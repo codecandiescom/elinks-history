@@ -1,0 +1,1418 @@
+# Ukrainian ELinks translation.
+# Dmitry Pinchukov <dpinch@mail.ru>
+# Olexander Kunytsa <kunia@istc.kiev.ua>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ELinks 0.5pre0.CVS\n"
+"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"PO-Revision-Date: 2003-01-03 03:41+0100\n"
+"Last-Translator: Dmitry Pinchukov <dpinch@mail.ru>\n"
+"Language-Team: Ukrainian <uk@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/bfu/inpfield.c:40 src/bfu/inpfield.c:49
+msgid "Bad number"
+msgstr "Неправильне число"
+
+#: src/bfu/inpfield.c:41
+msgid "Number expected in field"
+msgstr "В пол╕ ма╓ бути число"
+
+#: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52 src/bfu/inpfield.c:72
+#: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:273
+#: src/bookmarks/dialogs.c:281 src/config/dialogs.c:42
+#: src/config/dialogs.c:184 src/config/dialogs.c:323 src/config/dialogs.c:355
+#: src/config/dialogs.c:390 src/config/dialogs.c:402 src/config/dialogs.c:457
+#: src/config/dialogs.c:472 src/config/dialogs.c:606 src/config/dialogs.c:628
+#: src/config/dialogs.c:654 src/config/dialogs.c:718 src/config/dialogs.c:731
+#: src/dialogs/auth.c:191 src/dialogs/edit.c:173 src/dialogs/menu.c:605
+#: src/dialogs/menu.c:615 src/dialogs/menu.c:644 src/dialogs/menu.c:662
+#: src/dialogs/menu.c:672 src/dialogs/mime.c:269 src/dialogs/options.c:267
+#: src/dialogs/options.c:360 src/document/download.c:505
+#: src/document/download.c:538 src/document/download.c:640
+#: src/document/download.c:979 src/document/download.c:987
+#: src/document/download.c:1022 src/document/download.c:1032
+#: src/document/session.c:313 src/document/session.c:585
+#: src/globhist/dialogs.c:285 src/lua/core.c:428 src/lua/core.c:572
+#: src/lua/core.c:797 src/protocol/url.c:67 src/protocol/user.c:103
+#: src/protocol/user.c:131 src/viewer/text/view.c:1580
+#: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
+#: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
+#: src/viewer/text/view.c:3284
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: src/bfu/inpfield.c:50
+msgid "Number out of range"
+msgstr "Число виходить за припустим╕ меж╕"
+
+#: src/bfu/inpfield.c:69
+msgid "Bad string"
+msgstr "Неправильний рядок"
+
+#: src/bfu/inpfield.c:70
+msgid "Empty string not allowed"
+msgstr "Порожн╕ рядки неприпустим╕"
+
+#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
+msgid "Add folder"
+msgstr "Додати папку"
+
+#: src/bookmarks/dialogs.c:170
+msgid "Folder name"
+msgstr "╤м'я папки"
+
+#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:124
+#: src/config/dialogs.c:132 src/config/dialogs.c:319 src/config/dialogs.c:402
+#: src/config/dialogs.c:471 src/config/dialogs.c:654 src/config/dialogs.c:730
+#: src/dialogs/auth.c:187 src/dialogs/document.c:52 src/dialogs/document.c:207
+#: src/dialogs/document.c:230 src/dialogs/document.c:277
+#: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:103
+#: src/dialogs/info.c:130 src/dialogs/info.c:146 src/dialogs/info.c:207
+#: src/dialogs/info.c:239 src/dialogs/info.c:268 src/dialogs/menu.c:605
+#: src/dialogs/menu.c:615 src/dialogs/menu.c:643 src/dialogs/menu.c:662
+#: src/dialogs/menu.c:672 src/dialogs/mime.c:265 src/dialogs/options.c:257
+#: src/dialogs/options.c:355 src/document/download.c:563
+#: src/document/session.c:1075 src/document/session.c:1092
+#: src/document/session.c:1116 src/globhist/dialogs.c:396 src/lua/core.c:424
+#: src/lua/core.c:567 src/lua/core.c:676 src/lua/core.c:796
+#: src/sched/sched.c:70 src/viewer/text/view.c:2625
+msgid "OK"
+msgstr "Угу"
+
+#: src/bookmarks/dialogs.c:241 src/lua/core.c:408
+msgid "Edit bookmark"
+msgstr "Редагувати закладку"
+
+#: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:276
+#: src/bookmarks/dialogs.c:406 src/bookmarks/dialogs.c:413
+#: src/bookmarks/dialogs.c:420 src/bookmarks/dialogs.c:421
+msgid "Delete bookmark"
+msgstr "Видалити закладку"
+
+#: src/bookmarks/dialogs.c:270 src/bookmarks/dialogs.c:277
+#: src/globhist/dialogs.c:283
+msgid "Sorry, but this bookmark is already being used by something right now."
+msgstr "Вибачте, ця закладинка вже чимось використову╓ться прямо зараз"
+
+#: src/bookmarks/dialogs.c:271 src/bookmarks/dialogs.c:278
+#: src/dialogs/document.c:91 src/globhist/dialogs.c:392
+msgid "Title"
+msgstr "Назва"
+
+#: src/bookmarks/dialogs.c:279 src/bookmarks/dialogs.c:422
+#: src/dialogs/document.c:60 src/dialogs/edit.c:27 src/globhist/dialogs.c:324
+#: src/globhist/dialogs.c:393 src/lua/core.c:294
+msgid "URL"
+msgstr "URL"
+
+#: src/bookmarks/dialogs.c:407
+msgid "Delete marked bookmarks?"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:409 src/bookmarks/dialogs.c:416
+#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:124 src/dialogs/mime.c:163
+#: src/document/session.c:583 src/globhist/dialogs.c:326
+#: src/globhist/dialogs.c:358
+msgid "Yes"
+msgstr "Так"
+
+#: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:417
+#: src/bookmarks/dialogs.c:425 src/dialogs/menu.c:125 src/dialogs/mime.c:164
+#: src/document/session.c:584 src/globhist/dialogs.c:327
+#: src/globhist/dialogs.c:359
+msgid "No"
+msgstr "Н╕"
+
+#: src/bookmarks/dialogs.c:414
+msgid "Delete folder content"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:608
+msgid "Bookmark manager"
+msgstr "Робота з закладками"
+
+#: src/bookmarks/dialogs.c:618 src/globhist/dialogs.c:443
+msgid "Goto"
+msgstr "Йти"
+
+#: src/bookmarks/dialogs.c:624 src/config/dialogs.c:301
+#: src/config/dialogs.c:350 src/config/dialogs.c:515
+msgid "Edit"
+msgstr "Редагувати"
+
+#: src/bookmarks/dialogs.c:629 src/config/dialogs.c:527
+#: src/config/dialogs.c:773 src/globhist/dialogs.c:453
+msgid "Delete"
+msgstr "Стерти"
+
+#: src/bookmarks/dialogs.c:634
+msgid "Move"
+msgstr "Перем╕стити"
+
+#: src/bookmarks/dialogs.c:644 src/config/dialogs.c:521
+#: src/config/dialogs.c:767
+msgid "Add"
+msgstr "Додати"
+
+#: src/bookmarks/dialogs.c:649 src/dialogs/menu.c:671
+#: src/globhist/dialogs.c:458 src/viewer/text/view.c:2340
+#: src/viewer/text/view.c:2386
+msgid "Search"
+msgstr "Пошук"
+
+#: src/bookmarks/dialogs.c:654 src/config/dialogs.c:538
+#: src/config/dialogs.c:790 src/globhist/dialogs.c:473
+msgid "Close"
+msgstr "Закрити"
+
+#: src/bookmarks/dialogs.c:788 src/bookmarks/dialogs.c:813
+msgid "Add bookmark"
+msgstr "Додати закладку"
+
+#: src/bookmarks/dialogs.c:799
+msgid "Search bookmarks"
+msgstr "Пошук по закладках"
+
+#: src/config/dialogs.c:38
+msgid "Config error"
+msgstr "Помилка конф╕гурац╕╖"
+
+#: src/config/dialogs.c:39
+msgid "Unable to write to config file"
+msgstr "Не можу записати файл конф╕гурац╕╖"
+
+#: src/config/dialogs.c:118 src/config/dialogs.c:127 src/config/dialogs.c:509
+#: src/dialogs/document.c:49 src/dialogs/document.c:204
+#: src/globhist/dialogs.c:391 src/globhist/dialogs.c:448
+msgid "Info"
+msgstr "╤нформац╕я"
+
+#: src/config/dialogs.c:119 src/config/dialogs.c:128 src/config/dialogs.c:199
+#: src/config/dialogs.c:401 src/dialogs/edit.c:26 src/lua/core.c:292
+#: src/lua/core.c:293
+msgid "Name"
+msgstr "Назва"
+
+#: src/config/dialogs.c:120 src/config/dialogs.c:129 src/config/dialogs.c:200
+msgid "Type"
+msgstr ""
+
+#: src/config/dialogs.c:121 src/config/dialogs.c:202
+#: src/viewer/text/view.c:3536
+msgid "value"
+msgstr "значення"
+
+#: src/config/dialogs.c:122 src/config/dialogs.c:130 src/config/dialogs.c:203
+msgid "Description"
+msgstr ""
+
+#: src/config/dialogs.c:181 src/document/session.c:856
+#: src/document/session.c:917 src/document/session.c:1395
+#: src/protocol/url.c:64 src/viewer/text/view.c:1911
+#: src/viewer/text/view.c:3226
+msgid "Error"
+msgstr "Помилка"
+
+#: src/config/dialogs.c:182
+msgid "Bad option value."
+msgstr ""
+
+#: src/config/dialogs.c:351
+msgid ""
+"This option cannot be edited. This means that this is some special option "
+"like a folder - try to press a space in order to see its contents."
+msgstr ""
+
+#: src/config/dialogs.c:387 src/config/dialogs.c:401
+msgid "Add option"
+msgstr ""
+
+#: src/config/dialogs.c:388
+msgid "Cannot add an option here."
+msgstr ""
+
+#: src/config/dialogs.c:454 src/config/dialogs.c:468
+msgid "Delete option"
+msgstr ""
+
+#: src/config/dialogs.c:455
+msgid "Cannot delete this option."
+msgstr ""
+
+#: src/config/dialogs.c:469
+msgid "Really delete the option"
+msgstr ""
+
+#: src/config/dialogs.c:499
+msgid "Options manager"
+msgstr ""
+
+#: src/config/dialogs.c:533 src/config/dialogs.c:785 src/dialogs/options.c:262
+#: src/document/download.c:977 src/document/download.c:1020
+msgid "Save"
+msgstr "Зберегти"
+
+#: src/config/dialogs.c:603 src/config/dialogs.c:625 src/config/dialogs.c:653
+msgid "Add keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:604
+msgid "Invalid keystroke."
+msgstr ""
+
+#: src/config/dialogs.c:626
+msgid "Need to select a keymap."
+msgstr ""
+
+#: src/config/dialogs.c:641
+msgid "Action"
+msgstr ""
+
+#: src/config/dialogs.c:642
+msgid "Keymap"
+msgstr ""
+
+#: src/config/dialogs.c:643
+msgid ""
+"Keystroke should be written in the format: [Prefix-]Key\n"
+"Prefix: Shift, Ctrl, Alt\n"
+"Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+msgstr ""
+
+#: src/config/dialogs.c:647
+msgid "Keystroke"
+msgstr ""
+
+#: src/config/dialogs.c:714 src/config/dialogs.c:725
+msgid "Delete keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:715
+msgid ""
+"This item is not a keybinding. Try to press a space in order to get to the "
+"keybinindings themselves."
+msgstr ""
+
+#: src/config/dialogs.c:726
+msgid "Really delete the keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:727
+msgid "action"
+msgstr ""
+
+#: src/config/dialogs.c:728
+msgid "keymap"
+msgstr ""
+
+#: src/config/dialogs.c:757
+msgid "Keybinding manager"
+msgstr ""
+
+#: src/config/dialogs.c:779 src/globhist/dialogs.c:463
+msgid "Toggle display"
+msgstr "Перемикнути URL/назва"
+
+#: src/config/opttypes.c:462
+msgid "Boolean"
+msgstr ""
+
+#: src/config/opttypes.c:463
+msgid "Integer"
+msgstr ""
+
+#: src/config/opttypes.c:464
+msgid "Longint"
+msgstr ""
+
+#: src/config/opttypes.c:465
+msgid "String"
+msgstr ""
+
+#: src/config/opttypes.c:467 src/dialogs/document.c:111
+msgid "Codepage"
+msgstr "Кодова стор╕нка"
+
+#: src/config/opttypes.c:468
+msgid "Language"
+msgstr ""
+
+#: src/config/opttypes.c:469 src/dialogs/options.c:118
+msgid "Color"
+msgstr "Кольори"
+
+#: src/config/opttypes.c:471
+msgid "Special"
+msgstr ""
+
+#: src/config/opttypes.c:473
+msgid "Alias"
+msgstr ""
+
+#. tree
+#: src/config/opttypes.c:476
+msgid "Folder"
+msgstr ""
+
+#: src/dialogs/auth.c:33 src/dialogs/auth.c:34 src/dialogs/auth.c:52
+#: src/dialogs/auth.c:75
+msgid "Login"
+msgstr "╤м'я користувача"
+
+#: src/dialogs/auth.c:35 src/dialogs/auth.c:36 src/dialogs/auth.c:56
+#: src/dialogs/auth.c:82
+msgid "Password"
+msgstr "Пароль"
+
+#: src/dialogs/auth.c:147 src/dialogs/auth.c:166
+msgid "Authentication required for "
+msgstr "Необх╕дна аутентиф╕кац╕я для "
+
+#: src/dialogs/auth.c:149 src/dialogs/auth.c:168
+msgid " at "
+msgstr " на "
+
+#: src/dialogs/auth.c:162
+msgid "HTTP Authentication"
+msgstr "HTTP Аутентиф╕кац╕я"
+
+#: src/dialogs/document.c:50 src/dialogs/document.c:228
+msgid "You are nowhere!"
+msgstr "Ви н╕де не знаходитесь!"
+
+#: src/dialogs/document.c:100
+msgid "Size"
+msgstr "Розм╕р"
+
+#: src/dialogs/document.c:106
+msgid "incomplete"
+msgstr "не повн╕стю"
+
+#: src/dialogs/document.c:117
+msgid "assumed"
+msgstr "прийнято"
+
+#: src/dialogs/document.c:123
+msgid "ignoring server setting"
+msgstr "параметри серверу ╕гноруються"
+
+#: src/dialogs/document.c:130
+msgid "Server"
+msgstr "Сервер"
+
+#: src/dialogs/document.c:138
+msgid "SSL Cipher"
+msgstr "Код SSL"
+
+#: src/dialogs/document.c:144
+msgid "Encoding"
+msgstr "Кодування"
+
+#: src/dialogs/document.c:152
+msgid "Date"
+msgstr "Дата"
+
+#: src/dialogs/document.c:160
+msgid "Last modified"
+msgstr "Востанн╓ модиф╕ковано"
+
+#: src/dialogs/document.c:169 src/globhist/dialogs.c:394
+msgid "Last visit time"
+msgstr "Востанн╓ в╕дв╕дано"
+
+#: src/dialogs/document.c:178
+msgid "Unknown"
+msgstr "Нев╕домо"
+
+#: src/dialogs/document.c:187 src/dialogs/menu.c:583
+msgid "~Link"
+msgstr "Посилання"
+
+#: src/dialogs/document.c:196
+msgid "Link title"
+msgstr "Назва посилання"
+
+#: src/dialogs/document.c:227 src/dialogs/document.c:274
+#: src/dialogs/document.c:286
+msgid "Header info"
+msgstr "╤нформац╕я про заголовок"
+
+#: src/dialogs/document.c:287
+msgid "No header info."
+msgstr ""
+
+#: src/dialogs/edit.c:168 src/globhist/dialogs.c:468
+msgid "Clear"
+msgstr "Очистити"
+
+#: src/dialogs/info.c:55
+msgid "Text WWW browser"
+msgstr " Под╕бний до Lynx текстовий веб-брoузер"
+
+#: src/dialogs/info.c:58
+msgid "Features"
+msgstr "Можливост╕"
+
+#: src/dialogs/info.c:100
+msgid "About"
+msgstr "Про програму"
+
+#: src/dialogs/info.c:111
+msgid "Keys"
+msgstr "Kлав╕ш╕"
+
+#: src/dialogs/info.c:112
+msgid ""
+"ESC      display menu\n"
+"^C, q    quit\n"
+"^P, ^N   scroll up, down\n"
+"[, ]     scroll left, right\n"
+"up, down select link\n"
+"->       follow link\n"
+"<-       go back\n"
+"g        go to url\n"
+"G        go to url based on current url\n"
+"/        search\n"
+"?        search back\n"
+"n        find next\n"
+"N        find previous\n"
+"=        document info\n"
+"|        header info\n"
+"\\        document source\n"
+"d        download"
+msgstr ""
+"ESC      меню\n"
+"^C, q    вих╕д\n"
+"^P, ^N   прокрутка вгору-вниз\n"
+"[, ]     прокрутка л╕воруч-праворуч\n"
+"up, down виб╕р посилання\n"
+"->       перех╕д за посиланням\n"
+"<-       назад\n"
+"g        перейти до нового URL\n"
+"G        перейти до URL, який базу╓ться на поточному\n"
+"/        пошук\n"
+"?        зворотн╕й пошук\n"
+"n        шукати дал╕\n"
+"N        шукати вгору\n"
+"=        ╕нформац╕я про документ\n"
+"\\        показати код HTML\n"
+"d        завантажити"
+
+#: src/dialogs/info.c:136
+msgid "Copying"
+msgstr "Л╕ценз╕я"
+
+#: src/dialogs/info.c:137
+msgid "ELinks "
+msgstr ""
+
+#: src/dialogs/info.c:137
+msgid ""
+"\n"
+"\n"
+"(C) 1999 - 2002 Mikulas Patocka\n"
+"(C) 2001 - 2003 Petr Baudis\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+"Ця програма ╓ безкоштовним ПЗ; ви можете розповсюджувати та/або модиф╕кувати "
+"╖╖ зг╕дно л╕ценз╕╖ GNU, яка опубл╕кована \"Фондом безкоштовного програмного "
+"забезпечення\" (FSF); верс╕╖ 2 Л╕ценз╕╖, або (за вашим бажанням) б╕льш "
+"п╕зньо╖ верс╕╖"
+
+#: src/dialogs/info.c:189 src/dialogs/info.c:190
+msgid "Resources"
+msgstr "Ресурси"
+
+#: src/dialogs/info.c:191
+msgid "handles"
+msgstr "хендл╕в"
+
+#: src/dialogs/info.c:192
+msgid "timers"
+msgstr "таймер╕в"
+
+#: src/dialogs/info.c:193
+msgid "Connections"
+msgstr "З'╓днання"
+
+#: src/dialogs/info.c:194
+msgid "connections"
+msgstr "з'╓днань"
+
+#: src/dialogs/info.c:195
+msgid "connecting"
+msgstr "створюються"
+
+#: src/dialogs/info.c:196
+msgid "transferring"
+msgstr "передач"
+
+#: src/dialogs/info.c:197
+msgid "keepalive"
+msgstr "збереження зв'язку"
+
+#: src/dialogs/info.c:198
+msgid "Memory cache"
+msgstr "Кеш в пам'ят╕"
+
+#: src/dialogs/info.c:199
+msgid "bytes"
+msgstr "байт"
+
+#: src/dialogs/info.c:200
+msgid "files"
+msgstr "файл╕в"
+
+#: src/dialogs/info.c:201 src/dialogs/info.c:205
+msgid "locked"
+msgstr "блоковано"
+
+#: src/dialogs/info.c:202
+msgid "loading"
+msgstr "завантажу╓ться"
+
+#: src/dialogs/info.c:203
+msgid "Formatted document cache"
+msgstr "Кеш в╕дформатованих документ╕в"
+
+#: src/dialogs/info.c:204
+msgid "documents"
+msgstr "документ╕в"
+
+#: src/dialogs/info.c:236
+msgid "Cache info"
+msgstr "╤нформац╕я про кеш"
+
+#: src/dialogs/info.c:237
+msgid "Cache content"
+msgstr "Вм╕ст кешу"
+
+#: src/dialogs/info.c:256
+msgid "bytes of memory allocated"
+msgstr "байт╕в вид╕лено"
+
+#: src/dialogs/info.c:265
+msgid "Memory info"
+msgstr "╤нформац╕я про пам'ять"
+
+#: src/dialogs/menu.c:118
+msgid "Exit ELinks"
+msgstr "Вих╕д з ELinks"
+
+#: src/dialogs/menu.c:120
+msgid "Do you really want to exit ELinks (and terminate all downloads)?"
+msgstr "Ви д╕йсно бажа╓те вийти з ELinks та припинити вс╕ завантаження?"
+
+#: src/dialogs/menu.c:122
+msgid "Do you really want to exit ELinks?"
+msgstr "Ви д╕йсно бажа╓те вийти з ELinks?"
+
+#: src/dialogs/menu.c:226
+msgid "No history"
+msgstr "╤стор╕я порожня"
+
+#: src/dialogs/menu.c:301
+msgid "No downloads"
+msgstr "Нема╓ завантажень"
+
+#: src/dialogs/menu.c:372
+msgid "~Go to URL"
+msgstr "Пeрейти до..."
+
+#: src/dialogs/menu.c:373
+msgid "Go ~back"
+msgstr "Пoвернутися назад"
+
+#: src/dialogs/menu.c:374
+msgid "~History"
+msgstr "╤стор╕я стор╕нок до поточно╖"
+
+#: src/dialogs/menu.c:375
+msgid "Unhis~tory"
+msgstr "╤стор╕я стор╕нок п╕сля поточно╖"
+
+#: src/dialogs/menu.c:376
+msgid "~Reload"
+msgstr "Перезавантажити"
+
+#: src/dialogs/menu.c:381
+msgid "Global histor~y"
+msgstr "Повна ╕стор╕я"
+
+#: src/dialogs/menu.c:384
+msgid "Bookmark~s"
+msgstr "Закладки"
+
+#: src/dialogs/menu.c:390
+msgid "Sa~ve as"
+msgstr "Зберегти як"
+
+#: src/dialogs/menu.c:391
+msgid "Save ~URL as"
+msgstr "Зберегти URL як"
+
+#: src/dialogs/menu.c:392
+msgid "Save formatted ~document"
+msgstr "Зберегти в╕дформатований документ"
+
+#: src/dialogs/menu.c:397
+msgid "~Kill background connections"
+msgstr "Роз╕рвати з'╓днання на тл╕"
+
+#: src/dialogs/menu.c:398
+msgid "~Flush all caches"
+msgstr "Очистити вс╕ кеш╕"
+
+#: src/dialogs/menu.c:399
+msgid "Resource ~info"
+msgstr "╤нформац╕я про ресурси"
+
+#. This ought to be rewritten first, now it's too messy - try it with
+#. * a bit full cache.
+#: src/dialogs/menu.c:403
+msgid "~Cache info"
+msgstr "╤нформац╕я про кеш"
+
+#: src/dialogs/menu.c:406
+msgid "~Memory info"
+msgstr "╤нформац╕я про пам'ять"
+
+#: src/dialogs/menu.c:413
+msgid "E~xit"
+msgstr "Вих╕д"
+
+#: src/dialogs/menu.c:442
+msgid "~New window"
+msgstr "Нове в╕кно"
+
+#: src/dialogs/menu.c:463
+msgid "~OS shell"
+msgstr "Оболонка операц╕йно╖ системи"
+
+#: src/dialogs/menu.c:474 src/dialogs/options.c:332
+msgid "Resize ~terminal"
+msgstr "Зм╕нити розм╕ри терминалу"
+
+#: src/dialogs/menu.c:493 src/dialogs/menu.c:506
+msgid "~Search"
+msgstr "Пошук"
+
+#: src/dialogs/menu.c:494 src/dialogs/menu.c:507
+msgid "Search ~backward"
+msgstr "Зворотн╕й пошук"
+
+#: src/dialogs/menu.c:495 src/dialogs/menu.c:508
+msgid "Find ~next"
+msgstr "Знайти наступне"
+
+#: src/dialogs/menu.c:496 src/dialogs/menu.c:509
+msgid "Find ~previous"
+msgstr "Знайти попередн╓"
+
+#: src/dialogs/menu.c:498 src/dialogs/menu.c:511
+msgid "Toggle ~html/plain"
+msgstr "Перемикач HTML/текст"
+
+#: src/dialogs/menu.c:499 src/dialogs/menu.c:512
+msgid "Document ~info"
+msgstr "╤нформац╕я про документ"
+
+#: src/dialogs/menu.c:500
+msgid "H~eader info"
+msgstr "╤нформац╕я про заголовок"
+
+#: src/dialogs/menu.c:501 src/dialogs/menu.c:513
+msgid "Frame at ~full-screen"
+msgstr "Фрейм на весь екран"
+
+#: src/dialogs/menu.c:518
+msgid "~About"
+msgstr "Про програму"
+
+#: src/dialogs/menu.c:519
+msgid "~Keys"
+msgstr "Kлав╕ш╕"
+
+#: src/dialogs/menu.c:520
+msgid "User's ~manual"
+msgstr "╤нструкц╕я"
+
+#: src/dialogs/menu.c:521
+msgid "~Copying"
+msgstr "Л╕ценз╕я"
+
+#: src/dialogs/menu.c:522
+msgid "~ELinks homepage"
+msgstr "Домашня стор╕нка Elinks"
+
+#: src/dialogs/menu.c:528 src/dialogs/menu.c:536
+msgid "~Add"
+msgstr "Додати"
+
+#: src/dialogs/menu.c:529 src/dialogs/menu.c:537
+msgid "~Modify"
+msgstr "Зм╕нити"
+
+#: src/dialogs/menu.c:530 src/dialogs/menu.c:538
+msgid "~Delete"
+msgstr "Стерти"
+
+#: src/dialogs/menu.c:543 src/dialogs/menu.c:556
+msgid "~Language"
+msgstr "Мова"
+
+#: src/dialogs/menu.c:544 src/dialogs/menu.c:557
+msgid "C~haracter set"
+msgstr "Кодування"
+
+#: src/dialogs/menu.c:545 src/dialogs/menu.c:558
+msgid "~Terminal options"
+msgstr "Параметри термiналу"
+
+#. {N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0},
+#: src/dialogs/menu.c:547
+msgid "File ~extensions"
+msgstr "Розширення файл╕в"
+
+#: src/dialogs/menu.c:549
+msgid "~Options manager"
+msgstr ""
+
+#: src/dialogs/menu.c:550
+msgid "~Keybinding manager"
+msgstr ""
+
+#: src/dialogs/menu.c:551
+msgid "~Save options"
+msgstr "Зберегти параметри"
+
+#: src/dialogs/menu.c:581
+msgid "~File"
+msgstr "Файл"
+
+#: src/dialogs/menu.c:582
+msgid "~View"
+msgstr "Вигляд"
+
+#: src/dialogs/menu.c:584
+msgid "~Downloads"
+msgstr "Завантаження"
+
+#: src/dialogs/menu.c:585
+msgid "~Setup"
+msgstr "Параметри"
+
+#: src/dialogs/menu.c:586
+msgid "~Help"
+msgstr "Допомога"
+
+#: src/dialogs/menu.c:604
+msgid "Go to URL"
+msgstr "Пeрейти до..."
+
+#: src/dialogs/menu.c:604 src/dialogs/menu.c:614
+msgid "Enter URL"
+msgstr "Введ╕ть URL"
+
+#: src/dialogs/menu.c:614
+msgid "Save URL"
+msgstr "Зберегти URL"
+
+#: src/dialogs/menu.c:643 src/document/download.c:388
+#: src/document/download.c:560
+msgid "Download"
+msgstr "Завантаження"
+
+#: src/dialogs/menu.c:643
+msgid "Save to file"
+msgstr "Записати до файлу"
+
+#: src/dialogs/menu.c:661
+msgid "Search backward"
+msgstr "Зворотн╕й пошук"
+
+#: src/dialogs/menu.c:661 src/dialogs/menu.c:671
+msgid "Search for text"
+msgstr "Пошук тексту"
+
+#: src/dialogs/mime.c:44
+msgid "Extension(s)"
+msgstr "Розширення"
+
+#: src/dialogs/mime.c:45
+msgid "Content-Type"
+msgstr "Тип даних"
+
+#: src/dialogs/mime.c:160 src/dialogs/mime.c:161
+msgid "Delete extension"
+msgstr "Видалити розширення"
+
+#: src/dialogs/mime.c:247
+msgid "Extension"
+msgstr "Розширення"
+
+#: src/dialogs/mime.c:281
+msgid "No extensions"
+msgstr "Нема╓ розширень"
+
+#: src/dialogs/options.c:111
+msgid "No frames"
+msgstr "Без рамок"
+
+#: src/dialogs/options.c:112
+msgid "VT 100 frames"
+msgstr "Рамки VT 100"
+
+#: src/dialogs/options.c:113
+msgid "Linux or OS/2 frames"
+msgstr "Рамки Linux чи OS/2"
+
+#: src/dialogs/options.c:114
+msgid "KOI8-R frames"
+msgstr "Рамки KOI8-R"
+
+#: src/dialogs/options.c:115
+msgid "Use ^[[11m"
+msgstr "Використовувати ^[[11m"
+
+#: src/dialogs/options.c:116
+msgid "Restrict frames in cp850/852"
+msgstr "Обмежувати рамки з cp850/852"
+
+#: src/dialogs/options.c:117
+msgid "Block the cursor"
+msgstr "Прямокутний курсор"
+
+#: src/dialogs/options.c:119
+msgid "Transparency"
+msgstr ""
+
+#: src/dialogs/options.c:120
+msgid "UTF-8 I/O"
+msgstr "Вв╕д-вив╕д UTF-8"
+
+#: src/dialogs/options.c:194
+msgid "Terminal options"
+msgstr "Параметри термiналу"
+
+#: src/dialogs/options.c:301
+msgid "Columns"
+msgstr "Стовпчики"
+
+#: src/dialogs/options.c:302
+msgid "Rows"
+msgstr "Рядки"
+
+#: src/document/download.c:222 src/document/session.c:177
+msgid "Received"
+msgstr "Прийнято"
+
+#: src/document/download.c:228 src/document/session.c:182
+msgid "of"
+msgstr "з"
+
+#: src/document/download.c:238
+msgid "after resume"
+msgstr "п╕сля продовження"
+
+#: src/document/download.c:244
+msgid "Average speed"
+msgstr "Середня швидк╕сть"
+
+#: src/document/download.c:245
+msgid "Speed"
+msgstr "Швидк╕сть"
+
+#: src/document/download.c:254
+msgid "current speed"
+msgstr "поточна швидк╕сть"
+
+#: src/document/download.c:263
+msgid "Elapsed time"
+msgstr "Витрачений час"
+
+#: src/document/download.c:269
+msgid "estimated time"
+msgstr "Оч╕куваний час"
+
+#: src/document/download.c:397
+msgid "Background"
+msgstr "На тл╕"
+
+#: src/document/download.c:402
+msgid "Background with notify"
+msgstr "На тл╕ з пов╕домленням"
+
+#: src/document/download.c:407
+msgid "Abort"
+msgstr "Перервати"
+
+#: src/document/download.c:501 src/document/download.c:534
+#: src/document/download.c:636
+msgid "Download error"
+msgstr "Помилка завантаження"
+
+#: src/document/download.c:502 src/document/download.c:637
+msgid "Could not create file"
+msgstr "Не можу писати у файл"
+
+#: src/document/download.c:535
+msgid "Error downloading"
+msgstr "Помилка завантаження"
+
+#: src/document/download.c:561
+msgid "Download complete"
+msgstr "Завантаження зак╕нчено"
+
+#: src/document/download.c:973 src/document/download.c:982
+msgid "Unknown type"
+msgstr "Нев╕домий тип"
+
+#: src/document/download.c:974 src/document/download.c:983
+#: src/document/download.c:1015 src/document/download.c:1026
+msgid "Content type is"
+msgstr "Тип документу"
+
+#: src/document/download.c:975 src/document/download.c:984
+msgid "Do you want to save or display this file?"
+msgstr "Ви б хот╕ли зберегти чи показати цей файл?"
+
+#: src/document/download.c:978 src/document/download.c:986
+#: src/document/download.c:1021 src/document/download.c:1031
+msgid "Display"
+msgstr "Показати"
+
+#: src/document/download.c:1014 src/document/download.c:1025
+msgid "What to do?"
+msgstr "Що робити?"
+
+#: src/document/download.c:1016 src/document/download.c:1027
+msgid "Do you want to open file with"
+msgstr "Бажа╓те в╕дкрити файл за допомогою"
+
+#: src/document/download.c:1017 src/document/download.c:1028
+msgid "save it or display it?"
+msgstr "зберегти чи показати його?"
+
+#: src/document/download.c:1019 src/document/download.c:1030
+msgid "Open"
+msgstr "В╕дкрити"
+
+#: src/document/session.c:97
+msgid "Unknown error"
+msgstr "Нев╕дома помилка"
+
+#: src/document/session.c:188
+msgid "avg"
+msgstr "в середньому"
+
+#: src/document/session.c:196
+msgid "cur"
+msgstr "поточна"
+
+#: src/document/session.c:569
+msgid "Do you want to follow redirect and post form data to url"
+msgstr "Бажа╓те прямувати за переадресац╕╓ю та в╕дправити вм╕ст форми за адресою"
+
+#: src/document/session.c:572
+msgid "Do you want to post form data to url"
+msgstr "Ви бажа╓те в╕дправити вм╕ст форми за адресою"
+
+#: src/document/session.c:574
+msgid "Do you want to repost form data to url"
+msgstr "Ви бажа╓те заново в╕дправити вм╕ст форми за адресою"
+
+#: src/document/session.c:580 src/document/session.c:1080
+#: src/document/session.c:1100
+msgid "Warning"
+msgstr "Попередження"
+
+#: src/document/session.c:1070
+msgid "Welcome"
+msgstr "В╕та╓мо"
+
+#: src/document/session.c:1071
+msgid "Welcome to ELinks!"
+msgstr "Ласкаво просимо до ELinks!"
+
+#: src/document/session.c:1072
+msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
+msgstr "Натисн╕ть ESC щоб викликати меню. Прочитайте ╕нструкц╕ю в меню 'Допомога->╤нструкц╕я'."
+
+#: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
+msgid "Global history"
+msgstr "Керування ╕стор╕╓ю"
+
+#: src/globhist/dialogs.c:187
+msgid "Search history"
+msgstr "╤стор╕я пошук╕в"
+
+#: src/globhist/dialogs.c:282 src/globhist/dialogs.c:322
+#: src/globhist/dialogs.c:323
+msgid "Delete history item"
+msgstr "Видалити елемент ╕стор╕╖"
+
+#: src/globhist/dialogs.c:355 src/globhist/dialogs.c:356
+msgid "Clear global history"
+msgstr "Очистити повну ╕стор╕ю"
+
+#: src/lua/core.c:446
+msgid "A field"
+msgstr "Поле"
+
+#: src/lua/core.c:555
+msgid "User dialog"
+msgstr "Д╕алог користувача"
+
+#: src/lua/core.c:673
+msgid "Lua Error"
+msgstr "Помилка Lua"
+
+#: src/lua/core.c:794
+msgid "Lua Console"
+msgstr "Консоль Lua"
+
+#: src/lua/core.c:795
+msgid "Enter expression"
+msgstr "Введ╕сть вираз"
+
+#: src/osdep/os_dep.c:1832
+msgid "~Xterm"
+msgstr "Xterm"
+
+#: src/osdep/os_dep.c:1833
+msgid "~Twterm"
+msgstr "Twterm"
+
+#: src/osdep/os_dep.c:1834
+msgid "~Screen"
+msgstr "Екран"
+
+#: src/osdep/os_dep.c:1836 src/osdep/os_dep.c:1840
+msgid "~Window"
+msgstr "В╕кно"
+
+#: src/osdep/os_dep.c:1837
+msgid "~Full screen"
+msgstr "Повний екран"
+
+#: src/osdep/os_dep.c:1843
+msgid "~BeOS terminal"
+msgstr "Терм╕нал BeOS"
+
+#: src/protocol/url.c:65
+msgid "JavaScript is currently not supported."
+msgstr ""
+
+#: src/protocol/user.c:100
+msgid "No program"
+msgstr "Нема╓ програми"
+
+#: src/protocol/user.c:101
+msgid "No program specified for"
+msgstr "Не вказано програму для"
+
+#: src/protocol/user.c:128 src/sched/sched.c:79
+msgid "Bad URL syntax"
+msgstr "Неправильний синтаксис URL"
+
+#: src/protocol/user.c:129
+msgid "Bad user protocol URL"
+msgstr ""
+
+#: src/sched/sched.c:59
+msgid "Waiting in queue"
+msgstr "Оч╕кування в черз╕"
+
+#: src/sched/sched.c:60
+msgid "Looking up host"
+msgstr "Визначення ╕мен╕ серверу"
+
+#: src/sched/sched.c:61
+msgid "Making connection"
+msgstr "Створення з'╓днання"
+
+#: src/sched/sched.c:62
+msgid "SSL negotiation"
+msgstr "Встановлення SSL з'╓днання"
+
+#: src/sched/sched.c:63
+msgid "Request sent"
+msgstr "Запит над╕слано"
+
+#: src/sched/sched.c:64
+msgid "Logging in"
+msgstr "Входження"
+
+#: src/sched/sched.c:65
+msgid "Getting headers"
+msgstr "Отримання заголовк╕в"
+
+#: src/sched/sched.c:66
+msgid "Server is processing request"
+msgstr "Сервер оброблю╓ запит"
+
+#: src/sched/sched.c:67
+msgid "Transferring"
+msgstr "Передача"
+
+#: src/sched/sched.c:69
+msgid "Waiting for redirect confirmation"
+msgstr "Оч╕кування п╕дтвердження перенапрямлення"
+
+#: src/sched/sched.c:71
+msgid "Interrupted"
+msgstr "Перервано"
+
+#: src/sched/sched.c:72
+msgid "Socket exception"
+msgstr "Виключення в сокет╕"
+
+#: src/sched/sched.c:73
+msgid "Internal error"
+msgstr "Внутр╕шня помилка"
+
+#: src/sched/sched.c:74
+msgid "Out of memory"
+msgstr "Нестача пам'ят╕"
+
+#: src/sched/sched.c:75
+msgid "Host not found"
+msgstr "Сервер не знайдено"
+
+#: src/sched/sched.c:76
+msgid "Error writing to socket"
+msgstr "Помилка запису в сокет"
+
+#: src/sched/sched.c:77
+msgid "Error reading from socket"
+msgstr "Помилка читання з сокету"
+
+#: src/sched/sched.c:78
+msgid "Data modified"
+msgstr "Дату зм╕нено"
+
+#: src/sched/sched.c:80
+msgid "Receive timeout"
+msgstr "Тайм-аут п╕д час читання"
+
+#: src/sched/sched.c:81
+msgid "Request must be restarted"
+msgstr "Запит потр╕бно повторити"
+
+#: src/sched/sched.c:82
+msgid "Can't get socket state"
+msgstr "Неможливо отримати стан сокету"
+
+#: src/sched/sched.c:84
+msgid "Bad HTTP response"
+msgstr "Неправильна в╕дпов╕дь HTTP"
+
+#: src/sched/sched.c:85
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/sched.c:86
+msgid "No content"
+msgstr "╤нформац╕╖ нема╓"
+
+#: src/sched/sched.c:88
+msgid "Unknown file type"
+msgstr "Нев╕домий тип файлу"
+
+#: src/sched/sched.c:89
+msgid "Error opening file"
+msgstr "Помилка в╕дкриття файлу"
+
+#: src/sched/sched.c:91
+msgid "Bad FTP response"
+msgstr "Неправильна в╕дпов╕дь FTP"
+
+#: src/sched/sched.c:92
+msgid "FTP service unavailable"
+msgstr "Серв╕с FTP недоступний"
+
+#: src/sched/sched.c:93
+msgid "Bad FTP login"
+msgstr "Невдале FTP-з'╓днання"
+
+#: src/sched/sched.c:94
+msgid "FTP PORT command failed"
+msgstr "Команда FTP PORT зак╕нчилася невдало"
+
+#: src/sched/sched.c:95
+msgid "File not found"
+msgstr "Файл не знайдено"
+
+#: src/sched/sched.c:96
+msgid "FTP file error"
+msgstr "Помилка файлу на FTP"
+
+#: src/sched/sched.c:98
+msgid "SSL error"
+msgstr "Помилка SSL"
+
+#: src/sched/sched.c:100
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Ця верс╕я ELinks не п╕дтриму╓ SSL/TSL"
+
+#: src/viewer/text/view.c:1577
+msgid "Error while posting form"
+msgstr "Помилка в╕дправлення форми"
+
+#: src/viewer/text/view.c:1578
+msgid "Could not get file"
+msgstr "Не можу отримати файл"
+
+#: src/viewer/text/view.c:1912
+msgid "You can do this only on the master terminal"
+msgstr "Ви можете зробити це т╕льки на головному терм╕нал╕"
+
+#: src/viewer/text/view.c:2341
+msgid "No previous search"
+msgstr "Пошуку ще не було"
+
+#: src/viewer/text/view.c:2387
+msgid "Search string not found"
+msgstr "Рядок не знайдено"
+
+#: src/viewer/text/view.c:2624
+msgid "Go to link"
+msgstr "Йти за посиланням"
+
+#: src/viewer/text/view.c:2625
+msgid "Enter link number"
+msgstr "Введ╕ть номер посилання"
+
+#: src/viewer/text/view.c:3281
+msgid "Save error"
+msgstr "Помилка збереження"
+
+#: src/viewer/text/view.c:3282
+msgid "Error writing to file"
+msgstr "Помилка запису до файлу"
+
+#: src/viewer/text/view.c:3316
+msgid "Display ~usemap"
+msgstr "В╕добразити мапу"
+
+#: src/viewer/text/view.c:3321
+msgid "~Follow link"
+msgstr "Йти за посиланням"
+
+#: src/viewer/text/view.c:3324
+msgid "Follow link and r~eload"
+msgstr "Йти за посиланням та перезавантажити"
+
+#: src/viewer/text/view.c:3328
+msgid "Open in new ~window"
+msgstr "В╕дкрити в новому в╕кн╕"
+
+#: src/viewer/text/view.c:3334
+msgid "~Download link"
+msgstr "Завантажити за посиланням"
+
+#: src/viewer/text/view.c:3338
+msgid "~Add link to bookmarks"
+msgstr "Додати посилання до закладок"
+
+#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+msgid "~Reset form"
+msgstr "Очистити форму"
+
+#: src/viewer/text/view.c:3354
+msgid "~Submit form"
+msgstr "В╕д╕слати форму"
+
+#: src/viewer/text/view.c:3357
+msgid "Submit form and rel~oad"
+msgstr "В╕д╕слати форму та перезавантажити"
+
+#: src/viewer/text/view.c:3361
+msgid "Submit form and open in new ~window"
+msgstr "В╕д╕слати форму та в╕дкрити в новому в╕кн╕"
+
+#: src/viewer/text/view.c:3367
+msgid "Submit form and ~download"
+msgstr "В╕д╕слати форму та завантижити"
+
+#: src/viewer/text/view.c:3374
+msgid "V~iew image"
+msgstr "Подивитись зображення"
+
+#: src/viewer/text/view.c:3377
+msgid "Download ima~ge"
+msgstr "Завантижити зображення"
+
+#: src/viewer/text/view.c:3383
+msgid "No link selected"
+msgstr "Нема╓ вибраних посилань"
+
+#: src/viewer/text/view.c:3430
+msgid "Image"
+msgstr "Зображення"
+
+#: src/viewer/text/view.c:3446
+msgid "Usemap"
+msgstr "Мапа посилань"
+
+#: src/viewer/text/view.c:3479
+msgid "Submit form to"
+msgstr "Передати форму за адресою"
+
+#: src/viewer/text/view.c:3481
+msgid "Post form to"
+msgstr "В╕дправити форму за адресою"
+
+#: src/viewer/text/view.c:3499
+msgid "Radio button"
+msgstr "Рад╕окнопка"
+
+#: src/viewer/text/view.c:3502
+msgid "Checkbox"
+msgstr "Прапорець"
+
+#: src/viewer/text/view.c:3505
+msgid "Select field"
+msgstr "Поле вибору"
+
+#: src/viewer/text/view.c:3508
+msgid "Text field"
+msgstr "Текстове поле"
+
+#: src/viewer/text/view.c:3511
+msgid "Text area"
+msgstr "Текстова область"
+
+#: src/viewer/text/view.c:3514
+msgid "File upload"
+msgstr "Посилання файлу (upload)"
+
+#: src/viewer/text/view.c:3517
+msgid "Password field"
+msgstr "Введ╕ть пароль"
+
+#: src/viewer/text/view.c:3526
+msgid "name"
+msgstr "╕м'я"
+
+#: src/viewer/text/view.c:3545
+msgid "hit ENTER to"
+msgstr "натисн╕ть ENTER, щоб"
+
+#: src/viewer/text/view.c:3548
+msgid "submit to"
+msgstr "передати за адресою"
+
+#: src/viewer/text/view.c:3550
+msgid "post to"
+msgstr "в╕дправити за адресою"

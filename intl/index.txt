@@ -16,4 +16,3 @@ romanian
 russian
 swedish
 turkish
-ukrainian

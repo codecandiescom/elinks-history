@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.2 2003/08/24 02:53:27 jonas Exp $ */
+/* $Id: color.c,v 1.3 2003/08/26 23:52:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ fg_color(int fg, int bg)
 		/* 14 (brightcyan) */
 		{ 14, 14, 14, 14, 14, 14, 14, 14 },
 		/* 15 (brightwhite) */
-		{ 15, 15, 15, 15, 15, 15, 15, 15 },
+		{ 15, 15, 15, 15, 15, 15, 15,  7 },
 	};
 
 	if (d_opt && !d_opt->allow_dark_on_black)

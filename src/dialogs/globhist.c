@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.28 2002/08/29 11:48:31 pasky Exp $ */
+/* $Id: globhist.c,v 1.29 2002/08/29 21:15:02 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -81,6 +81,7 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 {
 	struct listbox_data *box;
 	struct history_dialog_list_item *item;
+	struct listbox_item *litem;
 
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
@@ -91,6 +92,10 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 			mem_free(item);
 			break;
 		}
+	}
+
+	foreach (litem, *box->items) {
+		litem->data = NULL;
 	}
 
 	mem_free(box);
@@ -279,10 +284,12 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Follow the history item */
-	historyitem = box->sel->udata;
-	if (historyitem)
-		goto_url((struct session *) goto_btn->item->udata,
-			 historyitem->url);
+	if (box->sel) {
+		historyitem = box->sel->udata;
+		if (historyitem)
+			goto_url((struct session *) goto_btn->item->udata,
+				 historyitem->url);
+	}
 
 	/* Close the history dialog */
 	delete_window(dlg->win);
@@ -301,9 +308,9 @@ push_delete_button(struct dialog_data *dlg,
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
+	if (!box->sel->udata) return 0;
 	historyitem = box->sel->udata;
-	if (!historyitem)
-		return 0;
+	if (!historyitem) return 0;
 
 	msg_box(term, NULL,
 		TEXT(T_DELETE_HISTORY_ITEM), AL_CENTER | AL_EXTD_TEXT,
@@ -359,16 +366,17 @@ push_info_button(struct dialog_data *dlg,
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Show history item info */
+	if (!box->sel) return 0;
 	historyitem = box->sel->udata;
-	if (historyitem) {
-		msg_box(term, NULL,
-			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
-			TEXT(T_TITLE), ": ", historyitem->title, "\n",
-			TEXT(T_URL), ": ", historyitem->url, "\n",
-			TEXT(T_LAST_VISIT_TIME), ": ", ctime(&historyitem->last_visit), NULL,
-			historyitem, 1,
-			TEXT(T_OK), NULL, B_ESC | B_ENTER);
-	}
+	if (!historyitem) return 0;
+
+	msg_box(term, NULL,
+		TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
+		TEXT(T_TITLE), ": ", historyitem->title, "\n",
+		TEXT(T_URL), ": ", historyitem->url, "\n",
+		TEXT(T_LAST_VISIT_TIME), ": ", ctime(&historyitem->last_visit), NULL,
+		historyitem, 1,
+		TEXT(T_OK), NULL, B_ESC | B_ENTER);
 
 	return 0;
 }

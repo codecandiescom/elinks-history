@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.21 2002/08/29 09:33:34 pasky Exp $ */
+/* $Id: globhist.c,v 1.22 2002/08/29 21:15:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,33 @@ free_global_history_item(struct global_history_item *historyitem)
 void
 delete_global_history_item(struct global_history_item *historyitem)
 {
+	struct listbox_item *item = historyitem->box_item;
+	struct listbox_data *box = item->data;
+
+	/* If this happens inside of the box, move top/sel if needed. */
+
+	if (box) {
+		if (box->sel && item == box->sel) {
+			box->sel = traverse_listbox_items_list(item, -1,
+					NULL, NULL);
+			if (item == box->sel)
+				box->sel = traverse_listbox_items_list(item, 1,
+						NULL, NULL);
+			if (item == box->sel)
+				box->sel = NULL;
+		}
+
+		if (box->top && item == box->top) {
+			box->top = traverse_listbox_items_list(item, 1,
+					NULL, NULL);
+			if (item == box->top)
+				box->top = traverse_listbox_items_list(item, -1,
+						NULL, NULL);
+			if (item == box->top)
+				box->top = NULL;
+		}
+	}
+
 	free_global_history_item(historyitem);
 	del_from_list(historyitem);
 	mem_free(historyitem);

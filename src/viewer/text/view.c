@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.302 2003/12/21 17:20:15 pasky Exp $ */
+/* $Id: view.c,v 1.303 2003/12/21 18:17:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,10 +337,13 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 	newpos = doc_view->vs->y + doc_view->document->options.height;
 	if (newpos < doc_view->document->height) {
 		doc_view->vs->y = newpos;
-		find_link(doc_view, 1, a);
+		newpos = 1;
 	} else {
-		find_link(doc_view, -1, a);
+		newpos = -1;
 	}
+
+	if (!c_in_view(doc_view))
+		find_link(doc_view, 1, a);
 }
 
 static void
@@ -349,9 +352,11 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
+	if (doc_view->vs->y == 0) return;
 	doc_view->vs->y -= doc_view->height;
 	int_lower_bound(&doc_view->vs->y, 0);
-	find_link(doc_view, -1, a);
+	if (!c_in_view(doc_view))
+		find_link(doc_view, -1, a);
 }
 
 

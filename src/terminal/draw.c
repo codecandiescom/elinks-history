@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.57 2003/09/01 13:07:41 zas Exp $ */
+/* $Id: draw.c,v 1.58 2003/09/05 01:19:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,8 +27,10 @@ void
 draw_border_cross(struct terminal *term, int x, int y,
 		  enum border_cross_direction dir, struct color_pair *color)
 {
-	static unsigned char border_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5},
-						   {0xc4, 0xc2, 0xc1, 0xc5}};
+	static unsigned char border_trans[2][4] = {
+		{ BORDER_SVLINE, BORDER_SRTEE, BORDER_SLTEE, BORDER_SCROSS },
+		{ BORDER_SHLINE, /* ? */ 0xc2, /* ? */ 0xc1, BORDER_SCROSS },
+	};
 	struct screen_char *screen_char;
 	unsigned int d;
 

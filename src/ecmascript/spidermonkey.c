@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.19 2004/09/24 21:23:06 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.20 2004/09/24 21:29:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,8 @@ static const JSPropertySpec document_props[] = {
 static JSBool
 document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
 	struct document *document = doc_view->document;
 
 	VALUE_TO_JSVAL_START;
@@ -198,7 +199,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
 	struct document *document = doc_view->document;
 
 	JSVAL_TO_VALUE_START;
@@ -235,7 +237,8 @@ static const JSPropertySpec location_props[] = {
 static JSBool
 location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
 	struct view_state *vs = &cur_loc(doc_view->session)->vs;
 
 	VALUE_TO_JSVAL_START;
@@ -253,7 +256,8 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
 
 	JSVAL_TO_VALUE_START;
 
@@ -309,6 +313,7 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	if (!ctx)
 		return NULL;
 	interpreter->backend_data = ctx;
+	JS_SetContextPrivate(ctx, interpreter);
 
 	global_obj = JS_NewObject(ctx, (JSClass *) &global_class, NULL, NULL);
 	if (!global_obj) {
@@ -316,19 +321,17 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 		return NULL;
 	}
 	JS_InitStandardClasses(ctx, global_obj);
-	JS_SetContextPrivate(ctx, interpreter);
+	JS_SetPrivate(ctx, global_obj, interpreter->doc_view);
 
 	document_obj = JS_InitClass(ctx, global_obj, NULL,
 				    (JSClass *) &document_class, NULL, 0,
 				    (JSPropertySpec *) document_props, NULL,
 				    NULL, NULL);
-	JS_SetPrivate(ctx, document_obj, interpreter->doc_view);
 
 	location_obj = JS_InitClass(ctx, global_obj, NULL,
 				    (JSClass *) &location_class, NULL, 0,
 				    (JSPropertySpec *) location_props, NULL,
 				    NULL, NULL);
-	JS_SetPrivate(ctx, location_obj, interpreter->doc_view);
 
 	return ctx;
 }

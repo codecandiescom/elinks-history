@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.48 2003/10/15 10:50:12 zas Exp $ */
+/* $Id: cache.c,v 1.49 2003/10/15 11:01:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,11 +324,10 @@ defrag_entry(struct cache_entry *e)
 	nf->real_length = l;
 
 	for (l = 0, h = f; h != g; h = h->next) {
-		struct fragment *x;
+		struct fragment *x = h;
 
 		memcpy(nf->data + l, h->data, h->length);
 		l += h->length;
-		x = h;
 		h = h->prev;
 		del_from_list(x);
 		mem_free(x);

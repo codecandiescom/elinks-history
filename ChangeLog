@@ -1,3 +1,526 @@
+Sun Jun  8 21:57:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	Use select_menu()'s window destroying loop inside of
+	select_mainmenu(), the original one (inherited from Links) was buggy
+	(but it is virtually never used, as we have only submenus inside of
+	the main menu).  
+
+Sun Jun  8 21:52:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Moved wtd checking from go_back() to go_away(). Now we check for
+	ses->wtd even in go_unback(). Let's see what will happen ;-).  
+
+Sun Jun  8 21:49:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Introduced go_away() static helper for go_back(), go_unback(). Okay,
+	it doesn't contain much stuff for now ;-).  
+
+Sun Jun  8 21:45:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Introduced static helper ses_leave_location(), merging common
+	preparation code from ses_back() and ses_unback().  
+
+Sun Jun  8 20:00:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Improve extension type lookup so it again only uses last extension
+	part. Also fix for not freeing returned mime handler.  
+
+Sun Jun  8 18:47:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, backend/common.c, backend/common.h,
+	backend/default.c, backend/mimetypes.c:
+
+	Backend content type resolvers now explicitly take extension instead
+	of url. Improved mimetypes resolving to try trimmed extensions.  
+
+Sun Jun  8 17:42:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, backend/common.c, backend/common.h:
+
+	Introduce get_extensionpart_from_url() and use it for guessing.  
+
+Sun Jun  8 17:41:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Interpretation of /> was fixed.  
+
+Sun Jun  8 17:18:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	More cleanup. Getting ready for better extension handling.  
+
+Sun Jun  8 16:51:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/default.c:
+
+	Minor cleanup.  
+
+Sun Jun  8 16:24:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor optimization in test order.  
+
+Sun Jun  8 16:17:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	Local variable flags was shadowing flags parameter. It was
+	responsible of the "No" button untranslated bug.  
+
+Sun Jun  8 16:13:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Variable declarations were moved close to their usage point.  
+
+Sun Jun  8 15:20:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: util/conv.h, osdep/os_dep.c, osdep/os_dep.h:
+
+	Move is_safe_in_shell() to util/ so it is completely independed
+	again.  
+
+Sun Jun  8 15:09:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Reverted previous changes. Use file_read_line() again.  
+
+Sun Jun  8 14:54:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	*cough* 
+
+Sun Jun  8 14:53:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Compilation fixes (stupid char vs. unsigned char), discovered by
+	Jonas.  
+
+Sun Jun  8 14:48:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	isA() cames back in atchr().  
+
+Sun Jun  8 14:45:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.h:
+
+	isA() is now a macro instead of a static inline function.  
+
+Sun Jun  8 14:42:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Hint for compiler: register for e.  
+
+Sun Jun  8 14:40:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	uu variable was renamed to quote.  
+
+Sun Jun  8 14:39:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: file.c, file.h:
+
+	Cleanup file_read_line(): leveling indentation and correctly handle
+	reallocation.  
+
+Sun Jun  8 14:29:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: file.c, file.h:
+
+	Small tidy up.  
+
+Sun Jun  8 14:28:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: dialogs.c, options.c:
+
+	Handle correctly case of option.desc being NULL.  
+
+Sun Jun  8 14:17:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Some generic util/error.* description, added parameter names to
+	declarations where they were missing before.  
+
+Sun Jun  8 14:14:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Documented dump_backtrace().  
+
+Sun Jun  8 14:13:57 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jun  8 14:11:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	Moving around of stuff (hopefully the final one now): first comes
+	error reporting, then force_dump(), hten optimization games, and the
+	backtrace function closes the suite.  
+
+Sun Jun  8 14:06:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	Documented force_dump(). Don't declare/define it if !defined(DEBUG).  
+
+Sun Jun  8 13:59:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/parser.c, util/error.h, util/lists.h:
+
+	Documented do_not_optimize_here(). Introduced
+	do_not_optimize_here_gcc_2_7() which expands to
+	do_not_optimize_here() under gcc <= 2.7.*. All usages of
+	do_not_optimize_here() converted to that.  
+
+Sun Jun  8 13:58:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.h:
+
+	Documented functions.  
+
+Sun Jun  8 13:47:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Effectively reverted the last patch --- *eof is '\0', so we
+	automagically test for eof at the most places, and frequently for
+	free as it comes out as the negation of the other conditions.
+	Compared to the state before the previous patch being applied, we
+	now take more advantage from *eof being '\0', and the checks are
+	placed more effectively somewhere.  
+
+Sun Jun  8 13:30:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Stricter eof checking and infinite loop prevention in
+	parse_element().  
+
+Sun Jun  8 13:21:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, lowlevel/connect.c, lua/core.c,
+	protocol/ftp.c, sched/download.c, util/memdebug.c,
+	viewer/text/view.c:
+
+	Fixes for label name collisions with error and int_error ->
+	elinks_internal 
+
+Sun Jun  8 13:04:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	atchr() now really does what it should.  
+
+Sun Jun  8 12:55:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, lists.h, error.h:
+
+	list_magic_error() now expands just to an internal() call, removed
+	support function list_magic_error_().  
+
+Sun Jun  8 12:46:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	Sorted the error-reporting functions in order
+	debug(),error(),internal(), both declarations and definitions.  
+
+Sun Jun  8 12:44:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	Now error() also shows __FILE__:__LINE__ where it happenned.  
+
+Sun Jun  8 12:41:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Now error() messages are automagically prepended by '<b>ERROR</b>: '
+	string as well.  
+
+Sun Jun  8 12:37:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	To be sure, undef internal,error,debug before redefining them as
+	wrappers to elinks_\&().  
+
+Sun Jun  8 12:36:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	error() -> elinks_error(), error() is now just a macro wrapper.
+	Moved error() declaration near internal() and debug() and documented
+	error() behaviour.  
+
+Sun Jun  8 12:33:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	int_error -> elinks_interal, debug_msg -> elinks_debug 
+
+Sun Jun  8 12:33:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* TODO:
+
+	Removed items that are in bugzilla and regrouped existing.  
+
+Sun Jun  8 12:30:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Tiny reorganization, documented the debug() and internal() calls.  
+
+Sun Jun  8 12:29:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/: atrule.c, parser.c, ruleset.c,
+	scanner.c, state.h, tree.c:
+
+	Use assert().  
+
+Sun Jun  8 12:19:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Introduced assert() macro. It does nothing if in FASTMEM mode,
+	prints internal error in normal mode and prints error + crash in the
+	DEBUG mode. Idea by Jonas, Zas, me, and many others over the
+	timeline ;-).  
+
+Sun Jun  8 11:54:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Small fixes of keybinding captions.  
+
+Sun Jun  8 11:54:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.h:
+
+	Make --enable-fastmem compile even if we don't have alloca().  
+
+Sun Jun  8 11:51:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Danish translation updated.  
+
+Sun Jun  8 11:38:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, main.c, version.c, version.h, dialogs/info.c,
+	lowlevel/signals.c, util/Makefile.am, util/error.c, util/version.c,
+	util/version.h:
+
+	Moved src/version.* to src/util/. This helps making util/ more or
+	less standalone, and we will (soon) want to use src/version.h for
+	something more interesting.  
+
+Sun Jun  8 10:59:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	msgbox formattized :) 
+
+Sun Jun  8 10:49:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, bookmarks/backend/xbel.c,
+	config/kbdbind.c, config/opttypes.c, dialogs/menu.c,
+	document/html/parser.c, document/html/renderer.c,
+	elusive/parser/css/scanner.c, elusive/parser/css/tree.c,
+	elusive/parser/html/parser.c, globhist/globhist.c,
+	intl/gettext/bindtextdom.c, intl/gettext/dcigettext.c,
+	intl/gettext/finddomain.c, intl/gettext/l10nflist.c,
+	intl/gettext/libintl.c, intl/gettext/loadmsgcat.c,
+	intl/gettext/localcharset.c, intl/gettext/localealias.c,
+	lowlevel/dns.c, lowlevel/select.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c, osdep/os_dep.c, protocol/file.c,
+	protocol/mailcap.c, protocol/http/auth.c, sched/download.c,
+	sched/location.c, sched/sched.c, sched/session.c,
+	terminal/terminal.c, util/blacklist.c, util/hash.c,
+	util/snprintf.c, viewer/dump/dump.c, viewer/text/view.c,
+	viewer/text/vs.c:
+
+	for(), foreach(), while(), .... -> for (), foreach (), while ()...  
+
+Sun Jun  8 10:40:09 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	A note about ie. for () vs for() was added.  
+
+Sun Jun  8 10:39:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, m4/gettext.m4, po/.cvsignore, po/Makefile.in,
+	po/Makefile.in.in, po/POTFILES.in, po/be.po, po/bg.po, po/ca.po,
+	po/cs.po, po/da.po, po/de.po, po/el.po, po/es.po, po/et.po,
+	po/fi.po, po/fr.po, po/gl.po, po/hr.po, po/hu.po, po/id.po,
+	po/is.po, po/it.po, po/lt.po, po/nl.po, po/no.po, po/pl.po,
+	po/pt.po, po/pt_BR.po, po/ro.po, po/ru.po, po/sk.po, po/sv.po,
+	po/tr.po, po/uk.po:
+
+	Removed POTFILES.in usage, we now just assume that all *.[ch] files
+	in src/ might contain stuff for l18n. This also involves
+	po/Makefile.in.in -> po/Makefile.in.  
+
+Sun Jun  8 02:24:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/parser/css/parser.c:
+
+	Now who said ELusive development was stalled. ;) Cleanups.  
+
+Sun Jun  8 02:00:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Destroy file_read_line() and integrate it in parse_mailcap_file()
+	all cleaned up. Also makes parsing more tolerant and optimized.  
+
+Sat Jun  7 23:50:50 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Sat Jun  7 23:42:42 2003  Laurent Monin <zas@norz.org>:
+
+	* po/POTFILES.in:
+
+	All source files were added to POTFILES.in, sometimes later it will
+	be changed to be automagically generated.  
+
+Sat Jun  7 23:42:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: common.c, common.h, default.c, mailcap.c,
+	mimetypes.c:
+
+	Store backends in a list. Simplifies multiplexing and could lead to
+	some fun optimization of lookups and/or easier configuration of the
+	order.  
+
+Sat Jun  7 23:37:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/cache.c:
+
+	Minor tidyup.  
+
+Sat Jun  7 23:31:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README, src/elusive/README, src/ssl/TODO:
+
+	Finish ciabot2 test.  
+
+Sat Jun  7 23:30:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elusive/README, ssl/TODO:
+
+	further test ciabot2 
+
+Sat Jun  7 23:29:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	test ciabot2 
+
+Sat Jun  7 23:08:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/msgbox.c, bfu/msgbox.h, bookmarks/dialogs.c,
+	config/dialogs.c, dialogs/info.c, dialogs/mime.c,
+	globhist/dialogs.c, protocol/user.c, sched/download.c,
+	sched/session.c, viewer/text/view.c:
+
+	MSGBOX_EXTD_TEXT was renamed to a more appropriate MSGBOX_FREE_TEXT.  
+
+Sat Jun  7 23:00:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	A test against buttons < 0 was added, in that case, we just return.  
+
+Sat Jun  7 22:53:43 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Jun  7 22:52:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Simplified extension type initialization. Unused #include removed 
+
+Sat Jun  7 22:50:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	Minor tidyup.  
+
+Sat Jun  7 22:42:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Update the .po files suite.  
+
+Sat Jun  7 22:37:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	More ciabot debugging.  
+
+Sat Jun  7 22:36:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README:
+
+	Debugging ciabot.  
+
+Sat Jun  7 22:18:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.h, backend/mailcap.c:
+
+	Hint accepted. s/(int [a-z]+:1;)/unsigned \1/ 
+
+Sat Jun  7 22:13:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/common.h:
+
+	Comment tidyups suggested by Miciah.  
+
+Sat Jun  7 22:10:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	s/quadro/tetra/, thanks to Troska.  
+
 Sat Jun  7 22:09:41 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* doc/hacking.txt:
@@ -580,13 +1103,13 @@ Sat Jun  7 08:37:21 2003  Laurent Monin <zas@norz.org>:
 Sat Jun  7 08:30:20 2003  Laurent Monin <zas@norz.org>:
 
 	* acconfig.h, configure.in, src/version.c, src/util/snprintf.h,
-	src/util/string.h:
+	src/util/string.h, src/util/version.c:
 
 	USE_LIBC  was renamed to USE_OWN_LIBC.  
 
 Sat Jun  7 08:22:54 2003  Laurent Monin <zas@norz.org>:
 
-	* src/version.c:
+	* src/: version.c, util/version.c:
 
 	Own_libc now appears in version string if was compiled with
 	--enable-own-libc.  
@@ -889,7 +1412,7 @@ Thu Jun  5 14:38:16 2003  Laurent Monin <zas@norz.org>:
 	* src/: version.c, bfu/leds.c, bookmarks/bookmarks.c,
 	bookmarks/backend/common.c, config/conf.c, config/kbdbind.c,
 	config/options.c, cookies/cookies.c, dialogs/menu.c,
-	document/html/parser.c, document/html/renderer.c,
+	util/version.c, document/html/parser.c, document/html/renderer.c,
 	elusive/layouter/box.c, elusive/parser/syntree.c,
 	elusive/parser/css/scanner.c, elusive/parser/css/tree.c,
 	globhist/globhist.c, intl/charsets.c, intl/gettext/libintl.c,
@@ -1592,7 +2115,7 @@ Sat May 24 10:24:17 2003  Laurent Monin <zas@norz.org>:
 
 Sat May 24 09:38:52 2003  Laurent Monin <zas@norz.org>:
 
-	* configure.in, src/version.c:
+	* configure.in, src/version.c, src/util/version.c:
 
 	Configure option --disable-backtrace is now fixed. An information
 	about it was added in version info (only when disable). It closes
@@ -1738,7 +2261,8 @@ Tue May 20 22:11:17 2003  Petr Baudis <pasky@ucw.cz>:
 
 Tue May 20 22:09:16 2003  Laurent Monin <zas@norz.org>:
 
-	* src/: version.c, version.h, dialogs/info.c:
+	* src/: version.c, version.h, dialogs/info.c, util/version.c,
+	util/version.h:
 
 	Only print useful version information at backtrace time. A new
 	parameter @more was added to get_dyn_full_version() to handle that..  
@@ -1800,21 +2324,22 @@ Tue May 20 10:10:59 2003  Laurent Monin <zas@norz.org>:
 Tue May 20 10:07:25 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: version.c, version.h, config/urlhist.c, config/urlhist.h,
-	dialogs/menu.c, util/encoding.c, util/encoding.h:
+	dialogs/menu.c, util/encoding.c, util/version.c, util/version.h,
+	util/encoding.h:
 
 	Some global variables are now correctly (i hope) declared as extern
 	in .h files. Compilation with -fno-common is now possible.  
 
 Tue May 20 09:43:29 2003  Laurent Monin <zas@norz.org>:
 
-	* src/version.c:
+	* src/: version.c, util/version.c:
 
 	memset() call is useless, just set first byte to NUL char is
 	sufficient.  
 
 Tue May 20 09:41:34 2003  Laurent Monin <zas@norz.org>:
 
-	* src/version.c:
+	* src/: version.c, util/version.c:
 
 	Use safe_strncpy() instead of memcpy() + strlen() + comparaisons.
 	Pointed out by Miciah.  
@@ -1830,7 +2355,7 @@ Mon May 19 23:10:59 2003  Laurent Monin <zas@norz.org>:
 Mon May 19 14:12:29 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: Makefile.am, main.c, version.c, version.h, dialogs/info.c,
-	util/error.c:
+	util/error.c, util/version.c, util/version.h:
 
 	version.{c,h} were introduced. Info box uses now a function to
 	retrieve version, and backtrace or core dump now print some version
@@ -5614,10 +6139,10 @@ Sun Apr 20 08:25:32 2003  Laurent Monin <zas@norz.org>:
 
 Sat Apr 19 19:15:09 2003  Laurent Monin <zas@norz.org>:
 
-	* po/: Makefile.in.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,
-	el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po,
-	is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po,
-	ru.po, sk.po, sv.po, tr.po, uk.po:
+	* po/: Makefile.in, Makefile.in.in, be.po, bg.po, ca.po, cs.po,
+	da.po, de.po, el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po,
+	hu.po, id.po, is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po,
+	pt_BR.po, ro.po, ru.po, sk.po, sv.po, tr.po, uk.po:
 
 	.po files and french translation were updated. msgmerge report was
 	slightly modified (clearer).  
@@ -6659,7 +7184,7 @@ Thu Jan  9 14:09:37 2003  Laurent Monin <zas@norz.org>:
 
 Tue Jan  7 23:26:26 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/Makefile.in.in:
+	* po/: Makefile.in, Makefile.in.in:
 
 	Require explicit make update-po call to update the .po files
 	accordingly to the source, like original gettext did (but it won't
@@ -6807,7 +7332,7 @@ Sat Jan  4 20:41:46 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan  4 20:39:29 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/Makefile.in.in:
+	* po/: Makefile.in, Makefile.in.in:
 
 	Remove also *.gmo, patch by Jonas.  
 
@@ -6909,7 +7434,7 @@ Sat Jan  4 15:21:53 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan  4 15:19:40 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/Makefile.in.in:
+	* po/: Makefile.in, Makefile.in.in:
 
 	Build the .gmo files in the build tree, not source tree, if they
 	differ. That allows us to run ELinks from the build tree directly
@@ -7021,16 +7546,16 @@ Sat Jan  4 12:20:37 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan  4 11:59:48 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/Makefile.in.in:
+	* po/: Makefile.in, Makefile.in.in:
 
 	Beautification.  
 
 Sat Jan  4 11:53:25 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/: Makefile.in.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,
-	el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po,
-	is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po,
-	ru.po, sk.po, sv.po, tr.po, uk.po:
+	* po/: Makefile.in, Makefile.in.in, be.po, bg.po, ca.po, cs.po,
+	da.po, de.po, el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po,
+	hu.po, id.po, is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po,
+	pt_BR.po, ro.po, ru.po, sk.po, sv.po, tr.po, uk.po:
 
 	Automatically update .po files when any of the gettextized sources
 	changes. TODO: Run msgmerge only when the .pot changed.  
@@ -7061,7 +7586,7 @@ Sat Jan  4 11:18:57 2003  Petr Baudis <pasky@ucw.cz>:
 
 Sat Jan  4 11:13:43 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/Makefile.in.in:
+	* po/: Makefile.in, Makefile.in.in:
 
 	Removed unused code.  
 
@@ -7747,7 +8272,7 @@ Thu Jan  2 15:33:49 2003  Petr Baudis <pasky@ucw.cz>:
 
 Thu Jan  2 15:32:59 2003  Petr Baudis <pasky@ucw.cz>:
 
-	* po/: Makefile.in.in, POTFILES.in:
+	* po/: Makefile.in, Makefile.in.in, POTFILES.in:
 
 	Added some base for po-files infrastructure.  
 

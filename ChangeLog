@@ -1,3 +1,27 @@
+Mon Nov 18 22:31:15 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Useless RD_READ_SIZE was removed 
+
+Mon Nov 18 17:12:02 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Bug fix: we must call lseek() only if needed. Prevent rare "Illegal
+	seek" error on some ftp sites.  
+
+Mon Nov 18 16:40:52 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, ssl/connect.c:
+
+	Read buffer handling was revisited.  Many useless calls to
+	mem_realloc() have disappeared.  A new field was added to struct
+	read_buffer, 'freespace' which is remaining space in buffer.  A
+	global #define was replaced by few local #define.  Buffer size is
+	now optimized to fit in exact number of memory pages, but for now we
+	suppose pages are 4096 bytes (this can be improved).  
+
 Sun Nov 17 15:30:57 2002  Laurent Monin <zas@norz.org>:
 
 	* elinks.1:

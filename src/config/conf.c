@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.66 2002/12/11 14:49:07 pasky Exp $ */
+/* $Id: conf.c,v 1.67 2002/12/11 14:52:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,7 +527,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	unsigned char *tmpstr;
 	int tmplen;
 	int origlen;
-	int savestyle = get_opt_int("config_saving_style");
+	int savestyle = get_opt_int("config.saving_style");
 
 	if (!str) return NULL;
 

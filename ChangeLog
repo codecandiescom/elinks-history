@@ -1,3 +1,379 @@
+Fri Oct 17 21:37:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update. A giant leap, we're getting near :^). Got
+	over de.po again as well as hu.po and leet.po...  
+
+Fri Oct 17 21:29:34 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Oct 17 20:57:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/options.c, document/options.h,
+	document/html/renderer.c, viewer/text/link.c:
+
+	Lots of nice link options to play with: 
+	
+	document.browse.links.active_link 
+	        tree with underline / invert colors / default color options.  
+	
+	document.html.underline_links 
+		this is not perfect yet it seems (some weirdness in underline
+		drawing) 
+
+Fri Oct 17 20:16:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Typo fixes in comment.  
+
+Fri Oct 17 19:58:33 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update: 94.93% 
+
+Fri Oct 17 19:53:02 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Oct 17 18:57:34 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update, now 92.13% 
+
+Fri Oct 17 18:46:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/options.c, document/options.h,
+	document/html/renderer.c, terminal/color.c, terminal/color.h,
+	viewer/text/link.c:
+
+	Add document.colors.ensure_contrast option. Patch by Johannes
+	Zellner and me.  
+
+Fri Oct 17 18:44:52 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Fri Oct 17 18:18:10 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update.  
+
+Fri Oct 17 18:12:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/color.c,
+	viewer/text/link.c:
+
+	Color info about whether to allow dark on black is passed using
+	color_flags.  For link colors we have to lookup the option value.
+	This is done using a nice int option value pointer.  
+
+Fri Oct 17 17:40:43 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update. Getting ahead of pasky ;-) 
+
+Fri Oct 17 17:37:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/color.c,
+	terminal/color.h, terminal/draw.c, viewer/text/link.c:
+
+	Introduce color_flags to control how a view color is converted to a
+	terminal color.  This is nicely mixed with a few renames so pasky
+	will be even more worried about how broken the color conversion is.  
+	Lots of TODOs.  
+
+Fri Oct 17 16:25:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Fri Oct 17 15:46:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h, screen.c:
+
+	Improve redrawing to only care about the background color when
+	dealing with ``space''.  
+
+Fri Oct 17 15:31:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, dialogs/menu.c, document/html/renderer.c,
+	sched/session.c, sched/session.h, viewer/text/view.c,
+	viewer/text/vs.c:
+
+	struct session screen field was renamed doc_view.  
+
+Fri Oct 17 15:24:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	t -> term, l -> link.  
+
+Fri Oct 17 15:20:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.h:
+
+	Improve terminal_screen->dirty_* comment.  
+
+Fri Oct 17 15:15:18 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Fri Oct 17 15:13:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Minimize dirty_to if >= the terminal height.  
+
+Fri Oct 17 15:12:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 15:09:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Only iterate for the range of dirty lines. Mostly dialog drawing
+	benefits.  
+
+Fri Oct 17 15:08:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/draw.c, terminal/screen.c,
+	terminal/screen.h, terminal/tab.c:
+
+	Maintain a dirty range instead of a dirty flag. dirty_from <=
+	dirty_to means the screen is dirty.  
+
+Fri Oct 17 14:25:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Rename struct document_view variables to doc_view + minor cleanup.  
+
+Fri Oct 17 14:19:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.h, view.h:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 14:16:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 14:11:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/vs.c:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 14:10:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Rename struct document_view variables to doc_view. Final part.  
+
+Fri Oct 17 14:08:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Rename struct document_view variables to doc_view + minor cleanup.  
+
+Fri Oct 17 14:02:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, form.h:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 13:59:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 13:58:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Rename struct document_view variables to doc_view. Part 1.  
+
+Fri Oct 17 13:50:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Rename struct document_view variables to doc_view.  Simplify
+	l_current_link(LS) to use get_current_link().  
+
+Fri Oct 17 13:46:05 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Fri Oct 17 13:42:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Rename struct document_view variables to *doc_view.  
+
+Fri Oct 17 13:39:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: search.c, search.h:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 13:35:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 13:26:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/history.c, document/html/frames.c:
+
+	Rename struct document_view variables to *doc_view.  
+
+Fri Oct 17 13:25:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: textarea.c, textarea.h, textarea.h:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 13:20:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Rename struct document_view variables to *doc_view.  
+
+Fri Oct 17 13:13:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, dialogs/menu.c, document/html/frames.c:
+
+	Rename struct document_view variables to doc_view.  
+
+Fri Oct 17 13:05:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Always use document variable name for struct document *.  
+
+Fri Oct 17 13:04:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: scripting/lua/core.c, viewer/dump/dump.c:
+
+	Use document variable name for struct document *.  
+
+Fri Oct 17 13:00:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Use document variable name for struct document *.  
+
+Fri Oct 17 12:56:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Always use document variable name for struct document *.  
+
+Fri Oct 17 12:35:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: form.c, view.c:
+
+	Always use document variable name for struct document *.
+	has_form_submit() cleanup.  
+
+Fri Oct 17 12:26:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: frames.c, renderer.c, tables.c:
+
+	Always use document variable name for struct document *.  
+
+Fri Oct 17 11:39:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/cache.h:
+
+	Make boolean members unsigned. Felt by Miciah.  
+
+Fri Oct 17 11:12:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/: cache.c, cache.h, html/frames.h, html/renderer.c:
+
+	Renamed struct cache_entry count field and struct document use_tag
+	field to id_tag. cache_count is now id_tag_counter. Use document
+	variable name for struct document * variables, instead of confusing
+	ce or screen.  
+
+Fri Oct 17 10:47:51 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Fri Oct 17 09:32:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.h:
+
+	Use bitfields for boolean fields in struct cache_entry.  
+
+Fri Oct 17 09:07:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Now useless comment was removed.  
+
+Fri Oct 17 07:56:21 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Fri Oct 17 07:38:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Fix typo.  
+
+Fri Oct 17 05:11:44 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Null chars are replaced by spaces. www.gazeta.pl is viewable now.  
+
+Thu Oct 16 23:02:10 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Thu Oct 16 22:31:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update. Got in front of Hungary, hope de.po won't
+	get too near :-). (But of course don't get discouraged, kuser ;-) 
+
 Thu Oct 16 21:17:10 2003  Karsten Schölzel <kuser@gmx.de>:
 
 	* po/de.po:

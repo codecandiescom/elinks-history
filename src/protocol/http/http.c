@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.89 2003/01/01 20:30:35 pasky Exp $ */
+/* $Id: http.c,v 1.90 2003/01/03 02:12:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -534,10 +534,10 @@ http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "Accept-Language: ");
 		add_to_str(&hdr, &l, optstr);
 		add_to_str(&hdr, &l, "\r\n");
-	} else	if (get_opt_bool("protocol.http.accept_ui_language")) {
+	} else if (get_opt_bool("protocol.http.accept_ui_language")) {
 			unsigned char *code;
 
-			code = language_iso639_code(current_language);
+			code = language_to_iso639(current_language);
 			add_to_str(&hdr, &l, "Accept-Language: ");
 			add_to_str(&hdr, &l, code ? code : (unsigned char *) "");
 			add_to_str(&hdr, &l, "\r\n");

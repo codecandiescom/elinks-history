@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.158 2004/01/09 10:09:31 zas Exp $ */
+/* $Id: menu.c,v 1.159 2004/01/09 10:25:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -895,7 +895,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 					display_mainmenu(win->term, menu);
 
 					if ((ev->b & BM_ACT) == B_UP
-					    || mi_is_submenu(menu->items[s])) {
+					    || mi_is_submenu(menu->items[menu->selected])) {
 						select_mainmenu(win->term,
 								menu);
 					}

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.502 2004/06/20 13:13:37 jonas Exp $ */
+/* $Id: view.c,v 1.503 2004/06/20 13:29:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,8 +627,6 @@ home(struct session *ses, struct document_view *doc_view)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	ses->navigate_mode = NAVIGATE_LINKWISE;
-
 	doc_view->vs->y = doc_view->vs->x = 0;
 	find_link_page_down(doc_view);
 }
@@ -640,8 +638,6 @@ x_end(struct session *ses, struct document_view *doc_view)
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
-
-	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	max_height = doc_view->document->height - doc_view->box.height;
 	doc_view->vs->x = 0;

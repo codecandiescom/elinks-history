@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.136 2004/09/21 09:20:08 pasky Exp $ */
+/* $Id: options.inc,v 1.137 2004/09/21 13:52:55 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -184,7 +184,7 @@ struct option_info config_options_info[] = {
 		N_("Default form input size if none is specified.")),
 
 	INIT_OPT_BOOL("document.browse.forms", N_("Insert mode"),
-		"insert_mode", 0, 0,
+		"insert_mode", 0, 1,
 		N_("The setting for this option affects how key presses are handled\n"
 		"when one selects a text-input form-field. When enabled, one must\n"
 		"explicitly 'enter' a selected text-field to edit it; this prevents\n"

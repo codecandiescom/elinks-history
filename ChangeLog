@@ -1,3 +1,225 @@
+Thu Nov 13 22:56:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/refresh.c:
+
+	Describe why we call goto_url_frame().  
+
+Thu Nov 13 22:44:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Trailing newline removed.  
+
+Thu Nov 13 22:44:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Always comment ``dead'' code.  
+
+Thu Nov 13 22:43:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Tiny ses_chktype() reindentation.  
+
+Thu Nov 13 22:42:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Tiny kill_downloads_to_file() reindentation.  
+
+Thu Nov 13 22:41:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Tiny destroy_downloads() reindentation.  
+
+Thu Nov 13 22:40:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Outcomment proposed fix for bug 60.  
+
+Thu Nov 13 22:39:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	write_cache_entry_to_file() foreach() loop body reindentation.  
+
+Thu Nov 13 22:38:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	download_data_store()'s state != S_OK case reindentation.  
+
+Thu Nov 13 22:35:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Reduced download_data_store() indentation levels even more
+	drastically.  
+
+Thu Nov 13 22:33:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Reindented download_data_store().  
+
+Thu Nov 13 22:31:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	download_data()'s end_store label -> store 
+
+Thu Nov 13 21:42:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/frames.c, sched/download.c, sched/history.c,
+	sched/session.c, sched/session.h:
+
+	Reverted the changes introduced in a "fix" for bug 12 by witekfl.
+	They need to be reintroduced with some clear description of what
+	each of them do and especially why does it do it.  
+
+Thu Nov 13 21:39:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Nov 13 21:02:14 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Nov 13 20:32:46 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Thu Nov 13 18:44:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, dialogs/menu.c, dialogs/menu.h,
+	terminal/tab.c, terminal/tab.h, viewer/text/view.c:
+
+	Option to ask for confirmation when closing a tab (by default off).
+	Fixes bug 43. Ask to quit when closing last tab. Fixes bug 44.  
+
+Thu Nov 13 18:18:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, tables.c:
+
+	Handle id attributes for table tags. Fixes bug 39.  
+
+Thu Nov 13 17:56:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/info.c:
+
+	Add plain / html toggle button to Info -> Keys. Requested by Miciah.  
+
+Thu Nov 13 17:56:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Add escape variable to make_keystroke() so keystroke string for
+	dialogs is more correct.  
+
+Thu Nov 13 17:43:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Merge write_key() into make_keystroke() .. less dirty ;) 
+
+Thu Nov 13 17:22:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Add points to links when justifying text. Fixes bug 60.  
+
+Thu Nov 13 14:50:40 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were updated and french translation was updated.  
+
+Thu Nov 13 14:28:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Show the url as title for plain text document. Doh.  
+
+Thu Nov 13 14:25:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Remove traces of plain text renderer in the html renderer.  
+
+Thu Nov 13 14:23:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Remove traces of plain text parser in the html parser.  
+
+Thu Nov 13 13:17:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/protocol.c, protocol/protocol.h, protocol/uri.c,
+	sched/session.c, viewer/dump/dump.c:
+
+	PROTOCOL_INVALID was added to enum protocol, it is used to handle
+	unknown protocols in a clever way. This should fix bug 245.  
+
+Thu Nov 13 10:01:46 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Thu Nov 13 09:24:41 2003  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	My entry was completed a bit ;) 
+
+Thu Nov 13 09:20:16 2003  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS:
+
+	Simon Wilkinson was added to AUTHORS, as author of X509 client
+	certificates support.  
+
+Thu Nov 13 09:17:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/ssl/: connect.c, ssl.c:
+
+	Support for X509 client certificates. Patch by Simon Wilkinson. Tidy
+	up by me.  
+
+Thu Nov 13 01:46:26 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/kbdbind.c:
+
+	In add_keyactions_to_string(), use add_char_to_string() instead of
+	add_bytes_to_string() to add the newline.  
+
+Wed Nov 12 23:32:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Removed redundant comment.  
+
+Wed Nov 12 23:15:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/mime/backend/mailcap.c:
+
+	Tidy up.  
+
 Wed Nov 12 21:17:59 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* po/cs.po:

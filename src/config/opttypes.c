@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.25 2002/09/04 15:43:22 zas Exp $ */
+/* $Id: opttypes.c,v 1.26 2002/11/13 21:13:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,12 @@
 
 /* Commandline handlers. */
 
+/* TAKE CARE! Remember that your _rd handler can be used for commandline
+ * parameters as well - probably, you don't want to be so syntactically
+ * strict, and _ESPECIALLY_ you don't want to move any file pointers ahead,
+ * since you will parse the commandline _TWO TIMES_! Remember! :-) */
+static int commandline = 0;
+
 unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
@@ -33,8 +39,12 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 	if (!*argc) return "Parameter expected";
 
 	/* FIXME!! We will modify argv! (maybe) */
+	commandline = 1;
 	str = option_types[o->type].read(o, *argv - 0);
+	commandline = 0;
 	if (str) {
+		/* We ate parameter */
+		(*argv)++; (*argc)--;
 		if (option_types[o->type].set(o, str)) {
 			mem_free(str);
 			return NULL;
@@ -188,11 +198,17 @@ add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
 unsigned char *
 num_rd(struct option *opt, unsigned char **file)
 {
+	unsigned char *end = *file;
 	long *value = mem_alloc(sizeof(long));
 
-	*value = strtolx(*file, file);
+	/* We don't want to move file if (commandline), but strtolx() second
+	 * parameter must not be NULL. */
+	*value = strtolx(*file, &end);
+	if (!commandline) *file = end;
 
-	if ((**file != 0 && !WHITECHAR(**file) && **file != '#')
+	/* Another trap for unwary - we need to check *end, not **file - reason
+	 * is left as an exercise for a reader. */
+	if ((*end != 0 && !WHITECHAR(*end) && *end != '#')
 	    || (*value < opt->min || *value > opt->max)) {
 		mem_free(value);
 		return NULL;
@@ -249,10 +265,10 @@ str_rd(struct option *opt, unsigned char **file)
 
 	/* We're getting used in some parser functions in conf.c as well, and
 	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
-	if (*str != '"') return NULL;
+	if (!commandline && *str != '"') { mem_free(str2); return NULL; }
 	str++;
 
-	while (*str && *str != '"') {
+	while (*str && (commandline || *str != '"')) {
 		if (*str == '\\') {
 			/* FIXME: This won't work on crlf systems. */
 			if (str[1] == '\n') { str[1] = ' '; str++; }
@@ -268,14 +284,14 @@ str_rd(struct option *opt, unsigned char **file)
 		str++;
 	}
 
-	if (!*str) {
+	if (!commandline && !*str) {
 		mem_free(str2);
 		*file = str;
 		return NULL;
 	}
 
 	str++; /* Skip the quote. */
-	*file = str;
+	if (!commandline) *file = str;
 
 	if (opt && opt->max && str2l >= opt->max) {
 		mem_free(str2);

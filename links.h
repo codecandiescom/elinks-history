@@ -1988,6 +1988,8 @@ void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
 
 /* html_r.c */
 
+/* Many pieces of it are exported just for interfacing with html_tab.c :/ */
+
 struct part {
 	int x, y;
 	int xp, yp;
@@ -2007,14 +2009,12 @@ struct sizes {
 };
 
 extern struct document_options *d_opt;
-extern int last_link_to_move;
-extern int margin;
+extern int margin; /* FIXME: This probably breaks encapsulation of renderer? --pasky */
 
 int xxpand_line(struct part *, int, int);
 int xxpand_lines(struct part *, int);
 void xset_hchar(struct part *, int, int, unsigned);
 void xset_hchars(struct part *, int, int, int, unsigned);
-void align_line(struct part *, int);
 
 void free_table_cache();
 

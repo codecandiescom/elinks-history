@@ -1085,20 +1085,17 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	int cye;
 	int x;
 	int i;
-	/*int llm = last_link_to_move;*/
+#if 0
+	int llm = last_link_to_move;
+#endif
 	struct s_e *bad_html;
 	int bad_html_n;
 	struct node *n, *nn;
-	/*if (!p->data) {
-		debug("nested tables not supported");
-		return;
-	}*/
+	
 	table_level++;
 	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
 	get_bgcolor(attr, &bgcolor);
 	if ((border = get_num(attr, "border")) == -1) border = has_attr(attr, "border");
-	/*if (!border) border = 1;*/
-								/* !!! FIXME: remove */
 	if ((cellsp = get_num(attr, "cellspacing")) == -1) cellsp = 1;
 	if ((cellpd = get_num(attr, "cellpadding")) == -1) {
 		vcellpd = 0;
@@ -1185,7 +1182,7 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 		t->cellpd = 0;
 		goto again;
 	}
-	/*debug("%d %d %d", t->min_t, t->max_t, width);*/
+	/* debug("%d %d %d", t->min_t, t->max_t, width); */
 	if (t->min_t >= width) distribute_widths(t, t->min_t);
 	else if (t->max_t < width && wf) distribute_widths(t, t->max_t);
 	else distribute_widths(t, width);
@@ -1222,11 +1219,13 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 		nn->xw = n->xw;
 		add_to_list(p->data->nodes, nn);
 	}
-	/*sdbg(p->data);*/
-	/*for (y = p->cy; y < cye; y++) {
+	/* sdbg(p->data); */
+#if 0
+	for (y = p->cy; y < cye; y++) {
 		last_link_to_move = llm;
-		align_line(p, y);
-	}*/
+		align_line(p, y, 0);
+	}
+#endif
 	if (p->cy + t->rh != cye) internal("size does not match; 1:%d, 2:%d", p->cy + t->rh, cye);
 	p->cy = cye;
 	p->cx = -1;

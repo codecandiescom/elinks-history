@@ -221,54 +221,54 @@ static inline int xpand_spaces(struct part *p, int l)
 	return 0;
 }
 
-#define POS(x, y) (p->data->data[p->yp + (y)].d[p->xp + (x)])
-#define LEN(y) (p->data->data[p->yp + (y)].l - p->xp < 0 ? 0 : p->data->data[p->yp + (y)].l - p->xp)
-#define SLEN(y, x) p->data->data[p->yp + (y)].l = p->xp + x;
-#define X(x) (p->xp + (x))
-#define Y(y) (p->yp + (y))
+#define POS(x, y) (part->data->data[part->yp + (y)].d[part->xp + (x)])
+#define LEN(y) (part->data->data[part->yp + (y)].l - part->xp < 0 ? 0 : part->data->data[part->yp + (y)].l - part->xp)
+#define SLEN(y, x) part->data->data[part->yp + (y)].l = part->xp + x;
+#define X(x) (part->xp + (x))
+#define Y(y) (part->yp + (y))
 
-static inline void set_hchar(struct part *p, int x, int y, unsigned c)
+static inline void set_hchar(struct part *part, int x, int y, unsigned c)
 {
-	if (xpand_lines(p, y)) return;
-	if (xpand_line(p, y, x)) return;
+	if (xpand_lines(part, y)) return;
+	if (xpand_line(part, y, x)) return;
 	POS(x, y) = c;
 }
 
-static inline void set_hchars(struct part *p, int x, int y, int xl, unsigned c)
+static inline void set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
-	if (xpand_lines(p, y)) return;
-	if (xpand_line(p, y, x+xl-1)) return;
+	if (xpand_lines(part, y)) return;
+	if (xpand_line(part, y, x+xl-1)) return;
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
-void xset_hchar(struct part *p, int x, int y, unsigned c)
+void xset_hchar(struct part *part, int x, int y, unsigned c)
 {
-	set_hchar(p, x, y, c);
+	set_hchar(part, x, y, c);
 }
 
-void xset_hchars(struct part *p, int x, int y, int xl, unsigned c)
+void xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
-	set_hchars(p, x, y, xl, c);
+	set_hchars(part, x, y, xl, c);
 }
 
-int xxpand_lines(struct part *p, int y)
+int xxpand_lines(struct part *part, int y)
 {
-	return xpand_lines(p, y);
+	return xpand_lines(part, y);
 }
 
-int xxpand_line(struct part *p, int y, int x)
+int xxpand_line(struct part *part, int y, int x)
 {
-	return xpand_line(p, y, x);
+	return xpand_line(part, y, x);
 }
 
-static inline void set_hline(struct part *p, int x, int y, int xl, unsigned char *d, unsigned c, int spc)
+static inline void set_hline(struct part *part, int x, int y, int xl, unsigned char *d, unsigned c, int spc)
 {
-	if (xpand_lines(p, y)) return;
-	if (xpand_line(p, y, x+xl-1)) return;
-	if (spc && xpand_spaces(p, x+xl-1)) return;
+	if (xpand_lines(part, y)) return;
+	if (xpand_line(part, y, x+xl-1)) return;
+	if (spc && xpand_spaces(part, x+xl-1)) return;
 	for (; xl; xl--, x++, d++) {
-		if (spc) p->spaces[x] = *d == ' ';
-		if (p->data) POS(x, y) = *d | c;
+		if (spc) part->spaces[x] = *d == ' ';
+		if (part->data) POS(x, y) = *d | c;
 	}
 }
 
@@ -276,16 +276,16 @@ int last_link_to_move;
 struct tag *last_tag_to_move;
 struct tag *last_tag_for_newline;
 
-static inline void move_links(struct part *p, int xf, int yf, int xt, int yt)
+static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
 {
 	int n;
 	struct tag *t;
 	int w = 0;
-	if (!p->data) return;
-	xpand_lines(p, yt);
-	for (n = last_link_to_move; n < p->data->nlinks; n++) {
+	if (!part->data) return;
+	xpand_lines(part, yt);
+	for (n = last_link_to_move; n < part->data->nlinks; n++) {
 		int i;
-		struct link *link = &p->data->links[n];
+		struct link *link = &part->data->links[n];
 			/*printf("ml: %d %d %d %d",link->pos[0].x,link->pos[0].y,X(xf),Y(yf));fflush(stdout);sleep(1);*/
 		for (i = 0; i < link->n; i++) if (link->pos[i].y == Y(yf)) {
 			w = 1;
@@ -303,14 +303,14 @@ static inline void move_links(struct part *p, int xf, int yf, int xt, int yt)
 			if (link->target) mem_free(link->target);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
-			memmove(link, link + 1, (p->data->nlinks - n - 1) * sizeof(struct link));
-			p->data->nlinks --;
+			memmove(link, link + 1, (part->data->nlinks - n - 1) * sizeof(struct link));
+			part->data->nlinks --;
 			n--;
 		}*/
 		if (!w /*&& n >= 0*/) last_link_to_move = n;
 	}
 	w = 0;
-	if (yt >= 0) for (t = last_tag_to_move->next; (void *)t != &p->data->tags; t = t->next) {
+	if (yt >= 0) for (t = last_tag_to_move->next; (void *)t != &part->data->tags; t = t->next) {
 		if (t->y == Y(yf)) {
 			w = 1;
 			if (t->x >= X(xf)) {
@@ -321,92 +321,163 @@ static inline void move_links(struct part *p, int xf, int yf, int xt, int yt)
 	}
 }
 
-static inline void copy_chars(struct part *p, int x, int y, int xl, chr *d)
+static inline void copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
 	if (xl <= 0) return;
-	if (xpand_lines(p, y)) return;
-	if (xpand_line(p, y, x+xl-1)) return;
+	if (xpand_lines(part, y)) return;
+	if (xpand_line(part, y, x+xl-1)) return;
 	for (; xl; xl--, x++, d++) POS(x, y) = *d;
 }
 
-static inline void move_chars(struct part *p, int x, int y, int nx, int ny)
+static inline void move_chars(struct part *part, int x, int y, int nx, int ny)
 {
 	if (LEN(y) - x <= 0) return;
-	copy_chars(p, nx, ny, LEN(y) - x, &POS(x, y));
+	copy_chars(part, nx, ny, LEN(y) - x, &POS(x, y));
 	SLEN(y, x);
-	move_links(p, x, y, nx, ny);
+	move_links(part, x, y, nx, ny);
 }
 
-static inline void shift_chars(struct part *p, int y, int s)
+static inline void shift_chars(struct part *part, int y, int shift)
 {
 	chr *a;
-	int l = LEN(y);
-	if (!(a = mem_alloc(l * sizeof(chr)))) return;
-	memcpy(a, &POS(0, y), l * sizeof(chr));
-	set_hchars(p, 0, y, s, (p->data->data[y].c << 11) | ' ');
-	copy_chars(p, s, y, l, a);
+	int len = LEN(y);
+	
+	a = mem_alloc(len * sizeof(chr));
+	if (!a) return;
+	
+	memcpy(a, &POS(0, y), len * sizeof(chr));
+	set_hchars(part, 0, y, shift, (part->data->data[y].c << 11) | ' ');
+	copy_chars(part, shift, y, len, a);
 	mem_free(a);
-	move_links(p, 0, y, s, y);
+	
+	move_links(part, 0, y, shift, y);
 }
 
-static inline void del_chars(struct part *p, int x, int y)
+static inline void del_chars(struct part *part, int x, int y)
 {
 	SLEN(y, x);
-	move_links(p, x, y, -1, -1);
+	move_links(part, x, y, -1, -1);
 }
 
-#define rm(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
+#define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
 void line_break(struct part *);
 
-int split_line(struct part *p)
+int split_line(struct part *part)
 {
 	int i;
-	/*if (!p->data) goto r;*/
-	/*printf("split: %d,%d   , %d,%d,%d\n",p->cx,p->cy,par_format.rightmargin,par_format.leftmargin,p->cx);*/
-	for (i = rm(par_format); i >= par_format.leftmargin; i--)
-		if (i < p->spl && p->spaces[i]) goto split;
-	/*for (i = p->cx - 1; i > rm(par_format) && i > par_format.leftmargin; i--)*/
-	for (i = par_format.leftmargin; i < p->cx ; i++)
-		if (i < p->spl && p->spaces[i]) goto split;
-	/*for (i = rm(par_format); i >= par_format.leftmargin; i--)
-		if ((POS(i, p->cy) & 0xff) == ' ') goto split;
-	for (i = p->cx - 1; i > rm(par_format) && i > par_format.leftmargin; i--)
-		if ((POS(i, p->cy) & 0xff) == ' ') goto split;*/
-	if (p->cx + par_format.rightmargin > p->x) p->x = p->cx + par_format.rightmargin;
-	/*if (p->y < p->cy + 1) p->y = p->cy + 1;
-	p->cy++; p->cx = -1;
-	memset(p->spaces, 0, p->spl);
-	if (p->data) xpand_lines(p, p->cy + 1);*/
-	/*line_break(p);*/
+	/*if (!part->data) goto r;*/
+	/*printf("split: %d,%d   , %d,%d,%d\n",part->cx,part->cy,par_format.rightmargin,par_format.leftmargin,part->cx);*/
+	for (i = overlap(par_format); i >= par_format.leftmargin; i--)
+		if (i < part->spl && part->spaces[i]) goto split;
+	/*for (i = part->cx - 1; i > overlap(par_format) && i > par_format.leftmargin; i--)*/
+	for (i = par_format.leftmargin; i < part->cx ; i++)
+		if (i < part->spl && part->spaces[i]) goto split;
+	/*for (i = overlap(par_format); i >= par_format.leftmargin; i--)
+		if ((POS(i, part->cy) & 0xff) == ' ') goto split;
+	for (i = part->cx - 1; i > overlap(par_format) && i > par_format.leftmargin; i--)
+		if ((POS(i, part->cy) & 0xff) == ' ') goto split;*/
+	if (part->cx + par_format.rightmargin > part->x) part->x = part->cx + par_format.rightmargin;
+	/*if (part->y < part->cy + 1) part->y = part->cy + 1;
+	part->cy++; part->cx = -1;
+	memset(part->spaces, 0, part->spl);
+	if (part->data) xpand_lines(part, part->cy + 1);*/
+	/*line_break(part);*/
 	return 0;
 	split:
-	if (i + par_format.rightmargin > p->x) p->x = i + par_format.rightmargin;
-	if (p->data) {
+	if (i + par_format.rightmargin > part->x) part->x = i + par_format.rightmargin;
+	if (part->data) {
 #ifdef DEBUG
-		if ((POS(i, p->cy) & 0xff) != ' ') internal("bad split: %c", (char)POS(i, p->cy));
+		if ((POS(i, part->cy) & 0xff) != ' ') internal("bad split: %c", (char)POS(i, part->cy));
 #endif
-		move_chars(p, i+1, p->cy, par_format.leftmargin, p->cy+1);
-		del_chars(p, i, p->cy);
+		move_chars(part, i+1, part->cy, par_format.leftmargin, part->cy+1);
+		del_chars(part, i, part->cy);
 	}
-	memmove(p->spaces, p->spaces + i + 1, p->spl - i - 1);
-	memset(p->spaces + p->spl - i - 1, 0, i + 1);
-	memmove(p->spaces + par_format.leftmargin, p->spaces, p->spl - par_format.leftmargin);
-	p->cy++; p->cx -= i - par_format.leftmargin + 1;
-	/*return 1 + (p->cx == par_format.leftmargin);*/
-	if (p->cx == par_format.leftmargin) p->cx = -1;
-	if (p->y < p->cy + (p->cx != -1)) p->y = p->cy + (p->cx != -1);
-	return 1 + (p->cx == -1);
+	memmove(part->spaces, part->spaces + i + 1, part->spl - i - 1);
+	memset(part->spaces + part->spl - i - 1, 0, i + 1);
+	memmove(part->spaces + par_format.leftmargin, part->spaces, part->spl - par_format.leftmargin);
+	part->cy++; part->cx -= i - par_format.leftmargin + 1;
+	/*return 1 + (part->cx == par_format.leftmargin);*/
+	if (part->cx == par_format.leftmargin) part->cx = -1;
+	if (part->y < part->cy + (part->cx != -1)) part->y = part->cy + (part->cx != -1);
+	return 1 + (part->cx == -1);
 }
 
-void align_line(struct part *p, int y)
+static void justify_line(struct part *part, int y)
 {
-	int na;
-	if (!p->data) return;
-	if (!LEN(y) || par_format.align == AL_LEFT || par_format.align == AL_NO || par_format.align == AL_BLOCK /* !!! fixme! */) return;
-	na = rm(par_format) - LEN(y);
-	if (par_format.align == AL_CENTER) na /= 2;
-	if (na > 0) shift_chars(p, y, na);
+	chr *a;
+	int shift;
+	int len = LEN(y);
+	int i = 0;
+	int *space_list;
+	int spaces = 1;
+	int q = 0;
+
+	shift = overlap(par_format) - len;
+	
+	a = mem_alloc(len * sizeof(chr));
+	if (!a) return;
+	space_list = mem_alloc(len * sizeof(int));
+	if (!space_list) return;
+
+	memcpy(a, &POS(0, y), len * sizeof(chr));
+	
+	while ((a[i] & 0xff) == ' ')
+		i++;
+	
+	space_list[0] = i - 1;
+	
+	for (; i < len; i++)
+		if ((a[i] & 0xff) == ' ')
+			space_list[spaces++] = i;
+
+	space_list[spaces] = len;
+
+	if (spaces > 1) {
+		set_hchars(part, 0, y, overlap(par_format),
+			   (part->data->data[y].c << 11) | ' ');
+		
+		for (i = 0; i < spaces; i++, q += shift) {
+			int new_pos, last_end = 0, word_len, x;
+			
+			x = space_list[i] + 1;
+			new_pos = x + (q / (spaces - 1));
+			word_len = space_list[i + 1] - x;
+			copy_chars(part, new_pos, y, word_len, &a[x]);
+			if (i) move_links(part, last_end + 1, y, new_pos, y);
+			last_end = new_pos + word_len;
+		};
+	}
+	
+	mem_free(space_list);
+	mem_free(a);
+}
+
+void align_line(struct part *part, int y, int last)
+{
+	int shift;
+	int len;
+	
+	if (!part->data)
+		return;
+
+	len = LEN(y);
+	
+	if (!len || par_format.align == AL_LEFT ||
+		    par_format.align == AL_NO)
+		return;
+
+	if (par_format.align == AL_BLOCK) {
+		if (!last)
+			justify_line(part, y);
+		return;
+	}
+	
+	shift = overlap(par_format) - len;
+	if (par_format.align == AL_CENTER)
+		shift /= 2;
+	if (shift > 0)
+		shift_chars(part, y, shift);
 }
 
 struct link *new_link(struct f_data *f)
@@ -447,16 +518,16 @@ void put_chars(struct part *, unsigned char *, int);
 
 #define CH_BUF	256
 
-void put_chars_conv(struct part *p, unsigned char *c, int l)
+void put_chars_conv(struct part *part, unsigned char *c, int l)
 {
 	static char buffer[CH_BUF];
 	int bp = 0;
 	int pp = 0;
 	if (format.attr & AT_GRAPHICS) {
-		put_chars(p, c, l);
+		put_chars(part, c, l);
 		return;
 	}
-	if (!l) put_chars(p, NULL, 0);
+	if (!l) put_chars(part, NULL, 0);
 	while (pp < l) {
 		unsigned char *e;
 		if (c[pp] < 128 && c[pp] != '&') {
@@ -499,14 +570,16 @@ void put_chars_conv(struct part *p, unsigned char *c, int l)
 			buffer[bp++] = *(e++);
 			if (bp < CH_BUF) continue;
 			flush1:
-			put_chars(p, buffer, bp);
+			put_chars(part, buffer, bp);
 			bp = 0;
 		}
 	}
-	if (bp) put_chars(p, buffer, bp);
+	if (bp) put_chars(part, buffer, bp);
 }
 
-void put_chars(struct part *p, unsigned char *c, int l)
+#undef CH_BUF
+
+void put_chars(struct part *part, unsigned char *c, int l)
 {
 	static struct text_attrib_beginning ta_cache = { -1, { 0, 0, 0 }, { 0, 0, 0 } };
 	static int bg_cache;
@@ -516,45 +589,45 @@ void put_chars(struct part *p, unsigned char *c, int l)
 	int i;
 	struct link *link;
 	struct point *pt;
-	/*printf("%d-", p->cx);for (i=0; i<l; i++) printf("%c", c[i]); printf("-\n");sleep(1);*/
-	while (par_format.align != AL_NO && p->cx == -1 && l && *c == ' ') c++, l--;
+	/*printf("%d-", part->cx);for (i=0; i<l; i++) printf("%c", c[i]); printf("-\n");sleep(1);*/
+	while (par_format.align != AL_NO && part->cx == -1 && l && *c == ' ') c++, l--;
 	if (!l) return;
 	if (c[0] != ' ' || (c[1] && c[1] != ' ')) {
-		last_tag_for_newline = (void *)&p->data->tags;
+		last_tag_for_newline = (void *)&part->data->tags;
 	}
-	if (p->cx == -1) p->cx = par_format.leftmargin;
+	if (part->cx == -1) part->cx = par_format.leftmargin;
 	if (last_link || last_image || last_form || format.link || format.image || format.form) goto process_link;
 	no_l:
-	/*printf("%d %d\n",p->cx, p->cy);*/
+	/*printf("%d %d\n",part->cx, part->cy);*/
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) goto format_change;
 	bg = bg_cache, fg = fg_cache;
 	end_format_change:
-	if (p->cx == par_format.leftmargin && *c == ' ' && par_format.align != AL_NO) c++, l--;
-	if (p->y < p->cy + 1) p->y = p->cy + 1;
-	set_hline(p, p->cx, p->cy, l, c, (((fg&0x08)<<3)|(bg<<3)|(fg&0x07))<<8, 1);
-	p->cx += l;
+	if (part->cx == par_format.leftmargin && *c == ' ' && par_format.align != AL_NO) c++, l--;
+	if (part->y < part->cy + 1) part->y = part->cy + 1;
+	set_hline(part, part->cx, part->cy, l, c, (((fg&0x08)<<3)|(bg<<3)|(fg&0x07))<<8, 1);
+	part->cx += l;
 	nobreak = 0;
 	if (par_format.align != AL_NO)
-		while (p->cx > rm(par_format) && p->cx > par_format.leftmargin) {
+		while (part->cx > overlap(par_format) && part->cx > par_format.leftmargin) {
 			int x;
-			/*if (p->cx > p->x) {
-				p->x = p->cx + par_format.rightmargin;
-				if (c[l - 1] == ' ') p->x--;
+			/*if (part->cx > part->x) {
+				part->x = part->cx + par_format.rightmargin;
+				if (c[l - 1] == ' ') part->x--;
 			}*/
-			if (!(x = split_line(p))) break;
-			/*if (LEN(p->cy-1) > p->x) p->x = LEN(p->cy-1);*/
-			align_line(p, p->cy - 1);
+			if (!(x = split_line(part))) break;
+			/*if (LEN(part->cy-1) > part->x) part->x = LEN(part->cy-1);*/
+			align_line(part, part->cy - 1, 0);
 			nobreak = x - 1;
 		}
-	if ((p->xa += l) - (c[l-1] == ' ' && par_format.align != AL_NO) + par_format.leftmargin + par_format.rightmargin > p->xmax) p->xmax = p->xa - (c[l-1] == ' ' && par_format.align != AL_NO) + par_format.leftmargin + par_format.rightmargin;
+	if ((part->xa += l) - (c[l-1] == ' ' && par_format.align != AL_NO) + par_format.leftmargin + par_format.rightmargin > part->xmax) part->xmax = part->xa - (c[l-1] == ' ' && par_format.align != AL_NO) + par_format.leftmargin + par_format.rightmargin;
 	return;
 	process_link:
 	if ((last_link /*|| last_target*/ || last_image || last_form) &&
 	    !xstrcmp(format.link, last_link) && !xstrcmp(format.target, last_target) &&
 	    !xstrcmp(format.image, last_image) && format.form == last_form) {
-		if (!p->data) goto x;
-		link = &p->data->links[p->data->nlinks - 1];
-		if (!p->data->nlinks) {
+		if (!part->data) goto x;
+		link = &part->data->links[part->data->nlinks - 1];
+		if (!part->data->nlinks) {
 			internal("no link");
 			goto no_l;
 		}
@@ -574,22 +647,22 @@ void put_chars(struct part *p, unsigned char *c, int l)
 			format.link = format.target = format.image = NULL;
 			format.form = NULL;
 			s[0] = '[';
-			snzprint(s + 1, 62, p->link_num);
+			snzprint(s + 1, 62, part->link_num);
 			strcat(s, "]");
-			put_chars(p, s, strlen(s));
-			if (ff && ff->type == FC_TEXTAREA) line_break(p);
-			if (p->cx == -1) p->cx = par_format.leftmargin;
+			put_chars(part, s, strlen(s));
+			if (ff && ff->type == FC_TEXTAREA) line_break(part);
+			if (part->cx == -1) part->cx = par_format.leftmargin;
 			format.link = fl, format.target = ft, format.image = fi;
 			format.form = ff;
 		}
-		p->link_num++;
+		part->link_num++;
 		last_link = stracpy(format.link);
 		last_target = stracpy(format.target);
 		last_image = stracpy(format.image);
 		last_form = format.form;
-		if (!p->data) goto no_l;
-		if (!(link = new_link(p->data))) goto no_l;
-		link->num = p->link_num - 1;
+		if (!part->data) goto no_l;
+		if (!(link = new_link(part->data))) goto no_l;
+		link->num = part->link_num - 1;
 		link->pos = DUMMY;
 		if (!last_form) {
 			link->type = L_LINK;
@@ -615,8 +688,8 @@ void put_chars(struct part *p, unsigned char *c, int l)
 		set_link:
 		if ((pt = mem_realloc(link->pos, (link->n + l) * sizeof(struct point)))) {
 			link->pos = pt;
-			for (i = 0; i < l; i++) pt[link->n + i].x = X(p->cx) + i,
-						pt[link->n + i].y = Y(p->cy);
+			for (i = 0; i < l; i++) pt[link->n + i].x = X(part->cx) + i,
+						pt[link->n + i].y = Y(part->cy);
 			link->n += i;
 		}
 	}
@@ -636,46 +709,48 @@ void put_chars(struct part *p, unsigned char *c, int l)
 		goto end_format_change;
 }
 
-void line_break(struct part *p)
+#undef overlap
+
+void line_break(struct part *part)
 {
 	struct tag *t;
 	/*printf("-break-\n");*/
-	if (p->cx + par_format.rightmargin > p->x) p->x = p->cx + par_format.rightmargin;
+	if (part->cx + par_format.rightmargin > part->x) part->x = part->cx + par_format.rightmargin;
 	if (nobreak) {
-		/*if (p->y < p->cy) p->y = p->cy;*/
+		/*if (part->y < part->cy) part->y = part->cy;*/
 		nobreak = 0;
-		p->cx = -1;
-		p->xa = 0;
+		part->cx = -1;
+		part->xa = 0;
 		return;
 	}
-	if (!p->data) goto e;
-	/*move_links(p, p->cx, p->cy, 0, p->cy + 1);*/
-	xpand_lines(p, p->cy + 1);
-	if (p->cx > par_format.leftmargin && (POS(p->cx-1, p->cy) & 0xff) == ' ') del_chars(p, p->cx-1, p->cy), p->cx--;
-	/*if (LEN(p->cy) > p->x) p->x = LEN(p->cy);*/
-	if (p->cx > 0) align_line(p, p->cy);
-	if (p->data) for (t = last_tag_for_newline; t && (void *)t != &p->data->tags; t = t->prev) {
+	if (!part->data) goto e;
+	/*move_links(part, part->cx, part->cy, 0, part->cy + 1);*/
+	xpand_lines(part, part->cy + 1);
+	if (part->cx > par_format.leftmargin && (POS(part->cx-1, part->cy) & 0xff) == ' ') del_chars(part, part->cx-1, part->cy), part->cx--;
+	/*if (LEN(part->cy) > part->x) part->x = LEN(part->cy);*/
+	if (part->cx > 0) align_line(part, part->cy, 1);
+	if (part->data) for (t = last_tag_for_newline; t && (void *)t != &part->data->tags; t = t->prev) {
 		t->x = X(0);
-		t->y = Y(p->cy + 1);
+		t->y = Y(part->cy + 1);
 	}
 	e:
-	p->cy++; p->cx = -1; p->xa = 0; /*if (p->y < p->cy) p->y = p->cy;*/
-	memset(p->spaces, 0, p->spl);
+	part->cy++; part->cx = -1; part->xa = 0; /*if (part->y < part->cy) part->y = part->cy;*/
+	memset(part->spaces, 0, part->spl);
 }
 
-void html_init(struct part *p)
+void html_init(struct part *part)
 {
 	/* !!! FIXME: background */
 }
 
 int g_ctrl_num;
 
-void html_form_control(struct part *p, struct form_control *fc)
+void html_form_control(struct part *part, struct form_control *fc)
 {
-	if (!p->data) {
+	if (!part->data) {
 		/*destroy_fc(fc);
 		mem_free(fc);*/
-		add_to_list(p->uf, fc);
+		add_to_list(part->uf, fc);
 		return;
 	}
 	fc->g_ctrl_num = g_ctrl_num++;
@@ -686,7 +761,7 @@ void html_form_control(struct part *p, struct form_control *fc)
 			fc->default_value = dv;
 		}
 	}
-	add_to_list(p->data->forms, fc);
+	add_to_list(part->data->forms, fc);
 }
 
 void add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe, unsigned char *name, unsigned char *url)
@@ -726,7 +801,7 @@ void create_frame(struct frame_param *fp)
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
-void *html_special(struct part *p, int c, ...)
+void *html_special(struct part *part, int c, ...)
 {
 	va_list l;
 	unsigned char *t;
@@ -737,19 +812,19 @@ void *html_special(struct part *p, int c, ...)
 	switch (c) {
 		case SP_TAG:
 			t = va_arg(l, unsigned char *);
-			html_tag(p->data, t, X(p->cx), Y(p->cy));
+			html_tag(part->data, t, X(part->cx), Y(part->cy));
 			break;
 		case SP_CONTROL:
 			fc = va_arg(l, struct form_control *);
-			html_form_control(p, fc);
+			html_form_control(part, fc);
 			break;
 		case SP_TABLE:
 			return convert_table;
 		case SP_USED:
-			return (void *)!!p->data;
+			return (void *)!!part->data;
 		case SP_FRAMESET:
 			fsp = va_arg(l, struct frameset_param *);
-			return create_frameset(p->data, fsp);
+			return create_frameset(part->data, fsp);
 		case SP_FRAME:
 			fp = va_arg(l, struct frame_param *);
 			create_frame(fp);
@@ -778,7 +853,7 @@ struct table_cache_entry {
 	int width;
 	int xs;
 	int link_num;
-	struct part p;
+	struct part part;
 };
 
 struct list_head table_cache = { &table_cache, &table_cache };
@@ -790,7 +865,7 @@ void free_table_cache()
 
 struct part *format_html_part(unsigned char *start, unsigned char *end, int align, int m, int width, struct f_data *data, int xs, int ys, unsigned char *head, int link_num)
 {
-	struct part *p;
+	struct part *part;
 	struct html_element *e;
 	int llm = last_link_to_move;
 	struct tag *ltm = last_tag_to_move;
@@ -806,10 +881,10 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 			    && tce->align == align && tce->m == m
 			    && tce->width == width && tce->xs == xs
 			    && tce->link_num == link_num) {
-				p = mem_alloc(sizeof(struct part));
-				if (!p) continue;
-				memcpy(p, &tce->p, sizeof(struct part));
-				return p;
+				part = mem_alloc(sizeof(struct part));
+				if (!part) continue;
+				memcpy(part, &tce->part, sizeof(struct part));
+				return part;
 			}
 		}
 	}
@@ -839,16 +914,16 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 	last_link = last_image = last_target = NULL;
 	last_form = NULL;
 	nobreak = 1;
-	if (!(p = mem_alloc(sizeof(struct part)))) goto ret;
-	p->x = p->y = 0;
-	p->data = data;
-	p->xp = xs; p->yp = ys;
-	p->xmax = p->xa = 0;
-	p->bgcolor = find_nearest_color(&par_format.bgcolor, 8);
-	p->spaces = DUMMY;
-	p->spl = 0;
-	p->link_num = link_num;
-	init_list(p->uf);
+	if (!(part = mem_alloc(sizeof(struct part)))) goto ret;
+	part->x = part->y = 0;
+	part->data = data;
+	part->xp = xs; part->yp = ys;
+	part->xmax = part->xa = 0;
+	part->bgcolor = find_nearest_color(&par_format.bgcolor, 8);
+	part->spaces = DUMMY;
+	part->spl = 0;
+	part->link_num = link_num;
+	init_list(part->uf);
 	html_stack_dup();
 	e = &html_top;
 	html_top.dontkill = 2;
@@ -860,10 +935,10 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 	par_format.list_level = 0;
 	par_format.list_number = 0;
 	par_format.dd_margin = 0;
-	p->cx = -1;
-	p->cy = 0;
-	do_format(start, end, p, head);
-	if (p->xmax < p->x) p->xmax = p->x;
+	part->cx = -1;
+	part->cy = 0;
+	do_format(start, end, part, head);
+	if (part->xmax < part->x) part->xmax = part->x;
 	nobreak = 0;
 	line_breax = 1;
 	if (last_link) mem_free(last_link);
@@ -878,13 +953,13 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 	}
 	html_top.dontkill = 0;
 	kill_html_stack_item(&html_top);
-	mem_free(p->spaces);
+	mem_free(part->spaces);
 	if (data) {
 		struct node *n = data->nodes.next;
-		n->yw = ys - n->y + p->y;
+		n->yw = ys - n->y + part->y;
 	}
-	foreach(fc, p->uf) destroy_fc(fc);
-	free_list(p->uf);
+	foreach(fc, part->uf) destroy_fc(fc);
+	free_list(part->uf);
 	ret:
 	last_link_to_move = llm;
 	last_tag_to_move = ltm;
@@ -900,12 +975,12 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 		tce->width = width;
 		tce->xs = xs;
 		tce->link_num = link_num;
-		memcpy(&tce->p, p, sizeof(struct part));
+		memcpy(&tce->part, part, sizeof(struct part));
 		add_to_list(table_cache, tce);
 	}
 	last_link = last_image = last_target = NULL;
 	last_form = NULL;
-	return p;
+	return part;
 }
 
 void push_base_format(unsigned char *url, struct document_options *opt)
@@ -946,8 +1021,8 @@ struct conv_table *get_convert_table(unsigned char *head, int to, int def, int *
 {
 	int from = -1;
 	unsigned char *a, *b;
-	unsigned char *p = head;
-	while (from == -1 && p && (a = parse_http_header(p, "Content-Type", &p))) {
+	unsigned char *part = head;
+	while (from == -1 && part && (a = parse_http_header(part, "Content-Type", &part))) {
 		if ((b = parse_header_param(a, "charset"))) {
 			from = get_cp_index(b);
 			mem_free(b);

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.112 2003/09/28 18:23:38 jonas Exp $ */
+/* $Id: menu.c,v 1.113 2003/09/28 20:28:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -788,12 +788,16 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 	}
 }
 
+/* For dynamic menus the last (cleared) item is used to mark the end. */
+#define realloc_menu_items(mi_, size) \
+	mem_align_alloc(mi_, size, (size) + 2, sizeof(struct menu_item), 0xF)
+
 struct menu_item *
 new_menu(enum item_free item_free)
 {
-	struct menu_item *mi = mem_calloc(1, sizeof(struct menu_item));
+	struct menu_item *mi = NULL;
 
-	if (mi) mi->item_free = item_free;
+	if (realloc_menu_items(&mi, 0)) mi->item_free = item_free;
 
 	return mi;
 }
@@ -802,19 +806,18 @@ void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	    menu_func func, void *data, int submenu, int no_intl)
 {
-	struct menu_item *mii;
 	int n = count_items(*mi);
+	/* XXX: Don't clear the last and special item. */
+	struct menu_item *item = realloc_menu_items(mi, n + 1);
 
-	mii = mem_realloc(*mi, (n + 2) * sizeof(struct menu_item));
-	if (!mii) return;
+	if (!item) return;
+
+	item += n;
 
 	/* Shift current last item by one place. */
-	memcpy(mii + n + 1, mii + n, sizeof(struct menu_item));
+	memcpy(item + 1, item, sizeof(struct menu_item));
 
-	/* Set new item, keeping item_free value of previous item. */
-	SET_MENU_ITEM(&mii[n], text, rtext, func, data, mii[n + 1].item_free,
+	/* Setup the new item. All menu items share the item_free value. */
+	SET_MENU_ITEM(item, text, rtext, func, data, item->item_free,
 		      submenu, no_intl, HKS_SHOW, 0);
-
-	/* Update pointer to new address (if any). */
-	*mi = mii;
 }

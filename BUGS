@@ -12,9 +12,6 @@ newline).
 
 	Tags inside <XMP> are still interpreted.
 
-	links '...?q=foo+bar' when launching new instance in xterm leads to
-incorrectly decoding +ba to 0xba.
-
 	When switching between source view and rendered view, the position of
 the view is based on the page number of the previous view, not on the content of
 the previous view.
@@ -27,6 +24,6 @@ top/bottom of screen.
 
 	Handling of textareas splitted to two pages is just weird.
 
-$Id: BUGS,v 1.26 2002/08/05 19:53:31 pasky Exp $
+$Id: BUGS,v 1.27 2002/08/11 17:18:27 pasky Exp $
 
 vim: textwidth=80

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.20 2003/11/03 13:55:13 zas Exp $ */
+/* $Id: document.h,v 1.21 2003/11/08 16:20:24 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -125,7 +125,7 @@ struct document {
 
 	unsigned int id_tag; /* Used to check cache entries. */
 
-	int refcount;
+	int locks;
 	int cp;
 	int width, height; /* size of document */
 	int nlinks;
@@ -134,6 +134,27 @@ struct document {
 
 	enum cp_status cp_status;
 };
+
+#if 1
+#define DEBUG_DOCUMENT_LOCKS
+#endif
+
+#ifdef DEBUG_DOCUMENT_LOCKS
+#define doc_lock_debug(doc, info) debug("document %p lock %s now %d url= %s", doc, info, (doc)->locks, (doc)->url)
+#define doc_sanity_check(doc) do { assert(doc); assertm((doc)->locks >= 0, "Document lock underflow."); } while (0)
+#else
+#define doc_lock_debug(ce, info)
+#define doc_sanity_check(ce)
+#endif
+
+#define get_document_locks(doc) ((doc)->locks)
+#define is_document_locked(doc) (!!(doc)->locks)
+#define document_lock(doc) do { doc_sanity_check(doc); (doc)->locks++; doc_lock_debug(doc, "+1"); } while (0)
+#define document_unlock(doc) do { (doc)->locks--; doc_lock_debug(doc, "-1"); doc_sanity_check(doc);} while (0)
+
+/* Please keep this one. It serves for debugging. --Zas */
+#define document_nolock(doc) do { doc_sanity_check(doc); doc_lock_debug(doc, "0"); } while (0)
+
 
 #define document_has_frames(document_) ((document_) && (document_)->frame_desc)
 

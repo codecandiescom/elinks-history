@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.101 2003/11/06 09:46:00 zas Exp $ */
+/* $Id: link.c,v 1.102 2003/11/08 16:20:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -464,7 +464,7 @@ set_pos_x(struct document_view *doc_view, struct link *link)
 			xl = int_min(xl, link->pos[i].x);
 		}
 	}
-	if (xl != MAXINT) 
+	if (xl != MAXINT)
 		int_bounds(&doc_view->vs->x, xm - doc_view->width, xl);
 }
 
@@ -647,7 +647,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		if (link->form->ro)
 			return 1;
 
-		doc_view->document->refcount++;
+		document_lock(doc_view->document);
 		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) release_document,
 				 doc_view->document);

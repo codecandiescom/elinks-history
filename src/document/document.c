@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.24 2003/11/08 12:48:33 pasky Exp $ */
+/* $Id: document.c,v 1.25 2003/11/08 16:20:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,8 @@ init_document(unsigned char *uristring, struct document_options *options)
 	init_list(document->tags);
 	init_list(document->nodes);
 
-	document->refcount = 1;
+	document_nolock(document);
+	document_lock(document);
 
 	copy_opt(&document->options, options);
 
@@ -83,7 +84,7 @@ done_document(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
-	assertm(!document->refcount, "Attempt to free locked formatted data.");
+	assertm(!is_document_locked(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
 	if (!find_in_cache(document->url, &ce) || !ce)
@@ -137,12 +138,10 @@ release_document(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
-	if (!--document->refcount) format_cache_entries++;
+	document_unlock(document);
+	if (!is_document_locked(document)) format_cache_entries++;
 	del_from_list(document);
 	add_to_list(format_cache, document);
-
-	assertm(document->refcount >= 0, "reference count underflow");
-	if_assert_failed document->refcount = 0;
 }
 
 /* Formatted document cache management */
@@ -159,7 +158,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 			continue;
 
 		if (id != document->id_tag) {
-			if (!document->refcount) {
+			if (!is_document_locked(document)) {
 				document = document->prev;
 				done_document(document->next);
 				format_cache_entries--;
@@ -171,7 +170,10 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 		del_from_list(document);
 		add_to_list(format_cache, document);
 
-		if (!document->refcount++) format_cache_entries--;
+		if (!is_document_locked(document))
+			format_cache_entries--;
+
+		document_lock(document);
 
 		return document;
 	}
@@ -189,8 +191,7 @@ shrink_format_cache(int whole)
 	if_assert_failed format_cache_entries = 0;
 
 	foreachback (document, format_cache) {
-		if (document->refcount)
-			continue;
+		if (is_document_locked(document)) continue;
 
 		if (!whole) {
 			struct cache_entry *ce = NULL;
@@ -225,7 +226,7 @@ count_format_cache(void)
 
 	format_cache_entries = 0;
 	foreach (document, format_cache)
-		if (!document->refcount)
+		if (!is_document_locked(document))
 			format_cache_entries++;
 }
 
@@ -241,7 +242,7 @@ formatted_info(int type)
 			return i;
 		case INFO_LOCKED:
 			foreach (document, format_cache)
-				i += !!document->refcount;
+				i += is_document_locked(document);
 			return i;
 		default:
 			internal("formatted_info: bad request");

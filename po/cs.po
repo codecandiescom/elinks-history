@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-19 14:50+0200\n"
-"PO-Revision-Date: 2003-10-19 00:39+0200\n"
+"PO-Revision-Date: 2003-10-19 15:44+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1244,23 +1244,27 @@ msgid ""
 "1-500 means display target filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
+"Zobrazovat jako výchozí popisku obrázkù [cílové jméno souboru] místo [IMG]:\n"
+"-1    znamená v¾dycky ukazovat prostì [IMG]\n"
+"0     znamená v¾dycky ukazovat celé jméno cílového souboru\n"
+"1-500 znamená ukazovat cílové jméno souboru s touto maximální délkou;\n"
+"      pokud je del¹í, prostøedek je nahrazen hvìzdièkou"
 
 #: src/config/options.c:1106
 msgid "Image links tagging"
 msgstr "Znaèkování odkazù na obrázky"
 
 #: src/config/options.c:1108
-#, fuzzy
 msgid ""
 "When to enclose image links:\n"
 "0 means never\n"
 "1 means never if alt or title are provided (old behavior)\n"
 "2 means always"
 msgstr ""
-"Kdy zobrazovat na obrazovce li¹tu s taby:\n"
-"0 znamená nikdy.\n"
-"1 znamená pouze, pokud je otevøeno dva a více tabù.\n"
-"2 znamená v¾dy."
+"Kdy uzavírat odkazy na obrázky do závorek:\n"
+"0 znamená nikdy\n"
+"1 znamená pouze pokud obrázku chybí popiska (alt) nebo titulek\n"
+"2 znamená v¾dy"
 
 #: src/config/options.c:1113
 msgid "Image link prefix"
@@ -1474,7 +1478,6 @@ msgid "Bold"
 msgstr "Tuèné"
 
 #: src/config/options.c:1161
-#, fuzzy
 msgid "Make the active link text bold."
 msgstr "Nakreslit text aktivního odkazu tuènì."
 
@@ -1534,6 +1537,11 @@ msgid ""
 "1 means if document.browse.links.numbering = 1\n"
 "2 means always"
 msgstr ""
+"Numerické klávesy budou vybírat odkazy, místo toho aby urèovaly opakovací\n"
+"prefixy pro ostatní akce. Tato volba je trojstavová:\n"
+"0 znamená nikdy\n"
+"1 znamená pouze, pokud document.browse.links.numbering = 1\n"
+"2 znamená v¾dy"
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
@@ -1704,6 +1712,21 @@ msgid ""
 "it, even previous redirects will be taken from cache instead of\n"
 "asking the server."
 msgstr ""
+"Zdalipak bychom si mìli pamatovat informaci o pøesmìrováních od serveru\n"
+"(obvykle pøes HTTP pomocí HTTP kódu 302 a hlavièky Location). To bylo\n"
+"docela dlouho pùvodní chování ELinksu, ov¹em zpùsobujte to problémy v\n"
+"situaci, která je velmi èastá v rùzných webových pøihla¹ovacích formuláøích\n"
+"- pøi pøístupu na urèité místo jste èasto pøesmìrováni na pøihla¹ovací\n"
+"stránku, pokud server neobdr¾el autentikaèní cookie. Pøihla¹ovací stránka\n"
+"vám pak dá tuto cookie a pøesmìruje vás zpìt na pùvodní stránku. Ale ELinks\n"
+"si u¾ u této stránky pamatuje pøesmìrování na pøihla¹ovací stránku!\n"
+"Pokud má tato volba hodnotu 0, tento problém je opraven, ale na druhou\n"
+"stranu obèas mù¾ete vykonat nadbyteèné po¾adavky (no, zále¾í jak se na to\n"
+"díváte ;-). Pokud má tato volba hodnotu 1, mù¾ou tento problém zku¹ení\n"
+"u¾ivatelé stále obejít chytrou kombinací reloadù, poskakování sem a tam\n"
+"v historii a maèkání ctrl+enter. Uvìdomte si, ¾e tato volba se kontroluje\n"
+"pøi získávání informací z cache, ne pøi jejich ukládání do cache - to\n"
+"znamená, ¾e její zmìna ovlivní i ji¾ nacachovaná pøesmìrování."
 
 #: src/config/options.c:1287
 msgid "Ignore cache-control info from server"
@@ -2048,9 +2071,8 @@ msgid "Display tables."
 msgstr "Zobrazovat tabulky."
 
 #: src/config/options.c:1479
-#, fuzzy
 msgid "Expand table columns"
-msgstr "Zapnout barvy"
+msgstr "Roztáhnout sloupce tabulky"
 
 #: src/config/options.c:1481
 msgid ""
@@ -2060,6 +2082,12 @@ msgid ""
 "overall layout. Only useful if you also have\n"
 "document.colors.use_document_colors set to 2. Experimental."
 msgstr ""
+"Pokud je tato volba zapnutá, jednotlivé øádky ve sloupcích tabulky budou\n"
+"rozta¾eny na maximální velikost. Výsledek více odpovídá oèekávanému\n"
+"vykreslení z hlediska barev pozadí, ov¹em neodpovídá celkovému rozvr¾ení\n"
+"dokumentu a obèas mù¾e (zvlá¹tì pouze s 16ti barvami) vypadat velmi\n"
+"o¹klivì. Tato volba je experimentální a má efekt pouze, pokud je volba\n"
+"document.colors.use_document_colors nasavena na hodnotu 2."
 
 #: src/config/options.c:1487
 msgid "Display subscripts"
@@ -2199,7 +2227,6 @@ msgid "Program"
 msgstr "Program"
 
 #: src/config/options.c:1566
-#, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
@@ -2497,6 +2524,11 @@ msgid ""
 "ELinks' user-interface. Note that some see this as a potential security\n"
 "risk because it tells web-masters about your preference in language."
 msgstr ""
+"Vy¾ádat si od webových serverù lokalizované verze dokumentù (pomocí\n"
+"hlavièky Accept-Language) v závislosti na jazyku, kterým si s vámi\n"
+"povídá u¾ivatelské rozhraní ELinksu. Nìkteøí si myslí, ¾e to je potenciální\n"
+"bezpeènostní riziko, proto¾e pak webmasteøi vìdí, jakému jazyku dáváte\n"
+"pøednost. Hm."
 
 #: src/config/options.c:1720
 msgid "Activate HTTP TRACE debugging"
@@ -2510,6 +2542,10 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
+"Pokud je tato volba zapnutá, v¹echny HTTP po¾adavky pou¾ívají metodu TRACE\n"
+"místo GET nebo POST. To je u¾iteèné pro ladìní ELinksu i rùzných server-side\n"
+"skriptù. Server pouze vrátí klientovi jeho po¾adavek pøesnì tak, jak ho\n"
+"obdr¾el. Tento typ po¾adavku nemusí být povolen na v¹ech serverech."
 
 #: src/config/options.c:1728
 msgid "User-agent identification"
@@ -2524,6 +2560,13 @@ msgid ""
 "%t in the string means size of the terminal\n"
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
+"Mìní identifikaci prohlí¾eèe (hlavièku User-Agent). To je identifikaèní\n"
+"øetìzec, který je odeslán HTTP serveru pøi ¾ádosti o nìjaký dokument.\n"
+"%v je v tomto øetìzci nahrazeno verzí ELinksu\n"
+"%s je v tomto øetìzci nahrazeno informací o systému\n"
+"%t je v tomto øetìzci nahrazeno velikostí terminálu\n"
+"Pokud nechcete, aby byla tato hlavièka odeslána, pou¾ijte hodnotu \" \"\n"
+"(samotnou mezeru)."
 
 #: src/config/options.c:1739
 msgid "FTP"
@@ -3357,6 +3400,10 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs"
 msgstr ""
+"Zdalipak zapnout èasovaè nebo ne:\n"
+"0 znamená nic neodpoèítávat\n"
+"1 znamená odpoèítávat, ale potichu (nic nikde neukazovat)\n"
+"2 znamená odpoèítávat, a ukazovat zbývající èas u LED indikátorù"
 
 #: src/config/options.c:2794
 msgid ""
@@ -3365,6 +3412,10 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs (DISABLED)"
 msgstr ""
+"Zdalipak zapnout èasovaè nebo ne:\n"
+"0 znamená nic neodpoèítávat\n"
+"1 znamená odpoèítávat, ale potichu (nic nikde neukazovat)\n"
+"2 znamená odpoèítávat, a ukazovat zbývající èas u LED indikátorù (VYPNUTO)"
 
 #: src/config/options.c:2800
 msgid "Duration"
@@ -3515,6 +3566,10 @@ msgid ""
 "is allowed, but user can't add or modify entries in\n"
 "association table."
 msgstr ""
+"Omezí ELinks, tak¾e mù¾e bezpeènì bì¾et i na anonymním úètu.\n"
+"Je zakázáno ukládání souborù na disk, procházení lokálního disku,\n"
+"jsou znaènì omezeny mo¾nosti zmìn konfigurace a jsou znemo¾nìny\n"
+"dal¹í potenciálnì nebezpeèné akce."
 
 #: src/config/options.c:2889
 msgid "Autosubmit first form"
@@ -3547,6 +3602,10 @@ msgid ""
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
+"ELinks bude pou¾ívat daný adresáø s konfigurací, místo toho aby ho zkusil\n"
+"najít sám v závislosti na výchozím nastavení. Pokud cesta zaèíná lomítkem,\n"
+"je pova¾ována za absolutní cestu, jinak se pøedpokládá, ¾e je relativní\n"
+"k va¹emu domovskému adresáøi."
 
 #: src/config/options.c:2905
 msgid "MIME type to assume for documents"
@@ -3587,6 +3646,9 @@ msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
+"Tato volba umo¾òuje na pøíkazové øádce uvádìt pøíkazy, které se pí¹ou do\n"
+"elinks.conf, napøíklad:\n"
+"  -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
 #: src/config/options.c:2928
@@ -3680,6 +3742,19 @@ msgid ""
 "are written to the disk when this option is used. See also\n"
 "-touch-files."
 msgstr ""
+"ID skupiny sezení, do které by se mìlo toto sezení ELinksu zaøadit. ELinks\n"
+"pracuje právì v tìchto takzvaných skupinách sezení, kde jsou v¹echny\n"
+"instance ELinksu propojeny a sdílejí nastavení, cache, zálo¾ky, cookies,\n"
+"downloady apod. Obvykle jsou v¹echny instance ELinksu seskupeny do skupiny\n"
+"sezení s ID 0. Toto chování v¹ak touto volbou mù¾ete zmìnit a vytvoøit\n"
+"kolik sezení chcete. Pokud skupina s daným ID neexistuje, bude samozøejmì\n"
+"touto instancí ELinksu vytvoøena a tato instance se stane tzv. master\n"
+"instancí (to vás jako u¾ivatele obvykle nemusí moc zajímat). Vlastnì tuto\n"
+"volbu obvykle nechcete vùbec pou¾ít, pokud nejste vývojáø ELinksu a\n"
+"netestujete právì nìco. Pokud pouze chcete, aby tato instance ELinksu\n"
+"bì¾ela samostatnì, pou¾ijte spí¹e parametr -no-connect. Také s touto volbou\n"
+"nebudou na disk ukládány ¾ádné konfiguraèní soubory - viz parametr\n"
+"-touch-files."
 
 #: src/config/options.c:2987
 msgid "Write the source of given URL to stdout"
@@ -3701,6 +3776,13 @@ msgid ""
 "stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 "know why you would use -source -stdin, though ;-)"
 msgstr ""
+"Otevøít standardní vstup jako HTML dokument. Tato volba je plnì ekvivalentní\n"
+"pøíkazové øádce:\n"
+" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
+"Pou¾ijte tu variantu, která se vám líbí víc ;-). Uvìdomte si v¹ak, ¾e\n"
+"naèítání dokumentu ze standardního vstupu samozøejmì FUNGUJE POUZE, POKUD\n"
+"POU®ÍVÁTE PARAMETR -dump NEBO -source!! (Docela rád bych ale vìdìl, proè\n"
+"byste chtìli dìlat -source -stdin. ;-)"
 
 #: src/config/options.c:2999
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
@@ -4030,7 +4112,6 @@ msgid "~History"
 msgstr "~Historie"
 
 #: src/dialogs/menu.c:369
-#, fuzzy
 msgid "Unh~istory"
 msgstr "An~tihistorie"
 
@@ -4063,7 +4144,6 @@ msgid "~Flush all caches"
 msgstr "~Vylej v¹echny cache"
 
 #: src/dialogs/menu.c:392
-#, fuzzy
 msgid "Resource in~fo"
 msgstr "~Informace o zdrojích"
 
@@ -4088,7 +4168,6 @@ msgid "~OS shell"
 msgstr "~OS shell"
 
 #: src/dialogs/menu.c:453
-#, fuzzy
 msgid "Resize t~erminal"
 msgstr "Zmìò velikost ~terminálu"
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.232 2003/09/04 18:16:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.233 2003/09/05 13:25:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1106,6 +1106,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 {
 	va_list l;
 	unsigned char *t;
+	struct document *document = part->document;
 	struct form_control *fc;
 	struct frameset_param *fsp;
 	struct frame_param *fp;
@@ -1117,8 +1118,8 @@ html_special(struct part *part, enum html_special_type c, ...)
 	switch (c) {
 		case SP_TAG:
 			t = va_arg(l, unsigned char *);
-			if (part->document)
-				html_tag(part->document, t, X(part->cx), Y(part->cy));
+			if (document)
+				html_tag(document, t, X(part->cx), Y(part->cy));
 			va_end(l);
 			break;
 		case SP_CONTROL:
@@ -1131,11 +1132,11 @@ html_special(struct part *part, enum html_special_type c, ...)
 			return convert_table;
 		case SP_USED:
 			va_end(l);
-			return (void *)!!part->document;
+			return (void *)!!document;
 		case SP_FRAMESET:
 			fsp = va_arg(l, struct frameset_param *);
 			va_end(l);
-			return create_frameset(part->document, fsp);
+			return create_frameset(document, fsp);
 		case SP_FRAME:
 			fp = va_arg(l, struct frame_param *);
 			va_end(l);

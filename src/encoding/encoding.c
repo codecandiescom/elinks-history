@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.25 2003/10/24 11:21:20 zas Exp $ */
+/* $Id: encoding.c,v 1.26 2003/12/20 18:35:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 
 #include "elinks.h"
 
-#include "util/encoding.h"
+#include "encoding/encoding.h"
 #include "util/memory.h"
 
 

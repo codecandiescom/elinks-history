@@ -1,7 +1,7 @@
-/* $Id: encoding.h,v 1.10 2003/06/21 13:43:44 jonas Exp $ */
+/* $Id: encoding.h,v 1.11 2003/12/20 18:35:17 pasky Exp $ */
 
-#ifndef EL__UTIL_ENCODING_H
-#define EL__UTIL_ENCODING_H
+#ifndef EL__ENCODING_ENCODING_H
+#define EL__ENCODING_ENCODING_H
 
 enum stream_encoding {
 	ENCODING_NONE = 0,

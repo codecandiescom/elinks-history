@@ -969,6 +969,7 @@ AC_OUTPUT([ \
  src/document/Makefile \
  src/document/html/Makefile \
  src/document/plain/Makefile \
+ src/encoding/Makefile \
  src/formhist/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \

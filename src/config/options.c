@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.138 2002/12/08 17:14:50 pasky Exp $ */
+/* $Id: options.c,v 1.139 2002/12/08 20:41:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,7 +280,7 @@ free_option_value(struct option *option)
 	}
 }
 
-void
+static void
 free_option(struct option *option)
 {
 	free_option_value(option);
@@ -338,7 +338,7 @@ copy_option(struct option *template)
 }
 
 
-void register_options();
+static void register_options();
 
 struct list_head *
 init_options_tree()
@@ -495,7 +495,8 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
  Options handlers
 **********************************************************************/
 
-unsigned char *eval_cmd(struct option *o, unsigned char ***argv, int *argc)
+static unsigned char *
+eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	if (*argc < 1) return "Parameter expected";
 
@@ -508,7 +509,8 @@ unsigned char *eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return NULL;
 }
 
-unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
+static unsigned char *
+lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	struct sockaddr *addrs = NULL;
 	int addrno, i;
@@ -554,14 +556,15 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return "";
 }
 
-unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
+static unsigned char *
+version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	printf("ELinks " VERSION_STRING " - Text WWW browser\n");
 	fflush(stdout);
 	return "";
 }
 
-unsigned char *
+static unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 {
 	int action;
@@ -640,7 +643,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
  Options values
 **********************************************************************/
 
-void
+static void
 register_options()
 {
 	add_opt_tree("",

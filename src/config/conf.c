@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.60 2002/12/07 22:26:30 pasky Exp $ */
+/* $Id: conf.c,v 1.61 2002/12/08 20:41:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@
 
 
 /* Skip block of whitespaces. */
-unsigned char *
+static unsigned char *
 skip_white(unsigned char *start, int *line)
 {
 	while (*start) {
@@ -92,7 +92,7 @@ enum parse_error {
  * and we will even write option value from the tree to the output string. We
  * will only possibly set OPT_WATERMARK flag to the option (if enabled). */
 
-enum parse_error
+static enum parse_error
 parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	  unsigned char **str, int *len)
 {
@@ -154,7 +154,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	return ERROR_NONE;
 }
 
-enum parse_error
+static enum parse_error
 parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	   unsigned char **str, int *len)
 {
@@ -212,10 +212,11 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	return error;
 }
 
+static
 int load_config_file(unsigned char *, unsigned char *, struct option *,
 		     unsigned char **, int *);
 
-enum parse_error
+static enum parse_error
 parse_include(struct option *opt_tree, unsigned char **file, int *line,
 	      unsigned char **str, int *len)
 {
@@ -265,7 +266,7 @@ struct parse_handler {
 				    unsigned char **str, int *len);
 };
 
-struct parse_handler parse_handlers[] = {
+static struct parse_handler parse_handlers[] = {
 	{ "set", parse_set },
 	{ "bind", parse_bind },
 	{ "include", parse_include },
@@ -354,8 +355,7 @@ test_end:
 
 
 
-
-unsigned char *
+static unsigned char *
 read_config_file(unsigned char *name)
 {
 #define FILE_BUF	1024
@@ -394,7 +394,7 @@ read_config_file(unsigned char *name)
 }
 
 /* Return 0 on success. */
-int
+static int
 load_config_file(unsigned char *prefix, unsigned char *name,
 		 struct option *options, unsigned char **str, int *len)
 {
@@ -507,7 +507,7 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 	}
 }
 
-unsigned char *
+static unsigned char *
 create_config_string(unsigned char *prefix, unsigned char *name,
 		     struct option *options)
 {
@@ -587,7 +587,7 @@ get_me_out:
 }
 
 /* TODO: The error condition should be handled somewhere else. */
-int
+static int
 write_config_file(unsigned char *prefix, unsigned char *name,
 		  struct option *options, struct terminal *term)
 {

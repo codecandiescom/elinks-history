@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.38 2002/12/08 18:28:52 pasky Exp $ */
+/* $Id: opttypes.c,v 1.39 2002/12/08 20:41:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@
  * since you will parse the commandline _TWO TIMES_! Remember! :-) */
 int commandline = 0;
 
-unsigned char *
+static unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	unsigned char *error;
@@ -59,7 +59,7 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 /* If 0 follows, disable option and eat 0. If 1 follows, enable option and
  * eat 1. If anything else follow, enable option and don't eat anything. */
-unsigned char *
+static unsigned char *
 bool_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	*((int *) o->ptr) = 1;
@@ -80,7 +80,7 @@ bool_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return NULL;
 }
 
-unsigned char *
+static unsigned char *
 exec_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	return ((unsigned char *(*)(struct option *, unsigned char ***, int *)) o->ptr)(o, argv, argc);
@@ -93,7 +93,7 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
  * possibly changing ptr to structure containing target name and pointer to
  * options list? --pasky */
 
-unsigned char *
+static unsigned char *
 redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 {
 	struct option *real = get_opt_rec(&root_options, opt->ptr);
@@ -110,7 +110,7 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 	return NULL;
 }
 
-unsigned char *
+static unsigned char *
 redir_rd(struct option *opt, unsigned char **file)
 {
 	struct option *real = get_opt_rec(&root_options, opt->ptr);
@@ -127,7 +127,7 @@ redir_rd(struct option *opt, unsigned char **file)
 	return NULL;
 }
 
-int
+static int
 redir_set(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(&root_options, opt->ptr);
@@ -144,7 +144,7 @@ redir_set(struct option *opt, unsigned char *str)
 	return 0;
 }
 
-int
+static int
 redir_add(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(&root_options, opt->ptr);
@@ -161,7 +161,7 @@ redir_add(struct option *opt, unsigned char *str)
 	return 0;
 }
 
-int
+static int
 redir_remove(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(&root_options, opt->ptr);
@@ -181,7 +181,7 @@ redir_remove(struct option *opt, unsigned char *str)
 
 /* Support functions for config file parsing. */
 
-void
+static void
 add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
 {
 	if (!commandline) add_chr_to_str(s, l, '"');
@@ -196,7 +196,7 @@ add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
 
 /* Config file handlers. */
 
-unsigned char *
+static unsigned char *
 num_rd(struct option *opt, unsigned char **file)
 {
 	unsigned char *end = *file;
@@ -220,27 +220,27 @@ num_rd(struct option *opt, unsigned char **file)
 	return (unsigned char *) value;
 }
 
-int
+static int
 int_set(struct option *opt, unsigned char *str)
 {
 	*((int *) opt->ptr) = *((long *) str);
 	return 1;
 }
 
-int
+static int
 long_set(struct option *opt, unsigned char *str)
 {
 	*((long *) opt->ptr) = *((long *) str);
 	return 1;
 }
 
-void
+static void
 num_wr(struct option *o, unsigned char **s, int *l)
 {
 	add_knum_to_str(s, l, *((int *) o->ptr));
 }
 
-void *
+static void *
 int_dup(struct option *opt, struct option *template)
 {
 	int *new = mem_alloc(sizeof(int));
@@ -249,7 +249,7 @@ int_dup(struct option *opt, struct option *template)
 	return new;
 }
 
-void *
+static void *
 long_dup(struct option *opt, struct option *template)
 {
 	long *new = mem_alloc(sizeof(long));
@@ -259,7 +259,7 @@ long_dup(struct option *opt, struct option *template)
 }
 
 
-unsigned char *
+static unsigned char *
 str_rd(struct option *opt, unsigned char **file)
 {
 	unsigned char *str = *file;
@@ -311,14 +311,14 @@ str_rd(struct option *opt, unsigned char **file)
 	return str2;
 }
 
-int
+static int
 str_set(struct option *opt, unsigned char *str)
 {
 	safe_strncpy(opt->ptr, str, MAX_STR_LEN);
 	return 1;
 }
 
-void
+static void
 str_wr(struct option *o, unsigned char **s, int *l)
 {
 	if (strlen(o->ptr) >= o->max) {
@@ -335,7 +335,7 @@ str_wr(struct option *o, unsigned char **s, int *l)
 	}
 }
 
-void *
+static void *
 str_dup(struct option *opt, struct option *template)
 {
 	unsigned char *new = mem_alloc(MAX_STR_LEN);
@@ -345,7 +345,7 @@ str_dup(struct option *opt, struct option *template)
 }
 
 
-int
+static int
 cp_set(struct option *opt, unsigned char *str)
 {
 	int ret;
@@ -357,14 +357,14 @@ cp_set(struct option *opt, unsigned char *str)
 	return 1;
 }
 
-void
+static void
 cp_wr(struct option *o, unsigned char **s, int *l)
 {
 	add_quoted_to_str(s, l, get_cp_mime_name(*((int *) o->ptr)));
 }
 
 
-int
+static int
 lang_set(struct option *opt, unsigned char *str)
 {
 	int i;
@@ -379,13 +379,14 @@ lang_set(struct option *opt, unsigned char *str)
 	return 0;
 }
 
-void
+static void
 lang_wr(struct option *o, unsigned char **s, int *l)
 {
 	add_quoted_to_str(s, l, language_name(current_language));
 }
 
 
+/* XXX: The extern prototype should be at a proper place at least! --pasky */
 int
 color_set(struct option *opt, unsigned char *str)
 {
@@ -398,7 +399,7 @@ color_set(struct option *opt, unsigned char *str)
 	return 1;
 }
 
-void
+static void
 color_wr(struct option *opt, unsigned char **str, int *len)
 {
 	struct rgb *color = (struct rgb *) opt->ptr;
@@ -415,7 +416,7 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 	mem_free(strcolor);
 }
 
-void *
+static void *
 color_dup(struct option *opt, struct option *template)
 {
 	struct rgb *new = mem_alloc(sizeof(struct rgb));
@@ -424,7 +425,7 @@ color_dup(struct option *opt, struct option *template)
 	return new;
 }
 
-void *
+static void *
 tree_dup(struct option *opt, struct option *template)
 {
 	struct list_head *new = mem_alloc(sizeof(struct list_head));

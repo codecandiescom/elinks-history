@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.465 2004/06/15 01:48:10 jonas Exp $ */
+/* $Id: view.c,v 1.466 2004/06/15 16:44:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,23 +473,32 @@ up(struct session *ses, struct document_view *doc_view)
 static void
 vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
-	int max_height;
+	int y;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->box.height;
-	if (steps > 0 && doc_view->vs->y >= max_height) return;
-	doc_view->vs->y += steps;
-	if (steps > 0) int_upper_bound(&doc_view->vs->y, max_height);
-	int_lower_bound(&doc_view->vs->y, 0);
+	y = doc_view->vs->y + steps;
+	if (steps > 0) {
+		/* DOWN */
+		int max_height = doc_view->document->height - doc_view->box.height;
+
+		int_upper_bound(&y, int_max(0, max_height));
+	} else {
+		/* UP */
+		int_lower_bound(&y, 0);
+	}
+
+	if (doc_view->vs->y == y) return;
+
+	doc_view->vs->y = y;
 
 	if (current_link_is_visible(doc_view)) return;
 
-	if (steps < 0)
-		find_link_page_up(doc_view);
-	else
+	if (steps > 0)
 		find_link_page_down(doc_view);
+	else
+		find_link_page_up(doc_view);
 }
 
 /* @steps > 0 -> right */
@@ -502,15 +511,23 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 	if_assert_failed return;
 
 	x = doc_view->vs->x + steps;
-	int_bounds(&x, 0, doc_view->document->width - 1);
-	if (x == doc_view->vs->x) return;
+	if (steps > 0) {
+		/* RIGHT */
+		int max_width = doc_view->document->width - doc_view->box.width;
+
+		int_upper_bound(&x, int_max(0, max_width));
+	} else {
+		/* LEFT */
+		int_lower_bound(&x, 0);
+	}
+
+	if (doc_view->vs->x == x) return;
 
 	doc_view->vs->x = x;
 
 	if (current_link_is_visible(doc_view)) return;
 
 	find_link_page_down(doc_view);
-	/* !!! FIXME: check right margin */
 }
 
 static void

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.5 2004/01/18 17:13:43 jonas Exp $ */
+/* $Id: scanner.c,v 1.6 2004/01/18 17:54:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,11 +55,6 @@ scan_css_token(struct css_token *token, unsigned char *string)
 	if (is_css_char_token(first_char)) {
 		token->type = first_char;
 
-	} else if (is_css_ident(first_char)) {
-		token->type = is_css_ident_start(first_char)
-			    ? CSS_TOKEN_IDENTIFIER : CSS_TOKEN_NAME;
-		scan_css(string, CSS_CHAR_IDENT);
-
 	} else if (is_css_digit(first_char)) {
 		scan_css(string, CSS_CHAR_DIGIT);
 
@@ -70,6 +65,11 @@ scan_css_token(struct css_token *token, unsigned char *string)
 		token->type = CSS_TOKEN_HEX_COLOR;
 		scan_css(string, CSS_CHAR_HEX_DIGIT);
 		/* FIXME: Check that it is either 3 or 6 chars */
+
+	} else if (is_css_ident(first_char)) {
+		token->type = is_css_ident_start(first_char)
+			    ? CSS_TOKEN_IDENTIFIER : CSS_TOKEN_NAME;
+		scan_css(string, CSS_CHAR_IDENT);
 
 	} else {
 		/* TODO: Strings and maybe function token having "<ident>(" */

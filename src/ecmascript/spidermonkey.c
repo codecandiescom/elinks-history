@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.21 2004/09/24 22:11:01 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.22 2004/09/24 22:12:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,6 +303,34 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
+static JSBool
+safeguard(JSContext *ctx, JSScript *script)
+{
+	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+
+	if (time(NULL) - interpreter->exec_start > 5) {
+		/* A killer script! Alert! */
+		msg_box(interpreter->doc_view->session->tab->term, NULL, 0,
+			N_("JavaScript Emergency"), ALIGN_CENTER,
+			N_("A script embedded in the current document was running "
+			"for more than 5 seconds in line. This probably means "
+			"there is a bug in the script and it could have halted "
+			"the whole ELinks. The script execution was interrupted."),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+		return JS_FALSE;
+	}
+	return JS_TRUE;
+}
+
+static void
+setup_safeguard(struct ecmascript_interpreter *interpreter,
+                JSContext *ctx)
+{
+	interpreter->exec_start = time(NULL);
+	JS_SetBranchCallback(ctx, safeguard);
+}
+
 
 void
 spidermonkey_init(void)
@@ -366,35 +394,6 @@ spidermonkey_put_interpreter(struct ecmascript_interpreter *interpreter)
 }
 
 
-static JSBool
-spidermonkey_safeguard(JSContext *ctx, JSScript *script)
-{
-	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
-
-	if (time(NULL) - interpreter->exec_start > 5) {
-		/* A killer script! Alert! */
-		msg_box(interpreter->doc_view->session->tab->term, NULL, 0,
-			N_("JavaScript Emergency"), ALIGN_CENTER,
-			N_("A script embedded in the current document was running "
-			"for more than 5 seconds in line. This probably means "
-			"there is a bug in the script and it could have halted "
-			"the whole ELinks. The script execution was interrupted."),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
-		return JS_FALSE;
-	}
-	return JS_TRUE;
-}
-
-static void
-spidermonkey_setup_safeguard(struct ecmascript_interpreter *interpreter,
-                             JSContext *ctx)
-{
-	interpreter->exec_start = time(NULL);
-	JS_SetBranchCallback(ctx, spidermonkey_safeguard);
-}
-
-
 void
 spidermonkey_eval(struct ecmascript_interpreter *interpreter,
                   struct string *code)
@@ -404,7 +403,7 @@ spidermonkey_eval(struct ecmascript_interpreter *interpreter,
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
-	spidermonkey_setup_safeguard(interpreter, ctx);
+	setup_safeguard(interpreter, ctx);
 	JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
 	                  code->source, code->length, "", 0, &rval);
 }
@@ -421,7 +420,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 
 	assert(interpreter);
 	ctx = interpreter->backend_data;
-	spidermonkey_setup_safeguard(interpreter, ctx);
+	setup_safeguard(interpreter, ctx);
 	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
 			      code->source, code->length, "", 0, &rval)
 	    == JS_FALSE) {

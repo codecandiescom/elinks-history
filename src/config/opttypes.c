@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.8 2002/05/26 17:56:21 pasky Exp $ */
+/* $Id: opttypes.c,v 1.9 2002/05/26 18:59:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,21 +101,6 @@ redir_rd(struct option *opt, unsigned char **file)
 		return option_types[real->type].read(real, file);
 
 	return 0;
-}
-
-void
-redir_wr(struct option *opt, unsigned char **s, int *l)
-{
-	struct option *real = get_opt_rec(root_options, opt->ptr);
-
-	if (!real) {
-		internal("Alias %s leads to unknown option %s!",
-			 opt->name, opt->ptr);
-		return;
-	}
-
-	if (option_types[real->type].write)
-		option_types[real->type].write(real, s, l);
 }
 
 
@@ -545,7 +530,7 @@ struct option_type_info option_types[] = {
 
 	{ exec_cmd, NULL, NULL, "[<...>]" },
 
-	{ redir_cmd, redir_rd, redir_wr, "" },
+	{ redir_cmd, redir_rd, NULL, "" },
 
 	/* tree */
 	{ NULL, NULL, NULL, "" },

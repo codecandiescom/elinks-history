@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-07 02:26+0100\n"
-"PO-Revision-Date: 2005-01-07 02:50+0100\n"
+"POT-Creation-Date: 2005-01-07 22:51+0100\n"
+"PO-Revision-Date: 2005-01-07 22:52+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -3169,7 +3169,7 @@ msgstr ""
 
 #: src/config/options.inc:678
 msgid "Plain rendering"
-msgstr "Klarteksts visning"
+msgstr "Klarteksts gengivelse"
 
 #: src/config/options.inc:680
 msgid "Options concerning the display of plain text pages."
@@ -3189,7 +3189,7 @@ msgstr "Komprimer tomme linjer"
 
 #: src/config/options.inc:688
 msgid "Compress successive empty lines to only one in displayed text."
-msgstr "Komprimer efterfølgende tomme linjer til kun en i den viste tekst."
+msgstr "Komprimer mere end to på hinanden følgende linjer til en."
 
 #: src/config/options.inc:691
 msgid "URI passing"
@@ -3226,20 +3226,19 @@ msgstr "Indstillinger for informationsfiler i ~/.elinks."
 
 #: src/config/options.inc:711
 msgid "Save interval"
-msgstr "Interval for gemning"
+msgstr "Gemningsinterval"
 
 #: src/config/options.inc:713
 msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
 msgstr ""
-"Det interval som vil forårsage at informationsfiler i ~/.elinks\n"
-"skrives til disken hvis de er blevet ændret. Angives i sekunder\n"
-"hvor 0 betyder deaktivering."
+"Interval i sekunder for skrivning af informationsfiler i ~/.elinks\n"
+"(hvis ændret) til disk. En værdi af 0 deaktiverer."
 
 #: src/config/options.inc:716
 msgid "Use secure file saving"
-msgstr "Brug sikret filgemning"
+msgstr "Gem filer på en sikker måde"
 
 #: src/config/options.inc:718
 msgid ""
@@ -3266,11 +3265,11 @@ msgstr ""
 #. Keep options in alphabetical order.
 #: src/config/options.inc:731
 msgid "Terminals"
-msgstr "Terminalindstillinger"
+msgstr "Terminaler"
 
 #: src/config/options.inc:733
 msgid "Terminal options."
-msgstr "Terminalindstillinger."
+msgstr "Skærmstyring."
 
 #: src/config/options.inc:737
 msgid "Options specific to this terminal type (according to $TERM value)."
@@ -3286,13 +3285,13 @@ msgid ""
 "3 is KOI-8\n"
 "4 is FreeBSD"
 msgstr ""
-"Information om terminal type. Har mest betydning ved tegning\n"
-"af dokumentrammer og rammer for dialogvinduer:\n"
-"0 betyder dum terminal type, dvs. benyt ASCII art\n"
-"1 betyder VT100, enkel men portabelt\n"
-"2 betyder Linux konsol, hvor du får dobbelt rammer og andre godbider\n"
-"3 betyder KOI-8\n"
-"4 betyder FreeBSD"
+"Terminaltype; har for det meste kun betydning ved gengivelse af\n"
+"rammer og kanter på dialogbokse:\n"
+"0 er en dum terminaltype, ASCII-tegning\n"
+"1 er VT100, simpel men portabel\n"
+"2 er Linux, du opnår dobbelte rammer og andre fordele\n"
+"3 er KOI-8\n"
+"4 er FreeBSD"
 
 #: src/config/options.inc:749 src/dialogs/options.c:167
 msgid "Switch fonts for line drawing"
@@ -3366,7 +3365,7 @@ msgstr ""
 
 #: src/config/options.inc:779 src/dialogs/options.c:170
 msgid "Transparency"
-msgstr "Gennemsigtig"
+msgstr "Gennemsigtighed"
 
 #: src/config/options.inc:781
 msgid ""
@@ -3385,15 +3384,15 @@ msgstr ""
 
 #: src/config/options.inc:789
 msgid "If we should use underline or enhance the color instead."
-msgstr "Om understregning skal bruges eller det skal markeres med farve."
+msgstr "Om understregning eller farvemarkering skal bruges."
 
 #: src/config/options.inc:793
 msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
 msgstr ""
-"Tegnopsætning af tegnsæt brugt til visning på terminal.\n"
-"'System' betyder tegnsættet angivet af den valgte lokalitet."
+"Tegnkodningstabellens tegnsæt brugt til skærmvisning.'System' betyder "
+"tegnsættet angivet af den valgte lokalitet."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:800
@@ -3406,152 +3405,152 @@ msgstr "Indstillinger for Brugergrænseflade"
 
 #: src/config/options.inc:806
 msgid "Color settings"
-msgstr "Farve indstillinger"
+msgstr "Farveindstillinger"
 
 #: src/config/options.inc:808
 msgid "Default user interface color settings."
-msgstr "Standard farve indstillinger for brugergrænseflade."
+msgstr "Standard farveindstillinger for brugergrænseflade."
 
 #: src/config/options.inc:835
 msgid "Color terminals"
-msgstr "Farve terminaler"
+msgstr "Farveterminaler"
 
 #: src/config/options.inc:837
 msgid "Color settings for color terminal."
-msgstr "Farve indstillinger for farve terminaler"
+msgstr "Farveindstillinger for farveterminaler"
 
 #: src/config/options.inc:839
 msgid "Non-color terminals"
-msgstr "Farveløse terminaler"
+msgstr "Monokrome terminaler"
 
 #: src/config/options.inc:841
 msgid "Color settings for non-color terminal."
-msgstr "Farveindstillinger for farveløse terminaler."
+msgstr "Farveindstillinger for monokrome terminaler."
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
 #: src/config/options.inc:844
 msgid "Main menu bar"
-msgstr "Hovedmenulinje"
+msgstr "Hovedmenubjælke"
 
 #: src/config/options.inc:846
 msgid "Main menu bar colors."
-msgstr "Farver for hovedmenulinje."
+msgstr "Farver for hovedmenubjælke."
 
 #: src/config/options.inc:848
 msgid "Unselected main menu bar item"
-msgstr "Ikke valgt element i hovedmenulinje"
+msgstr "Inaktive menupunkter i hovedmenu"
 
 #: src/config/options.inc:850
 msgid "Unselected main menu bar item colors."
-msgstr "Farver for ikke valgt element i hovedmenulinje."
+msgstr "Farver for inaktive menupunkter i hovedmenu"
 
 #: src/config/options.inc:852
 msgid "Selected main menu bar item"
-msgstr "Valgt element i hovedmenulinje"
+msgstr "Aktive menupunkter i hovedmenu"
 
 #: src/config/options.inc:854
 msgid "Selected main menu bar item colors."
-msgstr "Farver for element i hovedmenulinje."
+msgstr "Farver for aktive menupunkter i hovedmenu"
 
 #: src/config/options.inc:856 src/config/options.inc:885
 msgid "Hotkey"
-msgstr "Tasteturgenvej"
+msgstr "Hurtigtast"
 
 #: src/config/options.inc:858
 msgid "Main menu hotkey colors."
-msgstr "Farver for tasteturgenveje i hovedmenu."
+msgstr "Farver for hurtigtaster i hovedmenu."
 
 #: src/config/options.inc:860 src/config/options.inc:889
 msgid "Unselected hotkey"
-msgstr "Ikke valgt tasteturgenvej"
+msgstr "Inaktiv hurtigtast"
 
 #: src/config/options.inc:862
 msgid "Main menu unselected hotkey colors."
-msgstr "Farver for tasteturgenvej i ikke valgt hovedmenuindgang."
+msgstr "Farver for inaktiv hurtigtast"
 
 #: src/config/options.inc:864 src/config/options.inc:893
 msgid "Selected hotkey"
-msgstr "Valgt genvejstast"
+msgstr "Aktiv hurtigtast"
 
 #: src/config/options.inc:866
 msgid "Main menu selected hotkey colors."
-msgstr "Farver for tasteturgenvej i valgt hovedmenuindgang."
+msgstr "Farver for aktiv hurtigtast i hovedmenu."
 
 #: src/config/options.inc:869
 msgid "Menu bar"
-msgstr "Menuer"
+msgstr "Menulinje"
 
 #: src/config/options.inc:871
 msgid "Menu bar colors."
-msgstr "Farver for menuer"
+msgstr "Farver for menulinje."
 
 #: src/config/options.inc:873
 msgid "Unselected menu item"
-msgstr "Ikke valgt menuindgang"
+msgstr "Inaktivt menupunkt"
 
 #: src/config/options.inc:875
 msgid "Unselected menu item colors."
-msgstr "Farver for ikke valgt menuindgang."
+msgstr "Farver for inaktivt menupunkt i menu."
 
 #: src/config/options.inc:877
 msgid "Selected menu item"
-msgstr "Valgt menuindgang"
+msgstr "Aktivt menupunkt"
 
 #: src/config/options.inc:879
 msgid "Selected menu item colors."
-msgstr "Farver for valgt menuindgang."
+msgstr "Farver for aktivt menupunkt."
 
 #: src/config/options.inc:881
 msgid "Marked menu item"
-msgstr "Markeret menuindgang"
+msgstr "Markeret menupunkt"
 
 #: src/config/options.inc:883
 msgid "Marked menu item colors."
-msgstr "Farver for markeret menuindgang."
+msgstr "Farver for markeret menupunkt."
 
 #: src/config/options.inc:887
 msgid "Menu item hotkey colors."
-msgstr "Farver for tasteturgenveje i menuindgang."
+msgstr "Farver for hurtigtast i menupunkt."
 
 #: src/config/options.inc:891
 msgid "Menu item unselected hotkey colors."
-msgstr "Farver for tasteturgenveje i ikke valgt menuindgang."
+msgstr "Farver for inaktive hurtigtaster i menupunkter."
 
 #: src/config/options.inc:895
 msgid "Menu item selected hotkey colors."
-msgstr "Farver for tasteturgenveje i valgt menuindgang."
+msgstr "Farver for aktive hurtigtaster i menupunkter."
 
 #: src/config/options.inc:897
 msgid "Menu frame"
-msgstr "Menurammer"
+msgstr "Menuramme"
 
 #: src/config/options.inc:899
 msgid "Menu frame colors."
-msgstr "Farver for menurammer."
+msgstr "Farver for menuramme."
 
 #: src/config/options.inc:902
 msgid "Dialog"
-msgstr "Dialogvindue"
+msgstr "Dialogboks"
 
 #: src/config/options.inc:904
 msgid "Dialog colors."
-msgstr "Dialogvinduesfarver"
+msgstr "Farver for dialogboks"
 
 #: src/config/options.inc:914
 msgid "Generic"
-msgstr "Almene farver"
+msgstr "Fælles"
 
 #: src/config/options.inc:916
 msgid "Generic dialog colors."
-msgstr "Almene dialogvinduesfarver."
+msgstr "Fælles farver for dialogbokse."
 
 #: src/config/options.inc:918
 msgid "Frame"
-msgstr "Rammer"
+msgstr "Ramme"
 
 #: src/config/options.inc:920
 msgid "Dialog frame colors."
-msgstr "Farver for dialogvinduesrammer"
+msgstr "Farve på ramme om dialogboks."
 
 #: src/config/options.inc:922
 msgid "Scrollbar"
@@ -3559,19 +3558,19 @@ msgstr "Rullebjælke"
 
 #: src/config/options.inc:924
 msgid "Scrollbar colors."
-msgstr "Farver for rullebjælke."
+msgstr "Farver for rullebjælke"
 
 #: src/config/options.inc:926
-msgid "Scrollbar selected"
-msgstr "Rullebjælke aktiv"
+msgid "Selected scrollbar"
+msgstr "Farver for aktivt faneblad."
 
 #: src/config/options.inc:928
 msgid "Scrollbar selected colors."
-msgstr "Farver for aktiv rullebjælke"
+msgstr "Farver for aktiv rullebjælke."
 
 #: src/config/options.inc:932
 msgid "Dialog title colors."
-msgstr "Farver for i dialogvinduestitel."
+msgstr "Farve på titel i dialogboks."
 
 #: src/config/options.inc:934
 msgid "Text"
@@ -3579,23 +3578,23 @@ msgstr "Tekst"
 
 #: src/config/options.inc:936
 msgid "Dialog text colors."
-msgstr "Tekstfarver for dialogvinduer."
+msgstr "Farver på tekst i dialogboks"
 
 #: src/config/options.inc:938 src/viewer/text/form.c:1442
 msgid "Checkbox"
-msgstr "Afkrydsningsfelt"
+msgstr "Afkrydsningsboks"
 
 #: src/config/options.inc:940
 msgid "Dialog checkbox colors."
-msgstr "Farver for afkrydsningsfelter i dialogvinduer."
+msgstr "Farver for afkrydsningsboks."
 
 #: src/config/options.inc:942
 msgid "Checkbox label"
-msgstr "Tekst for afkrydsningsfelter"
+msgstr "Etiket på afkrydsningsboks"
 
 #: src/config/options.inc:944
 msgid "Dialog checkbox label colors."
-msgstr "Farver for afkrydsningsfelters tekst."
+msgstr "Farver på afkrydsningsboksens etiket."
 
 #: src/config/options.inc:946
 msgid "Button"
@@ -3603,7 +3602,7 @@ msgstr "Knap"
 
 #: src/config/options.inc:948 src/config/options.inc:956
 msgid "Dialog button colors."
-msgstr "Farver for knapper i dialogvinduer."
+msgstr "Farver på knapper i dialogbokse."
 
 #: src/config/options.inc:950
 msgid "Selected button"
@@ -3611,7 +3610,7 @@ msgstr "Valgt knap"
 
 #: src/config/options.inc:952 src/config/options.inc:960
 msgid "Dialog selected button colors."
-msgstr "Farver for udvalgte knapper i dialogvinduer."
+msgstr "Farver på den aktive knap i dialogbokse."
 
 #: src/config/options.inc:954
 msgid "Button shortcut"
@@ -3619,7 +3618,7 @@ msgstr "Knapgenveje"
 
 #: src/config/options.inc:958
 msgid "Selected button shortcut"
-msgstr "Valgt genvejsknap"
+msgstr "Aktiv knap genvejstaste"
 
 #: src/config/options.inc:962 src/viewer/text/form.c:1446
 msgid "Text field"
@@ -3627,7 +3626,7 @@ msgstr "Tekstfelt"
 
 #: src/config/options.inc:964
 msgid "Dialog text field colors."
-msgstr "Farver for tekstfelter i dialogvinduer."
+msgstr "Farver på tekstfelter i dialogbokse."
 
 #: src/config/options.inc:966
 msgid "Text field text"
@@ -3635,73 +3634,71 @@ msgstr "Tekstfelt tekst"
 
 #: src/config/options.inc:968
 msgid "Dialog field text colors."
-msgstr "Farver for tekstfelter i dialogvinduer."
+msgstr "Farver på tekst i dialogbokses tekstfelter."
 
 #: src/config/options.inc:970
 msgid "Meter"
-msgstr "Statusmeter"
+msgstr "Måler"
 
 #: src/config/options.inc:972
 msgid "Dialog meter colors."
-msgstr "Farver for statusmeter i dialogvinduer."
+msgstr "Farve på måler i dialogboks."
 
 #: src/config/options.inc:974
 msgid "Shadow"
-msgstr "Slagskygge"
+msgstr "Skygge"
 
 #: src/config/options.inc:976
 msgid "Dialog shadow colors (see ui.shadows option)."
-msgstr ""
-"Farver for dialogvinduers baggrunds slagskygge.\n"
-"Se indstillingen ui.shadows for mere information."
+msgstr "Farver på dialogbokses skygger (se ui.shadows option)."
 
 #: src/config/options.inc:978
 msgid "Title bar"
-msgstr "Titellinje"
+msgstr "Titelbjælke"
 
 #: src/config/options.inc:980
 msgid "Title bar colors."
-msgstr "Farver for titellinje."
+msgstr "Farver for titelbjælke"
 
 #: src/config/options.inc:982
 msgid "Generic title bar"
-msgstr "Generisk titellinje"
+msgstr "Fælles titelbjælke"
 
 #: src/config/options.inc:984
 msgid "Generic title bar colors."
-msgstr "Farver for generisk titellinje"
+msgstr "Farver for fælles titelbjælke"
 
 #: src/config/options.inc:986
 msgid "Title bar text"
-msgstr "Titellinjetekst"
+msgstr "Titelbjælketekst"
 
 #: src/config/options.inc:988
 msgid "Title bar text colors."
-msgstr "Farver for tekst i titellinje."
+msgstr "Tekstfarve for titelbjælke"
 
 #: src/config/options.inc:991
 msgid "Status bar"
-msgstr "Statuslinje"
+msgstr "Statusbjælke"
 
 #: src/config/options.inc:993
 msgid "Status bar colors."
-msgstr "Farver for statuslinje."
+msgstr "Farver på statusbjælke."
 
 #: src/config/options.inc:995
 msgid "Generic status bar"
-msgstr "Generisk statuslinje"
+msgstr "Fælles statusbjælke"
 
 #: src/config/options.inc:997
 msgid "Generic status bar colors."
-msgstr "Farver for generisk statuslinje."
+msgstr "Fælles farver for statusbjælke."
 
 #: src/config/options.inc:999
 msgid "Status bar text"
-msgstr "Status bjælke tekst"
+msgstr "Tekst for statusbjælke"
 
 #: src/config/options.inc:1001
 msgid "Status bar text colors."
-msgstr "Tekstfarver for statusbjælke."
+msgstr "Tekstfarver i statusbjælke."
 
 #: src/config/options.inc:1004
 msgid "Tabs bar"
@@ -3713,23 +3710,23 @@ msgstr "Farver for fanebladsbjælke."
 
 #: src/config/options.inc:1008
 msgid "Unvisited tab"
-msgstr "Ubesøgte faneblade"
+msgstr "Ubesøgt faneblad"
 
 #: src/config/options.inc:1010
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
 msgstr ""
-"Farver for faneblade som endnu ikke er blevet\n"
-"besøgt efter de er blevet indlæst."
+"Farver på faneblade der ikke har været besøgt\n"
+"efter at indlæsningen af dem fuldførtes."
 
 #: src/config/options.inc:1013
 msgid "Unselected tab"
-msgstr "Inaktiv faneblad"
+msgstr "Inaktivt faneblad"
 
 #: src/config/options.inc:1015
 msgid "Unselected tab colors."
-msgstr "Farver for inaktiv faneblad."
+msgstr "Farver for inaktivt faneblad."
 
 #: src/config/options.inc:1017
 msgid "Loading tab"
@@ -3737,15 +3734,15 @@ msgstr "Indlæsende faneblade"
 
 #: src/config/options.inc:1019
 msgid "Tab colors for tabs that are loading in the background."
-msgstr "Farver for faneblade, som indlæser dokument i baggrunden."
+msgstr "Farve på faneblade som indlæses i baggrunden."
 
 #: src/config/options.inc:1021
 msgid "Selected tab"
-msgstr "Aktiv faneblad"
+msgstr "Aktivt faneblad"
 
 #: src/config/options.inc:1023
 msgid "Selected tab colors."
-msgstr "Farver for aktiv faneblad."
+msgstr "Farver for aktivt faneblad."
 
 #: src/config/options.inc:1025
 msgid "Tab separator"
@@ -3753,15 +3750,15 @@ msgstr "Fanebladsseparator"
 
 #: src/config/options.inc:1027
 msgid "Tab separator colors."
-msgstr "Farver for fanebladsseparator."
+msgstr "Farver på fanebladsseparator."
 
 #: src/config/options.inc:1030
 msgid "Searched strings"
-msgstr "Søgetekststrenge"
+msgstr "Søgeudtryk"
 
 #: src/config/options.inc:1032
 msgid "Searched string highlight colors."
-msgstr "Fremhævningsfarver for tekststrenge ved søgning"
+msgstr "Farver for fremhævning af søgeord."
 
 #. ==========================================================
 #. ============= BORING PART (colors) END ===================
@@ -3769,23 +3766,23 @@ msgstr "Fremhævningsfarver for tekststrenge ved søgning"
 #. Keep options in alphabetical order.
 #: src/config/options.inc:1041
 msgid "Dialog settings"
-msgstr "Dialogvinduesindstillinger"
+msgstr "Indstillinger for dialogbokse"
 
 #: src/config/options.inc:1043
 msgid "Dialogs-specific appearance and behaviour settings."
-msgstr "Indstillinger for udseende og adfærd i dialogvinduer."
+msgstr "Indstillinger for udseende af og adfærd i dialogbokse."
 
 #: src/config/options.inc:1046
 msgid "Minimal height of listbox widget"
-msgstr "Minimal højde af listbox element"
+msgstr "Minimumhøjde på listeboks-element"
 
 #: src/config/options.inc:1048
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
-"Minimums højde for listbox-element (bruges eksempelvis af\n"
-"bogmærke- og historikhåndterings dialogvinduerne)."
+"Minimumhøjde på listeboks-element. Bruges f.eks. af\n"
+"bogmærke- og historikhåndtering."
 
 #: src/config/options.inc:1051
 msgid "Drop shadows"
@@ -3797,46 +3794,48 @@ msgid ""
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
-"Aktiver slagskygger for dialogvinduer. Slagskyggerne er\n"
-"massive. Farven kan indstilles via ui.colors.*.dialog.shadow\n"
-"Eventuel kan du også ved at ændre setup.h fjerne de brede\n"
-"rammer omkring dialogvinduer."
+"Giv dialogbokse slagskygger. Skyggerne er gennemfarvede,\n"
+"og farven kan ændres med ui.colors.*.dialog.shadow.\n"
+"Du kan fjerne de brede kanter ved at rette i setup.h."
 
 #: src/config/options.inc:1057
 msgid "Underline menu hotkeys"
-msgstr "Understreg menugenvejstaster"
+msgstr "Understreg menu-hurtigtaster"
 
 #: src/config/options.inc:1059
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
-"Om menugenvejstaster skal understreges for at gøre dem mere\n"
-"synlige. Kræver at understregning er aktiveret for terminalen."
+"Vælg om hurtigtaster i menuer skal understreges for at\n"
+"gøre dem mere synlige. Kræver at terminalen understøtter\n"
+"understregning."
 
 #: src/config/options.inc:1062
 msgid "Underline button shortcuts"
-msgstr "Understreg knapgenvejstaster"
+msgstr "Understreg knap-genvejstaster"
 
 #: src/config/options.inc:1064
 msgid ""
 "Whether to underline button shortcuts to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
-"Om knapgenvejstaster skal understreges for at gøre dem mere\n"
-"synlige. Kræver at understregning er aktiveret for terminalen."
+"Vælg om genvejstaster for knapper skal understreges for at\n"
+"gøre dem mere synlige. Kræver at terminalen understøtter\n"
+"understregning."
 
 #: src/config/options.inc:1068
 msgid "Timer options"
-msgstr "Indstilling for tidstager"
+msgstr "Timerindstillinger"
 
 #: src/config/options.inc:1070
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Tidsbestemt handling efter et givent interval af brugerinaktivitet.\n"
-"Dette kan faktisk være anvendeligt, selv om du måske ikke tror det."
+"Handling som udløses efter et vist tidsinterval af\n"
+"inaktivitet. Der er faktisk nogen der finder dette\n"
+"nyttigt selvom det lyder utroligt."
 
 #: src/config/options.inc:1076
 msgid ""
@@ -3845,7 +3844,7 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs"
 msgstr ""
-"Om tidstager skal anvendes:\n"
+"Om timeren skal aktiveres eller ej:\n"
 "0 betyder tæl ikke ned\n"
 "1 betyder tæl ned, men vis ikke timeren\n"
 "2 betyder tæl ned og vis timeren nær LEDs statusindikator"
@@ -3857,10 +3856,10 @@ msgid ""
 "1 is count down, but don't show the timer\n"
 "2 is count down and show the timer near LEDs (DISABLED)"
 msgstr ""
-"Om tidstager skal anvendes:\n"
+"Om timeren skal aktiveres eller ej:\n"
 "0 betyder tæl ikke ned\n"
 "1 betyder tæl ned, men vis ikke timeren\n"
-"2 betyder tæl ned og vis timeren nær LEDs statusindikator (deaktiveret)"
+"2 betyder tæl ned og vis timeren nær LEDs statusindikator (DEAKTIVERET)"
 
 #: src/config/options.inc:1089
 msgid "Duration"
@@ -3871,12 +3870,11 @@ msgid ""
 "Inactivity timeout in seconds. The maximum of one day\n"
 "should be enough for just everyone (TM)."
 msgstr ""
-"Inaktivitets tidsgrænse i sekunder. Maksimum på en\n"
-"dag burde være nok for alle (TM)."
+"Nedtælling for inaktivitet i sekunder. En dag bør række for de fleste (TM)."
 
 #: src/config/options.inc:1096
 msgid "Keybinding action to be triggered when timer reaches zero."
-msgstr "Tastehandling som skal udføres når tidstageren når nul."
+msgstr "Handling der udløses når nedtælling er fuldført."
 
 #: src/config/options.inc:1099
 msgid "Window tabs"
@@ -3884,11 +3882,11 @@ msgstr "Vinduesfaneblade"
 
 #: src/config/options.inc:1101
 msgid "Window tabs settings."
-msgstr "Indstillinger for faneblade."
+msgstr "Indstillinger for vinduesfaneblade."
 
 #: src/config/options.inc:1103
 msgid "Display tabs bar"
-msgstr "Vis fanebladslinje"
+msgstr "Vis fanebladsbjælke"
 
 #: src/config/options.inc:1105
 msgid ""
@@ -3897,30 +3895,30 @@ msgid ""
 "1 means only if two or more tabs are open\n"
 "2 means always"
 msgstr ""
-"Vis fanebladslinje på skærmen:\n"
+"Vis fanebladsbjælke på skærmen:\n"
 "0 betyder aldrig\n"
-"1 betyder kun hvis to eller flere faneblade er åbne\n"
+"1 betyder kun ved to eller flere åbne faneblade\n"
 "2 betyder altid"
 
 #: src/config/options.inc:1110
 msgid "Wrap-around tabs cycling"
-msgstr "Ombryde ved skift mellem faneblad"
+msgstr "Side til side navigeringscyklus for faneblade"
 
 #: src/config/options.inc:1112
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
-"Når der flyttes til højre fra det sidste faneblad, hop til det\n"
-"første og omvendt."
+"Når der flyttes til højre fra det sidste faneblad, hop da til\n"
+"det første og vice versa."
 
 #: src/config/options.inc:1115
 msgid "Confirm tab closing"
-msgstr "Bekræft lukning af faneblade"
+msgstr "Bekræft lukning af faneblad"
 
 #: src/config/options.inc:1117
 msgid "When closing a tab show confirmation dialog."
-msgstr "Bekræft lukning af faneblad."
+msgstr "Vis bekræftelsesdialog ved lukning af faneblad."
 
 #: src/config/options.inc:1121 src/config/opttypes.c:365
 msgid "Language"
@@ -3931,28 +3929,28 @@ msgid ""
 "Language of user interface. 'System' means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
-"Sproget for brugergrænsefladen. 'System' betyder at sproget vil\n"
-"blive sat dynamisk udfra miljøet."
+"Sprog i brugerfladen. \"System\" betyder at systemets\n"
+"sprogindstillinger vil blive anvendt."
 
 #: src/config/options.inc:1126
 msgid "Display status bar"
-msgstr "Vis statuslinje"
+msgstr "Vis statusbjælke"
 
 #: src/config/options.inc:1128
 msgid "Show status bar on the screen."
-msgstr "Vis statuslinje på skærmbilledet."
+msgstr "Vis statusbjælke på skærmen."
 
 #: src/config/options.inc:1130
 msgid "Display title bar"
-msgstr "Vis titellinje"
+msgstr "Vis titelbjælke"
 
 #: src/config/options.inc:1132
 msgid "Show title bar on the screen."
-msgstr "Vis titellinje på skærmen."
+msgstr "Vis titelbjælke på skærmen."
 
 #: src/config/options.inc:1134
 msgid "Display goto dialog in new tabs"
-msgstr "Vis gå til adresse dialogvindue i ny-åbnede faneblade"
+msgstr "Vis \"Gå til\"-dialogboks i nye faneblade"
 
 #: src/config/options.inc:1136
 msgid ""
@@ -3965,7 +3963,7 @@ msgstr ""
 
 #: src/config/options.inc:1139
 msgid "Show a message box when file is saved successfully"
-msgstr "Vis beskedvindue når en fil gemmes problemfrit"
+msgstr "Vis en meddelelse når en fil er gemt"
 
 #: src/config/options.inc:1141
 msgid ""
@@ -3973,9 +3971,9 @@ msgid ""
 "will make sure that a box confirming success of the operation will\n"
 "pop up."
 msgstr ""
-"Når du har trykket en [ Gem ] knap i en håndteringsdialog, denne\n"
-"indstilling sikrer at et dialogvindue, som bekræfter problemfri\n"
-"gemning åbnes."
+"Giv brugeren en bekræftelse på at indstillinger er blevet\n"
+"gemt ved at vise en dialogboks herom når der trykkes på\n"
+"knappen [ Gem ] i en opsætningsmenu."
 
 #: src/config/options.inc:1146
 msgid "Sessions"
@@ -3983,31 +3981,31 @@ msgstr "Sessioner"
 
 #: src/config/options.inc:1148
 msgid "Sessions settings."
-msgstr "Sessionsindstillinger."
+msgstr "Indstillinger for sessioner."
 
 #: src/config/options.inc:1150
 msgid "Auto save session"
-msgstr "Automatisk gemning af sessioner"
+msgstr "Autogem session"
 
 #: src/config/options.inc:1152
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
-"Automatisk gem sessionen, når der afsluttes.\n"
-"Denne egenskab kræver understøttelse af bogmærker."
+"Gem session automatisk ved afslutning. Dette kræver\n"
+"understøttelse af bogmærker."
 
 #: src/config/options.inc:1155
 msgid "Auto restore session"
-msgstr "Gendan automatisk gemte sessioner"
+msgstr "Autogenskab session"
 
 #: src/config/options.inc:1157
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
-"Automatisk gendan sessionen ved opstart.\n"
-"Denne egenskab kræver understøttelse af bogmærker."
+"Genskab session automatisk ved opstart. Dette kræver\n"
+"understøttelse af bogmærker."
 
 #: src/config/options.inc:1160
 msgid "Auto save and restore session folder name"
@@ -4019,14 +4017,13 @@ msgid ""
 "The name has to be unique. Any folders with the same name will be deleted.\n"
 "This only makes sense with bookmark support."
 msgstr ""
-"Navn på bogmærkemappen, der anvendes til at vedligeholde informationer\n"
-"til automatisk gemning og gendanning af sessioner. Navnet skal være\n"
-"unikt. Mapper med samme navn vil blive slettet.\n"
-"Denne egenskab kræver understøttelse af bogmærker."
+"Navn på bogmærkemappe som bruges ved autogemning og\n"
+"autogenskabelse af en session. Giver kun mening med\n"
+"understøttelse af bogmærker."
 
 #: src/config/options.inc:1166
 msgid "Homepage URI"
-msgstr "Hjemmeside"
+msgstr "Hjemmesideadresse"
 
 #: src/config/options.inc:1168
 msgid ""
@@ -4035,20 +4032,18 @@ msgid ""
 "Set to \"\" if the environment variable WWW_HOME should be used\n"
 "as homepage URI instead."
 msgstr ""
-"URIen som vil blive indlæst enten ved opstart når ingen URI\n"
-"er givet eller ved udførelse af goto-url-home handlingen.\n"
-"Sæt til \"\" hvis miljøvariablen WWW_HOME skal anvendes som\n"
-"hjemmeside URI i stedet."
+"Adresse som indlæses ved opstart når den enten ikke var\n"
+"angivet på kommandolinjen eller angivet ved handlingen\n"
+"\"goto-url-home\". Sæt værdien til \"\" hvis miljøvariablen\n"
+"WWW_HOME skal bruges som adresse på hjemmeside i stedet."
 
 #: src/config/options.inc:1174
 msgid "Date format"
-msgstr "Visning af datoer"
+msgstr "Datoformat"
 
 #: src/config/options.inc:1176
 msgid "Date format to use in dialogs. See strftime(3)."
-msgstr ""
-"Kontrollerer hvordan datoer vises i dialogvinduer.\n"
-"Se manualsiden strftime(3)"
+msgstr "Datoformat i dialoger. Se strftime(3)."
 
 #: src/config/options.inc:1179
 msgid "Set window title"
@@ -4060,17 +4055,18 @@ msgid ""
 "in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 msgstr ""
-"Sæt terminalvinduets titel ved kørsel i en xterm-lignende\n"
-"terminal i et vinduesmiljø. Derved vises dokumentets titel\n"
-"i terminalvinduets titellinje."
+"Sæt vinduestitel når der arbejdes i en xterm eller\n"
+"lignende terminalvindue i et vinduesmiljø. Dette gør\n"
+"at dokumentets titel bliver vist i terminalvinduets\n"
+"titelbjælke."
 
 #: src/config/opttypes.c:55
 msgid "Read error"
-msgstr "Fejl ved læsning"
+msgstr "Læsefejl"
 
 #: src/config/opttypes.c:359
 msgid "Boolean"
-msgstr "Sandhedsværdi (1: sandt, 0: falsk)"
+msgstr "Boolsk"
 
 #: src/config/opttypes.c:359
 msgid "[0|1]"
@@ -4082,7 +4078,7 @@ msgstr "Heltal"
 
 #: src/config/opttypes.c:360 src/config/opttypes.c:361
 msgid "<num>"
-msgstr "<tal>"
+msgstr "<nr>"
 
 #: src/config/opttypes.c:361
 msgid "Longint"
@@ -4094,11 +4090,11 @@ msgstr "Tekststreng"
 
 #: src/config/opttypes.c:362
 msgid "<str>"
-msgstr "<streng>"
+msgstr "<str>"
 
 #: src/config/opttypes.c:364
 msgid "<codepage>"
-msgstr "<tegnopsætning>"
+msgstr "<tegnkodningstabel>"
 
 #: src/config/opttypes.c:365
 msgid "<language>"
@@ -4106,7 +4102,7 @@ msgstr "<sprog>"
 
 #: src/config/opttypes.c:366
 msgid "Color"
-msgstr "Farver"
+msgstr "Farve"
 
 #: src/config/opttypes.c:366
 msgid "<color|#rrggbb>"
@@ -4123,12 +4119,12 @@ msgstr "Alias"
 #. tree
 #: src/config/opttypes.c:373
 msgid "Folder"
-msgstr "Mappe"
+msgstr "Katalog"
 
 #. name:
 #: src/cookies/cookies.c:81 src/cookies/cookies.c:826
 msgid "Cookies"
-msgstr "Cookies"
+msgstr "Cookier"
 
 #: src/cookies/cookies.c:83
 msgid "Cookies options."
@@ -4152,7 +4148,7 @@ msgstr ""
 
 #: src/cookies/cookies.c:93
 msgid "Maximum age"
-msgstr "Maksimal alder"
+msgstr "Udløbstid"
 
 #: src/cookies/cookies.c:95
 msgid ""
@@ -4200,7 +4196,7 @@ msgstr "Om cookier skal indlæses og gemmes til disken."
 
 #: src/cookies/cookies.c:114
 msgid "Resaving"
-msgstr "Gem efter ændring"
+msgstr "Omgemning"
 
 #: src/cookies/cookies.c:116
 msgid ""
@@ -5070,15 +5066,15 @@ msgstr "Indstillinger for ECMAScript."
 
 #: src/ecmascript/ecmascript.c:43
 msgid "Whether to run those scripts inside of documents."
-msgstr "Om skripts i dokumentet skal anvendes og køres"
+msgstr "Om scripts i dokumentet skal anvendes og køres"
 
 #: src/ecmascript/ecmascript.c:45
 msgid "Script error reporting"
-msgstr "Rapportering af skriptfejl"
+msgstr "Rapportering af scriptfejl"
 
 #: src/ecmascript/ecmascript.c:47
 msgid "Open a message box when a script reports an error."
-msgstr "Åbn dialogvindue når et skript rapportere en fejl."
+msgstr "Åbn dialogvindue når et script rapportere en fejl."
 
 #: src/ecmascript/ecmascript.c:49
 msgid "Maximum execution time"
@@ -5086,7 +5082,7 @@ msgstr "Maksimal tid for udførelse"
 
 #: src/ecmascript/ecmascript.c:51
 msgid "Maximum execution time in seconds for a script."
-msgstr "Antal sekunder som et skript maksimalt må eksekveres."
+msgstr "Antal sekunder som et script maksimalt må eksekveres."
 
 #: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
@@ -5096,7 +5092,7 @@ msgstr "JavaScript advarsel"
 #, c-format
 msgid "A script embedded in the current document raised the following%s%s%s%s"
 msgstr ""
-"Et skript indlejret i det aktuelle dokument rejste den følgende%s%s%s%s"
+"Et script indlejret i det aktuelle dokument rejste den følgende%s%s%s%s"
 
 #: src/ecmascript/spidermonkey.c:1928
 msgid "JavaScript Error"
@@ -5114,9 +5110,9 @@ msgid ""
 "a bug in the script and it could have halted the whole\n"
 "ELinks, so the script execution was interrupted."
 msgstr ""
-"Det indlejrede skript i det aktuelle dokument kørte i mrere end %d\n"
-"sekunder. Dette skyldes sikkert en fejl i skriptet og at skriptet\n"
-"kunne have afsluttet hele ELinks, så skriptet eksekveringen bliv\n"
+"Det indlejrede script i det aktuelle dokument kørte i mrere end %d\n"
+"sekunder. Dette skyldes sikkert en fejl i scriptet og at scriptet\n"
+"kunne have afsluttet hele ELinks, så scriptet eksekveringen bliv\n"
 "afbrudt."
 
 #: src/formhist/dialogs.c:67
@@ -5242,13 +5238,13 @@ msgstr "Formularhistorik"
 #: src/globhist/dialogs.c:106
 #, c-format
 msgid "Sorry, but history entry \"%s\" cannot be deleted."
-msgstr "Desværre, historikindgangen \"%s\" kan ikke slettes."
+msgstr "Desværre, historikemnet \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/globhist/dialogs.c:108
 #, c-format
 msgid "Sorry, but history entry \"%s\" is being used by something else."
-msgstr "Desværre, historikindgangen \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, historikemnet \"%s\" er optaget af en anden proces.."
 
 #. delete_marked_items_title
 #: src/globhist/dialogs.c:114
@@ -5675,7 +5671,7 @@ msgstr ""
 
 #: src/mime/backend/mailcap.c:115
 msgid "Prioritize entries by file"
-msgstr "Prioter indgange efter filrækkefølge"
+msgstr "Prioritering efter filrækkefølge"
 
 #: src/mime/backend/mailcap.c:117
 msgid ""
@@ -5683,9 +5679,9 @@ msgid ""
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 msgstr ""
-"Prioriter indgange i forhold til rækkefølgen af filer i mailcap\n"
-"søgestien. Dette betyder at indgange med wildcards (såsom: image/*)\n"
-"vil også anvendes før en passende håndtering bestemmes."
+"Prioritering efter filrækkefølge i mailcap-søgestien. Dette\n"
+"betyder at regler med jokertegn som f.eks. image/* også vil\n"
+"undersøgt før programhåndteringen vælges."
 
 #: src/mime/backend/mailcap.c:352
 #, c-format
@@ -5862,45 +5858,44 @@ msgstr "gyldig"
 #: src/protocol/auth/dialogs.c:212
 #, c-format
 msgid "Sorry, but auth entry \"%s\" cannot be deleted."
-msgstr "Desværre, identitetsbekræftelsesindgangen \"%s\" kan ikke slettes."
+msgstr "Desværre, identitetsbekræftelsesemnet \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/protocol/auth/dialogs.c:214
 #, c-format
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
 msgstr ""
-"Desværre, identitetsbekræftelsesindgangen \"%s\" er optaget af en anden "
-"proces.."
+"Desværre, identitetsbekræftelsesemnet \"%s\" er optaget af en anden proces.."
 
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
 msgid "Delete marked auth entries"
-msgstr "Slet markerede identitetsbekræftelsesindgange"
+msgstr "Slet markerede identitetsbekræftelsesemner"
 
 #. delete_marked_items
 #: src/protocol/auth/dialogs.c:222
 msgid "Delete marked auth entries?"
-msgstr "Slet markerede identitetsbekræftelsesindgange?"
+msgstr "Slet markerede identitetsbekræftelsesemner?"
 
 #. delete_item_title
 #: src/protocol/auth/dialogs.c:228
 msgid "Delete auth entry"
-msgstr "Slet identitetsbekræftelsesindgang"
+msgstr "Slet identitetsbekræftelsesemne"
 
 #. delete_item
 #: src/protocol/auth/dialogs.c:230
 msgid "Delete this auth entry?"
-msgstr "Slet denne identitetsbekræftelsesindgang"
+msgstr "Slet denne identitetsbekræftelsesemne"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:232
 msgid "Clear all auth entries"
-msgstr "Slet alle identitetsbekræftelsesindgange"
+msgstr "Slet alle identitetsbekræftelsesemner"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:234
 msgid "Do you really want to remove all auth entries?"
-msgstr "Vil du virkelig slette alle identitetsbekræftelsesindgange?"
+msgstr "Vil du virkelig slette alle identitetsbekræftelsesemner?"
 
 #: src/protocol/auth/dialogs.c:261
 msgid "Authentication manager"
@@ -5916,23 +5911,23 @@ msgstr "Indstillinger for visning af lokale filer."
 
 #: src/protocol/file/file.c:43
 msgid "Local CGI"
-msgstr "Lokal CGI-skripts"
+msgstr "Lokale CGI-scripts"
 
 #: src/protocol/file/file.c:45
 msgid "Local CGI specific options."
-msgstr "Indstillinger for lokale CGI-skripts."
+msgstr "Indstillinger for lokale CGI-scripts."
 
 #: src/protocol/file/file.c:49
 msgid "Colon separated list of directories, where CGI scripts are stored."
-msgstr "Kolonsepararet liste af mapper, hvor CGI-skripts er placeret."
+msgstr "Kolonsepareret liste over kataloger med CGI-scripts."
 
 #: src/protocol/file/file.c:51
 msgid "Allow local CGI"
-msgstr "Tillad lokale CGI-skripts"
+msgstr "Tillad lokal CGI"
 
 #: src/protocol/file/file.c:53
 msgid "Whether to execute local CGI scripts."
-msgstr "Om eksekvering af lokale CGI-skripts er tillads."
+msgstr "Om udførelse af lokale CGI-scripts er tilladt."
 
 #: src/protocol/file/file.c:56
 msgid "Allow reading special files"
@@ -5969,10 +5964,10 @@ msgid ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
-"Hvis aktiveret og det ikke er muligt at åbne filen 'filnavn',\n"
-"vil det også blive forsøgt at åbne 'filnavn' med diverse kendte\n"
-"endelser for indkodning tilføjet (såsom 'filnavn.gz'). Dette\n"
-"afhænger af understøttede indkodninger."
+"Hvis en fil ved navn \"filnavn\" ikke kan åbnes, prøves\n"
+"samme fil åbnet ved at tilføje en filendelse, f.eks.\n"
+"\"filnavn.gz\". Det afhænger af hvilke indkodninger der\n"
+"understøttes."
 
 #. name:
 #: src/protocol/file/file.c:77
@@ -6022,7 +6017,7 @@ msgstr "Anonym adgangskode"
 
 #: src/protocol/ftp/ftp.c:68
 msgid "FTP anonymous password to be sent."
-msgstr "Anonym adgangskode som sendes for FTP."
+msgstr "Adgangskode som sendes for anonyme FTP-konti."
 
 #: src/protocol/ftp/ftp.c:70
 msgid "Use passive mode (IPv4)"
@@ -6038,7 +6033,7 @@ msgstr "Brug passivtilstand (IPv6)"
 
 #: src/protocol/ftp/ftp.c:76
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr "Anvend EPSV i stedet for EPRT (passiv vs aktiv modus, kun IPv6)."
+msgstr "Brug EPSV i stedet for EPRT (passiv kontra aktiv tilstand, kun IPv6)."
 
 #. name:
 #: src/protocol/gopher/gopher.c:47
@@ -6079,11 +6074,11 @@ msgstr "HTTP-specifikke indstillinger."
 
 #: src/protocol/http/http.c:63
 msgid "Server bug workarounds"
-msgstr "Omgåelse af serverfejl"
+msgstr "Udbedring af serverfejl"
 
 #: src/protocol/http/http.c:65
 msgid "Server-side HTTP bugs workarounds."
-msgstr "Omgåelse af HTTP-fejl host serveren"
+msgstr "Udbedring af fejl på serverside."
 
 #: src/protocol/http/http.c:67
 msgid "Do not send Accept-Charset"
@@ -6094,20 +6089,20 @@ msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
-"Protokolhovedindgangen Accept-Charser er forholdsvis lang og afsendelse\n"
-"af den kan forårsage fejl i sjældne server."
+"Serverlinjen Accept-Charset er temmelig lang og ved at sende den, kan\n"
+"det udløse programfejl i nogle sjældent forekommende servere."
 
 #: src/protocol/http/http.c:72
 msgid "Allow blacklisting"
-msgstr "Tillad mørklistning"
+msgstr "Tillad sortlistning"
 
 #: src/protocol/http/http.c:74
 msgid "Allow blacklisting of buggy servers."
-msgstr "Tillad mørklistning af fejlbehæftigede servere."
+msgstr "Tillad sortlistning af fejlbehæftede servere."
 
 #: src/protocol/http/http.c:76
 msgid "Broken 302 redirects"
-msgstr "Fejlbehæftigede 302 omdirigeringer"
+msgstr "Forkerte 302-omdirigeringer"
 
 #: src/protocol/http/http.c:78
 msgid ""
@@ -6115,38 +6110,39 @@ msgid ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
-"Fejlbehæftigede 302 omdirigering (bryde med RFCen men er kompatibelt\n"
-"med Netscape). Dette problem er relevant for flere webdiskussionsfora\n"
-"og lignende websider. Hvis de forårsager underlige ting prøv at leg\n"
-"med denne indstilling."
+"Forkerte 302-omdirigeringer. Bryder med RFC-standard, men er\n"
+"kompatibel med Netscape. Denne fejl er almindelig i mange\n"
+"diskussionsfora og lignende. Hvis du har problemer med\n"
+"sådanne sites, så prøv at aktivere denne indstilling."
 
 #: src/protocol/http/http.c:82
 msgid "No keepalive after POST requests"
-msgstr "Hold ikke forbindelser i live efter POST forespørgelser"
+msgstr "Ingen keepalive efter POST-forespørgsler"
 
 #: src/protocol/http/http.c:84
 msgid "Disable keepalive connection after POST request."
-msgstr "Afslut forbindelse efter en POST forespørgelse."
+msgstr "Deaktivér keepalive-forbindelse efter en POST-forespørgsel."
 
 #: src/protocol/http/http.c:86
 msgid "Use HTTP/1.0"
-msgstr "Anvend HTTP/1.0"
+msgstr "Brug HTTP/1.0"
 
 #: src/protocol/http/http.c:88
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
-msgstr "Anvend HTTP/1.0 protokollen i stedet for HTTP/1.1"
+msgstr "Brug protokollen HTTP/1.0 i stedet for HTTP/1.1."
 
 #: src/protocol/http/http.c:92
 msgid "HTTP proxy configuration."
-msgstr "HTTP proxy konfiguration."
+msgstr "Opsætning af HTTP-proxy."
 
 #: src/protocol/http/http.c:96
 msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
-"Værtsmaskine og portnummer (host:port) for HTTP-proxyen eller tom.\n"
-"Hvis tom anvendes i stedet miljøvariablen HTTP_PROXY."
+"Værtsnavn og portnummer (host:port) på HTTP-proxyserveren.\n"
+"Hvis ingen værdi angives her, vil miljøvariablen HTTP_PROXY\n"
+"blive anvendt hvis den er sat."
 
 #: src/protocol/http/http.c:99
 msgid "Username"
@@ -6228,12 +6224,12 @@ msgid ""
 "security risk because it tells web-masters and the FBI sniffers about\n"
 "your language preference."
 msgstr ""
-"Spørg efter lokalitetsspecifikke versioner af dokumenter fra servere\n"
-"(ved at angive Accept-Language i protokolhovedet) og anvend sproget\n"
-"der benyttes i brugergrænsefladen. Dette også påvirker værdien af\n"
-"navigator.language, som stilles tilrådighed til ECMAScript skripts.\n"
-"Bemærk, at nogen anser dette som en potentiel sikkerhedsrisiko, pga.\n"
-"at webredaktører og FBI sniffers om din sprogpræferencer."
+"Anmod webservere om oversatte versioner af dokumenter, med\n"
+"værdien af Accept-Language-serverlinjen sat til det sprog\n"
+"du har defineret i ELinks' brugerflade. Styrer også værdien\n"
+"af navigator.language tilgængelig for ECMAScript scripts\n"
+"Bemærk at nogen ser dette som en mulig sikkerhedsrisiko,\n"
+"fordi det oplyser webmastere om dine sprogpræferencer."
 
 #: src/protocol/http/http.c:144
 msgid "Activate HTTP TRACE debugging"
@@ -6247,12 +6243,12 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
-"Hvis aktiveret vil alle HTTP forespørgsler blive sent med TRACE som\n"
-"deres metode i stedet for GET eller POST. Dette er anvendeligt ved\n"
-"fejlsøgning af både ELinks og diverse skripts på webservere, idet\n"
-"serveren kun returnerer klientens forespørgsel verbatimt tilbage\n"
-"til klienten. Bemærk at denne type forespørgsler ikke er tilgængelig\n"
-"på alle webservere."
+"Hvis aktiveret, vil alle HTTP-forespørgsler blive afsendt\n"
+"med TRACE som metode og ikke GET eller POST. Dette er\n"
+"nyttigt til fejlsøgning af både ELinks og diverse scripts\n"
+"på serverside. I sidstnævnte tilfælde returnerer serveren\n"
+"klientens forespørgsel ordret. Bemærk at ikke alle servere\n"
+"er i stand til dette."
 
 #. OSNews.com is supposed to be relying on the textmode token, at least.
 #: src/protocol/http/http.c:153
@@ -6812,7 +6808,7 @@ msgstr "Fejl ved åbning af fil"
 
 #: src/sched/error.c:75
 msgid "CGI script not in CGI path"
-msgstr "CGI-skript er ikke i CGI stien"
+msgstr "CGI-script er ikke i CGI-stien"
 
 #: src/sched/error.c:78
 msgid "Bad FTP response"
@@ -6987,7 +6983,7 @@ msgstr "Indtast udtryk"
 #. name:
 #: src/scripting/scripting.c:36
 msgid "Scripting"
-msgstr "Programskriptning"
+msgstr "Scriptning"
 
 #: src/ssl/ssl.c:72 src/ssl/ssl.c:157
 msgid "Verify certificates"
@@ -7014,8 +7010,8 @@ msgid ""
 "Enable or not the sending of X509 client certificates\n"
 "to servers which request them."
 msgstr ""
-"Aktivering for afsendelse af X509 klient certifikater\n"
-"til servere som forespørger dem."
+"Aktivér/deaktivér afsendelse af X509-klientcertifikater\n"
+"til servere der beder om dem."
 
 #: src/ssl/ssl.c:86
 msgid "Certificate File"
@@ -7114,7 +7110,7 @@ msgstr "Fejl under afsendelse af formular"
 
 #: src/viewer/text/form.c:854
 #, c-format
-msgid "Could not get file %s: %s"
+msgid "Could not load file %s: %s"
 msgstr "Kunne ikke indlæse filen %s: %s"
 
 #: src/viewer/text/form.c:1427

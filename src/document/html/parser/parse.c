@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.105 2005/02/19 21:51:00 jonas Exp $ */
+/* $Id: parse.c,v 1.106 2005/02/20 00:33:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,7 +908,7 @@ start_element(struct element_info *ei,
 #endif
 	if (ei->func) ei->func(attr);
 #ifdef CONFIG_CSS
-	if (selector) {
+	if (selector && html_top.options) {
 		/* Call it now to override default colors of the elements. */
 		selector = get_css_selector_for_element(&html_top,
 							&html_context.css_styles,

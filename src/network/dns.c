@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.17 2002/09/09 12:55:41 zas Exp $ */
+/* $Id: dns.c,v 1.18 2002/09/17 14:28:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,9 +105,8 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 #endif
 
 	*addrno = i;
-	*addrs = mem_alloc(i * sizeof(struct sockaddr_storage));
+	*addrs = mem_calloc(i, sizeof(struct sockaddr_storage));
 	if (!*addrs) return -1;
-	memset(*addrs, 0, i * sizeof(struct sockaddr_storage));
 
 #ifdef IPV6
 	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next) {
@@ -283,7 +282,7 @@ int do_queued_lookup(struct dnsquery *query)
 int find_in_dns_cache(char *name, struct dnsentry **dnsentry)
 {
 	struct dnsentry *e;
-	
+
 	foreach(e, dns_cache)
 		if (!strcasecmp(e->name, name)) {
 			del_from_list(e);

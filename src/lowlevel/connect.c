@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.26 2002/09/12 13:11:13 zas Exp $ */
+/* $Id: connect.c,v 1.27 2002/09/17 14:26:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,12 +509,11 @@ alloc_read_buffer(struct connection *c)
 {
 	struct read_buffer *rb;
 
-	rb = mem_alloc(sizeof(struct read_buffer) + READ_SIZE);
+	rb = mem_calloc(1, sizeof(struct read_buffer) + READ_SIZE);
 	if (!rb) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return NULL;
 	}
-	memset(rb, 0, sizeof(struct read_buffer));
 
 	return rb;
 }

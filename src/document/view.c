@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.75 2002/09/10 13:40:02 zas Exp $ */
+/* $Id: view.c,v 1.76 2002/09/17 14:21:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,22 +197,19 @@ comp_links(struct link *l1, struct link *l2)
 void
 sort_links(struct f_data *f)
 {
-	int i, size;
+	int i;
 
 	if (f->nlinks)
 		qsort(f->links, f->nlinks, sizeof(struct link),
 		      (void *) comp_links);
 
-	size = f->y * sizeof(struct link *);
-	f->lines1 = mem_alloc(size);
+	f->lines1 = mem_calloc(f->y, sizeof(struct link *));
 	if (!f->lines1) return;
-	f->lines2 = mem_alloc(size);
+	f->lines2 = mem_calloc(f->y, sizeof(struct link *));
 	if (!f->lines2) {
 		mem_free(f->lines1);
 		return;
 	}
-	memset(f->lines1, 0, size);
-	memset(f->lines2, 0, size);
 
 	for (i = 0; i < f->nlinks; i++) {
 		int p, q, j;
@@ -1325,9 +1322,9 @@ get_succesful_controls(struct f_data_c *f, struct form_control *fc,
 			if (form->type == FC_SELECT && !form->nvalues)
 				continue;
 fi_rep:
-			sub = mem_alloc(sizeof(struct submitted_value));
+			sub = mem_calloc(1, sizeof(struct submitted_value));
 			if (!sub) continue;
-			memset(sub, 0, sizeof(struct submitted_value));
+
 			sub->type = form->type;
 			sub->name = stracpy(form->name);
 

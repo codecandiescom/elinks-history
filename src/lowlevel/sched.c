@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.43 2002/09/12 13:00:14 zas Exp $ */
+/* $Id: sched.c,v 1.44 2002/09/17 14:30:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -887,13 +887,12 @@ load_url(unsigned char *url, unsigned char *prev_url,
 		return 0;
 	}
 
-	c = mem_alloc(sizeof(struct connection));
+	c = mem_calloc(1, sizeof(struct connection));
 	if (!c) {
 		if (stat) stat->end(stat, stat->data);
 		mem_free(u);
 		return -1;
 	}
-	memset(c, 0, sizeof(struct connection));
 
 	c->count = connection_count++;
 	c->url = u;

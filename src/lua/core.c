@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.18 2002/09/12 16:33:53 zas Exp $ */
+/* $Id: core.c,v 1.19 2002/09/17 14:35:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,7 +381,6 @@ static int
 l_edit_bookmark_dialog(LS)
 {
 	struct dialog *d;
-	size_t sz;
 	struct dlg_data *data;
 
 	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
@@ -390,10 +389,9 @@ l_edit_bookmark_dialog(LS)
 		return 1;
 	}
 
-	sz = sizeof(struct dialog) + 6 * sizeof(struct widget) + sizeof *data;
-	d = mem_alloc(sz);
+	d = mem_calloc(1, sizeof(struct dialog) + 6 * sizeof(struct widget)
+			  + sizeof *data);
 	if (!d) return 0;
-	memset(d, 0, sz);
 
 	data = (struct dlg_data *)&d->items[6];
 	data->state = S;
@@ -525,7 +523,6 @@ static int
 l_xdialog(LS)
 {
 	struct dialog *d;
-	size_t sz;
 	struct xdialog_data *data;
 	int nargs, nfields, nitems;
 	int i;
@@ -538,10 +535,9 @@ l_xdialog(LS)
 	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto error;
 	if (!lua_isfunction(S, nargs)) goto error;
 
-	sz = sizeof(struct dialog) + nitems * sizeof(struct widget) + sizeof *data;
-	d = mem_alloc(sz);
+	d = mem_calloc(1, sizeof(struct dialog) + nitems * sizeof(struct widget)
+			  + sizeof *data);
 	if (!d) return 0;
-	memset(d, 0, sz);
 
 	data = (struct xdialog_data *)&d->items[nitems];
 	data->state = S;

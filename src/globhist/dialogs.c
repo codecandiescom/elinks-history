@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.5 2002/08/31 00:27:54 pasky Exp $ */
+/* $Id: dialogs.c,v 1.6 2002/09/17 14:23:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,10 +57,9 @@ history_dialog_box_build()
 	struct listbox_data *box;
 
 	/* Deleted in abort */
-	box = mem_alloc(sizeof(struct listbox_data));
+	box = mem_calloc(1, sizeof(struct listbox_data));
 	if (!box) return NULL;
 
-	memset(box, 0, sizeof(struct listbox_data));
 	box->items = &gh_box_items;
 	add_to_list(gh_boxes, box);
 
@@ -433,17 +432,13 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 		gh_last_searched_url = NULL;
 	}
 
-#define DIALOG_MEMSIZE (sizeof(struct dialog) \
-		       + (HISTORY_BOX_IND + 2) * sizeof(struct widget) \
-		       + sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
 	/* XXX: sizeof(struct global_history_item): why? */
 
-	d = mem_alloc(DIALOG_MEMSIZE);
+	d = mem_calloc(1, sizeof(struct dialog)
+		          + (HISTORY_BOX_IND + 2) * sizeof(struct widget)
+		          + sizeof(struct global_history_item)
+			  + 2 * MAX_STR_LEN);
 	if (!d) return;
-
-	memset(d, 0, DIALOG_MEMSIZE);
-
-#undef DIALOG_MEMSIZE
 
 	d->title = TEXT(T_HISTORY_MANAGER);
 	d->fn = layout_history_manager;

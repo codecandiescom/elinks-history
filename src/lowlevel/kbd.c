@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.11 2002/09/16 12:57:32 pasky Exp $ */
+/* $Id: kbd.c,v 1.12 2002/09/17 14:29:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,13 +288,12 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 		queue_event(itrm, ts, ts_len);
 
-		mm = mem_alloc(ll);
+		mm = mem_calloc(1, ll);
 		if (!mm) {
 			free_trm(itrm);
 			return;
 		}
 
-		memset(mm, 0, ll);
 		queue_event(itrm, mm, ll);
 		mem_free(mm);
 	}
@@ -316,13 +315,12 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 		queue_event(itrm, ts, ts_len);
 
-		mm = mem_alloc(ll);
+		mm = mem_calloc(1, ll);
 		if (!mm) {
 			free_trm(itrm);
 			return;
 		}
 
-		memset(mm, 0, ll);
 		queue_event(itrm, mm, ll);
 		mem_free(mm);
 	}

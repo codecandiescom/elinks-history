@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.189 2004/04/23 16:29:56 jonas Exp $ */
+/* $Id: uri.c,v 1.190 2004/04/23 16:42:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -832,6 +832,10 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 		}
 
 		filename += 9;
+
+		/* See if there are other fields after the `filename=' one */
+		filenamelen = (int) strcspn(filename, ";");
+		filename[filenamelen] = 0;
 
 		/* We don't want to add any directories from the path so
 		 * make sure we only add the filename. */

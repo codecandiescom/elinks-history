@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.49 2003/06/30 23:23:38 zas Exp $ */
+/* $Id: tables.c,v 1.50 2003/07/05 09:16:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1628,8 +1628,23 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
 	get_bgcolor(attr, &bgcolor);
 
+	/* From http://www.w3.org/TR/html4/struct/tables.html#adef-border-TABLE
+	 * The following settings should be observed by user agents for
+	 * backwards compatibility.
+	 * Setting border="0" implies frame="void" and, unless otherwise
+	 * specified, rules="none".
+	 * Other values of border imply frame="border" and, unless otherwise
+	 * specified, rules="all".
+	 * The value "border" in the start tag of the TABLE element should be
+	 * interpreted as the value of the frame attribute. It implies
+	 * rules="all" and some default (non-zero) value for the border
+	 * attribute. */
 	border = get_num(attr, "border");
-	if (border == -1) border = has_attr(attr, "border");
+ 	if (border == -1) {
+		border = has_attr(attr, "border")
+			 || has_attr(attr, "rules")
+			 || has_attr(attr, "frame");
+	}
 
 	if (border) {
 		if (border > 2) border = 2;
@@ -1677,7 +1692,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	rules = R_ALL;
+	rules = border ? R_ALL : R_NONE;
 	al = get_attr_val(attr, "rules");
 	if (al) {
 		if (!strcasecmp(al, "none")) rules = R_NONE;

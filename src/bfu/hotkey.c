@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.17 2004/04/17 11:58:45 jonas Exp $ */
+/* $Id: hotkey.c,v 1.18 2004/04/20 13:48:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 		menu->lang = current_language;
 	}
 #else
-	init_hotkeys(term, menu->items, menu->ni, menu->hotkeys);
+	init_hotkeys(term, menu->items, menu->size, menu->hotkeys);
 #endif
 }
 

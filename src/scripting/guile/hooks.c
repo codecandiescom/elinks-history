@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.15 2003/10/01 14:52:57 jonas Exp $ */
+/* $Id: hooks.c,v 1.16 2003/10/01 15:45:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,12 +80,13 @@ script_hook_pre_format_html(va_list ap)
 {
 	unsigned char **html = va_arg(ap, unsigned char **);
 	int *html_len = va_arg(ap, int *);
-#if 0 /* This event argument is still not used by this backend */
 	struct session *ses = va_arg(ap, struct session *);
-#endif
 	unsigned char *url = va_arg(ap, unsigned char *);
 	SCM proc;
 	SCM x;
+
+	/* Silence compiler warnings. */
+	if (0 && ses) ;
 
 	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 

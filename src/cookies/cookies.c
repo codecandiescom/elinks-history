@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.48 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: cookies.c,v 1.49 2003/05/07 13:03:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ static INIT_LIST_HEAD(cookies);
 struct c_domain {
 	LIST_HEAD(struct c_domain);
 
-	unsigned char domain[1];
+	unsigned char domain[1]; /* Must be at end of struct. */
 };
 
 static INIT_LIST_HEAD(c_domains);
@@ -67,7 +67,7 @@ struct c_server {
 	LIST_HEAD(struct c_server);
 
 	int accept;
-	unsigned char server[1];
+	unsigned char server[1]; /* Must be at end of struct. */
 };
 
 static INIT_LIST_HEAD(c_servers);

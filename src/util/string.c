@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.63 2003/07/23 12:32:45 pasky Exp $ */
+/* $Id: string.c,v 1.64 2003/07/23 13:46:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,12 +245,15 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	 * anything quantitively. --pasky */ \
  \
 	assert(s1 && s2); \
-	assert(n1 >= -1 && n2 >= -1); \
+ \
+	/* n1,n2 is unsigned, so don't assume -1 < 0 ! >:) */ \
  \
 	/* TODO: Don't precompute strlen()s but rather make the loop smarter.
 	 * --pasky */ \
 	if (n1 == -1) n1 = strlen(s1); \
 	if (n2 == -1) n2 = strlen(s2); \
+ \
+	assert(n1 >= 0 && n2 >= 0); \
  \
 	if (n1 != n2) return n1 - n2; \
  \

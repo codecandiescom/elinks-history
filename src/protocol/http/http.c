@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.349 2004/11/10 11:06:36 zas Exp $ */
+/* $Id: http.c,v 1.350 2004/11/10 18:39:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-static void uncompress_shutdown(struct connection *);
+static void decompress_shutdown(struct connection *);
 
 
 unsigned char *
@@ -248,7 +248,7 @@ http_end_request(struct connection *conn, enum connection_state state,
 		 int notrunc)
 {
 	set_connection_state(conn, state);
-	uncompress_shutdown(conn);
+	decompress_shutdown(conn);
 
 	if (conn->state == S_OK && conn->cached) {
 		if (!notrunc) truncate_entry(conn->cached, conn->from, 1);
@@ -658,8 +658,8 @@ http_send_header(struct connection *conn)
 }
 
 
-/* This function uncompresses the data block given in @data (if it was
- * compressed), which is long @len bytes. The uncompressed data block is given
+/* This function decompresses the data block given in @data (if it was
+ * compressed), which is long @len bytes. The decompressed data block is given
  * back to the world as the return value and its length is stored into
  * @new_len.
  *
@@ -673,7 +673,7 @@ http_send_header(struct connection *conn)
  *
  * This function gotta die. */
 static unsigned char *
-uncompress_data(struct connection *conn, unsigned char *data, int len,
+decompress_data(struct connection *conn, unsigned char *data, int len,
 		int *new_len)
 {
 	struct http_connection_info *info = conn->info;
@@ -764,7 +764,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		if (!output) break;
 
 		did_read = read_encoded(conn->stream, output + *new_len,
-					init ? PIPE_BUF / 8 : to_read); /* on init don't read too much */
+					init ? PIPE_BUF / 32 : to_read); /* on init don't read too much */
 		if (did_read > 0) *new_len += did_read;
 		else if (did_read == -1) {
 			mem_free_set(&output, NULL);
@@ -773,13 +773,13 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		}
 	} while (!(!len && did_read != to_read));
 
-	uncompress_shutdown(conn);
+	decompress_shutdown(conn);
 	return output;
 }
 
 /* FIXME: Unfortunately, we duplicate this in free_connection_data(). */
 static void
-uncompress_shutdown(struct connection *conn)
+decompress_shutdown(struct connection *conn)
 {
 	if (conn->stream) {
 		close_encoded(conn->stream);
@@ -923,7 +923,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 			int_upper_bound(&len, rb->len);
 			conn->received += len;
 
-			data = uncompress_data(conn, rb->data, len, &data_len);
+			data = decompress_data(conn, rb->data, len, &data_len);
 
 			if (add_fragment(conn->cached, conn->from,
 					 data, data_len) == 1)
@@ -985,7 +985,7 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 
 	conn->received += len;
 
-	data = uncompress_data(conn, rb->data, len, &data_len);
+	data = decompress_data(conn, rb->data, len, &data_len);
 
 	if (add_fragment(conn->cached, conn->from, data, data_len) == 1)
 		conn->tries = 0;
@@ -1013,7 +1013,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 	if (rb->close == READ_BUFFER_END) {
 		if (conn->content_encoding && info->length == -1) {
-			/* Flush uncompression first. */
+			/* Flush decompression first. */
 			info->length = 0;
 		} else {
 			read_http_data_done(conn);

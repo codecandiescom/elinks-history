@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.147 2003/09/15 14:23:26 zas Exp $ */
+/* $Id: session.c,v 1.148 2003/09/18 12:33:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,20 +259,31 @@ print_screen_status(struct session *ses)
 	}
 
 	if (ses->visible_tabs_bar) {
-		int tab_width = term->x / tabs_count;
-		int tab_total_width = tab_width * tabs_count;
-		int tab_num;
 		struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
 		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
 		struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
-		unsigned char ypos = term->y - (ses->visible_status_bar ? 2 : 1);
+		int tab_width = term->x / tabs_count;
+		int tab_total_width = tab_width * tabs_count;
+		int tab_remain_width = int_max(0, term->x - tab_total_width);
+		int tab_num;
+		int ypos = term->y - (ses->visible_status_bar ? 2 : 1);
+		int xpos = 0;
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 			struct color_pair *color;
 			struct window *tab = get_tab_by_number(term, tab_num);
 			struct document_view *fd;
-			int xpos = tab_num * tab_width;
+			int actual_tab_width = tab_width;
 			int msglen;
+
+			/* Adjust tab size to use full term width. */
+			if (tab_remain_width) {
+				actual_tab_width++;
+				tab_remain_width--;
+				if (tab_num == tabs_count - 1) {
+					actual_tab_width += tab_remain_width;
+				}
+			}
 
 			fd = tab->data ? current_frame(tab->data) : NULL;
 
@@ -287,8 +298,8 @@ print_screen_status(struct session *ses)
 			}
 
 			msglen = strlen(msg);
-			if (msglen >= tab_width)
-				msglen = tab_width - 1;
+			if (msglen >= actual_tab_width)
+				msglen = actual_tab_width - 1;
 
 			if (tab_num) {
 				draw_text(term, xpos, ypos, "|", 1, 0, normal_color);
@@ -310,14 +321,10 @@ print_screen_status(struct session *ses)
 					color = normal_color;
 			}
 
-			draw_area(term, xpos, ypos, tab_width, 1, ' ', 0, color);
+			draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
 			draw_text(term, xpos, ypos, msg, msglen, 0, color);
+			xpos += actual_tab_width;
 		}
-
-		if (tab_total_width < term->x)
-			draw_area(term, tab_total_width, ypos,
-				  term->x - tab_total_width, 1, ' ', 0, normal_color);
-
 	}
 
 	if (ses_tab_is_current && ses->visible_title_bar) {

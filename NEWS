@@ -3,23 +3,26 @@ See ChangeLog for recent changes, bugfixes and new features.
 ELinks-now:
 
 * simple CSS support
-* automatic session saving/restoring support
+* automatic session saving/restoring support (disabled by default)
 * multiple URIs on the command line
-* tabs moving
-* exmode CLI support
-* cursor routing (aka w3m style navigation)
+* tabs moving (press Alt-'>' or Alt-'<')
+* exmode CLI support (press ':' followed by action and args) (experimental)
+* cursor routing (aka w3m-style navigation)
 * directional links navigation
+* modal text-input form-fields editing (disabled by default) 
 * manual cookies creating and editing support
-* typeahead text searching (press '#/' sequence)
-* experimental Perl scripting extensions
-* configurability through features.conf
-* Mozilla-compliant support for -remote option
-* internationalized domain name support
+* typeahead text searching (press '#/')
+* Perl scripting extensions (experimental)
+* configurability and feature documentation through features.conf
+* Mozilla-compliant -remote option (http://www.mozilla.org/unix/remote.html)
+* internationalized domain name support (RFC 3490)
 * data protocol support (RFC 2397)
+* gopher protocol support (RFC 1436)
+* NNTP protocol support (RFC 977 and 2980) (experimental)
 * -localhost option to only permit local connections
+* -default-keys command line option to ignore user-defined keybindings
 * -config-dir replaces -confdir option
 * -config-file replaces -conffile option
-* -default-keys command line option to ignore user-defined keybindings
 
 ELinks-0.9.0:
 

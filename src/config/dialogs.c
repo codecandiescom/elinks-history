@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.214 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: dialogs.c,v 1.215 2005/04/06 21:13:13 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -20,6 +20,7 @@
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "intl/gettext/libintl.h"
+#include "sched/event.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
@@ -788,7 +789,8 @@ really_really_add_keybinding(void *data)
 
 	assert(hop);
 
-	add_keybinding(hop->keymap, hop->action, hop->key, hop->meta, 0);
+	add_keybinding(hop->keymap, hop->action, hop->key, hop->meta,
+		       EVENT_NONE);
 }
 
 static void

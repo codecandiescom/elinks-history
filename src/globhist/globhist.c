@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.10 2002/11/15 17:20:30 zas Exp $ */
+/* $Id: globhist.c,v 1.11 2002/11/29 09:49:03 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -223,7 +223,16 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 
 	history_item->last_visit = time;
 	history_item->title = stracpy(title);
+	if (!history_item->title) {
+		mem_free(history_item);
+		return;
+	}
 	history_item->url = stracpy(url);
+	if (!history_item->url) {
+		mem_free(history_item->title);
+		mem_free(history_item);
+		return;
+	}
 	history_item->refcount = 0;
 
 	add_to_list(global_history.items, history_item);
@@ -278,10 +287,15 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 	/* Memorize last searched title */
 	if (gh_last_searched_title) mem_free(gh_last_searched_title);
 	gh_last_searched_title = stracpy(search_title);
+	if (!gh_last_searched_title) return 0;
 
 	/* Memorize last searched url */
 	if (gh_last_searched_url) mem_free(gh_last_searched_url);
 	gh_last_searched_url = stracpy(search_url);
+	if (!gh_last_searched_url) {
+		mem_free(gh_last_searched_title);
+		return 0;
+	}
 
 	if (!*search_title && !*search_url) {
 		foreach (item, global_history.items) {
@@ -366,20 +380,19 @@ write_global_history()
 	foreachback (historyitem, global_history.items) {
 		unsigned char *p;
 		int i;
+		int bad = 0;
 
 		p = historyitem->title;
 		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ' || p[i] == '\t')
+			if (p[i] < ' ')
 				p[i] = ' ';
 
 		p = historyitem->url;
 		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ' || p[i] == '\t') {
-				/* Or maybe skip this URL instead as it will
-				 * now be (and was already) incorrect?
-				 * -- Miciah */
-				p[i] = ' ';
-			}
+			if (p[i] < ' ')
+				bad = 1; /* Incorrect url, skip it. */
+
+		if (bad) continue;
 
 		if (secure_fprintf(ssi, "%s\t%s\t%ld\n",
 				   historyitem->title,

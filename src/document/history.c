@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.9 2002/06/21 19:25:09 pasky Exp $ */
+/* $Id: history.c,v 1.10 2002/09/10 13:21:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,10 @@ ses_back(struct session *ses)
 
 	/* This is the current location. */
 	loc = cur_loc(ses);
-	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
+	if (ses->search_word) {
+		mem_free(ses->search_word);
+		ses->search_word = NULL;
+	}
 	if (!have_location(ses)) return;
     	del_from_list(loc);
 	add_to_list(ses->unhistory, loc);
@@ -96,7 +99,10 @@ ses_unback(struct session *ses)
 	free_files(ses);
 
 	loc = ses->unhistory.next;
-	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
+	if (ses->search_word) {
+		mem_free(ses->search_word);
+		ses->search_word = NULL;
+	}
 	if (list_empty(ses->unhistory)) return;
 	del_from_list(loc);
 	/* Save it as the current location! */
@@ -124,16 +130,21 @@ go_back(struct session *ses)
 		/* There's no history, maximally only current location. */
 		return;
 	abort_loading(ses);
-	if (!(url = stracpy(((struct location *)ses->history.next)->next->vs.url)))
-		return;
 
-	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
+	url = stracpy(((struct location *)ses->history.next)->next->vs.url);
+	if (!url) return;
+
+	if (ses->ref_url) {
+		mem_free(ses->ref_url);
+		ses->ref_url=NULL;
+	}
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
+	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL,
+		 end_load, 0);
 }
 
 void
@@ -145,17 +156,22 @@ go_unback(struct session *ses)
 
 	ses->reloadlevel = NC_CACHE;
 	/* XXX: why wtd checking is not here? --pasky */
-	if (list_empty(ses->unhistory))
-		return;
-	abort_loading(ses);
-	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
-		return;
+	if (list_empty(ses->unhistory)) return;
 
-	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
+	abort_loading(ses);
+
+	url = stracpy(((struct location *)ses->unhistory.next)->vs.url);
+	if (!url) return;
+
+	if (ses->ref_url) {
+		mem_free(ses->ref_url);
+		ses->ref_url=NULL;
+	}
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
+	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL,
+		 end_load, 1);
 }

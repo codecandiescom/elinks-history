@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.24 2004/07/06 10:25:28 jonas Exp $ */
+/* $Id: cookies.h,v 1.25 2004/10/23 07:54:27 pasky Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -49,7 +49,8 @@ void load_cookies(void);
 void save_cookies(void);
 
 /* Note that the returned value points to a static structure and thus the
- * string will be overwritten at the next call time. */
+ * string will be overwritten at the next call time. The string source
+ * itself is dynamically allocated, though. */
 struct string *send_cookies(struct uri *uri);
 
 extern struct module cookies_module;

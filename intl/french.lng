@@ -262,7 +262,7 @@ T_DO_YOU_REALLY_WANT_TO_EXIT_LINKS_AND_TERMINATE_ALL_DOWNLOADS, "Interrompre les
 T_MANUAL, "Manuel",
 T_NO_PROGRAM, "Aucun programme",
 T_NO_PROGRAM_SPECIFIED_FOR, "Aucun programme n'est défini pour ",
-T_BAD_USER_URL, NULL,
+T_BAD_USER_URL, "Mauvaise URL (protocole utilisateur)",
 T_USERID, "Utilisateur",
 T_PASSWORD, "Mot de passe",
 T_ENTER_USERNAME, "Entrez le nom d'utilisateur pour ",

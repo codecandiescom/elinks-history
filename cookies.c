@@ -88,7 +88,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	
 	for (pos = str; *pos != ';' && *pos; pos++) {
 		if (!last_was_ws)
-			val_end = pos;
+			val_end = pos + 1; /* The NEXT char is ending it! */
 
 		if (*pos == '=') {
 			/* End of name reached */

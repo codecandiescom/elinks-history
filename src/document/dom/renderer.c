@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.4 2004/09/24 02:08:14 jonas Exp $ */
+/* $Id: renderer.c,v 1.5 2004/09/24 02:34:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "cache/cache.h"
 #include "document/css/css.h"
+#include "document/css/parser.h"
 #include "document/css/property.h"
 #include "document/css/stylesheet.h"
 #include "document/docdata.h"
@@ -95,10 +96,28 @@ init_dom_renderer(struct dom_renderer *renderer, struct document *document,
 		struct screen_char *template = &renderer->styles[type];
 		color_t background = global_doc_opts->default_bg;
 		color_t foreground = global_doc_opts->default_fg;
+		static int i_want_struct_module_for_dom;
 
 		unsigned char *name = get_dom_node_type_name(type);
 		int namelen = name ? strlen(name) : 0;
 		struct css_selector *selector = NULL;
+
+		if (!i_want_struct_module_for_dom) {
+			static const unsigned char default_colors[] =
+				"document	{ color: yellow } "
+				"element	{ color: lightgreen } "
+				"entity-reference { color: red } "
+				"proc-instruction { color: red } "
+				"attribute	{ color: magenta } "
+				"comment	{ color: aqua } ";
+			unsigned char *styles = (unsigned char *) default_colors;
+
+			i_want_struct_module_for_dom = 1;
+			/* When someone will get here earlier than at 4am,
+			 * this will be done in some init function, perhaps
+			 * not overriding the user's default stylesheet. */
+			css_parse_stylesheet(css, NULL, styles, styles + sizeof(default_colors) + 1);
+		}
 
 		if (name)
 			selector = find_css_selector(&css->selectors,
@@ -324,7 +343,7 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *uri, int length)
 	link->type = LINK_HYPERTEXT;
 	link->where = where;
 	link->color.background = document->options.default_bg;
-	link->color.foreground = document->options.default_vlink;
+	link->color.foreground = document->options.default_link;
 
 	for (point = link->points; length > 0; length--, point++, x++) {
 		point->x = x;
@@ -568,6 +587,7 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 		if (node->data.attribute.reference)
 			add_dom_link(renderer, value, valuelen);
 
+		/* TODO: Different template for links. */
 		render_dom_text(renderer, template, value, valuelen);
 	}
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.37 2003/05/03 00:04:22 zas Exp $ */
+/* $Id: view.c,v 1.38 2003/05/03 00:41:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3423,8 +3423,8 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		l = 1;
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, N_("Display ~usemap"),
-				    SUBMENU_INDICATOR, MENU_FUNC send_enter, NULL, 1);
+			add_to_menu(&mi, N_("Display ~usemap"), M_SUBMENU,
+				    MENU_FUNC send_enter, NULL, 1);
 		else {
 			int c = can_open_in_new(term);
 
@@ -3436,7 +3436,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
-					     c - 1 ? SUBMENU_INDICATOR : NULL,
+					     c - 1 ? M_SUBMENU : NULL,
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
@@ -3469,7 +3469,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    c - 1 ? SUBMENU_INDICATOR : NULL,
+					    c - 1 ? M_SUBMENU : NULL,
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 

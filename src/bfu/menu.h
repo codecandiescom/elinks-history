@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.12 2003/05/02 23:48:16 pasky Exp $ */
+/* $Id: menu.h,v 1.13 2003/05/03 00:41:40 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -8,8 +8,8 @@
 #define MENU_FUNC_TYPE	void (*)(struct terminal *, void *, void *)
 #define MENU_FUNC	(MENU_FUNC_TYPE)
 
-extern unsigned char submenu_indicator[];
-#define SUBMENU_INDICATOR ((unsigned char *)submenu_indicator)
+extern unsigned char m_submenu[];
+#define M_SUBMENU ((unsigned char *) m_submenu)
 
 
 /* Which fields to free when zapping a list item - bitwise. */

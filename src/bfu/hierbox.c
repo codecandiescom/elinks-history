@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.84 2003/11/22 15:09:28 jonas Exp $ */
+/* $Id: hierbox.c,v 1.85 2003/11/22 15:43:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,6 +326,29 @@ scan_for_marks(struct listbox_item *item, void *info_, int *offset)
 	return 0;
 }
 
+static int
+scan_for_used(struct listbox_item *item, void *info_, int *offset)
+{
+	struct hierbox_action_info *action_info = info_;
+
+	if (action_info->box->ops->is_used(item)) {
+		action_info->item = item;
+		*offset = 0;
+	} else if (action_info->box->sel
+		   && action_info->item == action_info->box->sel) {
+		/* Small hack to ensure that action_info->item will end up
+		 * either being NULL if no items are being used or the first
+		 * used item found. */
+		if (!action_info->box->ops->is_used(action_info->item)) {
+			action_info->item = NULL;
+			*offset = 0;
+		}
+	}
+
+
+	return 0;
+}
+
 struct hierbox_action_info *
 init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
 			 int (*scanner)(struct listbox_item *, void *, int *))
@@ -394,6 +417,35 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 /* Delete action */
 
 static void
+print_delete_error(struct listbox_item *item, struct terminal *term,
+		   struct listbox_ops *ops)
+{
+	if (item->type == BI_FOLDER) {
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
+			N_("Deleting used folder"), AL_CENTER,
+			msg_text(term, N_("Sorry, but the folder \"%s\""
+				 "is being used by something else."),
+				 item->text),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+
+	} else {
+		unsigned char *msg = ops->get_info(item, term);
+
+		if (!msg) return;
+
+		msg_box(term, getml(msg, NULL), MSGBOX_FREE_TEXT,
+			N_("Deleting used item"), AL_CENTER,
+			msg_text(term, N_("Sorry, but the item \"%s\""
+				 "is being used by something else.\n\n"
+				 "%s"),
+				item->text, msg),
+			NULL, 1,
+			N_("OK"), NULL, B_ENTER | B_ESC);
+	}
+}
+
+static void
 do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
 	       int last)
 {
@@ -402,32 +454,7 @@ do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
 	assert(item && item->udata);
 
 	if (ops->is_used(item)) {
-		struct terminal *term = info->term;
-
-		if (item->type == BI_FOLDER) {
-			msg_box(term, NULL, MSGBOX_FREE_TEXT,
-				N_("Deleting used folder"), AL_CENTER,
-				msg_text(term, N_("Sorry, but the folder \"%s\""
-					 "is being used by something else."),
-					item->text),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-
-		} else {
-			unsigned char *msg = ops->get_info(item, term);
-
-			if (!msg) return;
-
-			msg_box(term, getml(msg, NULL), MSGBOX_FREE_TEXT,
-				N_("Deleting used item"), AL_CENTER,
-				msg_text(term, N_("Sorry, but the item \"%s\""
-					 "is being used by something else.\n\n"
-					 "%s"),
-					item->text, msg),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-		}
-
+		print_delete_error(item, info->term, ops);
 		return;
 	}
 
@@ -538,6 +565,58 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), push_cancel_delete_button, B_ESC);
 	}
+
+	return 0;
+}
+
+/* Clear action */
+
+static int
+delete_unused(struct listbox_item *item, void *data_, int *offset)
+{
+	struct hierbox_action_info *action_info = data_;
+
+	if (action_info->box->ops->is_used(item)) return 0;
+
+	do_delete_item(item, action_info, 0);
+	return 1;
+}
+
+static void
+do_clear_browser(void *action_info_)
+{
+	struct hierbox_action_info *action_info = action_info_;
+
+	traverse_listbox_items_list(action_info->box->items->next, 0, 0,
+				    delete_unused, action_info);
+}
+
+int
+push_hierbox_clear_button(struct dialog_data *dlg_data,
+			  struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct terminal *term = dlg_data->win->term;
+	struct hierbox_action_info *action_info;
+
+	if (!box->sel || !box->sel->udata) return 0;
+
+	assert(box->ops);
+
+	action_info = init_hierbox_action_info(box, term, scan_for_used);
+	if (!action_info) return 0;
+
+	if (action_info->item) {
+		print_delete_error(action_info->item, term, box->ops);
+		return 0;
+	}
+
+	msg_box(term, getml(action_info, NULL), 0,
+		N_("Clear all items"), AL_CENTER,
+		N_("Do you really want to remove all items?"),
+		action_info, 2,
+		N_("Yes"), do_clear_browser, B_ENTER,
+		N_("No"), NULL, B_ESC);
 
 	return 0;
 }

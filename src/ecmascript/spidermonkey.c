@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.24 2004/09/24 22:53:10 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.25 2004/09/24 23:19:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,12 +150,79 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, void *var)
 }
 
 
+
+static JSBool window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
 static const JSClass window_class = {
 	"window",
 	JSCLASS_HAS_PRIVATE,
-	JS_PropertyStub, JS_PropertyStub, JS_PropertyStub, JS_PropertyStub,
+	JS_PropertyStub, JS_PropertyStub,
+	window_get_property, window_set_property,
 	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
 };
+
+enum window_prop {
+	JSP_WIN_CLOSED,
+	JSP_WIN_DOC,
+	JSP_WIN_LOC,
+	JSP_WIN_SELF,
+	JSP_WIN_TOP,
+};
+static const JSPropertySpec window_props[] = {
+	{ "closed",	JSP_WIN_CLOSED,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "document",	JSP_WIN_DOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "location",	JSP_WIN_LOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "self",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "top",	JSP_WIN_TOP,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "window",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ NULL }
+};
+
+static JSBool
+window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+
+	VALUE_TO_JSVAL_START;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_WIN_CLOSED:
+		/* TODO: It will be a major PITA to implement this properly.
+		 * Well, perhaps not so much if we introduce reference tracking
+		 * for (struct session)? Still... --pasky */
+		boolean = 0; prop_type = JSPT_BOOLEAN; break;
+	case JSP_WIN_SELF: object = obj; prop_type = JSPT_OBJECT; break;
+	case JSP_WIN_TOP:
+	{
+		struct document_view *top_view = doc_view->session->doc_view;
+
+		assert(top_view && top_view->ecmascript);
+		object =JS_GetGlobalObject(top_view->ecmascript->backend_data);
+		prop_type = JSPT_OBJECT;
+		break;
+	}
+	default:
+		INTERNAL("Invalid ID %d in window_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	VALUE_TO_JSVAL_END;
+}
+
+static JSBool
+window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSVAL_TO_VALUE_START;
+
+	switch (JSVAL_TO_INT(id)) {
+	default:
+		INTERNAL("Invalid ID %d in window_set_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	JSVAL_TO_VALUE_END;
+}
 
 
 static JSBool document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -372,7 +439,10 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	JS_SetContextPrivate(ctx, interpreter);
 	JS_SetErrorReporter(ctx, error_reporter);
 
-	window_obj = JS_NewObject(ctx, (JSClass *) &window_class, NULL, NULL);
+	window_obj = JS_InitClass(ctx, NULL, NULL,
+	                          (JSClass *) &window_class, NULL, 0,
+	                          (JSPropertySpec *) window_props, NULL,
+	                          NULL, NULL);
 	if (!window_obj) {
 		spidermonkey_put_interpreter(interpreter);
 		return NULL;

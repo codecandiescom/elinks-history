@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.19 2003/11/06 00:07:16 jonas Exp $ */
+/* $Id: text.c,v 1.20 2003/11/06 00:15:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,6 @@ text_width(struct terminal *term, register unsigned char *text,
 
 /* Format text according to dialog dimensions and alignment. */
 /* TODO: Longer names for local variables. */
-/* TODO: Optimized version tha wont decode the color for every draw_char(). */
 void
 dlg_format_text(struct terminal *term,
 		unsigned char *text, int x, int *y, int w, int *rw,
@@ -74,17 +73,18 @@ dlg_format_text(struct terminal *term,
 
 		s = (align == AL_CENTER ? int_max((w - ww) / 2, 0) : 0);
 
-		while (tt < text - 1) {
-			if (s >= w) {
-				s = 0;
-			   	(*y)++;
-				if (rw) *rw = w;
+		if (s >= w) {
+			s = 0;
+			(*y)++;
+			if (rw) {
+				*rw = w;
 				rw = NULL;
 			}
-			if (term) draw_char(term, x + s, *y, *tt, 0, color);
-			s++;
-			tt++;
 		}
+
+		if (term)
+			draw_text(term, x + s, *y, tt, text - tt, 0, color);
+
 		if (rw && ww > *rw) *rw = ww;
 		(*y)++;
 	} while (*(text - 1));

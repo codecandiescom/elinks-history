@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.140 2004/08/01 20:54:11 jonas Exp $ */
+/* $Id: uri.h,v 1.141 2004/08/03 09:37:25 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -244,6 +244,13 @@ unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 /* Returns either the uri's port number if available or the protocol's
  * default port. It is zarro for user protocols. */
 int get_uri_port(struct uri *uri);
+
+/* Tcp port range */
+#define LOWEST_PORT	0
+#define HIGHEST_PORT	65535
+
+#define uri_port_is_valid(port) \
+	(LOWEST_PORT <= (port) && (port) <= HIGHEST_PORT)
 
 
 void encode_uri_string(struct string *, unsigned char *, int);

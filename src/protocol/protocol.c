@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.59 2004/07/12 14:03:52 jonas Exp $ */
+/* $Id: protocol.c,v 1.60 2004/08/03 09:37:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,6 +94,10 @@ get_protocol_port(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
 	if_assert_failed return 0;
+
+	assert(uri_port_is_valid(protocol_backends[protocol].port));
+	if_assert_failed return 0;
+
 	return protocol_backends[protocol].port;
 }
 

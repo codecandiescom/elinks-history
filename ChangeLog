@@ -1,3 +1,183 @@
+Sat May  1 19:29:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	Reduce code redundancy by introducing put_button().  
+
+Sat May  1 19:26:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	html_input(): allocate @fc only if needed, but not twice ;)) 
+
+Sat May  1 19:25:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	html_input(): allocate @fc only if needed.  
+
+Sat May  1 19:20:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	html_button(): allocate @fc only if needed.  
+
+Sat May  1 19:16:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	Minor tidyup and labels renaming.  
+
+Sat May  1 18:16:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/link.c:
+
+	Tidyup.  
+
+Sat May  1 18:12:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	File got aspelled and reformatted.  
+
+Sat May  1 18:03:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Try to sort out this mesh of misinformation. Take 2.  
+
+Sat May  1 18:01:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/: conf.c, dialogs.c, opttypes.c, opttypes.h:
+
+	Add an |int *line| parameter to reader procedures in the options
+	code.  In |str_rd|, increment |line| for each new-line character
+	encountered.  This fixes bug 443: Multi-line option values throw off
+	line-numbers in conf.-file errors 
+
+Sat May  1 17:58:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Try to sort out this mesh of misinformation.  
+
+Sat May  1 17:39:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* INSTALL:
+
+	feature.h -> features.conf 
+
+Sat May  1 17:33:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	feature.h -> features.conf 
+
+Sat May  1 17:24:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am:
+
+	Oops make features.conf appear in distributed tarballs.  
+
+Sat May  1 16:39:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, m4/iconv.m4:
+
+	Try to normalize some of the configure args.  
+
+Sat May  1 16:08:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf:
+
+	Setup CONFIG_IPV6 using EL_ARG_DEPEND(). Please pasky or someone
+	elaborate a bit in the descriptiong since all I am good for are
+	rants. ;-) 
+
+Sat May  1 15:50:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/configure.txt:
+
+	These now live in feature.conf file.  
+
+Sat May  1 15:49:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf:
+
+	Always set CONFIG_* defined via EL_ARG_*() macros to either yes or
+	no so they can be used in dependency checking. CONFIG_FASTMEM is now
+	defined via EL_ARG_DEPEND().  
+
+Sat May  1 15:31:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Make the CONFIG_* dependencies and explicit by using
+	HAVE_<name>=<value> notation.  
+
+Sat May  1 15:00:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf:
+
+	Add CONFIG_{DEBUG,OWN_LIBC,SMALL} to feature.conf.  
+
+Sat May  1 14:48:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add -lexpat to LIBS.  
+
+Sat May  1 14:09:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, feature.h, features.conf:
+
+	Feature configuration is now done using a simple shell script file
+	named features.conf containing default values for all features.  
+
+Sat May  1 10:01:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Handle invalid colors mode is a cleaner way, especially when 256
+	colors mode was enabled and saved in elinks.conf, then a 16 colors
+	only elinks is launched, attempting to use that now illicit mode. It
+	was exiting with internal error, now it just emits an error and fall
+	back to 16 color mode.  
+
+Sat May  1 05:29:36 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in, src/scripting/lua/core.c:
+
+	In init_lua(), call lua_mathlibopen() so as to have mod() available 
+	to Lua scripts, and delete the definition of mod() in hooks.lua.in.  
+
+Sat May  1 05:14:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* configure.in:
+
+	Doh, '/usr' and '/usr/local' were doubled, too.  Remove one '/usr'
+	and one '/usr/local'.  
+
+Sat May  1 05:11:51 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* configure.in:
+
+	I guess that the doubled '"$withval"' was part of the piggy-switch
+	hack, as hinted by the comment. Remove one '"$withval"'.  
+
+Sat May  1 05:05:52 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* configure.in:
+
+	Try -llua$suffix and -I$luadir/include/lua$suffix where $suffix is
+	'', '40', and '50' in succession until one or none are found to
+	work.  
+	
+	This fixes Lua detection with Lua 5 as packaged by Debian (which
+	gives the headers directory and libraries the suffix '50').  
+	
+	Who wrote that brain-dead piggy-switch hack?  Hm, rev. 1.135--ohh,
+	sorry pasky! 
+
 Fri Apr 30 21:41:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

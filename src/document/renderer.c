@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.122 2004/10/14 13:51:11 jonas Exp $ */
+/* $Id: renderer.c,v 1.123 2004/10/14 14:21:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,42 +118,48 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	for (; *current != (struct string_list_item *) snippets;
 	     (*current) = (*current)->next) {
 		struct string *string = &(*current)->string;
+		unsigned char *uristring;
+		struct uri *uri;
+		struct cache_entry *cached;
+		struct fragment *fragment;
 
 		if (string->length == 0)
 			continue;
 
-		if (*string->source == '^') {
-			/* External reference! */
-
-			unsigned char *uristring = string->source + 1;
-			struct uri *uri = get_uri(uristring, URI_BASE);
-			struct cache_entry *cached = uri ? find_in_cache(uri) : NULL;
-			struct fragment *fragment;
-
-			if (uri) done_uri(uri);
-
-			if (!cached) {
-				/* At this time (!gradual_rerendering), we
-				 * should've already retrieved this though. So
-				 * it must've been that it went away because
-				 * unused and the cache was already too full. */
-				ERROR("The script of %s was lost "
-				      "in too full a cache!", uristring);
-				continue;
-			}
-
-			defrag_entry(cached);
-			fragment = cached->frag.next;
-			if (!list_empty(cached->frag)
-			    && !fragment->offset && fragment->length) {
-				struct string code = INIT_STRING(fragment->data, fragment->length);
-
-				ecmascript_eval(interpreter, &code);
-			}
+		if (*string->source != '^') {
+			/* Evaluate <script>code</script> snippet */
+			ecmascript_eval(interpreter, string);
 			continue;
 		}
 
-		ecmascript_eval(interpreter, string);
+		/* Eval external <script src="reference"></script> snippet */
+		uristring = string->source + 1;
+		if (!*uristring) continue;
+
+		uri = get_uri(uristring, URI_BASE);
+		if (!uri) continue;
+
+		cached = find_in_cache(uri);
+		done_uri(uri);
+
+		if (!cached) {
+			/* At this time (!gradual_rerendering), we should've
+			 * already retrieved this though. So it must've been
+			 * that it went away because unused and the cache was
+			 * already too full. */
+			ERROR("The script of %s was lost in too full a cache!",
+			      uristring);
+			continue;
+		}
+
+		defrag_entry(cached);
+		fragment = cached->frag.next;
+		if (!list_empty(cached->frag)
+		    && !fragment->offset && fragment->length) {
+			struct string code = INIT_STRING(fragment->data, fragment->length);
+
+			ecmascript_eval(interpreter, &code);
+		}
 	}
 }
 #endif

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.78 2004/04/24 01:31:51 jonas Exp $ */
+/* $Id: cmdline.c,v 1.79 2004/04/24 01:35:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,13 +252,10 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 			skipback_whitespace(arg, comma);
 
-			skip_whitespace(where);
-			len = argend - where;
-
-			if (!strlcasecmp(where, len, "new-window", 10)) {
+			if (strstr(where, "new-window")) {
 				remote_session_flags |= SES_REMOTE_NEW_WINDOW;
 
-			} else if (!strlcasecmp(where, len, "new-tab", 7)) {
+			} else if (strstr(where, "new-tab")) {
 				remote_session_flags |= SES_REMOTE_NEW_TAB;
 			}
 

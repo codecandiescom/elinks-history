@@ -22,7 +22,7 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 			" SSL"
 #endif
 #ifdef HAVE_LUA
-			" Lua (patch 11)"
+			" Lua (patch 12 wip)"
 #endif
 	);
 #endif

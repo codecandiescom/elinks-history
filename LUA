@@ -1,0 +1,2 @@
+Links-Lua additions are now described in the manual.
+http://links.sourceforge.net/links-lua/

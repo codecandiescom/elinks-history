@@ -369,6 +369,8 @@ struct translation translation_english [] = {
   T_LUA_ERROR, "Lua Error",
   T_LUA_CONSOLE, "Lua Console",
   T_ENTER_EXPRESSION, "Enter expression",
+  T_XDIALOG_TITLE, "User dialog",
+  T_XDIALOG_FIELD, "A field",
   0, NULL
 };
 
@@ -741,6 +743,8 @@ struct translation translation_brazilian_portuguese [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -1113,6 +1117,8 @@ struct translation translation_bulgarian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -1485,6 +1491,8 @@ struct translation translation_czech [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -1857,6 +1865,8 @@ struct translation translation_estonian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -2229,6 +2239,8 @@ struct translation translation_french [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -2601,6 +2613,8 @@ struct translation translation_galician [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -2973,6 +2987,8 @@ struct translation translation_german [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -3345,6 +3361,8 @@ struct translation translation_greek [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -3717,6 +3735,8 @@ struct translation translation_hungarian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -4089,6 +4109,8 @@ struct translation translation_icelandic [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -4461,6 +4483,8 @@ struct translation translation_italian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -4833,6 +4857,8 @@ struct translation translation_lithuanian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -5205,6 +5231,8 @@ struct translation translation_polish [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -5577,6 +5605,8 @@ struct translation translation_russian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -5949,6 +5979,8 @@ struct translation translation_slovak [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -6321,6 +6353,8 @@ struct translation translation_spanish [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -6693,6 +6727,8 @@ struct translation translation_swedish [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -7065,6 +7101,8 @@ struct translation translation_turkish [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 
@@ -7437,6 +7475,8 @@ struct translation translation_ukrainian [] = {
   T_LUA_ERROR, NULL,
   T_LUA_CONSOLE, NULL,
   T_ENTER_EXPRESSION, NULL,
+  T_XDIALOG_TITLE, NULL,
+  T_XDIALOG_FIELD, NULL,
   0, NULL
 };
 

@@ -369,4 +369,6 @@
 #define T_LUA_ERROR    365	
 #define T_LUA_CONSOLE    366	
 #define T_ENTER_EXPRESSION    367	
-#define T__N_TEXTS    368	
+#define T_XDIALOG_TITLE    368	
+#define T_XDIALOG_FIELD    369	
+#define T__N_TEXTS    370	

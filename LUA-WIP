@@ -1,0 +1,9 @@
+This file will document the changes in the WIP versions of Links-lua.
+Once a release is made, move this stuff into the "What's new" part of
+the manual.
+
+2 Aug 2001
+- incorporated bindfix.diff
+- now we really only call pre_format_html_hook as we are meant to
+- xdialog function
+

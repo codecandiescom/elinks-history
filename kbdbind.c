@@ -142,6 +142,8 @@ static int parse_keystroke(unsigned char *s, long *x, long *y)
 static int parse_act(unsigned char *s)
 {
 	int i;
+	/* Please keep this table in alphabetical order, and in sync with 
+	 * the ACT_* constants in links.h.  */
 	unsigned char *table[] = {
 		"add-bookmark",
 		"auto-complete",
@@ -178,6 +180,7 @@ static int parse_act(unsigned char *s)
 		"paste-clipboard",
 		"previous-frame",
 		"quit",
+		"really-quit",
 		"reload",
 		"right",
 		"scroll-down",

@@ -145,6 +145,7 @@ void http_end_request(struct connection *c)
 		if (c->cache) {
 			truncate_entry(c->cache, c->from, 1);
 			c->cache->incomplete = 0;
+			c->cache->done_pre_format_html_hook = 0;
 		}
 	}
 	if (c->info && !((struct http_connection_info *)c->info)->close 

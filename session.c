@@ -1111,21 +1111,20 @@ unsigned char *pre_format_html_hook(struct session *ses, unsigned char *url, uns
 void doc_end_load(struct status *stat, struct session *ses)
 {
 	if (stat->state < 0) {
-#ifdef HAVE_LUA 
-		struct view_state *vs = &cur_loc(ses)->vs;
-		struct cache_entry *ce;
+#ifdef HAVE_LUA
 		struct fragment *fr;
 		unsigned char *s;
 		int len;
-		if (!get_cache_entry(vs->url, &ce)) {
-			defrag_entry(ce);
-			fr = ce->frag.next;
+		if (!stat->ce->done_pre_format_html_hook) {
+			defrag_entry(stat->ce);
+			fr = stat->ce->frag.next;
 			len = fr->length;
-			if ((s = pre_format_html_hook(ses, ce->url, fr->data, &len))) {
-				add_fragment(ce, 0, s, len);
-				truncate_entry(ce, len, 1);
+			if ((s = pre_format_html_hook(ses, stat->ce->url, fr->data, &len))) {
+				add_fragment(stat->ce, 0, s, len);
+				truncate_entry(stat->ce, len, 1);
 				mem_free(s);
 			}
+			stat->ce->done_pre_format_html_hook = 1;
 		}
 #endif
 		if (ses->display_timer != -1) kill_timer(ses->display_timer), ses->display_timer = -1;

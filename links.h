@@ -587,6 +587,9 @@ struct cache_entry {
 #ifdef HAVE_SSL
 	unsigned char *ssl_info;
 #endif
+#ifdef HAVE_LUA
+	int done_pre_format_html_hook;
+#endif
 };
 
 struct fragment {
@@ -2100,6 +2103,8 @@ void launch_bm_add_doc_dialog(struct terminal *,struct dialog_data *,struct sess
 #define KM_MENU		2
 #define KM_MAX		3
 
+/* Note: if you add anything here, please keep it in alphabetical order,
+ * and also update the table in parse_act() in kbdbind.c.  */
 enum {
 	ACT_ADD_BOOKMARK,
 	ACT_AUTO_COMPLETE,
@@ -2135,8 +2140,8 @@ enum {
 	ACT_PAGE_UP,
 	ACT_PASTE_CLIPBOARD,
 	ACT_PREVIOUS_FRAME,
-	ACT_REALLYQUIT,
 	ACT_QUIT,
+	ACT_REALLYQUIT,
 	ACT_RELOAD,
 	ACT_RIGHT,
 	ACT_SCROLL_DOWN,

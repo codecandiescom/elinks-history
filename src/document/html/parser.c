@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.372 2004/01/22 17:46:57 pasky Exp $ */
+/* $Id: parser.c,v 1.373 2004/01/23 19:18:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,20 +159,22 @@ end:
 		(s)[(l)++] = (c);					\
 	} while (0)
 
-
-/* Eat newlines when loading attribute value? */
-static int get_attr_val_eat_nl = 0;
-
-
 /* Parses html element attributes. */
 /* - e is attr pointer previously get from parse_element,
  * DON'T PASS HERE ANY OTHER VALUE!!!
  * - name is searched attribute */
-/* Returns allocated string containing the attribute, or NULL on unsuccess. */
-unsigned char *
-get_attr_val(register unsigned char *e, unsigned char *name)
+/* Returns allocated string containing the attribute, or NULL on unsuccess.
+ * If @test_only is different from zero then we only test for existence of
+ * an attribute of that @name. In that mode it returns NULL if attribute
+ * was not found, and a pointer to start of the attribute if it was found.
+ * If @eat_nl is zero, newline and tabs chars are replaced by spaces
+ * in returned value, else these chars are skipped. */
+static inline unsigned char *
+get_attr_val_(register unsigned char *e, unsigned char *name, int test_only,
+	      int eat_nl)
 {
 	unsigned char *n;
+	unsigned char *name_start;
 	unsigned char *attr = NULL;
 	int attrlen = 0;
 	int found;
@@ -181,6 +183,7 @@ next_attr:
 	while (isspace(*e)) e++;
 	if (end_of_tag(*e) || !atchr(*e)) goto parse_error;
 	n = name;
+	name_start = e;
 
 	while (atchr(*n) && atchr(*e) && upcase(*e) == upcase(*n)) e++, n++;
 	found = !*n && !atchr(*e);
@@ -188,13 +191,16 @@ next_attr:
 	while (atchr(*e)) e++;
 	while (isspace(*e)) e++;
 	if (*e != '=') {
-		if (found) goto found_endattr;
+		if (found) {
+			if (test_only) return name_start;
+			goto found_endattr;
+		}
 		goto next_attr;
 	}
 	e++;
 	while (isspace(*e)) e++;
 
-	if (found) {
+	if (found && !test_only) {
 		if (!IS_QUOTE(*e)) {
 			while (!isspace(*e) && !end_of_tag(*e)) {
 				if (!*e) goto parse_error;
@@ -210,7 +216,7 @@ parse_quoted_value:
 				if (!*e) goto parse_error;
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(attr, attrlen, *e);
-				else if (!get_attr_val_eat_nl)
+				else if (!eat_nl)
 					add_chr(attr, attrlen, ' ');
 			}
 			e++;
@@ -218,7 +224,6 @@ parse_quoted_value:
 				add_chr(attr, attrlen, *e);
 				goto parse_quoted_value;
 			}
-
 		}
 
 found_endattr:
@@ -250,6 +255,8 @@ found_endattr:
 				e++;
 			} while (*e == quote);
 		}
+
+		if (found) return name_start;
 	}
 
 	goto next_attr;
@@ -261,27 +268,22 @@ parse_error:
 
 #undef add_chr
 
+unsigned char *
+get_attr_val(register unsigned char *e, unsigned char *name)
+{
+	return get_attr_val_(e, name, 0, 0);
+}
 
-static inline unsigned char *
+static unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)
 {
-	unsigned char *val;
-
-	get_attr_val_eat_nl = 1;
-	val = get_attr_val(e, name);
-	get_attr_val_eat_nl = 0;
-	return val;
+	return get_attr_val_(e, name, 0, 1);
 }
 
 int
 has_attr(unsigned char *e, unsigned char *name)
 {
-	unsigned char *a = get_attr_val(e, name);
-
-	if (!a) return 0;
-	mem_free(a);
-
-	return 1;
+	return !!get_attr_val_(e, name, 1, 0);
 }
 
 static struct {

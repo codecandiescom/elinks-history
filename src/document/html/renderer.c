@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.508 2004/12/18 01:42:18 pasky Exp $ */
+/* $Id: renderer.c,v 1.509 2004/12/18 01:48:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1366,6 +1366,7 @@ html_form_control(struct part *part, struct form_control *fc)
 	}
 	/* Attach this form control to the last form encountered. */
 	form = part->document->forms.next;
+	fc->form = form;
 	add_to_list(form->items, fc);
 }
 

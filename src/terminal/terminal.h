@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.5 2003/05/04 19:11:17 pasky Exp $ */
+/* $Id: terminal.h,v 1.6 2003/05/04 19:30:54 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -136,49 +136,11 @@ void close_tab(struct terminal *term);
 
 void add_empty_window(struct terminal *, void (*)(void *), void *);
 void redraw_all_terminals();
-void set_char(struct terminal *, int, int, unsigned);
-unsigned get_char(struct terminal *, int, int);
-void set_color(struct terminal *, int, int, unsigned);
-void set_only_char(struct terminal *, int, int, unsigned);
-void set_line(struct terminal *, int, int, int, chr *);
-void set_line_color(struct terminal *, int, int, int, unsigned);
-void fill_area(struct terminal *, int, int, int, int, unsigned);
-void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
-void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);
-void set_cursor(struct terminal *, int, int, int, int);
 void destroy_all_terminals();
 void block_itrm(int);
 int unblock_itrm(int);
 void exec_thread(unsigned char *, int);
 void close_handle(void *);
-
-/* Linux frame symbols table (it's magically converted to other terminals when
- * needed). */
-/* In the screen image, they have attribute ATTR_FRAME; you should drop them
- * to the image using draw_frame_char(). */
-/* TODO: When we'll support internal Unicode, this should be changed to some
- * Unicode sequences. --pasky */
-
-enum frame_char {
-	/* single-lined */
-	FRAMES_ULCORNER = 218 | ATTR_FRAME,
-	FRAMES_URCORNER = 191 | ATTR_FRAME,
-	FRAMES_DLCORNER = 192 | ATTR_FRAME,
-	FRAMES_DRCORNER = 217 | ATTR_FRAME,
-	FRAMES_LTEE = 180 | ATTR_FRAME, /* => the tee points to the left => -| */
-	FRAMES_RTEE = 195 | ATTR_FRAME,
-	FRAMES_VLINE = 179 | ATTR_FRAME,
-	FRAMES_HLINE = 196 | ATTR_FRAME,
-	FRAMES_CROSS = 197 | ATTR_FRAME, /* + */
-
-	/* double-lined */ /* TODO: The TEE-chars! */
-	FRAMED_ULCORNER = 201 | ATTR_FRAME,
-	FRAMED_URCORNER = 187 | ATTR_FRAME,
-	FRAMED_DLCORNER = 200 | ATTR_FRAME,
-	FRAMED_DRCORNER = 188 | ATTR_FRAME,
-	FRAMED_VLINE = 186 | ATTR_FRAME,
-	FRAMED_HLINE = 205 | ATTR_FRAME,
-};
 
 #define TERM_FN_TITLE	1
 #define TERM_FN_RESIZE	2

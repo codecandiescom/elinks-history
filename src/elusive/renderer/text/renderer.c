@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.18 2003/05/02 14:22:19 pasky Exp $ */
+/* $Id: renderer.c,v 1.19 2003/05/04 19:30:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
  * as well. --pasky */
 #include "document/html/renderer.h"
 #include "document/options.h"
+#include "terminal/draw.h"
 #include "viewer/text/view.h"
 
 #include "elusive/layouter/syntree/layouter.h"

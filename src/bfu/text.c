@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.7 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: text.c,v 1.8 2003/05/04 19:30:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "bfu/align.h"
 #include "bfu/text.h"
 #include "intl/gettext/libintl.h"
+#include "terminal/draw.h"
 #include "terminal/terminal.h"
 
 

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.21 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: checkbox.c,v 1.22 2003/05/04 19:30:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "bfu/checkbox.h"
 #include "bfu/text.h"
 #include "intl/gettext/libintl.h"
+#include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 

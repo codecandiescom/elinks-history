@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.74 2003/05/03 23:26:43 zas Exp $ */
+/* $Id: renderer.c,v 1.75 2003/05/04 19:30:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "protocol/http/header.h"
 #include "protocol/url.h"
 #include "sched/session.h"
+#include "terminal/draw.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/hash.h"

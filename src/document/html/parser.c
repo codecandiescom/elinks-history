@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.83 2003/05/04 17:25:53 pasky Exp $ */
+/* $Id: parser.c,v 1.84 2003/05/04 19:30:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,10 +23,11 @@
 #include "document/html/tables.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
-#include "terminal/terminal.h"
 #include "protocol/http/header.h"
 #include "protocol/url.h"
 #include "sched/session.h"
+#include "terminal/draw.h"
+#include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memdebug.h"

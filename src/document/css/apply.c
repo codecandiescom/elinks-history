@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.91 2004/12/29 15:43:30 zas Exp $ */
+/* $Id: apply.c,v 1.92 2005/01/05 03:02:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,19 +172,18 @@ examine_element(struct css_selector *base,
 #undef dbginfo
 }
 
-void
-css_apply(struct html_element *element, struct css_stylesheet *css,
-          struct list_head *html_stack)
+struct css_selector *
+get_css_selector_for_element(struct html_element *element, struct css_stylesheet *css,
+			     struct list_head *html_stack)
 {
 	unsigned char *code;
-	struct css_property *property;
 	struct css_selector *selector;
 
 	assert(element && element->options && css);
 
 	selector = init_css_selector(NULL, CST_ELEMENT, NULL, 0);
 	if (!selector)
-		return;
+		return NULL;
 
 #ifdef DEBUG_CSS
 	DBG("Applying to element %.*s...", element->namelen, element->name);
@@ -213,6 +212,14 @@ css_apply(struct html_element *element, struct css_stylesheet *css,
 		mem_free(code);
 	}
 
+	return selector;
+}
+
+void
+apply_css_selector_style(struct html_element *element, struct css_selector *selector)
+{
+	struct css_property *property;
+
 	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);
 		/* We don't assert general prop->value_type here because I
@@ -221,6 +228,18 @@ css_apply(struct html_element *element, struct css_stylesheet *css,
 		assert(css_appliers[property->type]);
 		css_appliers[property->type](element, property);
 	}
+}
+
+void
+css_apply(struct html_element *element, struct css_stylesheet *css,
+	  struct list_head *html_stack)
+{
+	struct css_selector *selector;
+
+	selector = get_css_selector_for_element(element, css, html_stack);
+	if (!selector) return;
+
+	apply_css_selector_style(element, selector);
 
 	done_css_selector(selector);
 }

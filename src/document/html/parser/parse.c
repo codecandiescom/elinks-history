@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.103 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: parse.c,v 1.104 2005/01/05 03:02:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,6 +777,9 @@ start_element(struct element_info *ei,
 	unsigned char *a;
 	struct par_attrib old_format;
 	int restore_format;
+#ifdef CONFIG_CSS
+	struct css_selector *selector = NULL;
+#endif
 
 	if (html_context.was_xmp) {
 		put_chrs("<", 1, html_context.put_chars_f, part);
@@ -884,22 +887,26 @@ start_element(struct element_info *ei,
 	if (html_top.options && global_doc_opts->css_enable) {
 		/* XXX: We should apply CSS otherwise as well, but that'll need
 		 * some deeper changes in order to have options filled etc.
-		 * Probably just calling css_apply() from more places, since we
+		 * Probably just applying CSS from more places, since we
 		 * usually have nopair set when we either (1) rescan on your
 		 * own from somewhere else (2) html_stack_dup() in our own way.
 		 * --pasky */
 		/* Call it now to gain some of the stuff which might affect
 		 * formatting of some elements. */
-		css_apply(&html_top, &html_context.css_styles,
-		          &html_context.stack);
+		selector = get_css_selector_for_element(&html_top,
+							&html_context.css_styles,
+							&html_context.stack);
+
+		if (selector)
+			apply_css_selector_style(&html_top, selector);
 	}
 #endif
 	if (ei->func) ei->func(attr);
 #ifdef CONFIG_CSS
-	if (html_top.options && global_doc_opts->css_enable) {
+	if (selector) {
 		/* Call it now to override default colors of the elements. */
-		css_apply(&html_top, &html_context.css_styles,
-		          &html_context.stack);
+		apply_css_selector_style(&html_top, selector);
+		done_css_selector(selector);
 	}
 #endif
 

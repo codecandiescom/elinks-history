@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2003/12/22 22:53:25 pasky Exp $
+## $Id: Makefile.am,v 1.12 2003/12/22 22:55:05 pasky Exp $
 
 SUBDIRS = man
 
@@ -21,5 +21,5 @@ update-manpages:
 	else							\
 		sh $(top_srcdir)/doc/tools/help2doc --elinks=$(ELINKS)		\
 				  --elinksconf			\
-				  > $(top_builddir)/doc/man/man5/elinks.conf.5;	\
+				  > $(top_srcdir)/doc/man/man5/elinks.conf.5;	\
 	fi

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.89 2004/01/24 23:50:18 pasky Exp $ */
+/* $Id: info.c,v 1.90 2004/01/25 00:09:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,8 +114,8 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 			add_actions_to_string(&keys, actions, map, term);
 			if (map + 1 < KM_MAX)
 				add_to_string(&keys, "\n\n");
-#endif
 		}
+#endif
 	} else {
 		add_actions_to_string(&keys, actions, KM_MAIN, term);
 	}

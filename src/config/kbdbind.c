@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.236 2004/06/27 09:41:41 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.237 2004/06/27 09:45:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -910,20 +910,19 @@ static struct default_kb default_menu_keymap[] = {
 	{ 0, 0, 0}
 };
 
+static struct default_kb *default_keybindings[] = {
+	default_main_keymap,
+	default_edit_keymap,
+	default_menu_keymap,
+};
+
 static int
 keybinding_is_default(struct keybinding *kb)
 {
 	struct default_kb keybinding = { kb->key, kb->meta, kb->action };
-	struct default_kb *defaults, *pos;
+	struct default_kb *pos;
 
-	switch (kb->keymap) {
-	case KM_MAIN: defaults = default_main_keymap; break;
-	case KM_EDIT: defaults = default_edit_keymap; break;
-	case KM_MENU: defaults = default_menu_keymap; break;
-	default: return 0;
-	}
-
-	for (pos = defaults; pos->key; pos++)
+	for (pos = default_keybindings[kb->keymap]; pos->key; pos++)
 		if (!memcmp(&keybinding, pos, sizeof(struct default_kb)))
 			return 1;
 

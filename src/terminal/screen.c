@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.55 2003/08/31 17:20:15 jonas Exp $ */
+/* $Id: screen.c,v 1.56 2003/08/31 17:28:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,7 @@ struct rs_opt_cache {
 	unsigned int colors:1;
 	unsigned int restrict_852:1;
 	unsigned int trans:1;
+	unsigned int underline:1;
 };
 
 struct screen_state {
@@ -173,7 +174,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		add_bytes_to_string(screen, code, length);
 	}
 
-	if (opt_cache->type == TERM_VT100) {
+	if (opt_cache->underline) {
 		unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
 		if (underline != state->underline) {
@@ -251,6 +252,8 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 		(c).colors	 = 1; \
 		(c).charset	 = 3; \
 		(c).restrict_852 = 0; \
+		(c).trans	 = 1; \
+		(c).underline	 = 1; \
 		(c).cp437	 = 1; \
 		(c).koi8r	 = 1; \
 	} while (0)
@@ -264,6 +267,7 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 		(c).charset	 = get_opt_int_tree((t)->spec,	"charset"); \
 		(c).restrict_852 = get_opt_bool_tree((t)->spec,	"restrict_852"); \
 		(c).trans	 = get_opt_bool_tree((t)->spec,	"transparency"); \
+		(c).underline	 = get_opt_bool_tree((t)->spec,	"transparency"); \
 		\
 		/* Cache these values as they don't change and
 		 * get_cp_index() is pretty CPU-intensive. */ \

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.363 2004/04/11 00:40:11 jonas Exp $ */
+/* $Id: session.c,v 1.364 2004/04/14 00:11:51 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -366,7 +366,7 @@ doc_end_load(struct download *stat, struct session *ses)
 	int submit = 0;
 	struct form_control *fc = NULL;
 
-	if (stat->state < 0) {
+	if (is_in_result_state(stat->state)) {
 #ifdef HAVE_SCRIPTING
 		maybe_pre_format_html(stat->cached, ses);
 #endif

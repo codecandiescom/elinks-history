@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.71 2004/04/11 15:32:22 jonas Exp $ */
+/* $Id: task.c,v 1.72 2004/04/14 00:11:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,12 +412,12 @@ end_load(struct download *stat, struct session *ses)
 		display_timer(ses);
 	}
 
-	if (stat->state < 0) {
+	if (is_in_result_state(stat->state)) {
 		if (ses->task.type) free_task(ses);
 		if (d == 1) doc_end_load(stat, ses);
 	}
 
-	if (stat->state < 0 && stat->state != S_OK) {
+	if (is_in_result_state(stat->state) && stat->state != S_OK) {
 		print_error_dialog(ses, stat->state, stat->pri);
 		if (d == 0) reload(ses, CACHE_MODE_NORMAL);
 	}

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-25 11:50+0200\n"
+"POT-Creation-Date: 2004-04-26 17:52+0200\n"
 "PO-Revision-Date: 2004-03-04 11:48+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:361
 msgid "Close"
@@ -43,20 +43,21 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/document.c:50 src/dialogs/document.c:229
 #: src/dialogs/document.c:299 src/dialogs/document.c:311 src/dialogs/edit.c:99
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:153
-#: src/dialogs/menu.c:67 src/dialogs/menu.c:449 src/dialogs/menu.c:486
+#: src/dialogs/menu.c:67 src/dialogs/menu.c:449 src/dialogs/menu.c:497
 #: src/dialogs/options.c:169 src/dialogs/options.c:242
 #: src/formhist/dialogs.c:132 src/mime/dialogs.c:134
 #: src/protocol/auth/dialogs.c:81 src/protocol/user.c:164
 #: src/sched/download.c:228 src/sched/download.c:312 src/sched/download.c:348
-#: src/sched/download.c:608 src/sched/error.c:42 src/sched/session.c:124
-#: src/sched/session.c:582 src/sched/session.c:599 src/sched/session.c:623
-#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
-#: src/scripting/lua/core.c:599 src/scripting/lua/core.c:723
-#: src/viewer/text/form.c:641 src/viewer/text/search.c:851
-#: src/viewer/text/search.c:879 src/viewer/text/search.c:904
-#: src/viewer/text/search.c:935 src/viewer/text/search.c:1384
-#: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
-#: src/viewer/text/view.c:703 src/viewer/text/view.c:1116
+#: src/sched/download.c:494 src/sched/download.c:622 src/sched/error.c:42
+#: src/sched/session.c:124 src/sched/session.c:582 src/sched/session.c:599
+#: src/sched/session.c:623 src/scripting/lua/core.c:401
+#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:599
+#: src/scripting/lua/core.c:723 src/viewer/text/form.c:641
+#: src/viewer/text/search.c:851 src/viewer/text/search.c:879
+#: src/viewer/text/search.c:904 src/viewer/text/search.c:935
+#: src/viewer/text/search.c:1384 src/viewer/text/textarea.c:270
+#: src/viewer/text/textarea.c:279 src/viewer/text/view.c:703
+#: src/viewer/text/view.c:1116
 msgid "OK"
 msgstr "OK"
 
@@ -159,22 +160,22 @@ msgstr "Mauvaise chaîne"
 msgid "Empty string not allowed"
 msgstr "Chaîne vide non autorisée"
 
-#: src/bfu/leds.c:71
+#: src/bfu/leds.c:75
 msgid "Clock"
 msgstr "Horloge"
 
-#: src/bfu/leds.c:72
+#: src/bfu/leds.c:76
 msgid "Digital clock in the statusbar."
 msgstr "Horloge digitale dans la barre de status."
 
-#: src/bfu/leds.c:76 src/bfu/leds.c:82 src/bfu/leds.c:103
+#: src/bfu/leds.c:80 src/bfu/leds.c:86 src/bfu/leds.c:106
 #: src/config/options.inc:1171 src/config/options.inc:1178
 #: src/globhist/globhist.c:70 src/mime/backend/mailcap.c:96
 #: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
 msgid "Enable"
 msgstr "Activation"
 
-#: src/bfu/leds.c:78
+#: src/bfu/leds.c:82
 msgid ""
 "Whether to display a digital clock in the statusbar.\n"
 "Note that the LED indicators must be enabled for this\n"
@@ -184,7 +185,7 @@ msgstr ""
 "les indicateurs LEDs doivent être activés pour que cela\n"
 "fonctionne."
 
-#: src/bfu/leds.c:84
+#: src/bfu/leds.c:88
 msgid ""
 "Whether to display a digital clock in the statusbar.\n"
 "Note that the LED indicators (DISABLED) must be enabled\n"
@@ -194,11 +195,11 @@ msgstr ""
 "les indicateurs LEDs (INACTIFS) doivent être activés pour que\n"
 "cela fonctionne."
 
-#: src/bfu/leds.c:89
+#: src/bfu/leds.c:93
 msgid "Format"
 msgstr "Format"
 
-#: src/bfu/leds.c:91
+#: src/bfu/leds.c:95
 msgid ""
 "Format string for the digital clock. See the strftime(3)\n"
 "manpage for details."
@@ -206,15 +207,15 @@ msgstr ""
 "Chaîne de formatage pour l'horloge digitale.\n"
 "Voir la page de manuel de strftime(3) pour plus de détails."
 
-#: src/bfu/leds.c:99
+#: src/bfu/leds.c:102
 msgid "LEDs"
 msgstr "LEDs"
 
-#: src/bfu/leds.c:101
+#: src/bfu/leds.c:104
 msgid "LEDs (visual indicators) options."
 msgstr "Options concernant les LEDs (indicateurs visuels)"
 
-#: src/bfu/leds.c:105
+#: src/bfu/leds.c:108
 msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
@@ -223,7 +224,7 @@ msgstr ""
 "Ces indicateurs visuels informent de différents états."
 
 #. name:
-#: src/bfu/leds.c:282
+#: src/bfu/leds.c:287
 msgid "LED indicators"
 msgstr "Indicateurs LED"
 
@@ -293,11 +294,11 @@ msgstr "Nom du dossier"
 #: src/bookmarks/dialogs.c:192 src/bookmarks/dialogs.c:596
 #: src/config/dialogs.c:360 src/config/dialogs.c:438 src/config/dialogs.c:593
 #: src/config/dialogs.c:648 src/cookies/dialogs.c:272 src/dialogs/edit.c:103
-#: src/dialogs/menu.c:67 src/dialogs/menu.c:449 src/dialogs/menu.c:486
+#: src/dialogs/menu.c:67 src/dialogs/menu.c:449 src/dialogs/menu.c:497
 #: src/dialogs/options.c:172 src/dialogs/options.c:243 src/mime/dialogs.c:135
-#: src/protocol/auth/dialogs.c:82 src/sched/download.c:524
-#: src/sched/download.c:992 src/sched/download.c:1001
-#: src/sched/download.c:1021 src/sched/download.c:1033
+#: src/protocol/auth/dialogs.c:82 src/sched/download.c:538
+#: src/sched/download.c:1006 src/sched/download.c:1015
+#: src/sched/download.c:1035 src/sched/download.c:1047
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
 #: src/scripting/lua/core.c:723 src/viewer/text/search.c:1384
 #: src/viewer/text/view.c:703
@@ -344,8 +345,8 @@ msgstr "Chercher"
 #: src/bookmarks/dialogs.c:384 src/config/dialogs.c:461
 #: src/config/dialogs.c:670 src/cookies/dialogs.c:340
 #: src/dialogs/options.c:171 src/formhist/dialogs.c:169
-#: src/globhist/dialogs.c:192 src/sched/download.c:990
-#: src/sched/download.c:1019
+#: src/globhist/dialogs.c:192 src/sched/download.c:1004
+#: src/sched/download.c:1033
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -4127,7 +4128,7 @@ msgstr "Info. entêtes"
 msgid "No header info."
 msgstr "Aucune information d'entête."
 
-#: src/dialogs/download.c:255 src/dialogs/menu.c:485 src/sched/download.c:345
+#: src/dialogs/download.c:255 src/dialogs/menu.c:496 src/sched/download.c:345
 msgid "Download"
 msgstr "Téléchargement"
 
@@ -4520,7 +4521,7 @@ msgstr "A~ide"
 msgid "Go to URL"
 msgstr "Atteindre l'URL"
 
-#: src/dialogs/menu.c:485
+#: src/dialogs/menu.c:496
 msgid "Save to file"
 msgstr "Enregistrer dans le fichier"
 
@@ -4737,6 +4738,8 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:36
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5097,7 +5100,6 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#. name:
 #: src/mime/backend/mailcap.c:92 src/mime/backend/mailcap.c:128
 #: src/mime/backend/mailcap.c:689
 msgid "Mailcap"
@@ -5438,7 +5440,8 @@ msgstr "Aucun programme"
 msgid "No program specified for protocol %s."
 msgstr "Aucun programme spécifié pour le protocole %s."
 
-#: src/sched/download.c:224 src/sched/download.c:309 src/sched/download.c:604
+#: src/sched/download.c:224 src/sched/download.c:309 src/sched/download.c:490
+#: src/sched/download.c:618
 msgid "Download error"
 msgstr "Erreur de téléchargement"
 
@@ -5467,11 +5470,16 @@ msgstr ""
 "Téléchargement terminé:\n"
 "%s"
 
-#: src/sched/download.c:513
+#: src/sched/download.c:491
+#, c-format
+msgid "'%s' is a directory."
+msgstr "'%s' est un répertoire."
+
+#: src/sched/download.c:527
 msgid "File exists"
 msgstr "Fichier existant"
 
-#: src/sched/download.c:514
+#: src/sched/download.c:528
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -5486,19 +5494,19 @@ msgstr ""
 "Le nom alternatif est:\n"
 "%s"
 
-#: src/sched/download.c:521
+#: src/sched/download.c:535
 msgid "Save under the alternative name"
 msgstr "Sauver sous un autre nom"
 
-#: src/sched/download.c:522
+#: src/sched/download.c:536
 msgid "Overwrite the original file"
 msgstr "Ecraser le fichier original"
 
-#: src/sched/download.c:523
+#: src/sched/download.c:537
 msgid "Resume download of the original file"
 msgstr "Reprendre le téléchargement du fichier original"
 
-#: src/sched/download.c:605
+#: src/sched/download.c:619
 #, c-format
 msgid ""
 "Could not create file '%s':\n"
@@ -5507,30 +5515,30 @@ msgstr ""
 "Impossible de créer le fichier '%s':\n"
 "%s"
 
-#: src/sched/download.c:984 src/sched/download.c:995
+#: src/sched/download.c:998 src/sched/download.c:1009
 msgid "Unknown type"
 msgstr "Type inconnu"
 
-#: src/sched/download.c:985
+#: src/sched/download.c:999
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher?"
 
-#: src/sched/download.c:991 src/sched/download.c:1000
-#: src/sched/download.c:1020 src/sched/download.c:1032
+#: src/sched/download.c:1005 src/sched/download.c:1014
+#: src/sched/download.c:1034 src/sched/download.c:1046
 msgid "Display"
 msgstr "Afficher"
 
-#: src/sched/download.c:996
+#: src/sched/download.c:1010
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous afficher le fichier '%s' (type: %s)?"
 
-#: src/sched/download.c:1011 src/sched/download.c:1024
+#: src/sched/download.c:1025 src/sched/download.c:1038
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1012
+#: src/sched/download.c:1026
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5539,11 +5547,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1018 src/sched/download.c:1031
+#: src/sched/download.c:1032 src/sched/download.c:1045
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1025
+#: src/sched/download.c:1039
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"

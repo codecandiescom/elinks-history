@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.143 2003/12/25 08:17:23 jonas Exp $ */
+/* $Id: search.c,v 1.144 2003/12/25 08:29:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,7 +962,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	/* The link interval in which we are currently searching */
 	int upper_link, lower_link;
 	enum keyact action = kbd_action(KM_EDIT, event, NULL);
-	int direction;
+	int direction, case_sensitive;
 
 	switch (action) {
 		case ACT_BACKSPACE:
@@ -1018,6 +1018,10 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	assert(i >= 0 && i < doc_view->document->nlinks);
 	upper_link = (direction > 0) ? doc_view->document->nlinks : i + 1;
 	lower_link = (direction > 0) ? i - 1: -1;
+	case_sensitive = get_opt_bool("document.browse.search.case");
+
+#define case_compare_chars(c1, c2) \
+	(case_sensitive ? (c1) == (c2) : tolower(c1) == tolower(c2))
 
 	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &doc_view->document->links[i];
@@ -1031,7 +1035,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			unsigned char data = get_document_char(doc_view->document,
 							       linkpos->x, linkpos->y);
 
-			if (!data || data != typeahead[j])
+			if (!data || !case_compare_chars(data, typeahead[j]))
 				break;
 
 			if (charpos == j + 1) {

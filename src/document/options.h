@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.18 2003/10/09 10:36:59 jonas Exp $ */
+/* $Id: options.h,v 1.19 2003/10/17 18:46:43 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -28,7 +28,9 @@ struct document_options {
 	int xw, yw;
 
 	/* XXX: Keep boolean options grouped to save padding */
+	/* TODO: Store the color_flags options in an enum variable. */
 	unsigned int allow_dark_on_black:1;
+	unsigned int ensure_contrast:1;
 	unsigned int tables:1;
 	unsigned int table_order:1;
 	unsigned int frames:1;

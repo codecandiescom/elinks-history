@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.71 2003/10/17 18:12:33 jonas Exp $ */
+/* $Id: link.c,v 1.72 2003/10/17 18:46:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "bookmarks/dialogs.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "document/options.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
@@ -126,7 +127,6 @@ sort_links(struct document *document)
 static void
 draw_link(struct terminal *t, struct document_view *doc_view, int l)
 {
-	static int *allow_dark_on_black = NULL;
 	struct link *link;
 	int xmax, ymax;
 	int xpos, ypos;
@@ -140,12 +140,13 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	assertm(!doc_view->link_bg, "link background not empty");
 	if_assert_failed mem_free(doc_view->link_bg);
 
-	if (allow_dark_on_black == NULL) {
-		allow_dark_on_black =
-			&get_opt_bool("document.colors.allow_dark_on_black");
-	}
+	if (d_opt) {
+		if (!d_opt->allow_dark_on_black)
+			color_flags |= COLOR_INCREASE_CONTRAST;
 
-	if (!*allow_dark_on_black) color_flags |= COLOR_INCREASE_CONTRAST;
+		if (d_opt->ensure_contrast)
+			color_flags |= COLOR_ENSURE_CONTRAST;
+	}
 
 	if (l == -1) return;
 

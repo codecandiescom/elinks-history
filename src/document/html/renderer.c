@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.298 2003/10/17 18:12:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.299 2003/10/17 18:46:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,6 +268,9 @@ get_format_screen_char(struct part *part)
 
 			if (!part->document->opt.allow_dark_on_black)
 				color_flags |= COLOR_INCREASE_CONTRAST;
+
+			if (part->document->opt.ensure_contrast)
+				color_flags |= COLOR_ENSURE_CONTRAST;
 		}
 
 		schar_cache.attr = 0;

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.16 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: memdebug.c,v 1.17 2002/12/18 13:51:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,10 @@
 #define CHECK_XFLOWS
 #define XFLOW_MAGIC (char) 0xFA
 
+/* Log all (de-)allocations to stderr (huge and slow)
+ * Default is undefined. */
+/* #define LOG_MEMORY_ALLOC */
+
 /* --------- end of debugger configuration section */
 
 
@@ -118,6 +122,23 @@ long mem_amount = 0;
 
 struct list_head memory_list = { &memory_list, &memory_list };
 
+#ifdef LOG_MEMORY_ALLOC
+static void
+dump_short_info(struct alloc_header *ah, unsigned char *file, int line,
+		unsigned char *type)
+{
+	fprintf(stderr, "%p", PTR_AH2BASE(ah)), fflush(stderr);
+	fprintf(stderr, ":%d", ah->size), fflush(stderr);
+	if (type && *type) fprintf(stderr, " %s", type), fflush(stderr);
+	fprintf(stderr, " @ %s:%d ", file, line), fflush(stderr);
+	if (strcmp(file, ah->file) || line != ah->line)
+		fprintf(stderr, "< %s:%d", ah->file, ah->line), fflush(stderr);
+	if (ah->comment) fprintf(stderr, " [%s]", ah->comment), fflush(stderr);
+	fprintf(stderr, "\n"), fflush(stderr);
+}
+#else
+#define dump_short_info(a, b, c, d)
+#endif
 
 static void
 dump_info(struct alloc_header *ah, unsigned char *info,
@@ -138,7 +159,7 @@ dump_info(struct alloc_header *ah, unsigned char *info,
 	 * there're lions in ah, pointing us to evil places in memory, leading
 	 * to segfaults and stuff like that. --pasky */
 	/* if (file && (strcmp(file, ah->file) || line != ah->line)) */
-		fprintf(stderr, "%s:%d, ", file, line), fflush(stdout);
+		fprintf(stderr, "%s:%d, ", file, line), fflush(stderr);
 
 	fprintf(stderr, "alloc'd at %s:%d", ah->file, ah->line);
 
@@ -272,6 +293,8 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 
 	add_to_list(memory_list, ah);
 
+	dump_short_info(ah, file, line, "malloc");
+
 	return PTR_AH2BASE(ah);
 }
 
@@ -314,6 +337,8 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 
 	add_to_list(memory_list, ah);
 
+	dump_short_info(ah, file, line, "calloc");
+
 	return PTR_AH2BASE(ah);
 }
 
@@ -354,6 +379,8 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 #ifdef CHECK_XFLOWS
 	if (bad_xflow_magic(ah, "free()", file, line)) force_dump();
 #endif
+
+	dump_short_info(ah, file, line, "free");
 
 	if (ah->comment)
 		free(ah->comment);
@@ -428,6 +455,8 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 
 	ah->prev->next = ah;
 	ah->next->prev = ah;
+
+	dump_short_info(ah, file, line, "realloc");
 
 	return PTR_AH2BASE(ah);
 }

@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.2 2003/10/28 00:23:54 pasky Exp $ */
+/* $Id: sysinfo.h,v 1.3 2004/05/25 17:39:20 jonas Exp $ */
 
 #ifndef EL__OSDEP_UNIX_SYSINFO_H
 #define EL__OSDEP_UNIX_SYSINFO_H
@@ -24,9 +24,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 #endif
 #define ASSOC_BLOCK
 #define ASSOC_CONS_XWIN
-#if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
-#define GPM_MOUSE
-#endif
 
 #endif
 

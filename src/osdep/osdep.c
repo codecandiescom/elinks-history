@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.126 2004/04/15 14:27:06 jonas Exp $ */
+/* $Id: osdep.c,v 1.127 2004/05/25 17:39:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -603,7 +603,7 @@ elinks_cfmakeraw(struct termios *t)
 #endif
 }
 
-#if defined(GPM_MOUSE) && defined(CONFIG_MOUSE)
+#if defined(CONFIG_GPM) && defined(CONFIG_MOUSE)
 
 
 #elif !defined(OS2_MOUSE)
@@ -630,7 +630,7 @@ resume_mouse(void *data)
 {
 }
 
-#endif /* #ifdef GPM_MOUSE */
+#endif /* #ifdef CONFIG_GPM && CONFIG_MOUSE */
 
 /* Create a bitmask consisting from system-independent envirnoment modifiers.
  * This is then complemented by system-specific modifiers in an appropriate

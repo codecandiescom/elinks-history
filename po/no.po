@@ -1,0 +1,1422 @@
+# ELinks Norwegian translation.
+# Simen Graaten <simeng@slarkware.com>
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ELinks 0.5pre0.CVS\n"
+"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"PO-Revision-Date: 2003-01-03 03:41+0100\n"
+"Last-Translator: Simen Graaten <simeng@slarkware.com>\n"
+"Language-Team: Norwegian <no@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/bfu/inpfield.c:40 src/bfu/inpfield.c:49
+msgid "Bad number"
+msgstr "Feil nummer"
+
+#: src/bfu/inpfield.c:41
+msgid "Number expected in field"
+msgstr "Nummer forventet i felt"
+
+#: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52 src/bfu/inpfield.c:72
+#: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:273
+#: src/bookmarks/dialogs.c:281 src/config/dialogs.c:42
+#: src/config/dialogs.c:184 src/config/dialogs.c:323 src/config/dialogs.c:355
+#: src/config/dialogs.c:390 src/config/dialogs.c:402 src/config/dialogs.c:457
+#: src/config/dialogs.c:472 src/config/dialogs.c:606 src/config/dialogs.c:628
+#: src/config/dialogs.c:654 src/config/dialogs.c:718 src/config/dialogs.c:731
+#: src/dialogs/auth.c:191 src/dialogs/edit.c:173 src/dialogs/menu.c:605
+#: src/dialogs/menu.c:615 src/dialogs/menu.c:644 src/dialogs/menu.c:662
+#: src/dialogs/menu.c:672 src/dialogs/mime.c:269 src/dialogs/options.c:267
+#: src/dialogs/options.c:360 src/document/download.c:505
+#: src/document/download.c:538 src/document/download.c:640
+#: src/document/download.c:979 src/document/download.c:987
+#: src/document/download.c:1022 src/document/download.c:1032
+#: src/document/session.c:313 src/document/session.c:585
+#: src/globhist/dialogs.c:285 src/lua/core.c:428 src/lua/core.c:572
+#: src/lua/core.c:797 src/protocol/url.c:67 src/protocol/user.c:103
+#: src/protocol/user.c:131 src/viewer/text/view.c:1580
+#: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
+#: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
+#: src/viewer/text/view.c:3284
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: src/bfu/inpfield.c:50
+msgid "Number out of range"
+msgstr "Nummeret er utenfor område"
+
+#: src/bfu/inpfield.c:69
+msgid "Bad string"
+msgstr "Feil i tekststreng"
+
+#: src/bfu/inpfield.c:70
+msgid "Empty string not allowed"
+msgstr "Tom tekststreng er ikke tillatt"
+
+#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
+msgid "Add folder"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:170
+msgid "Folder name"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:124
+#: src/config/dialogs.c:132 src/config/dialogs.c:319 src/config/dialogs.c:402
+#: src/config/dialogs.c:471 src/config/dialogs.c:654 src/config/dialogs.c:730
+#: src/dialogs/auth.c:187 src/dialogs/document.c:52 src/dialogs/document.c:207
+#: src/dialogs/document.c:230 src/dialogs/document.c:277
+#: src/dialogs/document.c:289 src/dialogs/edit.c:164 src/dialogs/info.c:103
+#: src/dialogs/info.c:130 src/dialogs/info.c:146 src/dialogs/info.c:207
+#: src/dialogs/info.c:239 src/dialogs/info.c:268 src/dialogs/menu.c:605
+#: src/dialogs/menu.c:615 src/dialogs/menu.c:643 src/dialogs/menu.c:662
+#: src/dialogs/menu.c:672 src/dialogs/mime.c:265 src/dialogs/options.c:257
+#: src/dialogs/options.c:355 src/document/download.c:563
+#: src/document/session.c:1075 src/document/session.c:1092
+#: src/document/session.c:1116 src/globhist/dialogs.c:396 src/lua/core.c:424
+#: src/lua/core.c:567 src/lua/core.c:676 src/lua/core.c:796
+#: src/sched/sched.c:70 src/viewer/text/view.c:2625
+msgid "OK"
+msgstr "Ok"
+
+#: src/bookmarks/dialogs.c:241 src/lua/core.c:408
+msgid "Edit bookmark"
+msgstr "Rediger bokmerke"
+
+#: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:276
+#: src/bookmarks/dialogs.c:406 src/bookmarks/dialogs.c:413
+#: src/bookmarks/dialogs.c:420 src/bookmarks/dialogs.c:421
+msgid "Delete bookmark"
+msgstr "Slett bokmerke"
+
+#: src/bookmarks/dialogs.c:270 src/bookmarks/dialogs.c:277
+#: src/globhist/dialogs.c:283
+msgid "Sorry, but this bookmark is already being used by something right now."
+msgstr ""
+
+#: src/bookmarks/dialogs.c:271 src/bookmarks/dialogs.c:278
+#: src/dialogs/document.c:91 src/globhist/dialogs.c:392
+msgid "Title"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:279 src/bookmarks/dialogs.c:422
+#: src/dialogs/document.c:60 src/dialogs/edit.c:27 src/globhist/dialogs.c:324
+#: src/globhist/dialogs.c:393 src/lua/core.c:294
+msgid "URL"
+msgstr "URL"
+
+#: src/bookmarks/dialogs.c:407
+msgid "Delete marked bookmarks?"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:409 src/bookmarks/dialogs.c:416
+#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:124 src/dialogs/mime.c:163
+#: src/document/session.c:583 src/globhist/dialogs.c:326
+#: src/globhist/dialogs.c:358
+msgid "Yes"
+msgstr "Ja"
+
+#: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:417
+#: src/bookmarks/dialogs.c:425 src/dialogs/menu.c:125 src/dialogs/mime.c:164
+#: src/document/session.c:584 src/globhist/dialogs.c:327
+#: src/globhist/dialogs.c:359
+msgid "No"
+msgstr "Nei"
+
+#: src/bookmarks/dialogs.c:414
+msgid "Delete folder content"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:608
+msgid "Bookmark manager"
+msgstr "Bokmerke-behandler"
+
+#: src/bookmarks/dialogs.c:618 src/globhist/dialogs.c:443
+msgid "Goto"
+msgstr "Gå til"
+
+#: src/bookmarks/dialogs.c:624 src/config/dialogs.c:301
+#: src/config/dialogs.c:350 src/config/dialogs.c:515
+msgid "Edit"
+msgstr "Rediger"
+
+#: src/bookmarks/dialogs.c:629 src/config/dialogs.c:527
+#: src/config/dialogs.c:773 src/globhist/dialogs.c:453
+msgid "Delete"
+msgstr "Slett"
+
+#: src/bookmarks/dialogs.c:634
+msgid "Move"
+msgstr ""
+
+#: src/bookmarks/dialogs.c:644 src/config/dialogs.c:521
+#: src/config/dialogs.c:767
+msgid "Add"
+msgstr "Legg til"
+
+#: src/bookmarks/dialogs.c:649 src/dialogs/menu.c:671
+#: src/globhist/dialogs.c:458 src/viewer/text/view.c:2340
+#: src/viewer/text/view.c:2386
+msgid "Search"
+msgstr "Søk"
+
+#: src/bookmarks/dialogs.c:654 src/config/dialogs.c:538
+#: src/config/dialogs.c:790 src/globhist/dialogs.c:473
+msgid "Close"
+msgstr "Lukk"
+
+#: src/bookmarks/dialogs.c:788 src/bookmarks/dialogs.c:813
+msgid "Add bookmark"
+msgstr "Legg til bokmerke"
+
+#: src/bookmarks/dialogs.c:799
+msgid "Search bookmarks"
+msgstr ""
+
+#: src/config/dialogs.c:38
+msgid "Config error"
+msgstr "Konfigurasjonsfeil"
+
+#: src/config/dialogs.c:39
+msgid "Unable to write to config file"
+msgstr "Kan ikke skrive til konfigurasjonsfil"
+
+#: src/config/dialogs.c:118 src/config/dialogs.c:127 src/config/dialogs.c:509
+#: src/dialogs/document.c:49 src/dialogs/document.c:204
+#: src/globhist/dialogs.c:391 src/globhist/dialogs.c:448
+msgid "Info"
+msgstr "Info"
+
+#: src/config/dialogs.c:119 src/config/dialogs.c:128 src/config/dialogs.c:199
+#: src/config/dialogs.c:401 src/dialogs/edit.c:26 src/lua/core.c:292
+#: src/lua/core.c:293
+msgid "Name"
+msgstr "Navn"
+
+#: src/config/dialogs.c:120 src/config/dialogs.c:129 src/config/dialogs.c:200
+msgid "Type"
+msgstr ""
+
+#: src/config/dialogs.c:121 src/config/dialogs.c:202
+#: src/viewer/text/view.c:3536
+msgid "value"
+msgstr "Verdi"
+
+#: src/config/dialogs.c:122 src/config/dialogs.c:130 src/config/dialogs.c:203
+msgid "Description"
+msgstr ""
+
+#: src/config/dialogs.c:181 src/document/session.c:856
+#: src/document/session.c:917 src/document/session.c:1395
+#: src/protocol/url.c:64 src/viewer/text/view.c:1911
+#: src/viewer/text/view.c:3226
+msgid "Error"
+msgstr "Feil"
+
+#: src/config/dialogs.c:182
+msgid "Bad option value."
+msgstr ""
+
+#: src/config/dialogs.c:351
+msgid ""
+"This option cannot be edited. This means that this is some special option "
+"like a folder - try to press a space in order to see its contents."
+msgstr ""
+
+#: src/config/dialogs.c:387 src/config/dialogs.c:401
+msgid "Add option"
+msgstr ""
+
+#: src/config/dialogs.c:388
+msgid "Cannot add an option here."
+msgstr ""
+
+#: src/config/dialogs.c:454 src/config/dialogs.c:468
+msgid "Delete option"
+msgstr ""
+
+#: src/config/dialogs.c:455
+msgid "Cannot delete this option."
+msgstr ""
+
+#: src/config/dialogs.c:469
+msgid "Really delete the option"
+msgstr ""
+
+#: src/config/dialogs.c:499
+msgid "Options manager"
+msgstr ""
+
+#: src/config/dialogs.c:533 src/config/dialogs.c:785 src/dialogs/options.c:262
+#: src/document/download.c:977 src/document/download.c:1020
+msgid "Save"
+msgstr "Lagre"
+
+#: src/config/dialogs.c:603 src/config/dialogs.c:625 src/config/dialogs.c:653
+msgid "Add keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:604
+msgid "Invalid keystroke."
+msgstr ""
+
+#: src/config/dialogs.c:626
+msgid "Need to select a keymap."
+msgstr ""
+
+#: src/config/dialogs.c:641
+msgid "Action"
+msgstr ""
+
+#: src/config/dialogs.c:642
+msgid "Keymap"
+msgstr ""
+
+#: src/config/dialogs.c:643
+msgid ""
+"Keystroke should be written in the format: [Prefix-]Key\n"
+"Prefix: Shift, Ctrl, Alt\n"
+"Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
+msgstr ""
+
+#: src/config/dialogs.c:647
+msgid "Keystroke"
+msgstr ""
+
+#: src/config/dialogs.c:714 src/config/dialogs.c:725
+msgid "Delete keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:715
+msgid ""
+"This item is not a keybinding. Try to press a space in order to get to the "
+"keybinindings themselves."
+msgstr ""
+
+#: src/config/dialogs.c:726
+msgid "Really delete the keybinding"
+msgstr ""
+
+#: src/config/dialogs.c:727
+msgid "action"
+msgstr ""
+
+#: src/config/dialogs.c:728
+msgid "keymap"
+msgstr ""
+
+#: src/config/dialogs.c:757
+msgid "Keybinding manager"
+msgstr ""
+
+#: src/config/dialogs.c:779 src/globhist/dialogs.c:463
+msgid "Toggle display"
+msgstr ""
+
+#: src/config/opttypes.c:462
+msgid "Boolean"
+msgstr ""
+
+#: src/config/opttypes.c:463
+msgid "Integer"
+msgstr ""
+
+#: src/config/opttypes.c:464
+msgid "Longint"
+msgstr ""
+
+#: src/config/opttypes.c:465
+msgid "String"
+msgstr ""
+
+#: src/config/opttypes.c:467 src/dialogs/document.c:111
+msgid "Codepage"
+msgstr "Tegnsett"
+
+#: src/config/opttypes.c:468
+msgid "Language"
+msgstr ""
+
+#: src/config/opttypes.c:469 src/dialogs/options.c:118
+msgid "Color"
+msgstr "Farger"
+
+#: src/config/opttypes.c:471
+msgid "Special"
+msgstr ""
+
+#: src/config/opttypes.c:473
+msgid "Alias"
+msgstr ""
+
+#. tree
+#: src/config/opttypes.c:476
+msgid "Folder"
+msgstr ""
+
+#: src/dialogs/auth.c:33 src/dialogs/auth.c:34 src/dialogs/auth.c:52
+#: src/dialogs/auth.c:75
+msgid "Login"
+msgstr "Brukernavn"
+
+#: src/dialogs/auth.c:35 src/dialogs/auth.c:36 src/dialogs/auth.c:56
+#: src/dialogs/auth.c:82
+msgid "Password"
+msgstr "Passord"
+
+#: src/dialogs/auth.c:147 src/dialogs/auth.c:166
+msgid "Authentication required for "
+msgstr "Tast inn brukernavn og passord for "
+
+#: src/dialogs/auth.c:149 src/dialogs/auth.c:168
+msgid " at "
+msgstr " på "
+
+#: src/dialogs/auth.c:162
+msgid "HTTP Authentication"
+msgstr ""
+
+#: src/dialogs/document.c:50 src/dialogs/document.c:228
+msgid "You are nowhere!"
+msgstr "Ingen vevside er lastet!"
+
+#: src/dialogs/document.c:100
+msgid "Size"
+msgstr "Størrelse"
+
+#: src/dialogs/document.c:106
+msgid "incomplete"
+msgstr "ufullstendig"
+
+#: src/dialogs/document.c:117
+msgid "assumed"
+msgstr "antatt"
+
+#: src/dialogs/document.c:123
+msgid "ignoring server setting"
+msgstr "Ignorer tjener-innstillinger"
+
+#: src/dialogs/document.c:130
+msgid "Server"
+msgstr "Server"
+
+#: src/dialogs/document.c:138
+msgid "SSL Cipher"
+msgstr ""
+
+#: src/dialogs/document.c:144
+msgid "Encoding"
+msgstr ""
+
+#: src/dialogs/document.c:152
+msgid "Date"
+msgstr "Dato"
+
+#: src/dialogs/document.c:160
+msgid "Last modified"
+msgstr "Sist oppdatert"
+
+#: src/dialogs/document.c:169 src/globhist/dialogs.c:394
+msgid "Last visit time"
+msgstr ""
+
+#: src/dialogs/document.c:178
+msgid "Unknown"
+msgstr ""
+
+#: src/dialogs/document.c:187 src/dialogs/menu.c:583
+msgid "~Link"
+msgstr "~Lenker"
+
+#: src/dialogs/document.c:196
+msgid "Link title"
+msgstr ""
+
+#: src/dialogs/document.c:227 src/dialogs/document.c:274
+#: src/dialogs/document.c:286
+msgid "Header info"
+msgstr "Info om dokumenthode"
+
+#: src/dialogs/document.c:287
+msgid "No header info."
+msgstr ""
+
+#: src/dialogs/edit.c:168 src/globhist/dialogs.c:468
+msgid "Clear"
+msgstr ""
+
+#: src/dialogs/info.c:55
+msgid "Text WWW browser"
+msgstr "Vevleser"
+
+#: src/dialogs/info.c:58
+msgid "Features"
+msgstr ""
+
+#: src/dialogs/info.c:100
+msgid "About"
+msgstr "Om"
+
+#: src/dialogs/info.c:111
+msgid "Keys"
+msgstr "Taster"
+
+#: src/dialogs/info.c:112
+msgid ""
+"ESC      display menu\n"
+"^C, q    quit\n"
+"^P, ^N   scroll up, down\n"
+"[, ]     scroll left, right\n"
+"up, down select link\n"
+"->       follow link\n"
+"<-       go back\n"
+"g        go to url\n"
+"G        go to url based on current url\n"
+"/        search\n"
+"?        search back\n"
+"n        find next\n"
+"N        find previous\n"
+"=        document info\n"
+"|        header info\n"
+"\\        document source\n"
+"d        download"
+msgstr ""
+"ESC      vis meny\n"
+"^C, q    avslutt\n"
+"^P, ^N   bla opp/ned\n"
+"[, ]     bla venstre/høyre\n"
+"opp,ned  velg lenker\n"
+"->       følg lenke\n"
+"<-       gå tilbake\n"
+"g        gå til URL\n"
+"G        gå til URL basert på nåværende URL\n"
+"/        søk\n"
+"?        søk baklengs\n"
+"n        finn neste\n"
+"N        finn forrige\n"
+"=        dokument informasjon\n"
+"|        vis dokumenthode\n"
+"\\        vis kilde\n"
+"d        start fil-overføring"
+
+#: src/dialogs/info.c:136
+msgid "Copying"
+msgstr "Lisens"
+
+#: src/dialogs/info.c:137
+msgid "ELinks "
+msgstr ""
+
+#: src/dialogs/info.c:137
+msgid ""
+"\n"
+"\n"
+"(C) 1999 - 2002 Mikulas Patocka\n"
+"(C) 2001 - 2003 Petr Baudis\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify it "
+"under the terms of the GNU General Public License as published by the Free "
+"Software Foundation; either version 2 of the License, or (at your option) "
+"any later version."
+msgstr ""
+"\n"
+"\n"
+"(C) 1999 - 2002 Mikulas Patocka\n"
+"(C) 2001 - 2003 Petr Baudis\n"
+"\n"
+"Dette programmet er fri software. Du kan distribuere det og/eller endre det "
+"i henhold til GNU General Public License, publisert av Free Software "
+"Foundation, enten versjon 2 eller en hvilken som helst senere versjon."
+
+#: src/dialogs/info.c:189 src/dialogs/info.c:190
+msgid "Resources"
+msgstr "Ressurser"
+
+#: src/dialogs/info.c:191
+msgid "handles"
+msgstr "håndtak"
+
+#: src/dialogs/info.c:192
+msgid "timers"
+msgstr "tidsavbrytere"
+
+#: src/dialogs/info.c:193
+msgid "Connections"
+msgstr "Forbindelser"
+
+#: src/dialogs/info.c:194
+msgid "connections"
+msgstr "forbindelser"
+
+#: src/dialogs/info.c:195
+msgid "connecting"
+msgstr "etablerer forbindelse"
+
+#: src/dialogs/info.c:196
+msgid "transferring"
+msgstr "overfører data"
+
+#: src/dialogs/info.c:197
+msgid "keepalive"
+msgstr "forbindelser holdes i live"
+
+#: src/dialogs/info.c:198
+msgid "Memory cache"
+msgstr "Minne-cache"
+
+#: src/dialogs/info.c:199
+msgid "bytes"
+msgstr "byte"
+
+#: src/dialogs/info.c:200
+msgid "files"
+msgstr "filer"
+
+#: src/dialogs/info.c:201 src/dialogs/info.c:205
+msgid "locked"
+msgstr "låst"
+
+#: src/dialogs/info.c:202
+msgid "loading"
+msgstr "henter"
+
+#: src/dialogs/info.c:203
+msgid "Formatted document cache"
+msgstr "Cache for behandlede dokumenter"
+
+#: src/dialogs/info.c:204
+msgid "documents"
+msgstr "dokumenter"
+
+#: src/dialogs/info.c:236
+msgid "Cache info"
+msgstr "Cache-informasjon"
+
+#: src/dialogs/info.c:237
+msgid "Cache content"
+msgstr "Cache-innhold"
+
+#: src/dialogs/info.c:256
+msgid "bytes of memory allocated"
+msgstr "bytes minne allokert"
+
+#: src/dialogs/info.c:265
+msgid "Memory info"
+msgstr "Minne-informasjon"
+
+#: src/dialogs/menu.c:118
+msgid "Exit ELinks"
+msgstr "Avslutt Links"
+
+#: src/dialogs/menu.c:120
+msgid "Do you really want to exit ELinks (and terminate all downloads)?"
+msgstr "Vil du virkelig avslutte Links og avbryte alle nedlastninger?"
+
+#: src/dialogs/menu.c:122
+msgid "Do you really want to exit ELinks?"
+msgstr "Vil du virkelig avslutte Links?"
+
+#: src/dialogs/menu.c:226
+msgid "No history"
+msgstr "Ingen historikk"
+
+#: src/dialogs/menu.c:301
+msgid "No downloads"
+msgstr "Ingen nedlastninger"
+
+#: src/dialogs/menu.c:372
+msgid "~Go to URL"
+msgstr "~Gå til URL"
+
+#: src/dialogs/menu.c:373
+msgid "Go ~back"
+msgstr "Gå tilbake"
+
+#: src/dialogs/menu.c:374
+msgid "~History"
+msgstr "~Historikk"
+
+#: src/dialogs/menu.c:375
+msgid "Unhis~tory"
+msgstr ""
+
+#: src/dialogs/menu.c:376
+msgid "~Reload"
+msgstr "Oppdate~r"
+
+#: src/dialogs/menu.c:381
+msgid "Global histor~y"
+msgstr ""
+
+#: src/dialogs/menu.c:384
+msgid "Bookmark~s"
+msgstr "Bokmerker"
+
+#: src/dialogs/menu.c:390
+msgid "Sa~ve as"
+msgstr "Lagre som"
+
+#: src/dialogs/menu.c:391
+msgid "Save ~URL as"
+msgstr "Lagre ~URL som"
+
+#: src/dialogs/menu.c:392
+msgid "Save formatted ~document"
+msgstr "Lagre formatert ~dokument"
+
+#: src/dialogs/menu.c:397
+msgid "~Kill background connections"
+msgstr "Drep bakgrunnstil~koblinger"
+
+#: src/dialogs/menu.c:398
+msgid "~Flush all caches"
+msgstr "Tøm cachen"
+
+#: src/dialogs/menu.c:399
+msgid "Resource ~info"
+msgstr "Ressurs-~informasjon"
+
+#. This ought to be rewritten first, now it's too messy - try it with
+#. * a bit full cache.
+#: src/dialogs/menu.c:403
+msgid "~Cache info"
+msgstr "~Cache-informasjon"
+
+#: src/dialogs/menu.c:406
+msgid "~Memory info"
+msgstr "~Minne-informasjon"
+
+#: src/dialogs/menu.c:413
+msgid "E~xit"
+msgstr "Avslutt"
+
+#: src/dialogs/menu.c:442
+msgid "~New window"
+msgstr "~Nytt vindu"
+
+#: src/dialogs/menu.c:463
+msgid "~OS shell"
+msgstr "Kommand~olinjen"
+
+#: src/dialogs/menu.c:474 src/dialogs/options.c:332
+msgid "Resize ~terminal"
+msgstr "Endre ~terminalstørrelse"
+
+#: src/dialogs/menu.c:493 src/dialogs/menu.c:506
+msgid "~Search"
+msgstr "~Søk"
+
+#: src/dialogs/menu.c:494 src/dialogs/menu.c:507
+msgid "Search ~backward"
+msgstr "Søk ~bakover"
+
+#: src/dialogs/menu.c:495 src/dialogs/menu.c:508
+msgid "Find ~next"
+msgstr "Finn ~neste"
+
+#: src/dialogs/menu.c:496 src/dialogs/menu.c:509
+msgid "Find ~previous"
+msgstr "Finn forrige"
+
+#: src/dialogs/menu.c:498 src/dialogs/menu.c:511
+msgid "Toggle ~html/plain"
+msgstr "Bytt i mellom ~HTML/tekst"
+
+#: src/dialogs/menu.c:499 src/dialogs/menu.c:512
+msgid "Document ~info"
+msgstr "Dokument-~informasjon"
+
+#: src/dialogs/menu.c:500
+msgid "H~eader info"
+msgstr "Info om dokumenthode"
+
+#: src/dialogs/menu.c:501 src/dialogs/menu.c:513
+msgid "Frame at ~full-screen"
+msgstr "Maksimer ramme"
+
+#: src/dialogs/menu.c:518
+msgid "~About"
+msgstr "Om"
+
+#: src/dialogs/menu.c:519
+msgid "~Keys"
+msgstr "Taster"
+
+#: src/dialogs/menu.c:520
+msgid "User's ~manual"
+msgstr "Brukerveiledning"
+
+#: src/dialogs/menu.c:521
+msgid "~Copying"
+msgstr "Lisens"
+
+#: src/dialogs/menu.c:522
+msgid "~ELinks homepage"
+msgstr ""
+
+#: src/dialogs/menu.c:528 src/dialogs/menu.c:536
+msgid "~Add"
+msgstr "Legg til"
+
+#: src/dialogs/menu.c:529 src/dialogs/menu.c:537
+msgid "~Modify"
+msgstr "Endre"
+
+#: src/dialogs/menu.c:530 src/dialogs/menu.c:538
+msgid "~Delete"
+msgstr "Slett"
+
+#: src/dialogs/menu.c:543 src/dialogs/menu.c:556
+msgid "~Language"
+msgstr "Språk"
+
+#: src/dialogs/menu.c:544 src/dialogs/menu.c:557
+msgid "C~haracter set"
+msgstr "Tegnsett-innstillinger"
+
+#: src/dialogs/menu.c:545 src/dialogs/menu.c:558
+msgid "~Terminal options"
+msgstr "~Terminal-innstillinger"
+
+#. {N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0},
+#: src/dialogs/menu.c:547
+msgid "File ~extensions"
+msgstr "Fil-~etternavn"
+
+#: src/dialogs/menu.c:549
+msgid "~Options manager"
+msgstr ""
+
+#: src/dialogs/menu.c:550
+msgid "~Keybinding manager"
+msgstr ""
+
+#: src/dialogs/menu.c:551
+msgid "~Save options"
+msgstr "Lagre inn~stillinger"
+
+#: src/dialogs/menu.c:581
+msgid "~File"
+msgstr "~Fil"
+
+#: src/dialogs/menu.c:582
+msgid "~View"
+msgstr "~Vis"
+
+#: src/dialogs/menu.c:584
+msgid "~Downloads"
+msgstr "~Nedlastninger"
+
+#: src/dialogs/menu.c:585
+msgid "~Setup"
+msgstr "~Innstillinger"
+
+#: src/dialogs/menu.c:586
+msgid "~Help"
+msgstr "~Hjelp"
+
+#: src/dialogs/menu.c:604
+msgid "Go to URL"
+msgstr "Gå til URL"
+
+#: src/dialogs/menu.c:604 src/dialogs/menu.c:614
+msgid "Enter URL"
+msgstr "Tast inn URL"
+
+#: src/dialogs/menu.c:614
+msgid "Save URL"
+msgstr "Lagre URL"
+
+#: src/dialogs/menu.c:643 src/document/download.c:388
+#: src/document/download.c:560
+msgid "Download"
+msgstr "Last ned"
+
+#: src/dialogs/menu.c:643
+msgid "Save to file"
+msgstr "Lagre som"
+
+#: src/dialogs/menu.c:661
+msgid "Search backward"
+msgstr "Søk bakover"
+
+#: src/dialogs/menu.c:661 src/dialogs/menu.c:671
+msgid "Search for text"
+msgstr "Søk etter tekst"
+
+#: src/dialogs/mime.c:44
+msgid "Extension(s)"
+msgstr "Fil-etternavn"
+
+#: src/dialogs/mime.c:45
+msgid "Content-Type"
+msgstr "Innholdtype"
+
+#: src/dialogs/mime.c:160 src/dialogs/mime.c:161
+msgid "Delete extension"
+msgstr "Slett fil-etternavn"
+
+#: src/dialogs/mime.c:247
+msgid "Extension"
+msgstr "Fil-etternavn"
+
+#: src/dialogs/mime.c:281
+msgid "No extensions"
+msgstr ""
+
+#: src/dialogs/options.c:111
+msgid "No frames"
+msgstr "Ingen rammer"
+
+#: src/dialogs/options.c:112
+msgid "VT 100 frames"
+msgstr "VT100-rammer"
+
+#: src/dialogs/options.c:113
+msgid "Linux or OS/2 frames"
+msgstr "Linux eller OS/2-rammer"
+
+#: src/dialogs/options.c:114
+msgid "KOI8-R frames"
+msgstr "KOI8-R-rammer"
+
+#: src/dialogs/options.c:115
+msgid "Use ^[[11m"
+msgstr "Bruk ^[[11m"
+
+#: src/dialogs/options.c:116
+msgid "Restrict frames in cp850/852"
+msgstr "Begrens rammer i cp850/852"
+
+#: src/dialogs/options.c:117
+msgid "Block the cursor"
+msgstr "Hel markør"
+
+#: src/dialogs/options.c:119
+msgid "Transparency"
+msgstr ""
+
+#: src/dialogs/options.c:120
+msgid "UTF-8 I/O"
+msgstr ""
+
+#: src/dialogs/options.c:194
+msgid "Terminal options"
+msgstr "Terminal-innstillinger"
+
+#: src/dialogs/options.c:301
+msgid "Columns"
+msgstr "Kolonner"
+
+#: src/dialogs/options.c:302
+msgid "Rows"
+msgstr "Rader"
+
+#: src/document/download.c:222 src/document/session.c:177
+msgid "Received"
+msgstr "Mottatt"
+
+#: src/document/download.c:228 src/document/session.c:182
+msgid "of"
+msgstr "av"
+
+#: src/document/download.c:238
+msgid "after resume"
+msgstr ""
+
+#: src/document/download.c:244
+msgid "Average speed"
+msgstr "Gjennomsnittlig hastighet"
+
+#: src/document/download.c:245
+msgid "Speed"
+msgstr "Hastighet"
+
+#: src/document/download.c:254
+msgid "current speed"
+msgstr "nåværende hastighet"
+
+#: src/document/download.c:263
+msgid "Elapsed time"
+msgstr "Forløpt tid"
+
+#: src/document/download.c:269
+msgid "estimated time"
+msgstr "beregnet tid"
+
+#: src/document/download.c:397
+msgid "Background"
+msgstr "Bakgrunn"
+
+#: src/document/download.c:402
+msgid "Background with notify"
+msgstr ""
+
+#: src/document/download.c:407
+msgid "Abort"
+msgstr "Avbryt"
+
+#: src/document/download.c:501 src/document/download.c:534
+#: src/document/download.c:636
+msgid "Download error"
+msgstr "Overføringsfeil"
+
+#: src/document/download.c:502 src/document/download.c:637
+msgid "Could not create file"
+msgstr "Kunne ikke skrive til fil"
+
+#: src/document/download.c:535
+msgid "Error downloading"
+msgstr "Feil ved overføring av"
+
+#: src/document/download.c:561
+msgid "Download complete"
+msgstr ""
+
+#: src/document/download.c:973 src/document/download.c:982
+msgid "Unknown type"
+msgstr "Ukjent type"
+
+#: src/document/download.c:974 src/document/download.c:983
+#: src/document/download.c:1015 src/document/download.c:1026
+msgid "Content type is"
+msgstr "Innholdstype er"
+
+#: src/document/download.c:975 src/document/download.c:984
+msgid "Do you want to save or display this file?"
+msgstr "Vil du lagre eller vise filen?"
+
+#: src/document/download.c:978 src/document/download.c:986
+#: src/document/download.c:1021 src/document/download.c:1031
+msgid "Display"
+msgstr "Vis"
+
+#: src/document/download.c:1014 src/document/download.c:1025
+msgid "What to do?"
+msgstr "Hva skal jeg gjøre?"
+
+#: src/document/download.c:1016 src/document/download.c:1027
+msgid "Do you want to open file with"
+msgstr "Vil du åpne filen med"
+
+#: src/document/download.c:1017 src/document/download.c:1028
+msgid "save it or display it?"
+msgstr "lagre den, eller vise den?"
+
+#: src/document/download.c:1019 src/document/download.c:1030
+msgid "Open"
+msgstr "Åpne"
+
+#: src/document/session.c:97
+msgid "Unknown error"
+msgstr "Ukjent feil"
+
+#: src/document/session.c:188
+msgid "avg"
+msgstr "gjennomsnittlig"
+
+#: src/document/session.c:196
+msgid "cur"
+msgstr "nåværende"
+
+#: src/document/session.c:569
+msgid "Do you want to follow redirect and post form data to url"
+msgstr "Vil du følge omdirigeringen og sende innholdet i skjemaet til URL"
+
+#: src/document/session.c:572
+msgid "Do you want to post form data to url"
+msgstr "Vil du sende innholdet i skjemaet til URL"
+
+#: src/document/session.c:574
+msgid "Do you want to repost form data to url"
+msgstr "Vil du sende innholdet i skjemaet til URL om igjen"
+
+#: src/document/session.c:580 src/document/session.c:1080
+#: src/document/session.c:1100
+msgid "Warning"
+msgstr "Advarsel"
+
+#: src/document/session.c:1070
+msgid "Welcome"
+msgstr "Velkommen"
+
+#: src/document/session.c:1071
+msgid "Welcome to ELinks!"
+msgstr "Velkommen til Links!"
+
+#: src/document/session.c:1072
+msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
+msgstr "Trykk ESC for meny. Velg Hjelp->Brukerveiledning for mere informasjon"
+
+#: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
+msgid "Global history"
+msgstr ""
+
+#: src/globhist/dialogs.c:187
+msgid "Search history"
+msgstr ""
+
+#: src/globhist/dialogs.c:282 src/globhist/dialogs.c:322
+#: src/globhist/dialogs.c:323
+msgid "Delete history item"
+msgstr ""
+
+#: src/globhist/dialogs.c:355 src/globhist/dialogs.c:356
+msgid "Clear global history"
+msgstr ""
+
+#: src/lua/core.c:446
+msgid "A field"
+msgstr ""
+
+#: src/lua/core.c:555
+msgid "User dialog"
+msgstr ""
+
+#: src/lua/core.c:673
+msgid "Lua Error"
+msgstr ""
+
+#: src/lua/core.c:794
+msgid "Lua Console"
+msgstr ""
+
+#: src/lua/core.c:795
+msgid "Enter expression"
+msgstr ""
+
+#: src/osdep/os_dep.c:1832
+msgid "~Xterm"
+msgstr "~Xterm"
+
+#: src/osdep/os_dep.c:1833
+msgid "~Twterm"
+msgstr "~Twterm"
+
+#: src/osdep/os_dep.c:1834
+msgid "~Screen"
+msgstr "~Skerm"
+
+#: src/osdep/os_dep.c:1836 src/osdep/os_dep.c:1840
+msgid "~Window"
+msgstr "Vindu"
+
+#: src/osdep/os_dep.c:1837
+msgid "~Full screen"
+msgstr "Maksimer skjerm"
+
+#: src/osdep/os_dep.c:1843
+msgid "~BeOS terminal"
+msgstr "~BeOS-terminal"
+
+#: src/protocol/url.c:65
+msgid "JavaScript is currently not supported."
+msgstr ""
+
+#: src/protocol/user.c:100
+msgid "No program"
+msgstr "Ingen program"
+
+#: src/protocol/user.c:101
+msgid "No program specified for"
+msgstr "Ingen program er tilordnet"
+
+#: src/protocol/user.c:128 src/sched/sched.c:79
+msgid "Bad URL syntax"
+msgstr "Feil i URL-syntaks"
+
+#: src/protocol/user.c:129
+msgid "Bad user protocol URL"
+msgstr ""
+
+#: src/sched/sched.c:59
+msgid "Waiting in queue"
+msgstr "Venter i kø"
+
+#: src/sched/sched.c:60
+msgid "Looking up host"
+msgstr "Lokaliserer vert"
+
+#: src/sched/sched.c:61
+msgid "Making connection"
+msgstr "Kobler til"
+
+#: src/sched/sched.c:62
+msgid "SSL negotiation"
+msgstr "SSL forhandling"
+
+#: src/sched/sched.c:63
+msgid "Request sent"
+msgstr "Forespørsel sendt"
+
+#: src/sched/sched.c:64
+msgid "Logging in"
+msgstr "Logger inn"
+
+#: src/sched/sched.c:65
+msgid "Getting headers"
+msgstr "Henter dokumenthode"
+
+#: src/sched/sched.c:66
+msgid "Server is processing request"
+msgstr "Tjeneren behandler forespørselen"
+
+#: src/sched/sched.c:67
+msgid "Transferring"
+msgstr "Overfører"
+
+#: src/sched/sched.c:69
+msgid "Waiting for redirect confirmation"
+msgstr "Venter på bekreftelse av omdirigering"
+
+#: src/sched/sched.c:71
+msgid "Interrupted"
+msgstr "Avbrutt"
+
+#: src/sched/sched.c:72
+msgid "Socket exception"
+msgstr "Sokkel-feil"
+
+#: src/sched/sched.c:73
+msgid "Internal error"
+msgstr "Intern feil"
+
+#: src/sched/sched.c:74
+msgid "Out of memory"
+msgstr "Tom for minne"
+
+#: src/sched/sched.c:75
+msgid "Host not found"
+msgstr "Vertsmaskinen kan ikke lokaliseres"
+
+#: src/sched/sched.c:76
+msgid "Error writing to socket"
+msgstr "Feil ved skriving til sokkel"
+
+#: src/sched/sched.c:77
+msgid "Error reading from socket"
+msgstr "Feil ved lesing fra sokkel"
+
+#: src/sched/sched.c:78
+msgid "Data modified"
+msgstr "Data endret"
+
+#: src/sched/sched.c:80
+msgid "Receive timeout"
+msgstr "Ventetid utgått for overføring"
+
+#: src/sched/sched.c:81
+msgid "Request must be restarted"
+msgstr "Forespørsel må gjenopptas"
+
+#: src/sched/sched.c:82
+msgid "Can't get socket state"
+msgstr "Kan ikke lese sokkel-tilstand"
+
+#: src/sched/sched.c:84
+msgid "Bad HTTP response"
+msgstr "Feil i HTTP-svar"
+
+#: src/sched/sched.c:85
+msgid "HTTP 100 (???)"
+msgstr ""
+
+#: src/sched/sched.c:86
+msgid "No content"
+msgstr "Ingen innhold"
+
+#: src/sched/sched.c:88
+msgid "Unknown file type"
+msgstr "Ukjent filtype"
+
+#: src/sched/sched.c:89
+msgid "Error opening file"
+msgstr "Feil ved åpning av fil"
+
+#: src/sched/sched.c:91
+msgid "Bad FTP response"
+msgstr "Feil i FTP-svar"
+
+#: src/sched/sched.c:92
+msgid "FTP service unavailable"
+msgstr "FTP-tjeneste ikke tilgjengelig"
+
+#: src/sched/sched.c:93
+msgid "Bad FTP login"
+msgstr "Feil i FTP-innlogging"
+
+#: src/sched/sched.c:94
+msgid "FTP PORT command failed"
+msgstr "FTP PORT kommando mislyktes"
+
+#: src/sched/sched.c:95
+msgid "File not found"
+msgstr "Filen finnes ikke"
+
+#: src/sched/sched.c:96
+msgid "FTP file error"
+msgstr "FTP fil-feil"
+
+#: src/sched/sched.c:98
+msgid "SSL error"
+msgstr "SSL-feil"
+
+#: src/sched/sched.c:100
+msgid "This version of ELinks does not contain SSL/TSL support"
+msgstr "Denne versjonen av Links har ikke støtte for SSL/TSL"
+
+#: src/viewer/text/view.c:1577
+msgid "Error while posting form"
+msgstr "Feil under sending av skjemaet"
+
+#: src/viewer/text/view.c:1578
+msgid "Could not get file"
+msgstr "Kunne ikke hente fil"
+
+#: src/viewer/text/view.c:1912
+msgid "You can do this only on the master terminal"
+msgstr ""
+
+#: src/viewer/text/view.c:2341
+msgid "No previous search"
+msgstr "Ingen tidligere søk"
+
+#: src/viewer/text/view.c:2387
+msgid "Search string not found"
+msgstr "Søket gav ingen resultat"
+
+#: src/viewer/text/view.c:2624
+msgid "Go to link"
+msgstr "Gå til lenke"
+
+#: src/viewer/text/view.c:2625
+msgid "Enter link number"
+msgstr "Skriv nummer på lenke"
+
+#: src/viewer/text/view.c:3281
+msgid "Save error"
+msgstr "Feil ved lagring"
+
+#: src/viewer/text/view.c:3282
+msgid "Error writing to file"
+msgstr "Feil ved skriving til fil"
+
+#: src/viewer/text/view.c:3316
+msgid "Display ~usemap"
+msgstr "Vis ~usemap"
+
+#: src/viewer/text/view.c:3321
+msgid "~Follow link"
+msgstr "~Følg lenke"
+
+#: src/viewer/text/view.c:3324
+msgid "Follow link and r~eload"
+msgstr ""
+
+#: src/viewer/text/view.c:3328
+msgid "Open in new ~window"
+msgstr "Åpne i nytt vindu"
+
+#: src/viewer/text/view.c:3334
+msgid "~Download link"
+msgstr "Last ne~d lenke"
+
+#: src/viewer/text/view.c:3338
+msgid "~Add link to bookmarks"
+msgstr ""
+
+#: src/viewer/text/view.c:3349 src/viewer/text/view.c:3466
+msgid "~Reset form"
+msgstr "Nullstill skjemaet"
+
+#: src/viewer/text/view.c:3354
+msgid "~Submit form"
+msgstr "~Send skjemaet"
+
+#: src/viewer/text/view.c:3357
+msgid "Submit form and rel~oad"
+msgstr ""
+
+#: src/viewer/text/view.c:3361
+msgid "Submit form and open in new ~window"
+msgstr "Send skjemaet og åpne i nytt vindu"
+
+#: src/viewer/text/view.c:3367
+msgid "Submit form and ~download"
+msgstr "Sen~d skjemaet og overfør fil"
+
+#: src/viewer/text/view.c:3374
+msgid "V~iew image"
+msgstr "V~is bilde"
+
+#: src/viewer/text/view.c:3377
+msgid "Download ima~ge"
+msgstr "Hent bilde"
+
+#: src/viewer/text/view.c:3383
+msgid "No link selected"
+msgstr "Ingen lenker valgt"
+
+#: src/viewer/text/view.c:3430
+msgid "Image"
+msgstr "Bilde"
+
+#: src/viewer/text/view.c:3446
+msgid "Usemap"
+msgstr "Usemap"
+
+#: src/viewer/text/view.c:3479
+msgid "Submit form to"
+msgstr "Send skjemaet til"
+
+#: src/viewer/text/view.c:3481
+msgid "Post form to"
+msgstr "Send skjemaet til"
+
+#: src/viewer/text/view.c:3499
+msgid "Radio button"
+msgstr "Radioknapp"
+
+#: src/viewer/text/view.c:3502
+msgid "Checkbox"
+msgstr "Avkryssningboks"
+
+#: src/viewer/text/view.c:3505
+msgid "Select field"
+msgstr "Velg felt"
+
+#: src/viewer/text/view.c:3508
+msgid "Text field"
+msgstr "Tekstfelt"
+
+#: src/viewer/text/view.c:3511
+msgid "Text area"
+msgstr "Tekstboks"
+
+#: src/viewer/text/view.c:3514
+msgid "File upload"
+msgstr "Last opp fil"
+
+#: src/viewer/text/view.c:3517
+msgid "Password field"
+msgstr "Passordfelt"
+
+#: src/viewer/text/view.c:3526
+msgid "name"
+msgstr "Navn"
+
+#: src/viewer/text/view.c:3545
+msgid "hit ENTER to"
+msgstr "trykk [Linjeskift] for å"
+
+#: src/viewer/text/view.c:3548
+msgid "submit to"
+msgstr "send til"
+
+#: src/viewer/text/view.c:3550
+msgid "post to"
+msgstr "send til"

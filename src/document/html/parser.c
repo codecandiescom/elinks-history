@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.255 2003/11/12 15:52:38 jonas Exp $ */
+/* $Id: parser.c,v 1.256 2003/11/13 14:23:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,6 +484,7 @@ static int putsp;
 
 static int was_br;
 static int was_li;
+static int was_xmp;
 
 static inline void
 ln_break(int n, void (*line_break)(void *), void *f)
@@ -1154,7 +1155,7 @@ html_pre(unsigned char *a)
 static void
 html_xmp(unsigned char *a)
 {
-	global_doc_opts->plain = 2;
+	was_xmp = 1;
 	html_pre(a);
 }
 
@@ -3155,7 +3156,7 @@ next_break:
 			}
 		}
 
-		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !global_doc_opts->plain) {
+		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !was_xmp) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
 			put_chrs(lt, html - lt, put_chars_f, f);
@@ -3163,7 +3164,7 @@ next_break:
 			goto set_lt;
 		}
 
-		if (*html != '<' || global_doc_opts->plain == 1 || parse_element(html, eof, &name, &namelen, &attr, &end)) {
+		if (*html != '<' || parse_element(html, eof, &name, &namelen, &attr, &end)) {
 			/*if (putsp == 1) goto put_sp;
 			putsp = 0;*/
 			html++;
@@ -3216,7 +3217,7 @@ ng:;
 			if (!inv) {
 				unsigned char *a;
 
-				if (global_doc_opts->plain) {
+				if (ei->func == html_xmp) {
 					put_chrs("<", 1, put_chars_f, f);
 					html = prev_html + 1;
 					break;
@@ -3277,10 +3278,7 @@ ng:;
 				int lnb = 0;
 				int xxx = 0;
 
-				if (global_doc_opts->plain) {
-					if (ei->func == html_xmp) global_doc_opts->plain = 0;
-					else break;
-				}
+				if (ei->func == html_xmp) was_xmp = 0;
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
 				/*debug_stack();*/
@@ -3743,15 +3741,9 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	format.href_base = stracpy(url);
 	format.target_base = options->framename ? stracpy(options->framename) : NULL;
 
-	if (options->plain) {
-		par_format.align = AL_NONE;
-		par_format.leftmargin = 0;
-		par_format.rightmargin = 0;
-	} else {
-		par_format.align = AL_LEFT;
-		par_format.leftmargin = options->margin;
-		par_format.rightmargin = options->margin;
-	}
+	par_format.align = AL_LEFT;
+	par_format.leftmargin = options->margin;
+	par_format.rightmargin = options->margin;
 
 	par_format.width = options->width;
 	par_format.list_level = par_format.list_number = 0;

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.57 2003/05/04 16:25:19 pasky Exp $ */
+/* $Id: osdep.c,v 1.58 2003/05/04 16:52:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1809,17 +1809,17 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 
 	{
 		/* Now lets create new session... */
+
+		/* EV_RESIZE is in fact the second part of the EV_INIT
+		 * sequence. We don't call EV_INIT as it makes no sense to read
+		 * session info here. */ /* FIXME: This should be cleaned up
+		 * and read_session_info() should be probably moved out of the
+		 * way. And so on, this all is getting quite messy with the
+		 * tabs introduction. --pasky */
 		struct event ev = {EV_RESIZE, 0, 0, 0};
-		struct window *win = mem_calloc(1, sizeof(struct window));
+		struct window *win = init_tab(term);
 
 		if (!win) return;
-
-		win->handler = get_root_window(term)->handler;
-		win->term = term;
-		win->type = WT_ROOT;
-		add_to_list(term->windows, win);
-
-		term->current_tab = get_tab_number(win);
 
 		win->data = create_basic_session(win);
 

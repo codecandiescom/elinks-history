@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.64 2003/05/04 14:50:07 pasky Exp $ */
+/* $Id: terminal.c,v 1.65 2003/05/04 16:52:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,24 @@ redraw_below_window(struct window *win)
 		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
 	}
 	term->redrawing = tr;
+}
+
+struct window *
+init_tab(struct terminal *term)
+{
+	struct window *win = mem_calloc(1, sizeof(struct window));
+	struct window *current_tab = get_root_window(term);
+
+	if (!win) return NULL;
+
+	win->handler = current_tab ? current_tab->handler : NULL;
+	win->term = term;
+	win->type = WT_ROOT;
+
+	add_to_list(term->windows, win);
+	term->current_tab = get_tab_number(win);
+
+	return win;
 }
 
 static void
@@ -522,19 +540,14 @@ init_term(int fdin, int fdout,
 
 	init_list(term->windows);
 
-	win = mem_calloc(1, sizeof(struct window));
+	win = init_tab(term);
 	if (!win) {
 		del_from_list(term);
 		mem_free(term);
 		check_if_no_terminal();
 		return NULL;
 	}
-
 	win->handler = root_window;
-	win->term = term;
-	win->type = WT_ROOT;
-
-	add_to_list(term->windows, win);
 
 	set_handlers(fdin, (void (*)(void *)) in_term, NULL,
 		     (void (*)(void *)) destroy_terminal, term);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.27 2003/05/04 16:27:26 zas Exp $ */
+/* $Id: session.c,v 1.28 2003/05/04 16:52:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1642,6 +1642,7 @@ win_func(struct window *win, struct event *ev, int fw)
 				destroy_terminal(win->term);
 				return;
 			}
+			/* fall-through */
 		case EV_RESIZE:
 			if (!ses) break;
 			html_interpret(ses);

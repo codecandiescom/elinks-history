@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.490 2004/09/21 17:34:02 jonas Exp $ */
+/* $Id: parser.c,v 1.491 2004/09/24 01:37:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,6 +407,19 @@ void
 html_style(unsigned char *a)
 {
 	html_skip(a);
+}
+
+void
+html_html(unsigned char *a)
+{
+	/* This is here just to get CSS stuff applied. */
+
+	/* Modify the root HTML element - format_html_part() will take
+	 * this from there. */
+	struct html_element *e = html_context.stack.prev;
+	DBG("Here?");
+
+	e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
 }
 
 void
@@ -1309,7 +1322,6 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;
-
 	add_to_list(html_context.stack, e);
 
 	format.attr = 0;

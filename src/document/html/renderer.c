@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.203 2003/08/23 06:19:25 jonas Exp $ */
+/* $Id: renderer.c,v 1.204 2003/08/23 06:37:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1069,6 +1069,7 @@ html_form_control(struct part *part, struct form_control *fc)
 
 	if (!part->document) {
 		done_form_control(fc);
+		mem_free(fc);
 		return;
 	}
 

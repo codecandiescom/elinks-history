@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.8 2003/01/03 00:38:36 pasky Exp $ */
+/* $Id: view.c,v 1.9 2003/01/03 02:23:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 #include "document/html/renderer.h"
 #include "globhist/dialogs.h"
 #include "intl/charsets.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 #include "lua/core.h"

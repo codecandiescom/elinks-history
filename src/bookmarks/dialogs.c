@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.66 2003/01/03 00:38:33 pasky Exp $ */
+/* $Id: dialogs.c,v 1.67 2003/01/03 02:23:53 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -25,10 +25,10 @@
 #include "dialogs/edit.h"
 #include "dialogs/hierbox.h"
 #include "document/session.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "util/error.h"
 #include "util/memory.h"
 

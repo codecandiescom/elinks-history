@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.73 2003/01/03 00:38:33 pasky Exp $ */
+/* $Id: menu.c,v 1.74 2003/01/03 02:23:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 #include "document/location.h"
 #include "document/session.h"
 #include "globhist/dialogs.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"

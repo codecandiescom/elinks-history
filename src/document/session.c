@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.90 2003/01/03 00:38:34 pasky Exp $ */
+/* $Id: session.c,v 1.91 2003/01/03 02:23:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"

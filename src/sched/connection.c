@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.4 2003/01/03 00:38:35 pasky Exp $ */
+/* $Id: connection.c,v 1.5 2003/01/03 02:23:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "document/cache.h"
 #include "document/session.h"
 #include "document/html/renderer.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.26 2003/01/03 00:02:26 pasky Exp $ */
+/* $Id: dialog.c,v 1.27 2003/01/03 02:23:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "bfu/widget.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 #include "util/conv.h"

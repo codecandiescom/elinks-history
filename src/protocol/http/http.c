@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.90 2003/01/03 02:12:54 pasky Exp $ */
+/* $Id: http.c,v 1.91 2003/01/03 02:23:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@
 #include "document/download.h"
 #include "document/session.h"
 #include "intl/charsets.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/sysname.h"
 #include "lowlevel/terminal.h"

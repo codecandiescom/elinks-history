@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.53 2003/01/03 00:38:35 pasky Exp $ */
+/* $Id: url.c,v 1.54 2003/01/03 02:23:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "bfu/msgbox.h"
 #include "config/options.h"
 #include "document/session.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "protocol/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp.h"

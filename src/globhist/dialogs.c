@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.15 2003/01/03 00:38:34 pasky Exp $ */
+/* $Id: dialogs.c,v 1.16 2003/01/03 02:23:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,7 @@
 #include "dialogs/edit.h"
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/kbd.h"
 #include "util/memory.h"
 #include "util/string.h"

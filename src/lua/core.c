@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.27 2003/01/03 00:38:35 pasky Exp $ */
+/* $Id: core.c,v 1.28 2003/01/03 02:23:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 #include "document/location.h"
 #include "document/session.h"
 #include "document/html/renderer.h"
-#include "intl/language.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"

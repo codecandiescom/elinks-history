@@ -1,3 +1,233 @@
+Wed Jan 21 18:16:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Cleanup.  
+
+Wed Jan 21 17:49:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Make the madness really end.  
+
+Wed Jan 21 17:40:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Compile fix.  
+
+Wed Jan 21 17:39:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Unify SGML tagsoup navigation and use native scanners to make it
+	much more forgiving.  
+
+Wed Jan 21 17:05:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Tidyup comments.  
+
+Wed Jan 21 17:02:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Introduce a skip token and made CSS_TOKEN_NONE again mean stop
+	scanning.  
+
+Wed Jan 21 16:21:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Treat ".<number>%" as garbage so it is not broken up.  
+
+Wed Jan 21 16:05:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Call update_link_state() those places that call put_chars(). Remove
+	various hacks that did it before.  
+
+Wed Jan 21 16:01:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Add link state enum to struct link_state_info and use that in
+	put_chars(). get_link_state() is now simply an updater.  
+
+Wed Jan 21 15:49:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Move link state information to a new struct link_state_info.  
+
+Wed Jan 21 15:36:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Yuk .. another hack to solve memleaks because of changing link
+	states. We have to globalize that thing somehow. Reported by lindi-
+	and excellent test case by fabiob.  
+
+Wed Jan 21 10:09:01 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/options.h,
+	document/renderer.c, document/plain/renderer.c, sched/action.c,
+	viewer/text/view.c, viewer/text/view.h, viewer/text/vs.h:
+
+	Wrapping plain text support switched by Shift+W.  
+
+Wed Jan 21 06:19:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h, value.c:
+
+	Check precedence of the current token so we do not skip '}' when
+	looking for ';'. Fixes background property strangeness.  
+
+Wed Jan 21 06:11:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Handle numbers starting with dots.  
+
+Wed Jan 21 05:46:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	get_css_identifier_type(): Do length calculation + rename to
+	ident2type() to minimize wrapping.  
+
+Wed Jan 21 05:39:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Fix skipper that didn.t break out when getting to skipto char.  
+
+Wed Jan 21 05:20:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	get_css_identifier_type(): Drop the inline. Cleanup.  
+
+Wed Jan 21 05:17:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Ensure ending ')' even for rgb() function tokens. Use the ident2type
+	table to check for known functions.  
+
+Wed Jan 21 05:05:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Pass base type to identifier resolver. Fixes resolving and speeds up
+	the lookup.  
+
+Wed Jan 21 04:44:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c, scanner.h:
+
+	Generate specific @-keyword tokens. Required a little renaming of
+	number identifier to type mapping.  
+
+Wed Jan 21 04:29:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Tidyup definitions.  
+
+Wed Jan 21 04:25:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, scanner.c, scanner.h:
+
+	CSS_TOKEN_ATRULE -> CSS_TOKEN_AT_KEYWORD.  
+
+Wed Jan 21 04:18:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Update comments and remove CSS_TOKEN_NAME.  
+
+Wed Jan 21 04:17:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	There is no name token. It is only used for hashes.  
+
+Wed Jan 21 04:03:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: apply.c, parser.c, parser.h:
+
+	Make css_parse_properties() take scanner as argument. This means the
+	applier needs to know about the scanner but it is really a paint to
+	debug when property parsing spawns a new scanner + it is less
+	efficient of course.  
+
+Wed Jan 21 03:54:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/README:
+
+	Tidyup.  
+
+Wed Jan 21 03:45:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Moved dumping of scanner to dump_css_scanner().  
+
+Wed Jan 21 03:04:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Make the scanner debugging much more powerful showing both the
+	generated tokens and compressed src position.  
+
+Wed Jan 21 01:46:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Remove the used scanner function from debug info. It don.t work very
+	well.  
+
+Wed Jan 21 01:20:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make get_css_token_() into a macro.  
+
+Wed Jan 21 01:00:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make get_next_css_token_() into a macro.  
+
+Wed Jan 21 00:38:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	check_next_css_token(): Make it into a macro. With the amount of
+	sanity checking we have now it should be safe.  
+
+Wed Jan 21 00:27:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Move scanner sanity checking to exits of scan_css_tokens().  
+
+Wed Jan 21 00:11:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	scan_css_tokens(): Return the current token.  
+
+Wed Jan 21 00:02:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Unbytesize move_to_front. I was thinking about making
+	scanner->tokens a pointer but that seems stupid now.  
+
 Tue Jan 20 22:25:37 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/: text.c, widget.h:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.549 2004/07/15 08:03:05 miciah Exp $ */
+/* $Id: view.c,v 1.550 2004/07/15 08:13:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1033,7 +1033,7 @@ quit:
 					struct window *tab = get_current_tab(ses->tab->term);
 
 					tab_menu(ses->tab->term, tab->data,
-						 ev->x, ev->y);
+						 ev->x, ev->y, 1);
 				}
 			}
 
@@ -1043,7 +1043,7 @@ quit:
 		if (doc_view) x = do_mouse_event(ses, ev, doc_view);
 
 		if (!x && check_mouse_button(ev, B_RIGHT)) {
-			tab_menu(ses->tab->term, ses, ev->x, ev->y);
+			tab_menu(ses->tab->term, ses, ev->x, ev->y, 0);
 		}
 	}
 #endif /* CONFIG_MOUSE */

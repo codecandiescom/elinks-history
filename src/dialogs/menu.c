@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.350 2004/07/15 08:03:05 miciah Exp $ */
+/* $Id: menu.c,v 1.351 2004/07/15 08:13:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,11 +194,11 @@ history_menu_model(unhistory_menu, next);
 
 
 void
-tab_menu(struct terminal *term, struct session *ses, int x, int y)
+tab_menu(struct terminal *term, struct session *ses, int x, int y,
+	 int place_above_cursor)
 {
 	struct menu_item *menu;
 	int tabs = number_of_tabs(term);
-	int i = 0;
 #ifdef CONFIG_BOOKMARKS
 	int anonymous = get_cmd_opt_bool("anonymous");
 #endif
@@ -247,8 +247,15 @@ tab_menu(struct terminal *term, struct session *ses, int x, int y)
 	}
 
 	/* Adjust the menu position taking the menu frame into account */
-	while (menu[i].text) i++;
-	set_window_ptr(ses->tab, x, int_max(y - i - 1, 0));
+	if (place_above_cursor) {
+		int i = 0;
+
+		while (menu[i].text) i++;
+
+		y = int_max(y - i - 1, 0);
+	}
+
+	set_window_ptr(ses->tab, x, y);
 
 	do_menu(term, menu, ses, 1);
 }

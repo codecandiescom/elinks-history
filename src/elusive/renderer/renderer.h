@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.2 2003/01/01 14:32:07 pasky Exp $ */
+/* $Id: renderer.h,v 1.3 2003/01/01 17:16:19 pasky Exp $ */
 
 #ifndef EL__USIVE_RENDERER_RENDERER_H
 #define EL__USIVE_RENDERER_RENDERER_H
@@ -24,6 +24,8 @@ enum renderer_backend_type {
 struct renderer_state {
 	enum renderer_backend_type renderer;
 	void *data;
+
+	/* Note that input and output is _NOT_ freed by done()! */
 
 	/* This pointer should contain data from the viewer (typically
 	 * specifications of the terminal). The data format is specified in

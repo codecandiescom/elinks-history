@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.6 2003/07/03 20:38:09 jonas Exp $ */
+/* $Id: types.h,v 1.7 2004/04/08 02:00:35 jonas Exp $ */
 
 #ifndef EL__UTIL_TYPES_H
 #define EL__UTIL_TYPES_H
@@ -65,7 +65,6 @@ enum info_type {
 	INFO_TRANSFER,
 	INFO_CONNECTING,
 	INFO_KEEP,
-	INFO_LIST,
 };
 
 #endif

@@ -1,3 +1,93 @@
+Fri Jun  7 20:09:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/README:
+
+	Added guide written by Brain.  
+
+Fri Jun  7 19:53:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/danish.lng, intl/dutch.lng,
+	intl/english.lng, intl/estonian.lng, intl/finnish.lng,
+	intl/french.lng, intl/galician.lng, intl/german.lng,
+	intl/greek.lng, intl/hungarian.lng, intl/icelandic.lng,
+	intl/indonesian.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng, src/dialogs/document.c,
+	src/document/view.c, src/document/view.h,
+	src/document/html/parser.c, src/document/html/parser.h,
+	src/document/html/renderer.c, src/document/html/renderer.h,
+	src/intl/lang_defs.h, src/intl/language.inc:
+
+	Added support for TITLE attribute of A, INPUT and IMG tags (it was
+	alias for ALT in IMG already; it still acts like that as well). The
+	attribute is displayed in current link part of the document info.
+	Idea by David Mediavilla <benxrqzpd001@sneakemail.com> and Dave
+	Mielke <dave@mielke.cc>.  
+
+Fri Jun  7 18:06:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c, document/dump.c:
+
+	Introduced document.dump.codepage (instead of hardwired codepage 0
+	aka us-ascii) (reported by Fredrik Eriksson
+	<fredrik.eriksson@flowsecurity.se>); moved document.dump_width to
+	document.dump.width; removed obsoleted hack in main.c,
+	get_cp_index() is now called directly in config/options.c. Don't
+	expect document.dump to live long, however, I think I'll make it
+	just a special case of terminal.  
+
+Fri Jun  7 17:37:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Set -Werror at the end of the configure, as configure tests were
+	failing otherwise.  
+
+Fri Jun  7 17:22:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/kbd.c:
+
+	Another compilation warning fix. *yawn* 
+
+Fri Jun  7 17:20:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: kbdbind.c, opttypes.c:
+
+	Fixed compilation warnings - return 0 in now unimplemented option
+	types reading functions.  
+
+Fri Jun  7 17:18:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Add -Werror to CFLAGS. Making hacking easy for the masses (tm).  
+
+Fri Jun  7 17:14:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.h:
+
+	Finally introduced get_opt_bool(), doing the same job as
+	get_opt_int() but making the stuff more consistent. That means also
+	compilation fix for the previous patch ;).  
+
+Fri Jun  7 17:03:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, lowlevel/kbd.c:
+
+	Introduced boolean option ui.window_title, determining whether we
+	will touch window title if ELinks is being run in xterm or so; idea
+	by Jorgen A. Erhard <jae+debian@jerhard.org>, also thanks to Peter
+	Gervai.  
+
+Fri Jun  7 15:26:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/romanian.lng, src/intl/language.inc:
+
+	Romanian translation update; patch by Ionel Mugurel Ciobica
+	<tgakic@chem.tue.nl>.  
+
 Sat Jun  1 18:46:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/: cmdline.c, conf.c, options.c, opttypes.c:

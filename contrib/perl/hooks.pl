@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.76 2005/03/30 20:20:53 rrowan Exp $
+# $Id: hooks.pl,v 1.77 2005/03/30 20:25:11 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -46,6 +46,7 @@ and does not contain the default values:
 
 	bork:       yep       # BORKify Google?
 	collapse:   okay      # Collapse all XBEL bookmark folders on exit?
+	email:                # Set to show one's own bugs with the "bug" prefix.
 	fortune:    elinks    # *fortune*, *elinks* tip, or *none* on quit?
 	googlebeta: hell no   # I miss DejaNews...
 	gotosearch: not yet   # Don't use this yet.  It's broken.

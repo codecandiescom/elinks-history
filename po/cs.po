@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-25 02:38+0200\n"
-"PO-Revision-Date: 2003-10-24 13:52+0200\n"
+"PO-Revision-Date: 2003-10-25 02:53+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4527,9 +4527,8 @@ msgid "Rows"
 msgstr "Øádky"
 
 #: src/dialogs/options.c:318
-#, fuzzy
 msgid "Resize terminal"
-msgstr "Zmìò velikost ~terminálu"
+msgstr "Zmìò velikost terminálu"
 
 #: src/formhist/formhist.c:335 src/util/version.c:107
 msgid "Forms memory"

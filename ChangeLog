@@ -1,3 +1,163 @@
+Wed Oct  1 20:02:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix segfault when trying to /. openoffice.org's 1.1 feature page.  
+
+Wed Oct  1 18:09:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Fixed alignment of a condition.  
+
+Wed Oct  1 17:39:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Title and url are now sanitized before adding or modifying a
+	bookmark, starting/ending spaces are removed, and bad chars are
+	repplaced with spaces in title, and causes error if in url.  
+
+Wed Oct  1 17:16:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, util/conv.h, util/string.c, util/string.h:
+
+	trim_chars() was moved from string.c to conv.h, since this function
+	modifies strings.  
+
+Wed Oct  1 16:38:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/guile/hooks.c:
+
+	Use evhook_use_params() to silence compiler warnings, uncommented
+	fetching of @ses from @va even if unused.  
+
+Wed Oct  1 16:37:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/event.h:
+
+	Introduced evhook_use_params(), universal usage enforcer of all
+	evhook parameters ;-). Idea by kuser and jonas.  
+
+Wed Oct  1 15:45:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Fix my reckless programming in previous patch. We need to va_arg()
+	ses but still silence any compiler warnings.  
+
+Wed Oct  1 15:09:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/Makefile.am:
+
+	Add palette.inc to list of files.  
+
+Wed Oct  1 15:04:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/configure.txt:
+
+	Fix minor typos and add info about string magic.  
+
+Wed Oct  1 14:52:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Wrap unused event parameters in #if 0 #endif 
+
+Wed Oct  1 14:52:44 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/configure.txt:
+
+	Descriptions of debug and fastmem configure options were added (idea
+	by Jonas). Feel free to complete and fix.  
+
+Wed Oct  1 14:19:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Fix add_format_to_string.  There must be `width + 1' instead of
+	`newlength´ as argument to vsnprintf because the size attribute of
+	vsnprintf includes the trailing null, but the return value doesn't.  
+	Patch by Karsten Schölzel.  
+
+Wed Oct  1 11:31:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: scripting.h, guile/hooks.c, lua/hooks.c:
+
+	Introduce NULL_SCRIPTING_HOOK ..  
+
+Wed Oct  1 10:33:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/event.c, sched/event.h, scripting/scripting.c,
+	scripting/scripting.h, scripting/guile/hooks.c,
+	scripting/lua/hooks.c:
+
+	Add a data pointer to event_handler and scripting_hook, which can be
+	set through register_event_hook to save a hook specific data
+	pointer. It is especially useful for binding keys from scripting
+	backends, e.g. if you register one callback to two different events,
+	you can distinguish both events with the data pointer, if you set
+	them to different values.  
+	
+	This patch and the 3 previous by Karsten Schölzel.  
+
+Wed Oct  1 10:26:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/Makefile.am:
+
+	Move libscripting before scripting backends.  
+
+Wed Oct  1 10:25:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Fix wrong variable name.  
+
+Wed Oct  1 10:21:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Return enum evnhook_tatus.  
+
+Wed Oct  1 00:49:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Hack of the day: Repaint the link line background when
+	use_document_colours = 2. Might need some fine tuning.  
+
+Wed Oct  1 00:35:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Fix blackspace.  
+
+Tue Sep 30 23:49:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Add Guile scripting and HTML meta refresh ..  
+
+Tue Sep 30 23:34:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* SITES:
+
+	Missing update of pld-linux.org for links rpms, drop
+	elinks.pld.org.pl and point to the community page for mailinglist
+	info.  
+
+Tue Sep 30 23:18:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.vim:
+
+	Add toggle-document-colors ...  
+
+Tue Sep 30 23:15:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/completion.tcsh:
+
+	Painfully out of date so better remove it.  
+
 Tue Sep 30 16:31:51 2003  Laurent Monin <zas@norz.org>:
 
 	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,

@@ -148,8 +148,6 @@ Protocols / network:
 - HTTPS proxy support (!) (I have no idea how to do it so someone else will
   have to; good job for a wannabe ELinks developer ;)
 
-- Take info about proxies from env variables (?)
-
 
 Scripting:
 
@@ -179,4 +177,4 @@ Permanent goals:
 
 Key: - nothing done + work in progress * almost ready
 
-$Id: TODO,v 1.46 2003/05/03 22:25:41 pasky Exp $
+$Id: TODO,v 1.47 2003/05/03 22:28:04 pasky Exp $

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.65 2003/11/19 23:44:25 jonas Exp $ */
+/* $Id: hierbox.c,v 1.66 2003/11/19 23:46:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,10 +177,6 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			return EVENT_NOT_PROCESSED;
 
 display_dlg:
-#ifdef BOOKMARKS
-			/* FIXME - move from here to bookmarks/dialogs.c! */
-			bookmarks_dirty = 1;
-#endif
 			display_dlg_item(dlg_data, dlg_data->widgets_data, 1);
 
 			return EVENT_PROCESSED;

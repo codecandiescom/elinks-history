@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-24 17:55+0100\n"
+"POT-Creation-Date: 2004-12-28 00:13+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -28,11 +28,11 @@ msgstr "Info"
 
 #: src/bfu/hierbox.c:445
 msgid "Press space to expand this folder."
-msgstr ""
+msgstr "Tryk mellemrum for at åbne denne mappe."
 
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
 #: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
-#: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/msgbox.c:173
+#: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/msgbox.c:175
 #: src/bookmarks/dialogs.c:263 src/bookmarks/dialogs.c:666
 #: src/config/dialogs.c:56 src/config/dialogs.c:101 src/config/dialogs.c:341
 #: src/config/dialogs.c:410 src/config/dialogs.c:440 src/config/dialogs.c:478
@@ -43,8 +43,8 @@ msgstr ""
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
 #: src/dialogs/options.c:172 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:476 src/ecmascript/spidermonkey.c:2115
-#: src/ecmascript/spidermonkey.c:2142 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:509 src/ecmascript/spidermonkey.c:2103
+#: src/ecmascript/spidermonkey.c:2130 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/protocol.c:227 src/protocol/user.c:268
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
@@ -62,51 +62,38 @@ msgid "OK"
 msgstr "Ok"
 
 #: src/bfu/hierbox.c:564
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+msgstr "Desværre, indgangen \"%s\" kan ikke slettes."
 
 #: src/bfu/hierbox.c:565
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+msgstr "Desværre, indgangen \"%s\" bliver brugt andetsteds."
 
-#: src/bfu/hierbox.c:568
-#, fuzzy, c-format
+#. cant_delete_folder
+#: src/bfu/hierbox.c:568 src/bookmarks/dialogs.c:124
+#, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+msgstr "Desværre, folderen \"%s\" kan ikke slettes."
 
-#: src/bfu/hierbox.c:569
-#, fuzzy, c-format
+#. cant_delete_used_folder
+#: src/bfu/hierbox.c:569 src/bookmarks/dialogs.c:126
+#, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+msgstr "Desværre, folderen \"%s\" bliver brugt andetsteds."
 
 #: src/bfu/hierbox.c:635
-#, fuzzy
 msgid "Delete error"
-msgstr "Slet bokmærke"
+msgstr "Fejl ved sletning"
 
 #: src/bfu/hierbox.c:731
-#, fuzzy
 msgid "Delete marked items"
-msgstr "Slet historik indgang"
+msgstr "Slet markeret indgang"
 
 #: src/bfu/hierbox.c:732
-#, fuzzy
 msgid "Delete marked items?"
-msgstr "Slet historik indgang"
+msgstr "Slet markerede indgange"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
 #: src/bfu/hierbox.c:873 src/config/dialogs.c:828 src/dialogs/menu.c:125
@@ -124,40 +111,36 @@ msgstr "Nej"
 
 #. delete_folder_title
 #: src/bfu/hierbox.c:766 src/bookmarks/dialogs.c:132
-#, fuzzy
 msgid "Delete folder"
-msgstr "Slet bokmærke"
+msgstr "Slet folder"
 
 #: src/bfu/hierbox.c:767
-#, fuzzy, c-format
+#, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Slet indholdet af mappen \"%s\"?"
+msgstr "Slet folderen \"%s\" og dens indhold?"
 
 #: src/bfu/hierbox.c:784
-#, fuzzy
 msgid "Delete item"
-msgstr "Slet historik indgang"
+msgstr "Slet indgang"
 
 #: src/bfu/hierbox.c:785
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete \"%s\"?\n"
 "\n"
 "%s"
 msgstr ""
-"Slet bokmærke \"%s\" ?\n"
+"Slet \"%s\"?\n"
 "\n"
-"URL: \"%s\""
+"%s"
 
 #: src/bfu/hierbox.c:842
-#, fuzzy
 msgid "Clear all items"
-msgstr "Ryd global historik"
+msgstr "Ryd alle indgange"
 
 #: src/bfu/hierbox.c:843
-#, fuzzy
 msgid "Do you really want to remove all items?"
-msgstr "Vil du virkelig afslutte ELinks?"
+msgstr "Vil du virkelig slette alle indgange?"
 
 #: src/bfu/hierbox.c:940 src/bfu/hierbox.c:973 src/bookmarks/dialogs.c:451
 #: src/cache/dialogs.c:222 src/config/dialogs.c:523 src/config/dialogs.c:945
@@ -168,9 +151,9 @@ msgid "Search"
 msgstr "Søg"
 
 #: src/bfu/hierbox.c:942 src/viewer/text/search.c:987
-#, fuzzy, c-format
+#, c-format
 msgid "Search string '%s' not found"
-msgstr "Søgningen gav intet resultat"
+msgstr "Søgestrengen '%s' blev ikke fundet"
 
 #: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
 #: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:137
@@ -188,10 +171,9 @@ msgstr "Navn"
 #: src/dialogs/options.c:250 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
-#: src/sched/download.c:1053 src/sched/download.c:1066
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1572
-#: src/viewer/text/view.c:723
+#: src/sched/download.c:1085 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
+#: src/viewer/text/search.c:1572 src/viewer/text/view.c:723
 msgid "Cancel"
 msgstr "Annuller"
 
@@ -206,7 +188,7 @@ msgstr "Nummer forventet i felt"
 #: src/bfu/inpfield.c:77
 #, c-format
 msgid "Number should be in the range from %d to %d."
-msgstr ""
+msgstr "Nummeret skal være et tal mellem %d og %d."
 
 #: src/bfu/inpfield.c:97
 msgid "Bad string"
@@ -214,73 +196,63 @@ msgstr "Ugyldig tekststreng"
 
 #: src/bfu/inpfield.c:98
 msgid "Empty string not allowed"
-msgstr "Tom tekststren ikke tilladt"
+msgstr "Tom tekststreng ikke tilladt"
 
 #: src/bfu/leds.c:73
-#, fuzzy
 msgid "Clock"
-msgstr "låst"
+msgstr "Ur"
 
 #: src/bfu/leds.c:74
 msgid "Digital clock in the status bar."
-msgstr ""
+msgstr "Digitalt ur i statuslinien."
 
-#: src/bfu/leds.c:78 src/bfu/leds.c:84 src/bfu/leds.c:104
-#: src/config/options.inc:1087 src/config/options.inc:1094
-#: src/ecmascript/ecmascript.c:41 src/globhist/globhist.c:64
-#: src/mime/backend/mailcap.c:94 src/mime/backend/mimetypes.c:53
-#: src/ssl/ssl.c:81
+#: src/bfu/leds.c:76 src/bfu/leds.c:93 src/config/options.inc:1087
+#: src/config/options.inc:1094 src/ecmascript/ecmascript.c:41
+#: src/globhist/globhist.c:64 src/mime/backend/mailcap.c:94
+#: src/mime/backend/mimetypes.c:53 src/ssl/ssl.c:81
 msgid "Enable"
-msgstr "Slå til"
+msgstr "Anvend"
+
+#: src/bfu/leds.c:78
+msgid "Whether to display a digital clock in the status bar."
+msgstr "Kontrollerer visning af et digitalt ur i statuslinien."
 
 #: src/bfu/leds.c:80
-msgid ""
-"Whether to display a digital clock in the status bar.\n"
-"Note that the LED indicators must be enabled for this\n"
-"to take effect."
-msgstr ""
-
-#: src/bfu/leds.c:86
-msgid ""
-"Whether to display a digital clock in the status bar.\n"
-"Note that the LED indicators (DISABLED) must be enabled\n"
-"for this to take any effect."
-msgstr ""
-
-#: src/bfu/leds.c:91
-#, fuzzy
 msgid "Format"
-msgstr "Filformat"
+msgstr "Format"
 
-#: src/bfu/leds.c:93
+#: src/bfu/leds.c:82
 msgid ""
 "Format string for the digital clock. See the strftime(3)\n"
 "manpage for details."
 msgstr ""
+"Formatteringsstreng for det digitale ur. Se manual siden strftime(3)\n"
+"for hjælp."
 
-#: src/bfu/leds.c:100
+#: src/bfu/leds.c:89
 msgid "LEDs"
-msgstr ""
+msgstr "LEDs"
 
-#: src/bfu/leds.c:102
+#: src/bfu/leds.c:91
 msgid "LEDs (visual indicators) options."
-msgstr ""
+msgstr "LEDs (visuel indikatorer) indstillinger"
 
-#: src/bfu/leds.c:106
+#: src/bfu/leds.c:95
 msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
 msgstr ""
+"Anvend LEDs.\n"
+"Disse visuelle indikatorer vil informere dig om forskellige programtilstande."
 
 #. name:
-#: src/bfu/leds.c:291
+#: src/bfu/leds.c:280
 msgid "LED indicators"
-msgstr ""
+msgstr "LED indikatorer"
 
 #: src/bfu/menu.c:746
-#, fuzzy
 msgid "Search menu/"
-msgstr "Søgning"
+msgstr "Søg menu/"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -292,12 +264,13 @@ msgid "read_bookmarks_xbel(): Error reading %s"
 msgstr "read_bookmarks_xbel(): Fejl ved læsning af %s"
 
 #: src/bookmarks/backend/xbel.c:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Parse error while processing XBEL bookmarks in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Parsningsfejl i %s, linje %d tegn nummer %d:\n"
+"Under læsning af XBEL bogmærker opstod en parsningsfejl i %s, linje %d tegn "
+"nummer %d:\n"
 "%s"
 
 #: src/bookmarks/backend/xbel.c:384 src/bookmarks/backend/xbel.c:405
@@ -305,9 +278,8 @@ msgid "No title"
 msgstr "Ingen titel"
 
 #: src/bookmarks/backend/xbel.c:390
-#, fuzzy
 msgid "No URL"
-msgstr "Gå til URL"
+msgstr "Ingen URL"
 
 #. name:
 #: src/bookmarks/bookmarks.c:47 src/bookmarks/bookmarks.c:157
@@ -328,6 +300,10 @@ msgid ""
 "0 is the default native ELinks format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
+"Filformat for bogmærker (kontrollere både læsning og gemning):\n"
+"0 er det indbyggede ELinks format\n"
+"1 er XBEL universel XML bogmærke format (ingen nationale bogstaver "
+"understøttes!)"
 
 #: src/bookmarks/bookmarks.c:60
 msgid ""
@@ -336,10 +312,14 @@ msgid ""
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)  "
 "(DISABLED)"
 msgstr ""
+"Filformat for bogmærker (kontrollere både læsning og gemning):\n"
+"0 er det indbyggede ELinks format\n"
+"1 er XBEL universel XML bogmærke format (ingen nationale bogstaver "
+"understøttes!) (anvendes ikke)"
 
 #: src/bookmarks/bookmarks.c:66
 msgid "Periodic snapshotting"
-msgstr ""
+msgstr "Periodisk gemning af øjebliksbillede"
 
 #: src/bookmarks/bookmarks.c:68
 msgid ""
@@ -350,6 +330,11 @@ msgid ""
 "\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automatisk gem et øjebliksbillede af alle faneblade periodisk.\n"
+"Dette vil periodisk gemme alle faneblade i alle åbne terminaler\n"
+"som bogmærker i en separat folder for senere genskabelse i tilfælde\n"
+"af nedbrug.\n"
+"Denne egenskab kræver bogmærke understøttelse."
 
 #: src/bookmarks/dialogs.c:75 src/config/options.inc:943
 #: src/dialogs/document.c:81 src/globhist/dialogs.c:66
@@ -364,43 +349,18 @@ msgstr "URL"
 
 #. cant_delete_item
 #: src/bookmarks/dialogs.c:120
-#, fuzzy, c-format
-msgid "Sorry, but bookmark \"%s\" cannot be deleted."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+#, c-format
+msgid "Sorry, but the bookmark \"%s\" cannot be deleted."
+msgstr "Desværre, bogmærket \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/bookmarks/dialogs.c:122
-#, fuzzy, c-format
-msgid "Sorry, but bookmark \"%s\" is being used by something else."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
-
-#. cant_delete_folder
-#: src/bookmarks/dialogs.c:124
-#, fuzzy, c-format
-msgid "Sorry, but folder \"%s\" cannot be deleted."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
-
-#. cant_delete_used_folder
-#: src/bookmarks/dialogs.c:126
-#, fuzzy, c-format
-msgid "Sorry, but folder \"%s\" is being used by something else."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+#, c-format
+msgid "Sorry, but the bookmark \"%s\" is being used by something else."
+msgstr "Desværre, bogmærket \"%s\" bliver brugt andetsteds."
 
 #. delete_marked_items_title
 #: src/bookmarks/dialogs.c:128
-#, fuzzy
 msgid "Delete marked bookmarks"
 msgstr "Slet markerede bogmærker?"
 
@@ -411,41 +371,37 @@ msgstr "Slet markerede bogmærker?"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:134
-#, fuzzy, c-format
-msgid "Delete folder \"%s\" and all bookmarks in it?"
-msgstr "Slet indholdet af mappen \"%s\"?"
+#, c-format
+msgid "Delete the folder \"%s\" and all bookmarks in it?"
+msgstr "Slet folderen \"%s\" og alle bogmærker i den?"
 
 #. delete_item_title
 #: src/bookmarks/dialogs.c:136
-#, fuzzy
 msgid "Delete bookmark"
-msgstr "Slet markerede bogmærker?"
+msgstr "Slet bogmærke"
 
 #. delete_item
 #: src/bookmarks/dialogs.c:138
-#, fuzzy
 msgid "Delete this bookmark?"
-msgstr "Slet markerede bogmærker?"
+msgstr "Slet dette bogmærke?"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:140
-#, fuzzy
 msgid "Clear all bookmarks"
-msgstr "Søg bogmærker"
+msgstr "Ryd alle bogmærker"
 
 #. clear_all_items_title
 #: src/bookmarks/dialogs.c:142
-#, fuzzy
 msgid "Do you really want to remove all bookmarks?"
-msgstr "Vil du virkelig afslutte ELinks?"
+msgstr "Vil du virkelig ryde alle bogmærker?"
 
 #: src/bookmarks/dialogs.c:262 src/bookmarks/dialogs.c:449
 msgid "Add folder"
-msgstr "Tilføj mappe"
+msgstr "Tilføj folder"
 
 #: src/bookmarks/dialogs.c:262
 msgid "Folder name"
-msgstr "Mappe navn"
+msgstr "Folder navn"
 
 #: src/bookmarks/dialogs.c:307 src/scripting/lua/core.c:387
 msgid "Edit bookmark"
@@ -489,7 +445,7 @@ msgstr "Ryd"
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:425
 #: src/dialogs/options.c:174 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
-#: src/sched/download.c:1050
+#: src/sched/download.c:1078
 msgid "Save"
 msgstr "Gem"
 
@@ -506,28 +462,24 @@ msgid "Add bookmark"
 msgstr "Tilføj bogmærke"
 
 #: src/bookmarks/dialogs.c:657
-#, fuzzy
 msgid "Saved session"
-msgstr "Gem ind~stillinger"
+msgstr "Gemt tilstand"
 
 #: src/bookmarks/dialogs.c:665
-#, fuzzy
 msgid "Bookmark tabs"
-msgstr "Bogmærker"
+msgstr "Gem faneblade som bogmærker"
 
 #: src/bookmarks/dialogs.c:665
-#, fuzzy
 msgid "Enter folder name"
-msgstr "Mappe navn"
+msgstr "Indtast folder navn"
 
 #: src/cache/dialogs.c:72
-#, fuzzy
 msgid "Proxy URL"
-msgstr "Gå til URL"
+msgstr "Proxy URL"
 
 #: src/cache/dialogs.c:77
 msgid "Redirect"
-msgstr ""
+msgstr "Omdirigering"
 
 #: src/cache/dialogs.c:85 src/config/options.inc:500 src/dialogs/document.c:92
 msgid "Size"
@@ -535,12 +487,11 @@ msgstr "Størrelse"
 
 #: src/cache/dialogs.c:86
 msgid "Loaded size"
-msgstr ""
+msgstr "Indlæst størrelse"
 
 #: src/cache/dialogs.c:89
-#, fuzzy
 msgid "Content type"
-msgstr "Indholdstype er"
+msgstr "Indholdstype"
 
 #: src/cache/dialogs.c:93 src/dialogs/document.c:137
 msgid "Last modified"
@@ -555,9 +506,8 @@ msgid "Encoding"
 msgstr "Indkodning"
 
 #: src/cache/dialogs.c:111
-#, fuzzy
 msgid "Flags"
-msgstr "Alias"
+msgstr "Statusflag"
 
 #: src/cache/dialogs.c:114 src/dialogs/document.c:95
 msgid "incomplete"
@@ -565,62 +515,51 @@ msgstr "ufuldstændig"
 
 #: src/cache/dialogs.c:117 src/protocol/auth/dialogs.c:175
 msgid "invalid"
-msgstr ""
+msgstr "ugyldig"
 
 #: src/cache/dialogs.c:122
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: src/cache/dialogs.c:125 src/config/options.inc:623
-#, fuzzy
 msgid "Header"
-msgstr "Info om sidehoved"
+msgstr "Teksthoved"
 
 #. cant_delete_item
 #: src/cache/dialogs.c:178
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cache entry \"%s\" cannot be deleted."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+msgstr "Desværre, cache indgangen \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/cache/dialogs.c:180
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but cache entry \"%s\" is being used by something else."
-msgstr ""
-"Desværre, dette bogmærke er allerede i brug.\n"
-"\n"
-"Titel: \"%s\""
+msgstr "Desværre, cache indgangen \"%s\" bliver brugt andetsteds."
 
 #. delete_marked_items_title
 #: src/cache/dialogs.c:186
-#, fuzzy
 msgid "Delete marked cache entries"
-msgstr "Slet historik indgang"
+msgstr "Slet markerede cache indgange"
 
 #. delete_marked_items
 #: src/cache/dialogs.c:188
-#, fuzzy
 msgid "Delete marked cache entries?"
-msgstr "Slet historik indgang"
+msgstr "Slet markerede cache indgange?"
 
 #. delete_item_title
 #: src/cache/dialogs.c:194
-#, fuzzy
 msgid "Delete cache entry"
-msgstr "Slet bokmærke"
+msgstr "Slet cache indgang"
 
 #. delete_item
 #: src/cache/dialogs.c:196
 msgid "Delete this cache entry?"
-msgstr ""
+msgstr "Slet denne cache indgang?"
 
 #: src/cache/dialogs.c:227
-#, fuzzy
 msgid "Cache manager"
-msgstr "Åben historikhåndtering"
+msgstr "Cachehåndtering"
 
 #: src/config/cmdline.c:91
 #, c-format
@@ -651,61 +590,55 @@ msgstr "Værtsmaskinen kan ikke lokaliseres"
 
 #: src/config/cmdline.c:173
 msgid "Resolver error"
-msgstr "Fejl ved resolution"
+msgstr "Fejl ved lokalisering"
 
 #: src/config/cmdline.c:305
 msgid "Remote method not supported"
-msgstr ""
+msgstr "Fjernmetode kendes ikke"
 
 #: src/config/cmdline.c:357
 msgid "Template option folder"
 msgstr "Skabelon indstillingsmappe"
 
 #: src/config/cmdline.c:380
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %ld)"
-msgstr "    %s%s%s %s (standardværdi: %d)"
+msgstr "(standardværdi: %d)"
 
 #: src/config/cmdline.c:387 src/config/cmdline.c:416
-#, fuzzy, c-format
+#, c-format
 msgid "(default: \"%s\")"
-msgstr "    %s%s%s %s (standardværdi:\" %s\")"
+msgstr "(standardværdi: \"%s\")"
 
 #: src/config/cmdline.c:392
-#, fuzzy, c-format
+#, c-format
 msgid "(alias for %s)"
-msgstr "    %s%s%s %s (alias til %s)"
+msgstr "(alias til %s)"
 
 #: src/config/cmdline.c:397 src/config/cmdline.c:406
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %s)"
-msgstr "    %s%s%s %s (standardværdi: %s)"
+msgstr "(standardværdi: %s)"
 
 #: src/config/cmdline.c:537
-#, fuzzy
 msgid "Configuration options"
-msgstr "Konfigurationsindstillinger:\n"
+msgstr "Konfigurationsindstillinger"
 
 #: src/config/cmdline.c:541
-#, fuzzy
 msgid "Usage: elinks [OPTION]... [URL]"
-msgstr ""
-"Brug: elinks [INDSTILLING]... [URL]\n"
-"\n"
+msgstr "Brug: elinks [INDSTILLING]... [URL]"
 
 #: src/config/cmdline.c:542
-#, fuzzy
 msgid "Options"
-msgstr "Indstilling:\n"
+msgstr "Indstillinger"
 
 #: src/config/cmdline.c:584
-#, fuzzy
 msgid "Internal consistency error"
-msgstr "Intern fejl"
+msgstr "Intern konsistensfejl"
 
 #: src/config/cmdline.c:601
 msgid "Restrict to anonymous mode"
-msgstr ""
+msgstr "Begræns til anonym tilstand"
 
 #: src/config/cmdline.c:603
 msgid ""
@@ -714,6 +647,10 @@ msgid ""
 "is allowed, but user can't add or modify entries in\n"
 "association table."
 msgstr ""
+"Begræns ELinks så den kan køres på en anonym brugerkonto.\n"
+"Ingen læsning af lokale filer, ingen filoverførelser. Afvikling\n"
+"af eksterne visualiseringsprogrammer er tilladt, men brugeren\n"
+"kan ikke tilføje eller ændre indgange i filtypehåndteringstabellen."
 
 #: src/config/cmdline.c:608
 #, fuzzy
@@ -2389,6 +2326,7 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr ""
 
+#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -2786,15 +2724,15 @@ msgstr "Nedhentning"
 
 #: src/config/options.inc:587
 msgid "Options regarding files downloading and handling."
-msgstr "Indstillinger for fil nedhentning og håndtering."
+msgstr "Indstillinger for filoverførelse og håndtering."
 
 #: src/config/options.inc:589
 msgid "Default download directory"
-msgstr "Standard nedhentningsmappe"
+msgstr "Standard filoverføringsmappe"
 
 #: src/config/options.inc:591
 msgid "Default download directory."
-msgstr "Standard nedhentnings mappe."
+msgstr "Standard filoverførings mappe."
 
 #: src/config/options.inc:593
 msgid "Set original time"
@@ -2805,7 +2743,7 @@ msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
-"Sæt tidstemplet for hver nedhentet fil to tidsstemplet gemt\n"
+"Sæt tidstemplet for hver overført fil to tidsstemplet gemt\n"
 "på serveren."
 
 #. Does automatic resuming make sense as an option?
@@ -4887,11 +4825,11 @@ msgstr ""
 msgid "Maximum execution time in seconds for a script."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:473
+#: src/ecmascript/spidermonkey.c:506
 msgid "JavaScript Alert"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2098
+#: src/ecmascript/spidermonkey.c:2086
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4902,7 +4840,7 @@ msgid ""
 ".%*s^%*s."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2106
+#: src/ecmascript/spidermonkey.c:2094
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -4910,15 +4848,15 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2113
+#: src/ecmascript/spidermonkey.c:2101
 msgid "JavaScript Error"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2133
+#: src/ecmascript/spidermonkey.c:2121
 msgid "JavaScript Emergency"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:2135
+#: src/ecmascript/spidermonkey.c:2123
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
@@ -5155,132 +5093,132 @@ msgstr ""
 msgid "Global History"
 msgstr "Historik håndtering"
 
-#: src/intl/gettext/libintl.c:24
+#: src/intl/gettext/libintl.c:28
 #, fuzzy
 msgid "System"
 msgstr "Navn"
 
-#: src/intl/gettext/libintl.c:25
+#: src/intl/gettext/libintl.c:29
 msgid "English"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:27
+#: src/intl/gettext/libintl.c:31
 msgid "Belarusian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:28
+#: src/intl/gettext/libintl.c:32
 msgid "Brazilian Portuguese"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:29
+#: src/intl/gettext/libintl.c:33
 msgid "Bulgarian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:30
+#: src/intl/gettext/libintl.c:34
 msgid "Catalan"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:31
+#: src/intl/gettext/libintl.c:35
 #, fuzzy
 msgid "Croatian"
 msgstr "handling"
 
-#: src/intl/gettext/libintl.c:32
+#: src/intl/gettext/libintl.c:36
 #, fuzzy
 msgid "Czech"
 msgstr "Cache"
 
-#: src/intl/gettext/libintl.c:33
+#: src/intl/gettext/libintl.c:37
 msgid "Danish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:34
+#: src/intl/gettext/libintl.c:38
 msgid "Dutch"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:35
+#: src/intl/gettext/libintl.c:39
 msgid "Estonian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:36
+#: src/intl/gettext/libintl.c:40
 msgid "Finnish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:37
+#: src/intl/gettext/libintl.c:41
 msgid "French"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:38
+#: src/intl/gettext/libintl.c:42
 msgid "Galician"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:39
+#: src/intl/gettext/libintl.c:43
 msgid "German"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:40
+#: src/intl/gettext/libintl.c:44
 msgid "Greek"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:41
+#: src/intl/gettext/libintl.c:45
 msgid "Hungarian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:42
+#: src/intl/gettext/libintl.c:46
 msgid "Icelandic"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:43
+#: src/intl/gettext/libintl.c:47
 msgid "Indonesian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:44
+#: src/intl/gettext/libintl.c:48
 msgid "Italian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:45
+#: src/intl/gettext/libintl.c:49
 msgid "Lithuanian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:46
+#: src/intl/gettext/libintl.c:50
 msgid "Norwegian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:47
+#: src/intl/gettext/libintl.c:51
 #, fuzzy
 msgid "Polish"
 msgstr "Politik"
 
-#: src/intl/gettext/libintl.c:48
+#: src/intl/gettext/libintl.c:52
 msgid "Portuguese"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:49
+#: src/intl/gettext/libintl.c:53
 #, fuzzy
 msgid "Romanian"
 msgstr "Dokument~information"
 
-#: src/intl/gettext/libintl.c:50
+#: src/intl/gettext/libintl.c:54
 msgid "Russian"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:51
+#: src/intl/gettext/libintl.c:55
 msgid "Slovak"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:52
+#: src/intl/gettext/libintl.c:56
 msgid "Spanish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:53
+#: src/intl/gettext/libintl.c:57
 msgid "Swedish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:54
+#: src/intl/gettext/libintl.c:58
 msgid "Turkish"
 msgstr ""
 
-#: src/intl/gettext/libintl.c:55
+#: src/intl/gettext/libintl.c:59
 msgid "Ukrainian"
 msgstr ""
 
@@ -5433,29 +5371,29 @@ msgstr "Bloker terminalen når et ekstern program kører."
 msgid "Program"
 msgstr "Program"
 
-#: src/mime/backend/default.c:74
-#, c-format
+#: src/mime/backend/default.c:75
+#, no-c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
 msgstr ""
 
-#: src/mime/backend/default.c:78
+#: src/mime/backend/default.c:79
 msgid "File extension associations"
 msgstr "Associationer for fil endelser"
 
-#: src/mime/backend/default.c:80
+#: src/mime/backend/default.c:81
 msgid "Extension <-> MIME type association."
 msgstr "Association for fil endelse til MIME type"
 
-#: src/mime/backend/default.c:84
+#: src/mime/backend/default.c:85
 msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
 msgstr ""
 
 #. name:
-#: src/mime/backend/default.c:220
+#: src/mime/backend/default.c:221
 #, fuzzy
 msgid "Option system"
 msgstr "Indstilling:\n"
@@ -6230,22 +6168,23 @@ msgstr ""
 msgid "Dumb prefixes, see enable-dumb description for details."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:74
+#: src/protocol/rewrite/rewrite.c:75
+#, no-c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:78
+#: src/protocol/rewrite/rewrite.c:79
 msgid "Smart Prefixes"
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:80
+#: src/protocol/rewrite/rewrite.c:81
 msgid "Smart prefixes, see enable-smart description for details."
 msgstr ""
 
-#: src/protocol/rewrite/rewrite.c:86
+#: src/protocol/rewrite/rewrite.c:87
 msgid ""
 "Replacement URI for this smartprefix.\n"
 "%c in the string means the current URL\n"
@@ -6255,7 +6194,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:356
+#: src/protocol/rewrite/rewrite.c:357
 msgid "URI rewrite"
 msgstr ""
 
@@ -6394,12 +6333,12 @@ msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
 #: src/sched/download.c:1020 src/sched/download.c:1030
-#: src/sched/download.c:1051 src/sched/download.c:1064
+#: src/sched/download.c:1083
 msgid "Display"
 msgstr "Vis"
 
 #: src/sched/download.c:1021 src/sched/download.c:1031
-#: src/sched/download.c:1052 src/sched/download.c:1065
+#: src/sched/download.c:1084
 #, fuzzy
 msgid "Show header"
 msgstr "Vis skabelon"
@@ -6409,27 +6348,28 @@ msgstr "Vis skabelon"
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1042 src/sched/download.c:1056
+#: src/sched/download.c:1052
+#, c-format
+msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
+msgstr ""
+
+#: src/sched/download.c:1056
 msgid "What to do?"
 msgstr "Hvad skal jeg gøre?"
 
-#: src/sched/download.c:1043
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', save it or display it?"
+#: src/sched/download.c:1068
+#, no-c-format
+msgid "Program ('%' will be replaced by the filename)"
 msgstr ""
 
-#: src/sched/download.c:1049 src/sched/download.c:1063
+#: src/sched/download.c:1071
+#, c-format
+msgid "The file will be opened with the program '%s'."
+msgstr ""
+
+#: src/sched/download.c:1076
 msgid "Open"
 msgstr "Åben"
-
-#: src/sched/download.c:1057
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
-msgstr ""
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6785,7 +6725,7 @@ msgstr ""
 msgid "Could not read event: %d (%s)"
 msgstr "Kunne ikke skrive til fil"
 
-#: src/terminal/kbd.c:988
+#: src/terminal/kbd.c:998
 msgid "Too many bytes read from the itrm!"
 msgstr ""
 
@@ -7081,10 +7021,6 @@ msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
 
 #, fuzzy
-#~ msgid "Leet"
-#~ msgstr "Slet"
-
-#, fuzzy
 #~ msgid "Expand table columns"
 #~ msgstr "Slå til"
 
@@ -7093,18 +7029,6 @@ msgstr "Fejl ved skrivning til fil"
 
 #~ msgid "~Memory info"
 #~ msgstr "Huko~mmelsesinformation"
-
-#, fuzzy
-#~ msgid "Is the current link bookmarked"
-#~ msgstr "Vis det nuværende billede"
-
-#, fuzzy
-#~ msgid "Is the current location bookmarked"
-#~ msgstr "Vis det nuværende billede"
-
-#, fuzzy
-#~ msgid "Is the current link is the history"
-#~ msgstr "Åben det nuværende lænke i nyt vindue"
 
 #~ msgid "Number of cached formatted pages."
 #~ msgstr "Antal behandlede sider i cache."

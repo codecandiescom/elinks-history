@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.72 2004/06/16 20:53:32 zas Exp $ */
+/* $Id: textarea.c,v 1.73 2004/06/16 20:55:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,15 +517,15 @@ textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 		if (position < line[y].start) continue;
 
 		wrap = (line[y+1].start == line[y].end);
-		if (position < line[y].end + !wrap) {
-			fs->state = line[y].end - fs->value;
+		if (position >= line[y].end + !wrap) continue;
 
-			/* Don't jump to next line when wrapping. */
-			if (wrap && fs->state && fs->state < strlen(fs->value))
-				fs->state--;
+		fs->state = line[y].end - fs->value;
 
-			goto free_and_return;
-		}
+		/* Don't jump to next line when wrapping. */
+		if (wrap && fs->state && fs->state < strlen(fs->value))
+			fs->state--;
+
+		goto free_and_return;
 	}
 	fs->state = strlen(fs->value);
 

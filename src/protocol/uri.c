@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.149 2004/04/06 07:04:30 jonas Exp $ */
+/* $Id: uri.c,v 1.150 2004/04/06 07:07:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,6 +406,11 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 			}
 
 			src += 3;
+		} else if (dsep(src[0]) && dsep(src[1])) {
+
+			/* // - ignore first '/'. */
+
+			src += 1;
 		} else {
 proceed: ;
 			*dest++ = *src++;

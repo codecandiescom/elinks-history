@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: scanner.c,v 1.3 2004/09/24 00:59:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,8 @@ check_sgml_precedence(int type, int skipto)
 /* XXX: Only element or ``in tag'' precedence is handled correctly however
  * using this function for CDATA or text would be overkill. */
 static inline unsigned char *
-skip_sgml(struct scanner *scanner, unsigned char **string, unsigned char skipto)
+skip_sgml(struct scanner *scanner, unsigned char **string, unsigned char skipto,
+	  int check_quoting)
 {
 	unsigned char *pos = *string;
 
@@ -160,7 +161,7 @@ skip_sgml(struct scanner *scanner, unsigned char **string, unsigned char skipto)
 		if (!check_sgml_precedence(*pos, skipto))
 			break;
 
-		if (isquote(*pos)) {
+		if (check_quoting && isquote(*pos)) {
 			int length = scanner->end - pos;
 			unsigned char *end = memchr(pos + 1, *pos, length);
 
@@ -221,7 +222,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 			case SGML_TOKEN_NOTATION_COMMENT:
 				token->string = string;
 
-				while (skip_sgml(scanner, &string, '>')) {
+				while (skip_sgml(scanner, &string, '>', 0)) {
 					unsigned char *pos = string - 3;
 
 					if (pos < token->string
@@ -235,7 +236,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 				break;
 
 			default:
-				skip_sgml(scanner, &string, '>');
+				skip_sgml(scanner, &string, '>', 0);
 			}
 
 		} else if (*string == '?') {
@@ -250,7 +251,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 			type = map_scanner_string(scanner, pos, string, base);
 
 			/* Figure out where the processing instruction ends */
-			for (pos = string; skip_sgml(scanner, &pos, '>'); ) {
+			for (pos = string; skip_sgml(scanner, &pos, '>', 0); ) {
 				if (pos[-2] != '?') continue;
 
 				/* Set length until '?' char and move position
@@ -280,7 +281,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 				scan_sgml(scanner, string, SGML_CHAR_IDENT);
 				real_length = string - token->string;
 
-				if (skip_sgml(scanner, &string, '>'))
+				if (skip_sgml(scanner, &string, '>', 1))
 					type = SGML_TOKEN_ELEMENT_END;
 
 			} else if (*string == '>') {
@@ -294,7 +295,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 
 		} else {
 			/* Alien < > stuff so ignore it */
-			skip_sgml(scanner, &string, '>');
+			skip_sgml(scanner, &string, '>', 0);
 		}
 
 	} else if (first_char == '=') {
@@ -302,7 +303,7 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 
 	} else if (first_char == '?' || first_char == '>') {
 		if (first_char == '?') {
-			skip_sgml(scanner, &string, '>');
+			skip_sgml(scanner, &string, '>', 0);
 		}
 
 		type = SGML_TOKEN_TAG_END;

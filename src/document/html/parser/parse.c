@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.10 2004/04/24 01:25:35 pasky Exp $ */
+/* $Id: parse.c,v 1.11 2004/04/24 02:52:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,7 +570,7 @@ void
 parse_html(unsigned char *html, unsigned char *eof,
 	   void *f, unsigned char *head)
 {
-	unsigned char *base_pos;
+	unsigned char *base_pos = html;
 	int noupdate = 0;
 
 	putsp = -1;

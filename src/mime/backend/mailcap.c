@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.45 2003/09/22 14:59:35 jonas Exp $ */
+/* $Id: mailcap.c,v 1.46 2003/10/03 11:44:50 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -358,10 +358,10 @@ init_mailcap(void)
 	if (!mailcap_tree) {
 		mailcap_tree = get_opt_rec(config_options, "mime.mailcap");
 		mailcap_tree->change_hook = mailcap_change_hook;
-
-		if (!get_opt_bool_tree(mailcap_tree, "enable"))
-			return;
 	}
+
+	if (!get_opt_bool_tree(mailcap_tree, "enable"))
+		return;
 
 	mailcap_map = init_hash(8, &strhash);
 	if (!mailcap_map)

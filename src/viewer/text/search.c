@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.231 2004/06/04 07:33:37 zas Exp $ */
+/* $Id: search.c,v 1.232 2004/06/04 07:37:51 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -787,21 +787,21 @@ point_intersect(struct point *p1, int l1, struct point *p2, int l2)
 }
 
 static int
-find_next_link_in_search(struct document_view *doc_view, int d)
+find_next_link_in_search(struct document_view *doc_view, int direction)
 {
 	assert(doc_view && doc_view->vs);
 	if_assert_failed return 0;
 
-	if (d == -2 || d == 2) {
-		d /= 2;
-		find_link(doc_view, d, 0);
+	if (direction == -2 || direction == 2) {
+		direction /= 2;
+		find_link(doc_view, direction, 0);
 		if (doc_view->vs->current_link == -1) return 1;
 		goto nt;
 	}
 
 	while (doc_view->vs->current_link != -1
-	       && next_in_view(doc_view, doc_view->vs->current_link + d, d,
-			       in_view, NULL)) {
+	       && next_in_view(doc_view, doc_view->vs->current_link + direction,
+		               direction, in_view, NULL)) {
 		struct point *pt = NULL;
 		struct link *link;
 		int len;
@@ -816,7 +816,7 @@ nt:
 		mem_free_if(pt);
 	}
 
-	find_link(doc_view, d, 0);
+	find_link(doc_view, direction, 0);
 	return 1;
 }
 

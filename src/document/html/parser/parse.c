@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.16 2004/04/24 11:39:21 pasky Exp $ */
+/* $Id: parse.c,v 1.17 2004/04/24 11:46:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,9 +413,19 @@ void html_xmp(unsigned char *);
 
 
 struct element_info {
+	/* Element name, uppercase. */
 	unsigned char *name;
+
+	/* Element hander, doing relevant arguments processing and formatting
+	 * (by calling renderer hooks). Note that in few cases the functions
+	 * are just placeholders and the element is given a special care in
+	 * start_element() (where we also call these handlers). */
 	void (*func)(unsigned char *);
 
+	/* Basically something like how many times to break a line before (and
+	 * sometimes after) an element. Also for various element closing
+	 * precedence heuristics, zero value means inline element and non-zero
+	 * value is a block element. */
 	int linebreak;
 
 	/* 0 - normal pair tags

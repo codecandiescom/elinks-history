@@ -10,7 +10,7 @@ ELinks-now:
 * manual cookies creating and editing support
 * typeahead text searching (press '#/' sequence)
 * experimental Perl scripting extensions
-* configurability through feature.h
+* configurability through features.conf
 * Mozilla-compliant support for -remote option
 * -localhost option to only permit local connections
 * -config-dir replaces -confdir option

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.141 2004/12/14 16:59:32 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.142 2004/12/14 17:00:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "terminal/tab.h"
 #include "util/conv.h"
 #include "util/hash.h"
+#include "util/lists.h"
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/secsave.h"

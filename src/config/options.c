@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.148 2002/12/11 21:54:01 pasky Exp $ */
+/* $Id: options.c,v 1.149 2002/12/11 22:11:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -694,7 +694,7 @@ register_options()
 		"Format of the file with saved bookmarks (matters for both\n"
 		"reading and saving):\n"
 		"0 is the default ELinks (Links 0.9x compatible) format\n"
-		"1 is XBEL universal XML bookmarks format"
+		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 #ifndef HAVE_LIBEXPAT
 		" (DISABLED)"
 #endif

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.59 2003/12/06 17:04:31 pasky Exp $ */
+/* $Id: history.c,v 1.60 2003/12/29 14:05:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "cache/cache.h"
 #include "config/options.h"
 #include "dialogs/status.h"
 #include "sched/connection.h"
@@ -19,6 +20,7 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/view.h"
+#include "viewer/text/vs.h"
 
 
 static inline void
@@ -57,6 +59,25 @@ clean_unhistory(struct ses_history *history)
 
 		del_from_list(loc);
 		destroy_location(loc);
+	}
+}
+
+/* If history->current points to an entry redundant to @loc, remove that
+ * entry. */
+void
+compress_history(struct ses_history *history, struct location *loc)
+{
+	struct location *current = history->current;
+
+	assert(current);
+
+	if (!strlcasecmp(current->vs.url, current->vs.url_len,
+			 loc->vs.url, loc->vs.url_len)
+	    || (current->download.ce->redirect
+		&& !strlcasecmp(current->download.ce->redirect, -1,
+				loc->vs.url, loc->vs.url_len))) {
+		del_from_history(history, current);
+		destroy_location(current);
 	}
 }
 

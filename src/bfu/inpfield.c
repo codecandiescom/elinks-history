@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.173 2004/11/18 00:11:42 zas Exp $ */
+/* $Id: inpfield.c,v 1.174 2004/11/18 00:23:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,8 +279,7 @@ display_field_pass(struct dialog_data *dlg_data, struct widget_data *widget_data
 }
 
 static t_handler_event_status
-init_field(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	   struct term_event *ev)
+init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	if (widget_has_history(widget_data)) {
 		struct input_history_entry *entry;

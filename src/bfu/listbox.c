@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.173 2004/11/18 00:11:42 zas Exp $ */
+/* $Id: listbox.c,v 1.174 2004/11/18 00:23:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,8 +487,7 @@ check_old_state(struct listbox_item *item, void *info_, int *offset)
 }
 
 static t_handler_event_status
-init_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data,
-	     struct term_event *ev)
+init_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
 	struct listbox_data *box = get_listbox_widget_data(widget_data);

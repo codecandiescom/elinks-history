@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.171 2004/11/18 00:11:42 zas Exp $ */
+/* $Id: dialog.c,v 1.172 2004/11/18 00:23:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ static struct widget_ops *widget_type_to_ops[] = {
 };
 
 static inline struct widget_data *
-init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
+init_widget(struct dialog_data *dlg_data, int i)
 {
 	struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
@@ -170,7 +170,7 @@ init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 	}
 
 	if (widget_data->widget->ops->init)
-		widget_data->widget->ops->init(dlg_data, widget_data, ev);
+		widget_data->widget->ops->init(dlg_data, widget_data);
 
 	return widget_data;
 }
@@ -198,14 +198,14 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 }
 
 static void
-dialog_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
+dialog_ev_init(struct dialog_data *dlg_data)
 {
 	int i;
 
 	for (i = dlg_data->n - 1; i >= 0; i--) {
 		struct widget_data *widget_data;
 
-		widget_data = init_widget(dlg_data, ev, i);
+		widget_data = init_widget(dlg_data, i);
 
 		/* Make sure the selected widget is focusable */
 		if (widget_data
@@ -371,7 +371,8 @@ dialog_func(struct window *win, struct term_event *ev)
 
 	switch (ev->ev) {
 		case EVENT_INIT:
-			dialog_ev_init(dlg_data, ev);
+			dlg_data->term_event = ev;
+			dialog_ev_init(dlg_data);
 			/* fallback */
 		case EVENT_RESIZE:
 		case EVENT_REDRAW:

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.135 2004/10/14 18:38:40 jonas Exp $ */
+/* $Id: task.c,v 1.136 2004/10/14 20:13:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,7 +276,7 @@ ses_imgmap(struct session *ses)
 {
 	struct cache_entry *cached = find_in_cache(ses->loading_uri);
 	struct document_view *doc_view = current_frame(ses);
-	struct fragment *fr;
+	struct fragment *fragment;
 	struct memory_list *ml;
 	struct menu_item *menu;
 
@@ -285,14 +285,14 @@ ses_imgmap(struct session *ses)
 		return;
 	}
 
-	defrag_entry(cached);
-	fr = cached->frag.next;
-	if ((void *) fr == &cached->frag) return;
+	fragment = get_cache_fragment(cached);
+	if (!fragment) return;
 
 	if (!doc_view || !doc_view->document) return;
 	global_doc_opts = &doc_view->document->options;
 
-	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
+	if (get_image_map(cached->head, fragment->data,
+			  fragment->data + fragment->length,
 			  &menu, &ml, ses->loading_uri, ses->task.target_frame,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),

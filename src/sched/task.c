@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.49 2004/04/02 21:52:01 jonas Exp $ */
+/* $Id: task.c,v 1.50 2004/04/02 21:55:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,7 +447,6 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 {
 	unsigned char *u = translate_url(url, ses->tab->term->cwd);
 	unsigned char *pos = u ? extract_fragment(u) : NULL;
-	enum protocol protocol = known_protocol(url, NULL);
 	struct uri *referrer = NULL;
 	struct uri *uri = u ? get_uri(u, -1) : NULL;
 
@@ -464,16 +463,16 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		return;
 	}
 
-	if (protocol == PROTOCOL_UNKNOWN) {
+	if (uri->protocol == PROTOCOL_UNKNOWN) {
 		print_unknown_protocol_dialog(ses);
 		if (pos) mem_free(pos);
 		done_uri(uri);
 		return;
 	}
 
-	if (protocol != PROTOCOL_INVALID) {
+	if (uri>protocol != PROTOCOL_INVALID) {
 		protocol_external_handler *fn =
-			get_protocol_external_handler(protocol);
+			get_protocol_external_handler(uri->protocol);
 
 		if (fn) {
 			fn(ses, struri(uri));

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.423 2004/06/01 04:25:06 miciah Exp $ */
+/* $Id: view.c,v 1.424 2004/06/01 05:31:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -766,7 +766,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			}
 
 		} else if (link) {
-			x = 1;
 			doc_view->vs->current_link = link - doc_view->document->links;
 
 			if (!link_is_textinput(link)

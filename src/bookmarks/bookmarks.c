@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.3 2002/03/17 14:05:25 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -19,7 +19,7 @@
 #include <document/session.h>
 #include <lowlevel/kbd.h>
 #include <lowlevel/terminal.h>
-#include <internat/language.h>
+#include <intl/language.h>
 #include <protocol/types.h>
 #include <util/error.h>
 

@@ -1,11 +1,11 @@
-/* $Id: renderer.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: renderer.h,v 1.3 2002/03/17 14:05:26 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
 #include <links.h> /* list_head */
 #include <document/html/colors.h>
-#include <internat/charsets.h>
+#include <intl/charsets.h>
 #include <lowlevel/select.h>
 /* We need this included later, otherwise it will miss some our
  * declarations. */

@@ -24,8 +24,8 @@ for i in $codepages; do
 done
 echo '	{NULL, NULL, NULL}'
 echo '};'
-echo '#define N_CODEPAGES '$n | sed 's///g' > ../src/internat/codepage.h
-) | sed 's///g' > ../src/internat/codepage.inc
+echo '#define N_CODEPAGES '$n | sed 's///g' > ../src/intl/codepage.h
+) | sed 's///g' > ../src/intl/codepage.inc
 echo
 echo Done.
 fi

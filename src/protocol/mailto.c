@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */ 
-/* $Id: mailto.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: mailto.c,v 1.3 2002/03/17 14:05:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,7 @@
 #include <links.h>
 
 #include <bfu/bfu.h>
-#include <internat/language.h>
+#include <intl/language.h>
 #include <lowlevel/terminal.h>
 #include <protocol/mailto.h>
 #include <protocol/types.h>

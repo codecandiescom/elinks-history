@@ -1,0 +1,25 @@
+/* $Id: language.h,v 1.1 2002/03/17 14:05:26 pasky Exp $ */
+
+#ifndef EL__LANGUAGE_H
+#define EL__LANGUAGE_H
+
+#include <lowlevel/terminal.h>
+
+#include <intl/lang_defs.h>
+
+extern unsigned char dummyarray[];
+
+extern int current_language;
+
+void init_trans();
+void shutdown_trans();
+unsigned char *get_text_translation(unsigned char *, struct terminal *);
+unsigned char *get_english_translation(unsigned char *);
+void set_language(int);
+int n_languages();
+unsigned char *language_name(int);
+
+#define _(_x_, _y_) get_text_translation(_x_, _y_)
+#define TEXT(x) (dummyarray + x)
+
+#endif

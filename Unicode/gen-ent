@@ -12,7 +12,7 @@ echo '  {NULL,	0}'
 echo '};'
 echo
 echo '#define N_ENTITIES' $N
-) > ../src/internat/entity.inc
+) > ../src/intl/entity.inc
 rm -f tmp
 echo Done.
 echo

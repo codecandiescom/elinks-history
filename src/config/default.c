@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: default.c,v 1.3 2002/03/17 14:05:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,8 @@
 #include <document/session.h>
 #include <document/html/colors.h>
 #include <document/html/renderer.h>
-#include <internat/charsets.h>
-#include <internat/language.h>
+#include <intl/charsets.h>
+#include <intl/language.h>
 #include <lowlevel/dns.h>
 #include <lowlevel/terminal.h>
 #include <protocol/types.h>

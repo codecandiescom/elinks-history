@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.74 2004/04/24 01:07:01 jonas Exp $ */
+/* $Id: cmdline.c,v 1.75 2004/04/24 01:10:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,9 +260,6 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 			} else if (!strlcasecmp(where, len, "new-tab", 7)) {
 				remote_session_flags |= SES_REMOTE_NEW_TAB;
-
-			} else {
-				return gettext("Remote method not supported");
 			}
 
 			remote_url = memacpy(arg, comma - arg);
@@ -278,8 +275,6 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 		if (!strlcasecmp(arg, len, "openBrowser", 11)) {
 			remote_session_flags = SES_REMOTE_NEW_WINDOW;
-		} else {
-			return gettext("Remote method not supported");
 		}
 		break;
 
@@ -288,8 +283,11 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		break;
 
 	case REMOTE_METHOD_NOT_SUPPORTED:
-		return gettext("Remote method not supported");
+		break;
 	}
+
+	if (!remote_session_flags)
+		return gettext("Remote method not supported");
 
 	(*argv)++; (*argc)--;	/* Consume next argument */
 

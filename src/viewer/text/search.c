@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.234 2004/06/08 16:12:35 zas Exp $ */
+/* $Id: search.c,v 1.235 2004/06/08 16:14:02 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -240,24 +240,6 @@ get_range(struct document *document, int y, int yw, int l,
 	return 0;
 }
 
-/* Returns an allocated string which is a lowered copy of passed one. */
-static unsigned char *
-lowered_string(unsigned char *text, register int textlen)
-{
-	unsigned char *ret;
-
-	if (textlen < 0) textlen = strlen(text);
-
-	ret = mem_calloc(1, textlen + 1);
-	if (ret && textlen) {
-		do {
-			ret[textlen] = tolower(text[textlen]);
-		} while (textlen--);
-	}
-
-	return ret;
-}
-
 #ifdef HAVE_REGEX_H
 static int
 is_in_range_regex(struct document *document, int y, int yy,
@@ -356,6 +338,24 @@ next:
 	return found;
 }
 #endif /* HAVE_REGEX_H */
+
+/* Returns an allocated string which is a lowered copy of passed one. */
+static unsigned char *
+lowered_string(unsigned char *text, register int textlen)
+{
+	unsigned char *ret;
+
+	if (textlen < 0) textlen = strlen(text);
+
+	ret = mem_calloc(1, textlen + 1);
+	if (ret && textlen) {
+		do {
+			ret[textlen] = tolower(text[textlen]);
+		} while (textlen--);
+	}
+
+	return ret;
+}
 
 static int
 is_in_range_plain(struct document *document, int y, int yy,

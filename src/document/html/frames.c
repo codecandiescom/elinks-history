@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.43 2003/11/16 15:25:06 jonas Exp $ */
+/* $Id: frames.c,v 1.44 2003/11/16 15:46:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,12 +57,12 @@ add_frameset_entry(struct frameset_desc *frameset_desc,
 }
 
 struct frameset_desc *
-create_frameset(struct document *document, struct frameset_param *fp)
+create_frameset(struct frameset_param *fp)
 {
 	struct frameset_desc *fd;
 	unsigned int size;
 
-	assert(document && fp);
+	assert(fp);
 	if_assert_failed return NULL;
 
 	assertm(fp->x > 0 && fp->y > 0,
@@ -71,8 +71,6 @@ create_frameset(struct document *document, struct frameset_param *fp)
 		if (fp->x <= 0) fp->x = 1;
 		if (fp->y <= 0) fp->y = 1;
 	}
-
-	if (!fp->parent && document->frame_desc) return NULL;
 
 	size = fp->x * fp->y;
 	/* size - 1 since one struct frame_desc is already reserved
@@ -96,8 +94,6 @@ create_frameset(struct document *document, struct frameset_param *fp)
 
 	if (fp->parent)
 		add_frameset_entry(fp->parent, fd, NULL, NULL);
-	else if (!document->frame_desc)
-		document->frame_desc = fd;
 
 	return fd;
 }

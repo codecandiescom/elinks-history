@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.378 2003/11/16 15:25:06 jonas Exp $ */
+/* $Id: renderer.c,v 1.379 2003/11/16 15:46:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1153,7 +1153,6 @@ html_special(struct part *part, enum html_special_type c, ...)
 	struct document *document = part->document;
 	unsigned long seconds;
 	struct form_control *fc;
-	struct frameset_param *fsp;
 
 	assert(part);
 	if_assert_failed return NULL;
@@ -1178,9 +1177,18 @@ html_special(struct part *part, enum html_special_type c, ...)
 			va_end(l);
 			return (void *)!!document;
 		case SP_FRAMESET:
-			fsp = va_arg(l, struct frameset_param *);
+		{
+			struct frameset_param *fsp = va_arg(l, struct frameset_param *);
+			struct frameset_desc *frameset_desc;
+
 			va_end(l);
-			return create_frameset(document, fsp);
+			if (!fsp->parent && document->frame_desc) return NULL;
+
+			frameset_desc = create_frameset(fsp);
+			if (!document->frame_desc)
+				document->frame_desc = frameset_desc;
+			return frameset_desc;
+		}
 		case SP_FRAME:
 		{
 			struct frameset_desc *parent = va_arg(l, struct frameset_desc *);

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.32 2003/11/16 15:25:06 jonas Exp $ */
+/* $Id: frames.h,v 1.33 2003/11/16 15:46:00 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -35,7 +35,7 @@ struct frameset_param {
 	int *width, *height;
 };
 
-struct frameset_desc *create_frameset(struct document *doc, struct frameset_param *fp);
+struct frameset_desc *create_frameset(struct frameset_param *fp);
 
 /* Adds a frame to the @parent frameset. @subframe may be NULL. */
 void

@@ -1,3 +1,23 @@
+Sat Jan 22 17:47:18 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	A few fixes.  
+
+Sat Jan 22 14:01:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Opdater den danske oversættelse.  
+
+Sat Jan 22 13:54:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, ecmascript/ecmascript.c,
+	ecmascript/spidermonkey.c, sched/session.c, sched/session.h:
+
+	Introduce a very simple ECMAScript pop-up window blocking mechanism.
+	Will show a 'P' in the LED indicators. Off by default.  
+
 Fri Jan 21 19:58:02 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/da.po:

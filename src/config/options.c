@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.357 2003/10/25 00:37:23 pasky Exp $ */
+/* $Id: options.c,v 1.358 2003/10/25 10:17:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,6 +244,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		add_to_list_end(config_option_box_items, option->box_item);
 	}
 
+#if 0
 	if (tree->flags & OPT_SORT) {
 		struct option *pos;
 
@@ -270,7 +271,9 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 			assert(pos != (struct option *) cat);
 		}
 
-	} else {
+	} else
+#endif
+	{
 		add_at_pos((struct option *) cat->prev, option);
 	}
 }

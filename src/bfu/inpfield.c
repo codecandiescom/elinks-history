@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.119 2004/02/05 19:33:00 jonas Exp $ */
+/* $Id: inpfield.c,v 1.120 2004/02/08 20:15:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -498,6 +498,7 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	struct input_line *input_line = dlg_data->dlg->udata;
 	input_line_handler handler = input_line->handler;
 	enum edit_action action;
+	struct widget_data *widget_data = dlg_data->widgets_data;
 
 	if (ev->ev != EV_KBD) return EVENT_NOT_PROCESSED;
 
@@ -506,30 +507,30 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	switch (action) {
 		case ACT_EDIT_ENTER:
 			if (input_line->buffer
-			    && widget_has_history(dlg_data->widgets_data))
-				add_to_input_history(dlg_data->dlg->widgets->info.field.history,
+			    && widget_has_history(widget_data))
+				add_to_input_history(widget_data->widget->info.field.history,
 						     input_line->buffer, 1);
 			/* Falling */
 		case ACT_EDIT_BACKSPACE:
 			if (*input_line->buffer) break;
 			/* Falling */
 		case ACT_EDIT_CANCEL:
-			cancel_dialog(dlg_data, NULL);
+			cancel_dialog(dlg_data, widget_data);
 			return EVENT_PROCESSED;
 
 		default:
 			break;
 	}
 
-	dlg_data->widgets_data->widget->text = input_line->prompt;
+	widget_data->widget->text = input_line->prompt;
 	/* First let the input field do its business */
-	kbd_field(dlg_data->widgets_data, dlg_data, ev);
-	update_dialog_data(dlg_data, NULL);
+	kbd_field(widget_data, dlg_data, ev);
+	update_dialog_data(dlg_data, widget_data);
 
 	/* Then pass it on to the specialized handler */
 	switch (handler(input_line, action)) {
 		case INPUT_LINE_CANCEL:
-			cancel_dialog(dlg_data, NULL);
+			cancel_dialog(dlg_data, widget_data);
 			break;
 
 		default:

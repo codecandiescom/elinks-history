@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.25 2003/09/25 19:50:40 zas Exp $ */
+/* $Id: view.h,v 1.26 2003/10/17 14:21:15 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -19,20 +19,20 @@ init_document(unsigned char *uristring, struct document_options *options);
 void done_document(struct document *document);
 
 /* Releases the document view's resources. But doesn't free() the @view. */
-void detach_formatted(struct document_view *view);
+void detach_formatted(struct document_view *doc_view);
 
 /* Puts the formatted document on the given terminal's screen. */
-void draw_doc(struct terminal *t, struct document_view *scr, int active);
+void draw_doc(struct terminal *t, struct document_view *doc_view, int active);
 
 void draw_formatted(struct session *);
 
-void set_frame(struct session *, struct document_view *, int);
+void set_frame(struct session *, struct document_view *doc_view, int);
 struct document_view *current_frame(struct session *);
 
-void down(struct session *ses, struct document_view *fd, int a);
+void down(struct session *ses, struct document_view *doc_view, int a);
 
 /* Used for changing between formatted and source (plain) view. */
-void toggle(struct session *, struct document_view *, int);
+void toggle(struct session *, struct document_view *doc_view, int);
 
 /* File menu handlers. */
 

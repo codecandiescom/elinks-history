@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.265 2004/04/11 16:10:18 jonas Exp $ */
+/* $Id: download.c,v 1.266 2004/04/11 17:26:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,13 +305,14 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 		if (!url) goto abort;
 
-		msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("Download error"), AL_CENTER,
 			msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
 			get_download_ses(file_download), 1,
 			N_("OK"), NULL, B_ENTER | B_ESC /*,
 			N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
 
+		mem_free(url);
 		goto abort;
 	}
 
@@ -340,11 +341,12 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		}
 
 		if (url) {
-			msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
+			msg_box(term, NULL, MSGBOX_FREE_TEXT,
 				N_("Download"), AL_CENTER,
 				msg_text(term, N_("Download complete:\n%s"), url),
 				get_download_ses(file_download), 1,
 				N_("OK"), NULL, B_ENTER | B_ESC);
+			mem_free(url);
 		}
 	}
 
@@ -937,7 +939,6 @@ static void
 type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 {
 	struct string filename;
-	unsigned char *content_type;
 
 	if (tq->prog) {
 		mem_free(tq->prog);
@@ -953,9 +954,6 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 		}
 	}
 
-	content_type = stracpy(ct);
-	if (!content_type) return;
-
 	if (init_string(&filename))
 		add_uri_filename_to_string(&filename, tq->uri);
 
@@ -964,22 +962,22 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 
 	if (!handler) {
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
-			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
 				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "save the file '%s' (type: %s) "
 					 "or display it?"),
-					 filename.source, content_type),
+					 filename.source, ct),
 				tq, 3,
 				N_("Save"), tp_save, B_ENTER,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
 				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "display the file '%s' (type: %s)?"),
-					 filename.source, content_type),
+					 filename.source, ct),
 				tq, 2,
 				N_("Display"), tp_display, B_ENTER,
 				N_("Cancel"), tp_cancel, B_ESC);
@@ -991,12 +989,12 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
-			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
 				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', save it or display it?"),
-					 filename.source, content_type, desc_sep,
+					 filename.source, ct, desc_sep,
 					 description, handler->program),
 				tq, 4,
 				N_("Open"), tp_open, B_ENTER,
@@ -1004,12 +1002,12 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(tq->ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
+			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
 				msg_text(tq->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', or display it?"),
-					 filename.source, content_type, desc_sep,
+					 filename.source, ct, desc_sep,
 					 description, handler->program),
 				tq, 3,
 				N_("Open"), tp_open, B_ENTER,
@@ -1017,6 +1015,8 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	}
+
+	done_string(&filename);
 }
 
 struct {

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.84 2004/04/06 10:35:19 jonas Exp $ */
+/* $Id: form.c,v 1.85 2004/04/11 17:25:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -649,20 +649,13 @@ encode_error:
 	mem_free(bound_ptrs);
 	done_string(data);
 
-	{
-	unsigned char *m1, *m2;
-
 	/* XXX: This error message should move elsewhere. --Zas */
-	m1 = stracpy(sv->value);
-	if (!m1) return;
-	m2 = stracpy((unsigned char *) strerror(errno));
-	msg_box(ses->tab->term, getml(m1, m2, NULL), MSGBOX_FREE_TEXT,
+	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Error while posting form"), AL_CENTER,
 		msg_text(ses->tab->term, N_("Could not get file %s: %s"),
-			 m1, m2),
+			 sv->value, strerror(errno)),
 		ses, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
-	}
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.71 2003/11/21 22:23:05 zas Exp $ */
+/* $Id: charsets.c,v 1.72 2003/11/21 22:31:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ new_translation_table(struct conv_table *p)
 	}										\
 }											\
 
-unicode_val strange_chars[32] = {
+static const unicode_val strange_chars[32] = {
 0x20ac, 0x0000, 0x002a, 0x0000, 0x201e, 0x2026, 0x2020, 0x2021,
 0x005e, 0x2030, 0x0160, 0x003c, 0x0152, 0x0000, 0x0000, 0x0000,
 0x0000, 0x0060, 0x0027, 0x0022, 0x0022, 0x002a, 0x2013, 0x2014,
@@ -140,10 +140,10 @@ u2cp_(unicode_val u, int to, int no_nbsp_hack)
 	if (u == 0xad) return "";
 
 	if (u < 0xa0) {
-		if (!strange_chars[u - 0x80])
-			return NULL;
+		unicode_val strange = strange_chars[u - 0x80];
 
-		return u2cp_(strange_chars[u - 0x80], to, no_nbsp_hack);
+		if (!strange) return NULL;
+		return u2cp_(strange, to, no_nbsp_hack);
 	}
 	for (j = 0; codepages[to].table[j].c; j++)
 		if (codepages[to].table[j].u == u)

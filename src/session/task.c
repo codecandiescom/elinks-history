@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.105 2004/06/08 16:51:50 jonas Exp $ */
+/* $Id: task.c,v 1.106 2004/06/08 17:01:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,10 +529,7 @@ get_hooked_uri(unsigned char *uristring, struct uri *uri, unsigned char *cwd)
 	if (!uristring) return NULL;
 #endif
 
-	if (*uristring)
-		uri = get_translated_uri(uristring, cwd);
-	else
-		uri = NULL;
+	uri = *uristring ? get_translated_uri(uristring, cwd) : NULL;
 
 #if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
 	mem_free(uristring);

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.172 2004/07/07 02:24:49 jonas Exp $ */
+/* $Id: dialogs.c,v 1.173 2004/07/13 21:22:25 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -210,10 +210,12 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	struct bookmark *bm = NULL;
 
 	if (box->sel) {
+		struct bookmark *selected = box->sel->udata;
+
 		if (box->sel->type == BI_FOLDER && box->sel->expanded) {
-			bm = box->sel->udata;
-		} else if (box->sel->root) {
-			bm = box->sel->root->udata;
+			bm = selected;
+		} else {
+			bm = selected->root;
 		}
 	}
 	bm = add_bookmark(bm, 1, name, NULL);
@@ -468,10 +470,12 @@ bookmark_add_add(struct dialog *dlg)
 		box = get_dlg_listbox_data(dlg_data);
 
 		if (box->sel) {
+			struct bookmark *selected = box->sel->udata;
+
 			if (box->sel->type == BI_FOLDER) {
-				bm = box->sel->udata;
-			} else if (box->sel->root) {
-				bm = box->sel->root->udata;
+				bm = selected;
+			} else {
+				bm = selected->root;
 			}
 		}
 	}

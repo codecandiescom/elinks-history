@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.230 2003/12/26 14:14:43 zas Exp $ */
+/* $Id: menu.c,v 1.231 2003/12/26 16:57:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,38 +219,38 @@ static struct menu_item no_hist_menu[] = {
 	NULL_MENU_ITEM
 };
 
-#define history_menu_model(name__, dir__) \
-static void \
-name__(struct terminal *term, void *ddd, struct session *ses) \
-{ \
-	struct location *loc; \
-	struct menu_item *mi = NULL; \
- \
-	if (!have_location(ses)) goto loop_done; \
- \
-	for (loc = cur_loc(ses)->dir__; \
-	     loc != (struct location *) &ses->history.history; \
-	     loc = loc->dir__) { \
-		unsigned char *url; \
- \
-		if (!mi) { \
-			mi = new_menu(FREE_LIST | FREE_TEXT); \
-			if (!mi) return; \
-		} \
- \
-		url = get_no_post_url(loc->vs.url, NULL); \
-		if (url) { \
-			add_to_menu(&mi, url, NULL, ACT_NONE, \
-				    (menu_func) go_historywards, \
-			    	    (void *) loc, NO_INTL); \
-		} \
-	} \
-loop_done: \
- \
-	if (!mi) \
-		do_menu(term, no_hist_menu, ses, 0); \
-	else \
-		do_menu(term, mi, ses, 0); \
+#define history_menu_model(name__, dir__) 				\
+static void 								\
+name__(struct terminal *term, void *ddd, struct session *ses) 		\
+{ 									\
+	struct location *loc; 						\
+	struct menu_item *mi = NULL; 					\
+ 									\
+	if (!have_location(ses)) goto loop_done; 			\
+ 									\
+	for (loc = cur_loc(ses)->dir__; 				\
+	     loc != (struct location *) &ses->history.history; 		\
+	     loc = loc->dir__) { 					\
+		unsigned char *url; 					\
+ 									\
+		if (!mi) { 						\
+			mi = new_menu(FREE_LIST | FREE_TEXT); 		\
+			if (!mi) return; 				\
+		} 							\
+ 									\
+		url = get_no_post_url(loc->vs.url, NULL); 		\
+		if (url) { 						\
+			add_to_menu(&mi, url, NULL, ACT_NONE, 		\
+				    (menu_func) go_historywards,	\
+			    	    (void *) loc, NO_INTL); 		\
+		} 							\
+	} 								\
+loop_done: 								\
+ 									\
+	if (!mi) 							\
+		do_menu(term, no_hist_menu, ses, 0); 			\
+	else 								\
+		do_menu(term, mi, ses, 0); 				\
 }
 
 history_menu_model(history_menu, prev);

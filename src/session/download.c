@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.278 2004/04/22 16:13:08 jonas Exp $ */
+/* $Id: download.c,v 1.279 2004/04/23 10:28:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,8 +380,8 @@ download_data(struct download *download, struct file_download *file_download)
 	if (cached->last_modified)
 		file_download->remotetime = parse_http_date(cached->last_modified);
 
-	while (cached->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
-		if (download->state >= 0)
+	if (cached->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
+		if (is_in_progress_state(download->state))
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
 		assertm(cached->uri == file_download->uri, "Redirecting using bad base URI");

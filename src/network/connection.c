@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.166 2004/04/19 15:56:49 zas Exp $ */
+/* $Id: connection.c,v 1.167 2004/04/23 10:28:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,8 +203,9 @@ check_queue_bugs(void)
 		cc += conn->running;
 
 		assertm(priority >= prev_priority, "queue is not sorted");
-		assertm(conn->state >= 0, "interrupted connection on queue "
-			"(conn %s, state %d)", struri(conn->uri), conn->state);
+		assertm(is_in_progress_state(conn->state),
+			"interrupted connection on queue (conn %s, state %d)",
+			struri(conn->uri), conn->state);
 		prev_priority = priority;
 	}
 

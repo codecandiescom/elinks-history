@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.76 2004/04/19 15:56:49 zas Exp $ */
+/* $Id: task.c,v 1.77 2004/04/23 10:28:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,7 @@ do_move(struct session *ses, struct download **stat)
 	if (ses->loading_uri->protocol == PROTOCOL_UNKNOWN)
 		return 0;
 
-	if (ses->task.type == TASK_IMGMAP && (*stat)->state >= 0)
+	if (ses->task.type == TASK_IMGMAP && is_in_progress_state((*stat)->state))
 		return 0;
 
 	cached = (*stat)->cached;
@@ -376,7 +376,7 @@ b:
 			break;
 	}
 
-	if ((*stat)->state >= 0) {
+	if (is_in_progress_state((*stat)->state)) {
 		*stat = &cur_loc(ses)->download;
 		change_connection(&ses->loading, *stat, PRI_MAIN, 0);
 	} else {

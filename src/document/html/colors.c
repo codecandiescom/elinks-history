@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.15 2002/12/22 16:34:45 pasky Exp $ */
+/* $Id: colors.c,v 1.16 2002/12/22 17:54:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,14 +384,61 @@ find_nearest_color(struct rgb *r, int l)
 int
 fg_color(int fg, int bg)
 {
-	/* 0 == brightgrey  6 == cyan        12 == brightblue
+	/* 0 == black       6 == cyan        12 == brightblue
 	 * 1 == red         7 == brightgrey  13 == brightmagenta
-	 * 2 == green       8 == black       14 == brightcyan
+	 * 2 == green       8 == darkgrey    14 == brightcyan
 	 * 3 == brown       9 == brightred   15 == brightwhite
 	 * 4 == blue       10 == brightgreen
 	 * 5 == magenta    11 == brightyellow
 	 */
 
+	/* This table is based mostly on wild guesses of mine. Feel free to
+	 * correct it. --pasky */
+	/* Indexed by [fg][bg]->fg: */
+	int xlat[16][8] = {
+		/* bk  r  gr  br  bl   m   c   w */
+
+		/* 0 (black) */
+		{  7,  0,  0,  0,  7,  0,  0,  0 },
+		/* 1 (red) */
+		{  1,  9,  1,  9,  9,  9,  1,  1 },
+		/* 2 (green) */
+		{  2,  2, 10,  2,  2,  2, 10, 10 },
+		/* 3 (brown) */
+		{  3, 11,  3, 11,  3, 11,  3,  3 },
+		/* 4 (blue) */
+		{ 12, 12,  4,  4, 12,  4,  4,  4 },
+		/* 5 (magenta) */
+		{  5, 13,  5, 13, 13, 13,  5,  5 },
+		/* 6 (cyan) */
+		{  6,  6, 14,  6,  6,  6, 14, 14 },
+		/* 7 (grey) */
+		{  7,  7,  0,  7,  7,  7,  0,  0 }, /* Don't s/0/8/, messy --pasky */
+		/* 8 (darkgrey) */
+		{ 15, 15,  8, 15, 15, 15,  8,  8 },
+		/* 9 (brightred) */
+		{  9,  9,  1,  9,  9,  9,  1,  9 }, /* I insist on 7->9 --pasky */
+		/* 10 (brightgreen) */
+		{ 10, 10, 10, 10, 10, 10, 10, 10 },
+		/* 11 (brightyellow) */
+		{ 11, 11, 11, 11, 11, 11, 11, 11 },
+		/* 12 (brightblue) */
+		{ 12, 12, 12,  4,  6,  6,  4, 12 },
+		/* 13 (brightmagenta) */
+		{ 13, 13,  5, 13, 13, 13,  5,  5 },
+		/* 14 (brightcyan) */
+		{ 14, 14, 14, 14, 14, 14, 14, 14 },
+		/* 15 (brightwhite) */
+		{ 15, 15, 15, 15, 15, 15, 15, 15 },
+	};
+
+	if (!d_opt->allow_dark_on_black)
+		return xlat[fg][bg];
+
+	/* This is the original code - you can't really guess from it what is
+	 * translated to what and easily modify it. Also, it supports well only
+	 * the black background. */
+#if 0
 	/* This looks like it should be more efficient. It results in
 	 * different machine-code, but the same number of instructions:
 	 * int l, h;
@@ -419,6 +466,7 @@ fg_color(int fg, int bg)
 						: (7 - 7 * (bg == 2 ||
 							    bg == 6 ||
 							    bg == 7));
+#endif
 
 	return fg;
 }

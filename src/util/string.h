@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.70 2004/03/22 14:35:41 jonas Exp $ */
+/* $Id: string.h,v 1.71 2004/04/06 00:30:58 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -46,6 +46,11 @@ unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
 /* Concatenates @src to @str. */
 /* If reallocation of @str fails @str is not touched. */
 void add_to_strn(unsigned char **str, unsigned char *src);
+
+/* Inserts @seqlen chars from @seq at position @pos in the @dst string. */
+/* If reallocation of @dst fails it is not touched and NULL is returned. */
+unsigned char *
+insert_in_string(unsigned char **dst, int pos, unsigned char *seq, int seqlen);
 
 /* Takes a list of strings where the last parameter _must_ be NULL and
  * concatenates them. */

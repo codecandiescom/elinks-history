@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.94 2004/01/25 01:20:51 jonas Exp $ */
+/* $Id: string.c,v 1.95 2004/04/06 00:30:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,6 +109,22 @@ add_to_strn(unsigned char **dst, unsigned char *src)
 		memcpy(newdst + dstlen, src, srclen);
 		*dst = newdst;
 	}
+}
+
+
+unsigned char *
+insert_in_string(unsigned char **dst, int pos, unsigned char *seq, int seqlen)
+{
+	int dstlen = strlen(*dst);
+	unsigned char *string = mem_realloc(*dst, dstlen + seqlen + 1);
+
+	if (!string) return NULL;
+
+	memmove(string + pos + seqlen, string + pos, dstlen - pos + 1);
+	memcpy(string + pos, seq, seqlen);
+	*dst = string;
+
+	return string;
 }
 
 

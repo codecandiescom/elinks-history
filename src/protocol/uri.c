@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.142 2004/04/06 00:08:04 jonas Exp $ */
+/* $Id: uri.c,v 1.143 2004/04/06 00:30:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,20 +336,6 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 }
 
 
-static void
-insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
-{
-	int urilen = strlen(*uri);
-	unsigned char *string = mem_realloc(*uri, urilen + seqlen + 1);
-
-	if (!string) return;
-
-	memmove(string + pos + seqlen, string + pos, urilen - pos + 1);
-	memcpy(string + pos, seq, seqlen);
-	*uri = string;
-}
-
-
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
 static unsigned char *
@@ -473,7 +459,7 @@ transform_file_url(struct uri *uri, unsigned char *cwd)
 		if (*path == '.') *path = '/';
 
 		/* Insert the current working directory. */
-		insert_in_uri(&struri(uri), 7, cwd, cwdlen);
+		insert_in_string(&struri(uri), 7, cwd, cwdlen);
 		return uri;
 	}
 
@@ -650,7 +636,7 @@ parse_uri:
 
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */
-		insert_in_uri(&newurl, uri.protocollen + 1, "//", 2);
+		insert_in_string(&newurl, uri.protocollen + 1, "//", 2);
 		goto parse_uri;
 
 	case URI_ERRNO_NO_HOST_SLASH:
@@ -737,10 +723,10 @@ end:
 		if (!not_file) {
 			mem_free(newurl);
 			if (!dir_sep(*expanded))
-				insert_in_uri(&expanded, 0, "./", 2);
+				insert_in_string(&expanded, 0, "./", 2);
 			newurl = straconcat(prefix, expanded, NULL);
 		} else {
-			insert_in_uri(&newurl, 0, prefix, strlen(prefix));
+			insert_in_string(&newurl, 0, prefix, strlen(prefix));
 			if (!strchr(url, '/')) add_to_strn(&newurl, "/");
 		}
 		mem_free(expanded);

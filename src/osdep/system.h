@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.2 2003/10/27 02:29:07 pasky Exp $ */
+/* $Id: system.h,v 1.3 2003/10/27 02:30:40 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -29,7 +29,7 @@
 # define UNIX
 #endif
 
-#if defined(UNIX)
+#ifdef UNIX
 
 static inline int dir_sep(char x) { return x == '/'; }
 #define FS_UNIX_RIGHTS
@@ -51,7 +51,9 @@ static inline int dir_sep(char x) { return x == '/'; }
 #define ASSOC_BLOCK
 #define ASSOC_CONS_XWIN
 
-#elif defined(OS2)
+#endif
+
+#ifdef OS2
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
@@ -82,7 +84,9 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #endif
 #endif
 
-#elif defined(WIN32)
+#endif
+
+#ifdef WIN32
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 /*#define NO_ASYNC_LOOKUP*/
@@ -95,7 +99,9 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define DOS_FS
 #define NO_FORK_ON_EXIT
 
-#elif defined(BEOS)
+#endif
+
+#ifdef BEOS
 
 static inline int dir_sep(char x) { return x == '/'; }
 #define FS_UNIX_RIGHTS
@@ -129,7 +135,9 @@ int be_close(int);
 int be_select(int, struct fd_set *, struct fd_set *, struct fd_set *, struct timeval *);
 int be_getsockopt(int, int, int, void *, int *);
 
-#elif defined(RISCOS)
+#endif
+
+#ifdef RISCOS
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define SYSTEM_ID SYS_RISCOS

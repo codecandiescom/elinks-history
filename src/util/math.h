@@ -1,7 +1,8 @@
-/* $Id: math.h,v 1.1 2004/04/16 09:42:13 zas Exp $ */
+/* $Id: math.h,v 1.2 2004/04/23 20:39:30 pasky Exp $ */
 
 #ifndef EL__UTIL_MATH_H
 #define EL__UTIL_MATH_H
+
 
 /* These macros will evaluate twice their arguments.
  * Ie. MIN(a+b, c+d) will do 3 additions...
@@ -23,6 +24,7 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 
+
 static inline int
 int_min(register int x, register int y)
 {
@@ -36,6 +38,7 @@ int_max(register int x, register int y)
 	if (x > y) return x;
 	return y;
 }
+
 
 /* Limit @what pointed value to upper bound @limit. */
 static inline void

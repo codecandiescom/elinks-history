@@ -4,7 +4,6 @@ Homepage:
 DEBs:
 	http://packages.debian.org/testing/web/elinks.html
 	http://packages.debian.org/unstable/web/elinks.html
-	http://www.miernik.ctnet.pl/debian/ (of current unstable CVS)
 
 RPMs:
 	http://rpmfind.net/linux/rpm2html/search.php?query=elinks
@@ -44,4 +43,4 @@ RPMs:
 	http://ftp.nest.pld-linux.org/pool/l/links/
 	http://ftp.pld-linux.org/pool/l/links/
 
-$Id: SITES,v 1.20 2004/07/28 16:25:03 jonas Exp $
+$Id: SITES,v 1.21 2005/01/31 23:14:14 jonas Exp $

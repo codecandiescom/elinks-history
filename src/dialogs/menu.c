@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.49 2002/11/28 20:53:12 zas Exp $ */
+/* $Id: menu.c,v 1.50 2002/11/29 19:27:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,12 +597,15 @@ query_file(struct session *ses, unsigned char *url,
 	   void (*std)(struct session *, unsigned char *),
 	   void (*cancel)(struct session *), int interactive)
 {
-	unsigned char *file, *def;
+	unsigned char *file;
+	unsigned char *def = init_str();
 	int dfl = 0;
 	int l;
 
+	if (!def) return;
+
 	get_filename_from_url(url, &file, &l);
-	def = init_str();
+
 	add_to_str(&def, &dfl, get_opt_str("document.download.directory"));
 	if (*def && !dir_sep(def[strlen(def) - 1])) add_chr_to_str(&def, &dfl, '/');
 	add_bytes_to_str(&def, &dfl, file, l);

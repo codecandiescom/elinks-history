@@ -1,3 +1,282 @@
+Tue Aug  3 21:53:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Reduce code redundancy by introducing check_hotkeys_common(), now
+	used by check_hotkeys() and check_not_so_hot_keys(). Cleanup and
+	code simplification.  
+
+Tue Aug  3 21:25:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: hotkey.c, hotkey.h, menu.c:
+
+	Only pass struct menu * to clear_hotkeys() and init_hotkeys().  
+
+Tue Aug  3 21:02:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: hotkey.c, hotkey.h, menu.c:
+
+	Drop @ni parameter from init_hotkeys() and clear_hotkeys_cache().  
+
+Tue Aug  3 20:57:39 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	init_hotkeys(): use foreach_menu_item().  
+
+Tue Aug  3 17:08:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hotkey.c, bfu/menu.c, bfu/menu.h,
+	document/html/parser.c:
+
+	Use struct menu_item * in mi_is_*() macros, and simplify code. This
+	will help to expand usage of foreach_menu_item() macro.  
+
+Tue Aug  3 16:19:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_char16(): minor simplification, @code[x] already contains 0.  
+
+Tue Aug  3 16:13:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_char16(): drop static attribute for @code, there is no reason to
+	use it.  
+
+Tue Aug  3 10:41:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/http/http.c,
+	sched/connection.c, ssl/connect.c:
+
+	Do the init_ssl_connection() call in ssl_connect(). It simplifies a
+	lot of things. Now all the SSL handle setup and teardown is done
+	within ssl/.  
+
+Tue Aug  3 10:31:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, sched/connection.c,
+	ssl/connect.c:
+
+	Continue the rampage. Introduce done_connection_info().  
+
+Tue Aug  3 10:04:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/http/http.c:
+
+	Introduce init_connection_info().  
+
+Tue Aug  3 09:43:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	make_connection(): Why yes Mam but de gospel do say that man was
+	born of woman's womb.  
+
+Tue Aug  3 09:39:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, protocol/finger.c,
+	protocol/ftp/ftp.c, protocol/http/http.c:
+
+	make_connection(): Drop @port arg. It is needless code dublication.
+	The return value check in http_protocol_handler() should not be
+	needed anymore. T'is legacy.  
+
+Tue Aug  3 09:37:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, uri.c, uri.h:
+
+	Introduce uri_port_is_valid() macro. Check the port numbers for the
+	protocol backend in get_protocol_port().  
+
+Tue Aug  3 09:23:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.c:
+
+	truncate_entry(): add a comment about doubt of zero length fragment
+	legality.  
+
+Tue Aug  3 09:19:40 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/cache.c:
+
+	Tweak the assertion added in 1.167, 'truncate_entry(): reduce code
+	redundancy by reordering tests.' The assertion was triggered by a
+	Lua preformatting hook.  Zas doesn't know why, but suggested this
+	change, which asserts that cache-entry fragments have a length >= 0
+	rather than > 0.  
+
+Tue Aug  3 09:18:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h,
+	protocol/http/http.c, ssl/connect.c:
+
+	Rename struct conn_info's @func callback to @done. D-scribe
+	make_connection().  
+
+Tue Aug  3 09:11:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	connected(): No need to test for conn_info or conn_info->func.  
+
+Tue Aug  3 09:08:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c:
+
+	Rename all conn_info struct variables to conn_info.  
+
+Tue Aug  3 08:43:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	init_listbox(): Reduce indentation by doing check on the listbox
+	browser's box_data->items.  
+
+Tue Aug  3 08:24:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.h, ssl/connect.c:
+
+	struct connection: Rename @no_tsl to @no_tls.  
+
+Tue Aug  3 08:14:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_set_no_tls(): It is only called after checking |if
+	(conn->no_tsl)| which means there is no need to test it in the
+	function. Cleaned up to use table stack initialization. Reduce size
+	of @cipher_priority[], it was too big.  
+
+Tue Aug  3 00:50:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, sched/connection.c, ssl/ssl.c,
+	ssl/ssl.h:
+
+	init_ssl_connection(): Take connection_socket struct as arg.  
+
+Tue Aug  3 00:44:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_read(), ssl_do_read(): Use passed connection_socket struct.  
+
+Tue Aug  3 00:39:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_write(), ssl_do_write(): Use passed connection_socket struct.  
+
+Tue Aug  3 00:37:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_want_read(): Use local connection_socket pointer.  
+
+Tue Aug  3 00:35:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_do_connect(): Take connection_socket struct as arg.  
+
+Tue Aug  3 00:33:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_set_no_tls(): Take connection_socket struct as arg.  
+
+Tue Aug  3 00:10:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_connect(): Use the passed connection_socket for retrieving the
+	SSL handle.  
+
+Tue Aug  3 00:04:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Introduce connection_is_https_proxy() macro.  
+
+Mon Aug  2 23:58:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	HTTP is allowed to assume SSL handle is in conn->socket. Add TODO
+	about moving cache->ssl_info initialization.  
+
+Mon Aug  2 23:37:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/: connect.c, ssl.c, ssl.h:
+
+	done_ssl_connection(): Take only the connection_socket struct.
+	Rename? 
+
+Mon Aug  2 23:22:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+
+	Use the read_buffer socket for testing SSL and pass the socket to
+	ssl_read().  
+
+Mon Aug  2 23:20:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+
+	Use the write_buffer socket for testing SSL and pass the socket to
+	ssl_write().  
+
+Mon Aug  2 23:15:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	connected(): Check for SSL in the connection info struct's socket.  
+
+Mon Aug  2 23:10:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/connect.c:
+
+	dns_found(): Check for SSL in the connection info struct's socket.  
+
+Mon Aug  2 22:59:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	interrupt_connection(): Since close_socket() calls ssl_close() which
+	then calls done_ssl_connection() there is no need to do it here.
+	Further this also allows GNUTLS backend to close down the SSL
+	connection properly via ssl_do_close() macroed to gnutls_bye().  
+
+Mon Aug  2 22:50:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Oops, fix last patch. ;-) 
+
+Mon Aug  2 22:45:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_do_close(): Use the passed socket.  
+
+Mon Aug  2 22:43:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c, ssl/connect.h:
+
+	close_socket(): Pass the mic to ssl_connect().  
+
+Mon Aug  2 22:13:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h, ssl/connect.c, ssl/ssl.c:
+
+	Move the connection struct's ssl handle to struct connection_socket.
+	All users still assume that there can be only one ssl handle and it
+	is conn->socket.ssl. Ugly tag appended for each substitution so they
+	are easy to locate.  
+
 Mon Aug  2 21:38:59 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/man/man5/elinks.conf.5:

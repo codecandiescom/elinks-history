@@ -1,5 +1,5 @@
 /* Parser CSS backend */
-/* $Id: parser.c,v 1.1 2003/02/25 14:15:50 jonas Exp $ */
+/* $Id: parser.c,v 1.2 2003/06/08 02:24:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,7 +9,6 @@
 
 #include "elinks.h"
 
-#include "elusive/parser/property.h"
 #include "elusive/parser/css/atrule.h"
 #include "elusive/parser/css/parser.h"
 #include "elusive/parser/css/ruleset.h"
@@ -17,6 +16,7 @@
 #include "elusive/parser/css/state.h"
 #include "elusive/parser/css/tree.h"
 #include "elusive/parser/parser.h"
+#include "elusive/parser/property.h"
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memory.h"
@@ -42,7 +42,7 @@
  * 	| stylesheet ruleset
  */
 static enum pstate_code
-css_parse_stylesheet(struct parser_state *state, unsigned char **src, int *len)
+parse_css_stylesheet(struct parser_state *state, unsigned char **src, int *len)
 {
 	struct css_parser_state *pstate = state->data;
 	unsigned char *css = *src;
@@ -106,7 +106,7 @@ css_parse_stylesheet(struct parser_state *state, unsigned char **src, int *len)
 typedef enum pstate_code (*parse_func)(struct parser_state *, unsigned char **, int *);
 
 /* XXX: Keep in alphabetical order */
-parse_func css_state_parsers[CSS_STATE_CODES] = {
+parse_func css_parsers[CSS_STATE_CODES] = {
 	/* CSS_ATRULE */		css_parse_atrule,
 	/* CSS_CHARSET */		css_parse_charset,
 	/* CSS_COMMENT */		css_scan_comment,
@@ -143,7 +143,7 @@ parse_func css_state_parsers[CSS_STATE_CODES] = {
  * stylesheets. If only parsing of a subset of a stylesheet then calls should
  * go directly to the subset parser. See elusive/parser/html/ */
 static void
-css_init(struct parser_state *state)
+init_css_parser(struct parser_state *state)
 {
 	struct css_parser_state *pstate;
 
@@ -158,7 +158,7 @@ css_init(struct parser_state *state)
 }
 
 static void
-css_parse(struct parser_state *state, unsigned char **src, int *len)
+parse_css(struct parser_state *state, unsigned char **src, int *len)
 {
 	struct css_parser_state *pstate = state->data;
 
@@ -172,7 +172,7 @@ css_parse(struct parser_state *state, unsigned char **src, int *len)
 			internal("Illegal state code");
 #endif
 
-		if (css_state_parsers[pstate->state](state, src, len) == PSTATE_SUSPEND) {
+		if (css_parsers[pstate->state](state, src, len) == PSTATE_SUSPEND) {
 			return;
 		}
 
@@ -181,7 +181,7 @@ css_parse(struct parser_state *state, unsigned char **src, int *len)
 }
 
 static void
-css_done(struct parser_state *state)
+done_css_parser(struct parser_state *state)
 {
 	struct css_parser_state *pstate = state->data;
 
@@ -196,7 +196,7 @@ css_done(struct parser_state *state)
 }
 
 struct parser_backend css_parser_backend = {
-	css_init,
-	css_parse,
-	css_done,
+	init_css_parser,
+	parse_css,
+	done_css_parser,
 };

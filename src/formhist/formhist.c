@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.13 2003/08/02 17:16:47 jonas Exp $ */
+/* $Id: formhist.c,v 1.14 2003/08/02 17:31:40 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -57,14 +57,50 @@ done_form_history(void)
 		done_form_history_item(item);
 }
 
+static struct form_history_item *
+read_item_submit_list(struct form_history_item *item, FILE *f)
+{
+	unsigned char name[MAX_STR_LEN], value[MAX_STR_LEN];
+	unsigned char tmp[MAX_STR_LEN];
+
+	while (safe_fgets(tmp, MAX_STR_LEN, f)) {
+		struct submitted_value *sv;
+
+		if (tmp[0] == '\n' && !tmp[1]) break;
+
+		/* FIXME: i don't like sscanf()... --Zas */
+		if (sscanf(tmp, "%s\t%s%*[\n]", name, value) != 2)
+			return NULL;
+
+		sv = mem_alloc(sizeof(struct submitted_value));
+		if (!sv) return NULL;
+
+		sv->name = stracpy(name);
+		if (!sv->name) {
+			mem_free(sv);
+			return NULL;
+		}
+
+		sv->value = base64_decode(value);
+		if (!sv->value) {
+			mem_free(sv->name);
+			mem_free(sv);
+			return NULL;
+		}
+
+		add_to_list_bottom(item->submit, sv);
+	}
+
+	return item;
+}
+
 static int
 init_form_history(void)
 {
 	struct form_history_item *form;
-	struct submitted_value *sv;
-	unsigned char name[MAX_STR_LEN], value[MAX_STR_LEN];
 	unsigned char tmp[MAX_STR_LEN], *file;
 	FILE *f;
+	int ret = 1;
 
 	file = straconcat(elinks_home, "formhist", NULL);
 	if (!file) return 0;
@@ -84,32 +120,10 @@ init_form_history(void)
 		init_list(*form);
 		init_list(form->submit);
 		form->url = stracpy(tmp);
-		if (!form->url) goto fail;
-
-		while (safe_fgets(tmp, MAX_STR_LEN, f)) {
-			if (tmp[0] == '\n' && !tmp[1]) break;
-
-			/* FIXME: i don't like sscanf()... --Zas */
-			if (sscanf(tmp, "%s\t%s%*[\n]", name, value) != 2)
-				goto fail;
-
-			sv = mem_alloc(sizeof(struct submitted_value));
-			if (!sv) goto fail;
-
-			sv->name = stracpy(name);
-			if (!sv->name) {
-				mem_free(sv);
-				goto fail;
-			}
-
-			sv->value = base64_decode(value);
-			if (!sv->value) {
-				mem_free(sv->name);
-				mem_free(sv);
-				goto fail;
-			}
-
-			add_to_list_bottom(form->submit, sv);
+		if (!form->url || !read_item_submit_list(form, f)) {
+			done_form_history_item(form);
+			ret = 0;
+			break;
 		}
 
 		add_to_list_bottom(form_history, form);
@@ -118,11 +132,7 @@ init_form_history(void)
 	fclose(f);
 	loaded = 1;
 
-	return 1;
-
-fail:
-	done_form_history_item(form);
-	return 0;
+	return ret;
 }
 
 unsigned char *

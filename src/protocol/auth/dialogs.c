@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.81 2003/11/09 13:44:27 pasky Exp $ */
+/* $Id: dialogs.c,v 1.82 2003/11/09 15:05:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ auth_dialog_layouter(struct dialog_data *dlg_data)
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	if (dlg_data->dlg->udata) {
-		dlg_format_text(NULL,
+		dlg_format_text_do(NULL,
 				dlg_data->dlg->udata, 0, &y, w, &rw,
 				dialog_text_color, AL_LEFT);
 		y++;
@@ -57,7 +57,7 @@ auth_dialog_layouter(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB;
 	if (dlg_data->dlg->udata) {
-		dlg_format_text(term,
+		dlg_format_text_do(term,
 				dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 				&y, w, NULL,
 				dialog_text_color, AL_LEFT);

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.98 2003/11/09 13:44:26 pasky Exp $ */
+/* $Id: inpfield.c,v 1.99 2003/11/09 15:05:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ dlg_format_field(struct terminal *term,
 
 		if (term) text_color = get_bfu_color(term, "dialog.text");
 
-		dlg_format_text(term, label, x, y, w, rw, text_color, AL_LEFT);
+		dlg_format_text_do(term, label, x, y, w, rw, text_color, AL_LEFT);
 	}
 
 	/* XXX: We want the field and label on the same line if the terminal

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.50 2003/11/09 14:23:12 jonas Exp $ */
+/* $Id: text.c,v 1.51 2003/11/09 15:05:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ split_line(unsigned char *text, int max_width)
 
 /* Format text according to dialog dimensions and alignment. */
 void
-dlg_format_text(struct terminal *term, unsigned char *text,
+dlg_format_text_do(struct terminal *term, unsigned char *text,
 		int x, int *y, int dlg_width, int *real_width,
 		struct color_pair *color, enum format_align align)
 {
@@ -79,7 +79,7 @@ void
 layout_text_widget(struct terminal *term, struct widget_data *widget_data,
 		   int x, int *y, int dlg_width, int *real_width)
 {
-	dlg_format_text(term, widget_data->widget->text,
+	dlg_format_text_do(term, widget_data->widget->text,
 			x, y, dlg_width, real_width,
 			term ? get_bfu_color(term, "dialog.text") : NULL,
 			widget_data->widget->info.text.align);

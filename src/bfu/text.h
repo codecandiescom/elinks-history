@@ -1,4 +1,4 @@
-/* $Id: text.h,v 1.12 2003/11/09 14:23:12 jonas Exp $ */
+/* $Id: text.h,v 1.13 2003/11/09 15:05:17 pasky Exp $ */
 
 #ifndef EL__BFU_TEXT_H
 #define EL__BFU_TEXT_H
@@ -18,7 +18,7 @@
 	} while (0)
 
 extern struct widget_ops text_ops;
-void dlg_format_text(struct terminal *term,
+void dlg_format_text_do(struct terminal *term,
 		    unsigned char *text, int x, int *y, int w, int *rw,
 		    struct color_pair *scolor, enum format_align align);
 

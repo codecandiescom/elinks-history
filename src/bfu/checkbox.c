@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.63 2003/11/09 12:27:56 zas Exp $ */
+/* $Id: checkbox.c,v 1.64 2003/11/09 15:05:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ dlg_format_checkbox(struct terminal *term,
 	if (w <= 4) return;
 
 	if (rw) *rw -= 4;
-	dlg_format_text(term, text, x + 4, y, w - 4, rw,
+	dlg_format_text_do(term, text, x + 4, y, w - 4, rw,
 			get_bfu_color(term, "dialog.checkbox-label"), AL_LEFT);
 	if (rw) *rw += 4;
 }

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.112 2003/11/09 13:44:27 pasky Exp $ */
+/* $Id: dialogs.c,v 1.113 2003/11/09 15:05:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,12 +201,12 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 		return;
 	}
 
-	dlg_format_text(NULL, name, 0, &y,
+	dlg_format_text_do(NULL, name, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	dlg_format_field(NULL, &dlg_data->widgets_data[0],
 			 0, &y, w, &rw, AL_NONE);
 	y++;
-	dlg_format_text(NULL, desc, 0, &y,
+	dlg_format_text_do(NULL, desc, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2, 0,
@@ -216,14 +216,14 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 	draw_dialog(dlg_data, w, y);
 
 	y = dlg_data->y + DIALOG_TB;
-	dlg_format_text(term, name, dlg_data->x + DIALOG_LB,
+	dlg_format_text_do(term, name, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 
 	dlg_format_field(term, &dlg_data->widgets_data[0],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_NONE);
 
 	y++;
-	dlg_format_text(term, desc, dlg_data->x + DIALOG_LB,
+	dlg_format_text_do(term, desc, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, &dlg_data->widgets_data[1], 2, dlg_data->x + DIALOG_LB,

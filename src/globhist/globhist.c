@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.53 2003/11/26 11:29:41 miciah Exp $ */
+/* $Id: globhist.c,v 1.54 2003/11/26 18:09:04 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -335,7 +335,8 @@ read_global_history(void)
 	unsigned char *title, *url, *last_visit;
 	FILE *f;
 
-	if (!get_globhist_enable())
+	if (!get_globhist_enable()
+	    || get_opt_int_tree(cmdline_options, "anonymous"))
 		return;
 
 	if (elinks_home) {
@@ -485,7 +486,8 @@ done_global_history(struct module *module)
 {
 	if (global_history_write_timer >= 0)
 		kill_timer(global_history_write_timer);
-	write_global_history();
+	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
+		write_global_history();
 	free_global_history();
 	if (gh_last_searched_title) mem_free(gh_last_searched_title);
 	if (gh_last_searched_url) mem_free(gh_last_searched_url);

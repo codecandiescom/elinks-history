@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.51 2003/07/12 17:38:47 jonas Exp $ */
+/* $Id: auth.c,v 1.52 2003/07/12 19:23:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,7 +267,7 @@ get_invalid_auth_entry(void)
 	struct http_auth_basic *entry;
 
 	foreach (entry, http_auth_basic_list)
-		if (!auth_entry_has_userinfo(entry))
+		if (!entry->valid)
 			return entry;
 
 	return NULL;

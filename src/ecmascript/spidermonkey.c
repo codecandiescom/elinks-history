@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.124 2004/12/19 11:27:10 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.125 2004/12/19 11:31:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,6 +121,10 @@ value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 
 	case JSPT_BOOLEAN:
 		*vp = BOOLEAN_TO_JSVAL(prop->value.boolean);
+		break;
+
+	case JSPT_INT:
+		*vp = INT_TO_JSVAL(prop->value.number);
 		break;
 
 	case JSPT_OBJECT:

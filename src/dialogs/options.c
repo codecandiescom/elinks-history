@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.162 2004/12/26 23:36:47 jonas Exp $ */
+/* $Id: options.c,v 1.163 2004/12/26 23:44:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,17 +219,8 @@ push_resize_button(void *data)
 	struct terminal *term = data;
 	unsigned char str[MAX_STR_LEN];
 
-	strcpy(str, x_str);
-	strcat(str, ",");
-	strcat(str, y_str);
-	strcat(str, ",");
-
-	sprintf(x_str, "%d", term->width);
-	sprintf(y_str, "%d", term->height);
-
-	strcat(str, x_str);
-	strcat(str, ",");
-	strcat(str, y_str);
+	snprintf(str, sizeof(str), "%s,%s,%d,%d",
+		 x_str, y_str, term->width, term->height);
 
 	do_terminal_function(term, TERM_FN_RESIZE, str);
 }

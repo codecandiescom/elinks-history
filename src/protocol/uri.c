@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.264 2004/07/20 07:26:27 miciah Exp $ */
+/* $Id: uri.c,v 1.265 2004/07/20 22:14:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ static int
 check_uri_file(unsigned char *name)
 {
 	/* Check POST_CHAR etc ... */
-	unsigned char *chars = "\001#?";
+	static const unsigned char *chars = "\001#?";
 
 	if (file_exists(name))
 		return strlen(name);

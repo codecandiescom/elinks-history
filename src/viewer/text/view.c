@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.470 2004/06/15 22:04:00 zas Exp $ */
+/* $Id: view.c,v 1.471 2004/06/15 22:08:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,16 +854,19 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				d[1] = 0;
 				nl = document->nlinks, lnl = 1;
 				while (nl) nl /= 10, lnl++;
-					if (lnl > 1)
+				
+				if (lnl > 1)
 					input_field(ses->tab->term, NULL, 1,
 						    N_("Go to link"), N_("Enter link number"),
 						    N_("OK"), N_("Cancel"), ses, NULL,
 						    lnl, d, 1, document->nlinks, check_number,
 						    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
+
 			} else if (get_opt_int("document.browse.accesskey.priority") == 1
 				   && try_document_key(ses, doc_view, ev)) {
 				/* The document ate the key! */
 				status = FRAME_EVENT_OK;
+			
 			} else {
 				status = FRAME_EVENT_IGNORED;
 			}

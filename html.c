@@ -1039,9 +1039,8 @@ void get_html_form(unsigned char *a, struct form *form)
 		form->action = join_urls(format.href_base, all);
 		mem_free(al);
 	} else {
-		if ((ch = strchr(form->action = stracpy(format.href_base), POST_CHAR))) *ch = 0;
+		if ((ch = strchr(form->action, '?'))) *ch = 0;
 	}
-/*	if ((ch = strchr(form->action, '?'))) *ch = 0;*/
 	if ((al = get_target(a))) {
 		form->target = al;
 	} else {

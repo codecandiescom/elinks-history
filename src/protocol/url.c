@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.29 2002/08/06 23:26:31 pasky Exp $ */
+/* $Id: url.c,v 1.30 2002/08/25 20:15:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,7 +523,7 @@ translate_directories(unsigned char *url)
 {
 	unsigned char *url_data = get_url_data(url);
 	unsigned char *src, *dest;
-	int lo = !casecmp(url, "file://", 7);
+	int lo = !casecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 
 	if (!url_data || url_data == url/* || *--url_data != '/'*/) return;
 	if (!dsep(*url_data)) url_data--;
@@ -617,7 +617,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 {
 	unsigned char *p, *n, *path;
 	int l;
-	int lo = !casecmp(base, "file://", 7);
+	int lo = !casecmp(base, "file://", 7); /* dsep() *hint* *hint* */
 	int add_slash = 0;
 
 	/* See RFC 1808 */
@@ -976,7 +976,7 @@ extract_proxy(unsigned char *url)
 void
 get_filename_from_url(unsigned char *url, unsigned char **s, int *l)
 {
-	int lo = !casecmp(url, "file://", 7);
+	int lo = !casecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 	unsigned char *uu = get_url_data(url);
 
 	if (uu) url = uu;
@@ -987,6 +987,8 @@ get_filename_from_url(unsigned char *url, unsigned char **s, int *l)
 	}
 	*l = url - *s;
 }
+
+#undef dsep
 
 
 /* URL encoding, escaping unallowed characters. */

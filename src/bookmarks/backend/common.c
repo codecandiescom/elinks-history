@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.3 2002/12/08 20:33:28 pasky Exp $ */
+/* $Id: common.c,v 1.4 2002/12/09 18:55:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,8 @@ bookmarks_read()
 	unsigned char *file_name;
 	FILE *f;
 
+	if (!bookmarks_backends[MOOMAGIC]->read) return;
+
 	file_name = straconcat(elinks_home, "bookmarks", NULL);
 	if (!file_name) return;
 
@@ -56,8 +58,7 @@ bookmarks_read()
 	mem_free(file_name);
 	if (!f) return;
 
-	if (bookmarks_backends[MOOMAGIC]->read)
-		bookmarks_backends[MOOMAGIC]->read(f);
+	bookmarks_backends[MOOMAGIC]->read(f);
 
 	fclose(f);
 	bookmarks_dirty = 0;
@@ -71,6 +72,7 @@ bookmarks_write(struct list_head *bookmarks)
 	unsigned char *file_name;
 
 	if (!bookmarks_dirty) return;
+	if (!bookmarks_backends[MOOMAGIC]->write) return;
 
 	file_name = straconcat(elinks_home, "bookmarks", NULL);
 	if (!file_name) return;
@@ -79,8 +81,7 @@ bookmarks_write(struct list_head *bookmarks)
 	mem_free(file_name);
 	if (!ssi) return;
 
-	if (bookmarks_backends[MOOMAGIC]->write)
-		bookmarks_backends[MOOMAGIC]->write(ssi, bookmarks);
+	bookmarks_backends[MOOMAGIC]->write(ssi, bookmarks);
 
 	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }

@@ -1,22 +1,43 @@
-Enhanced/Extended Links (ELinks)
+ELinks - an advanced web browser
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Development version of Links (Lynx-like text WWW browser), with more liberal
-features policy and development style.
+ELinks is an advanced and well-established feature-rich text mode web
+(HTTP/FTP/..) browser. ELinks can render both frames and tables, is highly
+customizable and can be extended via scripts. It is very portable and runs
+on a variety of platforms.
 
-This is the ELinks tree - intended to provide a feature-rich version of Links.
-Its purpose is to provide an alternative to Links, and to test and tune various
-new features, but still provide good rock-solid releases inside stable branches.
-
-See the manpage for a detailed description of ELinks and its features.  If you
-are more interested, you can examine the Links website at http://links.sf.net/.
-For new ELinks version announcements please see the elinks-user mailing list at
-http://linuxfromscratch.org/mailman/listinfo/elinks-users.
-
-The ELinks site with some basic information is available at
-http://elinks.or.cz/.  Please see the SITES file for mirrors or other
-recommended sites. If you want to install ELinks on your computer, see the
+The ELinks official website is available at http://elinks.or.cz/.
+Please see the SITES file for mirrors or other recommended sites.
+If you want to install ELinks on your computer, see the
 INSTALL file for further instructions.
+
+A good start point is documentation files available in doc/, especially the
+file named index.txt.
+
+If you want to request features or report bugs, see community information at
+http://elinks.or.cz/community.html and feedback information available at
+http://elinks.or.cz/feedback.html.
+
+If you want to write some patches, please first read the doc/hacking.txt
+document.
+
+If you want to add a new language or update the translation for an existing
+one, please read intl/README document.
+
+If you want to write some documentation, well you're welcomed ;)
+
+
+
+History
+~~~~~~~
+
+Initially, ELinks was a development version of Links (Lynx-like text WWW browser),
+with more liberal features policy and development style.
+
+Its purpose was to provide an alternative to Links, and to test and tune various
+new features, but still provide good rock-solid releases inside stable branches.
+If you are more interested, you can examine the Links website at
+http://links.sf.net/.
 
 Why not contribute to Links instead?  Well, first I made a bunch of patches for
 the original Links, but a significant number of them got refused  because
@@ -30,17 +51,11 @@ drastic bloating of the code, the development is driven in the course of
 modularization and separation of add-on modules (like cookies, bookmarks, ssl,
 lua etc).
 
-If you want to write some patches, please read the doc/hacking.txt document.
+For more about ELinks history, see http://elinks.or.cz/history.html
 
-If you want to add a new language or update the translation for an existing one,
-please read intl/README document.
 
-If you want to write some documentation, well you're welcomed ;)
 
-If you want to request features or report bugs, use the mailing list as
-mentioned above, bugzilla at bugzilla.elinks.or.cz or come and see us on
-irc.freenode.net #elinks.
 
-$Id: README,v 1.22 2004/05/06 00:14:36 jonas Exp $
+$Id: README,v 1.23 2004/12/28 12:26:30 zas Exp $
 
 vim: textwidth=80

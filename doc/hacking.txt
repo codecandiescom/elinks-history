@@ -14,15 +14,10 @@ Motto: I didn't expect someone to look at the source, so it's unreadable.
 ~~~~~~~~~~~~~~~~~
 
 Each UI output should use language files in order to be able to translate the
-messages to a desired language.  Those language files reside in intl/ subdir,
-and each time when you add/remove something from there, thou shall call the
-./synclang script, so that the changes will propagate from english.lng to all
-other language files and lang_defs.h && language.inc files will be generated
-automagically. Thou shall NEVER modify those two files manually, or thou wilt
-be cursed for the rest of your life and all patches from thee will be trampled
-on.
-
-Please read the intl/README file before taking any action.
+messages to a desired language.  Those language files reside in po/ subdir. If
+you want to update a .po file please read the gettext manual available at
+<http://www.gnu.org/manual/gettext>. In order to actually use your updates on
+your own system you have to have the gettext tools installed.
 
 
 2, ELinks philosophy
@@ -50,7 +45,6 @@ some existing code and modify appropriately, if you want one :).
 
 Some common used functions (i.e. malloc() or free()) have their own clones
 inside ELinks and you should use them (i.e. mem_alloc() or mem_free()) instead.
-See links.h for list of them ;-).
 
 If you want to have anything else documented here, write a description and send
 us a patch.
@@ -337,7 +331,7 @@ func(int a, int b)
 	Instead of:
 		if ((c = a) == b) {...
 
-- Never use spaces with ().
+- Never use spaces within ().
 
 	Use:
 		if (a) ...
@@ -412,14 +406,17 @@ func(int a, int b)
 - If you see code in ELinks that doesn't follow these rules, fix it or tell
   us about it.
 
+- All the .c files MUST start by a short one-line description and a CVS Id tag
+  on the next line:
+
+	/* <short one-line description> */
+	/* $Id: hacking.txt,v 1.12 2003/06/24 20:49:40 jonas Exp $ */
+
+- All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
+  The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
+
 - There are obviously exceptions to these rules, but don't make a rule from
   your exception and be prepared to defend your exception at anytime ;).
-
-- All the .c files MUST start by a short one-line description and an $Id: hacking.txt,v 1.11 2003/06/21 22:45:38 pasky Exp $ tag
-  on the next line.
-
-- All the .h files MUST start by an $Id: hacking.txt,v 1.11 2003/06/21 22:45:38 pasky Exp $ tag and then anti-reinclusion ifdef.
-  The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
 
 
 Coding practices:
@@ -454,6 +451,11 @@ changes etc ;-).
 We also accept output from "cvs diff -u" :).  The statement about bloat
 removing above still applies.
 
+Big patches are hard to review so if your feature involves a lot of changes
+please consider splitting it in appropriate bits. Appropriate could mean:
+- Keep trivial changes like indenting, renaming, fixing comments separate.
+- Keep movements of (bigger) code snippets separate from changes in them.
+
 
 5, Advantages of --enable-debug configure option and why everybody concerned
 with ELinks devel. should use it:
@@ -480,4 +482,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.11 2003/06/21 22:45:38 pasky Exp $
+$Id: hacking.txt,v 1.12 2003/06/24 20:49:40 jonas Exp $

@@ -1,4 +1,4 @@
-/* $Id: box.h,v 1.3 2003/01/18 01:32:06 pasky Exp $ */
+/* $Id: box.h,v 1.4 2003/01/18 01:41:14 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_BOX_H
 #define EL__USIVE_LAYOUTER_BOX_H
@@ -98,7 +98,7 @@ get_box_property(struct layout_box *box, unsigned char *name);
  * dynamically allocated memory (which you have to free after doing what you
  * needed to, yes). */
 /* This doesn't automatically look up any properties other than stored in the
- * box itself. */
+ * box itself and its associated syntax tree node. */
 unsigned char *
 get_only_box_property(struct layout_box *box, unsigned char *name);
 

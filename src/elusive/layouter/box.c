@@ -1,5 +1,5 @@
 /* Layout box utility tools */
-/* $Id: box.c,v 1.5 2003/01/18 01:32:06 pasky Exp $ */
+/* $Id: box.c,v 1.6 2003/01/18 01:41:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,8 @@ get_only_box_property(struct layout_box *box, unsigned char *name)
 	struct property *property = get_property(&box->properties, name);
 
 	if (!property)
-		return NULL;
+		return box->syntree_node ? get_only_syntree_property(box->syntree_node, name)
+					 : NULL;
 
 	return memacpy(property->value, property->valuelen);
 }
@@ -74,9 +75,6 @@ unsigned char *
 get_box_property(struct layout_box *box, unsigned char *name)
 {
 	unsigned char *value = get_only_box_property(box, name);
-
-	if (!value && box->syntree_node)
-		value = get_only_syntree_property(box->syntree_node, name);
 
 	if (!value && box->root)
 		value = get_box_property(box->root, name);

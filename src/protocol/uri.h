@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.95 2004/04/09 03:19:43 jonas Exp $ */
+/* $Id: uri.h,v 1.96 2004/04/09 03:20:57 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -93,10 +93,10 @@ enum uri_component {
 	/* Some predefined classes for formatting of URIs */
 
 	/* Used for public display either in dialogs or sent over the Net */
-	URI_PUBLIC	 = ~(URI_PASSWORD | URI_DEFAULT_PORT | URI_POST),
+	URI_PUBLIC		= ~(URI_PASSWORD | URI_DEFAULT_PORT | URI_POST),
 
 	/* Used for getting the original URI with no internal encoding */
-	URI_ORIGINAL	 = ~(URI_DEFAULT_PORT | URI_POST),
+	URI_ORIGINAL		= ~(URI_DEFAULT_PORT | URI_POST),
 
 	/* Used in the HTTP Auth code for ma*/
 	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_DATA | URI_POST),

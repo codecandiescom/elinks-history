@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.83 2003/07/23 00:47:11 pasky Exp $ */
+/* $Id: download.c,v 1.84 2003/07/23 02:43:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1151,6 +1151,7 @@ tp_display(struct session *ses)
 static void
 type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 {
+	struct string filename;
 	unsigned char *content_type;
 
 	if (ses->tq_prog) {
@@ -1170,9 +1171,15 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 	content_type = stracpy(ct);
 	if (!content_type) return;
 
+	if (init_string(&filename))
+		add_string_uri_filename_to_string(&filename, ses->tq_url);
+
+	/* @filename.source should be last in the getml()s ! (It terminates the
+	 * pointers list in case of allocation failure.) */
+
 	if (!handler) {
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
-			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
+			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
 				msg_text(ses->tab->term, N_("Content type is %s.\n"
 					"Do you want to save or display this file?"),
@@ -1182,7 +1189,7 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
+			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
 				msg_text(ses->tab->term, N_("Content type is %s.\n"
 					"Do you want to display this file?"),
@@ -1194,10 +1201,6 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 	} else {
 		unsigned char *description = handler->description;
 		unsigned char *desc_sep;
-		struct string filename;
-
-		if (init_string(&filename))
-			add_string_uri_filename_to_string(&filename, ses->tq_url);
 
 		if (description) {
 			desc_sep = "; ";
@@ -1205,10 +1208,6 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 			desc_sep = "";
 			description = "";
 		}
-
-		/* @filename.source should be last in the getml()s !
-		 * (It terminates the pointers list in case of allocation
-		 * failure.) */
 
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.278 2004/08/15 06:49:08 miciah Exp $ */
+/* $Id: search.c,v 1.279 2004/08/15 06:55:20 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -274,7 +274,7 @@ is_in_range_regex(struct document *document, int y, int height,
 	if (reg_err) {
 		/* TODO: error message */
 		regfree(&regex);
-		return 0;
+		return -2;
 	}
 
 	doclen = s2 - s1 + textlen;
@@ -285,7 +285,7 @@ is_in_range_regex(struct document *document, int y, int height,
 	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
 	if (!doc) {
 		regfree(&regex);
-		return 0;
+		return -1;
 	}
 
 	for (i = 0; i < doclen; i++) {
@@ -372,7 +372,7 @@ is_in_range_plain(struct document *document, int y, int height,
 	int case_sensitive = get_opt_int("document.browse.search.case");
 
 	txt = case_sensitive ? stracpy(text) : lowered_string(text, textlen);
-	if (!txt) return 0;
+	if (!txt) return -1;
 
 	/* TODO: This is a great candidate for nice optimizations. Fresh CS
 	 * graduates can use their knowledge of ie. KMP (should be quite
@@ -422,7 +422,7 @@ is_in_range(struct document *document, int y, int height,
 	int textlen;
 
 	assert(document && text && min && max);
-	if_assert_failed return 0;
+	if_assert_failed return -1;
 
 	*min = INT_MAX, *max = 0;
 	textlen = strlen(text);
@@ -894,7 +894,7 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 
 	do {
 		if (is_in_range(doc_view->document, p, height, ses->search_word,
-				&min, &max)) {
+				&min, &max) > 0) {
 			doc_view->vs->y = p;
 			if (max >= min)
 				doc_view->vs->x = int_min(int_max(doc_view->vs->x,

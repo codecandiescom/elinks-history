@@ -222,7 +222,7 @@ int do_lookup(struct dnsquery *query, int force_async)
 int do_queued_lookup(struct dnsquery *query)
 {
 #ifndef THREAD_SAFE_LOOKUP
-	q->next_in_queue = NULL;
+	query->next_in_queue = NULL;
 	
 	if (!dns_queue) {
 		dns_queue = query;

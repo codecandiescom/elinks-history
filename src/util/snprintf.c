@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.27 2004/08/12 08:40:31 miciah Exp $ */
+/* $Id: snprintf.c,v 1.28 2004/11/15 03:36:04 miciah Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -832,6 +832,14 @@ elinks_vasprintf(char **ptr, const char *format, va_list ap)
 	if (ret <= 0) return ret;
 
 	/* Should we use mem_alloc() here instead of malloc() ??? --Zas */
+	/* No: This is an alternative to the system vasprintf.
+	 * When the system provides vasprintf, it will use malloc(),
+	 * which means that the string will need to be freed with free().
+	 * If we did use mem_alloc here in our alternative to the system
+	 * vasprintf, we would need to change all users of the memory
+	 * allocated by vasprintf to take into account whether the system
+	 * vasprintf (and therefore malloc) or our own vasprintf
+	 * (and therefore mem_alloc) was used. -- Miciah */
 	(*ptr) = (char *) malloc(ret + 1);
 	if (!*ptr) return -1;
 

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.14 2002/04/20 09:49:43 zas Exp $ */
+/* $Id: cookies.c,v 1.15 2002/04/20 11:21:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #ifdef COOKIES_DEBUG
 #include <util/error.h>
 #endif
-
+#include <util/secsave.h>
 
 tcount cookie_id = 0;
 
@@ -650,29 +650,27 @@ void
 save_cookies() {
 	struct cookie *c;
 	unsigned char *cookfile;
-	FILE *fp;
-	mode_t mask;
+	struct secure_save_info *ssi;
 
 	cookfile = straconcat(links_home, "cookies", NULL);
 	if (!cookfile) return;
 
-	mask = umask(066); /* 0600 permissions for cookies file */
-	fp = fopen(cookfile, "w");
-	umask(mask); /* Restore umask */
+	ssi = secure_open(cookfile, 0177); /* rw for user only */
 	mem_free(cookfile);
-	if (!fp) return;
+	if (!ssi) return;
 
 	foreach (c, cookies) {
-		if (c->expires && !cookie_expired(c))
-			fprintf(fp, "%s %s %s %s %s %ld %d\n",
-				c->name, c->value,
-				c->server ? c->server : (unsigned char *) "",
-				c->path ? c->path : (unsigned char *) "",
-				c->domain ? c->domain: (unsigned char *) "",
-				c->expires, c->secure);
+		if (c->expires && !cookie_expired(c)) {
+			if (secure_fprintf(ssi, "%s %s %s %s %s %ld %d\n",
+					   c->name, c->value,
+					   c->server ? c->server : (unsigned char *) "",
+					   c->path ? c->path : (unsigned char *) "",
+					   c->domain ? c->domain: (unsigned char *) "",
+	   				   c->expires, c->secure) < 0) break;
+		}
 	}
 
-	fclose(fp);
+	secure_close(ssi);
 }
 
 void

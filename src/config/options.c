@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.150 2002/12/12 16:47:44 pasky Exp $ */
+/* $Id: options.c,v 1.151 2002/12/12 17:01:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,7 +430,8 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 		int do_print_comment = 1;
 
 		if (option->flags & OPT_HIDDEN ||
-		    option->flags & OPT_WATERMARK)
+		    option->flags & OPT_WATERMARK ||
+		    (option->box_item && !option->box_item->visible) /* _template_ */)
 			continue;
 
 		/* Is there anything to be printed anyway? */

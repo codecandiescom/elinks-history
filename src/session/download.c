@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.205 2003/12/22 02:09:14 pasky Exp $ */
+/* $Id: download.c,v 1.206 2003/12/22 02:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,9 +173,10 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 {
 	unsigned char *msg = stracpy(file_download->file);
 	unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
+	struct session *ses = get_download_ses(file_download);
 
-	if (msg && emsg) {
-		struct terminal *term = get_download_ses(file_download)->tab->term;
+	if (msg && emsg && ses) {
+		struct terminal *term = ses->tab->term;
 
 		msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
 			N_("Download error"), AL_CENTER,
@@ -243,7 +244,11 @@ write_error:
 static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
-	struct terminal *term = get_download_ses(file_download)->tab->term;
+	struct session *ses = get_download_ses(file_download);
+	struct terminal *term;
+
+	if (!ses) goto abort;
+	term = ses->tab->term;
 
 	if (download->state >= 0) {
 		if (file_download->dlg_data)
@@ -303,8 +308,8 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 abort:
-	if (get_opt_int("document.download.notify_bell")
-	    + file_download->notify >= 2) {
+	if (term && get_opt_int("document.download.notify_bell")
+		    + file_download->notify >= 2) {
 		beep_terminal(term);
 	}
 

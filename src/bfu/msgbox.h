@@ -1,4 +1,4 @@
-/* $Id: msgbox.h,v 1.14 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: msgbox.h,v 1.15 2003/11/09 14:09:38 jonas Exp $ */
 
 #ifndef EL__BFU_MSGBOX_H
 #define EL__BFU_MSGBOX_H
@@ -23,7 +23,7 @@ enum msgbox_flags {
 /* This is _the_ dialog function used in almost all parts of the code. It is
  * used to easily format dialogs containing only text and few buttons below.
  *
- * @term	The terminal where the message box should be appear.
+ * @term	The terminal where the message box should appear.
  *
  * @mem_list	A list of pointers to allocated memory that should be
  *		free()'d when then dialog is closed. The list can be

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.12 2003/11/09 14:01:37 jonas Exp $ */
+/* $Id: hierbox.h,v 1.13 2003/11/09 14:09:38 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -11,7 +11,7 @@
 /* We use hierarchic listbox browsers for the various managers. They consist
  * of a listbox widget and some buttons.
  *
- * @term	The terminal where the browser should be appear.
+ * @term	The terminal where the browser should appear.
  *
  * @title	The title of the browser. It is automatically localized.
  *

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.7 2003/07/10 13:27:16 jonas Exp $ */
+/* $Id: uri.h,v 1.8 2003/07/12 20:21:15 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -46,5 +46,8 @@ end_of_dir(unsigned char c)
 
 /* Returns a valid host URL (for http authentification) or NULL. */
 unsigned char *get_uri_string(struct uri *uri);
+
+void encode_uri_string(unsigned char *, unsigned char **, int *);
+void decode_uri_string(unsigned char *);
 
 #endif

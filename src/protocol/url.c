@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.83 2003/07/11 23:17:46 jonas Exp $ */
+/* $Id: url.c,v 1.84 2003/07/12 20:21:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -667,76 +667,3 @@ get_extension_from_url(unsigned char *url)
 }
 
 #undef dsep
-
-
-/* URL encoding, escaping unallowed characters. */
-static inline int
-safe_char(unsigned char c)
-{
-	/* RFC 2396, Page 8, Section 2.3 ;-) */
-	return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-	       || (c >= '0' && c <= '9')
-	       || c == '-' || c == '_' || c == '.' || c == '!' || c == '~'
-	       || c == '*' || c == '\''|| c == '(' || c == ')';
-}
-
-
-void
-encode_url_string(unsigned char *name, unsigned char **data, int *len)
-{
-	unsigned char n[4];
-
-	n[0] = '%';
-	n[3] = '\0';
-
-	for (; *name; name++) {
-#if 0
-		/* This is probably correct only for query part of URL..? */
-		if (*name == ' ') add_chr_to_str(data, len, '+');
-		else
-#endif
-		if (safe_char(*name)) {
-			add_chr_to_str(data, len, *name);
-		} else {
-			/* Hex it. */
-			n[1] = hx((((int) *name) & 0xF0) >> 4);
-			n[2] = hx(((int) *name) & 0xF);
-			add_to_str(data, len, n);
-		}
-	}
-}
-
-
-/* This function is evil, it modifies its parameter. */
-/* XXX: but decoded string is _never_ longer than encoded string so it's an
- * efficient way to do that, imho. --Zas */
-void
-decode_url_string(unsigned char *src) {
-	unsigned char *dst = src;
-	unsigned char c;
-
-	do {
-		c = *src++;
-
-		if (c == '%') {
-			int x1 = unhx(*src);
-
-			if (x1 >= 0) {
-				int x2 = unhx(*(src + 1));
-
-				if (x2 >= 0) {
-					x1 = (x1 << 4) + x2;
-					if (x1 != 0) { /* don't allow %00 */
-						c = (unsigned char) x1;
-						src += 2;
-					}
-				}
-			}
-
-		} else if (c == '+') {
-			c = ' ';
-		}
-
-		*dst++ = c;
-	} while (c != '\0');
-}

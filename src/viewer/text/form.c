@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.4 2003/07/06 23:17:36 pasky Exp $ */
+/* $Id: form.c,v 1.5 2003/07/12 20:21:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
-#include "protocol/url.h"
+#include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
@@ -444,7 +444,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		d_opt = &o;
 
 		if (lst) add_chr_to_str(data, len, '&'); else lst = 1;
-		encode_url_string(sv->name, data, len);
+		encode_uri_string(sv->name, data, len);
 		add_chr_to_str(data, len, '=');
 
 		/* Convert back to original encoding (see html_form_control()
@@ -473,7 +473,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		}
 
 		if (p2) {
-			encode_url_string(p2, data, len);
+			encode_uri_string(p2, data, len);
 			mem_free(p2);
 		}
 	}

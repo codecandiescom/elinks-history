@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.51 2002/10/14 16:07:05 pasky Exp $ */
+/* $Id: dialogs.c,v 1.52 2002/11/11 23:05:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,9 +661,10 @@ launch_bm_add_link_dialog(struct terminal *term,
 			  struct dialog_data *parent,
 			  struct session *ses)
 {
-	unsigned char url[MAX_STR_LEN];
+	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
 
-	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL,
+	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK),
+		       get_current_link_name(ses, title, MAX_STR_LEN),
 		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
 		       parent, bookmark_add_add, NULL, NULL, 1);
 }

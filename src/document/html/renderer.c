@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.42 2002/09/17 14:49:49 zas Exp $ */
+/* $Id: renderer.c,v 1.43 2002/11/11 23:05:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -797,6 +797,8 @@ x:;
 			link->type = L_LINK;
 			link->where = stracpy(last_link);
 			link->target = stracpy(last_target);
+			link->name = memacpy(c, l);
+
 		} else {
 			switch (last_form->type) {
 				case FC_TEXT:

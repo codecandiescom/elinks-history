@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.14 2002/07/08 17:19:40 pasky Exp $ */
+/* $Id: session.h,v 1.15 2002/11/11 23:05:49 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -138,7 +138,9 @@ void display_timer(struct session *ses);
 unsigned char *get_current_url(struct session *, unsigned char *, size_t);
 unsigned char *get_current_title(struct session *, unsigned char *, size_t);
 
+struct link *get_current_link(struct session *ses);
 unsigned char *get_current_link_url(struct session *, unsigned char *, size_t);
+unsigned char *get_current_link_name(struct session *, unsigned char *, size_t);
 
 extern struct list_head questions_queue;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.64 2002/10/16 14:27:14 pasky Exp $ */
+/* $Id: session.c,v 1.65 2002/11/11 23:05:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1591,6 +1591,32 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
+	struct link *l;
+
+	l = get_current_link(ses);
+
+	if (l == NULL) return NULL;
+	else return safe_strncpy(str, l->where ? l->where : l->where_img,
+				 str_size);
+}
+
+/* get_current_link_name: returns the name of the current link
+ * (the text between <A> and </A>), str is a preallocated string,
+ * str_size includes the null char. */
+unsigned char *
+get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
+{
+	struct link *l;
+
+	l = get_current_link(ses);
+
+	if (l == NULL) return NULL;
+	else return safe_strncpy(str, l->name, str_size);
+}
+
+struct link *
+get_current_link(struct session *ses)
+{
 	struct f_data_c *fd;
 	struct link *l;
 
@@ -1604,9 +1630,8 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 		return NULL;
 
 	l = &fd->f_data->links[fd->vs->current_link];
-	/* Only write a link */
+	/* Only return a link */
 	if (l->type != L_LINK)
 		return NULL;
-
-	return safe_strncpy(str, l->where ? l->where : l->where_img, str_size);
+	else return l;
 }

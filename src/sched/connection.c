@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.187 2004/07/27 17:45:51 jonas Exp $ */
+/* $Id: connection.c,v 1.188 2004/07/27 17:48:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,8 +252,8 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	if (referrer) {
 		/* Don't set referrer when it is the file protocol and the URI
 		 * being loaded is not. This means CGI scripts will have it
-		 * available while leaking of information about the local
-		 * system is prevented. */
+		 * available while preventing information about the local
+		 * system from being leaked to external servers. */
 		if (referrer->protocol != PROTOCOL_FILE
 		    || uri->protocol == PROTOCOL_FILE)
 			conn->referrer = get_uri_reference(referrer);

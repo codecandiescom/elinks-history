@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.218 2004/07/03 11:01:48 jonas Exp $ */
+/* $Id: main.c,v 1.219 2004/07/16 18:46:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ init(void)
 		init_b = 1;
 		init_modules(builtin_modules);
 		init_timer();
-		load_url_history();
+		init_url_history();
 		init_search_history();
 	}
 
@@ -243,7 +243,7 @@ terminate_all_subsystems(void)
 #ifdef CONFIG_SCRIPTING
 		trigger_event_name("quit");
 #endif
-		save_url_history();
+		done_url_history();
 		done_search_history();
 #ifdef CONFIG_MARKS
 		free_marks();

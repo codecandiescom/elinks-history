@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.31 2004/02/06 22:41:04 jonas Exp $ */
+/* $Id: urlhist.c,v 1.32 2004/07/16 18:46:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "bfu/inphist.h"
 #include "config/urlhist.h"
+#include "sched/event.h"
 #include "util/lists.h"
 
 #define GOTO_HISTORY_FILENAME		"gotohist"
@@ -16,14 +17,41 @@
 
 INIT_INPUT_HISTORY(goto_url_history);
 
-void
+static void
 load_url_history(void)
 {
 	load_input_history(&goto_url_history, GOTO_HISTORY_FILENAME);
 }
 
-void
+static void
 save_url_history(void)
 {
 	save_input_history(&goto_url_history, GOTO_HISTORY_FILENAME);
+}
+
+static enum evhook_status
+goto_url_history_write_hook(va_list ap, void *data)
+{
+	save_url_history();
+	return EVENT_HOOK_STATUS_NEXT;
+}
+
+struct event_hook_info goto_url_history_hooks[] = {
+	{ "periodic-saving", goto_url_history_write_hook, NULL },
+
+	NULL_EVENT_HOOK_INFO,
+};
+
+void
+init_url_history(void)
+{
+	load_url_history();
+	register_event_hooks(goto_url_history_hooks);
+}
+
+void
+done_url_history(void)
+{
+	unregister_event_hooks(goto_url_history_hooks);
+	save_url_history();
 }

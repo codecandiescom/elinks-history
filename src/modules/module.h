@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.4 2003/10/25 21:43:29 pasky Exp $ */
+/* $Id: module.h,v 1.5 2003/10/25 21:46:19 pasky Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -19,6 +19,9 @@ struct module {
 	 * the specified order and teardown in the reverse order.
 	 * The table should end with NULL. */
 	struct module **submodules;
+
+	/* User data for the module. Undefined purpose. */
+	void *data;
 
 	/* Lifecycle functions */
 

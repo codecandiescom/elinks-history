@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.264 2004/08/09 07:00:35 miciah Exp $ */
+/* $Id: search.c,v 1.265 2004/08/09 08:38:07 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1202,6 +1202,7 @@ text_typeahead_handler(struct input_line *line, int action)
 	unsigned char *buffer = line->buffer;
 	struct document_view *doc_view = current_frame(ses);
 	int direction = ((unsigned char *) line->data)[0] == '/' ? 1 : -1;
+	int report_errors = action == -1;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return INPUT_LINE_CANCEL;
@@ -1226,7 +1227,7 @@ text_typeahead_handler(struct input_line *line, int action)
 			break;
 
 		default:
-			search_for_do(ses, buffer, direction, action == -1);
+			search_for_do(ses, buffer, direction, report_errors);
 	}
 
 	draw_formatted(ses, 0);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.179 2003/07/25 09:49:34 zas Exp $ */
+/* $Id: parser.c,v 1.180 2003/07/25 16:36:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -702,24 +702,25 @@ html_superscript(unsigned char *a)
 static void
 html_focusable(unsigned char *a)
 {
-	unsigned char *accesskey = a ? get_attr_val(a, "accesskey") : NULL;
-	int tabindex = a ? get_num(a, "tabindex") : 0;
+	unsigned char *accesskey;
+	int tabindex;
 
-	format.accesskey = 0;
-	format.tabindex = 0x80000000;
+	if (!a) return;
 
+	accesskey = get_attr_val(a, "accesskey");
 	if (accesskey) {
 		accesskey[0] = upcase(accesskey[0]);
 		format.accesskey = read_key(accesskey);
-#if 0
-		if (!format.accesskey)
-			internal("Invalid accesskey %s", accesskey);
-#endif
 		mem_free(accesskey);
+	} else {
+		format.accesskey = 0;
 	}
 
+	tabindex = get_num(a, "tabindex");
 	if (tabindex > 0) {
 		format.tabindex = (tabindex & 0x7fff) << 16;
+	} else {
+		format.tabindex = 0x80000000;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.56 2003/07/31 14:54:16 zas Exp $ */
+/* $Id: tables.c,v 1.57 2003/07/31 15:02:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1225,10 +1225,8 @@ check_table_widths(struct table *t)
 
 			if (!c->start) continue;
 
-			if (c->colspan + i > t->x) {
-				internal("colspan out of table");
-				goto end;
-			}
+			assertm(c->colspan + i <= t->x, "colspan out of table");
+			if_assert_failed goto end;
 
 			if (c->colspan == s) {
 				int k, p = 0;
@@ -1392,7 +1390,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					int tmpy = t->p->yp + yp;
 
 					if (cell->valign == VAL_MIDDLE)
-						tmpy += (yw - cell->height)/2;
+						tmpy += (yw - cell->height)>>1;
 					else if (cell->valign == VAL_BOTTOM)
 						tmpy += (yw - cell->height);
 
@@ -1868,8 +1866,8 @@ again:
 		add_to_list(p->document->nodes, nn);
 	}
 
-	if (p->cy + t->rh != cye)
-		internal("size does not match; 1:%d, 2:%d", p->cy + t->rh, cye);
+	assertm(p->cy + t->rh == cye, "size does not match; 1:%d, 2:%d",
+		p->cy + t->rh, cye);
 
 	p->cy = cye;
 	p->cx = -1;

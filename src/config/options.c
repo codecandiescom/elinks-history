@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.279 2003/10/04 01:44:23 jonas Exp $ */
+/* $Id: options.c,v 1.280 2003/10/04 20:19:13 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1147,6 +1147,23 @@ register_options(void)
 		"wraparound", /* 0 */ 0, 0,
 		N_("When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa."));
+
+	add_opt_tree("document.browse", N_("Searching"),
+		"search", 0,
+		N_("Options for searching."));
+
+	add_opt_bool("document.browse.search", N_("Regular expressions"),
+		"regex", 0, 0,
+		N_("Enable searching with regular expressions.\n"
+		"0 for plain text searching.\n"
+		"1 for basic regular expression searches."));
+
+	add_opt_bool("document.browse.search", N_("Overlapping matches"),
+		"overlap", 0, 0,
+		N_("Let matches overlap (only relevant to regex search).\n"
+		"0 matches should not overlap.\n"
+		"1 matches can overlap (CAUTION: can be cpu intensive with\n"
+		"  some expressions!)"));
 
 	add_opt_bool("document.browse", N_("Document meta refresh"),
 		"refresh", 0, 0,

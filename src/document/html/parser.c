@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.403 2004/04/23 22:43:33 pasky Exp $ */
+/* $Id: parser.c,v 1.404 2004/04/23 22:48:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2941,7 +2941,7 @@ void
 parse_html(unsigned char *html, unsigned char *eof,
 	   void *f, unsigned char *head)
 {
-	/*unsigned char *start = html;*/
+	/* unsigned char *start = html; */
 	unsigned char *lt;
 
 	putsp = -1;
@@ -3112,19 +3112,24 @@ ng:;
 					html = prev_html + 1;
 					break;
 				}
+
 				ln_break(ei->linebreak, line_break_f, f);
+
 				if ((a = get_attr_val(attr, "id"))) {
 					special_f(f, SP_TAG, a);
 					mem_free(a);
 				}
+
 				if (html_top.type == ELEMENT_WEAK) {
 					kill_html_stack_item(&html_top);
 				}
+
 				if (!html_top.invisible) {
 					int ali = (par_format.align == AL_NONE);
 					struct par_attrib pa = par_format;
 
-					if (ei->func == html_table && global_doc_opts->tables && table_level < HTML_MAX_TABLE_LEVEL) {
+					if (ei->func == html_table && global_doc_opts->tables
+					    && table_level < HTML_MAX_TABLE_LEVEL) {
 						format_table(attr, html, eof, &html, f);
 						ln_break(2, line_break_f, f);
 						goto set_lt;
@@ -3140,6 +3145,7 @@ ng:;
 					if (ei->func == html_style && global_doc_opts->css_enable) {
 						css_parse_stylesheet(&css_styles, html, eof);
 					}
+
 					if (ei->nopair == 2 || ei->nopair == 3) {
 						struct html_element *e;
 
@@ -3154,12 +3160,14 @@ ng:;
 							if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 						}
 						if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
+							while (e->prev != (void *)&html_stack)
+								kill_html_stack_item(e->prev);
 
 							if (e->type > ELEMENT_IMMORTAL)
 								kill_html_stack_item(e);
 						}
 					}
+
 					if (ei->nopair != 1) {
 						html_stack_dup(ELEMENT_KILLABLE);
 						html_top.name = name;
@@ -3167,6 +3175,7 @@ ng:;
 						html_top.options = attr;
 						html_top.linebreak = ei->linebreak;
 					}
+
 					if (html_top.options && global_doc_opts->css_enable) {
 						/* XXX: We should apply CSS
 						 * otherwise as well, but
@@ -3192,19 +3201,22 @@ ng:;
 						 * elements. */
 						css_apply(&html_top, &css_styles);
 					}
+
 					if (ei->func != html_br) was_br = 0;
 					if (ali) par_format = pa;
 				}
+
 			} else {
 				struct html_element *e, *elt;
 				int lnb = 0;
 				int xxx = 0;
 
 				if (was_xmp) {
-					if (ei->func == html_xmp)
+					if (ei->func == html_xmp) {
 						was_xmp = 0;
-					else
+					} else {
 						break;
+					}
 				}
 
 				was_br = 0;
@@ -3213,19 +3225,22 @@ ng:;
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak) xxx = 1;
 					if (strlcasecmp(e->name, e->namelen, name, namelen)) {
-						if (e->type < ELEMENT_KILLABLE)
+						if (e->type < ELEMENT_KILLABLE) {
 							break;
-						else
+						} else {
 							continue;
+						}
 					}
 					if (xxx) {
 						kill_html_stack_item(e);
 						break;
 					}
 					for (elt = e; elt != (void *)&html_stack; elt = elt->prev)
-						if (elt->linebreak > lnb) lnb = elt->linebreak;
+						if (elt->linebreak > lnb)
+							lnb = elt->linebreak;
 					ln_break(lnb, line_break_f, f);
-					while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
+					while (e->prev != (void *)&html_stack)
+						kill_html_stack_item(e->prev);
 					kill_html_stack_item(e);
 					break;
 				}

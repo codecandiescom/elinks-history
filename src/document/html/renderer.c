@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.499 2004/09/27 01:03:58 pasky Exp $ */
+/* $Id: renderer.c,v 1.500 2004/10/10 23:09:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1408,6 +1408,17 @@ html_special(struct part *part, enum html_special_type c, ...)
 
 			if (document)
 				add_to_uri_list(&document->css_imports, uri);
+#endif
+			va_end(l);
+			break;
+		}
+		case SP_SCRIPT:
+		{
+#ifdef CONFIG_ECMASCRIPT
+			struct uri *uri = va_arg(l, struct uri *);
+
+			if (document)
+				add_to_uri_list(&document->ecmascript_imports, uri);
 #endif
 			va_end(l);
 			break;

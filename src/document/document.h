@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.78 2004/09/27 01:03:58 pasky Exp $ */
+/* $Id: document.h,v 1.79 2004/10/10 23:09:24 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -138,6 +138,10 @@ struct document {
 	 * until it gets resolved and loaded. New items are guaranteed to
 	 * always appear at the list end. */
 	struct list_head onload_snippets; /* -> struct string_list_item */
+	/* FIXME: We should externally maybe using cache_entry store the
+	 * dependencies between the various entries so nothing gets removed
+	 * unneeded. */
+	struct uri_list ecmascript_imports;
 #endif
 #ifdef CONFIG_CSS
 	/* FIXME: We should externally maybe using cache_entry store the

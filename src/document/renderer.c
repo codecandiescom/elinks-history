@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.116 2004/10/10 20:33:36 pasky Exp $ */
+/* $Id: renderer.c,v 1.117 2004/10/10 23:09:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,38 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 		*current = snippets->next;
 	for (; *current != (struct string_list_item *) snippets;
 	     (*current) = (*current)->next) {
-		/* TODO: Support for external references. --pasky */
+		if ((*current)->string.length > 0
+		    && *(*current)->string.source == '^') {
+			/* External reference! */
+
+			unsigned char *url = memacpy((*current)->string.source + 1,
+			                             (*current)->string.length - 1);
+			struct uri *uri = get_uri(url, URI_BASE);
+			struct cache_entry *cached = uri ? find_in_cache(uri) : NULL;
+			struct fragment *fragment;
+
+			if (!cached) {
+				/* At this time (!gradual_rerendering), we
+				 * should've already retrieved this though. So
+				 * it must've been that it went away because
+				 * unused and the cache was already too full. */
+				ERROR("The script of %s was lost in too full a cache!", url);
+				goto next_snippet;
+			}
+
+			defrag_entry(cached);
+			fragment = cached->frag.next;
+			if (!list_empty(cached->frag)
+			    && !fragment->offset && fragment->length) {
+				struct string code = INIT_STRING(fragment->data, fragment->length);
+
+				ecmascript_eval(interpreter, &code);
+			}
+next_snippet:
+			done_uri(uri); mem_free(url);
+			continue;
+		}
+
 		ecmascript_eval(interpreter, &(*current)->string);
 	}
 }

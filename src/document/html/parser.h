@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.70 2004/09/24 12:43:36 pasky Exp $ */
+/* $Id: parser.h,v 1.71 2004/10/10 23:09:25 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -142,6 +142,7 @@ enum html_special_type {
 	SP_REFRESH,
 	SP_STYLESHEET,
 	SP_COLOR_LINK_LINES,
+	SP_SCRIPT,
 };
 
 /* Interface for the renderer */

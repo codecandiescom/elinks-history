@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.83 2004/09/27 01:03:58 pasky Exp $ */
+/* $Id: document.c,v 1.84 2004/10/10 23:09:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,6 +149,7 @@ done_document(struct document *document)
 #endif
 #ifdef CONFIG_ECMASCRIPT
 	free_string_list(&document->onload_snippets);
+	free_uri_list(&document->ecmascript_imports);
 #endif
 
 	free_list(document->forms);
@@ -181,6 +182,9 @@ release_document(struct document *document)
 }
 
 /* Formatted document cache management */
+
+/* ECMAScript doesn't like anything like CSS since it doesn't modify the
+ * formatted document (yet). */
 
 #if CONFIG_CSS
 unsigned long

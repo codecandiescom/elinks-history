@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.501 2004/10/08 13:06:14 zas Exp $ */
+/* $Id: parser.c,v 1.502 2004/10/10 23:09:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,9 +431,35 @@ not_processed:
 
 	src = get_attr_val(a, "src");
 	if (src) {
-		/* TODO: External references. --pasky */
+		/* External reference. */
+
+		unsigned char *import_url;
+		struct uri *uri;
+
+		if (!get_opt_bool("ecmascript.enable"))
+			goto not_processed;
+
+		/* HTML <head> urls should already be fine but we can.t detect them. */
+		import_url = join_urls(html_context.base_href, src);
 		mem_free(src);
-		goto not_processed;
+		if (!import_url) goto imported;
+
+		uri = get_uri(import_url, URI_BASE);
+		if (!uri) goto imported;
+
+		/* Request the imported script as part of the document ... */
+		html_context.special_f(html_context.part, SP_SCRIPT, uri);
+		done_uri(uri);
+
+		/* Create URL reference onload snippet. */
+		insert_in_string(&import_url, 0, "^", 1);
+		add_to_string_list(&part->document->onload_snippets,
+		                   import_url, -1);
+
+imported:
+		/* Retreat. Do not permit nested scripts, tho'. */
+		if (import_url) mem_free(import_url);
+		return 1;
 	}
 
 	/* Positive, grab the rest and interpret it. */

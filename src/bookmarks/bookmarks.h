@@ -1,17 +1,14 @@
-/* $Id: bookmarks.h,v 1.35 2004/07/15 00:36:42 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.36 2004/07/15 00:45:33 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
 
-#ifdef CONFIG_BOOKMARKS
-
-/* #include "bfu/listbox.h" */
-struct listbox_item;
-struct terminal;
-
 #include "modules/module.h"
 #include "util/lists.h"
 #include "util/object.h"
+
+struct listbox_item;
+struct terminal;
 
 /* Bookmark record structure */
 
@@ -57,5 +54,4 @@ void bookmark_auto_save_tabs(struct terminal *term);
 int update_bookmark(struct bookmark *, unsigned char *, unsigned char *);
 void open_bookmark_folder(struct session *ses, unsigned char *foldername);
 
-#endif
 #endif

@@ -1,9 +1,7 @@
-/* $Id: dialogs.h,v 1.13 2004/01/07 03:49:03 jonas Exp $ */
+/* $Id: dialogs.h,v 1.14 2004/07/15 00:45:33 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
-
-#ifdef CONFIG_BOOKMARKS
 
 #include "bfu/dialog.h"
 #include "bfu/hierbox.h"
@@ -39,5 +37,4 @@ void launch_bm_add_link_dialog(struct terminal *term,
 
 void bookmark_terminal_tabs_dialog(struct terminal *term);
 
-#endif
 #endif

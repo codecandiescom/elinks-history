@@ -55,6 +55,9 @@ See links.h for list of them ;-).
 If you want to have anything else documented here, write a description and send
 us a patch.
 
+Various parts are described either below or in README* file(s) of appropriate
+directory.
+
 
 2.1, HTML parser
 ~~~~~~~~~~~~~~~~
@@ -417,4 +420,4 @@ more...
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.1 2002/10/12 20:31:07 pasky Exp $
+$Id: hacking.txt,v 1.2 2002/10/12 21:41:07 pasky Exp $

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.32 2004/01/01 10:04:04 jonas Exp $ */
+/* $Id: protocol.c,v 1.33 2004/01/01 15:16:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,8 @@ static struct protocol_backend *protocol_backends[] = {
 	/* PROTOCOL_HTTPS */	&https_protocol_backend,
 #ifdef CONFIG_SMB
 	/* PROTOCOL_SMB */	&smb_protocol_backend,
+#else
+	/* PROTOCOL_SMB */	NULL,
 #endif
 	/* PROTOCOL_JAVASCRIPT */	&dummyjs_protocol_backend,
 	/* PROTOCOL_LUA */	&lua_protocol_backend,
@@ -101,9 +103,10 @@ check_protocol(unsigned char *name, int namelen)
 
 	/* Abuse that we iterate until protocol is PROTOCOL_UNKNOWN */
 	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++) {
-		unsigned char *pname = protocol_backends[protocol]->name;
+		unsigned char *pname = protocol_backends[protocol]
+				     ? protocol_backends[protocol]->name : NULL;
 
-		if (strlen(pname) == namelen && !memcmp(pname, name, namelen))
+		if (pname && !strlcmp(pname, -1, name, namelen))
 			break;
 	}
 

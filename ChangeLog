@@ -1,3 +1,199 @@
+Wed Jan 30 14:16:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	Fixed fix of stripping query strings from form's actions (Mikulas
+	Patocka) (from 0.97pre1)
+
+Wed Jan 30 14:06:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c, view.c:
+	
+	Fixed crash when amount of items in select box decreases after
+	reload, make it remember select item on reload (fixes www.xchat.cz)
+	(Mikulas Patocka) (from 0.97pre1)
+
+Wed Jan 30 13:58:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c, html_r.c:
+	
+	Do not allow larger input fiels than screen size (Mikulas Patocka)
+	(from 0.97pre1)
+
+Wed Jan 30 13:55:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	Fix one read overrun in parser (Mikulas Patocka) (from 0.97pre1)
+
+Wed Jan 30 13:48:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	Fixed crash in OS/2 when user pressed Ctrl-V and clipboard was
+	empty (Mikulas Patocka) (from 0.97pre1)
+
+Wed Jan 30 13:47:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* select.c:
+	
+	Fixed leaving zombie processes when more children exited
+	simultaneously (Mikulas Patocka) (from 0.97pre1)
+
+Wed Jan 30 13:45:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c:
+	
+	Fixed error when sprintf return value is defined as 'void' in
+	headers (Mikulas Patocka) (from 0.97pre1)
+
+Wed Jan 30 13:44:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	work-around for Sun C bug (Mikulas Patocka) (from 0.97pre1)
+
+Wed Jan 30 13:42:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, connect.c, html.c, view.c:
+	
+	compile incompatibilites, fix by Karel Kulhavy (from 0.97pre1)
+	(probably not everything, but dunno how classify the other fixes)
+
+Tue Jan 29 22:10:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, language.h, language.inc, intl/index.txt,
+	intl/dutch.lng:
+	
+	Dutch translation by Stefan de Groot <stefan@nllinux.nl> (from
+	0.97pre1)
+
+Tue Jan 29 22:07:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* language.inc, intl/slovak.lng:
+	
+	small fix in slovak.lng
+
+Tue Jan 29 22:06:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h:
+	
+	workaround for cygwin including getops.h (from 0.97pre1)
+
+Tue Jan 29 22:03:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* links.h:
+	
+	declare parse_http_date().. hey, yes, we really use him in
+	cookies.c as well ;) (from 0.97pre1)
+
+Tue Jan 29 21:57:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	Do not reject cookies with insecure domain (but send them only to
+	original server, not to the whole domain) (from Mikulas Patocka)
+	(from 0.97pre1)
+
+Tue Jan 29 21:56:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* entity.inc:
+	
+	removed some duplicite entries (inspired by 0.97pre1)
+
+Tue Jan 29 21:51:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* SITES:
+	
+	another download mirror (from 0.97pre1)
+
+Tue Jan 29 21:50:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Unicode/entities.lnx:
+	
+	removed some duplicite entries (inspired by 0.97pre1)
+
+Tue Jan 29 08:58:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/bm.lua:
+	
+	escaping more characters, refusing to save bookmarks if not loaded
+	properly (Peter Wang's)
+
+Mon Jan 28 12:02:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bookmarks.c:
+	
+	bookmark updates by zas - swap cancel and clear, after search move
+	pointer to top, on enter to the bookmark manager reset search
+	results
+
+Sat Jan 26 19:42:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, TODO:
+	
+	reduced a bit
+
+Sat Jan 26 19:38:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	XMP wrapped to PRE
+
+Sat Jan 26 15:21:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, BUGS, HACKING, INSTALL, LUA, README, SITES, TODO:
+	
+	Added Id tags
+
+Sat Jan 26 15:21:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* LUA-WIP, NEWS:
+	
+	removed dummy files
+
+Sat Jan 26 14:41:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	more sanity checking
+
+Sat Jan 26 11:33:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, bookmarks.c, language.h, language.inc, links.h,
+	intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/english.lng,
+	intl/estonian.lng, intl/french.lng, intl/galician.lng,
+	intl/german.lng, intl/greek.lng, intl/hungarian.lng,
+	intl/icelandic.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng:
+	
+	Bookmarks filtering, some minor bookmarks cleanups - patch by Zas
+	<zas@norz.org>. It still needs improvements, though.
+
+Sat Jan 26 10:24:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, sched.c:
+	
+	Finally fixed the problem (in one time, there might be two
+	connections in the scope of one struct connection) - after all, the
+	fix was quite simple :).
+
+Fri Jan 25 18:08:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, sched.c:
+	
+	hopefully fixed one evil crash inside connected()
+
+Fri Jan 25 17:36:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c:
+	
+	fixed typo in default.c for allow-special-files option, thanks zas
+	:)
+
 Fri Jan 25 17:11:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, file.c, links.h:

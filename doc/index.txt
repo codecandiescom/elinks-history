@@ -36,8 +36,8 @@ User's Guide
 		Automatic MIME Type Resolution .............. mime.html
 		Mailcap MIME Handlers in ELinks .......... mailcap.html
 		JavaScript/ECMAScript in ELinks ........ ecmascript.txt
-		Ex-mode .................................... exmode.txt
-		Managing remote ELinks instances ........... remote.txt
+		The Ex-mode Secrets Pamphlet ............... exmode.txt
+		Managing Remote ELinks Instances ........... remote.txt
 
 Developer's Guide
 	Internal Scripting (*)
@@ -70,7 +70,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.5 2004/12/16 13:36:36 jonas Exp $
+$Id: index.txt,v 1.6 2004/12/16 19:42:01 pasky Exp $
 
 vim: textwidth=72
 (Note: Sometimes, I broke the lines manually earlier than gqap would,

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.286 2003/11/26 21:59:32 jonas Exp $ */
+/* $Id: parser.c,v 1.287 2003/11/26 22:42:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1014,13 +1014,15 @@ html_body(unsigned char *a)
 static void
 html_skip(unsigned char *a)
 {
-	html_top.invisible = html_top.type = ELEMENT_DONT_KILL;
+	html_top.invisible = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 }
 
 static void
 html_title(unsigned char *a)
 {
-	html_top.invisible = html_top.type = ELEMENT_DONT_KILL;
+	html_top.invisible = 1;
+	html_top.type = ELEMENT_DONT_KILL;
 }
 
 static void

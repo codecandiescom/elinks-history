@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.79 2004/05/29 02:44:27 jonas Exp $ */
+/* $Id: history.c,v 1.80 2004/05/31 17:16:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,7 @@ ses_history_move(struct session *ses)
 	loc = cur_loc(ses);
 
 	/* There can be only one ... */
-	if (uris_compare(loc->vs.uri, ses->loading_uri))
+	if (compare_uri(loc->vs.uri, ses->loading_uri, 0))
 		return;
 
 	/* Remake that location. */

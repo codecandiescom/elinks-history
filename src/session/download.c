@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.289 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: download.c,v 1.290 2004/05/31 17:16:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,7 +384,7 @@ download_data(struct download *download, struct file_download *file_download)
 		if (is_in_progress_state(download->state))
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		assertm(uris_compare(cached->uri, file_download->uri),
+		assertm(compare_uri(cached->uri, file_download->uri, 0),
 			"Redirecting using bad base URI");
 
 		done_uri(file_download->uri);
@@ -872,7 +872,7 @@ init_type_query(struct session *ses, struct download *download,
 
 	/* There can be only one ... */
 	foreach (type_query, ses->type_queries)
-		if (uris_compare(type_query->uri, ses->loading_uri))
+		if (compare_uri(type_query->uri, ses->loading_uri, 0))
 			return NULL;
 
 	type_query = mem_calloc(1, sizeof(struct type_query));

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.109 2004/05/30 12:42:25 jonas Exp $ */
+/* $Id: uri.h,v 1.110 2004/05/31 17:16:51 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -80,9 +80,6 @@ enum uri_errno parse_uri(struct uri *uri, unsigned char *uristring);
  * with. Thus, chances are high that it is the original URI received, not any
  * cheap reconstruction. */
 #define struri(uri) ((uri)->string)
-
-/* Check if two URIs are equal */
-#define uris_compare(uri1, uri2) ((uri1) == (uri2))
 
 
 enum uri_component {
@@ -209,6 +206,10 @@ get_uri_reference(struct uri *uri)
  *		@fragment pointer. */
 struct uri *get_translated_uri(unsigned char *uristring, unsigned char *cwd,
 				unsigned char **fragment);
+
+/* Check if two URIs are equal. If @components are 0 simply compare the whole
+ * URI else only compare the specific parts. */
+int compare_uri(struct uri *uri1, struct uri *uri2, enum uri_component componentse);
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for

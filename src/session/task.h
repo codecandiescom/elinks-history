@@ -1,11 +1,12 @@
-/* $Id: task.h,v 1.3 2003/12/06 17:04:32 pasky Exp $ */
+/* $Id: task.h,v 1.4 2003/12/31 02:49:38 miciah Exp $ */
 
 #ifndef EL__SCHED_TASK_H
 #define EL__SCHED_TASK_H
 
+#include "cache/cache.h"
 #include "sched/session.h"
 
-struct dowload;
+struct download;
 struct location;
 struct terminal;
 struct view_state;

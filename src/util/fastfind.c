@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.41 2003/06/17 16:12:30 zas Exp $ */
+/* $Id: fastfind.c,v 1.42 2003/06/17 16:47:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@
  * String lookup: O(N) (N: string length). */
 
 
-/* Define it to generate statistics to stderr. */
+/* Define it to generate performance and memory usage statistics to stderr. */
 #if 0
 #define FASTFIND_DEBUG
 #endif
@@ -181,7 +181,7 @@ struct fastfind_info {
 
 
 #ifdef FASTFIND_DEBUG
-
+/* These are for performance testing. */
 #define meminc(x, size) (x)->memory_usage += (size)
 #define testinc(x) (x)->tests++
 #define iterinc(x) (x)->iterations++
@@ -465,7 +465,6 @@ fastfind_index_compress(struct fastfind_info *info)
 void *
 fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 {
-	register int i = 0;
 	struct ff_node *current;
 
 	assert(info);
@@ -483,44 +482,80 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 
 	current = info->root_leafset;
 
-	testinc(info); /* We count one test for case sensitivity (in loop for now). */
+	/* Code redundancy is here for performance. Do not try to reduce it.
+	 * Do not try to move inner code to an inlined function.
+	 * Do not even think about it.
+	 * If you find a better way (same or better performance) then
+	 * propose it and be prepared to defend it.
+	 * Special note for Pasky: i said no. --Zas */
 
-	for (; i < key_len; i++) {
-		/* TODO: Move this ifcase() test outside loop. Here performance
-		 * matters. We do not count this test in stats as it will
-		 * disappear. It will imply code duplication. */
-		int lidx;
+	accif(info) (info->case_sensitive) {
+		register int i = 0;
 
-		iterinc(info);
+		for (; i < key_len; i++) {
+			int lidx;
 
-		{
-		       	int k = ifcase(key[i]);
+			iterinc(info);
+
+			accif(info) (key[i] >= FF_MAX_CHARS) return NULL;
+			lidx = info->idxtab[key[i]];
+
+
+			accif(info) (lidx < 0) return NULL;
+
+			accif(info) (current->c) {
+				/* It is a compressed leaf. */
+				accif(info) (((struct ff_node_c *) current)->ch != lidx)
+					return NULL;
+			} else {
+				current = &current[lidx];
+			}
+
+			accif(info) (current->e
+				     && key_len == info->keylen_list[current->p]) {
+				testinc(info);
+				foundinc(info);
+				return info->pointers[current->p];
+			}
+
+			accif(info) (!current->l)
+				return NULL;
+
+			current = (struct ff_node *) info->leafsets[current->l];
+		}
+	} else {
+		register int i = 0;
+
+		for (; i < key_len; i++) {
+			int lidx, k = upcase(key[i]);
+
+			iterinc(info);
 
 			accif(info) (k >= FF_MAX_CHARS) return NULL;
 			lidx = info->idxtab[k];
-		}
 
-		accif(info) (lidx < 0) return NULL;
+			accif(info) (lidx < 0) return NULL;
 
-		accif(info) (current->c) {
-			/* It is a compressed leaf. */
-			accif(info) (((struct ff_node_c *) current)->ch != lidx)
+			accif(info) (current->c) {
+				/* It is a compressed leaf. */
+				accif(info) (((struct ff_node_c *) current)->ch != lidx)
+					return NULL;
+			} else {
+				current = &current[lidx];
+			}
+
+			accif(info) (current->e
+				     && key_len == info->keylen_list[current->p]) {
+				testinc(info);
+				foundinc(info);
+				return info->pointers[current->p];
+			}
+
+			accif(info) (!current->l)
 				return NULL;
-		} else {
-			current = &current[lidx];
+
+			current = (struct ff_node *) info->leafsets[current->l];
 		}
-
-		accif(info) (current->e
-			     && key_len == info->keylen_list[current->p]) {
-			testinc(info);
-			foundinc(info);
-			return info->pointers[current->p];
-		}
-
-		accif(info) (!current->l)
-			return NULL;
-
-		current = (struct ff_node *) info->leafsets[current->l];
 	}
 
 	return NULL;

@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.5 2003/05/05 15:40:03 zas Exp $ */
+/* $Id: tab.h,v 1.6 2003/05/08 22:24:45 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -15,6 +15,6 @@ void switch_to_tab(struct terminal *, int, int);
 void close_tab(struct terminal *);
 
 #define get_current_tab(term) get_tab_by_number((term), (term)->current_tab)
-#define IF_ACTIVE(win, term) if (!(win)->type || (win) == get_current_tab((term)))
+#define IF_ACTIVE(win, term) if ((win)->type == WT_NORMAL || (win) == get_current_tab((term)))
 
 #endif

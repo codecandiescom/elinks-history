@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.51 2003/10/15 21:40:15 zas Exp $ */
+/* $Id: cache.c,v 1.52 2003/10/16 08:16:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -386,15 +386,16 @@ del:
 void
 free_entry_to(struct cache_entry *e, int off)
 {
-	struct fragment *f, *g;
+	struct fragment *f;
 
 	foreach (f, e->frag) {
 		if (f->offset + f->length <= off) {
+			struct fragment *tmp = f;
+
 			resize_entry(e, -f->length);
-			g = f;
 			f = f->prev;
-			del_from_list(g);
-			mem_free(g);
+			del_from_list(tmp);
+			mem_free(tmp);
 		} else if (f->offset < off) {
 			long size = off - f->offset;
 

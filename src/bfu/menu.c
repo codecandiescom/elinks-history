@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.105 2003/09/28 15:12:14 zas Exp $ */
+/* $Id: menu.c,v 1.106 2003/09/28 15:16:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,12 +705,11 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 #ifdef DEBUG
 	if (!it->func) {
 	       	internal("No menu function");
-	} else {
-		it->func(term, it->data, menu->data);
+		return;
 	}
-#else
-	it->func(term, it->data, menu->data);
 #endif
+	/* Why is this working here but causes segfaults in select_menu() ?? --Zas */
+	it->func(term, it->data, menu->data);
 }
 
 static void

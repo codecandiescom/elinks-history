@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.9 2002/04/02 17:16:11 pasky Exp $ */
+/* $Id: ftp.c,v 1.10 2002/04/20 15:13:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -737,23 +737,26 @@ int ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 		int bufl = buflen - ret;
 		int bufp;
 		int strl;
+		int newline = 0;
 
 		/* Newline quest */
 
-		for (bufp = 0; bufp < bufl; bufp++)
-			if (buf[bufp] == '\n')
+		for (bufp = 0; bufp < bufl; bufp++) {
+			if (buf[bufp] == '\n') {
+				newline = 1;
 				break;
+			}
+		}
 
-		if (buf[bufp] == '\n') {
+		if (newline) {
 			ret += bufp + 1;
 			if (bufp && buf[bufp - 1] == '\r') bufp--;
-
 		} else {
 			if (!bufp || (!last && bufl < FTP_BUF_SIZE))
 				return ret;
 			ret += bufp;
 		}
-
+		
 		/* Process line whose end we've already found */
 
 		str = init_str();
@@ -932,15 +935,19 @@ out_of_mem:
 			int proceeded;
 
 			conn->received += len;
-			proceeded = ftp_process_dirlist(conn->cache, &conn->from, &c_i->dpos,
-							c_i->ftp_buffer, len + c_i->buf_pos,
+			proceeded = ftp_process_dirlist(conn->cache,
+							&conn->from,
+							&c_i->dpos,
+							c_i->ftp_buffer,
+							len + c_i->buf_pos,
 							0, &conn->tries);
 
 			if (proceeded == -1) goto out_of_mem;
 
-			memmove(c_i->ftp_buffer, c_i->ftp_buffer + proceeded,
-				c_i->buf_pos + len - proceeded);
 			c_i->buf_pos += len - proceeded;
+
+			memmove(c_i->ftp_buffer, c_i->ftp_buffer + proceeded,
+				c_i->buf_pos);
 		}
 
 		setcstate(conn, S_TRANS);

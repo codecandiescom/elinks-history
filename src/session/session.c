@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.320 2004/03/22 03:47:13 jonas Exp $ */
+/* $Id: session.c,v 1.321 2004/03/22 04:03:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -205,8 +205,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	if (!url) return;
 	pos = extract_fragment(url);
 
-	/* strlen(url) without + 1 since vs have already reserved one byte. */
-	frame = mem_calloc(1, sizeof(struct frame) + strlen(url));
+	frame = mem_calloc(1, sizeof(struct frame));
 	if (!frame) {
 		mem_free(url);
 		if (pos) mem_free(pos);
@@ -973,7 +972,6 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 {
 	struct location *loc = cur_loc(ses);
 	struct frame *frame;
-	size_t url_len = strlen(url);
 
 	assertm(have_location(ses), "ses_change_frame_url: no location yet");
 	if_assert_failed { return NULL; }
@@ -988,7 +986,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 		done_uri(frame->vs.uri);
 		frame->vs.uri = uri;
-		frame->vs.url_len = url_len;
+		frame->vs.url_len = strlen(url);
 
 		return frame;
 	}

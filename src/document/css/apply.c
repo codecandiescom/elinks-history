@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.76 2004/09/21 09:58:00 pasky Exp $ */
+/* $Id: apply.c,v 1.77 2004/09/21 10:00:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ examine_element(struct css_selector *base,
 #ifdef CSS_DEBUG
  	DBG("examine_element(%s, %d, %d, %p, %.*s);", base->name, seltype, rel, selectors, element->namelen, element->name);
 #define dbginfo(sel, type_, base) \
-	DBG("Matched selector %s (rel %d type %d [m%d])! Children %p !!%d, props !!%d", sel->name, sel->relation, sel->type, sel->type == type_, sel->leaves, !list_empty(sel->leaves), !list_empty(sel->properties))
+	DBG("Matched selector %s (rel %d type %d [m%d])! Children %p !!%d, props !!%d", sel->name, sel->relation, sel->type, sel->type == type_, &sel->leaves, !list_empty(sel->leaves), !list_empty(sel->properties))
 #else
 #define dbginfo(sel, type, base)
 #endif

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.129 2004/02/04 13:58:10 pasky Exp $ */
+/* $Id: conf.c,v 1.130 2004/02/04 23:13:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ static struct parse_handler parse_handlers[] = {
 
 
 enum parse_error
-parse_config_command(struct option *options, unsigned char *file, int *line,
+parse_config_command(struct option *options, unsigned char **file, int *line,
 		     struct string *mirror)
 {
 	struct parse_handler *handler;
@@ -334,8 +334,8 @@ parse_config_command(struct option *options, unsigned char *file, int *line,
 	     handler++) {
 		int cmdlen = strlen(handler->command);
 
-		if (!strncmp(file, handler->command, cmdlen)
-		    && isspace(file[cmdlen])) {
+		if (!strncmp(*file, handler->command, cmdlen)
+		    && isspace((*file)[cmdlen])) {
 			enum parse_error err;
 			struct string mirror2 = NULL_STRING;
 			struct string *m2 = NULL;
@@ -343,12 +343,12 @@ parse_config_command(struct option *options, unsigned char *file, int *line,
 			/* Mirror what we already have */
 			if (mirror && init_string(&mirror2)) {
 				m2 = &mirror2;
-				add_bytes_to_string(m2, file, cmdlen);
+				add_bytes_to_string(m2, *file, cmdlen);
 			}
 
 
-			file += cmdlen;
-			err = handler->handler(options, &file, line, m2);
+			*file += cmdlen;
+			err = handler->handler(options, file, line, m2);
 			if (!err && mirror && m2) {
 				add_string_to_string(mirror, m2);
 			}
@@ -389,7 +389,7 @@ parse_config_file(struct option *options, unsigned char *name,
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
 
-		err = parse_config_command(options, file, &line, mirror);
+		err = parse_config_command(options, &file, &line, mirror);
 
 		if (err == ERROR_COMMAND) {
 			orig_pos = file;

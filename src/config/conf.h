@@ -1,4 +1,4 @@
-/* $Id: conf.h,v 1.13 2004/02/04 13:57:56 pasky Exp $ */
+/* $Id: conf.h,v 1.14 2004/02/04 23:13:56 pasky Exp $ */
 
 #ifndef EL__CONFIG_CONF_H
 #define EL__CONFIG_CONF_H
@@ -17,7 +17,7 @@ enum parse_error {
 
 void load_config(void);
 enum parse_error parse_config_command(struct option *options,
-				      unsigned char *file, int *line,
+				      unsigned char **file, int *line,
 				      struct string *mirror);
 void parse_config_file(struct option *options, unsigned char *name,
 		       unsigned char *file, struct string *mirror);

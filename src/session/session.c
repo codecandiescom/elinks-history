@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.54 2003/05/08 01:07:14 pasky Exp $ */
+/* $Id: session.c,v 1.55 2003/05/08 01:16:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1711,8 +1711,11 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 			if (ses) destroy_session(ses);
 			break;
 		case EV_INIT:
-			/* FIXME: This needs to be done differently and more
-			 * universally. Works only for the first tab. --pasky */
+			/* Perhaps we should call just create_base_session()
+			 * and then do the rest of create_session() stuff
+			 * (renamed to setup_first_session() or so) if this is
+			 * the first tab. But I don't think it is so urgent.
+			 * --pasky */
 			ses = tab->data = create_session(tab);
 			if (!ses || process_session_info(ses, ev->b)) {
 				destroy_terminal(tab->term);

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.61 2003/05/04 20:44:46 pasky Exp $ */
+/* $Id: osdep.c,v 1.62 2003/05/08 01:16:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1797,7 +1797,7 @@ void
 open_in_new_tab(struct terminal *term, unsigned char *exe_name,
                 unsigned char *param)
 {
-	int base = 0; /* FIXME: Ignored. */
+	int base = -1;
 	unsigned char *url = NULL;
 
 	/* FIXME: This is way too ugly to survive in the codebase. --pasky */
@@ -1809,38 +1809,24 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 	}
 
 	{
-		/* Now lets create new session... */
+		struct window *tab;
+		struct initial_session_info *info;
+		struct event ev = {EV_INIT, 0, 0, 0};
 
-		/* EV_RESIZE is in fact the second part of the EV_INIT
-		 * sequence. We don't call EV_INIT as it makes no sense to read
-		 * session info here. */ /* FIXME: This should be cleaned up
-		 * and read_session_info() should be probably moved out of the
-		 * way. And so on, this all is getting quite messy with the
-		 * tabs introduction. --pasky */
-		struct event ev = {EV_RESIZE, 0, 0, 0};
-		struct window *tab = init_tab(term);
-
+		tab = init_tab(term);
 		if (!tab) return;
 
-		tab->data = create_basic_session(tab);
-
-		tab->handler(tab, &ev, 0);
-
-		if (url) {
-			unsigned char *u = decode_url(url);
-
-			if (u) {
-				goto_url((struct session *) tab->data, u);
-				mem_free(u);
-			}
-		} else {
-			unsigned char *h = getenv("WWW_HOME");
-
-			if (!h || !*h)
-				h = WWW_HOME_URL;
-			if (h && *h)
-				goto_url((struct session *) tab->data, h);
+		info = mem_calloc(1, sizeof(struct initial_session_info));
+		if (!info) {
+			mem_free(tab);
+			return;
 		}
+
+		info->base_session = base;
+		if (url) info->url = decode_url(url);
+
+		ev.b = (long) info;
+		tab->handler(tab, &ev, 0);
 	}
 }
 

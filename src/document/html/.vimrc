@@ -1,2 +1,2 @@
-:set shiftwidth=8
-:set noexpandtab
+:set runtimepath=.,$VIMRUNTIME
+:runtime ../../../.vimrc

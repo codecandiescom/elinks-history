@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.228 2003/06/15 16:58:19 jonas Exp $ */
+/* $Id: options.c,v 1.229 2003/06/15 17:06:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1258,10 +1258,11 @@ register_options(void)
 		"download", 0,
 		N_("Options regarding files downloading and handling."));
 
-	add_opt_string("document.download", N_("Default MIME-type"),
-		"default_mime_type", 0, "application/octet-stream",
-		N_("Document MIME-type to assume by default (when we are unable to\n"
-		"guess it properly from known information about the document)."));
+	/* Compatibility alias. Added: 2003-05-07, 0.5pre1.CVS. */
+	add_opt_alias("document.download", N_("Default MIME-type"),
+		"default_mime_type", 0, "mime.default_type",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the mime.default_type option instead."));
 
 	add_opt_string("document.download", N_("Default download directory"),
 		"directory", 0, "./",
@@ -1354,10 +1355,15 @@ register_options(void)
 
 
 
-
 	add_opt_tree("", N_("MIME"),
 		"mime", 0,
 		N_("MIME-related options (handlers of various MIME types)."));
+
+
+	add_opt_string("mime", N_("Default MIME-type"),
+		"default_type", 0, "application/octet-stream",
+		N_("Document MIME-type to assume by default (when we are unable to\n"
+		"guess it properly from known information about the document)."));
 
 
 	add_opt_tree("mime", N_("MIME type associations"),
@@ -1414,6 +1420,53 @@ register_options(void)
 		"_template_", 0, "",
 		N_("MIME-type matching this file extension ('*' is used here in place\n"
 		"of '.')."));
+
+
+	add_opt_tree("mime", N_("Mailcap"),
+		"mailcap", 0,
+		N_("Options for mailcap support."));
+
+	add_opt_bool("mime.mailcap", N_("Enable"),
+		"enable", 0, 1,
+		N_("Enable mailcap support."));
+
+	add_opt_string("mime.mailcap", N_("Path"),
+		"path", 0, "",
+		N_("Mailcap search path. Colon-separated list of files.\n"
+		"Leave as \"\" to use MAILCAP environment variable or\n"
+		"build-in defaults instead."));
+
+	add_opt_bool("mime.mailcap", N_("Ask before opening"),
+		"ask", 0, 1,
+		N_("Ask before using the handlers defined by mailcap."));
+
+	add_opt_int("mime.mailcap", N_("Type query string"),
+		"description", 0, 0, 2, 0,
+		N_("Type of description to show in \"what shall I do with this file\"\n"
+		"query dialog:\n"
+		"0 is show \"mailcap\".\n"
+		"1 is show program to be run.\n"
+		"2 is show mailcap description field if any; \"mailcap\" otherwise."));
+
+	add_opt_bool("mime.mailcap", N_("Prioritize entries by file"),
+		"prioritize", 0, 1,
+		N_("Prioritize entries by the order of the files in the mailcap\n"
+		"path. This means that wildcard entries (like: image/*) will\n"
+		"also be checked before deciding the handler."));
+
+
+	add_opt_tree("mime", N_("Mimetypes files"),
+		"mimetypes", 0,
+		N_("Options for mime.types support."));
+
+	add_opt_bool("mime.mimetypes", N_("Enable"),
+		"enable", 0, 1,
+		N_("Enable mime.types support."));
+
+	add_opt_string("mime.mimetypes", N_("Path"),
+		"path", 0, "",
+		N_("Mimetypes search path. Colon-separated list of files.\n"
+		"Leave as \"\" to use build-in default instead."));
 
 
 
@@ -1594,37 +1647,37 @@ register_options(void)
 		"%u in the string means the whole URL"));
 
 
+	/* Start of mailcap compatibility aliases:
+	 * Added: 2003-05-07, 0.5pre0.CVS.
+	 * Estimated due time: ? */
 	add_opt_tree("protocol", N_("Mailcap"),
 		"mailcap", 0,
-		N_("Options for mailcap support."));
+		N_("Options for mailcap support. (Deprecated. Please use\n"
+		"mime.mailcap instead)"));
 
-	add_opt_bool("protocol.mailcap", N_("Enable"),
-		"enable", 0, 1,
-		N_("Enable mailcap support."));
+	add_opt_alias("protocol.mailcap", N_("Enable"),
+		"enable", 0, "mime.mailcap.enable",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the mime.mailcap.enable option instead."));
 
-	add_opt_string("protocol.mailcap", N_("Path"),
-		"path", 0, "",
-		N_("Mailcap search path. Colon-separated list of files.\n"
-		"Leave as \"\" to use MAILCAP environment variable or\n"
-		"build-in defaults instead."));
+	add_opt_alias("protocol.mailcap", N_("Path"),
+		"path", 0, "mime.mailcap.path",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the mime.mailcap.path option instead."));
 
-	add_opt_bool("protocol.mailcap", N_("Ask before opening"),
-		"ask", 0, 1,
-		N_("Ask before using the handlers defined by mailcap."));
+	add_opt_alias("protocol.mailcap", N_("Ask before opening"),
+		"ask", 0, "mime.mailcap.ask",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the mime.mailcap.ask option instead."));
 
 	add_opt_int("protocol.mailcap", N_("Type query string"),
 		"description", 0, 0, 2, 0,
-		N_("Type of description to show in \"what shall I do with this file\"\n"
-		"query dialog:\n"
-		"0 is show \"mailcap\".\n"
-		"1 is show program to be run.\n"
-		"2 is show mailcap description field if any; \"mailcap\" otherwise."));
+		N_("This option is deprecated and will be removed very soon.\n"));
 
-	add_opt_bool("protocol.mailcap", N_("Prioritize entries by file"),
-		"prioritize", 0, 1,
-		N_("Prioritize entries by the order of the files in the mailcap\n"
-		"path. This means that wildcard entries (like: image/*) will\n"
-		"also be checked before deciding the handler."));
+	add_opt_alias("protocol.mailcap", N_("Prioritize entries by file"),
+		"prioritize", 0, "mime.mailcap.prioritize",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the mime.mailcap.prioritize option instead."));
 
 
 	add_opt_string("protocol", N_("No-proxy domains"),
@@ -2583,7 +2636,7 @@ register_options(void)
 		"This is internal ELinks option, you don't want to use it."));
 
 	add_opt_alias_tree(&cmdline_options, "", N_("MIME type to assume for documents"),
-		"default-mime-type", 0, "document.download.default_mime_type",
+		"default-mime-type", 0, "mime.default_type",
 		N_("Default MIME type to assume for documents of unknown type."));
 
 	add_opt_bool_tree(&cmdline_options, "", N_("Write formatted version of given URL to stdout"),

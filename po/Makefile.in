@@ -160,12 +160,12 @@ dist2: $(DISTFILES)
 	done
 
 update-po: Makefile
-	cd $(srcdir); \
+	@cd $(srcdir); \
 	catalogs='$(GMOFILES)'; \
 	for cat in $$catalogs; do \
 	  cat=`basename $$cat`; \
 	  lang=`echo $$cat | sed 's/\.gmo$$//'`; \
-	  echo "$$lang:"; \
+	  echo -n "$$lang: "; \
 	  if $(MSGMERGE) $$lang.po $(PACKAGE).pot -o $$lang.new.po; then \
 	    mv -f $$lang.new.po $$lang.po; \
 	  else \

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.231 2004/07/20 22:25:59 pasky Exp $ */
+/* $Id: form.c,v 1.232 2004/07/22 15:49:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,7 +780,10 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 				set_bin(fh);
 				do {
 					rd = safe_read(fh, buffer, F_BUFLEN);
-					if (rd == -1) goto encode_error;
+					if (rd == -1) {
+						close(fh);
+						goto encode_error;
+					}
 					if (rd) add_bytes_to_string(data, buffer, rd);
 				} while (rd);
 				close(fh);

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.58 2003/07/22 02:43:23 jonas Exp $ */
+/* $Id: opttypes.c,v 1.59 2003/07/25 00:48:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,11 +97,8 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 {
 	struct option *real = get_opt_rec(config_options, opt->ptr);
 
-	if (!real) {
-		internal("Alias %s leads to unknown option %s!",
-			 opt->name, opt->ptr);
-		return NULL;
-	}
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->ptr);
+	if_assert_failed { return NULL; }
 
 	if (option_types[real->type].cmdline)
 		return option_types[real->type].cmdline(real, argv, argc);
@@ -114,11 +111,8 @@ redir_rd(struct option *opt, unsigned char **file)
 {
 	struct option *real = get_opt_rec(config_options, opt->ptr);
 
-	if (!real) {
-		internal("Alias %s leads to unknown option %s!",
-			 opt->name, opt->ptr);
-		return NULL;
-	}
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->ptr);
+	if_assert_failed { return NULL; }
 
 	if (option_types[real->type].read)
 		return option_types[real->type].read(real, file);
@@ -131,11 +125,9 @@ redir_set(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(config_options, opt->ptr);
 
-	if (!real) {
-		internal("Alias %s leads to unknown option %s!",
-			 opt->name, opt->ptr);
-		return 0;
-	}
+
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->ptr);
+	if_assert_failed { return 0; }
 
 	if (option_types[real->type].set)
 		return option_types[real->type].set(real, str);
@@ -148,11 +140,9 @@ redir_add(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(config_options, opt->ptr);
 
-	if (!real) {
-		internal("Alias %s leads to unknown option %s!",
-			 opt->name, opt->ptr);
-		return 0;
-	}
+
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->ptr);
+	if_assert_failed { return 0; }
 
 	if (option_types[real->type].add)
 		return option_types[real->type].add(real, str);
@@ -165,11 +155,8 @@ redir_remove(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(config_options, opt->ptr);
 
-	if (!real) {
-		internal("Alias %s leads to unknown option %s!",
-			 opt->name, opt->ptr);
-		return 0;
-	}
+	assertm(real, "%s aliased to unknown option %s!", opt->name, opt->ptr);
+	if_assert_failed { return 0; }
 
 	if (option_types[real->type].remove)
 		return option_types[real->type].remove(real, str);

@@ -1,5 +1,5 @@
 /* Tool for testing of cookies string parser */
-/* $Id: parsetst.c,v 1.7 2004/06/26 14:35:38 jonas Exp $ */
+/* $Id: parsetst.c,v 1.8 2004/06/26 14:36:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,8 +31,7 @@ main(int argc, char *argv[])
 		string[strlen(string) - 1] = '\0'; /* Strip newline. */
 		if (!*string) return 0;
 
-		cstr.str = string;
-		if (!parse_cookie_str(&cstr)) {
+		if (!parse_cookie_str(&cstr, string)) {
 			printf("ERROR while parsing '%s'!\n", string);
 			continue;
 		}

@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.11 2004/06/26 14:25:59 jonas Exp $ */
+/* $Id: parser.c,v 1.12 2004/06/26 14:36:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,13 +37,14 @@ debug_cookie_parser(struct cookie_str *cstr, unsigned char *pos, int ws, int eq)
 
 /* Return cstr on success, NULL on failure. */
 struct cookie_str *
-parse_cookie_str(struct cookie_str *cstr)
+parse_cookie_str(struct cookie_str *cstr, unsigned char *str)
 {
 	unsigned char *pos;
 	int last_was_eq = 0;
 	int last_was_ws = 0;
 
 	cstr->nam_end = cstr->val_start = cstr->val_end = NULL;
+	cstr->str = str;
 
 	/* /NAME *= *VALUE *;/ */
 

@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.4 2004/01/02 19:56:41 pasky Exp $ */
+/* $Id: color.c,v 1.5 2004/01/17 00:05:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ decode_color(unsigned char *str, color_t *color)
 
 		errno = 0;
 		string_color = strtoul(&str[1], (char **)&end, 16);
-		if (!errno && !*end) {
+		if (!errno && (end == str + slen)) {
 			*color = string_color;
 			return 0;
 		}
@@ -236,7 +236,7 @@ decode_color(unsigned char *str, color_t *color)
 
 #ifndef USE_FASTFIND
 		for (cs = color_specs; cs->name; cs++)
-			if (!strcasecmp(cs->name, str))
+			if (!strlcasecmp(cs->name, -1, str, slen))
 				break;
 #else
 		cs = fastfind_search(str, slen, ff_info_colors);

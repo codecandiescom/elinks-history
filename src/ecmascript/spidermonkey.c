@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.177 2004/12/27 10:41:36 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.178 2004/12/27 10:49:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,140 +61,6 @@
 
 
 /*** Classes */
-
-enum prop_type {
-	JSPT_UNDEF,
-	JSPT_INT,
-	JSPT_DOUBLE,
-	JSPT_STRING,
-	JSPT_ASTRING,
-	JSPT_BOOLEAN,
-	JSPT_OBJECT,
-};
-
-struct jsval_property {
-	enum prop_type type;
-	union {
-		int boolean;
-		int number;
-		jsdouble floatnum;
-		JSObject *object;
-		unsigned char *string;
-	} value;
-#ifdef CONFIG_DEBUG
-	unsigned int magic;
-#endif
-};
-
-/* Sanity macros for struct jsval_property */
-#ifdef CONFIG_DEBUG
-#define JSVAL_PROP_MAGIC ((unsigned int) 0xf1de1c0d)
-#define set_prop_magic(prop) do { (prop)->magic = JSVAL_PROP_MAGIC; } while (0)
-#define check_prop_magic(prop) assertm((prop)->magic == JSVAL_PROP_MAGIC, "jsval_property magic check failed.")
-#else
-#define set_prop_magic(prop)
-#define check_prop_magic(prop)
-#endif
-
-
-static void
-set_prop_undef(struct jsval_property *prop)
-{
-	memset(prop, 'J', sizeof(struct jsval_property)); /* Active security ;) */
-	set_prop_magic(prop);
-	prop->type = JSPT_UNDEF;
-}
-
-static void
-set_prop_boolean(struct jsval_property *prop, int boolean)
-{
-	set_prop_magic(prop);
-	prop->value.boolean = boolean;
-	prop->type = JSPT_BOOLEAN;
-}
-
-static void
-set_prop_string(struct jsval_property *prop, unsigned char *string)
-{
-	set_prop_magic(prop);
-	prop->value.string = string;
-	prop->type = JSPT_STRING;
-}
-
-#if 0 /* not used. */
-
-static void
-set_prop_astring(struct jsval_property *prop, unsigned char *string)
-{
-	set_prop_magic(prop);
-	prop->value.string = string;
-	prop->type = JSPT_ASTRING;
-}
-
-static void
-set_prop_object(struct jsval_property *prop, JSObject *object)
-{
-	set_prop_magic(prop);
-	prop->value.object = object;
-	prop->type = JSPT_OBJECT;
-}
-
-static void
-set_prop_int(struct jsval_property *prop, int number)
-{
-	set_prop_magic(prop);
-	prop->value.number = number;
-	prop->type = JSPT_INT;
-}
-
-static void
-set_prop_double(struct jsval_property *prop, jsdouble floatnum)
-{
-	set_prop_magic(prop);
-	prop->value.floatnum = floatnum;
-	prop->type = JSPT_DOUBLE;
-}
-#endif
-
-static void
-value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
-{
-	check_prop_magic(prop);
-
-	switch (prop->type) {
-	case JSPT_STRING:
-	case JSPT_ASTRING:
-		if (!prop->value.string) {
-			*vp = JSVAL_NULL;
-			break;
-		}
-		*vp = STRING_TO_JSVAL(JS_NewStringCopyZ(ctx, prop->value.string));
-		if (prop->type == JSPT_ASTRING)
-			mem_free(prop->value.string);
-		break;
-
-	case JSPT_BOOLEAN:
-		*vp = BOOLEAN_TO_JSVAL(prop->value.boolean);
-		break;
-
-	case JSPT_DOUBLE:
-		*vp = DOUBLE_TO_JSVAL(prop->value.floatnum);
-		break;
-
-	case JSPT_INT:
-		*vp = INT_TO_JSVAL(prop->value.number);
-		break;
-
-	case JSPT_OBJECT:
-		*vp = OBJECT_TO_JSVAL(prop->value.object);
-		break;
-
-	case JSPT_UNDEF:
-	default:
-		*vp = JSVAL_NULL;
-		break;
-	}
-}
 
 static void
 string_to_jsval(JSContext *ctx, jsval *vp, unsigned char *string)
@@ -1842,9 +1708,6 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct document_view *doc_view = vs->doc_view;
 	struct session_status *status = &doc_view->session->status;
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
@@ -1852,7 +1715,7 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_UNIBAR_VISIBLE:
 #define unibar_fetch(bar) \
-	set_prop_boolean(&prop, status->force_show_##bar##_bar >= 0 \
+	boolean_to_jsval(ctx, vp, status->force_show_##bar##_bar >= 0 \
 	          ? status->force_show_##bar##_bar \
 	          : status->show_##bar##_bar)
 		switch (*bar) {
@@ -1863,17 +1726,16 @@ unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			unibar_fetch(title);
 			break;
 		default:
-			set_prop_boolean(&prop, 0);
+			boolean_to_jsval(ctx, vp, 0);
 			break;
 		}
 #undef unibar_fetch
 		break;
 	default:
 		INTERNAL("Invalid ID %d in unibar_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 
@@ -1946,35 +1808,32 @@ static const JSPropertySpec navigator_props[] = {
 static JSBool
 navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
-
 	if (!JSVAL_IS_INT(id))
 		return JS_TRUE;
 
+	undef_to_jsval(ctx, vp);
+
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_NAVIGATOR_APP_CODENAME:
-		set_prop_string(&prop, "Mozilla"); /* More like a constant nowadays. */
+		string_to_jsval(ctx, vp, "Mozilla"); /* More like a constant nowadays. */
 		break;
 	case JSP_NAVIGATOR_APP_NAME:
 		/* This evil hack makes the compatibility checking .indexOf()
 		 * code find what it's looking for. */
-		set_prop_string(&prop, "ELinks (roughly compatible with Netscape Navigator, Mozilla and Microsoft Internet Explorer)");
+		string_to_jsval(ctx, vp, "ELinks (roughly compatible with Netscape Navigator, Mozilla and Microsoft Internet Explorer)");
 		break;
 	case JSP_NAVIGATOR_APP_VERSION:
-		set_prop_string(&prop, VERSION);
+		string_to_jsval(ctx, vp, VERSION);
 		break;
 	case JSP_NAVIGATOR_LANGUAGE:
 #ifdef ENABLE_NLS
 		if (get_opt_bool("protocol.http.accept_ui_language"))
-			set_prop_string(&prop, language_to_iso639(current_language));
-		else
+			string_to_jsval(ctx, vp, language_to_iso639(current_language));
+
 #endif
-			set_prop_undef(&prop);
 		break;
 	case JSP_NAVIGATOR_PLATFORM:
-		set_prop_string(&prop, system_name);
+		string_to_jsval(ctx, vp, system_name);
 		break;
 	case JSP_NAVIGATOR_USER_AGENT:
 	{
@@ -1998,19 +1857,16 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			if (ustr) {
 				safe_strncpy(custr, ustr, 256);
 				mem_free(ustr);
-				set_prop_string(&prop, custr);
-			} else{
-				set_prop_undef(&prop);
+				string_to_jsval(ctx, vp, custr);
 			}
 		}
 	}
 		break;
 	default:
 		INTERNAL("Invalid ID %d in navigator_get_property().", JSVAL_TO_INT(id));
-		return JS_TRUE;
+		break;
 	}
 
-	value_to_jsval(ctx, vp, &prop);
 	return JS_TRUE;
 }
 

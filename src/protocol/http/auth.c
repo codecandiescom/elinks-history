@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.62 2003/07/23 08:37:47 zas Exp $ */
+/* $Id: auth.c,v 1.63 2003/07/23 12:51:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,24 +35,24 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	if (!url || !*url) return NULL;
 
 	foreach (entry, http_auth_basic_list) {
-		if (!strcasecmp(entry->url, url)) {
-			/* Found a matching url. */
-			match = entry;
-			if (!realm) {
-				/* Since realm is NULL, stops immediatly. */
-				break;
-			}
+		if (strcasecmp(entry->url, url)) continue;
 
-			/* From RFC 2617 section 1.2:
-			 * The realm value (case-sensitive), in combination
-			 * with the canonical root URL (the absolute URI for
-			 * the server whose abs_path is empty; see section
-			 * 5.1.2 of [2]) of the server being accessed, defines
-			 * the protection space. */
-			if (entry->realm && !strcmp(entry->realm, realm)) {
-				/* Exact match. */
-				break; /* Stop here. */
-			}
+		/* Found a matching url. */
+		match = entry;
+		if (!realm) {
+			/* Since realm is NULL, stops immediatly. */
+			break;
+		}
+
+		/* From RFC 2617 section 1.2:
+		 * The realm value (case-sensitive), in combination
+		 * with the canonical root URL (the absolute URI for
+		 * the server whose abs_path is empty; see section
+		 * 5.1.2 of [2]) of the server being accessed, defines
+		 * the protection space. */
+		if (entry->realm && !strcmp(entry->realm, realm)) {
+			/* Exact match. */
+			break; /* Stop here. */
 		}
 	}
 

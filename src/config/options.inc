@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.169 2004/12/29 22:35:54 jonas Exp $ */
+/* $Id: options.inc,v 1.170 2004/12/30 04:00:18 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -368,10 +368,10 @@ static struct option_info config_options_info[] = {
 #ifdef HAVE_REGEX_H
 	INIT_OPT_INT("document.browse.search", N_("Regular expressions"),
 		"regex", 0, 0, 2, 0,
-		N_("Enable searching with regular expressions.\n"
-		"0 for plain text searching.\n"
-		"1 for basic regular expression searches.\n"
-		"2 for extended regular expression searches.")),
+		N_("Enable searching with regular expressions:\n"
+		"0 for plain text searching\n"
+		"1 for basic regular expression searches\n"
+		"2 for extended regular expression searches")),
 #endif
 
 	INIT_OPT_BOOL("document.browse.search", N_("Show search hit top or bottom dialogs"),

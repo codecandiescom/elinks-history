@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.471 2004/06/15 22:08:00 zas Exp $ */
+/* $Id: view.c,v 1.472 2004/06/15 22:13:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,6 +772,14 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 		case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
 		case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
 		case ACT_MAIN_UP: rep_ev(ses, doc_view, up); break;
+		case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
+		case ACT_MAIN_END: rep_ev(ses, doc_view, x_end); break;
+
+		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
+		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
+		case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left); break;
+		case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right); break;
+
 		case ACT_MAIN_COPY_CLIPBOARD: {
 			/* This looks bogus. Why print_current_link()
 			 * it adds all kins of stuff that is not part
@@ -791,14 +799,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			break;
 		}
 
-		/* XXX: Code duplication of following for mouse */
-		case ACT_MAIN_SCROLL_UP: scroll_up(ses, doc_view); break;
-		case ACT_MAIN_SCROLL_DOWN: scroll_down(ses, doc_view); break;
-		case ACT_MAIN_SCROLL_LEFT: rep_ev(ses, doc_view, scroll_left); break;
-		case ACT_MAIN_SCROLL_RIGHT: rep_ev(ses, doc_view, scroll_right); break;
-
-		case ACT_MAIN_HOME: rep_ev(ses, doc_view, home); break;
-		case ACT_MAIN_END:  rep_ev(ses, doc_view, x_end); break;
 		case ACT_MAIN_ENTER:
 			if (try_jump_to_link_number(ses, doc_view))
 				status = FRAME_EVENT_OK;
@@ -854,7 +854,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				d[1] = 0;
 				nl = document->nlinks, lnl = 1;
 				while (nl) nl /= 10, lnl++;
-				
+
 				if (lnl > 1)
 					input_field(ses->tab->term, NULL, 1,
 						    N_("Go to link"), N_("Enter link number"),
@@ -866,7 +866,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				   && try_document_key(ses, doc_view, ev)) {
 				/* The document ate the key! */
 				status = FRAME_EVENT_OK;
-			
+
 			} else {
 				status = FRAME_EVENT_IGNORED;
 			}

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.30 2003/07/25 17:16:01 jonas Exp $ */
+/* $Id: uri.h,v 1.31 2003/07/25 17:21:16 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -12,10 +12,12 @@
  * start of a field is set but that the length is zero so instead of testing
  * *uri-><fieldname> always use uri-><fieldname>len.
  *
- * XXX: Lots of places in the code assume that the string members point into the
- * same string. That means if you need to use a NUL terminated uri field either
- * temporary modify the string, allocated a copy or change the function used to
- * take a length parameter. */
+ * XXX: Lots of places in the code assume that the string members point into
+ * the same string. That means if you need to use a NUL terminated uri field
+ * either temporary modify the string, allocated a copy or change the function
+ * used to take a length parameter (in the reverse precedence - modifying the
+ * string should not be done since you never know what kind of memory actually
+ * contains the string --pasky). */
 /* TODO: We should probably add path+query members instead of data. */
 struct uri {
 	/* The start of the uri (and thus start of the protocol string). */
@@ -75,24 +77,27 @@ enum uri_component {
 	URI_POST	= (1 << 6),
 };
 
-/* These functionss recreates the URI string part by part. */
+/* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for
- * construction of the URI string.  */
+ * construction of the URI string. */
 
 /* Adds the components to an already initialized string. */
 struct string *add_uri_to_string(struct string *string, struct uri *uri, enum uri_component components);
 
 /* Takes an uri string, parses it and adds the desired components. Useful if
- * there's no struct uri around. */
+ * there is no struct uri around. */
 struct string *add_string_uri_to_string(struct string *string, unsigned char *uristring, enum uri_component components);
 
+/* Extracts strictly the filename part (the crap between path and query) and
+ * returns it as a string. Note that there are cases where the string will be
+ * empty ("") (ie. http://example.com/?crash=elinks). */
 struct string *add_string_uri_filename_to_string(struct string *string, unsigned char *);
 
 /* Returns the new URI string or NULL upon an error. */
 unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 
 /* Returns either the uri's port number if available or the protocol's
- * default port. For user protocols this is 0. */
+ * default port. It is zarro for user protocols. */
 int get_uri_port(struct uri *uri);
 
 

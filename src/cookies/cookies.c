@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.185 2004/11/11 19:05:30 miciah Exp $ */
+/* $Id: cookies.c,v 1.186 2004/11/12 09:38:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -731,6 +731,10 @@ load_cookies(void) {
 	if (elinks_home) mem_free(cookfile);
 	if (!fp) return;
 
+	/* XXX: We don't want to overwrite the cookies file
+	 * periodically to our death. */
+	cookies_nosave = 1;
+
 	while (fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
 		struct cookie *cookie;
 		unsigned char *p, *q = in_buffer;
@@ -783,13 +787,10 @@ load_cookies(void) {
 		cookie->expires = expires;
 		cookie->secure  = !!atoi(members[SECURE].pos);
 
-		/* XXX: We don't want to overwrite the cookies file
-		 * periodically to our death. */
-		cookies_nosave = 1;
 		accept_cookie(cookie);
-		cookies_nosave = 0;
 	}
 
+	cookies_nosave = 0;
 	fclose(fp);
 }
 

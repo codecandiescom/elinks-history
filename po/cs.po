@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-16 15:15+0200\n"
-"PO-Revision-Date: 2003-10-15 21:30+0200\n"
+"PO-Revision-Date: 2003-10-16 16:00+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -910,6 +910,9 @@ msgid ""
 "This is internal option used when displaying a warning about\n"
 "obsolete config.saving_style. You shouldn't touch it."
 msgstr ""
+"Toto je interní polo¾ka pou¾ívaná pøi zobrazování varování o nevhodné\n"
+"hodnotì config.saving_style zdìdìné ze star¹ích verzí ELinksu. Prosíme\n"
+"nedotýkati se."
 
 #: src/config/options.c:948
 msgid "Show template"
@@ -920,6 +923,8 @@ msgid ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
 msgstr ""
+"Urèuje, zda ve správci nastavení zobrazovat volby s názvem _template_\n"
+"(¹ablony) a ukládat je do konfiguraèního souboru."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:957
@@ -947,12 +952,16 @@ msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "needs extensive configuration of OpenSSL by the user."
 msgstr ""
+"Ovìøit SSL certifikát druhé strany. Ke zprovoznìní tohoto nastavení\n"
+"je tøeba odpovídajícím zpùsobem nakonfigurovat OpenSSL."
 
 #: src/config/options.c:975
 msgid ""
 "Verify the peer's SSL certificate. Note that this\n"
 "probably doesn't work properly at all with GnuTLS."
 msgstr ""
+"Ovìøit SSL certifikát druhé strany. Ke zprovoznìní tohoto nastavení\n"
+"je tøeba odpovídajícím zpùsobem nakonfigurovat GnuTLS."
 
 #: src/config/options.c:980
 msgid "Verify the peer's SSL certificate."
@@ -1064,6 +1073,11 @@ msgid ""
 "non-international domains (instead of just two dots). Please see\n"
 "code (cookies.c:check_domain_security()) for explanation."
 msgstr ""
+"Pokud je tato volba zapnuta, pro v¹echny národní domény budou vy¾adovány\n"
+"ve jménì hostitele alespoò tøi teèky (namísto dvou). Nìkteøí lidé se\n"
+"domnívají, ¾e standardní chování (s touto volbou vypnutou) není dostateènì\n"
+"bezpeèné. Pro dal¹í vysvìtlení viz zdrojový kód\n"
+"(cookies.c:chech_domain_security())."
 
 #: src/config/options.c:1038
 msgid "Saving"
@@ -1122,10 +1136,13 @@ msgid ""
 "accesskey is pressed - this is the standard behaviour, but it's\n"
 "considered dangerous."
 msgstr ""
+"Automaticky následuj odkaz nebo ode¹li formuláø, pokud byla stisknuta\n"
+"odpovídající pøístupová klávesa - toto je standardní chování, ov¹em\n"
+"je pova¾ováno za zneu¾itelné autorem dokumentu."
 
 #: src/config/options.c:1072
 msgid "Accesskey priority"
-msgstr "Priorita accesskey"
+msgstr "Priorita pøístupových kláves"
 
 #: src/config/options.c:1074
 msgid ""
@@ -1134,6 +1151,12 @@ msgid ""
 "1 is first try only frame bindings; if it fails, check accesskey\n"
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
+"Priorita HTML atributu 'accesskey':\n"
+"0 znamená nejdøíve projít v¹echny standardní klávesové vazby; pokud\n"
+"  pro klávesu nejsou ¾ádné definovány, zkusit accesskey\n"
+"1 znamená nejdøíve projít standardní klávesové vazby rámcù; pokud\n"
+"  pro klávesu nejsou ¾ádné definovány, zkusit accesskey\n"
+"2 znamená nejdøíve zkusit accesskey (to mù¾e být nebezpeèné)"
 
 #: src/config/options.c:1080
 msgid "Forms"
@@ -1215,7 +1238,7 @@ msgstr "Prefix odkazu na obrázek"
 
 #: src/config/options.c:1121
 msgid "Prefix string to use to mark image links."
-msgstr ""
+msgstr "Øetìzec, který se má vlo¾it pøed odkaz na obrázek."
 
 #: src/config/options.c:1123
 msgid "Image link suffix"
@@ -1223,7 +1246,7 @@ msgstr "Suffix odkazu na obrázek."
 
 #: src/config/options.c:1125
 msgid "Suffix string to use to mark image links."
-msgstr ""
+msgstr "Øetìzec, který se má vlo¾it za odkaz na obrázek."
 
 #: src/config/options.c:1127
 msgid "Display image links"
@@ -1231,7 +1254,7 @@ msgstr "Zobrazovat odkazy na obrázky"
 
 #: src/config/options.c:1129
 msgid "Display links to images."
-msgstr ""
+msgstr "Zobrazovat odkazy na obrázky."
 
 #: src/config/options.c:1132
 msgid "Links"
@@ -1239,7 +1262,7 @@ msgstr "Odkazy"
 
 #: src/config/options.c:1134
 msgid "Options for handling of links to other documents."
-msgstr ""
+msgstr "Nastavení obsluhy odkazù na jiné dokumenty."
 
 #: src/config/options.c:1136
 msgid "Directory highlighting"
@@ -1248,6 +1271,8 @@ msgstr "Zvýrazòovat odkazy na adresáøe"
 #: src/config/options.c:1138
 msgid "Highlight links to directories in FTP and local directory listing."
 msgstr ""
+"Zvýrazòovat odkazy na adresáøe ve výpisech adresáøù na lokálním disku èi\n"
+"pøes FTP."
 
 #: src/config/options.c:1140
 msgid "Number links"
@@ -1255,7 +1280,7 @@ msgstr "Èíslovat odkazy"
 
 #: src/config/options.c:1142
 msgid "Display numbers next to the links."
-msgstr ""
+msgstr "Zobrazovat u odkazù jejich èísla."
 
 #: src/config/options.c:1144
 msgid "Use tabindex"
@@ -1292,6 +1317,8 @@ msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
 msgstr ""
+"Pøi stisku klávesy 'dolù' na posledním odkazu se pøesuò na první odkaz\n"
+"a naopak."
 
 #: src/config/options.c:1164
 msgid "Searching"
@@ -1299,7 +1326,7 @@ msgstr "Vyhledávání"
 
 #: src/config/options.c:1166
 msgid "Options for searching."
-msgstr ""
+msgstr "Nastavení vyhledávání."
 
 #: src/config/options.c:1168
 msgid "Case sensitivity"

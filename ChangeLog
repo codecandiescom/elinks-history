@@ -1,3 +1,67 @@
+Sun May 19 16:06:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/conf.c, config/conf.h, config/options.c,
+	config/options.h, dialogs/options.c, document/dump.c,
+	document/session.c:
+
+	Removed global dds, html options converted to type-specific
+	add_opt_*(). Removed html_options, HTML options are now in
+	links_options => bye, bye, ~/.links/html.cfg (we still read from it,
+	but we never write to it anymore) (thus also removed all_options).
+	Added add_opt_codepage(). First tiny bits of indicies for hiearchic
+	options.  
+
+Sun May 19 15:01:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/hash.c:
+
+	item->value can be NULL now.  
+
+Sun May 19 14:33:55 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Removed http_bugs, very minor tidyup, fixed reading strings from
+	config file, and most importantly fixed done_options() - we treated
+	option->type as a bitmask, due to some weird bug inside my brain.  
+
+Sun May 19 14:12:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Introduced specialized macros for adding options with certain types.
+	Removed most of the config variables, space is now allocated
+	dynamically. WARNING: IT SEGFAULTS ON QUIT NOW! I'll have to rewrite
+	some other small parts of ELinks code in order to get rid of
+	http_bugs struct.  
+
+Sun May 19 11:06:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Added add_opt(), which itself composes option struct from
+	parameters. Changed list of options to chain of add_opt()s.  
+
+Sun May 19 11:05:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+
+	dump and source are now both booleans 
+
+Sun May 19 11:05:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/dump.c:
+
+	Fixed possible crash when reading long streams by -source. Patch by
+	Mikulas.  
+
+Sat May 18 23:01:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: conf.c, options.c, options.h:
+
+	Typed options - each option has type instead of i/o handlers.
+	Removed dmp and enum dump_type.  
+
 Sat May 18 19:29:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/options.c:

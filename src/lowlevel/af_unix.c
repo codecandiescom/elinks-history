@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.17 2002/09/17 14:25:36 zas Exp $ */
+/* $Id: af_unix.c,v 1.18 2002/10/12 14:51:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
+#include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -72,19 +73,20 @@ int s_unix_fd = -1;
 int get_address()
 {
 	struct sockaddr_un *addr;
-	unsigned char *path;
+	unsigned char *path = init_str();
+	int pathl = 0;
 
 	if (!elinks_home) return -1;
 
-	path = stracpy(elinks_home);
+	add_to_str(&path, &pathl, elinks_home);
 
-	addr = mem_calloc(1, sizeof(struct sockaddr_un) + strlen(path) + 1);
+	addr = mem_calloc(1, sizeof(struct sockaddr_un) + pathl + 1);
 	if (!addr) {
 		mem_free(path);
 		return -1;
 	}
 
-	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un) + strlen(path) + 1);
+	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un) + pathl + 1);
 	if (!s_unix_accept) {
 		mem_free(addr);
 		mem_free(path);
@@ -93,7 +95,8 @@ int get_address()
 
 	addr->sun_family = AF_UNIX;
 
-	add_to_strn(&path, LINKS_SOCK_NAME);
+	add_to_str(&path, &pathl, LINKS_SOCK_NAME);
+	add_num_to_str(&path, &pathl, get_opt_int_tree(cmdline_options, "session-ring"));
 	strcpy(addr->sun_path, path);
 	mem_free(path);
 

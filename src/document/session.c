@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.61 2002/10/10 21:40:23 pasky Exp $ */
+/* $Id: session.c,v 1.62 2002/10/12 14:51:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1150,6 +1150,10 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 	cpfrom = *(int *)data;
 	sz = *((int *)data + 1);
 
+	/* This is the only place where s->id comes into game - we're comparing
+	 * it to possibly supplied -base-session here, and clone the session
+	 * with id of base-session (its current document association only,
+	 * rather) to the newly created session. */
 	foreach(s, sessions) {
 		if (s->id == cpfrom) {
 			copy_session(s, ses);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.105 2002/10/04 19:11:45 zas Exp $ */
+/* $Id: options.c,v 1.106 2002/10/12 14:51:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1703,7 +1703,8 @@ register_options()
 
 	add_opt_int_tree(cmdline_options, "",
 		"base-session", 0, 0, MAXINT, 0,
-		"Session ID of this ELinks. You don't want to change this.\n");
+		"ID of session (ELinks instance) which we want to clone.\n"
+		"This is internal ELinks option, you don't want to use it.");
 
 	add_opt_bool_tree(cmdline_options, "",
 		"dump", 0, 0,
@@ -1742,6 +1743,21 @@ register_options()
 		"no-home", 0, 0,
 		"Don't attempt to create and/or use home rc directory (~/.elinks).");
 
+	add_opt_int_tree(cmdline_options, "",
+		"session-ring", 0, 0, MAXINT, 0,
+		"ID of session ring this ELinks should connect to. The ELinks\n"
+		"works in so-called session rings, where all instances of ELinks\n"
+		"are interconnected and share same state (cache, bookmarks, cookies\n"
+		"and so on). By default, all ELinks instances connect to session\n"
+		"ring 0. You can change that behaviour by this switch and form as\n"
+		"many session rings as you want. Obviously, if the session-ring with\n"
+	        "this number doesn't exist yet, it's created and this ELinks instance\n"
+		"will become the master instance (that usually doesn't matter for you\n"
+		"as a user much). Note that you usually don't want to use this except\n"
+	        "you're a developer and you want to do some testing - if you want the\n"
+		"ELinks instances running each one standalone, rather use -no-connect\n"
+		"commandline option.");
+
 	add_opt_bool_tree(cmdline_options, "",
 		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
@@ -1757,7 +1773,8 @@ register_options()
 	add_opt_bool_tree(cmdline_options, "",
 		"touch-files", 0, 0,
 		"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
-		"changed when -no-connect is used; has no effect otherwise.");
+		"changed even when -no-connect is used; has no effect if not used\n"
+		"in connection with the -no-connect commandline option.");
 
 	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,

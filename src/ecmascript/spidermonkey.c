@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.74 2004/11/24 18:21:40 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.75 2004/11/25 18:01:39 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -641,8 +641,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_DOC_TITLE: p.string = document->title; prop_type = JSPT_STRING; break;
 	case JSP_DOC_URL: p.string = get_uri_string(document->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
 	case JSP_DOC_FORMS:
-		forms_obj = JS_DefineObject(ctx, obj, "forms",
-			(JSClass *)&forms_class, NULL, JSPROP_ENUMERATE);
+		forms_obj = JS_NewObject(ctx, (JSClass *)&forms_class, NULL, parent);
 		JS_DefineFunctions(ctx, forms_obj, (JSFunctionSpec *)&forms_funcs);
 		p.object = forms_obj;
 		prop_type = JSPT_OBJECT;

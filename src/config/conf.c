@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.107 2003/11/24 12:00:33 zas Exp $ */
+/* $Id: conf.c,v 1.108 2003/11/25 21:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,24 +332,22 @@ parse_config_file(struct option *options, unsigned char *name,
 				if (!strncmp(file, handler->command, cmdlen)
 				    && WHITECHAR(file[cmdlen])) {
 					struct string mirror2 = NULL_STRING;
-					struct string *m2;
+					struct string *m2 = NULL;
 
 					/* Mirror what we already have */
 					if (mirror && init_string(&mirror2)) {
 						m2 = &mirror2;
 						add_bytes_to_string(m2,
 								    file, cmdlen);
-					} else {
-						m2 = NULL;
 					}
 
 
 					file += cmdlen;
 					err = handler->handler(options,
 							       &file, &line,
-							       mirror?m2:NULL);
+							       m2);
 					if (!err && mirror && m2) {
-						add_to_string(mirror, m2->source);
+						add_string_to_string(mirror, m2);
 					}
 					if (m2)	done_string(m2);
 					goto test_end;

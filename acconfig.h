@@ -1,17 +1,5 @@
 
 @BOTTOM@
-/* Define to 1 if we have typeof */
-#undef HAVE_TYPEOF
-
-/* Define to 1 if we have long long */
-#undef HAVE_LONG_LONG
-
-/* Define to 1 if we have int32_t */
-#undef HAVE_INT32_T
-
-/* Define to 1 if we have uint32_t */
-#undef HAVE_UINT32_T
-
 /* Define to 1 if we have __va_copy() */
 #undef HAVE_VA_COPY
 

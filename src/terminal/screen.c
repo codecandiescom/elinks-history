@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.78 2003/09/12 10:48:41 zas Exp $ */
+/* $Id: screen.c,v 1.79 2003/09/19 13:55:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,19 +57,19 @@ static unsigned char frame_restrict[48] = {
 	179, 217, 218, 219, 220, 221, 222, 223,
 };
 
-struct frame_seq {
-	unsigned char *src;
-	int len;
+#define TERM_STRING(str) INIT_STRING(str, sizeof(str) - 1)
+
+#define add_term_string(str, tstr) \
+	add_bytes_to_string(str, (tstr).source, (tstr).length)
+
+static struct string m11_hack_frame_seqs[] = {
+	/* end border: */	TERM_STRING("\033[10m"),
+	/* begin border: */	TERM_STRING("\033[11m"),
 };
 
-static struct frame_seq m11_hack_frame_seqs[] = {
-	/* end border: */	{ "\033[10m", 5 },
-	/* begin border: */	{ "\033[11m", 5 },
-};
-
-static struct frame_seq vt100_frame_seqs[] = {
-	/* end border: */	{ "\x0f", 1 },
-	/* begin border: */	{ "\x0e", 1 },
+static struct string vt100_frame_seqs[] = {
+	/* end border: */	TERM_STRING("\x0f"),
+	/* begin border: */	TERM_STRING("\x0e"),
 };
 
 /* Used in print_char() and redraw_screen() to reduce the logic. */
@@ -91,7 +91,7 @@ struct screen_driver {
 	unsigned char *frame;
 
 	/* The frame mode setup and teardown sequences. May be NULL. */
-	struct frame_seq *frame_seqs;
+	struct string *frame_seqs;
 
 	/* These are directly derived from the terminal options. */
 	unsigned int colors:1;
@@ -280,10 +280,8 @@ print_char(struct string *screen, struct screen_driver *driver,
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
 	if (border != state->border && driver->frame_seqs) {
-		register struct frame_seq *seq = &driver->frame_seqs[!!border];
-
 		state->border = border;
-		add_bytes_to_string(screen, seq->src, seq->len);
+		add_term_string(screen, driver->frame_seqs[!!border]);
 	}
 
 	/* This is optimized for the (common) case that underlines are rare. */
@@ -476,9 +474,7 @@ redraw_screen(struct terminal *term)
 
 		/* If we ended in border state end the frame mode. */
 		if (state.border && driver->frame_seqs) {
-			struct frame_seq *seq = &driver->frame_seqs[0];
-
-			add_bytes_to_string(&image, seq->src, seq->len);
+			add_term_string(&image, driver->frame_seqs[0]);
 		}
 	}
 

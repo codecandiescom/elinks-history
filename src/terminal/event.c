@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.61 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: event.c,v 1.62 2004/07/01 11:58:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,25 @@
 #include "util/memory.h"
 #include "util/object.h"
 #include "util/string.h"
+
+
+/* Information used for communication between ELinks instances */
+struct terminal_interlink {
+	/* How big the input queue is and how much is free */
+	int qlen;
+	int qfreespace;
+
+	/* Something weird regarding the UTF8 I/O. */
+	struct {
+		unicode_val ucs;
+		int len;
+		int min;
+	} utf_8;
+
+	/* This is the queue of events as coming from the other ELinks instance
+	 * owning the hosting terminal. */
+	unsigned char input_queue[0];
+};
 
 
 void
@@ -144,15 +163,16 @@ static int
 handle_interlink_event(struct terminal *term, struct term_event *ev)
 {
 	struct terminal_info *info = NULL;
+	struct terminal_interlink *interlink = term->interlink;
 
 	switch (ev->ev) {
 	case EV_INIT:
-		if (term->qlen < sizeof(struct terminal_info))
+		if (interlink->qlen < sizeof(struct terminal_info))
 			return 0;
 
 		info = (struct terminal_info *) ev;
 
-		if (term->qlen < sizeof(struct terminal_info) + info->length)
+		if (interlink->qlen < sizeof(struct terminal_info) + info->length)
 			return 0;
 
 		info->name[MAX_TERM_LEN - 1] = 0;
@@ -207,24 +227,24 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			break;
 		}
 
-		if (term->utf_8.len) {
+		if (interlink->utf_8.len) {
 			utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
 
 			if ((ev->x & 0xC0) == 0x80
 			    && utf8_io) {
-				term->utf_8.ucs <<= 6;
-				term->utf_8.ucs |= ev->x & 0x3F;
-				if (! --term->utf_8.len) {
-					unicode_val u = term->utf_8.ucs;
+				interlink->utf_8.ucs <<= 6;
+				interlink->utf_8.ucs |= ev->x & 0x3F;
+				if (! --interlink->utf_8.len) {
+					unicode_val u = interlink->utf_8.ucs;
 
-					if (u < term->utf_8.min)
+					if (u < interlink->utf_8.min)
 						u = UCS_NO_CHAR;
 					term_send_ucs(term, ev, u);
 				}
 				break;
 
 			} else {
-				term->utf_8.len = 0;
+				interlink->utf_8.len = 0;
 				term_send_ucs(term, ev, UCS_NO_CHAR);
 			}
 		}
@@ -244,11 +264,11 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 			for (mask = 0x80; ev->x & mask; mask >>= 1) {
 				len++;
-				term->utf_8.min = cov;
+				interlink->utf_8.min = cov;
 				cov = 1 << (1 + 5 * len);
 			}
-			term->utf_8.len = len - 1;
-			term->utf_8.ucs = ev->x & (mask - 1);
+			interlink->utf_8.len = len - 1;
+			interlink->utf_8.ucs = ev->x & (mask - 1);
 			break;
 		}
 
@@ -272,22 +292,33 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 void
 in_term(struct terminal *term)
 {
+	struct terminal_interlink *interlink = term->interlink;
 	int r;
-	unsigned char *iq = term->input_queue;
+	unsigned char *iq;
 
-	if (!iq || !term->qfreespace || term->qfreespace - term->qlen > ALLOC_GR) {
-		int newsize = ((term->qlen + ALLOC_GR) & ~(ALLOC_GR - 1));
+	if (!interlink
+	    || !interlink->qfreespace
+	    || interlink->qfreespace - interlink->qlen > ALLOC_GR) {
+		int qlen = interlink ? interlink->qlen : 0;
+		int queuesize = ((qlen + ALLOC_GR) & ~(ALLOC_GR - 1));
+		int newsize = sizeof(struct terminal_interlink) + queuesize;
 
-		iq = mem_realloc(term->input_queue, newsize);
-		if (!iq) {
+		interlink = mem_realloc(interlink, newsize);
+		if (!interlink) {
 			destroy_terminal(term);
 			return;
 		}
-		term->input_queue = iq;
-		term->qfreespace = newsize - term->qlen;
+
+		/* Blank the members for the first allocation */
+		if (!term->interlink)
+			memset(interlink, 0, sizeof(struct terminal_interlink));
+
+		term->interlink = interlink;
+		interlink->qfreespace = queuesize - interlink->qlen;
 	}
 
-	r = safe_read(term->fdin, iq + term->qlen, term->qfreespace);
+	iq = interlink->input_queue;
+	r = safe_read(term->fdin, iq + interlink->qlen, interlink->qfreespace);
 	if (r <= 0) {
 		if (r == -1 && errno != ECONNRESET)
 			ERROR(_("Could not read event: %d (%s)", term),
@@ -296,10 +327,11 @@ in_term(struct terminal *term)
 		destroy_terminal(term);
 		return;
 	}
-	term->qlen += r;
-	term->qfreespace -= r;
 
-	while (term->qlen >= sizeof(struct term_event)) {
+	interlink->qlen += r;
+	interlink->qfreespace -= r;
+
+	while (interlink->qlen >= sizeof(struct term_event)) {
 		struct term_event *ev = (struct term_event *) iq;
 		int event_size = handle_interlink_event(term, ev);
 
@@ -308,12 +340,12 @@ in_term(struct terminal *term)
 		if (!event_size) break;
 
 		/* Acount for the handled bytes */
-		term->qlen -= event_size;
-		term->qfreespace += event_size;
+		interlink->qlen -= event_size;
+		interlink->qfreespace += event_size;
 
 		/* If there are no more bytes to handle stop else move next
 		 * event bytes to the front of the queue. */
-		if (!term->qlen) break;
-		memmove(iq, iq + event_size, term->qlen);
+		if (!interlink->qlen) break;
+		memmove(iq, iq + event_size, interlink->qlen);
 	}
 }

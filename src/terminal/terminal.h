@@ -1,15 +1,15 @@
-/* $Id: terminal.h,v 1.40 2004/06/28 10:50:08 jonas Exp $ */
+/* $Id: terminal.h,v 1.41 2004/07/01 11:58:24 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
 
 #include "config/options.h"
-#include "intl/charsets.h"
 #include "terminal/event.h"
 #include "util/lists.h"
 
 struct option;
 struct terminal_screen;
+struct terminal_interlink;
 
 
 /* The terminal type, meaningful for frames (lines) drawing. */
@@ -41,6 +41,7 @@ enum term_env_type {
 	/* Microsoft Windows cmdline thing. */
 	ENV_WIN32 = 64,
 };
+
 
 /* This is one of the axis of ELinks' user interaction. {struct terminal}
  * defines the terminal ELinks is running on --- each ELinks instance has
@@ -79,10 +80,6 @@ struct terminal {
 	 * in the X window frame or so. */
 	unsigned char *title;
 
-	/* This is the queue of events as coming from the other ELinks instance
-	 * owning this terminal. */
-	unsigned char *input_queue;
-
 	/* This is the screen. See terminal/screen.h */
 	struct terminal_screen *screen;
 
@@ -108,9 +105,6 @@ struct terminal {
 	 * right now. */
 	int blocked;
 
-	int qlen;
-	int qfreespace;
-
 	/* The current tab number. */
 	int current_tab;
 
@@ -120,12 +114,8 @@ struct terminal {
 	/* The current working directory for this terminal / ELinks instance. */
 	unsigned char cwd[MAX_CWD_LEN];
 
-	/* Something weird regarding the UTF8 I/O. */
-	struct {
-		unicode_val ucs;
-		int len;
-		int min;
-	} utf_8;
+	/* For communication between instances */
+	struct terminal_interlink *interlink;
 };
 
 /* We keep track about all the terminals in this list. */

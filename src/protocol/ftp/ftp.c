@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.28 2002/09/09 15:45:22 zas Exp $ */
+/* $Id: ftp.c,v 1.29 2002/09/11 12:45:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,7 +256,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	/* We don't require exact match here, as this is always error and some
-	 * non-RFC compilant servers may return even something other than 421.
+	 * non-RFC compliant servers may return even something other than 421.
 	 * --Zas */
 	if (response >= 400) {
 		abort_conn_with_state(conn, S_FTP_UNAVAIL);
@@ -269,7 +269,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	{
-		/* send PASS command */
+		/* Send PASS command. */
 		unsigned char *str;
 		unsigned char *cmd;
 		int cmdl = 0;
@@ -353,7 +353,7 @@ static void
 add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
 {
 	/* From RFC 959: DATA PORT (PORT)
-	 * 
+	 *
 	 * The argument is a HOST-PORT specification for the data port
 	 * to be used in data connection.  There are defaults for both
 	 * the user and server data ports, and under normal
@@ -364,11 +364,11 @@ add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
 	 * value of each field is transmitted as a decimal number (in
 	 * character string representation).  The fields are separated
 	 * by commas.  A port command would be:
-	 * 
+	 *
 	 *    PORT h1,h2,h3,h4,p1,p2
-	 * 
+	 *
 	 * where h1 is the high order 8 bits of the internet host
-	 * address. */	
+	 * address. */
 	add_to_str(str, strl, "PORT ");
 	add_num_to_str(str, strl, pc[0]);
 	add_chr_to_str(str, strl, ',');
@@ -385,8 +385,8 @@ add_portcmd_to_str(unsigned char **str, int *strl, unsigned char *pc)
 }
 
 /* Create passive socket and add appropriate announcing commands to str. Then
- * go and retrieve appropriate object from server. */
-/* Returns NULL if error. */
+ * go and retrieve appropriate object from server.
+ * Returns NULL if error. */
 struct ftp_connection_info *
 add_file_cmd_to_str(struct connection *conn)
 {
@@ -430,11 +430,12 @@ add_file_cmd_to_str(struct connection *conn)
 		data_end = data + strlen(data);
 
 	if (data == data_end || data_end[-1] == '/') {
-		/* ASCII */
+		/* Commands to get directory listing. */
 
 		c_i->dir = 1;
 		c_i->pending_commands = 4;
 
+		/* ASCII */
 		add_to_str(&str, &strl, "TYPE A\r\n");
 
 		add_to_str(&str, &strl, "CWD /");
@@ -442,17 +443,18 @@ add_file_cmd_to_str(struct connection *conn)
 		add_to_str(&str, &strl, "\r\n");
 
 		add_portcmd_to_str(&str, &strl, pc);
-		
+
 		add_to_str(&str, &strl, "LIST\r\n");
 
 		conn->from = 0;
 
 	} else {
-		/* BINARY */
+		/* Commands to get a file. */
 
 		c_i->dir = 0;
 		c_i->pending_commands = 3;
 
+		/* BINARY */
 		add_to_str(&str, &strl, "TYPE I\r\n");
 
 		if (conn->from) {
@@ -463,7 +465,7 @@ add_file_cmd_to_str(struct connection *conn)
 			c_i->rest_sent = 1;
 			c_i->pending_commands++;
 		}
-		
+
 		add_portcmd_to_str(&str, &strl, pc);
 
 		add_to_str(&str, &strl, "RETR /");
@@ -480,11 +482,11 @@ add_file_cmd_to_str(struct connection *conn)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
-	
+
 	strcpy(c_i->cmd_buffer, str);
 	mem_free(str);
 	conn->info = c_i;
-	
+
 	return c_i;
 }
 
@@ -565,7 +567,7 @@ get_filesize_from_RETR(unsigned char *data, int data_len)
 	for (pos = pos_file_len; pos < data_len; pos++)
 		if (data[pos] < '0' || data[pos] > '9')
 			goto next;
-	
+
 	return -1;
 
 next:
@@ -624,7 +626,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 					conn->from = 0;
 				}
 				break;
-				
+
 			case 3:	/* PORT */
 				if (response >= 400) {
 					abort_conn_with_state(conn, S_FTP_PORT);
@@ -657,7 +659,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		/* We only need to parse response after RETR to
 		 * get filesize if needed. */
 		if (!c_i->dir && !conn->from) {
-			long int file_len = 
+			long int file_len =
 				get_filesize_from_RETR(rb->data, rb->len);
 
 			if (file_len > 0) {
@@ -748,14 +750,14 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 		    int *tries)
 {
 	int ret = 0;
-	unsigned char dircolor[8];	
+	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 
 	if (colorize_dir) {
-		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"), 
+		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
 				(unsigned char *) &dircolor);
 	}
-	
+
 	while (1) {
 		unsigned char *str;
 		unsigned char *buf = buffer + ret;
@@ -781,7 +783,7 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 				return ret;
 			ret += bufp;
 		}
-		
+
 		/* Process line whose end we've already found. */
 
 		str = init_str();

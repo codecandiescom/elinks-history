@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.5 2003/09/19 15:37:41 jonas Exp $ */
+/* $Id: event.c,v 1.6 2003/09/19 15:41:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ register_event_hook(int id, int (*callback)(va_list ap), int priority)
 	event = &events[id];
 
 	for (i = 0; i < event->count; i++)
-		if (event->handlers[i].priority < priority) break;
+		if (event->handlers[i].callback == callback) break;
 
 	if (i == event->count) {
 		struct event_handler *eh;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.416 2003/12/06 17:10:53 pasky Exp $ */
+/* $Id: options.c,v 1.417 2003/12/08 02:51:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,6 +236,13 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 	if (option->box_item && option->name && !strcmp(option->name, "_template_"))
 		option->box_item->visible = get_opt_int("config.show_template");
+
+	if (tree->flags & OPT_AUTOCREATE && !option->desc) {
+		struct option *template = get_opt_rec(tree, "_template");
+
+		assert(template);
+		option->desc = template->desc;
+	}
 
 	abi = (tree->box_item && option->box_item);
 

@@ -1,3 +1,215 @@
+Sun Dec  1 20:04:37 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 19:53:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/session.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 19:42:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/: history.c, location.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 19:37:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/dump.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 19:34:32 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/download.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 19:31:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Egotrip(tm) 
+
+Sun Dec  1 19:29:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/czech.lng, src/intl/language.inc:
+
+	Czech translation update.  
+
+Sun Dec  1 19:27:13 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 19:21:18 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Minor changes concerning memory allocation/free.  
+
+Sun Dec  1 19:02:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/bookmarks/Makefile.am,
+	src/bookmarks/bookmarks.c, src/bookmarks/backend/.cvsignore,
+	src/bookmarks/backend/Makefile.am,
+	src/bookmarks/backend/Makefile.in,
+	src/bookmarks/backend/bookmarks.c, src/bookmarks/backend/common.c,
+	src/bookmarks/backend/common.h, src/bookmarks/backend/default.c,
+	src/bookmarks/backend/default.h:
+
+	Generalized bookmarks file format backends into
+	src/bookmarks/backend/* (people are working on XBEL backend, someone
+	would maybe like to port the LDAP backend? ;). Added back .cvsignore
+	fairie, we'll need you, lad.  
+
+Sun Dec  1 18:56:10 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Minor changes concerning memory allocation/free.  
+
+Sun Dec  1 18:21:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/: .cvsignore, .vimrc:
+
+	Hmpf, fairies fixed :).  
+
+Sun Dec  1 18:20:02 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/: .cvsignore, .vimrc:
+
+	Fairies added to src/bookmarks/backend/.  
+
+Sun Dec  1 18:15:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/view.c:
+
+	Fixed mem_free(NULL) while searching (thanks to Jose) and possible
+	crash when searching empty string. Made get_searched() static, since
+	it's not used anywhere.  
+
+Sun Dec  1 18:06:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/feedback.txt:
+
+	We are hungry.  
+
+Sun Dec  1 17:51:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Vast strip_url_password() simplifications. Fixed one
+	check_protocol() pitfall.  
+
+Sun Dec  1 17:45:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: mime.c, mime.h, url.c, user.c, user.h:
+
+	Moved get_prog() from protocol/mime.* to protocol/user.*.  
+
+Sun Dec  1 17:42:58 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/sched.c, protocol/url.c, protocol/url.h,
+	protocol/user.c:
+
+	Don't include port in %h.  
+
+Sun Dec  1 17:40:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/hungarian.lng, src/intl/language.inc:
+
+	Hungarian translation update by Varga Balázs.  
+
+Sun Dec  1 17:36:24 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Add some default protocols.  
+
+Sun Dec  1 17:29:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/portuguese.lng,
+	src/intl/language.inc:
+
+	Portugese and brazilian-portugese translation update, by André
+	Valente.  
+
+Sun Dec  1 17:28:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/options.c, src/intl/lang_defs.h, src/intl/language.inc,
+	src/protocol/mime.c, src/protocol/url.c, src/protocol/user.c,
+	src/protocol/user.h:
+
+	Full-scale protocol.user support. Now, the support isn't modified
+	only to mailto, telnet and tn3270, but you can define whatever you
+	want (the protocols dialog has no clue about that obviously) -
+	including the long-wanted news and gopher ;). Minor cleanups.  
+
+Sun Dec  1 15:50:54 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Memory allocation checks, free(NULL) prevention, and minor tidy up.  
+
+Sun Dec  1 14:39:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	A compilation issue was fixed. getenv() needs stdlib.h.  
+
+Sun Dec  1 12:59:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/danish.lng, src/intl/language.inc:
+
+	Danish translation update by Jonas.  
+
+Sun Dec  1 12:52:36 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS:
+
+	OS Shell vs GPM 
+
+Sun Dec  1 12:18:04 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, lowlevel/sched.c:
+
+	Look to (FTP|HTTP)_PROXY and its lowercase variant if
+	protocol.*.proxy.host is empty. Implemented native no_proxy support
+	(protocol.no_proxy, NO_PROXY, no_proxy environment variables);
+	someone with proxy should actually test this, I suppose ;-).
+	Inspiration from debian's #55425, Martijn van de Streek
+	<mvdstreek@cistron.nl> and Josip Rodin <joy@cibalia.gkvk.hr>.  
+
+Sun Dec  1 11:08:17 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.am:
+
+	Attempt to fix missing doc/ files in make dist.  
+
+Sun Dec  1 11:07:36 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listbox.c, config/options.c:
+
+	Switched to Jose's method of dynamic listbox height computation -
+	introduced ui.dialogs.listbox_min_height, by default 11. ui.shadows
+	aliased to ui.dialogs.shadows, will disappear around 2003-02-01 or
+	so.  
+
 Sat Nov 30 22:42:35 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/button.c, bfu/checkbox.c, bfu/inpfield.c,

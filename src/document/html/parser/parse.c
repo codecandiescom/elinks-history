@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.92 2004/09/25 04:26:13 jonas Exp $ */
+/* $Id: parse.c,v 1.93 2004/09/25 22:06:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -656,7 +656,8 @@ skip_w:
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
 				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, part);
-
+				if (html - base_pos == 0 && html_context.line_breax > 0)
+					html_context.line_breax--;
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
 				    && html[1] == ASCII_LF)

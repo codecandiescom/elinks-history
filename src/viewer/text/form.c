@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.137 2004/06/12 16:23:52 zas Exp $ */
+/* $Id: form.c,v 1.138 2004/06/12 16:26:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1213,22 +1213,24 @@ int
 field_op(struct session *ses, struct document_view *doc_view,
 	 struct link *link, struct term_event *ev, int rep)
 {
-	struct form_control *frm;
+	struct form_control *fc;
 	struct form_state *fs;
 	int x;
 
 	assert(ses && doc_view && link && ev);
 	if_assert_failed return 0;
-	frm = link->form;
-	assertm(frm, "link has no form control");
+
+	fc = link->form;
+	assertm(fc, "link has no form control");
 	if_assert_failed return 0;
 
-	if (frm->ro == 2) return 0;
-	fs = find_form_state(doc_view, frm);
+	if (fc->ro == 2) return 0;
+
+	fs = find_form_state(doc_view, fc);
 	if (!fs || !fs->value) return 0;
 
 	if (ev->ev == EV_KBD) {
-		x = field_op_do(ses->tab->term, doc_view, frm, fs, link, ev, rep);
+		x = field_op_do(ses->tab->term, doc_view, fc, fs, link, ev, rep);
 	} else {
 		x = 0;
 	}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.111 2003/06/16 15:15:20 pasky Exp $ */
+/* $Id: renderer.c,v 1.112 2003/06/16 15:17:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -386,29 +386,10 @@ del_chars(struct part *part, int x, int y)
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
 static int
-split_line(struct part *part)
+split_line_at(struct part *part, register int x)
 {
-	register int x;
 	register int tmp;
 
-	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
-		if (x < part->spaces_len && part->spaces[x])
-			goto split;
-
-	for (x = par_format.leftmargin; x < part->cx ; x++)
-		if (x < part->spaces_len && part->spaces[x])
-			goto split;
-
-	{
-		int new_x = part->cx + par_format.rightmargin;
-
-		if (new_x > part->x)
-			part->x = new_x;
-	}
-
-	return 0;
-
-split:
 	tmp = x + par_format.rightmargin;
 	if (tmp > part->x)
 		part->x = tmp;
@@ -448,6 +429,29 @@ split:
 		if (part->y < part->cy + 1) part->y = part->cy + 1;
 		return 1;
 	}
+}
+
+static int
+split_line(struct part *part)
+{
+	register int x;
+
+	for (x = overlap(par_format); x >= par_format.leftmargin; x--)
+		if (x < part->spaces_len && part->spaces[x])
+			return split_line_at(part, x);
+
+	for (x = par_format.leftmargin; x < part->cx ; x++)
+		if (x < part->spaces_len && part->spaces[x])
+			return split_line_at(part, x);
+
+	{
+		int new_x = part->cx + par_format.rightmargin;
+
+		if (new_x > part->x)
+			part->x = new_x;
+	}
+
+	return 0;
 }
 
 /* This function is very rare exemplary of clean and beautyful code here.

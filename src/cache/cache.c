@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.64 2003/11/08 01:12:13 pasky Exp $ */
+/* $Id: cache.c,v 1.65 2003/11/08 01:14:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,7 +458,9 @@ garbage_collection(int whole)
 {
 	struct cache_entry *ce, *entry;
 	long new_cache_size = cache_size;
-	long ccs = 0;
+	/* We recompute cache_size when scanning cache entries, to ensure
+	 * consistency. */
+	long old_cache_size = 0;
 	/* Whether we've hit an used (unfreeable) entry when collecting
 	 * garbage. */
 	int obstacle_entry = 0;
@@ -488,12 +490,13 @@ garbage_collection(int whole)
 			if_assert_failed { new_cache_size = 0; }
 		}
 
-		ccs += ce->data_size;
+		old_cache_size += ce->data_size;
 	}
 
-	assertm(ccs == cache_size, "cache_size badly computed: %ld != %ld",
-		cache_size, ccs);
-	if_assert_failed { cache_size = ccs; }
+	assertm(old_cache_size == cache_size,
+		"cache_size badly computed: %ld != %ld", cache_size,
+		old_cache_size);
+	if_assert_failed { cache_size = old_cache_size; }
 
 	if (!whole && new_cache_size <= opt_cache_memory_size) return;
 

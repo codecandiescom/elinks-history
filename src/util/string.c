@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.39 2003/05/11 22:56:45 zas Exp $ */
+/* $Id: string.c,v 1.40 2003/05/12 19:33:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,23 +349,24 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 }
 
 
-/* This function appends a unsigned long number, up to a limit of width
- * digits, to a string.
- * Optionnaly if slen points to the current length of the string, then
- * number will be appended starting at end of previous string. *slen is
- * updated accordingly.
- * Filling is starting at right.
- * So, ulongcat(s, NULL, 12345, 4, 0) will set s to "2345";
- * If fillchar isn't NUL, then ulongcat(s, NULL, 123, 5, '*') will set s to "**123"
- * A common usage will be: ulongcat(s, NULL, 123, 5, '0') -> "00123"
+/* This functions takes string @s and stores the @number (of a result width
+ * @width) in string format there, starting at position [*@slen]. If the number
+ * would take more space than @width, it is truncated and only the _last_
+ * digits of it are inserted to the string. If the number takes less space than
+ * @width, it is padded by @fillchar from left.
  *
- * A NUL char is always added at end of string.
- * s should point to a sufficient memory space (size >= width + 1).
+ * A NUL char is always added at the end of the string. @s must point to a
+ * sufficiently large memory space, at least *@slen + @width + 1.
  *
- * It returns 0 if OK, 1 means truncated, others values errors.
+ * Example:
  *
+ * ulongcat(s, NULL, 12345, 4, 0) : s = "2345"
+ *
+ * ulongcat(s, NULL, 123, 5, '0') : s = "001234"
  */
-/* TODO: align to right, left, center... --Zas */
+/* The function returns 0 if OK, 1 if truncated, other values sign an error. */
+/* TODO: Sane return value. --pasky */
+/* TODO: Align to right, left, center... --Zas */
 int inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,

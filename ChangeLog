@@ -1,3 +1,30 @@
+Tue Jan 18 22:54:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Tue Jan 18 22:39:04 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Fix a few hotkeys and a typo.  
+
+Tue Jan 18 22:25:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am:
+
+	acinclude.m4 requires autogen.sh to be run, which depends on special
+	tools, so only add it to MAINTAINERCLEANFILES.  
+
+Tue Jan 18 10:29:39 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/scripting/Makefile.am,
+	src/scripting/scripting.c:
+
+	Add support for ruby scripting. Needs more work but the basics are
+	there.  
+
 Mon Jan 17 14:28:46 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/introduction.txt:

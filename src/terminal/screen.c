@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.62 2003/09/02 18:39:45 jonas Exp $ */
+/* $Id: screen.c,v 1.63 2003/09/02 19:02:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,6 +57,20 @@ static unsigned char frame_restrict[48] = {
 	179, 217, 218, 219, 220, 221, 222, 223,
 };
 
+struct frame_seq {
+	unsigned char *src;
+	int len;
+};
+
+static struct frame_seq m11_hack_frame_seqs[] = {
+	/* end border: */	{ "\033[10m", 5 },
+	/* begin border: */	{ "\033[11m", 5 },
+};
+
+static struct frame_seq vt100_frame_seqs[] = {
+	/* end border: */	{ "\x0f", 1 },
+	/* begin border: */	{ "\x0e", 1 },
+};
 
 /* In print_char() and redraw_screen(), we must be extremely careful about
  * get_opt() calls, as they are CPU hog here. */
@@ -68,7 +82,7 @@ struct screen_driver {
 	int cp437;
 	int koi8r;
 	unsigned char *frame;
-	unsigned int m11_hack:1;
+	struct frame_seq *frame_seqs;
 	unsigned int utf_8_io:1;
 	unsigned int colors:1;
 	unsigned int trans:1;
@@ -97,30 +111,12 @@ print_char(struct string *screen, struct screen_driver *driver,
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 
-	if (driver->type == TERM_LINUX) {
-		if (driver->m11_hack && !driver->utf_8_io) {
-			if (border != state->border) {
-				state->border = border;
+	if (border != state->border && driver->frame_seqs) {
+		register struct frame_seq *seq = &driver->frame_seqs[!!border];
 
-				if (!border) {
-					add_bytes_to_string(screen, "\033[10m", 5);
-				} else {
-					add_bytes_to_string(screen, "\033[11m", 5);
-				}
-			}
-		}
-
-	} else {
-		if (driver->frame == frame_vt100 && border != state->border) {
-			state->border = border;
-
-			if (!border) {
-				add_char_to_string(screen, '\x0f');
-			} else {
-				add_char_to_string(screen, '\x0e');
-			}
-		}
-	}
+		state->border = border;
+		add_bytes_to_string(screen, seq->src, seq->len);
+ 	}
 
 	/* This is optimized for the (common) case that underlines are rare. */
 	if (underline != state->underline) {
@@ -271,7 +267,6 @@ init_screen_driver(struct screen_driver *driver, struct terminal *term)
 	memset(driver, 0, sizeof(struct screen_driver));
 
 	driver->type = get_opt_int_tree(term->spec, "type");
-	driver->m11_hack = get_opt_bool_tree(term->spec, "m11_hack");
 	driver->utf_8_io = get_opt_bool_tree(term->spec, "utf_8_io");
 	driver->colors = get_opt_bool_tree(term->spec, "colors");
 	driver->charset	= get_opt_int_tree(term->spec, "charset");
@@ -287,8 +282,19 @@ init_screen_driver(struct screen_driver *driver, struct terminal *term)
 		if (get_opt_bool_tree(term->spec, "restrict_852")) {
 			driver->frame = frame_restrict;
 		}
+
+		if (!driver->utf_8_io
+		    && get_opt_bool_tree(term->spec, "m11_hack")) {
+			driver->frame_seqs = m11_hack_frame_seqs;
+		}
+
 	} else if (driver->type == TERM_VT100) {
 		driver->frame = (driver->utf_8_io) ? frame_vt100_u : frame_vt100;
+
+		if (!driver->utf_8_io) {
+			driver->frame_seqs = vt100_frame_seqs;
+		}
+
 	} else if (driver->type == TERM_KOI8) {
 		driver->frame = frame_koi;
 	} else {
@@ -356,11 +362,12 @@ redraw_screen(struct terminal *term)
 
 		add_bytes_to_string(&image, "\033[0m", 4);
 
-		if (driver.type == TERM_LINUX && driver.m11_hack)
-			add_bytes_to_string(&image, "\033[10m", 5);
+		/* If we ended in border state end the frame mode. */
+		if (state.border && driver.frame_seqs) {
+			struct frame_seq *seq = &driver.frame_seqs[0];
 
-		if (driver.type == TERM_VT100)
-			add_char_to_string(&image, '\x0f');
+			add_bytes_to_string(&image, seq->src, seq->len);
+		}
 	}
 
 	if (image.length

@@ -1,3 +1,413 @@
+Mon Jan  3 23:10:24 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Typo fix.  
+
+Mon Jan  3 22:41:00 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Mon Jan  3 22:23:26 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jan  3 22:16:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Danish translation zeroed.  
+
+Mon Jan  3 21:51:40 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/: bookmarks.txt, color-model.txt, marks.txt:
+
+	Play a writing style carrion crawler.  
+
+Mon Jan  3 21:51:07 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Too many blank lines hurt.  
+
+Mon Jan  3 21:50:05 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	We code in C89.  
+
+Mon Jan  3 21:22:34 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Id est exempli gratia.  
+
+Mon Jan  3 21:16:31 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Rewritten, updated, elaborated. Attention has been paid to
+	explaining what is dialogs/ good for, what viewer/ really is and
+	their interactions with bfu/, so that those evil and dangerous
+	plagues like ui/ or <core>/dialogs.c are hopefully prevented and
+	avoided. ;-) 
+
+Mon Jan  3 21:08:36 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/edit.c:
+
+	TODO: Move to bfu/.  
+
+Mon Jan  3 21:03:43 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/tabs.txt:
+
+	Rewrite the first paragraph in the section on saving and restoring
+	tabs.  
+
+Mon Jan  3 20:48:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/hacking.txt:
+
+	Add some whitespace to the example for commenting a structure to
+	match current practice and encourage readability.  
+
+Mon Jan  3 20:47:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/hacking.txt:
+
+	Warn against using C++'s //-style comments.  
+
+Mon Jan  3 20:45:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/introduction.txt:
+
+	Refer to listbox items as items, not boxes.  
+
+Mon Jan  3 20:38:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/introduction.txt:
+
+	Change 'The hierarchic boxes' to 'Each hierarchic box'.  
+
+Mon Jan  3 20:34:19 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/introduction.txt:
+
+	Mention the Home and End keys in the list of listbox keybindings.  
+
+Mon Jan  3 17:58:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS, src/protocol/rewrite/rewrite.c:
+
+	In src/protocol/rewrite/rewrite.c (87 line) there is a string
+	(starting with "Replacement URI for this smartprefix") that contains
+	'%'. It looks like it lacks 
+	        /* xgettextize:no-c-format */ line just before it (as is
+	done 10 lines above with dumbprefix.  
+	
+	Patch by Adam Golebiowski.  
+
+Mon Jan  3 16:01:46 2005  Laurent Monin <zas@norz.org>:
+
+	* doc/introduction.txt:
+
+	Some stuff was added about how forms are displayed.  
+
+Mon Jan  3 16:00:55 2005  Laurent Monin <zas@norz.org>:
+
+	* po/pl.po:
+
+	Polish translation was updated. Patch by Adam Golebiowski.  
+
+Mon Jan  3 15:15:04 2005  Laurent Monin <zas@norz.org>:
+
+	* po/pl.po:
+
+	Polish translation was updated. Patch by Adam Golebiowski.  
+
+Mon Jan  3 14:39:52 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jan  3 14:24:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	8 miles left.  
+
+Mon Jan  3 14:02:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	But this is HTML so I shouldn't care about wrapping.  
+
+Mon Jan  3 14:00:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	Dammit the other thing cause weird wrapping.  
+
+Mon Jan  3 13:58:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/codes.c:
+
+	Trim down more of pasky's ramblings. It could probably be trimmed
+	down even further.  
+
+Mon Jan  3 13:40:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Clarifications. Missed this one.  
+
+Mon Jan  3 13:39:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, ecmascript/spidermonkey.c,
+	formhist/dialogs.c:
+
+	Clarifications.  
+
+Mon Jan  3 13:38:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	Sound a little less like uncle Danny.  
+
+Mon Jan  3 12:26:15 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/libintl.h:
+
+	When NLS is disabled make _() a static inline'd dummy function so
+	warnings about unused local @term variables are removed. Reported by
+	Russ with fixing patch by Miciah.  
+
+Mon Jan  3 08:52:36 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jan  3 08:28:51 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/mailcap.txt:
+
+	Change the paragraph explaining why one would use mailcap when one
+	has ELinks' internal MIME-handler configuration.  
+
+Mon Jan  3 08:25:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/mailcap.txt:
+
+	Change 'thou shall find' to 'thou wilt find'.  
+
+Mon Jan  3 08:23:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/remote.txt:
+
+	Rewrite the little bit about ELinks extensions.  
+
+Mon Jan  3 08:22:55 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	When looking for the --> inside of <script> (do_html_script()),
+	check if we didn't go past eof. Probably fixes crash on
+	intellectualconservative.com reported by Apu.  
+
+Mon Jan  3 08:21:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/urlprefixes.txt:
+
+	Mention that dumb-prefixes support '%c'.  
+
+Mon Jan  3 08:14:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/feedback.txt:
+
+	Update the maintainer E-mail address.  
+
+Mon Jan  3 08:12:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/: bookmarks.txt, color-model.txt, ecmascript.txt, events.txt,
+	exmode.txt, feedback.txt, hacking.txt, introduction.txt,
+	mailcap.txt, marks.txt, remote.txt, small.txt, tabs.txt,
+	terminal.txt, urlprefixes.txt:
+
+	Add some articles and delete some others.  
+
+Mon Jan  3 07:41:01 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/string.h:
+
+	Let add_bytes_to_string__ know about this change.  
+
+Mon Jan  3 07:28:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/: string.c, string.h:
+
+	Mark the source parameter for add_to_string constant to fix a
+	compilation error with SpiderMonkey.  Do the same to
+	add_to_string_list for consistency.  
+
+Mon Jan  3 07:12:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/: bookmarks.txt, color-model.txt, ecmascript.txt, events.txt,
+	exmode.txt, feedback.txt, hacking.txt, index.txt, introduction.txt,
+	mailcap.txt, marks.txt, remote.txt, small.txt, tabs.txt,
+	terminal.txt, urlprefixes.txt:
+
+	Punctuation, whitespace, and capitalisation fixes.  
+
+Mon Jan  3 06:02:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/: bookmarks.txt, color-model.txt, ecmascript.txt, exmode.txt,
+	hacking.txt, marks.txt, urlprefixes.txt:
+
+	Latin fixes.  
+
+Mon Jan  3 05:49:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/bookmarks.txt:
+
+	Missed one.  
+
+Mon Jan  3 05:47:31 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/: bookmarks.txt, color-model.txt, ecmascript.txt, exmode.txt,
+	marks.txt, urlprefixes.txt:
+
+	Mood and tense fixes.  
+
+Mon Jan  3 05:45:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* doc/man/man1/elinks.1.in:
+
+	-dump dumps a document, not a URI.  
+
+Mon Jan  3 04:20:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Small fix.  
+
+Mon Jan  3 04:03:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	1358 translated messages, 29 untranslated messages.  
+
+Mon Jan  3 04:02:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Remove double used 'used'.  
+
+Mon Jan  3 03:59:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix i18n braindead error messaging.  
+
+Mon Jan  3 03:40:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/: scripting.c, perl/Makefile.am, perl/core.h,
+	perl/perl.h:
+
+	Stupid perl headers define _() which causes compile errors when
+	included after libintl.h, so put the perl module declaration in its
+	own header file. Reported by Russ Rowan.  
+
+Mon Jan  3 03:22:51 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/osdep.c:
+
+	Fix building by including dummy mouse handlers when CONFIG_MOUSE=no
+	and CONFIG_GPM=yes. Reported by miernik.  
+
+Mon Jan  3 02:11:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Factor some code out from add_bookmark into the new init_bookmark.  
+
+Mon Jan  3 02:05:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Yay only 41 left.  
+
+Mon Jan  3 02:04:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Fixes for improvements by Miciah.  
+
+Mon Jan  3 02:01:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	A few improvements.  
+
+Mon Jan  3 01:59:57 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Use add_listbox_item in add_bookmark. Besides saving a fair amount 
+	of code, this fixes redraw bug where adding a bookmark in a bookmark 
+	manager box in one terminal would not update boxes in other
+	terminals.  
+
+Mon Jan  3 01:00:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Delete a very stale comment.  
+
+Mon Jan  3 00:31:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Move hash-table maintenance from add_bookmark to
+	add_bookmark_item_to_bookmarks.  
+
+Mon Jan  3 00:30:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Shorten pasky's long late night ramblings about use of document
+	colors.  
+
+Mon Jan  3 00:29:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	In add_bookmark, delete the bookmark if unable to allocate the
+	listbox item.  
+
+Mon Jan  3 00:26:59 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bookmarks/bookmarks.c:
+
+	Factor some code out from add_bookmark into the new
+	add_bookmark_item_to_bookmarks.  
+
+Sun Jan  2 23:45:09 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/hash.c:
+
+	Squashed another stupid non-functional inlining (get_hash_item()
+	this time) introduced by who-knows-who who-knows-when.  
+
 Sun Jan  2 22:47:56 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/cmdline.c:

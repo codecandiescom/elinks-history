@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.105 2003/11/11 15:48:12 zas Exp $ */
+/* $Id: conf.c,v 1.106 2003/11/16 00:14:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,8 +451,7 @@ static void
 load_config_from(unsigned char *file, struct option *tree)
 {
 	load_config_file(CONFDIR, file, tree, NULL);
-	load_config_file(elinks_home ? elinks_home : (unsigned char *) "",
-			 file, tree, NULL);
+	load_config_file(empty_string_or_(elinks_home), file, tree, NULL);
 }
 
 void

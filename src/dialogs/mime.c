@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.75 2003/11/09 14:55:22 jonas Exp $ */
+/* $Id: mime.c,v 1.76 2003/11/16 00:14:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,12 +144,9 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	new->ext_orig = ext_orig = ct + MAX_STR_LEN;
 
 	if (opt) {
-		#define no_null(x) ((x) ? (unsigned char *) (x) \
-					: (unsigned char *) "")
-		safe_strncpy(ext, no_null(fcp), MAX_STR_LEN);
-		safe_strncpy(ct, no_null(opt->value.string), MAX_STR_LEN);
-		safe_strncpy(ext_orig, no_null(translated.source), MAX_STR_LEN);
-		#undef no_null
+		safe_strncpy(ext, empty_string_or_(fcp), MAX_STR_LEN);
+		safe_strncpy(ct, empty_string_or_(opt->value.string), MAX_STR_LEN);
+		safe_strncpy(ext_orig, empty_string_or_(translated.source), MAX_STR_LEN);
 	}
 
 	if (fcp) done_string(&translated);

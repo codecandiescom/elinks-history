@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.168 2003/11/15 15:38:12 jonas Exp $ */
+/* $Id: download.c,v 1.169 2003/11/16 00:14:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -740,8 +740,8 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 			"%s\n\n"
 			"The alternative filename is:\n"
 			"%s"),
-			lun_hop->ofile ? lun_hop->ofile : (unsigned char *) "",
-			file ? file : (unsigned char *) ""),
+			empty_string_or_(lun_hop->ofile),
+			empty_string_or_(file)),
 		lun_hop, 4,
 		N_("Save under the alternative name"), lun_alternate, B_ENTER,
 		N_("Overwrite the original file"), lun_overwrite, 0,

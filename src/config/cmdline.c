@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.18 2003/09/03 12:20:47 zas Exp $ */
+/* $Id: cmdline.c,v 1.19 2003/11/16 00:14:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ unknown_option:
 		}
 	}
 
-	return location ? location : (unsigned char *) "";
+	return empty_string_or_(location);
 }
 
 unsigned char *

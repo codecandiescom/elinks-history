@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.91 2003/11/15 23:44:17 zas Exp $ */
+/* $Id: cookies.c,v 1.92 2003/11/16 00:14:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,7 +746,7 @@ load_cookies(void) {
 		cookie->expires = expires;
 
 		/* Drop ending '\n'. */
-		if (*p) p[strlen(p) - 1] = 0;
+		if (*p) p[strlen(p) - 1] = '\0';
 		cookie->secure = atoi(p);
 
 		cookie->id = cookie_id++;
@@ -760,7 +760,6 @@ load_cookies(void) {
 
 	fclose(fp);
 }
-
 
 static void
 save_cookies(void) {
@@ -781,9 +780,9 @@ save_cookies(void) {
 		if (is_dead(c->expires)) continue;
 		if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
 				   c->name, c->value,
-				   c->server ? c->server : (unsigned char *) "",
-				   c->path ? c->path : (unsigned char *) "",
-				   c->domain ? c->domain: (unsigned char *) "",
+				   empty_string_or_(c->server),
+				   empty_string_or_(c->path),
+				   empty_string_or_(c->domain),
 				   c->expires, c->secure) < 0)
 			break;
 	}

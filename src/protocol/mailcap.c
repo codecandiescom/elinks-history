@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.5 2002/12/13 20:12:27 jonas Exp $ */
+/* $Id: mailcap.c,v 1.6 2002/12/14 16:21:27 jonas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -532,9 +532,9 @@ convert2option(struct mailcap_entry *entry, unsigned char *type)
 	block	= entry->needsterminal;
 	if (entry->copiousoutput) block	= entry->copiousoutput;
 
-	add_opt_string_tree(association, "", "program", 0, command, NULL);
-	add_opt_bool_tree(association, "", "block", 0, block, NULL);
-	add_opt_bool_tree(association, "", "ask", 0, ask, NULL);
+	add_opt_string_tree(association, "", NULL, "program", 0, command, NULL);
+	add_opt_bool_tree(association, "", NULL, "block", 0, block, NULL);
+	add_opt_bool_tree(association, "", NULL, "ask", 0, ask, NULL);
 
 	if (command) mem_free(command);
 	return association;

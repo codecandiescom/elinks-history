@@ -55,7 +55,7 @@ CPPFLAGS = @CPPFLAGS@
 CFLAGS = @CFLAGS@
 LDFLAGS = @LDFLAGS@
 
-COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
+COMPILE = $(CC) $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
 HEADERS = $(COMHDRS) libgnuintl.h libgettext.h libintl.h loadinfo.h
 COMHDRS = gettext.h gettextP.h hash-string.h
@@ -76,6 +76,20 @@ DISTFILES.normal = VERSION
 DISTFILES.gettext = libintl.glibc
 DISTFILES.obsolete = xopen-msg.sed linux-msg.sed po2tbl.sed.in cat-compat.c
 
+
+# Dependency rules are stolen from automake.
+
+DEP_FILES =  .deps/intl-compat.P .deps/libintl.P .deps/bindtextdom.P \
+.deps/dcgettext.P .deps/dgettext.P .deps/gettext.P .deps/finddomain.P \
+.deps/loadmsgcat.P .deps/localealias.P .deps/textdomain.P .deps/l10nflist.P \
+.deps/explodename.P .deps/dcigettext.P .deps/dcngettext.P .deps/dngettext.P \
+.deps/ngettext.P .deps/localcharset.P .deps/plural.P
+
+DEPS_MAGIC := $(shell mkdir .deps > /dev/null 2>&1 || :)
+
+-include $(DEP_FILES)
+
+
 # Libtool's library version information for libintl.
 # Before making a gettext release, the gettext maintainer must change this
 # according to the libtool documentation, section "Library interface versions".
@@ -87,10 +101,18 @@ LTV_AGE=0
 
 .SUFFIXES:
 .SUFFIXES: .c .y .o .lo .sin .sed
+
 .c.o:
-	$(COMPILE) $<
+	@echo '$(COMPILE) -c $<'; \
+        $(COMPILE) -Wp,-MD,.deps/$(*F).pp -c $<
+	@-cp .deps/$(*F).pp .deps/$(*F).P; \
+        tr ' ' '\012' < .deps/$(*F).pp \
+          | sed -e 's/^\\$$//' -e '/^$$/ d' -e '/:$$/ d' -e 's/$$/ :/' \
+            >> .deps/$(*F).P; \
+        rm .deps/$(*F).pp
+
 .c.lo:
-	$(LIBTOOL) --mode=compile $(COMPILE) $<
+	$(LIBTOOL) --mode=compile $(COMPILE) -c $<
 
 .y.c:
 	$(YACC) $(YFLAGS) --output $@ $<
@@ -219,6 +241,7 @@ clean: mostlyclean
 
 distclean: clean
 	rm -f Makefile ID TAGS
+	rm -rf .deps
 
 maintainer-clean: distclean
 	@echo "This command is intended for maintainers to use;"

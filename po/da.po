@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-03 05:02+0100\n"
-"PO-Revision-Date: 2005-01-03 05:16+0100\n"
+"POT-Creation-Date: 2005-01-03 15:01+0100\n"
+"PO-Revision-Date: 2005-01-03 15:23+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -44,7 +44,7 @@ msgstr "Tryk mellemrum for at åbne denne mappe."
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:515 src/dialogs/menu.c:566
 #: src/dialogs/options.c:174 src/dialogs/options.c:254
 #: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1930
-#: src/ecmascript/spidermonkey.c:1957 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:1956 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/nntp/codes.c:132 src/protocol/protocol.c:227
 #: src/protocol/user.c:268 src/sched/download.c:231 src/sched/download.c:327
@@ -3067,7 +3067,7 @@ msgid ""
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
 "Hvis aktiveret vil mellemrumstegn angivet som ikke ombrydelige\n"
-"(eksempelvis entiteten nbsp i HTML-dokumenter) blive ombrydt\n"
+"(eksempelvis entiteten nbsp i HTML-dokumenter) blive ombrudt\n"
 "alligevel som almindelig tekst. Dette kan hjælpe med at undgå\n"
 "dokumenter bliver breddere end skærmen, således at det ikke\n"
 "er nødvendigt at rulled horisontalt."
@@ -3154,9 +3154,19 @@ msgid ""
 "it if you are using some exotic permissions for concerned files.\n"
 "Secure file saving is automagically disabled if file is symlink.\n"
 "Warning: some systems (ie. OS/2, Win32) require that destination\n"
-"file doesn't exist when rename() is called, breaking atomicity,\n"
+"file doesn't exist when rename(3) is called, breaking atomicity,\n"
 "and reducing reliability of this feature."
 msgstr ""
+"Først skrives data til en unik temporær fil, hvor efter denne fil\n"
+"omdøbes ved problemfri afslutning. Bemærk, at dette kun indebærer\n"
+"konfigurations filer og ikke filoverførsler. Hvis du anvender\n"
+"eksotiske tilladelser for de implicerede filer, tilrådes det at\n"
+"deaktiverer denne indstilling. Sikret filgemning er automatisk\n"
+"deaktiveret, hvis filen der skrives til er en symlænke.\n"
+"Advarsel: nogle systemer (eksempelvis OS/2, Win32) stiller krav\n"
+"om at der ikke allerede eksisterer en dedestinationsfil når der\n"
+"omdøbes med rename(3). Dette umuliggør kaldets atomiske udførelse\n"
+"hvormed pålideligheden af denne egenskab nedsættes."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:725
@@ -4930,6 +4940,10 @@ msgid ""
 "either CSS itself using the @import keyword or from the HTML using\n"
 "<link> tags in the document header will also be downloaded."
 msgstr ""
+"Når indstillingen er aktiveret indlæses og importeres alle eksternt\n"
+"refererede stilark enten CSS dokumenter når @import anvendes eller\n"
+"fra HTML dokumenter i forbindelse med <link> elementer i hovedet af\n"
+"dokumentet"
 
 #: src/document/css/css.c:43
 msgid "Default style sheet"
@@ -4939,10 +4953,15 @@ msgstr "Standard CSS stilark"
 msgid ""
 "The path to the file containing the default user defined\n"
 "Cascading Style Sheet. It can be used to control the basic\n"
-"layout of HTML documents. It is assumed to be relative to\n"
-"ELinks' home directory.\n"
+"layout of HTML documents. The path is assumed to be relative\n"
+"to ELinks' home directory.\n"
 "Leave as \"\" to use built-in document styling."
 msgstr ""
+"Stien til den fil som indeholder det brugerdefinerede standard\n"
+"CSS stilark. Stilarket kan anvendes til at kontrollere det\n"
+"generelle udseende af HTML dokumenter. Stien antages at være\n"
+"relativ til ELinks' hjemmemappe.\n"
+"Sæt til \"\" for at anvende det indbyggede layout."
 
 #. name:
 #: src/ecmascript/ecmascript.c:37 src/ecmascript/ecmascript.c:193
@@ -4993,12 +5012,15 @@ msgstr "JavaScript nødssituation"
 #: src/ecmascript/spidermonkey.c:1950
 #, c-format
 msgid ""
-"A script embedded in the current document was running for more than %d "
-"seconds in line.\n"
-"This probably means there is a bug in the script and it could have halted "
-"the whole ELinks.\n"
-"The script execution was interrupted."
+"A script embedded in the current document was running\n"
+"for more than %d seconds. This probably means there is\n"
+"a bug in the script and it could have halted the whole\n"
+"ELinks, so the script execution was interrupted."
 msgstr ""
+"Det indlejrede skript i det nuværende dokument kørte i mrere end %d\n"
+"sekunder. Dette skyldes sikkert en fejl i skriptet og at skriptet\n"
+"kunne have afsluttet hele ELinks, så skriptet eksekveringen bliv\n"
+"afbrudt."
 
 #: src/formhist/dialogs.c:67
 msgid "Forms are never saved for this URL."
@@ -5057,9 +5079,12 @@ msgstr "Formularen blev ikke gemt"
 #: src/formhist/dialogs.c:175
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle saving"
-"\" button."
+"If you want to save passwords for this URL, enable it by pressing the "
+"\"Toggle saving\" button."
 msgstr ""
+"Ingen informationer er gemt for denne URL.\n"
+"Hvis du ønsker at gemme adgangskode for denne URL kan det aktiveres ved at "
+"trykke knappen \"Skifte mellem gemning\"."
 
 #: src/formhist/dialogs.c:211 src/protocol/auth/dialogs.c:105
 msgid "Login"
@@ -5083,6 +5108,9 @@ msgid ""
 "This option only disables the dialog, already saved login\n"
 "forms are unaffected."
 msgstr ""
+"Spørg om en indlogningsformular skal huskes eller ej\n"
+"Denne indstilling deaktiverer kun dialogvinduet. Allerede\n"
+"gemte indlogningsformularer påvirkes ikke."
 
 #: src/formhist/formhist.c:451
 msgid "Form history"
@@ -5090,17 +5118,23 @@ msgstr "Formularhistorik"
 
 #: src/formhist/formhist.c:452
 msgid ""
-"Should I remember this login?\n"
+"Should this login be remembered?\n"
 "\n"
 "Please note that the password will be stored obscured (but unencrypted) in a "
 "file on your disk.\n"
 "\n"
 "If you are using a valuable password, answer NO."
 msgstr ""
+"Skal denne formular gemmes?\n"
+"\n"
+"Bemærk venligst, at adgangskoden gemmes ulæselig (men ikke krypteret) i en "
+"fil på disken.\n"
+"\n"
+"Hvis du anvender en værdifuldt adgangskode, sig nej."
 
 #: src/formhist/formhist.c:459
 msgid "Never for this site"
-msgstr ""
+msgstr "Aldrig for dette websted"
 
 #. name:
 #: src/formhist/formhist.c:484
@@ -5191,6 +5225,9 @@ msgid ""
 "0 is URLs\n"
 "1 is page titles"
 msgstr ""
+"Hvad der skal vises i dialogvinduet for den globale historik:\n"
+"0 betyder URLer\n"
+"1 betyder titlen på besøgte websteder"
 
 #. name:
 #: src/globhist/globhist.c:422
@@ -5326,11 +5363,12 @@ msgstr "Ukrainsk"
 msgid ""
 "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
+"Indstillingen -config-dir er sat til %s, men mappen %s kunne ikke oprettes."
 
 #: src/lowlevel/home.c:127
 #, c-format
 msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
-msgstr ""
+msgstr "ELINKS_CONFDIR er sat til %s, men mappen %s kunne ikke oprettes."
 
 #: src/lowlevel/home.c:150
 msgid ""
@@ -5338,6 +5376,9 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
+"Det var ikke muligt at finde eller oprette ELinks' konfigurationsmappe. "
+"Undersøg venligst om du har sat $HOME miljøvariablen rigtigt og om du har "
+"skriverettigheder til din hjemmemappe."
 
 #: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
 #, c-format
@@ -5352,7 +5393,7 @@ msgstr "%d select() fejl"
 
 #: src/main.c:143
 msgid "Cannot create a pipe for internal communication."
-msgstr ""
+msgstr "Kan ikke oprette kanal til intern kommunikation."
 
 #: src/main.c:203
 #, c-format
@@ -5388,18 +5429,28 @@ msgid ""
 "should contain (case-sensitive) name of the MIME handler (its\n"
 "properties are stored at mime.handler.<name>)."
 msgstr ""
+"Håndtering  <-> MIME type association. Den første forgrenning er\n"
+"MIME klassifikationen, mens den anden forgrening er MIME-typen.\n"
+"Eksempelvis vil håndteringen for typen image/gif være placeret\n"
+"under mime.type.image.gif. Indstillinger for hver MIME-type bør\n"
+"indeholde det (versalfølsomme) navn på MIME-håndteringen, som så\n"
+"vil blive tilgået via mime.handler.<navn>."
 
 #: src/mime/backend/default.c:36
 msgid ""
 "Handler matching this MIME-type class ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"Håndtering for denne MIME-type klassificering. '*' anvendes\n"
+"i stedet for '.'."
 
 #: src/mime/backend/default.c:41
 msgid ""
 "Handler matching this MIME-type name ('*' is used here in place\n"
 "of '.')."
 msgstr ""
+"Håndtering for dette MIME-type navn. '*' anvendes\n"
+"i stedet for '.'."
 
 #: src/mime/backend/default.c:45
 msgid "File type handlers"
@@ -5424,6 +5475,8 @@ msgstr "Beskrivelse af dette program"
 #: src/mime/backend/default.c:62
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
 msgstr ""
+"Beskrivelse af systemorienteret håndtering\n"
+"(eksempelvis unix eller unix-xwin)"
 
 #: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:103
 msgid "Ask before opening"
@@ -5896,15 +5949,20 @@ msgstr "HTTP fejl %03d"
 #: src/protocol/http/codes.c:130
 msgid ""
 "  An error occurred on the server while fetching the document you\n"
-"  requested. Moreover, the server did not send back any explanation of what\n"
-"  happenned whatsoever - it would be nice if you notified the web server\n"
-"  administrator about this, as it is not a nice behaviour from the web\n"
-"  server at all and it frequently indicates some much deeper problem with\n"
-"  the web server software.\n"
-"  <br><br>\n"
-"  I have no idea about what is wrong, sorry. Please contact the web\n"
-"  server administrator if you believe that this error should not occur.\n"
+"  requested. However, the server did not send back any explanation of what\n"
+"  happenned, so it is unknown what went wrong. Please contact the web\n"
+"  server administrator about this, if you believe that this error should\n"
+"  not occur since it is not a nice behaviour from the web server at all\n"
+"  and indicates that there is some much deeper problem with the web server\n"
+"  software.\n"
 msgstr ""
+"  En fejl opstod hos serveren mens dokumentet du bad om blev overført.\n"
+"  Desværre sendte serveren ikke nogen tilbagemelding om hvad der skete,\n"
+"  så det er uvidst hvad der gik galt. Kontakt venligst administratoren\n"
+"  af webserveren angående dette, hvis du tror at denne fejl ikke burde\n"
+"  opstå, da det ikke er nogen pæn opførelse fra webserverens side og\n"
+"  ofte antyder at der er et dybbereliggende problem med webserverens\n"
+"  programmel.\n"
 
 #. name:
 #: src/protocol/http/http.c:58 src/protocol/http/http.c:186
@@ -6000,7 +6058,7 @@ msgstr "Proxy verificerings adgangskode."
 
 #: src/protocol/http/http.c:108
 msgid "Referer sending"
-msgstr "Sending af referering"
+msgstr "Sending af henviser"
 
 #: src/protocol/http/http.c:110
 msgid ""
@@ -6011,6 +6069,13 @@ msgid ""
 "can unfortunately considerably affect privacy and can lead even to a\n"
 "security problem on some badly designed web pages."
 msgstr ""
+"Indstilling for afsending af HTTP henviser. HTTP henviser (referer)\n"
+"er en speciel indgang i protokolhovedet, der sendes i forespørgelser\n"
+"og formodes at indholde URLen på browserens forrige besøgte side.\n"
+"Derved er det muligt for serveren at vide hvilken henvisning, som\n"
+"du fulgte, da du tilgik siden. Desværre kan denne adfærd krænke\n"
+"privatlivetanses i nogle tilfælde og kan tilmed føre til problemer\n"
+"med sikkerheden på visse dårligt designede websider."
 
 #: src/protocol/http/http.c:117
 msgid "Policy"
@@ -6072,6 +6137,12 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
+"Hvis aktiveret vil alle HTTP forespørgsler blive sent med TRACE som\n"
+"deres metode i stedet for GET eller POST. Dette er anvendeligt ved\n"
+"fejlsøgning af både ELinks og diverse skripts på webservere, idet\n"
+"serveren kun returnerer klientens forespørgsel verbatimt tilbage\n"
+"til klienten. Bemærk at denne type forespørgsler ikke er tilgængelig\n"
+"på alle webservere."
 
 #. OSNews.com is supposed to be relying on the textmode token, at least.
 #: src/protocol/http/http.c:153
@@ -6212,6 +6283,12 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
+"Regler for omskrivning af URIer som indstastes i gå til URL\n"
+"dialogvinduet. Muliggør definering af præfikser som vil blive\n"
+"omskrevet hvis det matcheren tekststreng indtastet i gå til\n"
+"URL dialogvinduet. Præfikserne kan være simple, dvs. at de\n"
+"kun virker som URI forkortelser, eller smarte, som undersøtter\n"
+"angivelse af argumenterer såsom ord til søgemaskiner."
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable dumb prefixes"

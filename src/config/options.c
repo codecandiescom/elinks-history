@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.407 2003/11/25 13:29:35 jonas Exp $ */
+/* $Id: options.c,v 1.408 2003/11/30 18:36:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,8 @@
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
 #include "sched/session.h"
+#include "terminal/screen.h"
+#include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -1064,6 +1066,33 @@ change_hook_terminal(struct session *ses, struct option *current, struct option 
 	return 0;
 }
 
+static int
+change_hook_ui(struct session *ses, struct option *current, struct option *changed)
+{
+	int show_title_bar = get_opt_int("ui.show_title_bar");
+	int show_status_bar = get_opt_int("ui.show_status_bar");
+
+	foreach (ses, sessions) {
+		int dirty = 0;
+
+		if (ses->visible_title_bar != show_title_bar) {
+			ses->visible_title_bar = show_title_bar;
+			dirty = 1;
+		}
+
+		if (ses->visible_status_bar != show_status_bar) {
+			ses->visible_status_bar = show_status_bar;
+			dirty = 1;
+		}
+
+		if (!dirty) continue;
+
+		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
+	}
+
+	return 0;
+}
+
 /* Bit 2 of show means we should always set visibility, otherwise we set it
  * only on templates. */
 static void
@@ -1115,6 +1144,7 @@ static struct change_hook_info change_hooks[] = {
 	{ "document.html",		change_hook_html },
 	{ "terminal",			change_hook_terminal },
 	{ "ui.language",		change_hook_language },
+	{ "ui",				change_hook_ui },
 	{ NULL,				NULL },
 };
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.260 2003/11/29 23:01:56 pasky Exp $ */
+/* $Id: session.c,v 1.261 2003/11/30 18:36:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,11 +168,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 void
 init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)
 {
-	static int prev_title_bar = 0;
-	static int prev_status_bar = 0;
 	static int prev_tabs_bar = 0;
-	int show_title_bar = get_opt_int("ui.show_title_bar");
-	int show_status_bar = get_opt_int("ui.show_status_bar");
 	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
 	int tabs_cnt = number_of_tabs(ses->tab->term);
 
@@ -182,18 +178,6 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	if (tabs_count) *tabs_count = tabs_cnt;
 	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
 				!(show_tabs_bar == 1 && tabs_cnt < 2);
-	ses->visible_status_bar = show_status_bar;
-	ses->visible_title_bar = show_title_bar;
-
-	if (prev_title_bar != ses->visible_title_bar) {
-		prev_title_bar = ses->visible_title_bar;
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
-	}
-
-	if (prev_status_bar != ses->visible_status_bar) {
-		prev_status_bar = ses->visible_status_bar;
-		set_screen_dirty(ses->tab->term->screen, 0, ses->tab->term->height);
-	}
 
 	if (prev_tabs_bar != ses->visible_tabs_bar) {
 		prev_tabs_bar = ses->visible_tabs_bar;
@@ -1284,6 +1268,11 @@ create_basic_session(struct window *tab)
 	ses->id = session_id++;
 	ses->task = TASK_NONE;
 	ses->display_timer = -1;
+
+	/* Further updating of these is handled using change hooks */
+	ses->visible_title_bar = get_opt_int("ui.show_title_bar");
+	ses->visible_status_bar = get_opt_int("ui.show_status_bar");
+
 #ifdef USE_LEDS
 	init_led_panel(&ses->leds);
 	ses->ssl_led = register_led(ses, 0);

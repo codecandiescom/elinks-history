@@ -1,4 +1,4 @@
-<!-- $Id: elinkskeys.5.xml,v 1.2 2003/05/09 10:24:38 jonas Exp $ -->
+<!-- $Id: elinkskeys.5.xml,v 1.3 2003/05/09 10:43:05 jonas Exp $ -->
 
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
 	"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
@@ -34,7 +34,7 @@
 </para>
 <screen>
 
-	bind  "keymap" "keystroke" = "action" 
+	bind  "<emphasis>keymap</emphasis>" "<emphasis>keystroke</emphasis>" = "<emphasis>action<emphasis>"
 
 </screen>
 <para>
@@ -106,8 +106,8 @@
 <para>
 
 	Some keys will need to be quoted or escaped.  For example, space can be
-	written as " " (quote space quote), and the quote itself as \\"
-	(backslash quote).  Backslash can be written as \\\\&nbsp;(double
+	written as " " (quote space quote), and the quote itself as \"
+	(backslash quote).  Backslash can be written as \\ (double
 	backslash).
 
 </para>
@@ -633,101 +633,121 @@
 
 </para>
 <screen>
-bind main PageDown      page-down
-bind main " "           page-down
-bind main Ctrl-F        page-down
-bind main PageUp        page-up
-bind main b             page-up
-bind main B             page-up
-bind main Ctrl-B        page-up
-bind main Down          down
-bind main Up            up
-bind main Ctrl-Insert   copy-clipboard
-bind main Ctrl-C        copy-clipboard
-bind main Insert        scroll-up
-bind main Ctrl-P        scroll-up
-bind main Delete        scroll-down
-bind main Ctrl-N        scroll-down
-bind main [             scroll-left
-bind main ]             scroll-right
-bind main Home          home
-bind main Ctrl-A        home
-bind main End           end
-bind main Ctrl-E        end
-bind main Right         enter
-bind main Enter         enter
-bind main Left          back
-bind main d             download
-bind main D             download
-bind main /             search
-bind main ?             search-back
-bind main n             find-next
-bind main N             find-next-back
-bind main f             zoom-frame
-bind main F             zoom-frame
-bind main Ctrl-R        reload
-bind main g             goto-url
-bind main G             goto-url-current
-bind main a             add-bookmark
-bind main A             add-bookmark
-bind main s             bookmark-manager
-bind main S             bookmark-manager
-bind main q             quit
-bind main Q             really-quit
-bind main =             document-info
-bind main |             header-info
-bind main \\\&nbsp;           toggle-html-plain
-bind main *             toggle-display-images
-bind main Tab           next-frame
-bind main Escape        menu
-bind main F9            menu
-bind main F10           file-menu
+bind "main" "v" = "view-image"
+bind "main" "l" = "jump-to-link"
+bind "main" "L" = "link-menu"
+bind "main" "F10" = "file-menu"
+bind "main" "F9" = "menu"
+bind "main" "Escape" = "menu"
+bind "main" "Tab" = "next-frame"
+bind "main" "*" = "toggle-display-images"
+bind "main" "." = "toggle-numbered-links"
+bind "main" "\\" = "toggle-html-plain"
+bind "main" "<" = "tab-prev"
+bind "main" ">" = "tab-next"
+bind "main" "c" = "tab-close"
+bind "main" "|" = "header-info"
+bind "main" "=" = "document-info"
+bind "main" "Q" = "really-quit"
+bind "main" "q" = "quit"
+bind "main" "Ctrl-K" = "cookies-load"
+bind "main" "k" = "keybinding-manager"
+bind "main" "o" = "options-manager"
+bind "main" "h" = "history-manager"
+bind "main" "S" = "bookmark-manager"
+bind "main" "s" = "bookmark-manager"
+bind "main" "A" = "add-bookmark-link"
+bind "main" "a" = "add-bookmark"
+bind "main" "M" = "goto-url-home"
+bind "main" "m" = "goto-url-home"
+bind "main" "H" = "goto-url-home"
+bind "main" "G" = "goto-url-current"
+bind "main" "g" = "goto-url"
+bind "main" "E" = "goto-url-current-link"
+bind "main" "Ctrl-R" = "reload"
+bind "main" "F" = "zoom-frame"
+bind "main" "f" = "zoom-frame"
+bind "main" "N" = "find-next-back"
+bind "main" "n" = "find-next"
+bind "main" "?" = "search-back"
+bind "main" "/" = "search"
+bind "main" "z" = "abort-connection"
+bind "main" "R" = "resume-download"
+bind "main" "r" = "resume-download"
+bind "main" "D" = "download"
+bind "main" "d" = "download"
+bind "main" "U" = "unback"
+bind "main" "u" = "unback"
+bind "main" "Left" = "back"
+bind "main" "x" = "enter-reload"
+bind "main" "Ctrl-Enter" = "enter-reload"
+bind "main" "Ctrl-Right" = "enter-reload"
+bind "main" "Enter" = "enter"
+bind "main" "Right" = "enter"
+bind "main" "Ctrl-E" = "end"
+bind "main" "End" = "end"
+bind "main" "Ctrl-A" = "home"
+bind "main" "Home" = "home"
+bind "main" "}" = "scroll-right"
+bind "main" "{" = "scroll-left"
+bind "main" "]" = "scroll-right"
+bind "main" "[" = "scroll-left"
+bind "main" "Ctrl-N" = "scroll-down"
+bind "main" "Delete" = "scroll-down"
+bind "main" "Ctrl-P" = "scroll-up"
+bind "main" "Insert" = "scroll-up"
+bind "main" "Ctrl-C" = "copy-clipboard"
+bind "main" "Ctrl-Insert" = "copy-clipboard"
+bind "main" "Up" = "up"
+bind "main" "Down" = "down"
+bind "main" "Ctrl-B" = "page-up"
+bind "main" "B" = "page-up"
+bind "main" "b" = "page-up"
+bind "main" "PageUp" = "page-up"
+bind "main" "Ctrl-F" = "page-down"
+bind "main" " " = "page-down"
+bind "main" "PageDown" = "page-down"
 
-bind edit Left          left
-bind edit Right         right
-bind edit Home          home
-bind edit Ctrl-A        home
-bind edit Up            up
-bind edit Down          down
-bind edit End           end
-bind edit Ctrl-E        end
-bind edit Ctrl-Insert   copy-clipboard
-bind edit Ctrl-B        copy-clipboard
-bind edit Ctrl-X        cut-clipboard
-bind edit Ctrl-V        paste-clipboard
-bind edit Enter         enter
-bind edit Backspace     backspace
-bind edit Ctrl-H        backspace
-bind edit Delete        delete
-bind edit Ctrl-D        delete
-bind edit Ctrl-U        kill-to-bol
-bind edit Ctrl-K        kill-to-eol
-bind edit Ctrl-W        auto-complete
+bind "edit" "Ctrl-R" = "auto-complete-unambiguous"
+bind "edit" "Ctrl-W" = "auto-complete"
+bind "edit" "Ctrl-K" = "kill-to-eol"
+bind "edit" "Ctrl-U" = "kill-to-bol"
+bind "edit" "Ctrl-D" = "delete"
+bind "edit" "Delete" = "delete"
+bind "edit" "Ctrl-H" = "backspace"
+bind "edit" "Backspace" = "backspace"
+bind "edit" "Enter" = "enter"
+bind "edit" "Ctrl-V" = "paste-clipboard"
+bind "edit" "Ctrl-X" = "cut-clipboard"
+bind "edit" "Ctrl-C" = "copy-clipboard"
+bind "edit" "Ctrl-Insert" = "copy-clipboard"
+bind "edit" "Ctrl-T" = "edit"
+bind "edit" "F4" = "edit"
+bind "edit" "Ctrl-E" = "end"
+bind "edit" "End" = "end"
+bind "edit" "Down" = "down"
+bind "edit" "Up" = "up"
+bind "edit" "Ctrl-A" = "home"
+bind "edit" "Home" = "home"
+bind "edit" "Right" = "right"
+bind "edit" "Left" = "left"
 
-bind menu Left          left
-bind menu Right         right
-bind menu Home          home
-bind menu Ctrl-A        home
-bind menu Up            up
-bind menu Down          down
-bind menu End           end
-bind menu Ctrl-E        end
-bind menu Enter         enter
-bind menu PageDown      page-down
-bind menu Ctrl-F        page-down
-bind menu PageUp        page-up
-bind menu Ctrl-B        page-up
+bind "menu" "Ctrl-B" = "page-up"
+bind "menu" "PageUp" = "page-up"
+bind "menu" "Ctrl-F" = "page-down"
+bind "menu" "PageDown" = "page-down"
+bind "menu" "Enter" = "enter"
+bind "menu" "Ctrl-E" = "end"
+bind "menu" "End" = "end"
+bind "menu" "Down" = "down"
+bind "menu" "Up" = "up"
+bind "menu" "Ctrl-A" = "home"
+bind "menu" "Home" = "home"
+bind "menu" "Right" = "right"
+bind "menu" "Left" = "left"
 
-bind main l             link-menu
-bind main L             link-menu
-bind main u             unback
-bind main U             unback
-bind main Ctrl-K        cookies-load
-bind edit F4            edit
-bind edit Ctrl-T        edit
-
-# Links-Lua and ELinks
-bind main ,             lua-console
+# ELinks with Lua support
+bind "main" ","	= "lua-console"
 </screen>
 </refsect1>
 

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.72 2004/01/15 21:44:08 pasky Exp $ */
+/* $Id: document.c,v 1.73 2004/01/15 22:51:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ loc_msg(struct terminal *term, struct location *location,
 #ifdef CONFIG_GLOBHIST
 		{
 			struct global_history_item *historyitem = NULL;
-			struct link *link = get_current_link(ses);
+			struct link *link = get_current_link_in_view(doc_view);
 
 			if (link) {
 				historyitem =

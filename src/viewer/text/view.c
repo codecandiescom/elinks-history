@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.58 2003/05/05 23:27:13 zas Exp $ */
+/* $Id: view.c,v 1.59 2003/05/06 09:56:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1766,25 +1766,33 @@ int
 goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 	  int do_reload)
 {
-	if (!url) return 1;
+	int ret = 1;
 
-	if (strlen(url) >= 4 && !strncasecmp(url, "MAP@", 4)) {
-		/* TODO: Test reload? */
-		unsigned char *s = stracpy(url + 4);
+	if (url) {
+		/* if (strlen(url) > 4 && !strncasecmp(url, "MAP@", 4)) { */
+		if (((url[0]|32) == 'm') &&
+		    ((url[1]|32) == 'a') &&
+		    ((url[2]|32) == 'p') &&
+		    (url[3] == '@') &&
+		    url[4]) {
+			/* TODO: Test reload? */
+			unsigned char *s = stracpy(url + 4);
 
-		if (!s) return 1;
-		goto_imgmap(ses, url + 4, s,
-			    target ? stracpy(target) : NULL);
-	} else {
-		if (do_reload) {
-			goto_url_frame_reload(ses, url, target);
+			if (s) goto_imgmap(ses, url + 4, s,
+					   target ? stracpy(target) : NULL);
 		} else {
-			goto_url_frame(ses, url, target);
+			if (do_reload) {
+				goto_url_frame_reload(ses, url, target);
+			} else {
+				goto_url_frame(ses, url, target);
+			}
+			ret = 2;
 		}
+
+		mem_free(url);
 	}
 
-	mem_free(url);
-	return 2;
+	return ret;
 }
 
 

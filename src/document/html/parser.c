@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.329 2004/01/17 00:11:04 pasky Exp $ */
+/* $Id: parser.c,v 1.330 2004/01/17 01:26:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "bfu/menu.h"
 #include "config/options.h"
 #include "config/kbdbind.h"
+#include "document/html/css.h"
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
@@ -3201,7 +3202,31 @@ ng:;
 						html_top.options = attr;
 						html_top.linebreak = ei->linebreak;
 					}
+					if (html_top.options) {
+						/* XXX: We should apply CSS
+						 * otherwise as well, but
+						 * that'll need some deeper
+						 * changes in order to have
+						 * options filled etc. Probably
+						 * just calling css_apply()
+						 * from more places, since we
+						 * usually have nopair set when
+						 * we either (1) rescan on your
+						 * own from somewhere else (2)
+						 * html_stack_dup() in our own
+						 * way. --pasky */
+						/* Call it now to gain some of
+						 * the stuff which might affect
+						 * formatting of some elements. */
+						css_apply(&html_top);
+					}
 					if (ei->func) ei->func(attr);
+					if (html_top.options) {
+						/* Call it now to override
+						 * default colors of the
+						 * elements. */
+						css_apply(&html_top);
+					}
 					if (ei->func != html_br) was_br = 0;
 					if (ali) par_format = pa;
 				}

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.33 2003/11/18 22:18:12 pasky Exp $
+## $Id: Makefile.am,v 1.34 2004/01/17 01:26:57 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,6 +8,7 @@ SUBDIRS = html plain
 noinst_LIBRARIES = libdocument.a
 
 libdocument_a_LIBADD = \
+ html/css.o \
  html/frames.o \
  html/parser.o \
  html/renderer.o \

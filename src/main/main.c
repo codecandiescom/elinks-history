@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.231 2005/01/05 14:37:43 jonas Exp $ */
+/* $Id: main.c,v 1.232 2005/02/05 04:35:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,6 +112,7 @@ init(void)
 	INIT_LIST_HEAD(url_list);
 	int ret, fd = -1;
 
+	init_osdep();
 	init_static_version();
 	check_cwd();
 

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.161 2005/02/05 03:22:39 jonas Exp $ */
+/* $Id: osdep.c,v 1.162 2005/02/05 04:35:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -696,6 +696,14 @@ get_input_handle(void)
 
 #endif
 
+#ifndef CONFIG_WIN32
+
+void
+init_osdep(void)
+{
+}
+
+#endif
 
 #if defined(CONFIG_UNIX) || defined(CONFIG_OS2) || defined(CONFIG_RISCOS)
 

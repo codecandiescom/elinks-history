@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.43 2005/02/05 03:00:02 jonas Exp $ */
+/* $Id: osdep.h,v 1.44 2005/02/05 04:35:43 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -23,6 +23,7 @@ int get_output_handle(void);
 int get_ctl_handle(void);
 void want_draw(void);
 void done_draw(void);
+void init_osdep(void);
 void terminate_osdep(void);
 void *handle_mouse(int, void (*)(void *, unsigned char *, int), void *);
 void unhandle_mouse(void *);

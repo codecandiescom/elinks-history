@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.82 2004/12/17 00:39:27 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.83 2004/12/17 00:49:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,7 +535,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	VALUE_TO_JSVAL_START;
 
-	if (!fc) return JS_FALSE;
+	assert(fc);
 
 	if (!JSVAL_IS_INT(id))
 		goto bye;
@@ -545,32 +545,38 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		p.string = fc->name;
 		prop_type = JSPT_STRING;
 		break;
+
 	case JSP_FORM_CONTROL_ACTION:
 		p.string = fc->action;
 		prop_type  = JSPT_STRING;
 		break;
+
 	case JSP_FORM_CONTROL_METHOD:
-		switch(fc->method) {
-			case FORM_METHOD_GET:
-				p.string = "GET";
-				prop_type = JSPT_STRING;
-				goto end;
-			case FORM_METHOD_POST:
-			case FORM_METHOD_POST_MP:
-			case FORM_METHOD_POST_TEXT_PLAIN:
-				p.string = "POST";
-				prop_type = JSPT_STRING;
-				goto end;
+		switch (fc->method) {
+		case FORM_METHOD_GET:
+			p.string = "GET";
+			prop_type = JSPT_STRING;
+			goto end;
+
+		case FORM_METHOD_POST:
+		case FORM_METHOD_POST_MP:
+		case FORM_METHOD_POST_TEXT_PLAIN:
+			p.string = "POST";
+			prop_type = JSPT_STRING;
+			goto end;
 		}
 		break;
+
 	case JSP_FORM_CONTROL_TARGET:
 		p.string = fc->target;
 		prop_type = JSPT_STRING;
 		break;
+
 	default:
 		INTERNAL("Invalid ID %d in form_get_property().", JSVAL_TO_INT(id));
 		goto bye;
 	}
+
 end:
 	VALUE_TO_JSVAL_END(vp);
 }
@@ -582,7 +588,7 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	JSVAL_TO_VALUE_START;
 
-	if (!fc) return JS_FALSE;
+	assert(fc);
 
 	if (!JSVAL_IS_INT(id))
 		goto bye;
@@ -592,29 +598,31 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->name, stracpy(v.string));
 		break;
+
 	case JSP_FORM_CONTROL_ACTION:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->action, stracpy(v.string));
 		break;
+
 	case JSP_FORM_CONTROL_METHOD:
 		JSVAL_REQUIRE(vp, STRING);
 		if (!strcasecmp(v.string, "GET")) {
 			fc->method = FORM_METHOD_GET;
-			break;
-		}
-		if (!strcasecmp(v.string, "POST")) {
+		} else if (!strcasecmp(v.string, "POST")) {
 			fc->method = FORM_METHOD_POST;
-			break;
 		}
 		break;
+
 	case JSP_FORM_CONTROL_TARGET:
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(fc->target, stracpy(v.string));
 		break;
+
 	default:
-		INTERNAL("Invalid ID %d in form_get_property().", JSVAL_TO_INT(id));
+		INTERNAL("Invalid ID %d in form_set_property().", JSVAL_TO_INT(id));
 		goto bye;
 	}
+
 	JSVAL_TO_VALUE_END;
 }
 
@@ -626,11 +634,14 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct document_view *doc_view = vs->doc_view;
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 
-	if (!fc) return JS_FALSE;
-	if (argc != 0) return JS_FALSE;
+	VALUE_TO_JSVAL_START;
+	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+
+	assert(fc);
 	do_reset_form(doc_view, fc->form_num);
 	draw_forms(doc_view->session->tab->term, doc_view);
-	return JS_TRUE;
+
+	VALUE_TO_JSVAL_END(rval);
 }
 
 static JSBool
@@ -643,18 +654,21 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct form_control *fc = JS_GetPrivate(ctx, obj);
 	int link;
 
-	if (!fc) return JS_FALSE;
-	if (argc != 0) return JS_FALSE;
+	VALUE_TO_JSVAL_START;
+	p.boolean = 0; prop_type = JSPT_BOOLEAN;
 
-	for (link = 0; link < document->nlinks; link++)
-		if (get_link_form_control(&document->links[link]) == fc)
-			break;
+	assert(fc);
+	for (link = 0; link < document->nlinks; link++) {
+		if (get_link_form_control(&document->links[link]) == fc) {
+			doc_view->vs->current_link = link;
+			submit_form(doc_view->session, doc_view, 0);
 
-	if (link >= document->nlinks) return JS_FALSE;
+			VALUE_TO_JSVAL_END(rval);
+			/* This returns. */
+		}
+	}
 
-	doc_view->vs->current_link = link;
-	submit_form(doc_view->session, doc_view, 0);
-	return JS_TRUE;
+	goto bye;
 }
 
 

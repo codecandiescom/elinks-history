@@ -47,8 +47,9 @@ COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
 POFILES = @POFILES@
 GMOFILES = @GMOFILES@
-DISTFILES = Makefile.in README $(PACKAGE).pot \
-	$(POFILES) $(GMOFILES)
+DISTFILES = Makefile.in README $(PACKAGE).pot $(POFILES) $(GMOFILES)
+
+MSGIDBUGEMAIL = elinks-dev@linuxfromscratch.org
 
 POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' -o -name options.inc | sort)
 POTFILES_ABS = $(shell cd $(top_srcdir); find src/ -name '*.[ch]' -o -name options.inc | sort)
@@ -92,8 +93,8 @@ all-no:
 
 $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=$(top_srcdir) \
-	  --add-comments --keyword=_ --keyword=N_ \
-	  $(POTFILES_ABS) \
+	--msgid-bugs-address=$(MSGIDBUGEMAIL) --add-comments \
+	--keyword=_ --keyword=N_ $(POTFILES_ABS) \
 	&& test ! -f $(PACKAGE).po \
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 		&& mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )

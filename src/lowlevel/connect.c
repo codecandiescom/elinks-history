@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.103 2004/08/03 09:43:43 jonas Exp $ */
+/* $Id: connect.c,v 1.104 2004/08/03 10:04:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,25 @@ exception(void *data)
 	retry_conn_with_state((struct connection *) data, S_EXCEPT);
 }
 
+
+struct conn_info *
+init_connection_info(struct uri *uri, struct connection_socket *socket,
+		     void (*done)(struct connection *))
+{
+	struct conn_info *conn_info = mem_calloc(1, sizeof(struct conn_info));
+
+	if (!conn_info) return NULL;
+
+	conn_info->done = done;
+	conn_info->socket = socket;
+	conn_info->port = get_uri_port(uri);
+	conn_info->triedno = -1;
+	conn_info->addr = NULL;
+
+	return conn_info;
+}
+
+
 void
 make_connection(struct connection *conn, struct connection_socket *socket,
 		void (*done)(struct connection *))
@@ -109,18 +128,13 @@ make_connection(struct connection *conn, struct connection_socket *socket,
 		return;
 	}
 
-	conn_info = mem_calloc(1, sizeof(struct conn_info));
+	conn_info = init_connection_info(conn->uri, socket, done);
 	if (!conn_info) {
 		mem_free(host);
 		retry_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
-	conn_info->done = done;
-	conn_info->socket = socket;
-	conn_info->port = get_uri_port(conn->uri);
-	conn_info->triedno = -1;
-	conn_info->addr = NULL;
 	conn->conn_info = conn_info;
 
 	log_data("\nCONNECTION: ", 13);

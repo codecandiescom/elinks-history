@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.26 2004/08/03 09:39:42 jonas Exp $ */
+/* $Id: socket.h,v 1.27 2004/08/03 10:04:04 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -8,6 +8,7 @@
 
 struct connection;
 struct connection_socket;
+struct uri;
 
 struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */
@@ -33,6 +34,12 @@ struct read_buffer {
 
 	unsigned char data[1]; /* must be at end of struct */
 };
+
+
+struct conn_info *
+init_connection_info(struct uri *uri, struct connection_socket *socket,
+		     void (*done)(struct connection *));
+
 
 void close_socket(struct connection *conn, struct connection_socket *socket);
 

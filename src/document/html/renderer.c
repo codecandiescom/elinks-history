@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.241 2003/09/07 00:44:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.242 2003/09/07 20:23:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1796,8 +1796,10 @@ html_interpret(struct session *ses)
 		format_frames(ses, ses->screen->document->frame_desc, &o, 0);
 	}
 
-	foreach (fd, ses->scrn_frames) if (!fd->used) {
+	foreach (fd, ses->scrn_frames) {
 		struct document_view *fdp = fd->prev;
+
+		if (fd->used) continue;
 
 		detach_formatted(fd);
 		del_from_list(fd);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.101 2004/03/22 01:18:27 jonas Exp $ */
+/* $Id: uri.c,v 1.102 2004/03/22 04:32:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1050,20 +1050,18 @@ done_uri(struct uri *uri)
 
 	assert(is_object_used(&uri_cache));
 
+	object_unlock(uri);
+	if (is_object_used(uri)) return;
+
 	item = get_hash_item(uri_cache.map, string, length);
 	entry = item ? item->value : NULL;
 
 	assertm(entry, "Releasing unknown URI [%s]", string);
-
-	object_unlock(&entry->uri);
-
-	if (!is_object_used(&entry->uri)) {
-		object_unlock(&uri_cache);
-		del_hash_item(uri_cache.map, item);
-		mem_free(entry);
-	}
+	del_hash_item(uri_cache.map, item);
+	mem_free(entry);
 
 	/* Last URI frees the cache */
+	object_unlock(&uri_cache);
 	if (!is_object_used(&uri_cache))
 		free_hash(uri_cache.map);
 }

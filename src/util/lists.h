@@ -1,7 +1,9 @@
-/* $Id: lists.h,v 1.1 2002/06/17 08:00:16 pasky Exp $ */
+/* $Id: lists.h,v 1.2 2002/07/03 23:23:23 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
+
+#include "util/error.h" /* do_not_optimize_here() */
 
 struct list_head {
 	void *next;
@@ -27,16 +29,20 @@ do { \
 
 #define del_from_list(x) \
 do { \
+	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
+	do_not_optimize_here(x); \
 } while (0)
 
 #define add_at_pos(p,x) \
 do { \
+	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \
    	(p)->next = (x); \
    	(x)->next->prev = (x); \
+	do_not_optimize_here(p); \
 } while (0)
 
 #ifdef HAVE_TYPEOF
@@ -51,11 +57,13 @@ do { \
 
 #define free_list(l) \
 do { \
+	do_not_optimize_here(&l); \
 	while ((l).next != &(l)) { \
-		struct list_head *a=(l).next; \
-		del_from_list(a); \
-		mem_free(a); \
+		struct list_head *a__ = (l).next; \
+		del_from_list(a__); \
+		mem_free(a__); \
 	} \
+	do_not_optimize_here(&l); \
 } while (0)
 
 #endif

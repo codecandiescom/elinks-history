@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.135 2004/06/17 09:01:20 zas Exp $ */
+/* $Id: dump.c,v 1.136 2004/06/17 10:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 	memset(&formatted, 0, sizeof(struct document_view));
 
 	get_opt_bool("document.browse.links.numbering") =
-		!get_opt_bool_tree(cmdline_options, "no-numbering");
+		!get_cmd_opt_bool("no-numbering");
 
 	init_document_options(&o);
 	set_box(&o.box, 0, 1, get_opt_int("document.dump.width"), 25);
@@ -216,7 +216,7 @@ dump_end(struct download *status, void *p)
 
 	if (is_in_queued_state(status->state)) return;
 
-	if (get_opt_int_tree(cmdline_options, "dump")) {
+	if (get_cmd_opt_int("dump")) {
 		if (is_in_transfering_state(status->state))
 			return;
 
@@ -251,7 +251,7 @@ dump_start(unsigned char *url)
 	mem_free_if(wd);
 	if (!*url) {
 		usrerror(G_("URL expected after %s."),
-			get_opt_int_tree(cmdline_options, "source")
+			get_cmd_opt_int("source")
 			? "-source" : "-dump");
 		goto terminate;
 

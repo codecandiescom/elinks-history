@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.83 2004/05/20 12:42:44 jonas Exp $ */
+/* $Id: mailcap.c,v 1.84 2004/06/17 10:02:21 zas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -484,7 +484,7 @@ init_mailcap(struct module *module)
 
 	register_change_hooks(mimetypes_change_hooks);
 
-	if (get_opt_bool_tree(cmdline_options, "anonymous"))
+	if (get_cmd_opt_bool("anonymous"))
 		get_mailcap_enable() = 0;
 }
 

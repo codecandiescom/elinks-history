@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.86 2004/06/16 19:42:32 jonas Exp $ */
+/* $Id: formhist.c,v 1.87 2004/06/17 10:02:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,7 @@ save_forms_to_file(void)
 	struct formhist_data *form;
 	int r;
 
-	if (!elinks_home || get_opt_int_tree(cmdline_options, "anonymous"))
+	if (!elinks_home || get_cmd_opt_int("anonymous"))
 		return 0;
 
 	file = straconcat(elinks_home, FORMS_HISTORY_FILENAME, NULL);

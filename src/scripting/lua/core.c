@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.156 2004/06/12 18:43:15 zas Exp $ */
+/* $Id: core.c,v 1.157 2004/06/17 10:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -711,7 +711,7 @@ dialog_lua_console(va_list ap, void *data)
 {
 	struct session *ses = va_arg(ap, struct session *);
 
-	if (get_opt_int_tree(cmdline_options, "anonymous"))
+	if (get_cmd_opt_int("anonymous"))
 		return EHS_NEXT;
 
 	input_field(ses->tab->term, NULL, 1,

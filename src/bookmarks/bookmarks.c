@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.126 2004/06/14 22:03:42 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.127 2004/06/17 10:02:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ read_bookmarks(void)
 void
 write_bookmarks(void)
 {
-	if (get_opt_int_tree(cmdline_options, "anonymous")) {
+	if (get_cmd_opt_int("anonymous")) {
 		bookmarks_dirty = 0;
 		return;
 	}

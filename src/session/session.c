@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.522 2004/06/15 02:18:31 jonas Exp $ */
+/* $Id: session.c,v 1.523 2004/06/17 10:02:22 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -478,10 +478,9 @@ doc_end_load(struct download *stat, struct session *ses)
 
 		draw_formatted(ses, 1);
 
-		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
+		if (get_cmd_opt_bool("auto-submit")) {
 			if (!list_empty(ses->doc_view->document->forms)) {
-				get_opt_bool_tree(cmdline_options,
-						  "auto-submit") = 0;
+				get_cmd_opt_bool("auto-submit") = 0;
 				submit = 1;
 			}
 		}

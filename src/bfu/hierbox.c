@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.167 2004/06/09 21:13:18 jonas Exp $ */
+/* $Id: hierbox.c,v 1.168 2004/06/17 10:02:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,7 +308,7 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 	struct listbox_data *listbox_data;
 	struct dialog *dlg;
 	int button = browser->buttons_size + 2;
-	int anonymous = get_opt_bool_tree(cmdline_options, "anonymous");
+	int anonymous = get_cmd_opt_bool("anonymous");
 
 	assert(ses);
 

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.85 2004/04/23 20:44:26 pasky Exp $ */
+/* $Id: inphist.c,v 1.86 2004/06/17 10:02:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ load_input_history(struct input_history *history, unsigned char *filename)
 	unsigned char line[MAX_STR_LEN];
 	FILE *file;
 
-	if (get_opt_int_tree(cmdline_options, "anonymous")) return 0;
+	if (get_cmd_opt_int("anonymous")) return 0;
 	if (elinks_home) {
 		history_file = straconcat(elinks_home, filename, NULL);
 		if (!history_file) return 0;
@@ -253,7 +253,7 @@ save_input_history(struct input_history *history, unsigned char *filename)
 
 	if (!history->dirty
 	    || !elinks_home
-	    || get_opt_int_tree(cmdline_options, "anonymous"))
+	    || get_cmd_opt_int("anonymous"))
 		return 0;
 
 	history_file = straconcat(elinks_home, filename, NULL);

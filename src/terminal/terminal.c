@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.70 2004/06/13 18:56:37 jonas Exp $ */
+/* $Id: terminal.c,v 1.71 2004/06/17 10:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,7 @@ destroy_terminal(struct terminal *term)
 {
 #ifdef CONFIG_BOOKMARKS
 	if (get_opt_bool("ui.sessions.auto_save")
-	    && !get_opt_bool_tree(cmdline_options, "anonymous")) {
+	    && !get_cmd_opt_bool("anonymous")) {
 		bookmark_terminal_tabs(term,
 			get_opt_str("ui.sessions.auto_save_foldername"));
 	}

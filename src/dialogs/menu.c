@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.333 2004/06/14 22:32:30 jonas Exp $ */
+/* $Id: menu.c,v 1.334 2004/06/17 10:02:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,7 +201,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	int tabs = number_of_tabs(term);
 	int i = 0;
 #ifdef CONFIG_BOOKMARKS
-	int anonymous = get_opt_bool_tree(cmdline_options, "anonymous");
+	int anonymous = get_cmd_opt_bool("anonymous");
 #endif
 
 	assert(term && ses && tab);
@@ -302,7 +302,7 @@ static void
 do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct menu_item *file_menu, *e, *f;
-	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
+	int anonymous = get_cmd_opt_int("anonymous");
 	int x, o;
 
 	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu21)
@@ -447,7 +447,7 @@ static struct menu_item tools_menu[] = {
 static void
 do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	if (!get_opt_int_tree(cmdline_options, "anonymous"))
+	if (!get_cmd_opt_int("anonymous"))
 		do_menu(term, setup_menu, ses, 1);
 	else
 		do_menu(term, setup_menu_anon, ses, 1);
@@ -551,7 +551,7 @@ free_history_lists(void)
 static void
 add_cmdline_bool_option(struct string *string, unsigned char *name)
 {
-	if (!get_opt_bool_tree(cmdline_options, name)) return;
+	if (!get_cmd_opt_bool(name)) return;
 	add_to_string(string, " -");
 	add_to_string(string, name);	
 }
@@ -560,7 +560,7 @@ void
 open_uri_in_new_window(struct session *ses, struct uri *uri,
 		       enum term_env_type env)
 {
-	int ring = get_opt_int_tree(cmdline_options, "session-ring");
+	int ring = get_cmd_opt_int("session-ring");
 	struct string parameters;
 	int id;
 
@@ -674,9 +674,9 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text,
 	 * instance in the new window so with -no-connect or -no-home enabled
 	 * it is not possible to open links URIs. For -anonymous one window
 	 * should be enough. */
-	if (get_opt_bool_tree(cmdline_options, "no-connect")
-	    || get_opt_bool_tree(cmdline_options, "no-home")
-	    || get_opt_bool_tree(cmdline_options, "anonymous"))
+	if (get_cmd_opt_bool("no-connect")
+	    || get_cmd_opt_bool("no-home")
+	    || get_cmd_opt_bool("anonymous"))
 		return;
 
 	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,

@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.72 2004/06/11 14:00:24 jonas Exp $ */
+/* $Id: interlink.c,v 1.73 2004/06/17 10:02:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ get_sun_path(struct string *sun_path)
 	add_to_string(sun_path, elinks_home);
 	add_to_string(sun_path, ELINKS_SOCK_NAME);
 	add_long_to_string(sun_path,
-			   get_opt_int_tree(cmdline_options, "session-ring"));
+			   get_cmd_opt_int("session-ring"));
 
 	return 1;
 }
@@ -249,8 +249,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	if_assert_failed return -1;
 
 	/* Each ring is bind to ELINKS_PORT + ring number. */
-	port = ELINKS_PORT + get_opt_int_tree(cmdline_options,
-					      "session-ring");
+	port = ELINKS_PORT + get_cmd_opt_int("session-ring");
 	if (port < IPPORT_USERRESERVED || port > 65535)
 		return -1; /* Just in case of... */
 

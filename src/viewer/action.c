@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.73 2004/06/12 17:29:15 jonas Exp $ */
+/* $Id: action.c,v 1.74 2004/06/17 10:02:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,19 +129,19 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				launch_bm_add_doc_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_MAIN_ADD_BOOKMARK_LINK:
 #ifdef CONFIG_BOOKMARKS
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				launch_bm_add_link_dialog(term, NULL, ses);
 #endif
 			break;
 		case ACT_MAIN_ADD_BOOKMARK_TABS:
 #ifdef CONFIG_BOOKMARKS
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				bookmark_terminal_tabs_dialog(term);
 #endif
 			break;
@@ -170,7 +170,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
-			if (!get_opt_int_tree(cmdline_options, "anonymous")
+			if (!get_cmd_opt_int("anonymous")
 			    && get_opt_int("cookies.save"))
 				load_cookies();
 #endif
@@ -187,12 +187,12 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_DOWNLOAD:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_MAIN_DOWNLOAD_IMAGE:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
@@ -317,7 +317,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_OS_SHELL:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				exec_shell(term);
 			break;
 
@@ -363,27 +363,27 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_RESUME_DOWNLOAD:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_MAIN_SAVE_AS:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, save_as, 0);
 			break;
 
 		case ACT_MAIN_SAVE_FORMATTED:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				do_frame_action(ses, save_formatted_dlg, 0);
 			break;
 
 		case ACT_MAIN_SAVE_URL_AS:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				save_url_as(ses);
 			break;
 
 		case ACT_MAIN_SAVE_OPTIONS:
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_cmd_opt_int("anonymous"))
 				write_config(term);
 			break;
 

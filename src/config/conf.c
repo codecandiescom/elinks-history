@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.139 2004/05/26 13:45:52 jonas Exp $ */
+/* $Id: conf.c,v 1.140 2004/06/17 10:02:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,7 +377,7 @@ parse_config_file(struct option *options, unsigned char *name,
 	int line = 1;
 	int error_occured = 0;
 	enum parse_error err = 0;
-	enum verbose_level verbose = get_opt_int_tree(cmdline_options, "verbose");
+	enum verbose_level verbose = get_cmd_opt_int("verbose");
 	unsigned char error_msg[][80] = {
 		"no error",
 		"parse error",
@@ -507,7 +507,7 @@ load_config_from(unsigned char *file, struct option *tree)
 void
 load_config(void)
 {
-	load_config_from(get_opt_str_tree(cmdline_options, "config-file"),
+	load_config_from(get_cmd_opt_str("config-file"),
 			 config_options);
 }
 
@@ -792,6 +792,6 @@ write_config_to(unsigned char *file, struct option *tree,
 int
 write_config(struct terminal *term)
 {
-	return write_config_to(get_opt_str_tree(cmdline_options, "config-file"),
+	return write_config_to(get_cmd_opt_str("config-file"),
 			       config_options, term);
 }

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.294 2004/06/10 01:26:55 jonas Exp $ */
+/* $Id: download.c,v 1.295 2004/06/17 10:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -996,7 +996,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 		add_mime_filename_to_string(&filename, type_query->uri);
 
 	if (!handler) {
-		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
+		if (!get_cmd_opt_int("anonymous")) {
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
 				msg_text(type_query->ses->tab->term, N_("Would you like to "
@@ -1021,7 +1021,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 		unsigned char *description = handler->description;
 		unsigned char *desc_sep = (*description) ? "; " : "";
 
-		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
+		if (!get_cmd_opt_int("anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
 			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.102 2004/06/16 05:02:30 miciah Exp $ */
+/* $Id: options.h,v 1.103 2004/06/17 10:02:20 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -206,6 +206,12 @@ extern union option_value *get_opt_(struct option *, unsigned char *);
 #define get_opt_color(name) get_opt_color_tree(config_options, name)
 #define get_opt_tree(name) get_opt_tree_tree(config_options, name)
 
+#define get_cmd_opt_bool(name) get_opt_bool_tree(cmdline_options, name)
+#define get_cmd_opt_int(name) get_opt_int_tree(cmdline_options, name)
+#define get_cmd_opt_long(name) get_opt_long_tree(cmdline_options, name)
+#define get_cmd_opt_str(name) get_opt_str_tree(cmdline_options, name)
+#define get_cmd_opt_color(name) get_opt_color_tree(cmdline_options, name)
+#define get_cmd_opt_tree(name) get_opt_tree_tree(cmdline_options, name)
 
 extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 			      unsigned char *, enum option_flags, enum option_type,

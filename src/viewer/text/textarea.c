@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.86 2004/06/17 06:35:49 miciah Exp $ */
+/* $Id: textarea.c,v 1.87 2004/06/17 10:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *fc_,
 	assert (op == 1 || term_);
 	if_assert_failed return;
 
-	if (op == 0 && get_opt_bool_tree(cmdline_options, "anonymous")) {
+	if (op == 0 && get_cmd_opt_bool("anonymous")) {
 		msg_box(term_, NULL, 0,
 			N_("Error"), AL_CENTER,
 			N_("You cannot launch an external editor in the anonymous mode."),

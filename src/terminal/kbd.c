@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.71 2004/06/15 21:05:17 jonas Exp $ */
+/* $Id: kbd.c,v 1.72 2004/06/17 10:02:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len, int remote)
 {
 	int magic = remote ? INTERLINK_REMOTE_MAGIC : INTERLINK_NORMAL_MAGIC;
-	int session_info = remote ? remote : get_opt_int_tree(cmdline_options, "base-session");
+	int session_info = remote ? remote : get_cmd_opt_int("base-session");
 	struct itrm *itrm;
 	int width = 80, height = 24;
 	int terminal_size_error = get_terminal_size(ctl_in, &width, &height);

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.213 2004/06/13 18:56:37 jonas Exp $ */
+/* $Id: main.c,v 1.214 2004/06/17 10:02:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,28 +121,28 @@ init(void)
 	/* Should the document be read from stdin? */
 	if (!isatty(STDIN_FILENO)) {
 		add_to_string_list(&url_list, "file:///dev/stdin", 17);
-		get_opt_bool_tree(cmdline_options, "no-connect") = 1;
+		get_cmd_opt_bool("no-connect") = 1;
 	}
 
 	/* If called for outputting to a pipe without -dump or -source
 	 * specified default to using dump viewer. */
 	if (!isatty(STDOUT_FILENO)) {
-		int *dump = &get_opt_bool_tree(cmdline_options, "dump");
+		int *dump = &get_cmd_opt_bool("dump");
 
-		if (!*dump && !get_opt_bool_tree(cmdline_options, "source"))
+		if (!*dump && !get_cmd_opt_bool("source"))
 			*dump = 1;
 	}
 
-	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
+	if (!get_cmd_opt_bool("no-home")) {
 		init_home();
 	}
 
 	/* If there's no -no-connect, -dump or -source option, check if there's
 	 * no other ELinks running. If we found any, by-pass initialization of
 	 * non critical subsystems, open socket and act as a slave for it. */
-	if (get_opt_bool_tree(cmdline_options, "no-connect")
-	    || get_opt_bool_tree(cmdline_options, "dump")
-	    || get_opt_bool_tree(cmdline_options, "source")
+	if (get_cmd_opt_bool("no-connect")
+	    || get_cmd_opt_bool("dump")
+	    || get_cmd_opt_bool("source")
 	    || (fd = af_unix_open()) == -1) {
 
 		load_config();
@@ -157,8 +157,8 @@ init(void)
 		init_search_history();
 	}
 
-	if (get_opt_int_tree(cmdline_options, "dump")
-	    || get_opt_int_tree(cmdline_options, "source")) {
+	if (get_cmd_opt_int("dump")
+	    || get_cmd_opt_int("source")) {
 		/* Dump the URL list */
 		dump_pre_start(&url_list);
 

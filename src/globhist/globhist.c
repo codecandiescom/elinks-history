@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.75 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: globhist.c,v 1.76 2004/06/17 10:02:21 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -279,7 +279,7 @@ read_global_history(void)
 	FILE *f;
 
 	if (!get_globhist_enable()
-	    || get_opt_int_tree(cmdline_options, "anonymous"))
+	    || get_cmd_opt_int("anonymous"))
 		return;
 
 	if (elinks_home) {
@@ -402,7 +402,7 @@ global_history_write_timer_change_hook(struct session *ses,
 		global_history_write_timer = -1;
 	}
 
-	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
+	if (elinks_home && !get_cmd_opt_int("anonymous"))
 		global_history_write_timer_handler(NULL);
 
 	return 0;
@@ -420,7 +420,7 @@ init_global_history(struct module *module)
 	register_change_hooks(global_history_change_hooks);
 	read_global_history();
 
-	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
+	if (elinks_home && !get_cmd_opt_int("anonymous"))
 		global_history_write_timer_handler(NULL);
 }
 
@@ -429,7 +429,7 @@ done_global_history(struct module *module)
 {
 	if (global_history_write_timer >= 0)
 		kill_timer(global_history_write_timer);
-	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))
+	if (elinks_home && !get_cmd_opt_int("anonymous"))
 		write_global_history();
 	free_global_history();
 	mem_free_if(gh_last_searched_title);

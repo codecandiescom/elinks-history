@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.43 2004/05/20 12:42:44 jonas Exp $ */
+/* $Id: exmode.c,v 1.44 2004/06/17 10:02:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,6 +126,6 @@ exmode_input_handler(struct input_line *input_line, int action)
 void
 exmode_start(struct session *ses)
 {
-	if (get_opt_int_tree(cmdline_options, "anonymous")) return;
+	if (get_cmd_opt_int("anonymous")) return;
 	input_field_line(ses, ":", NULL, &exmode_history, exmode_input_handler);
 }

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.50 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: home.c,v 1.51 2004/06/17 10:02:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ get_home(void)
 		strip_trailing_dir_sep(home);
 
 	home_elinks = test_confdir(home,
-				   get_opt_str_tree(cmdline_options, "config-dir"),
+				   get_cmd_opt_str("config-dir"),
 				   N_("Commandline options -config-dir set to %s, "
 				      "but could not create directory %s."));
 	if (home_elinks) goto end;

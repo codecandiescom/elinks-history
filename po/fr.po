@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-21 17:20+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-12-21 18:01+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:304
 msgid "Close"
@@ -50,7 +50,7 @@ msgstr "Info"
 #: src/viewer/text/search.c:890 src/viewer/text/search.c:912
 #: src/viewer/text/search.c:1004 src/viewer/text/search.c:1168
 #: src/viewer/text/search.c:1179 src/viewer/text/textarea.c:272
-#: src/viewer/text/view.c:806 src/viewer/text/view.c:1519
+#: src/viewer/text/view.c:799 src/viewer/text/view.c:1512
 msgid "OK"
 msgstr "OK"
 
@@ -269,7 +269,7 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:999 src/sched/download.c:1011
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
 #: src/scripting/lua/core.c:720 src/viewer/text/search.c:1168
-#: src/viewer/text/search.c:1179 src/viewer/text/view.c:806
+#: src/viewer/text/search.c:1179 src/viewer/text/view.c:799
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -978,9 +978,8 @@ msgid "Open cache manager"
 msgstr "Ouvrir le gestionnaire de cache"
 
 #: src/config/kbdbind.c:387
-#, fuzzy
 msgid "Cancel current state"
-msgstr "Impossible d'obtenir l'état du socket"
+msgstr "Annuler l'état courant"
 
 #: src/config/kbdbind.c:388
 msgid "Open cookie manager"
@@ -1125,9 +1124,8 @@ msgid "Go at a specified mark"
 msgstr "Aller à la marque spécifiée"
 
 #: src/config/kbdbind.c:427
-#, fuzzy
 msgid "Mark item"
-msgstr "Item de menu marqué"
+msgstr "Marquer l'item"
 
 #: src/config/kbdbind.c:428
 msgid "Activate the menu"
@@ -1138,9 +1136,8 @@ msgid "Move to the next frame"
 msgstr "Se déplacer au cadre suivant"
 
 #: src/config/kbdbind.c:430
-#, fuzzy
 msgid "Move to the next item"
-msgstr "Se déplacer au cadre suivant"
+msgstr "Se déplacer à l'item suivant"
 
 #: src/config/kbdbind.c:431
 msgid "Open a new tab"
@@ -1195,9 +1192,8 @@ msgid "Quit without confirmation"
 msgstr "Quitter sans confirmation"
 
 #: src/config/kbdbind.c:445
-#, fuzzy
 msgid "Redraw the terminal"
-msgstr "Redimensionner le terminal"
+msgstr "Redessiner le terminal"
 
 #: src/config/kbdbind.c:446
 msgid "Reload the current page"
@@ -2671,28 +2667,24 @@ msgstr ""
 "Utilisez \" \" si vous ne voulez aucun entête User-Agent."
 
 #: src/config/options.inc:666
-#, fuzzy
 msgid "HTTPS"
-msgstr "HTTP"
+msgstr "HTTPS"
 
 #: src/config/options.inc:668
-#, fuzzy
 msgid "HTTPS-specific options."
-msgstr "Options du protocole HTTP."
+msgstr "Options spécifiques à HTTPS."
 
 #: src/config/options.inc:672
-#, fuzzy
 msgid "HTTPS proxy configuration."
-msgstr "Configuration proxy HTTP."
+msgstr "Configuration proxy HTTPS."
 
 #: src/config/options.inc:676
-#, fuzzy
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
 msgstr ""
-"Hôte et numéro de port (hôte:port) du proxy HTTP, ou rien.\n"
-"Si rien, la variable d'environnement HTTP_PROXY sera utilisée."
+"Hôte et numéro de port (hôte:port) du proxy HTTPS CONNECT, ou rien.\n"
+"Si rien, la variable d'environnement HTTPS_PROXY sera utilisée."
 
 #: src/config/options.inc:680
 msgid "FTP"
@@ -3894,18 +3886,16 @@ msgid "Server"
 msgstr "Serveur"
 
 #: src/cookies/dialogs.c:76
-#, fuzzy
 msgid "Domain"
-msgstr "~Documentation"
+msgstr "Domaine"
 
 #: src/cookies/dialogs.c:78
 msgid "Expires"
-msgstr ""
+msgstr "Expiration"
 
 #: src/cookies/dialogs.c:80
-#, fuzzy
 msgid "Secure"
-msgstr "act."
+msgstr "Sécurisé"
 
 #: src/cookies/dialogs.c:131 src/dialogs/download.c:414 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:171 src/globhist/dialogs.c:188
@@ -4484,16 +4474,16 @@ msgstr "temps écoulé"
 msgid "estimated time"
 msgstr "temps restant estimé"
 
-#: src/dialogs/status.c:203
+#: src/dialogs/status.c:204
 #, c-format
-msgid "Typeahead: %s (-> %s)"
-msgstr "Préfrappe: %s (-> %s)"
+msgid "Typeahead: %s [%s]"
+msgstr "Préfrappe: %s [%s]"
 
-#: src/dialogs/status.c:293
+#: src/dialogs/status.c:295
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:297
 msgid "No document"
 msgstr "Aucun document"
 
@@ -4904,13 +4894,12 @@ msgstr ""
 "Utilisez mime.mailcap.ask."
 
 #: src/mime/backend/mailcap.c:152
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use mime.mailcap.description option instead."
 msgstr ""
 "Option obsolète.\n"
-"Utilisez mime.mailcap.path."
+"Utilisez mime.mailcap.description."
 
 #: src/mime/backend/mailcap.c:157
 msgid ""
@@ -5086,7 +5075,6 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:64
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -5793,19 +5781,19 @@ msgstr "Recherche du texte"
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:805
+#: src/viewer/text/view.c:798
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:805
+#: src/viewer/text/view.c:798
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1516
+#: src/viewer/text/view.c:1509
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1517
+#: src/viewer/text/view.c:1510
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

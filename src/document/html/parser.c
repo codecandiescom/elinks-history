@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.321 2004/01/04 00:40:45 zas Exp $ */
+/* $Id: parser.c,v 1.322 2004/01/04 00:44:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3173,8 +3173,7 @@ ng:;
 				/*debug_stack();*/
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak) xxx = 1;
-					if (!e->name
-					    || strlcasecmp(e->name, e->namelen, name, namelen)) {
+					if (strlcasecmp(e->name, e->namelen, name, namelen)) {
 						if (e->type != ELEMENT_KILLABLE)
 							break;
 						else

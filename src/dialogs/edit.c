@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.16 2002/09/17 13:50:37 zas Exp $ */
+/* $Id: edit.c,v 1.17 2002/10/08 21:16:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,7 +156,7 @@ do_edit_dialog(struct terminal *term, unsigned char *title,
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
 	d->items[1].data = url;
-	if (dialog_type == 1) d->items[1].fn = check_nonempty;
+	/* if (dialog_type == 1) d->items[1].fn = check_nonempty; */
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.147 2004/08/19 08:10:09 miciah Exp $ */
+/* $Id: renderer.c,v 1.148 2004/08/19 08:12:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,8 +289,7 @@ add_document_line(struct plain_renderer *renderer,
 
 		} else if (line_char == ASCII_BS) {
 			if (!(expanded + line_pos)) {
-				/* We've backspaced to the start
-				 * of the line */
+				/* We've backspaced to the start of the line */
 				expanded--; /* Don't count it */
 				continue;
 			}
@@ -300,8 +299,7 @@ add_document_line(struct plain_renderer *renderer,
 			/* Handle x^H_ as _^Hx */
 			if (next_char == '_'
 			    && prev_char != '_') /* No inf. loop
-						  * swapping two
-						  * underscores */
+						  * swapping two underscores */
 			{
 				/* x^H_ becomes _^Hx */
 				line[line_pos - 1] = next_char;
@@ -356,12 +354,12 @@ add_document_line(struct plain_renderer *renderer,
 				 * alphabetic characters, or if
 				 * we are at the very start of the line.
 				 * It improves performance a bit. --Zas */
-				added_chars = print_document_link(
-						renderer,
-						lineno, line,
-						line_pos,
-						width, expanded,
-						pos);
+				added_chars = print_document_link(renderer,
+								  lineno, line,
+								  line_pos,
+								  width,
+								  expanded,
+								  pos);
 
 			}
 

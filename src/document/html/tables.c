@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.371 2004/12/19 16:23:22 pasky Exp $ */
+/* $Id: tables.c,v 1.372 2004/12/24 14:55:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1184,6 +1184,12 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	table->part = part;
 
+	/* XXX: This tag soup handling needs to be done outside the create
+	 * parser state. Something to do with link numbering. */
+	/* It needs to be done _before_ processing the actual table, too.
+	 * Otherwise i.e. <form> tags between <table> and <tr> are broken. */
+	draw_table_bad_html(table);
+
 	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
@@ -1246,9 +1252,6 @@ ret2:
 	html_context.part = part; /* Might've changed in draw_table_cells(). */
 	done_html_parser_state(state);
 
-	/* XXX: This tag soup handling needs to be done outside the create
-	 * parser state. Something to do with link numbering. */
-	draw_table_bad_html(table);
 	free_table(table);
 
 ret0:

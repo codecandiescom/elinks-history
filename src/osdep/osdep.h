@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.5 2002/06/20 11:05:32 pasky Exp $ */
+/* $Id: osdep.h,v 1.6 2002/07/03 23:40:49 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -187,6 +187,13 @@ int can_resize_window(int);
 int can_open_os_shell(int);
 struct open_in_new *get_open_in_new(int);
 void set_highpri();
+
+#ifdef USE_OPEN_PREALLOC
+int open_prealloc(char *, int, int, int);
+void prealloc_truncate(int, int);
+#else
+static inline void prealloc_truncate(int x, int y) { }
+#endif
 
 unsigned char *get_system_str(int);
 

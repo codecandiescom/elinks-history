@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.1 2002/03/17 11:29:12 pasky Exp $ */
+/* $Id: generic.h,v 1.2 2002/07/03 23:40:49 pasky Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -54,6 +54,10 @@ void cfmakeraw(struct termios *t);
 #undef errno
 #endif
 #define errno 1
+#endif
+
+#if defined(O_SIZE) && defined(__EMX__)
+#define USE_OPEN_PREALLOC
 #endif
 
 #endif

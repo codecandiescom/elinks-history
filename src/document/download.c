@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.21 2002/06/22 16:45:19 pasky Exp $ */
+/* $Id: download.c,v 1.22 2002/07/03 23:40:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,11 +88,17 @@ abort_download(struct download *down)
 	if (down->stat.state >= 0)
 		change_connection(&down->stat, NULL, PRI_CANCEL);
 	mem_free(down->url);
-	if (down->handle != -1) close(down->handle);
+
+	if (down->handle != -1) {
+		prealloc_truncate(down->handle, down->last_pos)
+		close(down->handle);
+	}
+
 	if (down->prog) {
 		unlink(down->file);
 		mem_free(down->prog);
 	}
+
 	mem_free(down->file);
 	del_from_list(down);
 	mem_free(down);
@@ -422,12 +428,31 @@ download_data(struct status *stat, struct download *down)
 		int remain = down->last_pos - frag->offset;
 
 		if (remain >= 0 && frag->length > remain) {
-			int saved_errno;
-			int w = write(down->handle, frag->data + remain,
-				      frag->length - remain);
+			int w;
 
-			saved_errno = errno; /* Saved in case of ... --Zas */
+#ifdef HAVE_OPEN_PREALLOC
+			if (!down->last_pos && (!down->stat.prg
+						|| down->stat.prg->size > 0)) {
+				close(down->handle);
+				down->handle = open_prealloc(down->file, O_CREAT|O_WRONLY|O_TRUNC, 0666,
+							     down->stat.prg ? down->stat.prg->size : ce->length);
+				if (down->handle == -1)
+					goto write_error;
+				set_bin(down->handle);
+			}
+#endif
+
+			w = write(down->handle, frag->data + remain,
+				  frag->length - remain);
+
 			if (w == -1) {
+				int saved_errno;
+
+#ifdef HAVE_OPEN_PREALLOC
+write_error:
+#endif
+				saved_errno = errno; /* Saved in case of ... --Zas */
+
 				detach_connection(stat, down->last_pos);
 				if (!list_empty(sessions)) {
 					unsigned char *msg = stracpy(down->file);
@@ -479,6 +504,8 @@ end_store:
 
 		} else {
 			if (down->prog) {
+				prealloc_truncate(down->handle,
+						  down->last_pos);
 				close(down->handle);
 				down->handle = -1;
 				exec_on_terminal(get_download_ses(down)->term,

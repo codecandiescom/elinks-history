@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.24 2002/07/03 22:50:07 pasky Exp $ */
+/* $Id: os_dep.c,v 1.25 2002/07/03 23:40:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,6 +99,24 @@ get_e(char *env)
 #endif
 
 #endif
+
+
+#ifdef USE_OPEN_PREALLOC
+int
+open_prealloc(char *name, int flags, int mode, int siz)
+{
+	/* This is good for OS/2, where this will prevent file fragmentation,
+	 * preallocating the desired file size upon open(). */
+	return open(name, flags | O_SIZE, mode, (unsigned long) siz);
+}
+
+void
+prealloc_truncate(int h, int siz)
+{
+	ftruncate(h, siz);
+}
+#endif
+
 
 /* Terminal size */
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.261 2004/06/29 02:11:39 jonas Exp $ */
+/* $Id: tables.c,v 1.262 2004/06/29 02:21:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1000,11 +1000,19 @@ get_bordercolor(unsigned char *a, color_t *rgb)
 }
 
 static void
-parse_table_attributes(struct table *table, unsigned char *attr)
+parse_table_attributes(struct table *table, unsigned char *attr, int real)
 {
 	table->fragment_id = get_attr_val(attr, "id");
 
 	get_bordercolor(attr, &table->bordercolor);
+
+	table->width = get_width(attr, "width", real);
+	if (table->width == -1) {
+		table->width = par_format.width - par_format.leftmargin - par_format.rightmargin;
+		if (table->width < 0) table->width = 0;
+		table->has_width = 1;
+	}
+
 }
 
 static void
@@ -1038,7 +1046,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
 	int border, cellspacing, vcellpadding, cellpadding, align;
-	int frame, rules, width, has_width;
+	int frame, rules;
 	int cye;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
@@ -1121,14 +1129,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	has_width = 0;
-	width = get_width(attr, "width", (part->document || part->box.x));
-	if (width == -1) {
-		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
-		if (width < 0) width = 0;
-		has_width = 1;
-	}
-
 	table = parse_table(html, eof, end, bgcolor, (part->document || part->box.x));
 	if (!table) {
 		goto ret0;
@@ -1137,15 +1137,13 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->part = part;
 	table->border = border;
 
-	parse_table_attributes(table, attr);
+	parse_table_attributes(table, attr, part->document || part->box.x);
 
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;
 	table->cellspacing = cellspacing;
 	table->frame = frame;
 	table->rules = rules;
-	table->width = width;
-	/* table->has_width = has_width; not used. */
 
 	format_bad_table_html(table);
 
@@ -1163,7 +1161,8 @@ again:
 
 	margins = par_format.leftmargin + par_format.rightmargin;
 	if (!part->document && !part->box.x) {
-		if (!has_width) int_upper_bound(&table->max_width, width);
+		if (!table->has_width)
+			int_upper_bound(&table->max_width, table->width);
 		int_lower_bound(&table->max_width, table->min_width);
 
 		int_lower_bound(&part->max_width, table->max_width + margins);
@@ -1172,7 +1171,7 @@ again:
 		goto ret2;
 	}
 
-	if (!cpd_pass && table->min_width > width && table->cellpadding) {
+	if (!cpd_pass && table->min_width > table->width && table->cellpadding) {
 		table->cellpadding = 0;
 		cpd_pass = 1;
 		cpd_width = table->min_width;
@@ -1184,13 +1183,13 @@ again:
 		goto again;
 	}
 
-	/* DBG("%d %d %d", t->min_width, t->max_width, width); */
-	if (table->min_width >= width)
+	/* DBG("%d %d %d", t->min_width, t->max_width, table->width); */
+	if (table->min_width >= table->width)
 		distribute_widths(table, table->min_width);
-	else if (table->max_width < width && has_width)
+	else if (table->max_width < table->width && table->has_width)
 		distribute_widths(table, table->max_width);
 	else
-		distribute_widths(table, width);
+		distribute_widths(table, table->width);
 
 	if (!part->document && part->box.x == 1) {
 		int ww = table->real_width + margins;

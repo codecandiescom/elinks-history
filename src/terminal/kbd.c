@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.9 2003/05/06 18:39:14 zas Exp $ */
+/* $Id: kbd.c,v 1.10 2003/05/14 20:58:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,13 +92,14 @@ write_ev_queue(struct itrm *itrm)
 	}
 
 	itrm->eqlen -= l;
-	memmove(itrm->ev_queue, itrm->ev_queue + l, itrm->eqlen);
 	if (!itrm->eqlen) {
 		set_handlers(itrm->sock_out,
 			     get_handler(itrm->sock_out, H_READ),
 			     NULL,
 			     get_handler(itrm->sock_out, H_ERROR),
 			     get_handler(itrm->sock_out, H_DATA));
+	} else {
+		memmove(itrm->ev_queue, itrm->ev_queue + l, itrm->eqlen);
 	}
 }
 

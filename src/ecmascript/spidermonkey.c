@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.142 2004/12/19 16:05:07 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.143 2004/12/19 16:06:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -780,9 +780,11 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 		break;
 	case JSP_INPUT_VALUE:
+		if (fc->type == FC_FILE)
+			break; /* A huge security risk otherwise. */
 		JSVAL_REQUIRE(vp, STRING);
 		mem_free_set(&fs->value, stracpy(v.string));
-		if (fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_FILE)
+		if (fc->type == FC_TEXT || fc->type == FC_PASSWORD)
 			fs->state = strlen(fs->value);
 		break;
 

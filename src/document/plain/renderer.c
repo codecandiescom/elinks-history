@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.68 2004/01/21 18:16:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.69 2004/01/22 18:43:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,13 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+struct plain_renderer {
+	struct document *document;
+	unsigned char *source;
+	int length;
+	struct conv_table *convert_table;
+};
 
 #define realloc_document_links(doc, size) \
 	ALIGN_LINK(&(doc)->links, (doc)->nlinks, size)

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.36 2004/01/22 18:34:33 jonas Exp $ */
+/* $Id: parser.c,v 1.37 2004/01/22 18:43:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,6 +181,10 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	skip_css_tokens(scanner, '{');
 
+	/* TODO: We don't handle the case where a property has already been
+	 * added to a selector. Maybe we should pass an empty list to
+	 * css_parse_properties() and then do a merge of old and new properties
+	 * favoring the new ones. */
 	css_parse_properties(&selector->properties, scanner);
 
 	skip_css_tokens(scanner, '}');

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.3 2005/01/09 10:35:26 jonas Exp $
+## $Id: Makefile.am,v 1.4 2005/02/01 23:38:02 jonas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -25,7 +25,8 @@ SUFFIXES = .po .gmo .mo
 
 .po.gmo:
 	@file=`echo $* | sed 's,.*/,,'`.gmo \
-	  && rm -f $$file && echo -n $*": " && $(GMSGFMT) --statistics -o $$file $<
+	  && rm -f $$file && echo -n $*": " \
+	  && $(GMSGFMT) --check --verbose --statistics -o $$file $<
 
 
 ### The default rule

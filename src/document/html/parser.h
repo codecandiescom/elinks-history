@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.38 2003/10/29 21:27:12 jonas Exp $ */
+/* $Id: parser.h,v 1.39 2003/10/29 21:58:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -147,9 +147,6 @@ struct html_element {
 
 extern struct list_head html_stack;
 
-extern unsigned char *startf;
-extern unsigned char *eofff;
-
 #define format (((struct html_element *) html_stack.next)->attr)
 #define par_format (((struct html_element *) html_stack.next)->parattr)
 #define html_top (*(struct html_element *) html_stack.next)
@@ -159,10 +156,6 @@ extern void (*put_chars_f)(void *, unsigned char *, int);
 extern void (*line_break_f)(void *);
 extern void (*init_f)(void *);
 extern void *(*special_f)(void *, int, ...);
-
-extern unsigned char *last_form_tag;
-extern unsigned char *last_form_attr;
-extern unsigned char *last_input_tag;
 
 int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
 
@@ -214,6 +207,10 @@ void free_tags_lookup(void);
 /* This initializes the tags cache used by fastfind. */
 void init_tags_lookup(void);
 
+void
+init_html_parser(unsigned char *url, struct document_options *options,
+		 unsigned char *start, unsigned char *end,
+		 struct string *head, struct string *title);
 void done_html_parser(void);
 struct html_element *init_html_parser_state(int align, int margin, int width);
 void done_html_parser_state(struct html_element *element);

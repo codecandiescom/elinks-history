@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.332 2003/10/29 21:51:04 jonas Exp $ */
+/* $Id: renderer.c,v 1.333 2003/10/29 21:58:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1362,74 +1362,6 @@ end:
 	return part;
 }
 
-static void
-init_html_parser(unsigned char *url, struct document_options *options,
-		 unsigned char *start, unsigned char *end,
-		 struct string *head, struct string *title)
-{
-	struct html_element *e;
-
-	assert(url && options);
-	if_assert_failed return;
-	assertm(list_empty(html_stack), "something on html stack");
-	if_assert_failed init_list(html_stack);
-
-	startf = start;
-	eofff = end;
-	scan_http_equiv(start, end, head, title);
-
-	e = mem_calloc(1, sizeof(struct html_element));
-	if (!e) return;
-
-	add_to_list(html_stack, e);
-
-	format.attr = 0;
-	format.fontsize = 3;
-	format.link = format.target = format.image = NULL;
-	format.select = NULL;
-	format.form = NULL;
-	format.title = NULL;
-
-	format.fg = options->default_fg;
-	format.bg = options->default_bg;
-	format.clink = options->default_link;
-	format.vlink = options->default_vlink;
-
-	format.href_base = stracpy(url);
-	format.target_base = options->framename ? stracpy(options->framename) : NULL;
-
-	if (options->plain) {
-		par_format.align = AL_NONE;
-		par_format.leftmargin = 0;
-		par_format.rightmargin = 0;
-	} else {
-		par_format.align = AL_LEFT;
-		par_format.leftmargin = options->margin;
-		par_format.rightmargin = options->margin;
-	}
-
-	par_format.width = options->xw;
-	par_format.list_level = par_format.list_number = 0;
-	par_format.dd_margin = options->margin;
-	par_format.flags = P_NONE;
-
-	par_format.bgcolor = options->default_bg;
-
-	html_top.invisible = 0;
-	html_top.name = NULL;
-   	html_top.namelen = 0;
-	html_top.options = NULL;
-	html_top.linebreak = 1;
-	html_top.dontkill = 1;
-
-	table_level = 0;
-	g_ctrl_num = 0;
-	last_form_tag = NULL;
-	last_form_attr = NULL;
-	last_input_tag = NULL;
-
-}
-
 struct conv_table *
 get_convert_table(unsigned char *head, int to_cp,
 		  int default_cp, int *from_cp,
@@ -1504,6 +1436,7 @@ format_html(struct cache_entry *ce, struct document *document)
 
 	if (!init_string(&head)) return;
 
+	g_ctrl_num = 0;
 	url = ce->url;
 	d_opt = &document->options;
 	document->id_tag = ce->id_tag;

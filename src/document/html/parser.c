@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.231 2003/10/29 21:27:12 jonas Exp $ */
+/* $Id: parser.c,v 1.232 2003/10/29 21:58:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,8 +475,8 @@ void (*init_f)(void *);
 void *(*special_f)(void *, int, ...);
 
 unsigned char *eoff;
-unsigned char *eofff;
-unsigned char *startf;
+static unsigned char *eofff;
+static unsigned char *startf;
 
 static int line_breax;
 static int position;
@@ -655,9 +655,9 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 
 static struct form form = NULL_STRUCT_FORM;
 
-unsigned char *last_form_tag;
-unsigned char *last_form_attr;
-unsigned char *last_input_tag;
+static unsigned char *last_form_tag;
+static unsigned char *last_form_attr;
+static unsigned char *last_input_tag;
 
 static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
@@ -3702,6 +3702,72 @@ done_html_parser_state(struct html_element *element)
 	html_top.dontkill = 0;
 	kill_html_stack_item(&html_top);
 
+}
+
+void
+init_html_parser(unsigned char *url, struct document_options *options,
+		 unsigned char *start, unsigned char *end,
+		 struct string *head, struct string *title)
+{
+	struct html_element *e;
+
+	assert(url && options);
+	if_assert_failed return;
+	assertm(list_empty(html_stack), "something on html stack");
+	if_assert_failed init_list(html_stack);
+
+	startf = start;
+	eofff = end;
+	scan_http_equiv(start, end, head, title);
+
+	e = mem_calloc(1, sizeof(struct html_element));
+	if (!e) return;
+
+	add_to_list(html_stack, e);
+
+	format.attr = 0;
+	format.fontsize = 3;
+	format.link = format.target = format.image = NULL;
+	format.select = NULL;
+	format.form = NULL;
+	format.title = NULL;
+
+	format.fg = options->default_fg;
+	format.bg = options->default_bg;
+	format.clink = options->default_link;
+	format.vlink = options->default_vlink;
+
+	format.href_base = stracpy(url);
+	format.target_base = options->framename ? stracpy(options->framename) : NULL;
+
+	if (options->plain) {
+		par_format.align = AL_NONE;
+		par_format.leftmargin = 0;
+		par_format.rightmargin = 0;
+	} else {
+		par_format.align = AL_LEFT;
+		par_format.leftmargin = options->margin;
+		par_format.rightmargin = options->margin;
+	}
+
+	par_format.width = options->xw;
+	par_format.list_level = par_format.list_number = 0;
+	par_format.dd_margin = options->margin;
+	par_format.flags = P_NONE;
+
+	par_format.bgcolor = options->default_bg;
+
+	html_top.invisible = 0;
+	html_top.name = NULL;
+   	html_top.namelen = 0;
+	html_top.options = NULL;
+	html_top.linebreak = 1;
+	html_top.dontkill = 1;
+
+	table_level = 0;
+	last_form_tag = NULL;
+	last_form_attr = NULL;
+	last_input_tag = NULL;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.162 2004/08/15 09:54:25 miciah Exp $ */
+/* $Id: listbox.c,v 1.163 2004/09/12 02:30:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -536,33 +536,31 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		}
 	}
 
-	if (check_mouse_action(ev, B_UP) || check_mouse_action(ev, B_DOWN)) {
-		if (check_mouse_wheel(ev))
-			return EVENT_NOT_PROCESSED;
+	if (check_mouse_wheel(ev))
+		return EVENT_NOT_PROCESSED;
 
-		if (check_mouse_position(ev, &widget_data->box)) {
-			/* Clicked in the box. */
-			int offset = ev->info.mouse.y - widget_data->box.y;
+	if (check_mouse_position(ev, &widget_data->box)) {
+		/* Clicked in the box. */
+		int offset = ev->info.mouse.y - widget_data->box.y;
 
-			box->sel_offset = offset;
-			if (offset)
-				box->sel = traverse_listbox_items_list(box->top,
-								       box,
-								       offset, 1,
-								       NULL, NULL);
-			else box->sel = box->top;
+		box->sel_offset = offset;
+		if (offset)
+			box->sel = traverse_listbox_items_list(box->top,
+							       box,
+							       offset, 1,
+							       NULL, NULL);
+		else box->sel = box->top;
 
-			if (box->sel && box->sel->type == BI_FOLDER) {
-				int xdepth = widget_data->box.x + box->sel->depth * 5;
-				int x = ev->info.mouse.x;
+		if (box->sel && box->sel->type == BI_FOLDER) {
+			int xdepth = widget_data->box.x + box->sel->depth * 5;
+			int x = ev->info.mouse.x;
 
-			       	if (x >= xdepth && x <= xdepth + 2)
-					box->sel->expanded = !box->sel->expanded;
-			}
-
-			display_dlg_item(dlg_data, widget_data, 1);
-			return EVENT_PROCESSED;
+			if (x >= xdepth && x <= xdepth + 2)
+				box->sel->expanded = !box->sel->expanded;
 		}
+
+		display_dlg_item(dlg_data, widget_data, 1);
+		return EVENT_PROCESSED;
 	}
 
 #endif /* CONFIG_MOUSE */

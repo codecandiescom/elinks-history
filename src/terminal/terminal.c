@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.53 2004/01/01 14:24:09 jonas Exp $ */
+/* $Id: terminal.c,v 1.54 2004/01/01 15:38:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,6 @@ exec_thread(unsigned char *path, int p)
 	if (path[0] == 2) setpgid(0, 0);
 #endif
 	exe(path + 1);
-	close(p);
 	if (path[plen]) unlink(path + plen);
 }
 

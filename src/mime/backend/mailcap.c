@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.43 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: mailcap.c,v 1.44 2003/07/21 06:52:18 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -452,11 +452,9 @@ mailcap_change_hook(struct session *ses, struct option *current,
 static unsigned char *
 format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 {
-	unsigned char *cmd = init_str();
-	int cmdlen = 0;
+	struct string cmd;
 
-	if (!cmd)
-		return NULL;
+	if (!init_string(&cmd)) return NULL;
 
 	while (*command) {
 		unsigned char *start = command;
@@ -465,31 +463,31 @@ format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 			command++;
 
 		if (start < command)
-			add_bytes_to_str(&cmd, &cmdlen, start, command - start);
+			add_bytes_to_string(&cmd, start, command - start);
 
 		if (*command == '%') {
 			command++;
 			if (!*command) {
-				mem_free(cmd);
+				done_string(&cmd);
 				return NULL;
 
 			} else if (*command == 's') {
-				add_chr_to_str(&cmd, &cmdlen, '%');
+				add_char_to_string(&cmd, '%');
 
 			} else if (*command == 't') {
 				if (!type) {
-					mem_free(cmd);
+					done_string(&cmd);
 					return NULL;
 				}
 
-				add_to_str(&cmd, &cmdlen, type);
+				add_to_string(&cmd, type);
 			}
 			command++;
 
 		} else if (*command == '\\') {
 			command++;
 			if (*command) {
-				add_chr_to_str(&cmd, &cmdlen, *command);
+				add_char_to_string(&cmd, *command);
 				command++;
 			}
 		}
@@ -507,12 +505,12 @@ format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 		}
 
 		if (pager) {
-			add_chr_to_str(&cmd, &cmdlen, '|');
-			add_to_str(&cmd, &cmdlen, pager);
+			add_char_to_string(&cmd, '|');
+			add_to_string(&cmd, pager);
 		}
 	}
 
-	return cmd;
+	return cmd.source;
 }
 
 /* Returns first usable mailcap_entry from a list where @entry is the head.

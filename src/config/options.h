@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.107 2004/12/16 14:43:41 zas Exp $ */
+/* $Id: options.h,v 1.108 2004/12/16 14:55:30 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -201,6 +201,7 @@ extern union option_value *get_opt_(struct option *, unsigned char *);
 #define get_opt_int_tree(tree, name)	get_opt(tree, name, OPT_INT)->number
 #define get_opt_long_tree(tree, name)	get_opt(tree, name, OPT_LONG)->big_number
 #define get_opt_str_tree(tree, name)	get_opt(tree, name, OPT_STRING)->string
+#define get_opt_codepage_tree(tree, name)	get_opt(tree, name, OPT_CODEPAGE)->number
 #define get_opt_color_tree(tree, name)	get_opt(tree, name, OPT_COLOR)->color
 #define get_opt_tree_tree(tree_, name)	get_opt(tree_, name, OPT_TREE)->tree
 
@@ -208,6 +209,7 @@ extern union option_value *get_opt_(struct option *, unsigned char *);
 #define get_opt_int(name) get_opt_int_tree(config_options, name)
 #define get_opt_long(name) get_opt_long_tree(config_options, name)
 #define get_opt_str(name) get_opt_str_tree(config_options, name)
+#define get_opt_codepage(name) get_opt_codepage_tree(config_options, name)
 #define get_opt_color(name) get_opt_color_tree(config_options, name)
 #define get_opt_tree(name) get_opt_tree_tree(config_options, name)
 
@@ -215,6 +217,7 @@ extern union option_value *get_opt_(struct option *, unsigned char *);
 #define get_cmd_opt_int(name) get_opt_int_tree(cmdline_options, name)
 #define get_cmd_opt_long(name) get_opt_long_tree(cmdline_options, name)
 #define get_cmd_opt_str(name) get_opt_str_tree(cmdline_options, name)
+#define get_cmd_opt_codepage(name) get_opt_codepage_tree(cmdline_options, name)
 #define get_cmd_opt_color(name) get_opt_color_tree(cmdline_options, name)
 #define get_cmd_opt_tree(name) get_opt_tree_tree(cmdline_options, name)
 

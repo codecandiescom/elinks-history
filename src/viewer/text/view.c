@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.500 2004/06/20 12:37:13 jonas Exp $ */
+/* $Id: view.c,v 1.501 2004/06/20 12:43:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,7 +393,12 @@ move_down(struct session *ses, struct document_view *doc_view, int type)
 static void
 page_down(struct session *ses, struct document_view *doc_view)
 {
-	move_down(ses, doc_view, 0);
+	int count = ses->kbdprefix.repeat_count;
+
+	if (!count) count = 1;
+
+	while (count--)
+		move_down(ses, doc_view, 0);
 }
 
 /* type == 0 -> PAGE_UP
@@ -419,7 +424,12 @@ move_up(struct session *ses, struct document_view *doc_view, int type)
 static void
 page_up(struct session *ses, struct document_view *doc_view)
 {
-	move_up(ses, doc_view, 0);
+	int count = ses->kbdprefix.repeat_count;
+
+	if (!count) count = 1;
+
+	while (count--)
+		move_up(ses, doc_view, 0);
 }
 
 static inline void
@@ -462,13 +472,23 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 void
 down(struct session *ses, struct document_view *doc_view)
 {
-	move_link(ses, doc_view, 1, doc_view->document->nlinks - 1, 0);
+	int count = ses->kbdprefix.repeat_count;
+
+	if (!count) count = 1;
+
+	while (count--)
+		move_link(ses, doc_view, 1, doc_view->document->nlinks - 1, 0);
 }
 
 static void
 up(struct session *ses, struct document_view *doc_view)
 {
-	move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1);
+	int count = ses->kbdprefix.repeat_count;
+
+	if (!count) count = 1;
+
+	while (count--)
+		move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1);
 }
 
 /* @steps > 0 -> down */
@@ -671,25 +691,6 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx)
 	draw_formatted(ses, 1);
 }
 
-static void
-rep_ev(struct session *ses, struct document_view *doc_view,
-       void (*f)(struct session *, struct document_view *))
-{
-	register int i = 1;
-
-	assert(ses && doc_view && f);
-	if_assert_failed return;
-
-	if (ses->kbdprefix.repeat_count) {
-		i = ses->kbdprefix.repeat_count;
-		ses->kbdprefix.repeat_count = 0;
-	}
-
-	while (i--) f(ses, doc_view);
-
-}
-
-
 /* Move cursor @y and @x steps */
 static enum frame_event_status
 move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
@@ -828,10 +829,10 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
-		case ACT_MAIN_PAGE_DOWN: rep_ev(ses, doc_view, page_down); break;
-		case ACT_MAIN_PAGE_UP: rep_ev(ses, doc_view, page_up); break;
-		case ACT_MAIN_DOWN: rep_ev(ses, doc_view, down); break;
-		case ACT_MAIN_UP: rep_ev(ses, doc_view, up); break;
+		case ACT_MAIN_PAGE_DOWN: page_down(ses, doc_view); break;
+		case ACT_MAIN_PAGE_UP: page_up(ses, doc_view); break;
+		case ACT_MAIN_DOWN: down(ses, doc_view); break;
+		case ACT_MAIN_UP: up(ses, doc_view); break;
 		case ACT_MAIN_HOME: home(ses, doc_view); break;
 		case ACT_MAIN_END: x_end(ses, doc_view); break;
 

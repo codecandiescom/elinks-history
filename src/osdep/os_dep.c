@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.81 2003/07/21 23:52:05 jonas Exp $ */
+/* $Id: os_dep.c,v 1.82 2003/09/07 19:13:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1989,12 +1989,12 @@ set_highpri(void)
 unsigned char *
 get_system_str(int xwin)
 {
-	unsigned char *system_str;
+	unsigned char *system_str = NULL;
 
-	system_str = stracpy(SYSTEM_STR);
-	if (!system_str) return NULL;
-
-	if (xwin) add_to_strn(&system_str, "-xwin");
+	if (xwin)
+		system_str = stracpy(SYSTEM_STR "-xwin");
+	else
+		system_str = stracpy(SYSTEM_STR);
 
 	return system_str;
 }

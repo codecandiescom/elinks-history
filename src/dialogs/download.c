@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.17 2003/12/03 13:58:06 miciah Exp $ */
+/* $Id: download.c,v 1.18 2003/12/03 15:15:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data
 
 	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) do_abort_download,
-			     dlg_data->dlg->udata);
+			     file_download);
 	return 0;
 }
 
@@ -88,7 +88,7 @@ dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_
 
 	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) undisplay_download,
-			     dlg_data->dlg->udata);
+			     file_download);
 	return 0;
 }
 

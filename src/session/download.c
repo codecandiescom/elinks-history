@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.108 2003/10/23 21:54:38 pasky Exp $ */
+/* $Id: download.c,v 1.109 2003/10/23 22:19:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -469,12 +469,8 @@ set_file_download_win_handler(struct file_download *file_download)
 static void
 download_error_dialog(struct file_download *file_download, int saved_errno)
 {
-	unsigned char *msg, *emsg;
-
-	if (list_empty(sessions)) return;
-
-	msg = stracpy(file_download->file);
-	emsg = stracpy((unsigned char *) strerror(saved_errno));
+	unsigned char *msg = stracpy(file_download->file);
+	unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
 
 	if (msg && emsg) {
 		struct terminal *term = get_download_ses(file_download)->tab->term;
@@ -537,7 +533,7 @@ write_cache_entry_to_file(struct cache_entry *ce, struct file_download *file_dow
 	return 1;
 
 write_error:
-	download_error_dialog(file_download, errno);
+	if (!list_empty(sessions)) download_error_dialog(file_download, errno);
 
 	return 0;
 }

@@ -720,7 +720,7 @@ msgstr ""
 
 #: src/config/cmdline.c:544
 msgid "Do not number links in dump output"
-msgstr "Ne pas numéroter les liens en sortie (dump)."
+msgstr "Ne pas numéroter les liens en sortie (dump)"
 
 #: src/config/cmdline.c:546
 msgid ""
@@ -3770,7 +3770,7 @@ msgstr ""
 
 #: src/config/options.inc:1265
 msgid "Use secure file saving"
-msgstr "Utiliser la sauvegarde fiable des fichiers."
+msgstr "Fiabiliser la sauvegarde des fichiers"
 
 #: src/config/options.inc:1267
 msgid ""

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.82 2004/06/26 21:29:58 pasky Exp $ */
+/* $Id: action.c,v 1.83 2004/07/02 00:24:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,7 +265,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_KEYBINDING_MANAGER:
-			keybinding_manager(ses);
+			if (!get_cmd_opt_int("anonymous"))
+				keybinding_manager(ses);
 			break;
 
 		case ACT_MAIN_KILL_BACKGROUNDED_CONNECTIONS:
@@ -323,7 +324,8 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPTIONS_MANAGER:
-			options_manager(ses);
+			if (!get_cmd_opt_int("anonymous"))
+				options_manager(ses);
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:

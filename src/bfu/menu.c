@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.169 2004/01/09 11:08:44 pasky Exp $ */
+/* $Id: menu.c,v 1.170 2004/01/09 14:07:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,9 +460,9 @@ display_menu(struct terminal *term, struct menu *menu)
 
 #ifdef CONFIG_MOUSE
 static void
-menu_mouse_handler(struct menu *menu, struct term_event *ev)
+menu_mouse_handler(struct menu *menu, struct term_event *ev,
+		   struct window *win)
 {
-	struct window *win = menu->win;
 
 	switch (ev->b & BM_BUTT) {
 		/* XXX: We return here directly because we
@@ -540,9 +540,8 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 #endif
 
 static void
-menu_kbd_handler(struct menu *menu, struct term_event *ev)
+menu_kbd_handler(struct menu *menu, struct term_event *ev, struct window *win)
 {
-	struct window *win = menu->win;
 	int s = 0;
 
 	switch (kbd_action(KM_MENU, ev, NULL)) {
@@ -698,12 +697,12 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_MOUSE:
 #ifdef CONFIG_MOUSE
-			menu_mouse_handler(menu, ev);
+			menu_mouse_handler(menu, ev, win);
 #endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:
-			menu_kbd_handler(menu, ev);
+			menu_kbd_handler(menu, ev, win);
 			break;
 
 		case EV_ABORT:
@@ -848,7 +847,8 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 #ifdef CONFIG_MOUSE
 static void
-mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
+mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev,
+		       struct window *win)
 {
 	struct window *win = menu->win;
 
@@ -916,9 +916,9 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 #endif
 
 static void
-mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
+mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd,
+		     struct window *win)
 {
-	struct window *win = menu->data;
 	enum keyact action = kbd_action(KM_MENU, ev, NULL);
 	int s = 0;
 
@@ -980,12 +980,12 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_MOUSE:
 #ifdef CONFIG_MOUSE
-			mainmenu_mouse_handler(menu, ev);
+			mainmenu_mouse_handler(menu, ev, win);
 #endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:
-			mainmenu_kbd_handler(menu, ev, fwd);
+			mainmenu_kbd_handler(menu, ev, fwd, win);
 			break;
 
 		case EV_ABORT:

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.62 2004/08/14 07:53:14 jonas Exp $ */
+/* $Id: protocol.c,v 1.63 2004/08/18 17:24:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "protocol/file/file.h"
 #include "protocol/finger.h"
 #include "protocol/ftp/ftp.h"
+#include "protocol/gopher/gopher.h"
 #include "protocol/http/http.h"
 #include "protocol/nntp/connection.h"
 #include "protocol/nntp/nntp.h"
@@ -51,6 +52,7 @@ static const struct protocol_backend protocol_backends[] = {
 	{ "file",	   0, file_protocol_handler,	1, 0, 0, 0 },
 	{ "finger",	  79, finger_protocol_handler,	1, 1, 0, 0 },
 	{ "ftp",	  21, ftp_protocol_handler,	1, 1, 0, 0 },
+	{ "gopher",	  70, gopher_protocol_handler,	1, 1, 0, 0 },
 	{ "http",	  80, http_protocol_handler,	1, 1, 0, 0 },
 	{ "https",	 443, https_protocol_handler,	1, 1, 0, 1 },
 	{ "news",	   0, news_protocol_handler,	0, 0, 1, 0 },

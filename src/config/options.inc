@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.132 2004/08/14 07:53:12 jonas Exp $ */
+/* $Id: options.inc,v 1.133 2004/08/18 17:24:16 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -891,8 +891,10 @@ struct option_info config_options_info[] = {
 #define INIT_OPT_USER_PROTOCOL(scheme, system, cmd) \
 	INIT_OPT_STRING("protocol.user." scheme, NULL, system, 0, cmd, NULL)
 
+#ifndef CONFIG_GOPHER
 	INIT_OPT_USER_PROTOCOL("gopher", "unix",	DEFAULT_AC_OPT_GOPHER),
 	INIT_OPT_USER_PROTOCOL("gopher", "unix-xwin",	DEFAULT_AC_OPT_GOPHER),
+#endif
 	INIT_OPT_USER_PROTOCOL("irc",	 "unix",	DEFAULT_AC_OPT_IRC),
 	INIT_OPT_USER_PROTOCOL("irc",	 "unix-xwin",	DEFAULT_AC_OPT_IRC),
 	INIT_OPT_USER_PROTOCOL("mailto", "unix",	DEFAULT_AC_OPT_MAILTO),

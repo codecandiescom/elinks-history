@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.36 2004/08/14 07:53:14 jonas Exp $ */
+/* $Id: protocol.h,v 1.37 2004/08/18 17:24:17 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -15,6 +15,7 @@ enum protocol {
 	PROTOCOL_FILE,
 	PROTOCOL_FINGER,
 	PROTOCOL_FTP,
+	PROTOCOL_GOPHER,
 	PROTOCOL_HTTP,
 	PROTOCOL_HTTPS,
 	PROTOCOL_NEWS,

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.35 2004/08/14 15:57:29 jonas Exp $
+## $Id: Makefile.am,v 1.36 2004/08/18 17:24:17 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -21,6 +21,11 @@ endif
 
 ftpobj = ftp/ftp.o ftp/ftpparse.o
 
+if CONFIG_GOPHER
+gopherdir = gopher
+gopherobj = $(gopherdir)/gopher.o
+endif
+
 httpobj = http/blacklist.o http/codes.o http/http.o
 
 if CONFIG_NNTP
@@ -38,7 +43,7 @@ rewritedir = rewrite
 rewriteobj = $(rewritedir)/rewrite.o
 endif
 
-SUBDIRS = auth file ftp http $(nntpdir) $(rewritedir) $(smbdir)
+SUBDIRS = auth file ftp $(gopherdir) http $(nntpdir) $(rewritedir) $(smbdir)
 
 noinst_LIBRARIES = libprotocol.a
 
@@ -50,6 +55,7 @@ libprotocol_a_LIBADD = \
  $(fileobj) \
  $(fingerobj) \
  $(ftpobj) \
+ $(gopherobj) \
  $(httpobj) \
  $(nntpobj) \
  $(rewriteobj) \

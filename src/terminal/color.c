@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.43 2003/09/30 11:49:44 jonas Exp $ */
+/* $Id: color.c,v 1.44 2003/10/01 00:35:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,8 +93,8 @@ static struct color_mode_info color_modes[] = {
 	{
 		palette16,
 		{
-			/* COLOR_DEFAULT */     { 8, 16 },
-			/* COLOR_LINK */        { 8, 8 },
+			/* COLOR_DEFAULT */	{ 8, 16 },
+			/* COLOR_LINK */	{ 8,  8 },
 		}
 	},
 
@@ -102,8 +102,8 @@ static struct color_mode_info color_modes[] = {
 	{
 		palette16,
 		{
-			/* COLOR_DEFAULT */     { 8, 16 },
-			/* COLOR_LINK */        { 8,  8 },
+			/* COLOR_DEFAULT */	{ 8, 16 },
+			/* COLOR_LINK */	{ 8,  8 },
 		}
 	},
 };

@@ -1,8 +1,11 @@
-<!-- $Id: elinks.1.xml,v 1.1 2003/05/08 22:42:29 jonas Exp $ -->
+<!-- $Id: elinks.1.xml,v 1.2 2003/05/09 00:41:06 jonas Exp $ -->
+
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
 	"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
-<!--CTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN">
+	
+<!--DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN">
 	http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"-->
+	
 <refentry id="elinks">
 
 <refmeta>
@@ -248,7 +251,7 @@
 	<varlistentry><term><envar> ELINKS_CONFDIR </envar></term>
 	<listitem><para>
 
-	The location of "<filename>.elinks/</filename>" user's directory.
+	The location of <filename>.elinks/</filename> user's directory.
 
 	</para></listitem>
 	</varlistentry>
@@ -305,10 +308,18 @@
 
 <refsect1><title> FILES </title>
 <variablelist>
+	<varlistentry><term><filename>@sysconfdir@/elinks.conf</filename></term>
+	<listitem><para>
+
+	Site-wide configuration file.
+
+	</para></listitem>
+	</varlistentry>
+
 	<varlistentry><term><filename>~/.elinks/elinks.conf</filename></term>
 	<listitem><para>
 
-	Per-user config file
+	Per-user config file, loaded after site-wide configuration.
 
 	</para></listitem>
 	</varlistentry>

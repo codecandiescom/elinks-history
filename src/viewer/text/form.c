@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.19 2003/08/01 17:28:38 zas Exp $ */
+/* $Id: form.c,v 1.20 2003/08/01 18:27:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -712,17 +712,17 @@ get_form_url(struct session *ses, struct document_view *f,
 	}
 
 	if (save && !form_already_saved(frm->action, &submit)) {
-		struct formsmem_data *fmem_data;
+		struct formsmem_data *fm_data;
 
-		fmem_data = mem_alloc(sizeof(struct formsmem_data));
-		if (!fmem_data) {
+		fm_data = mem_alloc(sizeof(struct formsmem_data));
+		if (!fm_data) {
 			free_succesful_controls(&submit);
 			return NULL;
 		}
 
 		sb = mem_alloc(sizeof(struct list_head));
 		if (!sb) {
-			mem_free(fmem_data);
+			mem_free(fm_data);
 			free_succesful_controls(&submit);
 			return NULL;
 		}
@@ -734,15 +734,15 @@ get_form_url(struct session *ses, struct document_view *f,
 		((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
 		((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
 
-		fmem_data->url = stracpy(frm->action);
-		if (!fmem_data->url) {
-			mem_free(fmem_data);
+		fm_data->url = stracpy(frm->action);
+		if (!fm_data->url) {
+			mem_free(fm_data);
 			mem_free(sb);
 			free_succesful_controls(&submit);
 			return NULL;
 		}
 
-		fmem_data->submit = sb;
+		fm_data->submit = sb;
 
 		msg_box(ses->tab->term, NULL, 0,
 			N_("Form memory"), AL_CENTER,
@@ -750,7 +750,7 @@ get_form_url(struct session *ses, struct document_view *f,
 			"Please note that passwords will be stored "
 			"obscured (i.e. unencrypted) in a file on your disk.\n\n"
 			"If you are using a valuable password answer NO."),
-			fmem_data, 2,
+			fm_data, 2,
 			N_("Yes"), remember_form, B_ENTER,
 			N_("No"), free_form, NULL);
 	}

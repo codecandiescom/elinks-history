@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.89 2003/11/15 17:43:25 jonas Exp $ */
+/* $Id: cookies.c,v 1.90 2003/11/15 22:33:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,9 +553,8 @@ accept_cookie_dialog(struct session *ses)
 		unsigned char str[13];
 		int wr = strftime(str, sizeof(str), "%b %e %H:%M", when_local);
 
-		while (wr < sizeof(str) - 1) str[wr++] = ' ';
-		str[sizeof(str) - 1] = '\0';
-		expires = memacpy(str, sizeof(str) - 1);
+		if (wr > 0)
+			expires = memacpy(str, wr);
 	}
 #endif
 

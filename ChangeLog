@@ -1,3 +1,47 @@
+Wed Dec 25 00:30:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/parser.h:
+
+	Some very basic parser interface.  
+
+Wed Dec 25 00:18:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/syntree.h:
+
+	When syntree_node.name is NULL, it's a text.  
+
+Wed Dec 25 00:15:39 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: attrib.c, attrib.h:
+
+	Added get_attrib() function.  
+
+Wed Dec 25 00:10:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/: css/.cvsignore, css/.vimrc, dtd/.cvsignore,
+	dtd/.vimrc, html/.cvsignore, html/.vimrc:
+
+	Fairies following.  
+
+Wed Dec 25 00:09:06 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/attrib.h:
+
+	Add some basic attribute description.  
+
+Tue Dec 24 23:54:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/parser/syntree.h:
+
+	Added proposed definition of one syntax tree node.  
+
+Tue Dec 24 23:33:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: .cvsignore, .vimrc, parser/.cvsignore,
+	parser/.vimrc:
+
+	Added some fairies.  
+
 Tue Dec 24 13:38:56 2002  Jonas Fonseca <fonseca@diku.dk>:
 
 	* elinks.conf.5:

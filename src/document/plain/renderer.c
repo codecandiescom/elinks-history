@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.25 2003/11/16 01:23:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.26 2003/11/18 19:51:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 
 	if (!((void *)fr == &ce->frag || fr->offset || !fr->length)) {
 		source = fr->data;
-		length= fr->length;
+		length = fr->length;
 	}
 
 	if (ce->head) add_to_string(&head, ce->head);

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.13 2003/11/29 17:49:17 jonas Exp $ */
+/* $Id: error.c,v 1.14 2003/11/29 18:07:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,11 +137,8 @@ free_strerror_buf(void)
 	 / ((longlong) (progress)->loaded * 10 / (progress)->elapsed / 100) \
 	 * 1000)
 
-/* If the terminal is wide enough show full message */
-#define WIDE(term, thin, wide) _((term)->width < 80 ? thin : wide, term)
-
 unsigned char *
-get_stat_msg(struct download *stat, struct terminal *term)
+get_stat_msg(struct download *stat, struct terminal *term, int wide, int full)
 {
 	struct string msg;
 
@@ -166,7 +163,8 @@ get_stat_msg(struct download *stat, struct terminal *term)
 	add_to_string(&msg, ", ");
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-		add_to_string(&msg, WIDE(term, N_("avg"), N_("Average speed")));
+		add_to_string(&msg,
+			      _(wide ? N_("Average speed") : N_("avg"), term));
 	} else {
 		add_to_string(&msg, _("Speed", term));
 	}
@@ -177,13 +175,14 @@ get_stat_msg(struct download *stat, struct terminal *term)
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, ", ");
-		add_to_string(&msg, WIDE(term, N_("cur"), N_("current speed")));
+		add_to_string(&msg,
+			      _(wide ? N_("current speed") : N_("cur"), term));
 		add_char_to_string(&msg, ' '),
 		add_xnum_to_string(&msg, current_speed(stat->prg));
 		add_to_string(&msg, "/s");
 	}
 
-	if (term->width < 100) return msg.source;
+	if (!full) return msg.source;
 
 	/* Do the following only if there is room */
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.255 2003/11/29 16:58:25 jonas Exp $ */
+/* $Id: session.c,v 1.256 2003/11/29 18:07:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,8 +186,12 @@ print_screen_status(struct session *ses)
 					msg = print_current_link(ses);
 			}
 
-			if (!msg)
-				msg = get_stat_msg(stat, term);
+			if (!msg) {
+				int fullinfo = term->width > 100;
+				int wide = term->width > 80;
+
+				msg = get_stat_msg(stat, term, wide, fullinfo);
+			}
 		}
 
 		draw_area(term, 0, term->height - 1, term->width, 1, ' ', 0,

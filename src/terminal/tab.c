@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.61 2004/06/10 15:30:59 jonas Exp $ */
+/* $Id: tab.c,v 1.62 2004/06/10 16:05:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,21 +236,7 @@ close_all_tabs_but_current(struct session *ses)
 void
 open_uri_in_new_tab(struct session *ses, struct uri *uri, int in_background)
 {
-	struct window *tab;
-	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
-
-	assert(ses);
-
-	tab = init_tab(ses->tab->term, in_background);
-	if (!tab) return;
-
-	ev.b = (long) init_session_info(ses, 0, uri);
-	if (!ev.b) {
-		mem_free(tab);
-		return;
-	}
-
-	tab->handler(tab, &ev, 0);
+	init_session(ses->tab->term, ses, uri, in_background);
 }
 
 void

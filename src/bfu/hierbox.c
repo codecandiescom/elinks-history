@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.116 2003/11/27 14:17:05 jonas Exp $ */
+/* $Id: hierbox.c,v 1.117 2003/11/29 02:38:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 
 	box->ops->lock(context->item);
 
-	msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT,
+	msg_box(term, getml(context, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
 		N_("Info"), AL_LEFT,
 		msg,
 		context, 1,

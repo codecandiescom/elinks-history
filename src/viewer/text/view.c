@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.386 2004/04/04 02:44:21 jonas Exp $ */
+/* $Id: view.c,v 1.387 2004/04/04 02:50:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1059,6 +1059,7 @@ send_open_in_new_window(struct terminal *term,
 {
 	struct document_view *doc_view;
 	struct link *link;
+	unsigned char *url;
 
 	assert(term && open_window && ses);
 	if_assert_failed return;
@@ -1069,13 +1070,15 @@ send_open_in_new_window(struct terminal *term,
 	link = get_current_link(doc_view);
 	if (!link) return;
 
-	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = get_link_url(ses, doc_view, link);
-	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_string(). --pasky */
+	url = get_link_url(ses, doc_view, link);
+	/* FIXME: We can't do this because url isn't alloc'd by init_string(). --pasky */
 	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
-	if (ses->dn_url) {
-		unsigned char *enc_url = encode_shell_safe_url(ses->dn_url);
+	if (url) {
+		unsigned char *enc_url = encode_shell_safe_url(url);
 
+		/* TODO: Possibly preload the link URI so it will be ready when
+		 * the new ELinks instance requests it. --jonas */
+		mem_free(url);
 		open_window(term, path_to_exe, enc_url);
 		mem_free(enc_url);
 	}

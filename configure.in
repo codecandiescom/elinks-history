@@ -1022,6 +1022,8 @@ LIBDIR=`eval echo "$libdir"`
 AC_DEFINE_UNQUOTED(LIBDIR, "$LIBDIR", [Directory containing libraries])
 AC_SUBST(LIBDIR)
 
+EL_LOG_CONFIG(CONFDIR, [System configuration directory], [])
+EL_LOG_CONFIG(LOCALEDIR, [Locale catalogs directory], [])
 
 dnl ===================================================================
 dnl A little fine tuning of gcc specific options (continued)
@@ -1050,6 +1052,8 @@ if test "x$ac_cv_prog_gcc" = "xyes"; then
   esac
 fi
 
+EL_LOG_CONFIG(CFLAGS, [Compiler options (CFLAGS)], [])
+EL_LOG_CONFIG(LIBS, [Linker options (LIBS)], [])
 
 dnl ===================================================================
 dnl Generated files

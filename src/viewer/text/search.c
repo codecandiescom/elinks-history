@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.263 2004/08/09 06:19:46 miciah Exp $ */
+/* $Id: search.c,v 1.264 2004/08/09 07:00:35 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -706,8 +706,21 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 }
 
 
+enum find_error {
+	FIND_ERROR_NONE,
+	FIND_ERROR_NO_PREVIOUS_SEARCH,
+	FIND_ERROR_HIT_TOP,
+	FIND_ERROR_HIT_BOTTOM,
+	FIND_ERROR_NOT_FOUND,
+};
+
+static enum find_error find_next_do(struct session *ses,
+				    struct document_view *doc_view,
+				    int direction);
+
 static void
-search_for_do(struct session *ses, unsigned char *str, int direction)
+search_for_do(struct session *ses, unsigned char *str, int direction,
+	      int report_errors)
 {
 	struct document_view *doc_view;
 
@@ -731,7 +744,10 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	if (!ses->last_search_word) return;
 
 	ses->search_direction = direction;
-	find_next(ses, doc_view, 1);
+	if (report_errors)
+		find_next(ses, doc_view, 1);
+	else
+		find_next_do(ses, doc_view, 1);
 }
 
 static void
@@ -740,7 +756,7 @@ search_for_back(struct session *ses, unsigned char *str)
 	assert(ses && str);
 	if_assert_failed return;
 
-	search_for_do(ses, str, -1);
+	search_for_do(ses, str, -1, 1);
 }
 
 static void
@@ -749,7 +765,7 @@ search_for(struct session *ses, unsigned char *str)
 	assert(ses && str);
 	if_assert_failed return;
 
-	search_for_do(ses, str, 1);
+	search_for_do(ses, str, 1, 1);
 }
 
 
@@ -835,14 +851,6 @@ nt:
 
 	return 1;
 }
-
-enum find_error {
-	FIND_ERROR_NONE,
-	FIND_ERROR_NO_PREVIOUS_SEARCH,
-	FIND_ERROR_HIT_TOP,
-	FIND_ERROR_HIT_BOTTOM,
-	FIND_ERROR_NOT_FOUND,
-};
 
 static enum find_error
 find_next_do(struct session *ses, struct document_view *doc_view, int direction)
@@ -1204,7 +1212,7 @@ text_typeahead_handler(struct input_line *line, int action)
 				/* This ensures that search-typeahead-text
 				 * followed immediately with enter
 				 * clears the last search. */
-				search_for_do(ses, buffer, direction);
+				search_for_do(ses, buffer, direction, 0);
 			}
 			goto_current_link(ses, doc_view, 0);
 			return INPUT_LINE_CANCEL;
@@ -1218,7 +1226,7 @@ text_typeahead_handler(struct input_line *line, int action)
 			break;
 
 		default:
-			search_for_do(ses, buffer, direction);
+			search_for_do(ses, buffer, direction, action == -1);
 	}
 
 	draw_formatted(ses, 0);

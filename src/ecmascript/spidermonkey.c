@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.195 2005/02/20 22:45:05 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.196 2005/02/20 23:04:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "osdep/newwin.h"
 #include "protocol/http/http.h"
 #include "protocol/uri.h"
+#include "sched/history.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
@@ -1564,6 +1565,7 @@ document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rv
 
 static JSBool history_back(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 static JSBool history_forward(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool history_go(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
 
 static const JSClass history_class = {
 	"history",
@@ -1576,6 +1578,7 @@ static const JSClass history_class = {
 static const JSFunctionSpec history_funcs[] = {
 	{ "back",		history_back,		0 },
 	{ "forward",		history_forward,	0 },
+	{ "go",			history_go,		1 },
 	{ NULL }
 };
 
@@ -1599,6 +1602,34 @@ history_forward(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	struct session *ses = doc_view->session;
 
 	go_unback(ses);
+
+	return 2;
+}
+
+static JSBool
+history_go(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+	struct document_view *doc_view = interpreter->vs->doc_view;
+	struct session *ses = doc_view->session;
+	int index;
+	struct location *loc;
+
+	if (argc != 1)
+		return JS_TRUE;
+
+	index  = atol(jsval_to_string(ctx, &argv[0]));
+
+	for (loc = cur_loc(ses);
+	     loc != (struct location *) &ses->history.history;
+	     loc = index > 0 ? loc->next : loc->prev) {
+		if (!index) {
+			go_history(ses, loc);
+			break;
+		}
+
+		index += index > 0 ? -1 : 1;
+	}
 
 	return 2;
 }

@@ -28,10 +28,6 @@
 
 #include <sys/types.h>
 
-#ifdef __GNUC__
-#define alloca __builtin_alloca
-#define HAVE_ALLOCA 1
-#else
 #if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #else
@@ -43,14 +39,10 @@ char *alloca();
 #endif
 #endif
 #endif
-#endif
 
 #include <errno.h>
 #ifndef errno
 extern int errno;
-#endif
-#ifndef __set_errno
-#define __set_errno(val) errno = (val)
 #endif
 
 #include <stddef.h>
@@ -74,13 +66,8 @@ extern int errno;
 #include "util/string.h"
 
 /* Alignment of types.  */
-#if defined __GNUC__ && __GNUC__ >= 2
-#define alignof(TYPE) __alignof__ (TYPE)
-#else
 #define alignof(TYPE) \
     ((int) &((struct { char dummy1; TYPE dummy2; } *) 0)->dummy2)
-#endif
-
 
 /* Some compilers, like SunOS4 cc, don't have offsetof in <stddef.h>.  */
 #ifndef offsetof
@@ -94,7 +81,7 @@ extern int errno;
 /* Non-POSIX BSD systems might have gcc's limits.h, which doesn't define
    PATH_MAX but might cause redefinition warnings when sys/param.h is
    later included (as on MORE/BSD 4.3).  */
-#if defined _POSIX_VERSION || (defined HAVE_LIMITS_H && !defined __GNUC__)
+#if defined _POSIX_VERSION || defined HAVE_LIMITS_H
 #include <limits.h>
 #endif
 
@@ -171,7 +158,7 @@ struct known_translation_t {
 	size_t translation_length;
 
 	/* Pointer to the string in question.  */
-	char msgid[ZERO];
+	char msgid[1];
 };
 
 /* Root of the search tree with known translations.  We can use this
@@ -405,7 +392,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 			dirname = (char *) alloca(path_max + dirname_len);
 			ADD_BLOCK(block_list, dirname);
 
-			__set_errno(0);
+			errno = 0;
 			ret = getcwd(dirname, path_max);
 			if (ret != NULL || errno != ERANGE)
 				break;
@@ -418,7 +405,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 			/* We cannot get the current working directory.  Don't signal an
 			   error but simply return the default string.  */
 			FREE_BLOCKS(block_list);
-			__set_errno(saved_errno);
+			errno = saved_errno;
 			return (plural == 0 ? (char *) msgid1
 				/* Use the Germanic plural rule.  */
 				: n == 1 ? (char *) msgid1 : (char *) msgid2);
@@ -476,7 +463,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 		if (strcmp(single_locale, "C") == 0
 		    || strcmp(single_locale, "POSIX") == 0) {
 			FREE_BLOCKS(block_list);
-			__set_errno(saved_errno);
+			errno = saved_errno;
 			return (plural == 0 ? (char *) msgid1
 				/* Use the Germanic plural rule.  */
 				: n == 1 ? (char *) msgid1 : (char *) msgid2);
@@ -511,7 +498,7 @@ dcigettext__(const char *domainname, const char *msgid1, const char *msgid2,
 				/* Found the translation of MSGID1 in domain DOMAIN:
 				   starting at RETVAL, RETLEN bytes.  */
 				FREE_BLOCKS(block_list);
-				__set_errno(saved_errno);
+				errno = saved_errno;
 #if defined HAVE_TSEARCH
 				if (foundp == NULL) {
 					/* Create a new entry and add it to the search tree.  */
@@ -1019,42 +1006,3 @@ guess_category_value(int category, const char *categoryname)
 
 	return retval;
 }
-
-
-
-#if 0
-/* If we want to free all resources we have to do some work at
-   program's end.  */
-static void __attribute__ ((unused))
-free_mem(void)
-{
-	void *old;
-
-	while (_nl_domain_bindings__ != NULL) {
-		struct binding *oldp = _nl_domain_bindings__;
-
-		_nl_domain_bindings__ = _nl_domain_bindings__->next;
-		if (oldp->dirname != _nl_default_dirname__)
-			/* Yes, this is a pointer comparison.  */
-			free(oldp->dirname);
-		free(oldp->codeset);
-		free(oldp);
-	}
-
-	if (_nl_current_default_domain__ != _nl_default_default_domain__)
-		/* Yes, again a pointer comparison.  */
-		free((char *) _nl_current_default_domain__);
-
-	/* Remove the search tree with the known translations.  */
-	__tdestroy(root, free);
-	root = NULL;
-
-	while (transmem_list != NULL) {
-		old = transmem_list;
-		transmem_list = transmem_list->next;
-		free(old);
-	}
-}
-
-text_set_element(__libc_subfreeres, free_mem);
-#endif

@@ -30,10 +30,6 @@
 #include <stdio.h>
 #include <sys/types.h>
 
-#ifdef __GNUC__
-#define alloca __builtin_alloca
-#define HAVE_ALLOCA 1
-#else
 #if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #else
@@ -42,7 +38,6 @@
 #else
 #ifndef alloca
 char *alloca();
-#endif
 #endif
 #endif
 #endif
@@ -310,19 +305,6 @@ extend_alias_table()
 	maxmap = new_size;
 	return 0;
 }
-
-#if 0
-static void __attribute__ ((unused))
-free_mem(void)
-{
-	if (string_space != NULL)
-		free(string_space);
-	if (map != NULL)
-		free(map);
-}
-
-text_set_element(__libc_subfreeres, free_mem);
-#endif
 
 static int
 alias_compare(const struct alias_map *map1, const struct alias_map *map2)

@@ -34,17 +34,12 @@
 #define W(flag, data) ((flag) ? SWAP (data) : (data))
 #endif
 
-#if 0
-#include <byteswap.h>
-#define SWAP(i) bswap_32 (i)
-#else
 static inline nls_uint32 SWAP(i)
 nls_uint32 i;
 {
 	return (i << 24) | ((i & 0xff00) << 8) | ((i >> 8) & 0xff00) | (i >>
 									24);
 }
-#endif
 
 /* This is the representation of the expressions to determine the
    plural form.  */
@@ -107,14 +102,6 @@ struct loaded_domain {
 	unsigned long int nplurals;
 };
 
-/* We want to allocate a string at the end of the struct.  But ISO C
-   doesn't allow zero sized arrays.  */
-#ifdef __GNUC__
-#define ZERO 0
-#else
-#define ZERO 1
-#endif
-
 /* A set of settings bound to a message domain.  Used to store settings
    from bindtextdomain() and bind_textdomain_codeset().  */
 struct binding {
@@ -122,7 +109,7 @@ struct binding {
 	char *dirname;
 	int codeset_cntr;	/* Incremented each time codeset changes.  */
 	char *codeset;
-	char domainname[ZERO];
+	char domainname[1];
 };
 
 extern unsigned char *LANGUAGE;

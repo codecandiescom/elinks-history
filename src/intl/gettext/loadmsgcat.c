@@ -32,10 +32,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifdef __GNUC__
-#define alloca __builtin_alloca
-#define HAVE_ALLOCA 1
-#else
 #if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #else
@@ -44,7 +40,6 @@
 #else
 #ifndef alloca
 char *alloca();
-#endif
 #endif
 #endif
 #endif
@@ -101,34 +96,6 @@ char *alloca();
    cached by one of GCC's features.  */
 int _nl_msg_cat_cntr;
 
-#if (defined __GNUC__ && !defined __APPLE_CC__) \
-    || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L)
-
-/* These structs are the constant expression for the germanic plural
-   form determination.  It represents the expression  "n != 1".  */
-static const struct expression plvar = {
-	.nargs = 0,
-	.operation = var,
-};
-static const struct expression plone = {
-	.nargs = 0,
-	.operation = num,
-	.val = {
-		.num = 1}
-};
-static struct expression germanic_plural = {
-	.nargs = 2,
-	.operation = not_equal,
-	.val = {
-		.args = {
-			 [0] = (struct expression *) &plvar,
-			 [1] = (struct expression *) &plone}
-		}
-};
-
-#define INIT_GERMANIC_PLURAL()
-
-#else
 
 /* For compilers without support for ISO C 99 struct/union initializers:
    Initialization at run-time.  */
@@ -156,8 +123,6 @@ init_germanic_plural()
 }
 
 #define INIT_GERMANIC_PLURAL() init_germanic_plural ()
-
-#endif
 
 /* Initialize the codeset dependent parts of an opened message catalog.
    Return the header entry.  */

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2005/03/02 23:01:25 zas Exp $
+## $Id: Makefile.am,v 1.8 2005/03/23 15:26:08 zas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -105,7 +105,7 @@ check-po:
 	  cat=`basename $$cat`; \
 	  lang=`echo $$cat | sed 's/\.gmo$$//'`; \
 	  echo -n "$$lang: "; \
-	  $(GMSGFMT) --check --verbose --statistics -o /dev/null $$lang.po; \
+	  $(GMSGFMT) --check --check-accelerators=~ --verbose --statistics -o /dev/null $$lang.po; \
 	done
 
 ### (Un)installation and distribution

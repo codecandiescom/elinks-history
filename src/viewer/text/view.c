@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.195 2003/08/29 03:33:01 jonas Exp $ */
+/* $Id: view.c,v 1.196 2003/08/29 23:28:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,6 +208,8 @@ find_tag(struct document *f, unsigned char *name)
 static void
 draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 {
+	/* Optionalize? */
+	struct color_pair colors = INIT_COLOR_PAIR(0x000000, 0xCCCCCC);
 	register int y, j;
 
 	assert(t && fsd && fsd->f);
@@ -224,25 +226,28 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 
 			if (i) {
 				draw_area(t, x, y + 1, 1, wwy, BORDER_SVLINE,
-					  SCREEN_ATTR_FRAME, NULL);
+					  SCREEN_ATTR_FRAME, &colors);
 				if (j == fsd->y - 1)
-					draw_border_cross(t, x, y + wwy + 1, BORDER_X_UP);
+					draw_border_cross(t, x, y + wwy + 1,
+							  BORDER_X_UP, &colors);
 			} else if (j) {
 				if (x >= 0)
-					draw_border_cross(t, x, y, BORDER_X_RIGHT);
+					draw_border_cross(t, x, y,
+							  BORDER_X_RIGHT, &colors);
 			}
 
 			if (j) {
 				draw_area(t, x + 1, y, wwx, 1, BORDER_SHLINE,
-					  SCREEN_ATTR_FRAME, NULL);
+					  SCREEN_ATTR_FRAME, &colors);
 				if (i == fsd->x - 1 && x + wwx + 1 < t->x)
-					draw_border_cross(t, x + wwx + 1, y, BORDER_X_LEFT);
+					draw_border_cross(t, x + wwx + 1, y,
+							  BORDER_X_LEFT, &colors);
 			} else if (i) {
-				draw_border_cross(t, x, y, BORDER_X_DOWN);
+				draw_border_cross(t, x, y, BORDER_X_DOWN, &colors);
 			}
 
 			if (i && j)
-				draw_border_char(t, x, y, BORDER_SCROSS, NULL);
+				draw_border_char(t, x, y, BORDER_SCROSS, &colors);
 
 			x += wwx + 1;
 		}

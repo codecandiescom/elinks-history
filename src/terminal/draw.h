@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.24 2003/08/23 16:44:43 jonas Exp $ */
+/* $Id: draw.h,v 1.25 2003/08/29 23:28:31 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -67,7 +67,7 @@ struct screen_char *get_char(struct terminal *, int xpos, int ypos);
 
 /* Sets the color of a screen position. */
 void draw_char_color(struct terminal *term, int x, int y,
-	       struct color_pair *color);
+		     struct color_pair *color);
 
 /* Sets the data of a screen position. */
 void draw_char_data(struct terminal *term, int x, int y, unsigned char data);
@@ -78,7 +78,7 @@ void draw_border_char(struct terminal *term, int x, int y,
 
 /* Sets the cross position of two borders. */
 void draw_border_cross(struct terminal *, int x, int y,
-		       enum border_cross_direction);
+		       enum border_cross_direction, struct color_pair *color);
 
 /* Draws a char. */
 void draw_char(struct terminal *term, int x, int y,

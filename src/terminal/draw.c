@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.54 2003/08/29 03:33:01 jonas Exp $ */
+/* $Id: draw.c,v 1.55 2003/08/29 23:28:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,14 +25,14 @@
 
 void
 draw_border_cross(struct terminal *term, int x, int y,
-		 enum border_cross_direction dir)
+		  enum border_cross_direction dir, struct color_pair *color)
 {
 	static unsigned char border_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5},
 						   {0xc4, 0xc2, 0xc1, 0xc5}};
 	struct screen_char *screen_char;
 	unsigned int d;
 
-	assert(term && term->screen);
+	assert(term && term->screen && color);
 	if_assert_failed return;
 	check_range(term, x, y);
 
@@ -46,6 +46,8 @@ draw_border_cross(struct terminal *term, int x, int y,
 	} else if (screen_char->data == border_trans[d][2 - (dir & 1)]) {
 		screen_char->data = border_trans[d][3];
 	}
+
+	screen_char->color = mix_color_pair(color);
 }
 
 void
@@ -54,7 +56,7 @@ draw_border_char(struct terminal *term, int x, int y,
 {
 	int position;
 
-	assert(term && term->screen && term->screen->image);
+	assert(term && term->screen && term->screen->image && color);
 	if_assert_failed return;
 	check_range(term, x, y);
 

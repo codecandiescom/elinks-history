@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.12 2003/06/14 00:48:20 zas Exp $ */
+/* $Id: fastfind.c,v 1.13 2003/06/14 01:13:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,6 +387,9 @@ fastfind_search(unsigned char *key, int key_len, void *fastfind_info)
 	testinc();
 	if (key_len < info->min_key_len) return NULL;
 #else
+#define testinc()
+#define iterinc()
+#define foundinc()
 	if (!key || key_len > info->max_key_len || key_len < info->min_key_len)
 		return NULL;
 #endif

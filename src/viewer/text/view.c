@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.686 2005/03/31 10:24:18 zas Exp $ */
+/* $Id: view.c,v 1.687 2005/04/06 21:31:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1102,13 +1102,13 @@ static struct session *
 send_kbd_event(struct session *ses, struct document_view *doc_view,
 	       struct term_event *ev)
 {
-	int func_ref;
+	int event;
 	enum main_action action;
 
 	if (doc_view && send_to_frame(ses, doc_view, ev) != FRAME_EVENT_IGNORED)
 		return NULL;
 
-	action = kbd_action(KEYMAP_MAIN, ev, &func_ref);
+	action = kbd_action(KEYMAP_MAIN, ev, &event);
 
 	if (action == ACT_MAIN_QUIT) {
 		if (check_kbd_key(ev, KBD_CTRL_C))
@@ -1128,7 +1128,7 @@ quit:
 
 	if (action == ACT_MAIN_SCRIPTING_FUNCTION) {
 #ifdef CONFIG_SCRIPTING
-		trigger_event(func_ref, ses);
+		trigger_event(event, ses);
 #endif
 		return NULL;
 	}

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.111 2004/05/29 02:26:26 jonas Exp $ */
+/* $Id: form.c,v 1.112 2004/05/29 02:28:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,7 +357,6 @@ get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 	assert(doc_view && doc_view->document && fc && subm);
 	if_assert_failed return;
 
-	init_list(*subm);
 	foreach (frm, doc_view->document->forms) {
 		if (frm->form_num == fc->form_num
 		    && ((frm->type != FC_SUBMIT &&
@@ -742,7 +741,7 @@ struct uri *
 get_form_uri(struct session *ses, struct document_view *doc_view,
 	     struct form_control *frm)
 {
-	struct list_head submit;
+	INIT_LIST_HEAD(submit);
 	struct string data;
 	struct string go;
 	unsigned char bound[BL];

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.80 2003/04/29 08:33:00 zas Exp $ */
+/* $Id: ftp.c,v 1.81 2003/04/30 22:17:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,9 +149,12 @@ again:
 	for (pos = 0; pos < rb->len; pos++) {
 		if (rb->data[pos] == 10) {
 			unsigned char *num_end;
-			int response = strtoul(rb->data, (char **) &num_end, 10);
-
-			if (num_end != rb->data + 3 || response < 100)
+			int response;
+			
+			errno = 0;
+			response = strtoul(rb->data, (char **) &num_end, 10);
+			
+			if (errno || num_end != rb->data + 3 || response < 100)
 				return -1;
 
 			if (sa && response == 227) { /* PASV response parsing. */

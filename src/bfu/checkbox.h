@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.22 2003/11/05 20:18:33 jonas Exp $ */
+/* $Id: checkbox.h,v 1.23 2003/11/06 16:43:45 jonas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -18,7 +18,7 @@
 		(dlg)->widgets_size++;					\
 	} while (0)
 
- #define add_dlg_radio(dlg, text_, groupid, groupnum, data_)		\
+#define add_dlg_radio(dlg, text_, groupid, groupnum, data_)		\
 	do {								\
 		int n = (dlg)->widgets_size;				\
 		(dlg)->widgets[n].type = WIDGET_CHECKBOX;		\

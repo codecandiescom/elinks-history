@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.19 2003/07/26 00:06:34 jonas Exp $ */
+/* $Id: screen.c,v 1.20 2003/07/26 00:12:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 
 /* Adds the term code for positioning the cursor at @x and @y to @string.
  * The template term code is: "\033[<@y>;<@x>H" */
-static struct string *
+static inline struct string *
 add_cursor_move_to_string(struct string *screen, int y, int x)
 {
 	/* 28 chars for both of the @y and @x numbers should be enough. */

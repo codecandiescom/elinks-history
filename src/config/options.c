@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.181 2003/01/07 23:20:32 pasky Exp $ */
+/* $Id: options.c,v 1.182 2003/01/16 10:06:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -614,7 +614,7 @@ printhelp_descend(struct option *tree, unsigned char *path,
 	indent[indentation] = '\0';
 
 	foreach (option, *((struct list_head *) tree->ptr)) {
-		unsigned char *desc = gettext(option->desc);
+		unsigned char *desc = option->desc && *option->desc ? gettext(option->desc) : "";
 
 		/* Don't print autocreated options and deprecated aliases */
 		if (option->flags == OPT_AUTOCREATE ||
@@ -634,7 +634,7 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			add_to_strn(&newpath, option->name);
 
 			if (option->capt)
-				description = gettext(option->capt);
+				description = *option->capt ? gettext(option->capt) : "";
 			else
 				description = desc;
 
@@ -686,22 +686,32 @@ printhelp_descend(struct option *tree, unsigned char *path,
 			} else {
 				/* Column width between '-' & caption start. */
 				spaces = CMDLINE_WIDTH;
-				printf(" %s", gettext(option_types[option->type].help_str));
+				if (*option_types[option->type].help_str)
+					printf(" %s", gettext(option_types[option->type].help_str));
+				else
+					printf(" ");
 			}
 			/* Find spaces to print between option to caption */
 			spaces -= strlen(option->name);
-			spaces -= strlen(gettext(option_types[option->type].help_str));
+			if (*option_types[option->type].help_str)
+				spaces -= strlen(gettext(option_types[option->type].help_str));
 
 			if (spaces < 1) spaces = 1; /* Minimum one space */
 			while (spaces-- > 0) printf(" ");
 
-			printf("%s\n", gettext(option->capt));
+			if (*option->capt)
+				printf("%s\n", gettext(option->capt));
+			else
+				printf("\n");
 
 		} else if (desc) {
 			int l = strlen(desc);
 			int i;
 
-			printf(" %s", gettext(option_types[option->type].help_str));
+			if (*option_types[option->type].help_str)
+				printf(" %s", gettext(option_types[option->type].help_str));
+			else
+				printf(" ");
 
 			if (option->type == OPT_INT
 				|| option->type == OPT_BOOL
@@ -991,7 +1001,7 @@ register_options()
 		N_("Save cookies after each change in cookies list? No effect when\n"
 		"cookies_save is off."));
 
-	
+
 
 	add_opt_tree("", N_("Document"),
 		"document", 0,

@@ -2,7 +2,7 @@
 # Fabrice Haberer-Proust <fric@gmx.li>
 # Laurent Monin <zas@norz.org>, 2001 - 2002
 #
-msgid "_this_is_a_workaround_\n"
+msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-01-09 14:48+0100\n"

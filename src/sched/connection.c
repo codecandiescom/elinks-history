@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.214 2005/02/28 15:34:26 zas Exp $ */
+/* $Id: connection.c,v 1.215 2005/03/02 18:00:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -831,7 +831,8 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			assertm(assigned != download, "Download assigned to '%s'", struri(conn->uri));
 			if_assert_failed {
 				download->state = S_INTERNAL;
-				if (download->callback) download->callback(download, download->data);
+				if (download->callback)
+					download->callback(download, download->data);
 				return 0;
 			}
 			/* No recovery path should be necessary. */
@@ -957,7 +958,8 @@ change_connection(struct download *old, struct download *new,
 			new->cached = old->cached;
 			new->state = old->state;
 			new->prev_error = old->prev_error;
-			if (new->callback) new->callback(new, new->data);
+			if (new->callback)
+				new->callback(new, new->data);
 		}
 		return;
 	}

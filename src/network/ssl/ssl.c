@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.25 2003/07/21 22:31:13 jonas Exp $ */
+/* $Id: ssl.c,v 1.26 2003/09/29 20:45:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,23 @@ SSL_CTX *context = NULL;
 #elif defined(HAVE_GNUTLS)
 GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred = NULL;
 GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred = NULL;
+
+const static int protocol_priority[16] = {
+	GNUTLS_TLS1, GNUTLS_SSL3, 0
+};
+const static int kx_priority[16] = {
+	GNUTLS_KX_RSA, GNUTLS_KX_DHE_DSS, GNUTLS_KX_DHE_RSA, GNUTLS_KX_SRP,
+	/* Do not use anonymous authentication, unless you know what that means */
+	GNUTLS_KX_ANON_DH, GNUTLS_KX_RSA_EXPORT, 0
+};
+const static int cipher_priority[16] = {
+	GNUTLS_CIPHER_ARCFOUR_128, GNUTLS_CIPHER_RIJNDAEL_128_CBC,
+	GNUTLS_CIPHER_3DES_CBC, GNUTLS_CIPHER_ARCFOUR_40, 0
+};
+const static int comp_priority[16] = { GNUTLS_COMP_ZLIB, GNUTLS_COMP_NULL, 0 };
+const static int mac_priority[16] = { GNUTLS_MAC_SHA, GNUTLS_MAC_MD5, 0 };
+const static int cert_type_priority[16] = { GNUTLS_CRT_X509, GNUTLS_CRT_OPENPGP, 0 };
+
 #endif
 #endif
 
@@ -142,6 +159,15 @@ get_ssl(void)
 		mem_free(state);
 		return NULL;
 	}
+
+	gnutls_handshake_set_private_extensions(*state, 1);
+	gnutls_cipher_set_priority(*state, cipher_priority);
+        gnutls_compression_set_priority(*state, comp_priority);
+        gnutls_kx_set_priority(*state, kx_priority);
+        gnutls_protocol_set_priority(*state, protocol_priority);
+        gnutls_mac_set_priority(*state, mac_priority);
+        gnutls_certificate_type_set_priority(*state, cert_type_priority);
+        gnutls_set_server_name(*state, GNUTLS_NAME_DNS, "localhost", strlen("localhost"));
 
 	return state;
 #endif

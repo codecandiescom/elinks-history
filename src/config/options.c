@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.39 2002/06/01 18:46:41 pasky Exp $ */
+/* $Id: options.c,v 1.40 2002/06/07 17:03:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -755,6 +755,11 @@ register_options()
 	add_opt_ptr("ui",
 		"language", 0, OPT_LANGUAGE, &current_language,
 		"Language of user interface.");
+
+	add_opt_bool("ui",
+		"window_title", 0, 1,
+		"Whether ELinks window title should be touched if ELinks is\n"
+		"being ran in some windowing environment.");
 
 
 

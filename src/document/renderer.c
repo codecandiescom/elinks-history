@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.101 2004/09/28 12:49:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.102 2004/09/28 13:30:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,14 +65,14 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
 		while (iterator != (struct string_list_item *) queued_snippets) {
-			assert(!strlcmp(iterator->string.source,
-			                iterator->string.length,
-			                doc_current->string.source,
-			                doc_current->string.length));
 			if (doc_current == (struct string_list_item *) doc_snippets) {
 				INTERNAL("add_snippets(): doc_snippets shorter than queued_snippets!");
 				return;
 			}
+			assert(!strlcmp(iterator->string.source,
+			                iterator->string.length,
+			                doc_current->string.source,
+			                doc_current->string.length));
 
 			doc_current = doc_current->next;
 			iterator = iterator->next;

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.10 2002/06/17 07:42:31 pasky Exp $ */
+/* $Id: kbd.c,v 1.11 2002/09/16 12:57:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,12 @@
 #include <termios.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+#ifdef __hpux__
+#include <limits.h>
+#define HPUX_PIPE	(len > PIPE_BUF || errno != EAGAIN)
+#else
+#define HPUX_PIPE	1
 #endif
 
 #include "links.h"
@@ -106,7 +112,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 
 	if (!itrm->eqlen && can_write(itrm->sock_out)) {
 		w = write(itrm->sock_out, data, len);
-		if (w <= 0) {
+		if (w <= 0 && HPUX_PIPE) {
 			/* free_trm(itrm); */
 			register_bottom_half((void (*)(void *))free_trm, itrm);
 			return;

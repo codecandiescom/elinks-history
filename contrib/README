@@ -24,8 +24,4 @@ Files not listed here have description included in their header.
 	patch for $VIMRUNTIME/filetype.vim so that elinks.conf is properly
 	detected and the elinks syntax is associated to it.
 
-* hpux-pipe.diff - Stephane Chazelas <Stephane_Chazelas@Yahoo.fr>
-	Fix for arcane (appears to me that everything under HPUX is somewhat
-	arcane ;) handling of pipes in HPUX
-
-$Id: README,v 1.9 2002/09/12 17:55:59 pasky Exp $
+$Id: README,v 1.10 2002/09/16 12:57:32 pasky Exp $

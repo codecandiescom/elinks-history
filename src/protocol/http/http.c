@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.366 2004/11/19 12:17:10 witekfl Exp $ */
+/* $Id: http.c,v 1.367 2004/11/19 17:08:47 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1459,7 +1459,7 @@ again:
 			}
 #endif
 			mem_free(d);
-			d = parse_header(str, "WWW-Authenticate", &str);
+			d = parse_header(str, "Proxy-Authenticate", &str);
 		}
 	}
 	kill_buffer_data(rb, a);

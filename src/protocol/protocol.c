@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.13 2003/06/26 23:49:00 jonas Exp $ */
+/* $Id: protocol.c,v 1.14 2003/06/27 00:01:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,31 +83,27 @@ static struct protocol_backend lua_protocol_backend = {
 
 
 enum protocol
-check_protocol(unsigned char *p, int l)
+check_protocol(unsigned char *name, int namelen)
 {
-	int i;
+	int protocol;
 
 	/* First check if this isn't some custom (protocol.user) protocol. It
 	 * has higher precedence than builtin handlers. */
-	/* FIXME: We have to get some terminal to pass along or else this is
-	 *	  pretty useless. */
-	p[l] = 0;
-	if (get_prog(NULL, p)) {
-		p[l] = ':';
-		/* XXX: We rely on the fact that custom is at the top of the
-		 * protocols table. */
+	/* TODO: In order to fully give higher precedence to user chosen
+	 *	 protocols we have to get some terminal to pass along. */
+	name[namelen] = 0;
+	if (get_prog(NULL, name)) {
+		name[namelen] = ':';
 		return PROTOCOL_USER;
 	}
 
-	for (i = 0; i < PROTOCOL_UNKNOWN; i++) {
-		if (strcasecmp(protocol_backends[i]->name, p))
-			continue;
-		p[l] = ':';
-		return i;
-	}
+	/* Abuse that we iterate until protocol is PROTOCOL_UNKNOWN */
+	for (protocol = 0; protocol < PROTOCOL_UNKNOWN; protocol++)
+		if (!strcasecmp(protocol_backends[protocol]->name, name))
+			break;
 
-	p[l] = ':';
-	return PROTOCOL_UNKNOWN;
+	name[namelen] = ':';
+	return protocol;
 }
 
 

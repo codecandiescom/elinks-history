@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.93 2004/12/18 00:06:32 miciah Exp $ */
+/* $Id: globhist.c,v 1.94 2004/12/18 00:18:33 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -213,6 +213,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	}
 
 	history_item = init_global_history_item(url, title, vtime);
+	if (!history_item) return;
 
 	add_to_history_list(&global_history, history_item);
 

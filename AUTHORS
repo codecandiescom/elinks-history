@@ -109,6 +109,7 @@ Felix von Leitner <felix@convergence.de>
 Flemming Frandsen <ff@partyticket.net>
 	Random hacking
 	accesskey,tabindex support
+	Referred as 'ff' or 'FF' in the code
 
 Gianluca Montecchi <gianluca@pluto.linux.it>
 	Italian translation
@@ -250,6 +251,7 @@ Stephane Chazelas <stephane.chazelas@free.fr>
 	Cookies fixes
 	HTTP Date parsing rewrite
 	Random hacking
+	Referred as 'sc' or 'SC' in the code
 
 Suveg Gabor <gsuveg@sgmobil2000.hu>
 	Hungarian translation
@@ -275,5 +277,6 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Updated French translation
 	Bookmarks hacking
 	Misc minor improvements
+	Referred as 'Zas' or 'zas' in the code
 
-$Id: AUTHORS,v 1.40 2002/03/18 21:03:12 pasky Exp $
+$Id: AUTHORS,v 1.41 2002/03/19 17:52:36 pasky Exp $

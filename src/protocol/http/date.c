@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.4 2002/03/19 15:03:16 pasky Exp $ */
+/* $Id: date.c,v 1.5 2002/03/19 17:52:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,6 +130,71 @@ static int parse_time(const char *date, struct tm *tm) {
 }
 
 
+time_t my_timegm(struct tm tm) {
+	time_t t = 0;
+	
+	/* Okay, the next part of the code is somewhat problematic. Now, we use
+	 * own code for calculating the number of seconds from 1.1.1970,
+	 * brought here by SC from w3m. I don't like it a lot, but it's 100%
+	 * portable, it's faster and it's shorter. */
+#if 0
+#ifdef HAVE_TIMEGM
+	t = timegm(&tm);
+#else
+	/* Since mktime thinks we have localtime, we need a wrapper
+	 * to handle GMT. */
+	/* FIXME: It was reported that it doesn't work somewhere :/. */
+	{
+		char *tz = getenv("TZ");
+
+		if (tz && *tz) {
+			/* Temporary disable timezone in-place. */
+			char tmp = *tz;
+
+			*tz = '\0';
+			tzset();
+
+			t = mktime(&tm);
+
+			*tz = tmp;
+			tzset();
+
+		} else {
+			/* Already GMT, cool! */
+			t = mktime(&tm);
+		}
+	}
+#endif
+#else
+	/* Following code was borrowed from w3m, and its developers probably
+	 * borrowed it from somewhere else as well, altough they didn't bother
+	 * to mention that. */
+	/* Yes, I've no idea about what this does as well. But it should work
+	 * (tm). --pasky */
+	tm.tm_mon -= 2;
+	if (tm.tm_mon < 0) {
+		tm.tm_mon += 12;
+		tm.tm_year--;
+	}
+	tm.tm_mon *= 153; tm.tm_mon += 2;
+	tm.tm_year -= 68;
+	
+	tm.tm_mday += tm.tm_year * 1461 / 4;
+	tm.tm_mday += ((tm.tm_mon / 5) - 672);
+	
+	t = ((tm.tm_mday * 60 * 60 * 24) +
+	     (tm.tm_hour * 60 * 60) +
+	     (tm.tm_min * 60) +
+	     tm.tm_sec);
+#endif
+
+	if (t == (time_t) -1)
+		return 0;
+	else
+		return t;
+}
+
+
 time_t parse_http_date(const char *date)
 {
 #define skip_time_sep() \
@@ -137,7 +202,6 @@ time_t parse_http_date(const char *date)
 	while ((c = *date) == ' ' || c == '-') date++;
 		
 	struct tm tm;
-	time_t t = 0;
 	char c;
 
 	if (!date)
@@ -215,39 +279,7 @@ time_t parse_http_date(const char *date)
 		tm.tm_year = parse_year(&date);
 		if (tm.tm_year < 0) return 0;
 	}
-
-#ifdef HAVE_TIMEGM
-	t = timegm(&tm);
-#else
-	/* Since mktime thinks we have localtime, we need a wrapper
-	 * to handle GMT. */
-	/* FIXME: It was reported that it doesn't work somewhere :/. */
-	{
-		char *tz = getenv("TZ");
-
-		if (tz && *tz) {
-			/* Temporary disable timezone in-place. */
-			char tmp = *tz;
-
-			*tz = '\0';
-			tzset();
-
-			t = mktime(&tm);
-
-			*tz = tmp;
-			tzset();
-
-		} else {
-			/* Already GMT, cool! */
-			t = mktime(&tm);
-		}
-	}
-#endif
-
-	if (t == (time_t) -1)
-		return 0;
-	else
-		return t;
-
 #undef skip_time_sep
+
+	return my_timegm(tm);
 }

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.6 2002/12/11 20:44:48 pasky Exp $ */
+/* $Id: xbel.c,v 1.7 2002/12/11 22:09:57 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -27,6 +27,7 @@
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/backend/common.h"
 #include "bookmarks/backend/xbel.h"
+#include "intl/charsets.h"
 #include "util/conv.h"
 #include "util/lists.h"
 #include "util/string.h"
@@ -186,10 +187,26 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 				 || (x) == '{' || (x) == '%' \
 				 || (x) == '+')
 
+	static int cp = 0;
+	
+	if (!cp) get_cp_index("us-ascii");
+
 	for (; *str; str++) {
 		if (accept_char(*str))
 			secure_fprintf(ssi, "%c", *str);
-		else secure_fprintf(ssi, "&#%i;", (int) *str); /* FIXME */
+		else {
+			if (isascii(*str)) {
+				secure_fprintf(ssi, "&#%i;", (int) *str);
+			}
+			else {	
+				char *tmp;
+				int len;
+
+				tmp = u2cp(*str, cp);
+				len = strlen(tmp);
+				print_xml_entities(ssi, tmp);
+			}
+		}	
 	}
 
 #undef accept_char
@@ -372,10 +389,9 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 			title = get_child(node, "title");
 
-			/* Folder with an empty <title> element */
-			if (!title->text) title->text = stracpy("No title");
-				
-			tmp = add_bookmark(current_parent, 0, title->text, "");
+			tmp = add_bookmark(current_parent, 0,
+					   title ? title->text : (unsigned char *) "No title",
+					   "");
 
 			/* Out of memory */
 			if (!tmp) return 0;

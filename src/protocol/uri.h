@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.137 2004/08/01 20:40:04 pasky Exp $ */
+/* $Id: uri.h,v 1.138 2004/08/01 20:43:53 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -126,7 +126,8 @@ enum uri_component {
 	URI_RARE		= URI_SPECIAL | URI_POST | URI_POST_INFO | URI_IDN,
 
 	/* Used for public display either in dialogs or sent over the Net */
-	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE) | URI_POST_INFO,
+	/* FIXME: URI_POST_INFO must not be ever sent over the net. --pasky */
+	URI_PUBLIC		= ~(URI_PASSWORD | URI_RARE) /*| URI_POST_INFO*/,
 
 	/* Used for getting the original URI with no internal post encoding */
 	URI_ORIGINAL		= ~URI_RARE,

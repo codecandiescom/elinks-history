@@ -318,9 +318,9 @@ void file_func(struct connection *c)
 				mem_free(n);
 			}
 			add_to_str(&file, &fl, "\">");
-			/*if (dir[i].s[0] == 'd') add_to_str(&file, &fl, "<font color=\"yellow\">");*/
+			if (color_dirs && dir[i].s[0] == 'd') add_to_str(&file, &fl, "<font color=\"yellow\">");
 			add_to_str(&file, &fl, dir[i].f);
-			/*if (dir[i].s[0] == 'd') add_to_str(&file, &fl, "</font>");*/
+			if (color_dirs && dir[i].s[0] == 'd') add_to_str(&file, &fl, "</font>");
 			add_to_str(&file, &fl, "</a>");
 			if (lnk) {
 				add_to_str(&file, &fl, " -> ");

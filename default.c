@@ -902,6 +902,8 @@ struct rgb default_bg = { 0, 0, 0 };
 struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
 
+int color_dirs = 1;
+
 int default_left_margin = HTML_LEFT_MARGIN;
 
 unsigned char http_proxy[MAX_STR_LEN] = "";
@@ -959,6 +961,11 @@ struct option links_options[] = {
 	 	"Run this links in separate session - instances of links with\n"
        		"same base-session will connect together and share runtime\n"
 		"informations. By default, base-session is 0." },
+
+	{	"color-dirs", "color_dirs",
+	       	gen_cmd, num_rd, NULL,
+		0, 1, &color_dirs,
+		"Highlight directories when listing local disk content." },
 	 
 	{	"download-dir", "download_dir",
 		gen_cmd, str_rd, str_wr,

@@ -2019,6 +2019,8 @@ extern struct rgb default_bg;
 extern struct rgb default_link;
 extern struct rgb default_vlink;
 
+extern int color_dirs;
+
 #define REFERER_NONE 0
 #define REFERER_SAME_URL 1
 #define REFERER_FAKE 2

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.280 2004/08/15 07:15:33 miciah Exp $ */
+/* $Id: search.c,v 1.281 2004/08/15 07:32:50 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1269,7 +1269,6 @@ text_typeahead_handler(struct input_line *line, int action)
 					    % (opt->max + 1);
 			opt->flags |= OPT_TOUCHED;
 		}
-		report_errors = 1;
 		/* Fall thru */
 
 		default:

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.31 2004/01/20 17:49:41 jonas Exp $ */
+/* $Id: parser.c,v 1.32 2004/01/21 04:03:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,18 +23,14 @@
 
 
 void
-css_parse_properties(struct list_head *props, unsigned char *string)
+css_parse_properties(struct list_head *props, struct css_scanner *scanner)
 {
-	struct css_scanner scanner;
+	assert(props && scanner);
 
-	assert(props && string);
-
-	init_css_scanner(&scanner, string);
-
-	while (css_scanner_has_tokens(&scanner)) {
+	while (css_scanner_has_tokens(scanner)) {
 		struct css_property_info *property_info = NULL;
 		struct css_property *prop;
-		struct css_token *token = get_css_token(&scanner);
+		struct css_token *token = get_css_token(scanner);
 		int i;
 
 		if (!token || token->type == '}') break;
@@ -42,8 +38,8 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		/* Extract property name. */
 
 		if (token->type != CSS_TOKEN_IDENT
-		    || !check_next_css_token(&scanner, ':')) {
-			skip_css_tokens(&scanner, ';');
+		    || !check_next_css_token(scanner, ':')) {
+			skip_css_tokens(scanner, ';');
 			continue;
 		}
 
@@ -57,8 +53,8 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		}
 
 		/* Skip property name and separator and check for expression */
-		if (!skip_css_tokens(&scanner, ':')) {
-			assert(!css_scanner_has_tokens(&scanner));
+		if (!skip_css_tokens(scanner, ':')) {
+			assert(!css_scanner_has_tokens(scanner));
 			break;
 		}
 
@@ -75,7 +71,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		}
 		prop->type = property_info->type;
 		prop->value_type = property_info->value_type;
-		if (!css_parse_value(property_info, &prop->value, &scanner)) {
+		if (!css_parse_value(property_info, &prop->value, scanner)) {
 			mem_free(prop);
 			goto ride_on;
 		}
@@ -84,7 +80,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		/* Maybe we have something else to go yet? */
 
 ride_on:
-		skip_css_tokens(&scanner, ';');
+		skip_css_tokens(scanner, ';');
 	}
 }
 
@@ -158,10 +154,7 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	skip_css_tokens(scanner, '{');
 
-	token = get_css_token(scanner);
-	assert(token);
-
-	css_parse_properties(&selector->properties, token->string);
+	css_parse_properties(&selector->properties, scanner);
 
 	skip_css_tokens(scanner, '}');
 }

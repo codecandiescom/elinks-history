@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.39 2004/01/19 19:19:41 jonas Exp $ */
+/* $Id: apply.c,v 1.40 2004/01/21 04:03:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "document/css/apply.h"
 #include "document/css/parser.h"
 #include "document/css/property.h"
+#include "document/css/scanner.h"
 #include "document/html/parser.h"
 #include "document/options.h"
 #include "util/color.h"
@@ -88,7 +89,10 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 
 	code = get_attr_val(element->options, "style");
 	if (code) {
-		css_parse_properties(&props, code);
+		struct css_scanner scanner;
+
+		init_css_scanner(&scanner, code);
+		css_parse_properties(&props, &scanner);
 		mem_free(code);
 
 	} else {

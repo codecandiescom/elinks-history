@@ -1,9 +1,10 @@
-/* $Id: parser.h,v 1.8 2004/01/19 19:01:42 jonas Exp $ */
+/* $Id: parser.h,v 1.9 2004/01/21 04:03:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
 
 #include "util/lists.h"
+struct css_scanner;
 
 /* This is interface for the value parser. It is intended to be used only
  * internally inside of the CSS engine. */
@@ -13,7 +14,7 @@
  * css_property}es to the specified list. The function returns positive value
  * in case it recognized a property in the given string, or zero in case of an
  * error. */
-void css_parse_properties(struct list_head *props, unsigned char *string);
+void css_parse_properties(struct list_head *props, struct css_scanner *scanner);
 
 
 /* For now we only handle really ``flat'' stylesheets. No complicated

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.11 2003/07/21 18:00:51 pasky Exp $ */
+/* $Id: form.c,v 1.12 2003/07/21 18:01:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -874,7 +874,7 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 						strlen(fs->value + fs->state));
 				break;
 			case ACT_KILL_TO_BOL:
-				if (!frm->ro && fs->state) {
+				if (!frm->ro && fs->state > 0) {
 					unsigned char *prev;
 
 					/* TODO: Make this memrchr(), and
@@ -887,7 +887,6 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 						;
 
 					if (prev > fs->value
-					    && fs->state
 					    && fs->value[fs->state - 1]
 						    != ASCII_LF)
 						prev++;

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.77 2003/01/16 21:56:16 pasky Exp $ */
+/* $Id: main.c,v 1.78 2003/04/14 15:05:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,7 +254,7 @@ static unsigned char **av;
 static int init_b = 0;
 
 
-static void
+void
 init()
 {
 	int uh;

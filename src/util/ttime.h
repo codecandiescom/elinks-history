@@ -1,4 +1,4 @@
-/* $Id: ttime.h,v 1.2 2002/09/01 11:57:05 pasky Exp $ */
+/* $Id: ttime.h,v 1.3 2003/04/14 15:05:47 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TTIME_H
 #define EL__LOWLEVEL_TTIME_H
@@ -22,6 +22,8 @@
 #endif
 #endif
 
+/* WARNING: may cause overflows since ttime holds values 1000 times
+ * bigger than usual time_t */
 typedef time_t ttime;
 
 ttime get_time();

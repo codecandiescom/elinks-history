@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.38 2003/06/18 12:10:23 zas Exp $ */
+/* $Id: interlink.c,v 1.39 2003/06/18 18:39:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,8 @@ get_address(void)
 	struct sockaddr_un *addr = NULL;
 	unsigned char *path;
 	int pathl = 0;
+	int sun_path_freespace;
+	int sun_size;
 
 	if (!elinks_home) return -1;
 
@@ -111,16 +113,37 @@ get_address(void)
 	 * UNIX_PATH_MAX is not defined on all systems, so we'll use sizeof().
 	 */
 
-	if (pathl >= sizeof(addr->sun_path)) {
+	/* Following code may need to be changed if at some time the
+	 * struct sockaddr_un mess is fixed. For now, i tried to make it
+	 * sure and portable.
+	 *
+	 * Extract from glibc documentation:
+	 * char sun_path[108]
+	 * This is the file name to use.
+	 * Incomplete: Why is 108 a magic number?
+	 * RMS suggests making this a zero-length array and tweaking the example
+	 * following to use alloca to allocate an appropriate amount of storage
+	 * based on the length of the filename.
+	 *
+	 * But at this day (2003/06/18) it seems there's no implementation of such
+	 * thing.
+	 * If it was the case, then following code will always generate an error.
+	 * --Zas
+	 */
+
+	sun_path_freespace = sizeof(addr->sun_path) - (pathl + 1);
+	if (sun_path_freespace < 0) {
 		internal("Socket path name '%s' is too long: %d >= %d",
 			 path, pathl, sizeof(addr->sun_path));
 		goto free_and_error;
 	}
 
-	addr = mem_calloc(1, sizeof(struct sockaddr_un));
+	/* We allocate only needed space. --Zas */
+	sun_size = sizeof(struct sockaddr_un) - sun_path_freespace;
+	addr = mem_calloc(1, sun_size);
 	if (!addr) goto free_and_error;
 
-	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un));
+	s_unix_accept = mem_alloc(sun_size);
 	if (!s_unix_accept) goto free_and_error;
 
 	memcpy(addr->sun_path, path, pathl); /* ending '\0' is done by calloc() */
@@ -129,7 +152,12 @@ get_address(void)
 	addr->sun_family = AF_UNIX;
 
 	s_unix = (struct sockaddr *) addr;
-	s_unix_l = SUN_LEN(addr);
+	/* The size of the address is the offset of the start of the filename,
+	 * plus its length, plus one for the terminating null byte (well, this
+	 * last byte may or not be needed it depends of....).
+	 * Alternatively we can use SUN_LEN() macro but this one is not always
+	 * defined nor always defined in the same way. --Zas */
+	s_unix_l = sun_size;
 
 	return AF_UNIX;
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.53 2004/09/29 17:02:43 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.54 2004/09/29 23:25:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -473,6 +473,7 @@ static const JSClass document_class = {
 
 enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL };
 static const JSPropertySpec document_props[] = {
+	{ "location",	JSP_DOC_URL,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "title",	JSP_DOC_TITLE,	JSPROP_ENUMERATE }, /* TODO: Charset? */
 	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE | JSPROP_READONLY },

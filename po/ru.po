@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 01:40+0200\n"
+"POT-Creation-Date: 2003-06-08 12:23+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry M. Klimov <dmk@gtrk.kmtn.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"

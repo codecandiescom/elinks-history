@@ -828,7 +828,7 @@ AC_OUTPUT([ \
  doc/man/man1/elinks.1 \
  doc/man/man5/Makefile \
  intl/Makefile \
- po/Makefile.in \
+ po/Makefile \
  src/Makefile \
  src/bfu/Makefile \
  src/bookmarks/Makefile \

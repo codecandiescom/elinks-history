@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.195 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: dialog.c,v 1.196 2005/03/05 20:14:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -447,7 +447,7 @@ update_dialog_data(struct dialog_data *dlg_data)
 t_handler_event_status
 ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	t_done_handler *done = widget_data->widget->info.button.done;
+	done_handler_T *done = widget_data->widget->info.button.done;
 	void *done_data = widget_data->widget->info.button.done_data;
 
 	if (check_dialog(dlg_data)) return EVENT_NOT_PROCESSED;

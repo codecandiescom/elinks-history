@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.83 2005/03/02 13:22:38 zas Exp $ */
+/* $Id: button.c,v 1.84 2005/03/05 20:14:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@
 void
 add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 		  t_widget_handler *handler, void *data,
-		  t_done_handler *done, void *done_data)
+		  done_handler_T *done, void *done_data)
 {
 	struct widget *widget = &dlg->widgets[dlg->number_of_widgets++];
 

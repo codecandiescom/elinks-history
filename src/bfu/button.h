@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.35 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: button.h,v 1.36 2005/03/05 20:14:24 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -10,13 +10,13 @@ struct dialog;
 struct terminal;
 struct widget_data;
 
-typedef void (t_done_handler)(void *);
+typedef void (done_handler_T)(void *);
 
 struct widget_info_button {
 	int flags;
 	/* Used by some default handlers like ok_dialog()
 	 * as a callback. */
-	t_done_handler *done;
+	done_handler_T *done;
 	void *done_data;
 };
 
@@ -24,7 +24,7 @@ struct widget_info_button {
 #define B_ENTER		1
 #define B_ESC		2
 
-void add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags, t_widget_handler *handler, void *data, t_done_handler *done, void *done_data);
+void add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags, t_widget_handler *handler, void *data, done_handler_T *done, void *done_data);
 
 #define add_dlg_ok_button(dlg, text, flags, done, data)	\
 	add_dlg_button_do(dlg, text, flags, ok_dialog, NULL, done, data)

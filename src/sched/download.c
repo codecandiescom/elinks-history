@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.349 2005/03/02 18:00:27 zas Exp $ */
+/* $Id: download.c,v 1.350 2005/03/05 20:14:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1001,7 +1001,7 @@ check_tp_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	struct widget *selected_widget = selected_widget_data->widget;
 
 	if (selected_widget->type != WIDGET_BUTTON
-	    || selected_widget->info.button.done != (t_done_handler *) tp_open)
+	    || selected_widget->info.button.done != (done_handler_T *) tp_open)
 		return EVENT_PROCESSED;
 
 	return check_nonempty(dlg_data, widget_data);
@@ -1109,20 +1109,20 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 
 	if (!get_cmd_opt_bool("anonymous") || handler) {
 		add_dlg_ok_button(dlg, _("Open", term), B_ENTER,
-				  (t_done_handler *) tp_open, type_query);
+				  (done_handler_T *) tp_open, type_query);
 	} else {
 		widgets--;
 	}
 
 	if (!get_cmd_opt_bool("anonymous")) {
 		add_dlg_ok_button(dlg, _("Save", term), B_ENTER,
-				  (t_done_handler *) tp_save, type_query);
+				  (done_handler_T *) tp_save, type_query);
 	} else {
 		widgets--;
 	}
 
 	add_dlg_ok_button(dlg, _("Display", term), B_ENTER,
-			  (t_done_handler *) tp_display, type_query);
+			  (done_handler_T *) tp_display, type_query);
 
 	if (type_query->cached && type_query->cached->head) {
 		add_dlg_button(dlg, _("Show header", term), B_ENTER,
@@ -1132,7 +1132,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	}
 
 	add_dlg_ok_button(dlg, _("Cancel", term), B_ESC,
-			  (t_done_handler *) tp_cancel, type_query);
+			  (done_handler_T *) tp_cancel, type_query);
 
 	add_dlg_end(dlg, widgets);
 

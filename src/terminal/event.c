@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.71 2004/07/28 10:43:37 jonas Exp $ */
+/* $Id: event.c,v 1.72 2004/07/28 12:24:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,14 +214,15 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 	case EVENT_KBD:
 	{
 		int utf8_io = -1;
+		int key = get_kbd_key(ev);
 
 		reset_timer();
 
-		if (check_kbd_modifier(ev, KBD_CTRL) && toupper(ev->x) == 'L') {
+		if (check_kbd_modifier(ev, KBD_CTRL) && toupper(key) == 'L') {
 			redraw_terminal_cls(term);
 			break;
 
-		} else if (ev->x == KBD_CTRL_C) {
+		} else if (key == KBD_CTRL_C) {
 			destroy_terminal(term);
 			return 0;
 		}
@@ -229,10 +230,9 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 		if (interlink->utf_8.len) {
 			utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
 
-			if ((ev->x & 0xC0) == 0x80
-			    && utf8_io) {
+			if ((key & 0xC0) == 0x80 && utf8_io) {
 				interlink->utf_8.ucs <<= 6;
-				interlink->utf_8.ucs |= ev->x & 0x3F;
+				interlink->utf_8.ucs |= key & 0x3F;
 				if (! --interlink->utf_8.len) {
 					unicode_val u = interlink->utf_8.ucs;
 
@@ -248,7 +248,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			}
 		}
 
-		if (ev->x < 0x80 || ev->x > 0xFF
+		if (key < 0x80 || key > 0xFF
 		    || (utf8_io == -1
 			? !get_opt_bool_tree(term->spec, "utf_8_io")
 			: !utf8_io)) {
@@ -256,18 +256,18 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 			term_send_event(term, ev);
 			break;
 
-		} else if ((ev->x & 0xC0) == 0xC0
-			   && (ev->x & 0xFE) != 0xFE) {
+		} else if ((key & 0xC0) == 0xC0 && (key & 0xFE) != 0xFE) {
 			unsigned int mask, cov = 0x80;
 			int len = 0;
 
-			for (mask = 0x80; ev->x & mask; mask >>= 1) {
+			for (mask = 0x80; key & mask; mask >>= 1) {
 				len++;
 				interlink->utf_8.min = cov;
 				cov = 1 << (1 + 5 * len);
 			}
+
 			interlink->utf_8.len = len - 1;
-			interlink->utf_8.ucs = ev->x & (mask - 1);
+			interlink->utf_8.ucs = key & (mask - 1);
 			break;
 		}
 

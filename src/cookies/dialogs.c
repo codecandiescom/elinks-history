@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.68 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.69 2004/07/14 20:04:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,11 +139,11 @@ delete_cookie(struct listbox_item *item, int last)
 	struct cookie *cookie = item->udata;
 
 	if (item->type == BI_FOLDER) {
-		struct listbox_item *from, *root = item;
+		struct listbox_item *next, *root = item;
 
 		/* Releasing refcounts on the cookie_server will automagically
 		 * delete it. */
-		foreachsafe (item, from, root->child)
+		foreachsafe (item, next, root->child)
 			delete_cookie(item, 0);
 	} else {
 		assert(!is_object_used(cookie));

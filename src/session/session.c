@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.214 2003/11/11 21:47:51 zas Exp $ */
+/* $Id: session.c,v 1.215 2003/11/11 21:57:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -591,7 +591,7 @@ post_yes(struct task *task)
 static void
 post_no(struct task *task)
 {
-	reload(task->ses, CACHE_MODE_DEFAULT);
+	reload(task->ses, CACHE_MODE_NORMAL);
 }
 
 void
@@ -731,14 +731,14 @@ do_move(struct session *ses, struct download **stat)
 					    : NULL;
 
 			ses_goto(ses, u, ses->task_target_frame, NULL,
-				 PRI_MAIN, CACHE_MODE_DEFAULT, task,
+				 PRI_MAIN, CACHE_MODE_NORMAL, task,
 				 gp, end_load, 1);
 			if (gp) mem_free(gp);
 			return 2;
 			}
 		case TASK_HISTORY:
 			ses_goto(ses, u, NULL, ses->task_target_location,
-				 PRI_MAIN, CACHE_MODE_DEFAULT, TASK_RELOAD,
+				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
 		case TASK_RELOAD:
@@ -763,7 +763,7 @@ b:
 		case TASK_FORWARD:
 			if (ses_chktype(ses, stat, ce)) {
 				free_task(ses);
-				reload(ses, CACHE_MODE_DEFAULT);
+				reload(ses, CACHE_MODE_NORMAL);
 				return 2;
 			}
 			break;
@@ -970,7 +970,7 @@ end_load(struct download *stat, struct session *ses)
 
 	if (stat->state < 0 && stat->state != S_OK) {
 		print_error_dialog(ses, stat);
-		if (d == 0) reload(ses, CACHE_MODE_DEFAULT);
+		if (d == 0) reload(ses, CACHE_MODE_NORMAL);
 	}
 
 end:
@@ -1080,7 +1080,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 	if (ses_chktype(ftl->ses, stat, ftl->ce)) {
 #if 0
 		free_wtd(ftl->ses);
-		reload(ses, CACHE_MODE_DEFAULT);
+		reload(ses, CACHE_MODE_NORMAL);
 #endif
 		return;
 	}
@@ -1167,7 +1167,7 @@ process_file_requests(struct session *ses)
 				referer = doc_view->document->url;
 
 			load_url(ftl->url, referer,
-				 &ftl->stat, ftl->pri, CACHE_MODE_DEFAULT, -1);
+				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
 			more = 1;
 		}
 	}
@@ -1578,13 +1578,13 @@ void
 goto_url_frame(struct session *ses, unsigned char *url,
 	       unsigned char *target)
 {
-	goto_url_w(ses, url, target, TASK_FORWARD, CACHE_MODE_DEFAULT);
+	goto_url_w(ses, url, target, TASK_FORWARD, CACHE_MODE_NORMAL);
 }
 
 void
 goto_url(struct session *ses, unsigned char *url)
 {
-	goto_url_w(ses, url, NULL, TASK_FORWARD, CACHE_MODE_DEFAULT);
+	goto_url_w(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL);
 }
 
 void
@@ -1616,7 +1616,7 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 	ses->imgmap_href_base = href;
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 	ses->imgmap_target_base = target;
-	goto_url_w(ses, url, target, TASK_IMGMAP, CACHE_MODE_DEFAULT);
+	goto_url_w(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL);
 }
 
 struct frame *

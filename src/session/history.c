@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.51 2003/11/11 21:47:51 zas Exp $ */
+/* $Id: history.c,v 1.52 2003/11/11 21:57:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,12 +109,12 @@ go_history(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
 
-	ses->reloadlevel = CACHE_MODE_DEFAULT;
+	ses->reloadlevel = CACHE_MODE_NORMAL;
 
 	if (ses->task) {
 		abort_loading(ses, 0);
 		print_screen_status(ses);
-		reload(ses, CACHE_MODE_DEFAULT);
+		reload(ses, CACHE_MODE_NORMAL);
 		return;
 	}
 

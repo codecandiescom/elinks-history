@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.294 2004/06/29 13:06:59 jonas Exp $ */
+/* $Id: tables.c,v 1.295 2004/06/29 13:09:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -771,23 +771,23 @@ static inline void
 draw_table_cell(struct table *table, int col, int row, int x, int y)
 {
 	struct table_cell *cell = CELL(table, col, row);
-	int xw = 0;
-	int yw = 0;
+	int width = 0;
+	int height = 0;
 	int s;
 	struct html_element *state;
 
 	if (!cell->start) return;
 
 	for (s = 0; s < cell->colspan; s++) {
-		xw += table->cols_widths[col + s] +
-		      (s < cell->colspan - 1 &&
-		       has_vline_width(table, col + s + 1));
+		width += table->cols_widths[col + s] +
+			(s < cell->colspan - 1 &&
+			 has_vline_width(table, col + s + 1));
 	}
 
 	for (s = 0; s < cell->rowspan; s++) {
-		yw += table->rows_heights[row + s] +
-		      (s < cell->rowspan - 1 &&
-		       get_hline_width(table, row + s + 1) >= 0);
+		height += table->rows_heights[row + s] +
+			(s < cell->rowspan - 1 &&
+			 get_hline_width(table, row + s + 1) >= 0);
 	}
 
 	if (global_doc_opts && global_doc_opts->table_expand_cols) {
@@ -796,7 +796,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		 * (/.) while other will look very ugly
 		 * and broken. */
 		par_format.bgcolor = table->bgcolor;
-		for (s = y; s < y + yw; s++) {
+		for (s = y; s < y + height; s++) {
 			expand_lines(table->part, s);
 			expand_line(table->part, s, x - 1);
 		}
@@ -815,11 +815,11 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		int tmpy = y;
 
 		if (cell->valign == VALIGN_MIDDLE)
-			tmpy += (yw - cell->height)>>1;
+			tmpy += (height - cell->height) / 2;
 		else if (cell->valign == VALIGN_BOTTOM)
-			tmpy += (yw - cell->height);
+			tmpy += (height - cell->height);
 
-	   	part = format_cell(table, col, row, document, x, tmpy, xw);
+	   	part = format_cell(table, col, row, document, x, tmpy, width);
 		if (part) {
 			int yt;
 

@@ -1,4 +1,4 @@
-/* $Id: os_depx.h,v 1.5 2003/04/17 07:44:44 zas Exp $ */
+/* $Id: os_depx.h,v 1.6 2003/10/05 12:37:37 pasky Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -27,10 +27,11 @@
 #define htons(x) (x)
 #endif*/
 
-#ifndef HAVE_CFMAKERAW
+/* We define own cfmakeraw() wrapper because cfmakeraw() is broken on AIX,
+ * thus we fix it right away. We can also emulate cfmakeraw() if it is not
+ * available at all. Face it, we are just cool. */
 #include <termios.h>
-void cfmakeraw(struct termios *t);
-#endif
+void elinks_cfmakeraw(struct termios *t);
 
 #ifdef BEOS
 #define socket be_socket

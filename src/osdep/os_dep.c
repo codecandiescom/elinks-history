@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.87 2003/09/28 00:13:17 zas Exp $ */
+/* $Id: os_dep.c,v 1.88 2003/10/05 12:37:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1586,10 +1586,15 @@ get_input_handle(void)
 #endif /* defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD) */
 
 
-#ifndef HAVE_CFMAKERAW
 void
-cfmakeraw(struct termios *t)
+elinks_cfmakeraw(struct termios *t)
 {
+#ifdef HAVE_CFMAKERAW
+	cfmakeraw(t);
+#ifdef VMIN
+	t->c_cc[VMIN] = 1; /* cfmakeraw() is broken on AIX --mikulas */
+#endif
+#else
 	t->c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL|IXON);
 	t->c_oflag &= ~OPOST;
 	t->c_lflag &= ~(ECHO|ECHONL|ICANON|ISIG|IEXTEN);
@@ -1597,8 +1602,8 @@ cfmakeraw(struct termios *t)
 	t->c_cflag |= CS8;
 	t->c_cc[VMIN] = 1;
 	t->c_cc[VTIME] = 0;
-}
 #endif
+}
 
 #if defined(USE_GPM) && defined(USE_MOUSE)
 

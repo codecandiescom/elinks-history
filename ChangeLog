@@ -1,3 +1,379 @@
+Fri Apr 23 22:05:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/cmdline.c, sched/session.h:
+
+	Remove -ping and only provide -remote 'ping()'.  
+
+Fri Apr 23 22:04:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Check element type by relational operators now, so that ELEMENT_WEAK
+	is considered as ELEMENT_KILLABLE in various considerations. This
+	should fix the <head><title>moo</head>.  
+
+Fri Apr 23 22:01:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser.h:
+
+	_The_ definitive fix for any and all <title> problems which could
+	ever occur. Removed the weak'n'hackish <title /> workaround, instead
+	ELEMENT_WEAK element type was introduced with the special property
+	that any attempt to put new element inside will terminate the
+	element (<title>foo<body> will do the right thing), even for
+	invisible elements where we do not normally permit other elements to
+	nest. <head> also owns own dummy stack level so that
+	<head><title>foo</head> does the right thing as well. You can't get
+	any better than *that* ;).  
+
+Fri Apr 23 20:44:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, bfu/button.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/group.c, bfu/inpfield.c, bfu/inphist.c, bfu/listbox.c,
+	bfu/listmenu.c, bfu/menu.c, bfu/text.c, bfu/widget.c,
+	bookmarks/backend/default.c, config/kbdbind.c, config/opttypes.c,
+	dialogs/download.c, dialogs/menu.c, dialogs/options.c,
+	dialogs/status.c, document/refresh.c, document/css/scanner.c,
+	document/css/value.c, document/html/frames.c,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, document/plain/renderer.c,
+	osdep/getifaddrs.c, protocol/auth/auth.c, protocol/http/http.c,
+	sched/event.c, sched/session.c, terminal/draw.c, terminal/screen.h,
+	util/math.h, util/scanner.c, util/snprintf.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c, viewer/text/vs.c:
+
+	#include util/math.h back in elinks.h. Its whole *point* was to be
+	around and available everytime. Besides, it includes a system
+	header.  
+
+Fri Apr 23 20:39:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/math.h:
+
+	Blank lines.  
+
+Fri Apr 23 20:30:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Fixed usrerror() mindtwist, I forgot to derive @params first :).
+	Noticed by Jonas.  
+
+Fri Apr 23 19:42:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Trivial decode_session_info() tidyup.  
+
+Fri Apr 23 19:38:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Exclaim appropriate messages when create_session_info() or
+	attach_terminal() failed.  
+
+Fri Apr 23 19:37:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Report -ping outcome to stderr.  
+
+Fri Apr 23 19:32:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Try to honour the 80 chars boundary where it makes sense.  
+
+Fri Apr 23 19:30:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	_parse_options() -> parse_options_() 
+
+Fri Apr 23 19:30:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Cleaned up _parse_options() - reduced level of indentation and
+	moving error handling.  
+
+Fri Apr 23 19:26:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, bookmarks/backend/xbel.c, config/cmdline.c,
+	intl/gettext/libintl.h, lowlevel/home.c, lowlevel/interlink.c,
+	lowlevel/select.c, mime/backend/mailcap.c, terminal/kbd.c,
+	viewer/dump/dump.c:
+
+	Introduced convenience G_() -> gettext() alias for use in
+	multi-level printing statements when we don't have a terminal
+	around.  
+
+Fri Apr 23 19:20:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/backend/xbel.c, config/cmdline.c,
+	lowlevel/home.c, mime/backend/mailcap.c, scripting/lua/core.c,
+	terminal/event.c, util/error.c, util/error.h, viewer/dump/dump.c:
+
+	Introduced usrerror() which acts for ERROR() in the cases where user
+	can trigger the error. It doesn't sleep, it doesn't beep and it
+	doesn't contain information about where in the source the error
+	occured, which could be quite confusing for the user (and she
+	doesn't care anyway).  
+
+Fri Apr 23 18:57:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	add_uri_filename_to_string(): Use get_filename_position(). I rule!
+	;P 
+
+Fri Apr 23 18:44:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: util/file.c, util/file.h, viewer/text/form.c:
+
+	Move strip_file_name() and rename to get_filename_position(). ;) 
+
+Fri Apr 23 18:40:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	strip_file_name(): Cleanup.  
+
+Fri Apr 23 18:23:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, dngettext.c, explodename.c, finddomain.c,
+	gettext.c, intl-compat.c, l10nflist.c, loadmsgcat.c,
+	localcharset.c, localealias.c, ngettext.c, textdomain.c:
+
+	Fix wrong inclusion of header. We want "config.h" not <config.h>.  
+
+Fri Apr 23 18:04:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	add_uri_filename_to_string(): Use parse_http_header_param().  
+
+Fri Apr 23 16:42:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Improve Content-Disposition handling by trimming any following
+	fields.  
+
+Fri Apr 23 16:29:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	add_uri_filename_to_string(): Use strstr() to find 'filename='
+	substring.  
+
+Fri Apr 23 15:52:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/perl/core.c:
+
+	Generic tidyup and some more includes.  
+
+Fri Apr 23 15:51:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/perl/core.h:
+
+	Remove some strange irrelevant includes.  
+
+Fri Apr 23 15:45:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memdebug.c:
+
+	Ensure the main pointer is aligned (otherwise we go nuts on some
+	archs) and put the XFLOW underflow mark to the alloc_header aligned
+	reserved space.  
+
+Fri Apr 23 15:28:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/libgnuintl.h:
+
+	Compile fix.  
+
+Fri Apr 23 15:11:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/libgnuintl.h:
+
+	#define _LIBINTL_H to avoid including system <libintl.h>. Last patch
+	will hopefully still fix issue with including <locale.h> in main.c 
+
+Fri Apr 23 15:08:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/libgnuintl.h:
+
+	Standardize header file include guard.  
+
+Fri Apr 23 15:02:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/libgnuintl.h:
+
+	Since libgnuintl.h is not included directly simplify LC_MESSAGE
+	#define.  
+
+Fri Apr 23 14:25:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/getifaddrs.c:
+
+	More SunOS compile fixes. #include <sys/socket.h> and <sys/types.h>
+	before <net/if.h>.  
+
+Fri Apr 23 14:20:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	I''n psaky./ O"m fxiing ytops.  
+
+Fri Apr 23 14:19:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.h:
+
+	Me pasky. I be fixed error grammars.  
+
+Fri Apr 23 14:11:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, finddomain.c, gettext.c, intl-compat.c,
+	ngettext.c, textdomain.c:
+
+	Always include own libintl.h instead of own libgnuintl.h. Fixes
+	building on sparc when the include magic will make system
+	<libintl.h> include our own libintl.h instead.  
+
+Fri Apr 23 13:55:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ssl/connect.c:
+
+	Cast @sock to (gnutls_transport_ptr) type, as indicated in recent
+	gnutls documentation.  
+
+Fri Apr 23 13:48:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/file.c:
+
+	Trivial file_exists() tidyup.  
+
+Fri Apr 23 13:47:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: scripting/lua/core.c, util/file.c, util/file.h:
+
+	Introduced file_can_read() similiar in spirit to file_exists(). Use
+	that instead of the hyperweird Lua5 Debianish bugfix using fopen()
+	(while assimiliating that for fallback unless HAVE_ACCESS).  
+
+Fri Apr 23 13:21:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, protocol/uri.c:
+
+	Use int type instead of size_t, preventing warnings on some
+	platforms.  
+
+Fri Apr 23 12:29:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, vernum.c, vernum.h, modules/version.c:
+
+	Introduce vernum.* which contains currently build date/time
+	information. It is rebuilt everytime to ensure we have the latest
+	data for this. In the future I'd like to invent some CVS trigger
+	which also keeps the latest commit date/time there (which is
+	somewhat more useful and accurate than just build time info).  
+
+Fri Apr 23 12:27:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/version.c:
+
+	Simplify the condition for inclusion of the build date/time and make
+	explicit that it is date/time of the build.  
+
+Fri Apr 23 11:44:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/file.h:
+
+	Restored a removed newline. Evil zas! 
+
+Fri Apr 23 11:39:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	SOME PEOPLE here should be taught the alphabet properly (moved
+	-no-numbering, -config-help, -localhost to their proper place).  
+	CCMAIL: pasky@ucw.cz CCMAIL: zas@norz.org 
+
+Fri Apr 23 11:36:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Further weeding out and slight tuning of the items, plus reordering.  
+
+Fri Apr 23 11:31:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Adjust some items and weed out some (IMHO) too unimportant ones.  
+
+Fri Apr 23 11:23:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/action.c:
+
+	Unrolled ACT_MAIN_TAB_MOVE* handling.  
+
+Fri Apr 23 11:22:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/action.c:
+
+	Reverted Jonas' 1.56 (Group similar action handler calling using a
+	magic variable.). We agreed that it's not so clever as it might
+	seem...  
+
+Fri Apr 23 10:28:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, download.c, session.c, task.c:
+
+	More is_in_progress_state() usage.  
+
+Fri Apr 23 08:41:56 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Apr 22 23:56:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	doc_end_load(): Yay digging into the cvsweb archive showed that a
+	little too clever cleanup broke -auto-submit handling. Readd the
+	first form grabbing and improve error handling if get_form_url()
+	fails.  
+
+Thu Apr 22 23:50:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Pointing out brokeness of -auto-submit handling.  
+
+Thu Apr 22 22:51:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	add_uri_filename_to_string(): Strip extracted filename of any
+	directories so only the clean filename is added. Fallback to old
+	filename resolving if whole extracted filename is stripped.  
+
+Thu Apr 22 22:37:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	add_uri_filename_to_string(): It is only used by query_file() and
+	do_type_query() dialog functions for local saving so add naive
+	support for Content-Disposition by checking the associated
+	cache_entry's header. I hope add_shell_safe* will make up for any
+	security issues.  
+
 Thu Apr 22 22:09:14 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

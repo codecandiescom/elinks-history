@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.99 2004/05/23 14:15:43 jonas Exp $ */
+/* $Id: uri.h,v 1.100 2004/05/25 03:45:40 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -24,7 +24,7 @@ struct string;
 
 struct uri {
 	/* The start of the uri (and thus start of the protocol string). */
-	unsigned char *protocol_str;
+	unsigned char *string;
 
 	/* The internal type of protocol. Can _never_ be PROTOCOL_UNKNOWN. */
 	int protocol; /* enum protocol */
@@ -78,7 +78,7 @@ enum uri_errno parse_uri(struct uri *uri, unsigned char *uristring);
 /* Returns the raw zero-terminated URI string the (struct uri) is associated
  * with. Thus, chances are high that it is the original URI received, not any
  * cheap reconstruction. */
-#define struri(uri) ((uri)->protocol_str)
+#define struri(uri) ((uri)->string)
 
 /* Check if two URIs are equal */
 #define uris_compare(uri1, uri2) ((uri1) == (uri2))

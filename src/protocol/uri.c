@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.198 2004/05/24 00:52:36 jonas Exp $ */
+/* $Id: uri.c,v 1.199 2004/05/25 03:45:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if_assert_failed return 0;
 	if (!*uristring) return URI_ERRNO_EMPTY;
 
-	uri->protocol_str = uristring;
+	uri->string = uristring;
 	uri->protocollen = get_protocol_length(uristring);
 
 	/* Invalid */
@@ -256,7 +256,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #define wants(x) (components & (x))
 
  	if (wants(URI_PROTOCOL)) {
-		add_bytes_to_string(string, uri->protocol_str, uri->protocollen);
+		add_bytes_to_string(string, uri->string, uri->protocollen);
 		add_char_to_string(string, ':');
  		if (get_protocol_need_slashes(uri->protocol))
 			add_to_string(string, "//");
@@ -396,7 +396,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 		 * get_translated_uri() through translate_url() calls this
 		 * function and then it already works on and modifies an
 		 * allocated copy. */
-		convert_to_lowercase(uri->protocol_str, uri->protocollen);
+		convert_to_lowercase(uri->string, uri->protocollen);
 		if (uri->hostlen) convert_to_lowercase(uri->host, uri->hostlen);
 
 		parse = 1;
@@ -1016,7 +1016,7 @@ check_uri_sanity(struct uri *uri)
 	int pos;
 
 	for (pos = 0; pos < uri->protocollen; pos++)
-		if (isupper(uri->protocol_str[pos])) goto error;
+		if (isupper(uri->string[pos])) goto error;
 
 	if (uri->hostlen)
 		for (pos = 0; pos < uri->hostlen; pos++)

@@ -879,7 +879,7 @@ msgstr ""
 
 #: src/config/dialogs.c:67
 msgid "Write config success"
-msgstr "Pomy¶lny zapis do pliku konfiguracyjnego "
+msgstr "Zapisano konfiguracjê"
 
 #: src/config/dialogs.c:68
 #, c-format
@@ -1287,7 +1287,7 @@ msgstr "Przeformatuj bie¿±c± stronê"
 
 #: src/config/kbdbind.c:518
 msgid "Reset form items to their initial values"
-msgstr "Ustaw elementy formularza na pocz±tkowe warto¶ci"
+msgstr "Ustaw elementy formularza na ich pocz±tkowe warto¶ci"
 
 #: src/config/kbdbind.c:519
 msgid "Show information about the currently used resources"
@@ -1495,7 +1495,7 @@ msgstr "Pod¶wietl pozycjê"
 
 #: src/config/kbdbind.c:608
 msgid "Select current highlighted item"
-msgstr "Wybierz biê¿±co pod¶wietlon± pozycjê"
+msgstr "Wybierz bie¿±co pod¶wietlon± pozycjê"
 
 #: src/config/kbdbind.c:609
 msgid "Collapse item"

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.13 2002/12/29 17:36:52 pasky Exp $ */
+/* $Id: parser.c,v 1.14 2002/12/29 17:40:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,117 +336,26 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	return 0;
 }
 
-/* This eats tag value, if there is any. It also adds the attribute to the
- * syntax tree node. */
-/* TODO: Parse entities inside of the attribute values! --pasky */
+/* This skips sequence of whitespaces inside of a tag. */
 static int
-tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
-{
-	struct html_parser_state *pstate = state->data;
-	unsigned char *html = *str;
-	int html_len = *len;
-	unsigned char quoted = 0;
-	unsigned char *attr; int attr_len;
-
-	if (WHITECHAR(*html)) {
-		pstate = html_state_push(state, HPT_TAG_WHITE);
-		return 0;
-	}
-
-	if (*html == '>') {
-		/* Shortcut. */
-		pstate = html_state_pop(state);
-	}
-	if (*html != '=') {
-		attrib_add(state,
-			pstate->data.attr.attrname, pstate->data.attr.attrlen,
-			html, 0);
-		pstate = html_state_pop(state);
-		return 0;
-	}
-
-	html++, html_len--; /* = */
-	if (!html_len) return -1;
-
-	if (*html == '"' || *html == '\'') {
-		quoted = *html;
-		html++, html_len--;
-	}
-
-	attr = html, attr_len = html_len;
-
-	while (html_len) {
-		if ((!WHITECHAR(*html) && *html != '>')
-		    || (quoted && *html != quoted)) {
-			html++, html_len--;
-			continue;
-		}
-
-		attrib_add(state,
-			pstate->data.attr.attrname, pstate->data.attr.attrlen,
-			attr, attr_len - html_len);
-
-		if (quoted)
-			html++, html_len--;
-
-		*str = html, *len = html_len;
-		return 0;
-	}
-
-	return -1;
-}
-
-/* This eats tag attributes names. */
-static int
-tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
+tag_white_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
 	unsigned char *html = *str;
 	int html_len = *len;
 
-	if (WHITECHAR(*html)) {
-		pstate = html_state_push(state, HPT_TAG_WHITE);
-		return 0;
-	}
-
-	if (*html == '>') {
-		pstate = html_state_pop(state);
-		return 0;
-	}
-
 	while (html_len) {
-		if (isA(*html)) {
+		if (WHITECHAR(*html)) {
 			html++, html_len--;
 			continue;
 		}
 
-		if (*len - html_len) {
-			int name_len = *len - html_len;
-
-			pstate->data.attr.attrname = *str;
-			pstate->data.attr.attrlen = name_len;
-			pstate = html_state_push(state, HPT_TAG_ATTR_VAL);
-			pstate->data.attr.attrname = *str;
-			pstate->data.attr.attrlen = name_len;
-			if (WHITECHAR(*html))
-				pstate = html_state_push(state, HPT_TAG_WHITE);
-
-		} else {
-			if (*html == '/') {
-				/* The tag isn't paired. */
-				/* FIXME: We should match this only at the end
-				 * of the tag, I think. --pasky */
-				if (state->root == state->current)
-					state->root = state->current->root;
-			}
-			/* TODO: State switch or while() here. --pasky */
-			html++, html_len--;
-		}
-
+		pstate = html_state_pop(state);
 		*str = html, *len = html_len;
 		return 0;
 	}
 
+	*str = html, *len = html_len;
 	return -1;
 }
 
@@ -528,26 +437,117 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 	return -1;
 }
 
-/* This skips sequence of whitespaces inside of a tag. */
+/* This eats tag attributes names. */
 static int
-tag_white_parse(struct parser_state *state, unsigned char **str, int *len)
+tag_attr_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
 	unsigned char *html = *str;
 	int html_len = *len;
 
+	if (WHITECHAR(*html)) {
+		pstate = html_state_push(state, HPT_TAG_WHITE);
+		return 0;
+	}
+
+	if (*html == '>') {
+		pstate = html_state_pop(state);
+		return 0;
+	}
+
 	while (html_len) {
-		if (WHITECHAR(*html)) {
+		if (isA(*html)) {
 			html++, html_len--;
 			continue;
 		}
 
-		pstate = html_state_pop(state);
+		if (*len - html_len) {
+			int name_len = *len - html_len;
+
+			pstate->data.attr.attrname = *str;
+			pstate->data.attr.attrlen = name_len;
+			pstate = html_state_push(state, HPT_TAG_ATTR_VAL);
+			pstate->data.attr.attrname = *str;
+			pstate->data.attr.attrlen = name_len;
+			if (WHITECHAR(*html))
+				pstate = html_state_push(state, HPT_TAG_WHITE);
+
+		} else {
+			if (*html == '/') {
+				/* The tag isn't paired. */
+				/* FIXME: We should match this only at the end
+				 * of the tag, I think. --pasky */
+				if (state->root == state->current)
+					state->root = state->current->root;
+			}
+			/* TODO: State switch or while() here. --pasky */
+			html++, html_len--;
+		}
+
 		*str = html, *len = html_len;
 		return 0;
 	}
 
-	*str = html, *len = html_len;
+	return -1;
+}
+
+/* This eats tag value, if there is any. It also adds the attribute to the
+ * syntax tree node. */
+/* TODO: Parse entities inside of the attribute values! --pasky */
+static int
+tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+	unsigned char quoted = 0;
+	unsigned char *attr; int attr_len;
+
+	if (WHITECHAR(*html)) {
+		pstate = html_state_push(state, HPT_TAG_WHITE);
+		return 0;
+	}
+
+	if (*html == '>') {
+		/* Shortcut. */
+		pstate = html_state_pop(state);
+	}
+	if (*html != '=') {
+		attrib_add(state,
+			pstate->data.attr.attrname, pstate->data.attr.attrlen,
+			html, 0);
+		pstate = html_state_pop(state);
+		return 0;
+	}
+
+	html++, html_len--; /* = */
+	if (!html_len) return -1;
+
+	if (*html == '"' || *html == '\'') {
+		quoted = *html;
+		html++, html_len--;
+	}
+
+	attr = html, attr_len = html_len;
+
+	while (html_len) {
+		if ((!WHITECHAR(*html) && *html != '>')
+		    || (quoted && *html != quoted)) {
+			html++, html_len--;
+			continue;
+		}
+
+		attrib_add(state,
+			pstate->data.attr.attrname, pstate->data.attr.attrlen,
+			attr, attr_len - html_len);
+
+		if (quoted)
+			html++, html_len--;
+
+		*str = html, *len = html_len;
+		return 0;
+	}
+
 	return -1;
 }
 

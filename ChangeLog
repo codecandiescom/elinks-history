@@ -1,3 +1,35 @@
+Tue Oct 26 21:36:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Fix comment.  
+
+Tue Oct 26 21:32:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Optimize pointers/keylen_list allocation: alloc_pointers() does it
+	in one step using info->count obtained by precedent loop, simplify
+	add_to_pointers().  
+
+Tue Oct 26 21:04:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Group debugging code.  
+
+Tue Oct 26 20:52:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Move debug code from fastfind_search() to new FF_DBG_search_stats().  
+
+Tue Oct 26 17:03:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Revert 1.77 and 1.78. It is reversing tab placement.  
+
 Mon Oct 25 20:31:16 2004  Laurent Monin <zas@norz.org>:
 
 	* src/util/fastfind.c:

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.20 2003/11/17 18:40:26 pasky Exp $ */
+/* $Id: dialogs.c,v 1.21 2003/11/18 09:44:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,22 +45,6 @@ update_all_cache_dialogs(void)
 
 		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
-}
-
-/* Creates the box display (holds everything EXCEPT the actual rendering data) */
-static struct listbox_data *
-cache_dialog_box_build(void)
-{
-	struct listbox_data *box;
-
-	/* Deleted in abort */
-	box = mem_calloc(1, sizeof(struct listbox_data));
-	if (!box) return NULL;
-
-	box->items = &cache_entry_box_items;
-	add_to_list(cache_entry_boxes, box);
-
-	return box;
 }
 
 
@@ -177,7 +161,11 @@ menu_cache_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	dlg_data = hierbox_browser(term, N_("Cache"),
-			0, cache_dialog_box_build(), ses,
+			0,
+			hierbox_browser_box_build(&cache_entry_boxes,
+						  &cache_entry_box_items,
+						  NULL),
+			ses,
 			1,
 			N_("Info"), push_info_button, B_ENTER, ses);
 

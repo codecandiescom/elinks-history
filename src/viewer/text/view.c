@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.556 2004/07/20 21:54:26 miciah Exp $ */
+/* $Id: view.c,v 1.557 2004/07/20 21:55:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -944,8 +944,8 @@ send_event(struct session *ses, struct term_event *ev)
 		action = kbd_action(KEYMAP_MAIN, ev, &func_ref);
 
 		if (action == ACT_MAIN_QUIT) {
-quit:
 			if (ev->x == KBD_CTRL_C)
+quit:
 				action = ACT_MAIN_REALLY_QUIT;
 		}
 

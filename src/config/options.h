@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.33 2002/06/21 13:28:20 pasky Exp $ */
+/* $Id: options.h,v 1.34 2002/07/01 14:48:09 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -22,6 +22,15 @@ enum option_flags {
 	 * the added hiearchy piece (category) is stored as "_template_"
 	 * category. */
 	OPT_AUTOCREATE = 2,
+	/* This is used just for marking various options for some very dark,
+	 * nasty and dirty purposes. This watermarking should be kept inside
+	 * some very closed and clearly bounded piece of ELinks module, not
+	 * spreaded along whole ELinks code, and you should clear it everytime
+	 * when sneaking outside of the module (except some trivial common
+	 * utility functions). Basically, you don't want to use this flag
+	 * normally ;). It doesn't affect how the option is handled by common
+	 * option handling functions in any way. */
+	OPT_WATERMARK = 4,
 };
 
 enum option_type {

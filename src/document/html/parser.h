@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.56 2004/01/17 15:18:27 pasky Exp $ */
+/* $Id: parser.h,v 1.57 2004/01/17 16:23:36 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -10,7 +10,6 @@
 struct document_options;
 struct form_control;
 struct frameset_desc;
-struct list_head;
 struct memory_list;
 struct menu_item;
 struct session;

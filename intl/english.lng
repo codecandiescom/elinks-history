@@ -386,3 +386,7 @@ T_CANNOT_DELETE_OPTION_HERE, "Cannot delete this option.",
 T_REALLY_DELETE_OPTION, "Really delete the option",
 T_HK_OPTIONS_MANAGER, "O",
 T_KEYBINDING_MANAGER, "Keybinding manager",
+T_DELETE_KEYBINDING, "Delete keybinding",
+T_NOT_A_KEYBINDING, "This item is not a keybinding."
+T_REALLY_DELETE_KEYBINDING, "Really delete the keybinding",
+T_KEYMAP, "keymap",

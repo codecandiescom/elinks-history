@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.49 2002/12/14 15:22:23 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.50 2002/12/15 22:49:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,17 +33,13 @@ static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings();
 
-static void delete_keybinding(enum keymap, long, long);
-
 static int read_action(unsigned char *);
-static unsigned char *write_action(int);
-static unsigned char *write_keymap(enum keymap);
 
 static void init_action_listboxes();
 static void free_action_listboxes();
 
 
-static void
+void
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
@@ -56,6 +52,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		unsigned char *keystroke = init_str();
 		int len = 0;
 
+		kb->keymap = km;
 		kb->action = action;
 		kb->key = key;
 		kb->meta = meta;
@@ -103,7 +100,22 @@ boom:
 	}
 }
 
-static void
+void
+free_keybinding(struct keybinding *kb)
+{
+	if (kb->box_item) {
+		del_from_list(kb->box_item);
+		mem_free(kb->box_item);
+	}
+#ifdef HAVE_LUA
+	if (kb->func_ref != LUA_NOREF)
+		lua_unref(lua_state, kb->func_ref);
+#endif
+	del_from_list(kb);
+	mem_free(kb);
+}
+
+void
 delete_keybinding(enum keymap km, long key, long meta)
 {
 	struct keybinding *kb;
@@ -112,16 +124,7 @@ delete_keybinding(enum keymap km, long key, long meta)
 		if (kb->key != key || kb->meta != meta)
 			continue;
 
-		if (kb->box_item) {
-			del_from_list(kb->box_item);
-			mem_free(kb->box_item);
-		}
-#ifdef HAVE_LUA
-		if (kb->func_ref != LUA_NOREF)
-			lua_unref(lua_state, kb->func_ref);
-#endif
-		del_from_list(kb);
-		mem_free(kb);
+		free_keybinding(kb);
 		break;
 	}
 }
@@ -249,7 +252,7 @@ read_keymap(unsigned char *keymap)
 	return strtonum(keymap_table, keymap);
 }
 
-static unsigned char *
+unsigned char *
 write_keymap(enum keymap keymap)
 {
 	return numtostr(keymap_table, keymap);
@@ -421,7 +424,7 @@ read_action(unsigned char *action)
 	return strtonum(action_table, action);
 }
 
-static unsigned char *
+unsigned char *
 write_action(int action)
 {
 

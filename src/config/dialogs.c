@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.23 2002/12/14 12:57:24 zas Exp $ */
+/* $Id: dialogs.c,v 1.24 2002/12/15 22:49:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -583,43 +583,65 @@ kbdbind_dialog_abort_handler(struct dialog_data *dlg)
 
 
 static void
-done_kbdbind_info_button(void *vhop)
+really_delete_keybinding(void *data)
 {
-#if 0
-	struct option *option = vhop;
+	struct keybinding *keybinding = data;
+	struct listbox_data *box;
 
-#endif
+	foreach (box, *keybinding->box_item->box) {
+		if (box->sel == keybinding->box_item) {
+			box->sel = traverse_listbox_items_list(keybinding->box_item, -1,
+					1, NULL, NULL);
+			if (keybinding->box_item == box->sel)
+				box->sel = traverse_listbox_items_list(keybinding->box_item, 1,
+						1, NULL, NULL);
+			if (keybinding->box_item == box->sel)
+				box->sel = NULL;
+		}
+
+		if (box->top == keybinding->box_item) {
+			box->top = traverse_listbox_items_list(keybinding->box_item, -1,
+					1, NULL, NULL);
+			if (keybinding->box_item == box->top)
+				box->top = traverse_listbox_items_list(keybinding->box_item, 1,
+						1, NULL, NULL);
+			if (keybinding->box_item == box->top)
+				box->top = NULL;
+		}
+	}
+
+	free_keybinding(keybinding);
 }
 
 static int
-push_kbdbind_info_button(struct dialog_data *dlg,
+push_kbdbind_del_button(struct dialog_data *dlg,
 		struct widget_data *some_useless_info_button)
 {
 	struct terminal *term = dlg->win->term;
-	struct keybinding *kb;
-	struct listbox_data *box;
-	unsigned char *value;
-	int val_len = 0;
+	struct listbox_data *box = (void *) dlg->dlg->items[KB_BOX_IND].data;
+	struct keybinding *keybinding;
 
-	box = (struct listbox_data *) dlg->dlg->items[KB_BOX_IND].data;
+	if (!box->sel || !box->sel->udata) {
+		msg_box(term, NULL,
+			TEXT(T_DELETE_KEYBINDING), AL_CENTER,
+			TEXT(T_NOT_A_KEYBINDING),
+			NULL, 1,
+			TEXT(T_CANCEL), NULL, B_ESC | B_ENTER);
+		return 0;
+	}
 
-	/* Show history item info */
-	if (!box->sel || !box->sel->udata) return 0;
-	kb = box->sel->udata;
+	keybinding = box->sel->udata;
 
-	value = init_str();
-	if (!value) return 0;
+	msg_box(term, NULL,
+		TEXT(T_DELETE_KEYBINDING), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_REALLY_DELETE_KEYBINDING), " \"", box->sel->text, "\" ",
+		TEXT(T_OF), " \"", write_action(keybinding->action), "\" (",
+		TEXT(T_KEYMAP), " \"", write_keymap(keybinding->keymap), "\") ?", NULL,
+		keybinding, 2,
+		TEXT(T_OK), really_delete_keybinding, B_ENTER,
+		TEXT(T_CANCEL), NULL, B_ESC);
 
-	make_keystroke(&value, &val_len, kb->key, kb->meta);
-
-	msg_box(term, getml(value, NULL),
-		TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
-		TEXT(T_NNAME), ": ", box->sel->text, "\n",
-		TEXT(T_VALUE), ": ", value, NULL,
-		kb, 1,
-		TEXT(T_OK), done_kbdbind_info_button, B_ESC | B_ENTER);
-
-	return 0; /* Why not 1 ? --Zas */
+	return 0;
 }
 
 
@@ -652,9 +674,9 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[0].type = D_BUTTON;
 	d->items[0].gid = B_ENTER;
-	d->items[0].fn = push_kbdbind_info_button;
+	d->items[0].fn = push_kbdbind_del_button;
 	d->items[0].udata = ses;
-	d->items[0].text = TEXT(T_INFO);
+	d->items[0].text = TEXT(T_DELETE);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;

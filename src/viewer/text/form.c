@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.177 2004/06/15 22:54:08 jonas Exp $ */
+/* $Id: form.c,v 1.178 2004/06/16 04:11:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,7 +1035,6 @@ int
 field_op(struct session *ses, struct document_view *doc_view,
 	 struct link *link, struct term_event *ev, int rep)
 {
-	struct terminal *term = ses->tab->term;
 	struct form_control *frm;
 	struct form_state *fs;
 	enum edit_action action;
@@ -1125,7 +1124,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_EDIT:
 			if (frm->type == FC_TEXTAREA && !frm->ro)
-			  	textarea_edit(0, term, frm, fs, doc_view, link);
+			  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);
@@ -1219,7 +1218,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 
 		case ACT_EDIT_REDRAW:
-			redraw_terminal_cls(term);
+			redraw_terminal_cls(ses->tab->term);
 			x = 0;
 			break;
 

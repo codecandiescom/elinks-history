@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.5 2004/01/18 16:12:07 jonas Exp $ */
+/* $Id: scanner.h,v 1.6 2004/01/18 16:22:58 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -35,18 +35,23 @@ struct css_token {
 	int length;
 };
 
-/* Should be big enough to contain properties with space separated values
- * and function calls with up to 3 variables like rgb(). */
+/* At best it should be big enough to contain properties with space separated
+ * values and function calls with up to 3 variables like rgb(). At worst no
+ * it should be no less than 2 so there is room for peeking at the next token
+ * in the scanner. */
 #define CSS_SCANNER_TOKENS 10
 
-/* To optimize the scanning a bit it scans a few tokens ahead. So scanning of
- * function calls will at most contain one call to the scanner. The rest is
- * done using macros. */
+/* The {struct css_scanner} describes the current state of the CSS scanner. The
+ * scanner maintains a table of tokens in order to optimize the scanning a bit
+ * and make it possible to look ahead at the next token. You should always use
+ * the accessors for the scanner table defined below. */
 struct css_scanner {
 	/* The very start of the scanned string */
 	unsigned char *string;
 
-	/* The current token and number of scanned tokens. */
+	/* The current token and number of scanned tokens in the table.
+	 * If the number of scanned tokens is less than CSS_SCANNER_TOKENS
+	 * it is because there are no more tokens in the string. */
 	int current, tokens;
 
 	struct css_token table[CSS_SCANNER_TOKENS];

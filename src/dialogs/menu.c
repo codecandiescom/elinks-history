@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.168 2003/10/24 01:41:59 pasky Exp $ */
+/* $Id: menu.c,v 1.169 2003/10/24 14:10:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,61 +171,33 @@ flush_caches(struct terminal *term, void *d, void *e)
 }
 
 static void
-go_backwards(struct terminal *term, void *psteps, struct session *ses)
+go_backwards(struct terminal *term, struct location *target, struct session *ses)
 {
-	int steps = (int) psteps;
 	struct location *cur = cur_loc(ses);
 
 	abort_loading(ses, 0);
 
-	/* Move all intermediate items to unhistory. */
-
-	while (steps > 1
-	       && cur_loc(ses)->prev != (struct location *) &ses->history.history.next) {
-		ses->history.current = ses->history.current->prev;
-		steps--;
-	}
-
-	{
-		/* XXX: We should have the original document as the current
-		 * location in go_back(), as it calls a lot of cleanup stuff
-		 * which assumes cur_loc() really returns the current document
-		 * BEFORE move. */
-		struct location *newcur = ses->history.current;
-
-		ses->history.current = cur;
-		go_back(ses, newcur->prev);
-		if (cur_loc(ses) == cur) ses->history.current = newcur;
-	}
+	/* XXX: We should have the original document as the current
+	 * location in go_back(), as it calls a lot of cleanup stuff
+	 * which assumes cur_loc() really returns the current document
+	 * BEFORE move. */
+	go_back(ses, target);
+	if (cur_loc(ses) == cur) ses->history.current = target->next;
 }
 
 static void
-go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
+go_unbackwards(struct terminal *term, struct location *target, struct session *ses)
 {
-	int steps = (int) psteps + 1;
 	struct location *cur = cur_loc(ses);
 
 	abort_loading(ses, 0);
 
-	/* Move all intermediate items to history. */
-
-	while (steps > 1
-	       && cur_loc(ses)->next != (struct location *) &ses->history.history.prev) {
-		ses->history.current = ses->history.current->next;
-		steps--;
-	}
-
-	{
-		/* XXX: We should have the original document as the current
-		 * location in go_unback(), as it calls a lot of cleanup stuff
-		 * which assumes cur_loc() really returns the current document
-		 * BEFORE move. */
-		struct location *newcur = ses->history.current;
-
-		ses->history.current = cur;
-		go_unback(ses, newcur->next);
-		if (cur_loc(ses) == cur) ses->history.current = newcur;
-	}
+	/* XXX: We should have the original document as the current
+	 * location in go_unback(), as it calls a lot of cleanup stuff
+	 * which assumes cur_loc() really returns the current document
+	 * BEFORE move. */
+	go_unback(ses, target);
+	if (cur_loc(ses) == cur) ses->history.current = target->prev;
 }
 
 static struct menu_item no_hist_menu[] = {
@@ -238,7 +210,6 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 {
 	struct location *loc;
 	struct menu_item *mi = NULL;
-	int n = 0;
 
 	if (!have_location(ses)) goto loop_done;
 
@@ -258,13 +229,12 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", (menu_func) go_backwards,
-			    	    (void *) n, 0, 1);
+			    	    (void *) loc, 0, 1);
 		}
-		n++;
 	}
 loop_done:
 
-	if (!n)
+	if (!mi)
 		do_menu(term, no_hist_menu, ses, 0);
 	else
 		do_menu(term, mi, ses, 0);
@@ -275,7 +245,6 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 {
 	struct location *loc;
 	struct menu_item *mi = NULL;
-	int n = 0;
 
 	if (!have_location(ses)) goto loop_done;
 
@@ -295,13 +264,12 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", (menu_func) go_unbackwards,
-			    	    (void *) n, 0, 1);
+			    	    (void *) loc, 0, 1);
 		}
-		n++;
 	}
 loop_done:
 
-	if (!n)
+	if (!mi)
 		do_menu(term, no_hist_menu, ses, 0);
 	else
 		do_menu(term, mi, ses, 0);

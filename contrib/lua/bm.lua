@@ -1,5 +1,5 @@
 -- Bookmark system for Links-Lua.
--- $Id: bm.lua,v 1.2 2003/10/02 12:16:04 kuser Exp $
+-- $Id: bm.lua,v 1.3 2003/11/24 13:30:01 zas Exp $
 
 -----------------------------------------------------------------------
 --  User options
@@ -71,7 +71,7 @@ function bm_sort_bookmarks ()
     if not bm_auto_sort_bookmarks then return end
     sort (bm_bookmarks, function (a, b) return a.category < b.category end)
     foreachi (bm_bookmarks,
-		function (i, v) 
+		function (i, v)
 		    sort (v, function (a, b) return a.name < b. name end)
 		end)
 end
@@ -216,7 +216,7 @@ function bm_edit_bookmark ()
 			    bm_do_add_bookmark (cat, tmp[i].name, tmp[i].url)
 			end
 			bm_delete_bookmark (%i)
-		    end	
+		    end
 		    return bm_view_bookmarks ()
 		end
 	    end)
@@ -224,7 +224,7 @@ function bm_edit_bookmark ()
     elseif bm_is_bookmark (bm) then
 	local i,j = bm_decode_info (bm)
 	local entry = bm_bookmarks[i][j]
-	edit_bookmark_dialog (bm_bookmarks[i].category, 
+	edit_bookmark_dialog (bm_bookmarks[i].category,
 			     entry.name, entry.url,
 			     function (cat, name, url)
 				if cat == '' or name == '' or url == '' then

@@ -1,12 +1,12 @@
 -- Check MD5 sums of download files automagically (it expects them in
 -- downloadedfile.txt).
--- $Id: md5check.lua,v 1.1 2002/06/30 22:21:06 pasky Exp $
+-- $Id: md5check.lua,v 1.2 2003/11/24 13:30:01 zas Exp $
 
 ----------------------------------------------------------------------
 -- Installation
 ----------------------------------------------------------------------
 --
--- 1. Put this into your hooks.lua.  Alternatively you can put 
+-- 1. Put this into your hooks.lua.  Alternatively you can put
 -- this in a separate file and `dofile' it.
 --
 -- 2. Edit your `console_hook_functions' table in hooks.lua. e.g.
@@ -18,7 +18,7 @@
 --	}
 --
 -- 3. Edit the second last line of this file to point to your
--- download directory.  Sorry, but ELinks can't get this 
+-- download directory.  Sorry, but ELinks can't get this
 -- information automatically (yet?).
 
 function file_exists(filename)

@@ -32,7 +32,8 @@ lua etc).
 
 If you want to write some patches, please read the doc/hacking.txt document.
 
-If you want to add a new language, please read intl/README document.
+If you want to add a new language or update the translation for an existing one,
+please read intl/README document.
 
 If you want to write some documentation, well you're welcomed ;)
 
@@ -40,6 +41,6 @@ If you want to request features or report bugs, use the mailing list as
 mentioned above, bugzilla at bugzilla.elinks.or.cz or come and see us on
 irc.freenode.net #elinks.
 
-$Id: README,v 1.20 2003/12/20 22:42:36 pasky Exp $
+$Id: README,v 1.21 2003/12/24 12:16:33 jonas Exp $
 
 vim: textwidth=80

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.51 2004/04/01 05:09:58 jonas Exp $ */
+/* $Id: document.h,v 1.52 2004/04/03 14:13:47 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -139,7 +139,7 @@ struct document {
 /* Initializes a document and its canvas. */
 /* Return NULL on allocation failure. */
 struct document *
-init_document(struct uri *uri, struct cache_entry *cache_entry,
+init_document(struct uri *uri, struct cache_entry *cached,
 	      struct document_options *options);
 
 /* Releases the document and all its resources. */

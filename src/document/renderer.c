@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.41 2004/04/02 21:21:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.42 2004/04/03 14:13:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 {
 	unsigned char *name;
 	struct document *document;
-	struct cache_entry *cache_entry;
+	struct cache_entry *cached;
 
 	assert(vs && doc_view && options);
 	if_assert_failed return;
@@ -54,31 +54,31 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
 
-	cache_entry = find_in_cache(vs->uri);
-	if (!cache_entry) {
+	cached = find_in_cache(vs->uri);
+	if (!cached) {
 		INTERNAL("document %s to format not found", struri(vs->uri));
 		return;
 	}
 
-	document = get_cached_document(vs->uri, options, cache_entry->id_tag);
+	document = get_cached_document(vs->uri, options, cached->id_tag);
 	if (!document) {
 		struct fragment *fr;
 
-		document = init_document(vs->uri, cache_entry, options);
+		document = init_document(vs->uri, cached, options);
 		if (!document) return;
 
 		shrink_memory(0);
 
-		defrag_entry(cache_entry);
-		fr = cache_entry->frag.next;
+		defrag_entry(cached);
+		fr = cached->frag.next;
 
-		if (list_empty(cache_entry->frag) || fr->offset || !fr->length) {
+		if (list_empty(cached->frag) || fr->offset || !fr->length) {
 
 		} else if (document->options.plain) {
-			render_plain_document(cache_entry, document);
+			render_plain_document(cached, document);
 
 		} else {
-			render_html_document(cache_entry, document);
+			render_html_document(cached, document);
 		}
 
 		sort_links(document);

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.107 2004/04/03 13:29:22 jonas Exp $ */
+/* $Id: dump.c,v 1.108 2004/04/03 14:13:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,18 +51,18 @@ static struct download dump_download;
 static int dump_redir_count = 0;
 
 
-/* This dumps the given @cache's source onto @fd nothing more. It returns 0 if it
+/* This dumps the given @cached's source onto @fd nothing more. It returns 0 if it
  * all went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
 static int
-dump_source(int fd, struct download *status, struct cache_entry *cache)
+dump_source(int fd, struct download *status, struct cache_entry *cached)
 {
 	struct fragment *frag;
 
-	if (!cache) return 0;
+	if (!cached) return 0;
 
 nextfrag:
-	foreach (frag, cache->frag) {
+	foreach (frag, cached->frag) {
 		int d = dump_pos - frag->offset;
 		int l, w;
 
@@ -93,17 +93,17 @@ nextfrag:
 	return 0;
 }
 
-/* This dumps the given @cache's formatted output onto @fd. It returns 0 if it all
+/* This dumps the given @cached's formatted output onto @fd. It returns 0 if it all
  * went fine and 1 if something isn't quite right and we should terminate
  * ourselves ASAP. */
 static int
-dump_formatted(int fd, struct download *status, struct cache_entry *cache)
+dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 {
 	struct document_options o;
 	struct document_view formatted;
 	struct view_state vs;
 
-	if (!cache) return 0;
+	if (!cached) return 0;
 
 	memset(&vs, 0, sizeof(struct view_state));
 	memset(&formatted, 0, sizeof(struct document_view));
@@ -121,7 +121,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *cache)
 	o.plain = 0;
 	o.frames = 0;
 
-	init_vs(&vs, get_cache_uri(cache), -1);
+	init_vs(&vs, get_cache_uri(cached), -1);
 
 	render_document(&vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
@@ -234,17 +234,17 @@ dump_pre_start(struct list_head *url_list)
 void
 dump_end(struct download *status, void *p)
 {
-	struct cache_entry *cache = status->ce;
+	struct cache_entry *cached = status->ce;
 	int fd = get_output_handle();
 
 	if (fd == -1) return;
-	if (cache && cache->redirect && dump_redir_count++ < MAX_REDIRECTS) {
-		struct uri *uri = get_uri_reference(cache->redirect);
+	if (cached && cached->redirect && dump_redir_count++ < MAX_REDIRECTS) {
+		struct uri *uri = get_uri_reference(cached->redirect);
 
 		if (status->state >= 0)
 			change_connection(status, NULL, PRI_CANCEL, 0);
 
-		load_uri(uri, get_cache_uri(cache), status, PRI_MAIN, 0, -1);
+		load_uri(uri, get_cache_uri(cached), status, PRI_MAIN, 0, -1);
 		return;
 	}
 
@@ -254,14 +254,14 @@ dump_end(struct download *status, void *p)
 		return;
 
 	if (get_opt_int_tree(cmdline_options, "source")) {
-		if (dump_source(fd, status, cache) > 0)
+		if (dump_source(fd, status, cached) > 0)
 			goto terminate;
 
 		if (status->state >= 0)
 			return;
 
 	} else {
-		if (dump_formatted(fd, status, cache) > 0)
+		if (dump_formatted(fd, status, cached) > 0)
 			goto terminate;
 	}
 

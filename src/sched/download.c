@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.244 2004/04/03 13:41:39 jonas Exp $ */
+/* $Id: download.c,v 1.245 2004/04/03 14:13:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,7 +193,7 @@ download_error_dialog(struct file_download *file_download, int saved_errno)
 }
 
 int
-write_cache_entry_to_file(struct cache_entry *cache, struct file_download *file_download)
+write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file_download)
 {
 	struct fragment *frag;
 
@@ -206,7 +206,7 @@ write_cache_entry_to_file(struct cache_entry *cache, struct file_download *file_
 			goto write_error;
 	}
 
-	foreach (frag, cache->frag) {
+	foreach (frag, cached->frag) {
 		int remain = file_download->last_pos - frag->offset;
 		int *h = &file_download->handle;
 		int w;
@@ -224,7 +224,7 @@ write_cache_entry_to_file(struct cache_entry *cache, struct file_download *file_
 					   0666,
 					   file_download->stat.prg
 					   ? file_download->stat.prg->size
-					   : cache->length);
+					   : cached->length);
 			if (*h == -1) goto write_error;
 			set_bin(*h);
 		}
@@ -332,38 +332,38 @@ abort:
 static void
 download_data(struct download *download, struct file_download *file_download)
 {
-	struct cache_entry *cache = download->ce;
+	struct cache_entry *cached = download->ce;
 
-	if (!cache) goto store;
+	if (!cached) goto store;
 
 	if (download->state >= S_WAIT && download->state < S_TRANS)
 		goto store;
 
-	if (cache->last_modified)
-		file_download->remotetime = parse_http_date(cache->last_modified);
+	if (cached->last_modified)
+		file_download->remotetime = parse_http_date(cached->last_modified);
 
-	while (cache->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
+	while (cached->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		assertm(cache->uri == file_download->uri, "Redirecting using bad base URI");
+		assertm(cached->uri == file_download->uri, "Redirecting using bad base URI");
 
 		done_uri(file_download->uri);
 
-		file_download->uri = get_uri_reference(cache->redirect);
+		file_download->uri = get_uri_reference(cached->redirect);
 		file_download->download.state = S_WAIT_REDIR;
 
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 
-		load_uri(file_download->uri, get_cache_uri(cache), &file_download->download,
+		load_uri(file_download->uri, get_cache_uri(cached), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->prg ? download->prg->start : 0);
 
 		return;
 	}
 
-	if (!write_cache_entry_to_file(cache, file_download)) {
+	if (!write_cache_entry_to_file(cached, file_download)) {
 		detach_connection(download, file_download->last_pos);
 		abort_download(file_download, 0);
 		return;
@@ -1047,12 +1047,12 @@ struct {
 };
 
 int
-ses_chktype(struct session *ses, struct download *loading, struct cache_entry *cache, int frame)
+ses_chktype(struct session *ses, struct download *loading, struct cache_entry *cached, int frame)
 {
 	struct mime_handler *handler;
 	struct view_state *vs;
 	struct tq *tq;
-	unsigned char *ctype = get_content_type(cache->head, get_cache_uri(cache));
+	unsigned char *ctype = get_content_type(cached->head, get_cache_uri(cached));
 	int plaintext = 1;
 	int ret = 0;
 	int xwin, i;
@@ -1090,7 +1090,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 
-	tq->cached = cache;
+	tq->cached = cached;
 	object_lock(tq->cached);
 
 	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.59 2004/04/03 13:17:08 jonas Exp $ */
+/* $Id: document.c,v 1.60 2004/04/03 14:13:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,7 @@ static INIT_LIST_HEAD(format_cache);
 static int format_cache_entries = 0;
 
 struct document *
-init_document(struct uri *uri, struct cache_entry *cache,
+init_document(struct uri *uri, struct cache_entry *cached,
 	      struct document_options *options)
 {
 	struct document *document = mem_calloc(1, sizeof(struct document));
@@ -45,8 +45,8 @@ init_document(struct uri *uri, struct cache_entry *cache,
 
 	document->uri = get_uri_reference(uri);
 
-	object_lock(cache);
-	document->id_tag = cache->id_tag;
+	object_lock(cached);
+	document->id_tag = cached->id_tag;
 
 	init_list(document->forms);
 	init_list(document->tags);
@@ -97,7 +97,7 @@ done_link_members(struct link *link)
 void
 done_document(struct document *document)
 {
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 	struct form_control *fc;
 	int pos;
 
@@ -107,11 +107,11 @@ done_document(struct document *document)
 	assertm(!is_object_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
-	cache = find_in_cache(document->uri);
-	if (!cache)
+	cached = find_in_cache(document->uri);
+	if (!cached)
 		INTERNAL("no cache entry for document");
 	else
-		object_unlock(cache);
+		object_unlock(cached);
 
 	if (document->uri) done_uri(document->uri);
 	if (document->title) mem_free(document->title);
@@ -229,15 +229,15 @@ shrink_format_cache(int whole)
 #endif
 
 	foreach (document, format_cache) {
-		struct cache_entry *cache;
+		struct cache_entry *cached;
 
 		if (is_object_used(document)) continue;
 
 		/* Destroy obsolete renderer documents which are already
 		 * out-of-sync. */
-		cache = find_in_cache(document->uri);
-		assertm(cache, "cached formatted document has no cache entry");
-		if (cache->id_tag == document->id_tag) continue;
+		cached = find_in_cache(document->uri);
+		assertm(cached, "cached formatted document has no cache entry");
+		if (cached->id_tag == document->id_tag) continue;
 
 		document = document->prev;
 		done_document(document->next);

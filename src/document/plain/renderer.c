@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.92 2004/04/03 13:17:09 jonas Exp $ */
+/* $Id: renderer.c,v 1.93 2004/04/03 14:13:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,14 +397,14 @@ add_document_lines(struct plain_renderer *renderer)
 }
 
 void
-render_plain_document(struct cache_entry *cache, struct document *document)
+render_plain_document(struct cache_entry *cached, struct document *document)
 {
-	struct fragment *fr = cache->frag.next;
+	struct fragment *fr = cached->frag.next;
 	struct conv_table *convert_table;
-	unsigned char *head = empty_string_or_(cache->head);
+	unsigned char *head = empty_string_or_(cached->head);
 	struct plain_renderer renderer;
 
-	assert(!list_empty(cache->frag));
+	assert(!list_empty(cached->frag));
 
 	convert_table = get_convert_table(head, document->options.cp,
 					  document->options.assume_cp,

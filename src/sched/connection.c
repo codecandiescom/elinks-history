@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.154 2004/04/03 13:26:19 jonas Exp $ */
+/* $Id: connection.c,v 1.155 2004/04/03 14:13:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -757,7 +757,7 @@ int
 load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
-	struct cache_entry *cache = NULL;
+	struct cache_entry *cached = NULL;
 	struct connection *conn;
 	struct uri *proxy_uri;
 
@@ -786,16 +786,16 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 #endif
 
 	if (cache_mode <= CACHE_MODE_NORMAL
-	    && (cache = find_in_cache(uri))
-	    && !cache->incomplete) {
-		if (!is_object_used(cache) &&
-		    ((cache->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
-		     || (cache->redirect && !get_opt_int("document.cache.cache_redirects")))) {
-			delete_cache_entry(cache);
-			cache = NULL;
+	    && (cached = find_in_cache(uri))
+	    && !cached->incomplete) {
+		if (!is_object_used(cached) &&
+		    ((cached->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
+		     || (cached->redirect && !get_opt_int("document.cache.cache_redirects")))) {
+			delete_cache_entry(cached);
+			cached = NULL;
 		} else {
 			if (download) {
-				download->ce = cache;
+				download->ce = cached;
 				download->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
@@ -861,9 +861,9 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		return -1;
 	}
 
-	if (cache_mode < CACHE_MODE_FORCE_RELOAD && cache && !list_empty(cache->frag)
-	    && !((struct fragment *) cache->frag.next)->offset)
-		conn->from = ((struct fragment *) cache->frag.next)->length;
+	if (cache_mode < CACHE_MODE_FORCE_RELOAD && cached && !list_empty(cached->frag)
+	    && !((struct fragment *) cached->frag.next)->offset)
+		conn->from = ((struct fragment *) cached->frag.next)->length;
 
 	if (download) {
 		download->prg = &conn->prg;

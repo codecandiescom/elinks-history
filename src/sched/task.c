@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.57 2004/04/03 13:30:45 jonas Exp $ */
+/* $Id: task.c,v 1.58 2004/04/03 14:13:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 {
 	struct task *task = mem_alloc(sizeof(struct task));
 	unsigned char *m1, *m2;
-	struct cache_entry *e;
+	struct cache_entry *cached;
 
 	if (ses->doc_view
 	    && ses->doc_view->document
@@ -123,8 +123,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	    || !uri->post
 	    || !get_opt_int("document.browse.forms.confirm_submit")
 	    || (cache_mode == CACHE_MODE_ALWAYS
-		&& (e = find_in_cache(uri))
-		&& !e->incomplete)) {
+		&& (cached = find_in_cache(uri))
+		&& !cached->incomplete)) {
 
 		if (task) mem_free(task);
 
@@ -261,20 +261,20 @@ x:
 static void
 ses_imgmap(struct session *ses)
 {
-	struct cache_entry *cache = find_in_cache(ses->loading_uri);
+	struct cache_entry *cached = find_in_cache(ses->loading_uri);
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
 
-	if (!cache) {
+	if (!cached) {
 		INTERNAL("can't find cache entry");
 		return;
 	}
-	defrag_entry(cache);
-	fr = cache->frag.next;
-	if ((void *)fr == &cache->frag) return;
+	defrag_entry(cached);
+	fr = cached->frag.next;
+	if ((void *)fr == &cached->frag) return;
 
-	if (get_image_map(cache->head, fr->data, fr->data + fr->length,
+	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
@@ -289,7 +289,7 @@ ses_imgmap(struct session *ses)
 static int
 do_move(struct session *ses, struct download **stat)
 {
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 
 	assert(stat && *stat);
 	assertm(ses->loading_uri, "no ses->loading_uri");
@@ -301,18 +301,18 @@ do_move(struct session *ses, struct download **stat)
 	if (ses->task.type == TASK_IMGMAP && (*stat)->state >= 0)
 		return 0;
 
-	cache = (*stat)->ce;
-	if (!cache) return 0;
+	cached = (*stat)->ce;
+	if (!cached) return 0;
 
-	if (cache->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
+	if (cached->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		enum task_type task = ses->task.type;
 
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
-		assertm(cache->uri == ses->loading_uri, "Redirecting using bad base URI");
+		assertm(cached->uri == ses->loading_uri, "Redirecting using bad base URI");
 
-		if (cache->redirect->protocol == PROTOCOL_UNKNOWN)
+		if (cached->redirect->protocol == PROTOCOL_UNKNOWN)
 			return 0;
 
 		abort_loading(ses, 0);
@@ -321,7 +321,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		set_session_referrer(ses, get_cache_uri(cache));
+		set_session_referrer(ses, get_cache_uri(cached));
 
 		switch (task) {
 		case TASK_NONE:
@@ -329,7 +329,7 @@ do_move(struct session *ses, struct download **stat)
 		case TASK_FORWARD:
 		{
 			protocol_external_handler *fn;
-			struct uri *uri = cache->redirect; 
+			struct uri *uri = cached->redirect; 
 
 			fn = get_protocol_external_handler(uri->protocol);
 			if (fn) {
@@ -345,19 +345,19 @@ do_move(struct session *ses, struct download **stat)
 					    ? stracpy(ses->goto_position)
 					    : NULL;
 
-			ses_goto(ses, cache->redirect, ses->task.target_frame, NULL,
+			ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
 				 PRI_MAIN, CACHE_MODE_NORMAL, task,
 				 gp, end_load, 1);
 			if (gp) mem_free(gp);
 			return 2;
 			}
 		case TASK_HISTORY:
-			ses_goto(ses, cache->redirect, NULL, ses->task.target_location,
+			ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
 				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
 		case TASK_RELOAD:
-			ses_goto(ses, cache->redirect, NULL, NULL,
+			ses_goto(ses, cached->redirect, NULL, NULL,
 				 PRI_MAIN, ses->reloadlevel, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
@@ -376,7 +376,7 @@ b:
 		case TASK_NONE:
 			break;
 		case TASK_FORWARD:
-			if (ses_chktype(ses, &ses->loading, cache, 0)) {
+			if (ses_chktype(ses, &ses->loading, cached, 0)) {
 				free_task(ses);
 				reload(ses, CACHE_MODE_NORMAL);
 				return 2;

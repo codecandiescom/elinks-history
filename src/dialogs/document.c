@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.83 2004/04/03 13:12:52 jonas Exp $ */
+/* $Id: document.c,v 1.84 2004/04/03 14:13:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ static void
 loc_msg(struct terminal *term, struct location *location,
 	struct document_view *doc_view)
 {
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 	struct string msg;
 
 	if (!location) {
@@ -86,14 +86,14 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_char_to_string(&msg, '\n');
 
-	cache = get_cache_entry(location->vs.uri);
-	if (cache) {
+	cached = get_cache_entry(location->vs.uri);
+	if (cached) {
 		unsigned char *a;
 
 		add_format_to_string(&msg, "\n%s: %d",
-				     _("Size", term), cache->length);
+				     _("Size", term), cached->length);
 
-		if (cache->incomplete) {
+		if (cached->incomplete) {
 			add_format_to_string(&msg, "(%s)", _("incomplete", term));
 		}
 
@@ -109,35 +109,35 @@ loc_msg(struct terminal *term, struct location *location,
 			}
 		}
 
-		a = parse_http_header(cache->head, "Server", NULL);
+		a = parse_http_header(cached->head, "Server", NULL);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Server", term), a);
 			mem_free(a);
 		}
 
-		if (cache->ssl_info) {
+		if (cached->ssl_info) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("SSL Cipher", term),
-					     cache->ssl_info);
+					     cached->ssl_info);
 		}
-		if (cache->encoding_info) {
+		if (cached->encoding_info) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Encoding", term),
-					     cache->encoding_info);
+					     cached->encoding_info);
 		}
 
-		a = parse_http_header(cache->head, "Date", NULL);
+		a = parse_http_header(cached->head, "Date", NULL);
 		if (a) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Date", term), a);
 			mem_free(a);
 		}
 
-		if (cache->last_modified) {
+		if (cached->last_modified) {
 			add_format_to_string(&msg, "\n%s: %s",
 					     _("Last modified", term),
-					     cache->last_modified);
+					     cached->last_modified);
 		}
 
 	}
@@ -242,16 +242,16 @@ state_msg(struct session *ses)
 void
 head_msg(struct session *ses)
 {
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 
 	if (!have_location(ses)) {
 		nowhere_box(ses->tab->term, N_("Header info"));
 		return;
 	}
 
-	cache = find_in_cache(cur_loc(ses)->vs.uri);
-	if (cache && cache->head) {
-		unsigned char *headers = stracpy(cache->head);
+	cached = find_in_cache(cur_loc(ses)->vs.uri);
+	if (cached && cached->head) {
+		unsigned char *headers = stracpy(cached->head);
 
 		if (!headers) return;
 
@@ -264,19 +264,19 @@ head_msg(struct session *ses)
 			/* XXX: Do we need to check length and limit
 			 * it to something reasonable ? */
 
-			while (cache->head[i]) {
+			while (cached->head[i]) {
 				/* Check for control chars. */
-				if (cache->head[i] < ' '
-				    && cache->head[i] != '\n') {
+				if (cached->head[i] < ' '
+				    && cached->head[i] != '\n') {
 					/* Ignore '\r' but replace
 					 * others control chars with
 					 * a visible char. */
-					if (cache->head[i] != '\r') {
+					if (cached->head[i] != '\r') {
 						 headers[j] = '*';
 						 j++;
 					}
 				} else {
-					headers[j] = cache->head[i];
+					headers[j] = cached->head[i];
 					j++;
 				}
 				i++;

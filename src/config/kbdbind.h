@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.8 2002/05/17 16:18:36 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.9 2002/05/23 18:33:14 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -81,8 +81,8 @@ void free_keymaps();
 long parse_key(unsigned char *);
 int kbd_action(enum keymap, struct event *, int *);
 
-unsigned char *bind_rd(struct option *, unsigned char *);
-unsigned char *unbind_rd(struct option *, unsigned char *);
+int bind_rd(struct option *, unsigned char **);
+int unbind_rd(struct option *, unsigned char **);
 
 #ifdef HAVE_LUA
 unsigned char *bind_lua_func(unsigned char *, unsigned char *, int);

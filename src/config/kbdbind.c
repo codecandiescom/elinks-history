@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.15 2002/05/17 16:18:36 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.16 2002/05/23 18:33:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,9 +274,10 @@ parse_act(unsigned char *s)
  */
 
 /* bind KEYMAP KEYSTROKE ACTION */
-unsigned char *
-bind_rd(struct option *o, unsigned char *line)
+int
+bind_rd(struct option *o, unsigned char **line)
 {
+#if 0
 	unsigned char *err = NULL;
 	unsigned char *ckmap;
 	unsigned char *ckey;
@@ -305,12 +306,14 @@ bind_rd(struct option *o, unsigned char *line)
 	if (ckmap) mem_free(ckmap);
 
 	return err;
+#endif
 }
 
 /* unbind KEYMAP KEYSTROKE */
-unsigned char *
-unbind_rd(struct option *o, unsigned char *line)
+int
+unbind_rd(struct option *o, unsigned char **line)
 {
+#if 0
 	unsigned char *err = NULL;
 	unsigned char *ckmap;
 	unsigned char *ckey;
@@ -332,6 +335,7 @@ unbind_rd(struct option *o, unsigned char *line)
 	if (ckmap) mem_free(ckmap);
 
 	return err;
+#endif
 }
 
 /*

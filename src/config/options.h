@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.17 2002/05/19 19:34:57 pasky Exp $ */
+/* $Id: options.h,v 1.18 2002/05/23 18:33:14 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -50,9 +50,9 @@ struct option {
 
 
 struct option_type_info {
-	unsigned char *(*rd_cmd)(struct option *, unsigned char ***, int *);
-	unsigned char *(*rd_cfg)(struct option *, unsigned char *);
-	void (*wr_cfg)(struct option *, unsigned char **, int *);
+	unsigned char *(*cmdline)(struct option *, unsigned char ***, int *);
+	int (*read)(struct option *, unsigned char **);
+	void (*write)(struct option *, unsigned char **, int *);
 	unsigned char *help_str;
 };
 

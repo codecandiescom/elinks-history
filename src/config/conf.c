@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.16 2002/05/20 15:28:29 pasky Exp $ */
+/* $Id: conf.c,v 1.17 2002/05/23 18:33:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,12 +32,12 @@
 
 /* Config file has only very simple grammar:
  * 
- * /^set option *= *value;$/
- * /^#.*$/
+ * /set option *= *value;/
+ * /#.*$/
  * 
  * Where option consists from any number of categories separated by dots and
  * name of the option itself. Both category and option name consists from
- * [a-zA-Z0-9_] - using uppercase letters is not recommended, though.
+ * [a-zA-Z0-9_-] - using uppercase letters is not recommended, though.
  * 
  * Value can consist from:
  * - number (it will be converted to int/long)
@@ -49,6 +49,8 @@
  * value to an option, but sometimes you may want to first create the option
  * ;). Then this will come handy. */
 
+
+/* TODO: Move commandline processing elsewhere. */
 
 /* TODO: This ought to be rewritten - we want special hash for commandline
  * options as "aliases" there. */
@@ -77,11 +79,11 @@ _parse_options(int argc, unsigned char *argv[], struct hash *opt)
 			if (!option)
 				continue;
 
-			if (option_types[option->type].rd_cmd
+			if (option_types[option->type].cmdline
 			    && option->flags & OPT_CMDLINE) {
 				unsigned char *err;
 
-				err = option_types[option->type].rd_cmd(option, &argv, &argc);
+				err = option_types[option->type].cmdline(option, &argv, &argc);
 
 				if (err) {
 					if (err[0])
@@ -117,120 +119,131 @@ parse_options(int argc, unsigned char *argv[])
 }
 
 
-/* TODO: This ought to disappear. */
+/* Skip block of whitespaces. */
 unsigned char *
-get_token(unsigned char **line)
+skip_white(unsigned char *start, int *line)
 {
-	unsigned char *s = NULL;
-	int l = 0;
-	int escape = 0;
-	int quote = 0;
+	while (*start) {
+		while (WHITECHAR(*start)) {
+			if (*start == '\n') {
+				(*line)++;
+			}
+			start++;
+		}
 
-	while (**line == ' ' || **line == 9) (*line)++;
-	if (**line) {
-		for (s = init_str(); **line; (*line)++) {
-			if (escape)
-				escape = 0;
-			else if (**line == '\\') {
-				escape = 1;
-				continue;
-			}
-			else if (**line == '"') {
-				quote = !quote;
-			    	continue;
-			}
-			else if ((**line == ' ' || **line == 9) && !quote)
-				break;
-			add_chr_to_str(&s, &l, **line);
+		if (*start == '#') {
+			start += strcspn(start, "\n");
+		} else {
+			return start;
 		}
 	}
-	return s;
+
+	return start;
 }
 
-/* TODO: New config file format. */
-void
-parse_config_file(unsigned char *name, unsigned char *file, struct hash *opt)
+/* Parse 'set' command. Returns 0 if error, 1 if ok. */
+int
+parse_set(unsigned char **optname, int *optlen, unsigned char **optval,
+	  int *line)
 {
-	int error = 0;
-	int line = 0;
+	unsigned char *ptr = *optname;
 
-	while (file[0]) {
-		struct option *option;
-		unsigned char *oname;
-		unsigned char *id, *val, *tok = NULL;
-		int id_len, val_len, tok_len;
+	ptr = skip_white(ptr, line);
+	if (!*ptr) return 0;
 
-		/* New line */
-		line++;
-		while (file[0] && (file[0] == ' ' || file[0] == 9)) file++;
+	/* Option name */
+	*optname = ptr;
+	while (isA(*ptr) || *ptr == '.') ptr++;
+	*optlen = ptr - *optname;
 
-		/* Get identifier */
-		id = file;
-		while (file[0] && file[0] > ' ') file++;
-		id_len = file - id;
+	/* Equal sign */
+	ptr = skip_white(ptr, line);
+	if (*(ptr++) != '=') return 0;
 
-		/* No identifier? */
-		if (! id_len) {
-			if (file[0]) file++;
-			continue;
-		}
+	/* Option value */
+	ptr = skip_white(ptr, line);
+	if (!*ptr) return 0;
+	*optval = ptr;
 
-		/* Skip separator */
-		while (file[0] == 9 || file[0] == ' ') file++;
+	return 1;
+}
 
-		/* Get value */
-		val = file;
-		while (file[0] && file[0] != 10 && file[0] != 13) file++;
-		val_len = file - val;
+void
+parse_config_file(unsigned char *name, unsigned char *file, struct hash *opt_tree)
+{
+	int line = 1;
+	int error_occured = 0;
+	enum {
+		ERROR_NONE,
+		ERROR_PARSE,
+		ERROR_OPTION,
+		ERROR_VALUE,
+	} error = 0;
+	unsigned char error_msg[][80] = {
+		"no error",
+		"parse error",
+		"unknown option",
+		"bad value",
+	};
 
-		/* Possibly move to new line */
-		if (file[0]) {
-			if ((file[1] == 10 || file[1] == 13) && file[0] != file[1]) file++;
-			file++;
-		}
+	while (file && *file) {
+		/* Skip all possible comments and whitespaces. */
+		file = skip_white(file, &line);
 
-		/* Comment? */
-		if (id[0] == '#') continue;
+		/* Second chance to escape from the hell. */
+		if (!*file) break;
 
-		/* Get token or go on */
-		tok = get_token(&id);
-		if (!tok) continue;
+		/* TODO: This should be done in a more generic way, maintaining
+		 * table of handlers for each command. Definitively overkill
+		 * when we support only one command ;-). --pasky */
 
-		/* TODO: Move following to separate function. */
+		if (!strncmp(file, "set", 3) && WHITECHAR(file[3])) {
+			unsigned char *optname = file + 3;
+			int optname_l = 0;
+			unsigned char *optval;
 
-		tok_len = strlen(tok);
-		oname = mem_alloc(tok_len + 1);
-		safe_strncpy(oname, tok, tok_len + 1);
-		option = get_opt_rec(opt, oname);
-		mem_free(oname);
+			if (parse_set(&optname, &optname_l, &optval, &line)) {
+				unsigned char *oname;
+				struct option *opt;
 
-		if (!option)
-			continue;
+				/* FIXME: By the time when I write it, I
+				 * already dislike it. However I just want to
+				 * get it done now, we should move this stuff
+				 * to separate function Later (tm). --pasky */
 
-		if (option->flags & OPT_CFGFILE) {
-			unsigned char *value = memacpy(val, val_len);
-			unsigned char *err = option_types[option->type].rd_cfg(option, value);
+				oname = memacpy(optname, optname_l);
+				opt = get_opt_rec(opt_tree, oname);
 
-			if (err) {
-				if (err[0])
-					fprintf(stderr, "Error parsing config file %s, line %d: %s\n",
-						name, line, err);
-				error = 1;
+				if (opt) {
+					if (!option_types[opt->type].read(opt, &optval))
+						error = ERROR_VALUE;
+					file = optval;
+				} else {
+					error = ERROR_OPTION;
+				}
+
+				mem_free(oname);
+			} else {
+				error = ERROR_PARSE;
 			}
-
-			mem_free(value);
-			goto next;
+		} else {
+			error = ERROR_PARSE;
+			/* Jump over this crap we can't understand. */
+			while (!WHITECHAR(*file) && *file != '#' && *file)
+				file++;
 		}
 
-		fprintf(stderr, "Unknown option in config file %s, line %d\n", name, line);
-		error = 1;
-next:
-		if (tok) mem_free(tok);
+		if (error) {
+			fprintf(stderr, "%s:%d: %s\n",
+				name, line, error_msg[error]);
+			error_occured = 1;
+			error = 0;
+		}
 	}
 
-	if (error) {
+	if (error_occured) {
 		fprintf(stderr, "\007");
-		sleep(3);
+		sleep(1);
 	}
 }
 
@@ -325,9 +338,9 @@ create_config_string(struct hash *options)
 	foreach_hash_item (options, item, i) {
 		struct option *option = item->value;
 
-		if (option_types[option->type].wr_cfg
+		if (option_types[option->type].write
 		    && option->flags & OPT_CFGFILE) {
-			option_types[option->type].wr_cfg(option, &str, &len);
+			option_types[option->type].write(option, &str, &len);
 		}
 	}
 

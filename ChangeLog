@@ -1,3 +1,66 @@
+Tue Mar 30 15:42:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	detach_formatted(): Use free_link().  
+
+Tue Mar 30 10:14:49 2004  Laurent Monin <zas@norz.org>:
+
+	* test/underline.html:
+
+	Underline tests.  
+
+Tue Mar 30 00:50:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	We don.t support string escape seqs, yet.  
+
+Tue Mar 30 00:47:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Temporary fix for inf. loop reported by pasky.  
+
+Tue Mar 30 00:36:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Make background property value parsing loop look more sane.  
+
+Tue Mar 30 00:22:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	More garbage. You can thank pasky for this.  
+
+Tue Mar 30 00:10:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Simplify/optimize token skipping.  
+
+Tue Mar 30 00:10:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Fix typo.  
+
+Mon Mar 29 23:03:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	In translate_url(), if file_exists() returns false setting not_file
+	to true is a bad assumption since @prefix is not changed which again
+	causes any URI that is not recognized as being some other protocol
+	to fallback to file:///.  Changing the @prefix is also not good
+	since it gives the error message "Bad URI syntax". Leaving it like
+	this will give a "No such file or directory" error.  Was introduced
+	in 1.83 -> 1.84. A potential memleak of expanded is still there but
+	I can.t figure this messy function.  
+	
+	Thanks to lindi- for helping to debug this thing. ;) 
+
 Mon Mar 29 17:42:03 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/config/cmdline.c:

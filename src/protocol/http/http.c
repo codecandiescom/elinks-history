@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.347 2004/11/07 17:39:45 witekfl Exp $ */
+/* $Id: http.c,v 1.348 2004/11/08 01:38:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1199,7 +1199,7 @@ again:
 	}
 	if (h == 204) {
 		mem_free(head);
-		http_end_request(conn, S_OK, 0);
+		http_end_request(conn, S_HTTP_204, 0);
 		return;
 	}
 	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket.ssl) {

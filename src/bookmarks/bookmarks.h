@@ -1,7 +1,10 @@
-/* $Id: bookmarks.h,v 1.7 2002/06/17 08:00:15 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.8 2002/08/29 09:33:33 pasky Exp $ */
 
-#ifndef EL__BOOKMARKS_H
-#define EL__BOOKMARKS_H
+#ifndef EL__BOOKMARKS_BOOKMARKS_H
+#define EL__BOOKMARKS_BOOKMARKS_H
+
+/* #include "bfu/listbox.h" */
+struct listbox_item;
 
 #include "util/lists.h"
 
@@ -14,13 +17,19 @@ typedef int bookmark_id;
 struct bookmark {
 	struct bookmark *next;
 	struct bookmark *prev;
+
 	bookmark_id id;         /* Bookmark id */
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
 	int selected;           /* Whether to display this bookmark or not */
+	
+	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
+	 * and simpler. */
+	struct listbox_item *box_item;
 };
 
 extern struct list_head bookmarks;
+extern struct list_head bookmark_box_items;
 
 /* Search memorization */
 extern unsigned char *bm_last_searched_name;
@@ -35,7 +44,7 @@ void finalize_bookmarks();
 
 struct bookmark *get_bookmark_by_id(bookmark_id);
 int delete_bookmark_by_id(bookmark_id);
-void add_bookmark(const unsigned char *, const unsigned char *);
+struct bookmark *add_bookmark(const unsigned char *, const unsigned char *);
 int update_bookmark(bookmark_id, const unsigned char *, const unsigned char *);
 
 int bookmark_simple_search(unsigned char *, unsigned char *);

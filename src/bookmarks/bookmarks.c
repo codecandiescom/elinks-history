@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.31 2002/06/22 21:20:52 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.32 2002/08/29 09:33:33 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -15,6 +15,7 @@
 
 #include "links.h"
 
+#include "bfu/listbox.h"
 #include "bookmarks/bookmarks.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
@@ -23,6 +24,8 @@
 
 /* The list of bookmarks */
 struct list_head bookmarks = { &bookmarks, &bookmarks };
+struct list_head bookmark_box_items = { &bookmark_box_items,
+					&bookmark_box_items };
 
 /* The last used id of a bookmark */
 bookmark_id next_bookmark_id = 0;
@@ -68,6 +71,8 @@ delete_bookmark_by_id(bookmark_id id)
 	bookmarks_dirty = 1;
 
 	/* Now wipe the bookmark */
+	del_from_list(bm->box_item);
+	mem_free(bm->box_item);
 	mem_free(bm->title);
 	mem_free(bm->url);
 	mem_free(bm);
@@ -75,26 +80,25 @@ delete_bookmark_by_id(bookmark_id id)
 	return 1;
 }
 
-/* Adds a bookmark to the bookmark list. Don't play with new_bm after you're
- * done. It would be impolite. */
-void
+/* Adds a bookmark to the bookmark list. */
+struct bookmark *
 add_bookmark(const unsigned char *title, const unsigned char *url)
 {
 	struct bookmark *bm = mem_alloc(sizeof(struct bookmark));
 
-	if (!bm) return;
+	if (!bm) return NULL;
 
 	bm->title = stracpy((unsigned char *) title);
 	if (!bm->title) {
 		free(bm);
-		return;
+		return NULL;
 	}
 
 	bm->url = stracpy((unsigned char *) url);
 	if (!bm->url) {
 		free(bm->title);
 		free(bm);
-		return;
+		return NULL;
 	}
 
 	bm->id = next_bookmark_id++;
@@ -103,6 +107,27 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 	/* Actually add it */
 	add_to_list(bookmarks, bm);
 	bookmarks_dirty = 1;
+
+	/* Setup box_item */
+	/* Note that item_free is left at zero */
+
+	bm->box_item = mem_calloc(1, sizeof(struct listbox_item)
+				     + strlen(bm->title) + 1);
+	if (!bm->box_item) return NULL;
+	init_list(bm->box_item->child);
+
+	bm->box_item->text = ((unsigned char *) bm->box_item
+			      + sizeof(struct listbox_item));
+	if (!list_empty(bookmark_box_items))
+		bm->box_item->data = ((struct listbox_item *)
+				      bookmark_box_items.next)->data;
+	bm->box_item->udata = (void *) bm->id;
+
+	strcpy(bm->box_item->text, bm->title);
+
+	add_to_list(bookmark_box_items, bm->box_item);
+
+	return bm;
 }
 
 /* Updates an existing bookmark.
@@ -123,12 +148,17 @@ update_bookmark(bookmark_id id, const unsigned char *title,
 
 	if (title) {
 		mem_free(bm->title);
-		bm->title = stracpy((unsigned char *)title);
+		bm->title = stracpy((unsigned char *) title);
+
+		bm->box_item = mem_realloc(bm->box_item,
+					   sizeof(struct listbox_item)
+					   + strlen(bm->title) + 1);
+		strcpy(bm->box_item->text, bm->title);
 	}
 
 	if (url) {
 		mem_free(bm->url);
-		bm->url = stracpy((unsigned char *)url);
+		bm->url = stracpy((unsigned char *) url);
 	}
 	bookmarks_dirty = 1;
 
@@ -161,19 +191,33 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 	bm_last_searched_url = stracpy(search_url);
 
 	if (!*search_title && !*search_url) {
-		foreach(bm, bookmarks) {
+		foreach (bm, bookmarks) {
+			if (!bm->selected)
+				add_to_list(bookmark_box_items, bm->box_item);
 			bm->selected = 1;
 		}
 	        return 1;
 	}
 
-	foreach(bm, bookmarks) {
-		bm->selected = 0;
+	foreach (bm, bookmarks) {
+		int s = bm->selected;
+
 		if ((search_title && *search_title
 		     && strcasestr(bm->title, search_title)) ||
 		    (search_url && *search_url
-		     && strcasestr(bm->url, search_url)))
+		     && strcasestr(bm->url, search_url))) {
 			bm->selected = 1;
+		} else {
+			bm->selected = 0;
+		}
+
+		if (s != bm->selected) {
+			if (bm->selected) {
+				add_to_list(bookmark_box_items, bm->box_item);
+			} else {
+				del_from_list(bm->box_item);
+			}
+		}
 	}
 	return 1;
 }
@@ -274,6 +318,8 @@ free_bookmarks()
 	struct bookmark *bm;
 
 	foreach (bm, bookmarks) {
+		del_from_list(bm->box_item);
+		mem_free(bm->box_item);
 		mem_free(bm->title);
 		mem_free(bm->url);
 	}

@@ -1,18 +1,24 @@
-/* $Id: globhist.h,v 1.5 2002/06/17 08:00:15 pasky Exp $ */
+/* $Id: globhist.h,v 1.6 2002/08/29 09:33:34 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_GLOBHIST_H
 #define EL__DOCUMENT_GLOBHIST_H
 
 #include <time.h>
 
+/* #include "bfu/listbox.h" */
+struct listbox_item;
+
 #include "util/lists.h"
 
 struct global_history_item {
 	struct global_history_item *next;
 	struct global_history_item *prev;
+
 	time_t last_visit;
 	unsigned char *title;
 	unsigned char *url;
+
+	struct listbox_item *box_item;
 };
 
 struct global_history_list {
@@ -21,6 +27,7 @@ struct global_history_list {
 };
 
 extern struct global_history_list global_history;
+extern struct list_head gh_box_items;
 
 extern unsigned char *gh_last_searched_title;
 extern unsigned char *gh_last_searched_url;

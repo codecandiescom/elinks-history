@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.6 2002/08/11 18:54:23 pasky Exp $ */
+/* $Id: listbox.h,v 1.7 2002/08/29 09:33:33 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -11,13 +11,13 @@
 #include "util/lists.h"
 
 
+struct listbox_item;
+
 /* Stores display information about a box. Kept in cdata. */
 struct listbox_data {
-	int sel;	/* Item currently selected */
-	int box_top;	/* Index into items of the item that is on the top
-			   line of the box */
+	struct listbox_item *sel; /* Item currently selected */
+	struct listbox_item *top; /* Item which is on the top line of the box */
 	struct list_head items;	/* The list being displayed */
-	int list_len;	/* Number of items in the list */
 };
 
 /* An item in a box */
@@ -25,9 +25,11 @@ struct listbox_item {
 	struct listbox_item *next;
 	struct listbox_item *prev;
 
-	/* These may be NULL for root/leaf nodes or non-hiearchic listboxes. */
-	struct listbox_item *child;
-	struct listbox_item *parent;
+	/* These may be NULL/empty list for root/leaf nodes or non-hiearchic
+	 * listboxes. */
+	struct listbox_item *root;
+	struct list_head child;
+	int expanded; /* Only valid if child is non-empty */
 
 	/* Text to display */
 	unsigned char *text;
@@ -37,6 +39,7 @@ struct listbox_item {
 	 * listbox_item that should be selected after execution. */
 	int (*on_selected)(struct terminal *, struct listbox_data *, struct listbox_item *);
 	void *data;
+	void *udata;
 	enum item_free item_free;
 };
 
@@ -44,7 +47,8 @@ extern struct widget_ops listbox_ops;
 
 void dlg_format_box(struct terminal *, struct terminal *, struct widget_data *, int, int *, int, int *, enum format_align);
 
+struct listbox_item *traverse_listbox_items_list(struct listbox_item *, int, void (*)(struct listbox_item *, void *), void *);
+
 void box_sel_move(struct widget_data *, int);
-void box_sel_set_visible(struct widget_data *, int);
 
 #endif

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.17 2002/08/11 18:25:49 pasky Exp $ */
+/* $Id: dialogs.c,v 1.18 2002/08/29 09:33:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,91 +36,32 @@
 
 #ifdef BOOKMARKS
 
+/* TODO: Why we use some strange bookmark_ids and not just pointers? --pasky */
+
 
 /****************************************************************************
   Bookmark manager stuff.
 ****************************************************************************/
 
-/* Clears the bookmark list from the bookmark_dialog */
-static inline void
-bookmark_dlg_list_clear(struct list_head *bm_list)
-{
-	free_list(*bm_list);
-}
-
-
-/* Updates the bookmark list for a dialog. Returns the number of bookmarks.
- * FIXME: Must be changed for hierarchical bookmarks. */
-int
-bookmark_dlg_list_update(struct list_head *bm_list)
-{
-	struct bookmark *bm;	/* Iterator over bm list */
-	struct listbox_item	*item;	/* New box item (one per displayed bookmark) */
-	unsigned char *text;
-	int count = 0;
-	bookmark_id id;
-
-	/* Empty the list */
-	bookmark_dlg_list_clear(bm_list);
-
-	/* Copy each bookmark into the display list */
-	foreach(bm, bookmarks) if (bm->selected) {
-		/* Deleted in bookmark_dlg_clear_list() */
-		item = mem_alloc( sizeof(struct listbox_item) + strlen(bm->title)
-			+ 1);
-		if (!item) return count;
-
-		item->text = text = ((unsigned char *)item + sizeof(struct listbox_item));
-		item->data = (void *)(id = bm->id);
-
-		/* Note that item_free is left at zero */
-		/* XXX: ??? --Zas */
-
-		strcpy(text, bm->title);
-
-		add_to_list( *bm_list, item);
-		count++;
-	}
-
-	return count;
-}
-
-
 /* Creates the box display (holds everything EXCEPT the actual rendering
  * data) */
-struct listbox_data *
-bookmark_dlg_box_build(struct listbox_data **box)
+static struct listbox_data *
+bookmark_dlg_box_build()
 {
+	struct listbox_data *box;
+	struct listbox_item *item;
+
 	/* Deleted in abort */
-	*box = mem_alloc(sizeof(struct listbox_data));
-	if (!*box) return NULL;
+	box = mem_alloc(sizeof(struct listbox_data));
+	if (!box) return NULL;
 
-	memset(*box, 0, sizeof(struct listbox_data));
-
-	init_list((*box)->items);
-
-	(*box)->list_len = bookmark_dlg_list_update(&((*box)->items));
-
-	return *box;
-}
-
-/* Get the id of the currently selected bookmark */
-bookmark_id
-bookmark_dlg_box_id_get(struct listbox_data *box)
-{
-	struct listbox_item *citem;
-	int sel = box->sel;
-
-	if (sel == -1) return BAD_BOOKMARK_ID;
-
-	/* Sel is an index into the list of bookmarks. Therefore, we spin thru
-	 * until sel equals zero, and return the id at that point. */
-	foreach(citem, box->items) {
-		if (!sel) return (bookmark_id) citem->data;
-		sel--;
+	memset(box, 0, sizeof(struct listbox_data));
+	box->items = bookmark_box_items;
+	foreach (item, box->items) {
+		item->data = box;
 	}
 
-	return BAD_BOOKMARK_ID;
+	return box;
 }
 
 
@@ -130,10 +71,7 @@ bookmark_dialog_abort_handler(struct dialog_data *dlg)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *)(dlg->dlg->items[BM_BOX_IND].data);
-
-	/* Zap the display list */
-	bookmark_dlg_list_clear(&(box->items));
+	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 
 	/* Delete the box structure */
 	mem_free(box);
@@ -317,18 +255,15 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 int
 push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 {
-	bookmark_id id;
 	struct listbox_data *box;
 
-	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data*) dlg->dlg->items[BM_BOX_IND].data;
 
 	/* Follow the bookmark */
-	id = bookmark_dlg_box_id_get(box);
-	if (id != BAD_BOOKMARK_ID)
+	if (box->sel)
 		goto_url((struct session *) goto_btn->item->udata,
-			 get_bookmark_by_id(id)->url);
-
-	/* FIXME: There really should be some feedback to the user here. */
+			 get_bookmark_by_id((bookmark_id)
+					    box->sel->udata)->url);
 
 	/* Close the bookmark dialog */
 	delete_window(dlg->win);
@@ -339,18 +274,9 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 /* Called when an edit is complete. */
 void
 bookmark_edit_done(struct dialog *d) {
-	bookmark_id id = (bookmark_id)d->udata2;
-	struct dialog_data *parent;
+	bookmark_id id = (bookmark_id) d->udata2;
 
 	update_bookmark(id, d->items[0].data, d->items[1].data);
-
-	parent = d->udata;
-
-	/* Tell the bookmark dialog to redraw */
-	if (parent)
-		bookmark_dlg_list_update(
-			&((struct listbox_data *)
-			  parent->dlg->items[BM_BOX_IND].data)->items);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -360,17 +286,15 @@ bookmark_edit_done(struct dialog *d) {
 
 /* Called when the edit button is pushed */
 int
-push_edit_button(struct dialog_data *dlg,
-		 struct widget_data *edit_btn)
+push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 {
-	bookmark_id id;
 	struct listbox_data *box;
 
-	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
+	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 
 	/* Follow the bookmark */
-	id = bookmark_dlg_box_id_get(box);
-	if (id != BAD_BOOKMARK_ID) {
+	if (box->sel) {
+		bookmark_id id = (bookmark_id) box->sel->udata;
 		const unsigned char *name = get_bookmark_by_id(id)->title;
 		const unsigned char *url = get_bookmark_by_id(id)->url;
 
@@ -378,7 +302,7 @@ push_edit_button(struct dialog_data *dlg,
 			       (struct session *) edit_btn->item->udata, dlg,
 			       bookmark_edit_done, (void *) id, 1);
 	}
-	/* FIXME There really should be some feedback to the user here */
+
 	return 0;
 }
 
@@ -397,21 +321,41 @@ void
 really_del_bookmark(void *vhop)
 {
 	struct push_del_button_hop_struct *hop;
-	int last;
+	struct listbox_data *box;
 
-	hop = (struct push_del_button_hop_struct *)vhop;
+	hop = (struct push_del_button_hop_struct *) vhop;
+	box = hop->box;
+
+	/* Take care about move of the selected item if we're deleting it. */
+
+	if (box->sel && (bookmark_id) box->sel->udata == hop->id) {
+		struct bookmark *bm;
+
+		bm = get_bookmark_by_id((bookmark_id) box->sel->udata);
+		box->sel = traverse_listbox_items_list(bm->box_item, -1,
+						       NULL, NULL);
+		if (bm->box_item == box->sel)
+			box->sel = traverse_listbox_items_list(bm->box_item, 1,
+							       NULL, NULL);
+		if (bm->box_item == box->sel)
+			box->sel = NULL;
+	}
+
+	if (box->top && (bookmark_id) box->top->udata == hop->id) {
+		struct bookmark *bm;
+
+		bm = get_bookmark_by_id((bookmark_id) box->top->udata);
+		box->top = traverse_listbox_items_list(bm->box_item, 1,
+						       NULL, NULL);
+		if (bm->box_item == box->top)
+			box->top = traverse_listbox_items_list(bm->box_item, -1,
+							       NULL, NULL);
+		if (bm->box_item == box->top)
+			box->top = NULL;
+	}
 
 	if (!delete_bookmark_by_id(hop->id))
 		return;
-
-	last = bookmark_dlg_list_update(&(hop->box->items)) - 1;
-
-	/* In case we deleted the last bookmark */
-	if (hop->box->sel >= last)
-		hop->box->sel = last;
-
-	/* Made in push_delete_button() */
-	/*mem_free(vhop);*/
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -434,7 +378,8 @@ push_delete_button(struct dialog_data *dlg,
 
 	box = (struct listbox_data*)(dlg->dlg->items[BM_BOX_IND].data);
 
-	bm = get_bookmark_by_id(bookmark_dlg_box_id_get(box));
+	if (!box->sel) return 0;
+	bm = get_bookmark_by_id((bookmark_id) box->sel->udata);
 	if (!bm) return 0;
 
 
@@ -471,6 +416,8 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	/* Show all bookmarks */
 	foreach (new_bm, bookmarks) {
+		if (!new_bm->selected)
+			add_to_list(bookmark_box_items, new_bm->box_item);
 		new_bm->selected = 1;
 	}
 
@@ -531,11 +478,9 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[5].fn = cancel_dialog;
 	d->items[5].text = TEXT(T_CLOSE);
 
-	/* MP: D_BOX is nonsense. I tried to remove it, but didn't succeed. */
 	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;
-
-	bookmark_dlg_box_build((struct listbox_data **) &(d->items[BM_BOX_IND].data));
+	d->items[BM_BOX_IND].data = (void *) bookmark_dlg_box_build();
 
 	d->items[BM_BOX_IND + 1].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
@@ -551,28 +496,16 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 void
 bookmark_add_add(struct dialog *d)
 {
-	struct dialog_data *parent;
+	struct bookmark *bm;
+	struct listbox_data *box;
 
-	add_bookmark(d->items[0].data, d->items[1].data);
-
-	parent = d->udata;
-
-	/* Tell the bookmark dialog to redraw */
-	if (parent) {
-		int new, box_top = 0;
-		int gid = parent->dlg->items[BM_BOX_IND].gid;
-		struct listbox_data *box;
-
-		box = (struct listbox_data *)
-		      parent->dlg->items[BM_BOX_IND].data;
-		new = bookmark_dlg_list_update(&box->items);
-
-		box->sel = new - 1;
-
-		if (new >= gid) box_top = new - gid;
-		box->box_top = box_top;
-
+	bm = add_bookmark(d->items[0].data, d->items[1].data);
+	box = (struct listbox_data *) bm->box_item->data;
+	if (box) {
+		box->sel = bm->box_item;
+		box->top = bm->box_item; /* XXX: BLEARGH! */
 	}
+
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
@@ -583,24 +516,14 @@ bookmark_add_add(struct dialog *d)
 void
 bookmark_search_do(struct dialog *d)
 {
-	struct dialog_data *parent;
-	int res;
+	if (bookmark_simple_search(d->items[1].data, d->items[0].data)) {
+		struct listbox_item *item = bookmark_box_items.next;
+		struct listbox_data *box = (struct listbox_data *) item->data;
 
-	res = bookmark_simple_search(d->items[1].data, d->items[0].data);
-
-	parent = d->udata;
-
-	/* Tell the bookmark dialog to redraw */
-	if (parent && res) {
-		struct listbox_data *box;
-
-		box = (struct listbox_data *)
-		      parent->dlg->items[BM_BOX_IND].data;
-
-		box->box_top = 0;
-		box->sel = 0;
-
-		bookmark_dlg_list_update(&box->items);
+		if (!list_empty(*item)) {
+			box->sel = item;
+			box->top = item;
+		}
 	}
 }
 

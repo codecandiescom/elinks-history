@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.26 2002/08/11 18:25:49 pasky Exp $ */
+/* $Id: globhist.c,v 1.27 2002/08/29 09:33:34 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -42,47 +42,6 @@ static struct list_head history_dialog_list = {
 	&history_dialog_list
 };
 
-static inline void
-history_dialog_list_clear(struct list_head *list)
-{
-	free_list(*list);
-}
-
-static int
-history_dialog_list_update(struct list_head *list)
-{
-	struct global_history_item *historyitem;
-	struct listbox_item	*item;
-	int count = 0;
-
-	/* Empty the list */
-	history_dialog_list_clear(list);
-
-	foreachback (historyitem, global_history.items) {
-		if ((gh_last_searched_title && *gh_last_searched_title
-		     && !strcasestr(historyitem->title, gh_last_searched_title))
-		    || (gh_last_searched_url && *gh_last_searched_url
-			&& !strcasestr(historyitem->url, gh_last_searched_url)))
-			continue;
-
-		/* Deleted in history_dialog_clear_list() */
-		item = mem_alloc(sizeof(struct listbox_item)
-				 + strlen(historyitem->url) + 1);
-		if (!item) {
-			return count;
-		}
-
-		item->text = ((unsigned char *) item + sizeof(struct listbox_item));
-
-		item->data = (void *) historyitem;
-
-		strcpy(item->text, historyitem->url);
-
-		add_to_list(*list, item);
-		count++;
-	}
-	return count;
-}
 
 void
 update_all_history_dialogs(void)
@@ -90,11 +49,6 @@ update_all_history_dialogs(void)
 	struct history_dialog_list_item *item;
 
 	foreach (item, history_dialog_list) {
-		struct listbox_data *box =
-			(struct listbox_data *)
-				item->dlg->dlg->items[HISTORY_BOX_IND].data;
-
-		history_dialog_list_update(&(box->items));
 		display_dlg_item(item->dlg,
 				 &(item->dlg->items[HISTORY_BOX_IND]), 1);
 	}
@@ -102,39 +56,22 @@ update_all_history_dialogs(void)
 
 /* Creates the box display (holds everything EXCEPT the actual rendering data) */
 static struct listbox_data *
-history_dialog_box_build(struct listbox_data **box)
+history_dialog_box_build()
 {
+	struct listbox_data *box;
+	struct listbox_item *item;
+
 	/* Deleted in abort */
-	*box = mem_alloc(sizeof(struct listbox_data));
-	if (!*box) return NULL;
+	box = mem_alloc(sizeof(struct listbox_data));
+	if (!box) return NULL;
 
-	memset(*box, 0, sizeof(struct listbox_data));
-
-	init_list((*box)->items);
-
-	(*box)->list_len = history_dialog_list_update(&((*box)->items));
-	return *box;
-}
-
-/* Get the id of the currently selected history */
-static struct global_history_item *
-history_dialog_get_selected_history_item(struct listbox_data *box)
-{
-	struct listbox_item *citem;
-	int sel = box->sel;
-
-	if (sel == -1)
-		return NULL;
-
-	/* sel is an index into the history list. Therefore, we spin thru until
-	 * sel equals zero, and return the id at that point. */
-	foreach (citem, box->items) {
-		if (sel == 0)
-			return (struct global_history_item *) citem->data;
-		sel--;
+	memset(box, 0, sizeof(struct listbox_data));
+	box->items = gh_box_items;
+	foreach (item, box->items) {
+		item->data = box;
 	}
 
-	return NULL;
+	return box;
 }
 
 
@@ -155,8 +92,6 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 			break;
 		}
 	}
-
-	history_dialog_list_clear(&(box->items));
 
 	mem_free(box);
 }
@@ -311,9 +246,9 @@ history_search_do(struct dialog *d)
 
 	box = (struct listbox_data *)
 	      parent->dlg->items[HISTORY_BOX_IND].data;
-	box->box_top = 0;
-	box->sel = 0;
-	history_dialog_list_update(&box->items);
+//	box->box_top = 0;
+//	box->sel = 0;
+//	history_dialog_list_update(&box->items);
 }
 
 static void
@@ -344,7 +279,7 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Follow the history item */
-	historyitem = history_dialog_get_selected_history_item(box);
+	historyitem = box->sel->udata;
 	if (historyitem)
 		goto_url((struct session *) goto_btn->item->udata,
 			 historyitem->url);
@@ -366,7 +301,7 @@ push_delete_button(struct dialog_data *dlg,
 	box = (struct listbox_data *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
-	historyitem = history_dialog_get_selected_history_item(box);
+	historyitem = box->sel->udata;
 	if (!historyitem)
 		return 0;
 
@@ -388,8 +323,8 @@ really_clear_history(struct listbox_data *box)
 	while (global_history.n) {
 		delete_global_history_item(global_history.items.prev);
 	}
-
-	box->sel = history_dialog_list_update(&(box->items)) - 1;
+	box->sel = NULL;
+	box->top = NULL;
 }
 
 static int
@@ -424,7 +359,7 @@ push_info_button(struct dialog_data *dlg,
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Show history item info */
-	historyitem = history_dialog_get_selected_history_item(box);
+	historyitem = box->sel->udata;
 	if (historyitem) {
 		msg_box(term, NULL,
 			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
@@ -508,8 +443,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;
-	history_dialog_box_build((struct listbox_data **)
-				 &(d->items[HISTORY_BOX_IND].data));
+	d->items[HISTORY_BOX_IND].data = (void *) history_dialog_box_build();
 
 	d->items[HISTORY_BOX_IND + 1].type = D_END;
 	dd = do_dialog(term, d, getml(d, NULL));

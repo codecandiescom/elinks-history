@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.20 2002/07/23 12:30:28 zas Exp $ */
+/* $Id: globhist.c,v 1.21 2002/08/29 09:33:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "bfu/listbox.h"
 #include "config/options.h"
 #include "dialogs/globhist.h"
 #include "document/globhist.h"
@@ -27,6 +28,8 @@ struct global_history_list global_history = {
 	{ &global_history.items, &global_history.items }
 };
 
+struct list_head gh_box_items = { &gh_box_items, &gh_box_items };
+
 /* GUI stuff. Declared here because finalize_global_history() frees it. */
 unsigned char *gh_last_searched_title = NULL;
 unsigned char *gh_last_searched_url = NULL;
@@ -38,6 +41,9 @@ unsigned char *gh_last_searched_url = NULL;
 void
 free_global_history_item(struct global_history_item *historyitem)
 {
+	del_from_list(historyitem->box_item);
+	mem_free(historyitem->box_item);
+
 	mem_free(historyitem->title);
 	mem_free(historyitem->url);
 }
@@ -77,7 +83,7 @@ get_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 void
 add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 {
-	struct global_history_item *historyitem;
+	struct global_history_item *history_item;
 
 	if (!get_opt_int("document.history.global.enable"))
 		return;
@@ -85,35 +91,51 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 	if (!title || !url)
 		return;
 
-	foreach (historyitem, global_history.items) {
-		if (!strcmp(historyitem->url, url)) {
-			delete_global_history_item(historyitem);
+	foreach (history_item, global_history.items) {
+		if (!strcmp(history_item->url, url)) {
+			delete_global_history_item(history_item);
 			break;
 		}
 	}
 
-	historyitem = mem_alloc(sizeof(struct global_history_item));
-	if (!historyitem)
+	history_item = mem_alloc(sizeof(struct global_history_item));
+	if (!history_item)
 		return;
 
-	historyitem->last_visit = time;
-	historyitem->title = stracpy(title);
-	historyitem->url = stracpy(url);
+	history_item->last_visit = time;
+	history_item->title = stracpy(title);
+	history_item->url = stracpy(url);
 
-	add_to_list(global_history.items, historyitem);
+	add_to_list(global_history.items, history_item);
 	global_history.n++;
 
 	while (global_history.n > get_opt_int("document.history.global.max_items")) {
-		historyitem = global_history.items.prev;
+		history_item = global_history.items.prev;
 
-		if ((void *) historyitem == &global_history.items) {
+		if ((void *) history_item == &global_history.items) {
 			internal("global history is empty");
 			global_history.n = 0;
 			return;
 		}
 
-		delete_global_history_item(historyitem);
+		delete_global_history_item(history_item);
 	}
+
+	/* Deleted in history_dialog_clear_list() */
+	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)
+					       + strlen(history_item->url) + 1);
+	if (!history_item) return;
+
+	history_item->box_item->text = ((unsigned char *) history_item->box_item
+					+ sizeof(struct listbox_item));
+	if (!list_empty(gh_box_items))
+		history_item->box_item->data = ((struct listbox_item *)
+						gh_box_items.next)->data;
+	history_item->box_item->udata = (void *) history_item;
+
+	strcpy(history_item->box_item->text, history_item->url);
+
+	add_to_list(gh_box_items, history_item->box_item);
 
 	update_all_history_dialogs();
 }

@@ -3485,6 +3485,7 @@ trap 'rm -fr `echo " \
  src/bookmarks/Makefile \
  src/config/Makefile \
  src/cookies/Makefile \
+ src/dialogs/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
  src/intl/Makefile \
@@ -3589,6 +3590,7 @@ CONFIG_FILES=\${CONFIG_FILES-"\
  src/bookmarks/Makefile \
  src/config/Makefile \
  src/cookies/Makefile \
+ src/dialogs/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
  src/intl/Makefile \

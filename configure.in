@@ -321,6 +321,7 @@ AC_OUTPUT([ \
  src/bookmarks/Makefile \
  src/config/Makefile \
  src/cookies/Makefile \
+ src/dialogs/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
  src/intl/Makefile \

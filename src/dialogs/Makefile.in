@@ -67,8 +67,8 @@ VERSION = @VERSION@
 INCLUDES =   -I$(srcdir)/..
 
 
-noinst_LIBRARIES = libbfu.a
-libbfu_a_SOURCES =   bfu.c  bfu.h
+noinst_LIBRARIES = libdialogs.a
+libdialogs_a_SOURCES =   menu.c  menu.h
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = ../../config.h
@@ -80,8 +80,8 @@ DEFS = @DEFS@ -I. -I$(srcdir) -I../..
 CPPFLAGS = @CPPFLAGS@
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
-libbfu_a_LIBADD = 
-libbfu_a_OBJECTS =  bfu.o
+libdialogs_a_LIBADD = 
+libdialogs_a_OBJECTS =  menu.o
 AR = ar
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -94,15 +94,15 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-DEP_FILES =  .deps/bfu.P
-SOURCES = $(libbfu_a_SOURCES)
-OBJECTS = $(libbfu_a_OBJECTS)
+DEP_FILES =  .deps/menu.P
+SOURCES = $(libdialogs_a_SOURCES)
+OBJECTS = $(libdialogs_a_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/bfu/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu src/dialogs/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
@@ -134,10 +134,10 @@ distclean-compile:
 
 maintainer-clean-compile:
 
-libbfu.a: $(libbfu_a_OBJECTS) $(libbfu_a_DEPENDENCIES)
-	-rm -f libbfu.a
-	$(AR) cru libbfu.a $(libbfu_a_OBJECTS) $(libbfu_a_LIBADD)
-	$(RANLIB) libbfu.a
+libdialogs.a: $(libdialogs_a_OBJECTS) $(libdialogs_a_DEPENDENCIES)
+	-rm -f libdialogs.a
+	$(AR) cru libdialogs.a $(libdialogs_a_OBJECTS) $(libdialogs_a_LIBADD)
+	$(RANLIB) libdialogs.a
 
 tags: TAGS
 
@@ -170,14 +170,14 @@ maintainer-clean-tags:
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = src/bfu
+subdir = src/dialogs
 
 distdir: $(DISTFILES)
 	here=`cd $(top_builddir) && pwd`; \
 	top_distdir=`cd $(top_distdir) && pwd`; \
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
-	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/bfu/Makefile
+	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu src/dialogs/Makefile
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \

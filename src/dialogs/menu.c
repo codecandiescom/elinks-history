@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.136 2003/10/02 12:47:15 kuser Exp $ */
+/* $Id: menu.c,v 1.137 2003/10/02 13:38:29 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,6 +652,6 @@ free_history_lists(void)
 	free_list(file_history.items);
 	free_list(search_history.items);
 #ifdef HAVE_SCRIPTING
-	trigger_event(get_event_id("free-history"));
+	trigger_event_name("free-history");
 #endif
 }

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.366 2003/10/25 13:25:40 pasky Exp $ */
+/* $Id: options.c,v 1.367 2003/10/25 13:26:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,8 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 
 		/* This fits as the last list entry, add it there. This
 		 * optimizes the most expensive BUT most common case ;-). */
-		} else if (strcmp((pos = cat->prev)->name, option->name) <= 0) {
+		} else if (strcmp(((struct option *) cat->prev)->name,
+			   option->name) <= 0) {
 			add_to_list_end(*cat, option);
 
 		/* Scan the list linearly. This could be probably optimized ie.

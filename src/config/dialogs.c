@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.184 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.185 2004/07/14 14:00:39 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -222,7 +222,13 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 static struct listbox_item *
 get_option_root(struct listbox_item *item)
 {
-	return item->root;
+	struct option *option = item->udata;
+
+	/* The config_options root has no listbox so return that
+	 * we are at the bottom. */
+	if (option->root == config_options) return NULL;
+
+	return option->root ? option->root->box_item : NULL;
 }
 
 static enum listbox_match
@@ -244,8 +250,10 @@ match_option(struct listbox_item *item, struct terminal *term,
 static int
 can_delete_option(struct listbox_item *item)
 {
-	if (item->root) {
-		struct option *parent_option = item->root->udata;
+	struct option *option = item->udata;
+
+	if (option->root) {
+		struct option *parent_option = option->root;
 
 		return parent_option->flags & OPT_AUTOCREATE;
 	}
@@ -311,11 +319,10 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 			 * was zero. */
 			while (current && (!current->change_hook ||
 				!current->change_hook(ses, current, option))) {
-				if (!current->box_item ||
-				    !current->box_item->root)
+				if (!current->root)
 					break;
 
-				current = current->box_item->root->udata;
+				current = current->root;
 			}
 
 			commandline = 0;
@@ -473,7 +480,7 @@ invalid_option:
 
 	option = box->sel->udata;
 	if (!(option->flags & OPT_AUTOCREATE)) {
-		if (box->sel->root) option = box->sel->root->udata;
+		if (option->root) option = option->root;
 		if (!option || !(option->flags & OPT_AUTOCREATE))
 			goto invalid_option;
 	}

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.104 2004/06/24 06:35:32 miciah Exp $ */
+/* $Id: options.h,v 1.105 2004/07/14 14:00:40 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -118,6 +118,8 @@ struct option {
 	union option_value value;
 	unsigned char *desc;
 	unsigned char *capt;
+
+	struct option *root;
 
 	/* To be called when the option (or sub-option if it's a tree) is
 	 * changed. If it returns zero, we will continue descending the options

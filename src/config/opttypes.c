@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.84 2004/07/04 13:32:25 jonas Exp $ */
+/* $Id: opttypes.c,v 1.85 2004/07/14 14:00:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -351,7 +351,6 @@ tree_dup(struct option *opt, struct option *template)
 			add_to_list(opt->box_item->child,
 				    new_opt->box_item);
 		}
-		new_opt->box_item->root = opt->box_item;
 	}
 }
 

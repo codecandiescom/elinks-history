@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.40 2002/07/08 17:19:39 pasky Exp $ */
+/* $Id: menu.c,v 1.41 2002/07/23 09:19:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,8 @@ exit_prog(struct terminal *term, void *d, struct session *ses)
 		register_bottom_half((void (*)(void *))destroy_terminal, term);
 		return;
 	}
-	if (!ses->exit_query && (!d || (term->next == term->prev && are_there_downloads()))) {
+	if (!ses->exit_query
+	    && (!d || (term->next == term->prev && are_there_downloads()))) {
 		query_exit(ses);
 		return;
 	}
@@ -204,16 +205,27 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 
 	foreach(l, ses->history) {
 		if (n/* || ses->tq_goto_position*/) {
-			unsigned char *url;
-			if (!mi && !(mi = new_menu(3))) return;
+			unsigned char *url, *pc;
+
+			if (!mi) {
+				mi = new_menu(3);
+				if (!mi) return;
+			}
+
 			url = stracpy(l->vs.url);
-			if (strchr(url, POST_CHAR)) *strchr(url, POST_CHAR) = 0;
-			add_to_menu(&mi, url, "", "", MENU_FUNC go_backwards, (void *) n, 0);
+			pc = strchr(url, POST_CHAR);
+			if (pc) *pc = '\0';
+
+			add_to_menu(&mi, url, "", "", MENU_FUNC go_backwards,
+				    (void *) n, 0);
 		}
 		n++;
 	}
-	if (n <= 1) do_menu(term, no_hist_menu, ses);
-	else do_menu(term, mi, ses);
+
+	if (n <= 1)
+		do_menu(term, no_hist_menu, ses);
+	else
+		do_menu(term, mi, ses);
 }
 
 void
@@ -224,15 +236,26 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	int n = 0;
 
 	foreach(l, ses->unhistory) {
-		unsigned char *url;
-		if (!mi && !(mi = new_menu(3))) return;
+		unsigned char *url, *pc;
+
+		if (!mi) {
+			mi = new_menu(3);
+			if (!mi) return;
+		}
+
 		url = stracpy(l->vs.url);
-		if (strchr(url, POST_CHAR)) *strchr(url, POST_CHAR) = 0;
-		add_to_menu(&mi, url, "", "", MENU_FUNC go_unbackwards, (void *) n, 0);
+		pc = strchr(url, POST_CHAR);
+		if (pc) *pc = '\0';
+
+		add_to_menu(&mi, url, "", "", MENU_FUNC go_unbackwards,
+			    (void *) n, 0);
 		n++;
 	}
-	if (!n) do_menu(term, no_hist_menu, ses);
-	else do_menu(term, mi, ses);
+
+	if (!n)
+		do_menu(term, no_hist_menu, ses);
+	else
+		do_menu(term, mi, ses);
 }
 
 
@@ -247,9 +270,9 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct download *d;
 	struct menu_item *mi = NULL;
 	int n = 0;
-	
+
 	foreachback(d, downloads) {
-		unsigned char *url;
+		unsigned char *url, *pc;
 
 		if (!mi) {
 			mi = new_menu(3);
@@ -257,16 +280,17 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 		}
 
 		url = stracpy(d->url);
-		if (strchr(url, POST_CHAR)) *strchr(url, POST_CHAR) = '\0';
-		add_to_menu(&mi, url, "", "", MENU_FUNC display_download, d, 0);
+		pc = strchr(url, POST_CHAR);
+		if (pc) *pc = '\0';
+		add_to_menu(&mi, url, "", "", MENU_FUNC display_download,
+			    d, 0);
 		n++;
 	}
-	
-	if (!n) {
+
+	if (!n)
 		do_menu(term, no_downloads_menu, ses);
-	} else {
+	else
 		do_menu(term, mi, ses);
-	}
 }
 
 
@@ -285,8 +309,9 @@ menu_toggle(struct terminal *term, void *ddd, struct session *ses)
 void
 menu_shell(struct terminal *term, void *xxx, void *yyy)
 {
-	unsigned char *sh;
-	if (!(sh = GETSHELL)) sh = DEFAULT_SHELL;
+	unsigned char *sh = GETSHELL;
+
+	if (!sh) sh = DEFAULT_SHELL;
 	exec_on_terminal(term, sh, "", 1);
 }
 
@@ -349,15 +374,24 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	int x;
 	int o;
 	struct menu_item *file_menu, *e, *f;
-	if (!(file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12) + sizeof(file_menu21) + sizeof(file_menu22) + sizeof(file_menu3) + 3 * sizeof(struct menu_item)))) return;
+
+	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12)
+			      + sizeof(file_menu21) + sizeof(file_menu22)
+			      + sizeof(file_menu3)
+			      + 3 * sizeof(struct menu_item));
+
+	if (!file_menu) return;
 	e = file_menu;
 	memcpy(e, file_menu11, sizeof(file_menu11));
 	e += sizeof(file_menu11) / sizeof(struct menu_item);
+
 	if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 		memcpy(e, file_menu12, sizeof(file_menu12));
 		e += sizeof(file_menu12) / sizeof(struct menu_item);
 	}
-	if ((o = can_open_in_new(term))) {
+
+	o = can_open_in_new(term);
+	if (o) {
 		e->text = TEXT(T_NEW_WINDOW);
 		e->rtext = o - 1 ? ">" : "";
 		e->hotkey = TEXT(T_HK_NEW_WINDOW);
@@ -367,14 +401,17 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->free_i = 0;
 		e++;
 	}
+
 	if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 		memcpy(e, file_menu21, sizeof(file_menu21));
 		e += sizeof(file_menu21) / sizeof(struct menu_item);
 	}
+
 	memcpy(e, file_menu22, sizeof(file_menu22));
 	e += sizeof(file_menu22) / sizeof(struct menu_item);
 	/*"", "", M_BAR, NULL, NULL, 0, 0,
 	TEXT(T_OS_SHELL), "", TEXT(T_HK_OS_SHELL), MENU_FUNC menu_shell, NULL, 0, 0,*/
+
 	x = 1;
 	if (!get_opt_int_tree(cmdline_options, "anonymous")
 	    && can_open_os_shell(term->environment)) {
@@ -388,6 +425,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e++;
 		x = 0;
 	}
+
 	if (can_resize_window(term->environment)) {
 		e->text = TEXT(T_RESIZE_TERMINAL);
 		e->rtext = "";
@@ -399,9 +437,12 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e++;
 		x = 0;
 	}
+
 	memcpy(e, file_menu3 + x, sizeof(file_menu3) - x * sizeof(struct menu_item));
 	e += sizeof(file_menu3) / sizeof(struct menu_item);
+
 	for (f = file_menu; f < e; f++) f->free_i = 1;
+
 	do_menu(term, file_menu, ses);
 }
 
@@ -483,15 +524,19 @@ struct menu_item setup_menu_anon[] = {
 void
 do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	if (!get_opt_int_tree(cmdline_options, "anonymous")) do_menu(term, view_menu, ses);
-	else do_menu(term, view_menu_anon, ses);
+	if (!get_opt_int_tree(cmdline_options, "anonymous"))
+		do_menu(term, view_menu, ses);
+	else
+		do_menu(term, view_menu_anon, ses);
 }
 
 void
 do_setup_menu(struct terminal *term, void *xxx, struct session *ses)
 {
-	if (!get_opt_int_tree(cmdline_options, "anonymous")) do_menu(term, setup_menu, ses);
-	else do_menu(term, setup_menu_anon, ses);
+	if (!get_opt_int_tree(cmdline_options, "anonymous"))
+		do_menu(term, setup_menu, ses);
+	else
+		do_menu(term, setup_menu_anon, ses);
 }
 
 struct menu_item main_menu[] = {
@@ -508,6 +553,7 @@ void
 activate_bfu_technology(struct session *ses, int item)
 {
 	struct terminal *term = ses->term;
+
 	do_mainmenu(term, main_menu, ses, item);
 }
 
@@ -516,29 +562,45 @@ struct input_history goto_url_history = { 0, {&goto_url_history.items, &goto_url
 void
 dialog_goto_url(struct session *ses, char *url)
 {
-	input_field(ses->term, NULL, TEXT(T_GOTO_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_STR_LEN, url, 0, 0, NULL, (void (*)(void *, unsigned char *)) goto_url_with_hook, NULL);
+	input_field(ses->term, NULL, TEXT(T_GOTO_URL), TEXT(T_ENTER_URL),
+		    TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history,
+		    MAX_STR_LEN, url, 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) goto_url_with_hook,
+		    NULL);
 }
 
 void
 dialog_save_url(struct session *ses)
 {
-	input_field(ses->term, NULL, TEXT(T_SAVE_URL), TEXT(T_ENTER_URL), TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) save_url, NULL);
+	input_field(ses->term, NULL, TEXT(T_SAVE_URL), TEXT(T_ENTER_URL),
+		    TEXT(T_OK), TEXT(T_CANCEL), ses, &goto_url_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) save_url,
+		    NULL);
 }
 
 struct input_history file_history = { 0, {&file_history.items, &file_history.items} };
 
 void
-query_file(struct session *ses, unsigned char *url, void (*std)(struct session *, unsigned char *), void (*cancel)(struct session *))
+query_file(struct session *ses, unsigned char *url,
+	   void (*std)(struct session *, unsigned char *),
+	   void (*cancel)(struct session *))
 {
 	unsigned char *file, *def;
 	int dfl = 0;
 	int l;
+
 	get_filename_from_url(url, &file, &l);
 	def = init_str();
 	add_to_str(&def, &dfl, get_opt_str("document.download.directory"));
 	if (*def && !dir_sep(def[strlen(def) - 1])) add_chr_to_str(&def, &dfl, '/');
 	add_bytes_to_str(&def, &dfl, file, l);
-	input_field(ses->term, NULL, TEXT(T_DOWNLOAD), TEXT(T_SAVE_TO_FILE), TEXT(T_OK), TEXT(T_CANCEL), ses, &file_history, MAX_STR_LEN, def, 0, 0, NULL, (void (*)(void *, unsigned char *))std, (void (*)(void *))cancel);
+
+	input_field(ses->term, NULL, TEXT(T_DOWNLOAD), TEXT(T_SAVE_TO_FILE),
+		    TEXT(T_OK), TEXT(T_CANCEL), ses, &file_history,
+		    MAX_STR_LEN, def, 0, 0, NULL,
+		    (void (*)(void *, unsigned char *))std,
+		    (void (*)(void *))cancel);
 	mem_free(def);
 }
 
@@ -547,13 +609,21 @@ struct input_history search_history = { 0, {&search_history.items, &search_histo
 void
 search_back_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, TEXT(T_SEARCH_BACK), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for_back, NULL);
+	input_field(ses->term, NULL, TEXT(T_SEARCH_BACK), TEXT(T_SEARCH_FOR_TEXT),
+		    TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) search_for_back,
+		    NULL);
 }
 
 void
 search_dlg(struct session *ses, struct f_data_c *f, int a)
 {
-	input_field(ses->term, NULL, TEXT(T_SEARCH), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for, NULL);
+	input_field(ses->term, NULL, TEXT(T_SEARCH), TEXT(T_SEARCH_FOR_TEXT),
+		    TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) search_for,
+		    NULL);
 }
 
 void
@@ -566,4 +636,3 @@ free_history_lists()
 	free_lua_console_history();
 #endif
 }
-

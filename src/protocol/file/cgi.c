@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.19 2003/12/05 17:47:42 pasky Exp $ */
+/* $Id: cgi.c,v 1.20 2003/12/05 17:48:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/string.h"
+
 
 static void
 close_pipe_and_read(struct connection *conn)

@@ -1,3 +1,10 @@
+Mon Mar 11 12:56:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html_r.c:
+	
+	Don't convert only default value of form item, but all possible
+	values (<select> tag) (by mikulas, from 0.97pre6)
+
 Sun Mar 10 20:42:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, html.c, html_r.c, links.h:

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.79 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: color.c,v 1.80 2005/03/14 22:46:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,7 @@ static unsigned char fg_color[16][8] = {
 	/* 3 (brown) */
 	{  3, 11,  3, 11,  3, 11,  3,  3 },
 	/* 4 (blue) */
-	{ 12, 12,  4,  4, 12, 15,  4,  4 },
+	{ 12, 12,  6,  4, 12,  6,  4,  4 },
 	/* 5 (magenta) */
 	{  5, 13,  5, 13, 13, 13,  5,  5 },
 	/* 6 (cyan) */
@@ -170,7 +170,7 @@ static unsigned char fg_color[16][8] = {
 	/* 11 (brightyellow) */
 	{ 11, 11, 11, 11, 11, 11, 11, 11 },
 	/* 12 (brightblue) */
-	{ 12, 12, 12,  4,  6,  6,  4, 12 },
+	{ 12, 12,  6,  4,  6,  6,  4, 12 },
 	/* 13 (brightmagenta) */
 	{ 13, 13,  5, 13, 13, 13,  5,  5 },
 	/* 14 (brightcyan) */

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.26 2003/06/04 17:14:37 pasky Exp $ */
+/* $Id: secsave.c,v 1.27 2003/06/04 17:15:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@
 /* FIXME: locking system on files about to be rewritten ? */
 /* FIXME: Low risk race conditions about ssi->file_name. */
 
-enum secsave_errno_set secsave_errno = SS_ERR_NONE;
+enum secsave_errno secsave_errno = SS_ERR_NONE;
 
 
 /* Open a file for writing in a secure way. It returns a pointer to a structure

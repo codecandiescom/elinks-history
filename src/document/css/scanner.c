@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.90 2004/01/22 22:55:44 jonas Exp $ */
+/* $Id: scanner.c,v 1.91 2004/01/23 06:26:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,8 @@ enum css_char_group {
 	CSS_CHAR_NON_ASCII	= (1 << 6),
 	CSS_CHAR_SGML_MARKUP	= (1 << 7),
 	CSS_CHAR_TOKEN		= (1 << 8),
-	CSS_CHAR_WHITESPACE	= (1 << 9),
+	CSS_CHAR_TOKEN_START	= (1 << 9),
+	CSS_CHAR_WHITESPACE	= (1 << 10),
 };
 
 #define	check_css_table(c, bit)	(css_scan_table[(c)] & (bit))
@@ -45,6 +46,7 @@ enum css_char_group {
 #define	is_css_digit(c)		check_css_table(c, CSS_CHAR_DIGIT)
 #define	is_css_hexdigit(c)	check_css_table(c, CSS_CHAR_HEX_DIGIT)
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
+#define	is_css_token_start(c)	check_css_table(c, CSS_CHAR_TOKEN_START)
 
 struct css_identifier {
 	unsigned char *name;
@@ -184,6 +186,10 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_IDENT;
 		}
 
+	} else if (!is_css_token_start(first_char)) {
+		/* TODO: Better composing of error tokens. For now we just
+		 * split them down into char tokens */
+
 	} else if (first_char == '#') {
 		/* Check whether it is hexcolor or hash token */
 		if (is_css_hexdigit(*string)) {
@@ -264,8 +270,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			}
 
 	} else {
-		/* TODO: Better composing of error tokens. For now we just
-		 * split them down into char tokens */
+		INTERNAL("Someone forgot to put code for recognizing tokens "
+			 "which start with '%c'.", first_char);
 	}
 
 	token->type = type;
@@ -460,6 +466,7 @@ static struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
 	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
 	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
+	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
 	/* Unicode escape (that we do not handle yet) + other special chars */
 	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 	/* This should contain mostly used char tokens like ':' and maybe a few

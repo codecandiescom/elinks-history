@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.49 2003/05/04 20:06:51 pasky Exp $ */
+/* $Id: view.c,v 1.50 2003/05/04 20:35:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -415,7 +415,7 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 							}
 						}
 						set_cursor(t, x, y, xx, yy);
-						set_window_ptr(get_root_window(t), x, y);
+						set_window_ptr(get_current_tab(t), x, y);
 						f = 1;
 					}
 					set_color(t, x, y, /*((link->sel_color << 3) | (co >> 11 & 7)) << 8*/ link->sel_color << 8);
@@ -949,7 +949,7 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 
 	if (active) {
 		set_cursor(t, xp + xw - 1, yp + yw - 1, xp + xw - 1, yp + yw - 1);
-		set_window_ptr(get_root_window(t), xp, yp);
+		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 	if (!scr->vs) {
 		fill_area(t, xp, yp, xw, yw, scr->f_data->y ? scr->f_data->bg : ' ');

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.4 2003/05/04 20:33:21 pasky Exp $ */
+/* $Id: tab.c,v 1.5 2003/05/04 20:35:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@ struct window *
 init_tab(struct terminal *term)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
-	struct window *current_tab = get_root_window(term);
+	struct window *current_tab = get_current_tab(term);
 
 	if (!win) return NULL;
 
@@ -115,7 +115,7 @@ close_tab(struct terminal *term)
 	if (number_of_tabs(term) < 2)
 		return;
 
-	delete_window(get_root_window(term));
+	delete_window(get_current_tab(term));
 
 	switch_to_tab(term, term->current_tab);
 }

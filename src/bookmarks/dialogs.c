@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.40 2002/09/22 15:33:21 pasky Exp $ */
+/* $Id: dialogs.c,v 1.41 2002/09/25 19:41:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -445,24 +445,25 @@ bookmark_add_add(struct dialog *d)
 	struct listbox_data *box;
 	struct bookmark *bm = NULL;
 
-	box_widget_data =
-		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
-	box = (struct listbox_data *) box_widget_data->item->data;
+	if (!d->udata) {
+		box_widget_data =
+			&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
+		box = (struct listbox_data *) box_widget_data->item->data;
 
-	if (box->sel) {
-		if (box->sel->type == BI_FOLDER) {
-			bm = box->sel->udata;
-		} else if (box->sel->root) {
-			bm = box->sel->root->udata;
+		if (box->sel) {
+			if (box->sel->type == BI_FOLDER) {
+				bm = box->sel->udata;
+			} else if (box->sel->root) {
+				bm = box->sel->root->udata;
+			}
 		}
 	}
+
 	bm = add_bookmark(bm, 1, d->items[0].data, d->items[1].data);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
-
-	if (!d->udata) return;
 
 	/* We touch only the actual bookmark dialog, not all of them;
 	 * that's right, right? ;-) --pasky */

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.208 2003/08/23 15:18:24 jonas Exp $ */
+/* $Id: renderer.c,v 1.209 2003/08/23 16:03:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,10 +758,11 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static int bg_cache;
 	static int fg_cache;
+	static enum screen_char_attr attr_cache;
 	int bg, fg;
 	struct link *link;
 	struct point *pt;
-	unsigned char attr = 0;
+	enum screen_char_attr attr = 0;
 
 	assert(part);
 	if_assert_failed return;
@@ -782,12 +783,6 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	}
 	if (part->cx == -1) part->cx = par_format.leftmargin;
 
-	if (format.attr & AT_UNDERLINE)
-		attr |= SCREEN_ATTR_UNDERLINE;
-
-	if (format.attr & AT_GRAPHICS)
-		attr |= SCREEN_ATTR_FRAME;
-
 	if (last_link || last_image || last_form || format.link
 	    || format.image || format.form)
 		goto process_link;
@@ -797,6 +792,7 @@ no_link:
 		goto format_change;
 	bg = bg_cache;
 	fg = fg_cache;
+	attr = attr_cache;
 
 end_format_change:
 	if (part->cx == par_format.leftmargin && *chars == ' '
@@ -970,9 +966,27 @@ format_change:
 	fg = find_nearest_color(format.fg, 16);
 	fg = fg_color(fg, bg);
 
-	if (format.attr & AT_ITALIC) fg = fg ^ 0x01;
-	if (format.attr & AT_UNDERLINE) fg = (fg ^ 0x04) | 0x08;
-	if (format.attr & AT_BOLD) fg = fg | 0x08;
+	attr = 0;
+	if (format.attr) {
+		if (format.attr & AT_UNDERLINE) {
+			attr |= SCREEN_ATTR_UNDERLINE;
+			fg = (fg ^ 0x04) | 0x08;
+		}
+
+		if (format.attr & AT_BOLD) {
+			attr |= SCREEN_ATTR_BOLD;
+			fg = fg | 0x08;
+		}
+
+		if (format.attr & AT_ITALIC) {
+			attr |= SCREEN_ATTR_ITALIC;
+			fg = fg ^ 0x01;
+		}
+
+		if (format.attr & AT_GRAPHICS) {
+			attr |= SCREEN_ATTR_FRAME;
+		}
+	}
 
 	fg = fg_color(fg, bg);
 	if (format.attr & AT_GRAPHICS) bg = bg | 0x10;
@@ -980,9 +994,7 @@ format_change:
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
 	fg_cache = fg;
 	bg_cache = bg;
-
-	if (format.attr & AT_GRAPHICS)
-		attr |= SCREEN_ATTR_FRAME;
+	attr_cache = attr;
 
 	/* FIXME:
 	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */

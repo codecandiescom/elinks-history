@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.9 2002/03/18 20:51:20 pasky Exp $ */
+/* $Id: connect.c,v 1.10 2002/03/22 18:08:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,8 +46,9 @@
 #ifdef LOG_TRANSFER
 void log_data(unsigned char *data, int len)
 {
-	int fd;
-	if ((fd = open(LOG_TRANSFER, O_WRONLY | O_APPEND | O_CREAT, 0622)) != -1) {
+	int fd = open(LOG_TRANSFER, O_WRONLY | O_APPEND | O_CREAT, 0622);
+
+	if (fd != -1) {
 		set_bin(fd);
 		write(fd, data, len);
 		close(fd);
@@ -72,8 +73,8 @@ void close_socket(int *s)
 
 void dns_exception(void *data)
 {
-        struct connection *conn = (struct connection *) data;
-        struct conn_info *c_i = (struct conn_info *) conn->buffer;
+	struct connection *conn = (struct connection *) data;
+	struct conn_info *c_i = (struct conn_info *) conn->buffer;
 
 	setcstate(conn, S_EXCEPT);
 	close_socket(c_i->sock);
@@ -82,7 +83,7 @@ void dns_exception(void *data)
 
 void exception(void *data)
 {
-        struct connection *c = (struct connection *) data;
+	struct connection *c = (struct connection *) data;
 
 	setcstate(c, S_EXCEPT);
 	retry_connection(c);
@@ -274,13 +275,13 @@ void dns_found(void *data, int state)
 
 void connected(void *data)
 {
-        struct connection *conn = (struct connection *) data;
+	struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
 	void (*func)(struct connection *) = c_i ? c_i->func : NULL;
 	int err = 0;
 	int len = sizeof(int);
 
-	if (! c_i) internal("Lost conn_info!");
+	if (!c_i) internal("Lost conn_info!");
 
 	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
 		/* Why does EMX return so large values? */
@@ -313,30 +314,37 @@ void connected(void *data)
 
 void write_select(struct connection *c)
 {
-	struct write_buffer *wb;
+	struct write_buffer *wb = c->buffer;
 	int wr;
-	if (!(wb = c->buffer)) {
+
+	if (!wb) {
 		internal("write socket has no buffer");
 		setcstate(c, S_INTERNAL);
 		abort_connection(c);
 		return;
 	}
-	/*printf("ws: %d\n",wb->len-wb->pos);
+
+#if 0
+	printf("ws: %d\n",wb->len-wb->pos);
 	for (wr = wb->pos; wr < wb->len; wr++) printf("%c", wb->data[wr]);
-	printf("-\n");*/
+	printf("-\n");
+#endif
 
 #ifdef HAVE_SSL
 	if (ssl_write(c, wb) <= 0) return;
 #endif
-	if ((wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos)) <= 0) {
+	wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
+	if (wr <= 0) {
 		setcstate(c, wr ? -errno : S_CANT_WRITE);
 		retry_connection(c);
 		return;
 	}
 
 	/*printf("wr: %d\n", wr);*/
-	if ((wb->pos += wr) == wb->len) {
+	wb->pos += wr;
+	if (wb->pos == wb->len) {
 		void (*f)(struct connection *) = wb->done;
+
 		c->buffer = NULL;
 		set_handlers(wb->sock, NULL, NULL, NULL, NULL);
 		mem_free(wb);
@@ -344,21 +352,27 @@ void write_select(struct connection *c)
 	}
 }
 
-void write_to_socket(struct connection *c, int s, unsigned char *data, int len, void (*write_func)(struct connection *))
+void write_to_socket(struct connection *c, int s, unsigned char *data,
+		      int len, void (*write_func)(struct connection *))
 {
 	struct write_buffer *wb;
+
 	log_data(data, len);
-	if (!(wb = mem_alloc(sizeof(struct write_buffer) + len))) {
+
+	wb = mem_alloc(sizeof(struct write_buffer) + len);
+	if (!wb) {
 		setcstate(c, S_OUT_OF_MEM);
 		abort_connection(c);
 		return;
 	}
+
 	wb->sock = s;
 	wb->len = len;
 	wb->pos = 0;
 	wb->done = write_func;
 	memcpy(wb->data, data, len);
-	if (c->buffer) mem_free(c->buffer);
+	if (c->buffer)
+		mem_free(c->buffer);
 	c->buffer = wb;
 	set_handlers(s, NULL, (void (*)())write_select, (void (*)())exception, c);
 }
@@ -367,16 +381,20 @@ void write_to_socket(struct connection *c, int s, unsigned char *data, int len, 
 
 void read_select(struct connection *c)
 {
-	struct read_buffer *rb;
+	struct read_buffer *rb = c->buffer;
 	int rd;
-	if (!(rb = c->buffer)) {
+
+	if (!rb) {
 		internal("read socket has no buffer");
 		setcstate(c, S_INTERNAL);
 		abort_connection(c);
 		return;
 	}
+
 	set_handlers(rb->sock, NULL, NULL, NULL, NULL);
-	if (!(rb = mem_realloc(rb, sizeof(struct read_buffer) + rb->len + READ_SIZE))) {
+
+	rb = mem_realloc(rb, sizeof(struct read_buffer) + rb->len + READ_SIZE);
+	if (!rb) {
 		setcstate(c, S_OUT_OF_MEM);
 		abort_connection(c);
 		return;
@@ -386,7 +404,9 @@ void read_select(struct connection *c)
 #ifdef HAVE_SSL
 	if (ssl_read(c, rb) <= 0) return;
 #endif
-	if ((rd = read(rb->sock, rb->data + rb->len, READ_SIZE)) <= 0) {
+
+	rd = read(rb->sock, rb->data + rb->len, READ_SIZE);
+	if (rd <= 0) {
 		if (rb->close && !rd) {
 			rb->close = 2;
 			rb->done(c, rb);
@@ -406,20 +426,25 @@ void read_select(struct connection *c)
 struct read_buffer *alloc_read_buffer(struct connection *c)
 {
 	struct read_buffer *rb;
-	if (!(rb = mem_alloc(sizeof(struct read_buffer) + READ_SIZE))) {
+
+	rb = mem_alloc(sizeof(struct read_buffer) + READ_SIZE);
+	if (!rb) {
 		setcstate(c, S_OUT_OF_MEM);
 		abort_connection(c);
 		return NULL;
 	}
 	memset(rb, 0, sizeof(struct read_buffer));
+
 	return rb;
 }
 
-void read_from_socket(struct connection *c, int s, struct read_buffer *buf, void (*read_func)(struct connection *, struct read_buffer *))
+void read_from_socket(struct connection *c, int s, struct read_buffer *buf,
+		       void (*read_func)(struct connection *, struct read_buffer *))
 {
 	buf->done = read_func;
 	buf->sock = s;
-	if (c->buffer && buf != c->buffer) mem_free(c->buffer);
+	if (c->buffer && buf != c->buffer)
+		mem_free(c->buffer);
 	c->buffer = buf;
 	set_handlers(s, (void (*)())read_select, NULL, (void (*)())exception, c);
 }

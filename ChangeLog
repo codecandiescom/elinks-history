@@ -1,3 +1,190 @@
+Mon Jun  9 21:41:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Major cleanup and optimization of get_attr_val(). Performance
+	improvment by partially duplicating code.  
+
+Mon Jun  9 20:13:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/Makefile.am:
+
+	Use EXTRA_* for everything.  
+
+Mon Jun  9 19:43:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/book/Makefile.am, doc/book/Makefile.doc,
+	doc/book/manpages/Makefile.am:
+
+	Let's (auto)make buildsystem handle doc/book or die trying. General
+	Makefile for inclusion added.  
+
+Mon Jun  9 18:44:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Now useless variable was removed.  
+
+Mon Jun  9 18:09:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	The strerror() output was uselessly dynamically allocated (useless
+	for format-string msgboxes).  
+
+Mon Jun  9 15:54:13 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced. French translation was updated.  
+
+Mon Jun  9 15:34:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Memleak on download error was fixed (bug 195). Patch by zardoz and
+	me.  
+
+Mon Jun  9 10:47:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Cleanup + comments.  
+
+Mon Jun  9 10:29:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Entity handling in attribute cleanup.  
+
+Mon Jun  9 10:24:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	add_chr() macro cleanup.  
+
+Mon Jun  9 10:07:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Short labels and variables names in get_attr_val() were replaced by
+	explicit ones.  
+
+Mon Jun  9 09:57:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Label end_1 was renamed parse_error.  
+
+Mon Jun  9 09:44:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Some gotos were replaced by while loop.  
+
+Mon Jun  9 01:48:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_element() now skip invalid attributes. It fixes bug 42. Please
+	review and test extensively.  
+
+Mon Jun  9 00:08:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	The character ":" was added to handle tag attribute like
+	xml:lang="en" 
+
+Sun Jun  8 23:59:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Some useless tests were removed, one concerning exit on error, the
+	other since TAG_DELIM() introduction.  
+
+Sun Jun  8 23:36:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	tmp -> saved_eof_char.  
+
+Sun Jun  8 23:34:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Use TAG_START macro.  
+
+Sun Jun  8 23:27:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	atchr() function is now a macro called ATTR_CHAR().  
+
+Sun Jun  8 22:36:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	Oops, a compilation fix. Fast, before anyone notices! 
+
+Sun Jun  8 22:35:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.c:
+
+	More reducing of code duplication (=> merging stuff to go_away(),
+	which now also takes dir parameter describing the exact action being
+	performed).  
+
+Sun Jun  8 22:26:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Removed wrapping-up of some warn() calls by ifdef DEBUG, it's
+	useless.  
+
+Sun Jun  8 22:24:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Since internal() doesn't dump core unless DEBUG anyway, call always
+	internal() for fatal errors. So DEBUG mode now just increases
+	verbosity by emitting error()s when warn*() is called.  
+
+Sun Jun  8 22:22:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: memdebug.c, memlist.c, string.c:
+
+	error() now prints the message source's longitude and latitude by
+	itself, so don't do a redundant job. Rather pass higher-level
+	caller's coordinates to elinks_error() where appropriate.  
+
+Sun Jun  8 22:17:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: memdebug.c, string.c:
+
+	Use elinks_internal() instead of int_error() if you already want to
+	pass own errfile,errline.  
+
+Sun Jun  8 22:12:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Don't highglight error.  
+
+Sun Jun  8 22:11:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, config/cmdline.c, config/options.c,
+	lowlevel/af_unix.c, lowlevel/select.c, lowlevel/signals.c,
+	lua/core.c, sched/session.c, terminal/kbd.c, terminal/terminal.c,
+	viewer/dump/dump.c:
+
+	Normalized error() users: the messages are now localized where it
+	makes sense, the messages text is edited for brevity, superfluous
+	leading 'ERROR' strings removed etc.  
+
 Sun Jun  8 21:57:33 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/bfu/menu.c:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.90 2003/05/27 20:03:38 zas Exp $ */
+/* $Id: renderer.c,v 1.91 2003/05/28 00:45:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -667,7 +667,8 @@ decode:
 			while (i < l && c[i] != ';'
 			       && ((c[i] >= 'A' && c[i] <= 'Z')
 				   || (c[i] >= 'a' && c[i] <= 'z')
-				   || (c[i] >= '0' && c[i] <= '9')))
+				   || (c[i] >= '0' && c[i] <= '9')
+				   || (c[i] == '#')))
 				i++;
 
 			if (c[i] == ';' && i > start) {

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.29 2003/05/27 20:03:37 zas Exp $ */
+/* $Id: charsets.c,v 1.30 2003/05/28 00:45:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -369,19 +369,24 @@ xxstrcmp(unsigned char *s1, unsigned char *s2, int l2)
 /* To enable experimental entity cache, define it. */
 #if 0
 #define ENTITY_CACHE
-#define DEBUG_ENTITY_CACHE
 #else
 #undef ENTITY_CACHE
+#endif
+
+/* Entity cache debugging purpose. */
+#if 0
+#define DEBUG_ENTITY_CACHE
+#else
 #undef DEBUG_ENTITY_CACHE
 #endif
 
 #ifdef ENTITY_CACHE
 struct entity_cache {
 		unsigned int hits;
-		int stlen;
+		int strlen;
 		int encoding;
 		unsigned char *result;
-		unsigned char st[20];
+		unsigned char str[20]; /* Suffice in any case. */
 };
 
 static int
@@ -394,18 +399,17 @@ hits_cmp(struct entity_cache *a, struct entity_cache *b)
 #endif
 
 unsigned char *
-get_entity_string(unsigned char *st, int l, int encoding)
+get_entity_string(const unsigned char *str, const int strlen, int encoding)
 {
 #ifdef ENTITY_CACHE
 #define ENTITY_CACHE_SIZE 10	/* 10 seems a good value. */
 	static struct entity_cache entity_cache[ENTITY_CACHE_SIZE];
 	static int nb_entity_cache = 0;
 	int i;
-	int stlen = l;
 #endif
 	unsigned char *result = NULL;
 
-	if (l <= 0) return NULL;
+	if (strlen <= 0) return NULL;
 
 #ifdef ENTITY_CACHE
 	/* Check if cached. A test on many websites (freshmeat.net + whole ELinks website
@@ -427,8 +431,9 @@ get_entity_string(unsigned char *st, int l, int encoding)
 	 * --Zas */
 	if (nb_entity_cache > 0) {
 		for (i = 0; i < nb_entity_cache; i++) {
-			if (entity_cache[i].stlen == stlen && entity_cache[i].encoding == encoding
-			    && !strncasecmp(st, entity_cache[i].st, stlen)) {
+			if (entity_cache[i].strlen == strlen
+			    && entity_cache[i].encoding == encoding
+			    && !strncasecmp(str, entity_cache[i].str, strlen)) {
 #ifdef DEBUG_ENTITY_CACHE
 				fprintf(stderr, "hit after %d iter.\n", i + 1);
 #endif
@@ -443,12 +448,16 @@ get_entity_string(unsigned char *st, int l, int encoding)
 	}
 #endif
 
-	if (*st == '#') { /* Numeric entity. */
+	if (*str == '#') { /* Numeric entity. */
+		/* Limit to 0xFFFF. Chinese/Korean Unicode may need greater value. */
+		int l = (int) strlen;
+		unsigned char *st = (unsigned char *) str;
 		unicode_val n = 0;
 
 		if (l == 1) goto end; /* &#; ? */
 		st++, l--;
 		if ((*st | 32) == 'x') { /* Hexadecimal */
+
 			if (l == 1 || l > 5) goto end; /* xFFFF max. */
 			st++, l--;
 			do {
@@ -470,11 +479,16 @@ get_entity_string(unsigned char *st, int l, int encoding)
 					n = n * 10 + c - '0';
 				else
 					goto end; /* Bad char. */
-				if (n >= 0x10000) goto end; /* Too big. */
+				/* Limit to 0xFFFF. */
+				if (n >= 0x10000) goto end;
 			} while (--l);
 		}
 
 		result = u2cp(n, encoding);
+
+#ifdef DEBUG_ENTITY_CACHE
+		fprintf(stderr, "%lu %016x %s\n", (unsigned long) n , n, result);
+#endif
 
 	} else { /* Text entity. */
 		long start = 0;
@@ -483,7 +497,7 @@ get_entity_string(unsigned char *st, int l, int encoding)
 		/* Dichotomic search is used there. */
 		while (start <= end) {
 			long middle = (start + end) >> 1;
-			int cmp = xxstrcmp(entities[middle].s, st, l);
+			int cmp = xxstrcmp(entities[middle].s, (unsigned char *) str, (int) strlen);
 
 			if (!cmp) {
 				/* Found. */
@@ -501,7 +515,8 @@ get_entity_string(unsigned char *st, int l, int encoding)
 
 end:
 #ifdef ENTITY_CACHE
-	if (stlen < sizeof(entity_cache[0].st)) {
+	/* Take care of potential buffer overflow. */
+	if (strlen < sizeof(entity_cache[0].str)) {
 
 		if (nb_entity_cache) /* We move previous cached entries (if any) by one step. */
 			memmove(&entity_cache[1], &entity_cache[0],
@@ -512,15 +527,15 @@ end:
 
 		/* Copy new entry to cache. */
 		entity_cache[0].hits = 1;
-		entity_cache[0].stlen = stlen;
+		entity_cache[0].strlen = strlen;
 		entity_cache[0].encoding = encoding;
 		entity_cache[0].result = result;
-		memcpy(entity_cache[0].st, st, stlen);
-		entity_cache[0].st[stlen] = '\0';
+		memcpy(entity_cache[0].str, str, strlen);
+		entity_cache[0].str[strlen] = '\0';
 
 #ifdef DEBUG_ENTITY_CACHE
 		fprintf(stderr, "Added: l=%d st='%s'\n",
-				entity_cache[0].stlen, entity_cache[0].st);
+				entity_cache[0].strlen, entity_cache[0].str);
 
 #endif
 		/* Sort entries by hit order. */
@@ -533,8 +548,8 @@ end:
 		fprintf(stderr, "- Cache entries -\n");
 		for (i = 0; i < nb_entity_cache; i++)
 			fprintf(stderr, "%d: hits=%d l=%d st='%s'\n", i,
-				entity_cache[i].hits, entity_cache[i].stlen,
-				entity_cache[i].st);
+				entity_cache[i].hits, entity_cache[i].strlen,
+				entity_cache[i].str);
 		fprintf(stderr, "-----------------\n");
 #endif
 	}
@@ -606,7 +621,8 @@ decode:
 			while (i < l && c[i] != ';'
 			       && ((c[i] >= 'A' && c[i] <= 'Z')
 				   || (c[i] >= 'a' && c[i] <= 'z')
-				   || (c[i] >= '0' && c[i] <= '9')))
+				   || (c[i] >= '0' && c[i] <= '9')
+				   || (c[i] == '#')))
 				i++;
 
 			if (c[i] == ';' && i > start) {

@@ -1,3 +1,57 @@
+Mon Dec  9 21:53:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/sched.c:
+
+	Brought back the witekfl's no-cache cache entry deleting patch with
+	a fix (also by witekfl) supposedly preventing crashes when going
+	back. Let's see how will it work out.  
+
+Mon Dec  9 20:14:42 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/default.h:
+
+	Fixed another critical bug and working on cygwin - we forgot to
+	export the handlers table properly. Thanks to Paul G. Barnett for
+	report, debugging and fix.  
+
+Mon Dec  9 18:55:15 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/common.c:
+
+	Fixed truncating of bookmark file when we try to write it and
+	there's no valid handler. Thanks Paul G. Barnett for a report.  
+
+Mon Dec  9 14:39:43 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Includes in alphabetical order. Patch by Jonas and me.  
+
+Mon Dec  9 13:49:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed bug in the latest parse_element() optimization, causing often
+	segfaults. Patch by witekfl.  
+
+Mon Dec  9 13:21:27 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	Last patch was reverted, it causes segfaults. Need clarification.  
+
+Mon Dec  9 13:00:54 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/file.c:
+
+	file.h is now included. Thanks to fonseca.  
+
+Mon Dec  9 10:47:49 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/gen-intl:
+
+	Polished gen-intl script. Thanks to Miciah.  
+
 Sun Dec  8 22:52:08 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/config/options.h:

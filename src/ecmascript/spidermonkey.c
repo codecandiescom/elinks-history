@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.133 2004/12/19 13:50:36 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.134 2004/12/19 13:53:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -815,7 +815,7 @@ input_click(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 
 	P_BOOLEAN(0);
 
-	assert(fc);
+	assert(fs);
 	fc = find_form_control(document, fs);
 	assert(fc);
 
@@ -1185,7 +1185,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_FORM_LENGTH:
 	{
 		struct form_control *fc;
-		int counter;
+		int counter = 0;
 
 		foreach (fc, form->items)
 			counter++;
@@ -1908,7 +1908,6 @@ static const JSPropertySpec navigator_props[] = {
 static JSBool
 navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	JSObject *parent = JS_GetParent(ctx, obj);
 	VALUE_TO_JSVAL_START;
 
 	if (!JSVAL_IS_INT(id))

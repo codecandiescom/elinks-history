@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.40 2005/03/04 10:21:12 zas Exp $ */
+/* $Id: refresh.c,v 1.41 2005/03/04 13:19:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 #include "document/document.h"
 #include "document/refresh.h"
 #include "document/view.h"
-#include "lowlevel/timer.h"
+#include "lowlevel/timers.h"
 #include "protocol/uri.h"
 #include "sched/download.h"
 #include "sched/session.h"

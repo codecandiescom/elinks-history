@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.604 2005/03/04 10:21:12 zas Exp $ */
+/* $Id: session.c,v 1.605 2005/03/04 13:19:37 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -30,7 +30,7 @@
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
-#include "lowlevel/timer.h"
+#include "lowlevel/timers.h"
 #include "osdep/newwin.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"

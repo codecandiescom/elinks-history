@@ -621,8 +621,7 @@ msgstr ""
 #: src/config/dialogs.c:504
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -763,8 +762,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:407
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:408
 msgid "Go to the homepage"
@@ -1215,8 +1213,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:98
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:104
@@ -1570,8 +1567,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:217
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:220 src/dialogs/options.c:186
 msgid "Underline"
@@ -1587,8 +1583,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:227
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:229
 msgid "Number links"
@@ -1630,8 +1625,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:253
 msgid "Searching"
@@ -1780,8 +1774,7 @@ msgstr ""
 
 #: src/config/options.inc:336
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:338
 msgid ""
@@ -2126,7 +2119,7 @@ msgstr "Linkek aláhúzása."
 
 #: src/config/options.inc:530
 msgid "Wrap non breaking space"
-msgstr ""
+msgstr "Az \"nbsp\"-t tartalmazó sorok kezelése"
 
 #: src/config/options.inc:532
 msgid ""
@@ -2134,6 +2127,10 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Ha be van állítva, akkor a megjelenítés során nem kerül figyelembevételre\n"
+"az \"nbsp\" (nem törhetõ szóköz), és az ezt tartalmazó szöveg több sorba rendezõdik.\n"
+"Ezáltal lecsökken a dokumentum szélessége, és kevesebb oldalirányú lapozás\n"
+"szükséges az olvasásához."
 
 #: src/config/options.inc:537
 msgid "Plain rendering"
@@ -2502,22 +2499,18 @@ msgstr ""
 "elválasztva."
 
 #: src/config/options.inc:725
-#, fuzzy
 msgid "Local CGI specific options. (DISABLED)"
-msgstr "Helyi CGI-vel kapcsolatos beállítások."
+msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:729
-#, fuzzy
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr "A helyi CGI scriptek futtatásának engedélyezése."
+msgstr "A helyi CGI scriptek futtatásának engedélyezése. (LETILTVA)"
 
 #: src/config/options.inc:733
-#, fuzzy
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
-"elválasztva."
+"elválasztva. (LETILTVA)"
 
 #: src/config/options.inc:736
 msgid "User protocols"
@@ -2805,7 +2798,7 @@ msgstr "Menü címsorának színei."
 
 #: src/config/options.inc:900
 msgid "Unselected main menu bar item"
-msgstr " Fõmenü sorában lévõ elem"
+msgstr "Fõmenü sorában lévõ elem"
 
 #: src/config/options.inc:902
 msgid "Unselected main menu bar item colors."
@@ -3599,8 +3592,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/options.inc:1983
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/options.inc:1985
 msgid ""
@@ -4046,7 +4038,7 @@ msgstr "Fül bezárása"
 
 #: src/dialogs/menu.c:117
 msgid "Close ~all but this"
-msgstr ""
+msgstr "Mindegyiket bezárja, kivéve ezt"
 
 #: src/dialogs/menu.c:199
 msgid "Exit ELinks"
@@ -4592,8 +4584,7 @@ msgstr "Látogatott lapok"
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid ""
-"Commandline options -confdir set to %s, but could not create directory %s."
+msgid "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5841,3 +5832,4 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
+

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.19 2002/06/21 13:28:20 pasky Exp $ */
+/* $Id: opttypes.c,v 1.20 2002/06/29 22:01:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,13 +28,26 @@
 unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	unsigned char *r;
+	unsigned char *error;
+	unsigned char *str;
+
 	if (!*argc) return "Parameter expected";
 	(*argv)++; (*argc)--;
-	/* FIXME!! We will modify argv! */
-	if (!option_types[o->type].read(o, *argv - 1)) r = "Read error"; else return NULL;
+
+	/* FIXME!! We will modify argv! (maybe) */
+	str = option_types[o->type].read(o, *argv - 0);
+	if (str) {
+		if (option_types[o->type].set(o, str)) {
+			mem_free(str);
+			return NULL;
+		}
+		mem_free(str);
+	}
+	error = "Read error";
+
 	(*argv)--; (*argc)++;
-	return r;
+
+	return error;
 }
 
 /* If 0 follows, disable option and eat 0. If 1 follows, enable option and
@@ -90,8 +103,25 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 	return NULL;
 }
 
-int
+unsigned char *
 redir_rd(struct option *opt, unsigned char **file)
+{
+	struct option *real = get_opt_rec(root_options, opt->ptr);
+
+	if (!real) {
+		internal("Alias %s leads to unknown option %s!",
+			 opt->name, opt->ptr);
+		return NULL;
+	}
+
+	if (option_types[real->type].read)
+		return option_types[real->type].read(real, file);
+
+	return NULL;
+}
+
+int
+redir_set(struct option *opt, unsigned char *str)
 {
 	struct option *real = get_opt_rec(root_options, opt->ptr);
 
@@ -101,8 +131,42 @@ redir_rd(struct option *opt, unsigned char **file)
 		return 0;
 	}
 
-	if (option_types[real->type].read)
-		return option_types[real->type].read(real, file);
+	if (option_types[real->type].set)
+		return option_types[real->type].set(real, str);
+
+	return 0;
+}
+
+int
+redir_add(struct option *opt, unsigned char *str)
+{
+	struct option *real = get_opt_rec(root_options, opt->ptr);
+
+	if (!real) {
+		internal("Alias %s leads to unknown option %s!",
+			 opt->name, opt->ptr);
+		return 0;
+	}
+
+	if (option_types[real->type].add)
+		return option_types[real->type].add(real, str);
+
+	return 0;
+}
+
+int
+redir_remove(struct option *opt, unsigned char *str)
+{
+	struct option *real = get_opt_rec(root_options, opt->ptr);
+
+	if (!real) {
+		internal("Alias %s leads to unknown option %s!",
+			 opt->name, opt->ptr);
+		return 0;
+	}
+
+	if (option_types[real->type].remove)
+		return option_types[real->type].remove(real, str);
 
 	return 0;
 }
@@ -125,19 +189,33 @@ add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
 
 /* Config file handlers. */
 
-int
+unsigned char *
 num_rd(struct option *opt, unsigned char **file)
 {
-	long value;
+	long *value = mem_alloc(sizeof(long));
 
-	value = strtolx(*file, file);
+	*value = strtolx(*file, file);
 
-	if (!WHITECHAR(**file) && **file != '#') return 0;
+	if ((!WHITECHAR(**file) && **file != '#')
+	    || (*value < opt->min || *value > opt->max)) {
+		mem_free(value);
+		return NULL;
+	}
 
-	if (value < opt->min || value > opt->max) return 0;
+	return (unsigned char *) value;
+}
 
-	*((int *) opt->ptr) = value;
+int
+int_set(struct option *opt, unsigned char *str)
+{
+	*((int *) opt->ptr) = *((long *) str);
+	return 1;
+}
 
+int
+long_set(struct option *opt, unsigned char *str)
+{
+	*((long *) opt->ptr) = *((long *) str);
 	return 1;
 }
 
@@ -166,14 +244,14 @@ long_dup(struct option *opt)
 }
 
 
-int
+unsigned char *
 str_rd(struct option *opt, unsigned char **file)
 {
 	unsigned char *str = *file;
 	unsigned char *str2 = init_str();
 	int str2l = 0;
 
-	if (*str != '"') return 0;
+	if (*str != '"') return NULL;
 	str++;
 
 	while (*str && *str != '"') {
@@ -192,16 +270,20 @@ str_rd(struct option *opt, unsigned char **file)
 		str++;
 	}
 
-	if (!*str) { mem_free(str2); *file = str; return 0; }
+	if (!*str) { mem_free(str2); *file = str; return NULL; }
 
 	str++; /* Skip the quote. */
 	*file = str;
 
-	if (opt->max && str2l >= opt->max) { mem_free(str2); return 0; }
+	if (opt->max && str2l >= opt->max) { mem_free(str2); return NULL; }
 
-	safe_strncpy(opt->ptr, str2, MAX_STR_LEN);
-	mem_free(str2);
+	return str2;
+}
 
+int
+str_set(struct option *opt, unsigned char *str)
+{
+	safe_strncpy(opt->ptr, str, MAX_STR_LEN);
 	return 1;
 }
 
@@ -231,32 +313,13 @@ str_dup(struct option *opt)
 
 
 int
-cp_rd(struct option *opt, unsigned char **str)
+cp_set(struct option *opt, unsigned char *str)
 {
-	unsigned char buf[MAX_STR_LEN];
-	void *ptr;
 	int ret;
 
-	/* XXX: We run string parser on this, simulating that this is a string
-	 * option. */
+	*((int *) opt->ptr) = ret = get_cp_index(str);
 
-	ptr = opt->ptr;
-	opt->ptr = buf;
-	ret = str_rd(opt, str);
-	if (!ret) {
-		opt->ptr = ptr;
-		return 0;
-	}
-
-	ret = get_cp_index(opt->ptr);
-	opt->ptr = ptr;
-
-	if (ret < 0) {
-		*((int *) opt->ptr) = ret;
-		return 0;
-	}
-
-	*((int *) opt->ptr) = ret;
+	if (ret < 0) return 0;
 
 	return 1;
 }
@@ -269,32 +332,16 @@ cp_wr(struct option *o, unsigned char **s, int *l)
 
 
 int
-lang_rd(struct option *opt, unsigned char **str)
+lang_set(struct option *opt, unsigned char *str)
 {
-	unsigned char buf[MAX_STR_LEN];
-	void *ptr;
-	int ret;
+	int i;
 
-	/* XXX: We run string parser on this, simulating that this is a string
-	 * option. */
-
-	ptr = opt->ptr;
-	opt->ptr = buf;
-	ret = str_rd(opt, str);
-	if (!ret) {
-		ptr = opt->ptr;
-		return 0;
-	}
-
-	for (ret = 0; ret < n_languages(); ret++)
-		if (!strcasecmp(language_name(ret), opt->ptr)) {
-			opt->ptr = ptr;
-			*((int *) opt->ptr) = ret;
-			set_language(ret);
+	for (i = 0; i < n_languages(); i++)
+		if (!strcasecmp(language_name(i), str)) {
+			*((int *) opt->ptr) = i;
+			set_language(i);
 			return 1;
 		}
-
-	opt->ptr = ptr;
 
 	*((int *) opt->ptr) = -1;
 
@@ -309,27 +356,11 @@ lang_wr(struct option *o, unsigned char **s, int *l)
 
 
 int
-color_rd(struct option *opt, unsigned char **str)
+color_set(struct option *opt, unsigned char *str)
 {
-	unsigned char buf[MAX_STR_LEN];
-	void *ptr;
 	int ret;
-	struct rgb color;
 
-	/* XXX: We run string parser on this, simulating that this is a string
-	 * option. */
-
-	ptr = opt->ptr;
-	opt->ptr = buf;
-	ret = str_rd(opt, str);
-	if (!ret) {
-		ptr = opt->ptr;
-		return 0;
-	}
-
-	ret = decode_color(opt->ptr, &color);
-	opt->ptr = ptr;
-	*((struct rgb *) opt->ptr) = color;
+	ret = decode_color(str, (struct rgb *) opt->ptr);
 
 	if (ret) return 0;
 
@@ -351,7 +382,7 @@ color_wr(struct option *opt, unsigned char **str, int *len)
 }
 
 void *
-rgb_dup(struct option *opt)
+color_dup(struct option *opt)
 {
 	struct rgb *new = mem_alloc(sizeof(struct rgb));
 
@@ -380,19 +411,19 @@ tree_dup(struct option *opt)
 
 
 struct option_type_info option_types[] = {
-	{ bool_cmd, num_rd, num_wr, int_dup, "[0|1]" },
-	{ gen_cmd, num_rd, num_wr, int_dup, "<num>" },
-	{ gen_cmd, num_rd, num_wr, long_dup, "<num>" },
-	{ gen_cmd, str_rd, str_wr, str_dup, "<str>" },
+	{ bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "[0|1]" },
+	{ gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "<num>" },
+	{ gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, "<num>" },
+	{ gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, "<str>" },
 
-	{ gen_cmd, cp_rd, cp_wr, int_dup, "<codepage>" },
-	{ gen_cmd, lang_rd, lang_wr, NULL, "<language>" },
-	{ gen_cmd, color_rd, color_wr, rgb_dup, "<color|#rrggbb>" },
+	{ gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, "<codepage>" },
+	{ gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, "<language>" },
+	{ gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, "<color|#rrggbb>" },
 
-	{ exec_cmd, NULL, NULL, NULL, "[<...>]" },
+	{ exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "[<...>]" },
 
-	{ redir_cmd, redir_rd, NULL, NULL, "" },
+	{ redir_cmd, redir_rd, NULL, NULL, redir_set, redir_add, redir_remove, "" },
 
 	/* tree */
-	{ NULL, NULL, NULL, tree_dup, "" },
+	{ NULL, NULL, NULL, tree_dup, NULL, NULL, NULL, "" },
 };

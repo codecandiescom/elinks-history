@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.34 2002/06/22 16:34:47 pasky Exp $ */
+/* $Id: conf.c,v 1.35 2002/06/29 22:01:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "intl/language.h"
 #include "lowlevel/home.h"
 #include "lowlevel/terminal.h"
+#include "util/error.h"
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
@@ -138,6 +139,7 @@ parse_config_file(unsigned char *name, unsigned char *file,
 			if (parse_set(&optname, &optname_l, &optval, &line)) {
 				unsigned char *oname;
 				struct option *opt;
+				unsigned char *str;
 
 				/* FIXME: By the time when I write it, I
 				 * already dislike it. However I just want to
@@ -148,9 +150,17 @@ parse_config_file(unsigned char *name, unsigned char *file,
 				opt = get_opt_rec(opt_tree, oname);
 
 				if (opt && !(opt->flags & OPT_HIDDEN)) {
-					if (!option_types[opt->type].read ||
-					    !option_types[opt->type].read(opt, &optval))
+					if (!option_types[opt->type].read) {
+						error = ERROR_VALUE;
+					} else {
+						str = option_types[opt->type].read(opt, &optval);
+						if (!str ||
+						    !option_types[opt->type].set ||
+						    !option_types[opt->type].set(opt, str)) {
 							error = ERROR_VALUE;
+						}
+						if (str) mem_free(str);
+					}
 				} else {
 					error = ERROR_OPTION;
 				}

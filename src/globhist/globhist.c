@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.79 2004/07/14 18:21:17 zas Exp $ */
+/* $Id: globhist.c,v 1.80 2004/07/14 19:15:29 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -348,9 +348,7 @@ write_global_history(void)
 				   historyitem->last_visit) < 0) break;
 	}
 
-	secure_close(ssi);
-
-	global_history.dirty = 0;
+	if (!secure_close(ssi)) global_history.dirty = 0;
 }
 
 static void

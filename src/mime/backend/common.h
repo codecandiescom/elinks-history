@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.4 2003/06/04 19:26:22 jonas Exp $ */
+/* $Id: common.h,v 1.5 2003/06/05 14:18:37 zas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -24,9 +24,9 @@ struct mime_backend {
 
 /* Multiplexor functions for the backends. */
 
-void init_mime_backends();
+void init_mime_backends(void);
 
-void done_mime_backends();
+void done_mime_backends(void);
 
 unsigned char *get_content_type_backends(unsigned char *uri);
 

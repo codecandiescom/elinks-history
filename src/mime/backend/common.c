@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.6 2003/06/04 19:26:22 jonas Exp $ */
+/* $Id: common.c,v 1.7 2003/06/05 14:18:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@ static struct mime_backend *mime_backends[] = {
 
 
 void
-init_mime_backends()
+init_mime_backends(void)
 {
 	int backend_index = 0;
 
@@ -51,7 +51,7 @@ init_mime_backends()
 }
 
 void
-done_mime_backends()
+done_mime_backends(void)
 {
 	int backend_index = 0;
 

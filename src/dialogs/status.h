@@ -1,4 +1,4 @@
-/* $Id: status.h,v 1.6 2004/10/08 16:21:41 zas Exp $ */
+/* $Id: status.h,v 1.7 2004/10/08 16:25:13 zas Exp $ */
 
 #ifndef EL__DIALOGS_STATUS_H
 #define EL__DIALOGS_STATUS_H
@@ -7,8 +7,10 @@
 #include "sched/connection.h"
 #include "sched/session.h"
 
-#define download_is_progressing(down) \
-	((down) && (down)->state == S_TRANS && ((down)->prg->elapsed / 100))
+#define download_is_progressing(download) \
+	((download) && \
+	 (download)->state == S_TRANS && \
+	 ((download)->prg->elapsed / 100))
 
 void print_screen_status(struct session *);
 

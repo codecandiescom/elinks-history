@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.139 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: parser.c,v 1.140 2004/12/29 15:59:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -311,7 +311,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* Look ahead at what's coming next */
 
-		memcpy(&last_token, token, sizeof(*token));
+		copy_struct(&last_token, token);
 		/* Detect whether upcoming tokens are separated by
 		 * whitespace or not (that's important for determining
 		 * whether it's a combinator or specificitier). */

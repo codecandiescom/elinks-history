@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.47 2003/11/12 16:52:00 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.48 2003/11/13 17:56:00 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -134,7 +134,7 @@ unsigned char *write_keymap(enum keymap);
 void toggle_display_action_listboxes(void);
 
 int parse_keystroke(unsigned char *, long *, long *);
-void make_keystroke(struct string *, long, long);
+void make_keystroke(struct string *, long, long, int);
 
 int kbd_action(enum keymap, struct term_event *, int *);
 struct keybinding *kbd_ev_lookup(enum keymap, long, long, int *);

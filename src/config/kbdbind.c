@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.92 2003/11/13 17:43:50 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.93 2003/11/13 17:56:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 
 		if (!init_string(&keystroke)) return;
 
-		make_keystroke(&keystroke, key, meta);
+		make_keystroke(&keystroke, key, meta, 0);
 		kb->box_item = mem_calloc(1, sizeof(struct listbox_item)
 					  + keystroke.length + 1);
 		if (!kb->box_item) {
@@ -346,9 +346,9 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 }
 
 void
-make_keystroke(struct string *str, long key, long meta)
+make_keystroke(struct string *str, long key, long meta, int escape)
 {
-	unsigned char key_buffer[3];
+	unsigned char key_buffer[3] = "xx";
 	unsigned char *key_string = numtostr(key_table, key);
 
 	if (meta & KBD_SHIFT)
@@ -359,15 +359,11 @@ make_keystroke(struct string *str, long key, long meta)
 		add_to_string(str, "Alt-");
 
 	if (!key_string) {
-		key_buffer[0] = (unsigned char) key;
-		if (key == '\\') {
-			key_buffer[1] = '\\';
-			key_buffer[2] = '\0';
-		} else {
-			key_buffer[1] = '\0';
+		key_string = key_buffer + 1;
+		*key_string = (unsigned char) key;
+		if (key == '\\' && escape) {
+			*--key_string = '\\';
 		}
-
-		key_string = key_buffer;
 	}
 
 	add_to_string(str, key_string);
@@ -635,7 +631,7 @@ bind_config_string(struct string *file)
 			add_to_string(file, "bind \"");
 			add_to_string(file, keymap_str);
 			add_to_string(file, "\" \"");
-			make_keystroke(file, keybinding->key, keybinding->meta);
+			make_keystroke(file, keybinding->key, keybinding->meta, 1);
 			add_to_string(file, "\" = \"");
 			add_to_string(file, action_str);
 			add_char_to_string(file, '\"');
@@ -839,7 +835,7 @@ add_keyactions_to_string(struct string *string, enum keyact *actions,
 
 		assert(kb);
 
-		make_keystroke(string, kb->key, kb->meta);
+		make_keystroke(string, kb->key, kb->meta, 0);
 		keystrokelen = string->length - keystrokelen;
 		add_xchar_to_string(string, ' ', int_max(10 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));

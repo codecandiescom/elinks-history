@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.45 2002/10/10 21:40:24 pasky Exp $ */
+/* $Id: sched.c,v 1.46 2002/10/12 15:01:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -851,7 +851,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 		if (stat) {
 			stat->ce = e;
 			stat->state = S_OK;
-			stat->prg->start = start;
+			if (stat->prg) stat->prg->start = start;
 			if (stat->end) stat->end(stat, stat->data);
 		}
 		return 0;

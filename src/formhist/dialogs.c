@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.36 2004/11/17 19:13:07 zas Exp $ */
+/* $Id: dialogs.c,v 1.37 2004/11/19 16:26:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,12 +9,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/hierbox.h"
-#include "bfu/listbox.h"
-#include "bfu/msgbox.h"
-#include "bfu/text.h"
 #include "formhist/dialogs.h"
 #include "formhist/formhist.h"
 #include "dialogs/edit.h"

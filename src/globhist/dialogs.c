@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.124 2004/11/17 19:13:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.125 2004/11/19 16:26:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,13 +9,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/hierbox.h"
-#include "bfu/inphist.h"
-#include "bfu/listbox.h"
-#include "bfu/msgbox.h"
-#include "bfu/text.h"
 #include "bookmarks/dialogs.h"
 #include "dialogs/edit.h"
 #include "globhist/dialogs.h"

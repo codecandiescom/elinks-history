@@ -1,23 +1,22 @@
-/* $Id: widget.h,v 1.74 2004/11/19 16:26:11 zas Exp $ */
+/* $Id: widget.h,v 1.76 2004/11/19 16:33:01 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
 
 #include "bfu/common.h"
 
+/* Dynamic widget #include area */
 #include "bfu/button.h"
 #include "bfu/checkbox.h"
 #include "bfu/group.h"
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
 #include "bfu/msgbox.h"
+#include "bfu/listbox.h"
 #include "bfu/style.h"
 #include "bfu/text.h"
 #include "util/lists.h"
 #include "util/box.h"
-
-/* Dynamic widget #include area */
-#include "bfu/button.h"
 
 struct dialog_data;
 struct input_history;

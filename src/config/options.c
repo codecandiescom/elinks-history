@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.208 2003/05/08 21:45:22 zas Exp $ */
+/* $Id: options.c,v 1.209 2003/05/10 04:07:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2694,4 +2694,6 @@ register_options()
 	strcpy(get_opt_str("protocol.user.gopher.unix-xwin"), "lynx %u");
 	strcpy(get_opt_str("protocol.user.news.unix"), "lynx %u");
 	strcpy(get_opt_str("protocol.user.news.unix-xwin"), "lynx %u");
+	strcpy(get_opt_str("protocol.user.irc.unix"), "irc %u");
+	strcpy(get_opt_str("protocol.user.irc.unix-xwin"), "irc %u");
 }

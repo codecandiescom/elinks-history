@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.34 2003/04/30 08:46:56 zas Exp $ */
+/* $Id: menu.c,v 1.35 2003/04/30 08:49:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,9 +105,7 @@ clear_hotkeys_cache(struct menu_item *items, int ni, int hotkeys)
 static void
 refresh_hotkeys(struct terminal *term, struct menu *menu)
 {
-	fprintf(stderr,"Refresh hotkeys\n");
  	if (current_language != menu->lang) {
-		fprintf(stderr,"Do it\n");
 		clear_hotkeys_cache(menu->items, menu->ni, menu->hotkeys);
 		init_hotkeys(term, menu->items, menu->ni, menu->hotkeys);
 		menu->lang = current_language;

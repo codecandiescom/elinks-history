@@ -31,8 +31,6 @@ for them; dummy javascript support (just an error message)
 
 	Reorganization of user interface
 
-	Use locale+gettext for translations instead of Mikulas' intl
-
 	When calling external viewer on files, assign temporary files the
 suffix appropriate to the file type (?)
 
@@ -74,4 +72,4 @@ optionally.
 	Write some more documentation.. docs, a lot of docs!
 
 
-$Id: TODO,v 1.40 2003/01/02 12:28:45 pasky Exp $
+$Id: TODO,v 1.41 2003/01/20 11:09:12 pasky Exp $

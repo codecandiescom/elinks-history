@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.39 2003/07/24 14:41:10 jonas Exp $ */
+/* $Id: cache.c,v 1.40 2003/08/05 01:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,15 +9,16 @@
 
 #include "elinks.h"
 
-#include "main.h"
 #include "config/options.h"
 #include "document/cache.h"
+#include "main.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "util/types.h"
+
 
 static INIT_LIST_HEAD(cache);
 
@@ -65,7 +66,7 @@ cache_info(int type)
 	return 0;
 }
 
-/* Return 1 and save cache entry to 'f' if there's matching one, otherwise
+/* Return 1 and save cache entry to @f if there's matching one, otherwise
  * return 0. */
 int
 find_in_cache(unsigned char *url, struct cache_entry **f)
@@ -277,7 +278,8 @@ defrag_entry(struct cache_entry *e)
 	f = e->frag.next;
 	if (f->offset) return;
 	for (g = f->next;
-	     g != (void *)&e->frag && g->offset <= g->prev->offset + g->prev->length;
+	     g != (void *)&e->frag && (g->offset <= g->prev->offset
+						  + g->prev->length);
 	     g = g->next)
 		if (g->offset < g->prev->offset + g->prev->length) {
 			internal("fragments overlay");
@@ -297,7 +299,8 @@ defrag_entry(struct cache_entry *e)
 	{
 		struct fragment *f;
 		foreach (f, e->frag)
-			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
+			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length,
+					f->real_length);
 		debug("d1-");
 	}
 #endif
@@ -313,7 +316,8 @@ defrag_entry(struct cache_entry *e)
 #if 0
 	{
 		foreach (f, e->frag)
-			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length, f->real_length);
+			fprintf(stderr, "%d, %d, %d\n", f->offset, f->length,
+					f->real_length);
 		debug("d-");
 	}
 #endif
@@ -461,7 +465,8 @@ garbage_collection(int u)
 	if (!u && ncs <= opt_cache_memory_size) return;
 
 	for (e = cache.prev; (void *)e != &cache; e = e->prev) {
-		if (!u && ncs <= opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT / 100)
+		if (!u && ncs <= opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT
+				 / 100)
 			goto g;
 		if (e->refcount || is_entry_used(e)) {
 			no = 1;
@@ -480,11 +485,13 @@ garbage_collection(int u)
 
 g:
 	e = e->next;
-	if ((void *)e == &cache) return;
+	if ((void *) e == &cache) return;
 
 	if (!u) {
 		for (f = e; (void *)f != &cache; f = f->next) {
-			if (ncs + f->data_size <= opt_cache_memory_size * MEMORY_CACHE_GC_PERCENT / 100) {
+			if (ncs + f->data_size <= opt_cache_memory_size
+						  * MEMORY_CACHE_GC_PERCENT
+						  / 100) {
 				ncs += f->data_size;
 				f->tgc = 0;
 			}
@@ -497,8 +504,10 @@ g:
 			delete_cache_entry(f->prev);
 	}
 #if 0
-	if (!no && cache_size > get_opt_long("document.cache.memory.size") * MEMORY_CACHE_GC_PERCENT / 100) {
-		internal("garbage collection doesn't work, cache size %ld", cache_size);
+	if (!no && cache_size > get_opt_long("document.cache.memory.size")
+				* MEMORY_CACHE_GC_PERCENT / 100) {
+		internal("garbage collection doesn't work, cache size %ld",
+			 cache_size);
 	}
 #endif
 }

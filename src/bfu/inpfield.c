@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.188 2004/11/29 17:31:06 zas Exp $ */
+/* $Id: inpfield.c,v 1.189 2004/11/30 17:47:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,20 +33,22 @@ void
 add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
 		 int min, int max, t_widget_handler *handler,
 		 int datalen, void *data,
-		 struct input_history *history, int float_)
+		 struct input_history *history, enum inpfield_flags flags)
 {
-		struct widget *widget;
+	struct widget *widget;
 
-		widget = &dlg->widgets[dlg->number_of_widgets++];
-		widget->type = type;
-		widget->text = label;
-		widget->info.field.min = min;
-		widget->info.field.max = max;
-		widget->handler = handler;
-		widget->datalen = datalen;
-		widget->data = data;
-		widget->info.field.history = history;
-		widget->info.field.float_label = float_;
+	widget = &dlg->widgets[dlg->number_of_widgets++];
+
+	widget->type    = type;
+	widget->text    = label;
+	widget->handler = handler;
+	widget->datalen = datalen;
+	widget->data    = data;
+
+	widget->info.field.history = history;
+	widget->info.field.flags   = flags;
+	widget->info.field.min     = min;
+	widget->info.field.max     = max;
 }
 
 t_handler_event_status
@@ -110,8 +112,9 @@ dlg_format_field(struct terminal *term,
 	unsigned char *label = widget_data->widget->text;
 	struct color_pair *text_color = NULL;
 	int label_width = 0;
+	int float_label = widget_data->widget->info.field.flags & (INPFIELD_FLOAT|INPFIELD_FLOAT2);
 
-	if (widget_data->widget->info.field.float_label && label) {
+	if (label && float_label) {
 		label_width = strlen(label);
 		if (prev_y == y) {
 			int_lower_bound(&max_label_width, label_width);
@@ -134,8 +137,8 @@ dlg_format_field(struct terminal *term,
 
 	/* XXX: We want the field and label on the same line if the terminal
 	 * width allows it. */
-	if (widget_data->widget->info.field.float_label && label) {
-		if (widget_data->widget->info.field.float_label != 2) {
+	if (label && float_label) {
+		if (widget_data->widget->info.field.flags & INPFIELD_FLOAT) {
 			(*y)--;
 			dlg_format_text_do(term, ":", x + label_width, y, w, rw, text_color, ALIGN_LEFT);
 			w -= 2;
@@ -671,10 +674,9 @@ input_field_line(struct session *ses, unsigned char *prompt, void *data,
 	dlg->layouter = input_line_layouter;
 	dlg->layout.only_widgets = 1;
 	dlg->udata = input_line;
-	dlg->widgets->info.field.float_label = 2;
 
-	add_dlg_field(dlg, prompt, 0, 0, NULL, INPUT_LINE_BUFFER_SIZE,
-		      buffer, history);
+	add_dlg_field_float2(dlg, prompt, 0, 0, NULL, INPUT_LINE_BUFFER_SIZE,
+			     buffer, history);
 
 	do_dialog(ses->tab->term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.177 2003/11/21 04:47:50 witekfl Exp $ */
+/* $Id: download.c,v 1.178 2003/11/21 04:50:28 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1113,12 +1113,10 @@ tp_free(struct tq *tq)
 {
 	object_unlock(tq->ce);
 	mem_free(tq->url);
-	tq->url = NULL;
-	if (tq->goto_position) {
-		mem_free(tq->goto_position);
-		tq->goto_position = NULL;
-	}
-	tq->ce = NULL;
+	if (tq->goto_position) mem_free(tq->goto_position);
+	if (tq->prog) mem_free(tq->prog);
+	del_from_list(tq);
+	mem_free(tq);
 }
 
 void
@@ -1290,8 +1288,10 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 {
 	struct mime_handler *handler;
 	struct view_state *vs;
+	struct tq *tq;
 	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
 	int plaintext = 1;
+	int ret = 0;
 	int xwin, i;
 
 	if (!ctype) goto end;
@@ -1310,30 +1310,31 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto free_ct;
 
-	assertm(!ses->tq.url,
-		"Type query to %s already in progress.", ses->tq.url);
-	if_assert_failed mem_free(ses->tq.url);
-
-	ses->tq.url = stracpy(ses->loading_url);
-	*download = &ses->tq.download;
+	tq = mem_calloc(1, sizeof(struct tq));
+	if (!tq) goto ret1;
+	add_to_list(ses->tq, tq);
+	ret = 1;
+	
+	tq->url = stracpy(ses->loading_url);
+	*download = &tq->download;
 	change_connection(&ses->loading, *download, PRI_MAIN, 0);
 
-	ses->tq.ce = ce;
-	object_lock(ses->tq.ce);
+	tq->ce = ce;
+	object_lock(tq->ce);
 
-	if (ses->tq.goto_position) mem_free(ses->tq.goto_position);
+	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);
+	tq->ses = ses;
 
-	ses->tq.goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
-	ses->tq.ses = ses;
-	
-	type_query(&ses->tq, ctype, handler);
+	type_query(tq, ctype, handler);
+
+ret1:
 	mem_free(ctype);
 	if (handler) {
 		mem_free(handler->program);
 		mem_free(handler);
 	}
 
-	return 1;
+	return ret;
 
 free_ct:
 	mem_free(ctype);

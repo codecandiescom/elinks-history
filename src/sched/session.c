@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.244 2003/11/19 01:29:02 jonas Exp $ */
+/* $Id: session.c,v 1.245 2003/11/21 04:50:28 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1215,6 +1215,7 @@ create_basic_session(struct window *tab)
 	create_history(&ses->history);
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
+	init_list(ses->tq);
 	ses->tab = tab;
 	ses->id = session_id++;
 	ses->task = TASK_NONE;
@@ -1431,6 +1432,7 @@ static void
 destroy_session(struct session *ses)
 {
 	struct document_view *doc_view;
+	struct tq *tq;
 
 	assert(ses);
 	if_assert_failed return;
@@ -1456,14 +1458,19 @@ destroy_session(struct session *ses)
 	if (ses->goto_position) mem_free(ses->goto_position);
 	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
-	if (ses->tq.ce) object_unlock(ses->tq.ce);
-	if (ses->tq.url) {
-		change_connection(&ses->tq.download, NULL, PRI_CANCEL, 0);
-		mem_free(ses->tq.url);
+
+	foreach (tq, ses->tq) {
+		if (tq->ce) object_unlock(tq->ce);
+		if (tq->url) {
+			change_connection(&tq->download, NULL, PRI_CANCEL, 0);
+			mem_free(tq->url);
+		}
+		if (tq->goto_position) mem_free(tq->goto_position);
+		if (tq->prog) mem_free(tq->prog);
+		if (tq->target_frame) mem_free(tq->target_frame);
 	}
-	if (ses->tq.goto_position) mem_free(ses->tq.goto_position);
-	if (ses->tq.prog) mem_free(ses->tq.prog);
-	if (ses->tq.target_frame) mem_free(ses->tq.target_frame);
+	free_list(ses->tq);
+	
 	if (ses->dn_url) mem_free(ses->dn_url);
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);

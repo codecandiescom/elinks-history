@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.66 2003/11/21 04:47:50 witekfl Exp $ */
+/* $Id: session.h,v 1.67 2003/11/21 04:50:28 witekfl Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -66,6 +66,7 @@ enum task_type {
 };
 
 struct tq {
+	LIST_HEAD(struct tq);
 	struct download download;
 	struct cache_entry *ce;
 	struct session *ses;
@@ -142,7 +143,7 @@ struct session {
 
 
 	/* The possibly running type query (what-to-do-with-that-file?) */
-	struct tq tq;
+	struct list_head tq; /* -> struct tq */
 
 	/* The Bars */
 

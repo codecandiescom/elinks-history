@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.119 2002/11/29 20:28:27 pasky Exp $ */
+/* $Id: options.c,v 1.120 2002/11/29 21:47:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -769,7 +769,7 @@ register_options()
 		"Enable global history (\"history of all pages visited\")?");
 
 	add_opt_int("document.history.global",
-		"max_items", 0, 1, MAXINT, 4096,
+		"max_items", 0, 1, MAXINT, 1024,
 		"Maximum number of entries in the global history.");
 
 	add_opt_bool("document.history",

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.73 2004/01/28 02:18:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.74 2004/01/28 02:25:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,15 +393,11 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	struct conv_table *convert_table;
 	struct string head;
 	struct plain_renderer renderer;
-	unsigned char *source = NULL;
-	int length = 0;
 
 	if (!init_string(&head)) return;
 
-	if (!((void *)fr == &ce->frag || fr->offset || !fr->length)) {
-		source = fr->data;
-		length = fr->length;
-	}
+	if (list_empty(ce->frag) || fr->offset || !fr->length)
+		return;
 
 	if (ce->head) add_to_string(&head, ce->head);
 
@@ -418,8 +414,8 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	document->width = 0;
 
 	renderer.document = document;
-	renderer.source = source;
-	renderer.length = length;
+	renderer.source = fr->data;
+	renderer.length = fr->length;
 	renderer.convert_table = convert_table;
 	renderer.max_width = document->options.wrap ? document->options.width
 						    : MAXINT;

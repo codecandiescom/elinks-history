@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.70 2003/11/20 13:07:26 jonas Exp $ */
+/* $Id: hierbox.c,v 1.71 2003/11/20 14:27:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,6 +194,18 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 		}
 
 		case EV_INIT:
+		{
+			struct hierbox_dialog_list_item *item;
+
+			item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
+			if (item) {
+				struct hierbox_browser *browser;
+
+				item->dlg_data = dlg_data;
+				browser = dlg_data->dlg->udata2;
+				add_to_list(*browser->dialogs, item);
+			}
+		}
 		case EV_RESIZE:
 		case EV_REDRAW:
 		case EV_MOUSE:
@@ -231,9 +243,7 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 		struct hierbox_browser *browser, void *udata,
 		size_t buttons, ...)
 {
-	struct hierbox_dialog_list_item *item;
 	struct listbox_data *listbox_data;
-	struct dialog_data *dlg_data;
 	struct dialog *dlg;
 	va_list ap;
 	struct listbox_item *litem;
@@ -289,15 +299,5 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 	add_dlg_end(dlg, buttons + 2);
 
-	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
-
-	if (!dlg_data) return NULL;
-
-	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
-	if (item) {
-		item->dlg_data = dlg_data;
-		add_to_list(*browser->dialogs, item);
-	}
-
-	return dlg_data;
+	return do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.90 2004/01/22 21:18:39 pasky Exp $ */
+/* $Id: options.inc,v 1.91 2004/01/23 19:27:26 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -523,6 +523,12 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.css", N_("Enable CSS"),
 		"enable", 0, 1,
 		N_("Enable adding of CSS style info to documents.")),
+
+	INIT_OPT_STRING("document.css", N_("Default style sheet"),
+		"stylesheet", 0, "",
+		N_("The URI for the default Cascading Style Sheet. It can be\n"
+		"used to control the basic layout of HTML documents.\n"
+		"Leave as \"\" to use built-in document styling.")),
 
 
 	INIT_OPT_TREE("document", N_("HTML rendering"),

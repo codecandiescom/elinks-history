@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.40 2004/01/21 04:03:08 jonas Exp $ */
+/* $Id: apply.c,v 1.41 2004/01/23 19:27:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "document/css/apply.h"
+#include "document/css/css.h"
 #include "document/css/parser.h"
 #include "document/css/property.h"
 #include "document/css/scanner.h"
@@ -96,11 +97,17 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		mem_free(code);
 
 	} else {
-		struct css_selector *selector;
+		struct css_selector *selector = NULL;
 
-		if (list_empty(css->selectors)) return;
+		if (!list_empty(css->selectors))
+			selector = get_css_selector(css, element->name,
+						    element->namelen);
 
-		selector = get_css_selector(css, element->name, element->namelen);
+		if (!selector && !list_empty(default_stylesheet.selectors))
+			selector = get_css_selector(&default_stylesheet,
+						    element->name,
+						    element->namelen);
+
 		if (!selector) return;
 
 		properties = &selector->properties;

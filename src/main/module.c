@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.28 2004/01/19 21:33:30 jonas Exp $ */
+/* $Id: module.c,v 1.29 2004/01/23 19:27:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/leds.h"
 #include "bookmarks/bookmarks.h"
 #include "cookies/cookies.h"
+#include "document/css/css.h"
 #include "document/document.h"
 #include "formhist/formhist.h"
 #include "globhist/globhist.h"
@@ -32,6 +33,7 @@ struct module *main_modules[] = {
 
 /* This is also used for version string composing so keep NULL terminated */
 struct module *builtin_modules[] = {
+	&css_module,
 #ifdef HAVE_SSL
 	&ssl_module,
 #endif

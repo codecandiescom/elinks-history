@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.38 2004/01/18 15:41:03 jonas Exp $
+## $Id: Makefile.am,v 1.39 2004/01/23 19:27:27 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,7 @@ noinst_LIBRARIES = libdocument.a
 
 libdocument_a_LIBADD = \
  css/apply.o \
+ css/css.o \
  css/parser.o \
  css/property.o \
  css/scanner.o \

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.452 2004/06/23 04:43:31 miciah Exp $ */
+/* $Id: renderer.c,v 1.453 2004/06/23 08:46:44 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -619,7 +619,7 @@ insert_spaces_in_link(struct part *part, int x, int y, int new_spaces)
 		struct link *link = &part->document->links[i];
 		int j = link->npoints;
 
-		while (j--) {
+		while (j-- > 1) {
 			struct point *point = &link->points[j];
 
 			if (point->x != x || point->y != y)

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.50 2003/10/15 16:59:17 zas Exp $ */
+/* $Id: cache.c,v 1.51 2003/10/15 21:40:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,10 +141,10 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 }
 
 static inline void
-enlarge(struct cache_entry *e, int x)
+resize_entry(struct cache_entry *e, int size)
 {
-	e->data_size += x;
-	cache_size += x;
+	e->data_size += size;
+	cache_size += size;
 }
 
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
@@ -157,11 +157,10 @@ int
 add_fragment(struct cache_entry *e, int offset,
 	     unsigned char *data, int length)
 {
-	int end_offset, f_end_offset;
-	struct fragment *f;
-	struct fragment *nf;
+	struct fragment *f, *nf;
 	int ret = 0;
 	int trunc = 0;
+	int end_offset, f_end_offset;
 
 	if (!length) return 0;
 
@@ -194,7 +193,7 @@ add_fragment(struct cache_entry *e, int offset,
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
 				 * old and new end.. */
-				enlarge(e, end_offset - f_end_offset);
+				resize_entry(e, end_offset - f_end_offset);
 				/* ..and length is now total length. */
 				f->length = end_offset - f->offset;
 			} else {
@@ -222,14 +221,15 @@ add_fragment(struct cache_entry *e, int offset,
 	nf = mem_calloc(1, sizeof(struct fragment) + CACHE_PAD(length) - 1);
 	if (!nf) return -1;
 
-	ret = 1;
-	enlarge(e, length);
 	nf->offset = offset;
 	nf->length = length;
 	nf->real_length = CACHE_PAD(length);
 	memcpy(nf->data, data, length);
 	add_at_pos(f->prev, nf);
 	f = nf;
+
+	ret = 1;
+	resize_entry(e, length);
 
 remove_overlaps:
 	/* Contatenate overlapping fragments. */
@@ -263,7 +263,7 @@ remove_overlaps:
 			       f->next->data + f_end_offset - f->next->offset,
 			       end_offset - f_end_offset);
 
-			enlarge(e, end_offset - f_end_offset);
+			resize_entry(e, end_offset - f_end_offset);
 			f->length = f->real_length = end_offset - f->offset;
 
 ff:;
@@ -278,8 +278,8 @@ ff:;
 
 		/* Remove the fragment, it influences our new one! */
 		nf = f->next;
+		resize_entry(e, -nf->length);
 		del_from_list(nf);
-		enlarge(e, -nf->length);
 		mem_free(nf);
 	}
 
@@ -322,13 +322,13 @@ defrag_entry(struct cache_entry *e)
 	nf->real_length = l;
 
 	for (l = 0, h = f; h != g; h = h->next) {
-		struct fragment *x = h;
+		struct fragment *tmp = h;
 
 		memcpy(nf->data + l, h->data, h->length);
 		l += h->length;
 		h = h->prev;
-		del_from_list(x);
-		mem_free(x);
+		del_from_list(tmp);
+		mem_free(tmp);
 	}
 	add_to_list(e->frag, nf);
 
@@ -352,7 +352,7 @@ truncate_entry(struct cache_entry *e, int off, int final)
 
 del:
 			while ((void *)f != &e->frag) {
-				enlarge(e, -f->length);
+				resize_entry(e, -f->length);
 				g = f->next;
 				del_from_list(f);
 				mem_free(f);
@@ -363,7 +363,7 @@ del:
 		}
 
 		if (f->length > size) {
-			enlarge(e, -(f->length - size));
+			resize_entry(e, -(f->length - size));
 			f->length = size;
 
 			if (final) {
@@ -390,7 +390,7 @@ free_entry_to(struct cache_entry *e, int off)
 
 	foreach (f, e->frag) {
 		if (f->offset + f->length <= off) {
-			enlarge(e, -f->length);
+			resize_entry(e, -f->length);
 			g = f;
 			f = f->prev;
 			del_from_list(g);
@@ -398,7 +398,7 @@ free_entry_to(struct cache_entry *e, int off)
 		} else if (f->offset < off) {
 			long size = off - f->offset;
 
-			enlarge(e, -size);
+			resize_entry(e, -size);
 			f->length -= size;
 			memmove(f->data, f->data + size, f->length);
 			f->offset = off;
@@ -409,15 +409,14 @@ free_entry_to(struct cache_entry *e, int off)
 void
 delete_entry_content(struct cache_entry *e)
 {
-	e->count = cache_count++;
-	free_list(e->frag);
-	e->length = 0;
-	e->incomplete = 1;
-
 	cache_size -= e->data_size;
 	assertm(cache_size >= 0, "cache_size underflow: %ld", cache_size);
 	if_assert_failed { cache_size = 0; }
 
+	free_list(e->frag);
+	e->count = cache_count++;
+	e->length = 0;
+	e->incomplete = 1;
 	e->data_size = 0;
 
 	if (e->last_modified) {

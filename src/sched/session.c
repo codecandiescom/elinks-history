@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.480 2004/06/11 14:02:59 jonas Exp $ */
+/* $Id: session.c,v 1.481 2004/06/11 14:12:48 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -58,15 +58,6 @@
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
 
-
-/* This is used to pass along the initial session parameters. */
-struct initial_session_info {
-	/* The session whose state to copy, -1 is none. */
-	struct session *base_session;
-
-	/* The URI we should load. */
-	struct uri *uri;
-};
 
 struct file_to_load {
 	LIST_HEAD(struct file_to_load);
@@ -544,29 +535,6 @@ process_file_requests(struct session *ses)
 }
 
 
-static struct initial_session_info *
-init_session_info(struct session *base_session, struct uri *uri)
-{
-	struct initial_session_info *info;
-
-	info = mem_calloc(1, sizeof(struct initial_session_info));
-	if (!info) return NULL;
-
-	info->base_session = base_session;
-
-	if (uri) info->uri = get_uri_reference(uri);
-
-	return info;
-}
-
-static void
-free_session_info(struct initial_session_info *info)
-{
-	if (info->uri) done_uri(info->uri);
-	mem_free(info);
-}
-
-
 static void
 dialog_goto_url_open(void *data)
 {
@@ -671,11 +639,9 @@ setup_session(struct session *ses, struct uri *uri, struct session *base)
 }
 
 static struct session *
-create_session(struct window *tab, struct initial_session_info *info)
+create_session(struct window *tab, struct session *base_session, struct uri *uri)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
-	struct session *base_session = info->base_session;
-	struct uri *uri = info->uri;
 
 	if (!ses) return NULL;
 
@@ -707,11 +673,10 @@ create_session(struct window *tab, struct initial_session_info *info)
 }
 
 
-struct initial_session_info *
+struct session *
 init_session(struct session *ses, struct terminal *term,
 	     struct uri *uri, int in_background)
 {
-	struct initial_session_info *info;
 	struct window *tab;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
 	int first = list_empty(term->windows);
@@ -719,18 +684,17 @@ init_session(struct session *ses, struct terminal *term,
 	tab = init_tab(term, in_background, tabwin_func);
 	if (!tab) return NULL;
 
-	info = init_session_info(ses, uri);
-	if (!info) {
+	tab->data = ses = create_session(tab, ses, uri);
+	if (!ses) {
 		mem_free(tab);
 		return NULL;
 	}
 
-	if (first) return info;
+	if (first) return ses;
 
-	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
 
-	return info;
+	return ses;
 }
 
 static enum remote_session_flags
@@ -817,10 +781,10 @@ encode_session_info(struct string *info, int cp, struct list_head *url_list)
 	return NULL;
 }
 
-struct initial_session_info *
+struct session *
 decode_session_info(struct terminal *term, int len, const int *data)
 {
-	struct initial_session_info *info = NULL;
+	struct session *info = NULL;
 	struct session *base_session;
 	enum remote_session_flags remote = 0;
 	struct uri *current_uri;
@@ -1065,8 +1029,6 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
-			ses = tab->data = create_session(tab, (struct initial_session_info *) ev->b);
-			free_session_info((struct initial_session_info *) ev->b);
 			if (!ses) {
 				register_bottom_half((void (*)(void *)) destroy_terminal, tab->term);
 				return;

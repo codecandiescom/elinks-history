@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.38 2004/06/10 18:15:52 jonas Exp $ */
+/* $Id: event.c,v 1.39 2004/06/11 14:12:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,12 +203,11 @@ test_queue:
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
 		term->environment = info->system_env;
-		ev->b = (long) decode_session_info(term, info->length, (int *) info->data);
 		r = sizeof(struct terminal_info) + info->length;
 
 		/* Either the initialization of the first session failed or we
 		 * are doing a remote session so quit.*/
-		if (!ev->b) {
+		if (!decode_session_info(term, info->length, (int *) info->data)) {
 			destroy_terminal(term);
 			return;
 		}

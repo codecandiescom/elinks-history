@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.3 2002/03/17 17:27:49 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.4 2002/03/27 23:49:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ ACT_EDIT, KBD_F4, 0 },
 	{ ACT_EDIT, 'T', KBD_CTRL },
 	{ ACT_COPY_CLIPBOARD, KBD_INS, KBD_CTRL },
-	{ ACT_COPY_CLIPBOARD, 'B', KBD_CTRL },
+	{ ACT_COPY_CLIPBOARD, 'C', KBD_CTRL },
 	{ ACT_CUT_CLIPBOARD, 'X', KBD_CTRL },
 	{ ACT_PASTE_CLIPBOARD, 'V', KBD_CTRL },
 	{ ACT_ENTER, KBD_ENTER, 0 },

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.55 2004/05/22 13:12:20 jonas Exp $ */
+/* $Id: conv.c,v 1.56 2004/06/10 16:49:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,14 +380,13 @@ add_encoded_shell_safe_url(struct string *string, unsigned char *url)
 /* This is _NOT_ for what do you think it's for! We use this to recover from
  * making URL shell-safe, nothing more. */
 unsigned char *
-decode_shell_safe_url(unsigned char *url)
+decode_shell_safe_url(unsigned char *url, int url_len)
 {
-	size_t url_len = strlen(url);
 	struct string u;
 
 	if (!init_string(&u)) return NULL;
 
-	for (; *url; url++, url_len--) {
+	for (; url_len > 0; url++, url_len--) {
 		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
 		    || unhx(url[2]) == -1 || url[3] != '=') {
 			add_char_to_string(&u, *url);

@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.31 2004/05/22 13:12:20 jonas Exp $ */
+/* $Id: conv.h,v 1.32 2004/06/10 16:49:39 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -136,7 +136,7 @@ int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
 #define snzprint(str, len, num) longcat(str, NULL, num, len, 0);
 
 struct string *add_encoded_shell_safe_url(struct string *string, unsigned char *url);
-unsigned char *decode_shell_safe_url(unsigned char *);
+unsigned char *decode_shell_safe_url(unsigned char *url, int url_len);
 
 /* Return 0 if starting with jan, 11 for dec, -1 for failure.
  * @month must be a lowercased string. */

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.444 2004/06/10 16:06:52 jonas Exp $ */
+/* $Id: session.c,v 1.445 2004/06/10 16:49:39 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -695,6 +695,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 {
 	struct initial_session_info *info;
 	struct session *base_session;
+	enum remote_session_flags remote = 0;
 	struct uri *current_uri, *uri;
 	unsigned char *str;
 	int magic;
@@ -723,34 +724,13 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 *	2: Remote <int>
 		 *	3: NUL terminated URIs <unsigned char>+
 		 */
-		if (len < 3 * sizeof(int)) break;
+		if (len < 3 * sizeof(int))
+			return NULL;
 
-		info = init_session_info(base_session, *(data++), NULL);
-		if (!info) return NULL;
-
-		str = (unsigned char *) data;
+		remote = *(data++);
 		len -= 3 * sizeof(int);
 
-		/* Extract multiple NUL terminated URIs */
-		while (len > 0) {
-			unsigned char *end = memchr(str, 0, len);
-			unsigned char *decoded;
-
-			if (!end) break;
-
-			decoded = decode_shell_safe_url(str);
-			uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
-			mem_free_if(decoded);
-
-			if (uri) {
-				add_to_uri_list(&info->uri_list, uri);
-				done_uri(uri);
-			}
-
-			len -= end - str + 1;
-			str  = end + 1;
- 		}
-		return info;
+		break;
 
 	default:
 		/* Older versions (up to and including 0.9.1) sends no magic
@@ -762,23 +742,42 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 *	1: URI length <int>
 		 *	2: URI length bytes containing the URI <unsigned char>*
 		 */
-		str = (unsigned char *) data;
 		len -= 2 * sizeof(int);
 
 		/* Extract URI containing @magic bytes */
-		if (magic > 0 || len > 0 || magic <= len)
-			str = memacpy(str, magic);
-
-		uri = get_hooked_uri(str, current_uri, term->cwd);
-		mem_free_if(str);
-
-		info = init_session_info(base_session, 0, uri);
-		if (uri) done_uri(uri);
-
-		return info;
+		if (magic <= 0 || magic > len)
+			len = 0;
+		else
+			len = magic;
 	}
 
-	return NULL;
+	info = init_session_info(base_session, remote, NULL);
+	if (!info) return NULL;
+
+	str = (unsigned char *) data;
+
+	/* Extract multiple (possible) NUL terminated URIs */
+	while (len > 0) {
+		unsigned char *end = memchr(str, 0, len);
+		int urilength = end ? end - str : len;
+		unsigned char *decoded;
+
+		if (!end) break;
+
+		decoded = decode_shell_safe_url(str, urilength);
+		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
+		mem_free_if(decoded);
+
+		if (uri) {
+			add_to_uri_list(&info->uri_list, uri);
+			done_uri(uri);
+		}
+
+		len -= end - str + 1;
+		str  = end + 1;
+	}
+
+	return info;
 }
 
 

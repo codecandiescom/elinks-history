@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.67 2004/10/27 17:17:46 zas Exp $ */
+/* $Id: fastfind.c,v 1.68 2004/10/27 17:21:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -743,11 +743,10 @@ main(int argc, char **argv)
 
 	fprintf(stderr, "---------- INDEX PHASE -----------\n");
 	/* Mandatory */
-	info = fastfind_index(&reset_list, &next_in_list);
-
-	fprintf(stderr, "--------- COMPRESS PHASE ---------\n");
-	/* Highly recommended but optional. */
-	fastfind_index_compress(info);
+	info = fastfind_index(&reset_list,
+			      &next_in_list,
+			      FF_COMPRESS,
+			      "sample");
 
 	fprintf(stderr, "---------- SEARCH PHASE ----------\n");
 	/* Without this one ... */
@@ -758,6 +757,7 @@ main(int argc, char **argv)
 	else
 		fprintf(stderr, " Not found: '%s'\n", key);
 
+	fprintf(stderr, "---------- CLEANUP PHASE ----------\n");
 	fastfind_done(info);
 
 	exit(0);

@@ -1901,7 +1901,7 @@ struct translation translation_czech [] = {
   {T_NO_SSL, "Tato verze ELinksu nepodporuje SSL/TSL"},
   {T_HK_ADD_BOOKMARK, "A"},
   {T_HK_BOOKMARKS, "Y"},
-  {T_HK_GLOBAL_HISTORY, NULL},
+  {T_HK_GLOBAL_HISTORY, "G"},
   {T_HK_GOTO_URL, "B"},
   {T_HK_GO_BACK, "Z"},
   {T_HK_HISTORY, "H"},

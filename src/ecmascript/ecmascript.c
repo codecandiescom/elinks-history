@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.27 2005/01/22 13:54:57 jonas Exp $ */
+/* $Id: ecmascript.c,v 1.28 2005/02/28 13:06:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ ecmascript_get_interpreter(struct view_state *vs)
 
 	assert(vs);
 
-	interpreter = mem_calloc(1, sizeof(struct ecmascript_interpreter));
+	interpreter = mem_calloc(1, sizeof(*interpreter));
 	if (!interpreter)
 		return NULL;
 

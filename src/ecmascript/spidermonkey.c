@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.198 2005/02/27 22:07:36 witekfl Exp $ */
+/* $Id: spidermonkey.c,v 1.199 2005/02/28 13:06:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1750,7 +1750,7 @@ location_goto(struct document_view *doc_view, unsigned char *url)
 	mem_free(new_abs_url);
 	if (!new_uri)
 		return;
-	deg = mem_calloc(1, sizeof(struct delayed_goto));
+	deg = mem_calloc(1, sizeof(*deg));
 	if (!deg) {
 		done_uri(new_uri);
 		return;

@@ -1,5 +1,5 @@
 /* Bzip2 encoding (ENCODING_BZIP2) backend */
-/* $Id: bzip2.c,v 1.5 2004/10/13 15:18:25 zas Exp $ */
+/* $Id: bzip2.c,v 1.6 2005/02/28 13:10:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ struct bz2_enc_data {
 static int
 bzip2_open(struct stream_encoded *stream, int fd)
 {
-	struct bz2_enc_data *data = mem_alloc(sizeof(struct bz2_enc_data));
+	struct bz2_enc_data *data = mem_alloc(sizeof(*data));
 	int err;
 
 	if (!data) {

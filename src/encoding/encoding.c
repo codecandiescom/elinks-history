@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.39 2004/11/08 17:04:07 jonas Exp $ */
+/* $Id: encoding.c,v 1.40 2005/02/28 13:10:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,7 @@ open_encoded(int fd, enum stream_encoding encoding)
 {
 	struct stream_encoded *stream;
 
-	stream = mem_alloc(sizeof(struct stream_encoded));
+	stream = mem_alloc(sizeof(*stream));
 	if (!stream) return NULL;
 
 	stream->encoding = encoding;

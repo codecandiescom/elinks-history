@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.99 2004/12/21 07:34:41 miciah Exp $ */
+/* $Id: globhist.c,v 1.100 2005/02/28 13:13:04 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -169,7 +169,7 @@ init_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 {
 	struct global_history_item *history_item;
 
-	history_item = mem_calloc(1, sizeof(struct global_history_item));
+	history_item = mem_calloc(1, sizeof(*history_item));
 	if (!history_item)
 		return NULL;
 

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.66 2003/11/04 15:28:32 zas Exp $ */
+/* $Id: info.c,v 1.67 2003/11/04 23:18:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,14 +212,14 @@ memory_inf(struct terminal *term, void *d, struct session *ses)
 			if (fscanf(f, "%li %li %li %li %li %li %li", &size, &resident, &shared, &trs, &drs, &lrs, &dt) == 7)
 				snprintf(more_info_buffer, sizeof(more_info_buffer),
 					 _("\n\n"
-					 "internally allocated = %li KiB\n"
-					 "total program size = %li KiB\n"
-					 "resident set size = %li KiB\n"
-					 "shared pages = %li KiB\n"
-					 "text (code) = %li KiB\n"
-					 "data/stack = %li KiB\n"
-					 "library = %li KiB\n"
-					 "dirty pages  = %li KiB", term),
+					 "Internally allocated = %li KiB\n"
+					 "Total program size = %li KiB\n"
+					 "Resident set size = %li KiB\n"
+					 "Shared pages = %li KiB\n"
+					 "Text (code) = %li KiB\n"
+					 "Data/stack = %li KiB\n"
+					 "Libraries = %li KiB\n"
+					 "Dirty pages = %li KiB", term),
 					 mem_amount / 1024,
 					 size * page_size,
 					 resident * page_size,

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.470 2004/06/11 00:39:03 jonas Exp $ */
+/* $Id: session.c,v 1.471 2004/06/11 00:42:13 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -597,7 +597,10 @@ setup_first_session(struct session *ses, struct uri *uri)
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!uri && get_opt_bool("ui.sessions.auto_restore")) {
-		open_bookmark_folder(ses, get_opt_str("ui.sessions.auto_save_foldername"));
+		unsigned char *folder;
+
+		folder = get_opt_str("ui.sessions.auto_save_foldername");
+		open_bookmark_folder(ses, folder);
 #endif
 	}
 

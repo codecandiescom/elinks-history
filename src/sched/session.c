@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.499 2004/06/12 16:06:14 jonas Exp $ */
+/* $Id: session.c,v 1.500 2004/06/12 18:05:53 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1176,11 +1176,11 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l = get_current_session_link(ses);
+	struct link *link = get_current_session_link(ses);
 
-	if (!l) return NULL;
+	if (!link) return NULL;
 
-	return safe_strncpy(str, l->where ? l->where : l->where_img, str_size);
+	return safe_strncpy(str, link->where ? link->where : link->where_img, str_size);
 }
 
 /* get_current_link_name: returns the name of the current link

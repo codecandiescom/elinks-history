@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.192 2004/06/12 17:55:38 zas Exp $ */
+/* $Id: link.c,v 1.193 2004/06/12 18:05:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ draw_current_link(struct terminal *term, struct document_view *doc_view)
 struct link *
 get_first_link(struct document_view *doc_view)
 {
-	struct link *l;
+	struct link *link;
 	struct document *document;
 	int height;
 	register int i;
@@ -246,24 +246,24 @@ get_first_link(struct document_view *doc_view)
 
 	if (!document->lines1) return NULL;
 
-	l = document->links + document->nlinks;
+	link = document->links + document->nlinks;
 	height = doc_view->vs->y + doc_view->box.height;
 
 	for (i = doc_view->vs->y; i < height; i++) {
 		if (i >= 0
 		    && i < document->height
 		    && document->lines1[i]
-		    && document->lines1[i] < l)
-			l = document->lines1[i];
+		    && document->lines1[i] < link)
+			link = document->lines1[i];
 	}
 
-	return (l == document->links + document->nlinks) ? NULL : l;
+	return (link == document->links + document->nlinks) ? NULL : link;
 }
 
 struct link *
 get_last_link(struct document_view *doc_view)
 {
-	struct link *l = NULL;
+	struct link *link = NULL;
 	register int i;
 
 	assert(doc_view && doc_view->document);
@@ -275,9 +275,9 @@ get_last_link(struct document_view *doc_view)
 	     i < doc_view->vs->y + doc_view->box.height;
 	     i++)
 		if (i >= 0 && i < doc_view->document->height
-		    && doc_view->document->lines2[i] > l)
-			l = doc_view->document->lines2[i];
-	return l;
+		    && doc_view->document->lines2[i] > link)
+			link = doc_view->document->lines2[i];
+	return link;
 }
 
 
@@ -599,7 +599,7 @@ int
 get_current_state(struct session *ses)
 {
 	struct document_view *doc_view;
-	struct link *l;
+	struct link *link;
 	struct form_state *fs;
 
 	assert(ses);
@@ -609,10 +609,10 @@ get_current_state(struct session *ses)
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return -1;
 
-	l = get_current_link(doc_view);
-	if (!l || l->type != LINK_SELECT) return -1;
+	link = get_current_link(doc_view);
+	if (!link || link->type != LINK_SELECT) return -1;
 
-	fs = find_form_state(doc_view, l->form_control);
+	fs = find_form_state(doc_view, link->form_control);
 	if (fs) return fs->state;
 	return -1;
 }

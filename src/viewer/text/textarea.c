@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.58 2004/06/12 17:55:38 zas Exp $ */
+/* $Id: textarea.c,v 1.59 2004/06/12 18:05:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ area_cursor(struct form_control *frm, struct form_state *fs)
 
 void
 draw_textarea(struct terminal *t, struct form_state *fs,
-	      struct document_view *doc_view, struct link *l)
+	      struct document_view *doc_view, struct link *link)
 {
 	struct line_info *ln, *lnx;
 	struct form_control *frm;
@@ -139,17 +139,17 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	int sl, ye;
 	register int x, y;
 
-	assert(t && doc_view && doc_view->document && doc_view->vs && l);
+	assert(t && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
-	frm = l->form_control;
-	assertm(frm, "link %d has no form", (int)(l - doc_view->document->links));
+	frm = link->form_control;
+	assertm(frm, "link %d has no form", (int)(link - doc_view->document->links));
 	if_assert_failed return;
 
 	box = &doc_view->box;
 	vx = doc_view->vs->x;
 	vy = doc_view->vs->y;
 
-	if (!l->npoints) return;
+	if (!link->npoints) return;
 	area_cursor(frm, fs);
 	lnx = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!lnx) return;
@@ -157,8 +157,8 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	sl = fs->vypos;
 	while (ln->st && sl) sl--, ln++;
 
-	x = l->points[0].x + box->x - vx;
-	y = l->points[0].y + box->y - vy;
+	x = link->points[0].x + box->x - vx;
+	y = link->points[0].y + box->y - vy;
 	ye = y + frm->rows;
 
 	for (; ln->st && y < ye; ln++, y++) {

@@ -1,4 +1,4 @@
-/* $Id: textarea.h,v 1.12 2004/01/01 07:16:49 miciah Exp $ */
+/* $Id: textarea.h,v 1.13 2004/06/12 18:05:54 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
@@ -13,7 +13,7 @@ struct session;
 struct terminal;
 
 int area_cursor(struct form_control *frm, struct form_state *fs);
-void draw_textarea(struct terminal *t, struct form_state *fs, struct document_view *doc_view, struct link *l);
+void draw_textarea(struct terminal *t, struct form_state *fs, struct document_view *doc_view, struct link *link);
 unsigned char *encode_textarea(struct submitted_value *sv);
 
 extern int textarea_editor;

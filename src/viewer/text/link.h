@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.26 2004/06/09 22:12:28 jonas Exp $ */
+/* $Id: link.h,v 1.27 2004/06/12 18:05:54 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -25,26 +25,26 @@ struct link *get_first_link(struct document_view *doc_view);
 struct link *get_last_link(struct document_view *doc_view);
 struct link *choose_mouse_link(struct document_view *doc_view, struct term_event *ev);
 
-unsigned char *print_current_link_title_do(struct document_view *doc_view, struct terminal *);
-unsigned char *print_current_link_do(struct document_view *doc_view, struct terminal *);
-unsigned char *print_current_link(struct session *);
+unsigned char *print_current_link_title_do(struct document_view *doc_view, struct terminal *term);
+unsigned char *print_current_link_do(struct document_view *doc_view, struct terminal *term);
+unsigned char *print_current_link(struct session *ses);
 
-void set_pos_x(struct document_view *doc_view, struct link *);
-void set_pos_y(struct document_view *doc_view, struct link *);
+void set_pos_x(struct document_view *doc_view, struct link *link);
+void set_pos_y(struct document_view *doc_view, struct link *link);
 void find_link(struct document_view *doc_view, int, int);
 int current_link_is_visible(struct document_view *doc_view);
-int in_view(struct document_view *doc_view, struct link *l);
+int in_view(struct document_view *doc_view, struct link *link);
 int next_in_view(struct document_view *doc_view, int p, int d, int (*fn)(struct document_view *, struct link *), void (*cntr)(struct document_view *, struct link *));
 
-void jump_to_link_number(struct session *, struct document_view *doc_view, int);
+void jump_to_link_number(struct session *ses, struct document_view *doc_view, int);
 
-struct link *goto_current_link(struct session *, struct document_view *, int);
+struct link *goto_current_link(struct session *ses, struct document_view *, int);
 void goto_link_number(struct session *ses, unsigned char *num);
 
 /* Bruteforce compilation fixes */
 enum frame_event_status enter(struct session *ses, struct document_view *doc_view, int a);
 int try_document_key(struct session *ses, struct document_view *doc_view, struct term_event *ev);
-int in_viewy(struct document_view *doc_view, struct link *l);
+int in_viewy(struct document_view *doc_view, struct link *link);
 
 struct uri *get_link_uri(struct session *ses, struct document_view *doc_view, struct link *link);
 

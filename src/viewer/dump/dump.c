@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.133 2004/06/08 13:54:52 jonas Exp $ */
+/* $Id: dump.c,v 1.134 2004/06/12 18:05:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,14 +404,14 @@ fail:
 			goto fail;
 
 		for (x = 0; x < document->nlinks; x++) {
-			struct link *l = &document->links[x];
-			unsigned char *where = l->where;
+			struct link *link = &document->links[x];
+			unsigned char *where = link->where;
 
 			if (!where) continue;
 
-			if (l->title && *l->title)
+			if (link->title && *link->title)
 				snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",
-					 x + 1, l->title, where);
+					 x + 1, link->title, where);
 			else
 				snprintf(buf, D_BUF, "%4d. %s\n",
 					 x + 1, where);

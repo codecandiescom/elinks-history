@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.142 2004/06/12 17:55:38 zas Exp $ */
+/* $Id: form.c,v 1.143 2004/06/12 18:05:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1011,7 +1011,7 @@ auto_submit_form(struct session *ses)
 
 int
 field_op_do(struct terminal *term, struct document_view *doc_view,
-	    struct form_control *frm, struct form_state *fs, struct link *l,
+	    struct form_control *frm, struct form_state *fs, struct link *link,
 	    struct term_event *ev, int rep)
 {
 	int x = 1;
@@ -1085,7 +1085,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_EDIT:
 			if (frm->type == FC_TEXTAREA && !frm->ro)
-			  	textarea_edit(0, term, frm, fs, doc_view, l);
+			  	textarea_edit(0, term, frm, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);

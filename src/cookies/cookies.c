@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.4 2002/03/17 17:42:56 pasky Exp $ */
+/* $Id: cookies.c,v 1.5 2002/03/17 18:14:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include <config/default.h>
 #include <document/session.h>
 #include <lowlevel/terminal.h>
-#include <protocol/http/http.h>
+#include <protocol/http/header.h>
 #include <protocol/url.h>
 #ifdef COOKIES_DEBUG
 #include <util/error.h>
@@ -206,7 +206,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 
 	/* Get expiration date */
 
-	date = parse_header_param(str, "expires");
+	date = parse_http_header_param(str, "expires");
 	if (date) {
 		cookie->expires = parse_http_date(date);
 		if (!cookie->expires) {
@@ -220,7 +220,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		cookie->expires = 0;
 	}
 
-	cookie->path = parse_header_param(str, "path");
+	cookie->path = parse_http_header_param(str, "path");
 	if (!cookie->path) {
 		unsigned char *path_end;
 
@@ -255,14 +255,14 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		}
 	}
 
-	cookie->domain = parse_header_param(str, "domain");
+	cookie->domain = parse_http_header_param(str, "domain");
 	if (!cookie->domain)
 		cookie->domain = stracpy(server);
 	if (cookie->domain[0] == '.')
 		memmove(cookie->domain, cookie->domain + 1,
 			strlen(cookie->domain));
 
-	secure = parse_header_param(str, "secure");
+	secure = parse_http_header_param(str, "secure");
 	if (secure) {
 		cookie->secure = 1;
 		mem_free(secure);

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.5 2002/03/17 17:42:57 pasky Exp $ */
+/* $Id: parser.c,v 1.6 2002/03/17 18:14:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 #include <document/html/tables.h>
 #include <intl/charsets.h>
 #include <lowlevel/terminal.h>
-#include <protocol/http/http.h>
+#include <protocol/http/header.h>
 #include <protocol/url.h>
 #include <util/error.h>
 
@@ -1891,7 +1891,7 @@ void process_head(unsigned char *head)
 {
 	unsigned char *r, *p;
 	if ((r = parse_http_header(head, "Refresh", NULL))) {
-		if ((p = parse_header_param(r, "URL"))) {
+		if ((p = parse_http_header_param(r, "URL"))) {
 			put_link_line("Refresh: ", p, p, d_opt->framename);
 			mem_free(p);
 		}

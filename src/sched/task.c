@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.143 2004/12/18 20:45:43 jonas Exp $ */
+/* $Id: task.c,v 1.144 2004/12/18 21:37:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,7 +145,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 {
 	struct task *task = NULL;
 	int referrer_incomplete = 0;
-	int unambiguous_uri = 0;
+	int malicious_uri = 0;
 	int confirm_submit = uri->form;
 	unsigned char *m1 = NULL, *message = NULL;
 
@@ -172,7 +172,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	if (uri->user && uri->userlen
 	    && get_opt_bool("document.browse.links.warn_malicious")
 	    && check_malicious_uri(uri)) {
-		unambiguous_uri = 1;
+		malicious_uri = 1;
 		confirm_submit = 1;
 
 	} else if (!uri->form) {
@@ -225,7 +225,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	task->target_frame = target_frame;
 	task->target_location = target_location;
 
-	if (unambiguous_uri) {
+	if (malicious_uri) {
 		unsigned char *host = memacpy(uri->host, uri->hostlen);
 		unsigned char *user = memacpy(uri->user, uri->userlen);
 		unsigned char *uristring = get_uri_string(uri, URI_PUBLIC);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.92 2003/10/18 23:42:09 jonas Exp $ */
+/* $Id: tables.c,v 1.93 2003/10/22 10:09:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1364,7 +1364,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					par_format.bgcolor = t->bgcolor;
 					for (s = yp; s < yp + yw; s++) {
 						expand_lines(t->p, s);
-						expand_line(t->p, s, xp);
+						expand_line(t->p, s, xp - 1);
 					}
 				}
 

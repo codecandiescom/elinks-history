@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.33 2003/06/15 11:29:00 pasky Exp $ */
+/* $Id: fastfind.c,v 1.34 2003/06/15 11:55:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,7 +407,7 @@ void
 fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;
-	int pos = -1;
+	int pos;
 	register int i = 0;
 
 	assert(info);
@@ -416,7 +416,7 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 		if (leafset[i].c) continue;
 
 		if (leafset[i].l) {
-			/* There's a leaf leafset, descend to it, and recurse */
+			/* There's a leaf leafset, descend to it and recurse */
 			fastfind_node_compress(info->leafsets[leafset[i].l],
 						info);
 		}
@@ -427,7 +427,7 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 		}
 	}
 
-	if (pos == -1 || cnt >= 2 || leafset[pos].c) return;
+	if (cnt != 1 || leafset[pos].c) return;
 
 	/* Compress if possible ;) */
 	for (i = 1; i < info->leafsets_count; i++)

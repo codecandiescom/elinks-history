@@ -1,4 +1,4 @@
-Unicode2ascii replacement and entity name tables taken from links.
+Unicode2ascii replacement and entity name tables taken from lynx.
 
 
 People who contributed to links, in alphabetical order (if you are missing here
@@ -252,9 +252,9 @@ Wojtek Bojdo/l <wojboj@lp.net.pl>
 Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Updated Russian localization
 
-zas@norz.org
+<zas@norz.org>
 	Updated French translation
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.31 2002/03/03 23:43:48 pasky Exp $
+$Id: AUTHORS,v 1.32 2002/03/04 22:09:07 pasky Exp $

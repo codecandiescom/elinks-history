@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.368 2003/10/25 13:44:35 pasky Exp $ */
+/* $Id: options.c,v 1.369 2003/10/25 13:49:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,7 +60,7 @@ static INIT_LIST_HEAD(options_root_tree);
 
 static struct option options_root = INIT_OPTION(
 	/* name: */	"",
-	/* flags: */	0,
+	/* flags: */	OPT_LISTBOX,
 	/* type: */	OPT_TREE,
 	/* min, max: */	0, 0,
 	/* value: */	&options_root_tree,
@@ -71,7 +71,6 @@ static struct option options_root = INIT_OPTION(
 struct option *config_options;
 struct option *cmdline_options;
 
-INIT_LIST_HEAD(config_option_box_items);
 INIT_LIST_HEAD(option_boxes);
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
@@ -240,8 +239,6 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		option->box_item->root = tree->box_item;
 
 		add_to_list_end(tree->box_item->child, option->box_item);
-	} else if (option->box_item) {
-		add_to_list_end(config_option_box_items, option->box_item);
 	}
 
 	if (tree->flags & OPT_SORT) {

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.83 2003/10/25 11:54:26 pasky Exp $ */
+/* $Id: options.h,v 1.84 2003/10/25 13:49:03 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -133,7 +133,6 @@ extern struct option options_root;
 extern struct option *config_options;
 extern struct option *cmdline_options;
 
-extern struct list_head config_option_box_items;
 extern struct list_head option_boxes;
 
 

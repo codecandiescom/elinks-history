@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.4 2002/12/09 18:55:15 pasky Exp $ */
+/* $Id: common.c,v 1.5 2002/12/10 22:52:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,12 +29,14 @@
 /* Backends dynamic area: */
 
 #include "bookmarks/backend/default.h"
+#include "bookmarks/backend/xbel.h"
 
 /* Note that the numbering is static, that means that you have to provide at
  * least dummy NULL handlers even when no support is compiled in. */
 
 static struct bookmarks_backend *bookmarks_backends[] = {
 	&default_bookmarks_backend,
+	&xbel_bookmarks_backend,
 };
 
 /* :aera cimanyd sdnekcaB */

@@ -207,6 +207,23 @@ else
 	AC_MSG_RESULT(no)
 fi
 
+dnl
+dnl XBEL
+dnl
+AC_ARG_WITH(xbel, [  --without-xbel          disable XBEL bookmarks],
+        [ if test "$withval" = no; then disable_xbel=yes; fi])
+AC_MSG_CHECKING([for xbel support])
+if test -z "$disable_xbel"; then
+        AC_CHECK_HEADERS(expat.h, cf_result=yes, cf_result=no)
+        if test "$cf_result" = yes; then
+                AC_CHECK_LIB(expat, XML_ParserCreate)
+        fi
+else
+        AC_MSG_RESULT(no)
+fi
+
+
+
 dnl ===================================================================
 dnl Checks for OS/2
 dnl ===================================================================

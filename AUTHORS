@@ -135,6 +135,7 @@ Evan Hughes <hughes@lab43.org>
 Fabio Bonelli <fabiobonelli@libero.it>
 	Accept-language support
 	Italian translation updates
+	XBEL bookmarks support
 	Random hacking
 	Cleanups
 
@@ -409,4 +410,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.104 2002/12/10 20:58:45 pasky Exp $
+$Id: AUTHORS,v 1.105 2002/12/10 22:52:15 pasky Exp $

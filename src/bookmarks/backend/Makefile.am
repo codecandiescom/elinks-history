@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2002/12/01 19:02:09 pasky Exp $
+## $Id: Makefile.am,v 1.2 2002/12/10 22:52:15 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -8,12 +8,13 @@ include $(top_srcdir)/Makefile.base
 # objects here and link them directly to libbookmarks.a in ../Makefile.am.
 
 # However, we apparently need to create the library in order to convience
-# automake to compile the objects :/. We don't use libbackend.a anywhere.
+# automake to compile the objects :/. We DON'T use libbackend.a ANYWHERE.
 
 noinst_LIBRARIES = libbackend.a
 libbackend_a_SOURCES = \
  common.c \
  common.h \
  default.c \
- default.h
-
+ default.h \
+ xbel.c \
+ xbel.h

@@ -1,3 +1,16 @@
+Fri Feb  8 21:14:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	added bug reported by Kovacs Zoltan
+	<kovacsz@pc10.radnoti-szeged.sulinet.hu>
+
+Fri Feb  8 06:24:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	typo fix in dns.c, by Cristiano Guadagnino <criguada@tin.it>
+
 Thu Feb  7 00:12:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, TODO:

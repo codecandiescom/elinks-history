@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.105 2004/10/22 23:55:28 jonas Exp $ */
+/* $Id: string.c,v 1.106 2004/11/03 11:12:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,25 +139,33 @@ straconcat(unsigned char *str, ...)
 	assertm(str, "[straconcat]");
 	if_assert_failed { return NULL; }
 
-	s = stracpy(str);
+	len = strlen(str);
+	s = mem_alloc(len + 1);
 	if (!s) return NULL;
 
-	len = strlen(s) + 1;
+	memcpy(s, str, len);
 
 	va_start(ap, str);
 	while ((a = va_arg(ap, unsigned char *))) {
-		if (*a) {
-			len += strlen(a);
-			s = mem_realloc(s, len);
-			if (s)
-				strcat(s, a);
-			else
-				break;
-		}
-	}
+		unsigned int l = strlen(a);
+		unsigned char *ns;
 
+		if (!l) continue;
+
+		ns = mem_realloc(s, len + l + 1);
+		if (!ns) {
+			mem_free(s);
+			va_end(ap);
+			return NULL;
+		}
+
+		s = ns;
+		memcpy(s + len, a, l);
+		len += l;
+	}
 	va_end(ap);
 
+	s[len] = '\0';
 	return s;
 }
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.209 2003/12/02 16:51:19 zas Exp $ */
+/* $Id: http.c,v 1.210 2003/12/05 08:38:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,8 +329,7 @@ http_send_header(struct connection *conn)
 	}
 
 	/* Sanity check for a host */
-	assert(uri && uri->host);
-	if_assert_failed {
+	if (!uri || !uri->host || !*uri->host || !uri->hostlen) {
 		http_end_request(conn, S_BAD_URL);
 		return;
 	}

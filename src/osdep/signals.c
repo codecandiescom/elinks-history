@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.15 2003/11/28 00:57:42 pasky Exp $ */
+/* $Id: signals.c,v 1.16 2004/01/01 15:20:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ struct signal_info {
 };
 
 static struct signal_info signal_info[NUM_SIGNALS];
-int critical_section = 0;
+volatile int critical_section = 0;
 
 static void check_for_select_race(void);
 
@@ -252,7 +252,7 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 	if (fn) sigaction(sig, &sa, NULL);
 }
 
-static int pending_alarm = 0;
+static volatile int pending_alarm = 0;
 
 static void
 alarm_handler(void *x)

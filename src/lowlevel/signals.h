@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.h,v 1.5 2003/10/28 00:35:24 pasky Exp $ */
+/* $Id: signals.h,v 1.6 2004/01/01 15:21:07 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SIGNALS_H
 #define EL__LOWLEVEL_SIGNALS_H
@@ -8,7 +8,7 @@ struct terminal;
 
 #define NUM_SIGNALS	32
 
-extern int critical_section;
+extern volatile int critical_section;
 
 void install_signal_handler(int, void (*)(void *), void *, int);
 void set_sigcld(void);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.163 2003/07/03 21:25:16 zas Exp $ */
+/* $Id: renderer.c,v 1.164 2003/07/03 21:26:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1901,7 +1901,6 @@ find_fd(struct session *ses, unsigned char *name,
 	return fd;
 }
 
-/* FIXME: url parameter is not used ... --Zas */
 static struct f_data_c *
 format_frame(struct session *ses, unsigned char *name,
 	     struct document_options *o, int depth)

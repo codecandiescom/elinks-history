@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.188 2003/11/27 06:56:48 witekfl Exp $ */
+/* $Id: download.c,v 1.189 2003/11/28 00:53:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,6 @@ abort_download(struct file_download *down, int stop)
 	if (down->box_item)
 		done_browser_box(&download_browser, down->box_item);
 	if (down->win) delete_window(down->win);
-	if (down->ask) delete_window(down->ask);
 	if (down->download.state >= 0)
 		change_connection(&down->download, NULL, PRI_CANCEL, stop);
 	if (down->url) mem_free(down->url);

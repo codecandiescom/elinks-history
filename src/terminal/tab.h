@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.10 2003/06/14 13:15:30 zas Exp $ */
+/* $Id: tab.h,v 1.11 2003/06/14 23:42:46 zas Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -7,7 +7,7 @@
 #include "terminal/window.h"
 #include "util/lists.h"
 
-struct window *init_tab(struct terminal *, int stay_here);
+struct window *init_tab(struct terminal *, int in_background);
 int number_of_tabs(struct terminal *);
 int get_tab_number(struct window *);
 struct window *get_tab_by_number(struct terminal *, int);

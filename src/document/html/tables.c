@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.11 2002/05/10 16:20:31 pasky Exp $ */
+/* $Id: tables.c,v 1.12 2002/05/10 17:53:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1194,12 +1194,18 @@ void check_table_widths(struct table *t)
 			       NULL, c->link_num, NULL);
 
 		if (c->x_width > p) {
+#if 0
+			/* Good bye, internal() - you catched for me a lot of
+			 * errors in table proccessing, but now it's simply
+			 * time to go :-(. */
 			int min, max;
 
 			get_cell_width(c->start, c->end, t->cellpd, 0, 0, &min,
 				       &max, c->link_num, NULL);
 			internal("cell is now wider (%d > %d) min = %d, max = %d, now_min = %d, now_max = %d",
 				 c->x_width, p, t->min_c[i], t->max_c[i], min, max);
+#endif
+			c->x_width = p;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.35 2003/05/04 20:42:13 pasky Exp $ */
+/* $Id: session.c,v 1.36 2003/05/04 20:44:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,16 +292,16 @@ print_screen_status(struct session *ses)
 		int selected_color = get_bfu_color(term, "tabs.selected");
 
 		for (tab = 0; tab < tabs_count; tab++) {
-			struct window *win = get_tab_by_number(term, tab);
+			struct window *tab = get_tab_by_number(term, tab);
 			int ypos = term->y - (show_status_bar ? 2 : 1);
 			int color = (tab == term->current_tab) ? selected_color
 								: normal_color;
 
-			if (win->data
-			    && current_frame(win->data)
-			    && current_frame(win->data)->f_data->title
-			    && strlen(current_frame(win->data)->f_data->title))
-				msg = current_frame(win->data)->f_data->title;
+			if (tab->data
+			    && current_frame(tab->data)
+			    && current_frame(tab->data)->f_data->title
+			    && strlen(current_frame(tab->data)->f_data->title))
+				msg = current_frame(tab->data)->f_data->title;
 			else
 				msg = _("Untitled", term);
 
@@ -1112,7 +1112,7 @@ process_file_requests(struct session *ses)
 }
 
 struct session *
-create_basic_session(struct window *win)
+create_basic_session(struct window *tab)
 {
         struct session *ses = mem_calloc(1, sizeof(struct session));
 
@@ -1121,7 +1121,7 @@ create_basic_session(struct window *win)
 	create_history(ses);
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
-	ses->tab = win;
+	ses->tab = tab;
 	ses->id = session_id++;
 	ses->screen = NULL;
 	ses->wtd = WTD_NO;
@@ -1136,10 +1136,10 @@ create_basic_session(struct window *win)
 }
 
 static struct session *
-create_session(struct window *win)
+create_session(struct window *tab)
 {
-	struct terminal *term = win->term;
-	struct session *ses = create_basic_session(win);
+	struct terminal *term = tab->term;
+	struct session *ses = create_basic_session(tab);
 
 	if (!ses) return NULL;
 
@@ -1627,21 +1627,23 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 }
 
 void
-tabwin_func(struct window *win, struct event *ev, int fw)
+tabwin_func(struct window *tab, struct event *ev, int fw)
 {
-	struct session *ses = win->data;
+	struct session *ses = tab->data;
 
 	switch (ev->ev) {
 		case EV_ABORT:
 			if (ses) destroy_session(ses);
 			break;
 		case EV_INIT:
-			ses = win->data = create_session(win);
+			/* FIXME: This needs to be done differently and more
+			 * universally. Works only for the first tab. --pasky */
+			ses = tab->data = create_session(tab);
 			if (!ses
-			    || read_session_info(win->term->fdin, ses,
+			    || read_session_info(tab->term->fdin, ses,
 				                 (char *)ev->b + sizeof(int),
 						 *(int *)ev->b)) {
-				destroy_terminal(win->term);
+				destroy_terminal(tab->term);
 				return;
 			}
 			/* fall-through */

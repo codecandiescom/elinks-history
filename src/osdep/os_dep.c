@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.60 2003/05/04 20:06:50 pasky Exp $ */
+/* $Id: os_dep.c,v 1.61 2003/05/04 20:44:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1818,19 +1818,19 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 		 * way. And so on, this all is getting quite messy with the
 		 * tabs introduction. --pasky */
 		struct event ev = {EV_RESIZE, 0, 0, 0};
-		struct window *win = init_tab(term);
+		struct window *tab = init_tab(term);
 
-		if (!win) return;
+		if (!tab) return;
 
-		win->data = create_basic_session(win);
+		tab->data = create_basic_session(tab);
 
-		win->handler(win, &ev, 0);
+		tab->handler(tab, &ev, 0);
 
 		if (url) {
 			unsigned char *u = decode_url(url);
 
 			if (u) {
-				goto_url((struct session *) win->data, u);
+				goto_url((struct session *) tab->data, u);
 				mem_free(u);
 			}
 		} else {
@@ -1839,7 +1839,7 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 			if (!h || !*h)
 				h = WWW_HOME_URL;
 			if (h && *h)
-				goto_url((struct session *) win->data, h);
+				goto_url((struct session *) tab->data, h);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.153 2004/06/14 18:47:49 jonas Exp $ */
+/* $Id: form.c,v 1.154 2004/06/14 18:51:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1037,6 +1037,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 	    struct term_event *ev, int rep)
 {
 	unsigned char *text;
+	int length;
 	int x = 1;
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
@@ -1122,20 +1123,19 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			if (frm->ro) break;
 
 			text = get_clipboard_text();
-			if (text) {
-				int cb_len = strlen(text);
+			if (!text) break;
+			
+			length = strlen(text);
+			if (length <= frm->maxlength) {
+				unsigned char *v = mem_realloc(fs->value, length + 1);
 
-				if (cb_len <= frm->maxlength) {
-					unsigned char *v = mem_realloc(fs->value, cb_len + 1);
-
-					if (v) {
-						fs->value = v;
-						memmove(v, text, cb_len + 1);
-						fs->state = strlen(fs->value);
-					}
+				if (v) {
+					fs->value = v;
+					memmove(v, text, length + 1);
+					fs->state = strlen(fs->value);
 				}
-				mem_free(text);
 			}
+			mem_free(text);
 			break;
 		case ACT_EDIT_ENTER:
 			if (frm->type == FC_TEXTAREA) {

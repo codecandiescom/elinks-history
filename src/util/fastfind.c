@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.30 2003/06/15 11:17:02 pasky Exp $ */
+/* $Id: fastfind.c,v 1.31 2003/06/15 11:18:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,7 +491,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 		accif(info) (lidx < 0) return NULL;
 
 		accif(info) (current->c) {
-			/* It is a compressed leafset. */
+			/* It is a compressed leaf. */
 			accif(info) (((struct ff_node_c *) current)->ch != lidx)
 				return NULL;
 		} else {

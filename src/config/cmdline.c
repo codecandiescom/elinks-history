@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.41 2004/02/03 19:20:01 zas Exp $ */
+/* $Id: cmdline.c,v 1.42 2004/02/04 16:24:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,6 +336,8 @@ print_full_help(struct option *tree, unsigned char *path)
 	}
 }
 
+static unsigned char *redir_cmd(struct option *option, unsigned char ***argv, int *argc);
+
 static void
 print_short_help()
 {
@@ -359,6 +361,11 @@ print_short_help()
 		/* When no caption is available the option name is 'stacked'
 		 * and the caption is shared with next options that has one. */
 		if (!option->capt) {
+			/* Avoid printing compatibility options */
+			if (option->type == OPT_COMMAND
+			    && option->value.command == redir_cmd)
+				continue;
+
 			if (!saved) {
 				if (!init_string(&string))
 					continue;

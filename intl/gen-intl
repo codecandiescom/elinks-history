@@ -30,8 +30,8 @@ echo
 	echo '#define N_LANGUAGES '$n
 	echo
 	cat english.lng | grep '^T_' | (cat; echo T__N_TEXTS) | sed 's/,.*//' | cat -n | sed 's/^\([^T]*\)\(.*\)$/#define \2 \1/'
-) | sed 's///g' > ../lang_defs.h
-) | sed 's///g' > ../language.inc
+) | sed 's///g' > ../src/internat/lang_defs.h
+) | sed 's///g' > ../src/internat/language.inc
 echo
 echo Done.
 fi

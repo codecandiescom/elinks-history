@@ -1,79 +1,12 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2002/03/16 23:05:50 pasky Exp $
+## $Id: Makefile.am,v 1.8 2002/03/17 11:28:53 pasky Exp $
 
-# codepage_sources = Unicode/gen-cp Unicode/*.cp Unicode/index.txt
-# entities_sources = Unicode/gen-ent Unicode/entities.lnx
-# uni7b_sources = Unicode/gen-7b Unicode/7bitrepl.lnx
-# lang_sources = intl/gen-intl intl/*.lng intl/index.txt
+SUBDIRS = src
 
 man_MANS = links.1
 
 EXTRA_DIST = \
- $(man_MANS) Unicode/* intl/* \
+ $(man_MANS) Unicode/* intl/* contrib/* \
  BUGS TODO SITES HACKING LUA \
  wipe-out-ssl wipe-out-ssl.awk
-
-bin_PROGRAMS = links
-links_SOURCES = \
- af_unix.c \
- beos.c \
- bfu.c \
- bookmarks.c \
- cache.c \
- charsets.c \
- codepage.h \
- codepage.inc \
- connect.c \
- colors.c \
- cookies.c \
- default.c \
- dns.c \
- entity.inc \
- error.c \
- file.c \
- finger.c \
- ftp.c \
- html.c \
- html_r.c \
- html_tbl.c \
- http.c \
- https.c \
- kbd.c \
- kbdbind.c \
- lang_defs.h \
- language.c \
- language.inc \
- links.h \
- lua.c \
- mailto.c \
- main.c \
- menu.c \
- os_dep.c \
- os_dep.h \
- os_depx.h \
- sched.c \
- select.c \
- session.c \
- setup.h \
- terminal.c \
- types.c \
- uni_7b.inc \
- url.c \
- view.c \
- win32.c
-
-datadir = $(prefix)/@DATADIRNAME@
-LIBS = @LIBS@
-
-#codepage.inc : $(codepage_sources)
-#	cd Unicode;./gen-cp;cd ..
-
-#entity.inc : $(entities_sources)
-#	cd Unicode;./gen-ent;cd ..
-
-#uni_7b.inc : $(uni7b_sources)
-#	cd Unicode;./gen-7b;cd ..
-
-#language.inc : $(lang_sources)
-#	cd intl;./gen-intl;cd ..
 

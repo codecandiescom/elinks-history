@@ -1,0 +1,183 @@
+/* $Id: sched.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+
+#ifndef EL__SCHED_H
+#define EL__SCHED_H
+
+#include "cache.h"
+#include "error.h"
+#include "links.h" /* tcount, list_head */
+#include "select.h"
+
+#define PRI_MAIN	0
+#define PRI_DOWNLOAD	0
+#define PRI_FRAME	1
+#define PRI_NEED_IMG	2
+#define PRI_IMG		3
+#define PRI_PRELOAD	4
+#define PRI_CANCEL	5
+#define N_PRI		6
+
+struct remaining_info {
+	int valid;
+	int size, loaded, last_loaded, cur_loaded;
+	int pos;
+	ttime elapsed;
+	ttime last_time;
+	ttime dis_b;
+	int data_in_secs[CURRENT_SPD_SEC];
+	int timer;
+};
+
+struct connection {
+	struct connection *next;
+	struct connection *prev;
+	tcount count;
+	unsigned char *url;
+	unsigned char *prev_url;
+	int running;
+	int state;
+	int prev_error;
+	int from;
+	int pri[N_PRI];
+	int no_cache;
+	int sock1;
+	int sock2;
+	void *dnsquery;
+	void *conn_info;
+	int tries;
+	struct list_head statuss;
+	void *info;
+	void *buffer;
+	void (*conn_func)(void *);
+	struct cache_entry *cache;
+	int received;
+	int est_length;
+	int unrestartable;
+	struct remaining_info prg;
+	int timer;
+	int detached;
+#ifdef HAVE_SSL
+	SSL *ssl;
+	int no_tsl;
+#endif
+};
+
+#define NC_ALWAYS_CACHE	0
+#define NC_CACHE	1
+#define NC_IF_MOD	2
+#define NC_RELOAD	3
+#define NC_PR_NO_CACHE	4
+
+#define S_WAIT		0
+#define S_DNS		1
+#define S_CONN		2
+#define S_SSL_NEG	3
+#define S_SENT		4
+#define S_GETH		5
+#define S_PROC		6
+#define S_TRANS		7
+#define S_QUESTIONS	8
+
+#define S_WAIT_REDIR		-999
+#define S_OK			-1000
+#define S_INTERRUPTED		-1001
+#define S_EXCEPT		-1002
+#define S_INTERNAL		-1003
+#define S_OUT_OF_MEM		-1004
+#define S_NO_DNS		-1005
+#define S_CANT_WRITE		-1006
+#define S_CANT_READ		-1007
+#define S_MODIFIED		-1008
+#define S_BAD_URL		-1009
+#define S_TIMEOUT		-1010
+#define S_RESTART		-1011
+#define S_STATE			-1012
+
+#define S_HTTP_ERROR		-1100
+#define S_HTTP_100		-1101
+#define S_HTTP_204		-1102
+
+#define S_FILE_TYPE		-1200
+#define S_FILE_ERROR		-1201
+
+#define S_FTP_ERROR		-1300
+#define S_FTP_UNAVAIL		-1301
+#define S_FTP_LOGIN		-1302
+#define S_FTP_PORT		-1303
+#define S_FTP_NO_FILE		-1304
+#define S_FTP_FILE_ERROR	-1305
+
+#define S_SSL_ERROR		-1400
+#define S_NO_SSL		-1401
+
+extern struct s_msg_dsc {
+	int n;
+	unsigned char *msg;
+} msg_dsc[];
+
+struct status {
+	struct status *next;
+	struct status *prev;
+	struct connection *c;
+	struct cache_entry *ce;
+	int state;
+	int prev_error;
+	int pri;
+	void (*end)(struct status *, void *);
+	void *data;
+	struct remaining_info *prg;
+};
+
+struct http_auth_basic {
+	struct http_auth_basic *next;
+	struct http_auth_basic *prev;
+	int blocked;
+	int valid;
+	unsigned char *url;
+	int url_len;
+	unsigned char *realm;
+	unsigned char *uid;
+	unsigned char *passwd;
+};
+
+void check_queue();
+long connect_info(int);
+/* void send_connection_info(struct connection *c); */
+void setcstate(struct connection *c, int);
+
+int get_keepalive_socket(struct connection *c);
+void add_keepalive_socket(struct connection *c, ttime);
+
+/* void run_connection(struct connection *c); */
+void retry_connection(struct connection *c);
+void abort_connection(struct connection *c);
+/* void end_connection(struct connection *c); */
+
+int load_url(unsigned char *, unsigned char *, struct status *, int, int);
+
+void change_connection(struct status *, struct status *, int);
+void detach_connection(struct status *, int);
+void abort_all_connections();
+void abort_background_connections();
+
+int is_entry_used(struct cache_entry *);
+
+/* void connection_timeout(struct connection *); */
+void set_timeout(struct connection *);
+
+enum blacklist_flags {
+	BL_HTTP10 = 1,
+	BL_NO_CHARSET = 2,
+};
+
+void add_blacklist_entry(unsigned char *, enum blacklist_flags);
+void del_blacklist_entry(unsigned char *, enum blacklist_flags);
+int get_blacklist_flags(unsigned char *);
+void free_blacklist();
+
+unsigned char *find_auth(unsigned char *);
+int add_auth_entry(unsigned char *, unsigned char *);
+void del_auth_entry(struct http_auth_basic *);
+void free_auth();
+
+#endif

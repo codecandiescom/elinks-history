@@ -1,0 +1,1534 @@
+/* Options settings and commandline proccessing */
+/* $Id: default.c,v 1.1 2002/03/17 11:30:06 pasky Exp $ */
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
+#endif
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h>
+#endif
+#include <netdb.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
+
+#include "links.h"
+
+#include "bfu.h"
+#include "charsets.h"
+#include "default.h"
+#include "dns.h"
+#include "colors.h"
+#include "html_r.h"
+#include "kbdbind.h"
+#include "language.h"
+#include "main.h"
+#include "session.h"
+#include "terminal.h"
+#include "types.h"
+
+void get_system_name()
+{
+	FILE *f;
+	unsigned char *p;
+	memset(system_name, 0, MAX_STR_LEN);
+	if (!(f = popen("uname -srm", "r"))) goto fail;
+	if (fread(system_name, 1, MAX_STR_LEN - 1, f) <= 0) {
+		pclose(f);
+		goto fail;
+	}
+	pclose(f);
+	for (p = system_name; *p; p++) if (*p < ' ') {
+		*p = 0;
+		break;
+	}
+	if (system_name[0]) return;
+	fail:
+	strcpy(system_name, SYSTEM_NAME);
+}
+
+extern struct option links_options[];
+extern struct option html_options[];
+
+struct option *all_options[] = { links_options, html_options, NULL, };
+
+unsigned char *_parse_options(int argc, unsigned char *argv[], struct option **opt)
+{
+	unsigned char *location = NULL;
+	
+	while (argc) {
+		argv++, argc--;
+		
+		if (argv[-1][0] == '-') {
+			struct option *option;
+			struct option **oplist;
+			
+			for (oplist = opt; (option = *oplist); oplist++) {
+				int i;
+		
+				for (i = 0; option[i].cfg_name || option[i].cmd_name; i++) {
+					if (option[i].rd_cmd &&
+					    option[i].cmd_name &&
+					    !strcasecmp(option[i].cmd_name, &argv[-1][(argv[-1][1] == '-' ? 2 : 1)])) {
+						unsigned char *err = option[i].rd_cmd(&option[i], &argv, &argc);
+						
+						if (err) {
+							if (err[0])
+								fprintf(stderr, "Error parsing option %s: %s\n", argv[-1], err);
+							
+							return NULL;
+						}
+
+						goto found;
+					}
+				}
+			}
+			
+			goto unknown_option;
+			
+		} else if (!location) {
+			location = argv[-1];
+			
+		} else {
+unknown_option:		fprintf(stderr, "Unknown option %s\n", argv[-1]);
+			
+			return NULL;
+		}
+		
+found:
+	}
+	
+	return location ? location : (unsigned char *) "";
+}
+
+unsigned char *parse_options(int argc, unsigned char *argv[])
+{
+	return _parse_options(argc, argv, all_options);
+}
+
+unsigned char *get_token(unsigned char **line)
+{
+	unsigned char *s = NULL;
+	int l = 0;
+	int escape = 0;
+	int quote = 0;
+	
+	while (**line == ' ' || **line == 9) (*line)++;
+	if (**line) {
+		for (s = init_str(); **line; (*line)++) {
+			if (escape) 
+				escape = 0;
+			else if (**line == '\\') {
+				escape = 1; 
+				continue;
+			}	
+			else if (**line == '"') {
+				quote = !quote;
+			    	continue;
+			}
+			else if ((**line == ' ' || **line == 9) && !quote)
+				break;
+			add_chr_to_str(&s, &l, **line);
+		}
+	}
+	return s;
+}
+
+void parse_config_file(unsigned char *name, unsigned char *file, struct option **opt)
+{
+	int error = 0;
+	int line = 0;
+	
+	while (file[0]) {
+		struct option **optlist;
+		struct option *option;
+		unsigned char *id, *val, *tok = NULL;
+		int id_len, val_len, tok_len;
+		
+		/* New line */
+		line++;
+		while (file[0] && (file[0] == ' ' || file[0] == 9)) file++;
+		
+		/* Get identifier */
+		id = file;
+		while (file[0] && file[0] > ' ') file++;
+		id_len = file - id;
+		
+		/* No identifier? */
+		if (! id_len) {
+			if (file[0]) file++;
+			continue;
+		}
+		
+		/* Skip separator */
+		while (file[0] == 9 || file[0] == ' ') file++;
+		
+		/* Get value */
+		val = file;
+		while (file[0] && file[0] != 10 && file[0] != 13) file++;
+		val_len = file - val;
+		
+		/* Possibly move to new line */
+		if (file[0]) {
+			if ((file[1] == 10 || file[1] == 13) && file[0] != file[1]) file++;
+			file++;
+		}
+		
+		/* Comment? */
+		if (id[0] == '#') continue;
+
+		/* Get token or go on */
+		tok = get_token(&id);
+		if (!tok) continue;
+		
+		tok_len = strlen(tok);
+		
+		for (optlist = opt; (option = *optlist); optlist++) {
+			int i;
+			
+		    	for (i = 0; option[i].cfg_name || option[i].cmd_name; i++) {
+				if (option[i].cfg_name &&
+				    tok_len == strlen(option[i].cfg_name) &&
+				    !casecmp(tok, option[i].cfg_name, tok_len)) {
+					unsigned char *value = memacpy(val, val_len);
+					unsigned char *err = option[i].rd_cfg(&option[i], value);
+					
+					if (err) {
+						if (err[0])
+							fprintf(stderr, "Error parsing config file %s, line %d: %s\n",
+								name, line, err);
+						error = 1;
+					}
+					
+					mem_free(value);
+					goto next;
+				}
+			}
+		}
+				
+		fprintf(stderr, "Unknown option in config file %s, line %d\n", name, line);
+		error = 1;
+next:
+		if (tok) mem_free(tok);
+	}
+		
+	if (error) {
+		fprintf(stderr, "\007");
+		sleep(3);
+	}
+}
+
+unsigned char *create_config_string(struct option *options)
+{
+	unsigned char *str = init_str();
+	int len = 0;
+	int i;
+	
+	add_to_str(&str, &len, "# This file is automatically generated by Links -- please do not edit.");
+	
+	for (i = 0; options[i].cfg_name || options[i].cmd_name; i++) {
+		if (options[i].wr_cfg) {
+			options[i].wr_cfg(&options[i], &str, &len);
+		}
+	}
+	
+	add_to_str(&str, &len, NEWLINE);
+	
+	return str;
+}
+
+#define FILE_BUF	1024
+
+unsigned char cfg_buffer[FILE_BUF];
+
+unsigned char *read_config_file(unsigned char *name)
+{
+	int h, r;
+	int l = 0;
+	unsigned char *s;
+	if ((h = open(name, O_RDONLY | O_NOCTTY)) == -1) return NULL;
+	set_bin(h);
+	s = init_str();
+	while ((r = read(h, cfg_buffer, FILE_BUF)) > 0) {
+		int i;
+		for (i = 0; i < r; i++) if (!cfg_buffer[i]) cfg_buffer[i] = ' ';
+		add_bytes_to_str(&s, &l, cfg_buffer, r);
+	}
+	if (r == -1) mem_free(s), s = NULL;
+	close(h);
+	return s;
+}
+
+int write_to_config_file(unsigned char *name, unsigned char *c)
+{
+	int rr = strlen(c);
+	int r = rr;
+	int h, w;
+	if ((h = open(name, O_WRONLY | O_NOCTTY | O_CREAT | O_TRUNC, 0666)) == -1) return -1;
+	set_bin(h);
+	while (r > 0) {
+		if ((w = write(h, c + rr - r, r)) <= 0) {
+			close(h);
+			return -1;
+		}
+		r -= w;
+	}
+	close(h);
+	return 0;
+}
+
+unsigned char *get_home(int *new)
+{
+	struct stat st;
+	unsigned char *home = stracpy(getenv("HOME"));
+	unsigned char *home_links;
+	unsigned char *config_dir = stracpy(getenv("CONFIG_DIR"));
+
+	if (new) *new = 1;
+	
+	if (!home) {
+		int i;
+		
+		home = stracpy(path_to_exe);
+		if (!home) {
+			if (config_dir) mem_free(config_dir);
+			return NULL;
+		}
+		
+		for (i = strlen(home) - 1; i >= 0; i--) {
+			if (dir_sep(home[i])) {
+				home[i + 1] = 0;
+				break;
+			}
+		}
+		
+		if (i < 0) home[0] = 0;
+	}
+	
+	while (home[0] && dir_sep(home[strlen(home) - 1]))
+		home[strlen(home) - 1] = 0;
+	
+	if (home[0]) add_to_strn(&home, "/");
+	
+	home_links = stracpy(home);
+	
+	if (config_dir) {
+		add_to_strn(&home_links, config_dir);
+		
+		while (home_links[0] && dir_sep(home_links[strlen(home_links) - 1]))
+			home_links[strlen(home_links) - 1] = 0;
+		
+		if (stat(home_links, &st) != -1 && S_ISDIR(st.st_mode)) {
+			add_to_strn(&home_links, "/links");
+			
+	    	} else {
+			fprintf(stderr, "CONFIG_DIR set to %s. But directory %s doesn't exist.\n\007", config_dir, home_links);
+			sleep(3);
+			mem_free(home_links);
+			home_links = stracpy(home);
+			add_to_strn(&home_links, ".links");		
+		}
+		
+		mem_free(config_dir);
+		
+	} else {
+		add_to_strn(&home_links, ".links");
+	}
+	
+	if (stat(home_links, &st)) {
+		if (!mkdir(home_links, 0700))
+			goto home_creat;
+		if (config_dir)
+			goto failed;
+		goto first_failed;
+	}
+	
+	if (S_ISDIR(st.st_mode))
+		goto home_ok;
+	
+first_failed:
+	mem_free(home_links);
+	
+	home_links = stracpy(home);
+	add_to_strn(&home_links, "links");
+	
+	if (stat(home_links, &st)) {
+		if (mkdir(home_links, 0700) == 0)
+			goto home_creat;
+		goto failed;
+	}
+	
+	if (S_ISDIR(st.st_mode))
+		goto home_ok;
+	
+failed:
+	mem_free(home_links);
+	mem_free(home);
+	
+	return NULL;
+
+home_ok:
+	if (new) *new = 0;
+	
+home_creat:
+#if 0
+	/* I've no idea if following is needed for newly created directories.
+	 * It's bad thing to do it everytime. */
+#ifdef HAVE_CHMOD
+	chmod(home_links, 0700);
+#endif
+#endif
+	add_to_strn(&home_links, "/");
+	mem_free(home);
+	
+	return home_links;
+}
+
+void init_home()
+{
+	get_system_name();
+	links_home = get_home(&first_use);
+	if (!links_home) {
+		fprintf(stderr, "Unable to find or create links config directory. Please check, that you have $HOME variable set correctly and that you have write permission to your home directory.\n\007");
+		sleep(3);
+		return;
+	}
+}
+
+void load_config_file(unsigned char *prefix, unsigned char *name)
+{
+	unsigned char *c, *config_file;
+	config_file = stracpy(prefix);
+	if (!config_file) return;
+	add_to_strn(&config_file, name);
+	if ((c = read_config_file(config_file))) goto ok;
+	mem_free(config_file);
+	config_file = stracpy(prefix);
+	if (!config_file) return;
+	add_to_strn(&config_file, ".");
+	add_to_strn(&config_file, name);
+	if ((c = read_config_file(config_file))) goto ok;
+	mem_free(config_file);
+	return;
+	ok:
+	parse_config_file(config_file, c, all_options);
+	mem_free(c);
+	mem_free(config_file);
+}
+
+void load_config()
+{
+	load_config_file("/etc/", "links.cfg");
+	load_config_file(links_home, "links.cfg");
+	load_config_file(links_home, "html.cfg");
+	load_config_file(links_home, "user.cfg");
+}
+
+int write_config_file(unsigned char *prefix, unsigned char *name, struct option *o, struct terminal *term)
+{
+	unsigned char *c, *config_file;
+	if (!(c = create_config_string(o))) return -1;
+	config_file = stracpy(prefix);
+	if (!config_file) {
+		mem_free(c);
+		return -1;
+	}
+	add_to_strn(&config_file, name);
+	if (write_to_config_file(config_file, c)) {
+		if (term) {
+			msg_box(term, NULL,
+				TEXT(T_CONFIG_ERROR), AL_CENTER,
+				TEXT(T_UNABLE_TO_WRITE_TO_CONFIG_FILE),
+				NULL, 1,
+				TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+		}
+		mem_free(c);
+		mem_free(config_file);
+		return -1;
+	}
+	mem_free(c);
+	mem_free(config_file);
+	return 0;
+}
+
+void write_config(struct terminal *term)
+{
+	write_config_file(links_home, "links.cfg", links_options, term);
+}
+
+void write_html_config(struct terminal *term)
+{
+	write_config_file(links_home, "html.cfg", html_options, term);
+}
+
+void add_nm(struct option *o, unsigned char **s, int *l)
+{
+	if (*l) add_to_str(s, l, NEWLINE);
+	add_to_str(s, l, o->cfg_name);
+	add_to_str(s, l, " ");
+}
+
+void add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
+{
+	add_chr_to_str(s, l, '"');
+	while (*q) {
+		if (*q == '"' || *q == '\\') add_chr_to_str(s, l, '\\');
+		add_chr_to_str(s, l, *q);
+		q++;
+	}
+	add_chr_to_str(s, l, '"');
+}
+
+unsigned char *num_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *tok = get_token(&c);
+	unsigned char *end;
+	long l;
+	if (!tok) return "Missing argument";
+	l = strtolx(tok, &end);
+	if (*end) {
+		mem_free(tok);
+		return "Number expected";
+	}
+	if (l < o->min || l > o->max) {
+		mem_free(tok);
+		return "Out of range";
+	}
+	*(int *)o->ptr = l;
+	mem_free(tok);
+	return NULL;
+}
+
+void num_wr(struct option *o, unsigned char **s, int *l)
+{
+	add_nm(o, s, l);
+	add_knum_to_str(s, l, *(int *)o->ptr);
+}
+
+unsigned char *str_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *tok = get_token(&c);
+	unsigned char *e = NULL;
+	if (!tok) return NULL;
+	if (strlen(tok) + 1 > o->max) e = "String too long";
+	else strcpy(o->ptr, tok);
+	mem_free(tok);
+	return e;
+}
+
+void str_wr(struct option *o, unsigned char **s, int *l)
+{
+	add_nm(o, s, l);
+	if (strlen(o->ptr) > o->max - 1) {
+		unsigned char *s1 = init_str();
+		int l1 = 0;
+		add_bytes_to_str(&s1, &l1, o->ptr, o->max - 1);
+		add_quoted_to_str(s, l, s1);
+		mem_free(s1);
+	}
+	else add_quoted_to_str(s, l, o->ptr);
+}
+
+unsigned char *cp_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *tok = get_token(&c);
+	unsigned char *e = NULL;
+	int i;
+	if (!tok) return "Missing argument";
+	/*if (!strcasecmp(c, "none")) i = -1;
+	else */if ((i = get_cp_index(tok)) == -1) e = "Unknown codepage";
+	else *(int *)o->ptr = i;
+	mem_free(tok);
+	return e;
+}
+
+void cp_wr(struct option *o, unsigned char **s, int *l)
+{
+	unsigned char *n = get_cp_mime_name(*(int *)o->ptr);
+	add_nm(o, s, l);
+	add_to_str(s, l, n);
+}
+
+unsigned char *lang_rd(struct option *o, unsigned char *c)
+{
+	int i;
+	unsigned char *tok = get_token(&c);
+	if (!tok) return "Missing argument";
+	for (i = 0; i < n_languages(); i++)
+		if (!(strcasecmp(language_name(i), tok))) {
+			set_language(i);
+			mem_free(tok);
+			return NULL;
+		}
+	mem_free(tok);
+	return "Unknown language";
+}
+
+void lang_wr(struct option *o, unsigned char **s, int *l)
+{
+	add_nm(o, s, l);
+	add_quoted_to_str(s, l, language_name(current_language));
+}
+
+int getnum(unsigned char *s, int *n, int r1, int r2)
+{
+	unsigned char *e;
+	long l = strtol(s, (char **)&e, 10);
+	if (*e || !*s) return -1;
+	if (l < r1 || l >= r2) return -1;
+	*n = (int)l;
+	return 0;
+}
+
+unsigned char *type_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *err = "Error reading association specification";
+	struct assoc new;
+	unsigned char *w;
+	int n;
+	memset(&new, 0, sizeof(struct assoc));
+	if (!(new.label = get_token(&c))) goto err;
+	if (!(new.ct = get_token(&c))) goto err;
+	if (!(new.prog = get_token(&c))) goto err;
+	if (!(w = get_token(&c))) goto err;
+	if (getnum(w, &n, 0, 32)) goto err_f;
+	mem_free(w);
+	new.cons = !!(n & 1);
+	new.xwin = !!(n & 2);
+	new.ask = !!(n & 4);
+	if ((n & 8) || (n & 16)) new.block = !!(n & 16);
+	else new.block = !new.xwin || new.cons;
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '9') goto err_f;
+	new.system = w[0] - '0';
+	mem_free(w);
+	update_assoc(&new);
+	err = NULL;
+	err:
+	if (new.label) mem_free(new.label);
+	if (new.ct) mem_free(new.ct);
+	if (new.prog) mem_free(new.prog);
+	return err;
+	err_f:
+	mem_free(w);
+	goto err;
+}
+
+void type_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct assoc *a;
+	foreachback(a, assoc) {
+		add_nm(o, s, l);
+		add_quoted_to_str(s, l, a->label);
+		add_to_str(s, l, " ");
+		add_quoted_to_str(s, l, a->ct);
+		add_to_str(s, l, " ");
+		add_quoted_to_str(s, l, a->prog);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, (!!a->cons) + (!!a->xwin) * 2 + (!!a->ask) * 4 + (!a->block) * 8 + (!!a->block) * 16);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, a->system);
+	}
+}
+
+unsigned char *ext_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *err = "Error reading extension specification";
+	struct extension new;
+	memset(&new, 0, sizeof(struct extension));
+	if (!(new.ext = get_token(&c))) goto err;
+	if (!(new.ct = get_token(&c))) goto err;
+	update_ext(&new);
+	err = NULL;
+	err:
+	if (new.ext) mem_free(new.ext);
+	if (new.ct) mem_free(new.ct);
+	return err;
+}
+
+void ext_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct extension *a;
+	foreachback(a, extensions) {
+		add_nm(o, s, l);
+		add_quoted_to_str(s, l, a->ext);
+		add_to_str(s, l, " ");
+		add_quoted_to_str(s, l, a->ct);
+	}
+}
+
+unsigned char *prog_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *err = "Error reading program specification";
+	unsigned char *prog, *w;
+	if (!(prog = get_token(&c))) goto err_1;
+	if (!(w = get_token(&c))) goto err_2;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '9') goto err_3;
+	update_prog(o->ptr, prog, w[0] - '0');
+	err = NULL;
+	err_3:
+	mem_free(w);
+	err_2:
+	mem_free(prog);
+	err_1:
+	return err;
+}
+
+void prog_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct protocol_program *a;
+	foreachback(a, *(struct list_head *)o->ptr) {
+		if (!*a->prog) continue;
+		add_nm(o, s, l);
+		add_quoted_to_str(s, l, a->prog);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, a->system);
+	}
+}
+
+unsigned char *term_rd(struct option *o, unsigned char *c)
+{
+	struct term_spec *ts;
+	unsigned char *w;
+	int i;
+	if (!(w = get_token(&c))) goto err;
+	if (!(ts = new_term_spec(w))) {
+		mem_free(w);
+		goto end;
+	}
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
+	ts->mode = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->m11_hack = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '7') goto err_f;
+	ts->col = (w[0] - '0') & 1;
+	ts->restrict_852 = !!((w[0] - '0') & 2);
+	ts->block_cursor = !!((w[0] - '0') & 4);
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if ((i = get_cp_index(w)) == -1) goto err_f;
+	ts->charset = i;
+	mem_free(w);
+	end:
+	return NULL;
+	err_f:
+	mem_free(w);
+	err:
+	return "Error reading terminal specification";
+}
+
+unsigned char *term2_rd(struct option *o, unsigned char *c)
+{
+	struct term_spec *ts;
+	unsigned char *w;
+	int i;
+	if (!(w = get_token(&c))) goto err;
+	if (!(ts = new_term_spec(w))) {
+		mem_free(w);
+		goto end;
+	}
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
+	ts->mode = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->m11_hack = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->restrict_852 = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
+	ts->col = w[0] - '0';
+	mem_free(w);
+	if (!(w = get_token(&c))) goto err;
+	if ((i = get_cp_index(w)) == -1) goto err_f;
+	ts->charset = i;
+	mem_free(w);
+	end:
+	return NULL;
+	err_f:
+	mem_free(w);
+	err:
+	return "Error reading terminal specification";
+}
+
+void term_wr(struct option *o, unsigned char **s, int *l)
+{
+	struct term_spec *ts;
+	foreachback(ts, term_specs) {
+		add_nm(o, s, l);
+		add_quoted_to_str(s, l, ts->term);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, ts->mode);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, ts->m11_hack);
+		add_to_str(s, l, " ");
+		add_num_to_str(s, l, !!ts->col + !!ts->restrict_852 * 2 + !!ts->block_cursor * 4);
+		add_to_str(s, l, " ");
+		add_to_str(s, l, get_cp_mime_name(ts->charset));
+	}
+}
+
+unsigned char *color_rd(struct option *o, unsigned char *c)
+{
+	unsigned char *val = get_token(&c);
+	
+	if (!val) {
+		return "Missing argument";
+	} else {
+		int err = decode_color(val, o->ptr);
+		
+		mem_free(val);
+		return (err) ? "Error decoding color" : NULL;
+	}
+}
+
+unsigned char *gen_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	unsigned char *r;
+	if (!*argc) return "Parameter expected";
+	(*argv)++; (*argc)--;
+	if (!(r = o->rd_cfg(o, *(*argv - 1)))) return NULL;
+	(*argv)--; (*argc)++;
+	return r;
+}
+
+unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	struct sockaddr *addrs;
+	int addrno, i;
+	
+	if (!*argc) return "Parameter expected";
+	if (*argc > 1) return "Too many parameters";
+	
+	(*argv)++; (*argc)--;
+	if (do_real_lookup(*(*argv - 1), &addrs, &addrno)) {
+#ifdef HAVE_HERROR
+		herror("error");
+#else
+		fprintf(stderr, "error: host not found\n");
+#endif
+		return "";
+	}
+	
+	for (i = 0; i < addrno; i++) {
+#ifdef IPV6
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) addrs)[i]);
+		unsigned char p[INET6_ADDRSTRLEN];
+
+		if (! inet_ntop(addr.sin6_family, &addr.sin6_addr, p, INET6_ADDRSTRLEN))
+			printf("Resolver error.");
+		else
+			printf("%s\n", p);
+#else
+		struct sockaddr_in addr = *((struct sockaddr_in *) &((struct sockaddr_storage *) addrs)[i]);
+		unsigned char *p = (unsigned char *) &addr.sin_addr.s_addr;
+		
+		printf("%d.%d.%d.%d\n", (int) p[0], (int) p[1],
+				        (int) p[2], (int) p[3]); 
+#endif
+	}
+
+	mem_free(addrs);
+	
+	fflush(stdout);
+	
+	return "";
+}
+
+unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	printf("Elinks " VERSION_STRING " - Text WWW browser\n");
+	fflush(stdout);
+	return "";
+}
+
+unsigned char *no_connect_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	no_connect = 1;
+	return NULL;
+}
+
+unsigned char *anonymous_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	anonymous = 1;
+	return NULL;
+}
+
+unsigned char *dump_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	if (dmp != o->min && dmp) return "Can't use both -dump and -source";
+	dmp = o->min;
+	no_connect = 1;
+	return NULL;
+}
+
+unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	struct option *option;
+
+	version_cmd(NULL, NULL, NULL);
+	printf("\n");
+	
+	printf("Usage: links [OPTION]... [URL]\n\n");
+	printf("Options:\n\n");
+
+	for (option = links_options; option->cmd_name || option->cfg_name; option++) {
+		if (option->cmd_name) {
+			printf("-%s ", option->cmd_name);
+			
+			if (option->rd_cfg == num_rd)
+				printf("<num>");
+			else if (option->rd_cfg == str_rd)
+				printf("<str>");
+			else if (option->rd_cfg == color_rd)
+				printf("<color|#rrggbb>");
+			else if (option->rd_cfg)
+				printf("<...>");
+
+			printf("\n");
+
+			if (option->desc) {
+				int l = strlen(option->desc);
+				int i;
+					
+				printf("%35s", "");
+
+				for (i = 0; i < l; i++) {
+					putchar(option->desc[i]);
+					
+					if (option->desc[i] == '\n')
+						printf("%35s", "");
+				}
+
+				printf("\n");
+
+				if (option->rd_cfg == num_rd)
+					printf("%35sDefault: %d\n", "", * (int *) option->ptr);
+				else if (option->rd_cfg == str_rd)
+					printf("%35sDefault: %s\n", "", option->ptr ? (char *) option->ptr : "");
+			}
+
+			printf("\n");
+		}
+	}
+
+/*printf("Keys:\n\
+ 	ESC	 display menu\n\
+	^C	 quit\n\
+	^P, ^N	 scroll up, down\n\
+	[, ]	 scroll left, right\n\
+	up, down select link\n\
+	->	 follow link\n\
+	<-	 go back\n\
+	g	 go to url\n\
+	G	 go to url based on current url\n\
+	/	 search\n\
+	?	 search back\n\
+	n	 find next\n\
+	N	 find previous\n\
+	=	 document info\n\
+	\\	 document source\n\
+	d	 download\n\
+	q	 quit\n");*/
+
+	fflush(stdout);
+	return "";
+}
+
+void end_config()
+{
+	if (links_home) mem_free(links_home);
+}
+
+int anonymous = 0;
+
+unsigned char system_name[MAX_STR_LEN];
+
+unsigned char *links_home = NULL;
+int first_use = 0;
+int created_home = 0;
+
+int no_connect = 0;
+int base_session = 0;
+
+int dmp = 0;
+int dump_width = 80;
+
+
+enum cookies_accept cookies_accept = COOKIES_ACCEPT_ALL;
+int cookies_save = 1;
+int cookies_resave = 1;
+int cookies_paranoid_security = 0;
+
+int async_lookup = 1;
+int download_utime = 0;
+int max_connections = 10;
+int max_connections_to_host = 2;
+int max_tries = 3;
+int receive_timeout = 120;
+int unrestartable_receive_timeout = 600;
+
+int max_format_cache_entries = 5;
+long memory_cache_size = 1048576;
+
+int enable_html_tables = 1;
+int enable_html_frames = 1;
+int display_images = 1;
+
+struct document_setup dds = { 0, 0, 1, 1, 1, 1, 0, 3, 0, 0 };
+
+struct rgb default_fg = { 191, 191, 191 };
+struct rgb default_bg = { 0, 0, 0 };
+struct rgb default_link = { 0, 0, 255 };
+struct rgb default_vlink = { 255, 255, 0 };
+
+int color_dirs = 1;
+
+int show_status_bar = 1;
+int show_title_bar = 1;
+
+int form_submit_auto = 1;
+int form_submit_confirm = 1;
+int accesskey_enter = 0;
+int accesskey_priority = 1;
+int links_wraparound = 0;
+
+int allow_special_files = 0;
+int keep_unhistory = 0;
+
+int default_left_margin = HTML_LEFT_MARGIN;
+
+unsigned char fake_referer[MAX_STR_LEN] = "";
+enum referer referer = REFERER_NONE;
+
+unsigned char http_proxy[MAX_STR_LEN] = "";
+unsigned char ftp_proxy[MAX_STR_LEN] = "";
+
+unsigned char download_dir[MAX_STR_LEN] = "./";
+
+unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
+
+unsigned char user_agent[MAX_STR_LEN] = "";
+
+int startup_goto_dialog = 1;
+
+/* These are workarounds for some CGI script bugs */
+struct http_bugs http_bugs = { 0, 1, 0, 0 };
+/*int bug_302_redirect = 0;*/
+	/* When got 301 or 302 from POST request, change it to GET
+	   - this violates RFC2068, but some buggy message board scripts rely on it */
+/*int bug_post_no_keepalive = 0;*/
+	/* No keepalive connection after POST request. Some buggy PHP databases report bad
+	   results if GET wants to retreive data POSTed in the same connection */
+
+/* Following lists are sorted alphabetically */
+
+struct option links_options[] = {
+	/* <optname>, <cfgoptname>,
+	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
+	 * <minval>, <maxval>, <varname>
+	 * <description> */ 
+
+	{	"accesskey-enter", "accesskey_enter",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &accesskey_enter,
+		"Automatically follow link / submit form if appropriate accesskey\n"
+		"is pressed - this is standart behaviour, however dangerous." },
+
+	{	"accesskey-priority", "accesskey_priority",
+		gen_cmd, num_rd, num_wr,
+	 	0, 2, &accesskey_priority,
+		"Priority of 'accesskey' HTML attribute:\n"
+		"0 is first try all normal bindings and if it fails, check accesskey\n"
+		"1 is first try only frame bindings and if it fails, check accesskey\n"
+		"2 is first check accesskey (that can be dangerous)" },
+
+	{	"allow-special-files", "allow_special_files",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &allow_special_files,
+		"Allow reading from non-regular files? (DANGEROUS - reading\n"
+		"/dev/urandom or /dev/zero can ruin your day!)" },
+	
+	{	"anonymous", NULL,
+		anonymous_cmd, NULL, NULL,
+	 	0, 0, NULL,
+	      	"Restrict links so that it can run on an anonymous account.\n"
+		"No local file browsing, no downloads. Executing of viewers\n"
+		"is allowed, but user can't add or modify entries in\n"
+		"association table." },
+	 
+	{	"assume-codepage", "assume_codepage",
+		gen_cmd, cp_rd, NULL,
+	 	0, 0, &dds.assume_cp,
+		"Use the given codepage when the webpage did not specify\n"
+		"its codepage.\n"
+		"Default: ISO 8859-1" },
+	 
+	{	"async-dns", "async_dns",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &async_lookup,
+		"Use asynchronous DNS resolver?" },
+	 
+	{	"base-session", NULL,
+		gen_cmd, num_rd, NULL,
+	 	0, MAXINT, &base_session,
+	 	"Run this links in separate session - instances of links with\n"
+       		"same base-session will connect together and share runtime\n"
+		"informations. By default, base-session is 0." },
+
+	{	"color-dirs", "color_dirs",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &color_dirs,
+		"Highlight directories when listing local disk content?" },
+
+	{	"cookies-accept", "cookies_accept",
+	       	gen_cmd, num_rd, num_wr,
+		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, &cookies_accept,
+		"Mode of accepting cookies:\n"
+		"0 is accept no cookies\n"
+		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
+		"2 is accept all cookies" },
+
+	{	"cookies-paranoid-security", "cookies_paranoid_security",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &cookies_paranoid_security,
+		"When enabled, we'll require three dots in cookies domain for all\n"
+		"non-international domains (instead of just two dots). Please see\n"
+		"code (cookies.c:check_domain_security()) for further description" },
+
+	{	"cookies-save", "cookies_save",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &cookies_save,
+		"Load/save cookies from/to disk?" },
+
+	{	"cookies-resave", "cookies_resave",
+	       	gen_cmd, num_rd, num_wr,
+		0, 1, &cookies_resave,
+		"Save cookies after each change in cookies list? No effect when\n"
+		"cookies-save is off." },
+
+	{	"default-fg", "default_fg",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_fg,
+		"Default foreground color." },
+
+		/* FIXME - this produces ugly results now */
+#if 0
+	{	"default-bg", "default_bg",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_bg,
+		"Default background color." },
+#endif
+
+	{	"default-link", "default_link",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_link,
+		"Default link color." },
+
+		/* FIXME - this is not yet implemented */
+#if 0
+	{	"default-vlink", "default_vlink",
+	       	gen_cmd, color_rd, NULL,
+		0, 1, &default_vlink,
+		"Default vlink color." },
+#endif
+
+	{	"download-dir", "download_dir",
+		gen_cmd, str_rd, str_wr,
+	 	0, MAX_STR_LEN, download_dir,
+		"Default download directory." },
+	 
+	{	"download-utime", "download_utime",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &download_utime,
+	 	"Set time of downloaded files?" },
+	 
+	{	"dump", NULL,
+		dump_cmd, NULL, NULL,
+	 	D_DUMP, 0, NULL,
+		"Write a plain-text version of the given HTML document to\n"
+		"stdout." },
+	 
+	{	"dump-width", "dump_width",
+		gen_cmd, num_rd, num_wr,
+	 	40, 512, &dump_width,
+	 	"Size of screen in characters, when dumping a HTML document." },
+	 
+	{	"format-cache-size", "format_cache_size",
+		gen_cmd, num_rd, num_wr,
+	 	0, 256, &max_format_cache_entries,
+		"Number of cached formatted pages." },
+	  
+	{	"form-submit-auto", "form_submit_auto",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &form_submit_auto,
+		"Automagically submit a form when enter pressed on text field." },
+
+	{	"form-submit-confirm", "form_submit_confirm",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &form_submit_confirm,
+		"Ask for confirmation when submitting a form." },
+	 
+	{	"ftp.anonymous-password", "ftp.anonymous_password",
+		gen_cmd, str_rd, str_wr,
+	 	0, MAX_STR_LEN, default_anon_pass,
+		"FTP anonymous password to be sent." },
+	 
+	{	"ftp-proxy", "ftp_proxy",
+		gen_cmd, str_rd, str_wr,
+	 	0, MAX_STR_LEN, ftp_proxy,
+		"Host and port number (host:port) of the FTP proxy, or blank." },
+	 	
+	{	"?", NULL,
+		printhelp_cmd, NULL, NULL,
+	 	0, 0, NULL,
+	 	NULL },
+	 
+	{	"h", NULL,
+		printhelp_cmd, NULL, NULL,
+	 	0, 0, NULL,
+	 	NULL },
+	 
+	{	"help", NULL,
+		printhelp_cmd, NULL, NULL,
+		0, 0, NULL,
+	 	"Print usage help and exit." },
+	 
+	{	"http-bugs.allow-blacklist", "http_bugs.allow_blacklist",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &http_bugs.allow_blacklist,
+		"Allow blacklist of buggy servers?" },
+	 
+	{	"http-bugs.bug-302-redirect", "http_bugs.bug_302_redirect",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &http_bugs.bug_302_redirect,
+		"Broken 302 redirect (violates RFC but compatible with Netscape)?" },
+	 
+	{	"http-bugs.bug-post-no-keepalive", "http_bugs.bug_post_no_keepalive",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &http_bugs.bug_post_no_keepalive,
+		"No keepalive connection after POST request?" },
+	 
+	{	"http-bugs.http10", "http_bugs.http10",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &http_bugs.http10,
+		"Use HTTP/1.0 protocol?" },
+	 
+	{	"http-proxy", "http_proxy",
+		gen_cmd, str_rd, str_wr,
+	 	0, MAX_STR_LEN, http_proxy,
+		"Host and port number (host:port) of the HTTP proxy, or blank." },
+	 
+	{	"http-referer", "http_referer",
+		gen_cmd, num_rd, num_wr,
+	 	REFERER_NONE, REFERER_TRUE, &referer,
+		"Mode of sending HTTP referer:\n"
+		"0 is send no referer\n"
+		"1 is send current URL as referer\n"
+		"2 is send fixed fake referer\n"
+		"3 is send previous URL as referer (correct, but insecure)\n" },
+	 
+	{	"fake-referer", "fake_referer", /* exception to alphabetical order */
+		gen_cmd, str_rd, str_wr,
+	 	0, MAX_STR_LEN, fake_referer,
+		"Fake referer to be sent when http-referer is 3." },
+
+	{	"keep-unhistory", "keep_unhistory",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &keep_unhistory,
+	 	"Keep unhistory (\"forward history\")?" },
+	 
+	{	"language", "language",
+		gen_cmd, lang_rd, lang_wr,
+	 	0, 0, &current_language,
+		"Language of user interface." },
+
+		/* TODO - this is somewhat implemented by ff, but commented out
+		 * for now as it doesn't work somewhat. */
+#if 0
+	{	"links-wraparound", "links_wraparound",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &links_wraparound,
+	 	"When pressing 'down' on the last link, jump at the first one, and\n"
+		"vice versa." },
+#endif
+ 
+	{	"lookup", NULL,
+		lookup_cmd, NULL, NULL,
+	 	0, 0, NULL,
+	 	"Make lookup for specified host." },
+	 
+	{	"max-connections", "max_connections",
+		gen_cmd, num_rd, num_wr,
+	 	1, 16, &max_connections,
+		"Maximum number of concurrent connections." },
+	 
+	{	"max-connections-to-host", "max_connections_to_host",
+		gen_cmd, num_rd, num_wr,
+	 	1, 8, &max_connections_to_host,
+		"Maximum number of concurrent connection to a given host." },
+	 
+	{	"memory-cache-size", "memory_cache_size",
+		gen_cmd, num_rd, num_wr,
+	 	0, MAXINT, &memory_cache_size,
+		"Memory cache size (in kilobytes)." },
+	 
+	{	"no-connect", NULL,
+		no_connect_cmd, NULL, NULL,
+	 	0, 0, NULL,
+	 	"Run links as a separate instance - instead of connecting to\n"
+	 	"existing instance." },
+	 
+	{	"receive-timeout", "receive_timeout",
+		gen_cmd, num_rd, num_wr,
+	 	1, 1800, &receive_timeout,
+		"Timeout on receive (in seconds)." },
+	 
+	{	"retries", "retries",
+		gen_cmd, num_rd, num_wr,
+	 	1, 16, &max_tries,
+		"Number of tries to estabilish a connection." },
+	 
+	{	"source", NULL,
+		dump_cmd, NULL, NULL,
+	 	D_SOURCE, 0, NULL,
+		"Write the given HTML document in source form to stdout." },
+	 
+	{	"show-status-bar", "show_status_bar",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &show_status_bar,
+		"Show status bar on the screen?" },
+	 
+	{	"show-title-bar", "show_title_bar",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &show_title_bar,
+		"Show title bar on the screen?" },
+	 
+		/* TODO - this is implemented, but commented out for now as
+		 * it's buggy. */
+#if 0
+	{	"startup-goto-dialog", "startup_goto_dialog",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &startup_goto_dialog,
+		"Pop up goto dialog on startup when there's no homepage?" },
+#endif
+	 
+	{	"unrestartable-receive-timeout", "unrestartable_receive_timeout",
+		gen_cmd, num_rd, num_wr,
+	 	1, 1800, &unrestartable_receive_timeout,
+		"Timeout on non restartable connections (in seconds)." },
+	 
+	{	"user-agent", "user_agent",
+		gen_cmd, str_rd, str_wr,
+	 	0, MAX_STR_LEN, user_agent,
+	        "Change the User Agent. That means identification string, which\n"
+		"is sent to HTTP server, when a document is requested.\n"
+		"If empty, defaults to: Elinks (<version>; <system_id>; <term_size>)" },
+	 
+	{	"version", NULL,
+		version_cmd, NULL, NULL,
+	 	0, 0, NULL,
+	 	"Print links version information and exit." },
+
+	/* config-file-only options */
+	 
+	{	NULL, "terminal",
+		NULL, term_rd, term_wr,
+	 	0, 0, NULL,
+		NULL },
+	 
+	{	NULL, "terminal2",
+		NULL, term2_rd, NULL,
+	 	0, 0, NULL,
+		NULL },
+	 
+	{	NULL, "association",
+		NULL, type_rd, type_wr,
+	 	0, 0, NULL,
+		NULL },
+	 
+	{	NULL, "extension",
+		NULL, ext_rd, ext_wr,
+	 	0, 0, NULL,
+		NULL },
+	 
+	{	NULL, "mailto",
+		NULL, prog_rd, prog_wr,
+	 	0, 0, &mailto_prog,
+		NULL },
+	 
+	{	NULL, "mailto",
+		NULL, prog_rd, prog_wr,
+	 	0, 0, &mailto_prog,
+		NULL },
+	 
+	{	NULL, "telnet",
+		NULL, prog_rd, prog_wr,
+	 	0, 0, &telnet_prog,
+		NULL },
+	 
+	{	NULL, "tn3270",
+		NULL, prog_rd, prog_wr,
+	 	0, 0, &tn3270_prog,
+		NULL },
+	 
+	{	NULL, "bind",
+		NULL, bind_rd, NULL,
+	 	0, 0, NULL,
+		NULL },
+	 
+	{	NULL, "unbind",
+		NULL, unbind_rd, NULL,
+	 	0, 0, NULL,
+		NULL },
+	 
+	{	NULL, NULL,
+		NULL, NULL, NULL,
+	 	0, 0, NULL,
+		NULL },
+};
+
+struct option html_options[] = {
+	 
+	{	"html-assume-codepage", "html_assume_codepage",
+		gen_cmd, cp_rd, cp_wr,
+	 	0, 0, &dds.assume_cp,
+		"Default document codepage." },
+	 
+	{	"html-avoid-dark-on-black", "html_avoid_dark_on_black",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.avoid_dark_on_black,
+		"Avoid dark colors on black background." },
+	 
+	{	"html-frames", "html_frames",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.frames,
+		"Display frames." },
+	 
+	{	"html-hard-assume", "html_hard_assume",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.hard_assume,
+		"Ignore charset info sent by server." },
+	 
+	{	"html-images", "html_images",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.images,
+		"Display links to images." },
+	 
+	{	"html-margin", "html_margin",
+		gen_cmd, num_rd, num_wr,
+	 	0, 9, &dds.margin,
+		"Text margin." },
+	 
+	{	"html-numbered-links", "html_numbered_links",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.num_links,
+		"Display links numbered." },
+	 
+	{	"html-tables", "html_tables",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.tables,
+		"Display tables." },
+	 
+	{	"html-table-order", "html_table_order",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.table_order,
+		"Move by columns in table." },
+	 
+	{	"html-use-document-colours", "html_use_document_colours",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &dds.use_document_colours,
+		"Use colors specified in document." },
+	 
+	{	NULL, NULL,
+		NULL, NULL, NULL,
+	 	0, 0, NULL,
+		NULL },
+};
+
+extern struct history goto_url_history ;
+
+/* Load history file */
+int load_url_history()
+{
+	FILE *fp;
+	unsigned char *history_file;
+	unsigned char url[MAX_INPUT_URL_LEN];
+
+	if (anonymous) return 0;
+	/* Must have been called after init_home */
+	if (!links_home) return 0;
+
+	history_file = stracpy(links_home);
+	if (!history_file) return 0;
+
+	add_to_strn(&history_file, "links.his");
+	fp = fopen(history_file, "r");
+	if (!fp) {
+		mem_free(history_file);
+		return 0;
+	}
+ 
+	while (fgets(url, MAX_INPUT_URL_LEN, fp)) {
+		url[strlen(url) - 1] = 0;
+		add_to_history(&goto_url_history, url, 0);
+	}
+	
+	fclose(fp);
+	mem_free(history_file);
+	return 0;
+}
+
+/* Write history list to file */
+int save_url_history()
+{
+	struct history_item* historyitem;
+	unsigned char *history_file;
+	int i = 0;
+	FILE *fp;
+	
+	if (anonymous) return 0;
+	/* Must have been called after init_home */
+	if (!links_home) return 0;
+	
+	history_file = stracpy(links_home);
+	if (!history_file) return 0;
+	
+	add_to_strn(&history_file, "links.his");
+	fp = fopen(history_file, "w");
+	if (!fp) {
+		mem_free(history_file);
+		return 0;
+	}
+	
+	foreachback(historyitem, goto_url_history.items) {
+		if (i++ > MAX_HISTORY_ITEMS) break;
+		fputs(historyitem->d, fp);
+		fputc('\n', fp);
+	}
+
+	fclose(fp);
+	mem_free(history_file);
+	return 0;
+}
+

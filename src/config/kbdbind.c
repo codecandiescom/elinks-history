@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.175 2004/01/24 21:17:44 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.176 2004/01/24 22:35:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 #define table table_elinks
 
 static struct strtonum action_table[];
-static struct listbox_item *action_box_items[KEYACTS];
+static struct listbox_item *action_box_items[KM_MAX][KEYACTS];
 static struct list_head keymaps[KM_MAX];
 
 static int read_action(unsigned char *);
@@ -39,7 +39,7 @@ struct keybinding *
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
-	struct listbox_item *keymap;
+	struct listbox_item *box_item;
 	struct string keystroke;
 
 	delete_keybinding(km, key, meta);
@@ -75,27 +75,21 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	strcpy(kb->box_item->text, keystroke.source);
 	done_string(&keystroke);
 
-	if (!action_box_items[action]) {
-boom:
+	box_item = action_box_items[km][action];
+	if (!box_item) {
 		mem_free(kb->box_item);
 		kb->box_item = NULL;
 		return NULL; /* Or goto ;-). */
 	}
-	for (keymap = action_box_items[action]->child.next;
-	     keymap != (struct listbox_item *) &action_box_items[action]->child && km;
-	     km--)
-		keymap = keymap->next;
-	if (keymap == (struct listbox_item *) &action_box_items[action]->child)
-		goto boom;
 
-	add_to_list(keymap->child, kb->box_item);
-	kb->box_item->root = keymap;
+	add_to_list(box_item->child, kb->box_item);
+	kb->box_item->root = box_item;
 	init_list(kb->box_item->child);
 	kb->box_item->visible = 1;
 	kb->box_item->translated = 1;
 	kb->box_item->udata = kb;
 	kb->box_item->type = BI_LEAF;
-	kb->box_item->depth = keymap->depth + 1;
+	kb->box_item->depth = box_item->depth + 1;
 
 	update_hierbox_browser(&keybinding_browser);
 
@@ -574,44 +568,47 @@ static void
 init_action_listboxes(void)
 {
 	struct strtonum *act;
+	int i;
 
-	for (act = action_table; act->str; act++) {
-		struct listbox_item *box_item;
-		int i;
+	for (i = 0; i < KM_MAX; i++) {
+		struct listbox_item *keymap;
 
-		if (act->num == ACT_SCRIPTING_FUNCTION || act->num == ACT_NONE)
-			continue;
+		keymap = mem_calloc(1, sizeof(struct listbox_item));
+		if (!keymap) continue;
 
-		box_item = mem_calloc(1, sizeof(struct listbox_item));
-		if (!box_item) continue;
+		init_list(keymap->child);
+		keymap->visible = 1;
+		keymap->translated = 1;
+		keymap->udata = (void *) i;
+		keymap->type = BI_FOLDER;
+		keymap->expanded = 0; /* Maybe you would like this being 1? */
+		keymap->depth = 0;
+		keymap->text = numtodesc(keymap_table, i);
+		add_to_list_end(keybinding_browser.root.child, keymap);
 
-		init_list(box_item->child);
-		box_item->udata = (void *) act->num;
-		box_item->type = BI_FOLDER;
-		box_item->expanded = 0; /* Maybe you would like this being 1? */
+		for (act = action_table; act->str; act++) {
+			struct listbox_item *box_item;
 
-		assert(act->desc);
-		box_item->text = act->desc;
-		box_item->translated = 1;
+			if (act->num == ACT_SCRIPTING_FUNCTION || act->num == ACT_NONE)
+				continue;
 
-		add_to_list_end(keybinding_browser.root.child, box_item);
-		action_box_items[act->num] = box_item;
+			box_item = mem_calloc(1, sizeof(struct listbox_item));
+			if (!box_item) continue;
 
-		for (i = 0; i < KM_MAX; i++) {
-			struct listbox_item *keymap;
+			box_item->root = keymap;
+			add_to_list_end(keymap->child, box_item);
+			init_list(box_item->child);
+			box_item->udata = (void *) act->num;
+			box_item->type = BI_FOLDER;
+			box_item->visible = 1;
+			box_item->expanded = 1;
+			box_item->depth = 1;
 
-			keymap = mem_calloc(1, sizeof(struct listbox_item));
-			if (!keymap) continue;
-			add_to_list_end(box_item->child, keymap);
-			keymap->root = box_item;
-			init_list(keymap->child);
-			keymap->visible = 1;
-			keymap->translated = 1;
-			keymap->udata = (void *) i;
-			keymap->type = BI_FOLDER;
-			keymap->expanded = 1;
-			keymap->depth = 1;
-			keymap->text = numtodesc(keymap_table, i);
+			assert(act->desc);
+			box_item->text = act->desc;
+			box_item->translated = 1;
+
+			action_box_items[i][act->num] = box_item;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.148 2004/08/19 08:12:24 miciah Exp $ */
+/* $Id: renderer.c,v 1.149 2004/08/19 08:12:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,7 +360,6 @@ add_document_line(struct plain_renderer *renderer,
 								  width,
 								  expanded,
 								  pos);
-
 			}
 
 			if (added_chars) {

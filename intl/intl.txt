@@ -3,7 +3,7 @@ script ./synclang. It adds NULL entries to other languages. Then run ./gen-intl.
 
 When you change any text, run ./get-intl.
 
-Menu hotkeys are also translated via this interface. You can specify more
+Menu hotkeys are also translated via this interface. You can specify more 
 hotkeys. When using normal letters as hotkeys, always use upper case. When using
 some characters above 128, specify both upper and lower letters.
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 echo
-echo Generating entity table.
+echo Generating entity table. 
 (
 cat entities.lnx | grep '^[ 	]*{"' | sort >tmp
 N=`cat tmp | wc -l`

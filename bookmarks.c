@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.10 2002/03/16 00:35:04 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.11 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -13,6 +13,8 @@
 #include <string.h>
 
 #include "links.h"
+
+#include "error.h"
 
 /* Whether to save bookmarks after each modification of their list
  * (add/modify/delete). */

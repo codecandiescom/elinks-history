@@ -1,4 +1,7 @@
-/* $Id: os_dep.h,v 1.9 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: os_dep.h,v 1.10 2002/03/16 15:17:23 pasky Exp $ */
+
+#ifndef EL__OS_DEP_H
+#define EL__OS_DEP_H
 
 #define SYS_UNIX	1
 #define SYS_OS2		2
@@ -136,4 +139,49 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 
 #ifndef HAVE_SA_STORAGE
 #define sockaddr_storage sockaddr
+#endif
+
+
+/* TODO: This should be in a separate .h file! */
+
+struct terminal;
+
+struct open_in_new {
+	unsigned char *text;
+	unsigned char *hk;
+	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
+};
+
+int get_system_env();
+int is_xterm();
+int can_twterm();
+int get_terminal_size(int, int *, int *);
+void handle_terminal_resize(int, void (*)());
+void unhandle_terminal_resize(int);
+void set_bin(int);
+int c_pipe(int *);
+int get_input_handle();
+int get_output_handle();
+int get_ctl_handle();
+void want_draw();
+void done_draw();
+void terminate_osdep();
+void *handle_mouse(int, void (*)(void *, unsigned char *, int), void *);
+void unhandle_mouse(void *);
+int check_file_name(unsigned char *);
+int start_thread(void (*)(void *, int), void *, int);
+char *get_clipboard_text();
+void set_clipboard_text(char *);
+void set_window_title(unsigned char *);
+unsigned char *get_window_title();
+int is_safe_in_shell(unsigned char);
+void check_shell_security(unsigned char **);
+void block_stdin();
+void unblock_stdin();
+int exe(char *);
+int resize_window(int, int);
+int can_resize_window(int);
+int can_open_os_shell(int);
+struct open_in_new *get_open_in_new(int);
+
 #endif

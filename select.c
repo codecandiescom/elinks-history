@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.6 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: select.c,v 1.7 2002/03/16 15:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,16 @@
 #endif
 
 #include "links.h"
+
+#include "cache.h"
+#include "error.h"
+#include "select.h"
+
+
+#ifndef FD_SETSIZE
+#define FD_SETSIZE 1024
+#endif
+
 
 struct thread {
 	void (*read_func)(void *);
@@ -423,4 +433,24 @@ void select_loop(void (*init)())
 			n -= k;
 		}
 	}
+}
+
+int can_read(int fd)
+{
+	fd_set fds;
+	struct timeval tv = {0, 0};
+
+	FD_ZERO(&fds);
+	FD_SET(fd, &fds);
+	return select(fd + 1, &fds, NULL, NULL, &tv);
+}
+
+int can_write(int fd)
+{
+	fd_set fds;
+	struct timeval tv = {0, 0};
+	
+	FD_ZERO(&fds);
+	FD_SET(fd, &fds);
+	return select(fd + 1, NULL, &fds, NULL, &tv);
 }

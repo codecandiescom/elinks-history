@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.6 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: error.c,v 1.7 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,18 +14,51 @@
 
 #include "links.h"
 
-void do_not_optimize_here(void *p)
-{
-	/* stop GCC optimization - avoid bugs in it */
-}
+#include "error.h"
+
 
 #ifdef LEAK_DEBUG
-long mem_amount = 0;
-long last_mem_amount = -1;
-#ifdef LEAK_DEBUG_LIST
-struct list_head memory_list = { &memory_list, &memory_list };
+
+#ifndef LEAK_DEBUG_LIST
+struct alloc_header {
+	int size;
+};
+#else
+struct alloc_header {
+	struct alloc_header *next;
+	struct alloc_header *prev;
+	int size;
+	int line;
+	unsigned char *file;
+	unsigned char *comment;
+};
 #endif
+
+#define L_D_S ((sizeof(struct alloc_header) + 7) & ~7)
+
 #endif
+
+
+#ifdef SPECIAL_MALLOC
+
+/* Again, this is inherited from old links and I've no idea wtf is it ;). */
+
+void *sp_malloc(size_t);
+void sp_free(void *);
+void *sp_realloc(void *, size_t);
+
+#define xmalloc sp_malloc
+#define xfree sp_free
+#define xrealloc sp_realloc
+
+#else
+
+#define xmalloc malloc
+#define xfree free
+#define xrealloc realloc
+
+#endif
+
 
 static inline void force_dump()
 {
@@ -34,26 +67,10 @@ static inline void force_dump()
 	raise(SIGSEGV);
 }
 
-void check_memory_leaks()
+
+void do_not_optimize_here(void *p)
 {
-#ifdef LEAK_DEBUG
-	if (mem_amount) {
-		fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n", mem_amount);
-#ifdef LEAK_DEBUG_LIST
-		fprintf(stderr, "\nList of blocks: ");
-		{
-			int r = 0;
-			struct alloc_header *ah;
-			foreach (ah, memory_list) {
-				fprintf(stderr, "%s%p:%d @ %s:%d", r ? ", ": "", (char *)ah + L_D_S, ah->size, ah->file, ah->line), r = 1;
-				if (ah->comment) fprintf(stderr, ":\"%s\"", ah->comment);
-			}
-			fprintf(stderr, "\n");
-		}
-#endif
-		force_dump();
-	}
-#endif
+	/* stop GCC optimization - avoid bugs in it */
 }
 
 void er(int b, unsigned char *m, va_list l)
@@ -96,7 +113,39 @@ void debug_msg(unsigned char *m, ...)
 	er(0, errbuf, l);
 }
 
+
+
+/* TODO: This should be probably in separate file. --pasky */
+
 #ifdef LEAK_DEBUG
+
+long mem_amount = 0;
+long last_mem_amount = -1;
+
+#ifdef LEAK_DEBUG_LIST
+struct list_head memory_list = { &memory_list, &memory_list };
+#endif
+
+void check_memory_leaks()
+{
+	if (mem_amount) {
+		fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n", mem_amount);
+#ifdef LEAK_DEBUG_LIST
+		fprintf(stderr, "\nList of blocks: ");
+		{
+			int r = 0;
+			struct alloc_header *ah;
+			foreach (ah, memory_list) {
+				fprintf(stderr, "%s%p:%d @ %s:%d", r ? ", ": "", (char *)ah + L_D_S, ah->size, ah->file, ah->line), r = 1;
+				if (ah->comment) fprintf(stderr, ":\"%s\"", ah->comment);
+			}
+			fprintf(stderr, "\n");
+		}
+#endif
+		force_dump();
+	}
+}
+
 
 void *debug_mem_alloc(unsigned char *file, int line, size_t size)
 {

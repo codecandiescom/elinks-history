@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.4 2002/03/16 00:35:04 pasky Exp $ */
+/* $Id: cache.c,v 1.5 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,10 @@
 #include <string.h>
 
 #include "links.h"
+
+#include "cache.h"
+#include "error.h"
+#include "main.h"
 
 struct list_head cache = {&cache, &cache};
 
@@ -84,6 +88,7 @@ int get_cache_entry(unsigned char *url, struct cache_entry **f)
 	return 0;
 }
 
+#if 0
 int get_cache_data(struct cache_entry *e, unsigned char **d, int *l)
 {
 	struct fragment *frag;
@@ -93,6 +98,7 @@ int get_cache_data(struct cache_entry *e, unsigned char **d, int *l)
 	*l = frag->length;
 	return 0;
 }
+#endif
 
 #define sf(x) e->data_size += x, cache_size += x
 

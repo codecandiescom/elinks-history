@@ -1,4 +1,7 @@
-/* $Id: setup.h,v 1.6 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: setup.h,v 1.7 2002/03/16 15:17:23 pasky Exp $ */
+
+#ifndef EL__SETUP_H
+#define EL__SETUP_H
 
 #if 0
 #define VERSION_STRING			VERSION " ["__DATE__ " " __TIME__"]"
@@ -104,3 +107,5 @@
 
 #define MAX_UID_LEN			20
 #define MAX_PASSWD_LEN			20
+
+#endif

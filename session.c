@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.28 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: session.c,v 1.29 2002/03/16 15:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,11 @@
 #endif
 
 #include "links.h"
+
+#include "cache.h"
+#include "error.h"
+#include "select.h"
+#include "url.h"
 
 #ifdef HAVE_LONG_LONG
 #define longlong long long

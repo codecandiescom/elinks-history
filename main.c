@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.9 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: main.c,v 1.10 2002/03/16 15:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,23 @@
 
 #include "links.h"
 
-int retval = RET_OK;
+#include "af_unix.h"
+#include "cache.h"
+#include "cookies.h"
+#include "dns.h"
+#include "error.h"
+#include "https.h"
+#include "main.h"
+#include "select.h"
+#include "url.h"
+
+enum {
+	RET_OK,
+	RET_ERROR,
+	RET_SIGNAL,
+	RET_SYNTAX,
+	RET_FATAL,
+} retval = RET_OK;
 
 void unhandle_basic_signals(struct terminal *);
 
@@ -176,6 +192,7 @@ struct status dump_stat;
 int dump_pos;
 int dump_redir_count = 0;
 
+/* XXX: This should be somewhere else. */
 void end_dump(struct status *stat, void *p)
 {
 	struct cache_entry *ce = stat->ce;
@@ -359,7 +376,9 @@ int main(int argc, char *argv[])
 	select_loop(init);
 	terminate_all_subsystems();
 
+#ifdef LEAK_DEBUG
 	check_memory_leaks();
+#endif
 	return retval;
 }
 

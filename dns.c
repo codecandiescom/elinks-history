@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.20 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: dns.c,v 1.21 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,10 @@
 #endif
 
 #include "links.h"
+
+#include "dns.h"
+#include "error.h"
+#include "select.h"
 
 struct dnsentry {
 	struct dnsentry *next;

@@ -1,11 +1,14 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */ 
-/* $Id: mailto.c,v 1.4 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: mailto.c,v 1.5 2002/03/16 15:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include "links.h"
+
+#include "mailto.h"
+#include "url.h"
 
 void prog_func(struct terminal *term, struct list_head *list, unsigned char *param, unsigned char *name)
 {
@@ -59,6 +62,9 @@ void tn_func(struct session *ses, unsigned char *url, struct list_head *prog, un
 	int hl, pl;
 	unsigned char *hh, *pp;
 	int f = 1;
+	
+	/* TODO: We shouldn't use parse_url() but some wrapper. */
+
 	if (parse_url(url, NULL, NULL, NULL, NULL, NULL, &h, &hl, &p, &pl, NULL, NULL, NULL) || !hl) goto fail;
 	if (!(hh = memacpy(h, hl))) goto fail;
 	if (pl && !(pp = memacpy(p, pl))) goto fail1;

@@ -1,9 +1,15 @@
 /* Global include with common functions and definitions for elinks */
-/* $Id: links.h,v 1.57 2002/03/16 09:55:34 pasky Exp $ */
+/* $Id: links.h,v 1.58 2002/03/16 15:17:23 pasky Exp $ */
+
+#ifndef EL__LINKS_H
+#define EL__LINKS_H
 
 #ifndef __EXTENSION__
 #define __EXTENSION__ /* Helper for SunOS */
 #endif
+
+/* XXX: REMOVE-ME */
+struct session;
 
 /* Includes for internal functions */
 
@@ -14,10 +20,6 @@
 #include <string.h>
 
 /* Temporary global includes, which we unfortunately still need. */
-
-/* dns.c */
-#include <sys/socket.h>
-#include <sys/types.h>
 
 /* sched.c, https.c */
 #ifdef HAVE_SSL
@@ -54,73 +56,33 @@
 
 #include "setup.h"
 
+/* Includes for internal functions */
+
+#include "error.h"
+
+
+/* This is for our pointer stuff */
+
 #define DUMMY ((void *)-1L)
 
-#define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
-/* error.c */
+/* Misc. types definition */
 
-void do_not_optimize_here(void *p);
-void check_memory_leaks();
-void error(unsigned char *, ...);
-void debug_msg(unsigned char *, ...);
-void int_error(unsigned char *, ...);
-extern int errline;
-extern unsigned char *errfile;
+typedef unsigned tcount;
 
-#define internal errfile = __FILE__, errline = __LINE__, int_error
-#define debug errfile = __FILE__, errline = __LINE__, debug_msg
 
-#ifdef SPECIAL_MALLOC
+/* Memory managment */
 
-void *sp_malloc(size_t);
-void sp_free(void *);
-void *sp_realloc(void *, size_t);
-
-#define xmalloc sp_malloc
-#define xfree sp_free
-#define xrealloc sp_realloc
-
-#else
-
-#define xmalloc malloc
-#define xfree free
-#define xrealloc realloc
-
-#endif
-
-/* inline */
-
-#ifdef LEAK_DEBUG
-
-extern long mem_amount;
-extern long last_mem_amount;
-
-#ifndef LEAK_DEBUG_LIST
-struct alloc_header {
-	int size;
-};
-#else
-struct alloc_header {
-	struct alloc_header *next;
-	struct alloc_header *prev;
-	int size;
-	int line;
-	unsigned char *file;
-	unsigned char *comment;
-};
-#endif
-
-#define L_D_S ((sizeof(struct alloc_header) + 7) & ~7)
-
+#if !defined(LEAK_DEBUG) && defined(LEAK_DEBUG_LIST)
+#error "You defined LEAK_DEBUG_LIST, but not LEAK_DEBUG!"
 #endif
 
 #ifdef LEAK_DEBUG
 
-void *debug_mem_alloc(unsigned char *, int, size_t);
-void debug_mem_free(unsigned char *, int, void *);
-void *debug_mem_realloc(unsigned char *, int, void *, size_t);
-void set_mem_comment(void *, unsigned char *, int);
+/* XXX: No, I don't like this too. Probably we should have the leak debugger
+ * in separate file. --pasky */
+
+#include "error.h"
 
 #define mem_alloc(x) debug_mem_alloc(__FILE__, __LINE__, x)
 #define mem_free(x) debug_mem_free(__FILE__, __LINE__, x)
@@ -167,32 +129,7 @@ static inline void *mem_realloc(void *p, size_t size)
 	return p;
 }
 
-static inline void *debug_mem_alloc(unsigned char *f, int l, size_t s) { return mem_alloc(s); }
-static inline void debug_mem_free(unsigned char *f, int l, void *p) { mem_free(p); }
-static inline void *debug_mem_realloc(unsigned char *f, int l, void *p, size_t s) { return mem_realloc(p, s); }
-static inline void set_mem_comment(void *p, unsigned char *c, int l) {}
-
 #endif
-
-static inline unsigned char upcase(unsigned char a)
-{
-	if (a>='a' && a<='z') a -= 0x20;
-	return a;
-}
-
-static inline int xstrcmp(unsigned char *s1, unsigned char *s2)
-{
-        if (!s1 && !s2) return 0;
-        if (!s1) return -1;
-        if (!s2) return 1;
-        return strcmp(s1, s2);
-}
-
-static inline int cmpbeg(unsigned char *str, unsigned char *b)
-{
-	while (*str && upcase(*str) == upcase(*b)) str++, b++;
-	return !!*b;
-}
 
 #if !(defined(LEAK_DEBUG) && defined(LEAK_DEBUG_LIST))
 
@@ -233,6 +170,29 @@ static inline unsigned char *debug_stracpy(unsigned char *f, int l, unsigned cha
 #define stracpy(s) debug_stracpy(__FILE__, __LINE__, s)
 
 #endif
+
+
+/* Inline utility functions */
+
+static inline unsigned char upcase(unsigned char a)
+{
+	if (a>='a' && a<='z') a -= 0x20;
+	return a;
+}
+
+static inline int xstrcmp(unsigned char *s1, unsigned char *s2)
+{
+        if (!s1 && !s2) return 0;
+        if (!s1) return -1;
+        if (!s2) return 1;
+        return strcmp(s1, s2);
+}
+
+static inline int cmpbeg(unsigned char *str, unsigned char *b)
+{
+	while (*str && upcase(*str) == upcase(*b)) str++, b++;
+	return !!*b;
+}
 
 static inline int snprint(unsigned char *s, int n, unsigned num)
 {
@@ -431,23 +391,7 @@ static inline unsigned char *strcasestr(unsigned char *haystack, unsigned char *
 }
 #endif
 
-static inline int can_write(int fd)
-{
-	fd_set fds;
-	struct timeval tv = {0, 0};
-	FD_ZERO(&fds);
-	FD_SET(fd, &fds);
-	return select(fd + 1, NULL, &fds, NULL, &tv);
-}
-
-static inline int can_read(int fd)
-{
-	fd_set fds;
-	struct timeval tv = {0, 0};
-	FD_ZERO(&fds);
-	FD_SET(fd, &fds);
-	return select(fd + 1, &fds, NULL, NULL, &tv);
-}
+/* TODO: Move to.. somewhere :). */
 
 #define CI_BYTES	1
 #define CI_FILES	2
@@ -459,130 +403,11 @@ static inline int can_read(int fd)
 #define CI_KEEP		8
 #define CI_LIST		9
 
-/* os_dep.c */
-
-struct terminal;
-
-struct open_in_new {
-	unsigned char *text;
-	unsigned char *hk;
-	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
-};
-
-int get_system_env();
-int is_xterm();
-int can_twterm();
-int get_terminal_size(int, int *, int *);
-void handle_terminal_resize(int, void (*)());
-void unhandle_terminal_resize(int);
-void set_bin(int);
-int c_pipe(int *);
-int get_input_handle();
-int get_output_handle();
-int get_ctl_handle();
-void want_draw();
-void done_draw();
-void terminate_osdep();
-void *handle_mouse(int, void (*)(void *, unsigned char *, int), void *);
-void unhandle_mouse(void *);
-int check_file_name(unsigned char *);
-int start_thread(void (*)(void *, int), void *, int);
-char *get_clipboard_text();
-void set_clipboard_text(char *);
-void set_window_title(unsigned char *);
-unsigned char *get_window_title();
-int is_safe_in_shell(unsigned char);
-void check_shell_security(unsigned char **);
-void block_stdin();
-void unblock_stdin();
-int exe(char *);
-int resize_window(int, int);
-int can_resize_window(int);
-int can_open_os_shell(int);
-struct open_in_new *get_open_in_new(int);
-
-/* select.c */
-
-#ifndef FD_SETSIZE
-#define FD_SETSIZE 1024
-#endif
+/* XXX XXX REMOVE ME */
 
 typedef long ttime;
-typedef unsigned tcount;
 
-extern int terminate;
 
-long select_info(int);
-void select_loop(void (*)());
-int register_bottom_half(void (*)(void *), void *);
-void check_bottom_halves();
-int install_timer(ttime, void (*)(void *), void *);
-void kill_timer(int);
-ttime get_time();
-
-#define H_READ	0
-#define H_WRITE	1
-#define H_ERROR	2
-#define H_DATA	3
-
-void *get_handler(int, int);
-void set_handlers(int, void (*)(void *), void (*)(void *), void (*)(void *), void *);
-void install_signal_handler(int, void (*)(void *), void *, int);
-void set_sigcld();
-
-/* dns.c */
-
-int do_real_lookup(unsigned char *, struct sockaddr **, int *);
-void shrink_dns_cache(int);
-int find_host(unsigned char *, struct sockaddr **, int *, void **, void (*)(void *, int), void *);
-int find_host_no_cache(unsigned char *, struct sockaddr **, int *, void **, void (*)(void *, int), void *);
-void kill_dns_request(void **);
-
-/* cache.c */
-
-struct cache_entry {
-	struct cache_entry *next;
-	struct cache_entry *prev;
-	unsigned char *url;
-	unsigned char *head;
-	unsigned char *redirect;
-	int redirect_get;
-	int length;
-	int incomplete;
-	int tgc;
-	unsigned char *last_modified;
-	int data_size;
-	struct list_head frag;
-	tcount count;
-	int refcount;
-#ifdef HAVE_SSL
-	unsigned char *ssl_info;
-#endif
-#ifdef HAVE_LUA
-	int done_pre_format_html_hook;
-#endif
-};
-
-struct fragment {
-	struct fragment *next;
-	struct fragment *prev;
-	int offset;
-	int length;
-	int real_length;
-	unsigned char data[1];
-};
-
-long cache_info(int);
-int find_in_cache(unsigned char *, struct cache_entry **);
-int get_cache_entry(unsigned char *, struct cache_entry **);
-int get_cache_data(struct cache_entry *e, unsigned char **, int *);
-int add_fragment(struct cache_entry *, int, unsigned char *, int);
-void defrag_entry(struct cache_entry *);
-void truncate_entry(struct cache_entry *, int, int);
-void free_entry_to(struct cache_entry *, int);
-void delete_entry_content(struct cache_entry *);
-void delete_cache_entry(struct cache_entry *);
-void garbage_collection(int);
 
 /* sched.c */
 
@@ -757,94 +582,6 @@ void free_auth();
 
 #define BL_HTTP10	1
 #define BL_NO_CHARSET	2
-
-/* url.c */
-
-struct session;
-
-#define POST_CHAR 1
-
-static inline int end_of_dir(unsigned char c)
-{
-	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
-}
-
-int parse_url(unsigned char *, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **);
-unsigned char *get_host_name(unsigned char *);
-unsigned char *get_host_and_pass(unsigned char *);
-unsigned char *get_user_name(unsigned char *);
-unsigned char *get_pass(unsigned char *);
-unsigned char *get_port_str(unsigned char *);
-int get_port(unsigned char *);
-void (*get_protocol_handle(unsigned char *))(struct connection *);
-void (*get_external_protocol_function(unsigned char *))(struct session *, unsigned char *);
-unsigned char *get_url_data(unsigned char *);
-unsigned char *strip_url_password(unsigned char *);
-unsigned char *join_urls(unsigned char *, unsigned char *);
-unsigned char *translate_url(unsigned char *, unsigned char *);
-unsigned char *extract_position(unsigned char *);
-void get_filename_from_url(unsigned char *, unsigned char **, int *);
-
-/* connect.c */
-
-struct read_buffer {
-	int sock;
-	int len;
-	int close;
-	void (*done)(struct connection *, struct read_buffer *);
-	unsigned char data[1];
-};
-
-void close_socket(int *);
-void make_connection(struct connection *, int, int *, void (*)(struct connection *));
-void dns_found(/* struct connection */ void *, int);
-int get_pasv_socket(struct connection *, int, unsigned char *);
-void write_to_socket(struct connection *, int, unsigned char *, int, void (*)(struct connection *));
-struct read_buffer *alloc_read_buffer(struct connection *c);
-void read_from_socket(struct connection *, int, struct read_buffer *, void (*)(struct connection *, struct read_buffer *));
-void kill_buffer_data(struct read_buffer *, int);
-
-/* cookies.c */
-
-int set_cookie(struct terminal *, unsigned char *, unsigned char *);
-void send_cookies(unsigned char **, int *, unsigned char *);
-void load_cookies();
-void init_cookies();
-void cleanup_cookies();
-
-/* http.c */
-
-unsigned char *parse_http_header(unsigned char *, unsigned char *, unsigned char **);
-unsigned char *parse_header_param(unsigned char *, unsigned char *);
-void http_func(struct connection *);
-void proxy_func(struct connection *);
-
-
-/* https.c */
-
-void https_func(struct connection *c);
-#ifdef HAVE_SSL
-void ssl_finish(void);
-SSL *getSSL(void);
-#endif
-
-/* file.c */
-
-void file_func(struct connection *);
-
-/* finger.c */
-
-void finger_func(struct connection *);
-
-/* ftp.c */
-
-void ftp_func(struct connection *);
-
-/* mailto.c */
-
-void mailto_func(struct session *, unsigned char *);
-void telnet_func(struct session *, unsigned char *);
-void tn3270_func(struct session *, unsigned char *);
 
 /* kbd.c */
 
@@ -1050,28 +787,6 @@ unsigned char *language_name(int);
 
 #define _(_x_, _y_) get_text_translation(_x_, _y_)
 #define TEXT(x) (dummyarray + x)
-
-/* af_unix.c */
-
-int bind_to_af_unix();
-void af_unix_close();
-
-/* main.c */
-
-#define RET_OK		0
-#define RET_ERROR	1
-#define RET_SIGNAL	2
-#define RET_SYNTAX	3
-#define RET_FATAL	4
-
-extern int retval;
-
-extern unsigned char *path_to_exe;
-
-void unhandle_terminal_signals(struct terminal *term);
-int attach_terminal(int, int, int, void *, int);
-void program_exit();
-void shrink_memory(int);
 
 /* types.c */
 
@@ -1977,6 +1692,8 @@ void format_table(unsigned char *, unsigned char *, unsigned char *, unsigned ch
 
 #define MAX_STR_LEN	1024
 
+#define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
+
 struct option {
 	unsigned char *cmd_name;
 	unsigned char *cfg_name;
@@ -2216,5 +1933,7 @@ int prepare_lua(struct session *);
 void finish_lua();
 void lua_console(struct session *, unsigned char *);
 void handle_standard_lua_returns(unsigned char *);
+
+#endif
 
 #endif

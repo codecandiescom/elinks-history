@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.17 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: sched.c,v 1.18 2002/03/16 15:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,13 @@
 #endif
 
 #include "links.h"
+
+#include "cache.h"
+#include "connect.h"
+#include "dns.h"
+#include "error.h"
+#include "select.h"
+#include "url.h"
 
 tcount connection_count = 0;
 

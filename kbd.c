@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.9 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: kbd.c,v 1.10 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,9 @@
 #endif
 
 #include "links.h"
+
+#include "error.h"
+#include "select.h"
 
 #define OUT_BUF_SIZE	16384
 #define IN_BUF_SIZE	16

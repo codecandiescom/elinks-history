@@ -1,4 +1,7 @@
-/* $Id: os_depx.h,v 1.4 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: os_depx.h,v 1.5 2002/03/16 15:17:23 pasky Exp $ */
+
+#ifndef EL__OS_DEPX_H
+#define EL__OS_DEPX_H
 
 #ifndef MAXINT
 #ifdef INT_MAX
@@ -51,4 +54,6 @@ void cfmakeraw(struct termios *t);
 #undef errno
 #endif
 #define errno 1
+#endif
+
 #endif

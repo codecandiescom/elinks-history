@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.19 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: http.c,v 1.20 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,12 @@
 #include <string.h>
 
 #include "links.h"
+
+#include "cache.h"
+#include "connect.h"
+#include "cookies.h"
+#include "http.h"
+#include "url.h"
 
 struct http_connection_info {
 	int bl_flags;

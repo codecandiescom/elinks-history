@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.6 2002/03/16 00:35:05 pasky Exp $ */
+/* $Id: ftp.c,v 1.7 2002/03/16 15:17:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,11 +8,20 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 
 #include "links.h"
+
+#include "cache.h"
+#include "connect.h"
+#include "error.h"
+#include "ftp.h"
+#include "select.h"
+#include "url.h"
 
 #define FTP_BUF	16384
 

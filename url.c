@@ -1,5 +1,5 @@
 /* URL parser and translator */
-/* $Id: url.c,v 1.20 2002/03/16 00:35:06 pasky Exp $ */
+/* $Id: url.c,v 1.21 2002/03/16 15:17:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,15 @@
 
 #include "links.h"
 
+#include "error.h"
+#include "file.h"
+#include "finger.h"
+#include "ftp.h"
+#include "http.h"
+#include "https.h"
+#include "mailto.h"
+#include "url.h"
+
 struct {
 	unsigned char *prot;
 	int port;
@@ -18,7 +27,8 @@ struct {
 	int free_syntax;
 	int need_slashes;
 	int need_slash_after_host;
-} protocols[]= {
+} protocols[] =
+{
 		{"file", 0, file_func, NULL, 1, 1, 0},
 		{"https", 443, https_func, NULL, 0, 1, 1},
 		{"http", 80, http_func, NULL, 0, 1, 1},

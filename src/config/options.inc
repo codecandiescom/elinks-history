@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.103 2004/04/22 18:02:09 pasky Exp $ */
+/* $Id: options.inc,v 1.104 2004/04/22 18:04:31 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1160,7 +1160,7 @@ struct option_info config_options_info[] = {
 #endif
 
 	INIT_OPT_STRING("ui.clock", N_("Format"),
-		"format", 0, "%H:%M",
+		"format", 0, "[%H:%M]",
 		N_("Format string for the digital clock. See the strftime(3)\n"
 		"manpage for details.")),
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.105 2004/05/25 00:48:40 jonas Exp $ */
+/* $Id: form.c,v 1.106 2004/05/26 10:34:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,6 +535,17 @@ bnd:
 xx:
 		add_bytes_to_string(data, bound, BL);
 		if (flg) break;
+
+		/* FIXME: name is not encoded.
+		 * from RFC 1867:
+		 * multipart/form-data contains a series of parts.
+		 * Each part is expected to contain a content-disposition
+		 * header where the value is "form-data" and a name attribute
+		 * specifies the field name within the form,
+		 * e.g., 'content-disposition: form-data; name="xxxxx"',
+		 * where xxxxx is the field name corresponding to that field.
+		 * Field names originally in non-ASCII character sets may be
+		 * encoded using the method outlined in RFC 1522. */
 		add_to_string(data, "\r\nContent-Disposition: form-data; name=\"");
 		add_to_string(data, sv->name);
 		if (sv->type == FC_FILE) {
@@ -546,7 +557,9 @@ xx:
 			add_to_string(data, get_filename_position(sv->value));
 			/* It sends bad data if the file name contains ", but
 			   Netscape does the same */
-			/* FIXME: is this a reason ? --Zas */
+			/* FIXME: We should follow RFCs 1522, 1867,
+			 * 2047 (updated by rfc 2231), to provide correct support
+			 * for non-ASCII and special characters in values. --Zas */
 			add_to_string(data, "\"\r\n\r\n");
 
 			if (*sv->value) {

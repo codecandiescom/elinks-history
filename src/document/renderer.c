@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.96 2004/09/27 09:36:16 pasky Exp $ */
+/* $Id: renderer.c,v 1.97 2004/09/27 09:36:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,9 +43,7 @@ static void sort_links(struct document *document);
 #ifdef CONFIG_ECMASCRIPT
 static void
 add_snippets(struct ecmascript_interpreter *interpreter,
-             struct list_head *doc_snippets,
-             struct list_head *queued_snippets,
-             struct string_list_item **current)
+             struct list_head *doc_snippets, struct list_head *queued_snippets)
 {
 	struct string_list_item *doc_current = NULL;
 	struct string_list_item *queue_end = queued_snippets->prev;
@@ -227,8 +225,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	 * (?). */
 	add_snippets(vs->ecmascript,
 	             &document->onload_snippets,
-	             &vs->ecmascript->onload_snippets,
-	             &vs->ecmascript->current_onload_snippet);
+	             &vs->ecmascript->onload_snippets);
 	process_snippets(vs->ecmascript, &vs->ecmascript->onload_snippets,
 	                 &vs->ecmascript->current_onload_snippet);
 #endif

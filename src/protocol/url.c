@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.8 2002/03/27 13:32:36 pasky Exp $ */
+/* $Id: url.c,v 1.9 2002/03/27 21:30:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include <protocol/http/https.h>
 #include <protocol/mailto.h>
 #include <protocol/url.h>
+#include <util/conv.h>
 #include <util/error.h>
 
 struct {

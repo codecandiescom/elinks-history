@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.11 2002/03/26 19:47:54 pasky Exp $ */
+/* $Id: session.c,v 1.12 2002/03/27 21:30:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,7 @@
 #include <protocol/http/date.h>
 #include <protocol/types.h>
 #include <protocol/url.h>
+#include <util/conv.h>
 #include <util/error.h>
 #include <util/memlist.h>
 
@@ -1458,19 +1459,6 @@ void *create_session_info(int cp, unsigned char *url, int *ll)
 	i[1] = l;
 	memcpy(i + 2, url, l);
 	return i;
-}
-
-static inline unsigned char hx(int a)
-{
-	return a >= 10 ? a + 'A' - 10 : a + '0';
-}
-
-static inline int unhx(unsigned char a)
-{
-	if (a >= '0' && a <= '9') return a - '0';
-	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
-	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
-	return -1;
 }
 
 /* This is _NOT_ for what do you think it's for! We use this to make URL

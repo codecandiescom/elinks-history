@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.52 2002/11/30 20:42:21 pasky Exp $ */
+/* $Id: menu.c,v 1.53 2002/11/30 21:59:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,6 +148,20 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 #endif
 
 	abort_loading(ses);
+
+	if (steps > 1) {
+		/* When we go back by multiple steps, we must move the first
+		 * location history at the last time - it denotes the current
+		 * location and some special actions need to be done when
+		 * moving it (we do it by go_back()). But we must add it to
+		 * unhistory _before_ the other stuff added there, so we must
+		 * save the position for it now. */
+		struct location *loc = ses->history.next;
+
+		if ((void *) loc != &ses->history) {
+			loc->unhist_jump = ses->unhistory.next;
+		}
+	}
 
 	/* Move all intermediate items to unhistory... */
 

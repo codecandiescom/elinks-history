@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.8 2002/06/22 21:20:52 pasky Exp $ */
+/* $Id: location.c,v 1.9 2002/11/30 21:59:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@ copy_location(struct location *dst, struct location *src)
 {
 	struct frame *f, *nf;
 
+	dst->unhist_jump = src->unhist_jump;
 	init_list(dst->frames);
 	foreachback(f, src->frames) {
 		nf = mem_alloc(sizeof(struct frame) + strlen(f->vs.url) + 1);

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.10 2002/09/10 13:21:53 zas Exp $ */
+/* $Id: history.c,v 1.11 2002/11/30 21:59:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,13 @@ ses_back(struct session *ses)
 	}
 	if (!have_location(ses)) return;
     	del_from_list(loc);
-	add_to_list(ses->unhistory, loc);
+	if (loc->unhist_jump) {
+		/* When going back by multiple steps, to order us properly. */
+		add_at_pos(loc->unhist_jump->prev, loc);
+		loc->unhist_jump = NULL;
+	} else {
+		add_to_list(ses->unhistory, loc);
+	}
 
 	/* This was the previous location (where we came back now). */
 	loc = ses->history.next;

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.124 2004/06/23 12:29:22 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.125 2004/06/24 18:15:48 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -191,6 +191,7 @@ enum menu_action {
 	ACT_MENU_PREVIOUS_ITEM,
 	ACT_MENU_REDRAW,
 	ACT_MENU_RIGHT,
+	ACT_MENU_SEARCH,
 	ACT_MENU_SELECT,
 	ACT_MENU_UNEXPAND,
 	ACT_MENU_UP,

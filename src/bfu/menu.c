@@ -1,5 +1,7 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.236 2004/06/24 15:32:53 jonas Exp $ */
+/* $Id: menu.c,v 1.237 2004/06/24 18:15:47 jonas Exp $ */
+
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +13,7 @@
 #include "elinks.h"
 
 #include "bfu/hotkey.h"
+#include "bfu/inpfield.h"
 #include "bfu/menu.h"
 #include "bfu/style.h"
 #include "config/kbdbind.h"
@@ -20,6 +23,7 @@
 #include "terminal/event.h"
 #include "terminal/kbd.h"
 #include "terminal/mouse.h"
+#include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/color.h"
@@ -608,6 +612,96 @@ menu_page_down(struct menu *menu)
 
 #undef DIST
 
+static inline int
+search_menu_item(struct menu_item *item, unsigned char *buffer,
+		 struct terminal *term)
+{
+	unsigned char *text, *match;
+
+	if (!mi_has_left_text(*item)) return 0;
+
+	text = mi_text_translate(*item) ? _(item->text, term) : item->text;
+
+	/* Crap. We have to remove the hotkey markers '~' */
+	text = stracpy(text);
+	if (!text) return 0;
+
+	match = strchr(text, '~');
+	if (match)
+		memmove(match, match + 1, strlen(match));
+
+	match = strcasestr(text, buffer);
+	mem_free(text);
+
+	return !!match;
+}
+
+static enum input_line_code
+menu_search_handler(struct input_line *line, int action)
+{
+	struct menu *menu = line->data;
+	struct terminal *term = menu->win->term;
+	unsigned char *buffer = line->buffer;
+	struct window *win;
+	int pos = menu->selected;
+	int direction;
+
+	/* If there is nothing to match with don't start searching */
+	if (!*buffer) return INPUT_LINE_PROCEED;
+
+	switch (action) {
+	case ACT_EDIT_ENTER:
+		/* XXX: The input line dialog window is above the menu window.
+		 * Remove it from the top, so that select_menu() will correctly
+		 * remove all the windows it has to and then readd it. */
+		win = term->windows.next;
+		del_from_list(win);
+		select_menu(term, menu);
+		add_to_list(term->windows, win);
+		return INPUT_LINE_CANCEL;
+
+	case ACT_EDIT_PREVIOUS_ITEM:
+		direction = -1;
+		break;
+
+	case ACT_EDIT_NEXT_ITEM:
+	default:
+		direction = 1;
+	}
+
+	pos = (pos + direction) % menu->size;
+
+	while (pos != menu->selected) {
+		struct menu_item *item = &menu->items[pos];
+
+		if (search_menu_item(item, buffer, term)) {
+			menu->selected = pos;
+			display_menu(term, menu);
+			return INPUT_LINE_PROCEED;
+		}
+
+		pos += direction;
+
+		if (pos == menu->size) pos = 0;
+		else if (pos < 0) pos = menu->size - 1;
+	}
+
+	return INPUT_LINE_CANCEL;
+}
+
+static void
+search_menu(struct menu *menu)
+{
+	struct terminal *term = menu->win->term;
+	struct window *tab = get_current_tab(term);
+	struct session *ses = tab ? tab->data : NULL;
+	unsigned char *prompt = _("Search menu/", term);
+
+	if (menu->size < 1 || !ses) return;
+
+	input_field_line(ses, prompt, menu, NULL, menu_search_handler);
+}
+
 static void
 menu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
@@ -657,6 +751,10 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 		case ACT_MENU_ENTER:
 		case ACT_MENU_SELECT:
 			goto enter;
+
+		case ACT_MENU_SEARCH:
+			search_menu(menu);
+			break;
 
 		case ACT_MENU_CANCEL:
 			if ((void *) win->next != &win->term->windows

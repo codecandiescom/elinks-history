@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.230 2004/06/24 13:17:51 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.231 2004/06/24 18:15:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -598,6 +598,7 @@ static struct strtonum menu_action_table[MENU_ACTIONS + 1] = {
 	{ "previous-item", ACT_MENU_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "redraw", ACT_MENU_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "right", ACT_MENU_RIGHT, DACT(N_("Move the cursor right")) },
+	{ "search", ACT_MENU_SEARCH, DACT(N_("Search for a text pattern")) },
 	{ "select", ACT_MENU_SELECT, DACT(N_("Select current highlighted item")) },
 	{ "unexpand", ACT_MENU_UNEXPAND, DACT(N_("Collapse item")) },
 	{ "up", ACT_MENU_UP, DACT(N_("Move cursor upwards")) },
@@ -850,6 +851,7 @@ static struct default_kb default_menu_keymap[] = {
 	{ '*',		 0,		ACT_MENU_MARK_ITEM },
 	{ '+',		 0,		ACT_MENU_EXPAND },
 	{ '-',		 0,		ACT_MENU_UNEXPAND },
+	{ '/',		 0,		ACT_MENU_SEARCH },
 	{ '=',		 0,		ACT_MENU_EXPAND },
 	{ 'A',		 KBD_CTRL,	ACT_MENU_HOME },
 	{ 'B',		 KBD_CTRL,	ACT_MENU_PAGE_UP },

@@ -228,7 +228,7 @@ Jonas Fonseca <fonseca@diku.dk>
 	http://elinks.or.cz/
 	Mailcap support
 	Major cleanups
-	BFU and document managment hacking
+	BFU and document management hacking
 	Random hacking
 
 John <martian202002@yahoo.com>
@@ -398,7 +398,7 @@ Petr Baudis <pasky@ucw.cz>
 	http://elinks.or.cz/
 
 Petr Cech <cech@atrey.karlin.mff.cuni.cz>
-	Allow spaces at the beginning of url
+	Allow spaces at the beginning of URL
 
 Petr Kulhavy <brain@artax.karlin.mff.cuni.cz>
 	Czech translation
@@ -418,7 +418,7 @@ Sebastian Zagrodzki <s.zagrodzki@sith.mimuw.edu.pl>
 	Shift-G opens dialog with pre-displayed current URL
 
 Serge Winitzki <serge@mendax.phys.cwru.edu>
-	Upadted Russian localization
+	Updated Russian localization
 
 Sergei Borushevsky <b_sp@usa.net>
 	No-proxy-for
@@ -509,4 +509,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.167 2004/09/19 11:40:47 jonas Exp $
+$Id: AUTHORS,v 1.168 2004/09/19 17:30:19 pasky Exp $

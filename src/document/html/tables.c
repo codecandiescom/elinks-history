@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.208 2004/06/25 13:34:38 zas Exp $ */
+/* $Id: tables.c,v 1.209 2004/06/25 13:36:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,11 +854,11 @@ get_cell_width(unsigned char *start, unsigned char *end,
 static inline void
 check_cell_widths(struct table *table)
 {
-	int i, j;
+	int col, row;
 
-	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
+	for (row = 0; row < table->y; row++) for (col = 0; col < table->x; col++) {
 		int min, max;
-		struct table_cell *cell = CELL(table, i, j);
+		struct table_cell *cell = CELL(table, col, row);
 
 		if (!cell->start) continue;
 

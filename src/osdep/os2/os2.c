@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.31 2005/02/28 14:03:46 zas Exp $ */
+/* $Id: os2.c,v 1.32 2005/02/28 15:52:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,7 +272,7 @@ get_window_title(void)
 
 	if (!pib) DosGetInfoBlocks(&tib, &pib);
 	oldType = pib->pib_ultype;
-	memset(&swData, 0, sizeof swData);
+	memset(&swData, 0, sizeof(swData));
 	if (hSw == NULLHANDLE) hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
 	if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
 		/*org_switch_title = mem_alloc(strlen(swData.szSwtitle)+1);
@@ -318,7 +318,7 @@ set_window_title(unsigned char *title)
 	if (!title) return;
 	if (!pib) DosGetInfoBlocks(&tib, &pib);
 	oldType = pib->pib_ultype;
-	memset(&swData, 0, sizeof swData);
+	memset(&swData, 0, sizeof(swData));
 	if (hSw == NULLHANDLE) hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
 	if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
 		unsigned char *p;
@@ -364,7 +364,7 @@ set_window_title(int init, const char *url)
 	case 1:
 		DosGetInfoBlocks(&tib, &pib);
 		oldType = pib->pib_ultype;
-		memset(&swData, 0, sizeof swData);
+		memset(&swData, 0, sizeof(swData));
 		hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
 		if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
 			org_switch_title = mem_alloc(strlen(swData.szSwtitle) + 1);

@@ -227,7 +227,7 @@ struct block_list {
 };
 #define ADD_BLOCK(list, addr)						      \
   do {									      \
-    struct block_list *newp = (struct block_list *) malloc (sizeof (*newp));  \
+    struct block_list *newp = (struct block_list *) malloc(sizeof(*newp));    \
     /* If we cannot get a free block we cannot add the new element to	      \
        the list.  */							      \
     if (newp != NULL) {							      \

@@ -127,9 +127,9 @@ read_alias_file(const unsigned char *fname, int fname_len)
 	size_t added;
 	static const unsigned char aliasfile[] = "/locale.alias";
 
-	full_fname = (unsigned char *) fmem_alloc(fname_len + sizeof aliasfile);
+	full_fname = (unsigned char *) fmem_alloc(fname_len + sizeof(aliasfile));
 	mempcpy(mempcpy(full_fname, fname, fname_len),
-		aliasfile, sizeof aliasfile);
+		aliasfile, sizeof(aliasfile));
 
 	fp = fopen(full_fname, "r");
 	fmem_free(full_fname);
@@ -148,7 +148,7 @@ read_alias_file(const unsigned char *fname, int fname_len)
 		unsigned char *value;
 		unsigned char *cp;
 
-		if (fgets(buf, sizeof buf, fp) == NULL)
+		if (fgets(buf, sizeof(buf), fp) == NULL)
 			/* EOF reached.  */
 			break;
 
@@ -158,7 +158,7 @@ read_alias_file(const unsigned char *fname, int fname_len)
 			unsigned char altbuf[BUFSIZ];
 
 			do
-				if (fgets(altbuf, sizeof altbuf, fp) == NULL)
+				if (fgets(altbuf, sizeof(altbuf), fp) == NULL)
 					/* Make sure the inner loop will be left.  The outer loop
 					   will exit at the `feof' test.  */
 					break;

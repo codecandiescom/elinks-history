@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.339 2004/01/18 14:50:12 zas Exp $ */
+/* $Id: parser.c,v 1.340 2004/01/18 14:52:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2258,9 +2258,9 @@ html_frame(unsigned char *a)
 }
 
 static void
-parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
+parse_frame_widths(unsigned char *str, int ww, int www, int **op, int *olp)
 {
-	unsigned char *aa;
+	unsigned char *tmp_str;
 	unsigned long n;
 	int q, qq, divisor, nn;
 	int *oo;
@@ -2269,17 +2269,17 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 	register int i;
 
 new_ch:
-	while (isspace(*a)) a++;
+	while (isspace(*str)) str++;
 	errno = 0;
-	n = strtoul(a, (char **)&a, 10);
+	n = strtoul(str, (char **)&str, 10);
 	if (errno) {
 		*olp = 0;
 		return;
 	}
 
 	q = n;
-	if (*a == '%') q = q * ww / 100;
-	else if (*a != '*') q = (q + (www - 1) / 2) / www;
+	if (*str == '%') q = q * ww / 100;
+	else if (*str != '*') q = (q + (www - 1) / 2) / www;
 	else if (!q) q = -1;
 	else q = -q;
 
@@ -2289,9 +2289,9 @@ new_ch:
 		*olp = 0;
 		return;
 	}
-	aa = strchr(a, ',');
-	if (aa) {
-		a = aa + 1;
+	tmp_str = strchr(str, ',');
+	if (tmp_str) {
+		str = tmp_str + 1;
 		goto new_ch;
 	}
 	*op = o;

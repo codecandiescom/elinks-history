@@ -955,6 +955,12 @@ AC_OUTPUT([ \
  src/mime/backend/Makefile \
  src/modules/Makefile \
  src/osdep/Makefile \
+ src/osdep/beos/Makefile \
+ src/osdep/os2/Makefile \
+ src/osdep/riscos/Makefile \
+ src/osdep/sysinfo/Makefile \
+ src/osdep/unix/Makefile \
+ src/osdep/win32/Makefile \
  src/protocol/Makefile \
  src/protocol/http/Makefile \
  src/sched/Makefile \

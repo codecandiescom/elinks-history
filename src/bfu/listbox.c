@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.76 2003/07/27 17:23:53 jonas Exp $ */
+/* $Id: listbox.c,v 1.77 2003/07/31 00:33:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -363,9 +363,9 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 			 : data->box->items->prev == child)
 			continue; /* We were the last branch. */
 
-		set_char(data->term, data->listbox_item_data->x + d * 5 + 1,
-			 data->listbox_item_data->y + data->offset,
-			 color + FRAMES_VLINE);
+		set_border_char(data->term, data->listbox_item_data->x + d * 5 + 1,
+				data->listbox_item_data->y + data->offset,
+				BORDER_SVLINE, get_screen_char_attr(color));
 	}
 
 	if (depth) {
@@ -396,10 +396,10 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		if (item->marked) str[4] = '*';
 
 		for (i = 0; i < 5; i++) {
-			set_char(data->term,
-				 data->listbox_item_data->x + (depth - 1) * 5 + i,
-				 data->listbox_item_data->y + data->offset,
-				 color + str[i]);
+			set_border_char(data->term,
+					data->listbox_item_data->x + (depth - 1) * 5 + i,
+					data->listbox_item_data->y + data->offset,
+					str[i], get_screen_char_attr(color));
 		}
 	}
 

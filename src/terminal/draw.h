@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.9 2003/07/30 21:17:43 jonas Exp $ */
+/* $Id: draw.h,v 1.10 2003/07/31 00:33:30 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -19,6 +19,27 @@
  * to the image using draw_frame_char(). */
 /* TODO: When we'll support internal Unicode, this should be changed to some
  * Unicode sequences. --pasky */
+
+enum border_char {
+	/* single-lined */
+	BORDER_SULCORNER = 218,
+	BORDER_SURCORNER = 191,
+	BORDER_SDLCORNER = 192,
+	BORDER_SDRCORNER = 217,
+	BORDER_SLTEE	 = 180, /* => the tee points to the left => -| */
+	BORDER_SRTEE	 = 195,
+	BORDER_SVLINE	 = 179,
+	BORDER_SHLINE	 = 196,
+	BORDER_SCROSS	 = 197, /* + */
+
+	/* double-lined */ /* TODO: The TEE-chars! */
+	BORDER_DULCORNER = 201,
+	BORDER_DURCORNER = 187,
+	BORDER_DDLCORNER = 200,
+	BORDER_DDRCORNER = 188,
+	BORDER_DVLINE	 = 186,
+	BORDER_DHLINE	 = 205,
+};
 
 enum frame_char {
 	/* single-lined */
@@ -50,6 +71,7 @@ enum frame_cross_direction {
 };
 
 void set_char(struct terminal *, int, int, unsigned);
+void set_border_char(struct terminal *term, int x, int y, enum border_char border, unsigned char color);
 void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
 struct screen_char *get_char(struct terminal *, int, int);
 void set_color(struct terminal *, int, int, unsigned);

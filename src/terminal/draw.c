@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.29 2003/07/30 23:21:26 zas Exp $ */
+/* $Id: draw.c,v 1.30 2003/07/31 00:33:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,25 @@ set_xchar(struct terminal *term, int x, int y, enum frame_cross_direction dir)
 	} else if (screen_char->data == frame_trans[d][2 - (dir & 1)]) {
 		screen_char->data = frame_trans[d][3];
 	}
+}
+
+void
+set_border_char(struct terminal *term, int x, int y,
+	        enum border_char border, unsigned char color)
+{
+	struct terminal_screen *screen = term->screen;
+	int position = x + term->x * y;
+
+	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
+	if_assert_failed { return; }
+
+	/* This should probably go.  */
+	if (!color)
+		color = get_char(term, x, y)->attr;
+
+	screen->image[position].data = (unsigned char) border;
+	screen->image[position].attr = (color | SCREEN_ATTR_FRAME);
+	screen->dirty = 1;
 }
 
 

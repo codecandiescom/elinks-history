@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.94 2003/06/25 09:57:33 jonas Exp $ */
+/* $Id: file.c,v 1.95 2003/06/25 10:15:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,37 +220,32 @@ stat_size(unsigned char **p, int *l, struct stat *stp)
 static inline void
 stat_date(unsigned char **p, int *l, struct stat *stp)
 {
-	time_t current_time = time(NULL);
-	time_t when;
-	struct tm *when_local;
-	unsigned char *fmt;
-	unsigned char str[13];
-	int wr;
+#ifdef HAVE_STRFTIME
+	if (stp) {
+		time_t current_time = time(NULL);
+		time_t when = stp->st_mtime;
+		struct tm *when_local = localtime(&when);
+		unsigned char *fmt;
+		unsigned char str[13];
+		int wr;
 
-	if (!stp) {
-		add_to_str(p, l, "             ");
+
+		if (current_time > when + 6L * 30L * 24L * 60L * 60L
+		    || current_time < when - 60L * 60L)
+			fmt = "%b %e  %Y";
+		else
+			fmt = "%b %e %H:%M";
+
+		wr = strftime(str, sizeof(str), fmt, when_local);
+
+		while (wr < sizeof(str) - 1) str[wr++] = ' ';
+		str[sizeof(str) - 1] = '\0';
+		add_to_str(p, l, str);
+		add_chr_to_str(p, l, ' ');
 		return;
 	}
-
-	when = stp->st_mtime;
-	when_local = localtime(&when);
-
-	if (current_time > when + 6L * 30L * 24L * 60L * 60L
-	    || current_time < when - 60L * 60L)
-		fmt = "%b %e  %Y";
-	else
-		fmt = "%b %e %H:%M";
-
-#ifdef HAVE_STRFTIME
-	wr = strftime(str, sizeof(str), fmt, when_local);
-#else
-	wr = 0;
 #endif
-
-	while (wr < sizeof(str) - 1) str[wr++] = ' ';
-	str[sizeof(str) - 1] = '\0';
-	add_to_str(p, l, str);
-	add_chr_to_str(p, l, ' ');
+	add_to_str(p, l, "             ");
 }
 
 

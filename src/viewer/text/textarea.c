@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.110 2004/06/18 13:33:30 jonas Exp $ */
+/* $Id: textarea.c,v 1.111 2004/06/18 13:48:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,11 +39,13 @@ struct line_info {
 	int end;
 };
 
+/* We add two extra entries to the table so the ending info can be added
+ * without reallocating. */
 #define realloc_line_info(info, size) \
 	mem_align_alloc(info, size, (size) + 3, struct line_info, 0xFF)
 
 static struct line_info *
-format_text(unsigned char *text, int width, int wrap)
+format_text(unsigned char *text, int width, int wrap, int format)
 {
 	struct line_info *line = NULL;
 	int line_number = 0;
@@ -68,7 +70,8 @@ format_text(unsigned char *text, int width, int wrap)
 			skip = 0;
 			for (s = pos; s >= begin; s--) {
 				if (text[s] == ' ') {
-					if (wrap == 2) text[s] = '\n';
+					if (wrap == 2 && format)
+						text[s] = '\n';
 					pos = s;
 					skip = 1;
 					break;
@@ -124,7 +127,7 @@ area_cursor(struct form_control *fc, struct form_state *fs)
 	assert(fc && fs);
 	if_assert_failed return 0;
 
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return 0;
 
 	y = get_textarea_line_number(line, fs->state);
@@ -171,7 +174,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 
 	if (!link->npoints) return;
 	area_cursor(fc, fs);
-	linex = format_text(fs->value, fc->cols, !!fc->wrap);
+	linex = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!linex) return;
 	line = linex;
 	sl = fs->vypos;
@@ -223,6 +226,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 unsigned char *
 encode_textarea(struct submitted_value *sv)
 {
+	struct form_control *fc;
 	struct string newtext;
 	void *blabla;
 	register int i;
@@ -230,9 +234,11 @@ encode_textarea(struct submitted_value *sv)
 	assert(sv && sv->value);
 	if_assert_failed return NULL;
 
+	fc = sv->form_control;
+
 	/* We need to reformat text now if it has to be wrapped
 	 * hard, just before encoding it. */
-	blabla = format_text(sv->value, sv->form_control->cols, sv->form_control->wrap);
+	blabla = format_text(sv->value, fc->cols, fc->wrap, 1);
 	mem_free_if(blabla);
 
 	if (!init_string(&newtext)) return NULL;
@@ -425,7 +431,7 @@ textarea_op_home(struct form_state *fs, struct form_control *fc)
 	if_assert_failed return FRAME_EVENT_OK;
 
 	state = fs->state;
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
@@ -445,7 +451,7 @@ textarea_op_up(struct form_state *fs, struct form_control *fc)
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 
@@ -477,7 +483,7 @@ textarea_op_down(struct form_state *fs, struct form_control *fc)
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
@@ -509,7 +515,7 @@ textarea_op_end(struct form_state *fs, struct form_control *fc)
 	if_assert_failed return FRAME_EVENT_OK;
 
 	state = fs->state;
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
@@ -540,7 +546,7 @@ textarea_op_bob(struct form_state *fs, struct form_control *fc)
 	if_assert_failed return FRAME_EVENT_OK;
 
 	state = fs->state;
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);
@@ -564,7 +570,7 @@ textarea_op_eob(struct form_state *fs, struct form_control *fc)
 	if_assert_failed return FRAME_EVENT_OK;
 
 	state = fs->state;
-	line = format_text(fs->value, fc->cols, !!fc->wrap);
+	line = format_text(fs->value, fc->cols, fc->wrap, 0);
 	if (!line) return FRAME_EVENT_OK;
 
 	current = get_textarea_line_number(line, fs->state);

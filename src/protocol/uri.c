@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.294 2004/11/10 20:00:28 jonas Exp $ */
+/* $Id: uri.c,v 1.295 2004/11/10 20:06:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1071,10 +1071,17 @@ parse_uri:
 		goto parse_uri;
 	}
 	case URI_ERRNO_NO_SLASHES:
+	{
 		/* Try prefix:some.url -> prefix://some.url.. */
-		insert_in_string(&newurl, uri.protocollen + 1, "//", 2);
-		goto parse_uri;
+		int slashes = 2;
 
+		/* Check if only one '/' is needed. */
+		if (uri.string[uri.protocollen + 1] == '/')
+			slashes--;
+
+		insert_in_string(&newurl, uri.protocollen + 1, "//", slashes);
+		goto parse_uri;
+	}
 	case URI_ERRNO_TRAILING_DOTS:
 	{
 		/* Trim trailing '.'s */

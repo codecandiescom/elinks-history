@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.296 2004/06/29 13:44:22 jonas Exp $ */
+/* $Id: tables.c,v 1.297 2004/06/29 15:06:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,10 +71,10 @@ get_table_margin(struct table *table)
 		x = par_format.leftmargin;
 	}
 
+	/* Don't use int_bounds(&x, 0, width) here,
+	 * width may be < 0. --Zas */
 	if (x > width) x = width;
 	if (x < 0) x = 0;
-	/* int_bounds(&x, 0, width);
-	 * segfault with gcc 2.95.3, why ? --Zas */
 
 	return x;
 }

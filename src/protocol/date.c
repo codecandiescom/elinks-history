@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.13 2005/03/29 03:07:43 jonas Exp $ */
+/* $Id: date.c,v 1.14 2005/03/29 03:19:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,9 +233,13 @@ my_timegm(struct tm *tm)
 time_T
 parse_date(const unsigned char *date)
 {
-#define skip_time_sep() \
-	if (c != ' ' && c != '-') return 0; \
-	while ((c = *date) == ' ' || c == '-') date++;
+#define skip_time_sep(date) \
+	do { \
+		const unsigned char *start = (date); \
+		while (*(date) == ' ' || *(date) == '-') \
+			(date)++; \
+		if (date == start) return 0; \
+	} while (0)
 
 	struct tm tm;
 	unsigned char c;
@@ -257,17 +261,14 @@ parse_date(const unsigned char *date)
 		tm.tm_mday = parse_day(&date);
 		if (tm.tm_mday > 31) return 0;
 
-		c = *date++;
-		skip_time_sep();
+		skip_time_sep(date);
 
 		/* Eat month */
 
 		tm.tm_mon = parse_month(&date, NULL);
 		if (tm.tm_mon < 0) return 0;
 
-		c = *date++;
-
-		skip_time_sep();
+		skip_time_sep(date);
 
 		/* Eat year */
 
@@ -289,23 +290,21 @@ parse_date(const unsigned char *date)
 		tm.tm_mon = parse_month(&date, NULL);
 		if (tm.tm_mon < 0) return 0;
 
-		c = *date++;
-
 		/* I know, we shouldn't allow '-', but who cares ;). --pasky */
-		skip_time_sep();
+		skip_time_sep(date);
 
 		/* Eat day */
 
 		tm.tm_mday = parse_day(&date);
 		if (tm.tm_mday > 31) return 0;
 
-		skip_time_sep();
+		skip_time_sep(date);
 
 		/* Eat time */
 
 		if (!parse_time(&date, &tm, NULL)) return 0;
 
-		skip_time_sep();
+		skip_time_sep(date);
 
 		/* Eat year */
 

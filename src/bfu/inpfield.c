@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.105 2003/12/21 00:30:15 jonas Exp $ */
+/* $Id: inpfield.c,v 1.106 2004/01/25 12:38:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct terminal *term = win->term;
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
-		case ACT_UP:
+		case ACT_EDIT_UP:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
@@ -333,7 +333,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 			break;
 
-		case ACT_DOWN:
+		case ACT_EDIT_DOWN:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
@@ -344,25 +344,25 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 			break;
 
-		case ACT_RIGHT:
+		case ACT_EDIT_RIGHT:
 			if (widget_data->info.field.cpos < strlen(widget_data->cdata))
 				widget_data->info.field.cpos++;
 			goto dsp_f;
 
-		case ACT_LEFT:
+		case ACT_EDIT_LEFT:
 			if (widget_data->info.field.cpos > 0)
 				widget_data->info.field.cpos--;
 			goto dsp_f;
 
-		case ACT_HOME:
+		case ACT_EDIT_HOME:
 			widget_data->info.field.cpos = 0;
 			goto dsp_f;
 
-		case ACT_END:
+		case ACT_EDIT_END:
 			widget_data->info.field.cpos = strlen(widget_data->cdata);
 			goto dsp_f;
 
-		case ACT_BACKSPACE:
+		case ACT_EDIT_BACKSPACE:
 			if (widget_data->info.field.cpos) {
 				memmove(widget_data->cdata + widget_data->info.field.cpos - 1,
 					widget_data->cdata + widget_data->info.field.cpos,
@@ -371,7 +371,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			}
 			goto dsp_f;
 
-		case ACT_DELETE:
+		case ACT_EDIT_DELETE:
 			{
 				int cdata_len = strlen(widget_data->cdata);
 
@@ -383,30 +383,30 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				goto dsp_f;
 			}
 
-		case ACT_KILL_TO_BOL:
+		case ACT_EDIT_KILL_TO_BOL:
 			memmove(widget_data->cdata,
 					widget_data->cdata + widget_data->info.field.cpos,
 					strlen(widget_data->cdata + widget_data->info.field.cpos) + 1);
 			widget_data->info.field.cpos = 0;
 			goto dsp_f;
 
-		case ACT_KILL_TO_EOL:
+		case ACT_EDIT_KILL_TO_EOL:
 			widget_data->cdata[widget_data->info.field.cpos] = 0;
 			goto dsp_f;
 
-		case ACT_COPY_CLIPBOARD:
+		case ACT_EDIT_COPY_CLIPBOARD:
 			/* Copy to clipboard */
 			set_clipboard_text(widget_data->cdata);
 			break;	/* We don't need to redraw */
 
-		case ACT_CUT_CLIPBOARD:
+		case ACT_EDIT_CUT_CLIPBOARD:
 			/* Cut to clipboard */
 			set_clipboard_text(widget_data->cdata);
 			widget_data->cdata[0] = 0;
 			widget_data->info.field.cpos = 0;
 			goto dsp_f;
 
-		case ACT_PASTE_CLIPBOARD:
+		case ACT_EDIT_PASTE_CLIPBOARD:
 			{
 				/* Paste from clipboard */
 				unsigned char *clipboard = get_clipboard_text();
@@ -419,21 +419,21 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				goto dsp_f;
 			}
 
-		case ACT_AUTO_COMPLETE:
+		case ACT_EDIT_AUTO_COMPLETE:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl(term, &widget_data->info.field.history, win);
 			goto dsp_f;
 
-		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
+		case ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS:
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
 			do_tab_compl_unambiguous(term, &widget_data->info.field.history, win);
 			goto dsp_f;
 
-		case ACT_REDRAW:
+		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(term);
 			return EVENT_PROCESSED;
 

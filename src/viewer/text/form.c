@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.80 2004/01/17 15:21:54 pasky Exp $ */
+/* $Id: form.c,v 1.81 2004/01/25 12:40:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -806,13 +806,13 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 	int x = 1;
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
-		case ACT_LEFT:
+		case ACT_EDIT_LEFT:
 			fs->state = int_max(fs->state - 1, 0);
 			break;
-		case ACT_RIGHT:
+		case ACT_EDIT_RIGHT:
 			fs->state = int_min(fs->state + 1, strlen(fs->value));
 			break;
-		case ACT_HOME:
+		case ACT_EDIT_HOME:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_home(fs, frm, rep)) {
 					x = 0;
@@ -822,7 +822,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				fs->state = 0;
 			}
 			break;
-		case ACT_UP:
+		case ACT_EDIT_UP:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_up(fs, frm, rep)) {
 					x = 0;
@@ -832,7 +832,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				x = 0;
 			}
 			break;
-		case ACT_DOWN:
+		case ACT_EDIT_DOWN:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_down(fs, frm, rep)) {
 					x = 0;
@@ -842,7 +842,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				x = 0;
 			}
 			break;
-		case ACT_END:
+		case ACT_EDIT_END:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_end(fs, frm, rep)) {
 					x = 0;
@@ -852,7 +852,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				fs->state = strlen(fs->value);
 			}
 			break;
-		case ACT_BEGINNING_OF_BUFFER:
+		case ACT_EDIT_BEGINNING_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_bob(fs, frm, rep)) {
 					x = 0;
@@ -862,7 +862,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				fs->state = 0;
 			}
 			break;
-		case ACT_END_OF_BUFFER:
+		case ACT_EDIT_END_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_eob(fs, frm, rep)) {
 					x = 0;
@@ -872,19 +872,19 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				fs->state = strlen(fs->value);
 			}
 			break;
-		case ACT_EDIT:
+		case ACT_EDIT_EDIT:
 			if (frm->type == FC_TEXTAREA && !frm->ro)
 			  	textarea_edit(0, term, frm, fs, doc_view, l);
 			break;
-		case ACT_COPY_CLIPBOARD:
+		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);
 			break;
-		case ACT_CUT_CLIPBOARD:
+		case ACT_EDIT_CUT_CLIPBOARD:
 			set_clipboard_text(fs->value);
 			if (!frm->ro) fs->value[0] = 0;
 			fs->state = 0;
 			break;
-		case ACT_PASTE_CLIPBOARD: {
+		case ACT_EDIT_PASTE_CLIPBOARD: {
 			char *clipboard = get_clipboard_text();
 
 			if (!clipboard)
@@ -905,7 +905,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			mem_free(clipboard);
 			break;
 		}
-		case ACT_ENTER:
+		case ACT_EDIT_ENTER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_enter(fs, frm, rep)) {
 					x = 0;
@@ -915,18 +915,18 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				x = 0;
 			}
 			break;
-		case ACT_BACKSPACE:
+		case ACT_EDIT_BACKSPACE:
 			if (!frm->ro && fs->state)
 				memmove(fs->value + fs->state - 1, fs->value + fs->state,
 					strlen(fs->value + fs->state) + 1),
 				fs->state--;
 			break;
-		case ACT_DELETE:
+		case ACT_EDIT_DELETE:
 			if (!frm->ro && fs->state < strlen(fs->value))
 				memmove(fs->value + fs->state, fs->value + fs->state + 1,
 					strlen(fs->value + fs->state));
 			break;
-		case ACT_KILL_TO_BOL:
+		case ACT_EDIT_KILL_TO_BOL:
 			if (!frm->ro && fs->state > 0) {
 				unsigned char *prev;
 
@@ -952,7 +952,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 				fs->state = (int) (prev - fs->value);
 			}
 			break;
-		case ACT_KILL_TO_EOL:
+		case ACT_EDIT_KILL_TO_EOL:
 			if (!frm->ro && fs->value[fs->state]) {
 				unsigned char *rest;
 
@@ -972,7 +972,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			}
 			break;
 
-		case ACT_REDRAW:
+		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(term);
 			x = 0;
 			break;

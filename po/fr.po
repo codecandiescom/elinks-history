@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-01 01:00+0100\n"
+"POT-Creation-Date: 2004-02-03 20:24+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -48,16 +48,15 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:67
 #: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:188
 #: src/sched/download.c:276 src/sched/download.c:301 src/sched/download.c:572
-#: src/sched/error.c:42 src/sched/session.c:123 src/sched/session.c:610
-#: src/sched/session.c:627 src/sched/session.c:651 src/sched/session.c:949
+#: src/sched/error.c:42 src/sched/session.c:124 src/sched/session.c:611
+#: src/sched/session.c:628 src/sched/session.c:652 src/sched/session.c:950
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
 #: src/scripting/lua/core.c:591 src/scripting/lua/core.c:720
-#: src/viewer/text/form.c:664 src/viewer/text/search.c:869
-#: src/viewer/text/search.c:897 src/viewer/text/search.c:919
-#: src/viewer/text/search.c:961 src/viewer/text/search.c:1319
-#: src/viewer/text/search.c:1330 src/viewer/text/textarea.c:270
-#: src/viewer/text/textarea.c:279 src/viewer/text/view.c:707
-#: src/viewer/text/view.c:1223
+#: src/viewer/text/form.c:664 src/viewer/text/search.c:863
+#: src/viewer/text/search.c:891 src/viewer/text/search.c:913
+#: src/viewer/text/search.c:957 src/viewer/text/search.c:1327
+#: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
+#: src/viewer/text/view.c:707 src/viewer/text/view.c:1223
 msgid "OK"
 msgstr "OK"
 
@@ -277,8 +276,8 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:998 src/sched/download.c:1007
 #: src/sched/download.c:1027 src/sched/download.c:1039
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:720 src/viewer/text/search.c:1319
-#: src/viewer/text/search.c:1330 src/viewer/text/view.c:707
+#: src/scripting/lua/core.c:720 src/viewer/text/search.c:1327
+#: src/viewer/text/view.c:707
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -312,8 +311,8 @@ msgid "Add"
 msgstr "Ajouter"
 
 #: src/bookmarks/dialogs.c:381 src/globhist/dialogs.c:187
-#: src/viewer/text/search.c:866 src/viewer/text/search.c:893
-#: src/viewer/text/search.c:915 src/viewer/text/search.c:1329
+#: src/viewer/text/search.c:860 src/viewer/text/search.c:887
+#: src/viewer/text/search.c:909 src/viewer/text/search.c:1322
 msgid "Search"
 msgstr "Chercher"
 
@@ -508,13 +507,11 @@ msgstr "Permettre seulement les connexions locales"
 msgid ""
 "Restrict ELinks so that it can only open connections to\n"
 "local addresses (ie. 127.0.0.1), it will prevent any connection\n"
-"to distant servers. WARNING: for now, it restricts to loopback."
+"to distant servers."
 msgstr ""
 "Restreint ELinks de manière à ce qu'il ne puisse ouvrir que des\n"
 "connexions vers des addresses locales (par exemple, 127.0.0.1),\n"
-"cela rend impossible toute connexion vers des sites distants.\n"
-"ATTENTION: pour l'instant, il n'autorise que les addresses de\n"
-"boucle locale (loopback)."
+"cela rend impossible toute connexion vers des sites distants."
 
 #: src/config/cmdline.c:460
 msgid "Autosubmit first form"
@@ -928,8 +925,8 @@ msgstr "Valeur"
 msgid "Description"
 msgstr "Description"
 
-#: src/config/dialogs.c:252 src/protocol/protocol.c:64 src/sched/session.c:120
-#: src/sched/session.c:945 src/viewer/text/textarea.c:267
+#: src/config/dialogs.c:252 src/protocol/protocol.c:64 src/sched/session.c:121
+#: src/sched/session.c:946 src/viewer/text/textarea.c:267
 #: src/viewer/text/textarea.c:276
 msgid "Error"
 msgstr "Erreur"
@@ -5656,11 +5653,11 @@ msgstr "Cette version de ELinks ne supporte ni SSL ni TLS"
 msgid "Unknown error"
 msgstr "Erreur inconnue"
 
-#: src/sched/session.c:605
+#: src/sched/session.c:606
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#: src/sched/session.c:606
+#: src/sched/session.c:607
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5671,11 +5668,11 @@ msgstr ""
 "Pressez ESC pour accèder au menu.\n"
 "La documentation est accessible par le menu Aide."
 
-#: src/sched/session.c:615 src/sched/session.c:635 src/sched/task.c:166
+#: src/sched/session.c:616 src/sched/session.c:636 src/sched/task.c:166
 msgid "Warning"
 msgstr "Avertissement"
 
-#: src/sched/session.c:616
+#: src/sched/session.c:617
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5694,7 +5691,7 @@ msgstr ""
 "défaut sera utilisée. Si vous n'avez aucune idée de quoi nous parlons alors "
 "faites juste ça. Toutes nos excuses pour ce désagrément."
 
-#: src/sched/session.c:636
+#: src/sched/session.c:637
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5715,7 +5712,7 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/sched/session.c:946
+#: src/sched/session.c:947
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through options system."
@@ -6009,57 +6006,57 @@ msgstr "Envoi à"
 msgid "post to"
 msgstr "Transfert à"
 
-#: src/viewer/text/search.c:867
+#: src/viewer/text/search.c:861
 msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
-#: src/viewer/text/search.c:894
+#: src/viewer/text/search.c:888
 msgid "Search hit top, continuing at bottom."
 msgstr "La recherche a atteint le haut du document, poursuite à partir du bas."
 
-#: src/viewer/text/search.c:895
+#: src/viewer/text/search.c:889
 msgid "Search hit bottom, continuing at top."
 msgstr "La recherche a atteint le bas du document, poursuite à partir du haut."
 
-#: src/viewer/text/search.c:916
+#: src/viewer/text/search.c:910
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/viewer/text/search.c:956
+#: src/viewer/text/search.c:952
 msgid "Typeahead"
 msgstr "Préfrappe"
 
-#: src/viewer/text/search.c:957
+#: src/viewer/text/search.c:953
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr "Ne peut trouver un lien avec le texte '%s'."
 
-#: src/viewer/text/search.c:1298
+#: src/viewer/text/search.c:1303
 msgid "Normal search"
 msgstr "Plein texte"
 
-#: src/viewer/text/search.c:1299
+#: src/viewer/text/search.c:1304
 msgid "Regexp search"
 msgstr "Expression régulière"
 
-#: src/viewer/text/search.c:1300
+#: src/viewer/text/search.c:1305
 msgid "Extended regexp search"
 msgstr "Expression régulière étendue"
 
-#: src/viewer/text/search.c:1301
+#: src/viewer/text/search.c:1306
 msgid "Case sensitive"
 msgstr "Respecter la casse"
 
-#: src/viewer/text/search.c:1302
+#: src/viewer/text/search.c:1307
 msgid "Case insensitive"
 msgstr "Ignorer la casse"
 
-#: src/viewer/text/search.c:1318
+#: src/viewer/text/search.c:1322
 msgid "Search backward"
 msgstr "Chercher en arrière"
 
-#: src/viewer/text/search.c:1318 src/viewer/text/search.c:1329
+#: src/viewer/text/search.c:1326
 msgid "Search for text"
 msgstr "Recherche du texte"
 

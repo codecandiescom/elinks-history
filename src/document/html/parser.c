@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.351 2004/01/18 15:28:24 zas Exp $ */
+/* $Id: parser.c,v 1.352 2004/01/18 15:32:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2300,12 +2300,14 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 
 		/* Save value. */
 		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
-		if (tmp_values) (values = tmp_values)[values_count++] = val;
-		else {
+		if (!tmp_values) {
 			*new_values_count = 0;
 			return;
 		}
-
+		
+		values = tmp_values;
+		values[values_count++] = val;
+	
 		/* Check for next field if any. */
 		tmp_str = strchr(str, ',');
 		if (!tmp_str) break;	/* It was the last field. */

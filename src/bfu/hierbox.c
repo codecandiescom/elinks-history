@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.168 2004/06/17 10:02:20 zas Exp $ */
+/* $Id: hierbox.c,v 1.169 2004/06/21 14:03:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,6 +652,7 @@ static void
 push_ok_delete_button(void *context_)
 {
 	struct listbox_context *context = context_;
+	int last = 0;
 
 	if (context->item) {
 		context->box->ops->unlock(context->item);
@@ -662,8 +663,16 @@ push_ok_delete_button(void *context_)
 		if (!context->item) return;
 	}
 
+	if (context->item->root) {
+		last = context->item == context->item->root->child.prev;
+	}
+
 	/* Delete the last one (traversal should save one to delete) */
 	do_delete_item(context->item, context, 1, 0);
+
+	/* If removing the last item in a folder move focus to previous item in
+	 * the folder or the root. */
+	if (last) box_sel_move(context->widget_data, -1);
 }
 
 int
@@ -682,6 +691,8 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 
 	context = init_listbox_context(box, term, box->sel, scan_for_marks);
 	if (!context) return 0;
+
+	context->widget_data = dlg_data->widgets_data;
 
 	if (!context->item) {
 		msg_box(term, getml(context, NULL), 0,

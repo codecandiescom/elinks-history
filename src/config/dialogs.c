@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.127 2003/11/25 00:34:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.128 2003/11/25 01:07:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,8 +112,16 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 	return info.source;
 }
 
+static int
+can_delete_option(struct listbox_item *item)
+{
+	struct option *option = item->udata;
+
+	return item->root && !(option->flags & OPT_AUTOCREATE);
+}
+
 static void
-done_option_item(struct listbox_item *item, int last)
+delete_option_item(struct listbox_item *item, int last)
 {
 	struct option *option = item->udata;
 
@@ -127,7 +135,8 @@ static struct listbox_ops options_listbox_ops = {
 	unlock_option,
 	is_option_used,
 	get_option_info,
-	done_option_item,
+	can_delete_option,
+	delete_option_item,
 };
 
 /* Button handlers */

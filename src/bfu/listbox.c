@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.112 2003/11/24 01:10:53 jonas Exp $ */
+/* $Id: listbox.c,v 1.113 2003/11/25 01:07:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -605,7 +605,9 @@ kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				struct listbox_data *box;
 
 				box = get_listbox_widget_data(dlg_item);
-				if (box->ops && box->ops->done)
+				if (box->ops
+				    && box->ops->delete
+				    && box->ops->can_delete)
 					push_hierbox_delete_button(dlg_data,
 								   widget_data);
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.99 2003/11/24 01:10:53 jonas Exp $ */
+/* $Id: hierbox.c,v 1.100 2003/11/25 01:07:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -461,6 +461,11 @@ do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
 
 	assert(item && item->udata);
 
+	/* FIXME: Hmm maybe this silent treatment is not optimal. Ideally we
+	 * should probably combine the delete error message to also be usable
+	 * for this. --jonas */
+	if (!ops->can_delete(item)) return;
+
 	if (ops->is_used(item)) {
 		print_delete_error(item, info->term, ops);
 		return;
@@ -476,7 +481,7 @@ do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
 	}
 
 	if (list_empty(item->child))
-		ops->done(item, last);
+		ops->delete(item, last);
 }
 
 static int
@@ -525,7 +530,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 
 	if (!box->sel || !box->sel->udata) return 0;
 
-	assert(box->ops);
+	assert(box->ops && box->ops->can_delete && box->ops->delete);
 
 	delete_info = init_hierbox_action_info(box, term, box->sel, scan_for_marks);
 	if (!delete_info) return 0;
@@ -540,7 +545,16 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
-	if (delete_info->item->type == BI_FOLDER) {
+	if (!box->ops->can_delete(delete_info->item)) {
+		msg_box(term, getml(delete_info, NULL), MSGBOX_FREE_TEXT,
+			N_("Delete item"), AL_CENTER,
+			msg_text(term, N_("Cannot delete \"%s\""),
+				delete_info->item->text),
+			NULL, 1,
+			N_("OK"), NULL, B_ESC | B_ENTER);
+		return 0;
+
+	} else if (delete_info->item->type == BI_FOLDER) {
 		box->ops->lock(delete_info->item);
 		msg_box(term, getml(delete_info, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete folder"), AL_CENTER,

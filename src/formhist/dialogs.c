@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.5 2003/11/24 23:34:23 zas Exp $ */
+/* $Id: dialogs.c,v 1.6 2003/11/25 01:07:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,8 +82,14 @@ get_formhist_data_info(struct listbox_item *item, struct terminal *term,
 	return info.source;
 }
 
+static int
+can_delete_formhist_data(struct listbox_item *item)
+{
+	return 1;
+}
+
 static void
-done_formhist_data_item(struct listbox_item *item, int last)
+delete_formhist_data(struct listbox_item *item, int last)
 {
 	struct formhist_data *formhist_data = item->udata;
 
@@ -98,7 +104,8 @@ static struct listbox_ops formhist_listbox_ops = {
 	unlock_formhist_data,
 	is_formhist_data_used,
 	get_formhist_data_info,
-	done_formhist_data_item,
+	can_delete_formhist_data,
+	delete_formhist_data,
 };
 
 static int

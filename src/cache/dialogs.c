@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.39 2003/11/24 00:33:55 jonas Exp $ */
+/* $Id: dialogs.c,v 1.40 2003/11/25 01:07:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,8 +115,14 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 	return msg.source;
 }
 
+static int
+can_delete_cache_entry(struct listbox_item *item)
+{
+	return 1;
+}
+
 static void
-done_cache_entry_item(struct listbox_item *item, int last)
+delete_cache_entry_item(struct listbox_item *item, int last)
 {
 	struct cache_entry *cache_entry = item->udata;
 
@@ -130,7 +136,8 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	unlock_cache_entry,
 	is_cache_entry_used,
 	get_cache_entry_info,
-	done_cache_entry_item,
+	can_delete_cache_entry,
+	delete_cache_entry_item,
 };
 
 static struct hierbox_browser_button cache_buttons[] = {

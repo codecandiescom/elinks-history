@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.50 2003/11/24 01:10:53 jonas Exp $ */
+/* $Id: listbox.h,v 1.51 2003/11/25 01:07:29 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -29,20 +29,24 @@ enum listbox_info {
 	LISTBOX_ALL,
 };
 
+/* TODO: We can maybe find a better way of figuring out whether a user of a
+ * generic button handler has implemented all the required functions. --jonas
+ * */
 struct listbox_ops {
 	/* Some basic util/object.h wrappers */
 	void (*lock)(struct listbox_item *);
 	void (*unlock)(struct listbox_item *);
 	int (*is_used)(struct listbox_item *);
 
-	/* TODO: We might need to pass some enum to signal what kind of info we
-	 * want to get. --jonas */
 	unsigned char *(*get_info)(struct listbox_item *, struct terminal *,
 				   enum listbox_info);
 
+	/* Before calling delete() thou shall call can_delete(). */
+	int (*can_delete)(struct listbox_item *);
+
 	/* Delete the listbox item object and its data. @last is non zero when
 	 * either deleting only one item or when deleting the last item. */
-	void (*done)(struct listbox_item *, int last);
+	void (*delete)(struct listbox_item *, int last);
 };
 
 /* Stores display information about a box. Kept in cdata. */

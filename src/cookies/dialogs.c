@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.21 2003/11/24 00:33:56 jonas Exp $ */
+/* $Id: dialogs.c,v 1.22 2003/11/25 01:07:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,8 +86,14 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 	return string.source;
 }
 
+static int
+can_delete_cookie(struct listbox_item *item)
+{
+	return 1;
+}
+
 static void
-done_cookie_item(struct listbox_item *item, int last)
+delete_cookie(struct listbox_item *item, int last)
 {
 	struct cookie *cookie = item->udata;
 
@@ -107,7 +113,8 @@ static struct listbox_ops cookies_listbox_ops = {
 	unlock_cookie,
 	is_cookie_used,
 	get_cookie_info,
-	done_cookie_item,
+	can_delete_cookie,
+	delete_cookie,
 };
 
 static int

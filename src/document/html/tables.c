@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.341 2004/07/01 14:46:59 jonas Exp $ */
+/* $Id: tables.c,v 1.342 2004/07/01 15:07:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1220,6 +1220,8 @@ ret2:
 	int_lower_bound(&part->box.height, part->cy);
 	done_html_parser_state(state);
 
+	/* XXX: This tag soup handling needs to be done outside the create
+	 * parser state. Something to do with link numbering. */
 	draw_table_bad_html(table);
 	free_table(table);
 

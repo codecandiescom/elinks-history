@@ -19,9 +19,9 @@ done
 echo
 echo 'struct translation_desc translations [] = {'
 for i in $languages; do
-	echo '  translation_'$i','
+	echo '  {translation_'$i'},'
 done
-echo '  NULL'
+echo '  {NULL}'
 echo '};'
 echo
 (

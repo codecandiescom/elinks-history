@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.159 2004/04/16 16:36:25 zas Exp $ */
+/* $Id: link.c,v 1.160 2004/04/17 16:26:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -833,7 +833,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_MAIN_ENTER_RELOAD);
 
-			add_separator_to_menu(&mi);
+			add_menu_separator(&mi);
 
 			add_new_win_to_menu(&mi, N_("Open in new ~window"),
 					    ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, term);
@@ -844,7 +844,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
-				add_separator_to_menu(&mi);
+				add_menu_separator(&mi);
 				add_menu_action(&mi, N_("~Download link"), ACT_MAIN_DOWNLOAD);
 
 #ifdef CONFIG_BOOKMARKS

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.303 2004/04/17 02:09:15 jonas Exp $ */
+/* $Id: menu.c,v 1.304 2004/04/17 16:26:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_menu_action(&menu, N_("Go ~back"), ACT_MAIN_BACK);
 	add_menu_action(&menu, N_("Go for~ward"), ACT_MAIN_UNBACK);
 
-	add_separator_to_menu(&menu);
+	add_menu_separator(&menu);
 
 #ifdef CONFIG_BOOKMARKS
 	if (!anonymous) {
@@ -199,7 +199,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 		add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_MAIN_ZOOM_FRAME);
 
 	/* Keep tab related operations below this separator */
-	add_separator_to_menu(&menu);
+	add_menu_separator(&menu);
 
 	if (tabs > 1) {
 		add_menu_action(&menu, N_("Nex~t tab"), ACT_MAIN_TAB_NEXT);

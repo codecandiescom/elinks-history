@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.119 2003/12/21 23:56:11 jonas Exp $ */
+/* $Id: dialog.c,v 1.120 2003/12/27 13:41:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,6 +71,8 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
 
+	assert(dlg_data->dlg->title);
+
 	if (layout) {
 		dlg_data->dlg->layouter(dlg_data);
 		/* This might not be the best place. We need to be able
@@ -93,7 +95,7 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	title_color = get_bfu_color(term, "dialog.title");
 	if (title_color) {
 		unsigned char *title = dlg_data->dlg->title;
-		int titlelen = strlen(title);
+		int titlelen = int_min(dlg_data->width - 2, strlen(title));
 
 		x = (dlg_data->width - titlelen) / 2 + dlg_data->x;
 		draw_text(term, x - 1, y, " ", 1, 0, title_color);
@@ -102,7 +104,8 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	}
 
 	for (i = 0; i < dlg_data->n; i++)
-		display_dlg_item(dlg_data, &dlg_data->widgets_data[i], i == dlg_data->selected);
+		display_dlg_item(dlg_data, &dlg_data->widgets_data[i],
+				 (i == dlg_data->selected));
 
 	redraw_from_window(dlg_data->win);
 }
@@ -469,7 +472,7 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
 	int height = dialog_max_height(term);
-	int rw = 0;
+	int rw = int_min(w, strlen(dlg_data->dlg->title));
 	int y = dlg_data->dlg->layout.padding_top ? 0 : -1;
 	int x = 0;
 

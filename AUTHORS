@@ -225,6 +225,7 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 	One of Links authors; a lot of misc. features & code
 
 Karsten Schölzel <kuser@gmx.de>
+	Scripting subsystem restructuralization
 	Random minor fixes
 
 Karvinen Ilkka <ik@iki.fi>
@@ -445,4 +446,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.128 2003/06/24 17:52:34 pasky Exp $
+$Id: AUTHORS,v 1.129 2003/07/24 01:21:40 pasky Exp $

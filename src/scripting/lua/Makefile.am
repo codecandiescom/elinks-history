@@ -1,12 +1,12 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.10 2002/07/03 21:50:43 pasky Exp $
+## $Id: Makefile.am,v 1.11 2003/07/24 01:21:42 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
 EXTRA_DIST = TODO
 
-noinst_LIBRARIES = liblua.a
-liblua_a_SOURCES = \
+pkglib_LTLIBRARIES = libscriptinglua.la
+libscriptinglua_la_SOURCES = \
  core.c \
  core.h \
  hooks.c \

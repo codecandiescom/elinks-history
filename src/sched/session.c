@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.79 2003/06/07 01:45:55 jonas Exp $ */
+/* $Id: session.c,v 1.80 2003/06/07 09:01:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1138,8 +1138,7 @@ create_session(struct window *tab)
 		msg_box(term, NULL,
 			N_("Welcome"), AL_CENTER,
 			N_("Welcome to ELinks!\n\n"
-			"Press ESC for menu. Select Help->Manual in menu "
-			"for user's manual."),
+			"Press ESC for menu. Documentation is available in Help menu."),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
 	}

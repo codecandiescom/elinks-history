@@ -232,7 +232,15 @@ void http_send_header(struct connection *c)
 	else add_to_str(&hdr, &l, " HTTP/1.0\r\n");
 	if ((h = get_host_name(host))) {
 		add_to_str(&hdr, &l, "Host: ");
-		add_to_str(&hdr, &l, h);
+#ifdef IPV6
+		if (strchr(h, ':') != strrchr(h, ':')) {
+			/* IPv6 address */
+			add_to_str(&hdr, &l, "[");
+			add_to_str(&hdr, &l, h);
+			add_to_str(&hdr, &l, "]");
+		} else
+#endif
+			add_to_str(&hdr, &l, h);
 		mem_free(h);
 		if ((h = get_port_str(host))) {
 			add_to_str(&hdr, &l, ":");

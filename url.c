@@ -54,6 +54,10 @@ int parse_url(unsigned char *url, int *prlen,
 	      unsigned char **post)
 {
 	unsigned char *prefix_end, *host_end;
+#ifdef IPV6
+	unsigned char *lbracket, *rbracket;
+	static unsigned char hostbuf[NI_MAXHOST];
+#endif
 	int protocol;
 	
 	if (prlen) *prlen = 0;
@@ -68,8 +72,15 @@ int parse_url(unsigned char *url, int *prlen,
 	if (data) *data = NULL;
 	if (dalen) *dalen = 0;
 	if (post) *post = NULL;
-	
+
 	if (!url) return -1;
+
+#ifdef IPV6
+	/* Get brackets enclosing IPv6 address */
+	lbracket = strchr(url, '[');
+	rbracket = strchr(url, ']');
+	if (lbracket > rbracket) return -1;
+#endif
 	
 	/* Isolate prefix */
 	
@@ -115,11 +126,38 @@ int parse_url(unsigned char *url, int *prlen,
 		prefix_end = host_end + 1;
 	}
 	
-	host_end = prefix_end + strcspn(prefix_end, ":/");
+#ifdef IPV6
+	if (lbracket && rbracket)
+		host_end = rbracket + strcspn(rbracket, ":/");
+	else
+#endif
+		host_end = prefix_end + strcspn(prefix_end, ":/");
+		
 	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
-	
-	if (host) *host = prefix_end;
-	if (holen) *holen = host_end - prefix_end;
+
+#ifdef IPV6
+	if (lbracket && rbracket) {
+		strncpy(hostbuf, lbracket + 1, rbracket - lbracket - 1);
+		hostbuf[rbracket - lbracket - 1] = 0;
+	}
+#endif
+	if (host) {
+#ifdef IPV6
+		if (lbracket && rbracket)
+			*host = hostbuf;
+		else
+#endif
+			*host = prefix_end;
+	}
+	if (holen) {
+#ifdef IPV6
+		if (lbracket && rbracket)
+			*holen = strlen(hostbuf);
+		else
+#endif
+			*holen = host_end - prefix_end;
+	}
+				
 	
 	if (*host_end == ':') { /* we have port here */
 		unsigned char *port_end = host_end + strcspn(host_end, "/");

@@ -205,12 +205,14 @@ void dns_found(void *data, int state)
 		return;
 	}
 
-	for (i = c_i->triedno + 1; c_i->triedno++, i < c_i->addrno; i++) {
+	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 #ifdef IPV6
 		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) c_i->addr)[i]);
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &((struct sockaddr_storage *) c_i->addr)[i]);
 #endif
+
+		c_i->triedno++;
 
 #ifdef IPV6
 		sock = socket(addr.sin6_family, SOCK_STREAM, IPPROTO_TCP);
@@ -239,6 +241,7 @@ void dns_found(void *data, int state)
 		}
 
 		close(sock);
+		perror("brm");
 	}
 
 	if (i == c_i->addrno) {
@@ -263,40 +266,39 @@ void connected(void *data)
 {
         struct connection *conn = (struct connection *) data;
 	struct conn_info *c_i = conn->conn_info;
+	void (*func)(struct connection *) = c_i->func;
 	int err = 0;
 	int len = sizeof(int);
 
 	if (! c_i) internal("Lost conn_info!");
 	
-	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *)&err, &len))
-		if (!(err = errno)) {
+	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
+		/* Why does EMX return so large values? */
+		if (err >= 10000) err -= 10000;
+	} else {
+		/* getsockopt() failed */
+		if (errno > 0)
+			err = errno;
+		else
 			err = -S_STATE;
-			goto skiperrdec;
-		}
+	}
 	
-	if (err >= 10000) err -= 10000;	/* Why does EMX return so large values? */
-	
-skiperrdec:
 	if (err > 0) {
 		setcstate(conn, -err);
 		
-		if (c_i->triedno < c_i->addrno) {
-			/* There are still some more candidates. */
-			close_socket(c_i->sock);
-			dns_found(conn, 0);
-		}
-		
-	} else {
-		void (*func)(struct connection *) = c_i->func;
-
-#ifdef HAVE_SSL
-		if (ssl_connect(conn, *c_i->sock) < 0) return;
-#endif
-		conn->conn_info = NULL;
-		func(conn);
-		mem_free(c_i->addr);
-		mem_free(c_i);
+		/* There are maybe still some more candidates. */
+		close_socket(c_i->sock);
+		dns_found(conn, 0);
+		return;
 	}
+	
+#ifdef HAVE_SSL
+	if (ssl_connect(conn, *c_i->sock) < 0) return;
+#endif
+	conn->conn_info = NULL;
+	func(conn);
+	mem_free(c_i->addr);
+	mem_free(c_i);
 }
 
 struct write_buffer {

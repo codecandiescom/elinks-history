@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.11 2002/07/05 11:16:01 pasky Exp $ */
+/* $Id: ssl.c,v 1.12 2002/07/05 12:59:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,9 @@
 #ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 SSL_CTX *context = NULL;
+#elif defined(HAVE_GNUTLS)
+GNUTLS_ANON_CLIENT_CREDENTIALS anon_cred;
+GNUTLS_CERTIFICATE_CLIENT_CREDENTIALS xcred;
 #endif
 #endif
 
@@ -41,7 +44,22 @@ init_ssl()
 	SSL_CTX_set_options(context, SSL_OP_ALL);
 	SSL_CTX_set_default_verify_paths(context);
 #elif defined(HAVE_GNUTLS)
-	gnutls_global_init();
+	int ret = gnutls_global_init();
+
+	if (ret < 0)
+		internal("GNUTLS init failed: %s", gnutls_strerror(ret));
+
+	ret = gnutls_anon_allocate_client_sc(&anon_cred);
+	if (ret < 0)
+		internal("GNUTLS anon credentials alloc failed: %s",
+			 gnutls_strerror(ret));
+
+	ret = gnutls_certificate_allocate_sc(&xcred);
+	if (ret < 0)
+		internal("GNUTLS X509 credentials alloc failed: %s",
+			 gnutls_strerror(ret));
+
+	/* Here, we should load certificate files etc. */
 #endif
 #endif
 }
@@ -53,6 +71,8 @@ done_ssl(void)
 #ifdef HAVE_OPENSSL
 	if (context) SSL_CTX_free(context);
 #elif defined(HAVE_GNUTLS)
+	gnutls_certificate_free_sc(xcred);
+	gnutls_anon_free_client_sc(anon_cred);
 	gnutls_global_deinit();
 #endif
 #endif
@@ -71,14 +91,30 @@ get_ssl(void)
 	 * who knows if some future implementation won't have that as a
 	 * structure itself.. --pasky */
 	GNUTLS_STATE *state = mem_alloc(sizeof(GNUTLS_STATE));
-	int ret;
+	int ret = gnutls_init(state, GNUTLS_CLIENT);
 
-	ret = gnutls_init(state, GNUTLS_CLIENT);
 	if (ret < 0) {
 		/* debug("sslinit %s", gnutls_strerror(ret)); */
 		mem_free(state);
 		return NULL;
 	}
+
+	ret = gnutls_cred_set(*state, GNUTLS_CRD_ANON, anon_cred);
+	if (ret < 0) {
+		/* debug("sslanoncred %s", gnutls_strerror(ret)); */
+		gnutls_deinit(*state);
+		mem_free(state);
+		return NULL;
+	}
+
+	ret = gnutls_cred_set(*state, GNUTLS_CRD_CERTIFICATE, xcred);
+	if (ret < 0) {
+		/* debug("sslx509cred %s", gnutls_strerror(ret)); */
+		gnutls_deinit(*state);
+		mem_free(state);
+		return NULL;
+	}
+
 	return state;
 #endif
 #else
@@ -119,12 +155,22 @@ get_ssl_cipher_str(ssl_t *ssl) {
 	/* XXX: How to get other relevant parameters? */
 	add_to_str(&str, &l, (unsigned char *)
 			gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)));
-	add_to_str(&str, &l, " ");
+	add_to_str(&str, &l, " - ");
+	add_to_str(&str, &l, (unsigned char *)
+			gnutls_kx_get_name(gnutls_kx_get(*ssl)));
+	add_to_str(&str, &l, " - ");
 	add_to_str(&str, &l, (unsigned char *)
 			gnutls_cipher_get_name(gnutls_cipher_get(*ssl)));
-	add_to_str(&str, &l, " ");
+	add_to_str(&str, &l, " - ");
 	add_to_str(&str, &l, (unsigned char *)
 			gnutls_mac_get_name(gnutls_mac_get(*ssl)));
+	add_to_str(&str, &l, " - ");
+	add_to_str(&str, &l, (unsigned char *)
+			gnutls_cert_type_get_name(gnutls_cert_type_get(*ssl)));
+	add_to_str(&str, &l, " (compr:");
+	add_to_str(&str, &l, (unsigned char *)
+			gnutls_compression_get_name(gnutls_compression_get(*ssl)));
+	add_to_str(&str, &l, ")");
 #endif
 #endif
 

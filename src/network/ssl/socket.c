@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.10 2002/07/05 11:16:01 pasky Exp $ */
+/* $Id: socket.c,v 1.11 2002/07/05 12:59:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,15 +50,85 @@ ssl_set_no_tls(struct connection *conn)
 #ifdef HAVE_OPENSSL
 	conn->ssl->options |= SSL_OP_NO_TLSv1;
 #elif defined(HAVE_GNUTLS)
-	int protocol_priority[3];
-	int i = 0;
+	/* We do a little more work here, setting up all these priorities (like
+	 * they couldn't have some reasonable defaults there).. */
 
-	if (!conn->no_tsl)
-		protocol_priority[i++] = GNUTLS_TLS1;
-	protocol_priority[i++] = GNUTLS_SSL3;
-	protocol_priority[i++] = 0;
+	{
+		int protocol_priority[3];
+		int i = 0;
 
-	gnutls_protocol_set_priority(*conn->ssl, protocol_priority);
+		if (!conn->no_tsl)
+			protocol_priority[i++] = GNUTLS_TLS1;
+		protocol_priority[i++] = GNUTLS_SSL3;
+		protocol_priority[i++] = 0;
+
+		gnutls_protocol_set_priority(*conn->ssl, protocol_priority);
+	}
+
+	/* Note that I have no clue about these; I just put all I found here
+	 * ;-). It is all a bit confusing for me, and I just want this to work.
+	 * Feel free to send me patch removing useless superfluous bloat,
+	 * thanks in advance. --pasky */
+
+	{
+		int cipher_priority[6] = {
+			GNUTLS_CIPHER_RIJNDAEL_128_CBC,
+			GNUTLS_CIPHER_3DES_CBC,
+			GNUTLS_CIPHER_ARCFOUR,
+			GNUTLS_CIPHER_TWOFISH_128_CBC,
+			GNUTLS_CIPHER_RIJNDAEL_256_CBC,
+			0
+		};
+		
+		gnutls_cipher_set_priority(*conn->ssl, cipher_priority);
+	}
+
+	{
+		/* Does any httpd support this..? ;) */
+		int comp_priority[3] = {
+			GNUTLS_COMP_ZLIB,
+			GNUTLS_COMP_NULL,
+			0
+		};
+
+		gnutls_compression_set_priority(*conn->ssl, comp_priority);
+	}
+
+	{
+		int kx_priority[5] = {
+			GNUTLS_KX_RSA,
+			GNUTLS_KX_DHE_DSS,
+			GNUTLS_KX_DHE_RSA,
+			/* Looks like we don't want SRP, do we? */
+			GNUTLS_KX_ANON_DH,
+			0
+		};
+
+		gnutls_kx_set_priority(*conn->ssl, kx_priority);
+	}
+
+	{
+		int mac_priority[3] = {
+			GNUTLS_MAC_SHA,
+			GNUTLS_MAC_MD5,
+			0
+		};
+
+		gnutls_mac_set_priority(*conn->ssl, mac_priority);
+	}
+
+	{
+		int cert_type_priority[2] = {
+			GNUTLS_CRT_X509,
+			/* We don't link with -extra now; by time of writing
+			 * this, it's unclear where OpenPGP will end up. */
+			0
+		};
+
+		gnutls_cert_type_set_priority(*conn->ssl, cert_type_priority);
+	}
+
+	gnutls_dh_set_prime_bits(*conn->ssl, 1024);
 #endif
 #endif
 }
@@ -108,10 +178,12 @@ ssl_connect(struct connection *conn, int sock)
 	int ret;
 
 	conn->ssl = get_ssl();
-#if 0
+	if (!conn->ssl)
+		goto ssl_error;
+
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
-#endif
+
 #ifdef HAVE_OPENSSL
 	SSL_set_fd(conn->ssl, sock);
 #elif defined(HAVE_GNUTLS)
@@ -135,8 +207,9 @@ ssl_connect(struct connection *conn, int sock)
 			break;
 
 		default:
-			debug("sslerr %s", gnutls_strerror(ret));
+			/* debug("sslerr %s", gnutls_strerror(ret)); */
 			conn->no_tsl++;
+ssl_error:
 			setcstate(conn, S_SSL_ERROR);
 			close_socket(NULL, c_i->sock);
 			dns_found(conn, 0);

@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.18 2003/07/10 00:35:20 jonas Exp $ */
+/* $Id: auth.c,v 1.19 2003/07/10 02:46:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,15 +101,14 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 /* Add a Basic Auth entry if needed. Returns -1 on error, 0 if entry do not
  * exists and user/pass are in url, 1 if exact entry already exists or is
  * in blocked state, 2 if entry was added. */
-/* FIXME: use an enum for return codes. */
-int
+enum add_auth_code
 add_auth_entry(unsigned char *url, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
 	unsigned char *user = get_user_name(url);
 	unsigned char *pass = get_pass(url);
 	unsigned char *newurl = get_auth_url(url);
-	int ret = -1;
+	int ret = ADD_AUTH_ERROR;
 
 	if (!newurl || !user || !pass) goto end;
 
@@ -119,7 +118,7 @@ add_auth_entry(unsigned char *url, unsigned char *realm)
 		/* Found an entry. */
 		if (entry->blocked == 1) {
 			/* Waiting for user/pass in dialog. */
-			ret = 1;
+			ret = ADD_AUTH_EXIST;
 			goto end;
 		}
 
@@ -131,7 +130,7 @@ add_auth_entry(unsigned char *url, unsigned char *realm)
 			    && !strcmp(user, entry->uid)
 			    && !strcmp(pass, entry->passwd)) {
 				/* Same host/realm/pass/user. */
-				ret = 1;
+				ret = ADD_AUTH_EXIST;
 				goto end;
 			}
 		}
@@ -173,15 +172,15 @@ add_auth_entry(unsigned char *url, unsigned char *realm)
 		}
 		safe_strncpy(entry->passwd, pass, MAX_PASSWD_LEN);
 
-		ret = 0; /* Entry added with user/pass from url. */
+		ret = ADD_AUTH_NONE; /* Entry added with user/pass from url. */
 	}
 
 	add_to_list(http_auth_basic_list, entry);
 
-	if (ret) ret = 2; /* Entry added. */
+	if (ret != ADD_AUTH_NONE) ret = ADD_AUTH_NEW; /* Entry added. */
 
 end:
-	if (ret == -1 || ret == 1) {
+	if (ret == ADD_AUTH_ERROR || ret == ADD_AUTH_EXIST) {
 		if (newurl) mem_free(newurl);
 	}
 
@@ -218,7 +217,7 @@ again:
 		if ((entry && !entry->valid && entry->uid && entry->passwd
 		    && (strcmp(user, entry->uid) || strcmp(pass, entry->passwd)))
 		   || !entry) {
-			if (add_auth_entry(uri->protocol, NULL) == 0) {
+			if (add_auth_entry(uri->protocol, NULL) == ADD_AUTH_NONE) {
 				/* An entry was re-created, we free user/pass
 				 * before retry to prevent infinite loop. */
 				if (user) {

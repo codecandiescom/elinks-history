@@ -1,3 +1,28 @@
+Thu May 20 21:35:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Update exmode description.  
+
+Thu May 20 12:49:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/dialogs.c,
+	formhist/formhist.c, globhist/dialogs.c, globhist/globhist.c,
+	protocol/rewrite/rewrite.c, protocol/smb/smb.c,
+	scripting/scripting.c, scripting/guile/core.c,
+	scripting/guile/hooks.c, scripting/lua/core.c,
+	scripting/lua/hooks.c, scripting/perl/core.c,
+	scripting/perl/hooks.c, ssl/connect.c, ssl/ssl.c:
+
+	Remove unneeded #ifdefs 
+
+Thu May 20 12:42:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/leds.c, dialogs/exmode.c, mime/backend/mailcap.c,
+	mime/backend/mimetypes.c:
+
+	Remove unneeded #ifdefs 
+
 Wed May 19 16:09:05 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.258 2003/09/10 03:41:18 jonas Exp $ */
+/* $Id: renderer.c,v 1.259 2003/09/10 14:10:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -998,9 +998,6 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	int_lower_bound(&part->y, part->cy + 1);
 
-	if (nowrap && part->cx + charslen > overlap(par_format))
-		return;
-
 	is_link = (format.link || format.image || format.form);
 
 	/* Put the link number when the link is new. */
@@ -1014,6 +1011,9 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (is_link || last_link || last_image || last_form) {
 		process_link(part, chars, charslen);
 	}
+
+	if (nowrap && part->cx + charslen > overlap(par_format))
+		return;
 
 	part->cx += charslen;
 	nobreak = 0;

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.83 2004/07/05 11:38:24 jonas Exp $ */
+/* $Id: string.h,v 1.84 2004/07/05 11:46:42 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -105,10 +105,10 @@ int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 	do { while (*(S) && !isspace(*(S))) (S)++; } while (0)
 
 #ifndef HAVE_ISALNUM
-#define isalnum(q)	(isalpha(c) || isdigit(c))
+#define isalnum(c)	(isalpha(c) || isdigit(c))
 #endif
 
-#define isquote(x)	((x) == '"' || (x) == '\'')
+#define isquote(c)	((c) == '"' || (c) == '\'')
 #define isasciialpha(c)	(((c) >= 'A' && (c) <= 'Z') || ((c) >= 'a' && (c) <= 'z'))
 #define isasciialnum(c)	(isasciialpha(c) || isdigit(c))
 #define isident(c)	(isasciialnum(c) || (c) == '_' || (c) == '-')

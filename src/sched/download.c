@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.293 2004/06/10 01:18:08 jonas Exp $ */
+/* $Id: download.c,v 1.294 2004/06/10 01:26:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,10 +105,18 @@ init_file_download(struct uri *uri, struct session *ses, unsigned char *file, in
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) return NULL;
 
+	/* Actually we could allow fragments in the URI and just change all the
+	 * places that compares and shows the URI, but for now it is much
+	 * easier this way. */
+	file_download->uri = get_composed_uri(uri, URI_BASE);
+	if (!file_download->uri) {
+		mem_free(file_download);
+		return NULL;
+	}
+
 	file_download->box_item = add_listbox_leaf(&download_browser, NULL,
 						   file_download);
 
-	file_download->uri = get_composed_uri(uri, URI_BASE);
 	file_download->file = file;
 	file_download->handle = fd;
 

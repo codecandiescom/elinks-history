@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.217 2005/03/03 15:11:44 zas Exp $ */
+/* $Id: connection.c,v 1.218 2005/03/03 15:14:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,11 +58,7 @@ static unsigned int connection_id = 0;
 static int active_connections = 0;
 static int keepalive_timeout = -1;
 
-/* TODO: queue probably shouldn't be exported; ideally we should probably
- * separate it to an own module and define operations on it (especially
- * foreach_queue or so). Ok ok, that's nothing important and I'm not even
- * sure I would really like it ;-). --pasky */
-INIT_LIST_HEAD(connection_queue);
+static INIT_LIST_HEAD(connection_queue);
 static INIT_LIST_HEAD(host_connections);
 static INIT_LIST_HEAD(keepalive_connections);
 

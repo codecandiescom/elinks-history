@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.88 2005/03/03 15:11:44 zas Exp $ */
+/* $Id: connection.h,v 1.89 2005/03/03 15:14:20 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -223,7 +223,6 @@ struct download {
 	enum connection_priority pri;
 };
 
-extern struct list_head connection_queue;
 
 void check_queue(void);
 long connect_info(int);

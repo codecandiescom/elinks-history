@@ -1,11 +1,9 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.116 2004/04/16 16:30:45 zas Exp $ */
+/* $Id: bookmarks.c,v 1.117 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_BOOKMARKS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -391,5 +389,3 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 		open_url_in_new_tab(ses, bookmark->url, 1);
 	}
 }
-
-#endif /* CONFIG_BOOKMARKS */

@@ -1,11 +1,9 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.47 2004/04/29 23:22:15 jonas Exp $ */
+/* $Id: socket.c,v 1.48 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_SSL
 
 #ifdef CONFIG_OPENSSL
 #include <openssl/ssl.h>
@@ -360,5 +358,3 @@ ssl_close(struct connection *conn)
 
 	return 0;
 }
-
-#endif

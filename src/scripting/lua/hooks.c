@@ -1,11 +1,9 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.50 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: hooks.c,v 1.51 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_LUA
 
 #include "elinks.h"
 
@@ -217,5 +215,3 @@ struct event_hook_info lua_scripting_hooks[] = {
 	{ "free-history", free_lua_console_history, NULL },
 	NULL_EVENT_HOOK_INFO,
 };
-
-#endif

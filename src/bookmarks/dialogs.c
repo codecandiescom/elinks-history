@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.156 2004/04/19 15:56:44 zas Exp $ */
+/* $Id: dialogs.c,v 1.157 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -8,8 +8,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_BOOKMARKS
 
 #include <string.h>
 
@@ -598,5 +596,3 @@ bookmark_terminal_tabs_dialog(struct terminal *term)
 		    (void (*)(void *, unsigned char *)) bookmark_terminal_tabs,
 		    NULL);
 }
-
-#endif

@@ -1,11 +1,9 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.9 2004/04/29 23:32:19 jonas Exp $ */
+/* $Id: hooks.c,v 1.10 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_PERL
 
 #include "elinks.h"
 
@@ -240,5 +238,3 @@ struct event_hook_info perl_scripting_hooks[] = {
 	{ "quit", script_hook_quit, NULL },
 	NULL_EVENT_HOOK_INFO,
 };
-
-#endif

@@ -1,11 +1,9 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.16 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: core.c,v 1.17 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_GUILE
 
 #include <libguile.h>
 
@@ -95,5 +93,3 @@ struct module guile_scripting_module = struct_module(
 	/* init: */		init_guile,
 	/* done: */		NULL
 );
-
-#endif /* CONFIG_GUILE */

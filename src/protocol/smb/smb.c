@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.44 2004/05/07 17:27:46 jonas Exp $ */
+/* $Id: smb.c,v 1.45 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -8,8 +8,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_SMB
 
 #include <errno.h>
 #include <stdio.h>
@@ -607,5 +605,3 @@ smb_protocol_handler(struct connection *conn)
 	set_handlers(err_pipe[0], (void (*)(void *)) smb_got_text, NULL, NULL, conn);
 	set_connection_state(conn, S_CONN);
 }
-
-#endif /* CONFIG_SMB */

@@ -1,11 +1,9 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.46 2004/04/29 23:22:15 jonas Exp $ */
+/* $Id: ssl.c,v 1.47 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_SSL
 
 #ifdef CONFIG_OPENSSL
 #include <openssl/ssl.h>
@@ -291,5 +289,3 @@ get_ssl_connection_cipher(struct connection *conn)
 
 	return str.source;
 }
-
-#endif /* CONFIG_SSL */

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.73 2004/04/19 15:56:47 zas Exp $ */
+/* $Id: globhist.c,v 1.74 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -8,8 +8,6 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_GLOBHIST
 
 #include "elinks.h"
 
@@ -447,5 +445,3 @@ struct module global_history_module = struct_module(
 	/* init: */		init_global_history,
 	/* done: */		done_global_history
 );
-
-#endif /* CONFIG_GLOBHIST */

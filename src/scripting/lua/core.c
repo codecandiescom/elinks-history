@@ -1,11 +1,9 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.154 2004/05/01 05:29:36 miciah Exp $ */
+/* $Id: core.c,v 1.155 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_LUA
 
 #include <setjmp.h>
 #include <signal.h>
@@ -750,5 +748,3 @@ struct module lua_scripting_module = struct_module(
 	/* init: */		init_lua,
 	/* done: */		cleanup_lua
 );
-
-#endif

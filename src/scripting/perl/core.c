@@ -1,11 +1,9 @@
 /* Perl scripting engine */
-/* $Id: core.c,v 1.10 2004/04/29 23:32:19 jonas Exp $ */
+/* $Id: core.c,v 1.11 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_PERL
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -121,5 +119,3 @@ struct module perl_scripting_module = struct_module(
 	/* init: */		init_perl,
 	/* done: */		cleanup_perl
 );
-
-#endif

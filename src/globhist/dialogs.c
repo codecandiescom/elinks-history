@@ -1,11 +1,9 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.109 2004/04/19 15:56:47 zas Exp $ */
+/* $Id: dialogs.c,v 1.110 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_GLOBHIST
 
 #include <string.h>
 
@@ -207,5 +205,3 @@ history_manager(struct session *ses)
 	mem_free_set(&gh_last_searched_url, NULL);
 	hierbox_browser(&globhist_browser, ses);
 }
-
-#endif /* CONFIG_GLOBHIST */

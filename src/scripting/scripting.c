@@ -1,11 +1,9 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.11 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: scripting.c,v 1.12 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_SCRIPTING
 
 #include "elinks.h"
 
@@ -43,5 +41,3 @@ struct module scripting_module = struct_module(
 	/* init: */		NULL,
 	/* done: */		NULL
 );
-
-#endif

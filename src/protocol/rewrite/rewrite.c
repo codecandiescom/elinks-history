@@ -1,11 +1,9 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.24 2004/04/02 22:16:12 jonas Exp $ */
+/* $Id: rewrite.c,v 1.25 2004/05/20 12:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_URI_REWRITE
 
 #include "elinks.h"
 
@@ -352,5 +350,3 @@ struct module uri_rewrite_module = struct_module(
 	/* init: */		NULL,
 	/* done: */		NULL
 );
-
-#endif

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.26 2004/02/02 16:20:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.27 2004/02/06 15:58:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ comp_links(struct link *l1, struct link *l2)
 }
 #endif
 
-void
+static void
 sort_links(struct document *document)
 {
 	int i;

@@ -1,3 +1,9 @@
+Sat Dec 22 22:06:14 2001  Petr Baudis <pasky@ji.cz>:
+
+	* language.inc, intl/french.lng:
+	
+	merge with STABLE
+
 Sat Dec 22 12:27:09 2001  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, html.c:

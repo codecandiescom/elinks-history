@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.80 2004/01/21 17:49:58 jonas Exp $ */
+/* $Id: scanner.c,v 1.81 2004/01/22 06:49:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,7 +232,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_IDENT;
 		}
 
-	} else if (first_char == '<' && first_char == '-') {
+	} else if (first_char == '<' || first_char == '-') {
 		/* Try to navigate SGML tagsoup */
 
 		if (*string == '/') {

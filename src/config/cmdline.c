@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.30 2004/01/02 19:54:51 pasky Exp $ */
+/* $Id: cmdline.c,v 1.31 2004/01/08 23:26:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,7 +451,7 @@ struct option_info cmdline_options_info[] = {
 		"which all the configuration shall be written. It should be\n"
 		"relative to confdir.")),
 
-	INIT_OPT_ALIAS("", N_("MIME type to assume for documents"),
+	INIT_OPT_CMDALIAS("", N_("MIME type to assume for documents"),
 		"default-mime-type", 0, "mime.default_type",
 		N_("Default MIME type to assume for documents of unknown type.")),
 
@@ -460,11 +460,11 @@ struct option_info cmdline_options_info[] = {
 		N_("Write a plain-text version of the given HTML document to\n"
 		"stdout.")),
 
-	INIT_OPT_ALIAS("", N_("Codepage to use with -dump"),
+	INIT_OPT_CMDALIAS("", N_("Codepage to use with -dump"),
 		"dump-charset", 0, "document.dump.codepage",
 		N_("Codepage used in dump output.")),
 
-	INIT_OPT_ALIAS("", N_("Width of document formatted with -dump"),
+	INIT_OPT_CMDALIAS("", N_("Width of document formatted with -dump"),
 		"dump-width", 0, "document.dump.width",
 		N_("Width of the dump output.")),
 

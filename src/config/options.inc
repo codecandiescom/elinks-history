@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.86 2004/01/08 22:00:01 pasky Exp $ */
+/* $Id: options.inc,v 1.87 2004/01/08 23:26:17 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -236,15 +236,11 @@ struct option_info config_options_info[] = {
 		N_("Display numbers next to the links.")),
 
 	/* Compatibility aliases. Added: 2004-01-07, 0.9.0.CVS. */
-	INIT_OPT_ALIAS("document.browse.links", NULL,
-		"typeahead_wraparound", 0, "document.browse.search.wraparound",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the document.browse.search.wraparound option instead.")),
+	INIT_OPT_ALIAS("document.browse.links", "typeahead_wraparound",
+		"document.browse.search.wraparound"),
 
-	INIT_OPT_ALIAS("document.browse.links", NULL,
-		"typeahead_error", 0, "document.browse.search.show_not_found",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the document.browse.search.show_not_found option instead.")),
+	INIT_OPT_ALIAS("document.browse.links", "typeahead_error",
+		"document.browse.search.show_not_found"),
 
 	INIT_OPT_BOOL("document.browse.links", N_("Use tabindex"),
 		"use_tabindex", 0, 1,
@@ -469,10 +465,8 @@ struct option_info config_options_info[] = {
 		N_("Options regarding files downloading and handling.")),
 
 	/* Compatibility alias. Added: 2003-05-07, 0.5pre1.CVS. */
-	INIT_OPT_ALIAS("document.download", NULL,
-		"default_mime_type", 0, "mime.default_type",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.default_type option instead.")),
+	INIT_OPT_ALIAS("document.download", "default_mime_type",
+		"mime.default_type"),
 
 	INIT_OPT_STRING("document.download", N_("Default download directory"),
 		"directory", 0, "./",
@@ -1000,16 +994,12 @@ struct option_info config_options_info[] = {
 		N_("Dialog colors.")),
 
 	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
-	INIT_OPT_ALIAS("ui.colors.color.dialog", NULL,
-		"background", 0, "ui.colors.color.dialog.generic.background",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use ui.colors.color.dialog.generic.background instead.")),
+	INIT_OPT_ALIAS("ui.colors.color.dialog", "background",
+		"ui.colors.color.dialog.generic.background"),
 
 	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
-	INIT_OPT_ALIAS("ui.colors.mono.dialog", NULL,
-		"background", 0, "ui.colors.mono.dialog.generic.background",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use ui.colors.mono.dialog.generic.background instead.")),
+	INIT_OPT_ALIAS("ui.colors.mono.dialog", "background",
+		"ui.colors.mono.dialog.generic.background"),
 
 	INIT_OPT_COLORS(".dialog", N_("Generic"),
 		"generic", "black", "white", "black", "white",

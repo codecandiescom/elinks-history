@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.78 2004/01/04 17:53:37 jonas Exp $ */
+/* $Id: mailcap.c,v 1.79 2004/01/08 23:26:17 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -130,31 +130,11 @@ static struct option_info mailcap_options[] = {
 		N_("Options for mailcap support. (Deprecated. Please use\n"
 		"mime.mailcap instead)")),
 
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"enable", 0, "mime.mailcap.enable",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.enable option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"path", 0, "mime.mailcap.path",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.path option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"ask", 0, "mime.mailcap.ask",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.ask option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"description", 0, "mime.mailcap.description",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use mime.mailcap.description option instead.")),
-
-	INIT_OPT_ALIAS("protocol.mailcap", NULL,
-		"prioritize", 0, "mime.mailcap.prioritize",
-		N_("This option is deprecated and will be removed very soon.\n"
-		"Please use the mime.mailcap.prioritize option instead.")),
-
+	INIT_OPT_ALIAS("protocol.mailcap", "enable", "mime.mailcap.enable"),
+	INIT_OPT_ALIAS("protocol.mailcap", "path", "mime.mailcap.path"),
+	INIT_OPT_ALIAS("protocol.mailcap", "ask", "mime.mailcap.ask"),
+	INIT_OPT_ALIAS("protocol.mailcap", "description", "mime.mailcap.description"),
+	INIT_OPT_ALIAS("protocol.mailcap", "prioritize", "mime.mailcap.prioritize"),
 
 	NULL_OPTION_INFO,
 };

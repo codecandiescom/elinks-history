@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.91 2005/01/15 21:42:36 miciah Exp $ */
+/* $Id: protocol.c,v 1.92 2005/03/03 12:21:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,21 +50,21 @@ struct protocol_backend {
 };
 
 static const struct protocol_backend protocol_backends[] = {
-	{ "about",	   0, about_protocol_handler,	0, 0, 1, 0 },
-	{ "data",	   0, data_protocol_handler,	0, 0, 1, 0 },
-	{ "file",	   0, file_protocol_handler,	1, 0, 0, 0 },
-	{ "finger",	  79, finger_protocol_handler,	1, 1, 0, 0 },
-	{ "ftp",	  21, ftp_protocol_handler,	1, 1, 0, 0 },
-	{ "gopher",	  70, gopher_protocol_handler,	1, 1, 0, 0 },
-	{ "http",	  80, http_protocol_handler,	1, 1, 0, 0 },
-	{ "https",	 443, https_protocol_handler,	1, 1, 0, 1 },
-	{ "javascript",	   0, NULL,			0, 0, 1, 0 },
-	{ "news",	   0, news_protocol_handler,	0, 0, 1, 0 },
-	{ "nntp",	 119, nntp_protocol_handler,	1, 1, 0, 0 },
-	{ "nntps",	 563, nntp_protocol_handler,	1, 1, 0, 1 },
-	{ "proxy",	3128, proxy_protocol_handler,	1, 1, 0, 0 },
-	{ "smb",	 139, smb_protocol_handler,	1, 1, 0, 0 },
-	{ "snews",	   0, news_protocol_handler,	0, 0, 1, 0 },
+	{ "about",	   0, about_protocol_handler,		0, 0, 1, 0 },
+	{ "data",	   0, data_protocol_handler,		0, 0, 1, 0 },
+	{ "file",	   0, file_protocol_handler,		1, 0, 0, 0 },
+	{ "finger",	  79, finger_protocol_handler,		1, 1, 0, 0 },
+	{ "ftp",	  21, ftp_protocol_handler,		1, 1, 0, 0 },
+	{ "gopher",	  70, gopher_protocol_handler,		1, 1, 0, 0 },
+	{ "http",	  80, http_protocol_handler,		1, 1, 0, 0 },
+	{ "https",	 443, https_protocol_handler,		1, 1, 0, 1 },
+	{ "javascript",	   0, NULL,				0, 0, 1, 0 },
+	{ "news",	   0, news_protocol_handler,		0, 0, 1, 0 },
+	{ "nntp",	 119, nntp_protocol_handler,		1, 1, 0, 0 },
+	{ "nntps",	 563, nntp_protocol_handler,		1, 1, 0, 1 },
+	{ "proxy",	3128, proxy_protocol_handler,		1, 1, 0, 0 },
+	{ "smb",	 139, smb_protocol_handler,		1, 1, 0, 0 },
+	{ "snews",	   0, news_protocol_handler,		0, 0, 1, 0 },
 
 	/* Keep these last! */
 	{ NULL,		   0, NULL,			0, 0, 1, 0 },

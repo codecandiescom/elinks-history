@@ -33,23 +33,67 @@ struct list_head dns_cache = {&dns_cache, &dns_cache};
 
 int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 {
+#ifdef IPV6
+	struct addrinfo hint, *ai, *ai_cur;
+#else
 	struct hostent *hostent;
+#endif
 	int i;
+
+#ifdef IPV6
+	/* I had a strong preference for the following, but the glibc is really
+	 * obsolete so I had to rather use much more complicated getaddrinfo().
+	 * But we duplicate the code terribly here :|. */
+	/* hostent = getipnodebyname(name, AF_INET6, AI_ALL | AI_ADDRCONFIG, NULL); */
+	memset(&hint, 0, sizeof(hint));
+	hint.ai_family = AF_UNSPEC;
+	hint.ai_socktype = SOCK_STREAM;
+	if (getaddrinfo(name, NULL, &hint, &ai) != 0) return -1;
 	
+#else	
 	hostent = gethostbyname(name);
 	if (!hostent) return -1;
+#endif
 
+#ifdef IPV6
+	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next);
+#else
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++);
+#endif
 
 	*addrno = i;
 	*addrs = mem_alloc(i * sizeof(struct sockaddr_storage));
+	memset(*addrs, 0, i * sizeof(struct sockaddr_storage));
 
-	for (i = 0; hostent->h_addr_list[i] != NULL; i++) {
-		struct sockaddr_in *addr = (struct sockaddr_in *) *addrs;
+#ifdef IPV6
+	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next) {
+		struct sockaddr_in6 *addr = (struct sockaddr_in6 *) &((struct sockaddr_storage *) *addrs)[i];
 		
-		addr[i].sin_family = hostent->h_addrtype;
-		memcpy(&addr[i].sin_addr.s_addr, hostent->h_addr_list[i], sizeof(struct in_addr));
+		memcpy(addr, ai_cur->ai_addr, ai_cur->ai_addrlen);
+		if (addr->sin6_family == AF_INET) {
+			/* We have to map IPv4 on IPv6 by ourselves :/ */
+			struct sockaddr_in addr4 = *((struct sockaddr_in *) addr);
+			unsigned char *a;
+
+			memset(&addr->sin6_addr, 0, sizeof(addr->sin6_addr));
+			a = (unsigned char *) &addr->sin6_addr;
+			a[10] = a[11] = 0xff;
+			memcpy(a + 12, &addr4.sin_addr, 4);
+			addr->sin6_family = AF_INET6;
+		}
 	}
+#else
+	for (i = 0; hostent->h_addr_list[i] != NULL; i++) {
+		struct sockaddr_in *addr = (struct sockaddr_in *) &((struct sockaddr_storage *) *addrs)[i];
+		
+		addr->sin_family = hostent->h_addrtype;
+		memcpy(&addr->sin_addr.s_addr, hostent->h_addr_list[i], hostent->h_length);
+	}
+#endif
+
+#ifdef IPV6
+	freeaddrinfo(ai);
+#endif
 	
 	return 0;
 }
@@ -75,8 +119,9 @@ void lookup_fn(void *data, int h)
 
 		do {
 			int w;
+			struct sockaddr_storage *addr = (struct sockaddr_storage *) addrs;
 
-			w = write(h, &addrs[i] + done, sizeof(struct sockaddr_storage) - done);
+			w = write(h, &addr[i] + done, sizeof(struct sockaddr_storage) - done);
 			if (w < 0) return;
 			done += w;
 		} while (done < sizeof(struct sockaddr_storage));
@@ -110,8 +155,9 @@ void end_real_lookup(void *data)
 
 		do {
 			int r;
+			struct sockaddr_storage **addr = (struct sockaddr_storage **) query->addr;
 
-			r = read(query->h, &(*query->addr)[i] + done, sizeof(struct sockaddr_storage) - done);
+			r = read(query->h, &(*addr)[i] + done, sizeof(struct sockaddr_storage) - done);
 			if (r < 0) goto done;
 			done += r;
 		} while (done < sizeof(struct sockaddr_storage));

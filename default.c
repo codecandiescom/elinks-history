@@ -739,11 +739,21 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	}
 	
 	for (i = 0; i < addrno; i++) {
-		struct sockaddr_in addr = *((struct sockaddr_in *) &addrs[i]);
+#ifdef IPV6
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) addrs)[i]);
+		unsigned char p[INET6_ADDRSTRLEN];
+
+		if (! inet_ntop(addr.sin6_family, &addr.sin6_addr, p, INET6_ADDRSTRLEN))
+			printf("Resolver error.");
+		else
+			printf("%s\n", p);
+#else
+		struct sockaddr_in addr = *((struct sockaddr_in *) &((struct sockaddr_storage *) addrs)[i]);
 		unsigned char *p = (unsigned char *) &addr.sin_addr.s_addr;
 		
 		printf("%d.%d.%d.%d\n", (int) p[0], (int) p[1],
 				        (int) p[2], (int) p[3]); 
+#endif
 	}
 
 	mem_free(addrs);

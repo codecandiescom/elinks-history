@@ -26,7 +26,6 @@ struct conn_info {
 	int addrno; /* array len / sizeof(sockaddr) */
 	int triedno; /* index of last tried address */
 	int port;
-	struct sockaddr_in sa;
 	int *sock;
 	void (*func)(struct connection *);
 };
@@ -47,7 +46,7 @@ void dns_exception(void *data)
 {
         struct connection *conn = (struct connection *) data;
         struct conn_info *c_i = (struct conn_info *) conn->buffer;
-	
+
 	setcstate(conn, S_EXCEPT);
 	close_socket(c_i->sock);
 	dns_found(conn, 0);
@@ -206,23 +205,30 @@ void dns_found(void *data, int state)
 		return;
 	}
 
-	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
-		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
+	for (i = c_i->triedno + 1; c_i->triedno++, i < c_i->addrno; i++) {
+#ifdef IPV6
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &((struct sockaddr_storage *) c_i->addr)[i]);
+#else
+		struct sockaddr_in addr = *((struct sockaddr_in *) &((struct sockaddr_storage *) c_i->addr)[i]);
+#endif
 
-		c_i->triedno++;
-		
+#ifdef IPV6
+		sock = socket(addr.sin6_family, SOCK_STREAM, IPPROTO_TCP);
+#else
 		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
+#endif
 		if (sock == -1) continue;
 		
 		*c_i->sock = sock;
 		fcntl(sock, F_SETFL, O_NONBLOCK);
 
-		memset(&c_i->sa, 0, sizeof(struct sockaddr_in));
-		c_i->sa.sin_port = htons(c_i->port);
-		c_i->sa.sin_family = addr.sin_family;
-		c_i->sa.sin_addr.s_addr = addr.sin_addr.s_addr;
+#ifdef IPV6
+		addr.sin6_port = htons(c_i->port);
+#else
+		addr.sin_port = htons(c_i->port);
+#endif
 		
-		if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa)) == 0)
+		if (connect(sock, (struct sockaddr *) &addr, sizeof(addr)) == 0)
 			break; /* success */
 
 		if (errno == EALREADY || errno == EINPROGRESS) {
@@ -259,6 +265,8 @@ void connected(void *data)
 	struct conn_info *c_i = conn->conn_info;
 	int err = 0;
 	int len = sizeof(int);
+
+	if (! c_i) internal("Lost conn_info!");
 	
 	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *)&err, &len))
 		if (!(err = errno)) {

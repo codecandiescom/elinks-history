@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.34 2003/09/10 06:06:47 miciah Exp $ */
+/* $Id: socket.c,v 1.35 2003/10/14 15:57:27 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,9 +172,6 @@ ssl_error:
 	}
 #endif
 	return;
-#ifdef HAVE_SSL
-	goto ssl_error; /* XXX */
-#endif
 }
 
 /* Return -1 on error, 0 or success. */

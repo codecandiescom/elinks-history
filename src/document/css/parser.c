@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.107 2004/09/20 16:41:35 pasky Exp $ */
+/* $Id: parser.c,v 1.108 2004/09/20 22:18:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,9 +241,17 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			if (seltype == CST_INVALID)
 				continue;
 
-			token = get_next_scanner_token(scanner);
-			if (token->type != CSS_TOKEN_IDENT) /* wtf */
-				continue;
+			/* Hexcolor and hash already contains the ident
+			 * inside. */
+			if (token->type != CSS_TOKEN_HEX_COLOR
+			    && token->type != CSS_TOKEN_HASH) {
+				token = get_next_scanner_token(scanner);
+				if (token->type != CSS_TOKEN_IDENT) /* wtf */
+					continue;
+			} else {
+				/* Skip the leading '#'. */
+				token->string++, token->length--;
+			}
 
 		} else {
 			if (pkg) reltype = CSR_ANCESTOR;

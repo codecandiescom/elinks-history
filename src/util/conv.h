@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.16 2003/07/24 14:36:00 zas Exp $ */
+/* $Id: conv.h,v 1.17 2003/07/24 14:42:58 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -23,17 +23,23 @@ is_safe_in_shell(unsigned char c)
 long strtolx(unsigned char *, unsigned char **);
 
 /* Convert a decimal number to hexadecimal (0 <= a <= 15). */
-#define hx(a) ((a) >= 10 ? (a) + 'A' - 10 : (a) + '0')
+static inline unsigned char
+hx(register int a)
+{
+       return a >= 10 ? a + 'A' - 10 : a + '0';
+}
 
 /* Convert an hexadecimal char ([0-9][a-z][A-Z]) to
  * its decimal value (0 <= result <= 15)
  * returns -1 if parameter is not an hexadecimal char. */
-#define unhx(a) \
-       ( ((a) >= '0' && (a) <= '9') ? (a) - '0' : \
-	( ((a) >= 'A' && (a) <= 'F') ? (a) - 'A' + 10 : \
-	 ( ((a) >= 'a' && (a) <= 'f') ? (a) - 'a' + 10 : -1 ) \
-	) \
-       ) \
+static inline int
+unhx(register unsigned char a)
+{
+       if (a >= '0' && a <= '9') return a - '0';
+       if (a >= 'A' && a <= 'F') return a - 'A' + 10;
+       if (a >= 'a' && a <= 'f') return a - 'a' + 10;
+       return -1;
+}
 
 /* These use granular allocation stuff. */
 struct string *add_long_to_string(struct string *string, long number);

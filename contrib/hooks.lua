@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.links/ as hooks.lua.
--- $Id: hooks.lua,v 1.2 2002/04/17 08:13:08 pasky Exp $
+-- $Id: hooks.lua,v 1.3 2002/05/01 18:33:58 pasky Exp $
 
 ----------------------------------------------------------------------
 --  Local configuration
@@ -105,6 +105,11 @@ function goto_url_hook (url, current_url)
     elseif match ("fm:", url) then
         url = plusify (strip (strsub (url, 4)))
         return "http://www.freshmeat.net/search/?q="..url
+
+    -- E2 search.
+    elseif match ("e2:", url) then
+        url = plusify (strip (strsub (url, 4)))
+        return "http://www.everything2.org/?node="..url
  
     -- RFC retreiving by number.
     elseif match ("rfc:", url) then

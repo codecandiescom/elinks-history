@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.11 2003/12/04 11:11:04 zas Exp $ */
+/* $Id: cgi.c,v 1.12 2003/12/05 17:10:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,9 +246,12 @@ execute_cgi(struct connection *conn)
 		info->sent_version.major = 1;
 		info->sent_version.minor = 0;
 		info->close = 1;
+
+		close(pipe_read[1]); close(pipe_write[0]);
 		conn->cgi_pipes[0] = pipe_read[0];
 		conn->cgi_pipes[1] = pipe_write[1];
 		conn->socket = conn->cgi_pipes[0];
+
 		send_request(conn);
 		return 0;
 	}

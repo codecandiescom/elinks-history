@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.c,v 1.1 2003/08/01 17:28:37 zas Exp $ */
+/* $Id: formsmem.c,v 1.2 2003/08/01 18:14:49 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -7,6 +7,10 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef FORMS_MEMORY
+
+#include <stdio.h>
 
 #include "elinks.h"
 
@@ -20,7 +24,6 @@
 #include "util/secsave.h"
 #include "util/string.h"
 
-#ifdef FORMS_MEMORY
 INIT_LIST_HEAD(saved_forms);
 
 static int loaded = 0;
@@ -85,6 +88,7 @@ load_saved_forms(void)
 
 			add_to_list_bottom(*form->submit, sv);
 		}
+
 		add_to_list_bottom(saved_forms, form);
 	}
 
@@ -275,4 +279,5 @@ free_form(struct formsmem_data *form)
         if (form->submit) mem_free(form->submit);
         mem_free(form);
 }
+
 #endif /* FORMS_MEMORY */

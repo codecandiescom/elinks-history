@@ -1,8 +1,8 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formsmem.h,v 1.1 2003/08/01 17:28:37 zas Exp $ */
+/* $Id: formsmem.h,v 1.2 2003/08/01 18:14:49 jonas Exp $ */
 
-#ifndef EL__FORMSMEM_H
-#define EL__FORMSMEM_H
+#ifndef EL__FORMSMEM_FORMSMEM_H
+#define EL__FORMSMEM_FORMSMEM_H
 
 #include "util/lists.h"
 
@@ -24,4 +24,4 @@ int remember_form(struct formsmem_data *fmem_data);
 void free_formsmemory(void);
 void free_form(struct formsmem_data *fmem_data);
 
-#endif /* EL__FORMSMEM_H */
+#endif /* EL__FORMSMEM_FORMSMEM_H */

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.292 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: uri.c,v 1.293 2004/11/10 19:57:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,6 +267,10 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	{
 		uri->host = prefix_end;
 		uri->hostlen = host_end - prefix_end;
+
+		/* Trim trailing '.'s */
+		if (uri->hostlen && uri->host[uri->hostlen - 1] == '.')
+			return URI_ERRNO_TRAILING_DOTS;
 	}
 
 	if (*host_end == ':') { /* we have port here */
@@ -1071,6 +1075,20 @@ parse_uri:
 		insert_in_string(&newurl, uri.protocollen + 1, "//", 2);
 		goto parse_uri;
 
+	case URI_ERRNO_TRAILING_DOTS:
+	{
+		/* Trim trailing '.'s */
+		unsigned char *from = uri.host + uri.hostlen;
+		unsigned char *to = from;
+
+		assert(uri.host < to && to[-1] == '.' && *from != '.');
+
+		while (uri.host < to && to[-1] == '.') to--;
+
+		assert(to < from);
+		memmove(to, from, strlen(from) + 1);
+		goto parse_uri;
+	}
 	case URI_ERRNO_NO_PORT_COLON:
 		assert(uri.portlen == 0
 		       && uri.string < uri.port

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.305 2004/12/19 14:49:27 pasky Exp $ */
+/* $Id: link.c,v 1.306 2004/12/19 14:56:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,12 +57,12 @@ current_link_evhook(struct document_view *doc_view, enum script_event_hook_type 
 
 	assert(doc_view && doc_view->vs);
 	link = get_current_link(doc_view);
-	if (!link) return;
-	if (!link->event_hooks) return;
+	if (!link) return -1;
+	if (!link->event_hooks) return -1;
 
 	/* Prevent assertion failure in ecmascript_eval(), may be incorrect.
 	 * --Zas */
-	if (!doc_view->vs->ecmascript) return;
+	if (!doc_view->vs->ecmascript) return -1;
 
 	foreach (evhook, *link->event_hooks) {
 		struct string src = INIT_STRING(evhook->src, strlen(evhook->src));

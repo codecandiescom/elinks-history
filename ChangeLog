@@ -1,3 +1,10 @@
+Wed Jan 22 00:49:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/download.c, sched/download.h, viewer/text/view.c:
+
+	Made create_download_file() asynchronous and its users as well ---
+	preparation for the smart download dialog implementation.  
+
 Mon Jan 20 18:02:43 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* acconfig.h, configure.in:

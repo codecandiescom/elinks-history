@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.116 2004/09/20 23:11:44 pasky Exp $ */
+/* $Id: parser.c,v 1.117 2004/09/20 23:23:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,6 +182,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
 	struct selector_pkg *pkg = NULL;
+	struct css_selector *prev_element_sel = NULL;
+	struct css_selector *prev_specific_sel = NULL;
 	int last_fragment = 0;
 
 	/* FIXME: element can be even '*' --pasky */
@@ -283,7 +285,12 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		} else if (reltype == CSR_SPECIFITY) {
 			/* We append under the last fragment. */
-			selector = get_css_selector(&pkg->selector->leaves,
+			struct css_selector *base_sel = last_specific_selector;
+
+			if (!base_sel) base_sel = last_element_selector;
+			assert(base_sel);
+
+			selector = get_css_selector(&base_sel->leaves,
 			                            seltype,
 						    last_token.string,
 						    last_token.length);
@@ -291,7 +298,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 			selector->relation = reltype;
 
-		} else {
+		} else /* CSR_PARENT || CSR_ANCESTOR */ {
 			/* We - in the perlish speak - unshift in front
 			 * of the previous selector fragment and reparent
 			 * it to the upcoming one. */
@@ -301,11 +308,22 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 					last_token.length);
 			if (!selector) continue;
 
-			add_to_list(selector->leaves, pkg->selector);
-			pkg->selector->relation = reltype;
+			assert(last_element_selector);
+			add_to_list(selector->leaves, last_element_selector);
+			last_element_selector->relation = reltype;
 		}
 
 		pkg->selector = selector;
+
+
+		/* Record the selector fragment for future generations */
+
+		if (reltype == CSR_SPECIFITY) {
+			prev_specific_selector = selector;
+		} else {
+			prev_element_selector = selector;
+			prev_specific_selector = NULL;
+		}
 
 
 		/* What to do next */
@@ -314,10 +332,16 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			/* Another selector hooked to these properties. */
 			skip_scanner_token(scanner);
 			pkg = NULL; last_fragment = 0;
+			prev_element_selector = NULL;
+			prev_specific_selector = NULL;
+
 		} else if (token->type == '{') {
 			/* End of selector list. */
 			pkg = NULL; last_fragment = 0;
+			prev_element_selector = NULL;
+			prev_specific_selector = NULL;
 			break;
+
 		} /* else Another selector fragment probably coming up. */
 	}
 

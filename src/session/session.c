@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.94 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: session.c,v 1.95 2003/06/08 22:11:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1602,7 +1602,7 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 			send_event(ses, ev);
 			break;
 		default:
-			error("ERROR: unknown event");
+			error(_("Unknown event.", tab->term));
 	}
 }
 

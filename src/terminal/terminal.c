@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.31 2003/06/08 10:49:29 zas Exp $ */
+/* $Id: terminal.c,v 1.32 2003/06/08 22:11:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 
 #include "main.h"
 #include "dialogs/menu.h" /* XXX */
+#include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "lowlevel/timer.h"
@@ -239,7 +240,8 @@ in_term(struct terminal *term)
 	r = read(term->fdin, iq + term->qlen, term->qfreespace);
 	if (r <= 0) {
 		if (r == -1 && errno != ECONNRESET)
-			error("ERROR: error %d on terminal: could not read event", errno);
+			error(_("Could not read event: %d (%s)", term),
+			      errno, (unsigned char *) strerror(errno));
 		destroy_terminal(term);
 		return;
 	}
@@ -257,7 +259,7 @@ test_queue:
 	    && ev->ev != EV_KBD
 	    && ev->ev != EV_MOUSE
 	    && ev->ev != EV_ABORT) {
-		error("ERROR: error on terminal: bad event %d", ev->ev);
+		error(_("Bad event %d", term), ev->ev);
 		goto mm;
 	}
 
@@ -294,7 +296,7 @@ test_queue:
 			}
 
 			if (badchar) {
-				error("WARNING: terminal name contains illicit chars.\n");
+				error(_("Warning: terminal name contains illicit chars.", term));
 				strcat(name, "_template_");
 			} else {
 				strcat(name, term->term);
@@ -316,7 +318,7 @@ test_queue:
 
 send_redraw:
 		if (ev->x < 0 || ev->y < 0) {
-			error("ERROR: bad terminal size: %d, %d",
+			error(_("Bad terminal size: %d, %d", term),
 			      (int) ev->x, (int) ev->y);
 			goto mm;
 		}

@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.15 2003/04/19 17:27:02 zas Exp $ */
+/* $Id: cmdline.c,v 1.16 2003/06/08 22:11:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 
 				if (err) {
 					if (err[0])
-						error(gettext("Error parsing option %s: %s"), argv[-1], err);
+						error(gettext("Cannot parse option %s: %s"), argv[-1], err);
 
 					return NULL;
 				}

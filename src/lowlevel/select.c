@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.30 2003/06/08 10:49:27 zas Exp $ */
+/* $Id: select.c,v 1.31 2003/06/08 22:11:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,10 +30,11 @@
 #include "elinks.h"
 
 #include "document/cache.h"
-#include "terminal/terminal.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "lowlevel/ttime.h"
+#include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
 
@@ -337,7 +338,8 @@ select_loop(void (*init)(void))
 			critical_section = 0;
 			uninstall_alarm();
 			if (errno != EINTR)
-				error("ERROR: select failed: %d", errno);
+				error(gettext("select() failed: %d (%s)"),
+				      errno, (unsigned char *) strerror(errno));
 			continue;
 		}
 

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.6 2003/06/08 11:38:41 pasky Exp $ */
+/* $Id: signals.c,v 1.7 2003/06/08 22:11:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 /* This does not deserve to survive. Gotta be moved... somewhere else.
  * 'nuff said. --pasky */
 #include "dialogs/menu.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
 #include "terminal/kbd.c"
@@ -231,7 +232,7 @@ static void
 got_signal(int sig)
 {
 	if (sig >= NUM_SIGNALS || sig < 0) {
-		error("ERROR: bad signal number: %d", sig);
+		error(gettext("Bad signal number: %d"), sig);
 		return;
 	}
 

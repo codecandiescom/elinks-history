@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.30 2003/06/05 15:28:03 zas Exp $ */
+/* $Id: interlink.c,v 1.31 2003/06/08 22:11:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 
 #include "elinks.h"
 
+#include "intl/gettext/libintl.h"
 #include "lowlevel/af_unix.h"
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
@@ -231,7 +232,8 @@ again:
 	}
 
 	if (listen(s_unix_fd, 100)) {
-		error("ERROR: listen failed: %d", errno);
+		error(gettext("listen() failed: %d (%s)"),
+		      errno, (unsigned char *) strerror(errno));
 
 		mem_free(s_unix); s_unix = NULL;
 		close(s_unix_fd); s_unix_fd = -1;

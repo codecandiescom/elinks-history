@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.16 2003/06/08 10:49:29 zas Exp $ */
+/* $Id: dump.c,v 1.17 2003/06/08 22:11:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ nextfrag:
 						detach_connection(stat, dump_pos);
 
 						if (w < 0)
-							error(gettext("Error writing to stdout: %s."),
+							error(gettext("Can't write to stdout: %s"),
 							      (unsigned char *) strerror(errno));
 						else
 							error(gettext("Can't write to stdout."));
@@ -151,7 +151,7 @@ nextfrag:
 	if (stat->state != S_OK) {
 		unsigned char *m = get_err_msg(stat->state, NULL);
 
-		error("%s\n", m);
+		error("%s", m);
 		retval = RET_ERROR;
 		goto terminate;
 	}

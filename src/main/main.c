@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.95 2003/06/08 11:38:40 pasky Exp $ */
+/* $Id: main.c,v 1.96 2003/06/08 22:11:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ init(void)
 	/* XXX: OS/2 has some stupid bug and the pipe must be created before
 	 * socket :-/. -- Mikulas */
 	if (check_terminal_pipes()) {
-		error("ERROR: can't create pipe for internal communication");
+		error(gettext("Cannot create a pipe for internal communication."));
 		goto fatal_error;
 	}
 

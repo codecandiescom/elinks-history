@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.300 2004/07/13 19:51:41 zas Exp $ */
+/* $Id: download.c,v 1.301 2004/07/13 19:53:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -785,46 +785,13 @@ resume_download(void *ses, unsigned char *file)
 }
 
 
-static void tp_cancel(void *);
-
-
-static void continue_download_do(struct terminal *, int, void *, int);
-
 struct codw_hop {
 	struct type_query *type_query;
 	unsigned char *real_file;
 	unsigned char *file;
 };
 
-static void
-continue_download(void *data, unsigned char *file)
-{
-	struct type_query *type_query = data;
-	struct codw_hop *codw_hop = mem_calloc(1, sizeof(struct codw_hop));
-
-	if (!codw_hop) {
-		tp_cancel(type_query);
-		return;
-	}
-
-	if (type_query->prog) {
-		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(type_query->uri);
-		if (!file) {
-			mem_free(codw_hop);
-			tp_cancel(type_query);
-			return;
-		}
-	}
-
-	codw_hop->type_query = type_query;
-	codw_hop->file = file;
-
-	kill_downloads_to_file(file);
-
-	create_download_file(type_query->ses->tab->term, file, &codw_hop->real_file,
-			     !!type_query->prog, 0, continue_download_do, codw_hop);
-}
+static void tp_cancel(void *);
 
 static void
 continue_download_do(struct terminal *term, int fd, void *data, int resume)
@@ -865,6 +832,36 @@ cancel:
 	if (type_query->prog) mem_free_if(codw_hop->file);
 	tp_cancel(type_query);
 	mem_free(codw_hop);
+}
+
+static void
+continue_download(void *data, unsigned char *file)
+{
+	struct type_query *type_query = data;
+	struct codw_hop *codw_hop = mem_calloc(1, sizeof(struct codw_hop));
+
+	if (!codw_hop) {
+		tp_cancel(type_query);
+		return;
+	}
+
+	if (type_query->prog) {
+		/* FIXME: get_temp_name() calls tempnam(). --Zas */
+		file = get_temp_name(type_query->uri);
+		if (!file) {
+			mem_free(codw_hop);
+			tp_cancel(type_query);
+			return;
+		}
+	}
+
+	codw_hop->type_query = type_query;
+	codw_hop->file = file;
+
+	kill_downloads_to_file(file);
+
+	create_download_file(type_query->ses->tab->term, file, &codw_hop->real_file,
+			     !!type_query->prog, 0, continue_download_do, codw_hop);
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.346 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: http.c,v 1.347 2004/11/07 17:39:45 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -764,7 +764,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		if (!output) break;
 
 		did_read = read_encoded(conn->stream, output + *new_len,
-					init ? PIPE_BUF / 4 : to_read); /* on init don't read too much */
+					init ? PIPE_BUF / 8 : to_read); /* on init don't read too much */
 		if (did_read > 0) *new_len += did_read;
 		else if (did_read == -1) {
 			mem_free_set(&output, NULL);

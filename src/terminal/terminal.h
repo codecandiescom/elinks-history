@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.3 2003/05/04 17:51:07 pasky Exp $ */
+/* $Id: terminal.h,v 1.4 2003/05/04 18:49:18 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -190,8 +190,5 @@ void do_terminal_function(struct terminal *, unsigned char, unsigned char *);
 void beep_terminal(struct terminal *);
 
 void term_send_event(struct terminal *, struct event *);
-/*
-#define term_send_event(terminal, event) ((struct window *) &(terminal)->windows)->next->handler((terminal)->windows.next, (event), 0)
-*/
 
 #endif

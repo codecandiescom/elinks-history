@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.14 2003/11/16 00:19:13 zas Exp $ */
+/* $Id: memlist.c,v 1.15 2003/11/26 13:39:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ add_one_to_ml(struct memory_list **ml, void *p)
 
 
 /* Free elements and memory list.
- * It ignores NULL pointers. */
+ * It returns safely if passed a NULL pointer. */
 void
 freeml(struct memory_list *ml)
 {

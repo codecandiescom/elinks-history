@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.164 2004/12/27 00:48:36 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.165 2004/12/27 00:51:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -513,9 +513,6 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct uri *uri;
 	static time_t ratelimit_start;
 	static int ratelimit_count;
-	struct jsval_property prop;
-
-	set_prop_undef(&prop);
 
 	if (argc < 1) return JS_TRUE;
 
@@ -548,7 +545,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	    && !get_cmd_opt_bool("anonymous")
 	    && can_open_in_new(ses->tab->term)) {
 		open_uri_in_new_window(ses, uri, ENV_ANY);
-		set_prop_boolean(&prop, 1);
+		boolean_to_jsval(ctx, rval, 1);
 	} else {
 		/* When opening a new tab, we might get rerendered, losing our
 		 * context and triggerring a disaster, so postpone that. */
@@ -559,13 +556,14 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 			deo->uri = get_uri_reference(uri);
 			register_bottom_half((void (*)(void *)) delayed_open,
 			                     deo);
-			set_prop_boolean(&prop, 1);
+			boolean_to_jsval(ctx, rval, 1);
+		} else {
+			undef_to_jsval(ctx, rval);
 		}
 	}
 
 	done_uri(uri);
 
-	value_to_jsval(ctx, rval, &prop);
 	return JS_TRUE;
 }
 

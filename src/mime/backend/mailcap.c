@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.33 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: mailcap.c,v 1.34 2003/06/08 15:09:31 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -272,20 +272,11 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 	FILE *file = fopen(filename, "r");
 	unsigned char *line = NULL;
 	size_t linelen = MAX_STR_LEN;
-	size_t offset = 0;
 	int lineno = 1;
 
 	if (!file) return;
 
-	line = mem_alloc(linelen);
-	if (!line) {
-		fclose(file);
-		return;
-	}
-
-	/* Read the file line by line. If a line ends with '\' the next line is
-	 * read too increasing @line if necessary. */
-	for (; fgets(line + offset, linelen - offset, file) || offset; lineno++) {
+	while ((line = file_read_line(line, &linelen, file, &lineno))) {
 		struct mailcap_entry *entry;
 		unsigned char *type;
 		unsigned char *command;
@@ -293,41 +284,6 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 
 		/* Ignore comments */
 		if (*line == '#') continue;
-
-		linepos = strchr(line + offset, '\n');
-		if (linepos) {
-			/* A whole line was read. Fetch next into the buffer if
-			 * the line is 'continued'. */
-			unsigned char *end = linepos - 1;
-
-			while (line < end && isspace(*end))
-				end--;
-
-			if (*end == '\\') {
-				offset = linepos - line - 1;
-				continue;
-			} else {
-				offset = 0;
-				*(end+1) = '\0';
-			}
-		} else {
-			/* Test if the line buffer should be increase because
-			 * it was continued and could not fit. */
-			int c = getc(file);
-
-			if (c != EOF) {
-				/* Not on last line. */
-				ungetc(c, file);
-				offset = linelen - 1;
-				linelen += MAX_STR_LEN;
-
-				linepos = mem_realloc(line, linelen);
-				if (!linepos)
-					break;
-				line = linepos;
-				continue;
-			}
-		}
 
 		linepos = line;
 

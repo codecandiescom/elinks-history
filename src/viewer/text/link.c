@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.260 2004/06/26 22:34:42 pasky Exp $ */
+/* $Id: link.c,v 1.261 2004/06/26 22:57:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,10 +550,16 @@ next_in_dir(struct document_view *doc_view, int current, int dir_x, int dir_y)
 					goto chose_link;
 
 				/* Consider taking a backup? */
-				get_link_x_bounds(link, y, NULL, &l_max_x);
-				take_backup = l_max_x < min_x;
-				if (take_backup || !backup)
-					backup = link;
+				/* Some links can be totally out of order here
+				 * ie. in tables or when using tabindex. */
+				if (y >= link->points[0].y
+				    && y <= link->points[link->npoints - 1].y) {
+					get_link_x_bounds(link, y, NULL,
+					                  &l_max_x);
+					take_backup = l_max_x < min_x;
+					if (take_backup || !backup)
+						backup = link;
+				}
 
 				link++;
 			}

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.8 2003/07/27 15:19:26 jonas Exp $ */
+/* $Id: draw.c,v 1.9 2003/07/27 15:24:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,6 +77,7 @@ set_line(struct terminal *t, int x, int y, int l, chr *line)
 	t->dirty = 1;
 }
 
+#if 0
 void
 set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 {
@@ -93,6 +94,7 @@ set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
 	}
 	t->dirty = 1;
 }
+#endif
 
 void
 fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)

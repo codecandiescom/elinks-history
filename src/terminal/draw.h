@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.3 2003/05/04 19:39:51 pasky Exp $ */
+/* $Id: draw.h,v 1.4 2003/07/27 15:24:09 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -42,7 +42,6 @@ unsigned get_char(struct terminal *, int, int);
 void set_color(struct terminal *, int, int, unsigned);
 void set_only_char(struct terminal *, int, int, unsigned);
 void set_line(struct terminal *, int, int, int, chr *);
-void set_line_color(struct terminal *, int, int, int, unsigned);
 void fill_area(struct terminal *, int, int, int, int, unsigned);
 void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
 void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);

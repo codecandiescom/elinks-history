@@ -415,6 +415,7 @@ struct translation translation_english [] = {
   {T_FOLDER_NAME, "Folder name"},
   {T_MOVE, "Move"},
   {T_AFTER_RESUME, "after resume"},
+  {T_TOGGLE_DISPLAY, "Toggle display"},
   {0, NULL}
 };
 
@@ -833,6 +834,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -1251,6 +1253,7 @@ struct translation translation_bulgarian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -1669,6 +1672,7 @@ struct translation translation_catalan [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -2087,6 +2091,7 @@ struct translation translation_croatian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -2505,6 +2510,7 @@ struct translation translation_czech [] = {
   {T_FOLDER_NAME, "N·zev sloæky"},
   {T_MOVE, "P¯esunout"},
   {T_AFTER_RESUME, "po poslednÌm nav·z·nÌ"},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -2923,6 +2929,7 @@ struct translation translation_danish [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -3341,6 +3348,7 @@ struct translation translation_dutch [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -3759,6 +3767,7 @@ struct translation translation_estonian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -4177,6 +4186,7 @@ struct translation translation_finnish [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -4595,6 +4605,7 @@ struct translation translation_french [] = {
   {T_FOLDER_NAME, "Nom du dossier"},
   {T_MOVE, "DÈplacer"},
   {T_AFTER_RESUME, "aprËs reprise"},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -5013,6 +5024,7 @@ struct translation translation_galician [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -5431,6 +5443,7 @@ struct translation translation_german [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -5849,6 +5862,7 @@ struct translation translation_greek [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -6267,6 +6281,7 @@ struct translation translation_hungarian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -6685,6 +6700,7 @@ struct translation translation_icelandic [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -7103,6 +7119,7 @@ struct translation translation_indonesian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -7521,6 +7538,7 @@ struct translation translation_italian [] = {
   {T_FOLDER_NAME, "Nome cartella"},
   {T_MOVE, "Sposta"},
   {T_AFTER_RESUME, "dopo il resume"},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -7939,6 +7957,7 @@ struct translation translation_lithuanian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -8357,6 +8376,7 @@ struct translation translation_norwegian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -8775,6 +8795,7 @@ struct translation translation_polish [] = {
   {T_FOLDER_NAME, "Nazwa foldera"},
   {T_MOVE, "Przenie∂"},
   {T_AFTER_RESUME, "po wznowieniu"},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -9193,6 +9214,7 @@ struct translation translation_portuguese [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -9611,6 +9633,7 @@ struct translation translation_romanian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -10029,6 +10052,7 @@ struct translation translation_russian [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -10447,6 +10471,7 @@ struct translation translation_slovak [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -10865,6 +10890,7 @@ struct translation translation_spanish [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -11283,6 +11309,7 @@ struct translation translation_swedish [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -11701,6 +11728,7 @@ struct translation translation_turkish [] = {
   {T_FOLDER_NAME, NULL},
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 
@@ -12119,6 +12147,7 @@ struct translation translation_ukrainian [] = {
   {T_FOLDER_NAME, "∂Õ'— –¡–À…"},
   {T_MOVE, "≈“≈Õ¶”‘…‘…"},
   {T_AFTER_RESUME, "–¶”Ã— –“œƒœ◊÷≈ŒŒ—"},
+  {T_TOGGLE_DISPLAY, NULL},
   {0, NULL}
 };
 

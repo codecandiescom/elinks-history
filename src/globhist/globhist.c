@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.14 2002/11/29 22:00:45 pasky Exp $ */
+/* $Id: globhist.c,v 1.15 2002/11/30 01:02:43 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -189,6 +189,7 @@ void
 add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
 	struct global_history_item *history_item;
+	unsigned char *text;
 	int max_globhist_items;
 
 	if (!get_opt_bool("document.history.global.enable"))
@@ -235,9 +236,12 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	add_to_list(global_history.items, history_item);
 	global_history.n++;
 
+	text = get_opt_int("document.history.global.display_type")
+		? history_item->title : history_item->url;
+
 	/* Deleted in history_dialog_clear_list() */
 	history_item->box_item = mem_calloc(1, sizeof(struct listbox_item)
-					       + strlen(history_item->url) + 1);
+					       + strlen(text) + 1);
 	if (!history_item->box_item) return;
 	init_list(history_item->box_item->child);
 	history_item->box_item->visible = 1;
@@ -247,7 +251,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 	history_item->box_item->box = &gh_boxes;
 	history_item->box_item->udata = (void *) history_item;
 
-	strcpy(history_item->box_item->text, history_item->url);
+	strcpy(history_item->box_item->text, text);
 
 	add_to_list(gh_box_items, history_item->box_item);
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.120 2002/11/29 21:47:50 pasky Exp $ */
+/* $Id: options.c,v 1.121 2002/11/30 01:02:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -771,6 +771,12 @@ register_options()
 	add_opt_int("document.history.global",
 		"max_items", 0, 1, MAXINT, 1024,
 		"Maximum number of entries in the global history.");
+
+	add_opt_int("document.history.global",
+		"display_type", 0, 0, 1, 0,
+		"What to display in global history dialog:\n"
+		"0 is URLs\n"
+		"1 is page titles");
 
 	add_opt_bool("document.history",
 		"keep_unhistory", 0, 1,

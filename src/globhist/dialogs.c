@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.8 2002/10/05 09:20:12 pasky Exp $ */
+/* $Id: dialogs.c,v 1.9 2002/11/30 01:02:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 
 #ifdef GLOBHIST
 
-#define HISTORY_BOX_IND 6
+#define HISTORY_BOX_IND 7
 
 struct history_dialog_list_item {
 	struct history_dialog_list_item *next;
@@ -192,6 +192,49 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_search_dialog(dlg->win->term, dlg,
 			     (struct session *) dlg->dlg->udata);
+	return 0;
+}
+
+static int
+push_toggle_display_button(struct dialog_data *dlg, struct widget_data *di)
+{
+	struct global_history_item *item;
+	int *display_type;
+
+	display_type = &get_opt_int("document.history.global.display_type");
+	*display_type = !*display_type;
+
+	foreach (item, global_history.items) {
+		struct listbox_item *b2;
+		unsigned char *text = *display_type ? item->title : item->url;
+
+		b2 = mem_realloc(item->box_item,
+				sizeof(struct listbox_item) + strlen(text) + 1);
+		if (!b2) continue;
+
+		if (b2 != item->box_item) {
+			struct listbox_data *box;
+
+			/* We are being relocated, so update everything. */
+			/* If there'll be ever any hiearchy, this will have to
+			 * be extended by root/child handling. */
+			b2->next->prev = b2;
+			b2->prev->next = b2;
+			foreach (box, *b2->box) {
+				if (box->sel == item->box_item) box->sel = b2;
+				if (box->top == item->box_item) box->top = b2;
+			}
+			item->box_item = b2;
+			item->box_item->text =
+				((unsigned char *) item->box_item
+				 + sizeof(struct listbox_item));
+		}
+
+		strcpy(item->box_item->text, text);
+	}
+
+	update_all_history_dialogs();
+
 	return 0;
 }
 
@@ -412,13 +455,18 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
-	d->items[4].fn = push_clear_button;
-	d->items[4].text = TEXT(T_CLEAR);
+	d->items[4].fn = push_toggle_display_button;
+	d->items[4].text = TEXT(T_TOGGLE_DISPLAY);
 
 	d->items[5].type = D_BUTTON;
-	d->items[5].gid = B_ESC;
-	d->items[5].fn = cancel_dialog;
-	d->items[5].text = TEXT(T_CLOSE);
+	d->items[5].gid = B_ENTER;
+	d->items[5].fn = push_clear_button;
+	d->items[5].text = TEXT(T_CLEAR);
+
+	d->items[6].type = D_BUTTON;
+	d->items[6].gid = B_ESC;
+	d->items[6].fn = cancel_dialog;
+	d->items[6].text = TEXT(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

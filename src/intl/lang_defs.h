@@ -415,4 +415,5 @@
 #define T_FOLDER_NAME    411	
 #define T_MOVE    412	
 #define T_AFTER_RESUME    413	
-#define T__N_TEXTS    414	
+#define T_TOGGLE_DISPLAY    414	
+#define T__N_TEXTS    415	

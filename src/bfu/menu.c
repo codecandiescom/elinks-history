@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.241 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: menu.c,v 1.242 2004/07/19 08:05:10 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -274,7 +274,12 @@ scroll_menu(struct menu *menu, int d)
 	while (!mi_is_selectable(menu->items[menu->selected])) {
 		menu->selected += d ? d/abs(d) : 1;
 
-		if (menu->selected < 0 || menu->selected >= menu->size) {
+		if (menu->selected < 0) {
+			menu->selected += menu->size;
+			menu->first = menu->selected - w;
+		}
+
+		if (menu->selected >= menu->size) {
 			menu->selected = -1;
 			menu->first = 0;
 			return;

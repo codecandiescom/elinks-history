@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.18 2004/01/19 06:25:17 jonas Exp $ */
+/* $Id: scanner.c,v 1.19 2004/01/19 06:29:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,9 +78,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		unsigned char *string_end = strchr(string, first_char);
 
 		if (string_end) {
-			/* Get rid of the string delimiters */
-			token->string = string;
-			token->length = string_end - string - 1;
 			string = string_end + 1;
 		} else {
 			token->type = CSS_TOKEN_GARBAGE;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.246 2004/06/12 01:01:32 jonas Exp $ */
+/* $Id: uri.c,v 1.247 2004/06/12 01:07:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -719,6 +719,8 @@ join_urls(struct uri *base, unsigned char *rel)
 	 * expensive since it uses granular allocation scheme. I wouldn't
 	 * personally mind tho' because it would be cleaner. --jonas */
 	if (rel[0] == '#') {
+		/* Strip fragment and post part from the base URI and append
+		 * the fragment string in @rel. */
 		length  = base->fragment
 			? base->fragment - struri(base) - 1
 			: get_real_uri_length(base);
@@ -729,7 +731,10 @@ join_urls(struct uri *base, unsigned char *rel)
 		add_to_strn(&uristring, rel);
 
 		return normalize_uri_reparse(uristring);
+
 	} else if (rel[0] == '?') {
+		/* Strip query, fragment and post part from the base URI and
+		 * append the query string in @rel. */
 		length  = base->fragment
 			? base->fragment - struri(base) - 1
 			: get_real_uri_length(base);
@@ -743,6 +748,7 @@ join_urls(struct uri *base, unsigned char *rel)
 		add_to_strn(&uristring, rel);
 
 		return normalize_uri_reparse(uristring);
+
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		if (!get_protocol_need_slashes(base->protocol))
 			return NULL;

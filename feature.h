@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.36 2004/01/29 13:10:37 jonas Exp $ */
+/* $Id: feature.h,v 1.37 2004/02/20 10:56:25 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -348,8 +348,8 @@
  * The code is still very experimental and lacks much work such as tab
  * completion.
  *
- * Default: enabled */
+ * Default: disabled */
 
-#define CONFIG_EXMODE
+/* #define CONFIG_EXMODE */
 
 #endif

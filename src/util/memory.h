@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.25 2004/04/19 15:56:49 zas Exp $ */
+/* $Id: memory.h,v 1.26 2004/04/29 23:02:42 jonas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -26,7 +26,7 @@
 
 #else
 
-#ifndef FASTMEM
+#ifndef CONFIG_FASTMEM
 
 /* Cygwin wants some size_t definition here... let's try to make it happy
  * then. Hrmpf. */
@@ -80,7 +80,7 @@ void *mem_realloc(void *, size_t);
 
 #endif /* HAVE_ALLOCA */
 
-#endif /* FASTMEM */
+#endif /* CONFIG_FASTMEM */
 
 #endif /* LEAK_DEBUG */
 

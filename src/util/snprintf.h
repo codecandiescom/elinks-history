@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.13 2003/09/03 16:03:11 zas Exp $ */
+/* $Id: snprintf.h,v 1.14 2004/04/29 23:02:42 jonas Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -21,7 +21,7 @@
 #endif
 #endif
 
-#ifdef USE_OWN_LIBC
+#ifdef CONFIG_OWN_LIBC
 #undef HAVE_VSNPRINTF
 #undef HAVE_C99_VSNPRINTF
 #undef HAVE_SNPRINTF

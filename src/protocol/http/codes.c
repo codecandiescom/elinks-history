@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.28 2004/04/19 15:56:48 zas Exp $ */
+/* $Id: codes.c,v 1.29 2004/04/29 23:02:42 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -118,13 +118,13 @@ get_http_error_document(struct terminal *term, struct uri *uri, int code)
 		" <head><title>%s</title></head>\n"
 		" <body>\n"
 		"  <h1 align=\"left\">%s: %s</h1>\n"
-#ifndef ELINKS_SMALL
+#ifndef CONFIG_SMALL
 		"  <hr />\n"
 		"  <p>\n"
 #endif
 		, title, title, codestr);
 
-#ifndef ELINKS_SMALL
+#ifndef CONFIG_SMALL
 	add_format_to_string(&string, _(
 		"  An error occurred on the server while fetching the document you\n"
 		"  requested. Moreover, the server did not send back any explanation of what\n"
@@ -143,7 +143,7 @@ get_http_error_document(struct terminal *term, struct uri *uri, int code)
 		"  URI: <a href=\"%s\">%s</a>\n", struri(uri), struri(uri));
 #endif
 	add_format_to_string(&string,
-#ifndef ELINKS_SMALL
+#ifndef CONFIG_SMALL
 		" </p>\n"
 		" <hr />\n"
 #endif

@@ -1,4 +1,4 @@
-/* $Id: stub.h,v 1.6 2004/03/09 12:24:36 jonas Exp $ */
+/* $Id: stub.h,v 1.7 2004/04/29 23:02:41 jonas Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
@@ -6,11 +6,11 @@
 #include <string.h>
 #if 0
 #ifdef CONFIG_DEBUG
-#define USE_OWN_LIBC
+#define CONFIG_OWN_LIBC
 #endif
 #endif
 
-#ifdef USE_OWN_LIBC
+#ifdef CONFIG_OWN_LIBC
 
 #undef HAVE_MEMMOVE
 #undef HAVE_BCOPY /* prevent using bcopy() stub for memmove() */
@@ -23,7 +23,7 @@
 #undef HAVE_STRNCASECMP
 #undef HAVE_STRSTR
 
-#endif /* USE_OWN_LIBC */
+#endif /* CONFIG_OWN_LIBC */
 
 
 /* These stubs are exception to our "Use (unsigned char *)!" rule. This is

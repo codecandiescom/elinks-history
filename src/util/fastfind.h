@@ -1,10 +1,10 @@
-/* $Id: fastfind.h,v 1.13 2004/02/13 17:52:48 zas Exp $ */
+/* $Id: fastfind.h,v 1.14 2004/04/29 23:02:42 jonas Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
 
 /* Whether to use these routines or not. */
-#ifndef ELINKS_SMALL
+#ifndef CONFIG_SMALL
 #define USE_FASTFIND 1
 #else
 #undef USE_FASTFIND

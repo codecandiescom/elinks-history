@@ -40,17 +40,17 @@
 #undef LIBDIR
 
 /* Enable direct use of system allocation functions */
-#undef FASTMEM
+#undef CONFIG_FASTMEM
 
 /* Force use of internal functions instead of those of system libc */
-#undef USE_OWN_LIBC
+#undef CONFIG_OWN_LIBC
 
 /* Define to 1 if we should include a generic backtrace printing infrastructure */
 /* (you will still need some support from the libc) */
 #undef CONFIG_BACKTRACE
 
 /* Define to 1 to reduce binary size as far as possible. */
-#undef ELINKS_SMALL
+#undef CONFIG_SMALL
 
 /* Define to 1 to enable support for SMB protocol (requires smbclient). */
 #undef CONFIG_SMB

@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.43 2004/04/23 19:20:18 pasky Exp $ */
+/* $Id: error.h,v 1.44 2004/04/29 23:02:42 jonas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -62,8 +62,8 @@ void usrerror(unsigned char *fmt, ...);
  * recovery path, see below if_assert_failed. */
 
 #undef assert
-#ifdef FASTMEM
-#define assert(x) /* We don't do anything in FASTMEM mode. */
+#ifdef CONFIG_FASTMEM
+#define assert(x) /* We don't do anything in CONFIG_FASTMEM mode. */
 #else
 #define assert(x) \
 do { if (!assert_failed && (assert_failed = !(x))) { \
@@ -81,8 +81,8 @@ do { if (!assert_failed && (assert_failed = !(x))) { \
 
 #undef assertm
 #ifdef HAVE_VARIADIC_MACROS
-#ifdef FASTMEM
-#define assertm(x,m...) /* We don't do anything in FASTMEM mode. */
+#ifdef CONFIG_FASTMEM
+#define assertm(x,m...) /* We don't do anything in CONFIG_FASTMEM mode. */
 #else
 #define assertm(x,m...) \
 do { if (!assert_failed && (assert_failed = !(x))) { \
@@ -90,7 +90,7 @@ do { if (!assert_failed && (assert_failed = !(x))) { \
 } } while (0)
 #endif
 #else /* HAVE_VARIADIC_MACROS */
-#ifdef FASTMEM
+#ifdef CONFIG_FASTMEM
 #define assertm elinks_assertm
 #else
 #define assertm errfile = __FILE__, errline = __LINE__, elinks_assertm
@@ -102,13 +102,13 @@ do { if (!assert_failed && (assert_failed = !(x))) { \
  * expression is int (and that's completely fine, I do *NOT* want to see any
  * stinking assert((int)pointer) ! ;-)), so CONFIG_DEBUG (-Werror) and
  * !HAVE_VARIADIC_MACROS won't play well together. Hrm. --pasky */
-#ifdef FASTMEM
+#ifdef CONFIG_FASTMEM
 static inline
 #endif
 void elinks_assertm(int x, unsigned char *fmt, ...)
-#ifdef FASTMEM
+#ifdef CONFIG_FASTMEM
 {
-	/* We don't do anything in FASTMEM mode. Let's hope that the compiler
+	/* We don't do anything in CONFIG_FASTMEM mode. Let's hope that the compiler
 	 * will at least optimize out the @x computation. */
 }
 #else
@@ -118,24 +118,24 @@ void elinks_assertm(int x, unsigned char *fmt, ...)
 
 
 /* To make recovery path possible (assertion failed may not mean end of the
- * world, the execution goes on if we're outside of CONFIG_DEBUG and FASTMEM),
+ * world, the execution goes on if we're outside of CONFIG_DEBUG and CONFIG_FASTMEM),
  * @assert_failed is set to true if the last assert() failed, otherwise it's
  * zero. Note that you must never change assert_failed value, sorry guys.
  *
  * You should never test assert_failed directly anyway. Use if_assert_failed
  * instead, it will attempt to hint compiler to optimize out the recovery path
- * if we're FASTMEM. So it should go like:
+ * if we're CONFIG_FASTMEM. So it should go like:
  *
  * assertm(1 == 1, "The world's gonna blow up!");
  * if_assert_failed { schedule_time_machine(); return; } */
 
-/* In-depth explanation: this restriction is here because in the FASTMEM mode,
+/* In-depth explanation: this restriction is here because in the CONFIG_FASTMEM mode,
  * assert_failed is initially initialized to zero and then not ever touched
  * anymore. So if you change it to non-zero failure, your all further recovery
- * paths will get hit (and since developers usually don't test FASTMEM mode
+ * paths will get hit (and since developers usually don't test CONFIG_FASTMEM mode
  * extensively...). So better don't mess with it, even if you would do that
  * with awareness of this fact. We don't want to iterate over tens of spots all
- * over the code when we chane one detail regarding FASTMEM operation.
+ * over the code when we chane one detail regarding CONFIG_FASTMEM operation.
  *
  * This is not that actual after introduction of if_assert_failed, but it's
  * a safe recommendation anyway, so... ;-) */
@@ -143,7 +143,7 @@ void elinks_assertm(int x, unsigned char *fmt, ...)
 extern int assert_failed;
 
 #undef if_assert_failed
-#ifdef FASTMEM
+#ifdef CONFIG_FASTMEM
 #define if_assert_failed if (0) /* This should be optimalized away. */
 #else
 #define if_assert_failed if (assert_failed && !(assert_failed = 0))

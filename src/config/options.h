@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.99 2004/04/03 17:40:53 jonas Exp $ */
+/* $Id: options.h,v 1.100 2004/04/29 23:02:41 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -214,7 +214,7 @@ extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 /* Hack which permit to disable option descriptions, to reduce elinks binary size.
  * It may of some use for people wanting a very small static non-i18n elinks binary,
  * at time of writing gain is over 25Kbytes. --Zas */
-#ifndef ELINKS_SMALL
+#ifndef CONFIG_SMALL
 #define DESC(x) (x)
 #else
 #define DESC(x) ((unsigned char *) "")

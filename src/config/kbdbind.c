@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.203 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.204 2004/04/29 23:02:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -439,7 +439,7 @@ add_actions_to_string(struct string *string, int *actions,
 }
 
 
-#ifndef ELINKS_SMALL
+#ifndef CONFIG_SMALL
 #define DACT(x) (x)
 #else
 #define DACT(x) (NULL)

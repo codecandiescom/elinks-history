@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.15 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: memory.c,v 1.16 2004/04/29 23:02:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 #include "util/memory.h"
 
 
-#if !defined(LEAK_DEBUG) && !defined(FASTMEM)
+#if !defined(LEAK_DEBUG) && !defined(CONFIG_FASTMEM)
 
 static int alloc_try = 0;
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.50 2003/06/07 15:10:58 pasky Exp $ */
+/* $Id: dialogs.c,v 1.51 2003/06/07 15:25:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,7 +303,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 		return;
 	}
 
-	d->title = N_("Edit");
+	d->title = _("Edit", term);
 	d->fn = layout_edit_dialog;
 	d->udata = option;
 	d->udata2 = ses;
@@ -321,11 +321,11 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = ok_dialog;
-	d->items[1].text = N_("OK");
+	d->items[1].text = _("OK", term);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ESC;
-	d->items[2].text = N_("Cancel");
+	d->items[2].text = _("Cancel", term);
 	d->items[2].fn = cancel_dialog;
 
 	d->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
@@ -502,7 +502,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = N_("Options manager");
+	d->title = _("Options manager", term);
 	d->fn = layout_hierbox_browser;
 	d->handle_event = hierbox_dialog_event_handler;
 	d->abort = option_dialog_abort_handler;
@@ -512,36 +512,36 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_info_button;
 	d->items[0].udata = ses;
-	d->items[0].text = N_("Info");
+	d->items[0].text = _("Info", term);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_edit_button;
 	d->items[1].udata = ses;
-	d->items[1].text = N_("Edit");
+	d->items[1].text = _("Edit", term);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_add_button;
 	d->items[2].udata = ses;
-	d->items[2].text = N_("Add");
+	d->items[2].text = _("Add", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_del_button;
 	d->items[3].udata = ses;
-	d->items[3].text = N_("Delete");
+	d->items[3].text = _("Delete", term);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
 	d->items[4].fn = push_save_button;
 	d->items[4].udata = ses;
-	d->items[4].text = N_("Save");
+	d->items[4].text = _("Save", term);
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ESC;
 	d->items[5].fn = cancel_dialog;
-	d->items[5].text = N_("Close");
+	d->items[5].text = _("Close", term);
 
 	d->items[OP_BOX_IND].type = D_BOX;
 	d->items[OP_BOX_IND].gid = 12;
@@ -762,7 +762,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + sizeof(struct option) + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = N_("Keybinding manager");
+	d->title = _("Keybinding manager", term);
 	d->fn = layout_hierbox_browser;
 	d->handle_event = hierbox_dialog_event_handler;
 	d->abort = kbdbind_dialog_abort_handler;
@@ -772,30 +772,30 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_kbdbind_add_button;
 	d->items[0].udata = ses;
-	d->items[0].text = N_("Add");
+	d->items[0].text = _("Add", term);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_kbdbind_del_button;
 	d->items[1].udata = ses;
-	d->items[1].text = N_("Delete");
+	d->items[1].text = _("Delete", term);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_kbdbind_toggle_display_button;
 	d->items[2].udata = ses;
-	d->items[2].text = N_("Toggle display");
+	d->items[2].text = _("Toggle display", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_kbdbind_save_button;
 	d->items[3].udata = ses;
-	d->items[3].text = N_("Save");
+	d->items[3].text = _("Save", term);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ESC;
 	d->items[4].fn = cancel_dialog;
-	d->items[4].text = N_("Close");
+	d->items[4].text = _("Close", term);
 
 	d->items[KB_BOX_IND].type = D_BOX;
 	d->items[KB_BOX_IND].gid = 12;

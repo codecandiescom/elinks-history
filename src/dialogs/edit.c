@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.26 2003/05/17 21:04:41 miciah Exp $ */
+/* $Id: edit.c,v 1.27 2003/06/07 15:25:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,16 +161,16 @@ do_edit_dialog(struct terminal *term, unsigned char *title,
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = ok_dialog;
-	d->items[2].text = N_("OK");
+	d->items[2].text = _("OK", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = 0;
-	d->items[3].text = N_("Clear");
+	d->items[3].text = _("Clear", term);
 	d->items[3].fn = clear_dialog;
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ESC;
-	d->items[4].text = N_("Cancel");
+	d->items[4].text = _("Cancel", term);
 	d->items[4].data = (void *) when_cancel;
 	d->items[4].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
 

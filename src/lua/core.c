@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.42 2003/06/07 15:10:59 pasky Exp $ */
+/* $Id: core.c,v 1.43 2003/06/07 15:25:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -420,7 +420,7 @@ l_edit_bookmark_dialog(LS)
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
 
-	d->title = N_("Edit bookmark");
+	d->title = _("Edit bookmark", lua_ses->tab->term);
 	d->fn = dialog_fn;
 	d->refresh = (void (*)(void *))dialog_run_lua;
 	d->refresh_data = data;
@@ -436,11 +436,11 @@ l_edit_bookmark_dialog(LS)
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = ok_dialog;
-	d->items[3].text = N_("OK");
+	d->items[3].text = _("OK", lua_ses->tab->term);
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ESC;
 	d->items[4].fn = cancel_dialog;
-	d->items[4].text = N_("Cancel");
+	d->items[4].text = _("Cancel", lua_ses->tab->term);
 	d->items[5].type = D_END;
 	do_dialog(lua_ses->tab->term, d, getml(d, NULL));
 
@@ -567,7 +567,7 @@ l_xdialog(LS)
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
 
-	d->title = N_("User dialog");
+	d->title = _("User dialog", lua_ses->tab->term);
 	d->fn = xdialog_fn;
 	d->refresh = (void (*)(void *))xdialog_run_lua;
 	d->refresh_data = data;
@@ -579,12 +579,12 @@ l_xdialog(LS)
 	d->items[i].type = D_BUTTON;
 	d->items[i].gid = B_ENTER;
 	d->items[i].fn = ok_dialog;
-	d->items[i].text = N_("OK");
+	d->items[i].text = _("OK", lua_ses->tab->term);
 	i++;
 	d->items[i].type = D_BUTTON;
 	d->items[i].gid = B_ESC;
 	d->items[i].fn = cancel_dialog;
-	d->items[i].text = N_("Cancel");
+	d->items[i].text = _("Cancel", lua_ses->tab->term);
 	i++;
 	d->items[i].type = D_END;
 	do_dialog(lua_ses->tab->term, d, getml(d, NULL));

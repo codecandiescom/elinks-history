@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.79 2003/06/07 15:10:58 pasky Exp $ */
+/* $Id: dialogs.c,v 1.80 2003/06/07 15:25:37 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -607,7 +607,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + sizeof(struct bookmark) + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = N_("Bookmark manager");
+	d->title = _("Bookmark manager", term);
 	d->fn = layout_hierbox_browser;
 	d->handle_event = hierbox_dialog_event_handler;
 	d->abort = bookmark_dialog_abort_handler;
@@ -617,43 +617,43 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_goto_button;
 	d->items[0].udata = ses;
-	d->items[0].text = N_("Goto");
+	d->items[0].text = _("Goto", term);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_edit_button;
 	d->items[1].udata = ses;
-	d->items[1].text = N_("Edit");
+	d->items[1].text = _("Edit", term);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_delete_button;
-	d->items[2].text = N_("Delete");
+	d->items[2].text = _("Delete", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_move_button;
-	d->items[3].text = N_("Move");
+	d->items[3].text = _("Move", term);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
 	d->items[4].fn = push_add_folder_button;
-	d->items[4].text = N_("Add folder");
+	d->items[4].text = _("Add folder", term);
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ENTER;
 	d->items[5].fn = push_add_button;
-	d->items[5].text = N_("Add");
+	d->items[5].text = _("Add", term);
 
 	d->items[6].type = D_BUTTON;
 	d->items[6].gid = B_ENTER;
 	d->items[6].fn = push_search_button;
-	d->items[6].text = N_("Search");
+	d->items[6].text = _("Search", term);
 
 	d->items[7].type = D_BUTTON;
 	d->items[7].gid = B_ESC;
 	d->items[7].fn = cancel_dialog;
-	d->items[7].text = N_("Close");
+	d->items[7].text = _("Close", term);
 
 	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;

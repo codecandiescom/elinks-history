@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.60 2003/05/27 21:57:52 pasky Exp $ */
+/* $Id: options.c,v 1.61 2003/06/07 15:25:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop->trans = get_opt_int_tree(term->spec, "transparency");
 	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
-	d->title = N_("Terminal options");
+	d->title = _("Terminal options", term);
 	d->fn = terminal_options_fn;
 	d->udata = termopt_hop;
 	d->refresh = (void (*)(void *)) terminal_options_ok;
@@ -254,17 +254,17 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[10].type = D_BUTTON;
 	d->items[10].gid = B_ENTER;
 	d->items[10].fn = ok_dialog;
-	d->items[10].text = N_("OK");
+	d->items[10].text = _("OK", term);
 
 	d->items[11].type = D_BUTTON;
 	d->items[11].gid = B_ENTER;
 	d->items[11].fn = terminal_options_save;
-	d->items[11].text = N_("Save");
+	d->items[11].text = _("Save", term);
 
 	d->items[12].type = D_BUTTON;
 	d->items[12].gid = B_ESC;
 	d->items[12].fn = cancel_dialog;
-	d->items[12].text = N_("Cancel");
+	d->items[12].text = _("Cancel", term);
 
 	d->items[13].type = D_END;
 
@@ -333,7 +333,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	d = mem_calloc(1, sizeof(struct dialog) + 5 * sizeof(struct widget));
 	if (!d) return;
 
-	d->title = N_("Resize ~terminal");
+	d->title = _("Resize ~terminal", term);
 	d->fn = group_fn;
 	d->udata = resize_texts;
 	d->refresh = (void (*)(void *))do_resize_terminal;
@@ -356,12 +356,12 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = ok_dialog;
-	d->items[2].text = N_("OK");
+	d->items[2].text = _("OK", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ESC;
 	d->items[3].fn = cancel_dialog;
-	d->items[3].text = N_("Cancel");
+	d->items[3].text = _("Cancel", term);
 
 	d->items[4].type = D_END;
 

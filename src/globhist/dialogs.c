@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.26 2003/06/07 14:16:56 pasky Exp $ */
+/* $Id: dialogs.c,v 1.27 2003/06/07 15:25:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 			  + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	d->title = N_("Global history");
+	d->title = _("Global history", term);
 	d->fn = layout_hierbox_browser;
 	d->handle_event = history_dialog_event_handler;
 	d->abort = history_dialog_abort_handler;
@@ -462,37 +462,37 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].gid = B_ENTER;
 	d->items[0].fn = push_goto_button;
 	d->items[0].udata = ses;
-	d->items[0].text = N_("Goto");
+	d->items[0].text = _("Goto", term);
 
 	d->items[1].type = D_BUTTON;
 	d->items[1].gid = B_ENTER;
 	d->items[1].fn = push_info_button;
-	d->items[1].text = N_("Info");
+	d->items[1].text = _("Info", term);
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = push_delete_button;
-	d->items[2].text = N_("Delete");
+	d->items[2].text = _("Delete", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
 	d->items[3].fn = push_search_button;
-	d->items[3].text = N_("Search");
+	d->items[3].text = _("Search", term);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
 	d->items[4].fn = push_toggle_display_button;
-	d->items[4].text = N_("Toggle display");
+	d->items[4].text = _("Toggle display", term);
 
 	d->items[5].type = D_BUTTON;
 	d->items[5].gid = B_ENTER;
 	d->items[5].fn = push_clear_button;
-	d->items[5].text = N_("Clear");
+	d->items[5].text = _("Clear", term);
 
 	d->items[6].type = D_BUTTON;
 	d->items[6].gid = B_ESC;
 	d->items[6].fn = cancel_dialog;
-	d->items[6].text = N_("Close");
+	d->items[6].text = _("Close", term);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

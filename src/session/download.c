@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.44 2003/06/07 14:56:07 pasky Exp $ */
+/* $Id: download.c,v 1.45 2003/06/07 15:25:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -399,7 +399,7 @@ found:
 
 	undisplay_download(down);
 	down->ses = ses;
-	dlg->title = N_("Download");
+	dlg->title = _("Download", term);
 	dlg->fn = download_window_function;
 	dlg->abort = download_abort_function;
 	dlg->udata = down;
@@ -408,17 +408,17 @@ found:
 	dlg->items[0].type = D_BUTTON;
 	dlg->items[0].gid = B_ENTER | B_ESC;
 	dlg->items[0].fn = dlg_undisplay_download;
-	dlg->items[0].text = N_("Background");
+	dlg->items[0].text = _("Background", term);
 
 	dlg->items[1].type = D_BUTTON;
 	dlg->items[1].gid = B_ENTER | B_ESC;
 	dlg->items[1].fn = dlg_set_notify;
-	dlg->items[1].text = N_("Background with notify");
+	dlg->items[1].text = _("Background with notify", term);
 
 	dlg->items[2].type = D_BUTTON;
 	dlg->items[2].gid = 0;
 	dlg->items[2].fn = dlg_abort_download;
-	dlg->items[2].text = N_("Abort");
+	dlg->items[2].text = _("Abort", term);
 
 	dlg->items[3].type = D_END;
 

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.26 2003/06/07 14:16:56 pasky Exp $ */
+/* $Id: mime.c,v 1.27 2003/06/07 15:25:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	if (translated) mem_free(translated);
 
-	d->title = N_("Extension");
+	d->title = _("Extension", term);
 	d->fn = add_ext_fn;
 	d->refresh = (void (*)(void *)) really_add_ext;
 	d->refresh_data = new;
@@ -271,11 +271,11 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = ok_dialog;
-	d->items[2].text = N_("OK");
+	d->items[2].text = _("OK", term);
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ESC;
-	d->items[3].text = N_("Cancel");
+	d->items[3].text = _("Cancel", term);
 	d->items[3].fn = cancel_dialog;
 
 	d->items[4].type = D_END;

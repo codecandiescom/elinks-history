@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.91 2004/05/29 02:44:27 jonas Exp $ */
+/* $Id: task.c,v 1.92 2004/05/29 13:33:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,13 +140,8 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		    && !referrer_incomplete) {
 			confirm_submit = 0;
 
-		} else {
-			/* Finally check the cache */
-			if (cache_mode == CACHE_MODE_ALWAYS
-			    && (cached = find_in_cache(uri))
-			    && !cached->incomplete) {
-				confirm_submit = 0;
-			}
+		} else if (get_validated_cache_entry(uri, cache_mode)) {
+			    confirm_submit = 0;
 		}
 	}
 

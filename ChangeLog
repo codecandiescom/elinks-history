@@ -1,3 +1,29 @@
+Wed Jul 23 18:30:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* THANKS:
+
+	Added praises for Gerard and fis regarding the excellent yet hidden
+	and frequently under-appreciated resources support they give us.  
+
+Wed Jul 23 18:24:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, doc/Makefile.am:
+
+	Purge doc/book from the buildsystem.  
+
+Wed Jul 23 18:20:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/textarea.c:
+
+	Create the linksarea temporary files in $TMPDIR || $TEMPDIR || $TEMP
+	|| /tmp. Idea by Zardoz, fixes bug 232.  
+
+Wed Jul 23 16:24:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre3.CVS 
+
 Wed Jul 23 16:21:19 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

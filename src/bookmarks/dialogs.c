@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.39 2002/09/17 17:17:14 pasky Exp $ */
+/* $Id: dialogs.c,v 1.40 2002/09/22 15:33:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "bfu/align.h"
 #include "bfu/dialog.h"
 #include "bfu/button.h"
+#include "bfu/inpfield.h"
 #include "bfu/listbox.h"
 #include "bfu/msgbox.h"
 #include "bfu/text.h"
@@ -20,6 +21,7 @@
 #include "dialogs/edit.h"
 #include "dialogs/hierbox.h"
 #include "document/session.h"
+#include "intl/language.h"
 #include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 #include "intl/language.h"
@@ -33,7 +35,7 @@
 
 /* The location of the box in the bookmark manager */
 /* Duplicate with dialogs/hierbox.c. */
-#define	BM_BOX_IND		6
+#define	BM_BOX_IND		7
 
 
 #ifdef BOOKMARKS
@@ -112,6 +114,54 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	launch_bm_search_doc_dialog(dlg->win->term, dlg,
 				    (struct session *) dlg->dlg->udata);
+	return 0;
+}
+
+
+void
+do_add_folder(struct dialog_data *dlg, unsigned char *name)
+{
+	struct widget_data *box_widget_data;
+	struct listbox_data *box;
+	struct bookmark *bm = NULL;
+
+	box_widget_data = &dlg->items[BM_BOX_IND];
+	box = (struct listbox_data *) box_widget_data->item->data;
+
+	if (box->sel) {
+		if (box->sel->type == BI_FOLDER) {
+			bm = box->sel->udata;
+		} else if (box->sel->root) {
+			bm = box->sel->root->udata;
+		}
+	}
+	bm = add_bookmark(bm, 0, name, "");
+	bm->box_item->type = BI_FOLDER;
+
+#ifdef BOOKMARKS_RESAVE
+	write_bookmarks();
+#endif
+
+	/* We touch only the actual bookmark dialog, not all of them;
+	 * that's right, right? ;-) --pasky */
+
+	/* FIXME: No, I don't like this. But can we do better? --pasky */
+	/* FIXME: _ought_ to be better. */
+#if 0
+	box->sel = bm->box_item;
+	box->top = bm->box_item;
+	box->sel_offset = 0;
+#endif
+}
+
+int
+push_add_folder_button(struct dialog_data *dlg, struct widget_data *di)
+{
+	input_field(dlg->win->term, NULL, TEXT(T_ADD_FOLDER), TEXT(T_FOLDER_NAME),
+		    TEXT(T_OK), TEXT(T_CANCEL), dlg, NULL,
+		    MAX_STR_LEN, NULL, 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) do_add_folder,
+		    NULL);
 	return 0;
 }
 
@@ -355,18 +405,23 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_add_button;
-	d->items[3].text = TEXT(T_ADD);
+	d->items[3].fn = push_add_folder_button;
+	d->items[3].text = TEXT(T_ADD_FOLDER);
 
 	d->items[4].type = D_BUTTON;
 	d->items[4].gid = B_ENTER;
-	d->items[4].fn = push_search_button;
-	d->items[4].text = TEXT(T_SEARCH);
+	d->items[4].fn = push_add_button;
+	d->items[4].text = TEXT(T_ADD);
 
 	d->items[5].type = D_BUTTON;
-	d->items[5].gid = B_ESC;
-	d->items[5].fn = cancel_dialog;
-	d->items[5].text = TEXT(T_CLOSE);
+	d->items[5].gid = B_ENTER;
+	d->items[5].fn = push_search_button;
+	d->items[5].text = TEXT(T_SEARCH);
+
+	d->items[6].type = D_BUTTON;
+	d->items[6].gid = B_ESC;
+	d->items[6].fn = cancel_dialog;
+	d->items[6].text = TEXT(T_CLOSE);
 
 	d->items[BM_BOX_IND].type = D_BOX;
 	d->items[BM_BOX_IND].gid = 12;
@@ -386,19 +441,28 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 void
 bookmark_add_add(struct dialog *d)
 {
-	struct bookmark *bm;
 	struct widget_data *box_widget_data;
+	struct listbox_data *box;
+	struct bookmark *bm = NULL;
 
-	bm = add_bookmark(NULL, d->items[0].data, d->items[1].data);
+	box_widget_data =
+		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
+	box = (struct listbox_data *) box_widget_data->item->data;
+
+	if (box->sel) {
+		if (box->sel->type == BI_FOLDER) {
+			bm = box->sel->udata;
+		} else if (box->sel->root) {
+			bm = box->sel->root->udata;
+		}
+	}
+	bm = add_bookmark(bm, 1, d->items[0].data, d->items[1].data);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
 #endif
 
 	if (!d->udata) return;
-
-	box_widget_data =
-		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
 
 	/* We touch only the actual bookmark dialog, not all of them;
 	 * that's right, right? ;-) --pasky */
@@ -407,7 +471,11 @@ bookmark_add_add(struct dialog *d)
 	 * list, we just move as down as possible. This is done so that
 	 * box->top is adjusted correctly. */
 
+	/* FIXME FIXME FIXME FIXME FIXME */
+#if 0
 	box_sel_move(box_widget_data, 32000); /* That is stuuupid. */
+	/* ..and doesn't work at all for non-root adding. */
+#endif
 }
 
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.2 2002/09/17 21:43:31 pasky Exp $ */
+/* $Id: hierbox.c,v 1.3 2002/09/22 15:33:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 
 /* The location of the box in the bookmark manager */
 /* Duplicated with bookmarks/dialogs.c now. */
-#define	BM_BOX_IND		6
+#define	BM_BOX_IND		7
 
 
 /* This is still a lot bookmarks-specific. Will be generalized as a need for

@@ -412,6 +412,8 @@ struct translation translation_english [] = {
   {T_BOOKMARK_USED, "Sorry, but this bookmark is already being used by something right now."},
   {T_ELINKS_HOME, "ELinks homepage"},
   {T_HK_ELINKS_HOME, "E"},
+  {T_ADD_FOLDER, "Add folder"},
+  {T_FOLDER_NAME, "Folder name"},
   {0, NULL}
 };
 
@@ -827,6 +829,8 @@ struct translation translation_brazilian_portuguese [] = {
   {T_BOOKMARK_USED, "Este bookmark já está a ser usado"},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -1242,6 +1246,8 @@ struct translation translation_bulgarian [] = {
   {T_BOOKMARK_USED, "Çà ñúæàëåíèå òàçè îòìåòêà ñå èçïîëçâà îò íåùî â ìîìåíòà"},
   {T_ELINKS_HOME, "Äîìàøíà ñòðàíèöà íà Elinks"},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -1657,6 +1663,8 @@ struct translation translation_catalan [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -2072,6 +2080,8 @@ struct translation translation_croatian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -2487,6 +2497,8 @@ struct translation translation_czech [] = {
   {T_BOOKMARK_USED, "Sorry, ale s tímto bookmarkem právì pracuje nìco jiného."},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -2902,6 +2914,8 @@ struct translation translation_danish [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -3317,6 +3331,8 @@ struct translation translation_dutch [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -3732,6 +3748,8 @@ struct translation translation_estonian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -4147,6 +4165,8 @@ struct translation translation_finnish [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -4562,6 +4582,8 @@ struct translation translation_french [] = {
   {T_BOOKMARK_USED, "Désolé, mais ce signet est déjà utilisé par quelque chose."},
   {T_ELINKS_HOME, "Site web ELinks"},
   {T_HK_ELINKS_HOME, "S"},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -4977,6 +4999,8 @@ struct translation translation_galician [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -5392,6 +5416,8 @@ struct translation translation_german [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -5807,6 +5833,8 @@ struct translation translation_greek [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -6222,6 +6250,8 @@ struct translation translation_hungarian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -6637,6 +6667,8 @@ struct translation translation_icelandic [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -7052,6 +7084,8 @@ struct translation translation_indonesian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -7467,6 +7501,8 @@ struct translation translation_italian [] = {
   {T_BOOKMARK_USED, "Spiacente, ma questo segnalibro è in uso, in questo momento"},
   {T_ELINKS_HOME, "Homepage di ELinks"},
   {T_HK_ELINKS_HOME, "E"},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -7882,6 +7918,8 @@ struct translation translation_lithuanian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -8297,6 +8335,8 @@ struct translation translation_norwegian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -8712,6 +8752,8 @@ struct translation translation_polish [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -9127,6 +9169,8 @@ struct translation translation_portuguese [] = {
   {T_BOOKMARK_USED, "Este bookmark já está a ser usado"},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -9542,6 +9586,8 @@ struct translation translation_romanian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -9957,6 +10003,8 @@ struct translation translation_russian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -10372,6 +10420,8 @@ struct translation translation_slovak [] = {
   {T_BOOKMARK_USED, "Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program"},
   {T_ELINKS_HOME, "Domovská stránka ELinks"},
   {T_HK_ELINKS_HOME, "E"},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -10787,6 +10837,8 @@ struct translation translation_spanish [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -11202,6 +11254,8 @@ struct translation translation_swedish [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -11617,6 +11671,8 @@ struct translation translation_turkish [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 
@@ -12032,6 +12088,8 @@ struct translation translation_ukrainian [] = {
   {T_BOOKMARK_USED, NULL},
   {T_ELINKS_HOME, NULL},
   {T_HK_ELINKS_HOME, NULL},
+  {T_ADD_FOLDER, NULL},
+  {T_FOLDER_NAME, NULL},
   {0, NULL}
 };
 

@@ -412,4 +412,6 @@
 #define T_BOOKMARK_USED    408	
 #define T_ELINKS_HOME    409	
 #define T_HK_ELINKS_HOME    410	
-#define T__N_TEXTS    411	
+#define T_ADD_FOLDER    411	
+#define T_FOLDER_NAME    412	
+#define T__N_TEXTS    413	

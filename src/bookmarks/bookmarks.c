@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.47 2002/09/19 15:24:01 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.48 2002/09/22 15:33:21 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -56,9 +56,10 @@ delete_bookmark(struct bookmark *bm)
 	return 1;
 }
 
-/* Adds a bookmark to the bookmark list. */
+/* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
+ * bottom. */
 struct bookmark *
-add_bookmark(struct bookmark *root, const unsigned char *title,
+add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	     const unsigned char *url)
 {
 	struct bookmark *bm = mem_alloc(sizeof(struct bookmark));
@@ -86,9 +87,12 @@ add_bookmark(struct bookmark *root, const unsigned char *title,
 	/* Actually add it */
 	/* add_at_pos() is here to add it at the _end_ of the list,
 	 * not vice versa. */
+	if (place)
 	add_at_pos((struct bookmark *) (root ? root->child.prev
 					      : bookmarks.prev),
 		   bm);
+	else
+		add_to_list((root ? root->child : bookmarks), bm);
 	bookmarks_dirty = 1;
 
 	/* Setup box_item */
@@ -109,9 +113,13 @@ add_bookmark(struct bookmark *root, const unsigned char *title,
 
 	strcpy(bm->box_item->text, bm->title);
 
+	if (place)
 	add_at_pos((struct listbox_item *) (root ? root->box_item->child.prev
 						 : bookmark_box_items.prev),
 		   bm->box_item);
+	else
+		add_to_list((root ? root->box_item->child : bookmark_box_items),
+			    bm->box_item);
 
 	return bm;
 }
@@ -310,7 +318,7 @@ read_bookmarks()
 					root = last_bm->root;
 				}
 			}
-			last_bm = add_bookmark(root, title, url);
+			last_bm = add_bookmark(root, 1, title, url);
 			last_depth = depth;
 
 			while (flags && *flags) {

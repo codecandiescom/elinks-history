@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.44 2003/11/07 17:26:17 pasky Exp $ */
+/* $Id: text.c,v 1.45 2003/11/07 18:27:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,27 +47,24 @@ text_width(struct terminal *term, register unsigned char *text,
 static inline int
 split_line(unsigned char *text, int w)
 {
-	unsigned char *next_split;
 	unsigned char *split = text;
-	int line_width;
 
-	do {
-		while (is_unsplitable(split)) {
-			split++;
-		}
-
-		line_width = split - text;
-		next_split = ++split;
-
-		if (*(split - 1) != ' ') break;
+	while (*split && *split != '\n') {
+		unsigned char *next_split = split + 1;
 
 		while (is_unsplitable(next_split))
 			next_split++;
-	} while (next_split - split < w - line_width);
 
-	assert(line_width + 1 == split - text);
+		if (next_split - text > w) {
+			/* Force a split if no position was found yet */
+			if (split == text) return w;
+			break;
+		}
 
-	return line_width;
+		split = next_split;
+	}
+
+	return split - text;
 }
 
 /* Format text according to dialog dimensions and alignment. */

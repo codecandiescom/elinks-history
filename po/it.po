@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-08-31 19:04+0200\n"
+"POT-Creation-Date: 2003-09-01 00:24+0200\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -791,7 +791,7 @@ msgstr "    %s%s%s %s (predefinito: %s"
 
 #: src/config/options.c:674
 #, fuzzy, c-format
-msgid "    %s%s%s %s (default: %06x)"
+msgid "    %s%s%s %s (default: #%06x)"
 msgstr "    %s%s%s %s (predefinito: %d)"
 
 #: src/config/options.c:792

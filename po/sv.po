@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-08-31 19:04+0200\n"
+"POT-Creation-Date: 2003-09-01 00:24+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Martin Norback <d95mback@dtek.chalmers.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -782,7 +782,7 @@ msgstr ""
 
 #: src/config/options.c:674
 #, c-format
-msgid "    %s%s%s %s (default: %06x)"
+msgid "    %s%s%s %s (default: #%06x)"
 msgstr ""
 
 #: src/config/options.c:792

@@ -7461,7 +7461,7 @@ struct translation translation_italian [] = {
   {T_ADD_BOOKMARK_LINK, "Aggiungi questo collegamento ai bookmark"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Lingua preferita (lista di codici ISO separati da virgola"},
-  {T_ACCEPT_UI_LANGUAGE, "Usa lingua dell'interfaccia come Accept-Language (piccola perdita di privacy)},
+  {T_ACCEPT_UI_LANGUAGE, "Usa lingua dell'interfaccia come Accept-Language (piccola perdita di privacy)"},
   {T_SSL_CIPHER, "Chiper SSL"},
   {T_ENCODING, "Codifica"},
   {T_BOOKMARK_USED, "Spiacente, ma questo segnalibro è in uso, in questo momento"},

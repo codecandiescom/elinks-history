@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.4 2003/07/03 00:47:29 pasky Exp $ */
+/* $Id: textarea.c,v 1.5 2003/07/03 08:47:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,25 +202,26 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 unsigned char *
 encode_textarea(struct submitted_value *sv)
 {
-	unsigned char *text = sv->value;
 	unsigned char *newtext;
-	int len = 0;
 	void *blabla;
+	int len = 0;
+	register int i;
 
-	assert(text);
+	assert(sv && sv->value);
 
 	/* We need to reformat text now if it has to be wrapped
 	 * hard, just before encoding it. */
-	blabla = format_text(text, sv->frm->cols,
-			     sv->frm->wrap);
+	blabla = format_text(sv->value, sv->frm->cols, sv->frm->wrap);
 	if (blabla) mem_free(blabla);
 
 	newtext = init_str();
 	if (!newtext) return NULL;
 
-	for (; *text; text++) {
-		if (*text != '\n') add_chr_to_str(&newtext, &len, *text);
-		else add_to_str(&newtext, &len, "\r\n");
+	for (i = 0; sv->value[i]; i++) {
+		if (sv->value[i] != '\n')
+			add_chr_to_str(&newtext, &len, sv->value[i]);
+		else
+			add_to_str(&newtext, &len, "\r\n");
 	}
 
 	return newtext;
@@ -253,18 +254,15 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static struct terminal *term;
 	static struct f_data_c *f;
 	static struct link *l;
-	static char *fn = NULL;
+	static unsigned char *fn = NULL;
 
 	if (op == 0 && !term_->master) {
-		if (fn) mem_free(fn);
-		fn = NULL; fs = NULL;
-
 		msg_box(term_, NULL, 0,
 			N_("Error"), AL_CENTER,
 			N_("You can do this only on the master terminal"),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
-		return;
+		goto free_and_return;
 	}
 
 	if (form_) form_maxlength = form_->maxlength;
@@ -273,45 +271,33 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	if (l_) l = l_;
 	if (term_) term = term_;
 
-	if (op == 0 && !textarea_editor && term->master) {
+	if (op == 0 && !textarea_editor) {
 		FILE *taf;
-		char *ed = getenv("EDITOR");
-		char *ex;
+		unsigned char *ed = getenv("EDITOR");
+		unsigned char *ex;
 		int h;
 
 		fn = stracpy("linksarea-XXXXXX");
-		if (!fn) {
-			fs = NULL;
-			return;
-		}
+		if (!fn) goto free_and_return;
 
 		h = mkstemp(fn);
-		if (h < 0) {
-			mem_free(fn); fn = NULL; fs = NULL;
-			return;
-		}
+		if (h < 0) goto free_and_return;
 
 		taf = fdopen(h, "w");
-		if (!taf) {
-			mem_free(fn); fn = NULL; fs = NULL;
-			return;
-		}
+		if (!taf) goto free_and_return;
 
 		fwrite(fs->value, strlen(fs->value), 1, taf);
 		fclose(taf);
 
 		if (!ed || !*ed) ed = "vi";
 
-		ex = mem_alloc(strlen(ed) + strlen(fn) + 2);
+		ex = straconcat(ed, " ", fn, NULL);
 		if (!ex) {
 			unlink(fn);
-			mem_free(fn); fn = NULL; fs = NULL;
-			return;
+			goto free_and_return;
 		}
 
-		sprintf(ex, "%s %s", ed, fn);
 		exec_on_terminal(term, ex, "", 1);
-
 		mem_free(ex);
 
 		textarea_editor = 1;
@@ -349,9 +335,15 @@ close:
 			unlink(fn);
 		}
 
-		mem_free(fn); fn = NULL; fs = NULL;
 		textarea_editor = 0;
+		goto free_and_return;
 	}
+
+	return;
+
+free_and_return:
+	if (fn) mem_free(fn), fn = NULL;
+	fs = NULL;
 }
 
 
@@ -362,6 +354,8 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
+
+	assert(fs && fs->value && frm);
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -385,6 +379,8 @@ textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 {
 	struct line_info *ln;
 	int y;
+
+	assert(fs && fs->value && frm);
 
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
@@ -418,6 +414,8 @@ textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 	struct line_info *ln;
 	int y;
 
+	assert(fs && fs->value && frm);
+
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
@@ -449,6 +447,8 @@ textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 	struct line_info *ln;
 	int y;
 
+	assert(fs && fs->value && frm);
+
 	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
@@ -474,8 +474,13 @@ yyyy:
 int
 textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 {
-	if (!frm->ro && strlen(fs->value) < frm->maxlength) {
-		unsigned char *v = mem_realloc(fs->value, strlen(fs->value) + 2);
+	int value_len;
+
+	assert(fs && fs->value && frm);
+
+	value_len = strlen(fs->value);
+	if (!frm->ro && value_len < frm->maxlength) {
+		unsigned char *v = mem_realloc(fs->value, value_len + 2);
 
 		if (v) {
 			fs->value = v;

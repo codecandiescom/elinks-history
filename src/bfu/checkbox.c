@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.54 2003/10/29 10:51:14 zas Exp $ */
+/* $Id: checkbox.c,v 1.55 2003/10/29 13:38:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,7 +133,7 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 		/* Checkboxes */
 		text = widget_data->info.checkbox.checked ? "[X]" : "[ ]";
 	}
-	
+
 	draw_text(term, widget_data->x,	widget_data->y, text, 3, 0, color);
 
 	if (sel) {

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.111 2003/10/27 23:08:47 jonas Exp $ */
+/* $Id: connection.c,v 1.112 2003/10/29 13:38:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,7 +247,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	conn->prg.start = start;
 	conn->prg.timer = -1;
 	conn->timer = -1;
-	
+
 	return conn;
 };
 

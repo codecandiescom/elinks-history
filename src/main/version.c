@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.22 2003/10/27 21:43:37 jonas Exp $ */
+/* $Id: version.c,v 1.23 2003/10/29 13:38:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,7 +65,7 @@ get_dyn_full_version(struct terminal *term, int more)
 {
 	static const unsigned char comma[] = ", ";
 	struct string string;
- 
+
 	if (!init_string(&string)) return NULL;
 
 	add_to_string(&string, ELINKS_VERSION);

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.104 2003/11/07 13:34:30 jonas Exp $ */
+/* $Id: search.c,v 1.105 2003/11/07 20:52:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,30 +968,21 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
-	int rw = 0; /* !!! FIXME: input field */
-	int y = -1;
+	int y = 2;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
 	int_upper_bound(&w, dlg_data->dlg->widgets->datalen);
 
-	dlg_format_text(NULL, dlg_data->dlg->udata, 0, &y, w, &rw,
-			text_color, AL_LEFT);
-	dlg_format_field(NULL, dlg_data->widgets_data, 0, &y, w, &rw,
-			 AL_LEFT);
-
-	y++;
 	dlg_format_group(NULL, dlg_data->widgets_data + 1, 3, 0,
-			 &y, w, &rw);
+			 &y, w, NULL);
 
 	y++;
 	dlg_format_group(NULL, dlg_data->widgets_data + 4, 2, 0,
-			 &y, w, &rw);
+			 &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 6, 2, 0, &y, w, &rw,
-			   AL_CENTER);
-
-	w = rw;
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 6, 2, 0,
+			   &y, w, NULL, AL_CENTER);
 
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 

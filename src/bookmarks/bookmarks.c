@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.46 2002/09/17 16:56:39 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.47 2002/09/19 15:24:01 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -222,9 +222,9 @@ void
 read_bookmarks()
 {
 	/* INBUF_SIZE = max. title length + 1 byte for separator
-	 * + max. url length + 1 byte for separator + 4 bytes for depth
+	 * + max. url length + 1 byte for separator + 5 bytes for depth
 	 * + 1 byte for end of line + 1 byte for null char + reserve */
-#define INBUF_SIZE ((MAX_STR_LEN - 1) + 1 + (MAX_STR_LEN - 1) + 1 + 4 + 1 + 1 \
+#define INBUF_SIZE ((MAX_STR_LEN - 1) + 1 + (MAX_STR_LEN - 1) + 1 + 5 + 1 + 1 \
 		    + MAX_STR_LEN)
 	unsigned char in_buffer[INBUF_SIZE]; /* read buffer */
 	unsigned char *file_name;
@@ -350,7 +350,7 @@ write_bookmarks_do(struct secure_save_info *ssi, struct list_head *bookmarks)
 		secure_fputc(ssi, '\t');
 		secure_fputs(ssi, bm->url);
 		secure_fputc(ssi, '\t');
-		snprintf(depth, 16, "%d", bm->box_item->depth);
+		snprintf(depth, 5, "%d", bm->box_item->depth);
 		secure_fputs(ssi, depth);
 		secure_fputc(ssi, '\t');
 		if (bm->box_item->type == BI_FOLDER)

@@ -1,4 +1,4 @@
-/* $Id: encoding.h,v 1.7 2003/06/20 15:37:38 jonas Exp $ */
+/* $Id: encoding.h,v 1.8 2003/06/20 18:20:51 pasky Exp $ */
 
 #ifndef EL__UTIL_ENCODING_H
 #define EL__UTIL_ENCODING_H
@@ -21,7 +21,9 @@ struct stream_encoded {
 
 struct stream_encoded *open_encoded(int, enum stream_encoding);
 int read_encoded(struct stream_encoded *, unsigned char *, int);
+unsigned char *decode_encoded(struct stream_encoded *, unsigned char *, int, int *);
 void close_encoded(struct stream_encoded *);
+
 unsigned char **listext_encoded(enum stream_encoding);
 enum stream_encoding guess_encoding(unsigned char *filename);
 

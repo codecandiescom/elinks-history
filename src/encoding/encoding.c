@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.18 2003/06/20 16:26:27 jonas Exp $ */
+/* $Id: encoding.c,v 1.19 2003/06/20 18:20:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,7 @@ unsigned char *encoding_names[NB_KNOWN_ENCODING];
 struct decoding_handlers {
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
+	unsigned char *(*decode)(struct stream_encoded *stream, unsigned char *data, int len, int *new_len);
 	void (*close)(struct stream_encoded *stream);
 	unsigned char **extensions;
 };
@@ -63,6 +64,17 @@ dummy_read(struct stream_encoded *stream, unsigned char *data, int len)
 	return read(((struct dummy_enc_data *) stream->data)->fd, data, len);
 }
 
+static unsigned char *
+dummy_decode(struct stream_encoded *stream, unsigned char *data, int len,
+	     int *new_len)
+{
+	unsigned char *new_data = mem_calloc(1, len);
+
+	*new_len = len;
+	memcpy(new_data, data, len);
+	return new_data;
+}
+
 static void
 dummy_close(struct stream_encoded *stream)
 {
@@ -75,6 +87,7 @@ static unsigned char *dummy_extensions[] = { NULL };
 static struct decoding_handlers dummy_handlers = {
 	dummy_open,
 	dummy_read,
+	dummy_decode,
 	dummy_close,
 	dummy_extensions,
 };
@@ -101,6 +114,17 @@ gzip_read(struct stream_encoded *stream, unsigned char *data, int len)
 	return gzread((gzFile *) stream->data, data, len);
 }
 
+static unsigned char *
+gzip_decode(struct stream_encoded *stream, unsigned char *data, int len,
+	    int *new_len)
+{
+	unsigned char *new_data = mem_calloc(1, len);
+
+	*new_len = len;
+	memcpy(new_data, data, len);
+	return new_data;
+}
+
 static void
 gzip_close(struct stream_encoded *stream)
 {
@@ -112,6 +136,7 @@ static unsigned char *gzip_extensions[] = { ".gz", ".tgz", NULL };
 static struct decoding_handlers gzip_handlers = {
 	gzip_open,
 	gzip_read,
+	gzip_decode,
 	gzip_close,
 	gzip_extensions,
 };
@@ -176,6 +201,17 @@ bzip2_read(struct stream_encoded *stream, unsigned char *buf, int len)
 	return len;
 }
 
+static unsigned char *
+bzip2_decode(struct stream_encoded *stream, unsigned char *data, int len,
+	     int *new_len)
+{
+	unsigned char *new_data = mem_calloc(1, len);
+
+	*new_len = len;
+	memcpy(new_data, data, len);
+	return new_data;
+}
+
 static void
 bzip2_close(struct stream_encoded *stream)
 {
@@ -192,6 +228,7 @@ static unsigned char *bzip2_extensions[] = { ".bz2", NULL };
 static struct decoding_handlers bzip2_handlers = {
 	bzip2_open,
 	bzip2_read,
+	bzip2_decode,
 	bzip2_close,
 	bzip2_extensions,
 };
@@ -251,6 +288,16 @@ read_encoded(struct stream_encoded *stream, unsigned char *data, int len)
 	return handlers[stream->encoding]->read(stream, data, len);
 }
 
+/* Decode the given chunk of data in the context of @stream. @data contains the
+ * original data chunk, @len bytes long. The resulting decoded data chunk is
+ * *@new_len bytes long. */
+unsigned char *
+decode_encoded(struct stream_encoded *stream, unsigned char *data, int len,
+		int *new_len)
+{
+	return handlers[stream->encoding]->decode(stream, data, len, new_len);
+}
+
 /* Closes encoded stream. Note that fd associated with the stream will be
  * closed here. */
 void
@@ -259,6 +306,7 @@ close_encoded(struct stream_encoded *stream)
 	handlers[stream->encoding]->close(stream);
 	mem_free(stream);
 }
+
 
 /* Return a list of extensions associated with that encoding. */
 unsigned char **listext_encoded(enum stream_encoding encoding)

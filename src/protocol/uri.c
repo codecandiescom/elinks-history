@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.178 2004/04/08 14:38:54 jonas Exp $ */
+/* $Id: uri.c,v 1.179 2004/04/09 03:39:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,7 +294,9 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		}
 	}
 
+	/* Only add slash if we need to separate */
 	if ((wants(URI_DATA) || wants(URI_POST))
+	    && wants(~(URI_DATA | URI_PORT))
 	    && get_protocol_need_slash_after_host(uri->protocol))
 		add_char_to_string(string, '/');
 

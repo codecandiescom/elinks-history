@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.273 2004/04/09 03:19:44 jonas Exp $ */
+/* $Id: http.c,v 1.274 2004/04/09 03:39:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ subst_user_agent(unsigned char *fmt, unsigned char *version,
 }
 
 static void
-add_url_to_http_string(struct string *header, unsigned char *data)
+add_url_to_http_string(struct string *header, struct uri *uri, int components)
 {
 	/* This block substitues spaces in URL by %20s. This is
 	 * certainly not the right place where to do it, but now the
@@ -113,23 +113,27 @@ add_url_to_http_string(struct string *header, unsigned char *data)
 	 * before. We should probably encode all URLs as early as
 	 * possible, and possibly decode them back in protocol
 	 * backends. --pasky */
-	int datalen = get_no_post_url_length(data);
+	unsigned char *string = get_uri_string(uri, components);
+	unsigned char *data = string;
 
-	while (datalen > 0) {
-		int len = int_min(strcspn(data, " \t\r\n\\"), datalen);
+	if (!string) return;
+
+	while (*data) {
+		int len = strcspn(data, " \t\r\n\\");
 
 		add_bytes_to_string(header, data, len);
 
-		if (len == datalen) break;
+		if (!data[len]) break;
 
 		if (data[len++] == '\\')
 			add_char_to_string(header, '/');
 		else
 			add_to_string(header, "%20");
 
-		datalen	-= len;
 		data	+= len;
 	}
+
+	mem_free(string);
 }
 
 /* This function extracts code, major and minor version from string
@@ -358,9 +362,9 @@ http_send_header(struct connection *conn)
 		add_uri_to_string(&header, uri, URI_HTTP_CONNECT);
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
-			add_url_to_http_string(&header, uri->data);
+			add_url_to_http_string(&header, uri, URI_DATA);
 		} else {
-			add_url_to_http_string(&header, conn->uri->data);
+			add_url_to_http_string(&header, conn->uri, URI_DATA);
 		}
 	}
 
@@ -435,7 +439,7 @@ http_send_header(struct connection *conn)
 		case REFERER_TRUE:
 			if (!conn->referrer) break;
 			add_to_string(&header, "Referer: ");
-			add_url_to_http_string(&header, struri(conn->referrer));
+			add_url_to_http_string(&header, conn->referrer, URI_PUBLIC);
 			add_to_string(&header, "\r\n");
 			break;
 
@@ -448,7 +452,7 @@ http_send_header(struct connection *conn)
 				add_char_to_string(&header, '/');
 
 			if (uri->data)
-				add_url_to_http_string(&header, uri->data);
+				add_url_to_http_string(&header, uri, URI_DATA);
 
 			add_to_string(&header, "\r\n");
 			break;

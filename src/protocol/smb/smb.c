@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.60 2004/11/03 17:20:36 zas Exp $ */
+/* $Id: smb.c,v 1.61 2004/11/03 17:40:35 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -175,7 +175,274 @@ find_strs(unsigned char *line, unsigned char *str1,
 	return p;
 }
 
-/* FIXME: split it. --Zas */
+static void
+parse_smbclient_output(struct uri *uri, struct smb_connection_info *si,
+		       struct string *page)
+{
+	unsigned char *line_start, *line_end;
+	enum {
+		SMB_TYPE_NONE,
+		SMB_TYPE_SHARE,
+		SMB_TYPE_SERVER,
+		SMB_TYPE_WORKGROUP
+	} type = SMB_TYPE_NONE;
+	int pos = 0;
+	int stop = 0;
+
+	assert(uri && si && page);
+	if_assert_failed return;
+
+	add_to_string(page, "<html><head><title>/");
+	add_bytes_to_string(page, uri->data, uri->datalen);
+	add_to_string(page, "</title></head><body><pre>");
+
+	line_start = si->text;
+	while (!stop && (line_end = strchr(line_start, ASCII_LF))) {
+		unsigned char *line = line_start;
+		int line_len;
+		int start_offset = 0;
+
+		/* Handle \r\n case. Normally, do not occur on *nix. */
+		if (line_end > line_start && line_end[-1] == ASCII_CR)
+			 line_end--, start_offset++;
+
+		line_len = line_end - line_start;
+
+		/* Here we modify si->text content, this should not be
+		 * a problem as it is only used here. This prevents
+		 * allocation of memory for the line. */
+		*line_end = '\0';
+
+		/* And I got bored here with cleaning it up. --pasky */
+
+		if (si->list_type == SMB_LIST_SHARES) {
+			unsigned char *ll, *lll, *found;
+
+			if (!*line) type = SMB_TYPE_NONE;
+
+			found = find_strs(line, "Sharename", "Type");
+			if (found) {
+				pos = found - line;
+				type = SMB_TYPE_SHARE;
+				goto print_as_is;
+			}
+
+			found = find_strs(line, "Server", "Comment");
+			if (found) {
+				type = SMB_TYPE_SERVER;
+				goto print_as_is;
+			}
+
+			found = find_strs(line, "Workgroup", "Master");
+			if (found) {
+				pos = found - line;
+				type = SMB_TYPE_WORKGROUP;
+				goto print_as_is;
+			}
+
+			if (type == SMB_TYPE_NONE)
+				goto print_as_is;
+
+			for (ll = line; *ll; ll++)
+				if (!isspace(*ll) && *ll != '-')
+					goto print_next;
+
+			goto print_as_is;
+
+print_next:
+			for (ll = line; *ll; ll++)
+				if (!isspace(*ll))
+					break;
+
+			for (lll = ll; *lll; lll++)
+				if (isspace(*lll))
+					break;
+
+			switch (type) {
+			case SMB_TYPE_SHARE:
+			{
+				unsigned char *llll;
+
+				if (!strstr(lll, "Disk"))
+					goto print_as_is;
+
+				if (pos && pos < line_len
+				    && isspace(*(llll = line + pos - 1))
+				    && llll > ll) {
+					while (llll > ll && isspace(*llll))
+						llll--;
+					if (!isspace(*llll))
+						lll = llll + 1;
+				}
+
+				add_bytes_to_string(page, line, ll - line);
+				add_to_string(page, "<a href=\"");
+				add_bytes_to_string(page, ll, lll - ll);
+				add_to_string(page, "/\">");
+				add_bytes_to_string(page, ll, lll - ll);
+				add_to_string(page, "</a>");
+				add_to_string(page, lll);
+				break;
+			}
+
+			case SMB_TYPE_WORKGROUP:
+				if (pos < line_len && pos
+				    && isspace(line[pos - 1])
+				    && !isspace(line[pos])) {
+					ll = line + pos;
+				} else {
+					for (ll = lll; *ll; ll++)
+						if (!isspace(*ll))
+							break;
+				}
+				for (lll = ll; *lll; lll++)
+					if (isspace(*lll))
+						break;
+				/* Fall-through */
+
+			case SMB_TYPE_SERVER:
+				add_bytes_to_string(page, line, ll - line);
+				add_to_string(page, "<a href=\"smb://");
+				add_bytes_to_string(page, ll, lll - ll);
+				add_to_string(page, "/\">");
+				add_bytes_to_string(page, ll, lll - ll);
+				add_to_string(page, "</a>");
+				add_to_string(page, lll);
+				break;
+
+			case SMB_TYPE_NONE:
+				goto print_as_is;
+			}
+
+		} else if (si->list_type == SMB_LIST_DIR) {
+			if (strstr(line, "NT_STATUS")) {
+				/* Error, stop after message. */
+				stop = 1;
+				goto print_as_is;
+			}
+
+			if (line_end - line_start >= 5
+			    && line_start[0] == ' '
+			    && line_start[1] == ' '
+			    && line_start[2] != ' ') {
+				int dir = 0;
+				int may_be_dir = 0;
+				unsigned char *p = line_end;
+				unsigned char *url = line_start + 2;
+
+				/* smbclient list parser
+				 * The boring thing is that output is
+				 * ambiguous in many ways:
+				 * filenames with more than one space,
+				 * etc...
+				 * This bloated code tries to do a not
+				 * so bad job. --Zas */
+
+/* directory                      D        0  Fri May  7 11:23:18 2004 */
+/* filename                             2444  Thu Feb 19 15:52:46 2004 */
+
+				/* Skip end of line */
+				while (p > url && !isdigit(*p)) p--;
+				if (p == url) goto print_as_is;
+
+				/* FIXME: Use parse_date()? */
+				/* year */
+				while (p > url && isdigit(*p)) p--;
+				if (p == url || !isspace(*p)) goto print_as_is;
+				while (p > url && isspace(*p)) p--;
+
+				/* seconds */
+				while (p > url && isdigit(*p)) p--;
+				if (p == url || *p != ':') goto print_as_is;
+				p--;
+
+				/* minutes */
+				while (p > url && isdigit(*p)) p--;
+				if (p == url || *p != ':') goto print_as_is;
+				p--;
+
+				/* hours */
+				while (p > url && isdigit(*p)) p--;
+				if (p == url || !isspace(*p)) goto print_as_is;
+				p--;
+
+				/* day as number */
+				while (p > url && isdigit(*p)) p--;
+				while (p > url && isspace(*p)) p--;
+				if (p == url) goto print_as_is;
+
+				/* month */
+				while (p > url && !isspace(*p)) p--;
+				if (p == url || !isspace(*p)) goto print_as_is;
+				p--;
+
+				/* day name */
+				while (p > url && !isspace(*p)) p--;
+				if (p == url || !isspace(*p)) goto print_as_is;
+				while (p > url && isspace(*p)) p--;
+
+				/* file size */
+				if (p == url || !isdigit(*p)) goto print_as_is;
+
+				if (*p == '0' && isspace(*(p - 1))) may_be_dir = 1;
+
+				while (p > url && isdigit(*p)) p--;
+				if (p == url) goto print_as_is;
+
+				/* Magic to determine if we have a
+				 * filename or a dirname. Thanks to
+				 * smbclient ambiguous output. */
+				{
+					unsigned char *pp = p;
+
+					while (pp > url && isspace(*pp)) pp--;
+
+					if (p - pp <= 8) {
+						while (pp > url
+						       && (*pp == 'D'
+							  || *pp == 'H'
+							  || *pp == 'A'
+							  || *pp == 'S'
+						          || *pp == 'R'
+							  || *pp == 'V')) {
+						        if (*pp == 'D' && may_be_dir)
+								dir = 1;
+							pp--;
+						}
+					}
+					while (pp > url && isspace(*pp)) pp--;
+					p = pp;
+				}
+
+				/* Don't display '.' directory */
+				if (p == url && *url == '.') goto ignored;
+				p++;
+
+				add_to_string(page, "  <a href=\"");
+				add_bytes_to_string(page, url, p - url);
+				if (dir) add_char_to_string(page, '/');
+				add_to_string(page, "\">");
+				add_bytes_to_string(page, url, p - url);
+				add_to_string(page, "</a>");
+				add_bytes_to_string(page, p, line_end - p);
+
+			} else {
+				goto print_as_is;
+			}
+
+		} else {
+print_as_is:
+			add_bytes_to_string(page, line_start, line_len);
+		}
+
+		add_char_to_string(page, ASCII_LF);
+ignored:
+		line_start = line_end + start_offset + 1;
+	}
+
+	add_to_string(page, "</pre></body></html>");
+}
+
 static void
 end_smb_connection(struct connection *conn)
 {
@@ -204,271 +471,14 @@ end_smb_connection(struct connection *conn)
 		redirect_cache(conn->cached, "/", 1, 0);
 
 	} else {
-		unsigned char *line_start, *line_end;
 		struct string page;
-		enum {
-			SMB_TYPE_NONE,
-			SMB_TYPE_SHARE,
-			SMB_TYPE_SERVER,
-			SMB_TYPE_WORKGROUP
-		} type = SMB_TYPE_NONE;
-		int pos = 0;
-		int stop = 0;
 
 		if (!init_string(&page)) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
 
-		add_to_string(&page, "<html><head><title>/");
-		add_bytes_to_string(&page, uri->data, uri->datalen);
-		add_to_string(&page, "</title></head><body><pre>");
-
-		line_start = si->text;
-		while (!stop && (line_end = strchr(line_start, ASCII_LF))) {
-			unsigned char *line = line_start;
-			int line_len;
-			int start_offset = 0;
-
-			/* Handle \r\n case. Normally, do not occur on *nix. */
-			if (line_end > line_start && line_end[-1] == ASCII_CR)
-				 line_end--, start_offset++;
-
-			line_len = line_end - line_start;
-
-			/* Here we modify si->text content, this should not be
-			 * a problem as it is only used here. This prevents
-			 * allocation of memory for the line. */
-			*line_end = '\0';
-
-			/* And I got bored here with cleaning it up. --pasky */
-
-			if (si->list_type == SMB_LIST_SHARES) {
-				unsigned char *ll, *lll, *found;
-
-				if (!*line) type = SMB_TYPE_NONE;
-
-				found = find_strs(line, "Sharename", "Type");
-				if (found) {
-					pos = found - line;
-					type = SMB_TYPE_SHARE;
-					goto print_as_is;
-				}
-
-				found = find_strs(line, "Server", "Comment");
-				if (found) {
-					type = SMB_TYPE_SERVER;
-					goto print_as_is;
-				}
-
-				found = find_strs(line, "Workgroup", "Master");
-				if (found) {
-					pos = found - line;
-					type = SMB_TYPE_WORKGROUP;
-					goto print_as_is;
-				}
-
-				if (type == SMB_TYPE_NONE)
-					goto print_as_is;
-
-				for (ll = line; *ll; ll++)
-					if (!isspace(*ll) && *ll != '-')
-						goto print_next;
-
-				goto print_as_is;
-
-print_next:
-				for (ll = line; *ll; ll++)
-					if (!isspace(*ll))
-						break;
-
-				for (lll = ll; *lll; lll++)
-					if (isspace(*lll))
-						break;
-
-				switch (type) {
-				case SMB_TYPE_SHARE:
-				{
-					unsigned char *llll;
-
-					if (!strstr(lll, "Disk"))
-						goto print_as_is;
-
-					if (pos && pos < line_len
-					    && isspace(*(llll = line + pos - 1))
-					    && llll > ll) {
-						while (llll > ll && isspace(*llll))
-							llll--;
-						if (!isspace(*llll))
-							lll = llll + 1;
-					}
-
-					add_bytes_to_string(&page, line, ll - line);
-					add_to_string(&page, "<a href=\"");
-					add_bytes_to_string(&page, ll, lll - ll);
-					add_to_string(&page, "/\">");
-					add_bytes_to_string(&page, ll, lll - ll);
-					add_to_string(&page, "</a>");
-					add_to_string(&page, lll);
-					break;
-				}
-
-				case SMB_TYPE_WORKGROUP:
-					if (pos < line_len && pos
-					    && isspace(line[pos - 1])
-					    && !isspace(line[pos])) {
-						ll = line + pos;
-					} else {
-						for (ll = lll; *ll; ll++)
-							if (!isspace(*ll))
-								break;
-					}
-					for (lll = ll; *lll; lll++)
-						if (isspace(*lll))
-							break;
-					/* Fall-through */
-
-				case SMB_TYPE_SERVER:
-					add_bytes_to_string(&page, line, ll - line);
-					add_to_string(&page, "<a href=\"smb://");
-					add_bytes_to_string(&page, ll, lll - ll);
-					add_to_string(&page, "/\">");
-					add_bytes_to_string(&page, ll, lll - ll);
-					add_to_string(&page, "</a>");
-					add_to_string(&page, lll);
-					break;
-
-				case SMB_TYPE_NONE:
-					goto print_as_is;
-				}
-
-			} else if (si->list_type == SMB_LIST_DIR) {
-				if (strstr(line, "NT_STATUS")) {
-					/* Error, stop after message. */
-					stop = 1;
-					goto print_as_is;
-				}
-
-				if (line_end - line_start >= 5
-				    && line_start[0] == ' '
-				    && line_start[1] == ' '
-				    && line_start[2] != ' ') {
-					int dir = 0;
-					int may_be_dir = 0;
-					unsigned char *p = line_end;
-					unsigned char *url = line_start + 2;
-
-					/* smbclient list parser
-					 * The boring thing is that output is
-					 * ambiguous in many ways:
-					 * filenames with more than one space,
-					 * etc...
-					 * This bloated code tries to do a not
-					 * so bad job. --Zas */
-
-/* directory                      D        0  Fri May  7 11:23:18 2004 */
-/* filename                             2444  Thu Feb 19 15:52:46 2004 */
-
-					/* Skip end of line */
-					while (p > url && !isdigit(*p)) p--;
-					if (p == url) goto print_as_is;
-
-					/* FIXME: Use parse_date()? */
-					/* year */
-					while (p > url && isdigit(*p)) p--;
-					if (p == url || !isspace(*p)) goto print_as_is;
-					while (p > url && isspace(*p)) p--;
-
-					/* seconds */
-					while (p > url && isdigit(*p)) p--;
-					if (p == url || *p != ':') goto print_as_is;
-					p--;
-
-					/* minutes */
-					while (p > url && isdigit(*p)) p--;
-					if (p == url || *p != ':') goto print_as_is;
-					p--;
-
-					/* hours */
-					while (p > url && isdigit(*p)) p--;
-					if (p == url || !isspace(*p)) goto print_as_is;
-					p--;
-
-					/* day as number */
-					while (p > url && isdigit(*p)) p--;
-					while (p > url && isspace(*p)) p--;
-					if (p == url) goto print_as_is;
-
-					/* month */
-					while (p > url && !isspace(*p)) p--;
-					if (p == url || !isspace(*p)) goto print_as_is;
-					p--;
-
-					/* day name */
-					while (p > url && !isspace(*p)) p--;
-					if (p == url || !isspace(*p)) goto print_as_is;
-					while (p > url && isspace(*p)) p--;
-
-					/* file size */
-					if (p == url || !isdigit(*p)) goto print_as_is;
-
-					if (*p == '0' && isspace(*(p - 1))) may_be_dir = 1;
-
-					while (p > url && isdigit(*p)) p--;
-					if (p == url) goto print_as_is;
-
-					/* Magic to determine if we have a
-					 * filename or a dirname. Thanks to
-					 * smbclient ambiguous output. */
-					{
-						unsigned char *pp = p;
-
-						while (pp > url && isspace(*pp)) pp--;
-
-						if (p - pp <= 8) {
-							while (pp > url
-							       && (*pp == 'D'
-								  || *pp == 'H'
-								  || *pp == 'A'
-								  || *pp == 'S'
-							          || *pp == 'R'
-								  || *pp == 'V')) {
-							        if (*pp == 'D' && may_be_dir)
-									dir = 1;
-								pp--;
-							}
-						}
-						while (pp > url && isspace(*pp)) pp--;
-						p = pp;
-					}
-
-					/* Don't display '.' directory */
-					if (p == url && *url == '.') goto ignored;
-					p++;
-
-					add_to_string(&page, "  <a href=\"");
-					add_bytes_to_string(&page, url, p - url);
-					if (dir) add_char_to_string(&page, '/');
-					add_to_string(&page, "\">");
-					add_bytes_to_string(&page, url, p - url);
-					add_to_string(&page, "</a>");
-					add_bytes_to_string(&page, p, line_end - p);
-
-				} else {
-					goto print_as_is;
-				}
-
-			} else {
-print_as_is:
-				add_bytes_to_string(&page, line_start, line_len);
-			}
-
-			add_char_to_string(&page, ASCII_LF);
-ignored:
-			line_start = line_end + start_offset + 1;
-		}
-
-		add_to_string(&page, "</pre></body></html>");
+		parse_smbclient_output(uri, si, &page);
 
 		add_fragment(conn->cached, 0, page.source, page.length);
 		conn->from += page.length;

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.63 2003/07/04 15:01:29 jonas Exp $ */
+/* $Id: connection.c,v 1.64 2003/07/04 15:53:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
 #include "protocol/protocol.h"
+#include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/connection.h"
 #include "sched/session.h"
@@ -335,9 +336,7 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 {
 	struct keepalive_connection *k;
 	protocol_handler *handler = get_protocol_handler(&c->uri);
-	int port = get_port(c->url);
-
-	if (port == -1 || !handler) return NULL;
+	int port = get_uri_port(&c->uri);
 
 	k = mem_calloc(1, sizeof(struct keepalive_connection));
 	if (!k) return NULL;
@@ -361,17 +360,11 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 static struct keepalive_connection *
 get_keepalive_connection(struct connection *c)
 {
-	unsigned char *host;
 	protocol_handler *handler = get_protocol_handler(&c->uri);
-	int port;
+	int port = get_uri_port(&c->uri);
 	struct keepalive_connection *keepalive_connection;
+	unsigned char *host = get_host_and_pass(c->url, 1);
 
-	if (!handler) return NULL;
-
-	port = get_port(c->url);
-	if (port == -1) return NULL;
-
-	host = get_host_and_pass(c->url, 1);
 	if (!host) return NULL;
 
 	foreach (keepalive_connection, keepalive_connections)

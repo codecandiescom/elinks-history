@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.2 2003/07/01 16:27:10 jonas Exp $ */
+/* $Id: uri.h,v 1.3 2003/07/04 15:53:23 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -29,5 +29,9 @@ struct uri {
 /* Expects that uri->protocol contains the uri string. */
 /* Returns the length of the parsed uri or 0 if some error was found. */
 int parse_uri(struct uri *uri);
+
+/* Returns either the uri's port number if available or the protocol's
+ * default port. For user protocols this is 0. */
+int get_uri_port(struct uri *uri);
 
 #endif

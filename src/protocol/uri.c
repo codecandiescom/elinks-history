@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.2 2003/07/01 16:27:10 jonas Exp $ */
+/* $Id: uri.c,v 1.3 2003/07/04 15:53:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,4 +157,29 @@ parse_uri(struct uri *uri)
 	uri->post = prefix_end ? (prefix_end + 1) : NULL;
 
 	return strlen(uri->protocol);
+}
+
+int
+get_uri_port(struct uri *uri)
+{
+	int port = -1;
+
+	if (uri->port && uri->portlen) {
+		int n;
+
+		errno = 0;
+		n = strtol(uri->port, NULL, 10);
+		if (!errno && n > 0) port = n;
+	}
+
+	if (port == -1) {
+		enum protocol protocol;
+
+		protocol = check_protocol(uri->protocol, uri->protocollen);
+		if (protocol != PROTOCOL_UNKNOWN)
+			port = get_protocol_port(protocol);
+	}
+
+	assertm(port != -1, "Invalid uri");
+	return port;
 }

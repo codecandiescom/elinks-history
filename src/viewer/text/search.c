@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.287 2004/10/04 14:08:29 jonas Exp $ */
+/* $Id: search.c,v 1.288 2004/10/10 17:23:47 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1143,7 +1143,7 @@ get_document_char(struct document *document, int x, int y)
 		? document->data[y].chars[x].data : 0;
 }
 
-static inline void
+static void
 draw_typeahead_match(struct terminal *term, struct document_view *doc_view,
 		     int chars, int offset)
 {

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.265 2005/02/28 10:21:30 zas Exp $ */
+/* $Id: kbdbind.c,v 1.266 2005/03/31 09:44:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,8 +346,10 @@ void
 make_keystroke(struct string *str, long key, long meta, int escape)
 {
 	unsigned char key_buffer[3] = "\\x";
-	unsigned char *key_string = numtostr(key_table, key);
+	unsigned char *key_string;
 
+	if (key < 0) return;
+	
 	if (meta & KBD_SHIFT)
 		add_to_string(str, "Shift-");
 	if (meta & KBD_CTRL)
@@ -355,6 +357,7 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 	if (meta & KBD_ALT)
 		add_to_string(str, "Alt-");
 
+	key_string = numtostr(key_table, key);
 	if (!key_string) {
 		key_string = key_buffer + 1;
 		*key_string = (unsigned char) key;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.316 2005/03/05 21:34:30 jonas Exp $ */
+/* $Id: link.c,v 1.317 2005/03/31 09:44:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1295,7 +1295,7 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, uristring, URI_PUBLIC);
-		if (link->accesskey
+		if (link->accesskey >= 0
 		    && get_opt_bool("document.browse.accesskey.display")) {
 			add_to_string(&str, " (");
 			make_keystroke(&str, link->accesskey, 0, 0);

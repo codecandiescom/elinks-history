@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.296 2003/10/17 15:31:43 zas Exp $ */
+/* $Id: renderer.c,v 1.297 2003/10/17 17:37:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ realloc_line(struct document *document, int y, int x)
 	 * other members. */
 	end = &line->d[x];
 	end->data = ' ';
-	set_term_color(end, &colors, COLOR_DEFAULT, document->opt.color_mode);
+	set_term_color(end, &colors, 0, document->opt.color_mode);
 
 	for (pos = &line->d[line->l]; pos < end; pos++) {
 		copy_screen_chars(pos, end, 1);
@@ -202,7 +202,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 		template->data = data;
 		template->attr = attr;
-		set_term_color(template, &colors, COLOR_DEFAULT,
+		set_term_color(template, &colors, 0,
 			       part->document->opt.color_mode);
 
 		for (xl -= 1, x += 1; xl; xl--, x++) {
@@ -243,7 +243,7 @@ xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 			template = &POS(x, y);
 			template->data = data;
 			template->attr = SCREEN_ATTR_FRAME;
-			set_term_color(template, &colors, COLOR_DEFAULT,
+			set_term_color(template, &colors, 0,
 				       part->document->opt.color_mode);
 		}
 	}
@@ -258,12 +258,12 @@ get_format_screen_char(struct part *part)
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
 		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
 		static enum color_mode color_mode;
-		static enum color_type color_type = COLOR_DEFAULT;
+		static enum color_flags color_flags = 0;
 
 		if (part->document) {
 			color_mode = part->document->opt.color_mode;
-			color_type = part->document->opt.underline
-				? COLOR_DEFAULT : COLOR_ENHANCE;
+			if (!part->document->opt.underline)
+				color_flags |= COLOR_ENHANCE_UNDERLINE;
 		}
 
 		schar_cache.attr = 0;
@@ -286,7 +286,7 @@ get_format_screen_char(struct part *part)
 		}
 
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-		set_term_color(&schar_cache, &colors, color_type, color_mode);
+		set_term_color(&schar_cache, &colors, color_flags, color_mode);
 
 		if (d_opt->display_subs) {
 			static int sub = 0;
@@ -1076,7 +1076,7 @@ color_link_lines(struct document *document)
 		for (x = 0; x < document->data[y].l; x++) {
 			struct screen_char *schar = &document->data[y].d[x];
 
-			set_term_color(schar, &colors, COLOR_DEFAULT, cmode);
+			set_term_color(schar, &colors, 0, cmode);
 
 			/* XXX: Entering hack zone! Change to clink color after
 			 * link text has been recolored. */

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.55 2003/10/17 15:46:06 jonas Exp $ */
+/* $Id: color.c,v 1.56 2003/10/17 17:37:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,21 +79,30 @@ get_color(color_t color, struct rgb *palette, int level)
 #undef HASH_RGB
 #undef RGB_HASH_SIZE
 
+/* Controls what color ranges to use when setting the terminal color. */
+/* TODO: Part of the 256 color palette is gray scale, maybe we could experiment
+ * with a grayscale mode. ;) --jonas */
+enum palette_range {
+       PALETTE_FULL = 0,
+       PALETTE_HALF,
+
+       PALETTE_RANGES, /* XXX: Keep last */
+};
+
 struct color_mode_info {
 	struct rgb *palette;
 
 	struct {
 		int bg;
 		int fg;
-	} levels[COLOR_TYPES];
+	} palette_range[PALETTE_RANGES];
 };
 
 static struct color_mode_info color_mode_16 = {
 	palette16,
 	{
-		/* COLOR_DEFAULT */	{ 8, 16 },
-		/* COLOR_LINK */	{ 8,  8 },
-		/* COLOR_ENHANCE */	{ 8, 16 },
+		/* PALETTE_FULL */	{ 8, 16 },
+		/* PALETTE_HALF */	{ 8,  8 },
 	}
 };
 
@@ -101,9 +110,8 @@ static struct color_mode_info color_mode_16 = {
 static struct color_mode_info color_mode_256 = {
 	palette256,
 	{
-		/* COLOR_DEFAULT */	{ 128, 256 },
-		/* COLOR_LINK */	{ 128, 128 },
-		/* COLOR_ENHANCE */	{ 128, 256 },
+		/* PALETTE_FULL */	{ 128, 256 },
+		/* PALETTE_HALF */	{ 128, 128 },
 	}
 };
 #endif
@@ -180,7 +188,7 @@ static unsigned char fg_color[16][8] = {
 #define use_inverse(bg, fg) CMPCODE(fg & TERM_COLOR_MASK) < CMPCODE(bg)
 
 static inline void
-set_term_color16(struct screen_char *schar, enum color_type type,
+set_term_color16(struct screen_char *schar, enum color_flags flags,
 		 unsigned char fg, unsigned char bg)
 {
 	/* Adjusts the foreground color to be more visible. */
@@ -197,7 +205,7 @@ set_term_color16(struct screen_char *schar, enum color_type type,
 			fg |= SCREEN_ATTR_BOLD;
 
 		if ((schar->attr & SCREEN_ATTR_UNDERLINE)
-		    && type == COLOR_ENHANCE) {
+		    && (flags & COLOR_ENHANCE_UNDERLINE)) {
 			fg |= SCREEN_ATTR_BOLD;
 			fg ^= 0x04;
 		}
@@ -228,19 +236,48 @@ set_term_color16(struct screen_char *schar, enum color_type type,
 
 void
 set_term_color(struct screen_char *schar, struct color_pair *pair,
-	       enum color_type type, enum color_mode color_mode)
+	       enum color_flags flags, enum color_mode color_mode)
 {
 	struct color_mode_info *mode = color_modes[color_mode];
-	unsigned char fg;
-	unsigned char bg;
+	enum palette_range palette_range = PALETTE_FULL;
+	unsigned char fg, bg;
 
-	assert(schar && 0 <= type && type < COLOR_TYPES);
+	/* Options for the various color modes. */
+	switch (color_mode) {
+	case COLOR_MODE_DUMP:
+		return;
 
-	/* No color calculation colors when dumping stuff. */
-	if (color_mode == COLOR_MODE_DUMP) return;
+	case COLOR_MODE_MONO:
+		/* TODO: A better way if possible to find out whether to 
+		 * inverse the fore- and backgroundcolor. Else figure out what:
+		 *
+		 *	CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
+		 *
+		 * mean. :) --jonas */
 
-	fg = get_color(pair->foreground, mode->palette, mode->levels[type].fg);
-	bg = get_color(pair->background, mode->palette, mode->levels[type].bg);
+		/* Decrease the range of the 16 palette to not include
+		 * bright colors. */
+		if (flags & COLOR_DECREASE_LIGHTNESS)
+			palette_range = PALETTE_HALF;
+		break;
+
+	case COLOR_MODE_16:
+		/* Decrease the range of the 16 palette to not include
+		 * bright colors. */
+		if (flags & COLOR_DECREASE_LIGHTNESS)
+			palette_range = PALETTE_HALF;
+		break;
+
+	case COLOR_MODE_256:
+		/* TODO: Handle decrease lightness by converting to
+		 * hue-ligthness-saturation color model */
+		break;
+	}
+
+	assert(schar);
+
+	fg = get_color(pair->foreground, mode->palette, mode->palette_range[palette_range].fg);
+	bg = get_color(pair->background, mode->palette, mode->palette_range[palette_range].bg);
 
 	switch (color_mode) {
 	case COLOR_MODE_256:
@@ -249,9 +286,9 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		/* TODO: Be smarter! Here we just choose either black or white
 		 * ANSI color to make sure the color is visible. Pasky
 		 * mentioned maybe calculating a distance and choosing some
-		 * intermediate color. */
+		 * intermediate color. --jonas */
 		/* TODO: Maybe also do something to honour the
-		 * allow_dark_on_black option. */
+		 * allow_dark_on_black option. --jonas */
 		if (fg == bg) {
 			fg = (bg == 0) ? 15 : 0;
 		}
@@ -262,7 +299,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 #endif
 	case COLOR_MODE_MONO:
 	case COLOR_MODE_16:
-		set_term_color16(schar, type, fg, bg);
+		set_term_color16(schar, flags, fg, bg);
 		break;
 	default:
 		internal("Invalid color mode");

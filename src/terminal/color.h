@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.25 2003/10/17 15:46:06 jonas Exp $ */
+/* $Id: color.h,v 1.26 2003/10/17 17:37:07 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -24,15 +24,18 @@
 #define TERM_COLOR_BACKGROUND(color) (((color)[0] >> 4) & TERM_COLOR_MASK)
 #endif
 
-/* Controls what color ranges to use when setting the terminal color. */
-/* TODO: Make this rather some bitwise color_flags so we can also pass info
- *	 about allow_dark_on_black so d_opt usage is no more neede. */
-enum color_type {
-	COLOR_DEFAULT = 0,
-	COLOR_LINK,
-	COLOR_ENHANCE,
+/* Bit flags to control how the colors are handled. */
+enum color_flags {
+	/* Use a decreased color range. */
+	COLOR_DECREASE_LIGHTNESS = 1,
 
-	COLOR_TYPES, /* XXX: Keep last */
+	/* Mangle the color to stand out if attributes like underline are set.
+	 * Useful for terminals that doesn't support these attributes.  */
+	COLOR_ENHANCE_UNDERLINE = 2,
+
+	/* Adjust the forground color to be more readable
+	 * for example by increasing the contrast. */
+	COLOR_INCREASE_CONTRAST = 4,
 };
 
 enum color_mode {
@@ -48,6 +51,6 @@ enum color_mode {
 /* If @allow_dark_on_black is non zero the foreground color will be adjusted.
  * XXX: @schar may not be NULL and is modified adding stuff like boldness. */
 void set_term_color(struct screen_char *schar, struct color_pair *pair,
-		    enum color_type type, enum color_mode mode);
+		    enum color_flags flags, enum color_mode mode);
 
 #endif

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.77 2003/10/17 15:08:28 jonas Exp $ */
+/* $Id: draw.c,v 1.78 2003/10/17 17:37:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ draw_border_cross(struct terminal *term, int x, int y,
 		screen_char->data = border_trans[d][3];
 	}
 
-	set_term_color(screen_char, color, COLOR_DEFAULT,
+	set_term_color(screen_char, color, 0,
 		       get_opt_int_tree(term->spec, "colors"));
 }
 
@@ -72,7 +72,7 @@ draw_border_char(struct terminal *term, int x, int y,
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
-	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT,
+	set_term_color(&term->screen->image[position], color, 0,
 		       get_opt_int_tree(term->spec, "colors"));
 	set_screen_dirty(term->screen, y, y);
 }
@@ -98,7 +98,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	check_range(term, x, y);
 
 	position = x + term->x * y;
-	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT,
+	set_term_color(&term->screen->image[position], color, 0,
 		       get_opt_int_tree(term->spec, "colors"));
 	set_screen_dirty(term->screen, y, y);
 }
@@ -190,7 +190,7 @@ draw_char(struct terminal *term, int x, int y,
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
 	term->screen->image[position].attr = attr;
-	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT,
+	set_term_color(&term->screen->image[position], color, 0,
 		       get_opt_int_tree(term->spec, "colors"));
 
 	set_screen_dirty(term->screen, y, y);
@@ -220,7 +220,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	end->attr = attr;
 	end->data = data;
 	if (color) {
-		set_term_color(end, color, COLOR_DEFAULT,
+		set_term_color(end, color, 0,
 			       get_opt_int_tree(term->spec, "colors"));
 	} else {
 		clear_screen_char_color(end);
@@ -261,7 +261,7 @@ draw_text(struct terminal *term, int x, int y,
 	memset(end, 0, sizeof(struct screen_char));
 	end->attr = attr;
 	if (color) {
-		set_term_color(end, color, COLOR_DEFAULT,
+		set_term_color(end, color, 0,
 			       get_opt_int_tree(term->spec, "colors"));
 	} else {
 		clear_screen_char_color(end);

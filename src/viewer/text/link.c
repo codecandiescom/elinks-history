@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.69 2003/10/17 15:24:03 zas Exp $ */
+/* $Id: link.c,v 1.70 2003/10/17 17:37:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	/* Setup the template char. */
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = 0;
-	set_term_color(template, &link->color, COLOR_LINK,
+	set_term_color(template, &link->color, COLOR_DECREASE_LIGHTNESS,
 		       doc_view->document->opt.color_mode);
 
 	xmax = doc_view->xp + doc_view->xw;

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-11-25 09:29+0100\n"
-"PO-Revision-Date: 2003-11-24 19:00+0100\n"
+"PO-Revision-Date: 2003-11-25 19:02+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -982,12 +982,11 @@ msgstr ""
 
 #: src/config/options.c:743
 msgid "Too many parameters"
-msgstr ""
+msgstr "Príli¹ veµa parametrov"
 
 #: src/config/options.c:748
-#, fuzzy
 msgid "error"
-msgstr "Chyba"
+msgstr "chyba"
 
 #: src/config/options.c:750 src/sched/error.c:45
 msgid "Host not found"
@@ -1020,7 +1019,7 @@ msgstr ""
 #: src/config/options.c:859
 #, c-format
 msgid "(alias for %s)"
-msgstr ""
+msgstr "(alias pre %s)"
 
 #: src/config/options.c:864 src/config/options.c:874
 #, c-format
@@ -1055,9 +1054,8 @@ msgid "Configuration handling options."
 msgstr ""
 
 #: src/config/options.inc:22
-#, fuzzy
 msgid "Comments"
-msgstr "dokumentov"
+msgstr "Poznámky"
 
 #: src/config/options.inc:24
 msgid ""
@@ -1133,7 +1131,7 @@ msgstr ""
 #. Keep options in alphabetical order.
 #: src/config/options.inc:70
 msgid "Connections"
-msgstr "Spojenie"
+msgstr "Spojenia"
 
 #: src/config/options.inc:72
 #, fuzzy
@@ -1142,20 +1140,19 @@ msgstr "Spojenie"
 
 #: src/config/options.inc:75
 msgid "Asynchronous DNS"
-msgstr ""
+msgstr "Asynchrónne DNS"
 
 #: src/config/options.inc:77
 msgid "Use asynchronous DNS resolver?"
-msgstr ""
+msgstr "Pou¾i» asynchrónny DNS resolver?"
 
 #: src/config/options.inc:79
-#, fuzzy
 msgid "Maximum connections"
-msgstr "Nadväzujem spojenie"
+msgstr "Maximum spojení"
 
 #: src/config/options.inc:81
 msgid "Maximum number of concurrent connections."
-msgstr ""
+msgstr "Maximálny poèet súèasných spojení."
 
 #: src/config/options.inc:83
 #, fuzzy
@@ -1182,9 +1179,8 @@ msgid "Receive timeout"
 msgstr "Èas vypr¹al"
 
 #: src/config/options.inc:94
-#, fuzzy
 msgid "Receive timeout (in seconds)."
-msgstr "Èas vypr¹al"
+msgstr "Èas vypr¹al (v sekundách)"
 
 #: src/config/options.inc:96
 msgid "Timeout for non-restartable connections"
@@ -1196,9 +1192,8 @@ msgstr ""
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:104
-#, fuzzy
 msgid "Document"
-msgstr "dokumentov"
+msgstr "Dokument"
 
 #: src/config/options.inc:106
 #, fuzzy
@@ -1271,12 +1266,11 @@ msgstr ""
 
 #: src/config/options.inc:143
 msgid "Ask for confirmation when submitting a form."
-msgstr ""
+msgstr "Pýtaj potvrdenie pri posielaní formulára."
 
 #: src/config/options.inc:146
-#, fuzzy
 msgid "Images"
-msgstr "Obrázok"
+msgstr "Obrázky"
 
 #: src/config/options.inc:148
 msgid "Options for handling of images."
@@ -1364,14 +1358,12 @@ msgid "Options for the active link."
 msgstr ""
 
 #: src/config/options.inc:194
-#, fuzzy
 msgid "Colors"
 msgstr "Farby"
 
 #: src/config/options.inc:196
-#, fuzzy
 msgid "Active link colors."
-msgstr "Titulok linku"
+msgstr "Farby aktívneho odkazu."
 
 #: src/config/options.inc:198 src/config/options.inc:382
 #: src/config/options.inc:877 src/config/options.inc:889
@@ -1405,9 +1397,8 @@ msgstr "Titulok linku"
 #: src/config/options.inc:1632 src/config/options.inc:1649
 #: src/config/options.inc:1661 src/config/options.inc:1673
 #: src/config/options.inc:1685
-#, fuzzy
 msgid "Background color"
-msgstr "Na pozadí"
+msgstr "Farba pozadia"
 
 #: src/config/options.inc:200 src/config/options.inc:384
 #: src/config/options.inc:879 src/config/options.inc:891
@@ -1439,7 +1430,7 @@ msgstr "Na pozadí"
 #: src/config/options.inc:1687
 #, fuzzy
 msgid "Default background color."
-msgstr "Ukonèi» v¹et~ky spojenia na pozadí"
+msgstr ""
 
 #: src/config/options.inc:202 src/config/options.inc:378
 #: src/config/options.inc:873 src/config/options.inc:885
@@ -1473,9 +1464,8 @@ msgstr "Ukonèi» v¹et~ky spojenia na pozadí"
 #: src/config/options.inc:1628 src/config/options.inc:1645
 #: src/config/options.inc:1657 src/config/options.inc:1669
 #: src/config/options.inc:1681
-#, fuzzy
 msgid "Text color"
-msgstr "Textová plocha"
+msgstr "Farba textu"
 
 #: src/config/options.inc:204 src/config/options.inc:380
 #: src/config/options.inc:875 src/config/options.inc:887
@@ -1509,9 +1499,8 @@ msgid "Default text color."
 msgstr ""
 
 #: src/config/options.inc:206
-#, fuzzy
 msgid "Enable color"
-msgstr "meno"
+msgstr "Zapnú» farby"
 
 #: src/config/options.inc:208
 msgid ""
@@ -1614,9 +1603,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:263 src/config/options.inc:270
-#, fuzzy
 msgid "Regular expressions"
-msgstr "Zadaj výraz"
+msgstr "Regulárne výrazy"
 
 #: src/config/options.inc:265
 msgid ""
@@ -1804,9 +1792,8 @@ msgid "Default document color settings."
 msgstr ""
 
 #: src/config/options.inc:386
-#, fuzzy
 msgid "Link color"
-msgstr "Titulok linku"
+msgstr "Farba odkazu"
 
 #: src/config/options.inc:388
 msgid "Default link color."
@@ -1814,7 +1801,7 @@ msgstr ""
 
 #: src/config/options.inc:390
 msgid "Visited-link color"
-msgstr ""
+msgstr "Farba nav¹tíveného odkazu"
 
 #: src/config/options.inc:392
 msgid "Default visited link color."
@@ -1840,7 +1827,7 @@ msgstr ""
 
 #: src/config/options.inc:403
 msgid "Ensure contrast"
-msgstr ""
+msgstr "Zabezpeèi» kontrast"
 
 #: src/config/options.inc:405
 msgid "Makes sure that the back- and foreground color is never equal."
@@ -1905,7 +1892,7 @@ msgstr ""
 #. Does automatic resuming make sense as an option?
 #: src/config/options.inc:449
 msgid "Prevent overwriting"
-msgstr ""
+msgstr "Zabráni» prepísaniu"
 
 #: src/config/options.inc:451
 msgid ""
@@ -1916,9 +1903,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.inc:456
-#, fuzzy
 msgid "Notify download completion by bell"
-msgstr "S»ahovanie ukonèené"
+msgstr "Upozorni» na ukonèenie s»ahovania pípnutím"
 
 #: src/config/options.inc:458
 msgid ""
@@ -1947,11 +1933,12 @@ msgstr ""
 
 #: src/config/options.inc:472
 msgid "Width"
-msgstr ""
+msgstr "©írka"
 
 #: src/config/options.inc:474
+#, fuzzy
 msgid "Width of screen in characters when dumping a HTML document."
-msgstr ""
+msgstr "©írka obrazovky v znakoch pri"
 
 #: src/config/options.inc:478
 #, fuzzy

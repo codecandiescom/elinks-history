@@ -1124,6 +1124,11 @@ AC_OUTPUT([ \
  test/Makefile
 ])
 
+
+dnl ===================================================================
+dnl Configuration summary
+dnl ===================================================================
+
 EL_MSG_CONFIG(CONFIG_BOOKMARKS)
 EL_MSG_CONFIG(CONFIG_XBEL_BOOKMARKS)
 EL_MSG_CONFIG(CONFIG_COOKIES)

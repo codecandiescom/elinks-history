@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.4 2002/06/17 11:23:46 pasky Exp $ */
+/* $Id: string.c,v 1.5 2002/06/21 17:52:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,11 +135,12 @@ init_str_x(unsigned char *file, int line)
 void
 add_to_str(unsigned char **s, int *l, unsigned char *a)
 {
-	unsigned char *p;
 	int ll = strlen(a);
 
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
-	   p = mem_realloc(*s, (*l + ll + ALLOC_GR) & ~(ALLOC_GR - 1));
+	   unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
+					      & ~(ALLOC_GR - 1));
+
 	   if (!p) return;
 	   *s = p;
 	}
@@ -151,12 +152,12 @@ add_to_str(unsigned char **s, int *l, unsigned char *a)
 void
 add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
 {
-	unsigned char *p;
-
 	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
-	   p = mem_realloc(*s, (*l + ll + ALLOC_GR) & ~(ALLOC_GR - 1));
-	   if (!p) return;
-	   *s = p;
+		unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
+			                      & ~(ALLOC_GR - 1));
+
+		if (!p) return;
+		*s = p;
 	}
 
 	memcpy(*s + *l, a, ll);
@@ -167,12 +168,12 @@ add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
 void
 add_chr_to_str(unsigned char **s, int *l, unsigned char a)
 {
-	unsigned char *p;
-
 	if ((*l & (ALLOC_GR - 1)) == ALLOC_GR - 1) {
-	   p = mem_realloc(*s, (*l + 1 + ALLOC_GR) & ~(ALLOC_GR - 1));
-	   if (!p) return;
-	   *s = p;
+		unsigned char *p = mem_realloc(*s, (*l + 1 + ALLOC_GR)
+					      & ~(ALLOC_GR - 1));
+
+		if (!p) return;
+		*s = p;
 	}
 
 	*(*s + *l) = a;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.113 2003/10/24 23:31:11 pasky Exp $ */
+/* $Id: download.c,v 1.114 2003/10/24 23:35:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ found:
 
 	set_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
 	set_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
-	set_dlg_button(dlg, n, 0, dkg_abort_download, _("Abort", term), NULL);
+	set_dlg_button(dlg, n, 0, dlg_abort_download, _("Abort", term), NULL);
 
 	set_dlg_end(dlg, n);
 

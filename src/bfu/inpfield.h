@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.9 2003/10/24 23:24:22 pasky Exp $ */
+/* $Id: inpfield.h,v 1.10 2003/10/24 23:35:51 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -16,10 +16,10 @@
 		(dlg)->items[n].gid = (min);				\
 		(dlg)->items[n].gnum = (max);				\
 		(dlg)->items[n].fn = (handler);				\
-		(dlg)->items[n].dlen = (length);			\
+		(dlg)->items[n].dlen = (len);				\
 		(dlg)->items[n].data = (field);				\
 		(dlg)->items[n].history = (hist);			\
-		(n)++;						\
+		(n)++;							\
 	} while (0)
 
 #define set_dlg_field(dlg, n, min, max, handler, len, field, history)	\

@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.10 2003/10/24 22:46:03 pasky Exp $ */
+/* $Id: button.h,v 1.11 2003/10/24 23:35:51 jonas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -11,14 +11,14 @@
 #define B_ENTER		1
 #define B_ESC		2
 
-#define set_dlg_button(dlg, n, key, handler, button_text, udata)	\
+#define set_dlg_button(dlg, n, key, handler, button_text, button_data)	\
 	do {								\
 		(dlg)->items[n].type = D_BUTTON;			\
 		(dlg)->items[n].gid = (key);				\
 		(dlg)->items[n].fn = (handler);				\
 		(dlg)->items[n].text = (button_text);			\
-		(dlg)->items[n].udata = (udata);			\
-		(n)++;						\
+		(dlg)->items[n].udata = (button_data);			\
+		(n)++;							\
 	} while (0)
 
 extern struct widget_ops button_ops;

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.131 2004/09/21 09:58:00 pasky Exp $ */
+/* $Id: parser.c,v 1.132 2004/09/21 11:00:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -494,6 +494,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string,
 		}
 	}
 #ifdef CSS_DEBUG
+	dump_css_selector_tree(&css->selectors);
 	WDBG("That's it.");
 #endif
 }

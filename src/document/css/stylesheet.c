@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.34 2004/09/21 08:26:21 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.35 2004/09/21 11:00:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,6 +178,28 @@ done_css_selector(struct css_selector *selector)
 	mem_free_if(selector->name);
 	mem_free(selector);
 }
+
+#ifdef CSS_DEBUG
+void
+dump_css_selector_tree_iter(struct list_head *sels, int level)
+{
+	struct css_selector *sel;
+
+	foreach (sel, *sels) {
+		fprintf(stderr, "%*s +- [%s] type %d rel %d props !!%d",
+		        " ", level * 4,
+		        sel->name, sel->type, sel->relation,
+			!list_empty(sel->properties));
+		dump_css_selector_tree_iterm(&sel->properties, level);
+	}
+}
+
+void
+dump_css_selector_tree(struct list_head *sels)
+{
+	dump_css_selector_tree_iter(sels, level);
+}
+#endif
 
 
 struct css_stylesheet *

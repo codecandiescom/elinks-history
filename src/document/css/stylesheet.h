@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.36 2004/09/20 22:54:25 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.37 2004/09/21 11:00:19 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -135,5 +135,10 @@ void merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2);
 
 /* Destroy a selector. done_css_stylesheet() normally does that for you. */
 void done_css_selector(struct css_selector *selector);
+
+#ifdef CSS_DEBUG
+/* Dumps the selector tree to stderr. */
+void dump_css_selector_tree(struct list_head *selector_list);
+#endif
 
 #endif

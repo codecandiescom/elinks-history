@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.176 2003/07/20 23:56:42 pasky Exp $ */
+/* $Id: renderer.c,v 1.177 2003/07/21 00:03:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,10 +691,7 @@ static void
 put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
 	unsigned char *buffer;
-	int bufferpos = 0;
-	int charspos = 0;
-
-	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
+	int bufferlen;
 
 	assert(part && chars);
 	if_assert_failed return;
@@ -709,100 +706,14 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 		return;
 	}
 
-	/* Buffer allocation */
+	/* XXX: Perhaps doing the whole string at once could be an ugly memory
+	 * hit? Dunno, someone should measure that. --pasky */
 
-	buffer = mem_alloc(ALLOC_GR);
-	if (!buffer) return;
+	buffer = convert_string(convert_table, chars, charslen);
+	bufferlen = buffer ? strlen(buffer) : 0;
 
-	/* Iterate ;-) */
-
-	while (charspos < charslen) {
-		unsigned char *e;
-
-		if (chars[charspos] < 128 && chars[charspos] != '&') {
-putc:
-			buffer[bufferpos++] = chars[charspos++];
-			goto flush;
-		}
-
-		if (chars[charspos] != '&') {
-			struct conv_table *t;
-			int i;
-
-			if (!convert_table) goto putc;
-			t = convert_table;
-			i = charspos;
-
-decode:
-			if (!t[chars[i]].t) {
-				e = t[chars[i]].u.str;
-			} else {
-				t = t[chars[i++]].u.tbl;
-				if (i >= charslen) goto putc;
-				goto decode;
-			}
-			charspos = i + 1;
-
-		} else {
-			int start = charspos + 1;
-			int i = start;
-
-			if (d_opt->plain) goto putc;
-			while (i < charslen
-			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
-				   || (chars[i] >= 'a' && chars[i] <= 'z')
-				   || (chars[i] >= '0' && chars[i] <= '9')
-				   || (chars[i] == '#')))
-				i++;
-
-			/* This prevents bug 213: we were expanding "entities"
-			 * in URL query strings. */
-			/* XXX: But this disables &nbsp&nbsp usage, which
-			 * appears to be relatively common! --pasky */
-			if (chars[i] != '&' && chars[i] != '='
-			    && !isalnum(chars[i]) && i > start) {
-				if (chars[i] != ';') {
-					/* Eat &nbsp &nbsp<foo> happily, but
-					 * pull back from the character after
-					 * entity string if it is not the valid
-					 * terminator. */
-					i--;
-				}
-				e = get_entity_string(&chars[start], i - start,
-						      d_opt->cp);
-				if (!e) goto putc;
-				charspos = i + (i < charslen);
-			} else goto putc;
-		}
-
-		if (!e[0]) continue;
-
-		if (!e[1]) {
-			buffer[bufferpos++] = e[0];
-flush:
-			e = "";
-			goto flush1;
-		}
-
-		while (*e) {
-			buffer[bufferpos++] = *(e++);
-flush1:
-			if (!(bufferpos & (ALLOC_GR - 1))) {
-				unsigned char *b;
-
-				b = mem_realloc(buffer, bufferpos + ALLOC_GR);
-				if (b)
-					buffer = b;
-				else
-					bufferpos--;
-			}
-		}
-	}
-
-	/* Say bye */
-
-	if (bufferpos) put_chars(part, buffer, bufferpos);
-	mem_free(buffer);
+	if (bufferlen) put_chars(part, buffer, bufferlen);
+	if (buffer) mem_free(buffer);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.125 2004/01/01 15:50:29 jonas Exp $ */
+/* $Id: screen.c,v 1.126 2004/01/04 00:07:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -707,14 +707,23 @@ init_screen(void)
 void
 resize_screen(struct terminal *term, int width, int height)
 {
-	int size = width * height;
-	int bsize = size * sizeof(struct screen_char);
-	struct terminal_screen *screen = term->screen;
+	struct terminal_screen *screen;
 	struct screen_char *image;
+	size_t size, bsize;
 
-	assert(screen);
+	assert(term && term->screen);
 
-	image = mem_realloc(screen->image, bsize<<1);
+	screen = term->screen;
+
+	assert(width >= 0);
+	assert(height >= 0);
+
+	size = width * height;
+	if (size <= 0) return;
+
+	bsize = size * sizeof(struct screen_char);
+
+	image = mem_realloc(screen->image, bsize * 2);
 	if (!image) return;
 
 	screen->image = image;

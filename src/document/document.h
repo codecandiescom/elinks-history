@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.82 2004/12/18 01:42:18 pasky Exp $ */
+/* $Id: document.h,v 1.83 2004/12/20 12:12:39 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -90,6 +90,8 @@ struct link {
 
 	int number;
 
+	/* This is supposed to be the colour-pair of the link, but the actual
+	 * colours on the canvas can differ--e.g., with image links. */
 	struct color_pair color;
 
 	/* XXX: They don't neccessary need to be link-specific, but we just

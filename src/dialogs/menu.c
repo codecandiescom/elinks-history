@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.36 2002/07/04 15:45:39 pasky Exp $ */
+/* $Id: menu.c,v 1.37 2002/07/05 16:19:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,14 +442,14 @@ struct menu_item help_menu[] = {
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 
-struct menu_item assoc_menu[] = {
 #if 0
+struct menu_item assoc_menu[] = {
 	{TEXT(T_ADD), "", TEXT(T_HK_ADD), MENU_FUNC menu_add_ct, NULL, 0, 0},
 	{TEXT(T_MODIFY), ">", TEXT(T_HK_MODIFY), MENU_FUNC menu_list_assoc, menu_add_ct, 1, 0},
 	{TEXT(T_DELETE), ">", TEXT(T_HK_DELETE), MENU_FUNC menu_list_assoc, menu_del_ct, 1, 0},
-#endif
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
+#endif
 
 struct menu_item ext_menu[] = {
 	{TEXT(T_ADD), "", TEXT(T_HK_ADD), MENU_FUNC menu_add_ext, NULL, 0, 0},
@@ -465,7 +465,7 @@ struct menu_item setup_menu[] = {
 	{TEXT(T_NETWORK_OPTIONS), "", TEXT(T_HK_NETWORK_OPTIONS), MENU_FUNC net_options, NULL, 0, 0},
 	{TEXT(T_CACHE), "", TEXT(T_HK_CACHE), MENU_FUNC cache_opt, NULL, 0, 0},
 	{TEXT(T_MAIL_AND_TELNEL), "", TEXT(T_HK_MAIL_AND_TELNEL), MENU_FUNC net_programs, NULL, 0, 0},
-	{TEXT(T_ASSOCIATIONS), ">", TEXT(T_HK_ASSOCIATIONS), MENU_FUNC do_menu, assoc_menu, 1, 0},
+/*	{TEXT(T_ASSOCIATIONS), ">", TEXT(T_HK_ASSOCIATIONS), MENU_FUNC do_menu, assoc_menu, 1, 0}, */
 	{TEXT(T_FILE_EXTENSIONS), ">", TEXT(T_HK_FILE_EXTENSIONS), MENU_FUNC do_menu, ext_menu, 1, 0},
 	{"", "", M_BAR, NULL, NULL, 0, 0},
 	{TEXT(T_SAVE_OPTIONS), "", TEXT(T_HK_SAVE_OPTIONS), MENU_FUNC write_config, NULL, 0, 0},

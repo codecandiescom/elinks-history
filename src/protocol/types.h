@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.9 2002/06/22 16:45:19 pasky Exp $ */
+/* $Id: types.h,v 1.10 2002/07/05 16:19:27 zas Exp $ */
 
 #ifndef EL__PROTOCOL_TYPES_H
 #define EL__PROTOCOL_TYPES_H
@@ -15,9 +15,12 @@ struct option *get_mime_type_handler(struct terminal *, unsigned char *);
 
 unsigned char *get_prog(struct terminal *, unsigned char *);
 
+#if 0
 void menu_add_ct(struct terminal *, void *, void *);
 void menu_del_ct(struct terminal *, void *, void *);
 void menu_list_assoc(struct terminal *, void *, void *);
+#endif
+
 void menu_add_ext(struct terminal *, void *, void *);
 void menu_del_ext(struct terminal *, void *, void *);
 void menu_list_ext(struct terminal *, void *, void *);

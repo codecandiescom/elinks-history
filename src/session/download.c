@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.152 2003/11/10 21:29:57 kuser Exp $ */
+/* $Id: download.c,v 1.153 2003/11/11 21:47:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 		done_string(&msg);
 		return;
 	}
-	
+
 	if (t && download->prg->size >= 0) {
 		int_lower_bound(&w, DOWN_DLG_MIN);
 	}
@@ -582,7 +582,7 @@ download_data(struct download *download, struct file_download *file_download)
 	int broken_302_redirect;
 
 	if (!ce) goto end_store;
-	
+
 	if (download->state >= S_WAIT && download->state < S_TRANS)
 		goto end_store;
 
@@ -614,7 +614,7 @@ download_data(struct download *download, struct file_download *file_download)
 		set_file_download_win_handler(file_download);
 
 		load_url(file_download->url, ce->url, &file_download->download,
-			 PRI_DOWNLOAD, NC_CACHE,
+			 PRI_DOWNLOAD, CACHE_MODE_DEFAULT,
 			 download->prg ? download->prg->start : 0);
 
 		return;
@@ -978,7 +978,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->remotetime = 0;
 
 	add_to_list(downloads, file_download);
-	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, NC_CACHE,
+	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_DEFAULT,
 		 (resume ? file_download->last_pos : 0));
 	display_download(cmdw_hop->ses->tab->term, file_download, cmdw_hop->ses);
 

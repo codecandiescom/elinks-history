@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.117 2003/11/11 15:00:40 zas Exp $ */
+/* $Id: connection.c,v 1.118 2003/11/11 21:47:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -781,9 +781,9 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 #endif
 
-	if (cache_mode <= NC_CACHE && find_in_cache(url, &ce) && !ce->incomplete) {
+	if (cache_mode <= CACHE_MODE_DEFAULT && find_in_cache(url, &ce) && !ce->incomplete) {
 		if (!is_cache_entry_locked(ce) &&
-		    ((ce->cache_mode == NC_PR_NO_CACHE && cache_mode != NC_ALWAYS_CACHE)
+		    ((ce->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
 		     || (ce->redirect && !get_opt_int("document.cache.cache_redirects")))) {
 			delete_cache_entry(ce);
 			ce = NULL;
@@ -848,7 +848,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return -1;
 	}
 
-	if (cache_mode < NC_RELOAD && ce && !list_empty(ce->frag)
+	if (cache_mode < CACHE_MODE_FORCE_RELOAD && ce && !list_empty(ce->frag)
 	    && !((struct fragment *) ce->frag.next)->offset)
 		conn->from = ((struct fragment *) ce->frag.next)->length;
 

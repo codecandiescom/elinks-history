@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.50 2003/10/24 22:30:50 pasky Exp $ */
+/* $Id: history.c,v 1.51 2003/11/11 21:47:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,12 +109,12 @@ go_history(struct session *ses, struct location *loc)
 {
 	unsigned char *url;
 
-	ses->reloadlevel = NC_CACHE;
+	ses->reloadlevel = CACHE_MODE_DEFAULT;
 
 	if (ses->task) {
 		abort_loading(ses, 0);
 		print_screen_status(ses);
-		reload(ses, NC_CACHE);
+		reload(ses, CACHE_MODE_DEFAULT);
 		return;
 	}
 
@@ -135,6 +135,6 @@ go_history(struct session *ses, struct location *loc)
 	if (!url) return;
 
 	ses_goto(ses, url, NULL, loc,
-		 PRI_MAIN, NC_ALWAYS_CACHE, TASK_HISTORY,
+		 PRI_MAIN, CACHE_MODE_ALWAYS, TASK_HISTORY,
 		 NULL, end_load, 0);
 }

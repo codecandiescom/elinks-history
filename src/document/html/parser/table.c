@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.24 2004/10/19 09:23:50 zas Exp $ */
+/* $Id: table.c,v 1.25 2004/10/19 10:24:19 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -559,6 +559,7 @@ see:
 		get_column_width(t_attr, &c_width, sh);
 		c_span = get_num(t_attr, "span");
 		if (c_span == -1) c_span = 1;
+		else if (c_span > HTML_MAX_COLSPAN) c_span = HTML_MAX_COLSPAN;
 		goto see;
 	}
 
@@ -581,6 +582,7 @@ see:
 
 		sp = get_num(t_attr, "span");
 		if (sp == -1) sp = 1;
+		else if (sp > HTML_MAX_COLSPAN) sp = HTML_MAX_COLSPAN;
 
 		width = c_width;
 		al = c_al;

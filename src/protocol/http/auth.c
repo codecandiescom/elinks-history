@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.67 2003/08/01 14:12:34 zas Exp $ */
+/* $Id: auth.c,v 1.68 2003/11/12 09:53:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,10 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+/* Defines to 1 to enable http auth debugging output. */
+#if 0
+#define DEBUG_HTTP_AUTH
+#endif
 
 static INIT_LIST_HEAD(http_auth_basic_list);
 
@@ -31,6 +35,10 @@ static struct http_auth_basic *
 find_auth_entry(unsigned char *url, unsigned char *realm)
 {
 	struct http_auth_basic *match = NULL, *entry;
+
+#ifdef DEBUG_HTTP_AUTH
+	debug("find_auth_entry: url=%s realm=%s", url, realm);
+#endif
 
 	if (!url || !*url) return NULL;
 
@@ -80,6 +88,10 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
 {
 	struct http_auth_basic *entry;
 
+#ifdef DEBUG_HTTP_AUTH
+	debug("init_auth_entry: auth_url=%s realm=%s uri=%p", auth_url, realm, uri);
+#endif
+
 	entry = mem_calloc(1, sizeof(struct http_auth_basic));
 	if (!entry) return NULL;
 
@@ -117,6 +129,10 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 {
 	struct http_auth_basic *entry;
 	unsigned char *newurl = get_uri_string(uri, ~(URI_DATA | URI_POST));
+
+#ifdef DEBUG_HTTP_AUTH
+	debug("add_auth_entry: newurl=%s realm=%s uri=%p", newurl, realm, uri);
+#endif
 
 	if (!newurl) return NULL;
 
@@ -192,6 +208,10 @@ find_auth(struct uri *uri)
 	unsigned char *id, *ret;
 	unsigned char *newurl = get_uri_string(uri, ~(URI_DATA | URI_POST));
 
+#ifdef DEBUG_HTTP_AUTH
+	debug("find_auth: newurl=%s uri=%p", newurl, uri);
+#endif
+
 	if (!newurl) return NULL;
 
 	entry = find_auth_entry(newurl, NULL);
@@ -238,6 +258,11 @@ find_auth(struct uri *uri)
 void
 del_auth_entry(struct http_auth_basic *entry)
 {
+#ifdef DEBUG_HTTP_AUTH
+	debug("del_auth_entry: url=%s realm=%s user=%p",
+	      entry->url, entry->realm, entry->user);
+#endif
+
 	if (entry->url) mem_free(entry->url);
 	if (entry->realm) mem_free(entry->realm);
 	if (entry->user) mem_free(entry->user);
@@ -252,6 +277,10 @@ del_auth_entry(struct http_auth_basic *entry)
 void
 free_auth(void)
 {
+#ifdef DEBUG_HTTP_AUTH
+	debug("free_auth");
+#endif
+
 	while (!list_empty(http_auth_basic_list))
 		del_auth_entry(http_auth_basic_list.next);
 
@@ -262,6 +291,10 @@ struct http_auth_basic *
 get_invalid_auth_entry(void)
 {
 	struct http_auth_basic *entry;
+
+#ifdef DEBUG_HTTP_AUTH
+	debug("get_invalid_auth_entry");
+#endif
 
 	foreach (entry, http_auth_basic_list)
 		if (!entry->valid)

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.56 2005/03/27 01:33:09 rrowan Exp $
+# $Id: hooks.pl,v 1.57 2005/03/27 01:54:30 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -643,65 +643,65 @@ sub loadrc
 ################################################################################
 ### Search engines #############################################################
 my %search_engines = (
-	"elgoog" => {
-		home => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
-		search => 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q='
+	"elgoog"     => {
+		home     => 'http://alltooflat.com/geeky/elgoog/m/index.cgi',
+		search   => 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q='
 	},
-	"google" => {
-		home => 'http://google.com!bork!',
-		search => 'http://google.com/search?!bork!q='
+	"google"     => {
+		home     => 'http://google.com!bork!',
+		search   => 'http://google.com/search?!bork!q='
 	},
-	"yahoo" => {
-		home => 'http://yahoo.com',
-		search => 'http://search.yahoo.com/search?p='
+	"yahoo"      => {
+		home     => 'http://yahoo.com',
+		search   => 'http://search.yahoo.com/search?p='
 	},
 	"ask jeeves" => {
-		home => 'http://ask.com',
-		search => 'http://web.ask.com/web?q='
+		home     => 'http://ask.com',
+		search   => 'http://web.ask.com/web?q='
 	},
-	"a9" => {
-		home => 'http://a9.com',
-		search => 'http://a9.com/?q='
+	"a9"         => {
+		home     => 'http://a9.com',
+		search   => 'http://a9.com/?q='
 	},
-	"altavista" => {
-		home => 'http://altavista.com',
-		search => 'http://altavista.com/web/results?q='
+	"altavista"  => {
+		home     => 'http://altavista.com',
+		search   => 'http://altavista.com/web/results?q='
 	},
-	"msn" => {
-		home => 'http://msn.com',
-		search => 'http://search.msn.com/results.aspx?q='
+	"msn"        => {
+		home     => 'http://msn.com',
+		search   => 'http://search.msn.com/results.aspx?q='
 	},
-	"dmoz" => {
-		home => 'http://dmoz.org',
-		search => 'http://search.dmoz.org/cgi-bin/search?search='
+	"dmoz"       => {
+		home     => 'http://dmoz.org',
+		search   => 'http://search.dmoz.org/cgi-bin/search?search='
 	},
-	"dogpile" => {
-		home => 'http://dogpile.com',
-		search => 'http://dogpile.com/info.dogpl/search/web/'
+	"dogpile"    => {
+		home     => 'http://dogpile.com',
+		search   => 'http://dogpile.com/info.dogpl/search/web/'
 	},
-	"mamma" => {
-		home => 'http://mamma.com',
-		search => 'http://mamma.com/Mamma?query='
+	"mamma"      => {
+		home     => 'http://mamma.com',
+		search   => 'http://mamma.com/Mamma?query='
 	},
 	"webcrawler" => {
-		home => 'http://webcrawler.com',
-		search => 'http://webcrawler.com/info.wbcrwl/search/web/'
+		home     => 'http://webcrawler.com',
+		search   => 'http://webcrawler.com/info.wbcrwl/search/web/'
 	},
-	"netscape" => {
-		home => 'http://search.netscape.com',
-		search => 'http://channels.netscape.com/ns/search/default.jsp?query='
+	"netscape"   => {
+		home     => 'http://search.netscape.com',
+		search   => 'http://channels.netscape.com/ns/search/default.jsp?query='
 	},
-	"lycos" => {
-		home => 'http://lycos.com',
-		search => 'http://search.lycos.com/default.asp?query='
+	"lycos"      => {
+		home     => 'http://lycos.com',
+		search   => 'http://search.lycos.com/default.asp?query='
 	},
-	"hotbot" => {
-		home => 'http://hotbot.com',
-		search => 'http://hotbot.com/default.asp?query='
+	"hotbot"     => {
+		home     => 'http://hotbot.com',
+		search   => 'http://hotbot.com/default.asp?query='
 	},
-	"excite" => {
-		home => 'http://search.excite.com',
-		search => 'http://search.excite.com/info.xcite/search/web/'
+	"excite"     => {
+		home     => 'http://search.excite.com',
+		search   => 'http://search.excite.com/info.xcite/search/web/'
 	},
 );
 
@@ -712,21 +712,24 @@ sub search
 
 	# Google is the default, Google is the best!
 	$engine = 'google' unless $search_engines{$engine}
-	                          and $search_engines{$engine}->{$key};
+		and $search_engines{$engine}->{$key};
 	my $url = $search_engines{$engine}->{$key};
-
-	if ($engine eq 'google') {
+	if ($engine eq 'google')
+	{
 		my $bork = '';
-		if (loadrc('bork') eq 'yes') {
-			if (not $search) {
+		if (loadrc('bork') eq 'yes')
+		{
+			if (not $search)
+			{
 				$bork = "/webhp?hl=xx-bork";
-			} else {
+			}
+			else
+			{
 				$bork = "hl=xx-bork&";
 			}
 		}
 		$url =~ s/!bork!/$bork/;
 	}
-
 	$url .= $search if $search;
 	return $url;
 }
@@ -735,66 +738,66 @@ sub search
 ################################################################################
 ### News servers ###############################################################
 my %news_servers = (
-	"bbc" => {
-		home => 'http://news.bbc.co.uk',
-		search => 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=',
+	"bbc"       => {
+		home    => 'http://news.bbc.co.uk',
+		search  => 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=',
 	},
 	# The bastard child of Microsoft and the National Broadcasting Corporation
-	"msnbc" => {
-		home => 'http://msnbc.com',
-		search => 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=',
+	"msnbc"     => {
+		home    => 'http://msnbc.com',
+		search  => 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=',
 	},
-	"cnn" => {
-		home => 'http://cnn.com',
-		search => 'http://search.cnn.com/pages/search.jsp?query=',
+	"cnn"       => {
+		home    => 'http://cnn.com',
+		search  => 'http://search.cnn.com/pages/search.jsp?query=',
 	},
-	"fox" => {
-		home => 'http://foxnews.com',
-		search => 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=',
+	"fox"       => {
+		home    => 'http://foxnews.com',
+		search  => 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=',
 	},
-	"google" => {
-		home => 'http://news.google.com',
-		search => 'http://news.google.com/news?q=',
+	"google"    => {
+		home    => 'http://news.google.com',
+		search  => 'http://news.google.com/news?q=',
 	},
-	"yahoo" => {
-		home => 'http://news.yahoo.com',
-		search => 'http://news.search.yahoo.com/search/news/?p=',
+	"yahoo"     => {
+		home    => 'http://news.yahoo.com',
+		search  => 'http://news.search.yahoo.com/search/news/?p=',
 	},
-	"reuters" => {
-		home => 'http://reuters.com',
-		search => 'http://reuters.com/newsSearchResultsHome.jhtml?query=',
+	"reuters"   => {
+		home    => 'http://reuters.com',
+		search  => 'http://reuters.com/newsSearchResultsHome.jhtml?query=',
 	},
-	"eff" => {
-		home => 'http://eff.org',
-		search => 'http://google.com/search?sitesearch=http://eff.org&q=',
+	"eff"       => {
+		home    => 'http://eff.org',
+		search  => 'http://google.com/search?sitesearch=http://eff.org&q=',
 	},
-	"wired" => {
-		home => 'http://wired.com',
-		search => 'http://search.wired.com/wnews/default.asp?query=',
+	"wired"     => {
+		home    => 'http://wired.com',
+		search  => 'http://search.wired.com/wnews/default.asp?query=',
 	},
-	"slashdot" => {
-		home => 'http://slashdot.org',
-		search => 'http://slashdot.org/search.pl?query=',
+	"slashdot"  => {
+		home    => 'http://slashdot.org',
+		search  => 'http://slashdot.org/search.pl?query=',
 	},
 	"newsforge" => {
-		home => 'http://newsforge.com',
-		search => 'http://newsforge.com/search.pl?query=',
+		home    => 'http://newsforge.com',
+		search  => 'http://newsforge.com/search.pl?query=',
 	},
-	"usnews" => {
-		home => 'http://usnews.com',
-		search => 'http://www.usnews.com/search/Search?keywords=',
+	"usnews"    => {
+		home    => 'http://usnews.com',
+		search  => 'http://www.usnews.com/search/Search?keywords=',
 	},
-	"newsci" => {
-		home => 'http://newscientist.com',
-		search => 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString=',
+	"newsci"    => {
+		home    => 'http://newscientist.com',
+		search  => 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString=',
 	},
-	"discover" => {
-		home => 'http://discover.com',
-		search => 'http://www.discover.com/search-results/?searchStr=',
+	"discover"  => {
+		home    => 'http://discover.com',
+		search  => 'http://www.discover.com/search-results/?searchStr=',
 	},
-	"sciam" => {
-		home => 'http://sciam.com',
-		search => 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=',
+	"sciam"     => {
+		home    => 'http://sciam.com',
+		search  => 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=',
 	},
 );
 
@@ -805,7 +808,7 @@ sub news
 
 	# Fall back to the BBC if no preference.
 	$server = 'bbc' unless $news_servers{$server}
-	                          and $news_servers{$server}->{$key};
+		and $news_servers{$server}->{$key};
 	my $url = $news_servers{$server}->{$key};
 	$url .= $search if $search;
 	return $url;
@@ -815,53 +818,53 @@ sub news
 ################################################################################
 ### Locators ###################################################################
 my %locators = (
-	'imdb' => {
-		home => 'http://imdb.com',
-		search => 'http://imdb.com/Find?select=All&for=',
+	'imdb'        => {
+		home      => 'http://imdb.com',
+		search    => 'http://imdb.com/Find?select=All&for=',
 	},
-	'stock' => {
-		home => 'http://nasdr.com',
-		search => 'http://finance.yahoo.com/l?s=',
+	'stock'       => {
+		home      => 'http://nasdr.com',
+		search    => 'http://finance.yahoo.com/l?s=',
 	},
-	'bs' => {
-		home => 'http://snopes.com',
-		search => 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=',
+	'bs'          => {
+		home      => 'http://snopes.com',
+		search    => 'http://search.atomz.com/search/?sp-a=00062d45-sp00000000&sp-q=',
 	},
-	'torrent' => {
-		home => 'http://isohunt.com',
-		search => 'http://google.com/search?q=filetype:torrent !query!!bork!',
+	'torrent'     => {
+		home      => 'http://isohunt.com',
+		search    => 'http://google.com/search?q=filetype:torrent !query!!bork!',
 	},
-	'archive' => {
-		home => 'http://web.archive.org/web/*/!current!',
-		search => 'http://web.archive.org/web/*/',
+	'archive'     => {
+		home      => 'http://web.archive.org/web/*/!current!',
+		search    => 'http://web.archive.org/web/*/',
 	},
-	'freshmeat' => {
-		home => 'http://freshmeat.net',
-		search => 'http://freshmeat.net/search/?q=',
+	'freshmeat'   => {
+		home      => 'http://freshmeat.net',
+		search    => 'http://freshmeat.net/search/?q=',
 	},
 	'sourceforge' => {
-		home => 'http://sourceforge.net',
-		search => 'http://sourceforge.net/search/?q=',
+		home      => 'http://sourceforge.net',
+		search    => 'http://sourceforge.net/search/?q=',
 	},
-	'savannah' => {
-		home => 'http://savannah.nongnu.org',
-		search => 'http://savannah.nongnu.org/search/?type_of_search=soft&words=',
+	'savannah'    => {
+		home      => 'http://savannah.nongnu.org',
+		search    => 'http://savannah.nongnu.org/search/?type_of_search=soft&words=',
 	},
-	'gna' => {
-		home => 'http://gna.org',
-		search => 'https://gna.org/search/?type_of_search=soft&words=',
+	'gna'         => {
+		home      => 'http://gna.org',
+		search    => 'https://gna.org/search/?type_of_search=soft&words=',
 	},
-	'dead' => {
-		home => 'http://www.whosaliveandwhosdead.com',
-		search => 'http://google.com/search?btnI&sitesearch=http://whosaliveandwhosdead.com&q=',
+	'dead'        => {
+		home      => 'http://www.whosaliveandwhosdead.com',
+		search    => 'http://google.com/search?btnI&sitesearch=http://whosaliveandwhosdead.com&q=',
 	},
-	'book' => {
-		home => 'http://gutenberg.org',
-		search => 'http://google.com/search?q=book+"!query!"',
+	'book'        => {
+		home      => 'http://gutenberg.org',
+		search    => 'http://google.com/search?q=book+"!query!"',
 	},
-	'ipl' => {
-		home => 'http://ipl.org',
-		search => 'http://ipl.org/div/searchresults/?words=',
+	'ipl'         => {
+		home      => 'http://ipl.org',
+		search    => 'http://ipl.org/div/searchresults/?words=',
 	},
 );
 
@@ -871,7 +874,7 @@ sub location
 	my $key = $search ? 'search' : 'home';
 
 	croak 'Unknown URL!' unless $locators{$server}
-	                            and $locators{$server}->{$key};
+		and $locators{$server}->{$key};
 	my $url = $locators{$server}->{$key};
 
 	my $bork = ""; $bork = "&hl=xx-bork" unless (loadrc("bork") ne "yes");

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.200 2004/04/23 19:26:46 pasky Exp $ */
+/* $Id: main.c,v 1.201 2004/04/23 19:37:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,12 @@ init(void)
 
 	} else if (get_opt_bool_tree(cmdline_options, "ping")) {
 		/* If no instance was running return ping failure */
-		if (fd == -1) retval = RET_PING;
+		if (fd == -1) {
+			usrerror(G_("ping: 0, no reply"));
+			retval = RET_PING;
+		} else {
+			usrerror(G_("ping: 1, alive and well"));
+		}
 		terminate = 1;
 
 	} else if (remote_session_flags && fd == -1) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.150 2003/07/14 19:51:31 jonas Exp $ */
+/* $Id: parser.c,v 1.151 2003/07/15 21:53:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2429,57 +2429,78 @@ free_cd:
 static void
 html_link(unsigned char *a)
 {
-	unsigned char *name, *url;
-
-	name = get_attr_val(a, "type");
-	if (name) {
-		/* Ignore links of type:
-		 * - text/css...
-		 * - image/x-icon...
-		 * */
-		if (!strncasecmp(name, "text/css", 8) ||
-		    !strncasecmp(name, "image/x-icon", 12)) {
-			mem_free(name);
-			return;
-		}
-		mem_free(name);
-	}
+	unsigned char *name = NULL;
+	unsigned char *type = NULL;
+	unsigned char *url;
 
 	url = get_url_val(a, "href");
 	if (!url) return;
 
+	type = get_attr_val(a, "type");
+	if (type) {
+		/* Ignore links of type:
+		 * - text/css...
+		 * - image/x-icon...
+		 * */
+		if (!strncasecmp(type, "text/css", 8) ||
+		    !strncasecmp(type, "image/x-icon", 12))
+			goto free_and_return;
+	}
+
 	name = get_attr_val(a, "rel");
 	if (!name) name = get_attr_val(a, "rev");
 	if (!name) name = stracpy(url);
-	if (!name) {
-		mem_free(url);
-		return;
-	}
 
 	/* Ignore few annoying links.. */
-	if (strcasecmp(name, "STYLESHEET") &&
+	if (name &&
+	    strcasecmp(name, "STYLESHEET") &&
 	    strcasecmp(name, "made") &&
 	    strcasecmp(name, "icon") &&
 	    strcasecmp(name, "SHORTCUT ICON")) {
-		unsigned char *linktext = NULL;
-		unsigned char *title = get_attr_val(a, "title");
+		unsigned char *text;
+		int textlen = 0;
+		unsigned char *title;
+		unsigned char *hreflang;
+
+		text = init_str();
+		if (!text) goto free_and_return;
 
 		html_focusable(a);
 
+		title = get_attr_val(a, "title");
 		if (title) {
-			linktext = straconcat(title, " (", name, ")", NULL);
+			add_to_str(&text, &textlen, title);
 			mem_free(title);
 		}
 
-		if (linktext) {
-			put_link_line("Link: ", linktext, url, format.target_base);
-			mem_free(linktext);
+		add_to_str(&text, &textlen, " (");
+		add_to_str(&text, &textlen, name);
+
+		hreflang = get_attr_val(a, "hreflang");
+		if (hreflang) {
+			add_to_str(&text, &textlen, ", ");
+			add_to_str(&text, &textlen, hreflang);
+			mem_free(hreflang);
+		}
+
+		if (type) {
+			add_to_str(&text, &textlen, ", ");
+			add_to_str(&text, &textlen, type);
+
+		}
+		add_chr_to_str(&text, &textlen, ')');
+
+		if (text) {
+			put_link_line("Link: ", text, url, format.target_base);
+			mem_free(text);
 		} else {
 			put_link_line("Link: ", name, url, format.target_base);
 		}
 	}
 
-	mem_free(name);
+free_and_return:
+	if (type) mem_free(type);
+	if (name) mem_free(name);
 	mem_free(url);
 }
 

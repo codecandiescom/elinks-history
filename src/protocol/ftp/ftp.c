@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.145 2004/07/03 09:44:40 zas Exp $ */
+/* $Id: ftp.c,v 1.146 2004/07/03 09:58:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ again:
 		unsigned char *num_end;
 		int response;
 
-		if (rb->data[pos] != 10) continue;
+		if (rb->data[pos] != ASCII_LF) continue;
 
 		errno = 0;
 		response = strtoul(rb->data, (char **) &num_end, 10);
@@ -203,11 +203,11 @@ again:
 			int i;
 
 			for (i = 0; i < rb->len - 5; i++)
-				if (rb->data[i] == 10
+				if (rb->data[i] == ASCII_LF
 				    && !memcmp(rb->data+i+1, rb->data, 3)
 				    && rb->data[i+4] == ' ') {
 					for (i++; i < rb->len; i++)
-						if (rb->data[i] == 10)
+						if (rb->data[i] == ASCII_LF)
 							goto ok;
 					return 0;
 				}
@@ -697,7 +697,7 @@ get_filesize_from_RETR(unsigned char *data, int data_len)
 	/* Getting file size from text response.. */
 	/* 150 Opening BINARY mode data connection for hello-1.0-1.1.diff.gz (16452 bytes). */
 
-	for (pos = 0; pos < data_len && data[pos] != 10; pos++)
+	for (pos = 0; pos < data_len && data[pos] != ASCII_LF; pos++)
 		if (data[pos] == '(')
 			pos_file_len = pos;
 
@@ -1040,7 +1040,7 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 		/* Newline quest. */
 
 		for (bufp = 0; bufp < bufl; bufp++) {
-			if (buf[bufp] == '\n') {
+			if (buf[bufp] == ASCII_LF) {
 				newline = 1;
 				break;
 			}
@@ -1048,7 +1048,7 @@ ftp_process_dirlist(struct cache_entry *cached, int *pos,
 
 		if (newline) {
 			ret += bufp + 1;
-			if (bufp && buf[bufp - 1] == '\r') bufp--;
+			if (bufp && buf[bufp - 1] == ASCII_CR) bufp--;
 		} else {
 			if (!bufp || (!last && bufl < FTP_BUF_SIZE))
 				return ret;

@@ -1,3 +1,91 @@
+Thu Sep  4 19:05:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Sending TWIN and XWIN sequences seems to make the thing work well at
+	least with xterm, rxvt, linux console. Please test in other env. if
+	it still works. Screen should be restored at exit, and mouse should
+	always work as usual.  
+
+Thu Sep  4 18:16:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Reduce the document line granularity. This maybe needs more tuning
+	and/or only enabled for big documents.  
+
+Thu Sep  4 18:14:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/options.c:
+
+	Fix the document option comparison that was causing the extra memory
+	usage. :P 
+
+Thu Sep  4 16:58:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/memory.h:
+
+	Fix grmask error. But how could it work before? 
+
+Thu Sep  4 14:42:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Issue concerning alternate screen handling and xterm/rxvt was fixed,
+	i hope.  
+
+Thu Sep  4 14:14:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/kbd.c:
+
+	send_term_sequence() -> send_done_sequence() 
+
+Thu Sep  4 12:31:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/options.c, sched/session.h,
+	util/version.c:
+
+	Information is like water, there is no plural.  
+	
+	-- Witold Filipczyk tohu-bohu <witekfl@poczta.gazeta.pl> 
+
+Wed Sep  3 23:10:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h, draw.h:
+
+	Change the color encoding so the bold bit is now between bg and fg
+	bits making it much simpler.  Adjusting of fg when bg == fg is now
+	(more correctly) done using a fg_color[] lookup.  
+
+Wed Sep  3 22:43:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Remove strange (bg & 0x02) and use make the foreground color bold if
+	fg == bg.  This means that fg color will _always_ be visible (so I
+	guess this is a bug fix).  
+
+Wed Sep  3 22:34:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.h, terminal/screen.c:
+
+	Update comments and move ``generic option cache'' TODO to better
+	place..  
+
+Wed Sep  3 22:34:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, viewer/text/form.c:
+
+	Option document.browse.forms.show_formhist was added. It turns
+	on/off the forms history dialog. Please improve description in
+	options.c. Feature requested by Jonas.  
+
+Wed Sep  3 22:32:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Fix a stupid bug: next <-> prev error.  
+
 Wed Sep  3 22:05:20 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: dialogs/options.c, terminal/screen.c:

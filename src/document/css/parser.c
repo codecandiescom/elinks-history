@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.77 2004/01/29 04:05:24 jonas Exp $ */
+/* $Id: parser.c,v 1.78 2004/01/29 04:13:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 {
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
 	struct scanner_token *token = get_scanner_token(scanner);
-	struct selector_pkg *pkg;
+	struct selector_pkg *pkg = NULL;
 	struct css_selector *selector;
 
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
@@ -193,80 +193,80 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 	/* TODO: comma-separated list of simple selectors. */
 	/* FIXME: element can be even '*' --pasky */
 
-next_one:
-	pkg = NULL;
+	while (scanner_has_tokens(scanner)) {
+		pkg = NULL;
 
-	/* Load up the selector */
+		/* Load up the selector */
 
-	if (token->type != CSS_TOKEN_IDENT) {
-		skip_css_tokens(scanner, '}');
-		return NULL;
-	}
-
-	name = memacpy(token->string, token->length);
-
-	/* Check if we have already encountered the selector */
-
-	/* FIXME: This is totally broken because we have to do this _after_
-	 * scanning for id/class/pseudo. --pasky */
-	selector = get_css_selector(css, name, -1);
-	if (!selector)
-		goto syntax_error;
-
-	pkg = mem_calloc(1, sizeof(struct selector_pkg));
-	if (!pkg)
-		goto syntax_error;
-	pkg->selector = selector;
-
-	/* Let's see if we will get anything else of this. */
-
-	token = get_next_scanner_token(scanner);
-
-	if (token->type == CSS_TOKEN_HASH
-	    || token->type == CSS_TOKEN_HEX_COLOR) {
-		/* id */
-		id = memacpy(token->string + 1, token->length - 1);
-		token = get_next_scanner_token(scanner);
-	}
-
-	if (token->type == '.') {
-		/* class */
-		token = get_next_scanner_token(scanner);
 		if (token->type != CSS_TOKEN_IDENT) {
-			goto syntax_error;
+			skip_css_tokens(scanner, '}');
+			return NULL;
 		}
-		class = memacpy(token->string, token->length);
-		token = get_next_scanner_token(scanner);
-	}
 
-	if (token->type == ':') {
-		/* pseudo */
-		token = get_next_scanner_token(scanner);
-		if (token->type != CSS_TOKEN_IDENT) {
+		name = memacpy(token->string, token->length);
+
+		/* Check if we have already encountered the selector */
+
+		/* FIXME: This is totally broken because we have to do this _after_
+		 * scanning for id/class/pseudo. --pasky */
+		selector = get_css_selector(css, name, -1);
+		if (!selector)
 			goto syntax_error;
-		}
-		pseudo = memacpy(token->string, token->length);
+
+		pkg = mem_calloc(1, sizeof(struct selector_pkg));
+		if (!pkg)
+			goto syntax_error;
+		pkg->selector = selector;
+
+		/* Let's see if we will get anything else of this. */
+
 		token = get_next_scanner_token(scanner);
-	}
 
-	/* This is a temporary measure, so that overly specific selectors won't
-	 * spoil our whole stylesheet until we support them, and we always
-	 * favour the general selectors instead. Keep just the add_to_list()
-	 * when we will start supporting the id/class/pseudo. */
-	if (!id && !class && !pseudo) {
-		add_to_list(*selectors, pkg);
-	} else {
-		if (id) mem_free(id), id = NULL;
-		if (class) mem_free(class), class = NULL;
-		if (pseudo) mem_free(pseudo), pseudo = NULL;
-		mem_free(pkg); pkg = NULL;
-	}
-	if (name) mem_free(name), name = NULL;
+		if (token->type == CSS_TOKEN_HASH
+			|| token->type == CSS_TOKEN_HEX_COLOR) {
+			/* id */
+			id = memacpy(token->string + 1, token->length - 1);
+			token = get_next_scanner_token(scanner);
+		}
 
-	if (token->type == ',') {
+		if (token->type == '.') {
+			/* class */
+			token = get_next_scanner_token(scanner);
+			if (token->type != CSS_TOKEN_IDENT) {
+				goto syntax_error;
+			}
+			class = memacpy(token->string, token->length);
+			token = get_next_scanner_token(scanner);
+		}
+
+		if (token->type == ':') {
+			/* pseudo */
+			token = get_next_scanner_token(scanner);
+			if (token->type != CSS_TOKEN_IDENT) {
+				goto syntax_error;
+			}
+			pseudo = memacpy(token->string, token->length);
+			token = get_next_scanner_token(scanner);
+		}
+
+		/* This is a temporary measure, so that overly specific selectors won't
+		 * spoil our whole stylesheet until we support them, and we always
+		 * favour the general selectors instead. Keep just the add_to_list()
+		 * when we will start supporting the id/class/pseudo. */
+		if (!id && !class && !pseudo) {
+			add_to_list(*selectors, pkg);
+		} else {
+			if (id) mem_free(id), id = NULL;
+			if (class) mem_free(class), class = NULL;
+			if (pseudo) mem_free(pseudo), pseudo = NULL;
+			mem_free(pkg); pkg = NULL;
+		}
+		if (name) mem_free(name), name = NULL;
+
+		if (token->type != ',') break;
+
 		/* Multiple elements hooked up to this ruleset. */
 		token = get_next_scanner_token(scanner);
-		goto next_one;
 	}
 
 	if (token->type != '{') {

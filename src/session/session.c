@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.15 2003/05/03 12:12:12 pasky Exp $ */
+/* $Id: session.c,v 1.16 2003/05/03 19:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,6 +280,9 @@ print_screen_status(struct session *ses)
 
 		for (tab = 0; tab < number; tab++) {
 			struct window *win = get_tab_by_number(term, tab);
+			int ypos = term->y - (show_status_bar ? 2 : 1);
+			int color = (tab == term->current_tab) ? selected_color
+								: normal_color;
 
 			if (win->data
 			    && current_frame(win->data)
@@ -293,16 +296,10 @@ print_screen_status(struct session *ses)
 			if (msglen > tab_width)
 				msglen = tab_width - 1;
 
-			fill_area(term,
-				  tab * tab_width, term->y - (show_status_bar ? 2 : 1),
-				  tab_width, 1,
-				  (tab == term->current_tab) ? selected_color
-							     : normal_color);
-			print_text(term,
-				   tab * tab_width, term->y - (show_status_bar ? 2 : 1),
-				   msglen, msg,
-				   (tab == term->current_tab) ? selected_color
-							      : normal_color);
+			fill_area(term, tab * tab_width, ypos, tab_width, 1,
+				  color);
+			print_text(term, tab * tab_width, ypos, msglen, msg,
+				   color);
 		}
 	}
 tabs_shown:

@@ -1,3 +1,41 @@
+Sun Jul 13 13:32:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	Renames in extract_proxy().  
+
+Sun Jul 13 13:09:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/document.c, protocol/uri.c, protocol/uri.h,
+	protocol/url.c, protocol/url.h, viewer/text/link.c:
+
+	Move get_uri_string() .. and rename it.  
+
+Sun Jul 13 13:02:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/url.c:
+
+	strip_url_password() now uses get_uri_string().  
+
+Sun Jul 13 12:57:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, http/auth.c:
+
+	get_uri_string() is now a Swiss army knife. Use with care. ;) 
+
+Sun Jul 13 10:24:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Correctly handle PROTOCOL_UNKNOWN and free_syntax in uri string
+	composing.  
+
+Sun Jul 13 10:17:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h, http/auth.c:
+
+	The quick solution for configuring adding of data to the uri string.  
+
 Sat Jul 12 20:42:39 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/uri.c:

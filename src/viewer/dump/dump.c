@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.145 2004/09/28 16:21:48 pasky Exp $ */
+/* $Id: dump.c,v 1.146 2004/10/14 18:38:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ dump_loading_callback(struct download *status, void *p)
 		if (is_in_progress_state(status->state))
 			change_connection(status, NULL, PRI_CANCEL, 0);
 
-		load_uri(uri, get_cache_uri(cached), status, PRI_MAIN, 0, -1);
+		load_uri(uri, cached->uri, status, PRI_MAIN, 0, -1);
 		return;
 	}
 

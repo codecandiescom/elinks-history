@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.326 2004/10/08 16:54:57 zas Exp $ */
+/* $Id: download.c,v 1.327 2004/10/14 18:38:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,7 +409,7 @@ download_data(struct download *download, struct file_download *file_download)
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 
-		load_uri(file_download->uri, get_cache_uri(cached), &file_download->download,
+		load_uri(file_download->uri, cached->uri, &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->progress ? download->progress->start : 0);
 

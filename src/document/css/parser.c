@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.127 2004/09/21 08:34:39 pasky Exp $ */
+/* $Id: parser.c,v 1.128 2004/09/21 09:32:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,12 +181,18 @@ static void
 css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
+	/* Shell for the last selector (the whole selector chain, that is). */
 	struct selector_pkg *pkg = NULL;
+	/* In 'p#x.y', it's NULL for 'p', and 'p' for '#x' and '.y'. */
 	struct css_selector *prev_element_selector = NULL;
+	/* In 'p#x.y:q', it's NULL for 'p' and '#x', '#x' for '.y', and '.y'
+	 * for ':q'. */
 	struct css_selector *prev_specific_selector = NULL;
+	/* In 'p#x.y div.z:a' it is NULL for 'p#x.y' and 'p' for 'div.z:a'. */
 	struct css_selector *last_chained_selector = NULL;
+	/* In 'p#x.y div.z:a, i.b {}', it's set for ':a' and '.b'. */
 	int last_fragment = 0;
-	/* In 'p#x .y', set for 'p' and '.y'. Note that it is always set in
+	/* In 'p#x .y', it's set for 'p' and '.y'. Note that it is always set in
 	 * the previous iteration so it's valid for the current token only
 	 * before "saving" the token. */
 	int selector_start = 1;

@@ -4581,9 +4581,9 @@ struct translation translation_french [] = {
   {T_BOOKMARK_USED, "Désolé, mais ce signet est déjà utilisé par quelque chose."},
   {T_ELINKS_HOME, "Site web ELinks"},
   {T_HK_ELINKS_HOME, "S"},
-  {T_ADD_FOLDER, NULL},
-  {T_FOLDER_NAME, NULL},
-  {T_MOVE, NULL},
+  {T_ADD_FOLDER, "Créer dossier"},
+  {T_FOLDER_NAME, "Nom du dossier"},
+  {T_MOVE, "Déplacer"},
   {0, NULL}
 };
 

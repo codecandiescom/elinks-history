@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.21 2003/10/28 09:26:35 jonas Exp $ */
+/* $Id: options.inc,v 1.22 2003/10/30 15:29:56 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -68,7 +68,7 @@ struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("", N_("Connections"),
-		"connection", 0,
+		"connection", OPT_SORT,
 		N_("Connection options.")),
 
 

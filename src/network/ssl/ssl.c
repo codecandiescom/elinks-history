@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.41 2003/10/28 20:50:37 jonas Exp $ */
+/* $Id: ssl.c,v 1.42 2003/10/30 15:29:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ static struct module gnutls_module = struct_module(
 
 static struct option_info ssl_options[] = {
 	INIT_OPT_TREE("connection", N_("SSL"),
-		"ssl", 0,
+		"ssl", OPT_SORT,
 		N_("SSL options.")),
 
 	NULL_OPTION_INFO,

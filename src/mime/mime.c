@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.34 2003/10/27 01:12:15 jonas Exp $ */
+/* $Id: mime.c,v 1.35 2003/10/30 15:32:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ enum mime_options {
 
 static struct option_info mime_options[] = {
 	INIT_OPT_TREE("", N_("MIME"),
-		"mime", 0,
+		"mime", OPT_SORT,
 		N_("MIME-related options (handlers of various MIME types).")),
 
 	INIT_OPT_STRING("mime", N_("Default MIME-type"),

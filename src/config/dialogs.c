@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.161 2004/04/11 20:44:03 jonas Exp $ */
+/* $Id: dialogs.c,v 1.162 2004/04/11 20:46:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,8 @@ toggle_success_msgbox(void *dummy)
 }
 
 void
-write_config_error(struct terminal *term, unsigned char *config_file,
-		   int secsave_error, int stdio_error)
+write_config_dialog(struct terminal *term, unsigned char *config_file,
+		    int secsave_error, int stdio_error)
 {
 	unsigned char *errmsg = NULL;
 	unsigned char *strerr;

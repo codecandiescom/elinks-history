@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.135 2004/04/11 20:41:13 jonas Exp $ */
+/* $Id: conf.c,v 1.136 2004/04/11 20:46:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,7 +772,7 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 		ret = secure_close(ssi);
 	}
 
-	if (term) write_config_error(term, config_file, secsave_errno, ret);
+	if (term) write_config_dialog(term, config_file, secsave_errno, ret);
 
 free_cfg_str:
 	if (config_file) mem_free(config_file);

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2004-01-18 00:13+0100\n"
-"PO-Revision-Date: 2004-01-19 05:14+0100\n"
+"PO-Revision-Date: 2004-01-27 16:24+0100\n"
 "Last-Translator: Varga Balazs <vinnui@ent.hu>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -2008,7 +2008,7 @@ msgstr ""
 
 #: src/config/options.inc:299
 msgid "Show not found"
-msgstr ""
+msgstr "Ha nincs találat"
 
 #: src/config/options.inc:301
 msgid ""
@@ -2496,11 +2496,11 @@ msgstr "Az URI-k megjelenítése a dokumentumban link-ként."
 
 #: src/config/options.inc:577
 msgid "Compress empty lines"
-msgstr ""
+msgstr "Az üres sorok tömörítése"
 
 #: src/config/options.inc:579
 msgid "Compress successive empty lines to only one in displayed text."
-msgstr ""
+msgstr "Az egymást követõ üres sorok megjelenítése egy sorként."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:585
@@ -3388,13 +3388,15 @@ msgstr "Fülek sorának színei."
 
 #: src/config/options.inc:1090
 msgid "Unvisited tab"
-msgstr ""
+msgstr "Új oldalt tartalmazó fül"
 
 #: src/config/options.inc:1092
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
 msgstr ""
+"Azoknak a füleknek a színei, amelyek letöltöttek egy új lapot,\n"
+"de azóta még nem lettek kiválasztva."
 
 #: src/config/options.inc:1095
 msgid "Unselected tab"

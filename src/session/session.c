@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.531 2004/07/22 22:14:15 zas Exp $ */
+/* $Id: session.c,v 1.532 2004/07/26 17:10:15 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -333,23 +333,22 @@ static void
 request_frameset(struct session *ses, struct frameset_desc *frameset_desc)
 {
 	static int depth = 0; /* Inheritation counter (recursion brake ;) */
+	int i;
 
-	if (++depth <= HTML_MAX_FRAME_DEPTH) {
-		int i = 0;
+	if (depth > HTML_MAX_FRAME_DEPTH) return;
 
-		for (; i < frameset_desc->n; i++) {
-			struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
+	depth++;
 
-			if (frame_desc->subframe) {
-				request_frameset(ses, frame_desc->subframe);
-			} else if (frame_desc->name && frame_desc->uri) {
-				request_frame(ses, frame_desc->name,
-					      frame_desc->uri);
-			}
+	for (i = 0; i < frameset_desc->n; i++) {
+		struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
+
+		if (frame_desc->subframe) {
+			request_frameset(ses, frame_desc->subframe);
+		} else if (frame_desc->name && frame_desc->uri) {
+			request_frame(ses, frame_desc->name,
+				      frame_desc->uri);
 		}
 	}
-
-	depth--;
 }
 
 inline void

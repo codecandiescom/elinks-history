@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.26 2004/11/09 01:39:07 jonas Exp $ */
+/* $Id: gopher.c,v 1.27 2004/11/09 13:56:37 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -357,13 +357,14 @@ add_gopher_search_field(struct string *buffer, const unsigned char *text,
 		const unsigned char *addr)
 {
 	add_format_to_string(buffer,
-		"<form action=\"%s\">\n"
-		"<table>\n"
-		"<td><b>%s</b></td>\n"
-		"<td><input maxlength=\"256\" name=\"search\" value=\"\"></td>\n"
-		"<td><input type=submit value=\"Search\"></td>\n"
-		"</table>\n"
-		"</form>\n",
+		"<form action=\"%s\">"
+		"<table>"
+		"<td>            </td>"
+		"<td>%s:</td>"
+		"<td><input maxlength=\"256\" name=\"search\" value=\"\"></td>"
+		"<td><input type=submit value=\"Search\"></td>"
+		"</table>"
+		"</form>",
 		addr, text);
 }
 
@@ -667,12 +668,10 @@ init_gopher_index_cache_entry(struct connection *conn)
 	add_format_to_string(&buffer,
 		"<html>\n"
 		"<head>\n"
-		"<title>Gopher index at %s</title>\n"
-		"<isindex>"
+		"<title>Searchable gopher index at %s</title>\n"
 		"</head>\n"
 		"<body>\n"
-		"<h1>Gopher index at %s</h1>\n"
-		"<p>This is a searchable Gopher index.</p>\n",
+		"<h1>Searchable gopher index at %s</h1>\n",
 		empty_string_or_(where), empty_string_or_(where));
 
 	if (where) {

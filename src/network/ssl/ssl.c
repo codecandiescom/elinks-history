@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.31 2003/10/27 23:08:48 jonas Exp $ */
+/* $Id: ssl.c,v 1.32 2003/10/27 23:09:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,12 +207,12 @@ init_ssl_connection(struct connection *conn)
 
 	gnutls_handshake_set_private_extensions(*state, 1);
 	gnutls_cipher_set_priority(*state, cipher_priority);
-        gnutls_compression_set_priority(*state, comp_priority);
-        gnutls_kx_set_priority(*state, kx_priority);
-        gnutls_protocol_set_priority(*state, protocol_priority);
-        gnutls_mac_set_priority(*state, mac_priority);
-        gnutls_certificate_type_set_priority(*state, cert_type_priority);
-        gnutls_set_server_name(*state, GNUTLS_NAME_DNS, "localhost", strlen("localhost"));
+	gnutls_compression_set_priority(*state, comp_priority);
+	gnutls_kx_set_priority(*state, kx_priority);
+	gnutls_protocol_set_priority(*state, protocol_priority);
+	gnutls_mac_set_priority(*state, mac_priority);
+	gnutls_certificate_type_set_priority(*state, cert_type_priority);
+	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, "localhost", strlen("localhost"));
 #endif
 
 	conn->ssl = state;

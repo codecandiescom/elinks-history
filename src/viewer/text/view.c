@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.161 2003/07/21 22:52:49 jonas Exp $ */
+/* $Id: view.c,v 1.162 2003/07/21 23:01:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1529,15 +1529,13 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 static unsigned char *
 print_current_titlex(struct document_view *fd, int w)
 {
-	int ml = 0, pl = 0;
-	unsigned char *m;
-	unsigned char *p;
+	struct string m;
+	struct string p;
 
 	assert(fd);
 	if_assert_failed return NULL;
 
-	p = init_str();
-	if (!p) return NULL;
+	if (!init_string(&p)) return NULL;
 
 	if (fd->yw < fd->document->y) {
 		int pp = 1;
@@ -1552,35 +1550,33 @@ print_current_titlex(struct document_view *fd, int w)
 		if (fd->vs->view_pos + fd->yw >= fd->document->y)
 			pp = pe;
 		if (fd->document->title)
-			add_chr_to_str(&p, &pl, ' ');
+			add_char_to_string(&p, ' ');
 
-		add_chr_to_str(&p, &pl, '(');
-		add_num_to_str(&p, &pl, pp);
-		add_chr_to_str(&p, &pl, '/');
-		add_num_to_str(&p, &pl, pe);
-		add_chr_to_str(&p, &pl, ')');
+		add_char_to_string(&p, '(');
+		add_long_to_string(&p, pp);
+		add_char_to_string(&p, '/');
+		add_long_to_string(&p, pe);
+		add_char_to_string(&p, ')');
 	}
 
-	if (!fd->document->title) return p;
+	if (!fd->document->title) return p.source;
 
-	m = init_str();
-	if (!m) goto end;
+	if (!init_string(&m)) goto end;
 
-	add_to_str(&m, &ml, fd->document->title);
+	add_to_string(&m, fd->document->title);
 
-	if (ml + pl > w - 4) {
-		ml = w - 4 - pl;
-		if (ml < 0) ml = 0;
-		add_to_str(&m, &ml, "...");
-
+	if (m.length + p.length > w - 4) {
+		m.length = w - 4 - p.length;
+		if (m.length < 0) m.length = 0;
+		add_to_string(&m, "...");
 	}
 
-	add_to_str(&m, &ml, p);
+	add_string_to_string(&m, &p);
 
 end:
-	mem_free(p);
+	done_string(&p);
 
-	return m;
+	return m.source;
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.48 2003/11/20 01:14:18 jonas Exp $ */
+/* $Id: globhist.c,v 1.49 2003/11/20 16:17:26 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -414,7 +414,7 @@ write_global_history(void)
 	struct secure_save_info *ssi;
 
 	if (!globhist_dirty || !elinks_home
-	    || !get_opt_bool("document.history.global.enable"))
+	    || !get_globhist_enable())
 		return;
 
 	file_name = straconcat(elinks_home, "globhist", NULL);

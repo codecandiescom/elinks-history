@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.41 2004/04/27 13:29:59 zas Exp $ */
+/* $Id: smb.c,v 1.42 2004/04/27 13:48:08 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -205,7 +205,12 @@ end_smb_connection(struct connection *conn)
 	} else {
 		unsigned char *line_start, *line_end, *line_end2;
 		struct string page;
-		int type = 0;
+		enum {
+			SMB_TYPE_NONE,
+			SMB_TYPE_SHARE,
+			SMB_TYPE_SERVER,
+			SMB_TYPE_WORKGROUP
+		} type = SMB_TYPE_NONE;
 		int pos = 0;
 
 		if (!init_string(&page)) {
@@ -233,35 +238,38 @@ end_smb_connection(struct connection *conn)
 			if (si->list_type == SMB_LIST_SHARES) {
 				unsigned char *ll, *lll, *found;
 
-				if (!*line) type = 0;
+				if (!*line) type = SMB_TYPE_NONE;
 
 				found = find_strs(line, "Sharename", "Type");
 				if (found) {
 					pos = found - line;
-					type = 1;
+					type = SMB_TYPE_SHARE;
 					goto print_as_is;
 				}
 
 				found = find_strs(line, "Server", "Comment");
 				if (found) {
-					type = 2;
+					type = SMB_TYPE_SERVER;
 					goto print_as_is;
 				}
 
 				found = find_strs(line, "Workgroup", "Master");
 				if (found) {
 					pos = found - line;
-					type = 3;
+					type = SMB_TYPE_WORKGROUP;
 					goto print_as_is;
 				}
 
-				if (!type) goto print_as_is;
+				if (type == SMB_TYPE_NONE)
+					goto print_as_is;
+
 				for (ll = line; *ll; ll++)
 					if (!isspace(*ll) && *ll != '-')
-						goto np;
-				goto print_as_is;
-np:
+						goto print_next;
 
+				goto print_as_is;
+
+print_next:
 				for (ll = line; *ll; ll++)
 					if (!isspace(*ll))
 						break;
@@ -271,7 +279,7 @@ np:
 						break;
 
 				switch (type) {
-				case 1:
+				case SMB_TYPE_SHARE:
 				{
 					unsigned char *llll;
 
@@ -297,7 +305,7 @@ np:
 					break;
 				}
 
-				case 3:
+				case SMB_TYPE_WORKGROUP:
 					if (pos < strlen(line) && pos
 					    && isspace(line[pos - 1])
 					    && !isspace(line[pos])) {
@@ -312,7 +320,7 @@ np:
 							break;
 					/* Fall-through */
 
-				case 2:
+				case SMB_TYPE_SERVER:
 					add_bytes_to_string(&page, line, ll - line);
 					add_to_string(&page, "<a href=\"smb://");
 					add_bytes_to_string(&page, ll, lll - ll);
@@ -322,7 +330,7 @@ np:
 					add_to_string(&page, lll);
 					break;
 
-				default:
+				case SMB_TYPE_NONE:
 					goto print_as_is;
 				}
 

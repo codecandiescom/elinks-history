@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.121 2003/06/09 10:24:14 zas Exp $ */
+/* $Id: parser.c,v 1.122 2003/06/09 10:29:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,10 +224,10 @@ endattr:
 	if (found) {
 		add_chr(attr, attrlen, '\0');
 		if (strchr(attr, '&')) {
-			unsigned char *aa = attr;
+			unsigned char *saved_attr = attr;
 
-			attr = convert_string(NULL, aa, strlen(aa));
-			mem_free(aa);
+			attr = convert_string(NULL, attr, attrlen);
+			mem_free(saved_attr);
 		}
 
 		set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));

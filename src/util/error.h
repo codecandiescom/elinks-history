@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.17 2003/06/08 12:37:29 pasky Exp $ */
+/* $Id: error.h,v 1.18 2003/06/08 12:44:45 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -25,7 +25,7 @@ void elinks_internal(unsigned char *, ...);
  * run. It tries to (not that agressively) draw user's attention to the error,
  * but never dumps core or so. */
 #undef error
-#define error elinks_error
+#define error errfile = __FILE__, errline = __LINE__, elinks_error
 void elinks_error(unsigned char *, ...);
 
 /* @debug(format_string) is used for printing of debugging information. It

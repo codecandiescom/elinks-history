@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.63 2004/12/15 09:32:34 zas Exp $ */
+/* $Id: link.c,v 1.64 2004/12/15 09:47:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,12 +95,11 @@ html_a(unsigned char *a)
 	set_fragment_identifier(a, "name");
 }
 
-/* Get image filename from its src attribute.
- * If none or disabled it retuns "IMG". */
+/* Get image filename from its src attribute. */
 static unsigned char *
 get_image_filename_from_src(unsigned char *src)
 {
-	unsigned char *text;
+	unsigned char *text = NULL;
 	int max_len;
 
 	/* We can display image as [foo.gif]. */
@@ -119,8 +118,6 @@ get_image_filename_from_src(unsigned char *src)
 		len -= start - src;
 
 		text = memacpy(start, len);
-	} else {
-		text = stracpy("IMG");
 	}
 
 	return text;
@@ -171,10 +168,7 @@ truncate_label(unsigned char *label, int max_len)
 	return new_label;
 }
 
-/* Returns an allocated string containing formatted @label
- * or just IMG (depending on options).
- * It may return NULL on allocation failure.
- */
+/* Returns an allocated string containing formatted @label. */
 static unsigned char *
 get_image_label(unsigned char *label)
 {
@@ -183,7 +177,7 @@ get_image_label(unsigned char *label)
 
 	if (max_len < 0 || !label) {
 		mem_free_if(label);
-		return stracpy("IMG");
+		return NULL;
 	}
 
 	formatted_label = truncate_label(label, max_len);
@@ -274,6 +268,10 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 	}
 
 	if (label) label = get_image_label(label);
+	if (!label) {
+		add_brackets = 1;
+		label = stracpy("IMG");
+	}
 
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.58 2003/10/17 18:46:44 jonas Exp $ */
+/* $Id: color.c,v 1.59 2003/10/17 23:52:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,8 +227,8 @@ set_term_color16(struct screen_char *schar, enum color_flags flags,
 #ifdef USE_256_COLORS
 	/* With 256 color support we use memcmp() when comparing color in
 	 * terminal/screen.c:add_char*() so we need to clear this byte. */
-	schar->color[0] = fg;
-	schar->color[1] = bg;
+	TERM_COLOR_FOREGROUND(schar->color) = fg;
+	TERM_COLOR_BACKGROUND(schar->color) = bg;
 #else
 	schar->color[0] = (bg << 4 | fg);
 #endif
@@ -292,12 +292,12 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		 * intermediate color. --jonas */
 		/* TODO: Maybe also do something to honour the
 		 * allow_dark_on_black option. --jonas */
-		if (fg == bg) {
+		if (bg == fg && (flags & COLOR_ENSURE_CONTRAST)) {
 			fg = (bg == 0) ? 15 : 0;
 		}
 
-		schar->color[0] = fg;
-		schar->color[1] = bg;
+		TERM_COLOR_FOREGROUND(schar->color) = fg;
+		TERM_COLOR_BACKGROUND(schar->color) = bg;
 		break;
 #endif
 	case COLOR_MODE_MONO:

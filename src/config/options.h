@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.92 2003/11/25 00:34:09 jonas Exp $ */
+/* $Id: options.h,v 1.93 2004/01/04 15:03:03 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -109,7 +109,7 @@ struct option {
 	unsigned char *name;
 	enum option_flags flags;
 	enum option_type type;
-	int min, max;
+	long min, max;
 	union option_value value;
 	unsigned char *desc;
 	unsigned char *capt;

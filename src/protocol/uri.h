@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.146 2004/09/30 10:51:51 zas Exp $ */
+/* $Id: uri.h,v 1.147 2004/10/17 15:38:03 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -69,6 +69,7 @@ enum uri_errno {
 	URI_ERRNO_EMPTY,		/* The URI string was empty */
 	URI_ERRNO_INVALID_PROTOCOL,	/* No protocol was found */
 	URI_ERRNO_NO_SLASHES,		/* Slashes after protocol missing */
+	URI_ERRNO_TOO_MANY_SLASHES,	/* Too many slashes after protocol */
 	URI_ERRNO_NO_HOST_SLASH,	/* Slash after host missing */
 	URI_ERRNO_IPV6_SECURITY,	/* IPv6 security bug detected */
 	URI_ERRNO_INVALID_PORT,		/* Port number is bad */

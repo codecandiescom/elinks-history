@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.285 2004/10/17 15:32:43 jonas Exp $ */
+/* $Id: uri.c,v 1.286 2004/10/17 15:38:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,10 +168,15 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	/* Skip slashes */
 
-	if (prefix_end[0] == '/' && prefix_end[1] == '/')
+	if (prefix_end[0] == '/' && prefix_end[1] == '/') {
+		if (prefix_end[2] == '/')
+			return URI_ERRNO_TOO_MANY_SLASHES;
+
 		prefix_end += 2;
-	else if (known && get_protocol_need_slashes(uri->protocol))
+
+	} else if (known && get_protocol_need_slashes(uri->protocol)) {
 		return URI_ERRNO_NO_SLASHES;
+	}
 
 	if (!known || get_protocol_free_syntax(uri->protocol)) {
 		uri->data = prefix_end;
@@ -1038,6 +1043,21 @@ parse_uri:
 
 		return normalize_uri_noparse(&uri);
 
+	case URI_ERRNO_TOO_MANY_SLASHES:
+	{
+		unsigned char *from, *to;
+
+		assert(uri.string[uri.protocollen] == ':'
+		       && uri.string[uri.protocollen + 1] == '/'
+		       && uri.string[uri.protocollen + 2] == '/');
+
+		from = to = uri.string + uri.protocollen + 3;
+		while (*from == '/') from++;
+
+		assert(to < from);
+		memmove(to, from, strlen(from));
+		goto parse_uri;
+	}
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */
 		insert_in_string(&newurl, uri.protocollen + 1, "//", 2);

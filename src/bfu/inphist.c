@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.73 2004/01/04 23:40:49 jonas Exp $ */
+/* $Id: inphist.c,v 1.74 2004/01/05 11:29:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,10 +45,6 @@ tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 {
 	tab_compl_n(term, item, strlen(item), win);
 }
-
-/* Allocate "+ 2" since the last entry is later memset() in do_tab_compl(). */
-#define realloc_menu_items(menu, size) \
-	mem_align_alloc(menu, size, (size) + 2, sizeof(struct menu_item), 0xFF)
 
 /* Complete to last unambiguous character, and display menu for all possible
  * further completions. */

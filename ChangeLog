@@ -1,3 +1,145 @@
+Sat Dec 21 22:26:25 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/polish.lng:
+
+	Polish translation update, patch by witekfl.  
+
+Sat Dec 21 20:52:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/mime.c:
+
+	Alloc failures test, minor optim. tidy up.  
+
+Sat Dec 21 20:21:07 2002  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/mime.c:
+
+	Minor fix: stracpy(NULL) call.  
+
+Sat Dec 21 19:58:20 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/header.c:
+
+	Minor tidyup.  
+
+Sat Dec 21 19:47:11 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Static + inline + minor things.  
+
+Sat Dec 21 19:22:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/user.c:
+
+	char -> unsigned char.  
+
+Sat Dec 21 19:19:56 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/url.c:
+
+	Static + inline + tidy up + unsigned char + alloc tests + minor
+	stuff.  
+
+Sat Dec 21 19:00:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: mime.c, mime.h:
+
+	Static + inline.  
+
+Sat Dec 21 18:51:22 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailcap.c:
+
+	Tidy up. One very-low-risk buffer overflow and one potential memleak
+	were fixed. Bit fields were replaced by int type, since bit fields
+	are not fully portable. Many minor optimizations.  
+
+Sat Dec 21 18:05:55 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Minor staticfication.  
+
+Sat Dec 21 18:03:21 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Static + inline + tidy up.  
+
+Sat Dec 21 17:00:21 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* intl/danish.lng:
+
+	Minor danish update.  
+
+Sat Dec 21 13:23:16 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, opttypes.c:
+
+	Added option --config-help which is mostly intended for generating
+	docs about the configuration options. The *-help printing has
+	somewhat been made more generic. This includes pretty printing where
+	several command line args can 'share' the same caption/description.
+	Changed description of deprecated options to 'scare' users from
+	using it.  
+
+Sat Dec 21 02:59:22 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/portuguese.lng:
+
+	Portuguese translation updates, patch by Andre.  
+
+Sat Dec 21 02:56:32 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, document/html/parser.c,
+	document/html/parser.h, document/html/renderer.c:
+
+	Night of hacking output: full support for user-specified background,
+	instead of the bastardized unusable thing we had before; that should
+	make some people happy. And it wasn't that simple as I supposed :-(.
+	Also introduced some support for taking background color from the
+	document, but it's weird yet (I'm forgetting to update something, I
+	suspect) - I will investigate that later. Just keep
+	document.colors.use_document_colors at 1 and you should be safe. But
+	it looks damn cool anyway, maybe I'll change the default to follow
+	document's background as well when it'll be done and ready ;-).  
+
+Sat Dec 21 01:06:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	Readibility was improved (i hope).  
+
+Fri Dec 20 23:31:47 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/options.c, src/dialogs/options.c,
+	src/lowlevel/terminal.c:
+
+	Transparency support (ie. transparent xterms or xterms with
+	background colors (ok, not exactly xterms, but you get the idea ;)),
+	patch by Tom Lear <tom@trap.mtview.ca.us>.  
+
+Fri Dec 20 23:11:20 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, config/options.c,
+	dialogs/options.c:
+
+	Terminal options changed in their dialog are now properly marked as
+	touched and thus properly saved with config.saving_style=3. Added
+	Save button to the terminal options dialog. Thanks to Alexey Tourbin
+	<at@turbinal.org> for the initial impulse ;-).  
+
 Fri Dec 20 22:14:51 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/view.c:

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.25 2002/05/08 13:55:00 pasky Exp $ */
+/* $Id: main.c,v 1.26 2002/05/12 16:40:43 fis Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "config/urlhist.h"
 #include "cookies/cookies.h"
 #include "dialogs/menu.h"
+#include "dialogs/auth.h" 
 #include "document/cache.h"
 #include "document/download.h"
 #include "document/dump.h"
@@ -50,6 +51,7 @@
 #include "lua/core.h"
 #include "lua/hooks.h"
 #include "protocol/types.h"
+#include "protocol/http/auth.h"
 #include "ssl/ssl.h"
 #include "util/blacklist.h"
 #include "util/error.h"

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2002/03/21 21:31:49 pasky Exp $
+## $Id: Makefile.am,v 1.9 2002/05/12 16:40:44 fis Exp $
 
 EXTRA_DIST = README.timegm
 
@@ -15,5 +15,7 @@ libhttp_a_SOURCES = \
  http.c \
  http.h \
  https.c \
- https.h
+ https.h \
+ auth.h \
+ auth.c
 

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.10 2002/05/08 13:55:04 pasky Exp $ */
+/* $Id: sched.h,v 1.11 2002/05/12 16:40:43 fis Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -137,18 +137,6 @@ struct status {
 	struct remaining_info *prg;
 };
 
-struct http_auth_basic {
-	struct http_auth_basic *next;
-	struct http_auth_basic *prev;
-	int blocked;
-	int valid;
-	unsigned char *url;
-	int url_len;
-	unsigned char *realm;
-	unsigned char *uid;
-	unsigned char *passwd;
-};
-
 void check_queue();
 long connect_info(int);
 /* void send_connection_info(struct connection *c); */
@@ -175,10 +163,5 @@ int is_entry_used(struct cache_entry *);
 
 /* void connection_timeout(struct connection *); */
 void set_timeout(struct connection *);
-
-unsigned char *find_auth(unsigned char *);
-int add_auth_entry(unsigned char *, unsigned char *);
-void del_auth_entry(struct http_auth_basic *);
-void free_auth();
 
 #endif

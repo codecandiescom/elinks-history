@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.122 2004/03/20 21:01:34 jonas Exp $ */
+/* $Id: cookies.c,v 1.123 2004/03/21 01:56:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ free_cookie(struct cookie *c)
 
 
 static int
-check_domain_security(unsigned char *domain, unsigned char *server, int server_len)
+check_domain_security(unsigned char *domain, struct string *server)
 {
 	register int i, j;
 	int domain_len;
@@ -159,9 +159,9 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 
 	/* XXX: Hmm, can't we use strlcasecmp() here? --pasky */
 
-	if (domain_len > server_len) return 0;
+	if (domain_len > server->length) return 0;
 
-	if (!strncasecmp(domain, server, server_len)) {
+	if (!string_strcasecmp(server, domain)) {
 		/* We should probably allow domains which are same as servers.
 		 * --<rono@sentuny.com.au> */
 		/* Mozilla does it as well ;))) and I can't figure out any
@@ -169,8 +169,8 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 		return 0;
 	}
 
-	for (i = server_len - domain_len, j = 0; domain[j]; i++, j++)
-		if (upcase(server[i]) != upcase(domain[j]))
+	for (i = server->length - domain_len, j = 0; domain[j]; i++, j++)
+		if (upcase(server->source[i]) != upcase(domain[j]))
 			return 0;
 
 	/* Also test if domain is secure enough.. */
@@ -352,7 +352,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	}
 #endif
 
-	if (!check_domain_security(cookie->domain, uri->hoststr, uri->hostlen)) {
+	if (!check_domain_security(cookie->domain, &uri->host)) {
 #ifdef COOKIES_DEBUG
 		DBG("Domain security violated: %s vs %*s", cookie->domain,
 				uri->hoststr, uri->hostlen);

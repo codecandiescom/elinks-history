@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.70 2003/11/26 20:58:44 zas Exp $ */
+/* $Id: formhist.c,v 1.71 2003/11/27 19:12:48 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,10 +157,11 @@ free_form(struct formhist_data *form)
 	mem_free(form);
 }
 
+static int loaded = 0;
+
 int
 load_forms_from_file(void)
 {
-	static int loaded = 0;
 	struct formhist_data *form;
 	unsigned char tmp[MAX_STR_LEN];
 	unsigned char *file;
@@ -288,6 +289,7 @@ save_forms_to_file(void)
 	struct secure_save_info *ssi;
 	unsigned char *file;
 	struct formhist_data *form;
+	int r;
 
 	if (!elinks_home || get_opt_int_tree(cmdline_options, "anonymous"))
 		return 0;
@@ -335,7 +337,10 @@ save_forms_to_file(void)
 		secure_fputc(ssi, '\n');
 	}
 
-	return secure_close(ssi);
+	r = secure_close(ssi);
+	if (r == 0) loaded = 1;
+
+	return r;
 }
 
 /* Check whether the form (chain of @submit submitted_values at @url document)

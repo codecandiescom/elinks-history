@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.100 2004/08/06 08:34:19 zas Exp $ */
+/* $Id: draw.c,v 1.101 2004/08/06 08:35:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,11 +95,11 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 void
 draw_char_data(struct terminal *term, int x, int y, unsigned char data)
 {
-	assert(term && term->screen && term->screen->image);
-	if_assert_failed return;
-	check_range(term, x, y);
+	struct screen_char *screen_char = get_char(term, x, y);
 
-	term->screen->image[x + term->width * y].data = data;
+	if (!screen_char) return;
+
+	screen_char->data = data;
 	set_screen_dirty(term->screen, y, y);
 }
 

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.38 2003/12/26 14:02:14 jonas Exp $ */
+/* $Id: status.c,v 1.39 2003/12/26 16:18:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,13 +339,15 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		} else {
 			stat = get_current_download(tab->data);
 
-			/* Set incomplete download to unvisited */
-			if (tab_ses && tab_ses->status.visited
-			    && stat && stat->state != S_OK)
-				tab_ses->status.visited = 0;
+			if (stat && stat->state != S_OK) {
+				color = loading_color;
+				/* Set incomplete download to unvisited */
+				if (tab_ses && tab_ses->status.visited)
+					tab_ses->status.visited = 0;
 
-			if (!tab_ses || !tab_ses->status.visited)
+			} else if (!tab_ses || !tab_ses->status.visited) {
 				color = fresh_color;
+			}
 
 			if (!download_is_progressing(stat))
 				stat = NULL;
@@ -355,8 +357,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 		if (stat) {
 			download_progress_bar(term, xpos, ypos,
-					      actual_tab_width - 1, msg,
-					      loading_color,
+					      actual_tab_width - 1, msg, NULL,
 					      stat->prg->pos, stat->prg->size);
 		} else {
 			int msglen = int_min(strlen(msg), actual_tab_width - 1);

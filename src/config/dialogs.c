@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.66 2003/07/31 16:56:12 jonas Exp $ */
+/* $Id: dialogs.c,v 1.67 2003/08/01 11:28:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,7 @@ push_info_button(struct dialog_data *dlg,
 
 	if (option_types[option->type].write) {
 		struct string value;
-		
+
 		if (!init_string(&value)) return 0;
 
 		option_types[option->type].write(option, &value);
@@ -229,11 +229,10 @@ layout_edit_dialog(struct dialog_data *dlg)
 	buttons_width(term, dlg->items + 1, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
-
-	if (w > max) w = max;
-	if (w < min) w = min;
-	if (w > term->x - 2 * DIALOG_LB) w = term->x - 2 * DIALOG_LB;
-	if (w < 1) w = 1;
+	int_upper_bound(&w, max);
+	int_lower_bound(&w, min);
+	int_upper_bound(&w, term->x - 2 * DIALOG_LB);
+	int_lower_bound(&w, 1);
 
 	rw = 0;
 

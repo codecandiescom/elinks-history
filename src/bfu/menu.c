@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.103 2003/09/28 14:55:33 zas Exp $ */
+/* $Id: menu.c,v 1.104 2003/09/28 15:05:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,9 +112,8 @@ select_menu(struct terminal *term, struct menu *menu)
 
 	func = it->func;
 
-	if (menu->selected < 0 ||
-	    menu->selected >= menu->ni ||
-	    it->rtext == M_BAR)
+	if (menu->selected < 0 || menu->selected >= menu->ni
+	    || it->rtext == M_BAR)
 		return;
 
 	if (!it->submenu) {
@@ -125,10 +124,9 @@ select_menu(struct terminal *term, struct menu *menu)
 
 		win = term->windows.next;
 
-		while ((void *) win != &term->windows &&
-			(win->handler == menu_handler ||
-			 win->handler == mainmenu_handler)) {
-
+		while ((void *) win != &term->windows
+			&& (win->handler == menu_handler
+			    || win->handler == mainmenu_handler)) {
 			win1 = win->next;
 			delete_window(win);
 			win = win1;
@@ -262,8 +260,8 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_area(term, mx, s, mxw, 1, ' ', 0, color);
 		}
 
-		if (menu->items[p].rtext == M_BAR &&
-		    menu->items[p].text && !*menu->items[p].text) {
+		if (menu->items[p].rtext == M_BAR
+		    && menu->items[p].text && !*menu->items[p].text) {
 
 			/* Horizontal separator */
 			draw_border_char(term, menu->x, s,
@@ -395,8 +393,8 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					return;
 			}
 
-			if ((ev->x < menu->x) || (ev->x >= menu->x + menu->xw) ||
-			    (ev->y < menu->y) || (ev->y >= menu->y + menu->yw)) {
+			if (ev->x < menu->x || ev->x >= menu->x + menu->xw
+			    || ev->y < menu->y || ev->y >= menu->y + menu->yw) {
 				if ((ev->b & BM_ACT) == B_DOWN)
 					delete_window_ev(win, ev);
 
@@ -418,19 +416,19 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 
 						m1 = w1->data;
 
-						if (ev->x > m1->x &&
-						    ev->x < m1->x + m1->xw - 1 &&
-						    ev->y > m1->y &&
-						    ev->y < m1->y + m1->yw - 1)
+						if (ev->x > m1->x
+						    && ev->x < m1->x + m1->xw - 1
+						    && ev->y > m1->y
+						    && ev->y < m1->y + m1->yw - 1)
 							delete_window_ev(win, ev);
 					}
 				}
 
 			} else {
-				if (!(ev->x <  menu->x ||
-				      ev->x >= menu->x + menu->xw ||
-				      ev->y <  menu->y + 1 ||
-				      ev->y >= menu->y + menu->yw-1)) {
+				if (ev->x >=  menu->x
+				    && ev->x < menu->x + menu->xw
+				    && ev->y >=  menu->y + 1
+				    && ev->y < menu->y + menu->yw - 1) {
 					int sel = ev->y - menu->y - 1 + menu->view;
 
 					if (sel >= 0 && sel < menu->ni
@@ -452,8 +450,8 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 			switch (kbd_action(KM_MENU, ev, NULL)) {
 				case ACT_LEFT:
 				case ACT_RIGHT:
-					if ((void *) win->next != &win->term->windows &&
-					    win->next->handler == mainmenu_handler) {
+					if ((void *) win->next != &win->term->windows
+					    && win->next->handler == mainmenu_handler) {
 						delete_window_ev(win, ev);
 						goto break2;
 					}
@@ -548,8 +546,8 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					}
 
 					if (ev->x == KBD_ESC) {
-						if ((void *) win->next != &win->term->windows &&
-						    win->next->handler == mainmenu_handler)
+						if ((void *) win->next != &win->term->windows
+						    && win->next->handler == mainmenu_handler)
 							delete_window_ev(win, ev);
 						else
 							delete_window_ev(win, NULL);
@@ -656,8 +654,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		p += 2;
 
 		for (j = 0; (c = tmptext[j]); j++, p++) {
-			if (!hk && key_pos
-			    && j == key_pos - 1) {
+			if (!hk && key_pos && j == key_pos - 1) {
 				hk = 1;
 				p--;
 				continue;
@@ -698,10 +695,9 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		win = term->windows.next;
 
-		while ((void *) win != &term->windows &&
-			(win->handler == menu_handler ||
-			 win->handler == mainmenu_handler)) {
-
+		while ((void *) win != &term->windows
+		       && (win->handler == menu_handler
+			   || win->handler == mainmenu_handler)) {
 			win1 = win->next;
 			delete_window(win);
 			win = win1;
@@ -772,12 +768,12 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_KBD:
-			if (ev->x == ' ' ||
-			    ev->x == KBD_ENTER ||
-			    ev->x == KBD_DOWN ||
-			    ev->x == KBD_UP ||
-			    ev->x == KBD_PAGE_DOWN ||
-			    ev->x == KBD_PAGE_UP) {
+			if (ev->x == ' '
+			    || ev->x == KBD_ENTER
+			    || ev->x == KBD_DOWN
+			    || ev->x == KBD_UP
+			    || ev->x == KBD_PAGE_DOWN
+			    || ev->x == KBD_PAGE_UP) {
 				select_mainmenu(win->term, menu);
 				break;
 			}
@@ -794,7 +790,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 
 			}
 
-			if ((ev->x == KBD_LEFT || ev->x == KBD_RIGHT) && fwd) {
+			if (fwd && (ev->x == KBD_LEFT || ev->x == KBD_RIGHT)) {
 				display_mainmenu(win->term, menu);
 				select_mainmenu(win->term, menu);
 				break;

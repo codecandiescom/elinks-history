@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.316 2004/08/19 09:58:27 miciah Exp $ */
+/* $Id: download.c,v 1.317 2004/08/19 10:02:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,8 +186,10 @@ destroy_downloads(struct session *ses)
 	 * bound to this terminal. That looks like the reasonable thing to do,
 	 * fulfilling the principle of least astonishment. */
 	foreach (s, sessions) {
-		if (s != ses && s->tab->term == ses->tab->term)
-			return;
+		if (s == ses || s->tab->term != ses->tab->term)
+			continue;
+
+		return;
 	}
 
 	foreach (file_download, downloads) {

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.28 2003/10/26 17:22:15 pasky Exp $ */
+/* $Id: default.c,v 1.29 2003/10/27 01:12:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-#define BACKEND_NAME	"optionsystem"
 
 static struct option_info default_mime_options[] = {
 	INIT_OPT_TREE("mime", N_("MIME type associations"),
@@ -210,7 +209,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 		handler->ask = get_opt_bool_tree(opt_tree, "ask");
 		handler->program = stracpy(get_opt_str_tree(opt_tree, "program"));
 		handler->description = desc;
-		handler->backend_name = BACKEND_NAME;
+		handler->backend_name = default_mime_module.name;
 
 		return handler;
 	}
@@ -225,7 +224,7 @@ struct mime_backend default_mime_backend = {
 };
 
 struct module default_mime_module = struct_module(
-	/* name: */		BACKEND_NAME,
+	/* name: */		N_("Option system"),
 	/* options: */		default_mime_options,
 	/* hooks: */		NULL,
 	/* submodules: */	NULL,

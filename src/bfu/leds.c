@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.23 2003/10/26 14:30:51 jonas Exp $ */
+/* $Id: leds.c,v 1.24 2003/10/27 01:12:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/leds.h"
 #include "bfu/style.h"
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
 #include "modules/module.h"
@@ -190,7 +191,7 @@ unregister_led(struct led *led)
 }
 
 struct module leds_module = struct_module(
-	/* name: */		"leds",
+	/* name: */		N_("LED indicators"),
 	/* options: */		NULL,
 	/* events: */		NULL,
 	/* submodules: */	NULL,

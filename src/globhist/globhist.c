@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.40 2003/10/26 18:09:01 jonas Exp $ */
+/* $Id: globhist.c,v 1.41 2003/10/27 01:12:14 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -540,7 +540,7 @@ done_global_history(struct module *module)
 }
 
 struct module global_history_module = struct_module(
-	/* name: */		"global history",
+	/* name: */		N_("Global History"),
 	/* options: */		global_history_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,

@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.8 2003/10/26 14:02:35 jonas Exp $ */
+/* $Id: scripting.c,v 1.9 2003/10/27 01:12:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "intl/gettext/libintl.h"
 #include "modules/module.h"
 #include "sched/event.h"
 #include "scripting/scripting.h"
@@ -30,7 +31,7 @@ static struct module *scripting_modules[] = {
 };
 
 struct module scripting_module = struct_module(
-	/* name: */		"scripting",
+	/* name: */		N_("Scripting"),
 	/* options: */		NULL,
 	/* events: */		NULL,
 	/* submodules: */	scripting_modules,

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.84 2003/10/26 18:25:23 jonas Exp $ */
+/* $Id: cookies.c,v 1.85 2003/10/27 01:12:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -770,7 +770,7 @@ done_cookies(struct module *module)
 }
 
 struct module cookies_module = struct_module(
-	/* name: */		"cookies",
+	/* name: */		N_("Cookies"),
 	/* options: */		cookies_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,

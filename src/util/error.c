@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.54 2003/06/08 12:36:55 pasky Exp $ */
+/* $Id: error.c,v 1.55 2003/06/08 12:41:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,10 +60,19 @@ er(int bell, unsigned char *fmt, va_list params)
 void
 elinks_error(unsigned char *fmt, ...)
 {
+	unsigned char errbuf[4096];
+	int size;
+	int maxsize = sizeof(errbuf) - strlen(fmt);
 	va_list params;
 
 	va_start(params, fmt);
-	er(1, fmt, params);
+
+	size = snprintf(errbuf, maxsize, "\033[1mERROR\033[0m: ");
+	if (size < maxsize) {
+		strcat(errbuf, fmt);
+		er(1, errbuf, params);
+	}
+
 	va_end(params);
 }
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.151 2003/06/17 16:18:50 pasky Exp $ */
+/* $Id: renderer.c,v 1.152 2003/06/17 16:26:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1563,12 +1563,14 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 	unsigned char *start = NULL;
 	unsigned char *end = NULL;
 	unsigned char *t;
-	unsigned char *head = init_str();
+	unsigned char *head;
 	int hdl = 0;
 	int i;
 
-	if (!head) return;
 	assert(ce && screen);
+
+	head = init_str();
+	if (!head) return;
 
 	url = ce->url;
 	d_opt = &screen->opt;

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.44 2005/03/26 22:05:45 rrowan Exp $
+# $Id: hooks.pl,v 1.45 2005/03/26 22:34:56 rrowan Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -270,10 +270,9 @@ sub goto_url_hook
 			$locator_rfc         = 'http://rfc-editor.org/cgi-bin/rfcsearch.pl?num=37&searchwords=' . $thingy;
 				$locator_rfc     = 'http://ietf.org/rfc/rfc' . $thingy . '.txt' unless $thingy !~ '^[0-9]*$';
 			my $weather          = loadrc("weather");
-			$weather             = 'ask jeeves' if $weather =~ /^(ask|jeeves)$/;
-			$weather           ||= 'weather underground';
-			$locator_weather     = $weather_locators_{$weather};
-			$locator_weather     =~ s/!query!/$thingy/;
+				$locator_weather     = $weather_locators_{$weather};
+				$locator_weather   ||= $weather_locators_{'weather underground'};
+				$locator_weather     =~ s/!query!/$thingy/;
 			$locator_whatis      = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
 		}
 		$url = $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');

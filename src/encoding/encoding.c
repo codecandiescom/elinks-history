@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.34 2004/07/03 00:04:14 pasky Exp $ */
+/* $Id: encoding.c,v 1.35 2004/07/29 10:02:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ guess_encoding(unsigned char *filename)
 		while (ext && *ext) {
 			int len = strlen(*ext);
 
-			if (fname_len > len && !strcmp(fname_end - len, *ext))
+			if (fname_len >= len && !strcmp(fname_end - len, *ext))
 				return enc;
 
 			ext++;

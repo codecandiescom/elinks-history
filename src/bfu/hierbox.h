@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.25 2003/11/22 02:16:37 jonas Exp $ */
+/* $Id: hierbox.h,v 1.26 2003/11/22 02:30:09 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -56,6 +56,8 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 int push_hierbox_delete_button(struct dialog_data *dlg_data, struct widget_data *button);
 
 struct delete_hierbox_item_info {
+	/* The item (and especially its ->udata) to delete. If NULL it means we
+	 * should destroy marked items instead. */
 	struct listbox_item *item;
 	struct terminal *term;
 };

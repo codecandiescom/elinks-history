@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.118 2004/11/12 22:01:08 zas Exp $ */
+/* $Id: action.c,v 1.119 2004/11/12 22:10:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -591,26 +591,22 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_MOVE_LINK_UP:
 			if (!has_vs) break;
-			move_link_up(ses, doc_view);
-			status = FRAME_EVENT_REFRESH;
+			status = move_link_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_DOWN:
 			if (!has_vs) break;
-			move_link_down(ses, doc_view);
-			status = FRAME_EVENT_REFRESH;
+			status = move_link_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_LEFT:
 			if (!has_vs) break;
-			move_link_left(ses, doc_view);
-			status = FRAME_EVENT_REFRESH;
+			status = move_link_left(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_LINK_RIGHT:
 			if (!has_vs) break;
-			move_link_right(ses, doc_view);
-			status = FRAME_EVENT_REFRESH;
+			status = move_link_right(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_START:

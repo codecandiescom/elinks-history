@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.655 2004/11/12 21:32:20 zas Exp $ */
+/* $Id: view.c,v 1.656 2004/11/12 22:10:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,13 +221,13 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	}
 }
 
-void
+enum frame_event_status
 move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, int dir_y)
 {
 	int count;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 	count = int_max(ses->kbdprefix.repeat_count, 1);
@@ -249,6 +249,8 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 			set_textarea(doc_view, -dir_y);
 		}
 	}
+
+	return FRAME_EVENT_REFRESH;
 }
 
 /* @steps > 0 -> down */

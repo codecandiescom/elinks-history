@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.67 2004/11/12 17:33:19 zas Exp $ */
+/* $Id: view.h,v 1.68 2004/11/12 22:10:24 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -30,8 +30,8 @@ void move_link(struct session *ses, struct document_view *doc_view,
 #define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
 #define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
 
-void move_link_dir(struct session *ses, struct document_view *doc_view,
-		   int dir_x, int dir_y);
+enum frame_event_status move_link_dir(struct session *ses, struct document_view *doc_view,
+				      int dir_x, int dir_y);
 
 #define move_link_up(ses, doc_view) move_link_dir(ses, doc_view,  0, -1)
 #define move_link_down(ses, doc_view) move_link_dir(ses, doc_view,  0,  1)

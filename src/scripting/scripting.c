@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.1 2003/09/23 00:45:18 jonas Exp $ */
+/* $Id: scripting.c,v 1.2 2003/09/23 08:40:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ register_scripting_hooks(struct scripting_hook *hooks)
 	int i;
 
 	for (i = 0; hooks[i].name; i++) {
-		int id = get_event_id(hooks[i].name);
+		int id = register_event(hooks[i].name);
 
 		if (id == EVENT_NONE) continue;
 

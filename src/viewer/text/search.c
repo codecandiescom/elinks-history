@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.228 2004/06/03 21:08:06 zas Exp $ */
+/* $Id: search.c,v 1.229 2004/06/03 21:12:41 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1389,10 +1389,21 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 }
 
 void
-search_dlg(struct session *ses, struct document_view *doc_view, int a)
+search_dlg(struct session *ses, struct document_view *doc_view, int direction)
 {
-	unsigned char *title  = a > 0 ? N_("Search") : N_("Search backward");
-	void *search_function = a > 0 ? search_for   : search_for_back;
+	unsigned char *title;
+	void *search_function;
+
+	assert(direction);
+	if_assert_failed return;
+
+	if (direction > 0) {
+		title = N_("Search");
+		search_function = search_for;
+	} else {
+		title = N_("Search backward");
+		search_function = search_for_back;
+	}
 
 	search_dlg_do(ses->tab->term, NULL, 1,
 		      title, N_("Search for text"),

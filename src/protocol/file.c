@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.104 2003/07/07 00:57:30 jonas Exp $ */
+/* $Id: file.c,v 1.105 2003/07/07 01:23:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,22 +480,22 @@ list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 /* Tries to open @prefixname with each of the supported encoding extensions
  * appended. */
 static inline enum stream_encoding
-try_encoding_extensions(unsigned char *prefixname, int *fd)
+try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 {
-	unsigned char filename[MAX_STR_LEN];
-	int filenamelen = strlen(prefixname);
-	int maxlen = MAX_STR_LEN - filenamelen;
+	int maxlen = MAX_STR_LEN - filenamelen - 1;
 	unsigned char *filenamepos = filename + filenamelen;
 	int encoding;
-
-	memcpy(filename, prefixname, filenamelen);
 
 	/* No file of that name was found, try some others names. */
 	for (encoding = 1; encoding < ENCODINGS_KNOWN; encoding++) {
 		unsigned char **ext = listext_encoded(encoding);
 
 		while (ext && *ext) {
-			safe_strncpy(filenamepos, *ext, maxlen);
+			int extlen = strlen(*ext);
+
+			if (extlen > maxlen) continue;
+
+			safe_strncpy(filenamepos, *ext, extlen + 1);
 
 			/* We try with some extensions. */
 			*fd = open(filename, O_RDONLY | O_NOCTTY);
@@ -508,6 +508,7 @@ try_encoding_extensions(unsigned char *prefixname, int *fd)
 		}
 	}
 
+	filename[filenamelen + 1] = 0;
 	return ENCODING_NONE;
 }
 
@@ -619,7 +620,8 @@ file_func(struct connection *connection)
 
 		if (fd == -1
 		    && get_opt_bool("protocol.file.try_encoding_extensions")) {
-			encoding = try_encoding_extensions(filename, &fd);
+			encoding = try_encoding_extensions(filename,
+							   filenamelen, &fd);
 		} else if (fd != -1) {
 			encoding = guess_encoding(filename);
 		}

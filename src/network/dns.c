@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.53 2004/12/16 15:13:31 zas Exp $ */
+/* $Id: dns.c,v 1.54 2005/02/05 04:20:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,6 +147,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	return 0;
 }
 
+#ifndef NO_ASYNC_LOOKUP
 static void
 lookup_fn(void *data, int h)
 {
@@ -189,6 +190,7 @@ lookup_fn(void *data, int h)
 	/* We're in thread, thus we must do plain free(). */
 	free(addrs);
 }
+#endif
 
 static void
 end_real_lookup(void *data)

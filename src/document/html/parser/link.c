@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.66 2004/12/15 10:32:44 zas Exp $ */
+/* $Id: link.c,v 1.67 2004/12/15 13:53:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,6 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 	label = get_attr_val(a, "alt");
 	if (!label) label = get_attr_val(a, "title");
-	if (!label) label = get_attr_val(a, "id");
 
 	/* Little hack to preserve rendering of [   ], in directories listing,
 	 * but we still want to drop extra spaces in alt or title attribute

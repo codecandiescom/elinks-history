@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.8 2002/07/09 23:01:07 pasky Exp $ */
+/* $Id: dialog.c,v 1.9 2002/07/10 19:04:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,7 +270,8 @@ dsp_f:
 				break;
 			}
 
-			if ((ev->x == KBD_ENTER && di->item->type == D_BUTTON) || ev->x == KBD_ENTER) {
+			if ((ev->x == KBD_ENTER && di->item->type == D_BUTTON)
+			    || ev->x == KBD_ENTER || ev->x == ' ') {
 				dlg_select_item(dlg, di);
 				break;
 			}
@@ -293,7 +294,7 @@ sel:
 
 			if ((ev->x == KBD_ENTER && (di->item->type == D_FIELD ||
 						    di->item->type == D_FIELD_PASS))
-			    || ev->x == ' ') {
+			    || (ev->x == KBD_ENTER && (ev->y == KBD_CTRL || ev->y == KBD_ALT))) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
 					    && dlg->dlg->items[i].gid & B_ENTER)

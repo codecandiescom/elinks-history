@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.41 2002/12/08 17:14:50 pasky Exp $ */
+/* $Id: options.h,v 1.42 2002/12/08 22:52:08 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -34,6 +34,10 @@ enum option_flags {
 	 * normally ;). It doesn't affect how the option is handled by common
 	 * option handling functions in any way. */
 	OPT_WATERMARK = 4,
+	/* This is used to mark options modified after the last save. That's
+	 * being useful if you want to save only the options whose value
+	 * changed. */
+	OPT_TOUCHED = 8,
 };
 
 enum option_type {

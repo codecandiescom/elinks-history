@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.136 2004/04/30 13:18:56 zas Exp $ */
+/* $Id: screen.c,v 1.137 2004/04/30 13:27:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -565,7 +565,7 @@ add_char256(struct string *screen, struct screen_driver *driver,
 	int ymax = (term_)->height - 1;						\
 	register struct screen_char *current = &screen->last_image[ypos];	\
 	register struct screen_char *pos = &screen->image[ypos];		\
-	register struct screen_char *prev_pos = NULL; /* XXX: check that */	\
+	register struct screen_char *prev_pos = NULL; /* Warning prevention. */	\
 										\
 	int_upper_bound(&screen->dirty_to, ymax);				\
 										\

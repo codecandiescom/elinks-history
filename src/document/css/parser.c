@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.69 2004/01/27 18:43:30 pasky Exp $ */
+/* $Id: parser.c,v 1.70 2004/01/27 19:08:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ struct selector_pkg {
 static struct list_head *
 css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 {
-	unsigned char *id = NULL, *class = NULL, *pseudo = NULL;
+	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
 	struct css_token *token = get_css_token(scanner);
 	static struct list_head selectors;
 	struct selector_pkg *pkg;
@@ -197,15 +197,20 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 next_one:
 	pkg = NULL;
 
+	/* Load up the selector */
+
 	if (token->type != CSS_TOKEN_IDENT) {
 		skip_css_tokens(scanner, '}');
 		return NULL;
 	}
 
+	name = memacpy(token->string, token->length);
+
 	/* Check if we have already encountered the selector */
+
 	/* FIXME: This is totally broken because we have to do this _after_
 	 * scanning for id/class/pseudo. --pasky */
-	selector = get_css_selector(css, token->string, token->length);
+	selector = get_css_selector(css, name, -1);
 	if (!selector)
 		goto syntax_error;
 
@@ -257,6 +262,7 @@ next_one:
 		if (pseudo) mem_free(pseudo), pseudo = NULL;
 		mem_free(pkg); pkg = NULL;
 	}
+	if (name) mem_free(name), name = NULL;
 
 	if (token->type == ',') {
 		/* Multiple elements hooked up to this ruleset. */
@@ -275,6 +281,7 @@ syntax_error:
 		if (id) mem_free(id), id = NULL;
 		if (class) mem_free(class), class = NULL;
 		if (pseudo) mem_free(pseudo), pseudo = NULL;
+		if (name) mem_free(name), name = NULL;
 
 		free_list(selectors);
 

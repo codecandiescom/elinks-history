@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.536 2004/06/26 21:29:58 pasky Exp $ */
+/* $Id: view.c,v 1.537 2004/06/26 22:57:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ move_page_up(struct session *ses, struct document_view *doc_view)
 		move_up(ses, doc_view, 0);
 }
 
-static inline void
+static void
 move_link(struct session *ses, struct document_view *doc_view, int direction,
 	  int wraparound_bound, int wraparound_link)
 {
@@ -188,7 +188,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 #define move_link_next(ses, doc_view) move_link(ses, doc_view,  1, doc_view->document->nlinks - 1, 0)
 #define move_link_prev(ses, doc_view) move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1)
 
-static inline void
+static void
 move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, int dir_y)
 {
 	int count;

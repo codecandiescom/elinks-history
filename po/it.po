@@ -632,7 +632,7 @@ msgstr ""
 
 #: src/config/dialogs.c:531 src/dialogs/info.c:126 src/globhist/dialogs.c:188
 msgid "Toggle display"
-msgstr "URL/Titolo"
+msgstr "Commuta vista"
 
 #: src/config/dialogs.c:536
 msgid "Keybinding manager"
@@ -4186,7 +4186,7 @@ msgstr "Apri URL"
 
 #: src/dialogs/menu.c:375
 msgid "Go ~forward"
-msgstr "Avant~i"
+msgstr "A~vanti"
 
 #: src/dialogs/menu.c:377
 msgid "~History"

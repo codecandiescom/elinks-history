@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.98 2003/10/24 11:41:42 pasky Exp $ */
+/* $Id: conf.c,v 1.99 2003/10/25 04:45:58 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,7 +479,6 @@ smart_config_output_fn(struct string *string, struct option *option,
 		       int action, int i18n)
 {
 	unsigned char *desc_i18n;
-	int i, l;
 
 	/* When we're OPT_TREE, we won't get called with action 2 anyway and
 	 * we want to pop out a comment. */
@@ -515,22 +514,44 @@ smart_config_output_fn(struct string *string, struct option *option,
 				break;
 
 			desc_i18n = conf_i18n(option->desc, i18n);
-			l = strlen(desc_i18n);
 
 			if (depth)
 				add_xchar_to_string(string, ' ', depth * indentation);
 			add_to_string(string, "# ");
+			{
+				unsigned char *i = desc_i18n;
+				unsigned char *j = i;
+				unsigned char *last_space = NULL;
+				int config_width = 80;
+				int n = depth * indentation + 2;
+				
+				for (; *i; i++, n++) {
+					if (*i == '\n') {
+						add_bytes_to_string(string, j, i - j + 1);
+						if (depth)
+							add_xchar_to_string(string, ' ', depth * indentation);
+						add_to_string(string, "# ");
+						j = i + 1;
+						n = depth * indentation + 1;
+						last_space = NULL;
+						continue;
+					}
 
-			for (i = 0; i < l; i++) {
-				add_char_to_string(string, desc_i18n[i]);
-				if (desc_i18n[i] == '\n') {
-					if (depth)
-						add_xchar_to_string(string, ' ',
-								    depth * indentation);
-					add_to_string(string, "# ");
+					if (*i == ' ') last_space = i;
+
+					if (n >= config_width && last_space) {
+						add_bytes_to_string(string, j, last_space - j);
+						add_char_to_string(string, '\n');
+						if (depth)
+							add_xchar_to_string(string, ' ', depth * indentation);
+						add_to_string(string, "# ");
+						j = last_space + 1;
+						n = depth * indentation + 1 + i - last_space;
+						last_space = NULL;
+					}
 				}
+				add_to_string(string, j);
 			}
-
 			add_char_to_string(string, '\n');
 			break;
 

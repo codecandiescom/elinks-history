@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.56 2004/06/10 12:09:52 jonas Exp $ */
+/* $Id: mime.c,v 1.57 2004/06/10 12:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ check_encoding_type(unsigned char *extension)
 #define debug_extension(extension__)
 #endif
 
-static unsigned char *
+unsigned char *
 get_extension_content_type(unsigned char *extension)
 {
 	unsigned char *ctype;

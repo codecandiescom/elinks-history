@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.16 2004/06/10 11:51:56 jonas Exp $ */
+/* $Id: mime.h,v 1.17 2004/06/10 12:10:53 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -22,6 +22,9 @@ extern struct module mime_module;
 /* Guess content type of the document. Either from the protocol header or
  * scanning the uri for extensions. */
 unsigned char *get_content_type(struct cache_entry *cached);
+
+/* Guess content type by looking at configurations of the given @extension */
+unsigned char *get_extension_content_type(unsigned char *extension);
 
 /* Find program to handle mimetype. The @xwin tells about X capabilities. */
 struct mime_handler *

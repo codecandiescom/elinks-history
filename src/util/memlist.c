@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.12 2003/06/07 10:03:24 pasky Exp $ */
+/* $Id: memlist.c,v 1.13 2003/06/08 22:22:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,8 @@ getml(void *p, ...)
 	 * just return. */
 	if (!p) {
 #ifdef DEBUG_MEMLIST
-		error("%s:%d getml(NULL, ....)", file, line);
+		errline = line, errfile = file;
+		elinks_error("getml(NULL, ....)");
 #endif
 		return NULL;
 	}
@@ -95,7 +96,8 @@ add_to_ml(struct memory_list **ml, ...)
 	/* None, so just return. */
 	if (!n) {
 #ifdef DEBUG_MEMLIST
-		error("%s:%d add_to_ml(%p, NULL, ...)", file, line, ml);
+		errline = line, errfile = file;
+		elinks_error("add_to_ml(%p, NULL, ...)", ml);
 #endif
 		return;
 	}
@@ -134,7 +136,8 @@ add_one_to_ml(struct memory_list **ml, void *p)
 	/* None, so just return. */
 	if (!p) {
 #ifdef DEBUG_MEMLIST
-		error("%s:%d add_one_to_ml(%p, NULL)", file, line, ml);
+		errline = line, errfile = file;
+		elinks_error("add_one_to_ml(%p, NULL)", ml);
 #endif
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.21 2003/06/08 22:17:55 pasky Exp $ */
+/* $Id: memdebug.c,v 1.22 2003/06/08 22:22:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,25 +237,26 @@ static int alloc_try = 0;
 static int
 patience(unsigned char *file, int line, unsigned char *of)
 {
+	errfile = file;
+	errline = line;
+
 	++alloc_try;
 	if (alloc_try < ALLOC_MAXTRIES) {
-		error("[%s:%d] Out of memory (%s returned NULL): retry #%d,"
-			" I still exercise my patience and retry tirelessly.",
-			file, line, of, alloc_try);
+		elinks_error("Out of memory (%s returned NULL): retry #%d, "
+			"I still exercise my patience and retry tirelessly.",
+			of, alloc_try);
 		sleep(ALLOC_DELAY);
 		return alloc_try;
 	}
 
 #ifdef CRASH_IF_ALLOC_MAXTRIES
-	errfile = file;
-	errline = line;
-	elinks_internal("Out of memory (%s returned NULL) after %d tries,"
-		" I give up. See ya on the other side.",
+	elinks_internal("Out of memory (%s returned NULL) after %d tries, "
+		"I give up. See ya on the other side.",
 		of, alloc_try);
 #else
-	error("[%s:%d] Out of memory (%s returned NULL) after %d tries,"
-		" I give up and try to continue. Pray for me, please.",
-		file, line, of, alloc_try);
+	elinks_error("Out of memory (%s returned NULL) after %d tries, "
+		"I give up and try to continue. Pray for me, please.",
+		of, alloc_try);
 #endif
 	alloc_try = 0;
 	return 0;

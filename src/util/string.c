@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.49 2003/06/08 22:17:55 pasky Exp $ */
+/* $Id: string.c,v 1.50 2003/06/08 22:22:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,11 +20,11 @@
 #ifdef DEBUG
 #define fatalfl(x) errfile = f, errline = l, elinks_internal(x)
 #define fatal(x) internal(x)
-#define warnfl(x) error("%s:%d %s\n", f, l, x)
-#define warn(x) error("%s:%d %s\n", __FILE__, __LINE__, x)
+#define warnfl(x) errfile = f, errline = l, elinks_error(x)
+#define warn(x) error(x)
 #else
-#define fatalfl(x) error("%s:%d %s\n", f, l, x)
-#define fatal(x) error("%s:%d %s\n", __FILE__, __LINE__, x)
+#define fatalfl(x) errfile = f, errline = l, elinks_error(x)
+#define fatal(x) error(x)
 #define warnfl(x)
 #define warn(x)
 #endif

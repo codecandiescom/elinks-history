@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.129 2004/04/12 21:38:14 jonas Exp $ */
+/* $Id: inpfield.c,v 1.130 2004/04/12 22:49:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,10 +88,9 @@ dlg_format_field(struct terminal *term,
 		 int x, int *y, int w, int *rw, enum format_align align)
 {
 	unsigned char *label = widget_data->widget->text;
+	struct color_pair *text_color = NULL;
 
 	if (label) {
-		struct color_pair *text_color = NULL;
-
 		if (term) text_color = get_bfu_color(term, "dialog.text");
 
 		dlg_format_text_do(term, label, x, y, w, rw, text_color, AL_LEFT);
@@ -101,6 +100,9 @@ dlg_format_field(struct terminal *term,
 	 * width allows it. */
 	if (widget_data->widget->info.field.float_label && label) {
 		int label_width = strlen(label);
+
+		(*y)--;
+		dlg_format_text_do(term, ": ", x + label_width, y, w, rw, text_color, AL_LEFT);
 
 		/* FIXME: Is 5 chars for input field enough? --jonas */
 		if (label_width < w - 5) {

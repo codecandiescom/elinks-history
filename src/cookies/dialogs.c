@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.38 2004/03/14 06:22:01 witekfl Exp $ */
+/* $Id: dialogs.c,v 1.39 2004/04/12 22:49:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,8 +228,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 #define EDIT_WIDGETS_COUNT 8
 	struct dialog *dlg;
 	unsigned char *name, *value, *domain, *expires, *secure;
-	unsigned char *dlg_server, *dlg_name, *dlg_value, *dlg_domain;
-	unsigned char *dlg_expires, *dlg_secure;
+	unsigned char *dlg_server;
 	int length = 0;
 
 	dlg = calloc_dialog(EDIT_WIDGETS_COUNT, MAX_STR_LEN * 5);
@@ -253,35 +252,23 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	length = 0;
 	ulongcat(secure, &length, cookie->secure, MAX_STR_LEN, 0);
 
-	dlg_server = straconcat(_("Server", term), ": ", cookie->server, NULL);
-	dlg_name = straconcat("\n", _("Name", term), ": ", NULL);
-	dlg_value = straconcat(_("Value", term), ": ", NULL);
-	dlg_domain = straconcat(_("Domain", term), ": ", NULL);
-	dlg_expires = straconcat(_("Expires", term), ": ", NULL);
-	dlg_secure = straconcat(_("Secure", term), ": ", NULL);
+	dlg_server = straconcat(_("Server", term), ": ", cookie->server, "\n", NULL);
 
-	if (!dlg_server || !dlg_name || !dlg_value || !dlg_domain
-	    || !dlg_expires || !dlg_secure) {
-		if (dlg_server) mem_free(dlg_server);
-		if (dlg_name) mem_free(dlg_name);
-		if (dlg_value) mem_free(dlg_value);
-		if (dlg_domain) mem_free(dlg_domain);
-		if (dlg_expires) mem_free(dlg_expires);
-		if (dlg_secure) mem_free(dlg_secure);
+	if (!dlg_server) {
 		mem_free(dlg);
 		return;
 	}
 
 	add_dlg_text(dlg, dlg_server, AL_LEFT, 1);
-	add_dlg_field(dlg, dlg_name, 0, 0, set_cookie_name, MAX_STR_LEN, name, NULL);
+	add_dlg_field(dlg, _("Name", term), 0, 0, set_cookie_name, MAX_STR_LEN, name, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, dlg_value, 0, 0, set_cookie_value, MAX_STR_LEN, value, NULL);
+	add_dlg_field(dlg, _("Value", term), 0, 0, set_cookie_value, MAX_STR_LEN, value, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, dlg_domain, 0, 0, set_cookie_domain, MAX_STR_LEN, domain, NULL);
+	add_dlg_field(dlg, _("Domain", term), 0, 0, set_cookie_domain, MAX_STR_LEN, domain, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, dlg_expires, 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
+	add_dlg_field(dlg, _("Expires", term), 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
-	add_dlg_field(dlg, dlg_secure, 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
+	add_dlg_field(dlg, _("Secure", term), 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
@@ -289,8 +276,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
-	do_dialog(term, dlg, getml(dlg, dlg_server, dlg_name, dlg_value, dlg_domain,
-		  dlg_expires, dlg_secure, NULL));
+	do_dialog(term, dlg, getml(dlg, dlg_server, NULL));
 #undef EDIT_WIDGETS_COUNT
 }
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.162 2004/04/11 20:46:52 jonas Exp $ */
+/* $Id: dialogs.c,v 1.163 2004/04/12 22:49:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,7 +296,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 {
 #define EDIT_WIDGETS_COUNT 5
 	struct dialog *dlg;
-	unsigned char *value, *label, *name, *desc, *range;
+	unsigned char *value, *name, *desc, *range;
 	struct string tvalue;
 
 	if (!init_string(&tvalue)) return;
@@ -323,8 +323,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	name = straconcat(_("Name", term), ": ", option->name, "\n",
 			  _("Type", term), ": ",
-			  _(option_types[option->type].name, term), NULL);
-	label = straconcat("\n", _("Value", term), ": ", NULL);
+			  _(option_types[option->type].name, term), "\n", NULL);
 	desc = straconcat(_("Description", term), ": \n",
 			  _(option->desc ? option->desc
 				  	 : (unsigned char *) "N/A", term),
@@ -343,17 +342,16 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 		mem_free(range);
 	}
 
-	if (!name || !desc || !label) {
+	if (!name || !desc) {
 		if (name) mem_free(name);
 		if (desc) mem_free(desc);
-		if (label) mem_free(label);
 		mem_free(dlg);
 		return;
 	}
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
 	add_dlg_text(dlg, name, AL_LEFT, 1);
-	add_dlg_field(dlg, label, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
+	add_dlg_field(dlg, _("Value", term), 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 
 	add_dlg_text(dlg, desc, AL_LEFT, 0);
@@ -363,7 +361,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
-	do_dialog(term, dlg, getml(dlg, label, name, desc, NULL));
+	do_dialog(term, dlg, getml(dlg, name, desc, NULL));
 #undef EDIT_WIDGETS_COUNT
 }
 

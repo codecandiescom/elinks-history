@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.154 2004/01/09 00:43:54 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.155 2004/01/09 01:06:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,7 +437,7 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "left", ACT_LEFT,DACT( N_("Move the cursor left")) },
 	{ "link-menu", ACT_LINK_MENU, DACT(N_("Open the link context menu")) },
-	{ "none", ACT_NONE, NULL },
+	{ "none", ACT_NONE, DACT(N_("Do nothing")) },
 #ifdef HAVE_LUA
 	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else

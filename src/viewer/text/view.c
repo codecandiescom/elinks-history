@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.84 2003/06/02 01:52:24 miciah Exp $ */
+/* $Id: view.c,v 1.85 2003/06/02 15:42:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1250,8 +1250,10 @@ down(struct session *ses, struct f_data_c *fd, int a)
 
 	if (get_opt_int("document.browse.links.wraparound")
 	    && current_link >= fd->f_data->nlinks - 1) {
-		/* FIXME: This is not working :/. */
 		jump_to_link_number(ses, fd, 0);
+		/* FIXME: This needs further work, we should call page_down()
+		 * and set_textarea() under some conditions as well. --pasky */
+		return;
 	}
 
 	if (current_link == -1
@@ -1272,8 +1274,10 @@ up(struct session *ses, struct f_data_c *fd, int a)
 
 	if (get_opt_int("document.browse.links.wraparound")
 	    && current_link == 0) {
-		/* FIXME: This is not working :/. */
 		jump_to_link_number(ses, fd, fd->f_data->nlinks - 1);
+		/* FIXME: This needs further work, we should call page_down()
+		 * and set_textarea() under some conditions as well. --pasky */
+		return;
 	}
 
 	if (current_link == -1

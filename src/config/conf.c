@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.132 2004/04/02 07:27:00 zas Exp $ */
+/* $Id: conf.c,v 1.133 2004/04/03 12:58:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -833,7 +833,11 @@ static int
 write_config_to(unsigned char *file, struct option *tree,
 		struct terminal *term)
 {
-	return write_config_file(elinks_home, file, tree, term);
+	if (elinks_home)
+		return write_config_file(elinks_home, file, tree, term);
+
+	/* TODO: Show error message otherwise */
+	return -1;
 }
 
 int

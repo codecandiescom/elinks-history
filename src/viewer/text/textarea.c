@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.123 2004/06/19 07:00:18 miciah Exp $ */
+/* $Id: textarea.c,v 1.124 2004/06/19 12:27:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,6 +46,13 @@ struct line_info {
 #define realloc_line_info(info, size) \
 	mem_align_alloc(info, size, (size) + 3, struct line_info, 0xFF)
 
+/* Allocates a line_info table describing the layout of the textarea buffer.
+ *
+ * @width	is max width and the offset at which text will be wrapped
+ * @wrap	controls how the wrapping of text is performed
+ * @format	is non zero the @text will be modified to make it suitable for
+ *		encoding it for form posting
+ */
 static struct line_info *
 format_text(unsigned char *text, int width, enum form_wrap wrap, int format)
 {
@@ -105,6 +112,9 @@ format_text(unsigned char *text, int width, enum form_wrap wrap, int format)
 	return line;
 }
 
+/* Searches for @cursor_position (aka. position in the fs->value string) for
+ * the corresponding entry in the @line info. Returns the index or -1 if
+ * position is not found. */
 static int
 get_textarea_line_number(struct line_info *line, int cursor_position)
 {
@@ -124,6 +134,8 @@ get_textarea_line_number(struct line_info *line, int cursor_position)
 	return -1;
 }
 
+/* Fixes up the vpos and vypos members of the form_state. Returns the
+ * logical position in the textarea view. */
 int
 area_cursor(struct form_control *fc, struct form_state *fs)
 {

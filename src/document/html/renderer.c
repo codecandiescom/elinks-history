@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.182 2003/07/28 17:05:44 zas Exp $ */
+/* $Id: renderer.c,v 1.183 2003/07/28 22:12:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,6 +723,9 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	assert(part);
 	if_assert_failed return;
 
+	assert(chars);
+	if_assert_failed return;
+
 	while (par_format.align != AL_NONE && part->cx == -1
 	       && charslen && *chars == ' ') {
 		chars++;
@@ -730,9 +733,6 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	}
 
 	if (!charslen) return;
-
-	assert(chars);
-	if_assert_failed return;
 
 	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
 		last_tag_for_newline = (void *)&part->document->tags;
@@ -755,6 +755,9 @@ end_format_change:
 		chars++;
 		charslen--;
 	}
+
+	if (!charslen) return;
+
 	if (part->y < part->cy + 1)
 		part->y = part->cy + 1;
 

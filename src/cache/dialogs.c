@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.16 2003/11/17 18:34:48 pasky Exp $ */
+/* $Id: dialogs.c,v 1.17 2003/11/17 18:37:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,18 +105,27 @@ push_info_button(struct dialog_data *dlg_data,
 
 	cache_entry_lock(ce);
 
-	/* TODO: More info */
-
 	add_to_string(&msg, _("URL", term));
 	add_to_string(&msg, ": ");
 	add_uri_to_string(&msg, &ce->uri, ~(URI_PASSWORD | URI_POST));
 
+	if (ce->redirect) {
+		add_format_to_string(&msg, "\n%s: %s", _("Redirect", term),
+						ce->redirect);
+
+		if (ce->redirect_get) {
+			add_to_string(&msg, " (GET)");
+		}
+	}
+
 	add_format_to_string(&msg, "\n%s: %d", _("Size", term), ce->length);
-	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term), ce->data_size);
+	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term),
+						ce->data_size);
 	add_format_to_string(&msg, "\n%s: %s", _("Last modified", term),
 						ce->last_modified);
 	if (ce->etag) {
-		add_format_to_string(&msg, "\n%s: %s", _("ETag", term), ce->etag);
+		add_format_to_string(&msg, "\n%s: %s", _("ETag", term),
+						ce->etag);
 	}
 	if (ce->ssl_info) {
 		add_format_to_string(&msg, "\n%s: %s", _("SSL Cipher", term),

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.41 2003/09/21 14:47:26 jonas Exp $ */
+/* $Id: dialog.c,v 1.42 2003/09/25 19:12:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@
 
 
 /* Prototypes */
-void dialog_func(struct window *, struct event *, int);
+void dialog_func(struct window *, struct term_event *, int);
 
 
 struct dialog_data *
@@ -111,7 +111,7 @@ select_dlg_item(struct dialog_data *dlg, int i)
 
 /* TODO: This is too long and ugly. Rewrite and split. */
 void
-dialog_func(struct window *win, struct event *ev, int fwd)
+dialog_func(struct window *win, struct term_event *ev, int fwd)
 {
 	int i;
 	struct dialog_data *dlg = win->data;

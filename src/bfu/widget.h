@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.11 2003/05/07 12:49:04 zas Exp $ */
+/* $Id: widget.h,v 1.12 2003/09/25 19:12:03 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -23,9 +23,9 @@ enum widget_type {
 struct widget_ops {
 	/* XXX: Order matters here. --Zas */
 	void (*display)(struct widget_data *, struct dialog_data *, int);
-	void (*init)(struct widget_data *, struct dialog_data *, struct event *);
-	int (*mouse)(struct widget_data *, struct dialog_data *, struct event *);
-	int (*kbd)(struct widget_data *, struct dialog_data *, struct event *);
+	void (*init)(struct widget_data *, struct dialog_data *, struct term_event *);
+	int (*mouse)(struct widget_data *, struct dialog_data *, struct term_event *);
+	int (*kbd)(struct widget_data *, struct dialog_data *, struct term_event *);
 	void (*select)(struct widget_data *, struct dialog_data *);
 };
 

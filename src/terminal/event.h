@@ -1,9 +1,9 @@
-/* $Id: event.h,v 1.1 2003/07/25 13:21:11 pasky Exp $ */
+/* $Id: event.h,v 1.2 2003/09/25 19:11:33 zas Exp $ */
 
 #ifndef EL__TERMINAL_EVENT_H
 #define EL__TERMINAL_EVENT_H
 
-enum event_type {
+enum term_event_type {
 	EV_INIT,
 	EV_KBD,
 	EV_MOUSE,
@@ -13,8 +13,8 @@ enum event_type {
 };
 
 /* XXX: do not change order of fields. --Zas */
-struct event {
-	enum event_type ev;
+struct term_event {
+	enum term_event_type ev;
 	long x;
 	long y;
 	long b;
@@ -22,8 +22,9 @@ struct event {
 
 struct terminal;
 
-void term_send_event(struct terminal *, struct event *);
-
+void term_send_event(struct terminal *, struct term_event *);
 void in_term(struct terminal *);
+
+#define INIT_TERM_EVENT(type, x, y, b) { (type), (x), (y), (b) }
 
 #endif /* EL__TERMINAL_EVENT_H */

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.40 2003/09/01 12:52:26 zas Exp $ */
+/* $Id: checkbox.c,v 1.41 2003/09/25 19:12:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ display_checkbox(struct widget_data *di, struct dialog_data *dlg, int sel)
 
 static void
 init_checkbox(struct widget_data *widget, struct dialog_data *dialog,
-	      struct event *ev)
+	      struct term_event *ev)
 {
 	if (widget->item->gid) {
 		if (*((int *) widget->cdata) == widget->item->gnum)
@@ -154,7 +154,7 @@ init_checkbox(struct widget_data *widget, struct dialog_data *dialog,
 
 static int
 mouse_checkbox(struct widget_data *di, struct dialog_data *dlg,
-	       struct event *ev)
+	       struct term_event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP
 	    || ev->y != di->y || ev->x < di->x || ev->x >= di->x + 3)

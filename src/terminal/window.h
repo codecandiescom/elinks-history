@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.3 2003/09/18 13:07:11 zas Exp $ */
+/* $Id: window.h,v 1.4 2003/09/25 19:11:33 zas Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -9,7 +9,7 @@
 struct window {
 	LIST_HEAD(struct window);
 
-	void (*handler)(struct window *, struct event *, int fwd);
+	void (*handler)(struct window *, struct term_event *, int fwd);
 	void *data;
 	struct terminal *term;
 	int xpos, width;	/* Used for tabs focus detection. */
@@ -22,9 +22,9 @@ struct window {
 
 void redraw_from_window(struct window *);
 void redraw_below_window(struct window *);
-void add_window(struct terminal *, void (*)(struct window *, struct event *, int), void *);
+void add_window(struct terminal *, void (*)(struct window *, struct term_event *, int), void *);
 void delete_window(struct window *);
-void delete_window_ev(struct window *, struct event *ev);
+void delete_window_ev(struct window *, struct term_event *ev);
 #define set_window_ptr(window, x, y) (window)->xp = (x), (window)->yp = (y)
 void get_parent_ptr(struct window *, int *, int *);
 

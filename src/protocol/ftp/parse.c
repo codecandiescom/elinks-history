@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.18 2005/03/28 22:26:29 zas Exp $ */
+/* $Id: parse.c,v 1.19 2005/03/28 23:19:00 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -19,6 +19,7 @@
 #ifdef HAVE_UNISTD_H
 # include <unistd.h>
 #endif
+#include <sys/stat.h>
 #include <sys/types.h>
 
 #include "elinks.h"
@@ -154,25 +155,83 @@ enum ftp_unix {
 };
 
 /* Converts Un*x-style symbolic permissions to number-style ones, e.g. string
- * rwxr-xr-x to 755. For now, it knows nothing of setuid/setgid/sticky. ACLs are
- * ignored. */
+ * rwxr-xr-x to 755.
+ * Borrowed from lftp source code by Alexander V. Lukyanov.
+ * On parse error, it returns -1. */
 static int
 parse_ftp_unix_permissions(const unsigned char *src, int len)
 {
-	int perms = 0, i;
+   int perms = 0;
 
-	if (len < 9)
-		return 0;
+   if (len != 9
+       && !(len == 10 && src[9] == '+'))   // ACL tag
+      	return -1;
 
-	for (i = 0; i < 3; i++, src += 3) {
-		perms <<= 3;
-		perms += (((src[0] == 'r') << 2)
-		      +   ((src[1] == 'w') << 1)
-		      +    (src[2] == 'x'
-			 || src[2] == 's'));
-	}
+   switch (src[0]) {
+   case('r'): perms |= S_IRUSR; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   switch (src[1]) {
+   case('w'): perms |= S_IWUSR; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   switch (src[2]) {
+   case('S'): perms |= S_ISUID; break;
+   case('s'): perms |= S_ISUID; // fall-through
+   case('x'): perms |= S_IXUSR; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   src += 3;
+   switch (src[0]) {
+   case('r'): perms |= S_IRGRP; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   switch (src[1]) {
+   case('w'): perms |= S_IWGRP; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   switch (src[2]) {
+   case('S'): perms |= S_ISGID; break;
+   case('s'): perms |= S_ISGID; // fall-through
+   case('x'): perms |= S_IXGRP; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   src += 3;
+   switch (src[0]) {
+   case('r'): perms |= S_IROTH; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   switch (src[1]) {
+   case('w'): perms |= S_IWOTH; break;
+   case('-'): break;
+   default: return -1;
+   }
+   
+   switch (src[2]) {
+   case('T'): perms |= S_ISVTX; break;
+   case('t'): perms |= S_ISVTX; // fall-through
+   case('x'): perms |= S_IXOTH; break;
+   case('l'):
+   case('L'): perms |= S_ISGID; perms &= ~S_IXGRP; break;
+   case('-'): break;
+   default: return -1;
+   }
 
-	return perms;
+   return perms;
 }
 
 static struct ftp_file_info *
@@ -212,8 +271,8 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 			 * rare and of some nonstandart format.  If you want
 			 * them, though, I'll accept patch enabling them.
 			 * --pasky */
-			if (pos - src == 9)
-				info->permissions = parse_ftp_unix_permissions(src, 9);
+			if (pos - src == 9)	/* 9 is length of "rwxrwxrwx". */
+				info->permissions = parse_ftp_unix_permissions(src, 9);	/* TODO: handle parse error. --Zas */
 			fact = FTP_UNIX_SIZE;
 			break;
 

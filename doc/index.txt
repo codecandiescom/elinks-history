@@ -30,6 +30,7 @@ Introduction and Table of Contents .......................... index.txt
 User's Guide
 	Beginner's Topics
 		Bookmarks ............................... bookmarks.txt
+		The Wonders of Tabbed Browsing ............... tabs.txt
 		Document Marks .............................. marks.txt
 		URL shortcuts ......................... urlprefixes.txt
 	Advanced Topics
@@ -70,7 +71,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.6 2004/12/16 19:42:01 pasky Exp $
+$Id: index.txt,v 1.7 2004/12/18 15:33:06 jonas Exp $
 
 vim: textwidth=72
 (Note: Sometimes, I broke the lines manually earlier than gqap would,

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.19 2004/12/16 13:11:18 jonas Exp $
+## $Id: Makefile.am,v 1.20 2004/12/18 15:33:06 jonas Exp $
 
 SUBDIRS = man
 
@@ -18,7 +18,8 @@ EXTRA_DIST = \
  marks.txt \
  mime.html \
  remote.txt \
- small.txt
+ small.txt \
+ tabs.txt
 
 ELINKS=$(top_builddir)/src/elinks
 

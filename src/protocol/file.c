@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.92 2003/06/24 23:00:21 jonas Exp $ */
+/* $Id: file.c,v 1.93 2003/06/24 23:55:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,8 +58,9 @@ struct file_data {
 
 
 /* Directory listing */
+/* The stat_* functions set the various attributes for directory entries. */
 
-static void
+static inline void
 stat_type(unsigned char **p, int *l, struct stat *stp)
 {
 	unsigned char c = '?';
@@ -89,8 +90,7 @@ stat_type(unsigned char **p, int *l, struct stat *stp)
 	add_chr_to_str(p, l, c);
 }
 
-
-static void
+static inline void
 stat_mode(unsigned char **p, int *l, struct stat *stp)
 {
 #ifdef FS_UNIX_RIGHTS
@@ -127,8 +127,7 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 	add_chr_to_str(p, l, ' ');
 }
 
-
-static void
+static inline void
 stat_links(unsigned char **p, int *l, struct stat *stp)
 {
 #ifdef FS_UNIX_HARDLINKS
@@ -143,13 +142,11 @@ stat_links(unsigned char **p, int *l, struct stat *stp)
 #endif
 }
 
-
 /* This is ugly and have to go. --jonas */
 static int last_uid = -1;
 static int last_gid = -1;
 
-
-static void
+static inline void
 stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 {
 #ifdef FS_UNIX_USERS
@@ -194,7 +191,6 @@ stat_user(unsigned char **p, int *l, struct stat *stp, int g)
 		else
 			sprintf(pp, "%.8s", grp->gr_name);
 		last_gid = id;
-
 	}
 
 end:
@@ -204,8 +200,7 @@ end:
 #endif
 }
 
-
-static void
+static inline void
 stat_size(unsigned char **p, int *l, struct stat *stp)
 {
 	if (!stp) {
@@ -219,8 +214,7 @@ stat_size(unsigned char **p, int *l, struct stat *stp)
 	}
 }
 
-
-static void
+static inline void
 stat_date(unsigned char **p, int *l, struct stat *stp)
 {
 	time_t current_time = time(NULL);
@@ -261,7 +255,6 @@ struct directory_entry {
 	unsigned char *attrib;
 	unsigned char *name;
 };
-
 
 static int
 comp_de(struct directory_entry *d1, struct directory_entry *d2)

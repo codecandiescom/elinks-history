@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.491 2004/06/12 11:24:53 jonas Exp $ */
+/* $Id: session.c,v 1.492 2004/06/12 11:30:33 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -687,14 +687,16 @@ init_session(struct session *base_session, struct terminal *term,
 	return ses;
 }
 
-static enum remote_session_flags
-init_remote_session(struct session *ses, enum remote_session_flags remote,
+static void
+init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		    struct uri *uri)
 {
+	enum remote_session_flags remote = *remote_ptr;
+
 	if (remote & SES_REMOTE_CURRENT_TAB) {
 		goto_uri(ses, uri);
 		/* Mask out the current tab flag */
-		return remote & ~SES_REMOTE_CURRENT_TAB;
+		*remote_ptr = remote & ~SES_REMOTE_CURRENT_TAB;
 
 	} else if (remote & SES_REMOTE_NEW_TAB) {
 		/* FIXME: This is not perfect. Doing multiple -remote
@@ -714,13 +716,13 @@ init_remote_session(struct session *ses, enum remote_session_flags remote,
 		 * possibility and should maybe make it possible to specify
 		 * new-screen etc via -remote "openURL(..., new-*)" --jonas */
 		if (!can_open_in_new(ses->tab->term))
-			return remote;
+			return;
 
 		open_uri_in_new_window(ses, uri, ses->tab->term->environment);
 
 	} else if (remote & SES_REMOTE_ADD_BOOKMARK) {
 #ifdef CONFIG_BOOKMARKS
-		if (!uri) return remote;
+		if (!uri) return;
 		add_bookmark(NULL, 1, struri(uri), struri(uri));
 #endif
 
@@ -728,8 +730,6 @@ init_remote_session(struct session *ses, enum remote_session_flags remote,
 		/* We can't create new window in EV_INIT handler! */
 		register_bottom_half(dialog_goto_url_open, ses);
 	}
-
-	return remote;
 }
 
 
@@ -842,7 +842,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
-		init_remote_session(base_session, remote, NULL);
+		init_remote_session(base_session, &remote, NULL);
 		return 0;
 	}
 
@@ -867,7 +867,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 * ASAP. */
 		if (uri) {
 			if (remote) {
-				remote = init_remote_session(base_session, remote, uri);
+				init_remote_session(base_session, &remote, uri);
 
 			} else if (!info) {
 				info = init_session(base_session, term, uri, 0);

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.220 2003/12/21 21:25:08 jonas Exp $ */
+/* $Id: menu.c,v 1.221 2003/12/21 21:28:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -605,23 +605,23 @@ dialog_goto_url(struct session *ses, char *url)
 		    NULL);
 }
 
+static void
+dialog_save_url(struct session *ses)
+{
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Save URL"), N_("Enter URL"),
+		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) save_url,
+		    NULL);
+}
+
 static struct input_history file_history = {
 	/* items: */	{ D_LIST_HEAD(file_history.entries) },
 	/* size: */	0,
 	/* dirty: */	0,
 	/* nosave: */	0,
 };
-
-static void
-dialog_save_url(struct session *ses)
-{
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Save URL"), N_("Enter URL"),
-		    N_("OK"), N_("Cancel"), ses, &file_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) save_url,
-		    NULL);
-}
 
 void
 query_file(struct session *ses, unsigned char *url, void *data,

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.40 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: smb.c,v 1.41 2004/04/27 13:29:59 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -161,6 +161,20 @@ smb_got_text(struct connection *conn)
 	smb_read_text(conn, conn->socket);
 }
 
+ /* Search for @str1 followed by @str2 in @line.
+  * It returns NULL if not found, or pointer to start
+  * of @str2 in @line if found.  */
+static unsigned char *
+find_strs(unsigned char *line, unsigned char *str1,
+	  unsigned char *str2)
+{
+	unsigned char *p = strstr(line, str1);
+
+	if (!p) return NULL;
+
+	p = strstr(p + strlen(str1), str2);
+	return p;
+}
 
 /* FIXME: split it. --Zas */
 static void
@@ -217,28 +231,26 @@ end_smb_connection(struct connection *conn)
 			/* And I got bored here with cleaning it up. --pasky */
 
 			if (si->list_type == SMB_LIST_SHARES) {
-				unsigned char *ll, *lll;
+				unsigned char *ll, *lll, *found;
 
 				if (!*line) type = 0;
-				if (strstr(line, "Sharename")
-				    && strstr(line, "Type")) {
-					if (strstr(line, "Type")) {
-						pos = (unsigned char *)
-							strstr(line, "Type") - line;
-					} else {
-						pos = 0;
-					}
+
+				found = find_strs(line, "Sharename", "Type");
+				if (found) {
+					pos = found - line;
 					type = 1;
 					goto print_as_is;
 				}
-				if (strstr(line, "Server")
-				    && strstr(line, "Comment")) {
+
+				found = find_strs(line, "Server", "Comment");
+				if (found) {
 					type = 2;
 					goto print_as_is;
 				}
-				if (strstr(line, "Workgroup")
-				    && strstr(line, "Master")) {
-					pos = (unsigned char *) strstr(line, "Master") - line;
+
+				found = find_strs(line, "Workgroup", "Master");
+				if (found) {
+					pos = found - line;
 					type = 3;
 					goto print_as_is;
 				}

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.78 2002/12/07 11:08:39 zas Exp $ */
+/* $Id: http.c,v 1.79 2002/12/07 13:30:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1228,6 +1228,22 @@ again:
 	       	d = parse_http_header(e->head, "Date", NULL);
 		if (d) e->last_modified = d;
 	}
+
+	d = parse_http_header(e->head, "ETag", NULL);
+	if (d) {
+		if (e->etag && strcasecmp(e->etag, d)) {
+			delete_entry_content(e);
+			if (c->from) {
+				c->from = 0;
+				mem_free(d);
+				retry_conn_with_state(c, S_MODIFIED);
+				return;
+			}
+		}
+		if (!e->etag) e->etag = d;
+		else mem_free(d);
+	}
+	
 	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
 
 	d = parse_http_header(e->head, "Content-Type", NULL);

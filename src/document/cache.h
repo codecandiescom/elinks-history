@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.8 2002/11/19 11:00:35 zas Exp $ */
+/* $Id: cache.h,v 1.9 2002/12/07 13:30:11 zas Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -26,6 +26,7 @@ struct cache_entry {
 	int tgc;
 	enum cache_mode cache_mode;
 	unsigned char *last_modified;
+	unsigned char *etag;
 	int data_size;
 	struct list_head frag;
 	tcount count;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.23 2002/12/01 19:27:13 zas Exp $ */
+/* $Id: cache.c,v 1.24 2002/12/07 13:30:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,6 +401,11 @@ delete_entry_content(struct cache_entry *e)
 		mem_free(e->last_modified);
 		e->last_modified = NULL;
 	}
+
+	if (e->etag) {
+		mem_free(e->etag);
+		e->etag = NULL;
+	}
 }
 
 void
@@ -420,7 +425,8 @@ delete_cache_entry(struct cache_entry *e)
 	if (e->redirect) mem_free(e->redirect);
 	if (e->ssl_info) mem_free(e->ssl_info);
 	if (e->encoding_info) mem_free(e->encoding_info);
-
+	if (e->etag) mem_free(e->etag);
+	
 	mem_free(e);
 }
 

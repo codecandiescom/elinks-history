@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.25 2003/06/10 14:49:47 pasky Exp $ */
+/* $Id: session.h,v 1.26 2003/06/10 14:50:55 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -123,7 +123,7 @@ void goto_url(struct session *, unsigned char *);
 void goto_url_with_hook(struct session *, unsigned char *);
 void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned char *);
 
-void ses_forward(struct session *, int);
+void ses_forward(struct session *);
 void ses_goto(struct session *, unsigned char *, unsigned char *, int,
 	      enum cache_mode, enum session_wtd, unsigned char *,
 	      void (*)(struct status *, struct session *), int);

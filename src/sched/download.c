@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.52 2003/06/10 14:49:47 pasky Exp $ */
+/* $Id: download.c,v 1.53 2003/06/10 14:50:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1326,7 +1326,7 @@ end:
 	if (mailcap) delete_option(mailcap);
 #endif
 	if (ses->wtd_target && r) *ses->wtd_target = 0;
-	ses_forward(ses, 1);
+	ses_forward(ses);
 	cur_loc(ses)->vs.plain = r;
 	return 0;
 }

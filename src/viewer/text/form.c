@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.245 2004/10/22 20:15:07 pasky Exp $ */
+/* $Id: form.c,v 1.246 2004/10/29 20:07:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1266,7 +1266,8 @@ field_op(struct session *ses, struct document_view *doc_view,
 			if ((has_form_submit(doc_view->document, fc)
 			      && !get_opt_int("document.browse.forms.auto_submit"))
 			    || goto_current_link(ses, doc_view, 0)) {
-				ses->insert_mode = INSERT_MODE_OFF;
+				if (ses->insert_mode == INSERT_MODE_ON)
+					ses->insert_mode = INSERT_MODE_OFF;
 				status = FRAME_EVENT_OK;
 			}
 			break;

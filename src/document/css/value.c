@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.2 2004/01/17 16:36:16 pasky Exp $ */
+/* $Id: value.c,v 1.3 2004/01/17 16:45:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,36 @@ typedef int (*css_value_parser_t)(union css_decl_value *value,
 				  unsigned char **string);
 
 static int
+rgb_component_parser(unsigned char **string, unsigned char terminator)
+{
+	unsigned char *nstring;
+	int part;
+
+	/* FIXME: We should handle the % values as floats. */
+
+	(*string) += 4;
+	skip_whitespace(*string);
+	part = strtol(*string, (char **) &nstring, 10);
+	if (*string == nstring) {
+		return -1;
+	}
+	*string = nstring;
+	skip_whitespace(*string);
+	if (**string == '%') {
+		part *= 255; part /= 100;
+		(*string)++;
+	}
+	skip_whitespace(*string);
+	if (**string != terminator) {
+		return -1;
+	}
+	(*string)++;
+
+	if (part > 255) part = 255;
+	return part;
+}
+
+static int
 css_parse_color_value(union css_decl_value *value, unsigned char **string)
 {
 	int pos;
@@ -36,68 +66,21 @@ css_parse_color_value(union css_decl_value *value, unsigned char **string)
 
 	if (!strncasecmp(*string, "rgb(", 4)) {
 		/* RGB function */
-		unsigned char *nstring;
 		int part;
 
-		/* FIXME: We should handle the % values as floats. */
-
 		(*string) += 4;
-		skip_whitespace(*string);
-		part = strtol(*string, (char **) &nstring, 10);
-		if (*string == nstring) {
-			return 0;
-		}
-		*string = nstring;
-		skip_whitespace(*string);
-		if (**string == '%') {
-			part *= 255; part /= 100;
-			(*string)++;
-		}
-		if (part > 255) part = 255;
+
+		part = rgb_component_parser(string, ',');
+		if (part < 0) return 0;
 		value->color |= part << 16;
-		skip_whitespace(*string);
-		if (**string != ',') {
-			return 0;
-		}
-		(*string)++;
 
-		skip_whitespace(*string);
-		part = strtol(*string, (char **) &nstring, 10);
-		if (*string == nstring) {
-			return 0;
-		}
-		*string = nstring;
-		skip_whitespace(*string);
-		if (**string == '%') {
-			part *= 255; part /= 100;
-			(*string)++;
-		}
-		if (part > 255) part = 255;
+		part = rgb_component_parser(string, ',');
+		if (part < 0) return 0;
 		value->color |= part << 8;
-		skip_whitespace(*string);
-		if (**string != ',') {
-			return 0;
-		}
-		(*string)++;
 
-		skip_whitespace(*string);
-		part = strtol(*string, (char **) &nstring, 10);
-		if (*string == nstring) {
-			return 0;
-		}
-		*string = nstring;
-		skip_whitespace(*string);
-		if (**string == '%') {
-			part *= 255; part /= 100;
-			(*string)++;
-		}
-		if (part > 255) part = 255;
+		part = rgb_component_parser(string, ')');
+		if (part < 0) return 0;
 		value->color |= part;
-		skip_whitespace(*string);
-		if (**string != ')') {
-			return 0;
-		}
-		(*string)++;
 
 		return 1;
 	}

@@ -1,3 +1,21 @@
+Sat Jan 29 12:08:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Sat Jan 29 02:06:28 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/ruby.m4:
+
+	file ruby.m4 was initially added on branch REL_0_10.  
+
+Sat Jan 29 00:48:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/Makefile.am:
+
+	Add user.css to EXTRA_DIST.  
+
 Fri Jan 28 19:00:16 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/dialogs/options.c:

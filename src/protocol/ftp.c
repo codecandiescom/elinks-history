@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.107 2003/10/17 22:57:39 zas Exp $ */
+/* $Id: ftp.c,v 1.108 2003/10/18 19:17:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -938,7 +938,7 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 	if (ftp_info->perm && ftp_info->permlen)
 		add_bytes_to_string(&string, ftp_info->perm, ftp_info->permlen);
 	else
-		add_to_string(&string, "r-xr-xr-x");
+		add_to_string(&string, "---------");
 	add_char_to_string(&string, ' ');
 
 	add_to_string(&string, "   1 ftp      ftp ");

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.11 2004/01/07 16:42:27 jonas Exp $ */
+/* $Id: action.c,v 1.12 2004/01/07 17:02:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,6 +220,21 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			reload(ses, CACHE_MODE_INCREMENT);
 			break;
 
+		case ACT_SAVE_AS:
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				save_as(term, NULL, ses);
+			break;
+
+		case ACT_SAVE_FORMATTED:
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				menu_save_formatted(ses->tab->term, NULL, ses);
+			break;
+
+		case ACT_SAVE_URL_AS:
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				menu_save_url_as(term, NULL, ses);
+			break;
+
 		case ACT_SAVE_OPTIONS:
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				write_config(term);
@@ -335,9 +350,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_REDRAW:
 		case ACT_RESUME_DOWNLOAD:
 		case ACT_RIGHT:
-		case ACT_SAVE_AS:
-		case ACT_SAVE_URL_AS:
-		case ACT_SAVE_FORMATTED:
 		case ACT_SCRIPTING_FUNCTION:
 		case ACT_SCROLL_DOWN:
 		case ACT_SCROLL_LEFT:

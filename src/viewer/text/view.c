@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.339 2004/01/07 16:42:27 jonas Exp $ */
+/* $Id: view.c,v 1.340 2004/01/07 17:02:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -993,18 +993,6 @@ quak:
 				free_auth();
 				shrink_memory(1); /* flush caches */
 				goto x;
-			case ACT_SAVE_AS:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					save_as(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_SAVE_URL_AS:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_save_url_as(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_SAVE_FORMATTED:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_save_formatted(ses->tab->term, (void *) 1, ses);
-				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES
 				if (!get_opt_int_tree(cmdline_options, "anonymous")
@@ -1419,5 +1407,5 @@ menu_save_formatted(struct terminal *term, void *xxx, struct session *ses)
 	assert(doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	query_file(ses, doc_view->vs->url, ses, save_formatted, NULL, !((int) xxx));
+	query_file(ses, doc_view->vs->url, ses, save_formatted, NULL, 1);
 }

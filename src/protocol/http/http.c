@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.329 2004/09/07 10:47:35 jonas Exp $ */
+/* $Id: http.c,v 1.330 2004/09/17 13:08:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,7 +300,7 @@ http_send_header(struct connection *conn)
 	unsigned char *host_data, *post_data = NULL;
 	struct uri *uri = conn->proxied_uri; /* Set to the real uri */
 	unsigned char *optstr;
-	int use_connect;
+	int use_connect, talking_to_proxy;
 
 	set_connection_timeout(conn);
 
@@ -335,6 +335,7 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
+	talking_to_proxy = IS_PROXY_URI(conn->uri) && !conn->socket.ssl;
 	use_connect = connection_is_https_proxy(conn) && !conn->socket.ssl;
 
 	if (trace) {
@@ -348,7 +349,7 @@ http_send_header(struct connection *conn)
 		add_to_string(&header, "GET ");
 	}
 
-	if (!IS_PROXY_URI(conn->uri) || conn->socket.ssl) {
+	if (!talking_to_proxy) {
 		add_char_to_string(&header, '/');
 	}
 
@@ -374,7 +375,7 @@ http_send_header(struct connection *conn)
 	add_crlf_to_string(&header);
 
 	optstr = get_opt_str("protocol.http.proxy.user");
-	if (optstr[0]) {
+	if (optstr[0] && talking_to_proxy) {
 		unsigned char *proxy_data;
 
 		proxy_data = straconcat(optstr, ":",

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.138 2003/12/21 17:01:22 jonas Exp $ */
+/* $Id: search.c,v 1.139 2003/12/21 19:18:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -940,21 +940,26 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 {
 	int i = doc_view->vs->current_link;
 	int charpos = strlen(typeahead);
-	int last_link;
+	/* The link interval in which we are currently searching */
+	int upper_link, lower_link;
 	enum keyact action = kbd_action(KM_EDIT, event, NULL);
+	int direction;
 
 	switch (action) {
 		case ACT_BACKSPACE:
 			if (charpos > 0) charpos--;
 			typeahead[charpos] = 0;
+			direction = -1;
+			break;
 
-			/* Nothing to match so stay put */
-			if (!charpos) return TYPEAHEAD_MATCHED;
-
-			i = 0;
+		case ACT_UP:
+			direction = -1;
+			i--;
 			break;
 
 		case ACT_NEXT_ITEM:
+		case ACT_DOWN:
+			direction = 1;
 			i++;
 			break;
 
@@ -963,12 +968,19 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 				return TYPEAHEAD_ESCAPE;
 
 			typeahead[charpos++] = event->x;
+			direction = 1;
 	}
 
-	int_bounds(&i, 0, doc_view->document->nlinks);
-	last_link = doc_view->document->nlinks;
+	assert(direction);
 
-	for (; i < last_link; i++) {
+	/* If there is nothing to match with don't start searching */
+	if (!charpos) return TYPEAHEAD_MATCHED;
+
+	int_bounds(&i, 0, doc_view->document->nlinks - 1);
+	upper_link = (direction > 0) ? doc_view->document->nlinks : i + 1;
+	lower_link = (direction > 0) ? i - 1: -1;
+
+	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &doc_view->document->links[i];
 		struct point *linkpos = link->pos;
 		int j;
@@ -989,12 +1001,22 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			}
 		}
 
-		/* Only wrap around one time */
-		if (i + 1 == last_link
-		    && last_link > doc_view->vs->current_link
+		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
 		    && get_opt_bool("document.browse.links.typeahead_wraparound")) {
-			i = 0;
-			last_link = doc_view->vs->current_link;
+			/* Only wrap around one time. Initialize @i with
+			 * {+= direction} in mind. */
+			if (direction > 0) {
+				if (upper_link != doc_view->document->nlinks)
+					break;
+
+				lower_link = i = -1;
+				upper_link = doc_view->vs->current_link + 1;
+			} else {
+				if (lower_link != -1) break;
+
+				lower_link = doc_view->vs->current_link - 1;
+				upper_link = i = doc_view->document->nlinks;
+			}
 		}
 	}
 

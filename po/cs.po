@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-30 22:00+0100\n"
-"PO-Revision-Date: 2003-12-30 22:37+0100\n"
+"PO-Revision-Date: 2004-01-01 15:34+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -985,7 +985,7 @@ msgstr "Opravdu smazat kombinaci \"%s\" (akce \"%s\", mapa kláves \"%s\")?"
 
 #: src/config/dialogs.c:574 src/dialogs/info.c:126 src/globhist/dialogs.c:187
 msgid "Toggle display"
-msgstr "Pøepnout URL/název"
+msgstr "Pøepnout zobrazení"
 
 #: src/config/dialogs.c:579
 msgid "Keybinding manager"

@@ -278,25 +278,21 @@ msgstr ""
 "## préservés.\n"
 
 #: src/config/conf.c:620
-#, fuzzy
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
-"##\n"
 "## Evidemment, si vous n'aimez pas ce que ELinks fera avec ce fichier,\n"
 "## vous pouvez modifier l'option config.saving_style.\n"
 
 #: src/config/conf.c:635
-#, fuzzy
 msgid "Automatically saved options\n"
-msgstr "# Options sauvées automatiquement\n"
+msgstr "Options sauvées automatiquement\n"
 
 #: src/config/conf.c:649
-#, fuzzy
 msgid "Automatically saved keybindings\n"
-msgstr "# Associations de touches sauvées automatiquement\n"
+msgstr "Associations de touches sauvées automatiquement\n"
 
 #: src/config/conf.c:691
 msgid "File saving disabled by option"
@@ -991,7 +987,7 @@ msgstr ""
 
 #: src/config/options.c:938
 msgid "Comments localization"
-msgstr ""
+msgstr "Localisation des commentaires"
 
 #: src/config/options.c:940
 msgid ""
@@ -1002,6 +998,12 @@ msgid ""
 "terminal where you saved the file, but it should be generally\n"
 "considered unpredictable."
 msgstr ""
+"Si mis à 1, les commentaires dans le fichier de configuration\n"
+"seront traduits dans la langue utilisée par l'interface. Notez\n"
+"que si vous utilisez différentes langues dans différents terminaux\n"
+"la langue utilisée PEUT être la même que celle du terminal dans\n"
+"lequel la sauvegarde a été lancée, mais cela doit être généralement\n"
+"considéré comme hasardeux."
 
 #: src/config/options.c:948
 msgid "Saving style warnings"
@@ -2907,7 +2909,6 @@ msgid "Color mode"
 msgstr "Mode couleurs"
 
 #: src/config/options.c:1919
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -2920,7 +2921,7 @@ msgstr ""
 "0 mode monochrome, 2 couleurs seulement sont utilisées\n"
 "1 mode 16 couleurs, les couleurs ANSI sont utilisées\n"
 "2 mode 256 couleurs, requiert un terminal supportant ce nombre de\n"
-"  couleurs (xterm256 par exemple).\n"
+"  couleurs (xterm-256color par exemple).\n"
 
 #: src/config/options.c:1925
 msgid "Enable transparency"

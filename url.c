@@ -335,9 +335,20 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 	unsigned char *p, *n, *pp;
 	int l;
 	int lo = !casecmp(base, "file://", 7);
+	
+	/* See RFC 1808 */
+
 	if (rel[0] == '#') {
 		if (!(n = stracpy(base))) return NULL;
 		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++) ;
+		*p = 0;
+		add_to_strn(&n, rel);
+		translate_directories(n);
+		return n;
+	}
+	if (rel[0] == '?') {
+		if (!(n = stracpy(base))) return NULL;
+		for (p = n; *p && *p != POST_CHAR && (*p != '?' || *p != '#'); p++) ;
 		*p = 0;
 		add_to_strn(&n, rel);
 		translate_directories(n);

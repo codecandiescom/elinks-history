@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.29 2005/03/05 21:14:38 zas Exp $ */
+/* $Id: hash.c,v 1.30 2005/03/05 21:16:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 #define hash_mask(n) (hash_size(n) - 1)
 
 struct hash *
-init_hash(unsigned int width, hash_func func)
+init_hash(unsigned int width, hash_func_T func)
 {
 	struct hash *hash;
 	unsigned int i = 0;

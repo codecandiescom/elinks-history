@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.166 2004/11/17 19:09:21 zas Exp $ */
+/* $Id: dialog.c,v 1.167 2004/11/17 21:53:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ select_dlg_item(struct dialog_data *dlg_data, int i)
 		dlg_data->selected = i;
 	}
 	if (widget_data->widget->ops->select)
-		widget_data->widget->ops->select(widget_data, dlg_data);
+		widget_data->widget->ops->select(dlg_data, widget_data);
 }
 
 static struct widget_ops *widget_type_to_ops[] = {
@@ -282,13 +282,13 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 	case ACT_MENU_SELECT:
 		/* Can we select? */
 		if (ops->select) {
-			ops->select(widget_data, dlg_data);
+			ops->select(dlg_data, widget_data);
 		}
 		break;
 	case ACT_MENU_ENTER:
 		/* Submit button. */
 		if (ops->select) {
-			ops->select(widget_data, dlg_data);
+			ops->select(dlg_data, widget_data);
 			break;
 		}
 

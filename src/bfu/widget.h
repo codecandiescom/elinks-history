@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.56 2004/11/17 19:07:28 zas Exp $ */
+/* $Id: widget.h,v 1.57 2004/11/17 21:53:52 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -44,7 +44,7 @@ struct widget_ops {
 	t_handler_event_status (*init)(struct widget_data *, struct dialog_data *, struct term_event *);
 	t_handler_event_status (*mouse)(struct widget_data *, struct dialog_data *, struct term_event *);
 	t_handler_event_status (*kbd)(struct widget_data *, struct dialog_data *, struct term_event *);
-	t_handler_event_status (*select)(struct widget_data *, struct dialog_data *);
+	t_handler_event_status (*select)(struct dialog_data *, struct widget_data *);
 };
 
 

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.63 2004/11/17 19:08:55 zas Exp $ */
+/* $Id: button.c,v 1.64 2004/11/17 21:53:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,13 +135,13 @@ mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, stru
 	do_not_ignore_next_mouse_event(term);
 
 	if (check_mouse_action(ev, B_UP) && widget_data->widget->ops->select)
-		return widget_data->widget->ops->select(widget_data, dlg_data);
+		return widget_data->widget->ops->select(dlg_data, widget_data);
 
 	return EVENT_PROCESSED;
 }
 
 static t_handler_event_status
-select_button(struct widget_data *widget_data, struct dialog_data *dlg_data)
+select_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	return widget_data->widget->fn(dlg_data, widget_data);
 }

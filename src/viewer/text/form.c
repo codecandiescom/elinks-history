@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.229 2004/07/18 04:01:55 jonas Exp $ */
+/* $Id: form.c,v 1.230 2004/07/18 04:38:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1096,6 +1096,8 @@ static void
 file_form_menu(struct terminal *term, unsigned char *path,
 	       struct form_state *fs)
 {
+	/* FIXME: It doesn't work for ../../ */
+#if 0
 	int valuelen = strlen(fs->value);
 	int pathlen = strlen(path);
 	int no_elevator = 0;
@@ -1109,8 +1111,9 @@ file_form_menu(struct terminal *term, unsigned char *path,
 			break;
 		}
 	}
+#endif
 
-	auto_complete_file(term, no_elevator, path,
+	auto_complete_file(term, 0 /* no_elevator */, path,
 			   (menu_func) set_file_form_state,
 			   (menu_func) file_form_menu, fs);
 }

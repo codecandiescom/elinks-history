@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.159 2004/01/16 18:21:05 zas Exp $ */
+/* $Id: main.c,v 1.160 2004/01/16 19:50:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,12 +116,12 @@ init(void)
 	if (!list_empty(*url_list)) {
 		struct url_list *ul = url_list->next;
 
-		url = stracpy(ul->url);
-		if (!url) goto fatal_error;
-	} else {
-		url = stracpy("");
+		url = ul->url;
 	}
-	
+
+	url = stracpy(empty_string_or_(url));
+	if (!url) goto fatal_error;
+
 	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
 		init_home();
 	}

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.118 2003/11/05 10:34:51 zas Exp $ */
+/* $Id: menu.c,v 1.119 2003/11/05 10:40:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,8 +180,8 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	menu->width = mx;
 	menu->height = my;
 
-	menu->x = menu->xp;
-	menu->y = menu->yp;
+	menu->x = menu->parent_x;
+	menu->y = menu->parent_y;
 
 	int_bounds(&menu->x, 0, width - mx);
 	int_bounds(&menu->y, 0, height - my);
@@ -367,7 +367,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 		case EV_INIT:
 		case EV_RESIZE:
 		case EV_REDRAW:
-			get_parent_ptr(win, &menu->xp, &menu->yp);
+			get_parent_ptr(win, &menu->parent_x, &menu->parent_y);
 			count_menu_size(win->term, menu);
 			menu->selected--;
 			scroll_menu(menu, 1);

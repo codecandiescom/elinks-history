@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.63 2005/03/25 18:40:15 miciah Exp $
+-- $Id: hooks.lua.in,v 1.64 2005/03/25 19:25:06 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -47,7 +47,7 @@ function dofile(s) return do_(loadfile(s)) end
 ----------------------------------------------------------------------
 
 dofile ("@sysconfdir@/config.lua")
-home_dir = (os and os.getenv and (os.getenv ("HOME") or "/home/"..os.getenv("USER"))) or "."
+home_dir = (os.getenv ("HOME") or "/home/"..os.getenv("USER")) or "."
 dofile (elinks_home.."/config.lua")
 
 ----------------------------------------------------------------------
@@ -519,7 +519,7 @@ if not tmp_files then
 end
 
 function delete_tmp_files ()
-    if tmp_files and os and os.remove then
+    if tmp_files and os.remove then
         tmp_files.n = nil
         for i,v in tmp_files do os.remove (v) end
     end

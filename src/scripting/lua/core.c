@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.184 2005/03/25 04:13:11 miciah Exp $ */
+/* $Id: core.c,v 1.185 2005/03/25 19:25:06 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,17 +248,6 @@ l_tmpname(LS)
 	alert_lua_error("Error generating temporary file name");
 	lua_pushnil(S);
 	return 1;
-}
-
-static int
-l_enable_systems_functions(LS)
-{
-	lua_iolibopen(S);
-	lua_register(S, "pipe_read", l_pipe_read);
-	lua_register(S, "execute", l_execute);
-	lua_register(S, "tmpname", l_tmpname);
-
-	return 0;
 }
 
 /*
@@ -525,13 +514,16 @@ init_lua(struct module *module)
 	lua_mathlibopen(L);
 	lua_strlibopen(L);
 	lua_tablibopen(L);
+	lua_iolibopen(L);
 	lua_register(L, LUA_ALERT, l_alert);
 	lua_register(L, "current_url", l_current_url);
 	lua_register(L, "current_link", l_current_link);
 	lua_register(L, "current_title", l_current_title);
 	lua_register(L, "current_document", l_current_document);
 	lua_register(L, "current_document_formatted", l_current_document_formatted);
-	lua_register(L, "enable_systems_functions", l_enable_systems_functions);
+	lua_register(L, "pipe_read", l_pipe_read);
+	lua_register(L, "execute", l_execute);
+	lua_register(L, "tmpname", l_tmpname);
 	lua_register(L, "bind_key", l_bind_key);
 	lua_register(L, "edit_bookmark_dialog", l_edit_bookmark_dialog);
 	lua_register(L, "xdialog", l_xdialog);

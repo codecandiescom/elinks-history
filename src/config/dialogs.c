@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.52 2003/06/07 23:08:55 zas Exp $ */
+/* $Id: dialogs.c,v 1.53 2003/06/08 14:28:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,7 +122,8 @@ push_info_button(struct dialog_data *dlg,
 				"Value: %s\n\n"
 				"Description: %s\n"),
 				option->name, option_types[option->type].name,
-				value, _(option->desc, term)),
+				value, _(option->desc ? option->desc : "N/A",
+					 term));
 			option, 1,
 			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	} else {
@@ -132,7 +133,7 @@ push_info_button(struct dialog_data *dlg,
 				"Type: %s\n"
 				"Description: %s\n"),
 				option->name, option_types[option->type].name,
-				_(option->desc, term)),
+				_(option->desc ? option->desc : "N/A", term)),
 			option, 1,
 			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	}
@@ -206,7 +207,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 			  _(option_types[option->type].name, term), NULL);
 	value= straconcat(_("Value", term), ": ", NULL);
 	desc = straconcat(_("Description", term), ": \n",
-			  _(option->desc, term), NULL);
+			  _(option->desc ? option->desc : "N/A", term), NULL);
 
 	if (name && type && value && desc)
 		add_to_ml(&dlg->ml, name, type, value, desc, NULL);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.216 2003/06/08 13:21:39 jonas Exp $ */
+/* $Id: options.c,v 1.217 2003/06/08 14:28:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -617,7 +617,7 @@ printhelp_descend(struct option *tree, unsigned char *path,
 	foreach (option, *((struct list_head *) tree->ptr)) {
 		unsigned char *desc = (option->desc && *option->desc)
 				      ? (unsigned char *) gettext(option->desc)
-				      : (unsigned char *) "";
+				      : (unsigned char *) "N/A";
 
 		/* Don't print autocreated options and deprecated aliases */
 		if (option->flags == OPT_AUTOCREATE ||

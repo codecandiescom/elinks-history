@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.47 2003/06/21 14:07:53 jonas Exp $ */
+/* $Id: file.c,v 1.48 2003/06/21 14:45:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,7 +284,8 @@ file_func(struct connection *c)
 	unsigned char *file, *name, *head;
 	int fl;
 	DIR *d;
-	int h, r;
+	int fd;
+	int readlen;
 	struct stat stt;
 	int namelen;
 	int saved_errno;
@@ -309,9 +310,9 @@ file_func(struct connection *c)
 	}
 
 	/* First, we try with name as is. */
-	h = open(name, O_RDONLY | O_NOCTTY);
+	fd = open(name, O_RDONLY | O_NOCTTY);
 	saved_errno = errno;
-	if (h == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
+	if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
 		int enc;
 
 		/* No file of that name was found, try some others names. */
@@ -332,8 +333,8 @@ file_func(struct connection *c)
 				add_to_str(&tname, &tname_len, *ext);
 
 				/* We try with some extensions. */
-				h = open(tname, O_RDONLY | O_NOCTTY);
-				if (h >= 0) {
+				fd = open(tname, O_RDONLY | O_NOCTTY);
+				if (fd >= 0) {
 					/* Ok, found one, use it. */
 					mem_free(name);
 					name = tname;
@@ -348,7 +349,7 @@ file_func(struct connection *c)
 		}
 	}
 
-	if (h == -1) {
+	if (fd == -1) {
 		d = opendir(name);
 		if (d) goto dir;
 
@@ -357,10 +358,10 @@ file_func(struct connection *c)
 		return;
 	}
 
-	set_bin(h);
-	if (fstat(h, &stt)) {
+	set_bin(fd);
+	if (fstat(fd, &stt)) {
 		saved_errno = errno;
-		close(h);
+		close(fd);
 		mem_free(name);
 		abort_conn_with_state(c, -saved_errno);
 		return;
@@ -368,7 +369,7 @@ file_func(struct connection *c)
 
 	if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
 		/* We only want to open regular encoded files. */
-		close(h);
+		close(fd);
 		mem_free(name);
 		abort_conn_with_state(c, -saved_errno);
 		return;
@@ -382,7 +383,7 @@ file_func(struct connection *c)
 
 		d = opendir(name);
 
-		close(h);
+		close(fd);
 
 dir:
 		dir = NULL;
@@ -413,7 +414,7 @@ dir:
 		fl = 0;
 
 		if (!file) {
-			close(h);
+			close(fd);
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
@@ -595,24 +596,24 @@ dir:
 		mem_free(name);
 
 		if (!get_opt_int("protocol.file.allow_special_files")) {
-			close(h);
+			close(fd);
 			abort_conn_with_state(c, S_FILE_TYPE);
 			return;
 		}
 
 		file = mem_alloc(bufsize + 1);
 		if (!file) {
-			close(h);
+			close(fd);
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
 
-		while ((r = read(h, file + offset, bufsize)) > 0) {
-			offset += r;
+		while ((readlen = read(fd, file + offset, bufsize)) > 0) {
+			offset += readlen;
 
 			file = mem_realloc(file, offset + bufsize + 1);
 			if (!file) {
-				close(h);
+				close(fd);
 				abort_conn_with_state(c, S_OUT_OF_MEM);
 				return;
 			}
@@ -621,7 +622,7 @@ dir:
 		fl = offset;
 		file[fl] = '\0'; /* NULL-terminate just in case */
 
-		close(h);
+		close(fd);
 
 		head = stracpy("");
 
@@ -643,15 +644,15 @@ dir:
 
 		file = mem_alloc(stt.st_size + 1);
 		if (!file) {
-			close(h);
+			close(fd);
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
 
-		stream = open_encoded(h, encoding);
+		stream = open_encoded(fd, encoding);
 		fl = 0;
-		while ((r = read_encoded(stream, file + fl, stt.st_size))) {
-			if (r < 0) {
+		while ((readlen = read_encoded(stream, file + fl, stt.st_size))) {
+			if (readlen < 0) {
 				/* FIXME: We should get the correct error
 				 * value. But it's I/O error in 90% of cases
 				 * anyway.. ;) --pasky */
@@ -662,13 +663,13 @@ dir:
 				return;
 			}
 
-			fl += r;
+			fl += readlen;
 
 #if 0
 			/* This didn't work so well as it should (I had to
 			 * implement end of stream handling to bzip2 anyway),
 			 * so I rather disabled this. */
-			if (r < stt.st_size) {
+			if (readlen < stt.st_size) {
 				/* This is much safer. It should always mean
 				 * that we already read everything possible,
 				 * and it permits us more elegant of handling

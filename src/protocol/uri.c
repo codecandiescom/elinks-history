@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.162 2004/04/07 15:32:53 jonas Exp $ */
+/* $Id: uri.c,v 1.163 2004/04/07 15:38:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -596,6 +596,9 @@ prx:
 	return normalize_uri_reparse(&uri, n);
 }
 
+static inline enum protocol
+find_uri_protocol(unsigned char *newurl);
+
 static unsigned char *
 translate_url(unsigned char *url, unsigned char *cwd)
 {
@@ -643,9 +646,45 @@ parse_uri:
 	case URI_ERRNO_INVALID_PROTOCOL:
 	{
 		/* No protocol name */
+		enum protocol protocol = find_uri_protocol(newurl);
+		unsigned char *prefix;
+
+		if (protocol == PROTOCOL_FILE && !dir_sep(*newurl))
+			insert_in_string(&newurl, 0, "./", 2);
+
+		switch (protocol) {
+			case PROTOCOL_FTP:
+				prefix = "ftp://";
+				break;
+
+			case PROTOCOL_HTTP:
+				prefix = "http://";
+				break;
+
+			case PROTOCOL_FILE:
+			default:
+				prefix = "file://";
+		}
+			
+		insert_in_string(&newurl, 0, prefix, strlen(prefix));
+		goto parse_uri;
+	}
+	case URI_ERRNO_EMPTY:
+	case URI_ERRNO_IPV6_SECURITY:
+	case URI_ERRNO_INVALID_PORT:
+	case URI_ERRNO_INVALID_PORT_RANGE:
+		break;
+	}
+
+	mem_free(newurl);
+	return NULL;
+}
+
+static inline enum protocol
+find_uri_protocol(unsigned char *newurl)
+{
 		unsigned char *ch = newurl + strcspn(newurl, ".:/@");
 		enum protocol protocol = PROTOCOL_FILE;
-		unsigned char *prefix;
 
 		if (file_exists(newurl)) goto end;
 #if 0
@@ -712,35 +751,7 @@ http:				protocol = PROTOCOL_HTTP;
 			}
 		}
 end:
-		if (protocol == PROTOCOL_FILE && !dir_sep(*newurl))
-			insert_in_string(&newurl, 0, "./", 2);
-
-		switch (protocol) {
-			case PROTOCOL_FTP:
-				prefix = "ftp://";
-				break;
-
-			case PROTOCOL_HTTP:
-				prefix = "http://";
-				break;
-
-			case PROTOCOL_FILE:
-			default:
-				prefix = "file://";
-		}
-			
-		insert_in_string(&newurl, 0, prefix, strlen(prefix));
-		goto parse_uri;
-	}
-	case URI_ERRNO_EMPTY:
-	case URI_ERRNO_IPV6_SECURITY:
-	case URI_ERRNO_INVALID_PORT:
-	case URI_ERRNO_INVALID_PORT_RANGE:
-		break;
-	}
-
-	mem_free(newurl);
-	return NULL;
+	return protocol;
 }
 
 static inline unsigned char *

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.13 2003/07/19 22:29:07 jonas Exp $ */
+/* $Id: uri.h,v 1.14 2003/07/20 15:43:10 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -53,8 +53,10 @@ end_of_dir(unsigned char c)
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }
 
-/* Returns a valid host URL (for http authentification) or NULL. */
-/* The @components bitmask controls what is NOT added. */
+/* This function recreates the URI string part by part. */
+/* The @components bitmask describes the set of URI components used for
+ * construction of the URI string.  */
+/* Returns the new URI string or NULL upon an error. */
 unsigned char *get_uri_string(struct uri *uri, int components);
 
 unsigned char *join_urls(unsigned char *, unsigned char *);

@@ -1,3 +1,136 @@
+Sun Nov 23 23:07:53 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation fix.  
+
+Sun Nov 23 23:02:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Oops fix leak when clearing and something is already in use. :/ 
+
+Sun Nov 23 23:01:07 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/: formhist.c, formhist.h:
+
+	@submit is now a pointer, should fix bug #288 + check for allocation
+	failures.  
+
+Sun Nov 23 22:48:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Make init_hierbox_action_info() take the initial value of the item
+	member so my buggy hack can be gracefully avoided. Thanks Miciah.  
+
+Sun Nov 23 18:52:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	[6 / 6] Use new data driven design for global history manager.  
+
+Sun Nov 23 18:52:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	[5 / 6] Use new data driven design for cookie manager.  
+
+Sun Nov 23 18:52:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/dialogs.c:
+
+	[4 / 6] Use new data driven design for cache manager.  
+
+Sun Nov 23 18:49:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	[3 / 6] Use new data driven design for option and keybinding
+	manager.  
+
+Sun Nov 23 18:49:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	[2 / 6] Use new data driven design for bookmark manager.  
+
+Sun Nov 23 18:47:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	[1 / 6] Make hierbox browser more data-driven by introducing a
+	button structure (so the number of buttons is dynamically
+	calculated) and storing the manager title in the browser structure.  
+
+Sun Nov 23 17:33:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	globhist/dialogs.c:
+
+	Make it official that hierbox_browser() button handlers always uses
+	B_ENTER for the key and never passes any udata.  
+
+Sun Nov 23 17:22:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Remove useless passing of session as button handler udata.  
+
+Sun Nov 23 17:09:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/dialogs.c, cookies/dialogs.c, globhist/dialogs.c:
+
+	Remove useless passing of session as button handler udata.  
+
+Sun Nov 23 17:07:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/edit.c:
+
+	Add TODO about making when_*() handler take dialog_data instead of
+	dialog.  
+
+Sun Nov 23 17:06:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	Prefer deriving the session from dlg_data->dlg->udata rather than
+	the button udata. We already does this for the generic goto handler
+	do it for the bookmark edit button handler as well.  
+
+Sun Nov 23 16:35:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/refresh.c:
+
+	Comment the fix for bug 289.  
+
+Sun Nov 23 13:59:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/refresh.c:
+
+	We apparently still need to bail out if a type query is in progress
+	for a refreshed URI. Fixes endless downloading of refreshed document
+	aka. bug 289.  
+
+Sun Nov 23 06:41:19 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
+Sun Nov 23 02:03:04 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Doh! Italian translation fixed.  
+
+Sun Nov 23 02:01:18 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated.  
+
 Sat Nov 22 22:05:44 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bookmarks/dialogs.c, cache/dialogs.c, globhist/dialogs.c:

@@ -401,6 +401,7 @@ struct translation translation_english [] = {
   {T_CLEAR, "Clear"},
   {T_ADD_BOOKMARK_LINK, "Add link to bookmarks"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
+  {T_ACCEPT_LANGUAGE, "Preferred language (comma-separated list of ISO codes)"},
   {0, NULL}
 };
 
@@ -805,6 +806,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -1209,6 +1211,7 @@ struct translation translation_bulgarian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -1613,6 +1616,7 @@ struct translation translation_catalan [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -2017,6 +2021,7 @@ struct translation translation_czech [] = {
   {T_CLEAR, "Zresetovat"},
   {T_ADD_BOOKMARK_LINK, "Pøidat link do bookmarkù"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
+  {T_ACCEPT_LANGUAGE, "Preferovaný jazyk stránek (seznam ISO kódù oddìlených èárkami)"},
   {0, NULL}
 };
 
@@ -2421,6 +2426,7 @@ struct translation translation_danish [] = {
   {T_CLEAR, "Ryd"},
   {T_ADD_BOOKMARK_LINK, "Tilføj lænke til bogmærker"},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -2825,6 +2831,7 @@ struct translation translation_dutch [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -3229,6 +3236,7 @@ struct translation translation_estonian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -3633,6 +3641,7 @@ struct translation translation_finnish [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -4037,6 +4046,7 @@ struct translation translation_french [] = {
   {T_CLEAR, "Effacer"},
   {T_ADD_BOOKMARK_LINK, "Ajouter ce lien aux signets"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -4441,6 +4451,7 @@ struct translation translation_galician [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -4845,6 +4856,7 @@ struct translation translation_german [] = {
   {T_CLEAR, "Löschen"},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -5249,6 +5261,7 @@ struct translation translation_greek [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -5653,6 +5666,7 @@ struct translation translation_hungarian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -6057,6 +6071,7 @@ struct translation translation_icelandic [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -6461,6 +6476,7 @@ struct translation translation_indonesian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -6865,6 +6881,7 @@ struct translation translation_italian [] = {
   {T_CLEAR, "Pulisci"},
   {T_ADD_BOOKMARK_LINK, "Aggiungi questo collegamento ai bookmark"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -7269,6 +7286,7 @@ struct translation translation_lithuanian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -7673,6 +7691,7 @@ struct translation translation_polish [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -8077,6 +8096,7 @@ struct translation translation_romanian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -8481,6 +8501,7 @@ struct translation translation_russian [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -8885,6 +8906,7 @@ struct translation translation_slovak [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -9289,6 +9311,7 @@ struct translation translation_spanish [] = {
   {T_CLEAR, "Borrar"},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -9693,6 +9716,7 @@ struct translation translation_swedish [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -10097,6 +10121,7 @@ struct translation translation_turkish [] = {
   {T_CLEAR, NULL},
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 
@@ -10501,6 +10526,7 @@ struct translation translation_ukrainian [] = {
   {T_CLEAR, "ïÞÉÓÔÉÔÉ"},
   {T_ADD_BOOKMARK_LINK, "äÏÄÁÔÉ ÐÏÓÉÌÁÎÎÑ ÄÏ ÚÁËÌÁÄÏË"},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
+  {T_ACCEPT_LANGUAGE, NULL},
   {0, NULL}
 };
 

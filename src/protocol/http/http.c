@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.15 2002/05/08 13:55:06 pasky Exp $ */
+/* $Id: http.c,v 1.16 2002/05/11 16:47:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,6 +432,12 @@ void http_send_header(struct connection *c)
 
 	if (!(info->bl_flags & BL_NO_CHARSET)) {
 		add_to_str(&hdr, &l, accept_charset);
+	}
+
+	if (*accept_language) {
+		add_to_str(&hdr, &l, "Accept-Language: ");
+		add_to_str(&hdr, &l, accept_language);
+		add_to_str(&hdr, &l, "\r\n");
 	}
 
 	if (!http10) {

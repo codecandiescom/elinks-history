@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.6 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: options.c,v 1.7 2002/05/11 16:47:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,6 +192,7 @@ unsigned char *http_labels[] = {
 	TEXT(T_REFERER_TRUE),
 	TEXT(T_FAKE_REFERER),
 	TEXT(T_USER_AGENT),
+	TEXT(T_ACCEPT_LANGUAGE),
 	NULL
 };
 
@@ -221,20 +222,23 @@ httpopt_fn(struct dialog_data *dlg)
 	y+=2;
 	dlg_format_text(NULL, term, http_labels[9], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
 	y+=2;
+	dlg_format_text(NULL, term, http_labels[10], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	y+=2;
 	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 2, 2, 0, &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg->xw = rw + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
+	dlg->yw = y + 2 * DIALOG_TB - 3;
 	center_dlg(dlg);
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 4, dlg->x + DIALOG_LB, &y, w, NULL, dlg->dlg->udata);
+	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 5, dlg->x + DIALOG_LB, &y, w, NULL, dlg->dlg->udata);
 	y++;
 	dlg_format_text(term, term, http_labels[8], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 8, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
-	y++;
 	dlg_format_text(term, term, http_labels[9], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 9, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, http_labels[10], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_field(term, term, dlg->items + 10, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, dlg->items + dlg->n - 2, 2, dlg->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }
@@ -246,9 +250,9 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	struct http_bugs *bugs = (struct http_bugs *)di->cdata;
 	struct dialog *d;
 
-	d = mem_alloc(sizeof(struct dialog) + 13 * sizeof(struct dialog_item));
+	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
 	if (!d) return 0;
-	memset(d, 0, sizeof(struct dialog) + 13 * sizeof(struct dialog_item));
+	memset(d, 0, sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
 
 	d->title = TEXT(T_HTTP_BUG_WORKAROUNDS);
 	d->fn = httpopt_fn;
@@ -308,15 +312,21 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[9].dlen = MAX_STR_LEN;
 	d->items[9].data = user_agent;
 
-	d->items[10].type = D_BUTTON;
-	d->items[10].gid = B_ENTER;
-	d->items[10].fn = ok_dialog;
-	d->items[10].text = TEXT(T_OK);
+	d->items[10].type = D_FIELD;
+	d->items[10].dlen = MAX_STR_LEN;
+	d->items[10].data = accept_language;
+
 	d->items[11].type = D_BUTTON;
-	d->items[11].gid = B_ESC;
-	d->items[11].fn = cancel_dialog;
-	d->items[11].text = TEXT(T_CANCEL);
-	d->items[12].type = D_END;
+	d->items[11].gid = B_ENTER;
+	d->items[11].fn = ok_dialog;
+	d->items[11].text = TEXT(T_OK);
+
+	d->items[12].type = D_BUTTON;
+	d->items[12].gid = B_ESC;
+	d->items[12].fn = cancel_dialog;
+	d->items[12].text = TEXT(T_CANCEL);
+
+	d->items[13].type = D_END;
 
 	do_dialog(dlg->win->term, d, getml(d, NULL));
 

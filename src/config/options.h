@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.6 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: options.h,v 1.7 2002/05/11 16:47:55 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -44,6 +44,7 @@ extern unsigned char *cmd_name(unsigned char *);
 
 extern int anonymous;
 extern unsigned char user_agent[];
+extern unsigned char accept_language[];
 
 extern int no_connect;
 extern int base_session;

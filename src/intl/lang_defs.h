@@ -401,4 +401,5 @@
 #define T_CLEAR    397	
 #define T_ADD_BOOKMARK_LINK    398	
 #define T_HK_ADD_BOOKMARK_LINK    399	
-#define T__N_TEXTS    400	
+#define T_ACCEPT_LANGUAGE    400	
+#define T__N_TEXTS    401	

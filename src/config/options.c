@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.12 2002/05/08 13:59:07 pasky Exp $ */
+/* $Id: options.c,v 1.13 2002/05/11 16:47:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,6 +673,8 @@ unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
 
 unsigned char user_agent[MAX_STR_LEN] = "";
 
+unsigned char accept_language[MAX_STR_LEN] = "";
+
 unsigned char proxy_user[MAX_STR_LEN] = "";
 unsigned char proxy_passwd[MAX_STR_LEN] = "";
 
@@ -701,6 +703,11 @@ struct option links_options[] = {
 	 * <minval>, <maxval>, <varname>
 	 * <description> */
 
+	{	"accept_language", OPT_CMDLINE | OPT_CFGFILE,
+		gen_cmd, str_rd, str_wr,
+		0, MAX_STR_LEN, accept_language,
+		"Send Accept-Language header." },
+		
 	{	"accesskey_enter", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &accesskey_enter,

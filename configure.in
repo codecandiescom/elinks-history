@@ -251,96 +251,49 @@ AC_DEFUN([AC_RESTORE_FLAGS],
 ])
 
 dnl ===================================================================
-dnl Checks for gpm, optional even if installed.
+dnl Checks for a libraries, optional even if installed.
 dnl ===================================================================
 
-AC_ARG_WITH(gpm, [  --without-gpm           disable gpm (mouse) support],
-	[ if test "$withval" = no; then withval=""; disable_gpm=yes; fi])
-AC_MSG_CHECKING([for gpm support])
+dnl AC_CHECK_OPTIONAL_LIBRARY(name, header, lib, function, confhelp)
 
-if test "$withval" = yes; then withval=""; fi
+AC_DEFUN([AC_CHECK_OPTIONAL_LIBRARY],
+[
+	AC_ARG_WITH($1, [$5],
+	[ if test "$withval" = no; then withval=""; disable_$1=yes; fi])
 
-if test -z "$disable_gpm"; then
-	AC_SAVE_FLAGS
-	if test -d "$withval"; then
-		CFLAGS="$CFLAGS -I$withval/include";
-		CPPFLAGS="$CPPFLAGS -I$withval/include";
-		LDFLAGS="$LDFLAGS -L$withval/lib";
+	AC_MSG_CHECKING([for $1 support])
+	if test "$withval" = yes; then withval=""; fi
+
+	if test -z "$disable_$1"; then
+		AC_MSG_RESULT(yes)
+		AC_SAVE_FLAGS
+		if test -d "$withval"; then
+			CFLAGS="$CFLAGS -I$withval/include";
+			CPPFLAGS="$CPPFLAGS -I$withval/include";
+			LDFLAGS="$LDFLAGS -L$withval/lib";
+		fi
+
+		AC_CHECK_HEADERS($2, cf_result=yes, cf_result=no)
+		if test "$cf_result" = yes; then
+			AC_CHECK_LIB($3, $4)
+		fi
+
+		if test "$cf_result" != yes; then
+			AC_RESTORE_FLAGS
+		fi
+	else
+		AC_MSG_RESULT(disabled)
 	fi
+])
 
-	AC_CHECK_HEADERS(gpm.h, cf_result=yes, cf_result=no)
-	if test "$cf_result" = yes; then
-		AC_CHECK_LIB(gpm, Gpm_Open)
-	fi
+AC_CHECK_OPTIONAL_LIBRARY(gpm, gpm.h, gpm, Gpm_Open,
+	[  --without-gpm           disable gpm (mouse) support])
 
-	if test "$cf_result" != yes; then
-		AC_RESTORE_FLAGS
-	fi
-else
-	AC_MSG_RESULT(no)
-fi
+AC_CHECK_OPTIONAL_LIBRARY(zlib, zlib.h, z, gzdopen,
+	[  --without-zlib          disable zlib support])
 
-dnl ===================================================================
-dnl Checks for zlib, optional even if installed.
-dnl ===================================================================
-
-AC_ARG_WITH(zlib, [  --without-zlib          disable zlib support],
-	[ if test "$withval" = no; then withval=""; disable_zlib=yes; fi])
-AC_MSG_CHECKING([for zlib support])
-
-if test "$withval" = yes; then withval=""; fi
-
-if test -z "$disable_zlib"; then
-	AC_SAVE_FLAGS
-	if test -d "$withval"; then
-		CFLAGS="$CFLAGS -I$withval/include";
-		CPPFLAGS="$CPPFLAGS -I$withval/include";
-		LDFLAGS="$LDFLAGS -L$withval/lib";
-	fi
-
-	AC_CHECK_HEADERS(zlib.h, cf_result=yes, cf_result=no)
-	if test "$cf_result" = yes; then
-		AC_CHECK_LIB(z, gzdopen)
-	fi
-
-	if test "$cf_result" != yes; then
-		AC_RESTORE_FLAGS
-	fi
-else
-	AC_MSG_RESULT(no)
-fi
-
-
-dnl ===================================================================
-dnl Checks for bzlib, optional even if installed.
-dnl ===================================================================
-
-AC_ARG_WITH(bzlib, [  --without-bzlib         disable bzlib support],
-	[ if test "$withval" = no; then withval=""; disable_bzlib=yes; fi])
-AC_MSG_CHECKING([for bzlib support])
-
-if test "$withval" = yes; then withval=""; fi
-
-if test -z "$disable_bzlib"; then
-	AC_SAVE_FLAGS
-	if test -d "$withval"; then
-		CFLAGS="$CFLAGS -I$withval/include";
-		CPPFLAGS="$CPPFLAGS -I$withval/include";
-		LDFLAGS="$LDFLAGS -L$withval/lib";
-	fi
-
-	AC_CHECK_HEADERS(bzlib.h, cf_result=yes, cf_result=no)
-	if test "$cf_result" = yes; then
-		AC_CHECK_LIB(bz2, BZ2_bzReadOpen)
-	fi
-
-	if test "$cf_result" != yes; then
-		AC_RESTORE_FLAGS
-	fi
-else
-	AC_MSG_RESULT(no)
-fi
-
+AC_CHECK_OPTIONAL_LIBRARY(bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
+	[  --without-bzlib         disable bzlib support])
 
 dnl ===================================================================
 dnl XBEL support

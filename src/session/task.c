@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.32 2004/03/31 22:42:38 jonas Exp $ */
+/* $Id: task.c,v 1.33 2004/03/31 23:17:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ post_yes(struct task *task)
 	ses->task.target_frame = task->target_frame;
 	ses->task.target_location = task->target_location;
 
-	load_url(ses->loading_url, ses->ref_url,
+	load_url(ses->loading_url, ses->referrer,
 		 &ses->loading, task->pri, task->cache_mode, -1);
 }
 
@@ -137,7 +137,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 		ses->task.target_frame = target_frame;
 		ses->task.target_location = target_location;
 
-		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
+		load_url(url, ses->referrer, &ses->loading, pri, cache_mode, -1);
 
 		return;
 	}

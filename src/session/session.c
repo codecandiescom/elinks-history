@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.326 2004/03/31 22:42:38 jonas Exp $ */
+/* $Id: session.c,v 1.327 2004/03/31 23:17:59 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -906,7 +906,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 		l->download.data = ses;
 		l->download.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->ref_url, &l->download, PRI_MAIN, cache_mode, -1);
+		load_url(l->vs.url, ses->referrer, &l->download, PRI_MAIN, cache_mode, -1);
 		foreach (ftl, ses->more_files) {
 			struct uri *referer = NULL;
 
@@ -1012,13 +1012,13 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 void
 set_session_referrer(struct session *ses, struct uri *referrer)
 {
-	if (ses->ref_url) mem_free(ses->ref_url);
+	if (ses->referrer) mem_free(ses->referrer);
 
 	if (referrer && referrer->protocol != PROTOCOL_FILE) {
 		/* Don't set referrer for file protocol */
-		ses->ref_url = stracpy(struri(referrer));
+		ses->referrer = stracpy(struri(referrer));
 	} else {
-		ses->ref_url = NULL;
+		ses->referrer = NULL;
 	}
 }
 

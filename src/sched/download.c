@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.221 2004/03/22 14:35:40 jonas Exp $ */
+/* $Id: download.c,v 1.222 2004/03/31 23:17:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -736,7 +736,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->remotetime = 0;
 
 	add_to_list(downloads, file_download);
-	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
+	load_url(url, cmdw_hop->ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
 
 	if (is_in_downloads_list(file_download))

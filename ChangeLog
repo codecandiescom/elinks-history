@@ -1,3 +1,266 @@
+Sat Apr 17 18:56:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, form.h:
+
+	Remove unused member submitted_value->file_content.  
+
+Sat Apr 17 18:06:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: listmenu.c, menu.h:
+
+	Introduce FREE_RECURSIVE_DATA and make free_menu() check the flags.  
+
+Sat Apr 17 18:01:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Use new_menu() and add_to_menu(). There are
+	probably some issues with the fact that allocation failure in
+	add_to_menu() will result in leak and add_to_menu() enables hotkeys
+	I think.  
+
+Sat Apr 17 17:52:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Decrease indentation by returning if data != -1 and
+	stack size is zero.  
+
+Sat Apr 17 17:49:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Group data == -1 code and improve error handling.  
+
+Sat Apr 17 17:04:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/optgroup.html:
+
+	Add test for <optgroup> handling.  
+
+Sat Apr 17 16:26:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.h, dialogs/menu.c, viewer/text/link.c:
+
+	add_separator_to_menu() -> add_menu_separator().  
+
+Sat Apr 17 15:35:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	count_menu_size(): Use foreach_menu_item().  
+
+Sat Apr 17 15:11:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Use @size for updating @item after reallocation of
+	top.  
+
+Sat Apr 17 14:54:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	Kill line.  
+
+Sat Apr 17 14:50:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Use foreach_menu_item() to make code look more
+	normal.  
+
+Sat Apr 17 14:37:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	do_select_submenu(): Get rid of goto by asigning @sel if
+	menu_contains() the item.  
+
+Sat Apr 17 14:35:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	do_select_submenu(): Use int_min() for @def < 0.  
+
+Sat Apr 17 14:29:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	Apparently menu_labels() is the only place this MENU_FULLNAME flag
+	is used and it only actually means anything for ordinary items and
+	not submenu items.  
+
+Sat Apr 17 14:20:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	menu_labels(): Cleanup base label allocation.  
+
+Sat Apr 17 14:17:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	menu_labels(): Rename m -> item. We should consider what name to use
+	for menu_item through out the code.  
+
+Sat Apr 17 14:15:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	More foreach_menu_item usage.  
+
+Sat Apr 17 14:14:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Introduce foreach_menu_item iterator.  
+
+Sat Apr 17 11:58:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hotkey.c, menu.c, menu.h:
+
+	Ni wtf is ni ;) ahh it is the number of items. Renamed menu->ni to
+	menu->size for shortness and descriptive value.  
+
+Sat Apr 17 11:52:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hotkey.c, hotkey.h, menu.c, menu.h:
+
+	Blast menu_head.  
+
+Sat Apr 17 11:47:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Use select_menu() and remove select_mainmenu().  
+
+Sat Apr 17 11:39:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Add struct mainmenu member to struct menu. The little extra added
+	memory usage is on temporary dialog code. Now we can remove some of
+	that stupid code duplication and it will be needed anyway when we
+	introduce tabs for dialogs.  
+
+Sat Apr 17 11:36:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.h:
+
+	Warn about mem_free_*if() possibly obfuscating their users.  
+
+Sat Apr 17 11:34:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.h:
+
+	Always set freed pointer to NULL, as was discussed on #elinks.  
+
+Sat Apr 17 11:28:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	struct main_menu's sp member is only asigned to which much mean it
+	is bloat of the evil kind.  
+
+Sat Apr 17 11:19:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Handle name is NULL case up front.  
+
+Sat Apr 17 03:07:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/event.c:
+
+	Doh. realloc_event() off by one error :|.  
+
+Sat Apr 17 02:48:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	Fix mem_free_set_if_leak_debug() bug. We test @name right after so
+	it should not be cleared.  
+
+Sat Apr 17 02:39:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/menu.c, bfu/text.c, document/docdata.h,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, sched/event.c, util/memory.h,
+	util/string.h, viewer/text/form.c, viewer/text/search.c,
+	viewer/text/textarea.c:
+
+	Make the mem_align_alloc() macro apply the sizeof() to the object.  
+
+Sat Apr 17 02:20:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: newwin.c, newwin.h:
+
+	Describe this little piece of code.  
+
+Sat Apr 17 02:09:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, osdep/newwin.c, osdep/newwin.h,
+	util/memory.h:
+
+	This is a good example of how abstractions can make code harder to
+	work with. Expose _const_ open_in_new so no copy allocation is
+	needed. It is just another example of my if-it-works-$(do)-it-anyway
+	where $(do) could be try-to or even play-with.  
+
+Sat Apr 17 01:52:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	oinw -> open_in_new.  
+
+Sat Apr 17 01:37:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	Make them open_in_new data static.  
+
+Sat Apr 17 01:35:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	open_new_window(): Inline exec_new_elinks().  
+
+Sat Apr 17 01:30:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: newwin.c, newwin.h, beos/beos.c, os2/os2.c,
+	win32/win32.c:
+
+	Centralize all them open in new functions by putting the default
+	command in the open_in_new structure.  
+
+Sat Apr 17 01:19:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	Let the code breathe a bit.  
+
+Sat Apr 17 01:13:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.h:
+
+	When LEAK_DEBUG is defined, mem_free_if(p) set p to NULL after
+	freeing it. This will cause some issues ;).  
+
+Sat Apr 17 01:10:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, osdep/newwin.c,
+	osdep/newwin.h, sched/session.c:
+
+	Don't pass callbacks around but term_env_type for open in new window
+	functions.  
+
+Fri Apr 16 23:39:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	do_action() was moved so include obsolete.  
+
 Fri Apr 16 17:41:01 2004  Karsten Schölzel <kuser@gmx.de>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.7 2003/11/28 02:24:25 jonas Exp $ */
+/* $Id: download.c,v 1.8 2003/11/28 03:49:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,6 +69,17 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data
 	return 0;
 }
 
+static int
+push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
+{
+	struct file_download *file_download = dlg_data->dlg->udata;
+
+	file_download->delete = 1;
+	object_unlock(file_download);
+	register_bottom_half((void (*)(void *)) do_abort_download,
+			     dlg_data->dlg->udata);
+	return 0;
+}
 
 static int
 dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
@@ -297,7 +308,7 @@ display_download(struct terminal *term, struct file_download *down,
 			goto found;
 	return;
 
-#define DOWNLOAD_WIDGETS_COUNT 3
+#define DOWNLOAD_WIDGETS_COUNT 4
 found:
 	dlg = calloc_dialog(DOWNLOAD_WIDGETS_COUNT, 0);
 	if (!dlg) return;
@@ -314,6 +325,7 @@ found:
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
 	add_dlg_button(dlg, 0, dlg_abort_download, _("Abort", term), NULL);
+	add_dlg_button(dlg, 0, push_delete_button, _("Abort and delete file", term), NULL);
 
 	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 
@@ -462,16 +474,16 @@ static INIT_LIST_HEAD(download_box_items);
 /* TODO: Ideas for buttons .. should be pretty trivial most of it
  *
  * - Resume or something that will use some goto like handler
- * - Suspend / stop buttons .. the last one should delete the file
  * - Open button that can be used to set file_download->prog.
  * - Toggle notify button
  * - Introduce listbox_ops->draw() so we can get a meter in the manager
  *   dialog ;)
  */
 static struct hierbox_browser_button download_buttons[] = {
-	{ N_("Info"),		push_info_button		},
-	{ N_("Abort"),		push_hierbox_delete_button	},
-	{ N_("Clear"),		push_hierbox_clear_button	},
+	{ N_("Info"),			push_info_button		},
+	{ N_("Abort"),			push_hierbox_delete_button	},
+	{ N_("Abort and delete file"),	push_delete_button		},
+	{ N_("Clear"),			push_hierbox_clear_button	},
 };
 
 struct hierbox_browser download_browser = {

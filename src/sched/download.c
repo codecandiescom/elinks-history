@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.194 2003/11/28 02:24:26 jonas Exp $ */
+/* $Id: download.c,v 1.195 2003/11/28 03:49:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,12 +105,11 @@ abort_download(struct file_download *down, int stop)
 		close(down->handle);
 	}
 
-	if (down->prog) {
-		unlink(down->file);
-		mem_free(down->prog);
+	if (down->prog) mem_free(down->prog);
+	if (down->file) {
+		if (down->delete) unlink(down->file);
+		mem_free(down->file);
 	}
-
-	if (down->file) mem_free(down->file);
 	del_from_list(down);
 	mem_free(down);
 }
@@ -264,9 +263,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		exec_on_terminal(get_download_ses(file_download)->tab->term,
 				 file_download->prog, file_download->file,
 				 !!file_download->prog_flags);
-		mem_free(file_download->prog);
-		file_download->prog = NULL;
-
+		file_download->delete = 0;
 		goto abort;
 	}
 
@@ -812,6 +809,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	if (codw_hop->tq->prog) {
 		file_download->prog = subst_file(codw_hop->tq->prog, codw_hop->file);
+		file_download->delete = 1;
 		mem_free(codw_hop->file);
 		mem_free(codw_hop->tq->prog);
 		codw_hop->tq->prog = NULL;

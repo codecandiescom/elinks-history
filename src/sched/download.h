@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.23 2003/11/28 02:24:26 jonas Exp $ */
+/* $Id: download.h,v 1.24 2003/11/28 03:49:08 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -28,6 +28,9 @@ struct file_download {
 	int notify;
 	int prog_flags;
 	struct download download;
+
+	/* Should the file be deleted when destroying the structure */
+	unsigned int delete:1;
 
 	/* Should any download dialog be updated */
 	unsigned int dirty:1;

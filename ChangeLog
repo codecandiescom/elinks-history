@@ -1,3 +1,186 @@
+Mon Nov  8 22:15:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Update elinks(1) manpage with new names of options. Head-shakingly
+	ignoring that alot of new options are not listed. ;) 
+
+Mon Nov  8 22:11:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Don't declare hidden options as unknown. All of them are handled by
+	the redir_cmd(). Fixes problem with -stdin mentioned in bug 557 so
+	it now warns about it being deprecated.  
+
+Mon Nov  8 21:55:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	Restart the document refreshing when rerendering.  
+
+Mon Nov  8 20:16:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	I think this is a fix for incorrect generating of title. It does not
+	cause crash, but excessive memory allocation. Part of mikulas batch
+	of fixes in links-1.0pre12 for bugs discovered with mangleme
+	<http://lcamtuf.coredump.cx/mangleme/mangle2.cgi>.  
+
+Mon Nov  8 19:41:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/signals.c:
+
+	Use pid_t for storing return value of getpid().  
+
+Mon Nov  8 19:37:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/signals.c:
+
+	Fixed bad error codes because of errno modified by signal handler.
+	Patch by user in links-1.0pre9.  
+
+Mon Nov  8 19:27:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listmenu.c, bfu/menu.c, bfu/style.c,
+	document/html/renderer.c, document/sgml/scanner.c,
+	mime/backend/common.c, mime/backend/mimetypes.c, modules/module.c,
+	modules/module.h, osdep/newwin.c, protocol/uri.c:
+
+	19:38 < Miciah> We have several foreach macros that follow a pattern
+			of |for (...) if (...)| or |foreach (...) if (...)|.  
+			That will not work so well when somebody does: 
+			if (frink) foreach_foo (x, y) frob(x); else wooble; 
+	
+	... so I made this patch that puts {} to reduce ambiguity.  
+
+Mon Nov  8 19:15:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Reset the ses->redirect_cnt in ses_goto() rather than in do_move() 
+	and make it depend on the @redir variable. It apparently fixes a bug 
+	triggered when clicking on broken links that after five times would 
+	display the redirect itself.  
+	
+	Patch by user in links-1.0pre5.  
+
+Mon Nov  8 17:04:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: encoding/encoding.c, util/file.c:
+
+	Fix overflow when accessing local files >= 2G. Patch by user in
+	links-1.0pre9.  
+
+Mon Nov  8 16:47:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Allow '@' in the password URI-component. Patch by user in
+	links-1.0pre5.  
+
+Mon Nov  8 16:15:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/osdep/stub.c, src/osdep/stub.h:
+
+	Add stub function for raise(). Inspired by Wojciech Puchar
+	<wojtek@tensor.3miasto.net>'s 'Portability fixes for SunOS' in
+	1.0pre11.  
+
+Mon Nov  8 15:52:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Make sure the user is notified if initialization of the first
+	session fails.  
+
+Mon Nov  8 15:42:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/osdep.c, osdep/beos/beos.c, osdep/win32/win32.c,
+	protocol/file/cgi.c, protocol/smb/smb.c:
+
+	Use pid_t for storing return value of fork(). Inspired by Mikulas in
+	1.0pre9.  
+
+Mon Nov  8 15:36:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Introduce check_cwd() that will chdir(getenv("HOME")) if CWD cannot
+	be stat()'ed. Inspired by Mikulas in 1.0pre9.  
+
+Mon Nov  8 14:57:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Remove code for reporting 'URL expected after -{dump,source}' errors
+	that was not working correctly after the introduction of URL list
+	support. It was duplicated in src/main.c (1.223 -> 1.224).  
+
+Mon Nov  8 14:24:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/encoding.c:
+
+	It looks like the workaround for reading zero bytes to invalid
+	address on Linux by adding one byte is not needed anymore. Inspired
+	by Mikulas in the links-1.0pre9.  
+
+Mon Nov  8 03:36:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	decode_color(): Another small sanity check for strtoul() return
+	value. Inspired by Mikulas in the links-1.0 prereleases.  
+
+Mon Nov  8 02:57:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	get_width(): Add sanity check for strtoul() return value. Inspired
+	by Mikulas in the links-1.0 prereleases.  
+
+Mon Nov  8 02:43:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/unix/unix.c:
+
+	Add sanity check for GPM coordinate calculation. Inspired by Mikulas
+	in the links-1.0 prereleases.  
+
+Mon Nov  8 02:12:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Make it hopefully a little easier to see what is going one with the
+	CR-LF concatenation.  
+
+Mon Nov  8 01:57:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Report 'URL expected after -{dump,source}' error. Inspired by
+	Mikulas in the links-1.0 prereleases.  
+
+Mon Nov  8 01:38:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Fix wrong HTTP error code reporting when server returns 204. Patch
+	by Mikulas; backported from links-1.0 prereleases.  
+
+Mon Nov  8 01:28:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/charsets.c:
+
+	Tidyup from links-1.0 prereleases.  
+
+Mon Nov  8 00:31:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/forms.c:
+
+	html_select(): Fix leak when two <select multiple=elements> appears
+	successively. (bug 552) 
+
 Sun Nov  7 17:39:45 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/protocol/http/http.c:

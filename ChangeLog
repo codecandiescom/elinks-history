@@ -1,3 +1,145 @@
+Sun Dec 30 01:43:50 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, links.h, sched.c:
+	
+	Even more rewrites of DNS (even random digs to connection
+	managment) so that we now finally correctly handle multiple RRs; we
+	also virtually already can use IPv6, if would gethostbyname() eever
+	return it and we would use sizeof(sockaddr_storage) ;).
+
+Sat Dec 29 22:53:06 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c:
+	
+	unified some duplicated SSL code
+
+Sat Dec 29 22:33:15 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, dns.c:
+	
+	We do blocking communication with resolver thread, it shouldn't
+	hurt as it's always only local, and it is too difficult to do it
+	non-blocking properly. Now it should again work at BSD for hosts
+	with single RR.
+
+Sat Dec 29 18:52:38 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, links.h, sched.c:
+	
+	a little more dns cleanup, now address list should be freed
+	correctly when an error occurs
+
+Sat Dec 29 17:35:29 2001  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	fix async resolving under such braindead systems like bsd ;) which
+	won't acceptdata from resolver thread to a socket at once
+
+Sat Dec 29 16:19:28 2001  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	fix segfault when host not found
+
+Sat Dec 29 14:21:39 2001  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	more universal addr type passing :)
+
+Sat Dec 29 14:17:21 2001  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	fix async resolving under such braindead systems like bsd ;) which
+	won't burst me with data from resolver thread at once
+
+Sat Dec 29 14:04:05 2001  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	small anti-leak when fucked up communication with resolver thread
+
+Sat Dec 29 13:20:52 2001  Petr Baudis <pasky@ji.cz>:
+
+	* stamp-h.in:
+	
+	i hate autoshits :(
+
+Sat Dec 29 12:47:33 2001  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, BUGS, COPYING, HACKING, INSTALL, LUA, LUA-WIP,
+	Makefile.am, Makefile.gen, Makefile.in, NEWS, README, SITES, TODO,
+	acconfig.h, aclocal.m4, af_unix.c, beos.c, bfu.c, bookmarks.c,
+	cache.c, charsets.c, codepage.h, codepage.inc, config.guess,
+	config.h.in, config.sub, config2.h, configure, configure.in,
+	connect.c, cookies.c, default.c, dns.c, entity.inc, error.c,
+	file.c, finger.c, ftp.c, html.c, html_r.c, html_tbl.c, http.c,
+	https.c, install-sh, kbd.c, kbdbind.c, language.c, language.h,
+	language.inc, links.1, links.h, lua.c, mailcap.pl, mailto.c,
+	main.c, menu.c, missing, mkinstalldirs, os_dep.c, os_dep.h,
+	os_depx.h, rebuild, sched.c, select.c, session.c, setup.h,
+	stamp-h.in, terminal.c, types.c, uni_7b.inc, url.c, view.c,
+	win32.c, wipe-out-ssl, wipe-out-ssl.awk:
+	
+	hopefully fix build system - changing ctimes
+
+Fri Dec 28 17:25:34 2001  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: README, bm.lua, color_config.diff, dummy-js.diff,
+	hooks.lua, links_wps.zip, user.example:
+	
+	made contrib/ and added some interesting things there
+
+Fri Dec 28 16:20:43 2001  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING:
+	
+	html parser/renderer description
+
+Fri Dec 28 16:05:54 2001  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+	
+	historical note near GNU gettext credits
+
+Fri Dec 28 13:04:34 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, default.c, dns.c, links.h:
+	
+	remove ip and use sockaddr(_in) instead
+
+Fri Dec 28 03:29:02 2001  Petr Baudis <pasky@ji.cz>:
+
+	* README, Unicode/gen-ent, intl/intl.txt:
+	
+	back from test :)
+
+Fri Dec 28 03:16:35 2001  Petr Baudis <pasky@ji.cz>:
+
+	* Unicode/gen-ent, intl/intl.txt:
+	
+	test of new cvslog.pl :)
+
+Fri Dec 28 03:13:03 2001  Petr Baudis <pasky@ji.cz>:
+
+	* README:
+	
+	test of new cvslog.pl :)
+
+Fri Dec 28 00:41:42 2001  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING, HACKING:
+	
+	*dummy*
+
+Thu Dec 27 21:46:13 2001  Petr Baudis <pasky@ji.cz>:
+
+	* HACKING:
+	
+	some more coding style issues
+
 Thu Dec 27 05:27:43 2001  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:

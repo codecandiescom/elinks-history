@@ -1,16 +1,20 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.13 2004/08/15 05:46:41 miciah Exp $
+## $Id: Makefile.am,v 1.14 2004/09/29 23:18:17 jonas Exp $
 
 SUBDIRS = man
 
 EXTRA_DIST = \
  README \
  bookmarks.txt \
+ color-model.txt \
+ ecmascript.texi \
  elinks-lua.texi \
+ events.txt \
  feedback.txt \
  hacking.txt \
  mailcap.html \
- mime.html
+ mime.html \
+ small.txt
 
 ELINKS=$(top_builddir)/src/elinks
 

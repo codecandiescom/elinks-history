@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.13 2002/04/20 16:53:24 pasky Exp $ */
+/* $Id: url.c,v 1.14 2002/04/20 19:28:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include <protocol/url.h>
 #include <util/conv.h>
 #include <util/error.h>
+
 
 struct {
 	unsigned char *prot;
@@ -471,7 +472,7 @@ void insert_wd(unsigned char **up, unsigned char *cwd)
 
 unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 {
-	unsigned char *p, *n, *pp;
+	unsigned char *p, *n, *path;
 	int l;
 	int lo = !casecmp(base, "file://", 7);
 
@@ -495,6 +496,7 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 	}
 	if (rel[0] == '/' && rel[1] == '/') {
 		unsigned char *s, *n;
+		
 		if (!(s = strstr(base, "//"))) {
 			internal("bad base url: %s", base);
 			return NULL;
@@ -518,19 +520,40 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 		}
 		mem_free(n);
 	}
-	prx:
-	if (parse_url(base, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &p, NULL, NULL) || !p) {
+	
+prx:
+	if (parse_url(base, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &path, NULL, NULL) || !path) {
 		internal("bad base url");
 		return NULL;
 	}
-	if (!dsep(*p)) p--;
-	if (!dsep(rel[0])) for (pp = p; *pp; pp++) {
-		if (end_of_dir(*pp)) break;
-		if (dsep(*pp)) p = pp + 1;
+	
+	if (*path && !dsep(*path)) {
+		/* I'm not sure about this, I think I would like some
+		 * explanation. --pasky */
+		path--;
 	}
-	if (!(n = mem_alloc(p - base + strlen(rel) + 1))) return NULL;
-	memcpy(n, base, p - base);
-	strcpy(n + (p - base), rel);
+	
+	if (!dsep(rel[0])) {
+		char *path_end;
+
+		/* The URL is relative. */
+		
+		for (path_end = path; *path_end; path_end++) {
+			if (end_of_dir(*path_end)) break;
+			/* Modify the path pointer, so that it'll always point
+			 * above the last '/' in the URL; later, we'll copy the
+			 * URL only _TO_ this point, and anything after last
+			 * slash will be substituted by 'rel'. */
+			if (dsep(*path_end)) path = path_end + 1;
+		}
+	}
+	
+	n = mem_alloc(path - base + strlen(rel) + 1);
+	if (!n) return NULL;
+	
+	memcpy(n, base, path - base);
+	strcpy(n + (path - base), rel);
+	
 	translate_directories(n);
 	return n;
 }

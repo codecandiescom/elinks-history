@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.51 2004/03/26 18:05:45 zas Exp $ */
+/* $Id: kbd.c,v 1.52 2004/03/26 18:15:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,25 +499,29 @@ has_nul_byte:
 	bytes_read -= i;
 	p = 0;
 
-#define RD(xx) { \
-	unsigned char cc; \
-	if (p < bytes_read) cc = buf[p++]; \
-	else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0) goto free_and_return; \
-	xx = cc; }
+#define RD(xx) {							\
+		unsigned char cc;					\
+									\
+		if (p < bytes_read)					\
+			cc = buf[p++];					\
+		else if ((hard_read(itrm->sock_in, &cc, 1)) <= 0)	\
+			goto free_and_return;				\
+		xx = cc;						\
+	}
 
 	RD(fg);
 
-	/* FIXME: goto fr on error ?? */
 	if (!init_string(&path)) goto free_and_return;
-	if (!init_string(&delete)) {
-		done_string(&path);
-		goto free_and_return;
-	}
-
+	
 	while (1) {
 		RD(ch);
 		if (!ch) break;
 		add_char_to_string(&path, ch);
+	}
+
+	if (!init_string(&delete)) {
+		done_string(&path);
+		goto free_and_return;
 	}
 
 	while (1) {

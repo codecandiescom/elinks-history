@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.201 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: form.c,v 1.202 2004/06/17 19:16:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1160,7 +1160,8 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_CUT_CLIPBOARD:
 			set_clipboard_text(fs->value);
-			if (fc->mode != FORM_MODE_READONLY) fs->value[0] = 0;
+			if (!form_field_is_readonly(fc))
+				fs->value[0] = 0;
 			fs->state = 0;
 			break;
 		case ACT_EDIT_PASTE_CLIPBOARD:

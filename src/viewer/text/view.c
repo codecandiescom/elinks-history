@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.94 2003/06/07 15:10:59 pasky Exp $ */
+/* $Id: view.c,v 1.95 2003/06/07 20:00:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3250,7 +3250,8 @@ enum dl_type {
 };
 
 static void
-_send_download(struct terminal *term, void *xxx, struct session *ses, enum dl_type dlt)
+send_download_do(struct terminal *term, void *xxx, struct session *ses,
+		enum dl_type dlt)
 {
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
@@ -3290,13 +3291,13 @@ _send_download(struct terminal *term, void *xxx, struct session *ses, enum dl_ty
 void
 send_download_image(struct terminal *term, void *xxx, struct session *ses)
 {
-	_send_download(term, xxx, ses, IMAGE);
+	send_download_do(term, xxx, ses, IMAGE);
 }
 
 static void
 send_download(struct terminal *term, void *xxx, struct session *ses)
 {
-	_send_download(term, xxx, ses, URL);
+	send_download_do(term, xxx, ses, URL);
 }
 
 static int

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.28 2003/12/01 23:44:40 jonas Exp $ */
+/* $Id: tab.c,v 1.29 2003/12/27 13:08:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,9 +50,8 @@ number_of_tabs(struct terminal *term)
 	int result = 0;
 	struct window *win;
 
-	foreach (win, term->windows) {
-		result += (win->type == WT_TAB);
-	}
+	foreach_tab (win, term->windows)
+		result++;
 
 	return result;
 }
@@ -66,12 +65,12 @@ get_tab_number(struct window *window)
 	int current = 0;
 	int num = 0;
 
-	foreachback (win, term->windows) {
+	foreachback_tab (win, term->windows) {
 		if (win == window) {
 			num = current;
 			break;
 		}
-		current += (win->type == WT_TAB);
+		current++;
 	}
 
 	return num;
@@ -83,10 +82,9 @@ get_tab_by_number(struct terminal *term, int num)
 {
 	struct window *win = NULL;
 
-	foreachback (win, term->windows) {
-		if (win->type == WT_TAB && !num)
-			break;
-		num -= win->type;
+	foreachback_tab (win, term->windows) {
+		if (!num) break;
+		num--;
 	}
 
 	return win;
@@ -99,9 +97,9 @@ get_tab_number_by_xpos(struct terminal *term, int xpos)
 	int num = 0;
 	struct window *win = NULL;
 
-	foreachback (win, term->windows) {
-		if (win->type != WT_TAB) continue;
-		if (xpos >= win->xpos && xpos <= win->xpos + win->width)
+	foreachback_tab (win, term->windows) {
+		if (xpos >= win->xpos
+		    && xpos <= win->xpos + win->width)
 			return num;
 		num++;
 	}

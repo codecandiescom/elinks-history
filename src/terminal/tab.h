@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.18 2003/12/01 14:24:21 pasky Exp $ */
+/* $Id: tab.h,v 1.19 2003/12/27 13:08:44 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -23,5 +23,11 @@ void close_tab(struct terminal *, struct session *);
 
 void open_in_new_tab(struct terminal *term, int link, struct session *ses);
 void open_in_new_tab_in_background(struct terminal *term, int link, struct session *ses);
+
+#define foreach_tab(tab, terminal) \
+	foreach (tab, terminal) if (tab->type == WT_TAB)
+
+#define foreachback_tab(tab, terminal) \
+	foreachback (tab, terminal) if (tab->type == WT_TAB)
 
 #endif

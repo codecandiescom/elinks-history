@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.107 2003/10/30 17:04:32 zas Exp $ */
+/* $Id: tables.c,v 1.108 2003/10/30 17:27:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,30 +26,31 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-#define AL_TR		-1
+#define AL_TR	-1
 
-#define VAL_TR		-1
-#define VAL_TOP		0
-#define VAL_MIDDLE	1
-#define VAL_BOTTOM	2
+#define VALIGN_TR	-1
+#define VALIGN_TOP	0
+#define VALIGN_MIDDLE	1
+#define VALIGN_BOTTOM	2
+#define VALIGN_BASELINE	VALIGN_TOP /* Not implemented. */
 
-#define W_AUTO		-1
-#define W_REL		-2
+#define WIDTH_AUTO		-1
+#define WIDTH_RELATIVE		-2
 
-#define F_VOID		0
-#define F_ABOVE		1
-#define F_BELOW		2
-#define F_HSIDES	3
-#define F_LHS		4
-#define F_RHS		8
-#define F_VSIDES	12
-#define F_BOX		15
+#define TABLE_FRAME_VOID	0
+#define TABLE_FRAME_ABOVE	1
+#define TABLE_FRAME_BELOW	2
+#define TABLE_FRAME_HSIDES	3
+#define TABLE_FRAME_LHS		4
+#define TABLE_FRAME_RHS		8
+#define TABLE_FRAME_VSIDES	12
+#define TABLE_FRAME_BOX		15
 
-#define R_NONE		0
-#define R_ROWS		1
-#define R_COLS		2
-#define R_ALL		3
-#define R_GROUPS	4
+#define TABLE_RULE_NONE		0
+#define TABLE_RULE_ROWS		1
+#define TABLE_RULE_COLS		2
+#define TABLE_RULE_ALL		3
+#define TABLE_RULE_GROUPS	4
 
 #define INIT_X		2
 #define INIT_Y		2
@@ -142,10 +143,10 @@ get_valign(unsigned char *attr, int *a)
 	unsigned char *al = get_attr_val(attr, "valign");
 
 	if (al) {
-		if (!(strcasecmp(al, "top"))) *a = VAL_TOP;
-		else if (!(strcasecmp(al, "middle"))) *a = VAL_MIDDLE;
-		else if (!(strcasecmp(al, "bottom"))) *a = VAL_BOTTOM;
-		else if (!(strcasecmp(al, "baseline"))) *a = VAL_TOP; /* NOT IMPLEMENTED */
+		if (!(strcasecmp(al, "top"))) *a = VALIGN_TOP;
+		else if (!(strcasecmp(al, "middle"))) *a = VALIGN_MIDDLE;
+		else if (!(strcasecmp(al, "bottom"))) *a = VALIGN_BOTTOM;
+		else if (!(strcasecmp(al, "baseline"))) *a = VALIGN_BASELINE; /* NOT IMPLEMENTED */
 		mem_free(al);
 	}
 }
@@ -166,7 +167,7 @@ get_column_width(unsigned char *attr, int *width, int sh)
 			errno = 0;
 			n = strtoul(al, (char **)&en, 10);
 			if (!errno && n >= 0 && !*en)
-				*width = W_REL - n;
+				*width = WIDTH_RELATIVE - n;
 		} else {
 			int w = get_width(attr, "width", sh);
 
@@ -356,17 +357,17 @@ set_td_width(struct table *t, int x, int width, int f)
 		nc = mem_realloc(t->xcols, n * sizeof(int));
 		if (!nc) return;
 
-		for (i = t->xc; i < n; i++) nc[i] = W_AUTO;
+		for (i = t->xc; i < n; i++) nc[i] = WIDTH_AUTO;
 		t->xc = n;
 		t->xcols = nc;
 	}
 
-	if (t->xcols[x] == W_AUTO || f) {
+	if (t->xcols[x] == WIDTH_AUTO || f) {
 		t->xcols[x] = width;
 		return;
 	}
 
-	if (width == W_AUTO) return;
+	if (width == WIDTH_AUTO) return;
 
 	if (width < 0 && t->xcols[x] >= 0) {
 		t->xcols[x] = width;
@@ -413,12 +414,12 @@ parse_table(unsigned char *html, unsigned char *eof,
 	int t_namelen;
 	int p = 0;
 	int l_al = AL_LEFT;
-	int l_val = VAL_MIDDLE;
-	int csp, rsp;
+	int l_val = VALIGN_MIDDLE;
+	int colspan, rowspan;
 	int group = 0;
 	int i, j, k;
 	int qqq;
-	int c_al = AL_TR, c_val = VAL_TR, c_width = W_AUTO, c_span = 0;
+	int c_al = AL_TR, c_val = VALIGN_TR, c_width = WIDTH_AUTO, c_span = 0;
 	register int x = 0, y = -1;
 
 	*end = html;
@@ -482,8 +483,8 @@ qwe:
 			lbhp = NULL;
 		}
 		c_al = AL_TR;
-		c_val = VAL_TR;
-		c_width = W_AUTO;
+		c_val = VALIGN_TR;
+		c_width = WIDTH_AUTO;
 		get_align(t_attr, &c_al);
 		get_valign(t_attr, &c_val);
 		get_column_width(t_attr, &c_width, sh);
@@ -500,8 +501,8 @@ qwe:
 		}
 		c_span = 0;
 		c_al = AL_TR;
-		c_val = VAL_TR;
-		c_width = W_AUTO;
+		c_val = VALIGN_TR;
+		c_width = WIDTH_AUTO;
 		goto see;
 	}
 
@@ -566,7 +567,7 @@ qwe:
 
 		if (group) group--;
 		l_al = AL_LEFT;
-		l_val = VAL_MIDDLE;
+		l_val = VALIGN_MIDDLE;
 		l_col = bgcolor;
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
@@ -641,7 +642,7 @@ nc:
 	if (x < t->columns_count) {
 		if (t->columns[x].align != AL_TR)
 			cell->align = t->columns[x].align;
-		if (t->columns[x].valign != VAL_TR)
+		if (t->columns[x].valign != VALIGN_TR)
 			cell->valign = t->columns[x].valign;
 	}
 
@@ -651,44 +652,44 @@ nc:
 	get_valign(t_attr, &cell->valign);
 	get_bgcolor(t_attr, &cell->bgcolor);
 
-	csp = get_num(t_attr, "colspan");
-	if (csp == -1) csp = 1;
-	else if (!csp) csp = -1;
+	colspan = get_num(t_attr, "colspan");
+	if (colspan == -1) colspan = 1;
+	else if (!colspan) colspan = -1;
 
-	rsp = get_num(t_attr, "rowspan");
-	if (rsp == -1) rsp = 1;
-	else if (!rsp) rsp = -1;
+	rowspan = get_num(t_attr, "rowspan");
+	if (rowspan == -1) rowspan = 1;
+	else if (!rowspan) rowspan = -1;
 
-	cell->colspan = csp;
-	cell->rowspan = rsp;
+	cell->colspan = colspan;
+	cell->rowspan = rowspan;
 
-	if (csp == 1) {
-		int width = W_AUTO;
+	if (colspan == 1) {
+		int width = WIDTH_AUTO;
 
 		get_column_width(t_attr, &width, sh);
-		if (width != W_AUTO) set_td_width(t, x, width, 0);
+		if (width != WIDTH_AUTO) set_td_width(t, x, width, 0);
 	}
 
 	qqq = t->x;
 
-	for (i = 1; csp != -1 ? i < csp : i < qqq; i++) {
+	for (i = 1; colspan != -1 ? i < colspan : i < qqq; i++) {
 		struct table_cell *sc = new_cell(t, x + i, y);
 
 		if (!sc || sc->used) {
-			csp = i;
-			for (k = 0; k < i; k++) CELL(t, x + k, y)->colspan = csp;
+			colspan = i;
+			for (k = 0; k < i; k++) CELL(t, x + k, y)->colspan = colspan;
 			break;
 		}
 
 		sc->used = sc->spanned = 1;
-		sc->rowspan = rsp;
-		sc->colspan = csp;
+		sc->rowspan = rowspan;
+		sc->colspan = colspan;
 		sc->mx = x;
 		sc->my = y;
 	}
 
 	qqq = t->y;
-	for (j = 1; rsp != -1 ? j < rsp : j < qqq; j++) {
+	for (j = 1; rowspan != -1 ? j < rowspan : j < qqq; j++) {
 		for (k = 0; k < i; k++) {
 			struct table_cell *sc = new_cell(t, x + k, y + j);
 
@@ -703,7 +704,7 @@ nc:
 					memset(CELL(t, x + l, y + j), 0,
 					       sizeof(struct table_cell));
 
-				rsp = j;
+				rowspan = j;
 
 				for (l = 0; l < i; l++)
 					for (m = 0; m < j; m++)
@@ -712,8 +713,8 @@ nc:
 			}
 
 			sc->used = sc->spanned = 1;
-			sc->rowspan = rsp;
-			sc->colspan = csp;
+			sc->rowspan = rowspan;
+			sc->colspan = colspan;
 			sc->mx = x;
 			sc->my = y;
 		}
@@ -742,9 +743,9 @@ scan_done:
 	} else t->rows_height = NULL;
 
 	for (x = 0; x < t->columns_count; x++)
-		if (t->columns[x].width != W_AUTO)
+		if (t->columns[x].width != WIDTH_AUTO)
 			set_td_width(t, x, t->columns[x].width, 1);
-	set_td_width(t, t->x, W_AUTO, 0);
+	set_td_width(t, t->x, WIDTH_AUTO, 0);
 
 	return t;
 }
@@ -868,9 +869,9 @@ get_vline_width(struct table *t, int col)
 
 	if (!col) return -1;
 
-	if (t->rules == R_COLS || t->rules == R_ALL)
+	if (t->rules == TABLE_RULE_COLS || t->rules == TABLE_RULE_ALL)
 		w = t->cellsp;
-	else if (t->rules == R_GROUPS)
+	else if (t->rules == TABLE_RULE_GROUPS)
 		w = (col < t->columns_count && t->columns[col].group);
 
 	if (!w && t->cellpd) w = -1;
@@ -885,13 +886,13 @@ get_hline_width(struct table *t, int row)
 
 	if (!row) return -1;
 
-	if (t->rules == R_ROWS || t->rules == R_ALL) {
+	if (t->rules == TABLE_RULE_ROWS || t->rules == TABLE_RULE_ALL) {
 
 x:
 		if (t->cellsp || t->vcellpd) return t->cellsp;
 		return -1;
 
-	} else if (t->rules == R_GROUPS) {
+	} else if (t->rules == TABLE_RULE_GROUPS) {
 		register int q;
 
 		for (q = 0; q < t->x; q++)
@@ -994,11 +995,11 @@ get_table_width(struct table *t)
 	}
 
 	if (t->border) {
-		if (t->frame & F_LHS) {
+		if (t->frame & TABLE_FRAME_LHS) {
 			min++;
 			max++;
 		}
-		if (t->frame & F_RHS) {
+		if (t->frame & TABLE_FRAME_RHS) {
 			min++;
 			max++;
 		}
@@ -1081,7 +1082,7 @@ distribute_widths(struct table *t, int width)
 				case 2:
 				case 3:
 					if (t->columns_width[i] < t->max_c[i]
-					    && (om == 3 || t->xcols[i] == W_AUTO)) {
+					    && (om == 3 || t->xcols[i] == WIDTH_AUTO)) {
 						mx[i] = t->max_c[i] - t->columns_width[i];
 						if (mmax_c) {
 							w[i] = 5 + t->max_c[i] * 10 / mmax_c;
@@ -1318,8 +1319,8 @@ get_table_heights(struct table *t)
 
 	t->rh = 0;
 	if (t->border) {
-		if (t->frame & F_ABOVE) t->rh++;
-		if (t->frame & F_BELOW) t->rh++;
+		if (t->frame & TABLE_FRAME_ABOVE) t->rh++;
+		if (t->frame & TABLE_FRAME_BELOW) t->rh++;
 	}
 
 	for (j = 0; j < t->y; j++) {
@@ -1334,11 +1335,11 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	register int i, j;
 	struct document *document = t->p->document;
 	int yp;
-	int xp = x + (t->border && (t->frame & F_LHS));
+	int xp = x + (t->border && (t->frame & TABLE_FRAME_LHS));
 	int expand_cols = (d_opt && d_opt->table_expand_cols);
 
 	for (i = 0; i < t->x; i++) {
-		yp = y + (t->border && (t->frame & F_ABOVE));
+		yp = y + (t->border && (t->frame & TABLE_FRAME_ABOVE));
 		for (j = 0; j < t->y; j++) {
 			struct table_cell *cell = CELL(t, i, j);
 
@@ -1382,9 +1383,9 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
  				{
 					int tmpy = t->p->y + yp;
 
-					if (cell->valign == VAL_MIDDLE)
+					if (cell->valign == VALIGN_MIDDLE)
 						tmpy += (yw - cell->height)>>1;
-					else if (cell->valign == VAL_BOTTOM)
+					else if (cell->valign == VALIGN_BOTTOM)
 						tmpy += (yw - cell->height);
 
 				   	p = format_html_part(cell->start,
@@ -1427,8 +1428,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 	*yy = yp;
 	if (t->border) {
-		if (t->frame & F_ABOVE) (*yy)++;
-		if (t->frame & F_BELOW) (*yy)++;
+		if (t->frame & TABLE_FRAME_ABOVE) (*yy)++;
+		if (t->frame & TABLE_FRAME_BELOW) (*yy)++;
 	}
 }
 
@@ -1526,7 +1527,7 @@ display_table_frames(struct table *t, int x, int y)
 
  	frame[1] = &frame[0][fh_size];
 
-	if (t->rules == R_NONE) goto cont2;
+	if (t->rules == TABLE_RULE_NONE) goto cont2;
 
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		int xsp, ysp;
@@ -1537,18 +1538,18 @@ display_table_frames(struct table *t, int x, int y)
 		xsp = cell->colspan ? cell->colspan : t->x - i;
 		ysp = cell->rowspan ? cell->rowspan : t->y - j;
 
-		if (t->rules != R_COLS) {
+		if (t->rules != TABLE_RULE_COLS) {
 			memset(&H_FRAME_POSITION(t, i, j), t->cellsp, xsp);
 			memset(&H_FRAME_POSITION(t, i, j + ysp), t->cellsp, xsp);
 		}
 
-		if (t->rules != R_ROWS) {
+		if (t->rules != TABLE_RULE_ROWS) {
 			memset(&V_FRAME_POSITION(t, i, j), t->cellsp, ysp);
 			memset(&V_FRAME_POSITION(t, i + xsp, j), t->cellsp, ysp);
 		}
 	}
 
-	if (t->rules == R_GROUPS) {
+	if (t->rules == TABLE_RULE_GROUPS) {
 		for (i = 1; i < t->x; i++) {
 			if (!t->xcols[i])
 				memset(&V_FRAME_POSITION(t, i, 0), 0, t->y);
@@ -1566,10 +1567,10 @@ cont:;
 
 cont2:
 	if (t->border) {
-		fa = !!(t->frame & F_ABOVE);
-		fb = !!(t->frame & F_BELOW);
-		fl = !!(t->frame & F_LHS);
-		fr = !!(t->frame & F_RHS);
+		fa = !!(t->frame & TABLE_FRAME_ABOVE);
+		fb = !!(t->frame & TABLE_FRAME_BELOW);
+		fl = !!(t->frame & TABLE_FRAME_LHS);
+		fr = !!(t->frame & TABLE_FRAME_RHS);
 	}
 
 	memset(&H_FRAME_POSITION(t, 0, 0), fa, t->x);
@@ -1675,23 +1676,23 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		cellsp = get_num(attr, "cellspacing");
 		int_bounds(&cellsp, 1, 2);
 
-		frame = F_BOX;
+		frame = TABLE_FRAME_BOX;
 		al = get_attr_val(attr, "frame");
 		if (al) {
-			if (!strcasecmp(al, "void")) frame = F_VOID;
-			else if (!strcasecmp(al, "above")) frame = F_ABOVE;
-			else if (!strcasecmp(al, "below")) frame = F_BELOW;
-			else if (!strcasecmp(al, "hsides")) frame = F_HSIDES;
-			else if (!strcasecmp(al, "vsides")) frame = F_VSIDES;
-			else if (!strcasecmp(al, "lhs")) frame = F_LHS;
-			else if (!strcasecmp(al, "rhs")) frame = F_RHS;
-			else if (!strcasecmp(al, "box")) frame = F_BOX;
-			else if (!strcasecmp(al, "border")) frame = F_BOX;
+			if (!strcasecmp(al, "void")) frame = TABLE_FRAME_VOID;
+			else if (!strcasecmp(al, "above")) frame = TABLE_FRAME_ABOVE;
+			else if (!strcasecmp(al, "below")) frame = TABLE_FRAME_BELOW;
+			else if (!strcasecmp(al, "hsides")) frame = TABLE_FRAME_HSIDES;
+			else if (!strcasecmp(al, "vsides")) frame = TABLE_FRAME_VSIDES;
+			else if (!strcasecmp(al, "lhs")) frame = TABLE_FRAME_LHS;
+			else if (!strcasecmp(al, "rhs")) frame = TABLE_FRAME_RHS;
+			else if (!strcasecmp(al, "box")) frame = TABLE_FRAME_BOX;
+			else if (!strcasecmp(al, "border")) frame = TABLE_FRAME_BOX;
 			mem_free(al);
 		}
 	} else {
 		cellsp = 0;
-		frame = F_VOID;
+		frame = TABLE_FRAME_VOID;
 	}
 
 	cellpd = get_num(attr, "cellpadding");
@@ -1714,14 +1715,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	rules = border ? R_ALL : R_NONE;
+	rules = border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
 	al = get_attr_val(attr, "rules");
 	if (al) {
-		if (!strcasecmp(al, "none")) rules = R_NONE;
-		else if (!strcasecmp(al, "groups")) rules = R_GROUPS;
-		else if (!strcasecmp(al, "rows")) rules = R_ROWS;
-		else if (!strcasecmp(al, "cols")) rules = R_COLS;
-		else if (!strcasecmp(al, "all")) rules = R_ALL;
+		if (!strcasecmp(al, "none")) rules = TABLE_RULE_NONE;
+		else if (!strcasecmp(al, "groups")) rules = TABLE_RULE_GROUPS;
+		else if (!strcasecmp(al, "rows")) rules = TABLE_RULE_ROWS;
+		else if (!strcasecmp(al, "cols")) rules = TABLE_RULE_COLS;
+		else if (!strcasecmp(al, "all")) rules = TABLE_RULE_ALL;
 		mem_free(al);
 	}
 

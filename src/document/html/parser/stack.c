@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.8 2004/04/23 23:18:22 pasky Exp $ */
+/* $Id: stack.c,v 1.9 2004/04/23 23:23:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,14 +12,8 @@
 
 #include "elinks.h"
 
-#include "config/options.h"
-#include "document/css/stylesheet.h"
-#include "document/html/frames.h"
 #include "document/html/parser/stack.h"
 #include "document/html/parser.h"
-#include "intl/charsets.h"
-#include "protocol/uri.h"
-#include "sched/session.h"
 #include "util/error.h"
 #include "util/lists.h"
 #include "util/memdebug.h"

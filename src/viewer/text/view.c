@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.186 2003/08/23 17:54:32 jonas Exp $ */
+/* $Id: view.c,v 1.187 2003/08/23 18:01:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,70 +99,68 @@ free_frameset_desc(struct frameset_desc *fd)
 	mem_free(fd);
 }
 
-static void
-clear_formatted(struct document *scr)
+void
+done_document(struct document *document)
 {
-	struct list_head tmp;
-	int n;
-	int y;
 	struct cache_entry *ce;
 	struct form_control *fc;
+	int pos;
 
-	assert(scr);
+	assert(document);
 	if_assert_failed return;
 
-	if (!find_in_cache(scr->url, &ce) || !ce)
+	assertm(!document->refcount, "Attempt to free locked formatted data.");
+	if_assert_failed return;
+
+	if (!find_in_cache(document->url, &ce) || !ce)
 		internal("no cache entry for document");
 	else
 		ce->refcount--;
 
-	if (scr->url) mem_free(scr->url);
-	if (scr->title) mem_free(scr->title);
-	if (scr->frame_desc) {
-		free_frameset_desc(scr->frame_desc);
-	}
-	for (n = 0; n < scr->nlinks; n++) {
-		struct link *l = &scr->links[n];
+	if (document->url) mem_free(document->url);
+	if (document->title) mem_free(document->title);
+	if (document->frame_desc) free_frameset_desc(document->frame_desc);
 
-		if (l->where) mem_free(l->where);
-		if (l->target) mem_free(l->target);
-		if (l->title) mem_free(l->title);
-		if (l->where_img) mem_free(l->where_img);
-		if (l->pos) mem_free(l->pos);
-		if (l->name) mem_free(l->name);
+	for (pos = 0; pos < document->nlinks; pos++) {
+		struct link *link = &document->links[pos];
+
+		if (link->where) mem_free(link->where);
+		if (link->target) mem_free(link->target);
+		if (link->title) mem_free(link->title);
+		if (link->where_img) mem_free(link->where_img);
+		if (link->pos) mem_free(link->pos);
+		if (link->name) mem_free(link->name);
 	}
-	if (scr->links) mem_free(scr->links);
-	for (y = 0; y < scr->y; y++) if (scr->data[y].d) mem_free(scr->data[y].d);
-	if (scr->data) mem_free(scr->data);
-	if (scr->lines1) mem_free(scr->lines1);
-	if (scr->lines2) mem_free(scr->lines2);
-	if (scr->opt.framename) mem_free(scr->opt.framename);
-	foreach (fc, scr->forms) {
+
+	if (document->links) mem_free(document->links);
+
+	if (document->data) {
+		for (pos = 0; pos < document->y; pos++) {
+			if (document->data[pos].d)
+				mem_free(document->data[pos].d);
+		}
+
+		mem_free(document->data);
+	}
+
+	if (document->lines1) mem_free(document->lines1);
+	if (document->lines2) mem_free(document->lines2);
+	if (document->opt.framename) mem_free(document->opt.framename);
+
+	foreach (fc, document->forms) {
 		done_form_control(fc);
 	}
-	free_list(scr->forms);
-	free_list(scr->tags);
-	free_list(scr->nodes);
-	if (scr->search) mem_free(scr->search);
-	if (scr->slines1) mem_free(scr->slines1);
-	if (scr->slines2) mem_free(scr->slines2);
 
-	memcpy(&tmp, (struct document **)scr, sizeof(struct list_head));
-	memset(((struct document **)scr), 0, sizeof(struct document));
-	memcpy((struct document **)scr, &tmp, sizeof(struct list_head));
-}
+	free_list(document->forms);
+	free_list(document->tags);
+	free_list(document->nodes);
 
-void
-destroy_formatted(struct document *scr)
-{
-	assert(scr);
-	if_assert_failed return;
-	assertm(!scr->refcount, "Attempt to free locked formatted data.");
-	if_assert_failed return;
+	if (document->search) mem_free(document->search);
+	if (document->slines1) mem_free(document->slines1);
+	if (document->slines2) mem_free(document->slines2);
 
-	clear_formatted(scr);
-	del_from_list(scr);
-	mem_free(scr);
+	del_from_list(document);
+	mem_free(document);
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.213 2003/08/23 17:54:31 jonas Exp $ */
+/* $Id: renderer.c,v 1.214 2003/08/23 18:01:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1604,7 +1604,7 @@ shrink_format_cache(int u)
 		}
 
 		ce = ce->prev;
-		destroy_formatted(ce->next);
+		done_document(ce->next);
 		format_cache_entries--;
 	}
 }
@@ -1634,7 +1634,7 @@ delete_unused_format_cache_entries(void)
 				assertm(cee, "file %s disappeared from cache",
 					ce->url);
 				ce = ce->prev;
-				destroy_formatted(ce->next);
+				done_document(ce->next);
 				format_cache_entries--;
 			}
 		}
@@ -1688,7 +1688,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 		if (cache_entry->count != document->use_tag) {
 			if (!document->refcount) {
 				document = document->prev;
-				destroy_formatted(document->next);
+				done_document(document->next);
 				format_cache_entries--;
 			}
 			continue;

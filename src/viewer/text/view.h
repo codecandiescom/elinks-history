@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.20 2003/08/23 17:54:32 jonas Exp $ */
+/* $Id: view.h,v 1.21 2003/08/23 18:01:02 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -9,13 +9,13 @@
 #include "terminal/terminal.h"
 
 
+struct document *init_document(unsigned char *uristring, struct document_options *options);
+void done_document(struct document *document);
+
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *), struct session *);
 /* void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *); */
 void send_open_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
 
-void destroy_formatted(struct document *);
-/* void clear_formatted(struct document *); */
-struct document *init_document(unsigned char *uristring, struct document_options *options);
 void detach_formatted(struct document_view *);
 
 /* void draw_doc(struct terminal *, struct document_view *, int); */

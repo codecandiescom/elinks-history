@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.19 2002/10/08 16:56:38 pasky Exp $ */
+/* $Id: listbox.h,v 1.20 2002/11/29 11:17:57 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -39,8 +39,6 @@ struct listbox_item {
 	int marked;
 	int depth;
 
-	/* Text to display */
-	unsigned char *text;
 	/* Run when this item is hilighted */
 	void (*on_hilight)(struct terminal *, struct listbox_data *, struct listbox_item *);
 	/* Run when the user selects on this item. Returns pointer to the
@@ -49,6 +47,9 @@ struct listbox_item {
 	struct list_head *box;
 	void *udata;
 	enum item_free item_free;
+
+	/* Text to display (must be last) */
+	unsigned char *text;
 };
 
 extern struct widget_ops listbox_ops;

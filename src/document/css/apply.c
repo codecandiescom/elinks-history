@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.64 2004/09/20 08:29:15 pasky Exp $ */
+/* $Id: apply.c,v 1.65 2004/09/20 08:36:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,32 +82,34 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 	/* CSS_PT_WHITE_SPACE */	css_apply_font_attribute,
 };
 
+/* This looks for a match in list of selectors. */
 static void
-examine_element(struct css_selector *base, struct html_element *element)
+examine_element(struct css_selector *base, struct list_head *selectors,
+                struct html_element *element)
 {
 	struct css_selector *altsel;
 	unsigned char *code;
 
-	altsel = find_css_base_selector(css, CST_ELEMENT,
-	                                element->name, element->namelen);
+	altsel = find_css_selector(css, selectors, CST_ELEMENT,
+	                           element->name, element->namelen);
 	if (altsel) merge_css_selectors(selector, altsel);
 
 	code = get_attr_val(element->options, "id");
 	if (code) {
-		altsel = find_css_base_selector(css, CST_ID, code, -1);
+		altsel = find_css_selector(css, selectors, CST_ID, code, -1);
 		if (altsel) merge_css_selectors(selector, altsel);
 		mem_free(code);
 	}
 
 	code = get_attr_val(element->options, "class");
 	if (code) {
-		altsel = find_css_base_selector(css, CST_CLASS, code, -1);
+		altsel = find_css_selector(css, selectors, CST_CLASS, code, -1);
 		if (altsel) merge_css_selectors(selector, altsel);
 		mem_free(code);
 	}
 
-	/* TODO: Somehow handle pseudo-classess. The caller will have to
-	 * tell us about those. --pasky */
+	/* TODO: Somehow handle pseudo-classess. The css_apply() caller will
+	 * have to tell us about those. --pasky */
 }
 
 void
@@ -133,7 +135,7 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		mem_free(code);
 	}
 
-	examine_element(selector, element);
+	examine_element(selector, &css->selectors, element);
 
 	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);

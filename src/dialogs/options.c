@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.93 2003/10/26 13:25:40 zas Exp $ */
+/* $Id: options.c,v 1.94 2003/10/26 16:02:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,17 +83,15 @@ terminal_options_ok(void *p)
 {
 	struct termopt_hop *termopt_hop = p;
 	struct terminal *term = termopt_hop->term;
+	int touched = 0;
 
 #define maybe_update(val, name) 					\
 { 									\
-	struct option *o = get_opt_rec(termopt_hop->term->spec, name); 	\
+	struct option *o = get_opt_rec(term->spec, name);	 	\
 	if (o->value.number != val) {					\
 		o->value.number = val;	 				\
 		o->flags |= OPT_TOUCHED; 				\
-		if (term) { 						\
-			term->spec->change_hook(NULL, term->spec, NULL);\
-			term = NULL; 					\
-		} 							\
+		touched++;						\
 	} 								\
 }
 	maybe_update(termopt_hop->type, "type");
@@ -105,6 +103,9 @@ terminal_options_ok(void *p)
 	maybe_update(termopt_hop->utf_8_io, "utf_8_io");
 	maybe_update(termopt_hop->underline, "underline");
 #undef maybe_update
+
+	if (touched)	
+		term->spec->change_hook(NULL, term->spec, NULL);
 
 	cls_redraw_all_terminals();
 }

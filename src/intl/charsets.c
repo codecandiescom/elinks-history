@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.108 2004/11/08 01:28:28 jonas Exp $ */
+/* $Id: charsets.c,v 1.109 2005/02/28 13:24:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,7 @@ add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 			assertm(ct[*p].u.str == no_str, "bad utf encoding #1");
 			if_assert_failed return;
 
-			nct = mem_calloc(256, sizeof(struct conv_table));
+			nct = mem_calloc(256, sizeof(*nct));
 			if (!nct) return;
 			new_translation_table(nct);
 			ct[*p].t = 1;
@@ -272,7 +272,7 @@ get_translation_table_to_utf_8(int from)
 	from &= ~SYSTEM_CHARSET_FLAG;
 	if (from == lfr) return utf_table;
 	if (utf_table_init)
-		memset(utf_table, 0, sizeof(struct conv_table) * 256),
+		memset(utf_table, 0, sizeof(utf_table)),
 		utf_table_init = 0;
 	else
 		free_utf_table();
@@ -312,7 +312,7 @@ free_conv_table(void)
 {
 	if (!utf_table_init) free_utf_table();
 	if (first) {
-		memset(table, 0, sizeof(struct conv_table) * 256);
+		memset(table, 0, sizeof(table));
 		first = 0;
 	}
 	new_translation_table(table);
@@ -328,7 +328,7 @@ get_translation_table(int from, int to)
 	from &= ~SYSTEM_CHARSET_FLAG;
 	to &= ~SYSTEM_CHARSET_FLAG;
 	if (first) {
-		memset(table, 0, sizeof(struct conv_table) * 256);
+		memset(table, 0, sizeof(table));
 		first = 0;
 	}
 	if (/*from == to ||*/ from == -1 || to == -1)
@@ -536,7 +536,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 		struct string key = INIT_STRING((unsigned char *) str, strlen);
 		struct entity *element = bsearch((void *) &key, entities,
 						 N_ENTITIES,
-						 sizeof(struct entity),
+						 sizeof(*element),
 						 compare_entities);
 
 		if (element) result = u2cp(element->c, encoding);
@@ -567,7 +567,7 @@ end:
 		/* Sort entries by hit order. */
 		if (nb_entity_cache[slen] > 1)
 			qsort(&entity_cache[slen][0], nb_entity_cache[slen],
-			      sizeof(struct entity_cache), (void *) hits_cmp);
+			      sizeof(entity_cache[slen][0]), (void *) hits_cmp);
 
 #ifdef DEBUG_ENTITY_CACHE
 	{

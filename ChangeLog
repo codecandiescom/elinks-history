@@ -1,3 +1,18 @@
+Tue Jul  6 11:05:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,
+	bookmarks/dialogs.c, cache/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, formhist/dialogs.c, globhist/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	Ditch listbox_info enum and add get_text() op. Idea by Miciah.  
+
+Tue Jul  6 10:25:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	s/c_server/cookie_server/.  
+
 Mon Jul  5 11:56:43 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in, src/util/string.h:

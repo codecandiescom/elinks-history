@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.148 2004/01/08 14:56:35 zas Exp $ */
+/* $Id: dialogs.c,v 1.149 2004/01/08 15:25:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,6 +49,7 @@ static void
 toggle_success_msgbox(void *dummy)
 {
 	get_opt_bool("ui.success_msgbox") = !get_opt_bool("ui.success_msgbox");
+	get_opt_rec(config_options, "ui.success_msgbox")->flags |= OPT_TOUCHED;
 }
 
 void
@@ -59,6 +60,8 @@ write_config_success(struct terminal *term, struct memory_list *ml,
 		freeml(ml);
 		return;
 	}
+
+	if (!term) return;
 
 	msg_box(term, ml, MSGBOX_FREE_TEXT,
 		N_("Write config success"), AL_CENTER,

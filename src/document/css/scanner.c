@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.11 2004/01/18 22:38:05 jonas Exp $ */
+/* $Id: scanner.c,v 1.12 2004/01/18 22:48:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,7 @@
 
 
 /* Define if you want a talking scanner */
- #define CSS_SCANNER_DEBUG 
+/* #define CSS_SCANNER_DEBUG */
 
 #define	SCAN_TABLE_SIZE	256
 
@@ -63,9 +63,14 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			    ? CSS_TOKEN_PERCENTAGE : CSS_TOKEN_DIGIT;
 
 	} else if (first_char == '#') {
-		token->type = CSS_TOKEN_HEX_COLOR;
+		int hexdigits;
+
 		scan_css(string, CSS_CHAR_HEX_DIGIT);
-		/* FIXME: Check that it is either 3 or 6 chars */
+
+		/* Check that the hexdigit sequence is either 3 or 6 chars */
+		hexdigits = string - token->string - 1;
+		token->type = (hexdigits == 3 || hexdigits == 6)
+			    ? CSS_TOKEN_HEX_COLOR : CSS_TOKEN_GARBAGE;
 
 	} else if (first_char == '"' || first_char == '\'') {
 		unsigned char *string_end = strchr(string, first_char);

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.19 2004/01/26 08:11:14 jonas Exp $ */
+/* $Id: exmode.c,v 1.20 2004/01/26 08:14:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,9 +214,12 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 					break;
 
 				case ACT_EDIT_BACKSPACE:
-					if (!*data->buffer)
-						cancel_dialog(dlg_data, NULL);
+					if (*data->buffer)
+						return EVENT_NOT_PROCESSED;
+
+					cancel_dialog(dlg_data, NULL);
 					break;
+
 				default:
 					return EVENT_NOT_PROCESSED;
 			}

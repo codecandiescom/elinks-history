@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.7 2003/11/17 18:23:31 pasky Exp $ */
+/* $Id: dialogs.c,v 1.8 2003/11/17 18:25:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,13 @@ push_info_button(struct dialog_data *dlg_data,
 		add_format_to_string(&msg, "\n%s: %s", _("Encoding", term),
 						ce->encoding_info);
 	}
+
+	add_to_string(&msg, _("Flags", term));
+	add_to_string(&msg, ": ");
+	if (ce->incomplete) add_to_string(&msg, _("incomplete", term));
+	add_char_to_string(&msg, ' ');
+	if (!ce->valid) add_to_string(&msg, _("invalid", term));
+	add_char_to_string(&msg, '\n');
 	
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.76 2003/09/15 20:50:41 jonas Exp $ */
+/* $Id: options.c,v 1.77 2003/09/27 14:03:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,14 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 
 struct termopt_hop {
 	struct terminal *term;
-	int type, m11_hack, restrict_852, block_cursor, colors, utf_8_io, trans, underline;
+	int type;
+	int m11_hack;
+	int restrict_852;
+	int block_cursor;
+	int colors;
+	int utf_8_io;
+	int trans;
+	int underline;
 };
 
 static void
@@ -76,17 +83,17 @@ terminal_options_ok(void *p)
 	struct termopt_hop *termopt_hop = p;
 	struct terminal *term = termopt_hop->term;
 
-#define maybe_update(val, name) \
-{ \
-	struct option *o = get_opt_rec(termopt_hop->term->spec, name); \
-	if (*((int *) o->ptr) != val) { \
-		*((int *) o->ptr) = val; \
-		o->flags |= OPT_TOUCHED; \
-		if (term) { \
-			term->spec->change_hook(NULL, term->spec, NULL); \
-			term = NULL; \
-		} \
-	} \
+#define maybe_update(val, name) 					\
+{ 									\
+	struct option *o = get_opt_rec(termopt_hop->term->spec, name); 	\
+	if (*((int *) o->ptr) != val) { 				\
+		*((int *) o->ptr) = val; 				\
+		o->flags |= OPT_TOUCHED; 				\
+		if (term) { 						\
+			term->spec->change_hook(NULL, term->spec, NULL);\
+			term = NULL; 					\
+		} 							\
+	} 								\
 }
 	maybe_update(termopt_hop->type, "type");
 	maybe_update(termopt_hop->m11_hack, "m11_hack");
@@ -103,7 +110,7 @@ terminal_options_ok(void *p)
 
 static int
 terminal_options_save(struct dialog_data *dlg,
-		struct widget_data *some_useless_info_button)
+		      struct widget_data *some_useless_info_button)
 {
 	update_dialog_data(dlg, some_useless_info_button);
 	terminal_options_ok(dlg->dlg->udata);
@@ -145,11 +152,11 @@ terminal_options_fn(struct dialog_data *dlg)
 
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, 1, dlg->items, dlg->n - 3, 0, &y, w,
-			&rw, td_labels);
+			      &rw, td_labels);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 3, 3, 0, &y, w,
-			&rw, AL_CENTER);
+			   &rw, AL_CENTER);
 
 	w = rw;
 	dlg->xw = rw + 2 * DIALOG_LB;
@@ -160,13 +167,13 @@ terminal_options_fn(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB + 1;
 	dlg_format_checkboxes(term, term, 1, dlg->items, dlg->n - 3,
-			dlg->x + DIALOG_LB, &y, w, NULL,
-			td_labels);
+			      dlg->x + DIALOG_LB, &y, w, NULL,
+			      td_labels);
 
 	y++;
 	dlg_format_buttons(term, term, dlg->items + dlg->n - 3, 3,
-			dlg->x + DIALOG_LB, &y, w, &rw,
-			AL_CENTER);
+			   dlg->x + DIALOG_LB, &y, w, &rw,
+			   AL_CENTER);
 }
 
 #define set_term_opt_checkbox(dlg, pos, groupid, groupnum, dataz)	\

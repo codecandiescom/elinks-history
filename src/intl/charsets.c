@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.81 2004/04/22 19:50:34 pasky Exp $ */
+/* $Id: charsets.c,v 1.82 2004/05/04 00:55:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,8 @@ struct codepage_desc {
 #include "codepage.inc"
 #include "uni_7b.inc"
 #include "entity.inc"
+
+#define CODEPAGES (sizeof(codepages) / sizeof(codepages[0]))
 
 char *strings[256] = {
 	"\000", "\001", "\002", "\003", "\004", "\005", "\006", "\007",
@@ -750,7 +752,7 @@ charsets_list_next(void)
 	if (!codepages[i_name].name) return NULL;
 
 	kv.key = codepages[i_name].aliases[i_alias];
-	kv.data = (void *) (i_name + 1); /* int -> void * conversion. */
+	kv.data = &codepages[i_name];
 
 	if (codepages[i_name].aliases[i_alias + 1])
 		i_alias++;
@@ -767,7 +769,7 @@ charsets_list_next(void)
 int
 get_cp_index(unsigned char *name)
 {
-	void *found;
+	struct codepage_desc *codepage;
 	int syscp = 0;
 
 	if (!strcasecmp(name, "System")) {
@@ -779,11 +781,10 @@ get_cp_index(unsigned char *name)
 #endif
 	}
 
-	/* We assume sizeof(void *) == sizeof(unsigned int), it may cause
-	 * issue on 64bits platforms... How can we do better ? --Zas */
-	found = fastfind_search(name, strlen(name), ff_info_charsets);
-	if (found) {
-		return ((unsigned int) found) - 1;
+	codepage = fastfind_search(name, strlen(name), ff_info_charsets);
+	if (codepage) {
+		assert(codepages <= codepage && codepage < codepages + CODEPAGES);
+		return codepage - codepages;
 
 	} else if (syscp) {
 		return get_cp_index("us-ascii");

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.453 2004/06/13 21:37:09 zas Exp $ */
+/* $Id: view.c,v 1.454 2004/06/13 21:49:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,7 +476,7 @@ scroll(struct session *ses, struct document_view *doc_view, int steps)
 		find_link(doc_view, steps < 0 ? -1 : 1, 0);
 }
 
-void
+static void
 scroll_up(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	int steps;
@@ -489,7 +489,7 @@ scroll_up(struct session *ses, struct document_view *doc_view, int xxxx)
 	scroll(ses, doc_view, -steps);
 }
 
-void
+static void
 scroll_down(struct session *ses, struct document_view *doc_view, int xxxx)
 {
 	int steps;
@@ -501,6 +501,20 @@ scroll_down(struct session *ses, struct document_view *doc_view, int xxxx)
 
 	scroll(ses, doc_view, steps);
 }
+
+#ifdef CONFIG_MOUSE
+static void
+scroll_mouse_up(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	scroll(ses, doc_view, -2);
+}
+
+static void
+scroll_mouse_down(struct session *ses, struct document_view *doc_view, int xxxx)
+{
+	scroll(ses, doc_view, 2);
+}
+#endif /* CONFIG_MOUSE */
 
 static void
 hscroll(struct session *ses, struct document_view *doc_view, int a)
@@ -781,9 +795,9 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (!check_mouse_action(ev, B_DOWN)) {
 				/* We handle only B_DOWN case... */
 			} else if (check_mouse_button(ev, B_WHEEL_UP)) {
-				rep_ev(ses, doc_view, scroll, -2);
+				rep_ev(ses, doc_view, scroll_mouse_up, 0);
 			} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
-				rep_ev(ses, doc_view, scroll, 2);
+				rep_ev(ses, doc_view, scroll_mouse_down, 0);
 			}
 
 		} else if (link) {
@@ -812,10 +826,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			 * repeatcount-free here. */
 
 			if (ev->y < scrollmargin) {
-				rep_ev(ses, doc_view, scroll, -2);
+				rep_ev(ses, doc_view, scroll_mouse_up, 0);
 			}
 			if (ev->y >= doc_view->box.height - scrollmargin) {
-				rep_ev(ses, doc_view, scroll, 2);
+				rep_ev(ses, doc_view, scroll_mouse_down, 0);
 			}
 
 			if (ev->x < scrollmargin * 2) {

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.132 2003/06/21 11:52:17 pasky Exp $ */
+/* $Id: http.c,v 1.133 2003/06/21 11:54:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -861,30 +861,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 			/* Flush uncompression first. */
 			info->length = 0;
 		} else {
-
-thats_all_folks:
-			/* There's no content but an error so just print
-			 * that instead of nothing. */
-			if (!conn->from && info->error_code) {
-				unsigned char errs[] = "xxx";
-				unsigned char *str;
-
-				ulongcat(errs, NULL, info->error_code, 3, '0');
-
-				str = straconcat("<HTML><HEAD><TITLE>HTTP ERROR ", errs,
-						 "</TITLE></HEAD><BODY>HTTP ERROR ", errs,
-						 "</BODY></HTML>", NULL);
-				if (str) {
-					int strl = strlen(str);
-
-					add_fragment(conn->cache, conn->from, str, strl);
-					conn->from += strl;
-					mem_free(str);
-				}
-			}
-
-			http_end_request(conn, S_OK);
-			return;
+			goto thats_all_folks;
 		}
 	}
 
@@ -1029,6 +1006,31 @@ next_chunk:
 read_more:
 	read_from_socket(conn, conn->sock1, rb, read_http_data);
 	setcstate(conn, S_TRANS);
+	return;
+
+thats_all_folks:
+	/* There's no content but an error so just print
+	 * that instead of nothing. */
+	if (!conn->from && info->error_code) {
+		unsigned char errs[] = "xxx";
+		unsigned char *str;
+
+		ulongcat(errs, NULL, info->error_code, 3, '0');
+
+		str = straconcat("<HTML><HEAD><TITLE>HTTP ERROR ", errs,
+				 "</TITLE></HEAD><BODY>HTTP ERROR ", errs,
+				 "</BODY></HTML>", NULL);
+		if (str) {
+			int strl = strlen(str);
+
+			add_fragment(conn->cache, conn->from, str, strl);
+			conn->from += strl;
+			mem_free(str);
+		}
+	}
+
+	http_end_request(conn, S_OK);
+	return;
 }
 
 /* Returns offset of the header end, zero if more data is needed, -1 when

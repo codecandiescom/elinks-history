@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.22 2003/08/23 18:14:00 jonas Exp $ */
+/* $Id: view.h,v 1.23 2003/08/23 18:15:24 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -28,6 +28,8 @@ void draw_formatted(struct session *);
 
 void set_frame(struct session *, struct document_view *, int);
 struct document_view *current_frame(struct session *);
+
+void down(struct session *ses, struct document_view *fd, int a);
 
 /* Used for changing between formatted and source (plain) view. */
 void toggle(struct session *, struct document_view *, int);
@@ -63,8 +65,6 @@ open_in_new_window(struct terminal *term,
 		   struct session *ses);
 
 /* TODO Move to users files. */
-void down(struct session *ses, struct document_view *fd, int a);
-inline void decrement_fc_refcount(struct document *f);
 void menu_save_formatted(struct terminal *, void *, struct session *);
 void do_for_frame(struct session *, void (*)(struct session *, struct document_view *, int), int);
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.188 2003/08/23 18:11:19 jonas Exp $ */
+/* $Id: view.c,v 1.189 2003/08/23 18:15:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,6 +96,7 @@ free_frameset_desc(struct frameset_desc *fd)
 		if (fd->f[i].name) mem_free(fd->f[i].name);
 		if (fd->f[i].url) mem_free(fd->f[i].url);
 	}
+
 	mem_free(fd);
 }
 
@@ -552,18 +553,6 @@ x_end(struct session *ses, struct document_view *f, int a)
 	int_lower_bound(&f->vs->view_pos, 0);
 	find_link(f, -1, 0);
 }
-
-inline void
-decrement_fc_refcount(struct document *f)
-{
-	assert(f);
-	if_assert_failed return;
-
-	if (!--f->refcount) format_cache_entries++;
-	assertm(f->refcount >= 0, "reference count underflow");
-	if_assert_failed f->refcount = 0;
-}
-
 
 void
 set_frame(struct session *ses, struct document_view *f, int a)

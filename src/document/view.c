@@ -1,5 +1,5 @@
 /* Document view */
-/* $Id: view.c,v 1.121 2003/10/31 17:11:18 jonas Exp $ */
+/* $Id: view.c,v 1.122 2003/10/31 17:32:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,6 +252,8 @@ render_document(struct document *document, struct cache_entry *cache_entry)
 
 	for (i = 0; i < document->height; i++)
 		document->width = int_max(document->width, document->data[i].l);
+
+	if (document->links) sort_links(document);
 }
 
 void

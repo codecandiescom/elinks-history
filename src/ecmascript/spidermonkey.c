@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.128 2004/12/19 12:17:30 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.129 2004/12/19 13:09:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -882,6 +882,185 @@ get_input_object(JSContext *ctx, JSObject *jsform, struct form_state *fs)
 }
 
 
+static JSObject *
+get_form_control_object(JSContext *ctx, JSObject *jsform, enum form_type type, struct form_state *fs)
+{
+	switch (type) {
+		case FC_TEXT:
+		case FC_PASSWORD:
+		case FC_FILE:
+		case FC_CHECKBOX:
+		case FC_RADIO:
+		case FC_SUBMIT:
+		case FC_IMAGE:
+		case FC_RESET:
+		case FC_BUTTON:
+		case FC_HIDDEN:
+			return get_input_object(ctx, jsform, fs);
+
+		case FC_TEXTAREA:
+		case FC_SELECT:
+			/* TODO */
+			return NULL;
+
+		default:
+			INTERNAL("Weird fc->type %d", type);
+			return NULL;
+	}
+}
+
+
+
+static JSBool form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass form_elements_class = {
+	"elements",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	form_elements_get_property, JS_PropertyStub,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+static JSBool form_elements_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+static JSBool form_elements_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+
+static const JSFunctionSpec form_elements_funcs[] = {
+	{ "item",		form_elements_item,		1 },
+	{ "namedItem",		form_elements_namedItem,	1 },
+	{ NULL }
+};
+
+/* INTs from 0 up are equivalent to item(INT), so we have to stuff length out
+ * of the way. */
+enum form_elements_prop { JSP_FORM_ELEMENTS_LENGTH = -1 };
+static const JSPropertySpec form_elements_props[] = {
+	{ "length",	JSP_FORM_ELEMENTS_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY},
+	{ NULL }
+};
+
+static JSBool
+form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_view *form_view = JS_GetPrivate(ctx, parent_form);
+	struct form *form = find_form_by_form_view(document, form_view);
+	VALUE_TO_JSVAL_START;
+
+	if (JSVAL_IS_STRING(id)) {
+		form_elements_namedItem(ctx, obj, 1, &id, vp);
+		goto bye;
+	} else if (!JSVAL_IS_INT(id))
+		goto bye;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_FORM_ELEMENTS_LENGTH:
+	{
+		struct form_control *fc;
+		int counter = 0;
+
+		foreach (fc, form->items)
+			counter++;
+
+		P_INT(counter);
+		break;
+	}
+	default:
+		/* Array index. */
+		form_elements_item(ctx, obj, 1, &id, vp);
+		goto bye;
+	}
+
+	VALUE_TO_JSVAL_END(vp);
+}
+
+static JSBool
+form_elements_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_view *form_view = JS_GetPrivate(ctx, parent_form);
+	struct form *form = find_form_by_form_view(document, form_view);
+	struct form_control *fc;
+	union jsval_union v;
+	int counter = -1;
+	int index;
+	VALUE_TO_JSVAL_START;
+
+	if (argc != 1)
+		goto bye;
+
+	JSVAL_REQUIRE(&argv[0], STRING);
+	index = atol(v.string);
+
+	foreach (fc, form->items) {
+		counter++;
+		if (counter == index) {
+			JSObject *fcobj = get_form_control_object(ctx, parent_form, fc->type, find_form_state(doc_view, fc));
+
+			if (fcobj) {
+				P_OBJECT(fcobj);
+			} else {
+				P_UNDEF();
+			}
+
+			VALUE_TO_JSVAL_END(rval);
+			/* This returns. */
+		}
+	}
+
+	goto bye;
+}
+
+static JSBool
+form_elements_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	JSObject *parent_form = JS_GetParent(ctx, obj);
+	JSObject *parent_doc = JS_GetParent(ctx, parent_form);
+	JSObject *parent_win = JS_GetParent(ctx, parent_doc);
+	struct view_state *vs = JS_GetPrivate(ctx, parent_win);
+	struct document_view *doc_view = vs->doc_view;
+	struct document *document = doc_view->document;
+	struct form_view *form_view = JS_GetPrivate(ctx, parent_form);
+	struct form *form = find_form_by_form_view(document, form_view);
+	struct form_control *fc;
+	union jsval_union v;
+	VALUE_TO_JSVAL_START;
+
+	if (argc != 1)
+		goto bye;
+
+	JSVAL_REQUIRE(&argv[0], STRING);
+	if (!v.string || !*v.string)
+		goto bye;
+
+	foreach (fc, form->items) {
+		if (fc->name && !strcasecmp(v.string, fc->name)) {
+			JSObject *fcobj = get_form_control_object(ctx, parent_form, fc->type, find_form_state(doc_view, fc));
+
+			if (fcobj) {
+				P_OBJECT(fcobj);
+			} else {
+				P_UNDEF();
+			}
+
+			VALUE_TO_JSVAL_END(rval);
+			/* This returns. */
+		}
+	}
+
+	goto bye;
+}
+
+
 
 static JSBool form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -896,6 +1075,7 @@ static const JSClass form_class = {
 
 enum form_prop {
 	JSP_FORM_ACTION,
+	JSP_FORM_ELEMENTS,
 	JSP_FORM_ENCODING,
 	JSP_FORM_LENGTH,
 	JSP_FORM_METHOD,
@@ -905,6 +1085,7 @@ enum form_prop {
 
 static const JSPropertySpec form_props[] = {
 	{ "action",	JSP_FORM_ACTION,	JSPROP_ENUMERATE },
+	{ "elements",	JSP_FORM_ELEMENTS,	JSPROP_ENUMERATE },
 	{ "encoding",	JSP_FORM_ENCODING,	JSPROP_ENUMERATE },
 	{ "length",	JSP_FORM_LENGTH,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "method",	JSP_FORM_METHOD,	JSPROP_ENUMERATE },
@@ -947,32 +1128,12 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			if (!fc->name || strcasecmp(v.string, fc->name))
 				continue;
 
-			switch (fc->type) {
-				case FC_TEXT:
-				case FC_PASSWORD:
-				case FC_FILE:
-				case FC_CHECKBOX:
-				case FC_RADIO:
-				case FC_SUBMIT:
-				case FC_IMAGE:
-				case FC_RESET:
-				case FC_BUTTON:
-				case FC_HIDDEN:
-					fcobj = get_input_object(ctx, obj, find_form_state(doc_view, fc));
-					break;
-
-				case FC_TEXTAREA:
-				case FC_SELECT:
-					/* TODO */
-					P_UNDEF();
-					goto bye;
-
-				default:
-					INTERNAL("Weird fc->type %d", fc->type);
-					goto bye;
+			fcobj = get_form_control_object(ctx, obj, fc->type, find_form_state(doc_view, fc));
+			if (fcobj) {
+				P_OBJECT(fcobj);
+			} else {
+				P_UNDEF();
 			}
-
-			P_OBJECT(fcobj);
 			goto convert;
 		}
 		goto bye;
@@ -982,6 +1143,19 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ACTION:
 		P_STRING(form->action);
+		break;
+
+	case JSP_FORM_ELEMENTS:
+	{
+		/* jsform ('form') is form_elements' parent; who knows is that's correct */
+		JSObject *jsform_elems = JS_NewObject(ctx, (JSClass *) &form_elements_class, NULL, obj);
+
+		JS_DefineProperties(ctx, jsform_elems, (JSPropertySpec *) form_elements_props);
+		JS_DefineFunctions(ctx, jsform_elems, (JSFunctionSpec *) form_elements_funcs);
+		P_OBJECT(jsform_elems);
+		/* SM will cache this property value for us so we create this
+		 * just once per form. */
+	}
 		break;
 
 	case JSP_FORM_ENCODING:
@@ -1222,7 +1396,6 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		goto bye;
 	}
 
-convert:
 	VALUE_TO_JSVAL_END(vp);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.69 2004/08/02 22:13:24 jonas Exp $ */
+/* $Id: connection.h,v 1.70 2004/08/03 08:24:57 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -177,7 +177,7 @@ struct connection {
 	unsigned int running:1;
 	unsigned int unrestartable:1;
 	unsigned int detached:1;
-	unsigned int no_tsl:1;
+	unsigned int no_tls:1;
 
 	/* Each document is downloaded with some priority. When downloading a
 	 * document, the existing connections are checked to see if a

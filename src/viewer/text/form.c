@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.192 2004/06/16 17:21:15 jonas Exp $ */
+/* $Id: form.c,v 1.193 2004/06/16 18:44:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1344,6 +1344,16 @@ get_form_label(struct form_control *fc)
 	return NULL;
 }
 
+static inline void
+add_form_attr_to_string(struct string *string, struct terminal *term,
+			unsigned char *name, unsigned char *value)
+{
+		add_to_string(string, ", ");
+		add_to_string(string, _(name, term));
+		add_char_to_string(string, ' ');
+		add_to_string(string, value);
+}
+
 unsigned char *
 get_form_info(struct session *ses, struct document_view *doc_view)
 {
@@ -1364,10 +1374,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	add_to_string(&str, _(label, term));
 
 	if (link->type != LINK_BUTTON && fc->name && fc->name[0]) {
-		add_to_string(&str, ", ");
-		add_to_string(&str, _("name", term));
-		add_char_to_string(&str, ' ');
-		add_to_string(&str, fc->name);
+		add_form_attr_to_string(&str, term, N_("name"), fc->name);
 	}
 
 	switch (fc->type) {
@@ -1376,10 +1383,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		if (!fc->default_value || !fc->default_value[0])
 			break;
 
-		add_to_string(&str, ", ");
-		add_to_string(&str, _("value", term));
-		add_char_to_string(&str, ' ');
-		add_to_string(&str, fc->default_value);
+		add_form_attr_to_string(&str, term, N_("value"), fc->default_value);
 		break;
 
 	case FC_TEXT:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.251 2004/04/04 03:46:27 jonas Exp $ */
+/* $Id: download.c,v 1.252 2004/04/04 03:51:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -751,10 +751,10 @@ start_download(void *ses_, unsigned char *file)
 {
 	struct session *ses = ses_;
 
-        if (ses->download_uri->protocol == PROTOCOL_UNKNOWN) {
-                print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
-                return;
-        }
+	if (ses->download_uri->protocol == PROTOCOL_UNKNOWN) {
+		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
+		return;
+	}
 
 	common_download(ses, file, 0);
 }

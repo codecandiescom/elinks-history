@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.4 2002/03/18 06:33:13 pasky Exp $ */
+/* $Id: renderer.h,v 1.5 2002/03/18 10:55:37 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -6,8 +6,8 @@
 #include <links.h> /* list_head */
 #include <document/html/colors.h>
 #include <intl/charsets.h>
-#include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
+#include <lowlevel/ttime.h>
 /* We need this included later, otherwise it will miss some our
  * declarations. */
 /* #include "html.h" */

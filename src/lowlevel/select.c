@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
+/* $Id: select.c,v 1.4 2002/03/18 10:55:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include <document/cache.h>
 #include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
+#include <lowlevel/ttime.h>
 #include <util/error.h>
 
 
@@ -77,13 +78,6 @@ struct timer {
 };
 
 struct list_head timers = {&timers, &timers};
-
-ttime get_time()
-{
-	struct timeval tv;
-	gettimeofday(&tv, NULL);
-	return tv.tv_sec * 1000 + tv.tv_usec / 1000;
-}
 
 long select_info(int type)
 {

@@ -1,11 +1,11 @@
-/* $Id: sched.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: sched.h,v 1.3 2002/03/18 10:55:38 pasky Exp $ */
 
 #ifndef EL__SCHED_H
 #define EL__SCHED_H
 
 #include <links.h> /* tcount, list_head */
 #include <document/cache.h>
-#include <lowlevel/select.h>
+#include <lowlevel/ttime.h>
 #include <util/error.h>
 
 #define PRI_MAIN	0

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2002/03/17 18:15:09 pasky Exp $
+## $Id: Makefile.am,v 1.8 2002/03/18 10:55:38 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..
@@ -19,5 +19,7 @@ liblowlevel_a_SOURCES = \
  select.c \
  select.h \
  terminal.c \
- terminal.h
+ terminal.h \
+ ttime.c \
+ ttime.h
 

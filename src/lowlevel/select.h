@@ -1,9 +1,9 @@
-/* $Id: select.h,v 1.1 2002/03/17 11:29:11 pasky Exp $ */
+/* $Id: select.h,v 1.2 2002/03/18 10:55:38 pasky Exp $ */
 
 #ifndef EL__SELECT_H
 #define EL__SELECT_H
 
-typedef long ttime;
+#include <lowlevel/ttime.h>
 
 extern int terminate;
 
@@ -13,7 +13,6 @@ int register_bottom_half(void (*)(void *), void *);
 void check_bottom_halves();
 int install_timer(ttime, void (*)(void *), void *);
 void kill_timer(int);
-ttime get_time();
 
 #define H_READ	0
 #define H_WRITE	1

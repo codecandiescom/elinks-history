@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.353 2004/11/14 11:21:48 witekfl Exp $ */
+/* $Id: http.c,v 1.354 2004/11/14 13:43:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1283,17 +1283,15 @@ again:
 				}
 			}
 #ifdef CONFIG_SSL
-				else {
-				if (!strncasecmp(d, "Digest", 6)) {
-					unsigned char *realm = get_header_param(d, "realm");
-					unsigned char *nonce = get_header_param(d, "nonce");
-					unsigned char *opaque = get_header_param(d, "opaque");
+			else if (!strncasecmp(d, "Digest", 6)) {
+				unsigned char *realm = get_header_param(d, "realm");
+				unsigned char *nonce = get_header_param(d, "nonce");
+				unsigned char *opaque = get_header_param(d, "opaque");
 
-					add_auth_entry(uri, realm, nonce, opaque, 1);
-					mem_free_if(realm);
-					mem_free_if(nonce);
-					mem_free_if(opaque);
-				}
+				add_auth_entry(uri, realm, nonce, opaque, 1);
+				mem_free_if(realm);
+				mem_free_if(nonce);
+				mem_free_if(opaque);
 			}
 #endif
 			mem_free(d);

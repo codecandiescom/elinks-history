@@ -971,7 +971,7 @@ void html_li(unsigned char *a)
 		char n[32];
 		int t = par_format.flags & P_LISTMASK;
 		int s = get_num(a, "value");
-		if (s != -1) par_fomat.list_number = s;
+		if (s != -1) par_format.list_number = s;
 		if ((t != P_roman && t != P_ROMAN && par_format.list_number < 10) || t == P_alpha || t == P_ALPHA) put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
 		if (t == P_ALPHA || t == P_alpha) {
 			n[0] = par_format.list_number ? (par_format.list_number - 1) % 26 + (t == P_ALPHA ? 'A' : 'a') : 0;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.123 2003/06/09 10:47:02 zas Exp $ */
+/* $Id: parser.c,v 1.124 2003/06/09 21:41:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,10 +177,7 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
-	if (!*e || !ATTR_CHAR(*e) || TAG_DELIM(e)) {
-		if (TAG_END_XML(e)) e++;
-		return NULL;
-	}
+	if (!*e || !ATTR_CHAR(*e) || TAG_DELIM(e)) goto end;
 
 	/* Does it match ? */
 	n = name;
@@ -189,27 +186,50 @@ nextattr:
 	while (ATTR_CHAR(*e)) found = 0, e++;
 
 	while (WHITECHAR(*e)) e++;
-	if (*e != '=') goto endattr;
+	if (*e != '=') {
+		if (found) goto found_endattr;
+		goto nextattr;
+	}
 	e++;
 	while (WHITECHAR(*e)) e++;
 
-	/* Parse value part. */
+	if (found) goto found_parse_value;
+
+	/* Attribute not found, we still parse until next one. */
+	/* Code duplication here improves performance a lot. --Zas */
+	if (!IS_QUOTE(*e)) {
+		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) e++;
+	} else {
+		unsigned char quote = *e;
+
+		while (*e == quote) {
+			e++;
+			while (*e != quote) {
+				if (!*e) goto end;
+				e++;
+			}
+			e++;
+		}
+	}
+
+	goto nextattr;
+
+	/* Attribute was found, so we parse its value. */
+found_parse_value:
 	if (!IS_QUOTE(*e)) {
 		while (!WHITECHAR(*e) && !(TAG_DELIM(e))) {
-			if (found) add_chr(attr, attrlen, *e);
+			add_chr(attr, attrlen, *e);
 			e++;
 		}
 	} else {
 		unsigned char quote = *e;
 
-quoted_value:
+found_parse_quoted_value:
 		e++;
 		while (*e != quote) {
-			if (!*e) {
-				if (attr) mem_free(attr);
-				return NULL;
-			}
-			if (found && *e != ASCII_CR) {
+			if (!*e) goto end;
+
+			if (*e != ASCII_CR) {
 				if (*e != ASCII_TAB && *e != ASCII_LF)
 					add_chr(attr, attrlen, *e);
 				else if (!get_attr_val_eat_nl)
@@ -219,29 +239,29 @@ quoted_value:
 		}
 		e++;
 		if (*e == quote) {
-			if (found) add_chr(attr, attrlen, *e);
-			goto quoted_value;
+			add_chr(attr, attrlen, *e);
+			goto found_parse_quoted_value;
 		}
 	}
 
-endattr:
-	if (found) {
-		add_chr(attr, attrlen, '\0');
+found_endattr:
+	add_chr(attr, attrlen, '\0');
 
-		/* Convert entities if needed. */
-		if (strchr(attr, '&')) {
-			unsigned char *saved_attr = attr;
+	/* Convert entities if needed. */
+	if (strchr(attr, '&')) {
+		unsigned char *saved_attr = attr;
 
-			attr = convert_string(NULL, attr, attrlen);
-			mem_free(saved_attr);
-		}
-
-		set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
-
-		return attr;
+		attr = convert_string(NULL, attr, attrlen);
+		mem_free(saved_attr);
 	}
 
-	goto nextattr;
+	set_mem_comment(trim_chars(attr, ' ', NULL), name, strlen(name));
+
+	return attr;
+
+end:
+	if (attr) mem_free(attr);
+	return NULL;
 }
 
 #undef add_chr
@@ -708,7 +728,7 @@ html_fixed(unsigned char *a)
 static inline void
 html_subscript(unsigned char *a)
 {
-       format.attr |= AT_SUBSCRIPT;
+     format.attr |= AT_SUBSCRIPT;
 }
 
 static inline void

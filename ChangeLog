@@ -1,3 +1,207 @@
+Wed Nov 12 21:17:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Wed Nov 12 17:35:39 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Wed Nov 12 17:28:27 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Wed Nov 12 16:52:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c:
+
+	Make Info -> Keys show the current keybindings. Fixes bug 25.  
+
+Wed Nov 12 15:52:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: protocol.c, uri.c, uri.h:
+
+	get_protocol_end() was introduced, it returns a pointer to end of
+	protocol scheme.  
+
+Wed Nov 12 15:52:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Only set hX align if no alignment is set. Fixes bug 9.  
+
+Wed Nov 12 15:14:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Fix potential leak and improve error handling.  
+
+Wed Nov 12 13:18:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Fix tab expansion by maintaining the number of expanded chars.  
+
+Wed Nov 12 09:53:05 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/auth.c:
+
+	A debug compile-time option was added to http auth code.  
+
+Wed Nov 12 09:19:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, terminal/screen.c:
+
+	Trailing spaces fix.  
+
+Wed Nov 12 09:17:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	An assertion failure introduced by Miciah was fixed. Miciah please
+	review that change ;) 
+
+Wed Nov 12 08:42:35 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/document.c:
+
+	In the Info box (opened by '=' or View->Document info), display any
+	available information from global history about the selected link.
+	This fixes bug 118.  
+
+Wed Nov 12 07:46:12 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/renderer.c:
+
+	In process_link(), if link_state is LINK_STATE_SAME, catenate the
+	new text to the old link's name. This fixes bug 92.  
+
+Wed Nov 12 06:03:16 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: sched/download.c, sched/history.c, sched/session.c,
+	sched/session.h, document/html/frames.c:
+
+	Partial fix for bug 12. Rendering of plaintext documents in existing
+	frames is good now. The rest of the fix be later, but in this year.  
+	I don't like wait too long for the response! 
+
+Wed Nov 12 05:17:40 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Wed Nov 12 01:44:29 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/protocol.c:
+
+	Remove a stray semicolon.  
+
+Wed Nov 12 01:42:51 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/protocol.c:
+
+	Fix logic errors in revision 1.24 of src/protocol/protocol.c that
+	prevented the revision from making any effective difference.  
+
+Wed Nov 12 01:29:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/session.c:
+
+	Pass int options to signal whether to set referrer or not. No
+	referrer for goto_url() (goto dialog, globhist, bookmarks) calls.
+	Had to change document refresh to use goto_url_frame() so the
+	referrer gets set.  
+
+Wed Nov 12 01:15:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Rename: *goto_url_w() to *follow_url().  
+
+Wed Nov 12 01:07:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Revert last bogus patch.  
+
+Wed Nov 12 00:52:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Don't set any referrer when the url comes from the goto dialog. Idea
+	by Dmitry Pinchukov <dpinch@zen.com.ua>.  
+
+Wed Nov 12 00:44:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.h:
+
+	Don't set the referrer for local files. Idea by Dmitry Pinchukov
+	<dpinch@zen.com.ua>.  
+
+Wed Nov 12 00:38:58 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	In doc_end_load(), add to global history the document that was just
+	loaded, not the currently displayed document--an important
+	distinction with frames. Fixes bug 48.  
+
+Wed Nov 12 00:33:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.h:
+
+	Add comment from Miciah about enum cache ordering and a related
+	TODO.  
+
+Wed Nov 12 00:29:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/cache.h:
+
+	Useless stuff was removed.  
+
+Wed Nov 12 00:21:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/: session.c, session.h:
+
+	Field reloadlevel of struct session has now enum cache_mode type. An
+	upper bound (CACHE_MODE_NEVER) is now enforced for reloadlevel in
+	reload().  
+
+Wed Nov 12 00:16:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/history.c, sched/session.c, sched/session.h,
+	viewer/text/view.c:
+
+	set_referrer(): Introduce to wrap access to session->ref_url. It
+	will ease avoiding setting referrer for certain protocols.  
+
+Wed Nov 12 00:10:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: cache/cache.h, dialogs/auth.c, dialogs/menu.c,
+	sched/session.c, viewer/text/view.c:
+
+	CACHE_MODE_INCREMENT was added to struct cache_mode. -1 occurences
+	were replaced by it.  
+
+Tue Nov 11 23:44:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/protocol.c:
+
+	gett_protocol_external_handler() was modified to be able to
+	differentiate case where no protocol scheme is found from case where
+	no known protocol is found. End of scheme protocol detection is now
+	stricter, but related code should be moved elsewhere. We will need
+	that later to prevent bug 245.  
+
 Tue Nov 11 22:32:39 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: cache/cache.h, protocol/http/http.c, sched/connection.c:

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.170 2004/05/16 13:08:29 zas Exp $ */
+/* $Id: tables.c,v 1.171 2004/05/16 13:14:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1375,6 +1375,7 @@ get_table_heights(struct table *t)
 	}
 }
 
+/* FIXME: too long, split it. */
 static void
 display_complicated_table(struct table *t, int x, int y, int *yy)
 {
@@ -1407,7 +1408,6 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			}
 
 			if (cell->start) {
-				struct part *part = NULL;
 				int xw = 0;
 				int yw = 0;
 				register int s;
@@ -1445,6 +1445,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				format.bg = cell->bgcolor;
 				par_format.bgcolor = cell->bgcolor;
  				{
+					struct part *part;
 					int tmpy = yp;
 
 					if (cell->valign == VALIGN_MIDDLE)
@@ -1453,20 +1454,19 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 						tmpy += (yw - cell->height);
 
 				   	part = format_cell(t, i, j, document, xp, tmpy, xw);
-				}
+					if (part) {
+						int yt;
 
-				if (part) {
-					int yt;
+						for (yt = 0; yt < part->box.height; yt++) {
+							expand_lines(t->part, yp + yt);
+							expand_line(t->part, yp + yt, xp + t->columns_width[i]);
+						}
 
-					for (yt = 0; yt < part->box.height; yt++) {
-						expand_lines(t->part, yp + yt);
-						expand_line(t->part, yp + yt, xp + t->columns_width[i]);
+						if (cell->fragment_id)
+							add_fragment_identifier(part, cell->fragment_id);
+
+						mem_free(part);
 					}
-
-					if (cell->fragment_id)
-						add_fragment_identifier(part, cell->fragment_id);
-
-					mem_free(part);
 				}
 
 				done_html_parser_state(state);

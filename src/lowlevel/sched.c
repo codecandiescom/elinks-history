@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.47 2002/10/12 19:49:54 pasky Exp $ */
+/* $Id: sched.c,v 1.48 2002/10/13 12:44:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,29 +190,29 @@ void
 stat_timer(struct connection *c)
 {
 	ttime a;
-	struct remaining_info *r = &c->prg;
+	struct remaining_info *prg = &c->prg;
 
-	r->loaded = c->received;
-	r->size = c->est_length;
-	r->pos = c->from;
-	if (r->size < r->pos && r->size != -1)
-		r->size = c->from;
-	r->dis_b += a = get_time() - r->last_time;
+	prg->loaded = c->received;
+	prg->size = c->est_length;
+	prg->pos = c->from;
+	if (prg->size < prg->pos && prg->size != -1)
+		prg->size = c->from;
+	prg->dis_b += a = get_time() - prg->last_time;
 
-	while (r->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
-		r->cur_loaded -= r->data_in_secs[0];
-		memmove(r->data_in_secs, r->data_in_secs + 1,
+	while (prg->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
+		prg->cur_loaded -= prg->data_in_secs[0];
+		memmove(prg->data_in_secs, prg->data_in_secs + 1,
 			sizeof(int) * (CURRENT_SPD_SEC - 1));
-		r->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
-		r->dis_b -= SPD_DISP_TIME;
+		prg->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
+		prg->dis_b -= SPD_DISP_TIME;
 	}
 
-	r->data_in_secs[CURRENT_SPD_SEC - 1] += r->loaded - r->last_loaded;
-	r->cur_loaded += r->loaded - r->last_loaded;
-	r->last_loaded = r->loaded;
-	r->last_time += a;
-	r->elapsed += a;
-	r->timer = install_timer(SPD_DISP_TIME, (void (*)(void *))stat_timer, c);
+	prg->data_in_secs[CURRENT_SPD_SEC - 1] += prg->loaded - prg->last_loaded;
+	prg->cur_loaded += prg->loaded - prg->last_loaded;
+	prg->last_loaded = prg->loaded;
+	prg->last_time += a;
+	prg->elapsed += a;
+	prg->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, c);
 	if (!st_r) send_connection_info(c);
 }
 
@@ -226,18 +226,18 @@ setcstate(struct connection *c, int state)
 
 	c->state = state;
 	if (c->state == S_TRANS) {
-		struct remaining_info *r = &c->prg;
+		struct remaining_info *prg = &c->prg;
 
-		if (r->timer == -1) {
+		if (prg->timer == -1) {
 			tcount count = c->count;
-			if (!r->valid) {
-				int tmp = r->start;
-				memset(r, 0, sizeof(struct remaining_info));
-				r->valid = 1;
-				r->start = tmp;
+			if (!prg->valid) {
+				int tmp = prg->start;
+				memset(prg, 0, sizeof(struct remaining_info));
+				prg->valid = 1;
+				prg->start = tmp;
 			}
-			r->last_time = get_time();
-			r->last_loaded = r->loaded;
+			prg->last_time = get_time();
+			prg->last_loaded = prg->loaded;
 			st_r = 1;
 			stat_timer(c);
 			st_r = 0;
@@ -246,11 +246,11 @@ setcstate(struct connection *c, int state)
 		}
 
 	} else {
-		struct remaining_info *r = &c->prg;
+		struct remaining_info *prg = &c->prg;
 
-		if (r->timer != -1) {
-			kill_timer(r->timer);
-			r->timer = -1;
+		if (prg->timer != -1) {
+			kill_timer(prg->timer);
+			prg->timer = -1;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.197 2003/11/25 08:43:05 zas Exp $ */
+/* $Id: menu.c,v 1.198 2003/11/26 00:18:18 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -323,7 +323,7 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Unh~istory"), M_SUBMENU, unhistory_menu, NULL, SUBMENU),
 };
 
-static struct menu_item file_menu12[] = {
+static struct menu_item tools_menu[] = {
 #ifdef GLOBHIST
 	INIT_MENU_ITEM(N_("Global histor~y"), "h", menu_history_manager, NULL, 0),
 #endif
@@ -370,9 +370,8 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
 	int x, o;
 
-	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu12)
-			      + sizeof(file_menu21) + sizeof(file_menu22)
-			      + sizeof(file_menu3)
+	file_menu = mem_alloc(sizeof(file_menu11) + sizeof(file_menu21)
+			      + sizeof(file_menu22) + sizeof(file_menu3)
 			      + 3 * sizeof(struct menu_item));
 	if (!file_menu) return;
 
@@ -389,9 +388,6 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	e += sizeof(file_menu11) / sizeof(struct menu_item);
 
 	if (!anonymous) {
-		memcpy(e, file_menu12, sizeof(file_menu12));
-		e += sizeof(file_menu12) / sizeof(struct menu_item);
-
 		memcpy(e, file_menu21, sizeof(file_menu21));
 		e += sizeof(file_menu21) / sizeof(struct menu_item);
 	}
@@ -495,6 +491,12 @@ static struct menu_item setup_menu_anon[] = {
 };
 
 static void
+do_tools_menu(struct terminal *term, void *xxx, struct session *ses)
+{
+	do_menu(term, tools_menu, ses, 1);
+}
+
+static void
 do_view_menu(struct terminal *term, void *xxx, struct session *ses)
 {
 	do_menu(term, view_menu, ses, 1);
@@ -520,6 +522,7 @@ static struct menu_item main_menu[] = {
 	INIT_MENU_ITEM(N_("~View"), "", do_view_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Link"), "", link_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Downloads"), "", downloads_menu, NULL, FREE_LIST | SUBMENU),
+	INIT_MENU_ITEM(N_("~Tools"), "", do_tools_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Setup"), "", do_setup_menu, NULL, FREE_LIST | SUBMENU),
 	INIT_MENU_ITEM(N_("~Help"), "", do_help_menu, NULL, FREE_LIST | SUBMENU),
 	NULL_MENU_ITEM

@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.4 2002/05/10 17:09:21 pasky Exp $ */
+/* $Id: win32.c,v 1.5 2002/09/12 16:38:33 zas Exp $ */
 
 #if defined(_WIN32) || defined(__CYGWIN__)
 
@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <unistd.h>
 
-static		int		w32_input_pid;
+static int w32_input_pid;
 
 static char* keymap[] = {
 	"\E[5~", /* VK_PRIOR */
@@ -26,7 +26,10 @@ static char* keymap[] = {
 	"\E[2~", /* VK_INSERT */
 	"\E[3~" /* VK_DELETE */
 };
-void input_function (int fd)
+
+
+void
+input_function(int fd)
 {
 	BOOL bSuccess;
 	HANDLE hStdIn, hStdOut;
@@ -66,11 +69,14 @@ void input_function (int fd)
 			if (inputBuffer.Event.KeyEvent.bKeyDown)
 			{
 				char c = inputBuffer.Event.KeyEvent.uChar.AsciiChar;
+
 				if (!c) {
 					int vkey = inputBuffer.Event.KeyEvent.wVirtualKeyCode;
+
 					if (vkey >= VK_PRIOR && vkey <= VK_DELETE)
 					{
-						char	*p = keymap[vkey - VK_PRIOR];
+						char *p = keymap[vkey - VK_PRIOR];
+
 						if (*p)
 							if (write (fd, p, strlen(p)) < 0)
 									bSuccess = FALSE;
@@ -104,6 +110,7 @@ void input_function (int fd)
 		} /* switch */
 		/* when we receive an esc down key, drop out of do loop */
 	} while (bSuccess);
+
 	exit (0);
 }
 
@@ -134,12 +141,14 @@ int get_terminal_size(int fd, int *x, int *y)
 }
 #endif
 
-void terminate_osdep ()
+void
+terminate_osdep ()
 {
 	kill (w32_input_pid, SIGINT);
 }
 
-void set_proc_id (int id)
+void
+set_proc_id (int id)
 {
 	w32_input_pid = id;
 }

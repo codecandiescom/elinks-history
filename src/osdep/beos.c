@@ -15,61 +15,75 @@
 #define MAXINT 0x7fffffff
 #endif
 
-int be_read(int s, void *ptr, int len)
+int
+be_read(int s, void *ptr, int len)
 {
 	if (s >= SHS) return recv(s - SHS, ptr, len, 0);
 	return read(s, ptr, len);
 }
 
-int be_write(int s, void *ptr, int len)
+int
+be_write(int s, void *ptr, int len)
 {
 	if (s >= SHS) return send(s - SHS, ptr, len, 0);
 	return write(s, ptr, len);
 }
 
-int be_close(int s)
+int
+be_close(int s)
 {
 	if (s >= SHS) return closesocket(s - SHS);
 	return close(s);
 }
 
-int be_socket(int af, int sock, int prot)
+int
+be_socket(int af, int sock, int prot)
 {
 	int h = socket(af, sock, prot);
+
 	if (h < 0) return h;
 	return h + SHS;
 }
 
-int  be_connect(int s, struct sockaddr *sa, int sal)
+int
+be_connect(int s, struct sockaddr *sa, int sal)
 {
 	return connect(s - SHS, sa, sal);
 }
 
-int be_getpeername(int s, struct sockaddr *sa, int *sal)
+int
+be_getpeername(int s, struct sockaddr *sa, int *sal)
 {
 	return getpeername(s - SHS, sa, sal);
 }
 
-int be_getsockname(int s, struct sockaddr *sa, int *sal)
+int
+be_getsockname(int s, struct sockaddr *sa, int *sal)
 {
 	return getsockname(s - SHS, sa, sal);
 }
 
-int be_listen(int s, int c)
+int
+be_listen(int s, int c)
 {
 	return listen(s - SHS, c);
 }
 
-int be_accept(int s, struct sockaddr *sa, int *sal)
+int
+be_accept(int s, struct sockaddr *sa, int *sal)
 {
 	int a = accept(s - SHS, sa, sal);
+
 	if (a < 0) return -1;
 	return a + SHS;
 }
 
-int be_bind(int s, struct sockaddr *sa, int sal)
+int
+be_bind(int s, struct sockaddr *sa, int sal)
 {
-	/*struct sockaddr_in *sin = (struct sockaddr_in *)sa;
+#if 0
+	struct sockaddr_in *sin = (struct sockaddr_in *)sa;
+
 	if (!sin->sin_port) {
 		int i;
 		for (i = 16384; i < 49152; i++) {
@@ -77,7 +91,8 @@ int be_bind(int s, struct sockaddr *sa, int sal)
 			if (!be_bind(s, sa, sal)) return 0;
 		}
 		return -1;
-	}*/
+	}
+#endif
 	if (bind(s - SHS, sa, sal)) return -1;
 	getsockname(s - SHS, sa, &sal);
 	return 0;
@@ -85,17 +100,22 @@ int be_bind(int s, struct sockaddr *sa, int sal)
 
 #define PIPE_RETRIES	10
 
-int be_pipe(int *fd)
+int
+be_pipe(int *fd)
 {
 	int s1, s2, s3, l;
 	struct sockaddr_in sa1, sa2;
 	int retry_count = 0;
-	again:
-	if ((s1 = be_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
+
+again:
+	s1 = be_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (s1 < 0) {
 		/*perror("socket1");*/
 		goto fatal_retry;
 	}
-	if ((s2 = be_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
+
+	s2 = be_socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (s2 < 0) {
 		/*perror("socket2");*/
 		be_close(s1);
 		goto fatal_retry;
@@ -106,7 +126,8 @@ int be_pipe(int *fd)
 	sa1.sin_addr.s_addr = INADDR_ANY;
 	if (be_bind(s1, (struct sockaddr *)&sa1, sizeof(sa1))) {
 		/*perror("bind");*/
-		clo:
+
+clo:
 		be_close(s1);
 		be_close(s2);
 		goto fatal_retry;
@@ -134,16 +155,19 @@ int be_pipe(int *fd)
 	fd[1] = s3;
 	return 0;
 
-	fatal_retry:
+fatal_retry:
 	if (++retry_count > PIPE_RETRIES) return -1;
 	sleep(1);
 	goto again;
 }
 
-int be_select(int n, struct fd_set *rd, struct fd_set *wr, struct fd_set *exc, struct timeval *tm)
+int
+be_select(int n, struct fd_set *rd, struct fd_set *wr, struct fd_set *exc,
+	  struct timeval *tm)
 {
 	int i, s;
 	struct fd_set d, rrd;
+
 	FD_ZERO(&d);
 	if (!rd) rd = &d;
 	if (!wr) wr = &d;
@@ -169,7 +193,8 @@ int be_select(int n, struct fd_set *rd, struct fd_set *wr, struct fd_set *exc, s
 #define SO_ERROR	10001
 #endif
 
-int be_getsockopt(int s, int level, int optname, void *optval, int *optlen)
+int
+be_getsockopt(int s, int level, int optname, void *optval, int *optlen)
 {
 	if (optname == SO_ERROR && *optlen >= sizeof(int)) {
 		*(int *)optval = 0;
@@ -187,17 +212,21 @@ int inth;
 
 #include <errno.h>
 
-void input_handle_th(void *p)
+void
+input_handle_th(void *p)
 {
 	char c;
 	int b = 0;
+
 	setsockopt(ihpipe[1], SOL_SOCKET, SO_NONBLOCK, &b, sizeof(b));
 	while (1) if (read(0, &c, 1) == 1) be_write(ihpipe[1], &c, 1);
 }
 
-int get_input_handle()
+int
+get_input_handle()
 {
 	static int h = -1;
+
 	if (h >= 0) return h;
 	if (be_pipe(ihpipe) < 0) return -1;
 	if ((inth = start_thr(input_handle_th, NULL, "input_thread")) < 0) {
@@ -208,33 +237,40 @@ int get_input_handle()
 	return h = ihpipe[0];
 }
 
-void block_stdin()
+void
+block_stdin()
 {
 	suspend_thread(inth);
 }
 
-void unblock_stdin()
+void
+unblock_stdin()
 {
 	resume_thread(inth);
 }
 
-/*int ohpipe[2];
+#if 0
+int ohpipe[2];
 
 #define O_BUF	16384
 
-void output_handle_th(void *p)
+void
+output_handle_th(void *p)
 {
 	char *c = malloc(O_BUF);
 	int r, b = 0;
+
 	if (!c) return;
 	setsockopt(ohpipe[1], SOL_SOCKET, SO_NONBLOCK, &b, sizeof(b));
 	while ((r = be_read(ohpipe[0], c, O_BUF)) > 0) write(1, c, r);
 	free(c);
 }
 
-int get_output_handle()
+int
+get_output_handle()
 {
 	static int h = -1;
+
 	if (h >= 0) return h;
 	if (be_pipe(ohpipe) < 0) return -1;
 	if (start_thr(output_handle_th, NULL, "output_thread") < 0) {
@@ -243,6 +279,7 @@ int get_output_handle()
 		return -1;
 	}
 	return h = ohpipe[1];
-}*/
+}
+#endif
 
 #endif

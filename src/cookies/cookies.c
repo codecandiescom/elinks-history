@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.64 2003/07/08 13:54:51 jonas Exp $ */
+/* $Id: cookies.c,v 1.65 2003/07/08 15:10:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,7 +554,6 @@ load_cookies(void) {
 	 * in save_cookies(). --Zas */
 	unsigned char in_buffer[6 * MAX_STR_LEN];
 	unsigned char *cookfile = "cookies";
-	unsigned char *p, *q;
 	FILE *fp;
 
 	if (elinks_home) {
@@ -573,49 +572,44 @@ load_cookies(void) {
 	if (!fp) return;
 
 	while (safe_fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
-		struct cookie *cookie = mem_calloc(1, sizeof(struct cookie));
+		struct cookie *cookie;
+		unsigned char *p, *q = in_buffer;
+		enum { NAME = 0, VALUE, SERVER, PATH, DOMAIN, MEMBERS } member;
+		unsigned char *members[MEMBERS];
 
-		if (!cookie) return;
+		/* First read in and allocate all members. */
+		for (member = NAME; member < MEMBERS; member++, q = p) {
+			p = strchr(q, '\t');
+			if (!p) break;
+			*p++ = '\0';
+			members[member] = stracpy(q);
+			if (!members[member]) break;
+		}
 
-		/* Drop ending '\n'. */
-		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
+		/* Finally get a hold of the expire field. */
+		p = (member == MEMBERS ? strchr(q, '\t') : NULL);
 
-		q = in_buffer;
-		p = strchr(in_buffer, '\t');
-		if (!p)	goto inv;
-		*p++ = '\0';
-		cookie->name = stracpy(q); /* FIXME: untested return value. */
+		/* Prepare cookie if all members and fields was read. */
+		cookie = (p ? mem_calloc(1, sizeof(struct cookie)) : NULL);
 
-		q = p;
-		p = strchr(p, '\t');
-		if (!p) goto inv;
-		*p++ = '\0';
-		cookie->value = stracpy(q); /* FIXME: untested return value. */
+		if (1 || !cookie) {
+			/* Something went wrong so clean up. */
+			for (member -= 1; member >= NAME; member--)
+				mem_free(members[member]);
+			continue;
+		}
 
-		q = p;
-		p = strchr(p, '\t');
-		if (!p) goto inv;
-		*p++ = '\0';
-		cookie->server = stracpy(q); /* FIXME: untested return value. */
+		cookie->name	= members[NAME];
+		cookie->value	= members[VALUE];
+		cookie->server	= members[SERVER];
+		cookie->path	= members[PATH];
+		cookie->domain	= members[DOMAIN];
 
-		q = p;
-		p = strchr(p, '\t');
-		if (!p) goto inv;
-		*p++ = '\0';
-		cookie->path = stracpy(q); /* FIXME: untested return value. */
-
-		q = p;
-		p = strchr(p, '\t');
-		if (!p) goto inv;
-		*p++ = '\0';
-		cookie->domain = stracpy(q); /* FIXME: untested return value. */
-
-		q = p;
-		p = strchr(p, '\t');
-		if (!p) goto inv;
 		*p++ = '\0';
 		cookie->expires = atol(q);
 
+		/* Drop ending '\n'. */
+		if (*p) p[strlen(p) - 1] = 0;
 		cookie->secure = atoi(p);
 
 		cookie->id = cookie_id++;
@@ -625,11 +619,6 @@ load_cookies(void) {
 		cookies_nosave = 1;
 		accept_cookie(cookie);
 		cookies_nosave = 0;
-
-		continue;
-
-inv:
-		free_cookie(cookie);
 	}
 
 	fclose(fp);

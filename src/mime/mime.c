@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.20 2003/06/20 20:20:08 jonas Exp $ */
+/* $Id: mime.c,v 1.21 2003/07/14 18:23:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,35 +57,31 @@ check_extension_type(unsigned char *extension)
 	return NULL;
 }
 
-/* Check if part of the extension coresponds to a supported encoding so
- * that it can be stripped. */
+/* Check if part of the extension coresponds to a supported encoding and if it
+ * has any handlers. */
 static inline unsigned char *
 check_encoding_type(unsigned char *extension)
 {
 	enum stream_encoding encoding = guess_encoding(extension);
-	unsigned char **extensions;
-	int extensionlen;
+	unsigned char **extension_list;
+	unsigned char *last_extension = strrchr(extension, '.');
 
-	/* Yes this is a bit dull, having to do guess_extension() all over */
-	if (encoding == ENCODING_NONE) return NULL;
-	extensions = listext_encoded(encoding);
-	extensionlen = strlen(extension);
+	if (encoding == ENCODING_NONE && !last_extension)
+		return NULL;
 
-	while (extensions && *extensions) {
-		int len = strlen(*extensions);
-		unsigned char *snip = extension + extensionlen - len;
+	extension_list = listext_encoded(encoding);
+
+	while (extension_list && *extension_list) {
 		unsigned char *ctype;
-		unsigned char tmp;
 
-		if (extensionlen <= len && strncmp(snip+1, *extensions, len)) {
-			extensions++;
+		if (strcmp(*extension_list, last_extension)) {
+			extension_list++;
 			continue;
 		}
 
-		tmp = *snip;
-		*snip = '\0';
+		*last_extension = '\0';
 		ctype = get_content_type_backends(extension);
-		*snip = tmp;
+		*last_extension = '.';
 
 		return ctype;
 	}

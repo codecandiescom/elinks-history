@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.33 2003/06/18 07:48:33 zas Exp $ */
+/* $Id: af_unix.c,v 1.34 2003/06/18 07:59:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,6 +175,11 @@ af_unix_connection(void *dummy)
 
 	memset(s_unix_accept, 0, l);
 	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);
+	if (ns < 0) {
+		error(gettext("accept() failed: %d (%s)"),
+		      errno, (unsigned char *) strerror(errno));
+		return;
+	}
 
 	init_term(ns, ns, tabwin_func);
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.193 2004/06/16 18:44:16 jonas Exp $ */
+/* $Id: form.c,v 1.194 2004/06/16 18:50:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1348,10 +1348,12 @@ static inline void
 add_form_attr_to_string(struct string *string, struct terminal *term,
 			unsigned char *name, unsigned char *value)
 {
-		add_to_string(string, ", ");
-		add_to_string(string, _(name, term));
+	add_to_string(string, ", ");
+	add_to_string(string, _(name, term));
+	if (value) {
 		add_char_to_string(string, ' ');
 		add_to_string(string, value);
+	}
 }
 
 unsigned char *
@@ -1397,12 +1399,21 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 			if (!key) break;
 
+			if (fc->ro)
+				label = N_("press %s to move");
+			else
+				label = N_("press %s to edit");
+
 			add_to_string(&str, " (");
-			add_format_to_string(&str, _("press %s to edit", term), key);
+			add_format_to_string(&str, _(label, term), key);
 			add_char_to_string(&str, ')');
 			mem_free(key);
 			break;
+
+		} if (fc->ro) {
+			add_form_attr_to_string(&str, term, N_("read only"), NULL);
 		}
+
 
 		if (fc->type == FC_TEXTAREA)
 			break;

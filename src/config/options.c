@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.404 2003/11/20 02:14:13 jonas Exp $ */
+/* $Id: options.c,v 1.405 2003/11/21 01:13:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,8 +71,6 @@ static struct option options_root = INIT_OPTION(
 
 struct option *config_options;
 struct option *cmdline_options;
-
-INIT_LIST_HEAD(option_boxes);
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
 static void free_options_tree(struct list_head *, int recursive);
@@ -329,7 +327,7 @@ init_option_listbox_item(struct option *option)
 	box->visible = 1;
 	box->translated = 1;
 	box->text = option->capt ? option->capt : option->name;
-	box->box = &option_boxes;
+	box->box = &option_browser.boxes;
 	box->udata = option;
 	box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
 

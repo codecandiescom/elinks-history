@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.72 2003/11/21 00:59:13 jonas Exp $ */
+/* $Id: hierbox.c,v 1.73 2003/11/21 01:13:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ init_browser_box(struct hierbox_browser *browser, unsigned char *text,
 	box->visible = 1;
 
 	box->text = text;
-	box->box = browser->boxes;
+	box->box = &browser->boxes;
 	box->udata = data;
 
 	add_to_list(*browser->items, box);
@@ -83,7 +83,7 @@ hierbox_browser_box_build(struct hierbox_browser *browser)
 
 	box->ops = browser->ops;
 	box->items = browser->items;
-	add_to_list(*browser->boxes, box);
+	add_to_list(browser->boxes, box);
 
 	return box;
 }

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.73 2003/11/21 00:59:14 jonas Exp $ */
+/* $Id: dialogs.c,v 1.74 2003/11/21 01:13:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ static struct listbox_ops gh_listbox_ops = {
 };
 
 struct hierbox_browser globhist_browser = {
-	&gh_boxes,
+	{ D_LIST_HEAD(globhist_browser.boxes) },
 	&gh_box_items,
 	{ D_LIST_HEAD(globhist_browser.dialogs) },
 	&gh_listbox_ops,

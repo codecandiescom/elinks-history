@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.120 2003/11/21 00:59:13 jonas Exp $ */
+/* $Id: dialogs.c,v 1.121 2003/11/21 01:13:25 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -50,7 +50,7 @@ static struct listbox_ops bookmarks_listbox_ops = {
 };
 
 struct hierbox_browser bookmark_browser = {
-	&bookmark_boxes,
+	{ D_LIST_HEAD(bookmark_browser.boxes) },
 	&bookmark_box_items,
 	{ D_LIST_HEAD(bookmark_browser.dialogs) },
 	&bookmarks_listbox_ops,

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.94 2003/11/20 16:09:10 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.95 2003/11/21 01:13:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,6 @@
 /* The list of bookmarks */
 INIT_LIST_HEAD(bookmarks);
 INIT_LIST_HEAD(bookmark_box_items);
-INIT_LIST_HEAD(bookmark_boxes);
 
 /* Set to 1, if bookmarks have changed. */
 int bookmarks_dirty = 0;
@@ -251,7 +250,7 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	bm->box_item->visible = 1;
 
 	bm->box_item->text = bm->title;
-	bm->box_item->box = &bookmark_boxes;
+	bm->box_item->box = &bookmark_browser.boxes;
 	bm->box_item->udata = (void *) bm;
 
 	if (place) {

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.100 2003/11/20 01:14:17 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.101 2003/11/21 01:13:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,6 @@
 #define table table_elinks
 
 INIT_LIST_HEAD(kbdbind_box_items);
-INIT_LIST_HEAD(kbdbind_boxes);
 
 static struct listbox_item *keyact_box_items[KEYACTS];
 static struct list_head keymaps[KM_MAX];
@@ -98,7 +97,7 @@ boom:
 		kb->box_item->udata = kb;
 		kb->box_item->type = BI_LEAF;
 		kb->box_item->depth = keymap->depth + 1;
-		kb->box_item->box = &kbdbind_boxes;
+		kb->box_item->box = &keybinding_browser.boxes;
 
 		update_hierbox_browser(&keybinding_browser);
 	}
@@ -498,7 +497,7 @@ init_action_listboxes(void)
 		box_item->type = BI_FOLDER;
 		box_item->expanded = 0; /* Maybe you would like this being 1? */
 		box_item->depth = 0;
-		box_item->box = &kbdbind_boxes;
+		box_item->box = &keybinding_browser.boxes;
 		box_item->text = act->desc ? act->desc : act->str;
 
 		for (i = 0; i < KM_MAX; i++) {
@@ -515,7 +514,7 @@ init_action_listboxes(void)
 			keymap->type = BI_FOLDER;
 			keymap->expanded = 1;
 			keymap->depth = 1;
-			keymap->box = &kbdbind_boxes;
+			keymap->box = &keybinding_browser.boxes;
 			keymap->text = numtodesc(keymap_table, i);
 		}
 	}

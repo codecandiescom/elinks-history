@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.90 2003/10/26 19:18:17 jonas Exp $ */
+/* $Id: options.h,v 1.91 2003/11/21 01:13:26 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -130,8 +130,6 @@ struct option {
 extern struct option options_root;
 extern struct option *config_options;
 extern struct option *cmdline_options;
-
-extern struct list_head option_boxes;
 
 
 extern void init_options(void);

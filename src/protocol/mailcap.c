@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.8 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: mailcap.c,v 1.9 2003/04/19 17:00:23 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -125,6 +125,7 @@ convert_command(unsigned char *command, int copiousoutput)
 			buffer[y++] = command[x++];
 		}
 	}
+
 	if (copiousoutput) {
 		/*
 		 * Here we handle copiousoutput flag by appending $PAGER.
@@ -134,12 +135,12 @@ convert_command(unsigned char *command, int copiousoutput)
 		 */
 		unsigned char *pager = getenv("PAGER");
 
-		if (!pager && file_exists("/usr/bin/pager")) {
-			pager = "/usr/bin/pager";
-		} else if (!pager && file_exists("/usr/bin/less")) {
-			pager = "/usr/bin/less";
-		} else if (!pager && file_exists("/usr/bin/more")) {
-			pager = "/usr/bin/more";
+		if (!pager && file_exists(DEFAULT_PAGER_PATH)) {
+			pager = DEFAULT_PAGER_PATH;
+		} else if (!pager && file_exists(DEFAULT_LESS_PATH)) {
+			pager = DEFAULT_LESS_PATH;
+		} else if (!pager && file_exists(DEFAULT_MORE_PATH)) {
+			pager = DEFAULT_MORE_PATH;
 		}
 
 		if (pager) {
@@ -152,9 +153,9 @@ convert_command(unsigned char *command, int copiousoutput)
 	buffer[y++] = '\0';
 
 	converted = mem_alloc(y);
-	if (!converted) return NULL;
+	if (converted)
+		safe_strncpy(converted, buffer, y);
 
-	safe_strncpy(converted, buffer, y);
 	return converted;
 }
 
@@ -220,9 +221,8 @@ get_field_text(unsigned char *field,
 		return stracpy(field);
 	}
 
-	fprintf(stderr,
-		"Bad formated entry for type %s in \"%s\" line %d\n",
-		type, filename, lineno);
+	error("Bad formated entry for type %s in \"%s\" line %d\n",
+	      type, filename, lineno);
 
 	return NULL;
 }
@@ -355,8 +355,7 @@ mailcap_parse(unsigned char *filename, unsigned int priority)
 			/* XXX: Nothing should be 'auto'-freed */
 			entry = NULL;
 		}
-
-	} /* while ((file = read_file_line()) != NULL ) */
+	}
 
 	/* Clean up from previous iterations */
 	if (entry) mailcap_free_entry(entry);
@@ -394,7 +393,7 @@ mailcap_init()
 	/* Try to setup mailcap_path */
 	path = get_opt_str("protocol.mailcap.path");
 	if (!path || !*path) path = getenv("MAILCAP");
-	if (!path) path = "~/.mailcap:/etc/mailcap";
+	if (!path) path = DEFAULT_MAILCAP_PATH;
 
 	while (*path) {
 		unsigned char file[MAX_STR_LEN];
@@ -479,9 +478,9 @@ expand_command(unsigned char *command, unsigned char *type)
 	buffer[y++] = '\0';
 
 	expanded = mem_alloc(y);
-	if (!expanded) return NULL;
+	if (expanded)
+		safe_strncpy(expanded, buffer, y);
 
-	safe_strncpy(expanded, buffer, y);
 	return expanded;
 }
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.307 2005/02/28 14:16:17 zas Exp $ */
+/* $Id: uri.c,v 1.308 2005/03/20 10:57:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -974,7 +974,7 @@ join_urls(struct uri *base, unsigned char *rel)
 
 /* Tries to figure out what protocol @newurl might be specifying by checking if
  * it exists as a file locally or by checking parts of the host name. */
-static inline enum protocol
+static enum protocol
 find_uri_protocol(unsigned char *newurl)
 {
 	unsigned char *ch;
@@ -1034,11 +1034,7 @@ find_uri_protocol(unsigned char *newurl)
 			return PROTOCOL_HTTP;
 	}
 
-	/* We default to file:// even though we already tested if the file
-	 * existed since it will give a "No such file or directory" error.
-	 * which might better hint the user that there was problem figuring out
-	 * the URI. */
-	return PROTOCOL_FILE;
+	return PROTOCOL_UNKNOWN;
 }
 
 
@@ -1219,6 +1215,12 @@ parse_uri:
 				add_to_string(&str, newurl);
 				break;
 
+			case PROTOCOL_UNKNOWN:
+				/* We default to file:// even though we already
+				 * tested if the file existed since it will give
+				 * a "No such file or directory" error.  which
+				 * might better hint the user that there was
+				 * problem figuring out the URI. */
 			case PROTOCOL_FILE:
 			default:
 				add_to_string(&str, "file://");

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.209 2005/03/24 09:39:07 zas Exp $ */
+/* $Id: inpfield.c,v 1.210 2005/03/24 15:23:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,13 @@
 #include "util/color.h"
 #include "util/memlist.h"
 #include "util/memory.h"
+
+#define INPUTFIELD_HEIGHT 1
+
+#define INPUTFIELD_FLOATLABEL_PADDING 1
+
+#define INPUTFIELD_FLOAT_SEPARATOR ":"
+#define INPUTFIELD_FLOAT_SEPARATOR_LEN 1
 
 void
 add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,
@@ -100,13 +107,13 @@ dlg_format_field(struct terminal *term,
 		 int x, int *y, int w, int *rw, enum format_align align)
 {
 	static int max_label_width;
-	static int *prev_y; /* Assert the uniqueness of y */
+	static int *prev_y; /* Assert the uniqueness of y */	/* TODO: get rid of this !! --Zas */
 	unsigned char *label = widget_data->widget->text;
 	struct color_pair *text_color = NULL;
 	int label_width = 0;
 	int float_label = widget_data->widget->info.field.flags & (INPFIELD_FLOAT|INPFIELD_FLOAT2);
 
-	if (label && float_label) {
+	if (label && *label && float_label) {
 		label_width = strlen(label);
 		if (prev_y == y) {
 			int_lower_bound(&max_label_width, label_width);
@@ -121,7 +128,7 @@ dlg_format_field(struct terminal *term,
 		w -= max_label_width - label_width;
 	}
 
-	if (label) {
+	if (label && *label) {
 		if (term) text_color = get_bfu_color(term, "dialog.text");
 
 		dlg_format_text_do(term, label, x, y, w, rw, text_color, ALIGN_LEFT);
@@ -129,17 +136,19 @@ dlg_format_field(struct terminal *term,
 
 	/* XXX: We want the field and label on the same line if the terminal
 	 * width allows it. */
-	if (label && float_label) {
+	if (label && *label && float_label) {
 		if (widget_data->widget->info.field.flags & INPFIELD_FLOAT) {
-			(*y)--;
-			dlg_format_text_do(term, ":", x + label_width, y, w, rw, text_color, ALIGN_LEFT);
-			w -= 2;
-			x += 2;
+			(*y) -= INPUTFIELD_HEIGHT;
+			dlg_format_text_do(term, INPUTFIELD_FLOAT_SEPARATOR,
+					   x + label_width, y, w, rw,
+					   text_color, ALIGN_LEFT);
+			w -= INPUTFIELD_FLOAT_SEPARATOR_LEN + INPUTFIELD_FLOATLABEL_PADDING;
+			x += INPUTFIELD_FLOAT_SEPARATOR_LEN + INPUTFIELD_FLOATLABEL_PADDING;
 		}
 
 		/* FIXME: Is 5 chars for input field enough? --jonas */
 		if (label_width < w - 5) {
-			(*y)--;
+			(*y) -= INPUTFIELD_HEIGHT;
 			w -= label_width;
 			x += label_width;
 		}
@@ -147,9 +156,9 @@ dlg_format_field(struct terminal *term,
 
 	if (rw) int_lower_bound(rw, int_min(w, DIALOG_MIN_WIDTH));
 
-	set_box(&widget_data->box, x, *y, w, 1);
+	set_box(&widget_data->box, x, *y, w, INPUTFIELD_HEIGHT);
 
-	(*y)++;
+	(*y) += INPUTFIELD_HEIGHT;
 }
 
 static widget_handler_status_T

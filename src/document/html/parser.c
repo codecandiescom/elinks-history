@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.485 2004/08/03 17:08:09 zas Exp $ */
+/* $Id: parser.c,v 1.486 2004/08/12 08:40:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -561,10 +561,10 @@ void
 html_hr(unsigned char *a)
 {
 	int i/* = par_format.width - 10*/;
-	unsigned char r = (unsigned char)BORDER_DHLINE;
+	unsigned char r = (unsigned char) BORDER_DHLINE;
 	int q = get_num(a, "size");
 
-	if (q >= 0 && q < 2) r = (unsigned char)BORDER_SHLINE;
+	if (q >= 0 && q < 2) r = (unsigned char) BORDER_SHLINE;
 	html_stack_dup(ELEMENT_KILLABLE);
 	par_format.align = ALIGN_CENTER;
 	mem_free_set(&format.link, NULL);

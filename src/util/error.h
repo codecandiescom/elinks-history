@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.44 2004/04/29 23:02:42 jonas Exp $ */
+/* $Id: error.h,v 1.45 2004/08/12 08:40:30 miciah Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -100,7 +100,7 @@ do { if (!assert_failed && (assert_failed = !(x))) { \
  * variadic macros are not supported. */
 /* XXX: assertm() usage could generate warnings (we assume that the assert()ed
  * expression is int (and that's completely fine, I do *NOT* want to see any
- * stinking assert((int)pointer) ! ;-)), so CONFIG_DEBUG (-Werror) and
+ * stinking assert((int) pointer) ! ;-)), so CONFIG_DEBUG (-Werror) and
  * !HAVE_VARIADIC_MACROS won't play well together. Hrm. --pasky */
 #ifdef CONFIG_FASTMEM
 static inline

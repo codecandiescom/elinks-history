@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.75 2004/07/14 00:31:09 jonas Exp $ */
+/* $Id: terminal.c,v 1.76 2004/08/12 08:40:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,7 +226,7 @@ exec_on_terminal(struct terminal *term, unsigned char *path,
 
 			if (fg == 1) block_itrm(term->fdin);
 
-			blockh = start_thread((void (*)(void *, int))exec_thread,
+			blockh = start_thread((void (*)(void *, int)) exec_thread,
 					      param, param_size);
 			if (blockh == -1) {
 				if (fg == 1) unblock_itrm(term->fdin);

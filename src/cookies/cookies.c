@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.160 2004/07/06 10:25:28 jonas Exp $ */
+/* $Id: cookies.c,v 1.161 2004/08/12 08:40:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -496,7 +496,7 @@ end:
 static struct
 cookie *find_cookie_id(void *idp)
 {
-	int id = (int)idp;
+	int id = (int) idp;
 	struct cookie *c;
 
 	foreach (c, cookies)

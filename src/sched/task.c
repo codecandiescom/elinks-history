@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.121 2004/07/22 17:04:30 pasky Exp $ */
+/* $Id: task.c,v 1.122 2004/08/12 08:40:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -411,7 +411,7 @@ end_load(struct download *stat, struct session *ses)
 	if (d == 2) goto end;
 
 	if (d == 1) {
-		stat->end = (void (*)(struct download *, void *))doc_end_load;
+		stat->end = (void (*)(struct download *, void *)) doc_end_load;
 		display_timer(ses);
 	}
 

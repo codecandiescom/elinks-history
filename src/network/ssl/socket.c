@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.84 2004/08/04 05:16:57 miciah Exp $ */
+/* $Id: socket.c,v 1.85 2004/08/12 08:40:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ ssl_connect(struct connection *conn, struct connection_socket *socket)
 		}
 
 		if (client_cert) {
-			SSL_CTX *ctx = ((SSL *)socket->ssl)->ctx;
+			SSL_CTX *ctx = ((SSL *) socket->ssl)->ctx;
 
 			SSL_CTX_use_certificate_chain_file(ctx, client_cert);
 			SSL_CTX_use_PrivateKey_file(ctx, client_cert,

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.25 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: hash.c,v 1.26 2004/08/12 08:40:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,7 +238,7 @@ strhash(unsigned char *k, /* the key */
    h = (h & hashmask(10));
  In which case, the hash table should have hashsize(10) elements.
 
- If you are hashing n strings (ub1 **)k, do it like this:
+ If you are hashing n strings (ub1 **) k, do it like this:
    for (i=0, h=0; i<n; ++i) h = hash( k[i], len[i], h);
 
  By Bob Jenkins, 1996.  bob_jenkins@burtleburtle.net.  You may use this

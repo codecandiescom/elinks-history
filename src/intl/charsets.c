@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.93 2004/07/04 16:29:03 jonas Exp $ */
+/* $Id: charsets.c,v 1.94 2004/08/12 08:40:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -456,7 +456,7 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 
 				total_iter += i + 1;
 				hit_count++;
-				fprintf(stderr, "hit after %d iter. (mean = %0.2f)\n", i + 1, total_iter / (double)hit_count);
+				fprintf(stderr, "hit after %d iter. (mean = %0.2f)\n", i + 1, total_iter / (double) hit_count);
 #endif
 				if (entity_cache[slen][i].hits < (unsigned int) ~0)
 					entity_cache[slen][i].hits++;

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.26 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: snprintf.c,v 1.27 2004/08/12 08:40:31 miciah Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -387,7 +387,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args_in)
 					long int *num;
 
 					num = va_arg(args, long int *);
-					*num = (long int)currlen;
+					*num = (long int) currlen;
 				} else if (cflags == DP_C_LLONG) {
 					LLONG *num;
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.166 2004/08/08 06:33:21 miciah Exp $ */
+/* $Id: core.c,v 1.167 2004/08/12 08:40:39 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,7 +275,7 @@ static enum evhook_status
 run_lua_func(va_list ap, void *data)
 {
 	struct session *ses = va_arg(ap, struct session *);
-	int func_ref = (int)data;
+	int func_ref = (int) data;
 	int err;
 
 	if (func_ref == LUA_NOREF) {

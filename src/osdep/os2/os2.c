@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.25 2004/07/31 07:33:51 miciah Exp $ */
+/* $Id: os2.c,v 1.26 2004/08/12 08:40:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ winch(void *s)
 	unsigned char c;
 
 	while (can_read(winch_pipe[0]) && safe_read(winch_pipe[0], &c, 1) == 1);
-	((void (*)())s)();
+	((void (*)()) s)();
 }
 
 void
@@ -246,7 +246,7 @@ set_clipboard_text(unsigned char *data)
 				PVOID pvShrObject = NULL;
 				if (DosAllocSharedMem(&pvShrObject, NULL, strlen(data) + 1, PAG_COMMIT | PAG_WRITE | OBJ_GIVEABLE) == NO_ERROR) {
 					strcpy(pvShrObject, data);
-					WinSetClipbrdData(hab, (ULONG)pvShrObject, CF_TEXT, CFI_POINTER);
+					WinSetClipbrdData(hab, (ULONG) pvShrObject, CF_TEXT, CFI_POINTER);
 				}
 				WinCloseClipbrd(hab);
 			}

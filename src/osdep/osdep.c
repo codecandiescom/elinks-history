@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.143 2004/07/30 22:22:43 jonas Exp $ */
+/* $Id: osdep.c,v 1.144 2004/08/12 08:40:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ set_cwd(unsigned char *path)
 static void
 sigwinch(void *s)
 {
-	((void (*)(void))s)();
+	((void (*)(void)) s)();
 }
 
 void
@@ -466,7 +466,7 @@ get_window_title(void)
 
 	/* If WINDOWID is bad, we don't want X to abort us. */
 	x_error = 0;
-	XSetErrorHandler((int (*)(Display *, XErrorEvent *))catch_x_error);
+	XSetErrorHandler((int (*)(Display *, XErrorEvent *)) catch_x_error);
 
 	status = XGetWMName(display, window, &text_prop);
 	/* status = XGetWMIconName(x11_display, x11_window, &text_prop); */

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.32 2004/07/23 01:56:44 pasky Exp $ */
+/* $Id: listmenu.c,v 1.33 2004/08/12 08:40:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@ static int
 menu_contains(struct menu_item *m, int f)
 {
 	if (m->func != (menu_func) do_select_submenu)
-		return (int)m->data == f;
+		return (int) m->data == f;
 
 	foreach_menu_item (m, m->data)
 		if (menu_contains(m, f))
@@ -185,7 +185,7 @@ menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 			mem_free(bs);
 		} else {
 			assert(item->func == (menu_func) selected_item);
-			lbls[(int)item->data] = bs;
+			lbls[(int) item->data] = bs;
 		}
 	}
 }

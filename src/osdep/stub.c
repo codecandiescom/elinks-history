@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.14 2004/06/23 08:01:20 jonas Exp $ */
+/* $Id: stub.c,v 1.15 2004/08/12 08:40:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,9 +105,9 @@ inline const char *
 elinks_strerror(int err_no)
 {
 	if (err_no < 0 || err_no > sys_nerr)
-		return (const char *)"Unknown Error";
+		return (const char *) "Unknown Error";
 	else
-		return (const char *)sys_errlist[err_no];
+		return (const char *) sys_errlist[err_no];
 }
 #endif
 

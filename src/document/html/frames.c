@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.79 2004/07/04 11:04:34 jonas Exp $ */
+/* $Id: frames.c,v 1.80 2004/08/12 08:40:41 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -372,7 +372,7 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		 * range to prevent bad things. */
 		if (number <= 0xffff) {
 			if (*str == '%')	/* Percentage */
-				val = int_min((int)number, 100) * max_value / 100;
+				val = int_min((int) number, 100) * max_value / 100;
 			else if (*str != '*')	/* Pixels */
 				val = (number + (pixels_per_char - 1) / 2) / pixels_per_char;
 			else if (number)	/* Fraction, marked by negative value. */

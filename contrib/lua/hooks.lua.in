@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.15 2003/05/06 22:36:03 pasky Exp $
+-- $Id: hooks.lua.in,v 1.16 2003/05/20 22:11:17 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -128,7 +128,7 @@ function goto_url_hook (url, current_url)
     end
 
     if strfind(url,'%s') or strfind(url, ':') then
-        local _,_,nick,val = strfind(url, "^([^%s]+)[:%s]%s*(.-)%s*$")
+        local _,_,nick,val = strfind(url, "^([^%s:]+)[:%s]%s*(.-)%s*$")
         if nick and smartprefixes[nick] then
             val = escape(val)
             return format(smartprefixes[nick], val)

@@ -1,5 +1,5 @@
-/* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.158 2004/08/13 21:28:05 jonas Exp $ */
+/* Input field widget ismplementation. */
+/* $Id: inpfield.c,v 1.159 2004/08/14 15:16:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -594,6 +594,8 @@ cancel_input_line:
 			widget_data->cdata + widget_data->info.field.cpos,
 			strlen(widget_data->cdata) - widget_data->info.field.cpos + 1);
 		widget_data->info.field.cpos--;
+
+		update_dialog_data(dlg_data, widget_data);
 
 	case INPUT_LINE_PROCEED:
 		break;

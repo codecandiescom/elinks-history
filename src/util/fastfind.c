@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.5 2003/06/13 21:47:03 zas Exp $ */
+/* $Id: fastfind.c,v 1.6 2003/06/13 22:04:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,22 +118,29 @@ ff_init(int case_sensitive)
 static int
 add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 {
+	void **new_pointers;
+	int *new_keylen_list;
+	int new_count = info->pointers_count + 1;
+
 	/* FIXME: Check limit */
-	info->pointers = mem_realloc(info->pointers, sizeof(void *) * (info->pointers_count + 1));
-	if (!info->pointers) return 0; /* Freed at cleanup time */
+	/* On error, cleanup is done by fastfind_terminate(). */
+
+	new_pointers = mem_realloc(info->pointers, new_count * sizeof(void *));
+	if (!new_pointers) return 0;
+
+	new_keylen_list = mem_realloc(info->keylen_list, new_count * sizeof(int));
+	if (!new_keylen_list) return 0;
+
 #ifdef FASTFIND_DEBUG
-	info->memory_usage += sizeof(void *);
+	info->memory_usage += sizeof(int) + sizeof(void *);
 #endif
 
-	info->keylen_list = mem_realloc(info->keylen_list, sizeof(int) * (info->pointers_count + 1));
-	if (!info->keylen_list) return 0; /* Freed at cleanup time */
-#ifdef FASTFIND_DEBUG
-	info->memory_usage += sizeof(int);
-#endif
+	info->pointers = new_pointers;
+	info->keylen_list = new_keylen_list;
 	info->pointers[info->pointers_count] = p;
 	info->keylen_list[info->pointers_count] = key_len; /* Record key len, used in search */
 
-	info->pointers_count++;
+	info->pointers_count = new_count;
 
 	return 1;
 }

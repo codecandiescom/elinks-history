@@ -9,4 +9,7 @@ Makefile
 Makefile.in
 stamp-h
 stamp-h.in
+install-sh
+missing
+mkinstalldirs
 .deps

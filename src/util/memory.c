@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.12 2002/12/08 17:00:42 zas Exp $ */
+/* $Id: memory.c,v 1.13 2003/09/13 00:51:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ patience(unsigned char *of)
 	return 0;
 }
 
-inline void *
+void *
 mem_alloc(size_t size)
 {
 	if (size)
@@ -56,7 +56,7 @@ mem_alloc(size_t size)
 	return NULL;
 }
 
-inline void *
+void *
 mem_calloc(size_t count, size_t eltsize)
 {
 	if (eltsize && count)
@@ -69,7 +69,7 @@ mem_calloc(size_t count, size_t eltsize)
 	return NULL;
 }
 
-inline void
+void
 mem_free(void *p)
 {
 	if (!p) {
@@ -80,7 +80,7 @@ mem_free(void *p)
 	free(p);
 }
 
-inline void *
+void *
 mem_realloc(void *p, size_t size)
 {
 	if (!p) return mem_alloc(size);

@@ -88,4 +88,8 @@
 /* Define to 1 to reduce binary size as far as possible. */
 #undef ELINKS_SMALL
 
+/* Define to 1 to enable support for SMB protocol (requires smbclient). */
+#undef ELINKS_SMB
+
+
 #include "../feature.h"

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.147 2003/11/09 15:05:18 pasky Exp $ */
+/* $Id: download.c,v 1.148 2003/11/09 22:27:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,60 +510,8 @@ write_error:
 }
 
 static void
-download_data(struct download *download, struct file_download *file_download)
+download_data_store(struct download *download, struct file_download *file_download)
 {
-	struct cache_entry *ce;
-	int broken_302_redirect;
-
-	if (download->state >= S_WAIT && download->state < S_TRANS)
-		goto end_store;
-
-	ce = download->ce;
-	if (!ce) goto end_store;
-
-	if (ce->last_modified)
-		file_download->remotetime = parse_http_date(ce->last_modified);
-
-	broken_302_redirect = get_opt_int("protocol.http.bugs.broken_302_redirect");
-
-	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u;
-
-		if (download->state >= 0)
-			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
-
-		u = join_urls(file_download->url, ce->redirect);
-		if (!u) break;
-
-		if (!broken_302_redirect && !ce->redirect_get) {
-			unsigned char *p = strchr(file_download->url, POST_CHAR);
-
-			if (p) add_to_strn(&u, p);
-		}
-
-		mem_free(file_download->url);
-
-		file_download->url = u;
-		file_download->download.state = S_WAIT_REDIR;
-
-		set_file_download_win_handler(file_download);
-
-		load_url(file_download->url, ce->url, &file_download->download,
-			 PRI_DOWNLOAD, NC_CACHE,
-			 download->prg ? download->prg->start : 0);
-
-		return;
-	}
-
-	if (!write_cache_entry_to_file(ce, file_download)) {
-		detach_connection(download, file_download->last_pos);
-		abort_download(file_download, 0);
-		return;
-	}
-
-	detach_connection(download, file_download->last_pos);
-
-end_store:
 	if (download->state < 0) {
 		struct terminal *term = get_download_ses(file_download)->tab->term;
 
@@ -630,6 +578,64 @@ end_store:
 	}
 
 	set_file_download_win_handler(file_download);
+}
+
+static void
+download_data(struct download *download, struct file_download *file_download)
+{
+	struct cache_entry *ce;
+	int broken_302_redirect;
+
+	if (download->state >= S_WAIT && download->state < S_TRANS)
+		goto end_store;
+
+	ce = download->ce;
+	if (!ce) goto end_store;
+
+	if (ce->last_modified)
+		file_download->remotetime = parse_http_date(ce->last_modified);
+
+	broken_302_redirect = get_opt_int("protocol.http.bugs.broken_302_redirect");
+
+	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
+		unsigned char *u;
+
+		if (download->state >= 0)
+			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
+
+		u = join_urls(file_download->url, ce->redirect);
+		if (!u) break;
+
+		if (!broken_302_redirect && !ce->redirect_get) {
+			unsigned char *p = strchr(file_download->url, POST_CHAR);
+
+			if (p) add_to_strn(&u, p);
+		}
+
+		mem_free(file_download->url);
+
+		file_download->url = u;
+		file_download->download.state = S_WAIT_REDIR;
+
+		set_file_download_win_handler(file_download);
+
+		load_url(file_download->url, ce->url, &file_download->download,
+			 PRI_DOWNLOAD, NC_CACHE,
+			 download->prg ? download->prg->start : 0);
+
+		return;
+	}
+
+	if (!write_cache_entry_to_file(ce, file_download)) {
+		detach_connection(download, file_download->last_pos);
+		abort_download(file_download, 0);
+		return;
+	}
+
+	detach_connection(download, file_download->last_pos);
+
+end_store:
+	download_data_store(download, file_download);
 }
 
 

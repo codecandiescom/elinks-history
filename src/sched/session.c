@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.161 2003/09/28 00:13:17 zas Exp $ */
+/* $Id: session.c,v 1.162 2003/09/28 22:17:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -826,13 +826,9 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	add_to_list(loc->frames, frm);
 
 found:
-	if (url) {
-		if (*url) {
-			request_additional_file(ses, url, PRI_FRAME);
-		}
-
-		mem_free(url);
-	}
+	if (*url)
+		request_additional_file(ses, url, PRI_FRAME);
+	mem_free(url);
 }
 
 void

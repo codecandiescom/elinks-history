@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.104 2004/08/06 08:40:19 zas Exp $ */
+/* $Id: draw.c,v 1.105 2004/08/06 08:41:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,14 +275,13 @@ draw_text(struct terminal *term, int x, int y,
 {
 	struct screen_char *pos, *end;
 
-	assert(term && term->screen && term->screen->image && text && length >= 0);
+	assert(text && length >= 0);
 	if_assert_failed return;
 
 	if (length <= 0) return;
+	pos = get_char(term, x, y);
+	if (!pos) return;
 
-	check_range(term, x, y);
-
-	pos = &term->screen->image[x + term->width * y];
 	end = &pos[int_min(length, term->width - x) - 1];
 
 	if (color) {

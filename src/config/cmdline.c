@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.106 2004/12/19 15:54:53 jonas Exp $ */
+/* $Id: cmdline.c,v 1.107 2004/12/19 16:42:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -704,8 +704,7 @@ struct option_info cmdline_options_info[] = {
 		"no-home", 0, 0,
 		N_("Disables creation and use of files in the user specific home\n"
 		"configuration directory (~/.elinks). It forces default configuration\n"
-		"values to be used and disables saving of changed configuration\n"
-		"option and state files (e.g. cookies).")),
+		"values to be used and disables saving of runtime state files.")),
 
 	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
 		"no-numbering", 0, 0,

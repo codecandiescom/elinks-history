@@ -107,8 +107,8 @@ this option is used. See also \fI-touch-files\fR.
 \fB-no-home [0|1] (default: 0) \fR
 Disables creation and use of files in the user specific home
 configuration directory (\fI~/.elinks\fR). It forces default
-configuration values to be used and disables saving of changed
-configuration option and state files (e.g. cookies).
+configuration values to be used and disables saving of state
+files (e.g. cookies).
 .TP
 \fB-no-numbering [0|1] (default: 0) \fR
 Prevents numbering of links in the \fI-dump\fR. output; this was the

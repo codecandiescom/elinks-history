@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.117 2003/10/28 01:18:31 pasky Exp $ */
+/* $Id: osdep.c,v 1.118 2003/11/08 05:51:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,7 +249,25 @@ get_clipboard_text(void)	/* !!! FIXME */
 void
 set_clipboard_text(unsigned char *data)
 {
-	/* !!! FIXME */
+	/* GNU Screen's clipboard */
+	if (getenv("STY")) {
+		struct string str;
+
+		if (!init_string(&str)) return;
+
+		add_to_string(&str, "screen -X register . '");
+		for (; *data; ++data)
+			if (*data == '\'')
+				add_to_string(&str, "'\\''");
+			else
+				add_char_to_string(&str, *data);
+		add_char_to_string(&str, '\'');
+
+		if (str.length) exe(str.source);
+		if (str.source) done_string(&str);
+	}
+
+	/* TODO: internal clipboard */
 }
 
 /* Set xterm-like term window's title. */

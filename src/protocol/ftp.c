@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.24 2002/09/04 15:43:23 zas Exp $ */
+/* $Id: ftp.c,v 1.25 2002/09/04 16:02:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -957,20 +957,21 @@ out_of_mem:
 
 			memmove(c_i->ftp_buffer, c_i->ftp_buffer + proceeded,
 				c_i->buf_pos);
-			
-			A(ftp_dirlist_end);
+
 		}
 
 		setcstate(conn, S_TRANS);
 		return;
 	}
 
-#undef A
-
 	if (ftp_process_dirlist(conn->cache, &conn->from, &c_i->dpos,
 				c_i->ftp_buffer, c_i->buf_pos, 1,
 				&conn->tries) == -1)
 		goto out_of_mem;
+
+	if (c_i->dir) A(ftp_dirlist_end);
+
+#undef A
 
 	set_handlers(conn->sock2, NULL, NULL, NULL, NULL);
 	close_socket(NULL, &conn->sock2);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.159 2003/11/13 22:33:55 pasky Exp $ */
+/* $Id: download.c,v 1.160 2003/11/13 22:35:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,46 +532,49 @@ download_data_store(struct download *download, struct file_download *file_downlo
 			}
 		}
 
-	} else {
-		if (file_download->prog) {
-			prealloc_truncate(file_download->handle,
-					  file_download->last_pos);
-			close(file_download->handle);
-			file_download->handle = -1;
-			exec_on_terminal(get_download_ses(file_download)->tab->term,
-					 file_download->prog, file_download->file,
-					 !!file_download->prog_flags);
-			mem_free(file_download->prog);
-			file_download->prog = NULL;
+		goto abort;
+	}
 
-		} else {
-			if (file_download->notify) {
-				unsigned char *url = get_no_post_url(file_download->url, NULL);
+	if (file_download->prog) {
+		prealloc_truncate(file_download->handle,
+				  file_download->last_pos);
+		close(file_download->handle);
+		file_download->handle = -1;
+		exec_on_terminal(get_download_ses(file_download)->tab->term,
+				 file_download->prog, file_download->file,
+				 !!file_download->prog_flags);
+		mem_free(file_download->prog);
+		file_download->prog = NULL;
 
-				if (url) {
-					msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
-						N_("Download"), AL_CENTER,
-						msg_text(term, N_("Download complete:\n%s"), url),
-						get_download_ses(file_download), 1,
-						N_("OK"), NULL, B_ENTER | B_ESC);
-				}
-			}
+		goto abort;
+	}
 
-			if (get_opt_int("document.download.notify_bell")
-			    + file_download->notify >= 2) {
-				beep_terminal(get_download_ses(file_download)->tab->term);
-			}
+	if (file_download->notify) {
+		unsigned char *url = get_no_post_url(file_download->url, NULL);
 
-			if (file_download->remotetime
-			    && get_opt_int("document.download.set_original_time")) {
-				struct utimbuf foo;
-
-				foo.actime = foo.modtime = file_download->remotetime;
-				utime(file_download->file, &foo);
-			}
+		if (url) {
+			msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
+				N_("Download"), AL_CENTER,
+				msg_text(term, N_("Download complete:\n%s"), url),
+				get_download_ses(file_download), 1,
+				N_("OK"), NULL, B_ENTER | B_ESC);
 		}
 	}
 
+	if (get_opt_int("document.download.notify_bell")
+	    + file_download->notify >= 2) {
+		beep_terminal(get_download_ses(file_download)->tab->term);
+	}
+
+	if (file_download->remotetime
+	    && get_opt_int("document.download.set_original_time")) {
+		struct utimbuf foo;
+
+		foo.actime = foo.modtime = file_download->remotetime;
+		utime(file_download->file, &foo);
+	}
+
+abort:
 	abort_download(file_download, 0);
 }
 

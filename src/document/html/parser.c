@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.23 2002/05/10 17:46:47 pasky Exp $ */
+/* $Id: parser.c,v 1.24 2002/05/10 17:50:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -997,8 +997,13 @@ void find_form_for_input(unsigned char *i)
 {
 	unsigned char *s, *ss, *name, *attr, *lf, *la;
 	int namelen;
+
 	if (form.action) mem_free(form.action);
 	if (form.target) mem_free(form.target);
+	memset(&form, 0, sizeof(form));
+
+	if (!special_f(ff, SP_USED, NULL)) return;
+
 	if (last_input_tag && i <= last_input_tag && i > last_form_tag) {
 		get_html_form(last_form_attr, &form);
 		return;

@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.3 2003/06/21 12:29:29 pasky Exp $ */
+/* $Id: codes.c,v 1.4 2003/06/21 12:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,4 +81,24 @@ http_code_to_string(int code)
 	}
 
 	return NULL;
+}
+
+
+unsigned char *
+http_error_document(int code)
+{
+	unsigned char errs[] = "xxx";
+	unsigned char *str;
+	unsigned char *codestr = http_code_to_string(info->error_code);
+
+	if (!codestr) codestr = "Unknown error";
+			
+	ulongcat(errs, NULL, info->error_code, 3, '0');
+
+	str = straconcat("<html><head><title>HTTP error ", errs,
+			 "</title></head><body>HTTP error ", errs,
+			 " : <b>", codestr, "</b>",
+			 "</body></html>", NULL);
+
+	return str;
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.140 2003/06/21 12:26:16 pasky Exp $ */
+/* $Id: http.c,v 1.141 2003/06/21 12:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1017,19 +1017,7 @@ thats_all_folks:
 	 * that instead of nothing. */
 	/* TODO: Make sure that Content-type is text/html. --pasky */
 	if (!conn->from && info->error_code) {
-		unsigned char errs[] = "xxx";
-		unsigned char *str;
-		unsigned char *codestr = 
-			       http_code_to_string(info->error_code);
-
-		if (!codestr) codestr = "Unknown error";
-				
-		ulongcat(errs, NULL, info->error_code, 3, '0');
-
-		str = straconcat("<html><head><title>HTTP error ", errs,
-				 "</title></head><body>HTTP error ", errs,
-				 " : <b>", codestr, "</b>",
-				 "</body></html>", NULL);
+		unsigned char *str = http_error_document(info->error_code);
 
 		if (str) {
 			int strl = strlen(str);

@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.10 2003/01/18 01:15:26 pasky Exp $ */
+/* $Id: layouter.c,v 1.11 2003/01/18 02:12:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,8 @@ spawn_box(struct layouter_state *state)
 		add_to_list(state->root->leafs, box);
 
 	box->root = state->root;
+
+	state->current = box;
 
 	return box;
 }
@@ -112,7 +114,7 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		text->len = 1;
 	}
 
-	foreachback (leaf, node->leafs) {
+	foreach (leaf, node->leafs) {
 		struct layout_box *root_box = state->root;
 
 		box = spawn_box(state);

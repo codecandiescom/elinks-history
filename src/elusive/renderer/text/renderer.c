@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.12 2003/01/18 01:15:26 pasky Exp $ */
+/* $Id: renderer.c,v 1.13 2003/01/18 02:12:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,18 @@
 
 struct text_renderer_state {
 	int last_display_type; /* 0 -> inline, 1 -> block */
+
+	/* The reference box position and padding (absolute to the viewport).
+	 * It's basically where we return with the virtual "cursor" when we
+	 * move to a new line, where we even start with the drawing when we
+	 * move to a new column, and what space we will leave at the
+	 * bottom/right. */
+	int leftpad;
+	/* TODO: toppad,bottompad,rightpad */
+
+	/* Position of the virtual "cursor" in the normal flow. */
+	int x_pos;
+	/* TODO: y_pos when we'll support non-static positioning! */
 };
 
 
@@ -124,16 +136,33 @@ render_box(struct renderer_state *state, struct layout_box *box)
 	struct f_data *frame_data = console_frame_data->f_data;
 	int y = frame_data->y;
 	struct layout_box *leaf_box;
+	int leftpad = rstate->leftpad;
 
 	{
-		unsigned char *display = get_box_property(box, "display");
+		unsigned char *display = get_only_box_property(box, "display");
 
 		if (display && !strcmp(display, "block")) {
-			if (!rstate->last_display_type)
+			/* Don't make multiple newlines for subsequent block
+			 * elements. */
+			if (!rstate->last_display_type) {
 				realloc_lines(frame_data, ++y);
+				rstate->x_pos = rstate->leftpad;
+			}
 			rstate->last_display_type = 1;
 		} else {
 			rstate->last_display_type = 0;
+		}
+	}
+
+	{
+		unsigned char *leftpad;
+
+		/* XXX: Assuming em unit. */
+		leftpad = get_only_box_property(box, "padding-left");
+		if (leftpad) {
+			int lp = atoi(leftpad);
+
+			rstate->leftpad += lp; rstate->x_pos += lp;
 		}
 	}
 
@@ -144,22 +173,21 @@ render_box(struct renderer_state *state, struct layout_box *box)
 		case RECT_TEXT:
 			{
 				struct layout_box_text *data = box->data;
-				unsigned char *leftpad;
-				int x = frame_data->data[y].l;
 
-				/* XXX: Assuming em unit. */
-				leftpad = get_box_property(box, "padding-left");
-				if (leftpad) x = atoi(leftpad);
+				put_text(frame_data, rstate->x_pos, y,
+					data->str, data->len);
 
-				put_text(frame_data, x, y, data->str, data->len);
+				rstate->x_pos += data->len;
 			}
 			break;
 	}
 	y++;
 
-	foreachback (leaf_box, box->leafs) {
+	foreach (leaf_box, box->leafs) {
 		render_box(state, leaf_box);
 	}
+
+	rstate->leftpad = leftpad;
 }
 
 

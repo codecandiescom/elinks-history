@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.103 2003/10/16 13:08:46 zas Exp $ */
+/* $Id: connection.c,v 1.104 2003/10/19 17:51:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,7 +241,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	c->ref_url = ref_url;
 	c->pri[priority] =  1;
 	c->cache_mode = cache_mode;
-	c->sock1 = c->sock2 = -1;
+	c->socket = c->sock2 = -1;
 	c->content_encoding = ENCODING_NONE;
 	c->stream_pipes[0] = c->stream_pipes[1] = -1;
 	init_list(c->downloads);
@@ -339,7 +339,7 @@ free_connection_data(struct connection *c)
 	 * at least active_connections underflows along the way. --pasky */
 	c->running = 0;
 
-	if (c->sock1 != -1) set_handlers(c->sock1, NULL, NULL, NULL, NULL);
+	if (c->socket != -1) set_handlers(c->socket, NULL, NULL, NULL, NULL);
 	if (c->sock2 != -1) set_handlers(c->sock2, NULL, NULL, NULL, NULL);
 	close_socket(NULL, &c->sock2);
 
@@ -436,7 +436,7 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 	k->port = get_uri_port(uri);
 	k->protocol = get_protocol_handler(uri->protocol);
 	k->pf = c->pf;
-	k->socket = c->sock1;
+	k->socket = c->socket;
 	k->timeout = timeout;
 	k->add_time = get_time();
 
@@ -472,7 +472,7 @@ has_keepalive_connection(struct connection *c)
 
 	if (!k) return 0;
 
-	c->sock1 = k->socket;
+	c->socket = k->socket;
 	c->pf = k->pf;
 
 	/* Mark that the socket should not be closed */
@@ -488,14 +488,14 @@ add_keepalive_connection(struct connection *c, ttime timeout)
 	struct keepalive_connection *k;
 
 	free_connection_data(c);
-	assertm(c->sock1 != -1, "keepalive connection not connected");
+	assertm(c->socket != -1, "keepalive connection not connected");
 	if_assert_failed goto done;
 
 	k = init_keepalive_connection(c, timeout);
 	if (k)
 		add_to_list(keepalive_connections, k);
 	else
-		close(c->sock1);
+		close(c->socket);
 
 done:
 	done_connection(c);
@@ -594,7 +594,7 @@ interrupt_connection(struct connection *c)
 		c->ssl = NULL;
 	}
 
-	close_socket(c, &c->sock1);
+	close_socket(c, &c->socket);
 	free_connection_data(c);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.37 2003/07/24 11:35:11 miciah Exp $ */
+/* $Id: connection.h,v 1.38 2003/10/19 17:51:37 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -135,7 +135,7 @@ struct connection {
 	enum connection_state state;
 	int prev_error;
 	int from;
-	int sock1;
+	int socket;
 	int sock2;
 	int tries;
 	int received;

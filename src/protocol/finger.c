@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.20 2003/07/23 15:20:49 pasky Exp $ */
+/* $Id: finger.c,v 1.21 2003/10/19 17:51:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@ finger_func(struct connection *c)
 {
 	set_connection_timeout(c);
 	c->from = 0;
-	make_connection(c, get_uri_port(&c->uri), &c->sock1, finger_send_request);
+	make_connection(c, get_uri_port(&c->uri), &c->socket, finger_send_request);
 }
 
 static void finger_send_request(struct connection *c)
@@ -41,7 +41,7 @@ static void finger_send_request(struct connection *c)
 		add_bytes_to_string(&req, c->uri.user, c->uri.userlen);
 	}
 	add_to_string(&req, "\r\n");
-	write_to_socket(c, c->sock1, req.source, req.length, finger_sent_request);
+	write_to_socket(c, c->socket, req.source, req.length, finger_sent_request);
 	done_string(&req);
 	set_connection_state(c, S_SENT);
 }
@@ -55,7 +55,7 @@ finger_sent_request(struct connection *c)
 	rb = alloc_read_buffer(c);
 	if (!rb) return;
 	rb->close = 1;
-	read_from_socket(c, c->sock1, rb, finger_get_response);
+	read_from_socket(c, c->socket, rb, finger_get_response);
 }
 
 static void
@@ -85,7 +85,7 @@ finger_get_response(struct connection *c, struct read_buffer *rb)
 
 	c->from += l;
 	kill_buffer_data(rb, l);
-	read_from_socket(c, c->sock1, rb, finger_get_response);
+	read_from_socket(c, c->socket, rb, finger_get_response);
 	set_connection_state(c, S_TRANS);
 }
 

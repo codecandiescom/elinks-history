@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.108 2003/10/18 19:17:40 pasky Exp $ */
+/* $Id: ftp.c,v 1.109 2003/10/19 17:51:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ again:
 				}
 
 				memset(s, 0, sizeof(struct sockaddr_in6));
-				if (getpeername(conn->sock1, (struct sockaddr *) sa, &sal)) {
+				if (getpeername(conn->socket, (struct sockaddr *) sa, &sal)) {
 					return -1;
 				}
 				s->sin6_family = AF_INET6;
@@ -227,7 +227,7 @@ ftp_func(struct connection *conn)
 	if (!has_keepalive_connection(conn)) {
 		int port = get_uri_port(&conn->uri);
 
-		make_connection(conn, port, &conn->sock1, ftp_login);
+		make_connection(conn, port, &conn->socket, ftp_login);
 
 	} else {
 		ftp_send_retr_req(conn, S_SENT);
@@ -241,7 +241,7 @@ get_resp(struct connection *conn)
 	struct read_buffer *rb = alloc_read_buffer(conn);
 
 	if (!rb) return;
-	read_from_socket(conn, conn->sock1, rb, conn->read_func);
+	read_from_socket(conn, conn->socket, rb, conn->read_func);
 }
 
 /* Send command, set connection state and free cmd string. */
@@ -249,7 +249,7 @@ static void
 send_cmd(struct connection *conn, unsigned char *cmd, int cmdl, void *callback, int state)
 {
 	conn->read_func = callback;
-	write_to_socket(conn, conn->sock1, cmd, cmdl, get_resp);
+	write_to_socket(conn, conn->socket, cmd, cmdl, get_resp);
 
 	mem_free(cmd);
 	set_connection_state(conn, state);
@@ -291,7 +291,7 @@ ftp_got_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(conn, conn->sock1, rb, ftp_got_info);
+		read_from_socket(conn, conn->socket, rb, ftp_got_info);
 		return;
 	}
 
@@ -322,7 +322,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(conn, conn->sock1, rb, ftp_got_user_info);
+		read_from_socket(conn, conn->socket, rb, ftp_got_user_info);
 		return;
 	}
 
@@ -395,7 +395,7 @@ ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(conn, conn->sock1, rb, ftp_pass_info);
+		read_from_socket(conn, conn->socket, rb, ftp_pass_info);
 		set_connection_state(conn, S_LOGIN);
 		return;
 	}
@@ -528,7 +528,7 @@ add_file_cmd_to_str(struct connection *conn)
 		c_i->use_epsv = 1;
 
 	if (!c_i->use_epsv && conn->pf == 2) {
-		data_sock = get_pasv6_socket(conn, conn->sock1,
+		data_sock = get_pasv6_socket(conn, conn->socket,
 		 	    (struct sockaddr_storage *) &data_addr);
 		if (data_sock < 0)
 			return NULL;
@@ -537,7 +537,7 @@ add_file_cmd_to_str(struct connection *conn)
 #endif
 
 	if (!c_i->use_pasv && conn->pf != 2) {
-		data_sock = get_pasv_socket(conn, conn->sock1, pc);
+		data_sock = get_pasv_socket(conn, conn->socket, pc);
 		if (data_sock < 0)
 			return NULL;
 		conn->sock2 = data_sock;
@@ -742,7 +742,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		}
 
 		if (!response) {
-			read_from_socket(conn, conn->sock1, rb, ftp_retr_file);
+			read_from_socket(conn, conn->socket, rb, ftp_retr_file);
 			set_connection_state(conn, S_GETH);
 			return;
 		}
@@ -824,7 +824,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(conn, conn->sock1, rb, ftp_retr_file);
+		read_from_socket(conn, conn->socket, rb, ftp_retr_file);
 		set_connection_state(conn, S_GETH);
 		return;
 	}
@@ -848,7 +848,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		     (void (*)(void *)) got_something_from_data_connection,
 		     NULL, NULL, conn);
 
-	/* read_from_socket(conn, conn->sock1, rb, ftp_got_final_response); */
+	/* read_from_socket(conn, conn->socket, rb, ftp_got_final_response); */
 	ftp_got_final_response(conn, rb);
 }
 
@@ -864,7 +864,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (!response) {
-		read_from_socket(conn, conn->sock1, rb, ftp_got_final_response);
+		read_from_socket(conn, conn->socket, rb, ftp_got_final_response);
 		if (conn->state != S_TRANS)
 			set_connection_state(conn, S_GETH);
 		return;

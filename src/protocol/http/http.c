@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.189 2003/10/17 05:11:44 witekfl Exp $ */
+/* $Id: http.c,v 1.190 2003/10/19 17:51:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,7 +298,7 @@ http_func(struct connection *conn)
 			return;
 		}
 
-		make_connection(conn, p, &conn->sock1, http_send_header);
+		make_connection(conn, p, &conn->socket, http_send_header);
 	} else {
 		http_send_header(conn);
 	}
@@ -670,7 +670,7 @@ http_send_header(struct connection *conn)
 #undef POST_BUFFER_SIZE
 	}
 
-	write_to_socket(conn, conn->sock1, header.source, header.length,
+	write_to_socket(conn, conn->socket, header.source, header.length,
 			http_get_header);
 	done_string(&header);
 
@@ -988,7 +988,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 read_more:
-	read_from_socket(conn, conn->sock1, rb, read_http_data);
+	read_from_socket(conn, conn->socket, rb, read_http_data);
 	set_connection_state(conn, S_TRANS);
 	return;
 
@@ -1109,7 +1109,7 @@ again:
 		return;
 	}
 	if (!a) {
-		read_from_socket(conn, conn->sock1, rb, http_got_header);
+		read_from_socket(conn, conn->socket, rb, http_got_header);
 		set_connection_state(conn, state);
 		return;
 	}
@@ -1391,7 +1391,7 @@ http_get_header(struct connection *conn)
 	if (!rb) return;
 	set_connection_timeout(conn);
 	rb->close = 1;
-	read_from_socket(conn, conn->sock1, rb, http_got_header);
+	read_from_socket(conn, conn->socket, rb, http_got_header);
 }
 
 

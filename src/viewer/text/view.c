@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.629 2004/10/17 20:38:10 miciah Exp $ */
+/* $Id: view.c,v 1.630 2004/10/17 20:40:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -626,13 +626,9 @@ try_mark_key(struct session *ses, struct document_view *doc_view,
 {
 	unsigned char mark = get_kbd_key(ev);
 
-	if (ses->kbdprefix.mark == KP_MARK_NOTHING)
-		return FRAME_EVENT_IGNORED;
-
 	switch (ses->kbdprefix.mark) {
 		case KP_MARK_NOTHING:
-			assert(0);
-			break;
+			return FRAME_EVENT_IGNORED;
 
 		case KP_MARK_SET:
 			/* It is intentional to set the mark

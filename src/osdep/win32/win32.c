@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.18 2004/11/08 15:42:57 jonas Exp $ */
+/* $Id: win32.c,v 1.19 2004/11/10 16:47:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,13 +129,13 @@ input_function(int fd)
 void
 handle_terminal_resize(int fd, void (*fn)())
 {
-		return;
+	return;
 }
 
 void
 unhandle_terminal_resize(int fd)
 {
-		return;
+	return;
 }
 
 void

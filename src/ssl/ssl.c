@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.24 2003/07/06 21:25:49 pasky Exp $ */
+/* $Id: ssl.c,v 1.25 2003/07/21 22:31:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,41 +167,39 @@ free_ssl(ssl_t *ssl)
 
 unsigned char *
 get_ssl_cipher_str(ssl_t *ssl) {
-	unsigned char *str = NULL;
+	struct string str = NULL_STRING;
 #ifdef HAVE_SSL
-	int l = 0;
 
-	str = init_str();
-	if (!str) return NULL;
+	if (!init_string(&str)) return NULL;
 
 #ifdef HAVE_OPENSSL
-	add_num_to_str(&str, &l, SSL_get_cipher_bits(ssl, NULL));
-	add_to_str(&str, &l, "-bit ");
-	add_to_str(&str, &l, SSL_get_cipher_version(ssl));
-	add_chr_to_str(&str, &l, ' ');
-	add_to_str(&str, &l, (unsigned char *) SSL_get_cipher_name(ssl));
+	add_long_to_string(&str, SSL_get_cipher_bits(ssl, NULL));
+	add_to_string(&str, "-bit ");
+	add_to_string(&str, SSL_get_cipher_version(ssl));
+	add_char_to_string(&str, ' ');
+	add_to_string(&str, (unsigned char *) SSL_get_cipher_name(ssl));
 #elif defined(HAVE_GNUTLS)
 	/* XXX: How to get other relevant parameters? */
-	add_to_str(&str, &l, (unsigned char *)
-			gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)));
-	add_to_str(&str, &l, " - ");
-	add_to_str(&str, &l, (unsigned char *)
-			gnutls_kx_get_name(gnutls_kx_get(*ssl)));
-	add_to_str(&str, &l, " - ");
-	add_to_str(&str, &l, (unsigned char *)
+	add_to_string(&str, (unsigned char *)
+		      gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)));
+	add_to_string(&str, " - ");
+	add_to_string(&str, (unsigned char *)
+		      gnutls_kx_get_name(gnutls_kx_get(*ssl)));
+	add_to_string(&str, " - ");
+	add_to_string(&str, (unsigned char *)
 			gnutls_cipher_get_name(gnutls_cipher_get(*ssl)));
-	add_to_str(&str, &l, " - ");
-	add_to_str(&str, &l, (unsigned char *)
+	add_to_string(&str, " - ");
+	add_to_string(&str, (unsigned char *)
 			gnutls_mac_get_name(gnutls_mac_get(*ssl)));
-	add_to_str(&str, &l, " - ");
-	add_to_str(&str, &l, (unsigned char *)
+	add_to_string(&str, " - ");
+	add_to_string(&str, (unsigned char *)
 			gnutls_cert_type_get_name(gnutls_cert_type_get(*ssl)));
-	add_to_str(&str, &l, " (compr:");
-	add_to_str(&str, &l, (unsigned char *)
+	add_to_string(&str, " (compr:");
+	add_to_string(&str, (unsigned char *)
 			gnutls_compression_get_name(gnutls_compression_get(*ssl)));
-	add_chr_to_str(&str, &l, ')');
+	add_char_to_string(&str, ')');
 #endif
 #endif
 
-	return str;
+	return str.source;
 }

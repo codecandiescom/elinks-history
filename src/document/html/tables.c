@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.112 2003/10/30 17:51:54 zas Exp $ */
+/* $Id: tables.c,v 1.113 2003/10/30 22:04:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1375,8 +1375,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 					}
 				}
 
-				html_stack_dup();
-				html_top.dontkill = 1;
+				html_stack_dup(1);
 
 				if (cell->is_header) format.attr |= AT_BOLD;
 
@@ -1752,8 +1751,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	if (bad_html) mem_free(bad_html);
-	html_stack_dup();
-	html_top.dontkill = 1;
+	html_stack_dup(1);
 	par_format.align = AL_LEFT;
 	t->p = p;
 	t->border = border;

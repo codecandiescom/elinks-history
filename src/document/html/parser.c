@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.242 2003/10/30 16:49:21 jonas Exp $ */
+/* $Id: parser.c,v 1.243 2003/10/30 22:04:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,7 +434,7 @@ debug_stack(void)
 #endif
 
 void
-html_stack_dup(void)
+html_stack_dup(int dontkill)
 {
 	struct html_element *e;
 	struct html_element *ep = html_stack.next;
@@ -465,7 +465,7 @@ html_stack_dup(void)
 #endif
 	e->name = e->options = NULL;
 	e->namelen = 0;
-	e->dontkill = 0;
+	e->dontkill = dontkill;
 	add_to_list(html_stack, e);
 }
 
@@ -664,7 +664,7 @@ static void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
-	html_stack_dup();
+	html_stack_dup(0);
 	ln_break(1, line_break_f, ff);
 	if (format.link) mem_free(format.link),	format.link = NULL;
 	if (format.target) mem_free(format.target), format.target = NULL;
@@ -836,7 +836,7 @@ html_img(unsigned char *a)
 		unsigned char *u;
 
 		usemap = 1;
-		html_stack_dup();
+		html_stack_dup(0);
 		if (format.link) mem_free(format.link);
 		if (format.form) format.form = NULL;
 		u = join_urls(format.href_base, al);
@@ -961,7 +961,7 @@ html_img(unsigned char *a)
 		if (ismap) {
 			unsigned char *h;
 
-			html_stack_dup();
+			html_stack_dup(0);
 			h = stracpy(format.link);
 			if (h) {
 				add_to_strn(&h, "?0,0");
@@ -1165,7 +1165,7 @@ html_hr(unsigned char *a)
 	int q = get_num(a, "size");
 
 	if (q >= 0 && q < 2) r = (unsigned char)BORDER_SHLINE;
-	html_stack_dup();
+	html_stack_dup(0);
 	par_format.align = AL_CENTER;
 	if (format.link) mem_free(format.link), format.link = NULL;
 	format.form = NULL;
@@ -1633,7 +1633,7 @@ xxx:
 	if (fc->type == FC_HIDDEN) goto hid;
 
 	put_chrs(" ", 1, put_chars_f, ff);
-	html_stack_dup();
+	html_stack_dup(0);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
 	format.title = get_attr_val(a, "title");
@@ -1766,7 +1766,7 @@ x:
 	fc->ro = format.select_disabled;
 	if (has_attr(a, "disabled")) fc->ro = 2;
 	put_chrs(" ", 1, put_chars_f, ff);
-	html_stack_dup();
+	html_stack_dup(0);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 	put_chrs("[ ]", 3, put_chars_f, ff);
@@ -2120,7 +2120,7 @@ end_parse:
 	fc->labels = lbls;
 	menu_labels(fc->menu, "", lbls);
 	put_chrs("[", 1, put_chars_f, f);
-	html_stack_dup();
+	html_stack_dup(0);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 	mw = 0;
@@ -2236,7 +2236,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (rows > 1) ln_break(1, line_break_f, f);
 	else put_chrs(" ", 1, put_chars_f, f);
 
-	html_stack_dup();
+	html_stack_dup(0);
 	format.form = fc;
 	format.attr |= AT_BOLD;
 
@@ -3258,7 +3258,7 @@ ng:;
 						}
 					}
 					if (ei->nopair != 1) {
-						html_stack_dup();
+						html_stack_dup(0);
 						html_top.name = name;
 						html_top.namelen = namelen;
 						html_top.options = attr;
@@ -3657,9 +3657,8 @@ init_html_parser_state(int align, int margin, int width)
 {
 	struct html_element *element;
 
-	html_stack_dup();
+	html_stack_dup(2);
 	element = &html_top;
-	html_top.dontkill = 2;
 	html_top.namelen = 0;
 
 	par_format.align = align;

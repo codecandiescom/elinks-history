@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.96 2004/07/30 10:01:59 zas Exp $ */
+/* $Id: draw.c,v 1.97 2004/08/06 08:30:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ struct screen_char *
 get_char(struct terminal *term, int x, int y)
 {
 	assert(term && term->screen && term->screen->image);
-	if_assert_failed return 0;
+	if_assert_failed return NULL;
 	check_range(term, x, y);
 
 	return &term->screen->image[x + term->width * y];

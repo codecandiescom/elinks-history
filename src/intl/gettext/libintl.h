@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.1 2003/01/02 23:38:53 pasky Exp $ */
+/* $Id: libintl.h,v 1.2 2003/01/03 00:51:08 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -15,10 +15,14 @@
 
 #include "intl/gettext/libgettext.h"
 
+#if 0
+
 /* TODO: Make use of the term. */
 #define _(msg,term) gettext(msg)
 
 /* no-op - just for marking */
 #define N_(msg) gettext_noop(msg)
+
+#endif
 
 #endif

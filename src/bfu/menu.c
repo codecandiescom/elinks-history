@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.242 2004/07/19 08:05:10 zas Exp $ */
+/* $Id: menu.c,v 1.243 2004/07/19 13:29:29 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -249,7 +249,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 }
 
 static void
-scroll_menu(struct menu *menu, int d)
+scroll_menu(struct menu *menu, int steps)
 {
 	int w = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
@@ -263,7 +263,7 @@ scroll_menu(struct menu *menu, int d)
 		return;
 	}
 
-	menu->selected += d;
+	menu->selected += steps;
 
 	menu->selected %= menu->size;
 	if (menu->selected < 0)
@@ -272,7 +272,7 @@ scroll_menu(struct menu *menu, int d)
 	int_bounds(&menu->selected, 0, menu->size - 1);
 
 	while (!mi_is_selectable(menu->items[menu->selected])) {
-		menu->selected += d ? d/abs(d) : 1;
+		menu->selected += steps ? steps/abs(steps) : 1;
 
 		if (menu->selected < 0) {
 			menu->selected += menu->size;

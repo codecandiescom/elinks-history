@@ -1,7 +1,8 @@
 /* Terminal color palettes. */
-/* $Id: palette.inc,v 1.2 2003/09/06 22:33:36 jonas Exp $ */
+/* $Id: palette.inc,v 1.3 2003/09/06 22:50:56 jonas Exp $ */
 /* TODO: We should probably autogenerate this using xterm's perl script. */
 
+/* The 16 ANSI colors. */
 static struct rgb palette16[] = {
 #if defined(PALA)
 	{0x00, 0x00, 0x00},
@@ -59,8 +60,10 @@ static struct rgb palette16[] = {
 
 #ifdef USE_88_COLORS
 /* Regexp'd from Dickey's xterm 88colres.h file. */
+/* Colors  0-16 are the ANSI colors (and the same as palette16[]).
+ * Colors 16-79 are 4x4x4 color cubes
+ * Colors 80-91 are a grayscale ramp (with black and white left out). */
 static struct rgb palette88[] = {
-	/* The first 16 entries are the same as palette16[] */
 	{0x00, 0x00, 0x00}, /* 0 */
 	{0x80, 0x00, 0x00}, /* 1 */
 	{0x00, 0x80, 0x00}, /* 2 */
@@ -146,7 +149,6 @@ static struct rgb palette88[] = {
 	{0xff, 0xff, 0xcd}, /* 78 */
 	{0xff, 0xff, 0xff}, /* 79 */
 
-	/* Pure grayscale part. */
 	{0x2e, 0x2e, 0x2e}, /* 80 */
 	{0x5c, 0x5c, 0x5c}, /* 81 */
 	{0x73, 0x73, 0x73}, /* 82 */
@@ -160,8 +162,10 @@ static struct rgb palette88[] = {
 
 #ifdef USE_256_COLORS
 /* Regexp'd from Dickey's xterm 256colres.h file. */
+/* Colors   0- 16 are the ANSI colors (and the same as palette16[]).
+ * Colors  16-231 are a 6x6x6 color cube
+ * Colors 231-255 are a grayscale ramp (with black and white left out). */
 static struct rgb palette256[] = {
-	/* The first 16 entries are the same as palette16[] */
 	{0x00, 0x00, 0x00}, /* 0 */
 	{0x80, 0x00, 0x00}, /* 1 */
 	{0x00, 0x80, 0x00}, /* 2 */
@@ -401,7 +405,6 @@ static struct rgb palette256[] = {
 	{0xff, 0xff, 0xd7}, /* 230 */
 	{0xff, 0xff, 0xff}, /* 231 */
 
-	/* Pure grayscale part. */
 	{0x08, 0x08, 0x08}, /* 232 */
 	{0x12, 0x12, 0x12}, /* 233 */
 	{0x1c, 0x1c, 0x1c}, /* 234 */

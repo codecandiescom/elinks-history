@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.12 2004/04/17 01:35:17 jonas Exp $ */
+/* $Id: newwin.c,v 1.13 2004/04/17 01:37:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "util/string.h"
 
 
-struct open_in_new oinw[] = {
+static struct open_in_new oinw[] = {
 	{ ENV_XWIN,	DEFAULT_XTERM_CMD,	    N_("~Xterm") },
 	{ ENV_TWIN,	DEFAULT_TWTERM_CMD,	    N_("T~wterm") },
 	{ ENV_SCREEN,	DEFAULT_SCREEN_CMD,	    N_("~Screen") },

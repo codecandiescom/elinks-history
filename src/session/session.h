@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.148 2004/06/12 11:24:53 jonas Exp $ */
+/* $Id: session.h,v 1.149 2004/06/12 15:03:19 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -51,7 +51,6 @@ struct kbdprefix {
 };
 
 struct session;
-struct initial_session_info;
 
 /* This describes, what are we trying to do right now. We pass this around so
  * that we can use generic scheduler routines and when the control will get

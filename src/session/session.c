@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.354 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: session.c,v 1.355 2004/04/04 01:26:52 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -106,12 +106,13 @@ get_current_download(struct session *ses)
 }
 
 void
-print_error_dialog(struct session *ses, struct download *stat)
+print_error_dialog(struct session *ses, enum connection_state state,
+		   enum connection_priority priority)
 {
-	unsigned char *t = get_err_msg(stat->state, ses->tab->term);
+	unsigned char *t = get_err_msg(state, ses->tab->term);
 
 	/* Don't show error dialogs for missing CSS stylesheets */
-	if (!t || stat->pri == PRI_CSS) return;
+	if (!t || priority == PRI_CSS) return;
 	msg_box(ses->tab->term, NULL, MSGBOX_NO_INTL,
 		_("Error", ses->tab->term), AL_CENTER,
 		t,
@@ -399,7 +400,7 @@ doc_end_load(struct download *stat, struct session *ses)
 		}
 
 		if (stat->state != S_OK) {
-			print_error_dialog(ses, stat);
+			print_error_dialog(ses, stat->state, stat->pri);
 		}
 
 	} else if (ses->display_timer == -1) {

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.59 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: task.c,v 1.60 2004/04/04 01:26:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,7 +429,7 @@ end_load(struct download *stat, struct session *ses)
 	}
 
 	if (stat->state < 0 && stat->state != S_OK) {
-		print_error_dialog(ses, stat);
+		print_error_dialog(ses, stat->state, stat->pri);
 		if (d == 0) reload(ses, CACHE_MODE_NORMAL);
 	}
 
@@ -452,12 +452,9 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	if (!u || !uri) {
 		int state = u == NULL ? S_BAD_URL : S_OUT_OF_MEM;
-		struct download stat = { NULL_LIST_HEAD, NULL, NULL,
-					 NULL, NULL, NULL,
-					 state, PRI_CANCEL, 0 };
 
 		if (pos) mem_free(pos);
-		print_error_dialog(ses, &stat);
+		print_error_dialog(ses, state, PRI_CANCEL);
 		return;
 	}
 

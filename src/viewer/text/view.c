@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.362 2004/01/30 18:28:07 jonas Exp $ */
+/* $Id: view.c,v 1.363 2004/01/30 18:36:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -735,8 +735,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			x = 1;
 			doc_view->vs->current_link = link - doc_view->document->links;
 
-			if ((link->type == LINK_HYPERTEXT || link->type == LINK_BUTTON ||
-			     link->type == LINK_CHECKBOX || link->type == LINK_SELECT)
+			if (!link_is_textinput(link)
 			    && (ev->b & BM_ACT) == B_UP) {
 
 				draw_doc(ses->tab->term, doc_view, 1);

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.21 2003/10/30 11:22:10 zas Exp $ */
+/* $Id: frames.h,v 1.22 2003/10/30 11:41:16 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -25,7 +25,7 @@ struct frameset_desc {
 	int width, height;
 	int xp, yp;
 
-	struct frame_desc f[1]; /* must be last of struct. --Zas */
+	struct frame_desc frame_desc[1]; /* must be last of struct. --Zas */
 };
 
 struct view_state;

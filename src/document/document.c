@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.6 2003/10/30 02:25:57 jonas Exp $ */
+/* $Id: document.c,v 1.7 2003/10/30 11:41:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,17 +85,22 @@ get_cached_document(unsigned char *uristring, struct document_options *options,
 }
 
 static void
-free_frameset_desc(struct frameset_desc *fd)
+free_frameset_desc(struct frameset_desc *frameset_desc)
 {
 	int i;
 
-	for (i = 0; i < fd->n; i++) {
-		if (fd->f[i].subframe) free_frameset_desc(fd->f[i].subframe);
-		if (fd->f[i].name) mem_free(fd->f[i].name);
-		if (fd->f[i].url) mem_free(fd->f[i].url);
+	for (i = 0; i < frameset_desc->n; i++) {
+		struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
+		
+		if (frame_desc->subframe)
+			free_frameset_desc(frame_desc->subframe);
+		if (frame_desc->name)
+			mem_free(frame_desc->name);
+		if (frame_desc->url)
+			mem_free(frame_desc->url);
 	}
 
-	mem_free(fd);
+	mem_free(frameset_desc);
 }
 
 void

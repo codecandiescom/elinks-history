@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.241 2003/10/30 11:22:10 zas Exp $ */
+/* $Id: view.c,v 1.242 2003/10/30 11:41:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,28 +103,29 @@ find_tag(struct document *document, unsigned char *name)
 
 
 static void
-draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
+draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
+		 int xp, int yp)
 {
 	/* Optionalize? */
 	struct color_pair colors = INIT_COLOR_PAIR(0x000000, 0xCCCCCC);
 	register int y, j;
 
-	assert(t && fsd && fsd->f);
+	assert(t && frameset_desc && frameset_desc->frame_desc);
 	if_assert_failed return;
 
 	y = yp - 1;
-	for (j = 0; j < fsd->height; j++) {
+	for (j = 0; j < frameset_desc->height; j++) {
 		register int x, i;
-		int height = fsd->f[j * fsd->width].height;
+		int height = frameset_desc->frame_desc[j * frameset_desc->width].height;
 
 		x = xp - 1;
-		for (i = 0; i < fsd->width; i++) {
-			int width = fsd->f[i].width;
+		for (i = 0; i < frameset_desc->width; i++) {
+			int width = frameset_desc->frame_desc[i].width;
 
 			if (i) {
 				draw_area(t, x, y + 1, 1, height, BORDER_SVLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (j == fsd->height - 1)
+				if (j == frameset_desc->height - 1)
 					draw_border_cross(t, x, y + height + 1,
 							  BORDER_X_UP, &colors);
 			} else if (j) {
@@ -136,7 +137,8 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 			if (j) {
 				draw_area(t, x + 1, y, width, 1, BORDER_SHLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (i == fsd->width - 1 && x + width + 1 < t->x)
+				if (i == frameset_desc->width - 1
+				    && x + width + 1 < t->x)
 					draw_border_cross(t, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
 			} else if (i) {
@@ -152,18 +154,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	}
 
 	y = yp - 1;
-	for (j = 0; j < fsd->height; j++) {
+	for (j = 0; j < frameset_desc->height; j++) {
 		register int x, i;
-		int pj = j * fsd->width;
-		int height = fsd->f[pj].height;
+		int pj = j * frameset_desc->width;
+		int height = frameset_desc->frame_desc[pj].height;
 
 		x = xp - 1;
-		for (i = 0; i < fsd->width; i++) {
-			int width = fsd->f[i].width;
+		for (i = 0; i < frameset_desc->width; i++) {
+			int width = frameset_desc->frame_desc[i].width;
 			int p = pj + i;
 
-			if (fsd->f[p].subframe) {
-				draw_frame_lines(t, fsd->f[p].subframe,
+			if (frameset_desc->frame_desc[p].subframe) {
+				draw_frame_lines(t, frameset_desc->frame_desc[p].subframe,
 						 x + 1, y + 1);
 			}
 			x += width + 1;

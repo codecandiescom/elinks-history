@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.24 2003/10/30 11:22:10 zas Exp $ */
+/* $Id: frames.c,v 1.25 2003/10/30 11:41:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,9 +40,9 @@ add_frameset_entry(struct frameset_desc *fsd, struct frameset_desc *subframe,
 	if (fsd->yp >= fsd->height) return;
 
 	idx = fsd->xp + fsd->yp * fsd->width;
-	fsd->f[idx].subframe = subframe;
-	fsd->f[idx].name = name ? stracpy(name) : NULL;
-	fsd->f[idx].url = url ? stracpy(url) : NULL;
+	fsd->frame_desc[idx].subframe = subframe;
+	fsd->frame_desc[idx].name = name ? stracpy(name) : NULL;
+	fsd->frame_desc[idx].url = url ? stracpy(url) : NULL;
 	fsd->xp++;
 	if (fsd->xp >= fsd->width) {
 		fsd->xp = 0;
@@ -79,8 +79,8 @@ create_frameset(struct document *document, struct frameset_param *fp)
 		register int i;
 
 		for (i = 0; i < size; i++) {
-			fd->f[i].width = fp->xw[i % fp->x];
-			fd->f[i].height = fp->yw[i / fp->x];
+			fd->frame_desc[i].width = fp->xw[i % fp->x];
+			fd->frame_desc[i].height = fp->yw[i / fp->x];
 		}
 	}
 
@@ -220,17 +220,17 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 
 		o.xp = op->xp;
 		for (i = 0; i < fsd->width; i++) {
-			struct frame_desc *f = &fsd->f[n];
+			struct frame_desc *frame_desc = &fsd->frame_desc[n];
 
-			o.xw = f->width;
-			o.yw = f->height;
-			o.framename = f->name;
-			if (f->subframe)
-				format_frames(ses, f->subframe, &o, depth + 1);
-			else if (f->name) {
+			o.xw = frame_desc->width;
+			o.yw = frame_desc->height;
+			o.framename = frame_desc->name;
+			if (frame_desc->subframe)
+				format_frames(ses, frame_desc->subframe, &o, depth + 1);
+			else if (frame_desc->name) {
 				struct document_view *doc_view;
 
-				doc_view = format_frame(ses, f->name, &o, depth);
+				doc_view = format_frame(ses, frame_desc->name, &o, depth);
 				if (doc_view && document_has_frames(doc_view->document))
 					format_frames(ses, doc_view->document->frame_desc,
 						      &o, depth + 1);

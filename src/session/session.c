@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.194 2003/10/29 19:43:38 jonas Exp $ */
+/* $Id: session.c,v 1.195 2003/10/30 11:41:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -856,19 +856,21 @@ found:
 }
 
 void
-request_frameset(struct session *ses, struct frameset_desc *fd)
+request_frameset(struct session *ses, struct frameset_desc *frameset_desc)
 {
 	static int depth = 0; /* Inheritation counter (recursion brake ;) */
 
 	if (++depth <= HTML_MAX_FRAME_DEPTH) {
 		int i = 0;
 
-		for (; i < fd->n; i++) {
-			if (fd->f[i].subframe) {
-				request_frameset(ses, fd->f[i].subframe);
-			} else if (fd->f[i].name) {
-				request_frame(ses, fd->f[i].name,
-					      fd->f[i].url);
+		for (; i < frameset_desc->n; i++) {
+			struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
+			
+			if (frame_desc->subframe) {
+				request_frameset(ses, frame_desc->subframe);
+			} else if (frame_desc->name) {
+				request_frame(ses, frame_desc->name,
+					      frame_desc->url);
 			}
 		}
 	}

@@ -1,3 +1,63 @@
+Tue Dec 23 19:24:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Sort prefixes.  
+
+Tue Dec 23 19:08:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Position the now unblockable cursor where text is typed in the
+	typeahead statusline. Fixes second part of bug 344 and improves
+	i18n.  
+
+Tue Dec 23 17:30:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Decompression bug fix was reintroduced, it should now work in any
+	case. Please review and test with special attention. Patch by Jonas.  
+
+Tue Dec 23 17:08:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Last patch was reverted. freshmeat.net gzipped index page is not
+	decompressed anymore. So the fix was not a good one.  
+
+Tue Dec 23 17:01:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Unattended decompression of .tgz files was fixed by Jonas. We now
+	use guess_encoding().  
+
+Tue Dec 23 16:59:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Redraw screen when entering typeahead mode so the status line is
+	updated. Fixes first part of bug 344.  
+
+Tue Dec 23 14:19:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Tue Dec 23 13:45:15 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Tue Dec 23 12:44:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc3.CVS 
+
 Tue Dec 23 12:41:11 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

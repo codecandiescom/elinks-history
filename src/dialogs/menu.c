@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.75 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: menu.c,v 1.76 2003/01/24 15:55:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,19 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/view.h"
+
+#ifdef HAVE_LUA
+static void
+menu_lua_manual(struct terminal *term, void *d, struct session *ses)
+{
+	unsigned char *u = stracpy(LUA_MANUAL_URL);
+
+	if (u) {
+		goto_url(ses, u);
+		mem_free(u);
+	}
+}
+#endif
 
 static void
 menu_elinks_home(struct terminal *term, void *d, struct session *ses)
@@ -518,6 +531,9 @@ static struct menu_item help_menu[] = {
 	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},
 	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
 	{N_("User's ~manual"), "", MENU_FUNC menu_manual, (void *)0, 0, 0},
+#ifdef HAVE_LUA
+	{N_("~LUA Reference manual"), "", MENU_FUNC menu_lua_manual, (void *)0, 0, 0},
+#endif
 	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
 	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.10 2002/12/08 20:00:39 pasky Exp $ */
+/* $Id: dialogs.c,v 1.11 2002/12/08 20:21:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,16 +114,16 @@ push_info_button(struct dialog_data *dlg,
 			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
 			TEXT(T_NNAME), ": ", option->name, "\n",
 			TEXT(T_TYPE), ": ", option_types[option->type].name, "\n",
-			TEXT(T_VALUE), ": ", value, "\n",
-			TEXT(T_DESCRIPTION), ": ", option->desc, NULL,
+			TEXT(T_VALUE), ": ", value, "\n\n",
+			TEXT(T_DESCRIPTION), ": \n", option->desc, NULL,
 			option, 1,
 			TEXT(T_OK), done_info_button, B_ESC | B_ENTER);
 	} else {
 		msg_box(term, NULL,
 			TEXT(T_INFO), AL_LEFT | AL_EXTD_TEXT,
 			TEXT(T_NNAME), ": ", option->name, "\n",
-			TEXT(T_TYPE), ": ", option_types[option->type].name, "\n",
-			TEXT(T_DESCRIPTION), ": ", option->desc, NULL,
+			TEXT(T_TYPE), ": ", option_types[option->type].name, "\n\n",
+			TEXT(T_DESCRIPTION), ": \n", option->desc, NULL,
 			option, 1,
 			TEXT(T_OK), done_info_button, B_ESC | B_ENTER);
 	}
@@ -177,7 +177,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 	name = straconcat(_(TEXT(T_INFO), term), ": ", option->name, NULL);
 	type = straconcat(_(TEXT(T_TYPE), term), ": ", option_types[option->type].name, NULL);
 	value= straconcat(_(TEXT(T_VALUE), term), ": ", NULL);
-	desc = straconcat(_(TEXT(T_DESCRIPTION), term), ": ", option->desc, NULL);
+	desc = straconcat(_(TEXT(T_DESCRIPTION), term), ": \n", option->desc, NULL);
 	add_to_ml(&dlg->ml, name, type, value, desc, NULL);
 
 	max_text_width(term, name, &max);

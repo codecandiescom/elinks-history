@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.57 2004/01/21 00:02:29 jonas Exp $ */
+/* $Id: scanner.c,v 1.58 2004/01/21 00:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,7 +252,8 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 /* Fills the scanner with tokens. Already scanned tokens that has not been
  * requested remains and are moved to the start of the scanners token table. */
-static void
+/* Returns the current token or NULL if there are none. */
+static struct css_token *
 scan_css_tokens(struct css_scanner *scanner)
 {
 	struct css_token *table = scanner->table;
@@ -260,6 +261,8 @@ scan_css_tokens(struct css_scanner *scanner)
 	int move_to_front = int_max(table_end - scanner->current, 0);
 	struct css_token *current = move_to_front ? scanner->current : table;
 	size_t moved_size = 0;
+
+	assert(scanner->current);
 
 #ifdef CSS_SCANNER_DEBUG
 	if (scanner->tokens > 0) WDBG("Rescanning");
@@ -278,7 +281,7 @@ scan_css_tokens(struct css_scanner *scanner)
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;
 		scanner->current = table;
-		return;
+		return move_to_front ? table : NULL;
 	}
 
 	/* Scan tokens til we have filled the table */
@@ -301,6 +304,8 @@ scan_css_tokens(struct css_scanner *scanner)
 	scanner->current = table;
 	if (scanner->position && !*scanner->position)
 		scanner->position = NULL;
+
+	return table;
 }
 
 
@@ -342,10 +347,8 @@ get_next_css_token_(struct css_scanner *scanner)
 	scanner->current++;
 
 	/* Do a scanning if we do not have also have access to next token */
-	if (scanner->current + 1 >= scanner->table + scanner->tokens) {
-		scan_css_tokens(scanner);
-	}
-	return get_css_token_(scanner);
+	return (scanner->current + 1 >= scanner->table + scanner->tokens)
+		? scan_css_tokens(scanner) : get_css_token_(scanner);
 }
 
 struct css_token *

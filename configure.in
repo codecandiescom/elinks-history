@@ -5,6 +5,8 @@ AC_INIT(src/main.c)
 AM_INIT_AUTOMAKE(elinks, 0.4pre3-CVS)
 AM_CONFIG_HEADER(config.h)
 
+AC_PROG_MAKE_SET
+
 dnl ===================================================================
 dnl Checks for programs.
 dnl ===================================================================
@@ -310,7 +312,24 @@ AC_MSG_RESULT($cf_result)
 
 test "$have_emx" = yes && LDFLAGS="$LDFLAGS -Zexe"
 
-AC_OUTPUT(Makefile)
+
+AC_OUTPUT([ \
+ Makefile \
+ src/Makefile \
+ src/bfu/Makefile \
+ src/bookmarks/Makefile \
+ src/config/Makefile \
+ src/cookies/Makefile \
+ src/document/Makefile \
+ src/document/html/Makefile \
+ src/internat/Makefile \
+ src/lowlevel/Makefile \
+ src/lua/Makefile \
+ src/osdep/Makefile \
+ src/protocol/Makefile \
+ src/util/Makefile \
+])
+
 
 # if test -z "$AWK"; then
 # 	AC_WARN([awk not found. You won't be able to rebuild code page table.]);

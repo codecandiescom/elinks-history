@@ -1,3 +1,125 @@
+Fri Jun  6 21:18:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: common.h, default.c, mailcap.c, mimetypes.c:
+
+	Add identifying name to backends.  
+
+Fri Jun  6 20:34:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Make wildcard lookup more compact and readable 
+
+Fri Jun  6 20:22:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Further improve the clarity and testing.  
+
+Fri Jun  6 20:07:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Remake previous fix to actually work. Missing #include added.  
+
+Fri Jun  6 19:37:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Possible badness was fixed with type being NULL when formatting 
+
+Fri Jun  6 19:24:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Finally ignore entries where testneedsfile or parsing of optional
+	fields reported error.  
+
+Fri Jun  6 19:13:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Always use strncasecmp. s/mailcap_map_entries/mailcap_map_size/.  
+
+Fri Jun  6 19:04:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	A lot of small cleanups and improving comments. More sanity checks.  
+
+Fri Jun  6 17:37:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Use lists. This also means introducing a hash item for each type
+	that holds the list_head.  
+
+Fri Jun  6 17:24:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Simplify code flow. Add missing allocated memory tests 
+
+Fri Jun  6 16:03:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Cleanups and reduce code duplication by using pointer magic ;) 
+
+Fri Jun  6 12:59:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mimetypes.c:
+
+	Make mailcap use #defined backend name. Make mimetypes name reflect
+	option system.  
+
+Fri Jun  6 12:46:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Quite huge sorry.  Generalize and fix command formatting for
+	bufferoverflows.  Formatting is prosponed to when needed.  The bogus
+	file expansion removed. Fail if test needs file always! 
+
+Fri Jun  6 11:41:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Completely change the flow of parsing the file. Nomore 'lazy'
+	allocation of @entry. Moved most of @entry initialization to
+	init_mailcap_entry() 
+
+Fri Jun  6 11:14:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Rename to (done|init)_mailcap_entry(). Changed their order which
+	will be usefull in next steps.  
+
+Thu Jun  5 23:34:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Move variables to make them as local as possible.  
+
+Thu Jun  5 23:04:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	Added missing mem_alloc() test.  
+
+Thu Jun  5 22:46:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/common.h:
+
+	Add void to non args struct functions 
+
+Thu Jun  5 22:40:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Greatly simplify the code flow in check_entries().  
+
 Thu Jun  5 21:54:38 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/lists.h:

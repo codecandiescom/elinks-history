@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
 	"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+
+<!ENTITY bugreporting	'<xref linkend="bugreporting" />'>
+<!ENTITY elinks.conf	"<filename>elinks.conf</filename>">
+
 <!-- Imported files: -->
 <!ENTITY authors		SYSTEM "authors.xml">
 <!ENTITY bookmarks		SYSTEM "bookmarks.xml">
@@ -19,8 +23,6 @@
 <!ENTITY version		SYSTEM "VERSION">
 <!ENTITY wordlist		SYSTEM "wordlist.xml">
 
-<!ENTITY bugreporting	'<xref linkend="bugreporting" />'>
-<!ENTITY elinks.conf	"<filename>elinks.conf</filename>">
 ]>
 
 <book id="index" lang="en">

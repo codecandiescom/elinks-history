@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <chapter>
 <chapterinfo>
 <authorgroup>
@@ -10,7 +11,7 @@
 	<surname>Monin</surname>
 	<contrib>
 	
-	Who pointed me the syntax for the mime.type and mime.handler options.
+	For pointing out the syntax for the mime.type and mime.handler options.
 
 	</contrib>
 </othercredit>
@@ -19,7 +20,7 @@
 	<surname>Baudis</surname>
 	<contrib>
 
-	Suggested to use the Links to ELinks configuration conversion script
+	Suggestion to use the Links to ELinks configuration conversion script
 	from the contrib/ directory and in general for keeping up improving
 	ELinks.
 

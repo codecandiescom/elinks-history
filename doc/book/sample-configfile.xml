@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <appendix id="sample-configuration"><title>Sample configuration File</title>
-
 <para>
 
 	Provided here is a sample &elinks.conf; file with some the default settings.

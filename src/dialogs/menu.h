@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.32 2004/05/04 01:22:03 jonas Exp $ */
+/* $Id: menu.h,v 1.33 2004/05/04 01:46:04 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -34,7 +34,7 @@ void send_open_in_new_window(struct terminal *term, const struct open_in_new *op
 
 void
 open_in_new_window(struct terminal *term,
-		   void (*)(struct terminal *, enum term_env_type, struct session *ses),
+		   void (*)(struct terminal *, const struct open_in_new *, struct session *ses),
 		   struct session *ses);
 
 void

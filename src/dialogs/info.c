@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.1 2002/03/18 22:12:32 pasky Exp $ */
+/* $Id: info.c,v 1.2 2002/03/18 22:20:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,7 +114,6 @@ void refresh_abort(struct dialog_data *dlg)
 	refresh_end(dlg->dlg->udata2);
 }
 
-#if 0
 void refresh_init(struct refresh *r, struct terminal *term,
 		  struct session *ses, void *data, refresh_handler fn)
 {
@@ -127,7 +126,6 @@ void refresh_init(struct refresh *r, struct terminal *term,
 	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
 	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
 }
-#endif
 
 
 void res_inf(struct terminal *term, void *d, struct session *ses)
@@ -138,13 +136,6 @@ void res_inf(struct terminal *term, void *d, struct session *ses)
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
-
-	r->term = term;
-	r->win = NULL;
-	r->ses = ses;
-	r->fn = res_inf;
-	r->data = d;
-	r->timer = -1;
 
 	l = 0; a1 = init_str(); add_to_str(&a1, &l, ": ");
 				add_num_to_str(&a1, &l, select_info(CI_FILES)); add_to_str(&a1, &l, " ");
@@ -199,9 +190,7 @@ void res_inf(struct terminal *term, void *d, struct session *ses)
 		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 
-	r->win = term->windows.next;
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
+	refresh_init(r, term, ses, d, res_inf);
 }
 
 void cache_inf(struct terminal *term, void *d, struct session *ses)
@@ -216,13 +205,6 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 
 	a = init_str();
 
-	r->term = term;
-	r->win = NULL;
-	r->ses = ses;
-	r->fn = cache_inf;
-	r->data = d;
-	r->timer = -1;
-
 	cache = (struct cache_entry *) cache_info(CI_LIST);
 	add_to_str(&a, &l, ":");
 	foreach(ce, *cache) {
@@ -236,9 +218,7 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 
-	r->win = term->windows.next;
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
+	refresh_init(r, term, ses, d, cache_inf);
 }
 
 #ifdef LEAK_DEBUG
@@ -254,13 +234,6 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
-
-	r->term = term;
-	r->win = NULL;
-	r->ses = ses;
-	r->fn = memory_inf;
-	r->data = d;
-	r->timer = -1;
 
 	p = message;
 	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
@@ -281,9 +254,7 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
 
-	r->win = term->windows.next;
-	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
-	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
+	refresh_init(r, term, ses, d, memory_inf);
 }
 
 #undef MSG_W

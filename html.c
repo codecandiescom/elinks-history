@@ -127,6 +127,21 @@ int has_attr(unsigned char *e, unsigned char *name)
 	return 1;
 }
 
+unsigned char *get_url_val(unsigned char *e, unsigned char *name)
+{
+	int n = 0;
+	unsigned char *p, *q, *pp;
+	if (!(pp = get_attr_val(e, name))) return NULL;
+	p = pp; q = pp;
+	while (1) {
+		if (*p == '#') n = 1;
+		if ((*p = *q) != ' ' || n) p++;
+		if (!*q) break;
+		q++;
+	}
+	return pp;
+}
+
 struct {
 	int n;
 	char *s;
@@ -634,7 +649,7 @@ void html_fixed(unsigned char *a) { format.attr |= AT_FIXED; }
 void html_a(unsigned char *a)
 {
 	char *al;
-	if ((al = get_attr_val(a, "href"))) {
+	if ((al = get_url_val(a, "href"))) {
 		char *all = al;
 		while (all[0] == ' ') all++;
 		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
@@ -711,7 +726,7 @@ void html_img(unsigned char *a)
 	if (format.image) mem_free(format.image), format.image = NULL;
 	if (al) {
 		unsigned char *s;
-		if ((s = get_attr_val(a, "src")) || (s = get_attr_val(a, "dynsrc"))) {
+		if ((s = get_url_val(a, "src")) || (s = get_attr_val(a, "dynsrc"))) {
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);
 		}
@@ -887,7 +902,7 @@ void html_td(unsigned char *a)
 void html_base(unsigned char *a)
 {
 	char *al;
-	if ((al = get_attr_val(a, "href"))) {
+	if ((al = get_url_val(a, "href"))) {
 		if (format.href_base) mem_free(format.href_base);
 		format.href_base = join_urls(((struct html_element *)html_stack.prev)->attr.href_base, al);
 		mem_free(al);
@@ -1015,7 +1030,7 @@ void get_html_form(unsigned char *a, struct form *form)
 {
 	unsigned char *al;
 	unsigned char *ch;
-	if ((al = get_attr_val(a, "action"))) {
+	if ((al = get_url_val(a, "action"))) {
 		char *all = al;
 		while (all[0] == ' ') all++;
 		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
@@ -1209,7 +1224,7 @@ void html_input(unsigned char *a)
 			break;
 		case FC_IMAGE:
 			if (format.image) mem_free(format.image), format.image = NULL;
-			if ((al = get_attr_val(a, "src")) || (al = get_attr_val(a, "dynsrc"))) {
+			if ((al = get_url_val(a, "src")) || (al = get_url_val(a, "dynsrc"))) {
 				format.image = join_urls(format.href_base, al);
 				mem_free(al);
 			}
@@ -1655,7 +1670,7 @@ void do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *e
 void html_iframe(unsigned char *a)
 {
 	unsigned char *name, *url;
-	if (!(url = get_attr_val(a, "src"))) return;
+	if (!(url = get_url_val(a, "src"))) return;
 	if (!(name = get_attr_val(a, "name"))) name = stracpy("");
 	if (*name) put_link_line("IFrame: ", name, url, d_opt->framename);
 	else put_link_line("", "IFrame", url, d_opt->framename);
@@ -1671,7 +1686,7 @@ void html_noframes(unsigned char *a)
 void html_frame(unsigned char *a)
 {
 	unsigned char *name, *u2, *url;
-	if (!(u2 = get_attr_val(a, "src"))) {
+	if (!(u2 = get_url_val(a, "src"))) {
 		url = stracpy("");
 	} else {
 		url = join_urls(format.href_base, u2);
@@ -1859,7 +1874,7 @@ void html_link(unsigned char *a)
 		}
 		mem_free(name);
 	}
-	if (!(url = get_attr_val(a, "href"))) return;
+	if (!(url = get_url_val(a, "href"))) return;
 	if (!(name = get_attr_val(a, "rel"))) if (!(name = get_attr_val(a, "rev"))) name = stracpy(url);
 	if (strcasecmp(name, "STYLESHEET") && strcasecmp(name, "made") && strcasecmp(name, "SHORTCUT ICON")) put_link_line("Link: ", name, url, format.target_base);
 	mem_free(name);
@@ -2285,7 +2300,7 @@ int get_image_map(unsigned char *head, unsigned char *s, unsigned char *eof, uns
 		else label = NULL;
 	} else if (namelen == 4 && !casecmp(name, "/MAP", 4)) goto done;
 	else goto se2;
-	if (!(href = get_attr_val(attr, "href"))) {
+	if (!(href = get_url_val(attr, "href"))) {
 		if (label) mem_free(label);
 		goto se2;
 	}

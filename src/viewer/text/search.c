@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.33 2003/10/05 19:53:41 pasky Exp $ */
+/* $Id: search.c,v 1.34 2003/10/05 20:07:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -836,6 +836,12 @@ struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} }
 /* TODO: This is just hacked input_field(), containing a lot of generic crap
  * etc. The useless cruft should be blasted out. And it's quite ugly anyway,
  * a nice cleanup target ;-). --pasky */
+/* TODO: I want all the checkboxes on one line, which appears not to be
+ * trivial, though. Hint: look at bfu/group.c - it appears to be broken lately,
+ * but in Links (and ELinks up to 0.3) it did exactly that, compressing as much
+ * stuff on one line as could be pushed there. The problem with this one is
+ * that in puts input field and @text on one line, which is not what we want.
+ * Tough job. --pasky */
 
 static unsigned char *radio_labels[] = {
 	N_("Normal search"),

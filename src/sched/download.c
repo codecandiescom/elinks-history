@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.329 2004/10/19 23:38:24 miciah Exp $ */
+/* $Id: download.c,v 1.330 2004/11/05 23:02:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -969,14 +969,17 @@ tp_display(struct type_query *type_query)
 	ses->task.target_frame = target_frame;
 
 	if (!type_query->frame) {
-		cur_loc(ses)->download.callback = (void (*)(struct download *, void *))
-				     doc_loading_callback;
-		cur_loc(ses)->download.data = ses;
+		struct download *old = &type_query->download;
+		struct download *new = &cur_loc(ses)->download;
 
-		if (type_query->download.state >= 0)
-			change_connection(&type_query->download, &cur_loc(ses)->download, PRI_MAIN, 0);
+		new->callback = (void (*)(struct download *, void *))
+				doc_loading_callback;
+		new->data = ses;
+
+		if (old->state >= 0)
+			change_connection(old, new, PRI_MAIN, 0);
 		else
-			cur_loc(ses)->download.state = type_query->download.state;
+			new->state = old->state;
 	}
 
 	display_timer(ses);

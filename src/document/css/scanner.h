@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.6 2004/01/18 16:22:58 jonas Exp $ */
+/* $Id: scanner.h,v 1.7 2004/01/18 16:24:45 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -36,9 +36,9 @@ struct css_token {
 };
 
 /* At best it should be big enough to contain properties with space separated
- * values and function calls with up to 3 variables like rgb(). At worst no
- * it should be no less than 2 so there is room for peeking at the next token
- * in the scanner. */
+ * values and function calls with up to 3 variables like rgb(). At worst it
+ * should be no less than 2 so there is room for peeking at the next token in
+ * the scanner. */
 #define CSS_SCANNER_TOKENS 10
 
 /* The {struct css_scanner} describes the current state of the CSS scanner. The

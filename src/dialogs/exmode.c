@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.24 2004/01/28 05:18:28 jonas Exp $ */
+/* $Id: exmode.c,v 1.25 2004/01/28 05:22:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,9 +226,9 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 	return EVENT_NOT_PROCESSED;
 }
 
-
-void
-exmode_start(struct session *ses)
+static void
+input_field_line(struct session *ses, unsigned char *prompt,
+		 struct input_history *history)
 {
 	struct dialog *dlg;
 	unsigned char *buffer;
@@ -247,9 +247,15 @@ exmode_start(struct session *ses)
 	dlg->udata2 = ses;
 	dlg->widgets->info.field.float_label = 1;
 
-	add_dlg_field(dlg, ":", 0, 0, NULL, 80, buffer, &exmode_history);
+	add_dlg_field(dlg, prompt, 0, 0, NULL, 80, buffer, history);
 
 	do_dialog(ses->tab->term, dlg, getml(dlg, NULL));
+}
+
+void
+exmode_start(struct session *ses)
+{
+	input_field_line(ses, ":", &exmode_history);
 }
 
 #endif /* CONFIG_EXMODE */

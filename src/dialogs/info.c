@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.30 2003/01/04 12:28:25 pasky Exp $ */
+/* $Id: info.c,v 1.31 2003/01/04 12:30:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,15 +138,18 @@ void menu_keys(struct terminal *term, void *d, struct session *ses)
 void menu_copying(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL,
-		N_("Copying"), AL_CENTER,
-		N_("ELinks " VERSION_STRING "\n\n"
+		N_("Copying"), AL_CENTER | AL_EXTD_TEXT,
+		N_("ELinks "), VERSION_STRING,
+		N_("\n"
+		   "\n"
 		   "(C) 1999 - 2002 Mikulas Patocka\n"
-		   "(C) 2001 - 2003 Petr Baudis\n\n"
+		   "(C) 2001 - 2003 Petr Baudis\n"
+		   "\n"
 		   "This program is free software; you can redistribute it "
 		   "and/or modify it under the terms of the GNU General Public "
 		   "License as published by the Free Software Foundation; "
 		   "either version 2 of the License, or (at your option) any "
-		   "later version."),
+		   "later version."), NULL,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-09-16 21:31+0200\n"
+"POT-Creation-Date: 2004-09-16 23:01+0200\n"
 "PO-Revision-Date: 2004-09-16 22:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -1979,7 +1979,7 @@ msgstr "Limit czasu pobierania (w sekundach)."
 
 #: src/config/options.inc:98 src/config/options.inc:108
 msgid "Try IPv4 when connecting"
-msgstr "Próbuj IPv4 przy po³±czeniu""
+msgstr "Próbuj IPv4 przy po³±czeniu"
 
 #: src/config/options.inc:100
 msgid ""
@@ -1995,7 +1995,7 @@ msgstr ""
 "Je¶li connection.try_ipv6 jest tak¿e w³±czone, to ma\n"
 "pierwszeñstwo. Lepiej nie dotykaj tego, dopóki nie wiesz\n"
 "co robisz. Pamiêtaj, ¿e mo¿esz wymusiæ dany protokó³\n"
-"przy po³±czeniu u¿ywaj±c URL-a w stylu np. http4://elinks.or.cz/." 
+"przy po³±czeniu u¿ywaj±c URL-a w stylu np. http4://elinks.or.cz/."
 
 #: src/config/options.inc:110
 msgid ""
@@ -4871,8 +4871,8 @@ msgid ""
 "Cache size     : %ld bytes\n"
 msgstr ""
 "Zaalokowane               : %ld bajtów\n"
-"Naprawdê zaalokowane      : %ld bajtów (x%0.2f)"
-"Rozmiar pamiêci podrêcznej: %ld bajtów\n"
+"Naprawdê zaalokowane      : %ld bajtów (x%0.2f)Rozmiar pamiêci podrêcznej: %"
+"ld bajtów\n"
 
 #: src/dialogs/info.c:194
 #, c-format
@@ -5506,8 +5506,6 @@ msgstr "Prze³±cz zapisywanie"
 msgid "Form history manager"
 msgstr "Menad¿er historii formularzy"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Poka¿ okno dialogowe historii formularzy"
@@ -5980,6 +5978,7 @@ msgstr "System konfiguracyjny"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.135 2003/10/25 18:57:08 jonas Exp $ */
+/* $Id: main.c,v 1.136 2003/10/26 13:46:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,9 +179,6 @@ init(void)
 	init_cookies();
 #endif
 	init_ssl();
-#ifdef HAVE_SCRIPTING
-	init_scripting();
-#endif
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
@@ -245,9 +242,6 @@ terminate_all_subsystems(void)
 #endif
 #ifdef COOKIES
 		cleanup_cookies();
-#endif
-#ifdef HAVE_SCRIPTING
-		done_scripting();
 #endif
 		done_modules();
 	}

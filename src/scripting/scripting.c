@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.6 2003/10/26 13:13:42 jonas Exp $ */
+/* $Id: scripting.c,v 1.7 2003/10/26 13:46:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "modules/module.h"
 #include "sched/event.h"
 #include "scripting/scripting.h"
 
@@ -18,46 +19,24 @@
 #include "scripting/guile/core.h"
 #include "scripting/lua/core.h"
 
-static struct scripting_backend *scripting_backends[] = {
+static struct module *scripting_modules[] = {
 #ifdef HAVE_LUA
-	&lua_scripting_backend,
+	&lua_scripting_module,
 #endif
 #ifdef HAVE_GUILE
-	&guile_scripting_backend,
+	&guile_scripting_module,
 #endif
 	NULL,
 };
 
-void
-init_scripting(void)
-{
-	int i;
-
-	for (i = 0; scripting_backends[i]; i++) {
-		struct scripting_backend *backend = scripting_backends[i];
-
-		if (backend->init)
-			backend->init();
-
-		if (backend->hooks)
-			register_event_hooks(backend->hooks);
-	}
-}
-
-void
-done_scripting(void)
-{
-	int i;
-
-	for (i = 0; scripting_backends[i]; i++) {
-		struct scripting_backend *backend = scripting_backends[i];
-
-		if (backend->hooks)
-			unregister_event_hooks(backend->hooks);
-
-		if (backend->done)
-			backend->done();
-	}
-}
+struct module scripting_module = module_struct(
+	/* name: */		"scripting",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	scripting_modules,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
 
 #endif

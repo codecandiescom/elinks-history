@@ -631,16 +631,23 @@ direntry:
 			}
 			
 			add_conv_str(&str, &strl, buf, *dpos);
+
 			add_to_str(&str, &strl, "<a href=\"");
 			add_conv_str(&str, &strl, buf + *dpos,
 				     symlinkpos - *dpos);
-			if (buf[0] == 'd') {
-				/* TODO: Dirs highlighting */
+			if (buf[0] == 'd')
 				add_chr_to_str(&str, &strl, '/');
-			}
 			add_to_str(&str, &strl, "\">");
+			
+			if (color_dirs && buf[0] == 'd')
+				add_to_str(&str, &strl, "<font color=\"yellow\">");
+			
 			add_conv_str(&str, &strl, buf + *dpos,
 				     symlinkpos - *dpos);
+			
+			if (color_dirs && buf[0] == 'd')
+				add_to_str(&str, &strl, "</font>");
+			
 			add_to_str(&str, &strl, "</a>");
 
 			/* The symlink stuff ;) */

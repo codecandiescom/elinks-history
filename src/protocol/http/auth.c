@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.37 2003/07/11 06:06:02 jonas Exp $ */
+/* $Id: auth.c,v 1.38 2003/07/11 14:26:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
  *	ADD_AUTH_NONE	if entry do not exists and user/pass are in url
  *	ADD_AUTH_EXIST	if exact entry already exists or is in blocked state
  *	ADD_AUTH_NEW	if entry was added
- *	ADD_AUIH_ERROR	on error. */
+ *	ADD_AUTH_ERROR	on error. */
 enum add_auth_code
 add_auth_entry(struct uri *uri, unsigned char *realm)
 {
@@ -168,6 +168,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 				     min(uri->passwordlen + 1, MAX_UID_LEN));
 		}
 
+		/* If all was matched exactly we have an existing entry. */
 		if (entry->valid) return ADD_AUTH_EXIST;
 
 	} else {
@@ -192,9 +193,9 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 /* Find an entry in auth list by url. If url contains user/pass information
  * and entry does not exist then entry is created.
  * If entry exists but user/pass passed in url is different, then entry is
- * updated (but not if user/pass is set in dialog).
- * It returns NULL on failure, or a base 64 encoded user + pass suitable to
- * use in Authorization header. */
+ * updated (but not if user/pass is set in dialog).  It returns NULL on
+ * failure, or a base 64 encoded user + pass suitable to use in Authorization
+ * header. */
 unsigned char *
 find_auth(struct uri *uri)
 {
@@ -206,6 +207,24 @@ find_auth(struct uri *uri)
 
 	if (!newurl || !user || !pass) goto end;
 
+	/* FIXME Somehow this seems over complicated. If add_auth_entry()
+	 * returned the added entry it would be a lot easier as in no need
+	 * to call find_auth_entry() to get the added entry BUT how should the
+	 * return values be added?
+	 *
+	 *	ADD_AUIH_ERROR	on error.
+	 *			-> NULL
+	 *	ADD_AUTH_NONE	if entry do not exists and user/pass are in url
+	 *			-> entry->valid == 1
+	 *	ADD_AUTH_EXIST	if exact entry already exists or is in blocked state
+	 *			-> entry->valid == 1
+	 *				&& (entry->blocked == 1 || <something>)
+	 *	ADD_AUTH_NEW	if entry was added
+	 *			-> entry->valid == 0
+	 *
+	 * <something> could be a new flag. Or maybe we should just split up
+	 * add_auth_entry() so existing entries was a matter of calling
+	 * get_auth_entry(). */
 again:
 	entry = find_auth_entry(newurl, NULL);
 

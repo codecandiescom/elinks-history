@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.41 2003/07/22 00:20:33 pasky Exp $ */
+/* $Id: string.h,v 1.42 2003/07/22 03:40:53 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -21,9 +21,6 @@ unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
 unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
 #define stracpy(s) debug_stracpy(__FILE__, __LINE__, s)
 
-unsigned char *debug_init_str(unsigned char *, int);
-#define init_str() debug_init_str(__FILE__, __LINE__)
-
 unsigned char *debug_copy_string(unsigned char *, int, unsigned char **, unsigned char *);
 #define copy_string(d, s) debug_copy_string(__FILE__, __LINE__, d, s)
 
@@ -31,7 +28,6 @@ unsigned char *debug_copy_string(unsigned char *, int, unsigned char **, unsigne
 
 unsigned char *memacpy(unsigned char *, int);
 unsigned char *stracpy(unsigned char *);
-unsigned char *init_str(void);
 unsigned char *copy_string(unsigned char **, unsigned char *);
 
 #endif /* LEAK_DEBUG */
@@ -39,10 +35,6 @@ unsigned char *copy_string(unsigned char **, unsigned char *);
 
 void add_to_strn(unsigned char **, unsigned char *);
 unsigned char *straconcat(unsigned char *, ...);
-
-void add_to_str(unsigned char **, int *, unsigned char *);
-void add_bytes_to_str(unsigned char **, int *, unsigned char *, int);
-void add_chr_to_str(unsigned char **, int *, unsigned char);
 
 int xstrcmp(unsigned char *, unsigned char *);
 

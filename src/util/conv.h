@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.14 2003/07/21 16:24:54 jonas Exp $ */
+/* $Id: conv.h,v 1.15 2003/07/22 03:40:53 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -25,13 +25,8 @@ long strtolx(unsigned char *, unsigned char **);
 unsigned char hx(int);
 int unhx(unsigned char);
 
-/* These use granular allocation stuff. */
-int add_num_to_str(unsigned char **str, int *len, long num);
-int add_knum_to_str(unsigned char **str, int *len, long num);
-void add_xnum_to_str(unsigned char **s, int *l, int n);
-void add_time_to_str(unsigned char **s, int *l, ttime t);
-void add_htmlesc_str(unsigned char **, int *, unsigned char *, int);
 
+/* These use granular allocation stuff. */
 struct string *add_long_to_string(struct string *string, long number);
 struct string *add_knum_to_string(struct string *string, long number);
 struct string *add_xnum_to_string(struct string *string, int number);

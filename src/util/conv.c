@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.45 2003/07/22 03:34:09 jonas Exp $ */
+/* $Id: conv.c,v 1.46 2003/07/22 03:40:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,114 +119,6 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
 	}
 
 	return elinks_ulongcat(p, slen, number, width, fillchar, base, upper);
-}
-
-
-int
-add_num_to_str(unsigned char **str, int *len, long num)
-{
-	int ret;
-	unsigned char t[32];
-	int tlen = 0;
-
-	ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
-	if (ret < 0 || !tlen) return ret;
-
-	add_bytes_to_str(str, len, t, tlen);
-
-	return ret;
-}
-
-int
-add_knum_to_str(unsigned char **str, int *len, long num)
-{
-	int ret;
-	unsigned char t[32];
-	int tlen = 0;
-
-	if (num && (num / (1024 * 1024)) * (1024 * 1024) == num) {
-		ret = longcat(&t, &tlen, num / (1024 * 1024), sizeof(t) - 2, 0);
-		t[tlen++] = 'M';
-		t[tlen] = '\0';
-	} else if (num && (num / 1024) * 1024 == num) {
-		ret = longcat(&t, &tlen, num / 1024, sizeof(t) - 2, 0);
-		t[tlen++] = 'k';
-		t[tlen] = '\0';
-	} else {
-		ret = longcat(&t, &tlen, num, sizeof(t) - 1, 0);
-	}
-
-	if (ret < 0 || !tlen) return ret;
-
-	add_bytes_to_str(str, len, t, tlen);
-
-	return ret;
-}
-
-void
-add_xnum_to_str(unsigned char **s, int *l, int n)
-{
-	unsigned char suff[3] = "\0i";
-	int d = -1;
-
-	/* XXX: I don't completely like the computation of d here. --pasky */
-	/* Mebi (Mi), 2^20 */
-	if (n >= 1024*1024)  {
-		suff[0] = 'M';
-	       	d = (n / (int)((int)(1024*1024)/(int)10)) % 10;
-	       	n /= 1024*1024;
-	/* Kibi (Ki), 2^10 */
-	} else if (n >= 1024) {
-		suff[0] = 'K';
-	       	d = (n / (int)((int)1024/(int)10)) % 10;
-		n /= 1024;
-	}
-	add_num_to_str(s, l, n);
-
-	if (n < 10 && d != -1) {
-		add_chr_to_str(s, l, '.');
-	       	add_num_to_str(s, l, d);
-	}
-	add_chr_to_str(s, l, ' ');
-
-	if (suff[0]) add_to_str(s, l, suff);
-	add_chr_to_str(s, l, 'B');
-}
-
-void
-add_time_to_str(unsigned char **s, int *l, ttime t)
-{
-	unsigned char q[64];
-	int qlen = 0;
-
-	t /= 1000;
-	t &= 0xffffffff;
-
-	if (t < 0) t = 0;
-
-	/* Days */
-	if (t >= (24 * 3600)) {
-		ulongcat(q, &qlen, (t / (24 * 3600)), 5, 0);
-		q[qlen++] = 'd';
-		q[qlen++] = ' ';
-	}
-
-	/* Hours and minutes */
-	if (t >= 3600) {
-		t %= (24 * 3600);
-		ulongcat(q, &qlen, (t / 3600), 4, 0);
-		q[qlen++] = ':';
-		ulongcat(q, &qlen, ((t / 60) % 60), 2, '0');
-	} else {
-		/* Only minutes */
-		ulongcat(q, &qlen, (t / 60), 2, 0);
-	}
-
-	/* Seconds */
-	q[qlen++] = ':';
-	ulongcat(q, &qlen, (t % 60), 2, '0');
-
-	add_to_str(s, l, q);
 }
 
 
@@ -456,36 +348,6 @@ unhx(unsigned char a)
 	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
 	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
 	return -1;
-}
-
-
-/* Convert chars to html &#xx */
-void
-add_htmlesc_str(unsigned char **str, int *strl,
-		unsigned char *ostr, int ostrl)
-{
-
-#ifdef HAVE_ISALNUM
-#define accept_char(x) (isalnum((x)) || (x) == '-' || (x) == '_' \
-			|| (x) == ' ' || (x) == '.' \
-			|| (x) == ':' || (x) == ';')
-
-#else
-#define accept_char(x) (isA((x)) || (x) == ' ' || (x) == '.' \
-			|| (x) == ':' || (x) == ';')
-#endif
-	for (; ostrl; ostrl--, ostr++) {
-		if (accept_char(*ostr)) {
-			add_chr_to_str(str, strl, *ostr);
-		} else {
-			add_to_str(str, strl, "&#");
-			add_num_to_str(str, strl, (int) *ostr);
-			add_chr_to_str(str, strl, ';');
-		}
-	}
-
-#undef accept_char
-
 }
 
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.58 2003/07/21 23:08:24 pasky Exp $ */
+/* $Id: string.c,v 1.59 2003/07/22 03:40:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,100 +205,6 @@ straconcat(unsigned char *str, ...)
 	va_end(ap);
 
 	return s;
-}
-
-
-/* Granular autoallocation dynamic string functions */
-#ifdef LEAK_DEBUG
-inline unsigned char *
-debug_init_str(unsigned char *file, int line)
-{
-	unsigned char *p = debug_mem_alloc(file, line, ALLOC_GR);
-
-	if (p) *p = 0;
-
-	return p;
-}
-#else
-inline unsigned char *
-init_str(void)
-{
-	unsigned char *p = mem_alloc(ALLOC_GR);
-
-	if (p) *p = 0;
-
-	return p;
-}
-#endif
-
-inline void
-add_to_str(unsigned char **s, int *l, unsigned char *a)
-{
-	int ll;
-
-#ifdef DEBUG
-	if (!*s) { fatal("add_to_str *s=NULL"); return; }
-	if (!a) { fatal("add_to_str a=NULL"); return; }
-#endif
-	if (!*a) return;
-
-	ll = strlen(a);
-
-	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
-	   unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
-					      & ~(ALLOC_GR - 1));
-
-	   if (!p) return;
-	   *s = p;
-	}
-
-	strcpy(*s + *l, a);
-   	*l += ll;
-}
-
-inline void
-add_bytes_to_str(unsigned char **s, int *l, unsigned char *a, int ll)
-{
-#ifdef DEBUG
-	if (!*s) { fatal("add_bytes_to_str *s=NULL"); return; }
-	if (!a) { fatal("add_bytes_to_str a=NULL"); return; }
-	if (ll < 0) { fatal("add_bytes_to_str ll < 0"); return; }
-#endif
-	if (!ll) return;
-
-	if ((*l & ~(ALLOC_GR - 1)) != ((*l + ll) & ~(ALLOC_GR - 1))) {
-		unsigned char *p = mem_realloc(*s, (*l + ll + ALLOC_GR)
-			                      & ~(ALLOC_GR - 1));
-
-		if (!p) return;
-		*s = p;
-	}
-
-	memcpy(*s + *l, a, ll);
-	*l += ll;
-   	(*s)[*l] = 0;
-}
-
-inline void
-add_chr_to_str(unsigned char **s, int *l, unsigned char a)
-{
-#ifdef DEBUG
-	if (!*s) { fatal("add_chr_to_str *s=NULL"); return; }
-	if (!a) { warn("add_chr_to_str a=0"); }
-#endif
-
-	if ((*l & (ALLOC_GR - 1)) == ALLOC_GR - 1) {
-		unsigned char *p = mem_realloc(*s, (*l + 1 + ALLOC_GR)
-					      & ~(ALLOC_GR - 1));
-
-		if (!p) return;
-
-		*s = p;
-	}
-
-	*(*s + *l) = a;
-	(*l)++;
-	*(*s + *l) = 0;
 }
 
 

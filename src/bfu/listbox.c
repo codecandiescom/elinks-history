@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.87 2003/09/01 12:52:26 zas Exp $ */
+/* $Id: listbox.c,v 1.88 2003/09/14 03:03:25 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
+#include "util/conv.h"
 #include "util/lists.h"
 
 
@@ -569,21 +570,25 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 			}
 
 			/* Moving the box */
-			if (ev->x == KBD_DOWN) {
+			if (ev->x == KBD_DOWN
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'N')) {
 				box_sel_move(dlg_item, 1);
 				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_UP) {
+			if (ev->x == KBD_UP
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'P')) {
 				box_sel_move(dlg_item, -1);
 				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_PAGE_DOWN) {
+			if (ev->x == KBD_PAGE_DOWN
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'V')
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'F')) {
 				box_sel_move(dlg_item,
 					     dlg_item->h / 2);
 				display_dlg_item(dlg, dlg_item, 1);
@@ -591,7 +596,9 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_PAGE_UP) {
+			if (ev->x == KBD_PAGE_UP
+			    || (ev->y == KBD_ALT && upcase(ev->x) == 'V')
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'B')) {
 				box_sel_move(dlg_item,
 					     -dlg_item->h / 2);
 				display_dlg_item(dlg, dlg_item, 1);
@@ -599,14 +606,16 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_HOME) {
+			if (ev->x == KBD_HOME
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'A')) {
 				box_sel_move(dlg_item, -MAXINT);
 				display_dlg_item(dlg, dlg_item, 1);
 
 				return EVENT_PROCESSED;
 			}
 
-			if (ev->x == KBD_END) {
+			if (ev->x == KBD_END
+			    || (ev->y == KBD_CTRL && upcase(ev->x) == 'E')) {
 				box_sel_move(dlg_item, MAXINT);
 				display_dlg_item(dlg, dlg_item, 1);
 

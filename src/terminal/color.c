@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.61 2003/10/18 00:26:48 jonas Exp $ */
+/* $Id: color.c,v 1.62 2003/10/18 01:19:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,8 +257,10 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 
 		/* Decrease the range of the 16 palette to not include
 		 * bright colors. */
-		if (flags & COLOR_DECREASE_LIGHTNESS)
+		if (flags & COLOR_DECREASE_LIGHTNESS) {
 			palette_range = PALETTE_HALF;
+			schar->attr |= SCREEN_ATTR_STANDOUT;
+		}
 		break;
 
 	case COLOR_MODE_16:

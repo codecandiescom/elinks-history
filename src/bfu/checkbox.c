@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.71 2004/05/14 00:18:40 jonas Exp $ */
+/* $Id: checkbox.c,v 1.72 2004/05/26 17:25:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,8 @@ dlg_format_checkbox(struct terminal *term,
 }
 
 static void
-display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
+display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
+		 int selected)
 {
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
@@ -52,15 +53,14 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data, 
 	color = get_bfu_color(term, "dialog.checkbox");
 	if (!color) return;
 
-	if (widget_data->info.checkbox.checked) {
-		text = (!widget_data->widget->info.checkbox.gid) ? "[X]" : "(X)";
-	} else {
-		text = (!widget_data->widget->info.checkbox.gid) ? "[ ]" : "( )";
-	}
+	if (widget_data->info.checkbox.checked)
+		text = widget_data->widget->info.checkbox.gid ? "(X)" : "[X]";
+	else
+		text = widget_data->widget->info.checkbox.gid ? "( )" : "[ ]";
 
 	draw_text(term, pos->x, pos->y, text, CHECKBOX_LEN, 0, color);
 
-	if (sel) {
+	if (selected) {
 		set_cursor(term, pos->x + 1, pos->y, 0);
 		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
@@ -70,11 +70,15 @@ static void
 init_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
+	int *cdata = (int *) widget_data->cdata;
+
+	assert(cdata);
+
 	if (widget_data->widget->info.checkbox.gid) {
-		if (*((int *) widget_data->cdata) == widget_data->widget->info.checkbox.gnum)
+		if (*cdata == widget_data->widget->info.checkbox.gnum)
 			widget_data->info.checkbox.checked = 1;
 	} else {
-		if (*((int *) widget_data->cdata))
+		if (*cdata)
 			widget_data->info.checkbox.checked = 1;
 	}
 }
@@ -90,32 +94,49 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
 	dlg_data->selected = widget_data - dlg_data->widgets_data;
 	display_dlg_item(dlg_data, widget_data, 1);
+
 	if (check_mouse_action(ev, B_UP) && widget_data->widget->ops->select)
 		widget_data->widget->ops->select(widget_data, dlg_data);
+
 	return EVENT_PROCESSED;
 }
 
 static void
 select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 {
+
 	if (!widget_data->widget->info.checkbox.gid) {
-		widget_data->info.checkbox.checked = *((int *) widget_data->cdata)
-			    = !*((int *) widget_data->cdata);
+		/* Checkbox. */
+		int *cdata = (int *) widget_data->cdata;
+
+		assert(cdata);
+
+		widget_data->info.checkbox.checked = *cdata = !*cdata;
+
 	} else {
+		/* Group of radio buttons. */
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->widgets_data[i].widget->type != WIDGET_CHECKBOX
-			    || dlg_data->widgets_data[i].widget->info.checkbox.gid
-			       != widget_data->widget->info.checkbox.gid)
+			struct widget_data *wdata = &dlg_data->widgets_data[i];
+			int *cdata = (int *) wdata->cdata;
+
+			if (wdata->widget->type != WIDGET_CHECKBOX)
 				continue;
 
-			*((int *) dlg_data->widgets_data[i].cdata) = widget_data->widget->info.checkbox.gnum;
-			dlg_data->widgets_data[i].info.checkbox.checked = 0;
-			display_dlg_item(dlg_data, &dlg_data->widgets_data[i], 0);
+			if (wdata->widget->info.checkbox.gid
+			    != widget_data->widget->info.checkbox.gid)
+				continue;
+
+			assert(cdata);
+
+			*cdata = widget_data->widget->info.checkbox.gnum;
+			wdata->info.checkbox.checked = 0;
+			display_dlg_item(dlg_data, wdata, 0);
 		}
 		widget_data->info.checkbox.checked = 1;
 	}
+
 	display_dlg_item(dlg_data, widget_data, 1);
 }
 

@@ -1,3 +1,31 @@
+Wed May  8 17:18:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, configure.in, src/protocol/file.c, src/util/Makefile.am,
+	src/util/compress.c, src/util/compress.h:
+
+	Base of decompression (gz and bz2) support. It can work only for
+	files now, and it's disabled yet, because there are various issues
+	with that - they are described in FIXMEs near try_decompress().  
+
+Wed May  8 15:48:05 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/session.c:
+
+	Tidy up.  
+
+Wed May  8 14:06:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: links-remote, remote.lua:
+
+	Added 'X' binding which saves current link URL to external_url_file.  
+
+Wed May  8 13:59:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, lowlevel/connect.c, lowlevel/dns.c,
+	protocol/file.c:
+
+	Hopefully last OS/2 compilation fixes by Cris.  
+
 Wed May  8 13:55:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: links.h, main.c, main.h, bfu/bfu.c, bfu/bfu.h, bfu/menu.c,

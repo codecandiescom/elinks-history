@@ -227,6 +227,84 @@ B<TODO>
 
 
 
+=head1 SIMPLE DIALOGS
+
+This chapter is concerned of using simple prefabricated dialogs.  Explicitly
+construing complex custom dialogs from widgets is described in the CUSTOM
+DIALOGS section.
+
+=over 4
+
+=item ELinks::alert(...)
+
+This function shows a trivial window containing only the supplied text and an
+C<[ OK ]> button.
+
+The function takes either a single parameter with the text, or a hash with the
+I<message> and optional I<title> key. The window title defaults to "Perl
+Alert").
+
+The function returns nothing (or rather, anything).
+
+B<Example:>
+
+	ELinks::alert('They are after you!');
+	ELinks::alert(title => 'The Litany Against Fear',
+	              message => 'I must not fear. Fear is the mind-killer...');
+
+B<TODO>
+
+=item ELinks::confirm(...)
+
+This function shows a simple window containing only the supplied text and two
+C<[ Yes ]> and C<[ No ]> buttons.
+
+The function takes either a single parameter with the text, or a hash with the
+I<message> and optional I<title> (window title) key, which defaults to "Perl
+Confirmation". You can also pass optional I<yes> and I<no> keys, changing the
+default button labels.
+
+The function returns true if the yes button was pressed, false otherwise.
+
+B<Example:>
+
+	ELinks::emit_action('quit') if Elinks::confirm('Quit ELinks?');
+
+	# Abuse example: ;-)
+	if (ELinks::confirm(title => 'Candy shop',
+	                    message => 'What will you choose?'
+	                    yes => 'Sweet', no => 'Lollipop')
+		{ ELinks::alert('Yummy!'); }
+	else
+		{ ELinks::alert('*Smack*'); }
+
+B<TODO>
+
+=item ELinks::inputbox(...)
+
+This functionn shows a simple window containing the supplied label, an input
+box, and the C<[ OK ]> and C<[ Cancel ]> buttons. So it will look like e.g.
+the Goto URL dialog.
+
+The function takes either a single parameter with the label, or a hash with the
+I<label> and and optional I<title> (window title) key, which defaults to "Perl
+Input".
+
+The function returns the input value if the OK button was pressed, undef
+otherwise.
+
+B<Example:>
+
+	ELinks::alert('I have ' . ELinks::inputbox('Amount') . ' of '
+	              . ELinks::inputbox(title => 'Curious',
+	                                 label => 'Fruit sort'));
+
+B<TODO>
+
+=back
+
+
+
 =head1 AUTHORS
 
 This document was scribbled by Petr Baudis.

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.84 2004/06/16 14:51:44 zas Exp $ */
+/* $Id: formhist.c,v 1.85 2004/06/16 15:32:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,19 +88,6 @@ form_type2str(enum form_type num)
 
 #undef FORM_TYPE_COUNT
 
-static void
-free_form_in_list(struct formhist_data *form)
-{
-	struct submitted_value *sv, *svtmp;
-
-	foreach (sv, *form->submit) {
-		svtmp = sv;
-		sv = sv->prev;
-		del_from_list(svtmp);
-		free_submitted_value(svtmp);
-	}
-}
-
 static struct formhist_data *
 new_form(unsigned char *url)
 {
@@ -124,7 +111,7 @@ new_form(unsigned char *url)
 void
 free_form(struct formhist_data *form)
 {
-	free_form_in_list(form);
+	free_submitted_value_list(form->submit);
 	mem_free(form->submit);
 	if (form->box_item)
 		done_listbox_item(&formhist_browser, form->box_item);
@@ -480,7 +467,7 @@ done_form_history(struct module *module)
 	struct formhist_data *form;
 
 	foreach(form, saved_forms) {
-		free_form_in_list(form);
+		free_submitted_value_list(form->submit);
 		mem_free(form->submit);
 		if (form->box_item)
 			done_listbox_item(&formhist_browser, form->box_item);

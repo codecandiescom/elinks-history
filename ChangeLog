@@ -1,3 +1,51 @@
+Sun May 11 21:28:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Added Michail as author of Mutt's mailcap code + elinks.or.cz to
+	self 
+
+Sun May 11 19:49:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	A function ulonghexcat() was added to do fast convertion of integers
+	to hexa strings. Bye bye snprintf(str, 8, "#%02x%02x%02x", color->r,
+	color->g, color->b), you are 100x too slow for us.  
+
+Sun May 11 18:34:26 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* AUTHORS:
+
+	Update my E-mail address in AUTHORS and, while I'm editing the file, 
+	put in the rest of my name.  
+
+Sun May 11 16:28:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Two minor optimizations and very minor cleanup.  
+
+Sat May 10 23:05:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* SITES:
+
+	Updated mailing list info.  
+
+Sat May 10 23:03:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* BUGS:
+
+	The bugs now live in Bugzilla.  
+
+Sat May 10 22:50:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	The count of remaining entries was wrong (by one), fixed. Cache
+	entry refcount and data_size now appear in dialog when compiled with
+	--enable-debug.  
+
 Sat May 10 20:06:27 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/snprintf.c:
@@ -320,7 +368,7 @@ Thu May  8 12:33:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	Please maintain proper blanklining.  
 
-Thu May  8 12:11:32 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+Thu May  8 12:11:32 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/options.c:
 
@@ -328,7 +376,7 @@ Thu May  8 12:11:32 2003  Miciah Dashiel <theweirdo@subdimension.com>:
 	document.browse.links.number_keys_select_link doesn't exhibit 
 	seemingly random I'll-work-when-I-want-to behaviour.  
 
-Thu May  8 11:51:33 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+Thu May  8 11:51:33 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/document/options.c:
 
@@ -336,7 +384,7 @@ Thu May  8 11:51:33 2003  Miciah Dashiel <theweirdo@subdimension.com>:
 	document.browse.links.numbering is a boolean, use get_opt_bool, not
 	get_opt_int, to get its value.  
 
-Thu May  8 11:46:43 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+Thu May  8 11:46:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/view.c:
 
@@ -358,7 +406,7 @@ Thu May  8 11:17:40 2003  Laurent Monin <zas@norz.org>:
 	2 new functions were introduced, one for handling hotkeys, the
 	others to handle not_so_hot_keys ;).  
 
-Thu May  8 11:07:29 2003  Miciah Dashiel <theweirdo@subdimension.com>:
+Thu May  8 11:07:29 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* BUGS, TODO:
 

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.11 2002/11/29 11:15:34 pasky Exp $ */
+/* $Id: memdebug.c,v 1.12 2002/11/29 11:42:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,13 @@
  * the non-debug one.
  * Default is defined. */
 #define CHECK_REALLOC_NULL
+
+/* Check for useless reallocation ?
+ * If oldsize is equal to newsize, print a message to stderr.
+ * It may help to find inefficient code.
+ * Default is undefined.
+ */
+#undef CHECK_USELESS_REALLOC
 
 /* Check for validity of address passed to free() ?
  * Note that this is VERY slow, as we iterate through whole memory_list each
@@ -404,7 +411,12 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 
 	/* We compare oldsize to new size, and if equal we just return ptr
 	 * and change nothing, this conforms to usual realloc() behavior. */
-	if (ah->size == size) return (void *) ptr;
+	if (ah->size == size) {
+#ifdef CHECK_USELESS_REALLOC
+		fprintf(stderr, "[%s:%d] mem_realloc() oldsize = newsize = %d\n", file, line, size);
+#endif
+		return (void *) ptr;
+	}
 
 	do {
 		ah2 = realloc(ah, SIZE_BASE2AH(size));

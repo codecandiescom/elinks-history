@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.17 2002/05/17 22:14:59 pasky Exp $ */
+/* $Id: options.c,v 1.18 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -666,8 +666,6 @@ int keep_unhistory = 1;
 
 int enable_global_history = 1;
 
-int default_left_margin = HTML_LEFT_MARGIN;
-
 unsigned char fake_referer[MAX_STR_LEN] = "";
 enum referer referer = REFERER_NONE;
 
@@ -835,8 +833,6 @@ struct option links_options[] = {
 	 	0, 1, &download_utime,
 	 	"Set time of downloaded files?" },
 
-	/* FIXME: Yes, you shouldn't be able to specify this in a config file.
-	 * This will be fixed later. --pasky */
 	{	"dump", OPT_CMDLINE,
 		dump_cmd, NULL, NULL,
 	 	D_DUMP, 0, &dmp,
@@ -944,15 +940,13 @@ struct option links_options[] = {
 	 	0, 0, &current_language,
 		"Language of user interface." },
 
-		/* TODO - this is somehow implemented by ff, but commented out
+		/* TODO - this is somehow implemented by ff, but disabled
 		 * for now as it doesn't work. */
-#if 0
-	{	"links_wraparound", OPT_CMDLINE | OPT_CFGFILE,
+	{	"links_wraparound", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &links_wraparound,
 	 	"When pressing 'down' on the last link, jump at the first one, and\n"
 		"vice versa." },
-#endif
 
 	{	"lookup", OPT_CMDLINE,
 		lookup_cmd, NULL, NULL,
@@ -1024,14 +1018,12 @@ struct option links_options[] = {
 	 	D_SOURCE, 0, &dmp,
 		"Write the given HTML document in source form to stdout." },
 
-		/* TODO - this is implemented, but commented out for now as
+		/* TODO - this is implemented, but disabled for now as
 		 * it's buggy. */
-#if 0
-	{	"startup_goto_dialog", OPT_CMDLINE | OPT_CFGFILE,
+	{	"startup_goto_dialog", /* OPT_CMDLINE | OPT_CFGFILE */ 0,
 		gen_cmd, num_rd, num_wr,
 	 	0, 1, &startup_goto_dialog,
 		"Pop up goto dialog on startup when there's no homepage?" },
-#endif
 
 	{	"unrestartable_receive_timeout", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,

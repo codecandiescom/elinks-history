@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.46 2002/05/17 21:59:59 pasky Exp $ */
+/* $Id: view.c,v 1.47 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,7 +1009,7 @@ static void down(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link = fd->vs->current_link;
 
-	if (links_wraparound && current_link >= fd->f_data->nlinks - 1) {
+	if (get_opt_int("links_wraparound") && current_link >= fd->f_data->nlinks - 1) {
 		/* FIXME: This is not working :/. */
 		jump_to_link_number(ses, fd, 0);
 	}
@@ -1029,7 +1029,7 @@ static void up(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link = fd->vs->current_link;
 
-	if (links_wraparound && current_link == 0) {
+	if (get_opt_int("links_wraparound") && current_link == 0) {
 		/* FIXME: This is not working :/. */
 		jump_to_link_number(ses, fd, fd->f_data->nlinks - 1);
 	}
@@ -1529,14 +1529,14 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 	link = &fd->f_data->links[fd->vs->current_link];
 
 	if (link->type == L_LINK || link->type == L_BUTTON
-	    || ((has_form_submit(fd->f_data, link->form) || form_submit_auto)
+	    || ((has_form_submit(fd->f_data, link->form) || get_opt_int("form_submit_auto"))
 		&& (link->type == L_FIELD || link->type == L_AREA))) {
 
 		return goto_link(get_link_url(ses, fd, link), link, ses, a);
 
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
 		/* We won't get here if (has_form_submit() ||
-		 * 			 form_submit_auto) */
+		 * 			 get_opt_int("form_submit_auto")) */
 		down(ses, fd, 0);
 
 	} else if (link->type == L_CHECKBOX) {
@@ -2152,7 +2152,7 @@ static void goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 
 	jump_to_link_number(ses, fd, n);
 
-	if (accesskey_enter && link->type != L_AREA && link->type != L_FIELD)
+	if (get_opt_int("accesskey_enter") && link->type != L_AREA && link->type != L_FIELD)
 		enter(ses, fd, 0);
 }
 
@@ -2235,7 +2235,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			return 1;
 		}
 
-		if (accesskey_priority >= 2 && try_document_key(ses, fd, ev)) {
+		if (get_opt_int("accesskey_priority") >= 2 && try_document_key(ses, fd, ev)) {
 			/* The document ate the key! */
 			return 1;
 		}
@@ -2317,7 +2317,7 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					x = 0;
 				}
 #endif
-				else if (accesskey_priority == 1
+				else if (get_opt_int("accesskey_priority") == 1
 					 && try_document_key(ses, fd, ev)) {
 					/* The document ate the key! */
 					return 1;
@@ -2585,7 +2585,7 @@ void send_event(struct session *ses, struct event *ev)
 				}
 		}
 
-		if (accesskey_priority <= 0 && current_frame(ses)
+		if (get_opt_int("accesskey_priority") <= 0 && current_frame(ses)
 		    && try_document_key(ses, current_frame(ses), ev)) {
 			/* The document ate the key! */
 			draw_doc(ses->term, current_frame(ses), 1);

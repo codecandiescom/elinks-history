@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.4 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: history.c,v 1.5 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ clean_unhistory(struct session *ses)
 {
 	struct location *loc;
 
-	if (keep_unhistory) return;
+	if (get_opt_int("keep_unhistory")) return;
 	foreach(loc, ses->unhistory) destroy_location(loc);
 }
 

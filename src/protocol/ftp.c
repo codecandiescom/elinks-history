@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.15 2002/05/08 13:55:05 pasky Exp $ */
+/* $Id: ftp.c,v 1.16 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -787,7 +787,7 @@ direntry:
 				add_chr_to_str(&str, &strl, '/');
 			add_to_str(&str, &strl, "\">");
 
-			if (buf[0] == 'd' && color_dirs) {
+			if (buf[0] == 'd' && get_opt_int("color_dirs")) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
 				add_to_str(&str, &strl, "<font color=\""
@@ -797,7 +797,7 @@ direntry:
 			add_htmlesc_str(&str, &strl, buf + *dpos,
 					symlinkpos - *dpos);
 
-			if (buf[0] == 'd' && color_dirs) {
+			if (buf[0] == 'd' && get_opt_int("color_dirs")) {
 				add_to_str(&str, &strl, "</b></font>");
 			}
 

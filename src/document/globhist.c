@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.11 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: globhist.c,v 1.12 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 {
 	struct global_history_item *historyitem;
 
-	if (!enable_global_history)
+	if (!get_opt_int("enable_global_history"))
 		return; 
 
 	if (!title || !url)
@@ -122,7 +122,7 @@ read_global_history()
 	unsigned char *title, *url, *last_visit;
 	FILE *f;
 
-	if (!enable_global_history)
+	if (!get_opt_int("enable_global_history"))
 		return; 
 
 	file_name = straconcat(links_home, "history", NULL);
@@ -163,7 +163,7 @@ write_global_history()
 	unsigned char *file_name;
 	struct secure_save_info *ssi;
 
-	if (!enable_global_history)
+	if (!get_opt_int("enable_global_history"))
 		return; 
 
 	file_name = straconcat(links_home, "history", NULL);

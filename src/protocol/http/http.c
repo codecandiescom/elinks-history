@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.17 2002/05/12 20:15:25 pasky Exp $ */
+/* $Id: http.c,v 1.18 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,7 @@ void http_send_header(struct connection *c)
                 add_to_str(&hdr, &l, "\r\n");
         }
 
-	switch (referer) {
+	switch (get_opt_int("http_referer")) {
 		case REFERER_NONE:
 			/* oh well */
 			break;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.35 2002/05/11 15:20:16 pasky Exp $ */
+/* $Id: session.c,v 1.36 2002/05/17 22:31:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,9 +212,9 @@ print_screen_status(struct session *ses)
 
 	/* TODO: Make this optionally switchable off. */
 
-	if (show_title_bar)
+	if (get_opt_int("show_title_bar"))
 		fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
-	if (show_status_bar)
+	if (get_opt_int("show_status_bar"))
 		fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
 
 	if (ses->wtd)
@@ -234,7 +234,7 @@ print_screen_status(struct session *ses)
 	}
 
 	if (stat) {
-		if (show_status_bar) {
+		if (get_opt_int("show_status_bar")) {
 			if (stat->state == S_OK)
 				msg = print_current_link(ses);
 			if (!msg)
@@ -246,7 +246,7 @@ print_screen_status(struct session *ses)
 			}
 		}
 
-		if (show_title_bar) {
+		if (get_opt_int("show_title_bar")) {
 			msg = print_current_title(ses);
 			if (msg) {
 				int pos = term->x - 1 - strlen(msg);
@@ -506,7 +506,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
 
-	if (!wtd_data || !form_submit_confirm || !strchr(url, POST_CHAR)
+	if (!wtd_data || !get_opt_int("form_submit_confirm") || !strchr(url, POST_CHAR)
 	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
 
@@ -1123,7 +1123,7 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 #if 0
 			/* I can't do it here - it doesn't work everytime and
 			 * it leaks. --pasky */
-			if (startup_goto_dialog)
+			if (get_opt_int("startup_goto_dialog"))
 				dialog_goto_url(ses, "");
 #endif
 		} else {

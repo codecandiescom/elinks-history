@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.52 2002/10/10 21:40:24 pasky Exp $ */
+/* $Id: http.c,v 1.53 2002/10/12 23:42:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
 
 #include "links.h"
 
@@ -31,9 +35,6 @@
 #include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
-
-#include <unistd.h>
-#include <fcntl.h>
 
 
 struct http_connection_info {

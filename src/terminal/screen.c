@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.7 2003/06/24 09:37:30 zas Exp $ */
+/* $Id: screen.c,v 1.8 2003/07/22 00:05:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,19 +154,17 @@ void
 redraw_screen(struct terminal *term)
 {
 	struct rs_opt_cache opt_cache;
-	unsigned char *a;
+	struct string screen;
 	register int y = 0;
 	register int p = 0;
 	int cx = -1;
 	int cy = -1;
 	int attrib = -1;
 	int mode = -1;
-	int l = 0;
 
 	if (!term->dirty || (term->master && is_blocked())) return;
 
-	a = init_str();
-	if (!a) return;
+	if (!init_string(&screen)) return;
 
 #if 0
 	/* Performance testing utility */
@@ -216,58 +214,58 @@ redraw_screen(struct terminal *term)
 #undef TSP
 #undef TLSP
 			if (cx == x && cy == y) {
-				print_char(term, &opt_cache, &a, &l,
+				print_char(term, &opt_cache, &screen.source, &screen.length,
 					   p, &mode, &attrib);
 				cx++;
 			} else if (cy == y && x - cx < 10) {
 				register int i = x - cx;
 
 				for (; i >= 0; i--) {
-					print_char(term, &opt_cache, &a, &l,
+					print_char(term, &opt_cache, &screen.source, &screen.length,
 						   p - i, &mode, &attrib);
 					cx++;
 				}
 			} else {
-				add_to_str(&a, &l, "\033[");
-				add_num_to_str(&a, &l, y + 1);
-				add_chr_to_str(&a, &l, ';');
-				add_num_to_str(&a, &l, x + 1);
-				add_chr_to_str(&a, &l, 'H');
+				add_to_string(&screen, "\033[");
+				add_long_to_string(&screen, y + 1);
+				add_char_to_string(&screen, ';');
+				add_long_to_string(&screen, x + 1);
+				add_char_to_string(&screen, 'H');
 				cx = x; cy = y;
-				print_char(term, &opt_cache, &a, &l,
+				print_char(term, &opt_cache, &screen.source, &screen.length,
 					   p, &mode, &attrib);
 				cx++;
 			}
 		}
 	}
 
-	if (l) {
+	if (screen.length) {
 		if (opt_cache.colors)
-			add_to_str(&a, &l, "\033[37;40m");
+			add_to_string(&screen, "\033[37;40m");
 
-		add_to_str(&a, &l, "\033[0m");
+		add_to_string(&screen, "\033[0m");
 
 		if (opt_cache.type == TERM_LINUX && opt_cache.m11_hack)
-			add_to_str(&a, &l, "\033[10m");
+			add_to_string(&screen, "\033[10m");
 
 		if (opt_cache.type == TERM_VT100)
-			add_chr_to_str(&a, &l, '\x0f');
+			add_char_to_string(&screen, '\x0f');
 	}
 
-	if (l || term->cx != term->lcx || term->cy != term->lcy) {
+	if (screen.length || term->cx != term->lcx || term->cy != term->lcy) {
 		term->lcx = term->cx;
 		term->lcy = term->cy;
-		add_to_str(&a, &l, "\033[");
-		add_num_to_str(&a, &l, term->cy + 1);
-		add_chr_to_str(&a, &l, ';');
-		add_num_to_str(&a, &l, term->cx + 1);
-		add_chr_to_str(&a, &l, 'H');
+		add_to_string(&screen, "\033[");
+		add_long_to_string(&screen, term->cy + 1);
+		add_char_to_string(&screen, ';');
+		add_long_to_string(&screen, term->cx + 1);
+		add_char_to_string(&screen, 'H');
 	}
 
-	if (l && term->master) want_draw();
-	hard_write(term->fdout, a, l);
-	mem_free(a);
-	if (l && term->master) done_draw();
+	if (screen.length && term->master) want_draw();
+	hard_write(term->fdout, screen.source, screen.length);
+	done_string(&screen);
+	if (screen.length && term->master) done_draw();
 
 	memcpy(term->last_screen, term->screen, term->x * term->y * sizeof(int));
 	term->dirty = 0;

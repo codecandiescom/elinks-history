@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.74 2003/11/08 02:03:01 pasky Exp $ */
+/* $Id: cache.c,v 1.75 2003/11/08 02:10:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 }
 
 static inline void
-resize_entry(struct cache_entry *ce, int size)
+enlarge_entry(struct cache_entry *ce, int size)
 {
 	ce->data_size += size;
 	cache_size += size;
@@ -197,7 +197,7 @@ add_fragment(struct cache_entry *ce, int offset,
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
 				 * old and new end.. */
-				resize_entry(ce, end_offset - f_end_offset);
+				enlarge_entry(ce, end_offset - f_end_offset);
 				/* ..and length is now total length. */
 				f->length = end_offset - f->offset;
 			} else {
@@ -232,7 +232,7 @@ add_fragment(struct cache_entry *ce, int offset,
 	f = nf;
 
 	ret = 1;
-	resize_entry(ce, length);
+	enlarge_entry(ce, length);
 
 remove_overlaps:
 	/* Contatenate overlapping fragments. */
@@ -264,7 +264,7 @@ remove_overlaps:
 			       f->next->data + f_end_offset - f->next->offset,
 			       end_offset - f_end_offset);
 
-			resize_entry(ce, end_offset - f_end_offset);
+			enlarge_entry(ce, end_offset - f_end_offset);
 			f->length = f->real_length = end_offset - f->offset;
 
 ff:;
@@ -279,7 +279,7 @@ ff:;
 
 		/* Remove the fragment, it influences our new one! */
 		nf = f->next;
-		resize_entry(ce, -nf->length);
+		enlarge_entry(ce, -nf->length);
 		del_from_list(nf);
 		mem_free(nf);
 	}
@@ -355,7 +355,7 @@ del:
 			while ((void *)f != &ce->frag) {
 				struct fragment *tmp = f->next;
 
-				resize_entry(ce, -f->length);
+				enlarge_entry(ce, -f->length);
 				del_from_list(f);
 				mem_free(f);
 				f = tmp;
@@ -365,7 +365,7 @@ del:
 		}
 
 		if (f->length > size) {
-			resize_entry(ce, -(f->length - size));
+			enlarge_entry(ce, -(f->length - size));
 			f->length = size;
 
 			if (final) {
@@ -394,14 +394,14 @@ free_entry_to(struct cache_entry *ce, int off)
 		if (f->offset + f->length <= off) {
 			struct fragment *tmp = f;
 
-			resize_entry(ce, -f->length);
+			enlarge_entry(ce, -f->length);
 			f = f->prev;
 			del_from_list(tmp);
 			mem_free(tmp);
 		} else if (f->offset < off) {
 			long size = off - f->offset;
 
-			resize_entry(ce, -size);
+			enlarge_entry(ce, -size);
 			f->length -= size;
 			memmove(f->data, f->data + size, f->length);
 			f->offset = off;

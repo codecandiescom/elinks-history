@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.87 2003/10/29 19:43:38 jonas Exp $ */
+/* $Id: link.c,v 1.88 2003/10/29 19:59:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,9 +203,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		colors.foreground = doc_opts->active_link_fg;
 		colors.background = doc_opts->active_link_bg;
 
-	} else if (doc_opts->invert_active_link
-		   && link->type != L_FIELD
-		   && link->type != L_AREA) {
+	} else if (doc_opts->invert_active_link && !link_is_textinput(link)) {
 		colors.foreground = link->color.background;
 		colors.background = link->color.foreground;
 
@@ -241,14 +239,8 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		copy_screen_chars(&doc_view->link_bg[i].c, co, 1);
 
 		if (i == cursor_offset) {
-			int blockable;
-
-			if (link->type != L_FIELD && link->type != L_AREA
-			    && co->color != template->color) {
-				blockable = 1;
-			} else {
-				blockable = 0;
-			}
+			int blockable = (!link_is_textinput(link)
+					 && co->color != template->color);
 
 			set_cursor(t, x, y, blockable);
 			set_window_ptr(get_current_tab(t), x, y);
@@ -626,13 +618,13 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	if (link->type == L_LINK || link->type == L_BUTTON
 	    || ((has_form_submit(doc_view->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
-		&& (link->type == L_FIELD || link->type == L_AREA))) {
+		&& (link_is_textinput(link)))) {
 		unsigned char *url = get_link_url(ses, doc_view, link);
 
 		if (url)
 			return goto_link(url, link->target, ses, a);
 
-	} else if (link->type == L_FIELD || link->type == L_AREA) {
+	} else if (link_is_textinput(link)) {
 		/* We won't get here if (has_form_submit() ||
 		 * 			 get_opt_int("..")) */
 		down(ses, doc_view, 0);
@@ -802,8 +794,7 @@ goto_link_number_do(struct session *ses, struct document_view *doc_view, int n)
 	jump_to_link_number(ses, doc_view, n);
 
 	link = &doc_view->document->links[n];
-	if (link->type != L_AREA
-	    && link->type != L_FIELD
+	if (!link_is_textinput(link)
 	    && get_opt_int("document.browse.accesskey.auto_follow"))
 		enter(ses, doc_view, 0);
 }
@@ -1060,7 +1051,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 	}
 
 	if (link->type == L_CHECKBOX || link->type == L_SELECT
-	    || link->type == L_FIELD || link->type == L_AREA) {
+	    || link_is_textinput(link)) {
 		struct string str;
 
 		if (!init_string(&str)) return NULL;

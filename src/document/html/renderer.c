@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.326 2003/10/29 19:43:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.327 2003/10/29 19:59:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -769,7 +769,7 @@ new_link(struct document *document, int link_number,
 	}
 
 	link->color.background = format.bg;
-	link->color.foreground = (link->type != L_FIELD && link->type != L_AREA)
+	link->color.foreground = !link_is_textinput(link)
 				? format.clink : format.fg;
 
 	return link;

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.7 2003/10/29 19:43:37 jonas Exp $ */
+/* $Id: document.h,v 1.8 2003/10/29 19:59:43 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -67,6 +67,9 @@ enum link_type {
 	L_FIELD,
 	L_AREA,
 };
+
+#define link_is_textinput(link) \
+	((link)->type == L_FIELD || (link)->type == L_AREA)
 
 struct point {
 	int x, y;

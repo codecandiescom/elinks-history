@@ -1,61 +1,14 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua,v 1.1 2002/06/30 22:21:06 pasky Exp $
+-- $Id: hooks.lua,v 1.2 2002/06/30 22:33:22 pasky Exp $
+
+-- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
 ----------------------------------------------------------------------
---  Local configuration
+--  Load configuration
 ----------------------------------------------------------------------
 
--- ** IMPORTANT **
--- For security reasons, systems functions are not enabled by default.
--- To do so, uncomment the following line, but be careful about
--- including unknown code.  Individual functions may be disabled by
--- assigning them to `nil'.
-
-    -- enable_systems_functions ()
-
-    -- openfile = nil    -- may open files in write mode
-    -- readfrom = nil    -- reading from pipe can execute commands
-    -- writeto = nil
-    -- appendto = nil
-    -- pipe_read = nil
-    -- remove = nil
-    -- rename = nil
-    -- execute = nil
-    -- exit = nil
-
--- Home directory: If you do not enable system functions, you will
--- need to set the following to your home directory.
-
-    home_dir = (getenv and getenv ("HOME")) or "/home/MYSELF"
-    hooks_file = home_dir.."/.elinks/hooks.lua"
-
--- Pausing: When external programs are run, sometimes we need to pause
--- to see the output.  This is the string we append to the command
--- line to do that.  You may customise it if you wish.
-
-    pause = '; echo -ne "\\n\\e[1;32mPress ENTER to continue...\\e[0m"; read'
-
--- Make ALT="" into ALT="&nbsp;": Makes web pages with superfluous
--- images look better.  However, even if you disable the "Display links
--- to images" option, single space links to such images will appear.
--- To enable, set the following to 1.  If necessary, you can change
--- this while in Links using the Lua Console, then reload the page.
--- See also the keybinding section at the end of the file.
-
-    mangle_blank_alt = nil
-
--- If you set this to non-`nil', the bookmark addon will be loaded,
--- and actions will be bound to my key bindings.  Change them at the
--- bottom of the file.
--- Note that you need to copy bm.lua (from contrib/) to ~/.elinks/ directory
--- as well.
-
-    bookmark_addon = nil
-
--- For any other lua script to be loaded, clone following line:
-
-    dofile (home_dir.."/.elinks/script.lua")
-
+dofile ("/etc/elinks/config.lua")
+dofile (home_dir.."/.elinks/config.lua")
 
 ----------------------------------------------------------------------
 --  case-insensitive gsub
@@ -88,7 +41,9 @@ function plusify (str)
     return gsub (str, "%s", "+")
 end
 
-dumbbookmarks = {
+-- You can write smt like "gg" to goto URL dialog and it'll go to google.com.
+
+dumbprefixes = {
     g  = "http://www.google.com/",
     gg = "http://www.google.com/",
     go = "http://www.google.com/",
@@ -102,7 +57,10 @@ dumbbookmarks = {
     e2 = "http://www.everything2.org/",
 }
 
-smartbookmarks = {
+-- You can write "gg:foo" or "gg foo" to goto URL dialog and it'll ask google
+-- for it automagically.
+
+smartprefixes = {
     g  = "http://www.google.com/search?q=%s&btnG=Google+Search",
     gg = "http://www.google.com/search?q=%s&btnG=Google+Search",
     go = "http://www.google.com/search?q=%s&btnG=Google+Search",
@@ -130,15 +88,15 @@ smartbookmarks = {
 }
 
 function goto_url_hook (url, current_url)
-    if dumbbookmarks[url] then
-        return dumbbookmarks[url]
+    if dumbprefixes[url] then
+        return dumbprefixes[url]
     end
 
     if strfind(url,'%s') or strfind(url, ':') then
         local _,_,nick,val = strfind(url, "^([^%s]+)[:%s]%s*(.-)%s*$")
-        if smartbookmarks[nick] then
+        if smartprefixes[nick] then
             val = plusify(val)
-            return format(smartbookmarks[nick], val)
+            return format(smartprefixes[nick], val)
         end
     end
 
@@ -352,7 +310,7 @@ if bookmark_addon then
     -- Add/change any bookmark options here.
 
     -- Be careful not to load bookmarks if this script is being
-    -- reloaded while in Links, or we will lose unsaved changes.
+    -- reloaded while in ELinks, or we will lose unsaved changes.
     if not bm_bookmarks or getn (bm_bookmarks) == 0 then
 	bm_load_bookmarks ()
     end

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.15 2002/12/30 01:08:22 pasky Exp $ */
+/* $Id: parser.c,v 1.16 2002/12/30 02:04:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -628,12 +628,15 @@ static parse_func state_parsers[HPT_NO] = {
 
 
 static void
-html_parser(struct parser_state *state, unsigned char **str, int *len)
+html_init(struct parser_state *state)
+{
+	html_state_push(state, HPT_PLAIN);
+}
+
+static void
+html_parse(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
-
-	if (!pstate) pstate = html_state_push(state, HPT_PLAIN);
-	if (!pstate) return;
 
 	while (*len) {
 		if (state_parsers[pstate->state](state, str, len) < 0)
@@ -642,7 +645,16 @@ html_parser(struct parser_state *state, unsigned char **str, int *len)
 	}
 }
 
+static void
+html_done(struct parser_state *state)
+{
+	while (state->data)
+		html_state_pop(state);
+}
+
 
 struct parser_backend html_backend = {
-	html_parser,
+	html_init,
+	html_parse,
+	html_done,
 };

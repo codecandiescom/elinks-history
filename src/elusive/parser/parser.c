@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.6 2002/12/29 17:26:22 pasky Exp $ */
+/* $Id: parser.c,v 1.7 2002/12/30 02:04:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,24 +23,42 @@ struct parser_backend *parser_backends[] = {
 };
 
 
-void
-elusive_parser(enum parser_backend_type parser, struct parser_state **state,
-		unsigned char **str, int *len)
+struct parser_state *
+elusive_init(enum parser_backend_type parser)
 {
-	if (!parser_backends[parser] || !parser_backends[parser]->parse)
+	struct parser_state *state;
+
+	state = mem_calloc(1, sizeof(struct parser_state));
+	if (!state) return NULL;
+
+	state->real_root = init_syntree_node();
+	state->current = state->root = state->real_root;
+	state->parser = parser;
+
+	if (parser_backends[state->parser] &&
+	    parser_backends[state->parser]->init)
+		parser_backends[state->parser]->init(state);
+
+	return state;
+}
+
+void
+elusive_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	if (!parser_backends[state->parser] ||
+	    !parser_backends[state->parser]->parse)
 		return;
 
-	if (!*state) {
-		*state = mem_calloc(1, sizeof(struct parser_state));
-		if (!*state)
-			return; /* Try next time, buddy. */
+	parser_backends[state->parser]->parse(state, str, len);
+}
 
-		(*state)->root = init_syntree_node();
-		(*state)->current = (*state)->root;
-	}
+void
+elusive_done(struct parser_state *state)
+{
+	if (parser_backends[state->parser] &&
+	    parser_backends[state->parser]->done)
+		parser_backends[state->parser]->done(state);
 
-	if (str && len) {
-		/* Otherwise we was called just to init state. */
-		parser_backends[parser]->parse(*state, str, len);
-	}
+	done_syntree_node(state->real_root);
+	mem_free(state);
 }

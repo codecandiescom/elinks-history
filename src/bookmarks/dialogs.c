@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.203 2005/03/19 17:45:31 zas Exp $ */
+/* $Id: dialogs.c,v 1.204 2005/03/19 17:46:44 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -224,7 +224,7 @@ focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 }
 
 static void
-do_add_special_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char *url)
+do_add_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char *url)
 {
 	struct bookmark *bm = NULL;
 	struct bookmark *selected = NULL;
@@ -265,13 +265,13 @@ do_add_special_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsig
 static void
 do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 {
-	do_add_special_bookmark(dlg_data, name, NULL);
+	do_add_bookmark(dlg_data, name, NULL);
 }
 
 static widget_handler_status_T
 push_add_separator_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
-	do_add_special_bookmark(dlg_data, "-", "");
+	do_add_bookmark(dlg_data, "-", "");
 	redraw_dialog(dlg_data, 1);
 	return EVENT_PROCESSED;
 }
@@ -510,7 +510,7 @@ bookmark_add_add(void *data)
 	struct dialog *dlg = data;
 	struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
 
-	do_add_special_bookmark(dlg_data, dlg->widgets[0].data, dlg->widgets[1].data);
+	do_add_bookmark(dlg_data, dlg->widgets[0].data, dlg->widgets[1].data);
 }
 
 

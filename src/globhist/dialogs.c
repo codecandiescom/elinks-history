@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.93 2003/11/25 01:07:31 jonas Exp $ */
+/* $Id: dialogs.c,v 1.94 2003/11/25 13:29:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,9 @@ history_search_do(struct dialog *dlg)
 	if (!globhist_simple_search(dlg->widgets[1].data, dlg->widgets[0].data)) return;
 	if (list_empty(gh_box_items)) return;
 
-	foreach (box, *item->box) {
+	/* Shouldn't we rather do this only for the specific listbox_data box
+	 * in dlg->widget->data so only the current dialog is updated? --jonas */
+	foreach (box, globhist_browser.boxes) {
 		box->top = item;
 		box->sel = box->top;
 	}

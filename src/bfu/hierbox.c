@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.100 2003/11/25 01:07:29 jonas Exp $ */
+/* $Id: hierbox.c,v 1.101 2003/11/25 13:29:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,6 @@ init_browser_box(struct hierbox_browser *browser, unsigned char *text,
 	box->visible = 1;
 
 	box->text = text;
-	box->box = &browser->boxes;
 	box->udata = data;
 
 	add_to_list(*browser->items, box);
@@ -65,14 +64,14 @@ init_browser_box(struct hierbox_browser *browser, unsigned char *text,
  * up and if both traversals end up returning the box we want to replace bail
  * out using NULL. */
 static inline struct listbox_item *
-replace_box_item(struct listbox_item *item)
+replace_box_item(struct listbox_item *item, struct listbox_data *data)
 {
 	struct listbox_item *box;
 
-	box = traverse_listbox_items_list(item, 1, 1, NULL, NULL);
+	box = traverse_listbox_items_list(item, data, 1, 1, NULL, NULL);
 	if (item != box) return box;
 
-	box = traverse_listbox_items_list(item, -1, 1, NULL, NULL);
+	box = traverse_listbox_items_list(item, data, -1, 1, NULL, NULL);
 	return (item == box) ? NULL : box;
 }
 
@@ -86,12 +85,12 @@ done_browser_box(struct hierbox_browser *browser, struct listbox_item *box_item)
 	/* If we are removing the top or the selected box we have to figure out
 	 * a replacement. */
 
-	foreach (box_data, *box_item->box) {
+	foreach (box_data, browser->boxes) {
 		if (box_data->sel == box_item)
-			box_data->sel = replace_box_item(box_item);
+			box_data->sel = replace_box_item(box_item, box_data);
 
 		if (box_data->top == box_item)
-			box_data->top = replace_box_item(box_item);
+			box_data->top = replace_box_item(box_item, box_data);
 	}
 
 	/* The option dialog needs this test */
@@ -181,7 +180,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 					if (!selected->root) break;
 
 					traverse_listbox_items_list(
-							selected->root, 0, 1,
+							selected->root, box, 0, 1,
 							test_search, &ctx);
 					box_sel_move(dlg_data->widgets_data,
 						     ctx.offset);
@@ -347,7 +346,8 @@ init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
 
 	/* Look if it wouldn't be more interesting to blast off the marked
 	 * item. */
-	traverse_listbox_items_list(box->items->next, 0, 0,
+	assert(!list_empty(*box->items));
+	traverse_listbox_items_list(box->items->next, box, 0, 0,
 				    scanner, action_info);
 
 	return action_info;
@@ -511,7 +511,8 @@ push_ok_delete_button(void *delete_info_)
 	if (delete_info->item) {
 		delete_info->box->ops->unlock(delete_info->item);
 	} else {
-		traverse_listbox_items_list(delete_info->box->items->next, 0, 0,
+		traverse_listbox_items_list(delete_info->box->items->next,
+					    delete_info->box, 0, 0,
 					    delete_marked, delete_info);
 		if (!delete_info->item) return;
 	}
@@ -601,7 +602,8 @@ do_clear_browser(void *action_info_)
 {
 	struct hierbox_action_info *action_info = action_info_;
 
-	traverse_listbox_items_list(action_info->box->items->next, 0, 0,
+	traverse_listbox_items_list(action_info->box->items->next,
+				    action_info->box, 0, 0,
 				    delete_unused, action_info);
 }
 

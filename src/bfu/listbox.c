@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.113 2003/11/25 01:07:29 jonas Exp $ */
+/* $Id: listbox.c,v 1.114 2003/11/25 13:29:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,19 +97,17 @@ dlg_format_box(struct terminal *term, struct widget_data *widget_data,
  * (down) until we reach the end or fn() returns 0. */
 /* From the box structure, we should use only 'items' here. */
 struct listbox_item *
-traverse_listbox_items_list(struct listbox_item *item, int offset,
-			    int follow_visible,
+traverse_listbox_items_list(struct listbox_item *item, struct listbox_data *box,
+			    int offset, int follow_visible,
 			    int (*fn)(struct listbox_item *, void *, int *),
 			    void *d)
 {
 	struct listbox_item *visible_item = item;
-	struct listbox_data *box;
 	int levmove = 0;
 	int stop = 0;
 	int infinite = !offset;
 
 	if (!item) return NULL;
-	box = item->box->next;
 
 	if (infinite)
 		offset = 1;
@@ -262,7 +260,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 		} else {
 			data->box->top =
 				traverse_listbox_items_list(data->box->top,
-					1, 1, NULL, NULL);
+					data->box, 1, 1, NULL, NULL);
 		}
 	} else if (data->dist < 0) {
 		if (data->box->sel_offset > 0) {
@@ -270,7 +268,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 		} else {
 			data->box->top =
 				traverse_listbox_items_list(data->box->top,
-					-1, 1, NULL, NULL);
+					data->box, -1, 1, NULL, NULL);
 		}
 	}
 
@@ -291,12 +289,12 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
-		box->top = traverse_listbox_items_list(box->top,
+		box->top = traverse_listbox_items_list(box->top, box,
 				1, 1, NULL, NULL);
 		box->sel = box->top;
 	}
 
-	if (traverse_listbox_items_list(box->sel, dist, 1, NULL, NULL)
+	if (traverse_listbox_items_list(box->sel, box, dist, 1, NULL, NULL)
 	    != box->sel) {
 		struct box_context data;
 
@@ -308,7 +306,7 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 		/* XXX: This is ugly, yes; but we don't want to call the
 		 * callback if we won't move on at all. */
-		box->sel = traverse_listbox_items_list(box->sel, dist, 1,
+		box->sel = traverse_listbox_items_list(box->sel, box, dist, 1,
 						       box_sel_move_do, &data);
 	}
 }
@@ -372,7 +370,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 					str[1] = BORDER_SDLCORNER;
 				}
 			} else {
-				struct list_head *p = ((struct listbox_data *) item->box->next)->items;
+				struct list_head *p = data->box->items;
 
 				if (p->next == item) {
 					str[1] = BORDER_SULCORNER;
@@ -433,7 +431,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 	/* We want to have these visible if possible. */
 	if (box->top && !box->top->visible) {
 		/* debug("top: %s - (%d) %p\n", box->top->text, box->top->visible, box->top); */
-		box->top = traverse_listbox_items_list(box->top, 1,
+		box->top = traverse_listbox_items_list(box->top, box, 1,
 				1, NULL, NULL);
 		box->sel = box->top;
 	}
@@ -445,7 +443,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg_d
 		data->box = box;
 		data->dlg_data = dlg_data;
 
-		traverse_listbox_items_list(box->top, listbox_item_data->h,
+		traverse_listbox_items_list(box->top, box, listbox_item_data->h,
 					    1, display_listbox_item, data);
 
 		mem_free(data);

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.51 2003/11/25 01:07:29 jonas Exp $ */
+/* $Id: listbox.h,v 1.52 2003/11/25 13:29:34 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -70,9 +70,6 @@ struct listbox_item {
 	struct listbox_item *root;
 	struct list_head child;
 
-	/* The listbox this item is member of. */
-	struct list_head *box;
-
 	enum { BI_LEAF, BI_FOLDER } type;
 
 	unsigned int expanded:1; /* Only valid if this is a BI_FOLDER */
@@ -91,7 +88,7 @@ extern struct widget_ops listbox_ops;
 
 void dlg_format_box(struct terminal *, struct widget_data *, int, int *, int, int, int *, enum format_align);
 
-struct listbox_item *traverse_listbox_items_list(struct listbox_item *, int, int, int (*)(struct listbox_item *, void *, int *), void *);
+struct listbox_item *traverse_listbox_items_list(struct listbox_item *, struct listbox_data *, int, int, int (*)(struct listbox_item *, void *, int *), void *);
 
 void box_sel_move(struct widget_data *, int);
 

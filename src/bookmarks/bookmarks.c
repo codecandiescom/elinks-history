@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.96 2003/11/22 17:05:24 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.97 2003/11/25 13:29:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,7 +250,6 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	bm->box_item->visible = 1;
 
 	bm->box_item->text = bm->title;
-	bm->box_item->box = &bookmark_browser.boxes;
 	bm->box_item->udata = (void *) bm;
 
 	if (place) {
@@ -323,7 +322,7 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 			/* We are being relocated, so update everything. */
 			b2->next->prev = b2;
 			b2->prev->next = b2;
-			foreach (box, *b2->box) {
+			foreach (box, bookmark_browser.boxes) {
 				if (box->sel == bm->box_item) box->sel = b2;
 				if (box->top == bm->box_item) box->top = b2;
 			}

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.137 2003/11/25 01:07:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.138 2003/11/25 13:29:35 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -528,7 +528,7 @@ bookmark_search_do(struct dialog *dlg)
 	ctx.search_url = search_url;
 	ctx.search_title = search_title;
 
-	traverse_listbox_items_list(box->sel, 0, 0, test_search, &ctx);
+	traverse_listbox_items_list(box->sel, box, 0, 0, test_search, &ctx);
 	if (!ctx.found) return;
 
 	box_sel_move(widget_data, ctx.ofs - 1);

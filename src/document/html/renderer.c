@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.161 2003/07/03 21:10:56 zas Exp $ */
+/* $Id: renderer.c,v 1.162 2003/07/03 21:20:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1404,10 +1404,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	while (&html_top != e) {
 		kill_html_stack_item(&html_top);
-		if (!&html_top || (void *)&html_top == (void *)&html_stack) {
-			internal("html stack trashed");
-			break;
-		}
+		assertm(&html_top && (void *)&html_top != (void *)&html_stack,
+			"html stack trashed");
 	}
 
 	html_top.dontkill = 0;
@@ -1768,7 +1766,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	screen->vs = vs;
 	screen->xl = screen->yl = -1;
 	screen->f_data = NULL;
-
+	
 	if (!find_in_cache(vs->url, &cee) || !cee) {
 		internal("document %s to format not found", vs->url);
 		return;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.242 2004/04/03 13:27:25 jonas Exp $ */
+/* $Id: download.c,v 1.244 2004/04/03 13:41:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -875,7 +875,7 @@ cancel:
 static void
 tp_free(struct tq *tq)
 {
-	object_unlock(tq->ce);
+	object_unlock(tq->cached);
 	done_uri(tq->uri);
 	if (tq->goto_position) mem_free(tq->goto_position);
 	if (tq->prog) mem_free(tq->prog);
@@ -1047,12 +1047,12 @@ struct {
 };
 
 int
-ses_chktype(struct session *ses, struct download *loading, struct cache_entry *ce, int frame)
+ses_chktype(struct session *ses, struct download *loading, struct cache_entry *cache, int frame)
 {
 	struct mime_handler *handler;
 	struct view_state *vs;
 	struct tq *tq;
-	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
+	unsigned char *ctype = get_content_type(cache->head, get_cache_uri(cache));
 	int plaintext = 1;
 	int ret = 0;
 	int xwin, i;
@@ -1090,8 +1090,8 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 
-	tq->ce = ce;
-	object_lock(tq->ce);
+	tq->cached = cache;
+	object_lock(tq->cached);
 
 	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);
 	if (ses->task.target_frame)

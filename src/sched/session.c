@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.351 2004/04/03 13:32:42 jonas Exp $ */
+/* $Id: session.c,v 1.352 2004/04/03 13:41:39 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -834,7 +834,7 @@ destroy_session(struct session *ses)
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 
 	foreach (tq, ses->tq) {
-		if (tq->ce) object_unlock(tq->ce);
+		if (tq->cached) object_unlock(tq->cached);
 		if (tq->uri) {
 			change_connection(&tq->download, NULL, PRI_CANCEL, 0);
 			done_uri(tq->uri);

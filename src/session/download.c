@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.199 2003/12/06 17:04:31 pasky Exp $ */
+/* $Id: download.c,v 1.200 2003/12/19 11:26:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1052,10 +1052,10 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 
 	foreach (tq, ses->tq)
 		if (!strcmp(tq->url, ses->loading_url))
-			goto ret1;
+			goto do_not_follow;
 
 	tq = mem_calloc(1, sizeof(struct tq));
-	if (!tq) goto ret1;
+	if (!tq) goto do_not_follow;
 	add_to_list(ses->tq, tq);
 	ret = 1;
 	
@@ -1073,7 +1073,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 
 	type_query(tq, ctype, handler);
 
-ret1:
+do_not_follow:
 	mem_free(ctype);
 	if (handler) {
 		mem_free(handler->program);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.145 2004/01/08 01:26:51 jonas Exp $ */
+/* $Id: link.c,v 1.146 2004/01/08 02:02:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -848,8 +848,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 				add_separator_to_menu(&mi);
-				add_to_menu(&mi, N_("~Download link"), NULL, ACT_DOWNLOAD,
-					    (menu_func) send_download, NULL, 0);
+				add_menu_action(&mi, N_("~Download link"), ACT_DOWNLOAD);
 
 #ifdef CONFIG_BOOKMARKS
 				add_menu_action(&mi, N_("~Add link to bookmarks"),
@@ -885,8 +884,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
-				add_to_menu(&mi, N_("Submit form and ~download"), "d", ACT_NONE,
-					    (menu_func) send_download, NULL, 0);
+				add_menu_action(&mi, N_("Submit form and ~download"), ACT_DOWNLOAD);
 
 			add_to_menu(&mi, N_("~Reset form"), NULL, ACT_NONE,
 				    (menu_func) reset_form, NULL, 0);

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.24 2004/01/08 01:50:29 jonas Exp $ */
+/* $Id: action.c,v 1.25 2004/01/08 02:02:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,8 +185,13 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			state_msg(ses);
 			break;
 
+		case ACT_DOWNLOAD:
+			do_frame_action(ses, download_link, 0);
+			break;
+
 		case ACT_DOWNLOAD_IMAGE:
-			send_download_image(term, NULL, ses);
+			/* 1 means download link->where_img URI */
+			do_frame_action(ses, download_link, 1);
 			break;
 
 		case ACT_DOWNLOAD_MANAGER:
@@ -423,7 +428,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_CUT_CLIPBOARD:
 		case ACT_DELETE:
 		case ACT_DOWN:
-		case ACT_DOWNLOAD:
 		case ACT_EDIT:
 		case ACT_END:
 		case ACT_END_OF_BUFFER:

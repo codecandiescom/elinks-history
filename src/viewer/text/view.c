@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.346 2004/01/08 01:34:13 jonas Exp $ */
+/* $Id: view.c,v 1.347 2004/01/08 02:02:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1041,61 +1041,30 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 	send_event(ses, &ev);
 }
 
-enum dl_type {
-	URL,
-	IMAGE,
-};
-
-static void
-send_download_do(struct session *ses, enum dl_type dlt)
+void
+download_link(struct session *ses, struct document_view *doc_view, int image)
 {
-	struct document_view *doc_view;
-
-	assert(ses);
-	if_assert_failed return;
-	doc_view = current_frame(ses);
-	assert(doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
+	struct link *link;
 
 	if (doc_view->vs->current_link == -1) return;
+
 	if (ses->dn_url) {
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
 	}
 
-	if (dlt == URL) {
-		ses->dn_url = get_link_url(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link]);
-	} else if (dlt == IMAGE) {
-		unsigned char *wi = doc_view->document->links[doc_view->vs->current_link].where_img;
+	link = &doc_view->document->links[doc_view->vs->current_link];
 
-		if (wi) ses->dn_url = stracpy(wi);
-	} else {
-		INTERNAL("Unknown dl_type");
-		ses->dn_url = NULL;
-		return;
+	if (!image) {
+		ses->dn_url = get_link_url(ses, doc_view, link);
+	} else if (link->where_img) {
+		ses->dn_url = stracpy(link->where_img);
 	}
 
 	if (ses->dn_url) {
 		set_referrer(ses, doc_view->document->url);
 		query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
 	}
-}
-
-
-void
-send_download_image(struct terminal *term, void *xxx, struct session *ses)
-{
-	assert(term && ses);
-	if_assert_failed return;
-	send_download_do(ses, IMAGE);
-}
-
-void
-send_download(struct terminal *term, void *xxx, struct session *ses)
-{
-	assert(term && ses);
-	if_assert_failed return;
-	send_download_do(ses, URL);
 }
 
 static struct string *

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.170 2004/11/10 12:25:18 zas Exp $ */
+/* $Id: cookies.c,v 1.171 2004/11/10 15:58:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,9 @@
 
 #include "elinks.h"
 
-/* #define DEBUG_COOKIES */
+#if 0
+#define DEBUG_COOKIES
+#endif
 
 #include "bfu/msgbox.h"
 #include "cookies/cookies.h"
@@ -404,7 +406,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
 #ifdef DEBUG_COOKIES
 		DBG("Domain security violated: %s vs %*s", cookie->domain,
-				uri->host, uri->hostlen);
+		    uri->hostlen, uri->host);
 #endif
 		mem_free(cookie->domain);
 		cookie->domain = memacpy(uri->host, uri->hostlen);
@@ -689,6 +691,7 @@ send_cookies(struct uri *uri)
 
 static void done_cookies(struct module *module);
 
+
 void
 load_cookies(void) {
 	/* Buffer size is set to be enough to read long lines that
@@ -716,67 +719,54 @@ load_cookies(void) {
 	while (fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
 		struct cookie *cookie;
 		unsigned char *p, *q = in_buffer;
-		enum { NAME = 0, VALUE, SERVER, PATH, DOMAIN, MEMBERS } member;
-		unsigned char *members[MEMBERS];
-		ttime expires = 0;
+		enum { NAME = 0, VALUE, SERVER, PATH, DOMAIN, EXPIRES, SECURE, MEMBERS } member;
+		struct {
+			unsigned char *pos;
+			int len;
+		} members[MEMBERS];
+		ttime expires;
 
-		memset(members, 0, sizeof(unsigned char *) * MEMBERS);
-
-		/* First read in and allocate all members. */
-		for (member = NAME; member < MEMBERS; member++, q = p) {
+		/* First find all members. */
+		for (member = NAME; member < MEMBERS; member++, q = ++p) {
 			p = strchr(q, '\t');
-			if (!p) break;
-			*p++ = '\0';
-			members[member] = stracpy(q);
-			if (!members[member]) break;
-		}
-
-		/* Finally get a hold of the expire field. */
-		p = (member == MEMBERS ? strchr(q, '\t') : NULL);
-
-		if (p) {
-			expires = atol(q);
-			if (is_dead(expires)) {
-				p = NULL;
-				cookies_dirty = 1;
+			if (!p) {
+				if (member + 1 != MEMBERS) break; /* last field ? */
+				p = strchr(q, '\n');
+				if (!p) break;
 			}
+
+			members[member].pos = q;
+			members[member].len = p - q;
 		}
 
-		/* Prepare cookie if all members and fields was read. */
-		cookie = (p ? mem_calloc(1, sizeof(struct cookie)) : NULL);
+		if (member != MEMBERS) continue;	/* Invalid line. */
 
-		if (cookie) {
-			unsigned char *host = members[SERVER];
-			int hostlen = strlen(host);
-
-			cookie->server = get_cookie_server(host, hostlen);
-			if (cookie->server) {
-				mem_free(members[SERVER]);
-			} else {
-				mem_free(cookie);
-				cookie = NULL;
-			}
-		}
-
-		if (!cookie) {
-			/* Something went wrong so clean up. */
-			for (member = NAME; member < MEMBERS; member++)
-				if (members[member])
-					mem_free(members[member]);
+		/* Skip expired cookies if any. */
+		expires = atol(members[EXPIRES].pos);
+		if (is_dead(expires)) {
+			cookies_dirty = 1;
 			continue;
 		}
 
-		cookie->name	= members[NAME];
-		cookie->value	= members[VALUE];
-		cookie->path	= members[PATH];
-		cookie->domain	= members[DOMAIN];
+		/* Prepare cookie if all members and fields was read. */
+		cookie = mem_calloc(1, sizeof(struct cookie));
+		if (!cookie) continue;
 
-		*p++ = '\0';
+		cookie->server  = get_cookie_server(members[SERVER].pos, members[SERVER].len);
+		cookie->name	= memacpy(members[NAME].pos, members[NAME].len);
+		cookie->value	= memacpy(members[VALUE].pos, members[VALUE].len);
+		cookie->path	= memacpy(members[PATH].pos, members[PATH].len);
+		cookie->domain	= memacpy(members[DOMAIN].pos, members[DOMAIN].len);
+
+		/* Check whether all fields were correctly allocated. */
+		if (!cookie->server || !cookie->name || !cookie->value
+		    || !cookie->path || !cookie->domain) {
+			free_cookie(cookie);
+			continue;
+		}
+
 		cookie->expires = expires;
-
-		/* Drop ending '\n'. */
-		if (*p) p[strlen(p) - 1] = '\0';
-		cookie->secure = atoi(p);
+		cookie->secure  = !!atoi(members[SECURE].pos);
 
 		/* XXX: We don't want to overwrite the cookies file
 		 * periodically to our death. */

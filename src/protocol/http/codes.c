@@ -1,13 +1,14 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.2 2003/06/21 12:28:20 pasky Exp $ */
+/* $Id: codes.c,v 1.3 2003/06/21 12:29:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <stdio.h>
-
 #include "elinks.h"
+
+#include "protocol/http/codes.h"
+
 
 struct http_code {
 	int num;

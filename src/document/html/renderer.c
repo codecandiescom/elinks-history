@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.474 2004/07/02 23:29:28 pasky Exp $ */
+/* $Id: renderer.c,v 1.475 2004/07/02 23:34:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1095,6 +1095,16 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	if (chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
 		renderer_context.last_tag_for_newline = (void *) &part->document->tags;
+	}
+#ifndef CONFIG_FASTMEM
+	else if (!html_is_preformatted()) {
+		/* XXX: I believe the test above is just a funny (and errie)
+		 * way to make sure we carry some real non-whitespace content.
+		 * --pasky */
+		char *sc = chars;
+
+		while (*sc) assert(isspace(*sc)), sc++;
+#endif
 	}
 
 	int_lower_bound(&part->box.height, part->cy + 1);

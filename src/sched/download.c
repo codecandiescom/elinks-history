@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.258 2004/04/11 14:22:12 jonas Exp $ */
+/* $Id: download.c,v 1.259 2004/04/11 14:28:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -738,24 +738,22 @@ static void
 common_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct cmdw_hop *cmdw_hop = data;
-	struct file_download *file_download = NULL;
+	unsigned char *file = cmdw_hop->real_file;
+	struct file_download *file_download;
 	struct session *ses = cmdw_hop->ses;
 	struct stat buf;
 
-	if (!cmdw_hop->real_file || fstat(fd, &buf))
-		goto download_error;
+	mem_free(cmdw_hop);
 
-	file_download = init_file_download(ses->download_uri, ses,
-					   cmdw_hop->real_file, fd);
-	if (!file_download) goto download_error;
+	if (!file || fstat(fd, &buf)) return;
+
+	file_download = init_file_download(ses->download_uri, ses, file, fd);
+	if (!file_download) return;
 
 	file_download->last_pos = resume ? (int) buf.st_size : 0;
 
 	load_uri(file_download->uri, ses->referrer, &file_download->download,
 		 PRI_DOWNLOAD, CACHE_MODE_NORMAL, file_download->last_pos);
-
-download_error:
-	mem_free(cmdw_hop);
 }
 
 void

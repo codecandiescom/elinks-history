@@ -390,10 +390,10 @@ void kbd_timeout(struct itrm *itrm)
 {
 	struct event ev = {EV_KBD, KBD_ESC, 0, 0};
 	itrm->tm = -1;
-	/*if (can_read(itrm->std_in)) {
+	if (can_read(itrm->std_in)) {
 		in_kbd(itrm);
 		return;
-	}*/
+	}
 	if (!itrm->qlen) {
 		internal("timeout on empty queue");
 		return;
@@ -634,6 +634,7 @@ int process_queue(struct itrm *itrm)
 void in_kbd(struct itrm *itrm)
 {
 	int r;
+	if (!can_read(itrm->std_in)) return;
 	if (itrm->tm != -1) kill_timer(itrm->tm), itrm->tm = -1;
 	if (itrm->qlen >= IN_BUF_SIZE) {
 		set_handlers(itrm->std_in, NULL, NULL, (void (*)(void *))free_trm, itrm);

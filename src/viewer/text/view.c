@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.368 2004/03/03 16:34:56 jonas Exp $ */
+/* $Id: view.c,v 1.369 2004/03/03 17:08:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -838,33 +838,32 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	       struct document_view *doc_view)
 {
 	struct term_event evv;
-	struct document_view *current_doc_view; /* !!! FIXME: frames */
-	struct document_options *o;
+	struct document_view *matched = NULL, *first = doc_view;
 
-	assert(ses && ev && doc_view && doc_view->document);
+	assert(ses && ev);
 	if_assert_failed return;
 
-	o = &doc_view->document->options;
-	if (ev->x >= o->x && ev->x < o->x + doc_view->width
-	    && ev->y >= o->y && ev->y < o->y + doc_view->height)
-		goto ok;
+	do {
+		struct document_options *o = &doc_view->document->options;
 
-r:
-	next_frame(ses, 1);
-	current_doc_view = current_frame(ses);
-	assert(current_doc_view && current_doc_view->document);
-	if_assert_failed return;
-	o = &current_doc_view->document->options;
-	if (ev->x >= o->x && ev->x < o->x + current_doc_view->width
-	    && ev->y >= o->y && ev->y < o->y + current_doc_view->height) {
-		draw_formatted(ses, 0);
-		doc_view = current_doc_view;
-		goto ok;
-	}
-	if (current_doc_view != doc_view) goto r;
-	return;
+		assert(doc_view && doc_view->document);
+		if_assert_failed return;
 
-ok:
+		if (ev->x >= o->x && ev->x < o->x + doc_view->width
+		    && ev->y >= o->y && ev->y < o->y + doc_view->height) {
+			matched = doc_view;
+			break;
+		}
+
+		next_frame(ses, 1);
+		doc_view = current_frame(ses);
+
+	} while (doc_view != first);
+
+	if (!matched) return;
+
+	if (doc_view != first) draw_formatted(ses, 0);
+
 	memcpy(&evv, ev, sizeof(struct term_event));
 	evv.x -= doc_view->x;
 	evv.y -= doc_view->y;

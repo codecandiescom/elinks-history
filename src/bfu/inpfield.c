@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.153 2004/07/27 16:26:58 jonas Exp $ */
+/* $Id: inpfield.c,v 1.154 2004/07/27 16:36:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,15 +466,19 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 		default:
 			if (check_kbd_textinput_key(ev)) {
-				int cdata_len = strlen(widget_data->cdata);
+				unsigned char *text = widget_data->cdata;
+				int textlen = strlen(text);
 
-				if (cdata_len >= widget_data->widget->datalen - 1)
+				if (textlen >= widget_data->widget->datalen - 1)
 					goto display_field;
 
-				memmove(widget_data->cdata + widget_data->info.field.cpos + 1,
-					widget_data->cdata + widget_data->info.field.cpos,
-					cdata_len - widget_data->info.field.cpos + 1);
-				widget_data->cdata[widget_data->info.field.cpos++] = ev->x;
+				/* Shift to position of the cursor */
+				textlen -= widget_data->info.field.cpos;
+				text	+= widget_data->info.field.cpos++;
+
+				memmove(text + 1, text, textlen + 1);
+				*text = ev->x;
+
 				goto display_field;
 			}
 	}

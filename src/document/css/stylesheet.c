@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.13 2004/01/27 00:23:46 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.14 2004/01/27 00:24:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,6 +167,7 @@ init_css_stylesheet(css_stylesheet_importer importer)
 	if (!css)
 		return NULL;
 	css->import = importer;
+	init_list(css->selectors);
 	return css;
 }
 

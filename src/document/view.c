@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.93 2002/11/27 17:43:34 zas Exp $ */
+/* $Id: view.c,v 1.94 2002/11/28 13:39:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1410,6 +1410,8 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 
 	*len = 0;
 	*data = init_str();
+	if (!*data) return;
+
 	foreach(sv, *l) {
 		unsigned char *p = sv->value;
 		struct document_options o;
@@ -1458,6 +1460,8 @@ encode_multipart(struct session *ses, struct list_head *l,
 	memset(bound, 'x', BL);
 	*len = 0;
 	*data = init_str();
+	if (!*data) return;
+
 	foreach(sv, *l) {
 
 bnd:
@@ -1551,6 +1555,7 @@ error:
 	mem_free(*data);
 	*data = NULL;
 	m1 = stracpy(sv->value);
+	if (!m1) return;
 	m2 = stracpy(strerror(errno));
 	msg_box(ses->term, getml(m1, m2, NULL),
 		TEXT(T_ERROR_WHILE_POSTING_FORM), AL_CENTER | AL_EXTD_TEXT,
@@ -1883,7 +1888,6 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static struct f_data_c *f;
 	static struct link *l;
 	static char *fn = NULL;
-	int flen;
 
 	if (op == 0 && !term_->master) {
 		if (fn) mem_free(fn); fn = NULL; fs = NULL;
@@ -1949,16 +1953,21 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		FILE *taf = fopen(fn, "r+");
 
 		if (taf) {
-			/* FIXME: error checking !! */
-			fseek(taf, 0, SEEK_END);
-			flen = ftell(taf);
-			fseek(taf, 0, SEEK_SET);
+			int flen = -1;
 
-			if (flen <= form_maxlength) {
+			if (!fseek(taf, 0, SEEK_END)) {
+				flen = ftell(taf);
+				if (flen != -1
+				    && fseek(taf, 0, SEEK_SET))
+					flen = -1;
+			}
+
+			if (flen >= 0 && flen <= form_maxlength) {
 				int bread;
 
 				mem_free(fs->value);
 				fs->value = mem_alloc(flen + 1);
+				if (!fs->value) goto close;
 
 				bread = fread(fs->value, 1, flen, taf);
 				fs->value[bread] = 0;
@@ -1968,6 +1977,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 					draw_form_entry(term, f, l);
 			}
 
+close:
 			fclose(taf);
 			unlink(fn);
 		}
@@ -1992,8 +2002,8 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 	}
 	if (l->form->ro == 2) return 0;
 	fs = find_form_state(f, form);
-	if (!fs) return 0;
-	if (!fs->value) return 0;
+	if (!fs || !fs->value) return 0;
+
 	if (ev->ev == EV_KBD) {
 		switch (kbd_action(KM_EDIT, ev, NULL)) {
 			case ACT_LEFT:
@@ -3010,8 +3020,13 @@ no_mem:
 	}
 }
 
-void
-send_download_image(struct terminal *term, void *xxx, struct session *ses)
+enum dl_type {
+	URL,
+	IMAGE,
+};
+
+static void
+_send_download(struct terminal *term, void *xxx, struct session *ses, enum dl_type dlt)
 {
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
@@ -3019,7 +3034,15 @@ send_download_image(struct terminal *term, void *xxx, struct session *ses)
 	if (!fd) return;
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img);
+	if (dlt == URL)
+		ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
+	else if (dlt == IMAGE)
+		ses->dn_url = stracpy(fd->f_data->links[fd->vs->current_link].where_img);
+	else {
+		internal("Unknown dl_type");
+		ses->dn_url = NULL;
+		return;
+	}
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
@@ -3033,27 +3056,17 @@ send_download_image(struct terminal *term, void *xxx, struct session *ses)
 	}
 }
 
+
+void
+send_download_image(struct terminal *term, void *xxx, struct session *ses)
+{
+	_send_download(term, xxx, ses, IMAGE);
+}
+
 void
 send_download(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct f_data_c *fd = current_frame(ses);
-	int l = 0;
-
-	if (!fd) return;
-	if (fd->vs->current_link == -1) return;
-	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
-	if (ses->dn_url) {
-		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = init_str();
-		if (!ses->ref_url) {
-			mem_free(ses->dn_url);
-			ses->dn_url = NULL;
-			return;
-		}
-		add_to_str(&ses->ref_url, &l, fd->f_data->url);
-		query_file(ses, ses->dn_url, start_download, NULL, 1);
-	}
+	_send_download(term, xxx, ses, URL);
 }
 
 static int

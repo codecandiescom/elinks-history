@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-03-24 08:55+0100\n"
-"PO-Revision-Date: 2005-03-22 12:41+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-03-27 00:10+0100\n"
+"PO-Revision-Date: 2005-03-27 00:23+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
 #: src/bfu/hierbox.c:348
@@ -29,16 +29,15 @@ msgstr "Info"
 msgid "Press space to expand this folder."
 msgstr "Tast mellemrum for at åbne denne mappe."
 
-#: src/bfu/hierbox.c:455 src/bfu/inpfield.c:245 src/bfu/msgbox.c:175
+#: src/bfu/hierbox.c:455 src/bfu/inpfield.c:254 src/bfu/msgbox.c:175
 #: src/bfu/msgbox.c:192 src/config/dialogs.c:56 src/config/dialogs.c:404
 #: src/cookies/dialogs.c:356 src/dialogs/edit.c:98 src/dialogs/info.c:133
 #: src/dialogs/options.c:209 src/dialogs/options.c:289 src/mime/dialogs.c:130
 #: src/protocol/auth/dialogs.c:108 src/protocol/protocol.c:227
-#: src/sched/session.c:737 src/scripting/lua/core.c:395
-#: src/scripting/lua/core.c:476 src/viewer/text/search.c:1562
-#, fuzzy
+#: src/sched/session.c:737 src/scripting/lua/core.c:384
+#: src/scripting/lua/core.c:469 src/viewer/text/search.c:1562
 msgid "~OK"
-msgstr "O.k."
+msgstr "~O.k."
 
 #: src/bfu/hierbox.c:566
 #, c-format
@@ -78,17 +77,15 @@ msgstr "Slet markerede elementer?"
 #: src/bfu/hierbox.c:872 src/config/dialogs.c:817 src/dialogs/menu.c:126
 #: src/formhist/formhist.c:457 src/mime/dialogs.c:70 src/sched/task.c:267
 #: src/terminal/tab.c:191 src/terminal/tab.c:227
-#, fuzzy
 msgid "~Yes"
-msgstr "Ja"
+msgstr "~Ja"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
 #: src/bfu/hierbox.c:873 src/config/dialogs.c:818 src/dialogs/menu.c:127
 #: src/formhist/formhist.c:458 src/mime/dialogs.c:71 src/sched/task.c:268
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
-#, fuzzy
 msgid "~No"
-msgstr "Nej"
+msgstr "~Nej"
 
 #. delete_folder_title
 #: src/bfu/hierbox.c:765 src/bookmarks/dialogs.c:132
@@ -136,41 +133,40 @@ msgstr "Søgningen \"%s\" gav intet resultat"
 
 #: src/bfu/hierbox.c:970 src/config/dialogs.c:167 src/config/dialogs.c:370
 #: src/config/dialogs.c:486 src/cookies/dialogs.c:35 src/cookies/dialogs.c:350
-#: src/dialogs/edit.c:92 src/dialogs/edit.c:94 src/scripting/lua/core.c:391
-#: src/scripting/lua/core.c:392 src/scripting/lua/core.c:473
+#: src/dialogs/edit.c:92 src/dialogs/edit.c:94 src/scripting/lua/core.c:380
+#: src/scripting/lua/core.c:381 src/scripting/lua/core.c:466
 msgid "Name"
 msgstr "Navn"
 
-#: src/bfu/inpfield.c:64 src/bfu/inpfield.c:71
+#: src/bfu/inpfield.c:71 src/bfu/inpfield.c:78
 msgid "Bad number"
 msgstr "Ugyldigt tal"
 
-#: src/bfu/inpfield.c:65
+#: src/bfu/inpfield.c:72
 msgid "Number expected in field"
 msgstr "Tal forventet i felt"
 
-#: src/bfu/inpfield.c:73
+#: src/bfu/inpfield.c:80
 #, c-format
 msgid "Number should be in the range from %d to %d."
 msgstr "Tallet skal ligge i intervallet fra %d til %d."
 
-#: src/bfu/inpfield.c:91
+#: src/bfu/inpfield.c:98
 msgid "Bad string"
 msgstr "Ugyldig tekststreng"
 
-#: src/bfu/inpfield.c:92
+#: src/bfu/inpfield.c:99
 msgid "Empty string not allowed"
 msgstr "Tom tekststreng ikke tilladt"
 
-#: src/bfu/inpfield.c:245 src/config/dialogs.c:405 src/cookies/dialogs.c:357
+#: src/bfu/inpfield.c:254 src/config/dialogs.c:405 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/options.c:212
 #: src/dialogs/options.c:290 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:539
-#: src/sched/download.c:1122 src/scripting/lua/core.c:396
-#: src/scripting/lua/core.c:477 src/viewer/text/search.c:1563
-#, fuzzy
+#: src/sched/download.c:1122 src/scripting/lua/core.c:385
+#: src/scripting/lua/core.c:470 src/viewer/text/search.c:1563
 msgid "~Cancel"
-msgstr "Annullér"
+msgstr "~Annullér"
 
 #: src/bfu/leds.c:73
 msgid "Clock"
@@ -360,7 +356,7 @@ msgstr "Titel"
 
 #: src/bookmarks/dialogs.c:76 src/cache/dialogs.c:65 src/dialogs/document.c:69
 #: src/dialogs/edit.c:96 src/formhist/dialogs.c:63 src/globhist/dialogs.c:67
-#: src/protocol/auth/dialogs.c:156 src/scripting/lua/core.c:393
+#: src/protocol/auth/dialogs.c:156 src/scripting/lua/core.c:382
 msgid "URL"
 msgstr "Adresse"
 
@@ -420,7 +416,7 @@ msgstr "Tilføj mappe"
 msgid "Folder name"
 msgstr "Mappenavn"
 
-#: src/bookmarks/dialogs.c:331 src/scripting/lua/core.c:387
+#: src/bookmarks/dialogs.c:331 src/scripting/lua/core.c:376
 msgid "Edit bookmark"
 msgstr "Redigér bogmærke"
 
@@ -432,7 +428,7 @@ msgstr "~Gå til"
 #: src/bookmarks/dialogs.c:468 src/config/dialogs.c:509
 #: src/cookies/dialogs.c:423
 msgid "~Edit"
-msgstr "~Redigér"
+msgstr "R~edigér"
 
 #: src/bookmarks/dialogs.c:469 src/cache/dialogs.c:221
 #: src/config/dialogs.c:511 src/config/dialogs.c:932 src/cookies/dialogs.c:424
@@ -462,7 +458,7 @@ msgstr "~Flyt"
 #: src/config/dialogs.c:512 src/config/dialogs.c:934 src/dialogs/menu.c:397
 #: src/globhist/dialogs.c:230
 msgid "~Search"
-msgstr "~Søg"
+msgstr "S~øg"
 
 #. This one is too dangerous, so just let user delete
 #. * the bookmarks file if needed. --Zas
@@ -586,9 +582,8 @@ msgstr "Slet dette cache-element?"
 #: src/cache/dialogs.c:219 src/config/dialogs.c:508 src/cookies/dialogs.c:421
 #: src/dialogs/download.c:472 src/formhist/dialogs.c:210
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
-#, fuzzy
 msgid "~Info"
-msgstr "Info"
+msgstr "~Info"
 
 #: src/cache/dialogs.c:227
 msgid "Cache manager"
@@ -1113,9 +1108,8 @@ msgid "Options were saved successfully to config file %s."
 msgstr "Indstillinger gemt i opsætningsfilen %s."
 
 #: src/config/dialogs.c:57
-#, fuzzy
 msgid "~Do not show anymore"
-msgstr "Vis ikke fremover"
+msgstr "~Vis ikke fremover"
 
 #: src/config/dialogs.c:63
 msgid "Cannot read the file"
@@ -1236,9 +1230,8 @@ msgstr "Indstillinger kan ikke tilføjes her."
 #: src/config/dialogs.c:513 src/config/dialogs.c:935 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:211 src/formhist/dialogs.c:214
 #: src/sched/download.c:1106
-#, fuzzy
 msgid "Sa~ve"
-msgstr "Gem"
+msgstr "~Gem"
 
 #: src/config/dialogs.c:518
 msgid "Option manager"
@@ -1282,9 +1275,8 @@ msgid "Need to select a keymap."
 msgstr "Det er nødvendigt at vælge en tasteoversigt."
 
 #: src/config/dialogs.c:933 src/dialogs/info.c:134 src/globhist/dialogs.c:231
-#, fuzzy
 msgid "~Toggle display"
-msgstr "Skift mellem visning"
+msgstr "Skift mellem ~visning"
 
 #: src/config/dialogs.c:940
 msgid "Keybinding manager"
@@ -4296,14 +4288,12 @@ msgid "Accept cookie?"
 msgstr "Godkend cookie?"
 
 #: src/cookies/dialogs.c:81
-#, fuzzy
 msgid "~Accept"
-msgstr "Godkend"
+msgstr "~Godkend"
 
 #: src/cookies/dialogs.c:82
-#, fuzzy
 msgid "~Reject"
-msgstr "Afvis"
+msgstr "~Afvis"
 
 #: src/cookies/dialogs.c:149 src/cookies/dialogs.c:342
 #: src/dialogs/document.c:110
@@ -4376,9 +4366,8 @@ msgid "Do you really want to remove all cookies?"
 msgstr "Vil du virkelig slette alle cookier?"
 
 #: src/cookies/dialogs.c:425
-#, fuzzy
 msgid "~Clear"
-msgstr "Ryd"
+msgstr "~Ryd"
 
 #: src/cookies/dialogs.c:431
 msgid "Cookie manager"
@@ -4441,24 +4430,20 @@ msgid "Download"
 msgstr "Download"
 
 #: src/dialogs/download.c:257
-#, fuzzy
 msgid "~Background"
-msgstr "Baggrund"
+msgstr "~Udfør i baggrunden"
 
 #: src/dialogs/download.c:258
-#, fuzzy
 msgid "Background with ~notify"
-msgstr "Udfør i baggrunden og underret"
+msgstr "Udfør i ~baggrunden og underret"
 
 #: src/dialogs/download.c:259 src/dialogs/download.c:473
-#, fuzzy
 msgid "~Abort"
-msgstr "Afbryd"
+msgstr "~Afbryd"
 
 #: src/dialogs/download.c:264
-#, fuzzy
 msgid "Abort and ~delete file"
-msgstr "Afbryd og slet fil"
+msgstr "Afbryd og ~slet fil"
 
 #. cant_delete_item
 #: src/dialogs/download.c:404
@@ -4509,9 +4494,8 @@ msgstr "Afbryd og slet fil"
 
 #: src/dialogs/download.c:478 src/dialogs/edit.c:99 src/globhist/dialogs.c:232
 #: src/protocol/auth/dialogs.c:256
-#, fuzzy
 msgid "C~lear"
-msgstr "Ryd"
+msgstr "~Ryd"
 
 #: src/dialogs/download.c:483
 msgid "Download manager"
@@ -5365,26 +5349,21 @@ msgstr ""
 "for denne adresse."
 
 #: src/formhist/dialogs.c:209
-#, fuzzy
 msgid "~Login"
-msgstr "Brugernavn"
+msgstr "~Log ind"
 
 #: src/formhist/dialogs.c:212
-#, fuzzy
 msgid "~Toggle saving"
-msgstr "Gemning fra/til"
+msgstr "G~emning fra/til"
 
 #: src/formhist/dialogs.c:213
-#, fuzzy
 msgid "Clea~r"
-msgstr "Ryd"
+msgstr "~Ryd"
 
 #: src/formhist/dialogs.c:219
 msgid "Form history manager"
 msgstr "Formularhistorikhåndtering"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Vis dialogboks for formularhistorik"
@@ -5420,9 +5399,8 @@ msgstr ""
 "Hvis du bruger en værdifuld adgangskode, så svar NEJ."
 
 #: src/formhist/formhist.c:459
-#, fuzzy
 msgid "Ne~ver for this site"
-msgstr "Aldrig for dette netsted"
+msgstr "~Aldrig for dette netsted"
 
 #. name:
 #: src/formhist/formhist.c:484
@@ -5476,9 +5454,8 @@ msgid "Search history"
 msgstr "Søg i historik"
 
 #: src/globhist/dialogs.c:227
-#, fuzzy
 msgid "~Bookmark"
-msgstr "~Bogmærker"
+msgstr "~Tilføj som bogmærke"
 
 #: src/globhist/dialogs.c:241
 msgid "Global history manager"
@@ -6748,11 +6725,11 @@ msgstr ""
 "%s erstattes med emnestreng (dvs. ?subject=<emne streng>)\n"
 "%u erstattes med den fulde adresse"
 
-#: src/protocol/user.c:263
+#: src/protocol/user.c:264
 msgid "No program"
 msgstr "Intet program"
 
-#: src/protocol/user.c:265
+#: src/protocol/user.c:266
 #, c-format
 msgid "No program specified for protocol %s."
 msgstr "Intet program angivet for protokol %s."
@@ -6816,19 +6793,16 @@ msgstr ""
 "%s"
 
 #: src/sched/download.c:536
-#, fuzzy
 msgid "Sa~ve under the alternative name"
-msgstr "Gem under det alternative navn"
+msgstr "Gem under det ~alternative navn"
 
 #: src/sched/download.c:537
-#, fuzzy
 msgid "~Overwrite the original file"
-msgstr "Overskriv originalfilen"
+msgstr "~Overskriv originalfilen"
 
 #: src/sched/download.c:538
-#, fuzzy
 msgid "~Resume download of the original file"
-msgstr "Genoptag overførsel af originalfilen"
+msgstr "~Genoptag overførsel af originalfilen"
 
 #: src/sched/download.c:1025
 msgid "What to do?"
@@ -6854,19 +6828,16 @@ msgid "The file will be opened with the program '%s'."
 msgstr "Filen vil blive åbnet med programmet \"%s\"."
 
 #: src/sched/download.c:1099
-#, fuzzy
 msgid "~Open"
-msgstr "Åbn"
+msgstr "~Åbn"
 
 #: src/sched/download.c:1112
-#, fuzzy
 msgid "~Display"
-msgstr "Vis"
+msgstr "~Vis"
 
 #: src/sched/download.c:1116
-#, fuzzy
 msgid "Show ~header"
-msgstr "Vis protokolhoved"
+msgstr "Vis ~protokolhoved"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -7182,19 +7153,19 @@ msgstr "Vil du sende formulardata til adresse %s?"
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Vil du sende formulardata til adresse %s igen?"
 
-#: src/scripting/lua/core.c:468
+#: src/scripting/lua/core.c:461
 msgid "User dialog"
 msgstr "Brugerdialog"
 
-#: src/scripting/lua/core.c:591
+#: src/scripting/lua/core.c:587
 msgid "Lua Error"
 msgstr "Lua-fejl"
 
-#: src/scripting/lua/core.c:715
+#: src/scripting/lua/core.c:711
 msgid "Lua Console"
 msgstr "Lua-konsol"
 
-#: src/scripting/lua/core.c:715
+#: src/scripting/lua/core.c:711
 msgid "Enter expression"
 msgstr "Indtast udtryk"
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.23 2002/05/08 13:55:01 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.24 2002/05/15 08:56:03 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -31,6 +31,10 @@ unsigned char *bm_last_searched_url = NULL;
 
 #ifdef BOOKMARKS
 
+/* Set to 1, if bookmarks have changed. */
+int bookmarks_dirty = 0;
+
+
 /* Gets a bookmark by id */
 struct bookmark *
 get_bookmark_by_id(bookmark_id id)
@@ -58,6 +62,7 @@ delete_bookmark_by_id(bookmark_id id)
 	if (!bm) return 0;
 
 	del_from_list(bm);
+	bookmarks_dirty = 1;
 
 	/* Now wipe the bookmark */
 	mem_free(bm->title);
@@ -94,6 +99,7 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 
 	/* Actually add it */
 	add_to_list(bookmarks, bm);
+	bookmarks_dirty = 1;
 }
 
 /* Updates an existing bookmark.
@@ -121,6 +127,7 @@ update_bookmark(bookmark_id id, const unsigned char *title,
 		mem_free(bm->url);
 		bm->url = stracpy((unsigned char *)url);
 	}
+	bookmarks_dirty = 1;
 
 	return 1;
 }
@@ -229,6 +236,7 @@ read_bookmarks()
 	}
 
 	fclose(f);
+	bookmarks_dirty = 0;
 #undef INBUF_SIZE
 }
 
@@ -239,6 +247,8 @@ write_bookmarks()
 	struct bookmark *bm;
 	struct secure_save_info *ssi;
 	unsigned char *file_name;
+
+	if (!bookmarks_dirty) return;
 
 	file_name = straconcat(links_home, "bookmarks", NULL);
 	if (!file_name) return;
@@ -263,7 +273,7 @@ write_bookmarks()
 		if (ssi->err) break;
 	}
 
-	secure_close(ssi);
+	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }
 
 /* Clears the bookmark list */
@@ -295,10 +305,9 @@ finalize_bookmarks()
 void read_bookmarks() {}
 void write_bookmarks() {}
 void finalize_bookmarks() {}
-struct bookmark *get_bookmark_by_id(bookmark_id b) {}
-int delete_bookmark_by_id(bookmark_id b) {}
+struct bookmark *get_bookmark_by_id(bookmark_id b) { return NULL; }
+int delete_bookmark_by_id(bookmark_id b) { return 0; }
 void add_bookmark(const unsigned char *u, const unsigned char *t) {}
-int update_bookmark(bookmark_id b, const unsigned char *u, const unsigned char *t) {}
-int bookmark_simple_search(unsigned char *u, unsigned char *t) {}
-
+int update_bookmark(bookmark_id b, const unsigned char *u, const unsigned char *t) { return 0; }
+int bookmark_simple_search(unsigned char *u, unsigned char *t){ return 0; }
 #endif

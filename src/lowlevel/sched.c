@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.27 2002/05/17 22:13:39 pasky Exp $ */
+/* $Id: sched.c,v 1.28 2002/05/17 22:41:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -788,8 +788,8 @@ static unsigned char *get_proxy_worker(unsigned char *url, unsigned char *proxy)
 	if (proxy) {
 		if (!*proxy) proxy = NULL;  /* "" from script_hook_get_proxy() */
 	} else {
-		if (*http_proxy && l >= 7 && !casecmp(url, "http://", 7)) proxy = http_proxy;
-		if (*ftp_proxy && l >= 6 && !casecmp(url, "ftp://", 6)) proxy = ftp_proxy;
+		if (*get_opt_str("http_proxy") && l >= 7 && !casecmp(url, "http://", 7)) proxy = get_opt_str("http_proxy");
+		if (*get_opt_str("ftp_proxy") && l >= 6 && !casecmp(url, "ftp://", 6)) proxy = get_opt_str("ftp_proxy");
 	}
 
 	u = mem_alloc(l + 1 + (proxy ? strlen(proxy) + 9 : 0));

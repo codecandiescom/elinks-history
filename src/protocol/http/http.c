@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.18 2002/05/17 22:31:47 pasky Exp $ */
+/* $Id: http.c,v 1.19 2002/05/17 22:41:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,10 +304,10 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "\r\n");
 	}
 
-	if (*proxy_user) {
+	if (get_opt_str("proxy_user")[0]) {
 		unsigned char *proxy_data;
 
-		proxy_data = straconcat(proxy_user, ":", proxy_passwd, NULL);
+		proxy_data = straconcat(get_opt_str("proxy_user"), ":", get_opt_str("proxy_passwd"), NULL);
 		if (proxy_data) {
 			unsigned char *proxy_64 = base64_encode(proxy_data);
 
@@ -321,7 +321,7 @@ void http_send_header(struct connection *c)
 		}
 	}
 	
-	if (!*user_agent) {
+	if (!get_opt_str("user_agent")[0]) {
                 add_to_str(&hdr, &l,
 			   "User-Agent: ELinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);
@@ -338,7 +338,7 @@ void http_send_header(struct connection *c)
 
         } else {
                 add_to_str(&hdr, &l, "User-Agent: ");
-                add_to_str(&hdr, &l, user_agent);
+                add_to_str(&hdr, &l, get_opt_str("user_agent"));
                 add_to_str(&hdr, &l, "\r\n");
         }
 
@@ -349,7 +349,7 @@ void http_send_header(struct connection *c)
 
 		case REFERER_FAKE:
 			add_to_str(&hdr, &l, "Referer: ");
-			add_to_str(&hdr, &l, fake_referer);
+			add_to_str(&hdr, &l, get_opt_str("fake_referer"));
 			add_to_str(&hdr, &l, "\r\n");
 			break;
 
@@ -435,9 +435,9 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, accept_charset);
 	}
 
-	if (*accept_language) {
+	if (get_opt_str("accept_language")[0]) {
 		add_to_str(&hdr, &l, "Accept-Language: ");
-		add_to_str(&hdr, &l, accept_language);
+		add_to_str(&hdr, &l, get_opt_str("accept_language"));
 		add_to_str(&hdr, &l, "\r\n");
 	}
 

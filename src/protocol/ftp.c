@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.16 2002/05/17 22:31:47 pasky Exp $ */
+/* $Id: ftp.c,v 1.17 2002/05/17 22:41:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,7 +283,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 		if (str && *str) {
 			add_to_str(&cmd, &cmdl, str);
 		} else {
-			add_to_str(&cmd, &cmdl, default_anon_pass);
+			add_to_str(&cmd, &cmdl, get_opt_str("default_anon_pass"));
 		}
 		if (str) mem_free(str);
 		add_to_str(&cmd, &cmdl, "\r\n");

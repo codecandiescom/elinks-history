@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.25 2003/12/31 13:32:12 jonas Exp $ */
+/* $Id: version.c,v 1.26 2003/12/31 14:26:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,6 @@ add_module_to_string(struct string *string, struct module *module,
 static void
 add_modules_to_string(struct string *string, struct terminal *term)
 {
-	extern struct module *builtin_modules[];
 	struct module *module;
 	int i;
 

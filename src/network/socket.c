@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.81 2004/07/12 13:39:44 zas Exp $ */
+/* $Id: socket.c,v 1.82 2004/07/12 13:43:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,15 +69,15 @@ void dns_found(/* struct connection */ void *, int);
 static void connected(/* struct connection */ void *);
 
 void
-close_socket(struct connection *conn, int *s)
+close_socket(struct connection *conn, int *socket)
 {
-	if (*s == -1) return;
+	if (*socket == -1) return;
 #ifdef CONFIG_SSL
 	if (conn && conn->ssl) ssl_close(conn);
 #endif
-	close(*s);
-	set_handlers(*s, NULL, NULL, NULL, NULL);
-	*s = -1;
+	close(*socket);
+	set_handlers(*socket, NULL, NULL, NULL, NULL);
+	*socket = -1;
 }
 
 void
@@ -548,7 +548,7 @@ write_select(struct connection *conn)
 }
 
 void
-write_to_socket(struct connection *conn, int s, unsigned char *data,
+write_to_socket(struct connection *conn, int socket, unsigned char *data,
 		int len, void (*write_func)(struct connection *))
 {
 	struct write_buffer *wb;
@@ -564,13 +564,13 @@ write_to_socket(struct connection *conn, int s, unsigned char *data,
 		return;
 	}
 
-	wb->sock = s;
+	wb->sock = socket;
 	wb->len = len;
 	wb->pos = 0;
 	wb->done = write_func;
 	memcpy(wb->data, data, len);
 	mem_free_set(&conn->buffer, wb);
-	set_handlers(s, NULL, (void *) write_select, (void *) exception, conn);
+	set_handlers(socket, NULL, (void *) write_select, (void *) exception, conn);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -654,15 +654,15 @@ alloc_read_buffer(struct connection *conn)
 #undef RD_SIZE
 
 void
-read_from_socket(struct connection *conn, int s, struct read_buffer *buf,
+read_from_socket(struct connection *conn, int socket, struct read_buffer *buf,
 		 void (*read_func)(struct connection *, struct read_buffer *))
 {
 	buf->done = read_func;
-	buf->sock = s;
+	buf->sock = socket;
 	if (conn->buffer && buf != conn->buffer)
 		mem_free(conn->buffer);
 	conn->buffer = buf;
-	set_handlers(s, (void *) read_select, NULL, (void *) exception, conn);
+	set_handlers(socket, (void *) read_select, NULL, (void *) exception, conn);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.160 2004/12/18 19:53:39 pasky Exp $ */
+/* $Id: options.inc,v 1.161 2004/12/18 20:45:43 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -328,6 +328,12 @@ static struct option_info config_options_info[] = {
 		"0 means never\n"
 		"1 means if document.browse.links.numbering = 1\n"
 		"2 means always")),
+
+	INIT_OPT_BOOL("document.browse.links", N_("Warn about maliciously crafted URIs"),
+		"warn_malicious", 0, 1,
+		N_("When folowing a link the user ID part of the URI is\n"
+		"checked and if a maliciously crafted URI is detected a\n"
+		"warning dialog will ask before following the link.")),
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */

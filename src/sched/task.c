@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.142 2004/12/18 19:22:03 jonas Exp $ */
+/* $Id: task.c,v 1.143 2004/12/18 20:45:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,15 +90,64 @@ post_no(struct task *task)
 	done_uri(task->uri);
 }
 
+/* Check if the URI is obfuscated (bug 382). The problem is said to occur when
+ * a URI designed to pass access a specific location with a supplied username,
+ * contains misleading chars prior to the @ symbol.
+ *
+ * An attacker can exploit this issue by supplying a malicious URI pointing to
+ * a page designed to mimic that of a trusted site, and tricking a victim who
+ * follows a link into believing they are actually at the trusted location.
+ *
+ * Only the user ID (and not also the password) is checked because only the
+ * user ID is displayed in the status bar. */
+static int
+check_malicious_uri(struct uri *uri)
+{
+	unsigned char *user, *pos;
+	int warn = 0;
+
+	assert(uri->user && uri->userlen);
+
+	user = pos = memacpy(uri->user, uri->userlen);
+	if (!user) return 0;
+
+	decode_uri_for_display(user);
+
+	while (*pos) {
+		int length;
+
+		for (length = 0; pos[length] != '\0'; length++)
+			if (!(isalnum(pos[length]) || pos[length] == '.'))
+				break;
+
+		/* Not perfect, but I am clueless as how to do better. Besides
+		 * I don't really think it is an issue for ELinks. --jonas */
+		if (end_with_known_tld(pos, length) != -1) {
+			warn = 1;
+			break;
+		}
+
+		pos += length;
+
+		while (*pos && (!isalnum(*pos) || *pos == '.'))
+			pos++;
+	}
+
+	mem_free(user);
+
+	return warn;
+}
+
 void
 ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	 struct location *target_location, enum cache_mode cache_mode,
 	 enum task_type task_type, int redir)
 {
-	struct task *task = uri->form ? mem_alloc(sizeof(struct task)) : NULL;
-	unsigned char *m1, *m2;
+	struct task *task = NULL;
 	int referrer_incomplete = 0;
+	int unambiguous_uri = 0;
 	int confirm_submit = uri->form;
+	unsigned char *m1 = NULL, *message = NULL;
 
 	if (ses->doc_view
 	    && ses->doc_view->document
@@ -115,10 +164,18 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 	/* Figure out whether to confirm submit or not */
 
-	/* Only confirm submit if we are posting form data */
+	/* Only confirm submit if we are posting form data or a misleading URI
+	 * was detected. */
 	/* Note uri->post might be empty here but we are still supposely
 	 * posting form data so this should be more correct. */
-	if (!task || !uri->form) {
+
+	if (uri->user && uri->userlen
+	    && get_opt_bool("document.browse.links.warn_malicious")
+	    && check_malicious_uri(uri)) {
+		unambiguous_uri = 1;
+		confirm_submit = 1;
+
+	} else if (!uri->form) {
 		confirm_submit = 0;
 
 	} else {
@@ -158,6 +215,9 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		return;
 	}
 
+	task = mem_alloc(sizeof(struct task));
+	if (!task) return;
+
 	task->ses = ses;
 	task->uri = get_uri_reference(uri);
 	task->cache_mode = cache_mode;
@@ -165,8 +225,23 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	task->target_frame = target_frame;
 	task->target_location = target_location;
 
-	if (redir) {
-		m1 = N_("Do you want to follow redirect and post form data "
+	if (unambiguous_uri) {
+		unsigned char *host = memacpy(uri->host, uri->hostlen);
+		unsigned char *user = memacpy(uri->user, uri->userlen);
+		unsigned char *uristring = get_uri_string(uri, URI_PUBLIC);
+
+		message = msg_text(ses->tab->term,
+			N_("The URL you are about to follow might be maliciously "
+			"crafted to confuse you. By following the URL you will "
+			"be connecting to host \"%s\" as user \"%s\".\n\n"
+			"Do you want to go to URL %s"), host, user, uristring);
+
+		mem_free_if(host);
+		mem_free_if(user);
+		mem_free_if(uristring);
+
+	} else if (redir) {
+		m1 = N_("Do you want to follow the redirect and post form data "
 			"to URL %s?");
 
 	} else if (referrer_incomplete) {
@@ -180,14 +255,19 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		m1 = N_("Do you want to repost form data to URL %s?");
 	}
 
-	m2 = get_uri_string(uri, URI_PUBLIC);
+	if (!message && m1) {
+		unsigned char *uristring = get_uri_string(uri, URI_PUBLIC);
+
+		message = msg_text(ses->tab->term, m1, uristring);
+		mem_free_if(uristring);
+	}
+
 	msg_box(ses->tab->term, getml(task, NULL), MSGBOX_FREE_TEXT,
 		N_("Warning"), ALIGN_CENTER,
-		msg_text(ses->tab->term, m1, m2),
+		message,
 		task, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);
-	mem_free_if(m2);
 }
 
 

@@ -1,3 +1,48 @@
+Sun Aug 17 14:49:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/canvas.c:
+
+	file canvas.c was initially added on branch ELUSION.  
+
+Sun Aug 17 14:49:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/canvas.h:
+
+	file canvas.h was initially added on branch ELUSION.  
+
+Sun Aug 17 11:08:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/splash.h:
+
+	file splash.h was initially added on branch ELUSION.  
+
+Sun Aug 17 11:08:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/splash.c:
+
+	file splash.c was initially added on branch ELUSION.  
+
+Sun Aug 17 01:20:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/refresh.h:
+
+	file refresh.h was initially added on branch ELUSION.  
+
+Sun Aug 17 01:20:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/refresh.c:
+
+	file refresh.c was initially added on branch ELUSION.  
+
+Sat Aug 16 23:41:58 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/edit.c:
+
+	'Fix' narrow edit dialogue boxes again (bug 158).  I fixed this
+	before but Zas reverted that fix with src/dialogs/edit.c 1.35: 
+	Populate with int_[upper|lower]_bound() and fix a missing bound
+	check.  
+
 Sat Aug  9 01:52:10 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: terminal/colors.c, util/colors.c:

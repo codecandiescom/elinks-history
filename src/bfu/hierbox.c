@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.11 2002/12/13 12:42:09 zas Exp $ */
+/* $Id: hierbox.c,v 1.12 2002/12/13 15:20:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,10 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 				box = (struct listbox_data *) dlg->items[dlg->n - 1].item->data;
 				if (box->sel) {
 					box->sel->expanded = !box->sel->expanded;
+#ifdef BOOKMARKS
+					/* FIXME - move from here to bookmarks/dialogs.c! */
 					bookmarks_dirty = 1;
+#endif
 				}
 				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
 

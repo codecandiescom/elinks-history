@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.215 2003/06/05 14:38:16 zas Exp $ */
+/* $Id: options.c,v 1.216 2003/06/08 13:21:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,8 +185,8 @@ get_opt_(unsigned char *file, int line, struct option *tree,
 #ifdef DEBUG
 	errfile = file;
 	errline = line;
-	if (!opt) int_error("Attempted to fetch nonexisting option %s!", name);
-	if (!opt->ptr) int_error("Option %s has no value!", name);
+	if (!opt) elinks_internal("Attempted to fetch nonexisting option %s!", name);
+	if (!opt->ptr) elinks_internal("Option %s has no value!", name);
 #endif
 
 	return opt->ptr;

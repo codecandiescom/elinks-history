@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.36 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: connect.c,v 1.37 2003/06/08 13:21:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 	/* Get our endpoint of the control socket */
 
 	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
-error:
+sock_error:
 		retry_conn_with_state(conn, -errno);
 		return -1;
 	}
@@ -160,32 +160,32 @@ error:
 
 	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0)
-		goto error;
+		goto sock_error;
 
 	/* Set it non-blocking */
 
 	if (set_nonblocking_fd(sock) < 0)
-		goto error;
+		goto sock_error;
 
 	/* Bind it to some port */
 
 	memcpy(&sb, &sa, sizeof(struct sockaddr_in));
 	sb.sin_port = 0;
 	if (bind(sock, (struct sockaddr *) &sb, sizeof(sb)))
-		goto error;
+		goto sock_error;
 
 	/* Get our endpoint of the passive socket and save it to port */
 
 	len = sizeof(sa);
 	if (getsockname(sock, (struct sockaddr *) &sa, &len))
-		goto error;
+		goto sock_error;
 	memcpy(port, &sa.sin_addr.s_addr, 4);
 	memcpy(port + 4, &sa.sin_port, 2);
 
 	/* Go listen */
 
 	if (listen(sock, 1))
-		goto error;
+		goto sock_error;
 
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	{
@@ -212,7 +212,7 @@ get_pasv6_socket(struct connection *conn, int ctrl_sock,
 	/* Get our endpoint of the control socket */
 
 	if (getsockname(ctrl_sock, (struct sockaddr *) s6, &len)) {
-error:
+sock_error:
 		retry_conn_with_state(conn, -errno);
 		return -1;
 	}
@@ -221,30 +221,30 @@ error:
 
 	sock = socket(AF_INET6, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0)
-		goto error;
+		goto sock_error;
 
 	/* Set it non-blocking */
 
 	if (set_nonblocking_fd(sock) < 0)
-		goto error;
+		goto sock_error;
 
 	/* Bind it to some port */
 
 	memcpy(&s0, s6, sizeof(struct sockaddr_in6));
 	s0.sin6_port = 0;
 	if (bind(sock, (struct sockaddr *) &s0, sizeof(struct sockaddr_in6)))
-		goto error;
+		goto sock_error;
 
 	/* Get our endpoint of the passive socket and save it to port */
 
 	len = sizeof(struct sockaddr_in6);
 	if (getsockname(sock, (struct sockaddr *) s6, &len))
-		goto error;
+		goto sock_error;
 
 	/* Go listen */
 
 	if (listen(sock, 1))
-		goto error;
+		goto sock_error;
 
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	{

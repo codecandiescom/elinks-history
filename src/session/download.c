@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.47 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: download.c,v 1.48 2003/06/08 13:21:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -949,17 +949,17 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	unsigned char *url = cmdw_hop->ses->dn_url;
 	struct stat buf;
 
-	if (!cmdw_hop->real_file) goto error;
+	if (!cmdw_hop->real_file) goto download_error;
 
 	down = mem_calloc(1, sizeof(struct download));
-	if (!down) goto error;
+	if (!down) goto download_error;
 
 	down->url = stracpy(url);
-	if (!down->url) goto error;
+	if (!down->url) goto download_error;
 
 	down->file = cmdw_hop->real_file;
 
-	if (fstat(fd, &buf)) goto error;
+	if (fstat(fd, &buf)) goto download_error;
 	down->last_pos = resume ? (int) buf.st_size : 0;
 
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
@@ -976,7 +976,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	mem_free(cmdw_hop);
 	return;
 
-error:
+download_error:
 	if (down) {
 		if (down->url) mem_free(down->url);
 		mem_free(down);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.99 2003/06/08 10:49:29 zas Exp $ */
+/* $Id: view.c,v 1.100 2003/06/08 13:21:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1637,13 +1637,13 @@ xx:
 			}*/
 			if (*sv->value) {
 				if (get_opt_int_tree(&cmdline_options, "anonymous"))
-					goto error;
+					goto encode_error;
 				fh = open(sv->value, O_RDONLY);
-				if (fh == -1) goto error;
+				if (fh == -1) goto encode_error;
 				set_bin(fh);
 				do {
 					rd = read(fh, buffer, F_BUFLEN);
-					if (rd == -1) goto error;
+					if (rd == -1) goto encode_error;
 					if (rd) add_bytes_to_str(data, len, buffer, rd);
 				} while (rd);
 				close(fh);
@@ -1673,7 +1673,7 @@ nb:;
 	mem_free(bound_ptrs);
 	return;
 
-error:
+encode_error:
 	mem_free(bound_ptrs);
 	mem_free(*data);
 	*data = NULL;

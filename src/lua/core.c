@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.43 2003/06/07 15:25:38 pasky Exp $ */
+/* $Id: core.c,v 1.44 2003/06/08 13:21:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,10 +154,10 @@ l_current_document_formatted(LS)
 	int l = 0;
 
 	if (lua_gettop(S) == 0) width = -1;
-	else if (!lua_isnumber(S, 1)) goto error;
-	else if ((width = lua_tonumber(S, 1)) <= 0) goto error;
+	else if (!lua_isnumber(S, 1)) goto lua_error;
+	else if ((width = lua_tonumber(S, 1)) <= 0) goto lua_error;
 
-	if (!lua_ses || !(f = current_frame(lua_ses))) goto error;
+	if (!lua_ses || !(f = current_frame(lua_ses))) goto lua_error;
 	if (width > 0) {
 		old_width = lua_ses->tab->term->x, lua_ses->tab->term->x = width;
 		html_interpret(lua_ses);
@@ -185,7 +185,7 @@ l_current_document_formatted(LS)
 	}
 	return 1;
 
-error:
+lua_error:
 	lua_pushnil(S);
 	return 1;
 }
@@ -197,10 +197,10 @@ l_pipe_read(LS)
 	unsigned char *s = NULL;
 	int len = 0;
 
-	if (!lua_isstring(S, 1)) goto error;
+	if (!lua_isstring(S, 1)) goto lua_error;
 
 	fp = popen(lua_tostring(S, 1), "r");
-	if (!fp) goto error;
+	if (!fp) goto lua_error;
 
 	while (!feof(fp)) {
 		unsigned char buf[1024];
@@ -208,12 +208,12 @@ l_pipe_read(LS)
 
 		if (l > 0) {
 			s = mem_realloc(s, len + l);
-			if (!s) goto error;
+			if (!s) goto lua_error;
 			memcpy(s + len, buf, l);
 			len += l;
 
 		} else if (l < 0) {
-			goto error;
+			goto lua_error;
 		}
 	}
 	pclose(fp);
@@ -222,7 +222,7 @@ l_pipe_read(LS)
 	if (s) mem_free(s);
 	return 1;
 
-error:
+lua_error:
 	if (s) mem_free(s);
 	lua_pushnil(S);
 	return 1;
@@ -277,7 +277,7 @@ l_bind_key(LS)
 	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
 	    || !lua_isfunction(S, 3)) {
 		alert_lua_error("bad arguments to bind_key");
-		goto error;
+		goto lua_error;
 	}
 
 	lua_pushvalue(S, 3);
@@ -288,13 +288,13 @@ l_bind_key(LS)
 	if (err) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
-		goto error;
+		goto lua_error;
 	}
 
 	lua_pushnumber(S, 1);
 	return 1;
 
-error:
+lua_error:
 	lua_pushnil(S);
 	return 1;
 }
@@ -550,9 +550,9 @@ l_xdialog(LS)
 	nfields = nargs - 1;
 	nitems = nfields + 3;
 
-	if ((nfields < 1) || (nfields > XDIALOG_MAX_FIELDS)) goto error;
-	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto error;
-	if (!lua_isfunction(S, nargs)) goto error;
+	if ((nfields < 1) || (nfields > XDIALOG_MAX_FIELDS)) goto lua_error;
+	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto lua_error;
+	if (!lua_isfunction(S, nargs)) goto lua_error;
 
 	d = mem_calloc(1, sizeof(struct dialog) + nitems * sizeof(struct widget)
 			  + sizeof *data);
@@ -592,7 +592,7 @@ l_xdialog(LS)
 	lua_pushnumber(S, 1);
 	return 1;
 
-error:
+lua_error:
 	lua_pushnil(S);
 	return 1;
 }

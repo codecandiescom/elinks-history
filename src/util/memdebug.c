@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.19 2003/06/05 14:38:18 zas Exp $ */
+/* $Id: memdebug.c,v 1.20 2003/06/08 13:21:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -351,7 +351,7 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 	if (!ptr) {
 		errfile = file;
 		errline = line;
-		int_error("mem_free(NULL)");
+		elinks_internal("mem_free(NULL)");
 		return;
 	}
 

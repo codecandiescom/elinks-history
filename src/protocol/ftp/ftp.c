@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.210 2005/03/27 14:25:35 jonas Exp $ */
+/* $Id: ftp.c,v 1.211 2005/03/27 21:43:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1030,13 +1030,12 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
 		  struct ftp_file_info *ftp_info)
 {
-	int is_file, is_dir = 0;
+	int is_dir = 0;
 	struct string string;
 	unsigned char permissions[10] = "---------";
 
 	if (!init_string(&string)) return -1;
 
-	is_file = ftp_info->type == FTP_FILE_PLAINFILE;
 	is_dir  = ftp_info->type == FTP_FILE_DIRECTORY;
 
 	add_char_to_string(&string, ftp_info->type);

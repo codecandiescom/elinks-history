@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: David Mediavilla <r96x6a79yki40001@sneakemail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -4340,17 +4340,17 @@ msgstr "Tiempo transcurrido"
 msgid "estimated time"
 msgstr "tiempo estimado"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+#, fuzzy
+msgid "Typeahead"
 msgstr "Tipo"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 #, fuzzy
 msgid "Untitled"
 msgstr "Título del enlace"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 #, fuzzy
 msgid "No document"
 msgstr "documentos"
@@ -5630,11 +5630,6 @@ msgstr ""
 msgid "Search string '%s' not found"
 msgstr "Cadena no encontrada"
 
-#: src/viewer/text/search.c:1034
-#, fuzzy
-msgid "Typeahead"
-msgstr "Tipo"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5688,6 +5683,10 @@ msgstr "Error al grabar"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Error escribiendo en el fichero"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Tipo"
 
 #, fuzzy
 #~ msgid "unknown"

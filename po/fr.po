@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -4516,16 +4516,15 @@ msgstr "temps écoulé"
 msgid "estimated time"
 msgstr "temps restant estimé"
 
-#: src/dialogs/status.c:204
-#, c-format
-msgid "Typeahead: %s [%s]"
-msgstr "Préfrappe: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+msgid "Typeahead"
+msgstr "Préfrappe"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr "Sans titre"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 msgid "No document"
 msgstr "Aucun document"
 
@@ -5911,10 +5910,6 @@ msgstr "La recherche a atteint le haut du document, poursuite à partir du bas."
 msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
-#: src/viewer/text/search.c:1034
-msgid "Typeahead"
-msgstr "Préfrappe"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5967,6 +5962,9 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Préfrappe: %s [%s]"
 
 #~ msgid "URL: \"%s\""
 #~ msgstr "URL: \"%s\""

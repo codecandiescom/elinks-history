@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -4359,17 +4359,17 @@ msgstr "Изтекло време"
 msgid "estimated time"
 msgstr "Прогнозирано време"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+#, fuzzy
+msgid "Typeahead"
 msgstr "Тип"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 #, fuzzy
 msgid "Untitled"
 msgstr "Неозаглавен"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 #, fuzzy
 msgid "No document"
 msgstr "документи"
@@ -5651,11 +5651,6 @@ msgstr ""
 msgid "Search string '%s' not found"
 msgstr "Търсеният символен низ '%s' не е открит"
 
-#: src/viewer/text/search.c:1034
-#, fuzzy
-msgid "Typeahead"
-msgstr "Тип"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5709,6 +5704,10 @@ msgstr "Грешка при запазване"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Грешка при запис във файл"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Тип"
 
 #~ msgid ""
 #~ "Name: %s\n"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -4565,16 +4565,15 @@ msgstr "tempo trascorso"
 msgid "estimated time"
 msgstr "tempo stimato"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
-msgstr "Trova: %s (-> %s)"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+msgid "Typeahead"
+msgstr "Trova mentre scrivi"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr "Senza titolo"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 msgid "No document"
 msgstr "Nessun documento"
 
@@ -5959,10 +5958,6 @@ msgstr "La ricerca è arrivata all'inizio, continuo alla fine."
 msgid "Search string '%s' not found"
 msgstr "Stringa '%s' non trovata"
 
-#: src/viewer/text/search.c:1034
-msgid "Typeahead"
-msgstr "Trova mentre scrivi"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -6015,6 +6010,10 @@ msgstr "Errore salvataggio"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Errore scrittura del file"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Trova: %s (-> %s)"
 
 #~ msgid "URL: \"%s\""
 #~ msgstr "URL: \"%s\""

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Alberto García <berto@gpul.org>\n"
 "Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
@@ -4315,16 +4315,15 @@ msgstr "Tempo transcorrido"
 msgid "estimated time"
 msgstr "tempo estimado"
 
-#: src/dialogs/status.c:204
-#, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+msgid "Typeahead"
 msgstr ""
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr ""
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 #, fuzzy
 msgid "No document"
 msgstr "documentos"
@@ -5601,10 +5600,6 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Non se atopou a cadea de búsqueda"
-
-#: src/viewer/text/search.c:1034
-msgid "Typeahead"
-msgstr ""
 
 #: src/viewer/text/search.c:1035
 #, c-format

@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-10-20 18:36+0200\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -4512,16 +4512,16 @@ msgstr "Elapsed 71|V|3"
 msgid "estimated time"
 msgstr "estimated 71|V|3"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+#, fuzzy
+msgid "Typeahead"
 msgstr "7`/P3"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr "U|\\|717|3d"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 msgid "No document"
 msgstr "|\\|0 |)0(U|V|3N7"
 
@@ -5873,11 +5873,6 @@ msgstr ""
 msgid "Search string '%s' not found"
 msgstr "534R(H 57r1|\\|6 '%s' |\\|07 f0u|\\|d"
 
-#: src/viewer/text/search.c:1034
-#, fuzzy
-msgid "Typeahead"
-msgstr "7`/P3"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5930,6 +5925,10 @@ msgstr "54\\/3 3RR0R"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "3RR0R VV|2171n9 70 f1|3"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "7`/P3"
 
 #~ msgid ""
 #~ "Name: %s\n"

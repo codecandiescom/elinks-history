@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-10-30 11:48+0100\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
@@ -4483,16 +4483,15 @@ msgstr "eltelt idõ"
 msgid "estimated time"
 msgstr "Becsült hátralevõ idõ"
 
-#: src/dialogs/status.c:204
-#, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+msgid "Typeahead"
 msgstr ""
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 msgid "Untitled"
 msgstr "Cím nélkül"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 msgid "No document"
 msgstr "Nincs dokumentum"
 
@@ -5829,10 +5828,6 @@ msgstr "A keresés elérte a lap tetejét, folytatódik a lap aljától."
 #, c-format
 msgid "Search string '%s' not found"
 msgstr "Keresett szöveg ('%s') nem található"
-
-#: src/viewer/text/search.c:1034
-msgid "Typeahead"
-msgstr ""
 
 #: src/viewer/text/search.c:1035
 #, c-format

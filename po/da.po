@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-23 13:37+0100\n"
+"POT-Creation-Date: 2003-12-24 00:52+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -4285,17 +4285,17 @@ msgstr "Forløbet tid"
 msgid "estimated time"
 msgstr "beregnet tid"
 
-#: src/dialogs/status.c:204
-#, fuzzy, c-format
-msgid "Typeahead: %s [%s]"
+#: src/dialogs/status.c:206 src/viewer/text/search.c:1034
+#, fuzzy
+msgid "Typeahead"
 msgstr "Type"
 
-#: src/dialogs/status.c:295
+#: src/dialogs/status.c:301
 #, fuzzy
 msgid "Untitled"
 msgstr "Lænketitel"
 
-#: src/dialogs/status.c:297
+#: src/dialogs/status.c:303
 #, fuzzy
 msgid "No document"
 msgstr "dokumenter"
@@ -5573,11 +5573,6 @@ msgstr ""
 msgid "Search string '%s' not found"
 msgstr "Søgningen gav intet resultat"
 
-#: src/viewer/text/search.c:1034
-#, fuzzy
-msgid "Typeahead"
-msgstr "Type"
-
 #: src/viewer/text/search.c:1035
 #, c-format
 msgid "Could not find a link with the text '%s'."
@@ -5631,6 +5626,10 @@ msgstr "Fejl ved skrivning"
 #: src/viewer/text/view.c:1528
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
+
+#, fuzzy
+#~ msgid "Typeahead: %s [%s]"
+#~ msgstr "Type"
 
 #~ msgid ""
 #~ "Name: %s\n"

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.314 2003/10/20 17:32:20 jonas Exp $ */
+/* $Id: renderer.c,v 1.315 2003/10/20 17:37:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,7 +466,7 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 	assert(xl > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
-	if (realloc_line(part->document, Y(y), X(x) + xl))
+	if (realloc_line(part->document, Y(y), X(x) + xl - 1))
 		return;
 
 	copy_screen_chars(&POS(x, y), d, xl);

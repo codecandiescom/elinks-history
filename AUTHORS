@@ -93,6 +93,9 @@ Dmitry M. Klimov <dmk@gtrk.kmtn.ru>
 Dmitry Pinchukov <dpinch@mail.ru>
 	Ukrainian translation
 
+Doug Kearns <djkea2@mugca.its.monash.edu.au>
+	Fixes in linkskeys.5
+
 Edwin Groothuis <edwin@mavetju.org>
 	Dump-width option
 
@@ -295,4 +298,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
 
-$Id: AUTHORS,v 1.49 2002/04/16 18:34:56 pasky Exp $
+$Id: AUTHORS,v 1.50 2002/04/17 08:26:45 pasky Exp $

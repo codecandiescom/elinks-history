@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.96 2004/01/25 03:42:47 jonas Exp $ */
+/* $Id: scanner.c,v 1.97 2004/01/26 17:20:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,11 +79,11 @@ ident2type(unsigned char *ident, unsigned char *end,
 		{ "rgb",	CSS_TOKEN_RGB,		CSS_TOKEN_FUNCTION },
 		{ "url",	CSS_TOKEN_URL,		CSS_TOKEN_FUNCTION },
 
-		{ "charset",	CSS_TOKEN_CHARSET,	CSS_TOKEN_AT_KEYWORD },
-		{ "font-face",	CSS_TOKEN_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
-		{ "import",	CSS_TOKEN_IMPORT,	CSS_TOKEN_AT_KEYWORD },
-		{ "media",	CSS_TOKEN_MEDIA,	CSS_TOKEN_AT_KEYWORD },
-		{ "page",	CSS_TOKEN_PAGE,		CSS_TOKEN_AT_KEYWORD },
+		{ "charset",	CSS_TOKEN_AT_CHARSET,	CSS_TOKEN_AT_KEYWORD },
+		{ "font-face",	CSS_TOKEN_AT_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
+		{ "import",	CSS_TOKEN_AT_IMPORT,	CSS_TOKEN_AT_KEYWORD },
+		{ "media",	CSS_TOKEN_AT_MEDIA,	CSS_TOKEN_AT_KEYWORD },
+		{ "page",	CSS_TOKEN_AT_PAGE,	CSS_TOKEN_AT_KEYWORD },
 
 		{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
 	};

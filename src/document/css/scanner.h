@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.51 2004/01/25 02:35:22 jonas Exp $ */
+/* $Id: scanner.h,v 1.52 2004/01/26 17:20:14 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -60,11 +60,11 @@ enum css_token_type {
 
 	/* @-rule symbols */
 	CSS_TOKEN_AT_KEYWORD,	/* @<ident> */
-	CSS_TOKEN_CHARSET,	/* @charset */
-	CSS_TOKEN_FONT_FACE,	/* @font-face */
-	CSS_TOKEN_IMPORT,	/* @import */
-	CSS_TOKEN_MEDIA,	/* @media */
-	CSS_TOKEN_PAGE,		/* @page */
+	CSS_TOKEN_AT_CHARSET,	/* @charset */
+	CSS_TOKEN_AT_FONT_FACE,	/* @font-face */
+	CSS_TOKEN_AT_IMPORT,	/* @import */
+	CSS_TOKEN_AT_MEDIA,	/* @media */
+	CSS_TOKEN_AT_PAGE,	/* @page */
 
 	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
 

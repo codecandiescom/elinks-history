@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.48 2004/01/25 05:02:15 jonas Exp $ */
+/* $Id: parser.c,v 1.49 2004/01/26 17:20:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 
 	/* Skip skip skip that code */
 	switch (token->type) {
-		case CSS_TOKEN_IMPORT:
+		case CSS_TOKEN_AT_IMPORT:
 			token = get_next_css_token(scanner);
 			if (!token) break;
 
@@ -131,13 +131,13 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 			skip_css_tokens(scanner, ';');
 			break;
 
-		case CSS_TOKEN_CHARSET:
+		case CSS_TOKEN_AT_CHARSET:
 			skip_css_tokens(scanner, ';');
 			break;
 
-		case CSS_TOKEN_FONT_FACE:
-		case CSS_TOKEN_MEDIA:
-		case CSS_TOKEN_PAGE:
+		case CSS_TOKEN_AT_FONT_FACE:
+		case CSS_TOKEN_AT_MEDIA:
+		case CSS_TOKEN_AT_PAGE:
 			skip_css_block(scanner);
 			break;
 
@@ -220,11 +220,11 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 			break;
 
 		case CSS_TOKEN_AT_KEYWORD:
-		case CSS_TOKEN_CHARSET:
-		case CSS_TOKEN_FONT_FACE:
-		case CSS_TOKEN_IMPORT:
-		case CSS_TOKEN_MEDIA:
-		case CSS_TOKEN_PAGE:
+		case CSS_TOKEN_AT_CHARSET:
+		case CSS_TOKEN_AT_FONT_FACE:
+		case CSS_TOKEN_AT_IMPORT:
+		case CSS_TOKEN_AT_MEDIA:
+		case CSS_TOKEN_AT_PAGE:
 			css_parse_atrule(css, &scanner);
 			break;
 

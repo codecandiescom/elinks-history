@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.201 2005/03/03 15:31:57 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.202 2005/03/04 02:14:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -900,11 +900,7 @@ form_elements_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ELEMENTS_LENGTH:
 	{
-		struct form_control *fc;
-		int counter = 0;
-
-		foreach (fc, form->items)
-			counter++;
+		int counter = list_size(&form->items);
 
 		int_to_jsval(ctx, vp, counter);
 		break;
@@ -1110,11 +1106,8 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	case JSP_FORM_LENGTH:
 	{
-		struct form_control *fc;
-		int counter = 0;
+		int counter = list_size(&form->items);
 
-		foreach (fc, form->items)
-			counter++;
 		int_to_jsval(ctx, vp, counter);
 		break;
 	}
@@ -1311,11 +1304,7 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORMS_LENGTH:
 	{
-		struct form *form;
-		int counter = 0;
-
-		foreach (form, document->forms)
-			counter++;
+		int counter = list_size(&document->forms);
 
 		int_to_jsval(ctx, vp, counter);
 		break;

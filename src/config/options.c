@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.280 2003/10/04 20:19:13 kuser Exp $ */
+/* $Id: options.c,v 1.281 2003/10/04 21:19:39 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1152,11 +1152,19 @@ register_options(void)
 		"search", 0,
 		N_("Options for searching."));
 
+#ifdef HAVE_REGEX_H
 	add_opt_bool("document.browse.search", N_("Regular expressions"),
 		"regex", 0, 0,
 		N_("Enable searching with regular expressions.\n"
 		"0 for plain text searching.\n"
 		"1 for basic regular expression searches."));
+#else
+	add_opt_bool("document.browse.search", N_("Regular expressions"),
+		"regex", 0, 0,
+		N_("Enable searching with regular expressions.\n"
+		"0 for plain text searching.\n"
+		"1 for basic regular expression searches. (DISABLED)"));
+#endif
 
 	add_opt_bool("document.browse.search", N_("Overlapping matches"),
 		"overlap", 0, 0,

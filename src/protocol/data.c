@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.8 2004/11/10 11:06:36 zas Exp $ */
+/* $Id: data.c,v 1.9 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ data_protocol_handler(struct connection *conn)
 
 		mem_free_set(&data, decoded);
 	} else {
-		decode_uri_string(data);
+		decode_uri(data);
 	}
 
 	/* This will not release the newly created header */

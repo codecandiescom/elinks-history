@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.332 2004/11/10 16:46:32 jonas Exp $ */
+/* $Id: download.c,v 1.333 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1006,8 +1006,7 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 		add_mime_filename_to_string(&filename, type_query->uri);
 
 	/* Let's make the filename pretty for display & save */
-	decode_uri_string(filename.source);
-	filename.length = strlen(filename.source);
+	decode_uri_string(&filename);
 
 	if (!handler) {
 		if (!get_cmd_opt_int("anonymous")) {

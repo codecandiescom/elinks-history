@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.295 2004/10/21 21:01:06 pasky Exp $ */
+/* $Id: link.c,v 1.296 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1254,7 +1254,7 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 			add_char_to_string(&str, ')');
 		}
 
-		decode_uri_string(str.source);
+		decode_uri_string(&str);
 		return str.source;
 	}
 }

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.149 2004/11/10 19:57:05 jonas Exp $ */
+/* $Id: uri.h,v 1.150 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -268,8 +268,9 @@ int get_uri_port(struct uri *uri);
 	(LOWEST_PORT <= (port) && (port) <= HIGHEST_PORT)
 
 
-void encode_uri_string(struct string *, unsigned char *, int);
-void decode_uri_string(unsigned char *);
+void encode_uri_string(struct string *string, unsigned char *src, int len);
+void decode_uri_string(struct string *string);
+void decode_uri(unsigned char *uristring);
 
 
 /* Returns allocated string containing the biggest possible extension.

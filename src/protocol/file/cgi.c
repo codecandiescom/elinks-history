@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.83 2004/11/08 15:42:57 jonas Exp $ */
+/* $Id: cgi.c,v 1.84 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -296,7 +296,7 @@ execute_cgi(struct connection *conn)
 		state = S_OUT_OF_MEM;
 		goto end2;
 	}
-	decode_uri_string(script);
+	decode_uri(script);
 	scriptlen = strlen(script);
 
 	if (stat(script, &buf) || !(S_ISREG(buf.st_mode))

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.129 2004/10/23 08:04:03 pasky Exp $ */
+/* $Id: renderer.c,v 1.130 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,7 +312,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 			if (document->uri->protocol == PROTOCOL_FILE) {
 				document->title = get_uri_string(document->uri,
 								 URI_PATH);
-				decode_uri_string(document->title);
+				decode_uri(document->title);
 			} else {
 				document->title = get_uri_string(document->uri,
 								 URI_PUBLIC);

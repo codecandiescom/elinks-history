@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.179 2004/09/27 11:40:38 jonas Exp $ */
+/* $Id: file.c,v 1.180 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,8 +211,7 @@ file_protocol_handler(struct connection *connection)
 		return;
 	}
 
-	decode_uri_string(name.source);
-	name.length = strlen(name.source);
+	decode_uri_string(&name);
 
 	if (file_is_dir(name.source)) {
 		/* In order for global history and directory listing to

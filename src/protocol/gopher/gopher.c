@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.28 2004/11/10 21:08:10 jonas Exp $ */
+/* $Id: gopher.c,v 1.29 2004/11/10 21:22:54 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -183,7 +183,10 @@ add_uri_decoded(struct string *command, unsigned char *string, int length,
 	}
 
 	assert(command->length > oldlen);
-	decode_uri_string(command->source + oldlen);
+	/* FIXME: Decoding the whole command string should not be a problem,
+	 * and I don't remember why I didn't do that in the first place.
+	 * --jonas */
+	decode_uri(command->source + oldlen);
 
 	/* Evil decode_uri_string() modifies the string */
 	command->length = strlen(command->source);

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.372 2004/11/10 16:46:32 jonas Exp $ */
+/* $Id: menu.c,v 1.373 2004/11/10 21:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,8 +548,7 @@ query_file(struct session *ses, struct uri *uri, void *data,
 	add_mime_filename_to_string(&def, uri);
 
 	/* Remove the %-ugliness for display */
-	decode_uri_string(def.source);
-	def.length = strlen(def.source);
+	decode_uri_string(&def);
 
 	if (interactive) {
 		input_field(ses->tab->term, NULL, 1,

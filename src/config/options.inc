@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.143 2004/10/13 00:09:06 jonas Exp $ */
+/* $Id: options.inc,v 1.144 2004/11/01 22:22:42 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -15,7 +15,7 @@
  * 4. When adding an alias put a comment about the date the alias was added.
  * 5. Love thy option system! :) */
 
-struct option_info config_options_info[] = {
+static struct option_info config_options_info[] = {
 	INIT_OPT_TREE("", N_("Configuration system"),
 		"config", 0,
 		N_("Configuration handling options.")),

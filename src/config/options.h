@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.105 2004/07/14 14:00:40 jonas Exp $ */
+/* $Id: options.h,v 1.106 2004/11/01 22:22:42 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -135,7 +135,6 @@ struct option {
 #define INIT_OPTION(name, flags, type, min, max, value, desc, capt) \
 	{ NULL_LIST_HEAD, name, flags, type, min, max, { (struct list_head *) (value) }, desc, capt }
 
-extern struct option options_root;
 extern struct option *config_options;
 extern struct option *cmdline_options;
 

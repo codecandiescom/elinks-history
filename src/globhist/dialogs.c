@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.39 2003/10/06 00:27:30 zas Exp $ */
+/* $Id: dialogs.c,v 1.40 2003/10/22 19:24:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,7 @@ push_toggle_display_button(struct dialog_data *dlg, struct widget_data *di)
 	struct global_history_item *item;
 	int *display_type;
 
-	display_type = &get_opt_int("document.history.global.display_type");
+	display_type = (int *) &get_opt_int("document.history.global.display_type");
 	*display_type = !*display_type;
 
 	foreach (item, global_history.items) {

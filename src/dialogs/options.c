@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.81 2003/10/05 18:17:49 pasky Exp $ */
+/* $Id: options.c,v 1.82 2003/10/22 19:24:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,8 @@ display_codepage(struct terminal *term, void *pcp, struct session *ses)
 {
 	struct option *opt = get_opt_rec(term->spec, "charset");
 
-	if (*((int *) opt->ptr) != (int) pcp) {
-		*((int *) opt->ptr) = (int) pcp;
+	if (opt->value.number != (int) pcp) {
+		opt->value.number = (int) pcp;
 		opt->flags |= OPT_TOUCHED;
 	}
 
@@ -87,8 +87,8 @@ terminal_options_ok(void *p)
 #define maybe_update(val, name) 					\
 { 									\
 	struct option *o = get_opt_rec(termopt_hop->term->spec, name); 	\
-	if (*((int *) o->ptr) != val) { 				\
-		*((int *) o->ptr) = val; 				\
+	if (o->value.number != val) {					\
+		o->value.number = val;	 				\
 		o->flags |= OPT_TOUCHED; 				\
 		if (term) { 						\
 			term->spec->change_hook(NULL, term->spec, NULL);\

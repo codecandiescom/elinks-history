@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.57 2003/10/21 15:36:25 zas Exp $ */
+/* $Id: search.c,v 1.58 2003/10/22 19:24:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -966,8 +966,8 @@ search_dlg_ok(struct dialog_data *dlg, struct widget_data *di)
 		struct option *o = get_opt_rec(config_options,
 					       "document.browse.search.regex");
 
-		if (*((int *) o->ptr) != hop->whether_regex) {
-			*((int *) o->ptr) = hop->whether_regex;
+		if (o->value.number != hop->whether_regex) {
+			o->value.number = hop->whether_regex;
 			o->flags |= OPT_TOUCHED;
 		}
 	}
@@ -976,8 +976,8 @@ search_dlg_ok(struct dialog_data *dlg, struct widget_data *di)
 		struct option *o = get_opt_rec(config_options,
 					       "document.browse.search.case");
 
-		if (*((int *) o->ptr) != hop->cases) {
-			*((int *) o->ptr) = hop->cases;
+		if (o->value.number != hop->cases) {
+			o->value.number = hop->cases;
 			o->flags |= OPT_TOUCHED;
 		}
 	}

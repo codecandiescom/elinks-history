@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.94 2003/10/20 15:42:17 pasky Exp $ */
+/* $Id: conf.c,v 1.95 2003/10/22 19:24:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -636,7 +636,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	add_to_string(&tmpstring, "#\n\n");
 
 	origlen = tmpstring.length;
-	smart_config_string(&tmpstring, 2, i18n, options->ptr, NULL, 0, smart_config_output_fn);
+	smart_config_string(&tmpstring, 2, i18n, options->value.tree, NULL, 0, smart_config_output_fn);
 	if (tmpstring.length > origlen)
 		add_bytes_to_string(&config, tmpstring.source, tmpstring.length);
 	done_string(&tmpstring);
@@ -656,7 +656,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	done_string(&tmpstring);
 
 get_me_out:
-	unmark_options_tree(options->ptr);
+	unmark_options_tree(options->value.tree);
 
 	return config.source;
 }

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.47 2003/09/28 13:43:55 jonas Exp $ */
+/* $Id: dialogs.c,v 1.48 2003/10/22 19:24:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	/* Finally add */
 	add_to_string(&str, " -> ");
-	add_to_string(&str, (unsigned char *) opt->ptr);
+	add_to_string(&str, opt->value.string);
 
 	msg_box(term, getml(str.source, translated.source, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete extension"), AL_CENTER,
@@ -223,7 +223,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		#define no_null(x) ((x) ? (unsigned char *) (x) \
 					: (unsigned char *) "")
 		safe_strncpy(ext, no_null(fcp), MAX_STR_LEN);
-		safe_strncpy(ct, no_null(opt->ptr), MAX_STR_LEN);
+		safe_strncpy(ct, no_null(opt->value.string), MAX_STR_LEN);
 		safe_strncpy(ext_orig, no_null(translated.source), MAX_STR_LEN);
 		#undef no_null
 	}
@@ -271,7 +271,7 @@ static struct menu_item mi_no_ext[] = {
 void
 menu_list_ext(struct terminal *term, void *fn, void *xxx)
 {
-	struct option *opt_tree = get_opt_ptr("mime.extension");
+	struct list_head *opt_tree = get_opt_tree("mime.extension");
 	struct option *opt;
 	struct menu_item *mi = NULL;
 
@@ -298,7 +298,7 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		}
 
 		translated2 = memacpy(translated.source, translated.length);
-		optptr2 = stracpy(opt->ptr);
+		optptr2 = stracpy(opt->value.string);
 
 		if (translated2 && optptr2) {
 			add_to_menu(&mi, translated.source, optptr2,

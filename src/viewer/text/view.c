@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.223 2003/10/21 15:12:51 jonas Exp $ */
+/* $Id: view.c,v 1.224 2003/10/22 19:24:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1110,7 +1110,7 @@ quit:
 				goto x;
 			case ACT_TOGGLE_DOCUMENT_COLORS:
 			{
-				int *mode = &get_opt_int("document.colors.use_document_colors");
+				int *mode = (int *) &get_opt_int("document.colors.use_document_colors");
 
 				*mode = (*mode + 1 <= 2) ? *mode + 1 : 0;
 			}

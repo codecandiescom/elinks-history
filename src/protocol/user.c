@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.48 2003/10/06 00:27:30 zas Exp $ */
+/* $Id: user.c,v 1.49 2003/10/22 19:24:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 	opt = get_opt_rec_real(config_options, name.source);
 
 	done_string(&name);
-	return (unsigned char *) (opt ? opt->ptr : NULL);
+	return (unsigned char *) (opt ? opt->value.string : NULL);
 }
 
 

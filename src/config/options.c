@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.322 2003/10/21 15:36:25 zas Exp $ */
+/* $Id: options.c,v 1.323 2003/10/22 19:24:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,8 @@
  * (struct option *) instead. This applies to bookmarks, global history and
  * listbox items as well, though. --pasky */
 
+static INIT_LIST_HEAD(options_root_tree);
+
 static struct option options_root = {
 	NULL_LIST_HEAD,
 
@@ -63,7 +65,7 @@ static struct option options_root = {
 	/* flags: */	0,
 	/* type: */	OPT_TREE,
 	/* min, max: */	0, 0,
-	/* ptr: */	NULL,
+	/* value: */	{ &options_root_tree },
 	/* desc: */	"",
 	/* capt: */	NULL,
 };
@@ -118,7 +120,7 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 		name = sep + 1;
 	}
 
-	foreach (option, *((struct list_head *) tree->ptr)) {
+	foreach (option, *tree->value.tree) {
 		if (option->name && !strcmp(option->name, name)) {
 			mem_free(aname);
 			return option;
@@ -176,7 +178,7 @@ get_opt_rec_real(struct option *tree, unsigned char *name)
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return
  * NULL. Note that you are supposed to use wrapper get_opt(). */
-void *
+union option_value *
 get_opt_(
 #ifdef DEBUG
 	 unsigned char *file, int line,
@@ -189,21 +191,26 @@ get_opt_(
 	errfile = file;
 	errline = line;
 	if (!opt) elinks_internal("Attempted to fetch nonexisting option %s!", name);
-	if (!opt->ptr) elinks_internal("Option %s has no value!", name);
+
+	/* TODO: Sanity check that values are within min/max limits. --jonas */
+	if ((opt->type == OPT_TREE && !opt->value.tree)
+	    || ((opt->type == OPT_STRING || opt->type == OPT_ALIAS)
+		&& !opt->value.string))
+		elinks_internal("Option %s has no value!", name);
 #endif
 
-	return opt->ptr;
+	return &opt->value;
 }
 
 /* Add option to tree. */
 static void
 add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 {
-	struct list_head *cat = tree->ptr;
+	struct list_head *cat = tree->value.tree;
 
 	if (*path) {
 		tree = get_opt_rec(tree, path);
-		cat = tree->ptr;
+		cat = tree->value.tree;
 	}
 	if (!cat) return;
 
@@ -225,7 +232,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 struct option *
 add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	unsigned char *name, enum option_flags flags, enum option_type type,
-	int min, int max, void *ptr, unsigned char *desc)
+	int min, int max, void *value, unsigned char *desc)
 {
 	struct option *option = mem_calloc(1, sizeof(struct option));
 
@@ -240,7 +247,6 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->type = type;
 	option->min = min;
 	option->max = max;
-	option->ptr = ptr;
 	option->capt = capt;
 	option->desc = desc;
 
@@ -261,6 +267,37 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 		}
 	}
 
+	/* XXX: For allocated values we allocate in the add_opt_<type>() macro.
+	 * This involves OPT_TREE, OPT_STRING and OPT_ALIAS. */
+	/* TODO: Check for allocation failure */
+	switch (type) {
+		case OPT_TREE:
+			option->value.tree = value;
+			break;
+		case OPT_STRING:
+		case OPT_ALIAS:
+			option->value.string = value;
+			break;
+		case OPT_BOOL:
+		case OPT_INT:
+		case OPT_CODEPAGE:
+		case OPT_LONG:
+			option->value.number = (long) value;
+			break;
+		case OPT_COLOR:
+			decode_color(value, &option->value.color);
+			break;
+		case OPT_COMMAND:
+			option->value.command = value;
+			break;
+		case OPT_LANGUAGE:
+			break;
+		default:
+			/* XXX: Make sure all option types are handled here. */
+			internal("Invalid option type %d", type);
+			break;
+	}
+
 	add_opt_rec(tree, path, option);
 	return option;
 }
@@ -275,21 +312,14 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 void
 free_option_value(struct option *option)
 {
-	if (option->type == OPT_TREE) {
-		free_options_tree((struct list_head *) option->ptr);
-	}
-
 	switch (option->type) {
-		case OPT_BOOL:
-		case OPT_INT:
-		case OPT_LONG:
 		case OPT_STRING:
-		case OPT_LANGUAGE:
-		case OPT_CODEPAGE:
-		case OPT_COLOR:
 		case OPT_ALIAS:
+			mem_free(option->value.string);
+			break;
 		case OPT_TREE:
-			mem_free(option->ptr);
+			free_options_tree(option->value.tree);
+			mem_free(option->value.tree);
 			break;
 		default:
 			break;
@@ -318,7 +348,7 @@ delete_option(struct option *option)
 struct option *
 copy_option(struct option *template)
 {
-	struct option *option = mem_alloc(sizeof(struct option));
+	struct option *option = mem_calloc(1, sizeof(struct option));
 
 	if (!option) return NULL;
 
@@ -349,9 +379,11 @@ copy_option(struct option *template)
 						: 0;
 	}
 
-	option->ptr = option_types[template->type].dup
-			? option_types[template->type].dup(option, template)
-			: template->ptr;
+	if (option_types[template->type].dup) {
+		option_types[template->type].dup(option, template);
+	} else {
+		option->value = template->value;
+	}
 
 	return option;
 }
@@ -371,7 +403,6 @@ init_options_tree(void)
 void
 init_options(void)
 {
-	options_root.ptr = init_options_tree();
 	config_options = add_opt_tree_tree(&options_root, "", "",
 					 "config", OPT_LISTBOX, "");
 	cmdline_options = add_opt_tree_tree(&options_root, "", "",
@@ -391,8 +422,7 @@ free_options_tree(struct list_head *tree)
 void
 done_options(void)
 {
-	free_options_tree(options_root.ptr);
-	mem_free(options_root.ptr);
+	free_options_tree(options_root.value.tree);
 }
 
 void
@@ -403,7 +433,7 @@ unmark_options_tree(struct list_head *tree)
 	foreach (option, *tree) {
 		option->flags &= ~OPT_WATERMARK;
 		if (option->type == OPT_TREE)
-			unmark_options_tree((struct list_head *) option->ptr);
+			unmark_options_tree(option->value.tree);
 	}
 }
 
@@ -416,7 +446,7 @@ check_nonempty_tree(struct list_head *options)
 
 	foreach (opt, *options) {
 		if (opt->type == OPT_TREE) {
-			if (check_nonempty_tree((struct list_head *) opt->ptr))
+			if (check_nonempty_tree(opt->value.tree))
 				return 1;
 		} else if (!(opt->flags & OPT_WATERMARK)) {
 			return 1;
@@ -445,7 +475,7 @@ smart_config_string(struct string *str, int print_comment, int i18n,
 
 		/* Is there anything to be printed anyway? */
 		if (option->type == OPT_TREE
-		    && !check_nonempty_tree((struct list_head *) option->ptr))
+		    && !check_nonempty_tree(option->value.tree))
 			continue;
 
 		/* We won't pop out the description when we're in autocreate
@@ -501,7 +531,7 @@ smart_config_string(struct string *str, int print_comment, int i18n,
 				add_char_to_string(&newpath, '.');
 			}
 			add_to_string(&newpath, option->name);
-			smart_config_string(str, pc, i18n, option->ptr,
+			smart_config_string(str, pc, i18n, option->value.tree,
 					    newpath.source, depth + 1, fn);
 			done_string(&newpath);
 
@@ -619,7 +649,7 @@ print_full_help(struct option *tree, unsigned char *path)
 
 	*savedpos = 0;
 
-	foreach (option, *((struct list_head *) tree->ptr)) {
+	foreach (option, *tree->value.tree) {
 		enum option_type type = option->type;
 		unsigned char *help;
 		unsigned char *capt = option->capt;
@@ -648,27 +678,27 @@ print_full_help(struct option *tree, unsigned char *path)
 
 		/* Print the 'title' of each option type. */
 		if (type == OPT_INT || type == OPT_BOOL || type == OPT_LONG) {
-			printf(gettext("    %s%s%s %s (default: %d)"),
+			printf(gettext("    %s%s%s %s (default: %ld)"),
 				path, saved, option->name, help,
-				*((int *) option->ptr));
+				(long) option->value.number);
 
-		} else if (type == OPT_STRING && option->ptr) {
+		} else if (type == OPT_STRING && option->value.string) {
 			printf(gettext("    %s%s%s %s (default: \"%s\")"),
 				path, saved, option->name, help,
-				(char *) option->ptr);
+				option->value.string);
 
 		} else if (type == OPT_ALIAS) {
 			printf(gettext("    %s%s%s %s (alias for %s)"),
 				path, saved, option->name, help,
-				(char *) option->ptr);
+				option->value.string);
 
 		} else if (type == OPT_CODEPAGE) {
 			printf(gettext("    %s%s%s %s (default: %s)"),
 				path, saved, option->name, help,
-				get_cp_name(* (int *) option->ptr));
+				get_cp_name(option->value.number));
 
 		} else if (type == OPT_COLOR) {
-			color_t color = *(color_t *) option->ptr;
+			color_t color = option->value.color;
 
 			printf(gettext("    %s%s%s %s (default: #%06x)"),
 			       path, saved, option->name, help, color);
@@ -679,7 +709,7 @@ print_full_help(struct option *tree, unsigned char *path)
 		} else if (type == OPT_LANGUAGE) {
 			printf(gettext("    %s%s%s %s (default: \"%s\")"),
 				path, saved, option->name, help,
-				(char *) option->ptr);
+				language_to_name(option->value.number));
 
 		} else if (type == OPT_TREE) {
 			int pathlen = strlen(path);
@@ -738,7 +768,7 @@ print_short_help()
 	memset(align, ' ', sizeof(align) - 1);
 	align[sizeof(align) - 1] = 0;
 
-	foreach (option, *((struct list_head *) cmdline_options->ptr)) {
+	foreach (option, *cmdline_options->value.tree) {
 		unsigned char *capt;
 		unsigned char *help;
 		unsigned char *info = saved ? saved->source
@@ -849,11 +879,11 @@ update_visibility(struct list_head *tree, int show)
 		if (!strcmp(opt->name, "_template_")) {
 			if (opt->box_item) opt->box_item->visible = show & 1;
 			if (opt->type == OPT_TREE)
-				update_visibility(opt->ptr, show | 2);
+				update_visibility(opt->value.tree, show | 2);
 		} else {
 			if (opt->box_item && show & 2) opt->box_item->visible = show & 1;
 			if (opt->type == OPT_TREE)
-				update_visibility(opt->ptr, show);
+				update_visibility(opt->value.tree, show);
 		}
 	}
 }
@@ -861,7 +891,7 @@ update_visibility(struct list_head *tree, int show)
 static int
 change_hook_stemplate(struct session *ses, struct option *current, struct option *changed)
 {
-	update_visibility(config_options->ptr, *((int *) changed->ptr));
+	update_visibility(config_options->value.tree, changed->value.number);
 	return 0;
 }
 
@@ -870,7 +900,7 @@ change_hook_language(struct session *ses, struct option *current, struct option 
 {
 /* FIXME */
 #ifdef ENABLE_NLS
-	set_language(*((int *) changed->ptr));
+	set_language(changed->value.number);
 #endif
 	return 0;
 }
@@ -2842,8 +2872,8 @@ register_options(void)
 
 
 
-	add_opt_ptr("ui", N_("Language"),
-		"language", 0, OPT_LANGUAGE, mem_calloc(1, sizeof(int)),
+	add_opt_lang("ui", N_("Language"),
+		"language", 0,
 		N_("Language of user interface. System means that the language will\n"
 		"be extracted from the environment dynamically."));
 	get_opt_rec(config_options, "ui.language")->change_hook = change_hook_language;

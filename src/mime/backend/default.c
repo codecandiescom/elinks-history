@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.21 2003/10/20 14:54:55 jonas Exp $ */
+/* $Id: default.c,v 1.22 2003/10/22 19:24:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ get_content_type_default(unsigned char *extension)
 
 	opt_tree = get_opt_rec_real(config_options, "mime.extension");
 
-	foreach (opt, *((struct list_head *) opt_tree->ptr)) {
+	foreach (opt, *opt_tree->value.tree) {
 		unsigned char *namepos = opt->name + strlen(opt->name) - 1;
 		unsigned char *extpos = extend;
 
@@ -52,7 +52,7 @@ get_content_type_default(unsigned char *extension)
 		 * extension.. */
 		if ((namepos < opt->name)
 		    && ((extpos < extension) || (*extpos == '.')))
-			return stracpy(opt->ptr);
+			return stracpy(opt->value.string);
 	}
 
 	return NULL;
@@ -99,7 +99,7 @@ get_mime_handler_name(unsigned char *type, int xwin)
 	system_str = get_system_str(xwin);
 	if (!system_str) return NULL;
 
-	name = straconcat("mime.handler.", (unsigned char *) opt->ptr,
+	name = straconcat("mime.handler.", opt->value.string,
 			  ".", system_str, NULL);
 	mem_free(system_str);
 
@@ -129,7 +129,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 			opt = get_opt_rec_real(config_options, mt);
 			mem_free(mt);
 
-			if (opt) desc = opt->ptr;
+			if (opt) desc = opt->value.string;
 		}
 
 		handler = mem_alloc(sizeof(struct mime_handler));

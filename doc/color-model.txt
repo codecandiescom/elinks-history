@@ -10,9 +10,9 @@ ELinks already provides a mean to configure and adjust color combinations to
 maximize readability. We would like to extend this capability to also include
 the newly added 256 color mode.
 
-For 16 colors the adjustment is done by doing a few lookups in a hard coded
+For 16 colors, the adjustment is done by doing a few lookups in a hard coded
 color table. This is fine when there are only 16 * 8 fore- and background
-combinations but would probably be too painful for 256 * 256 combinations. Also
+combinations but would probably be too painful for 256 * 256 combinations. Also,
 the hard-coded table - although doing a good job - does not leave much up for the
 users preferences. So the second goal is to also make the adjustment more
 configurable so people with color deficiencies can tune the rendering to their
@@ -28,12 +28,12 @@ distinguishable to someone with a visual disorder. It is important to appreciate
 that it is the contrast of colors one against another that makes them more or
 less discernible rather than the individual colors themselves.
 
-I.e. current allow/forbid dark on black colors will be really simple and far
+I.e., current allow/forbid dark on black colors will be really simple and far
 more universal.  Zas is currently researching about rules to preserve page
-readability by eliminating bad colors combinations (like dark red on dark red,
-or even primary red / primary blue, yellow on white, green on grey, ...) One
-cool side effect, is that we can adapt a color model to take in account some
-user's visual deficiencies (e.g. rule like "do not use red colors at all", "forbid
+readability by eliminating bad colors combinations (like dark red on dark red
+or even primary red / primary blue, yellow on white, green on grey, ...). One
+cool side effect is that we can adapt a color model to take in account some
+user's visual deficiencies (e.g., rule like "do not use red colors at all", "forbid
 orange on red", ...) Another color model may take in account screen environment:
 "ensure very high lightness contrast".
 
@@ -41,7 +41,7 @@ Algorithms for determining bad color combinations
 -------------------------------------------------
 
 Zas has some ideas about that: there's no "algorithm" to determine bad color
-combos, but many experiences, so we'll use common sense (ie. low lightness
+combos, but many experiences, so we'll use common sense (i.e., low lightness
 contrast, similar colors, white/bright yellow, and more...).
 
 Algorithms for finding the nearest good color combination
@@ -49,11 +49,11 @@ Algorithms for finding the nearest good color combination
 
 This all comes down to applying what ever constraints the user desires:
 
-1. Given a back- and foreground color pair of RGB colors.
-2. Check if it satisfies all the constraints. If not make a new couple obtained
+1. given a back- and foreground color pair of RGB colors,
+2. check if it satisfies all the constraints; if not, make a new couple obtained
    by successive constraint satisfaction.
 
-In some cases, one or more constraints can't be satisfied, for solving that, we
+In some cases, one or more constraints can't be satisfied. For solving that, we
 just need notions like "hard" / "strong" and "soft" / "weak" constraints.
 
 Example
@@ -68,13 +68,13 @@ soft constraint 2 = "foreground darker than background"
 soft constraint 3 = "no green foreground on blue background"
 
 Starting with (bg, fg) = (H=red L=70% S=100%; H=blue L=40% S=95%)
-hc1 is not satisfied, because fg is red, so we just need to move fg away from
+hc1 is not satisfied because fg is red, so we just need to move fg away from
 red.
 
-1. hc2 is satisfied
-2. hc3 is not satisfied, red and blue are fully saturated.
-3. sc1 is satisfied
-4. sc2 is not satisfied, since fg is lighter than bg, so move fg away
+1. hc2 is satisfied.
+2. hc3 is not satisfied: red and blue are fully saturated.
+3. sc1 is satisfied.
+4. sc2 is not satisfied: fg is lighter than bg; so move fg away
    from lightness, and move bg away from darkness.
 5. sc3 is satisfied
 
@@ -87,25 +87,25 @@ lightness: hc2, sc2
 saturation: hc3
 
 - Hue constraints satisfaction:
-A) nearest not red hue from fg is either green or blue (simpler for now), let
-   choose randomly one: green
-   now hc1 is satisfied, sc1 too, and sc3 is not
+A) Nearest not red hue from fg is either green or blue (simpler for now), let
+   choose randomly one: green.
+   Now hc1 is satisfied, sc1 too, and sc3 is not.
 
-B) move fg away from green and red: fg is now blue
-   now hc1 is satisfied, sc1 is not, and sc3 is
+B) Move fg away from green and red: fg is now blue.
+   Now hc1 is satisfied, sc1 is not, and sc3 is.
 
-C) since we can't satisfy all constraints, reiterate
-   going back to A) let move initial fg from red to blue instead of green
-   now hc1 is satisfied, sc1 is not, and sc3 too
+C) Since we can't satisfy all constraints, reiterate,
+   going back to A). Let move initial fg from red to blue instead of green.
+   Now hc1 is satisfied, sc1 is not, and sc3 too.
 
-D) we cannot satisfy hc1 and sc1, so since sc1 is a soft constraint,
-   just ignore it and continue
+D) We cannot satisfy hc1 and sc1. Since sc1 is a soft constraint,
+   just ignore it and continue.
 
 Finally we have (fg, bg) = (H=blue L=70% S=100%; H=blue L=40% S=95%)
 
 - Lightness constraints satisfaction:
-E) hc2 can be satisfied by either increasing lightness of fg, or darkness of bg
-   we choose to change fg (randomly)
+E) hc2 can be satisfied by either increasing lightness of fg or darkness of bg.
+   We choose to change fg (randomly):
    (fg, bg) = (H=blue L=90% S=100%; H=blue L=40% S=95%)
 
 F) sc2 can be satisfied by swapping fg an bg lightness:
@@ -122,14 +122,14 @@ How to cache the result and integrate it with the current color system
 ----------------------------------------------------------------------
 
 In previous example, we supposed we were using a true color palette, but most
-cases we have a limited number of usable colors.
+cases, we have a limited number of usable colors.
 We need to convert (fg, bg) to the nearest available color _before_ constraints
 satisfaction and at each step of it.
 When a valid transformation has been found we cache the initial (fg, bg) and the
 result, and because we can't cache all combos we need to limit cache size to a
-reasonable value and sometimes recalculate.
+reasonable value and, sometimes, recalculate.
 
-Maybe if the calculations will be really heavy we can save/restore the combinations
+Maybe if the calculations will be really heavy, we can save/restore the combinations
 to file (~/.elinks/colorhist ;) from session to session.
 
 How to make the configuration easy but still powerful
@@ -138,14 +138,14 @@ How to make the configuration easy but still powerful
 User should be able to describe what he wants or not, so let's try to have our
 own color-constraint interpreter:
 
-one constraint is either hard or soft, it applies to fg, bg or both, and affects
+One constraint is either hard or soft; it applies to fg, bg or both, and affects
 either hue, lightness or saturation.
-hue unit is either a name (e.g. red) or an angle interval (e.g. for red [0,30])
-lightness and saturation units are a percentage 0-100%
-We'll use only integers values on the user side, because it's simpler to handle.
+Hue unit is either a name (e.g., red) or an angle interval (e.g., for red, [0,30])
+Lightness and saturation units are a percentage, 0-100%.
+We'll use only integers values on the user side because it's simpler to handle.
 
 Operators are either ! or no, < or lt, > or gt, = or eq, <= or lte, >= or
-gte. != or ne, >< or hue differences (human sense)
+gte, != or ne, >< or hue differences (human sense).
 Referring to hue, lighness and saturation is done by using these names or H, L,
 S.
 Referring to fg or bg is possible by using fg or ^, bg or _.
@@ -187,13 +187,13 @@ Including text attributes in the color model
 
 Hmmm, since we use colors to render text attributes, I (zas) think we need to
 integrate them in the process.
-E.g. italics are rendered by color, so let the user tells which color to use.
+E.g., italics are rendered by color, so let the user tells which color to use.
 
 (bg, fg, type) triplet can be used for that. In constraint definition, we'll
 have H, S, L and type (T) variables.
 Type is (link|normal) and/or italic and/or bold and/or underline and/or
 (subscript|supscript) etc...
-Note link is not a text attribute (in the terminal sense of it), that's all the
+Note link is not a text attribute (in the terminal sense of it); that's all the
 magic.
 Also note that the attribute enhancement should be fully optional.
 
@@ -213,25 +213,25 @@ bg saturation < 90%
 
 Hey, this language is better than the one before ;)
 
-More about hues or "what is red ?":
+More about hues, or "what is red?":
 
-Defining hues is not as easy it seems, the main problem here is to know what
+Defining hues is not as easy it seems; the main problem here is to know what
 we talk about when using red name.
 
-Where is start and end of red ? Applying KISS principle, let's say that in HLS
-system S° < H < E° where S is starting hue, and E ending one.
+Where is start and end of red? Applying KISS principle, let's say that in HLS
+system, S < H < E, where S is starting hue and E ending one.
 For each hue we want to express let use a similar non-overlapping interval.
-Take a circle, divide it in 3 parts for primary hues RGB:
-Make R starts at 0 (hmm, in HLS it's not exactly the case, but nm).
+Take a circle and divide it in 3 parts for primary hues, RGB:
+Make R starts at 0 (hmm, in HLS it's not exactly the case, but NM).
 Red is [0, 1*360/3[  (no, not a typo, 120 is not red)
 Green is [1*360/3, 2*360/3[
 Blue is [2*360/3, 0[
 
-It will be convenient to have intermediate hues, between red and green ;)
+It will be convenient to have intermediate hues between red and green ;)
 So just let divide by a value greater than 3, and name each part.
-Using 12 subdivisions seems to be sufficient, since we want to keep it simple.
+Using 12 subdivisions seems to be sufficient since we want to keep it simple.
 Each subdivision should be equal but it may not reflect reality of human color
-perception, using "uniform" color models instead of HLS may help here.
+perception; using "uniform" color models instead of HLS may help here.
 
 Implementation
 --------------
@@ -243,14 +243,14 @@ implementation draws nearer.
 Availability
 ------------
 
-The color model idea sounds great, however its usability is probably rather
+The color model idea sounds great. However, its usability is probably rather
 limited and most users could live fine without it (that is not to dispute that
 it can prove to be unique and invaluable for others). Thus, it should be fully
 optional both at compile time and runtime.
 
 It should still be possible to use only the original 16 colors fg_color xlat
 table (which is so trivial that its inclusion probably need not be configurable
-at compile time), because its value is indisputably greater by orders of
+at compile time) because its value is indisputably greater by orders of
 magnitude for the whole (or most of the) scale of users - the approximation to
 16 colors is so imprecise that the result is too often far from what the page
 author intended. Pasky believes that the 256 colors already provide much
@@ -259,20 +259,20 @@ color combinations shown would differ dramatically from the intended look.
 
 Jonas: I agree that the color adjustment should be optional like the current
 one. Especially since the development of this will probably require quite a lot
-of tuning before being really usable. In the future with some kind of CSS
-implementation the user will have further possibility to override any unreadable
+of tuning before being really usable. In the future, with some kind of CSS
+implementation, the user will have further possibility to override any unreadable
 styling. Whether this kind of fix-up will still be necessary only time will show.
 Anyway since even 256 colors are pretty limited
 
-Of course some people want to always force readability over the web page's
-author color choice (there is some really sick stuff color-wise around the web;
+Of course some people want to always force readability over the Web page's
+author color choice (there is some really sick stuff color-wise around the Web,
 and of course there are the "secret" black-on-black or white-on-white texts ;-),
 and people with all sorts of color disabilities (which are quite frequent in the
 population, AFAIK). This would be a killer feature for them and that is the
-reason why Pasky thinks that the compile time option for including of color
+reason why Pasky thinks that the compile-time option for including of color
 models implementation should be by default enabled. Pasky is still not sure
 whether the color models should be by default enabled or disabled at the
-runtime, pros and cons welcomed.
+runtime; pros and cons welcomed.
 
 Further reading
 ---------------
@@ -296,5 +296,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 
 
-$Id: color-model.txt,v 1.15 2005/01/03 06:02:09 miciah Exp $
+$Id: color-model.txt,v 1.16 2005/01/03 07:12:20 miciah Exp $
 vim: textwidth=80

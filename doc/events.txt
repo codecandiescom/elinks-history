@@ -1,6 +1,6 @@
 				Events
 
-This file lists the events currently in use. When they are called, what they
+This file lists the events currently in use, when they are called, what they
 do and what arguments they expect.
 
 Events are a mechanism for communication between ELinks parts --- any ELinks
@@ -152,7 +152,7 @@ Description:
  @ses is usually used for deciding based on the current URI or for reporting
  potential errors during the hook processing through the UI. With @ses being
  NULL the hook handler should assume no current URI and no suitable UI set up
- (ie. starting up yet or -dump).
+ (i.e., starting up yet or -dump).
 
 -------------------------------------------------------------------------------
 Name:		follow-url
@@ -171,8 +171,8 @@ Description:
  If another URL than @url should be followed it is passed by setting @url.
  If @url is changed the event propagation should be ended.
  Valid values for @url includes:
- - leaving @url unchanged if the original URL should be followed.
- - NULL if no URL should be followed.
+ - leaving @url unchanged if the original URL should be followed;
+ - NULL if no URL should be followed; or
  - a dynamically allocated new URL to be followed instead.
 
 -------------------------------------------------------------------------------
@@ -189,9 +189,9 @@ Arguments:
 Description:
 
  Possible values for @new_proxy_url includes:
- - a dynamically allocated string with the format proxy:port
- - an empty string (dynamically allocated!) to use no proxy
- - NULL to use default proxies
+ - a dynamically allocated string with the format proxy:port;
+ - an empty string (dynamically allocated!) to use no proxy; or
+ - NULL to use default proxies.
 
 -------------------------------------------------------------------------------
 Name:		periodic-saving
@@ -226,7 +226,7 @@ Description:
  event propagation should be ended and @html_len should be updated to the new
  length of the document content.
  Possible values for @html includes:
- - new document content in a dynamically allocated string.
+ - new document content in a dynamically allocated string; or
  - NULL to keep the content unchanged.
 
 -------------------------------------------------------------------------------
@@ -242,7 +242,7 @@ Arguments:
 
 Description:
 
- Allows a subsystem to do whatever clean up is required when ELinks quits.
+ Allows a subsystem to do whatever clean-up is required when ELinks quits.
 
 -------------------------------------------------------------------------------
-$Id: events.txt,v 1.14 2004/12/17 21:54:31 miciah Exp $
+$Id: events.txt,v 1.15 2005/01/03 07:12:20 miciah Exp $

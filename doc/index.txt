@@ -9,7 +9,7 @@ be eventually superseded by a complete ELinks Book, which you can find
 in the book/ subdirectory in a very prenatal stage.
 
 There was a complete (or from a large part complete) manual for the
-Links 0.82 once, you can still find it at
+Links 0.82 once, you can still find it at:
 
 	http://links.sourceforge.net/docs/manual-0.82-en/index.html
 
@@ -19,7 +19,7 @@ relevant information there.
 You may also refer to the manual page for a very quick reference,
 however little effort is done to keep it always up-to-date.
 On the other hand, the built-in documentation is _always_ up-to-date.
-Check the --long-help and --config-help ELinks commandline arguments.
+Check the --long-help and --config-help ELinks command-line arguments.
 
 
 Table of contents
@@ -61,7 +61,7 @@ Appendices
 (*) Man pages are best viewed with the man program. The easiest way to
 do this is by telling the man program to look for man pages in the
 doc/man directory by using the -M switch. If you are standing in the
-top-level directory you can do this by invoking the man program using:
+top-level directory, you can do this by invoking the man program using:
 
 	man -M doc/man elinks.conf
 
@@ -84,7 +84,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.13 2005/01/02 12:21:25 jonas Exp $
+$Id: index.txt,v 1.14 2005/01/03 07:12:20 miciah Exp $
 
 (Note: Sometimes, I broke the lines manually earlier than gqap would,
 for greater aesthetical effect. --pasky)

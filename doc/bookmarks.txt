@@ -6,12 +6,12 @@ formats and maybe even about the code structure later. But don't fear, we won't
 burden you with it, just stop reading when you know enough already.
 
 In order to read this, you need some common sense, ability to start ELinks and
-some idea about what's a web document, URL address and knowledge like that.
+some idea about what's a Web document, URL address and knowledge like that.
 
 If we ever mention some keys here, please note that you can rebind almost
 any action to another key which you like more - then you must obviously imagine
 your own key in place of that. Below, we will list all actions, options and so
-on, related to bookmarks. We won't tell you how to rebind the keys, though;
+on related to bookmarks. We won't tell you how to rebind the keys, though;
 another document will describe that.
 
 Somewhat out-of-order, a very frequent FAQ: In order to move bookmarks around,
@@ -29,7 +29,7 @@ to do with them.
 You launch the bookmark manager by pressing the 's' key in standby (standard)
 mode. You should see a big empty space (bookmarks will slowly appear there as
 you will add them) and couple of buttons shriveling at the bottom. So, as a
-start, move with the right (or left, both will do) arrow to the button "Add
+start, move with the right (or left; both will do) arrow to the button "Add
 bookmark" and fill in the input fields it offers to you. I mean, you can
 type something like "ELinks homepage" to the first field, then move down by e.g.
 the down arrow and fill "http://elinks.or.cz/" to the second field. Then,
@@ -38,7 +38,7 @@ area reserved for bookmarks.
 
 Repeat this step few times. Now, you can move between bookmarks by the up and
 down arrow, jump to the location any of them points to by the Goto button,
-change it by the Edit button, delete it with the Delete button and so on.. When
+change it by the Edit button, delete it with the Delete button and so on. When
 you'll become bored, press the escape button and you're free again!
 
 
@@ -56,11 +56,11 @@ it has [+] near, it's enfolded, while when it has [-] near, it is expanded,
 while you can change that by pressing the spacebar.
 
 In order to add a bookmark into a folder, move on the item of the folder (it
-must be expanded) or onto any bookmark inside of the folder, and simply do the
+must be expanded) or onto any bookmark inside of the folder and simply do the
 usual "Add bookmark" job. You can also move the bookmarks around, obviously.
 You need to first mark all the bookmarks (or even folders) you want to move
-(using the Insert or '*' key, asterisk will appear near of all marked
-bookmarks), and then move to where you want to have the stuff moved to, and
+using the Insert or '*' key--asterisk will appear near of all marked
+bookmarks--and then move to where you want to have the stuff moved to, and
 press the "Move" button.
 
 
@@ -79,18 +79,18 @@ stabilized yet.)
 
 		Chapter 4: File formats
 
-ELinks supports two bookmark formats - the native format and a generic bookmark
+ELinks supports two bookmark formats: the native format and a generic bookmark
 exchange format called XBEL. Each of those formats has its pros and cons, which
 we shall discuss below. You can switch between then by changing the option
 bookmarks.file_format.
 
-However, first please note that ELinks can NOT read Links bookmarks directly.
+However, first please note that ELinks CANNOT read Links bookmarks directly.
 Importing Links-0.9x (or Links-1.x) bookmarks is easy - it is just matter of
 changing all the '|' (pipe) characters to tabs. There is a script for that
-in the contrib/conv/ directory. Importing Links-2.xx bookmarks is not so easy.
-In fact, the scribe knows of no way of doing that at the time of writing this,
+in the contrib/conv/ directory. Importing Links-2.xx bookmarks is not so easy;
+in fact, the scribe knows of no way of doing that at the time of writing this,
 so this is up to you to figure out (if you do, please tell us so that we can
-add it here). Perhaps, you might find a way to convert Links2 bookmarks to
+add it here). Perhaps you might find a way to convert Links2 bookmarks to
 the XBEL format, which can then be loaded in ELinks.
 
 
@@ -205,4 +205,4 @@ simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.10 2005/01/03 06:02:09 miciah Exp $
+$Id: bookmarks.txt,v 1.11 2005/01/03 07:12:20 miciah Exp $

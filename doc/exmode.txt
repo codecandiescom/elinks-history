@@ -1,7 +1,7 @@
 The tale of ex-mode
 ~~~~~~~~~~~~~~~~~~~
 
-Are you a vim controls nerd who wants to see them everywhere? Welcome.
+Are you a vim-controls nerd who wants to see them everywhere? Welcome.
 
 Actually ELinks doesn't shine in this area yet very much. Heck, the famous hjkl
 foursome is still occupied by some feeble managers in the default keymap (we
@@ -81,8 +81,8 @@ How to use it
 ~~~~~~~~~~~~~
 
 It's simple. You press ':' (without the apostrophes, of course) and type in the
-command, then you press enter.  E.g.  ':set config.saving_style = 3' (this is a
-good thing), ':quit' (and the game is over). The standard line editing facility
+command, then you press enter.  E.g., ':set config.saving_style = 3' (this is a
+good thing), ':quit' (and the game is over). The standard line-editing facility
 is present (cursor keys and so), and the ex-mode input line has own history.
 
 
@@ -97,9 +97,9 @@ you want to invoke, tough beans. Someone shall address this issue in the future.
 
 Also, perhaps wider scale of commands should be implemented in ex-mode. The
 code is extremely flexible and it is very trivial to make another ex-mode
-command handler, it's just that noone has done it yet ;-). Also, more actions
+command handler, it's just that no one has done it yet ;-). Also, more actions
 should be able to take arguments.
 
 
 
-$Id: exmode.txt,v 1.4 2005/01/03 06:02:09 miciah Exp $
+$Id: exmode.txt,v 1.5 2005/01/03 07:12:20 miciah Exp $

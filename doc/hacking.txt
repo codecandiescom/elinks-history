@@ -15,9 +15,9 @@ Motto: I didn't expect someone to look at the source, so it's unreadable.
 
 Each UI output should use language files in order to be able to translate the
 messages to a desired language.  Those language files reside in po/ subdir. If
-you want to update a .po file please read the gettext manual available at
+you want to update a .po file, please read the gettext manual available at
 <http://www.gnu.org/manual/gettext>. In order to actually use your updates on
-your own system you have to have the gettext tools installed.
+your own system, you have to have the gettext tools installed.
 
 
 2, ELinks philosophy
@@ -43,8 +43,8 @@ never pretend that it has one.
 The UI plainly needs a rewrite as it's extremely ugly ;-).  Cut'n'paste from
 some existing code and modify appropriately, if you want one :).
 
-Some common used functions (e.g. malloc() or free()) have their own clones
-inside ELinks and you should use them (e.g. mem_alloc() or mem_free()) instead.
+Some common used functions (e.g., malloc() or free()) have their own clones
+inside ELinks and you should use them (e.g., mem_alloc() or mem_free()) instead.
 
 If you want to have anything else documented here, write a description and send
 us a patch.
@@ -94,20 +94,20 @@ views.
 A document is rendered (or formatted) one time once it is loaded - then it
 stays formatted in a cache for some time, and whoever opens the document just
 attaches that formatted document. That is, if you open the same document in
-three tabs, they all show contents of the same single underlying {struct
-document} (and family).
+three tabs, they all show contents of the same single underlying struct
+document and family.
 
-However, each of the tabs gets own {struct document_view}. That structure
+However, each of the tabs gets own struct document_view. That structure
 contains information about the currently active link, position in the document,
 size of the viewport, search terms currently highlighted etc. This structure
 stays around only when the document is displayed in some session, thus its
-lifespan is always shorter than {struct document}'s. document_view to document
+lifespan is always shorter than struct document's. document_view to document
 mapping is many to one.
 
-There is a third structure {struct view_state}. This structure contains
-information about the current link and position, contents of forms fields
-and so. Like {struct document_view}, it contains information specific to
-a certain view of the document and the mapping to document is many to one.
+There is a third structure, struct view_state. This structure contains
+information about the current link and position, contents of forms fields,
+and so. Like struct document_view, it contains information specific to
+a certain view of the document, and the mapping to document is many to one.
 Unlike document_view, though, its lifespan is much longer. When you chain
 those view_states up, you get a session history.
 
@@ -214,9 +214,9 @@ part.
 
 Be sure to prefix all local functions with 'static'.
 
-Indent shift width is 8 characters, that means one tab character.
+Indent shift width is 8 characters--that means one tab character.
 
-'{' should be on the same line as conditions near for, if, while, switch etc,
+'{' should be on the same line as conditions near for, if, while, switch etc.,
 but on separate lines near function headers in function definitions.
 
 Please _USE_ one tab instead of 8 spaces!  It makes things easier.
@@ -240,7 +240,7 @@ Use blank lines frequently to separate chunks of code.  And use magic "/*" and
 Keep in mind that if there's an object and verb in the comment (and it is, in
 most cases), it is a sentence, so it has to start with a capital letter and end
 with a fullstop ;-).  If you want to share your opinion or investigations, you
-should sign yourself, e.g. /* TODO: Move this far away! --pasky */
+should sign yourself; e.g., /* TODO: Move this far away! --pasky */
 
 Comments should be written in _ENGLISH_ only.
 
@@ -436,7 +436,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.23 2005/01/03 06:02:09 miciah Exp $ */
+	/* $Id: hacking.txt,v 1.24 2005/01/03 07:12:20 miciah Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -515,7 +515,7 @@ cd ..
 diff -ru elinks/ elinks+mysuperfeature/ >elinks-mysuperfeature.patch
 
 Please manually remove any bloat like changes in ./configure, whitespace
-changes etc ;-).
+changes etc. ;-).
 
 We also accept output from "cvs diff -u" :).  The statement about bloat
 removing above still applies.
@@ -546,7 +546,7 @@ In 0.5 versions --enable-debug add some fancy things:
 - hotkey debugging: especially cool for translators, it highlights redundant
   hotkeys in a menu.
 - more errors messages
-- low bug tolerance: it will core dump on some errors, instead of just writing
+- low bug tolerance: it will core dump on some errors instead of just writing
   an error description.
 - internal backtrace feature (always enabled if possible)
 - and more...
@@ -558,4 +558,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.23 2005/01/03 06:02:09 miciah Exp $
+$Id: hacking.txt,v 1.24 2005/01/03 07:12:20 miciah Exp $

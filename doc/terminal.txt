@@ -1,17 +1,17 @@
 				The Terminal Setup
 
-ELinks uses neither (n)curses nor termcap/terminfo so unless you are using a
+ELinks uses neither (n)curses nor termcap/terminfo, so unless you are using a
 terminal that is known by ELinks and have a built-in configuration (see below
-for a list) it might be required that you do a little configuring of how your
+for a list), it might be required that you do a little configuring of how your
 terminal should be handled. The easiest way to do this is using the Terminal
 Options dialog located in the Setup submenu of the Main menu.
 
 It is possible to have configurations for multiple terminals as long as the
 TERM environment variable -- used to distinguish terminals from one another --
 is set to something different for each terminal. So be sure to set TERM to
-different values for two terminals that can not share the same configuration.
-For example always setting TERM to xterm-color can lead to problems if you run
-ELinks under the linux console. This is because the linux console does not
+different values for two terminals that cannot share the same configuration.
+For example, always setting TERM to xterm-color can lead to problems if you run
+ELinks under the Linux console. This is because the Linux console does not
 support underlining and ELinks will not know that underlined characters will
 have to be color highlighted so they stand out.
 
@@ -28,11 +28,11 @@ Options
 
 For each terminal the following options can be configured:
 
-	Terminal type: (multi-state, default assumes dumb terminal/ASCII art)
+	Terminal type: (multi-state; default assumes dumb terminal/ASCII art)
 
-		It maps roughly to the terminal type, such as linux console,
-		xterm, vt100 etc. It matters mostly when drawing frames and
-		borders around dialog windows. As already mentioned it also
+		It maps roughly to the terminal type, such as Linux console,
+		XTerm, VT100 etc. It matters mostly when drawing frames and
+		borders around dialog windows. As already mentioned, it also
 		turns on certain features which try to compensate for
 		``missing'' terminal capabilities when drawing. Special
 		highlighting of underlined text if underlining is not
@@ -54,15 +54,15 @@ For each terminal the following options can be configured:
 		fonts when drawing lines, enabling both local characters and
 		lines working at the same time.
 
-		Makes sense only with linux terminal.
+		Makes sense only with Linux terminal.
 
 	Restrict frames in cp850/852 (boolean, default is off)
 
 		This is related to the drawing of frames and window borders
-		controlled by the option above. If enabled it restricts the
+		controlled by the option above. If enabled, it restricts the
 		characters used when drawing lines.
 
-		Makes sense only with linux terminals using the cp850/852
+		Makes sense only with Linux terminals using the cp850/852
 		character sets.
 
 	Block cursor (boolean, off by default)
@@ -77,7 +77,7 @@ For each terminal the following options can be configured:
 	Transparency (boolean, on by default)
 
 		Whether to set the background to black. This is particularly
-		useful when using a terminal (typically in some  windowing
+		useful when using a terminal (typically in some windowing
 		environment) with a background image or a transparent
 		background. If this option is enabled the background will be
 		visible in ELinks as well.
@@ -107,7 +107,7 @@ For each terminal the following options can be configured:
 		charset according to the current locale.
 
 Apart from the last one configurable through the Setup -> Character Set
-submenu in the Main menu the rest can be configured using the Terminal Options
+submenu in the Main menu, the rest can be configured using the Terminal Options
 dialog.
 
 

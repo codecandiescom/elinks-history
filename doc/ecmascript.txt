@@ -1,15 +1,15 @@
 		ECMAScript support?!
 
-Yes, there is some ECMAScript support in ELinks - there isn't anything we
+Yes, there is some ECMAScript support in ELinks. There isn't anything we
 could call complete, but some bits could help with the most common ECMAScript
 usage cases - help you (and then us ;) get into your banking account, pass
 through those ignorant page redirects done by JavaScript code snippets and so.
 
-ELinks does not have own ECMAScript parser and compiler, instead it reuses
+ELinks does not have own ECMAScript parser and compiler; instead it reuses
 other people's work (this may eventually change, see the bottom of this file).
-First we aimed at the njs engine, which is easy to install, small, compact,
-has nice naming scheme, horrible calling conventions, very lacking
-documentation, is not actively developed and generally looks broken and
+First we aimed at the NJS engine, which is easy to install, small and compact;
+has nice naming scheme, horrible calling conventions and very lacking
+documentation; is not actively developed; and generally looks broken and
 extremely clumsy to work with. So we instead went the way of SpiderMonkey (SM)
 engine (property of Mozilla), which is hard to install, bigger (mind you, it
 comes from Mozilla ;), has ugly naming scheme but nice calling conventions,
@@ -24,7 +24,7 @@ care of installation through a package system. Below are listed instructions
 on what package you need to install on various systems (please help improve
 the list). If all goes well you can proceed to rebuilding ELinks.
 
-   On Debian testing or unstable install the packages libsmjs1 and libsmjs-dev
+   On Debian testing or unstable, install the packages libsmjs1 and libsmjs-dev
    by running:
 
 	$ apt-get install libsmjs1 libsmjs-dev
@@ -61,7 +61,7 @@ Now, edit config.mk and adjust the $PREFIX variable - you probably won't like
 the default value - ELinks will find it there, but your dynamic linker likely
 won't.
 
-E.g. for /usr/local installation:
+E.g., for /usr/local installation:
 	$ sed 's#^PREFIX = /opt/spidermonkey#PREFIX = /usr/local#' < config.mk > config.mk.t
 	$ mv -f config.mk.t config.mk
 
@@ -78,7 +78,7 @@ Check for:
 
 If all went well, you can proceed to rebuild ELinks now. If something broke,
 see you on #elinks @ FreeNode or in the mailing list.
-You may add your options to ./configure as usual, spidermonkey should be
+You may add your options to ./configure as usual; SpiderMonkey should be
 autodetected.
 
 	$ cd ../..
@@ -103,7 +103,7 @@ it's not our fault we will tell you to go complain to Mozilla (better yet if
 it does not work in the Mozilla browsers neither ;-).
 
 
-		Now, I would still like njs or a new JS engine from scratch...
+		Now, I would still like NJS or a new JS engine from scratch...
 
 ...and you don't fear some coding? That's fine then! ELinks is in no way tied
 to SpiderMonkey, in fact the ECMAScript support was carefully implemented so
@@ -115,4 +115,4 @@ easy. We await your patches eagerly.
 
 
 
-$Id: ecmascript.txt,v 1.9 2005/01/03 06:02:09 miciah Exp $
+$Id: ecmascript.txt,v 1.10 2005/01/03 07:12:20 miciah Exp $

@@ -6,12 +6,12 @@ If you have some weird problems, you can't see what they come from, and you are
 running latest ELinks version, feel free to ask us!
 
 If you encountered some bug, BUGS file don't know about it, if ELinks crashed
-to you and you have latest version, core, backtrace etc, if you have even fixed
+to you and you have latest version, core, backtrace etc., if you have even fixed
 the bug and have a patch, feel free to let us know!
 
 If you have idea about some great feature missing from ELinks, if something in
 ELinks constantly irritates you, if you have even patch for any new feature and
-you think others would appreciate it, or even use it, or even we would like to
+you think others would appreciate it or even use it, or even we would like to
 include it in the mainstream ELinks, feel free to let us know!
 
 Remember, the things probably won't change magically. If you don't like
@@ -34,4 +34,4 @@ he'll split the stuff properly amongst himself and other developers >:).
 
 
 
-$Id: feedback.txt,v 1.3 2004/12/16 09:33:23 pasky Exp $
+$Id: feedback.txt,v 1.4 2005/01/03 07:12:20 miciah Exp $

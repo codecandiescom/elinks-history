@@ -1,3 +1,37 @@
+Wed Jan 30 15:16:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in, AUTHORS, dns.c:
+	
+	MacOS address resolution fix (Aldy Hernandez) (from 0.97pre2)
+
+Wed Jan 30 15:08:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, aclocal.m4, config.h.in, configure.in, Makefile.in,
+	configure, stamp-h.in, os_dep.c:
+	
+	Fix compile error when -lgpm works but gpm.h is not there (Mikulas
+	Patocka) (from 0.97pre2)
+
+Wed Jan 30 15:05:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* NEWS:
+	
+	Dummy NEWS to make automake happy
+
+Wed Jan 30 14:58:40 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, view.c:
+	
+	Fixed segfault when posting large form (Jacek Fedorynski) (from
+	0.97pre2)
+
+Wed Jan 30 14:48:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, entity.inc, Unicode/entities.lnx:
+	
+	Added &euro; symbol (Cliff Cunnington) (from 0.97pre2)
+
 Wed Jan 30 14:16:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:

@@ -1,4 +1,4 @@
-/* $Id: atrule.h,v 1.1 2003/01/19 20:25:21 jonas Exp $ */
+/* $Id: atrule.h,v 1.2 2003/01/20 00:57:50 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_ATRULE_H
 #define EL__USIVE_PARSER_CSS_ATRULE_H
@@ -23,33 +23,33 @@
  * they assume '@<atrule name>' has been skipped. The atrule state will be
  * replaced by a specialized atrule state. */
 enum pstate_code
-parse_atrule(struct parser_state *state, unsigned char **src, int *len);
+css_parse_atrule(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of @charset rules */
 enum pstate_code
-parse_charset(struct parser_state *state, unsigned char **src, int *len);
+css_parse_charset(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of @import rules */
 enum pstate_code
-parse_import(struct parser_state *state, unsigned char **src, int *len);
+css_parse_import(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of @media rules */
 enum pstate_code
-parse_media(struct parser_state *state, unsigned char **src, int *len);
+css_parse_media(struct parser_state *state, unsigned char **src, int *len);
 
 /* Mediatypes parsing */
 /* This is used by @import and @media so placed here */
 enum pstate_code
-parse_mediatypes(struct parser_state *state, unsigned char **src, int *len);
+css_parse_mediatypes(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of @page rules */
 /* Is currently just be skipped and ignored */
 enum pstate_code
-parse_page(struct parser_state *state, unsigned char **src, int *len);
+css_parse_page(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsin of @font-face rules */
 /* Is currently just be skipped and ignored */
 enum pstate_code
-parse_fontface(struct parser_state *state, unsigned char **src, int *len);
+css_parse_fontface(struct parser_state *state, unsigned char **src, int *len);
 
 #endif /* EL__USIVE_PARSER_CSS_ATRULE_H */

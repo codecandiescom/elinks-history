@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.1 2003/01/19 20:25:21 jonas Exp $ */
+/* $Id: scanner.h,v 1.2 2003/01/20 00:57:50 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_SCANNER_H
 #define EL__USIVE_PARSER_CSS_SCANNER_H
@@ -24,6 +24,7 @@ extern int css_scan_table[];
 /* Initialize the scanner table */
 void css_init_scan_table(void);
 
+
 /* Token scanners */
 /* Generates tokens and passes them by modifying the given pointer to pointers
  * in the parser state. Failures will be signaled by setting
@@ -34,60 +35,55 @@ void css_init_scan_table(void);
 
 /* Scanning of identifiers */
 enum pstate_code
-scan_ident(struct parser_state *, unsigned char **src, int *len);
+css_scan_ident(struct parser_state *, unsigned char **src, int *len);
 
 /* Scanning of names */
 enum pstate_code
-scan_name(struct parser_state *state, unsigned char **src, int *len);
+css_scan_name(struct parser_state *state, unsigned char **src, int *len);
 
 /* String scanning */
-/* The generated token will have the string delimiters omitted */
+/* The generated token will not include the string delimiters. */
 enum pstate_code
-scan_string(struct parser_state *state, unsigned char **src, int *len);
+css_scan_string(struct parser_state *state, unsigned char **src, int *len);
 
 /* Scanning of url functions */
+/* The generated token will only contain the url. */
 enum pstate_code
-scan_url(struct parser_state *state, unsigned char **src, int *len);
+css_scan_url(struct parser_state *state, unsigned char **src, int *len);
 
 /* Scanning of escape sequences */
 enum pstate_code
-scan_escape(struct parser_state *state, unsigned char **src, int *len);
+css_scan_escape(struct parser_state *state, unsigned char **src, int *len);
 
 /* Scanning of unicoderanges */
 enum pstate_code
-scan_unicoderange(struct parser_state *state, unsigned char **src, int *len);
+css_scan_unicoderange(struct parser_state *state, unsigned char **src, int *len);
 
 /* Scanning of hexcolors */
 enum pstate_code
-scan_hexcolor(struct parser_state *state, unsigned char **src, int *len);
-
-/* Non-token scanners */
-
-/* Scans a sequence of whitespace any where in the document */
-enum pstate_code
-scan_whitespace(struct parser_state *state, unsigned char **src, int *len);
-
-/* Scanning of comments */
-enum pstate_code
-scan_comment(struct parser_state *state, unsigned char **src, int *len);
+css_scan_hexcolor(struct parser_state *state, unsigned char **src, int *len);
 
 
 /* Code skipping scanners */
 /* Primary usage is for recovering or ignoring code snippets. */
 
+/* Scanning of comments */
+enum pstate_code
+css_scan_comment(struct parser_state *state, unsigned char **src, int *len);
+
 /* Scanner for skipping blocks of css declarations. Expect that the begining '{' is
  * at the first position. */
 enum pstate_code
-scan_skipblock(struct parser_state *, unsigned char **, int *len);
+css_scan_skipblock(struct parser_state *, unsigned char **, int *len);
 
 /* Scanner for multiplexing between skipping a block and up till next ';'. What
  * ever comes first. */
 enum pstate_code
-scan_skip(struct parser_state *, unsigned char **, int *len);
+css_scan_skip(struct parser_state *, unsigned char **, int *len);
 
 /* Macros for skipping tokens. XXX: Engineered for loops. */
 
-#define SKIP_WHITESPACE(source, length) \
+#define CSS_SKIP_WHITESPACE(source, length) \
 	if (css_scan_table[*source] & IS_WHITESPACE) { \
 		do { \
 			source++; length--; \
@@ -95,7 +91,7 @@ scan_skip(struct parser_state *, unsigned char **, int *len);
 		continue; \
 	}
 
-#define SKIP_COMMENT(parserstate, sourceptr, lengthptr, source, length) \
+#define CSS_SKIP_COMMENT(parserstate, sourceptr, lengthptr, source, length) \
 	if (*source == '/') { \
 		if (length < 2) return PSTATE_SUSPEND; \
 		if (*(source+1) == '*') { \

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.83 2003/10/29 19:17:58 jonas Exp $ */
+/* $Id: search.c,v 1.84 2003/10/29 19:30:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ sort_srch(struct document *document)
 static int
 get_srch(struct document *document)
 {
-	struct node *n;
+	struct node *node;
 	int cnt = 0;
 	int cc;
 
@@ -140,10 +140,9 @@ get_srch(struct document *document)
 
 	cc = !document->search;
 
-	foreachback (n, document->nodes) {
+	foreachback (node, document->nodes) {
 		register int x, y;
-		int xm = n->x + n->width;
-		int ym = n->y + n->height;
+		int height = int_min(node->y + node->height, document->height);
 
 #if 0
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
@@ -154,10 +153,12 @@ get_srch(struct document *document)
 	else cnt++; \
 } while (0)
 
-		for (y = n->y; y < ym && y < document->height; y++) {
+		for (y = node->y; y < height; y++) {
+			int width = int_min(node->x + node->width,
+					    document->data[y].l);
 			int ns = 1;
 
-			for (x = n->x; x < xm && x < document->data[y].l; x++) {
+			for (x = node->x; x < width; x++) {
 				unsigned char c = document->data[y].d[x].data;
 
 				if (c < ' ') c = ' ';
@@ -175,9 +176,7 @@ get_srch(struct document *document)
 					int xx;
 					int found = 0;
 
-					for (xx = x + 1;
-					     xx < xm && xx < document->data[y].l;
-					     xx++) {
+					for (xx = x + 1; xx < width; xx++) {
 						if (document->data[y].d[xx].data >= ' ') {
 							found = 1;
 							break;

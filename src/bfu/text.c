@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.23 2003/11/06 01:59:24 jonas Exp $ */
+/* $Id: text.c,v 1.24 2003/11/06 02:38:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,8 @@ text_width(struct terminal *term, register unsigned char *text,
 	} while (*(text++));
 }
 
+#define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
+
 /* Format text according to dialog dimensions and alignment. */
 /* TODO: Longer names for local variables. */
 void
@@ -57,7 +59,7 @@ dlg_format_text(struct terminal *term,
 		int line_width;
 
 		do {
-			while (*split && *split != '\n' && *split != ' ') {
+			while (is_unsplitable(split)) {
 				split++;
 			       	line_x++;
 			}
@@ -67,7 +69,7 @@ dlg_format_text(struct terminal *term,
 			line_x++;
 			if (*(split - 1) != ' ') break;
 
-			while (*tx && *tx != '\n' && *tx != ' ')
+			while (is_unsplitable(tx))
 				tx++;
 		} while (tx - split < w - line_width);
 

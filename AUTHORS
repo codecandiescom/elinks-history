@@ -382,6 +382,9 @@ Suveg Gabor <gsuveg@sgmobil2000.hu>
 Taniel Kirikal <taniel@colleduc.ee>
 	Estonian translation
 
+Tom Lear <tom@trap.mtview.ca.us>
+	Transparency support
+
 Uwe Hermann <uh1763@bingo-ev.de>
 	Manpage
 	Command line switch -version
@@ -414,4 +417,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.107 2002/12/19 15:35:45 pasky Exp $
+$Id: AUTHORS,v 1.108 2002/12/20 23:31:47 pasky Exp $

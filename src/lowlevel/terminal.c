@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.39 2002/12/17 12:38:35 zas Exp $ */
+/* $Id: terminal.c,v 1.40 2002/12/20 23:31:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,7 +710,7 @@ static unsigned char frame_restrict[48] = {
 
 /* TODO: We should provide some generic mechanism for options caching. */
 struct rs_opt_cache {
-	int type, m11_hack, utf_8_io, colors, charset, restrict_852, cp437, koi8r;
+	int type, m11_hack, utf_8_io, colors, charset, restrict_852, cp437, koi8r, trans;
 };
 
 static inline void
@@ -768,7 +768,8 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 			add_to_str(a, l, m);
 			m[1] = '4';
 			m[2] = (*attrib >> 3 & 7) + '0';
-			add_to_str(a, l, m);
+			if (!opt_cache->trans || m[2] != '0')
+				add_to_str(a, l, m);
 		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7))
 			add_to_str(a, l, ";7");
 		if (*attrib & 0100) add_to_str(a, l, ";1");
@@ -842,6 +843,7 @@ redraw_screen(struct terminal *term)
 	opt_cache.colors = get_opt_bool_tree(term->spec, "colors");
 	opt_cache.charset = get_opt_int_tree(term->spec, "charset");
 	opt_cache.restrict_852 = get_opt_bool_tree(term->spec, "restrict_852");
+	opt_cache.trans = get_opt_bool_tree(term->spec, "transparency");
 	/* Cache these values as they don't change and
 	 * get_cp_index() is pretty CPU-intensive. */
 	opt_cache.cp437 = get_cp_index("cp437");

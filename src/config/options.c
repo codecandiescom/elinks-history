@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.163 2002/12/20 23:11:20 pasky Exp $ */
+/* $Id: options.c,v 1.164 2002/12/20 23:31:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1487,6 +1487,14 @@ register_options()
 	add_opt_bool("terminal._template_", "Use colors",
 		"colors", 0, 0,
 		"If we should use colors.");
+
+	add_opt_bool("terminal._template_", "Enable transparency",
+		"transparency", 0, 1,
+		"If we should not set the background to black. This is particularly\n"
+		"useful when we have a terminal (typically in some windowing\n"
+		"environment) with a background image or a transparent background -\n"
+		"it will be visible in ELinks as well. Note that this option makes\n"
+		"sense only when colors are enabled.");
 
 	add_opt_codepage("terminal._template_", "Codepage",
 		"charset", 0, get_cp_index("us-ascii"),

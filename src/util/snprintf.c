@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.16 2003/06/07 10:34:14 pasky Exp $ */
+/* $Id: snprintf.c,v 1.17 2003/06/07 10:57:33 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -477,7 +477,7 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 	int signvalue = 0;
 	unsigned long uvalue;
 	char convert[20];
-	char *numbers = &hexnumbers;
+	char *numbers = (char *) &hexnumbers;
 	int place = 0;
 	int spadlen = 0; /* amount to space pad */
 	int zpadlen = 0; /* amount to zero pad */
@@ -501,7 +501,7 @@ fmtint(char *buffer, size_t *currlen, size_t maxlen,
 
 	if (flags & DP_F_UP) {
 		 /* Should characters be upper case? */
-		numbers = &HEXnumbers;
+		numbers = (char *) &HEXnumbers;
 	}
 
 	do {
@@ -634,7 +634,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 	double ufvalue;
 	char iconvert[311];
 	char fconvert[311];
-	char *numbers = &hexnumbers;
+	char *numbers = (char *) &hexnumbers;
 	int iplace = 0;
 	int fplace = 0;
 	int padlen = 0; /* amount to pad */
@@ -668,7 +668,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 #if 0
 	if (flags & DP_F_UP) {
 		caps = 1; /* Should characters be upper case? */
-		numbers = &HEXnumbers;
+		numbers = (char *) &HEXnumbers;
 	}
 #endif
 

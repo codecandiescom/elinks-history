@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.15 2003/08/23 03:31:43 jonas Exp $ */
+/* $Id: textarea.c,v 1.16 2003/09/17 00:02:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,9 @@ struct line_info {
 	unsigned char *en;
 };
 
+#define realloc_line_info(info, size) \
+	mem_align_alloc(info, size, (size) + 1, sizeof(struct line_info), 0xFF)
+
 static struct line_info *
 format_text(unsigned char *text, int width, int wrap)
 {
@@ -54,17 +57,11 @@ format_text(unsigned char *text, int width, int wrap)
 			sk = 1;
 
 put:
-			if (!(lnn & (ALLOC_GR - 1))) {
-				struct line_info *_ln = mem_realloc(ln,
-						        (lnn + ALLOC_GR)
-							* sizeof(struct line_info));
-
-				if (!_ln) {
-					if (ln) mem_free(ln);
-					return NULL;
-				}
-				ln = _ln;
+			if (!realloc_line_info(&ln, lnn)) {
+				if (ln) mem_free(ln);
+				return NULL;
 			}
+
 			ln[lnn].st = b;
 			ln[lnn++].en = text;
 			b = text += sk;

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.45 2004/01/26 21:54:15 jonas Exp $ */
+/* $Id: apply.c,v 1.46 2004/01/26 23:00:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,11 +101,11 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		struct css_selector *selector = NULL;
 
 		if (!list_empty(css->selectors))
-			selector = get_css_selector(css, element->name,
+			selector = find_css_selector(css, element->name,
 						    element->namelen);
 
 		if (!selector && !list_empty(default_stylesheet.selectors))
-			selector = get_css_selector(&default_stylesheet,
+			selector = find_css_selector(&default_stylesheet,
 						    element->name,
 						    element->namelen);
 

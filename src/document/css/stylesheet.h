@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.8 2004/01/26 22:57:44 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.9 2004/01/26 23:00:15 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -70,7 +70,7 @@ struct css_stylesheet {
 
 /* Returns a new freshly made selector adding it to the given stylesheet or NULL. */
 struct css_selector *
-init_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
+get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
 
 /* Releases all the content of the stylesheet. */
 void done_css_stylesheet(struct css_stylesheet *css);
@@ -78,6 +78,6 @@ void done_css_stylesheet(struct css_stylesheet *css);
 /* Looks up the selector with the name @name and length @namelen in the
  * stylesheet @css. */
 struct css_selector *
-get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
+find_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
 
 #endif

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.16 2003/06/20 15:37:38 jonas Exp $ */
+/* $Id: encoding.c,v 1.17 2003/06/20 15:55:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ struct decoding_handlers {
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
 	void (*close)(struct stream_encoded *stream);
-	unsigned char **(*listext)(void);
+	unsigned char *extensions[];
 };
 
 
@@ -70,16 +70,11 @@ dummy_close(struct stream_encoded *stream)
 	mem_free(stream->data);
 }
 
-static unsigned char **dummy_listext(void)
-{
-	return NULL;
-}
-
 static struct decoding_handlers dummy_handlers = {
 	dummy_open,
 	dummy_read,
 	dummy_close,
-	dummy_listext,
+	{ NULL },
 };
 
 
@@ -110,20 +105,11 @@ gzip_close(struct stream_encoded *stream)
 	gzclose((gzFile *) stream->data);
 }
 
-static unsigned char **
-gzip_listext(void)
-{
-	static unsigned char *ext[] = { ".gz", ".tgz", NULL};
-
-	return ext;
-}
-
-
 static struct decoding_handlers gzip_handlers = {
 	gzip_open,
 	gzip_read,
 	gzip_close,
-	gzip_listext,
+	{ ".gz", ".tgz", NULL },
 };
 
 #endif
@@ -197,19 +183,11 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
-static unsigned char **
-bzip2_listext(void)
-{
-	static unsigned char *ext[] = { ".bz2", NULL};
-
-	return ext;
-}
-
 static struct decoding_handlers bzip2_handlers = {
 	bzip2_open,
 	bzip2_read,
 	bzip2_close,
-	bzip2_listext,
+	{ ".bz2", NULL },
 };
 
 #endif
@@ -279,7 +257,7 @@ close_encoded(struct stream_encoded *stream)
 /* Return a list of extensions associated with that encoding. */
 unsigned char **listext_encoded(enum stream_encoding encoding)
 {
-	return handlers[encoding]->listext();
+	return handlers[encoding]->extensions;
 }
 
 enum stream_encoding

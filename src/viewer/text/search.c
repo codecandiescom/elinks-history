@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.46 2003/10/07 12:04:54 pasky Exp $ */
+/* $Id: search.c,v 1.47 2003/10/07 16:49:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1061,7 +1061,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	hop->cases = get_opt_int("document.browse.search.case");
 	hop->data = data;
 
-#define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct widget))
+#define SIZEOF_DIALOG (sizeof(struct dialog) + 9 * sizeof(struct widget))
 
 	dlg = mem_calloc(1, SIZEOF_DIALOG + l);
 	if (!dlg) {

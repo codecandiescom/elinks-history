@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.22 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: view.c,v 1.23 2003/04/24 08:52:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,12 +62,12 @@
 void
 init_formatted(struct f_data *scr)
 {
-	memset(((struct f_data **)scr) + 2, 0,
-	       sizeof(struct f_data) - 2 * sizeof(struct f_data *));
+	struct list_head tmp;
 
-	scr->data = NULL;
-	scr->nlinks = 0;
-	scr->links = NULL;
+	memcpy(&tmp, (struct f_data **)scr, sizeof(struct list_head));
+	memset(((struct f_data **)scr), 0, sizeof(struct f_data));
+	memcpy((struct f_data **)scr, &tmp, sizeof(struct list_head));
+
        	init_list(scr->forms);
 	init_list(scr->tags);
 	init_list(scr->nodes);

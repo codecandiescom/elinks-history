@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.12 2003/09/12 23:37:16 zas Exp $ */
+/* $Id: vs.c,v 1.13 2003/09/12 23:41:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ copy_vs(struct view_state *dst, struct view_state *src)
 	assert(dst->url_len >= src->url_len);
 	if_assert_failed return;
 
-	memcpy(dst->url, src->url, src->url_len);
+	memcpy(dst->url, src->url, src->url_len + 1);
 
 	dst->goto_position = src->goto_position ?
 			     stracpy(src->goto_position) : NULL;

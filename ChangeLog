@@ -1,3 +1,41 @@
+Thu Dec 19 15:35:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, contrib/elinks.spec.in:
+
+	Updated RPM's contrib/elinks.spec (fixed documentation including),
+	patch by Bennett Todd <bet@rahul.net>.  
+
+Thu Dec 19 15:33:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Move the cursor to the active listbox item; makes things much easier
+	for blind users, idea by Dave Mielke <dave@mielke.cc>.  
+
+Thu Dec 19 12:17:26 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c, intl/brazilian_portuguese.lng,
+	intl/bulgarian.lng, intl/catalan.lng, intl/croatian.lng,
+	intl/czech.lng, intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/dialogs.c:
+
+	Ignore OPT_ALIAS when traversing a tree when writing stuff (I mean,
+	configuration ;) to disk. Fixes "set config_saving_style = " bug
+	reported by Jonas.  
+
+Thu Dec 19 09:36:59 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* intl/danish.lng:
+
+	Translation for new keybinding and option manager messages.  
+
 Wed Dec 18 22:54:07 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

@@ -138,10 +138,9 @@ AC_DEFUN([EL_ARG_DEPEND],
 	AC_MSG_CHECKING([for $4])
 	if test "x[$]$1" = xyes; then
 		# require all dependencies to be met
-		changequote(, )
 		for dependency in $3; do
-			el_name=`echo "$dependency" | sed 's/=[-_a-zA-Z0-9]*//'`;
-			el_arg=`echo "$dependency" | sed 's/[-_a-zA-Z0-9]*=//'`;
+			el_name=`echo "$dependency" | sed 's/=.*//'`;
+			el_arg=`echo "$dependency" | sed 's/.*=//'`;
 			# Hope this is portable?!? --jonas
 			eval el_value=$`echo $el_name`;
 
@@ -150,7 +149,6 @@ AC_DEFUN([EL_ARG_DEPEND],
 				break;
 			fi
 		done
-		changequote([, ])
 
 		if test "[$]ENABLE_$1" = yes; then
 			EL_CONFIG($1, [$4])

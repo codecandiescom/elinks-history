@@ -1,3 +1,208 @@
+Wed Dec 11 22:50:13 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/protocol/url.c:
+
+	Dummy handler for javascript protocol (pops up msgbox with error).  
+
+Wed Dec 11 22:14:55 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* TODO:
+
+	Removed few items, added one other. Just update.  
+
+Wed Dec 11 22:11:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Bold notice about no nationals char support in current XBEL
+	implementation.  
+
+Wed Dec 11 22:11:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Removed some mess ;-).  
+
+Wed Dec 11 22:09:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Fixed diacritics weirdness with XBEL bookmarks - at least partially,
+	we convert it to 7bit ASCII now; this will need to be fixed more
+	properly, but that'll need work. Fix crash in XBEL bookmarks if
+	there was no title along a bookmark. Patches from Fabio's works.  
+
+Wed Dec 11 22:05:06 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	Compilation fix.  
+
+Wed Dec 11 22:02:38 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Always consider OPT_LANGUAGE as touched.  
+
+Wed Dec 11 22:01:35 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	Set OPT_TOUCHED when changing charset as well.  
+
+Wed Dec 11 21:54:01 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, config/options.c, document/session.c:
+
+	Support for saving only the options which were actually changed
+	(added value 3 to config.saving_style).  
+
+Wed Dec 11 21:09:49 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Call change_hooks when an option was changed in options manager.
+	This fixes various possible weirdness when changing ie. HTML options
+	or connection options.  
+
+Wed Dec 11 20:44:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	XBEL fixes - now we can read own bookmarks file after ourselves even
+	when we had diacritics in it. More verbose error reporting, fixed
+	huge memleaks when there was a parse error in the file. Patch by
+	Fabio.  
+
+Wed Dec 11 20:29:05 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/italian.lng:
+
+	Italian translation update, patch by Fabio.  
+
+Wed Dec 11 20:28:31 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Introduced option.change_hook which assures essential stuff updates
+	when an option changes. Also added some of these hooks (moved from
+	dialog/options.c), but their calling is not yet implemented.  
+
+Wed Dec 11 15:21:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/: options.c, options.h:
+
+	Removed functions caring about specific setup dialogs (except
+	terminal options). We will ahve to add some change_hook to struct
+	option * and add certain operations there which should be trigerred
+	by changing stuff in options manager. So changing network, cache and
+	html options by now can _maybe_ result in a little ... weirdness
+	;-). Will be fixed soon.  
+
+Wed Dec 11 15:10:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Removed HTML options traces.  
+
+Wed Dec 11 15:06:46 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Removed network options, cache options and mail/telnet options menu
+	items from the options menu, added option manager menu item (HK
+	provisorium ;).  
+
+Wed Dec 11 14:52:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Oops - one more config_saving_style -> config.saving_style, this one
+	was actually fatal.  
+
+Wed Dec 11 14:49:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	config_saving_style -> config.saving_style 
+
+Wed Dec 11 14:48:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, options.c:
+
+	Added config.comments, controlling which comments are written to the
+	configuration file automagically.  
+
+Wed Dec 11 14:39:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/: common.c, common.h, default.c, xbel.c:
+
+	Added filename bookmarks backend hook returning filename appropriate
+	for given backend. Don't try to open file with XBEL bookmarks for
+	writing if we didn't read XBEL bookmarks without problems.  
+
+Wed Dec 11 14:38:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Make the summary more brief, remove some too specific and useless
+	items, attempt to update to the latest state of things.  
+
+Wed Dec 11 13:53:28 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/mailcap.html:
+
+	Added note about disabling mailcap support. Changed navigation to
+	use id in h2 tags. Changed samples to be more sane.  
+
+Wed Dec 11 13:20:58 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Fixed problem with XBEL bookmarks saving when they were loaded by
+	some other backend. I still recommend backing up your bookmarks
+	before playing with this, though ;-).  
+
+Wed Dec 11 13:18:14 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/backend/common.c, config/options.c:
+
+	Added bookmarks.file_format option, allowing you to choose between
+	normal and XBEL bookmarks file format. Note that XBEL ate my
+	bookmarks right now, I'll notify you in a commit message when this
+	will be fixed.  
+
+Tue Dec 10 23:23:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/download.c, protocol/mailcap.c:
+
+	Mailcap handler showing fix and useless check in mailcap code
+	removed. Patch from Jonas' workshop.  
+
+Tue Dec 10 23:15:47 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Try to fix compilation w/o XBEL stuff even more.  
+
+Tue Dec 10 23:13:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, options.c:
+
+	On the popular request (Jose, witekfl) introduced config.indentation
+	specifying indentation level when saving configuration file, by
+	default 2.  
+
 Tue Dec 10 23:02:52 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/bookmarks/backend/xbel.c:

@@ -706,6 +706,11 @@ ALL_LINGUAS="be bg ca cs da de el es et fi fr gl hr hu id is it leet lt nl no pl
 
 AM_GNU_GETTEXT
 
+AC_MSG_CHECKING([how many characters your English alphabet has])
+# f33r d4 l33t... I hope it's portable. :)
+cf_result=$((48#z - 48#a + 1));
+AC_MSG_RESULT($cf_result)
+
 
 dnl ===================================================================
 dnl Compile-time features control

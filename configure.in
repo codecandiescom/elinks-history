@@ -939,6 +939,7 @@ AC_OUTPUT([ \
  src/bfu/Makefile \
  src/bookmarks/Makefile \
  src/bookmarks/backend/Makefile \
+ src/cache/Makefile \
  src/config/Makefile \
  src/cookies/Makefile \
  src/dialogs/Makefile \

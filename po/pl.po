@@ -1076,7 +1076,7 @@ msgstr ""
 "Czas ¿ycia ciasteczka (w dniach):\n"
 "-1 - u¿yj daty przedawnienia ciasteczka, je¶li podana\n"
 " 0 - ciasteczko wa¿ne do koñca sesji\n"
-"1+ - u¿yj daty przedawnienia ciasteczka, ograniczaj±c czas ¿yciado podanej "
+"1+ - u¿yj daty przedawnienia ciasteczka, ograniczaj±c czas ¿ycia do podanej "
 "liczby dni"
 
 #: src/config/options.c:1026
@@ -1951,12 +1951,12 @@ msgid ""
 "5 everything"
 msgstr ""
 "Gadatliwo¶æ renderowania odno¶nika:\n"
-"0 ¿adna\n"
-"1 tytu³\n"
-"2 dodatkowo nazwa\n"
-"3 dodatkowo hreflang\n"
-"4 dodatkowo typ\n"
-"5 wszystko"
+"0 - ¿adna\n"
+"1 - tytu³\n"
+"2 - dodatkowo nazwa\n"
+"3 - dodatkowo hreflang\n"
+"4 - dodatkowo typ\n"
+"5 - wszystko"
 
 #: src/config/options.c:1404
 msgid "MIME"
@@ -2125,8 +2125,8 @@ msgid ""
 "1 is show program to be run.\n"
 "2 is show mailcap description field if any; \"mailcap\" otherwise."
 msgstr ""
-"Typ opisu do wy¶wietlenia w  \"co zrobiæ z tym plikiem\"\n"
-"okno dialogowe zapytania:\n"
+"Typ opisu do wy¶wietlenia w oknie dialogowym \"co zrobiæ\n"
+"z tym plikiem\":\n"
 "0 - wy¶wietla \"mailcap\".\n"
 "1 - wy¶wietla program, który ma byæ uruchomiony.\n"
 "2 - wy¶wietla opis pola mailcap, je¶li istnieje; \"mailcap\" w przeciwnym\n"
@@ -2227,8 +2227,8 @@ msgid ""
 "If they will do strange things to you, try to play with this."
 msgstr ""
 "B³êdne przekierowanie 302 (narusza RFC, ale jest kompatybilne z Netscapem).\n"
-"Jest to problem wielu webowych forum dyskusyjnych. Je¶li sprawiaj± problemy,"
-"spróbuj ustawiæ to."
+"Jest to problem wielu webowych forum dyskusyjnych. Je¶li sprawiaj± problemy,\n"
+"spróbuj to ustawiæ."
 
 #: src/config/options.c:1549
 msgid "No keepalive after POST requests"
@@ -2265,7 +2265,7 @@ msgid ""
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
 "Host i numer portu (host:port) serwera proxy HTTP, lub puste.\n"
-"Je¶li puste, zmienna ¶rodowiskowa HTTP_PROXY jest sprawdzana."
+"Je¶li puste sprawdzana jest zmienna ¶rodowiskowa HTTP_PROXY."
 
 #
 #: src/config/options.c:1566
@@ -2400,7 +2400,7 @@ msgid ""
 "If it's blank, FTP_PROXY environment variable is checked as well."
 msgstr ""
 "Host i numer portu (host:port) serwera proxy FTP, albo puste.\n"
-"Je¶li puste, zmienna ¶rodowiskowa FTP_PROXY jest sprawdzana."
+"Je¶li puste sprawdzana jest zmienna ¶rodowiskowa FTP_PROXY."
 
 #: src/config/options.c:1636
 msgid "Anonymous password"
@@ -2472,7 +2472,7 @@ msgstr ""
 
 #: src/config/options.c:1671
 msgid "Show hidden files in directory listing"
-msgstr "Pokazuj ukryty pliki przy wy¶wietlaniu katalogów"
+msgstr "Pokazuj ukryte pliki przy wy¶wietlaniu katalogów"
 
 #: src/config/options.c:1673
 msgid ""
@@ -2480,9 +2480,9 @@ msgid ""
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
-"Czy pokazywaæ ukryty pliki przy wy¶wietlaniu katalogów ?\n"
+"Czy pokazywaæ ukryte pliki przy wy¶wietlaniu katalogów ?\n"
 "Je¶li ustawione na 0, pliki zaczynaj±ce siê od kropki nie bêd±\n"
-"pokzywane."
+"pokazywane."
 
 #
 #: src/config/options.c:1678
@@ -2580,7 +2580,7 @@ msgid ""
 msgstr ""
 "Lista domen oddzielona przecinkami, dla których proxy (HTTP/FTP)\n"
 "powinno byæ wy³±czone. Opcjonalnie mo¿na podawaæ numer portu\n"
-"dla domen. Gdy puste zmienna ¶rodowiskowa NO_PROXY jest sprawdzana."
+"dla domen. Gdy puste sprawdzana jest zmienna ¶rodowiskowa NO_PROXY."
 
 #
 #: src/config/options.c:1746
@@ -2681,7 +2681,7 @@ msgstr "Czy powinno siê u¿ywaæ kolorów."
 #
 #: src/config/options.c:1790
 msgid "Enable transparency"
-msgstr "Pzezroczysto¶æ"
+msgstr "Przezroczysto¶æ"
 
 #: src/config/options.c:1792
 msgid ""
@@ -2691,7 +2691,7 @@ msgid ""
 "it will be visible in ELinks as well. Note that this option makes\n"
 "sense only when colors are enabled."
 msgstr ""
-"Czy nie ustawiaæ t³a na czarno. To jest szczególnie u¿yteczne, gdy\n"
+"Czy powinni¶my nie ustawiaæ t³a na czarno?. To jest szczególnie u¿yteczne, gdy\n"
 "mamy terminal (zwykle w ¶rodowisku okienkowym) z obrazkiem w tle\n"
 "lub przezroczystym t³em - bêdzie to widoczne tak¿e w ELinksie.\n"
 "Wiedz, ¿e to ustawienie ma sens jedynie, gdy u¿ywanie kolorów jest\n"

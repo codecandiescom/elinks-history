@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.264 2004/06/26 23:06:35 pasky Exp $ */
+/* $Id: link.c,v 1.265 2004/06/26 23:09:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -537,8 +537,14 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 			if (!link) continue;
 
 			/* Go through all the links on line. */
-			while (link <= document->lines2[y]) {
+			for (; link <= document->lines2[y]; link++) {
 				int l_max_x;
+
+				/* Some links can be totally out of order here,
+				 * ie. in tables or when using tabindex. */
+				if (y < link->points[0].y
+				    || y > link->points[link->npoints - 1].y)
+					continue;
 
 				/* XXX: This (I think) could be rewritten by
 				 * only using get_link_x_bounds() and avoiding
@@ -550,18 +556,12 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 					goto chose_link;
 
 				/* Consider taking a backup? */
-				/* Some links can be totally out of order here
-				 * ie. in tables or when using tabindex. */
-				if (y >= link->points[0].y
-				    && y <= link->points[link->npoints - 1].y) {
-					get_link_x_bounds(link, y, NULL,
-					                  &l_max_x);
-					take_backup = l_max_x < min_x;
-					if (take_backup || !backup)
-						backup = link;
-				}
 
-				link++;
+				get_link_x_bounds(link, y, NULL,
+				                  &l_max_x);
+				take_backup = l_max_x < min_x;
+				if (take_backup || !backup)
+					backup = link;
 			}
 
 			if (backup) {

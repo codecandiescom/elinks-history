@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.1 2004/11/14 14:17:18 witekfl Exp $ */
+/* $Id: digest.c,v 1.2 2004/11/14 15:18:30 witekfl Exp $ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -22,7 +22,7 @@
 static unsigned char *
 convert_hex(unsigned char *bin, int len)
 {
-	int i = 16;
+	int i;
 	unsigned char *hex = mem_calloc(1, len * 2 + 1);
 
 	if (!hex) return NULL;
@@ -47,9 +47,10 @@ convert_hex(unsigned char *bin, int len)
 unsigned char *
 random_cnonce(void)
 {
+	int r;
 	srand(time(0));
 
-	int r = rand();
+	r = rand();
 	return convert_hex((unsigned char *)&r, sizeof(r));
 }
 
@@ -99,23 +100,5 @@ digest_calc_response(struct http_auth_basic *entry, unsigned char *ha1,
 	MD5_Final(Ha2, &MD5Ctx);
 	mem_free_if(Ha2_hex);
 	return convert_hex(Ha2, 16); 
-}
-#else
-unsigned char *
-random_cnonce(void)
-{
-	return NULL;
-}
-
-unsigned char *
-digest_calc_ha1(struct http_auth_basic *, unsigned char *)
-{
-	return NULL;
-}
-
-unsigned char *
-digest_calc_response(struct http_auth_basic *, unsigned char *, unsigned char *)
-{
-	return NULL;
 }
 #endif

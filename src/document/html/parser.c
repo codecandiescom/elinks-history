@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.385 2004/03/13 17:57:04 pasky Exp $ */
+/* $Id: parser.c,v 1.386 2004/04/13 15:59:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -545,7 +545,7 @@ put_chrs(unsigned char *start, int len,
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
 	if (putsp == -1) {
-		if (start[0] == ' ') start++, len--;
+		if (isspace(start[0])) start++, len--;
 		putsp = 0;
 	}
 	if (!len) {
@@ -553,7 +553,7 @@ put_chrs(unsigned char *start, int len,
 		if (par_format.align == AL_NONE) putsp = 0;
 		return;
 	}
-	if (start[len - 1] == ' ') putsp = -1;
+	if (isspace(start[len - 1])) putsp = -1;
 	if (par_format.align == AL_NONE) putsp = 0;
 	was_br = 0;
 	put_chars(f, start, len);
@@ -2970,7 +2970,7 @@ set_lt:
 			}
 			html++;
 			if (!(position + (html - lt - 1))) goto skip_w; /* ??? */
-			if (*(html - 1) == ' ') {
+			if (isspace(*(html - 1))) {
 				/* BIG performance win; not sure if it doesn't cause any bug */
 				if (html < eof && !isspace(*html)) continue;
 				put_chrs(lt, html - lt, put_chars_f, f);

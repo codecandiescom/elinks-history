@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.197 2005/03/05 20:46:47 zas Exp $ */
+/* $Id: dialogs.c,v 1.198 2005/03/18 14:39:06 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -445,9 +445,9 @@ static struct hierbox_browser_button bookmark_buttons[] = {
 	{ N_("Goto"),		push_hierbox_goto_button,	1 },
 	{ N_("Edit"),		push_edit_button,		0 },
 	{ N_("Delete"),		push_hierbox_delete_button,	0 },
-	{ N_("Move"),		push_move_button,		0 },
-	{ N_("Add folder"),	push_add_folder_button,		0 },
 	{ N_("Add"),		push_add_button,		0 },
+	{ N_("Add folder"),	push_add_folder_button,		0 },
+	{ N_("Move"),		push_move_button,		0 },
 	{ N_("Search"),		push_search_button,		1 },
 	{ N_("Clear"),		push_hierbox_clear_button,	0 },
 #if 0

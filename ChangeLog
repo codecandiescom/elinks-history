@@ -1,3 +1,63 @@
+Fri Jan 28 19:00:16 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Add a little help text to the terminal options dialog, which also
+	indicates the value of the TERM environment variable. Idea by
+	Miciah.  
+
+Fri Jan 28 14:56:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Fix the root of bug 613. Don't mirror the default stylesheet if CSS
+	is disabled.  
+
+Fri Jan 28 14:45:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/forms.c:
+
+	get_form_control_link() Miciah is so smart. Return if FC_HIDDEN.  
+
+Fri Jan 28 14:40:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Eureka, bug 613 CSS leak fixed.  
+
+Fri Jan 28 14:19:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/user.css:
+
+	Add Id tag.  
+
+Fri Jan 28 14:10:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	When the first form is added make sure it takes up the whole form
+	(offset) range. Fixes bug 613.  
+
+Fri Jan 28 13:13:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/forms.c:
+
+	Hidden form fields are not attached to links. Fixes bug 614.  
+
+Fri Jan 28 12:50:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Fix underline rendering when using 256 colors. Now, the char
+	'outputter' is more similar to the one used for 16 colors. Hmm, this
+	has only bugged the last year or so.  
+
+Fri Jan 28 01:46:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Fixes from Morten.  
+
 Wed Jan 26 22:36:01 2005  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

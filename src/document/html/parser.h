@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.24 2003/07/04 09:39:32 zas Exp $ */
+/* $Id: parser.h,v 1.25 2003/07/22 01:52:59 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -206,7 +206,7 @@ unsigned char *skip_comment(unsigned char *, unsigned char *);
 
 int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned char *a, struct menu_item **, struct memory_list **, unsigned char *, unsigned char *, int, int, int);
 
-void scan_http_equiv(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **);
+void scan_http_equiv(unsigned char *, unsigned char *, struct string *, struct string *);
 
 void parse_html(unsigned char *, unsigned char *, void (*)(void *, unsigned char *, int), void (*)(void *), void (*)(void *), void *(*)(void *, int, ...), void *, unsigned char *);
 

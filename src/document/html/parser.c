@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.160 2003/07/22 01:37:57 jonas Exp $ */
+/* $Id: parser.c,v 1.161 2003/07/22 01:52:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2998,7 +2998,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	if (!init_string(&hd)) return -1;
 
 	if (head) add_to_string(&hd, head);
-	scan_http_equiv(pos, eof, &hd.source, &hd.length, NULL);
+	scan_http_equiv(pos, eof, &hd, NULL);
 	ct = get_convert_table(hd.source, to, def, NULL, NULL, hdef);
 	done_string(&hd);
 
@@ -3209,19 +3209,16 @@ look_for_tag:
 }
 
 void
-scan_http_equiv(unsigned char *s, unsigned char *eof, unsigned char **head,
-		int *hdl, unsigned char **title)
+scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head,
+		struct string *title)
 {
 	unsigned char *name, *attr, *he, *c;
 	int namelen;
-	int tlen = 0;
 	int h = 0;
 
-	if (title) {
-		*title = init_str();
-		if (!*title) return;
-	}
-	add_chr_to_str(head, hdl, '\n');
+	if (title && !init_string(title)) return;
+
+	add_char_to_string(head, '\n');
 
 se:
 	while (s < eof && *s != '<') {
@@ -3241,7 +3238,7 @@ ps:
 		goto se;
 	}
 	if (namelen == 5 && !strncasecmp(name, "/HEAD", 5)) return;
-	if (title && h && !tlen && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
+	if (title && h && !title->length && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
 		unsigned char *s1;
 
 xse:
@@ -3250,38 +3247,38 @@ xse:
 xsp:
 			s++;
 		}
-		add_bytes_to_str(title, &tlen, s1, s - s1);
+		add_bytes_to_string(title, s1, s - s1);
 		if (s >= eof) goto se;
 		if (s + 2 <= eof && (s[1] == '!' || s[1] == '?')) {
 			s = skip_comment(s, eof);
 			goto xse;
 		}
 		if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto xsp;
-		clr_spaces(*title);
+		clr_spaces(title->source);
 		goto ps;
 	}
 	if (!h || namelen != 4 || strncasecmp(name, "META", 4)) goto se;
 
 	he = get_attr_val(attr, "charset");
 	if (he) {
-		add_to_str(head, hdl, "Charset: ");
-		add_to_str(head, hdl, he);
+		add_to_string(head, "Charset: ");
+		add_to_string(head, he);
 		mem_free(he);
 	}
 
 	he = get_attr_val(attr, "http-equiv");
 	if (!he) goto se;
 
-	add_to_str(head, hdl, he);
+	add_to_string(head, he);
 
 	c = get_attr_val(attr, "content");
 	if (c) {
-		add_to_str(head, hdl, ": ");
-		add_to_str(head, hdl, c);
+		add_to_string(head, ": ");
+		add_to_string(head, c);
 	        mem_free(c);
 	}
 
 	mem_free(he);
-	add_to_str(head, hdl, "\r\n");
+	add_to_string(head, "\r\n");
 	goto se;
 }

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.64 2004/06/23 10:07:33 zas Exp $ */
+/* $Id: renderer.h,v 1.65 2004/06/30 01:52:44 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -27,8 +27,7 @@ struct part {
 	int link_num;
 };
 
-int expand_line(struct part *, int, int);
-int expand_lines(struct part *, int);
+void expand_line(struct part *, int, int);
 
 void draw_frame_hchars(struct part *, int, int, int, unsigned char data, color_t bgcolor, color_t fgcolor);
 void draw_frame_vchars(struct part *, int, int, int, unsigned char data, color_t bgcolor, color_t fgcolor);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.323 2004/06/30 01:31:51 jonas Exp $ */
+/* $Id: tables.c,v 1.324 2004/06/30 01:52:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -789,7 +789,6 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		 * and broken. */
 		par_format.bgcolor = table->bgcolor;
 		for (s = y; s < y + height; s++) {
-			expand_lines(table->part, s);
 			expand_line(table->part, s, x - 1);
 		}
 	}
@@ -816,7 +815,6 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 			int yt;
 
 			for (yt = 0; yt < part->box.height; yt++) {
-				expand_lines(table->part, y + yt);
 				expand_line(table->part, y + yt,
 					    x + table->cols_widths[col]);
 			}
@@ -858,7 +856,6 @@ draw_table_cells(struct table *table, int x, int y)
 			for (row2 = table->part->cy;
 			     row2 < yp + row_height + table_frames.top;
 			     row2++) {
-				expand_lines(table->part, row2);
 				expand_line(table->part, row2, x - 1);
 			}
 

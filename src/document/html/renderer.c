@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.464 2004/06/28 11:14:20 jonas Exp $ */
+/* $Id: renderer.c,v 1.465 2004/06/30 01:52:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,22 +149,13 @@ realloc_line(struct document *document, int y, int x)
 	return 0;
 }
 
-int
-expand_lines(struct part *part, int y)
-{
-	assert(part && part->document);
-	if_assert_failed return -1;
-
-	return -!realloc_lines(part->document, Y(y));
-}
-
-int
+void
 expand_line(struct part *part, int y, int x)
 {
 	assert(part && part->document);
-	if_assert_failed return -1;
+	if_assert_failed return;
 
-	return realloc_line(part->document, Y(y), X(x));
+	realloc_line(part->document, Y(y), X(x));
 }
 
 static inline int

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.93 2003/07/09 19:21:28 pasky Exp $ */
+/* $Id: connection.c,v 1.94 2003/07/09 19:40:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ add_host_connection(struct connection *c)
 	struct host_connection *hc = get_host_connection(c);
 
 	if (!hc && c->uri.host) {
-		hc = mem_calloc(sizeof(struct host_connection) + c->uri.hostlen);
+		hc = mem_calloc(1, sizeof(struct host_connection) + c->uri.hostlen);
 		if (!hc) return 0;
 
 		memcpy(hc->host, c->uri.host, c->uri.hostlen);
@@ -769,7 +769,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		struct download *assigned;
 
 		foreach (assigned, c->downloads) {
-			assertm(assigned != download, "Download assigned to '%s'", c->url);
+			assertm(assigned != download, "Download assigned to '%s'", c->uri.protocol);
 			if_assert_failed {
 				download->state = S_INTERNAL;
 				if (download->end) download->end(download, download->data);

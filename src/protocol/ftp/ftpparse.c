@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.13 2003/11/26 22:05:38 pasky Exp $ */
+/* $Id: ftpparse.c,v 1.14 2003/11/26 22:10:24 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -36,6 +36,7 @@ Definitely not covered:
 Long VMS filenames, with information split across two lines.
 NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -50,6 +51,7 @@ NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 #include "osdep/ascii.h"
 #include "protocol/ftpparse.h"
 #include "util/conv.h"
+
 
 static long
 totai(long year, long month, long mday)
@@ -117,42 +119,43 @@ initnow(void)
 	initbase();
 	now = time((time_t *) 0) - base;
 
-	if (flagneedcurrentyear) {
-		day = now / 86400;
-		if ((now % 86400) < 0)
-			--day;
-		day -= 11017;
-		year = 5 + day / 146097;
-		day = day % 146097;
-		if (day < 0) {
-			day += 146097;
-			--year;
-		}
-		year *= 4;
-		if (day == 146096) {
-			year += 3;
-			day = 36524;
-		} else {
-			year += day / 36524;
-			day %= 36524;
-		}
-		year *= 25;
-		year += day / 1461;
-		day %= 1461;
-		year *= 4;
-		if (day == 1460) {
-			year += 3;
-			day = 365;
-		} else {
-			year += day / 365;
-			day %= 365;
-		}
-		day *= 10;
-		if ((day + 5) / 306 >= 10)
-			++year;
-		currentyear = year;
-		flagneedcurrentyear = 0;
+	if (!flagneedcurrentyear)
+		return;
+
+	day = now / 86400;
+	if ((now % 86400) < 0)
+		--day;
+	day -= 11017;
+	year = 5 + day / 146097;
+	day = day % 146097;
+	if (day < 0) {
+		day += 146097;
+		--year;
 	}
+	year *= 4;
+	if (day == 146096) {
+		year += 3;
+		day = 36524;
+	} else {
+		year += day / 36524;
+		day %= 36524;
+	}
+	year *= 25;
+	year += day / 1461;
+	day %= 1461;
+	year *= 4;
+	if (day == 1460) {
+		year += 3;
+		day = 365;
+	} else {
+		year += day / 365;
+		day %= 365;
+	}
+	day *= 10;
+	if ((day + 5) / 306 >= 10)
+		++year;
+	currentyear = year;
+	flagneedcurrentyear = 0;
 }
 
 /* UNIX ls does not show the year for dates in the last six months. */
@@ -243,32 +246,34 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 					fp->namelen = len - j - 1;
 					return 1;
 				}
-				if (buf[j] == ',') {
-					switch (buf[i]) {
-						case '/':
-							fp->flagtrycwd = 1;
-							break;
-						case 'r':
-							fp->flagtryretr = 1;
-							break;
-						case 's':
-							fp->sizetype = FTPPARSE_SIZE_BINARY;
-							fp->size = getlong(buf + i + 1,
+
+				if (buf[j] != ',')
+					continue;
+
+				switch (buf[i]) {
+					case '/':
+						fp->flagtrycwd = 1;
+						break;
+					case 'r':
+						fp->flagtryretr = 1;
+						break;
+					case 's':
+						fp->sizetype = FTPPARSE_SIZE_BINARY;
+						fp->size = getlong(buf + i + 1,
+								   j - i - 1);
+						break;
+					case 'm':
+						fp->mtimetype = FTPPARSE_MTIME_LOCAL;
+						initbase();
+						fp->mtime = base + getlong(buf + i + 1,
 									   j - i - 1);
-							break;
-						case 'm':
-							fp->mtimetype = FTPPARSE_MTIME_LOCAL;
-							initbase();
-							fp->mtime = base + getlong(buf + i + 1,
-										   j - i - 1);
-							break;
-						case 'i':
-							fp->idtype = FTPPARSE_ID_FULL;
-							fp->id = buf + i + 1;
-							fp->idlen = j - i - 1;
-					}
-					i = j + 1;
+						break;
+					case 'i':
+						fp->idtype = FTPPARSE_ID_FULL;
+						fp->id = buf + i + 1;
+						fp->idlen = j - i - 1;
 				}
+				i = j + 1;
 			}
 			return 0;
 
@@ -316,75 +321,77 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 
 			state = 1;
 			i = 0;
-			for (j = 1; j < len; ++j)
-				if ((buf[j] == ' ') && (buf[j - 1] != ' ')) {
-					switch (state) {
-						case 1:	/* skipping perm */
-							state = 2;
-							break;
-						case 2:	/* skipping nlink */
-							state = 3;
-							if ((j - i == 6) && (buf[i] == 'f'))	/* for NetPresenz */
-								state = 4;
-							break;
-						case 3:	/* skipping uid */
+			for (j = 1; j < len; ++j) {
+				if ((buf[j] != ' ') || (buf[j - 1] == ' '))
+					continue;
+
+				switch (state) {
+					case 1:	/* skipping perm */
+						state = 2;
+						break;
+					case 2:	/* skipping nlink */
+						state = 3;
+						if ((j - i == 6) && (buf[i] == 'f'))	/* for NetPresenz */
 							state = 4;
-							break;
-						case 4:	/* getting tentative size */
+						break;
+					case 3:	/* skipping uid */
+						state = 4;
+						break;
+					case 4:	/* getting tentative size */
+						size = getlong(buf + i, j - i);
+						state = 5;
+						break;
+					case 5:	/* searching for month, otherwise getting tentative size */
+						month = getmonth(buf + i, j - i);
+						if (month >= 0)
+							state = 6;
+						else
 							size = getlong(buf + i, j - i);
-							state = 5;
-							break;
-						case 5:	/* searching for month, otherwise getting tentative size */
-							month = getmonth(buf + i, j - i);
-							if (month >= 0)
-								state = 6;
-							else
-								size = getlong(buf + i, j - i);
-							break;
-						case 6:	/* have size and month */
-							mday = getlong(buf + i, j - i);
-							state = 7;
-							break;
-						case 7:	/* have size, month, mday */
-							if ((j - i == 4)
-							    && (buf[i + 1] == ':')) {
-								hour = getlong(buf + i, 1);
-								minute = getlong(buf + i + 2, 2);
+						break;
+					case 6:	/* have size and month */
+						mday = getlong(buf + i, j - i);
+						state = 7;
+						break;
+					case 7:	/* have size, month, mday */
+						if ((j - i == 4)
+						    && (buf[i + 1] == ':')) {
+							hour = getlong(buf + i, 1);
+							minute = getlong(buf + i + 2, 2);
+							fp->mtimetype = FTPPARSE_MTIME_REMOTEMINUTE;
+							initbase();
+							fp->mtime = base
+								    + guesstai(month, mday)
+								    + hour * 3600
+								    + minute * 60;
+						} else if ((j - i == 5)
+							   && (buf[i + 2] == ':')) {
+								hour = getlong(buf + i, 2);
+								minute = getlong(buf + i + 3, 2);
 								fp->mtimetype = FTPPARSE_MTIME_REMOTEMINUTE;
 								initbase();
 								fp->mtime = base
 									    + guesstai(month, mday)
 									    + hour * 3600
 									    + minute * 60;
-							} else if ((j - i == 5)
-								   && (buf[i + 2] == ':')) {
-									hour = getlong(buf + i, 2);
-									minute = getlong(buf + i + 3, 2);
-									fp->mtimetype = FTPPARSE_MTIME_REMOTEMINUTE;
-									initbase();
-									fp->mtime = base
-										    + guesstai(month, mday)
-										    + hour * 3600
-										    + minute * 60;
-							} else if (j - i >= 4) {
-								year = getlong(buf + i, j - i);
-								fp->mtimetype = FTPPARSE_MTIME_REMOTEDAY;
-								initbase();
-								fp->mtime = base + totai(year, month, mday);
-							} else
-								return 0;
+						} else if (j - i >= 4) {
+							year = getlong(buf + i, j - i);
+							fp->mtimetype = FTPPARSE_MTIME_REMOTEDAY;
+							initbase();
+							fp->mtime = base + totai(year, month, mday);
+						} else
+							return 0;
 
-							fp->name = buf + j + 1;
-							fp->namelen = len - j - 1;
-							state = 8;
-							break;
-						case 8:	/* twiddling thumbs */
-							break;
-					}
-					i = j + 1;
-					while ((i < len) && (buf[i] == ' '))
-						++i;
+						fp->name = buf + j + 1;
+						fp->namelen = len - j - 1;
+						state = 8;
+						break;
+					case 8:	/* twiddling thumbs */
+						break;
 				}
+				i = j + 1;
+				while ((i < len) && (buf[i] == ' '))
+					++i;
+			}
 
 			if (state != 8)
 				return 0;

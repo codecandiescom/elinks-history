@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.25 2003/08/23 17:34:10 jonas Exp $ */
+/* $Id: renderer.c,v 1.26 2003/08/23 17:48:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,29 +198,29 @@ static void
 text_init(struct renderer_state *state)
 {
 	struct document_options *document_options = state->input;
-	struct document_view *console_frame_data;
+	struct document_view *document_view;
 
 	state->data = mem_calloc(1, sizeof(struct text_renderer_state));
 	if (!state->data) return;
 
 	state->layouter_state = elusive_layouter_init(state->layouter,
-							state->parser);
+						      state->parser);
 
 	state->output = mem_calloc(1, sizeof(struct document_view));
 	if (!state->output) return;
-	console_frame_data = state->output;
+	document_view = state->output;
 
-	console_frame_data->xw = document_options->xw;
-	console_frame_data->yw = document_options->yw;
-	console_frame_data->xp = document_options->xp;
-	console_frame_data->yp = document_options->yp;
+	document_view->xw = document_options->xw;
+	document_view->yw = document_options->yw;
+	document_view->xp = document_options->xp;
+	document_view->yp = document_options->yp;
 
-	console_frame_data->document = mem_calloc(1, sizeof(struct document));
-	if (!console_frame_data->document) return;
+	document_view->document = mem_calloc(1, sizeof(struct document));
+	if (!document_view->document) return;
 
-	init_formatted(console_frame_data->document);
-	console_frame_data->document->refcount = 1;
-	copy_opt(&console_frame_data->document->opt, document_options);
+	init_formatted(document_view->document);
+	document_view->document->refcount = 1;
+	copy_opt(&document_view->document->opt, document_options);
 }
 
 static void
@@ -234,15 +234,15 @@ text_render(struct renderer_state *state, unsigned char **str, int *len)
 static void
 text_done(struct renderer_state *state)
 {
-	struct document_view *console_frame_data = state->output;
-	struct document *frame_data = console_frame_data->document;
+ 	struct document_view *document_view = state->output;
+ 	struct document *document= document_view->document;
 	int i;
 
 	elusive_layouter_done(state->layouter_state);
 
-	for (i = 0; i < frame_data->y; i++)
-		if (frame_data->data[i].l > frame_data->x)
-			frame_data->x = frame_data->data[i].l;
+	for (i = 0; i < document->y; i++)
+		if (document->data[i].l > document->x)
+			document->x = document->data[i].l;
 
 }
 

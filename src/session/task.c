@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.104 2004/06/08 15:12:35 jonas Exp $ */
+/* $Id: task.c,v 1.105 2004/06/08 16:51:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,29 +515,41 @@ goto_url(struct session *ses, unsigned char *url)
 	follow_url(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
 }
 
-void
-goto_url_with_hook(struct session *ses, unsigned char *url)
+static struct uri *
+get_hooked_uri(unsigned char *uristring, struct uri *uri, unsigned char *cwd)
 {
 #if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
 	static int goto_url_event_id = EVENT_NONE;
-	struct uri *current_uri = NULL;
 
-	url = stracpy(url);
-	if (!url) return;
-
-	if (have_location(ses))
-		current_uri = cur_loc(ses)->vs.uri;
+	uristring = stracpy(uristring);
+	if (!uristring) return NULL;
 
 	set_event_id(goto_url_event_id, "goto-url");
-	trigger_event(goto_url_event_id, &url, current_uri);
-	if (!url) return;
+	trigger_event(goto_url_event_id, &uristring, uri);
+	if (!uristring) return NULL;
 #endif
 
-	if (*url) goto_url(ses, url);
+	if (*uristring)
+		uri = get_translated_uri(uristring, cwd);
+	else
+		uri = NULL;
 
 #if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
-	mem_free(url);
+	mem_free(uristring);
 #endif
+	return uri;
+}
+
+void
+goto_url_with_hook(struct session *ses, unsigned char *url)
+{
+	struct uri *uri = have_location(ses) ? cur_loc(ses)->vs.uri : NULL;
+
+	uri = get_hooked_uri(url, uri, ses->tab->term->cwd);
+	if (uri) {
+		goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
+		done_uri(uri);
+	}
 }
 
 int

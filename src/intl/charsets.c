@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.39 2003/06/25 08:39:06 zas Exp $ */
+/* $Id: charsets.c,v 1.40 2003/06/26 13:26:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "intl/charsets.h"
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/fastfind.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "util/types.h"
@@ -662,6 +663,7 @@ decode:
 	return buffer;
 }
 
+#ifndef USE_FASTFIND
 int
 get_cp_index(unsigned char *n)
 {
@@ -687,6 +689,72 @@ get_cp_index(unsigned char *n)
 	}
 
 	return -1;
+}
+
+#else
+
+static struct fastfind_info *ff_info_charsets;
+static unsigned int i_name = 0;
+static unsigned int i_alias = 0;
+
+/* Reset internal list pointer */
+void
+charsets_list_reset(void)
+{
+	i_name = 0;
+	i_alias = 0;
+}
+
+/* Returns a pointer to a struct that contains
+ * current key and data pointers and increment
+ * internal pointer.
+ * It returns NULL when key is NULL. */
+struct fastfind_key_value *
+charsets_list_next(void)
+{
+	static struct fastfind_key_value kv;
+
+	if (!codepages[i_name].name) return NULL;
+
+	kv.key = codepages[i_name].aliases[i_alias];
+	kv.data = (void *) (i_name + 1); /* int -> void * conversion. */
+
+	if (codepages[i_name].aliases[i_alias + 1])
+		i_alias++;
+	else {
+		i_name++;
+		i_alias = 0;
+	}
+
+	return &kv;
+}
+
+/* It searchs for a charset named @name or one of its aliases and
+ * returns index for it or -1 if not found. */
+int
+get_cp_index(unsigned char *name)
+{
+	static int do_index = 1;
+
+	if (do_index) {
+		ff_info_charsets = fastfind_index(&charsets_list_reset, &charsets_list_next, 0);
+		fastfind_index_compress(ff_info_charsets);
+		do_index = 0;
+	}
+
+	/* We assume sizeof(void *) == sizeof(unsigned int), it may cause
+	 * issue on 64bits platforms... How can we do better ? --Zas */
+	return ((unsigned int) fastfind_search(name, strlen(name), ff_info_charsets) - 1);
+}
+
+#endif /* USE_FASTFIND */
+
+void
+free_charsets_lookup(void)
+{
+#ifdef USE_FASTFIND
+	fastfind_done(ff_info_charsets);
+#endif
 }
 
 unsigned char *

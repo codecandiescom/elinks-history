@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.106 2003/06/19 22:38:12 zas Exp $ */
+/* $Id: main.c,v 1.107 2003/06/26 13:26:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,6 +253,7 @@ terminate_all_subsystems(void)
 	}
 
 	shrink_memory(1);
+	free_charsets_lookup();
 	free_colors_lookup();
 	free_tags_lookup();
 	free_table_cache();

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.330 2004/06/30 21:11:26 jonas Exp $ */
+/* $Id: tables.c,v 1.331 2004/06/30 21:42:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,7 +358,6 @@ distribute_widths(struct table *table, int width)
 	int col;
 	int spare_width = width - table->min_width;
 	int stretch_method = 0;
-	char *visited_cols;
 	int *widths, *max_widths;
 	int max_cols_width = 0;
 	int cols_array_size;
@@ -381,9 +380,6 @@ distribute_widths(struct table *table, int width)
 
 	max_widths = fmem_alloc(cols_array_size);
 	if (!max_widths) goto free_widths;
-
-	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
-	visited_cols = fmem_alloc(table->cols);
 
 	while (spare_width) {
 		int stretch_width, stretch_col;
@@ -465,7 +461,6 @@ distribute_widths(struct table *table, int width)
 		}
 
 		did_stretch = 0;
-		if (visited_cols) memset(visited_cols, 0, table->cols);
 		total_spare_width = spare_width;
 
 again:
@@ -475,8 +470,6 @@ again:
 			int col_spare_width;
 
 			if (!widths[col])
-				continue;
-			if (visited_cols && visited_cols[col])
 				continue;
 
 			col_spare_width = total_spare_width * widths[col] / total_width;
@@ -488,7 +481,8 @@ again:
 		}
 
 		if (stretch_col != -1) {
-			if (visited_cols) visited_cols[stretch_col] = 1;
+			/* Mark the column as visited */
+			widths[stretch_col] = 0;
 
 			if (stretch_width > spare_width)
 				stretch_width = spare_width;
@@ -507,7 +501,6 @@ again:
 	}
 
 free_all:
-	if (visited_cols) fmem_free(visited_cols);
 	fmem_free(max_widths);
 
 free_widths:

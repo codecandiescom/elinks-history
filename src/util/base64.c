@@ -1,5 +1,5 @@
-/* Base64 encoder implementation. */
-/* $Id: base64.c,v 1.9 2003/08/01 19:37:20 zas Exp $ */
+/* Base64 encode/decode implementation. */
+/* $Id: base64.c,v 1.10 2003/08/01 20:22:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,39 +13,39 @@
 #include "util/error.h"
 #include "util/memory.h"
 
-unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 unsigned char *
-base64_encode(unsigned char *str)
+base64_encode(register unsigned char *in)
 {
-	register unsigned char *in = str;
 	register unsigned char *out;
 	unsigned char *outstr;
 	int inlen;
 
-	assert(str && *str);
+	assert(in && *in);
+	if_assert_failed return NULL;
 
 	inlen = strlen(in);
 	out = outstr = mem_alloc((inlen / 3) * 4 + 4 + 1);
 	if (!out) return NULL;
 
 	while (inlen >= 3) {
-		*out++ = base64_chars[ (*in >> 2) ];
-		*out++ = base64_chars[ ((*in << 4 | *(in + 1) >> 4) & 63) ];
-		*out++ = base64_chars[ ((*(in + 1) << 2 | *(in + 2) >> 6) & 63) ];
-		*out++ = base64_chars[ (*(in + 2) & 63) ];
+		*out++ = base64_chars[ *in >> 2 ];
+		*out++ = base64_chars[ (*in << 4 | *(in + 1) >> 4) & 63 ];
+		*out++ = base64_chars[ (*(in + 1) << 2 | *(in + 2) >> 6) & 63 ];
+		*out++ = base64_chars[ *(in + 2) & 63 ];
 		inlen -= 3; in += 3;
 	}
 	if (inlen == 1) {
-		*out++ = base64_chars[ (*in >> 2) ];
-		*out++ = base64_chars[ (*in << 4 & 63) ];
+		*out++ = base64_chars[ *in >> 2 ];
+		*out++ = base64_chars[ *in << 4 & 63 ];
 		*out++ = '=';
 		*out++ = '=';
 	}
 	if (inlen == 2) {
-		*out++ = base64_chars[ (*in >> 2) ];
-		*out++ = base64_chars[ ((*in << 4 | *(in + 1) >> 4) & 63) ];
-		*out++ = base64_chars[ ((*(in + 1) << 2) & 63) ];
+		*out++ = base64_chars[ *in >> 2 ];
+		*out++ = base64_chars[ (*in << 4 | *(in + 1) >> 4) & 63 ];
+		*out++ = base64_chars[ (*(in + 1) << 2) & 63 ];
 		*out++ = '=';
 	}
 	*out = 0;
@@ -55,35 +55,73 @@ base64_encode(unsigned char *str)
 
 /* Base64 decoding is used only with the FORMS_MEMORY feature, so i'll #ifdef it */
 #ifdef FORMS_MEMORY
-#define INDEXOF(x) ((unsigned char *) strchr(base64_chars, (x)) - base64_chars)
+
 /* base64_decode:  @in string to decode
  *                 returns the string decoded (must be freed by the caller) */
 unsigned char *
-base64_decode(unsigned char *in)
+base64_decode(register unsigned char *in)
 {
-	unsigned char *out, *outstr;
-	unsigned int val = 0;
-	unsigned int tmp;
+	static unsigned char is_base64_char[256]; /* static to force initialization at zero */
+	unsigned char decode[256];
+	register unsigned char *out;
+	unsigned char *outstr;
+	int i = sizeof(base64_chars) - 1;
+	int count = 0;
+	unsigned int bits = 0;
 
 	assert(in && *in);
+	if_assert_failed return NULL;
 
 	outstr = out = mem_alloc(strlen(in) / 4 * 3 + 1);
 	if (!outstr) return NULL;
 
-	while (*in) {
-	        val = INDEXOF(*in++) << 18 | INDEXOF(*in++) << 12;
-	        if (*in != '=') val |= INDEXOF(*in) << 6;
-		in++;
-	        if (*in != '=') val |= INDEXOF(*in);
-		in++;
-	        *out++ = val >> 16;
-	        tmp = (val & 0xFF00) >> 8;
-	        if (tmp) *out++ = tmp;
-	        tmp = (val & 0xFF);
-	        if (tmp) *out++ = tmp;
+	/* XXX: move this elsewhere if intense usage of base64_decode. --Zas */
+	while (i >= 0) {
+		is_base64_char[base64_chars[i]] = 1;
+		decode[base64_chars[i]] = i;
+		i--;
 	}
-	*out = '\0';
+
+	while (*in) {
+		if (*in == '=') break;
+        	if (*in > 255 || !is_base64_char[*in])
+			goto decode_error;
+
+        	bits += decode[*in];
+        	count++;
+		if (count == 4) {
+			*out++ = bits >> 16;
+			*out++ = (bits >> 8) & 0xff;
+			*out++ = bits & 0xff;
+          	        bits = 0;
+           	 	count = 0;
+        	} else {
+            		bits <<= 6;
+        	}
+	}
+
+	if (!*in) {
+		if (count) goto decode_error;
+	} else { /* '=' */
+		switch (count) {
+			case 1:
+				goto decode_error;
+            			break;
+			case 2:
+            			*out++ = bits >> 10;
+				break;
+			case 3:
+				*out++ = bits >> 16;
+				*out++ = (bits >> 8) & 0xff;
+				break;
+		}
+	}
 
 	return outstr;
+
+decode_error:
+	mem_free(outstr);
+	return NULL;
 }
+
 #endif /* FORMS_MEMORY */

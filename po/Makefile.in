@@ -83,7 +83,11 @@ all-no:
 
 # Note 2: We aren't gcc, we are ELinks. And I want that dependency ;-). --pasky
 
-$(CATALOGS): $(srcdir)/$(PACKAGE).pot
+# Note 3: I changed my mind, it is really annoying if you just insert one line
+# and suddenly you have tons of changes in all the .po files updating the line
+# informations. --pasky
+
+# $(CATALOGS): $(srcdir)/$(PACKAGE).pot
 
 $(srcdir)/$(PACKAGE).pot: $(POTFILES) $(srcdir)/POTFILES.in
 	$(XGETTEXT) --default-domain=$(PACKAGE) --directory=$(top_srcdir) \
@@ -93,7 +97,7 @@ $(srcdir)/$(PACKAGE).pot: $(POTFILES) $(srcdir)/POTFILES.in
 	   || ( rm -f $(srcdir)/$(PACKAGE).pot \
 		&& mv $(PACKAGE).po $(srcdir)/$(PACKAGE).pot )
 	# Now update the .po files.
-	$(MAKE) update-po
+	# $(MAKE) update-po-do
 
 
 install: install-exec install-data
@@ -149,9 +153,10 @@ maintainer-clean: distclean
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 dist distdir:
-	$(MAKE) $(srcdir)/$(PACKAGE).pot
+	# $(MAKE) $(srcdir)/$(PACKAGE).pot
+	$(MAKE) update-po-do
 	@$(MAKE) dist2
-# This is a separate target because 'update-po' must be executed before.
+# This is a separate target because 'update-po-do' must be executed before.
 dist2: $(DISTFILES)
 	dists="$(DISTFILES)"; \
 	for file in $$dists; do \
@@ -159,7 +164,10 @@ dist2: $(DISTFILES)
 	  cp -p $$dir/$$file $(distdir); \
 	done
 
-update-po: Makefile
+# This is here just as a convient shortcut for us poor developers.
+update-po: Makefile $(srcdir)/$(PACKAGE).pot update-po-do
+
+update-po-do: Makefile
 	@cd $(srcdir); \
 	catalogs='$(GMOFILES)'; \
 	for cat in $$catalogs; do \

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.130 2004/06/19 13:42:44 jonas Exp $ */
+/* $Id: textarea.c,v 1.131 2004/06/20 11:27:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -646,6 +646,8 @@ textarea_op_enter(struct form_state *fs, struct form_control *fc)
 void
 set_textarea(struct document_view *doc_view, int direction)
 {
+	struct form_control *fc;
+	struct form_state *fs;
 	struct link *link;
 
 	assert(doc_view && doc_view->vs && doc_view->document);
@@ -653,24 +655,22 @@ set_textarea(struct document_view *doc_view, int direction)
 	if_assert_failed return;
 
 	link = get_current_link(doc_view);
-	if (link && link->type == LINK_AREA) {
-		struct form_control *fc;
-		struct form_state *fs;
+	if (!link || link->type != LINK_AREA)
+		return;
 
-		fc = link->form_control;
-		assertm(fc, "link has no form control");
-		if_assert_failed return;
+	fc = link->form_control;
+	assertm(fc, "link has no form control");
+	if_assert_failed return;
 
-		if (fc->mode == FORM_MODE_DISABLED) return;
+	if (fc->mode == FORM_MODE_DISABLED) return;
 
-		fs = find_form_state(doc_view, fc);
-		if (!fs || !fs->value) return;
+	fs = find_form_state(doc_view, fc);
+	if (!fs || !fs->value) return;
 
-		/* Depending on which way we entered the textarea move cursor
-		 * so that it is available at end or start. */
-		if (direction == 1)
-			textarea_op_eob(fs, fc);
-		else
-			textarea_op_bob(fs, fc);
-	}
+	/* Depending on which way we entered the textarea move cursor so that
+	 * it is available at end or start. */
+	if (direction == 1)
+		textarea_op_eob(fs, fc);
+	else
+		textarea_op_bob(fs, fc);
 }

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.93 2003/11/16 01:02:47 jonas Exp $ */
+/* $Id: cookies.c,v 1.94 2003/11/16 01:11:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,17 +245,16 @@ set_cookie(struct uri *uri, unsigned char *str)
 	/* Fill main fields */
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
-	if (!cookie->name) {
-		free_cookie(cookie);
-		return;
-	}
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
-	if (!cookie->value) {
-		free_cookie(cookie);
-		return;
-	}
 	cookie->server = memacpy(uri->host, uri->hostlen);
-	if (!cookie->server) {
+	cookie->domain = parse_http_header_param(str, "domain");
+	if (!cookie->domain) cookie->domain = memacpy(uri->host, uri->hostlen);
+
+	/* Now check that all is well */
+	if (!cookie->domain
+	    || !cookie->name
+	    || !cookie->value
+	    || !cookie->server) {
 		free_cookie(cookie);
 		return;
 	}
@@ -337,14 +336,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 		}
 	}
 
-	cookie->domain = parse_http_header_param(str, "domain");
-	if (!cookie->domain) {
-		cookie->domain = memacpy(uri->host, uri->hostlen);
-		if (!cookie->domain) {
-			free_cookie(cookie);
-			return;
-		}
-	}
 	if (cookie->domain[0] == '.')
 		memmove(cookie->domain, cookie->domain + 1,
 			strlen(cookie->domain));

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.419 2003/12/19 12:03:38 pasky Exp $ */
+/* $Id: options.c,v 1.420 2003/12/21 12:04:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@
 #include "util/string.h"
 #include "viewer/text/view.h"
 
+
 /* TODO? In the past, covered by shadow and legends, remembered only by the
  * ELinks Elders now, options were in hashes (it was not for a long time, after
  * we started to use dynamic options lists and before we really started to use
@@ -54,6 +55,7 @@
  * fabulous and implement possibility to have both lists and hashes for trees,
  * as it may be useful for some supernatural entities. And when that age will
  * come... */
+
 
 /* TODO: We should remove special case for root options and use some auxiliary
  * (struct option *) instead. This applies to bookmarks, global history and
@@ -76,6 +78,7 @@ struct option *cmdline_options;
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
 static void free_options_tree(struct list_head *, int recursive);
+
 
 /**********************************************************************
  Options interface
@@ -434,21 +437,19 @@ delete_option_do(struct option *option, int recursive)
 				mem_free(option->value.string);
 			break;
 		case OPT_TREE:
-			if (option->value.tree) {
-				if (!recursive
-				    && !list_empty(*option->value.tree)) {
-					if (option->flags & OPT_AUTOCREATE) {
-						recursive = 1;
-					} else {
-						error("Orphaned unregistered "
-							"option in subtree %s!",
-							option->name);
-						recursive = -1;
-					}
+			if (!option->value.tree) break;
+			if (!recursive && !list_empty(*option->value.tree)) {
+				if (option->flags & OPT_AUTOCREATE) {
+					recursive = 1;
+				} else {
+					error("Orphaned unregistered "
+						"option in subtree %s!",
+						option->name);
+					recursive = -1;
 				}
-				free_options_tree(option->value.tree, recursive);
-				mem_free(option->value.tree);
 			}
+			free_options_tree(option->value.tree, recursive);
+			mem_free(option->value.tree);
 			break;
 		default:
 			break;
@@ -1137,6 +1138,7 @@ static struct change_hook_info change_hooks[] = {
 	{ "ui",				change_hook_ui },
 	{ NULL,				NULL },
 };
+
 
 /**********************************************************************
  Options values

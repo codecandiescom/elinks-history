@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.263 2004/07/18 01:32:37 miciah Exp $ */
+/* $Id: uri.c,v 1.264 2004/07/20 07:26:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1085,7 +1085,7 @@ get_extension_from_uri(struct uri *uri)
 
 	for (; *pos && !end_of_dir(uri, *pos); pos++) {
 		if (!afterslash && !extension && *pos == '.') {
-			extension = pos + 1;
+			extension = pos;
 		} else if (is_uri_dir_sep(uri, *pos)) {
 			extension = NULL;
 			afterslash = 1;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.3 2004/05/01 18:16:59 zas Exp $ */
+/* $Id: link.c,v 1.4 2004/05/04 07:55:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,10 +21,6 @@
 #include "bfu/menu.h"
 #include "config/options.h"
 #include "config/kbdbind.h"
-#include "document/css/apply.h"
-#include "document/css/css.h"
-#include "document/css/parser.h"
-#include "document/css/stylesheet.h"
 #include "document/html/frames.h"
 #include "document/html/parser/link.h"
 #include "document/html/parser/stack.h"
@@ -626,9 +622,11 @@ html_link(unsigned char *a)
 	if (!html_link_parse(a, &link)) return;
 	if (!link.href) goto free_and_return;
 
+#ifdef CONFIG_CSS
 	if (link.type == LT_STYLESHEET) {
 		import_css_stylesheet(&css_styles, link.href, strlen(link.href));
 	}
+#endif
 
 	/* Ignore few annoying links.. */
 	if (link_display < 5 &&

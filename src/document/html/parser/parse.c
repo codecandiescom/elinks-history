@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.22 2004/04/26 08:49:10 zas Exp $ */
+/* $Id: parse.c,v 1.23 2004/05/04 07:55:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -770,9 +770,11 @@ start_element(struct element_info *ei,
 		do_html_textarea(attr, html, eof, &html, f);
 		return html;
 	}
+#ifdef CONFIG_CSS
 	if (ei->func == html_style && global_doc_opts->css_enable) {
 		css_parse_stylesheet(&css_styles, html, eof);
 	}
+#endif
 
 	if (ei->nopair == 2 || ei->nopair == 3) {
 		struct html_element *e;
@@ -804,6 +806,7 @@ start_element(struct element_info *ei,
 		html_top.linebreak = ei->linebreak;
 	}
 
+#ifdef CONFIG_CSS
 	if (html_top.options && global_doc_opts->css_enable) {
 		/* XXX: We should apply CSS otherwise as well, but that'll need
 		 * some deeper changes in order to have options filled etc.
@@ -815,11 +818,14 @@ start_element(struct element_info *ei,
 		 * formatting of some elements. */
 		css_apply(&html_top, &css_styles);
 	}
+#endif
 	if (ei->func) ei->func(attr);
+#ifdef CONFIG_CSS
 	if (html_top.options && global_doc_opts->css_enable) {
 		/* Call it now to override default colors of the elements. */
 		css_apply(&html_top, &css_styles);
 	}
+#endif
 
 	if (ei->func != html_br) was_br = 0;
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.414 2004/04/29 13:30:00 zas Exp $ */
+/* $Id: parser.c,v 1.415 2004/05/04 07:55:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,6 @@
 #include "bfu/menu.h"
 #include "document/css/apply.h"
 #include "document/css/css.h"
-#include "document/css/parser.h"
 #include "document/css/stylesheet.h"
 #include "document/html/frames.h"
 #include "document/html/parser/forms.h"
@@ -217,6 +216,7 @@ add_fragment_identifier(void *part, unsigned char *attr)
 	special_f(part, SP_TAG, attr);
 }
 
+#ifdef CONFIG_CSS
 void
 import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 {
@@ -245,6 +245,7 @@ import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 }
 
 INIT_CSS_STYLESHEET(css_styles, import_css_stylesheet);
+#endif
 
 unsigned char *last_form_tag;
 unsigned char *last_form_attr;
@@ -359,10 +360,12 @@ html_body(unsigned char *a)
 	get_color(a, "vlink", &format.vlink);
 
 	get_bgcolor(a, &format.bg);
+#ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
 	if (global_doc_opts->css_enable)
 		css_apply(&html_top, &css_styles);
+#endif
 
 	if (par_format.bgcolor != format.bg) {
 		/* Modify the root HTML element - format_html_part() will take
@@ -1314,14 +1317,18 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	last_form_attr = NULL;
 	last_input_tag = NULL;
 
+#ifdef CONFIG_CSS
 	mirror_css_stylesheet(&css_styles, &default_stylesheet);
+#endif
 }
 
 void
 done_html_parser(void)
 {
+#ifdef CONFIG_CSS
 	if (global_doc_opts->css_enable)
 		done_css_stylesheet(&css_styles);
+#endif
 
 	done_form();
 

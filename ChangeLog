@@ -1,3 +1,18 @@
+Wed Feb  6 23:37:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* dns.c:
+	
+	disable 4to6 mapping, possibly solving the problem with the non
+	ipv6-enabled kernels but ipv6 enabled libc
+
+Wed Feb  6 23:10:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bookmarks.c:
+	
+	memorizing last search until escaping from the bookmarks dialog,
+	patch by Zas, lead fixed by pasky; bookmarks search should
+	hopefully be done by now
+
 Mon Feb  4 14:13:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, links.1, os_dep.c, os_dep.h:

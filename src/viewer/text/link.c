@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.225 2004/06/15 01:48:10 jonas Exp $ */
+/* $Id: link.c,v 1.226 2004/06/15 21:22:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -712,7 +712,7 @@ jump_to_link_number(struct session *ses, struct document_view *doc_view, int n)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (n < 0 || n > doc_view->document->nlinks) return;
+	if (n < 0 || n >= doc_view->document->nlinks) return;
 	doc_view->vs->current_link = n;
 	check_vs(doc_view);
 }
@@ -725,7 +725,7 @@ goto_link_number_do(struct session *ses, struct document_view *doc_view, int n)
 
 	assert(ses && doc_view && doc_view->document);
 	if_assert_failed return;
-	if (n < 0 || n > doc_view->document->nlinks) return;
+	if (n < 0 || n >= doc_view->document->nlinks) return;
 	jump_to_link_number(ses, doc_view, n);
 
 	link = &doc_view->document->links[n];

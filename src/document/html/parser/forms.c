@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.34 2004/06/23 12:44:27 jonas Exp $ */
+/* $Id: forms.c,v 1.35 2004/06/23 14:51:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,6 +196,25 @@ get_form_mode(unsigned char *attr)
 	return FORM_MODE_NORMAL;
 }
 
+static struct form_control *
+init_form_control(enum form_type type, unsigned char *attr)
+{
+	struct form_control *fc;
+
+	fc = mem_calloc(1, sizeof(struct form_control));
+	if (!fc) return NULL;
+
+	fc->type = type;
+	fc->form_num = html_context.last_form_tag - html_context.startf;
+	fc->ctrl_num = attr - html_context.last_form_tag;
+	fc->position = attr - html_context.startf;
+	fc->method = form.method;
+	fc->action = null_or_stracpy(form.action);
+	fc->mode = get_form_mode(attr);
+
+	return fc;
+}
+
 void
 html_button(unsigned char *a)
 {
@@ -224,18 +243,10 @@ html_button(unsigned char *a)
 	mem_free(al);
 
 no_type_attr:
-	fc = mem_calloc(1, sizeof(struct form_control));
+	fc = init_form_control(type, a);
 	if (!fc) return;
 
-	fc->type = type;
-	fc->form_num = html_context.last_form_tag - html_context.startf;
-	fc->ctrl_num = a - html_context.last_form_tag;
-	fc->position = a - html_context.startf;
-	fc->method = form.method;
-	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(a, "name");
-	fc->mode = get_form_mode(a);
-
 	fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
 	if (!fc->default_value && fc->type == FC_RESET) fc->default_value = stracpy("Reset");
@@ -280,19 +291,11 @@ html_input(unsigned char *a)
 	mem_free(al);
 
 no_type_attr:
-	fc = mem_calloc(1, sizeof(struct form_control));
+	fc = init_form_control(type, a);
 	if (!fc) return;
 
-	fc->type = type;
-	fc->form_num = html_context.last_form_tag - html_context.startf;
-	fc->ctrl_num = a - html_context.last_form_tag;
-	fc->position = a - html_context.startf;
-	fc->method = form.method;
-	fc->action = null_or_stracpy(form.action);
 	fc->target = null_or_stracpy(form.target);
 	fc->name = get_attr_val(a, "name");
-	fc->mode = get_form_mode(a);
-
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
@@ -394,9 +397,6 @@ html_option(unsigned char *a)
 	find_form_for_input(a);
 	if (!format.select) return;
 
-	fc = mem_calloc(1, sizeof(struct form_control));
-	if (!fc) return;
-
 	val = get_attr_val(a, "value");
 	if (!val) {
 		struct string str;
@@ -441,16 +441,17 @@ sp:
 	}
 
 end_parse:
-	fc->form_num = html_context.last_form_tag - html_context.startf;
-	fc->ctrl_num = a - html_context.last_form_tag;
-	fc->position = a - html_context.startf;
-	fc->method = form.method;
-	fc->action = null_or_stracpy(form.action);
-	fc->type = FC_CHECKBOX;
+	fc = init_form_control(FC_CHECKBOX, a);
+	if (!fc) {
+		mem_free_if(val);
+		return;
+	}
+
 	fc->name = null_or_stracpy(format.select);
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
 	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
+
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
@@ -585,25 +586,18 @@ end_parse:
 	*end = en;
 	if (!order) goto abort;
 
-	fc = mem_calloc(1, sizeof(struct form_control));
-	if (!fc) goto abort;
-
 	labels = mem_calloc(order, sizeof(unsigned char *));
-	if (!labels) {
-		mem_free(fc);
+	if (!labels) goto abort;
+
+	fc = init_form_control(FC_SELECT, attr);
+	if (!fc) {
+		mem_free(labels);
 		goto abort;
 	}
 
-	fc->form_num = html_context.last_form_tag - html_context.startf;
-	fc->ctrl_num = attr - html_context.last_form_tag;
-	fc->position = attr - html_context.startf;
-	fc->method = form.method;
-	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
-	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
 	fc->default_value = order ? stracpy(values[fc->default_state]) : stracpy("");
-	fc->mode = get_form_mode(attr);
 	fc->nvalues = order;
 	fc->values = values;
 	fc->menu = detach_menu(&lnk_menu);
@@ -663,17 +657,10 @@ pp:
 	if (parse_element(p, eof, &t_name, &t_namelen, NULL, end)) goto pp;
 	if (strlcasecmp(t_name, t_namelen, "/TEXTAREA", 9)) goto pp;
 
-	fc = mem_calloc(1, sizeof(struct form_control));
+	fc = init_form_control(FC_TEXTAREA, attr);
 	if (!fc) return;
 
-	fc->form_num = html_context.last_form_tag - html_context.startf;
-	fc->ctrl_num = attr - html_context.last_form_tag;
-	fc->position = attr - html_context.startf;
-	fc->method = form.method;
-	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
-	fc->type = FC_TEXTAREA;;
-	fc->mode = get_form_mode(attr);
 	fc->default_value = memacpy(html, p - html);
 	for (p = fc->default_value; p && p[0]; p++) {
 		/* FIXME: We don't cope well with entities here. Bugzilla uses

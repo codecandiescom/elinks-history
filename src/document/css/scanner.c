@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.73 2004/01/21 05:46:10 jonas Exp $ */
+/* $Id: scanner.c,v 1.74 2004/01/21 06:11:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,7 +133,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	if (is_css_char_token(first_char)) {
 		type = first_char;
 
-	} else if (is_css_digit(first_char)) {
+	} else if (is_css_digit(first_char) || first_char == '.') {
 		scan_css(string, CSS_CHAR_DIGIT);
 
 		/* First scan the full number token */
@@ -147,7 +147,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		}
 
 		/* Check what kind of number we have */
-		if (*string == '%') {
+		if (*string == '%' && first_char != '.') {
 			type = CSS_TOKEN_PERCENTAGE;
 			string++;
 

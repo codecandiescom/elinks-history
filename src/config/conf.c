@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.56 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: conf.c,v 1.57 2002/12/05 15:02:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,8 @@ parse_set(struct list_head *opt_tree, unsigned char **file, int *line,
 		val = option_types[opt->type].read(opt, file);
 		if (str) {
 			opt->flags |= OPT_WATERMARK;
-			option_types[opt->type].write(opt, str, len);
+			if (option_types[opt->type].write)
+				option_types[opt->type].write(opt, str, len);
 		} else if (!val || !option_types[opt->type].set
 			   || !option_types[opt->type].set(opt, val)) {
 			if (val) mem_free(val);
@@ -440,6 +441,9 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 		       int action)
 {
 	int i, j, l;
+
+	if (!option_types[option->type].write)
+		return;
 
 	switch (action) {
 		case 0:

@@ -1,5 +1,33 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.26 2004/05/04 10:50:08 zas Exp $ */
+/* $Id: memdebug.c,v 1.27 2004/05/08 13:40:39 pasky Exp $ */
+
+/* Wrappers for libc memory managment providing protection against common
+ * pointers manipulation mistakes - bad realloc()/free() pointers, double
+ * free() problem, using uninitialized/freed memory, underflow/overflow
+ * protection, leaks tracking...
+ *
+ * Copyright (C) 1999 - 2002  Mikulas Patocka
+ * Copyright (C) 2001 - 2004  Petr Baudis
+ * Copyright (C) 2002 - 2003  Laurent Monin
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * This file is covered by the General Public Licence v2. */
+
+/* This file is very useful even for projects other than ELinks and I like to
+ * refer to it through its cvsweb URL, therefore it is a good thing to include
+ * the full copyright header here, contrary to the usual ELinks customs. */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.51 2004/12/10 18:05:17 zas Exp $ */
+/* $Id: link.c,v 1.52 2004/12/10 18:12:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,18 +227,19 @@ html_img(unsigned char *a)
 	if (usemap_attr) {
 		unsigned char *url;
 
-		usemap = 1;
-		html_stack_dup(ELEMENT_KILLABLE);
-		mem_free_if(format.link);
-		if (format.form) format.form = NULL;
-		url = join_urls(html_context.base_href, usemap_attr);
+		url = straconcat("MAP@",
+				 join_urls(html_context.base_href, usemap_attr),
+				 NULL);
 		mem_free(usemap_attr);
-		if (!url) return; /* FIXME: kill_html_stack_item(&html_top) ? --Zas */
+		if (!url) return;
 
-		format.link = straconcat("MAP@", url, NULL);
-		format.attr |= AT_BOLD;
+		html_stack_dup(ELEMENT_KILLABLE);
+		mem_free_set(&format.link, url);
 		mem_free(url);
-	}
+		format.form = NULL;
+		format.attr |= AT_BOLD;
+		usemap = 1;
+ 	}
 
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
 

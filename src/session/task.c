@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.65 2004/04/04 16:26:44 jonas Exp $ */
+/* $Id: task.c,v 1.66 2004/04/04 16:38:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,8 +224,6 @@ x:
 			destroy_vs(vs);
 			init_vs(vs, ses->loading_uri, vs->plain);
 			if (ses->goto_position) {
-				if (frame->vs.goto_position)
-					mem_free(frame->vs.goto_position);
 				frame->vs.goto_position = ses->goto_position;
 				ses->goto_position = NULL;
 			}

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.153 2005/03/02 15:17:54 zas Exp $ */
+/* $Id: task.c,v 1.154 2005/03/02 15:39:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,8 +204,6 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	if (!confirm_submit) {
-		mem_free_if(task);
-
 		ses->loading.callback = (void (*)(struct download *, void *)) loading_callback;
 		ses->loading.data = ses;
 		ses->loading_uri = get_uri_reference(uri);

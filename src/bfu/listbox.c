@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.40 2002/10/08 22:07:57 pasky Exp $ */
+/* $Id: listbox.c,v 1.41 2002/10/12 12:44:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,12 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 		*rw = item->l;
 		if (*rw > w) *rw = w;
 	}
-	(*y) += item->item->gid;
+	/* We ignore this one happily now. Rather be Dynamic ;p. */
+	/* (*y) += item->item->gid; */
+	/* This is only weird heuristic, it could scale well I hope. */
+	item->h = (term ? term->y : t2 ? t2->y : 25) * 2 / 3 - 2 * DIALOG_TB - 8;
+	//debug("::%d(%d)::%d::%d::", term?term->y:t2->y, term?1:2, item->h, *y);
+	(*y) += item->h;
 }
 
 
@@ -193,7 +198,7 @@ box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 
 	if (data->dist > 0) {
 		if (data->box->sel_offset
-		    < data->listbox_item_data->item->gid - 1) {
+		    < data->listbox_item_data->h - 1) {
 			data->box->sel_offset++;
 		} else {
 			data->box->top =
@@ -353,7 +358,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	}
 
 	fill_area(term, listbox_item_data->x, listbox_item_data->y,
-		  listbox_item_data->l, listbox_item_data->item->gid,
+		  listbox_item_data->l, listbox_item_data->h,
 		  get_bfu_color(term, "menu.normal"));
 
 	data = mem_alloc(sizeof(struct box_context));
@@ -370,7 +375,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		box->sel = box->top;
 	}
 
-	traverse_listbox_items_list(box->top, listbox_item_data->item->gid,
+	traverse_listbox_items_list(box->top, listbox_item_data->h,
 				    1, display_listbox_item, data);
 
 	mem_free(data);
@@ -408,7 +413,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	}
 
 	if ((ev->b & BM_ACT) == B_UP) {
-		if ((ev->y >= di->y && ev->y < di->y + di->item->gid) &&
+		if ((ev->y >= di->y && ev->y < di->y + di->h) &&
 		    (ev->x >= di->x && ev->x <= di->x + di->l)) {
 			/* Clicked in the box. */
 			int offset;
@@ -479,7 +484,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 
 			if (ev->x == KBD_PAGE_DOWN) {
 				box_sel_move(&dlg->items[dlg->n - 1],
-					     dlg->items[dlg->n - 1].item->gid / 2);
+					     dlg->items[dlg->n - 1].h / 2);
 				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
 
 				return EVENT_PROCESSED;
@@ -487,7 +492,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 
 			if (ev->x == KBD_PAGE_UP) {
 				box_sel_move(&dlg->items[dlg->n - 1],
-					     -dlg->items[dlg->n - 1].item->gid / 2);
+					     -dlg->items[dlg->n - 1].h / 2);
 				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
 
 				return EVENT_PROCESSED;

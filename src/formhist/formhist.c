@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.26 2003/08/22 15:07:47 zas Exp $ */
+/* $Id: formhist.c,v 1.27 2003/08/22 15:13:17 zas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -24,7 +24,7 @@
 #include "util/string.h"
 #include "viewer/text/form.h"
 
-#define FORMHIST_FILENAME		"password"
+#define FORMHIST_FILENAME		"formhist"
 
 INIT_LIST_HEAD(saved_forms);
 

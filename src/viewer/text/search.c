@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.178 2004/01/30 22:38:52 jonas Exp $ */
+/* $Id: search.c,v 1.179 2004/01/31 00:29:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -982,6 +982,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	int direction, case_sensitive, i = current_link;
 
 	switch (action) {
+		case ACT_EDIT_PREVIOUS_ITEM:
 		case ACT_EDIT_UP:
 			direction = -1;
 			i--;
@@ -1091,6 +1092,10 @@ text_typeahead_handler(struct input_line *line, int action)
 		case ACT_EDIT_ENTER:
 			send_enter(ses->tab->term, NULL, ses);
 			return INPUT_LINE_CANCEL;
+
+		case ACT_EDIT_PREVIOUS_ITEM:
+			find_next_back(ses, doc_view, 0);
+			break;
 
 		case ACT_EDIT_NEXT_ITEM:
 			find_next(ses, doc_view, 0);

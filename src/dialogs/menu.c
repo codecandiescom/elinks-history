@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.152 2003/10/23 15:18:53 zas Exp $ */
+/* $Id: menu.c,v 1.153 2003/10/23 21:54:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,7 +187,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 	/* Move all intermediate items to unhistory. */
 
 	while (steps-- > 0) {
-		struct location *loc = ses->history.next;
+		struct location *loc = ses->history.history.next;
 
 		if (!have_location(ses)) return;
 
@@ -195,7 +195,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 		 * precious... like... like... the current location? */
 
 		loc = loc->next;
-		if ((void *) loc == &ses->history) return;
+		if ((void *) loc == &ses->history.history) return;
 
 		go_back(ses);
 	}
@@ -211,9 +211,9 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 	/* Move all intermediate items to history. */
 
 	while (steps-- > 0) {
-	    	struct location *loc = ses->unhistory.next;
+	    	struct location *loc = ses->history.unhistory.next;
 
-		if ((void *) loc == &ses->unhistory) return;
+		if ((void *) loc == &ses->history.unhistory) return;
 
 		go_unback(ses);
 	}
@@ -231,7 +231,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach (loc, ses->history) {
+	foreach (loc, ses->history.history) {
 		unsigned char *url;
 
 		if (!n) {
@@ -268,7 +268,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 	struct menu_item *mi = NULL;
 	int n = 0;
 
-	foreach (loc, ses->unhistory) {
+	foreach (loc, ses->history.unhistory) {
 		unsigned char *url;
 
 		if (!mi) {

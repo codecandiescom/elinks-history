@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.178 2003/10/22 11:45:55 jonas Exp $ */
+/* $Id: session.c,v 1.179 2003/10/23 21:54:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -474,7 +474,7 @@ x:
 		if_assert_failed return;
 
 		copy_location(loc, cur_loc(ses));
-		add_to_history(ses, loc);
+		add_to_history(&ses->history, loc);
 		frm = ses_change_frame_url(ses, ses->task_target_frame,
 					   ses->loading_url);
 
@@ -500,7 +500,7 @@ x:
 	} else {
 		init_list(loc->frames);
 		init_vs(&loc->vs, ses->loading_url);
-		add_to_history(ses, loc);
+		add_to_history(&ses->history, loc);
 
 		if (ses->goto_position) {
 			loc->vs.goto_position = ses->goto_position;
@@ -1158,7 +1158,7 @@ create_basic_session(struct window *tab)
 
 	if (!ses) return NULL;
 
-	create_history(ses);
+	create_history(&ses->history);
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
 	ses->tab = tab;
@@ -1394,8 +1394,7 @@ destroy_session(struct session *ses)
 
 	free_list(ses->scrn_frames);
 
-	destroy_history(ses);
-	if (ses->location) destroy_location(ses->location);
+	destroy_history(&ses->history);
 
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
@@ -1526,7 +1525,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	/* abort_loading(ses); */
 
 end:
-	clean_unhistory(ses);
+	clean_unhistory(&ses->history);
 }
 
 static void

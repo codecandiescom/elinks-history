@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.107 2003/10/22 21:59:40 zas Exp $ */
+/* $Id: download.c,v 1.108 2003/10/23 21:54:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1192,7 +1192,7 @@ tp_display(struct session *ses)
 		ses->tq_goto_position = NULL;
 	}
 
-	add_to_history(ses, l);
+	add_to_history(&ses->history, l);
 	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				     doc_end_load;
 	cur_loc(ses)->download.data = ses;

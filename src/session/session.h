@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.47 2003/10/23 21:43:30 pasky Exp $ */
+/* $Id: session.h,v 1.48 2003/10/23 21:54:38 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -12,6 +12,7 @@ struct session;
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "sched/connection.h"
+#include "sched/history.h"
 #include "sched/location.h"
 #include "util/lists.h"
 #include "viewer/text/vs.h"
@@ -81,22 +82,10 @@ struct session {
 
 	/* Browsing history */
 
-	/* The _last_ visited location is always stored _first_ in the list.
-	 * Thus, after visiting A B C D E and then going back to C, in history
-	 * will be (in this order, from list.next through ->nexts) B A and in
-	 * unhistory will be D E. */
-	struct list_head history; /* -> struct location */
-	struct list_head unhistory; /* -> struct location */
+	struct ses_history history;
 
 
 	/* The current document */
-
-	/* This points to the current location info. The recommended way of
-	 * getting this is by calling cur_loc(session). */
-	/* Historical note: this used to be @history.next, but that had to be
-	 * changed in order to generalize and greatly simplify the (un)history
-	 * handling. --pasky */
-	struct location *location;
 
 	struct list_head more_files; /* -> struct file_to_load */
 
@@ -159,12 +148,12 @@ extern struct list_head sessions; /* -> struct session */
 
 /* This returns a pointer to the current location inside of the given session.
  * That's nice for encapsulation and alrady paid out once ;-). */
-#define cur_loc(x) ((struct location *) ((x)->history.next))
+#define cur_loc(x) ((struct location *) ((x)->history.history.next))
 
 /* Return if we have anything being loaded in this session already. */
 static inline int
 have_location(struct session *ses) {
-	return !list_empty(ses->history);
+	return !list_empty(ses->history.history);
 }
 
 

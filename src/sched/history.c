@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.29 2003/10/17 13:26:45 jonas Exp $ */
+/* $Id: history.c,v 1.30 2003/10/23 21:54:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,24 +41,24 @@ free_history(struct list_head *history)
 
 
 void
-create_history(struct session *ses)
+create_history(struct ses_history *history)
 {
-	init_list(ses->history);
-	init_list(ses->unhistory);
+	init_list(history->history);
+	init_list(history->unhistory);
 }
 
 void
-destroy_history(struct session *ses)
+destroy_history(struct ses_history *history)
 {
-	free_history(&ses->history);
-	free_history(&ses->unhistory);
+	free_history(&history->history);
+	free_history(&history->unhistory);
 }
 
 void
-clean_unhistory(struct session *ses)
+clean_unhistory(struct ses_history *history)
 {
 	if (get_opt_int("document.history.keep_unhistory")) return;
-	free_history(&ses->unhistory);
+	free_history(&history->unhistory);
 }
 
 
@@ -95,12 +95,12 @@ ses_back(struct session *ses)
 	loc = cur_loc(ses);
     	del_from_list(loc);
 
-	add_to_list(ses->unhistory, loc);
+	add_to_list(ses->history.unhistory, loc);
 
 	if (!have_location(ses)) return;
 
 	/* This was the previous location (where we came back now). */
-	loc = ses->history.next;
+	loc = ses->history.history.next;
 
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
@@ -117,14 +117,14 @@ ses_unback(struct session *ses)
 	if (ses_leave_location(ses, 1) < 1)
 		return;
 
-	if (list_empty(ses->unhistory))
+	if (list_empty(ses->history.unhistory))
 		return;
 
-	loc = ses->unhistory.next;
+	loc = ses->history.unhistory.next;
 
 	del_from_list(loc);
 	/* Save it as the current location! */
-	add_to_list(ses->history, loc);
+	add_to_list(ses->history.history, loc);
 
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
@@ -142,8 +142,8 @@ static int
 go_away(struct session *ses, int dir)
 {
 	struct document_view *doc_view = current_frame(ses);
-	struct list_head *history = (dir == 1	? &ses->unhistory
-						: &ses->history);
+	struct list_head *history = (dir == 1	? &ses->history.unhistory
+						: &ses->history.history);
 
 	ses->reloadlevel = NC_CACHE;
 
@@ -183,7 +183,7 @@ go_back(struct session *ses)
 	if (go_away(ses, -1) < 1)
 		return;
 
-	loc = ((struct location *) ses->history.next)->next;
+	loc = ((struct location *) ses->history.history.next)->next;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 
@@ -200,7 +200,7 @@ go_unback(struct session *ses)
 	if (go_away(ses, 1) < 1)
 		return;
 
-	loc = (struct location *) ses->unhistory.next;
+	loc = (struct location *) ses->history.unhistory.next;
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;
 

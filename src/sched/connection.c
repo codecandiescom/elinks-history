@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.27 2003/07/02 00:44:53 jonas Exp $ */
+/* $Id: connection.c,v 1.28 2003/07/02 02:17:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ static int keepalive_timeout = -1;
  * foreach_queue or so). Ok ok, that's nothing important and I'm not even
  * sure I would really like it ;-). --pasky */
 INIT_LIST_HEAD(queue);
-static INIT_LIST_HEAD(h_conns);
+static INIT_LIST_HEAD(host_connections);
 static INIT_LIST_HEAD(keepalive_connections);
 
 
@@ -141,7 +141,7 @@ is_host_on_list(struct connection *c)
 	struct h_conn *h;
 
 	if (!ho) return NULL;
-	foreach (h, h_conns) if (!strcmp(h->host, ho)) {
+	foreach (h, host_connections) if (!strcmp(h->host, ho)) {
 		mem_free(ho);
 		return h;
 	}
@@ -588,7 +588,7 @@ run_connection(struct connection *c)
 			mem_free(hc);
 			return;
 		}
-		add_to_list(h_conns, hc);
+		add_to_list(host_connections, hc);
 	}
 	hc->conn++;
 	active_connections++;

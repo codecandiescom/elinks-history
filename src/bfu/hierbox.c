@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.130 2003/12/27 23:33:39 jonas Exp $ */
+/* $Id: hierbox.c,v 1.131 2003/12/28 03:14:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,6 +437,31 @@ recursively_goto_listbox(struct session *ses, struct terminal *term,
 	}
 }
 
+static int
+goto_marked(struct listbox_item *item, void *data_, int *offset)
+{
+	struct listbox_context *context = data_;
+
+	if (item->marked) {
+		struct session *ses = context->dlg_data->dlg->udata;
+		struct listbox_data *box = context->box;
+		unsigned char *uri;
+
+		if (item->type == BI_FOLDER) {
+			recursively_goto_listbox(ses, ses->tab->term, item, box);
+			return 0;
+		}
+
+		uri = box->ops->get_info(item, ses->tab->term, LISTBOX_URI);
+		if (!uri) return 0;
+
+		open_url_in_new_tab(ses, uri, 1);
+		mem_free(uri);
+	}
+
+	return 0;
+}
+
 int
 push_hierbox_goto_button(struct dialog_data *dlg_data,
 			 struct widget_data *button)
@@ -444,12 +469,22 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct session *ses = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
+	struct listbox_context *context;
 	unsigned char *uri;
 
 	/* Do nothing with a folder */
 	if (!box->sel) return 0;
 
-	if (box->sel->type == BI_FOLDER) {
+	context = init_listbox_context(box, term, box->sel, scan_for_marks);
+	if (!context) return 0;
+
+	if (!context->item) {
+		context->dlg_data = dlg_data;
+		traverse_listbox_items_list(context->box->items->next,
+					    context->box, 0, 0,
+					    goto_marked, context);
+
+	} else if (box->sel->type == BI_FOLDER) {
 		recursively_goto_listbox(ses, term, box->sel, box);
 
 	} else {
@@ -460,6 +495,8 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 		goto_url(ses, uri);
 		mem_free(uri);
 	}
+
+	mem_free(context);
 
 	/* Close the dialog */
 	delete_window(dlg_data->win);

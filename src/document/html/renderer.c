@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.402 2004/01/16 14:49:25 jonas Exp $ */
+/* $Id: renderer.c,v 1.403 2004/01/16 15:35:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,6 +79,11 @@ static unsigned char *last_link;
 static unsigned char *last_target;
 static unsigned char *last_image;
 static struct form_control *last_form;
+/* We need to have the current @link_state global because for example <sub> and
+ * <sup> tags will output to the canvas using an inner put_chars() call which
+ * results in their process_link() call will ``update'' the @link_state but the
+ * outer put_chars() would not notice this change. */
+static enum link_state link_state;
 static int nobreak;
 static int nosearchable;
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
@@ -258,8 +263,10 @@ draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 	}
 }
 
+static enum link_state get_link_state(void);
+
 static inline struct screen_char *
-get_format_screen_char(struct part *part, enum link_state link_state)
+get_format_screen_char(struct part *part)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static struct screen_char schar_cache;
@@ -308,6 +315,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 				if (!sub) {
 					sub = 1;
 					put_chars(part, "[", 1);
+					link_state = get_link_state();
 				}
 			} else {
 				if (sub) {
@@ -324,6 +332,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 				if (!super) {
 					super = 1;
 					put_chars(part, "^", 1);
+					link_state = get_link_state();
 				}
 			} else {
 				if (super) {
@@ -343,10 +352,9 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 /* First possibly do the format change and then find out what coordinates
  * to use since sub- or superscript might change them */
 static inline void
-set_hline(struct part *part, unsigned char *chars, int charslen,
-	  enum link_state link_state)
+set_hline(struct part *part, unsigned char *chars, int charslen)
 {
-	struct screen_char *schar = get_format_screen_char(part, link_state);
+	struct screen_char *schar = get_format_screen_char(part);
 	int x = part->cx;
 	int y = part->cy;
 
@@ -887,8 +895,7 @@ put_link_number(struct part *part)
 	assertm(!(old), "Old link value [%s]. New value [%s]", old, new);
 
 static inline void
-process_link(struct part *part, enum link_state link_state,
-	     unsigned char *chars, int charslen)
+process_link(struct part *part, unsigned char *chars, int charslen)
 {
 	struct link *link;
 
@@ -916,8 +923,8 @@ process_link(struct part *part, enum link_state link_state,
 		part->link_num++;
 
 		assert_link_variable(last_image, format.image);
-		assert_link_variable(last_target, format.target);
 		assert_link_variable(last_link, format.link);
+		assert_link_variable(last_target, format.target);
 
 		last_link = null_or_stracpy(format.link);
 		last_target = null_or_stracpy(format.target);
@@ -945,7 +952,7 @@ process_link(struct part *part, enum link_state link_state,
 	}
 }
 
-static inline enum link_state
+static enum link_state
 get_link_state(void)
 {
 	enum link_state state;
@@ -978,8 +985,6 @@ get_link_state(void)
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
-	enum link_state link_state;
-
 	assert(part);
 	if_assert_failed return;
 
@@ -1008,16 +1013,18 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	int_lower_bound(&part->height, part->cy + 1);
 
+	/* See comment attached to @link_state declaration about problems with
+	 * recursive calls to put_chars(). */
 	link_state = get_link_state();
 
 	if (global_doc_opts->num_links_display && link_state == LINK_STATE_NEW) {
 		put_link_number(part);
 	}
 
-	set_hline(part, chars, charslen, link_state);
+	set_hline(part, chars, charslen);
 
 	if (link_state != LINK_STATE_NONE) {
-		process_link(part, link_state, chars, charslen);
+		process_link(part, chars, charslen);
 	}
 
 	if (nowrap && part->cx + charslen > overlap(par_format))

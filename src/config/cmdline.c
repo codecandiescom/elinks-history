@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.53 2004/04/15 08:28:28 jonas Exp $ */
+/* $Id: cmdline.c,v 1.54 2004/04/15 17:30:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ unknown_option:
 
 					return 1;
 				} else if (remote_url) {
-					add_to_string_list(url_list, remote_url, -1);
+					if (url_list) add_to_string_list(url_list, remote_url, -1);
 					mem_free(remote_url);
 					remote_url = NULL;
 				}

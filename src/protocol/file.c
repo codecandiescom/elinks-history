@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.86 2003/06/24 01:35:25 jonas Exp $ */
+/* $Id: file.c,v 1.87 2003/06/24 01:51:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,6 +55,7 @@ struct file_data {
 	unsigned char *fragment;
 	int fragmentlen;
 };
+
 
 /* Directory listing */
 
@@ -289,7 +290,7 @@ comp_de(struct directory_entry *d1, struct directory_entry *d2)
 
 /* Based on the @entry attributes and file-/dir-/linkname is added to the @data
  * fragment. */
-static void
+static inline void
 add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	      unsigned char *path, unsigned char *dircolor)
 {
@@ -366,8 +367,8 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 
 /* First information such as permissions is gathered for each directory entry.
  * All entries are then sorted and finally the sorted entries are added to the
- * fragment one by one. */
-static void
+ * @data->fragment one by one. */
+static inline void
 add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	struct directory_entry *entries = NULL;
@@ -454,7 +455,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 /* Generates a HTML page listing the content of @directory with the path
  * @dirpath. */
 /* Returns a connection state. S_OK if all is well. */
-static int
+static inline int
 list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	unsigned char *fragment = init_str();
@@ -501,7 +502,7 @@ list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 
 /* Tries to open @prefixname with each of the supported encoding extensions
  * appended. */
-static enum stream_encoding
+static inline enum stream_encoding
 try_encoding_extensions(unsigned char *prefixname, int *fd)
 {
 	unsigned char filename[MAX_STR_LEN];
@@ -535,7 +536,7 @@ try_encoding_extensions(unsigned char *prefixname, int *fd)
 
 /* Reads the file from @stream in chunks of size @readsize. */
 /* Returns a connection state. S_OK if all is well. */
-static int
+static inline int
 read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
 {
 	/* + 1 is there because of bug in Linux. Read returns -EACCES when

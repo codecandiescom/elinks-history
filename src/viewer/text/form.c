@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.198 2004/06/16 21:39:56 zas Exp $ */
+/* $Id: form.c,v 1.199 2004/06/17 00:35:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1085,7 +1085,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 	assertm(fc, "link has no form control");
 	if_assert_failed return FRAME_EVENT_OK;
 
-	if (fc->ro == 2 || ev->ev != EV_KBD)
+	if (fc->mode == FORM_MODE_DISABLED || ev->ev != EV_KBD)
 		return FRAME_EVENT_IGNORED;
 
 	action = kbd_action(KM_EDIT, ev, NULL);
@@ -1149,9 +1149,9 @@ field_op(struct session *ses, struct document_view *doc_view,
 			}
 			break;
 		case ACT_EDIT_EDIT:
-			if (fc->ro)
+			if (form_field_is_readonly(fc))
 				status = FRAME_EVENT_IGNORED;
-			else if (fc->type == FC_TEXTAREA && !fc->ro)
+			else if (fc->type == FC_TEXTAREA)
 				textarea_edit(0, ses->tab->term, fc, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
@@ -1160,11 +1160,11 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_CUT_CLIPBOARD:
 			set_clipboard_text(fs->value);
-			if (!fc->ro) fs->value[0] = 0;
+			if (fc->mode != FORM_MODE_READONLY) fs->value[0] = 0;
 			fs->state = 0;
 			break;
 		case ACT_EDIT_PASTE_CLIPBOARD:
-			if (fc->ro) break;
+			if (form_field_is_readonly(fc)) break;
 
 			text = get_clipboard_text();
 			if (!text) break;
@@ -1188,7 +1188,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 				status = textarea_op_enter(fs, fc, rep);
 			break;
 		case ACT_EDIT_BACKSPACE:
-			if (fc->ro) {
+			if (form_field_is_readonly(fc)) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1205,7 +1205,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state--;
 			break;
 		case ACT_EDIT_DELETE:
-			if (fc->ro) {
+			if (form_field_is_readonly(fc)) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1221,7 +1221,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			memmove(text, text + 1, length - fs->state);
 			break;
 		case ACT_EDIT_KILL_TO_BOL:
-			if (fc->ro) {
+			if (form_field_is_readonly(fc)) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1247,7 +1247,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			fs->state = (int) (text - fs->value);
 			break;
 		case ACT_EDIT_KILL_TO_EOL:
-			if (fc->ro) {
+			if (form_field_is_readonly(fc)) {
 				status = FRAME_EVENT_IGNORED;
 				break;
 			}
@@ -1285,7 +1285,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			if (fc->ro) break;
+			if (form_field_is_readonly(fc)) break;
 
 			length = strlen(fs->value);
 			if (length >= fc->maxlength) {
@@ -1392,7 +1392,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_PASSWORD:
 	case FC_FILE:
 	case FC_TEXTAREA:
-		if (fc->ro) {
+		if (form_field_is_readonly(fc)) {
 			add_form_attr_to_string(&str, term, N_("read only"), NULL);
 		}
 
@@ -1403,7 +1403,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 			if (!key) break;
 
-			if (fc->ro)
+			if (form_field_is_readonly(fc))
 				label = N_("press %s to navigate");
 			else
 				label = N_("press %s to edit");

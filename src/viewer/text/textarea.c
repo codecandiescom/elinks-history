@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.82 2004/06/16 21:33:51 zas Exp $ */
+/* $Id: textarea.c,v 1.83 2004/06/17 00:35:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -382,7 +382,9 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 
 	fc = link->form_control;
 	assert(fc && fc->type == FC_TEXTAREA);
-	if (fc->ro) return 1;
+
+	if (form_field_is_readonly(link->form_control))
+		return 1;
 
 	fs = find_form_state(doc_view, fc);
 	if (!fs) return 1;
@@ -628,9 +630,12 @@ textarea_op_enter(struct form_state *fs, struct form_control *fc, int rep)
 	assert(fs && fs->value && fc);
 	if_assert_failed return FRAME_EVENT_OK;
 
+	if (form_field_is_readonly(fc))
+		return FRAME_EVENT_OK;
+
 	value = fs->value;
 	value_len = strlen(value);
-	if (!fc->ro && value_len < fc->maxlength) {
+	if (value_len < fc->maxlength) {
 		value = mem_realloc(value, value_len + 2);
 
 		if (value) {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.230 2004/06/16 19:19:49 jonas Exp $ */
+/* $Id: link.c,v 1.231 2004/06/17 00:35:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -634,7 +634,8 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 	} else if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs = find_form_state(doc_view, link->form_control);
 
-		if (link->form_control->ro) return FRAME_EVENT_REFRESH;
+		if (form_field_is_readonly(link->form_control))
+			return FRAME_EVENT_REFRESH;
 
 		if (link->form_control->type == FC_CHECKBOX) {
 			fs->state = !fs->state;
@@ -656,7 +657,7 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 		}
 
 	} else if (link->type == LINK_SELECT) {
-		if (link->form_control->ro)
+		if (form_field_is_readonly(link->form_control))
 			return FRAME_EVENT_REFRESH;
 
 		object_lock(doc_view->document);
@@ -871,7 +872,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			break;
 
 		case FC_TEXTAREA:
-			if (!link->form_control->ro) {
+			if (!form_field_is_readonly(link->form_control)) {
 				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}

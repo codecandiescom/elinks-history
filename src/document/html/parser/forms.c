@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.19 2004/06/17 00:12:26 jonas Exp $ */
+/* $Id: forms.c,v 1.20 2004/06/17 00:35:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,9 +189,9 @@ put_button(unsigned char *a)
 int
 get_form_mode(unsigned char *attr)
 {
-	if (has_attr(attr, "disabled")) return 2;
-	if (has_attr(attr, "readonly")) return 1;
-	return 0;
+	if (has_attr(attr, "disabled")) return FORM_MODE_DISABLED;
+	if (has_attr(attr, "readonly")) return FORM_MODE_READONLY;
+	return FORM_MODE_NORMAL;
 }
 
 void
@@ -232,7 +232,7 @@ no_type_attr:
 	fc->method = form.method;
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(a, "name");
-	fc->ro = get_form_mode(a);
+	fc->mode = get_form_mode(a);
 
 	fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_SUBMIT) fc->default_value = stracpy("Submit");
@@ -289,7 +289,7 @@ no_type_attr:
 	fc->action = null_or_stracpy(form.action);
 	fc->target = null_or_stracpy(form.target);
 	fc->name = get_attr_val(a, "name");
-	fc->ro = get_form_mode(a);
+	fc->mode = get_form_mode(a);
 
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
@@ -379,7 +379,7 @@ html_select(unsigned char *a)
 	html_focusable(a);
 	html_top.type = ELEMENT_DONT_KILL;
 	format.select = al;
-	format.select_disabled = 2 * has_attr(a, "disabled");
+	format.select_disabled = has_attr(a, "disabled") ? FORM_MODE_DISABLED : FORM_MODE_NORMAL;
 }
 
 void
@@ -447,7 +447,7 @@ end_parse:
 	fc->name = null_or_stracpy(format.select);
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
-	fc->ro = has_attr(a, "disabled") ? 2 : format.select_disabled;
+	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
 	put_chrs(" ", 1, put_chars_f, ff);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
@@ -600,7 +600,7 @@ end_parse:
 	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
 	fc->default_value = order ? stracpy(values[fc->default_state]) : stracpy("");
-	fc->ro = get_form_mode(attr);
+	fc->mode = get_form_mode(attr);
 	fc->nvalues = order;
 	fc->values = values;
 	fc->menu = detach_menu(&lnk_menu);
@@ -670,7 +670,7 @@ pp:
 	fc->action = null_or_stracpy(form.action);
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_TEXTAREA;;
-	fc->ro = get_form_mode(attr);
+	fc->mode = get_form_mode(attr);
 	fc->default_value = memacpy(html, p - html);
 	for (p = fc->default_value; p && p[0]; p++) {
 		/* FIXME: We don't cope well with entities here. Bugzilla uses

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.72 2003/11/08 01:59:46 pasky Exp $ */
+/* $Id: cache.c,v 1.73 2003/11/08 02:01:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -500,16 +500,17 @@ garbage_collection(int whole)
 	 * that @cache_size is in sync. */
 
 	foreach (ce, cache) {
-		if (ce->refcount || is_entry_used(ce)) {
-			new_cache_size -= ce->data_size;
+		old_cache_size += ce->data_size;
 
-			assertm(new_cache_size >= 0,
+		if (!ce->refcount && !is_entry_used(ce))
+			continue;
+
+		new_cache_size -= ce->data_size;
+
+		assertm(new_cache_size >= 0,
 				"cache_size (%ld) underflow: %ld",
 				cache_size, new_cache_size);
-			if_assert_failed { new_cache_size = 0; }
-		}
-
-		old_cache_size += ce->data_size;
+		if_assert_failed { new_cache_size = 0; }
 	}
 
 	assertm(old_cache_size == cache_size,
@@ -577,10 +578,11 @@ shrinked_enough:
 		for (entry = ce; (void *) entry != &cache; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
-			if (newer_cache_size <= gc_cache_size) {
-				new_cache_size = newer_cache_size;
-				entry->gc_target = 0;
-			}
+			if (newer_cache_size > gc_cache_size)
+				continue;
+
+			new_cache_size = newer_cache_size;
+			entry->gc_target = 0;
 		}
 	}
 

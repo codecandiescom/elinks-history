@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.9 2002/12/08 18:30:09 pasky Exp $ */
+/* $Id: dialogs.c,v 1.10 2002/12/08 20:00:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,52 +79,6 @@ option_dialog_abort_handler(struct dialog_data *dlg)
 	mem_free(box);
 }
 
-
-#if 0
-/* Called when an edit is complete. */
-static void
-option_edit_done(struct dialog *d) {
-	struct option *bm = (struct option *) d->udata2;
-
-	update_bookmark(bm, d->items[0].data, d->items[1].data);
-	bm->refcount--;
-
-#ifdef BOOKMARKS_RESAVE
-	write_bookmarks();
-#endif
-}
-
-static void
-bookmark_edit_cancel(struct dialog *d) {
-	struct bookmark *bm = (struct bookmark *) d->udata2;
-
-	bm->refcount--;
-}
-
-/* Called when the edit button is pushed */
-static int
-push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
-{
-	struct listbox_data *box;
-
-	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
-
-	/* Follow the bookmark */
-	if (box->sel) {
-		struct bookmark *bm = (struct bookmark *) box->sel->udata;
-		const unsigned char *name = bm->title;
-		const unsigned char *url = bm->url;
-
-		bm->refcount++;
-		do_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
-			       (struct session *) edit_btn->item->udata, dlg,
-			       bookmark_edit_done, bookmark_edit_cancel,
-			       (void *) bm, 1);
-	}
-
-	return 0;
-}
-#endif
 
 static void
 done_info_button(void *vhop)
@@ -312,10 +266,6 @@ build_edit_dialog(struct terminal *term, struct option *option)
 
 	d->title = TEXT(T_EDIT);
 	d->fn = layout_edit_dialog;
-#if 0
-	d->refresh = (void (*)(void *)) finish_edit_dialog;
-	d->refresh_data = d;
-#endif
 	d->udata = option;
 
 	value = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];

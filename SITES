@@ -16,9 +16,9 @@ CVS root:
 
 Mailing list:
 	http://links.sf.net/mailing.html
-	links-list@linuxfromscratch.org (bug reports, announcements)
-	links-discuss@linuxfromscratch.org (feature requests, development)
-	listar@linuxfromscratch.org (Subject: subscribe links-list)
+	elinks-users@linuxfromscratch.org (user discussion, announcements)
+	elinks-dev@linuxfromscratch.org (weird development and sorcery talks)
+	listar@linuxfromscratch.org (Subject: subscribe elinks-users)
 
 
 If you want to see the original Links as well, try:
@@ -46,4 +46,4 @@ RPMs:
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-$Id: SITES,v 1.13 2003/01/01 19:54:44 pasky Exp $
+$Id: SITES,v 1.14 2003/05/10 23:05:27 pasky Exp $

@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.33 2004/04/01 00:13:01 jonas Exp $ */
+/* $Id: download.h,v 1.34 2004/04/01 00:37:44 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -14,12 +14,13 @@ struct terminal;
 
 struct cache_entry;
 struct session;
+struct uri;
 
 
 struct file_download {
 	LIST_HEAD(struct file_download);
 
-	unsigned char *uri;
+	struct uri *uri;
 	unsigned char *file;
 	unsigned char *prog;
 	struct session *ses;

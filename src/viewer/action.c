@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.62 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: action.c,v 1.63 2004/05/05 12:26:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_TOGGLE_CSS:
+#ifdef CONFIG_CSS
 			toggle_document_option(ses, "document.css.enable");
+#endif
 			break;
 
 		case ACT_MAIN_TOGGLE_DISPLAY_IMAGES:

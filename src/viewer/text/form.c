@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.164 2004/06/14 19:35:53 jonas Exp $ */
+/* $Id: form.c,v 1.165 2004/06/15 01:05:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1308,7 +1308,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 
 	if (link->type == LINK_FIELD
 	    && fc->action
-	    && !has_form_submit(doc_view->document, fc)) {
+	    && has_form_submit(doc_view->document, fc)) {
 		add_to_string(&str, ", ");
 		add_to_string(&str, _("hit ENTER to", term));
 		add_char_to_string(&str, ' ');

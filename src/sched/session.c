@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.474 2004/06/11 00:54:10 jonas Exp $ */
+/* $Id: session.c,v 1.475 2004/06/11 01:21:13 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -577,15 +577,13 @@ setup_first_session(struct session *ses, struct uri *uri)
 {
 	struct terminal *term = ses->tab->term;
 
-	/* Start loading URI in the background */
-	if (uri) goto_uri(ses, uri);
+	if (uri) {
+		goto_uri(ses, uri);
 
-	if (first_use) {
+	} else if (first_use) {
 		/* Only open the goto URL dialog if no URI was passed on the
 		 * command line. */
 		void *handler = uri ? dialog_goto_url_open : NULL;
-
-		first_use = 0;
 
 		msg_box(term, NULL, 0,
 			N_("Welcome"), AL_CENTER,
@@ -596,7 +594,7 @@ setup_first_session(struct session *ses, struct uri *uri)
 			N_("OK"), handler, B_ENTER | B_ESC);
 
 #ifdef CONFIG_BOOKMARKS
-	} else if (!uri && get_opt_bool("ui.sessions.auto_restore")) {
+	} else if (get_opt_bool("ui.sessions.auto_restore")) {
 		unsigned char *folder;
 
 		folder = get_opt_str("ui.sessions.auto_save_foldername");
@@ -605,6 +603,8 @@ setup_first_session(struct session *ses, struct uri *uri)
 	} else {
 		goto_url_home(ses);
 	}
+
+	first_use = 0;
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
 		msg_box(term, NULL, 0,
@@ -652,7 +652,7 @@ setup_first_session(struct session *ses, struct uri *uri)
 /* First load the current URI of the base session. In most cases it will just
  * be fetched from the cache so that the new tab will not appear ``empty' while
  * loading the real URI or showing the goto URL dialog. */
-static void 
+static void
 setup_session(struct session *ses, struct uri *uri, struct session *base)
 {
 	if (base && have_location(base))

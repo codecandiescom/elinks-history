@@ -868,12 +868,11 @@ msgid "Cannot write the file"
 msgstr "Impossibile scrivere il file"
 
 #: src/config/dialogs.c:41
-#, fuzzy
 msgid "Write config error"
-msgstr "Errore configurazione"
+msgstr "Errore nella scrittura del file di configurazione"
 
 #: src/config/dialogs.c:42
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Unable to write to config file %s.\n"
 "%s"
@@ -883,12 +882,12 @@ msgstr ""
 
 #: src/config/dialogs.c:67
 msgid "Write config success"
-msgstr ""
+msgstr "Scrittura configurazione avvenuta con successo"
 
 #: src/config/dialogs.c:68
 #, c-format
 msgid "Options were saved successfully to config file %s."
-msgstr ""
+msgstr "Opzioni salvate con successo nel file di configurazione %s."
 
 #: src/config/dialogs.c:72
 msgid "Do not show anymore"
@@ -1446,9 +1445,8 @@ msgid "Toggle displaying of links numbers"
 msgstr "Abilita/disabilita i collegamenti numerati"
 
 #: src/config/kbdbind.c:499
-#, fuzzy
 msgid "Toggle plain renderer compression of empty lines"
-msgstr "Abilita/disabilita il rendering delle tabelle"
+msgstr "Abilita/disabilita la compressione delle righe vuote"
 
 #: src/config/kbdbind.c:500
 msgid "Go forward in the unhistory"
@@ -1738,9 +1736,8 @@ msgid "Ask for confirmation when submitting a form."
 msgstr "Chiedi conferma quando si sottomette un form."
 
 #: src/config/options.inc:146
-#, fuzzy
 msgid "Default form input size"
-msgstr "Impostazioni predefinite dei colori"
+msgstr "Dimensione predefinita dell'input nei form"
 
 #: src/config/options.inc:148
 msgid "Default form input size if none is specified."
@@ -1890,13 +1887,12 @@ msgid "Enable color"
 msgstr "Abilita colore"
 
 #: src/config/options.inc:213
-#, fuzzy
 msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of the link colors from the document."
 msgstr ""
 "Abilita l'uso del colore dello sfondo e del testo per il collegamento\n"
-"attivo invece di browse.links dal documento."
+"attivo invece di usare colori del documento."
 
 #: src/config/options.inc:216
 msgid "Bold"
@@ -2064,11 +2060,10 @@ msgid "Wraparound"
 msgstr "Ricomincia dall'inizio"
 
 #: src/config/options.inc:301
-#, fuzzy
 msgid "Wrap around when searching. Currently only used for typeahead."
 msgstr ""
-"Ricomincia dall'inizio per il successivo collegamento corrispondente dopo "
-"l'ultimo."
+"Ricomincia dall'inizio quando si cerca. Attualmente usato solo per \"trova "
+"mentre scrivi\"."
 
 #: src/config/options.inc:303
 #, fuzzy
@@ -2115,7 +2110,7 @@ msgstr ""
 "Segue automaticamente le direttive di refresh specificate nel documento\n"
 "(tag '<meta>' per il refresh). Gli autori di pagine web lo usano per\n"
 "indicare al browser di ricaricare un documento dopo un certo intervallo o\n"
-"per caricare un'altra pagina"
+"per caricare un'altra pagina."
 
 #: src/config/options.inc:325
 #, fuzzy
@@ -2123,12 +2118,16 @@ msgid "Document meta refresh minimum time"
 msgstr "Meta refresh del documento"
 
 #: src/config/options.inc:327
+#, fuzzy
 msgid ""
 "The minimum number of milliseconds that should pass before\n"
 "refreshing. If set to zero the document refresh time is used\n"
 "unchanged. It can fix going back in history for some sites that\n"
 "use refreshing with zero values."
 msgstr ""
+"Il numero minimo di millisecondi che dovrebbero trascorrere prima\n"
+"di ricaricare. Se impostato a zero il è usato il tempo di ricaricamento\n"
+"del documento."
 
 #: src/config/options.inc:332
 msgid "Scroll margin"
@@ -2593,11 +2592,11 @@ msgstr "Visualizza come collegamenti gli URI nel documento."
 
 #: src/config/options.inc:583
 msgid "Compress empty lines"
-msgstr ""
+msgstr "Comprimi righe vuote"
 
 #: src/config/options.inc:585
 msgid "Compress successive empty lines to only one in displayed text."
-msgstr ""
+msgstr "Comprime righe vuote consecutive a una sola, nel testo mostrato."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:591
@@ -3597,6 +3596,9 @@ msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
+"Imposta la sottolineatura delle scorciatoie nei menu per renderle\n"
+"maggiormente visibili. Richiede che la sottolineature sia abilitata\n"
+"per il terminale."
 
 #: src/config/options.inc:1154
 msgid "Timer options"
@@ -3685,7 +3687,7 @@ msgstr ""
 
 #: src/config/options.inc:1200
 msgid "Confirm tab closing"
-msgstr "Conferma chiusura delle schede."
+msgstr "Conferma chiusura delle schede"
 
 #: src/config/options.inc:1202
 msgid "When closing a tab show confirmation dialog."
@@ -3739,6 +3741,8 @@ msgid ""
 "will make sure that a box confirming success of the operation will\n"
 "pop up."
 msgstr ""
+"Quando si preme il pulsante [ Salva] in uno dei gestori, questa opzione\n"
+"farà apparire una finestra di conferma del successo dell'operazione."
 
 #: src/config/options.inc:1230
 msgid "Sessions"
@@ -4230,9 +4234,8 @@ msgid "C~lose all tabs but the current"
 msgstr "Chiudi ~tutti tranne questo"
 
 #: src/dialogs/menu.c:212
-#, fuzzy
 msgid "B~ookmark all tabs"
-msgstr "Segnalibri"
+msgstr "Aggiungi ~tutte le schede ai segnalibri"
 
 #: src/dialogs/menu.c:233
 msgid "Open new ~tab"
@@ -4252,7 +4255,7 @@ msgstr "Avanti"
 
 #: src/dialogs/menu.c:239
 msgid "~History"
-msgstr "S~torico"
+msgstr "Cronologia"
 
 #: src/dialogs/menu.c:240
 msgid "~Unhistory"
@@ -4319,9 +4322,8 @@ msgid "Find ~previous"
 msgstr "Trova p~recedente"
 
 #: src/dialogs/menu.c:332
-#, fuzzy
 msgid "T~ypeahead search"
-msgstr "Trova mentre scrivi"
+msgstr "Tr~ova mentre scrivi"
 
 #: src/dialogs/menu.c:334
 msgid "Toggle ~html/plain"
@@ -5842,9 +5844,8 @@ msgid "Do you really want to close the current tab?"
 msgstr "Vuoi veramente chiudere la scheda corrente?"
 
 #: src/terminal/tab.c:227
-#, fuzzy
 msgid "Do you really want to close all except the current tab?"
-msgstr "Vuoi veramente chiudere la scheda corrente?"
+msgstr "Vuoi veramente chiudere tutte le schede tranne la corrente?"
 
 #: src/viewer/dump/dump.c:79
 #, c-format
@@ -6066,81 +6067,3 @@ msgstr "Errore salvataggio"
 #: src/viewer/text/view.c:1217
 msgid "Error writing to file"
 msgstr "Errore scrittura del file"
-
-#~ msgid "Typeahead error handling"
-#~ msgstr "Gestione errore"
-
-#~ msgid "Main menu unselected hotkey default text color."
-#~ msgstr "Colore testo predefinito scorciatoia del menu non selezionata."
-
-#~ msgid "Main menu unselected hotkey default background color."
-#~ msgstr "Colore sfondo predefinito scorciatoia del menu non selezionata."
-
-#~ msgid "Main menu selected hotkey text color."
-#~ msgstr "Colore testo scorciatoia del menu principale selezionata."
-
-#~ msgid "Main menu selected hotkey default background color."
-#~ msgstr ""
-#~ "Colore predefinito sfondo scorciatoia del menu principale selezionata."
-
-#~ msgid "Menu item unselected hotkey default text color."
-#~ msgstr "Colore testo scorciatoia del menu principale non selezionata."
-
-#~ msgid "Menu item unselected hotkey default background color."
-#~ msgstr "Colore sfondo scorciatoia del menu principale non selezionata."
-
-#~ msgid "Menu item selected hotkey default text color."
-#~ msgstr ""
-#~ "Colore predefinito sfondo scorciatoia del menu principale selezionata."
-
-#~ msgid "Menu item selected hotkey background color."
-#~ msgstr "Colore sfondo scorciatoia del menu principale selezionata."
-
-#~ msgid "Unselected menu bar item"
-#~ msgstr "Voce di barra di menu non selezionata"
-
-#~ msgid "Unselected menu bar item colors."
-#~ msgstr "Colori voci di barra di menu non selezionate"
-
-#~ msgid "Selected menu bar item"
-#~ msgstr "Voce di barra di menu selezionata"
-
-#~ msgid "Selected menu bar item colors."
-#~ msgstr "Colori voci di barra di menu selezionate"
-
-#~ msgid "Main menu selected hotkey default text color."
-#~ msgstr "Colore predefinito testo scorciatoia menu principale selezionata"
-
-#~ msgid "Menu unselected hotkey colors."
-#~ msgstr "Colori scorciatoia del menu non selezionata."
-
-#~ msgid "Menu selected hotkey colors."
-#~ msgstr "Colori scorciatoia del menu selezionata."
-
-#~ msgid "Menu unselected hotkey default text color."
-#~ msgstr "Colore predefinito testo scorciatoia del menu non selezionata"
-
-#~ msgid "Menu unselected hotkey default background color."
-#~ msgstr "Colore predefinito sfondo scorciatoia del menu non selezionata"
-
-#~ msgid "Menu selected hotkey default text color."
-#~ msgstr "Colore predefinito testo scorciatoia del menu selezionata"
-
-#~ msgid "Menu selected hotkey default background color."
-#~ msgstr "Colore predefinito sfondo scorciatoia del menu selezionata"
-
-#~ msgid "Dialog field colors."
-#~ msgstr "Colori dei campi delle finestre di dialogo"
-
-#~ msgid "Title text"
-#~ msgstr "Testo titolo"
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the config.saving_style option instead."
-#~ msgstr ""
-#~ "Questa opzione è deprecata a sarà rimossa molto presto.\n"
-#~ "Usare l'opzione config.saving_style."
-
-#~ msgid "Typeahead: %s [%s]"
-#~ msgstr "Trova: %s [%s]"

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.53 2004/05/31 03:27:06 jonas Exp $ */
+/* $Id: dialogs.c,v 1.54 2004/05/31 12:09:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,7 +249,8 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	length = 0;
 	ulongcat(secure, &length, cookie->secure, MAX_STR_LEN, 0);
 
-	dlg_server = straconcat(_("Server", term), ": ", cookie->server, "\n", NULL);
+	dlg_server = cookie->server->server;
+	dlg_server = straconcat(_("Server", term), ": ", dlg_server, "\n", NULL);
 
 	if (!dlg_server) {
 		mem_free(dlg);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.145 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: cookies.c,v 1.146 2004/05/31 12:09:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,7 +364,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	{
 		DBG("Got cookie %s = %s from %s, domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
-		      cookie->value, cookie->server, cookie->domain,
+		      cookie->value, cookie->server->server, cookie->domain,
 		      cookie->expires, cookie->secure);
 	}
 #endif
@@ -411,10 +411,12 @@ void
 accept_cookie(struct cookie *c)
 {
 	struct c_domain *cd;
+	struct listbox_item *root = c->server->box_item;
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = add_listbox_leaf(&cookie_browser, c->server->box_item, c);
+	if (root)
+		c->box_item = add_listbox_leaf(&cookie_browser, root, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)
@@ -569,7 +571,7 @@ accept_cookie_dialog(struct session *ses, void *data)
 		"Domain: %s\n"
 		"Expires: %s\n"
 		"Secure: %s\n"),
-		cookie->server, cookie->name, cookie->value,
+		cookie->server->server, cookie->name, cookie->value,
 		cookie->domain, string.source,
 		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
 		cookie, 2,
@@ -800,7 +802,7 @@ save_cookies(void) {
 		if (is_dead(c->expires)) continue;
 		if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
 				   c->name, c->value,
-				   empty_string_or_(c->server),
+				   c->server->server,
 				   empty_string_or_(c->path),
 				   empty_string_or_(c->domain),
 				   c->expires, c->secure) < 0)

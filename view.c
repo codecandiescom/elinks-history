@@ -1367,6 +1367,30 @@ void set_frame(struct session *ses, struct f_data_c *f, int a)
 	goto_url(ses, f->vs->url);
 }
 
+int submit_form(struct terminal *term, void *xxx, struct session *ses) {
+	struct f_data_c *f = current_frame(ses);
+	struct link *link;
+	unsigned char *url;
+	
+	if (f->vs->current_link == -1) return 1;
+	link = &f->f_data->links[f->vs->current_link];
+	
+	if ((url = get_form_url(ses, f, link->form))) {
+		if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
+			goto_imgmap(ses, url + 4, stracpy(url + 4),
+				    stracpy(link->target));
+		} else {
+			goto_url_f(ses, url, link->target);
+		}
+		
+		mem_free(url);
+		return 2;
+	}
+	
+	return 1;
+}
+
+
 int enter(struct session *ses, struct f_data_c *f, int a)
 {
 	struct link *link;
@@ -1374,16 +1398,10 @@ int enter(struct session *ses, struct f_data_c *f, int a)
 	if (f->vs->current_link == -1) return 1;
 	link = &f->f_data->links[f->vs->current_link];
 	if (link->type == L_LINK || link->type == L_BUTTON) {
-		submit:
-		if ((u = get_link_url(ses, f, link))) {
-			if (strlen(u) >= 4 && !casecmp(u, "MAP@", 4))
-				goto_imgmap(ses, u + 4, stracpy(u + 4), stracpy(link->target));
-			else goto_url_f(ses, u, link->target);
-			mem_free(u);
-			return 2;
-		}
+		return submit_form(NULL, NULL, ses);
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
-		if (!has_form_submit(f->f_data, link->form)) goto submit;
+		if (!has_form_submit(f->f_data, link->form))
+			return submit_form(NULL, NULL, ses);
 		down(ses, f, 0);
 	} else if (link->type == L_CHECKBOX) {
 		struct form_state *fs = find_form_state(f, link->form);
@@ -2431,12 +2449,12 @@ void link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 		}
 	}
-	if (link->type == L_BUTTON && link->form) {
+	if (link->form) {
 		l = 1;
 		if (link->form->type == FC_RESET) add_to_menu(&mi, TEXT(T_RESET_FORM), "", TEXT(T_HK_RESET_FORM), MENU_FUNC send_enter, NULL, 0);
-		else if (link->form->type == FC_SUBMIT || link->form->type == FC_IMAGE) {
+		else {
 			int c = can_open_in_new(term);
-			add_to_menu(&mi, TEXT(T_SUBMIT_FORM), "", TEXT(T_HK_SUBMIT_FORM), MENU_FUNC send_enter, NULL, 0);
+			add_to_menu(&mi, TEXT(T_SUBMIT_FORM), "", TEXT(T_HK_SUBMIT_FORM), MENU_FUNC submit_form, NULL, 0);
 			if (c && link->form->method == FM_GET) add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW), c - 1 ? ">" : "", TEXT(T_HK_SUBMIT_FORM_AND_OPEN_IN_NEW_WINDOW), MENU_FUNC open_in_new_window, send_open_in_new_xterm, c - 1);
 			if (!anonymous) add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_DOWNLOAD), "d", TEXT(T_HK_SUBMIT_FORM_AND_DOWNLOAD), MENU_FUNC send_download, NULL, 0);
 		}

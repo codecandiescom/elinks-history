@@ -1,3 +1,51 @@
+Mon Jun  2 17:05:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: string.c, string.h:
+
+	memmove() should take void *, not char *. Suggested by zas.  
+
+Mon Jun  2 16:07:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Some comments reorganization (very minor).  
+
+Mon Jun  2 16:04:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/string.c:
+
+	Moved libc functions before string comparasion functions. Prevents
+	'declared inline after being called' warnings, reported by zas.  
+
+Mon Jun  2 15:55:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: string.c, string.h:
+
+	Reverted overloaded patch.  
+
+Mon Jun  2 15:42:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Fix bug (bug 184) when document.browse.links.wraparound skips link
+	#1 and the last link (as it gets moved twice). Patch by
+	Zardoz@users.sf.net (and me). Will need more work in future, maybe.  
+
+Mon Jun  2 10:02:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: string.c, string.h:
+
+	Replacement functions for strchr() and strrchr() were added, fixing
+	an issue reported by Jonas. elinks_memmove() was fixed. All stub
+	functions were moved at top of source file to prevent "declared
+	inline after being called" warnings.  
+
+Mon Jun  2 01:52:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Fix bug 188: Need to redraw after enter/enter-reload with a prefix.  
+
 Sun Jun  1 18:57:01 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/terminal/kbd.c:

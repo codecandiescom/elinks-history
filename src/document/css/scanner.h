@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.17 2004/01/18 22:38:05 jonas Exp $ */
+/* $Id: scanner.h,v 1.18 2004/01/19 05:52:03 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -87,20 +87,24 @@ void scan_css_tokens(struct css_scanner *scanner);
 
 /* Scanner table accessors and mutators */
 
-/* Scans a token in the @string and stores info about it in the given @token
- * struct. */
+/* Checks the type of the next token. Might cause a rescanning so any token
+ * pointers that has been stored in a local variable might not be valid after
+ * calling this function. */
+int check_next_css_token(struct css_scanner *scanner, enum css_token_type type);
+
+/* Access current and next token. Getting the next token might cause
+ * a rescan so any token pointers that has been stored in a local variable
+ * might not be valid after the call. */
 struct css_token *get_css_token_(struct css_scanner *scanner, unsigned char *file, int line);
 #define get_css_token(scanner)  get_css_token_(scanner, __FILE__, __LINE__)
 
 struct css_token *get_next_css_token_(struct css_scanner *scanner, unsigned char *file, int line);
 #define get_next_css_token(scanner)  get_next_css_token_(scanner, __FILE__, __LINE__)
 
+/* Removes tokens from the scanner until it meets a token of the given type.
+ * This token will then also be skipped. */
 struct css_token *skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type,
 		 unsigned char *file, int line);
 #define skip_css_tokens(scanner, type)  skip_css_tokens_(scanner, type, __FILE__, __LINE__)
-
-/* Checking of the next token type */
-int check_next_css_token(struct css_scanner *scanner, enum css_token_type type);
-
 
 #endif

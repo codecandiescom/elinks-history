@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.302 2004/01/25 09:33:30 jonas Exp $ */
+/* $Id: session.c,v 1.303 2004/01/25 09:55:08 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -407,7 +407,7 @@ doc_end_load(struct download *stat, struct session *ses)
 	print_screen_status(ses);
 
 #ifdef CONFIG_GLOBHIST
-	if (stat->conn) {
+	if (stat->conn && stat->pri != PRI_CSS) {
 		unsigned char *title = ses->doc_view->document->title;
 		struct uri *uri = &stat->conn->uri;
 		unsigned char *uristring = uri->protocol == PROTOCOL_PROXY

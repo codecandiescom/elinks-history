@@ -14,6 +14,8 @@ Major goals:
 
 - Possibility to optionally use commandline-driven interface instead of BFU
 
+- Full modularization, plugins mechanism
+
 - Generalised scripting interface, possibly also supporting SWIG backend
   (http://www.swig.org/)
 
@@ -163,9 +165,14 @@ Protocols / network:
 
 Scripting:
 
-- Rewrite Lua APIs
-
 - Add Lua APIs to manipulate bookmarks and other things
+
+- Lua execution ought to be changed. It has to be done script-oriented, where
+  each script stands on his own, installs hooks handlers it wants etc.
+
+- Redesign the whole scripting interface from scratch, generalizing it at the
+  same time to multiple language backends. This should go hand-by-hand with
+  plugins interface definition
 
 
 Generic code changes:
@@ -195,4 +202,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.51 2003/05/08 12:33:45 pasky Exp $
+$Id: TODO,v 1.52 2003/05/08 12:41:15 pasky Exp $

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.62 2002/12/24 00:05:23 pasky Exp $ */
+/* $Id: download.c,v 1.63 2002/12/24 00:23:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -665,7 +665,7 @@ get_temp_name(unsigned char *url)
 	int l, nl;
 	unsigned char *name;
 	unsigned char *fn, *fnn, *fnnn, *s;
-	unsigned char *nm = tempnam(NULL, "links");
+	unsigned char *nm = tempnam(NULL, "elinks");
 
 	if (!nm) return NULL;
 

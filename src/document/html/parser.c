@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.459 2004/06/22 23:24:16 zas Exp $ */
+/* $Id: parser.c,v 1.460 2004/06/23 10:07:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -444,8 +444,8 @@ html_br(unsigned char *a)
 void
 html_p(unsigned char *a)
 {
-	int_lower_bound(&par_format.leftmargin, margin);
-	int_lower_bound(&par_format.rightmargin, margin);
+	int_lower_bound(&par_format.leftmargin, html_context.margin);
+	int_lower_bound(&par_format.rightmargin, html_context.margin);
 	/*par_format.align = AL_LEFT;*/
 	html_linebrk(a);
 }
@@ -561,10 +561,10 @@ html_hr(unsigned char *a)
 	format.form = NULL;
 	html_linebrk(a);
 	if (par_format.align == AL_BLOCK) par_format.align = AL_CENTER;
-	par_format.leftmargin = par_format.rightmargin = margin;
+	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 
 	i = get_width(a, "width", 1);
-	if (i == -1) i = par_format.width - (margin - 2) * 2;
+	if (i == -1) i = par_format.width - (html_context.margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
 	html_context.special_f(html_context.ff, SP_NOWRAP, 1);
 	while (i-- > 0) {
@@ -578,7 +578,7 @@ html_hr(unsigned char *a)
 void
 html_table(unsigned char *a)
 {
-	par_format.leftmargin = par_format.rightmargin = margin;
+	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 	par_format.align = AL_LEFT;
 	html_linebrk(a);
 	format.attr = 0;

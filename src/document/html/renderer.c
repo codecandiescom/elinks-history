@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.453 2004/06/23 08:46:44 miciah Exp $ */
+/* $Id: renderer.c,v 1.454 2004/06/23 10:07:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,6 @@ struct table_cache_entry {
 #define MAX_TABLE_CACHE_ENTRIES 16384
 
 /* Global variables */
-int margin;
 
 static int table_cache_entries = 0;
 static int last_link_to_move;
@@ -1331,7 +1330,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	int llm = last_link_to_move;
 	struct tag *ltm = last_tag_to_move;
 	/*struct tag *ltn = last_tag_for_newline;*/
-	int lm = margin;
+	int lm = html_context.margin;
 	int ef = empty_format;
 	struct table_cache_entry *tce;
 
@@ -1391,7 +1390,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		last_tag_for_newline = NULL;
 	}
 
-	margin = m;
+	html_context.margin = m;
 	empty_format = !document;
 
 	done_link_state_info();
@@ -1430,7 +1429,7 @@ ret:
 	last_link_to_move = llm;
 	last_tag_to_move = ltm;
 	/*last_tag_for_newline = ltn;*/
-	margin = lm;
+	html_context.margin = lm;
 	empty_format = ef;
 
 	if (html_context.table_level > 1 && !document && table_cache

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.63 2004/05/21 10:54:50 jonas Exp $ */
+/* $Id: renderer.h,v 1.64 2004/06/23 10:07:33 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -36,10 +36,5 @@ void draw_frame_vchars(struct part *, int, int, int, unsigned char data, color_t
 void free_table_cache(void);
 
 struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, struct document *, int, int, unsigned char *, int);
-
-/* Interface with parser.c */
-
-/* FIXME: Following probably breaks encapsulation of renderer? --pasky */
-extern int margin;
 
 #endif

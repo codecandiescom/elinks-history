@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.25 2004/06/22 23:24:16 zas Exp $ */
+/* $Id: internal.h,v 1.26 2004/06/23 10:07:33 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -29,6 +29,9 @@ struct html_context {
 	int was_br; /* For parser/forms.c too */
 	int was_li;
 	int was_xmp;
+
+	/* For html/parser.c, html/renderer.c */
+	int margin;
 
 	/* For parser/link.c: */
 	int has_link_lines;

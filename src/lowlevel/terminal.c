@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.55 2003/05/03 02:37:11 pasky Exp $ */
+/* $Id: terminal.c,v 1.56 2003/05/03 02:38:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,7 +376,7 @@ get_tab_by_number(struct terminal *term, int num)
 {
 	struct window *win = NULL;
 
-	foreachback (win,term->windows)
+	foreachback (win, term->windows)
 		if (win->type && !num)
 			break;
 		else

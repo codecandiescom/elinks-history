@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.75 2004/09/14 20:56:36 witekfl Exp $ */
+/* $Id: cgi.c,v 1.76 2004/09/14 20:58:51 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,8 +316,7 @@ execute_cgi(struct connection *conn)
 		*last_slash = 0;
 		res = test_path(script);
 		*last_slash = storage;
-		if (res && (scriptlen < 4
-			    || strcasecmp(script + scriptlen - 4, ".cgi"))) {
+		if (res) {
 			mem_free(script);
 			return 1;
 		}

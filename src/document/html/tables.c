@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.5 2002/03/26 15:09:14 pasky Exp $ */
+/* $Id: tables.c,v 1.6 2002/03/26 15:12:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1008,57 +1008,95 @@ void distribute_widths(struct table *t, int width)
 	char *u;
 	int *w, *mx;
 	int mmax_c = 0;
+
 	if (!t->x) return;
 	if (d < 0) {
 		internal("too small width %d, required %d", width, t->min_t);
 	}
-	for (i = 0; i < t->x; i++) if (t->max_c[i] > mmax_c) mmax_c = t->max_c[i];
+
+	for (i = 0; i < t->x; i++)
+		if (t->max_c[i] > mmax_c)
+			mmax_c = t->max_c[i];
+
 	memcpy(t->w_c, t->min_c, t->x * sizeof(int));
 	t->rw = width;
+
+	/* XXX: We don't need to fail if unsuccessful.  See bellow. --Zas */
 	u = mem_alloc(t->x);
-	if (!(w = mem_alloc(t->x * sizeof(int)))) goto end;
-	if (!(mx = mem_alloc(t->x * sizeof(int)))) goto end1;
+
+	w = mem_alloc(t->x * sizeof(int));
+	if (!w) goto end;
+
+	mx = mem_alloc(t->x * sizeof(int));
+	if (!mx) goto end1;
+
 	while (d) {
 		int mss, mii;
 		int p = 0;
 		int wq;
 		int dd;
+
 		memset(w, 0, t->x * sizeof(int));
 		memset(mx, 0, t->x * sizeof(int));
+
 		for (i = 0; i < t->x; i++) {
 			switch (om) {
 				case 0:
 					if (t->w_c[i] < t->xcols[i]) {
-						w[i] = 1, mx[i] = (t->xcols[i] > t->max_c[i] ? t->max_c[i] : t->xcols[i]) - t->w_c[i];
+						w[i] = 1;
+						if (t->xcols[i] > t->max_c[i]) {
+							mx[i] = t->max_c[i];
+						} else {
+							mx[i] = t->xcols[i];
+						}
+						mx[i] -= t->w_c[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
+
 					break;
 				case 1:
 					if (t->xcols[i] < -1 && t->xcols[i] != -2) {
-						w[i] = t->xcols[i] <= -2 ? -2 - t->xcols[i] : 1;
+						if (t->xcols[i] <= -2) {
+							w[i] = -2 - t->xcols[i];
+						} else {
+							w[i] = 1;
+						}
 						mx[i] = t->max_c[i] - t->w_c[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
 				case 2:
 				case 3:
-					if (t->w_c[i] < t->max_c[i] && (om == 3 || t->xcols[i] == W_AUTO)) {
+					if (t->w_c[i] < t->max_c[i]
+					    && (om == 3 || t->xcols[i] == W_AUTO)) {
 						mx[i] = t->max_c[i] - t->w_c[i];
-						if (mmax_c) w[i] = 5 + t->max_c[i] * 10 / mmax_c;
-						else w[i] = 1;
+						if (mmax_c) {
+							w[i] = 5 + t->max_c[i] * 10 / mmax_c;
+						} else {
+							w[i] = 1;
+						}
 					}
 					break;
 				case 4:
 					if (t->xcols[i] >= 0) {
-						w[i] = 1, mx[i] = t->xcols[i] - t->w_c[i];
+						w[i] = 1;
+						mx[i] = t->xcols[i] - t->w_c[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
 				case 5:
-					if (t->xcols[i] < 0) w[i] = t->xcols[i] <= -2 ? -2 - t->xcols[i] : 1, mx[i] = MAXINT;
+					if (t->xcols[i] < 0) {
+						if (t->xcols[i] <= -2) {
+							w[i] =  -2 - t->xcols[i];
+						} else {
+							w[i] = 1;
+						}
+						mx[i] = MAXINT;
+					}
 					break;
 				case 6:
-					w[i] = 1, mx[i] = MAXINT;
+					w[i] = 1;
+					mx[i] = MAXINT;
 					break;
 				default:
 					internal("could not expand table");
@@ -1066,79 +1104,128 @@ void distribute_widths(struct table *t, int width)
 			}
 			p += w[i];
 		}
+
 		if (!p) {
 			om++;
 			continue;
 		}
+
 		wq = 0;
 		if (u) memset(u, 0, t->x);
 		dd = d;
-		a:
-		mss = 0; mii = -1;
+
+a:
+		mss = 0;
+		mii = -1;
 		for (i = 0; i < t->x; i++) if (w[i]) {
 			int ss;
+
 			if (u && u[i]) continue;
-			if (!(ss = dd * w[i] / p)) ss = 1;
+			ss = dd * w[i] / p;
+			if (!ss) ss = 1;
 			if (ss > mx[i]) ss = mx[i];
-			if (ss > mss) mss = ss, mii = i;
+			if (ss > mss) {
+				mss = ss;
+				mii = i;
+			}
 		}
+
 		if (mii != -1) {
 			int q = t->w_c[mii];
+
 			if (u) u[mii] = 1;
 			t->w_c[mii] += mss;
 			d -= t->w_c[mii] - q;
-			while (d < 0) t->w_c[mii]--, d++;
+			while (d < 0) {
+				t->w_c[mii]--;
+				d++;
+			}
 			if (t->w_c[mii] < q) internal("shrinking cell");
 			wq = 1;
 			if (d) goto a;
 		} else if (!wq) om++;
 	}
-	end2:
+
+end2:
 	mem_free(mx);
-	end1:
+
+end1:
 	mem_free(w);
-	end:
+
+end:
 	if (u) mem_free(u);
 }
 
-#ifdef HTML_TABLE_2ND_PASS
+
+
+#ifdef HTML_TABLE_2ND_PASS /* This is by default ON! (<setup.h>) */
+/* check_table_widths() */
 void check_table_widths(struct table *t)
 {
-	int *w;
 	int i, j;
 	int s, ns;
 	int m, mi = 0; /* go away, warning! */
-	if (!(w = mem_alloc(t->x * sizeof(int)))) return;
+	int *w = mem_alloc(t->x * sizeof(int));
+
+	if (!w) return;
 	memset(w, 0, t->x * sizeof(int));
+
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		struct table_cell *c = CELL(t, i, j);
 		int k, p = 0;
+
 		if (!c->start) continue;
+
+#if 1
 		for (k = 1; k < c->colspan; k++) p += get_vline_width(t, i + k) >= 0;
 		for (k = 0; k < c->colspan; k++) p += t->w_c[i + k];
-		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->x_width, NULL, c->link_num, NULL);
+#else
+		/* TODO: This needs to be tested */
+		for (k = 0; k < c->colspan; k++) {
+			p += t->w_c[i + k];
+			if (k > 0 && get_vline_width(t, i + k) >= 0)
+				p++;
+		}
+#endif
+
+		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->x_width,
+			       NULL, c->link_num, NULL);
+
 		if (c->x_width > p) {
 			int min, max;
-			get_cell_width(c->start, c->end, t->cellpd, 0, 0, &min, &max, c->link_num, NULL);
-			internal("cell is now wider (%d > %d) min = %d, max = %d, now_min = %d, now_max = %d", c->x_width, p, t->min_c[i], t->max_c[i], min, max);
+
+			get_cell_width(c->start, c->end, t->cellpd, 0, 0, &min,
+				       &max, c->link_num, NULL);
+			internal("cell is now wider (%d > %d) min = %d, max = %d, now_min = %d, now_max = %d",
+				 c->x_width, p, t->min_c[i], t->max_c[i], min, max);
 		}
 	}
+
 	s = 1;
+
 	do {
 		ns = MAXINT;
 		for (i = 0; i < t->x; i++) for (j = 0; j < t->y; j++) {
 			struct table_cell *c = CELL(t, i, j);
+
 			if (!c->start) continue;
+
 			if (c->colspan + i > t->x) {
 				internal("colspan out of table");
 				mem_free(w);
 				return;
 			}
+
 			if (c->colspan == s) {
 				int k, p = 0;
-				for (k = 1; k < s; k++) p += get_vline_width(t, i + k) >= 0;
+
+				for (k = 1; k < s; k++)
+					if (get_vline_width(t, i + k) >= 0)
+						p++;
+
 				dst_width(w + i, s, c->x_width - p, t->max_c + i);
-				/*for (k = i; k < i + s; k++) if (w[k] > t->w_c[k]) {
+#if 0
+				for (k = i; k < i + s; k++) if (w[k] > t->w_c[k]) {
 					int l;
 					int c;
 					ag:
@@ -1148,31 +1235,48 @@ void check_table_widths(struct table *t)
 						if (!c) internal("can't shrink cell");
 						else goto ag;
 					}
-				}*/
-			} else if (c->colspan > s && c->colspan < ns) ns = c->colspan;
+				}
+#endif
+			} else if (c->colspan > s && c->colspan < ns) {
+				ns = c->colspan;
+			}
 		}
 	} while ((s = ns) != MAXINT);
 
-	s = 0; ns = 0;
+	s = 0;
+	ns = 0;
+
 	for (i = 0; i < t->x; i++) {
-		s += t->w_c[i], ns += w[i];
-		/*if (w[i] > t->w_c[i]) {
+		s += t->w_c[i];
+		ns += w[i];
+#if 0
+		if (w[i] > t->w_c[i]) {
 			int k;
 			for (k = 0; k < t->x; k++) debug("%d, %d", t->w_c[k], w[k]);
 			debug("column %d: new width(%d) is larger than previous(%d)", i, w[i], t->w_c[i]);
-		}*/
+		}
+#endif
 	}
+
 	if (ns > s) {
-		/*internal("new width(%d) is larger than previous(%d)", ns, s);*/
+		/* internal("new width(%d) is larger than previous(%d)", ns, s); */
 		mem_free(w);
 		return;
 	}
+
 	m = -1;
+
 	for (i = 0; i < t->x; i++) {
-		/*if (table_level == 1) debug("%d: %d %d %d %d", i, t->max_c[i], t->min_c[i], t->w_c[i], w[i]);*/
+#if 0
+		if (table_level == 1)
+			debug("%d: %d %d %d %d", i, t->max_c[i], t->min_c[i],
+						 t->w_c[i], w[i]);
+#endif
 		if (t->max_c[i] > m) m = t->max_c[i], mi = i;
 	}
-	/*if (table_level == 1) debug("%d %d", mi, s - ns);*/
+
+	/* if (table_level == 1) debug("%d %d", mi, s - ns); */
+
 	if (m != -1) {
 		w[mi] += s - ns;
 		if (w[mi] <= t->max_c[mi]) {

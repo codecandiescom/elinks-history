@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.25 2004/01/20 00:11:57 jonas Exp $ */
+/* $Id: scanner.h,v 1.26 2004/01/20 00:13:07 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -16,7 +16,7 @@ enum css_token_type {
 	 * tokens have values from 256 and up. */
 
 	CSS_TOKEN_ATRULE = 256, /* "@<identifier>" */
-	CSS_TOKEN_DIGIT,	/* [0-9]+|[0-9]*"."[0-9]+ */
+	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
 	CSS_TOKEN_FUNCTION,	/* "<identifier>(" */
 	CSS_TOKEN_HEX_COLOR,	/* #[0-9a-f]\{3,6} */
 	CSS_TOKEN_IDENTIFIER,	/* [a-z_]|{nonascii} followed by *_NAME chars */

@@ -68,7 +68,7 @@ CATALOGS = @CATALOGS@
 	$(MSGFMT) -o $@ $<
 
 .po.gmo:
-	file=$(srcdir)/`echo $* | sed 's,.*/,,'`.gmo \
+	file=`echo $* | sed 's,.*/,,'`.gmo \
 	  && rm -f $$file && $(GMSGFMT) --statistics -o $$file $<
 
 
@@ -112,8 +112,8 @@ install-data-yes: all
 	    $(INSTALL_DATA) $$cat $(DESTDIR)$$dir/$(PACKAGE).mo; \
 	    echo "installing $$cat as $(DESTDIR)$$dir/$(PACKAGE).mo"; \
 	  else \
-	    $(INSTALL_DATA) $(srcdir)/$$cat $(DESTDIR)$$dir/$(PACKAGE).mo; \
-	    echo "installing $(srcdir)/$$cat as" \
+	    $(INSTALL_DATA) $$cat $(DESTDIR)$$dir/$(PACKAGE).mo; \
+	    echo "installing $$cat as" \
 		 "$(DESTDIR)$$dir/$(PACKAGE).mo"; \
 	  fi; \
 	done

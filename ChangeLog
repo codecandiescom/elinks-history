@@ -1,3 +1,9 @@
+Wed Sep 25 19:41:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Fixed segfault when bookmark is added outside of a bookmark dialog.  
+
 Mon Sep 23 12:35:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

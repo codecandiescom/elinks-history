@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.80 2003/04/29 17:34:59 zas Exp $ */
+/* $Id: menu.c,v 1.81 2003/04/30 12:24:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,8 +384,8 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 static struct menu_item file_menu11[] = {
 	{N_("~Go to URL"), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
 	{N_("Go ~back"), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
-	{N_("~History"), ">", MENU_FUNC history_menu, (void *)0, 1, 0},
-	{N_("Unhis~tory"), ">", MENU_FUNC unhistory_menu, (void *)0, 1, 0},
+	{N_("~History"), SUBMENU_INDICATOR, MENU_FUNC history_menu, (void *)0, 1, 0},
+	{N_("Unhis~tory"), SUBMENU_INDICATOR, MENU_FUNC unhistory_menu, (void *)0, 1, 0},
 	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
 };
 
@@ -453,7 +453,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 	o = can_open_in_new(term);
 	if (o) {
 		e->text = N_("~New window");
-		e->rtext = o - 1 ? ">" : "";
+		e->rtext = o - 1 ? SUBMENU_INDICATOR : "";
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
 		e->in_m = o - 1;
@@ -556,17 +556,17 @@ static struct menu_item assoc_menu[] = {
 
 static struct menu_item ext_menu[] = {
 	{N_("~Add"), "", MENU_FUNC menu_add_ext, NULL, 0, 0},
-	{N_("~Modify"), ">", MENU_FUNC menu_list_ext, menu_add_ext, 1, 0},
-	{N_("~Delete"), ">", MENU_FUNC menu_list_ext, menu_del_ext, 1, 0},
+	{N_("~Modify"), SUBMENU_INDICATOR, MENU_FUNC menu_list_ext, menu_add_ext, 1, 0},
+	{N_("~Delete"), SUBMENU_INDICATOR, MENU_FUNC menu_list_ext, menu_del_ext, 1, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 
 static struct menu_item setup_menu[] = {
-	{N_("~Language"), ">", MENU_FUNC menu_language_list, NULL, 1, 0},
-	{N_("C~haracter set"), ">", MENU_FUNC charset_list, (void *)1, 1, 0},
+	{N_("~Language"), SUBMENU_INDICATOR, MENU_FUNC menu_language_list, NULL, 1, 0},
+	{N_("C~haracter set"), SUBMENU_INDICATOR, MENU_FUNC charset_list, (void *)1, 1, 0},
 	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
-/*	{N_("~Associations"), ">", MENU_FUNC do_menu, assoc_menu, 1, 0}, */
-	{N_("File ~extensions"), ">", MENU_FUNC do_menu, ext_menu, 1, 0},
+/*	{N_("~Associations"), SUBMENU_INDICATOR, MENU_FUNC do_menu, assoc_menu, 1, 0}, */
+	{N_("File ~extensions"), SUBMENU_INDICATOR, MENU_FUNC do_menu, ext_menu, 1, 0},
 	{"", M_BAR, NULL, NULL, 0, 0},
 	{N_("~Options manager"), "o", MENU_FUNC menu_options_manager, NULL, 0, 0},
 	{N_("~Keybinding manager"), "k", MENU_FUNC menu_keybinding_manager, NULL, 0, 0},
@@ -575,8 +575,8 @@ static struct menu_item setup_menu[] = {
 };
 
 static struct menu_item setup_menu_anon[] = {
-	{N_("~Language"), ">", MENU_FUNC menu_language_list, NULL, 1, 0},
-	{N_("C~haracter set"), ">", MENU_FUNC charset_list, (void *)1, 1, 0},
+	{N_("~Language"), SUBMENU_INDICATOR, MENU_FUNC menu_language_list, NULL, 1, 0},
+	{N_("C~haracter set"), SUBMENU_INDICATOR, MENU_FUNC charset_list, (void *)1, 1, 0},
 	{N_("~Terminal options"), "", MENU_FUNC terminal_options, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };

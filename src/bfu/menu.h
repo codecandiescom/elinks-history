@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.9 2003/04/29 17:11:07 zas Exp $ */
+/* $Id: menu.h,v 1.10 2003/04/30 12:24:41 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -11,6 +11,7 @@
 extern unsigned char m_bar;
 #define M_BAR	(&m_bar)
 
+#define SUBMENU_INDICATOR ">"
 
 /* Which fields to free when zapping a list item - bitwise. */
 enum item_free {

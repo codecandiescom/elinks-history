@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.56 2004/10/25 16:00:55 zas Exp $ */
+/* $Id: fastfind.c,v 1.57 2004/10/25 20:08:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,20 +346,16 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			info->max_key_len = key_len;
 
 		for (i = 0; i < key_len; i++) {
-			int j, k;
-
-			k = ifcase(p->key[i]);
-
-			assert(k < FF_MAX_CHARS);
-			if_assert_failed goto alloc_error;
-
 			/* ifcase() test should be moved outside loops but
 			 * remember we call this routine only once per list.
 			 * So I go for code readability vs performance here.
 			 * --Zas */
-			j = char2idx(k, info);
+			int k = ifcase(p->key[i]);
 
-			if (j == -1) {
+			assert(k < FF_MAX_CHARS);
+			if_assert_failed goto alloc_error;
+
+			if (char2idx(k, info) == -1) {
 				assert(info->uniq_chars_count < FF_MAX_CHARS);
 				if_assert_failed goto alloc_error;
 

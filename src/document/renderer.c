@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.104 2004/09/28 13:56:18 pasky Exp $ */
+/* $Id: renderer.c,v 1.105 2004/09/28 14:02:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ static void
 add_snippets(struct ecmascript_interpreter *interpreter,
              struct list_head *doc_snippets, struct list_head *queued_snippets)
 {
-	struct string_list_item *doc_current = NULL;
+	struct string_list_item *doc_current = doc_snippets->next;
 
 #ifdef CONFIG_LEDS
 	if (list_empty(*queued_snippets) && interpreter->vs->doc_view->session)
@@ -68,11 +68,9 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 	/* Position @doc_current in @doc_snippet to match the end of
 	 * @queued_snippets. */
 	if (list_empty(*queued_snippets)) {
-		doc_current = doc_snippets->next;
 	} else {
 		struct string_list_item *iterator = queued_snippets->next;
 
-		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
 		while (iterator != (struct string_list_item *) queued_snippets) {
 			if (doc_current == (struct string_list_item *) doc_snippets) {

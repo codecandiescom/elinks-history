@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.37 2002/06/17 07:42:28 pasky Exp $ */
+/* $Id: main.c,v 1.38 2002/06/17 11:23:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,7 @@
 #include "ssl/ssl.h"
 #include "util/blacklist.h"
 #include "util/error.h"
+#include "util/memdebug.h"
 #include "util/memory.h"
 
 enum retval retval = RET_OK;

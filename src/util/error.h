@@ -1,8 +1,9 @@
-/* $Id: error.h,v 1.3 2002/06/15 22:02:14 pasky Exp $ */
+/* $Id: error.h,v 1.4 2002/06/17 11:23:46 pasky Exp $ */
 
-#ifndef EL__ERROR_H
-#define EL__ERROR_H
+#ifndef EL__UTIL_ERROR_H
+#define EL__UTIL_ERROR_H
 
+void force_dump();
 void do_not_optimize_here(void *);
 void error(unsigned char *, ...);
 
@@ -15,27 +16,5 @@ void int_error(unsigned char *, ...);
  * only as gcc extension :(. */
 #define internal errfile = __FILE__, errline = __LINE__, int_error
 #define debug errfile = __FILE__, errline = __LINE__, debug_msg
-
-
-#ifdef LEAK_DEBUG
-
-/* TODO: Another file? */
-
-extern long mem_amount;
-
-void *debug_mem_alloc(unsigned char *, int, size_t);
-void *debug_mem_calloc(unsigned char *, int, size_t, size_t);
-void debug_mem_free(unsigned char *, int, void *);
-void *debug_mem_realloc(unsigned char *, int, void *, size_t);
-void set_mem_comment(void *, unsigned char *, int);
-
-void check_memory_leaks();
-
-#else
-
-static inline void set_mem_comment(void *p, unsigned char *c, int l) {}
-
-#endif
-
 
 #endif

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.3 2002/06/17 07:45:22 zas Exp $ */
+/* $Id: string.c,v 1.4 2002/06/17 11:23:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "util/conv.h"
 #include "util/error.h"
+#include "util/memdebug.h"
 #include "util/memory.h"
 #include "util/string.h"
 

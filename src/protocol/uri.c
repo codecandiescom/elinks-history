@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.188 2004/04/23 13:21:11 zas Exp $ */
+/* $Id: uri.c,v 1.189 2004/04/23 16:29:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -825,16 +825,8 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 		pos = parse_http_header(cached->head, "Content-Disposition", NULL);
 		if (!pos) break;
 
-		filename = strchr(pos, ';');
+		filename = strstr(pos, "filename=");
 		if (!filename) {
-			mem_free(pos);
-			break;
-		}
-
-		filename++;
-		skip_whitespace(filename);
-
-		if (strncasecmp(filename, "filename=", 9)) {
 			mem_free(pos);
 			break;
 		}

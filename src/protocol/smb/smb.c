@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.2 2003/12/07 20:15:26 pasky Exp $ */
+/* $Id: smb.c,v 1.3 2003/12/07 20:15:58 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -427,12 +427,14 @@ smb_func(struct connection *conn)
 
 	cpid = fork();
 	if (cpid == -1) {
+		int s_errno = errno;
+
 		close(out_pipe[0]);
 		close(out_pipe[1]);
 		close(err_pipe[0]);
 		close(err_pipe[1]);
 		mem_free(share);
-		retry_conn_with_state(conn, -errno);
+		retry_conn_with_state(conn, -s_errno);
 		return;
 	}
 

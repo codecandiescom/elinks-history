@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.12 2002/12/16 22:59:29 zas Exp $ */
+/* $Id: options.c,v 1.13 2003/05/08 11:51:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ mk_document_options(struct document_options *doo)
 	doo->frames = get_opt_int("document.html.display_frames");
 	doo->images = get_opt_int("document.browse.images.show_as_links");
 	doo->margin = get_opt_int("document.browse.margin_width");
-	doo->num_links_display = get_opt_int("document.browse.links.numbering");
+	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 	doo->table_order = get_opt_int("document.browse.table_move_order");
 	doo->display_subs = get_opt_bool("document.html.display_subs");

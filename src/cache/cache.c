@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.77 2003/11/08 02:22:01 pasky Exp $ */
+/* $Id: cache.c,v 1.78 2003/11/08 02:23:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,9 +302,9 @@ defrag_entry(struct cache_entry *ce)
 	if (first_frag->offset) return;
 
 	for (g = first_frag->next; g != (void *) &ce->frag; g = g->next) {
-		long overlay = g->prev->offset + g->prev->length - g->offset;
+		long overlay = g->offset - (g->prev->offset + g->prev->length);
 
-		if (overlay < 0) continue;
+		if (overlay > 0) continue;
 		if (overlay == 0) break;
 
 		internal("fragments overlay");

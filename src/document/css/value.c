@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.10 2004/01/17 21:18:01 pasky Exp $ */
+/* $Id: value.c,v 1.11 2004/01/17 22:12:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,19 +167,19 @@ css_parse_text_align_value(union css_decl_value *value, unsigned char **string)
 	}
 
 	if (!strlcasecmp(*string, -1, "right", 5)) {
-		(*string) += 4;
+		(*string) += 5;
 		value->text_align = AL_RIGHT;
 		return 1;
 	}
 
 	if (!strlcasecmp(*string, -1, "center", 6)) {
-		(*string) += 4;
+		(*string) += 6;
 		value->text_align = AL_CENTER;
 		return 1;
 	}
 
 	if (!strlcasecmp(*string, -1, "justify", 7)) {
-		(*string) += 4;
+		(*string) += 7;
 		value->text_align = AL_BLOCK;
 		return 1;
 	}

@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.10 2004/01/27 00:11:50 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.11 2004/01/27 00:13:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,6 +75,20 @@ get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen)
 	return NULL;
 }
 
+void
+done_css_selector(struct css_selector *selector)
+{
+	struct css_selector *selector = css->selectors.next;
+
+	if (selector->next) del_from_list(selector);
+	free_list(selector->properties);
+	if (selector->element) mem_free(selector->element);
+	if (selector->id) mem_free(selector->id);
+	if (selector->class) mem_free(selector->class);
+	if (selector->pseudo) mem_free(selector->pseudo);
+	mem_free(selector);
+}
+
 
 struct css_stylesheet *
 init_css_stylesheet(css_stylesheet_importer importer)
@@ -92,14 +106,6 @@ void
 done_css_stylesheet(struct css_stylesheet *css)
 {
 	while (!list_empty(css->selectors)) {
-		struct css_selector *selector = css->selectors.next;
-
-		if (selector->next) del_from_list(selector);
-		free_list(selector->properties);
-		if (selector->element) mem_free(selector->element);
-		if (selector->id) mem_free(selector->id);
-		if (selector->class) mem_free(selector->class);
-		if (selector->pseudo) mem_free(selector->pseudo);
-		mem_free(selector);
+		done_css_selector(css->selectors.next);
 	}
 }

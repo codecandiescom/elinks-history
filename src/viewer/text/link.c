@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.207 2004/06/13 17:43:38 zas Exp $ */
+/* $Id: link.c,v 1.208 2004/06/13 17:55:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,18 +292,21 @@ get_last_link(struct document_view *doc_view)
 	return link;
 }
 
-static int
+static inline int
 in_viewx(struct document_view *doc_view, struct link *link)
 {
-	register int i;
+	register int i, dx, width;
 
 	assert(doc_view && link);
 	if_assert_failed return 0;
 
-	for (i = 0; i < link->npoints; i++) {
-		int x = link->points[i].x - doc_view->vs->x;
+	dx = doc_view->vs->x;
+	width = doc_view->box.width;
 
-		if (x >= 0 && x < doc_view->box.width)
+	for (i = 0; i < link->npoints; i++) {
+		register int x = link->points[i].x - dx;
+
+		if (x >= 0 && x < width)
 			return 1;
 	}
 
@@ -313,15 +316,18 @@ in_viewx(struct document_view *doc_view, struct link *link)
 int
 in_viewy(struct document_view *doc_view, struct link *link)
 {
-	register int i;
+	register int i, dy, height;
 
 	assert(doc_view && link);
 	if_assert_failed return 0;
 
-	for (i = 0; i < link->npoints; i++) {
-		int y = link->points[i].y - doc_view->vs->y;
+	dy = doc_view->vs->y;
+	height = doc_view->box.height;
 
-		if (y >= 0 && y < doc_view->box.height)
+	for (i = 0; i < link->npoints; i++) {
+		register int y = link->points[i].y - dy;
+
+		if (y >= 0 && y < height)
 			return 1;
 	}
 

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.50 2004/01/20 17:15:58 jonas Exp $ */
+/* $Id: scanner.c,v 1.51 2004/01/20 17:28:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,9 +101,6 @@ get_number_identifier(unsigned char *ident, int length)
 		(s)++;								\
 	}
 
-/* TODO: CSS_TOKEN_HASH:.it conflicts a bit with hex color token. Color should
- * have precedens and the selector parser will just have to treat
- * CSS_TOKEN_HASH and CSS_TOKEN_HEX_COLOR alike. */
 static inline void
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
@@ -146,17 +143,27 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		}
 
 	} else if (first_char == '#') {
-		int hexdigits;
+		/* Check wether hexcolor or hash token */
+		if (is_css_hexdigit(*string)) {
+			int hexdigits;
 
-		scan_css(string, CSS_CHAR_HEX_DIGIT);
+			scan_css(string, CSS_CHAR_HEX_DIGIT);
 
-		/* Check that the hexdigit sequence is either 3 or 6 chars */
-		hexdigits = string - token->string - 1;
-		if (hexdigits == 3 || hexdigits == 6)
-			type = CSS_TOKEN_HEX_COLOR;
+			/* Check that the hexdigit sequence is either 3 or 6 chars */
+			hexdigits = string - token->string - 1;
+			if (hexdigits == 3 || hexdigits == 6) {
+				type = CSS_TOKEN_HEX_COLOR;
+			} else {
+				type = CSS_TOKEN_HASH;
+			}
+
+		} else if (is_css_ident(*string)) {
+			/* Not *_ident_start() because hashes are #<name>. */
+			scan_css(string, CSS_CHAR_IDENT);
+			type = CSS_TOKEN_HASH;
+		}
 
 	} else if (first_char == '@') {
-
 		/* Compose token containing @<ident> */
 		if (is_css_ident_start(*string)) {
 			/* Scan both ident start and ident */

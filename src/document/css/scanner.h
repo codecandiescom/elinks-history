@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.32 2004/01/20 16:12:13 jonas Exp $ */
+/* $Id: scanner.h,v 1.33 2004/01/20 17:28:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -22,8 +22,13 @@ enum css_token_type {
 	CSS_TOKEN_EX,		/* <number>ex */
 	CSS_TOKEN_FREQUENCY,	/* <number>Hz or <number>kHz */
 	CSS_TOKEN_FUNCTION,	/* <identifier>( */
+
+	/* XXX: CSS_TOKEN_HASH conflicts with CSS_TOKEN_HEX_COLOR. Generating
+	 * hex color tokens has precedence and the hash token user have to
+	 * treat CSS_TOKEN_HASH and CSS_TOKEN_HEX_COLOR alike. */
 	CSS_TOKEN_HASH,		/* #<name> */
 	CSS_TOKEN_HEX_COLOR,	/* #[0-9a-f]\{3,6} */
+
 	CSS_TOKEN_IDENTIFIER,	/* [a-z_]|{nonascii} followed by *_NAME chars */
 	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
 	CSS_TOKEN_LENGTH,	/* <number>{px,cm,mm,in,pt,pc} */

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.155 2004/12/26 23:36:47 jonas Exp $ */
+/* $Id: osdep.c,v 1.156 2004/12/27 10:38:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -571,10 +571,8 @@ resize_window(int width, int height, int old_width, int old_height)
 
 	return 0;
 #else
-	/* At least reset the window title to a blank one. */
-	return stracpy("");
-#endif
 	return -1;
+#endif
 }
 
 #endif

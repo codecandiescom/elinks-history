@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.60 2004/04/03 02:21:51 jonas Exp $ */
+/* $Id: frames.c,v 1.61 2004/04/03 02:24:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,8 +181,6 @@ repeat:
 	if (vs->plain != -1) o->plain = vs->plain;
 
 	if (ce->redirect && frame->redirect_cnt < MAX_REDIRECTS) {
-		assertm(ce->uri == vs->uri, "Redirecting using bad base URI");
-
 		frame->redirect_cnt++;
 		ses_change_frame_uri(ses, name, ce->redirect);
 		o->plain = plain;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.76 2003/01/24 15:55:13 zas Exp $ */
+/* $Id: menu.c,v 1.77 2003/02/05 08:58:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,7 +532,7 @@ static struct menu_item help_menu[] = {
 	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
 	{N_("User's ~manual"), "", MENU_FUNC menu_manual, (void *)0, 0, 0},
 #ifdef HAVE_LUA
-	{N_("~LUA Reference manual"), "", MENU_FUNC menu_lua_manual, (void *)0, 0, 0},
+	{N_("~Lua Reference manual"), "", MENU_FUNC menu_lua_manual, (void *)0, 0, 0},
 #endif
 	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
 	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},

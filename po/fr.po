@@ -3148,8 +3148,8 @@ msgid "User's ~manual"
 msgstr "~Manuel"
 
 #: src/dialogs/menu.c:535
-msgid "~LUA Reference manual"
-msgstr "~LUA Manuel de référence"
+msgid "~Lua Reference manual"
+msgstr "~Lua Manuel de référence"
 
 #: src/dialogs/menu.c:537
 msgid "~Copying"

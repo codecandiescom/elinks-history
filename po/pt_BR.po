@@ -2966,7 +2966,7 @@ msgid "User's ~manual"
 msgstr "~Manual do Usuário"
 
 #: src/dialogs/menu.c:535
-msgid "~LUA Reference manual"
+msgid "~Lua Reference manual"
 msgstr ""
 
 #: src/dialogs/menu.c:537
@@ -3161,7 +3161,7 @@ msgstr ""
 
 #: src/lua/core.c:676
 msgid "Lua Error"
-msgstr "Erro LUA"
+msgstr "Erro Lua"
 
 #: src/lua/core.c:797
 msgid "Lua Console"

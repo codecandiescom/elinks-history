@@ -2976,7 +2976,7 @@ msgid "User's ~manual"
 msgstr "~Handbuch"
 
 #: src/dialogs/menu.c:535
-msgid "~LUA Reference manual"
+msgid "~Lua Reference manual"
 msgstr ""
 
 #: src/dialogs/menu.c:537

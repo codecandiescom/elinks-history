@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.34 2004/01/25 05:02:15 jonas Exp $ */
+/* $Id: css.c,v 1.35 2004/01/25 07:19:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 
 struct option_info css_options_info[] = {
 	INIT_OPT_TREE("document", N_("Cascading Style Sheets"),
-		"css", 0,
+		"css", OPT_SORT,
 		N_("Options concerning how to use CSS for styling documents.")),
 
 	INIT_OPT_BOOL("document.css", N_("Enable CSS"),

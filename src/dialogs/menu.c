@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.364 2004/07/27 22:45:31 jonas Exp $ */
+/* $Id: menu.c,v 1.365 2004/07/27 22:53:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -829,19 +829,23 @@ add_uri_command_to_menu(struct menu_item **mi, enum pass_uri_type type)
 	int commands = 0;
 	enum menu_item_flags flags = NO_FLAG;
 	int action;
+	unsigned char *text;
 
 	switch (type) {
 	case PASS_URI_FRAME:
 		action = ACT_MAIN_FRAME_EXTERNAL_COMMAND;
+		text = N_("~Pass frame URI to external command");
 		break;
 
 	case PASS_URI_LINK:
 		action = ACT_MAIN_LINK_EXTERNAL_COMMAND;
+		text = N_("Pass link URI to e~xternal command");
 		break;
 
 	default:
 	case PASS_URI_TAB:
 		action = ACT_MAIN_TAB_EXTERNAL_COMMAND;
+		text = N_("Pass tab URI to e~xternal command");
 	};
 
 	foreach (option, *tree) {
@@ -857,8 +861,7 @@ add_uri_command_to_menu(struct menu_item **mi, enum pass_uri_type type)
 
 	if (commands == 0) return;
 
-	add_to_menu(mi, N_("Pass URI to e~xternal command"), NULL,
-		    action, NULL, NULL, flags);
+	add_to_menu(mi, text, NULL, action, NULL, NULL, flags);
 }
 
 

@@ -1,9 +1,11 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.3 2002/12/11 14:39:09 pasky Exp $ */
+/* $Id: default.c,v 1.4 2002/12/13 12:42:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef BOOKMARKS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,8 +20,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 
-
-#ifdef BOOKMARKS
 
 /* Loads the bookmarks from file */
 static void

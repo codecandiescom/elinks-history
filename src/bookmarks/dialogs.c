@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.61 2002/12/08 20:33:28 pasky Exp $ */
+/* $Id: dialogs.c,v 1.62 2002/12/13 12:42:08 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -361,9 +361,9 @@ cancel_del_bookmark(void *vhop)
 static int
 scan_for_marks(struct listbox_item *item, void *data_, int offset)
 {
-	struct push_del_button_hop_struct *hop = data_;
-
 	if (item->marked) {
+		struct push_del_button_hop_struct *hop = data_;
+
 		hop->bm = NULL;
 		return 0;
 	}
@@ -535,12 +535,10 @@ push_move_button(struct dialog_data *dlg,
 
 	if (!box->sel) return 0; /* nowhere to move to */
 
+	dest = box->sel->udata;
 	if (box->sel->type == BI_FOLDER && box->sel->expanded) {
-		dest = box->sel->udata;
 		destb = &((struct bookmark *) box->sel->udata)->child;
 		desti = &box->sel->child;
-	} else {
-		dest = box->sel->udata;
 	}
 
 	/* Avoid recursion headaches (prevents moving a folder into itself). */
@@ -726,10 +724,10 @@ static int
 test_search(struct listbox_item *item, void *data_, int offset) {
 	struct bookmark_search_ctx *ctx = data_;
 	struct bookmark *bm = item->udata;
-	int m= ((ctx->search_title && *ctx->search_title
-		 && strcasestr(bm->title, ctx->search_title)) ||
-		(ctx->search_url && *ctx->search_url
-		 && strcasestr(bm->url, ctx->search_url)));
+	int m = ((ctx->search_title && *ctx->search_title
+		  && strcasestr(bm->title, ctx->search_title)) ||
+		 (ctx->search_url && *ctx->search_url
+		  && strcasestr(bm->url, ctx->search_url)));
 
 	if (!ctx->ofs) m = 0; /* ignore possible match on first item */
 	ctx->found = m;
@@ -753,6 +751,7 @@ bookmark_search_do(struct dialog *d)
 
 	if (!d->udata)
 		internal("Bookmarks search without udata in dialog! Let's panic.");
+
 	box_widget_data =
 		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
 	box = (struct listbox_data *) box_widget_data->item->data;
@@ -816,11 +815,5 @@ launch_bm_add_link_dialog(struct terminal *term,
 		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
 		       parent, bookmark_add_add, NULL, NULL, 1);
 }
-
-#else /* BOOKMARKS */
-
-void menu_bookmark_manager(struct terminal *t, void *d, struct session *s) {}
-void launch_bm_add_doc_dialog(struct terminal *t, struct dialog_data *d, struct session *s) {}
-void launch_bm_add_link_dialog(struct terminal *t, struct dialog_data *d, struct session *s) {}
 
 #endif

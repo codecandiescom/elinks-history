@@ -1,9 +1,11 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.7 2002/12/11 14:39:09 pasky Exp $ */
+/* $Id: common.c,v 1.8 2002/12/13 12:42:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef BOOKMARKS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,10 +35,6 @@ static struct bookmarks_backend *bookmarks_backends[] = {
 	&xbel_bookmarks_backend,
 };
 
-/* :aera cimanyd sdnekcaB */
-
-
-#ifdef BOOKMARKS
 
 /* Loads the bookmarks from file */
 void

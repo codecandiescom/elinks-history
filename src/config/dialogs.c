@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.18 2002/12/12 22:43:38 pasky Exp $ */
+/* $Id: dialogs.c,v 1.19 2002/12/13 12:42:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,6 @@ push_save_button(struct dialog_data *dlg,
 	write_config(dlg->win->term);
 	return 0;
 }
-
 
 /* Builds the "Options manager" dialog */
 void

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.10 2002/12/07 20:05:53 pasky Exp $ */
+/* $Id: hierbox.c,v 1.11 2002/12/13 12:42:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,9 +59,6 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 }
 
 
-extern unsigned char *bookmark_dialog_msg[];
-
-/* Called to setup the bookmark dialog */
 void
 layout_hierbox_browser(struct dialog_data *dlg)
 {

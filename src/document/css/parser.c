@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.2 2004/01/17 16:36:16 pasky Exp $ */
+/* $Id: parser.c,v 1.3 2004/01/17 17:35:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,8 +40,8 @@ struct css_property_info {
 
 /* TODO: Use fastfind when we get a lot of properties. */
 struct css_property_info css_property_info[] = {
-	CSS_PROPERTY("color", CSS_DP_COLOR),
 	CSS_PROPERTY("background-color", CSS_DP_BACKGROUND_COLOR),
+	CSS_PROPERTY("color", CSS_DP_COLOR),
 	CSS_PROPERTY("font-weight", CSS_DP_FONT_WEIGHT),
 
 	CSS_PROPERTY("", CSS_DP_NONE),

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.350 2004/07/02 02:11:41 jonas Exp $ */
+/* $Id: tables.c,v 1.351 2004/07/02 02:14:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1089,7 +1089,6 @@ draw_table_frames(struct table *table, int indent, int y)
 		}
 
 		if (row < table->rows) cy += table->rows_heights[row];
-		/*for (cyy = cy1; cyy < cy; cyy++) expand_line(table->p, cyy, cx - 1);*/
 	}
 
 	fmem_free(frame[0]);

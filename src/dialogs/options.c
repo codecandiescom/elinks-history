@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.174 2005/03/05 20:46:47 zas Exp $ */
+/* $Id: options.c,v 1.175 2005/03/22 00:49:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,24 +141,31 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	union option_value *values;
 	int anonymous = get_cmd_opt_bool("anonymous");
 	unsigned char help_text[MAX_STR_LEN], *text;
-	size_t help_textlen;
+	size_t help_textlen = 0;
 	size_t add_size = TERM_OPTION_VALUE_SIZE;
 
-	snprintf(help_text, sizeof(help_text) - 3 /* 2 '\n' + 1 '\0' */,
-		 _("The environmental variable TERM is set to '%s'.\n"
-		"\n"
-		"ELinks maintains separate sets of values for these options\n"
-		"and chooses the appropriate set based on the value of TERM.\n"
-		"This allows you to configure the settings appropriately for\n"
-		"each terminal in which you run ELinks.", term),
-		 term->spec->name);
+	/* XXX: we don't display help text when terminal height is too low,
+	 * because then user can't change values.
+	 * This should be dropped when we'll have scrollable dialog boxes.
+	 * --Zas */
+	if (term->height > 30) {
+		snprintf(help_text, sizeof(help_text) - 3 /* 2 '\n' + 1 '\0' */,
+			 _("The environmental variable TERM is set to '%s'.\n"
+			"\n"
+			"ELinks maintains separate sets of values for these options\n"
+			"and chooses the appropriate set based on the value of TERM.\n"
+			"This allows you to configure the settings appropriately for\n"
+			"each terminal in which you run ELinks.", term),
+			 term->spec->name);
 
-	help_textlen = strlen(help_text);
+		help_textlen = strlen(help_text);
 
-	/* Two newlines are needed to get a blank line between the help text and
-	 * the first group of widgets. */
-	help_text[help_textlen++] = '\n';
-	help_text[help_textlen++] = '\n';
+		/* Two newlines are needed to get a blank line between the help text and
+		 * the first group of widgets. */
+		help_text[help_textlen++] = '\n';
+		help_text[help_textlen++] = '\n';
+	}
+
 	help_text[help_textlen++] = '\0';
 
 	add_size += help_textlen;

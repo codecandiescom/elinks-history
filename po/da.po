@@ -1,7 +1,6 @@
 # Danish ELinks translation.
 # Jonas Fonseca <fonseca@diku.dk>
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
@@ -57,12 +56,12 @@ msgstr "Tom tekststreng ikke tilladt"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Fejl i XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:110
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Fej ved læsning af %s"
 
 #: src/bookmarks/backend/xbel.c:119
 #, c-format
@@ -70,11 +69,12 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
+"read_bookmarks_xbel(): Parsningsfejl i %s, linje %d tegn nummer %d:\n"
+"%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
-#, fuzzy
 msgid "No title"
-msgstr "Lænketitel"
+msgstr "Ingen titel"
 
 #: src/bookmarks/dialogs.c:169 src/bookmarks/dialogs.c:640
 msgid "Add folder"
@@ -113,21 +113,28 @@ msgid "Delete bookmark"
 msgstr "Slet bokmærke"
 
 #: src/bookmarks/dialogs.c:269
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\""
-msgstr "Desværre, dette bogmærke er allerede i brug."
+msgstr ""
+"Desværre, dette bogmærke er allerede i brug.\n"
+"\n"
+"Titel: \"%s\""
 
 #: src/bookmarks/dialogs.c:278
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\"\n"
 "URL: \"%s\""
-msgstr "Desværre, dette bogmærke er allerede i brug."
+msgstr ""
+"Desværre, dette bogmærke er allerede i brug.\n"
+"\n"
+"Title: \"%s\""
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:412
 msgid "Delete marked bookmarks?"
@@ -148,17 +155,20 @@ msgid "No"
 msgstr "Nej"
 
 #: src/bookmarks/dialogs.c:419
-#, fuzzy, c-format
+#, c-format
 msgid "Delete folder content \"%s\" ?"
-msgstr "Slet mappe indhold"
+msgstr "Slet mappe indholdet \"%s\"?"
 
 #: src/bookmarks/dialogs.c:427
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete bookmark \"%s\" ?\n"
 "\n"
 "URL: \"%s\""
-msgstr "Slet bokmærke"
+msgstr ""
+"Slet bokmærke \"%s\" ?\n"
+"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:609
 msgid "Bookmark manager"
@@ -209,7 +219,7 @@ msgstr "Søg bogmærker"
 #: src/config/cmdline.c:57
 #, fuzzy, c-format
 msgid "Error parsing option %s: %s"
-msgstr "Fejl ved skrivning til sokkel"
+msgstr "Fejl ved parsning af konfigurations variabel %s: %s"
 
 #: src/config/cmdline.c:70
 #, fuzzy, c-format

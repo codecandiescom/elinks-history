@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.198 2005/03/11 15:08:39 zas Exp $ */
+/* $Id: ftp.c,v 1.199 2005/03/11 15:11:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -606,13 +606,12 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 
+	conn->info = c_i;	/* Freed when connection is destroyed. */
+
 	if (!init_string(&command)) {
-		mem_free(c_i);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
-
-	conn->info = c_i;
 
 #ifdef CONFIG_IPV6
 	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");

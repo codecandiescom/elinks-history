@@ -1,3 +1,9 @@
+Sat Aug 10 10:41:24 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	A small typo preventing compilation was fixed.  
+
 Fri Aug  9 12:55:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, bfu/leds.c, config/options.c, lowlevel/Makefile.am,

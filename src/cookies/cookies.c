@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.172 2004/11/10 17:20:01 zas Exp $ */
+/* $Id: cookies.c,v 1.173 2004/11/10 17:21:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,7 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 		 * --<rono@sentuny.com.au> */
 		/* Mozilla does it as well ;))) and I can't figure out any
 		 * security risk. --pasky */
-		return 0;
+		return 1;
 	}
 
 	for (i = server_len - domain_len, j = 0; domain[j]; i++, j++)

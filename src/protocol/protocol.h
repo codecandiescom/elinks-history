@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.32 2004/07/12 11:16:58 jonas Exp $ */
+/* $Id: protocol.h,v 1.33 2004/07/12 11:31:17 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -37,6 +37,7 @@ int get_protocol_port(enum protocol protocol);
 int get_protocol_need_slashes(enum protocol protocol);
 int get_protocol_need_slash_after_host(enum protocol protocol);
 int get_protocol_free_syntax(enum protocol protocol);
+int get_protocol_need_ssl(enum protocol protocol);
 
 protocol_handler *get_protocol_handler(enum protocol protocol);
 protocol_external_handler *get_protocol_external_handler(enum protocol protocol);

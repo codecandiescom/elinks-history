@@ -1,3 +1,73 @@
+Thu Jan  6 21:59:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Include bfu/led.s.h for menu_leds_info.  
+
+Thu Jan  6 16:32:25 2005  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Could you check ftp download resume? 
+
+Thu Jan  6 16:24:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	More merging of Danish translations by Morten Bo Johansen.  
+
+Thu Jan  6 15:32:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Second batch of merged Danish translations by Morten Bo Johansen.  
+
+Thu Jan  6 13:19:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/dcigettext.c:
+
+	Try to declare alloca() with proper types. Should fix problems on
+	OpenBSD and NetBSD systems. Reported by Nelson H. F. Beebe.  
+
+Thu Jan  6 13:13:55 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	INET_ADDRSTRLEN is not available on some IRIX systems, so define
+	them if needed. Reported by Nelson H. F. Beebe.  
+
+Thu Jan  6 09:00:12 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Display led indicators help dialog when these are clicked.  
+
+Thu Jan  6 08:55:18 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Drop |bars| variable and only check for mouse tabs navigation if
+	tabs bar is displayed.  
+
+Thu Jan  6 08:47:44 2005  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Revert 1.666->1.667 patch. It will be reintroduced in smaller parts.
+	Idea by Miciah.  
+
+Wed Jan  5 23:55:01 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po, AUTHORS:
+
+	First batch of merged Danish translations by Morten Bo Johansen.  
+
+Wed Jan  5 23:17:44 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Wed Jan  5 19:54:29 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: config/options.inc, viewer/text/view.c:

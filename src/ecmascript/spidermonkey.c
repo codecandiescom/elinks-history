@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.136 2004/12/19 13:59:17 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.137 2004/12/19 14:13:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1926,7 +1926,10 @@ navigator_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		P_STRING(VERSION);
 		break;
 	case JSP_NAVIGATOR_LANGUAGE:
-		P_STRING(language_to_iso639(current_language));
+		if (get_opt_bool("protocol.http.accept_ui_language"))
+			P_STRING(language_to_iso639(current_language));
+		else
+			P_UNDEF();
 		break;
 	case JSP_NAVIGATOR_PLATFORM:
 		P_STRING(system_name);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.383 2004/12/19 12:17:07 jonas Exp $ */
+/* $Id: http.c,v 1.384 2004/12/19 14:13:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,8 +135,10 @@ static struct option_info http_options[] = {
 		"accept_ui_language", 0, 1,
 		N_("Request localised versions of documents from web-servers (using the\n"
 		"Accept-Language header) using the language you have configured for\n"
-		"ELinks' user-interface. Note that some see this as a potential security\n"
-		"risk because it tells web-masters about your preference in language.")),
+		"ELinks' user-interface (this also affects navigator.language ECMAScript\n"
+		"value available to scripts). Note that some see this as a potential\n"
+		"security risk because it tells web-masters and the FBI sniffers about\n"
+		"your language preference.")),
 
 	INIT_OPT_BOOL("protocol.http", N_("Activate HTTP TRACE debugging"),
 		"trace", 0, 0,

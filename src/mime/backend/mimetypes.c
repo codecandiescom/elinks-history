@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.31 2003/10/26 14:02:35 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.32 2003/10/26 19:49:01 zas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -292,7 +292,7 @@ struct mime_backend mimetypes_mime_backend = {
 struct module mimetypes_mime_module = struct_module(
 	/* name: */		"mimetypes",
 	/* options: */		mimetypes_options,
-	/* hooks: */		NULL,	
+	/* hooks: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		init_mimetypes,

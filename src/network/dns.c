@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.35 2003/10/24 11:41:43 pasky Exp $ */
+/* $Id: dns.c,v 1.36 2003/10/26 19:49:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,7 +193,7 @@ end_real_lookup(void *data)
 
 	r = safe_read(query->h, query->addrno, sizeof(int));
 	if (r != sizeof(int)) goto done;
-	
+
 	*query->addr = mem_calloc(*query->addrno, sizeof(struct sockaddr_storage));
 	if (!*query->addr) goto done;
 

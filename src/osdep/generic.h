@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.8 2003/10/24 11:21:19 zas Exp $ */
+/* $Id: generic.h,v 1.9 2003/10/26 19:49:01 zas Exp $ */
 
 #ifndef EL__OS_DEPX_H
 #define EL__OS_DEPX_H
@@ -83,7 +83,7 @@ static inline ssize_t
 safe_read(int fd, void *buf, size_t count) {
 	do {
 		register int r = read(fd, buf, count);
-	
+
 		if (r == -1 && errno == EINTR) continue;
 		return r;
 	} while (1);
@@ -93,7 +93,7 @@ static inline ssize_t
 safe_write(int fd, const void *buf, size_t count) {
 	do {
 		register int w = write(fd, buf, count);
-	
+
 		if (w == -1 && errno == EINTR) continue;
 		return w;
 	} while (1);

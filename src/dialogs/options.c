@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.94 2003/10/26 16:02:53 pasky Exp $ */
+/* $Id: options.c,v 1.95 2003/10/26 19:49:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,7 @@ terminal_options_ok(void *p)
 	maybe_update(termopt_hop->underline, "underline");
 #undef maybe_update
 
-	if (touched)	
+	if (touched)
 		term->spec->change_hook(NULL, term->spec, NULL);
 
 	cls_redraw_all_terminals();

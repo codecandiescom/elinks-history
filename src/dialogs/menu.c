@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.175 2003/10/24 21:11:39 pasky Exp $ */
+/* $Id: menu.c,v 1.176 2003/10/26 19:49:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ static struct menu_item no_hist_menu[] = {
 	INIT_MENU_ITEM(N_("No history"), M_BAR, NULL, NULL, FREE_NOTHING, 0),
 	NULL_MENU_ITEM
 };
-	
+
 #define history_menu_model(name__, dir__) \
 static void \
 name__(struct terminal *term, void *ddd, struct session *ses) \

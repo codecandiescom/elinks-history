@@ -20,13 +20,7 @@
 
 #include <locale.h>
 
-/* The LC_MESSAGES locale category is the category used by the functions
-   gettext() and dgettext().  It is specified in POSIX, but not in ANSI C.
-   On systems that don't define it, use an arbitrary value instead.
-   On Solaris, <locale.h> defines __LOCALE_H then includes <libintl.h> (i.e.
-   this file!) and then only defines LC_MESSAGES.  To avoid a redefinition
-   warning, don't define LC_MESSAGES in this case.  */
-#if !defined LC_MESSAGES && !defined __LOCALE_H
+#ifndef LC_MESSAGES
 #define LC_MESSAGES 1729
 #endif
 

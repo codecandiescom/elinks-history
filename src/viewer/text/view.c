@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.450 2004/06/12 18:51:21 zas Exp $ */
+/* $Id: view.c,v 1.451 2004/06/13 00:24:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -668,7 +668,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				 * it adds all kins of stuff that is not part
 				 * of the current link. I'd propose to use
 				 * get_link_uri() or something. --jonas */
-				char *current_link = print_current_link(ses);
+				char *current_link = get_current_link_info(ses, doc_view);
 
 				if (current_link) {
 					set_clipboard_text(current_link);

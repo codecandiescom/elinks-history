@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.55 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: url.c,v 1.56 2003/01/19 14:07:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,6 +371,12 @@ get_port_str(unsigned char *url)
 }
 
 
+/* XXX: Warning! We modify the p string here (altough it is reconstructed to
+ * its original state at all exit points of the functions), which is somehow
+ * controversial and it makes it impossible to pass constant strings to this
+ * function. If this will be *that* painful, I'll make it allocate a working
+ * tmp. copy, but for now I rather changed check_protocol() usage, which
+ * obviously may not be the best thing :/. --pasky */
 int
 get_port(unsigned char *url)
 {

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.31 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: globhist.c,v 1.32 2003/07/15 22:18:02 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -23,6 +23,7 @@
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
 #include "lowlevel/home.h"
+#include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
 #include "util/file.h"
 #include "util/hash.h"
@@ -45,6 +46,8 @@ INIT_LIST_HEAD(gh_boxes);
 unsigned char *gh_last_searched_title = NULL;
 unsigned char *gh_last_searched_url = NULL;
 
+/* Timer for periodically writing the history to disk. */
+static int global_history_write_timer = -1;
 
 #ifdef GLOBHIST
 
@@ -326,7 +329,7 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 
 
 void
-read_global_history(void)
+static read_global_history(void)
 {
 	unsigned char in_buffer[MAX_STR_LEN];
 	unsigned char *file_name = "globhist";
@@ -414,6 +417,8 @@ write_global_history(void)
 	}
 
 	secure_close(ssi);
+
+	globhist_dirty = 0;
 }
 
 static void
@@ -429,9 +434,51 @@ free_global_history(void)
 	free_list(global_history.items);
 }
 
+static void
+global_history_write_timer_handler(void *xxx)
+{
+	int interval = get_opt_int("document.history.global.write_interval");
+
+	write_global_history();
+
+	if (!interval) return;
+
+	global_history_write_timer =
+		install_timer(interval * 1000,
+			      global_history_write_timer_handler,
+			      NULL);
+}
+
+int
+global_history_write_timer_change_hook(struct session *ses,
+				       struct option *current,
+				       struct option *changed)
+{
+	if (global_history_write_timer >= 0) {
+		kill_timer(global_history_write_timer);
+		global_history_write_timer = -1;
+	}
+
+	if (elinks_home && !get_opt_int_tree(&cmdline_options, "anonymous"))
+		global_history_write_timer_handler(NULL);
+
+	return 0;
+}
+
+void
+init_global_history(void)
+{
+	read_global_history();
+
+	if (elinks_home && !get_opt_int_tree(&cmdline_options, "anonymous"))
+		global_history_write_timer_handler(NULL);
+}
+
 void
 finalize_global_history(void)
 {
+	if (global_history_write_timer >= 0)
+		kill_timer(global_history_write_timer);
 	write_global_history();
 	free_global_history();
 	if (gh_last_searched_title) mem_free(gh_last_searched_title);

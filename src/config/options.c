@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.239 2003/07/05 13:19:54 jonas Exp $ */
+/* $Id: options.c,v 1.240 2003/07/15 22:18:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/cache.h"
+#include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
@@ -1352,6 +1353,13 @@ register_options(void)
 		N_("What to display in global history dialog:\n"
 		"0 is URLs\n"
 		"1 is page titles"));
+
+	add_opt_int("document.history.global", N_("Auto-save interval"),
+		"write_interval", 0, 0, MAXINT, 300,
+		N_("Interval at which to write global history to disk if it\n"
+		"has changed (seconds; 0 to disable)"));
+	get_opt_rec(&root_options, "document.history.global.write_interval")
+		->change_hook = global_history_write_timer_change_hook;
 
 	add_opt_bool("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,

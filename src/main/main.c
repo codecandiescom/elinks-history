@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.111 2003/07/07 15:04:11 pasky Exp $ */
+/* $Id: main.c,v 1.112 2003/07/15 22:18:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ init(void)
 	read_bookmarks();
 #endif
 #ifdef GLOBHIST
-	read_global_history();
+	init_global_history();
 #endif
 	load_url_history();
 #ifdef COOKIES

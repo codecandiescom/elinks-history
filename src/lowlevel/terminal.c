@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.57 2003/05/03 02:42:05 pasky Exp $ */
+/* $Id: terminal.c,v 1.58 2003/05/03 19:26:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,14 +398,14 @@ switch_to_tab(struct terminal *term, int num)
 	int num_tabs = number_of_tabs(term);
 
 	if (num >= num_tabs) {
-		if (get_opt_bool("ui.tabs_bar.cycle"))
+		if (get_opt_bool("ui.tabs.wraparound"))
 			num = 0;
 		else
 			num = num_tabs - 1;
 	}
 
 	if (num < 0) {
-		if (get_opt_bool("ui.tabs_bar.cycle"))
+		if (get_opt_bool("ui.tabs.wraparound"))
 			num = num_tabs - 1;
 		else
 			num = 0;

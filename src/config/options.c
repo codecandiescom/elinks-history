@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.204 2003/05/03 19:09:31 pasky Exp $ */
+/* $Id: options.c,v 1.205 2003/05/03 19:26:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2021,6 +2021,35 @@ register_options()
 		N_("Default background color."));
 
 
+	add_opt_tree("ui.colors.color", N_("Tabs bar"),
+		"tabs", 0,
+		N_("Tabs bar colors."));
+
+	add_opt_tree("ui.colors.color.tabs", N_("Unselected tab"),
+		"normal", 0,
+		N_("Unselected tab colors."));
+
+	add_opt_color("ui.colors.color.tabs.normal", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.color.tabs.normal", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
+
+	add_opt_tree("ui.colors.color.tabs", N_("Selected tab"),
+		"selected", 0,
+		N_("Selected tab colors."));
+
+	add_opt_color("ui.colors.color.tabs.selected", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.color.tabs.selected", N_("Background color"),
+		"background", 0, "green",
+		N_("Default background color."));
+
+
 	add_opt_tree("ui.colors", N_("Non-color terminals"),
 		"mono", 0,
 		N_("Color settings for non-color terminal."));
@@ -2081,6 +2110,7 @@ register_options()
 	add_opt_color("ui.colors.mono.mainmenu.hotkey.selected", N_("Background color"),
 		"background", 0, "white",
 		N_("Main menu selected hotkey default background color."));
+
 
 	add_opt_tree("ui.colors.mono", N_("Menu bar"),
 		"menu", 0,
@@ -2346,6 +2376,36 @@ register_options()
 		N_("Default background color."));
 
 
+	add_opt_tree("ui.colors.mono", N_("Tabs bar"),
+		"tabs", 0,
+		N_("Tabs bar colors."));
+
+	add_opt_tree("ui.colors.mono.tabs", N_("Unselected tab"),
+		"normal", 0,
+		N_("Unselected tab colors."));
+
+	add_opt_color("ui.colors.mono.tabs.normal", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.mono.tabs.normal", N_("Background color"),
+		"background", 0, "white",
+		N_("Default background color."));
+
+	add_opt_tree("ui.colors.mono.tabs", N_("Selected tab"),
+		"selected", 0,
+		N_("Selected tab colors."));
+
+	add_opt_color("ui.colors.mono.tabs.selected", N_("Text color"),
+		"text", 0, "gray",
+		N_("Default text color."));
+
+	add_opt_color("ui.colors.mono.tabs.selected", N_("Background color"),
+		"background", 0, "black",
+		N_("Default background color."));
+
+
+
 	/* ========================================================== */
 	/* ============= BORING PART (colors) END =================== */
 	/* ========================================================== */
@@ -2397,6 +2457,23 @@ register_options()
 		N_("Key-binding action to be triggered when timer reaches zero."));
 
 
+	add_opt_tree("ui", N_("Window tabs"),
+		"tabs", 0,
+		N_("Window tabs settings."));
+
+	add_opt_int("ui.tabs", N_("Display tabs bar"),
+		"show_bar",  0, 0, 2, 1,
+		N_("Show tabs bar on the screen:\n"
+		   "0 means never.\n"
+		   "1 means only if two or more tabs.\n"
+		   "2 means always."));
+
+	add_opt_bool("ui.tabs", N_("Wrap-around tabs cycling"),
+		"wraparound", 0, 1,
+		N_("When moving right from the last tab, jump at the first one, and\n"
+		"vice versa."));
+
+
 
 	add_opt_ptr("ui", N_("Language"),
 		"language", 0, OPT_LANGUAGE, mem_calloc(1, sizeof(int)),
@@ -2422,84 +2499,6 @@ register_options()
 	add_opt_bool("ui", N_("Display goto dialog on startup"),
 		"startup_goto_dialog", 0, 0,
 		N_("Pop up goto dialog on startup when there's no homepage set."));
-
-
-	/* Tabs bar options */
-	add_opt_tree("ui", N_("Tabs bar"),
-		"tabs_bar", 0,
-		N_("Tabs_bar options and colors."));
-
-	add_opt_int("ui.tabs_bar", N_("Display tabs bar"),
-		"show",  0, 0, 2, 1,
-		N_("Show tabs bar on the screen:\n"
-		   "0 means never.\n"
-		   "1 means only if two or more tabs.\n"
-		   "2 means always."));
-
-	add_opt_bool("ui.tabs_bar", N_("Cycle tabs bar"),
-		"cycle", 0, 1,
-		N_("Cycle at left/right when swapping tabs."));
-
-	add_opt_tree("ui.tabs_bar", N_("Tabs bar colors"),
-		"colors", 0,
-		N_("Tabs_bar colors."));
-
-	add_opt_tree("ui.tabs_bar.colors", N_("Color"),
-		"color", 0,
-		N_("Tabs_bar color mode."));
-
-	add_opt_tree("ui.tabs_bar.colors.color", N_("Unselected"),
-		"normal", 0,
-		N_("Unselected tabs bar item colors."));
-
-	add_opt_color("ui.tabs_bar.colors.color.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color."));
-
-	add_opt_color("ui.tabs_bar.colors.color.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color."));
-
-	add_opt_tree("ui.tabs_bar.colors.color", N_("Selected"),
-		"selected", 0,
-		N_("Selected tabs bar item colors."));
-
-	add_opt_color("ui.tabs_bar.colors.color.selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color."));
-
-	add_opt_color("ui.tabs_bar.colors.color.selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Default background color."));
-
-	add_opt_tree("ui.tabs_bar.colors", N_("Mono"),
-		"mono", 0,
-		N_("Tabs_bar monochrome only."));
-
-	add_opt_tree("ui.tabs_bar.colors.mono", N_("Unselected"),
-		"normal", 0,
-		N_("Unselected tabs bar item colors."));
-
-	add_opt_color("ui.tabs_bar.colors.mono.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color."));
-
-	add_opt_color("ui.tabs_bar.colors.mono.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color."));
-
-	add_opt_tree("ui.tabs_bar.colors.mono", N_("Selected"),
-		"selected", 0,
-		N_("Selected tabs bar item colors."));
-
-	add_opt_color("ui.tabs_bar.colors.mono.selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color."));
-
-	add_opt_color("ui.tabs_bar.colors.mono.selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Default background color."));
-	/* End of tabs bar options */
 
 
 	add_opt_bool("ui", N_("Set window title"),

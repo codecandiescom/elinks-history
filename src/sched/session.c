@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.16 2003/05/03 19:05:57 pasky Exp $ */
+/* $Id: session.c,v 1.17 2003/05/03 19:26:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ print_screen_status(struct session *ses)
 	unsigned char *msg = NULL;
 	int show_title_bar = get_opt_int("ui.show_title_bar");
 	int show_status_bar = get_opt_int("ui.show_status_bar");
-	int show_tab_bar = get_opt_int("ui.tabs_bar.show");
+	int show_tab_bar = get_opt_int("ui.tabs.show_bar");
 
 	if (show_title_bar)
 		fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "title.title-bar"));
@@ -272,8 +272,8 @@ print_screen_status(struct session *ses)
 		int tab_width = term->x / number;
 		int tab;
 		int msglen;
-		int selected_color = xget_bfu_color(term, "selected", "ui.tabs_bar.colors.");
-		int normal_color = xget_bfu_color(term, "normal", "ui.tabs_bar.colors.");
+		int normal_color = get_bfu_color(term, "tabs.normal");
+		int selected_color = get_bfu_color(term, "tabs.selected");
 
 		if (show_tab_bar == 1 && number < 2)
 			goto tabs_shown;

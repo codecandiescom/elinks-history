@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.2 2003/09/19 14:43:43 zas Exp $ */
+/* $Id: event.c,v 1.3 2003/09/19 15:11:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ static struct hash *event_hash = NULL;
 static inline int
 invalid_event_id(register int id)
 {
-	return (id == EVENT_NONE || id < 0 || id >= eventssize);
+	return (id < 0 || id >= eventssize);
 }
 
 int
@@ -176,7 +176,8 @@ register_event_hook(int id, int (*callback)(va_list ap), int priority)
 
 	event = &events[id];
 
-	for (i = 0; i < event->count && event->handlers[i].callback != callback; i++);
+	for (i = 0; i < event->count; i++)
+		if (event->handlers[i].callback == callback) break;
 
 	if (i == event->count) {
 		struct event_handler *eh;
@@ -192,7 +193,8 @@ register_event_hook(int id, int (*callback)(va_list ap), int priority)
 		move_event_handler(event, i, i + 1);
 	}
 
-	for (i = 0; i < event->count - 1 && priority <= event->handlers[i].priority; i++);
+	for (i = 0; i < event->count; i++)
+		if (event->handlers[i].callback == callback) break;
 
 	move_event_handler(event, i + 1, i);
 

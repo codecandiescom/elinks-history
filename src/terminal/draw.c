@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.11 2003/07/27 17:47:35 jonas Exp $ */
+/* $Id: draw.c,v 1.12 2003/07/27 19:39:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
 	register int i;
-	int end = (x + l <= t->x) ? l :  t->x - x;
+	int end = (x + l <= t->x) ? l : t->x - x;
 	register int offset = x + t->x * y;
 
 	assert(l >= 0 && l <= t->x && x >= 0 && x < t->x && y >= 0 && y < t->y);
@@ -174,6 +174,7 @@ print_text(struct terminal *t, int x, int y, int l,
 	assert(x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
+	l = (x + l <= t->x) ? l : t->x - x;
 	for (; l-- && *text; text++, x++)
 		set_char(t, x, y, *text + c);
 }

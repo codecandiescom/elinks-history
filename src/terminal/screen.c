@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.63 2003/09/02 19:02:11 jonas Exp $ */
+/* $Id: screen.c,v 1.64 2003/09/02 19:25:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,12 +78,15 @@ static struct frame_seq vt100_frame_seqs[] = {
 /* TODO: We should provide some generic mechanism for options caching. */
 struct screen_driver {
 	int type;
-	int charset;
-	int cp437;
-	int koi8r;
+
+	/* Charsets when doing UTF8 I/O. */
+	/* [0] is the common charset and [1] is the frame charset.
+	 * Test wether to use utf8 using the use_utf8_io() macro. */
+	int charsets[2];
+
 	unsigned char *frame;
 	struct frame_seq *frame_seqs;
-	unsigned int utf_8_io:1;
+
 	unsigned int colors:1;
 	unsigned int trans:1;
 	unsigned int underline:1;
@@ -100,6 +103,8 @@ struct screen_state {
 #define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
 #define use_negative_image(c) \
 	(CMPCODE(TERM_COLOR_FOREGROUND(c)) < CMPCODE(TERM_COLOR_BACKGROUND(c)))
+
+#define use_utf8_io(driver) ((driver)->charsets[0] != -1)
 
 /* Time critical section. */
 static inline void
@@ -207,22 +212,8 @@ print_char(struct string *screen, struct screen_driver *driver,
 			c = driver->frame[c - 176];
 		}
 
-		if (driver->utf_8_io) {
-			int charset = driver->charset;
-
-			if (border) {
-				switch (driver->type) {
-					case TERM_LINUX:
-					case TERM_VT100:
-						charset = driver->cp437;
-						break;
-					case TERM_KOI8:
-						charset = driver->koi8r;
-						break;
-					default:
-						break;
-				}
-			}
+		if (use_utf8_io(driver)) {
+			int charset = driver->charsets[!!border];
 
 			add_to_string(screen, cp2utf_8(charset, c));
 		} else {
@@ -264,41 +255,51 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 static inline void
 init_screen_driver(struct screen_driver *driver, struct terminal *term)
 {
+	int utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+
 	memset(driver, 0, sizeof(struct screen_driver));
 
 	driver->type = get_opt_int_tree(term->spec, "type");
-	driver->utf_8_io = get_opt_bool_tree(term->spec, "utf_8_io");
 	driver->colors = get_opt_bool_tree(term->spec, "colors");
-	driver->charset	= get_opt_int_tree(term->spec, "charset");
 	driver->trans = get_opt_bool_tree(term->spec, "transparency");
 	driver->underline = get_opt_bool_tree(term->spec, "underline");
 
-	/* Cache these values as they don't change and
-	 * get_cp_index() is pretty CPU-intensive. */
-	driver->cp437 = get_cp_index("cp437");
-	driver->koi8r = get_cp_index("koi8-r");
+	if (utf8_io) {
+		driver->charsets[0] = get_opt_int_tree(term->spec, "charset");
+	} else {
+		driver->charsets[0] = -1;
+	}
 
 	if (driver->type == TERM_LINUX) {
 		if (get_opt_bool_tree(term->spec, "restrict_852")) {
 			driver->frame = frame_restrict;
 		}
 
-		if (!driver->utf_8_io
-		    && get_opt_bool_tree(term->spec, "m11_hack")) {
+		if (utf8_io) {
+			driver->charsets[1] = get_cp_index("cp437");
+
+		} else if (get_opt_bool_tree(term->spec, "m11_hack")) {
 			driver->frame_seqs = m11_hack_frame_seqs;
 		}
 
 	} else if (driver->type == TERM_VT100) {
-		driver->frame = (driver->utf_8_io) ? frame_vt100_u : frame_vt100;
-
-		if (!driver->utf_8_io) {
+		if (utf8_io) {
+			driver->frame = frame_vt100_u;
+			driver->charsets[1] = get_cp_index("cp437");
+		} else {
+			driver->frame = frame_vt100;
 			driver->frame_seqs = vt100_frame_seqs;
 		}
 
 	} else if (driver->type == TERM_KOI8) {
 		driver->frame = frame_koi;
+
+		if (utf8_io) {
+			driver->charsets[1] = get_cp_index("koi8-r");
+		}
 	} else {
 		driver->frame = frame_dumb;
+		driver->charsets[1] = driver->charsets[0];
 	}
 }
 

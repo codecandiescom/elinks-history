@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.90 2003/06/07 15:35:33 jonas Exp $ */
+/* $Id: session.c,v 1.91 2003/06/07 15:43:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,9 +548,10 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	struct wtd_data *wtd_data = mem_alloc(sizeof(struct wtd_data));
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
+	unsigned char *post_char_pos = strchr(url, POST_CHAR);
 
 	if (!wtd_data || !get_opt_int("document.browse.forms.confirm_submit")
-	    || !strchr(url, POST_CHAR)
+	    || !post_char_pos
 	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
 
@@ -588,7 +589,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		m1 = N_("Do you want to repost form data to url %s?");
 	}
 
-	m2 = memacpy(url, (unsigned char *) strchr(url, POST_CHAR) - url);
+	m2 = memacpy(url, post_char_pos - url);
 	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
 				 NULL), MSGBOX_EXTD_TEXT,
 		N_("Warning"), AL_CENTER,

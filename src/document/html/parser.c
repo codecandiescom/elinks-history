@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.436 2004/06/18 20:22:05 zas Exp $ */
+/* $Id: parser.c,v 1.437 2004/06/18 20:35:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -728,6 +728,7 @@ html_li(unsigned char *a)
 		put_chrs(x, 7, put_chars_f, ff);
 		par_format.leftmargin += 2;
 		par_format.align = AL_LEFT;
+
 	} else {
 		unsigned char c = 0;
 		unsigned char n[32];
@@ -736,16 +737,15 @@ html_li(unsigned char *a)
 		int s = get_num(a, "value");
 
 		if (s != -1) par_format.list_number = s;
-		if ((t != P_roman && t != P_ROMAN && par_format.list_number < 10)
-		    || t == P_alpha || t == P_ALPHA)
-			put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
 
 		if (t == P_ALPHA || t == P_alpha) {
+			put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
 			n[0] = par_format.list_number
 			       ? (par_format.list_number - 1) % 26
 			         + (t == P_ALPHA ? 'A' : 'a')
 			       : 0;
 			n[1] = 0;
+
 		} else if (t == P_ROMAN || t == P_roman) {
 			roman(n, par_format.list_number);
 			if (t == P_ROMAN) {
@@ -753,9 +753,14 @@ html_li(unsigned char *a)
 
 				for (x = n; *x; x++) *x = upcase(*x);
 			}
+
 		} else {
+			if (par_format.list_number < 10)
+				put_chrs("&nbsp;", 6, put_chars_f, ff), c = 1;
+
 			ulongcat(n, NULL, par_format.list_number, (sizeof(n) - 1), 0);
 		}
+
 		nlen = strlen(n);
 		put_chrs(n, strlen(n), put_chars_f, ff);
 		put_chrs(".&nbsp;", 7, put_chars_f, ff);

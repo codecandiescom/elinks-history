@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.80 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: listbox.c,v 1.81 2003/08/01 11:13:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,9 +334,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		text = _(text, data->term);
 
 	len = strlen(text);
-	if (len > data->listbox_item_data->l - depth * 5) {
-		len = data->listbox_item_data->l - depth * 5;
-	}
+	int_upper_bound(&len, data->listbox_item_data->l - depth * 5);
 
 	if (item == data->box->sel) {
 		color = get_bfu_color(data->term, "menu.selected");

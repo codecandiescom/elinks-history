@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.42 2003/08/01 10:11:22 zas Exp $ */
+/* $Id: inpfield.c,v 1.43 2003/08/01 11:13:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,12 +244,9 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 {
 	struct terminal *term = dlg->win->term;
 
-	if (di->vpos + di->l <= di->cpos)
-		di->vpos = di->cpos - di->l + 1;
-	if (di->vpos > di->cpos)
-		di->vpos = di->cpos;
-	if (di->vpos < 0)
-		di->vpos = 0;
+	int_lower_bound(&di->vpos, di->cpos - di->l + 1);
+	int_upper_bound(&di->vpos, di->cpos);
+	int_lower_bound(&di->vpos, 0);
 
 	fill_area(term, di->x, di->y, di->l, 1, ' ',
 		  get_bfu_color(term, "dialog.field"));
@@ -339,12 +336,8 @@ mouse_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 	}
 
 	di->cpos = di->vpos + ev->x - di->x;
-	{
-		int len = strlen(di->cdata);
+	int_upper_bound(&di->cpos, strlen(di->cdata));
 
-		if (di->cpos > len)
-			di->cpos = len;
-	}
 	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 	dlg->selected = di - dlg->items;
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.86 2003/07/31 17:29:00 jonas Exp $ */
+/* $Id: menu.c,v 1.87 2003/08/01 11:13:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,10 +185,13 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	menu->xw = mx;
 	menu->yw = my;
 
-	if ((menu->x = menu->xp) < 0) menu->x = 0;
-	if ((menu->y = menu->yp) < 0) menu->y = 0;
-	if (menu->x + mx > sx) menu->x = sx - mx;
-	if (menu->y + my > sy) menu->y = sy - my;
+	menu->x = menu->xp;
+	menu->y = menu->yp;
+
+	int_lower_bound(&menu->x, 0);
+	int_lower_bound(&menu->y, 0);
+	int_upper_bound(&menu->x, sx - mx);
+	int_upper_bound(&menu->y, sy - my);
 }
 
 static void
@@ -230,14 +233,10 @@ scroll_menu(struct menu *menu, int d)
 		menu->selected += d;
 	}
 
-	if (menu->selected < menu->view + scr_i)
-		menu->view = menu->selected - scr_i;
-	if (menu->selected >= menu->view + w - scr_i - 1)
-		menu->view = menu->selected - w + scr_i + 1;
-	if (menu->view > menu->ni - w)
-		menu->view = menu->ni - w;
-	if (menu->view < 0)
-		menu->view = 0;
+	int_upper_bound(&menu->view, menu->selected - scr_i);
+	int_lower_bound(&menu->view, menu->selected - w + scr_i + 1);
+	int_upper_bound(&menu->view, menu->ni - w);
+	int_lower_bound(&menu->view, 0);
 }
 
 static void
@@ -543,11 +542,9 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						step = DIST;
 					}
 
-					if (menu->selected + step >= menu->ni)
-						step = menu->ni - menu->selected - 1;
-					if (step > DIST) step = DIST;
-					if (step >= menu->ni)
-						step = menu->ni - 1;
+					int_upper_bound(&step, menu->ni - menu->selected - 1);
+					int_upper_bound(&step, DIST);
+					int_upper_bound(&step, menu->ni - 1);
 
 					scroll_menu(menu, step);
 				}

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.23 2003/06/07 21:28:53 pasky Exp $ */
+/* $Id: inphist.c,v 1.24 2003/08/01 11:13:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,8 +28,7 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	struct dialog_data *dd = (struct dialog_data *) win->data;
 	struct widget_data *di = &(dd)->items[dd->selected];
 
-	if (len >= di->item->dlen)
-		len = di->item->dlen - 1;
+	int_upper_bound(&len, di->item->dlen - 1);
 	memcpy(di->cdata, item, len);
 	di->cdata[len] = 0;
 	di->cpos = len;

@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.11 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: widget.c,v 1.12 2003/08/01 11:13:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,7 @@ dlg_set_history(struct widget_data *di)
 	if ((void *) di->cur_hist != &di->history)
 		s = di->cur_hist->d;
 	len = strlen(s);
-	if (len > di->item->dlen)
-		len = di->item->dlen - 1;
+	int_upper_bound(&len, di->item->dlen - 1);
 	memcpy(di->cdata, s, len);
 	di->cdata[len] = 0;
 	di->cpos = len;

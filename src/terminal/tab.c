@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.29 2003/12/27 13:08:44 jonas Exp $ */
+/* $Id: tab.c,v 1.30 2003/12/27 13:21:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,32 +107,31 @@ get_tab_number_by_xpos(struct terminal *term, int xpos)
 	return -1;
 }
 
-/* if nbtabs > 0, then it is taken as the result of a recent
+/* if @tabs > 0, then it is taken as the result of a recent
  * call to number_of_tabs() so it just uses this value. */
 void
-switch_to_tab(struct terminal *term, int num, int nbtabs)
+switch_to_tab(struct terminal *term, int tab, int tabs)
 {
-	int num_tabs = nbtabs;
+	if (tabs < 0) tabs = number_of_tabs(term);
 
-	if (nbtabs < 0) num_tabs = number_of_tabs(term);
-	if (num_tabs > 1) {
-		if (num >= num_tabs) {
+	if (tabs > 1) {
+		if (tab >= tabs) {
 			if (get_opt_bool("ui.tabs.wraparound"))
-				num = 0;
+				tab = 0;
 			else
-				num = num_tabs - 1;
+				tab = tabs - 1;
 		}
 
-		if (num < 0) {
+		if (tab < 0) {
 			if (get_opt_bool("ui.tabs.wraparound"))
-				num = num_tabs - 1;
+				tab = tabs - 1;
 			else
-				num = 0;
+				tab = 0;
 		}
-	} else num = 0;
+	} else tab = 0;
 
-	if (num != term->current_tab) {
-		term->current_tab = num;
+	if (tab != term->current_tab) {
+		term->current_tab = tab;
 		set_screen_dirty(term->screen, 0, term->height);
 		redraw_terminal(term);
 	}

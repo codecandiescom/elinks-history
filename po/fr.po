@@ -2803,7 +2803,7 @@ msgid ""
 "a codepage determined by a selected locale."
 msgstr ""
 "Jeu de caractères par défaut pour les documents.\n"
-"'System' indique que celui-ci sera déterminé par\n"
+"'Système' indique que celui-ci sera déterminé par\n"
 "la locale en cours."
 
 #: src/config/options.inc:501

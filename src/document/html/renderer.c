@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.498 2004/09/27 00:55:40 pasky Exp $ */
+/* $Id: renderer.c,v 1.499 2004/09/27 01:03:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -906,7 +906,7 @@ new_link(struct document *document, int link_number,
 	link->color.foreground = link_is_textinput(link)
 				? format.fg : format.clink;
 
-	init_list(link->event_hooks);
+	link->event_hooks = NULL;
 
 	return link;
 }

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.77 2004/09/27 00:55:40 pasky Exp $ */
+/* $Id: document.h,v 1.78 2004/09/27 01:03:58 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -91,7 +91,7 @@ struct link {
 
 	struct color_pair color;
 
-	struct list_head event_hooks; /* -> struct script_event_hook */
+	struct list_head *event_hooks; /* -> struct script_event_hook */
 
 	union {
 		unsigned char *name;

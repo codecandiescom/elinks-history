@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.187 2004/12/30 23:50:39 jonas Exp $ */
+/* $Id: file.c,v 1.188 2004/12/31 11:44:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,13 +55,13 @@ static struct option_info file_options[] = {
 
 	INIT_OPT_BOOL("protocol.file", N_("Allow reading special files"),
 		"allow_special_files", 0, 0,
-		N_("Allow reading from non-regular files? (DANGEROUS - reading\n"
-		"/dev/urandom or /dev/zero can ruin your day!)")),
+		N_("Whether to allow reading from non-regular files.\n"
+		"Note this can be dangerous; reading /dev/urandom or\n"
+		"/dev/zero can ruin your day!")),
 
 	INIT_OPT_BOOL("protocol.file", N_("Show hidden files in directory listing"),
 		"show_hidden_files", 0, 1,
-		N_("Show hidden files in directory listing ?\n"
-		   "If set to false, files with name starting with a dot will be\n"
+		N_("When set to false, files with name starting with a dot will be\n"
 		   "hidden in local directories listing.")),
 
 	INIT_OPT_BOOL("protocol.file", N_("Try encoding extensions"),

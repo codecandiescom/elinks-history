@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.114 2003/11/27 13:59:11 jonas Exp $ */
+/* $Id: hierbox.c,v 1.115 2003/11/27 14:08:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -561,7 +561,8 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
-	if (!box->ops->can_delete(context->item)) {
+	if (!box->ops->can_delete(context->item)
+	    || box->ops->is_used(context->item)) {
 		print_delete_error(context->item, term, box->ops,
 				   DELETE_IMPOSSIBLE);
 		mem_free(context);

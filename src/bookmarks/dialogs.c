@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.47 2002/10/08 21:18:59 pasky Exp $ */
+/* $Id: dialogs.c,v 1.48 2002/10/08 21:20:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,7 +443,7 @@ push_move_button(struct dialog_data *dlg,
 
 	if (!box->sel) return 0; /* nowhere to move to */
 
-	if (box->sel->type == BI_FOLDER) {
+	if (box->sel->type == BI_FOLDER && box->sel->expanded) {
 		dest = box->sel->udata;
 		destb = &((struct bookmark *) box->sel->udata)->child;
 		desti = &box->sel->child;

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.63 2003/06/23 02:21:27 jonas Exp $ */
+/* $Id: file.c,v 1.64 2003/06/23 02:24:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -582,10 +582,7 @@ void
 file_func(struct connection *c)
 {
 	struct cache_entry *e;
-	unsigned char *fragment;
 	unsigned char *filename;
-	unsigned char *head;
-	int fragmentlen;
 	DIR *d;
 	int filenamelen;
 	struct file_info *info;
@@ -641,10 +638,6 @@ file_func(struct connection *c)
 			return;
 		}
 
-		fragment = info->fragment;
-		fragmentlen = info->fragmentlen;
-		head = info->head;
-		mem_free(info);
 	} else {
 		struct stream_encoded *stream;
 		struct stat stt;
@@ -703,26 +696,23 @@ file_func(struct connection *c)
 			abort_conn_with_state(c, state);
 			return;
 		}
-
-		fragment = info->fragment;
-		fragmentlen = info->fragmentlen;
-		head = info->head;
-		mem_free(info);
 	}
 
 	if (get_cache_entry(c->url, &e)) {
-		mem_free(fragment);
+		mem_free(info->fragment);
+		mem_free(info);
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
 
 	if (e->head) mem_free(e->head);
-	e->head = head;
+	e->head = info->head;
 	c->cache = e;
-	add_fragment(e, 0, fragment, fragmentlen);
-	truncate_entry(e, fragmentlen, 1);
+	add_fragment(e, 0, info->fragment, info->fragmentlen);
+	truncate_entry(e, info->fragmentlen, 1);
 
-	mem_free(fragment);
+	mem_free(info->fragment);
+	mem_free(info);
 
 end:
 	c->cache->incomplete = 0;

@@ -173,7 +173,16 @@ AC_CHECK_FUNCS(geteuid, HAVE_GETEUID=yes)
 dnl These aren't probably needed now, as they are commented in links.h.
 dnl I've no idea about their historical background, but I keep them here
 dnl just in the case they will help later. --pasky
-AC_CHECK_FUNCS(getpid setpgid getpgid setpgrp getpgrp)
+AC_CHECK_FUNCS(getpid, HAVE_GETPID=yes)
+AC_CHECK_FUNCS(setpgid getpgid setpgrp getpgrp)
+AC_CHECK_FUNCS(raise, HAVE_RAISE=yes)
+AC_CHECK_FUNCS(kill, HAVE_KILL=yes)
+
+if test x"$HAVE_RAISE" = x; then
+	if test x"$HAVE_KILL" = x || test x"$HAVE_GETPID" = x; then
+		AC_ERROR([Unable to emulate raise()])
+	fi
+fi
 
 AC_CACHE_CHECK([for __va_copy],el_cv_HAVE_VA_COPY,[
 AC_TRY_LINK([#include <stdarg.h>

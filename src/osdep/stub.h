@@ -1,4 +1,4 @@
-/* $Id: stub.h,v 1.8 2004/06/18 14:59:54 jonas Exp $ */
+/* $Id: stub.h,v 1.9 2004/11/08 16:15:07 jonas Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
@@ -12,9 +12,10 @@
 
 #ifdef CONFIG_OWN_LIBC
 
-#undef HAVE_MEMMOVE
 #undef HAVE_BCOPY /* prevent using bcopy() stub for memmove() */
+#undef HAVE_MEMMOVE
 #undef HAVE_MEMPCPY
+#undef HAVE_RAISE
 #undef HAVE_STPCPY
 #undef HAVE_STRCASECMP
 #undef HAVE_STRCASESTR
@@ -120,6 +121,13 @@ void *elinks_mempcpy(void *, const void *, size_t);
 #undef memrchr
 #define memrchr(src, c, n) elinks_memrchr(src, c, n)
 void *elinks_memrchr(const void *s, int c, size_t n);
+#endif
+
+/* raise() */
+#ifndef HAVE_RAISE
+#undef raise
+#define raise(signal) elinks_raise(signal)
+int elinks_raise(int signal);
 #endif
 
 #endif

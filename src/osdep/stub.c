@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.15 2004/08/12 08:40:36 miciah Exp $ */
+/* $Id: stub.c,v 1.16 2004/11/08 16:15:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,5 +194,18 @@ elinks_memrchr(const void *s, int c, size_t n)
 	}
 
 	return NULL;
+}
+#endif
+
+#ifndef HAVE_RAISE
+
+#if !defined(HAVE_KILL) || !defined(HAVE_GETPID)
+#error The raise() stub function requires kill() and getpid()
+#endif
+
+int
+elinks_raise(int signal)
+{
+	return(kill(getpid(), signal));
 }
 #endif

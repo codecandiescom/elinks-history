@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.171 2003/10/06 18:49:57 fabio Exp $ */
+/* $Id: session.c,v 1.172 2003/10/06 20:58:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,9 +449,6 @@ ses_forward(struct session *ses)
 	int len;
 
 	free_files(ses);
-	if (have_location(ses)) {
-		loc = cur_loc(ses);
-	}
 
 	if (ses->search_word) {
 		mem_free(ses->search_word);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.72 2003/05/03 19:26:02 pasky Exp $ */
+/* $Id: renderer.c,v 1.73 2003/05/03 22:34:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1883,7 +1883,7 @@ html_interpret(struct session *ses)
 	o.yp = 0;
 	if (show_title_bar) o.yp = 1;
 	o.xw = ses->term->x;
-	o.yw = ses->term->y + 1;
+	o.yw = ses->term->y;
 	if (show_title_bar) o.yw--;
 	if (show_status_bar || show_tab_bar) o.yw--;
 	if (show_status_bar && show_tab_bar) o.yw--;

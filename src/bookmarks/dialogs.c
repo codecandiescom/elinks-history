@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.191 2004/12/14 18:38:38 miciah Exp $ */
+/* $Id: dialogs.c,v 1.192 2004/12/14 18:45:41 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -358,10 +358,10 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 
 			del_from_list(bm->box_item);
 			del_from_list(bm);
-			add_at_pos((!destb ? dest : (struct bookmark *) destb),
+			add_at_pos(!destb ? dest : (struct bookmark *) destb,
 				   bm);
-			add_at_pos((!desti ? dest->box_item
-					   : (struct listbox_item *) desti),
+			add_at_pos(!desti ? dest->box_item
+					  : (struct listbox_item *) desti,
 				   bm->box_item);
 
 			bm->root = destb ? dest : dest->root;

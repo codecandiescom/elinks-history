@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.517 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: view.c,v 1.518 2004/06/24 07:35:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,18 +76,6 @@ detach_formatted(struct document_view *doc_view)
 	doc_view->vs = NULL;
 	if (doc_view->link_bg) free_link(doc_view);
 	mem_free_set(&doc_view->name, NULL);
-}
-
-static inline int
-find_tag(struct document *document, unsigned char *name, int namelen)
-{
-	struct tag *tag;
-
-	foreach (tag, document->tags)
-		if (!strlcasecmp(tag->name, -1, name, namelen))
-			return tag->y;
-
-	return -1;
 }
 
 /* type == 0 -> PAGE_DOWN

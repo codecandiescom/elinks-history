@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.140 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: bookmarks.c,v 1.141 2004/12/14 16:59:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,21 +12,21 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
+#include "bookmarks/backend/common.h"
 #include "bookmarks/bookmarks.h"
 #include "bookmarks/dialogs.h"
-#include "bookmarks/backend/common.h"
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
-#include "sched/task.h"
 #include "protocol/uri.h"
+#include "sched/task.h"
 #include "terminal/tab.h"
 #include "util/conv.h"
 #include "util/hash.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/secsave.h"
 #include "util/string.h"
-#include "util/object.h"
 
 /* The list of bookmarks */
 INIT_LIST_HEAD(bookmarks);

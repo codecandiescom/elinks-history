@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.239 2004/06/11 10:02:45 zas Exp $ */
+/* $Id: search.c,v 1.240 2004/06/11 10:30:52 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1320,22 +1320,15 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 /* XXX: @data is ignored. */
 static void
-search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
-	      unsigned char *title, unsigned char *text,
-	      unsigned char *okbutton, unsigned char *cancelbutton,
-	      void *data, struct input_history *history,
+search_dlg_do(struct terminal *term, struct memory_list *ml,
+	      unsigned char *title, void *data,
+	      struct input_history *history,
 	      void (*fn)(void *, unsigned char *))
 {
 	struct dialog *dlg;
 	unsigned char *field;
 	struct search_dlg_hop *hop;
-
-	if (intl) {
-		title = _(title, term);
-		text = _(text, term);
-		okbutton = _(okbutton, term);
-		cancelbutton = _(cancelbutton, term);
-	}
+	unsigned char *text = _("Search for text", term);
 
 	hop = mem_calloc(1, sizeof(struct search_dlg_hop));
 	if (!hop) return;
@@ -1351,7 +1344,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 		return;
 	}
 
-	dlg->title = title;
+	dlg->title = _(title, term);
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.fit_datalen = 1;
 	dlg->layout.float_groups = 1;
@@ -1370,8 +1363,8 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, hop->values[SEARCH_OPT_CASE].number);
 	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->values[SEARCH_OPT_CASE].number);
 
-	add_dlg_button(dlg, B_ENTER, search_dlg_ok, okbutton, fn);
-	add_dlg_button(dlg, B_ESC, search_dlg_cancel, cancelbutton, NULL);
+	add_dlg_button(dlg, B_ENTER, search_dlg_ok, _("OK", term), fn);
+	add_dlg_button(dlg, B_ESC, search_dlg_cancel, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, SEARCH_WIDGETS_COUNT);
 
@@ -1396,10 +1389,9 @@ search_dlg(struct session *ses, struct document_view *doc_view, int direction)
 		search_function = search_for_back;
 	}
 
-	search_dlg_do(ses->tab->term, NULL, 1,
-		      title, N_("Search for text"),
-		      N_("OK"), N_("Cancel"),
-		      ses, &search_history,
+	search_dlg_do(ses->tab->term, NULL,
+		      title, ses,
+		      &search_history,
 		      search_function);
 }
 

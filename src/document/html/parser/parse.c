@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.104 2005/01/05 03:02:31 jonas Exp $ */
+/* $Id: parse.c,v 1.105 2005/02/19 21:51:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -893,20 +893,31 @@ start_element(struct element_info *ei,
 		 * --pasky */
 		/* Call it now to gain some of the stuff which might affect
 		 * formatting of some elements. */
+		/* FIXME: The caching of the CSS selector is broken, since t can
+		 * lead to wrong styles being applied to following elements, so
+		 * disabled for now. */
 		selector = get_css_selector_for_element(&html_top,
 							&html_context.css_styles,
 							&html_context.stack);
 
-		if (selector)
+		if (selector) {
 			apply_css_selector_style(&html_top, selector);
+			done_css_selector(selector);
+		}
 	}
 #endif
 	if (ei->func) ei->func(attr);
 #ifdef CONFIG_CSS
 	if (selector) {
 		/* Call it now to override default colors of the elements. */
-		apply_css_selector_style(&html_top, selector);
-		done_css_selector(selector);
+		selector = get_css_selector_for_element(&html_top,
+							&html_context.css_styles,
+							&html_context.stack);
+
+		if (selector) {
+			apply_css_selector_style(&html_top, selector);
+			done_css_selector(selector);
+		}
 	}
 #endif
 

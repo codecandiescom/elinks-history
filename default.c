@@ -686,7 +686,7 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	printf("Links " VERSION_STRING "\n");
+	printf("Elinks " VERSION_STRING "\n");
 	fflush(stdout);
 	return "";
 }
@@ -791,7 +791,7 @@ Options are:\n\
  -user-agent <agent>\n\
   Change the User Agent. That means identification string, which\n\
   is sent to HTTP server, when a document is requested. Default\n\
-  is \"Links (version; system_id)\".\n\
+  is \"Elinks (version; system_id)\".\n\
 \n\
  -help\n\
   Prints this help screen\n\

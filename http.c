@@ -243,7 +243,7 @@ void http_send_header(struct connection *c)
 	}
         
 	if(!strcmp(user_agent, "")) {
-                add_to_str(&hdr, &l, "User-Agent: Links (" VERSION_STRING "; ");
+                add_to_str(&hdr, &l, "User-Agent: Elinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);
                 add_to_str(&hdr, &l, ")\r\n");
         } else {

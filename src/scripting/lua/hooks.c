@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.26 2003/09/23 00:05:18 jonas Exp $ */
+/* $Id: hooks.c,v 1.27 2003/09/23 00:45:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "sched/session.h"
 #include "scripting/lua/core.h"
 #include "scripting/lua/hooks.h"
+#include "scripting/scripting.h"
 #include "util/string.h"
 
 
@@ -227,11 +228,7 @@ script_hook_quit(va_list ap)
 	return 0;
 }
 
-/* TODO: Generalize and share the hook registration among the backends. */
-static struct {
-	unsigned char *name;
-	int (*callback)(va_list ap);
-} hooks[] = {
+struct scripting_hook lua_scripting_hooks[] = {
 	{ "goto-url", script_hook_goto_url },
 	{ "follow-url", script_hook_follow_url },
 	{ "pre-format-html", script_hook_pre_format_html },
@@ -239,33 +236,5 @@ static struct {
 	{ "quit", script_hook_quit },
 	{ NULL, NULL }
 };
-
-void
-register_lua_hooks(void)
-{
-	int i;
-
-	for (i = 0; hooks[i].name; i++) {
-		int id;
-
-		id = register_event(hooks[i].name);
-		if (id >= 0)
-			register_event_hook(id, hooks[i].callback, 0);
-	}
-}
-
-void
-unregister_lua_hooks(void)
-{
-	int i;
-
-	for (i = 0; hooks[i].name; i++) {
-		int id;
-
-		id = get_event_id(hooks[i].name);
-		if (id >= 0)
-			unregister_event_hook(id, hooks[i].callback);
-	}
-}
 
 #endif

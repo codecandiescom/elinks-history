@@ -1,12 +1,13 @@
-/* $Id: hooks.h,v 1.8 2003/09/22 21:54:47 jonas Exp $ */
+/* $Id: hooks.h,v 1.9 2003/09/23 00:45:56 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_HOOKS_H
 #define EL__SCRIPTING_LUA_HOOKS_H
 
 #ifdef HAVE_LUA
 
-void register_lua_hooks(void);
-void unregister_lua_hooks(void);
+#include "scripting/scripting.h"
+
+extern struct scripting_hook lua_scripting_hooks[];
 
 #endif
 

@@ -76,21 +76,26 @@ AC_DEFUN([EL_CHECK_TYPE],
 	AC_MSG_RESULT([$]$2)
 ])
 
-
-dnl EL_CHECK_SPECIAL_TYPE(type, define, include sys types, code)
-AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
+dnl EL_CHECK_SYS_TYPE(type, define, includes)
+AC_DEFUN([EL_CHECK_SYS_TYPE],
 [
 	EL_CHECK_TYPE([$1], [$2], [
-#if $3
 #include <sys/types.h>
+$3
+	], [int a = sizeof($1);])
+])
+
+dnl EL_CHECK_SPECIAL_TYPE(type, define)
+AC_DEFUN([EL_CHECK_SPECIAL_TYPE],
+[
+	EL_CHECK_SYS_TYPE([$1], [$2], [
 #ifdef HAVE_STDINT_H
 #include <stdint.h>
 #endif
 #ifdef HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif
-#endif
-	], [$4])
+	])
 ])
 
 
@@ -123,9 +128,9 @@ AC_HEADER_TIME
 AC_STRUCT_TM
 
 EL_CHECK_TYPE(typeof, HAVE_TYPEOF, [], [int a; typeof(a) b;])
-EL_CHECK_SPECIAL_TYPE(long long, HAVE_LONG_LONG, 0, [unsigned long long a;])
-EL_CHECK_SPECIAL_TYPE(int32_t, HAVE_INT32_T, 1, [int32_t a;])
-EL_CHECK_SPECIAL_TYPE(uint32_t, HAVE_UINT32_T, 1, [uint32_t a;])
+EL_CHECK_SYS_TYPE(long long, HAVE_LONG_LONG, [])
+EL_CHECK_SPECIAL_TYPE(int32_t, HAVE_INT32_T)
+EL_CHECK_SPECIAL_TYPE(uint32_t, HAVE_UINT32_T)
 
 AC_CHECK_SIZEOF(char, 1)
 AC_CHECK_SIZEOF(short, 2)

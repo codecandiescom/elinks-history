@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.68 2003/11/14 15:00:27 zas Exp $ */
+/* $Id: color.c,v 1.69 2003/11/15 14:09:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	enum palette_range palette_range = PALETTE_FULL;
 	unsigned char fg, bg;
 
-	assert(color_mode >= 0);
+	assert(color_mode >= 0 && color_mode < COLOR_MODES);
 
 	/* Options for the various color modes. */
 	switch (color_mode) {
@@ -279,7 +279,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		return;
 
 	case COLOR_MODES:
-		internal("Bad color mode, it should _never_ occur here.");
+		/* This is caught by the assert() above. */
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.7 2002/12/27 23:49:01 pasky Exp $ */
+/* $Id: parser.c,v 1.8 2002/12/27 23:58:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,10 +13,8 @@
 #include "elusive/parser/parser.h"
 #include "elusive/parser/syntree.h"
 #include "util/error.h"
-
-
-/* TODO: Unicode...? --pasky */
-#define whitespace(x) (x <= 32)
+#include "util/memory.h"
+#include "util/string.h"
 
 
 /* We maintain the states (see below for a nice diagram) in a stack, maintained
@@ -26,6 +24,7 @@ enum state_code {
 	HPT_PLAIN,
 	HPT_ENTITY,
 	HPT_TAG,
+	HPT_TAG_WHITE,
 	HPT_TAG_COMMENT,
 	HPT_NO,
 };
@@ -307,11 +306,34 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	/* Ordinary tag. *yawn* */
 	pstate = html_state_push(state, HPT_TAG_NAME);
 	/* Let's save one parser turn: */
-	if (whitespace(*html)) {
+	if (WHITECHAR(*html)) {
 		pstate = html_state_push(state, HPT_TAG_WHITE);
 	}
 
 	return 0;
+}
+
+/* This skips sequence of whitespaces inside of a tag. */
+static int
+tag_white_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+
+	while (html_len) {
+		if (WHITECHAR(*html)) {
+			html++, html_len--;
+			continue;
+		}
+
+		pstate = html_state_pop(state);
+		*str = html, *len = html_len;
+		return 0;
+	}
+
+	*str = html, *len = html_len;
+	return -1;
 }
 
 /* Walk through a comment towards the light. */
@@ -321,7 +343,6 @@ comment_parse(struct parser_state *state, unsigned char **str, int *len)
 	struct html_parser_state *pstate = state->data;
 	unsigned char *html = *str;
 	int html_len = *len;
-	int name_len = 0;
 	unsigned char *end = "-->";
 	int endp = 0;
 
@@ -475,6 +496,7 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 	plain_parse,
 	entity_parse,
 	tag_parse,
+	tag_white_parse,
 	comment_parse,
 };
 

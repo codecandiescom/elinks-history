@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.15 2002/05/19 16:06:43 pasky Exp $ */
+/* $Id: options.h,v 1.16 2002/05/19 17:02:18 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -35,6 +35,8 @@ enum option_type {
 	OPT_COLOR,
 
 	OPT_COMMAND,
+
+	OPT_HASH,
 };
 
 struct option {
@@ -63,6 +65,9 @@ extern struct hash *links_options;
 extern void init_options();
 extern void done_options();
 
+extern struct hash *init_options_hash();
+extern void free_options_hash(struct hash *);
+
 extern struct option *get_opt_rec(struct hash *, unsigned char *);
 extern void *get_opt(struct hash *, unsigned char *);
 
@@ -72,38 +77,42 @@ extern void *get_opt(struct hash *, unsigned char *);
 #define get_opt_str(name) ((unsigned char *) get_opt(links_options, name))
 #define get_opt_ptr(name) ((void *) get_opt(links_options, name))
 
-extern void add_opt_rec(struct hash *, struct option *);
-extern void add_opt(struct hash *, unsigned char *name, enum option_flags flags,
-		    enum option_type type, int min, int max, void *ptr,
+extern void add_opt_rec(struct hash *, unsigned char *path, struct option *);
+extern void add_opt(struct hash *, unsigned char *path, unsigned char *name,
+		    enum option_flags flags, enum option_type type,
+		    int min, int max, void *ptr,
 		    unsigned char *desc);
 
-#define add_opt_bool(hash, name, flags, def, desc) do { \
-	add_opt(hash, name, flags, OPT_BOOL, 0, 1, mem_alloc(sizeof(int)), desc); \
-	*((int *) get_opt(hash, name)) = def; } while (0)
+#define add_opt_bool(path, name, flags, def, desc) do { \
+	add_opt(links_options, path, name, flags, OPT_BOOL, 0, 1, mem_alloc(sizeof(int)), desc); \
+	get_opt_int(name) = def; } while (0)
 
-#define add_opt_int(hash, name, flags, min, max, def, desc) do { \
-	add_opt(hash, name, flags, OPT_INT, min, max, mem_alloc(sizeof(int)), desc); \
-	*((int *) get_opt(hash, name)) = def; } while (0)
+#define add_opt_int(path, name, flags, min, max, def, desc) do { \
+	add_opt(links_options, path, name, flags, OPT_INT, min, max, mem_alloc(sizeof(int)), desc); \
+	get_opt_int(name) = def; } while (0)
 
-#define add_opt_long(hash, name, flags, min, max, def, desc) do { \
-	add_opt(hash, name, flags, OPT_LONG, min, max, mem_alloc(sizeof(long)), desc); \
-	*((long *) get_opt(hash, name)) = def; } while (0)
+#define add_opt_long(path, name, flags, min, max, def, desc) do { \
+	add_opt(links_options, path, name, flags, OPT_LONG, min, max, mem_alloc(sizeof(long)), desc); \
+	get_opt_long(name) = def; } while (0)
 
-#define add_opt_string(hash, name, flags, def, desc) \
-	add_opt(hash, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
+#define add_opt_string(path, name, flags, def, desc) \
+	add_opt(links_options, path, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
 
-#define add_opt_codepage(hash, name, flags, def, desc) do { \
-	add_opt(hash, name, flags, OPT_CODEPAGE, 0, 0, mem_alloc(sizeof(int)), desc); \
-	*((int *) get_opt(hash, name)) = def; } while (0)
+#define add_opt_codepage(path, name, flags, def, desc) do { \
+	add_opt(links_options, path, name, flags, OPT_CODEPAGE, 0, 0, mem_alloc(sizeof(int)), desc); \
+	get_opt_int(name) = def; } while (0)
 
-#define add_opt_ptr(hash, name, flags, type, def, desc) \
-	add_opt(hash, name, flags, type, 0, 0, def, desc);
+#define add_opt_ptr(path, name, flags, type, def, desc) \
+	add_opt(links_options, path, name, flags, type, 0, 0, def, desc);
 
-#define add_opt_void(hash, name, flags, type, desc) \
-	add_opt(hash, name, flags, type, 0, 0, NULL, desc);
+#define add_opt_void(path, name, flags, type, desc) \
+	add_opt(links_options, path, name, flags, type, 0, 0, NULL, desc);
 
-#define add_opt_command(hash, name, flags, cmd, desc) \
-	add_opt(hash, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
+#define add_opt_command(path, name, flags, cmd, desc) \
+	add_opt(links_options, path, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
+
+#define add_opt_hash(path, name, flags, desc) \
+	add_opt(links_options, path, name, flags, OPT_HASH, 0, 0, init_options_hash(), desc);
 
 
 extern unsigned char *cmd_name(unsigned char *);

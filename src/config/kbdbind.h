@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.93 2004/01/24 23:25:06 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.94 2004/01/24 23:33:34 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -19,6 +19,7 @@ enum keymap {
 
 /* Note: if you add anything here, please keep it in alphabetical order,
  * and also update the table action_table[] in kbdbind.c.  */
+
 enum action {
 	/* These two actions are common over all keymaps: */
 	ACT_NONE = 0,
@@ -132,8 +133,6 @@ enum action {
 	ACT_UP,
 	ACT_VIEW_IMAGE,
 	ACT_ZOOM_FRAME,
-
-	KEYACTS
 };
 
 enum kbdbind_flags {

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.180 2004/01/24 23:25:06 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.181 2004/01/24 23:33:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,9 @@
 #define table table_elinks
 
 static struct strtonum (*action_table)[KM_MAX];
-static struct listbox_item *action_box_items[KM_MAX][KEYACTS];
+/* XXX: 1024 is just a quick hack, we ought to allocate the sub-arrays
+ * separately. --pasky */
+static struct listbox_item *action_box_items[KM_MAX][1024];
 static struct list_head keymaps[KM_MAX];
 
 static int read_action(unsigned char *);

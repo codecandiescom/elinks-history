@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.7 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: file.c,v 1.8 2002/04/27 21:21:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,7 @@
 #include <document/cache.h>
 #include <lowlevel/sched.h>
 #include <protocol/file.h>
+#include <util/conv.h>
 
 #define FILE_DIR_COLOR   "yellow"
 
@@ -292,10 +293,8 @@ comp_de(struct dirs *d1, struct dirs *d2)
 	return strcmp(d1->f, d2->f);
 }
 
-/* FIXME: Many return values aren't checked. And we should split it. No
- * special attention is taken about html bad chars that may appear in
- * filenames, a file created with echo > '<PRE>' gives interesting results
- * when listed. --Zas */
+/* FIXME: Many return values aren't checked. And we should split it.
+ * --Zas */
 void
 file_func(struct connection *c)
 {
@@ -439,8 +438,10 @@ dir:
 				int size = 0;
 				int r = -1;
 				unsigned char *n = stracpy(name);
+				int nl = strlen(n);
 
-				add_to_strn(&n, dir[i].f);
+				add_htmlesc_str(&n, &nl,
+						dir[i].f, strlen(dir[i].f));
 				do {
 					if (buf) mem_free(buf);
 					size += ALLOC_GR;
@@ -460,16 +461,20 @@ dir:
 			}
 #endif
 			/*add_to_str(&file, &fl, "   ");*/
-			add_to_str(&file, &fl, dir[i].s);
+			add_htmlesc_str(&file, &fl,
+					dir[i].s, strlen(dir[i].s));
 			add_to_str(&file, &fl, "<a href=\"");
-			add_to_str(&file, &fl, dir[i].f);
+			add_htmlesc_str(&file, &fl,
+					dir[i].f, strlen(dir[i].f));
 			if (dir[i].s[0] == 'd') {
 				add_to_str(&file, &fl, "/");
 			} else if (lnk) {
 				struct stat st;
 				unsigned char *n = stracpy(name);
+				int nl = strlen(n);
 
-				add_to_strn(&n, dir[i].f);
+				add_htmlesc_str(&n, &nl,
+						dir[i].f, strlen(dir[i].f));
 				if (!stat(n, &st))
 					if (S_ISDIR(st.st_mode))
 						add_to_str(&file, &fl, "/");
@@ -484,7 +489,8 @@ dir:
 					   FILE_DIR_COLOR "\"><b>");
 			}
 			
-			add_to_str(&file, &fl, dir[i].f);
+			add_htmlesc_str(&file, &fl,
+					dir[i].f, strlen(dir[i].f));
 
 			if (dir[i].s[0] == 'd' && color_dirs) {
 				add_to_str(&file, &fl, "</b></font>");
@@ -493,7 +499,7 @@ dir:
 			add_to_str(&file, &fl, "</a>");
 			if (lnk) {
 				add_to_str(&file, &fl, " -> ");
-				add_to_str(&file, &fl, lnk);
+				add_htmlesc_str(&file, &fl, lnk, strlen(lnk));
 				mem_free(lnk);
 			}
 		

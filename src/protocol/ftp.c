@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.11 2002/04/27 13:15:53 pasky Exp $ */
+/* $Id: ftp.c,v 1.12 2002/04/27 21:21:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include <lowlevel/sched.h>
 #include <protocol/ftp.h>
 #include <protocol/url.h>
+#include <util/conv.h>
 #include <util/error.h>
 
 /* Constants */
@@ -699,31 +700,6 @@ void ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 }
 
 
-/* Convert chars to html &#xx */
-void add_conv_str(unsigned char **str, int *strl,
-                  unsigned char *ostr, int ostrl)
-{
-
-#define accept_char(x) ((upcase((x)) >= 'A' && upcase((x)) <= 'Z') ||\
-			((x) >= '0' && (x) <= '9') || (x) == ' ' ||\
-			 (x) == '-' || (x) == '_' || (x) == '.' ||\
-			 (x) == ':' || (x) == ';')
-
-	for (; ostrl; ostrl--, ostr++) {
-		if (accept_char(*ostr)) {
-			add_chr_to_str(str, strl, *ostr);
-		} else {
-			add_to_str(str, strl, "&#");
-			add_num_to_str(str, strl, (int) *ostr);
-			add_chr_to_str(str, strl, ';');
-		}
-	}
-
-#undef accept_char
-
-}
-
-
 /* List a directory in html format */
 int ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 			unsigned char *buffer, int buflen, int last,
@@ -778,11 +754,11 @@ direntry:
 				symlinkpos = bufp;
 			}
 
-			add_conv_str(&str, &strl, buf, *dpos);
+			add_htmlesc_str(&str, &strl, buf, *dpos);
 
 			add_to_str(&str, &strl, "<a href=\"");
-			add_conv_str(&str, &strl, buf + *dpos,
-				     symlinkpos - *dpos);
+			add_htmlesc_str(&str, &strl, buf + *dpos,
+					symlinkpos - *dpos);
 			if (buf[0] == 'd')
 				add_chr_to_str(&str, &strl, '/');
 			add_to_str(&str, &strl, "\">");
@@ -794,8 +770,8 @@ direntry:
 					   FTP_DIR_COLOR "\"><b>");
 			}
 
-			add_conv_str(&str, &strl, buf + *dpos,
-				     symlinkpos - *dpos);
+			add_htmlesc_str(&str, &strl, buf + *dpos,
+					symlinkpos - *dpos);
 
 			if (buf[0] == 'd' && color_dirs) {
 				add_to_str(&str, &strl, "</b></font>");
@@ -804,8 +780,8 @@ direntry:
 			add_to_str(&str, &strl, "</a>");
 
 			/* The symlink stuff ;) */
-			add_conv_str(&str, &strl, buf + symlinkpos,
-				     bufp - symlinkpos);
+			add_htmlesc_str(&str, &strl, buf + symlinkpos,
+					bufp - symlinkpos);
 
 		} else {
 			int symlinkpos;
@@ -831,7 +807,7 @@ direntry:
 			*dpos = symlinkpos + 1;
 			goto direntry;
 rawentry:
-			add_conv_str(&str, &strl, buf, bufp);
+			add_htmlesc_str(&str, &strl, buf, bufp);
 		}
 
 		add_chr_to_str(&str, &strl, '\n');

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.60 2003/06/23 00:08:25 jonas Exp $ */
+/* $Id: file.c,v 1.61 2003/06/23 00:51:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -582,22 +582,23 @@ file_func(struct connection *c)
 
 					/* We try with some extensions. */
 					fd = open(tname, O_RDONLY | O_NOCTTY);
+					mem_free(tname);
 					if (fd >= 0) {
 						/* Ok, found one, use it. */
-						mem_free(filename);
-						filename = tname;
 						encoding = enc;
 						enc = ENCODINGS_KNOWN;
 						break;
 					}
-					mem_free(tname);
 					ext++;
 				}
 			}
+		} else if (fd != -1) {
+			encoding = guess_encoding(filename);
 		}
 
+		mem_free(filename);
+
 		if (fd == -1) {
-			mem_free(filename);
 			abort_conn_with_state(c, -saved_errno);
 			return;
 		}
@@ -606,15 +607,9 @@ file_func(struct connection *c)
 		if (fstat(fd, &stt)) {
 			saved_errno = errno;
 			close(fd);
-			mem_free(filename);
 			abort_conn_with_state(c, -saved_errno);
 			return;
 		}
-
-		if (encoding == ENCODING_NONE)
-			encoding = guess_encoding(filename);
-
-		mem_free(filename);
 
 		if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
 			/* We only want to open regular encoded files. */

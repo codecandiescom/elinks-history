@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.181 2004/04/09 16:42:09 jonas Exp $ */
+/* $Id: main.c,v 1.182 2004/04/13 18:38:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,7 +182,6 @@ init(void)
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
-		get_opt_bool("protocol.file.allow_special_files") = 1;
 		dump_pre_start(&url_list);
 		if (terminate) {
 			/* XXX? */

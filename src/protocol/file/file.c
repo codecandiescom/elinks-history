@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.159 2004/04/13 18:27:45 jonas Exp $ */
+/* $Id: file.c,v 1.160 2004/04/13 18:38:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -565,6 +565,13 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 	return S_OK;
 }
 
+static inline int
+is_stdin_pipe(struct stat *stt, unsigned char *filename, int filenamelen)
+{
+	return !strlcmp(filename, filenamelen, "/dev/stdin", 10)
+		&& S_ISFIFO(stt->st_mode);
+}
+
 enum connection_state
 read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 {
@@ -594,7 +601,8 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 		break;
 
 	default:
-		if (S_ISREG(stt.st_mode)) {
+		if (S_ISREG(stt.st_mode)
+		    || is_stdin_pipe(&stt, filename, filenamelen)) {
 			/* All is well */
 
 		} else if (encoding != ENCODING_NONE) {

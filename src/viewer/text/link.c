@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.66 2003/10/17 14:16:01 jonas Exp $ */
+/* $Id: link.c,v 1.67 2003/10/17 14:25:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,52 +269,59 @@ clear_link(struct terminal *t, struct document_view *doc_view)
 
 
 void
-draw_current_link(struct terminal *term, struct document_view *view)
+draw_current_link(struct terminal *term, struct document_view *doc_view)
 {
-	assert(term && view && view->vs);
+	assert(term && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	draw_link(term, view, view->vs->current_link);
-	draw_searched(term, view);
+	draw_link(term, doc_view, doc_view->vs->current_link);
+	draw_searched(term, doc_view);
 }
 
 
 struct link *
-get_first_link(struct document_view *f)
+get_first_link(struct document_view *doc_view)
 {
 	struct link *l;
+	struct document *document;
+	int width;
 	register int i;
 
-	assert(f && f->document);
+	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
 
-	if (!f->document->lines1) return NULL;
+	document = doc_view->document;
 
-	l = f->document->links + f->document->nlinks;
+	if (!document->lines1) return NULL;
 
-	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->document->y && f->document->lines1[i]
-		    && f->document->lines1[i] < l)
-			l = f->document->lines1[i];
+	l = document->links + document->nlinks;
+	width = doc_view->vs->view_pos + doc_view->yw;
 
-	if (l == f->document->links + f->document->nlinks) l = NULL;
-	return l;
+	for (i = doc_view->vs->view_pos; i < width; i++) {
+		if (i >= 0
+		    && i < document->y
+		    && document->lines1[i]
+		    && document->lines1[i] < l)
+			l = document->lines1[i];
+	}
+
+	return (l == document->links + document->nlinks) ? NULL : l;
 }
 
 struct link *
-get_last_link(struct document_view *f)
+get_last_link(struct document_view *doc_view)
 {
 	struct link *l = NULL;
 	register int i;
 
-	assert(f && f->document);
+	assert(doc_view && doc_view->document);
 	if_assert_failed return NULL;
 
-	if (!f->document->lines2) return NULL;
+	if (!doc_view->document->lines2) return NULL;
 
-	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->document->y && f->document->lines2[i] > l)
-			l = f->document->lines2[i];
+	for (i = doc_view->vs->view_pos; i < doc_view->vs->view_pos + doc_view->yw; i++)
+		if (i >= 0 && i < doc_view->document->y && doc_view->document->lines2[i] > l)
+			l = doc_view->document->lines2[i];
 	return l;
 }
 

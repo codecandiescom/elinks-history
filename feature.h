@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.22 2004/01/01 10:12:01 jonas Exp $ */
+/* $Id: feature.h,v 1.23 2004/01/01 11:53:36 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -270,7 +270,7 @@
  * yes, ELinks can do that too! You will still need to also enable this manualy
  * at document.browse.forms.show_formhist.
  *
- * Many people find it extremely annoying (including myself), however some
+ * Many people find it extremely annoying (including pasky), however some
  * others consider it extremely handy and will sacrifice almost anything to get
  * it. It will not do any harm to have this compiled-in as long as you will
  * leave it turned off (which is also the default configuration).

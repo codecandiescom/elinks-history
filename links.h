@@ -648,6 +648,7 @@ struct connection {
 	int sock1;
 	int sock2;
 	void *dnsquery;
+	void *conn_info;
 	int tries;
 	struct list_head statuss;
 	void *info;

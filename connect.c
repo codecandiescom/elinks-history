@@ -39,6 +39,7 @@ void connected(/* struct connection */ void *);
 
 struct conn_info {
 	/* Note that we MUST start with addr - free_connection_info() relies on it */
+	/* TODO: Remove this hack when we will have .h for each .c */
 	struct sockaddr *addr; /* array of addresses */
 	int addrno; /* array len / sizeof(sockaddr) */
 	int port;
@@ -74,7 +75,7 @@ void make_connection(struct connection *conn, int port, int *sock,
 	c_i->func = func;
 	c_i->sock = sock;
 	c_i->port = port;
-	conn->buffer = c_i;
+	conn->conn_info = c_i;
 	
 	log_data("\nCONNECTION: ", 13);
 	log_data(host, strlen(host));
@@ -127,12 +128,12 @@ int get_pasv_socket(struct connection *c, int cc, int *sock, unsigned char *port
 #ifdef HAVE_SSL
 void ssl_want_read(struct connection *c)
 {
-	struct conn_info *b = c->buffer;
+	struct conn_info *b = c->conn_info;
 
 	if (c->no_tsl) c->ssl->options |= SSL_OP_NO_TLSv1;
 	switch (SSL_get_error(c->ssl, SSL_connect(c->ssl))) {
 		case SSL_ERROR_NONE:
-			c->buffer = NULL;
+			c->conn_info = NULL;
 			b->func(c);
 			mem_free(b->addr);
 			mem_free(b);
@@ -150,7 +151,7 @@ void dns_found(void *data, int state)
 {
 	int sock;
 	struct connection *conn = (struct connection *) data;
-	struct conn_info *c_i = conn->buffer;
+	struct conn_info *c_i = conn->conn_info;
 	int i;
 	
 	if (state < 0) {
@@ -220,7 +221,7 @@ void dns_found(void *data, int state)
 		}
 	}
 #endif
-	conn->buffer = NULL;
+	conn->conn_info = NULL;
 	c_i->func(conn);
 	mem_free(c_i->addr);
 	mem_free(c_i);
@@ -229,7 +230,7 @@ void dns_found(void *data, int state)
 void connected(void *data)
 {
         struct connection *conn = (struct connection *) data;
-	struct conn_info *c_i = conn->buffer;
+	struct conn_info *c_i = conn->conn_info;
 	int err = 0;
 	int len = sizeof(int);
 	
@@ -276,7 +277,7 @@ skiperrdec:
 		}
 #endif
 		
-		conn->buffer = NULL;
+		conn->conn_info = NULL;
 		func(conn);
 		mem_free(c_i->addr);
 		mem_free(c_i);

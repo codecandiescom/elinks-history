@@ -180,20 +180,14 @@ void free_connection_data(struct connection *c)
 		internal("connection already suspended");
 	}
 	c->running = 0;
-#if 0
-	if (c->buffer) debug("%p %d", *((void **) c->buffer), !!c->dnsquery);
-#endif
 	if (c->dnsquery) {
 		kill_dns_request(&c->dnsquery);
-#if 0
-		/* I'm not sure if this is appropriate, nevertheless probably
-		 * it is. However better leak than crash from freeing some
-		 * nonsense, so it's left commented unless someone else will
-		 * investigate this more deeply. */
-		debug("freeeee!");
-		mem_free(*((void **) c->buffer)); /* XXX */
-		debug("freeeeed!");
-#endif
+	}
+	if (c->conn_info) {
+		if (*((void **) c->conn_info))
+			mem_free(*((void **) c->conn_info)); /* XXX */
+		mem_free(c->conn_info);
+		c->conn_info = NULL;
 	}
 	if (c->buffer) {
 		mem_free(c->buffer);

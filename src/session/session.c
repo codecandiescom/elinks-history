@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.495 2004/06/12 11:54:08 jonas Exp $ */
+/* $Id: session.c,v 1.496 2004/06/12 12:24:47 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -848,8 +848,6 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	current_uri = base_session && have_location(base_session)
 		    ? cur_loc(base_session)->vs.uri : NULL;
 
-	/* TODO: Warn about bad syntax. --jonas */
-
 	/* Extract multiple (possible) NUL terminated URIs */
 	while (len > 0) {
 		unsigned char *end = memchr(str, 0, len);
@@ -861,21 +859,26 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		uri = decoded ? get_hooked_uri(decoded, current_uri, term->cwd) : NULL;
 		mem_free_if(decoded);
 
-		if (uri) {
-			if (remote) {
-				init_remote_session(base_session, &remote, uri);
-
-			} else {
-				int backgrounded = !list_empty(term->windows);
-
-				if (!init_session(base_session, term, uri, backgrounded))
-					break;
-			}
-			done_uri(uri);
-		}
-
 		len -= urilength + 1;
 		str += urilength + 1;
+
+		/* The uristring is going through get_translated_uri() which
+		 * will try to make the URI saner. So I don't think poping up
+		 * bad syntax dialogs if !uri for non remote session doesn't
+		 * make much sense here. --jonas */
+		if (!uri) continue;
+
+		if (remote) {
+			init_remote_session(base_session, &remote, uri);
+
+		} else {
+			int backgrounded = !list_empty(term->windows);
+
+			if (!init_session(base_session, term, uri, backgrounded))
+				break;
+		}
+
+		done_uri(uri);
 	}
 
 	/* If we only initialized remote sessions or didn't manage to add any

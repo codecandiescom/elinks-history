@@ -1,3 +1,221 @@
+Sun Dec  7 21:40:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Hopefully a fix of an off by one error in the progress bar filed as
+	bug 320.  
+
+Sun Dec  7 21:39:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Compile fix for FreeBSD frame patch.  
+
+Sun Dec  7 21:26:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	Update widgets count. Spotted by Jonas.  
+
+Sun Dec  7 21:03:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/options.c, terminal/screen.c, terminal/terminal.h:
+
+	Support for FreeBSD frames (by mikulas, from 0.99pre14).  
+
+Sun Dec  7 20:49:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Improved HTTP code 204 handling (by mikulas, from 0.99pre14).  
+
+Sun Dec  7 20:18:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Reorder cases in the @type switch to eliminate a goto.  
+
+Sun Dec  7 20:17:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Convert @type checking to a switch.  
+
+Sun Dec  7 20:15:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	close() can spoil @errno, so save errno before.  
+
+Sun Dec  7 20:15:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Abort connection with state S_OUT_OF_MEM instead of -errno after
+	allocation failure, spotted by Jonas.  
+
+Sun Dec  7 16:51:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	SMB protocol, goto rewritting. Kicked to do that by Jonas.  
+
+Sun Dec  7 16:45:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, acconfig.h, configure.in, src/Makefile.am,
+	src/protocol/Makefile.am, src/protocol/protocol.c,
+	src/protocol/protocol.h, src/protocol/smb/Makefile.am,
+	src/protocol/smb/smb.c, src/protocol/smb/smb.h:
+
+	Introduced support for SMB protocol (you need to have smbclient
+	installed), by default disabled at compile time (--enable-smb) (by
+	mikulas, from 0.99pre12).  
+
+Sun Dec  7 15:59:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Compilation fixes.  
+
+Sun Dec  7 12:50:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Fixed another possible aliasing bug in lists handling (by mikulas,
+	from 0.99pre14).  
+
+Sun Dec  7 12:01:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/: .cvsignore, .vimrc:
+
+	Fairies.  
+
+Sun Dec  7 11:55:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/man/man1/elinks.1.in:
+
+	ELinks was written by a team.  
+
+Sun Dec  7 11:52:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, terminal/event.c:
+
+	Fixed possibility of invalid intercom communication crashing ELinks
+	(by mikulas, from 0.99pre10).  
+
+Sun Dec  7 11:39:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/lists.h:
+
+	Fixed possible aliasing bug in lists handling (by mikulas, from
+	0.99pre10).  
+
+Sun Dec  7 11:34:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fixed incorrect file truncation of file on 304 reply (by mikulas,
+	from 0.99pre10).  
+
+Sun Dec  7 11:29:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Set IPTOS_THROUGHPUT on data sockets (assumably by either mikulas or
+	brain, from 0.99pre10).  
+
+Sun Dec  7 11:24:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Localized the @fd variable in ftp_retr_file().  
+
+Sun Dec  7 11:17:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/connect.c:
+
+	Do not retry DNS failures (by mikulas, from 0.99pre10).  
+
+Sun Dec  7 02:45:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Added some TODOs.  
+
+Sun Dec  7 02:18:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Cleanup to use macro for array sizes.  
+
+Sun Dec  7 02:04:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Cleanup.  
+
+Sun Dec  7 01:57:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Add .  
+
+Sun Dec  7 01:45:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/rewrite/rewrite.c:
+
+	Elaborate a bit in the URI rewriting option description.  
+
+Sun Dec  7 00:59:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Sun Dec  7 00:50:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in, src/Makefile.am, src/modules/module.c,
+	src/protocol/Makefile.am, src/protocol/rewrite/.cvsignore,
+	src/protocol/rewrite/.vimrc, src/protocol/rewrite/Makefile.am,
+	src/protocol/rewrite/rewrite.c, src/protocol/rewrite/rewrite.h,
+	src/sched/task.c:
+
+	Support for URI rewriting like the one scripting extensions provide.
+	Prefix enable options are on by default since it can lead to
+	confusion if it does not seem to work because of this when first
+	rewrite rule is defined by the user. Patch by kuser and me.  
+
+Sun Dec  7 00:26:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	File::Bookmark document has now 'a' as its hotkey. Idea by Jonas.  
+
+Sun Dec  7 00:26:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Reassigned menu hotkeys in the File menu to make some actual sense,
+	cleaning up some historical twists. This oughta happen once.  
+
+Sun Dec  7 00:22:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Reverted 1.62 (by me) and re-add 'add bookmark' menu item.  
+
+Sun Dec  7 00:15:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Moved @tools_menu near do_tools_menu().  
+
+Sat Dec  6 23:37:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Missing include sched/event.h added. Spotted by Jonas.  
+
 Sat Dec  6 23:02:35 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

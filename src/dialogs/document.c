@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.39 2003/06/07 13:17:36 pasky Exp $ */
+/* $Id: document.c,v 1.40 2003/06/11 22:54:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,7 +23,6 @@
 #include "terminal/terminal.h"
 #include "protocol/http/header.h"
 #include "protocol/url.h"
-#include "sched/history.h"
 #include "sched/location.h"
 #include "sched/session.h"
 #include "util/conv.h"

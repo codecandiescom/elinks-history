@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.561 2004/07/23 02:36:23 miciah Exp $ */
+/* $Id: view.c,v 1.562 2004/07/23 02:57:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -666,6 +666,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			if (!uri) return FRAME_EVENT_OK;
 
 			uristring = get_uri_string(uri, URI_ORIGINAL);
+			done_uri(uri);
 
 			if (uristring) {
 				set_clipboard_text(uristring);

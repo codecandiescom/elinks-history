@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.154 2004/07/27 16:36:48 jonas Exp $ */
+/* $Id: inpfield.c,v 1.155 2004/07/28 12:25:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,7 +477,7 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				text	+= widget_data->info.field.cpos++;
 
 				memmove(text + 1, text, textlen + 1);
-				*text = ev->x;
+				*text = get_kbd_key(ev);
 
 				goto display_field;
 			}

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.253 2004/07/28 10:43:37 jonas Exp $ */
+/* $Id: menu.c,v 1.254 2004/07/28 12:25:00 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -812,7 +812,10 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			return;
 
 		default:
-			if ((ev->x >= KBD_F1 && ev->x <= KBD_F12)
+		{
+			int key = get_kbd_key(ev);
+
+			if ((key >= KBD_F1 && key <= KBD_F12)
 			    || check_kbd_modifier(ev, KBD_ALT)) {
 				delete_window_ev(win, ev);
 				return;
@@ -821,10 +824,11 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			if (!check_kbd_label_key(ev))
 				break;
 
-			s = check_hotkeys(menu, ev->x, win->term);
+			s = check_hotkeys(menu, key, win->term);
 
-			if (s || check_not_so_hot_keys(menu, ev->x, win->term))
+			if (s || check_not_so_hot_keys(menu, key, win->term))
 				scroll_menu(menu, 0, 1);
+		}
 	}
 
 	display_menu(win->term, menu);
@@ -1107,7 +1111,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 	default:
 		/* Fallback to see if any hotkey matches the pressed key */
 		if (check_kbd_label_key(ev)
-		    && check_hotkeys(menu, ev->x, win->term)) {
+		    && check_hotkeys(menu, get_kbd_key(ev), win->term)) {
 			fwd = 1;
 			break;
 		}

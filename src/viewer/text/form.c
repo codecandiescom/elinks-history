@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.237 2004/07/27 16:26:58 jonas Exp $ */
+/* $Id: form.c,v 1.238 2004/07/28 12:25:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1370,7 +1370,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			fs->value[fs->state++] = ev->x;
+			fs->value[fs->state++] = get_kbd_key(ev);
 			break;
 	}
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.566 2004/07/28 11:22:47 jonas Exp $ */
+/* $Id: view.c,v 1.567 2004/07/28 12:25:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -540,6 +540,7 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 {
 	struct document *document = doc_view->document;
 	struct document_options *doc_opts = &document->options;
+	int digit = get_kbd_key(ev) - '0';
 
 	if (get_kbd_modifier(ev)
 	    || !doc_opts->num_links_key
@@ -550,7 +551,7 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 		 * When used, it has to be reset to zero. */
 
 		ses->kbdprefix.repeat_count *= 10;
-		ses->kbdprefix.repeat_count += ev->x - '0';
+		ses->kbdprefix.repeat_count += digit;
 
 		/* If too big, just restart from zero, so pressing
 		 * '0' six times or more will reset the count. */
@@ -560,9 +561,9 @@ frame_ev_kbd_number(struct session *ses, struct document_view *doc_view,
 		return FRAME_EVENT_OK;
 	}
 
-	if (ev->x >= '1' && !get_kbd_modifier(ev)) {
+	if (digit >= 1 && !get_kbd_modifier(ev)) {
 		int nlinks = document->nlinks, length;
-		unsigned char d[2] = { ev->x, 0 };
+		unsigned char d[2] = { get_kbd_key(ev), 0 };
 
 		ses->kbdprefix.repeat_count = 0;
 
@@ -591,7 +592,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 #ifdef CONFIG_MARKS
 	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
 		/* Marks */
-		unsigned char mark = ev->x;
+		unsigned char mark = get_kbd_key(ev);
 
 		switch (ses->kbdprefix.mark) {
 			case KP_MARK_NOTHING:
@@ -720,7 +721,7 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 				status = FRAME_EVENT_IGNORED;
 			break;
 		default:
-			if (isdigit(ev->x)) {
+			if (isdigit(get_kbd_key(ev))) {
 				status = frame_ev_kbd_number(ses, doc_view,
 							     ev);
 
@@ -951,7 +952,7 @@ send_event(struct session *ses, struct term_event *ev)
 		action = kbd_action(KEYMAP_MAIN, ev, &func_ref);
 
 		if (action == ACT_MAIN_QUIT) {
-			if (ev->x == KBD_CTRL_C)
+			if (check_kbd_key(ev, KBD_CTRL_C))
 quit:
 				action = ACT_MAIN_REALLY_QUIT;
 		}
@@ -971,7 +972,7 @@ quit:
 			return;
 		}
 
-		if (ev->x == KBD_CTRL_C) goto quit;
+		if (check_kbd_key(ev, KBD_CTRL_C)) goto quit;
 		if (get_kbd_modifier(ev) & KBD_ALT) {
 			struct window *m;
 

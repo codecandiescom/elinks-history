@@ -440,7 +440,7 @@ msgstr "Unzulässiger Tastendruck."
 
 #: src/config/dialogs.c:629
 msgid "Need to select a keymap."
-msgstr ""
+msgstr "Man muss eine Tastentabelle auswählen."
 
 #: src/config/dialogs.c:644 src/config/options.inc:1949
 msgid "Action"
@@ -448,7 +448,7 @@ msgstr "Aktion"
 
 #: src/config/dialogs.c:645
 msgid "Keymap"
-msgstr ""
+msgstr "Tastentabelle"
 
 #: src/config/dialogs.c:646
 msgid ""
@@ -477,9 +477,9 @@ msgstr ""
 "Tastenbelegung selbst anzeigen zu lassen."
 
 #: src/config/dialogs.c:730
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Tastenbelegung \"%s\" wirklich löschen (Aktion \"%s\", )?"
+msgstr "Tastenbelegung \"%s\" wirklich löschen (Aktion \"%s\", Tastentabelle \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -491,15 +491,15 @@ msgstr "Anzeige umschalten"
 
 #: src/config/kbdbind.c:257
 msgid "Main mapping"
-msgstr ""
+msgstr "Haupttabelle"
 
 #: src/config/kbdbind.c:258
 msgid "Edit mapping"
-msgstr ""
+msgstr "Bearbeitungstabelle"
 
 #: src/config/kbdbind.c:259
 msgid "Menu mapping"
-msgstr ""
+msgstr "Menütabelle"
 
 #: src/config/kbdbind.c:372
 msgid "Abort connection"
@@ -809,7 +809,7 @@ msgstr "Maximiere den aktuellen Rahmen"
 
 #: src/config/kbdbind.c:647
 msgid "Unrecognised keymap"
-msgstr ""
+msgstr "Unbekannte Tastentabelle"
 
 #: src/config/kbdbind.c:649
 msgid "Error parsing keystroke"
@@ -1312,7 +1312,6 @@ msgstr ""
 "Anmeldeformulare bleiben bestehen."
 
 #: src/config/options.inc:235
-#, fuzzy
 msgid ""
 "Ask if a login form should be saved to file or not.\n"
 "This option only disables the dialog, already saved login\n"
@@ -1320,7 +1319,7 @@ msgid ""
 msgstr ""
 "Fragen, ob ein Anmeldeformular gespeichert werden soll oder nicht.\n"
 "Diese Option schaltet nur den Dialog ab. Bereits abgespeicherte\n"
-"Anmeldeformulare bleiben bestehen."
+"Anmeldeformulare bleiben bestehen. (ABGESCHALTET)"
 
 #: src/config/options.inc:240
 msgid "Images"
@@ -1566,6 +1565,8 @@ msgid ""
 "Enable use of the active link background and text color\n"
 "settings instead of browse.links from the document."
 msgstr ""
+"Benutze die aktiven Link-Hintergrund- und Textfarbeinstellungen\n"
+"anstatt derer von browse.links aus dem Dokument."
 
 #: src/config/options.inc:305
 msgid "Bold"
@@ -1714,9 +1715,8 @@ msgstr ""
 "2 für Suche mit erweiterten regulären Ausdrücken. (ABGESCHALTET)"
 
 #: src/config/options.inc:379
-#, fuzzy
 msgid "Show search hit top or bottom dialogs"
-msgstr "Dialog anzeigen"
+msgstr "Dialog anzeigen bei Suche an Dokumentanfang oder -ende"
 
 #: src/config/options.inc:381
 msgid ""
@@ -2411,7 +2411,7 @@ msgstr ""
 
 #: src/config/options.inc:752
 msgid "Prioritize entries by file"
-msgstr ""
+msgstr "Eintrag nach Datei sortieren"
 
 #: src/config/options.inc:754
 msgid ""
@@ -2419,10 +2419,13 @@ msgid ""
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 msgstr ""
+"Sortiere die Einträge nach der Folge der Datei im Mailcap-Pfad.\n"
+"Das heißt, dass auch Platzhalter (wie: image/*) überprüft werden,\n"
+"bevor der Bearbeiter ausgesucht wird."
 
 #: src/config/options.inc:759 src/util/version.c:104
 msgid "Mimetypes files"
-msgstr ""
+msgstr "Mime-Typen-Dateien"
 
 #: src/config/options.inc:761
 msgid ""
@@ -2430,16 +2433,20 @@ msgid ""
 "can be used to find the content type of an URL by looking at the\n"
 "extension of the file name."
 msgstr ""
+"Optionen für Mime-Typen-Dateien. Diese Dateien können benutzt,\n"
+"um den Inhaltstyp einer URL an Hand der Endung zu bestimmen."
 
 #: src/config/options.inc:767
 msgid "Enable mime.types support."
-msgstr ""
+msgstr "mime.types-Unterstützung aktivieren."
 
 #: src/config/options.inc:771
 msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use built-in default instead."
 msgstr ""
+"Mime-Typen Suchpfad. Durch Doppelpunkt getrennte Liste von Dateien.\n"
+"Ist der Pfad leer, so wird die interne Voreinstellung benutzt."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:778
@@ -2608,7 +2615,7 @@ msgstr "Sende Accept-Language Header"
 
 #: src/config/options.inc:859
 msgid "Use UI language as Accept-Language"
-msgstr ""
+msgstr "Schnittstellen-Sprache für Accept-Language benutzen"
 
 #: src/config/options.inc:861
 msgid ""
@@ -2617,6 +2624,11 @@ msgid ""
 "ELinks' user-interface. Note that some see this as a potential security\n"
 "risk because it tells web-masters about your preference in language."
 msgstr ""
+"Lokalisierte Versionen von Dokumenten von Webservern (mittels\n"
+"Accept-Language Header) anfordern, wobei die Sprache verwendet wird,\n"
+"die für ELinks-Benutzerschnittstelle eingestellt ist. Beachte, dass manche\n"
+"dies als potenzielles Sicherheitsrisiko ansehen, weil es dem Web-Master\n"
+"etwas über deine Sprache verrät."
 
 #: src/config/options.inc:866
 msgid "Activate HTTP TRACE debugging"
@@ -4180,12 +4192,11 @@ msgstr "Keine Downloads aktiv"
 
 #: src/dialogs/menu.c:401
 msgid "Open new ~tab"
-msgstr "In neuer Ansich~t öffnen"
+msgstr "Neue Ansich~t öffnen"
 
 #: src/dialogs/menu.c:402
-#, fuzzy
 msgid "Open new t~ab in background"
-msgstr "In neuer Ansicht in ~Hintergrund öffnen"
+msgstr "Neue Ansicht im ~Hintergrund öffnen"
 
 #: src/dialogs/menu.c:404
 msgid "~Go to URL"
@@ -4236,7 +4247,6 @@ msgid "~Flush all caches"
 msgstr "~Alle Caches löschen"
 
 #: src/dialogs/menu.c:431
-#, fuzzy
 msgid "Resource i~nfo"
 msgstr "Belegte ~Ressourcen"
 

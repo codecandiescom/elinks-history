@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.44 2002/10/02 14:07:31 zas Exp $ */
+/* $Id: ftp.c,v 1.45 2002/10/02 15:12:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,6 +81,56 @@ static void got_something_from_data_connection(struct connection *);
 static void ftp_end_request(struct connection *, int);
 static struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
 
+/* Parse EPSV or PASV response for address and/or port.
+ * int *n should point to a sizeof(int) * 6 space.
+ * It returns zero on error or count of parsed numbers.
+ * It returns an error if:
+ * - there's more than 6 or less than 1 numbers.
+ * - a number is strictly greater than max.
+ *
+ * On success, array of integers *n is filled with numbers starting
+ * from end of array (ie. if we found one number, you can access it using
+ * n[5]).
+ *
+ * Important:
+ * Negative numbers aren't handled so -123 is taken as 123.
+ * We don't take care about separators.
+*/
+static int parse_psv_resp(unsigned char *data, int *n, int max_value)
+{
+	unsigned char *p = data;
+	int i = 5;
+	
+	memset(n, 0, 6 * sizeof(int));
+	/* Find the end. */
+	if (*p < ' ') return 0;
+	while (*p >= ' ') p++;
+		
+	/* Ignore non-numeric ending chars. */
+       	while (p != data && (*p < '0' || *p > '9')) p--;
+	if (p == data) return 0;
+		
+	while (i>=0) {
+		int x = 1;
+		
+		n[i] = 0;
+		/* Parse one number. */
+		while (p != data && *p >= '0' && *p <= '9') {
+			n[i] += (*p - '0') * x;
+			if (n[i] > max_value) return 0;
+			x*=10;
+			p--;
+		}
+		/* Ignore non-numeric chars. */
+		while (p != data && (*p < '0' || *p > '9')) p--;
+		if (p == data) return 6-i;
+		/* Get the next one. */
+		i--;
+	}
+
+	return 0;
+}
+
 /* Returns 0 if there's no numeric response, -1 if error, the positive response
  * number otherwise. */
 static int
@@ -100,56 +150,34 @@ again:
 			if (num_end != rb->data + 3 || response < 100)
 				return -1;
 
-			if (response == 227) { /* PASV response parsing. */
+			if (sa && response == 227) { /* PASV response parsing. */
 				struct sockaddr_in *s = (struct sockaddr_in *) sa;
-				unsigned char p[6];
-				unsigned char *begin = strchr(num_end, ',');
-
-				/* find beginning of ports_info */
-				if (!begin)
+				int n[6];
+				
+				if (parse_psv_resp(num_end, (int *)&n, 255) != 6)
 					return -1;
-				while (isdigit(*(--begin)));
-				begin++;
-
-				memset(p, 0, 6 * sizeof(unsigned char));
-
-				/* %hhd -> unsigned char */
-				if (6 != sscanf(begin, "%hhd,%hhd,%hhd,%hhd,%hhd,%hhd",
-						&p[0], &p[1],
-						&p[2], &p[3],
-						&p[4], &p[5]))
-					return -1;
-
+				
 				memset(s, 0, sizeof(struct sockaddr_in));
 				s->sin_family = AF_INET;
-				s->sin_addr.s_addr = htonl((p[0] << 24) + (p[1] << 16) + (p[2] << 8) + p[3]);
-				s->sin_port = htons((p[4] << 8) + p[5]);
+				s->sin_addr.s_addr = htonl((n[0] << 24) + (n[1] << 16) + (n[2] << 8) + n[3]);
+				s->sin_port = htons((n[4] << 8) + n[5]);
 			}
 
 #ifdef IPV6
-			if (response == 229) { /* EPSV response parsing. */
+			if (sa && response == 229) { /* EPSV response parsing. */
 				/* See RFC 2428 */
 				struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
-				unsigned char p[6];
-				unsigned int port;
 				int sal;
-				unsigned char *begin = strchr(num_end, '(');
-
-				if (!begin)
-					return -1;
-
-				memset(p, 0, 6 * sizeof(unsigned char));
-
-				if (4 != sscanf(begin + 1, "%c%c%c%d%c",
-						&p[0], &p[1],
-						&p[2], &port, &p[3]))
+				int n[6];
+				
+				if (parse_psv_resp(num_end, (int *)&n, 65535) != 1)
 					return -1;
 
 				memset(s, 0, sizeof(struct sockaddr_in6));
 				if (!getpeername(conn->sock1, (struct sockaddr *)&sa, &sal))
 					return -1;
 				s->sin6_family = AF_INET6;
-				s->sin6_port = htons(port);
+				s->sin6_port = htons(n[5]);
 			}
 #endif
 

@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.9 2003/10/27 02:21:48 pasky Exp $ */
+/* $Id: beos.c,v 1.10 2003/10/27 02:44:45 pasky Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -8,6 +8,10 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "osdep/system.h"
+
+#ifdef BEOS
 
 #include <errno.h>
 #include <stdio.h>
@@ -23,8 +27,6 @@
 
 #include "terminal/terminal.h"
 #include "util/lists.h"
-
-#ifdef BEOS
 
 
 /* Misc trivial stuff */

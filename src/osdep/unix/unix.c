@@ -1,9 +1,13 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.1 2003/10/27 02:19:13 pasky Exp $ */
+/* $Id: unix.c,v 1.2 2003/10/27 02:44:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "osdep/system.h"
+
+#ifdef UNIX
 
 #if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
 #define USE_GPM
@@ -17,8 +21,6 @@
 
 #include "osdep/os_depx.h"
 #include "util/memory.h"
-
-#ifdef UNIX
 
 
 #if defined(USE_GPM) && defined(USE_MOUSE)

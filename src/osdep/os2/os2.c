@@ -1,9 +1,13 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.6 2003/10/27 02:21:48 pasky Exp $ */
+/* $Id: os2.c,v 1.7 2003/10/27 02:44:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include "osdep/system.h"
+
+#ifdef OS2
 
 #ifdef X2
 /* from xf86sup - XFree86 OS/2 support driver */
@@ -18,8 +22,6 @@
 #include "elinks.h"
 
 #include "terminal/terminal.h"
-
-#ifdef OS2
 
 
 #define INCL_MOU

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.42 2005/02/05 05:54:53 jonas Exp $ */
+/* $Id: secsave.c,v 1.43 2005/02/28 10:07:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,9 +88,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		return NULL;
 	}
 
-	ssi = (struct secure_save_info *)
-		mem_calloc(1, sizeof(struct secure_save_info));
-
+	ssi = mem_calloc(1, sizeof(*ssi));
 	if (!ssi) {
 		secsave_errno = SS_ERR_OUT_OF_MEM;
 		goto end;

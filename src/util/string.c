@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.110 2005/01/03 07:28:48 miciah Exp $ */
+/* $Id: string.c,v 1.111 2005/02/28 10:08:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,7 +278,7 @@ done_string(struct string *string)
 	}
 
 	/* Blast everything including the magic */
-	memset(string, 0, sizeof(struct string));
+	memset(string, 0, sizeof(*string));
 }
 
 inline struct string *
@@ -431,7 +431,7 @@ add_to_string_list(struct list_head *list, const unsigned char *source,
 	assertm(list && source, "[add_to_string_list]");
 	if_assert_failed return NULL;
 
-	item = mem_alloc(sizeof(struct string_list_item));
+	item = mem_alloc(sizeof(*item));
 	if (!item) return NULL;
 
 	string = &item->string;

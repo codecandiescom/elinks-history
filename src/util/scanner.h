@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.15 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: scanner.h,v 1.16 2005/02/28 10:07:32 zas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -97,7 +97,6 @@ void init_scanner(struct scanner *scanner, struct scanner_info *scanner_info,
  * should be no less than 2 in order to be able to peek at the next token in
  * the scanner. */
 #define SCANNER_TOKENS 10
-#define SCANNER_TABLE_SIZE (sizeof(struct scanner_token) * SCANNER_TOKENS)
 
 /* The {struct scanner} describes the current state of the scanner. */
 struct scanner {
@@ -204,13 +203,13 @@ begin_token_scanning(struct scanner *scanner)
 
 	/* Move any untouched tokens */
 	if (move_to_front) {
-		moved_size = move_to_front * sizeof(struct scanner_token);
+		moved_size = move_to_front * sizeof(*table);
 		memmove(table, current, moved_size);
 		current = &table[move_to_front];
 	}
 
 	/* Clear all unused tokens */
-	memset(current, 0, SCANNER_TABLE_SIZE - moved_size);
+	memset(current, 0, sizeof(*table) * SCANNER_TOKENS - moved_size);
 
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;

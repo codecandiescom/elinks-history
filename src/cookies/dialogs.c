@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.77 2005/01/02 14:11:14 jonas Exp $ */
+/* $Id: dialogs.c,v 1.78 2005/02/28 10:25:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,7 +387,7 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 
 	if (!box->sel || !box->sel->udata) return EVENT_PROCESSED;
 
-	new_cookie = mem_calloc(1, sizeof(struct cookie));
+	new_cookie = mem_calloc(1, sizeof(*new_cookie));
 	if (!new_cookie) return EVENT_PROCESSED;
 
 	if (box->sel->type == BI_FOLDER) {

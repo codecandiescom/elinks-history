@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.189 2005/01/15 18:15:18 miciah Exp $ */
+/* $Id: dialog.c,v 1.190 2005/02/28 10:09:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 {
 	struct dialog_data *dlg_data;
 
-	dlg_data = mem_calloc(1, sizeof(struct dialog_data) +
+	dlg_data = mem_calloc(1, sizeof(*dlg_data) +
 			      sizeof(struct widget_data) * dlg->number_of_widgets);
 	if (!dlg_data) {
 		/* Worry not: freeml() checks whether its argument is NULL. */
@@ -133,7 +133,7 @@ init_widget(struct dialog_data *dlg_data, int i)
 {
 	struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
-	memset(widget_data, 0, sizeof(struct widget_data));
+	memset(widget_data, 0, sizeof(*widget_data));
 	widget_data->widget = &dlg_data->dlg->widgets[i];
 
 	if (widget_data->widget->datalen) {
@@ -622,7 +622,7 @@ refresh_dialog(struct dialog_data *dlg_data, dialog_refresh_handler handler, voi
 	struct dialog_refresh *refresh = dlg_data->dlg->refresh;
 
 	if (!refresh) {
-		refresh = mem_calloc(1, sizeof(struct dialog_refresh));
+		refresh = mem_calloc(1, sizeof(*refresh));
 		if (!refresh) return;
 
 		dlg_data->dlg->refresh = refresh;

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.196 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: cache.c,v 1.197 2005/02/28 10:16:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ get_cache_entry(struct uri *uri)
 
 	shrink_memory(0);
 
-	cached = mem_calloc(1, sizeof(struct cache_entry));
+	cached = mem_calloc(1, sizeof(*cached));
 	if (!cached) return NULL;
 
 	cached->uri = get_proxied_uri(uri);

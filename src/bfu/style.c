@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.13 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: style.c,v 1.14 2005/02/28 10:11:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 		opt = get_opt_rec_real(opt, stylename);
 		if (!opt) return NULL;
 
-		entry = mem_calloc(1, sizeof(struct bfu_color_entry));
+		entry = mem_calloc(1, sizeof(*entry));
 		if (!entry) return NULL;
 
 		item = add_hash_item(bfu_colors, stylename, stylenamelen, entry);

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.27 2005/01/02 23:45:09 pasky Exp $ */
+/* $Id: hash.c,v 1.28 2005/02/28 10:06:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ init_hash(unsigned int width, hash_func func)
 	if_assert_failed return NULL;
 
 	/* One is already reserved in struct hash, so use size - 1. */
-	hash = mem_alloc(sizeof(struct hash) + (hash_size(width) - 1)
+	hash = mem_alloc(sizeof(*hash) + (hash_size(width) - 1)
 			 * sizeof(struct list_head));
 	if (!hash) return NULL;
 
@@ -73,7 +73,7 @@ add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 	      void *value)
 {
 	hash_value hashval;
-	struct hash_item *item = mem_alloc(sizeof(struct hash_item));
+	struct hash_item *item = mem_alloc(sizeof(*item));
 
 	if (!item) return NULL;
 

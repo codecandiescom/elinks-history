@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.195 2005/01/15 20:00:41 miciah Exp $ */
+/* $Id: inpfield.c,v 1.196 2005/02/28 10:10:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,8 +309,7 @@ init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			struct input_history_entry *new_entry;
 
 			/* One byte is reserved in struct input_history_entry. */
-			new_entry = mem_alloc(sizeof(struct input_history_entry)
-					      + datalen);
+			new_entry = mem_alloc(sizeof(*new_entry) + datalen);
 			if (!new_entry) continue;
 
 			memcpy(new_entry->data, entry->data, datalen + 1);

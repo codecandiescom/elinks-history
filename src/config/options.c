@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.472 2005/02/17 10:43:25 jonas Exp $ */
+/* $Id: options.c,v 1.473 2005/02/28 10:21:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,7 +430,7 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 static inline struct listbox_item *
 init_option_listbox_item(struct option *option)
 {
-	struct listbox_item *box = mem_calloc(1, sizeof(struct listbox_item));
+	struct listbox_item *box = mem_calloc(1, sizeof(*box));
 
 	if (!box) return NULL;
 
@@ -447,7 +447,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	unsigned char *name, enum option_flags flags, enum option_type type,
 	int min, int max, void *value, unsigned char *desc)
 {
-	struct option *option = mem_calloc(1, sizeof(struct option));
+	struct option *option = mem_calloc(1, sizeof(*option));
 
 	if (!option) return NULL;
 
@@ -564,7 +564,7 @@ delete_option_do(struct option *option, int recursive)
 		/* We are probably dealing with a built-in autocreated option
 		 * that will be attempted to be deleted when shutting down. */
 		/* Clear it so nothing will be done later. */
-		memset(option, 0, sizeof(struct option));
+		memset(option, 0, sizeof(*option));
 	}
 }
 
@@ -597,7 +597,7 @@ delete_option(struct option *option)
 struct option *
 copy_option(struct option *template)
 {
-	struct option *option = mem_calloc(1, sizeof(struct option));
+	struct option *option = mem_calloc(1, sizeof(*option));
 
 	if (!option) return NULL;
 
@@ -630,7 +630,7 @@ copy_option(struct option *template)
 struct list_head *
 init_options_tree(void)
 {
-	struct list_head *ptr = mem_alloc(sizeof(struct list_head));
+	struct list_head *ptr = mem_alloc(sizeof(*ptr));
 
 	if (ptr) init_list(*ptr);
 	return ptr;

@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.10 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: scanner.c,v 1.11 2005/02/28 10:07:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,7 +160,7 @@ init_scanner(struct scanner *scanner, struct scanner_info *scanner_info,
 		scanner_info->initialized = 1;
 	}
 
-	memset(scanner, 0, sizeof(struct scanner));
+	memset(scanner, 0, sizeof(*scanner));
 
 	scanner->string = string;
 	scanner->position = string;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.207 2005/01/19 12:52:22 zas Exp $ */
+/* $Id: dialogs.c,v 1.208 2005/02/28 10:21:10 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -781,7 +781,7 @@ struct kbdbind_add_hop {
 
 struct kbdbind_add_hop *
 new_hop_from(struct kbdbind_add_hop *hop) {
-	struct kbdbind_add_hop *new_hop = mem_alloc(sizeof(struct kbdbind_add_hop));
+	struct kbdbind_add_hop *new_hop = mem_alloc(sizeof(*new_hop));
 
 	if (new_hop)
 		copy_struct(new_hop, hop);
@@ -867,7 +867,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		return EVENT_PROCESSED;
 	}
 
-	hop = mem_calloc(1, sizeof(struct kbdbind_add_hop));
+	hop = mem_calloc(1, sizeof(*hop));
 	if (!hop) return EVENT_PROCESSED;
 	hop->term = term;
 

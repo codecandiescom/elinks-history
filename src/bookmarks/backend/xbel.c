@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.47 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: xbel.c,v 1.48 2005/02/28 10:15:19 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -286,7 +286,7 @@ on_element_open(void *data, const char *name, const char **attr)
 			return;
 		}
 
-		attribute = mem_calloc(1, sizeof(struct attributes));
+		attribute = mem_calloc(1, sizeof(*attribute));
 		if (!attribute) {
 			mem_free(tmp);
 			free_node(current_node);
@@ -491,12 +491,12 @@ new_node(struct tree_node *parent)
 {
 	struct tree_node *node;
 
-	node = mem_calloc(1, sizeof(struct tree_node));
+	node = mem_calloc(1, sizeof(*node));
 	if (!node) return NULL;
 
 	node->parent = parent ? parent : node;
 
-	node->attrs = mem_calloc(1, sizeof(struct attributes));
+	node->attrs = mem_calloc(1, sizeof(*node->attrs));
 	if (!node->attrs) {
 		mem_free(node);
 		return NULL;

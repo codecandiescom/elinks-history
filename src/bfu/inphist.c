@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.91 2004/12/02 16:34:01 zas Exp $ */
+/* $Id: inphist.c,v 1.92 2005/02/28 10:10:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 
 	/* Copy it all etc. */
 	/* One byte is already reserved for url in struct input_history_item. */
-	entry = mem_alloc(sizeof(struct input_history_entry) + length);
+	entry = mem_alloc(sizeof(*entry) + length);
 	if (!entry) return;
 
 	memcpy(entry->data, data, length + 1);

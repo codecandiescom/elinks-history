@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.185 2004/12/29 14:39:03 jonas Exp $ */
+/* $Id: listbox.c,v 1.186 2005/02/28 10:10:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ listbox_sel_move(struct widget_data *widget_data, int dist)
 	    != box->sel) {
 		struct listbox_context data;
 
-		memset(&data, 0, sizeof(struct listbox_context));
+		memset(&data, 0, sizeof(data));
 
 		data.box = box;
 		data.widget_data = widget_data;
@@ -476,7 +476,7 @@ display_listbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		box->sel = box->top;
 	}
 
-	memset(&data, 0, sizeof(struct listbox_context));
+	memset(&data, 0, sizeof(data));
 	data.term = term;
 	data.widget_data = widget_data;
 	data.box = box;

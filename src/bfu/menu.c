@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.288 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: menu.c,v 1.289 2005/02/28 10:11:05 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -100,7 +100,7 @@ void
 do_menu_selected(struct terminal *term, struct menu_item *items,
 		 void *data, int selected, int hotkeys)
 {
-	struct menu *menu = mem_calloc(1, sizeof(struct menu));
+	struct menu *menu = mem_calloc(1, sizeof(*menu));
 
 	if (menu) {
 		menu->selected = selected;
@@ -886,7 +886,7 @@ void
 do_mainmenu(struct terminal *term, struct menu_item *items,
 	    void *data, int sel)
 {
-	struct menu *menu = mem_calloc(1, sizeof(struct menu));
+	struct menu *menu = mem_calloc(1, sizeof(*menu));
 
 	if (!menu) return;
 

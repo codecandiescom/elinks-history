@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.202 2004/12/29 14:51:49 zas Exp $ */
+/* $Id: hierbox.c,v 1.203 2005/02/28 10:09:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
 		root = &browser->root;
 	}
 
-	item = mem_calloc(1, sizeof(struct listbox_item));
+	item = mem_calloc(1, sizeof(*item));
 	if (!item) return NULL;
 
 	init_list(item->child);
@@ -186,7 +186,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 			if (root) {
 				struct listbox_context ctx;
 
-				memset(&ctx, 0, sizeof(struct listbox_context));
+				memset(&ctx, 0, sizeof(ctx));
 				ctx.box = box;
 				ctx.offset = 1;
 
@@ -238,7 +238,7 @@ hierbox_ev_init(struct dialog_data *dlg_data)
 
 	/* If we fail here it only means automatic updating
 	 * will not be possible so no need to panic. */
-	item = mem_alloc(sizeof(struct hierbox_dialog_list_item));
+	item = mem_alloc(sizeof(*item));
 	if (item) {
 		item->dlg_data = dlg_data;
 		add_to_list(browser->dialogs, item);
@@ -391,7 +391,7 @@ init_listbox_context(struct listbox_data *box, struct terminal *term,
 {
 	struct listbox_context *context;
 
-	context = mem_calloc(1, sizeof(struct listbox_context));
+	context = mem_calloc(1, sizeof(*context));
 	if (!context) return NULL;
 
 	context->item = item;

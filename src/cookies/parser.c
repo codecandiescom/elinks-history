@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.16 2004/07/04 11:04:34 jonas Exp $ */
+/* $Id: parser.c,v 1.17 2005/02/28 10:25:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ debug_cookie_parser(struct cookie_str *cstr, unsigned char *pos, int ws, int eq)
 struct cookie_str *
 parse_cookie_str(struct cookie_str *cstr, unsigned char *str)
 {
-	memset(cstr, 0, sizeof(struct cookie_str));
+	memset(cstr, 0, sizeof(*cstr));
 	cstr->str = str;
 
 	/* Parse name token */

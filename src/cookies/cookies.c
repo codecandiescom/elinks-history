@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.194 2005/01/02 15:23:36 jonas Exp $ */
+/* $Id: cookies.c,v 1.195 2005/02/28 10:24:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 		return cs;
 	}
 
-	cs = mem_calloc(1, sizeof(struct cookie_server) + hostlen);
+	cs = mem_calloc(1, sizeof(*cs) + hostlen);
 	if (!cs) return NULL;
 
 	memcpy(cs->host, host, hostlen);
@@ -291,7 +291,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	if (!parse_cookie_str(&cstr, str)) return;
 
-	cookie = mem_calloc(1, sizeof(struct cookie));
+	cookie = mem_calloc(1, sizeof(*cookie));
 	if (!cookie) return;
 
 	object_nolock(cookie, "cookie"); /* Debugging purpose. */
@@ -474,7 +474,7 @@ accept_cookie(struct cookie *cookie)
 
 	domain_len = strlen(cookie->domain);
 	/* One byte is reserved for domain in struct c_domain. */
-	cd = mem_alloc(sizeof(struct c_domain) + domain_len);
+	cd = mem_alloc(sizeof(*cd) + domain_len);
 	if (!cd) return;
 
 	memcpy(cd->domain, cookie->domain, domain_len + 1);
@@ -735,7 +735,7 @@ load_cookies(void) {
 		}
 
 		/* Prepare cookie if all members and fields was read. */
-		cookie = mem_calloc(1, sizeof(struct cookie));
+		cookie = mem_calloc(1, sizeof(*cookie));
 		if (!cookie) continue;
 
 		cookie->server  = get_cookie_server(members[SERVER].pos, members[SERVER].len);

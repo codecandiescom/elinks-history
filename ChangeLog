@@ -1,3 +1,10 @@
+Mon Aug 26 23:40:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/session.c, document/view.c:
+
+	Introduced auto-submit commandline option - automagically submit the
+	first form you'll stumble upon.  
+
 Sun Aug 25 20:15:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:

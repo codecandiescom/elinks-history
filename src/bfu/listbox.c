@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.59 2003/01/04 17:04:39 pasky Exp $ */
+/* $Id: listbox.c,v 1.60 2003/01/04 21:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,12 +291,16 @@ static int
 display_listbox_item(struct listbox_item *item, void *data_, int offset)
 {
 	struct box_context *data = data_;
+	unsigned char *text = item->text;
 	int len; /* Length of the current text field. */
 	int color;
 	int depth = item->depth + 1;
 	int d;
 
-	len = strlen(item->text);
+	if (item->translated)
+		text = _(text, data->term);
+
+	len = strlen(text);
 	if (len > data->listbox_item_data->l - depth * 5) {
 		len = data->listbox_item_data->l - depth * 5;
 	}
@@ -365,9 +369,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 
 	print_text(data->term, data->listbox_item_data->x + depth * 5,
 		   data->listbox_item_data->y + data->offset,
-		   len, item->translated ? _(item->text, data->term)
-					 : item->text,
-		   color);
+		   len, text, color);
 	if (item == data->box->sel) {
 		/* For blind users: */
 		set_cursor(data->term,

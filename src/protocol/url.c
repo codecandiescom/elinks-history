@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.63 2003/05/20 21:47:08 zas Exp $ */
+/* $Id: url.c,v 1.64 2003/05/20 21:54:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,11 @@ parse_url(unsigned char *url, int *prlen,
 			} else {
 				/* Invalid length or empty address,
 				 * set hostbuf to empty string. */
+				internal("parse_url(): addrlen value is bad "
+					"(%d) for URL '%s'. Problems are "
+					"likely to be encountered. Please "
+					"report this, it is a security bug!",
+					addrlen, url);
 				hostbuf[0] = '\0';
 				addrlen = 0;
 			}

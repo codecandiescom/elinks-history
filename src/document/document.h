@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.72 2004/06/30 16:10:26 zas Exp $ */
+/* $Id: document.h,v 1.73 2004/07/15 15:20:07 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -66,9 +66,6 @@ struct link {
 	unsigned char *target;
 	unsigned char *where_img;
 	unsigned char *title;
-	unsigned char *name;
-
-	struct form_control *form_control;
 
 	/* The set of characters belonging to this link (their coordinates
 	 * in the document) - each character has own {struct point}. */
@@ -78,6 +75,11 @@ struct link {
 	int number;
 
 	struct color_pair color;
+
+	union {
+		unsigned char *name;
+		struct form_control *form_control;
+	} data;
 };
 
 #define get_link_index(document, link) (link - document->links)
@@ -87,6 +89,12 @@ struct link {
 
 #define link_is_form(link) \
 	((link)->type != LINK_HYPERTEXT && (link)->type != LINK_MAP)
+
+#define get_link_form_control(link) \
+	(link_is_form(link) ? (link)->data.form_control : NULL)
+
+#define get_link_name(link) \
+	(!link_is_form(link) ? (link)->data.name : NULL)
 
 
 struct search {

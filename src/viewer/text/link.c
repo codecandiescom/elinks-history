@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.276 2004/07/15 08:42:16 zas Exp $ */
+/* $Id: link.c,v 1.277 2004/07/15 15:20:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,6 +59,7 @@ set_link(struct document_view *doc_view)
 static inline int
 get_link_cursor_offset(struct document_view *doc_view, struct link *link)
 {
+	struct form_control *fc;
 	struct form_state *fs;
 
 	switch (link->type) {
@@ -69,12 +70,14 @@ get_link_cursor_offset(struct document_view *doc_view, struct link *link)
 			return 2;
 
 		case LINK_FIELD:
-			fs = find_form_state(doc_view, link->form_control);
+			fc = get_link_form_control(link);
+			fs = find_form_state(doc_view, fc);
 			return fs ? fs->state - fs->vpos : 0;
 
 		case LINK_AREA:
-			fs = find_form_state(doc_view, link->form_control);
-			return fs ? area_cursor(link->form_control, fs) : 0;
+			fc = get_link_form_control(link);
+			fs = find_form_state(doc_view, fc);
+			return fs ? area_cursor(fc, fs) : 0;
 
 		case LINK_HYPERTEXT:
 		case LINK_MAP:
@@ -771,7 +774,8 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 
 		case LINK_BUTTON:
 		case LINK_FIELD:
-			return get_form_uri(ses, doc_view, link->form_control);
+			return get_form_uri(ses, doc_view,
+					    get_link_form_control(link));
 
 		default:
 			return NULL;
@@ -791,7 +795,7 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 	if (!link) return NULL;
 
 	if (link_is_form(link))
-		uri = get_form_uri(ses, doc_view, link->form_control);
+		uri = get_form_uri(ses, doc_view, get_link_form_control(link));
 	else
 		uri = get_link_uri(ses, doc_view, link);
 
@@ -815,6 +819,7 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 enum frame_event_status
 enter(struct session *ses, struct document_view *doc_view, int do_reload)
 {
+	struct form_control *link_fc;
 	struct link *link;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
@@ -832,25 +837,27 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 		return FRAME_EVENT_REFRESH;
 	}
 
-	if (form_field_is_readonly(link->form_control))
+	link_fc = get_link_form_control(link);
+
+	if (form_field_is_readonly(link_fc))
 		return FRAME_EVENT_OK;
 
 	if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs;
 
-		fs = find_form_state(doc_view, link->form_control);
+		fs = find_form_state(doc_view, link_fc);
 		if (!fs) return FRAME_EVENT_OK;
 
-		if (link->form_control->type == FC_CHECKBOX) {
+		if (link_fc->type == FC_CHECKBOX) {
 			fs->state = !fs->state;
 
 		} else {
 			struct form_control *fc;
 
 			foreach (fc, doc_view->document->forms) {
-				if (fc->form_num == link->form_control->form_num
+				if (fc->form_num == link_fc->form_num
 				    && fc->type == FC_RADIO
-				    && !xstrcmp(fc->name, link->form_control->name)) {
+				    && !xstrcmp(fc->name, link_fc->name)) {
 					struct form_state *frm_st;
 
 					frm_st = find_form_state(doc_view, fc);
@@ -865,7 +872,7 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) release_document,
 				 doc_view->document);
-		do_select_submenu(ses->tab->term, link->form_control->menu, ses);
+		do_select_submenu(ses->tab->term, link_fc->menu, ses);
 
 	} else {
 		INTERNAL("bad link type %d", link->type);
@@ -1019,6 +1026,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	struct document_view *doc_view;
 	struct link *link;
 	struct menu_item *mi;
+	struct form_control *fc;
 
 	assert(term && ses);
 	if_assert_failed return;
@@ -1065,14 +1073,15 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		}
 	}
 
-	if (link->form_control) {
-		switch (link->form_control->type) {
+	fc = get_link_form_control(link);
+	if (fc) {
+		switch (fc->type) {
 		case FC_RESET:
 			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
 			break;
 
 		case FC_TEXTAREA:
-			if (!form_field_is_readonly(link->form_control)) {
+			if (!form_field_is_readonly(fc)) {
 				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
@@ -1081,7 +1090,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
 			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 
-			if (link->form_control->method == FM_GET) {
+			if (fc->method == FM_GET) {
 				add_new_win_to_menu(&mi, N_("Submit form and open in new ~window"), term);
 
 				add_menu_action(&mi, N_("Submit form and open in new ~tab"),
@@ -1145,7 +1154,7 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 	if (!link) return NULL;
 
 	if (link_is_form(link)) {
-		if (!link->form_control) return NULL;
+		if (get_link_form_control(link)) return NULL;
 
 		return get_form_info(ses, doc_view);
 	} else {

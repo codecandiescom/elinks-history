@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.528 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: session.c,v 1.529 2004/07/15 15:20:07 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1191,7 +1191,8 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 		if (item) name = item->title;
 	}
 #endif
-	if (!name) name = link->name ? link->name : where;
+	if (!name) name = get_link_name(link);
+	if (!name) name = where;
 
 	return safe_strncpy(str, name, str_size);
 }

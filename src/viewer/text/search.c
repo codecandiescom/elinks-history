@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.255 2004/07/15 08:42:16 zas Exp $ */
+/* $Id: search.c,v 1.256 2004/07/15 15:20:07 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -957,6 +957,17 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 	}
 }
 
+static inline unsigned char *
+get_link_typeahead_text(struct link *link)
+{
+	unsigned char *name = get_link_name(link);
+
+	if (name) return name;
+	if (link->where) return link->where;
+	if (link->where_img) return link->where_img;
+
+	return "";
+}
 
 /* Searches the @document for a link with the given @text. takes the
  * current_link in the view, the link to start searching from @i and the
@@ -987,7 +998,7 @@ search_link_text(struct document *document, int current_link, int i,
 
 	for (; i > lower_link && i < upper_link; i += direction) {
 		struct link *link = &document->links[i];
-		unsigned char *match = link->name ? link->name : link->where;
+		unsigned char *match = get_link_typeahead_text(link);
 		unsigned char *matchpos;
 
 		if (link_is_form(link)
@@ -1064,7 +1075,7 @@ draw_link_text(struct terminal *term, struct document_view *doc_view,
 	int yoffset = doc_view->box.y - doc_view->vs->y;
 	int current_link = doc_view->vs->current_link;
 	struct link *link = &doc_view->document->links[current_link];
-	unsigned char *text = link->name ? link->name : link->where;
+	unsigned char *text = get_link_typeahead_text(link);
 	int end = offset + chars;
 	int i, j;
 

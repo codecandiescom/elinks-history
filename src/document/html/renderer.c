@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.482 2004/07/14 01:22:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.483 2004/07/15 15:20:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -818,7 +818,7 @@ new_link(struct document *document, int link_number,
 
 	if (!format.form) {
 		link->target = null_or_stracpy(format.target);
-		link->name = memacpy(name, namelen);
+		link->data.name = memacpy(name, namelen);
 		/* if (strlen(url) > 4 && !strncasecmp(url, "MAP@", 4)) { */
 		if (format.link
 		    && ((format.link[0]|32) == 'm')
@@ -858,7 +858,7 @@ new_link(struct document *document, int link_number,
 		case FC_HIDDEN:
 			link->type = LINK_BUTTON;
 		}
-		link->form_control = form;
+		link->data.form_control = form;
 		link->target = null_or_stracpy(form->target);
 	}
 
@@ -984,6 +984,8 @@ process_link(struct part *part, enum link_state link_state,
 	int x_offset = 0;
 
 	if (link_state == LINK_STATE_SAME) {
+		unsigned char *name;
+
 		if (!part->document) return;
 
 		assertm(part->document->nlinks > 0, "no link");
@@ -991,13 +993,14 @@ process_link(struct part *part, enum link_state link_state,
 
 		link = &part->document->links[part->document->nlinks - 1];
 
-		if (link->name) {
+		name = get_link_name(link);
+		if (name) {
 			unsigned char *new_name;
 
-			new_name = straconcat(link->name, chars, NULL);
+			new_name = straconcat(name, chars, NULL);
 			if (new_name) {
-				mem_free(link->name);
-				link->name = new_name;
+				mem_free(name);
+				link->data.name = new_name;
 			}
 		}
 

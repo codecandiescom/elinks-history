@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.136 2004/07/15 08:42:16 zas Exp $ */
+/* $Id: textarea.c,v 1.137 2004/07/15 15:20:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 
 	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
-	fc = link->form_control;
+	fc = get_link_form_control(link);
 	assertm(fc, "link %d has no form control", (int)(link - doc_view->document->links));
 	if_assert_failed return;
 
@@ -392,7 +392,7 @@ textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 		if (doc_view_) doc_view = doc_view_;
 		if (link_) {
 			link = link_;
-			fc_maxlength = link_->form_control->maxlength;
+			fc_maxlength = get_link_form_control(link_)->maxlength;
 		}
 		if (term_) term = term_;
 
@@ -430,6 +430,7 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 	struct document_view *doc_view;
 	struct link *link;
 	struct form_state *fs;
+	struct form_control *fc;
 
 	assert(term && ses);
 	if_assert_failed return;
@@ -442,10 +443,11 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link) return;
 
-	if (form_field_is_readonly(link->form_control))
+	fc = get_link_form_control(link);
+	if (form_field_is_readonly(fc))
 		return;
 
-	fs = find_form_state(doc_view, link->form_control);
+	fs = find_form_state(doc_view, fc);
 	if (!fs) return;
 
 	textarea_edit(0, term, fs, doc_view, link);
@@ -656,7 +658,7 @@ set_textarea(struct document_view *doc_view, int direction)
 	if (!link || link->type != LINK_AREA)
 		return;
 
-	fc = link->form_control;
+	fc = get_link_form_control(link);
 	assertm(fc, "link has no form control");
 	if_assert_failed return;
 

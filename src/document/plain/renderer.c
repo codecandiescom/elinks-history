@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.61 2003/12/29 17:54:11 zas Exp $ */
+/* $Id: renderer.c,v 1.62 2003/12/29 19:04:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,6 +167,8 @@ add_document_line(struct document *document, int lineno,
 	/* Now expand tabs and handle urls if needed.
 	 * Here little code redundancy to improve performance. */
 	if (document->options.plain_display_links) {
+		int was_alpha_char = 1; /* to match start of line too. */
+
 		for (line_pos = 0; line_pos < width; line_pos++) {
 			unsigned char line_char = line[line_pos];
 
@@ -174,15 +176,29 @@ add_document_line(struct document *document, int lineno,
 				int tab_width = 7 - ((line_pos + expanded) & 7);
 
 				expanded += tab_width;
+				was_alpha_char = 0;
 
-			} else if (isalpha(line_char)) {
-				unsigned char *start = &line[line_pos];
-				int len = get_uri_length(start, width - line_pos);
-				int x = line_pos + expanded;
+			} else {
+				/* We only want to detect url if there is at least
+				 * to consecutive alphanumeric characters, or when
+				 * we are at the very start of line.
+				 * It improves performance a bit. --Zas */
+				int is_alpha_char = isalpha(line_char);
 
-				if (len
-				    && check_link_word(document, start, len, x, lineno))
-					line_pos += len - 1;
+				if (is_alpha_char && was_alpha_char) {
+					int pos = int_max(0, line_pos - 1);
+					unsigned char *start = &line[pos];
+					int len = get_uri_length(start, width - pos);
+					int x = pos + expanded;
+
+					if (len
+					    && check_link_word(document, start, len, x, lineno))
+						line_pos += len - 2;
+
+					was_alpha_char = 1;
+				} else {
+					was_alpha_char = is_alpha_char;
+				}
 			}
 		}
 	} else {

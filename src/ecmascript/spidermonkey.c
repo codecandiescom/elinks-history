@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.103 2004/12/17 15:48:50 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.104 2004/12/17 15:52:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1294,13 +1294,14 @@ safeguard(JSContext *ctx, JSScript *script)
 		struct terminal *term = interpreter->vs->doc_view->session->tab->term;
 
 		/* A killer script! Alert! */
-		msg_box(term, NULL, 0,
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
 			N_("JavaScript Emergency"), ALIGN_CENTER,
 			msg_text(term,
 				 N_("A script embedded in the current document was running "
-				    "for more than %d seconds in line. This probably means "
-				    "there is a bug in the script and it could have halted "
-			            "the whole ELinks. The script execution was interrupted."),
+				    "for more than %d seconds in line.\n"
+				    "This probably means there is a bug in the script and "
+				    "it could have halted the whole ELinks.\n"
+				    "The script execution was interrupted."),
 				 max_exec_time),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);

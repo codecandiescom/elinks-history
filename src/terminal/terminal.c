@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.24 2003/05/24 13:30:15 pasky Exp $ */
+/* $Id: terminal.c,v 1.25 2003/05/24 13:38:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,8 +107,9 @@ redraw_terminal_ev(struct terminal *term, int e)
 	clear_terminal(term);
 	term->redrawing = 2;
 
-	foreachback(win, term->windows)
-		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
+	foreachback (win, term->windows)
+		if (!inactive_tab(win))
+			win->handler(win, &ev, 0);
 
 	term->redrawing = 0;
 }
@@ -331,7 +332,8 @@ send_redraw:
 			 * is registering a bottom-half handler which will open
 			 * additional windows.
 			 * --pasky */
-			IF_ACTIVE(win,term) win->handler(win, ev, 0);
+			if (!inactive_tab(win))
+				win->handler(win, ev, 0);
 		}
 		term->redrawing = 0;
 	}

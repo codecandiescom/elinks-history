@@ -100,6 +100,9 @@ Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 	Win NT port
 	Saving goto history
 
+Daniel Macks <dmacks@netscape.org>
+	Minor compilation/weirdness fixes
+
 <darix@irssi.org>
 	RPM elinks.spec updates
 
@@ -485,4 +488,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.157 2004/01/22 16:22:21 pasky Exp $
+$Id: AUTHORS,v 1.158 2004/02/18 21:46:22 pasky Exp $

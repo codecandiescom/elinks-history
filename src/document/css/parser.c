@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.78 2004/01/29 04:13:50 jonas Exp $ */
+/* $Id: parser.c,v 1.79 2004/01/29 04:16:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,7 +186,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
 	struct scanner_token *token = get_scanner_token(scanner);
 	struct selector_pkg *pkg = NULL;
-	struct css_selector *selector;
 
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
 	 * And anyway we should have css_parse_selector(). --pasky */
@@ -194,6 +193,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 	/* FIXME: element can be even '*' --pasky */
 
 	while (scanner_has_tokens(scanner)) {
+		struct css_selector *selector;
+
 		pkg = NULL;
 
 		/* Load up the selector */

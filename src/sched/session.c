@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.514 2004/06/14 00:08:27 jonas Exp $ */
+/* $Id: session.c,v 1.515 2004/06/14 00:18:16 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -887,7 +887,7 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		 * actually assert it since people could pour all kinds of crap
 		 * down the socket. */
 		if (!info->session_info) {
-			INTERAL("Remote magic with no remote flags");
+			INTERNAL("Remote magic with no remote flags");
 			return 0;
 		}
 

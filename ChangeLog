@@ -1,3 +1,59 @@
+Wed Dec 24 02:03:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc4 
+
+Wed Dec 24 01:29:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Wed Dec 24 00:59:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/proxy.c:
+
+	Fixed handling of the $FTP_PROXY, patch by Timo.  
+
+Wed Dec 24 00:31:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Fix bug 315 - Tilde expansion doesn't work in file upload form
+	fields.  
+
+Wed Dec 24 00:30:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Comment on the code related to bug 282.  
+
+Wed Dec 24 00:11:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Tue Dec 23 23:59:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po:
+
+	.po files were resynced.  
+
+Tue Dec 23 23:51:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Last-minute attempt to fix possible segfault when passing
+	close_socket() a NULL pointer, extracted from Timo's patch.  
+
 Tue Dec 23 19:24:06 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/rewrite/rewrite.c:

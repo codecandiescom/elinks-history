@@ -1,3 +1,16 @@
+Thu Feb  7 00:12:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, TODO:
+	
+	added some more items
+
+Thu Feb  7 00:00:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* session.c:
+	
+	fixed small bug in lua hooks which caused links to crash if
+	non-existent local file was specified as a frame source
+
 Wed Feb  6 23:37:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.140 2003/06/21 14:19:03 pasky Exp $ */
+/* $Id: parser.c,v 1.141 2003/06/21 14:19:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1063,6 +1063,7 @@ html_h(int h, unsigned char *a, enum format_align default_align)
 static void
 html_h1(unsigned char *a)
 {
+	format.attr |= AT_BOLD;
 	html_h(2, a, AL_CENTER);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.60 2003/07/23 01:04:17 jonas Exp $ */
+/* $Id: options.h,v 1.61 2003/07/23 02:11:03 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -141,19 +141,19 @@ extern void free_option_value(struct option *);
 extern struct option *get_opt_rec(struct option *, unsigned char *);
 extern struct option *get_opt_rec_real(struct option *, unsigned char *);
 #ifdef DEBUG
-extern struct option *get_opt_(unsigned char *, int, struct option *, unsigned char *);
+extern void *get_opt_(unsigned char *, int, struct option *, unsigned char *);
 #define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
 #else
-extern struct option *get_opt_(struct option *, unsigned char *);
+extern void *get_opt_(struct option *, unsigned char *);
 #define get_opt(tree, name) get_opt_(tree, name)
 #endif
 
-#define get_opt_bool_tree(tree, name) *((int *) get_opt(tree, name)->ptr)
-#define get_opt_int_tree(tree, name) *((int *) get_opt(tree, name)->ptr)
-#define get_opt_long_tree(tree, name) *((long *) get_opt(tree, name)->ptr)
-#define get_opt_char_tree(tree, name) *((unsigned char *) get_opt(tree, name)->ptr)
-#define get_opt_str_tree(tree, name) ((unsigned char *) get_opt(tree, name)->ptr)
-#define get_opt_ptr_tree(tree, name) ((void *) get_opt(tree, name)->ptr)
+#define get_opt_bool_tree(tree, name) *((int *) get_opt(tree, name))
+#define get_opt_int_tree(tree, name) *((int *) get_opt(tree, name))
+#define get_opt_long_tree(tree, name) *((long *) get_opt(tree, name))
+#define get_opt_char_tree(tree, name) *((unsigned char *) get_opt(tree, name))
+#define get_opt_str_tree(tree, name) ((unsigned char *) get_opt(tree, name))
+#define get_opt_ptr_tree(tree, name) ((void *) get_opt(tree, name))
 
 #define get_opt_bool(name) get_opt_bool_tree(config_options, name)
 #define get_opt_int(name) get_opt_int_tree(config_options, name)

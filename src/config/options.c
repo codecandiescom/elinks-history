@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.253 2003/07/23 00:55:53 jonas Exp $ */
+/* $Id: options.c,v 1.254 2003/07/23 02:11:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ get_opt_rec_real(struct option *tree, unsigned char *name)
 
 /* Fetch pointer to value of certain option. It is guaranteed to never return
  * NULL. Note that you are supposed to use wrapper get_opt(). */
-struct option *
+void *
 get_opt_(
 #ifdef DEBUG
 	 unsigned char *file, int line,
@@ -193,7 +193,7 @@ get_opt_(
 	if (!opt->ptr) elinks_internal("Option %s has no value!", name);
 #endif
 
-	return opt;
+	return opt->ptr;
 }
 
 /* Add option to tree. */

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.43 2002/11/15 17:20:30 zas Exp $ */
+/* $Id: parser.c,v 1.44 2002/11/23 19:23:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,13 +384,13 @@ html_stack_dup()
 	e = mem_alloc(sizeof(struct html_element));
 	if (!e) return;
 	memcpy(e, ep, sizeof(struct html_element));
-	copy_string(&e->attr.link, ep->attr.link);
-	copy_string(&e->attr.target, ep->attr.target);
-	copy_string(&e->attr.image, ep->attr.image);
-	copy_string(&e->attr.title, ep->attr.title);
-	copy_string(&e->attr.href_base, ep->attr.href_base);
-	copy_string(&e->attr.target_base, ep->attr.target_base);
-	copy_string(&e->attr.select, ep->attr.select);
+	if (ep->attr.link) copy_string(&e->attr.link, ep->attr.link);
+	if (ep->attr.target) copy_string(&e->attr.target, ep->attr.target);
+	if (ep->attr.image) copy_string(&e->attr.image, ep->attr.image);
+	if (ep->attr.title) copy_string(&e->attr.title, ep->attr.title);
+	if (ep->attr.href_base) copy_string(&e->attr.href_base, ep->attr.href_base);
+	if (ep->attr.target_base) copy_string(&e->attr.target_base, ep->attr.target_base);
+	if (ep->attr.select) copy_string(&e->attr.select, ep->attr.select);
 #if 0
 	if (e->name) {
 		if (e->attr.link) set_mem_comment(e->attr.link, e->name, e->namelen);
@@ -1479,8 +1479,8 @@ xxx:
 	fc->ctrl_num = a - last_form_tag;
 	fc->position = a - startf;
 	fc->method = form.method;
-	fc->action = stracpy(form.action);
-	fc->target = stracpy(form.target);
+	fc->action = form.action ? stracpy(form.action) : NULL;
+	fc->target = form.target ? stracpy(form.target) : NULL;
 	fc->name = get_attr_val(a, "name");
 
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
@@ -1958,7 +1958,7 @@ end_parse:
 	fc->ctrl_num = attr - last_form_tag;
 	fc->position = attr - startf;
 	fc->method = form.method;
-	fc->action = stracpy(form.action);
+	fc->action = form.action ? stracpy(form.action) : NULL;
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
@@ -2881,7 +2881,7 @@ look_for_tag:
 	}
 
 	target = get_target(attr);
-	if (!target) target = stracpy(target_base);
+	if (!target) target = target_base ? stracpy(target_base) : NULL;
 	if (!target) target = stracpy("");
 
 	ld = mem_alloc(sizeof(struct link_def));

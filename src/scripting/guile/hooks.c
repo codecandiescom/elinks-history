@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.22 2003/12/13 04:40:43 miciah Exp $ */
+/* $Id: hooks.c,v 1.23 2003/12/13 05:17:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,10 +73,18 @@ script_hook_follow_url(va_list ap, void *data)
 	proc = scm_c_module_lookup(internal_module(), "%follow-url-hook");
 	x = scm_call_1(SCM_VARIABLE_REF(proc), scm_makfrom0str(*url));
 
-	if (SCM_STRINGP(x))
-		*url = memacpy(SCM_STRING_UCHARS(x), SCM_STRING_LENGTH(x)+1);
-	else
-		*url = NULL;
+	if (SCM_STRINGP(x)) {
+		unsigned char *new_url;
+
+		new_url = memacpy(SCM_STRING_UCHARS(x),
+				  SCM_STRING_LENGTH(x) + 1);
+		if (new_url) {
+			mem_free(*url);
+			*url = new_url;
+		}
+	} else {
+		(*url)[0] = 0;
+	}
 
 	return EHS_NEXT;
 }

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.47 2003/12/12 14:05:43 jonas Exp $ */
+/* $Id: hooks.c,v 1.48 2003/12/13 05:17:36 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,9 +96,15 @@ script_hook_follow_url(va_list ap, void *data)
 	if (err) return EHS_NEXT;
 
 	if (lua_isstring(L, -1)) {
-		*url = stracpy((unsigned char *) lua_tostring(L, -1));
+		unsigned char *new_url;
+
+		new_url = stracpy((unsigned char *) lua_tostring(L, -1));
+		if (new_url) {
+			mem_free(*url);
+			*url = new_url;
+		}
 	} else if (lua_isnil(L, -1)) {
-		*url = NULL;
+		(*url)[0] = 0;
 	} else {
 		alert_lua_error("follow_url_hook must return a string or nil");
 	}

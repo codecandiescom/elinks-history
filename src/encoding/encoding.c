@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.17 2003/06/20 15:55:12 jonas Exp $ */
+/* $Id: encoding.c,v 1.18 2003/06/20 16:26:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ struct decoding_handlers {
 	int (*open)(struct stream_encoded *stream, int fd);
 	int (*read)(struct stream_encoded *stream, unsigned char *data, int len);
 	void (*close)(struct stream_encoded *stream);
-	unsigned char *extensions[];
+	unsigned char **extensions;
 };
 
 
@@ -70,11 +70,13 @@ dummy_close(struct stream_encoded *stream)
 	mem_free(stream->data);
 }
 
+static unsigned char *dummy_extensions[] = { NULL };
+
 static struct decoding_handlers dummy_handlers = {
 	dummy_open,
 	dummy_read,
 	dummy_close,
-	{ NULL },
+	dummy_extensions,
 };
 
 
@@ -105,11 +107,13 @@ gzip_close(struct stream_encoded *stream)
 	gzclose((gzFile *) stream->data);
 }
 
+static unsigned char *gzip_extensions[] = { ".gz", ".tgz", NULL };
+
 static struct decoding_handlers gzip_handlers = {
 	gzip_open,
 	gzip_read,
 	gzip_close,
-	{ ".gz", ".tgz", NULL },
+	gzip_extensions,
 };
 
 #endif
@@ -183,11 +187,13 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
+static unsigned char *bzip2_extensions[] = { ".bz2", NULL };
+
 static struct decoding_handlers bzip2_handlers = {
 	bzip2_open,
 	bzip2_read,
 	bzip2_close,
-	{ ".bz2", NULL },
+	bzip2_extensions,
 };
 
 #endif

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.214 2004/04/18 00:59:00 jonas Exp $ */
+/* $Id: menu.c,v 1.215 2004/04/18 01:24:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 
 	if (menu) {
 		menu->selected = selected;
-		menu->view = 0;
+		menu->first = 0;
 		menu->items = items;
 		menu->data = data;
 		menu->size = count_items(items);
@@ -259,7 +259,7 @@ scroll_menu(struct menu *menu, int d)
 
 	if (menu->size < 1) {
 		menu->selected = -1;
-		menu->view = 0;
+		menu->first = 0;
 		return;
 	}
 
@@ -275,13 +275,13 @@ scroll_menu(struct menu *menu, int d)
 
 		if (menu->selected < 0 || menu->selected >= menu->size) {
 			menu->selected = -1;
-			menu->view = 0;
+			menu->first = 0;
 			return;
 		}
 	}
 
-	int_bounds(&menu->view, menu->selected - w + scr_i + 1, menu->selected - scr_i);
-	int_bounds(&menu->view, 0, menu->size - w);
+	int_bounds(&menu->first, menu->selected - w + scr_i + 1, menu->selected - scr_i);
+	int_bounds(&menu->first, 0, menu->size - w);
 }
 
 static inline void
@@ -388,8 +388,8 @@ display_menu(struct terminal *term, struct menu *menu)
 	draw_area(term,	mx, my, mwidth, mheight, ' ', 0, normal_color);
 	draw_border(term, menu->x, menu->y, menu->width, menu->height, frame_color, 1);
 
-	for (p = menu->view, y = my;
-	     p < menu->size && p < menu->view + mheight;
+	for (p = menu->first, y = my;
+	     p < menu->size && p < menu->first + mheight;
 	     p++, y++) {
 		struct color_pair *color = normal_color;
 
@@ -551,7 +551,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		    && ev->x < menu->x + menu->width
 		    && ev->y >=  menu->y + 1
 		    && ev->y < menu->y + menu->height - 1) {
-			int sel = ev->y - menu->y - 1 + menu->view;
+			int sel = ev->y - menu->y - 1 + menu->first;
 
 			if (sel >= 0 && sel < menu->size
 			    && mi_is_selectable(menu->items[sel])) {
@@ -786,31 +786,31 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 
 	/* Try to make current selected menu entry visible. */
 	while (1) {
-		if (menu->selected < menu->first_displayed) {
-			menu->first_displayed--;
-			menu->last_displayed--;
+		if (menu->selected < menu->first) {
+			menu->first--;
+			menu->last--;
 
-		} else if (menu->selected > menu->last_displayed) {
-			menu->first_displayed++;
-			menu->last_displayed++;
+		} else if (menu->selected > menu->last) {
+			menu->first++;
+			menu->last++;
 		} else
 			break;
 	}
 
-	if (menu->last_displayed <= 0)
-		menu->last_displayed = menu->size - 1;
+	if (menu->last <= 0)
+		menu->last = menu->size - 1;
 
-	int_bounds(&menu->last_displayed, 0, menu->size - 1);
-	int_bounds(&menu->first_displayed, 0, menu->last_displayed);
+	int_bounds(&menu->last, 0, menu->size - 1);
+	int_bounds(&menu->first, 0, menu->last);
 
 	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);
 
-	if (menu->first_displayed != 0)
+	if (menu->first != 0)
 		draw_area(term, 0, 0, L_MAINMENU_SPACE, 1, '<', 0, normal_color);
 
 	p += L_MAINMENU_SPACE;
 
-	for (i = menu->first_displayed; i < menu->size; i++) {
+	for (i = menu->first; i < menu->size; i++) {
 		struct color_pair *color = normal_color;
 		unsigned char *text = menu->items[i].text;
 		int l = menu->items[i].hotkey_pos;
@@ -852,9 +852,9 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 		p += R_MAINTEXT_SPACE + R_TEXT_SPACE + L_TEXT_SPACE;
 	}
 
-	menu->last_displayed = i - 1;
-	int_lower_bound(&menu->last_displayed, menu->first_displayed);
-	if (menu->last_displayed < menu->size - 1)
+	menu->last = i - 1;
+	int_lower_bound(&menu->last, menu->first);
+	if (menu->last < menu->size - 1)
 		draw_area(term, term->width - R_MAINMENU_SPACE, 0, R_MAINMENU_SPACE, 1, '>', 0, normal_color);
 
 	redraw_from_window(menu->win);
@@ -878,7 +878,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 		int i;
 
 		/* We don't initialize to
-		 * menu->first_displayed here,
+		 * menu->first here,
 		 * since it breaks horizontal
 		 * scrolling using mouse in some
 		 * cases. --Zas */

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.58 2004/04/18 01:18:26 jonas Exp $ */
+/* $Id: menu.h,v 1.59 2004/04/18 01:24:14 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -132,17 +132,10 @@ struct menu {
 	int size;		/* The number of menu items */
 
 	int selected;		/* The current selected item. -1 means none */
-	int view;		/* The upper most? item currently visible */
+	int first, last;	/* The first and last visible menu items */
 	int x, y;		/* The coordinates for the upper left corner */
 	int width, height;	/* The dimensions of the visible menu */
 	int parent_x, parent_y;	/* The coordinates of the parent window */
-
-	/* For horizontal menus this holds info about start and ending item
-	 * being displayed. */
-	/* FIXME: first_displayed and view member should be the same */
-	/* last_displayed could even be useful for trimmed vertical menus */
-	int first_displayed;
-	int last_displayed;
 
 	int hotkeys;		/* Whether to check and display hotkeys */
 #ifdef ENABLE_NLS

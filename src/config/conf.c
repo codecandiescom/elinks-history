@@ -1,11 +1,12 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.147 2004/07/17 20:22:17 pasky Exp $ */
+/* $Id: conf.c,v 1.148 2004/10/07 02:54:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h> /* OS/2 needs this after sys/types.h */

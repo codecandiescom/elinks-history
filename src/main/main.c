@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.211 2004/06/12 15:16:50 jonas Exp $ */
+/* $Id: main.c,v 1.212 2004/06/13 12:48:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,11 +177,10 @@ init(void)
 		terminate = 1;
 
 	} else {
-		int id = get_opt_int_tree(cmdline_options, "base-session");
 		struct string info;
 		struct terminal *term = NULL;
 
-		if (!encode_session_info(&info, id, &url_list)) {
+		if (!encode_session_info(&info, &url_list)) {
 			ERROR(G_("Unable to encode session info."));
 			retval = RET_FATAL;
 			terminate = 1;

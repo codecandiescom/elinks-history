@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.1 2003/07/01 15:22:39 jonas Exp $ */
+/* $Id: uri.c,v 1.2 2003/07/01 16:27:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,48 +23,33 @@
 
 
 int
-parse_uri(unsigned char *url, int *prlen,
-          unsigned char **user, int *uslen,
-          unsigned char **pass, int *palen,
-          unsigned char **host, int *holen,
-          unsigned char **port, int *polen,
-          unsigned char **data, int *dalen,
-          unsigned char **post)
+parse_uri(struct uri *uri)
 {
 	unsigned char *prefix_end, *host_end;
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
+	unsigned char *uristring = uri->protocol;
 	int protocol;
 
-	assertm(url, "No url to parse.");
+	assertm(uristring, "No uri to parse.");
+	memset(uri, 0, sizeof(struct uri));
 
-	if (prlen) *prlen = 0;
-	if (user) *user = NULL;
-	if (uslen) *uslen = 0;
-	if (pass) *pass = NULL;
-	if (palen) *palen = 0;
-	if (host) *host = NULL;
-	if (holen) *holen = 0;
-	if (port) *port = NULL;
-	if (polen) *polen = 0;
-	if (data) *data = NULL;
-	if (dalen) *dalen = 0;
-	if (post) *post = NULL;
-
-	if (!*url) return -1; /* Empty url. */
+	/* Nothing to do for an empty url. */
+	if (!*uristring) return 0;
+	uri->protocol = uristring;
 
 	/* Isolate prefix */
 
-	prefix_end = strchr(url, ':');
-	if (!prefix_end) return -1;
+	prefix_end = strchr(uristring, ':');
+	if (!prefix_end) return 0;
 
-	if (prlen) *prlen = prefix_end - url;
+	uri->protocollen = prefix_end - uristring;
 
 	/* Get protocol */
 
-	protocol = check_protocol(url, prefix_end - url);
-	if (protocol == PROTOCOL_UNKNOWN) return -1;
+	protocol = check_protocol(uristring, prefix_end - uristring);
+	if (protocol == PROTOCOL_UNKNOWN) return 0;
 
 	prefix_end++; /* ':' */
 
@@ -73,12 +58,12 @@ parse_uri(unsigned char *url, int *prlen,
 	if (prefix_end[0] == '/' && prefix_end[1] == '/')
 		prefix_end += 2;
 	else if (get_protocol_need_slashes(protocol))
-		return -1;
+		return 0;
 
 	if (get_protocol_free_syntax(protocol)) {
-		if (data) *data = prefix_end;
-		if (dalen) *dalen = strlen(prefix_end);
-		return 0;
+		uri->data = prefix_end;
+		uri->datalen = strlen(prefix_end);
+		return strlen(uri->protocol);
 	}
 
 	/* Isolate host */
@@ -101,18 +86,16 @@ parse_uri(unsigned char *url, int *prlen,
 
 	if (prefix_end + strcspn(prefix_end, "/") > host_end
 	    && *host_end) { /* we have auth info here */
-		if (user || uslen || pass || palen) {
-			unsigned char *user_end = strchr(prefix_end, ':');
+		unsigned char *user_end = strchr(prefix_end, ':');
 
-			if (!user_end || user_end > host_end) {
-				if (user) *user = prefix_end;
-				if (uslen) *uslen = host_end - prefix_end;
-			} else {
-				if (user) *user = prefix_end;
-				if (uslen) *uslen = user_end - prefix_end;
-				if (pass) *pass = user_end + 1;
-				if (palen) *palen = host_end - user_end - 1;
-			}
+		if (!user_end || user_end > host_end) {
+			uri->user = prefix_end;
+			uri->userlen = host_end - prefix_end;
+		} else {
+			uri->user = prefix_end;
+			uri->userlen = user_end - prefix_end;
+			uri->password = user_end + 1;
+			uri->passwordlen = host_end - user_end - 1;
 		}
 		prefix_end = host_end + 1;
 	}
@@ -125,32 +108,30 @@ parse_uri(unsigned char *url, int *prlen,
 		host_end = prefix_end + strcspn(prefix_end, ":/");
 
 	if (!*host_end && get_protocol_need_slash_after_host(protocol))
-		return -1;
+		return 0;
 
-	if (host || holen) { /* Only enter if needed. */
 #ifdef IPV6
-		if (rbracket) {
-			int addrlen = rbracket - lbracket - 1;
+	if (rbracket) {
+		int addrlen = rbracket - lbracket - 1;
 
-			/* Check for valid length.
-			 * addrlen >= sizeof(hostbuf) is theorically impossible
-			 * but i keep the test in case of... Safer, imho --Zas */
-			if (addrlen < 0 || addrlen > NI_MAXHOST) {
-				internal("parse_uri(): addrlen value is bad "
-					"(%d) for URL '%s'. Problems are "
-					"likely to be encountered. Please "
-					"report this, it is a security bug!",
-					addrlen, url);
-				return -1;
-			}
-			if (host) *host = lbracket + 1;
-			if (holen) *holen = addrlen;
-		} else
-#endif
-		{
-			if (host) *host = prefix_end;
-			if (holen) *holen = host_end - prefix_end;
+		/* Check for valid length.
+		 * addrlen >= sizeof(hostbuf) is theorically impossible
+		 * but i keep the test in case of... Safer, imho --Zas */
+		if (addrlen < 0 || addrlen > NI_MAXHOST) {
+			internal("parse_uri(): addrlen value is bad "
+				"(%d) for URL '%s'. Problems are "
+				"likely to be encountered. Please "
+				"report this, it is a security bug!",
+				addrlen, uristring);
+			return 0;
 		}
+		uri->host = lbracket + 1;
+		uri->hostlen = addrlen;
+	} else
+#endif
+	{
+		uri->host = prefix_end;
+		uri->hostlen = host_end - prefix_end;
 	}
 
 	if (*host_end == ':') { /* we have port here */
@@ -158,26 +139,22 @@ parse_uri(unsigned char *url, int *prlen,
 
 		host_end++;
 
-		if (port) *port = host_end;
-		if (polen) *polen = port_end - host_end;
+		uri->port = host_end;
+		uri->portlen = port_end - host_end;
 
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
 		for (; host_end < port_end; host_end++)
 			if (*host_end < '0' || *host_end > '9')
-				return -1;
-
-		host_end = port_end;
+				return 0;
 	}
 
-	if (data || dalen || post) {
-		if (*host_end) host_end++; /* skip slash */
+	if (*host_end) host_end++; /* skip slash */
 
-		prefix_end = strchr(host_end, POST_CHAR);
-		if (data) *data = host_end;
-		if (dalen) *dalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
-		if (post) *post = prefix_end ? (prefix_end + 1) : NULL;
-	}
+	prefix_end = strchr(host_end, POST_CHAR);
+	uri->data = host_end;
+	uri->datalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
+	uri->post = prefix_end ? (prefix_end + 1) : NULL;
 
-	return 0;
+	return strlen(uri->protocol);
 }

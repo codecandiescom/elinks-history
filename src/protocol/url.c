@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.78 2003/07/01 15:22:39 jonas Exp $ */
+/* $Id: url.c,v 1.79 2003/07/01 16:27:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,42 @@ parse_url(unsigned char *url, int *prlen,
           unsigned char **data, int *dalen,
           unsigned char **post)
 {
-	return parse_uri(url, prlen, user, uslen, pass, palen, host, holen,
-			 port, polen, data, dalen, post);
+	struct uri uri;
+	int uricode;
+
+	uri.protocol = url;
+	uricode = parse_uri(&uri);
+#if 0
+	/* Temporary debug code */
+	debug("parse_uri returned [%d]", uricode);
+	if (uricode > 0) {
+		debug("protocollen = %d", uri.protocollen);
+		debug("user        = %s", uri.user);
+		debug("userlen     = %d", uri.userlen);
+		debug("password    = %s", uri.password);
+		debug("passwordlen = %d", uri.passwordlen);
+		debug("host        = %s", uri.host);
+		debug("hostlen     = %d", uri.hostlen);
+		debug("port        = %s", uri.port);
+		debug("portlen     = %d", uri.portlen);
+		debug("data        = %s", uri.data);
+		debug("datalen     = %d", uri.datalen);
+		debug("post        = %s", uri.post);
+	}
+#endif
+	if (prlen) *prlen = uri.protocollen;
+	if (user)  *user  = uri.user;
+	if (uslen) *uslen = uri.userlen;
+	if (pass)  *pass  = uri.password;
+	if (palen) *palen = uri.passwordlen;
+	if (host)  *host  = uri.host;
+	if (holen) *holen = uri.hostlen;
+	if (port)  *port  = uri.port;
+	if (polen) *polen = uri.portlen;
+	if (data)  *data  = uri.data;
+	if (dalen) *dalen = uri.datalen;
+	if (post)  *post  = uri.post;
+	return (uricode > 0 ? 0 : -1);
 }
 
 /* Returns protocol part of url in an allocated string.

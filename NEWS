@@ -2,7 +2,6 @@ See ChangeLog for recent changes, bugfixes and new features.
 
 ELinks-0.5.0:
 
-* new modular and extensive HTML engine employed - ELusive
 * used gettext for internationalization
 * support for background document colors
 * tabs support

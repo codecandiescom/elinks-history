@@ -1,11 +1,10 @@
-/* $Id: dump.h,v 1.12 2004/05/16 12:11:51 jonas Exp $ */
+/* $Id: dump.h,v 1.13 2004/05/16 12:13:56 jonas Exp $ */
 
 #ifndef EL__VIEWER_DUMP_DUMP_H
 #define EL__VIEWER_DUMP_DUMP_H
 
 #include "util/lists.h"
 
-struct download;
 struct string;
 struct document;
 

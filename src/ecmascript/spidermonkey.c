@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.101 2004/12/17 15:00:00 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.102 2004/12/17 15:25:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,25 +73,30 @@ union prop_union {
 	unsigned char *string;
 };
 
-#define VALUE_TO_JSVAL_START \
-	enum prop_type prop_type = JSPT_UNDEF; \
-	union prop_union p; \
- \
-	/* Prevent "Unused variable" warnings. */ \
-	if ((p.string = NULL)) \
-		goto bye;
-
-#define VALUE_TO_JSVAL_END(vp) \
-	value_to_jsval(ctx, vp, prop_type, &p); \
- \
-bye: \
-	return JS_TRUE;
+#define P_UNDEF() do { \
+	memset(&p, 'J', sizeof(p)); /* Active security ;) */\
+	prop_type = JSPT_UNDEF; \
+	if (0) goto bye;	/* Prevent unused label errors */ \
+} while (0)
 
 #define P_OBJECT(x) do { p.object = (x); prop_type = JSPT_OBJECT; } while (0)
 #define P_BOOLEAN(x) do { p.boolean = (x); prop_type = JSPT_BOOLEAN; } while (0)
 #define P_STRING(x) do { p.string = (x); prop_type = JSPT_STRING; } while (0)
 #define P_ASTRING(x) do { p.string = (x); prop_type = JSPT_ASTRING; } while (0)
 #define P_INT(x) do { p.number = (x); prop_type = JSPT_INT; } while (0)
+
+
+#define VALUE_TO_JSVAL_START \
+	enum prop_type prop_type; \
+	union prop_union p; \
+ \
+	P_UNDEF();
+
+#define VALUE_TO_JSVAL_END(vp) \
+	value_to_jsval(ctx, vp, prop_type, &p); \
+ \
+bye: \
+	return JS_TRUE;
 
 
 static void
@@ -318,7 +323,6 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 		if (!ses->doc_view->document->frame_desc) {
 			INTERNAL("Looking for parent but there're no frames.");
-			prop_type = JSPT_UNDEF;
 			break;
 		}
 		assert(frame);
@@ -330,15 +334,13 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 				goto found_parent;
 		}
 		INTERNAL("Cannot find frame %s parent.",doc_view->name);
-		prop_type = JSPT_UNDEF;
 		break;
 
 found_parent:
 		if (doc_view->vs.ecmascript_fragile)
 			ecmascript_reset_state(&doc_view->vs);
 		assert(doc_view->ecmascript);
-		p.object=JS_GetGlobalObject(doc_view->ecmascript->backend_data);
-		prop_type = JSPT_OBJECT;
+		P_OBJECT(JS_GetGlobalObject(doc_view->ecmascript->backend_data));
 		break;
 	}
 #endif
@@ -881,7 +883,6 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_DOC_REF:
-		prop_type = JSPT_UNDEF;
 		switch (get_opt_int("protocol.http.referer.policy")) {
 		case REFERER_NONE:
 			/* oh well */

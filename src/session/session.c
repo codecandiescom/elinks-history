@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.500 2004/06/12 18:05:53 zas Exp $ */
+/* $Id: session.c,v 1.501 2004/06/12 23:50:09 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -783,6 +783,7 @@ init_remote_session(struct session *ses, enum remote_session_flags *remote_ptr,
 		goto_uri(ses, uri);
 		/* Mask out the current tab flag */
 		*remote_ptr = remote & ~SES_REMOTE_CURRENT_TAB;
+		assertm(*remote_ptr, "Remote session was masked out");
 
 	} else if (remote & SES_REMOTE_NEW_TAB) {
 		/* FIXME: This is not perfect. Doing multiple -remote

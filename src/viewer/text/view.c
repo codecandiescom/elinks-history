@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.278 2003/11/29 01:06:20 pasky Exp $ */
+/* $Id: view.c,v 1.279 2003/11/30 00:22:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,17 +434,12 @@ static void
 hscroll(struct session *ses, struct document_view *doc_view, int a)
 {
 	int x;
-	int max_x;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	/* Don't scroll when the rest of the document is already visible */
-
-	max_x = int_max(doc_view->document->width - doc_view->width,
-			doc_view->vs->x);
 	x = doc_view->vs->x + a;
-	int_bounds(&x, 0, max_x);
+	int_bounds(&x, 0, doc_view->document->width - 1);
 	if (x == doc_view->vs->x) return;
 
 	doc_view->vs->x = x;

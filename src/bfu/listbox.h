@@ -1,8 +1,9 @@
-/* $Id: listbox.h,v 1.77 2004/11/19 15:40:20 zas Exp $ */
+/* $Id: listbox.h,v 1.78 2004/11/19 15:45:46 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
 
+#include "bfu/common.h"
 #include "bfu/style.h"
 #include "util/lists.h"
 
@@ -11,6 +12,7 @@ struct listbox_data;
 struct listbox_item;
 struct terminal;
 struct uri;
+struct widget_data;
 
 void add_dlg_listbox(struct dialog *dlg, int height, void *box_data);
 
@@ -137,13 +139,7 @@ void dlg_format_box(struct terminal *, struct widget_data *, int, int *, int, in
 struct listbox_item *traverse_listbox_items_list(struct listbox_item *, struct listbox_data *, int, int, int (*)(struct listbox_item *, void *, int *), void *);
 
 void box_sel_move(struct widget_data *, int);
-
-static inline struct listbox_data *
-get_listbox_widget_data(struct widget_data *widget_data)
-{
-	assert(widget_data->widget->type == WIDGET_LISTBOX);
-	return ((struct listbox_data *) widget_data->widget->data);
-}
+struct listbox_data *get_listbox_widget_data(struct widget_data *widget_data);
 
 #define get_dlg_listbox_data(dlg_data) \
 	get_listbox_widget_data(dlg_data->widgets_data)

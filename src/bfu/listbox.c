@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.178 2004/11/19 11:07:53 zas Exp $ */
+/* $Id: listbox.c,v 1.179 2004/11/19 15:45:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,13 @@ add_dlg_listbox(struct dialog *dlg, int height, void *box_data)
 	widget->type = WIDGET_LISTBOX;
 	widget->info.box.height = height;
 	widget->data = box_data;
+}
+
+struct listbox_data *
+get_listbox_widget_data(struct widget_data *widget_data)
+{
+	assert(widget_data->widget->type == WIDGET_LISTBOX);
+	return ((struct listbox_data *) widget_data->widget->data);
 }
 
 /* Layout for generic boxes */

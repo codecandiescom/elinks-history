@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.147 2003/12/25 10:46:42 jonas Exp $ */
+/* $Id: search.c,v 1.148 2003/12/25 11:21:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -962,14 +962,15 @@ enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
 	     unsigned char *typeahead, struct term_event *event)
 {
-	int i = doc_view->vs->current_link;
+	int current_link = doc_view->vs->current_link;
 	int charpos = strlen(typeahead);
 	/* The link interval in which we are currently searching */
 	int upper_link, lower_link;
 	enum keyact action = kbd_action(KM_EDIT, event, NULL);
-	int direction, case_sensitive;
+	int direction, case_sensitive, i;
 
-	if (i == -1) i = 0;
+	if (current_link == -1) current_link = 0;
+	i = current_link;
 
 	switch (action) {
 		case ACT_BACKSPACE:
@@ -1056,15 +1057,18 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			/* Only wrap around one time. Initialize @i with
 			 * {+= direction} in mind. */
 			if (direction > 0) {
-				if (upper_link != doc_view->document->nlinks)
+				if (upper_link != doc_view->document->nlinks
+				    || upper_link == current_link + 1)
 					break;
 
 				lower_link = i = -1;
-				upper_link = doc_view->vs->current_link + 1;
+				upper_link = current_link + 1;
 			} else {
-				if (lower_link != -1) break;
+				if (lower_link != -1
+				    || lower_link == current_link - 1)
+					break;
 
-				lower_link = doc_view->vs->current_link - 1;
+				lower_link = current_link - 1;
 				upper_link = i = doc_view->document->nlinks;
 			}
 		}

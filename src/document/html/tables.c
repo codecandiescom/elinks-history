@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.238 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: tables.c,v 1.239 2004/06/28 07:55:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,9 +261,9 @@ free_table(struct table *table)
 }
 
 static void
-expand_cells(struct table *table, int dst_col, int dst_row)
+expand_cells(struct table *table, int dest_col, int dest_row)
 {
-	if (dst_col >= table->cols) {
+	if (dest_col >= table->cols) {
 		if (table->cols) {
 			int last_col = table->cols - 1;
 			int row;
@@ -274,7 +274,7 @@ expand_cells(struct table *table, int dst_col, int dst_row)
 
 				if (cellp->colspan != -1) continue;
 
-				for (col = table->cols; col <= dst_col; col++) {
+				for (col = table->cols; col <= dest_col; col++) {
 					struct table_cell *cell = CELL(table, col, row);
 
 					cell->is_used = 1;
@@ -286,10 +286,10 @@ expand_cells(struct table *table, int dst_col, int dst_row)
 				}
 			}
 		}
-		table->cols = dst_col + 1;
+		table->cols = dest_col + 1;
 	}
 
-	if (dst_row >= table->rows) {
+	if (dest_row >= table->rows) {
 		if (table->rows) {
 			int last_row = table->rows - 1;
 			int col;
@@ -300,7 +300,7 @@ expand_cells(struct table *table, int dst_col, int dst_row)
 
 				if (cellp->rowspan != -1) continue;
 
-				for (row = table->rows; row <= dst_row; row++) {
+				for (row = table->rows; row <= dest_row; row++) {
 					struct table_cell *cell = CELL(table, col, row);
 
 					cell->is_used = 1;
@@ -312,32 +312,32 @@ expand_cells(struct table *table, int dst_col, int dst_row)
 				}
 			}
 		}
-		table->rows = dst_row + 1;
+		table->rows = dest_row + 1;
 	}
 }
 
 static struct table_cell *
-new_cell(struct table *table, int dst_col, int dst_row)
+new_cell(struct table *table, int dest_col, int dest_row)
 {
-	if (dst_col < table->cols && dst_row < table->rows)
-		return CELL(table, dst_col, dst_row);
+	if (dest_col < table->cols && dest_row < table->rows)
+		return CELL(table, dest_col, dest_row);
 
 	while (1) {
 		struct table new_table;
 		int col, row;
 
-		if (dst_col < table->real_cols && dst_row < table->real_rows) {
-			expand_cells(table, dst_col, dst_row);
-			return CELL(table, dst_col, dst_row);
+		if (dest_col < table->real_cols && dest_row < table->real_rows) {
+			expand_cells(table, dest_col, dest_row);
+			return CELL(table, dest_col, dest_row);
 		}
 
 		new_table.real_cols = table->real_cols;
 		new_table.real_rows = table->real_rows;
 
-		while (dst_col >= new_table.real_cols)
+		while (dest_col >= new_table.real_cols)
 			if (!(new_table.real_cols <<= 1))
 				return NULL;
-		while (dst_row >= new_table.real_rows)
+		while (dest_row >= new_table.real_rows)
 			if (!(new_table.real_rows <<= 1))
 				return NULL;
 

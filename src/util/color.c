@@ -1,10 +1,11 @@
 /* Color parser */
-/* $Id: color.c,v 1.6 2004/01/17 00:11:03 pasky Exp $ */
+/* $Id: color.c,v 1.7 2004/01/18 22:57:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -219,13 +220,24 @@ free_colors_lookup(void)
 int
 decode_color(unsigned char *str, int slen, color_t *color)
 {
-	if (*str == '#' && slen == 7) {
+	if (*str == '#' && (slen == 7 || slen == 4)) {
+		unsigned char buffer[6];
 		unsigned char *end;
 		color_t string_color;
 
+		str++, slen--;
+
+		if (slen == 3) {
+			/* Expand the short hex color format */
+			buffer[0] = buffer[1] = str[0];
+			buffer[2] = buffer[3] = str[1];
+			buffer[4] = buffer[5] = str[2];
+			str = buffer;
+		}
+
 		errno = 0;
-		string_color = strtoul(&str[1], (char **)&end, 16);
-		if (!errno && (end == str + slen)) {
+		string_color = strtoul(str, (char **)&end, 16);
+		if (!errno && (end == str + 6)) {
 			*color = string_color;
 			return 0;
 		}

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.7 2002/04/06 16:51:24 pasky Exp $ */
+/* $Id: osdep.c,v 1.8 2002/04/16 12:41:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -340,11 +340,52 @@ void set_clipboard_text(char *data)
 	/* !!! FIXME */
 }
 
-void set_window_title(unsigned char *url)
+/* Set xterm-like term window's title. */
+void set_window_title(unsigned char *title)
 {
+	unsigned char *s;
+	int xsize, ysize;
+	int j = 0;
+
+	/* Check if we're in a xterm-like terminal. */
 	if (!is_xterm()) return;
-	printf("\033]0;%s\a", url);
+
+	/* Retrieve terminal dimensions. */
+	if (get_terminal_size(0, &xsize, &ysize)) return;
+
+	/* Check if terminal width is reasonnable. */
+	if (xsize < 1 || xsize > 1024) return;
+
+	/* Allocate space for title + 3 ending points + null char. */
+	s = (unsigned char *) mem_alloc((xsize + 3 + 1) * sizeof(unsigned char));
+	if (!s) return;
+
+	/* Copy title to s if different from NULL */
+	if (title) {
+		int i;
+
+		/* We limit title length to terminal width and ignore control
+		 * chars if any. Note that in most cases window decoration
+		 * reduces printable width, so it's just a precaution. */
+		for (i = 0; title[i] && i < xsize; i++) {
+			if (title[i] >= ' ') s[j++] = title[i];
+			else s[j++] = ' ';
+		}
+
+		/* If title is truncated, add "..." */
+		if (i == xsize) {
+			s[j++] = '.';
+			s[j++] = '.';
+			s[j++] = '.';
+		}
+	}
+	s[j] = '\0';
+
+	/* Send terminal escape sequence + title string */
+	printf("\033]0;%s\a", s);
 	fflush(stdout);
+
+	mem_free(s);
 }
 
 unsigned char *get_window_title()

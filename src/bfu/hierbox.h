@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.46 2004/01/02 18:37:56 jonas Exp $ */
+/* $Id: hierbox.h,v 1.47 2004/01/02 19:33:09 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -57,7 +57,7 @@ struct hierbox_browser {
 	}
 
 struct listbox_item *
-init_listbox_item(struct hierbox_browser *browser, unsigned char *text, void *data);
+add_listbox_item(struct hierbox_browser *browser, unsigned char *text, void *data);
 void done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box);
 void update_hierbox_browser(struct hierbox_browser *browser);
 

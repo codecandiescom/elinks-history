@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.105 2004/01/02 18:37:56 jonas Exp $ */
+/* $Id: cache.c,v 1.106 2004/01/02 19:33:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ get_cache_entry(unsigned char *url)
 
 	add_to_list(cache, ce);
 
-	ce->box_item = init_listbox_item(&cache_browser, struri(ce->uri),
+	ce->box_item = add_listbox_item(&cache_browser, struri(ce->uri),
 					     ce);
 
 	return ce;

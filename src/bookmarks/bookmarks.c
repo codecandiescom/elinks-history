@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.155 2005/01/03 01:59:57 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.156 2005/01/03 02:11:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,6 +257,37 @@ delete_folder_by_name(unsigned char *foldername)
 	}
 }
 
+static struct bookmark *
+init_bookmark(struct bookmark *root, unsigned char *title, unsigned char *url)
+{
+	struct bookmark *bm;
+
+	bm = mem_calloc(1, sizeof(struct bookmark));
+	if (!bm) return NULL;
+
+	bm->title = stracpy(title);
+	if (!bm->title) {
+		mem_free(bm);
+		return NULL;
+	}
+	sanitize_title(bm->title);
+
+	bm->url = stracpy(empty_string_or_(url));
+	if (!bm->url || !sanitize_url(bm->url)) {
+		mem_free_if(bm->url);
+		mem_free(bm->title);
+		mem_free(bm);
+		return NULL;
+	}
+
+	bm->root = root;
+	init_list(bm->child);
+
+	object_nolock(bm, "bookmark");
+	
+	return bm;
+}
+
 static void
 add_bookmark_item_to_bookmarks(struct bookmark *bm, struct bookmark *root, int place)
 {
@@ -290,29 +321,9 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	     unsigned char *url)
 {
 	struct bookmark *bm;
-
-	bm = mem_calloc(1, sizeof(struct bookmark));
+	
+	bm = init_bookmark(root, title, url);
 	if (!bm) return NULL;
-
-	bm->title = stracpy(title);
-	if (!bm->title) {
-		mem_free(bm);
-		return NULL;
-	}
-	sanitize_title(bm->title);
-
-	bm->url = stracpy(empty_string_or_(url));
-	if (!bm->url || !sanitize_url(bm->url)) {
-		mem_free_if(bm->url);
-		mem_free(bm->title);
-		mem_free(bm);
-		return NULL;
-	}
-
-	bm->root = root;
-	init_list(bm->child);
-
-	object_nolock(bm, "bookmark");
 
 	/* Setup box_item */
 	bm->box_item = add_listbox_item(&bookmark_browser,

@@ -1,3 +1,446 @@
+Mon Nov 17 22:59:18 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation fixes.  
+
+Mon Nov 17 22:44:40 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Mon Nov 17 22:27:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/form.c:
+
+	Reinserted the removed semicolon (=> compilation fix).  
+
+Mon Nov 17 22:22:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Add save button.  
+
+Mon Nov 17 22:17:38 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/form.c:
+
+	Remove superfluous ';' ;) 
+
+Mon Nov 17 22:15:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/dialogs.c:
+
+	Fix dialog title spotted by pasky.  
+
+Mon Nov 17 22:11:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: dialogs.c, dialogs.h:
+
+	Add dialog file. Eh.  
+
+Mon Nov 17 22:10:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cookies/Makefile.am, cookies/cookies.c, cookies/cookies.h,
+	dialogs/menu.c:
+
+	Adding start of cookie manager based on cache manager code. Only
+	info button is available. This means cookies need to be moved to
+	cookies.h and have both refcount and box_item member.  
+
+Mon Nov 17 22:10:36 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/link.c:
+
+	Use int_(upper|lower)_bound.  
+
+Mon Nov 17 21:48:03 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/link.c:
+
+	Rename @width to @height. The old name didn't fit.  
+
+Mon Nov 17 21:41:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Alphabetize includes.  
+
+Mon Nov 17 21:40:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Compilation fix.  
+
+Mon Nov 17 21:39:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Fixed invalid usage of get_cache_uri() in delete_cache_entry().  
+
+Mon Nov 17 21:36:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	ACT_CACHE_MANAGER is now handled properly.  
+
+Mon Nov 17 21:33:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.h:
+
+	Removed antique cache_entry_nolock() macro.  
+
+Mon Nov 17 21:32:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/object.h:
+
+	Include util/error.h even if DEBUG_REFCOUNT for debug() call.  
+
+Mon Nov 17 21:31:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/object.h:
+
+	Removed some strange suspicious include.  
+
+Mon Nov 17 21:31:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/object.h:
+
+	Whitespace trivial fix.  
+
+Mon Nov 17 21:31:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/object.h:
+
+	refcount_sanity_check() -> object_sanity_check() 
+
+Mon Nov 17 18:47:03 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Remove now needless test.  
+
+Mon Nov 17 18:45:20 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Move test for preceding spaces before the loop.  
+
+Mon Nov 17 18:43:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/object.h:
+
+	Add object.h file. Doh.  
+
+Mon Nov 17 18:40:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Show the Flags field only if we can show something inside.  
+
+Mon Nov 17 18:39:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Do not translate strings ETag and Refcount.  
+
+Mon Nov 17 18:39:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, cache/dialogs.c,
+	document/document.c, document/document.h, document/renderer.c,
+	sched/connection.c, sched/download.c, sched/session.c,
+	util/Makefile.am, viewer/text/link.c:
+
+	Generalize object refcount debugging.  
+
+Mon Nov 17 18:38:31 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/search.c:
+
+	Simplify a bit.  
+
+Mon Nov 17 18:37:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Added the 'Redirect' field.  
+
+Mon Nov 17 18:34:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Added 'ID tag' field to the debugmode area.  
+
+Mon Nov 17 18:33:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Separate the header visibly.  
+
+Mon Nov 17 18:33:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Show the newline _before_ Flags, not after.  
+
+Mon Nov 17 18:33:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Show refcount-1 in the info dialog.  
+
+Mon Nov 17 18:31:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Added 'ETag' field.  
+
+Mon Nov 17 18:29:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Moved 'Last modified' below sizes.  
+
+Mon Nov 17 18:29:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Oops, properly initialize @msg in push_info_button().  
+
+Mon Nov 17 18:28:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Show refcount and complete header in the debug mode.  
+
+Mon Nov 17 18:25:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Added Flags field, possibly getting 'incomplete' and/or 'invalid'
+	values.  
+
+Mon Nov 17 18:23:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Do not be so elaborate. It's clear.  
+
+Mon Nov 17 18:22:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Last modified time -> Last modified 
+
+Mon Nov 17 18:22:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	Added 'SSL Cipher' and 'Encoding' fields.  
+
+Mon Nov 17 18:20:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	cache_entry.data_size contains the loaded size, so show length in
+	the 'Size' field of the info msgbox instead and add another field
+	'Loaded size'.  
+
+Mon Nov 17 18:17:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/dialogs.c:
+
+	The cache entry info message composing was changed to look more like
+	loc_msg()'s. Show URI rewritten without the password and post data
+	as a side-effect.  
+
+Mon Nov 17 18:06:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Removed the default uppercase keybindings for various actions where
+	we have already bound the same lowercase keybindings to it. Do not
+	pretend case-insensitivity when we are case-sensitive anyway and
+	there is not that much keys on the keyboard. We might need them all
+	in the future ;p.  
+
+Mon Nov 17 18:03:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c:
+
+	Introduced cache-manager action, by default bound to 'C'.  
+
+Mon Nov 17 18:03:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: dialogs.c, dialogs.h:
+
+	Fix #includes. *tsk* 
+
+Mon Nov 17 18:00:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/: info.c, menu.c:
+
+	Removed now-obsolete Cache info dialog (cache_inf()).  
+
+Mon Nov 17 17:58:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: cache/Makefile.am, cache/cache.c, cache/cache.h,
+	cache/dialogs.c, cache/dialogs.h, dialogs/menu.c:
+
+	Introduced very simplistic and trivial cache manager.  
+
+Mon Nov 17 17:23:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/globhist/dialogs.c:
+
+	Includes in alphabetical order.  
+
+Mon Nov 17 17:18:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Missing ELEMENT_* thing.  
+
+Mon Nov 17 17:01:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/leds.c, sched/session.c:
+
+	Mark the led as used in register_led().  
+
+Mon Nov 17 17:00:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	Removed obsolete comment.  
+
+Mon Nov 17 16:59:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/leds.c, sched/session.c, sched/session.h:
+
+	The first led is now a SSL indicator. It shows 'S' if the current
+	document was received through a secure channel.  
+
+Mon Nov 17 14:34:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Generalize usage of end_of_tag() macro.  
+
+Mon Nov 17 14:27:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Use macros in parse_element().  
+
+Mon Nov 17 13:18:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, tables.c:
+
+	html_element.dontkill renamed to type using html_element_type enum.
+	0 -> ELEMENT_KILLABLE, 1 -> ELEMENT_DONT_KILL, 2 ->
+	ELEMENT_IMMORTAL.  
+
+Mon Nov 17 12:21:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Desperately strive to avoid infinite loops in HTML parser.  
+
+Mon Nov 17 11:11:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	Compilation fix.  
+
+Mon Nov 17 11:10:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.h:
+
+	Compilation fix. Do not include sched/session.h but instead just
+	assert existence of struct session.  
+
+Mon Nov 17 11:09:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.c:
+
+	Sync leds for each session.  
+
+Mon Nov 17 11:06:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	T now by default opens link in new tab instead of opening new tab in
+	background. This is probably more useful. Idea by Tony.  
+
+Mon Nov 17 10:58:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/leds.h:
+
+	Fixed missing trailing ;.  
+
+Mon Nov 17 10:56:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/leds.c, bfu/leds.h, sched/session.c, sched/session.h:
+
+	Make the leds localized to a session.  
+
+Mon Nov 17 10:47:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	0 | SUBMENU -> SUBMENU.  
+
+Mon Nov 17 10:34:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/leds.c, bfu/leds.h, sched/session.c:
+
+	draw_leds() now take struct session instead of struct terminal.  
+
+Mon Nov 17 06:51:13 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Mon Nov 17 02:04:21 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/session.c, viewer/dump/dump.c, viewer/text/vs.c,
+	viewer/text/vs.h:
+
+	Add the @plain parameter to init_vs(). Now ses_forward() needn't
+	save vs->plain and restore it after calling init_vs(), but need
+	merely pass vs->plain to init_vs().  
+
+Mon Nov 17 01:48:51 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	Fix two logic inversions in download_data_part() introduced in
+	src/sched/download.c:1.160->1.161.  
+
+Mon Nov 17 00:37:45 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/frames.c:
+
+	#include cache/cache.h in src/document/html/frames.c for struct
+	cache_entry and find_in_cache().  
+
+Mon Nov 17 00:33:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/frames.c:
+
+	#include document/document.h in src/document/html/frames.c for
+	document_has_frames().  
+
+Sun Nov 16 23:20:56 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	In l_current_document(), return the integer 1, not a complex number:
+	The latter is unnecessary and less portable. Seriously, fix a typo
+	introduced in src/scripting/lua/core.c:1.127->1.128.  
+
 Sun Nov 16 17:28:17 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/intl/charsets.c:

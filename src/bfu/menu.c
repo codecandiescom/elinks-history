@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.249 2004/07/19 21:01:26 zas Exp $ */
+/* $Id: menu.c,v 1.250 2004/07/19 21:16:39 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -598,19 +598,17 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		}
 
 	} else {
-		if (is_in_box(&menu->box, ev->x, ev->y)) {
-			int sel = ev->y - menu->box.y - 1 + menu->first;
+		int sel = ev->y - menu->box.y - 1 + menu->first;
 
-			if (sel >= 0 && sel < menu->size
-			    && mi_is_selectable(menu->items[sel])) {
-				menu->selected = sel;
-				scroll_menu(menu, 0, 1);
-				display_menu(win->term, menu);
+		if (sel >= 0 && sel < menu->size
+		    && mi_is_selectable(menu->items[sel])) {
+			menu->selected = sel;
+			scroll_menu(menu, 0, 1);
+			display_menu(win->term, menu);
 
-				if (check_mouse_action(ev, B_UP) ||
-				    mi_is_submenu(menu->items[sel]))
-					select_menu(win->term, menu);
-			}
+			if (check_mouse_action(ev, B_UP) ||
+			    mi_is_submenu(menu->items[sel]))
+				select_menu(win->term, menu);
 		}
 	}
 }

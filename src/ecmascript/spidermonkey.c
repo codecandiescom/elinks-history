@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.157 2004/12/25 15:11:27 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.158 2004/12/25 15:15:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 	}
 }
 
-static JSBool
+static int
 jsval_to_boolean(JSContext *ctx, jsval *vp)
 {
 	jsval val;

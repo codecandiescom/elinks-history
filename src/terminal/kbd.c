@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.110 2004/07/31 11:05:54 miciah Exp $ */
+/* $Id: kbd.c,v 1.111 2004/08/03 22:24:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -619,15 +619,6 @@ get_esc_code(unsigned char *str, int len, unsigned char *code, int *num)
 	return 0;
 }
 
-
-struct key {
-	int x, y;
-};
-
-static struct key os2xtd[256] = {
-#include "terminal/key.inc"
-};
-
 /* Define it to dump queue content in a readable form,
  * it may help to determine terminal sequences, and see what goes on. --Zas */
 /* #define DEBUG_ITRM_QUEUE */
@@ -921,13 +912,17 @@ process_queue(struct itrm *itrm)
 		}
 
 	} else if (itrm->kqueue[0] == 0) {
+		static const struct { int key, modifier; } os2xtd[256] = {
+#include "terminal/key.inc"
+		};
+
 		if (itrm->qlen < 2) goto ret;
-		ev.info.keyboard.key = os2xtd[itrm->kqueue[1]].x;
+		ev.info.keyboard.key = os2xtd[itrm->kqueue[1]].key;
 
 		if (!ev.info.keyboard.key)
 			ev.info.keyboard.key = -1;
 
-		ev.info.keyboard.modifier = os2xtd[itrm->kqueue[1]].y;
+		ev.info.keyboard.modifier = os2xtd[itrm->kqueue[1]].modifier;
 		el = 2;
 
 	} else {

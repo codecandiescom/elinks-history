@@ -578,6 +578,11 @@ cf_result="no"
 if test "$disable_openssl" = yes; then
 	cf_result="not used"
 else
+	# Rule number 6.5: do _not_ put ssl headers in yes dir ;-)
+	if test "$openssl_withval" = "yes"; then
+		openssl_withval=""
+	fi
+
 	for ssldir in "$openssl_withval" "" /usr /usr/local/openssl \
 			 /usr/lib/openssl /usr/local/ssl \
 			 /usr/local/www /usr/lib/ssl /usr/local \

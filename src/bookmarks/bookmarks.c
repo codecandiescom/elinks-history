@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.25 2002/05/19 19:34:57 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.26 2002/05/19 21:25:21 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -176,8 +176,6 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 }
 
 
-static int new_bookmarks_format = 1;
-
 /* Loads the bookmarks from file */
 void
 read_bookmarks()
@@ -205,15 +203,6 @@ read_bookmarks()
 		unsigned char *urlend;
 
 		url = strchr(in_buffer, '\t');
-		/* Compatibility hack to smoothly replace separator '|' with
-		 * '\t' */
-		/* TODO: Writing this while we're dating era of 0.4pre5-CVS.
-		 * You, people from the future, should remove this probably
-		 * around 0.7 or so.. -- pasky, zas */
-		if (!url) {
-			url = strchr(in_buffer, '|');
-			new_bookmarks_format = 0;
-		}
 
 		/* If separator is not found, or title is empty or too long,
 		 * skip that line -- Zas */
@@ -262,11 +251,10 @@ write_bookmarks()
 		int i;
 
 		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' '
-			    || (!new_bookmarks_format && p[i] == '|'))
+			if (p[i] < ' ')
 				p[i] = ' ';
 		secure_fputs(ssi, p);
-		secure_fputc(ssi, new_bookmarks_format ? '\t' : '|');
+		secure_fputc(ssi, '\t');
 		secure_fputs(ssi, bm->url);
 		secure_fputc(ssi, '\n');
 		mem_free(p);

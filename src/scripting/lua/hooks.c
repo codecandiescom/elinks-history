@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.15 2003/07/24 03:15:38 pasky Exp $ */
+/* $Id: hooks.c,v 1.16 2003/07/24 03:21:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,8 +32,8 @@ unsigned char *
 script_hook_goto_url(struct session *ses, unsigned char *url)
 {
 	lua_State *L = lua_state;
-	int err;
 	unsigned char *newurl = NULL;
+	int err;
 
 	lua_getglobal(L, "goto_url_hook");
 	if (lua_isnil(L, -1)) {
@@ -71,18 +71,17 @@ script_hook_goto_url(struct session *ses, unsigned char *url)
 }
 
 
-/*
- * follow_url:
- *
- * This function should return the URL to follow in a dynamically
- * allocated string, or NULL to not follow any URL.
- */
-
+/* Triggerred when user decided to let some document to load (followed a link,
+ * entered URL in the goto URL dialog, is loading frames from a frameset (?)
+ * or whatever). */
+/* Returns NULL if the original @url should be followed, or dynamically
+ * allocated new URL to be followed instead ("" means that no URL should be
+ * followed at all). */
 unsigned char *
 script_hook_follow_url(struct session *ses, unsigned char *url)
 {
 	lua_State *L = lua_state;
-	unsigned char *s = NULL;
+	unsigned char *new_url = NULL;
 	int err;
 
 	lua_getglobal(L, "follow_url_hook");
@@ -92,27 +91,30 @@ script_hook_follow_url(struct session *ses, unsigned char *url)
 	}
 
 	lua_pushstring(L, url);
-	if (prepare_lua(ses))
+
+	if (prepare_lua(ses)) {
 		return stracpy("");
+	}
 	err = lua_call(L, 1, 1);
 	finish_lua();
-	if (err)
+	if (err) {
 		return stracpy("");
+	}
 
 	if (lua_isstring(L, -1)) {
 		int len = lua_strlen(L, -1);
 
-		s = memacpy((unsigned char *)lua_tostring(L, -1), len);
-	}
-	else if (!lua_isnil(L, -1)) {
+		/* XXX: Why not call stracpy() ? --pasky */
+		new_url = memacpy((unsigned char *) lua_tostring(L, -1), len);
+	} else if (!lua_isnil(L, -1)) {
 		alert_lua_error("follow_url_hook must return a string or nil");
+	} else {
+		new_url = stracpy("");
 	}
-	else {
-		s = stracpy("");
-	}
+
 	lua_pop(L, 1);
 
-	return s;
+	return new_url;
 }
 
 

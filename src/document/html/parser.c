@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.50 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: parser.c,v 1.51 2002/12/04 12:14:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1304,12 +1304,7 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_attr_val(a, "action");
 	if (al) {
-		char *all = al;
-
-		while (all[0] == ' ') all++;
-		/* XXX: Optimization possible */
-		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
-		form->action = join_urls(format.href_base, all);
+		form->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
 		mem_free(al);
 	} else {
 		form->action = stracpy(format.href_base);
@@ -1339,7 +1334,9 @@ get_html_form(unsigned char *a, struct form *form)
 void
 find_form_for_input(unsigned char *i)
 {
-	unsigned char *s, *ss, *name, *attr, *lf, *la;
+	unsigned char *s, *ss, *name, *attr;
+	unsigned char *lf = NULL;
+	unsigned char *la = NULL;
 	int namelen;
 
 	if (form.action) mem_free(form.action);
@@ -1352,12 +1349,17 @@ find_form_for_input(unsigned char *i)
 		get_html_form(last_form_attr, &form);
 		return;
 	}
-	if (last_input_tag && i > last_input_tag) s = last_form_tag;
-	else s = startf;
-	lf = NULL, la = NULL;
+	if (last_input_tag && i > last_input_tag)
+		s = last_form_tag;
+	else
+		s = startf;
 
 se:
-	while (s < i && *s != '<') sp:s++;
+	while (s < i && *s != '<') {
+
+sp:
+		s++;
+	}
 	if (s >= i) goto end_parse;
 	if (s + 2 <= eofff && (s[1] == '!' || s[1] == '?')) {
 		s = skip_comment(s, i);
@@ -1372,7 +1374,7 @@ se:
 
 
 end_parse:
-	if (lf) {
+	if (lf && la) {
 		last_form_tag = lf;
 		last_form_attr = la;
 		last_input_tag = i;

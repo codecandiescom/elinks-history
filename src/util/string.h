@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.10 2002/11/27 11:45:45 zas Exp $ */
+/* $Id: string.h,v 1.11 2002/12/04 12:14:04 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -77,7 +77,7 @@ unsigned char *strcasestr(unsigned char *, unsigned char *);
 #endif
 
 unsigned char *safe_strncpy(unsigned char *, const unsigned char *, size_t);
-
+unsigned char *trim_chars(unsigned char *, unsigned char, int *);
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= 9 && (x) <= 13))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')

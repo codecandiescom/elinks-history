@@ -1,3 +1,72 @@
+Wed Jul  3 16:44:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre10 
+
+Wed Jul  3 16:32:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/config/cmdline.c, src/protocol/ftp.c,
+	src/protocol/url.c:
+
+	Compilation fixes for gcc-3.1 by <pixel@mandrakesoft.com>.  
+
+Wed Jul  3 15:08:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/danish.lng, src/intl/language.inc:
+
+	Danish translation update by Jonas.  
+
+Wed Jul  3 15:04:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/menu.c, protocol/types.c:
+
+	Fix leaking in extensions menu. Introduced new flag for free_i
+	bitmask.  
+
+Wed Jul  3 15:03:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c:
+
+	Fixed commandline options (mainly no-connect).  
+
+Wed Jul  3 12:42:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Typo fix, patch by zas.  
+
+Wed Jul  3 12:12:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c:
+
+	Ehm, typo fix ;).  
+
+Wed Jul  3 12:03:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c:
+
+	OOPS! We twice tried to load global config file, and never 
+	~/.elinks/elinks.conf ;).  
+
+Wed Jul  3 12:02:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/conf.c, lua/core.c:
+
+	Insert slash after CONFDIR.  
+
+Wed Jul  3 11:29:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/conv/conf-links2elinks.awk:
+
+	More of that ;).  
+
+Wed Jul  3 11:28:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/conv/conf-links2elinks.awk:
+
+	Refer to conf-links2elinks.awk instead of links_to_elinks.awk.  
+
 Tue Jul  2 22:39:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

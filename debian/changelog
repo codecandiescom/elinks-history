@@ -1,5 +1,6 @@
-elinks (0.11.0-0) unstable; urgency=low
+elinks (0.11.CVS-1.1) unstable; urgency=low
 
+  * NMU
   * Only remove CVS files from packaging directory
   * Install elinks.conf from contrib/
   * Install documentation files about using ELinks from doc/
@@ -8,7 +9,7 @@ elinks (0.11.0-0) unstable; urgency=low
   * Support for DEB_BUILD_OPTIONS
   * Update and cleanup debian/rules
   * Pass -force-html in the debian/mime mailcap entries so problems with
-    viewing files without an extension is fixed
+    viewing files without an extension are fixed
   * Many problems related to mangleme tools fixed (closes: #277283)
   * Documentation updates (closes: #215619)
   * Fix IPv6 URI parsing (closes: #173378)
@@ -24,8 +25,9 @@ elinks (0.11.0-0) unstable; urgency=low
   * Fix handling of id names in preformatted content (closes: #219331)
   * Fix assertion failure when searching in empty documents (closes: #238281)
   * Remove www-browser alternative, thanks Andreas Metzler (closes: #247495)
+  * Fix uncompressing of .gz files on download (closes: #221207)
 
- -- Jonas Fonseca <fonseca@diku.dk>  Tue, 11 Jan 2005 18:06:35 +0100
+ -- Jonas Fonseca <fonseca@diku.dk>  Tue, 11 Jan 2005 19:29:31 +0100
 
 elinks (0.9.3-1) unstable; urgency=low
 

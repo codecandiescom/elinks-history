@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.114 2004/06/18 14:20:34 jonas Exp $ */
+/* $Id: textarea.c,v 1.115 2004/06/18 14:27:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,17 +70,18 @@ format_text(unsigned char *text, int width, enum form_wrap wrap, int format)
 			skip = 0;
 
 			/* Find a place to wrap the text */
+			/* FIXME: Use memrchr(&text[begin], ' ', pos) when stub
+			 * is added. */
 			for (s = pos; s >= begin; s--) {
-				if (text[s] == ' ') {
-					/* When formatting text for form
-					 * submitting we have to apply the
-					 * wrapping mode. */
-					if (wrap == FORM_WRAP_HARD && format)
-						text[s] = '\n';
-					pos = s;
-					skip = 1;
-					break;
-				}
+				if (text[s] != ' ') continue;
+
+				/* When formatting text for form submitting we
+				 * have to apply the wrapping mode. */
+				if (wrap == FORM_WRAP_HARD && format)
+					text[s] = '\n';
+				pos = s;
+				skip = 1;
+				break;
 			}
 		}
 

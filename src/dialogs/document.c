@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.37 2003/06/04 10:06:03 zas Exp $ */
+/* $Id: document.c,v 1.38 2003/06/07 10:56:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,12 +273,12 @@ head_msg(struct session *ses)
 
 
 			if (*headers)
-			/* Headers info message box. */
+				/* Headers info message box. */
 				msg_box(ses->tab->term, getml(headers, NULL),
-				N_("Header info"), AL_LEFT,
-				headers,
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+					N_("Header info"), AL_LEFT,
+					headers,
+					NULL, 1,
+					N_("OK"), NULL, B_ENTER | B_ESC);
 
 			return;
 		}

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.74 2003/06/07 01:45:54 jonas Exp $ */
+/* $Id: dialogs.c,v 1.75 2003/06/07 10:56:17 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -267,19 +267,19 @@ do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
 		msg_box(term, NULL,
 			N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
 			msg_text(N_("Sorry, but this bookmark is already being"
-			" used by something right now.\n\n"
-			"Title: \"%s\""),
-			bookmark->title),
+				" used by something right now.\n\n"
+				"Title: \"%s\""),
+				bookmark->title),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		else
 		msg_box(term, NULL,
 			N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
 			msg_text(N_("Sorry, but this bookmark is already being"
-			" used by something right now.\n\n"
-			"Title: \"%s\"\n"
-			"URL: \"%s\""),
-			bookmark->title, bookmark->url),
+				" used by something right now.\n\n"
+				"Title: \"%s\"\n"
+				"URL: \"%s\""),
+				bookmark->title, bookmark->url),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ENTER | B_ESC);
 		return;
@@ -416,8 +416,7 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	else if (bm->box_item->type == BI_FOLDER)
 	msg_box(term, getml(hop, NULL),
 		N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
-		msg_text(N_("Delete folder content \"%s\" ?"),
-		bm->title),
+		msg_text(N_("Delete folder content \"%s\" ?"), bm->title),
 		hop, 2,
 		N_("Yes"), really_del_bookmark, B_ENTER,
 		N_("No"), cancel_del_bookmark, B_ESC);
@@ -425,8 +424,8 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	msg_box(term, getml(hop, NULL),
 		N_("Delete bookmark"), AL_CENTER | AL_EXTD_TEXT,
 		msg_text(N_("Delete bookmark \"%s\" ?\n\n"
-		"URL: \"%s\""),
-		bm->title, bm->url),
+			"URL: \"%s\""),
+			bm->title, bm->url),
 		hop, 2,
 		N_("Yes"), really_del_bookmark, B_ENTER,
 		N_("No"), cancel_del_bookmark, B_ESC);

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.47 2003/06/07 03:13:35 jonas Exp $ */
+/* $Id: info.c,v 1.48 2003/06/07 10:56:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,16 +107,17 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 	msg_box(term, NULL,
 		N_("Resources"), AL_LEFT | AL_EXTD_TEXT,
 		msg_text(N_("Resources: %d handles, %d timers.\n"
-		"Connections: %d connections, %d connecting, %d transferring,"
-		" %d keepalive.\n"
-		"Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
-		"Formatted document cache: %d documents, %d locked."),
-		select_info(CI_FILES), select_info(CI_TIMERS),
-		connect_info(CI_FILES), connect_info(CI_CONNECTING),
-		connect_info(CI_TRANSFER), connect_info(CI_KEEP),
-		cache_info(CI_BYTES), cache_info(CI_FILES),
-		cache_info(CI_LOCKED), cache_info(CI_LOADING),
-		formatted_info(CI_FILES), formatted_info(CI_LOCKED)),
+			"Connections: %d connections, %d connecting, %d "
+			"transferring, %d keepalive.\n"
+			"Memory cache: %d bytes, %d files, %d locked, %d "
+			"loading.\n"
+			"Formatted document cache: %d documents, %d locked."),
+			select_info(CI_FILES), select_info(CI_TIMERS),
+			connect_info(CI_FILES), connect_info(CI_CONNECTING),
+			connect_info(CI_TRANSFER), connect_info(CI_KEEP),
+			cache_info(CI_BYTES), cache_info(CI_FILES),
+			cache_info(CI_LOCKED), cache_info(CI_LOADING),
+			formatted_info(CI_FILES), formatted_info(CI_LOCKED)),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

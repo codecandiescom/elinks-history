@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.23 2003/06/07 01:45:55 jonas Exp $ */
+/* $Id: dialogs.c,v 1.24 2003/06/07 10:56:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,10 +232,10 @@ do_delete_global_history_item(struct terminal *term,
 		msg_box(term, NULL,
 			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
 			msg_text(N_("Sorry, but this history entry is already "
-			"being used by something right now.\n\n"
-			"Title: \"%s\"\n"
-			"URL: \"%s\"\n"),
-			historyitem->title, historyitem->url),
+				"being used by something right now.\n\n"
+				"Title: \"%s\"\n"
+				"URL: \"%s\"\n"),
+				historyitem->title, historyitem->url),
  			NULL, 1,
  			N_("Cancel"), NULL, B_ENTER | B_ESC);
  		return;
@@ -327,8 +327,8 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 		msg_box(term, getml(ctx, NULL),
 			N_("Delete history item"), AL_CENTER | AL_EXTD_TEXT,
 			msg_text(N_("Delete history item \"%s\" ?\n\n"
-			"URL: \"%s\""),
-			historyitem->title, historyitem->url),
+				"URL: \"%s\""),
+				historyitem->title, historyitem->url),
 			ctx, 2,
 			N_("Yes"), really_delete_global_history_item, B_ENTER,
 			N_("No"), cancel_delete_globhist_item, B_ESC);
@@ -410,9 +410,10 @@ push_info_button(struct dialog_data *dlg,
 	msg_box(term, NULL,
 		N_("Info"), AL_LEFT | AL_EXTD_TEXT,
 		msg_text(N_("Title: %s\n"
-		"URL: %s\n"
-		"Last visit time: %s"), historyitem->title,
-		historyitem->url, ctime(&historyitem->last_visit)),
+			"URL: %s\n"
+			"Last visit time: %s"),
+			historyitem->title, historyitem->url,
+			ctime(&historyitem->last_visit)),
 		historyitem, 1,
 		N_("OK"), done_info_button, B_ESC | B_ENTER);
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.44 2003/06/07 08:47:49 zas Exp $ */
+/* $Id: dialogs.c,v 1.45 2003/06/07 10:56:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,9 +37,8 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 {
 	msg_box(term, ml,
 		N_("Config error"), AL_CENTER | AL_EXTD_TEXT,
-		msg_text(N_("Unable to write to config file\n"
-		"%s: %s"),
-		config_file, strerr),
+		msg_text(N_("Unable to write to config file %s: %s"),
+			config_file, strerr),
 		NULL, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }
@@ -119,21 +118,21 @@ push_info_button(struct dialog_data *dlg,
 		msg_box(term, getml(value, NULL),
 			N_("Info"), AL_LEFT | AL_EXTD_TEXT,
 			msg_text(N_("Name: %s\n"
-			"Type: %s\n"
-			"Value: %s\n\n"
-			"Description: %s\n"),
-			option->name, option_types[option->type].name, value,
-			option->desc),
+				"Type: %s\n"
+				"Value: %s\n\n"
+				"Description: %s\n"),
+				option->name, option_types[option->type].name,
+				value, option->desc),
 			option, 1,
 			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	} else {
 		msg_box(term, NULL,
 			N_("Info"), AL_LEFT | AL_EXTD_TEXT,
 			msg_text(N_("Name: %s\n"
-			"Type: %s\n"
-			"Description: %s\n"),
-			option->name, option_types[option->type].name,
-			option->desc),
+				"Type: %s\n"
+				"Description: %s\n"),
+				option->name, option_types[option->type].name,
+				option->desc),
 			option, 1,
 			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	}
@@ -730,9 +729,9 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 	msg_box(term, NULL,
 		N_("Delete keybinding"), AL_CENTER | AL_EXTD_TEXT,
 		msg_text(N_("Really delete the keybinding \"%s\" "
-		"(action \"%s\", keymap \"%s\")?"),
-		box->sel->text, write_action(keybinding->action),
-		write_keymap(keybinding->keymap)),
+			"(action \"%s\", keymap \"%s\")?"),
+			box->sel->text, write_action(keybinding->action),
+			write_keymap(keybinding->keymap)),
 		keybinding, 2,
 		N_("OK"), really_delete_keybinding, B_ENTER,
 		N_("Cancel"), NULL, B_ESC);

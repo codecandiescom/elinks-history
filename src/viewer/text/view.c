@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.87 2003/06/07 01:45:55 jonas Exp $ */
+/* $Id: view.c,v 1.88 2003/06/07 10:56:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2508,8 +2508,8 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 	msg_box(ses->tab->term, NULL,
 		N_("Search"), AL_CENTER | AL_EXTD_TEXT,
 		msg_text(N_("'%s'\n"
-		"Search string not found"),
-		ses->search_word),
+			"Search string not found"),
+			ses->search_word),
 		ses, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.162 2002/12/19 12:17:26 pasky Exp $ */
+/* $Id: options.c,v 1.163 2002/12/20 23:11:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -706,6 +706,13 @@ change_hook_html(struct session *ses, struct option *current, struct option *cha
 	load_frames(ses, ses->screen);
 	process_file_requests(ses);
 	print_screen_status(ses);
+	return 0;
+}
+
+static int
+change_hook_terminal(struct session *ses, struct option *current, struct option *changed)
+{
+	cls_redraw_all_terminals();
 	return 0;
 }
 
@@ -1441,6 +1448,7 @@ register_options()
 	add_opt_tree("", "Terminals",
 		"terminal", OPT_AUTOCREATE,
 		"Terminal options.");
+	get_opt_rec(&root_options, "terminal")->change_hook = change_hook_terminal;
 
 	add_opt_tree("terminal", NULL,
 		"_template_", 0,

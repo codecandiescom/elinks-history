@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.23 2002/12/08 20:30:32 pasky Exp $ */
+/* $Id: dialog.c,v 1.24 2002/12/20 23:11:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,22 +299,30 @@ cancel_dialog(struct dialog_data *dlg, struct widget_data *di)
 }
 
 int
-ok_dialog(struct dialog_data *dlg, struct widget_data *di)
+update_dialog_data(struct dialog_data *dlg, struct widget_data *di)
 {
 	int i;
-	void (*fn)(void *) = dlg->dlg->refresh;
-	void *data = dlg->dlg->refresh_data;
-
-	if (check_dialog(dlg)) return 1;
 
 	for (i = 0; i < dlg->n; i++)
 		memcpy(dlg->dlg->items[i].data,
 		       dlg->items[i].cdata,
 		       dlg->dlg->items[i].dlen);
 
+	return 0;
+}
+
+int
+ok_dialog(struct dialog_data *dlg, struct widget_data *di)
+{
+	void (*fn)(void *) = dlg->dlg->refresh;
+	void *data = dlg->dlg->refresh_data;
+
+	if (check_dialog(dlg)) return 1;
+
+	update_dialog_data(dlg, di);
+
 	if (fn) fn(data);
-	i = cancel_dialog(dlg, di);
-	return i;
+	return cancel_dialog(dlg, di);
 }
 
 /* FIXME? Added to clear fields in bookmarks dialogs, may be broken if used

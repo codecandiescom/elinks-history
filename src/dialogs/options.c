@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.44 2002/12/11 22:05:06 pasky Exp $ */
+/* $Id: options.c,v 1.45 2002/12/20 23:11:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,12 +12,14 @@
 #include "elinks.h"
 
 #include "bfu/align.h"
-#include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/checkbox.h"
+#include "bfu/dialog.h"
 #include "bfu/group.h"
 #include "bfu/inpfield.h"
 #include "bfu/menu.h"
+#include "bfu/text.h"
+#include "config/conf.h"
 #include "config/options.h"
 #include "dialogs/options.h"
 #include "document/session.h"
@@ -60,13 +62,48 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 }
 
 
-/* TODO: Build this automagically. But that will need "captions" for options
- * not to lose translations and so on. 0.5 stuff or even later. --pasky */
+/* TODO: Build this automagically. But that will need gettextted options
+ * captions not to lose translations and so on. 0.5 stuff or even later.
+ * --pasky */
+
+struct termopt_hop {
+	struct terminal *term;
+	int type, m11_hack, restrict_852, block_cursor, colors, utf_8_io;
+};
 
 static void
 terminal_options_ok(void *p)
 {
+	struct termopt_hop *termopt_hop = p;
+
+#define maybe_update(val, name) \
+{ \
+	struct option *o = get_opt_rec(termopt_hop->term->spec, name); \
+	if (*((int *) o->ptr) != val) { \
+		*((int *) o->ptr) = val; \
+		o->flags |= OPT_TOUCHED; \
+	} \
+}
+	maybe_update(termopt_hop->type, "type");
+	maybe_update(termopt_hop->m11_hack, "m11_hack");
+	maybe_update(termopt_hop->restrict_852, "restrict_852");
+	maybe_update(termopt_hop->block_cursor, "block_cursor");
+	maybe_update(termopt_hop->colors, "colors");
+	maybe_update(termopt_hop->utf_8_io, "utf_8_io");
+#undef maybe_update
+
 	cls_redraw_all_terminals();
+}
+
+static int
+terminal_options_save(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	update_dialog_data(dlg, some_useless_info_button);
+	terminal_options_ok(dlg->dlg->udata);
+	if (!get_opt_int_tree(&cmdline_options, "anonymous"))
+	        write_config(dlg->win->term);
+        return 0;
 }
 
 static unsigned char *td_labels[] = {
@@ -82,68 +119,129 @@ static unsigned char *td_labels[] = {
 	NULL
 };
 
+/* Stolen checkbox_list_fn(). Code duplication forever. */
+static void
+terminal_options_fn(struct dialog_data *dlg)
+{
+	struct terminal *term = dlg->win->term;
+	int max = 0, min = 0;
+	int w, rw;
+	int y = 0;
+
+	checkboxes_width(term, td_labels, &max, max_text_width);
+	checkboxes_width(term, td_labels, &min, min_text_width);
+	max_buttons_width(term, dlg->items + dlg->n - 3, 3, &max);
+	min_buttons_width(term, dlg->items + dlg->n - 3, 3, &min);
+
+	w = term->x * 9 / 10 - 2 * DIALOG_LB;
+	if (w > max) w = max;
+	if (w < min) w = min;
+	if (w > term->x - 2 * DIALOG_LB) w = term->x - 2 * DIALOG_LB;
+	if (w < 5) w = 5;
+
+	rw = 0;
+	dlg_format_checkboxes(NULL, term, dlg->items, dlg->n - 3, 0, &y, w,
+			&rw, td_labels);
+
+	y++;
+	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 3, 3, 0, &y, w,
+			&rw, AL_CENTER);
+
+	w = rw;
+	dlg->xw = rw + 2 * DIALOG_LB;
+	dlg->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg);
+
+	draw_dlg(dlg);
+
+	y = dlg->y + DIALOG_TB + 1;
+	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 3,
+			dlg->x + DIALOG_LB, &y, w, NULL,
+			td_labels);
+
+	y++;
+	dlg_format_buttons(term, term, dlg->items + dlg->n - 3, 3,
+			dlg->x + DIALOG_LB, &y, w, &rw,
+			AL_CENTER);
+}
+
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
+	struct termopt_hop *termopt_hop;
 	struct dialog *d;
-	void *opt_term_type = (void *) get_opt_ptr_tree(term->spec, "type");
 
-	d = mem_calloc(1, sizeof(struct dialog) + 12 * sizeof(struct widget));
-	if (!d) return;
+	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
+	if (!termopt_hop) return;
+
+	d = mem_calloc(1, sizeof(struct dialog) + 13 * sizeof(struct widget));
+	if (!d) {
+		mem_free(termopt_hop);
+		return;
+	}
+
+	termopt_hop->term = term;
+	termopt_hop->type = get_opt_int_tree(term->spec, "type");
+	termopt_hop->m11_hack = get_opt_int_tree(term->spec, "m11_hack");
+	termopt_hop->restrict_852 = get_opt_int_tree(term->spec, "restrict_852");
+	termopt_hop->block_cursor = get_opt_int_tree(term->spec, "block_cursor");
+	termopt_hop->colors = get_opt_int_tree(term->spec, "colors");
+	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
 	d->title = TEXT(T_TERMINAL_OPTIONS);
-	d->fn = checkbox_list_fn;
-	d->udata = td_labels;
+	d->fn = terminal_options_fn;
+	d->udata = termopt_hop;
 	d->refresh = (void (*)(void *)) terminal_options_ok;
+	d->refresh_data = termopt_hop;
 
 	d->items[0].type = D_CHECKBOX;
 	d->items[0].gid = 1;
 	d->items[0].gnum = TERM_DUMB;
 	d->items[0].dlen = sizeof(int);
-	d->items[0].data = opt_term_type;
+	d->items[0].data = (unsigned char *) &termopt_hop->type;
 
 	d->items[1].type = D_CHECKBOX;
 	d->items[1].gid = 1;
 	d->items[1].gnum = TERM_VT100;
 	d->items[1].dlen = sizeof(int);
-	d->items[1].data = opt_term_type;
+	d->items[1].data = (unsigned char *) &termopt_hop->type;
 
 	d->items[2].type = D_CHECKBOX;
 	d->items[2].gid = 1;
 	d->items[2].gnum = TERM_LINUX;
 	d->items[2].dlen = sizeof(int);
-	d->items[2].data = opt_term_type;
+	d->items[2].data = (unsigned char *) &termopt_hop->type;
 
 	d->items[3].type = D_CHECKBOX;
 	d->items[3].gid = 1;
 	d->items[3].gnum = TERM_KOI8;
 	d->items[3].dlen = sizeof(int);
-	d->items[3].data = opt_term_type;
+	d->items[3].data = (unsigned char *) &termopt_hop->type;
 
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 0;
 	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (void *) get_opt_ptr_tree(term->spec, "m11_hack");
+	d->items[4].data = (unsigned char *) &termopt_hop->m11_hack;
 
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 0;
 	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (void *) get_opt_ptr_tree(term->spec, "restrict_852");
+	d->items[5].data = (unsigned char *) &termopt_hop->restrict_852;
 
 	d->items[6].type = D_CHECKBOX;
 	d->items[6].gid = 0;
 	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (void *) get_opt_ptr_tree(term->spec, "block_cursor");
+	d->items[6].data = (unsigned char *) &termopt_hop->block_cursor;
 
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 0;
 	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (void *) get_opt_ptr_tree(term->spec, "colors");
+	d->items[7].data = (unsigned char *) &termopt_hop->colors;
 
 	d->items[8].type = D_CHECKBOX;
 	d->items[8].gid = 0;
 	d->items[8].dlen = sizeof(int);
-	d->items[8].data = (void *) get_opt_ptr_tree(term->spec, "utf_8_io");
+	d->items[8].data = (unsigned char *) &termopt_hop->utf_8_io;
 
 	d->items[9].type = D_BUTTON;
 	d->items[9].gid = B_ENTER;
@@ -151,13 +249,18 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[9].text = TEXT(T_OK);
 
 	d->items[10].type = D_BUTTON;
-	d->items[10].gid = B_ESC;
-	d->items[10].fn = cancel_dialog;
-	d->items[10].text = TEXT(T_CANCEL);
+	d->items[10].gid = B_ENTER;
+	d->items[10].fn = terminal_options_save;
+	d->items[10].text = TEXT(T_SAVE);
 
-	d->items[11].type = D_END;
+	d->items[11].type = D_BUTTON;
+	d->items[11].gid = B_ESC;
+	d->items[11].fn = cancel_dialog;
+	d->items[11].text = TEXT(T_CANCEL);
 
-	do_dialog(term, d, getml(d, NULL));
+	d->items[12].type = D_END;
+
+	do_dialog(term, d, getml(d, termopt_hop, NULL));
 }
 
 

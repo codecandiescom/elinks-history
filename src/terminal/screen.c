@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.135 2004/04/30 12:44:31 zas Exp $ */
+/* $Id: screen.c,v 1.136 2004/04/30 13:18:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,24 +555,25 @@ add_char256(struct string *screen, struct screen_driver *driver,
 }
 #endif
 
-/* FIXME: static inline this. Long macros are a pain to edit. --Zas */
 #define add_chars(image_, term_, driver_, state_, ADD_CHAR)			\
 {										\
-	register int y = (term_)->screen->dirty_from;				\
+	struct terminal_screen *screen = (term_)->screen;			\
+	register int y = screen->dirty_from;					\
 	int ypos = y * (term_)->width;						\
-	register struct screen_char *current = &(term_)->screen->last_image[ypos]; \
-	register struct screen_char *pos = &(term_)->screen->image[ypos];	\
-	register struct screen_char *prev_pos = NULL;				\
 	int prev_y = -1;							\
+	int xmax = (term_)->width - 1;						\
+	int ymax = (term_)->height - 1;						\
+	register struct screen_char *current = &screen->last_image[ypos];	\
+	register struct screen_char *pos = &screen->image[ypos];		\
+	register struct screen_char *prev_pos = NULL; /* XXX: check that */	\
 										\
-	if ((term_)->screen->dirty_to >= (term_)->height)			\
-		(term_)->screen->dirty_to = (term_)->height - 1;		\
+	int_upper_bound(&screen->dirty_to, ymax);				\
 										\
-	for (; y <= (term_)->screen->dirty_to; y++) {				\
+	for (; y <= screen->dirty_to; y++) {					\
+		int is_last_line = (y == ymax);					\
 		register int x = 0;						\
-		int is_last_line = (y == (term_)->height - 1);			\
 										\
-		for (; x < (term_)->width; x++, current++, pos++) {		\
+		for (; x <= xmax; x++, current++, pos++) {			\
 			/*  Workaround for terminals without
 			 *  "eat_newline_glitch (xn)", e.g., the cons25 family
 			 *  of terminals and cygwin terminal.
@@ -582,7 +583,7 @@ add_char256(struct string *screen, struct screen_driver *driver,
 			 *  terminal type, and/or add a terminal option for
 			 *  this purpose. */					\
 										\
-			if (is_last_line && x == (term_)->width - 1)		\
+			if (is_last_line && x == xmax)				\
 				break;						\
 										\
 			if (compare_bg_color(pos->color, current->color)) {	\
@@ -606,7 +607,7 @@ add_char256(struct string *screen, struct screen_driver *driver,
 				prev_pos = pos;					\
 				prev_y = y;					\
 			}							\
-										\
+				 						\
 			for (; prev_pos <= pos ; prev_pos++)			\
 				ADD_CHAR(image_, driver_, prev_pos, state_);	\
 		}								\

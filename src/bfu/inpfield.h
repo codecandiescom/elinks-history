@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.32 2004/02/08 20:29:16 jonas Exp $ */
+/* $Id: inpfield.h,v 1.33 2004/06/11 10:13:10 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -13,17 +13,16 @@ struct session;
 struct terminal;
 
 #define add_dlg_field_do(dlg, t, label, min_, max_, handler, datalen_, data_, hist)	\
-	do {								\
-		int n = (dlg)->widgets_size;				\
-		(dlg)->widgets[n].type = (t);				\
-		(dlg)->widgets[n].text = (label);			\
-		(dlg)->widgets[n].info.field.min = (min_);		\
-		(dlg)->widgets[n].info.field.max = (max_);		\
-		(dlg)->widgets[n].fn = (handler);			\
-		(dlg)->widgets[n].datalen = (datalen_);			\
-		(dlg)->widgets[n].data = (data_);			\
-		(dlg)->widgets[n].info.field.history = (hist);		\
-		(dlg)->widgets_size++;					\
+	do {										\
+		struct widget *widget = &(dlg)->widgets[(dlg)->widgets_size++];		\
+		widget->type = (t);							\
+		widget->text = (label);							\
+		widget->info.field.min = (min_);					\
+		widget->info.field.max = (max_);					\
+		widget->fn = (handler);							\
+		widget->datalen = (datalen_);						\
+		widget->data = (data_);							\
+		widget->info.field.history = (hist);					\
 	} while (0)
 
 #define add_dlg_field(dlg, label, min, max, handler, len, field, history)	\

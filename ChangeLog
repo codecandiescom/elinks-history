@@ -1,3 +1,16 @@
+Wed Mar  6 17:34:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+	
+	stupid CVS - credit for <kisto@go2.pl> and his justify
+
+Wed Mar  6 17:33:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html_r.c, html_tbl.c, links.h:
+	
+	Support for align=justify, original patch by <kisto@go2.pl>, some
+	variable names expanded by me. Minor html renderer cleanup.
+
 Wed Mar  6 12:54:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, session.c, setup.h:

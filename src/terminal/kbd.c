@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.60 2004/05/24 18:18:45 jonas Exp $ */
+/* $Id: kbd.c,v 1.61 2004/05/25 22:56:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,16 +21,16 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "lowlevel/select.h"
 #include "intl/gettext/libintl.h"
+#include "lowlevel/select.h"
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "terminal/hardio.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
-#include "util/string.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 
 #define OUT_BUF_SIZE	16384

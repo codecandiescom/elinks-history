@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.214 2003/08/23 18:01:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.215 2003/08/23 18:18:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1714,9 +1714,7 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	add_to_list(format_cache, document);
 
 	document_view->document = document;
-	document->time_to_get = -get_time();
 	format_html(cache_entry, document);
-	document->time_to_get += get_time();
 
 sx:
 	document_view->xw = document->opt.xw;

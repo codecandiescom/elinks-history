@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.9 2003/08/23 17:34:10 jonas Exp $ */
+/* $Id: frames.h,v 1.10 2003/08/23 18:18:09 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -67,7 +67,6 @@ struct document {
 	struct search **slines1;
 	struct search **slines2;
 
-	ttime time_to_get;
 	unsigned int use_tag;
 
 	int refcount;

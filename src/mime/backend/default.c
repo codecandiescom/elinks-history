@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.22 2003/10/22 19:24:46 jonas Exp $ */
+/* $Id: default.c,v 1.23 2003/10/25 19:17:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,11 +148,15 @@ get_mime_handler_default(unsigned char *type, int have_x)
 }
 
 
-/* Setup the exported backend */
 struct mime_backend default_mime_backend = {
-	/* name: */		BACKEND_NAME,
-	/* init: */		NULL,
-	/* done: */		NULL,
 	/* get_content_type: */	get_content_type_default,
 	/* get_mime_handler: */	get_mime_handler_default,
 };
+
+struct module default_mime_module = INIT_MODULE(
+	/* name: */		BACKEND_NAME,
+	/* options: */		NULL,
+	/* submodules: */	NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);

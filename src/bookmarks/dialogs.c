@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.149 2004/01/02 17:51:23 jonas Exp $ */
+/* $Id: dialogs.c,v 1.150 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -388,7 +388,6 @@ struct_hierbox_browser(
 	bookmark_browser,
 	N_("Bookmark manager"),
 	bookmark_buttons,
-	&bookmark_box_items,
 	&bookmarks_listbox_ops
 );
 

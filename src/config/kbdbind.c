@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.144 2004/01/02 17:53:20 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.145 2004/01/02 18:37:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,6 @@
 
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
-
-INIT_LIST_HEAD(kbdbind_box_items);
 
 static struct listbox_item *keyact_box_items[KEYACTS];
 static struct list_head keymaps[KM_MAX];
@@ -528,7 +526,7 @@ init_action_listboxes(void)
 		keyact_box_items[act->num] = box_item =
 			mem_calloc(1, sizeof(struct listbox_item));
 		if (!box_item) continue;
-		add_to_list_end(kbdbind_box_items, box_item);
+		add_to_list_end(keybinding_browser.root.child, box_item);
 		box_item->root = NULL;
 		init_list(box_item->child);
 		box_item->visible = (act->num != ACT_SCRIPTING_FUNCTION); /* XXX */
@@ -563,7 +561,7 @@ free_action_listboxes(void)
 {
 	struct listbox_item *action;
 
-	foreach (action, kbdbind_box_items) {
+	foreach (action, keybinding_browser.root.child) {
 		struct listbox_item *keymap;
 
 		foreach (keymap, action->child) {
@@ -571,7 +569,7 @@ free_action_listboxes(void)
 		}
 		free_list(action->child);
 	}
-	free_list(kbdbind_box_items);
+	free_list(keybinding_browser.root.child);
 }
 
 
@@ -585,7 +583,7 @@ toggle_display_action_listboxes(void)
 	state = !state;
 	toggle = state ? numtodesc : numtostr;
 
-	foreach (action, kbdbind_box_items) {
+	foreach (action, keybinding_browser.root.child) {
 		struct listbox_item *keymap;
 
 		action->text = toggle(action_table, (int) action->udata);

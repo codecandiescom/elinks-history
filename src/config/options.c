@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.427 2004/01/01 18:21:55 zas Exp $ */
+/* $Id: options.c,v 1.428 2004/01/02 18:37:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -551,8 +551,9 @@ init_options(void)
 	register_options(cmdline_options_info, cmdline_options);
 
 	config_options = add_opt_tree_tree(&options_root, "", "",
-					 "config", OPT_LISTBOX | OPT_SORT, "");
-	config_options->box_item->visible = 0;
+					 "config", OPT_SORT, "");
+	config_options->flags |= OPT_LISTBOX;
+	config_options->box_item = &option_browser.root;
 	register_options(config_options_info, config_options);
 
 	register_autocreated_options();
@@ -571,6 +572,7 @@ done_options(void)
 {
 	unregister_options(config_options_info, config_options);
 	unregister_options(cmdline_options_info, cmdline_options);
+	config_options->box_item = NULL;
 	free_options_tree(&options_root_tree, 0);
 }
 

@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.29 2004/01/01 14:24:08 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.30 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -33,7 +33,6 @@ struct bookmark {
 /* Bookmark lists */
 
 extern struct list_head bookmarks; /* struct bookmark */
-extern struct list_head bookmark_box_items; /* struct listbox_item */
 
 extern int bookmarks_dirty;
 

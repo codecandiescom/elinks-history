@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.106 2004/01/01 14:47:33 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.107 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,6 @@
 
 /* The list of bookmarks */
 INIT_LIST_HEAD(bookmarks);
-INIT_LIST_HEAD(bookmark_box_items);
 
 /* Set to 1, if bookmarks have changed. */
 int bookmarks_dirty = 0;
@@ -92,7 +91,7 @@ static void
 done_bookmarks(struct module *module)
 {
 	write_bookmarks();
-	free_bookmarks(&bookmarks, &bookmark_box_items);
+	free_bookmarks(&bookmarks, &bookmark_browser.root.child);
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 }
@@ -262,13 +261,13 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 			add_to_list_end(root->box_item->child,
 					bm->box_item);
 		else
-			add_to_list_end(bookmark_box_items,
+			add_to_list_end(bookmark_browser.root.child,
 					bm->box_item);
 	} else {
 		if (root)
 			add_to_list(root->box_item->child, bm->box_item);
 		else
-			add_to_list(bookmark_box_items, bm->box_item);
+			add_to_list(bookmark_browser.root.child, bm->box_item);
 	}
 
 	return bm;

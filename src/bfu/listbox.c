@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.135 2004/01/01 15:54:37 jonas Exp $ */
+/* $Id: listbox.c,v 1.136 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -490,7 +490,7 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	/* Try to restore the position from last time */
 	memcpy(box, &browser->box_data, sizeof(struct listbox_data));
 	if (box->items) {
-		traverse_listbox_items_list(browser->items->next, box, 0, 0,
+		traverse_listbox_items_list(browser->root.child.next, box, 0, 0,
 					    check_old_state, box);
 
 		box->sel = (!box->sel) ? browser->box_data.sel : NULL;
@@ -500,7 +500,7 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 
 	box->ops = browser->ops;
-	box->items = browser->items;
+	box->items = &browser->root.child;
 
 	add_to_list(browser->boxes, box);
 }

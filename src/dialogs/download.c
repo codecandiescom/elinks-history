@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.31 2004/01/02 17:51:25 jonas Exp $ */
+/* $Id: download.c,v 1.32 2004/01/02 18:37:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,8 +408,6 @@ push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 }
 
 
-static INIT_LIST_HEAD(download_box_items);
-
 /* TODO: Ideas for buttons .. should be pretty trivial most of it
  *
  * - Resume or something that will use some goto like handler
@@ -430,7 +428,6 @@ struct_hierbox_browser(
 	download_browser,
 	N_("Download manager"),
 	download_buttons,
-	&download_box_items,
 	&downloads_listbox_ops
 );
 

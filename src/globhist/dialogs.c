@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.102 2004/01/02 17:51:25 jonas Exp $ */
+/* $Id: dialogs.c,v 1.103 2004/01/02 18:37:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,11 +97,11 @@ static struct listbox_ops gh_listbox_ops = {
 static void
 history_search_do(struct dialog *dlg)
 {
-	struct listbox_item *item = gh_box_items.next;
+	struct listbox_item *item = globhist_browser.root.child.next;
 	struct listbox_data *box;
 
 	if (!globhist_simple_search(dlg->widgets[1].data, dlg->widgets[0].data)) return;
-	if (list_empty(gh_box_items)) return;
+	if (list_empty(globhist_browser.root.child)) return;
 
 	/* Shouldn't we rather do this only for the specific listbox_data box
 	 * in dlg->widget->data so only the current dialog is updated? --jonas */
@@ -196,7 +196,6 @@ struct_hierbox_browser(
 	globhist_browser,
 	N_("Global history manager"),
 	globhist_buttons,
-	&gh_box_items,
 	&gh_listbox_ops
 );
 

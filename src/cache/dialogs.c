@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.43 2004/01/02 17:51:24 jonas Exp $ */
+/* $Id: dialogs.c,v 1.44 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,6 @@ struct_hierbox_browser(
 	cache_browser,
 	N_("Cache manager"),
 	cache_buttons,
-	&cache_entry_box_items,
 	&cache_entry_listbox_ops
 );
 

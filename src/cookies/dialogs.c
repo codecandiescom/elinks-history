@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.29 2004/01/02 17:51:24 jonas Exp $ */
+/* $Id: dialogs.c,v 1.30 2004/01/02 18:37:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,8 +125,6 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 	return 0;
 }
 
-static INIT_LIST_HEAD(cookie_box_items);
-
 static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
@@ -138,7 +136,6 @@ struct_hierbox_browser(
 	cookie_browser,
 	N_("Cookie manager"),
 	cookie_buttons,
-	&cookie_box_items,
 	&cookies_listbox_ops
 );
 

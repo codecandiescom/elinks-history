@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.141 2004/01/02 17:51:24 jonas Exp $ */
+/* $Id: dialogs.c,v 1.142 2004/01/02 18:37:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,7 +365,6 @@ struct_hierbox_browser(
 	option_browser,
 	N_("Option manager"),
 	option_buttons,
-	NULL,	/* Set in menu_options_manager() */
 	&options_listbox_ops
 );
 
@@ -373,8 +372,6 @@ struct_hierbox_browser(
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	option_browser.items = &config_options->box_item->child;
-
 	hierbox_browser(&option_browser, ses);
 }
 
@@ -576,7 +573,6 @@ struct_hierbox_browser(
 	keybinding_browser,
 	N_("Keybinding manager"),
 	keybinding_buttons,
-	&kbdbind_box_items,
 	NULL
 );
 

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.76 2004/01/01 07:16:48 miciah Exp $ */
+/* $Id: kbdbind.h,v 1.77 2004/01/02 18:37:57 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -141,8 +141,6 @@ struct keybinding {
 	int flags;
 	struct listbox_item *box_item;
 };
-
-extern struct list_head kbdbind_box_items;
 
 
 void init_keymaps(void);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.104 2003/12/21 14:56:54 zas Exp $ */
+/* $Id: cache.c,v 1.105 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,6 @@
 
 /* The list of cache entries */
 static INIT_LIST_HEAD(cache);
-INIT_LIST_HEAD(cache_entry_box_items);
 
 static long cache_size;
 static int id_tag_counter = 0;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.59 2004/01/01 09:56:02 jonas Exp $ */
+/* $Id: globhist.c,v 1.60 2004/01/02 18:37:58 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -42,8 +42,6 @@ struct global_history_list global_history = {
 	0,
 	{ D_LIST_HEAD(global_history.items) }
 };
-
-INIT_LIST_HEAD(gh_box_items);
 
 
 /* GUI stuff. Declared here because done_global_history() frees it. */

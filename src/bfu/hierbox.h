@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.45 2004/01/02 17:51:23 jonas Exp $ */
+/* $Id: hierbox.h,v 1.46 2004/01/02 18:37:56 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -30,22 +30,29 @@ struct hierbox_browser {
 	size_t buttons_size;
 
 	struct list_head boxes;
-	struct list_head *items;
 	struct list_head dialogs;
+	struct listbox_item root;
 	struct listbox_ops *ops;
 
 	/* For saving state */
 	struct listbox_data box_data;
 };
 
-#define struct_hierbox_browser(name, title, buttons, items, ops)	\
+#define struct_hierbox_browser(name, title, buttons, ops)	\
 	struct hierbox_browser name = {					\
 		title,							\
 		buttons,						\
 		HIERBOX_BROWSER_BUTTONS_SIZE(buttons),			\
 		{ D_LIST_HEAD(name.boxes) },				\
-		items,							\
 		{ D_LIST_HEAD(name.dialogs) },				\
+		{							\
+			NULL_LIST_HEAD,					\
+			NULL,						\
+			{ D_LIST_HEAD(name.root.child) },		\
+			BI_FOLDER,					\
+			1,						\
+			0,						\
+		},							\
 		ops,							\
 	}
 

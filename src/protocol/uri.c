@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.199 2004/05/25 03:45:40 jonas Exp $ */
+/* $Id: uri.c,v 1.200 2004/05/25 17:40:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <ctype.h>
 #include <errno.h>
-#ifdef HAVE_LIBIDN
+#ifdef HAVE_IDNA_H
 #include <idna.h>
 #endif
 #include <stdio.h>
@@ -278,7 +278,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 #ifdef CONFIG_IPV6
 		if (uri->ipv6) add_char_to_string(string, '[');
 #endif
-#ifdef HAVE_LIBIDN
+#ifdef CONFIG_IDN
 		/* Support for the GNU International Domain Name library.
 		 *
 		 * http://www.gnu.org/software/libidn/manual/html_node/IDNA-Functions.html

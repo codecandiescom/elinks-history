@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.278 2004/09/15 14:40:28 jonas Exp $ */
+/* $Id: uri.c,v 1.279 2004/09/23 22:08:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1071,12 +1071,11 @@ parse_uri:
 				add_to_string(&str, "file://");
 				if (!dir_sep(*newurl))
 					add_to_string(&str, "./");
+
+				encode_uri_string(&str, newurl, 0);
+				mem_free(newurl);
+				newurl = str.source;
 		}
-
-		encode_uri_string(&str, newurl, 0);
-
-		mem_free(newurl);
-		newurl = str.source;
 
 		goto parse_uri;
 	}

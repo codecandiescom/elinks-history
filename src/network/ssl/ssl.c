@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.13 2002/07/08 17:00:19 pasky Exp $ */
+/* $Id: ssl.c,v 1.14 2002/07/11 21:30:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,8 +44,9 @@ init_ssl()
 	SSL_CTX_set_options(context, SSL_OP_ALL);
 	SSL_CTX_set_default_verify_paths(context);
 #elif defined(HAVE_GNUTLS)
-	int ret = gnutls_global_init();
+	int ret;
 
+	ret = gnutls_global_init();
 	if (ret < 0)
 		internal("GNUTLS init failed: %s", gnutls_strerror(ret));
 
@@ -71,8 +72,8 @@ done_ssl(void)
 #ifdef HAVE_OPENSSL
 	if (context) SSL_CTX_free(context);
 #elif defined(HAVE_GNUTLS)
-	gnutls_certificate_free_sc(xcred);
-	gnutls_anon_free_client_sc(anon_cred);
+	if (xcred) gnutls_certificate_free_sc(xcred);
+	if (anon_cred) gnutls_anon_free_client_sc(anon_cred);
 	gnutls_global_deinit();
 #endif
 #endif

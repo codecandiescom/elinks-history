@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.82 2004/09/24 20:05:45 pasky Exp $ */
+/* $Id: renderer.c,v 1.83 2004/09/24 22:35:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,6 +149,9 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		struct document_options *options)
 {
 	unsigned char *name;
+#ifdef CONFIG_ECMASCRIPT
+	struct ecmascript_interpreter *interpreter;
+#endif
 	struct document *document;
 	struct cache_entry *cached;
 
@@ -158,13 +161,26 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	name = doc_view->name;
 	doc_view->name = NULL;
 
+	/* We do the @interpreter dances to preserve the interpreter over
+	 * gradual rerenderings of the document. And most importantly we need
+	 * to always stay in sync with onload_snippets.
+	 * And if this isn't a gradual rerendering, we've already put the
+	 * interpreter in render_document_frames(). */
+#ifdef CONFIG_ECMASCRIPT
+	interpreter = doc_view->ecmascript;
+	doc_view->ecmascript = NULL;
+#endif
 	detach_formatted(doc_view);
+#ifdef CONFIG_ECMASCRIPT
+	doc_view->ecmascript = interpreter;
+#endif
 
 	doc_view->name = name;
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
 #ifdef CONFIG_ECMASCRIPT
-	doc_view->ecmascript = ecmascript_get_interpreter(doc_view);
+	if (!doc_view->ecmascript)
+		doc_view->ecmascript = ecmascript_get_interpreter(doc_view);
 #endif
 
 	cached = find_in_cache(vs->uri);
@@ -266,6 +282,10 @@ render_document_frames(struct session *ses, int no_cache)
 			 * evaluation progress status. */
 			free_string_list(&vs->onload_snippets);
 			vs->current_onload_snippet = NULL;
+			if (ses->doc_view->ecmascript) {
+				ecmascript_put_interpreter(ses->doc_view->ecmascript);
+				ses->doc_view->ecmascript = NULL;
+			}
 		}
 #endif
 		if (vs->plain < 0) vs->plain = 0;

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.154 2004/05/25 04:48:54 jonas Exp $ */
+/* $Id: hierbox.c,v 1.155 2004/05/26 20:35:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,8 +413,8 @@ scan_for_used(struct listbox_item *item, void *info_, int *offset)
 
 static struct listbox_context *
 init_listbox_context(struct listbox_data *box, struct terminal *term,
-			 struct listbox_item *item,
-			 int (*scanner)(struct listbox_item *, void *, int *))
+		     struct listbox_item *item,
+		     int (*scanner)(struct listbox_item *, void *, int *))
 {
 	struct listbox_context *context;
 
@@ -720,7 +720,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	}
 
 	delete = box->ops->can_delete(context->item)
-		? DELETE_LOCKED : DELETE_IMPOSSIBLE;
+		 ? DELETE_LOCKED : DELETE_IMPOSSIBLE;
 
 	if (delete == DELETE_IMPOSSIBLE || box->ops->is_used(context->item)) {
 		print_delete_error(context->item, term, box->ops, delete);

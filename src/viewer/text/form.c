@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.138 2004/06/12 16:26:15 zas Exp $ */
+/* $Id: form.c,v 1.139 2004/06/12 16:27:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1215,7 +1215,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 {
 	struct form_control *fc;
 	struct form_state *fs;
-	int x;
+	int x = 0;
 
 	assert(ses && doc_view && link && ev);
 	if_assert_failed return 0;
@@ -1231,13 +1231,11 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 	if (ev->ev == EV_KBD) {
 		x = field_op_do(ses->tab->term, doc_view, fc, fs, link, ev, rep);
-	} else {
-		x = 0;
-	}
 
-	if (x) {
-		draw_form_entry(ses->tab->term, doc_view, link);
-		redraw_from_window(ses->tab);
+		if (x) {
+			draw_form_entry(ses->tab->term, doc_view, link);
+			redraw_from_window(ses->tab);
+		}
 	}
 
 	return x;

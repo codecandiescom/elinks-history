@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.127 2003/11/22 12:06:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.128 2003/11/22 12:28:31 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -77,7 +77,7 @@ get_bookmark_info(struct listbox_item *item, struct terminal *term)
 }
 
 static void
-done_bookmark_item(struct listbox_item *item, struct terminal *term, int last)
+done_bookmark_item(struct listbox_item *item, int last)
 {
 	struct bookmark *bookmark = item->udata;
 

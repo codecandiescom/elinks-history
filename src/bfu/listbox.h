@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.46 2003/11/22 12:06:18 jonas Exp $ */
+/* $Id: listbox.h,v 1.47 2003/11/22 12:28:31 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -37,7 +37,7 @@ struct listbox_ops {
 
 	/* Delete the listbox item object and its data. @last is non zero when
 	 * either deleting only one item or when deleting the last item. */
-	void (*done)(struct listbox_item *, struct terminal *, int last);
+	void (*done)(struct listbox_item *, int last);
 };
 
 /* Stores display information about a box. Kept in cdata. */

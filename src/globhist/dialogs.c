@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.80 2003/11/22 12:06:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.81 2003/11/22 12:28:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
 }
 
 static void
-done_globhist_item(struct listbox_item *item, struct terminal *term, int last)
+done_globhist_item(struct listbox_item *item, int last)
 {
 	struct global_history_item *historyitem = item->udata;
 

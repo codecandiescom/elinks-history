@@ -30,6 +30,7 @@ Introduction and Table of Contents .......................... index.txt
 User's Guide
 	Beginner's Topics
 		Introduction to the World of ELinks .. introduction.txt
+		Frequently Asked Questions ................... faq.html
 		Bookmarks ............................... bookmarks.txt
 		The Wonders of Tabbed Browsing ............... tabs.txt
 		Document Marks .............................. marks.txt
@@ -84,7 +85,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.14 2005/01/03 07:12:20 miciah Exp $
+$Id: index.txt,v 1.15 2005/04/05 19:47:16 jonas Exp $
 
 (Note: Sometimes, I broke the lines manually earlier than gqap would,
 for greater aesthetical effect. --pasky)

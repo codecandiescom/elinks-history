@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.22 2004/12/21 23:38:34 jonas Exp $
+## $Id: Makefile.am,v 1.23 2005/04/05 19:47:16 jonas Exp $
 
 SUBDIRS = man
 
@@ -11,6 +11,7 @@ EXTRA_DIST = \
  elinks-lua.texi \
  events.txt \
  exmode.txt \
+ faq.html \
  feedback.txt \
  hacking.txt \
  index.txt \

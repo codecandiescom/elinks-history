@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.90 2005/03/22 14:56:23 zas Exp $ */
+/* $Id: button.c,v 1.91 2005/03/22 15:18:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			}
 			draw_text(term, x + hk_pos, pos->y, &widget_data->widget->text[hk_pos + 1], 1, attr, shortcut_color);
 			if (right > 1) {
-				draw_text(term, x + hk_pos + 1, pos->y, &widget_data->widget->text[hk_pos + 2], right - - 1, 0, color);
+				draw_text(term, x + hk_pos + 1, pos->y, &widget_data->widget->text[hk_pos + 2], right - 1, 0, color);
 			}
 
 		} else {

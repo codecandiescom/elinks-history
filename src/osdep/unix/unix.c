@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.9 2003/10/28 01:22:13 pasky Exp $ */
+/* $Id: unix.c,v 1.10 2003/10/28 01:25:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,6 @@ void
 resume_mouse(void *h)
 {
 	struct gpm_mouse_spec *gms = h;
-	int h;
 
 	if (!gms) return;
 

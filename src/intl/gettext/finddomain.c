@@ -29,8 +29,8 @@
 #include <unistd.h>
 #endif
 
-#include "gettextP.h"
-#include "libintl.h"
+#include "intl/gettext/gettextP.h"
+#include "intl/gettext/libintl.h"
 #include "util/string.h"
 
 /* List of already loaded domains.  */

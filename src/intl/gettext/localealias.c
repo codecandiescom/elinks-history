@@ -43,12 +43,11 @@ unsigned char *alloca();
 #endif
 
 #include <stdlib.h>
-
 #include <string.h>
 
 #include "elinks.h"
 
-#include "gettextP.h"
+#include "intl/gettext/gettextP.h"
 #include "util/string.h"
 
 /* For those losing systems which don't have `alloca' we have to add

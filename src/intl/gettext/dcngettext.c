@@ -19,8 +19,8 @@
 #include "config.h"
 #endif
 
-#include "gettextP.h"
-#include "libintl.h"
+#include "intl/gettext/gettextP.h"
+#include "intl/gettext/libintl.h"
 
 /* Look up MSGID in the DOMAINNAME message catalog for the current CATEGORY
    locale.  */

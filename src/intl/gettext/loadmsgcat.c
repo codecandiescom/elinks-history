@@ -62,8 +62,8 @@ unsigned char *alloca();
 
 #include "elinks.h"
 
-#include "gettext.h"
-#include "gettextP.h"
+#include "intl/gettext/gettext.h"
+#include "intl/gettext/gettextP.h"
 #include "util/string.h"
 
 

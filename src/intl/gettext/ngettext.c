@@ -20,11 +20,10 @@
 #endif
 
 #include <stdlib.h>		/* Just for NULL.  */
-
-#include "gettextP.h"
-#include "libintl.h"
-
 #include <locale.h>
+
+#include "intl/gettext/gettextP.h"
+#include "intl/gettext/libintl.h"
 
 /* Look up MSGID in the current default message catalog for the current
    LC_MESSAGES locale.  If not found, returns MSGID itself (the default

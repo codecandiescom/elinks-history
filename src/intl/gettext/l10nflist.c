@@ -50,8 +50,7 @@
 
 #include "elinks.h"
 
-#include "loadinfo.h"
-
+#include "intl/gettext/loadinfo.h"
 #include "util/string.h"
 
 /* On some strange systems still no definition of NULL is found.  Sigh!  */

@@ -27,8 +27,8 @@
 #include <iconv.h>
 #endif
 
-#include "loadinfo.h"
-#include "gettext.h"		/* Get nls_uint32.  */
+#include "intl/gettext/loadinfo.h"
+#include "intl/gettext/gettext.h"		/* Get nls_uint32.  */
 
 #ifndef W
 #define W(flag, data) ((flag) ? SWAP (data) : (data))

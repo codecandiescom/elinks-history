@@ -23,7 +23,7 @@
 #include <string.h>
 #include <sys/types.h>
 
-#include "loadinfo.h"
+#include "intl/gettext/loadinfo.h"
 
 /* On some strange systems still no definition of NULL is found.  Sigh!  */
 #ifndef NULL

@@ -21,8 +21,8 @@
 
 #include <locale.h>
 
-#include "gettextP.h"
-#include "libgnuintl.h"
+#include "intl/gettext/gettextP.h"
+#include "intl/gettext/libgnuintl.h"
 
 /* Look up MSGID in the DOMAINNAME message catalog of the current
    LC_MESSAGES locale and skip message according to the plural form.  */

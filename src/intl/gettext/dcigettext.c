@@ -62,9 +62,9 @@ extern int errno;
 
 #include "elinks.h"
 
-#include "gettextP.h"
-#include "libintl.h"
-#include "hash-string.h"
+#include "intl/gettext/gettextP.h"
+#include "intl/gettext/libintl.h"
+#include "intl/gettext/hash-string.h"
 #include "util/string.h"
 
 /* Alignment of types.  */

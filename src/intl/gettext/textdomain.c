@@ -22,8 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "libintl.h"
-#include "gettextP.h"
+#include "intl/gettext/libintl.h"
+#include "intl/gettext/gettextP.h"
 #include "util/string.h"
 
 /* Name of the default text domain.  */

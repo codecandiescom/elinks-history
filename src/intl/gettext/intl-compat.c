@@ -20,8 +20,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 #include "config.h"
 #endif
 
-#include "libintl.h"
-#include "gettextP.h"
+#include "intl/gettext/libintl.h"
+#include "intl/gettext/gettextP.h"
 
 /* This file redirects the gettext functions (without prefix or suffix) to
    those defined in the included GNU gettext library (with "__" suffix).

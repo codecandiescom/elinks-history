@@ -23,6 +23,8 @@ zones.
 Overview of the User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+TODO: Title, Tab and Status bar.
+
 The most important dialogs, that you will meet, include the Main, Link and Tab
 menus and the different managers. The menus serve as entry points to the
 actions available from different contexts, while the managers let you check
@@ -42,6 +44,16 @@ elinkskeys(5) man page. It is not always up-to-date, so you should also check
 the keybinding manager and the overview of all the configured keybindings
 given in the Help -> Keys dialog. The Keys dialogs serves as a good
 introduction to the most common keybindings.
+
+
+The Title, Tab and Status bar
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Documents bigger than can be displayed with the current screen size are
+divided into subpages. In this case the current document position is indicated
+in the far right of the title bar as a suffix to the actual document title.
+The syntax is: ( <current subpage> / <number of subpages> ), an example is
+"(4/9)" that indicates the 4th subpage of 9 subpages.
 
 
 The Main, Link and Tab Menus
@@ -89,9 +101,9 @@ buttons at the bottom. Below a view of the cookie manager is shown.
 
 The hierarchic boxes are either folders or leafs. Folder boxes are displayed
 with a "[-]" or "[+]" before the name telling whether the folder is currently
-open or closed. Leaf boxes are displayed indented compared to the folder they
-are nested in. In the cookie manager example above "bugzilla.elinks.or.cz" is
-a folder box and "BUGLIST" is a leaf box.
+open or closed. Nested boxes are displayed indented compared to the folder
+they are nested in. In the cookie manager example above "bjork.com" is a
+folder box and "PREF" is a leaf box.
 
 Boxes can be "marked", which makes it possible to select a group of boxes and
 perform an action on them, such as deleting all marked boxes. If any box has
@@ -122,22 +134,83 @@ Some managers also supports searching, either by pressing the "[ Search ]"
 button or by pressing '/'. By searching the empty string all hidden boxes from
 the previous search will be shown again.
 
-Note: This is still a work in progress and from here on an below everything is
-marked TODO!
-
 Navigation
 ~~~~~~~~~~
 
 ELinks provides various ways to navigate documents. Depending on how documents
-are structured it can be a great help to change navigation style.
+are structured it can be a great help to change navigation style. The
+navigation styles can roughly be divided into page-oriented, link-oriented and
+screen-oriented. They overlap in many ways, so this separation is mostly used
+as a mean to present them.
 
- - Link Oriented Navigation:
-   Directional and Up/Down.
+Page Oriented Navigation:
 
- - Cursor Routing
+	This involves scrolling documents horizontally and vertically.
+	Documents can be scrolled page-wise, where the next or previous
+	subpage will be displayed. It is also possible to scroll documents in
+	steps, either line-wise (vertically) or column-wise (horizontally).
+	The step size can be configured and by default is 2 lines and 8
+	columns. Alternatively whole documents can be scrolled to the start
+	or the end.
 
- - Mouse?
+	The basic default controls:
 
+		Insert/Delete	Scroll up/down line-wise. (vertically)
+		PageUp/PageDown	Scroll up/down page-wise.
+		'['/']'		Scroll left/right column-wise. (horizontally)
+		Home/End	Scroll to the start/end of the document.
+
+Link Oriented Navigation:
+
+	For hypertext documents, access to the links makes it more practical
+	to navigate by jumping between links in the document. There are two
+	ways to do this; either you can move between links relationally or by
+	number. Using relational link navigation it is possible to focus the
+	next/previous link or move in a directional manner to the link in a
+	certain direction such as left/right/up/down.
+
+	In order to navigate using link numbers you have to first toggle link
+	numbering on. This will prefix all links with a number using the
+	notation [<number>]. "[23]" indicates link number 23. When link
+	numbering is enabled pressing any number key will pop up a "Go to
+	link"-dialog where the complete link number can be entered. By
+	pressing Enter the entered link number will be focused, but only if it
+	is a valid link number.
+
+	Note: it is also possible to jump to links by searching the link text.
+	Check the documentation on searching.
+
+	The basic default controls:
+
+		Up/Down		Move to the previous/next link.
+		'.'		Toggle link numbering.
+		Enter/Right	Follow the current focused link.
+
+		No keys are by default configured for directional link
+		navigation.
+
+Position Oriented Navigation:
+
+	Positional navigation (sorry, bad word) uses the either the position
+	of the cursor or the mouse click to navigate the document. If you are
+	familiar with the w3m text-browser you will be familiar with cursor
+	routing. Basicly you move the cursor around -- kind of like a mouse --
+	in the document area of the user interface. When the cursor is over a
+	link the link is highlighted and when the cursor moves outside the
+	current document view it will cause the document view to scroll.
+
+	The possibilities when using the mouse to navigate document depend on
+	what terminal you are using. In some terminals it is possible to
+	scroll by using the mouse wheel. Scrolling is however also possible by
+	clicking in the edge areas of the document view. High-lighting links
+	can be done by clicking on a link but waiting to release the mouse
+	button until the link is no longer under the mouse pointer.
+
+	No keys are by default configured for cursor routing.
+
+
+Note: This is still a work in progress and from here on an below everything is
+marked TODO!
 
 Useful Document Display Options
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -163,4 +236,6 @@ Hints and Odd Features
 
  - Numerical action prefixes. Example 3<Down> jumps down three links.
 
-$Id: introduction.txt,v 1.4 2004/12/25 14:29:24 jonas Exp $
+ - How to move forward in the document history ('u').
+
+$Id: introduction.txt,v 1.5 2004/12/25 19:05:15 jonas Exp $

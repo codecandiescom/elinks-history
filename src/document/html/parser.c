@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.357 2004/01/18 16:08:22 zas Exp $ */
+/* $Id: parser.c,v 1.358 2004/01/18 16:12:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2297,7 +2297,7 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 	}
 
 	*val_ = val;
-	return 0;
+	return 1;
 }
 
 /* Returns 0 on error. */
@@ -2353,7 +2353,7 @@ static void
 parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
 {
 	unsigned char *tmp_str;
-	int val;
+	int val, ret = 0;
 	int *values = NULL;
 	int values_count = 0;
 	register int i;
@@ -2409,16 +2409,21 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 	foreach_values(i) if (values[i] > 0) val += values[i] - 1;
 
 	if (val >= max_value) {
-		distribute_rows_or_cols(&val, max_value, values, values_count);
+		ret = distribute_rows_or_cols(&val, max_value, values, values_count);
 	} else {
 		int neg = 0;
 
 		foreach_values(i) if (values[i] < 0) neg = 1;
 		if (!neg) {
-			distribute_rows_or_cols(&val, max_value, values, values_count);
+			ret = distribute_rows_or_cols(&val, max_value, values, values_count);
 		} else {
-			distribute_rows_or_cols_that_left(&val, max_value, values, values_count);
+			ret = distribute_rows_or_cols_that_left(&val, max_value, values, values_count);
 		}
+	}
+
+	if (!ret) {
+		*new_values_count = 0;
+		return;
 	}
 
 	foreach_values(i) if (!values[i]) {

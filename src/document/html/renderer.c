@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.502 2004/10/22 20:15:05 pasky Exp $ */
+/* $Id: renderer.c,v 1.503 2004/10/23 09:53:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1060,6 +1060,13 @@ process_link(struct part *part, enum link_state link_state,
 				link->data.name = new_name;
 			}
 		}
+
+		/* FIXME: Concatenating two adjectent <a> elements to a single
+		 * link is broken since we lose the event handlers for the
+		 * second one.  OTOH simply appending them here won't fly since
+		 * we may get here multiple times for even a single link. We
+		 * will probably need some SP_ for creating a new link or so.
+		 * --pasky */
 
 		break;
 	}

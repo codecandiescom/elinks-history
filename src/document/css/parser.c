@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.49 2004/01/26 17:20:14 pasky Exp $ */
+/* $Id: parser.c,v 1.50 2004/01/26 18:06:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,8 +174,13 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 	struct css_token *token = get_css_token(scanner);
 	struct css_selector *selector;
 
-	if (!check_next_css_token(scanner, '{')) {
-		/* TODO: comma separated list of simple selectors. */
+	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
+	 * And anyway we should have css_parse_selector(). --pasky */
+	/* TODO: comma-separated list of simple selectors. */
+	/* FIXME: element can be even '*' --pasky */
+
+	if (token->type != CSS_TOKEN_IDENT
+	    || !check_next_css_token(scanner, '{')) {
 		skip_css_tokens(scanner, '}');
 		return;
 	}
@@ -214,11 +219,6 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 		assert(token);
 
 		switch (token->type) {
-		case CSS_TOKEN_IDENT:
-			/* TODO: Handle more selectors like '*' ':<ident>' */
-			css_parse_ruleset(css, &scanner);
-			break;
-
 		case CSS_TOKEN_AT_KEYWORD:
 		case CSS_TOKEN_AT_CHARSET:
 		case CSS_TOKEN_AT_FONT_FACE:
@@ -229,8 +229,8 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 			break;
 
 		default:
-			/* TODO: Skip to ';' or block if '{' */
-			skip_css_tokens(&scanner, token->type);
+			/* And WHAT ELSE could it be?! */
+			css_parse_ruleset(css, &scanner);
 		}
 	}
 }

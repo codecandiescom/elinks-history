@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.74 2003/07/07 20:13:25 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.75 2003/07/21 05:52:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "scripting/lua/core.h"
 #include "terminal/kbd.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 #ifndef HAVE_LUA
 #define LUA_NOREF	0
@@ -48,8 +49,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	kb = mem_alloc(sizeof(struct keybinding));
 	if (kb) {
 		struct listbox_item *keymap;
-		unsigned char *keystroke = init_str();
-		int len = 0;
+		struct string keystroke;
 
 		kb->keymap = km;
 		kb->action = action;
@@ -64,16 +64,20 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 			kb->box_item = NULL;
 			return; /* Or goto. */
 		}
-		make_keystroke(&keystroke, &len, key, meta);
-		kb->box_item = mem_calloc(1, sizeof(struct listbox_item) + len + 1);
+
+		if (!init_string(&keystroke)) return;
+
+		make_keystroke(&keystroke, key, meta);
+		kb->box_item = mem_calloc(1, sizeof(struct listbox_item)
+					  + keystroke.length + 1);
 		if (!kb->box_item) {
-			mem_free(keystroke);
+			done_string(&keystroke);
 			return; /* Or just goto after end of this if block. */
 		}
 		kb->box_item->text = ((unsigned char *) kb->box_item
 					+ sizeof(struct listbox_item));
-		strcpy(kb->box_item->text, keystroke);
-		mem_free(keystroke);
+		strcpy(kb->box_item->text, keystroke.source);
+		done_string(&keystroke);
 
 		if (!keyact_box_items[action]) {
 boom:
@@ -346,16 +350,16 @@ parse_keystroke(unsigned char *s, long *key, long *meta)
 }
 
 void
-make_keystroke(unsigned char **str, int *len, long key, long meta)
+make_keystroke(struct string *str, long key, long meta)
 {
 	if (meta & KBD_SHIFT)
-		add_to_str(str, len, "Shift-");
+		add_to_string(str, "Shift-");
 	if (meta & KBD_CTRL)
-		add_to_str(str, len, "Ctrl-");
+		add_to_string(str, "Ctrl-");
 	if (meta & KBD_ALT)
-		add_to_str(str, len, "Alt-");
+		add_to_string(str, "Alt-");
 
-	add_to_str(str, len, write_key(key));
+	add_to_string(str, write_key(key));
 }
 
 
@@ -585,7 +589,7 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 }
 
 void
-bind_config_string(unsigned char **file, int *len)
+bind_config_string(struct string *file)
 {
 	enum keymap keymap;
 	struct keybinding *keybinding;
@@ -605,15 +609,14 @@ bind_config_string(unsigned char **file, int *len)
 			}
 
 			/* TODO: Maybe we should use string.write.. */
-			add_to_str(file, len, "bind \"");
-			add_to_str(file, len, keymap_str);
-			add_to_str(file, len, "\" \"");
-			make_keystroke(file, len, keybinding->key,
-				       keybinding->meta);
-			add_to_str(file, len, "\" = \"");
-			add_to_str(file, len, action_str);
-			add_chr_to_str(file, len, '\"');
-			add_to_str(file, len, NEWLINE);
+			add_to_string(file, "bind \"");
+			add_to_string(file, keymap_str);
+			add_to_string(file, "\" \"");
+			make_keystroke(file, keybinding->key, keybinding->meta);
+			add_to_string(file, "\" = \"");
+			add_to_string(file, action_str);
+			add_char_to_string(file, '\"');
+			add_to_string(file, NEWLINE);
 		}
 }
 

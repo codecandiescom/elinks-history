@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.41 2003/07/07 20:13:25 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.42 2003/07/21 05:52:26 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -8,6 +8,7 @@ struct listbox_item;
 
 #include "config/options.h"
 #include "terminal/terminal.h"
+#include "util/string.h"
 
 enum keymap {
 	KM_MAIN,
@@ -128,7 +129,7 @@ unsigned char *write_keymap(enum keymap);
 void toggle_display_action_listboxes(void);
 
 int parse_keystroke(unsigned char *, long *, long *);
-void make_keystroke(unsigned char **, int *, long, long);
+void make_keystroke(struct string *, long, long);
 
 int kbd_action(enum keymap, struct event *, int *);
 struct keybinding *kbd_ev_lookup(enum keymap, long, long, int *);
@@ -136,7 +137,7 @@ struct keybinding *kbd_nm_lookup(enum keymap, unsigned char *, int *);
 
 int bind_do(unsigned char *, unsigned char *, unsigned char *);
 unsigned char *bind_act(unsigned char *, unsigned char *);
-void bind_config_string(unsigned char **, int *);
+void bind_config_string(struct string *);
 
 #ifdef HAVE_LUA
 unsigned char *bind_lua_func(unsigned char *, unsigned char *, int);

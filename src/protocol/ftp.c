@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.75 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: ftp.c,v 1.76 2002/12/21 18:05:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,10 +66,10 @@ struct ftp_connection_info {
 
 
 /* Global variables */
-unsigned char ftp_dirlist_head[] = "<html>\n<head><title>/";
-unsigned char ftp_dirlist_head2[] = "</title></head>\n<body>\n<h2>Directory /";
-unsigned char ftp_dirlist_head3[] = "</h2>\n<pre>";
-unsigned char ftp_dirlist_end[] = "</pre>\n<hr>\n</body>\n</html>";
+static unsigned char ftp_dirlist_head[] = "<html>\n<head><title>/";
+static unsigned char ftp_dirlist_head2[] = "</title></head>\n<body>\n<h2>Directory /";
+static unsigned char ftp_dirlist_head3[] = "</h2>\n<pre>";
+static unsigned char ftp_dirlist_end[] = "</pre>\n<hr>\n</body>\n</html>";
 
 
 /* Prototypes */

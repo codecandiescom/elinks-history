@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.61 2004/12/13 04:49:43 miciah Exp $ */
+/* $Id: link.c,v 1.62 2004/12/14 19:16:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,10 +39,6 @@
 
 /* Unsafe macros */
 #include "document/html/internal.h"
-
-
-
-static unsigned char *object_src;
 
 
 void
@@ -214,8 +210,8 @@ put_image_label(unsigned char *a, unsigned char *label)
 	format.fg = fg;
 }
 
-void
-html_img(unsigned char *a)
+static void
+html_img_do(unsigned char *a, unsigned char *object_src)
 {
 	int ismap, usemap = 0;
 	int add_brackets = 0;
@@ -333,6 +329,12 @@ html_img(unsigned char *a)
 }
 
 void
+html_img(unsigned char *a)
+{
+	html_img_do(a, NULL);
+}
+
+void
 put_link_line(unsigned char *prefix, unsigned char *linkname,
 	      unsigned char *link, unsigned char *target)
 {
@@ -375,8 +377,8 @@ html_applet(unsigned char *a)
 	mem_free(code);
 }
 
-void
-html_iframe(unsigned char *a)
+static void
+html_iframe_do(unsigned char *a, unsigned char *object_src)
 {
 	unsigned char *name, *url = NULL;
 
@@ -405,6 +407,12 @@ html_iframe(unsigned char *a)
 }
 
 void
+html_iframe(unsigned char *a)
+{
+	html_iframe_do(a, NULL);
+}
+
+void
 html_object(unsigned char *a)
 {
 	unsigned char *type, *url;
@@ -422,17 +430,13 @@ html_object(unsigned char *a)
 
 	if (!strncasecmp(type, "text/", 5)) {
 		/* We will just emulate <iframe>. */
-		object_src = url;
-		html_iframe(a);
-		object_src = NULL;
+		html_iframe_do(a, url);
 		html_skip(a);
 
 	} else if (!strncasecmp(type, "image/", 6)) {
 		/* <img> emulation. */
 		/* TODO: Use the enclosed text as 'alt' attribute. */
-		object_src = url;
-		html_img(a);
-		object_src = NULL;
+		html_img_do(a, url);
 	} else {
 		unsigned char *name = get_attr_val(a, "standby");
 
@@ -455,6 +459,7 @@ void
 html_embed(unsigned char *a)
 {
 	unsigned char *type, *extension;
+	unsigned char *object_src;
 
 	/* This is just some dirty wrapper. We emulate various things through
 	 * this, which is anyway in the spirit of <object> element, unifying
@@ -473,10 +478,10 @@ html_embed(unsigned char *a)
 
 	type = get_extension_content_type(extension);
 	if (type && !strncasecmp(type, "image/", 6)) {
-		html_img(a);
+		html_img_do(a, object_src);
 	} else {
 		/* We will just emulate <iframe>. */
-		html_iframe(a);
+		html_iframe_do(a, object_src);
 	}
 
 	mem_free_if(type);

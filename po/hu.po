@@ -7,14 +7,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
-"POT-Creation-Date: 2004-09-26 22:30+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-09-29 23:49+0200\n"
 "PO-Revision-Date: 2004-06-14 11:59+0200\n"
 "Last-Translator: Balazs Varga\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "X-Generator: KBabel 1.3.1\n"
 
 #: src/bfu/hierbox.c:345
@@ -46,10 +46,10 @@ msgstr "A mappa kinyitásához nyomd meg a Space billentyût."
 #: src/dialogs/document.c:50 src/dialogs/document.c:226
 #: src/dialogs/document.c:293 src/dialogs/document.c:305 src/dialogs/edit.c:99
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
-#: src/dialogs/menu.c:96 src/dialogs/menu.c:497 src/dialogs/menu.c:545
+#: src/dialogs/menu.c:96 src/dialogs/menu.c:505 src/dialogs/menu.c:553
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:807
-#: src/ecmascript/spidermonkey.c:824 src/formhist/dialogs.c:183
+#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:843
+#: src/ecmascript/spidermonkey.c:860 src/formhist/dialogs.c:183
 #: src/mime/dialogs.c:134 src/protocol/auth/dialogs.c:92
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:367
@@ -169,8 +169,8 @@ msgstr "Név"
 #: src/bfu/hierbox.c:958 src/bookmarks/dialogs.c:269
 #: src/bookmarks/dialogs.c:669 src/config/dialogs.c:410
 #: src/config/dialogs.c:497 src/config/dialogs.c:905 src/cookies/dialogs.c:323
-#: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:497
-#: src/dialogs/menu.c:545 src/dialogs/options.c:179 src/dialogs/options.c:250
+#: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:505
+#: src/dialogs/menu.c:553 src/dialogs/options.c:179 src/dialogs/options.c:250
 #: src/mime/dialogs.c:135 src/protocol/auth/dialogs.c:93
 #: src/sched/download.c:550 src/sched/download.c:1004
 #: src/sched/download.c:1013 src/sched/download.c:1033
@@ -3006,7 +3006,6 @@ msgid "Rules for passing URIs to external commands."
 msgstr "A külsõ programoknak átadott URI-kkal kapcsolatos szabályok."
 
 #: src/config/options.inc:678
-#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -4625,7 +4624,7 @@ msgstr "Mesterséges fejléc infó."
 msgid "No header info."
 msgstr "Nincs fejléc infó."
 
-#: src/dialogs/download.c:257 src/dialogs/menu.c:544 src/sched/download.c:364
+#: src/dialogs/download.c:257 src/dialogs/menu.c:552 src/sched/download.c:364
 msgid "Download"
 msgstr "Letöltés"
 
@@ -4773,7 +4772,7 @@ msgstr "Memória információ"
 msgid "Save URL"
 msgstr "URL mentése"
 
-#: src/dialogs/menu.c:95 src/dialogs/menu.c:496
+#: src/dialogs/menu.c:95 src/dialogs/menu.c:504
 msgid "Enter URL"
 msgstr "URL beirása"
 
@@ -4809,19 +4808,19 @@ msgstr "Az aktuális ~lap felvétele a könyvjelzõkhöz"
 msgid "~Reload"
 msgstr "~Frissités"
 
-#: src/dialogs/menu.c:234 src/dialogs/menu.c:393
+#: src/dialogs/menu.c:234 src/dialogs/menu.c:400
 msgid "Frame at ~full-screen"
 msgstr "Keret ~teljes képrnyõre"
 
-#: src/dialogs/menu.c:242 src/dialogs/menu.c:395
+#: src/dialogs/menu.c:242 src/dialogs/menu.c:402
 msgid "Nex~t tab"
 msgstr "Következõ fül"
 
-#: src/dialogs/menu.c:243 src/dialogs/menu.c:396
+#: src/dialogs/menu.c:243 src/dialogs/menu.c:403
 msgid "Pre~v tab"
 msgstr "Elõzõ fül"
 
-#: src/dialogs/menu.c:246 src/dialogs/menu.c:397
+#: src/dialogs/menu.c:246 src/dialogs/menu.c:404
 msgid "~Close tab"
 msgstr "Fül bezárása"
 
@@ -4889,228 +4888,233 @@ msgstr "~Memória információ"
 msgid "E~xit"
 msgstr "~Kilépés"
 
-#: src/dialogs/menu.c:334
+#: src/dialogs/menu.c:341
 msgid "~New window"
 msgstr "Új ablak"
 
-#: src/dialogs/menu.c:353
+#: src/dialogs/menu.c:360
 msgid "~OS shell"
 msgstr "Parancss~or"
 
-#: src/dialogs/menu.c:360
+#: src/dialogs/menu.c:367
 msgid "Resize t~erminal"
 msgstr "~Terminál átméretezése"
 
-#: src/dialogs/menu.c:377
+#: src/dialogs/menu.c:384
 msgid "~Search"
 msgstr "Kere~sés"
 
-#: src/dialogs/menu.c:378
+#: src/dialogs/menu.c:385
 msgid "Search ~backward"
 msgstr "Keresés ~visszafelé"
 
-#: src/dialogs/menu.c:379
+#: src/dialogs/menu.c:386
 msgid "Find ~next"
 msgstr "~Következõ keresése"
 
-#: src/dialogs/menu.c:380
+#: src/dialogs/menu.c:387
 msgid "Find ~previous"
 msgstr "Elõzõ k~eresése"
 
-#: src/dialogs/menu.c:381
+#: src/dialogs/menu.c:388
 msgid "T~ypeahead search"
 msgstr ""
 
-#: src/dialogs/menu.c:383
+#: src/dialogs/menu.c:390
 msgid "Toggle ~html/plain"
 msgstr "Váltás ~html/forrás között"
 
-#: src/dialogs/menu.c:384
+#: src/dialogs/menu.c:391
 msgid "Toggle i~mages"
 msgstr "Képek váltása"
 
-#: src/dialogs/menu.c:385
+#: src/dialogs/menu.c:392
 msgid "Toggle ~link numbering"
 msgstr "Link számozás váltása"
 
-#: src/dialogs/menu.c:386
+#: src/dialogs/menu.c:393
 msgid "Toggle ~document colors"
 msgstr "A dokumentum színeinek váltása"
 
-#: src/dialogs/menu.c:387
+#: src/dialogs/menu.c:394
 msgid "~Wrap text on/off"
 msgstr "Sortörés be/ki"
 
-#: src/dialogs/menu.c:389
+#: src/dialogs/menu.c:396
 msgid "Document ~info"
 msgstr "Dokumentum ~információ"
 
-#: src/dialogs/menu.c:390
+#: src/dialogs/menu.c:397
 msgid "H~eader info"
 msgstr "~Fejléc infó"
 
-#: src/dialogs/menu.c:391
+#: src/dialogs/menu.c:398
 msgid "Rel~oad document"
 msgstr "Dokumentum újratöltése"
 
-#: src/dialogs/menu.c:392
+#: src/dialogs/menu.c:399
 msgid "~Rerender document"
 msgstr "Dokumentum megjelenítése"
 
-#: src/dialogs/menu.c:403
+#: src/dialogs/menu.c:410
 msgid "~ELinks homepage"
 msgstr "~Elinks honlap"
 
-#: src/dialogs/menu.c:404
+#: src/dialogs/menu.c:411
 msgid "~Documentation"
 msgstr "~Dokumentáció"
 
-#: src/dialogs/menu.c:405
+#: src/dialogs/menu.c:412
 msgid "~Keys"
 msgstr "~Billenytük"
 
-#: src/dialogs/menu.c:407
+#: src/dialogs/menu.c:414
 msgid "~Bugs information"
 msgstr "Hibák infója"
 
-#: src/dialogs/menu.c:409
+#: src/dialogs/menu.c:416
 msgid "ELinks C~vsWeb"
 msgstr "Elinks CVSWeb honlap"
 
-#: src/dialogs/menu.c:410
+#: src/dialogs/menu.c:417
 #, fuzzy
 msgid "ELinks Cvs ~History"
 msgstr "Elinks CVSWeb honlap"
 
-#: src/dialogs/menu.c:413
+#: src/dialogs/menu.c:418
+#, fuzzy
+msgid "ELinks ~LXR"
+msgstr "Elinks CVSWeb honlap"
+
+#: src/dialogs/menu.c:421
 msgid "~Copying"
 msgstr "~Szerzöi jogok"
 
-#: src/dialogs/menu.c:414
+#: src/dialogs/menu.c:422
 msgid "~About"
 msgstr "~Programról"
 
-#: src/dialogs/menu.c:420
+#: src/dialogs/menu.c:428
 msgid "~Add"
 msgstr "Hozzá~ad"
 
-#: src/dialogs/menu.c:421
+#: src/dialogs/menu.c:429
 msgid "~Modify"
 msgstr "~Modosítás"
 
-#: src/dialogs/menu.c:422
+#: src/dialogs/menu.c:430
 msgid "~Delete"
 msgstr "~Törlés"
 
-#: src/dialogs/menu.c:428 src/dialogs/menu.c:441
+#: src/dialogs/menu.c:436 src/dialogs/menu.c:449
 msgid "~Language"
 msgstr "~Nyelv"
 
-#: src/dialogs/menu.c:430 src/dialogs/menu.c:442
+#: src/dialogs/menu.c:438 src/dialogs/menu.c:450
 msgid "C~haracter set"
 msgstr "~Kódlapok"
 
-#: src/dialogs/menu.c:431 src/dialogs/menu.c:443
+#: src/dialogs/menu.c:439 src/dialogs/menu.c:451
 msgid "~Terminal options"
 msgstr "~Terminál beállítások"
 
-#: src/dialogs/menu.c:432
+#: src/dialogs/menu.c:440
 msgid "File ~extensions"
 msgstr "Fájl ~kiterjesztések"
 
-#: src/dialogs/menu.c:434
+#: src/dialogs/menu.c:442
 msgid "~Options manager"
 msgstr "Beállítások"
 
-#: src/dialogs/menu.c:435
+#: src/dialogs/menu.c:443
 msgid "~Keybinding manager"
 msgstr "B~illentyûparancs beállító"
 
-#: src/dialogs/menu.c:436
+#: src/dialogs/menu.c:444
 msgid "~Save options"
 msgstr "Beállítások menté~se"
 
-#: src/dialogs/menu.c:449
+#: src/dialogs/menu.c:457
 msgid "Global ~history"
 msgstr "Lá~togatott oldalak teljes listája"
 
-#: src/dialogs/menu.c:452
+#: src/dialogs/menu.c:460
 msgid "~Bookmarks"
 msgstr "~Könyvjelzõk"
 
-#: src/dialogs/menu.c:454
+#: src/dialogs/menu.c:462
 msgid "~Cache"
 msgstr "~Gyorsítótár"
 
-#: src/dialogs/menu.c:455
+#: src/dialogs/menu.c:463
 msgid "~Downloads"
 msgstr "~Letöltések"
 
-#: src/dialogs/menu.c:457
+#: src/dialogs/menu.c:465
 msgid "Coo~kies"
 msgstr "~Sütik"
 
-#: src/dialogs/menu.c:460
+#: src/dialogs/menu.c:468
 msgid "~Form history"
 msgstr "Û~rlap lista"
 
-#: src/dialogs/menu.c:462
+#: src/dialogs/menu.c:470
 msgid "~Authentication"
 msgstr "~Hitelesítés"
 
-#: src/dialogs/menu.c:476
+#: src/dialogs/menu.c:484
 msgid "~File"
 msgstr "~Fájl"
 
-#: src/dialogs/menu.c:477
+#: src/dialogs/menu.c:485
 msgid "~View"
 msgstr "~Nézet"
 
-#: src/dialogs/menu.c:478
+#: src/dialogs/menu.c:486
 msgid "~Link"
 msgstr "~Link"
 
-#: src/dialogs/menu.c:479
+#: src/dialogs/menu.c:487
 msgid "~Tools"
 msgstr "~Eszközök"
 
-#: src/dialogs/menu.c:480
+#: src/dialogs/menu.c:488
 msgid "~Setup"
 msgstr "~Beállítások"
 
-#: src/dialogs/menu.c:481
+#: src/dialogs/menu.c:489
 msgid "~Help"
 msgstr "~Súgó"
 
-#: src/dialogs/menu.c:496
+#: src/dialogs/menu.c:504
 msgid "Go to URL"
 msgstr "URL megnyitása"
 
-#: src/dialogs/menu.c:544
+#: src/dialogs/menu.c:552
 msgid "Save to file"
 msgstr "Mentés fájlba"
 
-#: src/dialogs/menu.c:841
+#: src/dialogs/menu.c:849
 msgid "~Pass frame URI to external command"
 msgstr "A keret URI-jának átadása külsõ programnak"
 
-#: src/dialogs/menu.c:846
+#: src/dialogs/menu.c:854
 msgid "Pass link URI to e~xternal command"
 msgstr "A link URI-jának átadása külsõ programnak"
 
-#: src/dialogs/menu.c:852
+#: src/dialogs/menu.c:860
 msgid "Pass tab URI to e~xternal command"
 msgstr "A fül URI-jának átadása külsõ programnak"
 
-#: src/dialogs/menu.c:877
+#: src/dialogs/menu.c:885
 msgid "Empty directory"
 msgstr "Üres könyvtár"
 
-#: src/dialogs/menu.c:921
+#: src/dialogs/menu.c:929
 msgid "Directories:"
 msgstr "Könyvtárak:"
 
-#: src/dialogs/menu.c:934
+#: src/dialogs/menu.c:942
 msgid "Files:"
 msgstr "Állományok:"
 
@@ -5250,16 +5254,16 @@ msgstr ""
 msgid "Keyboard prefix: %d"
 msgstr ""
 
-#: src/dialogs/status.c:256
+#: src/dialogs/status.c:260
 #, c-format
 msgid "Cursor position: %dx%d"
 msgstr "A kurzor pozíciója: %dx%d"
 
-#: src/dialogs/status.c:357
+#: src/dialogs/status.c:361
 msgid "Untitled"
 msgstr "Cím nélkül"
 
-#: src/dialogs/status.c:359
+#: src/dialogs/status.c:363
 msgid "No document"
 msgstr "Nincs dokumentum"
 
@@ -5331,11 +5335,11 @@ msgstr ""
 msgid "JavaScript Alert"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:790
+#: src/ecmascript/spidermonkey.c:826
 msgid "JavaScript Error"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:793
+#: src/ecmascript/spidermonkey.c:829
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following exception: \n"
@@ -5346,7 +5350,7 @@ msgid ""
 ".%*s^%*s."
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:801
+#: src/ecmascript/spidermonkey.c:837
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following exception: \n"
@@ -5354,11 +5358,11 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:818
+#: src/ecmascript/spidermonkey.c:854
 msgid "JavaScript Emergency"
 msgstr ""
 
-#: src/ecmascript/spidermonkey.c:819
+#: src/ecmascript/spidermonkey.c:855
 msgid ""
 "A script embedded in the current document was running for more than 5 "
 "seconds in line. This probably means there is a bug in the script and it "
@@ -5441,8 +5445,6 @@ msgstr "Mentés be/ki"
 msgid "Form history manager"
 msgstr ""
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Mutassa az ûrlapok listáját"
@@ -5893,6 +5895,7 @@ msgstr "Konfigurációs rendszer"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
+#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:685
 msgid "Mailcap"
@@ -6015,7 +6018,7 @@ msgid "No extensions"
 msgstr "Nincs kiterjesztés"
 
 #. name:
-#: src/mime/mime.c:35 src/mime/mime.c:306
+#: src/mime/mime.c:35 src/mime/mime.c:308
 msgid "MIME"
 msgstr "MIME"
 
@@ -6299,7 +6302,6 @@ msgid "Dumb prefixes, see enable-dumb description for details."
 msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:74
-#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"

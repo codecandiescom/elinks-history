@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.255 2004/04/09 03:10:26 jonas Exp $ */
+/* $Id: download.c,v 1.256 2004/04/11 12:42:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -709,17 +709,14 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	struct session *ses = cmdw_hop->ses;
 	struct stat buf;
 
-	if (!cmdw_hop->real_file) goto download_error;
+	if (!cmdw_hop->real_file || fstat(fd, &buf))
+		goto download_error;
 
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto download_error;
 
 	file_download->uri = get_uri_reference(ses->download_uri);
-	if (!file_download->uri) goto download_error;
-
 	file_download->file = cmdw_hop->real_file;
-
-	if (fstat(fd, &buf)) goto download_error;
 	file_download->last_pos = resume ? (int) buf.st_size : 0;
 
 	file_download->download.end = (void (*)(struct download *, void *)) download_data;
@@ -733,6 +730,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	object_nolock(file_download, "file_download");
 	add_to_list(downloads, file_download);
+
 	load_uri(file_download->uri, ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
 
@@ -743,14 +741,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	display_download(ses->tab->term, file_download, ses);
 
-	mem_free(cmdw_hop);
-	return;
-
 download_error:
-	if (file_download) {
-		if (file_download->uri) done_uri(file_download->uri);
-		mem_free(file_download);
-	}
 	mem_free(cmdw_hop);
 }
 

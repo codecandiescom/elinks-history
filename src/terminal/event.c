@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.82 2005/03/05 21:41:41 zas Exp $ */
+/* $Id: event.c,v 1.83 2005/03/27 18:14:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/object.h"
+#include "util/snprintf.h"
 #include "util/string.h"
 
 
@@ -155,8 +156,7 @@ check_terminal_name(struct terminal *term, struct terminal_info *info)
 		return;
 	}
 
-	strcpy(name, "terminal.");
-	strcat(name, info->name);
+	snprintf(name, sizeof(name), "terminal.%s", info->name);
 
 	/* Unlock the default _template_ option tree that was asigned by
 	 * init_term() and get the correct one. */

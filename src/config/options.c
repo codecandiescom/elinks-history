@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.66 2002/07/03 15:03:45 pasky Exp $ */
+/* $Id: options.c,v 1.67 2002/07/03 22:29:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -787,7 +787,7 @@ register_options()
 		"Allow blacklist of buggy servers.");
 
 	add_opt_bool("protocol.http.bugs",
-		"broken_302_redirect", 0, 0,
+		"broken_302_redirect", 0, 1,
 		"Broken 302 redirect (violates RFC but compatible with Netscape).");
 
 	add_opt_bool("protocol.http.bugs",

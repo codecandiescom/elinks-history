@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.80 2003/09/15 21:28:34 jonas Exp $ */
+/* $Id: tables.c,v 1.81 2003/09/15 21:30:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1430,9 +1430,6 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 #define V_LINE_X(table, xx, yy) (*(xx < 0 || xx > (table)->x || yy < -1 || yy > (table)->y + 1 ? \
 			(signed char *) NULL : &frame[1][(yy) + 1 + ((table)->y + 2) * (xx)]))
 #endif
-
-#define H_LINE(table, xx, yy) int_max(H_LINE_X(table, (xx), (yy)), 0)
-#define V_LINE(table, xx, yy) int_max(V_LINE_X(table, (xx), (yy)), 0)
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,

@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.10 2003/10/02 13:35:18 kuser Exp $ */
+/* $Id: event.h,v 1.11 2003/10/26 13:13:42 jonas Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -69,6 +69,19 @@ int register_event_hook(int id, event_hook callback, int priority, void *data);
 
 void unregister_event_hook(int id, event_hook callback);
 
+
+/*** Interface for table driven event hooks maintainance */
+
+struct event_hook_info {
+	unsigned char *name;
+	event_hook callback;
+	void *data;
+};
+
+#define NULL_EVENT_HOOK_INFO { NULL, NULL, NULL }
+
+void register_event_hooks(struct event_hook_info *hooks);
+void unregister_event_hooks(struct event_hook_info *hooks);
 
 /*** The events resolver */
 

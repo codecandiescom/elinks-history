@@ -1,5 +1,5 @@
 /* Event handling functions */
-/* $Id: event.c,v 1.13 2003/10/16 13:08:46 zas Exp $ */
+/* $Id: event.c,v 1.14 2003/10/26 13:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,6 +275,34 @@ unregister_event_hook(int id, event_hook callback)
 
 			break;
 		}
+	}
+}
+
+void
+register_event_hooks(struct event_hook_info *hooks)
+{
+	int i;
+
+	for (i = 0; hooks[i].name; i++) {
+		int id = register_event(hooks[i].name);
+
+		if (id == EVENT_NONE) continue;
+
+		register_event_hook(id, hooks[i].callback, 0, hooks[i].data);
+	}
+}
+
+void
+unregister_event_hooks(struct event_hook_info *hooks)
+{
+	int i;
+
+	for (i = 0; hooks[i].name; i++) {
+		int id = get_event_id(hooks[i].name);
+
+		if (id == EVENT_NONE) continue;
+
+		unregister_event_hook(id, hooks[i].callback);
 	}
 }
 

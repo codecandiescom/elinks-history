@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.5 2003/10/01 10:33:12 jonas Exp $ */
+/* $Id: scripting.c,v 1.6 2003/10/26 13:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,34 +28,6 @@ static struct scripting_backend *scripting_backends[] = {
 	NULL,
 };
 
-static inline void
-register_scripting_hooks(struct scripting_hook *hooks)
-{
-	int i;
-
-	for (i = 0; hooks[i].name; i++) {
-		int id = register_event(hooks[i].name);
-
-		if (id == EVENT_NONE) continue;
-
-		register_event_hook(id, hooks[i].callback, 0, hooks[i].data);
-	}
-}
-
-static inline void
-unregister_scripting_hooks(struct scripting_hook *hooks)
-{
-	int i;
-
-	for (i = 0; hooks[i].name; i++) {
-		int id = get_event_id(hooks[i].name);
-
-		if (id == EVENT_NONE) continue;
-
-		unregister_event_hook(id, hooks[i].callback);
-	}
-}
-
 void
 init_scripting(void)
 {
@@ -68,7 +40,7 @@ init_scripting(void)
 			backend->init();
 
 		if (backend->hooks)
-			register_scripting_hooks(backend->hooks);
+			register_event_hooks(backend->hooks);
 	}
 }
 
@@ -81,7 +53,7 @@ done_scripting(void)
 		struct scripting_backend *backend = scripting_backends[i];
 
 		if (backend->hooks)
-			unregister_scripting_hooks(backend->hooks);
+			unregister_event_hooks(backend->hooks);
 
 		if (backend->done)
 			backend->done();

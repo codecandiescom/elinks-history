@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.17 2003/10/01 16:38:49 pasky Exp $ */
+/* $Id: hooks.c,v 1.18 2003/10/26 13:13:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,13 +134,13 @@ script_hook_quit(va_list ap)
 	return EHS_NEXT;
 }
 
-struct scripting_hook guile_scripting_hooks[] = {
+struct event_hook_info guile_scripting_hooks[] = {
 	{ "goto-url", script_hook_goto_url, NULL },
 	{ "follow-url", script_hook_follow_url, NULL },
 	{ "pre-format-html", script_hook_pre_format_html, NULL },
 	{ "get-proxy", script_hook_get_proxy, NULL },
 	{ "quit", script_hook_quit, NULL },
-	NULL_SCRIPTING_HOOK,
+	NULL_EVENT_HOOK_INFO,
 };
 
 #endif /* HAVE_GUILE */

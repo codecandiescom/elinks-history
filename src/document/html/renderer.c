@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.120 2003/06/17 11:21:22 zas Exp $ */
+/* $Id: renderer.c,v 1.121 2003/06/17 11:26:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,10 +158,8 @@ realloc_line(struct part *p, int y, int x)
 static inline int
 xpand_lines(struct part *p, int y)
 {
-	/*if (y >= p->y) p->y = y + 1;*/
 	assert(p && p->data);
 
-	if (!p->data) return 0;
 	y += p->yp;
 	if (y >= p->data->y) return realloc_lines(p, y);
 
@@ -177,16 +175,16 @@ expand_lines(struct part *part, int y)
 static inline int
 xpand_line(struct part *p, int y, int x)
 {
-	if (!p->data) return 0; /* !!! FIXME: p->x (?) */
+	assert(p && p->data);
+
 	x += p->xp;
 	y += p->yp;
-#ifdef DEBUG
-	if (y >= p->data->y) {
-		internal("line does not exist");
-		return -1;
-	}
-#endif
-	if (x >= p->data->data[y].l) return realloc_line(p, y, x);
+
+	assertm(y < p->data->y, "line does not exist");
+
+	if (x >= p->data->data[y].l)
+		return realloc_line(p, y, x);
+
 	return 0;
 }
 

@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.1 2002/12/26 02:29:46 pasky Exp $ */
+/* $Id: syntree.c,v 1.2 2002/12/26 02:31:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,9 +22,9 @@ get_syntree_attrib(struct syntree_node *node, unsigned char *name)
 
 	if (!attr) return NULL;
 
-	value = mem_alloc(attr->svallen + 1);
-	strncpy(value, attr->sval, attr->svallen);
-	value[attr->svallen] = 0;
+	value = mem_alloc(attr->valuelen + 1);
+	strncpy(value, attr->value, attr->valuelen);
+	value[attr->valuelen] = 0;
 
 	return value;
 }

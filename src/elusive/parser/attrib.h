@@ -1,4 +1,4 @@
-/* $Id: attrib.h,v 1.2 2002/12/25 00:15:39 pasky Exp $ */
+/* $Id: attrib.h,v 1.3 2002/12/26 02:31:48 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_ATTRIB_H
 #define EL__USIVE_PARSER_ATTRIB_H
@@ -16,10 +16,7 @@ struct attribute {
 	struct attribute *prev;
 
 	unsigned char *name; int namelen;
-	unsigned char *sval; int svallen;
-
-	enum attribute_type type;
-	void *value;
+	unsigned char *value; int valuelen;
 };
 
 /* Get attribute of a given name from the supplied list. Returns NULL on

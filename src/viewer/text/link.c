@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.108 2003/11/17 22:10:36 kuser Exp $ */
+/* $Id: link.c,v 1.109 2003/11/24 04:45:15 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,13 +65,26 @@ set_link(struct document_view *doc_view)
 		find_link(doc_view, 1, 0);
 }
 
-
+#if 0
 static int
 comp_links(struct link *l1, struct link *l2)
 {
 	assert(l1 && l2);
 	if_assert_failed return 0;
 	return (l1->num - l2->num);
+}
+#endif
+
+static int
+comp_links(struct link *l1, struct link *l2)
+{
+	int res;
+	
+	assert(l1 && l2 && l1->pos && l2->pos);
+	if_assert_failed return 0;
+	res = l1->pos->y - l2->pos->y;
+	if (res) return res;
+	return l1->pos->x - l2->pos->x;
 }
 
 void

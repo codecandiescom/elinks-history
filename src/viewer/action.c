@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.1 2004/01/07 01:22:22 jonas Exp $ */
+/* $Id: action.c,v 1.2 2004/01/07 01:57:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 
 #include "cache/cache.h"
 #include "config/kbdbind.h"
+#include "config/options.h"
 #include "dialogs/document.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
@@ -24,6 +25,33 @@
 #include "sched/session.h"
 #include "sched/task.h"
 #include "viewer/text/view.h"
+
+
+static void
+toggle_document_option(struct session *ses, unsigned char *option_name)
+{
+	struct option *option;
+	long number;
+
+	assert(ses && ses->doc_view && ses->tab && ses->tab->term);
+	if_assert_failed return;
+
+	if (!ses->doc_view->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
+
+	option = get_opt_rec(config_options, option_name);
+	number = option->value.number + 1;
+
+	assert(option->type == OPT_BOOL || option->type == OPT_INT);
+	assert(option->max);
+
+	/* TODO: toggle per document. --Zas */
+	option->value.number = (number <= option->max) ? number : option->min;
+
+	draw_formatted(ses, 1);
+}
 
 
 /* This could gradually become some mulitplexor / switch noodle containing
@@ -82,11 +110,11 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			break;
 
 		case ACT_TOGGLE_DISPLAY_IMAGES:
-			toggle_images(ses, ses->doc_view, 0);
+			toggle_document_option(ses, "document.browse.images.show_as_links");
 			break;
 
 		case ACT_TOGGLE_DOCUMENT_COLORS:
-			toggle_document_colors(ses, ses->doc_view, 0);
+			toggle_document_option(ses, "document.colors.use_document_colors");
 			break;
 
 		case ACT_TOGGLE_HTML_PLAIN:
@@ -94,7 +122,7 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			break;
 
 		case ACT_TOGGLE_NUMBERED_LINKS:
-			toggle_link_numbering(ses, ses->doc_view, 0);
+			toggle_document_option(ses, "document.browse.links.numbering");
 			break;
 
 		case ACT_UNBACK:

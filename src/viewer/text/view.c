@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.331 2004/01/07 01:22:23 jonas Exp $ */
+/* $Id: view.c,v 1.332 2004/01/07 01:57:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -511,64 +511,6 @@ toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
 	}
 
 	doc_view->vs->plain = !doc_view->vs->plain;
-	draw_formatted(ses, 1);
-}
-
-void
-toggle_images(struct session *ses, struct document_view *doc_view, int a)
-{
-	assert(ses && doc_view && ses->tab && ses->tab->term);
-	if_assert_failed return;
-
-	if (!doc_view->vs) {
-		nowhere_box(ses->tab->term, NULL);
-		return;
-	}
-
-	/* TODO: toggle per document. --Zas */
-	get_opt_int("document.browse.images.show_as_links") =
-		!get_opt_int("document.browse.images.show_as_links");
-
-	draw_formatted(ses, 1);
-}
-
-void
-toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a)
-{
-	assert(ses && doc_view && ses->tab && ses->tab->term);
-	if_assert_failed return;
-
-	if (!doc_view->vs) {
-		nowhere_box(ses->tab->term, NULL);
-		return;
-	}
-
-	/* TODO: toggle per document. --Zas */
-	get_opt_int("document.browse.links.numbering") =
-		!get_opt_int("document.browse.links.numbering");
-
-	draw_formatted(ses, 1);
-}
-
-void
-toggle_document_colors(struct session *ses, struct document_view *doc_view, int a)
-{
-	assert(ses && doc_view && ses->tab && ses->tab->term);
-	if_assert_failed return;
-
-	if (!doc_view->vs) {
-		nowhere_box(ses->tab->term, NULL);
-		return;
-	}
-
-	/* TODO: toggle per document. --Zas */
-	{
-		int mode = get_opt_int("document.colors.use_document_colors");
-
-		get_opt_int("document.colors.use_document_colors") =
-			(mode + 1 <= 2) ? mode + 1 : 0;
-	}
-
 	draw_formatted(ses, 1);
 }
 

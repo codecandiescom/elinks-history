@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.118 2003/06/09 09:44:25 zas Exp $ */
+/* $Id: parser.c,v 1.119 2003/06/09 09:57:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,10 +77,10 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	*eof = '\0';
 
 	if (*e == '/') e++;
-	if (!isA(*e)) goto end_1;
+	if (!isA(*e)) goto parse_error;
 
 	while (isA(*e)) e++;
-	if ((!WHITECHAR(*e) && !TAG_DELIM(e) && *e != ':')) goto end_1;
+	if ((!WHITECHAR(*e) && !TAG_DELIM(e) && *e != ':')) goto parse_error;
 
 	if (name && namelen) *namelen = e - *name;
 
@@ -89,7 +89,8 @@ parse_element(register unsigned char *e, unsigned char *eof,
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
-	if (!*e || TAG_DELIM(e)) goto end;
+	if (!*e) goto parse_error;
+	if (TAG_DELIM(e)) goto end;
 
 	if (!ATTR_CHAR(*e)) {
 		/* Bad attribute, skip it. */
@@ -101,7 +102,7 @@ nextattr:
 				while (*e == quote) {
 					e++;
 					while (*e != quote && *e) e++;
-					if (!*e) goto end_1;
+					if (!*e) goto parse_error;
 					e++;
 				}
 			}
@@ -123,7 +124,7 @@ nextattr:
 		while (*e == quote) {
 			e++;
 			while (*e != quote && *e) e++;
-			if (!*e) goto end_1;
+			if (!*e) goto parse_error;
 			e++;
 		}
 	} else {
@@ -132,14 +133,16 @@ nextattr:
 	while (WHITECHAR(*e)) e++;
 
 endattr:
-	if (!*e) goto end_1;
+	if (!*e) goto parse_error;
 	if (!TAG_DELIM(e)) goto nextattr;
+
 end:
 	if (TAG_END_XML(e)) e++;
 	if (end) *end = e + TAG_END(e);
 	*eof = saved_eof_char;
 	return 0;
-end_1:
+
+parse_error:
 	*eof = saved_eof_char;
 	return -1;
 }

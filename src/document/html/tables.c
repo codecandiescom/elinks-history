@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.273 2004/06/29 02:46:15 jonas Exp $ */
+/* $Id: tables.c,v 1.274 2004/06/29 03:01:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -663,7 +663,7 @@ get_table_heights(struct table *table)
 
 /* FIXME: too long, split it. */
 static void
-display_complicated_table(struct table *table, int x, int y, int *yy)
+display_complicated_table(struct table *table, int x, int y)
 {
 	int col, row;
 	struct document *document = table->part->document;
@@ -776,7 +776,13 @@ display_complicated_table(struct table *table, int x, int y, int *yy)
 		      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
 	}
 
-	*yy = yp + table_frames.top + table_frames.bottom;
+	assertm(table->part->cy + table->real_height
+		==
+		yp + table_frames.top + table_frames.bottom,
+		"size does not match; 1:%d, 2:%d",
+		table->part->cy + table->real_height,
+		yp + table_frames.top + table_frames.bottom);
+
 }
 
 
@@ -1009,7 +1015,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
 	int align;
-	int cye;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
 	int margins;
@@ -1119,21 +1124,18 @@ again:
 	node = part->document->nodes.next;
 	node->box.height = part->box.y - node->box.y + part->cy;
 
-	display_complicated_table(table, x, part->cy, &cye);
+	display_complicated_table(table, x, part->cy);
 	display_table_frames(table, x, part->cy);
+
+	part->cy += table->real_height;
+	part->cx = -1;
 
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
-		set_box(&new_node->box, node->box.x, part->box.y + cye,
+		set_box(&new_node->box, node->box.x, part->box.y + part->cy,
 			node->box.width, 0);
 		add_to_list(part->document->nodes, new_node);
 	}
-
-	assertm(part->cy + table->real_height == cye, "size does not match; 1:%d, 2:%d",
-		part->cy + table->real_height, cye);
-
-	part->cy = cye;
-	part->cx = -1;
 
 ret2:
 	part->link_num = table->link_num;

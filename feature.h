@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.17 2004/01/01 03:25:48 pasky Exp $ */
+/* $Id: feature.h,v 1.18 2004/01/01 09:42:54 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -204,7 +204,7 @@
  *
  * - Recent versions of PuTTY also have some support for 256 colors.
  *
- * You will still need to enable this at the runtime for a given terminal in
+ * You will still need to enable this at runtime for a given terminal in
  * terminal options, or set your $TERM variable to xterm-256color - then,
  * ELinks will automatically configure itself to make use of all the available
  * terminal features, while still acting sensibly when you happen to run it in
@@ -260,7 +260,7 @@
 /* #define ELINKS_ROOT_EXEC */
 
 
-/*** Forms Memory
+/*** Form History
  *
  * The famous Competing Browser has that annoying thing which pops up when you
  * submit a form, offering to remember it and pre-fill it the next time. And
@@ -280,12 +280,14 @@
 /*** Mouse Support
  *
  * ELinks may be controlled not only by keyboard, but also by mouse to quite
- * a some extent. You can select links, menu items, scroll document, click at
+ * some extent. You can select links, menu items, scroll document, click at
  * buttons etc, and it should hopefully work. ELinks supports mouse control by
  * GPM, xterm mouse reporting and TWAIN's twterm mouse reporting.
  *
  * It is generally nice convience and doesn't cost too much. However, you can
- * do everything with keyboard as you can with mouse.
+ * do everything with keyboard as you can with mouse. Also note that the xterm
+ * mouse reporting takes control over the terminal so that copy and pasting
+ * text from and to ELinks has to be done by holding down the Shift key.
  *
  * Default: enabled */
 
@@ -312,15 +314,18 @@
  *
  * Default: disabled */
 
+#ifdef HAVE_SETENV
+/* Uncomment the following line if you want to enable this: */
 /* #define ELINKS_LOCAL_CGI */
+#endif
 
 
 /*** SMB Protocol Support
  *
- * ELinks supports browsing over the SMB protocol (URI 'smb' scheme), using
- * smbclient program as the backend. Therefore, in order to have this enabled,
- * you will need to install Samba (or at least just the smbclient part, if you
- * can install it separately).
+ * ELinks supports browsing over the SMB protocol (URI 'smb' scheme), using the
+ * smbclient program as backend. Therefore, in order to have this enabled, you
+ * will need to install Samba (or at least just the smbclient part, if you can
+ * install it separately).
  *
  * Default: enabled if smbclient will be found */
 

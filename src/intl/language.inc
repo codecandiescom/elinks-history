@@ -2510,7 +2510,7 @@ struct translation translation_czech [] = {
   {T_FOLDER_NAME, "Název slo¾ky"},
   {T_MOVE, "Pøesunout"},
   {T_AFTER_RESUME, "po posledním navázání"},
-  {T_TOGGLE_DISPLAY, NULL},
+  {T_TOGGLE_DISPLAY, "Pøepnout URL/název"},
   {0, NULL}
 };
 

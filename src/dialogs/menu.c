@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.166 2003/10/24 01:18:13 pasky Exp $ */
+/* $Id: menu.c,v 1.167 2003/10/24 01:36:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 	}
 loop_done:
 
-	if (n <= 1)
+	if (!n)
 		do_menu(term, no_hist_menu, ses, 0);
 	else
 		do_menu(term, mi, ses, 0);

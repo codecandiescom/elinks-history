@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.106 2004/06/18 12:38:06 jonas Exp $ */
+/* $Id: textarea.c,v 1.107 2004/06/18 13:04:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,10 +576,12 @@ textarea_op_eob(struct form_state *fs, struct form_control *fc)
 		fs->state = strlen(fs->value);
 
 	} else {
-		for (; line[y].start != -1 && line[y + 1].start != -1; y++) {
-			fs->state += line[y].end - line[y].start + 1;
-		}
-		int_upper_bound(&fs->state, line[y].end);
+		int last = get_textarea_line_number(line, strlen(fs->value));
+
+		assertm(last != -1, "line info corrupt");
+
+		fs->state += line[last].start - line[y].start;
+		int_upper_bound(&fs->state, line[last].end);
 	}
 
 	mem_free(line);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.415 2004/05/31 17:16:50 jonas Exp $ */
+/* $Id: session.c,v 1.416 2004/06/04 07:40:10 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1142,8 +1142,7 @@ get_current_link_in_view(struct document_view *doc_view)
 {
 	struct link *link = get_current_link(doc_view);
 
-	return (link && (link->type == LINK_HYPERTEXT || link->type == LINK_MAP))
-		? link : NULL;
+	return link && !link_is_form(link) ? link : NULL;
 }
 
 struct link *

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.59 2004/05/26 16:22:08 jonas Exp $ */
+/* $Id: document.h,v 1.60 2004/06/04 07:40:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -89,6 +89,9 @@ struct link {
 
 #define link_is_textinput(link) \
 	((link)->type == LINK_FIELD || (link)->type == LINK_AREA)
+
+#define link_is_form(link) \
+	((link)->type != LINK_HYPERTEXT && (link)->type != LINK_MAP)
 
 
 struct search {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.184 2004/05/29 16:15:27 jonas Exp $ */
+/* $Id: link.c,v 1.185 2004/06/04 07:40:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,7 +506,7 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 	link = get_current_link(doc_view);
 	if (!link) return NULL;
 
-	if (link->form)
+	if (link_is_form(link))
 		uri = get_form_uri(ses, doc_view, link->form);
 	else
 		uri = get_link_uri(ses, doc_view, link);
@@ -540,9 +540,8 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	link = get_current_link(doc_view);
 	if (!link) return 1;
 
-	if (link->type == LINK_HYPERTEXT
+	if (!link_is_form(link)
 	    || link->type == LINK_BUTTON
-	    || link->type == LINK_MAP
 	    || ((has_form_submit(doc_view->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link_is_textinput(link)))) {
@@ -821,8 +820,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link) goto end;
 
-	if (link->where
-	    && (link->type == LINK_HYPERTEXT || link->type == LINK_MAP)) {
+	if (link->where && !link_is_form(link)) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_ENTER,
@@ -927,8 +925,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 	link = get_current_link(doc_view);
 	if (!link) return NULL;
 
-	if (link->type == LINK_HYPERTEXT
-	    || link->type == LINK_MAP) {
+	if (!link_is_form(link)) {
 		struct string str;
 		unsigned char *uristring;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.38 2003/05/04 21:11:32 pasky Exp $ */
+/* $Id: session.c,v 1.39 2003/05/05 13:43:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,29 +210,67 @@ get_stat_msg(struct status *stat, struct terminal *term)
 	return stracpy(_(get_err_msg(stat->state), term));
 }
 
+extern struct document_options *d_opt;
+
+void
+init_bars_status(struct session *ses, int *tabs_count, struct document_options *doo)
+{
+	static int prev_title_bar = 0;
+	static int prev_status_bar = 0;
+	static int prev_tabs_bar = 0;
+	int show_title_bar = get_opt_int("ui.show_title_bar");
+	int show_status_bar = get_opt_int("ui.show_status_bar");
+	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
+	int tabs_cnt = number_of_tabs(ses->tab->term);
+
+	if (tabs_count) *tabs_count = tabs_cnt;
+	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
+		 	       !(show_tabs_bar == 1 && tabs_cnt < 2);
+	ses->visible_status_bar = show_status_bar;
+	ses->visible_title_bar = show_title_bar;
+
+	if (prev_title_bar != ses->visible_title_bar) {
+		prev_title_bar = ses->visible_title_bar;
+		ses->tab->term->dirty = 1;
+	}
+
+	if (prev_status_bar != ses->visible_status_bar) {
+		prev_status_bar = ses->visible_status_bar;
+		ses->tab->term->dirty = 1;
+	}
+
+	if (prev_tabs_bar != ses->visible_tabs_bar) {
+		prev_tabs_bar = ses->visible_tabs_bar;
+		ses->tab->term->dirty = 1;
+	}
+
+	if (doo) {
+		doo->xp = 0;
+		doo->yp = 0;
+		if (ses->visible_title_bar) doo->yp = 1;
+		doo->xw = ses->tab->term->x;
+		doo->yw = ses->tab->term->y;
+		if (ses->visible_title_bar) doo->yw--;
+		if (ses->visible_status_bar || ses->visible_tabs_bar) doo->yw--;
+		if (ses->visible_status_bar && ses->visible_tabs_bar) doo->yw--;
+	}
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
 	unsigned char *msg = NULL;
-	int show_title_bar = get_opt_int("ui.show_title_bar");
-	int show_status_bar = get_opt_int("ui.show_status_bar");
-	int show_tab_bar = get_opt_int("ui.tabs.show_bar");
-	int tabs_count = number_of_tabs(term);
+	int tabs_count;
 
-	ses->visible_tab_bar = (show_tab_bar > 0) &&
-		 	       !(show_tab_bar == 1 && tabs_count < 2);
-	ses->visible_status_bar = 0;
-	ses->visible_title_bar = 0;
-	
-	if (show_status_bar) {
+	init_bars_status(ses, &tabs_count, d_opt);
+
+	if (ses->visible_status_bar) {
 		static int last_current_link;
 		int tab_info_len = 0;
 		struct status *stat = NULL;
 
-		ses->visible_status_bar = 1;
-		
 		if (ses->wtd)
 			stat = &ses->loading;
 		else if (have_location(ses))
@@ -271,7 +309,7 @@ print_screen_status(struct session *ses)
 		fill_area(term, 0, term->y - 1, term->x, 1,
 			  get_bfu_color(term, "status.status-bar"));
 
-		if (!ses->visible_tab_bar && tabs_count > 1) {
+		if (!ses->visible_tabs_bar && tabs_count > 1) {
 			unsigned char tab_info[64];
 
 			snprintf(tab_info, 64, "[%d] ", term->current_tab + 1);
@@ -288,7 +326,7 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (ses->visible_tab_bar) {
+	if (ses->visible_tabs_bar) {
 		int tab_width = term->x / tabs_count;
 		int tab_num;
 		int msglen;
@@ -297,7 +335,7 @@ print_screen_status(struct session *ses)
 
 		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 			struct window *tab = get_tab_by_number(term, tab_num);
-			int ypos = term->y - (show_status_bar ? 2 : 1);
+			int ypos = term->y - (ses->visible_status_bar ? 2 : 1);
 			int color = (tab_num == term->current_tab)
 					? selected_color : normal_color;
 
@@ -325,8 +363,7 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (show_title_bar) {
-		ses->visible_title_bar = 1;
+	if (ses->visible_title_bar) {
 		fill_area(term, 0, 0, term->x, 1,
 			  get_bfu_color(term, "title.title-bar"));
 		msg = print_current_title(ses);

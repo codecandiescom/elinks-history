@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.13 2003/05/04 20:50:59 zas Exp $ */
+/* $Id: session.h,v 1.14 2003/05/05 13:43:15 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -81,7 +81,7 @@ struct session {
 	unsigned char *last_search_word;
 	int search_direction;
 	int exit_query;
-	int visible_tab_bar;
+	int visible_tabs_bar;
 	int visible_status_bar;
 	int visible_title_bar;
 	unsigned char *last_title;
@@ -106,6 +106,8 @@ void process_file_requests(struct session *);
 /* int read_session_info(int, struct session *, void *, int); */
 void *create_session_info(int, unsigned char *, int *);
 struct session *create_basic_session(struct window *);
+
+void init_bars_status(struct session *, int *, struct document_options *);
 
 void tabwin_func(struct window *, struct event *, int);
 

@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.10 2004/01/17 14:57:55 pasky Exp $ */
+/* $Id: apply.c,v 1.11 2004/01/17 14:59:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,7 +334,7 @@ static css_applier_t css_appliers[CSS_DP_LAST] = {
 	/* CSS_DP_NONE */		NULL,
 	/* CSS_DP_COLOR */		css_apply_color,
 	/* CSS_DP_BACKGROUND_COLOR */	css_apply_background_color,
-	/* CSS_DP_FONT_WEIGHT */	css_font_weight,
+	/* CSS_DP_FONT_WEIGHT */	css_apply_font_weight,
 };
 
 void

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.212 2003/11/10 20:53:21 jonas Exp $ */
+/* $Id: session.c,v 1.213 2003/11/11 15:25:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -709,6 +709,8 @@ do_move(struct session *ses, struct download **stat)
 		ses->ref_url = stracpy(ce->url);
 
 		switch (task) {
+		case TASK_NONE:
+			break;
 		case TASK_FORWARD:
 		{
 			protocol_external_handler *fn;
@@ -744,8 +746,6 @@ do_move(struct session *ses, struct download **stat)
 				 PRI_MAIN, ses->reloadlevel, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
-		default:
-			break;
 		}
 	} else {
 		ses->redirect_cnt = 0;
@@ -758,6 +758,8 @@ b:
 	}
 
 	switch (ses->task) {
+		case TASK_NONE:
+			break;
 		case TASK_FORWARD:
 			if (ses_chktype(ses, stat, ce)) {
 				free_task(ses);
@@ -775,8 +777,6 @@ b:
 			ses->task_target_location = cur_loc(ses)->prev;
 			ses_history_move(ses);
 			ses_forward(ses);
-			break;
-		default:
 			break;
 	}
 
@@ -1714,8 +1714,6 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!ses) break;
 			send_event(ses, ev);
 			break;
-		default:
-			error(_("Unknown event.", tab->term));
 	}
 }
 

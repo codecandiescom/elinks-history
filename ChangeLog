@@ -1,3 +1,18 @@
+Mon Jun 10 19:00:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lua/core.c:
+
+	Use sigjmp_buf instead of jmp_buf; fixes possible warning.  
+
+Mon Jun 10 15:54:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, config/options.h, config/opttypes.c,
+	dialogs/edit.c, protocol/types.c, protocol/types.h:
+
+	Moved extension<->mimetype to options space, so it's now
+	saved/loaded properly; removed struct extension. Introduced
+	delete_option(). Bugfix in str_dup().  
+
 Sun Jun  9 20:14:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, config/conf.c, config/options.c, config/options.h,

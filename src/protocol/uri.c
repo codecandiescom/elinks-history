@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.270 2004/08/20 04:02:48 jonas Exp $ */
+/* $Id: uri.c,v 1.271 2004/08/21 21:11:33 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -731,9 +731,8 @@ join_urls(struct uri *base, unsigned char *rel)
 	} else if (rel[0] == '?') {
 		/* Strip query, fragment and post part from the base URI and
 		 * append the query string in @rel. */
-		length  = base->fragment
-			? base->fragment - struri(base) - 1
-			: get_real_uri_length(base);
+		length  = base->fragment ? base->fragment - struri(base) - 1
+					 : get_real_uri_length(base);
 
 		uristring = memchr(base->data, '?', base->datalen);
 		if (uristring) length = uristring - struri(base);
@@ -823,7 +822,8 @@ join_urls(struct uri *base, unsigned char *rel)
 			 * above the last '/' in the URL; later, we'll copy the
 			 * URL only _TO_ this point, and anything after last
 			 * slash will be substituted by 'rel'. */
-			if (is_uri_dir_sep(base, *path_end)) path = path_end + 1;
+			if (is_uri_dir_sep(base, *path_end))
+				path = path_end + 1;
 		}
 	}
 

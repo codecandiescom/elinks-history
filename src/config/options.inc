@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.174 2005/01/02 12:54:24 jonas Exp $ */
+/* $Id: options.inc,v 1.175 2005/01/03 00:30:02 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -546,7 +546,7 @@ static struct option_info config_options_info[] = {
 		N_("Makes sure that the back- and foreground color is never "
 		"equal.")),
 
-	/* If you change this please also change ACT_DOCUMENT_COLORS action
+	/* If you change this please also change ACT_MAIN_DOCUMENT_COLORS action
 	 * handling. */
 	INIT_OPT_INT("document.colors", N_("Use document-specified colors"),
 		"use_document_colors", 0, 0, 2, 2,
@@ -554,13 +554,9 @@ static struct option_info config_options_info[] = {
 		"0 is use always the default settings\n"
 		"1 is use document colors if available, except background\n"
 		"2 is use document colors, including background. This can\n"
-		"  look really impressive mostly, but few sites look really\n"
-		"  ugly there (unfortunately including slashdot (but try to\n"
-		"  let him serve you that 'plain' version and the world will\n"
-		"  suddenly become a much more happy place for life)). Note\n"
-		"  that obviously if the background isn't black, it will\n"
-		"  break transparency, if you have it enabled for your terminal\n"
-		"  and on your terminal.")),
+		"  mostly look very impressive, but some sites will appear\n"
+		"  really ugly. Note, that obviously if the background is\n"
+		"  not black, it will break the behaviour of transparency.")),
 
 
 	/* Keep options in alphabetical order. */

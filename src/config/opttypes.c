@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.40 2002/12/10 10:50:55 zas Exp $ */
+/* $Id: opttypes.c,v 1.41 2002/12/12 16:47:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -442,6 +442,9 @@ tree_dup(struct option *opt, struct option *template)
 		add_to_list(*new, new_opt);
 
 		if (!new_opt->box_item) continue;
+
+		if (new_opt->name && !strcmp(new_opt->name, "_template_"))
+			new_opt->box_item->visible = get_opt_int("config.show_template");
 
 		if (template->box_item) {
 			add_at_pos((struct listbox_item *)

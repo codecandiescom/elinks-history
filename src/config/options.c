@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.149 2002/12/11 22:11:40 pasky Exp $ */
+/* $Id: options.c,v 1.150 2002/12/12 16:47:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,6 +208,9 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 		cat = tree->ptr;
 	}
 	if (!cat) return;
+
+	if (option->box_item && option->name && !strcmp(option->name, "_template_"))
+		option->box_item->visible = get_opt_int("config.show_template");
 
 	if (tree->box_item && option->box_item) {
 		option->box_item->depth = tree->box_item->depth + 1;
@@ -675,6 +678,33 @@ change_hook_html(struct session *ses, struct option *current, struct option *cha
 	return 0;
 }
 
+/* Bit 2 of show means we should always set visibility, otherwise we set it
+ * only on templates. */
+static void
+update_visibility(struct list_head *tree, int show)
+{
+	struct option *opt;
+
+	foreach (opt, *tree) {
+		if (!strcmp(opt->name, "_template_")) {
+			if (opt->box_item) opt->box_item->visible = show & 1;
+			if (opt->type == OPT_TREE)
+				update_visibility(opt->ptr, show | 2);
+		} else {
+			if (opt->box_item && show & 2) opt->box_item->visible = show & 1;
+			if (opt->type == OPT_TREE)
+				update_visibility(opt->ptr, show);
+		}
+	}
+}
+
+static int
+change_hook_stemplate(struct session *ses, struct option *current, struct option *changed)
+{
+	update_visibility(root_options.ptr, *((int *) changed->ptr));
+	return 0;
+}
+
 
 /**********************************************************************
  Options values
@@ -739,6 +769,12 @@ register_options()
 		"saving_style_w", 0, 0,
 		"This is internal option used when displaying warning about\n"
 		"obsolete config.saving_style. You shouldn't touch it.");
+
+	add_opt_bool("config",
+		"show_template", 0, 0,
+		"Show _template_ options in autocreated trees in the options\n"
+		"manager and save them to the configuration file.");
+	get_opt_rec(&root_options, "config.show_template")->change_hook = change_hook_stemplate;
 
 
 	add_opt_tree("",

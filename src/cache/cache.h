@@ -1,9 +1,10 @@
-/* $Id: cache.h,v 1.81 2004/04/03 14:51:53 jonas Exp $ */
+/* $Id: cache.h,v 1.82 2004/04/03 17:40:52 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
 
 #include "util/lists.h"
+#include "util/object.h"
 
 struct listbox_item;
 struct uri;
@@ -46,7 +47,9 @@ struct cache_entry {
 
 	int length;
 	int data_size;
-	int refcount; /* No direct access, use provided macros for that. */
+
+	/* Usage count object. */
+	struct object object;
 
 #ifdef HAVE_SCRIPTING
 	unsigned int done_pre_format_html_hook:1;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.246 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: download.c,v 1.247 2004/04/03 17:40:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,6 +723,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->term = cmdw_hop->ses->tab->term;
 	file_download->remotetime = 0;
 
+	object_nolock(file_download, "file_download");
 	add_to_list(downloads, file_download);
 	load_uri(file_download->uri, cmdw_hop->ses->referrer, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 		 (resume ? file_download->last_pos : 0));
@@ -827,7 +828,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto cancel;
 
-	object_nolock(file_download); /* Debugging purpose. */
+	object_nolock(file_download, "file_download"); /* Debugging purpose. */
 
 	file_download->uri = get_uri_reference(codw_hop->tq->uri);
 	file_download->file = codw_hop->real_file;

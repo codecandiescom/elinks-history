@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.98 2004/03/09 12:24:35 jonas Exp $ */
+/* $Id: options.h,v 1.99 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -6,6 +6,7 @@
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 
 /* TODO: We should provide some generic mechanism for options caching. */
@@ -126,7 +127,7 @@ struct option {
 	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
 	 * and simpler. */
 	struct listbox_item *box_item;
-	int refcount;
+	struct object object;
 };
 
 #define INIT_OPTION(name, flags, type, min, max, value, desc, capt) \

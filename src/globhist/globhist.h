@@ -1,4 +1,4 @@
-/* $Id: globhist.h,v 1.19 2004/01/04 18:13:04 jonas Exp $ */
+/* $Id: globhist.h,v 1.20 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
@@ -7,6 +7,7 @@ struct listbox_item;
 struct input_history;
 
 #include "util/lists.h"
+#include "util/object.h"
 #include "util/ttime.h"
 
 struct global_history_item {
@@ -18,7 +19,7 @@ struct global_history_item {
 	unsigned char *url;
 
 	ttime last_visit;
-	int refcount; /* No direct access, use provided macros for that. */
+	struct object object; /* No direct access, use provided macros for that. */
 };
 
 extern struct input_history global_history;

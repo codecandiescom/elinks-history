@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.134 2004/04/03 14:54:43 jonas Exp $ */
+/* $Id: cache.c,v 1.135 2004/04/03 17:40:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,7 @@ get_cache_entry(struct uri *uri)
 	cached->valid = 1;
 	init_list(cached->frag);
 	cached->id_tag = id_tag_counter++;
-	object_nolock(cached); /* Debugging purpose. */
+	object_nolock(cached, "cache_entry"); /* Debugging purpose. */
 
 	add_to_list(cache_entries, cached);
 

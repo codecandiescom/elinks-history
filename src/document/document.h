@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.52 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: document.h,v 1.53 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -6,6 +6,7 @@
 #include "document/options.h"
 #include "util/color.h"
 #include "util/lists.h"
+#include "util/object.h"
 
 struct cache_entry;
 struct document_refresh;
@@ -124,7 +125,7 @@ struct document {
 
 	unsigned int id_tag; /* Used to check cache entries. */
 
-	int refcount; /* No direct access, use provided macros for that. */
+	struct object object; /* No direct access, use provided macros for that. */
 	int cp;
 	int width, height; /* size of document */
 	int nlinks;

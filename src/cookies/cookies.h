@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.20 2004/03/11 04:44:23 witekfl Exp $ */
+/* $Id: cookies.h,v 1.21 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -6,6 +6,7 @@
 #include "bfu/listbox.h"
 #include "modules/module.h"
 #include "protocol/uri.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "util/ttime.h"
 
@@ -28,7 +29,7 @@ struct cookie {
 	/* This is indeed maintained by cookies.c, not dialogs.c; much easier
 	 * and simpler. */
 	struct listbox_item *box_item;
-	int refcount;
+	struct object object;
 };
 
 void accept_cookie(struct cookie *);

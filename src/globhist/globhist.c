@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.69 2004/03/09 15:24:48 zas Exp $ */
+/* $Id: globhist.c,v 1.70 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -205,7 +205,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		mem_free(history_item);
 		return;
 	}
-	object_nolock(history_item);
+	object_nolock(history_item, "globhist");
 
 	add_to_history_list(&global_history, history_item);
 

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.60 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: document.c,v 1.61 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ init_document(struct uri *uri, struct cache_entry *cached,
 	init_list(document->nodes);
 	init_list(document->css_imports);
 
-	object_nolock(document);
+	object_nolock(document, "document");
 	object_lock(document);
 
 	copy_opt(&document->options, options);

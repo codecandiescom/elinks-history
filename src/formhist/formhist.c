@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.78 2004/03/09 15:24:47 zas Exp $ */
+/* $Id: formhist.c,v 1.79 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "util/base64.h"
 #include "util/file.h"
 #include "util/lists.h"
+#include "util/object.h"
 #include "util/secsave.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
@@ -143,6 +144,7 @@ new_form(unsigned char *url)
 	form->submit = mem_alloc(sizeof(struct list_head));
 	if (!form->submit) { mem_free(form); return NULL; }
 
+	object_nolock(form, "formhist");
 	init_list(*form->submit);
 	form->box_item = add_listbox_item(&formhist_browser, form->url,
 					  form);

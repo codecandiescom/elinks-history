@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.30 2004/01/02 18:37:56 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.31 2004/04/03 17:40:52 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -11,6 +11,7 @@ struct terminal;
 
 #include "modules/module.h"
 #include "util/lists.h"
+#include "util/object.h"
 
 /* Bookmark record structure */
 
@@ -25,7 +26,7 @@ struct bookmark {
 
 	unsigned char *title;   /* title of bookmark */
 	unsigned char *url;     /* Location of bookmarked item */
-	int refcount;		/* No direct access, use provided macros for that. */
+	struct object object;	/* No direct access, use provided macros for that. */
 
 	struct list_head child;
 };

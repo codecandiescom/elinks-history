@@ -1,10 +1,11 @@
-/* $Id: download.h,v 1.34 2004/04/01 00:37:44 jonas Exp $ */
+/* $Id: download.h,v 1.35 2004/04/03 17:40:54 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
 
 #include "sched/connection.h"
 #include "util/lists.h"
+#include "util/object.h"
 #include "util/ttime.h"
 
 /* Silly BFU stuff */
@@ -39,7 +40,7 @@ struct file_download {
 	/* The current dialog for this download. Can be NULL. */
 	struct dialog_data *dlg_data;
 	struct listbox_item *box_item;
-	int refcount;
+	struct object object;
 };
 
 /* Stack of all running downloads */

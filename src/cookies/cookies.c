@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.129 2004/03/22 14:35:38 jonas Exp $ */
+/* $Id: cookies.c,v 1.130 2004/04/03 17:40:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,7 +232,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	cookie = mem_calloc(1, sizeof(struct cookie));
 	if (!cookie) return;
 
-	object_nolock(cookie); /* Debugging purpose. */
+	object_nolock(cookie, "cookie"); /* Debugging purpose. */
 
 	/* Fill main fields */
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.77 2004/04/02 22:51:42 jonas Exp $ */
+/* $Id: uri.h,v 1.78 2004/04/03 17:40:54 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -55,8 +55,8 @@ struct uri {
 	 * POST_CHAR in the uri string. */
 	unsigned char *post;
 
-	/* User count. Maintained by the URI cache. */
-	unsigned int refcount;
+	/* Usage count object. */
+	struct object object;
 };
 
 

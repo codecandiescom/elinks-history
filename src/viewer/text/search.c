@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.275 2004/08/14 15:21:27 miciah Exp $ */
+/* $Id: search.c,v 1.276 2004/08/14 15:22:39 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -720,7 +720,7 @@ static enum find_error find_next_do(struct session *ses,
 
 static void print_find_error(struct session *ses, enum find_error find_error);
 
-static void
+static enum find_error
 search_for_do(struct session *ses, unsigned char *str, int direction,
 	      int report_errors)
 {
@@ -728,23 +728,23 @@ search_for_do(struct session *ses, unsigned char *str, int direction,
 	enum find_error error;
 
 	assert(ses && str);
-	if_assert_failed return;
+	if_assert_failed return FIND_ERROR_NOT_FOUND;
 
 	doc_view = current_frame(ses);
 
 	assert(doc_view);
-	if_assert_failed return;
+	if_assert_failed return FIND_ERROR_NOT_FOUND;
 
 	mem_free_set(&ses->search_word, NULL);
 	mem_free_set(&ses->last_search_word, NULL);
 
-	if (!*str) return;
+	if (!*str) return FIND_ERROR_NOT_FOUND;
 
 	/* We only set the last search word because we don.t want find_next()
 	 * to try to find next link in search before the search data has been
 	 * initialized. find_next() will set ses->search_word for us. */
 	ses->last_search_word = stracpy(str);
-	if (!ses->last_search_word) return;
+	if (!ses->last_search_word) return FIND_ERROR_NOT_FOUND;
 
 	ses->search_direction = direction;
 
@@ -752,6 +752,8 @@ search_for_do(struct session *ses, unsigned char *str, int direction,
 
 	if (report_errors)
 		print_find_error(ses, error);
+
+	return error;
 }
 
 static void

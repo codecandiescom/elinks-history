@@ -342,9 +342,8 @@ msgid "Saved session"
 msgstr "Sessione salvata"
 
 #: src/bookmarks/dialogs.c:605
-#, fuzzy
 msgid "Bookmark tabs"
-msgstr "Schede segnalibri"
+msgstr "Aggiungi le schede ai segnalibri"
 
 #: src/bookmarks/dialogs.c:605
 msgid "Enter folder name"
@@ -519,15 +518,14 @@ msgid "Name of directory with configuration file"
 msgstr "Nome della directori con il file di configurazione"
 
 #: src/config/cmdline.c:443
-#, fuzzy
 msgid ""
 "ELinks will read and write its config files to the given\n"
 "directory instead of ~/.elinks. If the path begins with\n"
 "a '/' its used as an absolute path. Else it is assumed to\n"
 "be relative to your HOME dir."
 msgstr ""
-"Imposta la directory di configurazione al percorso dato. ELinks\n"
-"leggerà e scriverà i suoi file di configurazione in essa. Se il\n"
+"ELinks leggerà e scriverà i suoi file di configurazione nella\n"
+"directory data invece che in ~/.elinks. Se il\n"
 "percorso inizia con un '/' è usato un percorso assoluto. Altrimenti\n"
 "si assume essere relativo alla propria HOME directory."
 
@@ -2055,12 +2053,10 @@ msgstr ""
 "mentre scrivi\"."
 
 #: src/config/options.inc:299
-#, fuzzy
 msgid "Show not found"
-msgstr "Host non trovato"
+msgstr "Non trovato"
 
 #: src/config/options.inc:301
-#, fuzzy
 msgid ""
 "How to handle errors when nothing is matched.\n"
 "Currently only used for typeahead:\n"
@@ -2068,11 +2064,11 @@ msgid ""
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
-"Gestione degli errori quando \"trova mentre scrivi\" non trova "
-"corrispondenze:\n"
+"Gestione degli errori quando non viene trovato niente.\n"
+"Correntemente usato solo per \"trova mentre scrivi\":\n"
 "0 significa non fare niente\n"
 "1 significa fare beep\n"
-"2 significa mostra una finestra di dialogo"
+"2 significa mostrare una finestra di dialogo"
 
 #: src/config/options.inc:308
 msgid "Horizontal text margin"
@@ -2087,7 +2083,6 @@ msgid "Document meta refresh"
 msgstr "Meta refresh del documento"
 
 #: src/config/options.inc:314
-#, fuzzy
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2100,14 +2095,16 @@ msgstr ""
 "(tag '<meta>' per il refresh). Gli autori di pagine web lo usano per\n"
 "indicare al browser di ricaricare un documento dopo un certo intervallo o\n"
 "per caricare un'altra pagina."
+"Qualsiasi sia il valore, l'URI per il refresh sarà accessibile come\n"
+"collegamento.\n"
+"Usare document.browse.minumum_refresh_time per impostare il minimo ammontare\n"
+"di secondi per il refresh automatico."
 
 #: src/config/options.inc:321
-#, fuzzy
 msgid "Document meta refresh minimum time"
-msgstr "Meta refresh del documento"
+msgstr "Tempo minimo per il refresh del documento"
 
 #: src/config/options.inc:323
-#, fuzzy
 msgid ""
 "The minimum number of milliseconds that should pass before\n"
 "refreshing. If set to zero the document refresh time is used\n"
@@ -2116,7 +2113,8 @@ msgid ""
 msgstr ""
 "Il numero minimo di millisecondi che dovrebbero trascorrere prima\n"
 "di ricaricare. Se impostato a zero il è usato il tempo di ricaricamento\n"
-"del documento."
+"del documento. Può evitare stranezze quando si torna indietro nella\n"
+"cronologia con alcuni siti che usano valori di refresh pari a zero."
 
 #: src/config/options.inc:328
 msgid "Scroll margin"

@@ -1,17 +1,17 @@
 # Danish ELinks translation.
 # Jonas Fonseca <fonseca@diku.dk>
-# Morten Bo Johansen <mojo@mbjnet.dk>, 2004
+# Morten Bo Johansen <mojo@mbjnet.dk>, 2004, 2005
 # Vim: /msgstr ""\n$
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-25 23:50+0100\n"
-"PO-Revision-Date: 2005-01-31 23:27+0100\n"
-"Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
+"POT-Creation-Date: 2005-02-05 20:53+0100\n"
+"PO-Revision-Date: 2005-02-05 20:56+0100\n"
+"Last-Translator: Morten Bo Johansen <mojo@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: src/bfu/hierbox.c:348
@@ -29,7 +29,7 @@ msgstr "Info"
 
 #: src/bfu/hierbox.c:445
 msgid "Press space to expand this folder."
-msgstr "Tast mellemrum for at udfolde denne mappe."
+msgstr "Tast mellemrum for at åbne denne mappe."
 
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
 #: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
@@ -67,18 +67,18 @@ msgstr "O.k."
 #: src/bfu/hierbox.c:564
 #, c-format
 msgid "Sorry, but the item \"%s\" cannot be deleted."
-msgstr "Beklager, men emnet \"%s\" kan ikke slettes."
+msgstr "Beklager, men elementet \"%s\" kan ikke slettes."
 
 #: src/bfu/hierbox.c:565
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr "Desværre, men emnet \"%s\" er optaget af en anden proces."
+msgstr "Desværre, men elementet \"%s\" er optaget af en anden proces."
 
 #. cant_delete_folder
 #: src/bfu/hierbox.c:568 src/bookmarks/dialogs.c:124
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
-msgstr "Desværre, mappen \"%s\" kan ikke slettes"
+msgstr "Desværre, mappen \"%s\" kan ikke slettes."
 
 #. cant_delete_used_folder
 #: src/bfu/hierbox.c:569 src/bookmarks/dialogs.c:126
@@ -92,11 +92,11 @@ msgstr "Sletningsfejl"
 
 #: src/bfu/hierbox.c:731
 msgid "Delete marked items"
-msgstr "Slet markerede emner"
+msgstr "Slet markerede elementer"
 
 #: src/bfu/hierbox.c:732
 msgid "Delete marked items?"
-msgstr "Slet markerede emner?"
+msgstr "Slet markerede elementer?"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
 #: src/bfu/hierbox.c:873 src/config/dialogs.c:825 src/dialogs/menu.c:126
@@ -124,7 +124,7 @@ msgstr "Slet mappen \"%s\" og dens indhold?"
 
 #: src/bfu/hierbox.c:784
 msgid "Delete item"
-msgstr "Slet emne"
+msgstr "Slet element"
 
 #: src/bfu/hierbox.c:785
 #, c-format
@@ -143,7 +143,7 @@ msgstr "Slet alle"
 
 #: src/bfu/hierbox.c:843
 msgid "Do you really want to remove all items?"
-msgstr "Vil du virkelig slette alle emner?"
+msgstr "Vil du virkelig slette alle elementer?"
 
 #: src/bfu/hierbox.c:940 src/bfu/hierbox.c:973 src/bookmarks/dialogs.c:451
 #: src/cache/dialogs.c:222 src/config/dialogs.c:520 src/config/dialogs.c:945
@@ -172,13 +172,11 @@ msgstr "Navn"
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1022 src/sched/download.c:1032
-#: src/sched/download.c:1053 src/sched/download.c:1066
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:730
+#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
+#: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
-msgstr "Annuller"
+msgstr "Annullér"
 
 #: src/bfu/inpfield.c:66 src/bfu/inpfield.c:75
 msgid "Bad number"
@@ -342,8 +340,8 @@ msgid ""
 "(DISABLED)"
 msgstr ""
 "Filformat for bogmærker (påvirker læsning og gemning):\n"
-"0 er ELinks' standardformat format\n"
-"1 er det universelle XBEL XML-bogmærkeformat (INGEN NATIONALE TEGN!) "
+"0 er ELinks' standardformat\n"
+"1 er det universelle XBEL XML-bogmærkeformat (INGEN NATIONALE TEGN!) \n"
 "(DEAKTIVERET)"
 
 #: src/bookmarks/bookmarks.c:67
@@ -359,7 +357,7 @@ msgid ""
 "\n"
 "This feature requires bookmark support."
 msgstr ""
-"Automatisk gem et øjebliksbillede af alle faneblade periodisk.\n"
+"Gem et øjebliksbillede automatisk af alle faneblade periodisk.\n"
 "Dette vil gemme alle faneblade i alle åbne terminaler periodisk\n"
 "som bogmærker i en separat mappe for senere genskabelse i tilfælde\n"
 "af nedbrud.\n"
@@ -473,8 +471,7 @@ msgstr "Ryd"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1019
-#: src/sched/download.c:1050
+#: src/globhist/dialogs.c:235 src/sched/download.c:1114
 msgid "Save"
 msgstr "Gem"
 
@@ -558,33 +555,33 @@ msgstr "Teksthoved"
 #: src/cache/dialogs.c:178
 #, c-format
 msgid "Sorry, but cache entry \"%s\" cannot be deleted."
-msgstr "Desværre, cacheemnet \"%s\" kan ikke slettes."
+msgstr "Desværre, cache-elementet \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/cache/dialogs.c:180
 #, c-format
 msgid "Sorry, but cache entry \"%s\" is being used by something else."
-msgstr "Desværre, cacheemnet \"%s\" er optaget af en anden proces."
+msgstr "Desværre, cache-elementet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/cache/dialogs.c:186
 msgid "Delete marked cache entries"
-msgstr "Slet markerede cacheemner"
+msgstr "Slet markerede cache-elementer"
 
 #. delete_marked_items
 #: src/cache/dialogs.c:188
 msgid "Delete marked cache entries?"
-msgstr "Slet markerede cacheemner?"
+msgstr "Slet markerede cache-elementer?"
 
 #. delete_item_title
 #: src/cache/dialogs.c:194
 msgid "Delete cache entry"
-msgstr "Slet cacheemne"
+msgstr "Slet cache-element"
 
 #. delete_item
 #: src/cache/dialogs.c:196
 msgid "Delete this cache entry?"
-msgstr "Slet dette cacheemne?"
+msgstr "Slet dette cache-element?"
 
 #: src/cache/dialogs.c:227
 msgid "Cache manager"
@@ -593,7 +590,7 @@ msgstr "Cachehåndtering"
 #: src/config/cmdline.c:92
 #, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "Fejl ved parsning af indstilingen %s: %s"
+msgstr "Fejl ved fortolkning af indstilingen %s: %s"
 
 #: src/config/cmdline.c:110
 #, c-format
@@ -623,7 +620,7 @@ msgstr "Kunne ikke omdanne værtsnavn til IP-adresse"
 
 #: src/config/cmdline.c:306
 msgid "Remote method not supported"
-msgstr "Fjernmetode kendes ikke"
+msgstr "Fjernmetode ikke understøttet"
 
 #: src/config/cmdline.c:358
 msgid "Template option folder"
@@ -693,7 +690,7 @@ msgstr "Indsend automatisk den første formular i de givne adresser."
 # bedre, men i så fald burde vi kalde det ID-nummer og ikke bare ID.
 #: src/config/cmdline.c:616
 msgid "Clone internal session with given ID"
-msgstr "Kloning af intern session med et givent ID-nummer"
+msgstr "Kloning af intern session med et givent id-nummer"
 
 #: src/config/cmdline.c:618
 msgid ""
@@ -702,7 +699,7 @@ msgid ""
 "new instance. You don't want to use it."
 msgstr ""
 "Bruges internt når ELinks-instanser åbnes i nye terminalvinduer.\n"
-"Det givne ID-nummer henviser til information som den nye instans\n"
+"Det givne id-nummer henviser til information som den nye instans\n"
 "baseres på. Dette programargument bør ikke benyttes."
 
 #: src/config/cmdline.c:624
@@ -746,17 +743,13 @@ msgstr "Udskriv hjælp til opsætningsindstillinger og afslut."
 msgid "MIME type assumed for unknown document types"
 msgstr "MIME-typen som antages for dokumenter af ukendt type"
 
-# Har rettet sætninger af typen "standard ..." til "forvalgt ...". RO
-# nævner intet om at "standard" kan bruges som adjektiv, det kan nok
-# bruges i sammenstillinger, men så skal vi sige f.eks. "standard-MIME-type",
-# og det bliver jo let klodset. Det er en udbredt fejl i mange oversættelser.
 #: src/config/cmdline.c:645
 msgid "The default MIME type used for documents of unknown type."
 msgstr "Forvalgt MIME-type for dokumenter af ukendt type."
 
 #: src/config/cmdline.c:647
 msgid "Ignore user-defined keybindings"
-msgstr "Ignorer brugerdefinerede tasteturgenveje"
+msgstr "Ignorér brugerdefinerede tasteturgenveje"
 
 #: src/config/cmdline.c:649
 msgid ""
@@ -862,8 +855,8 @@ msgstr "Kontakt den specificerede værtsmaskine"
 #: src/config/cmdline.c:701
 msgid "Look up specified host and print all DNS resolved IP addresses."
 msgstr ""
-"Kontakt den specificerede værtsmaskine og udskriv alle IP adresser\n"
-"fundet ved DNS opslag"
+"Kontakt den specificerede værtsmaskine og udskriv alle IP-adresser\n"
+"fundet ved DNS-opslag"
 
 #: src/config/cmdline.c:703
 msgid "Run as separate instance"
@@ -878,7 +871,7 @@ msgid ""
 msgstr ""
 "Kør ELinks i en separat session og ikke i en sessionskreds. Bemærk\n"
 "at ingen sessionstilknyttede filer (bogmærker, historik osv.) bliver\n"
-"skrevet til disk når denne indstilling bruges. Se også -touch-files."
+"skrevet til disken når denne indstilling bruges. Se også -touch-files."
 
 #: src/config/cmdline.c:710
 msgid "Disable use of files in ~/.elinks"
@@ -921,7 +914,7 @@ msgstr ""
 
 #: src/config/cmdline.c:727
 msgid "Control an already running ELinks"
-msgstr "Kontroller en allerede kørende ELinks"
+msgstr "Kontrollér en allerede kørende ELinks"
 
 #: src/config/cmdline.c:729
 msgid ""
@@ -944,7 +937,7 @@ msgstr ""
 "til den. Indstillingen tager et ekstra argument, der angiver den\n"
 "metode, som skal kaldes samt eventuelle parametre der skal gives\n"
 "til den. For at gøre indstillingen nemmere at bruge kan det ekstra\n"
-"argument udelades i hvilket tilfælde alle adresse argumenter vil blive\n"
+"argument udelades i hvilket tilfælde alle adresse-argumenter vil blive\n"
 "åbnet i nye tabs i instansen som fjernkontrolleres.\n"
 "Efterfølgende er en liste af understøttede metoder:\n"
 "\tping()                    : søg efter fjern instans\n"
@@ -1195,7 +1188,7 @@ msgstr ""
 
 #: src/config/dialogs.c:212 src/config/dialogs.c:378
 msgid "N/A"
-msgstr "I/T"
+msgstr "-"
 
 #: src/config/dialogs.c:214 src/config/dialogs.c:376
 msgid "Description"
@@ -1216,8 +1209,9 @@ msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
-"Denne indstilling kan ikke ændres. Dette betyder det er en speciel "
-"indstilling eksempelvis en mappe - prøv at taste mellemrum for at åbne den. "
+"Denne indstilling kan ikke ændres. Dette betyder det er en "
+"specialindstilling eksempelvis en mappe - prøv at taste mellemrum for at "
+"åbne den."
 
 #: src/config/dialogs.c:472 src/config/dialogs.c:494
 msgid "Add option"
@@ -1294,11 +1288,11 @@ msgstr "Primære tastetildelinger"
 
 #: src/config/kbdbind.c:258
 msgid "Edit mapping"
-msgstr "Redigerings tastetildelinger"
+msgstr "Tastetildelinger ved redigering"
 
 #: src/config/kbdbind.c:259
 msgid "Menu mapping"
-msgstr "Menu tastetildelinger"
+msgstr "Tastetildelinger i menu"
 
 #: src/config/kbdbind.c:430 src/config/kbdbind.c:550 src/config/kbdbind.c:581
 msgid "Do nothing"
@@ -1335,7 +1329,7 @@ msgstr "Åbn cachehåndtering"
 
 #: src/config/kbdbind.c:439
 msgid "Free unused cache entries"
-msgstr "Frigør ubrugte emner i cache"
+msgstr "Frigør ubrugte cache-elementer"
 
 #: src/config/kbdbind.c:440
 msgid "Open cookie manager"
@@ -1375,7 +1369,7 @@ msgstr "Find forrige forekomst af den aktuelle søgetekst"
 
 #: src/config/kbdbind.c:449
 msgid "Forget authentication credentials"
-msgstr "Ignorer HTTP-verificering"
+msgstr "Ignorér HTTP-verificering"
 
 #: src/config/kbdbind.c:450
 msgid "Open form history manager"
@@ -1801,7 +1795,7 @@ msgstr "Flyt markør til venstre"
 
 #: src/config/kbdbind.c:568 src/config/kbdbind.c:592
 msgid "Move to the next item"
-msgstr "Flyt til næste emne"
+msgstr "Flyt til næste element"
 
 #: src/config/kbdbind.c:569
 msgid "Open in external editor"
@@ -1813,7 +1807,7 @@ msgstr "Kopiér tekst fra klippebord"
 
 #: src/config/kbdbind.c:571 src/config/kbdbind.c:595
 msgid "Move to the previous item"
-msgstr "Flyt til forrige emne"
+msgstr "Flyt til forrige element"
 
 #: src/config/kbdbind.c:573 src/config/kbdbind.c:597
 msgid "Move the cursor right"
@@ -1829,11 +1823,11 @@ msgstr "Flyt markør op"
 
 #: src/config/kbdbind.c:588
 msgid "Expand item"
-msgstr "Udfold emne"
+msgstr "Udfold element"
 
 #: src/config/kbdbind.c:591
 msgid "Mark item"
-msgstr "Markér emne"
+msgstr "Markér element"
 
 #: src/config/kbdbind.c:599
 msgid "Select current highlighted item"
@@ -2774,7 +2768,7 @@ msgstr ""
 
 #: src/config/options.inc:467
 msgid "Ignore cache-control info from server"
-msgstr "Ignorer cachestyringsinfo fra server"
+msgstr "Ignorér cachestyringsinfo fra server"
 
 #: src/config/options.inc:469
 msgid ""
@@ -2864,11 +2858,11 @@ msgstr ""
 
 #: src/config/options.inc:511
 msgid "Ignore charset info from server"
-msgstr "Ignorer information om tegnsæt fra server"
+msgstr "Ignorér information om tegnsæt fra server"
 
 #: src/config/options.inc:513
 msgid "Ignore charset info sent by server."
-msgstr "Ignorer information om tegnsæt sendt fra server"
+msgstr "Ignorér information om tegnsæt sendt fra server"
 
 #: src/config/options.inc:517
 msgid "Default color settings"
@@ -3613,11 +3607,11 @@ msgstr "Farver for afkrydsningsboks."
 
 #: src/config/options.inc:947
 msgid "Checkbox label"
-msgstr "Etiket på afkrydsningsboks"
+msgstr "Mærkat på afkrydsningsboks"
 
 #: src/config/options.inc:949
 msgid "Dialog checkbox label colors."
-msgstr "Farver på afkrydsningsboksens etiket."
+msgstr "Farver på afkrydsningsboksens mærkat."
 
 #: src/config/options.inc:951
 msgid "Button"
@@ -3823,7 +3817,7 @@ msgstr ""
 
 #: src/config/options.inc:1062
 msgid "Underline menu hotkeys"
-msgstr "Understreg menu-hurtigtaster"
+msgstr "Understreg hurtigtaster i menu"
 
 #: src/config/options.inc:1064
 msgid ""
@@ -4361,7 +4355,7 @@ msgstr "antaget"
 
 #: src/dialogs/document.c:106
 msgid "ignoring server setting"
-msgstr "Ignorer serverindstilling"
+msgstr "Ignorerer serverindstilling"
 
 #: src/dialogs/document.c:131
 msgid "Date"
@@ -5244,8 +5238,6 @@ msgstr "Gemning fra/til"
 msgid "Form history manager"
 msgstr "Formularhistorikhåndtering"
 
-#. TODO: Remember multiple login for the same form.
-#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Vis dialogboks for formularhistorik"
@@ -5293,43 +5285,43 @@ msgstr "Formularhistorik"
 #: src/globhist/dialogs.c:106
 #, c-format
 msgid "Sorry, but history entry \"%s\" cannot be deleted."
-msgstr "Desværre, historikemnet \"%s\" kan ikke slettes."
+msgstr "Desværre, historik-elementet \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/globhist/dialogs.c:108
 #, c-format
 msgid "Sorry, but history entry \"%s\" is being used by something else."
-msgstr "Desværre, historikemnet \"%s\" er optaget af en anden proces."
+msgstr "Desværre, historik-elementet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/globhist/dialogs.c:114
 msgid "Delete marked history entries"
-msgstr "Slet markerede emner"
+msgstr "Slet markerede historik-elementer"
 
 #. delete_marked_items
 #: src/globhist/dialogs.c:116
 msgid "Delete marked history entries?"
-msgstr "Slet markerede emner?"
+msgstr "Slet markerede historik-elementer?"
 
 #. delete_item_title
 #: src/globhist/dialogs.c:122
 msgid "Delete history entry"
-msgstr "Slet historikemne"
+msgstr "Slet historik-element"
 
 #. delete_item
 #: src/globhist/dialogs.c:124
 msgid "Delete this history entry?"
-msgstr "Slet dette historikemne?"
+msgstr "Slet dette historik-element?"
 
 #. clear_all_items_title
 #: src/globhist/dialogs.c:126
 msgid "Clear all history entries"
-msgstr "Slet alle historikemner"
+msgstr "Slet alle historik-elementer"
 
 #. clear_all_items_title
 #: src/globhist/dialogs.c:128
 msgid "Do you really want to remove all history entries?"
-msgstr "Vil du virkelig slette alle historikemner?"
+msgstr "Vil du virkelig slette alle historik-elementer?"
 
 #: src/globhist/dialogs.c:170
 msgid "Search history"
@@ -5357,11 +5349,11 @@ msgstr "Aktivér global historik (historik over alle besøgte sider)."
 
 #: src/globhist/globhist.c:68
 msgid "Maximum number of entries"
-msgstr "Maksimalt antal emner"
+msgstr "Maksimalt antal elementer"
 
 #: src/globhist/globhist.c:70
 msgid "Maximum number of entries in the global history."
-msgstr "Maksimalt antal emner i global historik."
+msgstr "Maksimalt antal elementer i global historik."
 
 #: src/globhist/globhist.c:72
 msgid "Display style"
@@ -5529,40 +5521,40 @@ msgstr ""
 "om variablen $HOME har en korrekt værdi og om du har skriverettigheder til "
 "dit hjemmekatalog."
 
-#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
+#: src/lowlevel/interlink.c:327 src/lowlevel/select.c:341
 #, c-format
 msgid "The call to %s failed: %d (%s)"
 msgstr "Kaldet til %s fejlede: %d (%s)"
 
 #. Infinite loop prevention.
-#: src/lowlevel/select.c:342
+#: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
 msgstr "%d select() fejl."
 
-#: src/main.c:143
+#: src/main.c:144
 msgid "Cannot create a pipe for internal communication."
 msgstr "Kan ikke oprette datakanal til intern kommunikation."
 
-#: src/main.c:203
+#: src/main.c:204
 #, c-format
 msgid "URL expected after -%s"
 msgstr "Adresse forventes efter -%s."
 
-#: src/main.c:211
+#: src/main.c:212
 msgid "No running ELinks found."
 msgstr "Ingen eksisterende ELinks blev fundet."
 
 #. The remote session(s) can not be created
-#: src/main.c:218
+#: src/main.c:219
 msgid "No remote session to connect to."
 msgstr "Ingen fjernsession at forbinde til."
 
-#: src/main.c:227
+#: src/main.c:228
 msgid "Unable to encode session info."
 msgstr "Kunne ikke indkode sessionsinformation."
 
-#: src/main.c:244
+#: src/main.c:245
 msgid "Unable to attach_terminal()."
 msgstr "Kunne ikke forbinde til terminal med attach_terminal()."
 
@@ -5913,43 +5905,44 @@ msgstr "gyldig"
 #: src/protocol/auth/dialogs.c:212
 #, c-format
 msgid "Sorry, but auth entry \"%s\" cannot be deleted."
-msgstr "Desværre, autentifikationsemnet \"%s\" kan ikke slettes."
+msgstr "Desværre, autentifikations-elementet \"%s\" kan ikke slettes."
 
 #. cant_delete_used_item
 #: src/protocol/auth/dialogs.c:214
 #, c-format
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
-msgstr "Desværre, autentifikationsemnet \"%s\" er optaget af en anden proces."
+msgstr ""
+"Desværre, autentifikations-elementet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
 msgid "Delete marked auth entries"
-msgstr "Slet markerede autentifikationsemner"
+msgstr "Slet markerede autentifikations-elementer"
 
 #. delete_marked_items
 #: src/protocol/auth/dialogs.c:222
 msgid "Delete marked auth entries?"
-msgstr "Slet markerede autentifikationsemner?"
+msgstr "Slet markerede autentifikations-elementer?"
 
 #. delete_item_title
 #: src/protocol/auth/dialogs.c:228
 msgid "Delete auth entry"
-msgstr "Slet autentifikationsemne"
+msgstr "Slet autentifikations-element"
 
 #. delete_item
 #: src/protocol/auth/dialogs.c:230
 msgid "Delete this auth entry?"
-msgstr "Slet denne autentifikationsemne"
+msgstr "Slet denne autentifikations-element?"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:232
 msgid "Clear all auth entries"
-msgstr "Slet alle autentifikationsemner"
+msgstr "Slet alle autentifikations-elementer"
 
 #. clear_all_items_title
 #: src/protocol/auth/dialogs.c:234
 msgid "Do you really want to remove all auth entries?"
-msgstr "Vil du virkelig slette alle autentifikationsemner?"
+msgstr "Vil du virkelig slette alle autentifikations-elementer?"
 
 #: src/protocol/auth/dialogs.c:261
 msgid "Authentication manager"
@@ -6681,55 +6674,40 @@ msgstr "Overskriv originalfilen"
 msgid "Resume download of the original file"
 msgstr "Genoptag overførsel af originalfilen"
 
-#: src/sched/download.c:1013 src/sched/download.c:1025
-msgid "Unknown type"
-msgstr "Ukendt type"
-
-#: src/sched/download.c:1014
-#, c-format
-msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Vil du gemme filen \"%s\" (type: %s) eller vise den?"
-
-#: src/sched/download.c:1020 src/sched/download.c:1030
-#: src/sched/download.c:1051 src/sched/download.c:1064
-msgid "Display"
-msgstr "Vis"
-
-#: src/sched/download.c:1021 src/sched/download.c:1031
-#: src/sched/download.c:1052 src/sched/download.c:1065
-msgid "Show header"
-msgstr "Vis protokolhoved"
-
-#: src/sched/download.c:1026
-#, c-format
-msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Vil du vise filen \"%s\" (type: %s)?"
-
-#: src/sched/download.c:1042 src/sched/download.c:1056
+#: src/sched/download.c:1033
 msgid "What to do?"
 msgstr "Hvad skal der ske med filen?"
 
-#: src/sched/download.c:1043
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', save it or display it?"
-msgstr ""
-"Vil du åbne filen \"%s\" (type: %s%s%s)\n"
-"med \"%s\", gemme den eller vise den?"
+#: src/sched/download.c:1036
+msgid "Unknown type"
+msgstr "Ukendt type"
 
-#: src/sched/download.c:1049 src/sched/download.c:1063
+#: src/sched/download.c:1053
+#, c-format
+msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
+msgstr "Hvad vil du gøre med filen \"%s\" (type: %s%s%s)?"
+
+#: src/sched/download.c:1083
+#, no-c-format
+msgid "Program ('%' will be replaced by the filename)"
+msgstr "Program (\"%\" vil blive erstattet med filnavnet)"
+
+#: src/sched/download.c:1090
+#, c-format
+msgid "The file will be opened with the program '%s'."
+msgstr "Filen vil blive åbnet med programmet \"%s\"."
+
+#: src/sched/download.c:1107
 msgid "Open"
 msgstr "Åbn"
 
-#: src/sched/download.c:1057
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
-msgstr ""
-"Vil du åbne filen \"%s\" (type: %s%s%s)\n"
-"med \"%s\" eller vise den?"
+#: src/sched/download.c:1120
+msgid "Display"
+msgstr "Vis"
+
+#: src/sched/download.c:1124
+msgid "Show header"
+msgstr "Vis protokolhoved"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6920,7 +6898,21 @@ msgstr ""
 msgid "The CSO phone-book protocol is not supported."
 msgstr "Telefonbogsprotokollen CSO understøttes ikke."
 
-#: src/sched/error.c:126
+#: src/sched/error.c:105
+msgid ""
+"The proxy configuration encountered an error.\n"
+"This usually means that either an environment\n"
+"variable with proxy info or a proxy scripting\n"
+"hook did not provide proxy configuration info\n"
+"in the correct format."
+msgstr ""
+"Der opstod en fejl under proxy-konfigureringen.\n"
+"Dette betyder ofte enten at en miljøvariabel med\n"
+"proxy-information eller at en proxy-script-kald\n"
+"ikke returnerede proxy-konfigurerings information\n"
+"i det korrekte format."
+
+#: src/sched/error.c:132
 msgid "Unknown error"
 msgstr "Ukendt fejl"
 
@@ -7132,7 +7124,7 @@ msgstr "Ugyldig hændelse %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Kunne ikke læse hændelse: %d (%s)"
 
-#: src/terminal/kbd.c:998
+#: src/terminal/kbd.c:1000
 msgid "Too many bytes read from the itrm!"
 msgstr "Læste for mange bytes fra itrm!"
 

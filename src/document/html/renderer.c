@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.80 2003/05/08 23:03:07 zas Exp $ */
+/* $Id: renderer.c,v 1.81 2003/05/10 11:55:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1486,19 +1486,19 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 
 	if (ce->head) add_to_str(&head, &hdl, ce->head);
 
-	scan_http_equiv(start, end, &head, &hdl, &t);
-
-	convert_table = get_convert_table(head, screen->opt.cp,
+	i = d_opt->plain;
+	if (!i) {
+		scan_http_equiv(start, end, &head, &hdl, &t);
+		convert_table = get_convert_table(head, screen->opt.cp,
 					  screen->opt.assume_cp,
 					  &screen->cp, &screen->ass,
 					  screen->opt.hard_assume);
 
-	i = d_opt->plain;
-	d_opt->plain = 0;
-	if (!i) screen->title = convert_string(convert_table, t, strlen(t));
-	d_opt->plain = i;
-
-	mem_free(t);
+		d_opt->plain = 0;
+		screen->title = convert_string(convert_table, t, strlen(t));
+		d_opt->plain = i;
+		mem_free(t);
+	}
 
 	push_base_format(url, &screen->opt);
 

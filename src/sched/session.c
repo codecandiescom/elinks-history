@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.361 2004/04/04 16:05:58 jonas Exp $ */
+/* $Id: session.c,v 1.362 2004/04/04 17:42:01 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -347,7 +347,7 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 	uri = get_cache_uri_string(cached);
 
 	set_event_id(pre_format_html_event, "pre-format-html");
-	trigger_event(pre_format_html_event, &src, &len, ses, url);
+	trigger_event(pre_format_html_event, &src, &len, ses, uri);
 
 	if (src && src != fr->data) {
 		add_fragment(cached, 0, src, len);

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.76 2004/09/25 19:51:49 pasky Exp $ */
+/* $Id: document.h,v 1.77 2004/09/27 00:55:40 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -58,6 +58,20 @@ enum link_type {
 	LINK_AREA,
 };
 
+struct script_event_hook {
+	LIST_HEAD(struct event_hook);
+
+	enum script_event_hook_type {
+		SEVHOOK_ONCLICK,
+		SEVHOOK_ONDBLCLICK,
+		SEVHOOK_ONMOUSEOVER,
+		SEVHOOK_ONFOCUS,
+		SEVHOOK_ONMOUSEOUT,
+		SEVHOOK_ONBLUR,
+	} type;
+	unsigned char *src;
+};
+
 struct link {
 	long accesskey;
 
@@ -76,6 +90,8 @@ struct link {
 	int number;
 
 	struct color_pair color;
+
+	struct list_head event_hooks; /* -> struct script_event_hook */
 
 	union {
 		unsigned char *name;

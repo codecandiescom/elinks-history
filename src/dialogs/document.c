@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.65 2003/11/14 11:21:41 zas Exp $ */
+/* $Id: document.c,v 1.66 2003/11/16 03:19:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,8 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_char_to_string(&msg, '\n');
 
-	if (!get_cache_entry(location->vs.url, &ce)) {
+	ce = get_cache_entry(location->vs.url);
+	if (ce) {
 		unsigned char *a;
 
 		add_format_to_string(&msg, "\n%s: %d",
@@ -251,7 +252,8 @@ head_msg(struct session *ses)
 		return;
 	}
 
-	if (find_in_cache(cur_loc(ses)->vs.url, &ce) && ce->head) {
+	ce = find_in_cache(cur_loc(ses)->vs.url);
+	if (ce && ce->head) {
 		unsigned char *headers = stracpy(ce->head);
 
 		if (!headers) return;

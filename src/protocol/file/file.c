@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.130 2003/11/10 23:36:43 zas Exp $ */
+/* $Id: file.c,v 1.131 2003/11/16 03:19:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,7 +657,8 @@ file_func(struct connection *connection)
 
 		/* Try to add fragment data to the connection cache if either
 		 * file reading or directory listing worked out ok. */
-		if (get_cache_entry(struri(connection->uri), &cache)) {
+		cache = get_cache_entry(struri(connection->uri));
+		if (!cache) {
 			if (!redirect) done_string(&page);
 			state = S_OUT_OF_MEM;
 

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.28 2003/11/15 16:39:21 pasky Exp $ */
+/* $Id: document.c,v 1.29 2003/11/16 03:19:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,8 @@ done_document(struct document *document)
 	assertm(!is_document_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
-	if (!find_in_cache(document->url, &ce) || !ce)
+	ce = find_in_cache(document->url);
+	if (!ce)
 		internal("no cache entry for document");
 	else
 		cache_entry_unlock(ce);
@@ -197,7 +198,7 @@ shrink_format_cache(int whole)
 		if (is_document_used(document)) continue;
 
 		if (!whole) {
-			struct cache_entry *ce = NULL;
+			struct cache_entry *ce;
 
 			/* If we are not purging the whole format cache, stop
 			 * once we are below the maximum number of entries. */
@@ -206,8 +207,8 @@ shrink_format_cache(int whole)
 
 			/* Keep unreferenced documents that are in sync with
 			 * the (resource) cache entry. */
-			if (find_in_cache(document->url, &ce)
-			    && ce && ce->id_tag == document->id_tag)
+			ce = find_in_cache(document->url);
+			if (ce && ce->id_tag == document->id_tag)
 				continue;
 		}
 

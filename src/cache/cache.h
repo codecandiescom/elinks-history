@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.55 2003/11/15 16:37:37 pasky Exp $ */
+/* $Id: cache.h,v 1.56 2003/11/16 03:19:46 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -98,8 +98,15 @@ struct fragment {
 };
 
 long cache_info(int);
-int find_in_cache(unsigned char *, struct cache_entry **);
-int get_cache_entry(unsigned char *, struct cache_entry **);
+
+/* Searches the cache for an entry matching the URI. Returns NULL if no one
+ * matches. */
+struct cache_entry *find_in_cache(unsigned char *uri);
+
+/* Searches the cache for a matching entry else a new one is added. Returns
+ * NULL if allocation fails. */
+struct cache_entry *get_cache_entry(unsigned char *uri);
+
 int add_fragment(struct cache_entry *, int, unsigned char *, int);
 void defrag_entry(struct cache_entry *);
 void truncate_entry(struct cache_entry *, int, int);

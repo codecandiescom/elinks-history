@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.4 2003/11/13 23:40:55 jonas Exp $ */
+/* $Id: renderer.c,v 1.5 2003/11/16 03:19:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ render_document(struct view_state *vs, struct document_view *document_view,
 {
 	unsigned char *name;
 	struct document *document;
-	struct cache_entry *cache_entry = NULL;
+	struct cache_entry *cache_entry;
 
 	assert(vs && document_view && options);
 	if_assert_failed return;
@@ -51,7 +51,8 @@ render_document(struct view_state *vs, struct document_view *document_view,
 	document_view->last_x = document_view->last_y = -1;
 	document_view->document = NULL;
 
-	if (!find_in_cache(vs->url, &cache_entry) || !cache_entry) {
+	cache_entry = find_in_cache(vs->url);
+	if (!cache_entry) {
 		internal("document %s to format not found", vs->url);
 		return;
 	}

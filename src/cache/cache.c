@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.93 2003/11/15 16:25:23 pasky Exp $ */
+/* $Id: cache.c,v 1.94 2003/11/16 03:19:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,10 +89,8 @@ cache_info(int type)
 	return 0;
 }
 
-/* Return 1 and save cache entry to @f if there's matching one, otherwise
- * return 0. */
-int
-find_in_cache(unsigned char *url, struct cache_entry **cep)
+struct cache_entry *
+find_in_cache(unsigned char *url)
 {
 	struct cache_entry *ce;
 
@@ -106,30 +104,30 @@ find_in_cache(unsigned char *url, struct cache_entry **cep)
 		del_from_list(ce);
 		add_to_list(cache, ce);
 
-		*cep = ce;
-		return 1;
+		return ce;
 	}
 
-	return 0;
+	return NULL;
 }
 
-int
-get_cache_entry(unsigned char *url, struct cache_entry **cep)
+struct cache_entry *
+get_cache_entry(unsigned char *url)
 {
-	struct cache_entry *ce;
+	struct cache_entry *ce = find_in_cache(url);
 
-	if (find_in_cache(url, cep)) return 0;
+	if (ce) return ce;
+
 	shrink_memory(0);
 	url = extract_proxy(url);
 
 	ce = mem_calloc(1, sizeof(struct cache_entry));
-	if (!ce) return -1;
+	if (!ce) return NULL;
 
 	url = stracpy(url);
 	if (!url || !parse_uri(&ce->uri, url)) {
 		if (url) mem_free(url);
 		mem_free(ce);
-		return -1;
+		return NULL;
 	}
 
 	ce->incomplete = 1;
@@ -139,9 +137,8 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 	cache_entry_nolock(ce); /* Debugging purpose. */
 
 	add_to_list(cache, ce);
-	*cep = ce;
 
-	return 0;
+	return ce;
 }
 
 static inline void

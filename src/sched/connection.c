@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.126 2003/11/15 16:25:23 pasky Exp $ */
+/* $Id: connection.c,v 1.127 2003/11/16 03:19:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -781,7 +781,9 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 #endif
 
-	if (cache_mode <= CACHE_MODE_NORMAL && find_in_cache(url, &ce) && !ce->incomplete) {
+	if (cache_mode <= CACHE_MODE_NORMAL
+	    && (ce = find_in_cache(url))
+	    && !ce->incomplete) {
 		if (!is_cache_entry_used(ce) &&
 		    ((ce->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
 		     || (ce->redirect && !get_opt_int("document.cache.cache_redirects")))) {

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.127 2003/11/14 02:31:06 miciah Exp $ */
+/* $Id: core.c,v 1.128 2003/11/16 03:19:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,12 +125,12 @@ l_current_document(LS)
 {
 	if (lua_ses) {
 		unsigned char *url = cur_loc(lua_ses)->vs.url;
-		struct cache_entry *ce;
-		struct fragment *f;
+		struct cache_entry *ce = url ? find_in_cache(url) : NULL;
+		struct fragment *f = ce ? ce->frag.next : NULL;
 
-		if (url && find_in_cache(url, &ce) && (f = ce->frag.next)) {
+		if (f && f->length) {
 			lua_pushlstring(S, f->data, f->length);
-			return 1;
+			return 1i;
 		}
 	}
 

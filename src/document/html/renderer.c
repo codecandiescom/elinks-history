@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.188 2003/07/30 15:18:13 jonas Exp $ */
+/* $Id: renderer.c,v 1.189 2003/07/30 16:06:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ xpand_spaces(struct part *p, int l)
 	} while (0)
 
 static inline void
-set_hchar(struct part *part, int x, int y, unsigned c)
+set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char attr)
 {
 	assert(part && part->document);
 	if_assert_failed return;
@@ -263,7 +263,8 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 	assert(part->document->data);
 	if_assert_failed return;
 
-	set_position(x, y, c);
+	POS(x, y).data = data;
+	POS(x, y).attr = attr;
 }
 
 static inline void
@@ -283,9 +284,9 @@ set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 }
 
 void
-xset_hchar(struct part *part, int x, int y, unsigned c)
+xset_hchar(struct part *part, int x, int y, unsigned char data, unsigned char attr)
 {
-	set_hchar(part, x, y, c);
+	set_hchar(part, x, y, data, attr);
 }
 
 void
@@ -312,8 +313,10 @@ set_hline(struct part *part, int x, int y,
 
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
-		if (part->document && part->document->data)
-			set_position(x, y, (*chars | attr));
+		if (part->document && part->document->data) {
+			set_position_attr(x, y, attr);
+			set_position_data(x, y, *chars);
+		}
 	}
 }
 
@@ -384,7 +387,10 @@ copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
-	for (; xl; xl--, x++, d++) set_position(x, y, encode_screen_char(*d));
+	for (; xl; xl--, x++, d++) {
+		POS(x, y).attr = d->attr;
+		POS(x, y).data = d->data;
+	}
 }
 
 static inline void

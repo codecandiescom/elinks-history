@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.670 2005/01/06 08:55:18 zas Exp $ */
+/* $Id: view.c,v 1.671 2005/01/06 09:00:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1067,7 +1067,17 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 	if (!do_mouse_event(ses, ev, doc_view)
 	    && check_mouse_button(ev, B_RIGHT)) {
 		tab_menu(ses, mouse->x, mouse->y, 0);
+		return NULL;
 	}
+
+#ifdef CONFIG_LEDS
+	if (ses->status.show_leds
+	    && mouse->y == term->height - 1
+	    && mouse->x >= term->width - LEDS_COUNT - 3) {
+		menu_leds_info(term, NULL, NULL);
+		return NULL;
+	}
+#endif
 
 	return NULL;
 }

@@ -65,7 +65,6 @@ extern int errno;
 #include "gettextP.h"
 #include "libgnuintl.h"
 #include "hash-string.h"
-#include "osdep/os_dep.h"
 #include "util/string.h"
 
 /* Alignment of types.  */

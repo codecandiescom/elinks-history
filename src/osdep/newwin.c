@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.1 2003/10/27 23:22:11 pasky Exp $ */
+/* $Id: newwin.c,v 1.2 2003/10/27 23:25:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,7 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
-#include "osdep/os_dep.h"
+#include "osdep/osdep.h"
 #include "terminal/terminal.h"
 #include "util/memory.h"
 #include "util/string.h"

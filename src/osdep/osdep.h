@@ -1,7 +1,7 @@
-/* $Id: osdep.h,v 1.31 2003/10/27 23:22:11 pasky Exp $ */
+/* $Id: osdep.h,v 1.32 2003/10/27 23:25:36 pasky Exp $ */
 
-#ifndef EL__OSDEP_OS_DEP_H
-#define EL__OSDEP_OS_DEP_H
+#ifndef EL__OSDEP_OSDEP_H
+#define EL__OSDEP_OSDEP_H
 
 int get_system_env(void);
 int get_e(unsigned char *env);

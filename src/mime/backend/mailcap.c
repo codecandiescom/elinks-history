@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.69 2003/10/27 01:12:15 jonas Exp $ */
+/* $Id: mailcap.c,v 1.70 2003/10/27 23:25:35 pasky Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -35,7 +35,7 @@
 #include "mime/backend/mailcap.h"
 #include "mime/mime.h"
 #include "modules/module.h"
-#include "osdep/os_dep.h"		/* For exe() */
+#include "osdep/osdep.h"		/* For exe() */
 #include "sched/session.h"
 #include "util/file.h"
 #include "util/hash.h"

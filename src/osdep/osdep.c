@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.114 2003/10/27 23:22:11 pasky Exp $ */
+/* $Id: osdep.c,v 1.115 2003/10/27 23:25:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 
 #include "lowlevel/select.h"
 #include "lowlevel/signals.h"
-#include "osdep/os_dep.h"
+#include "osdep/osdep.h"
 #include "sched/session.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"

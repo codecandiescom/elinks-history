@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.26 2003/05/24 13:52:10 pasky Exp $ */
+/* $Id: terminal.c,v 1.27 2003/05/25 01:39:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -589,25 +589,22 @@ exec_on_terminal(struct terminal *term, unsigned char *path,
 	}
 }
 
-void
+/* Send code or/and data to terminal.
+ * if datalen > 0, data is considered as a c string and strlen() is called.
+ * Returns -1 on error, 0 on success, 1 if not done. */
+int
 do_terminal_function(struct terminal *term, unsigned char code,
-		     unsigned char *data)
+		     unsigned char *data, int datalen)
 {
-	int data_len = strlen(data);
-	unsigned char *x_data = fmem_alloc(data_len + 1 /* code */ + 1 /* null char */);
+	int data_len = (datalen > 0) ? datalen : strlen(data);
+	unsigned char *x_data;
 
-	if (!x_data) return;
+	x_data = fmem_alloc(data_len + 1 /* code */ + 1 /* null char */);
+	if (!x_data) return -1;
 	x_data[0] = code;
 	memcpy(x_data + 1, data, data_len + 1);
 	exec_on_terminal(term, NULL, x_data, 0);
 	fmem_free(x_data);
-}
 
-void
-set_terminal_title(struct terminal *term, unsigned char *title)
-{
-	if (term->title && !strcmp(title, term->title)) return;
-	if (term->title) mem_free(term->title);
-	term->title = stracpy(title);
-	do_terminal_function(term, TERM_FN_TITLE, title);
+	return 0;
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.68 2003/05/16 23:31:51 pasky Exp $ */
+/* $Id: session.c,v 1.69 2003/05/25 01:39:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,6 +272,67 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	}
 }
 
+
+/* Compose and display terminal title for current session. */
+/* 0 = OK, title effectively set
+ * 1 = title didn't changed since last call.
+ * -1 = error */
+static int
+set_terminal_title(struct session *ses, unsigned char *prefix,
+		   unsigned char *default_title, unsigned char *suffix)
+{
+	static void *last_ses = NULL;
+	unsigned char *s = init_str();
+	int slen = 0;
+
+	if (!s) return -1; /* Eh, memory needed very sooooon... */
+
+	/* What about ASSERT() introduction in ELinks code ? --Zas */
+	if (!ses || !ses->tab || !ses->tab->term) {
+		internal("Today is a bad day for you.");
+		return -1;
+	}
+
+	/* Full title = prefix + (default_title | page title) + suffix */
+	if (prefix && *prefix) add_to_str(&s, &slen, prefix);
+
+	if (ses->screen &&
+	    ses->screen->f_data &&
+	    ses->screen->f_data->title &&
+	    ses->screen->f_data->title[0])
+		/* Page title is good for you. */
+		add_to_str(&s, &slen, ses->screen->f_data->title);
+	else if (default_title && *default_title)
+		/* No page, so default title is displayed. */
+		add_to_str(&s, &slen, default_title);
+
+	/* And now, the suffix ! */
+	if (suffix && *suffix) add_to_str(&s, &slen, suffix);
+
+	/* We test to prevent multiple displays of the same title, it causes
+	 * flickering. --Zas */
+	if (last_ses != ses ||
+	    ses->last_title == NULL ||
+	    ses->last_title_len != slen ||
+	    memcmp(ses->last_title, s, slen)) {
+		/* Now really display it. */
+		do_terminal_function(ses->tab->term, TERM_FN_TITLE, s, slen);
+		/* Save title and ses. */
+		if (ses->last_title)
+			mem_free(ses->last_title);
+		ses->last_title = s;
+		ses->last_title_len = slen;
+		last_ses = ses;
+
+		return 0; /* Yes, i dit it ! */
+	} else {
+		/* Yes, we build it for fun... */
+		mem_free(s);
+	}
+
+	return 1; /* In fact, no, bad luck. */
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
@@ -399,32 +460,11 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (!ses_tab_is_current) goto title_set;
-	msg = stracpy("ELinks");
-	if (msg) {
-		int msglen;
-		static void *last_ses = NULL;
-
-		if (ses->screen && ses->screen->f_data
-		    && ses->screen->f_data->title
-		    && ses->screen->f_data->title[0]) {
-			add_to_strn(&msg, " - ");
-			add_to_strn(&msg, ses->screen->f_data->title);
-		}
-
-		msglen = strlen(msg);
-		if ((last_ses != ses ) || !ses->last_title ||
-		    strlen(ses->last_title) != msglen ||
-		    memcmp(ses->last_title, msg, msglen)) {
-			if (ses->last_title) mem_free(ses->last_title);
-			ses->last_title = msg;
-			set_terminal_title(term, msg);
-			last_ses = ses;
-		} else {
-			mem_free(msg);
-		}
-	}
-title_set:
+	if (ses_tab_is_current)
+		set_terminal_title(ses,
+				   (unsigned char *) TERM_TITLE_PREFIX,
+				   (unsigned char *) TERM_TITLE_DEFAULT,
+				   (unsigned char *) TERM_TITLE_SUFFIX);
 
 	redraw_from_window(ses->tab);
 #ifdef USE_LEDS

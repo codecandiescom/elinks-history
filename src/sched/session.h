@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.18 2003/05/09 13:23:26 pasky Exp $ */
+/* $Id: session.h,v 1.19 2003/05/25 01:39:46 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -86,6 +86,7 @@ struct session {
 	unsigned char *last_search_word;
 	unsigned char *last_title;
 
+	int last_title_len;
 	int id;
 	int display_timer;
 	int reloadlevel;

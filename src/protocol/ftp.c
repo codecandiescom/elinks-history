@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.66 2002/10/13 19:08:55 pasky Exp $ */
+/* $Id: ftp.c,v 1.67 2002/10/16 14:04:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -879,7 +879,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	if (response >= 100 && response < 200) {
 		/* We only need to parse response after RETR to
 		 * get filesize if needed. */
-		if (!c_i->dir && !conn->from) {
+		if (!c_i->dir && conn->est_length == -1) {
 			long int file_len =
 				get_filesize_from_RETR(rb->data, rb->len);
 

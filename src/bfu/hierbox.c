@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.78 2003/11/22 02:40:02 jonas Exp $ */
+/* $Id: hierbox.c,v 1.79 2003/11/22 03:04:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,10 +86,10 @@ done_browser_box(struct hierbox_browser *browser, struct listbox_item *box_item)
 	 * a replacement. */
 
 	foreach (box_data, *box_item->box) {
-		if (box_data->sel && box_data->sel == box_item)
+		if (box_data->sel == box_item)
 			box_data->sel = replace_box_item(box_item);
 
-		if (box_data->top && box_data->top == box_item)
+		if (box_data->top == box_item)
 			box_data->top = replace_box_item(box_item);
 	}
 

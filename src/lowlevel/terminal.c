@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.17 2002/06/20 10:13:07 pasky Exp $ */
+/* $Id: terminal.c,v 1.18 2002/06/21 18:16:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -665,87 +665,94 @@ unsigned char frame_restrict[48] = {
 };
 
 
-#define PRINT_CHAR(p)								\
-{										\
-	unsigned ch = term->screen[p];						\
-	unsigned char c = ch & 0xff;						\
-	unsigned char A = ch >> 8 & 0x7f;					\
-										\
-	if (get_opt_int_tree(opt_tree, "type") == TERM_LINUX) {			\
-		if (get_opt_bool_tree(opt_tree, "m11_hack") &&			\
-		    !get_opt_bool_tree(opt_tree, "utf_8_io")) {			\
-			if (ch >> 15 != mode) {					\
-				mode = ch >> 15;				\
-				if (!mode) add_to_str(&a, &l, "\033[10m");	\
-				else add_to_str(&a, &l, "\033[11m");		\
-			}							\
-		}								\
-		if (get_opt_bool_tree(opt_tree, "restrict_852")) {		\
-			if ((ch >> 15) && c >= 176 && c < 224) {		\
-				if (frame_restrict[c - 176])			\
-					c = frame_restrict[c - 176];		\
-			}							\
-		}								\
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100		\
-		   && !get_opt_bool_tree(opt_tree, "utf_8_io")) {		\
-		if (ch >> 15 != mode) {						\
-			mode = ch >> 15;					\
-			if (!mode) add_to_str(&a, &l, "\x0f");			\
-			else add_to_str(&a, &l, "\x0e");			\
-		}								\
-		if (mode && c >= 176 && c < 224) c = frame_vt100[c - 176];	\
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100		\
-		   && (ch >> 15) && c >= 176 && c < 224) { 			\
-		c = frame_vt100_u[c - 176];					\
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_KOI8		\
-		   && (ch >> 15) && c >= 176 && c < 224) { 			\
-		c = frame_koi[c - 176];						\
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_DUMB		\
-		   && (ch >> 15) && c >= 176 && c < 224)			\
-		c = frame_dumb[c - 176];					\
-										\
-	if (!(A & 0100) && (A >> 3) == (A & 7)) A = (A & 070) | 7 * !(A & 020);	\
-	if (A != attrib) {							\
-		attrib = A;							\
-		add_to_str(&a, &l, "\033[0");					\
-		if (get_opt_bool_tree(opt_tree, "colors")) {			\
-			unsigned char m[4];					\
-										\
-			m[0] = ';';						\
-		       	m[1] = '3';						\
-			m[2] = (attrib & 7) + '0';				\
-		       	m[3] = 0;						\
-			add_to_str(&a, &l, m);					\
-			m[1] = '4';						\
-			m[2] = (attrib >> 3 & 7) + '0';				\
-			add_to_str(&a, &l, m);					\
-		} else if (getcompcode(attrib & 7) < getcompcode(attrib >> 3 & 7))	\
-			add_to_str(&a, &l, ";7");				\
-		if (attrib & 0100) add_to_str(&a, &l, ";1");			\
-		add_to_str(&a, &l, "m");					\
-	}									\
-	if (c >= ' ' && c != 127/* && c != 155*/) {				\
-		int charset = get_opt_int_tree(opt_tree, "charset");		\
-		int type = get_opt_int_tree(opt_tree, "type");			\
-										\
-		if (ch >> 15) {							\
-			int frames_charset = (type == TERM_LINUX ||		\
-					      type == TERM_VT100)		\
-						? get_cp_index("cp437")		\
-						: type == TERM_KOI8		\
-							? get_cp_index("koi8-r")\
-							: -1;			\
-			if (frames_charset != -1) charset = frames_charset;	\
-		}								\
-		if (get_opt_bool_tree(opt_tree, "utf_8_io"))			\
-			add_to_str(&a, &l, cp2utf_8(charset, c));		\
-		else 								\
-			add_chr_to_str(&a, &l, c);				\
-	}									\
-	else if (!c || c == 1) add_chr_to_str(&a, &l, ' ');			\
-	else add_chr_to_str(&a, &l, '.');					\
-	cx++;									\
-}										\
+static inline void
+print_char(struct terminal *term, struct list_head *opt_tree,
+	   unsigned char **a, int *l, int p, int *mode, int *attrib)
+{
+	static int cp437 = -1, koi8r = -1;
+	unsigned ch = term->screen[p];
+	unsigned char c = ch & 0xff;
+	unsigned char A = ch >> 8 & 0x7f;
+
+	/* Cache these values as they don't change and get_cp_index() is pretty
+	 * CPU-intensive. */
+	if (cp437 < 0) cp437 = get_cp_index("cp437");
+	if (koi8r < 0) koi8r = get_cp_index("koi8-r");
+
+	if (get_opt_int_tree(opt_tree, "type") == TERM_LINUX) {
+		if (get_opt_bool_tree(opt_tree, "m11_hack") &&
+		    !get_opt_bool_tree(opt_tree, "utf_8_io")) {
+			if (ch >> 15 != *mode) {
+				*mode = ch >> 15;
+				if (!*mode) add_to_str(a, l, "\033[10m");
+				else add_to_str(a, l, "\033[11m");
+			}
+		}
+		if (get_opt_bool_tree(opt_tree, "restrict_852")) {
+			if ((ch >> 15) && c >= 176 && c < 224) {
+				if (frame_restrict[c - 176])
+					c = frame_restrict[c - 176];
+			}
+		}
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100
+		   && !get_opt_bool_tree(opt_tree, "utf_8_io")) {
+		if (ch >> 15 != *mode) {
+			*mode = ch >> 15;
+			if (!*mode) add_to_str(a, l, "\x0f");
+			else add_to_str(a, l, "\x0e");
+		}
+		if (*mode && c >= 176 && c < 224) c = frame_vt100[c - 176];
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100
+		   && (ch >> 15) && c >= 176 && c < 224) {
+		c = frame_vt100_u[c - 176];
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_KOI8
+		   && (ch >> 15) && c >= 176 && c < 224) {
+		c = frame_koi[c - 176];
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_DUMB
+		   && (ch >> 15) && c >= 176 && c < 224)
+		c = frame_dumb[c - 176];
+
+	if (!(A & 0100) && (A >> 3) == (A & 7)) A = (A & 070) | 7 * !(A & 020);
+	if (A != *attrib) {
+		*attrib = A;
+		add_to_str(a, l, "\033[0");
+		if (get_opt_bool_tree(opt_tree, "colors")) {
+			unsigned char m[4];
+
+			m[0] = ';';
+		       	m[1] = '3';
+			m[2] = (*attrib & 7) + '0';
+		       	m[3] = 0;
+			add_to_str(a, l, m);
+			m[1] = '4';
+			m[2] = (*attrib >> 3 & 7) + '0';
+			add_to_str(a, l, m);
+		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7))
+			add_to_str(a, l, ";7");
+		if (*attrib & 0100) add_to_str(a, l, ";1");
+		add_to_str(a, l, "m");
+	}
+	if (c >= ' ' && c != 127/* && c != 155*/) {
+		int charset = get_opt_int_tree(opt_tree, "charset");
+		int type = get_opt_int_tree(opt_tree, "type");
+
+		if (ch >> 15) {
+			int frames_charset = (type == TERM_LINUX ||
+					      type == TERM_VT100)
+						? cp437
+						: type == TERM_KOI8
+							? koi8r
+							: -1;
+			if (frames_charset != -1) charset = frames_charset;
+		}
+		if (get_opt_bool_tree(opt_tree, "utf_8_io"))
+			add_to_str(a, l, cp2utf_8(charset, c));
+		else
+			add_chr_to_str(a, l, c);
+	}
+	else if (!c || c == 1) add_chr_to_str(a, l, ' ');
+	else add_chr_to_str(a, l, '.');
+}
 
 
 /* redraw_all_terminals() */
@@ -789,12 +796,17 @@ void redraw_screen(struct terminal *term)
 #undef TSP
 #undef TLSP
 			if (cx == x && cy == y) {
-				PRINT_CHAR(p);
+				print_char(term, opt_tree, &a, &l,
+					   p, &mode, &attrib);
+				cx++;
 			} else if (cy == y && x - cx < 10) {
 				int i;
 
-				for (i = x - cx; i >= 0; i--)
-					PRINT_CHAR(p - i);
+				for (i = x - cx; i >= 0; i--) {
+					print_char(term, opt_tree, &a, &l,
+						   p - i, &mode, &attrib);
+					cx++;
+				}
 			} else {
 				add_to_str(&a, &l, "\033[");
 				add_num_to_str(&a, &l, y + 1);
@@ -802,7 +814,9 @@ void redraw_screen(struct terminal *term)
 				add_num_to_str(&a, &l, x + 1);
 				add_to_str(&a, &l, "H");
 				cx = x; cy = y;
-				PRINT_CHAR(p);
+				print_char(term, opt_tree, &a, &l,
+					   p, &mode, &attrib);
+				cx++;
 			}
 		}
 

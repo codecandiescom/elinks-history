@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.62 2002/10/13 18:43:48 pasky Exp $ */
+/* $Id: ftp.c,v 1.63 2002/10/13 18:45:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1115,19 +1115,33 @@ out_of_mem:
 	if (c_i->dir && !conn->from) {
 		unsigned char *url_data;
 		unsigned char *postchar;
-
+		unsigned char *str;
+		int strl = 0;
+		
 		url_data = stracpy(get_url_data(conn->url));
 		if (!url_data) goto out_of_mem;
 
+		str = init_str();
+		if (!str) {
+			mem_free(url_data);
+			goto out_of_mem;
+		}
+		
 		postchar = strchr(url_data, POST_CHAR);
 		if (postchar) *postchar = 0;
 
+		if (*url_data)
+			add_htmlesc_str(&str, &strl, url_data, strlen(url_data));		
+		
+		mem_free(url_data);
+		
 		A(ftp_dirlist_head);
-		if (url_data) A(url_data);
+		A(str);
 		A(ftp_dirlist_head2);
-		if (url_data) A(url_data);
+		A(str);
 		A(ftp_dirlist_head3);
-		if (url_data && *url_data) {
+		
+		if (*str) {
 			struct ftpparse ftp_info;
 
 			ftp_info.name = "..";
@@ -1149,9 +1163,8 @@ out_of_mem:
 			display_dir_entry(conn->cache, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);
 		}
-		
-		if (url_data)
-			mem_free(url_data);
+
+		mem_free(str);
 
 		if (!conn->cache->head) {
 			conn->cache->head = stracpy("\r\n");

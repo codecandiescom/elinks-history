@@ -34,6 +34,9 @@ The applier
    It applies style info from a syntax tree or fracment of one (in the case of
    style="" attributes) to the current element.
 
+   The applier lives in apply.*
+
+
 			      The current state
 
    Currently only the element's 'style' attribute and content of <style> tags

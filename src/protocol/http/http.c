@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.217 2003/12/06 22:37:40 pasky Exp $ */
+/* $Id: http.c,v 1.218 2003/12/07 11:34:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,13 +230,14 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 }
 
 static void
-http_end_request(struct connection *conn, enum connection_state state)
+http_end_request(struct connection *conn, enum connection_state state,
+		 int notrunc)
 {
 	set_connection_state(conn, state);
 	uncompress_shutdown(conn);
 
 	if (conn->state == S_OK && conn->cache) {
-		truncate_entry(conn->cache, conn->from, 1);
+		if (!notrunc) truncate_entry(conn->cache, conn->from, 1);
 		conn->cache->incomplete = 0;
 #ifdef HAVE_SCRIPTING
 		conn->cache->done_pre_format_html_hook = 0;
@@ -330,7 +331,7 @@ http_send_header(struct connection *conn)
 
 	/* Sanity check for a host */
 	if (!uri || !uri->host || !*uri->host || !uri->hostlen) {
-		http_end_request(conn, S_BAD_URL);
+		http_end_request(conn, S_BAD_URL, 0);
 		return;
 	}
 
@@ -351,7 +352,7 @@ http_send_header(struct connection *conn)
 	}
 
 	if (!init_string(&header)) {
-		http_end_request(conn, S_OUT_OF_MEM);
+		http_end_request(conn, S_OUT_OF_MEM, 0);
 		return;
 	}
 
@@ -986,7 +987,7 @@ thats_all_folks:
 		}
 	}
 
-	http_end_request(conn, S_OK);
+	http_end_request(conn, S_OK, 0);
 	return;
 }
 
@@ -1144,7 +1145,7 @@ http_error:
 	}
 	if (h == 304) {
 		mem_free(head);
-		http_end_request(conn, S_OK);
+		http_end_request(conn, S_OK, 1);
 		return;
 	}
 
@@ -1176,7 +1177,7 @@ http_error:
 #endif
 
 	if (h == 204) {
-		http_end_request(conn, S_OK);
+		http_end_request(conn, S_OK, 0);
 		return;
 	}
 	if (h == 301 || h == 302 || h == 303 || h == 307) {

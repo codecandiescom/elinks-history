@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.28 2003/06/15 11:09:16 pasky Exp $ */
+/* $Id: fastfind.c,v 1.29 2003/06/15 11:14:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,9 +403,8 @@ alloc_error:
 }
 
 void
-fastfind_node_compress(void *current_node, struct fastfind_info *info)
+fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
 {
-	struct ff_node *current = (struct ff_node *) current_node;
 	int cnt = 0;
 	int pos = -1;
 	register int i = 0;

@@ -1,3 +1,42 @@
+Wed May 28 09:59:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Entity cache was greatly improved. memmove() call was removed. It
+	uses iterative search + a kind of hashing on length + dichotomic
+	search for not yet cached entities. Disabled for now but fully
+	functionnal, please test and profile. Feel free to improve ;).
+	Hashing whole entity table does not seem to improve things. Current
+	solution is very effective.  
+
+Wed May 28 08:41:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	A now useless test was removed (reported by Miciah). A comment about
+	code redundancy between convert_string() and put_chars_conv() was
+	added.  
+
+Wed May 28 00:58:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.h:
+
+	Sync header with new get_entity_string() definition which use const.  
+
+Wed May 28 00:45:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, intl/charsets.c:
+
+	Ooops, fix bug in &#1234; interpretation introduced by last patch
+	and cleanup of experimental cache code (disable for now). Thanks to
+	Master "Eye-Of-The-Awk" Pasky for the report.  
+
+Tue May 27 22:12:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* m4/gettext.m4:
+
+	The bison detection was wrong, fixed by skim <skim@psi.cz>.  
+
 Tue May 27 21:57:52 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: setup.h, dialogs/options.c, sched/session.c,

@@ -5,6 +5,7 @@ ELinks-now:
 * simple CSS support
 * simple JavaScript/ECMAScript support by the SpiderMonkey Mozilla JS engine
 * support plain-text mark-up (_^Hx to underline, x^Hx to embolden)
+* HTML source highlighting using DOM implementation (experimental)
 * multiple URIs on the command line
 * tabs moving (press Alt-'>' or Alt-'<')
 * exmode CLI support (press ':' followed by action and args) (experimental)

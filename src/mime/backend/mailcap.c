@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.56 2003/10/24 16:34:43 jonas Exp $ */
+/* $Id: mailcap.c,v 1.57 2003/10/24 19:35:43 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -403,9 +403,27 @@ done_mailcap(void)
 	mailcap_map_size = 0;
 }
 
+static int
+change_hook_mailcap(struct session *ses, struct option *current, struct option *changed)
+{
+	if (!strlcmp(changed->name, -1, "path", 4)
+	    || (!strlcmp(changed->name, -1, "enable", 6)
+		&& !changed->value.number)) {
+		done_mailcap();
+	}
+
+	return 0;
+}
+
 static void
 init_mailcap(void)
 {
+	struct change_hook_info mimetypes_change_hooks[] = {
+		{ "mime.mailcap",		change_hook_mailcap },
+		{ NULL,				NULL },
+	};
+
+	register_change_hooks(mimetypes_change_hooks);
 	mailcap_tree = get_opt_rec(config_options, "mime.mailcap");
 }
 

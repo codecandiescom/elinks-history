@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.133 2003/12/27 23:33:39 jonas Exp $ */
+/* $Id: listbox.c,v 1.134 2003/12/29 20:15:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -463,6 +463,22 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 				    1, display_listbox_item, &data);
 }
 
+static int
+check_old_state(struct listbox_item *item, void *info_, int *offset)
+{
+	struct listbox_data *box = info_;
+
+	if (box->sel == item)
+		box->sel = NULL;
+	else if (box->top == item)
+		box->top = NULL;
+
+	if (!box->sel && !box->top)
+		*offset = 0;
+
+	return 0;
+}
+
 static void
 init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	     struct term_event *ev)
@@ -471,15 +487,20 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct listbox_data *box =
 		(struct listbox_data *) widget_data->widget->data;
 
+	/* Try to restore the position from last time */
+	memcpy(box, &browser->box_data, sizeof(struct listbox_data));
+	if (box->items) {
+		traverse_listbox_items_list(browser->items->next, box, 0, 0,
+					    check_old_state, box);
+
+		box->sel = (!box->sel) ? browser->box_data.sel : NULL;
+		box->top = (!box->top) ? browser->box_data.top : NULL;
+		if (!box->sel) box->sel = box->top;
+		if (!box->top) box->top = box->sel;
+	}
+
 	box->ops = browser->ops;
 	box->items = browser->items;
-
-	/* Try to restore the position from last time */
-	if (browser->sel_offset) {
-		box_sel_move(widget_data, browser->sel_offset);
-		box->sel_offset = browser->sel_offset;
-		box->top = NULL;
-	}
 
 	add_to_list(browser->boxes, box);
 }

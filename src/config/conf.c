@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.122 2004/01/17 14:18:14 pasky Exp $ */
+/* $Id: conf.c,v 1.123 2004/01/18 00:59:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -452,7 +452,7 @@ load_config_from(unsigned char *file, struct option *tree)
 void
 load_config(void)
 {
-	load_config_from(get_opt_str_tree(cmdline_options, "conffile"), config_options);
+	load_config_from(get_opt_str_tree(cmdline_options, "config-file"), config_options);
 }
 
 
@@ -772,6 +772,6 @@ write_config_to(unsigned char *file, struct option *tree,
 int
 write_config(struct terminal *term)
 {
-	return write_config_to(get_opt_str_tree(cmdline_options, "conffile"),
+	return write_config_to(get_opt_str_tree(cmdline_options, "config-file"),
 			       config_options, term);
 }

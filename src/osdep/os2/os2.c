@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.24 2004/07/30 22:22:43 jonas Exp $ */
+/* $Id: os2.c,v 1.25 2004/07/31 07:33:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,7 +514,7 @@ mouse_thread(void *p)
 			ev.info.mouse.button = status = b;
 		} else {
 			if (status == -1) continue;
-			ev.info.mouse.button  = (status & BM_BUTT) | B_UP;
+			ev.info.mouse.button = (status & BM_BUTT) | B_UP;
 			status = -1;
 		}
 		if (hard_write(oms->p[1], (unsigned char *) &ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;

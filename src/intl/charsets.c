@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.82 2004/05/04 00:55:31 jonas Exp $ */
+/* $Id: charsets.c,v 1.83 2004/05/04 01:08:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ struct codepage_desc {
 
 #define CODEPAGES (sizeof(codepages) / sizeof(codepages[0]))
 
-char *strings[256] = {
+static char *strings[256] = {
 	"\000", "\001", "\002", "\003", "\004", "\005", "\006", "\007",
 	"\010", "\011", "\012", "\013", "\014", "\015", "\016", "\017",
 	"\020", "\021", "\022", "\023", "\024", "\025", "\026", "\033",

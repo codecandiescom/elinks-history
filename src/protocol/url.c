@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.82 2003/07/09 23:56:36 jonas Exp $ */
+/* $Id: url.c,v 1.83 2003/07/11 23:17:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,118 +71,7 @@ parse_url(unsigned char *url, int *prlen,
 	return (uricode > 0 ? 0 : -1);
 }
 
-/* Returns protocol part of url in an allocated string.
- * If url can't be parsed, it will return NULL. */
-unsigned char *
-get_protocol_name(unsigned char *url)
-{
-	int l;
-
-	if (parse_url(url, &l,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL)) return NULL;
-
-	return memacpy(url, l);
-}
-
-
-unsigned char *
-get_host_and_pass(unsigned char *url, int include_port)
-{
-	unsigned char *user, *host, *port, *start, *end;
-	int hostlen, portlen;
-
-	if (parse_url(url, NULL,
-		      &user, NULL,
-		      NULL, NULL,
-		      &host, &hostlen,
-		      &port, &portlen,
-		      NULL, NULL,
-		      NULL)) return NULL;
-
-	start = user ? user : host;
-	end = (port && include_port) ? port + portlen : host + hostlen;
-	return memacpy(start, end - start);
-}
-
-
-unsigned char *
-get_host_name(unsigned char *url)
-{
-	unsigned char *h;
-	int hl;
-
-	if (parse_url(url, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      &h, &hl,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL)) return NULL;
-
-	return memacpy(h, hl);
-}
-
-
-unsigned char *
-get_user_name(unsigned char *url)
-{
-	unsigned char *h;
-	int hl;
-
-	if (parse_url(url, NULL,
-		      &h, &hl,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL)) return NULL;
-
-	return memacpy(h, hl);
-}
-
-
-unsigned char *
-get_pass(unsigned char *url)
-{
-	unsigned char *h;
-	int hl;
-
-	if (parse_url(url, NULL,
-		      NULL, NULL,
-		      &h, &hl,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL)) return NULL;
-
-	return memacpy(h, hl);
-}
-
-
-unsigned char *
-get_port_str(unsigned char *url)
-{
-	unsigned char *p;
-	int pl;
-
-	if (parse_url(url, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      &p, &pl,
-		      NULL, NULL,
-		      NULL)) return NULL;
-
-	return memacpy(p, pl);
-}
-
-
-unsigned char *
+static unsigned char *
 get_url_data(unsigned char *url)
 {
 	unsigned char *d;

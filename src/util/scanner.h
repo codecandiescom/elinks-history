@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.12 2004/05/21 13:44:34 jonas Exp $ */
+/* $Id: scanner.h,v 1.13 2004/05/21 15:33:43 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -209,7 +209,7 @@ begin_token_scanning(struct scanner *scanner)
 		current = &table[move_to_front];
 	}
 
-	/* Set all unused tokens to SGML_TOKEN_NONE */
+	/* Clear all unused tokens */
 	memset(current, 0, SCANNER_TABLE_SIZE - moved_size);
 
 	if (!scanner->position) {

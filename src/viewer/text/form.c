@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.23 2003/08/01 19:35:22 jonas Exp $ */
+/* $Id: form.c,v 1.24 2003/08/01 21:56:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -681,6 +681,8 @@ memorize_form(struct session *ses, struct list_head *submit,
 
 	fm_data = mem_alloc(sizeof(struct formsmem_data));
 	if (!fm_data) goto fail;
+
+	init_list(fm_data->submit);
 
 	/* Set up a new list_head, as @submit will be destroyed as soon as
 	 * get_form_url() returns */

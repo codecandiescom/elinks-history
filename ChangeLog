@@ -1,3 +1,43 @@
+Tue Mar  8 15:51:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Remove the loop in get_ftp_response and use memchr instead.  
+
+Tue Mar  8 15:34:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Add a note about the fact that we require unix-like paths to handle
+	PWD response.  
+
+Tue Mar  8 15:25:20 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Add a FIXME about double quotes handling.  
+
+Tue Mar  8 15:21:39 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Repeat.  
+
+Tue Mar  8 15:20:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Simplify some code in get_ftp_response.  
+
+Tue Mar  8 13:56:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/ftp/ftp.c, sched/connection.c, sched/connection.h:
+
+	Send PWD and parse its response to get base directory sent by ftp
+	server, and prepend it to URIs used to retrieve directories and
+	files. It fixes bug reported on #elinks by pasky about
+	ftp://tron.homeunix.org/. Please review and improve if needed.  
+
 Mon Mar  7 09:45:18 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* contrib/.cvsignore:

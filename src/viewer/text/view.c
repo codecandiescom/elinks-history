@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.443 2004/06/09 21:05:53 zas Exp $ */
+/* $Id: view.c,v 1.444 2004/06/09 21:12:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,10 +341,9 @@ draw_formatted(struct session *ses, int rerender)
 	if (!ses->doc_view->vs && have_location(ses))
 		ses->doc_view->vs = &cur_loc(ses)->vs;
 	ses->doc_view->last_x = ses->doc_view->last_y = -1;
-	draw_doc(ses, ses->doc_view, 1);
+	
 	draw_frames(ses);
-	print_screen_status(ses);
-	redraw_from_window(ses->tab);
+	refresh_view(ses, ses->doc_view);
 }
 
 static void
@@ -665,9 +664,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 						    ses->kbdprefix.rep_num
 							- 1);
 
-				draw_doc(ses, doc_view, 1);
-				print_screen_status(ses);
-				redraw_from_window(ses->tab);
+				refresh_view(ses, doc_view);
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
@@ -764,9 +761,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 				x = 2;
 
-				draw_doc(ses, doc_view, 1);
-				print_screen_status(ses);
-				redraw_from_window(ses->tab);
+				refresh_view(ses, doc_view);
 
 				if (check_mouse_button(ev, B_LEFT))
 					x = enter(ses, doc_view, 0);
@@ -849,11 +844,7 @@ send_to_frame(struct session *ses, struct term_event *ev)
 	if_assert_failed return 0;
 
 	r = frame_ev(ses, doc_view, ev);
-	if (r == 1) {
-		draw_doc(ses, doc_view, 1);
-		print_screen_status(ses);
-		redraw_from_window(ses->tab);
-	}
+	if (r == 1) refresh_view(ses, doc_view);
 
 	return r;
 }
@@ -957,9 +948,7 @@ quit:
 		    && get_opt_int("document.browse.accesskey.priority") <= 0
 		    && try_document_key(ses, doc_view, ev)) {
 			/* The document ate the key! */
-			draw_doc(ses, doc_view, 1);
-			print_screen_status(ses);
-			redraw_from_window(ses->tab);
+			refresh_view(ses, doc_view);
 			return;
 		}
 	}

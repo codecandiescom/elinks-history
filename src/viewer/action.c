@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.70 2004/06/08 23:22:22 jonas Exp $ */
+/* $Id: action.c,v 1.71 2004/06/09 21:12:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,11 +94,8 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 	action(ses, doc_view, magic);
 
 	/* This is hopefully only some temporary setup. --jonas */
-	if (action == find_next) {
-		draw_doc(ses, doc_view, 1);
-		print_screen_status(ses);
-		redraw_from_window(ses->tab);
-	}
+	if (action == find_next)
+		refresh_view(ses, doc_view);
 }
 
 static void

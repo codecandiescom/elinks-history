@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.31 2003/11/15 16:38:17 pasky Exp $ */
+/* $Id: document.h,v 1.32 2003/11/15 16:39:21 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -142,7 +142,7 @@ do { \
 #endif
 
 #define get_document_refcount(doc) ((doc)->refcount)
-#define is_document_locked(doc) (!!(doc)->refcount)
+#define is_document_used(doc) (!!(doc)->refcount)
 #define document_lock(doc) do { doc_sanity_check(doc); (doc)->refcount++; doc_lock_debug(doc, "+1"); } while (0)
 #define document_unlock(doc) do { (doc)->refcount--; doc_lock_debug(doc, "-1"); doc_sanity_check(doc);} while (0)
 

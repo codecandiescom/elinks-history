@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.27 2003/11/11 17:50:07 jonas Exp $ */
+/* $Id: document.c,v 1.28 2003/11/15 16:39:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ done_document(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
-	assertm(!is_document_locked(document), "Attempt to free locked formatted data.");
+	assertm(!is_document_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
 	if (!find_in_cache(document->url, &ce) || !ce)
@@ -142,7 +142,7 @@ release_document(struct document *document)
 
 	if (document->refresh) kill_document_refresh(document->refresh);
 	document_unlock(document);
-	if (!is_document_locked(document)) format_cache_entries++;
+	if (!is_document_used(document)) format_cache_entries++;
 	del_from_list(document);
 	add_to_list(format_cache, document);
 }
@@ -161,7 +161,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 			continue;
 
 		if (id != document->id_tag) {
-			if (!is_document_locked(document)) {
+			if (!is_document_used(document)) {
 				document = document->prev;
 				done_document(document->next);
 				format_cache_entries--;
@@ -173,7 +173,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 		del_from_list(document);
 		add_to_list(format_cache, document);
 
-		if (!is_document_locked(document))
+		if (!is_document_used(document))
 			format_cache_entries--;
 
 		document_lock(document);
@@ -194,7 +194,7 @@ shrink_format_cache(int whole)
 	if_assert_failed format_cache_entries = 0;
 
 	foreachback (document, format_cache) {
-		if (is_document_locked(document)) continue;
+		if (is_document_used(document)) continue;
 
 		if (!whole) {
 			struct cache_entry *ce = NULL;
@@ -229,7 +229,7 @@ count_format_cache(void)
 
 	format_cache_entries = 0;
 	foreach (document, format_cache)
-		if (!is_document_locked(document))
+		if (!is_document_used(document))
 			format_cache_entries++;
 }
 
@@ -245,7 +245,7 @@ formatted_info(int type)
 			return i;
 		case INFO_LOCKED:
 			foreach (document, format_cache)
-				i += is_document_locked(document);
+				i += is_document_used(document);
 			return i;
 	}
 

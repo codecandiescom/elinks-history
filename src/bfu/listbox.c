@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.84 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: listbox.c,v 1.85 2003/08/29 15:08:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,15 +26,15 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 	       struct widget_data *item, int x, int *y, int w, int *rw,
 	       enum format_align align)
 {
-	int min, optimal_h, max_y = term ? term->y : t2 ? t2->y : 25;
+	int min, optimal_h, max_y = 25;
 
 	item->x = x;
 	item->y = *y;
 	item->l = w;
 
-	if (rw && item->l > *rw) {
-		*rw = item->l;
-		if (*rw > w) *rw = w;
+	if (rw) {
+	       int_lower_bound(rw, item->l);
+	       int_upper_bound(rw, w);
 	}
 
 	/* Height bussiness follows: */
@@ -43,6 +43,9 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 	/* (*y) += item->item->gid; */
 
 	/* This is only weird heuristic, it could scale well I hope. */
+	if (term) max_y = term->y;
+	else if (t2) max_y = t2->y;
+
 	optimal_h = max_y * 2 / 3 - 2 * DIALOG_TB - 8;
 	min = get_opt_int("ui.dialogs.listbox_min_height");
 
@@ -300,22 +303,19 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 	if (traverse_listbox_items_list(box->sel, dist, 1, NULL, NULL)
 	    != box->sel) {
-		struct box_context *data = fmem_alloc(sizeof(struct box_context));
+		struct box_context *data = mem_calloc(1, sizeof(struct box_context));
 
 		if (data) {
 			data->box = box;
 			data->listbox_item_data = listbox_item_data;
 			data->dist = dist;
-			data->term = NULL;
-			data->dlg = NULL;
-			data->offset = 0;
 
 			/* XXX: This is ugly, yes; but we don't want to call the
 			 * callback if we won't move on at all. */
 			box->sel = traverse_listbox_items_list(box->sel, dist, 1,
 						       	       box_sel_move_do,
 							       data);
-			fmem_free(data);
+			mem_free(data);
 		}
 	}
 }
@@ -331,6 +331,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	struct color_pair *color;
 	int depth = item->depth + 1;
 	int d;
+	int y;
 
 	if (item->translated)
 		text = _(text, data->term);
@@ -340,12 +341,13 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 
 	color = get_bfu_color(data->term,
 			      (item == data->box->sel) ? "menu.selected"
-						      : "menu.normal");
+						       : "menu.normal");
 
+	y = data->listbox_item_data->y + data->offset;
 	for (d = 0; d < depth - 1; d++) {
 		struct listbox_item *root = item;
 		struct listbox_item *child = item;
-		int i;
+		int i, x;
 
 		for (i = depth - d; i; i--) {
 			child = root;
@@ -353,23 +355,20 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		}
 
 		/* XXX */
-		draw_text(data->term, data->listbox_item_data->x + d * 5,
-			  data->listbox_item_data->y + data->offset,
-			  "     ", 5, 0, color);
+		x = data->listbox_item_data->x + d * 5;
+		draw_text(data->term, x, y, "     ", 5, 0, color);
 
 		if (root ? root->child.prev == child
 			 : data->box->items->prev == child)
 			continue; /* We were the last branch. */
 
-		draw_border_char(data->term, data->listbox_item_data->x + d * 5 + 1,
-				 data->listbox_item_data->y + data->offset,
-				 BORDER_SVLINE, color);
+		draw_border_char(data->term, x + 1, y, BORDER_SVLINE, color);
 	}
 
 	if (depth) {
 		enum border_char str[5] =
 			{ 32, BORDER_SRTEE, BORDER_SHLINE, BORDER_SHLINE, 32 };
-		int i;
+		int i, x;
 
 		if (item->type == BI_LEAF) {
 			if (item->root) {
@@ -377,39 +376,38 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 					str[1] = BORDER_SDLCORNER;
 				}
 			} else {
-				if (((struct listbox_data *) item->box->next)->items->next == item) {
+				struct list_head *p = ((struct listbox_data *) item->box->next)->items;
+
+				if (p->next == item) {
 					str[1] = BORDER_SULCORNER;
-				} else if (((struct listbox_data *) item->box->next)->items->prev == item) {
+				} else if (p->prev == item) {
 					str[1] = BORDER_SDLCORNER;
 				}
 			}
 		} else {
-			if (item->expanded) {
-				str[0] = '['; str[1] = '-'; str[2] = ']';
-			} else {
-				str[0] = '['; str[1] = '+'; str[2] = ']';
-			}
+			str[0] = '[';
+			str[1] = (item->expanded) ? '-' : '+';
+			str[2] = ']';
 		}
 
 		if (item->marked) str[4] = '*';
 
+		x = data->listbox_item_data->x + (depth - 1) * 5;
 		for (i = 0; i < 5; i++) {
-			draw_border_char(data->term,
-					 data->listbox_item_data->x + (depth - 1) * 5 + i,
-					 data->listbox_item_data->y + data->offset,
-					 str[i], color);
+			draw_border_char(data->term, x + i, y, str[i], color);
 		}
 	}
 
 	draw_text(data->term, data->listbox_item_data->x + depth * 5,
-		   data->listbox_item_data->y + data->offset,
-		   text, len, 0, color);
+		  data->listbox_item_data->y + data->offset,
+		  text, len, 0, color);
+
 	if (item == data->box->sel) {
+		int x = data->listbox_item_data->x;
+
 		/* For blind users: */
-		set_cursor(data->term, data->listbox_item_data->x,
-			   data->listbox_item_data->y + data->offset, 0);
-		set_window_ptr(data->dlg->win,
-			data->listbox_item_data->x, data->listbox_item_data->y + data->offset);
+		set_cursor(data->term, x, y, 0);
+		set_window_ptr(data->dlg->win, x, y);
 	}
 
 	data->offset++;
@@ -423,10 +421,9 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		int sel)
 {
 	struct terminal *term = dlg->win->term;
-	struct listbox_data *box;
+	struct listbox_data *box = (struct listbox_data *) listbox_item_data->item->data;
 	struct box_context *data;
 
-	box = (struct listbox_data *) listbox_item_data->item->data;
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
@@ -445,19 +442,17 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		box->sel = box->top;
 	}
 
-	data = fmem_alloc(sizeof(struct box_context));
+	data = mem_calloc(1, sizeof(struct box_context));
 	if (data) {
 		data->term = term;
 		data->listbox_item_data = listbox_item_data;
 		data->box = box;
 		data->dlg = dlg;
-		data->offset = 0;
-		data->dist = 0;
 
 		traverse_listbox_items_list(box->top, listbox_item_data->h,
 					    1, display_listbox_item, data);
 
-		fmem_free(data);
+		mem_free(data);
 	}
 }
 
@@ -484,9 +479,8 @@ static int
 mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	      struct event *ev)
 {
-	struct listbox_data *box;
+	struct listbox_data *box = (struct listbox_data *) di->item->data;
 
-	box = (struct listbox_data *) di->item->data;
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
 		if (!box->sel) box->sel = box->top;
@@ -514,14 +508,17 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 
 			box->sel_offset = offset;
 			if (offset)
-			box->sel = traverse_listbox_items_list(box->top,
-							       offset, 1,
-							       NULL, NULL);
+				box->sel = traverse_listbox_items_list(box->top,
+								       offset, 1,
+								       NULL, NULL);
 			else box->sel = box->top;
 
-			if (box->sel && ev->x >= di->x + box->sel->depth * 5
-			    && ev->x <= di->x + box->sel->depth * 5 + 2) {
-				box->sel->expanded = !box->sel->expanded;
+
+			if (box->sel) {
+				int xdepth =  di->x + box->sel->depth * 5;
+
+			       	if (ev->x >= xdepth && ev->x <= xdepth + 2)
+					box->sel->expanded = !box->sel->expanded;
 			}
 
 			display_dlg_item(dlg, di, 1);

@@ -17,3 +17,12 @@ stage is not exported yet (it'd be useless for that). Only the second stage is
 available now, and it doesn't take the stylesheet argument yet.  It will
 automatically scan the current element, and if a 'style' attribute is found, it
 is parsed and applied to the current element.
+
+
+One big problem with the current way of doing things is inheritance, there is
+no way we are telling the HTML engine what is going to be inherited and what is
+not. The other problem is precedence, currently even global stylesheet takes
+precedence over local classic-formatting attributes (we just css_apply() like
+mad on various places to make sure the CSS attributes are stuffed through HTML
+engine's throat). These two problems will be solved when the HTML engine is
+converted to work with stylesheets natively (instead of format + par_format).

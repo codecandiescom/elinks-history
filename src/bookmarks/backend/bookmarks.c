@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.59 2002/12/01 19:02:08 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.1 2002/12/01 19:02:09 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -17,7 +17,6 @@
 
 #include "bfu/listbox.h"
 #include "bookmarks/bookmarks.h"
-#include "bookmarks/backend/common.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
 #include "util/secsave.h"
@@ -260,13 +259,169 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 void
 read_bookmarks()
 {
-	bookmarks_read();
+	/* INBUF_SIZE = max. title length + 1 byte for separator
+	 * + max. url length + 1 byte for separator + 5 bytes for depth
+	 * + 1 byte for end of line + 1 byte for null char + reserve */
+#define INBUF_SIZE ((MAX_STR_LEN - 1) + 1 + (MAX_STR_LEN - 1) + 1 + 5 + 1 + 1 \
+		    + MAX_STR_LEN)
+	unsigned char in_buffer[INBUF_SIZE]; /* read buffer */
+	unsigned char *file_name;
+	FILE *f;
+	struct bookmark *last_bm = NULL;
+	int last_depth = 0;
+
+	file_name = straconcat(elinks_home, "bookmarks", NULL);
+	if (!file_name) return;
+
+	f = fopen(file_name, "r");
+	mem_free(file_name);
+	if (!f) return;
+
+	/* TODO: Ignore lines with bad chars in title or url (?). -- Zas */
+	while (fgets(in_buffer, INBUF_SIZE, f)) {
+		unsigned char *title = in_buffer;
+		unsigned char *url;
+		unsigned char *depth_str;
+		int depth = 0;
+		unsigned char *flags = NULL;
+		unsigned char *line_end;
+
+		/* Load URL. */
+
+		url = strchr(in_buffer, '\t');
+
+		/* If separator is not found, or title is empty or too long,
+		 * skip that line. */
+		if (!url || url == in_buffer
+		    || url - in_buffer > MAX_STR_LEN - 1)
+			continue;
+		*url = '\0';
+		url++;
+
+		/* Load depth. */
+
+		depth_str = strchr(url, '\t');
+		if (depth_str && depth_str - url > MAX_STR_LEN - 1)
+			continue;
+
+		if (depth_str) {
+			*depth_str = '\0';
+			depth_str++;
+			depth = atoi(depth_str);
+			if (depth < 0) depth = 0;
+			if (depth > last_depth + 1) depth = last_depth + 1;
+			if (!last_bm && depth > 0) depth = 0;
+
+			/* Load flags. */
+
+			flags = strchr(depth_str, '\t');
+			if (flags) {
+				*flags = '\0';
+				flags++;
+			}
+		} else {
+			depth_str = url;
+		}
+
+		/* Load EOLN. */
+
+		line_end = strchr(flags ? flags : depth_str, '\n');
+		if (!line_end)
+			continue;
+		*line_end = '\0';
+
+		{
+			struct bookmark *root = NULL;
+
+			if (depth > 0) {
+				if (depth == last_depth) {
+					root = last_bm->root;
+				} else if (depth > last_depth) {
+					root = last_bm;
+				} else {
+					while (last_depth - depth) {
+						last_bm = last_bm->root;
+						last_depth--;
+					}
+					root = last_bm->root;
+				}
+			}
+			last_bm = add_bookmark(root, 1, title, url);
+			last_depth = depth;
+
+			while (flags && *flags) {
+				switch (*flags) {
+					case 'F':
+						last_bm->box_item->type = BI_FOLDER;
+						break;
+					case 'E':
+						last_bm->box_item->expanded = 1;
+						break;
+				}
+				flags++;
+			}
+		}
+	}
+
+	fclose(f);
+	bookmarks_dirty = 0;
+#undef INBUF_SIZE
+}
+
+/* Saves the bookmarks to file */
+void
+write_bookmarks_do(struct secure_save_info *ssi, struct list_head *bookmarks)
+{
+	struct bookmark *bm;
+
+	foreach (bm, *bookmarks) {
+		unsigned char *p;
+		int i;
+		int bad = 0;
+
+		p = bm->title;
+		for (i = strlen(p) - 1; i >= 0; i--)
+			if (p[i] < ' ')
+				p[i] = ' ';
+
+		p = bm->url;
+		for (i = strlen(p) - 1; i >= 0; i--)
+			if (p[i] < ' ')
+				bad = 1; /* Incorrect url, skip it. */
+
+		if (bad) continue;
+
+		secure_fprintf(ssi, "%s\t%s\t%d\t", bm->title, bm->url, bm->box_item->depth);
+		if (bm->box_item->type == BI_FOLDER)
+			secure_fputc(ssi, 'F');
+		if (bm->box_item->expanded)
+			secure_fputc(ssi, 'E');
+		secure_fputc(ssi, '\n');
+		if (ssi->err) break;
+
+		if (!list_empty(bm->child))
+			write_bookmarks_do(ssi, &bm->child);
+	}
 }
 
 void
 write_bookmarks()
 {
-	bookmarks_write(&bookmarks);
+	struct secure_save_info *ssi;
+	unsigned char *file_name;
+
+	if (!bookmarks_dirty) return;
+
+	file_name = straconcat(elinks_home, "bookmarks", NULL);
+	if (!file_name) return;
+
+	ssi = secure_open(file_name, 0177);
+	mem_free(file_name);
+	if (!ssi) return;
+
+	write_bookmarks_do(ssi, &bookmarks);
+
+	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }
 
 /* Clears the bookmark list */

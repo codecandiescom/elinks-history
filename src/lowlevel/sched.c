@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.59 2002/12/05 23:16:08 pasky Exp $ */
+/* $Id: sched.c,v 1.60 2002/12/05 23:38:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "protocol/url.h"
 #include "ssl/ssl.h"
 #include "util/base64.h"
+#include "util/encoding.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -333,6 +334,16 @@ free_connection_data(struct connection *c)
 		internal("connection already suspended");
 	}
 	c->running = 0;
+
+	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
+	if (c->stream) {
+		close_encoded(c->stream);
+		c->stream = NULL;
+	}
+	if (c->stream_pipes[1] >= 0)
+		close(c->stream_pipes[1]);
+	c->stream_pipes[0] = c->stream_pipes[1] = -1;
+
 	if (c->dnsquery) {
 		kill_dns_request(&c->dnsquery);
 	}

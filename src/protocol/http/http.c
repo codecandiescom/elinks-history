@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.74 2002/12/05 13:39:38 zas Exp $ */
+/* $Id: http.c,v 1.75 2002/12/05 23:38:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,6 +58,8 @@ struct http_connection_info {
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
 };
+
+static void uncompress_shutdown(struct connection *);
 
 
 static unsigned char *
@@ -215,6 +217,7 @@ static void
 http_end_request(struct connection *c, int state)
 {
 	setcstate(c, state);
+	uncompress_shutdown(c);
 
 	if (c->state == S_OK) {
 		if (c->cache) {
@@ -764,11 +767,21 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		output = NULL;
 	}
 
-	close_encoded(conn->stream);
-	conn->stream = NULL;
-	close(conn->stream_pipes[1]);
-	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
+	uncompress_shutdown(conn);
 	return output;
+}
+
+/* FIXME: Unfortunately, we duplicate this in free_connection_data(). */
+static void
+uncompress_shutdown(struct connection *conn)
+{
+	if (conn->stream) {
+		close_encoded(conn->stream);
+		conn->stream = NULL;
+	}
+	if (conn->stream_pipes[1] >= 0)
+		close(conn->stream_pipes[1]);
+	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 }
 
 void

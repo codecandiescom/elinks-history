@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.481 2004/07/12 18:26:31 jonas Exp $ */
+/* $Id: parser.c,v 1.480 2004/07/12 18:25:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,7 +574,7 @@ html_hr(unsigned char *a)
 	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 
 	i = get_width(a, "width", 1);
-	if (i == -1) i = get_html_max_width();
+	if (i == -1) i = par_format.width - (html_context.margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
 	html_context.special_f(html_context.part, SP_NOWRAP, 1);
 	while (i-- > 0) {

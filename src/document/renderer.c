@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.64 2004/07/12 18:23:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.65 2004/07/12 18:25:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,6 @@ render_document_frames(struct session *ses)
 		doc_opts.color_flags |= COLOR_ENHANCE_UNDERLINE;
 
 	doc_opts.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
-	doc_opts.no_cache = 1;
 
 	if (vs) {
 		if (vs->plain < 0) vs->plain = 0;

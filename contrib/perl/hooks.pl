@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.73 2005/03/27 13:36:18 pasky Exp $
+# $Id: hooks.pl,v 1.74 2005/03/27 22:01:28 rrowan Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -16,16 +16,16 @@ hooks.pl -- the Perl hooks for the ELinks text WWW browser
 
 =head1 DESCRIPTION
 
-This file contains the Perl hoks for the ELinks text WWW browser.
+This file contains the Perl hooks for the ELinks text WWW browser.
 
 These hooks can alter the browser's behaviour in various ways; probably the
 most popular is processing the user input in the Goto URL dialog and rewriting
 it in various ways (like the builtin URL prefixes capability, but much more
 powerful and flexible).
 
-Other popular capability is the hooks is to rewrite the HTML source of the page
-before it is rendered, usually to get rid of the ads and/or make the web page
-more ELinks-friendly. The hooks also allow you to fine-tune the proxying rules,
+Another popular capability of the hooks is to rewrite the HTML source of the page
+before it is rendered, usually to get rid of ads and/or make the web page
+more ELinks-friendly.  The hooks also allow you to fine-tune the proxying rules,
 can show a fortune when ELinks exits, and more!
 
 =cut
@@ -40,7 +40,7 @@ use Carp;
 
 =head1 CONFIGURATION FILE
 
-The hooks file reads its file from I<~/.elinks/config.pl>.
+The hooks file reads its configuration from I<~/.elinks/config.pl>.
 Note that the following is only an example,
 and does not contain the default values:
 
@@ -64,7 +64,7 @@ and does not contain the default values:
 	#          ask jeeves
 
 I<Developer's usage>: The function I<loadrc()> takes a preference name as its
-single argument and returns either empty string if it is not specified,
+single argument and returns either an empty string if it is not specified,
 I<yes> for a true value (even if specified like I<sure> or I<why not>),
 I<no> for a false value (even if like I<nah>, I<off> or I<0>),
 or the lowercased preference value (like I<cnn> for C<weather: CNN>).

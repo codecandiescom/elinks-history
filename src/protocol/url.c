@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.65 2003/05/21 07:10:59 zas Exp $ */
+/* $Id: url.c,v 1.66 2003/05/22 14:29:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,10 +226,7 @@ parse_url(unsigned char *url, int *prlen,
 			/* Check for valid length.
 			 * addrlen >= sizeof(hostbuf) is theorically impossible
 			 * but i keep the test in case of... Safer, imho --Zas */
-			if (addrlen >= 0 && addrlen < NI_MAXHOST) {
-				if (host) *host = lbracket + 1;
-				if (holen) *holen = addrlen;
-			} else {
+			if (addrlen < 0 || addrlen > NI_MAXHOST) {
 				internal("parse_url(): addrlen value is bad "
 					"(%d) for URL '%s'. Problems are "
 					"likely to be encountered. Please "
@@ -237,6 +234,8 @@ parse_url(unsigned char *url, int *prlen,
 					addrlen, url);
 				return -1;
 			}
+			if (host) *host = lbracket + 1;
+			if (holen) *holen = addrlen;
 		} else
 #endif
 		{

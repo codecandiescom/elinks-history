@@ -161,6 +161,8 @@ struct binding
   char domainname[ZERO];
 };
 
+extern unsigned char *LANGUAGE;
+
 /* A counter which is incremented each time some previous translations
    become invalid.
    This variable is part of the external ABI of the GNU libintl.  */

@@ -281,6 +281,10 @@ const char *_nl_current_default_domain = _nl_default_default_domain;
 /* Contains the default location of the message catalogs.  */
 const char _nl_default_dirname[] = LOCALEDIR;
 
+/* Contains application-specific LANGUAGE variation, taking precedence to the
+ * $LANGUAGE environment variable.  */
+unsigned char *LANGUAGE = NULL;
+
 /* List with bindings of specific domains created by bindtextdomain()
    calls.  */
 struct binding *_nl_domain_bindings;
@@ -1154,6 +1158,11 @@ guess_category_value (category, categoryname)
 {
   const char *language;
   const char *retval;
+
+  /* Takes precedence to anything else, damn it's what the application wants!
+   * ;-) --pasky  */
+  if (LANGUAGE && *LANGUAGE)
+    return LANGUAGE;
 
   /* The highest priority value is the `LANGUAGE' environment
      variable.  But we don't use the value if the currently selected

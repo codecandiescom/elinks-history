@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.108 2004/10/19 05:48:32 miciah Exp $ */
+/* $Id: document.c,v 1.109 2004/10/19 05:50:53 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ no_header_info:
 
 	/* Headers info message box. */
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-		artificial ?  N_("Artificial header info") : N_("Header info"), ALIGN_LEFT,
+		artificial ? N_("Artificial header info") : N_("Header info"), ALIGN_LEFT,
 		headers,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

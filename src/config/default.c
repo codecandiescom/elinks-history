@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.8 2002/03/26 17:08:51 pasky Exp $ */
+/* $Id: default.c,v 1.9 2002/03/26 17:11:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #endif
 
 /* We need to have it here. Stupid BSD. */
+#include <netinet/in.h>
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
 #endif

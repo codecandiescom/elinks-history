@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.9 2003/09/21 13:00:13 zas Exp $ */
+/* $Id: ftpparse.c,v 1.10 2003/09/22 14:14:37 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -185,7 +185,7 @@ getmonth(const unsigned char *buf, int len)
 	month[1] = buf[1]|32;
 	month[2] = buf[2]|32;
 
-	return month2num(buf);
+	return month2num(month);
 }
 
 static long

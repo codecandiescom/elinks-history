@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.7 2004/01/19 17:03:49 jonas Exp $ */
+/* $Id: parser.h,v 1.8 2004/01/19 19:01:42 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -32,5 +32,6 @@ struct css_stylesheet {
 
 void css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string);
 void done_css_stylesheet(struct css_stylesheet *css);
+struct css_selector *get_css_selector(struct css_stylesheet *css, unsigned char *name, int namelen);
 
 #endif

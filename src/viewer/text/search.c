@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.38 2003/10/06 00:27:31 zas Exp $ */
+/* $Id: search.c,v 1.39 2003/10/06 19:38:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,6 +358,12 @@ is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
 
 	txt = lowered_string(text, l);
 	if (!txt) return 0;
+
+	/* TODO: This is a great candidate for nice optimizations. Fresh CS
+	 * graduates can use their knowledge of ie. KMP (should be quite
+	 * trivial, probably a starter; very fast as well) or Turbo-BM (or
+	 * maybe some other Boyer-Moore variant, I don't feel that strong in
+	 * this area), hmm?  >:) --pasky */
 
 	for (; s1 <= s2; s1++) {
 		register int i;

@@ -24,24 +24,10 @@ TODO list for ELinks (sorted approximatelly by priority):
 
 	Mouse buttonbinding ;)
 
-	Sessions: Bookmark the current page of each tab or window under
-a single folder.
-
-	Complementary 'open all bookmarks in folder' or 'open all marked
-bookmarks' buttons in the bookmark mgr.
-
-	Support for bookmarked-link colour in addition to visited-link
-colour
-
-	Alert user when ey attempts to follow a broken link to a fragment
-on the current page
-
 	Show certain information specified with <meta> and <link> tags in the
 Document Info box
 
 	Display links to or with images with a distinct colour
-
-	Configurable highlight colour for text matched after a search
 
 	Kill-ring for edit-boxes
 
@@ -49,8 +35,6 @@ Document Info box
 superscript?
 
 	Allow resizing of frames
-
-	Incremental-search
 
 	Show selected link's title (which is specified by the title attribute)
 in the statusbar
@@ -68,22 +52,10 @@ the currently queued item when back is pressed
 add-bookmark-link, back, unback, document-info, next-frame, previous-frame,
 tab-prev, tab-next, tab-close, zoom-frame
 
-	Include search string in 'Search string not found' error box
-
 	Show any info that can be found in globhist for the selected link
 in the Info box
 
-	'Search' in the bookmark mgr. should be able to search
-collapsed folders
-
-	Expand or collapse recursively and expand or collapse all folders
-in hierarchical listboxes
-
-	Highlight marked listbox items instead of or in addition to putting
-asterisks next to them
-
-	Optimize multiple _()s of the same strings
-by using temporary variables
+	Optimize multiple _()s of the same strings by using temporary variables
 
 	Allow the output from MIME handlers to be displayed in ELinks
 
@@ -113,6 +85,39 @@ current link to external command (?)).
 	Copy URL to X clipboard (using X selections).
 
 
+Bookmarks/listboxes:
+
+	Sessions: Bookmark the current page of each tab or window under
+a single folder.
+
+	Complementary 'open all bookmarks in folder' or 'open all marked
+bookmarks' buttons in the bookmark mgr.
+
+	Support for bookmarked-link colour in addition to visited-link
+colour
+
+	'Search' in the bookmark mgr. should be able to search
+collapsed folders
+
+	Expand or collapse recursively and expand or collapse all folders
+in hierarchical listboxes
+
+	Highlight marked listbox items instead of or in addition to putting
+asterisks next to them
+
+
+Search improvements:
+
+	Alert user when he attempts to follow a broken link to a fragment
+on the current page
+
+	Include search string in 'Search string not found' error box
+
+	Incremental-search
+
+	Configurable highlight colour for text matched after a search
+
+
 Permanent goals:
 
 	General code cleanup
@@ -137,4 +142,4 @@ optionally.
 	Generalised scripting interface, possibly using SWIG
 (http://www.swig.org/)
 
-$Id: TODO,v 1.43 2003/05/03 10:54:03 zas Exp $
+$Id: TODO,v 1.44 2003/05/03 21:54:20 pasky Exp $

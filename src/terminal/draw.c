@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.86 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: draw.c,v 1.87 2004/05/13 09:06:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
+#include "util/rect.h"
 
 /* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \
@@ -239,6 +240,41 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	}
 
 	set_screen_dirty(term->screen, y, y + yw);
+}
+
+void
+draw_box(struct terminal *term, struct rect *box,
+	 unsigned char data, enum screen_char_attr attr,
+	 struct color_pair *color)
+{
+	/* draw_area() may disappear later. --Zas */
+	draw_area(term, box->x,  box->y, box->width, box->height,
+		  data, attr, color);
+}
+
+void
+draw_shadow_box(struct terminal *term, struct rect *box,
+		struct color_pair *color, int width, int height)
+{
+	struct rect dbox;
+
+	/* (horizontal) */
+	set_rect(&dbox,
+		 box->x + width,
+		 box->y + box->height,
+		 box->width - width,
+		 height);
+
+	draw_box(term, &dbox, ' ', 0, color);
+
+	/* (vertical) */
+	set_rect(&dbox,
+		 box->x + box->width,
+		 box->y + height,
+		 width,
+		 box->height);
+
+	draw_box(term, &dbox, ' ', 0, color);
 }
 
 void

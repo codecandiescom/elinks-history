@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.156 2005/02/05 05:26:41 jonas Exp $ */
+/* $Id: screen.c,v 1.157 2005/02/28 14:57:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,10 +270,10 @@ add_screen_driver(enum term_mode_type type, struct terminal *term, int env_len)
 	struct screen_driver *driver;
 
 	/* One byte is reserved for name in struct screen_driver. */
-	driver = mem_alloc(sizeof(struct screen_driver) + env_len);
+	driver = mem_alloc(sizeof(*driver) + env_len);
 	if (!driver) return NULL;
 
-	memcpy(driver, screen_drivers[type], sizeof(struct screen_driver) - 1);
+	memcpy(driver, screen_drivers[type], sizeof(*driver) - 1);
 	memcpy(driver->name, term->spec->name, env_len + 1);
 
 	add_to_list(active_screen_drivers, driver);
@@ -719,7 +719,7 @@ init_screen(void)
 {
 	struct terminal_screen *screen;
 
-	screen = mem_calloc(1, sizeof(struct terminal_screen));
+	screen = mem_calloc(1, sizeof(*screen));
 	if (!screen) return NULL;
 
 	screen->lcx = -1;
@@ -747,7 +747,7 @@ resize_screen(struct terminal *term, int width, int height)
 	size = width * height;
 	if (size <= 0) return;
 
-	bsize = size * sizeof(struct screen_char);
+	bsize = size * sizeof(*image);
 
 	image = mem_realloc(screen->image, bsize * 2);
 	if (!image) return;

@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.80 2004/12/29 15:04:21 zas Exp $ */
+/* $Id: event.c,v 1.81 2005/02/28 14:57:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ handle_interlink_event(struct terminal *term, struct term_event *ev)
 
 	/* For EVENT_INIT we read a liitle more */
 	if (info) return TERMINAL_INFO_SIZE + info->length;
-	return sizeof(struct term_event);
+	return sizeof(*ev);
 }
 
 void
@@ -333,7 +333,7 @@ in_term(struct terminal *term)
 	    || interlink->qfreespace - interlink->qlen > ALLOC_GR) {
 		int qlen = interlink ? interlink->qlen : 0;
 		int queuesize = ((qlen + ALLOC_GR) & ~(ALLOC_GR - 1));
-		int newsize = sizeof(struct terminal_interlink) + queuesize;
+		int newsize = sizeof(*interlink) + queuesize;
 
 		interlink = mem_realloc(interlink, newsize);
 		if (!interlink) {
@@ -343,7 +343,7 @@ in_term(struct terminal *term)
 
 		/* Blank the members for the first allocation */
 		if (!term->interlink)
-			memset(interlink, 0, sizeof(struct terminal_interlink));
+			memset(interlink, 0, sizeof(*interlink));
 
 		term->interlink = interlink;
 		interlink->qfreespace = queuesize - interlink->qlen;

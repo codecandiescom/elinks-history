@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.116 2005/02/05 03:00:03 jonas Exp $ */
+/* $Id: kbd.c,v 1.117 2005/02/28 14:57:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ kbd_ctrl_c(void)
 	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_CTRL_C, 0, 0);
 
 	if (!ditrm) return;
-	queue_event(ditrm, (unsigned char *) &ev, sizeof(struct term_event));
+	queue_event(ditrm, (unsigned char *) &ev, sizeof(ev));
 }
 
 #define write_sequence(fd, seq) \
@@ -227,7 +227,7 @@ resize_terminal(void)
 	ev.info.size.width = width;
 	ev.info.size.height = height;
 
-	queue_event(ditrm, (char *) &ev, sizeof(struct term_event));
+	queue_event(ditrm, (char *) &ev, sizeof(ev));
 }
 
 
@@ -236,7 +236,7 @@ setraw(int fd, struct termios *p)
 {
 	struct termios t;
 
-	memset(&t, 0, sizeof(struct termios));
+	memset(&t, 0, sizeof(t));
 	if (tcgetattr(fd, &t)) return -1;
 
 	if (p) copy_struct(p, &t);
@@ -261,7 +261,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	struct term_event_size *size = &info.event.info.size;
 	unsigned char *ts;
 
-	memset(&info, 0, sizeof(struct terminal_info));
+	memset(&info, 0, sizeof(info));
 
 	get_terminal_size(ctl_in, &size->width, &size->height);
 	info.event.ev = EVENT_INIT;
@@ -276,7 +276,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 		info.magic = INTERLINK_NORMAL_MAGIC;
 	}
 
-	itrm = mem_calloc(1, sizeof(struct itrm));
+	itrm = mem_calloc(1, sizeof(*itrm));
 	if (!itrm) return;
 
 	ditrm = itrm;
@@ -601,7 +601,7 @@ kbd_timeout(struct itrm *itrm)
 	assertm(itrm->qlen, "timeout on empty queue");
 	if_assert_failed return;
 
-	queue_event(itrm, (char *) &ev, sizeof(struct term_event));
+	queue_event(itrm, (char *) &ev, sizeof(ev));
 
 	if (--itrm->qlen)
 		memmove(itrm->kqueue, itrm->kqueue + 1, itrm->qlen);
@@ -950,7 +950,7 @@ process_queue(struct itrm *itrm)
 	/* The call to decode_terminal_escape_sequence() might have changed the
 	 * keyboard event to a mouse event. */
 	if (ev.ev == EVENT_MOUSE || ev.info.keyboard.key != -1)
-		queue_event(itrm, (char *) &ev, sizeof(struct term_event));
+		queue_event(itrm, (char *) &ev, sizeof(ev));
 
 	if (itrm->qlen)
 		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);

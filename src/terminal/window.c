@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.24 2004/10/25 19:10:14 pasky Exp $ */
+/* $Id: window.c,v 1.25 2005/02/28 14:59:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ static void
 add_window_at_pos(struct terminal *term, window_handler handler,
 		  void *data, struct window *at)
 {
-	struct window *win = mem_calloc(1, sizeof(struct window));
+	struct window *win = mem_calloc(1, sizeof(*win));
 	struct term_event ev = INIT_TERM_EVENT(EVENT_INIT, term->width, term->height, 0);
 
 	if (!win) {
@@ -173,7 +173,7 @@ empty_window_handler(struct window *win, struct term_event *ev)
 void
 add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 {
-	struct ewd *ewd = mem_alloc(sizeof(struct ewd));
+	struct ewd *ewd = mem_alloc(sizeof(*ewd));
 
 	if (!ewd) return;
 	ewd->fn = fn;

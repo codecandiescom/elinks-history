@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.42 2004/11/12 10:52:03 jonas Exp $ */
+/* $Id: file.c,v 1.43 2005/02/28 15:02:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,8 +532,7 @@ get_directory_entries(unsigned char *dirname, int get_hidden)
 		if (!file_visible(entry->d_name, get_hidden, is_root_directory))
 			continue;
 
-		new_entries = mem_realloc(entries, (size + 2) *
-					  sizeof(struct directory_entry));
+		new_entries = mem_realloc(entries, (size + 2) * sizeof(*new_entries));
 		if (!new_entries) continue;
 		entries = new_entries;
 
@@ -575,10 +574,10 @@ get_directory_entries(unsigned char *dirname, int get_hidden)
 		return NULL;
 	}
 
-	qsort(entries, size, sizeof(struct directory_entry),
+	qsort(entries, size, sizeof(*entries),
 	      (int (*)(const void *, const void *)) compare_dir_entries);
 
-	memset(&entries[size], 0, sizeof(struct directory_entry));
+	memset(&entries[size], 0, sizeof(*entries));
 
 	return entries;
 }

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.45 2004/10/25 12:56:38 jonas Exp $ */
+/* $Id: terminal.h,v 1.46 2005/02/28 14:58:50 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -128,7 +128,7 @@ struct terminal {
 };
 
 #define do_not_ignore_next_mouse_event(term) \
-	memset(&term->prev_mouse_event, 0, sizeof(struct term_event_mouse))
+	memset(&(term)->prev_mouse_event, 0, sizeof((term)->prev_mouse_event))
 
 /* We keep track about all the terminals in this list. */
 extern struct list_head terminals;

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.48 2005/02/28 10:15:19 zas Exp $ */
+/* $Id: xbel.c,v 1.49 2005/03/18 13:30:54 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -231,7 +231,8 @@ write_bookmarks_list(struct secure_save_info *ssi,
 
 			indentation(ssi, n + 1);
 			secure_fputs(ssi, "</folder>\n\n");
-		} else {
+
+		} else if (bm->box_item->type == BI_LEAF) {
 
 			secure_fputs(ssi, "<bookmark href=\"");
 			print_xml_entities(ssi, bm->url);
@@ -244,6 +245,9 @@ write_bookmarks_list(struct secure_save_info *ssi,
 
 			indentation(ssi, n + 1);
 			secure_fputs(ssi, "</bookmark>\n\n");
+
+		} else if (bm->box_item->type == BI_SEPARATOR) {
+			secure_fputs(ssi, "<separator/>\n");
 		}
 	}
 }
@@ -394,8 +398,8 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 			tmp->root = current_parent;
 			lastbm = tmp;
-		}
-		else if (!strcmp(node->name, "folder")) {
+
+		} else if (!strcmp(node->name, "folder")) {
 			unsigned char *folded;
 
 			title = get_child(node, "title");
@@ -412,6 +416,14 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 			if (folded && !strcmp(folded, "no"))
 				tmp->box_item->expanded = 1;
 
+			lastbm = tmp;
+
+		} else if (!strcmp(node->name, "separator")) {
+			tmp = add_bookmark(current_parent, 0, "-", "");
+
+			/* Out of memory */
+			if (!tmp) return 0;
+			tmp->root = current_parent;
 			lastbm = tmp;
 		}
 

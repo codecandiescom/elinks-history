@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.160 2005/02/28 10:15:01 zas Exp $ */
+/* $Id: bookmarks.c,v 1.161 2005/03/18 13:30:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,12 +273,12 @@ init_bookmark(struct bookmark *root, unsigned char *title, unsigned char *url)
 	sanitize_title(bm->title);
 
 	bm->url = stracpy(empty_string_or_(url));
-	if (!bm->url || !sanitize_url(bm->url)) {
-		mem_free_if(bm->url);
+	if (!bm->url) {
 		mem_free(bm->title);
 		mem_free(bm);
 		return NULL;
 	}
+	sanitize_url(bm->url);
 
 	bm->root = root;
 	init_list(bm->child);
@@ -320,15 +320,24 @@ struct bookmark *
 add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	     unsigned char *url)
 {
+	enum listbox_item_type type;
 	struct bookmark *bm;
 
 	bm = init_bookmark(root, title, url);
 	if (!bm) return NULL;
 
+	if (url && *url) {
+		type = BI_LEAF;
+	} else if (title && title[0] == '-' && title[1] == '\0') {
+		type = BI_SEPARATOR;
+	} else {
+		type = BI_FOLDER;
+	}
+
 	/* Setup box_item */
 	bm->box_item = add_listbox_item(&bookmark_browser,
 					root ? root->box_item : NULL,
-					url && *url ? BI_LEAF : BI_FOLDER,
+					type,
 					(void *) bm,
 					place ? -1 : 1);
 
@@ -358,10 +367,9 @@ update_bookmark(struct bookmark *bm, unsigned char *title,
 	unsigned char *url2 = NULL;
 
 	if (url) {
-		if (!sanitize_url(url)) return 0;
-
 		url2 = stracpy(url);
 		if (!url2) return 0;
+		sanitize_url(url2);
 	}
 
 	if (title) {
@@ -536,6 +544,8 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 	if_assert_failed return;
 
 	foreach (bookmark, bookmarks) {
+		if (bookmark->box_item->type != BI_FOLDER)
+			continue;
 		if (strcmp(bookmark->title, foldername))
 			continue;
 		folder = bookmark;
@@ -548,6 +558,7 @@ open_bookmark_folder(struct session *ses, unsigned char *foldername)
 		struct uri *uri;
 
 		if (bookmark->box_item->type == BI_FOLDER
+		    || bookmark->box_item->type == BI_SEPARATOR
 		    || !*bookmark->url)
 			continue;
 

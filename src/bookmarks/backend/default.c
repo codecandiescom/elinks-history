@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.19 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: default.c,v 1.20 2005/03/18 13:30:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,16 +105,21 @@ read_bookmarks_default(FILE *f)
 			last_bm = add_bookmark(root, 1, title, url);
 			last_depth = depth;
 
-			while (flags && *flags && last_bm) {
-				switch (*flags) {
-					case 'F':
-						last_bm->box_item->type = BI_FOLDER;
-						break;
-					case 'E':
-						last_bm->box_item->expanded = 1;
-						break;
+			if (!*url && title[0] == '-' && title[1] == '\0') {
+			       	last_bm->box_item->type = BI_SEPARATOR;
+
+			} else {
+				while (flags && *flags && last_bm) {
+					switch (*flags) {
+						case 'F':
+							last_bm->box_item->type = BI_FOLDER;
+							break;
+						case 'E':
+							last_bm->box_item->expanded = 1;
+							break;
+					}
+					flags++;
 				}
-				flags++;
 			}
 		}
 	}
@@ -130,10 +135,11 @@ write_bookmarks_default(struct secure_save_info *ssi,
 
 	foreach (bm, *bookmarks_list) {
 		secure_fprintf(ssi, "%s\t%s\t%d\t", bm->title, bm->url, bm->box_item->depth);
-		if (bm->box_item->type == BI_FOLDER)
+		if (bm->box_item->type == BI_FOLDER) {
 			secure_fputc(ssi, 'F');
-		if (bm->box_item->expanded)
-			secure_fputc(ssi, 'E');
+			if (bm->box_item->expanded)
+				secure_fputc(ssi, 'E');
+		}
 		secure_fputc(ssi, '\n');
 		if (ssi->err) break;
 

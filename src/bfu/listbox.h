@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.81 2004/11/23 13:08:29 zas Exp $ */
+/* $Id: listbox.h,v 1.82 2005/03/18 13:30:53 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -118,7 +118,8 @@ struct listbox_data {
 
 enum listbox_item_type {
 	BI_LEAF,
-	BI_FOLDER
+	BI_FOLDER,
+	BI_SEPARATOR
 };
 
 /* An item in a box */

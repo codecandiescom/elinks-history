@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.189 2005/03/05 20:46:46 zas Exp $ */
+/* $Id: listbox.c,v 1.190 2005/03/18 13:30:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,7 +343,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	struct color_pair *color;
 	int depth = item->depth + 1;
 	int d;
-	int y;
+	int x, y;
 
 	stylename = (item == data->box->sel) ? "menu.selected"
 		  : ((item->marked)	     ? "menu.marked"
@@ -376,9 +376,12 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 	if (depth) {
 		enum border_char str[5] =
 			{ 32, BORDER_SRTEE, BORDER_SHLINE, BORDER_SHLINE, 32 };
-		int i, x;
+		int i;
 
-		if (item->type == BI_LEAF) {
+		switch (item->type) {
+		case BI_LEAF:
+		case BI_SEPARATOR:
+		{
 			struct listbox_item *root = data->box->ops->get_root(item);
 
 			if (root) {
@@ -394,10 +397,16 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 					str[1] = BORDER_SDLCORNER;
 				}
 			}
-		} else {
+			break;
+		}
+		case BI_FOLDER:
 			str[0] = '[';
 			str[1] = (item->expanded) ? '-' : '+';
 			str[2] = ']';
+			break;
+		default:
+			INTERNAL("Unknown item type");
+			break;
 		}
 
 		if (item->marked) str[4] = '*';
@@ -408,11 +417,21 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		}
 	}
 
-	if (data->box->ops && data->box->ops->draw) {
-		int x = data->widget_data->box.x + depth * 5;
+	x = data->widget_data->box.x + depth * 5;
+
+	if (item->type == BI_SEPARATOR) {
+		int i;
+		int width = data->widget_data->box.width - depth * 5;
+
+		for (i = 0; i < width; i++) {
+			draw_border_char(data->term, x + i, y, BORDER_SHLINE, color);
+		}
+
+	} else if (data->box->ops && data->box->ops->draw) {
 		int width = data->widget_data->box.width - depth * 5;
 
 		data->box->ops->draw(item, data, x, y, width);
+
 	} else {
 		unsigned char *text;
 		struct listbox_ops *ops = data->box->ops;
@@ -425,15 +444,13 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		len = strlen(text);
 		int_upper_bound(&len, int_max(0, data->widget_data->box.width - depth * 5));
 
-		draw_text(data->term, data->widget_data->box.x + depth * 5, y,
-			  text, len, 0, color);
+		draw_text(data->term, x, y, text, len, 0, color);
 
 		mem_free(text);
 	}
 
-
 	if (item == data->box->sel) {
-		int x = data->widget_data->box.x;
+		x = data->widget_data->box.x;
 
 		/* For blind users: */
 		set_cursor(data->term, x, y, 1);

@@ -1,3 +1,16 @@
+Tue Oct 15 19:46:12 2002  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS, intl/polish.lng, src/intl/language.inc:
+
+	Polish translation was updated. Patch by Witold Filipczy 
+
+Tue Oct 15 13:51:55 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/polish.lng, src/intl/language.inc:
+
+	Polish translation was updated. Patch by Witold Filipczyk
+	<witekfl@poczta.onet.pl>.  
+
 Mon Oct 14 21:32:18 2002  Laurent Monin <zas@norz.org>:
 
 	* Unicode/8859_15.cp:

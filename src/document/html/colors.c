@@ -1,10 +1,11 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.7 2002/09/04 15:43:22 zas Exp $ */
+/* $Id: colors.c,v 1.8 2002/09/05 21:02:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 

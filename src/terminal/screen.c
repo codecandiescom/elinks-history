@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.134 2004/04/30 09:26:22 zas Exp $ */
+/* $Id: screen.c,v 1.135 2004/04/30 12:44:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,21 +657,24 @@ redraw_screen(struct terminal *term)
 		if (state.border && driver->frame_seqs)
 			add_term_string(&image, driver->frame_seqs[0]);
 
-		if (image.length
-		    || screen->cx != screen->lcx
-		    || screen->cy != screen->lcy) {
-			screen->lcx = screen->cx;
-			screen->lcy = screen->cy;
+	}
 
-			add_cursor_move_to_string(&image, screen->cy + 1,
+	/* Even if nothing was redrawn, we possibly still need to move
+	 * cursor. */
+	if (image.length
+	    || screen->cx != screen->lcx
+	    || screen->cy != screen->lcy) {
+		screen->lcx = screen->cx;
+		screen->lcy = screen->cy;
+
+		add_cursor_move_to_string(&image, screen->cy + 1,
 						  screen->cx + 1);
-		}
+	}
 
-		if (image.length) {
-			if (term->master) want_draw();
-			hard_write(term->fdout, image.source, image.length);
-			if (term->master) done_draw();
-		}
+	if (image.length) {
+		if (term->master) want_draw();
+		hard_write(term->fdout, image.source, image.length);
+		if (term->master) done_draw();
 	}
 
 	done_string(&image);

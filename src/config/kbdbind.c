@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.241 2004/07/14 14:13:28 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.242 2004/07/14 14:17:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,8 @@ static struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
 static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings(void);
-static void init_action_listboxes(void);
-static void free_action_listboxes(void);
+static void init_keybinding_listboxes(void);
+static void done_keybinding_listboxes(void);
 
 static struct listbox_item *
 get_keybinding_action_box_item(enum keymap km, int action)
@@ -157,7 +157,7 @@ init_keymaps(void)
 	for (i = 0; i < KM_MAX; i++)
 		init_list(keymaps[i]);
 
-	init_action_listboxes();
+	init_keybinding_listboxes();
 	add_default_keybindings();
 }
 
@@ -166,7 +166,7 @@ free_keymaps(void)
 {
 	enum keymap i;
 
-	free_action_listboxes();
+	done_keybinding_listboxes();
 
 	for (i = 0; i < KM_MAX; i++)
 		free_list(keymaps[i]);
@@ -661,7 +661,7 @@ write_action(enum keymap keymap, int action)
 }
 
 static void
-init_action_listboxes(void)
+init_keybinding_listboxes(void)
 {
 	struct listbox_item *root = &keybinding_browser.root;
 	struct strtonum *act, *map;
@@ -697,7 +697,7 @@ init_action_listboxes(void)
 }
 
 static void
-free_action_listboxes(void)
+done_keybinding_listboxes(void)
 {
 	struct listbox_item *action;
 

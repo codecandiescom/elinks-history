@@ -1,5 +1,5 @@
 /* Guile scripting hooks */
-/* $Id: hooks.c,v 1.11 2003/10/01 10:21:27 jonas Exp $ */
+/* $Id: hooks.c,v 1.12 2003/10/01 10:25:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ script_hook_pre_format_html(va_list ap)
 
 	proc = scm_c_module_lookup(internal_module(), "%pre-format-html-hook");
 	x = scm_call_2(SCM_VARIABLE_REF(proc), scm_makfrom0str(url),
-		       scm_mem2string(*html, *len));
+		       scm_mem2string(*html, *html_len));
 
 	if (!SCM_STRINGP(x)) return EHS_NEXT;
 

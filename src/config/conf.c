@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.84 2003/06/10 19:19:00 pasky Exp $ */
+/* $Id: conf.c,v 1.85 2003/06/10 19:19:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,7 +364,7 @@ test_end:
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */
 			errfile = name, errline = line;
-			error("%s",  error_msg[err]);
+			elinks_error("%s",  error_msg[err]);
 			error_occured = 1;
 			err = 0;
 		}

@@ -1,5 +1,5 @@
-/* Global history */
-/* $Id: globhist.c,v 1.3 2002/04/01 20:48:36 pasky Exp $ */
+/* Global history dialogs */
+/* $Id: globhist.c,v 1.4 2002/04/01 21:00:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,14 +16,14 @@
 #include <lowlevel/kbd.h>
 
 
-#define HISTORY_BOX_IND 3
+#define HISTORY_BOX_IND 4
 
 static inline void
 history_dialog_list_clear(struct list_head *list)
 {
 	struct box_item *item;
 
-	foreach(item, *list) {
+	foreach (item, *list) {
 		free_global_history_item((struct global_history_item *)
 					 item->data);
 		mem_free(item->data);
@@ -42,7 +42,8 @@ history_dialog_list_update(struct list_head *list)
 	/* Empty the list */
 	history_dialog_list_clear(list);
 
-	foreach(historyitem, global_history.items) {
+	foreach (historyitem, global_history.items) {
+		/* Deleted in history_dialog_clear_list() */
 		item = mem_alloc(sizeof(struct box_item)
 				 + strlen(historyitem->url) + 1);
 		if (!item) {
@@ -213,12 +214,10 @@ static unsigned char *history_dialog_msg[] = {
 static void
 layout_history_manager(struct dialog_data *dlg)
 {
+	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	struct terminal *term;
-
-	term = dlg->win->term;
 
 	/* Find dimensions of dialog */
 	max_text_width(term, history_dialog_msg[0], &max);
@@ -289,11 +288,10 @@ struct push_del_button_hop_struct {
 static void
 really_del_history(void *vhop)
 {
-	struct push_del_button_hop_struct *hop;
+	struct push_del_button_hop_struct *hop =
+		(struct push_del_button_hop_struct *) vhop;
 	struct global_history_item *historyitem;
 	int last;
-
-	hop = (struct push_del_button_hop_struct *) vhop;
 
 	historyitem = get_global_history_item(hop->historyitem->url,
 					      hop->historyitem->title, 0);
@@ -307,7 +305,7 @@ really_del_history(void *vhop)
 	if (hop->box->sel >= (last - 1))
 		hop->box->sel = last - 1;
 
-	/* Made in push_delete_button() */
+	/* Made in push_delete_button(), as we've it in memlist. */
 	/* mem_free(vhop); */
 }
 
@@ -317,10 +315,8 @@ push_delete_button(struct dialog_data *dlg,
 {
 	struct global_history_item *historyitem;
 	struct push_del_button_hop_struct *hop;
-	struct terminal *term;
+	struct terminal *term = dlg->win->term;
 	struct dlg_data_item_data_box *box;
-
-	term = dlg->win->term;
 
 	box = (struct dlg_data_item_data_box *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
@@ -329,7 +325,6 @@ push_delete_button(struct dialog_data *dlg,
 	if (!historyitem)
 		return 0;
 
-	/* Deleted in really_del_history() */
 	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
 	if (!hop)
 		return 0;
@@ -344,6 +339,48 @@ push_delete_button(struct dialog_data *dlg,
 		TEXT(T_URL), ": \"", historyitem->url, "\")?", NULL,
 		hop, 2,
 		TEXT(T_YES), really_del_history, B_ENTER,
+		TEXT(T_NO), NULL, B_ESC);
+
+	return 0;
+}
+
+
+static void
+really_clear_history(void *vhop)
+{
+	struct push_del_button_hop_struct *hop =
+		(struct push_del_button_hop_struct *) vhop;
+
+	while (global_history.n) {
+		delete_global_history_item(global_history.items.prev);
+	}
+
+	hop->box->sel = history_dialog_list_update(&(hop->box->items)) - 1;
+}
+
+static int
+push_clear_button(struct dialog_data *dlg,
+		  struct dialog_item_data *some_useless_clear_button)
+{
+	struct push_del_button_hop_struct *hop;
+	struct terminal *term = dlg->win->term;
+	struct dlg_data_item_data_box *box;
+
+	box = (struct dlg_data_item_data_box *)
+	      dlg->dlg->items[HISTORY_BOX_IND].data;
+
+	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
+	if (!hop)
+		return 0;
+
+	hop->dlg = dlg->dlg;
+	hop->box = box;
+
+	msg_box(term, getml(hop, NULL),
+		TEXT(T_CLEAR_GLOBAL_HISTORY), AL_CENTER | AL_EXTD_TEXT,
+		TEXT(T_CLEAR_GLOBAL_HISTORY), "?", NULL,
+		hop, 2,
+		TEXT(T_YES), really_clear_history, B_ENTER,
 		TEXT(T_NO), NULL, B_ESC);
 
 	return 0;
@@ -384,9 +421,14 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[1].text = TEXT(T_DELETE);
 
 	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ESC;
-	d->items[2].fn = cancel_dialog;
-	d->items[2].text = TEXT(T_CLOSE);
+	d->items[2].gid = B_ENTER;
+	d->items[2].fn = push_clear_button;
+	d->items[2].text = TEXT(T_CLEAR);
+
+	d->items[3].type = D_BUTTON;
+	d->items[3].gid = B_ESC;
+	d->items[3].fn = cancel_dialog;
+	d->items[3].text = TEXT(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

@@ -7,9 +7,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ELinks 0.5pre7.CVS\n"
+"Project-Id-Version: ELinks 0.5pre11.CVS\n"
 "POT-Creation-Date: 2003-12-12 23:58+0100\n"
-"PO-Revision-Date: 2003-12-09 11:00+0200\n"
+"PO-Revision-Date: 2003-12-13 13:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4211,7 +4211,7 @@ msgstr "~Wróæ"
 
 #: src/dialogs/menu.c:325
 msgid "Go for~ward"
-msgstr ""
+msgstr "Naprzó~d"
 
 #: src/dialogs/menu.c:331 src/dialogs/menu.c:387
 msgid "Bookm~ark document"
@@ -4231,7 +4231,7 @@ msgstr "Nas~têpny tab"
 
 #: src/dialogs/menu.c:349 src/dialogs/menu.c:479
 msgid "Pre~v tab"
-msgstr "~Popzedni tab"
+msgstr "~Poprzedni tab"
 
 #: src/dialogs/menu.c:353 src/dialogs/menu.c:480
 msgid "~Close tab"
@@ -4255,7 +4255,7 @@ msgstr "Przejd¼ do ~URL-a"
 
 #: src/dialogs/menu.c:375
 msgid "Go ~forward"
-msgstr ""
+msgstr "Naprzó~d"
 
 #: src/dialogs/menu.c:377
 msgid "~History"
@@ -4263,7 +4263,7 @@ msgstr "~Historia"
 
 #: src/dialogs/menu.c:378
 msgid "~Unhistory"
-msgstr "His~toria powrotów"
+msgstr "Historia ~powrotów"
 
 #: src/dialogs/menu.c:383
 msgid "~Save as"
@@ -4271,20 +4271,19 @@ msgstr "Zapi~sz jako"
 
 #: src/dialogs/menu.c:384
 msgid "Save UR~L as"
-msgstr "Zapisz UR~L jako"
+msgstr "Zapisz URL ~jako"
 
 #: src/dialogs/menu.c:385
-#, fuzzy
 msgid "Sa~ve formatted document"
-msgstr "Zapisz sformatowany dokument"
+msgstr "Zapisz s~formatowany dokument"
 
 #: src/dialogs/menu.c:393
 msgid "~Kill background connections"
-msgstr "~Przerwij wszystkie po³±czenia w tle"
+msgstr "Przerwij wszyst~kie po³±czenia w tle"
 
 #: src/dialogs/menu.c:394
 msgid "Flush all ~caches"
-msgstr "Wyczy¶æ ca³± pamiêæ pod~rêczn±"
+msgstr "Wyczy¶æ ~ca³± pamiêæ podrêczn±"
 
 #: src/dialogs/menu.c:395
 msgid "Resource ~info"
@@ -5865,6 +5864,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1496
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Save formatted ~document"
-#~ msgstr "Zapisz sformatowany ~dokument"

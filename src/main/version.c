@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.20 2003/10/27 20:57:06 jonas Exp $ */
+/* $Id: version.c,v 1.21 2003/10/27 21:04:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 
 #define ELINKS_VERSION	("ELinks " VERSION_STRING)
 
-void
+static void
 add_module_to_string(struct string *string, struct module *module,
 		     struct terminal *term)
 {
@@ -46,7 +46,7 @@ add_module_to_string(struct string *string, struct module *module,
 	add_to_string(string, ")");
 }
 
-void
+static void
 add_modules_to_string(struct string *string, struct terminal *term)
 {
 	extern struct module *builtin_modules[];

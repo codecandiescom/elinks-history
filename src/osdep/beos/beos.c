@@ -1,3 +1,10 @@
+/* BeOS system-specific routines. */
+/* $Id: beos.c,v 1.4 2003/10/27 00:46:18 pasky Exp $ */
+
+/* Note that this file is currently unmaintained and basically dead. Noone
+ * cares about BeOS support, apparently. This file may yet survive for some
+ * time, but it will probably be removed if noone will adopt it. */
+
 #ifdef __BEOS__
 
 #include <stdio.h>

@@ -1,3 +1,9 @@
+Tue Aug  5 01:12:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/cache.c:
+
+	Minor tidyups.  
+
 Mon Aug  4 20:38:20 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/display.h:

@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.11 2003/10/28 00:23:52 pasky Exp $ */
+/* $Id: system.h,v 1.12 2004/08/14 21:15:09 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -11,22 +11,26 @@
 #define SYS_BEOS	4
 #define SYS_RISCOS	5
 
+/* FIXME: Remove all usage of defines below and only use CONFIG_<OS> one */
+
 #undef UNIX
 #undef OS2
 #undef WIN32
 #undef BEOS
 #undef RISCOS
 
-#if defined(__EMX__)
+#if defined(CONFIG_OS2)
 # define OS2
-#elif defined(_WIN32)
+#elif defined(CONFIG_WIN32)
 # define WIN32
-#elif defined(__BEOS__)
+#elif defined(CONFIG_BEOS)
 # define BEOS
-#elif defined(__riscos__)
+#elif defined(CONFIG_RISCOS)
 # define RISCOS
-#else
+#elif defined(CONFIG_UNIX)
 # define UNIX
+#else
+# error No OS defined by configure
 #endif
 
 #include "osdep/beos/overrides.h"

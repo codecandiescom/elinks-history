@@ -1,19 +1,43 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.27 2004/02/03 19:20:02 zas Exp $
+## $Id: Makefile.am,v 1.28 2004/08/14 21:15:09 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
-SUBDIRS = beos os2 riscos unix win32
+if CONFIG_BEOS
+beosdir = beos
+beosobj = $(beosdir)/beos.o $(beosdir)/overrides.o
+endif
+
+if CONFIG_OS2
+os2dir = os2
+os2obj = $(os2dir)/os2.o
+endif
+
+if CONFIG_RISCOS
+riscosdir = riscos
+riscosobj = $(riscosdir)/riscos.o
+endif
+
+if CONFIG_UNIX
+unixdir = unix
+unixobj = $(unixdir)/unix.o
+endif
+
+if CONFIG_WIN32
+win32dir = win32
+win32obj = $(win32dir)/win32.o
+endif
+
+SUBDIRS = $(beosdir) $(os2dir) $(riscosdir) $(unixdir) $(win32dir)
 
 noinst_LIBRARIES = libosdep.a
 
 libosdep_a_LIBADD = \
- beos/beos.o \
- beos/overrides.o \
- os2/os2.o \
- riscos/riscos.o \
- unix/unix.o \
- win32/win32.o
+ $(beosobj) \
+ $(os2obj) \
+ $(riscosobj) \
+ $(unixobj) \
+ $(win32obj)
 
 libosdep_a_SOURCES = \
  ascii.h \

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.186 2005/03/27 21:58:11 miciah Exp $ */
+/* $Id: core.c,v 1.187 2005/03/31 08:21:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,10 +21,13 @@
 #include "bfu/dialog.h"
 #include "cache/cache.h"
 #include "config/kbdbind.h"
+#include "config/options.h"
+#include "config/opttypes.h"
 #include "document/document.h"
 #include "document/renderer.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
+#include "intl/charsets.h"
 #include "lowlevel/home.h"
 #include "lowlevel/signals.h"
 #include "modules/module.h"
@@ -477,6 +480,135 @@ lua_error:
 
 /* End xdialog bit. */
 
+/* Set/get option */
+
+static int
+l_set_option(LS)
+{
+	int nargs;
+	struct option *opt, *current;
+	const char *name;
+
+	nargs = lua_gettop(S);
+	if (nargs != 2)
+		goto lua_error;
+
+	/* Get option record */
+	name = lua_tostring(S, 1);
+	opt = get_opt_rec(config_options, (unsigned char *) name);
+	if (opt == NULL)
+		goto lua_error;
+
+	/* Set option */
+	switch (opt->type) {
+	case OPT_BOOL:
+	case OPT_INT:
+	case OPT_LONG:
+	{
+		int value;
+
+		value = lua_tonumber(S, 2);
+		option_types[opt->type].set(opt, (unsigned char *) (&value));
+		break;
+	}
+	case OPT_STRING:
+	case OPT_CODEPAGE:
+	case OPT_LANGUAGE:
+	case OPT_COLOR:
+		option_types[opt->type].set(opt, (unsigned char *) lua_tostring(S, 2));
+		break;
+	default:
+		goto lua_error;
+	}
+
+	/* Call hook */
+	current = opt;
+	while (current && (!current->change_hook ||
+		!current->change_hook(lua_ses, current, opt))) {
+		if (current->root)
+			current = current->root;
+		else
+			break;
+	}
+	return 1;
+
+lua_error:
+	lua_pushnil(S);
+	return 1;
+}
+
+static int
+l_get_option(LS)
+{
+	int nargs;
+	struct option *opt;
+	const char *name;
+
+	/* Get option record */
+	nargs = lua_gettop(S);
+	if (nargs != 1)
+		goto lua_error;
+	name = lua_tostring(S, 1);
+	opt = get_opt_rec(config_options, (unsigned char *) name);
+	if (opt == NULL)
+		goto lua_error;
+
+	/* Convert to an appropriate Lua type */
+	switch (opt->type) {
+	case OPT_BOOL:
+		lua_pushboolean(S, opt->value.number);
+		break;
+	case OPT_INT:
+	case OPT_LONG:
+		lua_pushnumber(S, opt->value.number);
+		break;
+	case OPT_STRING:
+		lua_pushstring(S, opt->value.string);
+		break;
+	case OPT_CODEPAGE:
+	{
+		unsigned char *cp_name;
+
+		cp_name = get_cp_mime_name(opt->value.number);
+		lua_pushstring(S, cp_name);
+		break;
+	}
+	case OPT_LANGUAGE:
+	{
+		unsigned char *lang;
+
+#ifdef ENABLE_NLS
+		lang = language_to_name(current_language);
+#else
+		lang = "System";
+#endif
+		lua_pushstring(S, lang);
+		break;
+	}
+	case OPT_COLOR:
+	{
+		color_T color;
+		unsigned char hexcolor[8];
+		unsigned char *strcolor;
+
+		color = opt->value.color;
+		strcolor = get_color_string(color, hexcolor);
+		lua_pushstring(S, strcolor);
+		break;
+	}
+	case OPT_COMMAND:
+	default:
+		goto lua_error;
+	}
+
+	return 1;
+
+lua_error:
+	lua_pushnil(S);
+	return 1;
+}
+
+/* End of set/get option */
 
 /* Initialisation */
 
@@ -521,6 +653,8 @@ init_lua(struct module *module)
 	lua_register(L, "bind_key", l_bind_key);
 	lua_register(L, "edit_bookmark_dialog", l_edit_bookmark_dialog);
 	lua_register(L, "xdialog", l_xdialog);
+	lua_register(L, "set_option", l_set_option);
+	lua_register(L, "get_option", l_get_option);
 
 	lua_dostring(L, "function set_elinks_home(s) elinks_home = s end");
 	lua_getglobal(L, "set_elinks_home");

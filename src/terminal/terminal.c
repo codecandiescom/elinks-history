@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.4 2003/05/04 19:11:17 pasky Exp $ */
+/* $Id: terminal.c,v 1.5 2003/05/04 19:19:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,8 +31,6 @@
 #include "util/string.h"
 #include "viewer/text/view.h"
 
-
-/* TODO: We must use termcap/terminfo if available! --pasky */
 
 unsigned char *
 get_cwd()

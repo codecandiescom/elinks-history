@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.1 2003/05/04 19:11:17 pasky Exp $ */
+/* $Id: screen.c,v 1.2 2003/05/04 19:19:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,8 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+/* TODO: We must use termcap/terminfo if available! --pasky */
 
 #define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 

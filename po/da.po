@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2004-06-21 19:27+0200\n"
+"POT-Creation-Date: 2004-07-01 22:22+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -19,7 +19,7 @@ msgstr "Luk"
 
 #. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:430 src/bfu/hierbox.c:452 src/cache/dialogs.c:169
-#: src/config/dialogs.c:468 src/cookies/dialogs.c:336
+#: src/config/dialogs.c:473 src/cookies/dialogs.c:334
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
 #: src/dialogs/download.c:439 src/formhist/dialogs.c:179
 #: src/globhist/dialogs.c:192 src/protocol/auth/dialogs.c:186
@@ -35,10 +35,10 @@ msgstr ""
 #: src/bfu/inpfield.c:49 src/bfu/inpfield.c:60 src/bfu/inpfield.c:80
 #: src/bfu/msgbox.c:172 src/bookmarks/dialogs.c:206
 #: src/bookmarks/dialogs.c:600 src/config/dialogs.c:61
-#: src/config/dialogs.c:106 src/config/dialogs.c:300 src/config/dialogs.c:370
-#: src/config/dialogs.c:400 src/config/dialogs.c:437 src/config/dialogs.c:449
-#: src/config/dialogs.c:660 src/config/dialogs.c:680 src/config/dialogs.c:710
-#: src/cookies/dialogs.c:271 src/dialogs/document.c:50
+#: src/config/dialogs.c:106 src/config/dialogs.c:305 src/config/dialogs.c:375
+#: src/config/dialogs.c:405 src/config/dialogs.c:442 src/config/dialogs.c:454
+#: src/config/dialogs.c:665 src/config/dialogs.c:685 src/config/dialogs.c:715
+#: src/cookies/dialogs.c:269 src/dialogs/document.c:50
 #: src/dialogs/document.c:226 src/dialogs/document.c:287
 #: src/dialogs/document.c:299 src/dialogs/edit.c:99 src/dialogs/info.c:44
 #: src/dialogs/info.c:133 src/dialogs/info.c:153 src/dialogs/menu.c:95
@@ -47,15 +47,16 @@ msgstr ""
 #: src/protocol/auth/dialogs.c:92 src/protocol/user.c:207
 #: src/sched/download.c:236 src/sched/download.c:320 src/sched/download.c:356
 #: src/sched/download.c:503 src/sched/download.c:631 src/sched/error.c:42
-#: src/sched/session.c:239 src/sched/session.c:651 src/sched/session.c:675
-#: src/sched/session.c:692 src/scripting/lua/core.c:399
-#: src/scripting/lua/core.c:480 src/scripting/lua/core.c:595
-#: src/scripting/lua/core.c:719 src/viewer/text/form.c:830
-#: src/viewer/text/search.c:864 src/viewer/text/search.c:892
-#: src/viewer/text/search.c:917 src/viewer/text/search.c:948
-#: src/viewer/text/search.c:1374 src/viewer/text/textarea.c:365
-#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:256
-#: src/viewer/text/view.c:953 src/viewer/text/view.c:1359
+#: src/sched/session.c:240 src/sched/session.c:652 src/sched/session.c:676
+#: src/sched/session.c:693 src/scripting/lua/core.c:400
+#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:598
+#: src/scripting/lua/core.c:722 src/viewer/text/draw.c:66
+#: src/viewer/text/form.c:831 src/viewer/text/search.c:867
+#: src/viewer/text/search.c:895 src/viewer/text/search.c:920
+#: src/viewer/text/search.c:951 src/viewer/text/search.c:1277
+#: src/viewer/text/search.c:1389 src/viewer/text/textarea.c:365
+#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:566
+#: src/viewer/text/view.c:1123
 msgid "OK"
 msgstr "Ok"
 
@@ -107,14 +108,14 @@ msgid "Delete marked items?"
 msgstr "Slet historik indgang"
 
 #: src/bfu/hierbox.c:702 src/bfu/hierbox.c:729 src/bfu/hierbox.c:743
-#: src/bfu/hierbox.c:805 src/config/dialogs.c:638 src/dialogs/menu.c:124
+#: src/bfu/hierbox.c:805 src/config/dialogs.c:643 src/dialogs/menu.c:124
 #: src/formhist/formhist.c:454 src/mime/dialogs.c:75 src/sched/task.c:184
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "Yes"
 msgstr "Ja"
 
 #: src/bfu/hierbox.c:703 src/bfu/hierbox.c:730 src/bfu/hierbox.c:744
-#: src/bfu/hierbox.c:806 src/config/dialogs.c:639 src/dialogs/menu.c:125
+#: src/bfu/hierbox.c:806 src/config/dialogs.c:644 src/dialogs/menu.c:125
 #: src/formhist/formhist.c:455 src/mime/dialogs.c:76 src/sched/task.c:185
 #: src/terminal/tab.c:196 src/terminal/tab.c:232
 msgid "No"
@@ -183,7 +184,7 @@ msgid "Clock"
 msgstr "låst"
 
 #: src/bfu/leds.c:75
-msgid "Digital clock in the statusbar."
+msgid "Digital clock in the status bar."
 msgstr ""
 
 #: src/bfu/leds.c:79 src/bfu/leds.c:85 src/bfu/leds.c:105
@@ -195,14 +196,14 @@ msgstr "Slå til"
 
 #: src/bfu/leds.c:81
 msgid ""
-"Whether to display a digital clock in the statusbar.\n"
+"Whether to display a digital clock in the status bar.\n"
 "Note that the LED indicators must be enabled for this\n"
 "to take effect."
 msgstr ""
 
 #: src/bfu/leds.c:87
 msgid ""
-"Whether to display a digital clock in the statusbar.\n"
+"Whether to display a digital clock in the status bar.\n"
 "Note that the LED indicators (DISABLED) must be enabled\n"
 "for this to take any effect."
 msgstr ""
@@ -236,6 +237,11 @@ msgstr ""
 #: src/bfu/leds.c:286
 msgid "LED indicators"
 msgstr ""
+
+#: src/bfu/menu.c:698
+#, fuzzy
+msgid "Search menu/"
+msgstr "Søgning"
 
 #: src/bookmarks/backend/xbel.c:387 src/bookmarks/backend/xbel.c:408
 msgid "No title"
@@ -281,7 +287,7 @@ msgstr "Titel"
 
 #: src/bookmarks/dialogs.c:82 src/cache/dialogs.c:69 src/dialogs/document.c:72
 #: src/dialogs/edit.c:96 src/formhist/dialogs.c:67 src/globhist/dialogs.c:72
-#: src/protocol/auth/dialogs.c:140 src/scripting/lua/core.c:397
+#: src/protocol/auth/dialogs.c:140 src/scripting/lua/core.c:398
 msgid "URL"
 msgstr "URL"
 
@@ -294,20 +300,20 @@ msgid "Folder name"
 msgstr "Mappe navn"
 
 #: src/bookmarks/dialogs.c:206 src/bookmarks/dialogs.c:600
-#: src/config/dialogs.c:371 src/config/dialogs.c:449 src/config/dialogs.c:710
-#: src/cookies/dialogs.c:272 src/dialogs/edit.c:103 src/dialogs/menu.c:95
+#: src/config/dialogs.c:376 src/config/dialogs.c:454 src/config/dialogs.c:715
+#: src/cookies/dialogs.c:270 src/dialogs/edit.c:103 src/dialogs/menu.c:95
 #: src/dialogs/menu.c:478 src/dialogs/menu.c:526 src/dialogs/options.c:175
 #: src/dialogs/options.c:246 src/mime/dialogs.c:135
 #: src/protocol/auth/dialogs.c:93 src/sched/download.c:547
 #: src/sched/download.c:1009 src/sched/download.c:1018
 #: src/sched/download.c:1038 src/sched/download.c:1050
-#: src/scripting/lua/core.c:400 src/scripting/lua/core.c:481
-#: src/scripting/lua/core.c:719 src/viewer/text/search.c:1375
-#: src/viewer/text/view.c:953
+#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:483
+#: src/scripting/lua/core.c:722 src/viewer/text/search.c:1390
+#: src/viewer/text/view.c:566
 msgid "Cancel"
 msgstr "Annuller"
 
-#: src/bookmarks/dialogs.c:249 src/scripting/lua/core.c:391
+#: src/bookmarks/dialogs.c:249 src/scripting/lua/core.c:392
 msgid "Edit bookmark"
 msgstr "Rediger bogmærke"
 
@@ -316,14 +322,14 @@ msgstr "Rediger bogmærke"
 msgid "Goto"
 msgstr "Gå til"
 
-#: src/bookmarks/dialogs.c:390 src/config/dialogs.c:326
-#: src/config/dialogs.c:395 src/config/dialogs.c:469 src/cookies/dialogs.c:233
-#: src/cookies/dialogs.c:338
+#: src/bookmarks/dialogs.c:390 src/config/dialogs.c:331
+#: src/config/dialogs.c:400 src/config/dialogs.c:474 src/cookies/dialogs.c:231
+#: src/cookies/dialogs.c:336
 msgid "Edit"
 msgstr "Rediger"
 
 #: src/bookmarks/dialogs.c:391 src/cache/dialogs.c:171
-#: src/config/dialogs.c:471 src/config/dialogs.c:743 src/cookies/dialogs.c:339
+#: src/config/dialogs.c:476 src/config/dialogs.c:748 src/cookies/dialogs.c:337
 #: src/formhist/dialogs.c:180 src/globhist/dialogs.c:196
 #: src/protocol/auth/dialogs.c:187
 msgid "Delete"
@@ -333,20 +339,20 @@ msgstr "Slet"
 msgid "Move"
 msgstr "Flyt"
 
-#: src/bookmarks/dialogs.c:394 src/config/dialogs.c:470
-#: src/config/dialogs.c:742 src/cookies/dialogs.c:337
+#: src/bookmarks/dialogs.c:394 src/config/dialogs.c:475
+#: src/config/dialogs.c:747 src/cookies/dialogs.c:335
 msgid "Add"
 msgstr "Tilføj"
 
 #: src/bookmarks/dialogs.c:395 src/globhist/dialogs.c:197
-#: src/viewer/text/search.c:861 src/viewer/text/search.c:888
-#: src/viewer/text/search.c:912 src/viewer/text/search.c:1393
+#: src/viewer/text/search.c:864 src/viewer/text/search.c:891
+#: src/viewer/text/search.c:915 src/viewer/text/search.c:1408
 msgid "Search"
 msgstr "Søg"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:398 src/config/dialogs.c:472
-#: src/config/dialogs.c:745 src/cookies/dialogs.c:341
+#: src/bookmarks/dialogs.c:398 src/config/dialogs.c:477
+#: src/config/dialogs.c:750 src/cookies/dialogs.c:339
 #: src/dialogs/options.c:174 src/formhist/dialogs.c:183
 #: src/globhist/dialogs.c:202 src/sched/download.c:1007
 #: src/sched/download.c:1036
@@ -530,94 +536,105 @@ msgid "Default MIME type to assume for documents of unknown type."
 msgstr ""
 
 #: src/config/cmdline.c:636
-msgid "Write formatted version of given URL to stdout"
+msgid "Ignore user-defined keybindings"
 msgstr ""
 
 #: src/config/cmdline.c:638
+msgid ""
+"If set, parse but don't set keybindings from configuration\n"
+"file. It forces use of default keybindings and will reset\n"
+"user-defined ones on save."
+msgstr ""
+
+#: src/config/cmdline.c:642
+msgid "Write formatted version of given URL to stdout"
+msgstr ""
+
+#: src/config/cmdline.c:644
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
 
-#: src/config/cmdline.c:641
+#: src/config/cmdline.c:647
 msgid "Codepage to use with -dump"
 msgstr ""
 
-#: src/config/cmdline.c:643
+#: src/config/cmdline.c:649
 msgid "Codepage used in dump output."
 msgstr "Tegnopsætning brugt for -dump"
 
-#: src/config/cmdline.c:645
+#: src/config/cmdline.c:651
 msgid "Width of document formatted with -dump"
 msgstr ""
 
-#: src/config/cmdline.c:647
+#: src/config/cmdline.c:653
 msgid "Width of the dump output."
 msgstr ""
 
-#: src/config/cmdline.c:649
+#: src/config/cmdline.c:655
 msgid "Evaluate given configuration option"
 msgstr ""
 
-#: src/config/cmdline.c:651
+#: src/config/cmdline.c:657
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
 
 #. lynx compatibility
-#: src/config/cmdline.c:655
+#: src/config/cmdline.c:661
 msgid "Assume the file is HTML"
 msgstr ""
 
-#: src/config/cmdline.c:657
+#: src/config/cmdline.c:663
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
 
-#: src/config/cmdline.c:666
+#: src/config/cmdline.c:672
 msgid "Print usage help and exit"
 msgstr ""
 
-#: src/config/cmdline.c:668
+#: src/config/cmdline.c:674
 msgid "Print usage help and exit."
 msgstr ""
 
-#: src/config/cmdline.c:670
+#: src/config/cmdline.c:676
 msgid "Print detailed usage help and exit"
 msgstr ""
 
-#: src/config/cmdline.c:672
+#: src/config/cmdline.c:678
 msgid "Print detailed usage help and exit."
 msgstr ""
 
-#: src/config/cmdline.c:674
+#: src/config/cmdline.c:680
 msgid "Only permit local connections"
 msgstr ""
 
-#: src/config/cmdline.c:676
+#: src/config/cmdline.c:682
 msgid ""
 "Restrict ELinks so that it can only open connections to\n"
 "local addresses (ie. 127.0.0.1), it will prevent any connection\n"
 "to distant servers."
 msgstr ""
 
-#: src/config/cmdline.c:680
+#: src/config/cmdline.c:686
 #, fuzzy
 msgid "Look up specified host"
 msgstr "Intet program angivet for"
 
-#: src/config/cmdline.c:682
+#: src/config/cmdline.c:688
 #, fuzzy
 msgid "Look up specified host."
 msgstr "Intet program angivet for"
 
-#: src/config/cmdline.c:684
+#: src/config/cmdline.c:690
 msgid "Run as separate instance"
 msgstr ""
 
-#: src/config/cmdline.c:686
+#: src/config/cmdline.c:692
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -625,31 +642,31 @@ msgid ""
 "this option is used. See also -touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:691
+#: src/config/cmdline.c:697
 msgid "Don't use files in ~/.elinks"
 msgstr ""
 
-#: src/config/cmdline.c:693
+#: src/config/cmdline.c:699
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
 msgstr ""
 
-#: src/config/cmdline.c:695
+#: src/config/cmdline.c:701
 #, fuzzy
 msgid "Do not number links in dump output"
 msgstr "Tegnopsætning brugt for -dump"
 
-#: src/config/cmdline.c:697
+#: src/config/cmdline.c:703
 msgid ""
 "Prevents numbering of links (and showing their list at the end of\n"
 "the dumped document) in the -dump output; this was the default behaviour\n"
 "until 0.5pre12. Note that this really affects only -dump, nothing else."
 msgstr ""
 
-#: src/config/cmdline.c:701
+#: src/config/cmdline.c:707
 msgid "Control an already running ELinks"
 msgstr ""
 
-#: src/config/cmdline.c:703
+#: src/config/cmdline.c:709
 msgid ""
 "Mozilla compliant support for controlling a remote ELinks instance.\n"
 "The command takes an additional argument containing the method which\n"
@@ -666,11 +683,11 @@ msgid ""
 "  xfeDoCommand(openBrowser) -- open new window"
 msgstr ""
 
-#: src/config/cmdline.c:717
+#: src/config/cmdline.c:723
 msgid "Connect to session ring with given ID"
 msgstr ""
 
-#: src/config/cmdline.c:719
+#: src/config/cmdline.c:725
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -688,30 +705,30 @@ msgid ""
 "-touch-files."
 msgstr ""
 
-#: src/config/cmdline.c:734
+#: src/config/cmdline.c:740
 msgid "Write the source of given URL to stdout"
 msgstr ""
 
-#: src/config/cmdline.c:736
+#: src/config/cmdline.c:742
 msgid "Write the given HTML document in source form to stdout."
 msgstr ""
 
-#: src/config/cmdline.c:740
+#: src/config/cmdline.c:746
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 
-#: src/config/cmdline.c:742
+#: src/config/cmdline.c:748
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
 
-#: src/config/cmdline.c:746
+#: src/config/cmdline.c:752
 msgid "Verbose level"
 msgstr ""
 
-#: src/config/cmdline.c:748
+#: src/config/cmdline.c:754
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -720,15 +737,15 @@ msgid ""
 "\t2 means show all messages\n"
 msgstr ""
 
-#: src/config/cmdline.c:754
+#: src/config/cmdline.c:760
 msgid "Print version information and exit"
 msgstr ""
 
-#: src/config/cmdline.c:756
+#: src/config/cmdline.c:762
 msgid "Print ELinks version information and exit."
 msgstr ""
 
-#: src/config/conf.c:672
+#: src/config/conf.c:678
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -736,7 +753,7 @@ msgid ""
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:680
+#: src/config/conf.c:686
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -747,7 +764,7 @@ msgid ""
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
 
-#: src/config/conf.c:690
+#: src/config/conf.c:696
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -755,19 +772,19 @@ msgid ""
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
 
-#: src/config/conf.c:701
+#: src/config/conf.c:707
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 
-#: src/config/conf.c:716
+#: src/config/conf.c:722
 #, fuzzy
 msgid "Automatically saved options\n"
 msgstr "Indstillinger for behandlede documenter"
 
-#: src/config/conf.c:731
+#: src/config/conf.c:737
 #, fuzzy
 msgid "Automatically saved keybindings\n"
 msgstr "Indstillinger for behandlede documenter"
@@ -843,40 +860,40 @@ msgstr "Kan ikke skrive til konfigurationsfilen %s: %s"
 msgid "(expand by pressing space)"
 msgstr ""
 
-#: src/config/dialogs.c:177 src/config/dialogs.c:340
+#: src/config/dialogs.c:177 src/config/dialogs.c:345
 msgid "N/A"
 msgstr "Ingen"
 
-#: src/config/dialogs.c:190 src/config/dialogs.c:206 src/config/dialogs.c:335
-#: src/config/dialogs.c:448 src/cookies/dialogs.c:99 src/cookies/dialogs.c:260
-#: src/dialogs/edit.c:92 src/scripting/lua/core.c:395
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:476
+#: src/config/dialogs.c:190 src/config/dialogs.c:206 src/config/dialogs.c:340
+#: src/config/dialogs.c:453 src/cookies/dialogs.c:97 src/cookies/dialogs.c:258
+#: src/dialogs/edit.c:92 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:397 src/scripting/lua/core.c:478
 msgid "Name"
 msgstr "Navn"
 
-#: src/config/dialogs.c:191 src/config/dialogs.c:207 src/config/dialogs.c:336
+#: src/config/dialogs.c:191 src/config/dialogs.c:207 src/config/dialogs.c:341
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:200 src/config/dialogs.c:365 src/cookies/dialogs.c:100
-#: src/cookies/dialogs.c:262
+#: src/config/dialogs.c:200 src/config/dialogs.c:370 src/cookies/dialogs.c:98
+#: src/cookies/dialogs.c:260
 msgid "Value"
 msgstr "Værdi"
 
-#: src/config/dialogs.c:203 src/config/dialogs.c:209 src/config/dialogs.c:338
+#: src/config/dialogs.c:203 src/config/dialogs.c:209 src/config/dialogs.c:343
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: src/config/dialogs.c:297 src/sched/session.c:236
+#: src/config/dialogs.c:302 src/sched/session.c:237
 #: src/viewer/text/textarea.c:362 src/viewer/text/textarea.c:371
 msgid "Error"
 msgstr "Fejl"
 
-#: src/config/dialogs.c:298
+#: src/config/dialogs.c:303
 msgid "Bad option value."
 msgstr "Ugyldig værdi for indstilling."
 
-#: src/config/dialogs.c:396
+#: src/config/dialogs.c:401
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
@@ -885,56 +902,56 @@ msgstr ""
 "indstilling eksempelvis en mappe - prøv at trykke \"Mellemrum\" for at åbne "
 "den."
 
-#: src/config/dialogs.c:434 src/config/dialogs.c:448
+#: src/config/dialogs.c:439 src/config/dialogs.c:453
 msgid "Add option"
 msgstr "Tilføj indstilling"
 
-#: src/config/dialogs.c:435
+#: src/config/dialogs.c:440
 msgid "Cannot add an option here."
 msgstr "Indstillinger kan ikke tilføjes her."
 
-#: src/config/dialogs.c:477
+#: src/config/dialogs.c:482
 #, fuzzy
 msgid "Option manager"
 msgstr "Indstillingshåndtering"
 
-#: src/config/dialogs.c:552 src/config/dialogs.c:702
+#: src/config/dialogs.c:557 src/config/dialogs.c:707
 msgid "Keystroke"
 msgstr "Genvejskombination"
 
-#: src/config/dialogs.c:554 src/config/dialogs.c:696
+#: src/config/dialogs.c:559 src/config/dialogs.c:701
 #: src/config/options.inc:1229
 msgid "Action"
 msgstr "Handling"
 
-#: src/config/dialogs.c:555 src/config/dialogs.c:697
+#: src/config/dialogs.c:560 src/config/dialogs.c:702
 msgid "Keymap"
 msgstr "Tasteoversigt"
 
-#: src/config/dialogs.c:632
+#: src/config/dialogs.c:637
 msgid "Keystroke already used"
 msgstr ""
 
-#: src/config/dialogs.c:633
+#: src/config/dialogs.c:638
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
 
-#: src/config/dialogs.c:657 src/config/dialogs.c:677 src/config/dialogs.c:709
+#: src/config/dialogs.c:662 src/config/dialogs.c:682 src/config/dialogs.c:714
 msgid "Add keybinding"
 msgstr "Tilføj tastaturgenvej"
 
-#: src/config/dialogs.c:658
+#: src/config/dialogs.c:663
 msgid "Invalid keystroke."
 msgstr "Ugyldig genvejskombination"
 
-#: src/config/dialogs.c:678
+#: src/config/dialogs.c:683
 msgid "Need to select a keymap."
 msgstr "Det er nødvendigt at vælge en tasteoversigt."
 
-#: src/config/dialogs.c:698
+#: src/config/dialogs.c:703
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -944,595 +961,615 @@ msgstr ""
 "Præfiks (kan undlades) er: Shift, Ctrl, Alt\n"
 "Tast er: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:744 src/dialogs/info.c:134 src/globhist/dialogs.c:198
+#: src/config/dialogs.c:749 src/dialogs/info.c:134 src/globhist/dialogs.c:198
 msgid "Toggle display"
 msgstr "Skifte mellem visning"
 
-#: src/config/dialogs.c:750
+#: src/config/dialogs.c:755
 msgid "Keybinding manager"
 msgstr "Tastaturgenvejshåndtering"
 
-#: src/config/kbdbind.c:276
+#: src/config/kbdbind.c:292
 msgid "Main mapping"
 msgstr "Main tastaturoversigt"
 
-#: src/config/kbdbind.c:277
+#: src/config/kbdbind.c:293
 msgid "Edit mapping"
 msgstr "Edit tastaturoversigt"
 
-#: src/config/kbdbind.c:278
+#: src/config/kbdbind.c:294
 msgid "Menu mapping"
 msgstr "Menu tastaturoversigt"
 
-#: src/config/kbdbind.c:436 src/config/kbdbind.c:550 src/config/kbdbind.c:580
+#: src/config/kbdbind.c:464 src/config/kbdbind.c:582 src/config/kbdbind.c:612
 #, fuzzy
 msgid "Do nothing"
 msgstr "Nedhentning"
 
 #. internal use only
-#: src/config/kbdbind.c:438
+#: src/config/kbdbind.c:466
 msgid "Abort connection"
 msgstr "Afbryd forbindelse"
 
-#: src/config/kbdbind.c:439
+#: src/config/kbdbind.c:467
 msgid "Add a new bookmark"
 msgstr "Tilføj bogmærke"
 
-#: src/config/kbdbind.c:440
+#: src/config/kbdbind.c:468
 msgid "Add a new bookmark using current link"
 msgstr "Tilføj bogmærke med nuværende henvisning"
 
-#: src/config/kbdbind.c:441
+#: src/config/kbdbind.c:469
 #, fuzzy
 msgid "Bookmark all open tabs"
 msgstr "Bogmærkeindstillinger."
 
-#: src/config/kbdbind.c:442
+#: src/config/kbdbind.c:470
 #, fuzzy
 msgid "Open authentication manager"
 msgstr "Åben historikhåndtering"
 
-#: src/config/kbdbind.c:443
+#: src/config/kbdbind.c:471
 msgid "Open bookmark manager"
 msgstr "Åben bogmærkehåndteringen"
 
-#: src/config/kbdbind.c:444
+#: src/config/kbdbind.c:472
 #, fuzzy
 msgid "Open cache manager"
 msgstr "Åben historikhåndtering"
 
-#: src/config/kbdbind.c:445
+#: src/config/kbdbind.c:473
 msgid "Free unused cache entries"
 msgstr ""
 
-#: src/config/kbdbind.c:446
+#: src/config/kbdbind.c:474
 #, fuzzy
 msgid "Open cookie manager"
 msgstr "Åben historikhåndtering"
 
-#: src/config/kbdbind.c:447
+#: src/config/kbdbind.c:475
 msgid "Reload cookies file"
 msgstr "Genindlæs cookie fil"
 
-#: src/config/kbdbind.c:448 src/config/kbdbind.c:557
+#: src/config/kbdbind.c:476 src/config/kbdbind.c:589
 msgid "Copy text to clipboard"
 msgstr "Kopier tekst til udklipsholder"
 
-#: src/config/kbdbind.c:449
+#: src/config/kbdbind.c:477
 msgid "Show information about the current page"
 msgstr "Vis information om nuværende side"
 
-#: src/config/kbdbind.c:450
+#: src/config/kbdbind.c:478
 #, fuzzy
 msgid "Open download manager"
 msgstr "Hent billede"
 
-#: src/config/kbdbind.c:451 src/config/kbdbind.c:561
+#: src/config/kbdbind.c:479 src/config/kbdbind.c:593
 msgid "Begin editing"
 msgstr "Begynd redigering"
 
 #. FIXME
-#: src/config/kbdbind.c:452
+#: src/config/kbdbind.c:480
 msgid "Enter ex-mode (command line)"
 msgstr ""
 
-#: src/config/kbdbind.c:453
+#: src/config/kbdbind.c:481
 msgid "Open the File menu"
 msgstr "Åben fil menuen"
 
-#: src/config/kbdbind.c:454
+#: src/config/kbdbind.c:482
 msgid "Find the next occurrence of the current search text"
 msgstr "Find næste forkommelse af det nuværende søgestreng"
 
-#: src/config/kbdbind.c:455
+#: src/config/kbdbind.c:483
 msgid "Find the previous occurrence of the current search text"
 msgstr "Find næste forkommelse af den nuværende søgestreng"
 
-#: src/config/kbdbind.c:456
+#: src/config/kbdbind.c:484
 msgid "Forget authentication credentials"
 msgstr "Ignorer HTTP verificering"
 
-#: src/config/kbdbind.c:457
+#: src/config/kbdbind.c:485
 #, fuzzy
 msgid "Open form history manager"
 msgstr "Åben historikhåndtering"
 
-#: src/config/kbdbind.c:458
+#: src/config/kbdbind.c:486
+msgid "Move to the next frame"
+msgstr "Flyt til næste ramme"
+
+#: src/config/kbdbind.c:487
+msgid "Move to the previous frame"
+msgstr "Flut til den forrige ramme"
+
+#: src/config/kbdbind.c:488
+msgid "Maximize the current frame"
+msgstr "Maksimer den nuværende ramme"
+
+#: src/config/kbdbind.c:489
 msgid "Open \"Go to URL\" dialog box"
 msgstr "Åben \"Gå til URL\" dialogvindue"
 
-#: src/config/kbdbind.c:459
+#: src/config/kbdbind.c:490
 msgid "Open \"Go to URL\" dialog box containing the current URL"
 msgstr "Åben \"Gå til URL\" dialogvindue med nuværende URL"
 
-#: src/config/kbdbind.c:460
+#: src/config/kbdbind.c:491
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
 msgstr "Åben \"Gå til URL\" dialogvindue med nuværende URL"
 
-#: src/config/kbdbind.c:461
+#: src/config/kbdbind.c:492
 msgid "Go to the homepage"
 msgstr "Gå til hjemmesiden"
 
-#: src/config/kbdbind.c:462
+#: src/config/kbdbind.c:493
 msgid "Show information about the current page HTTP headers"
 msgstr "Vis information om den nuværende sides HTTP header"
 
-#: src/config/kbdbind.c:463
+#: src/config/kbdbind.c:494
 msgid "Open history manager"
 msgstr "Åben historikhåndtering"
 
-#: src/config/kbdbind.c:464
+#: src/config/kbdbind.c:495
 msgid "Return to the previous document in history"
 msgstr "Gå tilbage til de forrige dokument i historik"
 
-#: src/config/kbdbind.c:465
+#: src/config/kbdbind.c:496
 #, fuzzy
 msgid "Go forward in history"
 msgstr "Gå frem i anti-historik"
 
-#: src/config/kbdbind.c:466
+#: src/config/kbdbind.c:497
 msgid "Jump to link"
 msgstr "Gå til lænke"
 
-#: src/config/kbdbind.c:467
+#: src/config/kbdbind.c:498
 msgid "Open keybinding manager"
 msgstr "Åben tastaturgenvejshåndtering"
 
-#: src/config/kbdbind.c:468
+#: src/config/kbdbind.c:499
 #, fuzzy
 msgid "Kill all backgrounded connections"
 msgstr "Dræb baggrundsforbindelse"
 
-#: src/config/kbdbind.c:469
+#: src/config/kbdbind.c:500
 msgid "Download the current link"
 msgstr "Hent det nuværende lænke"
 
-#: src/config/kbdbind.c:470
+#: src/config/kbdbind.c:501
 msgid "Download the current image"
 msgstr "Hent det nuværende billede"
 
-#: src/config/kbdbind.c:471
+#: src/config/kbdbind.c:502
 msgid "Attempt to resume download of the current link"
 msgstr "Forsøg at genoptage hentning af den nuværende henvisning"
 
-#: src/config/kbdbind.c:472
+#: src/config/kbdbind.c:503
 msgid "Pass URI of current link to external command"
 msgstr ""
 
-#: src/config/kbdbind.c:473 src/config/kbdbind.c:564 src/config/kbdbind.c:586
+#: src/config/kbdbind.c:504 src/config/kbdbind.c:596 src/config/kbdbind.c:618
 msgid "Follow the current link"
 msgstr "~Følg det nuværende lænke"
 
-#: src/config/kbdbind.c:474
+#: src/config/kbdbind.c:505
 msgid "Follow the current link, forcing reload of the target"
 msgstr "Følg det nuværende lænke og genindlæs siden"
 
-#: src/config/kbdbind.c:475
+#: src/config/kbdbind.c:506
 msgid "Open the link context menu"
 msgstr "Åben link menu"
 
-#: src/config/kbdbind.c:477
+#: src/config/kbdbind.c:508
 msgid "Open a Lua console"
 msgstr "Åben en lua-konsol"
 
-#: src/config/kbdbind.c:479
+#: src/config/kbdbind.c:510
 msgid "Open a Lua console (DISABLED)"
 msgstr "Åben en lua-konsol (Deaktiveret)"
 
-#: src/config/kbdbind.c:481
+#: src/config/kbdbind.c:512
 msgid "Go at a specified mark"
 msgstr ""
 
-#: src/config/kbdbind.c:482
+#: src/config/kbdbind.c:513
 #, fuzzy
 msgid "Set a mark"
 msgstr "Søg bogmærker"
 
-#: src/config/kbdbind.c:483
+#: src/config/kbdbind.c:514
 msgid "Activate the menu"
 msgstr "Åben menuen"
 
-#: src/config/kbdbind.c:484
+#: src/config/kbdbind.c:515
 #, fuzzy
 msgid "Move cursor down"
 msgstr "Flyt markøren nedad"
 
-#: src/config/kbdbind.c:485
+#: src/config/kbdbind.c:516
 #, fuzzy
 msgid "Move cursor left"
 msgstr "Flyt markør til venstre"
 
-#: src/config/kbdbind.c:486
+#: src/config/kbdbind.c:517
 #, fuzzy
 msgid "Move cursor right"
 msgstr "Flyt markøren til højre"
 
-#: src/config/kbdbind.c:487
+#: src/config/kbdbind.c:518
 #, fuzzy
 msgid "Move cursor up"
 msgstr "Flyt markør op af"
 
-#: src/config/kbdbind.c:488
+#: src/config/kbdbind.c:519
 #, fuzzy
 msgid "Move to the end of the document"
 msgstr "Flut markøren til enden af siden/linjen"
 
-#: src/config/kbdbind.c:489
+#: src/config/kbdbind.c:520
 #, fuzzy
 msgid "Move to the start of the document"
 msgstr "Gå til begyndelsen af siden/linjen"
 
-#: src/config/kbdbind.c:490
+#: src/config/kbdbind.c:521
 #, fuzzy
-msgid "Move downwards one link"
-msgstr "Flyt en side ned"
-
-#: src/config/kbdbind.c:491
-#, fuzzy
-msgid "Move upwards one link"
+msgid "Move one link down"
 msgstr "Flyt en side op"
 
-#: src/config/kbdbind.c:492 src/config/kbdbind.c:592
+#: src/config/kbdbind.c:522
+#, fuzzy
+msgid "Move one link left"
+msgstr "Flyt en side op"
+
+#: src/config/kbdbind.c:523
+#, fuzzy
+msgid "Move to the next link"
+msgstr "Flyt til næste ramme"
+
+#: src/config/kbdbind.c:524
+#, fuzzy
+msgid "Move to the previous link"
+msgstr "Flut til den forrige ramme"
+
+#: src/config/kbdbind.c:525
+#, fuzzy
+msgid "Move one link right"
+msgstr "Flyt markøren til højre"
+
+#: src/config/kbdbind.c:526
+#, fuzzy
+msgid "Move one link up"
+msgstr "Flyt en side op"
+
+#: src/config/kbdbind.c:527 src/config/kbdbind.c:624
 msgid "Move downwards by a page"
 msgstr "Flyt en side ned"
 
-#: src/config/kbdbind.c:493 src/config/kbdbind.c:593
+#: src/config/kbdbind.c:528 src/config/kbdbind.c:625
 msgid "Move upwards by a page"
 msgstr "Flyt en side op"
 
-#: src/config/kbdbind.c:494
-msgid "Move to the next frame"
-msgstr "Flyt til næste ramme"
-
-#: src/config/kbdbind.c:495
+#: src/config/kbdbind.c:529
 #, fuzzy
 msgid "Open the current link in a new tab"
 msgstr "Åben det nuværende lænke i nyt vindue"
 
-#: src/config/kbdbind.c:496
+#: src/config/kbdbind.c:530
 #, fuzzy
 msgid "Open the current link a new tab in background"
 msgstr "Åben det nuværende lænke i nyt vindue"
 
-#: src/config/kbdbind.c:497
-msgid "Open the current link in a new window"
-msgstr "Åben det nuværende lænke i nyt vindue"
-
-#: src/config/kbdbind.c:498
-#, fuzzy
-msgid "Open a new tab"
-msgstr "Åben i nyt vindue"
-
-#: src/config/kbdbind.c:499
-#, fuzzy
-msgid "Open a new tab in background"
-msgstr "Udfør i baggrunden"
-
-#: src/config/kbdbind.c:500
-msgid "Open a new window"
-msgstr "Åben i nyt vindue"
-
-#: src/config/kbdbind.c:501
-#, fuzzy
-msgid "Open an OS shell"
-msgstr "K~ommandofortolker"
-
-#: src/config/kbdbind.c:502
-msgid "Open options manager"
-msgstr "Indstillingshåndtering"
-
-#: src/config/kbdbind.c:503
-msgid "Move to the previous frame"
-msgstr "Flut til den forrige ramme"
-
-#: src/config/kbdbind.c:504
-msgid "Open a quit confirmation dialog box"
-msgstr "Åben et dialog vindue til at bekræftige afslutning"
-
-#: src/config/kbdbind.c:505
-msgid "Quit without confirmation"
-msgstr "Afslut uden bekræftelse"
-
-#: src/config/kbdbind.c:506 src/config/kbdbind.c:572 src/config/kbdbind.c:595
-#, fuzzy
-msgid "Redraw the terminal"
-msgstr "Ændre ~terminalstørrelse"
-
-#: src/config/kbdbind.c:507
-msgid "Reload the current page"
-msgstr "Genindlæs den nuværende side"
-
-#: src/config/kbdbind.c:508
-#, fuzzy
-msgid "Re-render the current page"
-msgstr "Genindlæs den nuværende side"
-
-#: src/config/kbdbind.c:509
-msgid "Reset form items to their initial values"
-msgstr ""
-
-#: src/config/kbdbind.c:510
-#, fuzzy
-msgid "Show information about the currently used resources"
-msgstr "Vis information om nuværende side"
-
-#: src/config/kbdbind.c:511
-#, fuzzy
-msgid "Save as"
-msgstr "Gem som"
-
-#: src/config/kbdbind.c:512
-msgid "Save formatted document"
-msgstr "Gem behandlet dokument"
-
-#: src/config/kbdbind.c:513
-#, fuzzy
-msgid "Save options"
-msgstr "Gem ind~stillinger"
-
-#: src/config/kbdbind.c:514
-#, fuzzy
-msgid "Save URL as"
-msgstr "Gem ~URL som"
-
-#: src/config/kbdbind.c:515
-msgid "Scroll down"
-msgstr "Rul ned"
-
-#: src/config/kbdbind.c:516
-msgid "Scroll left"
-msgstr "Rul til venstre"
-
-#: src/config/kbdbind.c:517
-msgid "Scroll right"
-msgstr "Rul til højre"
-
-#: src/config/kbdbind.c:518
-msgid "Scroll up"
-msgstr "Rul op"
-
-#: src/config/kbdbind.c:519
-msgid "Search for a text pattern"
-msgstr "Søg efter tekststring"
-
-#: src/config/kbdbind.c:520
-msgid "Search backwards for a text pattern"
-msgstr "Søg bagud efter tekststreng"
-
-#: src/config/kbdbind.c:521 src/config/kbdbind.c:522
-msgid "Search link text by typing ahead"
-msgstr ""
-
-#: src/config/kbdbind.c:523
-msgid "Search document text by typing ahead"
-msgstr ""
-
-#: src/config/kbdbind.c:524
-msgid "Search document text backwards by typing ahead"
-msgstr ""
-
-#: src/config/kbdbind.c:525
-#, fuzzy
-msgid "Show terminal options dialog"
-msgstr "Terminalindstillinger"
-
-#: src/config/kbdbind.c:526
-#, fuzzy
-msgid "Submit form"
-msgstr "~Send formular"
-
-#: src/config/kbdbind.c:527
-#, fuzzy
-msgid "Submit form and reload"
-msgstr "Send formular ~og genindlæs"
-
-#: src/config/kbdbind.c:528 src/terminal/tab.c:192 src/terminal/tab.c:228
-msgid "Close tab"
-msgstr "Luk faneblad"
-
-#: src/config/kbdbind.c:529
-#, fuzzy
-msgid "Close all tabs but the current one"
-msgstr "Vis information om nuværende side"
-
-#: src/config/kbdbind.c:530
-#, fuzzy
-msgid "Open the tab menu"
-msgstr "Åben fil menuen"
-
 #: src/config/kbdbind.c:531
-#, fuzzy
-msgid "Move the current tab to the left"
+msgid "Open the current link in a new window"
 msgstr "Åben det nuværende lænke i nyt vindue"
 
 #: src/config/kbdbind.c:532
 #, fuzzy
+msgid "Open a new tab"
+msgstr "Åben i nyt vindue"
+
+#: src/config/kbdbind.c:533
+#, fuzzy
+msgid "Open a new tab in background"
+msgstr "Udfør i baggrunden"
+
+#: src/config/kbdbind.c:534
+msgid "Open a new window"
+msgstr "Åben i nyt vindue"
+
+#: src/config/kbdbind.c:535
+#, fuzzy
+msgid "Open an OS shell"
+msgstr "K~ommandofortolker"
+
+#: src/config/kbdbind.c:536
+msgid "Open options manager"
+msgstr "Indstillingshåndtering"
+
+#: src/config/kbdbind.c:537
+msgid "Open a quit confirmation dialog box"
+msgstr "Åben et dialog vindue til at bekræftige afslutning"
+
+#: src/config/kbdbind.c:538
+msgid "Quit without confirmation"
+msgstr "Afslut uden bekræftelse"
+
+#: src/config/kbdbind.c:539 src/config/kbdbind.c:604 src/config/kbdbind.c:627
+#, fuzzy
+msgid "Redraw the terminal"
+msgstr "Ændre ~terminalstørrelse"
+
+#: src/config/kbdbind.c:540
+msgid "Reload the current page"
+msgstr "Genindlæs den nuværende side"
+
+#: src/config/kbdbind.c:541
+#, fuzzy
+msgid "Re-render the current page"
+msgstr "Genindlæs den nuværende side"
+
+#: src/config/kbdbind.c:542
+msgid "Reset form items to their initial values"
+msgstr ""
+
+#: src/config/kbdbind.c:543
+#, fuzzy
+msgid "Show information about the currently used resources"
+msgstr "Vis information om nuværende side"
+
+#: src/config/kbdbind.c:544
+#, fuzzy
+msgid "Save as"
+msgstr "Gem som"
+
+#: src/config/kbdbind.c:545
+msgid "Save formatted document"
+msgstr "Gem behandlet dokument"
+
+#: src/config/kbdbind.c:546
+#, fuzzy
+msgid "Save options"
+msgstr "Gem ind~stillinger"
+
+#: src/config/kbdbind.c:547
+#, fuzzy
+msgid "Save URL as"
+msgstr "Gem ~URL som"
+
+#: src/config/kbdbind.c:548
+msgid "Scroll down"
+msgstr "Rul ned"
+
+#: src/config/kbdbind.c:549
+msgid "Scroll left"
+msgstr "Rul til venstre"
+
+#: src/config/kbdbind.c:550
+msgid "Scroll right"
+msgstr "Rul til højre"
+
+#: src/config/kbdbind.c:551
+msgid "Scroll up"
+msgstr "Rul op"
+
+#: src/config/kbdbind.c:552 src/config/kbdbind.c:629
+msgid "Search for a text pattern"
+msgstr "Søg efter tekststring"
+
+#: src/config/kbdbind.c:553
+msgid "Search backwards for a text pattern"
+msgstr "Søg bagud efter tekststreng"
+
+#: src/config/kbdbind.c:554 src/config/kbdbind.c:555
+msgid "Search link text by typing ahead"
+msgstr ""
+
+#: src/config/kbdbind.c:556
+msgid "Search document text by typing ahead"
+msgstr ""
+
+#: src/config/kbdbind.c:557
+msgid "Search document text backwards by typing ahead"
+msgstr ""
+
+#: src/config/kbdbind.c:558
+#, fuzzy
+msgid "Show terminal options dialog"
+msgstr "Terminalindstillinger"
+
+#: src/config/kbdbind.c:559
+#, fuzzy
+msgid "Submit form"
+msgstr "~Send formular"
+
+#: src/config/kbdbind.c:560
+#, fuzzy
+msgid "Submit form and reload"
+msgstr "Send formular ~og genindlæs"
+
+#: src/config/kbdbind.c:561 src/terminal/tab.c:192 src/terminal/tab.c:228
+msgid "Close tab"
+msgstr "Luk faneblad"
+
+#: src/config/kbdbind.c:562
+#, fuzzy
+msgid "Close all tabs but the current one"
+msgstr "Vis information om nuværende side"
+
+#: src/config/kbdbind.c:563
+#, fuzzy
+msgid "Open the tab menu"
+msgstr "Åben fil menuen"
+
+#: src/config/kbdbind.c:564
+#, fuzzy
+msgid "Move the current tab to the left"
+msgstr "Åben det nuværende lænke i nyt vindue"
+
+#: src/config/kbdbind.c:565
+#, fuzzy
 msgid "Move the current tab to the right"
 msgstr "Åben det nuværende lænke i nyt vindue"
 
-#: src/config/kbdbind.c:533
+#: src/config/kbdbind.c:566
 msgid "Next tab"
 msgstr "Næste faneblad"
 
-#: src/config/kbdbind.c:534
+#: src/config/kbdbind.c:567
 msgid "Previous tab"
 msgstr "Forrige faneblad"
 
-#: src/config/kbdbind.c:535
+#: src/config/kbdbind.c:568
 #, fuzzy
 msgid "Toggle rendering of page using CSS"
 msgstr "Skift mellem visning af tabeller"
 
-#: src/config/kbdbind.c:536
+#: src/config/kbdbind.c:569
 msgid "Toggle displaying of links to images"
 msgstr "Skift mellem visning af henvisninger til billeder"
 
-#: src/config/kbdbind.c:537
+#: src/config/kbdbind.c:570
 msgid "Toggle rendering of tables"
 msgstr "Skift mellem visning af tabeller"
 
-#: src/config/kbdbind.c:538
+#: src/config/kbdbind.c:571
 msgid "Toggle usage of document specific colors"
 msgstr ""
 
-#: src/config/kbdbind.c:539
+#: src/config/kbdbind.c:572
 msgid "Toggle rendering page as HTML / plain text"
 msgstr "Skift mellem visning af side som HTML eller almindelig tekst"
 
-#: src/config/kbdbind.c:540
+#: src/config/kbdbind.c:573
 msgid "Toggle displaying of links numbers"
 msgstr "Skift mellem visning af nummerering af henvisninger"
 
-#: src/config/kbdbind.c:541
+#: src/config/kbdbind.c:574
 #, fuzzy
 msgid "Toggle plain renderer compression of empty lines"
 msgstr "Skift mellem visning af tabeller"
 
-#: src/config/kbdbind.c:542
+#: src/config/kbdbind.c:575
 #, fuzzy
 msgid "Toggle wrapping of text"
 msgstr "Skift mellem visning af tabeller"
 
-#: src/config/kbdbind.c:543
+#: src/config/kbdbind.c:576
 msgid "View the current image"
 msgstr "Vis det nuværende billede"
 
-#: src/config/kbdbind.c:544
-msgid "Maximize the current frame"
-msgstr "Maksimer den nuværende ramme"
-
 #. internal use only
-#: src/config/kbdbind.c:552
+#: src/config/kbdbind.c:584
 msgid "Attempt to auto-complete the input"
 msgstr "Forsøg automatisk at færdiggøre input"
 
-#: src/config/kbdbind.c:553
+#: src/config/kbdbind.c:585
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr "Forsøg automatisk utvetydigt at færdiggøre input"
 
-#: src/config/kbdbind.c:554
+#: src/config/kbdbind.c:586
 msgid "Delete character in front of the cursor"
 msgstr "Slet tegn foran markøren"
 
-#: src/config/kbdbind.c:555
+#: src/config/kbdbind.c:587
 #, fuzzy
 msgid "Go to the first line of the buffer"
 msgstr "Gå til begyndelsen af siden/linjen"
 
 #. internal use only
-#: src/config/kbdbind.c:556 src/config/kbdbind.c:582
+#: src/config/kbdbind.c:588 src/config/kbdbind.c:614
 #, fuzzy
 msgid "Cancel current state"
 msgstr "Kan ikke aflæse sokkeltilstand"
 
-#: src/config/kbdbind.c:558
+#: src/config/kbdbind.c:590
 msgid "Delete text from clipboard"
 msgstr "Slet tekst fra udklipsholder"
 
-#: src/config/kbdbind.c:559 src/config/kbdbind.c:583
+#: src/config/kbdbind.c:591 src/config/kbdbind.c:615
 msgid "Delete character under cursor"
 msgstr "Slet tegn under markør"
 
-#: src/config/kbdbind.c:560 src/config/kbdbind.c:584
+#: src/config/kbdbind.c:592 src/config/kbdbind.c:616
 msgid "Move cursor downwards"
 msgstr "Flyt markøren nedad"
 
 #. FIXME
-#: src/config/kbdbind.c:562 src/config/kbdbind.c:585
+#: src/config/kbdbind.c:594 src/config/kbdbind.c:617
 msgid "Go to the end of the page/line"
 msgstr "Flut markøren til enden af siden/linjen"
 
-#: src/config/kbdbind.c:563
+#: src/config/kbdbind.c:595
 #, fuzzy
 msgid "Go to the last line of the buffer"
 msgstr "Gå til begyndelsen af siden/linjen"
 
-#: src/config/kbdbind.c:565 src/config/kbdbind.c:588
+#: src/config/kbdbind.c:597 src/config/kbdbind.c:620
 msgid "Go to the start of the page/line"
 msgstr "Gå til begyndelsen af siden/linjen"
 
-#: src/config/kbdbind.c:566
+#: src/config/kbdbind.c:598
 msgid "Delete to beginning of line"
 msgstr "Slet til linjestart"
 
-#: src/config/kbdbind.c:567
+#: src/config/kbdbind.c:599
 msgid "Delete to end of line"
 msgstr "Slet til enden af linje"
 
-#: src/config/kbdbind.c:568 src/config/kbdbind.c:589
+#: src/config/kbdbind.c:600 src/config/kbdbind.c:621
 msgid "Move the cursor left"
 msgstr "Flyt markør til venstre"
 
-#: src/config/kbdbind.c:569 src/config/kbdbind.c:591
+#: src/config/kbdbind.c:601 src/config/kbdbind.c:623
 #, fuzzy
 msgid "Move to the next item"
 msgstr "Flyt til næste ramme"
 
-#: src/config/kbdbind.c:570
+#: src/config/kbdbind.c:602
 msgid "Paste text from the clipboard"
 msgstr "Kopier tekst fra udklipsholder"
 
-#: src/config/kbdbind.c:571 src/config/kbdbind.c:594
+#: src/config/kbdbind.c:603 src/config/kbdbind.c:626
 #, fuzzy
 msgid "Move to the previous item"
 msgstr "Flut til den forrige ramme"
 
-#: src/config/kbdbind.c:573 src/config/kbdbind.c:596
+#: src/config/kbdbind.c:605 src/config/kbdbind.c:628
 msgid "Move the cursor right"
 msgstr "Flyt markøren til højre"
 
-#: src/config/kbdbind.c:574 src/config/kbdbind.c:599
+#: src/config/kbdbind.c:606 src/config/kbdbind.c:632
 msgid "Move cursor upwards"
 msgstr "Flyt markør op af"
 
-#: src/config/kbdbind.c:587
+#: src/config/kbdbind.c:619
 #, fuzzy
 msgid "Expand item"
 msgstr "Slå til"
 
-#: src/config/kbdbind.c:590
+#: src/config/kbdbind.c:622
 #, fuzzy
 msgid "Mark item"
 msgstr "Markeret menuindgang"
 
-#: src/config/kbdbind.c:597
+#: src/config/kbdbind.c:630
 msgid "Select current highlighted item"
 msgstr ""
 
-#: src/config/kbdbind.c:598
+#: src/config/kbdbind.c:631
 #, fuzzy
 msgid "Collapse item"
 msgstr "Forløbet tid"
 
-#: src/config/kbdbind.c:697
+#: src/config/kbdbind.c:733
 msgid "Unrecognised keymap"
 msgstr "Ugenkendt tasteoversigt"
 
-#: src/config/kbdbind.c:699
+#: src/config/kbdbind.c:735
 msgid "Error parsing keystroke"
 msgstr "Fejl ved parsning af tastekombination"
 
-#: src/config/kbdbind.c:701
+#: src/config/kbdbind.c:737
 msgid "Unrecognised action (internal error)"
 msgstr "Ugenkendt handling (intern fejl)"
 
@@ -2878,7 +2915,7 @@ msgid "Local CGI specific options."
 msgstr "Intet program angivet for"
 
 #: src/config/options.inc:804 src/config/options.inc:816
-#: src/cookies/dialogs.c:102 src/mime/backend/mailcap.c:98
+#: src/cookies/dialogs.c:100 src/mime/backend/mailcap.c:98
 #: src/mime/backend/mimetypes.c:56
 msgid "Path"
 msgstr "Sti"
@@ -3283,7 +3320,7 @@ msgstr "Tekst"
 msgid "Dialog text colors."
 msgstr ""
 
-#: src/config/options.inc:1087 src/viewer/text/form.c:1336
+#: src/config/options.inc:1087 src/viewer/text/form.c:1337
 msgid "Checkbox"
 msgstr "Afkrysningsboks"
 
@@ -3315,7 +3352,7 @@ msgstr "Valgt knap"
 msgid "Dialog selected button colors."
 msgstr ""
 
-#: src/config/options.inc:1103 src/viewer/text/form.c:1340
+#: src/config/options.inc:1103 src/viewer/text/form.c:1341
 msgid "Text field"
 msgstr "Tekstfelt"
 
@@ -3783,19 +3820,19 @@ msgid "Folder"
 msgstr "Mappe"
 
 #. name:
-#: src/cookies/cookies.c:82 src/cookies/cookies.c:825
+#: src/cookies/cookies.c:80 src/cookies/cookies.c:847
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/cookies/cookies.c:84
+#: src/cookies/cookies.c:82
 msgid "Cookies options."
 msgstr "Cookieindstillinger."
 
-#: src/cookies/cookies.c:86
+#: src/cookies/cookies.c:84
 msgid "Accept policy"
 msgstr ""
 
-#: src/cookies/cookies.c:89
+#: src/cookies/cookies.c:87
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -3803,11 +3840,11 @@ msgid ""
 "2 is accept all cookies"
 msgstr ""
 
-#: src/cookies/cookies.c:94
+#: src/cookies/cookies.c:92
 msgid "Maximum age"
 msgstr "Maksimal alder"
 
-#: src/cookies/cookies.c:96
+#: src/cookies/cookies.c:94
 msgid ""
 "Cookie maximum age (in days):\n"
 "-1 is use cookie's expiration date if any\n"
@@ -3816,45 +3853,45 @@ msgid ""
 "1+ is use cookie's expiration date, but limit age to the given number of days"
 msgstr ""
 
-#: src/cookies/cookies.c:101
+#: src/cookies/cookies.c:99
 msgid "Paranoid security"
 msgstr ""
 
-#: src/cookies/cookies.c:103
+#: src/cookies/cookies.c:101
 msgid ""
 "When enabled, we'll require three dots in cookies domain for all\n"
 "non-international domains (instead of just two dots). Please see\n"
 "code (cookies.c:check_domain_security()) for explanation."
 msgstr ""
 
-#: src/cookies/cookies.c:107
+#: src/cookies/cookies.c:105
 msgid "Saving"
 msgstr "Gemning"
 
-#: src/cookies/cookies.c:109
+#: src/cookies/cookies.c:107
 msgid "Load/save cookies from/to disk?"
 msgstr "Læs/gem cookies fra/til disken?"
 
-#: src/cookies/cookies.c:111
+#: src/cookies/cookies.c:109
 msgid "Resaving"
 msgstr ""
 
-#: src/cookies/cookies.c:113
+#: src/cookies/cookies.c:111
 msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
 msgstr ""
 
-#: src/cookies/cookies.c:543
+#: src/cookies/cookies.c:565
 #, fuzzy
 msgid "at quit time"
 msgstr "Sidste tilgangstid"
 
-#: src/cookies/cookies.c:546
+#: src/cookies/cookies.c:568
 msgid "Accept cookie?"
 msgstr ""
 
-#: src/cookies/cookies.c:547
+#: src/cookies/cookies.c:569
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -3866,50 +3903,50 @@ msgid ""
 "Secure: %s\n"
 msgstr ""
 
-#: src/cookies/cookies.c:556 src/cookies/dialogs.c:112
+#: src/cookies/cookies.c:578 src/cookies/dialogs.c:110
 #, fuzzy
 msgid "yes"
 msgstr "byte"
 
-#: src/cookies/cookies.c:556 src/cookies/dialogs.c:112
+#: src/cookies/cookies.c:578 src/cookies/dialogs.c:110
 #, fuzzy
 msgid "no"
 msgstr "Info"
 
-#: src/cookies/cookies.c:558
+#: src/cookies/cookies.c:580
 msgid "Accept"
 msgstr ""
 
-#: src/cookies/cookies.c:559
+#: src/cookies/cookies.c:581
 msgid "Reject"
 msgstr ""
 
-#: src/cookies/dialogs.c:98 src/cookies/dialogs.c:252
+#: src/cookies/dialogs.c:96 src/cookies/dialogs.c:250
 #: src/dialogs/document.c:113
 msgid "Server"
 msgstr "Server"
 
-#: src/cookies/dialogs.c:101 src/cookies/dialogs.c:264
+#: src/cookies/dialogs.c:99 src/cookies/dialogs.c:262
 #, fuzzy
 msgid "Domain"
 msgstr "Dokument~information"
 
-#: src/cookies/dialogs.c:106 src/cookies/dialogs.c:266
+#: src/cookies/dialogs.c:104 src/cookies/dialogs.c:264
 msgid "Expires"
 msgstr ""
 
-#: src/cookies/dialogs.c:111 src/cookies/dialogs.c:268
+#: src/cookies/dialogs.c:109 src/cookies/dialogs.c:266
 #, fuzzy
 msgid "Secure"
 msgstr "nuværende"
 
-#: src/cookies/dialogs.c:340 src/dialogs/download.c:445 src/dialogs/edit.c:100
+#: src/cookies/dialogs.c:338 src/dialogs/download.c:445 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:182 src/globhist/dialogs.c:199
 #: src/protocol/auth/dialogs.c:188
 msgid "Clear"
 msgstr "Ryd"
 
-#: src/cookies/dialogs.c:346
+#: src/cookies/dialogs.c:344
 #, fuzzy
 msgid "Cookie manager"
 msgstr "Bogmærkehåndtering"
@@ -5196,7 +5233,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/protocol/protocol.c:176
+#: src/protocol/protocol.c:181
 #, fuzzy
 msgid "Protocol"
 msgstr "Bruger protokoller"
@@ -5265,7 +5302,7 @@ msgid ""
 msgstr ""
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:343
+#: src/protocol/rewrite/rewrite.c:346
 msgid "URI rewrite"
 msgstr ""
 
@@ -5557,11 +5594,11 @@ msgstr "Denne version af ELinks understøtter ikke SSL/TSL"
 msgid "Unknown error"
 msgstr "Ukendt fejl"
 
-#: src/sched/session.c:639 src/sched/session.c:659 src/sched/task.c:181
+#: src/sched/session.c:640 src/sched/session.c:660 src/sched/task.c:181
 msgid "Warning"
 msgstr "Advarsel"
 
-#: src/sched/session.c:640
+#: src/sched/session.c:641
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5572,7 +5609,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:660
+#: src/sched/session.c:661
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5585,11 +5622,11 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:687
+#: src/sched/session.c:688
 msgid "Welcome"
 msgstr "Velkommen"
 
-#: src/sched/session.c:688
+#: src/sched/session.c:689
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -5619,19 +5656,19 @@ msgstr "Vil du sende formulardata til URL"
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Vil du sende formulardata til URL igen"
 
-#: src/scripting/lua/core.c:470
+#: src/scripting/lua/core.c:472
 msgid "User dialog"
 msgstr "Bruger dialogvindue"
 
-#: src/scripting/lua/core.c:592
+#: src/scripting/lua/core.c:595
 msgid "Lua Error"
 msgstr "Lua-fejl"
 
-#: src/scripting/lua/core.c:718
+#: src/scripting/lua/core.c:721
 msgid "Lua Console"
 msgstr "Lua-konsol"
 
-#: src/scripting/lua/core.c:718
+#: src/scripting/lua/core.c:721
 msgid "Enter expression"
 msgstr "Indtast udtryk"
 
@@ -5695,21 +5732,21 @@ msgstr "SSL"
 msgid "SSL options."
 msgstr "SSL indstillinger"
 
-#: src/terminal/event.c:46
+#: src/terminal/event.c:66
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr ""
 
-#: src/terminal/event.c:128
+#: src/terminal/event.c:148
 msgid "Warning: terminal name contains illicit chars."
 msgstr ""
 
-#: src/terminal/event.c:264
+#: src/terminal/event.c:283
 #, c-format
 msgid "Bad event %d"
 msgstr ""
 
-#: src/terminal/event.c:293
+#: src/terminal/event.c:323
 #, fuzzy, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Kunne ikke skrive til fil"
@@ -5724,221 +5761,235 @@ msgstr "Vil du virkelig afslutte ELinks?"
 msgid "Do you really want to close all except the current tab?"
 msgstr "Vil du virkelig afslutte ELinks?"
 
-#: src/viewer/text/form.c:826
+#: src/viewer/text/draw.c:61
+#, fuzzy
+msgid "Missing fragment"
+msgstr "Menurammer"
+
+#: src/viewer/text/draw.c:62
+#, c-format
+msgid "The requested fragment \"#%s\" doesn't exist."
+msgstr ""
+
+#: src/viewer/text/form.c:827
 msgid "Error while posting form"
 msgstr "Fejl under afsendelse af formular"
 
-#: src/viewer/text/form.c:827
+#: src/viewer/text/form.c:828
 #, fuzzy, c-format
 msgid "Could not get file %s: %s"
 msgstr "Kunne ikke hente fil"
 
-#: src/viewer/text/form.c:1323
+#: src/viewer/text/form.c:1324
 #, fuzzy
 msgid "Reset form"
 msgstr "Nulstil formular"
 
-#: src/viewer/text/form.c:1331
+#: src/viewer/text/form.c:1332
 msgid "Submit form to"
 msgstr "Send formular til"
 
-#: src/viewer/text/form.c:1332
+#: src/viewer/text/form.c:1333
 msgid "Post form to"
 msgstr "Send formular til"
 
-#: src/viewer/text/form.c:1334
+#: src/viewer/text/form.c:1335
 msgid "Radio button"
 msgstr "Radioknap"
 
-#: src/viewer/text/form.c:1338
+#: src/viewer/text/form.c:1339
 msgid "Select field"
 msgstr "Vælg felt"
 
-#: src/viewer/text/form.c:1342
+#: src/viewer/text/form.c:1343
 msgid "Text area"
 msgstr "Tekstområde"
 
-#: src/viewer/text/form.c:1344
+#: src/viewer/text/form.c:1345
 msgid "File upload"
 msgstr "Filoplæsning"
 
-#: src/viewer/text/form.c:1346
+#: src/viewer/text/form.c:1347
 msgid "Password field"
 msgstr "Adgangskodefelt"
 
-#: src/viewer/text/form.c:1384
+#: src/viewer/text/form.c:1385
 msgid "name"
 msgstr "Navn"
 
-#: src/viewer/text/form.c:1393
+#: src/viewer/text/form.c:1394
 msgid "value"
 msgstr "Værdi"
 
-#: src/viewer/text/form.c:1401
+#: src/viewer/text/form.c:1402
 msgid "read only"
 msgstr ""
 
-#: src/viewer/text/form.c:1412
+#: src/viewer/text/form.c:1413
 #, c-format
 msgid "press %s to navigate"
 msgstr ""
 
-#: src/viewer/text/form.c:1414
+#: src/viewer/text/form.c:1415
 #, c-format
 msgid "press %s to edit"
 msgstr ""
 
-#: src/viewer/text/form.c:1434
+#: src/viewer/text/form.c:1435
 #, fuzzy, c-format
 msgid "press %s to submit to"
 msgstr "send til"
 
-#: src/viewer/text/form.c:1436
+#: src/viewer/text/form.c:1437
 #, c-format
 msgid "press %s to post to"
 msgstr ""
 
-#: src/viewer/text/link.c:839
+#: src/viewer/text/link.c:1039
 msgid "Display ~usemap"
 msgstr "Vis ~usemap"
 
-#: src/viewer/text/link.c:842
+#: src/viewer/text/link.c:1042
 msgid "~Follow link"
 msgstr "~Følg lænke"
 
-#: src/viewer/text/link.c:844
+#: src/viewer/text/link.c:1044
 msgid "Follow link and r~eload"
 msgstr "Følg lænke og g~enindlæs"
 
-#: src/viewer/text/link.c:848
+#: src/viewer/text/link.c:1048
 msgid "Open in new ~window"
 msgstr "Åben i nyt vindue"
 
-#: src/viewer/text/link.c:850
+#: src/viewer/text/link.c:1050
 #, fuzzy
 msgid "Open in new ~tab"
 msgstr "Åben i nyt vindue"
 
-#: src/viewer/text/link.c:852
+#: src/viewer/text/link.c:1052
 #, fuzzy
 msgid "Open in new tab in ~background"
 msgstr "Udfør i baggrunden"
 
-#: src/viewer/text/link.c:857
+#: src/viewer/text/link.c:1057
 msgid "~Download link"
 msgstr "Hent lænke"
 
-#: src/viewer/text/link.c:860
+#: src/viewer/text/link.c:1060
 msgid "~Add link to bookmarks"
 msgstr "Tilføj lænke til bogmærker"
 
-#: src/viewer/text/link.c:871 src/viewer/text/link.c:897
+#: src/viewer/text/link.c:1071 src/viewer/text/link.c:1097
 msgid "~Reset form"
 msgstr "Nulstil formular"
 
-#: src/viewer/text/link.c:876
+#: src/viewer/text/link.c:1076
 msgid "Open in ~external editor"
 msgstr ""
 
-#: src/viewer/text/link.c:881
+#: src/viewer/text/link.c:1081
 msgid "~Submit form"
 msgstr "~Send formular"
 
-#: src/viewer/text/link.c:882
+#: src/viewer/text/link.c:1082
 msgid "Submit form and rel~oad"
 msgstr "Send formular ~og genindlæs"
 
-#: src/viewer/text/link.c:885
+#: src/viewer/text/link.c:1085
 msgid "Submit form and open in new ~window"
 msgstr "Send formular og åben i nyt vindue"
 
-#: src/viewer/text/link.c:887
+#: src/viewer/text/link.c:1087
 #, fuzzy
 msgid "Submit form and open in new ~tab"
 msgstr "Send formular og åben i nyt vindue"
 
-#: src/viewer/text/link.c:890
+#: src/viewer/text/link.c:1090
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
 msgstr "Send formular og åben i nyt vindue"
 
-#: src/viewer/text/link.c:895
+#: src/viewer/text/link.c:1095
 msgid "Submit form and ~download"
 msgstr "Sen~d formular og overfør fil"
 
-#: src/viewer/text/link.c:902
+#: src/viewer/text/link.c:1102
 msgid "V~iew image"
 msgstr "Vis b~illede"
 
-#: src/viewer/text/link.c:904
+#: src/viewer/text/link.c:1104
 msgid "Download ima~ge"
 msgstr "Hent billede"
 
-#: src/viewer/text/link.c:909
+#: src/viewer/text/link.c:1109
 msgid "No link selected"
 msgstr "Ingen lænker valgt"
 
-#: src/viewer/text/link.c:959
+#: src/viewer/text/link.c:1159
 msgid "Image"
 msgstr "Billede"
 
-#: src/viewer/text/link.c:964
+#: src/viewer/text/link.c:1164
 msgid "Usemap"
 msgstr "Usemap"
 
-#: src/viewer/text/search.c:862
+#: src/viewer/text/search.c:865
 msgid "No previous search"
 msgstr "Ingen tidligere søgning"
 
-#: src/viewer/text/search.c:889
+#: src/viewer/text/search.c:892
 msgid "Search hit top, continuing at bottom."
 msgstr ""
 
-#: src/viewer/text/search.c:890
+#: src/viewer/text/search.c:893
 msgid "Search hit bottom, continuing at top."
 msgstr ""
 
-#: src/viewer/text/search.c:914
+#: src/viewer/text/search.c:917
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
 msgstr "Søgningen gav intet resultat"
 
-#: src/viewer/text/search.c:943
+#: src/viewer/text/search.c:946 src/viewer/text/search.c:1273
 #, fuzzy
 msgid "Typeahead"
 msgstr "Type"
 
-#: src/viewer/text/search.c:944
+#: src/viewer/text/search.c:947
 #, c-format
 msgid "Could not find a link with the text '%s'."
 msgstr ""
 
-#: src/viewer/text/search.c:1339
+#: src/viewer/text/search.c:1275
+msgid "No links in current document"
+msgstr ""
+
+#: src/viewer/text/search.c:1354
 msgid "Search for text"
 msgstr "Søg efter tekst"
 
-#: src/viewer/text/search.c:1368
+#: src/viewer/text/search.c:1383
 #, fuzzy
 msgid "Normal search"
 msgstr "Ingen tidligere søgning"
 
-#: src/viewer/text/search.c:1369
+#: src/viewer/text/search.c:1384
 msgid "Regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1370
+#: src/viewer/text/search.c:1385
 msgid "Extended regexp search"
 msgstr ""
 
-#: src/viewer/text/search.c:1371
+#: src/viewer/text/search.c:1386
 msgid "Case sensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1372
+#: src/viewer/text/search.c:1387
 msgid "Case insensitive"
 msgstr ""
 
-#: src/viewer/text/search.c:1396
+#: src/viewer/text/search.c:1411
 msgid "Search backward"
 msgstr "Søg bagud"
 
@@ -5950,31 +6001,25 @@ msgstr ""
 msgid "You can do this only on the master terminal"
 msgstr "Dette er kun muligt i masterterminalen"
 
-#: src/viewer/text/view.c:251
-#, fuzzy
-msgid "Missing fragment"
-msgstr "Menurammer"
-
-#: src/viewer/text/view.c:252
-#, c-format
-msgid "The requested fragment \"#%s\" doesn't exist."
-msgstr ""
-
-#: src/viewer/text/view.c:952
+#: src/viewer/text/view.c:565
 msgid "Go to link"
 msgstr "Gå til lænke"
 
-#: src/viewer/text/view.c:952
+#: src/viewer/text/view.c:565
 msgid "Enter link number"
 msgstr "Skriv nummer på lænke"
 
-#: src/viewer/text/view.c:1356
+#: src/viewer/text/view.c:1120
 msgid "Save error"
 msgstr "Fejl ved skrivning"
 
-#: src/viewer/text/view.c:1357
+#: src/viewer/text/view.c:1121
 msgid "Error writing to file"
 msgstr "Fejl ved skrivning til fil"
+
+#, fuzzy
+#~ msgid "Move downwards one link"
+#~ msgstr "Flyt en side ned"
 
 #~ msgid "Number out of range"
 #~ msgstr "Nummer uden for område"

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-27 01:11+0200\n"
+"POT-Creation-Date: 2004-07-01 22:22+0200\n"
 "PO-Revision-Date: 2004-06-24 10:35+0200\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:342
 msgid "Close"
@@ -20,7 +20,7 @@ msgstr "Fermer"
 
 #. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:430 src/bfu/hierbox.c:452 src/cache/dialogs.c:169
-#: src/config/dialogs.c:473 src/cookies/dialogs.c:336
+#: src/config/dialogs.c:473 src/cookies/dialogs.c:334
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
 #: src/dialogs/download.c:439 src/formhist/dialogs.c:179
 #: src/globhist/dialogs.c:192 src/protocol/auth/dialogs.c:186
@@ -39,7 +39,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/config/dialogs.c:106 src/config/dialogs.c:305 src/config/dialogs.c:375
 #: src/config/dialogs.c:405 src/config/dialogs.c:442 src/config/dialogs.c:454
 #: src/config/dialogs.c:665 src/config/dialogs.c:685 src/config/dialogs.c:715
-#: src/cookies/dialogs.c:271 src/dialogs/document.c:50
+#: src/cookies/dialogs.c:269 src/dialogs/document.c:50
 #: src/dialogs/document.c:226 src/dialogs/document.c:287
 #: src/dialogs/document.c:299 src/dialogs/edit.c:99 src/dialogs/info.c:44
 #: src/dialogs/info.c:133 src/dialogs/info.c:153 src/dialogs/menu.c:95
@@ -51,13 +51,13 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/sched/session.c:240 src/sched/session.c:652 src/sched/session.c:676
 #: src/sched/session.c:693 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:598
-#: src/scripting/lua/core.c:722 src/viewer/text/draw.c:77
+#: src/scripting/lua/core.c:722 src/viewer/text/draw.c:66
 #: src/viewer/text/form.c:831 src/viewer/text/search.c:867
 #: src/viewer/text/search.c:895 src/viewer/text/search.c:920
 #: src/viewer/text/search.c:951 src/viewer/text/search.c:1277
 #: src/viewer/text/search.c:1389 src/viewer/text/textarea.c:365
-#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:560
-#: src/viewer/text/view.c:1117
+#: src/viewer/text/textarea.c:374 src/viewer/text/view.c:566
+#: src/viewer/text/view.c:1123
 msgid "OK"
 msgstr "OK"
 
@@ -297,7 +297,7 @@ msgstr "Nom du dossier"
 
 #: src/bookmarks/dialogs.c:206 src/bookmarks/dialogs.c:600
 #: src/config/dialogs.c:376 src/config/dialogs.c:454 src/config/dialogs.c:715
-#: src/cookies/dialogs.c:272 src/dialogs/edit.c:103 src/dialogs/menu.c:95
+#: src/cookies/dialogs.c:270 src/dialogs/edit.c:103 src/dialogs/menu.c:95
 #: src/dialogs/menu.c:478 src/dialogs/menu.c:526 src/dialogs/options.c:175
 #: src/dialogs/options.c:246 src/mime/dialogs.c:135
 #: src/protocol/auth/dialogs.c:93 src/sched/download.c:547
@@ -305,7 +305,7 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:1038 src/sched/download.c:1050
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:483
 #: src/scripting/lua/core.c:722 src/viewer/text/search.c:1390
-#: src/viewer/text/view.c:560
+#: src/viewer/text/view.c:566
 msgid "Cancel"
 msgstr "Annuler"
 
@@ -319,13 +319,13 @@ msgid "Goto"
 msgstr "Aller à"
 
 #: src/bookmarks/dialogs.c:390 src/config/dialogs.c:331
-#: src/config/dialogs.c:400 src/config/dialogs.c:474 src/cookies/dialogs.c:233
-#: src/cookies/dialogs.c:338
+#: src/config/dialogs.c:400 src/config/dialogs.c:474 src/cookies/dialogs.c:231
+#: src/cookies/dialogs.c:336
 msgid "Edit"
 msgstr "Modifier"
 
 #: src/bookmarks/dialogs.c:391 src/cache/dialogs.c:171
-#: src/config/dialogs.c:476 src/config/dialogs.c:748 src/cookies/dialogs.c:339
+#: src/config/dialogs.c:476 src/config/dialogs.c:748 src/cookies/dialogs.c:337
 #: src/formhist/dialogs.c:180 src/globhist/dialogs.c:196
 #: src/protocol/auth/dialogs.c:187
 msgid "Delete"
@@ -336,7 +336,7 @@ msgid "Move"
 msgstr "Déplacer"
 
 #: src/bookmarks/dialogs.c:394 src/config/dialogs.c:475
-#: src/config/dialogs.c:747 src/cookies/dialogs.c:337
+#: src/config/dialogs.c:747 src/cookies/dialogs.c:335
 msgid "Add"
 msgstr "Ajouter"
 
@@ -348,7 +348,7 @@ msgstr "Chercher"
 
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:398 src/config/dialogs.c:477
-#: src/config/dialogs.c:750 src/cookies/dialogs.c:341
+#: src/config/dialogs.c:750 src/cookies/dialogs.c:339
 #: src/dialogs/options.c:174 src/formhist/dialogs.c:183
 #: src/globhist/dialogs.c:202 src/sched/download.c:1007
 #: src/sched/download.c:1036
@@ -931,7 +931,7 @@ msgid "N/A"
 msgstr "N/A"
 
 #: src/config/dialogs.c:190 src/config/dialogs.c:206 src/config/dialogs.c:340
-#: src/config/dialogs.c:453 src/cookies/dialogs.c:99 src/cookies/dialogs.c:260
+#: src/config/dialogs.c:453 src/cookies/dialogs.c:97 src/cookies/dialogs.c:258
 #: src/dialogs/edit.c:92 src/scripting/lua/core.c:396
 #: src/scripting/lua/core.c:397 src/scripting/lua/core.c:478
 msgid "Name"
@@ -941,8 +941,8 @@ msgstr "Nom"
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:200 src/config/dialogs.c:370 src/cookies/dialogs.c:100
-#: src/cookies/dialogs.c:262
+#: src/config/dialogs.c:200 src/config/dialogs.c:370 src/cookies/dialogs.c:98
+#: src/cookies/dialogs.c:260
 msgid "Value"
 msgstr "Valeur"
 
@@ -2773,6 +2773,7 @@ msgid "Rules for passing URIs to external commands."
 msgstr "Règles de passage d'URIs aux commandes externes."
 
 #: src/config/options.inc:627
+#, c-format
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -3107,7 +3108,7 @@ msgid "Local CGI specific options."
 msgstr "Options des scripts CGI locaux."
 
 #: src/config/options.inc:804 src/config/options.inc:816
-#: src/cookies/dialogs.c:102 src/mime/backend/mailcap.c:98
+#: src/cookies/dialogs.c:100 src/mime/backend/mailcap.c:98
 #: src/mime/backend/mimetypes.c:56
 msgid "Path"
 msgstr "Chemin"
@@ -4104,19 +4105,19 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:82 src/cookies/cookies.c:849
+#: src/cookies/cookies.c:80 src/cookies/cookies.c:847
 msgid "Cookies"
 msgstr "Cookies"
 
-#: src/cookies/cookies.c:84
+#: src/cookies/cookies.c:82
 msgid "Cookies options."
 msgstr "Options des cookies."
 
-#: src/cookies/cookies.c:86
+#: src/cookies/cookies.c:84
 msgid "Accept policy"
 msgstr "Politique d'acceptation"
 
-#: src/cookies/cookies.c:89
+#: src/cookies/cookies.c:87
 msgid ""
 "Cookies accepting policy:\n"
 "0 is accept no cookies\n"
@@ -4128,11 +4129,11 @@ msgstr ""
 "1 demander confirmation avant d'accepter un cookie\n"
 "2 accepter tous les cookies"
 
-#: src/cookies/cookies.c:94
+#: src/cookies/cookies.c:92
 msgid "Maximum age"
 msgstr "Age maximal"
 
-#: src/cookies/cookies.c:96
+#: src/cookies/cookies.c:94
 msgid ""
 "Cookie maximum age (in days):\n"
 "-1 is use cookie's expiration date if any\n"
@@ -4147,11 +4148,11 @@ msgstr ""
 " 1+ utiliser si possible la date d'expiration du cookie,\n"
 "    mais limiter l'age à ce nombre de jours."
 
-#: src/cookies/cookies.c:101
+#: src/cookies/cookies.c:99
 msgid "Paranoid security"
 msgstr "Sécurité maximale (parano.)"
 
-#: src/cookies/cookies.c:103
+#: src/cookies/cookies.c:101
 msgid ""
 "When enabled, we'll require three dots in cookies domain for all\n"
 "non-international domains (instead of just two dots). Please see\n"
@@ -4162,19 +4163,19 @@ msgstr ""
 "points).\n"
 "Voir le code (cookies.c:check_domain_security()) pour explications."
 
-#: src/cookies/cookies.c:107
+#: src/cookies/cookies.c:105
 msgid "Saving"
 msgstr "Sauvegarde"
 
-#: src/cookies/cookies.c:109
+#: src/cookies/cookies.c:107
 msgid "Load/save cookies from/to disk?"
 msgstr "Charger/sauver les cookies sur disque ?"
 
-#: src/cookies/cookies.c:111
+#: src/cookies/cookies.c:109
 msgid "Resaving"
 msgstr "Sauvegarde répétée"
 
-#: src/cookies/cookies.c:113
+#: src/cookies/cookies.c:111
 msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
@@ -4182,15 +4183,15 @@ msgstr ""
 "Sauvegarde des cookies après chaque modification ?\n"
 "Aucun effet si la sauvegarde est désactivée."
 
-#: src/cookies/cookies.c:567
+#: src/cookies/cookies.c:565
 msgid "at quit time"
 msgstr "au moment de quitter"
 
-#: src/cookies/cookies.c:570
+#: src/cookies/cookies.c:568
 msgid "Accept cookie?"
 msgstr "Accepter le cookie ?"
 
-#: src/cookies/cookies.c:571
+#: src/cookies/cookies.c:569
 #, c-format
 msgid ""
 "Do you want to accept a cookie from %s?\n"
@@ -4209,46 +4210,46 @@ msgstr ""
 "Expiration: %s\n"
 "Securisé: %s\n"
 
-#: src/cookies/cookies.c:580 src/cookies/dialogs.c:112
+#: src/cookies/cookies.c:578 src/cookies/dialogs.c:110
 msgid "yes"
 msgstr "oui"
 
-#: src/cookies/cookies.c:580 src/cookies/dialogs.c:112
+#: src/cookies/cookies.c:578 src/cookies/dialogs.c:110
 msgid "no"
 msgstr "non"
 
-#: src/cookies/cookies.c:582
+#: src/cookies/cookies.c:580
 msgid "Accept"
 msgstr "Accepter"
 
-#: src/cookies/cookies.c:583
+#: src/cookies/cookies.c:581
 msgid "Reject"
 msgstr "Rejeter"
 
-#: src/cookies/dialogs.c:98 src/cookies/dialogs.c:252
+#: src/cookies/dialogs.c:96 src/cookies/dialogs.c:250
 #: src/dialogs/document.c:113
 msgid "Server"
 msgstr "Serveur"
 
-#: src/cookies/dialogs.c:101 src/cookies/dialogs.c:264
+#: src/cookies/dialogs.c:99 src/cookies/dialogs.c:262
 msgid "Domain"
 msgstr "Domaine"
 
-#: src/cookies/dialogs.c:106 src/cookies/dialogs.c:266
+#: src/cookies/dialogs.c:104 src/cookies/dialogs.c:264
 msgid "Expires"
 msgstr "Expiration"
 
-#: src/cookies/dialogs.c:111 src/cookies/dialogs.c:268
+#: src/cookies/dialogs.c:109 src/cookies/dialogs.c:266
 msgid "Secure"
 msgstr "Sécurisé"
 
-#: src/cookies/dialogs.c:340 src/dialogs/download.c:445 src/dialogs/edit.c:100
+#: src/cookies/dialogs.c:338 src/dialogs/download.c:445 src/dialogs/edit.c:100
 #: src/formhist/dialogs.c:182 src/globhist/dialogs.c:199
 #: src/protocol/auth/dialogs.c:188
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/cookies/dialogs.c:346
+#: src/cookies/dialogs.c:344
 msgid "Cookie manager"
 msgstr "Gestionnaire de cookies"
 
@@ -4928,6 +4929,8 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5288,7 +5291,6 @@ msgstr "Système de configuration"
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#. name:
 #: src/mime/backend/mailcap.c:90 src/mime/backend/mailcap.c:126
 #: src/mime/backend/mailcap.c:687
 msgid "Mailcap"
@@ -5555,7 +5557,7 @@ msgstr ""
 "  pas se produire.\n"
 
 #. name:
-#: src/protocol/protocol.c:176
+#: src/protocol/protocol.c:181
 msgid "Protocol"
 msgstr "Protocole"
 
@@ -5605,6 +5607,7 @@ msgid "Dumb prefixes."
 msgstr "Préfixes simples."
 
 #: src/protocol/rewrite/rewrite.c:68
+#, c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -6115,21 +6118,21 @@ msgstr "SSL"
 msgid "SSL options."
 msgstr "Options SSL."
 
-#: src/terminal/event.c:46
+#: src/terminal/event.c:66
 #, c-format
 msgid "Bad terminal size: %d, %d"
 msgstr "Mauvaise taille de terminal: %d, %d"
 
-#: src/terminal/event.c:128
+#: src/terminal/event.c:148
 msgid "Warning: terminal name contains illicit chars."
 msgstr "Attention: le nom du terminal contient des caractères illicites."
 
-#: src/terminal/event.c:264
+#: src/terminal/event.c:283
 #, c-format
 msgid "Bad event %d"
 msgstr "Mauvais évenement %d"
 
-#: src/terminal/event.c:293
+#: src/terminal/event.c:323
 #, c-format
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évenement: %d (%s)"
@@ -6142,11 +6145,11 @@ msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant ?"
 msgid "Do you really want to close all except the current tab?"
 msgstr "Êtes-vous sûr de vouloir fermer tous les onglets sauf celui-ci ?"
 
-#: src/viewer/text/draw.c:72
+#: src/viewer/text/draw.c:61
 msgid "Missing fragment"
 msgstr "Ancre manquante"
 
-#: src/viewer/text/draw.c:73
+#: src/viewer/text/draw.c:62
 #, c-format
 msgid "The requested fragment \"#%s\" doesn't exist."
 msgstr "L'ancre recherchée \"#%s\" n'existe pas."
@@ -6224,87 +6227,87 @@ msgstr "pressez %s pour soumettre à"
 msgid "press %s to post to"
 msgstr "pressez %s pour poster à"
 
-#: src/viewer/text/link.c:1040
+#: src/viewer/text/link.c:1039
 msgid "Display ~usemap"
 msgstr "Afficher ~usemap"
 
-#: src/viewer/text/link.c:1043
+#: src/viewer/text/link.c:1042
 msgid "~Follow link"
 msgstr "~Suivre le lien"
 
-#: src/viewer/text/link.c:1045
+#: src/viewer/text/link.c:1044
 msgid "Follow link and r~eload"
 msgstr "Suivre le lien et ~recharger"
 
-#: src/viewer/text/link.c:1049
+#: src/viewer/text/link.c:1048
 msgid "Open in new ~window"
 msgstr "Ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1051
+#: src/viewer/text/link.c:1050
 msgid "Open in new ~tab"
 msgstr "Ouvrir dans un nouvel ongle~t"
 
-#: src/viewer/text/link.c:1053
+#: src/viewer/text/link.c:1052
 msgid "Open in new tab in ~background"
 msgstr "Ouvrir dans un nouvel onglet en arrière-~plan"
 
-#: src/viewer/text/link.c:1058
+#: src/viewer/text/link.c:1057
 msgid "~Download link"
 msgstr "~Enregistrer le lien"
 
-#: src/viewer/text/link.c:1061
+#: src/viewer/text/link.c:1060
 msgid "~Add link to bookmarks"
 msgstr "~Ajouter ce lien aux signets"
 
-#: src/viewer/text/link.c:1072 src/viewer/text/link.c:1098
+#: src/viewer/text/link.c:1071 src/viewer/text/link.c:1097
 msgid "~Reset form"
 msgstr "Remettre à ~zéro le formulaire"
 
-#: src/viewer/text/link.c:1077
+#: src/viewer/text/link.c:1076
 msgid "Open in ~external editor"
 msgstr "Ouvrir dans un ~éditeur externe"
 
-#: src/viewer/text/link.c:1082
+#: src/viewer/text/link.c:1081
 msgid "~Submit form"
 msgstr "~Envoyer le formulaire"
 
-#: src/viewer/text/link.c:1083
+#: src/viewer/text/link.c:1082
 msgid "Submit form and rel~oad"
 msgstr "Envoyer le formulaire et ~recharger"
 
-#: src/viewer/text/link.c:1086
+#: src/viewer/text/link.c:1085
 msgid "Submit form and open in new ~window"
 msgstr "Envoyer le formulaire et ouvrir dans une nouvelle ~fenêtre"
 
-#: src/viewer/text/link.c:1088
+#: src/viewer/text/link.c:1087
 msgid "Submit form and open in new ~tab"
 msgstr "Envoyer le formulaire et ouvrir un ~onglet"
 
-#: src/viewer/text/link.c:1091
+#: src/viewer/text/link.c:1090
 msgid "Submit form and open in new tab in ~background"
 msgstr "Envoyer le formulaire et ouvrir un onglet en ~arrière-plan"
 
-#: src/viewer/text/link.c:1096
+#: src/viewer/text/link.c:1095
 msgid "Submit form and ~download"
 msgstr "Envoyer le formulaire et ~télécharger"
 
-#: src/viewer/text/link.c:1103
+#: src/viewer/text/link.c:1102
 msgid "V~iew image"
 msgstr "~Voir l'image"
 
-#: src/viewer/text/link.c:1105
+#: src/viewer/text/link.c:1104
 msgid "Download ima~ge"
 msgstr "Enregistrer l'~image"
 
-#: src/viewer/text/link.c:1110
+#: src/viewer/text/link.c:1109
 msgid "No link selected"
 msgstr "Aucun lien sélectionné"
 
-#: src/viewer/text/link.c:1160
+#: src/viewer/text/link.c:1159
 msgid "Image"
 msgstr "Image"
 
-#: src/viewer/text/link.c:1165
+#: src/viewer/text/link.c:1164
 msgid "Usemap"
 msgstr "Usemap"
 
@@ -6374,19 +6377,19 @@ msgstr "Vous ne pouvez utiliser un éditeur externe en mode anonyme."
 msgid "You can do this only on the master terminal"
 msgstr "Vous ne pouvez faire ça que dans le terminal maître"
 
-#: src/viewer/text/view.c:559
+#: src/viewer/text/view.c:565
 msgid "Go to link"
 msgstr "Aller au lien"
 
-#: src/viewer/text/view.c:559
+#: src/viewer/text/view.c:565
 msgid "Enter link number"
 msgstr "Entrez un numéro de lien"
 
-#: src/viewer/text/view.c:1114
+#: src/viewer/text/view.c:1120
 msgid "Save error"
 msgstr "Erreur lors de la sauvegarde"
 
-#: src/viewer/text/view.c:1115
+#: src/viewer/text/view.c:1121
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
 

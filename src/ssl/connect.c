@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.1 2002/03/17 23:16:52 pasky Exp $ */
+/* $Id: connect.c,v 1.2 2002/03/18 20:51:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@ void ssl_want_read(struct connection *c)
 	}
 }
 
+/* Return -1 on error, 0 or success, 1 if no SSL is going to be used. */
 int ssl_connect(struct connection *conn, int sock)
 {
         struct conn_info *c_i = (struct conn_info *) conn->buffer;
@@ -68,11 +69,14 @@ int ssl_connect(struct connection *conn, int sock)
 				dns_found(conn, 0);
 				return -1;
 		}
+
+		return 0;
 	}
 
-	return 0;
+	return 1;
 }
 
+/* Return -1 on error, 0 or success, 1 if no SSL is going to be used. */
 int ssl_write(struct connection *conn, struct write_buffer *wb)
 {
 	int wr;
@@ -97,11 +101,14 @@ int ssl_write(struct connection *conn, struct write_buffer *wb)
 			
 			return -1;
 		}
+
+		return 0;
 	}
 
-	return 0;
+	return 1;
 }
 
+/* Return -1 on error, 0 or success, 1 if no SSL is going to be used. */
 int ssl_read(struct connection *conn, struct read_buffer *rb)
 {
 	int rd;
@@ -134,9 +141,11 @@ int ssl_read(struct connection *conn, struct read_buffer *rb)
 			
 			return -1;
 		}
+
+		return 0;
 	}
 
-	return 0;
+	return 1;
 }
 
 #endif

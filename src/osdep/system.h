@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.6 2003/10/27 02:41:55 pasky Exp $ */
+/* $Id: system.h,v 1.7 2003/10/27 02:45:32 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -35,7 +35,7 @@
 #include "osdep/beos.h"
 #include "osdep/riscos.h"
 
-#if defined(HAVE_MOUOPEN) && !defined(USE_GPM) && defined(USE_MOUSE)
+#if defined(HAVE_MOUOPEN) && defined(USE_MOUSE)
 #define USING_OS2_MOUSE
 #endif
 

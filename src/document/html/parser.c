@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.420 2004/05/21 10:54:50 jonas Exp $ */
+/* $Id: parser.c,v 1.421 2004/05/21 11:21:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1057,7 +1057,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 		unsigned char *alt = get_attr_val(attr, "alt");
 
 		if (alt) {
-			label = convert_string(ct, alt, strlen(alt), CSM_DEFAULT);
+			label = convert_string(ct, alt, strlen(alt), CSM_DEFAULT, NULL);
 			mem_free(alt);
 		} else {
 			label = NULL;

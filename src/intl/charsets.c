@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.86 2004/05/21 11:11:13 jonas Exp $ */
+/* $Id: charsets.c,v 1.87 2004/05/21 11:21:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -578,7 +578,7 @@ end:
 unsigned char *
 convert_string(struct conv_table *convert_table,
 	       unsigned char *chars, int charslen,
-	       enum convert_string_mode mode)
+	       enum convert_string_mode mode, int *length)
 {
 	unsigned char *buffer;
 	int bufferpos = 0;
@@ -683,6 +683,7 @@ flush:
 	/* Say bye */
 
 	buffer[bufferpos] = 0;
+	if (length) *length = bufferpos;
 	return buffer;
 }
 

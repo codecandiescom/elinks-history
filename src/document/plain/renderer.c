@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.101 2004/05/21 10:54:50 jonas Exp $ */
+/* $Id: renderer.c,v 1.102 2004/05/21 11:21:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,33 +163,18 @@ get_uri_length(unsigned char *line, int length)
 
 static inline int
 add_document_line(struct plain_renderer *renderer,
-		  unsigned char *line, int width)
+		  unsigned char *line, int line_width)
 {
 	struct document *document = renderer->document;
 	struct screen_char *template = &renderer->template;
 	struct screen_char *pos;
 	int lineno = renderer->lineno;
 	int expanded = 0;
+	int width = line_width;
 	register int line_pos;
 
-	/* Drop bad chars before anything else. */
-	for (line_pos = 0; line_pos < width; line_pos++) {
-		unsigned char line_char = line[line_pos];
-
-		if ((line_char != ASCII_TAB && line_char < ' ')
-		    || line_char == ASCII_ESC)
-			line[line_pos] = '.';
-	}
-
-	line = convert_string(renderer->convert_table, line, width, CSM_NONE);
+	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width);
 	if (!line) return 0;
-
-	/* After conversion, line may have a different length. */
-	width = strlen(line);
-	if (!width) {
-		mem_free(line);
-		return 0;
-	}
 
 	/* Now expand tabs and handle urls if needed.
 	 * Here little code redundancy to improve performance. */
@@ -261,6 +246,8 @@ add_document_line(struct plain_renderer *renderer,
 			while (tab_width--);
 
 		} else {
+			if (line_char < ' ' || line_char == ASCII_ESC)
+				line_char = '.';
 			template->data = line_char;
 			copy_screen_chars(pos++, template, 1);
 		}

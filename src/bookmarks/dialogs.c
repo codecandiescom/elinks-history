@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.25 2002/08/30 23:21:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.26 2002/08/30 23:32:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,6 +279,12 @@ bookmark_edit_done(struct dialog *d) {
 #endif
 }
 
+void
+bookmark_edit_cancel(struct dialog *d) {
+	struct bookmark *bm = (struct bookmark *) d->udata2;
+
+	bm->refcount--;
+}
 
 /* Called when the edit button is pushed */
 int
@@ -297,7 +303,8 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 		bm->refcount++;
 		do_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
 			       (struct session *) edit_btn->item->udata, dlg,
-			       bookmark_edit_done, (void *) bm, 1);
+			       bookmark_edit_done, bookmark_edit_cancel,
+			       (void *) bm, 1);
 	}
 
 	return 0;
@@ -543,7 +550,7 @@ launch_bm_add_doc_dialog(struct terminal *term,
 			 struct session *ses)
 {
 	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL, NULL,
-		       ses, parent, bookmark_add_add, NULL, 1);
+		       ses, parent, bookmark_add_add, NULL, NULL, 1);
 }
 
 
@@ -555,7 +562,7 @@ launch_bm_search_doc_dialog(struct terminal *term,
 {
 	do_edit_dialog(term, TEXT(T_SEARCH_BOOKMARK),
 		       bm_last_searched_name, bm_last_searched_url,
-		       ses, parent, bookmark_search_do, NULL, 0);
+		       ses, parent, bookmark_search_do, NULL, NULL, 0);
 }
 
 
@@ -569,7 +576,7 @@ launch_bm_add_link_dialog(struct terminal *term,
 
 	do_edit_dialog(term, TEXT(T_ADD_BOOKMARK), NULL,
 		       get_current_link_url(ses, url, MAX_STR_LEN), ses,
-		       parent, bookmark_add_add, NULL, 1);
+		       parent, bookmark_add_add, NULL, NULL, 1);
 }
 
 #else /* BOOKMARKS */

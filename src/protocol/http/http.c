@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.208 2003/12/02 16:00:16 zas Exp $ */
+/* $Id: http.c,v 1.209 2003/12/02 16:51:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -681,11 +681,13 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 
 	length_of_block = (info->length == LEN_CHUNKED ? &info->chunk_remaining
 						       : &info->length);
+
+#define BIG_READ 65536
 	if (!*length_of_block) {
 		/* Going to finish this decoding bussiness. */
 		/* Some nicely big value - empty encoded output queue by reading
 		 * big chunks from it. */
-		to_read = 65536;
+		to_read = BIG_READ;
 	}
 
 	if (conn->content_encoding == ENCODING_NONE) {
@@ -722,7 +724,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 				 * non-keep-alive and chunked */
 				if (!info->length) {
 					/* That's all, folks - let's finish this. */
-					to_read = 65536;
+					to_read = BIG_READ;
 				} else if (!len) {
 					/* We've done for this round (but not done
 					 * completely). Thus we will get out with
@@ -743,7 +745,7 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 			if (!conn->stream) return NULL;
 			/* On "startup" pipe is treated with care, but if everything
 			 * was already written to the pipe, caution isn't necessary */
-			else if (to_read != 65536) init = 1;
+			else if (to_read != BIG_READ) init = 1;
 		} else init = 0;
 
 		output = (unsigned char *) mem_realloc(output, *new_len + to_read);

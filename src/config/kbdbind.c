@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.158 2004/01/09 01:22:54 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.159 2004/01/09 10:22:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -623,7 +623,7 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
 
 	action_ = read_action(action);
-	if (action_ < 0) return 77 / 9 - 6;
+	if (action_ < 0) return 77 / 9 - 5;
 
 	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);
 	return 0;

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.20 2003/09/09 23:32:06 jonas Exp $ */
+/* $Id: home.c,v 1.21 2003/09/10 00:04:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,6 @@
 
 unsigned char *elinks_home = NULL;
 int first_use = 0;
-
 
 /* TODO: Check possibility to use <libgen.h> dirname. */
 static unsigned char *
@@ -61,7 +60,6 @@ get_home(int *new)
 	unsigned char *envhome = getenv("HOME");
 	unsigned char *home = envhome ? stracpy(envhome) : NULL;
 	unsigned char *envconfdir = getenv("ELINKS_CONFDIR");
-	unsigned char *config_dir;
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
@@ -84,9 +82,8 @@ get_home(int *new)
 		return NULL;
 	}
 
-	config_dir = envconfdir ? stracpy(envconfdir) : NULL;
-	if (config_dir) {
-		add_to_strn(&home_elinks, config_dir);
+	if (envconfdir) {
+		add_to_strn(&home_elinks, envconfdir);
 
 		while (home_elinks[0]
 		       && dir_sep(home_elinks[strlen(home_elinks) - 1]))
@@ -98,14 +95,12 @@ get_home(int *new)
 	    	} else {
 			error(gettext("ELINKS_CONFDIR set to %s, but "
 				      "directory %s doesn't exist."),
-			      config_dir, home_elinks);
+			      envconfdir, home_elinks);
 			sleep(3);
 			mem_free(home_elinks);
 			home_elinks = stracpy(home);
 			add_to_strn(&home_elinks, ".elinks");
 		}
-
-		mem_free(config_dir);
 
 	} else {
 		add_to_strn(&home_elinks, ".elinks");
@@ -114,8 +109,6 @@ get_home(int *new)
 	if (stat(home_elinks, &st)) {
 		if (!mkdir(home_elinks, 0700))
 			goto home_creat;
-		if (config_dir)
-			goto failed;
 		goto first_failed;
 	}
 
@@ -128,7 +121,6 @@ first_failed:
 	home_elinks = stracpy(home);
 	if (!home_elinks) {
 		mem_free(home);
-		if (config_dir) mem_free(config_dir);
 		return NULL;
 	}
 

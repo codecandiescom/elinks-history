@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.30 2004/01/01 07:03:49 miciah Exp $ */
+/* $Id: header.c,v 1.31 2004/01/17 14:18:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,14 +121,14 @@ again:
 	while (*n && upcase(*e) == upcase(*n)) e++, n++;
 	if (*n) goto again;
 
-	while (WHITECHAR(*e)) e++;
+	while (isspace(*e)) e++;
 	if (*e++ != '=') return NULL;
 
-	while (WHITECHAR(*e)) e++;
+	while (isspace(*e)) e++;
 	start = e;
 
 	if (!IS_QUOTE(*e)) {
-		while (*e && !WHITECHAR(*e)) e++;
+		while (*e && !isspace(*e)) e++;
 	} else {
 		unsigned char uu = *e++;
 

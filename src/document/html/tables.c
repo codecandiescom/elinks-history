@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.135 2004/01/01 23:36:44 zas Exp $ */
+/* $Id: tables.c,v 1.136 2004/01/17 14:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1780,9 +1780,9 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	for (i = 0; i < bad_html_n; i++) {
-		while (bad_html[i].start < bad_html[i].end && WHITECHAR(*bad_html[i].start))
+		while (bad_html[i].start < bad_html[i].end && isspace(*bad_html[i].start))
 			bad_html[i].start++;
-		while (bad_html[i].start < bad_html[i].end && WHITECHAR(bad_html[i].end[-1]))
+		while (bad_html[i].start < bad_html[i].end && isspace(bad_html[i].end[-1]))
 			bad_html[i].end--;
 		if (bad_html[i].start < bad_html[i].end)
 			parse_html(bad_html[i].start, bad_html[i].end, p, NULL);

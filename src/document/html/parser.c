@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.331 2004/01/17 14:06:23 pasky Exp $ */
+/* $Id: parser.c,v 1.332 2004/01/17 14:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,28 +95,28 @@ parse_element(register unsigned char *e, unsigned char *eof,
 
 	while (isA(*e)) next_char();
 
-	if (!WHITECHAR(*e) && !end_of_tag(*e) && *e != '/' && *e != ':')
+	if (!isspace(*e) && !end_of_tag(*e) && *e != '/' && *e != ':')
 		return -1;
 
 	if (name && namelen) *namelen = e - *name;
 
-	while ((WHITECHAR(*e) || *e == '/' || *e == ':')) next_char();
+	while ((isspace(*e) || *e == '/' || *e == ':')) next_char();
 
 	/* Skip bad attribute */
-	while (!atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
+	while (!atchr(*e) && !end_of_tag(*e) && !isspace(*e)) next_char();
 
 	if (attr) *attr = e;
 
 next_attr:
-	while (WHITECHAR(*e)) next_char();
+	while (isspace(*e)) next_char();
 
 	/* Skip bad attribute */
-	while (!atchr(*e) && !end_of_tag(*e) && !WHITECHAR(*e)) next_char();
+	while (!atchr(*e) && !end_of_tag(*e) && !isspace(*e)) next_char();
 
 	if (end_of_tag(*e)) goto end;
 
 	while (atchr(*e)) next_char();
-	while (WHITECHAR(*e)) next_char();
+	while (isspace(*e)) next_char();
 
 	if (*e != '=') {
 		if (end_of_tag(*e)) goto end;
@@ -124,7 +124,7 @@ next_attr:
 	}
 	next_char();
 
-	while (WHITECHAR(*e)) next_char();
+	while (isspace(*e)) next_char();
 
 	if (IS_QUOTE(*e)) {
 		unsigned char quote = *e;
@@ -135,10 +135,10 @@ quoted_value:
 		next_char();
 		if (*e == quote) goto quoted_value;
 	} else {
-		while (!WHITECHAR(*e) && !end_of_tag(*e)) next_char();
+		while (!isspace(*e) && !end_of_tag(*e)) next_char();
 	}
 
-	while (WHITECHAR(*e)) next_char();
+	while (isspace(*e)) next_char();
 
 	if (!end_of_tag(*e)) goto next_attr;
 
@@ -176,7 +176,7 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 	int found;
 
 next_attr:
-	while (WHITECHAR(*e)) e++;
+	while (isspace(*e)) e++;
 	if (end_of_tag(*e) || !atchr(*e)) goto parse_error;
 	n = name;
 
@@ -184,17 +184,17 @@ next_attr:
 	found = !*n && !atchr(*e);
 
 	while (atchr(*e)) e++;
-	while (WHITECHAR(*e)) e++;
+	while (isspace(*e)) e++;
 	if (*e != '=') {
 		if (found) goto found_endattr;
 		goto next_attr;
 	}
 	e++;
-	while (WHITECHAR(*e)) e++;
+	while (isspace(*e)) e++;
 
 	if (found) {
 		if (!IS_QUOTE(*e)) {
-			while (!WHITECHAR(*e) && !end_of_tag(*e)) {
+			while (!isspace(*e) && !end_of_tag(*e)) {
 				if (!*e) goto parse_error;
 				add_chr(attr, attrlen, *e);
 				e++;
@@ -235,7 +235,7 @@ found_endattr:
 
 	} else {
 		if (!IS_QUOTE(*e)) {
-			while (!WHITECHAR(*e) && !end_of_tag(*e)) {
+			while (!isspace(*e) && !end_of_tag(*e)) {
 				if (!*e) goto parse_error;
 				e++;
 			}
@@ -658,15 +658,15 @@ parse_width(unsigned char *w, int trunc)
 	int l;
 	int width;
 
-	while (WHITECHAR(*w)) w++;
+	while (isspace(*w)) w++;
 	for (l = 0; w[l] && w[l] != ','; l++);
 
-	while (l && WHITECHAR(w[l - 1])) l--;
+	while (l && isspace(w[l - 1])) l--;
 	if (!l) return -1;
 
 	if (w[l - 1] == '%') l--, p = 1;
 
-	while (l && WHITECHAR(w[l - 1])) l--;
+	while (l && isspace(w[l - 1])) l--;
 	if (!l) return -1;
 
 	width = par_format.width - par_format.leftmargin - par_format.rightmargin;
@@ -1810,8 +1810,8 @@ html_option(unsigned char *a)
 		}
 
 rrrr:
-		while (p < eoff && WHITECHAR(*p)) p++;
-		while (p < eoff && !WHITECHAR(*p) && *p != '<') {
+		while (p < eoff && isspace(*p)) p++;
+		while (p < eoff && !isspace(*p) && *p != '<') {
 
 pppp:
 			add_char_to_string(&str, *p), p++;
@@ -1820,7 +1820,7 @@ pppp:
 		r = p;
 		val = str.source; /* Has to be before the possible 'goto x' */
 
-		while (r < eoff && WHITECHAR(*r)) r++;
+		while (r < eoff && isspace(*r)) r++;
 		if (r >= eoff) goto x;
 		if (r - 2 <= eoff && (r[1] == '!' || r[1] == '?')) {
 			p = skip_comment(r, eoff);
@@ -1910,8 +1910,8 @@ abort:
 		unsigned char *q, *s = en;
 		int l = html - en;
 
-		while (l && WHITECHAR(s[0])) s++, l--;
-		while (l && WHITECHAR(s[l-1])) l--;
+		while (l && isspace(s[0])) s++, l--;
+		while (l && isspace(s[l-1])) l--;
 		q = convert_string(ct, s, l, CSM_DEFAULT);
 		if (q) add_to_string(&lbl, q), mem_free(q);
 	}
@@ -2265,7 +2265,7 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 	register int i;
 
 new_ch:
-	while (WHITECHAR(*a)) a++;
+	while (isspace(*a)) a++;
 	errno = 0;
 	n = strtoul(a, (char **)&a, 10);
 	if (errno) {
@@ -2881,7 +2881,7 @@ skip_comment(unsigned char *html, unsigned char *eof)
 		if (comm && html + 2 <= eof && html[0] == '-' && html[1] == '-') {
 			html += 2;
 			while (html < eof && *html == '-') html++;
-			while (html < eof && WHITECHAR(*html)) html++;
+			while (html < eof && isspace(*html)) html++;
 			if (html >= eof) return eof;
 			if (*html == '>') return html + 1;
 			continue;
@@ -3005,17 +3005,17 @@ set_lt:
 		int inv;
 		int dotcounter = 0;
 
-		if (WHITECHAR(*html) && par_format.align != AL_NONE) {
+		if (isspace(*html) && par_format.align != AL_NONE) {
 			unsigned char *h = html;
 
 #if 0
 			if (putsp == -1) {
-				while (html < eof && WHITECHAR(*html)) html++;
+				while (html < eof && isspace(*html)) html++;
 				goto set_lt;
 			}
 			putsp = 0;
 #endif
-			while (h < eof && WHITECHAR(*h)) h++;
+			while (h < eof && isspace(*h)) h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
 					put_chrs(lt, html - lt, put_chars_f, f);
@@ -3028,7 +3028,7 @@ set_lt:
 			if (!(position + (html - lt - 1))) goto skip_w; /* ??? */
 			if (*(html - 1) == ' ') {
 				/* BIG performance win; not sure if it doesn't cause any bug */
-				if (html < eof && !WHITECHAR(*html)) continue;
+				if (html < eof && !isspace(*html)) continue;
 				put_chrs(lt, html - lt, put_chars_f, f);
 			} else {
 				put_chrs(lt, html - 1 - lt, put_chars_f, f);
@@ -3036,7 +3036,7 @@ set_lt:
 			}
 
 skip_w:
-			while (html < eof && WHITECHAR(*html)) html++;
+			while (html < eof && isspace(*html)) html++;
 			/*putsp = -1;*/
 			goto set_lt;
 
@@ -3075,7 +3075,7 @@ next_break:
 			if (html - lt) put_chrs(lt, html - lt, put_chars_f, f);
 			dotcounter++;
 			html++; lt = html;
-			if (*html >= ' ' || WHITECHAR(*html) || html >= eof) {
+			if (*html >= ' ' || isspace(*html) || html >= eof) {
 				unsigned char *dots = fmem_alloc(dotcounter);
 
 				if (dots) {
@@ -3113,7 +3113,7 @@ element:
 			while (!parse_element(ee, eof, &nm, NULL, NULL, &ee))
 				if (*nm == '/')
 					goto ng;
-			if (ee < eof && WHITECHAR(*ee)) {
+			if (ee < eof && isspace(*ee)) {
 				/*putsp = -1;*/
 				put_chrs(" ", 1, put_chars_f, f);
 			}

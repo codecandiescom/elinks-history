@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.8 2004/01/01 15:36:18 jonas Exp $ */
+/* $Id: parser.c,v 1.9 2004/01/17 14:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ parse_cookie_str(struct cookie_str *cstr)
 			}
 			last_was_ws = 0;
 
-		} else if (WHITECHAR(*pos)) {
+		} else if (isspace(*pos)) {
 			if (!cstr->nam_end) {
 				/* Just after name - end of name reached */
 				cstr->nam_end = pos;
@@ -60,7 +60,7 @@ parse_cookie_str(struct cookie_str *cstr)
 
 		} else if (last_was_eq) {
 			/* Start of value reached */
-			/* LESS priority than WHITECHAR() */
+			/* LESS priority than isspace() */
 			cstr->val_start = pos;
 			last_was_eq = 0;
 			last_was_ws = 0;

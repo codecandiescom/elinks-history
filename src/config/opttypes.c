@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.76 2004/01/17 00:11:05 pasky Exp $ */
+/* $Id: opttypes.c,v 1.77 2004/01/17 14:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,7 +163,7 @@ num_rd(struct option *opt, unsigned char **file)
 
 	/* Another trap for unwary - we need to check *end, not **file - reason
 	 * is left as an exercise to the reader. */
-	if ((*end != 0 && (commandline || (!WHITECHAR(*end) && *end != '#')))
+	if ((*end != 0 && (commandline || (!isspace(*end) && *end != '#')))
 	    || (*value < opt->min || *value > opt->max)) {
 		mem_free(value);
 		return NULL;

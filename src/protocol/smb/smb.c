@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.32 2004/01/01 16:15:16 pasky Exp $ */
+/* $Id: smb.c,v 1.33 2004/01/17 14:18:15 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -247,17 +247,17 @@ end_smb_connection(struct connection *conn)
 
 				if (!type) goto print_as_is;
 				for (ll = line; *ll; ll++)
-					if (!WHITECHAR(*ll) && *ll != '-')
+					if (!isspace(*ll) && *ll != '-')
 						goto np;
 				goto print_as_is;
 np:
 
 				for (ll = line; *ll; ll++)
-					if (!WHITECHAR(*ll))
+					if (!isspace(*ll))
 						break;
 
 				for (lll = ll; *lll/* && lll[1]*/; lll++)
-					if (WHITECHAR(*lll)/* && WHITECHAR(lll[1])*/)
+					if (isspace(*lll)/* && isspace(lll[1])*/)
 						break;
 
 				switch (type) {
@@ -269,11 +269,11 @@ np:
 						goto print_as_is;
 
 					if (pos && pos < strlen(line)
-					    && WHITECHAR(*(llll = line + pos - 1))
+					    && isspace(*(llll = line + pos - 1))
 					    && llll > ll) {
-						while (llll > ll && WHITECHAR(*llll))
+						while (llll > ll && isspace(*llll))
 							llll--;
-						if (!WHITECHAR(*llll))
+						if (!isspace(*llll))
 							lll = llll + 1;
 					}
 
@@ -289,16 +289,16 @@ np:
 
 				case 3:
 					if (pos < strlen(line) && pos
-					    && WHITECHAR(line[pos - 1])
-					    && !WHITECHAR(line[pos])) {
+					    && isspace(line[pos - 1])
+					    && !isspace(line[pos])) {
 						ll = line + pos;
 					} else {
 						for (ll = lll; *ll; ll++)
-							if (!WHITECHAR(*ll))
+							if (!isspace(*ll))
 								break;
 					}
 					for (lll = ll; *lll; lll++)
-						if (WHITECHAR(*lll))
+						if (isspace(*lll))
 							break;
 					/* Fall-through */
 

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.121 2004/01/08 21:17:29 pasky Exp $ */
+/* $Id: conf.c,v 1.122 2004/01/17 14:18:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ static unsigned char *
 skip_white(unsigned char *start, int *line)
 {
 	while (*start) {
-		while (WHITECHAR(*start)) {
+		while (isspace(*start)) {
 			if (*start == '\n') {
 				(*line)++;
 			}
@@ -324,7 +324,7 @@ parse_config_file(struct option *options, unsigned char *name,
 				int cmdlen = strlen(handler->command);
 
 				if (!strncmp(file, handler->command, cmdlen)
-				    && WHITECHAR(file[cmdlen])) {
+				    && isspace(file[cmdlen])) {
 					struct string mirror2 = NULL_STRING;
 					struct string *m2 = NULL;
 
@@ -352,7 +352,7 @@ parse_config_file(struct option *options, unsigned char *name,
 		err = ERROR_COMMAND;
 		orig_pos = file;
 		/* Jump over this crap we can't understand. */
-		while (!WHITECHAR(*file) && *file != '#' && *file)
+		while (!isspace(*file) && *file != '#' && *file)
 			file++;
 
 		/* Mirror what we already have */

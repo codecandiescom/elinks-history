@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.51 2004/06/08 16:13:01 jonas Exp $ */
+/* $Id: protocol.c,v 1.52 2004/06/27 19:30:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,15 @@ struct protocol_backend {
 	unsigned int need_slash_after_host:1;
 };
 
+static void
+about_protocol_handler(struct connection *conn)
+{
+	set_connection_state(conn, S_OK);
+	abort_connection(conn);
+}
+
 static const struct protocol_backend protocol_backends[] = {
+	{ "about",	   0, about_protocol_handler,	0, 0 },
 	{ "file",	   0, file_protocol_handler,	1, 0 },
 	{ "finger",	  79, finger_protocol_handler,	1, 1 },
 	{ "ftp",	  21, ftp_protocol_handler,	1, 1 },

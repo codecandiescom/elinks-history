@@ -1,6 +1,5 @@
 #!/bin/bash
-autoheader
 aclocal
+autoheader
 automake
 autoconf
-touch stamp-h.in

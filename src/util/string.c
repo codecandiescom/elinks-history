@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.109 2004/12/19 10:41:04 pasky Exp $ */
+/* $Id: string.c,v 1.110 2005/01/03 07:28:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,7 +282,7 @@ done_string(struct string *string)
 }
 
 inline struct string *
-add_to_string(struct string *string, unsigned char *source)
+add_to_string(struct string *string, const unsigned char *source)
 {
 	assertm(string && source, "[add_to_string]");
 	if_assert_failed { return NULL; }
@@ -422,7 +422,8 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 }
 
 struct string *
-add_to_string_list(struct list_head *list, unsigned char *source, int length)
+add_to_string_list(struct list_head *list, const unsigned char *source,
+		   int length)
 {
 	struct string_list_item *item;
 	struct string *string;

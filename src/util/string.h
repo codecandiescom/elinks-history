@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.90 2004/12/19 10:38:25 pasky Exp $ */
+/* $Id: string.h,v 1.91 2005/01/03 07:30:52 miciah Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -155,7 +155,8 @@ struct string *init_string(struct string *string);
 void done_string(struct string *string);
 
 
-struct string *add_to_string(struct string *string, unsigned char *text);
+struct string *add_to_string(struct string *string,
+			     const unsigned char *source);
 struct string *add_char_to_string(struct string *string, unsigned char character);
 struct string *add_string_to_string(struct string *to, struct string *from);
 struct string *add_crlf_to_string(struct string *string);
@@ -241,7 +242,8 @@ struct string_list_item {
 /* Adds @string with @length chars to the list. If length is -1 it will be set
  * to the return value of strlen(). */
 struct string *
-add_to_string_list(struct list_head *list, unsigned char *string, int length);
+add_to_string_list(struct list_head *list, const unsigned char *string,
+		   int length);
 
 void free_string_list(struct list_head *list);
 

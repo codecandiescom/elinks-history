@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.33 2003/07/09 14:31:09 jonas Exp $ */
+/* $Id: user.c,v 1.34 2003/07/09 14:39:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,35 +94,6 @@ subst_cmd(unsigned char *cmd, unsigned char *url, unsigned char *host,
 	return n;
 }
 
-/* TODO: Merge with user_func() ? --pasky */
-static void
-prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
-	  unsigned char *host, unsigned char *port, unsigned char *dir,
-	  unsigned char *subj)
-{
-	unsigned char *cmd;
-	unsigned char *prog = get_user_program(term, proto, strlen(proto));
-
-	if (!prog || !*prog) {
-		/* Shouldn't ever happen, but be paranoid. */
-		/* Happens when you're in X11 and you've no handler for it. */
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("No program"), AL_CENTER,
-			msg_text(term,
-				N_("No program specified for protocol %s."),
-				proto),
-			NULL, 1,
-			N_("Cancel"), NULL, B_ENTER | B_ESC);
-		return;
-	}
-
-	cmd = subst_cmd(prog, url, host, port, dir, subj);
-	if (cmd) {
-		exec_on_terminal(term, cmd, "", 1);
-		mem_free(cmd);
-	}
-}
-
 /* Stay silent about complete RFC 2368 support or do it yourself! ;-).
  * --pasky */
 static unsigned char *
@@ -149,6 +120,7 @@ user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *urldata;
 	unsigned char *proto, *host, *port, *dir, *subj;
+	unsigned char *prog;
 
 	/* I know this may be NULL and I don't care. --pasky */
 	proto = get_protocol_name(url);
@@ -185,7 +157,26 @@ user_func(struct session *ses, unsigned char *url)
 		subj = NULL;
 	}
 
-	prog_func(ses->tab->term, url, proto, host, port, dir, subj);
+	prog = get_user_program(ses->tab->term, proto, strlen(proto));
+	if (!prog || !*prog) {
+		/* Shouldn't ever happen, but be paranoid. */
+		/* Happens when you're in X11 and you've no handler for it. */
+		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			N_("No program"), AL_CENTER,
+			msg_text(ses->tab->term,
+				N_("No program specified for protocol %s."),
+				proto),
+			NULL, 1,
+			N_("Cancel"), NULL, B_ENTER | B_ESC);
+		return;
+	} else {
+		unsigned char *cmd = subst_cmd(prog, url, host, port, dir, subj);
+
+		if (cmd) {
+			exec_on_terminal(ses->tab->term, cmd, "", 1);
+			mem_free(cmd);
+		}
+	}
 
 	if (dir) mem_free(dir);
 	if (subj) mem_free(subj);

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.5 2002/03/28 22:53:35 pasky Exp $ */
+/* $Id: view.h,v 1.6 2002/03/28 22:59:17 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -23,8 +23,6 @@ void destroy_formatted(struct f_data *);
 /* void clear_formatted(struct f_data *); */
 void init_formatted(struct f_data *);
 void detach_formatted(struct f_data_c *);
-
-void copy_location(struct location *, struct location *);
 
 /* void draw_doc(struct terminal *, struct f_data_c *, int); */
 void draw_formatted(struct session *);

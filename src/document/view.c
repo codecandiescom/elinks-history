@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.16 2002/03/28 22:53:35 pasky Exp $ */
+/* $Id: view.c,v 1.17 2002/03/28 22:59:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,20 +147,6 @@ void detach_formatted(struct f_data_c *scr)
 	scr->vs = NULL;
 	if (scr->link_bg) mem_free(scr->link_bg), scr->link_bg = NULL, scr->link_bg_n = 0;
 	if (scr->name) mem_free(scr->name), scr->name = NULL;
-}
-
-void copy_location(struct location *dst, struct location *src)
-{
-	struct frame *f, *nf;
-
-	init_list(dst->frames);
-	foreachback(f, src->frames) if ((nf = mem_alloc(sizeof(struct frame) + strlen(f->vs.url) + 1))) {
-		nf->name = stracpy(f->name);
-		nf->redirect_cnt = 0;
-		copy_vs(&nf->vs, &f->vs);
-		add_to_list(dst->frames, nf);
-	}
-	copy_vs(&dst->vs, &src->vs);
 }
 
 void set_link(struct f_data_c *f)

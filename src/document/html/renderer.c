@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.483 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: renderer.c,v 1.484 2004/07/15 17:51:32 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1114,8 +1114,8 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 		for (sc = chars; *sc; sc++)
 			assert(isspace(*sc));
-#endif
 	}
+#endif
 
 	int_lower_bound(&part->box.height, part->cy + 1);
 

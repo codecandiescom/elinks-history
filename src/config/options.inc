@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.59 2003/12/28 01:58:17 jonas Exp $ */
+/* $Id: options.inc,v 1.60 2003/12/28 02:07:20 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -887,12 +887,15 @@ struct option_info config_options_info[] = {
 	/* The colors and mono tree should be similar but with different default
 	 * values of course so always use the macros below. */
 
-#define INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)	\
+#define DO_INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)		\
 	INIT_OPT_TREE(subtree, capt, name, 0, desc),			\
 	INIT_OPT_COLOR(subtree "." name, N_("Text color"),		\
 		      "text", 0, fg, N_("Default text color.")),	\
-	INIT_OPT_COLOR(subtree "." name, N_("Background color"), \
+	INIT_OPT_COLOR(subtree "." name, N_("Background color"), 	\
 		      "background", 0, bg, N_("Default background color."))
+
+#define INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)		\
+	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, bg, fg, desc)
 
 	INIT_OPT_TREE("ui.colors", N_("Color terminals"),
 		"color", 0,
@@ -903,11 +906,11 @@ struct option_info config_options_info[] = {
 		"mainmenu", 0,
 		N_("Main menu bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.mainmenu", N_("Unselected main menu bar item"),
+	INIT_OPT_COLORS(".mainmenu", N_("Unselected main menu bar item"),
 		"normal", "white", "black",
 		N_("Unselected main menu bar item colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.mainmenu", N_("Selected main menu bar item"),
+	INIT_OPT_COLORS(".mainmenu", N_("Selected main menu bar item"),
 		"selected", "black", "green",
 		N_("Selected main menu bar item colors.")),
 
@@ -915,11 +918,11 @@ struct option_info config_options_info[] = {
 		"hotkey", 0,
 		N_("Main menu hotkey colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.mainmenu.hotkey", N_("Unselected hotkey"),
+	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Unselected hotkey"),
 		"normal", "white", "darkred",
 		N_("Main menu unselected hotkey colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.mainmenu.hotkey", N_("Selected hotkey"),
+	INIT_OPT_COLORS(".mainmenu.hotkey", N_("Selected hotkey"),
 		"selected", "green", "darkred",
 		N_("Main menu selected hotkey colors.")),
 
@@ -928,15 +931,15 @@ struct option_info config_options_info[] = {
 		"menu", 0,
 		N_("Menu bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.menu", N_("Unselected menu item"),
+	INIT_OPT_COLORS(".menu", N_("Unselected menu item"),
 		"normal", "white", "black",
 		N_("Unselected menu item colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.menu", N_("Selected menu item"),
+	INIT_OPT_COLORS(".menu", N_("Selected menu item"),
 		"selected", "green", "black",
 		N_("Selected menu item colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.menu", N_("Marked menu item"),
+	INIT_OPT_COLORS(".menu", N_("Marked menu item"),
 		"marked", "white", "red",
 		N_("Marked menu item colors.")),
 
@@ -944,15 +947,15 @@ struct option_info config_options_info[] = {
 		"hotkey", 0,
 		N_("Menu item hotkey colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.menu.hotkey", N_("Unselected hotkey"),
+	INIT_OPT_COLORS(".menu.hotkey", N_("Unselected hotkey"),
 		"normal", "white", "darkred",
 		N_("Menu item unselected hotkey colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.menu.hotkey", N_("Selected hotkey"),
+	INIT_OPT_COLORS(".menu.hotkey", N_("Selected hotkey"),
 		"selected", "green", "darkred",
 		N_("Menu item selected hotkey colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.menu", N_("Menu frame"),
+	INIT_OPT_COLORS(".menu", N_("Menu frame"),
 		"frame", "white", "black",
 		N_("Menu frame colors.")),
 
@@ -967,59 +970,59 @@ struct option_info config_options_info[] = {
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use ui.colors.color.dialog.generic.background instead.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Generic"),
+	INIT_OPT_COLORS(".dialog", N_("Generic"),
 		"generic", "white", "black",
 		N_("Generic dialog colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Frame"),
+	INIT_OPT_COLORS(".dialog", N_("Frame"),
 		"frame", "white", "black",
 		N_("Dialog frame colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Scrollbar"),
+	INIT_OPT_COLORS(".dialog", N_("Scrollbar"),
 		"scrollbar", "blue", "black",
 		N_("Scrollbar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Scrollbar selected"),
+	INIT_OPT_COLORS(".dialog", N_("Scrollbar selected"),
 		"scrollbar-selected", "green", "black",
 		N_("Scrollbar selected colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Title"),
+	INIT_OPT_COLORS(".dialog", N_("Title"),
 		"title", "white", "darkred",
 		N_("Dialog title colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Text"),
+	INIT_OPT_COLORS(".dialog", N_("Text"),
 		"text", "white", "black",
 		N_("Dialog text colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Checkbox"),
+	INIT_OPT_COLORS(".dialog", N_("Checkbox"),
 		"checkbox", "white", "darkred",
 		N_("Dialog checkbox colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Checkbox label"),
+	INIT_OPT_COLORS(".dialog", N_("Checkbox label"),
 		"checkbox-label", "white", "black",
 		N_("Dialog checkbox label colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Button"),
+	INIT_OPT_COLORS(".dialog", N_("Button"),
 		"button", "blue", "white",
 		N_("Dialog button colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Selected button"),
+	INIT_OPT_COLORS(".dialog", N_("Selected button"),
 		"button-selected", "green", "yellow",
 		N_("Dialog selected button colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Text field"),
+	INIT_OPT_COLORS(".dialog", N_("Text field"),
 		"field", "blue", "white",
 		N_("Dialog text field colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Text field text"),
+	INIT_OPT_COLORS(".dialog", N_("Text field text"),
 		"field-text", "blue", "yellow",
 		N_("Dialog field text colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Meter"),
+	INIT_OPT_COLORS(".dialog", N_("Meter"),
 		"meter", "blue", "white",
 		N_("Dialog meter colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Shadow"),
+	INIT_OPT_COLORS(".dialog", N_("Shadow"),
 		"shadow", "black", "black",
 		N_("Dialog shadow colors (see ui.shadows option).")),
 
@@ -1027,11 +1030,11 @@ struct option_info config_options_info[] = {
 		"title", 0,
 		N_("Title bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.title", N_("Generic title bar"),
+	INIT_OPT_COLORS(".title", N_("Generic title bar"),
 		"title-bar", "white", "black",
 		N_("Generic title bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.title", N_("Title bar text"),
+	INIT_OPT_COLORS(".title", N_("Title bar text"),
 		"title-text", "white", "black",
 		N_("Title bar text colors.")),
 
@@ -1040,11 +1043,11 @@ struct option_info config_options_info[] = {
 		"status", 0,
 		N_("Status bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.status", N_("Generic status bar"),
+	INIT_OPT_COLORS(".status", N_("Generic status bar"),
 		"status-bar", "white", "black",
 		N_("Generic status bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.status", N_("Status bar text"),
+	INIT_OPT_COLORS(".status", N_("Status bar text"),
 		"status-text", "white", "black",
 		N_("Status bar text colors.")),
 
@@ -1053,29 +1056,29 @@ struct option_info config_options_info[] = {
 		"tabs", 0,
 		N_("Tabs bar colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Unvisited tab"),
+	INIT_OPT_COLORS(".tabs", N_("Unvisited tab"),
 		"unvisited", "white", "green",
 		N_("Tab colors for tabs that have not completed or has not been\n"
 		   "selected since they completed loading.")),
 
-	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Unselected tab"),
+	INIT_OPT_COLORS(".tabs", N_("Unselected tab"),
 		"normal", "white", "black",
 		N_("Unselected tab colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Loading tab"),
+	INIT_OPT_COLORS(".tabs", N_("Loading tab"),
 		"loading", "white", "darkred",
 		N_("Tab colors for tabs that are loading in the background.")),
 
-	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Selected tab"),
+	INIT_OPT_COLORS(".tabs", N_("Selected tab"),
 		"selected", "green", "black",
 		N_("Selected tab colors.")),
 
-	INIT_OPT_COLORS("ui.colors.color.tabs", N_("Tab separator"),
+	INIT_OPT_COLORS(".tabs", N_("Tab separator"),
 		"separator", "white", "brown",
 		N_("Tab separator colors.")),
 
 
-	INIT_OPT_COLORS("ui.colors.color", N_("Searched strings"),
+	INIT_OPT_COLORS("", N_("Searched strings"),
 		"searched", "lime", "black",
 		N_("Searched string highlight colors.")),
 

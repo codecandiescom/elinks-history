@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.365 2004/01/30 19:13:29 jonas Exp $ */
+/* $Id: view.c,v 1.366 2004/01/30 19:25:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,7 +327,7 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	newpos = doc_view->vs->y + doc_view->document->options.height;
+	newpos = doc_view->vs->y + doc_view->height;
 	if (newpos < doc_view->document->height)
 		doc_view->vs->y = newpos;
 
@@ -424,7 +424,7 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->document->options.height;
+	max_height = doc_view->document->height - doc_view->height;
 	if (a > 0 && doc_view->vs->y >= max_height) return;
 	doc_view->vs->y += a;
 	if (a > 0) int_upper_bound(&doc_view->vs->y, max_height);
@@ -471,7 +471,7 @@ x_end(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->document->options.height;
+	max_height = doc_view->document->height - doc_view->height;
 	doc_view->vs->x = 0;
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
 	find_link(doc_view, -1, 0);

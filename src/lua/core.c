@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.3 2002/05/19 19:34:58 pasky Exp $ */
+/* $Id: core.c,v 1.4 2002/06/10 19:00:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ lua_State *lua_state;
 
 static struct session *ses;
 static struct terminal *errterm;
-static jmp_buf errjmp;
+static sigjmp_buf errjmp;
 
 #define L	lua_state
 #define LS	lua_State *S

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.72 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: kbd.c,v 1.73 2004/06/19 12:00:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ struct itrm {
 	int flags;
 	unsigned char kqueue[IN_BUF_SIZE];
 	int qlen;
-	int tm;
+	int timer;
 	unsigned char *ev_queue;
 	int eqlen;
 	void *mouse_h;
@@ -282,7 +282,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->sock_in = sock_in;
 	itrm->sock_out = sock_out;
 	itrm->ctl_in = ctl_in;
-	itrm->tm = -1;
+	itrm->timer = -1;
 
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */
@@ -393,8 +393,8 @@ free_trm(struct itrm *itrm)
 	set_handlers(itrm->std_out, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->sock_out, NULL, NULL, NULL, NULL);
 
-	if (itrm->tm != -1)
-		kill_timer(itrm->tm);
+	if (itrm->timer != -1)
+		kill_timer(itrm->timer);
 
 	if (itrm == ditrm) ditrm = NULL;
 	mem_free_if(itrm->ev_queue);
@@ -578,7 +578,7 @@ kbd_timeout(struct itrm *itrm)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_KBD, KBD_ESC, 0, 0);
 
-	itrm->tm = -1;
+	itrm->timer = -1;
 
 	if (can_read(itrm->std_in)) {
 		in_kbd(itrm);
@@ -886,8 +886,8 @@ end:
 	return el;
 
 ret:
-	itrm->tm = install_timer(ESC_TIMEOUT, (void (*)(void *))kbd_timeout,
-				 itrm);
+	itrm->timer = install_timer(ESC_TIMEOUT, (void (*)(void *))kbd_timeout,
+				    itrm);
 
 	return 0;
 }
@@ -900,9 +900,9 @@ in_kbd(struct itrm *itrm)
 
 	if (!can_read(itrm->std_in)) return;
 
-	if (itrm->tm != -1) {
-		kill_timer(itrm->tm);
-		itrm->tm = -1;
+	if (itrm->timer != -1) {
+		kill_timer(itrm->timer);
+		itrm->timer = -1;
 	}
 
 	if (itrm->qlen >= IN_BUF_SIZE) {

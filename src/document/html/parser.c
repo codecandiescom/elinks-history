@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.256 2003/11/13 14:23:49 jonas Exp $ */
+/* $Id: parser.c,v 1.257 2003/11/13 18:18:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,6 +652,17 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 	mem_free(w);
 
 	return r;
+}
+
+void
+set_id_attribute(unsigned char *attr)
+{
+	unsigned char *id_attr = get_attr_val(attr, "id");
+
+	if (id_attr) {
+		special_f(ff, SP_TAG, id_attr);
+		mem_free(id_attr);
+	}
 }
 
 static struct form form = NULL_STRUCT_FORM;

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.47 2003/10/31 18:03:29 jonas Exp $ */
+/* $Id: parser.h,v 1.48 2003/11/13 18:18:00 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -147,6 +147,7 @@ int has_attr(unsigned char *, unsigned char *);
 int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
 int get_bgcolor(unsigned char *, color_t *);
+void set_id_attribute(unsigned char *attr);
 
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 

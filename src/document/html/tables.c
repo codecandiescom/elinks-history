@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.121 2003/11/08 23:43:03 zas Exp $ */
+/* $Id: tables.c,v 1.122 2003/11/13 18:18:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,6 +574,7 @@ qwe:
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &l_col);
+		set_id_attribute(t_attr);
 		y++;
 		x = 0;
 		goto see;
@@ -653,6 +654,7 @@ nc:
 	get_align(t_attr, &cell->align);
 	get_valign(t_attr, &cell->valign);
 	get_bgcolor(t_attr, &cell->bgcolor);
+	set_id_attribute(t_attr);
 
 	colspan = get_num(t_attr, "colspan");
 	if (colspan == -1) colspan = 1;

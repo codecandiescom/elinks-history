@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.25 2004/10/19 10:24:19 jonas Exp $ */
+/* $Id: table.c,v 1.26 2004/10/19 12:46:37 zas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -761,7 +761,9 @@ see:
 			if (!span_cell || span_cell->is_used) {
 				int l, m;
 
-				if (span_cell->col == col && span_cell->row == row)
+				if (span_cell
+				    && span_cell->col == col
+				    && span_cell->row == row)
 					continue;
 
 				for (l = 0; l < k; l++)

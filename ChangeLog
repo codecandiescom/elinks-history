@@ -1,3 +1,129 @@
+Wed May 26 21:31:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Fix a bug in not_so_hot_keys scrolling in goto url history scrolling
+	introduced in rev 1.184: list didnt scroll on first key press as it
+	should when list was greater than terminal height.  
+
+Wed May 26 21:12:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Tidy up.  
+
+Wed May 26 20:40:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hotkey.c:
+
+	Cache *used - 1 since it is used 3 times.  
+
+Wed May 26 20:35:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Indentation fixes.  
+
+Wed May 26 17:25:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.c:
+
+	Tidy up.  
+
+Wed May 26 16:43:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/widget.h:
+
+	Comment gid and gnum fields of "checkbox" widget.  
+
+Wed May 26 16:37:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h, task.c:
+
+	get_rewritten_uri(): Introduced. Basicly it envokes the goto-url
+	event and get_uri()s it.  
+
+Wed May 26 16:35:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/checkbox.h:
+
+	Code redundancy was reduced regarding add_dlg_radio() and
+	add_dlg_checkbox().  
+
+Wed May 26 16:32:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	import_css_stylesheet(): Use get_translated_uri() so that #fragments
+	are removed.  
+
+Wed May 26 16:22:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/document.h,
+	document/css/css.c, document/css/css.h, document/html/parser.c,
+	document/html/renderer.c, protocol/uri.c, protocol/uri.h,
+	sched/session.c:
+
+	Add support for real URI lists and make document->css_imports use
+	it.  
+
+Wed May 26 14:53:33 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed May 26 13:59:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: opttypes.c, opttypes.h:
+
+	Remove unused option_type_info->remove function and make
+	option_types[] const.  
+
+Wed May 26 13:45:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: cmdline.c, conf.c, options.h:
+
+	Introduce --verbose stuff to silent config loading.  
+
+Wed May 26 13:00:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Only autocreate 256 color options when needed.  
+
+Wed May 26 10:34:54 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Comments about field names and values currently missing correct
+	encoding were added.  
+
+Wed May 26 07:54:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Random tidyup: use width,height instead of x,y where applicable,
+	rename resize_term_x() to resize_term_from_str().  
+
+Tue May 25 23:06:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	write_ev_queue(): Random cleanup.  
+
+Tue May 25 23:00:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Make process_queue() static and fix comment.  
+
+Tue May 25 22:56:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Alphabetize includes.  
+
 Tue May 25 18:08:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/encoding/encoding.c:

@@ -1,3 +1,306 @@
+Tue Jun 17 16:47:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Case sensitivity test was finally moved outside the loop, as it was
+	planned. Now fastfind_search gives maximum performance.  
+
+Tue Jun 17 16:26:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Clustered @head initialization in format_html().  
+
+Tue Jun 17 16:18:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Fixed segfault caused by carelessly placed assertm() in process_link
+	fragment of put_chars(), reported by zas.  
+
+Tue Jun 17 16:17:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Minor tidyup. assert(ce && screen) only if @head allocation didn't
+	fail.  
+
+Tue Jun 17 16:12:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	assert(): valid chars only at index time too.  
+
+Tue Jun 17 16:10:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Minor get_convert_table() cleanup. Removed now useless tests for
+	(head) (it is assert()'d).  
+
+Tue Jun 17 16:07:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Tidyup.  
+
+Tue Jun 17 16:07:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/fastfind.c:
+
+	Account the recently introduced FF_MAX_CHARS if. And move it after
+	interinc().  
+
+Tue Jun 17 16:04:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Reverted zas' 'fix', unreverting mine ;-).  
+
+Tue Jun 17 15:58:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Fix a fatal bug: do not even consult index if char is not in a valid
+	range. Bug reported by Pasky.  
+
+Tue Jun 17 15:56:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Fix bad assertm().  
+
+Tue Jun 17 15:27:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	And handle more gracefully the assert()ion failure.  
+
+Tue Jun 17 15:26:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Assert about part->data->nlinks in put_chars() process_link
+	fragment. This reflects the original code.  
+
+Tue Jun 17 15:07:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Tidyup.  
+
+Tue Jun 17 15:02:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Reintroduced (p->data) assertion into xpand_line, it is not a valid
+	situation even on the display_complicated_table() call path.  
+
+Tue Jun 17 14:52:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Attempted to make the execution flow more intuitive.  
+
+Tue Jun 17 14:51:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Indentation fix.  
+
+Tue Jun 17 14:43:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Reverted xpand_line() assert(p->data) instead of just returning. It
+	is apparently valid at the display_complicated_table() ->
+	expand_line() call path.  
+
+Tue Jun 17 14:41:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Reverted xpand_lines() assert(p->data) instead of just returning. It
+	is apparently valid at the display_complicated_table() ->
+	expand_lines() call path.  
+
+Tue Jun 17 14:36:23 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	A note about assert() and assertm() was added.  
+
+Tue Jun 17 14:33:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	A missing assertion p->data->data != NULL was added.  
+
+Tue Jun 17 14:30:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	The bad "weird test" change was fixed. Reported by Pasky.  
+
+Tue Jun 17 14:13:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Last steps to assert() generalization. Please report any assert()
+	failure.  
+
+Tue Jun 17 13:42:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 13:29:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 13:24:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	A useless test was removed. A missing assert() was added.  
+
+Tue Jun 17 13:18:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	A weird test was reworked.  
+
+Tue Jun 17 13:10:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Label no_l was renamed to no_link.  
+
+Tue Jun 17 13:06:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	A useless label and a goto were removed.  
+
+Tue Jun 17 13:04:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 12:51:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 12:47:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 12:43:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 12:31:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Reverted reverting of changes. They are _not_ too agressive.  
+
+Tue Jun 17 11:52:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Partially reverted some of the assert()ization, some of the changes
+	seemed way too agressive.  
+
+Tue Jun 17 11:34:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 11:29:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 11:26:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Next steps to assert() generalization.  
+
+Tue Jun 17 11:21:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	First steps to assert() generalization.  
+
+Tue Jun 17 11:11:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	_GNU_SOURCE #defining should be the very first thing we do.  
+
+Tue Jun 17 11:09:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: snprintf.c, snprintf.h:
+
+	Reverted the removal of HAVE_C99_SNPRINTF test, we *DO* want to use
+	our snprintf() if the system's doesn't provide C99 return value
+	semantic. Oh, and s/C99_SNPRINTF/C99_VSNPRINTF/ ;-).  
+
+Tue Jun 17 08:55:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Attempt to reduce code redundancy was a bad thing. This code was not
+	exactly redundant. Fixed.  
+
+Tue Jun 17 07:43:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	split_line() was fixed. Bug introduced by a bad movesky :) 
+
+Tue Jun 17 07:27:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Superfluous indentation was removed. split_line_at() is now declared
+	inline.  
+
+Tue Jun 17 07:17:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Define _GNU_SOURCE for vasprintf(). It fixes a compilation issue...  
+
+Tue Jun 17 01:16:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/snprintf.h:
+
+	Removed apparently bogus defined(HAVE_C99_SNPRINTF) test. It was not
+	AC_DEFINE'd in configure.in so it caused undefined reference to
+	elinks_snprintf errors. Maybe it's time to at least take the time to
+	compile before committing? 
+
+Tue Jun 17 00:13:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/error.c:
+
+	Correctly cast buffer pointer in vasprintf call.  
+
 Mon Jun 16 16:43:40 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/viewer/text/view.c:

@@ -1,21 +1,17 @@
-/* $Id: connection.h,v 1.45 2003/12/01 13:55:40 pasky Exp $ */
+/* $Id: connection.h,v 1.46 2003/12/01 14:51:33 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
 
-#include "elinks.h" /* SSL stuff */
-
-/* We need to declare these first :/. Damn cross-dependencies. */
-struct connection;
-struct read_buffer;
-
 #include "cache/cache.h"
-#include "lowlevel/connect.h"
 #include "protocol/uri.h"
 #include "util/encoding.h"
-#include "util/error.h"
 #include "util/lists.h"
 #include "util/ttime.h"
+
+struct conn_info;
+struct read_buffer;
+
 
 enum connection_priority {
 	PRI_MAIN	= 0,

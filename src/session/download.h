@@ -1,17 +1,20 @@
-/* $Id: download.h,v 1.26 2003/12/01 13:55:41 pasky Exp $ */
+/* $Id: download.h,v 1.27 2003/12/01 14:51:34 pasky Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
 
-#include <sys/types.h>
-
-#include "bfu/dialog.h"
-#include "cache/cache.h"
 #include "sched/connection.h"
-#include "sched/session.h"
-#include "terminal/terminal.h"
 #include "util/lists.h"
 #include "util/ttime.h"
+
+/* Silly BFU stuff */
+struct dialog_data;
+struct listbox_item;
+struct terminal;
+
+struct cache_entry;
+struct session;
+
 
 struct file_download {
 	LIST_HEAD(struct file_download);

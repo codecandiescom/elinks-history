@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.15 2002/09/13 16:23:35 pasky Exp $ */
+/* $Id: document.c,v 1.16 2002/10/13 17:41:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,7 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
+#ifdef HAVE_TIME_H
 #include <time.h>
+#endif
 
 #include "links.h"
 

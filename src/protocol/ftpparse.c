@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.5 2002/10/12 14:17:19 pasky Exp $ */
+/* $Id: ftpparse.c,v 1.6 2002/10/13 17:41:12 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -36,8 +36,13 @@ Definitely not covered:
 Long VMS filenames, with information split across two lines.
 NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
+#ifdef HAVE_TIME_H
 #include <time.h>
+#endif
 #include <string.h>
 #include "ftpparse.h"
 

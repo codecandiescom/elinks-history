@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.8 2002/09/08 20:49:59 pasky Exp $ */
+/* $Id: globhist.c,v 1.9 2002/10/13 17:41:12 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -11,10 +11,12 @@
 
 #include "links.h"
 
-#include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_TIME_H
+#include <time.h>
+#endif
 
 #include "bfu/listbox.h"
 #include "config/options.h"

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.106 2004/09/19 22:59:09 pasky Exp $ */
+/* $Id: parser.c,v 1.107 2004/09/20 16:41:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,15 +255,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		memcpy(&element, token, sizeof(struct scanner_token));
 		token = get_next_scanner_token(scanner);
 		if (!token) return;
-
-
-		/* End of selector? */
-
-		if (!(token->type == ',' || token->type == '{')) {
-			/* Not yet! */
-			skip_css_tokens(scanner, ',');
-			continue;
-		}
 
 
 		/* Register the selector */

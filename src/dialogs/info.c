@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.44 2003/05/20 22:09:16 zas Exp $ */
+/* $Id: info.c,v 1.45 2003/06/04 10:28:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 
 	create_str(a14, ": ", formatted_info(CI_FILES));
 	create_str(a15, ", ", formatted_info(CI_LOCKED));
-	l = 0; a16 = init_str(); add_to_str(&a16, &l, ".");
+	l = 0; a16 = init_str(); add_chr_to_str(&a16, &l, '.');
 
 #undef create_str
 

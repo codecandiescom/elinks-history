@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.85 2003/06/02 15:42:59 pasky Exp $ */
+/* $Id: view.c,v 1.86 2003/06/04 10:26:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1530,16 +1530,16 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 			/* We need to reformat text now if it has to be wrapped
 			 * hard, just before encoding it. */
 			void *blabla;
-			
+
 			blabla = format_text(sv->value, sv->frm->cols, sv->frm->wrap);
 			if (blabla) mem_free(blabla);
 
 			p = encode_textarea(sv->value);
 		}
 
-		if (lst) add_to_str(data, len, "&"); else lst = 1;
+		if (lst) add_chr_to_str(data, len, '&'); else lst = 1;
 		encode_url_string(sv->name, data, len);
-		add_to_str(data, len, "=");
+		add_chr_to_str(data, len, '=');
 
 		/* Convert back to original encoding (see html_form_control()
 		 * for the original recoding). */
@@ -1757,7 +1757,7 @@ get_form_url(struct session *ses, struct f_data_c *f,
 		} else {
 			add_to_str(&go, &l, "multipart/form-data; boundary=");
 			add_bytes_to_str(&go, &l, bound, BL);
-			add_to_str(&go, &l, "\n");
+			add_chr_to_str(&go, &l, '\n');
 		}
 		for (i = 0; i < len; i++) {
 			unsigned char p[3];
@@ -3649,7 +3649,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			add_to_str(&str, &strl, _("Submit form to", term));
 		else
 			add_to_str(&str, &strl, _("Post form to", term));
-		add_to_str(&str, &strl, " ");
+		add_chr_to_str(&str, &strl, ' ');
 
 		url = strip_url_password(link->form->action);
 		if (url) {

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.21 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: ssl.c,v 1.22 2003/06/04 10:24:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ get_ssl_cipher_str(ssl_t *ssl) {
 	add_num_to_str(&str, &l, SSL_get_cipher_bits(ssl, NULL));
 	add_to_str(&str, &l, "-bit ");
 	add_to_str(&str, &l, SSL_get_cipher_version(ssl));
-	add_to_str(&str, &l, " ");
+	add_chr_to_str(&str, &l, ' ');
 	add_to_str(&str, &l, (unsigned char *) SSL_get_cipher_name(ssl));
 #elif defined(HAVE_GNUTLS)
 	/* XXX: How to get other relevant parameters? */
@@ -197,7 +197,7 @@ get_ssl_cipher_str(ssl_t *ssl) {
 	add_to_str(&str, &l, " (compr:");
 	add_to_str(&str, &l, (unsigned char *)
 			gnutls_compression_get_name(gnutls_compression_get(*ssl)));
-	add_to_str(&str, &l, ")");
+	add_chr_to_str(&str, &l, ')');
 #endif
 #endif
 

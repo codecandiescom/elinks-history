@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.55 2003/06/22 16:37:39 jonas Exp $ */
+/* $Id: file.c,v 1.56 2003/06/22 16:43:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,7 +284,7 @@ file_func(struct connection *c)
 	unsigned char *fragment;
 	unsigned char *name;
 	unsigned char *head;
-	int fl;
+	int fragmentlen;
 	DIR *d;
 	int namelen;
 
@@ -340,38 +340,38 @@ file_func(struct connection *c)
 		last_uid = -1;
 		last_gid = -1;
 		fragment = init_str();
-		fl = 0;
+		fragmentlen = 0;
 
 		if (!fragment) {
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
 
-		add_to_str(&fragment, &fl, "<html>\n<head><title>");
-		add_htmlesc_str(&fragment, &fl, name, strlen(name));
-		add_to_str(&fragment, &fl, "</title></head>\n<body>\n<h2>Directory ");
+		add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
+		add_htmlesc_str(&fragment, &fragmentlen, name, strlen(name));
+		add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
 		{
 			unsigned char *pslash, *slash = name - 1;
 
 			while (pslash = ++slash, slash = strchr(slash, '/')) {
 				if (slash == name) {
-					add_chr_to_str(&fragment, &fl, '/');
+					add_chr_to_str(&fragment, &fragmentlen, '/');
 					continue;
 				}
 
 				slash[0] = 0;
-				add_to_str(&fragment, &fl, "<a href=\"");
+				add_to_str(&fragment, &fragmentlen, "<a href=\"");
 				/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-				add_to_str(&fragment, &fl, name);
-				add_chr_to_str(&fragment, &fl, '/');
-				add_to_str(&fragment, &fl, "\">");
-				add_htmlesc_str(&fragment, &fl, pslash, strlen(pslash));
-				add_to_str(&fragment, &fl, "</a>");
-				add_chr_to_str(&fragment, &fl, '/');
+				add_to_str(&fragment, &fragmentlen, name);
+				add_chr_to_str(&fragment, &fragmentlen, '/');
+				add_to_str(&fragment, &fragmentlen, "\">");
+				add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
+				add_to_str(&fragment, &fragmentlen, "</a>");
+				add_chr_to_str(&fragment, &fragmentlen, '/');
 				slash[0] = '/';
 			}
 		}
-		add_to_str(&fragment, &fl, "</h2>\n<pre>");
+		add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 
 		while ((de = readdir(d))) {
 			struct stat st, *stp;
@@ -460,14 +460,14 @@ file_func(struct connection *c)
 				}
 			}
 #endif
-			/* add_to_str(&fragment, &fl, "   "); */
-			add_htmlesc_str(&fragment, &fl,
+			/* add_to_str(&fragment, &fragmentlen, "   "); */
+			add_htmlesc_str(&fragment, &fragmentlen,
 					dir[i].s, strlen(dir[i].s));
-			add_to_str(&fragment, &fl, "<a href=\"");
-			add_htmlesc_str(&fragment, &fl,
+			add_to_str(&fragment, &fragmentlen, "<a href=\"");
+			add_htmlesc_str(&fragment, &fragmentlen,
 					dir[i].f, strlen(dir[i].f));
 			if (dir[i].s[0] == 'd') {
-				add_chr_to_str(&fragment, &fl, '/');
+				add_chr_to_str(&fragment, &fragmentlen, '/');
 			} else if (lnk) {
 				struct stat st;
 				unsigned char *n = init_str();
@@ -479,35 +479,35 @@ file_func(struct connection *c)
 							dir[i].f, strlen(dir[i].f));
 					if (!stat(n, &st))
 						if (S_ISDIR(st.st_mode))
-							add_chr_to_str(&fragment, &fl, '/');
+							add_chr_to_str(&fragment, &fragmentlen, '/');
 					mem_free(n);
 				}
 			}
-			add_to_str(&fragment, &fl, "\">");
+			add_to_str(&fragment, &fragmentlen, "\">");
 
 			if (dir[i].s[0] == 'd' && colorize_dir) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
-				add_to_str(&fragment, &fl, "<font color=\"");
-				add_to_str(&fragment, &fl, dircolor);
-				add_to_str(&fragment, &fl, "\"><b>");
+				add_to_str(&fragment, &fragmentlen, "<font color=\"");
+				add_to_str(&fragment, &fragmentlen, dircolor);
+				add_to_str(&fragment, &fragmentlen, "\"><b>");
 			}
 
-			add_htmlesc_str(&fragment, &fl,
+			add_htmlesc_str(&fragment, &fragmentlen,
 					dir[i].f, strlen(dir[i].f));
 
 			if (dir[i].s[0] == 'd' && colorize_dir) {
-				add_to_str(&fragment, &fl, "</b></font>");
+				add_to_str(&fragment, &fragmentlen, "</b></font>");
 			}
 
-			add_to_str(&fragment, &fl, "</a>");
+			add_to_str(&fragment, &fragmentlen, "</a>");
 			if (lnk) {
-				add_to_str(&fragment, &fl, " -> ");
-				add_htmlesc_str(&fragment, &fl, lnk, strlen(lnk));
+				add_to_str(&fragment, &fragmentlen, " -> ");
+				add_htmlesc_str(&fragment, &fragmentlen, lnk, strlen(lnk));
 				mem_free(lnk);
 			}
 
-			add_chr_to_str(&fragment, &fl, '\n');
+			add_chr_to_str(&fragment, &fragmentlen, '\n');
 		}
 
 		mem_free(name);
@@ -517,7 +517,7 @@ file_func(struct connection *c)
 		}
 		mem_free(dir);
 
-		add_to_str(&fragment, &fl, "</pre>\n<hr>\n</body>\n</html>\n");
+		add_to_str(&fragment, &fragmentlen, "</pre>\n<hr>\n</body>\n</html>\n");
 		head = stracpy("\r\nContent-Type: text/html\r\n");
 
 	} else {
@@ -616,8 +616,8 @@ file_func(struct connection *c)
 		}
 
 		stream = open_encoded(fd, encoding);
-		fl = 0;
-		while ((readlen = read_encoded(stream, fragment + fl, stt.st_size))) {
+		fragmentlen = 0;
+		while ((readlen = read_encoded(stream, fragment + fragmentlen, stt.st_size))) {
 			if (readlen < 0) {
 				/* FIXME: We should get the correct error
 				 * value. But it's I/O error in 90% of cases
@@ -629,7 +629,7 @@ file_func(struct connection *c)
 				return;
 			}
 
-			fl += readlen;
+			fragmentlen += readlen;
 
 #if 0
 			/* This didn't work so well as it should (I had to
@@ -644,7 +644,7 @@ file_func(struct connection *c)
 			}
 #endif
 
-			fragment = mem_realloc(fragment, fl + stt.st_size);
+			fragment = mem_realloc(fragment, fragmentlen + stt.st_size);
 			if (!fragment) {
 				close_encoded(stream);
 				abort_conn_with_state(c, S_OUT_OF_MEM);
@@ -653,7 +653,7 @@ file_func(struct connection *c)
 		}
 
 		close_encoded(stream);
-		fragment[fl] = '\0'; /* NULL-terminate just in case */
+		fragment[fragmentlen] = '\0'; /* NULL-terminate just in case */
 		head = stracpy("");
 	}
 
@@ -666,8 +666,8 @@ file_func(struct connection *c)
 	if (e->head) mem_free(e->head);
 	e->head = head;
 	c->cache = e;
-	add_fragment(e, 0, fragment, fl);
-	truncate_entry(e, fl, 1);
+	add_fragment(e, 0, fragment, fragmentlen);
+	truncate_entry(e, fragmentlen, 1);
 
 	mem_free(fragment);
 

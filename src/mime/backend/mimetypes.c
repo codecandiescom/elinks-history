@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.18 2003/10/03 13:22:25 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.19 2003/10/13 21:45:21 pasky Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -148,6 +148,8 @@ init_mimetypes_map(void)
 {
 	unsigned char *path;
 
+	assert(mimetypes_tree);
+
 	if (!get_opt_bool_tree(mimetypes_tree, "enable"))
 		return NULL;
 
@@ -213,6 +215,7 @@ static void
 init_mimetypes(void)
 {
 	mimetypes_tree = get_opt_rec(config_options, "mime.mimetypes");
+	assert(mimetypes_tree);
 	mimetypes_tree->change_hook = mimetypes_change_hook;
 }
 

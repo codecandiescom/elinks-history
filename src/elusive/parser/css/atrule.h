@@ -1,22 +1,9 @@
-/* $Id: atrule.h,v 1.2 2003/01/20 00:57:50 jonas Exp $ */
+/* $Id: atrule.h,v 1.3 2003/02/25 14:15:50 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_ATRULE_H
 #define EL__USIVE_PARSER_CSS_ATRULE_H
 
 #include "elusive/parser/parser.h"
-
-/* Mediatype bitmap entries used for setting the mediatypes to be accepted */
-
-#define MEDIATYPE_ALL		(1 <<  0) /* All devices */
-#define MEDIATYPE_AURAL	 	(1 <<  1) /* Speech synthesizers */
-#define MEDIATYPE_BRAILLE	(1 <<  2) /* Braille tactile feedback devices */
-#define MEDIATYPE_EMBOSSED	(1 <<  3) /* Paged braille printers */
-#define MEDIATYPE_HANDHELD	(1 <<  4) /* Handheld devices */
-#define MEDIATYPE_PRINT		(1 <<  5) /* Paged, opaque material ... */
-#define MEDIATYPE_PROJECTION	(1 <<  6) /* Projected presentations */
-#define MEDIATYPE_SCREEN	(1 <<  7) /* Color computer screens */
-#define MEDIATYPE_TTY		(1 <<  8) /* Teletypes, terminals ... */
-#define MEDIATYPE_TV		(1 <<  9) /* Television-type devices */
 
 /* General atrule parser multiplexor */
 /* Specialized atrule parsers can only be interfaced through this one since

@@ -1,4 +1,4 @@
-/* $Id: ruleset.h,v 1.2 2003/01/20 00:57:50 jonas Exp $ */
+/* $Id: ruleset.h,v 1.3 2003/02/25 14:15:50 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_RULESET_H
 #define EL__USIVE_PARSER_CSS_RULESET_H
@@ -37,27 +37,48 @@
  */
 
 /* Parsing of rulesets */
+/* Example: 'div, p, ul { color: green; }' */
 enum pstate_code
 css_parse_ruleset(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of selectors */
+/* Example: 'div h1#foo.bar a' part of 'div h1#foo.bar a { display: none }' */
 enum pstate_code
 css_parse_selector(struct parser_state *state, unsigned char **src, int *len);
 
+/* Parsing of simple selectors */
+/* Example: 'h1#foo.bar' part of the 'div h1#foo.bar a' selector */
+enum pstate_code
+css_parse_simple_selector(struct parser_state *state, unsigned char **src, int *len);
+
+/* Parsing of attributes in simple selectors */
+/* Example: '#foo' or '.bar' part of the 'div h1#foo.bar a' selector */
+enum pstate_code
+css_parse_selector_attr(struct parser_state *state, unsigned char **src, int *len);
+
+/* Parsing of declarations */
+/* Example: code from '{' to '}' in 'div { color: black; margin: 0em }' */
+enum pstate_code
+css_parse_declarations(struct parser_state *state, unsigned char **src, int *len);
+
 /* Parsing of a property declaration */
+/* Example: 'color: black' part of the 'div { color: black; margin: 0em }' */
 enum pstate_code
 css_parse_declaration(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of property settings */
+/* Example: '0em 2em' part of the 'margin: 0em 2em' declaration */
 enum pstate_code
 css_parse_expression(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of functions in selectors and expressions.
  * This can have optimized versions and just act as multiplexor. */
+/* Example: the 'content("before")' part of 'p:before { content("before") }' */
 enum pstate_code
 css_parse_function(struct parser_state *state, unsigned char **src, int *len);
 
 /* Parsing of rgb functions */
+/* Example: 'rgb(10%, 50%, 10%)' */
 enum pstate_code
 css_parse_rgb(struct parser_state *state, unsigned char **src, int *len);
 

@@ -1,0 +1,66 @@
+			Testing the ELusive CSS Parser
+			==============================
+
+To make the maintaince easier a test suite will be made. It will include test
+to validate correct parsing and see if reasonable errors are well recovered.
+
+Below are the tests. Some tests are short. A single string. Others span several
+lines and are kept in a file.
+
+			    The fields of a test
+			    --------------------
+
+A test should be delimited by two horizontal lines of dashes. The following
+fields can be used.
+
+[Description]	A short line describing what is being tested for.
+
+[String]	The test input string. String delimiters (") should be escaped.
+
+[File]		The name of the file containing the test input.
+
+[Checksum]	This is the output of piping the test output through md5sum.
+
+[Notes]		Additional notes like possible improvements.
+
+
+				Validation
+				----------
+
+Prove correctness. Live up to the specification. Conformance.
+
+-------------------------------------------------------------------------------
+Description:	Ignore unknown @-rule
+String:		"@unknown { @nested { at: rules } } @this-is-unknown \"too\";"
+Checksum:	f454419a18d955a10b178a3f6f3f0660
+Notes:		Also checks for correct handling of nested blocks.
+-------------------------------------------------------------------------------
+Description:	Handling of sgml comments
+String:		"<\!-- style { sheet: rules } -->"
+Checksum:	78fce3cfaaa76fb88d9d35876ed9a44d
+Notes:		SGML should just be skipped.
+-------------------------------------------------------------------------------
+
+
+			     Recovery testing
+			     ----------------
+
+Prove the possibilities. What is acceptable?
+
+-------------------------------------------------------------------------------
+Description:	Never ending comment
+String:		"never { ending } /* comment"
+Checksum:	be3e116f071a99789def8c5c7091cb48
+Notes:
+
+		We could try to parse the document backward to see somehow
+		where the error occured.
+
+-------------------------------------------------------------------------------
+Description:	Bad declarations
+String:		"bad { declarattion: /; blue }"
+Checksum:	b042dc72c9c36d3e7031e3855af85a67
+Notes:		
+-------------------------------------------------------------------------------
+
+$Id: TESTING,v 1.1 2003/02/25 14:15:50 jonas Exp $

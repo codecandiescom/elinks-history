@@ -1,5 +1,5 @@
 /* CSS Parser state data */
-/* $Id: state.h,v 1.1 2003/01/19 20:25:21 jonas Exp $ */
+/* $Id: state.h,v 1.2 2003/02/25 14:15:50 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_STATE_H
 #define EL__USIVE_PARSER_CSS_STATE_H
@@ -22,6 +22,7 @@ enum css_state_code
 	CSS_CHARSET,
 	CSS_COMMENT,
 	CSS_DECLARATION,
+	CSS_DECLARATIONS,
 	CSS_ESCAPE,
 	CSS_EXPRESSION,
 	CSS_FONTFACE,
@@ -36,13 +37,15 @@ enum css_state_code
 	CSS_RGB,
 	CSS_RULESET,
 	CSS_SELECTOR,
+	CSS_SIMPLE_SELECTOR,
+	CSS_SELECTOR_ATTR,
 	CSS_SKIP,
-	CSS_SKIPBLOCK,
+	CSS_SKIP_MEDIATYPES,
+	CSS_SKIP_UNTIL,
 	CSS_STRING,
 	CSS_STYLESHEET,
 	CSS_UNICODERANGE,
 	CSS_URL,
-	CSS_WHITESPACE,
 
 	CSS_STATE_CODES, /* XXX: Keep last */
 };
@@ -62,9 +65,6 @@ struct css_parser_state {
 
 			/* Denotes if charset declarations are allowed */
 			int no_charset;
-
-			/* The stylesheet node */
-			struct stylesheet *node;
 		} stylesheet;
 
 		/* CSS_ATRULE */
@@ -72,17 +72,10 @@ struct css_parser_state {
 			/* The name of the atrule (e.g. import or charset) */
 			unsigned char *name;
 			int name_len;
-
-			/* For passing on the stylesheet node */
-			struct stylesheet *stylesheet;
 		} atrule;
 
 		/* CSS_CHARSET */
 		struct {
-			/* The stylesheet node for getting mediatypes and
-			 * adding charset url. */
-			struct stylesheet *stylesheet;
-
 			/* The string data containing the charset */
 			unsigned char *str;
 			int len;
@@ -94,21 +87,23 @@ struct css_parser_state {
 			unsigned char *url;
 			int url_len;
 
-			/* The stylesheet node for getting mediatypes,
-			 * adding import url and signaling if import should
-			 * be accepted (NULL means not). */
-			struct stylesheet *stylesheet;
+			/* Wether the mediatypes matched. Values are
+			 *	 0 -> have not yet been checked
+			 *	 1 -> one did match
+			 *	-1 -> no one matched */
+			int matched;
 		} import;
 
 		/* CSS_MEDIA */
 		struct {
-			/* For signaling if we're inside the block */
-			int inside;
+			/* Wether the mediatypes matched. Values are
+			 *	 0 -> have not yet been checked
+			 *	 1 -> one did match
+			 *	-1 -> no one matched */
+			int matched;
 
-			/* The stylesheet node for getting mediatypes, passing
-			 * on stylesheet node and signaling if media block
-			 * should be accepted (NULL means not). */
-			struct stylesheet *stylesheet;
+			/* Wether we are already inside the block */
+			int inside_block;
 		} media;
 
 		/* CSS_MEDIATYPES */
@@ -117,37 +112,51 @@ struct css_parser_state {
 			unsigned char *name;
 			int name_len;
 
-			/* The stylesheet node for checking bitmaps and
-			 * signaling if there was a match or not. */
-			struct stylesheet **stylesheet;
+			/* For reporting if any of the mediatypes matched. */
+			int *matched;
 		} mediatypes;
 
 		/* CSS_RULESET */
 		struct {
-			/* The properties to add to a group of selectors. */
-			struct list_head *properties;
-
-			/* The stylesheet node */
-			struct stylesheet *stylesheet;
-
-			/* For signaling errors */
-			int ack;
+			/* The selector nodes of the ruleset. */
+			struct css_node *selectors;
 		} ruleset;
 
 		/* CSS_SELECTOR */
 		struct {
-			/* The node corresponding to a given selector. */
-			struct css_node *node;
+			/* The node worked on by simple selector */
+			struct css_node *work;
+
+			/* The match type of the element. See tree.h */
+			enum css_element_match_type match_type;
+		} selector;
+
+		/* CSS_SIMPLE_SELECTOR */
+		struct {
+			/* For attributes being worked on */
+			struct attribute_matching *attr;
+
+			/* The match type of the attribute. See tree.h */
+			enum css_attr_match_type match_type;
 
 			/* For getting token from the scanners */
 			unsigned char *name;
 			int name_len;
-		} selector;
+		} simple_selector;
+
+		/* CSS_DECLARATIONS */
+		struct {
+			/* The properties to add to a group of selectors. */
+			struct list_head *properties;
+
+			/* The selector nodes where properties will be added */
+			struct css_node *nodes;
+		} declarations;
 
 		/* CSS_DECLARATION */
 		struct {
 			/* Will work directly on the given property list. */
-			struct list_head *properties;
+			struct list_head **properties;
 
 			/* The terms from the expression. */
 			struct list_head *terms;
@@ -192,26 +201,32 @@ struct css_parser_state {
 		} unicoderange;
 
 		/* CSS_COMMENT */
-		/* XXX Depending on <inside> being initialized to 0 */
 		struct {
 			/* Wether the scanner's inside the comment. Used when
 			 * returning from suspension */
 			int inside;
 		} comment;
 
-		/* CSS_SKIPBLOCK */
+		/* CSS_SKIP and CSS_SKIP_UNTIL */
+		/* The first two member are used by CSS_SKIP_UNTIL */
 		struct {
-			/* Info about the current block depth used across
+			/* The character that should end the skipping */
+			unsigned char end_marker;
+
+			/* The character character to accept chars from */
+			int group;
+
+			/* info about the current block depth used across
 			 * suspensions */
 			int nest_level;
-		} skipblock;
+		} skip;
 	} data;
 };
 
 static inline struct css_parser_state *
 css_state_push(struct parser_state *state, enum css_state_code state_code)
 {
-#ifdef DEBUG
+#ifdef CSS_DEBUG
 	if (css_stack_size++ > 20) internal("CSS stack items skyrocketing");
 #endif
 
@@ -223,7 +238,7 @@ css_state_push(struct parser_state *state, enum css_state_code state_code)
 static inline struct css_parser_state *
 css_state_pop(struct parser_state *state)
 {
-#ifdef DEBUG
+#ifdef CSS_DEBUG
 	css_stack_size--;
 #endif
 

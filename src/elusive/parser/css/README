@@ -29,4 +29,4 @@ The parser can be divided up into:
 
 Apart from that they act the same way and have the same interface.
 
-$Id: README,v 1.1 2003/01/19 18:29:14 jonas Exp $
+$Id: README,v 1.2 2003/02/25 14:15:50 jonas Exp $

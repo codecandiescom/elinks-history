@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.2 2003/01/20 00:57:50 jonas Exp $ */
+/* $Id: scanner.h,v 1.3 2003/02/25 14:15:50 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_SCANNER_H
 #define EL__USIVE_PARSER_CSS_SCANNER_H
@@ -68,26 +68,25 @@ css_scan_hexcolor(struct parser_state *state, unsigned char **src, int *len);
 /* Primary usage is for recovering or ignoring code snippets. */
 
 /* Scanning of comments */
+/* For scanning comments in loops the macro below should be used. */
 enum pstate_code
 css_scan_comment(struct parser_state *state, unsigned char **src, int *len);
 
-/* Scanner for skipping blocks of css declarations. Expect that the begining '{' is
- * at the first position. */
+/* Scanner for skipping until a given character */
 enum pstate_code
-css_scan_skipblock(struct parser_state *, unsigned char **, int *len);
+css_scan_skip_until(struct parser_state *, unsigned char **, int *len);
 
-/* Scanner for multiplexing between skipping a block and up till next ';'. What
- * ever comes first. */
+/* Scanner for skipping a block or up till next ';'. What ever comes first. */
 enum pstate_code
 css_scan_skip(struct parser_state *, unsigned char **, int *len);
 
 /* Macros for skipping tokens. XXX: Engineered for loops. */
 
 #define CSS_SKIP_WHITESPACE(source, length) \
-	if (css_scan_table[*source] & IS_WHITESPACE) { \
+	if (css_scan_table[*(source)] & IS_WHITESPACE) { \
 		do { \
-			source++; length--; \
-		} while (length && (css_scan_table[*source] & IS_WHITESPACE)); \
+			(source)++; (length)--; \
+		} while (length && (css_scan_table[*(source)] & IS_WHITESPACE)); \
 		continue; \
 	}
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.101 2004/07/03 10:26:45 zas Exp $ */
+/* $Id: string.c,v 1.102 2004/07/03 14:13:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -337,20 +337,16 @@ string_concat(struct string *string, ...)
 inline struct string *
 add_char_to_string(struct string *string, unsigned char character)
 {
-	int newlength;
-
 	assertm(string && character, "[add_char_to_string]");
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
 
-	newlength = string->length + 1;
-	if (!realloc_string(string, newlength))
+	if (!realloc_string(string,  string->length + 1))
 		return NULL;
 
-	string->source[string->length] = character;
-	string->source[newlength] = 0;
-	string->length = newlength;
+	string->source[string->length++] = character;
+	string->source[string->length]   = '\0';
 
 	return string;
 }

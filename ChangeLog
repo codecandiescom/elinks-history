@@ -1,3 +1,22 @@
+Sun Apr  7 14:13:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Do not save bookmarks in new format yet, if they were loaded in the
+	old format.
+
+Sun Apr  7 14:06:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/download.c:
+	
+	Reverted download cleanup by Zas. Caused VERY nasty problems.
+
+Sun Apr  7 13:55:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/cookies.c:
+	
+	Reverted cookies cleanup by Zas. Caused VERY nasty problems.
+
 Sun Apr  7 12:47:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

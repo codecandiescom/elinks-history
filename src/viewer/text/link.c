@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.270 2004/06/30 16:44:56 zas Exp $ */
+/* $Id: link.c,v 1.271 2004/07/01 13:06:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ get_last_link(struct document_view *doc_view)
 }
 
 static inline int
-in_viewx(struct document_view *doc_view, struct link *link)
+link_in_view_x(struct document_view *doc_view, struct link *link)
 {
 	int i, dx, width;
 
@@ -364,7 +364,7 @@ link_in_view(struct document_view *doc_view, struct link *link)
 {
 	assert(doc_view && link);
 	if_assert_failed return 0;
-	return link_in_view_y(doc_view, link) && in_viewx(doc_view, link);
+	return link_in_view_y(doc_view, link) && link_in_view_x(doc_view, link);
 }
 
 int

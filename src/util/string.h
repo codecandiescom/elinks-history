@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.21 2003/05/06 16:47:44 zas Exp $ */
+/* $Id: string.h,v 1.22 2003/05/07 17:57:13 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -87,7 +87,7 @@ isA(unsigned char c)
 /** strchr() */
 
 #ifndef HAVE_STRCHR
-#ifdef HAVE_INDEX /* for old ASCII_BSD systems. */
+#ifdef HAVE_INDEX /* for old BSD systems. */
 
 #undef strchr
 #define strchr(a, b) index(a, b)

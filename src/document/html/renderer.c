@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.294 2003/10/17 12:26:21 zas Exp $ */
+/* $Id: renderer.c,v 1.295 2003/10/17 13:20:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1744,8 +1744,8 @@ void
 html_interpret(struct session *ses)
 {
 	struct document_options o;
-	struct document_view *fd;
-	struct document_view *cf = NULL;
+	struct document_view *doc_view;
+	struct document_view *current_doc_view = NULL;
 	struct view_state *l = NULL;
 
 	if (!ses->screen) {
@@ -1772,32 +1772,32 @@ html_interpret(struct session *ses)
 		o.plain = 1;
 	}
 
-	foreach (fd, ses->scrn_frames) fd->used = 0;
+	foreach (doc_view, ses->scrn_frames) doc_view->used = 0;
 
 	if (l) cached_format_html(l, ses->screen, &o);
 
 	if (document_has_frames(ses->screen->document)) {
-		cf = current_frame(ses);
+		current_doc_view = current_frame(ses);
 		format_frames(ses, ses->screen->document->frame_desc, &o, 0);
 	}
 
-	foreach (fd, ses->scrn_frames) {
-		struct document_view *fdp = fd->prev;
+	foreach (doc_view, ses->scrn_frames) {
+		struct document_view *prev_doc_view = doc_view->prev;
 
-		if (fd->used) continue;
+		if (doc_view->used) continue;
 
-		detach_formatted(fd);
-		del_from_list(fd);
-		mem_free(fd);
-		fd = fdp;
+		detach_formatted(doc_view);
+		del_from_list(doc_view);
+		mem_free(doc_view);
+		doc_view = prev_doc_view;
 	}
 
-	if (cf) {
+	if (current_doc_view) {
 		int n = 0;
 
-		foreach (fd, ses->scrn_frames) {
-			if (document_has_frames(fd->document)) continue;
-			if (fd == cf) {
+		foreach (doc_view, ses->scrn_frames) {
+			if (document_has_frames(doc_view->document)) continue;
+			if (doc_view == current_doc_view) {
 				cur_loc(ses)->vs.current_link = n;
 				break;
 			}

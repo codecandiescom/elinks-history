@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.224 2003/10/22 19:24:47 jonas Exp $ */
+/* $Id: view.c,v 1.225 2003/10/23 14:51:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -568,7 +568,7 @@ set_frame(struct session *ses, struct document_view *doc_view, int a)
 
 
 void
-toggle(struct session *ses, struct document_view *doc_view, int a)
+toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
 {
 	assert(ses && doc_view && ses->tab && ses->tab->term);
 	if_assert_failed return;
@@ -583,6 +583,24 @@ toggle(struct session *ses, struct document_view *doc_view, int a)
 	draw_formatted(ses);
 }
 
+void
+toggle_images(struct session *ses, struct document_view *doc_view, int a)
+{
+	assert(ses && doc_view && ses->tab && ses->tab->term);
+	if_assert_failed return;
+
+	if (!doc_view->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
+
+	/* TODO: toggle per document. --Zas */
+	get_opt_int("document.browse.images.show_as_links") =
+		!get_opt_int("document.browse.images.show_as_links");
+
+	html_interpret(ses);
+	draw_formatted(ses);
+}
 
 static inline void
 rep_ev(struct session *ses, struct document_view *doc_view,
@@ -1088,10 +1106,7 @@ quit:
 				head_msg(ses);
 				goto x;
 			case ACT_TOGGLE_DISPLAY_IMAGES:
-				get_opt_int("document.browse.images.show_as_links") =
-					!get_opt_int("document.browse.images.show_as_links");
-				html_interpret(ses);
-				draw_formatted(ses);
+				toggle_images(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_DISPLAY_TABLES:
 				get_opt_int("document.html.display_tables") =
@@ -1100,7 +1115,7 @@ quit:
 				draw_formatted(ses);
 				goto x;
 			case ACT_TOGGLE_HTML_PLAIN:
-				toggle(ses, ses->doc_view, 0);
+				toggle_plain_html(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_NUMBERED_LINKS:
 				get_opt_int("document.browse.links.numbering") =

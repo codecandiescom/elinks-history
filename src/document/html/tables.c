@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.125 2003/11/14 15:03:48 jonas Exp $ */
+/* $Id: tables.c,v 1.126 2003/11/14 15:55:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,14 +212,26 @@ new_table(void)
 static void
 free_table(struct table *t)
 {
+	int i, j;
+
 	if (t->min_c) mem_free(t->min_c);
 	if (t->max_c) mem_free(t->max_c);
 	if (t->columns_width) mem_free(t->columns_width);
 	if (t->rows_height) mem_free(t->rows_height);
 	if (t->fragment_id) mem_free(t->fragment_id);
-	mem_free(t->columns);
 	if (t->xcols) mem_free(t->xcols);
+
+	for (i = 0; i < t->x; i++) {
+		for (j = 0; j < t->y; j++) {
+			struct table_cell *cell = CELL(t, i, j);
+
+			if (cell->fragment_id)
+				mem_free(cell->fragment_id);
+		}
+	}
+
 	mem_free(t->cells);
+	mem_free(t->columns);
 	mem_free(t);
 }
 
@@ -1424,12 +1436,6 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 					mem_free(p);
 				}
-
-				if (cell->fragment_id) {
-					mem_free(cell->fragment_id);
-					cell->fragment_id = NULL;
-				}
-
 
 				done_html_parser_state(state);
 			}

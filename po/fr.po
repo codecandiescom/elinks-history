@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-28 17:55+0100\n"
-"PO-Revision-Date: 2004-12-28 17:56+0100\n"
+"POT-Creation-Date: 2004-12-29 17:12+0100\n"
+"PO-Revision-Date: 2004-12-29 17:13+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -4359,8 +4359,8 @@ msgid "No header info."
 msgstr "Aucune information d'en-tête."
 
 #: src/dialogs/document.c:294
-msgid "Artificial header info"
-msgstr "Info. en-têtes artificiels"
+msgid "Internal header info"
+msgstr "Info. en-têtes internes"
 
 #: src/dialogs/download.c:253 src/dialogs/menu.c:566 src/sched/download.c:365
 msgid "Download"

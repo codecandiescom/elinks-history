@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.24 2003/09/10 00:37:17 jonas Exp $ */
+/* $Id: home.c,v 1.25 2003/09/10 00:53:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,7 @@ get_home(void)
 	unsigned char *envhome = getenv("HOME");
 	unsigned char *home = envhome ? stracpy(envhome) : NULL;
 	unsigned char *envconfdir = getenv("ELINKS_CONFDIR");
+	unsigned char *pos;
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
@@ -97,8 +98,8 @@ get_home(void)
 		if (!home) return NULL;
 	}
 
-	while (home[0] && dir_sep(home[strlen(home) - 1]))
-		home[strlen(home) - 1] = 0;
+	for (pos = home + strlen(home) - 1; *home && dir_sep(*pos); pos--)
+		*pos  = 0;
 
 	if (home[0]) add_to_strn(&home, "/");
 
@@ -111,9 +112,9 @@ get_home(void)
 	if (envconfdir) {
 		add_to_strn(&home_elinks, envconfdir);
 
-		while (home_elinks[0]
-		       && dir_sep(home_elinks[strlen(home_elinks) - 1]))
-			home_elinks[strlen(home_elinks) - 1] = 0;
+		for (pos = home_elinks + strlen(home_elinks) - 1;
+		     *home_elinks && dir_sep(*pos); pos--)
+			*pos = 0;
 
 		if (stat(home_elinks, &st) != -1 && S_ISDIR(st.st_mode)) {
 			add_to_strn(&home_elinks, "/elinks");

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.77 2004/04/03 02:21:51 jonas Exp $ */
+/* $Id: cache.h,v 1.78 2004/04/03 12:20:12 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -102,9 +102,11 @@ void delete_cache_entry(struct cache_entry *);
  * @get		controls the method should be used when handling the redirect.
  * @incomplete	will become the new value of the incomplete member if it
  *		is >= 0.
+ * Returns the URI being redirected to or NULL if allocation failed.
  */
-int redirect_cache(struct cache_entry *cache_entry, unsigned char *location,
-		   int get, int incomplete);
+struct uri *
+redirect_cache(struct cache_entry *cache_entry, unsigned char *location,
+		int get, int incomplete);
 
 /* The garbage collector trigger. If @whole is zero, remove unused cache
  * entries which are bigger than the cache size limit set by user. For @zero

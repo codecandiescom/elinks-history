@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.127 2004/04/03 12:11:06 jonas Exp $ */
+/* $Id: cache.c,v 1.128 2004/04/03 12:20:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,7 +488,7 @@ delete_cache_entry(struct cache_entry *ce)
 }
 
 
-int
+struct uri *
 redirect_cache(struct cache_entry *cache, unsigned char *location,
 	       int get, int incomplete)
 {
@@ -503,7 +503,7 @@ redirect_cache(struct cache_entry *cache, unsigned char *location,
 		uristring = straconcat(struri(cache->uri), location, NULL);
 	else
 		uristring = join_urls(struri(cache->uri), location);
-	if (!uristring) return 0;
+	if (!uristring) return NULL;
 
 	/* According to RFC2068 POST must not be redirected to GET,
 	 * but some BUGGY message boards rely on it :-( */
@@ -524,7 +524,7 @@ redirect_cache(struct cache_entry *cache, unsigned char *location,
 
 	mem_free(uristring);
 
-	return !!cache->redirect;
+	return cache->redirect;
 }
 
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.23 2002/05/04 07:57:19 pasky Exp $ */
+/* $Id: session.c,v 1.24 2002/05/04 08:06:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -383,41 +383,59 @@ void post_cancel(struct wtd_data *w)
 	reload(w->ses, NC_CACHE);
 }
 
-void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, int pri, int cache, enum session_wtd wtd, unsigned char *pos, void (*fn)(struct status *, struct session *), int redir)
+void
+ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
+	 int pri, int cache, enum session_wtd wtd, unsigned char *pos,
+	 void (*fn)(struct status *, struct session *),
+	 int redir)
 {
-	struct wtd_data *w;
+	struct wtd_data *wtd_data = mem_alloc(sizeof(struct wtd_data));
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
 
-	if (!form_submit_confirm || !strchr(url, POST_CHAR)
-	    || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e) && !e->incomplete)
-	    || !(w = mem_alloc(sizeof(struct wtd_data)))) {
+	if (!wtd_data || !form_submit_confirm || !strchr(url, POST_CHAR)
+	    || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e)
+		&& !e->incomplete)) {
+
+		if (wtd_data) mem_free(wtd_data);
+
 		if (ses->goto_position) mem_free(ses->goto_position);
 		ses->goto_position = pos;
+
 		ses->loading.end = (void (*)(struct status *, void *))fn;
 		ses->loading.data = ses;
 		ses->loading_url = url;
 		ses->wtd = wtd;
 		ses->wtd_target = target;
+
 		load_url(url, ses->ref_url, &ses->loading, pri, cache);
+
 		return;
 	}
-	w->ses = ses;
-	w->url = url;
-	w->pri = pri;
-	w->cache = cache;
-	w->wtd = wtd;
-	w->target = target;
-	w->pos = pos;
-	w->fn = fn;
-	if (redir) m1 = TEXT(T_DO_YOU_WANT_TO_FOLLOW_REDIRECT_AND_POST_FORM_DATA_TO_URL);
-	else if (wtd == WTD_FORWARD) m1 = TEXT(T_DO_YOU_WANT_TO_POST_FORM_DATA_TO_URL);
-	else m1 = TEXT(T_DO_YOU_WANT_TO_REPOST_FORM_DATA_TO_URL);
-	m2 = memacpy(url, (unsigned char *)strchr(url, POST_CHAR) - url);
-	msg_box(ses->term, getml(m2, w, w->url, w->pos, NULL),
+
+	wtd_data->ses = ses;
+	wtd_data->url = url;
+	wtd_data->pri = pri;
+	wtd_data->cache = cache;
+	wtd_data->wtd = wtd;
+	wtd_data->target = target;
+	wtd_data->pos = pos;
+	wtd_data->fn = fn;
+
+	if (redir) {
+		m1 = TEXT(T_DO_YOU_WANT_TO_FOLLOW_REDIRECT_AND_POST_FORM_DATA_TO_URL);
+	} else if (wtd == WTD_FORWARD) {
+		m1 = TEXT(T_DO_YOU_WANT_TO_POST_FORM_DATA_TO_URL);
+	} else {
+		m1 = TEXT(T_DO_YOU_WANT_TO_REPOST_FORM_DATA_TO_URL);
+	}
+
+	m2 = memacpy(url, (unsigned char *) strchr(url, POST_CHAR) - url);
+	msg_box(ses->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
+				 NULL),
 		TEXT(T_WARNING), AL_CENTER | AL_EXTD_TEXT,
 		m1, " ", m2, "?", NULL,
-		w, 3,
+		wtd_data, 3,
 		TEXT(T_YES), post_yes, B_ENTER,
 		TEXT(T_NO), post_no, 0,
 		TEXT(T_CANCEL), post_cancel, B_ESC);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.484 2004/07/15 17:51:32 witekfl Exp $ */
+/* $Id: renderer.c,v 1.485 2004/07/27 17:54:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1110,7 +1110,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		/* XXX: I believe the test above is just a funny (and errie)
 		 * way to make sure we carry some real non-whitespace content.
 		 * --pasky */
-		char *sc;
+		unsigned char *sc;
 
 		for (sc = chars; *sc; sc++)
 			assert(isspace(*sc));

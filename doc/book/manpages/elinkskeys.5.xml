@@ -1,4 +1,4 @@
-<!-- $Id: elinkskeys.5.xml,v 1.3 2003/05/09 10:43:05 jonas Exp $ -->
+<!-- $Id: elinkskeys.5.xml,v 1.4 2003/05/09 21:34:08 jonas Exp $ -->
 
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
 	"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
@@ -621,6 +621,100 @@
 	<varlistentry><term> end </term><listitem><para></para></listitem></varlistentry>
 	<varlistentry><term> page-up </term><listitem><para></para></listitem></varlistentry>
 	<varlistentry><term> page-down </term><listitem><para></para></listitem></varlistentry>
+</variablelist>
+</refsect1>
+
+<refsect1><title> NAVIGATION KEYS </title>
+<para>
+
+	You may optionally prefix each of this keys with a number, telling its
+	repeat count (how much times to do it). You can also re-bind those
+	keys.  See <command>elinkskeys(5)</command> for complete documentation
+	about keybindings and more complete list of keys bound by default.  The
+	keys you may use for navigation are:
+
+</para>
+<variablelist>
+	
+	<varlistentry><term> PGDN </term><listitem><para>page down</para></listitem></varlistentry>
+	<varlistentry><term> Space </term><listitem><para>page down</para></listitem></varlistentry>
+	<varlistentry><term> PGUP </term><listitem><para>page up</para></listitem></varlistentry>
+	<varlistentry><term> b </term><listitem><para>page up</para></listitem></varlistentry>
+	<varlistentry><term> B </term><listitem><para>page up</para></listitem></varlistentry>
+	<varlistentry><term> DOWN </term><listitem><para>next link/down</para></listitem></varlistentry>
+	<varlistentry><term> UP </term><listitem><para>prev link/up</para></listitem></varlistentry>
+	<varlistentry><term> ^INS </term><listitem><para>copy to clipboard</para></listitem></varlistentry>
+	<varlistentry><term> ^C </term><listitem><para>copy to clipboard</para></listitem></varlistentry>
+	<varlistentry><term> INS </term><listitem><para>scroll up</para></listitem></varlistentry>
+	<varlistentry><term> ^P </term><listitem><para>scroll up</para></listitem></varlistentry>
+	<varlistentry><term> DEL </term><listitem><para>scroll down</para></listitem></varlistentry>
+	<varlistentry><term> ^N </term><listitem><para>scroll down</para></listitem></varlistentry>
+	<varlistentry><term> [ </term><listitem><para>scroll left</para></listitem></varlistentry>
+	<varlistentry><term> ] </term><listitem><para>scroll right</para></listitem></varlistentry>
+	<varlistentry><term> HOME </term><listitem><para>home</para></listitem></varlistentry>
+	<varlistentry><term> END </term><listitem><para>end of page</para></listitem></varlistentry>
+	<varlistentry><term> RIGHT </term><listitem><para>enter link/press button</para></listitem></varlistentry>
+	<varlistentry><term> ENTER </term><listitem><para>enter link/press button</para></listitem></varlistentry>
+	<varlistentry><term> LEFT </term><listitem><para>go back</para></listitem></varlistentry>
+	<varlistentry><term> d </term><listitem><para>download link</para></listitem></varlistentry>
+	<varlistentry><term> D </term><listitem><para>download link</para></listitem></varlistentry>
+	<varlistentry><term> F4 </term><listitem><para>edit textarea in external editor (broken)</para></listitem></varlistentry>
+	<varlistentry><term> ^T </term><listitem><para>edit textarea in external editor (broken)</para></listitem></varlistentry>
+	<varlistentry><term> / </term><listitem><para>search in the page</para></listitem></varlistentry>
+	<varlistentry><term> ? </term><listitem><para>search back in the page</para></listitem></varlistentry>
+	<varlistentry><term> n </term><listitem><para>find next match</para></listitem></varlistentry>
+	<varlistentry><term> N </term><listitem><para>find next match backwards</para></listitem></varlistentry>
+	<varlistentry><term> f </term><listitem><para>zoom actual frame</para></listitem></varlistentry>
+	<varlistentry><term> F </term><listitem><para>zoom actual frame</para></listitem></varlistentry>
+	<varlistentry><term> ^R </term><listitem><para>reload page</para></listitem></varlistentry>
+	<varlistentry><term> g </term><listitem><para>go to URL</para></listitem></varlistentry>
+	<varlistentry><term> G </term><listitem><para>go to the current URL</para></listitem></varlistentry>
+	<varlistentry><term> a </term><listitem><para>add a new bookmark</para></listitem></varlistentry>
+	<varlistentry><term> A </term><listitem><para>add a new bookmark</para></listitem></varlistentry>
+	<varlistentry><term> s </term><listitem><para>bookmark manager</para></listitem></varlistentry>
+	<varlistentry><term> S </term><listitem><para>bookmark manager</para></listitem></varlistentry>
+	<varlistentry><term> ^K </term><listitem><para>reload cookies from ~/.elinks/cookies</para></listitem></varlistentry>
+	<varlistentry><term> q </term><listitem><para>quit</para></listitem></varlistentry>
+	<varlistentry><term> Q </term><listitem><para>quit</para></listitem></varlistentry>
+	<varlistentry><term> = </term><listitem><para>document information</para></listitem></varlistentry>
+	<varlistentry><term> | </term><listitem><para>header information</para></listitem></varlistentry>
+	<varlistentry><term> \ </term><listitem><para>toggle HTML source/rendered view</para></listitem></varlistentry>
+	<varlistentry><term> * </term><listitem><para>toggle display of images</para></listitem></varlistentry>
+	<varlistentry><term> TAB </term><listitem><para>next frame</para></listitem></varlistentry>
+	<varlistentry><term> ESC </term><listitem><para>menu/escape</para></listitem></varlistentry>
+	<varlistentry><term> F9 </term><listitem><para>menu</para></listitem></varlistentry>
+	<varlistentry><term> F10 </term><listitem><para>file menu</para></listitem></varlistentry>
+
+</variablelist> 
+</refsect1>
+
+<refsect1><title>EDITING KEYS</title>
+<para>
+
+	The following keys can be used while editing a line/jumping to a URL:
+
+</para>
+<variablelist>
+
+	<varlistentry><term> RIGHT </term><listitem><para>move right</para></listitem></varlistentry>
+	<varlistentry><term> LEFT </term><listitem><para>move left</para></listitem></varlistentry>
+	<varlistentry><term> HOME </term><listitem><para>jump to the beginning</para></listitem></varlistentry>
+	<varlistentry><term> ^A </term><listitem><para>jump to the beginning</para></listitem></varlistentry>
+	<varlistentry><term> END </term><listitem><para>jump to the end</para></listitem></varlistentry>
+	<varlistentry><term> ^E </term><listitem><para>jump to the end</para></listitem></varlistentry>
+	<varlistentry><term> ^INS </term><listitem><para>copy to clipboard</para></listitem></varlistentry>
+	<varlistentry><term> ^B </term><listitem><para>copy to clipboard</para></listitem></varlistentry>
+	<varlistentry><term> ^X </term><listitem><para>cut to clipboard</para></listitem></varlistentry>
+	<varlistentry><term> ^V </term><listitem><para>paste from clipboard</para></listitem></varlistentry>
+	<varlistentry><term> ENTER </term><listitem><para>enter line</para></listitem></varlistentry>
+	<varlistentry><term> BACKSPACE </term><listitem><para>delete back character</para></listitem></varlistentry>
+	<varlistentry><term> ^H </term><listitem><para>delete back character</para></listitem></varlistentry>
+	<varlistentry><term> DEL </term><listitem><para>delete character</para></listitem></varlistentry>
+	<varlistentry><term> ^D </term><listitem><para>delete character</para></listitem></varlistentry>
+	<varlistentry><term> ^U </term><listitem><para>delete from beginning of the line</para></listitem></varlistentry>
+	<varlistentry><term> ^K </term><listitem><para>delete to the end of the line</para></listitem></varlistentry>
+	<varlistentry><term> ^W </term><listitem><para>auto complete line</para></listitem></varlistentry>
+
 </variablelist>
 </refsect1>
 

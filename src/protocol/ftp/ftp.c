@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.140 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: ftp.c,v 1.141 2004/07/02 22:31:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,14 +63,15 @@
 struct ftp_connection_info {
 	int pending_commands; /* Num of commands queued */
 	int opc;	/* Total num of commands queued */
-	int dir;	/* Directory listing in progress */
-	int rest_sent;	/* Sent RESTor command */
 	int conn_state;
-	int has_data;   /* Do we have data socket? */
 	int buf_pos;
-	int use_pasv; /* Use PASV (yes or no) */
+
+	unsigned int dir:1;	/* Directory listing in progress */
+	unsigned int rest_sent:1;	/* Sent RESTore command */
+	unsigned int has_data:1;   /* Do we have data socket? */
+	unsigned int use_pasv:1; /* Use PASV (yes or no) */
 #ifdef CONFIG_IPV6
-	int use_epsv; /* Use EPSV */
+	unsigned int use_epsv:1; /* Use EPSV */
 #endif
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
 	unsigned char cmd_buffer[1]; /* Must be last field !! */

@@ -37,28 +37,33 @@ dnl Checks for special OSes.
 dnl ===================================================================
 
 dnl EL_CHECK_COMPILER_MACRO(define, name, flagname)
-AC_DEFUN([EL_CHECK_COMPILER_MACRO],
+AC_DEFUN([EL_CHECK_COMPILER_MACROS],
 [
 	AC_MSG_CHECKING([for $2])
-	AC_TRY_COMPILE(, [#ifndef $3
+
+	for flag in $3; do
+		AC_TRY_COMPILE(, [#ifndef $flag
 kill me!
 #endif ], $1=yes, $1=no)
+		if test "[$]$1" = yes; then
+			EL_CONFIG([$1], [$2])
+			break
+		fi
+	done
+
 	AC_MSG_RESULT([$]$1)
-	if test "[$]$1" = yes; then
-		EL_CONFIG([$1], [$2])
-	fi
 ])
 
-EL_CHECK_COMPILER_MACRO(CONFIG_BEOS, [BEOS], [__BEOS__])
+EL_CHECK_COMPILER_MACROS(CONFIG_BEOS, [BEOS], [__BEOS__])
 AM_CONDITIONAL(CONFIG_BEOS, test "$CONFIG_BEOS" = yes)
 
-EL_CHECK_COMPILER_MACRO(CONFIG_RISCOS, [RISCOS], [__riscos__])
+EL_CHECK_COMPILER_MACROS(CONFIG_RISCOS, [RISCOS], [__riscos__])
 AM_CONDITIONAL(CONFIG_RISCOS, test "$CONFIG_RISCOS" = yes)
 
-EL_CHECK_COMPILER_MACRO(CONFIG_WIN32, [WIN32], [_WIN32])
+EL_CHECK_COMPILER_MACROS(CONFIG_WIN32, [WIN32], [_WIN32 __WIN32__])
 AM_CONDITIONAL(CONFIG_WIN32, test "$CONFIG_WIN32" = yes)
 
-EL_CHECK_COMPILER_MACRO(CONFIG_OS2, [EMX], [__EMX__])
+EL_CHECK_COMPILER_MACROS(CONFIG_OS2, [EMX], [__EMX__])
 AM_CONDITIONAL(CONFIG_OS2, test "$CONFIG_OS2" = yes)
 test "$CONFIG_OS2" = yes && LDFLAGS=`echo "$LDFLAGS" | sed "s/-Zexe//g"`
 

@@ -1,3 +1,83 @@
+Mon May 24 18:18:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Be smart? and save one line so we only have ~79239 ;-) 
+
+Mon May 24 18:06:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/event.c:
+
+	Use struct terminal_info when reading EV_INIT data. It removes all
+	those ugly offset calculations. decode_session_info() now takes
+	length and data pointer.  
+
+Mon May 24 18:05:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.h, kbd.c, terminal.h:
+
+	Introduce struct terminal_info that holds all the stuff sent over
+	the interlink. It makes it possible to batch all the queue stuff
+	together.  
+
+Mon May 24 17:29:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	handle_trm(): Use stack allocated buffer for writing the cwd so
+	queue_ts() can be removed.  
+
+Mon May 24 17:23:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	handle_trm(): Use stack allocated buffer for writing the TERM env
+	variable so we can bypass queue_ts() that allocated cleared memory
+	so MAX_TERM_LEN chars are always written.  
+
+Mon May 24 13:12:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/scanner.h:
+
+	end_token_scanning(): Allow @end to be <= scanner->table.
+	scanner->tokens will become <= 0 meaning empty. Triggered by empty
+	<style>-tags. Reported by sstar.  
+
+Mon May 24 09:02:21 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon May 24 02:30:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, viewer/text/form.c, viewer/text/form.h:
+
+	Introduce auto_submit_form() that uses submit_form() as backend and
+	make doc_end_load() use it.  
+
+Mon May 24 01:55:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	Introduce get_link_uri() that for now just wraps
+	get_uri(get_link_url()).  
+
+Mon May 24 01:43:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	download_link(): Remove map@-URL left over. LINK_MAP URL are now
+	downloadable don't know if it is correct.  
+
+Mon May 24 00:52:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	add_uri_to_string(): Add POST_CHAR before adding post data. The bug
+	was triggered by proxy related changes lately. Patch kindly donated
+	by Zardoz.  
+
 Sun May 23 17:13:34 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: document/document.h, document/html/renderer.c,

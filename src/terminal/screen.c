@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.17 2003/07/25 22:39:49 jonas Exp $ */
+/* $Id: screen.c,v 1.18 2003/07/25 22:58:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,41 +100,55 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	unsigned char B = ch >> 15;
 
 	if (opt_cache->type == TERM_LINUX) {
-		if (opt_cache->m11_hack &&
-		    !opt_cache->utf_8_io) {
+		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {
 			if (B != *mode) {
 				*mode = B;
-				if (!*mode) add_bytes_to_string(screen, "\033[10m", 5);
-				else add_bytes_to_string(screen, "\033[11m", 5);
+
+				if (!*mode) {
+					add_bytes_to_string(screen, "\033[10m", 5);
+				} else {
+					add_bytes_to_string(screen, "\033[11m", 5);
+				}
 			}
 		}
-		if (opt_cache->restrict_852
-		    && B && c >= 176 && c < 224
-		    && frame_restrict[c - 176])
+
+		if (opt_cache->restrict_852 && B && c >= 176 && c < 224
+		    && frame_restrict[c - 176]) {
 			c = frame_restrict[c - 176];
-	} else if (opt_cache->type == TERM_VT100
-		   && !opt_cache->utf_8_io) {
+		}
+
+	} else if (opt_cache->type == TERM_VT100 && !opt_cache->utf_8_io) {
 		if (B != *mode) {
 			*mode = B;
-			if (!*mode) add_char_to_string(screen, '\x0f');
-			else add_char_to_string(screen, '\x0e');
+			if (!*mode) {
+				add_char_to_string(screen, '\x0f');
+			} else {
+				add_char_to_string(screen, '\x0e');
+			}
 		}
-		if (*mode && c >= 176 && c < 224) c = frame_vt100[c - 176];
+
+		if (*mode && c >= 176 && c < 224) {
+			c = frame_vt100[c - 176];
+		}
+
 	} else if (B && c >= 176 && c < 224) {
-		if (opt_cache->type == TERM_VT100)
+		if (opt_cache->type == TERM_VT100) {
 			c = frame_vt100_u[c - 176];
-		else if (opt_cache->type == TERM_KOI8)
+		} else if (opt_cache->type == TERM_KOI8) {
 			c = frame_koi[c - 176];
-		else if (opt_cache->type == TERM_DUMB)
+		} else if (opt_cache->type == TERM_DUMB) {
 			c = frame_dumb[c - 176];
+		}
 	}
 
-	if (!(A & 0100) && (A >> 3) == (A & 7))
+	if (!(A & 0100) && (A >> 3) == (A & 7)) {
 		A = (A & 070) | 7 * !(A & 020);
+	}
 
 	if (A != *attrib) {
 		*attrib = A;
 		add_bytes_to_string(screen, "\033[0", 3);
+
 		if (opt_cache->colors) {
 			unsigned char m[3];
 
@@ -142,13 +156,22 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 			m[1] = '3';
 			m[2] = (*attrib & 7) + '0';
 			add_bytes_to_string(screen, m, 3);
+
 			m[1] = '4';
 			m[2] = (*attrib >> 3 & 7) + '0';
-			if (!opt_cache->trans || m[2] != '0')
+
+			if (!opt_cache->trans || m[2] != '0') {
 				add_bytes_to_string(screen, m, 3);
-		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7))
+			}
+
+		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7)) {
 			add_bytes_to_string(screen, ";7", 2);
-		if (*attrib & 0100) add_bytes_to_string(screen, ";1", 2);
+		}
+
+		if (*attrib & 0100) {
+			add_bytes_to_string(screen, ";1", 2);
+		}
+
 		add_char_to_string(screen, 'm');
 	}
 
@@ -176,9 +199,11 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 		} else {
 			add_char_to_string(screen, c);
 		}
+	} else if (!c || c == 1) {
+		add_char_to_string(screen, ' ');
+	} else {
+		add_char_to_string(screen, '.');
 	}
-	else if (!c || c == 1) add_char_to_string(screen, ' ');
-	else add_char_to_string(screen, '.');
 }
 
 /* TODO An optimized add_term_escape_to_string() would be nice. --jonas */

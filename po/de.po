@@ -334,14 +334,12 @@ msgid "Add bookmark"
 msgstr "Lesezeichen hinzufügen"
 
 #: src/bookmarks/dialogs.c:587
-#, fuzzy
 msgid "Saved session"
-msgstr "O~ptionen speichern"
+msgstr "Gespeicherte Sitzung"
 
 #: src/bookmarks/dialogs.c:608
-#, fuzzy
 msgid "Bookmark tabs"
-msgstr "Lesezeichen"
+msgstr "Ansichten zu den Lesezeichen hinzufügen"
 
 #: src/bookmarks/dialogs.c:608
 msgid "Enter folder name"
@@ -357,11 +355,11 @@ msgstr "Größe"
 
 #: src/cache/dialogs.c:74
 msgid "Loaded size"
-msgstr ""
+msgstr "Größe (geladen)"
 
 #: src/cache/dialogs.c:77 src/dialogs/document.c:140
 msgid "Last modified"
-msgstr "zuletzt geändert"
+msgstr "Zuletzt geändert"
 
 #: src/cache/dialogs.c:85 src/dialogs/document.c:122
 msgid "SSL Cipher"
@@ -372,9 +370,8 @@ msgid "Encoding"
 msgstr "Kodierung"
 
 #: src/cache/dialogs.c:95
-#, fuzzy
 msgid "Flags"
-msgstr "Alias"
+msgstr "Schalter"
 
 #: src/cache/dialogs.c:98 src/dialogs/document.c:98
 msgid "incomplete"
@@ -386,7 +383,7 @@ msgstr "ungültig"
 
 #: src/cache/dialogs.c:106
 msgid "ID tag"
-msgstr ""
+msgstr "ID tag"
 
 #: src/cache/dialogs.c:110
 msgid "Header"
@@ -571,7 +568,7 @@ msgstr "Mit -dump zu benutzender Zeichensatz"
 
 #: src/config/cmdline.c:465 src/config/options.inc:492
 msgid "Codepage used in dump output."
-msgstr ""
+msgstr "Zeichensatz, der für die Ausgabe (dump) benutzt wird."
 
 #: src/config/cmdline.c:467
 msgid "Width of document formatted with -dump"
@@ -731,7 +728,7 @@ msgstr ""
 
 #: src/config/cmdline.c:544
 msgid "Do not number links in dump output"
-msgstr ""
+msgstr "Links in der Ausgabe (dump) nicht nummerieren"
 
 #: src/config/cmdline.c:546
 msgid ""
@@ -739,6 +736,9 @@ msgid ""
 "the dumped document) in the -dump output; this was the default behaviour\n"
 "until 0.5pre12. Note that this really affects only --dump, nothing else."
 msgstr ""
+"Verhindert die Nummerierung von Links (und die Anzeige ihrer Liste am Ende\n"
+"der Ausgabe) in der Ausgabe (dump); dies war das normale Verhalten bis 0.5pre12.\n"
+"Beachte, dass dies nur -dump betrifft, nichts anderes."
 
 #: src/config/cmdline.c:550
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
@@ -826,18 +826,16 @@ msgid "Automatically saved keybindings\n"
 msgstr "Automatisch gespeicherte Tastenbelegungen\n"
 
 #: src/config/conf.c:696
-#, fuzzy
 msgid "Secure file error"
-msgstr "FTP-Dateifehler"
+msgstr "Fehler mit sicherer Datei"
 
 #: src/config/conf.c:702
 msgid "Cannot read the file"
 msgstr "Kann die Datei nicht lesen"
 
 #: src/config/conf.c:705
-#, fuzzy
 msgid "Cannot stat the file"
-msgstr "Fehler beim Schreiben in Datei"
+msgstr "Kann auf die Datei nicht zugreifen"
 
 #: src/config/conf.c:708
 msgid "Cannot access the file"
@@ -874,7 +872,7 @@ msgstr "In die Konfigurationsdatei %s kann nicht geschrieben werden: %s"
 
 #: src/config/dialogs.c:89
 msgid "(expand by pressing space)"
-msgstr ""
+msgstr "(zum Öffnen Leertaste drücken)"
 
 #: src/config/dialogs.c:92 src/config/dialogs.c:244
 msgid "N/A"
@@ -1027,9 +1025,8 @@ msgid "Add a new bookmark using current link"
 msgstr "Aktuellen Link als Lesezeichen hinzufügen"
 
 #: src/config/kbdbind.c:398
-#, fuzzy
 msgid "Bookmark all open tabs"
-msgstr "Lesezeichen-Optionen."
+msgstr "Alle geöffneten Ansicht zu den Lesezeichen hinzufügen"
 
 #: src/config/kbdbind.c:399
 msgid "Attempt to auto-complete the input"
@@ -1056,9 +1053,8 @@ msgid "Open cache manager"
 msgstr "Öffne Cachemanager"
 
 #: src/config/kbdbind.c:405
-#, fuzzy
 msgid "Cancel current state"
-msgstr "Status von Socket kann nicht bestimmt werden"
+msgstr "Aktuellen Zustand zurücksetzen"
 
 #: src/config/kbdbind.c:406
 msgid "Open cookie manager"
@@ -1106,9 +1102,8 @@ msgstr "Starte Bearbeitung"
 
 #. FIXME
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Expand item"
-msgstr "Tabellenspalten ausbreiten"
+msgstr "Eintrag öffnen"
 
 #: src/config/kbdbind.c:418
 msgid "Go to the end of the page/line"
@@ -1139,9 +1134,8 @@ msgid "Forget authentication credentials"
 msgstr "Authentifizierungs-Nachweise vergessen"
 
 #: src/config/kbdbind.c:425
-#, fuzzy
 msgid "Open form history manager"
-msgstr "Öffne Verlaufsmanager"
+msgstr "Öffne Formularverlaufsmanager"
 
 #: src/config/kbdbind.c:426
 msgid "Open \"Go to URL\" dialog box"
@@ -1361,14 +1355,12 @@ msgid "Close tab"
 msgstr "Ansicht schließen"
 
 #: src/config/kbdbind.c:485
-#, fuzzy
 msgid "Close all tabs but the current one"
-msgstr "Zeige Informationen zur aktuellen Seite"
+msgstr "Alle Ansichten außer der aktuellen schließen"
 
 #: src/config/kbdbind.c:486
-#, fuzzy
 msgid "Open the tab menu"
-msgstr "Öffne das Datei-Menü"
+msgstr "Öffne das Ansichten-Menü"
 
 #: src/config/kbdbind.c:487
 msgid "Next tab"
@@ -1399,18 +1391,16 @@ msgid "Toggle displaying of links numbers"
 msgstr "Umschalten  der Darstellung von Nummern neben Links"
 
 #: src/config/kbdbind.c:494
-#, fuzzy
 msgid "Toggle plain renderer compression of empty lines"
-msgstr "Umschalten der Darstellung von Tabellen"
+msgstr "Umschalten der Zusammenfassung von leeren Zeilen bei einfachem Text"
 
 #: src/config/kbdbind.c:495
 msgid "Go forward in the unhistory"
 msgstr "Gehe im späteren Verlauf vorwärts"
 
 #: src/config/kbdbind.c:496
-#, fuzzy
 msgid "Collapse item"
-msgstr "vergangene Zeit"
+msgstr "Eintrag schließen"
 
 #: src/config/kbdbind.c:497
 msgid "Move cursor upwards"
@@ -2021,7 +2011,6 @@ msgid "Document meta refresh"
 msgstr "Dokument-Auffrischung"
 
 #: src/config/options.inc:302
-#, fuzzy
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2033,7 +2022,11 @@ msgstr ""
 "Im Dokument angegebenen Auffrischungs-Anweisung automatisch folgen\n"
 "('<meta> refresh' Anweisungen). Autoren von Webseiten benutzen diese,\n"
 "um den Browser anzuweisen, ein Dokument nach einem gegebenen Intervall\n"
-"neu zu laden oder eine andere Seite zu laden."
+"neu zu laden oder eine andere Seite zu laden. Unabhängig vom Wert dieser\n"
+"Option ist die Auffrischungs-URI als Link erreichbar. Benutze die Option\n"
+"document.browse.minimum_refresh_time, um die Zeit einzustellen,\n"
+"die eine Auffrischung mindestens braucht."
+
 
 #: src/config/options.inc:309
 msgid "Document meta refresh minimum time"
@@ -2356,11 +2349,11 @@ msgstr ""
 
 #: src/config/options.inc:486
 msgid "Dump output"
-msgstr ""
+msgstr "Ausgabe (dump)"
 
 #: src/config/options.inc:488
 msgid "Dump output options."
-msgstr ""
+msgstr "Optionen für die Ausgabe (dump)."
 
 #: src/config/options.inc:490 src/config/options.inc:876
 #: src/config/opttypes.c:372 src/dialogs/document.c:102
@@ -2373,7 +2366,7 @@ msgstr "Breite"
 
 #: src/config/options.inc:496
 msgid "Width of screen in characters when dumping a HTML document."
-msgstr ""
+msgstr "Breite des Bildschirms in Zeichen, bei der Ausgabe (dump) eines HTML-Dokuments."
 
 #: src/config/options.inc:500
 msgid "History"
@@ -2481,7 +2474,7 @@ msgstr "Links unterstreichen."
 
 #: src/config/options.inc:552
 msgid "Wrap non breaking space"
-msgstr ""
+msgstr "Nicht trennbare Leerzeichen umbrechen"
 
 #: src/config/options.inc:554
 msgid ""
@@ -2489,6 +2482,10 @@ msgid ""
 "but allow to wrap the text. This can help keeping the width\n"
 "of documents down so no horizontal scrolling is needed."
 msgstr ""
+"Nicht trennbare Leerzeichen (nbsp) nicht beachten und das\n"
+"Umbrechen des Textes erlauben. Dies kann helfen, die Breite\n"
+"von Dokumenten klein zu halten, und so horizontales Rollen\n"
+"verhindern."
 
 #: src/config/options.inc:558
 msgid "Default form input size"
@@ -2499,14 +2496,12 @@ msgid "Default form input size if none is specified."
 msgstr "Grundeinstellung der Eingabeformulargröße, wenn keine angegeben ist."
 
 #: src/config/options.inc:563
-#, fuzzy
 msgid "Plain rendering"
-msgstr "HTML-Darstellung"
+msgstr "Darstellung von einfachem Text"
 
 #: src/config/options.inc:565
-#, fuzzy
 msgid "Options concerning the display of plain text pages."
-msgstr "Optionen, die mit der Darstellung von HTML-Seiten zusammenhängen."
+msgstr "Optionen, die mit der Darstellung von einfachem Text zusammenhängen."
 
 #: src/config/options.inc:567
 msgid "Display URIs"
@@ -2714,7 +2709,7 @@ msgstr ""
 
 #: src/config/options.inc:667
 msgid "Activate HTTP TRACE debugging"
-msgstr ""
+msgstr "Fehlersuche mit HTTP TRACE aktivieren"
 
 #: src/config/options.inc:669
 msgid ""
@@ -2724,6 +2719,11 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
+"Wenn aktiviert, werden alle HTTP-Anfragen mit der TRACE-Methode anstatt\n"
+"GET oder POST gesendet. Dies ist nützlich für die Fehlersuche sowohl bei\n"
+"ELinks als auch server-seitigen Skripten --- der Server gibt die Anfrage\n"
+"einfach so zurück, wie er sie erhalten hat. Beachte, dass diese Art der\n"
+"Anfrage nicht auf allen Servern angeschaltet sein muss."
 
 #: src/config/options.inc:675
 msgid "User-agent identification"
@@ -3159,27 +3159,27 @@ msgstr "Farben ausgewählter Hauptmenü-Einträge"
 
 #: src/config/options.inc:940 src/config/options.inc:969
 msgid "Hotkey"
-msgstr ""
+msgstr "Zugriffstaste"
 
 #: src/config/options.inc:942
 msgid "Main menu hotkey colors."
-msgstr ""
+msgstr "Farben von Zugriffstasten im Hauptmenü."
 
 #: src/config/options.inc:944 src/config/options.inc:973
 msgid "Unselected hotkey"
-msgstr ""
+msgstr "Nicht ausgewählte Zugriffstaste"
 
 #: src/config/options.inc:946
 msgid "Main menu unselected hotkey colors."
-msgstr ""
+msgstr "Farben von nicht ausgewählten  Zugriffstasten im Hauptmenü."
 
 #: src/config/options.inc:948 src/config/options.inc:977
 msgid "Selected hotkey"
-msgstr ""
+msgstr "Ausgewählte Zugriffstaste"
 
 #: src/config/options.inc:950
 msgid "Main menu selected hotkey colors."
-msgstr ""
+msgstr "Farben von ausgewählten  Zugriffstasten im Hauptmenü."
 
 #: src/config/options.inc:953
 msgid "Menu bar"
@@ -3211,19 +3211,19 @@ msgstr "Markierter Menü-Eintrag"
 
 #: src/config/options.inc:967
 msgid "Marked menu item colors."
-msgstr "Farben markierte Menü-Einträge"
+msgstr "Farben markierter Menü-Einträge"
 
 #: src/config/options.inc:971
 msgid "Menu item hotkey colors."
-msgstr ""
+msgstr "Farben der Zugriffstasten von Menüeinträgen."
 
 #: src/config/options.inc:975
 msgid "Menu item unselected hotkey colors."
-msgstr ""
+msgstr "Farben der nicht ausgewählten Zugriffstasten von Menüeinträgen."
 
 #: src/config/options.inc:979
 msgid "Menu item selected hotkey colors."
-msgstr ""
+msgstr "Farben der ausgewählten Zugriffstasten von Menüeinträgen."
 
 #: src/config/options.inc:981
 msgid "Menu frame"
@@ -3520,15 +3520,16 @@ msgstr ""
 "Anpassung von setup.h entfernen."
 
 #: src/config/options.inc:1137
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Links unterstreichen"
+msgstr "Zugriffstasten unterstreichen"
 
 #: src/config/options.inc:1139
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
+"Zugriffstasten unterstreichen, damit sie in Menüs auffälliger sind.\n"
+"Hierfür müssen Unterstreichungen für das Terminal eingeschaltet sein."
 
 #: src/config/options.inc:1143
 msgid "Timer options"
@@ -3623,14 +3624,12 @@ msgstr ""
 "man wieder bei der ersten Ansicht, und umgekehrt."
 
 #: src/config/options.inc:1189
-#, fuzzy
 msgid "Confirm tab closing"
-msgstr "Absenden bestätigen"
+msgstr "Ansicht-Schließen bestätigen"
 
 #: src/config/options.inc:1191
-#, fuzzy
 msgid "When closing a tab show confirmation dialog."
-msgstr "Öffne Bestätigungsdialog beim Beenden"
+msgstr "Öffne Bestätigungsdialog beim Schließen einer Ansicht."
 
 #: src/config/options.inc:1195 src/config/opttypes.c:373
 msgid "Language"
@@ -3988,9 +3987,8 @@ msgid "Link title"
 msgstr "Linktitel"
 
 #: src/dialogs/document.c:217
-#, fuzzy
 msgid "Link last visit time"
-msgstr "Letzer Besuch"
+msgstr "Zeitpunkt des letzten Aufruf des Links"
 
 #: src/dialogs/document.c:223
 msgid "Link title (from history)"
@@ -4258,9 +4256,8 @@ msgid "Toggle ~link numbering"
 msgstr "~Linknummern ein-/ausschalten"
 
 #: src/dialogs/menu.c:478
-#, fuzzy
 msgid "Toggle ~document colors"
-msgstr "Umschalten der Benutzung von dokument-spezifischen Farben"
+msgstr "Dokumentfarben umschalten"
 
 #: src/dialogs/menu.c:479
 msgid "Document ~info"
@@ -4339,7 +4336,6 @@ msgid "~Save options"
 msgstr "O~ptionen speichern"
 
 #: src/dialogs/menu.c:542
-#, fuzzy
 msgid "Global ~history"
 msgstr "Umfassender Verlauf"
 
@@ -4583,9 +4579,8 @@ msgid "Toggle saving"
 msgstr "Speichern umschalten"
 
 #: src/formhist/dialogs.c:175
-#, fuzzy
 msgid "Form history manager"
-msgstr "Öffne Verlaufsmanager"
+msgstr "Formularverlaufsmanager"
 
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
@@ -4641,9 +4636,8 @@ msgid "Bookmark"
 msgstr "Lesezeichen"
 
 #: src/globhist/dialogs.c:196
-#, fuzzy
 msgid "Global history manager"
-msgstr "Umfassender Verlauf"
+msgstr "Verwaltung des umfassenden Verlaufes"
 
 #: src/globhist/globhist.c:70
 msgid "Global history"
@@ -4698,9 +4692,8 @@ msgid "Global History"
 msgstr "Globaler Verlauf"
 
 #: src/intl/gettext/libintl.c:24
-#, fuzzy
 msgid "System"
-msgstr "Fastmem (Schneller Speicher)"
+msgstr "System"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
@@ -4994,7 +4987,6 @@ msgstr ""
 
 #. name:
 #: src/mime/backend/default.c:227
-#, fuzzy
 msgid "Option system"
 msgstr "Konfigurations-System"
 
@@ -5766,14 +5758,12 @@ msgid "Too many bytes read from the itrm!"
 msgstr "Zu viele Bytes von itrm gelesen!"
 
 #: src/terminal/tab.c:190
-#, fuzzy
 msgid "Do you really want to close the current tab?"
-msgstr "ELinks tatsächlich beenden?"
+msgstr "Die aktuelle Ansicht wirklich schließen?"
 
 #: src/terminal/tab.c:226
-#, fuzzy
 msgid "Do you really want to close all except the current tab?"
-msgstr "ELinks tatsächlich beenden?"
+msgstr "Alle Ansichten außer der aktuellen wirklich schließen?"
 
 #: src/viewer/dump/dump.c:79
 #, c-format

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.9 2003/01/13 11:18:15 zas Exp $ */
+/* $Id: file.c,v 1.10 2003/04/28 09:40:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,12 @@ get_unique_name(unsigned char *fileprefix)
 	int digits = 0;
 	int prefixlen;
 
-	prefix = expand_tilde(fileprefix);
+	/* This 'copy_string' is not really needed, but it's replacing a call
+	 * to 'expand_tilde', so the rest of the code doesn't need to be touched.
+	 * This function should be cleaned, anyway, to get rid of the 'mem_free'
+	 * calls for 'prefix', etc... NOTE THAT NOW THIS FUNCTION WANTS 'fileprefix'
+	 * already 'tildexpanded'. This is fixed in current uses of this function. */
+	copy_string(&prefix, fileprefix);
 	if (!prefix) return NULL;
 	prefixlen = strlen(prefix);
 	file = prefix;

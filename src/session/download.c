@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.14 2003/04/24 08:23:40 zas Exp $ */
+/* $Id: download.c,v 1.15 2003/04/28 09:40:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -649,6 +649,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	 * indeed a little confusing ;-) */
 	int overwrite = get_opt_int("document.download.overwrite");
 	unsigned char *file;
+	unsigned char *ofilex;
 
 	/* TODO: If the file already exists, possibly:
 	 * * inform the user
@@ -657,33 +658,39 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 	 * * allow to rename the old file
 	 * --pasky */
 
+	/* Let's do the tilde expansion right now. Please note that 'ofilex'
+	 * is needed to do the comparisons, 'get_unique_name', etc... because
+	 * we cannot do 'ofile=expand_tilde(ofile)'. Moreover, it should be
+	 * free'd somewhere... */
+	file = expand_tilde(ofile);
+	ofilex = expand_tilde(ofile);
+
 	if (!overwrite || resume) {
 		/* Nothing special to do... */
-		file = expand_tilde(ofile);
 		callback(term, file, data, resume);
 		return;
 	}
 
-	/* expand_tilde() lives inside! */
-	file = get_unique_name(ofile);
+	file = get_unique_name(ofilex);
 
-	if (!file || !strcmp(ofile, file) || overwrite == 1) {
+	if (!file || !strcmp(ofilex, file) || overwrite == 1) {
 		/* Still nothing special to do... */
 		callback(term, file, data, 0);
 		return;
 	}
 
-	/* overwrite == 2 (ask) and file != ofile (=> original file already
+	/* overwrite == 2 (ask) and file != ofilex (=> original file already
 	 * exists) */
 
 	lun_hop = mem_calloc(1, sizeof(struct lun_hop));
 	if (!lun_hop) {
 		mem_free(file);
+		mem_free(ofilex);
 		callback(term, NULL, data, 0);
 		return;
 	}
 	lun_hop->term = term;
-	lun_hop->ofile = stracpy(ofile);
+	lun_hop->ofile = stracpy(ofilex);
 	lun_hop->file = file;
 	lun_hop->callback = callback;
 	lun_hop->data = data;

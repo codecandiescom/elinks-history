@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.27 2002/12/01 19:37:46 zas Exp $ */
+/* $Id: dump.c,v 1.28 2002/12/03 15:14:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ dump_start(unsigned char *u)
 	unsigned char *uu, *wd;
 
 	if (!*u) {
-		fprintf(stderr, "URL expected after %s\n.",
+		fprintf(stderr, "URL expected after %s.\n",
 			get_opt_int_tree(cmdline_options, "source")
 			? "-source" : "-dump");
 		goto terminate;

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.26 2003/05/09 16:30:15 zas Exp $ */
+/* $Id: string.h,v 1.27 2003/05/09 16:49:43 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -56,6 +56,16 @@ void elinks_ulongcat(unsigned char *s, unsigned int *slen, unsigned long number,
 			(unsigned long) (number), \
 			(unsigned int) (width), \
 			(unsigned char) (fillchar)))
+
+void elinks_longcat(unsigned char *s, unsigned int *slen, long number, unsigned int width, unsigned char fillchar);
+/* Type casting is enforced, to shorten calls. --Zas */
+#define longcat(s, slen, number, width, fillchar) \
+(void) (elinks_longcat((unsigned char *) (s), \
+			(unsigned int *) (slen), \
+			(long) (number), \
+			(unsigned int) (width), \
+			(unsigned char) (fillchar)))
+
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')

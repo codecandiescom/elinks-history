@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.33 2003/05/09 16:30:15 zas Exp $ */
+/* $Id: string.c,v 1.34 2003/05/09 16:49:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,6 +360,7 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
  * s should point to a sufficient memory space (size >= width + 1).
  *
  */
+/* TODO: align to right, left, center... --Zas */
 void inline
 elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		unsigned long number, unsigned int width,
@@ -401,6 +402,24 @@ elinks_ulongcat(unsigned char *s, unsigned int *slen,
 		number /= 10;
 	}
 }
+
+void inline
+elinks_longcat(unsigned char *s, unsigned int *slen,
+	       long number, unsigned int width,
+	       unsigned char fillchar)
+{
+	unsigned char *p = s;
+
+	if (number < 0) {
+		if (slen) p[*slen++] = '-';
+		else p[0] = '-';
+		number = -number;
+		width--;
+		p++;
+	}
+	elinks_ulongcat(p, slen, number, width, fillchar);
+}
+
 
 #ifndef HAVE_STRCASECMP
 inline int

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.22 2003/07/26 01:10:07 jonas Exp $ */
+/* $Id: screen.c,v 1.23 2003/07/26 01:36:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,11 +225,11 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 {
 	/* 28 chars for both of the @y and @x numbers should be enough. */
 	unsigned char code[32];
-	int length = 0;
+	int length = 2;
 	int ret;
 
-	code[length++] = '\033';
-	code[length++] = '[';
+	code[0] = '\033';
+	code[1] = '[';
 
 	ret = longcat(code, &length, y, 30, 0);
 	/* Make sure theres atleast room for ';' and `some' number ;) */

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.19 2003/11/14 13:19:24 jonas Exp $ */
+/* $Id: renderer.c,v 1.20 2003/11/14 13:27:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,9 @@
 
 #define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
 #define ALIGN_LINE(x, o, n) mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
-#define ALIGN_LINK(x, o, n) mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
+
+#define realloc_document_links(doc, size) \
+	mem_align_alloc(&(doc)->links, (doc)->nlinks, size, sizeof(struct link), LINK_GRANULARITY)
 
 #define realloc_points(link, size) \
 	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
@@ -73,7 +75,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 	struct link *link;
 	struct point *point;
 
-	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
+	if (!realloc_document_links(document, document->nlinks + 1))
 		return NULL;
 
 	link = &document->links[document->nlinks];
@@ -124,7 +126,7 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 		mem_free(where);
 	}
 
-	return where ? length - 1 : 0;
+	return where ? length : 0;
 }
 
 static inline int

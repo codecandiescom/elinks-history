@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.67 2005/03/27 12:43:01 pasky Exp $
+# $Id: hooks.pl,v 1.68 2005/03/27 12:44:26 pasky Exp $
 #
 # This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 #
@@ -1110,6 +1110,13 @@ Quip few words of wisdom from ELinks the Sage. Prints a fortune. ;-)
 
 =cut
 
+
+
+################################################################################
+#
+# The following performs name->URL mapping for various URI rewrites. It probably
+# is of no interest to the hooks user so it has no POD documentation.
+#
 
 
 ################################################################################

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.619 2004/10/14 18:05:47 jonas Exp $ */
+/* $Id: view.c,v 1.620 2004/10/14 18:13:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -803,7 +803,10 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	struct link *link;
 	enum frame_event_status status;
 
-	assert(ses && doc_view && doc_view->document && ev);
+	assertm(doc_view && doc_view->document, "document not formatted");
+	if_assert_failed return FRAME_EVENT_IGNORED;
+
+	assert(ses && ev);
 	if_assert_failed return FRAME_EVENT_IGNORED;
 
 	/* When changing frame, vs may be NULL. See bug 525. */
@@ -867,15 +870,12 @@ current_frame(struct session *ses)
 }
 
 static enum frame_event_status
-send_to_frame(struct session *ses, struct term_event *ev)
+send_to_frame(struct session *ses, struct document_view *doc_view,
+	      struct term_event *ev)
 {
-	struct document_view *doc_view;
 	enum frame_event_status status;
 
 	assert(ses && ses->tab && ses->tab->term && ev);
-	if_assert_failed return FRAME_EVENT_IGNORED;
-	doc_view = current_frame(ses);
-	assertm(doc_view, "document not formatted");
 	if_assert_failed return FRAME_EVENT_IGNORED;
 
 	status = frame_ev(ses, doc_view, ev);
@@ -927,7 +927,7 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	memcpy(&evv, ev, sizeof(struct term_event));
 	evv.info.mouse.x -= doc_view->box.x;
 	evv.info.mouse.y -= doc_view->box.y;
-	return send_to_frame(ses, &evv);
+	return send_to_frame(ses, doc_view, &evv);
 }
 
 /* Returns the session if event cleanup should be done or NULL if no cleanup is
@@ -1009,7 +1009,7 @@ send_kbd_event(struct session *ses, struct document_view *doc_view,
 	int func_ref;
 	enum main_action action;
 
-	if (doc_view && send_to_frame(ses, ev) != FRAME_EVENT_IGNORED)
+	if (doc_view && send_to_frame(ses, doc_view, ev) != FRAME_EVENT_IGNORED)
 		return NULL;
 
 	action = kbd_action(KEYMAP_MAIN, ev, &func_ref);

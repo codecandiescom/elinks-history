@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.65 2003/09/15 13:54:01 zas Exp $ */
+/* $Id: core.c,v 1.66 2003/09/21 11:08:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,23 +72,21 @@ l_alert(LS)
 static int
 l_current_url(LS)
 {
-	struct view_state *vs;
-
-	if (have_location(lua_ses) && (vs = lua_ses ? &cur_loc(lua_ses)->vs : 0)) {
+	if (lua_ses && have_location(lua_ses)) {
+		struct view_state *vs = &cur_loc(lua_ses)->vs;
 		unsigned char *postchar = strchr(vs->url, POST_CHAR);
-		unsigned char *url =
-			memacpy(vs->url, postchar ? postchar - vs->url
-						  : vs->url_len);
+		unsigned char *url = memacpy(vs->url, postchar
+						      ? postchar - vs->url
+						      : vs->url_len);
 
 		if (url) {
 			lua_pushstring(S, url);
-
 			mem_free(url);
+			return 1;
 		}
 	}
-	else
-		lua_pushnil(S);
 
+	lua_pushnil(S);
 	return 1;
 }
 

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.97 2003/10/27 01:19:30 pasky Exp $ */
+/* $Id: osdep.c,v 1.98 2003/10/27 01:20:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,30 +110,6 @@ get_e(unsigned char *env)
 
 	return (v ? atoi(v) : 0);
 }
-
-#if defined(OS2)
-
-#define INCL_MOU
-#define INCL_VIO
-#define INCL_DOSPROCESS
-#define INCL_DOSERRORS
-#define INCL_WINCLIPBOARD
-#define INCL_WINSWITCHLIST
-#include <os2.h>
-#include <io.h>
-#include <process.h>
-#include <sys/video.h>
-#ifdef HAVE_SYS_FMUTEX_H
-#include <sys/builtin.h>
-#include <sys/fmutex.h>
-#endif
-
-#ifdef X2
-/* from xf86sup - XFree86 OS/2 support driver */
-#include <pty.h>
-#endif
-
-#endif
 
 
 #ifdef USE_OPEN_PREALLOC
@@ -800,16 +776,6 @@ get_output_handle(void)
 {
 	return 1;
 }
-
-#if defined(OS2)
-
-int
-get_ctl_handle(void)
-{
-	return 0;
-}
-
-#endif
 
 #if defined(BEOS)
 

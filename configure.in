@@ -630,6 +630,9 @@ AC_OUTPUT([ \
  src/dialogs/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
+ src/elusive/Makefile \
+ src/elusive/parser/Makefile \
+ src/elusive/parser/html/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \
  src/lowlevel/Makefile \

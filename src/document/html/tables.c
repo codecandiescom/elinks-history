@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.16 2002/09/10 14:28:24 zas Exp $ */
+/* $Id: tables.c,v 1.17 2002/09/17 10:20:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,10 +139,10 @@ get_align(char *attr, int *a)
 
 	if (al) {
 		if (!(strcasecmp(al, "left"))) *a = AL_LEFT;
-		if (!(strcasecmp(al, "right"))) *a = AL_RIGHT;
-		if (!(strcasecmp(al, "center"))) *a = AL_CENTER;
-		if (!(strcasecmp(al, "justify"))) *a = AL_BLOCK;
-		if (!(strcasecmp(al, "char"))) *a = AL_RIGHT; /* NOT IMPLEMENTED */
+		else if (!(strcasecmp(al, "right"))) *a = AL_RIGHT;
+		else if (!(strcasecmp(al, "center"))) *a = AL_CENTER;
+		else if (!(strcasecmp(al, "justify"))) *a = AL_BLOCK;
+		else if (!(strcasecmp(al, "char"))) *a = AL_RIGHT; /* NOT IMPLEMENTED */
 		mem_free(al);
 	}
 }
@@ -154,9 +154,9 @@ get_valign(char *attr, int *a)
 
 	if (al) {
 		if (!(strcasecmp(al, "top"))) *a = VAL_TOP;
-		if (!(strcasecmp(al, "middle"))) *a = VAL_MIDDLE;
-		if (!(strcasecmp(al, "bottom"))) *a = VAL_BOTTOM;
-		if (!(strcasecmp(al, "baseline"))) *a = VAL_TOP; /* NOT IMPLEMENTED */
+		else if (!(strcasecmp(al, "middle"))) *a = VAL_MIDDLE;
+		else if (!(strcasecmp(al, "bottom"))) *a = VAL_BOTTOM;
+		else if (!(strcasecmp(al, "baseline"))) *a = VAL_TOP; /* NOT IMPLEMENTED */
 		mem_free(al);
 	}
 }
@@ -186,33 +186,30 @@ get_c_width(char *attr, int *w, int sh)
 struct table *
 new_table()
 {
-	struct table *t = mem_alloc(sizeof(struct table));
+	struct table *t = mem_calloc(1, sizeof(struct table));
 
 	if (!t) return NULL;
-	memset(t, 0, sizeof(struct table));
 
 	t->p = NULL;
 	t->x = t->y = 0;
 	t->rx = INIT_X;
 	t->ry = INIT_Y;
 
-	t->cells = mem_alloc(INIT_X * INIT_Y * sizeof(struct table_cell));
+	t->cells = mem_calloc(INIT_X * INIT_Y, sizeof(struct table_cell));
 	if (!t->cells) {
 		mem_free(t);
 		return NULL;
 	}
-	memset(t->cells, 0, INIT_X * INIT_Y * sizeof(struct table_cell));
 
 	t->c = 0;
 	t->rc = INIT_X;
 
-	t->cols = mem_alloc(INIT_X * sizeof(struct table_column));
+	t->cols = mem_calloc(INIT_X, sizeof(struct table_column));
 	if (!t->cols) {
 		mem_free(t->cells);
 		mem_free(t);
 		return NULL;
 	}
-	memset(t->cols, 0, INIT_X * sizeof(struct table_column));
 
 	t->xcols = DUMMY;
 	t->xc = 0;
@@ -292,9 +289,8 @@ rep:
 	while (x >= nt.rx) if (!(nt.rx *= 2)) return NULL;
 	while (y >= nt.ry) if (!(nt.ry *= 2)) return NULL;
 
-	nt.cells = mem_alloc(nt.rx * nt.ry * sizeof(struct table_cell));
+	nt.cells = mem_calloc(nt.rx * nt.ry, sizeof(struct table_cell));
 	if (!nt.cells) return NULL;
-	memset(nt.cells, 0, nt.rx * nt.ry * sizeof(struct table_cell));
 
 	for (i = 0; i < t->x; i++)
 		for (j = 0; j < t->y; j++)
@@ -717,12 +713,11 @@ scan_done:
 		}
 	}
 
-	t->r_heights = mem_alloc(t->y * sizeof(int));
+	t->r_heights = mem_calloc(t->y, sizeof(int));
 	if (!t->r_heights) {
 		free_table(t);
 		return NULL;
 	}
-	memset(t->r_heights, 0, t->y * sizeof(int));
 
 	for (x = 0; x < t->c; x++)
 		if (t->cols[x].width != W_AUTO)
@@ -1156,10 +1151,9 @@ check_table_widths(struct table *t)
 	int i, j;
 	int s, ns;
 	int m, mi = 0; /* go away, warning! */
-	int *w = mem_alloc(t->x * sizeof(int));
+	int *w = mem_calloc(t->x, sizeof(int));
 
 	if (!w) return;
-	memset(w, 0, t->x * sizeof(int));
 
 	for (j = 0; j < t->y; j++) for (i = 0; i < t->x; i++) {
 		struct table_cell *c = CELL(t, i, j);
@@ -1666,8 +1660,8 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	al = get_attr_val(attr, "align");
 	if (al) {
 		if (!strcasecmp(al, "left")) align = AL_LEFT;
-		if (!strcasecmp(al, "center")) align = AL_CENTER;
-		if (!strcasecmp(al, "right")) align = AL_RIGHT;
+		else if (!strcasecmp(al, "center")) align = AL_CENTER;
+		else if (!strcasecmp(al, "right")) align = AL_RIGHT;
 		mem_free(al);
 	}
 
@@ -1675,14 +1669,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	al = get_attr_val(attr, "frame");
 	if (al) {
 		if (!strcasecmp(al, "void")) frame = F_VOID;
-		if (!strcasecmp(al, "above")) frame = F_ABOVE;
-		if (!strcasecmp(al, "below")) frame = F_BELOW;
-		if (!strcasecmp(al, "hsides")) frame = F_HSIDES;
-		if (!strcasecmp(al, "vsides")) frame = F_VSIDES;
-		if (!strcasecmp(al, "lhs")) frame = F_LHS;
-		if (!strcasecmp(al, "rhs")) frame = F_RHS;
-		if (!strcasecmp(al, "box")) frame = F_BOX;
-		if (!strcasecmp(al, "border")) frame = F_BOX;
+		else if (!strcasecmp(al, "above")) frame = F_ABOVE;
+		else if (!strcasecmp(al, "below")) frame = F_BELOW;
+		else if (!strcasecmp(al, "hsides")) frame = F_HSIDES;
+		else if (!strcasecmp(al, "vsides")) frame = F_VSIDES;
+		else if (!strcasecmp(al, "lhs")) frame = F_LHS;
+		else if (!strcasecmp(al, "rhs")) frame = F_RHS;
+		else if (!strcasecmp(al, "box")) frame = F_BOX;
+		else if (!strcasecmp(al, "border")) frame = F_BOX;
 		mem_free(al);
 	}
 
@@ -1690,10 +1684,10 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	al = get_attr_val(attr, "rules");
 	if (al) {
 		if (!strcasecmp(al, "none")) rules = R_NONE;
-		if (!strcasecmp(al, "groups")) rules = R_GROUPS;
-		if (!strcasecmp(al, "rows")) rules = R_ROWS;
-		if (!strcasecmp(al, "cols")) rules = R_COLS;
-		if (!strcasecmp(al, "all")) rules = R_ALL;
+		else if (!strcasecmp(al, "groups")) rules = R_GROUPS;
+		else if (!strcasecmp(al, "rows")) rules = R_ROWS;
+		else if (!strcasecmp(al, "cols")) rules = R_COLS;
+		else if (!strcasecmp(al, "all")) rules = R_ALL;
 		mem_free(al);
 	}
 

@@ -1,7 +1,7 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.58 2005/03/27 04:05:20 rrowan Exp $
+# $Id: hooks.pl,v 1.59 2005/03/27 11:12:38 pasky Exp $
 #
-# This file is (c) Russ Rowan and GPL'd.
+# This file is (c) Russ Rowan and Petr Baudis and GPL'd.
 
 
 use strict;
@@ -41,139 +41,446 @@ Don't call the prefixes "dumb", they hate that!  Rather, "interactivity
 challenged".  (Such politically correct names always appeared to me to be
 so much more insulting... --pasky ;-)
 
-=head2 prefixes:
+=head2 Misc. prefixes
 
-     bugmenot, bored, random, bofh, xyzzy, jack or handey
+B<bugmenot>, B<bored>, B<random>, B<bofh>, B<xyzzy>, B<jack> or B<handey>
 
-=head2 smart prefixes:
+=over 4
 
-     web search:
-          default engine:  search, find, www, web, s, f, go
-                           also, anything in quotes with no prefix
-          other:
-               google:     g or google
-               yahoo:      y or yahoo
-               ask jeeves: ask or jeeves
-               amazon a9:  a9
-               altavista:  av or altavista
-               microsoft:  msn or microsoft
-               dmoz:       dmoz, odp, mozilla
-               dogpile:    dp or dogpile
-               mamma:      ma or mamma
-               webcrawler: wc or webcrawler
-               netscape:   ns or netscape
-               lycos:      ly or lycos
-               hotbot:     hb or hotbot
-               excite:     ex or excite
-               elgoog:     eg, elgoog, hcraes, dnif, bew, og
-     news:
-          default agency:  n, news
-          other:
-               British Broadcasting Corporation: bbc
-               MSNBC: msnbc
-               Cable News Network: cnn
-               FOXNews: fox
-               Google News: gn
-               Yahoo News: yn
-               Reuters: rs or reuters
-               Electronic Frontier Foundation: eff
-               Wired: wd or wired
-               Slashdot: /. or sd or slashdot
-               NewsForge: nf or newsforge
-               U.S.News & World Report: us or usnews
-               New Scientist: newsci or nsci
-               Discover Magazine: dm
-               Scientific American: sa or sciam
-     locators:
-          Internet Movie Database: imdb, movie, or flick
-          US zip code search: zip or usps (# or address)
-          IP address locator / address space: ip
-          WHOIS / TLD list: whois (current url or specified)
-          Request for Comments: rfc (# or search)
-          weather: w or weather
-          Yahoo! Finance / NASD Regulation: stock, ticker, or quote
-          Snopes: ul, urban, or legend
-          torrent search / ISOHunt: bt, torrent, or bittorrent
-          Wayback Machine: ia, ar, arc, or archive (current url or specified)
-          software:
-               Freshmeat: fm or freshmeat
-               SourceForge: sf or sourceforge
-               Savannah: sv or savannah
-               Gna!: gna
-          Netcraft Uptime Survey: whatis or uptime (current url or specified)
-          Who's Alive and Who's Dead: alive or dead
-          Google Library / Project Gutenberg: book or read
-          Internet Public Library: ipl
-     other:
-          Google Groups: deja, gg, groups, gr, nntp, usenet, nn
-          AltaVista Babelfish: babelfish, babel, bf, translate, trans, or b
-          MirrorDot: md or mirrordot
-          Coral cache: cc, coral, or nyud (requires URL)
-          W3C page validators: vhtml or vcss (current url or specified)
-          the Dialectizer: dia <dialect> (current url or specified)
-               redneck, jive, cockney, fudd, bork, moron, piglatin, or hacker
+=item Google Groups
 
-=head2 elinks:
+B<deja>, B<gg>, B<groups>, B<gr>, B<nntp>, B<usenet>, B<nn>
 
-     home: el or elinks
-     bugzilla: bz or bug (# or search optional)
-     documentation and FAQ: doc(|s|umentation) or faq
+=item AltaVista Babelfish
+
+B<babelfish>, B<babel>, B<bf>, B<translate>, B<trans>, or B<b>
+
+=item MirrorDot
+
+B<md> or B<mirrordot>
+
+=item Coral cache
+
+B<cc>, B<coral>, or B<nyud> (requires URL)
+
+=item W3C page validators
+
+B<vhtml> or B<vcss> (current url or specified)
+
+=item The Dialectizer
+
+B<dia> <dialect> (current url or specified)
+
+Dialects can be:
+I<redneck>, I<jive>, I<cockney>, I<fudd>, I<bork>, I<moron>, I<piglatin>, or I<hacker>
+
+=back
+
+
+=head2 Web search
 
 =cut
 
+#######################################################################
 
-################################################################################
-### prefixes ###################################################################
 my %search_prefixes = (
-	'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$' => 'elgoog',
+
+=over 4
+
+=item Default engine
+
+B<search>, B<find>, B<www>, B<web>, B<s>, B<f>, B<go>,
+and anything in quotes with no prefix.
+
+=item Google
+
+B<g> or B<google>
+
+=cut
 	'^(g|google)(| .*)$' => 'google',
+
+=item Yahoo
+
+B<y> or B<yahoo>
+
+=cut
 	'^(y|yahoo)(| .*)$' => 'yahoo',
+
+=item Ask Jeeves
+
+B<ask> or B<jeeves>
+
+=cut
 	'^(ask|jeeves)(| .*)$' => 'ask jeeves',
+
+=item Amazon/A9
+
+B<a9>
+
+=cut
 	'^a9(| .*)$' => 'a9',
+
+=item Altavista
+
+B<av> or B<altavista>
+
+=cut
 	'^(av|altavista)(| .*)$' => 'altavista',
+
+=item Microsoft
+
+B<msn> or B<microsoft>
+
+=cut
 	'^(msn|microsoft)(| .*)$' => 'msn',
+
+=item dmoz
+
+B<dmoz>, B<odp>, B<mozilla>
+
+=cut
 	'^(dmoz|odp|mozilla)(| .*)$' => 'dmoz',
+
+=item Dogpile
+
+B<dp> or B<dogpile>
+
+=cut
 	'^(dp|dogpile)(| .*)$' => 'dogpile',
+
+=item Mamma
+
+B<ma> or B<mamma>
+
+=cut
 	'^(ma|mamma)(| .*)$' => 'mamma',
+
+=item Webcrawler
+
+B<wc> or B<webcrawler>
+
+=cut
 	'^(wc|webcrawler)(| .*)$' => 'webcrawler',
+
+=item Netscape
+
+B<ns> or B<netscape>
+
+=cut
 	'^(ns|netscape)(| .*)$' => 'netscape',
+
+=item Lycos
+
+B<ly> or B<lycos>
+
+=cut
 	'^(ly|lycos)(| .*)$' => 'lycos',
+
+=item Hotbot
+
+B<hb> or B<hotbot>
+
+=cut
 	'^(hb|hotbot)(| .*)$' => 'hotbot',
+
+=item Excite
+
+B<ex> or B<excite>
+
+=cut
 	'^(ex|excite)(| .*)$' => 'excite',
+
+=item Elgoog
+
+B<eg>, B<elgoog>, B<hcraes>, B<dnif>, B<bew>, B<og>
+
+=cut
+	'^(eg|elgoog|hcraes|dnif|bew|og)(| .*)$' => 'elgoog',
 );
 
+#######################################################################
+
+=back
+
+
+
+=head2 News agencies
+
+=cut
+
 my %news_prefixes = (
+
+=over 4
+
+=item Default agency
+
+B<n>, B<news>
+
+=item British Broadcasting Corporation
+
+B<bbc>
+
+=cut
 	'^bbc(| .*)$' => 'bbc',
+
+=item MSNBC
+
+B<msnbc>
+
+=cut
 	'^msnbc(| .*)$' => 'msnbc',
+
+=item Cable News Network
+
+B<cnn>
+
+=cut
 	'^cnn(| .*)$' => 'cnn',
+
+=item FOXNews
+
+B<fox>
+
+=cut
 	'^fox(| .*)$' => 'fox',
+
+=item Google News
+
+B<gn>
+
+=cut
 	'^gn(| .*)$' => 'google',
+
+=item Yahoo News
+
+B<yn>
+
+=cut
 	'^yn(| .*)$' => 'yahoo',
+
+=item Reuters
+
+B<rs> or B<reuters>
+
+=cut
 	'^(reuters|rs)(| .*)$' => 'reuters',
+
+=item Electronic Frontier Foundation
+
+B<eff>
+
+=cut
 	'^eff(| .*)$' => 'eff',
+
+=item Wired
+
+B<wd> or B<wired>
+
+=cut
 	'^(wired|wd)(| .*)$' => 'wired',
+
+=item Slashdot
+
+B</.> or B<sd> or B<slashdot>
+
+=cut
 	'^(\/\.|slashdot|sd)(| .*)$' => 'slashdot',
+
+=item NewsForge
+
+B<nf> or B<newsforge>
+
+=cut
 	'^(newsforge|nf)(| .*)$' => 'newsforge',
+
+=item U.S.News & World Report
+
+B<us> or B<usnews>
+
+=cut
 	'^(us|usnews)(| .*)$' => 'usnews',
+
+=item New Scientist
+
+B<newsci> or B<nsci>
+
+=cut
 	'^(nsci|newsci)(| .*)$' => 'newsci',
+
+=item Discover Magazine
+
+B<dm>
+
+=cut
 	'^dm(| .*)$' => 'discover',
+
+=item Scientific American
+
+B<sa> or B<sciam>
+
+=cut
 	'^(sa|sciam)(| .*)$' => 'sciam',
 );
 
+#######################################################################
+
+=back
+
+
+=head2 Locators
+
+=cut
+
+# Some of those are handled specially and not in this hash.
 my %locator_prefixes = (
+
+=over 4
+
+=item Internet Movie Database
+
+B<imdb>, B<movie>, or B<flick>
+
+=cut
 	'^(imdb|movie|flick)(| .*)$' => 'imdb',
+
+=item US zip code search
+
+B<zip> or B<usps> (# or address)
+
+=cut
+
+=item IP address locator / address space
+
+B<ip>
+
+=cut
+
+=item WHOIS / TLD list
+
+B<whois> (current url or specified)
+
+=cut
+
+=item Request for Comments
+
+B<rfc> (# or search)
+
+=cut
+
+=item Weather
+
+B<w> or B<weather>
+
+=cut
+
+=item Yahoo! Finance / NASD Regulation
+
+B<stock>, B<ticker>, or B<quote>
+
+=cut
 	'^(stock|ticker|quote)(| .*)$' => 'stock',
+
+=item Snopes
+
+B<ul>, B<urban>, or B<legend>
+
+=cut
 	'^(urban|legend|ul)(| .*)$' => 'bs',
+
+=item Torrent search / ISOHunt
+
+B<bt>, B<torrent>, or B<bittorrent>
+
+=cut
 	'^(bittorrent|torrent|bt)(| .*)$' => 'torrent',
+
+=item Wayback Machine
+
+B<ia>, B<ar>, B<arc>, or B<archive> (current url or specified)
+
+=cut
 	'^(archive|arc|ar|ia)(| .*)$' => 'archive',
+
+=item Freshmeat
+
+B<fm> or B<freshmeat>
+
+=cut
 	'^(freshmeat|fm)(| .*)$' => 'freshmeat',
+
+=item SourceForge
+
+B<sf> or B<sourceforge>
+
+=cut
 	'^(sourceforge|sf)(| .*)$' => 'sourceforge',
+
+=item Savannah
+
+B<sv> or B<savannah>
+
+=cut
 	'^(savannah|sv)(| .*)$' => 'savannah',
+
+=item Gna!
+
+B<gna>
+
+=cut
 	'^gna(| .*)$' => 'gna',
+
+=item Netcraft Uptime Survey
+
+B<whatis> or B<uptime> (current url or specified)
+
+=cut
+
+=item Who's Alive and Who's Dead
+
+Wanted, B<dead> or B<alive>!
+
+=cut
 	'^(alive|dead)(| .*)$' => 'dead',
+
+=item Google Library / Project Gutenberg
+
+B<book> or B<read>
+
+=cut
 	'^(book|read)(| .*)$' => 'book',
+
+=item Internet Public Library
+
+B<ipl>
+
+=cut
 	'^ipl(| .*)$' => 'ipl',
 );
+
+#######################################################################
+
+=back
+
+=head2 ELinks
+
+=over 4
+
+=item Home
+
+B<el> or B<elinks>
+
+=item Bugzilla
+
+B<bz> or B<bug> (# or search optional)
+
+=item Documentation and FAQ
+
+B<doc(|s|umentation)> or B<faq>
+
+=back
+
+=cut
+
 
 my %weather_locators = (
 	'weather underground' => 'http://wunderground.com/cgi-bin/findweather/getForecast?query=!query!',

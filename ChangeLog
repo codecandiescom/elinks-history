@@ -1,3 +1,30 @@
+Tue May 27 21:57:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: setup.h, dialogs/options.c, sched/session.c,
+	sched/session.h, terminal/terminal.c, terminal/terminal.h:
+
+	Reverted patch changing title setting stuff by zas. It was
+	overloaded and corrupted by some changes bad from the design
+	standpoint. Needs to be reintroduced by smaller bits. Reopens bug
+	178.  
+
+Tue May 27 20:03:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: intl/charsets.c, document/html/renderer.c:
+
+	Entity decoding was inefficient since we were calling
+	get_entity_string() for non-entity strings like &t=abc;. This was
+	fixed. An experimental entity string cache was added (but disabled
+	for now). Feel free to test and improve, have a look at
+	src/intl/charsets.c near line 37 if interested.  
+
+Tue May 27 07:58:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Fix a potential segfault introduced by my last patch, fix some
+	comments.  
+
 Mon May 26 08:51:00 2003  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/kbd.c:

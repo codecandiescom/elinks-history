@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.98 2004/08/02 23:22:20 jonas Exp $ */
+/* $Id: connect.c,v 1.99 2004/08/03 09:08:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ make_connection(struct connection *conn, int port,
 		void (*func)(struct connection *))
 {
 	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
-	struct conn_info *c_i;
+	struct conn_info *conn_info;
 	int async;
 
 	if (!host) {
@@ -110,29 +110,29 @@ make_connection(struct connection *conn, int port,
 		return;
 	}
 
-	c_i = mem_calloc(1, sizeof(struct conn_info));
-	if (!c_i) {
+	conn_info = mem_calloc(1, sizeof(struct conn_info));
+	if (!conn_info) {
 		mem_free(host);
 		retry_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
-	c_i->func = func;
-	c_i->socket = socket;
-	c_i->port = port;
-	c_i->triedno = -1;
-	c_i->addr = NULL;
-	conn->conn_info = c_i;
+	conn_info->func = func;
+	conn_info->socket = socket;
+	conn_info->port = port;
+	conn_info->triedno = -1;
+	conn_info->addr = NULL;
+	conn->conn_info = conn_info;
 
 	log_data("\nCONNECTION: ", 13);
 	log_data(host, strlen(host));
 	log_data("\n", 1);
 
 	if (conn->cache_mode >= CACHE_MODE_FORCE_RELOAD)
-		async = find_host_no_cache(host, &c_i->addr, &c_i->addrno,
+		async = find_host_no_cache(host, &conn_info->addr, &conn_info->addrno,
 					   &conn->dnsquery, dns_found, conn);
 	else
-		async = find_host(host, &c_i->addr, &c_i->addrno,
+		async = find_host(host, &conn_info->addr, &conn_info->addrno,
 				  &conn->dnsquery, dns_found, conn);
 
 	mem_free(host);
@@ -323,9 +323,9 @@ dns_found(void *data, int state)
 {
 	int sock = -1;
 	struct connection *conn = (struct connection *) data;
-	struct conn_info *c_i = conn->conn_info;
+	struct conn_info *conn_info = conn->conn_info;
 	int i;
-	int trno = c_i->triedno;
+	int trno = conn_info->triedno;
 	int only_local = get_cmd_opt_int("localhost");
 	int saved_errno = 0;
 	int at_least_one_remote_ip = 0;
@@ -337,17 +337,17 @@ dns_found(void *data, int state)
 
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
-	if (c_i->socket && c_i->socket->fd >= 0)
-		set_handlers(c_i->socket->fd, NULL, NULL, NULL, conn);
+	if (conn_info->socket && conn_info->socket->fd >= 0)
+		set_handlers(conn_info->socket->fd, NULL, NULL, NULL, conn);
 
-	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
+	for (i = conn_info->triedno + 1; i < conn_info->addrno; i++) {
 #ifdef CONFIG_IPV6
-		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &c_i->addr[i]);
+		struct sockaddr_in6 addr = *((struct sockaddr_in6 *) &conn_info->addr[i]);
 #else
-		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
+		struct sockaddr_in addr = *((struct sockaddr_in *) &conn_info->addr[i]);
 #endif
 
-		c_i->triedno++;
+		conn_info->triedno++;
 
 		if (only_local) {
 			int local = 0;
@@ -380,12 +380,12 @@ dns_found(void *data, int state)
 			close(sock);
 			continue;
 		}
-		c_i->socket->fd = sock;
+		conn_info->socket->fd = sock;
 
 #ifdef CONFIG_IPV6
-		addr.sin6_port = htons(c_i->port);
+		addr.sin6_port = htons(conn_info->port);
 #else
-		addr.sin_port = htons(c_i->port);
+		addr.sin_port = htons(conn_info->port);
 #endif
 
 		/* We can set conn->pf here even if the connection will fail,
@@ -420,7 +420,7 @@ dns_found(void *data, int state)
 		close(sock);
 	}
 
-	if (i >= c_i->addrno) {
+	if (i >= conn_info->addrno) {
 		/* Tried everything, but it didn't help :(. */
 
 		if (only_local && !saved_errno && at_least_one_remote_ip) {
@@ -433,31 +433,34 @@ dns_found(void *data, int state)
 		}
 
 		/* We set new state only if we already tried something new. */
-		if (trno != c_i->triedno) set_connection_state(conn, -errno);
+		if (trno != conn_info->triedno)
+			set_connection_state(conn, -errno);
+
 		retry_connection(conn);
 		return;
 	}
 
 #ifdef CONFIG_SSL
-	if (c_i->socket->ssl && ssl_connect(conn, c_i->socket) < 0) return;
+	if (conn_info->socket->ssl && ssl_connect(conn, conn_info->socket) < 0)
+		return;
 #endif
 
 	conn->conn_info = NULL;
-	c_i->func(conn);
-	mem_free_if(c_i->addr);
-	mem_free(c_i);
+	conn_info->func(conn);
+	mem_free_if(conn_info->addr);
+	mem_free(conn_info);
 }
 
 static void
 connected(void *data)
 {
 	struct connection *conn = (struct connection *) data;
-	struct conn_info *c_i = conn->conn_info;
-	struct connection_socket *socket = c_i->socket;
+	struct conn_info *conn_info = conn->conn_info;
+	struct connection_socket *socket = conn_info->socket;
 	int err = 0;
 	int len = sizeof(int);
 
-	assertm(c_i, "Lost conn_info!");
+	assertm(conn_info, "Lost conn_info!");
 	if_assert_failed return;
 
 	if (getsockopt(socket->fd, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
@@ -485,13 +488,13 @@ connected(void *data)
 #endif
 
 	conn->conn_info = NULL;
-	if (c_i && c_i->func) {
-		void (*func)(struct connection *) = c_i->func;
+	if (conn_info && conn_info->func) {
+		void (*func)(struct connection *) = conn_info->func;
 
 		func(conn);
 	}
-	mem_free_if(c_i->addr);
-	mem_free(c_i);
+	mem_free_if(conn_info->addr);
+	mem_free(conn_info);
 }
 
 struct write_buffer {

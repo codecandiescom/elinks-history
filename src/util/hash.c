@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.3 2002/05/18 19:03:54 pasky Exp $ */
+/* $Id: hash.c,v 1.4 2002/05/18 19:25:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,10 +41,8 @@ init_hash(int width)
 	}
 
 	/* Initialize dummy list_heads */
-	for (i = 0; i < hash_size(width); i++) {
-		hash->hash[i].next = &hash->hash[i];
-		hash->hash[i].prev = &hash->hash[i];
-	}
+	for (i = 0; i < hash_size(width); i++)
+		init_list(hash->hash[i]);
 
 	return hash;
 }

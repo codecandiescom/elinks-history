@@ -1,3 +1,88 @@
+Fri May 14 14:59:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Don't allow empty names when adding options. Mentioned by sstar.  
+
+Fri May 14 11:39:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Elaborate on CONFIG_MARKS description.  
+
+Fri May 14 11:39:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/leds.c:
+
+	Oops get the correct static option for get_leds_clock_format().  
+
+Fri May 14 10:24:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/window.c:
+
+	Pass references of the windows x and y members directly to
+	get_parent_ptr().  
+
+Fri May 14 10:19:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, view.c:
+
+	Revert last "fix", it was not one.  
+
+Fri May 14 10:12:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: link.c, view.c:
+
+	Clicking on links on first line of document was broken. It should
+	now be fixed.  
+
+Fri May 14 09:32:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, group.c:
+
+	Fix indentation of set_box().  
+
+Fri May 14 08:49:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, bfu/menu.h, dialogs/status.c,
+	document/renderer.c, document/html/frames.c,
+	document/html/tables.c, util/memdebug.c, viewer/text/form.c,
+	viewer/text/search.c, viewer/text/view.c:
+
+	Trailing spaces cleanup.  
+
+Fri May 14 08:42:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	Fix incorrect change introduced in rev 1.46: not document->options
+	but doc_view 
+
+Fri May 14 00:43:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, document/options.h,
+	document/renderer.c, document/html/frames.c,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/parser/forms.c, document/plain/renderer.c,
+	viewer/dump/dump.c, viewer/text/view.c:
+
+	Use struct box for struct document_options.  
+
+Fri May 14 00:18:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/group.c, bfu/inpfield.c, bfu/listbox.c, bfu/menu.c, bfu/menu.h,
+	bfu/text.c, bfu/widget.c, bfu/widget.h, dialogs/download.c,
+	dialogs/status.c, document/document.h, document/renderer.c,
+	document/view.h, document/html/frames.c, document/html/frames.h,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, document/plain/renderer.c, terminal/draw.c,
+	terminal/draw.h, util/box.h, util/rect.h, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c, viewer/text/textarea.c,
+	viewer/text/view.c:
+
+	s/dimensions/box/ && s/rect/box/ 
+
 Thu May 13 20:40:06 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/dialog.c, bfu/menu.c, terminal/draw.c, terminal/draw.h:

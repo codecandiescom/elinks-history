@@ -1,3 +1,92 @@
+Sun Jun 22 17:32:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Oops fix @tmp not being used.  
+
+Sun Jun 22 17:24:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Misc cleanups + 2 leak fixes 
+
+Sun Jun 22 16:47:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	More renames.  
+
+Sun Jun 22 16:43:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Rename: fl -> fragmentlen.  
+
+Sun Jun 22 16:37:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Rename: file -> fragment.  
+
+Sun Jun 22 16:28:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Followup cleanup: move vars close to their usage.  
+
+Sun Jun 22 16:19:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	First try to open @name as a directory.  This greatly simplifies the
+	code path and means there's only one entry point into the dir code.  
+
+Sun Jun 22 16:03:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file.c:
+
+	Combine !S_ISREG() branch with regular file branch.  
+
+Sun Jun 22 15:44:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/download.c, util/error.h:
+
+	GCC 3.3 do_not_optimize_here() introduced and used in tp_display()
+	so vs.plain is set properly.  
+
+Sun Jun 22 12:17:49 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jun 22 12:13:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, protocol/file.c:
+
+	An option to specify if hidden files should be shown in local
+	directory listing was added (protocol.file.show_hidden_files). It
+	defaults to 1 for now to preserve old behavior.  
+
+Sat Jun 21 22:45:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	How should all the .c and .h files start.  
+
+Sat Jun 21 22:40:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README, src/README:
+
+	Undo :). Everything is fine ;).  
+
+Sat Jun 21 22:39:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* README, src/README:
+
+	Dummy commit just to test whether ciabot still works fine even in
+	multidirs situation.  
+
 Sat Jun 21 15:12:02 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/file.c:

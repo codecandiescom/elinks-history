@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.4 2005/01/20 09:44:45 jonas Exp $ */
+/* $Id: core.c,v 1.5 2005/01/20 13:12:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ alert_ruby_error(struct session *ses, unsigned char *msg)
 
 	if (!ses) {
 		if (list_empty(terminals)) {
-			usrerror("Ruby: %s", msg);
+			usrerror("[Ruby] %s", msg);
 			return;
 		}
 
@@ -184,19 +184,46 @@ static VALUE
 erb_stdout_p(int argc, VALUE *argv, VALUE self)
 {
 	int i;
-	VALUE str = rb_str_new("", 0);
+	struct string string;
 
-	for (i = 0; i < argc; i++) {
-		if (i > 0) rb_str_cat(str, ", ", 2);
-		rb_str_concat(str, rb_inspect(argv[i]));
-	}
-
-	if (list_empty(terminals))
+	if (!init_string(&string))
 		return Qnil;
 
-	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL,
+	for (i = 0; i < argc; i++) {
+		VALUE substr;
+		unsigned char *ptr;
+		int len;
+
+		if (i > 0)
+			add_to_string(&string, ", ");
+
+		substr = rb_inspect(argv[i]);
+
+		/* The Ruby p() function writes variable number of objects using
+		 * the inspect() method, which adds quotes to the strings, so
+		 * gently ignore them. */
+
+		ptr = RSTRING(substr)->ptr;
+		len = RSTRING(substr)->len;
+
+		if (*ptr == '"')
+			ptr++, len--;
+
+		if (ptr[len - 1] == '"')
+			len--;
+
+		add_bytes_to_string(&string, ptr, len);
+	}
+
+	if (list_empty(terminals)) {
+		usrerror("[Ruby] %s", string.source);
+		done_string(&string);
+		return Qnil;
+	}
+
+	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
 		N_("Ruby Message"), ALIGN_LEFT,
-		RSTRING(str)->ptr,
+		string.source,
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

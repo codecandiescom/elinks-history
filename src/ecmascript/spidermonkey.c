@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.160 2004/12/25 17:28:30 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.161 2004/12/25 17:51:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,7 +488,7 @@ delayed_open(void *data)
 }
 
 static JSBool
-window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
+window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
 	struct document_view *doc_view = vs->doc_view;

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.71 2004/04/02 17:30:30 jonas Exp $ */
+/* $Id: uri.h,v 1.72 2004/04/02 17:58:36 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -101,6 +101,11 @@ get_uri_reference(struct uri *uri)
 	if (uri) object_lock(uri);
 	return uri;
 }
+
+#define get_proxied_uri(uri) \
+	((uri)->protocol == PROTOCOL_PROXY) \
+	? get_uri((uri)->data) : get_uri_reference(uri)
+
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.116 2004/04/02 17:45:28 jonas Exp $ */
+/* $Id: cache.c,v 1.117 2004/04/02 17:58:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "cache/dialogs.h"
 #include "config/options.h"
 #include "main.h"
+#include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "util/error.h"
@@ -118,18 +119,16 @@ find_in_cache(unsigned char *url)
 struct cache_entry *
 get_cache_entry(struct uri *uri)
 {
-	unsigned char *url = struri(uri);
-	struct cache_entry *ce = find_in_cache(url);
+	struct cache_entry *ce = find_in_cache(struri(uri));
 
 	if (ce) return ce;
 
 	shrink_memory(0);
-	url = extract_proxy(url);
 
 	ce = mem_calloc(1, sizeof(struct cache_entry));
 	if (!ce) return NULL;
 
-	ce->uri = get_uri(url);
+	ce->uri = get_proxied_uri(uri);
 	if (!ce->uri) {
 		mem_free(ce);
 		return NULL;

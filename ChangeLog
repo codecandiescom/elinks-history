@@ -1,3 +1,64 @@
+Tue Dec 24 13:38:56 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* elinks.conf.5:
+
+	Small fix in EXAMPLES. < and > should not be 'escaped'.  
+
+Tue Dec 24 10:33:12 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/mime.c:
+
+	Fixed one little memory leak. Was almost unnoticable hopefully.  
+
+Tue Dec 24 09:52:24 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Downloads resuming support.  
+
+Tue Dec 24 01:39:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/polish.lng:
+
+	Polish translation update (partial) by Jakub Bogusz.  
+
+Tue Dec 24 01:28:41 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am, elinks.1, elinks.conf.5, elinkskeys.5.in:
+
+	Added elinks.conf man page and references to it. Also a small update
+	to elinks man page with descriptions of --long-help and
+	--config-help.  
+
+Tue Dec 24 00:26:40 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Also print descriptions for option trees when doing --config-help.  
+
+Tue Dec 24 00:23:51 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/download.c:
+
+	Just another links -> einks change.  
+
+Tue Dec 24 00:18:14 2002  Jonas Fonseca <fonseca@diku.dk>:
+
+	* elinks.conf.5:
+
+	file elinks.conf.5 was initially added on branch REL_0_4.  
+
+Tue Dec 24 00:05:23 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/download.c, document/download.h, document/view.c,
+	util/file.c:
+
+	Let expand_tilde() and get_unique_name() always return newly
+	allocated string => let create_download_file() return real file name
+	=> use that file name as down->file => fix a bug with timestamps not
+	being set properly on the downloaded files reported by Peter Wang
+	plus a handful of similiar hidden bugs.  
+
 Mon Dec 23 21:36:09 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/util/memory.h:

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.170 2004/01/24 20:04:26 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.171 2004/01/24 20:05:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -905,7 +905,7 @@ bind_config_string(struct string *file)
 	enum keymap keymap;
 	struct keybinding *keybinding;
 
-	for (keymap = 0; keymap < KM_MAX; keymap++)
+	for (keymap = 0; keymap < KM_MAX; keymap++) {
 		foreach (keybinding, keymaps[keymap]) {
 			unsigned char *keymap_str = write_keymap(keymap);
 			unsigned char *action_str =
@@ -929,4 +929,5 @@ bind_config_string(struct string *file)
 			add_char_to_string(file, '\"');
 			add_char_to_string(file, '\n');
 		}
+	}
 }

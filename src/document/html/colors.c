@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: colors.c,v 1.3 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,10 +166,10 @@ struct color_spec color_specs[] = {
 int decode_color(unsigned char *str, struct rgb *col)
 {
 	int ch;
-	
+
 	if (*str != '#') {
 		struct color_spec *cs;
-		
+
 		for (cs = color_specs; cs < endof(color_specs); cs++)
 			if (!strcasecmp(cs->name, str)) {
 				ch = cs->rgb;
@@ -180,7 +180,7 @@ int decode_color(unsigned char *str, struct rgb *col)
 	str++;
 	if (strlen(str) == 6) {
 		char *end;
-		
+
 		ch = strtoul(str, &end, 16);
 		if (!*end) {
 found:

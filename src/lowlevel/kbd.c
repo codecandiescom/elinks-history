@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: kbd.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,7 +419,7 @@ void kbd_timeout(struct itrm *itrm)
 	}
 	queue_event(itrm, (char *)&ev, sizeof(struct event));
 	if (--itrm->qlen) memmove(itrm->kqueue, itrm->kqueue+1, itrm->qlen);
-	while (process_queue(itrm)) ;
+	while (process_queue(itrm));
 }
 
 int get_esc_code(char *str, int len, char *code, int *num, int *el)
@@ -445,57 +445,57 @@ struct key {
 
 struct key os2xtd[256] = {
 /* 0 */
-{0,0}, {0,0}, {' ',KBD_CTRL}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_BS,KBD_ALT}, {0,0}, 
+{0,0}, {0,0}, {' ',KBD_CTRL}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_BS,KBD_ALT}, {0,0},
 /* 16 */
-{'Q',KBD_ALT}, {'W',KBD_ALT}, {'E',KBD_ALT}, {'R',KBD_ALT}, {'T',KBD_ALT}, {'Y',KBD_ALT}, {'U',KBD_ALT}, {'I',KBD_ALT}, 
+{'Q',KBD_ALT}, {'W',KBD_ALT}, {'E',KBD_ALT}, {'R',KBD_ALT}, {'T',KBD_ALT}, {'Y',KBD_ALT}, {'U',KBD_ALT}, {'I',KBD_ALT},
 /* 24 */
-{'O',KBD_ALT}, {'P',KBD_ALT}, {'[',KBD_ALT}, {']',KBD_ALT}, {KBD_ENTER,KBD_ALT}, {0,0}, {'A',KBD_ALT}, {'S',KBD_ALT}, 
+{'O',KBD_ALT}, {'P',KBD_ALT}, {'[',KBD_ALT}, {']',KBD_ALT}, {KBD_ENTER,KBD_ALT}, {0,0}, {'A',KBD_ALT}, {'S',KBD_ALT},
 /* 32 */
-{'D',KBD_ALT}, {'F',KBD_ALT}, {'G',KBD_ALT}, {'H',KBD_ALT}, {'J',KBD_ALT}, {'K',KBD_ALT}, {'L',KBD_ALT}, {';',KBD_ALT}, 
+{'D',KBD_ALT}, {'F',KBD_ALT}, {'G',KBD_ALT}, {'H',KBD_ALT}, {'J',KBD_ALT}, {'K',KBD_ALT}, {'L',KBD_ALT}, {';',KBD_ALT},
 /* 40 */
-{'\'',KBD_ALT}, {'`',KBD_ALT}, {0,0}, {'\\',KBD_ALT}, {'Z',KBD_ALT}, {'X',KBD_ALT}, {'C',KBD_ALT}, {'V',KBD_ALT}, 
+{'\'',KBD_ALT}, {'`',KBD_ALT}, {0,0}, {'\\',KBD_ALT}, {'Z',KBD_ALT}, {'X',KBD_ALT}, {'C',KBD_ALT}, {'V',KBD_ALT},
 /* 48 */
 {'B',KBD_ALT}, {'N',KBD_ALT}, {'M',KBD_ALT}, {',', KBD_ALT}, {'.', KBD_ALT}, {'/', KBD_ALT}, {0, 0}, {'*', KBD_ALT},
 /* 56 */
-{0,0}, {' ',KBD_ALT}, {0,0}, {KBD_F1,0}, {KBD_F2,0}, {KBD_F3,0}, {KBD_F4,0}, {KBD_F5,0}, 
+{0,0}, {' ',KBD_ALT}, {0,0}, {KBD_F1,0}, {KBD_F2,0}, {KBD_F3,0}, {KBD_F4,0}, {KBD_F5,0},
 /* 64 */
-{KBD_F6,0}, {KBD_F7,0}, {KBD_F8,0}, {KBD_F9,0}, {KBD_F10,0}, {0,0}, {0,0}, {KBD_HOME,0}, 
+{KBD_F6,0}, {KBD_F7,0}, {KBD_F8,0}, {KBD_F9,0}, {KBD_F10,0}, {0,0}, {0,0}, {KBD_HOME,0},
 /* 72 */
-{KBD_UP,0}, {KBD_PAGE_UP,0}, {'-',KBD_ALT}, {KBD_LEFT,0}, {'5',0}, {KBD_RIGHT,0}, {'+',KBD_ALT}, {KBD_END,0}, 
+{KBD_UP,0}, {KBD_PAGE_UP,0}, {'-',KBD_ALT}, {KBD_LEFT,0}, {'5',0}, {KBD_RIGHT,0}, {'+',KBD_ALT}, {KBD_END,0},
 /* 80 */
-{KBD_DOWN,0}, {KBD_PAGE_DOWN,0}, {KBD_INS,0}, {KBD_DEL,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{KBD_DOWN,0}, {KBD_PAGE_DOWN,0}, {KBD_INS,0}, {KBD_DEL,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 88 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_F1,KBD_CTRL}, {KBD_F2,KBD_CTRL}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {KBD_F1,KBD_CTRL}, {KBD_F2,KBD_CTRL},
 /* 96 */
-{KBD_F3,KBD_CTRL}, {KBD_F4,KBD_CTRL}, {KBD_F5,KBD_CTRL}, {KBD_F6,KBD_CTRL}, {KBD_F7,KBD_CTRL}, {KBD_F8,KBD_CTRL}, {KBD_F9,KBD_CTRL}, {KBD_F10,KBD_CTRL}, 
+{KBD_F3,KBD_CTRL}, {KBD_F4,KBD_CTRL}, {KBD_F5,KBD_CTRL}, {KBD_F6,KBD_CTRL}, {KBD_F7,KBD_CTRL}, {KBD_F8,KBD_CTRL}, {KBD_F9,KBD_CTRL}, {KBD_F10,KBD_CTRL},
 /* 104 */
-{KBD_F1,KBD_ALT}, {KBD_F2,KBD_ALT}, {KBD_F3,KBD_ALT}, {KBD_F4,KBD_ALT}, {KBD_F5,KBD_ALT}, {KBD_F6,KBD_ALT}, {KBD_F7,KBD_ALT}, {KBD_F8,KBD_ALT}, 
+{KBD_F1,KBD_ALT}, {KBD_F2,KBD_ALT}, {KBD_F3,KBD_ALT}, {KBD_F4,KBD_ALT}, {KBD_F5,KBD_ALT}, {KBD_F6,KBD_ALT}, {KBD_F7,KBD_ALT}, {KBD_F8,KBD_ALT},
 /* 112 */
-{KBD_F9,KBD_ALT}, {KBD_F10,KBD_ALT}, {0,0}, {KBD_LEFT,KBD_CTRL}, {KBD_RIGHT,KBD_CTRL}, {KBD_END,KBD_CTRL}, {KBD_PAGE_DOWN,KBD_CTRL}, {KBD_HOME,KBD_CTRL}, 
+{KBD_F9,KBD_ALT}, {KBD_F10,KBD_ALT}, {0,0}, {KBD_LEFT,KBD_CTRL}, {KBD_RIGHT,KBD_CTRL}, {KBD_END,KBD_CTRL}, {KBD_PAGE_DOWN,KBD_CTRL}, {KBD_HOME,KBD_CTRL},
 /* 120 */
-{'1',KBD_ALT}, {'2',KBD_ALT}, {'3',KBD_ALT}, {'4',KBD_ALT}, {'5',KBD_ALT}, {'6',KBD_ALT}, {'7',KBD_ALT}, {'8',KBD_ALT}, 
+{'1',KBD_ALT}, {'2',KBD_ALT}, {'3',KBD_ALT}, {'4',KBD_ALT}, {'5',KBD_ALT}, {'6',KBD_ALT}, {'7',KBD_ALT}, {'8',KBD_ALT},
 /* 128 */
-{'9',KBD_ALT}, {'0',KBD_ALT}, {'-',KBD_ALT}, {'=',KBD_ALT}, {KBD_PAGE_UP,KBD_CTRL}, {KBD_F11,0}, {KBD_F12,0}, {0,0}, 
+{'9',KBD_ALT}, {'0',KBD_ALT}, {'-',KBD_ALT}, {'=',KBD_ALT}, {KBD_PAGE_UP,KBD_CTRL}, {KBD_F11,0}, {KBD_F12,0}, {0,0},
 /* 136 */
-{0,0}, {KBD_F11,KBD_CTRL}, {KBD_F12,KBD_CTRL}, {KBD_F11,KBD_ALT}, {KBD_F12,KBD_ALT}, {KBD_UP,KBD_CTRL}, {'-',KBD_CTRL}, {'5',KBD_CTRL}, 
+{0,0}, {KBD_F11,KBD_CTRL}, {KBD_F12,KBD_CTRL}, {KBD_F11,KBD_ALT}, {KBD_F12,KBD_ALT}, {KBD_UP,KBD_CTRL}, {'-',KBD_CTRL}, {'5',KBD_CTRL},
 /* 144 */
-{'+',KBD_CTRL}, {KBD_DOWN,KBD_CTRL}, {KBD_INS,KBD_CTRL}, {KBD_DEL,KBD_CTRL}, {KBD_TAB,KBD_CTRL}, {0,0}, {0,0}, {KBD_HOME,KBD_ALT}, 
+{'+',KBD_CTRL}, {KBD_DOWN,KBD_CTRL}, {KBD_INS,KBD_CTRL}, {KBD_DEL,KBD_CTRL}, {KBD_TAB,KBD_CTRL}, {0,0}, {0,0}, {KBD_HOME,KBD_ALT},
 /* 152 */
-{KBD_UP,KBD_ALT}, {KBD_PAGE_UP,KBD_ALT}, {0,0}, {KBD_LEFT,KBD_ALT}, {0,0}, {KBD_RIGHT,KBD_ALT}, {0,0}, {KBD_END,KBD_ALT}, 
+{KBD_UP,KBD_ALT}, {KBD_PAGE_UP,KBD_ALT}, {0,0}, {KBD_LEFT,KBD_ALT}, {0,0}, {KBD_RIGHT,KBD_ALT}, {0,0}, {KBD_END,KBD_ALT},
 /* 160 */
-{KBD_DOWN,KBD_ALT}, {KBD_PAGE_DOWN,KBD_ALT}, {KBD_INS,KBD_ALT}, {KBD_DEL,KBD_ALT}, {0,0}, {KBD_TAB,KBD_ALT}, {KBD_ENTER,KBD_ALT}, {0,0}, 
+{KBD_DOWN,KBD_ALT}, {KBD_PAGE_DOWN,KBD_ALT}, {KBD_INS,KBD_ALT}, {KBD_DEL,KBD_ALT}, {0,0}, {KBD_TAB,KBD_ALT}, {KBD_ENTER,KBD_ALT}, {0,0},
 /* 168 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 176 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 192 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 208 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 224 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 240 */
-{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, 
+{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0},
 /* 256 */
 };
 
@@ -525,9 +525,9 @@ int process_queue(struct itrm *itrm)
 				} else {
 					goto ret;
 				}
-			
+
 			}
-			
+
 			else switch (c) {
 				case 'A': ev.x = KBD_UP; break;
 				case 'B': ev.x = KBD_DOWN; break;
@@ -566,7 +566,7 @@ int process_queue(struct itrm *itrm)
 					case 24: ev.x = KBD_F12; break;
 					} break;
 				case 'R':
-						  resize_terminal (); break ;
+						  resize_terminal (); break;
 				case 'M': if (itrm->qlen - el < 3) goto ret;
 					if (v == 5) {
 						if (xterm_button == -1) xterm_button = 0; /* */
@@ -576,7 +576,7 @@ int process_queue(struct itrm *itrm)
 						ev.y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
 						if ( ev.y & (1 << 13)) ev.y = 0; /* ev.y |= ~0 << 14; */
 						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changhes only one bit */
-						    case TW_BUTT_LEFT:   ev.b = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break; 
+						    case TW_BUTT_LEFT:   ev.b = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
 						    case TW_BUTT_MIDDLE: ev.b = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
 						    case TW_BUTT_RIGHT:  ev.b = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
 						    case 0: ev.b = B_DRAG;
@@ -592,7 +592,7 @@ int process_queue(struct itrm *itrm)
 						if ((ev.b |= (itrm->kqueue[el] & BM_BUTT) | B_DOWN) == 3) {
 							ev.b = B_UP;
 							if (xterm_button != -1) ev.b |= xterm_button;
-						}  
+						}
 						/*if ((itrm->kqueue[el] & 4) && ev.b != B_UP) ev.b |= B_DRAG;*/
 						xterm_button = -1;
 						if ((ev.b & BM_ACT) == B_DOWN) xterm_button = ev.b & BM_BUTT;

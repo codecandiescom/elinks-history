@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.1 2002/03/17 14:05:26 pasky Exp $ */
+/* $Id: charsets.c,v 1.2 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,7 +210,7 @@ struct conv_table *get_translation_table_to_utf_8(int from)
 	for (i = 128; i < 256; i++) utf_table[i].u.str = NULL;
 	for (i = 0; codepages[from].table[i].c; i++) {
 		int u = codepages[from].table[i].u;
-		
+
 		if (!utf_table[codepages[from].table[i].c].u.str)
 			utf_table[codepages[from].table[i].c].u.str =
 				stracpy(encode_utf_8(u));

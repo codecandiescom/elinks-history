@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.3 2002/03/17 14:05:26 pasky Exp $ */
+/* $Id: renderer.c,v 1.4 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,22 +138,22 @@ static inline int find_nearest_color(struct rgb *r, int l)
 
 static inline int fg_color(int fg, int bg)
 {
-	/* 0 == brightgrey  6 == cyan        12 == brightblue 
-	 * 1 == red         7 == brightgrey  13 == brightmagenta 
-	 * 2 == green       8 == black       14 == brightcyan 
+	/* 0 == brightgrey  6 == cyan        12 == brightblue
+	 * 1 == red         7 == brightgrey  13 == brightmagenta
+	 * 2 == green       8 == black       14 == brightcyan
 	 * 3 == red         9 == brightred   15 == brightwhite
-	 * 4 == blue       10 == brightgreen 
-	 * 5 == magenta    11 == brightyellow 
+	 * 4 == blue       10 == brightgreen
+	 * 5 == magenta    11 == brightyellow
 	 */
 
 	/* This looks like it should be more efficient. It results in
 	 * different machine-code, but the same number of instructions:
 	 * int l, h;
 	 * if (bg < fg) l = bg, h = fg; else l = fg, h = bg;
-	 */ 
+	 */
 	int l = bg < fg ? bg : fg;
 	int h = bg < fg ? fg : bg;
-	
+
 	/* Below, I changed !l to l == 0. The two forms compile to the same
 	 * machine-code with GCC 2.95.4. The latter is more readable (IMO). */
 
@@ -183,22 +183,22 @@ static inline int fg_color(int fg, int bg)
 static int realloc_lines(struct part *p, int y)
 {
 	int i;
-	
+
 	if (ALIGN(y + 1) >= ALIGN(p->data->y)) {
 		struct line *l;
-		
+
 		l = mem_realloc(p->data->data, ALIGN(y+1)*sizeof(struct line));
 		if (!l)	return -1;
-		
+
 		p->data->data = l;
 	}
-	
+
 	for (i = p->data->y; i <= y; i++) {
 		p->data->data[i].l = 0;
 		p->data->data[i].c = p->bgcolor;
 		p->data->data[i].d = DUMMY;
 	}
-	
+
 	p->data->y = i;
 
 	return 0;
@@ -217,20 +217,20 @@ static inline int xpand_lines(struct part *p, int y)
 static int realloc_line(struct part *p, int y, int x)
 {
 	int i;
-	
+
 	if (ALIGN(x + 1) >= ALIGN(p->data->data[y].l)) {
 		chr *l;
-		
+
 		l = mem_realloc(p->data->data[y].d, ALIGN(x+1)*sizeof(chr));
 		if (!l)	return -1;
-		
+
 		p->data->data[y].d = l;
 	}
-	
+
 	for (i = p->data->data[y].l; i <= x; i++) {
 		p->data->data[y].d[i] = (p->data->data[y].c << 11) | ' ';
 	}
-	
+
 	p->data->data[y].c = p->bgcolor;
 	p->data->data[y].l = i;
 
@@ -255,14 +255,14 @@ static inline int xpand_line(struct part *p, int y, int x)
 int realloc_spaces(struct part *p, int l)
 {
 	unsigned char *c;
-	
+
 	c = mem_realloc(p->spaces, l + 1);
 	if (!c) return -1;
 	memset(c + p->spl, 0, l - p->spl + 1);
-	
+
 	p->spl = l + 1;
 	p->spaces = c;
-	
+
 	return 0;
 }
 
@@ -332,14 +332,14 @@ static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
 	struct tag *tag;
 	int nlink;
 	int matched = 0;
-	
+
 	if (!part->data) return;
 	xpand_lines(part, yt);
-	
+
 	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
 		struct link *link = &part->data->links[nlink];
 		int i;
-		
+
 		for (i = 0; i < link->n; i++) {
 			if (link->pos[i].y == Y(yf)) {
 				matched = 1;
@@ -358,7 +358,7 @@ static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
 				}
 			}
 		}
-		
+
 #if 0
 		if (!link->n) {
 			if (link->where) mem_free(link->where);
@@ -370,12 +370,12 @@ static inline void move_links(struct part *part, int xf, int yf, int xt, int yt)
 			nlink--;
 		}
 #endif
-		
+
 		if (!matched /* && nlink >= 0 */) last_link_to_move = nlink;
 	}
-	
+
 	matched = 0;
-	
+
 	if (yt >= 0) {
 		for (tag = last_tag_to_move->next;
 		     (void *) tag != &part->data->tags;
@@ -411,15 +411,15 @@ static inline void shift_chars(struct part *part, int y, int shift)
 {
 	chr *a;
 	int len = LEN(y);
-	
+
 	a = mem_alloc(len * sizeof(chr));
 	if (!a) return;
-	
+
 	memcpy(a, &POS(0, y), len * sizeof(chr));
 	set_hchars(part, 0, y, shift, (part->data->data[y].c << 11) | ' ');
 	copy_chars(part, shift, y, len, a);
 	mem_free(a);
-	
+
 	move_links(part, 0, y, shift, y);
 }
 
@@ -482,7 +482,7 @@ static void justify_line(struct part *part, int y)
 	int pos;
 	int *space_list;
 	int spaces;
-	
+
 	line = mem_alloc(len * sizeof(chr));
 	if (!line) return;
 
@@ -493,21 +493,21 @@ static void justify_line(struct part *part, int y)
 	if (!space_list) return;
 
 	memcpy(line, &POS(0, y), len * sizeof(chr));
-	
+
 	/* Skip leading spaces */
 
 	spaces = 0;
 	pos = 0;
-	
+
 	while ((line[pos] & 0xff) == ' ')
 		pos++;
-	
+
 	/* Yes, this can be negative, we know. But we add one to it always
 	 * anyway, so it's ok. */
 	space_list[spaces++] = pos - 1;
 
 	/* Count spaces */
-	
+
 	for (; pos < len; pos++)
 		if ((line[pos] & 0xff) == ' ')
 			space_list[spaces++] = pos;
@@ -515,7 +515,7 @@ static void justify_line(struct part *part, int y)
 	space_list[spaces] = len;
 
 	/* Realign line */
-	
+
 	if (spaces > 1) {
 		int insert = 1; //overlap(par_format) - len;
 		int prev_end = 0;
@@ -523,17 +523,17 @@ static void justify_line(struct part *part, int y)
 
 		set_hchars(part, 0, y, overlap(par_format),
 			   (part->data->data[y].c << 11) | ' ');
-		
+
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of
 			 * characters, so we move 'word'th word 'word_shift'
 			 * characters right. */
-			
+
 			int word_start = space_list[word] + 1;
 			int word_len = space_list[word + 1] - word_start;
 			int word_shift = (word * insert) / (spaces - 1);
-			int new_start = word_start + word_shift; 
-			
+			int new_start = word_start + word_shift;
+
 			copy_chars(part, new_start, y, word_len,
 				   &line[word_start]);
 
@@ -541,7 +541,7 @@ static void justify_line(struct part *part, int y)
 			 * the word. */
 			if (word != 0)
 				move_links(part, prev_end + 1, y, new_start, y);
-			
+
 			prev_end = new_start + word_len;
 		}
 	}
@@ -554,12 +554,12 @@ void align_line(struct part *part, int y, int last)
 {
 	int shift;
 	int len;
-	
+
 	if (!part->data)
 		return;
 
 	len = LEN(y);
-	
+
 	if (!len || par_format.align == AL_LEFT ||
 		    par_format.align == AL_NO)
 		return;
@@ -569,7 +569,7 @@ void align_line(struct part *part, int y, int last)
 			justify_line(part, y);
 		return;
 	}
-	
+
 	shift = overlap(par_format) - len;
 	if (par_format.align == AL_CENTER)
 		shift /= 2;
@@ -871,9 +871,9 @@ void html_form_control(struct part *part, struct form_control *fc)
 		add_to_list(part->uf, fc);
 		return;
 	}
-	
+
 	fc->g_ctrl_num = g_ctrl_num++;
-	
+
 	if (1 /*fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_TEXTAREA*/) {
 		unsigned char *dv = convert_string(convert_table, fc->default_value, strlen(fc->default_value));
 		int i;
@@ -882,7 +882,7 @@ void html_form_control(struct part *part, struct form_control *fc)
 			mem_free(fc->default_value);
 			fc->default_value = dv;
 		}
-		
+
 		for (i = 0; i < fc->nvalues; i++) {
 			dv = convert_string(convert_table, fc->values[i], strlen(fc->values[i]));
 			if (dv) {
@@ -891,7 +891,7 @@ void html_form_control(struct part *part, struct form_control *fc)
 			}
 		}
 	}
-	
+
 	add_to_list(part->data->forms, fc);
 }
 
@@ -1021,7 +1021,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 			}
 		}
 	}
-	
+
 	if (ys < 0) {
 		internal("format_html_part: ys == %d", ys);
 		return NULL;
@@ -1486,7 +1486,7 @@ void format_frames(struct session *ses, struct frameset_desc *fsd, struct docume
 		}
 		o.yp += o.yw + 1;
 	}
-			
+
 	/*for (i = 0; i < fsd->n; i++) {
 		if (!fsd->horiz) o.xw = fsd->f[i].width;
 		else o.yw = fsd->f[i].width;
@@ -1621,7 +1621,7 @@ int get_srch(struct f_data *f)
 			int ns = 1;
 			for (x = n->x; x < xm && x < f->data[y].l; x++) {
 				unsigned char c = f->data[y].d[x];
-				if (c < ' ') c = ' ' ;
+				if (c < ' ') c = ' ';
 				if (c == ' ' && ns) continue;
 				if (ns) {
 					if (!cc) add_srch_chr(f, c, x, y, 1);
@@ -1647,7 +1647,7 @@ int get_srch(struct f_data *f)
 		}
 	}
 	return cnt;
-	
+
 }
 
 void get_search_data(struct f_data *f)

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.3 2002/03/17 14:05:27 pasky Exp $ */
+/* $Id: sched.c,v 1.4 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,11 +854,11 @@ struct list_head http_auth_basic_list = { &http_auth_basic_list, &http_auth_basi
 struct http_auth_basic *find_auth_entry(unsigned char *url)
 {
 	struct http_auth_basic *a;
-	
+
 	foreach(a, http_auth_basic_list) {
 		if (!strncmp(a->url, url, a->url_len)) return a;
 	}
-	
+
 	return NULL;
 }
 
@@ -866,7 +866,7 @@ int add_auth_entry(unsigned char *url, unsigned char *realm)
 {
 	/* TODO: complete rewrite */
 	struct http_auth_basic *a;
-	
+
 	if ((a = find_auth_entry(url))) {
 #if 0
 		a->valid = 0;
@@ -882,23 +882,23 @@ int add_auth_entry(unsigned char *url, unsigned char *realm)
 		del_auth_entry(a);
 #endif
 	}
-	
+
 	if (!(a = mem_alloc(sizeof(struct http_auth_basic)))) return -1;
 	memset(a, 0, sizeof(struct http_auth_basic));
 
 	while (url[a->url_len] && !end_of_dir(url[a->url_len])) a->url_len++;
 	while (a->url_len && url[a->url_len - 1] != '/') a->url_len--;
-	
+
 	if (a->url_len < 9) {
 err:
 		mem_free(a);
 		return -1;
 	}
-	
+
 	if (!(a->url = mem_alloc(a->url_len + 1))) {
 		goto err;
 	}
-	
+
 	memcpy(a->url, url, a->url_len);
 	a->url[a->url_len] = 0;
 	a->realm = realm;
@@ -914,14 +914,14 @@ unsigned char *find_auth(unsigned char *url)
 	struct http_auth_basic *a = NULL;
 	unsigned char *uid, *b64;
 	int n;
-	
+
 	a = find_auth_entry(url);
 	if (!a)	return NULL;
 
 	if ((a->passwd == NULL) || (a->uid == NULL)) {
-		del_auth_entry(a); 
+		del_auth_entry(a);
 		del_from_list(a);
-		return NULL; 
+		return NULL;
 	}
 
 	if (!(uid = mem_alloc(strlen(a->uid) + strlen(a->passwd) + 2))) return NULL;

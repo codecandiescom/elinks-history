@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: tables.c,v 1.3 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -634,7 +634,7 @@ int get_hline_width(struct table *t, int row)
 	if (!w && !t->vcellpd) w = -1;
 	return w;
 }
-	
+
 int get_column_widths(struct table *t)
 {
 	int i, j, s, ns;
@@ -1109,7 +1109,7 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	struct s_e *bad_html;
 	int bad_html_n;
 	struct node *n, *nn;
-	
+
 	table_level++;
 	memcpy(&bgcolor, &par_format.bgcolor, sizeof(struct rgb));
 	get_bgcolor(attr, &bgcolor);

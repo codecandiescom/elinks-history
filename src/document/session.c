@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.4 2002/03/17 14:39:12 pasky Exp $ */
+/* $Id: session.c,v 1.5 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ unsigned char *get_stat_msg(struct status *stat, struct terminal *term)
 			add_to_str(&m, &l, _(TEXT(T_AVG), term)), add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10 / (stat->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) 
+		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 			add_to_str(&m, &l, ", "), add_to_str(&m, &l, _(TEXT(T_CUR), term)), add_to_str(&m, &l, " "),
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000)),
 			add_to_str(&m, &l, "/s");
@@ -188,20 +188,20 @@ void print_screen_status(struct session *ses)
 	unsigned char *msg = NULL;
 
 	/* TODO: Make this optionally switchable off. */
-	
+
 	if (show_title_bar)
 		fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
 	if (show_status_bar)
 		fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
-	
+
 	if (ses->wtd)
 		stat = &ses->loading;
 	else if (!list_empty(ses->history))
 		stat = &cur_loc(ses)->stat;
-	
+
 	if (stat && stat->state == S_OK) {
 		struct file_to_load *ftl;
-		
+
 		foreach(ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) {
 				stat = &ftl->stat;
@@ -209,7 +209,7 @@ void print_screen_status(struct session *ses)
 			}
 		}
 	}
-	
+
 	if (stat) {
 		if (show_status_bar) {
 			if (stat->state == S_OK)
@@ -222,19 +222,19 @@ void print_screen_status(struct session *ses)
 				mem_free(msg);
 			}
 		}
-		
+
 		if (show_title_bar) {
 			msg = print_current_title(ses);
 			if (msg) {
 				int pos = term->x - 1 - strlen(msg);
-			
+
 				if (pos < 0) pos = 0;
 				print_text(term, pos, 0, strlen(msg),
 					   msg, COLOR_TITLE);
 				mem_free(msg);
 			}
 		}
-	
+
 		msg = stracpy("Links");
 		if (msg) {
 			if (ses->screen && ses->screen->f_data
@@ -393,31 +393,31 @@ void map_selected(struct terminal *term, struct link_def *ld, struct session *se
 void ses_back(struct session *ses)
 {
 	struct location *loc;
-	
+
 	free_files(ses);
-	
+
 	/* This is the current location. */
 	loc = ses->history.next;
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->history) return;
     	del_from_list(loc);
 	add_to_list(ses->unhistory, loc);
-	
+
 	/* This was the previous location (where we came back now). */
 	loc = ses->history.next;
 	if ((void *)loc == &ses->history) return;
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 	destroy_location(loc);
-	
+
 	ses_forward(ses);
 }
 
 void ses_unback(struct session *ses)
 {
 	struct location *loc;
-	
+
 	free_files(ses);
-	
+
 	loc = ses->unhistory.next;
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->unhistory) return;
@@ -512,7 +512,7 @@ void download_window_function(struct dialog_data *dlg)
 		add_to_str(&m, &l, " ");
 		add_xnum_to_str(&m, &l, (longlong)stat->prg->loaded * 10 / (stat->prg->elapsed / 100));
 		add_to_str(&m, &l, "/s");
-		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) 
+		if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
 			add_to_str(&m, &l, ", "), add_to_str(&m, &l, _(TEXT(T_CURRENT_SPEED), term)), add_to_str(&m, &l, " "),
 			add_xnum_to_str(&m, &l, stat->prg->cur_loaded / (CURRENT_SPD_SEC * SPD_DISP_TIME / 1000)),
 			add_to_str(&m, &l, "/s");
@@ -617,7 +617,7 @@ time_t parse_http_date(const char *date)
 		 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	struct tm tm;
 	time_t t = 0;
-	
+
 	if (!date)
 		return 0;
 
@@ -625,19 +625,19 @@ time_t parse_http_date(const char *date)
 
 	while (*date && *date != ' ') date++;
 	date++;
-	
+
 	if (strlen(date) < 21) {
 		/* It's too short! */
 		return 0;
 	}
 
 	/* Eat day */
-	
+
 	tm.tm_mday = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
 
 	/* Eat month */
-	
+
 	for (tm.tm_mon = 0; tm.tm_mon < 12; tm.tm_mon++)
 		if (!strncmp(date, months[tm.tm_mon], 3))
 			break;
@@ -646,39 +646,39 @@ time_t parse_http_date(const char *date)
 	/* Eat year */
 
 	tm.tm_year = 0;
-	
+
 	if (date[3] == '0' && date[4] == '0') {
 		/* Four-digit year */
 		tm.tm_year = (date[0] - '0') * 1000 + (date[1] - '0') * 100;
 		date += 2;
 		/* We take off the 1900 later. */
 	}
-	
+
 	tm.tm_year += (date[0] - '0') * 10 + (date[1] - '0');
 	date += 3;
-	
+
 	if (tm.tm_year < 60) {
 		/* It's already next century. */
 		tm.tm_year += 100;
 	}
-	
+
 	if (tm.tm_year >= 200) {
 		/* Four-digit year, saga continues */
 		tm.tm_year -= 1900;
 	}
 
 	/* Eat hour */
-	
+
 	tm.tm_hour = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
 
 	/* Eat minute */
-	
+
 	tm.tm_min = (date[0] - '0') * 10 + date[1] - '0';
 	date += 3;
 
 	/* Eat second */
-	
+
 	tm.tm_sec = (date[0] - '0') * 10 + date[1] - '0';
 
 	/* TODO: Maybe we should accept non-GMT times as well? */
@@ -690,25 +690,25 @@ time_t parse_http_date(const char *date)
 	 * to handle GMT. */
 	{
 		char *tz = getenv("TZ");
- 		
+
 		if (tz && *tz) {
 			/* Temporary disable timezone in-place. */
 			char tmp = *tz;
- 			
+
 			*tz = '\0';
 			tzset();
-			
+
 			t = mktime(&tm);
-			
+
 			*tz = tmp;
 			tzset();
-			
+
 		} else {
 			t = mktime(&tm);
 		}
 	}
 #endif
-       
+
 	if (t == (time_t) -1)
 		return 0;
 	else
@@ -880,7 +880,7 @@ unsigned char *subst_file(unsigned char *prog, unsigned char *file)
 	int l = 0;
 	while (*prog) {
 		int p;
-		for (p = 0; prog[p] && prog[p] != '%'; p++) ;
+		for (p = 0; prog[p] && prog[p] != '%'; p++);
 		add_bytes_to_str(&n, &l, prog, p);
 		prog += p;
 		if (*prog == '%') {
@@ -1138,7 +1138,7 @@ void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, in
 	struct wtd_data *w;
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
-	
+
 	if (!form_submit_confirm || !strchr(url, POST_CHAR)
 	    || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e) && !e->incomplete)
 	    || !(w = mem_alloc(sizeof(struct wtd_data)))) {
@@ -1177,12 +1177,12 @@ int do_move(struct session *ses, struct status **stat)
 {
 	struct cache_entry *ce = NULL;
 	int l = 0;
-	
+
 	if (!ses->loading_url) {
 		internal("no ses->loading_url");
 		return 0;
 	}
-	
+
 	if (!(ce = (*stat)->ce) || (ses->wtd == WTD_IMGMAP && (*stat)->state >= 0)) {
 		return 0;
 	}
@@ -1310,7 +1310,7 @@ void display_timer(struct session *ses)
 	load_frames(ses, ses->screen);
 	process_file_requests(ses);
 }
-	
+
 struct list_head questions_queue = {&questions_queue, &questions_queue};
 
 struct questions_entry {
@@ -1341,7 +1341,7 @@ void add_questions_entry(void *callback)
 void end_load(struct status *stat, struct session *ses)
 {
 	int d;
-	
+
 	if (!ses->wtd) {
 		internal("end_load: !ses->wtd");
 		return;
@@ -1380,7 +1380,7 @@ unsigned char *pre_format_html_hook(struct session *ses, unsigned char *url, uns
 
 	lua_pushstring(L, url);
 	lua_pushlstring(L, html, *len);
-	
+
 	if (prepare_lua(ses)) return NULL;
 	err = lua_call(L, 2, 1);
 	finish_lua();
@@ -1389,7 +1389,7 @@ unsigned char *pre_format_html_hook(struct session *ses, unsigned char *url, uns
 	if (lua_isstring(L, -1)) {
 		*len = lua_strlen(L, -1);
 		s = memacpy((unsigned char *) lua_tostring(L, -1), *len);
-	}	
+	}
 	else if (!lua_isnil(L, -1)) alert_lua_error("pre_format_html_hook must return a string or nil");
 	lua_pop(L, 1);
 	return s;
@@ -1746,7 +1746,7 @@ void go_back(struct session *ses)
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
-	
+
 	ses->reloadlevel = NC_CACHE;
 	if (ses->wtd) {
 		if (1 || ses->wtd != WTD_BACK) {
@@ -1761,13 +1761,13 @@ void go_back(struct session *ses)
 	abort_loading(ses);
 	if (!(url = stracpy(((struct location *)ses->history.next)->next->vs.url)))
 		return;
-	
+
 	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
-	
+
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
 }
 
@@ -1776,7 +1776,7 @@ void go_unback(struct session *ses)
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
-	
+
 	ses->reloadlevel = NC_CACHE;
 	/* XXX: why wtd checking is not here? --pasky */
 	if (ses->unhistory.next == &ses->unhistory)
@@ -1784,13 +1784,13 @@ void go_unback(struct session *ses)
 	abort_loading(ses);
 	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
 		return;
-	
+
 	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
-	
+
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
 }
 
@@ -1824,7 +1824,7 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 	void (*fn)(struct session *, unsigned char *);
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
-	
+
 #ifdef HAVE_LUA
 	unsigned char *tofree = NULL;
 	if (!(url = follow_url_hook(ses, url))) goto end;
@@ -1858,7 +1858,7 @@ void goto_url_w(struct session *ses, unsigned char *url, unsigned char *target, 
 	}
 	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
 	/*abort_loading(ses);*/
-	
+
 	end:
         if (!keep_unhistory) {
 		struct location *l;
@@ -1924,7 +1924,7 @@ struct frame *ses_change_frame_url(struct session *ses, unsigned char *name, uns
 		return frm;
 	}
 	return NULL;
-	
+
 }
 
 void win_func(struct window *win, struct event *ev, int fw)
@@ -1960,10 +1960,10 @@ void win_func(struct window *win, struct event *ev, int fw)
 	}
 }
 
-/* 
+/*
  * Gets the url being viewed by this session. Writes it into str.
  * A maximum of str_size bytes (including null) will be written.
- */  
+ */
 unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t str_size) {
 	unsigned char *here, *end_of_url;
 	size_t url_len = 0;
@@ -1988,15 +1988,15 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 			url_len = str_size - 1;
 
 	safe_strncpy(str, here, url_len + 1);
-	
+
 	return str;
 }
 
 
-/* 
+/*
  * Gets the title of the page being viewed by this session. Writes it into str.
  * A maximum of str_size bytes (including null) will be written.
- */  
+ */
 unsigned char *get_current_title(struct session *ses, unsigned char *str, size_t str_size) {
 	struct f_data_c *fd;
 	fd = (struct f_data_c *)current_frame(ses);
@@ -2008,27 +2008,27 @@ unsigned char *get_current_title(struct session *ses, unsigned char *str, size_t
 	return safe_strncpy(str, fd->f_data->title, str_size);
 }
 
-/* 
+/*
  * Gets the url of the link currently selected. Writes it into str.
  * A maximum of str_size bytes (including null) will be written.
- */  
+ */
 unsigned char *get_current_link_url(struct session *ses, unsigned char *str, size_t str_size) {
 	struct f_data_c *fd;
     struct link *l;
-	
+
 	fd = (struct f_data_c *)current_frame(ses);
 	/* What the hell is an 'fd'? */
 	if (!fd)
 		return NULL;
-	
+
 	/* Nothing selected? */
-    if (fd->vs->current_link == -1) 
+    if (fd->vs->current_link == -1)
 		return NULL;
 
     l = &fd->f_data->links[fd->vs->current_link];
 	/* Only write a link */
-    if (l->type != L_LINK) 
+    if (l->type != L_LINK)
 		return NULL;
-	
+
 	return safe_strncpy(str, l->where ? l->where : l->where_img, str_size);
 }

@@ -1,5 +1,5 @@
-/* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */ 
-/* $Id: mailto.c,v 1.3 2002/03/17 14:05:28 pasky Exp $ */
+/* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
+/* $Id: mailto.c,v 1.4 2002/03/17 17:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ void tn_func(struct session *ses, unsigned char *url, struct list_head *prog, un
 	int hl, pl;
 	unsigned char *hh, *pp;
 	int f = 1;
-	
+
 	/* TODO: We shouldn't use parse_url() but some wrapper. */
 
 	if (parse_url(url, NULL, NULL, NULL, NULL, NULL, &h, &hl, &p, &pl, NULL, NULL, NULL) || !hl) goto fail;

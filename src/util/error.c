@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.2 2002/03/17 13:54:15 pasky Exp $ */
+/* $Id: error.c,v 1.3 2002/03/17 17:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,42 +152,42 @@ void *debug_mem_alloc(unsigned char *file, int line, size_t size)
 {
 	void *p;
 	struct alloc_header *ah;
-	
+
 	if (!size) return DUMMY;
-	
+
 	mem_amount += size;
 	size += L_D_S;
-	
+
 	if (!(p = xmalloc(size))) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
-	
+
 	ah = p;
 	p = (char *)p + L_D_S;
-	
+
 	ah->size = size - L_D_S;
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
 	ah->comment = NULL;
-	
+
 	add_to_list(memory_list, ah);
 #endif
-	
+
 	return p;
 }
 
 void debug_mem_free(unsigned char *file, int line, void *p)
 {
 	struct alloc_header *ah;
-	
+
 	if (p == DUMMY) return;
 	if (!p) {
 		errfile = file, errline = line, int_error("mem_free(NULL)");
 		return;
 	}
-	
+
 	p = (char *)p - L_D_S;
 	ah = p;
 #ifdef LEAK_DEBUG_LIST
@@ -201,7 +201,7 @@ void debug_mem_free(unsigned char *file, int line, void *p)
 void *debug_mem_realloc(unsigned char *file, int line, void *p, size_t size)
 {
 	struct alloc_header *ah;
-	
+
 	if (p == DUMMY) return debug_mem_alloc(file, line, size);
 	if (!p) {
 		errfile = file, errline = line, int_error("mem_realloc(NULL, %d)", size);
@@ -215,7 +215,7 @@ void *debug_mem_realloc(unsigned char *file, int line, void *p, size_t size)
 		error("ERROR: out of memory (realloc returned NULL)\n");
 		return NULL;
 	}
-	
+
 	ah = p;
 	mem_amount += size - ah->size;
 	ah->size = size;

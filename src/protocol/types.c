@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.3 2002/03/17 14:05:28 pasky Exp $ */
+/* $Id: types.c,v 1.4 2002/03/17 17:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,8 +55,8 @@ int is_in_list(unsigned char *list, unsigned char *str, int l)
 	rep:
 	while (*list && *list <= ' ') list++;
 	if (!*list) return 0;
-	for (l2 = list; *l2 && *l2 != ','; l2++) ;
-	for (l3 = l2 - 1; l3 >= list && *l3 <= ' '; l3--) ;
+	for (l2 = list; *l2 && *l2 != ','; l2++);
+	for (l3 = l2 - 1; l3 >= list && *l3 <= ' '; l3--);
 	l3++;
 	if (l3 - list == l && !casecmp(str, list, l)) return 1;
 	list = l2;

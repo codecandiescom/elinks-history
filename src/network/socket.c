@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: socket.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ void dns_exception(void *data)
 void exception(void *data)
 {
         struct connection *c = (struct connection *) data;
-	
+
 	setcstate(c, S_EXCEPT);
 	retry_connection(c);
 }
@@ -108,14 +108,14 @@ void make_connection(struct connection *conn, int port, int *sock,
 	unsigned char *host;
 	struct conn_info *c_i;
 	int async;
-	
+
 	host = get_host_name(conn->url);
 	if (!host) {
 		setcstate(conn, S_INTERNAL);
 		abort_connection(conn);
 		return;
 	}
-	
+
 	c_i = mem_alloc(sizeof(struct conn_info));
 	if (!c_i) {
 		mem_free(host);
@@ -123,27 +123,27 @@ void make_connection(struct connection *conn, int port, int *sock,
 		retry_connection(conn);
 		return;
 	}
-	
+
 	c_i->func = func;
 	c_i->sock = sock;
 	c_i->port = port;
 	c_i->triedno = -1;
 	c_i->addr = NULL;
 	conn->conn_info = c_i;
-	
+
 	log_data("\nCONNECTION: ", 13);
 	log_data(host, strlen(host));
 	log_data("\n", 1);
-	
+
 	if (conn->no_cache >= NC_RELOAD)
 		async = find_host_no_cache(host, &c_i->addr, &c_i->addrno,
 					   &conn->dnsquery, dns_found, conn);
 	else
 		async = find_host(host, &c_i->addr, &c_i->addrno,
 				  &conn->dnsquery, dns_found, conn);
-	
+
 	mem_free(host);
-	
+
 	if (async) setcstate(conn, S_DNS);
 }
 
@@ -155,35 +155,35 @@ int get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 	struct sockaddr_in sa;
 	struct sockaddr_in sb;
 	int len = sizeof(sa);
-	
+
 	/* Get our endpoint of the control socket */
-	
+
 	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
 error:
 		setcstate(conn, -errno);
 		retry_connection(conn);
 		return -1;
 	}
-	
+
 	/* Get a passive socket */
-	
+
 	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sock < 0)
 		goto error;
-	
+
 	/* Set it non-blocking */
-	
+
 	fcntl(sock, F_SETFL, O_NONBLOCK);
 
 	/* Bind it to some port */
-	
+
 	memcpy(&sb, &sa, sizeof(struct sockaddr_in));
 	sb.sin_port = 0;
 	if (bind(sock, (struct sockaddr *) &sb, sizeof(sb)))
 		goto error;
-	
+
 	/* Get our endpoint of the passive socket and save it to port */
-	
+
 	len = sizeof(sa);
 	if (getsockname(sock, (struct sockaddr *) &sa, &len))
 		goto error;
@@ -191,10 +191,10 @@ error:
 	memcpy(port + 4, &sa.sin_port, 2);
 
 	/* Go listen */
-	
+
 	if (listen(sock, 1))
 		goto error;
-	
+
 #if defined(IP_TOS) && defined(IPTOS_THROUGHPUT)
 	{
 		int on = IPTOS_THROUGHPUT;
@@ -231,22 +231,22 @@ void ssl_want_read(struct connection *c)
 int ssl_connect(struct connection *conn, int sock)
 {
         struct conn_info *c_i = (struct conn_info *) conn->buffer;
-	
+
 	if (conn->ssl) {
 		conn->ssl = getSSL();
 		SSL_set_fd(conn->ssl, sock);
 		if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
-		
+
 		switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
 			case SSL_ERROR_WANT_READ:
 				setcstate(conn, S_SSL_NEG);
 				set_handlers(sock, (void (*)(void *)) ssl_want_read,
 					     NULL, dns_exception, conn);
 				return -1;
-				
+
 			case SSL_ERROR_NONE:
 				break;
-				
+
 			default:
 				conn->no_tsl++;
 				setcstate(conn, S_SSL_ERROR);
@@ -267,13 +267,13 @@ void dns_found(void *data, int state)
 	struct conn_info *c_i = conn->conn_info;
 	int i;
 	int trno = c_i->triedno;
-	
+
 	if (state < 0) {
 		setcstate(conn, S_NO_DNS);
 		retry_connection(conn);
 		return;
 	}
-	
+
 	/* Clear handlers, the connection to the previous RR really timed
 	 * out and doesn't interest us anymore. */
 	if (c_i->sock && *c_i->sock >= 0)
@@ -294,7 +294,7 @@ void dns_found(void *data, int state)
 		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
 #endif
 		if (sock == -1) continue;
-		
+
 		*c_i->sock = sock;
 		fcntl(sock, F_SETFL, O_NONBLOCK);
 
@@ -303,7 +303,7 @@ void dns_found(void *data, int state)
 #else
 		addr.sin_port = htons(c_i->port);
 #endif
-		
+
 #ifdef IPV6
 		if (addr.sin6_family == AF_INET6) {
 			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6)) == 0)
@@ -325,7 +325,7 @@ void dns_found(void *data, int state)
 
 	if (i >= c_i->addrno) {
 		/* Tried everything, but it didn't help :(. */
-	
+
 		/* We set new state only if we already tried something new. */
 		if (trno != c_i->triedno) setcstate(conn, -errno);
 		retry_connection(conn);
@@ -350,7 +350,7 @@ void connected(void *data)
 	int len = sizeof(int);
 
 	if (! c_i) internal("Lost conn_info!");
-	
+
 	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
 		/* Why does EMX return so large values? */
 		if (err >= 10000) err -= 10000;
@@ -361,16 +361,16 @@ void connected(void *data)
 		else
 			err = -(S_STATE);
 	}
-	
+
 	if (err > 0) {
 		setcstate(conn, -err);
-		
+
 		/* There are maybe still some more candidates. */
 		close_socket(c_i->sock);
 		dns_found(conn, 0);
 		return;
 	}
-	
+
 #ifdef HAVE_SSL
 	if (ssl_connect(conn, *c_i->sock) < 0) return;
 #endif

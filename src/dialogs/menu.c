@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.1 2002/03/17 14:39:12 pasky Exp $ */
+/* $Id: menu.c,v 1.2 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,17 +187,17 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 	unsigned char *a1, *a2, *a3, *a4, *a5, *a6, *a7, *a8, *a9, *a10, *a11, *a12, *a13, *a14, *a15, *a16;
 	int l = 0;
 	struct refresh *r;
-	
+
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
-	
+
 	r->term = term;
 	r->win = NULL;
 	r->ses = ses;
 	r->fn = cache_inf;
 	r->data = d;
 	r->timer = -1;
-	
+
 	l = 0; a1 = init_str(); add_to_str(&a1, &l, ": ");
 				add_num_to_str(&a1, &l, select_info(CI_FILES)); add_to_str(&a1, &l, " ");
 	l = 0; a2 = init_str(); add_to_str(&a2, &l, ", ");
@@ -223,7 +223,7 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 	l = 0; a12 =init_str(); add_to_str(&a12, &l, ", ");
 				add_num_to_str(&a12, &l, cache_info(CI_LOADING)); add_to_str(&a12, &l, " ");
 	l = 0; a13 =init_str(); add_to_str(&a13, &l, ".\n");
-	
+
 	l = 0; a14 =init_str(); add_to_str(&a14, &l, ": ");
 				add_num_to_str(&a14, &l, formatted_info(CI_FILES)); add_to_str(&a14, &l, " ");
 	l = 0; a15 =init_str(); add_to_str(&a15, &l, ", ");
@@ -250,7 +250,7 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 		TEXT(T_LOCKED), a16, NULL,
 		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-	
+
 	r->win = term->windows.next;
 	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
 	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
@@ -263,10 +263,10 @@ void list_cache(struct terminal *term, void *d, struct session *ses)
 	int l = 0;
 	struct refresh *r;
 	struct cache_entry *ce, *cache;
-	
+
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
-	
+
 	a = init_str();
 
 	r->term = term;
@@ -282,13 +282,13 @@ void list_cache(struct terminal *term, void *d, struct session *ses)
 		add_to_str(&a, &l, "\n");
 		add_to_str(&a, &l, ce->url);
 	}
-	
+
 	msg_box(term, getml(a, NULL),
 		TEXT(T_CACHE_INFO), AL_LEFT | AL_EXTD_TEXT,
 		TEXT(T_CACHE_CONTENT), a, NULL,
 		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-	
+
 	r->win = term->windows.next;
 	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
 	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
@@ -309,31 +309,31 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 	char message[MSG_BUF];
 	char *p;
 	struct refresh *r;
-	
+
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
-	
+
 	r->term = term;
 	r->win = NULL;
 	r->ses = ses;
 	r->fn = memory_info;
 	r->data = d;
 	r->timer = -1;
-	
+
 	p = message;
 	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
 	p += strlen(p);
-	
+
 	if (last_mem_amount != -1) {
 		sprintf(p, ", %s %ld, %s %ld", _(TEXT(T_LAST), term),
 			last_mem_amount, _(TEXT(T_DIFFERENCE), term),
 			mem_amount - last_mem_amount);
 		p += strlen(p);
 	}
-	
+
 	sprintf(p, ".");
 	p += strlen(p);
-	
+
 #if 0 && defined(MAX_LIST_SIZE)
 	if (last_mem_amount != -1) {
 		long i, j;
@@ -353,19 +353,19 @@ void memory_info(struct terminal *term, void *d, struct session *ses)
 		p += sprintf(p, ".");
 	}
 #endif
-	
+
 	p = stracpy(message);
 	if (!p) {
 		mem_free(r);
 		return;
 	}
-	
+
 	msg_box(term, getml(p, NULL),
 		TEXT(T_MEMORY_INFO), AL_CENTER,
 		p,
 		r, 1,
 		TEXT(T_OK), NULL, B_ENTER | B_ESC);
-	
+
 	r->win = term->windows.next;
 	((struct dialog_data *) r->win->data)->dlg->abort = refresh_abort;
 	r->timer = install_timer(RESOURCE_INFO_REFRESH, (void (*)(void *)) refresh, r);
@@ -398,7 +398,7 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 	while (steps-- > 1) {
 		struct location *loc = ses->history.next;
-		
+
 		if ((void *) loc == &ses->history) return;
 
 		/* First item in history/unhistory is something special and
@@ -406,7 +406,7 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 
 		loc = loc->next;
 		if ((void *) loc == &ses->history) return;
-		
+
 		del_from_list(loc);
 		add_to_list(ses->unhistory, loc);
 	}
@@ -427,7 +427,7 @@ void go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	while (steps--) {
 	    	struct location *loc = ses->unhistory.next;
-		
+
 		if ((void *) loc == &ses->unhistory) return;
 
 		del_from_list(loc);
@@ -695,19 +695,19 @@ int dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[3].gid = 0;
 	d->items[3].dlen = sizeof(int);
 	d->items[3].data = (void *)&bugs->bug_post_no_keepalive;
-	
+
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 1;
 	d->items[4].gnum = REFERER_NONE;
 	d->items[4].dlen = sizeof(int);
 	d->items[4].data = (void *)&referer;
-	
+
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 1;
 	d->items[5].gnum = REFERER_SAME_URL;
 	d->items[5].dlen = sizeof(int);
 	d->items[5].data = (void *)&referer;
-	
+
 	/* This should be last, but I did it wrong originally and now I would
 	 * break backwards compatibility by changing it :/. */
 	d->items[6].type = D_CHECKBOX;
@@ -715,21 +715,21 @@ int dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[6].gnum = REFERER_FAKE;
 	d->items[6].dlen = sizeof(int);
 	d->items[6].data = (void *)&referer;
-	
+
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 1;
 	d->items[7].gnum = REFERER_TRUE;
 	d->items[7].dlen = sizeof(int);
 	d->items[7].data = (void *)&referer;
-	
+
 	d->items[8].type = D_FIELD;
 	d->items[8].dlen = MAX_STR_LEN;
 	d->items[8].data = fake_referer;
-	
+
 	d->items[9].type = D_FIELD;
 	d->items[9].dlen = MAX_STR_LEN;
 	d->items[9].data = user_agent;
-	
+
 	d->items[10].type = D_BUTTON;
 	d->items[10].gid = B_ENTER;
 	d->items[10].fn = ok_dialog;
@@ -1008,7 +1008,7 @@ void net_opt_ask(struct terminal *term, void *xxx, void *yyy)
 		net_options(term, xxx, yyy);
 		return;
 	}
-	
+
 	msg_box(term, NULL,
 		_("Network options"), AL_CENTER,
 		_("Warning: configuring network will terminate all running downloads. Do you really want to configure network?"),
@@ -1452,17 +1452,17 @@ void goto_url_with_hook(struct session *ses, unsigned char *url)
 		goto_url(ses, url);
 		return;
 	}
-	
+
 	lua_pushstring(L, url);
 	if (list_empty(ses->history)) lua_pushnil(L);
 	else lua_pushstring(L, cur_loc(ses)->vs.url);
-	
+
 	if (prepare_lua(ses)) return;
 	err = lua_call(L, 2, 1);
 	finish_lua();
 	if (err) return;
 
-	if (lua_isstring(L, -1)) goto_url(ses, (unsigned char *) lua_tostring(L, -1)); 
+	if (lua_isstring(L, -1)) goto_url(ses, (unsigned char *) lua_tostring(L, -1));
 	else if (!lua_isnil(L, -1)) alert_lua_error("goto_url_hook must return a string or nil");
 	lua_pop(L, 1);
 #endif
@@ -1567,7 +1567,7 @@ void auth_layout(struct dialog_data *dlg)
 	dlg_format_text(term, term, TEXT(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, TEXT(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);	
+	dlg_format_text(term, term, TEXT(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, &dlg->items[2], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
@@ -1632,20 +1632,20 @@ void do_auth_dialog(struct session *ses)
 
 	d->udata2 = a;
 	d->refresh_data = ses;
-	
+
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_UID_LEN;
 	d->items[0].data = a->uid;
-	
+
 	d->items[1].type = D_FIELD_PASS;
 	d->items[1].dlen = MAX_PASSWD_LEN;
 	d->items[1].data = a->passwd;
-	
+
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
 	d->items[2].fn = auth_ok;
 	d->items[2].text = TEXT(T_OK);
-	
+
 	d->items[3].type = D_BUTTON;
 	d->items[3].gid = B_ESC;
 	d->items[3].fn = auth_cancel;

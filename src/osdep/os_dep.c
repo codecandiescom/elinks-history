@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.3 2002/03/17 14:05:27 pasky Exp $ */
+/* $Id: os_dep.c,v 1.4 2002/03/17 17:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ int winch_thread_running = 0;
 
 void winch_thread(void)
 {
-	/* A thread which regularly checks whether the size of 
+	/* A thread which regularly checks whether the size of
 	   window has changed. Then raise SIGWINCH or notifiy
 	   the thread responsible to handle this. */
 	static int old_xsize, old_ysize;
@@ -147,7 +147,7 @@ void winch_thread(void)
 			write(winch_pipe[1], "x", 1);
 			/* Resizing may take some time. So don't send a flood
                      of requests?! */
-			_sleep2(2*WINCH_SLEEPTIME);   
+			_sleep2(2*WINCH_SLEEPTIME);
 		}
 		else
 			_sleep2(WINCH_SLEEPTIME);
@@ -543,7 +543,7 @@ void set_window_title(int init, const char *url)
 	HMQ hmq;
 	char new_title[MAXNAMEL];
 
-	switch(init) 
+	switch(init)
 	{
 	case 1:
 		DosGetInfoBlocks( &tib, &pib );
@@ -803,7 +803,7 @@ void input_thread(void *p)
 			if (w == 1) if (write(h, c+1, 1) <= 0) break;
 			printf("4");fflush(stdout);
 		}*/
-           /* for the records: 
+           /* for the records:
                  _read_kbd(0, 1, 1) will
                  read a char, don't echo it, wait for one available and
                  accept CTRL-C.
@@ -1132,21 +1132,21 @@ int get_input_handle()
 
 int get_input_handle()
 {
-	int	fd[2] ;
+	int	fd[2];
 	static int ti = -1, tp = -1;
-	int	pid ;
+	int	pid;
 
 	if (ti != -1) return ti;
 	if (c_pipe (fd) < 0) return 0;
-	ti = fd[0] ;
-	tp = fd[1] ;
+	ti = fd[0];
+	tp = fd[1];
 	if (!(pid = fork()))
 	{
-		input_function (tp) ;
+		input_function (tp);
 	}
 	else
-		set_proc_id (pid) ;
-	return ti ;
+		set_proc_id (pid);
+	return ti;
 }
 
 #else

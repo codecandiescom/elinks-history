@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: parser.h,v 1.3 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -135,19 +135,19 @@ struct text_attrib {
 /* This enum is pretty ugly, yes ;). */
 enum format_list_flag {
 	P_NONE = 0,
-	
+
 	P_NUMBER = 1,
 	P_alpha = 2,
 	P_ALPHA = 3,
 	P_roman = 4,
 	P_ROMAN = 5,
-	
+
 	P_STAR = 1,
 	P_O = 2,
 	P_PLUS = 3,
-	
+
 	P_LISTMASK = 7,
-	
+
 	P_COMPACT = 8,
 };
 

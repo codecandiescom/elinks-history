@@ -1,4 +1,4 @@
-/* $Id: bfu.h,v 1.2 2002/03/17 13:54:11 pasky Exp $ */
+/* $Id: bfu.h,v 1.3 2002/03/17 17:27:48 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
@@ -134,7 +134,7 @@ struct dialog_data {
 
 /* Stores display information about a box. Kept in cdata. */
 struct dlg_data_item_data_box {
-	int sel;	/* Item currently selected */	
+	int sel;	/* Item currently selected */
 	int box_top;	/* Index into items of the item that is on the top
 			   line of the box */
 	struct list_head items;	/* The list being displayed */
@@ -163,7 +163,7 @@ struct box_item {
 	enum box_item_free free_i;
 };
 
-void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *); 
+void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *);
 
 
 void do_dialog(struct terminal *, struct dialog *, struct memory_list *);
@@ -204,12 +204,12 @@ int cancel_dialog(struct dialog_data *, struct dialog_item_data *);
 int clear_dialog(struct dialog_data *, struct dialog_item_data *);
 
 void msg_box(struct terminal *, struct memory_list *, unsigned char *, int, /*unsigned char *, void *, int,*/ ...);
-	
+
 void input_field_fn(struct dialog_data *);
 void input_field(struct terminal *, struct memory_list *, unsigned char *, unsigned char *, unsigned char *, unsigned char *, void *, struct history *, int, unsigned char *, int, int, int (*)(struct dialog_data *, struct dialog_item_data *), void (*)(void *, unsigned char *), void (*)(void *));
 
-void box_sel_move(struct dialog_item_data *, int ); 
+void box_sel_move(struct dialog_item_data *, int );
 void show_dlg_item_box(struct dialog_data *, struct dialog_item_data *);
-void box_sel_set_visible(struct dialog_item_data *, int ); 
+void box_sel_set_visible(struct dialog_item_data *, int );
 
 #endif

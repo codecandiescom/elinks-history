@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.3 2002/03/17 14:05:26 pasky Exp $ */
+/* $Id: parser.c,v 1.4 2002/03/17 17:27:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,7 +440,7 @@ int parse_width(unsigned char *w, int trunc)
 	int s;
 	int l;
 	while (WHITECHAR(*w)) w++;
-	for (l = 0; w[l] && w[l] != ','; l++) ;
+	for (l = 0; w[l] && w[l] != ','; l++);
 	while (l && WHITECHAR(w[l - 1])) l--;
 	if (!l) return -1;
 	if (w[l - 1] == '%') l--, p = 1;
@@ -508,7 +508,7 @@ void html_focusable(unsigned char *a)
 {
 	char *accesskey = get_attr_val(a, "accesskey");
 	int tabindex = get_num(a, "tabindex");
-	
+
 	format.accesskey = 0;
 	format.tabindex = 0x80000000;
 
@@ -608,12 +608,12 @@ void html_img(unsigned char *a)
 	if (format.image) mem_free(format.image), format.image = NULL;
 	if (al) {
 		unsigned char *s;
-		
+
 		/* This is not 100% appropriate for <img>, but well, accepting
 		 * accesskey and tabindex near <img> is just our little
 		 * extension to the standart. After all, it makes sense. */
 		html_focusable(a);
-		
+
 		if ((s = get_url_val(a, "src")) || (s = get_attr_val(a, "dynsrc"))) {
 			format.image = join_urls(format.href_base, s);
 			mem_free(s);
@@ -1142,7 +1142,7 @@ void html_input(unsigned char *a)
 	}
 	kill_html_stack_item(&html_top);
 	put_chrs(" ", 1, put_chars_f, ff);
-			
+
 	hid:
 	special_f(ff, SP_CONTROL, fc);
 }
@@ -1151,9 +1151,9 @@ void html_select(unsigned char *a)
 {
 	/* Note I haven't seen this code in use, do_html_select() seems to take
 	 * care of bussiness. --FF */
-	
+
 	char *al = get_attr_val(a, "name");
-	
+
 	if (!al) return;
 	html_focusable(a);
 	html_top.dontkill = 1;
@@ -1174,7 +1174,7 @@ void html_option(unsigned char *a)
 		unsigned char *name;
 		int namelen;
 		int l = 0;
-		for (p = a - 1; *p != '<'; p--) ;
+		for (p = a - 1; *p != '<'; p--);
 		if (!(val = init_str())) goto x;
 		if (parse_element(p, eoff, NULL, NULL, NULL, &p)) {
 			internal("parse element failed");
@@ -1368,7 +1368,7 @@ int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char **val, **lbls;
 	int order, preselect, group;
 	int i, mw;
-	
+
 	if (has_attr(attr, "multiple")) return 1;
 	find_form_for_input(attr);
 	html_focusable(attr);

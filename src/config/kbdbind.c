@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.3 2002/03/17 17:27:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ void init_keymaps()
 	add_default_keybindings();
 }
 
-void free_keymaps() 
+void free_keymaps()
 {
 	enum keymap i;
 	for (i = 0; i < KM_MAX; i++) free_list(keymaps[i]);
@@ -98,7 +98,7 @@ struct strtonum {
 static long strtonum(struct strtonum *table, char *s)
 {
 	struct strtonum *p;
-	for (p = table; p->str; p++) 
+	for (p = table; p->str; p++)
 		if (!strcmp(p->str, s)) return p->num;
 	return -1;
 }
@@ -161,7 +161,7 @@ static int parse_keystroke(unsigned char *s, long *x, long *y)
 static int parse_act(unsigned char *s)
 {
 	int i;
-	/* Please keep this table in alphabetical order, and in sync with 
+	/* Please keep this table in alphabetical order, and in sync with
 	 * the ACT_* constants in links.h.  */
 	unsigned char *table[] = {
 		"add-bookmark",
@@ -243,14 +243,14 @@ unsigned char *bind_rd(struct option *o, unsigned char *line)
 	cact = get_token(&line);
 
 	if (!ckmap || !ckey || !cact)
-		err = "Missing arguments"; 
+		err = "Missing arguments";
 	else if ((kmap = parse_keymap(ckmap)) < 0)
 		err = "Unrecognised keymap";
 	else if (parse_keystroke(ckey, &x, &y) < 0)
 		err = "Error parsing keystroke";
 	else if ((act = parse_act(cact)) < 0)
-		err = "Unrecognised action"; 
-	else 
+		err = "Unrecognised action";
+	else
 		add_keybinding(kmap, act, x, y, LUA_NOREF);
 
 	if (cact) mem_free(cact);
@@ -267,16 +267,16 @@ unsigned char *unbind_rd(struct option *o, unsigned char *line)
 	unsigned char *ckey;
 	int kmap;
 	long x, y;
-	
+
 	ckmap = get_token(&line);
 	ckey = get_token(&line);
 	if (!ckmap)
-		err = "Missing arguments"; 
+		err = "Missing arguments";
 	else if ((kmap = parse_keymap(ckmap)) < 0)
 		err = "Unrecognised keymap";
 	else if (parse_keystroke(ckey, &x, &y) < 0)
 		err = "Error parsing keystroke";
-	else 
+	else
 		delete_keybinding(kmap, x, y);
 
 	if (ckey) mem_free(ckey);
@@ -301,8 +301,8 @@ unsigned char *bind_lua_func(unsigned char *ckmap, unsigned char *ckey, int func
 	else if (parse_keystroke(ckey, &x, &y) < 0)
 		err = "Error parsing keystroke";
 	else if ((act = parse_act(" *lua-function*")) < 0)
-		err = "Unrecognised action (internal error)"; 
-	else 
+		err = "Unrecognised action (internal error)";
+	else
 		add_keybinding(kmap, act, x, y, func_ref);
 
 	return err;

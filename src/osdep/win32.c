@@ -4,7 +4,7 @@
 #include <signal.h>
 #include <stdio.h>
 
-static		int		w32_input_pid ;
+static		int		w32_input_pid;
 
 static char* keymap[] = {
 	"\E[5~", /* VK_PRIOR */
@@ -21,7 +21,7 @@ static char* keymap[] = {
 	"", /* VK_SNAPSHOT */
 	"\E[2~", /* VK_INSERT */
 	"\E[3~" /* VK_DELETE */
-} ;
+};
 void input_function (int fd)
 {
 	BOOL bSuccess;
@@ -48,7 +48,7 @@ void input_function (int fd)
 			ENABLE_ECHO_INPUT)) | ENABLE_WINDOW_INPUT | ENABLE_MOUSE_INPUT);
 
 	cci.dwSize = 100;
-	cci.bVisible = TRUE ;
+	cci.bVisible = TRUE;
 	bSuccess = SetConsoleCursorInfo(hStdOut, &cci);
 	/* This is the main input loop. Read from the input queue and process */
 	/* the events read */
@@ -61,79 +61,79 @@ void input_function (int fd)
 		case KEY_EVENT:
 			if (inputBuffer.Event.KeyEvent.bKeyDown)
 			{
-				char c = inputBuffer.Event.KeyEvent.uChar.AsciiChar ;
+				char c = inputBuffer.Event.KeyEvent.uChar.AsciiChar;
 				if (!c) {
-					int vkey = inputBuffer.Event.KeyEvent.wVirtualKeyCode ;
+					int vkey = inputBuffer.Event.KeyEvent.wVirtualKeyCode;
 					if (vkey >= VK_PRIOR && vkey <= VK_DELETE)
 					{
-						char	*p = keymap[vkey - VK_PRIOR] ;
+						char	*p = keymap[vkey - VK_PRIOR];
 						if (*p)
 							if (write (fd, p, strlen(p)) < 0)
-									bSuccess = FALSE ;
+									bSuccess = FALSE;
 					}
-					break ;
+					break;
 				}
 				if (write (fd, &c, 1) < 0)
-					bSuccess = FALSE ;
+					bSuccess = FALSE;
 			}
 			break;
 		case MOUSE_EVENT:
 			if (inputBuffer.Event.MouseEvent.dwEventFlags == 0 &&
 				inputBuffer.Event.MouseEvent.dwButtonState)
 			{
-				char	mstr[] = "\E[Mxxx" ;
-				mstr[3] = ' ' | 0 ;
+				char	mstr[] = "\E[Mxxx";
+				mstr[3] = ' ' | 0;
 				mstr[4] = ' ' + 1 +
-					inputBuffer.Event.MouseEvent.dwMousePosition.X ;
+					inputBuffer.Event.MouseEvent.dwMousePosition.X;
 				mstr[5] = ' ' + 1 +
-					inputBuffer.Event.MouseEvent.dwMousePosition.Y ;
+					inputBuffer.Event.MouseEvent.dwMousePosition.Y;
 				if (write (fd, mstr, 6) < 0)
-					bSuccess = FALSE ;
-				mstr[3] = ' ' | 3 ;
+					bSuccess = FALSE;
+				mstr[3] = ' ' | 3;
 				if (write (fd, mstr, 6) < 0)
-					bSuccess = FALSE ;
+					bSuccess = FALSE;
 			}
 			break;
 		case WINDOW_BUFFER_SIZE_EVENT:
-			write (fd, "\E[R", 3) ;
+			write (fd, "\E[R", 3);
 			break;
 		} /* switch */
 		/* when we receive an esc down key, drop out of do loop */
-	} while (bSuccess) ;
-	exit (0) ;
+	} while (bSuccess);
+	exit (0);
 }
 
 void handle_terminal_resize(int fd, void (*fn)())
 {
-		return ;
+		return;
 }
 
 void unhandle_terminal_resize(int fd)
 {
-		return ;
+		return;
 }
 
 int get_terminal_size(int fd, int *x, int *y)
 {
-	CONSOLE_SCREEN_BUFFER_INFO	s ;
+	CONSOLE_SCREEN_BUFFER_INFO	s;
 
 	if (GetConsoleScreenBufferInfo (GetStdHandle (STD_OUTPUT_HANDLE), &s))
 	{
 		*x = s.dwSize.X - 1;
 		*y = s.dwSize.Y - 1;
-		return 0 ;
+		return 0;
 	}
-	return -1 ;
+	return -1;
 }
 
 void terminate_osdep ()
 {
-	kill (w32_input_pid, SIGINT) ;
+	kill (w32_input_pid, SIGINT);
 }
 
 void set_proc_id (int id)
 {
-	w32_input_pid = id ;
+	w32_input_pid = id;
 }
 
 # endif

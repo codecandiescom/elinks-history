@@ -1,5 +1,5 @@
 /* URL parser and translator */
-/* $Id: url.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: url.c,v 1.3 2002/03/17 17:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ int parse_url(unsigned char *url, int *prlen,
 	static unsigned char hostbuf[NI_MAXHOST];
 #endif
 	int protocol;
-	
+
 	if (prlen) *prlen = 0;
 	if (user) *user = NULL;
 	if (uslen) *uslen = 0;
@@ -100,29 +100,29 @@ int parse_url(unsigned char *url, int *prlen,
 	rbracket = strchr(url, ']');
 	if (lbracket > rbracket) return -1;
 #endif
-	
+
 	/* Isolate prefix */
-	
+
 	prefix_end = strchr(url, ':');
 	if (!prefix_end) return -1;
-	
+
 	if (prlen) *prlen = prefix_end - url;
 
 	/* Get protocol */
-	
+
 	protocol = check_protocol(url, prefix_end - url);
 	if (protocol == -1) return -1;
 
 	prefix_end++; /* ':' */
 
 	/* Skip slashes */
-	
+
 	if (prefix_end[0] == '/' && prefix_end[1] == '/') {
 		prefix_end += 2;
 	} else {
 		if (protocols[protocol].need_slashes) return -1;
 	}
-	
+
 	if (protocols[protocol].free_syntax) {
 		if (data) *data = prefix_end;
 		if (dalen) *dalen = strlen(prefix_end);
@@ -130,12 +130,12 @@ int parse_url(unsigned char *url, int *prlen,
 	}
 
 	/* Isolate host */
-	
+
 	host_end = prefix_end + strcspn(prefix_end, "@");
 	if (prefix_end + strcspn(prefix_end, "/") > host_end
 	    && *host_end) { /* we have auth info here */
 		unsigned char *user_end = strchr(prefix_end, ':');
-		
+
 		if (!user_end || user_end > host_end) {
 			if (user) *user = prefix_end;
 			if (uslen) *uslen = host_end - prefix_end;
@@ -147,18 +147,18 @@ int parse_url(unsigned char *url, int *prlen,
 		}
 		prefix_end = host_end + 1;
 	}
-	
+
 #ifdef IPV6
 	/* [address] is permitted only inside hostname part. */
 	if (prefix_end + strcspn(prefix_end, "/") < rbracket)
 		lbracket = rbracket = NULL;
-	
+
 	if (lbracket && rbracket)
 		host_end = rbracket + strcspn(rbracket, ":/");
 	else
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/");
-		
+
 	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
 
 #ifdef IPV6
@@ -182,31 +182,31 @@ int parse_url(unsigned char *url, int *prlen,
 #endif
 			*holen = host_end - prefix_end;
 	}
-				
-	
+
+
 	if (*host_end == ':') { /* we have port here */
 		unsigned char *port_end = host_end + strcspn(host_end, "/");
 		int idx;
-		
+
 		if (port) *port = host_end + 1;
 		if (polen) *polen = port_end - host_end - 1;
-		
+
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
 		for (idx = 1; idx < port_end - host_end; idx++)
 			if (host_end[idx] < '0' || host_end[idx] > '9')
 				return -1;
-		
+
 		host_end = port_end;
 	}
-	
+
 	if (*host_end) host_end++; /* skip slash */
-	
+
 	prefix_end = strchr(host_end, POST_CHAR);
 	if (data) *data = host_end;
 	if (dalen) *dalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
 	if (post) *post = prefix_end ? (prefix_end + 1) : NULL;
-	
+
 	return 0;
 }
 
@@ -457,12 +457,12 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 	unsigned char *p, *n, *pp;
 	int l;
 	int lo = !casecmp(base, "file://", 7);
-	
+
 	/* See RFC 1808 */
 
 	if (rel[0] == '#') {
 		if (!(n = stracpy(base))) return NULL;
-		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++) ;
+		for (p = n; *p && *p != POST_CHAR && *p != '#'; p++);
 		*p = 0;
 		add_to_strn(&n, rel);
 		translate_directories(n);
@@ -470,7 +470,7 @@ unsigned char *join_urls(unsigned char *base, unsigned char *rel)
 	}
 	if (rel[0] == '?') {
 		if (!(n = stracpy(base))) return NULL;
-		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++) ;
+		for (p = n; *p && *p != POST_CHAR && *p != '?' && *p != '#'; p++);
 		*p = 0;
 		add_to_strn(&n, rel);
 		translate_directories(n);
@@ -522,12 +522,12 @@ unsigned char *translate_url(unsigned char *url, unsigned char *cwd)
 {
 	unsigned char *ch;
 	unsigned char *newurl;
-	
+
 	/* Strip starting spaces */
 	while (*url == ' ') url++;
-	
+
 	if (!casecmp("proxy://", url, 8)) goto proxy;
-	
+
 	/* Ordinary parse */
 	if (!parse_url(url, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
 		newurl = stracpy(url);
@@ -535,7 +535,7 @@ unsigned char *translate_url(unsigned char *url, unsigned char *cwd)
 		translate_directories(newurl);
 		return newurl;
 	}
-	
+
 	/* Try to add slash to end */
 	if (strstr(url, "//") && (newurl = stracpy(url))) {
 		add_to_strn(&newurl, "/");
@@ -546,7 +546,7 @@ unsigned char *translate_url(unsigned char *url, unsigned char *cwd)
 		}
 		mem_free(newurl);
 	}
-	
+
 proxy:
 	/* No protocol name */
 	ch = url + strcspn(url, ".:/@");
@@ -557,7 +557,7 @@ proxy:
 #endif
 		unsigned char *prefix = "file://";
 		int not_file = 0;
-		
+
 		/* Yes, it would be simpler to make test for IPv6 address first,
 		 * but it would result in confusing mix of ifdefs ;-). */
 
@@ -565,12 +565,12 @@ proxy:
 			/* Contains user/password/ftp-hostname */
 			prefix = "ftp://";
 			not_file = 1;
-					
-#ifdef IPV6	
+
+#ifdef IPV6
 		} else if (*url == '[' && *ch == ':') {
 			/* Candidate for IPv6 address */
 			char *bracket2, *colon2;
-			
+
 			ch++;
 			bracket2 = strchr(ch, ']');
 			colon2 = strchr(ch, ':');
@@ -582,12 +582,12 @@ proxy:
 			/* Contains domain name? */
 			unsigned char *host_end, *domain;
 			int i;
-			
+
 			/* Process the hostname */
 			for (domain = ch + 1;
 			     *(host_end = domain + strcspn(domain, ".:/")) == '.';
 			     domain = host_end + 1);
-			
+
 			/* It's IP? */
 			for (i = 0; i < host_end - domain; i++)
 				if (domain[i] >= '0' && domain[i] <= '9')
@@ -597,55 +597,55 @@ proxy:
 			 * TODO: Remove it. We should rather first try file:// and
 			 * then http://, if failed. But this will require wider
 			 * modifications. :| --pasky */
-		
+
 			/* It's two-letter TLD? */
 			if (host_end - domain == 2) {
 http:				prefix = "http://";
 				not_file = 1;
-			
+
 			} else if (host_end - domain == 3) {
 				unsigned char *tld[] = { "com", "edu", "net", "org", "gov", "mil", "int", NULL };
-				
+
 				for (i = 0; tld[i]; i++)
 					if (!casecmp(tld[i], domain, 3))
 						goto http;
 			}
 		}
-		
+
 		newurl = stracpy(prefix);
 		if (!newurl) return NULL;
 		add_to_strn(&newurl, url);
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
-		
+
 		if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
 			insert_wd(&newurl, cwd);
 			translate_directories(newurl);
 			return newurl;
 		}
-		
+
 		mem_free(newurl);
 		return NULL;
 	}
-	
+
 	newurl = memacpy(url, ch - url + 1);
 	if (!newurl) return NULL;
 	add_to_strn(&newurl, "//");
 	add_to_strn(&newurl, ch + 1);
-	
+
 	if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
 		insert_wd(&newurl, cwd);
 		translate_directories(newurl);
 		return newurl;
 	}
-	
+
 	add_to_strn(&newurl, "/");
-	
+
 	if (!parse_url(newurl, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)) {
 		insert_wd(&newurl, cwd);
 		translate_directories(newurl);
 		return newurl;
 	}
-	
+
 	mem_free(newurl);
 	return NULL;
 }
@@ -655,7 +655,7 @@ unsigned char *extract_position(unsigned char *url)
 	unsigned char *u, *uu, *r;
 	if (!(u = strchr(url, POST_CHAR))) u = url + strlen(url);
 	uu = u;
-	while (--uu >= url && *uu != '#') ;
+	while (--uu >= url && *uu != '#');
 	if (uu < url || !(r = mem_alloc(u - uu))) return NULL;
 	memcpy(r, uu + 1, u - uu - 1);
 	r[u - uu - 1] = 0;

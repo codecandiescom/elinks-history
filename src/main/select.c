@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: select.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,7 +140,7 @@ void check_bottom_halves()
 }
 
 #define CHK_BH if (!list_empty(bottom_halves)) check_bottom_halves()
-		
+
 ttime last_time;
 
 void check_timers()
@@ -334,7 +334,7 @@ int check_signals()
 void sigchld(void *p)
 {
 #ifdef WNOHANG
-	while ((int) waitpid(-1, NULL, WNOHANG) > 0) ;
+	while ((int) waitpid(-1, NULL, WNOHANG) > 0);
 #else
 	wait(NULL);
 #endif
@@ -450,7 +450,7 @@ int can_write(int fd)
 {
 	fd_set fds;
 	struct timeval tv = {0, 0};
-	
+
 	FD_ZERO(&fds);
 	FD_SET(fd, &fds);
 	return select(fd + 1, NULL, &fds, NULL, &tv);

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: dns.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,8 +78,8 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 	hint.ai_family = AF_UNSPEC;
 	hint.ai_socktype = SOCK_STREAM;
 	if (getaddrinfo(name, NULL, &hint, &ai) != 0) return -1;
-	
-#else	
+
+#else
 	/* Seems there are problems on Mac, so we first need to try
 	 * gethostbyaddr(). */
 #ifdef HAVE_GETHOSTBYADDR
@@ -106,7 +106,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 #ifdef IPV6
 	for (i = 0, ai_cur = ai; ai_cur; i++, ai_cur = ai_cur->ai_next) {
 		struct sockaddr_in6 *addr = (struct sockaddr_in6 *) &((struct sockaddr_storage *) *addrs)[i];
-		
+
 		memcpy(addr, ai_cur->ai_addr, ai_cur->ai_addrlen);
 #if 0
 		/* Seems the following is not needed and breaks things for
@@ -127,7 +127,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 #else
 	for (i = 0; hostent->h_addr_list[i] != NULL; i++) {
 		struct sockaddr_in *addr = (struct sockaddr_in *) &((struct sockaddr_storage *) *addrs)[i];
-		
+
 		addr->sin_family = hostent->h_addrtype;
 		memcpy(&addr->sin_addr.s_addr, hostent->h_addr_list[i], hostent->h_length);
 	}
@@ -136,7 +136,7 @@ int do_real_lookup(unsigned char *name, struct sockaddr **addrs, int *addrno)
 #ifdef IPV6
 	freeaddrinfo(ai);
 #endif
-	
+
 	return 0;
 }
 
@@ -145,7 +145,7 @@ void lookup_fn(void *data, int h)
 	unsigned char *name = (unsigned char *) data;
 	struct sockaddr *addrs;
 	int addrno, i;
-	
+
 	if (do_real_lookup(name, &addrs, &addrno) < 0) return;
 
 	/* We will do blocking I/O here, however it's only local communication
@@ -155,7 +155,7 @@ void lookup_fn(void *data, int h)
 	fcntl(h, F_SETFL, ~O_NONBLOCK & fcntl(h, F_GETFL));
 
 	write(h, &addrno, sizeof(int));
-	
+
 	for (i = 0; i < addrno; i++) {
 		int done = 0;
 
@@ -177,7 +177,7 @@ void end_real_lookup(void *data)
 	struct dnsquery *query = (struct dnsquery *) data;
 	int res = -1;
 	int i;
-	
+
 	if (!query->addr || !query->addrno)
 		goto done;
 
@@ -188,7 +188,7 @@ void end_real_lookup(void *data)
 	 * And it would be incredibly more complicated and messy (and mainly
 	 * useless) to do this in non-blocking way. */
 	fcntl(query->h, F_SETFL, ~O_NONBLOCK & fcntl(query->h, F_GETFL));
-	
+
 	if (read(query->h, query->addrno, sizeof(int)) != sizeof(int))
 		goto done;
 
@@ -208,10 +208,10 @@ void end_real_lookup(void *data)
 	}
 
 	res = 0;
-	
+
 done:
 	if (res < 0 && query->addr && *query->addr) mem_free(*query->addr);
-		
+
 	set_handlers(query->h, NULL, NULL, NULL, NULL);
 	close(query->h);
 	query->xfn(query, res);
@@ -220,7 +220,7 @@ done:
 void failed_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
-	
+
 	set_handlers(query->h, NULL, NULL, NULL, NULL);
 	close(query->h);
 	query->xfn(query, -1);
@@ -233,19 +233,19 @@ int do_lookup(struct dnsquery *query, int force_async)
 	if (!async_lookup && !force_async) {
 #endif
 		int res;
-		
+
 		sync_lookup:
 		res = do_real_lookup(query->name, query->addr, query->addrno);
 		query->xfn(query, res);
-		
+
 		return 0;
-		
+
 #ifndef NO_ASYNC_LOOKUP
 	} else {
 		query->h = start_thread(lookup_fn, query->name, strlen(query->name) + 1);
 		if (query->h == -1) goto sync_lookup;
 		set_handlers(query->h, end_real_lookup, NULL, failed_real_lookup, query);
-		
+
 		return 1;
 	}
 #endif
@@ -255,14 +255,14 @@ int do_queued_lookup(struct dnsquery *query)
 {
 #ifndef THREAD_SAFE_LOOKUP
 	query->next_in_queue = NULL;
-	
+
 	if (!dns_queue) {
 		dns_queue = query;
 		/* debug("direct lookup"); */
 #endif
-		
+
 		return do_lookup(query, 0);
-		
+
 #ifndef THREAD_SAFE_LOOKUP
 	} else {
 		/* debug("queuing lookup for %s", q->name); */
@@ -292,9 +292,9 @@ void end_dns_lookup(struct dnsquery *q, int res)
 	struct dnsentry *dnsentry;
 	void (*fn)(void *, int);
 	void *data;
-	
+
 	/* debug("end lookup %s (%d)", q->name, res); */
-	
+
 #ifndef THREAD_SAFE_LOOKUP
 	if (q->next_in_queue) {
 		/* debug("processing next in queue: %s", q->next_in_queue->name); */
@@ -303,59 +303,59 @@ void end_dns_lookup(struct dnsquery *q, int res)
 	       	dns_queue = NULL;
 	}
 #endif
-	
+
 	if (!q->fn || !q->addr) {
 		if (q->addr && *q->addr) mem_free(*q->addr);
 		mem_free(q);
 		return;
 	}
-	
+
 	if (!(find_in_dns_cache(q->name, &dnsentry) < 0)) {
 		if (res < 0) {
 			/* q->addr(no) is pointer to something already allocated */
 
 			*q->addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
 			if (!*q->addr) goto done;
-			
+
 			memcpy(*q->addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
-			
+
 			*q->addrno = dnsentry->addrno;
-			
+
 			res = 0;
 			goto done;
 		}
-	
+
 		del_from_list(dnsentry);
 		mem_free(dnsentry->addr);
 		mem_free(dnsentry);
 	}
-	
+
 	if (res < 0) goto done;
-		
+
 	dnsentry = mem_alloc(sizeof(struct dnsentry) + strlen(q->name) + 1);
-	
+
 	if (dnsentry) {
 		strcpy(dnsentry->name, q->name);
 
 		dnsentry->addr = mem_alloc(sizeof(struct sockaddr_storage) * *q->addrno);
 		if (!dnsentry->addr) goto done;
-		
+
 		memcpy(dnsentry->addr, *q->addr, sizeof(struct sockaddr_storage) * *q->addrno);
-		
+
 		dnsentry->addrno = *q->addrno;
-		
+
 		dnsentry->get_time = get_time();
 		add_to_list(dns_cache, dnsentry);
 	}
-	
+
 done:
 	fn = q->fn;
 	data = q->data;
-	
+
 	if (q->s) *q->s = NULL;
 	/* q->addr is freed later by dns_found() */
 	mem_free(q);
-	
+
 	fn(data, res);
 }
 
@@ -363,13 +363,13 @@ int find_host_no_cache(unsigned char *name, struct sockaddr **addr, int *addrno,
 		       void **query_p, void (*fn)(void *, int), void *data)
 {
 	struct dnsquery *query;
-	
+
 	query = mem_alloc(sizeof(struct dnsquery) + strlen(name) + 1);
 	if (!query) {
 		fn(data, -1);
 		return 0;
 	}
-	
+
 	query->fn = fn;
 	query->data = data;
 	query->s = (struct dnsquery **) query_p;
@@ -379,7 +379,7 @@ int find_host_no_cache(unsigned char *name, struct sockaddr **addr, int *addrno,
 	strcpy(query->name, name);
 	if (query_p) *((struct dnsquery **) query_p) = query;
 	query->xfn = end_dns_lookup;
-	
+
 	return do_queued_lookup(query);
 }
 
@@ -387,20 +387,20 @@ int find_host(unsigned char *name, struct sockaddr **addr, int *addrno,
 	      void **query_p, void (*fn)(void *, int), void *data)
 {
 	struct dnsentry *dnsentry;
-	
+
 	if (query_p) *query_p = NULL;
-	
+
 	if (!(find_in_dns_cache(name, &dnsentry) < 0)) {
 		if (dnsentry->get_time + DNS_TIMEOUT < get_time())
 			goto timeout;
-		
+
 		*addr = mem_alloc(sizeof(struct sockaddr_storage) * dnsentry->addrno);
 		memcpy(*addr, dnsentry->addr, sizeof(struct sockaddr_storage) * dnsentry->addrno);
 		*addrno = dnsentry->addrno;
 		fn(data, 0);
 		return 0;
 	}
-	
+
 	timeout:
 	return find_host_no_cache(name, addr, addrno, query_p, fn, data);
 }
@@ -408,7 +408,7 @@ int find_host(unsigned char *name, struct sockaddr **addr, int *addrno,
 void kill_dns_request(void **qp)
 {
 	struct dnsquery *q = *qp;
-	
+
 	q->fn = NULL;
 	mem_free(q->addr); q->addr = NULL;
 	*qp = NULL;
@@ -423,7 +423,7 @@ void shrink_dns_cache(int whole)
 			e = d;
 			d = d->prev;
 			del_from_list(e);
-			
+
 			mem_free(e->addr);
 			mem_free(e);
 		}

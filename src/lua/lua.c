@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.3 2002/03/17 14:05:27 pasky Exp $ */
+/* $Id: lua.c,v 1.4 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,10 +183,10 @@ static int l_bind_key(LS)
 		alert_lua_error("bad arguments to bind_key");
 		goto error;
 	}
-	
+
 	lua_pushvalue(S, 3);
 	ref = lua_ref(S, 1);
-	
+
 	if ((err = bind_lua_func((uchar *)lua_tostring(S, 1), (uchar *)lua_tostring(S, 2), ref))) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
@@ -195,7 +195,7 @@ static int l_bind_key(LS)
 
 	lua_pushnumber(S, 1);
 	return 1;
-	
+
 	error:
 	lua_pushnil(S);
 	return 1;
@@ -290,11 +290,11 @@ static int l_edit_bookmark_dialog(LS)
 		lua_pushnil(S);
 		return 1;
 	}
-	
+
 	sz = sizeof(struct dialog) + 6 * sizeof(struct dialog_item) + sizeof *data;
 	if (!(d = mem_alloc(sz))) return 0;
 	memset(d, 0, sz);
-	
+
 	data = (struct dlg_data *)&d->items[6];
 	data->state = S;
 	safe_strncpy(data->cat, (uchar *)lua_tostring(S, 1), MAX_STR_LEN-1);
@@ -302,7 +302,7 @@ static int l_edit_bookmark_dialog(LS)
 	safe_strncpy(data->url, (uchar *)lua_tostring(S, 3), MAX_STR_LEN-1);
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
-	
+
 	d->title = TEXT(T_EDIT_BOOKMARK);
 	d->fn = dialog_fn;
 	d->refresh = (void (*)(void *))dialog_run_lua;
@@ -422,11 +422,11 @@ static int l_xdialog(LS)
 	if ((nfields < 1) || (nfields > XDIALOG_MAX_FIELDS)) goto error;
 	for (i = 1; i < nargs; i++) if (!lua_isstring(S, i)) goto error;
 	if (!lua_isfunction(S, nargs)) goto error;
-		
+
 	sz = sizeof(struct dialog) + nitems * sizeof(struct dialog_item) + sizeof *data;
 	if (!(d = mem_alloc(sz))) return 0;
 	memset(d, 0, sz);
-	
+
 	data = (struct xdialog_data *)&d->items[nitems];
 	data->state = S;
 	data->nfields = nfields;
@@ -434,7 +434,7 @@ static int l_xdialog(LS)
 		safe_strncpy(data->fields[i], (uchar *)lua_tostring(S, i+1), MAX_STR_LEN-1);
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
-	
+
 	d->title = TEXT(T_XDIALOG_TITLE);
 	d->fn = xdialog_fn;
 	d->refresh = (void (*)(void *))xdialog_run_lua;

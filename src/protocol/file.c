@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: file.c,v 1.3 2002/03/17 17:27:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ void stat_mode(unsigned char **p, int *l, struct stat *stp)
 {
 	unsigned char c = '?';
 	if (stp) {
-		if (0) ;
+		if (0);
 #ifdef S_ISBLK
 		else if (S_ISBLK(stp->st_mode)) c = 'b';
 #endif
@@ -190,7 +190,7 @@ void stat_date(unsigned char **p, int *l, struct stat *stp)
 	}
 	when = stp->st_mtime;
 	when_local = localtime(&when);
-	if (current_time > when + 6L * 30L * 24L * 60L * 60L || 
+	if (current_time > when + 6L * 30L * 24L * 60L * 60L ||
 	    current_time < when - 60L * 60L) fmt = "%b %e  %Y";
 	else fmt = "%b %e %H:%M";
 #ifdef HAVE_STRFTIME
@@ -207,7 +207,7 @@ void stat_date(unsigned char **p, int *l, struct stat *stp)
 char *get_filename(char *url)
 {
 	char *p, *m;
-	for (p = url + 7; *p && *p != 1; p++) ;
+	for (p = url + 7; *p && *p != 1; p++);
 	if (!(m = mem_alloc(p - url - 7 + 1))) return NULL;
 	memcpy(m, url + 7, p - url - 7),
 	m[p - url - 7] = 0;
@@ -385,26 +385,26 @@ void file_func(struct connection *c)
 			close(h);
 			setcstate(c, S_FILE_TYPE); abort_connection(c); return;
 		}
-		
+
 		file = mem_alloc(bufsize + 1);
 		if (!file) {
 			close(h);
 			setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
 		}
-		
+
 		while ((r = read(h, file + offset, bufsize)) > 0) {
 			offset += r;
-			
+
 			file = mem_realloc(file, offset + bufsize + 1);
 			if (!file) {
 				close(h);
 				setcstate(c, S_OUT_OF_MEM); abort_connection(c); return;
 			}
 		}
-		
+
 		fl = offset;
 		file[fl] = '\0'; /* NULL-terminate just in case */
-		
+
 		close(h);
 
 		head = stracpy("");

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.2 2002/03/17 13:54:13 pasky Exp $ */
+/* $Id: terminal.c,v 1.3 2002/03/17 17:27:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ unsigned char *get_cwd()
 
 void set_cwd(unsigned char *path)
 {
-	if (path) while (chdir(path) && errno == EINTR) ;
+	if (path) while (chdir(path) && errno == EINTR);
 }
 
 struct list_head terminals = {&terminals, &terminals};
@@ -664,7 +664,7 @@ void fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 	int i,j;
 	t->dirty = 1;
 	for (j = y >= 0 ? 0 : -y; j < yw && y+j < t->y; j++)
-		for (i = x >= 0 ? 0 : -x; i < xw && x+i < t->x; i++) 
+		for (i = x >= 0 ? 0 : -x; i < xw && x+i < t->x; i++)
 			t->screen[x+i + t->x*(y+j)] = c;
 }
 

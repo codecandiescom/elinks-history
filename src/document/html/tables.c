@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.62 2003/08/23 04:44:58 jonas Exp $ */
+/* $Id: tables.c,v 1.63 2003/08/23 15:52:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1442,30 +1442,52 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 
 
+#ifndef DEBUG
+#define H_LINE_X(xx, yy) fh[(xx) + 1 + (t->x + 2) * (yy)]
+#define V_LINE_X(xx, yy) fv[(yy) + 1 + (t->y + 2) * (xx)]
+#else
+#define H_LINE_X(xx, yy) (*(xx < -1 || xx > t->x + 1 || yy < 0 || yy > t->y ? \
+		   	(signed char *) NULL : &fh[(xx) + 1 + (t->x + 2) * (yy)]))
+#define V_LINE_X(xx, yy) (*(xx < 0 || xx > t->x || yy < -1 || yy > t->y + 1 ? \
+			(signed char *) NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
+#endif
 
-/* !!! FIXME: background */
-#define draw_frame_point(xx, yy, ii, jj) \
-if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || \
-    V_LINE_X((ii), (jj-1)) >= 0 || V_LINE_X((ii), (jj)) >= 0) \
-	xset_hchar(t->p, (xx), (yy), frame_table[V_LINE((ii), (jj)-1)+ \
-						 3*H_LINE((ii), (jj))+ \
-						 9*H_LINE((ii)-1, (jj))+ \
-						 27*V_LINE((ii),(jj))], \
-				     par_format.bgcolor, SCREEN_ATTR_FRAME)
+#define H_LINE(xx, yy) (H_LINE_X((xx), (yy)) == -1 ? 0 : H_LINE_X((xx), (yy)))
+#define V_LINE(xx, yy) (V_LINE_X((xx), (yy)) == -1 ? 0 : V_LINE_X((xx), (yy)))
 
+#define draw_frame_point(xx, yy, ii, jj)				\
+{									\
+	if (H_LINE_X((ii) - 1, (jj)) >= 0				\
+	    || H_LINE_X((ii), (jj)) >= 0				\
+	    || V_LINE_X((ii), (jj) - 1) >= 0				\
+	    || V_LINE_X((ii), (jj)) >= 0) {				\
+		register int pos = V_LINE((ii), (jj) - 1)		\
+				 + 3 * H_LINE((ii), (jj))		\
+				 + 9 * H_LINE((ii) - 1, (jj)) 		\
+				 + 27 * V_LINE((ii), (jj));		\
+									\
+		xset_hchar(t->p, (xx), (yy), frame_table[pos],		\
+			   par_format.bgcolor, SCREEN_ATTR_FRAME);	\
+	}								\
+}
 
-#define draw_frame_hline(xx, yy, ll, ii, jj) \
-if (H_LINE_X((ii), (jj)) >= 0) \
-	xset_hchars(t->p, (xx), (yy), (ll),\
-		    hline_table[H_LINE((ii), (jj))], \
-		    par_format.bgcolor, SCREEN_ATTR_FRAME)
+#define draw_frame_hline(xx, yy, ii, jj)				\
+{									\
+	if (H_LINE_X((ii), (jj)) >= 0) {				\
+		xset_hchars(t->p, (xx), (yy), t->w_c[(ii)],		\
+			    hline_table[H_LINE((ii), (jj))],		\
+			    par_format.bgcolor, SCREEN_ATTR_FRAME);	\
+	}								\
+}
 
-
-#define draw_frame_vline(xx, yy, ll, ii, jj) \
-	if (V_LINE_X((ii), (jj)) >= 0) \
-		xset_vchars(t->p, (xx), (yy), (ll), \
-			    vline_table[V_LINE((ii), (jj))], \
-			    par_format.bgcolor, SCREEN_ATTR_FRAME)
+#define draw_frame_vline(xx, yy, ii, jj)				\
+{									\
+	if (V_LINE_X((ii), (jj)) >= 0) {				\
+		xset_vchars(t->p, (xx), (yy), t->r_heights[(jj)],	\
+			    vline_table[V_LINE((ii), (jj))],		\
+			    par_format.bgcolor, SCREEN_ATTR_FRAME);	\
+	}								\
+}
 
 
 static void
@@ -1488,19 +1510,6 @@ display_table_frames(struct table *t, int x, int y)
 		return;
 	}
 	memset(fv, -1, fv_size);
-
-#ifndef DEBUG
-#define H_LINE_X(xx, yy) fh[(xx) + 1 + (t->x + 2) * (yy)]
-#define V_LINE_X(xx, yy) fv[(yy) + 1 + (t->y + 2) * (xx)]
-#else
-#define H_LINE_X(xx, yy) (*(xx < -1 || xx > t->x + 1 || yy < 0 || yy > t->y ? \
-		   	(signed char *) NULL : &fh[(xx) + 1 + (t->x + 2) * (yy)]))
-#define V_LINE_X(xx, yy) (*(xx < 0 || xx > t->x || yy < -1 || yy > t->y + 1 ? \
-			(signed char *) NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
-#endif
-
-#define H_LINE(xx, yy) (H_LINE_X((xx), (yy)) == -1 ? 0 : H_LINE_X((xx), (yy)))
-#define V_LINE(xx, yy) (V_LINE_X((xx), (yy)) == -1 ? 0 : V_LINE_X((xx), (yy)))
 
 	if (t->rules == R_NONE) goto cont2;
 
@@ -1581,18 +1590,18 @@ cont2:
 				if (w >= 0) {
 					draw_frame_point(cx, cy, i, j);
 					if (j < t->y)
-						draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
+						draw_frame_vline(cx, cy + 1, i, j);
 					cx++;
 				}
 
-				draw_frame_hline(cx, cy, t->w_c[i], i, j);
+				draw_frame_hline(cx, cy, i, j);
 				cx += t->w_c[i];
 			}
 
 			if (fr) {
 				draw_frame_point(cx, cy, i, j);
 				if (j < t->y)
-					draw_frame_vline(cx, cy + 1, t->r_heights[j], i, j);
+					draw_frame_vline(cx, cy + 1, i, j);
 				cx++;
 			}
 
@@ -1603,7 +1612,7 @@ cont2:
 				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
 				    || (i == 0 && fl)
 				    || (i == t->x && fr)) {
-					draw_frame_vline(cx, cy, t->r_heights[j], i, j);
+					draw_frame_vline(cx, cy, i, j);
 					cx++;
 				}
 				if (i < t->x) cx += t->w_c[i];

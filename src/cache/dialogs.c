@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.21 2003/11/18 09:44:54 miciah Exp $ */
+/* $Id: dialogs.c,v 1.22 2003/11/18 16:05:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,8 +106,10 @@ push_info_button(struct dialog_data *dlg_data,
 	add_format_to_string(&msg, "\n%s: %d", _("Size", term), ce->length);
 	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term),
 						ce->data_size);
-	add_format_to_string(&msg, "\n%s: %s", _("Last modified", term),
-						ce->last_modified);
+	if (ce->last_modified) {
+		add_format_to_string(&msg, "\n%s: %s", _("Last modified", term),
+				     ce->last_modified);
+	}
 	if (ce->etag) {
 		add_format_to_string(&msg, "\n%s: %s", "ETag",
 						ce->etag);
@@ -125,8 +127,10 @@ push_info_button(struct dialog_data *dlg_data,
 		add_char_to_string(&msg, '\n');
 		add_to_string(&msg, _("Flags", term));
 		add_to_string(&msg, ": ");
-		if (ce->incomplete) add_to_string(&msg, _("incomplete", term));
-		add_char_to_string(&msg, ' ');
+		if (ce->incomplete) {
+			add_to_string(&msg, _("incomplete", term));
+			add_char_to_string(&msg, ' ');
+		}
 		if (!ce->valid) add_to_string(&msg, _("invalid", term));
 	}
 
@@ -136,9 +140,13 @@ push_info_button(struct dialog_data *dlg_data,
 						ce->refcount - 1);
 	add_format_to_string(&msg, "\n%s: %d", _("ID tag", term),
 						ce->id_tag);
-	add_format_to_string(&msg, "\n%s:\n\n%s", _("Header", term), ce->head);
+
+	if (ce->head && *ce->head) {
+		add_format_to_string(&msg, "\n%s:\n\n%s", _("Header", term),
+				     ce->head);
+	}
 #endif
-	
+
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Info"), AL_LEFT,
 		msg.source,

@@ -1,11 +1,8 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.12 2003/10/24 00:59:29 pasky Exp $ */
+/* $Id: options.inc,v 1.13 2003/10/24 23:49:12 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
-
-/* Ok so shoot me. It will probably do me good. --jonas */
-#define N_(msg) (gettext_noop(msg))
 
 /* A few guidelines for this file: */
 /* 1. Keep options in alphabetical order.

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.31 2003/07/23 00:47:11 pasky Exp $ */
+/* $Id: uri.c,v 1.32 2003/07/23 01:54:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,7 +705,7 @@ extract_proxy(unsigned char *uristring)
 	return proxy_end + 1;
 }
 
-void
+struct string *
 add_string_uri_filename_to_string(struct *string, unsigned char *uristring)
 {
 	unsigned char *s;

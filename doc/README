@@ -9,8 +9,8 @@
 
    Note that the DocBookized manual did not happen yet. You can do with a bunch
 of .html and especially .txt (wait, you expect HTML browser to carry its
-documentation around in HTML?) files in this directory. Pick a topic or just
-browse them aimlessly, may you unleash unexpected wisdoms, useful for you.
+documentation around in HTML?) files in this directory. The index.txt file
+contains the table of contents listing all these files.
 
 
 The directory structure
@@ -86,7 +86,7 @@ File Info								|meta|
 
    Charset:		iso-8859-1
    Language:		en
-   CVS Id:		$Id: README,v 1.10 2004/12/15 21:52:23 pasky Exp $
+   CVS Id:		$Id: README,v 1.11 2004/12/16 09:31:29 pasky Exp $
    Copyright:		(c) 2003 Jonas Fonseca and others
    License:		Licensed under the GNU GPL.
    vim:			textwidth=80 filetype=doctool

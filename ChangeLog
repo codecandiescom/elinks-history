@@ -1,3 +1,36 @@
+Tue Oct  1 17:11:46 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftpparse.c:
+
+	Tidyup and conformance to HACKING document.  
+
+Tue Oct  1 16:31:16 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: ftpparse.c, ftpparse.h:
+
+	$Id stuff was added.  
+
+Tue Oct  1 16:28:01 2002  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS, src/protocol/Makefile.am, src/protocol/ftp.c,
+	src/protocol/ftpparse.c, src/protocol/ftpparse.h:
+
+	FTP directory listing is now handled via ftpparse from D.J.
+	Bernstein, we now support many more formats.  
+
+Tue Oct  1 16:18:47 2002  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS, src/config/options.c:
+
+	Updated Witold email address, PASV is now enabled by default.  
+
+Tue Oct  1 15:54:20 2002  Laurent Monin <zas@norz.org>:
+
+	* AUTHORS, src/config/options.c, src/protocol/ftp.c:
+
+	FTP PASV support (disabled by default for now), EPSV will come
+	later. Patch by Witold Filipczyk and me.  
+
 Wed Sep 25 19:41:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/dialogs.c:

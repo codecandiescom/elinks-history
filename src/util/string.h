@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.19 2003/05/03 15:21:14 pasky Exp $ */
+/* $Id: string.h,v 1.20 2003/05/03 21:43:27 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -70,6 +70,7 @@ isA(unsigned char c)
 #endif
 
 #ifdef USE_LIBC
+
 #undef HAVE_MEMMOVE
 #undef HAVE_BCOPY /* prevent using bcopy() stub for memmove() */
 #undef HAVE_MEMPCPY
@@ -80,20 +81,23 @@ isA(unsigned char c)
 #undef HAVE_STRERROR
 #undef HAVE_STRNCASECMP
 #undef HAVE_STRSTR
-#endif
+
+#endif /* USE_LIBC */
 
 /** strchr() */
-#if !(defined HAVE_STRCHR) && !(defined HAVE_INDEX)
-# error You have neither strchr() nor index() function. Please go upgrade your system.
-#endif
 
-/* for old BSD systems. */
 #ifndef HAVE_STRCHR
+#ifdef HAVE_INDEX /* for old BSD systems. */
+
 #undef strchr
 #define strchr(a, b) index(a, b)
 #undef strrchr
 #define strrchr(a, b) rindex(a, b)
-#endif
+
+#else /* ! HAVE_INDEX */
+# error You have neither strchr() nor index() function. Please go upgrade your system.
+#endif /* HAVE_INDEX */
+#endif /* HAVE_STRCHR */
 
 /** strerror() */
 #ifndef HAVE_STRERROR

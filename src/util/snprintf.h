@@ -1,7 +1,8 @@
-/* $Id: snprintf.h,v 1.5 2003/06/07 09:59:44 pasky Exp $ */
+/* $Id: snprintf.h,v 1.6 2003/06/07 10:24:47 pasky Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
+
 
 #include <stdarg.h>
 
@@ -15,7 +16,18 @@
 #endif
 #endif
 
+
+#ifdef USE_OWN_LIBC
+#undef HAVE_VSNPRINTF
+#undef HAVE_C99_VSNPRINTF
+#undef HAVE_SNPRINTF
+#undef HAVE_C99_SNPRINTF
+#undef HAVE_VASPRINTF
+#undef HAVE_ASPRINTF
+#else
 #include <stdio.h> /* The system's snprintf(). */
+#endif
+
 
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 int vsnprintf(char *str, size_t count, const char *fmt, va_list args);

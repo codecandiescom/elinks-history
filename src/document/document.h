@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.5 2003/10/29 17:51:06 zas Exp $ */
+/* $Id: document.h,v 1.6 2003/10/29 19:17:57 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -37,7 +37,7 @@ struct node {
 	LIST_HEAD(struct node);
 
 	int x, y;
-	int xw, yw;
+	int width, height;
 };
 
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.82 2003/10/29 17:51:07 zas Exp $ */
+/* $Id: search.c,v 1.83 2003/10/29 19:17:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,8 +142,8 @@ get_srch(struct document *document)
 
 	foreachback (n, document->nodes) {
 		register int x, y;
-		int xm = n->x + n->xw;
-		int ym = n->y + n->yw;
+		int xm = n->x + n->width;
+		int ym = n->y + n->height;
 
 #if 0
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);

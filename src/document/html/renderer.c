@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.323 2003/10/29 17:51:06 zas Exp $ */
+/* $Id: renderer.c,v 1.324 2003/10/29 19:17:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1266,7 +1266,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		if (n) {
 			n->x = xs;
 			n->y = ys;
-			n->xw = !table_level ? MAXINT : width;
+			n->width = !table_level ? MAXINT : width;
 			add_to_list(document->nodes, n);
 		}
 
@@ -1344,7 +1344,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (document) {
 		struct node *n = document->nodes.next;
 
-		n->yw = ys - n->y + part->y;
+		n->height = ys - n->y + part->y;
 	}
 
 ret:

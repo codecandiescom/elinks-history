@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.94 2003/10/25 14:41:42 jonas Exp $ */
+/* $Id: tables.c,v 1.95 2003/10/29 19:17:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1840,7 +1840,7 @@ again:
 	}
 
 	n = p->document->nodes.next;
-	n->yw = p->yp - n->y + p->cy;
+	n->width = p->yp - n->y + p->cy;
 
 	display_complicated_table(t, x, p->cy, &cye);
 	display_table_frames(t, x, p->cy);
@@ -1849,7 +1849,7 @@ again:
 	if (nn) {
 		nn->x = n->x;
 		nn->y = p->yp + cye;
-		nn->xw = n->xw;
+		nn->width = n->width;
 		add_to_list(p->document->nodes, nn);
 	}
 

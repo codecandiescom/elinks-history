@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.5 2003/12/31 21:44:20 pasky Exp $ */
+/* $Id: feature.h,v 1.6 2003/12/31 21:52:31 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -16,6 +16,24 @@
  * commented out, it means the feature is disabled, otherwise it is enabled.
  * Therefore, if the default doesn't suit you, you can either comment it out
  * or remove the comment marks. */
+
+/* For developers:
+ *
+ * Please strive to keep the format of all entries uniform, it will make it
+ * easier for us as well as for the users. Do not forget to accurately describe
+ * the feature and also the impact of enabling/disabling it. Follow the format
+ * of existing comments. Follow the example of XBEL when adding features which
+ * also need some detection in configure.in.
+ *
+ * Not everything is suitable for an entry in this file, maybe it would be
+ * happier directly in the configure.in. Basically, if it is going to have the
+ * commandline argument in ./configure anyway (the M4 macro expansion does it,
+ * like --with-x or --without-nls), do not add it here. If it is really purely
+ * question of system support (X2, HAVE_SA_STORAGE), and it makes no sense for
+ * the user to touch it, do not include it here.
+ *
+ * Also, use your common sense. (Not that I would trust it that much... ;-))
+ * --pasky */
 
 
 

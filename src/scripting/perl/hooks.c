@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.1 2004/03/02 17:06:15 witekfl Exp $ */
+/* $Id: hooks.c,v 1.2 2004/04/01 14:56:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "protocol/uri.h"
 #include "sched/event.h"
 #include "sched/session.h"
 #include "scripting/perl/core.h"
@@ -41,7 +42,7 @@ script_hook_goto_url(va_list ap, void *data)
 	if (!have_location(ses)) {
 		XPUSHs(sv_2mortal(newSV(0)));
 	} else {
-		XPUSHs(sv_2mortal(newSVpvn(cur_loc(ses)->vs.url, strlen(cur_loc(ses)->vs.url))));
+		XPUSHs(sv_2mortal(newSVpvn(struri(cur_loc(ses)->vs.uri), strlen(struri(cur_loc(ses)->vs.uri)))));
 	}
 	PUTBACK;
 	err = call_pv("goto_url_hook", G_EVAL | G_SCALAR);

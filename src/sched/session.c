@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.337 2004/04/01 06:06:20 jonas Exp $ */
+/* $Id: session.c,v 1.338 2004/04/01 14:56:09 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -184,7 +184,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			}
 		}
 
-		url = memacpy(frame->vs.url, frame->vs.url_len);
+		url = stracpy(struri(frame->vs.uri));
 		if (!url) return;
 #if 0
 		/* This seems not to be needed anymore, it looks like this
@@ -663,7 +663,7 @@ copy_session(struct session *old, struct session *new)
 {
 	if (!have_location(old)) return;
 
-	goto_url(new, cur_loc(old)->vs.url);
+	goto_url(new, struri(cur_loc(old)->vs.uri));
 }
 
 void *
@@ -1088,7 +1088,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	if (!have_location(ses))
 		return NULL;
 
-	here = cur_loc(ses)->vs.url;
+	here = struri(cur_loc(ses)->vs.uri);
 	url_len = get_no_post_url_length(here);
 
 	/* Ensure that the url size is not greater than str_size.

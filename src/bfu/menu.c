@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.75 2003/06/07 21:28:53 pasky Exp $ */
+/* $Id: menu.c,v 1.76 2003/06/07 21:33:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -645,12 +645,13 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		unsigned char c;
 		unsigned char *tmptext = menu->items[i].text;
 
-		if (!menu->items[i].no_intl) tmptext = _(tmptext, term);
-
 #ifdef DEBUG
 		int double_hk = 0;
 		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
 #endif
+
+		if (!menu->items[i].no_intl) tmptext = _(tmptext, term);
+
 		if (i == menu->selected) {
 			int tmptextlen = strlen(tmptext)
 					 - (key_pos ? 1 : 0);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.187 2004/04/22 22:51:23 jonas Exp $ */
+/* $Id: uri.c,v 1.188 2004/04/23 13:21:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -764,7 +764,7 @@ static inline unsigned char *
 extract_fragment(unsigned char *uri)
 {
 	unsigned char *fragment, *frag_start, *post_start;
-	size_t frag_len;
+	int frag_len;
 
 	assert(uri);
 	if_assert_failed return NULL;

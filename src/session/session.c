@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.385 2004/04/23 10:28:28 jonas Exp $ */
+/* $Id: session.c,v 1.386 2004/04/23 13:21:10 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1079,7 +1079,7 @@ unsigned char *
 get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 {
 	unsigned char *here;
-	size_t url_len;
+	int url_len;
 
 	/* Not looking at anything */
 	if (!have_location(ses))

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.52 2003/10/27 01:12:14 jonas Exp $ */
+/* $Id: formhist.c,v 1.53 2003/10/27 20:48:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -370,7 +370,7 @@ done_form_history(struct module *module)
 }
 
 struct module forms_history_module = struct_module(
-	/* name: */		N_("Forms history"),
+	/* name: */		N_("Forms History"),
 	/* options: */		forms_history_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.649 2004/11/12 17:11:36 zas Exp $ */
+/* $Id: view.c,v 1.650 2004/11/12 17:15:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,55 +248,59 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 }
 
 /* @steps > 0 -> down */
-static void
+static enum frame_event_status
 vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
 	int y;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	y = doc_view->vs->y + steps;
 	if (steps > 0) {
 		/* DOWN */
 		int max_height = doc_view->document->height - doc_view->box.height;
 
-		if (doc_view->vs->y >= max_height) return;
+		if (doc_view->vs->y >= max_height) return FRAME_EVENT_OK;
 		int_upper_bound(&y, max_height);
 	}
 
 	int_lower_bound(&y, 0);
 
-	if (doc_view->vs->y == y) return;
+	if (doc_view->vs->y == y) return FRAME_EVENT_OK;
 
 	doc_view->vs->y = y;
 
-	if (current_link_is_visible(doc_view)) return;
+	if (current_link_is_visible(doc_view)) return FRAME_EVENT_OK;
 
 	if (steps > 0)
 		find_link_page_down(doc_view);
 	else
 		find_link_page_up(doc_view);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 /* @steps > 0 -> right */
-static void
+static enum frame_event_status
 horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps)
 {
 	int x;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	x = doc_view->vs->x + steps;
 	int_bounds(&x, 0, doc_view->document->width - 1);
-	if (doc_view->vs->x == x) return;
+	if (doc_view->vs->x == x) return FRAME_EVENT_OK;
 
 	doc_view->vs->x = x;
 
-	if (current_link_is_visible(doc_view)) return;
+	if (current_link_is_visible(doc_view)) return FRAME_EVENT_OK;
 
 	find_link_page_down(doc_view);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.99 2004/01/26 22:40:34 jonas Exp $ */
+/* $Id: scanner.c,v 1.100 2004/01/26 22:44:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,8 @@
 
 
 /* Generic scanner stuff */
+
+#define	SCAN_TABLE_SIZE	256
 
 struct scan_table_info {
 	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
@@ -34,33 +36,10 @@ struct scan_table_info {
 #define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)
 #define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
 
-static struct scan_table_info css_scan_table_info[] = {
-	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
-	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-
-	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
-	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
-	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
-	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
-	/* Unicode escape (that we do not handle yet) + other special chars */
-	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	/* This should contain mostly used char tokens like ':' and maybe a few
-	 * garbage chars that people might put in their CSS code */
-	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
-	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
-
-	SCAN_TABLE_END,
-};
-
 /* Initiate bitmaps */
 static void
-init_css_scan_table(void)
+init_scan_table(int scan_table[SCAN_TABLE_SIZE], struct scan_table_info *info)
 {
-	struct scan_table_info *info = css_scan_table_info;
 	int i;
 
 	for (i = 0; info[i].type != SCAN_END; i++) {
@@ -74,7 +53,7 @@ init_css_scan_table(void)
 			assert(data->range.start <= data->range.end);
 
 			for (; index <= data->range.end; index++)
-				css_scan_table[index] |= info[i].bits;
+				scan_table[index] |= info[i].bits;
 
 		} else {
 			unsigned char *string = info[i].data.string.source;
@@ -83,14 +62,12 @@ init_css_scan_table(void)
 			assert(info[i].type == SCAN_STRING && pos >= 0);
 
 			for (; pos >= 0; pos--)
-				css_scan_table[string[pos]] |= info[i].bits;
+				scan_table[string[pos]] |= info[i].bits;
 		}
 	}
 }
 
 
-
-#define	SCAN_TABLE_SIZE	256
 
 /* The scanner table */
 /* Contains bitmaps for the various CSS characters groups.
@@ -546,14 +523,36 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 
 /* Initializers */
 
+static struct scan_table_info css_scan_table_info[] = {
+	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
+	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+
+	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
+	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
+	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
+	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
+	/* Unicode escape (that we do not handle yet) + other special chars */
+	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	/* This should contain mostly used char tokens like ':' and maybe a few
+	 * garbage chars that people might put in their CSS code */
+	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
+	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
+
+	SCAN_TABLE_END,
+};
+
 void
 init_css_scanner(struct css_scanner *scanner, unsigned char *string)
 {
-	static int init_scan_table;
+	static int did_init_scan_table;
 
-	if (!init_scan_table) {
-		init_css_scan_table();
-		init_scan_table = 1;
+	if (!did_init_scan_table) {
+		init_scan_table(css_scan_table, css_scan_table_info);
+		did_init_scan_table = 1;
 	}
 
 	memset(scanner, 0, sizeof(struct css_scanner));

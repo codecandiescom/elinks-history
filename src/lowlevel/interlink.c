@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.94 2005/02/05 22:36:37 jonas Exp $ */
+/* $Id: interlink.c,v 1.95 2005/02/28 13:51:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ get_address(struct socket_info *info, enum addr_type type)
 		goto free_and_error;
 	}
 
-	addr = mem_calloc(1, sizeof(struct sockaddr_un));
+	addr = mem_calloc(1, sizeof(*addr));
 	if (!addr) goto free_and_error;
 
 	memcpy(addr->sun_path, path.source, path.length); /* ending '\0' is done by calloc() */
@@ -184,7 +184,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	 * last byte may or not be needed it depends of....).
 	 * Alternatively we can use SUN_LEN() macro but this one is not always
 	 * defined nor always defined in the same way. --Zas */
-	info->size = sizeof(struct sockaddr_un) - sun_path_freespace;
+	info->size = sizeof(*addr) - sun_path_freespace;
 
 	return AF_UNIX;
 
@@ -204,11 +204,11 @@ alloc_address(struct socket_info *info)
 	if_assert_failed return 0;
 
 	/* calloc() is safer there. */
-	sa = mem_calloc(1, sizeof(struct sockaddr_un));
+	sa = mem_calloc(1, sizeof(*sa));
 	if (!sa) return 0;
 
 	info->addr = (struct sockaddr *) sa;
-	info->size = sizeof(struct sockaddr_un);
+	info->size = sizeof(*sa);
 
 	return 1;
 }
@@ -259,7 +259,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	if (port < IPPORT_USERRESERVED)
 		return -1; /* Just in case of... */
 
-	sin = mem_calloc(1, sizeof(struct sockaddr_in));
+	sin = mem_calloc(1, sizeof(*sin));
 	if (!sin) return -1;
 
 	sin->sin_family = AF_INET;
@@ -267,7 +267,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
 	info->addr = (struct sockaddr *) sin;
-	info->size = sizeof(struct sockaddr_in);
+	info->size = sizeof(*sin);
 
 	return AF_INET;
 }
@@ -281,11 +281,11 @@ alloc_address(struct socket_info *info)
 	if_assert_failed return 0;
 
 	/* calloc() is safer there. */
-	sa = mem_calloc(1, sizeof(struct sockaddr_in));
+	sa = mem_calloc(1, sizeof(*sa));
 	if (!sa) return 0;
 
 	info->addr = (struct sockaddr *) sa;
-	info->size = sizeof(struct sockaddr_in);
+	info->size = sizeof(*sa);
 
 	return 1;
 }

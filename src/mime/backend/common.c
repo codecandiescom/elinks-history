@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.21 2004/11/08 19:27:22 jonas Exp $ */
+/* $Id: common.c,v 1.22 2005/02/28 13:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ init_mime_handler(unsigned char *program, unsigned char *description,
 	int programlen = strlen(program);
 	struct mime_handler *handler;
 
-	handler = mem_calloc(1, sizeof(struct mime_handler) + programlen);
+	handler = mem_calloc(1, sizeof(*handler) + programlen);
 	if (!handler) return NULL;
 
 	memcpy(handler->program, program, programlen);

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.49 2004/12/31 11:22:46 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.50 2005/02/28 13:57:04 zas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -111,7 +111,7 @@ parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)
 		item = get_hash_item(mimetypes_map, extension, extlen);
 		if (item) continue;
 
-		entry = mem_calloc(1, sizeof(struct mimetypes_entry) + extlen);
+		entry = mem_calloc(1, sizeof(*entry) + extlen);
 		if (!entry) continue;
 
 		entry->content_type = memacpy(ctype, ctypelen);

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.50 2005/02/05 03:22:39 jonas Exp $ */
+/* $Id: select.c,v 1.51 2005/02/28 13:52:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -116,7 +116,7 @@ register_bottom_half(void (*fn)(void *), void *data)
 		if (bh->fn == fn && bh->data == data)
 			return 0;
 
-	bh = mem_alloc(sizeof(struct bottom_half));
+	bh = mem_alloc(sizeof(*bh));
 	if (!bh) return -1;
 	bh->fn = fn;
 	bh->data = data;
@@ -169,7 +169,7 @@ install_timer(ttime t, void (*func)(void *), void *data)
 {
 	struct timer *tm, *tt;
 
-	tm = mem_alloc(sizeof(struct timer));
+	tm = mem_alloc(sizeof(*tm));
 	if (!tm) return -1;
 	tm->interval = t;
 	tm->func = func;

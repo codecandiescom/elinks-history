@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.117 2005/02/05 04:15:06 jonas Exp $ */
+/* $Id: socket.c,v 1.118 2005/02/28 13:51:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ struct conn_info *
 init_connection_info(struct uri *uri, struct connection_socket *socket,
 		     void (*done)(struct connection *))
 {
-	struct conn_info *conn_info = mem_calloc(1, sizeof(struct conn_info));
+	struct conn_info *conn_info = mem_calloc(1, sizeof(*conn_info));
 
 	if (!conn_info) return NULL;
 
@@ -234,10 +234,10 @@ get_pasv6_socket(struct connection *conn, int ctrl_sock,
 {
 	int sock;
 	struct sockaddr_in6 s0;
-	int len = sizeof(struct sockaddr_in6);
+	int len = sizeof(s0);
 
-	memset(&s0, 0, sizeof(struct sockaddr_in6));
-	memset(s6, 0, sizeof(struct sockaddr_storage));
+	memset(&s0, 0, sizeof(s0));
+	memset(s6, 0, sizeof(*s6));
 
 	/* Get our endpoint of the control socket */
 
@@ -260,14 +260,14 @@ sock_error:
 
 	/* Bind it to some port */
 
-	memcpy(&s0, s6, sizeof(struct sockaddr_in6));
+	memcpy(&s0, s6, sizeof(s0));
 	s0.sin6_port = 0;
-	if (bind(sock, (struct sockaddr *) &s0, sizeof(struct sockaddr_in6)))
+	if (bind(sock, (struct sockaddr *) &s0, sizeof(s0)))
 		goto sock_error;
 
 	/* Get our endpoint of the passive socket and save it to port */
 
-	len = sizeof(struct sockaddr_in6);
+	len = sizeof(s0);
 	if (getsockname(sock, (struct sockaddr *) s6, &len))
 		goto sock_error;
 
@@ -297,7 +297,7 @@ check_if_local_address6(struct sockaddr_in6 *addr)
 			if (ifa->ifa_addr->sa_family == AF_INET6
 			    && !memcmp(&addr->sin6_addr.s6_addr,
 			    &((struct sockaddr_in6 *) ifa->ifa_addr)->sin6_addr.s6_addr,
-			    sizeof(struct in6_addr))) {
+			    sizeof(addr->sin6_addr.s6_addr))) {
 				local = 1;
 				break;
 			}
@@ -305,7 +305,7 @@ check_if_local_address6(struct sockaddr_in6 *addr)
 			if (ifa->ifa_addr->sa_family == AF_INET
 			    && !memcmp(&((struct sockaddr_in *) &addr)->sin_addr.s_addr,
 				&((struct sockaddr_in *) ifa->ifa_addr)->sin_addr.s_addr,
-				sizeof(struct in_addr))) {
+				sizeof(((struct sockaddr_in *) &addr)->sin_addr.s_addr))) {
 					local = 1;
 					break;
 			}
@@ -335,7 +335,7 @@ check_if_local_address4(struct sockaddr_in *addr)
 
 			if (!memcmp(&addr->sin_addr.s_addr,
 				&((struct sockaddr_in *) ifa->ifa_addr)->sin_addr.s_addr,
-				sizeof(struct in_addr))) {
+				sizeof(addr->sin_addr.s_addr))) {
 					local = 1;
 					break;
 			}
@@ -513,7 +513,7 @@ connected(void *data)
 	struct conn_info *conn_info = conn->conn_info;
 	struct connection_socket *socket = conn_info->socket;
 	int err = 0;
-	int len = sizeof(int);
+	int len = sizeof(err);
 
 	assertm(conn_info, "Lost conn_info!");
 	if_assert_failed return;
@@ -624,7 +624,7 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 	assert(len > 0);
 	if_assert_failed return;
 
-	wb = mem_alloc(sizeof(struct write_buffer) + len);
+	wb = mem_alloc(sizeof(*wb) + len);
 	if (!wb) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
@@ -640,8 +640,8 @@ write_to_socket(struct connection *conn, struct connection_socket *socket,
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
-#define RD_MEM (sizeof(struct read_buffer) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
-#define RD_SIZE(len) ((RD_MEM + (len)) & ~(RD_ALLOC_GR - 1))
+#define RD_MEM(rb) (sizeof(*(rb)) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
+#define RD_SIZE(rb, len) ((RD_MEM(rb) + (len)) & ~(RD_ALLOC_GR - 1))
 
 static void
 read_select(struct connection *conn)
@@ -661,14 +661,14 @@ read_select(struct connection *conn)
 	set_handlers(rb->socket->fd, NULL, NULL, NULL, NULL);
 
 	if (!rb->freespace) {
-		int size = RD_SIZE(rb->len);
+		int size = RD_SIZE(rb, rb->len);
 
 		rb = mem_realloc(rb, size);
 		if (!rb) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
-		rb->freespace = size - sizeof(struct read_buffer) - rb->len;
+		rb->freespace = size - sizeof(*rb) - rb->len;
 		assert(rb->freespace > 0);
 		conn->buffer = rb;
 	}
@@ -707,13 +707,13 @@ alloc_read_buffer(struct connection *conn)
 {
 	struct read_buffer *rb;
 
-	rb = mem_calloc(1, RD_SIZE(0));
+	rb = mem_calloc(1, RD_SIZE(rb, 0));
 	if (!rb) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 
-	rb->freespace = RD_SIZE(0) - sizeof(struct read_buffer);
+	rb->freespace = RD_SIZE(rb, 0) - sizeof(*rb);
 
 	return rb;
 }

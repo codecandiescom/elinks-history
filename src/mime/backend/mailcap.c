@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.89 2005/01/13 13:24:31 jonas Exp $ */
+/* $Id: mailcap.c,v 1.90 2005/02/28 13:56:47 zas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -152,7 +152,7 @@ init_mailcap_entry(unsigned char *command, int priority)
 	struct mailcap_entry *entry;
 	int commandlen = strlen(command);
 
-	entry = mem_calloc(1, sizeof(struct mailcap_entry) + commandlen);
+	entry = mem_calloc(1, sizeof(*entry) + commandlen);
 	if (!entry) return NULL;
 
 	memcpy(entry->command, command, commandlen);
@@ -172,7 +172,7 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
 	/* First check if the type is already checked in */
 	item = get_hash_item(mailcap_map, type, typelen);
 	if (!item) {
-		mitem = mem_alloc(sizeof(struct mailcap_hash_item) + typelen);
+		mitem = mem_alloc(sizeof(*mitem) + typelen);
 		if (!mitem) {
 			done_mailcap_entry(entry);
 			return;

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.57 2004/01/01 23:36:44 zas Exp $ */
+/* $Id: string.h,v 1.58 2004/01/01 23:40:56 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -202,5 +202,11 @@ add_bytes_to_string__(
 
 	return string;
 }
+
+/* Returns an empty C string or @str if different from NULL. */
+#define empty_string_or_(str) ((str) ? (unsigned char *) (str) : (unsigned char *) "")
+
+/* Allocated copy if not NULL or returns NULL. */
+#define null_or_stracpy(str) ((str) ? stracpy(str) : NULL)
 
 #endif /* EL__UTIL_STRING_H */

@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.57 2005/03/27 01:54:30 rrowan Exp $
+# $Id: hooks.pl,v 1.58 2005/03/27 04:05:20 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -12,7 +12,7 @@ use Carp;
 
 =head1 SAMPLE CONFIGURATION FILE
 
-Save this as ~/.elinks/config.pl :
+Save this as ~/.elinks/config.pl:
 
 	bork:       yep       # BORKify Google?
 	collapse:   okay      # Collapse all XBEL bookmark folders on exit?
@@ -38,11 +38,15 @@ Save this as ~/.elinks/config.pl :
 =head1 PREFIXES
 
 Don't call the prefixes "dumb", they hate that!  Rather, "interactivity
-challenged". (Such politically correct names always appeared to me to be
+challenged".  (Such politically correct names always appeared to me to be
 so much more insulting... --pasky ;-)
 
-prefixes: bugmenot, bored, random, bofh, xyzzy, jack or handey
-smart prefixes:
+=head2 prefixes:
+
+     bugmenot, bored, random, bofh, xyzzy, jack or handey
+
+=head2 smart prefixes:
+
      web search:
           default engine:  search, find, www, web, s, f, go
                            also, anything in quotes with no prefix
@@ -108,7 +112,12 @@ smart prefixes:
           W3C page validators: vhtml or vcss (current url or specified)
           the Dialectizer: dia <dialect> (current url or specified)
                redneck, jive, cockney, fudd, bork, moron, piglatin, or hacker
-elinks: el / elinks, bz / bug (# or search optional), doc(|s|umentation), faq
+
+=head2 elinks:
+
+     home: el or elinks
+     bugzilla: bz or bug (# or search optional)
+     documentation and FAQ: doc(|s|umentation) or faq
 
 =cut
 

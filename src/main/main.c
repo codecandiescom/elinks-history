@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.21 2002/04/28 15:11:32 pasky Exp $ */
+/* $Id: main.c,v 1.22 2002/04/29 22:23:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include <lua.h>
 #include <lualib.h>
 #endif
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_SYS_SIGNAL_H

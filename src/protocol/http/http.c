@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.307 2004/07/23 15:18:17 zas Exp $ */
+/* $Id: http.c,v 1.308 2004/07/23 15:25:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -946,10 +946,45 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 	return 1;
 }
 
+/* Returns 1 if more data, 0 if done. */
+static int
+read_normal_http_data(struct connection *conn, struct read_buffer *rb)
+{
+	struct http_connection_info *info = conn->info;
+	unsigned char *data;
+	int data_len;
+	int len = rb->len;
+
+	if (info->length >= 0 && info->length < len) {
+		/* We won't read more than we have to go. */
+		len = info->length;
+	}
+
+	conn->received += len;
+
+	data = uncompress_data(conn, rb->data, len, &data_len);
+
+	if (add_fragment(conn->cached, conn->from, data, data_len) == 1)
+		conn->tries = 0;
+
+	if (data && data != rb->data) mem_free(data);
+
+	conn->from += data_len;
+
+	kill_buffer_data(rb, len);
+
+	if (!info->length && !rb->close) {
+		return 0;
+	}
+
+	return 1;
+}
+
 static void
 read_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
+	int ret;
 
 	set_connection_timeout(conn);
 
@@ -964,45 +999,20 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (info->length != LEN_CHUNKED) {
-		unsigned char *data;
-		int data_len;
-		int len = rb->len;
-
-		if (info->length >= 0 && info->length < len) {
-			/* We won't read more than we have to go. */
-			len = info->length;
-		}
-
-		conn->received += len;
-
-		data = uncompress_data(conn, rb->data, len, &data_len);
-
-		if (add_fragment(conn->cached, conn->from, data, data_len) == 1)
-			conn->tries = 0;
-
-		if (data && data != rb->data) mem_free(data);
-
-		conn->from += data_len;
-
-		kill_buffer_data(rb, len);
-
-		if (!info->length && !rb->close) {
-			read_http_data_done(conn);
-			return;
-		}
+		ret = read_normal_http_data(conn, rb);
 
 	} else {
-		int ret = read_chunked_http_data(conn, rb);
+		ret = read_chunked_http_data(conn, rb);
+	}
 
-		if (ret < 0) {
-			abort_conn_with_state(conn, S_HTTP_ERROR);
-			return;
-		}
+	if (ret < 0) {
+		abort_conn_with_state(conn, S_HTTP_ERROR);
+		return;
+	}
 
-		if (!ret) {
-			read_http_data_done(conn);
-			return;
-		}
+	if (!ret) {
+		read_http_data_done(conn);
+		return;
 	}
 
 	read_more_http_data(conn, rb);

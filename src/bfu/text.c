@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.67 2003/12/04 12:28:54 zas Exp $ */
+/* $Id: text.c,v 1.68 2003/12/14 14:09:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,7 +127,7 @@ split_lines(struct widget_data *widget_data, int max_width)
 /* Format text according to dialog dimensions and alignment. */
 void
 dlg_format_text_do(struct terminal *term, unsigned char *text,
-		int x, int *y, int dlg_width, int *real_width,
+		int x, int *y, int width, int *real_width,
 		struct color_pair *color, enum format_align align)
 {
 	int line_width;
@@ -139,7 +139,7 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 		while (*text == ' ' || *text == '\n') text++;
 		if (!*text) break;
 
-		line_width = split_line(text, dlg_width);
+		line_width = split_line(text, width);
 		/* split_line() may return 0. */
 		if (line_width < 1) {
 			text++; /* Infinite loop prevention. */
@@ -151,13 +151,13 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 
 		/* Calculate the number of chars to indent */
 		if (align == AL_CENTER)
-			shift = (dlg_width - line_width) / 2;
+			shift = (width - line_width) / 2;
 		else if (align == AL_RIGHT)
-			shift = dlg_width - line_width;
+			shift = width - line_width;
 		else
 			shift = 0;
 
-		assert(line_width <= dlg_width && shift < dlg_width);
+		assert(line_width <= width && shift < width);
 
 		draw_text(term, x + shift, *y, text, line_width, 0, color);
 	}
@@ -165,7 +165,7 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 
 void
 dlg_format_text(struct terminal *term, struct widget_data *widget_data,
-		int x, int *y, int dlg_width, int *real_width, int max_height)
+		int x, int *y, int width, int *real_width, int max_height)
 {
 	unsigned char *text = widget_data->widget->text;
 	unsigned char saved = 0;
@@ -183,7 +183,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 	/* Can we scroll and do we even have to? */
 	if (widget_data->widget->info.text.is_scrollable
-	    && (widget_data->info.text.max_width != dlg_width
+	    && (widget_data->info.text.max_width != width
 		|| widget_data->h < widget_data->info.text.lines))
 	{
 		unsigned char **lines;
@@ -192,8 +192,8 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 		/* Ensure that the current split is valid but don't
 		 * split if we don't have to */
-		if (widget_data->w != dlg_width
-		    && !split_lines(widget_data, dlg_width))
+		if (widget_data->w != width
+		    && !split_lines(widget_data, width))
 			return;
 
 		lines = (unsigned char **) widget_data->cdata;
@@ -234,7 +234,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	}
 
 	dlg_format_text_do(term, text,
-		x, y, dlg_width, real_width,
+		x, y, width, real_width,
 		term ? get_bfu_color(term, "dialog.text") : NULL,
 		widget_data->widget->info.text.align);
 

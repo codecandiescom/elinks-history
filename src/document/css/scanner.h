@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.19 2004/01/19 06:03:39 jonas Exp $ */
+/* $Id: scanner.h,v 1.20 2004/01/19 06:05:06 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -52,6 +52,7 @@ struct css_token {
 #define css_token_contains(token, str) \
 	css_token_strlcasecmp(token, str, sizeof(str) - 1)
 
+
 /* The number of tokens in the scanners token table:
  * At best it should be big enough to contain properties with space separated
  * values and function calls with up to 3 variables like rgb(). At worst it
@@ -83,6 +84,7 @@ struct css_scanner {
 	 * (defined below) for getting tokens from the scanner. */
 	struct css_token table[CSS_SCANNER_TOKENS];
 };
+
 
 /* Initializes the scanner. */
 void init_css_scanner(struct css_scanner *scanner, unsigned char *string);

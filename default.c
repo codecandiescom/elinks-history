@@ -309,7 +309,7 @@ unsigned char *get_home(int *new)
 	}
 	
 	if (stat(home_links, &st)) {
-		if (!mkdir(home_links, 0777))
+		if (!mkdir(home_links, 0700))
 			goto home_creat;
 		if (config_dir)
 			goto failed;
@@ -326,7 +326,7 @@ first_failed:
 	add_to_strn(&home_links, "links");
 	
 	if (stat(home_links, &st)) {
-		if (mkdir(home_links, 0777) == 0)
+		if (mkdir(home_links, 0700) == 0)
 			goto home_creat;
 		goto failed;
 	}
@@ -344,8 +344,12 @@ home_ok:
 	if (new) *new = 0;
 	
 home_creat:
+#if 0
+	/* I've no idea if following is needed for newly created directories.
+	 * It's bad thing to do it everytime. */
 #ifdef HAVE_CHMOD
 	chmod(home_links, 0700);
+#endif
 #endif
 	add_to_strn(&home_links, "/");
 	mem_free(home);

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.32 2004/06/10 12:21:43 jonas Exp $ */
+/* $Id: parse.c,v 1.33 2004/06/18 21:24:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,9 +638,11 @@ next_break:
 		}
 
 		while (*html < ' ') {
-			if (html - base_pos) put_chrs(base_pos, html - base_pos, put_chars_f, f);
+			if (html - base_pos)
+				put_chrs(base_pos, html - base_pos, put_chars_f, f);
+
 			dotcounter++;
-			html++; base_pos = html;
+			base_pos = ++html;
 			if (*html >= ' ' || isspace(*html) || html >= eof) {
 				unsigned char *dots = fmem_alloc(dotcounter);
 
@@ -653,7 +655,8 @@ next_break:
 			}
 		}
 
-		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?') && !was_xmp) {
+		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?')
+		    && !was_xmp) {
 			put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			html = skip_comment(html, eof);
 			continue;
@@ -714,7 +717,8 @@ start_element(struct element_info *ei,
 
 	ln_break(ei->linebreak, line_break_f, f);
 
-	if ((a = get_attr_val(attr, "id"))) {
+	a = get_attr_val(attr, "id");
+	if (a) {
 		special_f(f, SP_TAG, a);
 		mem_free(a);
 	}
@@ -816,7 +820,7 @@ end_element(struct element_info *ei,
 {
 	struct html_element *e, *elt;
 	int lnb = 0;
-	int xxx = 0;
+	int kill = 0;
 
 	if (was_xmp) {
 		if (ei->func != html_xmp)
@@ -830,15 +834,14 @@ end_element(struct element_info *ei,
 
 	/* dump_html_stack(); */
 	foreach (e, html_stack) {
-		if (e->linebreak && !ei->linebreak) xxx = 1;
+		if (e->linebreak && !ei->linebreak) kill = 1;
 		if (strlcasecmp(e->name, e->namelen, name, namelen)) {
-			if (e->type < ELEMENT_KILLABLE) {
+			if (e->type < ELEMENT_KILLABLE)
 				break;
-			} else {
+			else
 				continue;
-			}
 		}
-		if (xxx) {
+		if (kill) {
 			kill_html_stack_item(e);
 			break;
 		}
@@ -864,11 +867,6 @@ process_element(unsigned char *name, int namelen, int endingtag,
 {
 	struct element_info *ei;
 
-#if 0
-	for (ei = elements; ei->name; ei++)
-		if (strlcasecmp(ei->name, -1, name, namelen))
-			continue;
-#endif
 #ifndef USE_FASTFIND
 	{
 		struct element_info elem;
@@ -886,15 +884,11 @@ process_element(unsigned char *name, int namelen, int endingtag,
 #endif
 	if (!ei) return html;
 
-	if (!endingtag) {
+	if (!endingtag)
 		return start_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
-	} else {
-		return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
-	}
+
+	return end_element(ei, name, namelen, endingtag, html, prev_html, eof, attr, f);
 }
-
-
-
 
 void
 scan_http_equiv(unsigned char *s, unsigned char *eof, struct string *head,

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.99 2003/09/22 16:21:57 jonas Exp $ */
+/* $Id: download.c,v 1.100 2003/09/22 16:23:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1301,7 +1301,7 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 	struct mime_handler *handler;
 	unsigned char *ctype = get_content_type(ce->head, ce->url);
 	int plaintext = 1;
-	int xwin;
+	int xwin, i;
 
 	if (!ctype) goto end;
 

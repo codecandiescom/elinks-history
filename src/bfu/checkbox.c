@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.29 2003/06/27 20:42:37 zas Exp $ */
+/* $Id: checkbox.c,v 1.30 2003/06/27 20:44:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ dlg_format_checkboxes(struct terminal *term, struct terminal *t2, int intl,
 }
 
 void
-min_max_checkboxes_width(struct terminal *term, int intl, unsigned char **texts,
+checkboxes_width(struct terminal *term, int intl, unsigned char **texts,
 			 int *minwidth, int *maxwidth)
 {
 	while (texts[0]) {
@@ -78,7 +78,7 @@ checkbox_list_fn(struct dialog_data *dlg)
 	int w, rw;
 	int y = 0;
 
-	min_max_checkboxes_width(term, 1, dlg->dlg->udata, &min, &max);
+	checkboxes_width(term, 1, dlg->dlg->udata, &min, &max);
 	buttons_width(term, dlg->items + dlg->n - 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;

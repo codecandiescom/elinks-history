@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.13 2003/07/22 02:10:24 jonas Exp $ */
+/* $Id: form.c,v 1.14 2003/07/22 02:17:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -486,8 +486,7 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void
-encode_multipart(struct session *ses, struct list_head *l,
-		 unsigned char **data, int *len,
+encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 		 unsigned char *bound, int cp_from, int cp_to)
 {
 	struct conv_table *convert_table = NULL;
@@ -497,42 +496,40 @@ encode_multipart(struct session *ses, struct list_head *l,
 	int flg = 0;
 	register int i;
 
-	assert(ses && l && data && len && bound);
+	assert(ses && l && data && bound);
 	if_assert_failed return;
 
-	*data = init_str();
-	if (!*data) return;
+	if (!init_string(data)) return;
 
 	memset(bound, 'x', BL);
-	*len = 0;
 
 	foreach (sv, *l) {
 
 bnd:
-		add_to_str(data, len, "--");
+		add_to_string(data, "--");
 		if (!(nbound_ptrs & (ALLOC_GR-1))) {
 			nbp = mem_realloc(bound_ptrs, (nbound_ptrs + ALLOC_GR) * sizeof(int));
 			if (!nbp) goto xx;
 			bound_ptrs = nbp;
 		}
-		bound_ptrs[nbound_ptrs++] = *len;
+		bound_ptrs[nbound_ptrs++] = data->length;
 
 xx:
-		add_bytes_to_str(data, len, bound, BL);
+		add_bytes_to_string(data, bound, BL);
 		if (flg) break;
-		add_to_str(data, len, "\r\nContent-Disposition: form-data; name=\"");
-		add_to_str(data, len, sv->name);
+		add_to_string(data, "\r\nContent-Disposition: form-data; name=\"");
+		add_to_string(data, sv->name);
 		if (sv->type == FC_FILE) {
 #define F_BUFLEN 1024
 			int fh, rd;
 			unsigned char buffer[F_BUFLEN];
 
-			add_to_str(data, len, "\"; filename=\"");
-			add_to_str(data, len, strip_file_name(sv->value));
+			add_to_string(data, "\"; filename=\"");
+			add_to_string(data, strip_file_name(sv->value));
 			/* It sends bad data if the file name contains ", but
 			   Netscape does the same */
 			/* FIXME: is this a reason ? --Zas */
-			add_to_str(data, len, "\"\r\n\r\n");
+			add_to_string(data, "\"\r\n\r\n");
 
 			if (*sv->value) {
 				if (get_opt_int_tree(cmdline_options, "anonymous"))
@@ -545,7 +542,7 @@ xx:
 				do {
 					rd = read(fh, buffer, F_BUFLEN);
 					if (rd == -1) goto encode_error;
-					if (rd) add_bytes_to_str(data, len, buffer, rd);
+					if (rd) add_bytes_to_string(data, buffer, rd);
 				} while (rd);
 				close(fh);
 			}
@@ -553,7 +550,7 @@ xx:
 		} else {
 			struct document_options o;
 
-			add_to_str(data, len, "\"\r\n\r\n");
+			add_to_string(data, "\"\r\n\r\n");
 
 			memset(&o, 0, sizeof(o));
 			o.plain = 1;
@@ -572,15 +569,15 @@ xx:
 				p = convert_string(convert_table, sv->value,
 						   strlen(sv->value));
 				if (p) {
-					add_to_str(data, len, p);
+					add_to_string(data, p);
 					mem_free(p);
 				}
 			} else {
-				add_to_str(data, len, sv->value);
+				add_to_string(data, sv->value);
 			}
 		}
 
-		add_to_str(data, len, "\r\n");
+		add_to_string(data, "\r\n");
 	}
 
 	if (!flg) {
@@ -588,14 +585,14 @@ xx:
 		goto bnd;
 	}
 
-	add_to_str(data, len, "--\r\n");
+	add_to_string(data, "--\r\n");
 	memset(bound, '0', BL);
 
 again:
-	for (i = 0; i <= *len - BL; i++) {
+	for (i = 0; i <= data->length - BL; i++) {
 		int j;
 
-		for (j = 0; j < BL; j++) if ((*data)[i + j] != bound[j]) goto nb;
+		for (j = 0; j < BL; j++) if ((data->source)[i + j] != bound[j]) goto nb;
 		for (j = BL - 1; j >= 0; j--)
 			if (bound[j]++ >= '9') bound[j] = '0';
 			else goto again;
@@ -605,14 +602,14 @@ nb:;
 	}
 
 	for (i = 0; i < nbound_ptrs; i++)
-		memcpy(*data + bound_ptrs[i], bound, BL);
+		memcpy(data->source + bound_ptrs[i], bound, BL);
 
 	mem_free(bound_ptrs);
 	return;
 
 encode_error:
 	mem_free(bound_ptrs);
-	mem_free(*data), *data = NULL;
+	done_string(data);
 
 	{
 	unsigned char *m1, *m2;
@@ -675,7 +672,7 @@ get_form_url(struct session *ses, struct document_view *f,
 	if (frm->method == FM_GET || frm->method == FM_POST)
 		encode_controls(&submit, &data.source, &data.length, cp_from, cp_to);
 	else
-		encode_multipart(ses, &submit, &data.source, &data.length, bound, cp_from, cp_to);
+		encode_multipart(ses, &submit, &data, bound, cp_from, cp_to);
 
 	if (!data.source) {
 		free_succesful_controls(&submit);

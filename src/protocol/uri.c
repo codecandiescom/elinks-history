@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.124 2004/04/04 07:34:51 jonas Exp $ */
+/* $Id: uri.c,v 1.125 2004/04/04 07:40:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,18 +238,11 @@ struct string *
 add_uri_to_string(struct string *string, struct uri *uri,
 		  enum uri_component components)
 {
-	int known = (uri->protocol != PROTOCOL_UNKNOWN);
-
-	assert(uri->protocol_str && uri->protocollen);
-	if_assert_failed { return NULL; }
-
- 	if (!known || get_protocol_free_syntax(uri->protocol)) {
- 		/* Custom or unknown or free-syntax protocol;
- 		 * keep the URI untouched. */
-		add_to_string(string, struri(uri));
-
-		return string;
- 	}
+	/* Custom or unknown or free-syntax protocol;
+	 * keep the URI untouched. */
+	if (uri->protocol == PROTOCOL_UNKNOWN
+	    || get_protocol_free_syntax(uri->protocol))
+		return add_to_string(string, struri(uri));
 
 #define wants(x) (components & (x))
 
@@ -320,12 +313,12 @@ get_uri_string(struct uri *uri, enum uri_component components)
 {
 	struct string string;
 
-	if (!init_string(&string)) return NULL;
+	if (init_string(&string)
+	    && add_uri_to_string(&string, uri, components))
+		return string.source;
 
-	if (!add_uri_to_string(&string, uri, components))
-		return NULL;
-
-	return string.source;
+	done_string(&string);
+	return NULL;
 }
 
 

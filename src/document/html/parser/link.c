@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.57 2004/12/13 04:16:37 miciah Exp $ */
+/* $Id: link.c,v 1.58 2004/12/13 04:18:00 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,6 +230,7 @@ html_img(unsigned char *a)
 		unsigned char *map_url;
 
 		mem_free(usemap_attr);
+		if (!joined_urls) return;
 		map_url = straconcat("MAP@", joined_urls, NULL);
 		if (!map_url) return;
 

@@ -2,21 +2,28 @@
 # translation of hu.po to
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
 # Varga Balazs <vinnui@ent.hu>, 2003, 2004.
 # Varga Balazs <vinnui@freemail.hu>, 2003.
+# Balazs Varga, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2004-01-18 00:13+0100\n"
-"PO-Revision-Date: 2004-01-27 16:24+0100\n"
-"Last-Translator: Varga Balazs <vinnui@ent.hu>\n"
-"Language-Team: Hungarian\n"
+"PO-Revision-Date: 2004-02-20 15:23+0100\n"
+"Last-Translator: Balazs Varga\n"
+"Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Report-Msgid-Bugs-To: \n"
-"X-Generator: KBabel 1.0.2\n"
+"X-Generator: KBabel 1.3\n"
 
 #: src/bfu/hierbox.c:358
 msgid "Close"
@@ -342,7 +349,7 @@ msgstr "Hozzáfûzés a konyvjelzõkhöz"
 
 #: src/bookmarks/dialogs.c:584
 msgid "Saved session"
-msgstr ""
+msgstr "Mentett munkafolyamat"
 
 #: src/bookmarks/dialogs.c:605
 msgid "Bookmark tabs"
@@ -3629,41 +3636,47 @@ msgstr ""
 
 #: src/config/options.inc:1220
 msgid "Sessions"
-msgstr ""
+msgstr "Munkafolyamatok"
 
 #: src/config/options.inc:1222
 msgid "Sessions settings."
-msgstr ""
+msgstr "A munkafolyamatok beállításai."
 
 #: src/config/options.inc:1224
 msgid "Auto save session"
-msgstr ""
+msgstr "A munkafolyamat automatikus mentése"
 
 #: src/config/options.inc:1226
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Kilépéskor automatikusan mentse a munkafolyamatot.\n"
+"Ehhez a funkcióhoz könyvjelzõtámogatás szukséges."
 
 #: src/config/options.inc:1229
 msgid "Auto restore session"
-msgstr ""
+msgstr "A munkafolyamat automatikus visszaállítása"
 
 #: src/config/options.inc:1231
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
+"A munkafolyamat automatikus visszaállítása indításkor.\n"
+"Ehhez a funkcióhoz könyvjelzõtámogatás szükséges."
 
 #: src/config/options.inc:1234
 msgid "Auto save and restore session folder name"
-msgstr ""
+msgstr "Az automatikus munkafolyamat mentés és visszaállítás könyvjelzõmappájának a neve"
 
 #: src/config/options.inc:1236
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
 msgstr ""
+"Annak a könyvjelzõmappának a neve, ahova az automatikus munkafolyamat mentés\n"
+"és visszaállítás funkció dolgozik. Csak könyvjelzõtámogatásnál van értelme."
 
 #: src/config/options.inc:1239
 msgid "Homepage URI"
@@ -5121,7 +5134,7 @@ msgstr "~BeOS terminál"
 #: src/protocol/auth/dialogs.c:57
 #, c-format
 msgid "Authentication required for %s at %s"
-msgstr "Azonosítás szükséges ehhez: %s itt %d"
+msgstr "Azonosítás szükséges ehhez: %s itt %s"
 
 #: src/protocol/auth/dialogs.c:64
 msgid "HTTP Authentication"
@@ -5888,490 +5901,4 @@ msgstr "Mentési hiba"
 #: src/viewer/text/view.c:1220
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
-
-#~ msgid "Set config dir to given string"
-#~ msgstr "A konfigurációs könyvtár helye"
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the document.browse.search.wraparound option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-#~ "Használd a document.browse.search.wraparound beállítást helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the document.browse.search.show_not_found option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-#~ "Használt a document.browse.search.wraparound opciót helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the mime.default_type option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-#~ "Használd a mime.default_type opciót helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use ui.colors.color.dialog.generic.background instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-#~ "Használt a ui.colors.color.dialog.generic.background opciót helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use ui.colors.mono.dialog.generic.background instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-#~ "Használt a ui.colors.mono.dialog.generic.background opciót helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the mime.mailcap.enable option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-#~ "Használd a mime.mailcap.enable beállítást helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the mime.mailcap.path option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-#~ "Használd a mime.mailcap.path beállítást helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the mime.mailcap.ask option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-#~ "Használd a mime.mailcap.ask beállítást helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use mime.mailcap.description option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-#~ "Használd a mime.mailcap.description beállítást helyette."
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the mime.mailcap.prioritize option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-#~ "Használd a mime.mailcap.prioritize beállítást helyette."
-
-#~ msgid "Typeahead error handling"
-#~ msgstr "Bevitelkiegészítés hibakezelése"
-
-#~ msgid "Main menu unselected hotkey default text color."
-#~ msgstr "Fõmenü gyorsbillentyûinek szövegszíne."
-
-#~ msgid "Main menu unselected hotkey default background color."
-#~ msgstr "Fõmenü gyorsbillentyûinek háttérszíne."
-
-#~ msgid "Main menu selected hotkey text color."
-#~ msgstr "Fõmenü kiválasztott gyorsbillentyûinek szövegszíne."
-
-#~ msgid "Main menu selected hotkey default background color."
-#~ msgstr "Fõmenü kiválasztott gyorsbillentyûinek háttérszíne."
-
-#~ msgid "Menu item unselected hotkey default text color."
-#~ msgstr "Menüpont gyorsbillentyûjének szövegszíne."
-
-#~ msgid "Menu item unselected hotkey default background color."
-#~ msgstr "Menüpont gyorsbillentyûjének háttérszíne."
-
-#~ msgid "Menu item selected hotkey default text color."
-#~ msgstr "Menüpont kiválasztott gyorsbillentyûjének szövegszíne."
-
-#~ msgid "Menu item selected hotkey background color."
-#~ msgstr "Menüpont kiválasztott gyorsbillentyûjének háttérszíne."
-
-#~ msgid "Unselected menu bar item"
-#~ msgstr "Menüsor elem"
-
-#~ msgid "Unselected menu bar item colors."
-#~ msgstr "Menüsor elemének színei."
-
-#~ msgid "Selected menu bar item"
-#~ msgstr "Kiválasztott menüsor elem"
-
-#~ msgid "Selected menu bar item colors."
-#~ msgstr "Menüsor kiválasztott elemének színei."
-
-#~ msgid "Main menu selected hotkey default text color."
-#~ msgstr "Fõmenü kiválasztott gyorsbillentyûjének szövegszíne."
-
-#~ msgid "Menu unselected hotkey colors."
-#~ msgstr "Menü gyorsbillentyûinek színei."
-
-#~ msgid "Menu selected hotkey colors."
-#~ msgstr "Menü kiválasztott gyorsbillentyûinek színei."
-
-#~ msgid "Menu unselected hotkey default text color."
-#~ msgstr "Menü gyorsbillentyûjének szövegszíne."
-
-#~ msgid "Menu unselected hotkey default background color."
-#~ msgstr "Menü gyorsbillentyûjének háttérszíne."
-
-#~ msgid "Menu selected hotkey default text color."
-#~ msgstr "Menü kiválasztott gyorsbillentyûjének szövegszíne."
-
-#~ msgid "Menu selected hotkey default background color."
-#~ msgstr "Menü kiválasztott gyorsbillentyûjének háttérszíne."
-
-#~ msgid "Dialog field colors."
-#~ msgstr "Dialógusablak szinei."
-
-#~ msgid "Title text"
-#~ msgstr "Cím"
-
-#~ msgid ""
-#~ "This option is deprecated and will be removed very soon.\n"
-#~ "Please use the config.saving_style option instead."
-#~ msgstr ""
-#~ "Ez a beállítás elavult, nemsokára eltávolításra kerül.\n"
-#~ "Használd a config.saving_style opciót helyette."
-
-#~ msgid "URL: \"%s\""
-#~ msgstr "URL: \"%s\""
-
-#~ msgid ""
-#~ "Name: %s\n"
-#~ "Type: %s\n"
-#~ "Value: %s\n"
-#~ "\n"
-#~ "Description:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Név: %s\n"
-#~ "Típus: %s\n"
-#~ "Érték: %s\n"
-#~ "\n"
-#~ "Leírás: \n"
-#~ "%s"
-
-#~ msgid ""
-#~ "Name: %s\n"
-#~ "Type: %s\n"
-#~ "\n"
-#~ "Description:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Név: %s\n"
-#~ "Típus: %s\n"
-#~ "\n"
-#~ "Leírás:\n"
-#~ "%s"
-
-#~ msgid "This option is deprecated and will be removed very soon.\n"
-#~ msgstr "Ez a beállítás elavult, és nemsokára eltávolításra kerül.\n"
-
-#~ msgid ""
-#~ "Server: %s\n"
-#~ "Name: %s\n"
-#~ "Value: %s\n"
-#~ "Domain: %s\n"
-#~ "Expires: %s\n"
-#~ "Secure: %s"
-#~ msgstr ""
-#~ "Szerver: %s\n"
-#~ "Név: %s\n"
-#~ "Érték: %s\n"
-#~ "Domain: %s\n"
-#~ "Lejárati idõ: %s\n"
-#~ "Biztonság: %s"
-
-#~ msgid "unknown"
-#~ msgstr "ismeretlen"
-
-#~ msgid ""
-#~ "Title: %s\n"
-#~ "URL: %s\n"
-#~ "Last visit time: %s"
-#~ msgstr ""
-#~ "Cím: %s\n"
-#~ "URL: %s\n"
-#~ "Utolsó látogatási idõ: %s"
-
-#~ msgid "Save formatted ~document"
-#~ msgstr "Formázott ~dokumentum mentése"
-
-#~ msgid "after resume"
-#~ msgstr "a folytatás után"
-
-#~ msgid "Stop"
-#~ msgstr "Állj"
-
-#~ msgid "Bad signal number: %d"
-#~ msgstr "Hibás szignál szám: %d"
-
-#, fuzzy
-#~ msgid "Deleting used item"
-#~ msgstr "Bejegyzés törlése"
-
-#, fuzzy
-#~ msgid "Cannot delete \"%s\""
-#~ msgstr "Ezt a beállítást nem lehet törölni."
-
-#, fuzzy
-#~ msgid "LEDs options."
-#~ msgstr "SSL beállítások"
-
-#, fuzzy
-#~ msgid "Enable LEDs."
-#~ msgstr "Engedélyezés"
-
-#~ msgid "No downloads"
-#~ msgstr "Nincs letöltés"
-
-#~ msgid "Global histor~y"
-#~ msgstr "Összes látogatott lap"
-
-#~ msgid "Bookmark~s"
-#~ msgstr "~Könyvjelzõk"
-
-#~ msgid "Delete option"
-#~ msgstr "Beállítás törlése"
-
-#~ msgid "Really delete the option \"%s\"?"
-#~ msgstr "Tényleg törlöd ezt a beállítást: \"%s\"?"
-
-#~ msgid ""
-#~ "Sorry, but this bookmark is already being used by something right now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Sajnos ez a könyvjelzõ már foglalt.\n"
-#~ "\n"
-#~ "Címe: \"%s\"\n"
-#~ "URL: \"%s\""
-
-#~ msgid "Delete marked bookmarks?"
-#~ msgstr "Töröljem a kijelölt könyjelzõket?"
-
-#~ msgid ""
-#~ "Sorry, but this history entry is already being used by something right "
-#~ "now.\n"
-#~ "\n"
-#~ "Title: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-#~ msgstr ""
-#~ "Sajnos ez a bejegyzés már foglalt.\n"
-#~ "\n"
-#~ "Cím: \"%s\"\n"
-#~ "URL: \"%s\"\n"
-
-#~ msgid ""
-#~ "Delete history item \"%s\"?\n"
-#~ "\n"
-#~ "URL: \"%s\""
-#~ msgstr ""
-#~ "Bejegyzés törlése \"%s\"?\n"
-#~ "\n"
-#~ "URL:\"%s\""
-
-#~ msgid "Clear global history?"
-#~ msgstr "Az összes látogatott lap törlése?"
-
-#~ msgid "No entry."
-#~ msgstr "Nincs bejegyzés."
-
-#~ msgid "%ld more entries."
-#~ msgstr "%ld-vel több bejegyzés."
-
-#~ msgid "Cache info"
-#~ msgstr "Gyorsitó memória információk"
-
-#~ msgid "Cache content: %s"
-#~ msgstr "Gyorsitó memória tartalom: %s"
-
-#~ msgid "~Cache info"
-#~ msgstr "~Gyorsitó memória információk"
-
-#~ msgid "Overlapping matches"
-#~ msgstr "Átfedõ találatok"
-
-#~ msgid ""
-#~ "ESC      display menu\n"
-#~ "^C, q    quit\n"
-#~ "^P, ^N   scroll up, down\n"
-#~ "[, ]     scroll left, right\n"
-#~ "up, down select link\n"
-#~ "->       follow link\n"
-#~ "<-       go back\n"
-#~ "g        go to URL\n"
-#~ "G        go to URL based on current URL\n"
-#~ "/        search\n"
-#~ "?        search back\n"
-#~ "n        find next\n"
-#~ "N        find previous\n"
-#~ "=        document info\n"
-#~ "|        header info\n"
-#~ "\\        document source\n"
-#~ "d        download"
-#~ msgstr ""
-#~ "ESC      menü megjelenítés\n"
-#~ "^C, q    kilépés\n"
-#~ "^P, ^N   görgetés fel, le\n"
-#~ "[, ]     görgetés balra, jobbra\n"
-#~ "fel, le  link kiválasztás\n"
-#~ "->       link követése\n"
-#~ "<-       vissza\n"
-#~ "g        URL-re ugrás\n"
-#~ "G        URL-re ugrás (aktuális URL alapján)\n"
-#~ "/        keresés\n"
-#~ "?        keresés visszafelé\n"
-#~ "n        szöveg keresés\n"
-#~ "N        elõzõ keresése\n"
-#~ "=        dokumentum információ\n"
-#~ "|        fejléc információ\\        dokumentum forrás\n"
-#~ "d        letöltés"
-
-#~ msgid "Secure open failed"
-#~ msgstr "Biztononságos mentés sikertelen"
-
-#~ msgid "Unknown event."
-#~ msgstr "Ismeretlen esemély."
-
-#~ msgid "A field"
-#~ msgstr "Egy mezõ"
-
-#~ msgid "Verify the peer's SSL certificate."
-#~ msgstr "Ellenõrizze a kapcsolat SSL tanusítványát."
-
-#~ msgid "Columns"
-#~ msgstr "Oszlopok"
-
-#~ msgid "Rows"
-#~ msgstr "Sorok"
-
-#~ msgid ""
-#~ "Ask if a login form should be saved to file or not.\n"
-#~ "This option only disables the dialog, already saved login\n"
-#~ "forms are unaffected. (DISABLED)"
-#~ msgstr ""
-#~ "Kérdezzen rá hogy elmenthetõ-e a bejelentkezési ûrlap fájlba vagy sem.\n"
-#~ "Ez a beállítás csak a dialógusablakot tiltja, a már elmentett ûrlapokra\n"
-#~ "nincs hatással. (LETILTVA)"
-
-#~ msgid "Resize ~terminal"
-#~ msgstr "~Terminál átméretezése"
-
-#~ msgid "Form memory"
-#~ msgstr "Ûrlap memória"
-
-#~ msgid "Generic background color"
-#~ msgstr "Általános háttérszín"
-
-#~ msgid "Dialog generic background color."
-#~ msgstr "Dialógusablak háttérszíne."
-
-#~ msgid "Dialog generic background color"
-#~ msgstr "Dialógusablak háttérszín"
-
-#~ msgid ""
-#~ "Whether to enable the timer or not:\n"
-#~ "0 is don't count down anything\n"
-#~ "1 is count down, but don't show the timer\n"
-#~ "2 is count down and show the timer near LEDs (note that this feature is "
-#~ "DISABLED)"
-#~ msgstr ""
-#~ "Az idõzítõ engedélyezése vagy tiltása:\n"
-#~ "0 - ne legyen idõzítõ\n"
-#~ "1 - legyen idõzítõ, de ne mutassa az állapotát\n"
-#~ "2 - legyen idõzítõ, és mutassa hol jár (ez a beállítás le van tiltva)"
-
-#~ msgid "~Tab"
-#~ msgstr "Fül"
-
-#~ msgid "HTTP referer sending options."
-#~ msgstr "HTTP referer küldés beállításai."
-
-#~ msgid "If we should use colors."
-#~ msgstr "Színek használata amennyiben lehetséges."
-
-#, fuzzy
-#~ msgid ""
-#~ "Content type is %s.\n"
-#~ "Do you want to save or display this file?"
-#~ msgstr "Mentés fájlba, vagy megjelenités képernyön?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Content type is %s.\n"
-#~ "Do you want to display this file?"
-#~ msgstr "Mentés fájlba, vagy megjelenités képernyön?"
-
-#, fuzzy
-#~ msgid "GlobHist"
-#~ msgstr "Látogatott lapok"
-
-#, fuzzy
-#~ msgid "error: host not found"
-#~ msgstr "Kiszolgáló nem található"
-
-#, fuzzy
-#~ msgid "Lua Error: %s"
-#~ msgstr "Lua hiba"
-
-#~ msgid " at "
-#~ msgstr " itt:"
-
-#~ msgid "handles"
-#~ msgstr "fogantyúk"
-
-#~ msgid "timers"
-#~ msgstr "idömérök"
-
-#~ msgid "connections"
-#~ msgstr "kapcsolatok"
-
-#~ msgid "connecting"
-#~ msgstr "kapcsolódás"
-
-#~ msgid "transferring"
-#~ msgstr "letöltés"
-
-#~ msgid "keepalive"
-#~ msgstr "életbentartás"
-
-#~ msgid "files"
-#~ msgstr "fájlok"
-
-#~ msgid "locked"
-#~ msgstr "védett"
-
-#~ msgid "Formatted document cache"
-#~ msgstr "Formázott dokumentum gyorsító"
-
-#~ msgid "Content type is"
-#~ msgstr "Tartalom típus"
-
-#~ msgid "Do you want to open file with"
-#~ msgstr "Fájl megnyitása"
-
-#~ msgid "save it or display it?"
-#~ msgstr "mentsük vagy jelenitsük meg?"
-
-#, fuzzy
-#~ msgid "or display it?"
-#~ msgstr "mentsük vagy jelenitsük meg?"
-
-#~ msgid "Welcome to ELinks!"
-#~ msgstr "Üdvözlünk a Linksben!"
-
-#, fuzzy
-#~ msgid " Bookmarks"
-#~ msgstr "~Könyvjelzök"
-
-#~ msgid "User's ~manual"
-#~ msgstr "~Kézikönyv"
-
-#, fuzzy
-#~ msgid "Cache redirect information"
-#~ msgstr "Várakozás az átirányítás elfogadására"
 

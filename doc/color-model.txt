@@ -38,6 +38,11 @@ user's visual deficience (ie. rule like "do not use red colors at all",
 "forbid orange on red", ...) Another color model may take in account screen
 environnement: "ensure very high lightness contrast".
 
+TODO: Algoritms for determining bad color combinations.
+TODO: Algoritms for finding the nearest good color combination.
+TODO: How to cache the result and integrate it with the current color system.
+TODO: How to make the configuration easy but still powerfull.
+
 Further reading
 ---------------
 
@@ -57,3 +62,5 @@ http://130.113.54.154/~monger/hsl-rgb.html
 http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
+
+$Id: color-model.txt,v 1.2 2003/10/07 18:56:16 jonas Exp $

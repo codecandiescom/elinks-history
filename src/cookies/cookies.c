@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.70 2003/07/21 13:26:12 jonas Exp $ */
+/* $Id: cookies.c,v 1.71 2003/07/21 23:39:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,14 +643,14 @@ save_cookies(void) {
 	if (!ssi) return;
 
 	foreach (c, cookies) {
-		if (c->expires && !cookie_expired(c)) {
-			if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
-					   c->name, c->value,
-					   c->server ? c->server : (unsigned char *) "",
-					   c->path ? c->path : (unsigned char *) "",
-					   c->domain ? c->domain: (unsigned char *) "",
-	   				   c->expires, c->secure) < 0) break;
-		}
+		if (cookie_expired(c)) continue;
+		if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
+				   c->name, c->value,
+				   c->server ? c->server : (unsigned char *) "",
+				   c->path ? c->path : (unsigned char *) "",
+				   c->domain ? c->domain: (unsigned char *) "",
+				   c->expires, c->secure) < 0)
+			break;
 	}
 
 	if (!secure_close(ssi)) cookies_dirty = 0;

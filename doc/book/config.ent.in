@@ -1,7 +1,7 @@
 <!-- Entities that configure should provide. -->
-<!-- $Id: config.ent.in,v 1.1 2003/06/10 15:38:41 jonas Exp $ -->
+<!-- $Id: config.ent.in,v 1.2 2003/06/10 16:02:40 jonas Exp $ -->
 
-<!-- XXX For each entry added here there should also exist one in
-  -- the site specific section of elinksbook.dtd  -->
+<!-- XXX For each entry in this file there should also exist one together
+  -- with a description in the site specific section of elinksbook.dtd. -->
 
 <!ENTITY sysconfdir "@sysconfdir@">

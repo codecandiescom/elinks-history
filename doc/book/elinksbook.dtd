@@ -1,16 +1,49 @@
-<!-- $Id: elinksbook.dtd,v 1.1 2003/06/10 13:41:59 jonas Exp $ -->
+<!-- The DTD used for costumization and common entities. -->
+<!-- $Id: elinksbook.dtd,v 1.2 2003/06/10 16:02:40 jonas Exp $ -->
 
-<!ENTITY % use-xml "IGNORE">
-<!ENTITY % use-sgml "INCLUDE">
+<!-- ================================================================== -->
+<!-- Costumize section							-->
+<!-- ================================================================== -->
 
-<![%use-xml;[
+<!-- Default is to use system specific entities defined in config.ent. -->
+<!ENTITY % use-config-entities "INCLUDE">
+
+<!-- TODO Ideally the following entities should be set by configure. -->
+<!ENTITY % use-xml-dtd "IGNORE">
+<!ENTITY % use-sgml-dtd "INCLUDE">
+
+<!-- ================================================================== -->
+<!-- Site specific entities						-->
+<!-- ================================================================== -->
+
+<![%use-config-entities;[
+<!ENTITY % config-entities SYSTEM "config.ent">
+%config-entities;
+]]>
+
+<!-- Declaration of the non site specific versions. -->
+
+<!-- For distributed manpages we want sysconfdir unexpanded. -->
+<!ENTITY sysconfdir "@sysconfdir@">
+
+<!-- ================================================================== -->
+<!-- DocBook DTD inclusion section					-->
+<!-- ================================================================== -->
+
+<![%use-xml-dtd;[
 <!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 		"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 %DocBookDTD;
 ]]>
 
-<![%use-sgml;[
+<![%use-sgml-dtd;[
 <!ENTITY % DocBookDTD PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
 		"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
 %DocBookDTD;
 ]]>
+
+<!-- ================================================================== -->
+<!-- File entities							-->
+<!-- ================================================================== -->
+
+<!ENTITY configfiles		SYSTEM "config/files.xml">

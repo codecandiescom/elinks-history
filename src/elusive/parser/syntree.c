@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.7 2002/12/29 14:42:02 pasky Exp $ */
+/* $Id: syntree.c,v 1.8 2002/12/30 01:09:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ done_syntree_node(struct syntree_node *node)
 		attrib = attrib_next;
 	}
 
-	if (node->str != node->src)
+	if (node->src)
 		mem_free(node->str);
 	if (node->special_data)
 		mem_free(node->special_data);

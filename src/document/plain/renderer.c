@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.106 2004/07/04 13:23:20 jonas Exp $ */
+/* $Id: renderer.c,v 1.107 2004/07/19 22:52:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,7 +245,7 @@ add_document_line(struct plain_renderer *renderer,
 			while (tab_width--);
 
 		} else {
-			if (line_char < ' ' || line_char == ASCII_ESC)
+			if (isscreensafe(line_char))
 				line_char = '.';
 			template->data = line_char;
 			copy_screen_chars(pos++, template, 1);

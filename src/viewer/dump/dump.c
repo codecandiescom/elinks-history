@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.138 2004/07/03 16:28:02 jonas Exp $ */
+/* $Id: dump.c,v 1.139 2004/07/19 22:52:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,7 +339,7 @@ add_document_to_string(struct string *string, struct document *document)
 			unsigned char data = pos->data;
 			unsigned int frame = (pos->attr & SCREEN_ATTR_FRAME);
 
-			if (data < ' ' || data == ASCII_DEL) {
+			if (!isscreensafe(data)) {
 				data = ' ';
 			} else if (frame && data >= 176 && data < 224) {
 				data = frame_dumb[data - 176];

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.145 2004/07/01 11:56:08 jonas Exp $ */
+/* $Id: screen.c,v 1.146 2004/07/19 22:52:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,7 +367,7 @@ static inline void
 add_char_data(struct string *screen, struct screen_driver *driver,
 	      unsigned char data, unsigned char border)
 {
-	if (data < ' ' || data == ASCII_DEL) {
+	if (!isscreensafe(data)) {
 		add_char_to_string(screen, ' ');
 		return;
 	}

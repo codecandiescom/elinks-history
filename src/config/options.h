@@ -1,10 +1,10 @@
-/* $Id: options.h,v 1.22 2002/05/25 20:05:05 pasky Exp $ */
+/* $Id: options.h,v 1.23 2002/05/25 21:18:33 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
 
 #include "document/html/colors.h"
-#include "links.h" /* lists stuff */
+#include "links.h" /* lists stuff */ /* MAX_STR_LEN, safe_strncpy() */
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
@@ -89,8 +89,10 @@ extern void add_opt(struct list_head *, unsigned char *path, unsigned char *name
 	add_opt(root_options, path, name, flags, OPT_LONG, min, max, ptr, desc); \
 	*ptr = def; } while (0)
 
-#define add_opt_string(path, name, flags, def, desc) \
-	add_opt(root_options, path, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
+#define add_opt_string(path, name, flags, def, desc) do { \
+	unsigned char *ptr = mem_alloc(sizeof(MAX_STR_LEN)); \
+	add_opt(root_options, path, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc); \
+	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
 
 #define add_opt_codepage(path, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \

@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.26 2004/01/01 16:42:31 jonas Exp $ */
+/* $Id: module.c,v 1.27 2004/01/19 20:35:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "protocol/rewrite/rewrite.h"
 #include "scripting/scripting.h"
 #include "ssl/ssl.h"
+
 
 /* This is also used for version string composing so keep NULL terminated */
 struct module *builtin_modules[] = {
@@ -110,23 +111,23 @@ done_module(struct module *module)
 /* Interface for handling builtin modules. */
 
 void
-register_modules_options(void)
+register_modules_options(struct module *modules[])
 {
 	struct module *module;
 	int i;
 
-	foreach_module (module, builtin_modules, i)
+	foreach_module (module, modules, i)
 		register_module_options(module);
 }
 
 void
-unregister_modules_options(void)
+unregister_modules_options(struct module *modules[])
 {
 	struct module *module;
 	int i;
 
 	/* Cleanups backward to initialization. */
-	foreachback_module (module, builtin_modules, i)
+	foreachback_module (module, modules, i)
 		unregister_module_options(module);
 }
 
@@ -135,22 +136,22 @@ unregister_modules_options(void)
  * by init_b in main.c */
 
 void
-init_modules(void)
+init_modules(struct module *modules[])
 {
 	struct module *module;
 	int i;
 
-	foreach_module (module, builtin_modules, i)
+	foreach_module (module, modules, i)
 		init_module(module);
 }
 
 void
-done_modules(void)
+done_modules(struct module *modules[])
 {
 	struct module *module;
 	int i;
 
 	/* Cleanups backward to initialization. */
-	foreachback_module (module, builtin_modules, i)
+	foreachback_module (module, modules, i)
 		done_module(module);
 }

@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.11 2003/12/31 14:26:50 jonas Exp $ */
+/* $Id: module.h,v 1.12 2004/01/19 20:35:02 jonas Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -76,10 +76,10 @@ void done_module(struct module *module);
 
 extern struct module *builtin_modules[];
 
-void register_modules_options(void);
-void unregister_modules_options(void);
+void register_modules_options(struct module *modules[]);
+void unregister_modules_options(struct module *modules[]);
 
-void init_modules(void);
-void done_modules(void);
+void init_modules(struct module *modules[]);
+void done_modules(struct module *modules[]);
 
 #endif

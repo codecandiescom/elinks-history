@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.84 2004/12/17 01:11:07 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.85 2004/12/17 11:02:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -712,8 +712,6 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct document_view *doc_view = vs->doc_view;
-	struct document *document = doc_view->document;
 
 	VALUE_TO_JSVAL_START;
 	if (!JSVAL_IS_INT(id))
@@ -724,6 +722,8 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	{
 		struct form_control *fc;
 		int counter = 0;
+		struct document_view *doc_view = vs->doc_view;
+		struct document *document = doc_view->document;
 
 		foreach (fc, document->forms)
 			counter++;

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.22 2003/08/24 20:26:15 jonas Exp $ */
+/* $Id: kbd.c,v 1.23 2003/08/25 02:46:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,8 +156,8 @@ kbd_ctrl_c(void)
 		queue_event(ditrm, (unsigned char *)&ev, sizeof(struct event));
 }
 
-#define seq_len(x) sizeof((x)) / sizeof(unsigned char) - 1
-#define write_sequence(fd, seq) hard_write(fd, seq, seq_len(seq))
+#define write_sequence(fd, seq) \
+	hard_write(fd, seq, sizeof(seq) / sizeof(unsigned char) - 1)
 
 static void
 send_init_sequence(int h, int flags)
@@ -192,7 +192,6 @@ send_term_sequence(int h, int flags)
 	}
 }
 
-#undef seq_len
 
 void
 resize_terminal(void)

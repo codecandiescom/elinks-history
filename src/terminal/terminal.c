@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.33 2003/06/14 13:15:30 zas Exp $ */
+/* $Id: terminal.c,v 1.34 2003/07/03 00:07:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,8 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
-#include "viewer/text/view.h"
+#include "viewer/text/textarea.h"
+
 
 /* TODO: move this function elsewhere... -- Zas */
 unsigned char *

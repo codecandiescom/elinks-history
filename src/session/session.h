@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.127 2004/05/25 00:26:32 jonas Exp $ */
+/* $Id: session.h,v 1.128 2004/05/26 16:37:58 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -237,6 +237,6 @@ extern struct list_head questions_queue;
 void add_questions_entry(void (*callback)(struct session *, void *), void *data);
 void check_questions_queue(struct session *ses);
 
-unsigned char *get_homepage_url(void);
+struct uri *get_rewritten_uri(struct session *ses, unsigned char *uristring);
 
 #endif

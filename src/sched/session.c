@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.408 2004/05/26 16:22:09 jonas Exp $ */
+/* $Id: session.c,v 1.409 2004/05/26 16:37:57 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1148,4 +1148,29 @@ struct link *
 get_current_session_link(struct session *ses)
 {
 	return get_current_link_in_view(current_frame(ses));
+}
+
+
+struct uri *
+get_rewritten_uri(struct session *ses, unsigned char *uristring)
+{
+	struct uri *uri = NULL;
+#if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
+	static int goto_url_event_id = EVENT_NONE;
+
+	uristring = stracpy(uristring);
+	if (!uristring) return NULL;
+
+	set_event_id(goto_url_event_id, "goto-url");
+	trigger_event(goto_url_event_id, &uristring, ses);
+	if (!uristring) return NULL;
+#endif
+
+	if (*uristring) uri = get_uri(uristring, -1);
+
+#if defined(CONFIG_SCRIPTING) || defined(CONFIG_URI_REWRITE)
+	mem_free(uristring);
+#endif
+
+	return uri;
 }

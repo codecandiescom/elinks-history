@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.144 2004/04/22 21:14:20 jonas Exp $ */
+/* $Id: cache.c,v 1.145 2004/05/29 13:21:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,6 +152,35 @@ get_cache_entry(struct uri *uri)
 	add_to_list(cache_entries, cached);
 
 	cached->box_item = add_listbox_item(&cache_browser, struri(cached->uri), cached);
+
+	return cached;
+}
+
+struct cache_entry *
+get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
+{
+	struct cache_entry *cached;
+
+	/* We have to check if something should be reloaded */
+	if (cache_mode > CACHE_MODE_NORMAL)
+		return NULL;
+
+	cached = find_in_cache(uri);
+	if (!cached || cached->incomplete)
+		return NULL;
+
+	/* Check if the entry should be deleted */
+	if (is_object_used(cached))
+		return cached;
+
+	/* A bit of a gray zone. Removed cached redirects if we have to and if
+	 * the entry has the stricktest cache mode and we don't want the most
+	 * aggressive mode. Please enlighten me. --jonas */
+	if ((cached->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
+	    || (cached->redirect && !get_opt_int("document.cache.cache_redirects"))) {
+		delete_cache_entry(cached);
+		return NULL;
+	}
 
 	return cached;
 }

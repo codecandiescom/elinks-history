@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.85 2004/05/25 03:40:18 jonas Exp $ */
+/* $Id: cache.h,v 1.86 2004/05/29 13:21:08 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -83,6 +83,10 @@ struct cache_entry *find_in_cache(struct uri *uri);
 /* Searches the cache for a matching entry else a new one is added. Returns
  * NULL if allocation fails. */
 struct cache_entry *get_cache_entry(struct uri *uri);
+
+/* Searches the cache for a matching entry and checks if it is still valid and
+ * usable. Returns NULL if the @cache_mode suggests to reload it again. */
+struct cache_entry *get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode);
 
 int add_fragment(struct cache_entry *, int, unsigned char *, int);
 void defrag_entry(struct cache_entry *);

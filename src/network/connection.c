@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.170 2004/05/28 21:16:54 jonas Exp $ */
+/* $Id: connection.c,v 1.171 2004/05/29 13:21:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -754,7 +754,7 @@ int
 load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
-	struct cache_entry *cached = NULL;
+	struct cache_entry *cached;
 	struct connection *conn;
 	struct uri *proxy_uri, *proxied_uri;
 
@@ -782,15 +782,8 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	}
 #endif
 
-	if (cache_mode <= CACHE_MODE_NORMAL
-	    && (cached = find_in_cache(uri))
-	    && !cached->incomplete) {
-		if (!is_object_used(cached) &&
-		    ((cached->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
-		     || (cached->redirect && !get_opt_int("document.cache.cache_redirects")))) {
-			delete_cache_entry(cached);
-			cached = NULL;
-		} else {
+	cached = get_validated_cache_entry(uri, cache_mode);
+	if (cached) {
 			if (download) {
 				download->cached = cached;
 				download->state = S_OK;
@@ -805,7 +798,6 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 					download->end(download, download->data);
 			}
 			return 0;
-		}
 	}
 
 	proxied_uri = get_proxied_uri(uri);

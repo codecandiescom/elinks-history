@@ -15,7 +15,6 @@ greek
 hungarian
 icelandic
 indonesian
-italian
 lithuanian
 norwegian
 polish

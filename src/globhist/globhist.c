@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.64 2004/01/04 14:40:01 jonas Exp $ */
+/* $Id: globhist.c,v 1.65 2004/01/04 14:53:36 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -104,9 +104,13 @@ static struct hash *globhist_cache = NULL;
 static int globhist_cache_entries = 0;
 
 
-static void
-free_global_history_item(struct global_history_item *historyitem)
+void
+delete_global_history_item(struct global_history_item *historyitem)
 {
+	del_from_list(historyitem);
+	global_history.size--;
+	global_history.dirty = 1;
+
 	if (globhist_cache) {
 		struct hash_item *item;
 
@@ -120,16 +124,7 @@ free_global_history_item(struct global_history_item *historyitem)
 	done_listbox_item(&globhist_browser, historyitem->box_item);
 	mem_free(historyitem->title);
 	mem_free(historyitem->url);
-}
-
-void
-delete_global_history_item(struct global_history_item *historyitem)
-{
-	free_global_history_item(historyitem);
-	del_from_list(historyitem);
 	mem_free(historyitem);
-	global_history.size--;
-	global_history.dirty = 1;
 }
 
 /* Search global history for item matching url. */
@@ -172,16 +167,6 @@ multiget_global_history_item(unsigned char *url, unsigned char *title, ttime tim
 	return NULL;
 }
 #endif
-
-static void
-free_globhist_cache(void)
-{
-	if (globhist_cache) {
-		free_hash(globhist_cache);
-		globhist_cache = NULL;
-		globhist_cache_entries = 0;
-	}
-}
 
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
@@ -396,14 +381,14 @@ write_global_history(void)
 static void
 free_global_history(void)
 {
-	struct global_history_item *historyitem;
-
-	free_globhist_cache();
-
-	foreach (historyitem, global_history.entries) {
-		free_global_history_item(historyitem);
+	if (globhist_cache) {
+		free_hash(globhist_cache);
+		globhist_cache = NULL;
+		globhist_cache_entries = 0;
 	}
-	free_list(global_history.entries);
+
+	while (!list_empty(global_history.entries))
+		delete_global_history_item(global_history.entries.next);
 }
 
 static void

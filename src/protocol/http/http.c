@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.188 2003/10/16 13:08:44 zas Exp $ */
+/* $Id: http.c,v 1.189 2003/10/17 05:11:44 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1029,6 +1029,11 @@ get_header(struct read_buffer *rb)
 	for (i = 0; i < rb->len; i++) {
 		unsigned char a0 = rb->data[i];
 		unsigned char a1 = rb->data[i + 1];
+
+		if (a0 == 0) {
+			rb->data[i] = ' ';
+			continue;
+		}
 		if (a0 == ASCII_LF && a1 == ASCII_LF
 		    && i < rb->len - 1)
 			return i + 2;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.641 2004/11/12 11:06:28 zas Exp $ */
+/* $Id: view.c,v 1.642 2004/11/12 11:20:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1070,23 +1070,26 @@ quit:
 		win->handler(win, ev);
 		if (ses->tab->term->windows.next == win) {
 			delete_window(win);
+			get_kbd_modifier(ev) |= KBD_ALT;
 
-		} else if (doc_view
-			   && get_opt_int("document.browse.accesskey"
-					  ".priority") <= 0
-			   && try_document_key(ses, doc_view, ev)
-			       == FRAME_EVENT_REFRESH) {
+			return NULL;
+		}
+
+		if (doc_view
+		    && get_opt_int("document.browse.accesskey"
+				   ".priority") <= 0
+		    && try_document_key(ses, doc_view, ev)
+		       == FRAME_EVENT_REFRESH) {
 			/* The document ate the key! */
 			refresh_view(ses, doc_view, 0);
 
 			return NULL;
-		} else {
-
-			return ses;
 		}
-		get_kbd_modifier(ev) |= KBD_ALT;
 
-	} else if (!(get_kbd_modifier(ev) & KBD_CTRL)) {
+		return ses;
+	}
+
+	if (!(get_kbd_modifier(ev) & KBD_CTRL)) {
 
 		switch (get_opt_int("document.browse.search.typeahead")) {
 			case 0:
@@ -1101,6 +1104,7 @@ quit:
 				INTERNAL("invalid value for document.browse.search.typeahead");
 		}
 
+		/* FIXME: what if !doc_view ? --Zas */
 		search_typeahead(ses, doc_view, action);
 
 		/* Cross your fingers -- I'm just asking

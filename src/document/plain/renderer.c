@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.13 2003/11/14 03:04:40 jonas Exp $ */
+/* $Id: renderer.c,v 1.14 2003/11/14 03:12:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 {
 	struct link *link;
 	struct uri test_uri;
+	struct point *point;
 	int keep = uri[length];
 	unsigned char *mailto;
 
@@ -82,13 +83,15 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 
 	if ((mailto = memchr(uri, '@', length)) && mailto - uri < length) {
 		mailto = straconcat("mailto:", uri, NULL);
+		uri[length] = keep;
+		if (!mailto) return 0;
 
 	} else if (!parse_uri(&test_uri, uri)) {
 		uri[length] = keep;
 		return 0;
+	} else {
+		uri[length] = keep;
 	}
-
-	uri[length] = keep;
 
 	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1)) {
 		if (mailto) mem_free(mailto);
@@ -97,24 +100,24 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 
 	link = &document->links[document->nlinks];
 
+	if (!realloc_points(link, length)) {
+		if (mailto) mem_free(mailto);
+		return length;
+	}
+
+	link->n = length;
 	link->type = LINK_HYPERTEXT;
 	link->where = mailto ? mailto : memacpy(uri, length);
-
 	link->color.background = document->options.default_bg;
 	link->color.foreground = document->options.default_vlink;
 
-	if (realloc_points(link, length)) {
-		struct point *point = link->pos;
-
-		link->n = length;
-
-		for (; length > 0; length--, point++, x++) {
-			point->x = x;
-			point->y = y;
-		}
-
-		document->nlinks++;
+	for (point = link->pos; length > 0; length--, point++, x++) {
+		point->x = x;
+		point->y = y;
 	}
+
+
+	document->nlinks++;
 
 	return length - 1;
 }

@@ -42,7 +42,7 @@
 		<term>HTML:</term>
 		<listitem>
 		<para>
-		<ulink url="http://elink.or.cz/documentation/manual/elinks-manual.html/"></ulink>
+		<ulink url="http://elinks.or.cz/documentation/manual/elinks-manual.html/"></ulink>
 		</para>
 		</listitem>
 	</varlistentry>
@@ -50,7 +50,7 @@
 		<term>a plain text file:</term>
 		<listitem>
 		<para>
-		<ulink url="http://elink.or.cz/documentation/manual/elinks-manual.txt"></ulink>
+		<ulink url="http://elinks.or.cz/documentation/manual/elinks-manual.txt"></ulink>
 		</para>
 		</listitem>
 	</varlistentry>
@@ -58,7 +58,7 @@
 		<term>HTML as a gzip'ed tar file:</term>
 		<listitem>
 		<para>
-		<ulink url="http://elink.or.cz/documentation/manual/elinks-manual.tgz"></ulink>
+		<ulink url="http://elinks.or.cz/documentation/manual/elinks-manual.tgz"></ulink>
 		</para>
 		</listitem>
 	</varlistentry>
@@ -66,7 +66,7 @@
 		<term>HTML as a zip file:</term>
 		<listitem>
 		<para>
-		<ulink url="http://elink.or.cz/documentation/manual/elinks-manual.zip"></ulink>
+		<ulink url="http://elinks.or.cz/documentation/manual/elinks-manual.zip"></ulink>
 		</para>
 		</listitem>
 	</varlistentry>
@@ -74,7 +74,7 @@
 		<term>as well as a gzip'ed PostScript file:</term>
 		<listitem>
 		<para>
-		<ulink url="http://elink.or.cz/documentation/manual/elinks-manual.ps.gz"></ulink>
+		<ulink url="http://elinks.or.cz/documentation/manual/elinks-manual.ps.gz"></ulink>
 		</para>
 		</listitem>
 	</varlistentry>
@@ -82,7 +82,7 @@
 		<term>and a PDF file:</term>
 		<listitem>
 		<para>
-		<ulink url="http://elink.or.cz/documentation/manual/elinks-manual.pdf"></ulink>
+		<ulink url="http://elinks.or.cz/documentation/manual/elinks-manual.pdf"></ulink>
 		</para>
 		</listitem>
 	</varlistentry>

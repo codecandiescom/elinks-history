@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.27 2004/09/03 11:20:13 jonas Exp $ */
+/* $Id: link.c,v 1.28 2004/09/12 18:14:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ html_a(unsigned char *a)
 		}
 
 		if (0)
-			/* Shut up compiler */ ;
+			; /* Shut up compiler */
 #ifdef CONFIG_GLOBHIST
 		else if (get_global_history_item(format.link))
 			format.fg = format.vlink;

@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.29 2004/06/08 23:22:22 jonas Exp $ */
+/* $Id: tab.h,v 1.30 2004/06/11 13:29:50 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -9,7 +9,10 @@
 struct session;
 struct uri;
 
-struct window *init_tab(struct terminal *, int in_background);
+struct window *
+init_tab(struct terminal *term, int in_background,
+	 void (*handler)(struct window *, struct term_event *, int));
+
 int number_of_tabs(struct terminal *);
 int get_tab_number(struct window *);
 int get_tab_number_by_xpos(struct terminal *term, int xpos);

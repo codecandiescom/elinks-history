@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.476 2004/06/11 02:00:34 jonas Exp $ */
+/* $Id: session.c,v 1.477 2004/06/11 13:29:50 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -713,7 +713,7 @@ init_session(struct session *ses, struct terminal *term,
 	struct window *tab;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
 
-	tab = init_tab(term, in_background);
+	tab = init_tab(term, in_background, tabwin_func);
 	if (!tab) return;
 
 	ev.b = (long) init_session_info(ses, uri);

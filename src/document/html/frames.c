@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.66 2004/04/23 20:44:28 pasky Exp $ */
+/* $Id: frames.c,v 1.67 2004/05/10 17:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,9 +109,12 @@ add_frame_to_list(struct session *ses, struct document_view *doc_view)
 	if_assert_failed return;
 
 	foreach (ses_doc_view, ses->scrn_frames) {
-		if (ses_doc_view->y > doc_view->y
-		    || (ses_doc_view->y == doc_view->y
-			&& ses_doc_view->x > doc_view->x)) {
+		int sx = ses_doc_view->dimensions.x;
+		int sy = ses_doc_view->dimensions.y;
+		int x = doc_view->dimensions.x;
+		int y = doc_view->dimensions.y;
+		
+		if (sy > y || (sy == y && sx > x)) {
 			add_at_pos(ses_doc_view->prev, doc_view);
 			return;
 		}
@@ -148,9 +151,8 @@ find_fd(struct session *ses, unsigned char *name,
 		return NULL;
 	}
 	doc_view->depth = depth;
-	doc_view->x = x;
-	doc_view->y = y;
 	doc_view->search_word = &ses->search_word;
+	set_rect(&doc_view->dimensions, x, y, 0, 0);
 
 	add_frame_to_list(ses, doc_view);
 

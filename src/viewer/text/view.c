@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.403 2004/04/29 23:32:19 jonas Exp $ */
+/* $Id: view.c,v 1.404 2004/05/10 17:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,39 +165,35 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 {
 	struct color_pair color = INIT_COLOR_PAIR(0, 0);
 	struct view_state *vs;
-	int xp, yp;
-	int width, height;
+	struct rect *box;	
 	int vx, vy;
 	int y;
 
 	assert(t && doc_view);
 	if_assert_failed return;
 
-	xp = doc_view->x;
-	yp = doc_view->y;
-	width = doc_view->width;
-	height = doc_view->height;
+	box = &doc_view->dimensions;
 
 	/* The code in this function assumes that both width and height are
 	 * bigger than 1 so we have to bail out here. */
-	if (width < 2 || height < 2) return;
+	if (box->width < 2 || box->height < 2) return;
 
 	if (active) {
-		set_cursor(t, xp + width - 1, yp + height - 1, 1);
-		set_window_ptr(get_current_tab(t), xp, yp);
+		set_cursor(t, box->x + box->width - 1, box->y + box->height - 1, 1);
+		set_window_ptr(get_current_tab(t), box->x, box->y);
 	}
 
 	if (doc_view->document->height)
 		color.background = doc_view->document->bgcolor;
 
 	if (!doc_view->vs) {
-		draw_area(t, xp, yp, width, height, ' ', 0, &color);
+		draw_area(t, box->x, box->y, box->width, box->height, ' ', 0, &color);
 		return;
 	}
 
 	if (document_has_frames(doc_view->document)) {
-	 	draw_area(t, xp, yp, width, height, ' ', 0, &color);
-		draw_frame_lines(t, doc_view->document->frame_desc, xp, yp);
+	 	draw_area(t, box->x, box->y, box->width, box->height, ' ', 0, &color);
+		draw_frame_lines(t, doc_view->document->frame_desc, box->x, box->y);
 		if (doc_view->vs && doc_view->vs->current_link == -1)
 			doc_view->vs->current_link = 0;
 		return;
@@ -228,21 +224,21 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	free_link(doc_view);
 	doc_view->last_x = vx;
 	doc_view->last_y = vy;
-	draw_area(t, xp, yp, width, height, ' ', 0, &color);
+	draw_area(t, box->x, box->y, box->width, box->height, ' ', 0, &color);
 	if (!doc_view->document->height) return;
 
-	while (vs->y >= doc_view->document->height) vs->y -= height;
+	while (vs->y >= doc_view->document->height) vs->y -= box->height;
 	int_lower_bound(&vs->y, 0);
 	if (vy != vs->y) vy = vs->y, check_vs(doc_view);
 	for (y = int_max(vy, 0);
-	     y < int_min(doc_view->document->height, height + vy);
+	     y < int_min(doc_view->document->height, box->height + vy);
 	     y++) {
 		int st = int_max(vx, 0);
 		int en = int_min(doc_view->document->data[y].length,
-				 width + vx);
+				 box->width + vx);
 
 		if (en - st <= 0) continue;
-		draw_line(t, xp + st - vx, yp + y - vy, en - st,
+		draw_line(t, box->x + st - vx, box->y + y - vy, en - st,
 			  &doc_view->document->data[y].chars[st]);
 	}
 	draw_forms(t, doc_view);
@@ -320,7 +316,7 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	newpos = doc_view->vs->y + doc_view->height;
+	newpos = doc_view->vs->y + doc_view->dimensions.height;
 	if (newpos < doc_view->document->height)
 		doc_view->vs->y = newpos;
 
@@ -335,7 +331,7 @@ page_up(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	if (doc_view->vs->y == 0) return;
-	doc_view->vs->y -= doc_view->height;
+	doc_view->vs->y -= doc_view->dimensions.height;
 	int_lower_bound(&doc_view->vs->y, 0);
 
 	if (!current_link_is_visible(doc_view))
@@ -417,7 +413,7 @@ scroll(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->height;
+	max_height = doc_view->document->height - doc_view->dimensions.height;
 	if (a > 0 && doc_view->vs->y >= max_height) return;
 	doc_view->vs->y += a;
 	if (a > 0) int_upper_bound(&doc_view->vs->y, max_height);
@@ -464,7 +460,7 @@ x_end(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	max_height = doc_view->document->height - doc_view->height;
+	max_height = doc_view->document->height - doc_view->dimensions.height;
 	doc_view->vs->x = 0;
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
 	find_link(doc_view, -1, 0);
@@ -758,14 +754,14 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			if (ev->y < scrollmargin) {
 				rep_ev(ses, doc_view, scroll, -2);
 			}
-			if (ev->y >= doc_view->height - scrollmargin) {
+			if (ev->y >= doc_view->dimensions.height - scrollmargin) {
 				rep_ev(ses, doc_view, scroll, 2);
 			}
 
 			if (ev->x < scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, -8);
 			}
-			if (ev->x >= doc_view->width - scrollmargin * 2) {
+			if (ev->x >= doc_view->dimensions.width - scrollmargin * 2) {
 				rep_ev(ses, doc_view, hscroll, 8);
 			}
 		}
@@ -845,8 +841,9 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 		assert(doc_view && doc_view->document);
 		if_assert_failed return;
 
-		if (ev->x >= o->x && ev->x < o->x + doc_view->width
-		    && ev->y >= o->y && ev->y < o->y + doc_view->height) {
+		/* FIXME: is_in_rect() ? */
+		if (ev->x >= o->x && ev->x < o->x + doc_view->dimensions.width
+		    && ev->y >= o->y && ev->y < o->y + doc_view->dimensions.height) {
 			matched = doc_view;
 			break;
 		}
@@ -861,8 +858,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	if (doc_view != first) draw_formatted(ses, 0);
 
 	memcpy(&evv, ev, sizeof(struct term_event));
-	evv.x -= doc_view->x;
-	evv.y -= doc_view->y;
+	evv.x -= doc_view->dimensions.x;
+	evv.y -= doc_view->dimensions.y;
 	send_to_frame(ses, &evv);
 }
 #endif /* CONFIG_MOUSE */

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.65 2004/04/23 20:44:27 pasky Exp $ */
+/* $Id: status.c,v 1.66 2004/05/10 17:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -374,7 +374,8 @@ display_title_bar(struct session *ses, struct terminal *term)
 	struct string title;
 	unsigned char buf[80];
 	int buflen = 0;
-
+	int height;
+	
 	/* Clear the old title */
 	draw_area(term, 0, 0, term->width, 1, ' ', 0,
 		  get_bfu_color(term, "title.title-bar"));
@@ -387,19 +388,17 @@ display_title_bar(struct session *ses, struct terminal *term)
 	document = doc_view->document;
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
-	if (doc_view->height < document->height) {
-		int pos = doc_view->vs->y + doc_view->height;
+	height = doc_view->dimensions.height;
+	if (height < document->height) {
+		int pos = doc_view->vs->y + height;
 		int page = 1;
-		int pages = doc_view->height
-			    ? (document->height + doc_view->height - 1) / doc_view->height
-			    : 1;
+		int pages = height ? (document->height + height - 1) / height : 1;
 
 		/* Check if at the end else calculate the page. */
 		if (pos >= document->height) {
 			page = pages;
-		} else if (doc_view->height) {
-			page = int_min((pos - doc_view->height / 2) / doc_view->height + 1,
-				       pages);
+		} else if (height) {
+			page = int_min((pos - height / 2) / height + 1, pages);
 		}
 
 		buflen = snprintf(buf, sizeof(buf), " (%d/%d)", page, pages);

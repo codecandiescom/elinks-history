@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.50 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: textarea.c,v 1.51 2004/05/10 17:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,8 +133,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 {
 	struct line_info *ln, *lnx;
 	struct form_control *frm;
-	int xp, yp;
-	int xw, yw;
+	struct rect *box;
 	int vx, vy;
 	int sl, ye;
 	register int x, y;
@@ -145,10 +144,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	assertm(frm, "link %d has no form", (int)(l - doc_view->document->links));
 	if_assert_failed return;
 
-	xp = doc_view->x;
-	yp = doc_view->y;
-	xw = doc_view->width;
-	yw = doc_view->height;
+	box = &doc_view->dimensions;
 	vx = doc_view->vs->x;
 	vy = doc_view->vs->y;
 
@@ -160,19 +156,19 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	sl = fs->vypos;
 	while (ln->st && sl) sl--, ln++;
 
-	x = l->pos[0].x + xp - vx;
-	y = l->pos[0].y + yp - vy;
+	x = l->pos[0].x + box->x - vx;
+	y = l->pos[0].y + box->y - vy;
 	ye = y + frm->rows;
 
 	for (; ln->st && y < ye; ln++, y++) {
 		register int i;
 
-		if (y < yp || y >= yp + yw) continue;
+		if (!row_is_in_rect(box, y)) continue;
 
 		for (i = 0; i < frm->cols; i++) {
 			int xi = x + i;
 
-			if (xi >= xp && xi < xp + xw) {
+			if (!col_is_in_rect(box, xi)) {
 				if (fs->value &&
 				    i >= -fs->vpos &&
 				    i + fs->vpos < ln->en - ln->st)
@@ -187,12 +183,12 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	for (; y < ye; y++) {
 		register int i;
 
-		if (y < yp || y >= yp + yw) continue;
+		if (!row_is_in_rect(box, y)) continue;
 
 		for (i = 0; i < frm->cols; i++) {
 			int xi = x + i;
 
-			if (xi >= xp && xi < xp + xw)
+			if (!col_is_in_rect(box, xi))
 				draw_char_data(t, xi, y, '_');
 		}
 	}

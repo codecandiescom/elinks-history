@@ -1,10 +1,12 @@
-/* $Id: view.h,v 1.19 2004/03/03 18:03:29 jonas Exp $ */
+/* $Id: view.h,v 1.20 2004/05/10 17:15:22 zas Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
 
 #include "terminal/draw.h"
 #include "util/lists.h"
+#include "util/rect.h"
+
 
 struct document;
 struct view_state;
@@ -25,8 +27,7 @@ struct document_view {
 	struct link_bg *link_bg;
 
 	int link_bg_n;
-	int x, y; /* pos of window */
-	int width, height; /* size of window */
+	struct rect dimensions;	/* pos and size of window */
 	int last_x, last_y; /* last pos of window */
 	int depth;
 	int used;

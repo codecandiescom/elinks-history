@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.93 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: form.c,v 1.94 2004/05/10 17:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,8 +191,7 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	struct form_state *fs;
 	struct form_control *frm;
 	struct view_state *vs;
-	int xp, yp;
-	int width, height;
+	struct rect *box;
 	int vx, vy;
 
 	assert(t && doc_view && doc_view->document && doc_view->vs && l);
@@ -204,10 +203,8 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 	fs = find_form_state(doc_view, frm);
 	if (!fs) return;
 
-	xp = doc_view->x;
-	yp = doc_view->y;
-	width = doc_view->width;
-	height = doc_view->height;
+	box = &doc_view->dimensions;
+	
 	vs = doc_view->vs;
 	vx = vs->x;
 	vy = vs->y;
@@ -223,13 +220,13 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 			int_bounds(&fs->vpos, fs->state - frm->size + 1, fs->state);
 			if (!l->n) break;
 
-			y = l->pos[0].y + yp - vy;
-			if (y >= yp && y < yp + height) {
+			y = l->pos[0].y + box->y - vy;
+			if (row_is_in_rect(box, y)) {
 				int len = strlen(fs->value) - fs->vpos;
 
-				x = l->pos[0].x + xp - vx;
+				x = l->pos[0].x + box->x - vx;
 				for (i = 0; i < frm->size; i++, x++) {
-					if (x >= xp && x < xp + width) {
+					if (col_is_in_rect(box, x)) {
 						if (fs->value &&
 						    i >= -fs->vpos && i < len)
 							draw_char_data(t, x, y,
@@ -248,9 +245,9 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 		case FC_CHECKBOX:
 		case FC_RADIO:
 			if (l->n < 2) break;
-			x = l->pos[1].x + xp - vx;
-			y = l->pos[1].y + yp - vy;
-			if (x >= xp && y >= yp && x < xp + width && y < yp + height)
+			x = l->pos[1].x + box->x - vx;
+			y = l->pos[1].y + box->y - vy;
+			if (is_in_rect(box, x, y))
 				draw_char_data(t, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
@@ -262,9 +259,9 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 				s = "";
 			sl = s ? strlen(s) : 0;
 			for (i = 0; i < l->n; i++) {
-				x = l->pos[i].x + xp - vx;
-				y = l->pos[i].y + yp - vy;
-				if (x >= xp && y >= yp && x < xp + width && y < yp + height)
+				x = l->pos[i].x + box->x - vx;
+				y = l->pos[i].y + box->y - vy;
+				if (is_in_rect(box, x, y))
 					draw_char_data(t, x, y, i < sl ? s[i] : '_');
 			}
 			break;

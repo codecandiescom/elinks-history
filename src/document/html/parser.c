@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.313 2004/01/01 14:28:07 zas Exp $ */
+/* $Id: parser.c,v 1.314 2004/01/01 14:34:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3506,9 +3506,8 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	unsigned char *attr, *label, *href, *name, *target;
 	struct link_def *ld;
 	struct menu_item *nm;
-	int nmenu = 0;
+	int nmenu;
 	int namelen;
-	int i;
 
 	while (*pos < eof && **pos != '<') {
 		(*pos)++;
@@ -3585,10 +3584,8 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 
 
 	ld->target = target;
-	for (i = 0; !mi_is_end_of_menu((*menu)[i]); i++) {
-		struct link_def *ll = (*menu)[i].data;
-
-		nmenu++;
+	for (nmenu = 0; !mi_is_end_of_menu((*menu)[nmenu]); nmenu++) {
+		struct link_def *ll = (*menu)[nmenu].data;
 
 		if (!strcmp(ll->link, ld->link) &&
 		    !strcmp(ll->target, ld->target)) {

@@ -1,3 +1,15 @@
+Fri Sep  6 16:21:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Compilation fix in the italian translation.  
+
+Fri Sep  6 15:42:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/italian.lng, src/intl/language.inc:
+
+	Italian translation update, patch by Fabio.  
+
 Thu Sep  5 21:02:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/colors.c:

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.24 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: inphist.c,v 1.25 2003/09/16 23:27:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,9 @@ tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 	tab_compl_n(term, item, strlen(item), win);
 }
 
+#define realloc_menu_items(menu, size) \
+	mem_align_alloc(menu, size, (size) + 1, sizeof(struct menu_item), 0xFF)
+
 /* Complete to last unambiguous character, and display menu for all possible
  * further completions. */
 void
@@ -53,19 +56,14 @@ do_tab_compl(struct terminal *term, struct list_head *history,
 	int l = strlen(cdata);
 	int n = 0;
 	struct input_history_item *hi;
-	struct menu_item *items = NULL, *i;
+	struct menu_item *items = NULL;
 
 	foreach (hi, *history) {
 		if (strncmp(cdata, hi->d, l)) continue;
 
-		if (!(n & (ALLOC_GR - 1))) {
-			i = mem_realloc(items, (n + ALLOC_GR + 1)
-					       * sizeof(struct menu_item));
-			if (!i) {
-				if (items) mem_free(items);
-				return;
-			}
-			items = i;
+		if (!realloc_menu_items(&items, n)) {
+			if (items) mem_free(items);
+			return;
 		}
 
 		items[n].text = hi->d;

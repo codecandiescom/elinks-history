@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.16 2002/03/29 10:36:56 pasky Exp $ */
+/* $Id: session.c,v 1.17 2002/03/29 10:56:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -926,6 +926,7 @@ void reload(struct session *ses, int no_cache)
 	abort_loading(ses);
 	if (no_cache == -1) no_cache = ++ses->reloadlevel;
 	else ses->reloadlevel = no_cache;
+	l = cur_loc(ses);
 	if (have_location(ses)) {
 		struct file_to_load *ftl;
 

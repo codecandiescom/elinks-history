@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.12 2004/09/23 14:05:32 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.13 2004/09/23 15:25:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ bye: \
 
 static void
 value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
-               unsigned char *string)
+	       unsigned char *string)
 {
 	switch (prop_type) {
 	case JSPT_STRING:
@@ -261,11 +261,11 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 		JSVAL_REQUIRE(vp, STRING, string);
 		new_uri = get_hooked_uri(string, doc_view->session,
-		                         doc_view->session->tab->term->cwd);
+					 doc_view->session->tab->term->cwd);
 		if (!new_uri)
 			break;
 		goto_uri_frame(doc_view->session, new_uri, doc_view->name,
-		               CACHE_MODE_NORMAL);
+			       CACHE_MODE_NORMAL);
 		done_uri(new_uri);
 		break;
 	}
@@ -316,14 +316,14 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	JS_SetContextPrivate(ctx, interpreter->doc_view);
 
 	document_obj = JS_InitClass(ctx, global_obj, NULL,
-	                            (JSClass *) &document_class, NULL, 0,
-	                            (JSPropertySpec *) document_props, NULL,
-	                            NULL, NULL);
+				    (JSClass *) &document_class, NULL, 0,
+				    (JSPropertySpec *) document_props, NULL,
+				    NULL, NULL);
 
 	location_obj = JS_InitClass(ctx, global_obj, NULL,
-	                            (JSClass *) &location_class, NULL, 0,
-	                            (JSPropertySpec *) location_props, NULL,
-	                            NULL, NULL);
+				    (JSClass *) &location_class, NULL, 0,
+				    (JSPropertySpec *) location_props, NULL,
+				    NULL, NULL);
 
 	return ctx;
 }
@@ -342,7 +342,7 @@ spidermonkey_put_interpreter(struct ecmascript_interpreter *interpreter)
 
 unsigned char *
 spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
-                             struct string *code)
+			     struct string *code)
 {
 	JSContext *ctx;
 	jsval rval;
@@ -352,7 +352,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 	assert(interpreter);
 	ctx = interpreter->backend_data;
 	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
-	                      code->source, code->length, "", 0, &rval)
+			      code->source, code->length, "", 0, &rval)
 	    == JS_FALSE)
 		return NULL;
 

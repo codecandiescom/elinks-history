@@ -113,13 +113,11 @@ install-data-yes: all
 	  lang=`echo $$cat | sed 's/\.gmo$$//'`; \
 	  dir=$(localedir)/$$lang/LC_MESSAGES; \
 	  $(mkinstalldirs) $(DESTDIR)$$dir; \
-	  if test -r $$cat; then \
-	    $(INSTALL_DATA) $$cat $(DESTDIR)$$dir/$(PACKAGE).mo; \
+	  if test -r $(srcdir)/$$cat; then \
+	    $(INSTALL_DATA) $(srcdir)/$$cat $(DESTDIR)$$dir/$(PACKAGE).mo; \
 	    echo "installing $$cat as $(DESTDIR)$$dir/$(PACKAGE).mo"; \
 	  else \
-	    $(INSTALL_DATA) $$cat $(DESTDIR)$$dir/$(PACKAGE).mo; \
-	    echo "installing $$cat as" \
-		 "$(DESTDIR)$$dir/$(PACKAGE).mo"; \
+	    echo "Error: Cannot find $$cat"; \
 	  fi; \
 	done
 

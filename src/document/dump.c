@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.22 2002/08/07 00:57:22 pasky Exp $ */
+/* $Id: dump.c,v 1.23 2002/09/10 13:15:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,8 @@ struct status dump_stat;
 int dump_pos;
 int dump_redir_count = 0;
 
-void dump_end(struct status *stat, void *p)
+void
+dump_end(struct status *stat, void *p)
 {
 	struct cache_entry *ce = stat->ce;
 	int oh = get_output_handle();
@@ -157,7 +158,8 @@ terminate:
 	terminate = 1;
 }
 
-void dump_start(unsigned char *u)
+void
+dump_start(unsigned char *u)
 {
 	unsigned char *uu, *wd;
 
@@ -186,7 +188,8 @@ terminate:
 	retval = RET_SYNTAX;
 }
 
-int dump_to_file(struct f_data *fd, int h)
+int
+dump_to_file(struct f_data *fd, int h)
 {
 #define D_BUF	65536
 

@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.7 2002/12/29 14:42:02 pasky Exp $ */
+/* $Id: syntree.h,v 1.8 2003/01/01 20:03:07 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -19,6 +19,8 @@
  * head and body elements as leafs and so on. */
 
 #include "util/lists.h"
+
+struct parser_state; /* We would hit a cross-dependency barrier otherwise. */
 
 enum syntree_node_special {
 	NODE_SPEC_NONE,
@@ -78,6 +80,13 @@ init_syntree_node();
 /* Releases the node structure and all its attributes and leafs. */
 void
 done_syntree_node(struct syntree_node *node);
+
+/* Creates new syntax tree node and adds it to the syntax tree properly at
+ * the current position (and will move the current position to itself then).
+ * It returns the node structure or NULL if failed (the syntax tree is not
+ * touched then). */
+struct syntree_node *
+spawn_syntree_node(struct parser_state *state);
 
 /* Returns value string of an attribute with this name. NULL means there's no
  * such attribute set, otherwise a pointer is returned that points to

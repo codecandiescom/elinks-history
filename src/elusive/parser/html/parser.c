@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.27 2003/01/01 18:58:13 pasky Exp $ */
+/* $Id: parser.c,v 1.28 2003/01/01 20:03:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,27 +71,6 @@ html_state_pop(struct parser_state *state)
 {
 	return (struct html_parser_state *)
 		state_stack_pop(state);
-}
-
-
-static struct syntree_node *
-spawn_syntree_node(struct parser_state *state)
-{
-	struct syntree_node *node = init_syntree_node();
-
-	if (!node) return NULL;
-
-	node->root = state->root;
-	if (state->root != state->current) {
-		add_at_pos(state->current, node);
-	} else {
-		/* We've spawned non-leaf node right before. So we will fit
-		 * under it (not along it) nicely. */
-		add_to_list(state->root->leafs, node);
-	}
-	state->current = node;
-
-	return node;
 }
 
 

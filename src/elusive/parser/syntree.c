@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.9 2002/12/30 23:57:02 pasky Exp $ */
+/* $Id: syntree.c,v 1.10 2003/01/01 20:03:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "elusive/parser/attrib.h"
+#include "elusive/parser/parser.h"
 #include "elusive/parser/syntree.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -57,6 +58,27 @@ done_syntree_node(struct syntree_node *node)
 
 	if (node->next) del_from_list(node);
 	mem_free(node);
+}
+
+
+struct syntree_node *
+spawn_syntree_node(struct parser_state *state)
+{
+	struct syntree_node *node = init_syntree_node();
+
+	if (!node) return NULL;
+
+	node->root = state->root;
+	if (state->root != state->current) {
+		add_at_pos(state->current, node);
+	} else {
+		/* We've spawned non-leaf node right before. So we will fit
+		 * under it (not along it) nicely. */
+		add_to_list(state->root->leafs, node);
+	}
+	state->current = node;
+
+	return node;
 }
 
 

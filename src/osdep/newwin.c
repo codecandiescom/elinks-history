@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.20 2004/09/25 22:39:49 pasky Exp $ */
+/* $Id: newwin.c,v 1.21 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,8 +40,9 @@ can_open_in_new(struct terminal *term)
 {
 	int i, possibilities = 0;
 
-	foreach_open_in_new (i, term->environment)
+	foreach_open_in_new (i, term->environment) {
 		possibilities++;
+	}
 
 	return possibilities;
 }

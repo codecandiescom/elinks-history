@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.35 2004/09/22 21:59:58 pasky Exp $ */
+/* $Id: module.c,v 1.36 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,8 +80,9 @@ register_module_options(struct module *module)
 
 	if (module->options) register_options(module->options, config_options);
 
-	foreach_module (submodule, module->submodules, i)
+	foreach_module (submodule, module->submodules, i) {
 		register_module_options(submodule);
+	}
 }
 
 void
@@ -106,8 +107,9 @@ init_module(struct module *module)
 	if (module->init) module->init(module);
 	if (module->hooks) register_event_hooks(module->hooks);
 
-	foreach_module (submodule, module->submodules, i)
+	foreach_module (submodule, module->submodules, i) {
 		init_module(submodule);
+	}
 }
 
 void
@@ -132,8 +134,9 @@ register_modules_options(struct module *modules[])
 	struct module *module;
 	int i;
 
-	foreach_module (module, modules, i)
+	foreach_module (module, modules, i) {
 		register_module_options(module);
+	}
 }
 
 void
@@ -157,8 +160,9 @@ init_modules(struct module *modules[])
 	struct module *module;
 	int i;
 
-	foreach_module (module, modules, i)
+	foreach_module (module, modules, i) {
 		init_module(module);
+	}
 }
 
 void

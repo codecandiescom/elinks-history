@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.20 2004/01/01 16:56:17 jonas Exp $ */
+/* $Id: common.c,v 1.21 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,13 +43,14 @@ get_content_type_backends(unsigned char *extension)
 	struct mime_backend *backend;
 	int i;
 
-	foreach_module (backend, mime_backends, i)
+	foreach_module (backend, mime_backends, i) {
 		if (backend->get_content_type) {
 			unsigned char *content_type;
 
 			content_type = backend->get_content_type(extension);
 			if (content_type) return content_type;
 		}
+	}
 
 	return NULL;
 }
@@ -60,13 +61,14 @@ get_mime_handler_backends(unsigned char *ctype, int have_x)
 	struct mime_backend *backend;
 	int i;
 
-	foreach_module (backend, mime_backends, i)
+	foreach_module (backend, mime_backends, i) {
 		if (backend->get_mime_handler) {
 			struct mime_handler *handler;
 
 			handler = backend->get_mime_handler(ctype, have_x);
 			if (handler) return handler;
 		}
+	}
 
 	return NULL;
 }

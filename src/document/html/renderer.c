@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.503 2004/10/23 09:53:27 pasky Exp $ */
+/* $Id: renderer.c,v 1.504 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1466,8 +1466,9 @@ free_table_cache(void)
 		int i;
 
 		/* We do not free key here. */
-		foreach_hash_item (item, *renderer_context.table_cache, i)
+		foreach_hash_item (item, *renderer_context.table_cache, i) {
 			mem_free_if(item->value);
+		}
 
 		free_hash(renderer_context.table_cache);
 	}

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.280 2004/10/10 19:31:31 miciah Exp $ */
+/* $Id: menu.c,v 1.281 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -69,8 +69,11 @@ count_items(struct menu_item *items)
 	struct menu_item *item;
 	int i = 0;
 
-	if (items)
-		foreach_menu_item (item, items) i++;
+	if (items) {
+		foreach_menu_item (item, items) {
+			i++;
+		}
+	}
 
 	return i;
 }
@@ -238,8 +241,9 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int my = int_min(menu->size, height);
 	int mx = 0;
 
-	foreach_menu_item (item, menu->items)
+	foreach_menu_item (item, menu->items) {
 		int_lower_bound(&mx, get_menuitem_width(term, item, width));
+	}
 
 	set_box(&menu->box,
 		menu->parent_x, menu->parent_y,

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.33 2004/08/12 08:40:28 miciah Exp $ */
+/* $Id: listmenu.c,v 1.34 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,9 +30,10 @@ menu_contains(struct menu_item *m, int f)
 	if (m->func != (menu_func) do_select_submenu)
 		return (int) m->data == f;
 
-	foreach_menu_item (m, m->data)
+	foreach_menu_item (m, m->data) {
 		if (menu_contains(m, f))
 			return 1;
+	}
 
 	return 0;
 }

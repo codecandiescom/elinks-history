@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.291 2004/11/08 16:47:20 jonas Exp $ */
+/* $Id: uri.c,v 1.292 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1297,8 +1297,9 @@ free_uri_list(struct uri_list *list)
 
 	if (!list->uris) return;
 
-	foreach_uri (uri, index, list)
+	foreach_uri (uri, index, list) {
 		done_uri(uri);
+	}
 
 	mem_free(list->uris);
 }

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.46 2004/10/19 09:35:30 zas Exp $ */
+/* $Id: mimetypes.c,v 1.47 2004/11/08 19:27:22 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-2004 The ELinks Project */
@@ -200,12 +200,13 @@ done_mimetypes(struct module *module)
 	if (!mimetypes_map)
 		return;
 
-	foreach_hash_item (item, *mimetypes_map, i)
+	foreach_hash_item (item, *mimetypes_map, i) {
 		if (item->value) {
 			struct mimetypes_entry *entry = item->value;
 
 			done_mimetypes_entry(entry);
 		}
+	}
 
 	free_hash(mimetypes_map);
 	mimetypes_map = NULL;

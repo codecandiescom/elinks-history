@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.12 2004/04/16 16:29:58 zas Exp $ */
+/* $Id: style.c,v 1.13 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,8 +105,9 @@ done_bfu_colors(void)
 	if (!bfu_colors)
 		return;
 
-	foreach_hash_item (item, *bfu_colors, i)
+	foreach_hash_item (item, *bfu_colors, i) {
 		mem_free_if(item->value);
+	}
 
 	free_hash(bfu_colors);
 	bfu_colors = NULL;

@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.14 2004/08/17 08:03:19 miciah Exp $ */
+/* $Id: module.h,v 1.15 2004/11/08 19:27:22 jonas Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -54,7 +54,9 @@ sizeof_modules(struct module **modules)
 	struct module *module;
 	int i;
 
-	foreach_module (module, modules, i) ; /* m33p */
+	foreach_module (module, modules, i) {
+		; /* m33p */
+	}
 
 	return i - 1;
 }

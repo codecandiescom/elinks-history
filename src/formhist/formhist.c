@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.61 2003/11/24 17:01:17 fabio Exp $ */
+/* $Id: formhist.c,v 1.62 2003/11/24 17:07:09 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ free_form(struct formhist_data *form)
 	mem_free(form);
 }
 
-static int
+int
 load_saved_forms(void)
 {
 	static int loaded = 0;

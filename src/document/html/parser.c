@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.99 2003/06/07 13:46:37 pasky Exp $ */
+/* $Id: parser.c,v 1.100 2003/06/07 20:05:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1766,12 +1766,12 @@ new_menu_item(unsigned char *name, int data, int fullname)
 			item->rtext = M_SUBMENU;
 			item->func = MENU_FUNC do_select_submenu;
 			item->data = nmenu;
-			item->in_m = 1;
+			item->submenu = 1;
 		} else {
 			item->rtext = "";
 			item->func = MENU_FUNC selected_item;
 			item->data = (void *) data;
-			item->in_m = 0;
+			item->submenu = 0;
 		}
 		item->item_free = FREE_NOTHING | (fullname << 8); /* XXX: DIRTY! */
 		item++;

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.18 2003/05/21 10:08:42 zas Exp $ */
+/* $Id: menu.h,v 1.19 2003/06/07 20:05:18 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -48,7 +48,7 @@ struct menu_item {
 	unsigned char *rtext; /* FIXME: Use real keybindings. */
 	void (*func)(struct terminal *, void *, void *);
 	void *data;
-	int in_m;
+	int submenu;
 	enum item_free item_free;
 	int hotkey_pos;
 	int ignore_hotkey;

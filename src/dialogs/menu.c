@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.101 2003/06/07 18:29:52 jonas Exp $ */
+/* $Id: menu.c,v 1.102 2003/06/07 20:05:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,7 +441,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = o - 1 ? M_SUBMENU : (unsigned char *) "";
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
-		e->in_m = o - 1;
+		e->submenu = o - 1;
 		e->item_free = FREE_NOTHING;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;
@@ -471,7 +471,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = "";
 		e->func = MENU_FUNC menu_shell;
 		e->data = NULL;
-		e->in_m = 0;
+		e->submenu = 0;
 		e->item_free = FREE_NOTHING;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;
@@ -484,7 +484,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = "";
 		e->func = MENU_FUNC dlg_resize_terminal;
 		e->data = NULL;
-		e->in_m = 0;
+		e->submenu = 0;
 		e->item_free = FREE_NOTHING;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;

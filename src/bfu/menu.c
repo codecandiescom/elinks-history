@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.73 2003/06/07 12:05:11 pasky Exp $ */
+/* $Id: menu.c,v 1.74 2003/06/07 20:05:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ select_menu(struct terminal *term, struct menu *menu)
 	    it->rtext == M_BAR)
 		return;
 
-	if (!it->in_m) {
+	if (!it->submenu) {
 		struct window *win, *win1;
 
 		/* Don't free data! */
@@ -449,7 +449,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						display_menu(win->term, menu);
 
 						if ((ev->b & BM_ACT) == B_UP ||
-						    menu->items[sel].in_m)
+						    menu->items[sel].submenu)
 							select_menu(win->term, menu);
 					}
 				}
@@ -698,7 +698,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 	    || it->rtext == M_BAR)
 		return;
 
-	if (!it->in_m) {
+	if (!it->submenu) {
 		struct window *win;
 
 		for (win = term->windows.next;
@@ -759,7 +759,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 					menu->selected = i;
 					display_mainmenu(win->term, menu);
 					if ((ev->b & BM_ACT) == B_UP
-					    || menu->items[s].in_m) {
+					    || menu->items[s].submenu) {
 						select_mainmenu(win->term,
 								menu);
 					}
@@ -831,7 +831,7 @@ void
 add_to_menu(struct menu_item **mi, unsigned char *text,
 	    unsigned char *rtext,
 	    void (*func)(struct terminal *, void *, void *),
-	    void *data, int in_m)
+	    void *data, int submenu)
 {
 	struct menu_item *mii;
 	int n = count_items(*mi);
@@ -845,7 +845,7 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	mii[n].rtext = rtext;
 	mii[n].func = func;
 	mii[n].data = data;
-	mii[n].in_m = in_m;
+	mii[n].submenu = submenu;
 	mii[n].hotkey_pos = 0;
 	mii[n].ignore_hotkey = 1;
 }

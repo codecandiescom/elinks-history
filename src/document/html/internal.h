@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.13 2004/06/22 22:11:04 zas Exp $ */
+/* $Id: internal.h,v 1.14 2004/06/22 22:13:50 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -32,11 +32,11 @@ struct html_context {
 	int putsp;
 	int was_br;
 	int was_li;
+	int was_xmp;
 };
 
 extern struct html_context html_context;
 
-extern int was_xmp;
 extern struct css_stylesheet css_styles;
 
 /* For parser/link.c: */

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.447 2004/06/22 22:11:04 zas Exp $ */
+/* $Id: parser.c,v 1.448 2004/06/22 22:13:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ struct html_context html_context;
 unsigned char *eofff;
 unsigned char *startf;
 
-int was_xmp;
 int has_link_lines;
 
 inline void
@@ -556,7 +555,7 @@ html_pre(unsigned char *a)
 void
 html_xmp(unsigned char *a)
 {
-	was_xmp = 1;
+	html_context.was_xmp = 1;
 	html_pre(a);
 }
 

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.56 2004/06/22 22:11:04 zas Exp $ */
+/* $Id: parse.c,v 1.57 2004/06/22 22:13:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -677,7 +677,7 @@ next_break:
 		}
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?')
-		    && !was_xmp) {
+		    && !html_context.was_xmp) {
 			put_chrs(base_pos, html - base_pos, put_chars_f, f);
 			html = skip_comment(html, eof);
 			continue;
@@ -730,7 +730,7 @@ start_element(struct element_info *ei,
 	struct par_attrib old_format;
 	int restore_format;
 
-	if (was_xmp) {
+	if (html_context.was_xmp) {
 		put_chrs("<", 1, put_chars_f, f);
 		html = prev_html + 1;
 		return html;
@@ -843,10 +843,10 @@ end_element(struct element_info *ei,
 	int lnb = 0;
 	int kill = 0;
 
-	if (was_xmp) {
+	if (html_context.was_xmp) {
 		if (ei->func != html_xmp)
 			return html;
-		was_xmp = 0;
+		html_context.was_xmp = 0;
 	}
 
 	html_context.was_br = 0;

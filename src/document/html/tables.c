@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.362 2004/07/08 16:22:41 jonas Exp $ */
+/* $Id: tables.c,v 1.363 2004/07/08 16:25:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -792,10 +792,6 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		height += table->rows_heights[row + s] +
 			(s < cell->rowspan - 1 &&
 			 has_hline_width(table, row + s + 1));
-	}
-
-	if (table->border) {
-		expand_lines(table->part, x - 1, y, height, table->bgcolor);
 	}
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, cell->align, 0, 0);

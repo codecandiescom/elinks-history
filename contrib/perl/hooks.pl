@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.23 2005/03/26 13:37:58 pasky Exp $
+# $Id: hooks.pl,v 1.24 2005/03/26 13:38:59 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -639,8 +639,8 @@ sub quit_hook
 sub loadrc
 {
 	my ($preference) = @_;
-	my $configperl = $ENV{"HOME"} . '/.elinks/config.pl';
-	my $answer = "no";
+	my $configperl = $ENV{'HOME'} . '/.elinks/config.pl';
+	my $answer = 'no';
 
 	return $answer unless -f $configperl;
 
@@ -652,9 +652,9 @@ sub loadrc
 		my $switch = $2;
 		next unless ($setting eq $preference);
 
-		if ($switch =~ '^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$') {
+		if ($switch =~ /^(yes|1|on|yea|yep|sure|ok|okay|yeah|why.*not)$/) {
 			$answer = "yes";
-		} elsif ($switch =~ '^(no|0|off|nay|nope|nah|hell.*no)$') {
+		} elsif ($switch =~ /^(no|0|off|nay|nope|nah|hell.*no)$/) {
 			$answer = "no";
 		} else {
 			$answer = lc($switch);

@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.2 2002/12/25 00:18:53 pasky Exp $ */
+/* $Id: syntree.h,v 1.3 2002/12/26 02:29:46 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -72,5 +72,12 @@ struct syntree_node {
 	unsigned char *src;
 	int srclen;
 };
+
+/* Returns value string of an attribute with this name. NULL means there's no
+ * such attribute set, otherwise a pointer is returned that points to
+ * dynamically allocated memory (which you have to free after doing what you
+ * needed to, yes). */
+unsigned char *
+get_syntree_attrib(struct syntree_node *node, unsigned char *name);
 
 #endif

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.41 2003/11/07 16:22:45 jonas Exp $ */
+/* $Id: text.c,v 1.42 2003/11/07 16:39:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,30 +45,27 @@ text_width(struct terminal *term, register unsigned char *text,
 #define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
 
 static inline int
-split_line(unsigned char *text, int w, int x)
+split_line(unsigned char *text, int w)
 {
 	unsigned char *tx;
 	unsigned char *split = text;
-	int line_x = x;
 	int line_width;
 
 	do {
 		while (is_unsplitable(split)) {
 			split++;
-			line_x++;
 		}
 
+		line_width = split - text;
 		tx = ++split;
-		line_width = line_x - x;
-		line_x++;
+
 		if (*(split - 1) != ' ') break;
 
 		while (is_unsplitable(tx))
 			tx++;
 	} while (tx - split < w - line_width);
 
-	assertm(split - text == line_x - x);
-	assertm(line_width + 1 == line_x - x);
+	assertm(line_width + 1 == split - text);
 
 	return line_width;
 }
@@ -88,7 +85,7 @@ dlg_format_text(struct terminal *term, unsigned char *text,
 		/* Skip any leading space from last line split */
 		if (*text == ' ' || *text == '\n') text++;
 
-		line_width = split_line(text, dlg_width, x);
+		line_width = split_line(text, dlg_width);
 
 		if (real_width) int_lower_bound(real_width, line_width);
 		if (!term || !line_width) continue;

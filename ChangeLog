@@ -1,3 +1,17 @@
+Fri Jan 10 22:28:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/intl/gettext/loadmsgcat.c:
+
+	Fixed compilation problems with the stpcpy() function.  
+
+Fri Jan 10 17:50:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/backend/default.c, config/urlhist.c,
+	cookies/cookies.c, globhist/globhist.c, util/file.c:
+
+	Fixed possible problems on systems where fgets() won't put NUL at
+	the end of the string. Patch by Mikulas and me.  
+
 Thu Jan  9 18:06:45 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/protocol/http/http.c:

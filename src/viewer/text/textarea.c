@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.137 2004/07/15 15:20:07 jonas Exp $ */
+/* $Id: textarea.c,v 1.138 2004/07/31 11:01:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,7 +181,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
 	fc = get_link_form_control(link);
-	assertm(fc, "link %d has no form control", (int)(link - doc_view->document->links));
+	assertm(fc, "link %d has no form control", (int) (link - doc_view->document->links));
 	if_assert_failed return;
 
 	box = &doc_view->box;

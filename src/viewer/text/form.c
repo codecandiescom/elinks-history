@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.238 2004/07/28 12:25:00 jonas Exp $ */
+/* $Id: form.c,v 1.239 2004/07/31 11:01:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,7 +286,7 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 	if_assert_failed return;
 
 	fc = get_link_form_control(link);
-	assertm(fc, "link %d has no form control", (int)(link - doc_view->document->links));
+	assertm(fc, "link %d has no form control", (int) (link - doc_view->document->links));
 	if_assert_failed return;
 
 	fs = find_form_state(doc_view, fc);

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.24 2004/06/25 10:52:31 zas Exp $ */
+/* $Id: hash.c,v 1.25 2004/07/31 11:01:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,9 +251,9 @@ strhash(unsigned char *k, /* the key */
  */
 
 #define keycompute(a) ((k[(a)]) \
-			+ ((hash_value)(k[(a)+1])<<8) \
-			+ ((hash_value)(k[(a)+2])<<16) \
-			+ ((hash_value)(k[(a)+3])<<24))
+			+ ((hash_value) (k[(a)+1])<<8) \
+			+ ((hash_value) (k[(a)+2])<<16) \
+			+ ((hash_value) (k[(a)+3])<<24))
 
 hash_value
 strhash(unsigned char *k, /* the key */
@@ -281,17 +281,17 @@ strhash(unsigned char *k, /* the key */
 	/*------------------------------------- handle the last 11 bytes */
 	c += length;
 	switch (len) {	/* all the case statements fall through */
-		case 11: c += ((hash_value)(k[10])<<24);
-		case 10: c += ((hash_value)(k[9])<<16);
-		case 9 : c += ((hash_value)(k[8])<<8);
+		case 11: c += ((hash_value) (k[10])<<24);
+		case 10: c += ((hash_value) (k[9])<<16);
+		case 9 : c += ((hash_value) (k[8])<<8);
 			/* the first byte of c is reserved for the length */
-		case 8 : b += ((hash_value)(k[7])<<24);
-		case 7 : b += ((hash_value)(k[6])<<16);
-		case 6 : b += ((hash_value)(k[5])<<8);
+		case 8 : b += ((hash_value) (k[7])<<24);
+		case 7 : b += ((hash_value) (k[6])<<16);
+		case 6 : b += ((hash_value) (k[5])<<8);
 		case 5 : b += (k[4]);
-		case 4 : a += ((hash_value)(k[3])<<24);
-		case 3 : a += ((hash_value)(k[2])<<16);
-		case 2 : a += ((hash_value)(k[1])<<8);
+		case 4 : a += ((hash_value) (k[3])<<24);
+		case 3 : a += ((hash_value) (k[2])<<16);
+		case 2 : a += ((hash_value) (k[1])<<8);
 		case 1 : a += (k[0]);
 			/* case 0: nothing left to add */
 	}

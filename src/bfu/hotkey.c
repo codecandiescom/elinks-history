@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.22 2004/06/20 21:19:28 jonas Exp $ */
+/* $Id: hotkey.c,v 1.23 2004/07/31 11:01:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@ find_hotkey_pos(unsigned char *text)
 	if (text && *text) {
 		unsigned char *p = strchr(text, '~');
 
-		if (p) return (int)(p - text) + 1;
+		if (p) return (int) (p - text) + 1;
 	}
 
 	return 0;

@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.25 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: snprintf.c,v 1.26 2004/07/31 11:01:42 miciah Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -704,7 +704,7 @@ fmtfp(char *buffer, size_t *currlen, size_t maxlen,
 		my_modf(temp, &intpart);
 		index = (int) ((temp - intpart + 0.05) * 10.0);
 #if 0
-		index = (int) (((double)(temp*0.1) -intpart +0.05) *10.0);
+		index = (int) (((double) (temp*0.1) -intpart +0.05) *10.0);
 		printf ("%llf, %f, %x\n", temp, intpart, index);
 #endif
 		iconvert[iplace++] = numbers[index];

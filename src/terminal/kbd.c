@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.108 2004/07/31 10:50:16 miciah Exp $ */
+/* $Id: kbd.c,v 1.109 2004/07/31 11:01:42 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -642,8 +642,8 @@ decode_mouse_position(struct itrm *itrm, int from)
 {
 	int position;
 
-	position = (unsigned char)(itrm->kqueue[from]) - ' ' - 1
-		 + ((int)((unsigned char)(itrm->kqueue[from + 1]) - ' ' - 1) << 7);
+	position = (unsigned char) (itrm->kqueue[from]) - ' ' - 1
+		 + ((int) ((unsigned char) (itrm->kqueue[from + 1]) - ' ' - 1) << 7);
 
 	return (position & (1 << 13)) ? 0 : position;
 }

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.118 2004/06/18 19:16:31 jonas Exp $ */
+/* $Id: textarea.c,v 1.119 2004/06/18 20:53:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,17 +198,18 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 		for (i = 0; i < fc->cols; i++) {
 			int xi = x + i;
 
-			if (col_is_in_box(box, xi)) {
-				if (fs->value &&
-				    i >= -fs->vpos &&
-				    i + fs->vpos < line->end - line->start)
-					draw_char_data(term, xi, y,
-						       fs->value[line->start
-							         + i
-								 + fs->vpos]);
-				else
-					draw_char_data(term, xi, y, '_');
-			}
+			if (!col_is_in_box(box, xi))
+				continue;
+
+			if (fs->value &&
+			    i >= -fs->vpos &&
+			    i + fs->vpos < line->end - line->start)
+				draw_char_data(term, xi, y,
+					       fs->value[line->start
+						         + i
+							 + fs->vpos]);
+			else
+				draw_char_data(term, xi, y, '_');
 		}
 	}
 

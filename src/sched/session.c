@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.245 2003/11/21 04:50:28 witekfl Exp $ */
+/* $Id: session.c,v 1.246 2003/11/21 04:52:23 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -789,7 +789,7 @@ b:
 		case TASK_NONE:
 			break;
 		case TASK_FORWARD:
-			if (ses_chktype(ses, stat, ce)) {
+			if (ses_chktype(ses, &ses->loading, stat, ce)) {
 				free_task(ses);
 				reload(ses, CACHE_MODE_NORMAL);
 				return 2;

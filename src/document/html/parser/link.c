@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.71 2004/12/15 15:21:26 zas Exp $ */
+/* $Id: link.c,v 1.72 2004/12/15 15:41:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,12 +283,13 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		label = get_image_label(label);
 	}
 
-	if (!label) {
+	if (!label || !*label) {
+		mem_free_set(&label, NULL);
 		add_brackets = 1;
 		if (display_style == 1)
 			label = get_image_filename_from_src(src);
-		if (!label)
-			label = stracpy("IMG");
+		if (!label || !*label)
+			mem_free_set(&label, stracpy("IMG"));
 	}
 
 	mem_free_set(&format.image, NULL);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.175 2004/04/07 22:10:56 jonas Exp $ */
+/* $Id: uri.c,v 1.176 2004/04/07 22:14:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (*host_end == '/') {
 		host_end++;
 
-	} else if (known && get_protocol_need_slash_after_host(uri->protocol)) {
+	} else if (get_protocol_need_slash_after_host(uri->protocol)) {
 		return URI_ERRNO_NO_HOST_SLASH;
 	}
 

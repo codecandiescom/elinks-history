@@ -497,7 +497,7 @@ msgstr ""
 
 #: src/config/cmdline.c:456
 msgid "Only permit local connections"
-msgstr ""
+msgstr "Permette solo connessioni locali"
 
 #: src/config/cmdline.c:458
 msgid ""
@@ -505,6 +505,9 @@ msgid ""
 "local addresses (ie. 127.0.0.1), it will prevent any connection\n"
 "to distant servers."
 msgstr ""
+"Limita ELinks ad aprire connessioni solo agli indirizzi\n"
+"locali (ie. 127.0.0.1), questo preverrà connessioni a server\n"
+"remoti."
 
 #: src/config/cmdline.c:462
 msgid "Autosubmit first form"
@@ -814,8 +817,8 @@ msgid ""
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
 "## Ovviamente, se non ti piace quello che ELinks farà di questo file,\n"
-"## puoi cambiare il comportamento modificando l'opzione config."
-"saving_style.\n"
+"## puoi cambiare il comportamento modificando l'opzione "
+"config.saving_style.\n"
 "## Dai, siamo dei bravi ragazzi dopo tutto.\n"
 
 #: src/config/conf.c:713
@@ -1009,8 +1012,8 @@ msgstr ""
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap \"%"
-"s\")?"
+"Eliminare veramente l'associazione di tasti \"%s\" (azione \"%s\", keymap "
+"\"%s\")?"
 
 #: src/config/dialogs.c:637 src/dialogs/info.c:138 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -1125,7 +1128,7 @@ msgstr ""
 
 #: src/config/kbdbind.c:475
 msgid "Enter ex-mode (command line)"
-msgstr ""
+msgstr "Entra in modalità ex (riga di comando)"
 
 #: src/config/kbdbind.c:476
 msgid "Open the File menu"
@@ -3057,8 +3060,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.inc:820
 msgid ""
@@ -4752,8 +4755,8 @@ msgstr "Form non salvato"
 #: src/formhist/dialogs.c:128
 msgid ""
 "No saved information for this URL.\n"
-"If you want to save passwords for this URL, enable it by the \"Toggle saving"
-"\" button."
+"If you want to save passwords for this URL, enable it by the \"Toggle "
+"saving\" button."
 msgstr ""
 "Non ci sono informazioni salvate per questo URL.\n"
 "Se desideri salvare le password per questo URL, abilitale tramite il "
@@ -5086,8 +5089,8 @@ msgstr ""
 "Associazione Gestore <-> tipo MIME. Il primo sotto albero è la\n"
 "classe MIME, mentre il secondo sotto albero è il tipo MIME (il\n"
 "gestore di image/gif risiedera in mime.type.image.gif). Ogni opzione\n"
-"del tipo MIME dovrebbe contenere il nome (considerando le maiuscole/"
-"minuscole)\n"
+"del tipo MIME dovrebbe contenere il nome (considerando le "
+"maiuscole/minuscole)\n"
 "del gestore MIME (le sue proprietà sono memorizzate in mime.handler.<nome>)."
 
 #: src/mime/backend/default.c:35
@@ -5239,8 +5242,8 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 "Dà priorità alle voci per l'ordine dei file nel percorso di\n"
-"mailcap. Questo significa che anche le voci con metacaratteri (come image/"
-"*)\n"
+"mailcap. Questo significa che anche le voci con metacaratteri (come "
+"image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
 #: src/mime/backend/mailcap.c:130
@@ -5392,7 +5395,7 @@ msgstr "Identificazione HTTP"
 #: src/protocol/http/codes.c:106
 #, c-format
 msgid "HTTP error %03d"
-msgstr ""
+msgstr "Errore HTTP %03d"
 
 #: src/protocol/http/codes.c:129
 msgid ""
@@ -5811,9 +5814,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -5821,9 +5824,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/task.c:162
 #, c-format

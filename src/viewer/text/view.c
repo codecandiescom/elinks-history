@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.332 2004/01/07 01:57:17 jonas Exp $ */
+/* $Id: view.c,v 1.333 2004/01/07 02:01:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1097,16 +1097,6 @@ quit:
 				goto x;
 			case ACT_SHOW_TERM_OPTIONS:
 				terminal_options(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_TOGGLE_DISPLAY_TABLES:
-				get_opt_int("document.html.display_tables") =
-					!get_opt_int("document.html.display_tables");
-				draw_formatted(ses, 1);
-				goto x;
-			case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
-				get_opt_int("document.plain.compress_empty_lines") =
-					!get_opt_int("document.plain.compress_empty_lines");
-				draw_formatted(ses, 1);
 				goto x;
 			case ACT_OPEN_OS_SHELL:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))

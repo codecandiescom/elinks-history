@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.2 2004/01/07 01:57:17 jonas Exp $ */
+/* $Id: action.c,v 1.3 2004/01/07 02:01:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,6 +113,10 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			toggle_document_option(ses, "document.browse.images.show_as_links");
 			break;
 
+		case ACT_TOGGLE_DISPLAY_TABLES:
+			toggle_document_option(ses, "document.html.display_tables");
+			break;
+
 		case ACT_TOGGLE_DOCUMENT_COLORS:
 			toggle_document_option(ses, "document.colors.use_document_colors");
 			break;
@@ -123,6 +127,10 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 
 		case ACT_TOGGLE_NUMBERED_LINKS:
 			toggle_document_option(ses, "document.browse.links.numbering");
+			break;
+
+		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
+			toggle_document_option(ses, "document.plain.compress_empty_lines");
 			break;
 
 		case ACT_UNBACK:
@@ -210,8 +218,6 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 		case ACT_SELECT:
 		case ACT_SHOW_TERM_OPTIONS:
 		case ACT_TAB_MENU:
-		case ACT_TOGGLE_DISPLAY_TABLES:
-		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
 		case ACT_UNEXPAND:
 		case ACT_UP:
 		case ACT_VIEW_IMAGE:

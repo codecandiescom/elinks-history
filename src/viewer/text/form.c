@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.160 2004/06/14 19:15:03 jonas Exp $ */
+/* $Id: form.c,v 1.161 2004/06/14 19:17:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1032,10 +1032,11 @@ auto_submit_form(struct session *ses)
 }
 
 static int
-field_op_do(struct terminal *term, struct document_view *doc_view,
+field_op_do(struct session *ses, struct document_view *doc_view,
 	    struct form_control *frm, struct form_state *fs, struct link *link,
 	    struct term_event *ev, int rep)
 {
+	struct terminal *term = ses->tab->term;
 	unsigned char *text;
 	int length;
 	int x = 1;
@@ -1237,11 +1238,11 @@ field_op(struct session *ses, struct document_view *doc_view,
 	if (!fs || !fs->value) return 0;
 
 	if (ev->ev == EV_KBD) {
-		struct terminal *term = ses->tab->term;
-
-		x = field_op_do(term, doc_view, fc, fs, link, ev, rep);
+		x = field_op_do(ses, doc_view, fc, fs, link, ev, rep);
 
 		if (x) {
+			struct terminal *term = ses->tab->term;
+
 			draw_form_entry(term, doc_view, link);
 			redraw_from_window(ses->tab);
 		}

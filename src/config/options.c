@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.346 2003/10/23 15:03:30 jonas Exp $ */
+/* $Id: options.c,v 1.347 2003/10/23 21:29:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 		mem_free(option);
 		return NULL;
 	}
-	option->flags = flags;
+	option->flags = (flags | OPT_ALLOC);
 	option->type = type;
 	option->min = min;
 	option->max = max;
@@ -358,7 +358,8 @@ static void
 free_option(struct option *option)
 {
 	free_option_value(option);
-	if (option->name) mem_free(option->name);
+	if ((option->flags & OPT_ALLOC) && option->name)
+		mem_free(option->name);
 	if (option->box_item) {
 		del_from_list(option->box_item);
 		mem_free(option->box_item);
@@ -370,7 +371,7 @@ delete_option(struct option *option)
 {
 	free_option(option);
 	if (option->next) del_from_list(option);
-	mem_free(option);
+	if ((option->flags & OPT_ALLOC)) mem_free(option);
 }
 
 struct option *
@@ -381,7 +382,7 @@ copy_option(struct option *template)
 	if (!option) return NULL;
 
 	option->name = template->name ? stracpy(template->name) : NULL;
-	option->flags = template->flags;
+	option->flags = (template->flags | OPT_ALLOC);
 	option->type = template->type;
 	option->min = template->min;
 	option->max = template->max;
@@ -485,10 +486,8 @@ init_options(void)
 static void
 free_options_tree(struct list_head *tree)
 {
-	struct option *option;
-
-	foreach (option, *tree) free_option(option);
-	free_list(*tree);
+	while (!list_empty(*tree))
+		delete_option(tree->next);
 }
 
 void
@@ -1022,8 +1021,73 @@ static struct change_hook_info change_hooks[] = {
  Options values
 **********************************************************************/
 
+#include "config/options.inc"
+
+static void
+register_option_info(struct option_info info[], struct option *tree)
+{
+	int i;
+
+	for (i = 0; info[i].path; i++) {
+		struct option *option = &info[i].option;
+		unsigned char *string;
+
+		if (option->type != OPT_ALIAS && (tree->flags & OPT_LISTBOX)) {
+			option->box_item = mem_calloc(1, sizeof(struct listbox_item));
+			if (!option->box_item) {
+				delete_option(option);
+				continue;
+			}
+
+			init_list(option->box_item->child);
+			option->box_item->visible = 1;
+			option->box_item->translated = 1;
+			option->box_item->text = option->capt
+						? option->capt : option->name;
+			option->box_item->box = &option_boxes;
+			option->box_item->udata = option;
+			option->box_item->type = (option->type == OPT_TREE)
+						? BI_FOLDER : BI_LEAF;
+		}
+
+		switch (option->type) {
+			case OPT_TREE:
+				option->value.tree = init_options_tree();
+				if (!option->value.tree) {
+					delete_option(option);
+					continue;
+				}
+				break;
+			case OPT_STRING:
+				string = mem_alloc(MAX_STR_LEN);
+				if (!string) {
+					delete_option(option);
+					continue;
+				}
+				safe_strncpy(string, option->value.string, MAX_STR_LEN);
+				option->value.string = string;
+				break;
+			case OPT_COLOR:
+				string = option->value.string;
+				assert(string);
+				decode_color(string, &option->value.color);
+				break;
+			case OPT_CODEPAGE:
+				string = option->value.string;
+				assert(string);
+				option->value.number = get_cp_index(string);
+				break;
+			default:
+				break;
+		}
+
+		add_opt_rec(tree, info[i].path, option);
+	}
+}
+
 static void
 register_options(void)
 {
-#include "config/options.inc"
+	register_option_info(config_options_info, config_options);
+	register_option_info(cmdline_options_info, cmdline_options);
 }

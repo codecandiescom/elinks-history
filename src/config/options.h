@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.77 2003/10/23 15:03:30 jonas Exp $ */
+/* $Id: options.h,v 1.78 2003/10/23 21:29:31 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -44,6 +44,9 @@ enum option_flags {
 	 * on the tree argument to add_opt, it will create the listbox (options
 	 * manager) item for the option. */
 	OPT_LISTBOX = 16,
+	/* This is used to mark that the option _and_ the option name is
+	 * allocated and should be freed when the option is released. */
+	OPT_ALLOC = 32,
 };
 
 enum option_type {
@@ -115,7 +118,7 @@ struct option {
 };
 
 #define INIT_OPTION(name, flags, type, min, max, value, desc, capt) \
-	{ NULL_LIST_HEAD, name, flags, type, min, max, { value }, desc, capt }
+	{ NULL_LIST_HEAD, name, flags, type, min, max, { (struct list_head *) (value) }, desc, capt }
 
 extern struct option options_root;
 extern struct option *config_options;
@@ -227,38 +230,46 @@ do { \
 	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), DESC(desc));
 
 
+/* Types and macros for builtin options. */
+
+struct option_info {
+	struct option option;
+	unsigned char *path;
+};
+
+#define NULL_OPTION_INFO \
+	{ INIT_OPTION(NULL, 0, 0, 0, 0, NULL, NULL, NULL), NULL }
+
 #define add_opt_bool(path, capt, name, flags, def, desc) \
-	add_opt_bool_tree(config_options, path, capt, name, flags, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_BOOL, 0, 1, def, DESC(desc), capt), path }
 
 #define add_opt_int(path, capt, name, flags, min, max, def, desc) \
-	add_opt_int_tree(config_options, path, capt, name, flags, min, max, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_INT, min, max, def, DESC(desc), capt), path }
 
 #define add_opt_long(path, capt, name, flags, min, max, def, desc) \
-	add_opt_long_tree(config_options, path, capt, name, flags, min, max, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_LONG, min, max, def, DESC(desc), capt), path }
 
 #define add_opt_str(path, capt, name, flags, def, desc) \
-	add_opt_str_tree(config_options, path, capt, name, flags, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_STRING, 0, MAX_STR_LEN, def, DESC(desc), capt), path }
 
 #define add_opt_codepage(path, capt, name, flags, def, desc) \
-	add_opt_codepage_tree(config_options, path, capt, name, flags, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_CODEPAGE, 0, 0, def, DESC(desc), capt), path }
 
 #define add_opt_color(path, capt, name, flags, def, desc) \
-	add_opt_color_tree(config_options, path, capt, name, flags, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_COLOR, 0, 0, def, DESC(desc), capt), path }
 
 #define add_opt_lang(path, capt, name, flags, desc) \
-	add_opt_lang_tree(config_options, path, capt, name, flags, DESC(desc))
-
-#define add_opt_void(path, capt, name, flags, type, desc) \
-	add_opt_void_tree(config_options, path, capt, name, flags, type, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_LANGUAGE, 0, 0, 0, DESC(desc), capt), path }
 
 #define add_opt_command(path, capt, name, flags, cmd, desc) \
-	add_opt_command_tree(config_options, path, capt, name, flags, cmd, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_COMMAND, 0, 0, cmd, DESC(desc), capt), path }
 
 #define add_opt_alias(path, capt, name, flags, def, desc) \
-	add_opt_alias_tree(config_options, path, capt, name, flags, def, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_ALIAS, 0, sizeof(def) - 1, def, DESC(desc), capt), path }
 
 #define add_opt_tree(path, capt, name, flags, desc) \
-	add_opt_tree_tree(config_options, path, capt, name, flags, DESC(desc))
+	{ INIT_OPTION(name, flags, OPT_TREE, 0, 0, NULL, DESC(desc), capt), path }
+
 
 /* TODO: We need to do *something* with this ;). */
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.163 2004/06/14 19:31:24 jonas Exp $ */
+/* $Id: form.c,v 1.164 2004/06/14 19:35:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1031,15 +1031,29 @@ auto_submit_form(struct session *ses)
 	submit_form(ses, ses->doc_view, 0);
 }
 
-static int
-field_op_do(struct session *ses, struct document_view *doc_view,
-	    struct form_control *frm, struct form_state *fs, struct link *link,
-	    struct term_event *ev, int rep)
+int
+field_op(struct session *ses, struct document_view *doc_view,
+	 struct link *link, struct term_event *ev, int rep)
 {
 	struct terminal *term = ses->tab->term;
+	struct form_control *frm;
+	struct form_state *fs;
 	unsigned char *text;
 	int length;
 	int x = 1;
+
+	assert(ses && doc_view && link && ev);
+	if_assert_failed return 0;
+
+	frm = link->form_control;
+	assertm(frm, "link has no form control");
+	if_assert_failed return 0;
+
+	if (frm->ro == 2 || ev->ev != EV_KBD)
+		return 0;
+
+	fs = find_form_state(doc_view, frm);
+	if (!fs || !fs->value) return 0;
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
 		case ACT_EDIT_LEFT:
@@ -1215,29 +1229,6 @@ field_op_do(struct session *ses, struct document_view *doc_view,
 	}
 
 	return x;
-}
-
-int
-field_op(struct session *ses, struct document_view *doc_view,
-	 struct link *link, struct term_event *ev, int rep)
-{
-	struct form_control *fc;
-	struct form_state *fs;
-
-	assert(ses && doc_view && link && ev);
-	if_assert_failed return 0;
-
-	fc = link->form_control;
-	assertm(fc, "link has no form control");
-	if_assert_failed return 0;
-
-	if (fc->ro == 2 || ev->ev != EV_KBD)
-		return 0;
-
-	fs = find_form_state(doc_view, fc);
-	if (!fs || !fs->value) return 0;
-
-	return field_op_do(ses, doc_view, fc, fs, link, ev, rep);
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.33 2004/01/20 00:23:06 jonas Exp $ */
+/* $Id: scanner.c,v 1.34 2004/01/20 00:43:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,16 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
 			token->type = CSS_TOKEN_ATRULE;
+
+		} else {
+			token->type = CSS_TOKEN_GARBAGE;
+		}
+
+	} else if (first_char == '!') {
+		scan_css(string, CSS_CHAR_WHITESPACE);
+		if (!strcasecmp(string, "important")) {
+			token->type = CSS_TOKEN_IMPORTANT;
+			string += 9;
 
 		} else {
 			token->type = CSS_TOKEN_GARBAGE;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.258 2003/11/29 21:55:33 jonas Exp $ */
+/* $Id: session.c,v 1.259 2003/11/29 21:58:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,9 +126,9 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	if (stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
-			      _(wide ? N_("Average speed") : N_("avg"), term));
+			      _(wide ? N_("average speed") : N_("avg"), term));
 	} else {
-		add_to_string(&msg, _("Speed", term));
+		add_to_string(&msg, _("speed", term));
 	}
 
 	add_char_to_string(&msg, ' ');
@@ -150,7 +150,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	add_to_string(&msg, separater);
 
-	add_to_string(&msg, _("Elapsed time", term));
+	add_to_string(&msg, _("elapsed time", term));
 	add_char_to_string(&msg, ' ');
 	add_time_to_string(&msg, stat->prg->elapsed);
 

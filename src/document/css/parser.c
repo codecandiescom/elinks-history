@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.90 2004/03/30 00:10:01 jonas Exp $ */
+/* $Id: parser.c,v 1.91 2004/03/30 00:10:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,7 @@ css_parse_properties(struct list_head *props, struct scanner *scanner)
 			/* Some use style="{ properties }" so we have to be
 			 * check what to skip to. */
 			if (token->type == '{') {
-				skip_css_tokens(scanner, '{');
+				skip_scanner_token(scanner);
 			} else {
 				skip_css_tokens(scanner, ';');
 			}
@@ -150,7 +150,7 @@ css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
 				if (!token) break;
 
 				if (token->type == ';') {
-					skip_css_tokens(scanner, ';');
+					skip_scanner_token(scanner);
 					break;
 
 				} else if (token->type == '{') {

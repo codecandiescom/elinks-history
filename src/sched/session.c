@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.454 2004/06/10 21:45:00 jonas Exp $ */
+/* $Id: session.c,v 1.455 2004/06/10 21:49:44 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -878,8 +878,10 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		if (uri) {
 			if (remote) {
 				remote = handle_remote_session(base_session, remote, uri);
-			} else {
+			} else if (!info->uri_list.size) {
 				add_to_uri_list(&info->uri_list, uri);
+			} else {
+				init_session(base_session, term, uri, 1);
 			}
 			done_uri(uri);
 		}
@@ -913,15 +915,12 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		struct uri *uri;
 		int index;
 
+		assert(info->uri_list.size == 1);
 		foreach_uri (uri, index, &info->uri_list) {
 			if (first) {
 				/* Open first url. */
 				goto_uri(ses, uri);
 				first = 0;
-
-			} else {
-				/* Open next ones. */
-				open_uri_in_new_tab(ses, uri, 1);
 			}
 		}
 

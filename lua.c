@@ -468,7 +468,7 @@ void init_lua()
 	lua_register(L, "edit_bookmark_dialog", l_edit_bookmark_dialog);
 	lua_register(L, "xdialog", l_xdialog);
 	do_hooks_file(L, "/etc/", "links-hooks.lua");
-	do_hooks_file(L, links_home, "hooks.lua");
+	if (links_home) do_hooks_file(L, links_home, "hooks.lua");
 }
 
 void alert_lua_error(unsigned char *msg)

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.94 2003/05/15 22:40:55 pasky Exp $ */
+/* $Id: parser.c,v 1.95 2003/05/15 23:02:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2082,7 +2082,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		 unsigned char **end, void *f)
 {
 	struct form_control *fc;
-	unsigned char *p, *t_name;
+	unsigned char *p, *t_name, *wrap_attr;
 	int t_namelen;
 	int cols, rows;
 	int i;
@@ -2136,7 +2136,18 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (rows > d_opt->yw) rows = d_opt->yw;
 	fc->rows = rows;
 
-	fc->wrap = has_attr(attr, "wrap");
+	wrap_attr = get_attr_val(attr, "wrap");
+	if (wrap_attr) {
+		if (!strcasecmp(wrap_attr, "hard")
+		    || !strcasecmp(wrap_attr, "physical")) {
+			fc->wrap = 2;
+		} else if (!strcasecmp(wrap_attr, "soft")
+			   || !strcasecmp(wrap_attr, "virtual")) {
+			fc->wrap = 1;
+		}
+		mem_free(wrap_attr);
+	}
+
 	fc->maxlength = get_num(attr, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.72 2003/05/15 22:42:13 zas Exp $ */
+/* $Id: view.c,v 1.73 2003/05/15 23:02:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,6 +294,7 @@ put:
 			continue;
 		}
 		for (s = text; s >= b; s--) if (*s == ' ') {
+			if (wrap == 2) *s = '\n';
 			text = s;
 			sk = 1;
 			goto put;

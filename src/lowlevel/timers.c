@@ -1,5 +1,5 @@
 /* Timers. */
-/* $Id: timers.c,v 1.1 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: timers.c,v 1.2 2005/03/04 14:01:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,15 @@
 #include "util/memory.h"
 #include "util/ttime.h"
 
+
+struct timer {
+	LIST_HEAD(struct timer);
+
+	ttime interval;
+	void (*func)(void *);
+	void *data;
+	int id;
+};
 
 static INIT_LIST_HEAD(timers);
 

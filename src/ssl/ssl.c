@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.6 2002/07/05 01:54:25 pasky Exp $ */
+/* $Id: ssl.c,v 1.7 2002/07/05 02:00:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,10 +12,12 @@
 #include "links.h"
 
 #include "ssl/ssl.h"
+#include "util/string.h"
 
 
 /* FIXME: As you can see, SSL is currently implemented in very, erm,
  * decentralized manner. */
+
 
 #ifdef HAVE_SSL
 SSL_CTX *context = NULL;
@@ -31,6 +33,15 @@ init_ssl()
 	SSL_CTX_set_default_verify_paths(context);
 #endif
 }
+
+void
+done_ssl(void)
+{
+#ifdef HAVE_SSL
+	if (context) SSL_CTX_free(context);
+#endif
+}
+
 
 ssl_t *
 get_ssl(void)
@@ -51,10 +62,16 @@ free_ssl(ssl_t *ssl)
 }
 
 
-void
-done_ssl(void)
-{
-#ifdef HAVE_SSL
-	if (context) SSL_CTX_free(context);
-#endif
+unsigned char *
+get_ssl_cipher_str(ssl_t *ssl) {
+	unsigned char *str = init_str();
+	int l = 0;
+
+	if (!str) return NULL;
+
+	add_num_to_str(&str, &l, SSL_get_cipher_bits(ssl, NULL));
+	add_to_str(&str, &l, "-bit ");
+	add_to_str(&str, &l, SSL_get_cipher_version(ssl));
+	add_to_str(&str, &l, " ");
+	add_to_str(&str, &l, (unsigned char *) SSL_get_cipher_name(ssl));
 }

@@ -1,13 +1,10 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.26 2002/07/05 01:29:10 pasky Exp $ */
+/* $Id: http.c,v 1.27 2002/07/05 02:00:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_SSL
-#include <openssl/ssl.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 
@@ -743,18 +740,12 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	}
 	if (e->head) mem_free(e->head);
 	e->head = head;
-#ifdef HAVE_SSL
+
 	if (c->ssl) {
-		int l = 0;
 		if (e->ssl_info) mem_free(e->ssl_info);
-		e->ssl_info = init_str();
-		add_num_to_str(&e->ssl_info, &l, SSL_get_cipher_bits(c->ssl, NULL));
-		add_to_str(&e->ssl_info, &l, "-bit ");
-		add_to_str(&e->ssl_info, &l, SSL_get_cipher_version(c->ssl));
-		add_to_str(&e->ssl_info, &l, " ");
-		add_to_str(&e->ssl_info, &l, (unsigned  char *)SSL_get_cipher_name(c->ssl));
+		e->ssl_info = get_ssl_cipher_str(c->ssl);
 	}
-#endif
+
 	if (h == 204) {
 		setcstate(c, S_OK);
 		http_end_request(c);

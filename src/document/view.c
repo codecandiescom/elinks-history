@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.41 2002/05/10 16:20:30 pasky Exp $ */
+/* $Id: view.c,v 1.42 2002/05/10 17:12:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1154,7 +1154,7 @@ void get_succesful_controls(struct f_data_c *f, struct form_control *fc, struct 
 			if (!(fs = find_form_state(f, form))) continue;
 			if ((form->type == FC_CHECKBOX || form->type == FC_RADIO) && !fs->state) continue;
 			if (form->type == FC_SELECT && !form->nvalues) continue;
-			fi_rep:
+fi_rep:
 			if (!(sub = mem_alloc(sizeof(struct submitted_value)))) continue;
 			memset(sub, 0, sizeof(struct submitted_value));
 			sub->type = form->type;
@@ -1177,7 +1177,7 @@ void get_succesful_controls(struct f_data_c *f, struct form_control *fc, struct 
 					sub->value = stracpy(fs->value);
 					break;
 				case FC_IMAGE:
-					add_to_strn(&sub->name, !fi ? ".x" : ".y");
+					add_to_strn(&sub->name, fi ? ".x" : ".y");
 					sub->value = stracpy("0");
 					break;
 				default:

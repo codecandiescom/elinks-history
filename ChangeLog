@@ -1,3 +1,48 @@
+Fri Apr 18 09:34:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, dngettext.c, finddomain.c, gettext.c,
+	gettext.h, gettextP.h, intl-compat.c, l10nflist.c, loadmsgcat.c,
+	localealias.c, ngettext.c, textdomain.c:
+
+	Even more ELinksified. Most libc-specific stuff was removed.  
+
+Fri Apr 18 08:13:03 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	Translations were resynced with source code. French translation was
+	updated.  
+
+Fri Apr 18 07:44:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lua/core.c:
+
+	current_url() no more returns post-data. Scripts that rely on the
+	old behaviour should be rewritten to use a new API which should be
+	written to return the post-data. Implementation of that new API is
+	leaved to people who are doïng fancy stuff that needs post-data.
+	Patch by Miciah.  
+
+Fri Apr 18 07:38:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, viewer/text/view.c:
+
+	Introduces document.browse.scroll_step option to configure the
+	default number of lines that scroll-up and scroll-down scroll. Patch
+	by Miciah.  
+
+Fri Apr 18 07:35:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/dialogs.c:
+
+	Removes layout_history_manager and uses layout_hierbox_browser.
+	Ports some bookmarks code to globhist so the user can delete marked
+	items, and delete using the Delete key. Patch by Miciah.  
+
 Thu Apr 17 17:57:09 2003  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser.c:

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.1 2002/12/27 14:59:56 pasky Exp $ */
+/* $Id: parser.c,v 1.2 2002/12/27 17:52:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "elusive/parser/syntree.h"
 #include "util/error.h"
 
+
 enum state_code {
 	HPT_PLAIN,
 	HTP_ENTITY,
@@ -21,20 +22,47 @@ enum state_code {
 };
 
 struct html_parser_state {
-	enum state_code state;
-	/* We don't need a stack of states since the only possible ambiguity
-	 * is (plain|attrval)->entity->?. */
-	/* XXX: We update this only in (HTP_PLAIN,HTTP_ATTRVAL) -> HTP_ENTITY. */
-	enum state_code prevstate;
+	struct html_parser_state *up;
 
-#if 0
+	enum state_code state;
+
 	union {
-		unsigned char *tagname; /* HPT_TAG_NAME -> HPT_TAG_* */
-		unsigned char *attrname; /* HPT_TAG_ATTR -> HTP_TAG_ATTRVAL */
-		int comment_type; /* HPT_COMMENT */
+		/* HPT_TAG_NAME */
+		unsigned char *tagname;
+		/* HPT_TAG_ATTR */
+		unsigned char *attrname;
+		/* HPT_COMMENT (not for children but for resuming) */
+		int comment_type;
 	} data;
-#endif
 };
+
+static struct html_parser_state *
+html_state_insert(struct parser_state *state, enum state_code state_code)
+{
+	struct html_parser_state *pstate;
+
+	pstate = mem_calloc(1, sizeof(struct html_parser_state));
+	if (!pstate) return NULL;
+
+	pstate->up = state->data;
+	state->data = pstate;
+	pstate->state = state_code;
+	return pstate;
+}
+
+static struct html_parser_state *
+html_state_remove(struct parser_state *state)
+{
+	struct html_parser_state *pstate = state->data;
+
+	if (!pstate) {
+		internal("HTML state stack underflow!");
+		return;
+	}
+	state->data = pstate->up;
+	mem_free(pstate);
+	return state->data;
+}
 
 
 /* The scheme of state-specific parser subroutines gives us considerably better
@@ -74,19 +102,20 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (*html == '&') {
 			state->current->strlen += *len - html_len;
 
-			pstate->prevstate = HTP_PLAIN;
-			pstate->state = HTP_ENTITY;
+			pstate = html_state_insert(state, HTP_ENTITY);
 			*str = html, *len = html_len;
 			return 0;
 		}
 
+#if 0
 		if (*html == '<') {
 			state->current->strlen += *len - html_len;
 
-			pstate->state = HTP_TAG;
+			pstate = html_state_insert(state, HTP_TAG);
 			*str = html, *len = html_len;
 			return 0;
 		}
+#endif
 
 		html++, html_len--;
 	}
@@ -133,7 +162,7 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 			state->current = node;
 		}
 
-		pstate->state = pstate->prevstate;
+		pstate = html_state_remove(state);
 		*str = html, *len = html_len;
 		return 0;
 	}
@@ -254,14 +283,10 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 static void
 html_parser(struct parser_state *state, unsigned char **str, int *len)
 {
-	struct html_parser_state *pstate;
+	struct html_parser_state *pstate = state->data;
 
-	if (!state->data) {
-		state->data = mem_calloc(1, sizeof(struct html_parser_state));
-		if (!state->data)
-			return;
-	}
-	pstate = state->data;
+	if (!pstate) pstate = html_state_insert(state, HTP_PLAIN);
+	if (!pstate) return;
 
 	while (html_len) {
 		if (state_parsers[pstate->state](state, str, len) < 0) {

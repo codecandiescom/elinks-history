@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.37 2002/07/05 18:24:00 pasky Exp $ */
+/* $Id: sched.c,v 1.38 2002/07/05 18:25:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1001,7 +1001,6 @@ void
 detach_connection(struct status *stat, int pos)
 {
 	struct connection *conn;
-	int i, l;
 
 	if (stat->state < 0) return;
 

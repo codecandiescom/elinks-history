@@ -115,6 +115,9 @@ instead of
 
 if (!(foo = mem_alloc(1234))) panic(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
+(note that thou shalt ALWAYS test for success of everything - we are supposed
+to handle even our own death ellegantly)
+
 Use blank lines frequently to separate chunks of code. And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
 

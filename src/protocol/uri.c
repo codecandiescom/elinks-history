@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.158 2004/04/07 15:03:26 jonas Exp $ */
+/* $Id: uri.c,v 1.159 2004/04/07 15:06:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -718,14 +718,10 @@ http:				prefix = "http://";
 			}
 		}
 end:
-		if (!not_file) {
-			if (!dir_sep(*newurl))
-				insert_in_string(&newurl, 0, "./", 2);
-			insert_in_string(&newurl, 0, prefix, strlen(prefix));
-		} else {
-			insert_in_string(&newurl, 0, prefix, strlen(prefix));
-		}
+		if (!not_file && !dir_sep(*newurl))
+			insert_in_string(&newurl, 0, "./", 2);
 
+		insert_in_string(&newurl, 0, prefix, strlen(prefix));
 		goto parse_uri;
 	}
 	case URI_ERRNO_EMPTY:

@@ -1,3 +1,22 @@
+Wed Jan 30 22:27:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c, session.c:
+	
+	some unhistory experiments, history should be stable, unhistory may
+	core randomly so don't use it now :^). now sleep time, children
+
+Wed Jan 30 21:54:37 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, menu.c, session.c, view.c:
+	
+	certain (un)history cleanups and fixes, not yet complete
+
+Wed Jan 30 19:27:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c, session.c:
+	
+	small unhistory cleanups
+
 Wed Jan 30 15:16:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,

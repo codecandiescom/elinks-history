@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.23 2003/11/14 14:24:36 jonas Exp $ */
+/* $Id: renderer.c,v 1.24 2003/11/14 15:03:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,8 +136,6 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 		&& (c) != '>'	\
 		&& (c) != '('	\
 		&& (c) != ')'	\
-		&& (c) != '['	\
-		&& (c) != ']'	\
 		&& (c) != '\''	\
 		&& (c) != '"')
 

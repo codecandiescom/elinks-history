@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.8 2002/07/04 14:06:03 pasky Exp $ */
+/* $Id: urlhist.c,v 1.9 2002/09/07 09:14:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,6 @@ int load_url_history()
 	}
 
 	while (fgets(url, MAX_STR_LEN, fp)) {
-		url[strlen(url) - 1] = 0;
 		add_to_input_history(&goto_url_history, url, 0);
 	}
 
@@ -68,7 +67,7 @@ save_url_history()
 	ssi = secure_open(history_file, 0177);
 	mem_free(history_file);
 	if (!ssi) return -1;
-	
+
 	foreachback(historyitem, goto_url_history.items) {
 		if (i++ > MAX_HISTORY_ITEMS) break;
 		secure_fputs(ssi, historyitem->d);

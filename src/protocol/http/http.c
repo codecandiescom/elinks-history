@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.63 2002/11/19 21:53:23 zas Exp $ */
+/* $Id: http.c,v 1.64 2002/11/19 22:00:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1010,23 +1010,16 @@ again:
 	e->head = head;
 
 	if (!get_opt_bool("document.cache.ignorecachecontrol")) {
-		d = parse_http_header(e->head, "Cache-Control", NULL);
-		if (d) {
-			if (strstr(d, "no-cache")) {
-				e->cache_mode = NC_PR_NO_CACHE;
-			}
-			mem_free(d);
-		}
-
-		d = parse_http_header(e->head, "Pragma", NULL);
-		if (d) {
+		if ((d = parse_http_header(e->head, "Cache-Control", NULL))
+		    || (d = parse_http_header(e->head, "Pragma", NULL)))
+		{
 			if (strstr(d, "no-cache")) {
 				e->cache_mode = NC_PR_NO_CACHE;
 			}
 			mem_free(d);
 		}
 	}
-		
+
 	if (c->ssl) {
 		if (e->ssl_info) mem_free(e->ssl_info);
 		e->ssl_info = get_ssl_cipher_str(c->ssl);
@@ -1045,7 +1038,7 @@ again:
 		}
 	}
 
- 	if (h == 401) {
+	if (h == 401) {
 		d = parse_http_header(e->head, "WWW-Authenticate", NULL);
 		if (d) {
 			if (!strncasecmp(d, "Basic", 5)) {
@@ -1060,7 +1053,7 @@ again:
 			}
 			mem_free(d);
 		}
-  	}
+	}
 
 	kill_buffer_data(rb, a);
 	c->cache = e;

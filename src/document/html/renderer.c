@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.401 2004/01/14 17:40:02 zas Exp $ */
+/* $Id: renderer.c,v 1.402 2004/01/16 14:49:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -883,6 +883,9 @@ put_link_number(struct part *part)
 	format.form = ff;
 }
 
+#define assert_link_variable(old, new) \
+	assertm(!(old), "Old link value [%s]. New value [%s]", old, new);
+
 static inline void
 process_link(struct part *part, enum link_state link_state,
 	     unsigned char *chars, int charslen)
@@ -911,6 +914,10 @@ process_link(struct part *part, enum link_state link_state,
 		assert(link_state == LINK_STATE_NEW);
 
 		part->link_num++;
+
+		assert_link_variable(last_image, format.image);
+		assert_link_variable(last_target, format.target);
+		assert_link_variable(last_link, format.link);
 
 		last_link = null_or_stracpy(format.link);
 		last_target = null_or_stracpy(format.target);

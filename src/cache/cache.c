@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.169 2004/07/24 18:42:02 zas Exp $ */
+/* $Id: cache.c,v 1.170 2004/07/24 18:52:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,9 +103,12 @@ find_in_cache(struct uri *uri)
 	int proxy = (uri->protocol == PROTOCOL_PROXY);
 
 	foreach (cached, cache_entries) {
-		if (!cached->valid
-		    || (proxy && !compare_uri(cached->proxy_uri, uri, URI_BASE))
-		    || (!proxy && !compare_uri(cached->uri, uri, URI_BASE)))
+		struct uri *c_uri;
+
+		if (!cached->valid) continue;
+
+		c_uri = proxy ? cached->proxy_uri : cached->uri;
+		if (!compare_uri(c_uri, uri, URI_BASE))
 			continue;
 
 		/* Move it on the top of the list. */

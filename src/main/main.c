@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.233 2005/02/11 20:04:32 jonas Exp $ */
+/* $Id: main.c,v 1.234 2005/02/11 20:09:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,7 +192,7 @@ init(void)
 		if (!list_empty(url_list)) {
 			dump_next(&url_list);
 		} else {
-			unsigned char *arg = get_cmd_opt_int("dump")
+			unsigned char *arg = get_cmd_opt_bool("dump")
 					   ? "dump" : "source";
 
 			usrerror(gettext("URL expected after -%s"), arg);

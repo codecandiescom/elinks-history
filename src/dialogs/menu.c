@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.15 2002/04/02 22:29:46 pasky Exp $ */
+/* $Id: menu.c,v 1.16 2002/04/17 08:24:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,7 +305,7 @@ struct menu_item file_menu11[] = {
 
 struct menu_item file_menu12[] = {
 #ifdef GLOBHIST
-	{TEXT(T_GLOBAL_HISTORY), "y", TEXT(T_HK_GLOBAL_HISTORY), MENU_FUNC menu_history_manager, (void *)0, 0, 0},
+	{TEXT(T_GLOBAL_HISTORY), "h", TEXT(T_HK_GLOBAL_HISTORY), MENU_FUNC menu_history_manager, (void *)0, 0, 0},
 #endif
 #ifdef BOOKMARKS
 	{TEXT(T_BOOKMARKS), "s", TEXT(T_HK_BOOKMARKS), MENU_FUNC menu_bookmark_manager, (void *)0, 0, 0},

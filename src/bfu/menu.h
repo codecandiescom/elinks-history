@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.4 2002/03/22 18:57:32 pasky Exp $ */
+/* $Id: menu.h,v 1.5 2002/04/17 08:24:02 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -14,7 +14,7 @@ extern unsigned char m_bar;
 struct menu_item {
 	unsigned char *text;
 	unsigned char *rtext;
-	unsigned char *hotkey;
+	unsigned char *hotkey; /* TODO: keybindings ?!?! */
 	void (*func)(struct terminal *, void *, void *);
 	void *data;
 	int in_m;

@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.4 2005/01/11 00:37:05 jonas Exp $
+# $Id: rules,v 1.5 2005/01/11 01:07:52 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -75,7 +75,7 @@ binary-arch: build install
 	dh_testroot
 	dh_installdebconf	
 	dh_installdocs AUTHORS SITES TODO BUGS
-	dh_installdocs bookmarks.txt exmode.txt index.txt introduction.txt mailcap.txt marks.txt mime.html remote.txt tabs.txt
+	dh_installdocs doc/bookmarks.txt doc/exmode.txt doc/index.txt doc/introduction.txt doc/mailcap.txt doc/marks.txt doc/mime.html doc/remote.txt doc/tabs.txt
 	dh_installexamples contrib/
 #contrib/*
 	dh_installmime

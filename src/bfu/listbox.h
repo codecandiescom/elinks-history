@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.17 2002/09/15 15:32:43 pasky Exp $ */
+/* $Id: listbox.h,v 1.18 2002/09/17 16:19:48 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -33,6 +33,7 @@ struct listbox_item {
 	 * listboxes. */
 	struct listbox_item *root;
 	struct list_head child;
+	enum { BI_LEAF, BI_FOLDER } type;
 	int expanded; /* Only valid if this is a BI_FOLDER */
 	int visible; /* Is this item visible? */
 	int depth;
@@ -47,8 +48,6 @@ struct listbox_item {
 	struct list_head *box;
 	void *udata;
 	enum item_free item_free;
-
-	enum { BI_LEAF, BI_FOLDER } type;
 };
 
 extern struct widget_ops listbox_ops;

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.111 2004/10/16 19:57:09 jonas Exp $ */
+/* $Id: action.c,v 1.112 2004/10/17 23:15:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	enum frame_event_status status = FRAME_EVENT_OK;
 	struct terminal *term = ses->tab->term;
 	struct document_view *doc_view = current_frame(ses);
-	struct link *link = doc_view ? get_current_link(doc_view) : NULL;
+	struct link *link = doc_view && doc_view->vs ? get_current_link(doc_view) : NULL;
 
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort
@@ -552,106 +552,106 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_MOVE_PAGE_DOWN:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_page_down(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_PAGE_UP:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_page_up(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_NEXT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_link_next(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_PREV:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_link_prev(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_UP:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_link_up(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_DOWN:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_link_down(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_LEFT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_link_left(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_RIGHT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_link_right(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_START:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_document_start(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_END:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			move_document_end(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_DOWN:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			scroll_down(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_UP:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			scroll_up(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_LEFT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			scroll_left(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_RIGHT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			scroll_right(ses, doc_view);
 			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_UP:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			status = move_cursor_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_DOWN:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			status = move_cursor_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_LEFT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			status = move_cursor_left(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_RIGHT:
-			if (!doc_view) break;
+			if (!doc_view || !doc_view->vs) break;
 			status = move_cursor_right(ses, doc_view);
 			break;
 

@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.2 2002/06/21 19:25:09 pasky Exp $ */
+/* $Id: memory.c,v 1.3 2002/11/23 19:37:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,7 @@ mem_alloc(size_t size)
 	if (!size) return DUMMY;
 
 	p = malloc(size);
-	if (!p) error("ERROR: out of memory (malloc returned NULL)\n");
+	if (!p) internal("out of memory (malloc returned NULL)\n");
 
 	return p;
 }
@@ -35,7 +35,7 @@ mem_calloc(size_t count, size_t eltsize)
 	if (!eltsize || !count) return DUMMY;
 
 	p = calloc(count, eltsize);
-	if (!p) error("ERROR: out of memory (calloc returned NULL)\n");
+	if (!p) internal("out of memory (calloc returned NULL)\n");
 
 	return p;
 }
@@ -69,7 +69,7 @@ mem_realloc(void *p, size_t size)
 	}
 
 	p = realloc(p, size);
-	if (!p) error("ERROR: out of memory (realloc returned NULL)\n");
+	if (!p) internal("out of memory (realloc returned NULL)\n");
 
 	return p;
 }

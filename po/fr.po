@@ -406,7 +406,7 @@ msgstr "Nom du dossier"
 
 #: src/bookmarks/dialogs.c:307 src/scripting/lua/core.c:387
 msgid "Edit bookmark"
-msgstr "Modifier"
+msgstr "Modifier un signet"
 
 #: src/bookmarks/dialogs.c:445 src/cache/dialogs.c:220
 #: src/globhist/dialogs.c:224 src/protocol/auth/dialogs.c:253

@@ -1,10 +1,8 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.2 2004/11/14 15:18:30 witekfl Exp $ */
+/* $Id: digest.c,v 1.3 2004/11/14 15:27:29 jonas Exp $ */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_SSL
 
 #ifdef CONFIG_OPENSSL
 #include <openssl/md5.h>
@@ -101,4 +99,3 @@ digest_calc_response(struct http_auth_basic *entry, unsigned char *ha1,
 	mem_free_if(Ha2_hex);
 	return convert_hex(Ha2, 16); 
 }
-#endif

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.69 2003/12/30 08:17:31 jonas Exp $ */
+/* $Id: options.inc,v 1.70 2003/12/30 13:57:43 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -554,6 +554,10 @@ struct option_info config_options_info[] = {
 		N_("If set do not honour non breaking space (the nbsp entity)\n"
 		"but allow to wrap the text. This can help keeping the width\n"
 		"of documents down so no horizontal scrolling is needed.")),
+
+	INIT_OPT_INT("document.html", N_("Default form input size"),
+		"default_form_input_size", 0, 3, 300, HTML_DEFAULT_INPUT_SIZE,
+		N_("Default form input size if none is specified.")),
 
 
 	INIT_OPT_TREE("document", N_("Plain rendering"),

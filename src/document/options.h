@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.36 2003/12/30 13:02:02 zas Exp $ */
+/* $Id: options.h,v 1.37 2003/12/30 13:57:44 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -16,6 +16,7 @@ struct document_options {
 	int num_links_key;
 	int use_document_colours;
 	int meta_link_display;
+	int default_form_input_size;
 
 	/* The default (fallback) colors. */
 	color_t default_fg;

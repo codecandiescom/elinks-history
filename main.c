@@ -161,7 +161,7 @@ void end_dump(struct status *stat, void *p)
 	if (ce && ce->redirect) {
 		unsigned char *u, *p;
 		if (stat->state >= 0) change_connection(stat, NULL, PRI_CANCEL);
-		u = stracpy(ce->redirect);
+		u = join_urls(ce->url, ce->redirect);
 		if (!http_bugs.bug_302_redirect) if (!ce->redirect_get && (p = strchr(ce->url, POST_CHAR))) add_to_strn(&u, p);
 		load_url(u, ce->url, stat, PRI_MAIN, 0);
 		mem_free(u);

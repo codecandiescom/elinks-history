@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.86 2004/04/05 04:27:29 jonas Exp $ */
+/* $Id: uri.h,v 1.87 2004/04/05 16:58:57 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -116,7 +116,7 @@ void done_uri(struct uri *uri);
 static inline struct uri *
 get_uri_reference(struct uri *uri)
 {
-	if (uri) object_lock(uri);
+	object_lock(uri);
 	return uri;
 }
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.158 2004/04/05 16:06:03 jonas Exp $ */
+/* $Id: connection.c,v 1.159 2004/04/05 16:58:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,7 +236,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->uri = uri;
 	conn->proxied_uri = get_uri_reference(proxied_uri);
 	conn->id = connection_id++;
-	conn->referrer = get_uri_reference(referrer);
+	conn->referrer = referrer ? get_uri_reference(referrer) : NULL;
 	conn->pri[priority] =  1;
 	conn->cache_mode = cache_mode;
 	conn->socket = conn->data_socket = -1;

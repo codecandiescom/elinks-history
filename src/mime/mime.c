@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.24 2003/07/15 21:33:18 jonas Exp $ */
+/* $Id: mime.c,v 1.25 2003/07/21 17:37:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,18 +69,19 @@ check_encoding_type(unsigned char *extension)
 	if (encoding == ENCODING_NONE || !last_extension)
 		return NULL;
 
-	extension_list = listext_encoded(encoding);
+	for (extension_list = listext_encoded(encoding);
+	     extension_list && *extension_list;
+	     extension_list++) {
+		unsigned char *content_type;
 
-	for (; extension_list && *extension_list; extension_list++) {
-		if (!strcmp(*extension_list, last_extension)) {
-			unsigned char *content_type;
+		if (strcmp(*extension_list, last_extension))
+			continue;
 
-			*last_extension = '\0';
-			content_type = get_content_type_backends(extension);
-			*last_extension = '.';
+		*last_extension = '\0';
+		content_type = get_content_type_backends(extension);
+		*last_extension = '.';
 
-			return content_type;
-		}
+		return content_type;
 	}
 
 	return NULL;

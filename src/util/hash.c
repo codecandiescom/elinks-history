@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.19 2003/06/08 10:49:29 zas Exp $ */
+/* $Id: hash.c,v 1.20 2003/06/28 23:07:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,8 +21,6 @@
 /* We provide common infrastructure for hashing - each hash consists from one
  * particularly large array full of small lists of keys with same index in the
  * array (same hash value). */
-/* Each key and value provided to the hash infrastructure MUST be dynamically
- * allocated, as it's being free()d when entry is destroyed. */
 
 #define hash_mask(n) (hash_size(n) - 1)
 
@@ -30,11 +28,9 @@ struct hash *
 init_hash(int width, hash_func func)
 {
 	struct hash *hash = mem_alloc(sizeof(struct hash));
-	int i;
+	register int i = 0;
 
-	if (!hash) {
-		return NULL;
-	}
+	if (!hash) return NULL;
 
 	hash->width = width;
 	hash->func = func;
@@ -46,7 +42,7 @@ init_hash(int width, hash_func func)
 	}
 
 	/* Initialize dummy list_heads */
-	for (i = 0; i < hash_size(width); i++)
+	for (; i < hash_size(width); i++)
 		init_list(hash->hash[i]);
 
 	return hash;
@@ -55,9 +51,9 @@ init_hash(int width, hash_func func)
 void
 free_hash(struct hash *hash)
 {
-	int i;
+	register int i = 0;
 
-	for (i = 0; i < hash_size(hash->width); i++)
+	for (; i < hash_size(hash->width); i++)
 		free_list(hash->hash[i]);
 
 	mem_free(hash->hash);
@@ -273,11 +269,11 @@ strhash(unsigned char *k, /* the key */
 	unsigned int length, /* the length of the key */
 	hash_value initval /* the previous hash, or an arbitrary value */)
 {
-	const unsigned char *p = (const unsigned char *)k;
-	hash_value h = initval;
-	unsigned int i;
+	const unsigned char *p = (const unsigned char *) k;
+	register hash_value h = initval;
+	register unsigned int i = 0;
 
-	for (i = 0; i < length; i++)
+	for (; i < length; i++)
 		h = (h << 5) - h + p[i];
 
 	return h;

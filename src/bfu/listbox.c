@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.35 2002/09/17 21:08:48 pasky Exp $ */
+/* $Id: listbox.c,v 1.36 2002/09/17 21:43:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,10 +417,90 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	return EVENT_NOT_PROCESSED;
 }
 
+int
+kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
+{
+	/* Not a pure listbox, but you're not supposed to use this outside of
+	 * the listbox browser anyway, so what.. */
+	/* We rely ie. on the fact that listbox is the last item of the dialog
+	 * and so on; we definitively shouldn't, but handling of all the stuff
+	 * would be much more painful. */
+
+	switch (ev->ev) {
+		case EV_KBD:
+			/* Catch change focus requests */
+			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
+				/* Move right */
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				if (++dlg->selected >= dlg->n - 1)
+					dlg->selected = 0;
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
+				/* Move left */
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				if (--dlg->selected < 0)
+					dlg->selected = dlg->n - 2;
+				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			/* Moving the box */
+			if (ev->x == KBD_DOWN) {
+				box_sel_move(&dlg->items[dlg->n - 1], 1);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_UP) {
+				box_sel_move(&dlg->items[dlg->n - 1], -1);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_PAGE_DOWN) {
+				box_sel_move(&dlg->items[dlg->n - 1],
+					     dlg->items[dlg->n - 1].item->gid / 2);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			if (ev->x == KBD_PAGE_UP) {
+				box_sel_move(&dlg->items[dlg->n - 1],
+					     -dlg->items[dlg->n - 1].item->gid / 2);
+				display_dlg_item(dlg, &dlg->items[dlg->n - 1], 1);
+
+				return EVENT_PROCESSED;
+			}
+
+			/* Selecting a button */
+			break;
+
+		case EV_INIT:
+		case EV_RESIZE:
+		case EV_REDRAW:
+		case EV_MOUSE:
+		case EV_ABORT:
+			break;
+
+		default:
+			internal("Unknown event received: %d", ev->ev);
+	}
+
+	return EVENT_NOT_PROCESSED;
+}
+
 struct widget_ops listbox_ops = {
 	display_listbox,
 	init_listbox,
 	mouse_listbox,
-	NULL,
+	kbd_listbox,
 	NULL,
 };

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.6 2002/09/17 14:23:49 zas Exp $ */
+/* $Id: dialogs.c,v 1.7 2002/09/17 21:43:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,70 +90,13 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 	mem_free(box);
 }
 
-/* Handles events for history dialog */
 static int
 history_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 {
-	struct widget_data *di;
-
 	switch (ev->ev) {
 		case EV_KBD:
-			di = &dlg->items[dlg->selected];
-
-			/* Catch change focus requests */
-			if (ev->x == KBD_RIGHT || (ev->x == KBD_TAB && !ev->y)) {
-				/* MP: dirty crap!!! this should be done in bfu.c */
-				/* Move right */
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (++dlg->selected >= HISTORY_BOX_IND)
-					dlg->selected = 0;
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_LEFT || (ev->x == KBD_TAB && ev->y)) {
-				/* Move left */
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (--dlg->selected < 0)
-					dlg->selected = HISTORY_BOX_IND - 1;
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			/* Moving the box */
-			if (ev->x == KBD_DOWN) {
-				box_sel_move(&dlg->items[HISTORY_BOX_IND], 1);
-				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_UP) {
-				box_sel_move(&dlg->items[HISTORY_BOX_IND], -1);
-				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_PAGE_DOWN) {
-				box_sel_move(&dlg->items[HISTORY_BOX_IND],
-					     dlg->items[HISTORY_BOX_IND].item->gid / 2);
-				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_PAGE_UP) {
-				box_sel_move(&dlg->items[HISTORY_BOX_IND],
-					     -dlg->items[HISTORY_BOX_IND].item->gid / 2);
-				display_dlg_item(dlg, &dlg->items[HISTORY_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			/* Selecting a button */
+			if (dlg->items[HISTORY_BOX_IND].item->ops->kbd)
+				return dlg->items[HISTORY_BOX_IND].item->ops->kbd(&dlg->items[HISTORY_BOX_IND], dlg, ev);
 			break;
 
 		case EV_INIT:

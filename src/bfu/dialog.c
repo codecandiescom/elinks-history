@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.16 2002/09/17 21:08:48 pasky Exp $ */
+/* $Id: dialog.c,v 1.17 2002/09/17 21:43:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 
 	dlg->win = win;
 
-	/* Use nonstandard event handlers */
+	/* Look whether user event handlers can help us.. */
 	if (dlg->dlg->handle_event &&
 	    (dlg->dlg->handle_event(dlg, ev) == EVENT_PROCESSED)) {
 		return;
@@ -174,13 +174,13 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 
 			di = &dlg->items[dlg->selected];
 
-			/* First let the widget to try out. */
+			/* First let the widget try out. */
 			if (di->item->ops->kbd
 			    && di->item->ops->kbd(di, dlg, ev)
 			       == EVENT_PROCESSED)
 				break;
 
-			/* We can select? */
+			/* Can we select? */
 			if ((ev->x == KBD_ENTER || ev->x == ' ')
 			    && di->item->ops->select) {
 				di->item->ops->select(di, dlg);

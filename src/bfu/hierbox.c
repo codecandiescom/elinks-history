@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.1 2002/09/17 17:17:14 pasky Exp $ */
+/* $Id: hierbox.c,v 1.2 2002/09/17 21:43:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,67 +31,12 @@
 int
 hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 {
-	struct widget_data *di;
-
 	switch (ev->ev) {
 		case EV_KBD:
-			di = &dlg->items[dlg->selected];
-			/* Catch change focus requests */
-			/* MP: dirty crap!!! This should be done in bfu.c! */
-			/* TODO: Agreed! --pasky */
-
-			if (ev->x == KBD_RIGHT
-			    || (ev->x == KBD_TAB && !ev->y)) {
-				/* Move right */
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (++dlg->selected >= BM_BOX_IND)
-					dlg->selected = 0;
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
-
+                        if (dlg->items[BM_BOX_IND].item->ops->kbd
+			    && dlg->items[BM_BOX_IND].item->ops->kbd(&dlg->items[BM_BOX_IND], dlg, ev)
+			       == EVENT_PROCESSED)
 				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_LEFT
-			    || (ev->x == KBD_TAB && ev->y)) {
-				/* Move left */
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-				if (--dlg->selected < 0)
-					dlg->selected = BM_BOX_IND - 1;
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			/* Moving the box */
-			if (ev->x == KBD_DOWN) {
-				box_sel_move(&dlg->items[BM_BOX_IND], 1);
-				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_UP) {
-				box_sel_move(&dlg->items[BM_BOX_IND], -1);
-				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_PAGE_DOWN) {
-				box_sel_move(&dlg->items[BM_BOX_IND],
-					     dlg->items[BM_BOX_IND].item->gid / 2);
-				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
-
-			if (ev->x == KBD_PAGE_UP) {
-				box_sel_move(&dlg->items[BM_BOX_IND],
-					     -dlg->items[BM_BOX_IND].item->gid / 2);
-				display_dlg_item(dlg, &dlg->items[BM_BOX_IND], 1);
-
-				return EVENT_PROCESSED;
-			}
 
 			if (ev->x == ' ') {
 				struct listbox_data *box;
@@ -105,15 +50,15 @@ hierbox_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 
 				return EVENT_PROCESSED;
 			}
+			break;
 
-			/* Selecting a button */
-		break;
 		case EV_INIT:
 		case EV_RESIZE:
 		case EV_REDRAW:
 		case EV_MOUSE:
 		case EV_ABORT:
-		break;
+			break;
+
 		default:
 			internal("Unknown event received: %d", ev->ev);
 	}

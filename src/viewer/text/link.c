@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.199 2004/06/13 00:07:07 jonas Exp $ */
+/* $Id: link.c,v 1.200 2004/06/13 00:12:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -842,11 +842,11 @@ end:
 
 /* Return current link's title. Pretty trivial. */
 unsigned char *
-get_current_link_title(struct document_view *doc_view, struct terminal *term)
+get_current_link_title(struct document_view *doc_view)
 {
 	struct link *link;
 
-	assert(term && doc_view && doc_view->document && doc_view->vs);
+	assert(doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return NULL;
 
 	if (doc_view->document->frame_desc)

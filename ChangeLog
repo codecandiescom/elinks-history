@@ -1,3 +1,313 @@
+Thu Jul 24 16:20:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Fix libtool macros order.  
+
+Thu Jul 24 16:20:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	'compilation' fix.  
+
+Thu Jul 24 16:19:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Disable shared libraries generation (at least for now).  
+
+Thu Jul 24 16:18:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, scripting/guile/Makefile.am:
+
+	Use libtool for libguile generation.  
+
+Thu Jul 24 16:11:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/guile/.vimrc:
+
+	Corrected invalid path in fairie.  
+
+Thu Jul 24 15:33:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, acconfig.h, configure.in, contrib/Makefile.am,
+	contrib/guile/internal-hooks.scm, contrib/guile/user-hooks.scm,
+	src/Makefile.am, src/main.c, src/dialogs/menu.c,
+	src/protocol/proxy.c, src/sched/session.c,
+	src/scripting/Makefile.am, src/scripting/guile/Makefile.am,
+	src/scripting/guile/README, src/scripting/guile/core.c,
+	src/scripting/guile/core.h, src/scripting/guile/hooks.c,
+	src/scripting/guile/hooks.h:
+
+	Support for internal scripting in scheme (w/ similiar interface as
+	Lua exports) through Guile. Patch by Peter Wang and little updates
+	by me.  
+
+Thu Jul 24 15:32:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/guile/: .cvsignore, .vimrc:
+
+	Added fairies.  
+
+Thu Jul 24 15:31:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/guile/.cvsignore:
+
+	Added fairy, even if useless here.  
+
+Thu Jul 24 14:42:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.h:
+
+	hx() and unhx() macros to static inline functions, better...  
+
+Thu Jul 24 14:41:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/cache.c:
+
+	Converted to use assertions in garbage_collection().  
+
+Thu Jul 24 14:36:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h:
+
+	hx() and unhx() functions were converted to macros. A kind of forced
+	inline ;).  
+
+Thu Jul 24 14:02:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Simplification of abort_background_connections().  
+
+Thu Jul 24 13:38:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/base64.c:
+
+	Cleanup, optimization and assertions. Type casting to (int) is
+	useless, so removed.  
+
+Thu Jul 24 13:37:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/auth.c:
+
+	Do not try to compare NULL or empty strings. Please review, it fixes
+	a segfault.  
+
+Thu Jul 24 13:05:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/blacklist.c:
+
+	Some assertions and a comment about last field were added.  
+
+Thu Jul 24 12:14:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/align.h:
+
+	Jonas-inspired optimisation of get_bfu_color(). (It _seems_ to
+	work...) 
+
+Thu Jul 24 11:48:13 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/checkbox.c:
+
+	Eliminate two unnecessary temp-vars in checkboxes_width().  
+
+Thu Jul 24 11:47:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	if + internal() parse_uri() brackets security check converted to an
+	assertm(). As a side-effect fixed off-by-one bug in the check.  
+
+Thu Jul 24 11:35:11 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/connection.h:
+
+	s/struct download/struct file_download/ in load_url()'s description 
+	(the comment wasn't updated when Jonas was renaming stuff).  
+
+Thu Jul 24 11:23:36 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/html/: parser.c, renderer.c:
+
+	Use list_empty().  
+
+Thu Jul 24 11:09:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Assert fd->document in jump_to_link_number.  
+
+Thu Jul 24 11:06:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/lowlevel/connect.c:
+
+	Remove temp-var in dns_exception that is used only once.  
+
+Thu Jul 24 10:55:39 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	send_event: Just pass @fd to do_mouse_event so as to save the latter 
+	a call to current_frame.  
+
+Thu Jul 24 10:48:49 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Remove unused parameters and an assertion of one of those parameters 
+	from send_download_do().  
+
+Thu Jul 24 10:43:04 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	s/rep[12]/rep/ now that the two labels are in separate functions and
+	thus will not clash.  
+
+Thu Jul 24 10:38:37 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	I don't normally mind when you explicitely initialise a static var
+	to NULL, but it becomes a little confusing when you do it for one
+	but not for others nearby that also need to be initialised to NULL
+	(explicitly or implicitly).  
+
+Thu Jul 24 10:26:18 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/menu.c:
+
+	view_menu has no dangerous items over view_menu_anon, so comment out
+	view_menu_anon and its use in do_view_menu.  
+
+Thu Jul 24 09:50:57 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Add $TMP to the list of environmental variables checked in
+	textarea_edit().  
+
+Thu Jul 24 09:42:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	A segfault when viewing certain pages (especially internal http
+	error page) was fixed, it was introduced by incomplete changes from
+	pasky on my html_hx() patch :).  
+
+Thu Jul 24 03:23:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/hooks.c:
+
+	Try to stracpy() follow_url_hook's return value naively instead of
+	memacpy()ing it. Should be fine.  
+
+Thu Jul 24 03:21:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_follow_url() tidyup and documentation.  
+
+Thu Jul 24 03:15:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/hooks.c:
+
+	Tidied up and documented script_hook_goto_url().  
+
+Thu Jul 24 03:11:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/lua/hooks.c:
+
+	script_hook_quit() tidyup.  
+
+Thu Jul 24 03:02:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Return 1 instead of the uri length in parse_uri(). It wasn't used so
+	pretty pointless.  
+
+Thu Jul 24 02:31:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/string.c:
+
+	Small cleanup and optimization of add_to_strn() by 'caching' the
+	@dst length.  
+
+Thu Jul 24 02:05:58 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Introduced load_config_from() and write_config_to(), even further
+	backending load_config() and write_config(). Based on part of
+	attachment 94 of bug 70, patch by kuser and me.  
+
+Thu Jul 24 02:01:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: string.c, string.h:
+
+	Update comments for string utilities and move most of them to the
+	header file.  
+
+Thu Jul 24 01:49:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Well, kuser's complete scripting reworking is *not* yet in ;-).  
+
+Thu Jul 24 01:48:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, scripting/lua/hooks.c:
+
+	Let script_hook_follow_url() return value to acquire same semantics
+	as script_hook_goto_url()'s: URL to go to, "" to go nowhere, NULL to
+	go to the original URL. Attachment 97 of bug 70, patch by kuser and
+	me.  
+
+Thu Jul 24 01:43:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/session.c, scripting/lua/hooks.c,
+	scripting/lua/hooks.h:
+
+	Changed script_hook_goto_url() to return the URL to go to ("" to go
+	nowhere, NULL to go to the original URL), instead of directly
+	calling goto_url() (which is now called from goto_url_with_hook()
+	conditionally). Attachment 96 of bug 70, patch by kuser and me.  
+
+Thu Jul 24 01:28:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Lua-specific CFLAGS and LIBS now *also* live in LUA_(CFLAGS|LIBS),
+	whose are AC_SUBST()'d for Makefiles. Attachment 83 of bug 70, patch
+	by kuser.  
+
+Thu Jul 24 01:21:40 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, configure.in, ltmain.sh, src/Makefile.am,
+	src/scripting/lua/Makefile.am:
+
+	[src/scripting/lua] liblua.a -> .libs/libscriptinglua.a and use
+	libtool to generate it. Attachment 79 of bug 70, patch by kuser.  
+
+Thu Jul 24 00:59:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	OPT_CONFIG -> OPT_LISTBOX and minor associated comment update.  
+
+Thu Jul 24 00:52:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	parse_set() now saves the pre-value part of set command to @mirror
+	only if the option has a @write method so we know we will get the
+	actual option value in the @mirror as well. Hopefully fixes bug 216
+	(alias'd options garbage the config file), reported by Dimitar
+	Dimitrov <dinux@mail.bg>.  
+
 Wed Jul 23 18:30:38 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* THANKS:

@@ -3,6 +3,8 @@ Homepage:
 	http://elinks.pld.org.pl/
 
 RPMs:
+	ftp://ftp.nest.pld-linux.org/pool/e/elinks/
+	http://ftp.nest.pld-linux.org/pool/e/elinks/
 	ftp://ftp.pld-linux.org/pool/e/elinks/
 	http://ftp.pld-linux.org/pool/e/elinks/
 
@@ -46,4 +48,4 @@ RPMs:
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-$Id: SITES,v 1.15 2003/08/28 23:01:45 jonas Exp $
+$Id: SITES,v 1.16 2003/09/26 21:18:05 pasky Exp $

@@ -21,10 +21,9 @@ Frames are supported. You can have different file formats associated
 with external viewers. mailto: and telnet: are supported via external
 clients. 
 .PP
-ELinks can handle local (file://) or remote
-(http://, ftp:// or
-https:// if there's compiled-in SSL support) URLs.
-It has also basic support for finger:. 
+ELinks can handle both local (file) and remote URLs. The main
+supported protocols are HTTP, FTP and HTTPS (with SSL support compiled in).
+Additional support exists for finger, gopher, smb, data and NNTP.
 .SH "OPTIONS"
 .PP
 Most options can be set in the user interface or config file, so

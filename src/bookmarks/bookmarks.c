@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.57 2002/11/29 09:48:03 zas Exp $ */
+/* $Id: bookmarks.c,v 1.58 2002/11/29 18:43:09 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -79,14 +79,14 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 
 	bm->title = stracpy((unsigned char *) title);
 	if (!bm->title) {
-		free(bm);
+		mem_free(bm);
 		return NULL;
 	}
 
 	bm->url = stracpy((unsigned char *) url);
 	if (!bm->url) {
-		free(bm->title);
-		free(bm);
+		mem_free(bm->title);
+		mem_free(bm);
 		return NULL;
 	}
 

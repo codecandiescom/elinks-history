@@ -201,6 +201,9 @@ José Luis González González <jlg80@mi.madritel.es>
 	MIME types documentation
 	Referred as 'Jose'
 
+Josef 'Jupp' Schugt <jupp@gmx.de>
+	German translation updates
+
 Julian Kinraid <jkinraid@clear.net.nz>
 	QNX-related fixes
 
@@ -421,4 +424,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.111 2003/01/01 01:21:45 pasky Exp $
+$Id: AUTHORS,v 1.112 2003/01/01 01:26:55 pasky Exp $

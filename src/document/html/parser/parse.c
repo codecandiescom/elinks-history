@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.36 2004/06/20 09:31:52 zas Exp $ */
+/* $Id: parse.c,v 1.37 2004/06/20 09:44:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,54 +253,69 @@ get_num(unsigned char *a, unsigned char *name)
 }
 
 /* Parse 'width[%],....'-like string, and return width value in chars.
- * If @trunc is set, it will limit width value to current usable width. */
+ * If @trunc is set, it will limit width value to current useable width.
+ * It returns -1 in case of error. */
 static inline int
 parse_width(unsigned char *str, int trunc)
 {
 	unsigned char *end;
 	int percentage = 0;
-	int value;
+	int width;
 	int len;
 
+	/* Skip spaces at start of string if any. */
 	while (isspace(*str)) str++;
+
+	/* Search for end of string or ',' character (ie. in "100,200") */
 	for (len = 0; str[len] && str[len] != ','; len++);
 
+	/* Go back, and skip spaces after width if any. */
 	while (len && isspace(str[len - 1])) len--;
-	if (!len) return -1;
+	if (!len) return -1; /* Nothing to parse. */
 
+	/* Is this a percentage ? */
 	if (str[len - 1] == '%') len--, percentage = 1;
 
+	/* Skip spaces between width number and percentage if any. */
 	while (len && isspace(str[len - 1])) len--;
-	if (!len) return -1;
+	if (!len) return -1; /* Nothing to parse. */
 
+	/* Convert to number if possible. */
 	errno = 0;
-	value = strtoul((char *)str, (char **)&end, 10);
+	width = strtoul((char *)str, (char **)&end, 10);
 	if (errno) return -1;
 
-#define WIDTH_PIXELS2CHARS(value) ((value) + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
+#define WIDTH_PIXELS2CHARS(width) ((width) + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
 
 	if (trunc) {
 		int maxwidth = par_format.width - (par_format.leftmargin + par_format.rightmargin);
 
-		if (percentage)
-			value = value * maxwidth / 100;
-		else
-			value = WIDTH_PIXELS2CHARS(value);
+		if (percentage) {
+			/* Value is a percentage. */
+			width = width * maxwidth / 100;
+		} else {
+			/* Value is a number of pixels, makes an approximation. */
+			width = WIDTH_PIXELS2CHARS(width);
+		}
 
-		if (value > maxwidth) value = maxwidth;
+		if (width > maxwidth) width = maxwidth;
 
 	} else {
-		if (percentage)
-			return -1;	/* No sense, we need @trunc for percentage. */
-		else
-			value = WIDTH_PIXELS2CHARS(value);
+		if (percentage) {
+			/* No sense, we need @trunc and @maxwidth for percentage. */
+			return -1;
+		} else {
+			/* Value is a number of pixels, makes an approximation,
+			 * no limit here */
+			width = WIDTH_PIXELS2CHARS(width);
+		}
 	}
 
 #undef WIDTH_2CHAR
 
-	if (value < 0) value = 0;
+	if (width < 0) width = 0;
 
-	return value;
+	return width;
 }
 
 /* Returns width value from attribute named @name. */

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.49 2003/08/29 11:31:50 jonas Exp $ */
+/* $Id: screen.c,v 1.50 2003/08/29 11:39:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,9 +318,7 @@ redraw_screen(struct terminal *term)
  		for (; x < term->x; x++, current++, pos++) {
 
 			/* No update for exact match. */
- 			if (pos->data == current->data
- 			    && pos->color == current->color
- 			    && pos->attr == current->attr)
+ 			if (!memcmp(pos, current, sizeof(struct screen_char)))
 				continue;
 
 			/* Else if the color match and the data is ``space''. */

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.19 2003/07/28 20:53:03 zas Exp $ */
+/* $Id: kbd.c,v 1.20 2003/08/24 00:32:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,8 @@
 #define TW_BUTT_LEFT	1
 #define TW_BUTT_MIDDLE	2
 #define TW_BUTT_RIGHT	4
+
+#define USE_ALTSCREEN	1
 
 struct itrm {
 	int std_in;
@@ -162,20 +164,24 @@ unsigned char *term_seq = "\033[2J\033[?1000l\033[?47l\0338\b \b";
 static unsigned char init_seq[] = "\033)0\0337";
 static unsigned char init_seq_x_mouse[] = "\033[?1000h";
 static unsigned char init_seq_tw_mouse[] = "\033[?9h";
+static unsigned char init_seq_altscreen[] = "\033[?47h";
 
 #define seq_len(x) sizeof((x)) / sizeof(unsigned char) - 1
 
 static int init_seq_len = seq_len(init_seq);
 static int init_seq_x_mouse_len = seq_len(init_seq_x_mouse);
 static int init_seq_tw_mouse_len = seq_len(init_seq_tw_mouse);
+static int init_seq_altscreen_len = seq_len(init_seq_altscreen);
 
 static unsigned char term_seq[] = "\033[2J\0338\r \b";
 static unsigned char term_seq_x_mouse[] = "\033[?1000l";
 static unsigned char term_seq_tw_mouse[]= "\033[?9l";
+static unsigned char term_seq_altscreen[] = "\033[?47l";
 
 static int term_seq_len = seq_len(term_seq);
 static int term_seq_x_mouse_len = seq_len(term_seq_x_mouse);
 static int term_seq_tw_mouse_len = seq_len(term_seq_tw_mouse);
+static int term_seq_altscreen_len = seq_len(term_seq_altscreen);
 
 #undef seq_len
 
@@ -191,6 +197,10 @@ send_init_sequence(int h, int flags)
 	} else {
 		hard_write(h, init_seq_x_mouse, init_seq_x_mouse_len);
 	}
+
+	if (flags & USE_ALTSCREEN) {
+		hard_write(h, init_seq_altscreen, init_seq_altscreen_len);
+	}
 }
 
 
@@ -203,6 +213,10 @@ send_term_sequence(int h, int flags)
 		hard_write(h, term_seq_tw_mouse, term_seq_tw_mouse_len);
 	} else {
 		hard_write(h, term_seq_x_mouse, term_seq_x_mouse_len);
+	}
+
+	if (flags & USE_ALTSCREEN) {
+		hard_write(h, term_seq_altscreen, term_seq_altscreen_len);
 	}
 }
 
@@ -316,6 +330,9 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
 		itrm->flags |= USE_TWIN_MOUSE;
+
+	if (env & (ENV_SCREEN | ENV_XWIN))
+		itrm->flags |= USE_ALTSCREEN;
 
 	if (queue_ts(itrm, ts, strlen(ts), MAX_TERM_LEN)) {
 		mem_free(ts);

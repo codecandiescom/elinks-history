@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.148 2004/04/03 14:13:48 jonas Exp $ */
+/* $Id: core.c,v 1.149 2004/04/09 03:13:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ l_current_url(LS)
 {
 	if (lua_ses && have_location(lua_ses)) {
 		struct view_state *vs = &cur_loc(lua_ses)->vs;
-		unsigned char *url = get_uri_string(vs->uri, ~URI_POST);
+		unsigned char *url = get_uri_string(vs->uri, URI_ORIGINAL);
 
 		if (url) {
 			lua_pushstring(S, url);

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.72 2004/01/28 02:13:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.73 2004/01/28 02:18:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,9 @@ struct plain_renderer {
 	unsigned char *source;
 	int length;
 	struct conv_table *convert_table;
+
+	/* The maximum width any line can have (used for wrapping text) */
+	int max_width;
 };
 
 #define realloc_document_links(doc, size) \
@@ -305,8 +308,7 @@ add_document_lines(struct plain_renderer *renderer)
 		int width, added, only_spaces = 1, spaces = 0, was_spaces = 0;
 		int last_space = 0;
 		int step = 0;
-		int doc_width = document->options.wrap
-			? int_min(document->options.width, length) : length;
+		int doc_width = int_min(renderer->max_width, length);
 
 		/* End of line detection.
 		 * We handle \r, \r\n and \n types here. */
@@ -419,6 +421,8 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	renderer.source = source;
 	renderer.length = length;
 	renderer.convert_table = convert_table;
+	renderer.max_width = document->options.wrap ? document->options.width
+						    : MAXINT;
 
 	add_document_lines(&renderer);
 }

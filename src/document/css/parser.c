@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.53 2004/01/26 23:00:15 pasky Exp $ */
+/* $Id: parser.c,v 1.54 2004/01/26 23:03:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,9 +192,7 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 	/* Check if we have already encountered the selector */
 	/* FIXME: This is totally broken because we have to do this _after_
 	 * scanning for id/class/pseudo. --pasky */
-	selector = find_css_selector(css, token->string, token->length);
-	if (!selector)
-		selector = get_css_selector(css, token->string, token->length);
+	selector = get_css_selector(css, token->string, token->length);
 
 	if (!selector) {
 syntax_error:

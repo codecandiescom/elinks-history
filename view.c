@@ -1764,7 +1764,7 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 						}
 					}
 					fs->state = 0;
-					x:
+x:
 					mem_free(ln);
 				} else fs->state = 0;
 				break;
@@ -1791,7 +1791,7 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 					}
 					mem_free(ln);
 					goto b;
-					xx:
+xx:
 					if (rep) goto rep1;
 					mem_free(ln);
 				} else x = 0;
@@ -1804,7 +1804,7 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 					ln = format_text(fs->value, form->cols, form->wrap);
 					if (!ln) break;
 					
-					rep2:
+rep2:
 					for (y = 0; ln[y].st; y++) {
 						if (fs->value + fs->state >= ln[y].st &&
 						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
@@ -1816,12 +1816,12 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 							if (fs->value + fs->state > ln[y+1].en) fs->state = ln[y+1].en - fs->value;
 							goto yy;
 						}
-						mem_free(ln);
-						goto b;
-						yy:
-						if (rep) goto rep2;
-						mem_free(ln);
 					}
+					mem_free(ln);
+					goto b;
+yy:
+					if (rep) goto rep2;
+					mem_free(ln);
 				} else x = 0;
 				break;
 			case ACT_END:
@@ -1838,10 +1838,10 @@ int field_op(struct session *ses, struct f_data_c *f, struct link *l, struct eve
 							fs->state = ln[y].en - fs->value;
 							goto yyyy;
 						}
-						fs->state = strlen(fs->value);
-						yyyy:
-						mem_free(ln);
 					}
+					fs->state = strlen(fs->value);
+yyyy:
+					mem_free(ln);
 				} else fs->state = strlen(fs->value);
 				break;
 			case ACT_EDIT:

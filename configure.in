@@ -915,7 +915,7 @@ EL_ARG_ENABLE(CONFIG_OWN_LIBC, own-libc, [Own libc stubs],
 AM_CONDITIONAL(CONFIG_OWN_LIBC, test "$CONFIG_OWN_LIBC" = yes)
 
 EL_ARG_ENABLE(CONFIG_SMALL, small, [Small binary],
-              [  --enable-small          reduce binary size as far as possible])
+	      [  --enable-small          reduce binary size as far as possible (but see the bottom of doc/small.txt!)])
 AM_CONDITIONAL(CONFIG_SMALL, test "$CONFIG_SMALL" = yes)
 
 

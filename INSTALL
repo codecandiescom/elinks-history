@@ -84,7 +84,18 @@ preference to OpenSSL, whenever possible.
          $ make
 
 	 should be enough. However, in some FreeBSD 3 distributions you have to
-	 set CFLAGS=-aout before running ./configure.
+	 set CFLAGS=-aout before running ./configure. Also, you may want to
+	 adjust some compile-time options through ./configure - do
+	 ./configure --help and it'll print you list of them.
+
+	 Also, a nice idea is to compile ELinks outside of the source tree.
+	 Make another directory and run path_to_source_tree/configure from it.
+	 Typically, it looks like:
+
+	 $ mkdir ../elinks-build
+	 $ cd ../elinks-build
+	 $ ../elinks/configure
+	 $ make
 
   OS/2 - you can use ./configure.
 
@@ -149,5 +160,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.19 2002/09/01 08:33:36 zas Exp $
+$Id: INSTALL,v 1.20 2002/09/01 12:06:24 pasky Exp $
 vim: textwidth=80

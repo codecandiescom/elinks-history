@@ -1,5 +1,8 @@
 Known bugs:
 
+- Swapping tabs during document loading causes some strange screen issues.
+  Content of document is shown in bad tabs...
+
 - Tilde doesn't expand as it should when used in goto dialog, ~ -> /home and ~/
   -> current directory.
 
@@ -53,4 +56,4 @@ Known bugs:
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.43 2003/05/03 23:43:07 pasky Exp $
+$Id: BUGS,v 1.44 2003/05/05 16:04:56 zas Exp $

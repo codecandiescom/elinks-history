@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.99 2003/10/31 22:37:18 pasky Exp $ */
+/* $Id: link.c,v 1.100 2003/11/02 00:10:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,7 +135,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	int i;
 	int cursor_offset = 0;
 	struct screen_char *template;
-	enum color_flags color_flags = COLOR_DECREASE_LIGHTNESS;
+	enum color_flags color_flags;
 	struct document_options *doc_opts;
 	struct color_pair colors;
 
@@ -185,14 +185,14 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 
 	/* Setup the template char. */
 	template = &doc_view->link_bg[link->n].c;
-	template->attr = 0;
+	template->attr = SCREEN_ATTR_STANDOUT;
 
 	/* We prefer to use the global d_opt since it is kept up to date by
 	 * an option change hook. However if it is not available fall back to
 	 * use the options from the viewed document. */
 	doc_opts = (d_opt) ? d_opt : &doc_view->document->options;
 
-	color_flags = doc_opts->color_flags;
+	color_flags = (doc_opts->color_flags | COLOR_DECREASE_LIGHTNESS);
 
 	if (doc_opts->underline_active_link)
 		template->attr |= SCREEN_ATTR_UNDERLINE;

@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.17 2003/09/28 23:44:32 jonas Exp $ */
+/* $Id: memory.h,v 1.18 2004/04/16 16:16:43 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -135,5 +135,10 @@ mem_align_alloc__(
 #define mem_align_alloc(ptr, old, new, objsize, mask) \
 	mem_align_alloc__((void **)ptr, old, new, objsize, mask)
 #endif
+
+#define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
+
+/* XXX: way to improve ? */
+#define mem_free_if_set(x, v) do { register void *p = (x); if (p) mem_free(p); (x) = (v); } while (0)
 
 #endif

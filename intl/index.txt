@@ -4,7 +4,6 @@ brazilian_portuguese
 bulgarian
 catalan
 croatian
-czech
 danish
 dutch
 estonian

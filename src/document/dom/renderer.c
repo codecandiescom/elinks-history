@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.12 2004/09/26 16:43:42 jonas Exp $ */
+/* $Id: renderer.c,v 1.13 2004/09/26 17:15:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,6 +9,7 @@
 
 #include "elinks.h"
 
+#include "bookmarks/bookmarks.h"	/* get_bookmark() */
 #include "cache/cache.h"
 #include "document/css/css.h"
 #include "document/css/parser.h"
@@ -22,6 +23,7 @@
 #include "document/renderer.h"
 #include "document/sgml/parser.h"
 #include "intl/charsets.h"
+#include "globhist/globhist.h"		/* get_global_history_item() */
 #include "protocol/uri.h"
 #include "terminal/draw.h"
 #include "util/box.h"
@@ -317,7 +319,7 @@ free_va_args:
 	ALIGN_LINK(&(doc)->links, (doc)->nlinks, size)
 
 static inline struct link *
-add_dom_link(struct dom_renderer *renderer, unsigned char *uri, int length)
+add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 {
 	struct document *document = renderer->document;
 	int x = renderer->canvas_x;
@@ -325,6 +327,9 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *uri, int length)
 	unsigned char *where;
 	struct link *link;
 	struct point *point;
+	struct screen_char template;
+	unsigned char *uristring;
+	color_t fgcolor;
 
 	if (!realloc_document_links(document, document->nlinks + 1))
 		return NULL;
@@ -334,18 +339,37 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *uri, int length)
 	if (!realloc_points(link, length))
 		return NULL;
 
-	uri = memacpy(uri, length);
-	if (!uri) return NULL;
+	uristring = memacpy(string, length);
+	if (!uristring) return NULL;
 
-	where = join_urls(document->uri, uri);
-	mem_free(uri);
-	if (!where) return NULL;
+	where = join_urls(document->uri, uristring);
+
+	mem_free(uristring);
+
+	if (!where)
+		return NULL;
+#ifdef CONFIG_GLOBHIST
+	else if (get_global_history_item(where))
+		fgcolor = document->options.default_vlink;
+#endif
+#ifdef CONFIG_BOOKMARKS
+	else if (get_bookmark(where))
+		fgcolor = get_opt_color("document.colors.bookmark");
+#endif
+	else
+		fgcolor = document->options.default_link;
 
 	link->npoints = length;
 	link->type = LINK_HYPERTEXT;
 	link->where = where;
 	link->color.background = document->options.default_bg;
-	link->color.foreground = document->options.default_link;
+	link->color.foreground = fgcolor;
+
+	set_term_color(&template, &link->color,
+		       document->options.color_flags,
+		       document->options.color_mode);
+
+	render_dom_text(renderer, &template, string, length);
 
 	for (point = link->points; length > 0; length--, point++, x++) {
 		point->x = x;
@@ -608,10 +632,14 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 			}
 
 			add_dom_link(renderer, value, valuelen - quoted);
-		}
 
-		/* TODO: Different template for links. */
-		render_dom_text(renderer, template, value, valuelen);
+			if (quoted) {
+				value += valuelen - 1;
+				render_dom_text(renderer, template, value, 1);
+			}
+		} else {
+			render_dom_text(renderer, template, value, valuelen);
+		}
 	}
 
 	return node;

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.100 2003/07/23 15:20:50 pasky Exp $ */
+/* $Id: connection.c,v 1.101 2003/07/24 14:02:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1019,21 +1019,12 @@ abort_all_connections(void)
 void
 abort_background_connections(void)
 {
-	int i = 0;
+	struct connection *connection;
 
-	while (1) {
-		int j;
-		struct connection *c = (void *)&queue;
-
-		for (j = 0; j <= i; j++) {
-			c = c->next;
-			if (c == (void *) &queue)
-				return;
+	foreach (connection, queue) {
+		if (get_priority(connection) >= PRI_CANCEL) {
+			connection = connection->prev;
+			abort_conn_with_state(connection->next, S_INTERRUPTED);
 		}
-
-		if (get_priority(c) >= PRI_CANCEL)
-			abort_conn_with_state(c, S_INTERRUPTED);
-		else
-			i++;
 	}
 }

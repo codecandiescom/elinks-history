@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.90 2004/01/25 00:09:50 pasky Exp $ */
+/* $Id: info.c,v 1.91 2004/01/25 00:11:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,6 +53,7 @@ struct keys_toggle_info {
 	int toggle;
 };
 
+#if 0
 static void
 push_toggle_keys_display_button(void *data)
 {
@@ -60,6 +61,7 @@ push_toggle_keys_display_button(void *data)
 
 	menu_keys(info->term, (void *) !info->toggle, NULL);
 }
+#endif
 
 void
 menu_keys(struct terminal *term, void *d, struct session *ses)
@@ -117,16 +119,16 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 		}
 #endif
 	} else {
-		add_actions_to_string(&keys, actions, KM_MAIN, term);
+		add_actions_to_string(&keys, (int *) actions, KM_MAIN, term);
 	}
 
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
 		N_("Keys"), AL_LEFT,
 		keys.source,
 		info, 2,
-		N_("OK"), NULL, B_ENTER | B_ESC,
+		N_("OK"), NULL, B_ENTER | B_ESC
 #if 0
-		N_("Toggle display"), push_toggle_keys_display_button, B_ENTER
+		, N_("Toggle display"), push_toggle_keys_display_button, B_ENTER
 #endif
 		);
 }

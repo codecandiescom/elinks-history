@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.173 2004/07/02 11:22:06 zas Exp $ */
+/* $Id: hierbox.c,v 1.174 2004/07/02 15:09:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -836,6 +836,8 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_context *context;
+	unsigned char *title = N_("Clear all items");
+	unsigned char *message = N_("Do you really want to remove all items?");
 
 	if (!box->sel) return 0;
 
@@ -854,9 +856,16 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
+	if (box->ops->messages) {
+		if (box->ops->messages->clear_all_items)
+			message = box->ops->messages->clear_all_items;
+		if (box->ops->messages->clear_all_items_title)
+			title = box->ops->messages->clear_all_items_title;
+	}
+
 	msg_box(term, getml(context, NULL), 0,
-		N_("Clear all items"), ALIGN_CENTER,
-		N_("Do you really want to remove all items?"),
+		title, ALIGN_CENTER,
+		message,
 		context, 2,
 		N_("Yes"), do_clear_browser, B_ENTER,
 		N_("No"), NULL, B_ESC);

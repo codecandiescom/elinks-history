@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.55 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: download.c,v 1.56 2004/07/02 15:09:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,6 +397,33 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 			      download->prg->size);
 }
 
+static struct listbox_ops_messages download_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this file \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this file \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	NULL,
+	/* cant_delete_used_folder */
+	NULL,
+	/* delete_marked_items_title */
+	N_("Interrupt marked downloads"),
+	/* delete_marked_items */
+	N_("Interrupt marked downloads?"),
+	/* delete_folder_title */
+	NULL,
+	/* delete_folder */
+	NULL,
+	/* delete_item_title */
+	N_("Interrupt download"),
+	/* delete_item */
+	N_("Interrupt this download?"),
+	/* clear_all_items_title */
+	N_("Interrupt all downloads"),
+	/* clear_all_items_title */
+	N_("Do you really want to interrupt all downloads?"),
+};
+
 static struct listbox_ops downloads_listbox_ops = {
 	lock_file_download,
 	unlock_file_download,
@@ -406,6 +433,7 @@ static struct listbox_ops downloads_listbox_ops = {
 	can_delete_file_download,
 	delete_file_download,
 	draw_file_download,
+	&download_messages,
 };
 
 

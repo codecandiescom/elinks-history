@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.166 2004/07/02 11:22:06 zas Exp $ */
+/* $Id: dialogs.c,v 1.167 2004/07/02 15:09:31 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -129,11 +129,15 @@ static struct listbox_ops_messages bookmarks_messages = {
 	/* delete_folder_title */
 	N_("Delete bookmark's folder"),
 	/* delete_folder */
-	N_("Delete this bookmark's folder and all bookmarks in it?"),
+	N_("Delete this folder and all bookmarks in it?"),
 	/* delete_item_title */
 	N_("Delete bookmark"),
 	/* delete_item */
 	N_("Delete this bookmark?"),
+	/* clear_all_items_title */
+	N_("Clear all bookmarks"),
+	/* clear_all_items_title */
+	N_("Do you really want to remove all bookmarks?"),
 };
 
 static struct listbox_ops bookmarks_listbox_ops = {

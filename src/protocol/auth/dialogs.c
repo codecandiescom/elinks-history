@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.103 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: dialogs.c,v 1.104 2004/07/02 15:09:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,6 +170,33 @@ delete_http_auth_basic(struct listbox_item *item, int last)
 	del_auth_entry(http_auth_basic);
 }
 
+static struct listbox_ops_messages http_auth_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this auth entry \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this auth entry \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	NULL,
+	/* cant_delete_used_folder */
+	NULL,
+	/* delete_marked_items_title */
+	N_("Delete marked auth entries"),
+	/* delete_marked_items */
+	N_("Delete marked auth entries?"),
+	/* delete_folder_title */
+	NULL,
+	/* delete_folder */
+	NULL,
+	/* delete_item_title */
+	N_("Delete auth entry"),
+	/* delete_item */
+	N_("Delete this auth entry?"),
+	/* clear_all_items_title */
+	N_("Clear all auth entries"),
+	/* clear_all_items_title */
+	N_("Do you really want to remove all auth entries?"),
+};
+
 static struct listbox_ops auth_listbox_ops = {
 	lock_http_auth_basic,
 	unlock_http_auth_basic,
@@ -179,6 +206,7 @@ static struct listbox_ops auth_listbox_ops = {
 	can_delete_http_auth_basic,
 	delete_http_auth_basic,
 	NULL,
+	&http_auth_messages,
 };
 
 static struct hierbox_browser_button auth_buttons[] = {

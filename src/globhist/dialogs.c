@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.116 2004/06/22 06:46:17 miciah Exp $ */
+/* $Id: dialogs.c,v 1.117 2004/07/02 15:09:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,6 +100,33 @@ delete_globhist_item(struct listbox_item *item, int last)
 	delete_global_history_item(historyitem);
 }
 
+static struct listbox_ops_messages globhist_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this history entry \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this history entry \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	NULL,
+	/* cant_delete_used_folder */
+	NULL,
+	/* delete_marked_items_title */
+	N_("Delete marked history entries"),
+	/* delete_marked_items */
+	N_("Delete marked history entries?"),
+	/* delete_folder_title */
+	NULL,
+	/* delete_folder */
+	NULL,
+	/* delete_item_title */
+	N_("Delete cache history"),
+	/* delete_item */
+	N_("Delete this history entry?"),
+	/* clear_all_items_title */
+	N_("Clear all history entries"),
+	/* clear_all_items_title */
+	N_("Do you really want to remove all history entries?"),
+};
+
 static struct listbox_ops gh_listbox_ops = {
 	lock_globhist_item,
 	unlock_globhist_item,
@@ -109,6 +136,7 @@ static struct listbox_ops gh_listbox_ops = {
 	can_delete_globhist_item,
 	delete_globhist_item,
 	NULL,
+	&globhist_messages,
 };
 
 /* Searching: */

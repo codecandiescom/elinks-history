@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.71 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: dialogs.c,v 1.72 2004/07/02 15:09:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,6 +154,33 @@ delete_cache_entry_item(struct listbox_item *item, int last)
 	delete_cache_entry(cached);
 }
 
+static struct listbox_ops_messages cache_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this cache entry \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this cache entry \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	NULL,
+	/* cant_delete_used_folder */
+	NULL,
+	/* delete_marked_items_title */
+	N_("Delete marked cache entries"),
+	/* delete_marked_items */
+	N_("Delete marked cache entries?"),
+	/* delete_folder_title */
+	NULL,
+	/* delete_folder */
+	NULL,
+	/* delete_item_title */
+	N_("Delete cache entry"),
+	/* delete_item */
+	N_("Delete this cache entry?"),
+	/* clear_all_items_title */
+	NULL,
+	/* clear_all_items_title */
+	NULL,
+};
+
 static struct listbox_ops cache_entry_listbox_ops = {
 	lock_cache_entry,
 	unlock_cache_entry,
@@ -163,6 +190,7 @@ static struct listbox_ops cache_entry_listbox_ops = {
 	can_delete_cache_entry,
 	delete_cache_entry_item,
 	NULL,
+	&cache_messages,
 };
 
 static struct hierbox_browser_button cache_buttons[] = {

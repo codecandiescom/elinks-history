@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.60 2004/06/28 11:07:10 jonas Exp $ */
+/* $Id: dialogs.c,v 1.61 2004/07/02 15:09:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,6 +136,33 @@ delete_cookie(struct listbox_item *item, int last)
 		save_cookies();
 }
 
+static struct listbox_ops_messages cookies_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this cookie \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this cookie \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	N_("Sorry, but this cookie's folder \"%s\" cannot be deleted."),
+	/* cant_delete_used_folder */
+	N_("Sorry, but this cookie's folder \"%s\" is being used by something else."),
+	/* delete_marked_items_title */
+	N_("Delete marked cookies"),
+	/* delete_marked_items */
+	N_("Delete marked cookies?"),
+	/* delete_folder_title */
+	N_("Delete cookie's folder"),
+	/* delete_folder */
+	N_("Delete this folder and all cookies in it?"),
+	/* delete_item_title */
+	N_("Delete cookie"),
+	/* delete_item */
+	N_("Delete this cookie?"),
+	/* clear_all_items_title */
+	N_("Clear all cookies"),
+	/* clear_all_items_title */
+	N_("Do you really want to remove all cookies?"),
+};
+
 static struct listbox_ops cookies_listbox_ops = {
 	lock_cookie,
 	unlock_cookie,
@@ -144,7 +171,8 @@ static struct listbox_ops cookies_listbox_ops = {
 	NULL,
 	can_delete_cookie,
 	delete_cookie,
-	NULL
+	NULL,
+	&cookies_messages,
 };
 
 static int

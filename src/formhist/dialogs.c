@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.29 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: dialogs.c,v 1.30 2004/07/02 15:09:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,33 @@ delete_formhist_data(struct listbox_item *item, int last)
 	free_form(formhist_data);
 }
 
+static struct listbox_ops_messages formhist_messages = {
+	/* cant_delete_item */
+	N_("Sorry, but this form \"%s\" cannot be deleted."),
+	/* cant_delete_used_item */
+	N_("Sorry, but this form \"%s\" is being used by something else."),
+	/* cant_delete_folder */
+	NULL,
+	/* cant_delete_used_folder */
+	NULL,
+	/* delete_marked_items_title */
+	N_("Delete marked forms"),
+	/* delete_marked_items */
+	N_("Delete marked forms?"),
+	/* delete_folder_title */
+	NULL,
+	/* delete_folder */
+	NULL,
+	/* delete_item_title */
+	N_("Delete form"),
+	/* delete_item */
+	N_("Delete this form?"),
+	/* clear_all_items_title */
+	N_("Clear all forms"),
+	/* clear_all_items_title */
+	N_("Do you really want to remove all forms?"),
+};
+
 static struct listbox_ops formhist_listbox_ops = {
 	lock_formhist_data,
 	unlock_formhist_data,
@@ -123,6 +150,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	can_delete_formhist_data,
 	delete_formhist_data,
 	NULL,
+	&formhist_messages,
 };
 
 static int

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.65 2004/07/02 11:22:06 zas Exp $ */
+/* $Id: listbox.h,v 1.66 2004/07/02 15:09:31 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -65,6 +65,8 @@ struct listbox_ops_messages {
 	unsigned char *delete_folder;
 	unsigned char *delete_item_title;
 	unsigned char *delete_item;
+	unsigned char *clear_all_items_title;
+	unsigned char *clear_all_items;
 };
 
 /* TODO: We can maybe find a better way of figuring out whether a user of a

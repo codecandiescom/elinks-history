@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.159 2004/12/17 21:54:31 miciah Exp $ */
+/* $Id: options.inc,v 1.160 2004/12/18 19:53:39 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -656,12 +656,6 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.html", N_("Display tables"),
 		"display_tables", 0, 1,
 		N_("Display tables.")),
-
-	/* FIXME: obsolete, how to alias them correctly ? --jonas */
-	INIT_OPT_BOOL("document.html", N_("Expand table columns"),
-		"expand_table_columns", 0, 0,
-		N_("This option is no longer in effect. It is obsoleted by changes\n"
-		"to always expand table columns.")),
 
 	INIT_OPT_BOOL("document.html", N_("Display subscripts"),
 		"display_subs", 0, 1,

@@ -1,3 +1,250 @@
+Fri Jun 25 21:03:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	move_link(): Do the session repeat_count looping and get rid of
+	macro wrappers.  
+
+Fri Jun 25 18:49:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Fixed 1.232 (smart keystrokes parsing) so that it's more readable,
+	more logical and doesn't potentially look after the end of the
+	string.  
+
+Fri Jun 25 17:05:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	read_key(): with the help of new strcasetonum(), be more tolerant
+	about keystroke format, accept f1 for F1, doWn for Down, etc.  
+
+Fri Jun 25 17:01:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	parse_keystroke(): be more tolerant about keystroke format, shift,
+	ctrl and alt prefixes are now case insensitive, and separator can be
+	+ as well as -. Entry is normalized before further treatment.  
+
+Fri Jun 25 16:16:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	init_listbox(): Tidyup.  
+
+Fri Jun 25 16:09:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Compilation fix.  
+
+Fri Jun 25 16:01:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Factor out some duplicate code in the move_link_*() functions, using
+	a prefactored macro instead. Will become more useful with the
+	directional link navigation.  
+
+Fri Jun 25 15:31:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Improve comment.  
+
+Fri Jun 25 14:58:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_html(): statement was not so useless, just fix last patch to
+	prevent infinite parser loop.  
+
+Fri Jun 25 14:32:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_cell(): @i -> @col, @j -> @row, use for() instead of while().  
+
+Fri Jun 25 14:27:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	expand_cells(): @i -> @col, @j -> @row, @tx -> @last_col, @ty ->
+	@last_row.  
+
+Fri Jun 25 13:36:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	check_cell_widths(): @i -> @col, @j -> @row.  
+
+Fri Jun 25 13:34:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_cell_widths(): @i -> @col, @j -> @row.  
+
+Fri Jun 25 13:32:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_column_widths(): set @i to 0 in for().  
+
+Fri Jun 25 13:30:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_html(): drop useless @html assigment. Weird.  
+
+Fri Jun 25 10:52:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/menu.c, cookies/cookies.c,
+	document/renderer.c, document/html/frames.c,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, document/plain/renderer.c,
+	formhist/formhist.c, intl/charsets.c, osdep/generic.h,
+	osdep/osdep.c, protocol/header.c, protocol/uri.c,
+	protocol/file/cgi.c, protocol/ftp/ftp.c, protocol/http/http.c,
+	sched/download.c, sched/event.c, scripting/lua/core.c,
+	terminal/color.c, terminal/draw.c, terminal/event.c,
+	terminal/screen.c, util/base64.c, util/color.c, util/conv.c,
+	util/conv.h, util/fastfind.c, util/hash.c, util/string.c,
+	viewer/text/draw.c, viewer/text/form.c, viewer/text/link.c,
+	viewer/text/search.c, viewer/text/textarea.c:
+
+	Drop most register variable attribute.  
+
+Fri Jun 25 10:18:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_values(): @n -> @count, @w -> @wanted, @s -> @sum.  
+
+Fri Jun 25 10:09:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	dst_width() -> distribute_values().  
+
+Fri Jun 25 10:06:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	dst_width(): minor optimization, introducing @delta.  
+
+Fri Jun 25 10:04:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	dst_width(): @p -> @values, @lim -> @limits.  
+
+Fri Jun 25 09:54:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: terminal/window.c, util/lists.h, viewer/text/form.c,
+	bfu/menu.c, cache/cache.c, sched/connection.c, sched/history.c:
+
+	Introduce list_has_next(list, item) macro.  A little extra cleanup
+	in delete_window_ev() removing bogus check.  
+
+Fri Jun 25 09:27:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	set_td_width(): @x -> @col, @f -> @force.  
+
+Fri Jun 25 09:20:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@min_t -> @min_width, @max_t -> @max_width, minor fields
+	reorganization in struct table.  
+
+Fri Jun 25 09:11:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@max_c -> @max_cols_widths, @min_c -> @min_cols_widths.  
+
+Fri Jun 25 09:03:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_column_widths(): @s -> @colspan, @ns -> @new_colspan.  
+
+Fri Jun 25 08:25:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_table_heights(): @xw -> @width.  
+
+Fri Jun 25 08:22:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_table_heights(): @s -> @rowspan, @ns -> @new_rowspan.  
+
+Fri Jun 25 08:18:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	check_table_widths(): make @new_colspan local to the loop.  
+
+Fri Jun 25 08:15:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	check_table_widths(): @s -> @colspan, @ns -> @new_colspan. Use
+	different names for different purposes: @s -> @width, @ns ->
+	@new_width.  
+
+Fri Jun 25 01:49:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Don't add link numbers for non accessible links. It seems to be
+	caused by the parser putting a space char after stuff like
+	<img>-tags or comments wrapped in <a>-tags. Fixes bug 30.  
+
+Fri Jun 25 01:06:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	A little stupid perhaps but quite annoying if using '_' as a name
+	for autocreated options.  
+	
+	Always ensure that them _template_ options are before anything else
+	so a lonely autocreated option (with _template_ options set to 
+	invisible) will be connected with an upper corner (ascii: `-)
+	instead of a rotated T (ascii: +-) when displaying it.  
+
+Fri Jun 25 00:48:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	add_opt_sort(): Do the @bpos updating in the start of the loop so we
+	correctly ignore options marked as deleted or which have NULL box
+	item member. This should fix the overflow assertion failure filed as
+	bug 471. Note the test case in the bug description was invalidated
+	by the last patch.  
+
+Fri Jun 25 00:25:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Only mark built-in options as deleted or in other words if
+	option->flags & OPT_ALLOC do a real deletion. Inspired by something
+	Miciah and zas discussed on irc today.  
+
+Thu Jun 24 23:49:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	render_html_document(): Only set document->title if the title string
+	in non empty so the fallback to using document->uri in
+	render_document() will be used.  
+
 Thu Jun 24 18:15:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bfu/menu.c, config/kbdbind.c, config/kbdbind.h:

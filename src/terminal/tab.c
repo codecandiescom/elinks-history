@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.7 2003/05/05 15:40:03 zas Exp $ */
+/* $Id: tab.c,v 1.8 2003/05/05 16:00:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,29 +83,33 @@ get_tab_by_number(struct terminal *term, int num)
 	return win;
 }
 
+/* if nbtabs > 0, then it is taken as the result of a recent
+ * call to number_of_tabs() so it just uses this value. */
 void
 switch_to_tab(struct terminal *term, int num, int nbtabs)
 {
 	int num_tabs = nbtabs;
 
-	if (nbtabs <= 0) num_tabs = number_of_tabs(term);
+	if (nbtabs < 0) num_tabs = number_of_tabs(term);
+	if (num_tabs > 1) {
+		if (num >= num_tabs) {
+			if (get_opt_bool("ui.tabs.wraparound"))
+				num = 0;
+			else
+				num = num_tabs - 1;
+		}
 
-	if (num >= num_tabs) {
-		if (get_opt_bool("ui.tabs.wraparound"))
-			num = 0;
-		else
-			num = num_tabs - 1;
-	}
-
-	if (num < 0) {
-		if (get_opt_bool("ui.tabs.wraparound"))
-			num = num_tabs - 1;
-		else
-			num = 0;
-	}
+		if (num < 0) {
+			if (get_opt_bool("ui.tabs.wraparound"))
+				num = num_tabs - 1;
+			else
+				num = 0;
+		}
+	} else num = 0;
 
 	if (num != term->current_tab) {
 		term->current_tab = num;
+		term->dirty = 1; /* XXX: needed ??? unsure about it --Zas */
 
 		redraw_terminal(term);
 	}

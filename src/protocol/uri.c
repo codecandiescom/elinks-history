@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.262 2004/07/12 11:16:58 jonas Exp $ */
+/* $Id: uri.c,v 1.263 2004/07/18 01:32:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -783,10 +783,9 @@ join_urls(struct uri *base, unsigned char *rel)
 		}
 	}
 
-	if (!base->data) {
-		INTERNAL("bad base url");
-		return NULL;
-	}
+	assertm(base->data, "bad base url");
+	if_assert_failed return NULL;
+
 	path = base->data;
 
 	/* Either is path blank, but we've slash char before, or path is not

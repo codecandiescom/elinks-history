@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.264 2004/12/19 16:15:39 pasky Exp $ */
+/* $Id: form.c,v 1.265 2004/12/29 19:25:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1507,6 +1507,10 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_PASSWORD:
 	case FC_FILE:
 	case FC_TEXTAREA:
+	{
+		struct uri *uri;
+		unsigned char *uristring;
+
 		if (form_field_is_readonly(fc)) {
 			add_form_attr_to_string(&str, term, N_("read only"), NULL);
 		}
@@ -1541,24 +1545,34 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		        && !get_opt_bool("document.browse.forms.auto_submit")))
 			break;
 
-		key = get_keystroke(ACT_EDIT_ENTER, KEYMAP_EDIT);
-		if (!key) break;
-
-		if (fc->form->method == FORM_METHOD_GET)
-			label = N_("press %s to submit to");
-		else
-			label = N_("press %s to post to");
-
-		add_to_string(&str, " (");
-		add_format_to_string(&str, _(label, term), key);
-		add_char_to_string(&str, ' ');
-		mem_free(key);
+		uri = get_uri(fc->form->action, 0);
+		if (!uri) break;
 
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, fc->form->action, URI_PUBLIC);
+		uristring = get_uri_string(uri, URI_PUBLIC);
+		done_uri(uri);
+
+		if (!uristring) break;
+
+		key = get_keystroke(ACT_EDIT_ENTER, KEYMAP_EDIT);
+		if (!key) {
+			mem_free(uristring);
+			break;
+		}
+
+		if (fc->form->method == FORM_METHOD_GET)
+			label = N_("press %s to submit to %s");
+		else
+			label = N_("press %s to post to %s");
+
+		add_to_string(&str, " (");
+		add_format_to_string(&str, _(label, term), key, uristring);
+		mem_free(uristring);
+		mem_free(key);
+
 		add_char_to_string(&str, ')');
 		break;
-
+	}
 	case FC_SUBMIT:
 	case FC_IMAGE:
 		add_char_to_string(&str, ' ');

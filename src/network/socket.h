@@ -1,4 +1,4 @@
-/* $Id: socket.h,v 1.17 2004/04/29 23:11:43 jonas Exp $ */
+/* $Id: socket.h,v 1.18 2004/06/22 00:59:33 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -27,16 +27,6 @@ struct read_buffer {
 	int len;
 	int close;
 	int freespace;
-
-	unsigned char data[1]; /* must be at end of struct */
-};
-
-struct write_buffer {
-	void (*done)(struct connection *);
-
-	int sock;
-	int len;
-	int pos;
 
 	unsigned char data[1]; /* must be at end of struct */
 };

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.76 2004/06/17 10:02:21 zas Exp $ */
+/* $Id: socket.c,v 1.77 2004/06/22 00:59:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,6 +510,16 @@ connected(void *data)
 	mem_free_if(c_i->addr);
 	mem_free(c_i);
 }
+
+struct write_buffer {
+	void (*done)(struct connection *);
+
+	int sock;
+	int len;
+	int pos;
+
+	unsigned char data[1]; /* must be at end of struct */
+};
 
 static void
 write_select(struct connection *conn)

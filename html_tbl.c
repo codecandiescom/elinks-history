@@ -1145,6 +1145,7 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	wf = 0;
 	if ((width = get_width(attr, "width", p->data || p->xp)) == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
+		if (width < 0) width = 0;
 		wf = 1;
 	}
 	if (!(t = parse_table(html, eof, end, &bgcolor, p->data || p->xp, &bad_html, &bad_html_n))) {
@@ -1235,8 +1236,9 @@ void format_table(unsigned char *attr, unsigned char *html, unsigned char *eof, 
 	if (p->cy > p->y) p->y = p->cy;
 	/*ret1:*/
 	free_table(t);
-	ret0:
 	kill_html_stack_item(&html_top);
+	ret0:
 	/*ret:*/
 	table_level--;
+	if (!table_level) free_table_cache();
 }

@@ -2016,6 +2016,8 @@ void xset_hchar(struct part *, int, int, unsigned);
 void xset_hchars(struct part *, int, int, int, unsigned);
 void align_line(struct part *, int);
 
+void free_table_cache();
+
 struct conv_table *get_convert_table(unsigned char *, int, int, int *, int *, int);
 extern int format_cache_entries;
 long formatted_info(int);

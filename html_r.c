@@ -679,7 +679,7 @@ void html_form_control(struct part *p, struct form_control *fc)
 		return;
 	}
 	fc->g_ctrl_num = g_ctrl_num++;
-	if (fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_TEXTAREA) {
+	if (1 /*fc->type == FC_TEXT || fc->type == FC_PASSWORD || fc->type == FC_TEXTAREA*/) {
 		unsigned char *dv = convert_string(convert_table, fc->default_value, strlen(fc->default_value));
 		if (dv) {
 			mem_free(fc->default_value);
@@ -768,6 +768,26 @@ void do_format(char *start, char *end, struct part *part, unsigned char *head)
 
 int margin;
 
+struct table_cache_entry {
+	struct table_cache_entry *next;
+	struct table_cache_entry *prev;
+	unsigned char *start;
+	unsigned char *end;
+	int align;
+	int m;
+	int width;
+	int xs;
+	int link_num;
+	struct part p;
+};
+
+struct list_head table_cache = { &table_cache, &table_cache };
+
+void free_table_cache()
+{
+	free_list(table_cache);
+}
+
 struct part *format_html_part(unsigned char *start, unsigned char *end, int align, int m, int width, struct f_data *data, int xs, int ys, unsigned char *head, int link_num)
 {
 	struct part *p;
@@ -778,6 +798,22 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 	int lm = margin;
 	int ef = empty_format;
 	struct form_control *fc;
+	struct table_cache_entry *tce;
+
+	if (!data) {
+		foreach(tce, table_cache) {
+			if (tce->start == start && tce->end == end
+			    && tce->align == align && tce->m == m
+			    && tce->width == width && tce->xs == xs
+			    && tce->link_num == link_num) {
+				p = mem_alloc(sizeof(struct part));
+				if (!p) continue;
+				memcpy(p, &tce->p, sizeof(struct part));
+				return p;
+			}
+		}
+	}
+	
 	if (ys < 0) {
 		internal("format_html_part: ys == %d", ys);
 		return NULL;
@@ -855,6 +891,18 @@ struct part *format_html_part(unsigned char *start, unsigned char *end, int alig
 	/*last_tag_for_newline = ltn;*/
 	margin = lm;
 	empty_format = ef;
+	if (table_level > 1 && !data
+	    && (tce = mem_alloc(sizeof(struct table_cache_entry)))) {
+		tce->start = start;
+		tce->end = end;
+		tce->align = align;
+		tce->m = m;
+		tce->width = width;
+		tce->xs = xs;
+		tce->link_num = link_num;
+		memcpy(&tce->p, p, sizeof(struct part));
+		add_to_list(table_cache, tce);
+	}
 	last_link = last_image = last_target = NULL;
 	last_form = NULL;
 	return p;

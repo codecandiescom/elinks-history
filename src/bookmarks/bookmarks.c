@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.84 2003/10/25 12:02:10 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.85 2003/10/25 14:09:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ static struct option_info bookmark_options_info[] = {
 void
 init_bookmarks(void)
 {
-	register_option_info(bookmark_options_info, config_options);
+	register_options(bookmark_options_info, config_options);
 
 	read_bookmarks();
 }
@@ -96,7 +96,7 @@ done_bookmarks(void)
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 
-	unregister_option_info(bookmark_options_info, config_options);
+	unregister_options(bookmark_options_info, config_options);
 }
 
 

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.369 2003/10/25 13:49:03 pasky Exp $ */
+/* $Id: options.c,v 1.370 2003/10/25 14:09:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,12 +457,6 @@ copy_option(struct option *template)
 	return option;
 }
 
-
-static void register_options(void);
-static void unregister_options(void);
-
-static struct change_hook_info change_hooks[];
-
 struct list_head *
 init_options_tree(void)
 {
@@ -526,14 +520,20 @@ register_autocreated_options(void)
 	strcpy(get_opt_str("protocol.user.irc.unix-xwin"), irc);
 }
 
+static struct option_info config_options_info[];
+static struct option_info cmdline_options_info[];
+static struct change_hook_info change_hooks[];
+
 void
 init_options(void)
 {
-	config_options = add_opt_tree_tree(&options_root, "", "",
-					 "config", OPT_LISTBOX | OPT_SORT, "");
 	cmdline_options = add_opt_tree_tree(&options_root, "", "",
 					    "cmdline", 0, "");
-	register_options();
+	register_options(cmdline_options_info, cmdline_options);
+
+	config_options = add_opt_tree_tree(&options_root, "", "",
+					 "config", OPT_LISTBOX | OPT_SORT, "");
+	register_options(config_options_info, config_options);
 	register_autocreated_options();
 	register_change_hooks(change_hooks);
 }
@@ -548,7 +548,8 @@ free_options_tree(struct list_head *tree, int recursive)
 void
 done_options(void)
 {
-	unregister_options();
+	unregister_options(config_options_info, config_options);
+	unregister_options(cmdline_options_info, cmdline_options);
 	free_options_tree(&options_root_tree, 0);
 }
 
@@ -1077,7 +1078,7 @@ static struct change_hook_info change_hooks[] = {
 #include "config/options.inc"
 
 void
-register_option_info(struct option_info info[], struct option *tree)
+register_options(struct option_info info[], struct option *tree)
 {
 	int i;
 
@@ -1129,7 +1130,7 @@ register_option_info(struct option_info info[], struct option *tree)
 }
 
 void
-unregister_option_info(struct option_info info[], struct option *tree)
+unregister_options(struct option_info info[], struct option *tree)
 {
 	int i = 0;
 
@@ -1140,18 +1141,4 @@ unregister_option_info(struct option_info info[], struct option *tree)
 
 	for (i--; i >= 0; i--)
 		delete_option_do(&info[i].option, 0);
-}
-
-static void
-register_options(void)
-{
-	register_option_info(config_options_info, config_options);
-	register_option_info(cmdline_options_info, cmdline_options);
-}
-
-static void
-unregister_options(void)
-{
-	unregister_option_info(config_options_info, config_options);
-	unregister_option_info(cmdline_options_info, cmdline_options);
 }

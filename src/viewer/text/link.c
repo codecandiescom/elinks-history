@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.12 2003/07/17 08:56:33 zas Exp $ */
+/* $Id: link.c,v 1.13 2003/07/22 02:39:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -916,37 +916,35 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 	if (link->type == L_LINK) {
 		if (!link->where && link->where_img) {
 			unsigned char *url;
-			unsigned char *str = init_str();
-			int strl = 0;
+			struct string str;
 
-			if (!str) return NULL;
+			if (!init_string(&str)) return NULL;
 
-			add_to_str(&str, &strl, _("Image", term));
-			add_chr_to_str(&str, &strl, ' ');
+			add_to_string(&str, _("Image", term));
+			add_char_to_string(&str, ' ');
 			url = strip_uri_password(link->where_img);
 			if (url) {
-				add_to_str(&str, &strl, url);
+				add_to_string(&str, url);
 				mem_free(url);
 			}
-			return str;
+			return str.source;
 		}
 
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4)) {
 			unsigned char *url;
-			unsigned char *str = init_str();
-			int strl = 0;
+			struct string str;
 
-			if (!str) return NULL;
+			if (!init_string(&str)) return NULL;
 
-			add_to_str(&str, &strl, _("Usemap", term));
-			add_chr_to_str(&str, &strl, ' ');
+			add_to_string(&str, _("Usemap", term));
+			add_char_to_string(&str, ' ');
 			url = strip_uri_password(link->where + 4);
 			if (url) {
-				add_to_str(&str, &strl, url);
+				add_to_string(&str, url);
 				mem_free(url);
 			}
-			return str;
+			return str.source;
 		}
 
 		return strip_uri_password(link->where);
@@ -956,79 +954,76 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 
 	if (link->type == L_BUTTON) {
 		unsigned char *url;
-		unsigned char *str;
-		int strl = 0;
+		struct string str;
 
 		if (link->form->type == FC_RESET)
 			return stracpy(_("Reset form", term));
 
 		if (!link->form->action) return NULL;
 
-		str = init_str();
-		if (!str) return NULL;
+		if (!init_string(&str)) return NULL;
 
 		if (link->form->method == FM_GET)
-			add_to_str(&str, &strl, _("Submit form to", term));
+			add_to_string(&str, _("Submit form to", term));
 		else
-			add_to_str(&str, &strl, _("Post form to", term));
-		add_chr_to_str(&str, &strl, ' ');
+			add_to_string(&str, _("Post form to", term));
+		add_char_to_string(&str, ' ');
 
 		url = strip_uri_password(link->form->action);
 		if (url) {
-			add_to_str(&str, &strl, url);
+			add_to_string(&str, url);
 			mem_free(url);
 		}
-		return str;
+		return str.source;
 	}
 
 	if (link->type == L_CHECKBOX || link->type == L_SELECT
 	    || link->type == L_FIELD || link->type == L_AREA) {
-		unsigned char * str = init_str();
-		int strl = 0;
+		struct string str;
 
-		if (!str) return NULL;
+		if (!init_string(&str)) return NULL;
 
 		if (link->form->type == FC_RADIO)
-			add_to_str(&str, &strl, _("Radio button", term));
+			add_to_string(&str, _("Radio button", term));
 
 		else if (link->form->type == FC_CHECKBOX)
-			add_to_str(&str, &strl, _("Checkbox", term));
+			add_to_string(&str, _("Checkbox", term));
 
 		else if (link->form->type == FC_SELECT)
-			add_to_str(&str, &strl, _("Select field", term));
+			add_to_string(&str, _("Select field", term));
 
 		else if (link->form->type == FC_TEXT)
-			add_to_str(&str, &strl, _("Text field", term));
+			add_to_string(&str, _("Text field", term));
 
 		else if (link->form->type == FC_TEXTAREA)
-			add_to_str(&str, &strl, _("Text area", term));
+			add_to_string(&str, _("Text area", term));
 
 		else if (link->form->type == FC_FILE)
-			add_to_str(&str, &strl, _("File upload", term));
+			add_to_string(&str, _("File upload", term));
 
 		else if (link->form->type == FC_PASSWORD)
-			add_to_str(&str, &strl, _("Password field", term));
+			add_to_string(&str, _("Password field", term));
 
 		else {
-			mem_free(str);
+			done_string(&str);
 			return NULL;
 		}
 
 		if (link->form->name && link->form->name[0]) {
-			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, _("name", term));
-			add_chr_to_str(&str, &strl, ' ');
-			add_to_str(&str, &strl, link->form->name);
+			add_to_string(&str, ", ");
+			add_to_string(&str, _("name", term));
+			add_char_to_string(&str, ' ');
+			add_to_string(&str, link->form->name);
 		}
 
 		if ((link->form->type == FC_CHECKBOX ||
 		     link->form->type == FC_RADIO)
 		    && link->form->default_value
 		    && link->form->default_value[0]) {
-			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, _("value", term));
-			add_chr_to_str(&str, &strl, ' ');
-			add_to_str(&str, &strl, link->form->default_value);
+			add_to_string(&str, ", ");
+			add_to_string(&str, _("value", term));
+			add_char_to_string(&str, ' ');
+			add_to_string(&str, link->form->default_value);
 		}
 
 		if (link->type == L_FIELD
@@ -1036,22 +1031,22 @@ print_current_link_do(struct document_view *fd, struct terminal *term)
 		    && link->form->action) {
 			unsigned char *url;
 
-			add_to_str(&str, &strl, ", ");
-			add_to_str(&str, &strl, _("hit ENTER to", term));
-			add_chr_to_str(&str, &strl, ' ');
+			add_to_string(&str, ", ");
+			add_to_string(&str, _("hit ENTER to", term));
+			add_char_to_string(&str, ' ');
 			if (link->form->method == FM_GET)
-				add_to_str(&str, &strl, _("submit to", term));
+				add_to_string(&str, _("submit to", term));
 			else
-				add_to_str(&str, &strl, _("post to", term));
-			add_chr_to_str(&str, &strl, ' ');
+				add_to_string(&str, _("post to", term));
+			add_char_to_string(&str, ' ');
 			url = strip_uri_password(link->form->action);
 			if (url) {
-				add_to_str(&str, &strl, url);
+				add_to_string(&str, url);
 				mem_free(url);
 			}
 		}
 
-		return str;
+		return str.source;
 	}
 
 	/* Uh-oh? */

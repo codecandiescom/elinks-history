@@ -1925,13 +1925,12 @@ msgid "Display numbers next to the links."
 msgstr "Afficher le numéro de lien devant chaque lien."
 
 #: src/config/options.inc:241
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the document.browse.search.wraparound option instead."
 msgstr ""
 "Option obsolète.\n"
-"Utilisez document.browse.search._wraparound."
+"Utilisez document.browse.search.wraparound."
 
 #: src/config/options.inc:246
 msgid ""

@@ -1,3 +1,85 @@
+Thu Aug 29 17:20:15 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	Hopefully finally fixed moving of cursor in the listbox.  
+
+Thu Aug 29 16:28:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: listbox.c, listbox.h:
+
+	Fixed moving of selection bar inside of the list.  
+
+Thu Aug 29 15:34:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fix in calling of hook in traverse_listbox_items_list() - now it's
+	called for each item _from_ the start item, _except_ the final item;
+	it was _except_ the start item, _with_ the final item before. More
+	mouse items selection fixes.  
+
+Thu Aug 29 15:22:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/listbox.c:
+
+	If there's no box->top and box->sel, figure out some.  
+
+Thu Aug 29 12:58:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/polish.lng, src/intl/language.inc:
+
+	Polish translation updates by Grzegorz Golawski
+	<grzegol@pld.org.pl>.  
+
+Thu Aug 29 12:23:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/index.txt, intl/portuguese.lng, src/intl/lang_defs.h,
+	src/intl/language.inc:
+
+	Added portuguese language.  
+
+Thu Aug 29 12:19:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c:
+
+	Introduced commandline option -stdin - guess what it does ;).  
+
+Thu Aug 29 11:48:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	dialogs/globhist.c:
+
+	Infinite loop caused by attempt to display listbox fixed.  
+
+Thu Aug 29 09:33:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c, dialogs/globhist.c,
+	document/globhist.c, document/globhist.h:
+
+	Massive changes in internal API of listboxes - just too much
+	changes, theoretically listbox is ready for hiearchic trees (except
+	that it can't render them).. this comes along with need for massive
+	restructuralization of bookmarks and global history stuff; it
+	doesn't work now, will be fixed again soon; searching in global
+	history a bit later ;-).  
+
+Thu Aug 29 00:36:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, protocol/mime.c:
+
+	Introduced some predefined autocreated options - few most common
+	terminal types (terminal._template_.m11_hack not 1 by default
+	anymore, terminal.linux.m11_hack is 1 by default, though), few most
+	common extension->mime-type associations.  
+
+Thu Aug 29 00:02:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre15.CVS 
+
 Thu Aug 29 00:01:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

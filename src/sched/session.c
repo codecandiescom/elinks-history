@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.453 2004/06/10 18:44:44 jonas Exp $ */
+/* $Id: session.c,v 1.454 2004/06/10 21:45:00 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -648,6 +648,29 @@ copy_session(struct session *old, struct session *new)
 	goto_uri(new, cur_loc(old)->vs.uri);
 }
 
+static struct initial_session_info *
+init_session_info(struct session *base_session, enum remote_session_flags remote,
+		  struct uri *uri);
+void
+init_session(struct session *ses, struct terminal *term,
+	     struct uri *uri, int in_background)
+{
+	struct window *tab;
+	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
+
+	tab = init_tab(term, in_background);
+	if (!tab) return;
+
+	ev.b = (long) init_session_info(ses, 0, uri);
+	if (!ev.b) {
+		mem_free(tab);
+		return;
+	}
+
+	tab->handler(tab, &ev, 0);
+}
+
+
 /* The session info encoder and decoder:
  *
  * This is responsible for handling the initial connection between a dumb and
@@ -685,7 +708,7 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 	return NULL;
 }
 
-struct initial_session_info *
+static struct initial_session_info *
 init_session_info(struct session *base_session, enum remote_session_flags remote,
 		  struct uri *uri)
 {

@@ -646,28 +646,24 @@ msgid "Move to the next frame"
 msgstr "Move 70 the |\\|3><7 f|24|V|3"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Open a new tab"
-msgstr "0p3N a |\\|u \\/\\/1N|)0VV"
+msgstr "0p3N a |\\|u 74B"
 
 #: src/config/kbdbind.c:418
-#, fuzzy
 msgid "Open a new tab in background"
-msgstr "Tab in 84(|<6R0Un|)"
+msgstr "0p3N a |\\|u 74b in 84(|<6R0Un|)"
 
 #: src/config/kbdbind.c:419
 msgid "Open a new window"
 msgstr "0p3N a |\\|u \\/\\/1N|)0VV"
 
 #: src/config/kbdbind.c:420
-#, fuzzy
 msgid "Open the current link in a new tab"
-msgstr "0p3N the current |1N|< in a |\\|u \\/\\/1N|)0VV"
+msgstr "0p3N the current |1N|< in a |\\|u 7ab"
 
 #: src/config/kbdbind.c:422
-#, fuzzy
 msgid "Open the current link a new tab in background"
-msgstr "0p3N the current |1N|< in a |\\|u \\/\\/1N|)0VV"
+msgstr "0p3N the current |1N|< in a |\\|u 7ab in b4(k6R0un|)"
 
 #: src/config/kbdbind.c:423
 msgid "Open the current link in a new window"
@@ -1318,9 +1314,8 @@ msgid "Suffix string to use to mark image links."
 msgstr "Suffix 57r1|\\|6 to |_|53 70 mark 1|V|463 |1N|<s."
 
 #: src/config/options.c:1122
-#, fuzzy
 msgid "Display links to images w/o alt"
-msgstr "Display |1N|<s 70 1|V|463s."
+msgstr "Display |1N|<s 70 1|V|463s w/0 4l7."
 
 #: src/config/options.c:1124
 msgid ""
@@ -1329,7 +1324,6 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1127
-#, fuzzy
 msgid "Display links to images"
 msgstr "Display |1N|<s 70 1|V|463s."
 
@@ -1354,19 +1348,16 @@ msgid "Active link"
 msgstr ""
 
 #: src/config/options.c:1141
-#, fuzzy
 msgid "Options for the active link."
-msgstr "0P710|\\|5 for 534R(HiN9."
+msgstr "0P710|\\|5 for da 4(71\\/3 |_1nK."
 
 #: src/config/options.c:1143
-#, fuzzy
 msgid "Colors"
-msgstr "(0|_0R"
+msgstr "(0|_0R5"
 
 #: src/config/options.c:1145
-#, fuzzy
 msgid "Active link colors."
-msgstr "|)34fU@|7 |1N|< (0|_0R."
+msgstr "4(71v3 |1N|< (0|_0R."
 
 #: src/config/options.c:1147 src/config/options.c:1335
 #: src/config/options.c:1970 src/config/options.c:1982
@@ -1497,9 +1488,8 @@ msgid "Default text color."
 msgstr "|)34fU@|7 73><7 (0|_0R."
 
 #: src/config/options.c:1155
-#, fuzzy
 msgid "Enable color"
-msgstr "Enable"
+msgstr "Enable (0l0r"
 
 #: src/config/options.c:1157
 msgid ""
@@ -1508,18 +1498,16 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1160
-#, fuzzy
 msgid "Bold"
-msgstr "f0|D4R"
+msgstr "80ld"
 
 #: src/config/options.c:1162
 msgid "Make the active link text bold."
 msgstr ""
 
 #: src/config/options.c:1164
-#, fuzzy
 msgid "Invert colors"
-msgstr "73><7 (0|_0R"
+msgstr "1n\\/3R7 (0|_0Rs"
 
 #: src/config/options.c:1166
 msgid "Invert the fore- and background color so the link stands out."
@@ -1705,7 +1693,6 @@ msgid "Cache information about redirects"
 msgstr "(4(|-|3 inf0|2|V|ations 480U7 R3o|1R3(7s"
 
 #: src/config/options.c:1270
-#, fuzzy
 msgid ""
 "Cache even redirects sent by server (usually thru HTTP by a 302\n"
 "HTTP code and a Location header). This was the original behaviour\n"
@@ -1733,7 +1720,7 @@ msgstr ""
 "don't receive an auth cookie, the login page then gives you the\n"
 "cookie and redirects you back to the original page, but there you\n"
 "have already cached redirect back to the login page! If this\n"
-"option has value of 0, this malfunction is fixed, but occassionally\n"
+"option has value of 0, this malfunction is fixed, but occasionally\n"
 "you may get superfluous (depends on how you take it ;-) requests to\n"
 "the server. If this option has value of 1, experienced users can\n"
 "still workaround it by clever combination of usage of reload,\n"
@@ -1784,9 +1771,8 @@ msgid "Size"
 msgstr "Size"
 
 #: src/config/options.c:1307
-#, fuzzy
 msgid "Memory cache size (in bytes)."
-msgstr "/\\/\\3|V|0R`/ cache size (in kilobytes)."
+msgstr "/\\/\\3|V|0R`/ cache size (in bytes)."
 
 #: src/config/options.c:1311
 msgid "Charset"
@@ -3005,14 +2991,12 @@ msgid "Selected menu item colors."
 msgstr "53|3(73|) |V|3|\\|U item (0|_0Rs."
 
 #: src/config/options.c:2043 src/config/options.c:2452
-#, fuzzy
 msgid "Marked menu item"
-msgstr "53|3(73|) |V|3|\\|U item"
+msgstr "|V|4Rk3d |V|3|\\|U item"
 
 #: src/config/options.c:2045 src/config/options.c:2454
-#, fuzzy
 msgid "Marked menu item colors."
-msgstr "53|3(73|) |V|3|\\|U item (0|_0Rs."
+msgstr "|V|4Rk3d |V|3|\\|U item (0|_0Rs."
 
 #: src/config/options.c:2057 src/config/options.c:2466
 msgid "Menu item hotkey colors."
@@ -3059,22 +3043,20 @@ msgid "Dialog colors."
 msgstr "Dialog (0|_0Rs."
 
 #: src/config/options.c:2103
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.color.dialog.generic.background instead."
 msgstr ""
 "This option is deprecated and will be removed very soon.\n"
-"Please use the ui.dialog.shadows option instead."
+"Please use ui.colors.color.dialog.generic.background instead."
 
 #: src/config/options.c:2106 src/config/options.c:2515
 msgid "Generic"
 msgstr ""
 
 #: src/config/options.c:2108 src/config/options.c:2517
-#, fuzzy
 msgid "Generic dialog colors."
-msgstr "Generic 717|3 84|2 (0|_0Rs."
+msgstr "Generic d14l09 (0|_0Rs."
 
 #: src/config/options.c:2118 src/config/options.c:2527
 msgid "Frame"
@@ -3308,13 +3290,12 @@ msgid "Menu selected hotkey default background color."
 msgstr "|V|3|\\|U 53|3(73|) hot|<3`/ |)34fU@|7 84(|<6R0Un|) (0|_0R."
 
 #: src/config/options.c:2512
-#, fuzzy
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use ui.colors.mono.dialog.generic.background instead."
 msgstr ""
 "This option is deprecated and will be removed very soon.\n"
-"Please use the ui.dialog.shadows option instead."
+"Please use ui.colors.mono.dialog.generic.background instead."
 
 #: src/config/options.c:2613
 msgid "Dialog field colors."
@@ -3387,7 +3368,6 @@ msgstr ""
 "2 is count down and show the timer near LEDs"
 
 #: src/config/options.c:2797
-#, fuzzy
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3397,7 +3377,7 @@ msgstr ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
 "1 is count down, but don't show the timer\n"
-"2 is count down and show the timer near LEDs"
+"2 is count down and show the timer near LEDs (DISABLED)"
 
 #: src/config/options.c:2803
 msgid "Duration"
@@ -3497,14 +3477,13 @@ msgid "Set window title"
 msgstr "537 \\/\\/1N|)0VV 717|3"
 
 #: src/config/options.c:2858
-#, fuzzy
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 msgstr ""
-"Set the window title when running in a windowing environment \n"
-"in an xterm-like terminal. This way the document's title is \n"
+"Set the window title when running in a windowing environment\n"
+"in an xterm-like terminal. This way the document's title is\n"
 "shown on the window titlebar."
 
 #: src/config/options.c:2868
@@ -3849,7 +3828,6 @@ msgid "Login"
 msgstr "|_061|\\|"
 
 #: src/dialogs/auth.c:131
-#, fuzzy, c-format
 msgid "Authentication required for %s at %s"
 msgstr "Authentication required for %s at %s"
 
@@ -3936,7 +3914,6 @@ msgid "Keys"
 msgstr "|<3`/5"
 
 #: src/dialogs/info.c:57
-#, fuzzy
 msgid ""
 "ESC      display menu\n"
 "^C, q    quit\n"
@@ -3963,8 +3940,8 @@ msgstr ""
 "up, down select link\n"
 "->       follow link\n"
 "<-       go back\n"
-"g        go to url\n"
-"G        go to url based on current url\n"
+"g        go to URL\n"
+"G        go to URL based on current URL\n"
 "/        search\n"
 "?        search back\n"
 "n        find next\n"
@@ -4067,14 +4044,12 @@ msgid "No downloads"
 msgstr "|\\|0 |)0VVN|04|)s"
 
 #: src/dialogs/menu.c:362
-#, fuzzy
 msgid "Open new ~tab"
-msgstr "0p3N in |\\|u \\/\\/1N|)0VV"
+msgstr "0p3N |\\|u 74b"
 
 #: src/dialogs/menu.c:363
-#, fuzzy
 msgid "Open new tab in ~background"
-msgstr "Tab in 84(|<6R0Un|)"
+msgstr "0p3N |\\|u 74b in 84(|<6R0Un|)"
 
 #: src/dialogs/menu.c:365
 msgid "~Go to URL"
@@ -4357,14 +4332,12 @@ msgid "No colors (mono)"
 msgstr ""
 
 #: src/dialogs/options.c:129
-#, fuzzy
 msgid "16 colors"
-msgstr "|_|53 (0|_0Rs"
+msgstr "0xF (0|_0Rs"
 
 #: src/dialogs/options.c:131
-#, fuzzy
 msgid "256 colors"
-msgstr "|_|53 (0|_0Rs"
+msgstr "0xFF (0|_0Rs"
 
 #: src/dialogs/options.c:133
 msgid "Use ^[[11m"
@@ -4399,9 +4372,8 @@ msgid "Resize ~terminal"
 msgstr "Resize 73R|V|1|\\|4|"
 
 #: src/formhist/formhist.c:335
-#, fuzzy
 msgid "Form memory"
-msgstr "Out of /\\/\\3|V|0R`/"
+msgstr "|=0R|V| /\\/\\3|V|0R`/"
 
 #: src/formhist/formhist.c:336
 msgid ""
@@ -4476,9 +4448,9 @@ msgid ""
 msgstr ""
 
 #: src/lowlevel/home.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
-msgstr "ELINKS_CONFDIR 537 to %s, but direc70ry %s doesn't exist."
+msgstr "ELINKS_CONFDIR 537 to %s, but (0u|d N07 cr3473 direc70ry %s."
 
 #: src/lowlevel/home.c:150
 msgid ""
@@ -4701,11 +4673,9 @@ msgid "Unknown type"
 msgstr "U|\\||<N0VVn 7`/P3"
 
 #: src/sched/download.c:1248
-#, fuzzy, c-format
+#, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
+msgstr "Would you like to save the file '%s' (type: %s) or display it?"
 
 #: src/sched/download.c:1254 src/sched/download.c:1263
 #: src/sched/download.c:1290 src/sched/download.c:1302
@@ -4713,11 +4683,9 @@ msgid "Display"
 msgstr "Display"
 
 #: src/sched/download.c:1259
-#, fuzzy, c-format
+#, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
+msgstr "Would you like to display the file '%s' (type: %s)?"
 
 #: src/sched/download.c:1281 src/sched/download.c:1294
 msgid "What to do?"
@@ -4886,22 +4854,21 @@ msgid "Untitled"
 msgstr "U|\\|717|3d"
 
 #: src/sched/session.c:296
-#, fuzzy
 msgid "No document"
-msgstr "|)0(U|V|3N7"
+msgstr "|\\|0 |)0(U|V|3N7"
 
 #: src/sched/session.c:635
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Do you want to f0110VV R3o|1R3(7 and |o057 f0|2|V| data 70 |_|R|_ %s?"
 
 #: src/sched/session.c:638
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Do you want to |o057 f0|2|V| data 70 |_|R|_ %s?"
 
 #: src/sched/session.c:640
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Do you want to re|o057 f0|2|V| data 70 |_|R|_ %s?"
 
@@ -5051,14 +5018,12 @@ msgid "LED indicators"
 msgstr ""
 
 #: src/util/version.c:107
-#, fuzzy
 msgid "Forms memory"
-msgstr "Out of /\\/\\3|V|0R`/"
+msgstr "|=0Rms /\\/\\3|V|0R`/"
 
 #: src/util/version.c:110
-#, fuzzy
 msgid "No mouse"
-msgstr "|)0(U|V|3N7"
+msgstr "No mouse"
 
 #: src/viewer/dump/dump.c:75
 #, c-format
@@ -5100,14 +5065,12 @@ msgid "Open in new ~window"
 msgstr "0p3N in |\\|u \\/\\/1N|)0VV"
 
 #: src/viewer/text/link.c:894
-#, fuzzy
 msgid "Open in new ~tab"
-msgstr "0p3N in |\\|u \\/\\/1N|)0VV"
+msgstr "0p3N in |\\|u 7ab"
 
 #: src/viewer/text/link.c:897
-#, fuzzy
 msgid "Open in new tab in ~background"
-msgstr "Tab in 84(|<6R0Un|)"
+msgstr "0p3N in |\\|u 7ab in 84(|<6R0Un|)"
 
 #: src/viewer/text/link.c:901
 msgid "~Download link"
@@ -5158,7 +5121,6 @@ msgid "Usemap"
 msgstr "|_|53map"
 
 #: src/viewer/text/link.c:1027
-#, fuzzy
 msgid "Reset form"
 msgstr "Re537 f0|2|V|"
 
@@ -5228,9 +5190,8 @@ msgid "Search string '%s' not found"
 msgstr "534R(H 57r1|\\|6 '%s' |\\|07 f0u|\\|d"
 
 #: src/viewer/text/search.c:922
-#, fuzzy
 msgid "Normal search"
-msgstr "|\\|0 |oR3\\/10U5 534R(H"
+msgstr "|\\|0r|V|4L 534R(H"
 
 #: src/viewer/text/search.c:923
 msgid "Regexp search"

@@ -1,5 +1,5 @@
-/* HTML viewer (and many more) */
-/* $Id: view.c,v 1.15 2002/03/28 22:25:43 pasky Exp $ */
+/* HTML viewer (and much more) */
+/* $Id: view.c,v 1.16 2002/03/28 22:53:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,8 @@
 #include <document/location.h>
 #include <document/options.h>
 #include <document/session.h>
+#include <document/view.h>
+#include <document/vs.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
 #include <intl/charsets.h>
@@ -52,25 +54,6 @@
 /* FIXME: Add comments!! --Zas */
 /* TODO: This file needs to be splitted to many smaller ones. Definitively.
  * --pasky */
-
-void init_vs(struct view_state *vs, unsigned char *url)
-{
-	memset(vs, 0, sizeof(struct view_state));
-	vs->current_link = -1;
-	vs->plain = -1;
-	vs->form_info = DUMMY;
-	vs->form_info_len = 0;
-	strcpy(vs->url, url);
-}
-
-void destroy_vs(struct view_state *vs)
-{
-	int i;
-
-	if (vs->goto_position) mem_free(vs->goto_position);
-	for (i = 0; i < vs->form_info_len; i++) if (vs->form_info[i].value) mem_free(vs->form_info[i].value);
-	mem_free(vs->form_info);
-}
 
 void init_formatted(struct f_data *scr)
 {
@@ -166,19 +149,6 @@ void detach_formatted(struct f_data_c *scr)
 	if (scr->name) mem_free(scr->name), scr->name = NULL;
 }
 
-void copy_vs(struct view_state *dst, struct view_state *src)
-{
-	memcpy(dst, src, sizeof(struct view_state));
-	strcpy(dst->url, src->url);
-	dst->goto_position = stracpy(src->goto_position);
-	if ((dst->form_info = mem_alloc(src->form_info_len * sizeof(struct form_state)))) {
-		int i;
-		memcpy(dst->form_info, src->form_info, src->form_info_len * sizeof(struct form_state));
-		for (i = 0; i < src->form_info_len; i++) if (src->form_info[i].value) dst->form_info[i].value = stracpy(src->form_info[i].value);
-	}
-	dst->f = NULL;
-}
-
 void copy_location(struct location *dst, struct location *src)
 {
 	struct frame *f, *nf;
@@ -191,24 +161,6 @@ void copy_location(struct location *dst, struct location *src)
 		add_to_list(dst->frames, nf);
 	}
 	copy_vs(&dst->vs, &src->vs);
-}
-
-static inline int c_in_view(struct f_data_c *);
-void set_pos_x(struct f_data_c *, struct link *);
-void set_pos_y(struct f_data_c *, struct link *);
-void find_link(struct f_data_c *, int, int);
-void next_frame(struct session *, int);
-
-void check_vs(struct f_data_c *f)
-{
-	struct view_state *vs = f->vs;
-
-	if (vs->current_link >= f->f_data->nlinks) vs->current_link = f->f_data->nlinks - 1;
-	if (vs->current_link != -1 && !c_in_view(f)) {
-		set_pos_x(f, &f->f_data->links[f->vs->current_link]);
-		set_pos_y(f, &f->f_data->links[f->vs->current_link]);
-	}
-	if (vs->current_link == -1) find_link(f, 1, 0);
 }
 
 void set_link(struct f_data_c *f)
@@ -951,7 +903,7 @@ int in_view(struct f_data_c *f, struct link *l)
 	return in_viewy(f, l) && in_viewx(f, l);
 }
 
-static inline int c_in_view(struct f_data_c *f)
+int c_in_view(struct f_data_c *f)
 {
 	return f->vs->current_link != -1 && in_view(f, &f->f_data->links[f->vs->current_link]);
 }
@@ -2363,23 +2315,6 @@ int send_to_frame(struct session *ses, struct event *ev)
 		redraw_from_window(ses->win);
 	}
 	return r;
-}
-
-void next_frame(struct session *ses, int p)
-{
-	int n;
-	struct view_state *vs;
-	struct f_data_c *fd;
-
-	if (!have_location(ses) || (ses->screen && ses->screen->f_data && !ses->screen->f_data->frame))
-		return;
-	vs = &cur_loc(ses)->vs;
-	n = 0;
-	foreach(fd, ses->scrn_frames) if (!(fd->f_data && fd->f_data->frame)) n++;
-	vs->current_link += p;
-	if (!n) n = 1;
-	while (vs->current_link < 0) vs->current_link += n;
-	vs->current_link %= n;
 }
 
 void do_for_frame(struct session *ses, void (*f)(struct session *, struct f_data_c *, int), int a)

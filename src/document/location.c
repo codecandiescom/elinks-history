@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.1 2002/03/28 22:26:11 pasky Exp $ */
+/* $Id: location.c,v 1.2 2002/03/28 22:53:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,11 +7,8 @@
 
 #include <links.h>
 
-#include <document/session.h>
-#include <document/view.h>
-
-/* Yawn. Don't break crossdeps! */
 #include <document/location.h>
+#include <document/session.h>
 
 
 void

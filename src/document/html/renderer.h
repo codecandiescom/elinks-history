@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.6 2002/03/18 11:34:03 pasky Exp $ */
+/* $Id: renderer.h,v 1.7 2002/03/28 22:53:35 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -12,7 +12,7 @@
 #include <lowlevel/ttime.h>
 /* We need this included later, otherwise it will miss some our
  * declarations. */
-/* #include "view.h" */
+/* #include "vs.h" */
 
 struct tag {
 	struct tag *next;
@@ -124,7 +124,7 @@ struct f_data {
 	struct search **slines2;
 };
 
-#include <document/view.h>
+#include <document/vs.h>
 
 struct f_data_c {
 	struct f_data_c *next;

@@ -1,26 +1,13 @@
-/* $Id: view.h,v 1.4 2002/03/28 22:25:43 pasky Exp $ */
+/* $Id: view.h,v 1.5 2002/03/28 22:53:35 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
 
+#include <document/location.h>
+#include <document/session.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
 #include <lowlevel/terminal.h>
-
-struct view_state {
-	int view_pos;
-	int view_posx;
-	int current_link;
-	int plain;
-	unsigned char *goto_position;
-	struct form_state *form_info;
-	int form_info_len;
-	struct f_data_c *f;
-	unsigned char url[1];
-};
-
-#include <document/location.h>
-#include <document/session.h>
 
 extern int textarea_editor;
 void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct link *);
@@ -37,8 +24,6 @@ void destroy_formatted(struct f_data *);
 void init_formatted(struct f_data *);
 void detach_formatted(struct f_data_c *);
 
-void init_vs(struct view_state *, unsigned char *);
-void destroy_vs(struct view_state *);
 void copy_location(struct location *, struct location *);
 
 /* void draw_doc(struct terminal *, struct f_data_c *, int); */
@@ -72,5 +57,10 @@ void find_next_back(struct session *, struct f_data_c *, int);
 
 void set_frame(struct session *, struct f_data_c *, int);
 struct f_data_c *current_frame(struct session *);
+
+void set_pos_x(struct f_data_c *, struct link *);
+void set_pos_y(struct f_data_c *, struct link *);
+void find_link(struct f_data_c *, int, int);
+int c_in_view(struct f_data_c *);
 
 #endif

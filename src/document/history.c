@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.1 2002/03/28 22:26:24 pasky Exp $ */
+/* $Id: history.c,v 1.2 2002/03/28 22:53:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,12 +11,10 @@
 
 #include <config/default.h>
 #include <document/session.h>
-#include <document/view.h>
-#include <lowlevel/sched.h>
-
-/* Don't break crossdeps, guys. */
 #include <document/history.h>
 #include <document/location.h>
+#include <document/view.h>
+#include <lowlevel/sched.h>
 
 /* The history itself is stored in struct session as field history,
  * surprisingly. It's a list containing all locations visited in the current

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.119 2003/06/17 08:55:39 zas Exp $ */
+/* $Id: renderer.c,v 1.120 2003/06/17 11:21:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,6 +99,8 @@ realloc_lines(struct part *p, int y)
 	int i;
 	int newsize = ALIGN(y + 1);
 
+	assert(p && p->data);
+
 	if (newsize >= ALIGN(p->data->y)
 	    && (!p->data->data || p->data->data->size < newsize)) {
 		struct line *l;
@@ -126,6 +128,8 @@ realloc_line(struct part *p, int y, int x)
 {
 	int i;
 	int newsize = ALIGN(x + 1);
+
+	assert(p && p->data);
 
 	if (newsize >= ALIGN(p->data->data[y].l)
 	    && (!p->data->data[y].d || p->data->data[y].dsize < newsize)) {
@@ -155,6 +159,8 @@ static inline int
 xpand_lines(struct part *p, int y)
 {
 	/*if (y >= p->y) p->y = y + 1;*/
+	assert(p && p->data);
+
 	if (!p->data) return 0;
 	y += p->yp;
 	if (y >= p->data->y) return realloc_lines(p, y);
@@ -254,9 +260,15 @@ static inline void
 set_hline(struct part *part, int x, int y,
 	  unsigned char *chars, int charslen, unsigned attr)
 {
-	if (xpand_lines(part, y)
-	    || xpand_line(part, y, x + charslen - 1)
-	    || (xpand_spaces(part, x + charslen - 1)))
+	assert(part);
+
+	if (part->data) {
+		if (xpand_lines(part, y)
+		    || xpand_line(part, y, x + charslen - 1))
+		return;
+	}
+
+	if (xpand_spaces(part, x + charslen - 1))
 		return;
 
 	for (; charslen > 0; charslen--, x++, chars++) {

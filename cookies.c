@@ -369,12 +369,15 @@ void save_cookies() {
 	struct cookie *c;
 	unsigned char *cookfile;
 	FILE *fp;
+	mode_t mask;
 
 	cookfile = stracpy(links_home);
 	if (! cookfile) return;
 	add_to_strn(&cookfile, "cookies");
 
+	mask = umask(066); /* 0600 permissions for cookies file */
 	fp = fopen(cookfile, "w");
+	umask(mask);
 	mem_free(cookfile);
 	if (fp == NULL) return;
 	

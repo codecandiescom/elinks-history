@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.28 2002/07/05 20:42:13 pasky Exp $ */
+/* $Id: options.c,v 1.29 2002/07/11 16:14:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,6 +200,7 @@ unsigned char *http_labels[] = {
 	TEXT(T_REFERER_SAME_URL),
 	TEXT(T_REFERER_FAKE),
 	TEXT(T_REFERER_TRUE),
+	TEXT(T_ACCEPT_UI_LANGUAGE),
 	TEXT(T_FAKE_REFERER),
 	TEXT(T_USER_AGENT),
 	TEXT(T_ACCEPT_LANGUAGE),
@@ -228,11 +229,11 @@ httpopt_fn(struct dialog_data *dlg)
 	rw = 0;
 	dlg_format_checkboxes(NULL, term, dlg->items, dlg->n - 4, 0, &y, w, &rw, dlg->dlg->udata);
 	y++;
-	dlg_format_text(NULL, term, http_labels[8], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
-	y+=2;
 	dlg_format_text(NULL, term, http_labels[9], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
 	y+=2;
 	dlg_format_text(NULL, term, http_labels[10], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
+	y+=2;
+	dlg_format_text(NULL, term, http_labels[11], 0, &y, w, &rw, COLOR_DIALOG_TEXT, AL_LEFT);
 	y+=2;
 	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 2, 2, 0, &y, w, &rw, AL_CENTER);
 	w = rw;
@@ -243,12 +244,12 @@ httpopt_fn(struct dialog_data *dlg)
 	y = dlg->y + DIALOG_TB + 1;
 	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 5, dlg->x + DIALOG_LB, &y, w, NULL, dlg->dlg->udata);
 	y++;
-	dlg_format_text(term, term, http_labels[8], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
-	dlg_format_field(term, term, dlg->items + 8, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	dlg_format_text(term, term, http_labels[9], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 9, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	dlg_format_text(term, term, http_labels[10], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
 	dlg_format_field(term, term, dlg->items + 10, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, http_labels[11], dlg->x + DIALOG_LB, &y, w, NULL, COLOR_DIALOG_TEXT, AL_LEFT);
+	dlg_format_field(term, term, dlg->items + 11, dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term, dlg->items + dlg->n - 2, 2, dlg->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }
@@ -316,29 +317,35 @@ dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 	d->items[7].dlen = sizeof(int);
 	d->items[7].data = (void *) get_opt_ptr("protocol.http.referer.policy");
 
-	d->items[8].type = D_FIELD;
-	d->items[8].dlen = MAX_STR_LEN;
-	d->items[8].data = get_opt_str("protocol.http.referer.fake");
+	d->items[8].type = D_CHECKBOX;
+	d->items[8].gid = 0;
+	d->items[8].dlen = sizeof(int);
+	d->items[8].data = (void *) get_opt_ptr("protocol.http.accept_ui_language");
+
 
 	d->items[9].type = D_FIELD;
 	d->items[9].dlen = MAX_STR_LEN;
-	d->items[9].data = get_opt_str("protocol.http.user_agent");
+	d->items[9].data = get_opt_str("protocol.http.referer.fake");
 
 	d->items[10].type = D_FIELD;
 	d->items[10].dlen = MAX_STR_LEN;
-	d->items[10].data = get_opt_str("protocol.http.accept_language");
+	d->items[10].data = get_opt_str("protocol.http.user_agent");
 
-	d->items[11].type = D_BUTTON;
-	d->items[11].gid = B_ENTER;
-	d->items[11].fn = ok_dialog;
-	d->items[11].text = TEXT(T_OK);
+	d->items[11].type = D_FIELD;
+	d->items[11].dlen = MAX_STR_LEN;
+	d->items[11].data = get_opt_str("protocol.http.accept_language");
 
 	d->items[12].type = D_BUTTON;
-	d->items[12].gid = B_ESC;
-	d->items[12].fn = cancel_dialog;
-	d->items[12].text = TEXT(T_CANCEL);
+	d->items[12].gid = B_ENTER;
+	d->items[12].fn = ok_dialog;
+	d->items[12].text = TEXT(T_OK);
 
-	d->items[13].type = D_END;
+	d->items[13].type = D_BUTTON;
+	d->items[13].gid = B_ESC;
+	d->items[13].fn = cancel_dialog;
+	d->items[13].text = TEXT(T_CANCEL);
+
+	d->items[14].type = D_END;
 
 	do_dialog(dlg->win->term, d, getml(d, NULL));
 

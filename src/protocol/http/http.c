@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.33 2002/07/10 10:08:39 pasky Exp $ */
+/* $Id: http.c,v 1.34 2002/07/11 16:14:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "document/cache.h"
 #include "document/session.h"
 #include "intl/charsets.h"
+#include "intl/language.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/sched.h"
 #include "lowlevel/sysname.h"
@@ -439,6 +440,12 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "Accept-Language: ");
 		add_to_str(&hdr, &l, get_opt_str("protocol.http.accept_language"));
 		add_to_str(&hdr, &l, "\r\n");
+	} else	if (get_opt_bool("protocol.http.accept_ui_language")) {
+			unsigned char *code;
+			code = language_iso639_code(current_language);
+			add_to_str(&hdr, &l, "Accept-Language: ");
+			add_to_str(&hdr, &l, code ? code : (unsigned char *) "");
+			add_to_str(&hdr, &l, "\r\n");
 	}
 
 	if (!http10) {

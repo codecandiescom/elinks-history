@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.70 2002/07/11 11:14:53 pasky Exp $ */
+/* $Id: options.c,v 1.71 2002/07/11 16:14:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -837,6 +837,10 @@ register_options()
 	add_opt_string("protocol.http",
 		"accept_language", 0, "",
 		"Send Accept-Language header.");
+	
+	add_opt_bool("protocol.http",
+		"accept_ui_language", 0, 1,
+		"Use the language of the interface as Accept-Language.");
 
 	add_opt_string("protocol.http",
 		"user_agent", 0, "",

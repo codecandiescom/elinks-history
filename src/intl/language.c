@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.7 2002/06/22 21:20:52 pasky Exp $ */
+/* $Id: language.c,v 1.8 2002/07/11 16:14:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,6 +134,12 @@ unsigned char *
 language_name(int l)
 {
 	return translations[l].t[T__LANGUAGE].name;
+}
+
+unsigned char *
+language_iso639_code(int l)
+{
+	return translations[l].t[T__ISO_639_CODE].name;
 }
 
 void

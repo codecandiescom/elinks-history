@@ -3,6 +3,7 @@
 struct translation translation_english [] = {
   {0, NULL},
   {T__CHAR_SET, "us-ascii"},
+  {T__ISO_639_CODE, "en"},
   {T__LANGUAGE, "English"},
   {T_BAD_NUMBER, "Bad number"},
   {T_NUMBER_EXPECTED, "Number expected in field"},
@@ -405,12 +406,14 @@ struct translation translation_english [] = {
   {T_ADD_BOOKMARK_LINK, "Add link to bookmarks"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Preferred language (comma-separated list of ISO codes)"},
+  {T_ACCEPT_UI_LANGUAGE, "Language of the interface as Accept-Language (little loss of privacy)"},
   {0, NULL}
 };
 
 struct translation translation_brazilian_portuguese [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "pr"},
   {T__LANGUAGE, "Brazilian Portuguese"},
   {T_BAD_NUMBER, "Número inválido"},
   {T_NUMBER_EXPECTED, "Espera-se número no campo"},
@@ -813,12 +816,14 @@ struct translation translation_brazilian_portuguese [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_bulgarian [] = {
   {0, NULL},
   {T__CHAR_SET, "cp1251"},
+  {T__ISO_639_CODE, "bg"},
   {T__LANGUAGE, "Bulgarian"},
   {T_BAD_NUMBER, "Íåâàëèäíî ÷èñëî"},
   {T_NUMBER_EXPECTED, "Â òîâà ïîëå òðÿáâà äà èìà ÷èñëî"},
@@ -1221,12 +1226,14 @@ struct translation translation_bulgarian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_catalan [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "ca"},
   {T__LANGUAGE, "Catalan"},
   {T_BAD_NUMBER, "Nombre incorrecte"},
   {T_NUMBER_EXPECTED, "S'hi esperava un nombre"},
@@ -1629,12 +1636,14 @@ struct translation translation_catalan [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_croatian [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-2"},
+  {T__ISO_639_CODE, "hr"},
   {T__LANGUAGE, "Croatian"},
   {T_BAD_NUMBER, "Neispravan broj"},
   {T_NUMBER_EXPECTED, "U polju oèekujem broj"},
@@ -2037,12 +2046,14 @@ struct translation translation_croatian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_czech [] = {
   {0, NULL},
   {T__CHAR_SET, "iso8859-2"},
+  {T__ISO_639_CODE, "cz"},
   {T__LANGUAGE, "Czech"},
   {T_BAD_NUMBER, "Chybné èíslo"},
   {T_NUMBER_EXPECTED, "V rámeèku musí být èíslo"},
@@ -2445,12 +2456,14 @@ struct translation translation_czech [] = {
   {T_ADD_BOOKMARK_LINK, "Pøidat link do bookmarkù"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Preferovaný jazyk stránek (seznam ISO kódù oddìlených èárkami)"},
+  {T_ACCEPT_UI_LANGUAGE, "Pou¾ít jazyk u¾ivatelského rozhraní jako preferovaný jazyk stránek"},
   {0, NULL}
 };
 
 struct translation translation_danish [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "da"},
   {T__LANGUAGE, "Danish"},
   {T_BAD_NUMBER, "Fejl i nummer"},
   {T_NUMBER_EXPECTED, "Nummer forventet i felt"},
@@ -2853,12 +2866,14 @@ struct translation translation_danish [] = {
   {T_ADD_BOOKMARK_LINK, "Tilføj lænke til bogmærker"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Fortrukne sprog (kommasepareret liste af ISO landekoder"},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_dutch [] = {
   {0, NULL},
   {T__CHAR_SET, "us-ascii"},
+  {T__ISO_639_CODE, "nl"},
   {T__LANGUAGE, "Dutch"},
   {T_BAD_NUMBER, "Onjuist nummer"},
   {T_NUMBER_EXPECTED, "Nummer verwacht in veld"},
@@ -3261,12 +3276,14 @@ struct translation translation_dutch [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_estonian [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "et"},
   {T__LANGUAGE, "Estonian"},
   {T_BAD_NUMBER, "Vale number"},
   {T_NUMBER_EXPECTED, "Eeldame välja sees numbrit"},
@@ -3669,12 +3686,14 @@ struct translation translation_estonian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_finnish [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "fi"},
   {T__LANGUAGE, "Finnish"},
   {T_BAD_NUMBER, "Ei numero"},
   {T_NUMBER_EXPECTED, "Kentässä on oltava numero"},
@@ -4077,12 +4096,14 @@ struct translation translation_finnish [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_french [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "fr"},
   {T__LANGUAGE, "French"},
   {T_BAD_NUMBER, "Nombre incorrect"},
   {T_NUMBER_EXPECTED, "Saisir un nombre"},
@@ -4485,12 +4506,14 @@ struct translation translation_french [] = {
   {T_ADD_BOOKMARK_LINK, "Ajouter ce lien aux signets"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Langues préférées (liste de codes ISO séparés par une virgule)"},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_galician [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "gl"},
   {T__LANGUAGE, "Galician"},
   {T_BAD_NUMBER, "Número non válido"},
   {T_NUMBER_EXPECTED, "Agardábase un número no campo"},
@@ -4893,12 +4916,14 @@ struct translation translation_galician [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_german [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-15"},
+  {T__ISO_639_CODE, "de"},
   {T__LANGUAGE, "German"},
   {T_BAD_NUMBER, "fehlerhafte Zahl"},
   {T_NUMBER_EXPECTED, "Zahleingabe erwartet"},
@@ -5301,12 +5326,14 @@ struct translation translation_german [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_greek [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-7"},
+  {T__ISO_639_CODE, "el"},
   {T__LANGUAGE, "Greek"},
   {T_BAD_NUMBER, "Ìç Ýãêõñïò áñéèìüò"},
   {T_NUMBER_EXPECTED, "Äåí áíáìåíüôáí áñéèìüò óôï ðåäßï"},
@@ -5709,12 +5736,14 @@ struct translation translation_greek [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_hungarian [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-2"},
+  {T__ISO_639_CODE, "hu"},
   {T__LANGUAGE, "Hungarian"},
   {T_BAD_NUMBER, "Hibás szám"},
   {T_NUMBER_EXPECTED, "Szám nem megengedet a mezöben"},
@@ -6117,12 +6146,14 @@ struct translation translation_hungarian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_icelandic [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "is"},
   {T__LANGUAGE, "Icelandic"},
   {T_BAD_NUMBER, "Ógild tala"},
   {T_NUMBER_EXPECTED, "Búist við tölu á reit"},
@@ -6525,12 +6556,14 @@ struct translation translation_icelandic [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_indonesian [] = {
   {0, NULL},
   {T__CHAR_SET, "us-ascii"},
+  {T__ISO_639_CODE, "id"},
   {T__LANGUAGE, "Indonesian"},
   {T_BAD_NUMBER, "Salah angka"},
   {T_NUMBER_EXPECTED, "Jumlah angka yang harus diisi"},
@@ -6933,12 +6966,14 @@ struct translation translation_indonesian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_italian [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "it"},
   {T__LANGUAGE, "Italian"},
   {T_BAD_NUMBER, "Numero sbagliato"},
   {T_NUMBER_EXPECTED, "atteso numero nel campo"},
@@ -7341,12 +7376,14 @@ struct translation translation_italian [] = {
   {T_ADD_BOOKMARK_LINK, "Aggiungi questo collegamento ai bookmark"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Lingua preferita"},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_lithuanian [] = {
   {0, NULL},
   {T__CHAR_SET, "Windows-1257"},
+  {T__ISO_639_CODE, "lt"},
   {T__LANGUAGE, "Lithuanian"},
   {T_BAD_NUMBER, "Netinkamas skaièius"},
   {T_NUMBER_EXPECTED, "Laukelyje reikia ávesti skaièiø"},
@@ -7749,12 +7786,14 @@ struct translation translation_lithuanian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_norwegian [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "no"},
   {T__LANGUAGE, "Norwegian"},
   {T_BAD_NUMBER, "Feil nummer"},
   {T_NUMBER_EXPECTED, "Nummer forventet i felt"},
@@ -8157,12 +8196,14 @@ struct translation translation_norwegian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_polish [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-2"},
+  {T__ISO_639_CODE, "pl"},
   {T__LANGUAGE, "Polish"},
   {T_BAD_NUMBER, "Nieprawid³owa liczba"},
   {T_NUMBER_EXPECTED, "Oczekiwano liczby"},
@@ -8565,12 +8606,14 @@ struct translation translation_polish [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_romanian [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-16"},
+  {T__ISO_639_CODE, "ro"},
   {T__LANGUAGE, "Romanian"},
   {T_BAD_NUMBER, "Numãr greºit"},
   {T_NUMBER_EXPECTED, "Numãr aºteptat în acest cîmp"},
@@ -8973,12 +9016,14 @@ struct translation translation_romanian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_russian [] = {
   {0, NULL},
   {T__CHAR_SET, "koi8-r"},
+  {T__ISO_639_CODE, "ru"},
   {T__LANGUAGE, "Russian"},
   {T_BAD_NUMBER, "îÅ×ÅÒÎÏÅ ÞÉÓÌÏ"},
   {T_NUMBER_EXPECTED, "÷ ÐÏÌÅ ÄÏÌÖÎÏ ÂÙÔØ ÞÉÓÌÏ"},
@@ -9381,12 +9426,14 @@ struct translation translation_russian [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_slovak [] = {
   {0, NULL},
   {T__CHAR_SET, "iso8859-2"},
+  {T__ISO_639_CODE, "sk"},
   {T__LANGUAGE, "Slovak"},
   {T_BAD_NUMBER, "Chybné èíslo"},
   {T_NUMBER_EXPECTED, "V rámèeku musí by» èíslo"},
@@ -9789,12 +9836,14 @@ struct translation translation_slovak [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_spanish [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "es"},
   {T__LANGUAGE, "Spanish"},
   {T_BAD_NUMBER, "Número no válido"},
   {T_NUMBER_EXPECTED, "Sólo números en este campo"},
@@ -10197,12 +10246,14 @@ struct translation translation_spanish [] = {
   {T_ADD_BOOKMARK_LINK, "Añadir enlace a los marcadores"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "Idiomas preferidos en web (códigos ISO separados por comas)"},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_swedish [] = {
   {0, NULL},
   {T__CHAR_SET, "ISO-8859-1"},
+  {T__ISO_639_CODE, "sv"},
   {T__LANGUAGE, "Swedish"},
   {T_BAD_NUMBER, "Felaktigt nummer"},
   {T_NUMBER_EXPECTED, "Väntade mig nummer i fältet"},
@@ -10605,12 +10656,14 @@ struct translation translation_swedish [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_turkish [] = {
   {0, NULL},
   {T__CHAR_SET, "8859-9"},
+  {T__ISO_639_CODE, "tr"},
   {T__LANGUAGE, "Turkish"},
   {T_BAD_NUMBER, "Hatalý sayý"},
   {T_NUMBER_EXPECTED, "Sayý girilmesi bekleniyordu"},
@@ -11013,12 +11066,14 @@ struct translation translation_turkish [] = {
   {T_ADD_BOOKMARK_LINK, NULL},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
   {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 
 struct translation translation_ukrainian [] = {
   {0, NULL},
   {T__CHAR_SET, "koi8-u"},
+  {T__ISO_639_CODE, "uk"},
   {T__LANGUAGE, "Ukrainian"},
   {T_BAD_NUMBER, "îÅÐÒÁ×ÉÌØÎÅ ÞÉÓÌÏ"},
   {T_NUMBER_EXPECTED, "÷ ÐÏÌ¦ ÍÁ¤ ÂÕÔÉ ÞÉÓÌÏ"},
@@ -11421,6 +11476,7 @@ struct translation translation_ukrainian [] = {
   {T_ADD_BOOKMARK_LINK, "äÏÄÁÔÉ ÐÏÓÉÌÁÎÎÑ ÄÏ ÚÁËÌÁÄÏË"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {T_ACCEPT_LANGUAGE, "âÁÖÁÎÁ ÍÏ×Á (ÓÐÉÓÏË ÒÏÚÄ¦ÌÅÎÉÈ ËÏÍÏÀ ISO-ËÏÄ¦×)"},
+  {T_ACCEPT_UI_LANGUAGE, NULL},
   {0, NULL}
 };
 

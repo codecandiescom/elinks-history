@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.43 2004/01/25 09:33:29 jonas Exp $ */
+/* $Id: document.h,v 1.44 2004/02/02 15:58:18 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -7,9 +7,12 @@
 #include "util/color.h"
 #include "util/lists.h"
 
-struct screen_char;
 struct cache_entry;
+struct document_refresh;
+struct form_control;
+struct frameset_desc;
 struct module;
+struct screen_char;
 
 
 struct tag {
@@ -55,8 +58,6 @@ struct point {
 	int x, y;
 };
 
-struct form_control;
-
 struct link {
 	long accesskey;
 
@@ -82,11 +83,6 @@ struct search {
 	signed int n:24;	/* This structure is size-critical */
 	unsigned char c;
 };
-
-/* TODO: Move here? --jonas */
-struct frameset_desc;
-
-struct document_refresh;
 
 struct document {
 	LIST_HEAD(struct document);

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.16 2004/01/01 15:20:32 pasky Exp $ */
+/* $Id: signals.c,v 1.17 2004/01/01 15:24:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,6 +269,9 @@ check_for_select_race(void)
 		install_signal_handler(SIGALRM, alarm_handler, NULL, 1);
 #endif
 		pending_alarm = 1;
+#ifdef HAVE_ALARM
+		alarm(1);
+#endif
 	}
 }
 

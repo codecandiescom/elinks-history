@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.10 2002/04/26 18:14:08 pasky Exp $ */
+/* $Id: types.c,v 1.11 2002/04/26 18:14:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
 		if (*pos == '.') {
 			extension = pos + 1;
-		} else if (dir_sep(*ct)) {
+		} else if (dir_sep(*pos)) {
 			extension = NULL;
 		}
 	}

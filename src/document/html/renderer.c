@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.293 2003/10/17 11:12:48 zas Exp $ */
+/* $Id: renderer.c,v 1.294 2003/10/17 12:26:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -687,19 +687,20 @@ align_line(struct part *part, int y, int last)
 }
 
 static struct link *
-new_link(struct document *f, int link_number, unsigned char *name, int namelen)
+new_link(struct document *document, int link_number,
+	 unsigned char *name, int namelen)
 {
 	struct link *link;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return NULL;
 
-	if (!ALIGN_LINK(&f->links, f->nlinks, f->nlinks + 1))
+	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
 		return NULL;
 
-	link = &f->links[f->nlinks++];
+	link = &document->links[document->nlinks++];
 	link->num = link_number - 1;
-	if (f->opt.use_tabindex) link->num += format.tabindex;
+	if (document->opt.use_tabindex) link->num += format.tabindex;
 	link->accesskey = format.accesskey;
 	link->title = format.title ? stracpy(format.title) : NULL;
 	link->where_img = format.image ? stracpy(format.image) : NULL;
@@ -748,12 +749,12 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 }
 
 static void
-html_tag(struct document *f, unsigned char *t, int x, int y)
+html_tag(struct document *document, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
 	int tag_len;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return;
 
 	tag_len = strlen(t);
@@ -763,8 +764,8 @@ html_tag(struct document *f, unsigned char *t, int x, int y)
 		tag->x = x;
 		tag->y = y;
 		memcpy(tag->name, t, tag_len + 1);
-		add_to_list(f->tags, tag);
-		if ((void *) last_tag_for_newline == &f->tags)
+		add_to_list(document->tags, tag);
+		if ((void *) last_tag_for_newline == &document->tags)
 			last_tag_for_newline = tag;
 	}
 }

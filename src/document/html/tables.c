@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.89 2003/10/04 12:01:00 jonas Exp $ */
+/* $Id: tables.c,v 1.90 2003/10/17 12:26:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1327,7 +1327,7 @@ static void
 display_complicated_table(struct table *t, int x, int y, int *yy)
 {
 	register int i, j;
-	struct document *f = t->p->document;
+	struct document *document = t->p->document;
 	int yp;
 	int xp = x + (t->border && (t->frame & F_LHS));
 
@@ -1385,7 +1385,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				   	p = format_html_part(cell->start,
 							     cell->end,
 							     cell->align,
-							     t->cellpd, xw, f,
+							     t->cellpd, xw,
+							     document,
 							     t->p->xp + xp,
 							     tmpy, NULL,
 							     cell->link_num);

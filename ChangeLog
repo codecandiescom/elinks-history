@@ -1,3 +1,29 @@
+Fri Dec  6 14:49:29 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre23 
+
+Fri Dec  6 14:20:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/view.c:
+
+	Fixed one possible link->name memleak, reported by zas.  
+
+Fri Dec  6 14:17:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: lowlevel/sched.c, protocol/http/http.c:
+
+	Always initialize c->stream_pipes, not only when doing HTTP. Fixes
+	problems with stdin being closed, causing hang. Thanks to zas for a
+	report.  
+
+Thu Dec  5 23:46:57 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.4pre22.CVS 
+
 Thu Dec  5 23:44:32 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

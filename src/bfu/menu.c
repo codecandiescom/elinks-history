@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.223 2004/04/21 00:21:01 jonas Exp $ */
+/* $Id: menu.c,v 1.224 2004/04/21 00:42:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -855,6 +855,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	struct window *win = menu->win;
 	struct menu_item *item;
 	int p = L_MAINMENU_SPACE;
+	int scroll = 0;
 
 	if (check_mouse_wheel(ev))
 		return;
@@ -866,46 +867,49 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 	if (ev->y) return;
 
-	/* We don't initialize to menu->first here, since it breaks horizontal
-	 * scrolling using mouse in some cases. --Zas */
-	foreach_menu_item (item, menu->items) {
-		int o = p;
+	/* First check if the mouse button was pressed in the side of the
+	 * terminal and simply scroll one step in that direction else iterate
+	 * through the menu items to see if it was pressed on a label. */
+	if (ev->x < p) {
+		scroll = -1;
 
-		if (mi_has_left_text(*item)) {
-			unsigned char *text = item->text;
+	} else if (ev->x >= win->term->width - R_MAINMENU_SPACE) {
+		scroll = 1;
 
-			if (mi_text_translate(*item))
-				text = _(text, win->term);
+	} else {
+		/* We don't initialize to menu->first here, since it breaks
+		 * horizontal scrolling using mouse in some cases. --Zas */
+		foreach_menu_item (item, menu->items) {
+			if (mi_has_left_text(*item)) {
+				unsigned char *text = item->text;
 
-			p += L_MAINTEXT_SPACE + L_TEXT_SPACE
-				+ strlen(text)
-				- !!item->hotkey_pos
-				+ R_TEXT_SPACE + R_MAINTEXT_SPACE;
+				if (mi_text_translate(*item))
+					text = _(text, win->term);
+
+				p += L_MAINTEXT_SPACE + L_TEXT_SPACE
+					+ strlen(text)
+					- !!item->hotkey_pos
+					+ R_TEXT_SPACE + R_MAINTEXT_SPACE;
+			}
+
+			if (ev->x < p) {
+				scroll = (item - menu->items) - menu->selected;
+				break;
+			}
 		}
+	}
 
-		if (ev->x < o) {
-			if (ev->x > L_MAINMENU_SPACE)
-				continue;
-
-			scroll_menu(menu, -1);
-
-		} else if (ev->x >= p) {
-			if (ev->x < win->term->width - R_MAINMENU_SPACE)
-				continue;
-
-			scroll_menu(menu, 1);
-
-		} else {
-			scroll_menu(menu, (item - menu->items) - menu->selected);
-		}
-
+	if (scroll) {
+		scroll_menu(menu, scroll);
 		display_mainmenu(win->term, menu);
+	}
 
-		if (check_mouse_action(ev, B_UP)
-		    || mi_is_submenu(*item)) {
-			select_menu(win->term, menu);
-		}
-		break;
+	/* We need to select the menu item even if we didn't scroll
+	 * apparently because we will delete any drop down menus
+	 * in the clicking process. */
+	if (check_mouse_action(ev, B_UP)
+	    || mi_is_submenu(menu->items[menu->selected])) {
+		select_menu(win->term, menu);
 	}
 }
 #endif

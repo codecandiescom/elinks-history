@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.36 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: dialogs.c,v 1.37 2003/07/21 06:14:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "dialogs/mime.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -123,32 +124,44 @@ really_del_ext(void *fcp)
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	unsigned char *translated = fcp ? encode_option_name(fcp) : NULL;
-	struct option *opt;
-	unsigned char *str;
-	int strl;
+	struct string translated;
+	struct option *opt = NULL;
+	struct string str;
 
-	if (!translated) goto end;
+	if (!fcp) return;
 
-	opt = get_real_opt("mime.extension", translated);
-	if (!opt) goto end;
+	if (!init_string(&str)) {
+		mem_free(fcp);
+		return;
+	}
 
-	str = init_str();
-	if (!str) goto end;
-	strl = 0;
-	add_to_str(&str, &strl, (unsigned char *) fcp);
-	add_to_str(&str, &strl, " -> ");
-	add_to_str(&str, &strl, (unsigned char *) opt->ptr);
+	add_to_string(&str, (unsigned char *) fcp);
+	mem_free(fcp);
 
-	msg_box(term, getml(str, translated, NULL), MSGBOX_FREE_TEXT,
+	if (!init_string(&translated)) {
+		done_string(&str);
+		return;
+	}
+
+	if (add_optname_to_string(&translated, str.source, str.length))
+		opt = get_real_opt("mime.extension", translated.source);
+
+	if (!opt) {
+		done_string(&translated);
+		done_string(&str);
+		return;
+	}
+
+	/* Finally add */
+	add_to_string(&str, " -> ");
+	add_to_string(&str, (unsigned char *) opt->ptr);
+
+	msg_box(term, getml(str.source, translated.source, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete extension"), AL_CENTER,
-		msg_text(term, N_("Delete extension %s?"), str),
-		translated, 2,
+		msg_text(term, N_("Delete extension %s?"), str.source),
+		translated.source, 2,
 		N_("Yes"), really_del_ext, B_ENTER,
 		N_("No"), NULL, B_ESC);
-
-end:
-	if (fcp) mem_free(fcp);
 }
 
 

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.89 2004/05/02 13:01:22 zas Exp $ */
+/* $Id: msgbox.c,v 1.90 2004/11/02 09:34:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,23 +99,23 @@ static unsigned char *
 msg_text_do(unsigned char *format, va_list ap)
 {
 	unsigned char *info;
-	int infolen;
+	int infolen, len;
 	va_list ap2;
 
 	VA_COPY(ap2, ap);
 
 	infolen = vsnprintf(NULL, 0, format, ap2);
 	info = mem_alloc(infolen + 1);
-	if (info) {
-		if (vsnprintf((char *) info, infolen + 1, format, ap) != infolen) {
-			mem_free(info);
-			info = NULL;
-		} else {
-			/* Wear safety boots */
-			info[infolen] = '\0';
-		}
+	if (!info) return NULL;
+
+	len = vsnprintf((char *) info, infolen + 1, format, ap);
+	if (len != infolen) {
+		mem_free(info);
+		return NULL;
 	}
 
+	/* Wear safety boots */
+	info[infolen] = '\0';
 	return info;
 }
 
@@ -135,8 +135,10 @@ msg_text(struct terminal *term, unsigned char *format, ...)
 static void
 abort_refreshed_msg_box_handler(struct dialog_data *dlg_data)
 {
-	if (dlg_data->dlg->udata != dlg_data->dlg->widgets->text)
-		mem_free(dlg_data->dlg->widgets->text);
+	void *data = dlg_data->dlg->widgets->text;
+
+	if (dlg_data->dlg->udata != data)
+		mem_free(data);
 }
 
 static enum dlg_refresh_code
@@ -171,11 +173,11 @@ refreshed_msg_box(struct terminal *term, enum msgbox_flags flags,
 			   data, 1,
 			   N_("OK"), NULL, B_ENTER | B_ESC);
 
-	if (dlg_data) {
-		/* Save the original text to check up on it when the dialog
-		 * is freed. */
-		dlg_data->dlg->udata = info;
-		dlg_data->dlg->abort = abort_refreshed_msg_box_handler;
-		refresh_dialog(dlg_data, refresh_msg_box, get_info);
-	}
+	if (!dlg_data) return;
+
+	/* Save the original text to check up on it when the dialog
+	 * is freed. */
+	dlg_data->dlg->udata = info;
+	dlg_data->dlg->abort = abort_refreshed_msg_box_handler;
+	refresh_dialog(dlg_data, refresh_msg_box, get_info);
 }

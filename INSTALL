@@ -58,7 +58,8 @@ compile it with debug.  It won't hurt if you do, though, and ELinks will tell
 you about any memory leaks, incorrect memory manipulation etc, which may be
 helpful to us if you report it.  Next, disable any optional features you are not
 going to use, they can make the resulting binary smaller (altough it'll probably
-have no non-marginal performance imapact).  Also, you may try to override the
+have no non-marginal performance imapact) - especially go through the feature.h
+file in the project root directory.  Also, you may try to override the
 build system to build a dynamically linked binary, which can be a lot smaller as
 well.  Lastly, you can go to the Unicode/ and intl/ directories, then edit
 index.txt and remove any codepages or translations you don't like; especially
@@ -91,7 +92,10 @@ recommended for users to give a strong preference to OpenSSL whenever possible.
 	 should be enough.  However, in some FreeBSD 3 distributions you have to
 	 set CFLAGS=-aout before running ./configure.  Also, you may want to
 	 adjust some compile-time options through ./configure - do
-	 ./configure --help and it'll print out a list of them.
+	 ./configure --help and it'll print out a list of them. You can more
+	 finely control what's going to be included in the binary in the
+	 feature.h file, and some really detailed tuning can be performed in
+	 the src/setup.h.
 
 	 Also, a nice idea is to compile ELinks outside of the source tree.
 	 Make another directory and run path_to_source_tree/configure from it.
@@ -168,5 +172,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.24 2003/12/31 18:47:48 pasky Exp $
+$Id: INSTALL,v 1.25 2003/12/31 19:13:20 pasky Exp $
 vim: textwidth=80

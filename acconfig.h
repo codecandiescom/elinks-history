@@ -69,12 +69,6 @@
 /* Define to 1 if we should include leak debugger and internal error checking facilites */
 #undef DEBUG
 
-/* Define to 1 if we should support the tiny LEDs-like indicators */
-#undef USE_LEDS
-
-/* Define to 1 if we should include internal bookmark manager */
-#undef BOOKMARKS
-
 /* Define to 1 if we should include support for cookies */
 #undef COOKIES
 
@@ -126,3 +120,5 @@
 
 /* Define to 1 to enable support for SMB protocol (requires smbclient). */
 #undef ELINKS_SMB
+
+#include "../feature.h"

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.118 2004/09/20 23:26:16 pasky Exp $ */
+/* $Id: parser.c,v 1.119 2004/09/20 23:32:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,6 +184,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 	struct selector_pkg *pkg = NULL;
 	struct css_selector *prev_element_selector = NULL;
 	struct css_selector *prev_specific_selector = NULL;
+	struct css_selector *last_chained_selector = NULL;
 	int last_fragment = 0;
 
 	/* FIXME: element can be even '*' --pasky */
@@ -296,6 +297,15 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 						    last_token.length);
 			if (!selector) continue;
 
+			if (last_chained_selector) {
+				/* The situation is like: 'div p#x', now it was
+				 * 'p -> div', but we need to redo that as
+				 * '(p ->) #x -> div'. */
+				del_from_list(last_chained_selector);
+				add_to_list(selector->leaves,
+				            last_chained_selector);
+			}
+
 			selector->relation = reltype;
 
 		} else /* CSR_PARENT || CSR_ANCESTOR */ {
@@ -310,6 +320,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 			assert(prev_element_selector);
 			add_to_list(selector->leaves, prev_element_selector);
+			last_chained_selector = selector;
 
 			prev_element_selector->relation = reltype;
 		}
@@ -335,12 +346,14 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			pkg = NULL; last_fragment = 0;
 			prev_element_selector = NULL;
 			prev_specific_selector = NULL;
+			last_chained_selector = NULL;
 
 		} else if (token->type == '{') {
 			/* End of selector list. */
 			pkg = NULL; last_fragment = 0;
 			prev_element_selector = NULL;
 			prev_specific_selector = NULL;
+			last_chained_selector = NULL;
 			break;
 
 		} /* else Another selector fragment probably coming up. */

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.265 2004/08/09 08:38:07 miciah Exp $ */
+/* $Id: search.c,v 1.266 2004/08/09 08:47:34 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1225,6 +1225,18 @@ text_typeahead_handler(struct input_line *line, int action)
 		case ACT_EDIT_NEXT_ITEM:
 			find_next(ses, doc_view, 1);
 			break;
+
+		case ACT_EDIT_SEARCH_TOGGLE_REGEX: {
+			struct option *opt =
+				get_opt_rec(config_options,
+					    "document.browse.search.regex");
+
+			opt->value.number = (opt->value.number + 1)
+					    % (opt->max + 1);
+			opt->flags |= OPT_TOUCHED;
+		}
+		report_errors = 1;
+		/* Fall thru */
 
 		default:
 			search_for_do(ses, buffer, direction, report_errors);

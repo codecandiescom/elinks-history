@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.135 2004/07/27 22:41:00 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.136 2004/08/09 08:47:34 miciah Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -171,6 +171,7 @@ enum edit_action {
 	ACT_EDIT_PREVIOUS_ITEM,
 	ACT_EDIT_REDRAW,
 	ACT_EDIT_RIGHT,
+	ACT_EDIT_SEARCH_TOGGLE_REGEX,
 	ACT_EDIT_UP,
 
 	EDIT_ACTIONS

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.255 2004/07/28 12:25:00 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.256 2004/08/09 08:47:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -569,6 +569,7 @@ static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
 	{ "previous-item", ACT_EDIT_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "redraw", ACT_EDIT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "right", ACT_EDIT_RIGHT, DACT(N_("Move the cursor right")) },
+	{ "search-toggle-regex", ACT_EDIT_SEARCH_TOGGLE_REGEX, DACT(N_("Toggle regex matching (type-ahead searching)")) },
 	{ "up", ACT_EDIT_UP, DACT(N_("Move cursor upwards")) },
 
 	{ NULL, 0, NULL }
@@ -782,6 +783,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ 'H',		 KBD_CTRL,	ACT_EDIT_BACKSPACE },
 	{ 'K',		 KBD_CTRL,	ACT_EDIT_KILL_TO_EOL },
 	{ 'L',		 KBD_CTRL,	ACT_EDIT_REDRAW },
+	{ 'r',		 KBD_ALT,	ACT_EDIT_SEARCH_TOGGLE_REGEX },
 	{ 'R',		 KBD_CTRL,	ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS },
 	{ 'T',		 KBD_CTRL,	ACT_EDIT_OPEN_EXTERNAL },
 	{ 'U',		 KBD_CTRL,	ACT_EDIT_KILL_TO_BOL },

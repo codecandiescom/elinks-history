@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.66 2004/04/23 23:05:38 jonas Exp $ */
+/* $Id: cmdline.c,v 1.67 2004/04/24 00:20:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,18 +184,21 @@ lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return "";
 }
 
+#define skipback_whitespace(start, S) \
+	for ((S)--; (start) < (S) && isspace(*(S)); (S)--) ;
+
 static unsigned char *
 remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	unsigned char *command, *arg, *argend = NULL;
-	int len;
+	int len = 0;
 
 	if (*argc < 1) return gettext("Parameter expected");
 
 	command = *(*argv);
 
-	for (len = 0; isalpha(command[len]); len++)
-		/* m33p */;
+	while (isalpha(command[len]))
+		len++;
 
 	arg = strchr(&command[len], '(');
 	if (arg) {
@@ -211,8 +214,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		return NULL;
 	}
 
-	for (argend--; arg < argend && isspace(*argend); argend--)
-		/* m33p */;
+	skipback_whitespace(arg, argend);
 
 	if (!strlcasecmp(command, len, "openURL", 7)) {
 		unsigned char *comma = memchr(arg, ',', argend - arg);
@@ -224,8 +226,7 @@ remote_cmd(struct option *o, unsigned char ***argv, int *argc)
 		} else if (comma) {
 			unsigned char *where = comma + 1;
 
-			for (comma--; arg < comma && isspace(*comma); comma--)
-				/* m33p */;
+			skipback_whitespace(arg, argend);
 
 			skip_whitespace(where);
 			len = argend - where + 1;

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.16 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: text.c,v 1.17 2003/11/04 22:01:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 
 void
 text_width(struct terminal *term, register unsigned char *text,
-		   int *minwidth, int *maxwidth)
+	   int *minwidth, int *maxwidth)
 {
 	do {
 		register int cmax = 0;
@@ -36,37 +36,9 @@ text_width(struct terminal *term, register unsigned char *text,
 			text++;
 		}
 
-		if (cmax > *maxwidth) *maxwidth = cmax;
-		if (cmin > *minwidth) *minwidth = cmin;
+		if (maxwidth && cmax > *maxwidth) *maxwidth = cmax;
+		if (minwidth && cmin > *minwidth) *minwidth = cmin;
 
-	} while (*(text++));
-}
-
-void
-max_text_width(struct terminal *term, unsigned char *text, int *width)
-{
-	do {
-		int c = 0;
-
-		while (*text && *text != '\n') {
-			text++;
-			c++;
-		}
-		if (c > *width) *width = c;
-	} while (*(text++));
-}
-
-void
-min_text_width(struct terminal *term, unsigned char *text, int *width)
-{
-	do {
-		int c = 0;
-
-		while (*text && *text != '\n' && *text != ' ') {
-			text++;
-			c++;
-		}
-		if (c > *width) *width = c;
 	} while (*(text++));
 }
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.379 2004/12/19 02:49:29 miciah Exp $ */
+/* $Id: http.c,v 1.380 2004/12/19 02:51:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,9 +220,7 @@ init_accept_charset()
 		add_crlf_to_string(&ac);
 	}
 
-	/* Never freed until exit(), if you found a  better solution,
-	 * let us now ;)
-	 * Do not use mem_alloc() here. */
+	/* Do not use mem_alloc() here. */
 	accept_charset = malloc(ac.length + 1);
 	if (accept_charset) {
 		strcpy(accept_charset, ac.source);

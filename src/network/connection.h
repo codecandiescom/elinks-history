@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.39 2003/10/19 17:57:49 pasky Exp $ */
+/* $Id: connection.h,v 1.40 2003/10/19 18:00:48 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -135,8 +135,14 @@ struct connection {
 	enum connection_state state;
 	int prev_error;
 	int from;
+
+	/* The communication socket with the other side. */
 	int socket;
+	/* The data socket. It is used, when @socket is used for the control,
+	 * and the actual data is transmitted through a different channel (so
+	 * the only user now is FTP ;-). */
 	int data_socket;
+
 	int tries;
 	int received;
 	int est_length;

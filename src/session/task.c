@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.90 2004/05/28 17:35:08 jonas Exp $ */
+/* $Id: task.c,v 1.91 2004/05/29 02:44:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,13 +61,11 @@ abort_preloading(struct session *ses, int interrupt)
 struct task {
 	struct session *ses;
 	struct uri *uri;
-	int pri;
 	enum cache_mode cache_mode;
 	enum task_type type;
 	unsigned char *target_frame;
 	struct location *target_location;
 	unsigned char *pos;
-	void (*fn)(struct download *, struct session *);
 };
 
 static void
@@ -79,7 +77,7 @@ post_yes(struct task *task)
 	mem_free_if(task->ses->goto_position);
 
 	ses->goto_position = null_or_stracpy(task->pos);
-	ses->loading.end = (void (*)(struct download *, void *)) task->fn;
+	ses->loading.end = (void (*)(struct download *, void *)) end_load;
 	ses->loading.data = task->ses;
 	ses->loading_uri = task->uri; /* XXX: Make the session inherit the URI. */
 
@@ -87,8 +85,8 @@ post_yes(struct task *task)
 	ses->task.target_frame = task->target_frame;
 	ses->task.target_location = task->target_location;
 
-	load_uri(ses->loading_uri, ses->referrer,
-		 &ses->loading, task->pri, task->cache_mode, -1);
+	load_uri(ses->loading_uri, ses->referrer, &ses->loading,
+		 PRI_MAIN, task->cache_mode, -1);
 }
 
 static void
@@ -100,11 +98,8 @@ post_no(struct task *task)
 
 void
 ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
-	 struct location *target_location,
-	 int pri, enum cache_mode cache_mode, enum task_type task_type,
-	 unsigned char *pos,
-	 void (*fn)(struct download *, struct session *),
-	 int redir)
+	 struct location *target_location, enum cache_mode cache_mode,
+	 enum task_type task_type, unsigned char *pos, int redir)
 {
 	struct task *task = uri->form ? mem_alloc(sizeof(struct task)) : NULL;
 	unsigned char *m1, *m2;
@@ -160,7 +155,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 		mem_free_set(&ses->goto_position, pos);
 
-		ses->loading.end = (void (*)(struct download *, void *)) fn;
+		ses->loading.end = (void (*)(struct download *, void *)) end_load;
 		ses->loading.data = ses;
 		ses->loading_uri = get_uri_reference(uri);
 
@@ -169,20 +164,18 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 		ses->task.target_location = target_location;
 
 		load_uri(ses->loading_uri, ses->referrer, &ses->loading,
-			 pri, cache_mode, -1);
+			 PRI_MAIN, cache_mode, -1);
 
 		return;
 	}
 
 	task->ses = ses;
 	task->uri = get_uri_reference(uri);
-	task->pri = pri;
 	task->cache_mode = cache_mode;
 	task->type = task_type;
 	task->target_frame = target_frame;
 	task->target_location = target_location;
 	task->pos = pos;
-	task->fn = fn;
 
 	if (redir) {
 		m1 = N_("Do you want to follow redirect and post form data "
@@ -364,18 +357,15 @@ do_move(struct session *ses, struct download **stat)
 			/* Fall through. */
 		case TASK_IMGMAP:
 			ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
-				 PRI_MAIN, CACHE_MODE_NORMAL, task,
-				 ses->goto_position, end_load, 1);
+				 CACHE_MODE_NORMAL, task, ses->goto_position, 1);
 			return 2;
 		case TASK_HISTORY:
 			ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
-				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
-				 NULL, end_load, 1);
+				 CACHE_MODE_NORMAL, TASK_RELOAD, NULL, 1);
 			return 2;
 		case TASK_RELOAD:
 			ses_goto(ses, cached->redirect, NULL, NULL,
-				 PRI_MAIN, ses->reloadlevel, TASK_RELOAD,
-				 NULL, end_load, 1);
+				 ses->reloadlevel, TASK_RELOAD, NULL, 1);
 			return 2;
 		}
 	} else {
@@ -501,9 +491,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	set_session_referrer(ses, referrer);
 
-	ses_goto(ses, uri, target, NULL,
-		 PRI_MAIN, cache_mode, task,
-		 pos, end_load, 0);
+	ses_goto(ses, uri, target, NULL, cache_mode, task, pos, 0);
 	done_uri(uri);
 	mem_free_if(pos);
 	/* abort_loading(ses); */

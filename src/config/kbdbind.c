@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.168 2004/01/24 19:55:29 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.169 2004/01/24 20:03:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ static void init_action_listboxes(void);
 static void free_action_listboxes(void);
 
 
-void
+struct keybinding *
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
@@ -98,6 +98,8 @@ boom:
 
 		update_hierbox_browser(&keybinding_browser);
 	}
+
+	return kb;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.117 2005/02/28 14:57:39 zas Exp $ */
+/* $Id: kbd.c,v 1.118 2005/03/01 11:08:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,7 +165,7 @@ kbd_ctrl_c(void)
 }
 
 #define write_sequence(fd, seq) \
-	hard_write(fd, seq, sizeof(seq) / sizeof(unsigned char) - 1)
+	hard_write(fd, seq, sizeof(seq) - 1)
 
 #define INIT_TERMINAL_SEQ	"\033)0\0337"	/* Special Character and Line Drawing Set, Save Cursor */
 #define INIT_TWIN_MOUSE_SEQ	"\033[?9h"	/* Send MIT Mouse Row & Column on Button Press */

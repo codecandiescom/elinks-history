@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.166 2005/02/28 15:34:06 zas Exp $ */
+/* $Id: osdep.c,v 1.167 2005/03/01 11:08:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,7 +393,7 @@ set_window_title(unsigned char *title)
 	if (xsize < 1 || xsize > 1024) return;
 
 	/* Allocate space for title + 3 ending points + null char. */
-	s = (unsigned char *) mem_alloc((xsize + 3 + 1) * sizeof(unsigned char));
+	s = mem_alloc(xsize + 3 + 1);
 	if (!s) return;
 
 	/* Copy title to s if different from NULL */

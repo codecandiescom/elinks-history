@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.308 2005/02/28 15:36:30 zas Exp $ */
+/* $Id: search.c,v 1.309 2005/03/01 11:08:40 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -244,7 +244,7 @@ get_search_region_from_search_nodes(struct search *s1, int doclen)
 	unsigned char *doc;
 	int i;
 
-	doc = mem_alloc(sizeof(unsigned char ) * (doclen + 1));
+	doc = mem_alloc(doclen + 1);
 	if (!doc) return NULL;
 
 	for (i = 0; i < doclen; i++) {

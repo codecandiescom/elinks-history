@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.95 2003/09/01 13:17:43 zas Exp $ */
+/* $Id: menu.c,v 1.96 2003/09/25 16:25:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -855,5 +855,5 @@ add_to_menu(struct menu_item **mi, unsigned char *text,
 	mii[n].submenu = submenu;
 	mii[n].no_intl = no_intl;
 	mii[n].hotkey_pos = 0;
-	mii[n].ignore_hotkey = 1;
+	mii[n].hotkey_state = HKS_SHOW;
 }

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.129 2003/09/22 18:41:11 jonas Exp $ */
+/* $Id: menu.c,v 1.130 2003/09/25 16:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,8 +220,8 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 }
 
 static struct menu_item no_hist_menu[] = {
-	{N_("No history"), M_BAR, NULL, NULL, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("No history"), M_BAR, NULL, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM
 };
 
 static void
@@ -295,8 +295,8 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 
 
 static struct menu_item no_downloads_menu[] = {
-	{N_("No downloads"), M_BAR, NULL, NULL, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	INIT_MENU_ITEM(N_("No downloads"), M_BAR, NULL, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM
 };
 
 static void
@@ -366,41 +366,41 @@ menu_kill_background_connections(struct terminal *term, void *xxx, void *yyy)
 }
 
 static struct menu_item file_menu11[] = {
-	{N_("~Go to URL"), "g", MENU_FUNC menu_goto_url, (void *)0, 0, 0},
-	{N_("Go ~back"), "<-", MENU_FUNC menu_go_back, (void *)0, 0, 0},
-	{N_("~Reload"), "Ctrl-R", MENU_FUNC menu_reload, (void *)0, 0, 0},
-	{N_("~History"), M_SUBMENU, MENU_FUNC history_menu, (void *)0, 0, 1},
-	{N_("Unhis~tory"), M_SUBMENU, MENU_FUNC unhistory_menu, (void *)0, 0, 1},
+	INIT_MENU_ITEM(N_("~Go to URL"), "g", menu_goto_url, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Go ~back"), "<-", menu_go_back, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Reload"), "Ctrl-R", menu_reload, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~History"), M_SUBMENU, history_menu, NULL, FREE_NOTHING, 1),
+	INIT_MENU_ITEM(N_("Unhis~tory"), M_SUBMENU, unhistory_menu, NULL, FREE_NOTHING, 1),
 };
 
 static struct menu_item file_menu12[] = {
 #ifdef GLOBHIST
-	{N_("Global histor~y"), "h", MENU_FUNC menu_history_manager, (void *)0, 0, 0},
+	INIT_MENU_ITEM(N_("Global histor~y"), "h", menu_history_manager, NULL, FREE_NOTHING, 0),
 #endif
 #ifdef BOOKMARKS
-	{N_("Bookmark~s"), "s", MENU_FUNC menu_bookmark_manager, (void *)0, 0, 0},
+	INIT_MENU_ITEM(N_("Bookmark~s"), "s", menu_bookmark_manager, NULL, FREE_NOTHING, 0),
 #endif
 };
 
 static struct menu_item file_menu21[] = {
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("Sa~ve as"), "", MENU_FUNC save_as, (void *)0, 0, 0},
-	{N_("Save ~URL as"), "", MENU_FUNC menu_save_url_as, (void *)0, 0, 0},
-	{N_("Save formatted ~document"), "", MENU_FUNC menu_save_formatted, (void *)0, 0, 0},
+	BAR_MENU_ITEM,
+	INIT_MENU_ITEM(N_("Sa~ve as"), "", save_as, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Save ~URL as"), "", menu_save_url_as, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Save formatted ~document"), "", menu_save_formatted, NULL, FREE_NOTHING, 0),
 };
 
 static struct menu_item file_menu22[] = {
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("~Kill background connections"), "", MENU_FUNC menu_kill_background_connections, (void *)0, 0, 0},
-	{N_("~Flush all caches"), "", MENU_FUNC flush_caches, (void *)0, 0, 0},
-	{N_("Resource ~info"), "", MENU_FUNC res_inf, (void *)0, 0, 0},
+	BAR_MENU_ITEM,
+	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("~Flush all caches"), "", flush_caches, NULL, FREE_NOTHING, 0),
+	INIT_MENU_ITEM(N_("Resource ~info"), "", res_inf, NULL, FREE_NOTHING, 0),
 #if 1 /* Always visible ? --Zas */
-	{N_("~Cache info"), "", MENU_FUNC cache_inf, (void *)0, 0, 0},
+	INIT_MENU_ITEM(N_("~Cache info"), "", cache_inf, NULL, FREE_NOTHING, 0),
 #endif
 #ifdef LEAK_DEBUG
-	{N_("~Memory info"), "", MENU_FUNC memory_inf, (void *)0, 0, 0},
+	INIT_MENU_ITEM(N_("~Memory info"), "", memory_inf, NULL, FREE_NOTHING, 0),
 #endif
-	{"", M_BAR, NULL, NULL, 0, 0},
+	NULL_MENU_ITEM,
 };
 
 static struct menu_item file_menu3[] = {
@@ -427,15 +427,9 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	o = can_open_in_new(term);
 	if (o) {
-		e->text = N_("~New window");
-		e->rtext = o - 1 ? M_SUBMENU : (unsigned char *) "";
-		e->func = MENU_FUNC open_in_new_window;
-		e->data = send_open_new_xterm;
-		e->item_free = FREE_NOTHING;
-		e->submenu = !!(o - 1);
-		e->no_intl = 0;
-		e->hotkey_pos = 0;
-		e->ignore_hotkey = 0;
+		SET_MENU_ITEM(e, N_("~New window"), o - 1 ? M_SUBMENU : (unsigned char *) "",
+			      MENU_FUNC open_in_new_window, send_open_new_xterm,
+			      FREE_NOTHING, !!(o - 1), 0, 0, HKS_SHOW);
 		e++;
 	}
 
@@ -458,29 +452,15 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	x = 1;
 	if (!anonymous && can_open_os_shell(term->environment)) {
-		e->text = N_("~OS shell");
-		e->rtext = "";
-		e->func = MENU_FUNC menu_shell;
-		e->data = NULL;
-		e->item_free = FREE_NOTHING;
-		e->submenu = 0;
-		e->no_intl = 0;
-		e->hotkey_pos = 0;
-		e->ignore_hotkey = 0;
+		SET_MENU_ITEM(e, N_("~OS shell"), "", menu_shell,
+			      NULL, FREE_NOTHING, 0, 0, 0, HKS_SHOW);
 		e++;
 		x = 0;
 	}
 
 	if (can_resize_window(term->environment)) {
-		e->text = N_("Resize ~terminal");
-		e->rtext = "";
-		e->func = MENU_FUNC dlg_resize_terminal;
-		e->data = NULL;
-		e->item_free = FREE_NOTHING;
-		e->submenu = 0;
-		e->no_intl = 0;
-		e->hotkey_pos = 0;
-		e->ignore_hotkey = 0;
+		SET_MENU_ITEM(e, N_("Resize ~terminal"), "", dlg_resize_terminal,
+			      NULL, FREE_NOTHING, 0, 0, 0, HKS_SHOW);
 		e++;
 		x = 0;
 	}

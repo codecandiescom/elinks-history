@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.8 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: hotkey.c,v 1.9 2003/09/25 16:25:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			if (!items[i].no_intl) text = _(text, term);
 			if (!*text) continue;
 
-			if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos)
+			if (items[i].hotkey_state != HKS_CACHED && !items[i].hotkey_pos)
 				items[i].hotkey_pos = find_hotkey_pos(text);
 
 			/* Negative value for hotkey_pos means the key is already
@@ -71,7 +71,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 
 				*used = i;
 
-				items[i].ignore_hotkey = 2; /* cached */
+				items[i].hotkey_state = 2; /* cached */
 			}
 		}
 	}
@@ -80,8 +80,8 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 	for (i = 0; i < ni; i++)
 		if (!hotkeys) {
 			items[i].hotkey_pos = 0;
-			items[i].ignore_hotkey = 1;
-		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
+			items[i].hotkey_state = 1;
+		} else if (items[i].hotkey_state != 2 && !items[i].hotkey_pos) {
 			unsigned char *text = items[i].text;
 
 			if (!*text) continue;
@@ -91,7 +91,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			items[i].hotkey_pos = find_hotkey_pos(text);
 
 			if (items[i].hotkey_pos)
-				items[i].ignore_hotkey = 2; /* cached */
+				items[i].hotkey_state = HKS_CACHED;
 		}
 }
 
@@ -102,7 +102,7 @@ clear_hotkeys_cache(struct menu_item *items, int ni, int hotkeys)
 	int i;
 
 	for (i = 0; i < ni; i++) {
-		items[i].ignore_hotkey = hotkeys ? 0 : 1 ;
+		items[i].hotkey_state = hotkeys ? HKS_SHOW : HKS_IGNORE;
 		items[i].hotkey_pos = 0;
 	}
 }

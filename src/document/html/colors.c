@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.10 2002/09/12 17:16:04 pasky Exp $ */
+/* $Id: colors.c,v 1.11 2002/10/12 15:38:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,8 @@ struct color_spec {
 	char *name;
 	int rgb;
 };
+
+extern int dump_pos;
 
 struct color_spec color_specs[] = {
 	{"aliceblue",		0xF0F8FF},
@@ -321,6 +323,11 @@ find_nearest_color(struct rgb *r, int l)
 	static struct rgb_cache_entry rgb_cache[RGB_HASH_SIZE];
 	static int cache_init = 0;
 	int h;
+
+	if (dump_pos) {
+		/* We don't ever care about colors while dumping stuff. */
+		return 0;
+	}
 
 	if (!cache_init) {
 		for (h = 0; h < RGB_HASH_SIZE; h++)

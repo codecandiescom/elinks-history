@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.130 2003/06/17 13:06:42 zas Exp $ */
+/* $Id: renderer.c,v 1.131 2003/06/17 13:10:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -770,7 +770,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	    || format.image || format.form)
 		goto process_link;
 
-no_l:
+no_link:
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning)))
 		goto format_change;
 	bg = bg_cache;
@@ -841,7 +841,7 @@ process_link:
 					      shouldn't we move that test before previous
 					      line ? --Zas */
 			internal("no link");
-			goto no_l;
+			goto no_link;
 		}
 		goto set_link;
 	} else {
@@ -852,7 +852,7 @@ process_link:
 		last_link = last_target = last_image = NULL;
 		last_form = NULL;
 
-		if (!(format.link || format.image || format.form)) goto no_l;
+		if (!(format.link || format.image || format.form)) goto no_link;
 
 		if (d_opt->num_links_display) {
 			unsigned char s[64];
@@ -886,10 +886,10 @@ process_link:
 		last_image = format.image ? stracpy(format.image) : NULL;
 		last_form = format.form;
 
-		if (!part->data) goto no_l;
+		if (!part->data) goto no_link;
 
 		link = new_link(part->data);
-		if (!link) goto no_l;
+		if (!link) goto no_link;
 
 		link->num = format.tabindex + part->link_num - 1;
 		link->accesskey = format.accesskey;
@@ -953,7 +953,7 @@ set_link:
 			link->n += i;
 		}
 	}
-	goto no_l;
+	goto no_link;
 
 format_change:
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.78 2003/09/15 21:23:21 jonas Exp $ */
+/* $Id: tables.c,v 1.79 2003/09/15 21:25:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1438,8 +1438,8 @@ static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 		 int i, int j)
 {
-	/* TODO: Use /FRAME._.* / macros ! --pasky */
-	static unsigned char frame_table[81] = {
+	/* TODO: Use /BORDER._.* / macros ! --pasky */
+	static unsigned char border_chars[81] = {
 		0x00, 0xb3, 0xba,	0xc4, 0xc0, 0xd3,	0xcd, 0xd4, 0xc8,
 		0xc4, 0xd9, 0xbd,	0xc4, 0xc1, 0xd0,	0xcd, 0xd4, 0xc8,
 		0xcd, 0xbe, 0xbc,	0xcd, 0xbe, 0xbc,	0xcd, 0xcf, 0xca,
@@ -1452,19 +1452,23 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 		0xb7, 0xb7, 0xb6,	0xd2, 0xd2, 0xd7,	0xc9, 0xc9, 0xcc,
 		0xbb, 0xbb, 0xb9,	0xbb, 0xbb, 0xb9,	0xcb, 0xcb, 0xce,
 	};
+	/* Note: I have no clue wether any of these names are suitable but they
+	 * should give an idea of what is going on. --jonas */
+	signed char left   = H_LINE_X(table, i - 1,     j);
+	signed char right  = H_LINE_X(table,     i,     j);
+	signed char top    = V_LINE_X(table,     i, j - 1);
+	signed char bottom = V_LINE_X(table,     i,     j);
+	register int pos;
 
-	if (H_LINE_X(table, i - 1, j) >= 0
-	    || H_LINE_X(table, i, j) >= 0
-	    || V_LINE_X(table, i, j - 1) >= 0
-	    || V_LINE_X(table, i, j) >= 0) {
-		register int pos = V_LINE(table, i, j - 1)
-				 + 3 * H_LINE(table, i, j)
-				 + 9 * H_LINE(table, i - 1, j)
-				 + 27 * V_LINE(table, i, j);
+	if (left < 0 && right < 0 && top < 0 && bottom < 0) return;
 
-		xset_hchar(table->p, x, y, frame_table[pos],
-			   par_format.bgcolor, SCREEN_ATTR_FRAME);
-	}
+	pos =      int_max(top,    0)
+	    +  3 * int_max(right,  0)
+	    +  9 * int_max(left,   0)
+	    + 27 * int_max(bottom, 0);
+
+	xset_hchar(table->p, x, y, border_chars[pos], par_format.bgcolor,
+		   SCREEN_ATTR_FRAME);
 }
 
 static inline void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.62 2004/12/14 19:16:14 miciah Exp $ */
+/* $Id: link.c,v 1.63 2004/12/15 09:32:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,8 +96,7 @@ html_a(unsigned char *a)
 }
 
 /* Get image filename from its src attribute.
- * If none or disabled it retuns "IMG".
- */
+ * If none or disabled it retuns "IMG". */
 static unsigned char *
 get_image_filename_from_src(unsigned char *src)
 {
@@ -137,8 +136,7 @@ get_image_filename_from_src(unsigned char *src)
  * In either case, it may return NULL if a memory
  * allocation failure occurs.
  * Example:
- * truncate_label("some_string", 5) => "so*ng"
- */
+ * truncate_label("some_string", 5) => "so*ng" */
 static unsigned char *
 truncate_label(unsigned char *label, int max_len)
 {
@@ -239,16 +237,14 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
 
-	/* Has image tag an attribute |alt| ? */
 	label = get_attr_val(a, "alt");
-	/* If not, let's see if there is a |title| */
 	if (!label) label = get_attr_val(a, "title");
+
 	/* Little hack to preserve rendering of [   ], in directories listing,
 	 * but we still want to drop extra spaces in alt or title attribute
 	 * to limit display width on certain websites. --Zas */
 	if (label && strlen(label) > 5) clr_spaces(label);
 
-	/* Get the |src| value for this tag if any. */
 	src = null_or_stracpy(object_src);
 	if (!src) src = get_url_val(a, "src");
 	if (!src) src = get_url_val(a, "dynsrc");
@@ -257,7 +253,8 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 	 * just use default ones, or image filename. */
 	if (!label || !*label) {
 		mem_free_if(label);
-		/* Do we want to display images with no link on them ?
+		/* Do we want to display images with no alt/title and with no
+		 * link on them ?
 		 * If not, just exit now. */
 		if (!global_doc_opts->images && !format.link) {
 			mem_free_if(src);
@@ -265,7 +262,6 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 			return;
 		}
 
-		/* We want label to use brackets (or prefix/suffix). */
 		add_brackets = 1;
 
 		if (usemap) {
@@ -277,7 +273,6 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		}
 	}
 
-	/* Get real label. */
 	if (label) label = get_image_label(label);
 
 	mem_free_set(&format.image, NULL);
@@ -286,7 +281,6 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 	if (label) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
 
-		/* Add brackets or prefix/suffix defined by options. */
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
 			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
 			unsigned char *img_link_suffix = get_opt_str("document.browse.images.image_link_suffix");

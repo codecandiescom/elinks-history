@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.127 2004/06/11 18:58:18 jonas Exp $ */
+/* $Id: form.c,v 1.128 2004/06/11 19:04:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -563,15 +563,16 @@ static inline void
 check_boundary(struct string *data, unsigned char *bound,
 	       int *bound_ptrs, int nbound_ptrs)
 {
+	unsigned char *pos, *end = data->source + data->length - BL;
 	register int i;
 
 	memset(bound, '0', BL);
 
 again:
-	for (i = 0; i <= data->length - BL; i++) {
+	for (pos = data->source; pos <= end; pos++) {
 		register int j;
 
-		if (memcmp(&data->source[i], bound, BL))
+		if (memcmp(pos, bound, BL))
 			continue;
 
 		for (j = BL - 1; j >= 0; j--)

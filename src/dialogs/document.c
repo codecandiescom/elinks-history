@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.85 2004/04/09 03:10:26 jonas Exp $ */
+/* $Id: document.c,v 1.86 2004/04/22 12:51:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,7 +292,7 @@ head_msg(struct session *ses)
 
 			if (*headers)
 				/* Headers info message box. */
-				msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+				msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
 					N_("Header info"), AL_LEFT,
 					headers,
 					NULL, 1,

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.219 2003/12/07 20:49:20 pasky Exp $ */
+/* $Id: http.c,v 1.220 2003/12/08 00:22:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1050,18 +1050,13 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	/* Setup the real uri. */
 	if (IS_PROXY_URI(conn->uri) && conn->uri.data) {
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri.data))
-			uri = NULL;
+		if (!parse_uri(uri, conn->uri.data)) {
+			abort_conn_with_state(conn, S_BAD_URL);
+			return;
+		}
 
 	} else {
 		uri = &conn->uri;
-	}
-
-	/* Sanity check for a uri */
-	assert(uri);
-	if_assert_failed {
-		abort_conn_with_state(conn, S_BAD_URL);
-		return;
 	}
 
 	if (rb->close == 2) {

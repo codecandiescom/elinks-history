@@ -1,3 +1,186 @@
+Thu Oct 14 20:28:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: cache.c, cache.h:
+
+	Merge defrag_entry() into get_cache_fragment(). It involved some
+	best-effort logics for handling allocation failure; is that
+	good/bad? 
+
+Thu Oct 14 20:23:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.c:
+
+	defrag_entry(): Add comments and prepare for next patch.  
+
+Thu Oct 14 20:13:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Use get_cache_fragment() for document image mapping. Same goes as
+	for preformatting if the document is already rendered it should also
+	make sense to get the cache fragment using get_cache_fragment().  
+
+Thu Oct 14 20:10:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Use get_cache_fragment() when preformatting. This restrict what
+	fragments preformatting will attempt to work on but I hope it will
+	not matter much since it is more in sync with the document rendering
+	so we only preformat if we are also going to render. (I pray that
+	this compiles else pasky will madly ask me to consider configuring
+	--with-lua ;-) 
+
+Thu Oct 14 20:02:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	Use get_cache_fragment() for document rendering. Fixes dangerous
+	dereference of the first fragment before the
+	list_empty(cached->frag) check.  
+
+Thu Oct 14 20:00:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.c, cache/cache.h, document/css/css.c:
+
+	Introduce get_cache_fragment() that defragments the cache entry and
+	does the sanity checks to determine whether to return the first
+	fragment or NULL.  
+	
+	Use is for CSS import handling.  
+
+Thu Oct 14 19:00:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/: cache.c, cache.h:
+
+	Describe add_fragment().  
+
+Thu Oct 14 18:50:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.h, mime/mime.c:
+
+	Convert remaining uses of get_cache_uri() to just access
+	cached->uri. I think the same applies as the previous patch namely
+	that validity of the cache entry is irrelevant because we already
+	access stuff like the cached header so why not also use any
+	extensions from the cache entry's URI.  
+
+Thu Oct 14 18:38:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/download.c, sched/task.c, viewer/dump/dump.c:
+
+	Fix confusing uses of get_cache_uri() to just use cached->uri as we
+	shouldn't care whether the cache entry is valid or not when using
+	the URI as referrer in redirects.  
+
+Thu Oct 14 18:32:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cache/cache.h:
+
+	Remove confusing comment pointed out by zas (I think). Move
+	cache_info() to be ast and describe it and also move get_cache_uri()
+	below {struct fragment} so the struct declarations are grouped.  
+
+Thu Oct 14 18:13:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Make send_to_frame() take doc_view as an arg so its current_frame()
+	call can be removed and the guarding assertion moved to frame_ev().  
+
+Thu Oct 14 18:05:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Convert the original insert mode resetting to an assertion so future
+	regressions will be caught.  
+
+Thu Oct 14 18:04:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: action.c, session.c:
+
+	Do the insert mode resetting in do_action() (is this the right place
+	Miciah\?) and revert my previous attempt at fixing it in
+	sched/session.c 1.574.  
+
+Thu Oct 14 14:21:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	process_snippets(): Since the external reference snippet handling is
+	the larger shortcut the shorter <script>code</script> snippet
+	handling.  
+
+Thu Oct 14 14:05:07 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser/parse.c, viewer/text/textarea.c:
+
+	Use add_crlf_to_string() where applicable.  
+
+Thu Oct 14 13:51:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	process_snippets(): No need to allocate the imported source uri
+	string. onload_snippets strings are NUL terminated.  
+
+Thu Oct 14 13:23:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Revert DACT(N_()) -> D_() patch, it was breaking i18n. Spotted by
+	Jonas.  
+
+Thu Oct 14 12:49:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Reduce code redundancy by introducing can_read_or_write(), called by
+	can_read() and can_write().  
+
+Thu Oct 14 12:48:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	process_snippets(): Free the URI right after the cache lookup. Use
+	{string->source + 1} instead in the error message.  
+
+Thu Oct 14 12:41:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	process_snippets(): More usage of the local {struct string}
+	variable.  
+
+Thu Oct 14 12:35:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	process_snippets(): Lessen the operator overload by using a local
+	{struct string} variable. Also short cut the snippet loop for empty
+	strings.  
+
+Thu Oct 14 12:34:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Cleanup and fix debugging code, log_data() was renamed
+	debug_transfer_log().  
+
+Thu Oct 14 12:28:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Reset the session insert mode to off when changing document in
+	doc_loading_callback(). Reproducable when changing document by
+	posting from 'an entered' text-input form-field (that is with insert
+	mode being on) all future pages would have insert mode on. Forensic
+	speculation: before it was handled magically at the end of
+	frame_ev() but 1.605 reindenting changes in 1.477 fixing text-input
+	field handling and redrawing caused the magic code never to be
+	reached. Anyway I think it makes good sense to handle it at the new
+	place.  
+
 Wed Oct 13 21:57:06 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/sched/session.c:

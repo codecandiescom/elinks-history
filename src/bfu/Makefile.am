@@ -1,9 +1,18 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.24 2004/01/03 15:08:46 zas Exp $
+## $Id: Makefile.am,v 1.25 2004/05/01 23:31:13 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
+EXTRA_libbfu_a_SOURCES = leds.c leds.h
+
+if CONFIG_LEDS
+ledsobj = leds.o
+endif
+
 noinst_LIBRARIES = libbfu.a
+
+libbfu_a_LIBADD = $(ledsobj)
+
 libbfu_a_SOURCES = \
  button.c \
  button.h \
@@ -21,8 +30,6 @@ libbfu_a_SOURCES = \
  inpfield.h \
  inphist.c \
  inphist.h \
- leds.c \
- leds.h \
  listbox.c \
  listbox.h \
  listmenu.c \

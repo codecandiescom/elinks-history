@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.37 2003/05/04 20:50:59 zas Exp $ */
+/* $Id: session.c,v 1.38 2003/05/04 21:11:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,16 +290,16 @@ print_screen_status(struct session *ses)
 
 	if (ses->visible_tab_bar) {
 		int tab_width = term->x / tabs_count;
-		int tab;
+		int tab_num;
 		int msglen;
 		int normal_color = get_bfu_color(term, "tabs.normal");
 		int selected_color = get_bfu_color(term, "tabs.selected");
 
-		for (tab = 0; tab < tabs_count; tab++) {
-			struct window *tab = get_tab_by_number(term, tab);
+		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
+			struct window *tab = get_tab_by_number(term, tab_num);
 			int ypos = term->y - (show_status_bar ? 2 : 1);
-			int color = (tab == term->current_tab) ? selected_color
-								: normal_color;
+			int color = (tab_num == term->current_tab)
+					? selected_color : normal_color;
 
 			if (tab->data
 			    && current_frame(tab->data)
@@ -313,12 +313,12 @@ print_screen_status(struct session *ses)
 			if (msglen >= tab_width)
 				msglen = tab_width - 1;
 
-			fill_area(term, tab * tab_width, ypos, tab_width, 1,
+			fill_area(term, tab_num * tab_width, ypos, tab_width, 1,
 				  color);
-			print_text(term, tab * tab_width, ypos, msglen, msg,
+			print_text(term, tab_num * tab_width, ypos, msglen, msg,
 				   color);
 			if (tab_width * tabs_count < term->x)
-				fill_area(term, (tab + 1) * tab_width, ypos,
+				fill_area(term, (tab_num + 1) * tab_width, ypos,
 					  term->x - (tab_width * tabs_count), 1,
 				  	  color);
 

@@ -1,9 +1,13 @@
-/* $Id: date.h,v 1.5 2005/03/29 01:02:29 jonas Exp $ */
+/* $Id: date.h,v 1.6 2005/03/29 02:44:12 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_DATE_H
 #define EL__PROTOCOL_DATE_H
 
 #include "util/ttime.h"
+
+/* Parses YY and YYYY style years. Returns year value ready for tm.tm_year and
+ * move @date pointer after the year if successful else returns -1. */
+int parse_year(const unsigned char **date, unsigned char *end);
 
 /* Expects HH:MM[:SS] or HH:MM[P|A]M, with HH <= 23, MM <= 59, SS <= 59.
  * Updates tm, updates time on success and returns 0 on failure, otherwise 1. */

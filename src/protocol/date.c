@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.10 2005/03/29 02:33:31 jonas Exp $ */
+/* $Id: date.c,v 1.11 2005/03/29 02:44:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,19 +35,22 @@
  * Sun Nov  6 08:49:37 1994       ; ANSI C's asctime() format
  */
 
-/* Return year or -1 if failure and move cursor after the year. */
-static int
-parse_year(const unsigned char **date_p)
+int
+parse_year(const unsigned char **date_p, unsigned char *end)
 {
 	const unsigned char *date = *date_p;
 	int year;
 
-	if (!isdigit(date[0]) || !isdigit(date[1]))
+	if ((end && date + 1 >= end)
+	    || !isdigit(date[0])
+	    || !isdigit(date[1]))
 		return -1;
 
 	year = (date[0] - '0') * 10 + date[1] - '0';
 
-	if (isdigit(date[2]) && isdigit(date[3])) {
+	if ((!end || date + 3 < end)
+	    && isdigit(date[2])
+	    && isdigit(date[3])) {
 		/* Four digits date */
 		year = year * 10 + date[2] - '0';
 		year = year * 10 + date[3] - '0' - 1900;
@@ -262,7 +265,7 @@ parse_date(const unsigned char *date)
 
 		/* Eat year */
 
-		tm.tm_year = parse_year(&date);
+		tm.tm_year = parse_year(&date, NULL);
 		if (tm.tm_year < 0) return 0;
 
 		if (*date++ != ' ') return 0;
@@ -301,7 +304,7 @@ parse_date(const unsigned char *date)
 
 		/* Eat year */
 
-		tm.tm_year = parse_year(&date);
+		tm.tm_year = parse_year(&date, NULL);
 		if (tm.tm_year < 0) return 0;
 	}
 #undef skip_time_sep

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.203 2003/05/03 03:01:42 pasky Exp $ */
+/* $Id: options.c,v 1.204 2003/05/03 19:09:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2415,9 +2415,13 @@ register_options()
 		"show_status_bar", 0, 1,
 		N_("Show status bar on the screen."));
 
-	add_opt_tree("ui.colors", N_("Color terminals"),
-		"color", 0,
-		N_("Color settings for color terminal."));
+	add_opt_bool("ui", N_("Display title bar"),
+		"show_title_bar", 0, 1,
+		N_("Show title bar on the screen."));
+
+	add_opt_bool("ui", N_("Display goto dialog on startup"),
+		"startup_goto_dialog", 0, 0,
+		N_("Pop up goto dialog on startup when there's no homepage set."));
 
 
 	/* Tabs bar options */
@@ -2497,13 +2501,6 @@ register_options()
 		N_("Default background color."));
 	/* End of tabs bar options */
 
-	add_opt_bool("ui", N_("Display title bar"),
-		"show_title_bar", 0, 1,
-		N_("Show title bar on the screen."));
-
-	add_opt_bool("ui", N_("Display goto dialog on startup"),
-		"startup_goto_dialog", 0, 0,
-		N_("Pop up goto dialog on startup when there's no homepage set."));
 
 	add_opt_bool("ui", N_("Set window title"),
 		"window_title", 0, 1,

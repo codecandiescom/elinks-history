@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.15 2004/04/17 18:56:48 jonas Exp $ */
+/* $Id: form.h,v 1.16 2004/05/24 02:30:04 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -98,6 +98,7 @@ int has_form_submit(struct document *document, struct form_control *frm);
 
 void reset_form(struct session *ses, struct document_view *doc_view, int a);
 void submit_form(struct session *ses, struct document_view *doc_view, int do_reload);
+void auto_submit_form(struct session *ses);
 
 void done_form_control(struct form_control *fc);
 

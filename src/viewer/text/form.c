@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.100 2004/05/23 17:13:34 jonas Exp $ */
+/* $Id: form.c,v 1.101 2004/05/24 02:30:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -769,6 +769,22 @@ submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 	if (url) goto_link(url, link->target, ses, do_reload, 0);
 }
 
+void
+auto_submit_form(struct session *ses)
+{
+	struct document *document = ses->doc_view->document;
+	struct form_control *form = document->forms.next;
+	int link;
+
+	for (link = 0; link < document->nlinks; link++)
+		if (document->links[link].form == form)
+			break;
+
+	if (link >= document->nlinks) return;
+
+	ses->doc_view->vs->current_link = link;
+	submit_form(ses, ses->doc_view, 0);
+}
 
 int
 field_op_do(struct terminal *term, struct document_view *doc_view,

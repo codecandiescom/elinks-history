@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.397 2004/05/23 17:13:34 jonas Exp $ */
+/* $Id: session.c,v 1.398 2004/05/24 02:30:03 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -425,12 +425,7 @@ doc_end_load(struct download *stat, struct session *ses)
 	}
 #endif
 
-	if (submit) {
-		struct form_control *fc = ses->doc_view->document->forms.next;
-		unsigned char *url = get_form_url(ses, ses->doc_view, fc);
-
-		if (url) goto_link(url, fc->target, ses, 1, 0);
-	}
+	if (submit) auto_submit_form(ses);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.7 2002/07/09 22:42:24 pasky Exp $ */
+/* $Id: listbox.c,v 1.8 2002/07/09 23:01:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "bfu/colors.h"
 #include "bfu/dialog.h"
 #include "bfu/listbox.h"
+#include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 
 
@@ -146,7 +147,32 @@ init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 	init_list(((struct dlg_data_item_data_box*) widget->cdata)->items);
 }
 
+int
+mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
+	      struct event *ev)
+{
+	if ((ev->b & BM_ACT) == B_UP) {
+		if ((ev->y >= di->y) && (ev->x >= di->x &&
+					 ev->x <= di->l + di->x)) {
+			/* Clicked in the box. */
+			int offset;
+
+			offset = ev->y - di->y;
+			box_sel_set_visible(di, offset);
+			display_dlg_item(dlg, di, 1);
+			return 1;
+		}
+	}
+#if 0
+	else if ((ev->b & BM_ACT) == B_DRAG) {
+		debug("drag");
+	}
+#endif
+	return 0;
+}
+
 struct widget_ops listbox_ops = {
 	display_listbox,
 	init_listbox,
+	mouse_listbox,
 };

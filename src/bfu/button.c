@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.5 2002/07/09 15:21:38 pasky Exp $ */
+/* $Id: button.c,v 1.6 2002/07/09 23:01:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "intl/language.h"
+#include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 
 
@@ -109,7 +110,24 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 	}
 }
 
+int
+mouse_button(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
+{
+	if (ev->y != di->y || ev->x < di->x
+	    || ev->x >= di->x + strlen(_(di->item->text, dlg->win->term)) + 4)
+		return 0;
+
+	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+	dlg->selected = di - dlg->items;
+	display_dlg_item(dlg, di, 1);
+	if ((ev->b & BM_ACT) == B_UP)
+		dlg_select_item(dlg, di);
+	return 1;
+}
+
 struct widget_ops button_ops = {
 	display_button,
 	NULL,
+	mouse_button,
 };
+

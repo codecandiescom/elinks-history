@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.4 2002/07/09 15:21:38 pasky Exp $ */
+/* $Id: widget.c,v 1.5 2002/07/09 23:01:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,77 +67,4 @@ void dlg_set_history(struct widget_data *di)
 	memcpy(di->cdata, s, len);
 	di->cdata[len] = 0;
 	di->cpos = len;
-}
-
-/* dlg_mouse() */
-int dlg_mouse(struct dialog_data *dlg, struct widget_data *di,
-	      struct event *ev)
-{
-	switch (di->item->type) {
-		case D_BUTTON:
-			if (ev->y != di->y || ev->x < di->x
-			    || ev->x >= di->x + strlen(_(di->item->text,
-						       dlg->win->term)) + 4)
-			   	return 0;
-
-			display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-			dlg->selected = di - dlg->items;
-			display_dlg_item(dlg, di, 1);
-			if ((ev->b & BM_ACT) == B_UP)
-				dlg_select_item(dlg, di);
-			return 1;
-
-		case D_FIELD_PASS:
-		case D_FIELD:
-			if (ev->y != di->y || ev->x < di->x
-			    || ev->x >= di->x + di->l)
-				return 0;
-			di->cpos = di->vpos + ev->x - di->x;
-			{
-				int len = strlen(di->cdata);
-
-				if (di->cpos > len)
-					di->cpos = len;
-			}
-			display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-			dlg->selected = di - dlg->items;
-			display_dlg_item(dlg, di, 1);
-			return 1;
-
-		case D_CHECKBOX:
-			if (ev->y != di->y || ev->x < di->x
-			    || ev->x >= di->x + 3)
-				return 0;
-			display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-			dlg->selected = di - dlg->items;
-			display_dlg_item(dlg, di, 1);
-			if ((ev->b & BM_ACT) == B_UP)
-				dlg_select_item(dlg, di);
-			return 1;
-
-		case D_BOX:
-			if ((ev->b & BM_ACT) == B_UP) {
-				if ((ev->y >= di->y)
-				    && (ev->x >= di->x &&
-					ev->x <= di->l + di->x)) {
-					/* Clicked in the box. */
-					int offset;
-
-					offset = ev->y - di->y;
-					box_sel_set_visible(di, offset);
-					display_dlg_item(dlg, di, 1);
-					return 1;
-				}
-			}
-#if 0
-			else if ((ev->b & BM_ACT) == B_DRAG) {
-					debug("drag");
-			}
-#endif
-		case D_END:
-			/* Silence compiler warnings */
-			break;
-	}
-
-	return 0;
 }

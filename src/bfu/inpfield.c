@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.6 2002/07/09 22:42:24 pasky Exp $ */
+/* $Id: inpfield.c,v 1.7 2002/07/09 23:01:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,12 +300,33 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 	widget->cpos = strlen(widget->cdata);
 }
 
+int
+mouse_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
+{
+	if (ev->y != di->y || ev->x < di->x
+	    || ev->x >= di->x + di->l)
+		return 0;
+	di->cpos = di->vpos + ev->x - di->x;
+	{
+		int len = strlen(di->cdata);
+
+		if (di->cpos > len)
+			di->cpos = len;
+	}
+	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+	dlg->selected = di - dlg->items;
+	display_dlg_item(dlg, di, 1);
+	return 1;
+}
+
 struct widget_ops field_ops = {
 	display_field,
 	init_field,
+	mouse_field,
 };
 
 struct widget_ops field_pass_ops = {
 	display_field_pass,
 	init_field,
+	mouse_field,
 };

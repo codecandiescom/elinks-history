@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.7 2002/07/09 22:42:24 pasky Exp $ */
+/* $Id: checkbox.c,v 1.8 2002/07/09 23:01:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "bfu/checkbox.h"
 #include "bfu/text.h"
 #include "intl/language.h"
+#include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 
 
@@ -141,7 +142,23 @@ init_checkbox(struct widget_data *widget, struct dialog_data *dialog,
 	}
 }
 
+int
+mouse_checkbox(struct widget_data *di, struct dialog_data *dlg,
+	       struct event *ev)
+{
+	if (ev->y != di->y || ev->x < di->x
+	    || ev->x >= di->x + 3)
+		return 0;
+	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+	dlg->selected = di - dlg->items;
+	display_dlg_item(dlg, di, 1);
+	if ((ev->b & BM_ACT) == B_UP)
+		dlg_select_item(dlg, di);
+	return 1;
+}
+
 struct widget_ops checkbox_ops = {
 	display_checkbox,
 	init_checkbox,
+	mouse_checkbox,
 };

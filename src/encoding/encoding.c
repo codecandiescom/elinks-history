@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.4 2002/08/27 13:31:23 pasky Exp $ */
+/* $Id: encoding.c,v 1.5 2002/09/18 12:58:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #ifdef HAVE_BZLIB_H
 #include <bzlib.h> /* Everything needs this after stdio.h */
 #endif

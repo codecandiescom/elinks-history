@@ -1,3 +1,29 @@
+Mon Aug  2 21:38:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Mon Aug  2 16:26:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	update_status(): test only once for @dirty.  
+
+Mon Aug  2 16:17:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/status.c:
+
+	update_status(): force rerendering when title/status/tabs/leds
+	display is toggled. Until now, only tabs toggling was forcing
+	document rerendering.  
+
+Mon Aug  2 14:57:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	We should call the change hooks when toggling document options.  
+
 Sun Aug  1 20:54:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/: uri.h, file/cgi.c, http/http.c:

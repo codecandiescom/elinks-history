@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.109 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: kbd.c,v 1.110 2004/07/31 11:05:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -720,7 +720,7 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		el += 3;
 	}
 
-	/* Prospone changing of the event type until all errors has sanity
+	/* Postpone changing of the event type until all sanity
 	 * checks have been done. */
 	ev->ev = EVENT_MOUSE;
 

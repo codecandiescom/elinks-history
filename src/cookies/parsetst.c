@@ -1,5 +1,5 @@
 /* Tool for testing of cookies string parser */
-/* $Id: parsetst.c,v 1.1 2002/04/23 08:06:21 pasky Exp $ */
+/* $Id: parsetst.c,v 1.2 2002/04/23 08:08:29 pasky Exp $ */
 
 #if 0
 /* Dunno.. --pasky */
@@ -31,7 +31,7 @@ main(int argc, char *argv[])
 		fgets(cstr.str, 1024, stdin);
 
 		if (!*cstr.str) return 0;
-		cstr.str[strlen(cstr.str)] = '\0'; /* Strip newline. */
+		cstr.str[strlen(cstr.str) - 1] = '\0'; /* Strip newline. */
 
 		if (!parse_cookie_str(&cstr)) {
 			printf("ERROR while parsing '%s'!\n", cstr.str);
@@ -39,7 +39,7 @@ main(int argc, char *argv[])
 		}
 
 		memcpy(name, cstr.str, cstr.nam_end - cstr.str);
-		memcpy(value, cstr.val_start, cstr.val_end - cstr.val_start);
+		memcpy(value, cstr.val_start, cstr.val_end - cstr.val_start + 1);
 
 		printf("'%s' -> '%s' :: '%s'\n", cstr.str, name, value);
 		free(cstr.str);

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.40 2003/05/24 23:40:14 miciah Exp $ */
+/* $Id: dialogs.c,v 1.41 2003/06/04 16:27:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,12 +32,12 @@
 
 
 void
-write_config_error(struct terminal *term, unsigned char *config_file, int ret)
+write_config_error(struct terminal *term, unsigned char *config_file, unsigned char *strerr)
 {
 	msg_box(term, NULL,
 		N_("Config error"), AL_CENTER | AL_EXTD_TEXT,
 		N_("Unable to write to config file"), "\n",
-		config_file, ": ", ret == 2222 ? "Secure open failed" : strerror(ret), NULL,
+		config_file, ": ", strerr, NULL,
 		NULL, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }

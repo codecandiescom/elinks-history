@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.77 2003/06/04 09:49:20 zas Exp $ */
+/* $Id: conf.c,v 1.78 2003/06/04 16:27:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,9 +661,12 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	secure_fputs(ssi, cfg_str);
 	ret = secure_close(ssi);
 
-	if (ret && term) {
+	if (ret) {
 wr_config_error:
-		write_config_error(term, config_file, ret);
+		write_config_error(term, config_file,
+			           (term && ret == 2222)
+				   ? _("Secure open failed", term)
+				   : (unsigned char *) strerror(ret));
 	}
 
 	mem_free(config_file);

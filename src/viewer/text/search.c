@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.51 2003/10/10 20:32:27 kuser Exp $ */
+/* $Id: search.c,v 1.52 2003/10/17 13:05:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,31 +38,31 @@
 /* FIXME: Add comments!! --Zas */
 
 static inline void
-add_srch_chr(struct document *f, unsigned char c, int x, int y, int nn)
+add_srch_chr(struct document *document, unsigned char c, int x, int y, int nn)
 {
 	int n;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return;
 
-	n = f->nsearch;
+	n = document->nsearch;
 
-	if (c == ' ' && (!n || f->search[n - 1].c == ' ')) return;
-	f->search[n].c = c;
-	f->search[n].x = x;
-	f->search[n].y = y;
-	f->search[n].n = nn;
-	f->nsearch++;
+	if (c == ' ' && (!n || document->search[n - 1].c == ' ')) return;
+	document->search[n].c = c;
+	document->search[n].x = x;
+	document->search[n].y = y;
+	document->search[n].n = nn;
+	document->nsearch++;
 }
 
 #if 0
 /* Debugging code, please keep it. */
 void
-sdbg(struct document *f)
+sdbg(struct document *document)
 {
 	struct node *n;
 
-	foreachback (n, f->nodes) {
+	foreachback (n, document->nodes) {
 		int xm = n->x + n->xw, ym = n->y + n->yw;
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
 		fflush(stdout);
@@ -73,54 +73,54 @@ sdbg(struct document *f)
 
 
 static void
-sort_srch(struct document *f)
+sort_srch(struct document *document)
 {
 	int i;
 	int *min, *max;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return;
 
-	f->slines1 = mem_calloc(f->y, sizeof(struct search *));
-	if (!f->slines1) return;
+	document->slines1 = mem_calloc(document->y, sizeof(struct search *));
+	if (!document->slines1) return;
 
-	f->slines2 = mem_calloc(f->y, sizeof(struct search *));
-	if (!f->slines2) {
-		mem_free(f->slines1);
+	document->slines2 = mem_calloc(document->y, sizeof(struct search *));
+	if (!document->slines2) {
+		mem_free(document->slines1);
 		return;
 	}
 
-	min = mem_calloc(f->y, sizeof(int));
+	min = mem_calloc(document->y, sizeof(int));
 	if (!min) {
-		mem_free(f->slines1);
-		mem_free(f->slines2);
+		mem_free(document->slines1);
+		mem_free(document->slines2);
 		return;
 	}
 
-	max = mem_calloc(f->y, sizeof(int));
+	max = mem_calloc(document->y, sizeof(int));
 	if (!max) {
-		mem_free(f->slines1);
-		mem_free(f->slines2);
+		mem_free(document->slines1);
+		mem_free(document->slines2);
 		mem_free(min);
 		return;
 	}
 
-	for (i = 0; i < f->y; i++) {
+	for (i = 0; i < document->y; i++) {
 		min[i] = MAXINT;
 		max[i] = 0;
 	}
 
-	for (i = 0; i < f->nsearch; i++) {
-		struct search *s = &f->search[i];
+	for (i = 0; i < document->nsearch; i++) {
+		struct search *s = &document->search[i];
 		int sxn = s->x + s->n;
 
 		if (s->x < min[s->y]) {
 			min[s->y] = s->x;
-		   	f->slines1[s->y] = s;
+		   	document->slines1[s->y] = s;
 		}
 		if (sxn > max[s->y]) {
 			max[s->y] = sxn;
-			f->slines2[s->y] = s;
+			document->slines2[s->y] = s;
 		}
 	}
 
@@ -129,18 +129,18 @@ sort_srch(struct document *f)
 }
 
 static int
-get_srch(struct document *f)
+get_srch(struct document *document)
 {
 	struct node *n;
 	int cnt = 0;
 	int cc;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return 0;
 
-	cc = !f->search;
+	cc = !document->search;
 
-	foreachback (n, f->nodes) {
+	foreachback (n, document->nodes) {
 		register int x, y;
 		int xm = n->x + n->xw;
 		int ym = n->y + n->yw;
@@ -149,13 +149,16 @@ get_srch(struct document *f)
 		printf("%d %d - %d %d\n", n->x, n->y, xm, ym);
 		fflush(stdout);
 #endif
-#define ADD(cr, nn) do { if (!cc) add_srch_chr(f, (cr), x, y, (nn)); else cnt++; } while (0)
+#define ADD(cr, nn) do { \
+	if (!cc) add_srch_chr(document, (cr), x, y, (nn)); \
+	else cnt++; \
+} while (0)
 
-		for (y = n->y; y < ym && y < f->y; y++) {
+		for (y = n->y; y < ym && y < document->y; y++) {
 			int ns = 1;
 
-			for (x = n->x; x < xm && x < f->data[y].l; x++) {
-				unsigned char c = f->data[y].d[x].data;
+			for (x = n->x; x < xm && x < document->data[y].l; x++) {
+				unsigned char c = document->data[y].d[x].data;
 
 				if (c < ' ') c = ' ';
 				if (c == ' ' && ns) continue;
@@ -173,9 +176,9 @@ get_srch(struct document *f)
 					int found = 0;
 
 					for (xx = x + 1;
-					     xx < xm && xx < f->data[y].l;
+					     xx < xm && xx < document->data[y].l;
 					     xx++) {
-						if (f->data[y].d[xx].data >= ' ') {
+						if (document->data[y].d[xx].data >= ' ') {
 							found = 1;
 							break;
 						}
@@ -203,54 +206,55 @@ get_srch(struct document *f)
 }
 
 static void
-get_search_data(struct document *f)
+get_search_data(struct document *document)
 {
 	int n;
 
-	assert(f);
+	assert(document);
 	if_assert_failed return;
 
-	if (f->search) return;
+	if (document->search) return;
 
-	n = get_srch(f);
+	n = get_srch(document);
 	if (!n) return;
 
-	f->nsearch = 0;
+	document->nsearch = 0;
 
-	f->search = mem_alloc(n * sizeof(struct search));
-	if (!f->search) return;
+	document->search = mem_alloc(n * sizeof(struct search));
+	if (!document->search) return;
 
-	get_srch(f);
-	while (f->nsearch && f->search[--f->nsearch].c == ' ');
-	sort_srch(f);
+	get_srch(document);
+	while (document->nsearch
+	       && document->search[--document->nsearch].c == ' ');
+	sort_srch(document);
 }
 
 static int
-get_range(struct document *f, int y, int yw, int l,
+get_range(struct document *document, int y, int yw, int l,
 	  struct search **s1, struct search **s2)
 {
 	register int i;
 
-	assert(f && s1 && s2);
+	assert(document && s1 && s2);
 	if_assert_failed return -1;
 
 	*s1 = *s2 = NULL;
 	int_lower_bound(&y, 0);
 
-	for (i = y; i < y + yw && i < f->y; i++) {
-		if (f->slines1[i] && (!*s1 || f->slines1[i] < *s1))
-			*s1 = f->slines1[i];
-		if (f->slines2[i] && (!*s2 || f->slines2[i] > *s2))
-			*s2 = f->slines2[i];
+	for (i = y; i < y + yw && i < document->y; i++) {
+		if (document->slines1[i] && (!*s1 || document->slines1[i] < *s1))
+			*s1 = document->slines1[i];
+		if (document->slines2[i] && (!*s2 || document->slines2[i] > *s2))
+			*s2 = document->slines2[i];
 	}
 	if (!*s1 || !*s2) return -1;
 
 	*s1 -= l;
 
-	if (*s1 < f->search)
-		*s1 = f->search;
-	if (*s2 > f->search + f->nsearch - l + 1)
-		*s2 = f->search + f->nsearch - l + 1;
+	if (*s1 < document->search)
+		*s1 = document->search;
+	if (*s2 > document->search + document->nsearch - l + 1)
+		*s2 = document->search + document->nsearch - l + 1;
 	if (*s1 > *s2)
 		*s1 = *s2 = NULL;
 	if (!*s1 || !*s2)
@@ -282,8 +286,9 @@ lowered_string(unsigned char *s, int l)
 
 #ifdef HAVE_REGEX_H
 static int
-is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
-		  int *min, int *max, struct search *s1, struct search *s2)
+is_in_range_regex(struct document *document, int y, int yy,
+		  unsigned char *text, int l, int *min, int *max,
+		  struct search *s1, struct search *s2)
 {
 	unsigned char *doc;
 	unsigned char *doctmp;
@@ -361,8 +366,9 @@ next:
 #endif /* HAVE_REGEX_H */
 
 static int
-is_in_range_plain(struct document *f, int y, int yy, unsigned char *text, int l,
-		  int *min, int *max, struct search *s1, struct search *s2)
+is_in_range_plain(struct document *document, int y, int yy,
+		  unsigned char *text, int l, int *min, int *max,
+		  struct search *s1, struct search *s2)
 {
 	unsigned char *txt;
 	int found = 0;
@@ -412,26 +418,26 @@ srch_failed:
 }
 
 static int
-is_in_range(struct document *f, int y, int yw, unsigned char *text,
-	    int *min, int *max)
+is_in_range(struct document *document, int y, int yw,
+	    unsigned char *text, int *min, int *max)
 {
 	struct search *s1, *s2;
 	int l;
 
-	assert(f && text && min && max);
+	assert(document && text && min && max);
 	if_assert_failed return 0;
 
 	*min = MAXINT, *max = 0;
 	l = strlen(text);
 
-	if (get_range(f, y, yw, l, &s1, &s2))
+	if (get_range(document, y, yw, l, &s1, &s2))
 		return 0;
 
 #ifdef HAVE_REGEX_H
 	if (get_opt_int("document.browse.search.regex"))
-		return is_in_range_regex(f, y, y + yw, text, l, min, max, s1, s2);
+		return is_in_range_regex(document, y, y + yw, text, l, min, max, s1, s2);
 #endif
-	return is_in_range_plain(f, y, y + yw, text, l, min, max, s1, s2);
+	return is_in_range_plain(document, y, y + yw, text, l, min, max, s1, s2);
 }
 
 #define realloc_points(pts, size) \

@@ -1,3 +1,107 @@
+Sat Dec 13 12:56:00 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Sat Dec 13 10:03:52 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Dec 13 05:29:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/task.c:
+
+	Eliminate the @new_url variable from goto_url_with_hook and
+	follow_url, and re-use the @url parameter instead.  
+
+Sat Dec 13 05:25:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Improve the typeahead error message with the help from Miciah.  
+
+Sat Dec 13 05:22:47 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/task.c:
+
+	Complete the previous commit.  
+
+Sat Dec 13 05:17:36 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/: guile/hooks.c, lua/hooks.c:
+
+	Fix memory leaks in the Guile and Lua follow-url event hooks,
+	following Jonas' pattern for the goto-url event hooks.  
+
+Sat Dec 13 04:40:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/guile/: core.c, hooks.c:
+
+	Compilation fixes: Add the void *data parameters to event hooks per
+	src/sched/event.h:1.7->1.8, and add the struct module *module
+	parameter to the module initialisation callback (wow, has Guile
+	support been broken since it was modularised?!).  
+
+Sat Dec 13 03:46:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	2 is pop up msg_box() and 1 is b33p in typeahead error handling.  
+
+Sat Dec 13 01:53:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Make it possible to use the user defined keyactions for navigating
+	widgets in the dialogs. Idea by Mikolaj Machowski <mikmach@wp.pl>.  
+
+Sat Dec 13 01:41:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	Make it possible to use the user defined keyactions in the main
+	menu. Idea by Mikolaj Machowski <mikmach@wp.pl>.  
+
+Sat Dec 13 00:39:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Quickly fix last patch before pasky starts complaining. ;) 
+
+Sat Dec 13 00:32:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, config/options.inc,
+	dialogs/status.c, sched/session.h, viewer/text/search.c,
+	viewer/text/search.h, viewer/text/view.c:
+
+	Melodic patch in hack minor adding support for typeahead searching
+	of link text.  
+
+Fri Dec 12 23:38:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Tree tagged. Prepare for assault attack... Three! Two! One! Let's
+	go, first three at the right wing, next three at the left wing, me
+	and seven and eight will keep at the centre. Target coordinates zero
+	dot fife papa romeo echo one two, designation dot charlie victor
+	sierra. Right wing, go. Left wing, go. The middle follows me.  
+
+Fri Dec 12 23:26:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre12. I'm a revisionist! 
+
+Fri Dec 12 23:25:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre12.CVS 
+
 Fri Dec 12 23:19:03 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

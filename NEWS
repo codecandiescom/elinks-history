@@ -5,7 +5,7 @@ ELinks-0.4pre:
 * Merged HTTP_AUTH
 * Rewritten part of cookies parsing
 * cookies parser rewritten
-* support for tabindex,accesskey attribute
+* support for tabindex,accesskey,title attribute
 * source layout was dramatically reorganized
 * FTP works now even with servers not requiring/supporting PASS command and
 servers not able to proccess more commands at once (Novell, MS IIS, ..)
@@ -20,6 +20,14 @@ servers not able to proccess more commands at once (Novell, MS IIS, ..)
 * win32/cygwin support enhancements
 * parsing/rendering performance enhancements
 * internal gzip/bzip2 decompression support
+* ELinks binary has now name elinks
+* relocated ELinks configuration files, changed format (if you are upgrading
+  from Links or older ELinks version, read INSTALL file to see how to convert
+  your old config files!!!)
+* options are now in tree hiearchy
+* performance improvements (especially when rendering tables)
+* unambiguous completion support
+* extensive memory debugging support
 
 ELinks-0.3.0:
 

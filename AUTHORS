@@ -190,6 +190,9 @@ Jonas Fonseca <fonseca@diku.dk>
 	Unique download filenames
 	Random hacking
 
+José Luis González González <jlg80@mi.madritel.es>
+	MIME types documentation
+
 Julian Kinraid <jkinraid@clear.net.nz>
 	QNX-related fixes
 
@@ -400,4 +403,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.98 2002/10/29 23:18:34 pasky Exp $
+$Id: AUTHORS,v 1.99 2002/11/26 22:46:20 pasky Exp $

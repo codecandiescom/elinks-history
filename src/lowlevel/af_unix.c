@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.43 2003/06/18 20:11:01 zas Exp $ */
+/* $Id: af_unix.c,v 1.44 2003/06/18 20:29:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@
 #include "util/string.h"
 
 /* Testing purpose. Do not remove. */
-#if 0
+#if 1
 #undef DONT_USE_AF_UNIX
 #undef USE_AF_UNIX
 #endif
@@ -148,9 +148,6 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 	addr = mem_calloc(1, sizeof(struct sockaddr_un));
 	if (!addr) goto free_and_error;
 
-	s_unix_accept = mem_alloc(sizeof(struct sockaddr_un));
-	if (!s_unix_accept) goto free_and_error;
-
 	memcpy(addr->sun_path, path, pathl); /* ending '\0' is done by calloc() */
 	mem_free(path);
 
@@ -171,6 +168,16 @@ free_and_error:
 	if (addr) mem_free(addr);
 
 	return -1;
+}
+
+static int
+alloc_address(struct sockaddr **s_addr, int *s_addr_size)
+{
+	*s_addr = mem_alloc(sizeof(struct sockaddr_un));
+	if (!*s_addr) return 0;
+	if (s_addr_size) *s_addr_size = sizeof(struct sockaddr_un);
+
+	return 1;
 }
 
 static void
@@ -202,12 +209,6 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sin) return -1;
 
-	s_unix_accept = mem_alloc(sizeof(struct sockaddr_in));
-	if (!s_unix_accept) {
-		mem_free(sin);
-		return -1;
-	}
-
 	sin->sin_family = AF_INET;
 	sin->sin_port = htons(ELINKS_PORT);
 	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
@@ -216,6 +217,16 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 	*s_addr_len = sizeof(struct sockaddr_in);
 
 	return AF_INET;
+}
+
+static int
+alloc_address(struct sockaddr **s_addr, int *s_addr_size)
+{
+	*s_addr = mem_alloc(sizeof(struct sockaddr_in));
+	if (!*s_addr) return 0;
+	if (s_addr_size) *s_addr_size = sizeof(struct sockaddr_in);
+
+	return 1;
 }
 
 #define unlink_unix(s)
@@ -251,8 +262,11 @@ bind_to_af_unix(void)
 	int attempts = 0;
 	int af;
 
+	if (!alloc_address(&s_unix_accept, NULL))
+		goto free_and_error;
+
 	af = get_address(&s_unix, &s_unix_l);
-	if (af == -1) return -1;
+	if (af == -1) goto free_and_error;
 
 again:
 
@@ -260,7 +274,7 @@ again:
 	if (s_unix_fd == -1) {
 		error(gettext("socket() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
-		return -1;
+		goto free_and_error;
 	}
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
@@ -280,7 +294,7 @@ again:
 		if (s_unix_fd == -1) {
 			error(gettext("socket() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
-			return -1;
+			goto free_and_error;
 		}
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
@@ -314,9 +328,7 @@ again:
 				goto again;
 			}
 
-			mem_free(s_unix); s_unix = NULL;
-
-			return -1;
+			goto free_and_error;
 		}
 
 		mem_free(s_unix); s_unix = NULL;
@@ -327,14 +339,15 @@ again:
 	if (listen(s_unix_fd, 100)) {
 		error(gettext("listen() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
-
-		mem_free(s_unix); s_unix = NULL;
-		close(s_unix_fd); s_unix_fd = -1;
-
-		return -1;
+		goto free_and_error;
 	}
 
 	set_handlers(s_unix_fd, af_unix_connection, NULL, NULL, NULL);
+
+	return -1;
+
+free_and_error:
+	af_unix_close();
 
 	return -1;
 }

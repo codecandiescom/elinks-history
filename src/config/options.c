@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.451 2004/06/24 06:35:32 miciah Exp $ */
+/* $Id: options.c,v 1.452 2004/06/25 00:48:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,24 +285,27 @@ append:
 	/* Scan the list linearly. This could be probably optimized ie.
 	 * to choose direction based on the first letter or so. */
 	} else {
-		struct listbox_item *bpos = bcat->next;
-
-		assert(bpos != (struct listbox_item *) bcat);
+		struct listbox_item *bpos = (struct listbox_item *) bcat;
 
 		foreach (pos, *cat) {
-			if ((option->type != OPT_TREE
-			     || pos->type == OPT_TREE)
-			    && strcmp(pos->name, option->name) <= 0) {
-next:
+			/* First move the box item to the current position but
+			 * only if the position has not been marked as deleted
+			 * and actually has a box_item -- else we will end up
+			 * 'overflowing' and causing assertion failure. */
+			if (!(pos->flags & OPT_DELETED) && pos->box_item) {
 				bpos = bpos->next;
 				assert(bpos != (struct listbox_item *) bcat);
-				continue;
 			}
+
+			if ((option->type != OPT_TREE
+			     || pos->type == OPT_TREE)
+			    && strcmp(pos->name, option->name) <= 0)
+				continue;
 
 			/* Ordinary options always sort behind trees. */
 			if (option->type != OPT_TREE
 			    && pos->type == OPT_TREE)
-				goto next;
+				continue;
 
 			/* The (struct option) add_at_pos() can mess
 			 * up the order so that we add the box_item

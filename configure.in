@@ -615,6 +615,37 @@ fi
 
 
 dnl ===================================================================
+dnl Backtraces displaying support.
+dnl ===================================================================
+
+hm_enabled_backtrace=1
+hm_forced_backtrace=0
+
+AC_ARG_ENABLE(backtrace, [  --disable-backtrace     disable displaying of backtrace upon crash],
+              [if test "$enableval" = yes; then
+                 hm_forced_backtrace=1
+               else
+                 hm_enabled_backtrace=0
+               fi])
+
+AC_MSG_CHECKING(for backtrace displaying support)
+
+if test "$hm_enabled_backtrace"; then
+	AC_CHECK_HEADERS(execinfo.h, have_execinfo=1, have_execinfo=0)
+	# possible checks for other system-specific means go here
+	if test "$have_execinfo"; then
+		AC_DEFINE(BACKTRACE)
+	else
+		if test "$hm_forced_backtrace"; then
+			AC_MSG_ERROR(No backtrace listing system capability found.)
+		fi
+	fi
+else
+	AC_MSG_RESULT(no)
+fi
+
+
+dnl ===================================================================
 dnl Gettext grey zone. Beware.
 dnl ===================================================================
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.82 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: main.c,v 1.83 2003/05/04 21:36:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,6 +133,34 @@ sig_cont(struct terminal *t)
 	} */
 }
 
+#ifdef BACKTRACE
+static void
+sig_segv(struct terminal *t)
+{
+	/* Get some attention. */
+	fprintf(stderr,"\a"); fflush(stderr); sleep(1);	fprintf(stderr,"\a\n");
+
+	/* Rant. */
+	fprintf(stderr,"ELinks crashed. That shouldn't happen. Please report this incident\n");
+	fprintf(stderr,"to developers. Preferrably please include information about what\n");
+	fprintf(stderr,"probably triggered this and the listout below. Note that it does NOT\n");
+	fprintf(stderr,"supercede the gdb output, which is way more useful for developers.\n");
+	fprintf(stderr,"If you would like to help to debug the problem you just uncovered,\n");
+	fprintf(stderr,"please keep the core you just got and send the developers output of\n");
+	fprintf(stderr,"'bt' command entered inside of gdb (which you run as gdb elinks core).\n");
+	fprintf(stderr,"Thanks a lot for your cooperation!\n\n");
+
+	/* Backtrace. */
+	dump_backtrace(stderr);
+
+	/* TODO: Perhaps offer launching of gdb? Or trying to continue w/
+	 * program execution? --pasky */
+
+	/* The fastest way OUT! */
+	abort();
+}
+#endif
+
 
 static void
 handle_basic_signals(struct terminal *term)
@@ -151,6 +179,9 @@ handle_basic_signals(struct terminal *term)
 #endif
 #ifdef SIGCONT
 	install_signal_handler(SIGCONT, (void (*)(void *))sig_cont, term, 0);
+#endif
+#ifdef BACKTRACE
+	install_signal_handler(SIGSEGV, (void (*)(void *))sig_segv, term, 0);
 #endif
 }
 
@@ -193,6 +224,9 @@ unhandle_terminal_signals(struct terminal *term)
 #ifdef SIGCONT
 	install_signal_handler(SIGCONT, NULL, NULL, 0);
 #endif
+#ifdef BACKTRACE
+	install_signal_handler(SIGSEGV, NULL, NULL, 0);
+#endif
 }
 
 void
@@ -212,6 +246,9 @@ unhandle_basic_signals(struct terminal *term)
 #endif
 #ifdef SIGCONT
 	install_signal_handler(SIGCONT, NULL, NULL, 0);
+#endif
+#ifdef BACKTRACE
+	install_signal_handler(SIGSEGV, NULL, NULL, 0);
 #endif
 }
 

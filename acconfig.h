@@ -89,3 +89,7 @@
 
 /* Force use of internal functions instead of those of system libc */
 #undef USE_LIBC
+
+/* Define to 1 if we should include a generic backtrace printing infrastructure */
+/* (you will still need some support from the libc) */
+#undef BACKTRACE

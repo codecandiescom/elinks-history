@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.7 2003/05/02 13:44:15 pasky Exp $ */
+/* $Id: error.h,v 1.8 2003/05/04 21:36:56 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -18,5 +18,10 @@ void int_error(unsigned char *, ...);
  * only as gcc extension :(. */
 #define internal errfile = __FILE__, errline = __LINE__, int_error
 #define debug errfile = __FILE__, errline = __LINE__, debug_msg
+
+#ifdef BACKTRACE
+#include <stdio.h>
+void dump_backtrace(FILE *);
+#endif
 
 #endif

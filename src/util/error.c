@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.40 2003/05/02 13:44:15 pasky Exp $ */
+/* $Id: error.c,v 1.41 2003/05/04 21:36:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,3 +112,68 @@ debug_msg(unsigned char *fmt, ...)
 
 	va_end(params);
 }
+
+
+#ifdef BACKTRACE
+
+/* The backtrace corner. */
+
+#include <stdio.h>
+
+#ifdef HAVE_EXECINFO_H
+#include <execinfo.h>
+#endif
+
+void
+dump_backtrace(FILE *f, int trouble)
+{
+	/* If trouble is set, when we get here, we can be in various
+	 * interesting situations like inside of the SIGSEGV handler etc. So be
+	 * especially careful here.  Dynamic memory allocation may not work
+	 * (corrupted stack). A lot of other things may not work too. So better
+	 * don't do anything not 100% necessary. */
+
+#ifdef HAVE_EXECINFO_H
+	/* glibc way of doing this */
+
+	void *stack[30];
+	size_t size;
+	char **strings;
+	size_t i;
+
+	size = backtrace(stack, 30);
+	
+	if (trouble) {
+		/* Let's hope fileno() is safe. */
+		backtrace_symbols_fd(stack, size, fileno(f));
+		/* Now out! */
+		return;
+	}
+
+	strings = backtrace_symbols(stack, size);
+
+	printf("Obtained %zd stack frames:\n", size);
+
+	for (i = 0; i < size; i++)
+		printf("[%p] %s\n", stack[i], strings[i]);
+
+	free(strings);
+
+#else
+	/* user torturation */
+	/* TODO: Gettextify? Er, better not. More people (translators) could
+	 * find out what are we doing... ;-) --pasky */
+	/* TODO: Be more cruel when in trouble? ;-) --pasky */
+
+	fprintf(f, "Wheeeeeeeeeee! You played with the config.h by hand, didn't you?\n");
+	fprintf(f, "Of _COURSE_ you did! Is that how a nice .. creature behaves like?\n");
+	fprintf(f, "Of _COURSE_ it isn't! I feel offended and thus I will revenge now!\n");
+	fprintf(f, "You will _suffer_ >:).\n");
+	fprintf(f, "\n");
+	fprintf(f, "CPU burning sequence initiated...\n");
+	/* TODO: Include cpuburn.c here. --pasky */
+	while (1);
+#endif
+}
+
+#endif

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.188 2005/04/01 09:11:37 zas Exp $ */
+/* $Id: core.c,v 1.189 2005/04/01 09:41:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,6 @@
 #include "sched/session.h"
 #include "sched/task.h"
 #include "scripting/lua/core.h"
-#include "scripting/lua/hooks.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/conv.h"
@@ -631,7 +630,7 @@ do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 	mem_free(file);
 }
 
-static void
+void
 init_lua(struct module *module)
 {
 	L = lua_open();
@@ -667,7 +666,7 @@ init_lua(struct module *module)
 
 static void free_lua_console_history_entries(void);
 
-static void
+void
 cleanup_lua(struct module *module)
 {
 	free_lua_console_history_entries();
@@ -854,14 +853,3 @@ free_lua_console_history(va_list ap, void *data)
 	free_lua_console_history_entries();
 	return EVENT_HOOK_STATUS_NEXT;
 }
-
-
-struct module lua_scripting_module = struct_module(
-	/* name: */		"Lua",
-	/* options: */		NULL,
-	/* hooks: */		lua_scripting_hooks,
-	/* submodules: */	NULL,
-	/* data: */		NULL,
-	/* init: */		init_lua,
-	/* done: */		cleanup_lua
-);

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.14 2005/01/13 14:14:51 jonas Exp $
+## $Id: Makefile.am,v 1.15 2005/04/01 09:41:37 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -13,5 +13,6 @@ libscriptinglua_a_SOURCES = \
  core.h \
  hooks.c \
  hooks.h \
+ lua.c \
  lua.h
 

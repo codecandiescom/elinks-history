@@ -1,10 +1,10 @@
-/* $Id: lua.h,v 1.1 2005/01/13 13:29:26 jonas Exp $ */
+/* $Id: lua.h,v 1.2 2005/04/01 09:41:37 zas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_LUA_H
 #define EL__SCRIPTING_LUA_LUA_H
 
-#include "modules/module.h"
+struct module;
 
-extern struct module lua_scripting_module;
+struct module lua_scripting_module;
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.16 2005/03/23 10:10:38 zas Exp $ */
+/* $Id: core.h,v 1.17 2005/04/01 09:41:37 zas Exp $ */
 
 #ifndef EL__SCRIPTING_LUA_CORE_H
 #define EL__SCRIPTING_LUA_CORE_H
@@ -14,6 +14,8 @@
 #include "sched/event.h"
 #include "sched/session.h"
 
+struct module;
+
 extern lua_State *lua_state;
 
 int prepare_lua(struct session *);
@@ -24,5 +26,8 @@ void alert_lua_error2(unsigned char *, unsigned char *);
 
 enum evhook_status dialog_lua_console(va_list ap, void *data);
 enum evhook_status free_lua_console_history(va_list ap, void *data);
+
+void init_lua(struct module *module);
+void cleanup_lua(struct module *module);
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.90 2003/05/09 15:11:39 zas Exp $ */
+/* $Id: parser.c,v 1.91 2003/05/10 11:36:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2461,8 +2461,22 @@ html_link(unsigned char *a)
 	if (strcasecmp(name, "STYLESHEET") &&
 	    strcasecmp(name, "made") &&
 	    strcasecmp(name, "SHORTCUT ICON")) {
+		unsigned char *linktext = NULL;
+		unsigned char *title = get_attr_val(a, "title");
+
 		html_focusable(a);
-		put_link_line("Link: ", name, url, format.target_base);
+
+		if (title)
+			linktext = straconcat(title, " (", name, ")", NULL);
+
+		if (linktext) {
+			put_link_line("Link: ", linktext, url, format.target_base);
+			mem_free(linktext);
+		} else {
+			put_link_line("Link: ", name, url, format.target_base);
+		}
+
+		if (title) mem_free(title);
 	}
 
 	mem_free(name);

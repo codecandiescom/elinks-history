@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.85 2003/11/22 21:42:48 jonas Exp $ */
+/* $Id: dialogs.c,v 1.86 2003/11/22 22:05:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,26 +145,6 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 }
 
 
-static int
-push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-	struct global_history_item *historyitem;
-
-	/* Follow the history item */
-	if (box->sel) {
-		historyitem = box->sel->udata;
-		if (historyitem)
-			goto_url((struct session *) goto_btn->widget->udata,
-				 historyitem->url);
-	}
-
-	/* Close the history dialog */
-	delete_window(dlg_data->win);
-	return 0;
-}
-
-
 #ifdef BOOKMARKS
 static int
 push_bookmark_button(struct dialog_data *dlg_data,
@@ -210,7 +190,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Global history"),
 			GLOBHIST_MANAGER_ADDSIZE, &globhist_browser, ses,
 			GLOBHIST_MANAGER_BUTTONS,
-			N_("Goto"), push_goto_button, B_ENTER, ses,
+			N_("Goto"), push_hierbox_goto_button, B_ENTER, ses,
 			N_("Info"), push_hierbox_info_button, B_ENTER, ses,
 #ifdef BOOKMARKS
 			N_("Bookmark"), push_bookmark_button, B_ENTER, NULL,

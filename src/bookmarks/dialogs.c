@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.130 2003/11/22 21:42:48 jonas Exp $ */
+/* $Id: dialogs.c,v 1.131 2003/11/22 22:05:44 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -191,29 +191,6 @@ push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_
 		    MAX_STR_LEN, NULL, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) do_add_folder,
 		    NULL);
-	return 0;
-}
-
-
-/**** GOTO ***********************************************************/
-
-/* Called when the goto button is pushed */
-static int
-push_goto_button(struct dialog_data *dlg_data, struct widget_data *goto_btn)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-
-	/* Do nothing with a folder */
-	if (box->sel && box->sel->type == BI_FOLDER)
-		return 0;
-
-	/* Follow the bookmark */
-	if (box->sel)
-		goto_url((struct session *) goto_btn->widget->udata,
-			 ((struct bookmark *) box->sel->udata)->url);
-
-	/* Close the bookmark dialog */
-	delete_window(dlg_data->win);
 	return 0;
 }
 
@@ -411,7 +388,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	hierbox_browser(term, N_("Bookmark manager"),
 			BOOKMARK_MANAGER_ADDSIZE, &bookmark_browser, ses,
 			BOOKMARK_MANAGER_BUTTONS,
-			N_("Goto"), push_goto_button, B_ENTER, ses,
+			N_("Goto"), push_hierbox_goto_button, B_ENTER, ses,
 			N_("Edit"), push_edit_button, B_ENTER, ses,
 			N_("Delete"), push_hierbox_delete_button, B_ENTER, NULL,
 			N_("Move"), push_move_button, B_ENTER, NULL,

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.51 2004/12/19 01:15:22 pasky Exp $ */
+/* $Id: vs.c,v 1.52 2004/12/19 11:17:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,12 +100,14 @@ copy_vs(struct view_state *dst, struct view_state *src)
 			memcpy(dst->form_info, src->form_info,
 			       src->form_info_len * sizeof(struct form_state));
 			for (i = 0; i < src->form_info_len; i++) {
-				if (src->form_info[i].value)
-					dst->form_info[i].value =
-						stracpy(src->form_info[i].value);
+				struct from_state *srcfs = &src->form_info[i];
+				struct from_state *dstfs = &dst->form_info[i];
+
+				if (srcfs->value)
+					dstfs->value = stracpy(srcfs->value);
 				/* XXX: This makes it O(nm). */
-				dst->form_info[i].form_view =
-					find_form_view_in_vs(dst, src->form_info[i].form_view->form_num);
+				dstfs->form_view =
+					find_form_view_in_vs(dst, srcfs->form_view->form_num);
 			}
 		}
 	}

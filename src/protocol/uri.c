@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.150 2004/04/06 07:07:33 jonas Exp $ */
+/* $Id: uri.c,v 1.151 2004/04/06 12:29:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -338,8 +338,8 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
-#define normalize_uri_reparse(uri, uristring) normalize_uri(uri, uristring, 1)
-#define normalize_uri_noparse(uri, uristring) normalize_uri(uri, uristring, 0)
+#define normalize_uri_reparse(uri, str)	normalize_uri(uri, str, 1)
+#define normalize_uri_noparse(uri)	normalize_uri(uri, struri(uri), 0)
 
 static unsigned char *
 normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
@@ -532,7 +532,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	switch (parse_uri(&uri, n)) {
 	case URI_ERRNO_OK:
-		return normalize_uri_noparse(&uri, n);
+		return normalize_uri_noparse(&uri);
 
 	case URI_ERRNO_NO_HOST_SLASH:
 	{
@@ -542,7 +542,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		add_to_strn(&n, "/");
 
 		if (parse_uri(&uri, n) == URI_ERRNO_OK)
-			return normalize_uri_noparse(&uri, n);
+			return normalize_uri_noparse(&uri);
 	}
 	default:
 		mem_free(n);
@@ -632,9 +632,9 @@ parse_uri:
 		/* If file:// URI is transformed we need to reparse. */
 		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd
 		    && transform_file_url(&uri, cwd))
-			return normalize_uri_reparse(&uri, newurl);
+			return normalize_uri_reparse(&uri, struri(&uri));
 
-		return normalize_uri_noparse(&uri, newurl);
+		return normalize_uri_noparse(&uri);
 
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */

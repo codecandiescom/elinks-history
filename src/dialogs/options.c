@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.123 2003/11/11 13:45:36 jonas Exp $ */
+/* $Id: options.c,v 1.124 2003/11/11 19:08:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
  * --pasky */
 
 enum termopt {
-	TERM_OPT_TYPE,
+	TERM_OPT_TYPE = 0,
 	TERM_OPT_M11_HACK,
 	TERM_OPT_RESTRICT_852,
 	TERM_OPT_BLOCK_CURSOR,
@@ -90,8 +90,8 @@ static struct termopt_info termopt_info[] = {
 	{ TERM_OPT_RESTRICT_852, "restrict_852"	},
 	{ TERM_OPT_BLOCK_CURSOR, "block_cursor"	},
 	{ TERM_OPT_COLORS,	 "colors"	},
-	{ TERM_OPT_UTF_8_IO,	 "transparency"	},
-	{ TERM_OPT_TRANSPARENCY, "utf_8_io"	},
+	{ TERM_OPT_TRANSPARENCY, "transparency"	},
+	{ TERM_OPT_UTF_8_IO,	 "utf_8_io"	},
 	{ TERM_OPT_UNDERLINE,	 "underline"	},
 };
 
@@ -108,9 +108,10 @@ push_ok_button(struct dialog_data *dlg_data, struct widget_data *button)
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
 		struct option *o = get_opt_rec(term->spec, name);
+		enum termopt id = termopt_info[i].id;
 
-		if (o->value.number != values[i]) {
-			o->value.number = values[i];
+		if (o->value.number != values[id]) {
+			o->value.number = values[id];
 			o->flags |= OPT_TOUCHED;
 			touched++;
 		}
@@ -151,11 +152,13 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(int) * TERM_OPTIONS);
 	if (!dlg) return;
 
-	values = (int *) dlg + sizeof_dialog(TERMOPT_WIDGETS_COUNT, 0);
+	i = sizeof_dialog(TERMOPT_WIDGETS_COUNT, 0);
+	values = (int *) ((unsigned char *) dlg + i);
 	for (i = 0; i < TERM_OPTIONS; i++) {
 		unsigned char *name = termopt_info[i].name;
+		enum termopt id = termopt_info[i].id;
 
-		values[i] = get_opt_int_tree(term->spec, name);
+		values[id] = get_opt_int_tree(term->spec, name);
 	}
 
 	dlg->title = _("Terminal options", term);

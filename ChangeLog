@@ -1,3 +1,21 @@
+Mon Sep 23 12:35:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	And now done it in a way so that it actually works.  
+
+Mon Sep 23 10:24:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: document/view.c, lowlevel/kbd.h:
+
+	This wasn't supposed to be commited (yet) ;-).  
+
+Mon Sep 23 10:23:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/document/view.c, src/lowlevel/kbd.h:
+
+	Fix configure for systems with zlib.h but without libz. *brr* 
+
 Sun Sep 22 16:34:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:

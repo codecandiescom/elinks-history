@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.145 2004/12/14 17:08:56 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.146 2004/12/14 17:35:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,14 +354,11 @@ get_bookmark(unsigned char *url)
 	return item ? item->value : NULL;
 }
 
-void
-bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
+static void
+bookmark_terminal(struct terminal *term, struct bookmark *folder)
 {
 	unsigned char title[MAX_STR_LEN], url[MAX_STR_LEN];
-	struct bookmark *folder = add_bookmark(NULL, 1, foldername, NULL);
 	struct window *tab;
-
-	if (!folder) return;
 
 	foreachback_tab (tab, term->windows) {
 		struct session *ses = tab->data;
@@ -375,6 +372,17 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 		add_bookmark(folder, 1, title, url);
 	}
 }
+
+void
+bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
+{
+	struct bookmark *folder = add_bookmark(NULL, 1, foldername, NULL);
+
+	if (!folder) return;
+
+	bookmark_terminal(term, folder);
+}
+
 
 void
 bookmark_auto_save_tabs(struct terminal *term)

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.62 2003/12/26 12:18:37 zas Exp $ */
+/* $Id: kbdbind.h,v 1.63 2003/12/26 14:14:43 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -50,6 +50,7 @@ enum keyact {
 	ACT_FIND_NEXT,
 	ACT_FIND_NEXT_BACK,
 	ACT_FORGET_CREDENTIALS,
+	ACT_FORMHIST_MANAGER,
 	ACT_GOTO_URL,
 	ACT_GOTO_URL_CURRENT,
 	ACT_GOTO_URL_CURRENT_LINK,

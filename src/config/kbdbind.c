@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.124 2003/12/26 14:08:07 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.125 2003/12/26 14:14:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,6 +404,7 @@ static struct strtonum action_table[] = {
 	{ "find-next", ACT_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
 	{ "find-next-back", ACT_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
 	{ "forget-credentials", ACT_FORGET_CREDENTIALS, DACT(N_("Forget authentication credentials")) },
+	{ "formhist-manager", ACT_FORMHIST_MANAGER, DACT(N_("Open form history manager")) },
 	{ "goto-url", ACT_GOTO_URL, DACT(N_("Open \"Go to URL\" dialog box")) },
 	{ "goto-url-current", ACT_GOTO_URL_CURRENT, DACT(N_("Open \"Go to URL\" dialog box containing the current URL")) },
 	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, DACT(N_("Open \"Go to URL\" dialog box containing the current link URL")) },
@@ -704,6 +705,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'E',		 0,		ACT_GOTO_URL_CURRENT_LINK },
 	{ 'E',		 KBD_CTRL,	ACT_END },
 	{ 'F',		 KBD_CTRL,	ACT_PAGE_DOWN },
+	{ 'F',		 0,		ACT_FORMHIST_MANAGER },
 	{ 'G',		 0,		ACT_GOTO_URL_CURRENT },
 	{ 'H',		 0,		ACT_GOTO_URL_HOME },
 	{ 'K',		 0,		ACT_COOKIE_MANAGER },

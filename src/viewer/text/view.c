@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.309 2003/12/26 13:37:18 jonas Exp $ */
+/* $Id: view.c,v 1.310 2003/12/26 14:14:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,7 @@
 #include "document/html/frames.h"
 #include "document/options.h"
 #include "document/renderer.h"
+#include "formhist/dialogs.h"
 #include "globhist/dialogs.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
@@ -1091,6 +1092,11 @@ quak:
 				goto x;
 			case ACT_DOWNLOAD_MANAGER:
 				menu_download_manager(ses->tab->term, NULL, ses);
+				goto x;
+			case ACT_FORMHIST_MANAGER:
+#ifdef FORMS_MEMORY
+				menu_formhist_manager(ses->tab->term, NULL, ses);
+#endif
 				goto x;
 			case ACT_HISTORY_MANAGER:
 #ifdef GLOBHIST

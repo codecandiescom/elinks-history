@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.13 2003/11/28 00:46:29 pasky Exp $ */
+/* $Id: signals.c,v 1.14 2003/11/28 00:48:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,6 +233,8 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 {
 	struct sigaction sa = {};
 
+	/* Yes, assertm() in signal handler is totally unsafe and depends just
+	 * on good luck. But hey, assert()ions are never triggered ;-). */
 	assertm(sig >= 0 && sig < NUM_SIGNALS, "bad signal number: %d", sig);
 	if_assert_failed return;
 

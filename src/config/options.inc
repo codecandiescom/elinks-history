@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.83 2004/01/08 21:43:53 pasky Exp $ */
+/* $Id: options.inc,v 1.84 2004/01/08 21:48:40 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -143,7 +143,7 @@ struct option_info config_options_info[] = {
 		"confirm_submit", 0, 1,
 		N_("Ask for confirmation when submitting a form.")),
 
-	INIT_OPT_INT("document.html", N_("Default form input size"),
+	INIT_OPT_INT("document.html.forms", N_("Default form input size"),
 		"input_size", 0, 3, 300, HTML_DEFAULT_INPUT_SIZE,
 		N_("Default form input size if none is specified.")),
 

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.70 2004/06/30 03:26:41 jonas Exp $ */
+/* $Id: document.c,v 1.71 2004/07/12 18:23:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,8 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 		    || compare_opt(&document->options, options))
 			continue;
 
-		if (cached->id != document->id
+		if (options->no_cache
+		    || cached->id != document->id
 		    || document->css_magic != get_document_css_magic(document)) {
 			if (!is_object_used(document)) {
 				document = document->prev;

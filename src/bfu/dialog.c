@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.200 2005/03/19 00:31:52 zas Exp $ */
+/* $Id: dialog.c,v 1.201 2005/03/30 10:45:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,6 +483,7 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *xxx)
 			widget_data->widget->ops->clear(dlg_data, widget_data);
 	}
 
+	select_widget_by_id(dlg_data, 0);
 	redraw_dialog(dlg_data, 0);
 	return EVENT_PROCESSED;
 }

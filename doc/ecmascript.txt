@@ -97,8 +97,8 @@ Enjoy.
 
 Likely not. The ECMAScript engine provides only the language compiler and some
 basic built-in objects, and it's more than likely that the problem is on our
-side in implementation of some of the HTML/DOM objects (perhaps we just didn't
-bother to implement it at all yet). So better tell us first, and if we think
+side in implementation of some of the HTML/DOM objects (perhaps we just haven't
+bothered to implement it at all yet). So better tell us first, and if we think
 it's not our fault we will tell you to go complain to Mozilla (better yet if
 it does not work in the Mozilla browsers neither ;-).
 
@@ -115,4 +115,4 @@ easy. We await your patches eagerly.
 
 
 
-$Id: ecmascript.txt,v 1.7 2004/12/16 13:36:36 jonas Exp $
+$Id: ecmascript.txt,v 1.8 2005/01/03 05:47:31 miciah Exp $

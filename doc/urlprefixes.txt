@@ -26,7 +26,7 @@ More so, if you type 'g elinks' to the Goto URL dialog, it will be rewritten to
 
 and then loaded --- therefore, google search for the "elinks" keyword will
 ensue. Note that you can separate the 'g' by either space or colon, so
-'g:elinks' would do the exact same thing.
+'g:elinks' will do the exact same thing.
 
 
 A large number of those shortcuts is already predefined. You can browse
@@ -94,4 +94,4 @@ goto-url hook isn't triggered when the URL is passed on the command line.
 
 
 
-$Id: urlprefixes.txt,v 1.2 2004/12/16 13:36:36 jonas Exp $
+$Id: urlprefixes.txt,v 1.3 2005/01/03 05:47:31 miciah Exp $

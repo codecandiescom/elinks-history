@@ -3,12 +3,12 @@
 Glad to see you again, mortal. Now, we are going to learn about bookmarks - how
 to use them, how to maintain them, and also something more about the file
 formats and maybe even about the code structure later. But don't fear, we won't
-burden you with it, just stop reading when you will know enough already.
+burden you with it, just stop reading when you know enough already.
 
 In order to read this, you need some common sense, ability to start ELinks and
 some idea about what's a web document, URL address and knowledge like that.
 
-If we will ever mention some keys here, please note that you can rebind almost
+If we ever mention some keys here, please note that you can rebind almost
 any action to another key which you like more - then you must obviously imagine
 your own key in place of that. Below, we will list all actions, options and so
 on, related to bookmarks. We won't tell you how to rebind the keys, though;
@@ -30,7 +30,7 @@ You launch the bookmark manager by pressing the 's' key in standby (standard)
 mode. You should see a big empty space (bookmarks will slowly appear there as
 you will add them) and couple of buttons shriveling at the bottom. So, as a
 start, move with the right (or left, both will do) arrow to the button "Add
-bookmark" and fill in the input fields it will offer to you. I mean, you can
+bookmark" and fill in the input fields it offers to you. I mean, you can
 type something like "ELinks homepage" to the first field, then move down by ie.
 the down arrow and fill "http://elinks.or.cz/" to the second field. Then,
 bravely press enter and watch the bookmark popping up at the top of the vast
@@ -198,11 +198,11 @@ configuration again and cause ELinks to resave the bookmarks.
 
 Agreed, this all strange dances are quite clumsy, likely some simple
 wizard-like interface for switching the bookmarks formats will be introduced
-in the future. So far, we had no reports from our users that anyone would be
+in the future. So far, we have had no reports from our users that anyone would be
 switching their bookmarks format frequently, so this is not too high on our
 TODO list. So be sure to tell us if you would like this process to be
 simplified rather sooner than later.
 
 
 
-$Id: bookmarks.txt,v 1.7 2004/12/16 10:49:32 pasky Exp $
+$Id: bookmarks.txt,v 1.8 2005/01/03 05:47:31 miciah Exp $

@@ -121,7 +121,7 @@ This last couple satisfies all constraints, so we are done ;)
 How to cache the result and integrate it with the current color system
 ----------------------------------------------------------------------
 
-In previous example, we supposed we are using a true color palette, but most
+In previous example, we supposed we were using a true color palette, but most
 cases we have a limited number of usable colors.
 We need to convert (fg, bg) to the nearest available color _before_ constraints
 satisfaction and at each step of it.
@@ -238,7 +238,7 @@ Implementation
 
 There is some sample code for RGB <-> HSL conversion posted to the elinks-dev
 mailing list. It is expected to be merged to CVS when the color model itself
-implementation will draw nearer.
+implementation draws nearer.
 
 Availability
 ------------
@@ -296,5 +296,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 
 
-$Id: color-model.txt,v 1.13 2004/12/16 09:33:23 pasky Exp $
+$Id: color-model.txt,v 1.14 2005/01/03 05:47:31 miciah Exp $
 vim: textwidth=80

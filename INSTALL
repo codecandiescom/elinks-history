@@ -1,4 +1,24 @@
-Links
+Elinks installation guidelines
+
+
+CVS:
+
+If you don't want to use tarball but CVS, do this:
+export CVSROOT=:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks
+cvs login
+(empty password)
+cvs co elinks
+cd elinks
+./configure
+make cvs-dist
+...
+
+Note that you don't need to call configure once more while compilation,
+once is enough :-).
+
+There is also target cvs-undist, which will keep really only contents of CVS
+repository in your directory.
+
 
 Compile:
 
@@ -23,6 +43,7 @@ OS/2 - you can use ./configure. If it fails or if you don't have bash, use
 	SET EMXOPT=-h100
 
 Dos, Windows - port it yourself
+
 
 Install:
 

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.4 2003/12/07 20:17:52 pasky Exp $ */
+/* $Id: smb.c,v 1.5 2003/12/07 20:18:36 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -266,17 +266,6 @@ np:
 					break;
 				}
 
-				case 2:
-sss:
-					add_bytes_to_string(&page, line, ll - line);
-					add_to_string(&page, "<a href=\"smb://");
-					add_bytes_to_string(&page, ll, lll - ll);
-					add_to_string(&page, "/\">");
-					add_bytes_to_string(&page, ll, lll - ll);
-					add_to_string(&page, "</a>");
-					add_to_string(&page, lll);
-					break;
-
 				case 3:
 					if (pos < strlen(line) && pos
 					    && WHITECHAR(line[pos - 1])
@@ -290,7 +279,17 @@ sss:
 					for (lll = ll; *lll; lll++)
 						if (WHITECHAR(*lll))
 							break;
-					goto sss;
+					/* Fall-through */
+
+				case 2:
+					add_bytes_to_string(&page, line, ll - line);
+					add_to_string(&page, "<a href=\"smb://");
+					add_bytes_to_string(&page, ll, lll - ll);
+					add_to_string(&page, "/\">");
+					add_bytes_to_string(&page, ll, lll - ll);
+					add_to_string(&page, "</a>");
+					add_to_string(&page, lll);
+					break;
 
 				default:
 					goto af;

@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.17 2003/11/06 20:11:19 jonas Exp $ */
+/* $Id: dialog.h,v 1.18 2003/11/06 22:02:51 jonas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -39,6 +39,8 @@ struct dialog {
 	(sizeof(struct dialog) + ((n) - 1) * sizeof(struct widget) + (add_size))
 
 #define calloc_dialog(n, add_size) ((struct dialog *) mem_calloc(1, sizeof_dialog(n, add_size)))
+
+#define dialog_max_width(term_) ((term_)->width * 9 / 10 - 2 * DIALOG_LB)
 
 struct dialog_data {
 	struct window *win;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.102 2003/11/06 20:11:21 jonas Exp $ */
+/* $Id: search.c,v 1.103 2003/11/06 22:02:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,7 +968,8 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
-	int w, rw;
+	int w = dialog_max_width(term);
+	int rw = 0; /* !!! FIXME: input field */
 	int y = -1;
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
@@ -980,11 +981,9 @@ search_dialog_layouter(struct dialog_data *dlg_data)
 
 	int_lower_bound(&max, dlg_data->dlg->widgets->datalen);
 
-	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
 
-	rw = 0; /* !!! FIXME: input field */
 	dlg_format_text(NULL, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
 	dlg_format_field(NULL, dlg_data->widgets_data, 0, &y, w, &rw,

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.114 2003/11/06 20:11:21 jonas Exp $ */
+/* $Id: core.c,v 1.115 2003/11/06 22:02:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -361,7 +361,8 @@ dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
-	int w, rw;
+	int w = dialog_max_width(term);
+	int rw;
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
@@ -370,7 +371,6 @@ dialog_layouter(struct dialog_data *dlg_data)
 	text_width(term, dlg_msg[2], &min, &max);
 	buttons_width(dlg_data->widgets_data + 3, 2, &min, &max);
 
-	w = dlg_data->win->term->width * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
 	int_upper_bound(&w, dlg_data->win->term->width - 2 * DIALOG_LB);
@@ -499,7 +499,8 @@ xdialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
-	int w, rw;
+	int w = dialog_max_width(term);
+	int rw;
 	int y = -1;
 	int i;
 	int nfields = 0;
@@ -511,7 +512,6 @@ xdialog_layouter(struct dialog_data *dlg_data)
 	text_width(term, dlg_msg[0], &min, &max);
 	buttons_width(dlg_data->widgets_data + nfields, 2, &min, &max);
 
-	w = dlg_data->win->term->width * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
 	int_upper_bound(&w, dlg_data->win->term->width - 2 * DIALOG_LB);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.136 2003/11/06 20:11:21 jonas Exp $ */
+/* $Id: download.c,v 1.137 2003/11/06 22:02:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,7 +312,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	struct file_download *file_download = dlg_data->dlg->udata;
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
-	int w, x, y;
+	int w = dialog_max_width(term);
+	int x, y;
 	int t = 0;
 	int url_len;
 	unsigned char *url;
@@ -326,7 +327,6 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	if (!init_string(&msg)) return;
 	t = download_progress_string(term, download, &msg);
 
-	w = term->width * 9 / 10 - 2 * DIALOG_LB;
 	int_lower_bound(&w, 0);
 
 	url_len = strlen(file_download->url);

@@ -184,9 +184,7 @@ reasonable, initialize variables during their declaration and don't group too
 many variables in one line.  ALWAYS make a blank line after the declaration
 part.
 
-And don't specify variable names in the prototypes - just types of variables.
-Anyone who's interested in the function will probably want to look at the code
-anyway.  And be sure to prefix all local functions with 'static'.
+Be sure to prefix all local functions with 'static'.
 
 Indent shift width is 8 characters, that means one tab character.
 
@@ -410,7 +408,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.16 2003/10/13 18:55:36 fabio Exp $ */
+	/* $Id: hacking.txt,v 1.17 2003/10/24 13:36:51 zas Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -515,4 +513,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.16 2003/10/13 18:55:36 fabio Exp $
+$Id: hacking.txt,v 1.17 2003/10/24 13:36:51 zas Exp $

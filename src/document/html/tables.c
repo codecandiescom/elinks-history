@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.332 2004/06/30 22:39:10 jonas Exp $ */
+/* $Id: tables.c,v 1.333 2004/06/30 22:44:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,28 +355,31 @@ static inline int
 stretch_columns(struct table *table, int widths[], int max_widths[],
 		int spare_width, int total_width)
 {
-	int stretch_width, stretch_col, col;
 	int total_spare_width = spare_width;
 
-again:
-	stretch_width = 0;
-	stretch_col = -1;
+	while (spare_width) {
+		int stretch_width = 0;
+		int stretch_col = -1;
+		int col;
 
-	for (col = 0; col < table->cols; col++) {
-		int col_spare_width;
+		for (col = 0; col < table->cols; col++) {
+			int col_spare_width;
 
-		if (!widths[col])
-			continue;
+			if (!widths[col])
+				continue;
 
-		col_spare_width = total_spare_width * widths[col] / total_width;
-		int_bounds(&col_spare_width, 1, max_widths[col]);
-		if (col_spare_width > stretch_width) {
-			stretch_width = col_spare_width;
-			stretch_col = col;
+			col_spare_width = total_spare_width * widths[col] / total_width;
+			int_bounds(&col_spare_width, 1, max_widths[col]);
+			if (col_spare_width > stretch_width) {
+				stretch_width = col_spare_width;
+				stretch_col = col;
+			}
 		}
-	}
 
-	if (stretch_col != -1) {
+		/* Got stretch column? */
+		if (stretch_col == -1)
+			break;
+
 		/* Mark the column as visited */
 		widths[stretch_col] = 0;
 
@@ -386,9 +389,6 @@ again:
 
 		table->cols_widths[stretch_col] += stretch_width;
 		spare_width -= stretch_width;
-
-		if (spare_width)
-			goto again;
 	}
 
 	return total_spare_width - spare_width;

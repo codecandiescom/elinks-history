@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.92 2003/05/16 19:42:32 zas Exp $ */
+/* $Id: menu.c,v 1.93 2003/05/16 22:25:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,12 +517,14 @@ static struct menu_item view_menu_anon[] = {
 };
 
 static struct menu_item help_menu[] = {
-	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
-	{N_("~Documentation"), "", MENU_FUNC menu_documentation, (void *)0, 0, 0},
 	{N_("~ELinks homepage"), "", MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
+	{N_("~Documentation"), "", MENU_FUNC menu_documentation, (void *)0, 0, 0},
+	{N_("~Keys"), "", MENU_FUNC menu_keys, (void *)0, 0, 0},
+	{"", M_BAR, NULL, NULL, 0, 0},
 #ifdef DEBUG
 	{N_("~Bugs information"), "", MENU_FUNC menu_bugs, (void *)0, 0, 0},
 	{N_("~ELinks CvsWeb"), "", MENU_FUNC menu_cvsweb, (void *)0, 0, 0},
+	{"", M_BAR, NULL, NULL, 0, 0},
 #endif
 	{N_("~Copying"), "", MENU_FUNC menu_copying, (void *)0, 0, 0},
 	{N_("~About"), "", MENU_FUNC menu_about, (void *)0, 0, 0},

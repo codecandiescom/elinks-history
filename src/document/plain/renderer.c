@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.160 2004/12/18 00:28:26 miciah Exp $ */
+/* $Id: renderer.c,v 1.161 2004/12/20 11:41:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,7 +179,6 @@ print_document_link(struct plain_renderer *renderer, int lineno,
 	unsigned char saved_char;
 	struct document_options *doc_opts = &document->options;
 	struct color_pair colors;
-	unsigned char *optstring = NULL;
 	struct screen_char template = renderer->template;
 	int i;
 
@@ -194,21 +193,18 @@ print_document_link(struct plain_renderer *renderer, int lineno,
 		; /* Shut up compiler */
 #ifdef CONFIG_GLOBHIST
 	else if (get_global_history_item(start))
-		optstring = "document.colors.vlink";
+		colors.foreground = doc_opts->default_vlink;
 #endif
 #ifdef CONFIG_BOOKMARKS
 	else if (get_bookmark(start))
-		optstring = "document.colors.bookmark";
+		colors.foreground = doc_opts->default_bookmark_link;
 #endif
 	else
-		optstring = "document.colors.link";
+		colors.foreground = doc_opts->default_link;
 
 	line[link_end] = saved_char;
 
-	assert(optstring);
-
 	colors.background = doc_opts->default_bg;
-	colors.foreground = get_opt_color(optstring);
 
 	set_term_color(&template, &colors,
 		       doc_opts->color_flags, doc_opts->color_mode);

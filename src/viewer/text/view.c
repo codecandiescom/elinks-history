@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.434 2004/06/02 06:38:12 miciah Exp $ */
+/* $Id: view.c,v 1.435 2004/06/03 08:08:54 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -708,7 +708,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_MAIN_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
 			case ACT_MAIN_JUMP_TO_LINK: x = 2; break;
 			case ACT_MAIN_MARK_SET:
-#ifdef CONFIG_MAKRS
+#ifdef CONFIG_MARKS
 				ses->kbdprefix.mark = KP_MARK_SET;
 #endif
 				x = 2;

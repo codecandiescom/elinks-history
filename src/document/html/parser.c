@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.424 2004/05/25 03:37:28 jonas Exp $ */
+/* $Id: parser.c,v 1.425 2004/05/25 03:52:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,7 +1035,7 @@ look_for_tag(unsigned char **pos, unsigned char *eof,
 static int
 look_for_link(unsigned char **pos, unsigned char *eof,
 	      unsigned char *tag, struct menu_item **menu,
-	      struct memory_list **ml, unsigned char *href_base,
+	      struct memory_list **ml, struct uri *href_base,
 	      unsigned char *target_base, struct conv_table *ct)
 {
 	unsigned char *attr, *label, *href, *name, *target;
@@ -1108,7 +1108,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	}
 
 
-	ld->link = join_urls(href_base, href);
+	ld->link = join_urls(struri(href_base), href);
 	mem_free(href);
 	if (!ld->link) {
 		mem_free_if(label);
@@ -1169,7 +1169,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      unsigned char *tag, struct menu_item **menu,
-	      struct memory_list **ml, unsigned char *href_base,
+	      struct memory_list **ml, struct uri *href_base,
 	      unsigned char *target_base, int to, int def, int hdef)
 {
 	struct conv_table *ct;

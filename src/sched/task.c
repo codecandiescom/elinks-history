@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.83 2004/05/25 01:00:02 jonas Exp $ */
+/* $Id: task.c,v 1.84 2004/05/25 03:52:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -264,7 +264,7 @@ ses_imgmap(struct session *ses)
 
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
-			  struri(ses->imgmap_href_base), ses->imgmap_target_base,
+			  ses->imgmap_href_base, ses->imgmap_target_base,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))

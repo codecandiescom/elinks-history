@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.6 2003/12/01 14:24:21 pasky Exp $ */
+/* $Id: window.h,v 1.7 2003/12/02 19:07:52 jonas Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -8,18 +8,38 @@
 struct term_event;
 struct terminal;
 
+enum window_type {
+	/* Normal windows: */
+	/* Used for things like dialogs. The default type when adding windows
+	 * with add_window(). */
+	WT_NORMAL,
+
+	/* Tab windows: */
+	/* Tabs are a separate session and has separate history, current
+	 * document and action-in-progress .. basically a separate browsing
+	 * state. */
+	WT_TAB,
+};
+
 struct window {
 	LIST_HEAD(struct window);
 
+	enum window_type type;
+
+	/* The window event handler */
 	void (*handler)(struct window *, struct term_event *, int fwd);
+
+	/* For tab windows the session is stored in @data. For normal windows
+	 * it can contain dialog data. */
+	/* It is free()'d by delete_window() */
 	void *data;
+
+	/* The terminal (and screen) that hosts the window */
 	struct terminal *term;
-	int xpos, width;	/* Used for tabs focus detection. */
+
+	/* Used for tabs focus detection. */
+	int xpos, width;
 	int x, y;
-	enum window_type {
-		WT_NORMAL, /* normal window, ie. dialog one */
-		WT_TAB, /* sorta sessions container */
-	} type;
 };
 
 void redraw_from_window(struct window *);

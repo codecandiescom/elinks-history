@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.230 2003/10/29 20:53:38 jonas Exp $ */
+/* $Id: parser.c,v 1.231 2003/10/29 21:27:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -478,7 +478,7 @@ unsigned char *eoff;
 unsigned char *eofff;
 unsigned char *startf;
 
-int line_breax;
+static int line_breax;
 static int position;
 static int putsp;
 
@@ -3659,6 +3659,49 @@ xsp:
 	mem_free(he);
 	add_to_string(head, "\r\n");
 	goto se;
+}
+
+struct html_element *
+init_html_parser_state(int align, int margin, int width)
+{
+	struct html_element *element;
+
+	html_stack_dup();
+	element = &html_top;
+	html_top.dontkill = 2;
+	html_top.namelen = 0;
+
+	par_format.align = align;
+	par_format.leftmargin = margin;
+	par_format.rightmargin = margin;
+	par_format.width = width;
+	par_format.list_level = 0;
+	par_format.list_number = 0;
+	par_format.dd_margin = 0;
+
+	return element;
+}
+
+void
+done_html_parser_state(struct html_element *element)
+{
+	line_breax = 1;
+
+	while (&html_top != element) {
+		kill_html_stack_item(&html_top);
+#if 0
+		/* I've preserved this bit to show an example of the Old Code
+		 * of the Mikulas days (I _HOPE_ it's by Mikulas, at least ;-).
+		 * I think this assert() can never fail, for one. --pasky */
+		assertm(&html_top && (void *)&html_top != (void *)&html_stack,
+			"html stack trashed");
+		if_assert_failed break;
+#endif
+	}
+
+	html_top.dontkill = 0;
+	kill_html_stack_item(&html_top);
+
 }
 
 void

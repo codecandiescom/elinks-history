@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.329 2003/10/29 20:53:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.330 2003/10/29 21:27:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1215,7 +1215,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		 int link_num)
 {
 	struct part *part;
-	struct html_element *e;
+	struct html_element *html_state;
 	int llm = last_link_to_move;
 	struct tag *ltm = last_tag_to_move;
 	/*struct tag *ltn = last_tag_for_newline;*/
@@ -1300,45 +1300,19 @@ format_html_part(unsigned char *start, unsigned char *end,
 	part->cy = 0;
 	part->link_num = link_num;
 
-	html_stack_dup();
-	e = &html_top;
-	html_top.dontkill = 2;
-	html_top.namelen = 0;
-
-	par_format.align = align;
-	par_format.leftmargin = m;
-	par_format.rightmargin = m;
-	par_format.width = width;
-	par_format.list_level = 0;
-	par_format.list_number = 0;
-	par_format.dd_margin = 0;
+	html_state = init_html_parser_state(align, m, width);
 
 	do_format(start, end, part, head);
+
+	done_html_parser_state(html_state);
 
 	part->xmax = int_max(part->xmax, part->x);
 
 	nobreak = 0;
-	line_breax = 1;
 
 	if (last_link) mem_free(last_link);
 	if (last_image) mem_free(last_image);
 	if (last_target) mem_free(last_target);
-
-	while (&html_top != e) {
-		kill_html_stack_item(&html_top);
-#if 0
-		/* I've preserved this bit to show an example of the Old Code
-		 * of the Mikulas days (I _HOPE_ it's by Mikulas, at least ;-).
-		 * I think this assert() can never fail, for one. --pasky */
-		assertm(&html_top && (void *)&html_top != (void *)&html_stack,
-			"html stack trashed");
-		if_assert_failed break;
-#endif
-	}
-
-	html_top.dontkill = 0;
-	kill_html_stack_item(&html_top);
-
 	if (part->spaces) mem_free(part->spaces);
 
 	if (document) {

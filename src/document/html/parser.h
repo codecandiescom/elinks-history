@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.37 2003/10/29 20:30:34 jonas Exp $ */
+/* $Id: parser.h,v 1.38 2003/10/29 21:27:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -146,7 +146,6 @@ struct html_element {
 };
 
 extern struct list_head html_stack;
-extern int line_breax;
 
 extern unsigned char *startf;
 extern unsigned char *eofff;
@@ -216,5 +215,7 @@ void free_tags_lookup(void);
 void init_tags_lookup(void);
 
 void done_html_parser(void);
+struct html_element *init_html_parser_state(int align, int margin, int width);
+void done_html_parser_state(struct html_element *element);
 
 #endif

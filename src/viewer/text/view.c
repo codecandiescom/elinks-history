@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.627 2004/10/17 20:33:17 miciah Exp $ */
+/* $Id: view.c,v 1.628 2004/10/17 20:34:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,7 +625,6 @@ try_mark_key(struct session *ses, struct document_view *doc_view,
 	     struct term_event *ev)
 {
 	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
-		/* Marks */
 		unsigned char mark = get_kbd_key(ev);
 
 		switch (ses->kbdprefix.mark) {

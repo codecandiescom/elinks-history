@@ -20,7 +20,10 @@ RPMs:
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
 Mailing list:
-	links-list@appwatch.com
-	links-subscribe@appwatch.com
-	links-help@appwatch.com
+	http://links.sf.net/mailing.html
+	links-list@linuxfromscratch.org (bug reports, announcements)
+	links-discuss@linuxfromscratch.org (feature requests, development)
+	listar@linuxfromscratch.org (Subject: subscribe links-list)
 
+elinks site:
+	http://pasky.ji.cz/elinks/

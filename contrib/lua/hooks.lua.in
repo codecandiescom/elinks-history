@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.58 2005/03/25 05:13:40 miciah Exp $
+-- $Id: hooks.lua.in,v 1.59 2005/03/25 05:36:58 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -10,6 +10,7 @@
 --  Taken from Lua's compat.lua.
 ----------------------------------------------------------------------
 
+enable_systems_functions()
 _OUTPUT = io.stdout
 
 function writeto (name)
@@ -71,32 +72,30 @@ end
 
 goto_url_hooks = {n=0}
 function goto_url_hook (url)
-    local changed = nil
-
     table.foreachi(goto_url_hooks,
                    function (i, fn)
                        local new,stop = fn(url)
                    
-                       if new then url=new changed=1 end
+                       url = new
+
                        return stop
                    end)
 
-   return changed and url
+   return url
 end
 
 follow_url_hooks = {n=0}
 function follow_url_hook (url)
-    local changed = nil
-
     table.foreachi(follow_url_hooks,
                    function (i, fn)
                        local new,stop = fn(url)
                    
-                       if new then url=new changed=1 end
+                       url = new
+
                        return stop
                    end)
 
-   return changed and url
+   return url
 end
 
 quit_hooks = {n=0}

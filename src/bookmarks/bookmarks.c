@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.146 2004/12/14 17:35:28 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.147 2004/12/16 09:44:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,13 +50,13 @@ static struct option_info bookmark_options_info[] = {
 	INIT_OPT_INT("bookmarks", N_("File format"),
 		"file_format", 0, 0, 1, 0,
 		N_("File format for bookmarks (affects both reading and saving):\n"
-		"0 is the default ELinks (Links 0.9x compatible) format\n"
+		"0 is the default native ELinks format\n"
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)")),
 #else
 	INIT_OPT_INT("bookmarks", N_("File format"),
 		"file_format", 0, 0, 1, 0,
 		N_("File format for bookmarks (affects both reading and saving):\n"
-		"0 is the default ELinks (Links 0.9x compatible) format\n"
+		"0 is the default native ELinks format\n"
 		"1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 		"  (DISABLED)")),
 #endif

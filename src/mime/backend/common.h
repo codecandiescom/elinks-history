@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.9 2003/06/07 23:42:31 jonas Exp $ */
+/* $Id: common.h,v 1.10 2003/06/08 17:42:49 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -46,5 +46,9 @@ unsigned char *
 get_next_path_filename(unsigned char **path_ptr, unsigned char separator);
 
 int get_extension_from_url(unsigned char *url, unsigned char **extension);
+
+/* Returns allocated string containing the biggest possible extension.
+ * If url is 'jabadaba.1.foo.gz' the extensionpart is '1.foo.gz' */
+unsigned char *get_extensionpart_from_url(unsigned char *url);
 
 #endif

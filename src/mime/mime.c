@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.9 2003/06/07 22:52:36 jonas Exp $ */
+/* $Id: mime.c,v 1.10 2003/06/08 17:42:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,6 @@ get_content_type(unsigned char *head, unsigned char *url)
 {
 	unsigned char *content_type;
 	unsigned char *extension;
-	int extensionlen;
 
 	/* If there's one in header, it's simple.. */
 	if (head) {
@@ -65,20 +64,26 @@ get_content_type(unsigned char *head, unsigned char *url)
 	if (content_type)
 		return content_type;
 
-	extensionlen = get_extension_from_url(url, &extension);
-
-	if (extensionlen) {
+	extension = get_extensionpart_from_url(url);
+	if (extension) {
+		int extensionlen = strlen(extension);
 		unsigned char *ext_type = mem_alloc(15 + extensionlen);
 
-		if (!ext_type) return NULL;
+		if (!ext_type) {
+			mem_free(extension);
+			return NULL;
+		}
 
 		/* Try to make application/x-<extension> from it */
 		memcpy(ext_type, "application/x-", 14);
 		safe_strncpy(ext_type + 14, extension, extensionlen + 1);
 
-		if (get_mime_type_handler(NULL, ext_type))
+		if (get_mime_type_handler(NULL, ext_type)) {
+			mem_free(extension);
 			return ext_type;
+		}
 
+		mem_free(extension);
 		mem_free(ext_type);
 	}
 

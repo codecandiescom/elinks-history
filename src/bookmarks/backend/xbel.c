@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.10 2002/12/13 12:42:09 zas Exp $ */
+/* $Id: xbel.c,v 1.11 2002/12/13 14:52:57 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -35,10 +35,10 @@
 
 /* Elements' attributes */
 struct attributes {
-	unsigned char *name;
-
-	struct attributes *prev;
 	struct attributes *next;
+	struct attributes *prev;
+
+	unsigned char *name;
 };
 
 /* Prototypes */
@@ -295,7 +295,7 @@ free:
 			return;
 		}
 
-		attribute = mem_alloc(sizeof(struct attributes));
+		attribute = mem_calloc(1, sizeof(struct attributes));
 		if (!attribute) {
 			mem_free(tmp);
 			goto free;
@@ -490,22 +490,18 @@ new_node(struct tree_node *parent)
 {
 	struct tree_node *node;
 
-	node = mem_alloc(sizeof(struct tree_node));
+	node = mem_calloc(1, sizeof(struct tree_node));
 	if (!node) return NULL;
 
 	node->parent = parent ? parent : node;
 
-	node->attrs = mem_alloc(sizeof(struct attributes));
+	node->attrs = mem_calloc(1, sizeof(struct attributes));
 	if (!node->attrs) {
 		mem_free(node);
 		return NULL;
 	}
-	node->attrs->name = NULL;
-	node->text = NULL;
-	node->next = NULL;
-	node->prev = NULL;
+
 	init_list(*node->attrs);
-	node->children = NULL;
 
 	return node;
 }
@@ -515,11 +511,15 @@ free_node(struct tree_node *node)
 {
 	struct attributes *attribute;
 
-	foreach(attribute, *node->attrs) {
-		mem_free(attribute->name);
-		mem_free(attribute);
+	if (node->attrs) {
+		foreach(attribute, *node->attrs) {
+			if (attribute->name)
+				mem_free(attribute->name);
+			mem_free(attribute);
+		}
+		mem_free(node->attrs);
 	}
-	mem_free(node->attrs);
+
 	mem_free(node->name);
 
 	if (node->text) mem_free(node->text);

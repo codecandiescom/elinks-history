@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.33 2003/07/29 17:41:08 jonas Exp $ */
+/* $Id: dump.c,v 1.34 2003/07/30 00:22:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,10 +238,9 @@ dump_to_file(struct document *formatted, int fd)
 			if (x == formatted->data[y].l) {
 				c = '\n';
 			} else {
-				unsigned char attr;
+				unsigned char attr = formatted->data[y].d[x].attr;
 
-				attr = get_screen_char_attr(formatted->data[y].d[x]);
-				c = get_screen_char_data(formatted->data[y].d[x]);
+				c = formatted->data[y].d[x].data;
 
 				if (c == 1)
 					c += ' ' - 1;

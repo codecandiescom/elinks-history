@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.186 2003/07/29 23:27:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.187 2003/07/30 00:22:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,9 +140,9 @@ realloc_line(struct part *p, int y, int x)
 
 	if (newsize >= ALIGN(line->l)
 	    && (!line->d || line->dsize < newsize)) {
-		chr *l;
+		struct screen_char *l;
 
-		l = mem_realloc(line->d, newsize * sizeof(chr));
+		l = mem_realloc(line->d, newsize * sizeof(struct screen_char));
 		if (!l)	return -1;
 
 		line->d = l;
@@ -152,7 +152,8 @@ realloc_line(struct part *p, int y, int x)
 	line->color = find_nearest_color(&par_format.bgcolor, 8);
 
 	for (i = line->l; i <= x; i++) {
-		line->d[i] = (line->color << 11) | ' ';
+		line->d[i].data = ' ';
+		line->d[i].attr = (line->color << 3);
 	}
 
 	line->l = i;
@@ -233,8 +234,17 @@ xpand_spaces(struct part *p, int l)
 #define X(x) (part->xp + (x))
 #define Y(y) (part->yp + (y))
 
+#define set_position_attr(xpos, ypos, value) \
+	do { POS(x, y).attr = get_screen_char_attr(value); } while (0)
+
+#define set_position_data(xpos, ypos, value) \
+	do { POS(x, y).data = get_screen_char_data(value); } while (0)
+
 #define set_position(xpos, ypos, value) \
-	do { POS(x, y) = (value); } while (0)
+	do { \
+		set_position_attr(x, y, value); \
+		set_position_data(x, y, value); \
+	} while (0)
 
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
@@ -361,7 +371,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 }
 
 static inline void
-copy_chars(struct part *part, int x, int y, int xl, chr *d)
+copy_chars(struct part *part, int x, int y, int xl, struct screen_char *d)
 {
 	assert(xl > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
@@ -370,7 +380,7 @@ copy_chars(struct part *part, int x, int y, int xl, chr *d)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
-	for (; xl; xl--, x++, d++) set_position(x, y, *d);
+	for (; xl; xl--, x++, d++) set_position(x, y, encode_screen_char(*d));
 }
 
 static inline void
@@ -388,7 +398,7 @@ move_chars(struct part *part, int x, int y, int nx, int ny)
 static inline void
 shift_chars(struct part *part, int y, int shift)
 {
-	chr *a;
+	struct screen_char *a;
 	int len;
 
 	assert(part && part->document && part->document->data);
@@ -396,10 +406,10 @@ shift_chars(struct part *part, int y, int shift)
 
 	len = LEN(y);
 
-	a = fmem_alloc(len * sizeof(chr));
+	a = fmem_alloc(len * sizeof(struct screen_char));
 	if (!a) return;
 
-	memcpy(a, &POS(0, y), len * sizeof(chr));
+	memcpy(a, &POS(0, y), len * sizeof(struct screen_char));
 	/* XXX: This is fundamentally broken and it gives us those color stains
 	 * all over spanning from the colorful table cells. We asume that the
 	 * whole line is one-colored here, but we should take definitively more
@@ -446,8 +456,8 @@ split_line_at(struct part *part, register int x)
 	if (part->document) {
 		assert(part->document->data);
 		if_assert_failed return 0;
-		assertm((POS(x, part->cy) & 0xff) == ' ',
-			"bad split: %c", (char) POS(x, part->cy));
+		assertm(POS(x, part->cy).data == ' ',
+			"bad split: %c", POS(x, part->cy).data);
 		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
 		del_chars(part, x, part->cy);
 	}
@@ -525,7 +535,7 @@ split_line(struct part *part)
 static void
 justify_line(struct part *part, int y)
 {
-	chr *line; /* we save original line here */
+	struct screen_char *line; /* we save original line here */
 	int len;
 	int pos;
 	int *space_list;
@@ -538,7 +548,7 @@ justify_line(struct part *part, int y)
 	assert(len > 0);
 	if_assert_failed return;
 
-	line = fmem_alloc(len * sizeof(chr));
+	line = fmem_alloc(len * sizeof(struct screen_char));
 	if (!line) return;
 
 	/* It may sometimes happen that the line is only one char long and that
@@ -550,14 +560,14 @@ justify_line(struct part *part, int y)
 		return;
 	}
 
-	memcpy(line, &POS(0, y), len * sizeof(chr));
+	memcpy(line, &POS(0, y), len * sizeof(struct screen_char));
 
 	/* Skip leading spaces */
 
 	spaces = 0;
 	pos = 0;
 
-	while ((line[pos] & 0xff) == ' ')
+	while (line[pos].data == ' ')
 		pos++;
 
 	/* Yes, this can be negative, we know. But we add one to it always
@@ -567,7 +577,7 @@ justify_line(struct part *part, int y)
 	/* Count spaces */
 
 	for (; pos < len; pos++)
-		if ((line[pos] & 0xff) == ' ')
+		if (line[pos].data == ' ')
 			space_list[spaces++] = pos;
 
 	space_list[spaces] = len;
@@ -995,7 +1005,7 @@ line_break(struct part *part)
 
 	xpand_lines(part, part->cy + 1);
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
-	    && (POS(part->cx - 1, part->cy) & 0xff) == ' ') {
+	    && POS(part->cx - 1, part->cy).data == ' ') {
 		del_chars(part, part->cx - 1, part->cy);
 	   	part->cx--;
 	}

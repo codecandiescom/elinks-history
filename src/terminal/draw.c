@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.26 2003/07/28 19:34:50 jonas Exp $ */
+/* $Id: draw.c,v 1.27 2003/07/30 00:22:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ set_only_char(struct terminal *term, int x, int y, unsigned c)
 /* Updates a line in the terms screen. */
 /* When doing frame drawing @x can be different than 0. */
 void
-set_line(struct terminal *term, int x, int y, int l, chr *line)
+set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 {
 	struct terminal_screen *screen = term->screen;
 	int end = (l <= term->x - x) ? l : term->x - x;
@@ -109,8 +109,8 @@ set_line(struct terminal *term, int x, int y, int l, chr *line)
 	for (i = 0; i < end; i++) {
 		int position = i + offset;
 
-		screen->image[position].data = get_screen_char_data(line[i]);
-		screen->image[position].attr = get_screen_char_attr(line[i]);
+		screen->image[position].data = line[i].data;
+		screen->image[position].attr = line[i].attr;
 	}
 	screen->dirty = 1;
 }

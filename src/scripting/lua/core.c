@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.60 2003/07/29 17:53:50 jonas Exp $ */
+/* $Id: core.c,v 1.61 2003/07/30 00:22:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,10 +166,9 @@ l_current_document_formatted(LS)
 			if (x == fd->data[y].l) {
 				c = '\n';
 			} else {
-				unsigned char attr;
+				unsigned char attr = fd->data[y].d[x].attr;
 
-				attr = get_screen_char_attr(fd->data[y].d[x]);
-				c = get_screen_char_data(fd->data[y].d[x]);
+				c = fd->data[y].d[x].data;
 
 				if (c == 1)
 					c += ' ' - 1;

@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.22 2003/07/29 23:27:20 jonas Exp $ */
+/* $Id: renderer.c,v 1.23 2003/07/30 00:22:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,9 +91,9 @@ realloc_line(struct document *document, int y, int x)
 
 	if (newsize >= ALIGN(document->data[y].l)
 	    && (!document->data[y].d || document->data[y].dsize < newsize)) {
-		chr *l;
+		struct screen_char *l = document->data[y].d;
 
-		l = mem_realloc(document->data[y].d, newsize * sizeof(chr));
+		l = mem_realloc(l, newsize * sizeof(struct screen_char));
 		if (!l) return -1;
 
 		document->data[y].d = l;
@@ -103,7 +103,8 @@ realloc_line(struct document *document, int y, int x)
 	document->data[y].color = 0;
 
 	for (i = document->data[y].l; i <= x; i++) {
-		document->data[y].d[i] = (document->data[y].color << 11) | ' ';
+		document->data[y].d[i].attr = (document->data[y].color << 3);
+		document->data[y].d[i].data = ' ';
 	}
 
 	document->data[y].l = i;
@@ -122,7 +123,7 @@ put_text(struct document *frame_data, int x, int y, unsigned char *str, int len)
 	realloc_line(frame_data, y, x + len);
 
 	for (i = 0; i < len; i++) {
-		frame_data->data[y].d[x + i] = str[i];
+		frame_data->data[y].d[x + i].data = str[i];
 	}
 }
 

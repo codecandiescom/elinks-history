@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.4 2003/07/29 23:27:19 jonas Exp $ */
+/* $Id: frames.h,v 1.5 2003/07/30 00:22:39 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -29,7 +29,7 @@ struct frameset_desc {
 
 /* For struct f_data */
 struct line {
-	chr *d;
+	struct screen_char *d;
 
 	int l;
 	int size;

@@ -1,11 +1,9 @@
-/* $Id: draw.h,v 1.7 2003/07/28 09:59:20 jonas Exp $ */
+/* $Id: draw.h,v 1.8 2003/07/30 00:22:41 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
 #include "terminal/terminal.h"
-
-typedef unsigned short chr;
 
 #define ATTR_FRAME      0x8000
 
@@ -50,7 +48,7 @@ void set_xchar(struct terminal *, int x, int y, enum frame_cross_direction);
 struct screen_char *get_char(struct terminal *, int, int);
 void set_color(struct terminal *, int, int, unsigned);
 void set_only_char(struct terminal *, int, int, unsigned);
-void set_line(struct terminal *, int, int, int, chr *);
+void set_line(struct terminal *, int, int, int, struct screen_char *);
 void fill_area(struct terminal *, int, int, int, int, unsigned);
 void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
 void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);

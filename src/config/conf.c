@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.126 2004/02/04 13:00:25 pasky Exp $ */
+/* $Id: conf.c,v 1.127 2004/02/04 13:27:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,14 +257,16 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 		unsigned char *act_str = bind_act(keymap, keystroke);
 
 		if (act_str) {
-			add_bytes_to_string(mirror, orig_pos, next_pos - orig_pos);
+			add_bytes_to_string(mirror, orig_pos,
+					    next_pos - orig_pos);
 			add_to_string(mirror, act_str);
 			mem_free(act_str);
 		} else {
 			err = ERROR_VALUE;
 		}
 	} else {
-		err = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
+		err = bind_do(keymap, keystroke, action) ? ERROR_VALUE
+							 : ERROR_NONE;
 	}
 	mem_free(keymap); mem_free(keystroke); mem_free(action);
 	return err;
@@ -390,7 +392,8 @@ parse_config_file(struct option *options, unsigned char *name,
 		file = skip_white(file, &line);
 
 		/* Mirror what we already have */
-		if (mirror) add_bytes_to_string(mirror, orig_pos, file - orig_pos);
+		if (mirror)
+			add_bytes_to_string(mirror, orig_pos, file - orig_pos);
 
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
@@ -500,7 +503,8 @@ load_config_from(unsigned char *file, struct option *tree)
 void
 load_config(void)
 {
-	load_config_from(get_opt_str_tree(cmdline_options, "config-file"), config_options);
+	load_config_from(get_opt_str_tree(cmdline_options, "config-file"),
+			 config_options);
 }
 
 
@@ -528,14 +532,16 @@ smart_config_output_fn(struct string *string, struct option *option,
 
 	/* XXX: OPT_LANGUAGE shouldn't have any bussiness here, but we're just
 	 * weird in that area. */
-	if (touching && !(option->flags & OPT_TOUCHED) && option->type != OPT_LANGUAGE)
+	if (touching && !(option->flags & OPT_TOUCHED)
+	    && option->type != OPT_LANGUAGE)
 		return;
 
 	switch (action) {
 		case 0:
 			if (!(comments & 1)) break;
 			if (depth)
-				add_xchar_to_string(string, ' ', depth * indentation);
+				add_xchar_to_string(string, ' ',
+						    depth * indentation);
 
 			add_to_string(string, "## ");
 			if (path) {
@@ -557,7 +563,8 @@ smart_config_output_fn(struct string *string, struct option *option,
 			desc_i18n = conf_i18n(option->desc, i18n);
 
 			if (depth)
-				add_xchar_to_string(string, ' ', depth * indentation);
+				add_xchar_to_string(string, ' ',
+						    depth * indentation);
 			add_to_string(string, "# ");
 			{
 				unsigned char *i = desc_i18n;
@@ -593,7 +600,8 @@ split:
 
 		case 2:
 			if (depth)
-				add_xchar_to_string(string, ' ', depth * indentation);
+				add_xchar_to_string(string, ' ',
+						    depth * indentation);
 			add_to_string(string, "set ");
 			if (path) {
 				add_to_string(string, path);
@@ -643,7 +651,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 		&& (load_config_file(prefix, name, options, &config)
 		    || !config.length))) {
 		/* At first line, and in english, write ELinks version, may be
-		 * of some help in future. Please keep that format for it. --Zas */
+		 * of some help in future. Please keep that format for it.
+		 * --Zas */
 		add_to_string(&config, "## ELinks " VERSION " configuration file\n\n");
 		assert(savestyle >= 0  && savestyle <= 2);
 		switch (savestyle) {
@@ -697,7 +706,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	add_to_string(&tmpstring, "#\n\n");
 
 	origlen = tmpstring.length;
-	smart_config_string(&tmpstring, 2, i18n, options->value.tree, NULL, 0, smart_config_output_fn);
+	smart_config_string(&tmpstring, 2, i18n, options->value.tree, NULL, 0,
+			    smart_config_output_fn);
 	if (tmpstring.length > origlen)
 		add_bytes_to_string(&config, tmpstring.source, tmpstring.length);
 	done_string(&tmpstring);
@@ -789,7 +799,8 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 				break;
 		}
 
-		if (ret > 0) errmsg = straconcat(strerr, " (", strerror(ret), ")", NULL);
+		if (ret > 0)
+			errmsg = straconcat(strerr, " (", strerror(ret), ")", NULL);
 
 		if (errmsg) {
 			write_config_error(term, getml(config_file, errmsg, NULL),

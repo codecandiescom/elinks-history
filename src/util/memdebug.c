@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.23 2004/01/24 19:08:57 pasky Exp $ */
+/* $Id: memdebug.c,v 1.24 2004/01/24 19:20:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,6 +61,11 @@
  * time. We can't check magics etc, as it would break double free() check.
  * Default is undef. */
 #undef CHECK_INVALID_FREE
+
+/* Check for double free ?
+ * Default is defined. */
+#define CHECK_DOUBLE_FREE
+#define AH_FREE_MAGIC 0xD3BF110C
 
 /* Check for overflows and underflows ?
  * Default is defined. */
@@ -374,6 +379,16 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 		return;
 	}
 
+#ifdef CHECK_DOUBLE_FREE
+	if (ah->magic == AH_FREE_MAGIC) {
+		dump_info(ah, "free()", file, line, "double free");
+		/* If we already survived it chances are we could get over it.
+		 * So let's not be overly tragic immediatelly. Just make sure
+		 * the developer saw it. */
+		sleep(1);
+	}
+#endif
+
 #ifdef CHECK_AH_SANITY
 	if (bad_ah_sanity(ah, "free()", file, line))
 		force_dump();
@@ -393,6 +408,9 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 
 #ifdef FILL_ON_FREE
 	memset(ah, FILL_ON_FREE_VALUE, SIZE_BASE2AH(ah->size));
+#endif
+#ifdef CHECK_DOUBLE_FREE
+	ah->magic = AH_FREE_MAGIC;
 #endif
 
 	free(ah);

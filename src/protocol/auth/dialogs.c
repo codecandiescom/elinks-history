@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.10 2002/08/07 03:00:14 pasky Exp $ */ 
+/* $Id: dialogs.c,v 1.11 2002/09/07 08:44:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@ auth_layout(struct dialog_data *dlg)
         int max = 0, min = 0;
         int w, rw;
         int y = -1;
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	max_text_width(term, TEXT(T_USERID), &max);
         min_text_width(term, TEXT(T_USERID), &min);
@@ -41,15 +42,23 @@ auth_layout(struct dialog_data *dlg)
         if (w < 1) w = 1;
         rw = 0;
         if (dlg->dlg->udata) {
-                dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+                dlg_format_text(NULL, term,
+				dlg->dlg->udata, 0, &y, w, &rw,
+				dialog_text_color, AL_LEFT);
                 y++;
         }
 
-        dlg_format_text(NULL, term, TEXT(T_USERID), 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+        dlg_format_text(NULL, term,
+			TEXT(T_USERID), 0, &y, w, &rw,
+			dialog_text_color, AL_LEFT);
         y += 2;
-        dlg_format_text(NULL, term, TEXT(T_PASSWORD), 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+        dlg_format_text(NULL, term,
+			TEXT(T_PASSWORD), 0, &y, w, &rw,
+			dialog_text_color, AL_LEFT);
         y += 2;
-        dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0, &y, w, &rw, AL_CENTER);
+        dlg_format_buttons(NULL, term,
+			   dlg->items + 2, 2,
+			   0, &y, w, &rw, AL_CENTER);
         w = rw;
         dlg->xw = w + 2 * DIALOG_LB;
         dlg->yw = y + 2 * DIALOG_TB;
@@ -57,16 +66,28 @@ auth_layout(struct dialog_data *dlg)
         draw_dlg(dlg);
         y = dlg->y + DIALOG_TB;
         if (dlg->dlg->udata) {
-                dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
+                dlg_format_text(term, term,
+				dlg->dlg->udata, dlg->x + DIALOG_LB, &y, w, NULL,
+				dialog_text_color, AL_LEFT);
                 y++;
         }
-        dlg_format_text(term, term, TEXT(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
-        dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+        dlg_format_text(term, term,
+			TEXT(T_USERID), dlg->x + DIALOG_LB, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
+        dlg_format_field(term, term,
+			 &dlg->items[0],
+			 dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
         y++;
-        dlg_format_text(term, term, TEXT(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
-        dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+        dlg_format_text(term, term,
+			TEXT(T_PASSWORD), dlg->x + DIALOG_LB, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
+        dlg_format_field(term, term,
+			 &dlg->items[1],
+			 dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
         y++;
-        dlg_format_buttons(term, term, &dlg->items[2], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+        dlg_format_buttons(term, term,
+			   &dlg->items[2], 2,
+			   dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
 int
@@ -104,14 +125,16 @@ do_auth_dialog(struct session *ses)
         a->valid = 1;
         a->blocked = 1;
         if (!a->uid) {
-                if (!(a->uid = mem_alloc(MAX_UID_LEN))) {
+		a->uid = mem_alloc(MAX_UID_LEN);
+                if (!a->uid) {
                         del_auth_entry(a);
                         return;
                 }
                 *a->uid = 0;
         }
         if (!a->passwd) {
-                if (!(a->passwd = mem_alloc(MAX_PASSWD_LEN))) {
+		a->passwd = mem_alloc(MAX_PASSWD_LEN);
+                if (!a->passwd) {
                         del_auth_entry(a);
                         return;
                 }

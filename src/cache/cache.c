@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.68 2003/11/08 01:36:35 pasky Exp $ */
+/* $Id: cache.c,v 1.69 2003/11/08 01:41:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -453,6 +453,8 @@ delete_cache_entry(struct cache_entry *ce)
 	mem_free(ce);
 }
 
+
+
 void
 garbage_collection(int whole)
 {
@@ -488,6 +490,7 @@ garbage_collection(int whole)
 #ifdef DEBUG_CACHE
 	debug("gc %d", whole);
 #endif
+
 	if (!whole && cache_size <= opt_cache_size) return;
 
 	foreach (ce, cache) {
@@ -495,7 +498,8 @@ garbage_collection(int whole)
 			new_cache_size -= ce->data_size;
 
 			assertm(new_cache_size >= 0,
-				"cache_size underflow: %ld", new_cache_size);
+				"cache_size (%ld) underflow: %ld",
+				cache_size, new_cache_size);
 			if_assert_failed { new_cache_size = 0; }
 		}
 
@@ -503,8 +507,8 @@ garbage_collection(int whole)
 	}
 
 	assertm(old_cache_size == cache_size,
-		"cache_size badly computed: %ld != %ld", cache_size,
-		old_cache_size);
+		"cache_size out of sync: %ld != (actual) %ld",
+		cache_size, old_cache_size);
 	if_assert_failed { cache_size = old_cache_size; }
 
 	if (!whole && new_cache_size <= opt_cache_size) return;
@@ -520,13 +524,15 @@ garbage_collection(int whole)
 		ce->gc_target = 1;
 		new_cache_size -= ce->data_size;
 
-		assertm(new_cache_size >= 0, "cache_size underflow: %ld",
-						new_cache_size);
+		assertm(new_cache_size >= 0,
+			"cache_size (%ld) underflow: %ld",
+			cache_size, new_cache_size);
 		if_assert_failed { new_cache_size = 0; }
 	}
 
-	assertm(new_cache_size == 0, "cache_size overflow: %ld",
-					new_cache_size);
+	assertm(new_cache_size == 0,
+		"cache_size (%ld) overflow: %ld",
+		cache_size, new_cache_size);
 	if_assert_failed { new_cache_size = 0; }
 
 g:
@@ -556,9 +562,10 @@ g:
 		/* TODO: warn user about it. */
 		get_opt_long("document.cache.memory.size") =
 			CACHE_PAD(cache_size * 100 / MEMORY_CACHE_GC_PERCENT);
+
 #ifdef DEBUG_CACHE
-		debug("garbage collection doesn't work, cache size %li > %li, "
-		      "document.cache.memory.size set to: %li bytes",
+		debug("garbage collection doesn't work, cache size %ld > %ld, "
+		      "document.cache.memory.size set to: %ld bytes",
 		      cache_size, gc_cache_size,
 		      get_opt_long("document.cache.memory.size"));
 #endif

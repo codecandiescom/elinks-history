@@ -3,6 +3,8 @@ TODO list for links (sorted approximatelly by priority):
 
 	Resuming of downloads (URGENT)
 
+	Strip spaces from the end of the URL
+
 	Each header file should include full path in anti-reinclude #define
 
 	Support for <xmp>
@@ -53,4 +55,4 @@ suffix appropriate to the file type.
 	CSS (?)
 
 
-$Id: TODO,v 1.14 2002/03/17 13:54:08 pasky Exp $
+$Id: TODO,v 1.15 2002/03/28 00:46:26 pasky Exp $

@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.3 2002/03/18 10:55:38 pasky Exp $ */
+/* $Id: sched.h,v 1.4 2002/03/28 00:46:27 pasky Exp $ */
 
 #ifndef EL__SCHED_H
 #define EL__SCHED_H
@@ -73,10 +73,11 @@ struct connection {
 #define S_CONN		2
 #define S_SSL_NEG	3
 #define S_SENT		4
-#define S_GETH		5
-#define S_PROC		6
-#define S_TRANS		7
-#define S_QUESTIONS	8
+#define S_LOGIN		5
+#define S_GETH		6
+#define S_PROC		7
+#define S_TRANS		8
+#define S_QUESTIONS	9
 
 #define S_WAIT_REDIR		-999
 #define S_OK			-1000

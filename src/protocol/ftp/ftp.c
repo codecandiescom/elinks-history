@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.6 2002/03/26 18:49:58 pasky Exp $ */
+/* $Id: ftp.c,v 1.7 2002/03/28 00:46:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@ struct ftp_connection_info {
 	int dpos;
 	int buf_pos;
 	unsigned char ftp_buffer[FTP_BUF_SIZE];
+	unsigned char cmd_buffer[1];
 };
 
 
@@ -55,19 +56,20 @@ unsigned char ftp_dirlist_head3[] = "</h2><pre>";
 /* Prototypes */
 
 void ftp_login(struct connection *);
+void ftp_sent_passwd(struct connection *);
 void ftp_logged(struct connection *);
 void ftp_got_reply(struct connection *, struct read_buffer *);
 void ftp_got_info(struct connection *, struct read_buffer *);
 void ftp_got_user_info(struct connection *, struct read_buffer *);
-void ftp_dummy_info(struct connection *, struct read_buffer *);
 void ftp_pass_info(struct connection *, struct read_buffer *);
-void ftp_send_retr_req(struct connection *);
-int add_file_cmd_to_str(struct connection *, unsigned char **, int *);
+void ftp_send_retr_req(struct connection *, int);
 void ftp_retr_1(struct connection *);
 void ftp_retr_file(struct connection *, struct read_buffer *);
 void ftp_got_final_response(struct connection *, struct read_buffer *);
 void got_something_from_data_connection(struct connection *);
 void ftp_end_request(struct connection *);
+
+struct ftp_connection_info *add_file_cmd_to_str(struct connection *);
 
 
 /* Returns 0 if there's no numeric response, -1 if error, the positive response
@@ -138,7 +140,7 @@ void ftp_func(struct connection *c)
 		make_connection(c, p, &c->sock1, ftp_login);
 
 	} else {
-		ftp_send_retr_req(c);
+		ftp_send_retr_req(c, S_SENT);
 	}
 }
 
@@ -167,22 +169,7 @@ void ftp_login(struct connection *conn)
 	if (str) mem_free(str);
 	add_to_str(&cmd, &cmdl, "\r\n");
 
-	add_to_str(&cmd, &cmdl, "PASS ");
-	str = get_pass(conn->url);
-	if (str && *str) {
-		add_to_str(&cmd, &cmdl, str);
-	} else {
-		add_to_str(&cmd, &cmdl, default_anon_pass);
-	}
-	if (str) mem_free(str);
-	add_to_str(&cmd, &cmdl, "\r\n");
-
-	if (add_file_cmd_to_str(conn, &cmd, &cmdl) < 0) {
-		mem_free(cmd);
-		return;
-	}
-
-	write_to_socket(conn, conn->sock1, cmd, strlen(cmd), ftp_logged);
+	write_to_socket(conn, conn->sock1, cmd, cmdl, ftp_logged);
 	mem_free(cmd);
 	setcstate(conn, S_SENT);
 }
@@ -255,31 +242,46 @@ void ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (response >= 200 && response < 300) {
-		ftp_dummy_info(conn, rb);
+		ftp_send_retr_req(conn, S_GETH);
 		return;
 	}
 
-	ftp_pass_info(conn, rb);
+	{
+		unsigned char *str;
+		unsigned char *cmd;
+		int cmdl = 0;
+		
+		cmd = init_str();
+		if (!cmd) {
+			setcstate(conn, S_OUT_OF_MEM);
+			abort_connection(conn);
+			return;
+		}
+
+		add_to_str(&cmd, &cmdl, "PASS ");
+		str = get_pass(conn->url);
+		if (str && *str) {
+			add_to_str(&cmd, &cmdl, str);
+		} else {
+			add_to_str(&cmd, &cmdl, default_anon_pass);
+		}
+		if (str) mem_free(str);
+		add_to_str(&cmd, &cmdl, "\r\n");
+
+		write_to_socket(conn, conn->sock1, cmd, cmdl, ftp_sent_passwd);
+		mem_free(cmd);
+		setcstate(conn, S_LOGIN);
+	}
 }
 
 
-/* ftp_dummy_info() */
-void ftp_dummy_info(struct connection *conn, struct read_buffer *rb)
+/* ftp_sent_passwd() */
+void ftp_sent_passwd(struct connection *conn)
 {
-	int response = get_ftp_response(conn, rb, 0);
-
-	if (response == -1) {
-		setcstate(conn, S_FTP_ERROR);
-		abort_connection(conn);
-		return;
-	}
-
-	if (!response) {
-		read_from_socket(conn, conn->sock1, rb, ftp_dummy_info);
-		return;
-	}
-
-	ftp_retr_file(conn, rb);
+	struct read_buffer *rb = alloc_read_buffer(conn);
+	
+	if (!rb) return;
+	read_from_socket(conn, conn->sock1, rb, ftp_pass_info);
 }
 
 
@@ -296,6 +298,7 @@ void ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 
 	if (!response) {
 		read_from_socket(conn, conn->sock1, rb, ftp_pass_info);
+		setcstate(conn, S_LOGIN);
 		return;
 	}
 
@@ -311,34 +314,43 @@ void ftp_pass_info(struct connection *conn, struct read_buffer *rb)
 		return;
 	}
 
-	ftp_retr_file(conn, rb);
+	ftp_send_retr_req(conn, S_GETH);
 }
 
 
 /* Create passive socket and add appropriate announcing commands to str. Then
  * go and retrieve appropriate object from server. */
-/* Returns -1 if error, 0 for success. */
-int add_file_cmd_to_str(struct connection *conn, unsigned char **str,
-			int *strl)
+/* Returns NULL if error. */
+struct ftp_connection_info *add_file_cmd_to_str(struct connection *conn)
 {
 	unsigned char *data;
 	unsigned char *data_end;
 	unsigned char pc[6];
 	int pasv_sock;
-	struct ftp_connection_info *c_i;
+	struct ftp_connection_info *c_i, *new_c_i;
+	unsigned char *str;
+	int strl = 0;
 
 	c_i = mem_alloc(sizeof(struct ftp_connection_info));
 	if (!c_i) {
 		setcstate(conn, S_OUT_OF_MEM);
 		abort_connection(conn);
-		return -1;
+		return NULL;
 	}
 	memset(c_i, 0, sizeof(struct ftp_connection_info));
 	conn->info = c_i;
 
+	str = init_str();
+	if (!str) {
+		mem_free(c_i);
+		setcstate(conn, S_OUT_OF_MEM);
+		abort_connection(conn);
+		return NULL;
+	}
+
 	pasv_sock = get_pasv_socket(conn, conn->sock1, pc);
 	if (pasv_sock < 0)
-		return pasv_sock /* -1 */;
+		return NULL;
 	conn->sock2 = pasv_sock;
 
 	data = get_url_data(conn->url);
@@ -346,7 +358,7 @@ int add_file_cmd_to_str(struct connection *conn, unsigned char **str,
 		internal("get_url_data failed");
 		setcstate(conn, S_INTERNAL);
 		abort_connection(conn);
-		return -1;
+		return NULL;
 	}
 
 	data_end = strchr(data, POST_CHAR);
@@ -359,27 +371,27 @@ int add_file_cmd_to_str(struct connection *conn, unsigned char **str,
 		c_i->dir = 1;
 		c_i->pending_commands = 4;
 
-		add_to_str(str, strl, "TYPE A\r\n");
+		add_to_str(&str, &strl, "TYPE A\r\n");
 
-		add_to_str(str, strl, "PORT ");
-		add_num_to_str(str, strl, pc[0]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[1]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[2]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[3]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[4]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[5]);
-		add_to_str(str, strl, "\r\n");
+		add_to_str(&str, &strl, "PORT ");
+		add_num_to_str(&str, &strl, pc[0]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[1]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[2]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[3]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[4]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[5]);
+		add_to_str(&str, &strl, "\r\n");
 
-		add_to_str(str, strl, "CWD /");
-		add_bytes_to_str(str, strl, data, data_end - data);
-		add_to_str(str, strl, "\r\n");
+		add_to_str(&str, &strl, "CWD /");
+		add_bytes_to_str(&str, &strl, data, data_end - data);
+		add_to_str(&str, &strl, "\r\n");
 
-		add_to_str(str, strl, "LIST\r\n");
+		add_to_str(&str, &strl, "LIST\r\n");
 
 		conn->from = 0;
 
@@ -389,45 +401,54 @@ int add_file_cmd_to_str(struct connection *conn, unsigned char **str,
 		c_i->dir = 0;
 		c_i->pending_commands = 3;
 
-		add_to_str(str, strl, "TYPE I\r\n");
+		add_to_str(&str, &strl, "TYPE I\r\n");
 
-		add_to_str(str, strl, "PORT ");
-		add_num_to_str(str, strl, pc[0]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[1]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[2]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[3]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[4]);
-		add_chr_to_str(str, strl, ',');
-		add_num_to_str(str, strl, pc[5]);
-		add_to_str(str, strl, "\r\n");
+		add_to_str(&str, &strl, "PORT ");
+		add_num_to_str(&str, &strl, pc[0]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[1]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[2]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[3]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[4]);
+		add_chr_to_str(&str, &strl, ',');
+		add_num_to_str(&str, &strl, pc[5]);
+		add_to_str(&str, &strl, "\r\n");
 
 		if (conn->from) {
-			add_to_str(str, strl, "REST ");
-			add_num_to_str(str, strl, conn->from);
-			add_to_str(str, strl, "\r\n");
+			add_to_str(&str, &strl, "REST ");
+			add_num_to_str(&str, &strl, conn->from);
+			add_to_str(&str, &strl, "\r\n");
 
 			c_i->rest_sent = 1;
 			c_i->pending_commands++;
 		}
 
-		add_to_str(str, strl, "RETR /");
-		add_bytes_to_str(str, strl, data, data_end - data);
-		add_to_str(str, strl, "\r\n");
+		add_to_str(&str, &strl, "RETR /");
+		add_bytes_to_str(&str, &strl, data, data_end - data);
+		add_to_str(&str, &strl, "\r\n");
 	}
 
 	c_i->opc = c_i->pending_commands;
 
-	return 0;
+	new_c_i = mem_realloc(c_i, sizeof(struct ftp_connection_info)
+				   + strl + 1);
+	if (new_c_i) {
+		c_i = new_c_i;
+		strcpy(c_i->cmd_buffer, str);
+	}
+	mem_free(str);
+	conn->info = c_i;
+	return c_i;
 }
 
 
 /* ftp_send_retr_req() */
-void ftp_send_retr_req(struct connection *conn)
+void ftp_send_retr_req(struct connection *conn, int state)
 {
+	struct ftp_connection_info *c_i;
 	unsigned char *cmd;
 	int cmdl = 0;
 
@@ -438,14 +459,31 @@ void ftp_send_retr_req(struct connection *conn)
 		return;
 	}
 
-	if (add_file_cmd_to_str(conn, &cmd, &cmdl) < 0) {
+	/* We don't save return value from add_file_cmd_to_str(), as it's saved
+	 * in conn->info as well. */
+	if (!conn->info && !add_file_cmd_to_str(conn)) {
 		mem_free(cmd);
 		return;
+	}
+	c_i = conn->info;
+
+	{
+		/* Send it line-by-line. */
+		unsigned char *nl = strchr(c_i->cmd_buffer, '\n');
+		
+		if (!nl) {
+			add_to_str(&cmd, &cmdl, c_i->cmd_buffer);
+		} else {
+			nl++;
+			add_bytes_to_str(&cmd, &cmdl, c_i->cmd_buffer,
+					 nl - c_i->cmd_buffer);
+			memmove(c_i->cmd_buffer, nl, strlen(nl) + 1);
+		}
 	}
 
 	write_to_socket(conn, conn->sock1, cmd, strlen(cmd), ftp_retr_1);
 	mem_free(cmd);
-	setcstate(conn, S_SENT);
+	setcstate(conn, state);
 }
 
 
@@ -465,7 +503,6 @@ void ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 	struct ftp_connection_info *c_i = conn->info;
 	int response;
 
-rep:
 	if (c_i->pending_commands > 1) {
 		response = get_ftp_response(conn, rb, 0);
 
@@ -486,7 +523,7 @@ rep:
 		/* XXX: The case values are order numbers of commands. */
 		switch (c_i->opc - c_i->pending_commands) {
 			case 1:	/* TYPE */
-				goto rep;
+				break;
 
 			case 2:	/* PORT */
 				if (response >= 400) {
@@ -494,7 +531,7 @@ rep:
 					abort_connection(conn);
 					return;
 				}
-				goto rep;
+				break;
 
 			case 3:	/* REST / CWD */
 				if (response >= 400) {
@@ -505,10 +542,14 @@ rep:
 					}
 					conn->from = 0;
 				}
-				goto rep;
+				break;
+				
+			default:
+				internal("WHAT???");
 		}
-
-		internal("WHAT???");
+		
+		ftp_send_retr_req(conn, S_GETH);
+		return;
 	}
 
 	response = get_ftp_response(conn, rb, 2);

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.11 2002/03/25 17:18:09 pasky Exp $ */
+/* $Id: sched.c,v 1.12 2002/03/28 00:46:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,6 +73,7 @@ struct s_msg_dsc msg_dsc[] = {
 	{S_CONN,		TEXT(T_MAKING_CONNECTION)},
 	{S_SSL_NEG,		TEXT(T_SSL_NEGOTIATION)},
 	{S_SENT,		TEXT(T_REQUEST_SENT)},
+	{S_LOGIN,		TEXT(T_LOGGING_IN)},
 	{S_GETH,		TEXT(T_GETTING_HEADERS)},
 	{S_PROC,		TEXT(T_SERVER_IS_PROCESSING_REQUEST)},
 	{S_TRANS,		TEXT(T_TRANSFERRING)},

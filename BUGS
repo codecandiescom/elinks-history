@@ -1,9 +1,6 @@
 Known bugs:
 
 
-	Can't connect to some FTP servers (Novell, NT). Connection stays in
-"Request sent" state.
-
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -32,6 +29,6 @@ combinations.
 	When title/status bar is turned off, there's still a blank line on
 top/bottom of screen.
 
-$Id: BUGS,v 1.21 2002/03/22 19:19:51 pasky Exp $
+$Id: BUGS,v 1.22 2002/03/28 00:46:26 pasky Exp $
 
 vim: textwidth=80

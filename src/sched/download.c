@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.78 2003/07/21 23:34:16 jonas Exp $ */
+/* $Id: download.c,v 1.79 2003/07/21 23:43:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -834,30 +834,28 @@ finish:
 static unsigned char *
 get_temp_name(unsigned char *url)
 {
-	int namelen = 0;
-	unsigned char *name;
+	struct string name;
 	unsigned char *extension;
 	unsigned char *nm = tempnam(NULL, "elinks");
 
 	if (!nm) return NULL;
 
-	name = init_str();
-	if (!name) {
+	if (!init_string(&name)) {
 		mem_free(nm);
 		return NULL;
 	}
-	add_to_str(&name, &namelen, nm);
+
+	add_to_string(&name, nm);
 	free(nm);
 
 	extension = get_extension_from_url(url);
 	if (extension) {
-		check_shell_security(&extension);
-		add_chr_to_str(&name, &namelen, '.');
-		add_to_str(&name, &namelen, extension);
+		add_char_to_string(&name, '.');
+		add_shell_safe_to_string(&name, extension, strlen(extension));
 		mem_free(extension);
 	}
 
-	return name;
+	return name.source;
 }
 
 

@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.4 2003/10/27 01:21:24 pasky Exp $ */
+/* $Id: os2.c,v 1.5 2003/10/27 01:30:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,4 +676,112 @@ can_open_os_shell(int environment)
 	return 1;
 }
 
-# endif
+
+#if defined(HAVE_BEGINTHREAD)
+
+int
+start_thread(void (*fn)(void *, int), void *ptr, int l)
+{
+	int p[2];
+	struct tdata *t;
+
+	if (c_pipe(p) < 0) return -1;
+	if (set_nonblocking_fd(p[0]) < 0) return -1;
+	if (set_nonblocking_fd(p[1]) < 0) return -1;
+
+	t = malloc(sizeof(struct tdata) + l);
+	if (!t) return -1;
+	t->fn = fn;
+	t->h = p[1];
+	memcpy(t->data, ptr, l);
+	if (_beginthread((void (*)(void *))bgt, NULL, 65536, t) == -1) {
+		close(p[0]);
+		close(p[1]);
+		mem_free(t);
+		return -1;
+	}
+
+	return p[0];
+}
+
+#if defined(HAVE_READ_KBD)
+
+int tp = -1;
+int ti = -1;
+
+void
+input_thread(void *p)
+{
+	unsigned char c[2];
+	int h = (int) p;
+
+	signal(SIGPIPE, SIG_IGN);
+	while (1) {
+#if 0
+		c[0] = _read_kbd(0, 1, 1);
+		if (c[0]) if (safe_write(h, c, 1) <= 0) break;
+		else {
+			int w;
+			printf("1");fflush(stdout);
+			c[1] = _read_kbd(0, 1, 1);
+			printf("2");fflush(stdout);
+			w = safe_write(h, c, 2);
+			printf("3");fflush(stdout);
+			if (w <= 0) break;
+			if (w == 1) if (safe_write(h, c+1, 1) <= 0) break;
+			printf("4");fflush(stdout);
+		}
+#endif
+		/* for the records:
+		 * _read_kbd(0, 1, 1) will
+		 * read a char, don't echo it, wait for one available and
+		 * accept CTRL-C.
+		 * Knowing that, I suggest we replace this call completly!
+		 */
+		*c = _read_kbd(0, 1, 1);
+		write(h, c, 1);
+	}
+	close(h);
+}
+
+int
+get_input_handle(void)
+{
+	int fd[2];
+
+	if (ti != -1) return ti;
+	if (is_xterm()) return 0;
+	if (c_pipe(fd) < 0) return 0;
+	ti = fd[0];
+	tp = fd[1];
+	_beginthread(input_thread, NULL, 0x10000, (void *)tp);
+/*
+#if defined(HAVE_MOUOPEN) && !defined(USE_GPM)
+	_beginthread(mouse_thread, NULL, 0x10000, (void *)tp);
+#endif
+*/
+	return fd[0];
+}
+
+#endif
+
+#endif
+
+
+#ifdef USE_OPEN_PREALLOC
+int
+open_prealloc(unsigned char *name, int flags, int mode, int siz)
+{
+	/* This is good for OS/2, where this will prevent file fragmentation,
+	 * preallocating the desired file size upon open(). */
+	return open(name, flags | O_SIZE, mode, (unsigned long) siz);
+}
+
+void
+prealloc_truncate(int h, int siz)
+{
+	ftruncate(h, siz);
+}
+#endif
+
+#endif

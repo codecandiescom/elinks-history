@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.18 2002/05/02 19:20:45 zas Exp $ */
+/* $Id: renderer.c,v 1.19 2002/05/04 07:44:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1303,7 +1303,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 	struct form_control *fc;
 	struct table_cache_entry *tce;
 	struct table_cache_entry *unused_tce = NULL;
-	int cache_entries_count = 0;
+	int table_cache_entries = 0;
 	
 	if (!data) {
 		/* Search for cached entry. */
@@ -1331,7 +1331,7 @@ struct part *format_html_part(unsigned char *start, unsigned char *end,
 				unused_tce = tce; 
 			
 			/* Count number of entries in cache. */
-			cache_entries_count++;
+			table_cache_entries++;
 		}
 	}
 	
@@ -1441,7 +1441,7 @@ ret:
 		int replace = 0;
 		
 		/* Limit number of cache entries. */
-		if (cache_entries_count >= 64 && unused_tce) {
+		if (table_cache_entries >= 64 && unused_tce) {
 			/* Replace an unused entry. */
 			tce = unused_tce;
 			replace = 1;

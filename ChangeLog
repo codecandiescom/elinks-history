@@ -1,3 +1,40 @@
+Tue Apr 22 15:51:57 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	Marked bookmarks deletion segfault bug was added.  
+
+Tue Apr 22 14:17:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/memory.h:
+
+	fmem_alloc() and fmem_free() are always mem_alloc() and mem_free()
+	but in one case. Fixed.  
+
+Tue Apr 22 13:01:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	A compile issue (type casting) was fixed. Patch by Jonas Fonseca.  
+
+Tue Apr 22 10:09:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/renderer.c, document/html/tables.c,
+	util/memory.h:
+
+	fmem_alloc() and fmem_free() were introduced. When alloca() exists,
+	and FASTMEM is defined (at configure time), then malloc() is
+	replaced with alloca() and free() is not used, whenever possible. It
+	will improve performance in functions allocating temporary memory.
+	Read alloca() man page for further information, and be conscious
+	that fmem_alloc() may only be used in some cases.  
+
+Tue Apr 22 08:57:36 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS, src/bookmarks/dialogs.c:
+
+	Bug: Moving bookmarks to empty higher level folders... Fixed.  
+
 Mon Apr 21 21:12:00 2003  Laurent Monin <zas@norz.org>:
 
 	* BUGS:

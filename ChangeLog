@@ -1,3 +1,164 @@
+Fri Mar 25 19:29:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/Makefile.am:
+
+	Distribute highlight.lua.  
+
+Fri Mar 25 19:25:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in, src/scripting/lua/core.c:
+
+	Drop enable_systems_functions and enable pipe_read, execute,
+	tmpname, and the Lua IO library by default.  
+	
+	Other languages don't have this silliness of disabling functions
+	until one calls another function, and if one really wants them
+	disabled, one can still do so by assigning them nil -- and now they
+	can't be re-enabed simply by calling that function again, which
+	makes it pointless to have disabled them in the first place.  
+
+Fri Mar 25 19:02:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/highlight.lua:
+
+	Simplify by returning from the loop once the code has been
+	highlighted.  
+
+Fri Mar 25 19:00:46 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/highlight.lua:
+
+	Use a table and a loop to greatly reduce code redundancy.  
+
+Fri Mar 25 18:58:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/highlight.lua:
+
+	Clean up the indentation.  
+
+Fri Mar 25 18:41:12 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/highlight.lua:
+
+	Don't check highlight_enable and just assume that if the file was
+	loaded that the user intends for source-code to be highlighted.  
+
+Fri Mar 25 18:40:15 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: highlight.lua, hooks.lua.in:
+
+	Move source-code highlighting to its own file.  
+
+Fri Mar 25 18:30:03 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Pass goto-url hooks the current URI.  
+
+Fri Mar 25 18:29:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: bm.lua, hooks.lua.in:
+
+	Return the unmodified URI rather than nil from the goto-url and
+	follow-url hooks to match the new semantics.  
+
+Fri Mar 25 05:37:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Whoops, drop an extra little bit that snuck in.  
+
+Fri Mar 25 05:36:58 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Change the semantics of follow_url_hook and goto_url_hook: nil from
+	a hook does not mean no change, but rather that the URL should be
+	changed to nil. Things are almost working again.  
+
+Fri Mar 25 05:13:40 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/: bm.lua, hooks.lua.in:
+
+	Move bookmarks code from hooks.lua to bm.lua.  
+
+Fri Mar 25 05:11:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fix a syntax error from the last patch.  
+
+Fri Mar 25 05:08:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fix a logic error in bookmarks_follow_url_hook so as not to prevent 
+	other hooks from running when no change is made to the URL.  
+
+Fri Mar 25 05:00:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move tmp-file clean-up from quit_hook_ to its own hook.  Delete
+	quit_hook_.  
+
+Fri Mar 25 04:59:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the bookmarks code from quit_hook_ to its own hook.  
+
+Fri Mar 25 04:57:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the bookmarks code from follow_url_hook_ to its own hook.  
+	Delete follow_url_hook_.  
+
+Fri Mar 25 04:54:54 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Change some occurences of 1 to true in hook return values.  
+
+Fri Mar 25 04:53:49 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move dumbprefixes and smartprefixes from goto_url_hook_ into their
+	own hook and delete goto_url_hook_.  
+
+Fri Mar 25 04:50:37 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move the localhost code from goto_url_hook_ to its own hook.  
+
+Fri Mar 25 04:47:25 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Move tilde expansion from goto_url_hook_ into its own hook.  
+
+Fri Mar 25 04:44:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Fix a logic error in the hook functions: table.foreachi (as well as 
+	table.foreach) breaks when the function returns a _non-nil_ value.  
+
+Fri Mar 25 04:42:47 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use table.foreachi instead of table.foreach in the hooks.  
+
+Fri Mar 25 04:13:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	In l_xdialog, check lua_ses before dereferencing it.  
+
 Thu Mar 24 21:50:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* contrib/lua/hooks.lua.in:

@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.2 2003/06/07 14:40:01 pasky Exp $ */
+/* $Id: error.c,v 1.3 2003/06/07 14:56:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "intl/gettext/intl.h"
 #include "sched/sched.h"
+#include "terminal/terminal.h"
 #include "util/lists.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -82,7 +83,7 @@ static INIT_LIST_HEAD(strerror_buf); /* struct strerror_val */
 
 
 unsigned char *
-get_err_msg(int state)
+get_err_msg(int state, struct terminal *term)
 {
 	unsigned char *e;
 	struct strerror_val *s;
@@ -92,9 +93,9 @@ get_err_msg(int state)
 
 		for (i = 0; msg_dsc[i].msg; i++)
 			if (msg_dsc[i].n == state)
-				return msg_dsc[i].msg;
+				return _(msg_dsc[i].msg, term);
 unknown_error:
-		return N_("Unknown error");
+		return _("Unknown error", term);
 	}
 
 	e = (unsigned char *) strerror(-state);

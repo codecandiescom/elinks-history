@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.86 2003/06/07 14:40:13 jonas Exp $ */
+/* $Id: session.c,v 1.87 2003/06/07 14:56:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ get_stat_msg(struct status *stat, struct terminal *term)
 	}
 
 	/* debug("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
-	return stracpy(_(get_err_msg(stat->state), term));
+	return stracpy(get_err_msg(stat->state, term));
 }
 
 extern struct document_options *d_opt;
@@ -326,7 +326,7 @@ void
 print_error_dialog(struct session *ses, struct status *stat,
 		   unsigned char *title)
 {
-	unsigned char *t = get_err_msg(stat->state);
+	unsigned char *t = get_err_msg(stat->state, ses->tab->term);
 
 	if (!t) return;
 	msg_box(ses->tab->term, NULL, 0,

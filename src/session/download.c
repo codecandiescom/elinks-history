@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.43 2003/06/07 14:40:13 jonas Exp $ */
+/* $Id: download.c,v 1.44 2003/06/07 14:56:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,7 +284,7 @@ download_window_function(struct dialog_data *dlg)
 						* 1000);
 		}
 
-	} else m = stracpy(_(get_err_msg(status->state), term));
+	} else m = stracpy(get_err_msg(status->state, term));
 
 	if (!m) return;
 
@@ -542,15 +542,16 @@ write_error:
 
 end_store:
 	if (status->state < 0) {
+		struct terminal *term = get_download_ses(down)->tab->term;
+
 		if (status->state != S_OK) {
-			unsigned char *t = get_err_msg(status->state);
+			unsigned char *t = get_err_msg(status->state, term);
 
 			if (t) {
 				unsigned char *tt = stracpy(down->url);
 
 				if (tt) {
 					unsigned char *p = strchr(tt, POST_CHAR);
-					struct terminal *term = get_download_ses(down)->tab->term;
 					if (p) *p = '\0';
 
 					msg_box(term, getml(tt, NULL), MSGBOX_EXTD_TEXT,
@@ -577,7 +578,6 @@ end_store:
 			} else {
 				if (down->notify) {
 					unsigned char *url = stracpy(down->url);
-					struct terminal *term = get_download_ses(down)->tab->term;
 
 					msg_box(term, getml(url, NULL), MSGBOX_EXTD_TEXT,
 						N_("Download"), AL_CENTER,

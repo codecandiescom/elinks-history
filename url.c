@@ -73,7 +73,14 @@ int parse_url(unsigned char *url, int *prlen,
 	if (dalen) *dalen = 0;
 	if (post) *post = NULL;
 
+	/* Skip spaces on the beginning of url */
+
 	if (!url) return -1;
+
+	while (*url && WHITECHAR(*url)) {
+		/* FIXME: uneffective */
+		memmove(url, url + 1, strlen(url + 1) + 1);
+	}
 
 #ifdef IPV6
 	/* Get brackets enclosing IPv6 address */
@@ -182,6 +189,22 @@ int parse_url(unsigned char *url, int *prlen,
 	}
 	
 	if (*host_end) host_end++;
+		
+	/* Skip trailing spaces */
+	{
+		unsigned char *post_chr = strchr(host_end, POST_CHAR);
+		int len = post_chr ? (post_chr - host_end) : strlen(host_end);
+
+		debug("[%d] url -> '%s'", len, url);
+		while (len > 0 && WHITECHAR(host_end[len])) {
+			len--;
+			/* FIXME: uneffective */
+			if (post_chr)
+				memmove(host_end + len, host_end + len + 1,
+					strlen(host_end + len + 1) + 1);
+			debug("[%d] url -> '%s'", len, url);
+		}
+	}
 	
 	prefix_end = strchr(host_end, POST_CHAR);
 	if (data) *data = host_end;

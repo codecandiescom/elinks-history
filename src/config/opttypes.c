@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.59 2003/07/25 00:48:27 jonas Exp $ */
+/* $Id: opttypes.c,v 1.60 2003/08/01 11:25:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,7 +226,7 @@ int_dup(struct option *opt, struct option *template)
 {
 	int *new = mem_alloc(sizeof(int));
 
-	if (new) memcpy(new, template->ptr, sizeof(int));
+	if (new) *new = *((int *)template->ptr);
 	return new;
 }
 
@@ -235,7 +235,7 @@ long_dup(struct option *opt, struct option *template)
 {
 	long *new = mem_alloc(sizeof(long));
 
-	if (new) memcpy(new, template->ptr, sizeof(long));
+	if (new) *new = *((long *)template->ptr);
 	return new;
 }
 
@@ -303,7 +303,8 @@ str_wr(struct option *o, struct string *s)
 {
 	int len = strlen(o->ptr);
 
-	add_optstring_to_string(s, o->ptr, (len >= o->max) ? o->max - 1 : len);
+	int_upper_bound(&len, o->max - 1);
+	add_optstring_to_string(s, o->ptr, len);
 }
 
 static void *

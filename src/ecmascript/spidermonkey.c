@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.30 2004/09/24 23:46:00 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.31 2004/09/25 00:02:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,6 +242,38 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	JSVAL_TO_VALUE_END;
 }
 
+static JSBool window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+
+static const JSFunctionSpec window_funcs[] = {
+	{ "alert",	window_alert,		1 },
+	{ NULL }
+};
+
+static JSBool
+window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
+{
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	union jsval_union v;
+	enum prop_type prop_type;
+	union prop_union p;
+	jsval *vp = rval;
+
+	assert(argc == 1);
+
+	JSVAL_REQUIRE(&argv[0], STRING);
+	if (!v.string || !*v.string)
+		goto bye;
+
+	msg_box(doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_NO_INTL,
+		N_("JavaScript Alert"), ALIGN_CENTER,
+		stracpy(v.string),
+		NULL, 1,
+		N_("OK"), NULL, B_ENTER | B_ESC);
+
+	p.boolean = 1; prop_type = JSPT_BOOLEAN;
+	VALUE_TO_JSVAL_END;
+}
+
 
 static JSBool document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -464,6 +496,7 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	}
 	JS_InitStandardClasses(ctx, window_obj);
 	JS_DefineProperties(ctx, window_obj, (JSPropertySpec *) window_props);
+	JS_DefineFunctions(ctx, window_obj, (JSFunctionSpec *) window_funcs);
 	JS_SetPrivate(ctx, window_obj, interpreter->doc_view);
 
 	document_obj = JS_InitClass(ctx, window_obj, NULL,

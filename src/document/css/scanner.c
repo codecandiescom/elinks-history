@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.25 2004/01/19 22:37:17 jonas Exp $ */
+/* $Id: scanner.c,v 1.26 2004/01/19 23:10:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ enum css_char_group {
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
 
-static inline int
+static inline enum css_token_type
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
 	unsigned char *string = scanner->position;
@@ -121,6 +121,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		 * split them down into char tokens */
 		if (!first_char) {
 			string--;
+			token->string = NULL;
 			token->type = CSS_TOKEN_NONE;
 		} else {
 			token->type = CSS_TOKEN_GARBAGE;
@@ -130,7 +131,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	token->length = string - token->string;
 	scanner->position = string;
 
-	return token->length;
+	return token->type;
 }
 
 void
@@ -169,7 +170,10 @@ scan_css_tokens(struct css_scanner *scanner)
 
 		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
 
-		if (!scan_css_token(scanner, token)) break;
+		if (scan_css_token(scanner, token) == CSS_TOKEN_NONE) {
+			current--;
+			break;
+		}
 	}
 
 	scanner->tokens = current;

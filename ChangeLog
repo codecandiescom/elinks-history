@@ -1,3 +1,173 @@
+Fri Sep 26 21:39:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre6 
+
+Fri Sep 26 21:36:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fix http://lists.pld-linux.org/ - Host: header sending was broken if
+	URL contained : and IPv6 support was compiled in. Patch by Jakub
+	Bogusz and me.  
+
+Fri Sep 26 21:18:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* SITES:
+
+	Added nest elinks pool RPM binaries link (more up-to-date), as
+	suggested by witekfl.  
+
+Fri Sep 26 21:16:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/uk.po:
+
+	Ukrainian translation update, patch by Dmitry.  
+
+Fri Sep 26 21:13:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files resynced, Polish translation update (by witekfl).  
+
+Fri Sep 26 21:07:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/TODO:
+
+	Add generalization TODO item and reformat.  
+
+Fri Sep 26 21:05:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/hacking.txt:
+
+	Specify further in which cases should the macro initializers be used
+	;-).  
+
+Fri Sep 26 20:58:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Reverted zas' introduction of INIT_STON() and relatives. It is IMHO
+	unnecessary complication and overhead for such a simple and fairly
+	localized structure as strtonum is.  
+
+Fri Sep 26 20:39:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/hooks.c:
+
+	Always propagate the event + removed useless increasing of length in
+	call to memacpy().  
+
+Fri Sep 26 19:59:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/intl/charsets.c:
+
+	Output asterisks instead of ¤ in case of unknown unicode values.
+	That character is not ASCII nor transliterated to proper terminal
+	codepage.  
+
+Fri Sep 26 19:57:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/hooks.c:
+
+	Always propagate the event.  
+
+Fri Sep 26 19:05:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/event.h:
+
+	Some preachment about EHS_LAST and how shouldn't you use it.  
+
+Fri Sep 26 18:32:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memory.h:
+
+	Fixed namespace pollution. You guys will never learn, will you? 
+
+Fri Sep 26 18:28:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/ttime.h:
+
+	Do not include config.h in a .h file! What was I *smoking*?? This
+	fixes compilation w/ --enable-own-libc. You wouldn't guess, would
+	you? ;-) 
+
+Fri Sep 26 17:44:42 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/hacking.txt:
+
+	A note about wrapping hard struct initializations was added.  
+
+Fri Sep 26 17:35:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, config/kbdbind.c,
+	document/html/parser.c, document/html/parser.h:
+
+	Various hard initializations to macros conversion.  
+
+Fri Sep 26 16:56:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/mime.c:
+
+	use *_MENU_ITEM macros.  
+
+Fri Sep 26 15:50:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	Strange english fix.  
+
+Fri Sep 26 15:49:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Grammar fix.  
+
+Fri Sep 26 14:00:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/Makefile.am:
+
+	Add TODO to EXTRA_DIST.  
+
+Fri Sep 26 12:56:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Be a little smarter and pre allocate the last menu item by calling
+	mem_align_alloc() with 'size + 2'.  
+
+Fri Sep 26 12:51:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Print ¤¤¤¤¤ instead of &#24505;&#24213;&#20837;&#38272;. Unicode
+	entities values are now handled up to 0xFFFFFFFF.  
+
+Fri Sep 26 12:36:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Remove temporary workaround for tab completion bug fixed in last
+	patch.  
+
+Fri Sep 26 12:33:48 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inphist.c:
+
+	Fix ancient bug by reallocationg items before the last memset(). Zas
+	discovered this yesterday. It was exposed by the move to using
+	mem_align_alloc() with more than 256 items in gotohist.  
+
+Thu Sep 25 23:35:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inphist.c:
+
+	Bug found...  
+
 Thu Sep 25 21:47:16 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/screen.c:

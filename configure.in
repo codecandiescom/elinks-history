@@ -924,7 +924,7 @@ EL_ARG_ENABLE(CONFIG_EXMODE, exmode, [Exmode interface],
 AM_CONDITIONAL(CONFIG_EXMODE, test "$CONFIG_EXMODE" = yes)
 
 EL_ARG_ENABLE(CONFIG_LEDS, leds, [LEDs],
-	      [  --enable-leds           enable LEDs support])
+	      [  --disable-leds          disable LEDs support])
 AM_CONDITIONAL(CONFIG_LEDS, test "$CONFIG_LEDS" = yes)
 
 EL_ARG_ENABLE(CONFIG_MARKS, marks, [Marks],

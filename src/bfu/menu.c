@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.43 2003/05/02 11:15:09 zas Exp $ */
+/* $Id: menu.c,v 1.44 2003/05/02 23:34:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,23 +132,23 @@ is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
 static void
 free_menu_items(struct menu_item *items)
 {
-	if (items) {
-		int i;
+	int i;
 
-		/* Note that item_free & FREE_DATA applies only when menu is aborted;
-		 * it is zeroed when some menu field is selected. */
+	if (!items) return;
 
-		for (i = 0; items[i].text; i++) {
-			if (items[i].item_free & FREE_TEXT && items[i].text)
-				mem_free(items[i].text);
-			if (items[i].item_free & FREE_RTEXT && items[i].rtext)
-				mem_free(items[i].rtext);
-			if (items[i].item_free & FREE_DATA && items[i].data)
-				mem_free(items[i].data);
-		}
+	/* Note that item_free & FREE_DATA applies only when menu is aborted;
+	 * it is zeroed when some menu field is selected. */
 
-		mem_free(items);
+	for (i = 0; items[i].text; i++) {
+		if (items[i].item_free & FREE_TEXT && items[i].text)
+			mem_free(items[i].text);
+		if (items[i].item_free & FREE_RTEXT && items[i].rtext)
+			mem_free(items[i].rtext);
+		if (items[i].item_free & FREE_DATA && items[i].data)
+			mem_free(items[i].data);
 	}
+
+	mem_free(items);
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.81 2003/09/15 21:30:39 jonas Exp $ */
+/* $Id: tables.c,v 1.82 2003/09/15 22:41:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1524,35 +1524,27 @@ display_table_frames(struct table *t, int x, int y)
 		if (!ysp) ysp = t->y - j;
 
 		if (t->rules != R_COLS) {
-			register int lx;
-
-			for (lx = 0; lx < xsp; lx++) {
-				H_LINE_X(t, i + lx, j) = t->cellsp;
-				H_LINE_X(t, i + lx, j + ysp) = t->cellsp;
-			}
+			memset(&H_LINE_X(t, i, j), t->cellsp, xsp);
+			memset(&H_LINE_X(t, i, j + ysp), t->cellsp, xsp);
 		}
 
 		if (t->rules != R_ROWS) {
-			register int ly;
-
-			for (ly = 0; ly < ysp; ly++) {
-				V_LINE_X(t, i, j + ly) = t->cellsp;
-				V_LINE_X(t, i + xsp, j + ly) = t->cellsp;
-			}
+			memset(&V_LINE_X(t, i, j), t->cellsp, ysp);
+			memset(&V_LINE_X(t, i + xsp, j), t->cellsp, ysp);
 		}
 	}
 
 	if (t->rules == R_GROUPS) {
 		for (i = 1; i < t->x; i++) {
 			if (/*i < t->xc &&*/ t->xcols[i]) continue;
-			for (j = 0; j < t->y; j++) V_LINE_X(t, i, j) = 0;
+			memset(&V_LINE_X(t, i, 0), 0, t->y);
 		}
 		for (j = 1; j < t->y; j++) {
 			for (i = 0; i < t->x; i++)
 				if (CELL(t, i, j)->group)
 					goto cont;
-			for (i = 0; i < t->x; i++)
-				H_LINE_X(t, i, j) = 0;
+
+			memset(&H_LINE_X(t, 0, j), 0, t->x);
 cont:;
 		}
 	}
@@ -1565,15 +1557,11 @@ cont2:
 		fr = !!(t->frame & F_RHS);
 	}
 
-	for (i = 0; i < t->x; i++) {
-		H_LINE_X(t, i, 0) = fa;
-		H_LINE_X(t, i, t->y) = fb;
-	}
+	memset(&H_LINE_X(t, 0, 0), fa, t->x);
+	memset(&H_LINE_X(t, 0, t->y), fb, t->x);
 
-	for (j = 0; j < t->y; j++) {
-		V_LINE_X(t, 0, j) = fl;
-		V_LINE_X(t, t->x, j) = fr;
-	}
+	memset(&V_LINE_X(t, 0, 0), fl, t->y);
+	memset(&V_LINE_X(t, t->x, 0), fr, t->y);
 
 	cy = y;
 	for (j = 0; j <= t->y; j++) {

@@ -88,6 +88,9 @@ Cristiano Guadagnino <cris@geppo.cmb2000.it>
 	Updated italian translation
 	OS/2 compilation fixes
 
+Cyril Slobin <slobin@ice.ru>
+	Russian translation updates
+
 Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 	Win NT port
 	Saving goto history
@@ -384,4 +387,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.90 2002/10/02 07:29:44 zas Exp $
+$Id: AUTHORS,v 1.91 2002/10/10 21:19:45 pasky Exp $

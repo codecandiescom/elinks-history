@@ -1,10 +1,11 @@
-/* $Id: bookmarks.h,v 1.27 2003/12/27 17:31:36 jonas Exp $ */
+/* $Id: bookmarks.h,v 1.28 2003/12/28 01:34:54 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
 
 /* #include "bfu/listbox.h" */
 struct listbox_item;
+struct terminal;
 
 #include "modules/module.h"
 #include "util/lists.h"
@@ -49,5 +50,6 @@ int delete_bookmark(struct bookmark *);
 struct bookmark *add_bookmark(struct bookmark *, int, unsigned char *, unsigned char *);
 void bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername);
 int update_bookmark(struct bookmark *, unsigned char *, unsigned char *);
+void open_bookmark_folder(struct session *ses, unsigned char *foldername);
 
 #endif

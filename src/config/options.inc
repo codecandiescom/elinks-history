@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.54 2003/12/27 22:58:19 zas Exp $ */
+/* $Id: options.inc,v 1.55 2003/12/28 01:34:54 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1845,6 +1845,14 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("ui", N_("Display goto dialog on startup"),
 		"startup_goto_dialog", 0, 1,
 		N_("Pop up goto dialog on startup when there's no homepage set.")),
+
+	INIT_OPT_INT("ui", N_("Auto save and restore session"),
+		"auto_save_restore_session", 0, 0, 4, 0,
+		N_("Automatically save and restore the session when quiting so\n"
+		"it can be continued later. Requires bookmark support:\n"
+		"0 means no auto saving and restoring\n"
+		"1 means auto save session when quiting\n"
+		"2 means auto save and restore session")),
 
 
 	INIT_OPT_BOOL("ui", N_("Set window title"),

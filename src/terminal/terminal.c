@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.50 2003/11/27 14:05:22 jonas Exp $ */
+/* $Id: terminal.c,v 1.51 2003/12/28 01:34:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 
 #include "elinks.h"
 
+#include "bookmarks/bookmarks.h"
 #include "main.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
@@ -174,6 +175,12 @@ redraw_all_terminals(void)
 void
 destroy_terminal(struct terminal *term)
 {
+#ifdef BOOKMARKS
+	if (get_opt_bool("ui.auto_save_restore_session")) {
+		bookmark_terminal_tabs(term, _("Auto saved session", term));
+	}
+#endif
+
 	while (!list_empty(term->windows))
 		delete_window(term->windows.next);
 

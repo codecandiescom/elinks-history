@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.103 2003/12/28 01:31:47 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.104 2003/12/28 01:34:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "config/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
+#include "sched/task.h"
 #include "terminal/tab.h"
 #include "util/conv.h"
 #include "util/memory.h"
@@ -393,6 +394,41 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 			continue;
 
 		add_bookmark(folder, 1, title, url);
+	}
+}
+
+void
+open_bookmark_folder(struct session *ses, unsigned char *foldername)
+{
+	struct bookmark *bookmark;
+	struct bookmark *folder = NULL;
+	struct bookmark *current = NULL;
+
+	assert(foldername && ses);
+	if_assert_failed return;
+
+	foreach (bookmark, bookmarks) {
+		if (strcmp(bookmark->title, foldername))
+			continue;
+		folder = bookmark;
+		break;
+	}
+
+	if (!folder) return;
+
+	foreachback (bookmark, folder->child) {
+		if (bookmark->box_item->type == BI_FOLDER
+		    || !*bookmark->url)
+			continue;
+
+		/* Save the first bookmark for the current tab */
+		if (!current) {
+			current = bookmark;
+			goto_url(ses, current->url);
+			continue;
+		}
+
+		open_url_in_new_tab(ses, bookmark->url, 1);
 	}
 }
 

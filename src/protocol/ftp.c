@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.48 2002/10/04 17:50:54 zas Exp $ */
+/* $Id: ftp.c,v 1.49 2002/10/09 13:01:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,24 +758,22 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 		if (response == 227) {
 			/* TODO: move that to ... ?? */
 			fd = socket(PF_INET, SOCK_STREAM, 0);
-			if (fd < 0) {
+			if (fd < 0 || set_nonblocking_fd(fd) < 0) {
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
 			conn->sock2 = fd;
-			fcntl(fd, F_SETFL, O_NONBLOCK);
 			connect(fd, (struct sockaddr *)&sa, sizeof(struct sockaddr_in));
 		}
 
 #ifdef IPV6
 		if (response == 229) {
 			fd = socket(PF_INET6, SOCK_STREAM, 0);
-			if (fd < 0) {
+			if (fd < 0 || set_nonblocking_fd(fd) < 0) {
 				abort_conn_with_state(conn, S_FTP_ERROR);
 				return;
 			}
 			conn->sock2 = fd;
-			fcntl(fd, F_SETFL, O_NONBLOCK);
 			connect(fd, (struct sockaddr *)&sa, sizeof(struct sockaddr_in6));
 		}
 #endif

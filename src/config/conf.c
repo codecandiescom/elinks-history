@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.61 2002/12/08 20:41:32 pasky Exp $ */
+/* $Id: conf.c,v 1.62 2002/12/10 21:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,6 +148,9 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 			if (val) mem_free(val);
 			return ERROR_VALUE;
 		}
+		/* This is not needed since this will be WATERMARK'd when
+		 * saving it. We won't need to save it as touched. */
+		/* if (!str) opt->flags |= OPT_TOUCHED; */
 		if (val) mem_free(val);
 	}
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.13 2002/12/08 21:18:56 pasky Exp $ */
+/* $Id: dialogs.c,v 1.14 2002/12/10 21:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -145,6 +145,7 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 	if (chinon) {
 		if (option_types[option->type].set &&
 		    option_types[option->type].set(option, chinon)) {
+			option->flags |= OPT_TOUCHED;
 			commandline = 0;
 			mem_free(chinon);
 			return 0;

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.140 2002/12/10 20:58:47 pasky Exp $ */
+/* $Id: options.c,v 1.141 2002/12/10 21:56:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,6 +427,10 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 		if (option->type == OPT_TREE
 		    && !check_nonempty_tree((struct list_head *) option->ptr))
 			continue;
+
+		/* TODO: We should maybe clear the touched flag only when really
+		 * saving the stuff...? --pasky */
+		option->flags &= ~OPT_TOUCHED;
 
 		/* We won't pop out the description when we're in autocreate
 		 * category and not template. It'd be boring flood of

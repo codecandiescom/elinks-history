@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.181 2003/07/25 21:52:21 zas Exp $ */
+/* $Id: http.c,v 1.182 2003/07/25 22:04:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -641,22 +641,22 @@ http_send_header(struct connection *conn)
 	add_to_string(&header, "\r\n");
 
 	if (uri->post) {
-#define POST_BUFFER_SIZE 4096
+#define POST_BUFFER_SIZE 4096		
 		unsigned char *post = uri->post;
 		unsigned char buffer[POST_BUFFER_SIZE];
 		int n = 0;
-
+		
 		while (post[0] && post[1]) {
 			register int h1, h2;
 
 			h1 = unhx(post[0]);
 			assert(h1 >= 0 && h1 < 16);
 			if_assert_failed h1 = 0;
-
+		
 			h2 = unhx(post[1]);
 			assert(h2 >= 0 && h2 < 16);
 			if_assert_failed h2 = 0;
-
+	
 			buffer[n++] = (h1<<4) + h2;
 			post += 2;
 			if (n == POST_BUFFER_SIZE) {
@@ -664,7 +664,7 @@ http_send_header(struct connection *conn)
 				n = 0;
 			}
 		}
-
+		
 		if (n)
 			add_bytes_to_string(&header, buffer, n);
 #undef POST_BUFFER_SIZE
@@ -844,30 +844,27 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (info->length != LEN_CHUNKED) {
+		unsigned char *data;
+		int data_len;
 		int len = rb->len;
 
-		if (info->length >= 0 && info->length < rb->len) {
+		if (info->length >= 0 && info->length < len) {
 			/* We won't read more than we have to go. */
 			len = info->length;
 		}
 
-		if (len) {
-			unsigned char *data;
-			int data_len;
+		conn->received += len;
 
-			conn->received += len;
+		data = uncompress_data(conn, rb->data, len, &data_len);
 
-			data = uncompress_data(conn, rb->data, len, &data_len);
+		if (add_fragment(conn->cache, conn->from, data, data_len) == 1)
+			conn->tries = 0;
 
-			if (add_fragment(conn->cache, conn->from, data, data_len) == 1)
-				conn->tries = 0;
+		if (data && data != rb->data) mem_free(data);
 
-			if (data && data != rb->data) mem_free(data);
+		conn->from += data_len;
 
-			conn->from += data_len;
-
-			kill_buffer_data(rb, len);
-		}
+		kill_buffer_data(rb, len);
 
 		if (!info->length && !rb->close)
 			goto thats_all_folks;
@@ -942,7 +939,6 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 			/* Maybe everything neccessary didn't come yet.. */
 			if (len > rb->len) len = rb->len;
-
 			conn->received += len;
 
 			data = uncompress_data(conn, rb->data, len, &data_len);

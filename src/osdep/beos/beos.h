@@ -1,4 +1,4 @@
-/* $Id: beos.h,v 1.3 2003/10/27 03:18:56 pasky Exp $ */
+/* $Id: beos.h,v 1.4 2003/10/27 03:26:27 pasky Exp $ */
 
 #ifndef EL__OSDEP_BEOS_H
 #define EL__OSDEP_BEOS_H
@@ -19,6 +19,11 @@ static inline int dir_sep(char x) { return x == '/'; }
 #define NO_FORK_ON_EXIT
 #define ASSOC_BLOCK
 #define THREAD_SAFE_LOOKUP
+
+struct terminal;
+
+void open_in_new_be(struct terminal *term, unsigned char *exe_name,
+		    unsigned char *param);
 
 #include <sys/time.h>
 #include <sys/types.h>

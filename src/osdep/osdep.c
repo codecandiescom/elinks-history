@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.110 2003/10/27 02:47:53 pasky Exp $ */
+/* $Id: osdep.c,v 1.111 2003/10/27 03:26:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -646,24 +646,6 @@ open_in_new_screen(struct terminal *term, unsigned char *exe_name,
 {
 	exec_new_elinks(term, DEFAULT_SCREEN_CMD, exe_name, param);
 }
-
-#ifdef OS2
-void open_in_new_vio(struct terminal *term, unsigned char *exe_name,
-		unsigned char *param);
-void open_in_new_fullscreen(struct terminal *term, unsigned char *exe_name,
-		       unsigned char *param);
-#endif
-
-#ifdef WIN32
-void
-open_in_new_win32(struct terminal *term, unsigned char *exe_name,
-		  unsigned char *param);
-#endif
-
-#ifdef BEOS
-void open_in_new_be(struct terminal *term, unsigned char *exe_name,
-		    unsigned char *param);
-#endif
 
 struct {
 	enum term_env_type env;

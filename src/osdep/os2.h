@@ -1,4 +1,4 @@
-/* $Id: os2.h,v 1.4 2003/10/27 02:47:08 pasky Exp $ */
+/* $Id: os2.h,v 1.5 2003/10/27 03:26:27 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS2_H
 #define EL__OSDEP_OS2_H
@@ -39,6 +39,13 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define USE_OPEN_PREALLOC
 #endif
 #endif
+
+struct terminal;
+
+void open_in_new_vio(struct terminal *term, unsigned char *exe_name,
+		     unsigned char *param);
+void open_in_new_fullscreen(struct terminal *term, unsigned char *exe_name,
+			    unsigned char *param);
 
 #endif
 

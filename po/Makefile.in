@@ -68,8 +68,8 @@ CATALOGS = @CATALOGS@
 	$(MSGFMT) -o $@ $<
 
 .po.gmo:
-	file=`echo $* | sed 's,.*/,,'`.gmo \
-	  && rm -f $$file && $(GMSGFMT) --statistics -o $$file $<
+	@file=`echo $* | sed 's,.*/,,'`.gmo \
+	  && rm -f $$file && echo -n $*": " && $(GMSGFMT) --statistics -o $$file $<
 
 
 all: all-@USE_NLS@

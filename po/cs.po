@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-19 19:29+0200\n"
+"POT-Creation-Date: 2003-04-19 20:46+0200\n"
 "PO-Revision-Date: 2003-01-04 23:39+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -358,8 +358,14 @@ msgstr "Oèekáván parametr"
 msgid "Too many parameters"
 msgstr "Pøíli¹ mnoho parametrù"
 
+#: src/config/options.c:543
+#, fuzzy
+msgid "error"
+msgstr "Chyba"
+
 #: src/config/options.c:545
-msgid "error: host not found\n"
+#, fuzzy
+msgid "error: host not found"
 msgstr "chyba: nena¹el jsem server\n"
 
 #: src/config/options.c:559
@@ -3133,6 +3139,11 @@ msgstr "U¾ivatelský dialog"
 msgid "Lua Error"
 msgstr "Chyba Lua"
 
+#: src/lua/core.c:693
+#, fuzzy, c-format
+msgid "Lua Error: %s"
+msgstr "Chyba Lua"
+
 #: src/lua/core.c:809
 msgid "Lua Console"
 msgstr "Lua Konzole"
@@ -3517,6 +3528,20 @@ msgstr ""
 "doporuèujeme, abys zmìnil hodnotu volby config.saving_style na 3, aby ELinks "
 "pøe¹el na \"správný\" zpùsob chování. Omlouváme se za zpùsobené "
 "nepøíjemnosti."
+
+#: src/viewer/dump/dump.c:94
+#, fuzzy, c-format
+msgid "Error writing to stdout: %s."
+msgstr "Chyba pøi zapisování do socketu"
+
+#: src/viewer/dump/dump.c:97
+msgid "Can't write to stdout."
+msgstr ""
+
+#: src/viewer/dump/dump.c:166
+#, c-format
+msgid "URL expected after %s."
+msgstr ""
 
 #: src/viewer/text/view.c:1576
 msgid "Error while posting form"

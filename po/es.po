@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-19 19:29+0200\n"
+"POT-Creation-Date: 2003-04-19 20:46+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: David Mediavilla <r96x6a79yki40001@sneakemail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -347,9 +347,14 @@ msgstr ""
 msgid "Too many parameters"
 msgstr ""
 
+#: src/config/options.c:543
+#, fuzzy
+msgid "error"
+msgstr "Error"
+
 #: src/config/options.c:545
 #, fuzzy
-msgid "error: host not found\n"
+msgid "error: host not found"
 msgstr "Máquina no encontrada"
 
 #: src/config/options.c:559
@@ -3193,6 +3198,11 @@ msgstr "Cuadro de diálogo de usuario"
 msgid "Lua Error"
 msgstr "Error de Lua"
 
+#: src/lua/core.c:693
+#, fuzzy, c-format
+msgid "Lua Error: %s"
+msgstr "Error de Lua"
+
 #: src/lua/core.c:809
 msgid "Lua Console"
 msgstr "Consola de Lua"
@@ -3560,6 +3570,20 @@ msgid ""
 "a subtle way. Thus, we recommend you to change the value of config."
 "saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
 "for any inconvience caused."
+msgstr ""
+
+#: src/viewer/dump/dump.c:94
+#, fuzzy, c-format
+msgid "Error writing to stdout: %s."
+msgstr "Error escribiendo en el socket"
+
+#: src/viewer/dump/dump.c:97
+msgid "Can't write to stdout."
+msgstr ""
+
+#: src/viewer/dump/dump.c:166
+#, c-format
+msgid "URL expected after %s."
 msgstr ""
 
 #: src/viewer/text/view.c:1576

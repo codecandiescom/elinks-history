@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-19 19:29+0200\n"
+"POT-Creation-Date: 2003-04-19 20:46+0200\n"
 "PO-Revision-Date: 2003-01-04 12:06+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@poczta.onet.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -360,9 +360,15 @@ msgstr "Spodziewano siê parametru"
 msgid "Too many parameters"
 msgstr "Zbyt wiele parametrów"
 
+#: src/config/options.c:543
+#, fuzzy
+msgid "error"
+msgstr "B³±d"
+
 #
 #: src/config/options.c:545
-msgid "error: host not found\n"
+#, fuzzy
+msgid "error: host not found"
 msgstr "b³±d: nie znaleziono serwera\n"
 
 #
@@ -3486,6 +3492,11 @@ msgstr "Okno dialogowe u¿ytkownika"
 msgid "Lua Error"
 msgstr "B³±d Lua"
 
+#: src/lua/core.c:693
+#, fuzzy, c-format
+msgid "Lua Error: %s"
+msgstr "B³±d Lua"
+
 #: src/lua/core.c:809
 msgid "Lua Console"
 msgstr "Konsola Lua"
@@ -3870,6 +3881,20 @@ msgstr ""
 "ustwieñ w subtelny sposób. Zatem, zalecamy zmieniæ warto¶æ config."
 "saving_style na 3, by uzyskaæ \"w³a¶ciwe\" zachowanie. Przepraszamy za "
 "wszelkie niedogodno¶ci."
+
+#: src/viewer/dump/dump.c:94
+#, fuzzy, c-format
+msgid "Error writing to stdout: %s."
+msgstr "B³±d przy zapisywaniu do gniazda"
+
+#: src/viewer/dump/dump.c:97
+msgid "Can't write to stdout."
+msgstr ""
+
+#: src/viewer/dump/dump.c:166
+#, c-format
+msgid "URL expected after %s."
+msgstr ""
 
 #: src/viewer/text/view.c:1576
 msgid "Error while posting form"

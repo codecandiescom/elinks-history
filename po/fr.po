@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-04-19 19:29+0200\n"
+"POT-Creation-Date: 2003-04-19 20:46+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -353,9 +353,13 @@ msgstr "Paramètre attendu"
 msgid "Too many parameters"
 msgstr "Trop de paramètres"
 
+#: src/config/options.c:543
+msgid "error"
+msgstr "Erreur"
+
 #: src/config/options.c:545
-msgid "error: host not found\n"
-msgstr "Erreur: Hôte introuvable\n"
+msgid "error: host not found"
+msgstr "Erreur: Hôte introuvable"
 
 #: src/config/options.c:559
 msgid "Resolver error."
@@ -3376,6 +3380,11 @@ msgstr "Dialogue utilisateur"
 msgid "Lua Error"
 msgstr "Erreur Lua"
 
+#: src/lua/core.c:693
+#, c-format
+msgid "Lua Error: %s"
+msgstr "Erreur Lua: %s"
+
 #: src/lua/core.c:809
 msgid "Lua Console"
 msgstr "Console Lua"
@@ -3758,6 +3767,20 @@ msgstr ""
 "dans les options. Nous vous recommandons d'utiliser la valeur 3 pour "
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
+
+#: src/viewer/dump/dump.c:94
+#, c-format
+msgid "Error writing to stdout: %s."
+msgstr "Erreur d'écriture sur stdout: %s."
+
+#: src/viewer/dump/dump.c:97
+msgid "Can't write to stdout."
+msgstr "Ne peut écrire sur stdout."
+
+#: src/viewer/dump/dump.c:166
+#, c-format
+msgid "URL expected after %s."
+msgstr "URL attendue après %s."
 
 #: src/viewer/text/view.c:1576
 msgid "Error while posting form"

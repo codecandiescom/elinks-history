@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.262 2004/04/11 14:38:50 jonas Exp $ */
+/* $Id: download.c,v 1.263 2004/04/11 15:47:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -792,11 +792,8 @@ static void
 continue_download(void *data, unsigned char *file)
 {
 	struct tq *tq = data;
-	struct codw_hop *codw_hop;
+	struct codw_hop *codw_hop = mem_calloc(1, sizeof(struct codw_hop));
 
-	if (!tq->uri) return;
-
-	codw_hop = mem_calloc(1, sizeof(struct codw_hop));
 	if (!codw_hop) {
 		tp_cancel(tq);
 		return;

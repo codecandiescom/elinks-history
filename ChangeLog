@@ -1,3 +1,90 @@
+Sun Dec 22 18:14:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/TODO, elusive/README:
+
+	Moved most of the stuff from document/html/TODO to elusive/README,
+	extended and fixed.  
+
+Sun Dec 22 17:54:49 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/colors.c:
+
+	New "allow dark colors on black background" implementation,
+	re-implementing support for other backgrounds as well. Please
+	comment and improve, maybe all the choices aren't best, and a lot of
+	them aren't certainly what are you used to.  
+
+Sun Dec 22 16:34:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/colors.c:
+
+	Fixed color table comment ;-).  
+
+Sun Dec 22 16:29:33 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/dialogs.c:
+
+	Add folders at the _bottom_ of the list, not at the top. Also move
+	box->sel properly to the newly added folder/bookmark. Fixes problem
+	reported by <muehlenhoff@gmx.de>.  
+
+Sun Dec 22 14:32:18 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/bulgarian.lng:
+
+	Bulgarian translation update.  
+
+Sun Dec 22 11:47:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed selecting of the first listbox item by mouse, reported by
+	Jonas. When you click at that +/- thing, the folder is (un)expanded.
+	Idea by Jonas and Links-2.x people.  
+
+Sun Dec 22 10:23:59 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/colors.c:
+
+	Some of my experiments with bgcolor approximation adjusting saved
+	for further reference (commented out) 
+
+Sun Dec 22 09:52:40 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Agitation.  
+
+Sun Dec 22 09:47:19 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: renderer.c, tables.c:
+
+	More table cells bgcolors rendering fixes, we get rid of a lot of
+	the color stains. But we won't get rid of some of them and this is
+	probably not going to change anymore, since this would probably
+	require a big rewrite :-( - so that one will come with the new html
+	engine already.  
+
+Sun Dec 22 00:05:49 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Oops - this leaked from the previous commit.  
+
+Sun Dec 22 00:04:59 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c, renderer.h:
+
+	Fixes in support for taking of background colors from the document.
+	Now we should be almost perfect in this area, preventing a lot of
+	black stains all around. Note that there's still a problem with cell
+	colors leaking all around and too bright colors on white background
+	(will fix these tommorow). Obviously this changes are visible only
+	if you set document.colors.use_document_colors = 2 (it'll be default
+	after the previously mentioned issues will be fixed). Have fun - I
+	think with these changes, a lot of sites start to look damn cool
+	with ELinks! :-) 
+
 Sat Dec 21 22:26:25 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* intl/polish.lng:

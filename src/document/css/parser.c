@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.99 2004/09/19 22:25:28 pasky Exp $ */
+/* $Id: parser.c,v 1.100 2004/09/19 22:25:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 {
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just a single
 	 * thing. --pasky */
-	/* TODO: comma-separated list of simple selectors. */
 	/* FIXME: element can be even '*' --pasky */
 
 	while (scanner_has_tokens(scanner)) {

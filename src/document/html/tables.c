@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.229 2004/06/27 08:43:05 zas Exp $ */
+/* $Id: tables.c,v 1.230 2004/06/27 08:49:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1102,7 +1102,7 @@ distribute_widths(struct table *table, int width)
 	int d = width - table->min_width;
 	int om = 0;
 	char *u;
-	int *w, *mx;
+	int *widths, *max_widths;
 	int max_cols_width = 0;
 	int cols_size;
 
@@ -1120,11 +1120,11 @@ distribute_widths(struct table *table, int width)
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
 	u = fmem_alloc(table->cols);
 
-	w = fmem_alloc(cols_size);
-	if (!w) goto end;
+	widths = fmem_alloc(cols_size);
+	if (!widths) goto end;
 
-	mx = fmem_alloc(cols_size);
-	if (!mx) goto end1;
+	max_widths = fmem_alloc(cols_size);
+	if (!max_widths) goto end1;
 
 	while (d) {
 		int mss, mii;
@@ -1132,27 +1132,27 @@ distribute_widths(struct table *table, int width)
 		int wq;
 		int dd;
 
-		memset(w, 0, cols_size);
-		memset(mx, 0, cols_size);
+		memset(widths, 0, cols_size);
+		memset(max_widths, 0, cols_size);
 
 		for (col = 0; col < table->cols; col++) {
 			switch (om) {
 				case 0:
 					if (table->cols_widths[col] < table->cols_x[col]) {
-						w[col] = 1;
-						mx[col] = int_min(table->cols_x[col],
+						widths[col] = 1;
+						max_widths[col] = int_min(table->cols_x[col],
 								table->max_cols_widths[col])
 							- table->cols_widths[col];
-						if (mx[col] <= 0) w[col] = 0;
+						if (max_widths[col] <= 0) widths[col] = 0;
 					}
 
 					break;
 				case 1:
 					if (table->cols_x[col] <= WIDTH_RELATIVE) {
-						w[col] = WIDTH_RELATIVE - table->cols_x[col];
-						mx[col] = table->max_cols_widths[col]
+						widths[col] = WIDTH_RELATIVE - table->cols_x[col];
+						max_widths[col] = table->max_cols_widths[col]
 							- table->cols_widths[col];
-						if (mx[col] <= 0) w[col] = 0;
+						if (max_widths[col] <= 0) widths[col] = 0;
 					}
 					break;
 				case 2:
@@ -1161,41 +1161,41 @@ distribute_widths(struct table *table, int width)
 					/* Fall-through */
 				case 3:
 					if (table->cols_widths[col] < table->max_cols_widths[col]) {
-						mx[col] = table->max_cols_widths[col]
+						max_widths[col] = table->max_cols_widths[col]
 							- table->cols_widths[col];
 						if (max_cols_width) {
-							w[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
+							widths[col] = 5 + table->max_cols_widths[col] * 10 / max_cols_width;
 						} else {
-							w[col] = 1;
+							widths[col] = 1;
 						}
 					}
 					break;
 				case 4:
 					if (table->cols_x[col] >= 0) {
-						w[col] = 1;
-						mx[col] = table->cols_x[col] - table->cols_widths[col];
-						if (mx[col] <= 0) w[col] = 0;
+						widths[col] = 1;
+						max_widths[col] = table->cols_x[col] - table->cols_widths[col];
+						if (max_widths[col] <= 0) widths[col] = 0;
 					}
 					break;
 				case 5:
 					if (table->cols_x[col] < 0) {
 						if (table->cols_x[col] <= WIDTH_RELATIVE) {
-							w[col] = WIDTH_RELATIVE - table->cols_x[col];
+							widths[col] = WIDTH_RELATIVE - table->cols_x[col];
 						} else {
-							w[col] = 1;
+							widths[col] = 1;
 						}
-						mx[col] = MAXINT;
+						max_widths[col] = MAXINT;
 					}
 					break;
 				case 6:
-					w[col] = 1;
-					mx[col] = MAXINT;
+					widths[col] = 1;
+					max_widths[col] = MAXINT;
 					break;
 				default:
 					INTERNAL("could not expand table");
 					goto end2;
 			}
-			p += w[col];
+			p += widths[col];
 		}
 
 		if (!p) {
@@ -1210,13 +1210,13 @@ distribute_widths(struct table *table, int width)
 a:
 		mss = 0;
 		mii = -1;
-		for (col = 0; col < table->cols; col++) if (w[col]) {
+		for (col = 0; col < table->cols; col++) if (widths[col]) {
 			int ss;
 
 			if (u && u[col]) continue;
-			ss = dd * w[col] / p;
+			ss = dd * widths[col] / p;
 			if (!ss) ss = 1;
-			if (ss > mx[col]) ss = mx[col];
+			if (ss > max_widths[col]) ss = max_widths[col];
 			if (ss > mss) {
 				mss = ss;
 				mii = col;
@@ -1240,10 +1240,10 @@ a:
 	}
 
 end2:
-	fmem_free(mx);
+	fmem_free(max_widths);
 
 end1:
-	fmem_free(w);
+	fmem_free(widths);
 
 end:
 	if (u) fmem_free(u);

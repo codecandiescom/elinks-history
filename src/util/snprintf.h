@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.9 2003/06/17 11:09:48 pasky Exp $ */
+/* $Id: snprintf.h,v 1.10 2003/06/18 00:55:11 jonas Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -28,7 +28,6 @@
 #include <stdio.h> /* The system's snprintf(). */
 #endif
 
-
 #if !defined(HAVE_VSNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 #undef vsnprintf
 #define vsnprintf elinks_vsnprintf
@@ -40,6 +39,11 @@ int elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args);
 #define snprintf elinks_snprintf
 int elinks_snprintf(char *str, size_t count, const char *fmt, ...);
 #endif
+
+/* TODO Somehow we should provide wrappers for the (v)asprintf() calls
+ *	since if they were used together with --enable-debug they would
+ *	generate a 'bad alloc header' error if the @ptr value was
+ *	mem_free()'d. --jonas */
 
 #ifndef HAVE_VASPRINTF
 #undef vasprintf

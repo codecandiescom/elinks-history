@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.8 2005/03/27 14:27:59 jonas Exp $ */
+/* $Id: parse.c,v 1.9 2005/03/27 14:50:31 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -478,8 +478,8 @@ parse_ftp_vms_response(struct ftp_file_info *info, unsigned char *src, int len)
 	}
 
 	/* Unknown months are mapped to January */
-	if (mtime.tm_mon <= 0)
-		mtime.tm_mon = 1;
+	if (mtime.tm_mon < 0)
+		mtime.tm_mon = 0;
 
 	pos++;
 	mtime.tm_year = parse_ftp_number(&pos, end, 0, LONG_MAX) - 1900;

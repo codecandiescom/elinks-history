@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-07-23 16:05+0200\n"
+"POT-Creation-Date: 2003-07-23 17:12+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -3475,8 +3475,8 @@ msgstr "Utilisateur"
 
 #: src/dialogs/auth.c:126
 #, c-format
-msgid "Authentication required for %s at %s\n"
-msgstr "Authentication requise pour %s à %s\n"
+msgid "Authentication required for %s at %s"
+msgstr "Authentication requise pour %s à %s"
 
 #: src/dialogs/auth.c:134
 msgid "HTTP Authentication"

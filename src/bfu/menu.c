@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.61 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: menu.c,v 1.62 2003/05/04 17:36:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,7 +310,7 @@ scroll_menu(struct menu *menu, int d)
 	if (scr_i < 0) scr_i = 0;
 	if (w < 0) w = 0;
 
-	menu->selected += (d > 0) ? 1 : -1;
+	menu->selected += d;
 
 	if (menu->ni) {
 		menu->selected %= menu->ni;
@@ -336,7 +336,7 @@ scroll_menu(struct menu *menu, int d)
 		if (menu->ni && menu->items[menu->selected].rtext != M_BAR)
 			break;
 
-		menu->selected += (d > 0) ? 1 : -1;
+		menu->selected += d;
 	}
 
 	if (menu->selected < menu->view + scr_i)

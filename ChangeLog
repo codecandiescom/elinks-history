@@ -1,3 +1,517 @@
+Sat Apr 24 16:15:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	First check content-type of Content-Disposition filename. Problem is
+	we still fall back to also checking the content type of the filename
+	in the URI and thus the what-to-do dialog will still report wrong
+	content type.  
+
+Sat Apr 24 16:13:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Move extension content type checking to separate function.  
+
+Sat Apr 24 16:03:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, mime/mime.h, protocol/uri.c:
+
+	Move Content-Disposition extraction to separate function in mime/.  
+
+Sat Apr 24 15:39:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, sched/download.c:
+
+	Fix problems regarding servers sending empty Content-Type values
+	which means the extension is never checked.  
+
+Sat Apr 24 15:31:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/intl/gettext/l10nflist.c:
+
+	Awful hack to make cygwin happy, it has no impact on other
+	environments.  
+
+Sat Apr 24 14:51:41 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	AC_PREREQ(2.13) was added, it prevents issues on systems having both
+	autoconf2.13 and 2.5x or more (debian, cygwin).  
+
+Sat Apr 24 14:44:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	process_element() and family now returns new value of html, because
+	it can shift it forth.  
+
+Sat Apr 24 14:39:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, html/internal.h, html/parser.c,
+	html/parser/Makefile.am, html/parser/forms.c, html/parser/forms.h,
+	html/parser/parse.c:
+
+	Factored out forms parser from document/html/parser.c to
+	document/html/parser/forms.*.  
+
+Sat Apr 24 14:36:13 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/perl/hooks.c:
+
+	Moved "dSP;". Now dSP is called only when Perl interpreter is
+	properly initialized. The crash should disappear.  
+
+Sat Apr 24 12:21:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/connection.h, sched/download.c,
+	sched/error.c:
+
+	Fix bug 440 by checking for external hanlders in query_file()
+	through where all downloads are routed. S_EXTERNAL_PROTOCOL
+	introduced for the error message mapping.  
+
+Sat Apr 24 11:50:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Update documentation of addBookmark().  
+
+Sat Apr 24 11:46:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Documented the rest of struct element_info.  
+
+Sat Apr 24 11:41:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, sched/session.c, sched/session.h:
+
+	Rename -remote bookmark() method to addBookmark(). enum also updated
+	to reflect this change.  
+
+Sat Apr 24 11:39:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	end_element(): Minor XMP handling simplification.  
+
+Sat Apr 24 11:31:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	start_element(): @ali -> @restore_format, @pa -> @old_format 
+
+Sat Apr 24 11:29:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Reindented start_element().  
+
+Sat Apr 24 11:27:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Separated start_element() and end_element() from process_element().  
+
+Sat Apr 24 10:59:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, mime/mime.h, sched/download.c:
+
+	Pass the cache entry to get_content_type().  
+
+Sat Apr 24 10:35:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	process_element(): Make links work again by breaking like the old
+	code did instead of returning so we end up at the killing spree
+	below.  
+
+Sat Apr 24 02:52:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Compile fix for the currently fubar'd html parser ;) 
+
+Sat Apr 24 02:13:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Shorten examples in the -remote description.  
+
+Sat Apr 24 02:11:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, sched/session.c, sched/session.h:
+
+	Add support for -remote 'bookmark(URL)'. Let the bloating begin.
+	Dunno if xfeDoCommand(bookmark, URL) would be a better way? 
+
+Sat Apr 24 01:43:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Fix leak when passing unknown openurl() parameter.  
+
+Sat Apr 24 01:39:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Unify openurl() remote_url allocation.  
+
+Sat Apr 24 01:35:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Use strstr() to scan openURL() args.  
+
+Sat Apr 24 01:31:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Tidyup.  
+
+Sat Apr 24 01:30:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Use strcspn() to simplify.  
+
+Sat Apr 24 01:25:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	@inv -> @endingtag in parse_html() and process_element().  
+
+Sat Apr 24 01:23:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	In parse_html() merged set_lt to the main loop.  
+
+Sat Apr 24 01:20:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Comments in process_element() reformatted.  
+
+Sat Apr 24 01:19:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Moved element processing off parse_html() to process_element().  
+
+Sat Apr 24 01:13:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Cleanup.  
+
+Sat Apr 24 01:10:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): If no remote session flags was applied it can only
+	mean the method is not supported. This nicely centralizes error
+	returning.  
+
+Sat Apr 24 01:07:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_html(): @lt -> @base_pos 
+
+Sat Apr 24 01:07:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Add missing break.  
+
+Sat Apr 24 01:05:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	More tidyup of parse_html().  
+
+Sat Apr 24 01:05:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	I'm a sucker for this data driven thing so make -remote method
+	parsing data driven and use switch.  
+
+Sat Apr 24 01:00:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Removed some ancient commented out relicts.  
+
+Sat Apr 24 00:57:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, html/internal.h, html/parser.c,
+	html/parser/Makefile.am, html/parser/link.c, html/parser/link.h,
+	html/parser/parse.c:
+
+	Moved link-related functions from document/html/parser.c to
+	document/html/parser/link.*.  
+
+Sat Apr 24 00:51:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Emit 'Remote method not supported' instead of 'Command
+	not supported'. Should hopefully be less confusing.  
+
+Sat Apr 24 00:38:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Restored get_num() which got... lost in an accident.  
+
+Sat Apr 24 00:36:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Removed idiotic static inline from html_*().  
+
+Sat Apr 24 00:33:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/: parse.c, parse.h:
+
+	Separated core parser stuff from document/html/parser.* to
+	document/html/parser/parse.*.  
+
+Sat Apr 24 00:32:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/perl/core.c:
+
+	Use PERL_EXIT_DESTRUCT_END only if it's defined, I don't have it in
+	my pet perl-5.6.1.  
+
+Sat Apr 24 00:31:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/cmdline.c, sched/session.c:
+
+	Fix -remote 'openurl()' so it again prompt for URL in current tab.  
+
+Sat Apr 24 00:28:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Oops it is @comma that should be strimmed from ending
+	space.  
+
+Sat Apr 24 00:25:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/perl/core.c:
+
+	Fix include modules/module.h.  
+
+Sat Apr 24 00:25:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* Makefile.base:
+
+	Remove CPPFLAGS usage. That shouldn't hurt anything and it's all
+	mostly redundant anyway.  
+
+Sat Apr 24 00:24:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Improve -remote long-help description. Fix incorrect description of
+	openurl(). Take 4.  
+
+Sat Apr 24 00:23:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	skipback_whitespace(): Don't go off by one.  
+
+Sat Apr 24 00:20:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	remote_cmd(): Cleanup looping. Introduce skipback_whitespace().  
+
+Sat Apr 24 00:20:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/document/html/Makefile.am:
+
+	Connect document/html/parser/ to the build infrastructure.  
+
+Sat Apr 24 00:18:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, document.c, css/apply.c,
+	html/internal.h, html/parser.c, html/parser.h, html/renderer.c,
+	html/tables.c, html/parser/Makefile.am:
+
+	Separated core parser stuff from document/html/parser.* to
+	document/html/parser/parse.*.  
+
+Sat Apr 24 00:18:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Added missing util/conv.h.  
+
+Sat Apr 24 00:03:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/internal.h:
+
+	parser/stack.c needs ln_break().  
+
+Fri Apr 23 23:56:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, util/error.c:
+
+	usrerror() now prefixes error messages with 'elinks: '. Change
+	-remote 'ping()' to be more mozilla compliant and in the spirit of
+	Unix and only emit error message when ping failed.  
+
+Fri Apr 23 23:30:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Emit error message when -remote failed to connect.  
+
+Fri Apr 23 23:23:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Trim down includes.  
+
+Fri Apr 23 23:23:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/internal.h:
+
+	Declare @ff and @line_break_f as extern.  
+
+Fri Apr 23 23:22:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/internal.h:
+
+	@ff and @line_break_f are needed by parser/stack.c.  
+
+Fri Apr 23 23:18:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Cleanup the gotos a little.  
+
+Fri Apr 23 23:16:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	kill_html_stack_until(): Reindentation.  
+
+Fri Apr 23 23:14:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Tidyup.  
+
+Fri Apr 23 23:12:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser/stack.c, parser/stack.h:
+
+	Removed debug_stack(), dump_html_stack() is now the official HTML
+	stack debugging dumper.  
+
+Fri Apr 23 23:10:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Enhanced dump_html_stack().  
+
+Fri Apr 23 23:08:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.h:
+
+	Removed redundant struct html_element declaration.  
+
+Fri Apr 23 23:08:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/: stack.c, stack.h:
+
+	search_html_stack() prototype: (char *) -> (unsigned char *) 
+
+Fri Apr 23 23:06:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser/stack.c, parser/stack.h:
+
+	kill_until() -> kill_html_stack_until() 
+
+Fri Apr 23 23:05:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Improve -remote long-help description. Take 3. Please stop me ;) 
+
+Fri Apr 23 23:05:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, html/parser.c,
+	html/parser/Makefile.am, html/parser/stack.c, html/parser/stack.h:
+
+	Moved HTML stack related functions from document/html/parser.c to
+	document/html/parser/stack.*.  
+
+Fri Apr 23 23:04:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/: .cvsignore, .vimrc:
+
+	Fairies.  
+
+Fri Apr 23 22:58:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Improve -remote long-help description. Take 2 
+
+Fri Apr 23 22:54:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Improve -remote long-help description.  
+
+Fri Apr 23 22:48:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Small parse_html() tidyup.  
+
+Fri Apr 23 22:43:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Attempt to at least roughly document element_info.nopair.  
+
+Fri Apr 23 22:30:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Moved process_head() and skip_comment() above the elements list.  
+
+Fri Apr 23 22:28:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Few strategically placed blank lines.  
+
+Fri Apr 23 22:24:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	elinks -version now prints out the full version string - including
+	build date and features list.  
+
+Fri Apr 23 22:21:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/version.c:
+
+	In case @more isn't set but we're debugging still show (built on),
+	but on the same line as ELinks VERSION_STRING.  
+
 Fri Apr 23 22:05:20 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: main.c, config/cmdline.c, sched/session.h:

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.51 2003/11/09 13:07:43 pasky Exp $ */
+/* $Id: hierbox.c,v 1.52 2003/11/09 13:23:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,11 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 }
 
 
+/* We install own dialog event handler, so that we can give the listbox widget
+ * an early chance to catch the event. Basically, the listbox widget is itself
+ * unselectable, instead one of the buttons below is always active. So, we
+ * always first let the listbox catch the keypress and handle it, and if it
+ * doesn't care, we pass it on to the button. */
 static int
 hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
@@ -57,6 +62,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 						dlg_data->widgets_data;
 			struct listbox_data *box;
 
+			/* Check if listbox has something to say to this */
                         if (widget_data->widget->ops->kbd
 			    && widget_data->widget->ops->kbd(widget_data,
 				   			     dlg_data, ev)
@@ -73,8 +79,14 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 				return EVENT_PROCESSED;
 			}
 
+			/* Recursively unexpand all folders */
 			if (ev->x == '[' || ev->x == '-' || ev->x == '_') {
 				if (box->sel) {
+					/* Special trick: if the folder is
+					 * already folded, jump at the parent
+					 * folder, so the next time when user
+					 * presses the key, the whole parent
+					 * folder will be closed. */
 					if (list_empty(box->sel->child)
 					    || !box->sel->expanded) {
 						if (box->sel->root) {
@@ -99,6 +111,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 				return EVENT_PROCESSED;
 			}
 
+			/* Recursively expand all folders */
 			if (ev->x == ']' || ev->x == '+' || ev->x == '=') {
 				if (box->sel) {
 					recursively_set_expanded(box->sel, 1);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.212 2003/05/24 22:32:53 pasky Exp $ */
+/* $Id: options.c,v 1.213 2003/06/04 09:59:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,7 +487,7 @@ smart_config_string(unsigned char **str, int *len, int print_comment,
 
 			if (path) {
 				add_to_str(&str2, &len2, path);
-				add_to_str(&str2, &len2, ".");
+				add_chr_to_str(&str2, &len2, '.');
 			}
 			add_to_str(&str2, &len2, option->name);
 			smart_config_string(str, len, pc, option->ptr,

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.124 2003/05/19 08:46:47 miciah Exp $ */
+/* $Id: http.c,v 1.125 2003/06/04 10:10:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,7 +140,7 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 		*p = '\0';
 		add_to_str(hdr, l, p1);
 		if (ch == '\\')
-			add_to_str(hdr, l, "/");
+			add_chr_to_str(hdr, l, '/');
 		else
 			add_to_str(hdr, l, "%20");
 		p++;
@@ -378,7 +378,7 @@ http_send_header(struct connection *conn)
 	}
 
 	if (!IS_PROXY_URL(conn->url)) {
-		add_to_str(&hdr, &l, "/");
+		add_chr_to_str(&hdr, &l, '/');
 	}
 
 	url_data = get_url_data(conn->url);
@@ -402,9 +402,9 @@ http_send_header(struct connection *conn)
 #ifdef IPV6
 		if (strchr(host_data, ':') != strrchr(host_data, ':')) {
 			/* IPv6 address */
-			add_to_str(&hdr, &l, "[");
+			add_chr_to_str(&hdr, &l, '[');
 			add_to_str(&hdr, &l, host_data);
-			add_to_str(&hdr, &l, "]");
+			add_chr_to_str(&hdr, &l, ']');
 		} else
 #endif
 			add_to_str(&hdr, &l, host_data);
@@ -414,7 +414,7 @@ http_send_header(struct connection *conn)
 		host_data = get_port_str(host);
 		if (host_data) {
 			if (*host_data) {
-				add_to_str(&hdr, &l, ":");
+				add_chr_to_str(&hdr, &l, ':');
 				add_to_str(&hdr, &l, host_data);
 			}
 			mem_free(host_data);
@@ -505,7 +505,7 @@ http_send_header(struct connection *conn)
 				host_data = get_port_str(extract_proxy(host));
 				if (host_data) {
 					if (*host_data) {
-						add_to_str(&hdr, &l, ":");
+						add_chr_to_str(&hdr, &l, ':');
 						add_to_str(&hdr, &l, host_data);
 					}
 					mem_free(host_data);
@@ -513,7 +513,7 @@ http_send_header(struct connection *conn)
 			}
 
 			if (!IS_PROXY_URL(conn->url) || hdr[l - 1] != '/') {
-				add_to_str(&hdr, &l, "/");
+				add_chr_to_str(&hdr, &l, '/');
 			}
 
 			url_data = get_url_data(extract_proxy(conn->url));

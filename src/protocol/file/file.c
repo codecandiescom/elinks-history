@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.42 2003/05/12 20:23:58 pasky Exp $ */
+/* $Id: file.c,v 1.43 2003/06/04 10:12:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,7 +557,7 @@ dir:
 			add_htmlesc_str(&file, &fl,
 					dir[i].f, strlen(dir[i].f));
 			if (dir[i].s[0] == 'd') {
-				add_to_str(&file, &fl, "/");
+				add_chr_to_str(&file, &fl, '/');
 			} else if (lnk) {
 				struct stat st;
 				unsigned char *n = init_str();
@@ -569,7 +569,7 @@ dir:
 							dir[i].f, strlen(dir[i].f));
 					if (!stat(n, &st))
 						if (S_ISDIR(st.st_mode))
-							add_to_str(&file, &fl, "/");
+							add_chr_to_str(&file, &fl, '/');
 					mem_free(n);
 				}
 			}
@@ -597,7 +597,7 @@ dir:
 				mem_free(lnk);
 			}
 
-			add_to_str(&file, &fl, "\n");
+			add_chr_to_str(&file, &fl, '\n');
 		}
 
 		mem_free(name);

@@ -1,5 +1,5 @@
 /* Get system name */
-/* $Id: sysname.c,v 1.9 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: sysname.c,v 1.10 2003/06/04 10:08:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,9 +35,9 @@ get_system_name()
 		int l = 0;
 
 		add_to_str(&str, &l, name.sysname);
-		add_to_str(&str, &l, " ");
+		add_chr_to_str(&str, &l, ' ');
 		add_to_str(&str, &l, name.release);
-		add_to_str(&str, &l, " ");
+		add_chr_to_str(&str, &l, ' ');
 		add_to_str(&str, &l, name.machine);
 		safe_strncpy(system_name, str, sizeof(system_name));
 		mem_free(str);

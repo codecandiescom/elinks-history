@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.52 2003/05/13 13:38:47 pasky Exp $ */
+/* $Id: cookies.c,v 1.53 2003/06/04 10:01:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -547,7 +547,7 @@ ok:
 		}
 
 		add_to_str(s, l, c->name);
-		add_to_str(s, l, "=");
+		add_chr_to_str(s, l, '=');
 		add_to_str(s, l, c->value);
 #ifdef COOKIES_DEBUG
 		debug("Cookie: %s=%s", c->name, c->value);

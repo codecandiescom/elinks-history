@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.66 2003/05/24 22:32:53 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.67 2003/06/04 10:02:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,7 +610,7 @@ bind_config_string(unsigned char **file, int *len)
 				       keybinding->meta);
 			add_to_str(file, len, "\" = \"");
 			add_to_str(file, len, action_str);
-			add_to_str(file, len, "\"");
+			add_chr_to_str(file, len, '\"');
 			add_to_str(file, len, NEWLINE);
 		}
 }

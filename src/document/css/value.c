@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.33 2004/01/18 18:21:08 jonas Exp $ */
+/* $Id: value.c,v 1.34 2004/01/19 00:24:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,9 +96,54 @@ css_parse_color_value(struct css_property_info *propinfo,
 		      struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
-	unsigned char *string = token->string;
 
-	return do_css_parse_color_value(propinfo, value, &string);
+	assert(propinfo->value_type == CSS_VT_COLOR);
+
+	if (token->type == CSS_TOKEN_FUNCTION
+	    && css_token_contains(token, "rgb(")) {
+		/* RGB function */
+		int shift;
+
+		token = get_next_css_token(scanner);
+
+		for (shift = 16; token && shift >= 0; shift -= 8) {
+			unsigned char paskynator = shift ? ',' : ')';
+			unsigned char *nstring = token->string;
+			int part;
+
+			if (token->type != CSS_TOKEN_DIGIT
+			    && token->type != CSS_TOKEN_PERCENTAGE)
+				return 0;
+
+			part = strtol(token->string, (char **)&nstring, 10);
+
+			if (token->string == nstring
+			    || !check_next_css_token(scanner, paskynator))
+				return 0;
+
+			if (token->type == CSS_TOKEN_PERCENTAGE) {
+				part *= 255; part /= 100;
+			}
+
+			int_bounds(&part, 0, 255);
+			value->color |= part << shift;
+			token = skip_css_tokens(scanner, paskynator);
+		}
+
+		return 1;
+	}
+
+	/* Just a color value we already know how to parse. */
+	if (token->type != CSS_TOKEN_IDENTIFIER
+	    && token->type != CSS_TOKEN_HEX_COLOR)
+		return 0;
+
+	if (decode_color(token->string, token->length, &value->color) < 0) {
+		return 0;
+	}
+
+	skip_css_tokens(scanner, token->type);
+	return 1;
 }
 
 int

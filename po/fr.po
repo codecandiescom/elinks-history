@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-24 17:55+0100\n"
-"PO-Revision-Date: 2004-12-22 23:32+0100\n"
+"POT-Creation-Date: 2004-12-28 00:59+0100\n"
+"PO-Revision-Date: 2004-12-28 01:00+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Pressez espace pour déployer le dossier."
 
 #: src/bfu/hierbox.c:447 src/bfu/hierbox.c:458 src/bfu/hierbox.c:638
 #: src/bfu/hierbox.c:945 src/bfu/hierbox.c:974 src/bfu/inpfield.c:69
-#: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/msgbox.c:173
+#: src/bfu/inpfield.c:80 src/bfu/inpfield.c:100 src/bfu/msgbox.c:175
 #: src/bookmarks/dialogs.c:263 src/bookmarks/dialogs.c:666
 #: src/config/dialogs.c:56 src/config/dialogs.c:101 src/config/dialogs.c:341
 #: src/config/dialogs.c:410 src/config/dialogs.c:440 src/config/dialogs.c:478
@@ -44,8 +44,8 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:516 src/dialogs/menu.c:567
 #: src/dialogs/options.c:172 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:476 src/ecmascript/spidermonkey.c:2115
-#: src/ecmascript/spidermonkey.c:2142 src/formhist/dialogs.c:179
+#: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1931
+#: src/ecmascript/spidermonkey.c:1958 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
 #: src/protocol/protocol.c:227 src/protocol/user.c:268
 #: src/sched/download.c:231 src/sched/download.c:327 src/sched/download.c:368
@@ -72,12 +72,14 @@ msgstr "Désolé, mais l'item \"%s\" ne peut être supprimé."
 msgid "Sorry, but the item \"%s\" is being used by something else."
 msgstr "Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:568
+#. cant_delete_folder
+#: src/bfu/hierbox.c:568 src/bookmarks/dialogs.c:124
 #, c-format
 msgid "Sorry, but the folder \"%s\" cannot be deleted."
 msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:569
+#. cant_delete_used_folder
+#: src/bfu/hierbox.c:569 src/bookmarks/dialogs.c:126
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
@@ -88,11 +90,11 @@ msgstr "Erreur de suppression"
 
 #: src/bfu/hierbox.c:731
 msgid "Delete marked items"
-msgstr "Supprimer les items sélectionnés"
+msgstr "Supprimer les items marqués"
 
 #: src/bfu/hierbox.c:732
 msgid "Delete marked items?"
-msgstr "Supprimer les items sélectionnés ?"
+msgstr "Supprimer les items marqués ?"
 
 #: src/bfu/hierbox.c:745 src/bfu/hierbox.c:781 src/bfu/hierbox.c:802
 #: src/bfu/hierbox.c:873 src/config/dialogs.c:828 src/dialogs/menu.c:125
@@ -206,39 +208,22 @@ msgstr "Horloge"
 msgid "Digital clock in the status bar."
 msgstr "Horloge digitale dans la barre de status."
 
-#: src/bfu/leds.c:78 src/bfu/leds.c:84 src/bfu/leds.c:104
-#: src/config/options.inc:1087 src/config/options.inc:1094
-#: src/ecmascript/ecmascript.c:41 src/globhist/globhist.c:64
-#: src/mime/backend/mailcap.c:94 src/mime/backend/mimetypes.c:53
-#: src/ssl/ssl.c:81
+#: src/bfu/leds.c:76 src/bfu/leds.c:93 src/config/options.inc:1087
+#: src/config/options.inc:1094 src/ecmascript/ecmascript.c:41
+#: src/globhist/globhist.c:64 src/mime/backend/mailcap.c:94
+#: src/mime/backend/mimetypes.c:53 src/ssl/ssl.c:81
 msgid "Enable"
 msgstr "Activation"
 
+#: src/bfu/leds.c:78
+msgid "Whether to display a digital clock in the status bar."
+msgstr "Afficher l'horloge digitale dans la barre de status."
+
 #: src/bfu/leds.c:80
-msgid ""
-"Whether to display a digital clock in the status bar.\n"
-"Note that the LED indicators must be enabled for this\n"
-"to take effect."
-msgstr ""
-"Activer ou non l'affichage de l'horloge digitale. Notez que\n"
-"les indicateurs LEDs doivent être activés pour que cela\n"
-"fonctionne."
-
-#: src/bfu/leds.c:86
-msgid ""
-"Whether to display a digital clock in the status bar.\n"
-"Note that the LED indicators (DISABLED) must be enabled\n"
-"for this to take any effect."
-msgstr ""
-"Activer ou non l'affichage de l'horloge digitale. Notez que\n"
-"les indicateurs LEDs (INACTIFS) doivent être activés pour que\n"
-"cela fonctionne."
-
-#: src/bfu/leds.c:91
 msgid "Format"
 msgstr "Format"
 
-#: src/bfu/leds.c:93
+#: src/bfu/leds.c:82
 msgid ""
 "Format string for the digital clock. See the strftime(3)\n"
 "manpage for details."
@@ -246,15 +231,15 @@ msgstr ""
 "Chaîne de formatage pour l'horloge digitale.\n"
 "Voir la page de manuel de strftime(3) pour plus de détails."
 
-#: src/bfu/leds.c:100
+#: src/bfu/leds.c:89
 msgid "LEDs"
 msgstr "LEDs"
 
-#: src/bfu/leds.c:102
+#: src/bfu/leds.c:91
 msgid "LEDs (visual indicators) options."
 msgstr "Options concernant les LEDs (indicateurs visuels)"
 
-#: src/bfu/leds.c:106
+#: src/bfu/leds.c:95
 msgid ""
 "Enable LEDs.\n"
 "These visual indicators will inform you about various states."
@@ -263,7 +248,7 @@ msgstr ""
 "Ces indicateurs visuels informent de différents états."
 
 #. name:
-#: src/bfu/leds.c:291
+#: src/bfu/leds.c:280
 msgid "LED indicators"
 msgstr "Indicateurs LED"
 
@@ -366,41 +351,29 @@ msgstr "URL"
 #. cant_delete_item
 #: src/bookmarks/dialogs.c:120
 #, c-format
-msgid "Sorry, but bookmark \"%s\" cannot be deleted."
+msgid "Sorry, but the bookmark \"%s\" cannot be deleted."
 msgstr "Désolé, mais le signet \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_item
 #: src/bookmarks/dialogs.c:122
 #, c-format
-msgid "Sorry, but bookmark \"%s\" is being used by something else."
+msgid "Sorry, but the bookmark \"%s\" is being used by something else."
 msgstr "Désolé, mais le signet \"%s\" est actuellement utilisé ailleurs."
-
-#. cant_delete_folder
-#: src/bookmarks/dialogs.c:124
-#, c-format
-msgid "Sorry, but folder \"%s\" cannot be deleted."
-msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
-
-#. cant_delete_used_folder
-#: src/bookmarks/dialogs.c:126
-#, c-format
-msgid "Sorry, but folder \"%s\" is being used by something else."
-msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 
 #. delete_marked_items_title
 #: src/bookmarks/dialogs.c:128
 msgid "Delete marked bookmarks"
-msgstr "Supprimer les signets sélectionnés"
+msgstr "Supprimer les signets marqués"
 
 #. delete_marked_items
 #: src/bookmarks/dialogs.c:130
 msgid "Delete marked bookmarks?"
-msgstr "Supprimer les signets sélectionnés ?"
+msgstr "Supprimer les signets marqués ?"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:134
 #, c-format
-msgid "Delete folder \"%s\" and all bookmarks in it?"
+msgid "Delete the folder \"%s\" and all bookmarks in it?"
 msgstr "Supprimer le dossier \"%s\" et tous les signets qu'il contient ?"
 
 #. delete_item_title
@@ -569,12 +542,12 @@ msgstr ""
 #. delete_marked_items_title
 #: src/cache/dialogs.c:186
 msgid "Delete marked cache entries"
-msgstr "Supprimer les entrées de cache sélectionnées"
+msgstr "Supprimer les entrées de cache marquées"
 
 #. delete_marked_items
 #: src/cache/dialogs.c:188
 msgid "Delete marked cache entries?"
-msgstr "Supprimer les entrées de cache sélectionnées ?"
+msgstr "Supprimer les entrées de cache marquées ?"
 
 #. delete_item_title
 #: src/cache/dialogs.c:194
@@ -2264,7 +2237,7 @@ msgstr "Préfixe pour les liens image"
 
 #: src/config/options.inc:233
 msgid "Prefix string to use to mark image links."
-msgstr "Chaîne avec laquelle préfixer les liens image."
+msgstr "Préfixe marquant les liens image."
 
 #: src/config/options.inc:235
 msgid "Image link suffix"
@@ -2272,7 +2245,7 @@ msgstr "Suffixe pour les liens image"
 
 #: src/config/options.inc:237
 msgid "Suffix string to use to mark image links."
-msgstr "Chaîne avec laquelle suffixer les liens image."
+msgstr "Suffixe marquant les liens image."
 
 #: src/config/options.inc:239
 msgid "Maximum length for image label"
@@ -2486,6 +2459,7 @@ msgstr ""
 msgid "Wrap-around links cycling"
 msgstr "Sélection cyclique des liens"
 
+#. 0
 #: src/config/options.inc:342
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
@@ -4289,12 +4263,12 @@ msgstr ""
 #. delete_marked_items_title
 #: src/cookies/dialogs.c:209
 msgid "Delete marked cookies"
-msgstr "Supprimer les cookies sélectionnés"
+msgstr "Supprimer les cookies marqués"
 
 #. delete_marked_items
 #: src/cookies/dialogs.c:211
 msgid "Delete marked cookies?"
-msgstr "Supprimer les cookies sélectionnés ?"
+msgstr "Supprimer les cookies marqués ?"
 
 #. delete_folder_title
 #: src/cookies/dialogs.c:213
@@ -4421,12 +4395,12 @@ msgstr ""
 #. delete_marked_items_title
 #: src/dialogs/download.c:410
 msgid "Interrupt marked downloads"
-msgstr "Interrompre les téléchargements sélectionnés"
+msgstr "Interrompre les téléchargements marqués"
 
 #. delete_marked_items
 #: src/dialogs/download.c:412
 msgid "Interrupt marked downloads?"
-msgstr "Interrompre les téléchargements sélectionnés ?"
+msgstr "Interrompre les téléchargements marqués ?"
 
 #. delete_item_title
 #: src/dialogs/download.c:418
@@ -5093,11 +5067,11 @@ msgstr "Temps max. d'exécution"
 msgid "Maximum execution time in seconds for a script."
 msgstr "Temps maximal pour l'exécution d'un script, en secondes."
 
-#: src/ecmascript/spidermonkey.c:473
+#: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:2098
+#: src/ecmascript/spidermonkey.c:1914
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5114,7 +5088,7 @@ msgstr ""
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:2106
+#: src/ecmascript/spidermonkey.c:1922
 #, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
@@ -5125,15 +5099,15 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:2113
+#: src/ecmascript/spidermonkey.c:1929
 msgid "JavaScript Error"
 msgstr "Erreur Javascript"
 
-#: src/ecmascript/spidermonkey.c:2133
+#: src/ecmascript/spidermonkey.c:1949
 msgid "JavaScript Emergency"
 msgstr "Alerte JavaScript"
 
-#: src/ecmascript/spidermonkey.c:2135
+#: src/ecmascript/spidermonkey.c:1951
 #, c-format
 msgid ""
 "A script embedded in the current document was running for more than %d "
@@ -5171,12 +5145,12 @@ msgstr "Désolé, mais le formulaire \"%s\" est actuellement utilisé ailleurs."
 #. delete_marked_items_title
 #: src/formhist/dialogs.c:129
 msgid "Delete marked forms"
-msgstr "Supprimer les formulaires sélectionnés"
+msgstr "Supprimer les formulaires marqués"
 
 #. delete_marked_items
 #: src/formhist/dialogs.c:131
 msgid "Delete marked forms?"
-msgstr "Supprimer les formulaires sélectionnés ?"
+msgstr "Supprimer les formulaires marqués ?"
 
 #. delete_item_title
 #: src/formhist/dialogs.c:137
@@ -5224,6 +5198,8 @@ msgstr "Bascule sauvegarde"
 msgid "Form history manager"
 msgstr "Gestionnaire d'historique de formulaires"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show forms history dialog"
 msgstr "Dialogue de mémorisation de formulaires"
@@ -5284,12 +5260,12 @@ msgstr ""
 #. delete_marked_items_title
 #: src/globhist/dialogs.c:114
 msgid "Delete marked history entries"
-msgstr "Supprimer les entrées d'historique sélectionnées"
+msgstr "Supprimer les entrées d'historique marquées"
 
 #. delete_marked_items
 #: src/globhist/dialogs.c:116
 msgid "Delete marked history entries?"
-msgstr "Supprimer les entrées d'historique sélectionnées ?"
+msgstr "Supprimer les entrées d'historique marquées ?"
 
 #. delete_item_title
 #: src/globhist/dialogs.c:122
@@ -5362,127 +5338,127 @@ msgstr ""
 msgid "Global History"
 msgstr "Historique Global"
 
-#: src/intl/gettext/libintl.c:24
+#: src/intl/gettext/libintl.c:28
 msgid "System"
 msgstr "Système"
 
-#: src/intl/gettext/libintl.c:25
+#: src/intl/gettext/libintl.c:29
 msgid "English"
 msgstr "Anglais"
 
-#: src/intl/gettext/libintl.c:27
+#: src/intl/gettext/libintl.c:31
 msgid "Belarusian"
 msgstr "Biélorusse"
 
-#: src/intl/gettext/libintl.c:28
+#: src/intl/gettext/libintl.c:32
 msgid "Brazilian Portuguese"
 msgstr "Brésilien"
 
-#: src/intl/gettext/libintl.c:29
+#: src/intl/gettext/libintl.c:33
 msgid "Bulgarian"
 msgstr "Bulgare"
 
-#: src/intl/gettext/libintl.c:30
+#: src/intl/gettext/libintl.c:34
 msgid "Catalan"
 msgstr "Catalan"
 
-#: src/intl/gettext/libintl.c:31
+#: src/intl/gettext/libintl.c:35
 msgid "Croatian"
 msgstr "Croate"
 
-#: src/intl/gettext/libintl.c:32
+#: src/intl/gettext/libintl.c:36
 msgid "Czech"
 msgstr "Tchèque"
 
-#: src/intl/gettext/libintl.c:33
+#: src/intl/gettext/libintl.c:37
 msgid "Danish"
 msgstr "Danois"
 
-#: src/intl/gettext/libintl.c:34
+#: src/intl/gettext/libintl.c:38
 msgid "Dutch"
 msgstr "Hollandais"
 
-#: src/intl/gettext/libintl.c:35
+#: src/intl/gettext/libintl.c:39
 msgid "Estonian"
 msgstr "Estonien"
 
-#: src/intl/gettext/libintl.c:36
+#: src/intl/gettext/libintl.c:40
 msgid "Finnish"
 msgstr "Finnois"
 
-#: src/intl/gettext/libintl.c:37
+#: src/intl/gettext/libintl.c:41
 msgid "French"
 msgstr "Français"
 
-#: src/intl/gettext/libintl.c:38
+#: src/intl/gettext/libintl.c:42
 msgid "Galician"
 msgstr "Galicien"
 
-#: src/intl/gettext/libintl.c:39
+#: src/intl/gettext/libintl.c:43
 msgid "German"
 msgstr "Allemand"
 
-#: src/intl/gettext/libintl.c:40
+#: src/intl/gettext/libintl.c:44
 msgid "Greek"
 msgstr "Grec"
 
-#: src/intl/gettext/libintl.c:41
+#: src/intl/gettext/libintl.c:45
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: src/intl/gettext/libintl.c:42
+#: src/intl/gettext/libintl.c:46
 msgid "Icelandic"
 msgstr "Islandais"
 
-#: src/intl/gettext/libintl.c:43
+#: src/intl/gettext/libintl.c:47
 msgid "Indonesian"
 msgstr "Indonésien"
 
-#: src/intl/gettext/libintl.c:44
+#: src/intl/gettext/libintl.c:48
 msgid "Italian"
 msgstr "Italien"
 
-#: src/intl/gettext/libintl.c:45
+#: src/intl/gettext/libintl.c:49
 msgid "Lithuanian"
 msgstr "Lituanien"
 
-#: src/intl/gettext/libintl.c:46
+#: src/intl/gettext/libintl.c:50
 msgid "Norwegian"
 msgstr "Norvégien"
 
-#: src/intl/gettext/libintl.c:47
+#: src/intl/gettext/libintl.c:51
 msgid "Polish"
 msgstr "Polonais"
 
-#: src/intl/gettext/libintl.c:48
+#: src/intl/gettext/libintl.c:52
 msgid "Portuguese"
 msgstr "Portugais"
 
-#: src/intl/gettext/libintl.c:49
+#: src/intl/gettext/libintl.c:53
 msgid "Romanian"
 msgstr "Roumain"
 
-#: src/intl/gettext/libintl.c:50
+#: src/intl/gettext/libintl.c:54
 msgid "Russian"
 msgstr "Russe"
 
-#: src/intl/gettext/libintl.c:51
+#: src/intl/gettext/libintl.c:55
 msgid "Slovak"
 msgstr "Slovaque"
 
-#: src/intl/gettext/libintl.c:52
+#: src/intl/gettext/libintl.c:56
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: src/intl/gettext/libintl.c:53
+#: src/intl/gettext/libintl.c:57
 msgid "Swedish"
 msgstr "Suèdois"
 
-#: src/intl/gettext/libintl.c:54
+#: src/intl/gettext/libintl.c:58
 msgid "Turkish"
 msgstr "Turque"
 
-#: src/intl/gettext/libintl.c:55
+#: src/intl/gettext/libintl.c:59
 msgid "Ukrainian"
 msgstr "Ukrainien"
 
@@ -5661,8 +5637,8 @@ msgstr "Bloquer le terminal pendant l'exécution d'un programme externe."
 msgid "Program"
 msgstr "Programme"
 
-#: src/mime/backend/default.c:74
-#, c-format
+#: src/mime/backend/default.c:75
+#, no-c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
@@ -5670,15 +5646,15 @@ msgstr ""
 "Visualisateur externe pour ce type de fichier. '%' dans la chaîne sera\n"
 "remplacé par un nom de fichier."
 
-#: src/mime/backend/default.c:78
+#: src/mime/backend/default.c:79
 msgid "File extension associations"
 msgstr "Associations des extensions de fichiers"
 
-#: src/mime/backend/default.c:80
+#: src/mime/backend/default.c:81
 msgid "Extension <-> MIME type association."
 msgstr "Association extension <-> type MIME."
 
-#: src/mime/backend/default.c:84
+#: src/mime/backend/default.c:85
 msgid ""
 "MIME-type matching this file extension ('*' is used here in place\n"
 "of '.')."
@@ -5687,7 +5663,7 @@ msgstr ""
 "ici à la place de '.')."
 
 #. name:
-#: src/mime/backend/default.c:220
+#: src/mime/backend/default.c:221
 msgid "Option system"
 msgstr "Système de configuration"
 
@@ -5942,12 +5918,12 @@ msgstr ""
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
 msgid "Delete marked auth entries"
-msgstr "Supprimer les authentifications sélectionnées"
+msgstr "Supprimer les authentifications marquées"
 
 #. delete_marked_items
 #: src/protocol/auth/dialogs.c:222
 msgid "Delete marked auth entries?"
-msgstr "Supprimer les authentifications sélectionnées ?"
+msgstr "Supprimer les authentifications marquées ?"
 
 #. delete_item_title
 #: src/protocol/auth/dialogs.c:228
@@ -6560,7 +6536,8 @@ msgstr ""
 "Préfixes simples, voir la description pour\n"
 "'Activer les préfixes simples' pour plus de détails."
 
-#: src/protocol/rewrite/rewrite.c:74
+#: src/protocol/rewrite/rewrite.c:75
+#, no-c-format
 msgid ""
 "Replacement URI for this dumbprefix.\n"
 "%c in the string means the current URL\n"
@@ -6570,17 +6547,17 @@ msgstr ""
 "%c dans la chaîne signifie URL courante\n"
 "%% dans la chaîne signifie '%'"
 
-#: src/protocol/rewrite/rewrite.c:78
+#: src/protocol/rewrite/rewrite.c:79
 msgid "Smart Prefixes"
 msgstr "Préfixes intelligents"
 
-#: src/protocol/rewrite/rewrite.c:80
+#: src/protocol/rewrite/rewrite.c:81
 msgid "Smart prefixes, see enable-smart description for details."
 msgstr ""
 "Préfixes intelligents, voir description pour\n"
 "'Activer les préfixes intelligents' pour plus de détails."
 
-#: src/protocol/rewrite/rewrite.c:86
+#: src/protocol/rewrite/rewrite.c:87
 msgid ""
 "Replacement URI for this smartprefix.\n"
 "%c in the string means the current URL\n"
@@ -6595,7 +6572,7 @@ msgstr ""
 "%% dans la chaîne signifie '%'"
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:356
+#: src/protocol/rewrite/rewrite.c:357
 msgid "URI rewrite"
 msgstr "Ré-écriture d'URI"
 
@@ -7193,7 +7170,7 @@ msgstr "Mauvais évènement %d"
 msgid "Could not read event: %d (%s)"
 msgstr "Impossible de lire l'évènement: %d (%s)"
 
-#: src/terminal/kbd.c:988
+#: src/terminal/kbd.c:998
 msgid "Too many bytes read from the itrm!"
 msgstr "Trop d'octets lus en provenance de itrm!"
 
@@ -7475,6 +7452,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "Leet"
-#~ msgstr "Leet"

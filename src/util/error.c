@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.20 2002/06/16 17:06:10 pasky Exp $ */
+/* $Id: error.c,v 1.21 2002/06/16 17:10:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,11 +72,11 @@ struct alloc_header {
 
 /* These macros are used to convert pointers and sizes to or from real ones
  * when using alloc_header stuff. */
-#define AH2REAL(ah) (void *) ((char *)(ah) + SIZE_AH_ALIGNED)
-#define REAL2AH(ptr) (struct alloc_header *) ((char *)(ptr) - SIZE_AH_ALIGNED)
+#define PTR_AH2BASE(ah) (void *) ((char *)(ah) + SIZE_AH_ALIGNED)
+#define PTR_BASE2AH(ptr) (struct alloc_header *) ((char *)(ptr) - SIZE_AH_ALIGNED)
 
-#define SIZE_REAL2AH(size) ((size) + SIZE_AH_ALIGNED)
-#define SIZE_AH2REAL(size) ((size) - SIZE_AH_ALIGNED)
+#define SIZE_BASE2AH(size) ((size) + SIZE_AH_ALIGNED)
+#define SIZE_AH2BASE(size) ((size) - SIZE_AH_ALIGNED)
 
 #endif /* LEAK_DEBUG */
 
@@ -172,7 +172,7 @@ bad_ah_sanity(struct alloc_header *ah, unsigned char *comment)
 	if (ah->magic != AH_SANITY_MAGIC) {
 		if (comment && *comment) fprintf(stderr, "%s ", comment);
 		fprintf(stderr, "%p:%d @ %s:%d magic:%08x != %08x @ %p",
-				AH2REAL(ah),
+				PTR_AH2BASE(ah),
 				ah->size, ah->file, ah->line, ah->magic,
 				AH_SANITY_MAGIC, ah);
 		return 1;
@@ -203,7 +203,7 @@ check_memory_leaks()
 		if (bad_ah_sanity(ah, "Skipped")) continue;
 #endif
 		fprintf(stderr, "%s%p:%d @ %s:%d", comma ? ", ": "",
-			AH2REAL(ah),
+			PTR_AH2BASE(ah),
 			ah->size, ah->file, ah->line);
 		comma = 1;
 		if (ah->comment)
@@ -223,14 +223,14 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 
 	if (!size) return DUMMY;
 
-	ah = malloc(SIZE_REAL2AH(size));
+	ah = malloc(SIZE_BASE2AH(size));
 	if (!ah) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
 
 #ifdef FILL_ON_ALLOC
-	memset(ah, FILL_ON_ALLOC_VALUE, SIZE_REAL2AH(size));
+	memset(ah, FILL_ON_ALLOC_VALUE, SIZE_BASE2AH(size));
 #endif
 
 	mem_amount += size;
@@ -247,7 +247,7 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	add_to_list(memory_list, ah);
 #endif
 
-	return AH2REAL(ah);
+	return PTR_AH2BASE(ah);
 }
 
 void *
@@ -266,7 +266,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	 * comment, it means YOU should help us and do the benchmarks! :)
 	 * Thanks a lot. --pasky */
 
-	ah = calloc(1, SIZE_REAL2AH(size));
+	ah = calloc(1, SIZE_BASE2AH(size));
 	if (!ah) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
@@ -286,7 +286,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	add_to_list(memory_list, ah);
 #endif
 
-	return AH2REAL(ah);
+	return PTR_AH2BASE(ah);
 }
 
 void
@@ -302,7 +302,7 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 		return;
 	}
 
-	ah = REAL2AH(ptr);
+	ah = PTR_BASE2AH(ptr);
 
 #ifdef CHECK_AH_SANITY
 	if (bad_ah_sanity(ah, "free()")) force_dump();
@@ -317,7 +317,7 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 	mem_amount -= ah->size;
 
 #ifdef FILL_ON_FREE
-	memset(ah, FILL_ON_FREE_VALUE, SIZE_REAL2AH(ah->size));
+	memset(ah, FILL_ON_FREE_VALUE, SIZE_BASE2AH(ah->size));
 #endif
 
 	free(ah);
@@ -347,7 +347,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 		return DUMMY;
 	}
 
-	ah = REAL2AH(ptr);
+	ah = PTR_BASE2AH(ptr);
 
 #ifdef CHECK_AH_SANITY
 	if (bad_ah_sanity(ah, "realloc()")) force_dump();
@@ -357,7 +357,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	 * and change nothing, this is conform to most realloc() behavior. */
 	if (ah->size == size) return (void *) ptr;
 
-	ah = realloc(ah, SIZE_REAL2AH(size));
+	ah = realloc(ah, SIZE_BASE2AH(size));
 	if (!ah) {
 		error("ERROR: out of memory (realloc returned NULL)\n");
 		return NULL;
@@ -367,7 +367,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 
 #ifdef FILL_ON_REALLOC
 	if (size > ah->size)
-		memset((char *) AH2REAL(ah) + ah->size,
+		memset((char *) PTR_AH2BASE(ah) + ah->size,
 		       FILL_ON_REALLOC_VALUE, size - ah->size);
 #endif
 
@@ -380,7 +380,7 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	ah->next->prev = ah;
 #endif
 
-	return AH2REAL(ah);
+	return PTR_AH2BASE(ah);
 }
 
 void
@@ -389,7 +389,7 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 #ifdef LEAK_DEBUG_LIST
 	struct alloc_header *ah;
 
-	ah = REAL2AH(ptr);
+	ah = PTR_BASE2AH(ptr);
 
 	if (ah->comment)
 		free(ah->comment);
@@ -414,11 +414,11 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 #undef CHECK_AH_SANITY
 #undef AH_SANITY_MAGIC
 
-#undef AH2REAL
-#undef REAL2AH
+#undef PTR_AH2BASE
+#undef PTR_BASE2AH
 
-#undef SIZE_REAL2AH
-#undef SIZE_AH2REAL
+#undef SIZE_BASE2AH
+#undef SIZE_AH2BASE
 
 #endif /* LEAK_DEBUG */
 

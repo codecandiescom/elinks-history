@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.9 2002/06/17 07:42:28 pasky Exp $ */
+/* $Id: menu.c,v 1.10 2002/07/03 15:04:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,23 @@ void menu_func(struct window *, struct event *, int);
 void mainmenu_func(struct window *, struct event *, int);
 
 
+void
+free_menu_items(struct menu_item *items)
+{
+	int i;
+
+	/* Note that free_i & 8 applies only when menu is aborted; it is zeroed
+	 * when some menu field is selected. */
+
+	for (i = 0; items[i].text; i++) {
+		if (items[i].free_i & 2) mem_free(items[i].text);
+		if (items[i].free_i & 4) mem_free(items[i].rtext);
+		if (items[i].free_i & 8) mem_free(items[i].data);
+	}
+
+	mem_free(items);
+}
+
 /* do_menu_selected() */
 void do_menu_selected(struct terminal *term, struct menu_item *items,
 		      void *data, int selected)
@@ -51,14 +68,7 @@ void do_menu_selected(struct terminal *term, struct menu_item *items,
 		menu->data = data;
 		add_window(term, menu_func, menu);
 	} else if (items->free_i) {
-		int i;
-
-		for (i = 0; items[i].text; i++) {
-			if (items[i].free_i & 2) mem_free(items[i].text);
-			if (items[i].free_i & 4) mem_free(items[i].rtext);
-		}
-
-		mem_free(items);
+		free_menu_items(items);
 	}
 }
 
@@ -85,6 +95,9 @@ void select_menu(struct terminal *term,	struct menu *menu)
 
 	if (!it->in_m) {
 		struct window *win, *win1;
+
+		/* Don't free data! */
+		it->free_i &= ~8;
 
 		win = term->windows.next;
 
@@ -442,18 +455,8 @@ break2:
 			break;
 
 		case EV_ABORT:
-			if (menu->items->free_i) {
-				int i;
-
-				for (i = 0; menu->items[i].text; i++) {
-					if (menu->items[i].free_i & 2)
-						mem_free(menu->items[i].text);
-					if (menu->items[i].free_i & 4)
-						mem_free(menu->items[i].rtext);
-				}
-
-				mem_free(menu->items);
-			}
+			if (menu->items->free_i)
+				free_menu_items(menu->items);
 
 			break;
 	}

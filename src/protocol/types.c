@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.34 2002/06/23 11:42:13 pasky Exp $ */
+/* $Id: types.c,v 1.35 2002/07/03 15:04:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -676,13 +676,16 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 		for (i = strlen(translated) - 1; i >= 0; i--)
 			if (translated[i] == '.')
 				translated[i] = '-';
-	} else return;
+	} else {
+		mem_free(fcp);
+		return;
+	}
 
 	opt = get_real_opt("mime.extension", translated);
-	if (!opt) return;
+	if (!opt) { mem_free(fcp); return; }
 
 	str = init_str();
-	if (!str) return;
+	if (!str) { mem_free(fcp); return; }
 	strl = 0;
 	add_to_str(&str, &strl, (unsigned char *) fcp);
 	add_to_str(&str, &strl, " -> ");
@@ -754,7 +757,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		       + sizeof(struct extension) + 3 * MAX_STR_LEN
 
 	d = mem_alloc(DIALOG_MEMSIZE);
-	if (!d) return;
+	if (!d) { mem_free(fcp); return; }
 	memset(d, 0, DIALOG_MEMSIZE);
 
 #undef DIALOG_MEMSIZE
@@ -836,8 +839,8 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		} else continue;
 
 		if (!mi) {
-			mi = new_menu(7);
-		       	if (!mi) return;
+			mi = new_menu(15);
+		       	if (!mi) { mem_free(translated); return; }
 		}
 		add_to_menu(&mi, translated,
 			    stracpy((unsigned char *) opt->ptr),

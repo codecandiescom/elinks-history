@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.487 2004/06/11 23:05:58 jonas Exp $ */
+/* $Id: session.c,v 1.488 2004/06/11 23:16:16 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -541,7 +541,9 @@ dialog_goto_url_open(void *data)
 	dialog_goto_url((struct session *) data, NULL);
 }
 
-static void
+/* Returns 0 if the first session was not properly initialized and
+ * setup_session() should be called on the session as well. */
+static int
 setup_first_session(struct session *ses, struct uri *uri)
 {
 	struct terminal *term = ses->tab->term;
@@ -588,13 +590,12 @@ setup_first_session(struct session *ses, struct uri *uri)
 		}
 	}
 
-	if (uri) {
-		goto_uri(ses, uri);
-
-	} else if (first_use) {
+	if (first_use) {
 		/* Only open the goto URL dialog if no URI was passed on the
 		 * command line. */
 		void *handler = uri ? dialog_goto_url_open : NULL;
+
+		first_use = 0;
 
 		msg_box(term, NULL, 0,
 			N_("Welcome"), AL_CENTER,
@@ -604,18 +605,24 @@ setup_first_session(struct session *ses, struct uri *uri)
 			ses, 1,
 			N_("OK"), handler, B_ENTER | B_ESC);
 
+		/* If there is no URI the goto dialog will pop up so there is
+		 * no need to call setup_session(). */
+		if (!uri) return 1;
+
 #ifdef CONFIG_BOOKMARKS
-	} else if (get_opt_bool("ui.sessions.auto_restore")) {
+	} else if (!uri && get_opt_bool("ui.sessions.auto_restore")) {
 		unsigned char *folder;
 
 		folder = get_opt_str("ui.sessions.auto_save_foldername");
 		open_bookmark_folder(ses, folder);
+		return 1;
 #endif
 	} else {
 		goto_url_home(ses);
 	}
 
-	first_use = 0;
+	/* If there's a URI to load we have to call */
+	return 0;
 }
 
 /* First load the current URI of the base session. In most cases it will just
@@ -668,10 +675,7 @@ init_session(struct session *base_session, struct terminal *term,
 #endif
 
 	/* Only do the setup for the first tab */
-	if (list_empty(sessions)) {
-		setup_first_session(ses, uri);
-
-	} else {
+	if (!list_empty(sessions) || !setup_first_session(ses, uri)) {
 		setup_session(ses, uri, base_session);
 	}
 

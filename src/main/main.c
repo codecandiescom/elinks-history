@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.51 2002/09/07 09:32:50 zas Exp $ */
+/* $Id: main.c,v 1.52 2002/09/07 09:40:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,7 +316,9 @@ init()
 	init_leds();
 #endif
 	init_timer();
+#ifdef BOOKMARKS
 	read_bookmarks();
+#endif
 	read_global_history();
 	load_url_history();
 #ifdef COOKIES
@@ -388,7 +390,9 @@ terminate_all_subsystems()
 	free_history_lists();
 	finalize_global_history();
 	free_auth();
+#ifdef BOOKMARKS
 	if (init_b) finalize_bookmarks();
+#endif
 	free_keymaps();
 	free_conv_table();
 	free_blacklist();

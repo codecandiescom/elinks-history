@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.38 2002/08/30 23:21:01 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.39 2002/09/07 09:40:13 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -292,13 +292,4 @@ finalize_bookmarks()
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 }
 
-#else /* BOOKMARKS */
-
-void read_bookmarks() {}
-void write_bookmarks() {}
-void finalize_bookmarks() {}
-int delete_bookmark(struct bookmark *bm) { return 0; }
-void add_bookmark(const unsigned char *u, const unsigned char *t) {}
-int update_bookmark(struct bookmark *bm, const unsigned char *u, const unsigned char *t) { return 0; }
-int bookmark_simple_search(unsigned char *u, unsigned char *t){ return 0; }
-#endif
+#endif /* BOOKMARKS */

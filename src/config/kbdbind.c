@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.185 2004/01/25 10:18:48 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.186 2004/01/25 10:19:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ delete_keybinding(enum keymap km, long key, long meta)
 void
 init_keymaps(void)
 {
-    	enum keymap i;
+	enum keymap i;
 
 	for (i = 0; i < KM_MAX; i++)
 		init_list(keymaps[i]);

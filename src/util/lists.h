@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.35 2003/12/07 12:50:10 pasky Exp $ */
+/* $Id: lists.h,v 1.36 2003/12/07 15:59:23 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -97,14 +97,12 @@ struct list_head {
 	void *magic2;
 };
 
-#ifndef HAVE_TYPEOF
 struct xlist_head {
 	void *magic1;
 	struct xlist_head *next;
 	struct xlist_head *prev;
 	void *magic2;
 };
-#endif
 
 
 #define NULL_LIST_HEAD LISTMAGIC1, NULL, NULL, LISTMAGIC2
@@ -119,9 +117,9 @@ struct xlist_head {
 #define init_list(x) \
 do { \
 	list_magic_set(x); \
-	do_not_optimize_here_3_x(&(x)); /* antialiasing ;) */ \
+	do_not_optimize_here_gcc_3_x(&(x)); /* antialiasing ;) */ \
 	(x).next = (x).prev = &(x); \
-	do_not_optimize_here_3_x(&(x)); \
+	do_not_optimize_here_gcc_3_x(&(x)); \
 } while (0)
 
 

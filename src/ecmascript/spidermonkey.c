@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.51 2004/09/28 23:28:49 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.52 2004/09/29 16:42:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -435,6 +435,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 
 	if (can_open_in_new(ses->tab->term)) {
 		open_uri_in_new_window(ses, uri, ~0 /* any env */);
+		done_uri(uri);
 		p.boolean = 1; prop_type = JSPT_BOOLEAN;
 	} else {
 		/* When opening a new tab, we might get rerendered, losing our

@@ -1,3 +1,362 @@
+Sun Jun 27 21:37:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/about.c:
+
+	Oops fix file header.  
+
+Sun Jun 27 21:36:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: Makefile.am, about.c, about.h, protocol.c:
+
+	Move about_protocol_handler to separate file so it will be easier to
+	add useless junk to it.  
+
+Sun Jun 27 20:43:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, uri.c:
+
+	about:bloat 
+
+Sun Jun 27 19:30:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.c, protocol/protocol.c,
+	protocol/protocol.h:
+
+	Introduce about: protocol backend and use about:blank to fix the
+	remaining part of bug 473.  
+
+Sun Jun 27 19:07:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Fix crash when pressing the up arrow in a document with no links
+	reported by zas.  
+
+Sun Jun 27 18:36:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/frames.c:
+
+	Partially fix bug 473. Now it ain't barfing stack traces anymore.
+	But a deeper bug has to be solved and which this thing reveals.
+	<frame>-tags with no 'src'-attribute is badly handled since no frame
+	struct is created for them.  
+
+Sun Jun 27 18:34:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/listbox.c, config/cmdline.c, config/options.inc,
+	document/html/renderer.c, document/html/tables.c,
+	document/html/parser/forms.c, document/html/parser/parse.c,
+	document/plain/renderer.c, globhist/globhist.c, osdep/generic.h,
+	osdep/beos/overrides.c, protocol/rewrite/.cvsignore, util/conv.c,
+	viewer/text/link.c, viewer/text/search.c:
+
+	MAXINT -> INT_MAX, MAXLONG -> LONG_MAX 
+
+Sun Jun 27 18:34:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, dialogs.c, parser.c:
+
+	All hail automake conditionals.  
+
+Sun Jun 27 17:19:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/osdep.c:
+
+	At least reset the window title to a blank one, if we cannot restore
+	the original one. Idea by Solar Designer.  
+
+Sun Jun 27 17:14:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/osdep.c:
+
+	When printing the terminal title, avoid also ISO-8859-* control
+	characters and 0x7f, insuring the whole thing by iscntrl(). Patch by
+	Solar Designer.  
+
+Sun Jun 27 17:08:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/osdep.c:
+
+	Skip invalid characters in terminal title altogether, don't just
+	substitute them by a space. Also add an explanation why do we do
+	this at the right place.  
+
+Sun Jun 27 14:06:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Fix a forgotten stupidity in get_link_x_bounds(). Unbelievable.  
+
+Sun Jun 27 13:20:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	ssl_connect(): Cleanup client_cert setup.  
+
+Sun Jun 27 13:13:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ssl/connect.c:
+
+	English fix.  
+
+Sun Jun 27 13:13:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Introduce ssl_do_close() wrapper.  
+
+Sun Jun 27 13:10:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	isalpha() || isdigit() -> isalnum() and clarify lowalpha in the
+	surrounding comment.  
+
+Sun Jun 27 13:09:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Introduce also ssl_do_{read,write} wrappers.  
+
+Sun Jun 27 13:06:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Simplify the -default-keys--conditioned bind_do() call.  
+
+Sun Jun 27 13:03:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ssl/connect.c:
+
+	How are we not handling certificates w/ GNUTLS.  
+
+Sun Jun 27 13:01:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ssl/connect.c:
+
+	get_ssl_error() -> ssl_do_connect(), because that is what it does
+	;-).  
+
+Sun Jun 27 12:59:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Group OpenSSL code in same #ifdef.  
+
+Sun Jun 27 12:55:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	A little cleanup of over-switched ssl #ifdef'ing.  
+
+Sun Jun 27 12:29:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.h:
+
+	Describe KBDB_DEFAULT flag.  
+
+Sun Jun 27 09:49:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Merge add_keymap_default_keybindings() intor
+	add_default_keybindings() and use default_keybindings[] table.  
+
+Sun Jun 27 09:45:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Introduce default keybinding info table.  
+
+Sun Jun 27 09:41:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Fix keybinding saving. It is not possible to simply check if
+	KBDB_DEFAULT flag is set and keybinding is not bound to
+	'none'-action since the flag is apparently used for something else.
+	It is inherited when the key combo belongs to a default keybinding.
+	Instead introduce a default keybinding table iterator to check if
+	...  
+
+Sun Jun 27 09:21:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	H_FRAME_POSITION, V_FRAME_POSITION: @tt -> @table, @xx -> @col, @yy
+	-> @row.  
+
+Sun Jun 27 09:17:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	display_complicated_table(): get_vline_width(table, row) is a non
+	sense, fixed. This was an old typo imho.  
+
+Sun Jun 27 09:13:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	display_complicated_table(): @row -> @row2, @i,@j -> @col,@row. A
+	possible bug was detected.  
+
+Sun Jun 27 09:06:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_table_heights(): @i, @j -> @col, @row.  
+
+Sun Jun 27 09:03:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	check_table_widths(): @i, @j -> @col, @row.  
+
+Sun Jun 27 08:58:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): label a -> again.  
+
+Sun Jun 27 08:56:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): reduce indentation in switch().  
+
+Sun Jun 27 08:49:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @w -> @widths, @mx -> @max_widths.  
+
+Sun Jun 27 08:43:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @i -> @col.  
+
+Sun Jun 27 08:36:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_column_widths(): @i,@j -> @col,@row.  
+
+Sun Jun 27 08:32:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_vline_width(): @w -> @width.  
+
+Sun Jun 27 08:30:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_cell_widths(): tidy up.  
+
+Sun Jun 27 08:28:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	format_cell(): @column -> @col.  
+
+Sun Jun 27 08:25:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_cell(), expand_cells(): @x -> @dst_col, @y -> @dst_row.  
+
+Sun Jun 27 02:26:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/parser.c:
+
+	Rewrite and comment parse_cookie_str() to make it more readable,
+	compliant and tolerant.  
+	
+	- Allow empty or missing value token which is mentioned in the rfc.  
+	
+	- Allow (non-ending) spaces in value token. Fixes bug 174 (BZ change
+	column).  
+
+Sat Jun 26 23:19:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Rewrite the next_link_in_dir()'s verical movement inner loop - it's
+	simpler and faster now.  
+
+Sat Jun 26 23:18:52 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Jun 26 23:10:36 2004  Laurent Monin <zas@norz.org>:
+
+	* NEWS:
+
+	Add -default-keys option.  
+
+Sat Jun 26 23:09:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Tidyup.  
+
+Sat Jun 26 23:09:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/cmdline.c:
+
+	Improve -default-keys description.  
+
+Sat Jun 26 23:09:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Simplify the inner loop for vertical movement in next_link_in_dir().  
+
+Sat Jun 26 23:06:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: link.c, link.h, search.c, view.c:
+
+	in_view() -> link_in_view(), in_viewy() -> link_in_view_y() 
+
+Sat Jun 26 23:03:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	next_in_dir() -> next_link_in_dir() 
+
+Sat Jun 26 23:03:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/: link.c, link.h, search.c, view.c:
+
+	next_in_view() -> next_link_in_view() 
+
+Sat Jun 26 22:59:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Note that wrapping over page boundary in move_link_dir() will break.  
+
+Sat Jun 26 22:57:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Un-inline move_link() and move_link_dir().  
+
+Sat Jun 26 22:57:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	next_in_dir(): Fix misnavigation in tabular design.  
+
+Sat Jun 26 22:34:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	Fix a plain stupidity in get_link_*_intersect().  
+
 Sat Jun 26 22:05:20 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* NEWS:

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.9 2004/01/01 00:47:12 jonas Exp $ */
+/* $Id: feature.h,v 1.10 2004/01/01 01:06:55 jonas Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -242,6 +242,20 @@
 /* Uncomment the following line if you want to always have this disabled: */
 /* #undef BACKTRACE */
 #endif
+
+
+/*** Disable root user
+ *
+ * Browsers are scary monsters used for traveling around in an even more scary
+ * world where people indifferently throw garbage files at you and threaten
+ * your perfect world. Altho' ELinks is a small monster compared to most
+ * browsers it can still bite your head off and some might consider running it
+ * as the root user extremely dangerous. To prevent such usage simply enable
+ * this feature.
+ *
+ * Default: disabled */
+
+/* #define ELINKS_ROOT_EXEC */
 
 
 #endif

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.231 2003/11/14 18:30:52 jonas Exp $ */
+/* $Id: session.c,v 1.232 2003/11/15 00:19:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1752,11 +1752,22 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 unsigned char *
 get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 {
+	unsigned char *here;
+	size_t url_len;
+
 	/* Not looking at anything */
 	if (!have_location(ses))
 		return NULL;
 
-	return get_no_post_url(cur_loc(ses)->vs.url, NULL);
+	here = cur_loc(ses)->vs.url;
+	url_len = get_no_post_url_length(here);
+
+	/* Ensure that the url size is not greater than str_size.
+	 * We can't just happily strncpy(str, here, str_size)
+	 * because we have to stop at POST_CHAR, not only at NULL. */
+	int_upper_bound(&url_len, str_size - 1);
+
+	return safe_strncpy(str, here, url_len + 1);
 }
 
 /*

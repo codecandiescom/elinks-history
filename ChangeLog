@@ -1,3 +1,16 @@
+Thu Dec 23 21:50:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Get rid of these awful macros and drop all these gotos: code is now
+	cleaner imho.  
+
+Thu Dec 23 02:45:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10rc3.CVS 
+
 Thu Dec 23 02:26:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:
@@ -9558,7 +9571,7 @@ Sun Sep 19 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/README:
 
-	$Id: ChangeLog,v 1.937 2004/12/22 23:11:12 jonas Exp $ tag.  
+	$Id$ tag.  
 
 Sun Sep 19 17:35:23 2004  Petr Baudis <pasky@ucw.cz>:
 

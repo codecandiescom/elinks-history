@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.35 2003/06/18 08:20:38 zas Exp $ */
+/* $Id: af_unix.c,v 1.36 2003/06/18 08:51:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,33 +202,39 @@ bind_to_af_unix(void)
 again:
 
 	s_unix_fd = socket(af, SOCK_STREAM, 0);
-	if (s_unix_fd == -1) return -1;
+	if (s_unix_fd == -1) {
+		error(gettext("socket() failed: %d (%s)"),
+		      errno, (unsigned char *) strerror(errno));
+		return -1;
+	}
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
 	setsockopt(s_unix_fd, SOL_SOCKET, SO_REUSEADDR, (void *) &reuse_addr, sizeof(int));
 #endif
 
 	if (bind(s_unix_fd, s_unix, s_unix_l) < 0) {
-#if 0
-		perror("");
-		debug("bind: %d", errno);
-#endif
+		if (errno != EADDRINUSE) /* This will change soon --Zas */
+			error(gettext("bind() failed: %d (%s)"),
+			      errno, (unsigned char *) strerror(errno));
+
 		close(s_unix_fd);
 
 		/* Try to connect there then */
 
 		s_unix_fd = socket(af, SOCK_STREAM, 0);
-		if (s_unix_fd == -1) return -1;
+		if (s_unix_fd == -1) {
+			error(gettext("socket() failed: %d (%s)"),
+			      errno, (unsigned char *) strerror(errno));
+			return -1;
+		}
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
 		setsockopt(s_unix_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse_addr, sizeof(int));
 #endif
 
 		if (connect(s_unix_fd, s_unix, s_unix_l) < 0) {
-#if 0
-			perror("");
-			debug("connect: %d", errno);
-#endif
+			error(gettext("connect() failed: %d (%s)"),
+			      errno, (unsigned char *) strerror(errno));
 
 			if (++attempts < MAX_BIND_TRIES) {
 				/* XXX: What's wrong with sleep(1) ?? --Zas */

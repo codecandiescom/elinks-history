@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.167 2004/06/15 01:18:20 jonas Exp $ */
+/* $Id: form.c,v 1.168 2004/06/15 01:28:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1237,7 +1237,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	struct terminal *term = ses->tab->term;
 	struct link *link = get_current_link(doc_view);
 	struct form_control *fc;
-	unsigned char *label;
+	unsigned char *label, *key;
 	struct string str;
 
 	assert(link);
@@ -1316,14 +1316,18 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		if (!fc->action || !has_form_submit(doc_view->document, fc))
 			break;
 
+		key = get_keystroke(ACT_EDIT_ENTER, KM_EDIT);
+		if (!key) break;
+
 		if (fc->method == FM_GET)
-			label = N_("hit ENTER to submit to");
+			label = N_("hit %s to submit to");
 		else
-			label = N_("hit ENTER to post to");
+			label = N_("hit %s to post to");
 
 		add_to_string(&str, ", ");
-		add_to_string(&str, _(label, term));
+		add_format_to_string(&str, _(label, term), key);
 		add_char_to_string(&str, ' ');
+		mem_free(key);
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);

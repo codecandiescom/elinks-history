@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.217 2004/05/31 05:04:32 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.218 2004/06/15 01:28:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,6 +380,21 @@ add_keystroke_to_string(struct string *string, int action,
 
 	if (kb)
 		make_keystroke(string, kb->key, kb->meta, 0);
+}
+
+unsigned char *
+get_keystroke(int action, enum keymap map)
+{
+	struct string keystroke;
+
+	if (!init_string(&keystroke)) return NULL;
+
+	add_keystroke_to_string(&keystroke, action, map);
+
+	/* Never return empty string */
+	if (!keystroke.length) done_string(&keystroke);
+
+	return keystroke.source;
 }
 
 void

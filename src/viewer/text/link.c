@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.53 2003/09/15 20:24:33 jonas Exp $ */
+/* $Id: link.c,v 1.54 2003/09/15 20:27:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	int xpos, ypos;
 	int i;
 	int cursor_offset = 0;
-	struct screen_char link_char = INIT_SCREEN_CHAR(0, SCREEN_ATTR_STANDOUT, 0);
+	struct screen_char *template;
 
 	assert(t && scr && scr->vs);
 	if_assert_failed return;
@@ -210,8 +210,8 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 			set_window_ptr(get_current_tab(t), x, y);
 		}
 
-		co->color = link_char.color;
-		co->attr = link_char.attr;
+ 		template->data = co->data;
+ 		copy_screen_chars(co, template, 1);
 	}
 }
 

@@ -1,3 +1,58 @@
+Sat Oct  9 22:06:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Handle the following in do_action instead of in frame_ev_kbd: 
+	
+	ACT_MAIN_MOVE_PAGE_DOWN ACT_MAIN_MOVE_PAGE_UP 
+	ACT_MAIN_MOVE_LINK_NEXT ACT_MAIN_MOVE_LINK_PREV 
+	ACT_MAIN_MOVE_LINK_UP ACT_MAIN_MOVE_LINK_DOWN 
+	ACT_MAIN_MOVE_LINK_LEFT ACT_MAIN_MOVE_LINK_RIGHT 
+	ACT_MAIN_MOVE_DOCUMENT_START ACT_MAIN_MOVE_DOCUMENT_END 
+	ACT_MAIN_SCROLL_DOWN ACT_MAIN_SCROLL_UP ACT_MAIN_SCROLL_LEFT 
+	ACT_MAIN_SCROLL_RIGHT 
+	
+	This required the exposure of several routines: 
+	
+	move_down move_page_down move_up move_page_up move_link 
+	move_link_dir scroll_up scroll_down scroll_left scroll_right 
+	move_document_start move_document_end 
+	
+	...and several macros: 
+	
+	move_link_up move_link_down move_link_left move_link_right 
+	move_link_next move_link_prev 
+
+Sat Oct  9 21:13:38 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Export try_jump_to_link_number.  
+	
+	Add a parameter jump_to_link_number to do_frame_action to indicate 
+	whether to call try_jump_to_link_number, in which case
+	do_frame_action will only proceed if try_jump_to_link_number
+	succeeds.  
+	
+	Change calls from do_action to do_frame_action to use the new flag.  
+	
+	Drop six actions from frame_ev_kbd which are already handled by
+	do_action: now that do_action handles prefixes, there is no need for
+	the duplicate code.  
+
+Sat Oct  9 21:08:55 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	In frame_ev_kbd, do not reset |ses->kbdprefix.repeat_count = 0| if
+	we are returning |FRAME_EVENT_IGNORE|.  
+
+Sat Oct  9 12:28:53 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Minor optimization.  
+
 Fri Oct  8 21:54:45 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/document/plain/renderer.c:

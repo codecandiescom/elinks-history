@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.12 2003/11/22 14:19:55 jonas Exp $ */
+/* $Id: dialogs.c,v 1.13 2003/11/22 15:38:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	hierbox_browser(term, N_("Cookie manager"),
 			0, &cookie_browser, ses,
-			2,
+			3,
 			N_("Info"), push_hierbox_info_button, B_ENTER, ses,
 			N_("Delete"), push_hierbox_delete_button, B_ENTER, ses,
 			N_("Save"), push_save_button, B_ENTER, ses);

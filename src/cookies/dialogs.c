@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.15 2003/11/22 16:10:58 jonas Exp $ */
+/* $Id: dialogs.c,v 1.16 2003/11/22 21:42:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,11 +47,15 @@ is_cookie_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_cookie_info(struct listbox_item *item, struct terminal *term)
+get_cookie_info(struct listbox_item *item, struct terminal *term,
+		enum listbox_info listbox_info)
 {
 	struct cookie *cookie = item->udata;
 	unsigned char *expires = NULL;
 	struct string string;
+
+	if (listbox_info == LISTBOX_URI)
+		return NULL;
 
 	if (!init_string(&string)) return NULL;
 

@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.48 2003/11/22 13:44:19 jonas Exp $ */
+/* $Id: listbox.h,v 1.49 2003/11/22 21:42:47 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -23,6 +23,11 @@
 struct listbox_data;
 struct listbox_item;
 
+enum listbox_info {
+	LISTBOX_URI,
+	LISTBOX_ALL,
+};
+
 struct listbox_ops {
 	/* Some basic util/object.h wrappers */
 	void (*lock)(struct listbox_item *);
@@ -31,7 +36,8 @@ struct listbox_ops {
 
 	/* TODO: We might need to pass some enum to signal what kind of info we
 	 * want to get. --jonas */
-	unsigned char *(*get_info)(struct listbox_item *, struct terminal *);
+	unsigned char *(*get_info)(struct listbox_item *, struct terminal *,
+				   enum listbox_info);
 
 	/* Delete the listbox item object and its data. @last is non zero when
 	 * either deleting only one item or when deleting the last item. */

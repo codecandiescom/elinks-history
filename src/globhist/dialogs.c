@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.84 2003/11/22 15:50:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.85 2003/11/22 21:42:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,10 +45,14 @@ static int is_globhist_item_used(struct listbox_item *item)
 }
 
 static unsigned char *
-get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
+get_globhist_item_info(struct listbox_item *box_item, struct terminal *term,
+		       enum listbox_info listbox_info)
 {
 	struct global_history_item *item = box_item->udata;
 	struct string info;
+
+	if (listbox_info == LISTBOX_URI)
+		return stracpy(item->url);
 
 	if (!init_string(&info)) return NULL;
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.136 2004/01/01 18:21:56 zas Exp $ */
+/* $Id: link.c,v 1.137 2004/01/03 15:10:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 
 #include "elinks.h"
 
+#include "bfu/listmenu.h"
 #include "bfu/menu.h"
 #include "bookmarks/dialogs.h"
 #include "dialogs/status.h"

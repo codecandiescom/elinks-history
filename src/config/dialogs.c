@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.196 2004/09/23 12:40:27 pasky Exp $ */
+/* $Id: dialogs.c,v 1.197 2004/11/17 19:11:49 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -291,7 +291,7 @@ static struct listbox_ops options_listbox_ops = {
 
 /* Button handlers */
 
-static int
+static t_handler_event_status
 check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -326,7 +326,7 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 
 			commandline = 0;
 			mem_free(chinon);
-			return 0;
+			return EVENT_PROCESSED;
 		}
 		mem_free(chinon);
 	}
@@ -337,7 +337,7 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 		N_("Bad option value."),
 		NULL, 1,
 		N_("OK"), NULL, B_ESC | B_ENTER);
-	return 1;
+	return EVENT_NOT_PROCESSED;
 }
 
 static void
@@ -415,7 +415,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 #undef EDIT_WIDGETS_COUNT
 }
 
-static int
+static t_handler_event_status
 push_edit_button(struct dialog_data *dlg_data,
 		 struct widget_data *some_useless_info_button)
 {
@@ -424,7 +424,7 @@ push_edit_button(struct dialog_data *dlg_data,
 	struct option *option;
 
 	/* Show history item info */
-	if (!box->sel || !box->sel->udata) return 0;
+	if (!box->sel || !box->sel->udata) return EVENT_PROCESSED;
 	option = box->sel->udata;
 
 	if (!option_types[option->type].write ||
@@ -437,12 +437,12 @@ push_edit_button(struct dialog_data *dlg_data,
 			   "to press a space in order to see its contents."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	build_edit_dialog(term, dlg_data->dlg->udata, option);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -458,7 +458,7 @@ add_option_to_tree(void *data, unsigned char *name)
 	/* TODO: If the return value is NULL, we should pop up a msgbox. */
 }
 
-static int
+static t_handler_event_status
 push_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
@@ -475,7 +475,7 @@ invalid_option:
 			N_("Cannot add an option here."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 
@@ -497,17 +497,17 @@ invalid_option:
 		N_("OK"), N_("Cancel"), option, NULL,
 		MAX_STR_LEN, "", 0, 0, check_nonempty,
 		add_option_to_tree, NULL);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
-static int
+static t_handler_event_status
 push_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	write_config(dlg_data->win->term);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 #define	OPTION_MANAGER_BUTTONS	5
@@ -831,24 +831,24 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 	really_really_add_keybinding((void *) hop);
 }
 
-int
+t_handler_event_status
 check_keystroke(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct kbdbind_add_hop *hop = dlg_data->dlg->udata2;
 	unsigned char *keystroke = widget_data->cdata;
 
 	if (parse_keystroke(keystroke, &hop->key, &hop->meta) >= 0)
-		return 0;
+		return EVENT_PROCESSED;
 
 	msg_box(hop->term, NULL, 0,
 		N_("Add keybinding"), ALIGN_CENTER,
 		N_("Invalid keystroke."),
 		NULL, 1,
 		N_("OK"), NULL, B_ESC | B_ENTER);
-	return 1;
+	return EVENT_NOT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 push_kbdbind_add_button(struct dialog_data *dlg_data,
 			struct widget_data *some_useless_info_button)
 {
@@ -864,11 +864,11 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			N_("Need to select a keymap."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	hop = mem_calloc(1, sizeof(struct kbdbind_add_hop));
-	if (!hop) return 0;
+	if (!hop) return EVENT_PROCESSED;
 	hop->term = term;
 
 	if (item->depth == 2) {
@@ -882,7 +882,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		hop->action = strtonum->num;
 
 		item = get_keybinding_root(item);
-		if (!item) return 0;
+		if (!item) return EVENT_PROCESSED; /* FIXME: hop not freed, leak ?? */
 
 		strtonum = item->udata;
 		hop->keymap = strtonum->num;
@@ -897,7 +897,7 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 			  _("Keystroke", term), NULL);
 	if (!text) {
 		mem_free(hop);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	input_field(term, getml(text, hop, NULL), 0,
@@ -905,11 +905,11 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 		_("OK", term), _("Cancel", term), hop, NULL,
 		MAX_STR_LEN, "", 0, 0, check_keystroke,
 		really_add_keybinding, NULL);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
-static int
+static t_handler_event_status
 push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
@@ -917,18 +917,18 @@ push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 	keybinding_text_toggle = !keybinding_text_toggle;
 	clear_dialog(dlg_data, some_useless_info_button);
 #endif
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
 /* FIXME: Races here, we need to lock the entry..? --pasky */
 
-static int
+static t_handler_event_status
 push_kbdbind_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	write_config(dlg_data->win->term);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 #define	KEYBINDING_MANAGER_BUTTONS	4

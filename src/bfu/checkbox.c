@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.75 2004/09/12 00:38:28 miciah Exp $ */
+/* $Id: checkbox.c,v 1.76 2004/11/17 19:09:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ dlg_format_checkbox(struct terminal *term,
 
 }
 
-static void
+static t_handler_event_status
 display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		 int selected)
 {
@@ -51,7 +51,7 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	struct box *pos = &widget_data->box;
 
 	color = get_bfu_color(term, "dialog.checkbox");
-	if (!color) return;
+	if (!color) return EVENT_NOT_PROCESSED;
 
 	if (widget_data->info.checkbox.checked)
 		text = widget_data->widget->info.checkbox.gid ? "(X)" : "[X]";
@@ -64,9 +64,11 @@ display_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		set_cursor(term, pos->x + 1, pos->y, 0);
 		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
+
+	return EVENT_PROCESSED;
 }
 
-static void
+static t_handler_event_status
 init_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
@@ -81,9 +83,10 @@ init_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		if (*cdata)
 			widget_data->info.checkbox.checked = 1;
 	}
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	       struct term_event *ev)
 {
@@ -105,7 +108,7 @@ mouse_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
-static void
+static t_handler_event_status
 select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 {
 
@@ -142,6 +145,7 @@ select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 	}
 
 	display_dlg_item(dlg_data, widget_data, 1);
+	return EVENT_PROCESSED;
 }
 
 struct widget_ops checkbox_ops = {

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.179 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.180 2004/11/17 19:11:33 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -172,12 +172,12 @@ void launch_bm_add_doc_dialog(struct terminal *, struct dialog_data *,
 
 
 /* Callback for the "add" button in the bookmark manager */
-static int
+static t_handler_event_status
 push_add_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_bm_add_doc_dialog(dlg_data->win->term, dlg_data,
 				 (struct session *) dlg_data->dlg->udata);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -187,12 +187,12 @@ void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
 
 
 /* Callback for the "search" button in the bookmark manager */
-static int
+static t_handler_event_status
 push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_bm_search_doc_dialog(dlg_data->win->term, dlg_data,
 				    (struct session *) dlg_data->dlg->udata);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -261,7 +261,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 	focus_bookmark(widget_data, box, bm);
 }
 
-static int
+static t_handler_event_status
 push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	input_field(dlg_data->win->term, NULL, 1,
@@ -270,7 +270,7 @@ push_add_folder_button(struct dialog_data *dlg_data, struct widget_data *widget_
 		    MAX_STR_LEN, NULL, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) do_add_folder,
 		    NULL);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -297,7 +297,7 @@ bookmark_edit_cancel(struct dialog *dlg) {
 }
 
 /* Called when the edit button is pushed */
-static int
+static t_handler_event_status
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -316,7 +316,7 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 			       (void *) bm, EDIT_DLG_ADD);
 	}
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -400,7 +400,7 @@ do_move_bookmark(struct bookmark *dest, struct list_head *destb,
 	}
 }
 
-static int
+static t_handler_event_status
 push_move_button(struct dialog_data *dlg_data,
 		 struct widget_data *blah)
 {
@@ -409,7 +409,7 @@ push_move_button(struct dialog_data *dlg_data,
 	struct list_head *destb = NULL, *desti = NULL;
 	struct widget_data *widget_data = dlg_data->widgets_data;
 
-	if (!box->sel) return 0; /* nowhere to move to */
+	if (!box->sel) return EVENT_PROCESSED; /* nowhere to move to */
 
 	dest = box->sel->udata;
 	if (box->sel->type == BI_FOLDER && box->sel->expanded) {
@@ -438,7 +438,7 @@ push_move_button(struct dialog_data *dlg_data,
 	write_bookmarks();
 #endif
 	display_dlg_item(dlg_data, widget_data, 1);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.62 2004/09/12 00:38:28 miciah Exp $ */
+/* $Id: button.c,v 1.63 2004/11/17 19:08:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ dlg_format_buttons(struct terminal *term,
 	}
 }
 
-static void
+static t_handler_event_status
 display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -104,7 +104,7 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 
 	color = get_bfu_color(term, sel ? "dialog.button-selected"
 					: "dialog.button");
-	if (!color) return;
+	if (!color) return EVENT_PROCESSED;
 
 	draw_text(term, pos->x, pos->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
 	draw_text(term, x, pos->y, widget_data->widget->text, len, 0, color);
@@ -114,9 +114,10 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 		set_cursor(term, x, pos->y, 0);
 		set_window_ptr(dlg_data->win, pos->x, pos->y);
 	}
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct terminal *term = dlg_data->win->term;
@@ -134,15 +135,15 @@ mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, stru
 	do_not_ignore_next_mouse_event(term);
 
 	if (check_mouse_action(ev, B_UP) && widget_data->widget->ops->select)
-		widget_data->widget->ops->select(widget_data, dlg_data);
+		return widget_data->widget->ops->select(widget_data, dlg_data);
 
 	return EVENT_PROCESSED;
 }
 
-static void
+static t_handler_event_status
 select_button(struct widget_data *widget_data, struct dialog_data *dlg_data)
 {
-	widget_data->widget->fn(dlg_data, widget_data);
+	return widget_data->widget->fn(dlg_data, widget_data);
 }
 
 struct widget_ops button_ops = {

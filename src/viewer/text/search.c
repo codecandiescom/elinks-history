@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.298 2004/11/05 06:00:42 miciah Exp $ */
+/* $Id: search.c,v 1.299 2004/11/17 19:13:46 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1493,7 +1493,7 @@ struct search_dlg_hop {
 	union option_value values[SEARCH_OPTIONS];
 };
 
-static int
+static t_handler_event_status
 search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *) = widget_data->widget->udata;
@@ -1501,12 +1501,10 @@ search_dlg_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	void *data = hop->data;
 
 	if (fn) fn(data);
-	cancel_dialog(dlg_data, widget_data);
-
-	return 0;
+	return cancel_dialog(dlg_data, widget_data);
 }
 
-static int
+static t_handler_event_status
 search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *, unsigned char *) = widget_data->widget->udata;
@@ -1519,7 +1517,7 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	commit_option_values(resolvers, config_options,
 			     hop->values, SEARCH_OPTIONS);
 
-	if (check_dialog(dlg_data)) return 1;
+	if (check_dialog(dlg_data)) return EVENT_NOT_PROCESSED;
 
 	add_to_input_history(dlg_data->dlg->widgets->info.field.history, text, 1);
 

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.167 2004/09/13 11:35:12 jonas Exp $ */
+/* $Id: listbox.c,v 1.168 2004/11/17 19:10:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 }
 
 /* Displays a dialog box */
-static void
+static t_handler_event_status
 display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		int sel)
 {
@@ -467,6 +467,8 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	traverse_listbox_items_list(box->top, box, widget_data->box.height,
 				    1, display_listbox_item, &data);
+
+	return EVENT_PROCESSED;
 }
 
 static int
@@ -485,7 +487,7 @@ check_old_state(struct listbox_item *item, void *info_, int *offset)
 	return 0;
 }
 
-static void
+static t_handler_event_status
 init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	     struct term_event *ev)
 {
@@ -509,9 +511,10 @@ init_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	box->items = &browser->root.child;
 
 	add_to_list(browser->boxes, box);
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	      struct term_event *ev)
 {
@@ -570,7 +573,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	return EVENT_NOT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 kbd_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {

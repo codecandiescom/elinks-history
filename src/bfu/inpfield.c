@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.164 2004/11/11 19:40:08 miciah Exp $ */
+/* $Id: inpfield.c,v 1.165 2004/11/17 19:10:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@
 #include "util/memory.h"
 
 
-int
+t_handler_event_status
 check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget *widget = widget_data->widget;
@@ -47,7 +47,7 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			N_("Number expected in field"),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
-		return 1;
+		return EVENT_NOT_PROCESSED;
 	}
 
 	if (l < widget->info.field.min || l > widget->info.field.max) {
@@ -58,20 +58,20 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 				 widget->info.field.min, widget->info.field.max),
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
-		return 1;
+		return EVENT_NOT_PROCESSED;
 	}
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-int
+t_handler_event_status
 check_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	unsigned char *p;
 
 	for (p = widget_data->cdata; *p; p++)
 		if (*p > ' ')
-			return 0;
+			return EVENT_PROCESSED;
 
 	msg_box(dlg_data->win->term, NULL, 0,
 		N_("Bad string"), ALIGN_CENTER,
@@ -79,7 +79,7 @@ check_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
-	return 1;
+	return EVENT_NOT_PROCESSED;
 }
 
 void
@@ -139,7 +139,7 @@ dlg_format_field(struct terminal *term,
 	(*y)++;
 }
 
-static int
+static t_handler_event_status
 input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *) = widget_data->widget->udata;
@@ -148,17 +148,17 @@ input_field_cancel(struct dialog_data *dlg_data, struct widget_data *widget_data
 	if (fn) fn(data);
 	cancel_dialog(dlg_data, widget_data);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 input_field_ok(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	void (*fn)(void *, unsigned char *) = widget_data->widget->udata;
 	void *data = dlg_data->dlg->udata2;
 	unsigned char *text = dlg_data->widgets_data->cdata;
 
-	if (check_dialog(dlg_data)) return 1;
+	if (check_dialog(dlg_data)) return EVENT_NOT_PROCESSED;
 
 	if (widget_has_history(dlg_data->widgets_data))
 		add_to_input_history(dlg_data->dlg->widgets->info.field.history,
@@ -177,7 +177,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	    unsigned char *cancelbutton,
 	    void *data, struct input_history *history, int l,
 	    unsigned char *def, int min, int max,
-	    int (*check)(struct dialog_data *, struct widget_data *),
+	    t_handler_event_status (*check)(struct dialog_data *, struct widget_data *),
 	    void (*fn)(void *, unsigned char *),
 	    void (*cancelfn)(void *))
 {
@@ -264,19 +264,21 @@ display_field_do(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 }
 
-static void
+static t_handler_event_status
 display_field(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
 	display_field_do(widget_data, dlg_data, sel, 0);
+	return EVENT_PROCESSED;
 }
 
-static void
+static t_handler_event_status
 display_field_pass(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
 	display_field_do(widget_data, dlg_data, sel, 1);
+	return EVENT_PROCESSED;
 }
 
-static void
+static t_handler_event_status
 init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {
@@ -298,9 +300,10 @@ init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	}
 
 	widget_data->info.field.cpos = strlen(widget_data->cdata);
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
@@ -342,7 +345,7 @@ display_field:
 	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	  struct term_event *ev)
 {
@@ -524,7 +527,7 @@ input_line_layouter(struct dialog_data *dlg_data)
 			 &y, win->term->width, NULL, ALIGN_LEFT);
 }
 
-static int
+static t_handler_event_status
 input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct input_line *input_line = dlg_data->dlg->udata;

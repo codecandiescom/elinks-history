@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.190 2004/09/26 00:28:25 pasky Exp $ */
+/* $Id: hierbox.c,v 1.191 2004/11/17 19:09:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ test_search(struct listbox_item *item, void *data_, int *offset)
 	return 0;
 }
 
-static int
+static t_handler_event_status
 hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
@@ -228,7 +228,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 hierbox_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct hierbox_browser *browser = dlg_data->dlg->udata2;
@@ -250,7 +250,7 @@ hierbox_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
 	return EVENT_NOT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 hierbox_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -281,7 +281,7 @@ hierbox_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
  * unselectable, instead one of the buttons below is always active. So, we
  * always first let the listbox catch the keypress and handle it, and if it
  * doesn't care, we pass it on to the button. */
-static int
+static t_handler_event_status
 hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	switch (ev->ev) {
@@ -418,7 +418,7 @@ done_listbox_context(void *context_)
 
 /* Info action */
 
-int
+t_handler_event_status
 push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -426,12 +426,12 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 	struct listbox_context *context;
 	unsigned char *msg;
 
-	if (!box->sel) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
 
 	assert(box->ops);
 
 	context = init_listbox_context(box, term, box->sel, NULL);
-	if (!context) return 0;
+	if (!context) return EVENT_PROCESSED;
 
 	msg = box->ops->get_info(context->item, term);
 	if (!msg) {
@@ -443,7 +443,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
 		}
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	box->ops->lock(context->item);
@@ -454,7 +454,7 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 		context, 1,
 		N_("OK"), done_listbox_context, B_ESC | B_ENTER);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -507,7 +507,7 @@ goto_marked(struct listbox_item *item, void *data_, int *offset)
 	return 0;
 }
 
-int
+t_handler_event_status
 push_hierbox_goto_button(struct dialog_data *dlg_data,
 			 struct widget_data *button)
 {
@@ -517,10 +517,10 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 	struct listbox_context *context;
 
 	/* Do nothing with a folder */
-	if (!box->sel) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
 
 	context = init_listbox_context(box, term, box->sel, scan_for_marks);
-	if (!context) return 0;
+	if (!context) return EVENT_PROCESSED;
 
 	if (!context->item) {
 		context->dlg_data = dlg_data;
@@ -544,7 +544,7 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 
 	/* Close the dialog */
 	delete_window(dlg_data->win);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -702,7 +702,7 @@ push_ok_delete_button(void *context_)
 	if (last) box_sel_move(context->widget_data, -1);
 }
 
-int
+t_handler_event_status
 push_hierbox_delete_button(struct dialog_data *dlg_data,
 			   struct widget_data *button)
 {
@@ -826,7 +826,7 @@ do_clear_browser(void *context_)
 				    delete_unused, context);
 }
 
-int
+t_handler_event_status
 push_hierbox_clear_button(struct dialog_data *dlg_data,
 			  struct widget_data *button)
 {
@@ -943,7 +943,7 @@ search_hierbox_browser(void *data, unsigned char *text)
 	mem_free(context);
 }
 
-int
+t_handler_event_status
 push_hierbox_search_button(struct dialog_data *dlg_data,
 			   struct widget_data *button)
 {

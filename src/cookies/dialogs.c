@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.71 2004/09/24 00:59:47 pasky Exp $ */
+/* $Id: dialogs.c,v 1.72 2004/11/17 19:12:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,40 +200,40 @@ static struct listbox_ops cookies_listbox_ops = {
 	&cookies_messages,
 };
 
-static int
+static t_handler_event_status
 set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
 	unsigned char *value = widget_data->cdata;
 
-	if (!value || !cookie) return 1;
+	if (!value || !cookie) return EVENT_NOT_PROCESSED;
 	mem_free_set(&cookie->name, stracpy(value));
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 set_cookie_value(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
 	unsigned char *value = widget_data->cdata;
 
-	if (!value || !cookie) return 1;
+	if (!value || !cookie) return EVENT_NOT_PROCESSED;
 	mem_free_set(&cookie->value, stracpy(value));
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 set_cookie_domain(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
 	unsigned char *value = widget_data->cdata;
 
-	if (!value || !cookie) return 1;
+	if (!value || !cookie) return EVENT_NOT_PROCESSED;
 	mem_free_set(&cookie->domain, stracpy(value));
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -241,17 +241,17 @@ set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data
 	unsigned char *end;
 	long number;
 
-	if (!value || !cookie) return 1;
+	if (!value || !cookie) return EVENT_NOT_PROCESSED;
 
 	errno = 0;
 	number = strtol(value, (char **) &end, 10);
-	if (errno || *end || number < 0) return 1;
+	if (errno || *end || number < 0) return EVENT_NOT_PROCESSED;
 
 	cookie->expires = (ttime) number;
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
@@ -259,14 +259,14 @@ set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	unsigned char *end;
 	long number;
 
-	if (!value || !cookie) return 1;
+	if (!value || !cookie) return EVENT_NOT_PROCESSED;
 
 	errno = 0;
 	number = strtol(value, (char **) &end, 10);
-	if (errno || *end) return 1;
+	if (errno || *end) return EVENT_NOT_PROCESSED;
 
 	cookie->secure = (number != 0);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 static void
@@ -328,22 +328,22 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 #undef EDIT_WIDGETS_COUNT
 }
 
-static int
+static t_handler_event_status
 push_edit_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct terminal *term = dlg_data->win->term;
 	struct cookie *cookie;
 
-	if (!box->sel) return 0;
-	if (box->sel->type == BI_FOLDER) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
+	if (box->sel->type == BI_FOLDER) return EVENT_PROCESSED;
 	cookie = box->sel->udata;
-	if (!cookie) return 0;
+	if (!cookie) return EVENT_PROCESSED;
 	build_edit_dialog(term, cookie);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -351,10 +351,10 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	struct cookie *new_cookie;
 	struct cookie_server *server;
 
-	if (!box->sel || !box->sel->udata) return 0;
+	if (!box->sel || !box->sel->udata) return EVENT_PROCESSED;
 
 	new_cookie = mem_calloc(1, sizeof(struct cookie));
-	if (!new_cookie) return 0;
+	if (!new_cookie) return EVENT_PROCESSED;
 
 	if (box->sel->type == BI_FOLDER) {
 		assert(box->sel->depth == 0);
@@ -373,14 +373,14 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *button)
 	new_cookie->domain = stracpy("");
 	accept_cookie(new_cookie);
 	build_edit_dialog(term, new_cookie);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_cookies();
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 static struct hierbox_browser_button cookie_buttons[] = {

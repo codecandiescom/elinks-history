@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.123 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.124 2004/11/17 19:13:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,17 +177,17 @@ launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 		       NULL, NULL, EDIT_DLG_SEARCH);
 }
 
-static int
+static t_handler_event_status
 push_search_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	launch_search_dialog(dlg_data->win->term, dlg_data,
 			     (struct session *) dlg_data->dlg->udata);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 /* Toggling: */
 
-static int
+static t_handler_event_status
 push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	int *display_type;
@@ -197,13 +197,13 @@ push_toggle_display_button(struct dialog_data *dlg_data, struct widget_data *wid
 
 	update_hierbox_browser(&globhist_browser);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 /* Bookmarking: */
 
 #ifdef CONFIG_BOOKMARKS
-static int
+static t_handler_event_status
 push_bookmark_button(struct dialog_data *dlg_data,
 		     struct widget_data *some_useless_info_button)
 {
@@ -211,15 +211,15 @@ push_bookmark_button(struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct global_history_item *historyitem;
 
-	if (!box->sel) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
 
 	historyitem = box->sel->udata;
-	if (!historyitem) return 0;
+	if (!historyitem) return EVENT_PROCESSED;
 
 	launch_bm_add_dialog(term, NULL, NULL,
 			     historyitem->title, historyitem->url);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 #endif
 

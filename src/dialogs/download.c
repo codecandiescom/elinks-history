@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.63 2004/10/08 16:54:57 zas Exp $ */
+/* $Id: download.c,v 1.64 2004/11/17 19:12:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,17 +56,17 @@ do_abort_download(struct file_download *file_download)
 	}
 }
 
-static int
+static t_handler_event_status
 dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
 
 	file_download->notify = 1;
 	undisplay_download(file_download);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -74,10 +74,10 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data
 	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) do_abort_download,
 			     file_download);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -86,10 +86,10 @@ push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) do_abort_download,
 			     file_download);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -97,7 +97,7 @@ dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_
 	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) undisplay_download,
 			     file_download);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -444,7 +444,7 @@ static struct listbox_ops downloads_listbox_ops = {
 };
 
 
-static int
+static t_handler_event_status
 push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
@@ -454,13 +454,13 @@ push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
 
 	assert(ses);
 
-	if (!file_download) return 0;
+	if (!file_download) return EVENT_PROCESSED;
 
 	/* Don't layer on top of the download manager */
 	delete_window(dlg_data->win);
 
 	display_download(term, file_download, ses);
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.60 2004/07/14 15:14:32 jonas Exp $ */
+/* $Id: hierbox.h,v 1.61 2004/11/17 19:09:50 zas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -11,7 +11,7 @@
 struct session;
 
 
-typedef int (*hierbox_button_handler)(struct dialog_data *dlg_data, struct widget_data *button);
+typedef t_handler_event_status (*hierbox_button_handler)(struct dialog_data *dlg_data, struct widget_data *button);
 
 struct hierbox_browser_button {
 	unsigned char *label;
@@ -100,10 +100,10 @@ add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
 struct dialog_data *
 hierbox_browser(struct hierbox_browser *browser, struct session *ses);
 
-int push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button);
-int push_hierbox_goto_button(struct dialog_data *dlg_data, struct widget_data *button);
-int push_hierbox_delete_button(struct dialog_data *dlg_data, struct widget_data *button);
-int push_hierbox_clear_button(struct dialog_data *dlg_data, struct widget_data *button);
-int push_hierbox_search_button(struct dialog_data *dlg_data, struct widget_data *button);
+t_handler_event_status push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button);
+t_handler_event_status push_hierbox_goto_button(struct dialog_data *dlg_data, struct widget_data *button);
+t_handler_event_status push_hierbox_delete_button(struct dialog_data *dlg_data, struct widget_data *button);
+t_handler_event_status push_hierbox_clear_button(struct dialog_data *dlg_data, struct widget_data *button);
+t_handler_event_status push_hierbox_search_button(struct dialog_data *dlg_data, struct widget_data *button);
 
 #endif

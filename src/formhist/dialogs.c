@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.35 2004/07/22 02:06:02 pasky Exp $ */
+/* $Id: dialogs.c,v 1.36 2004/11/17 19:13:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,7 @@ static struct listbox_ops formhist_listbox_ops = {
 	&formhist_messages,
 };
 
-static int
+static t_handler_event_status
 push_login_button(struct dialog_data *dlg_data,
 		  struct widget_data *button)
 {
@@ -170,7 +170,7 @@ push_login_button(struct dialog_data *dlg_data,
 	struct formhist_data *formhist_data;
 	struct terminal *term = dlg_data->win->term;
 
-	if (!box->sel || !box->sel->udata) return 0;
+	if (!box->sel || !box->sel->udata) return EVENT_PROCESSED;
 
 	formhist_data = box->sel->udata;
 
@@ -181,34 +181,34 @@ push_login_button(struct dialog_data *dlg_data,
 			"it by the \"Toggle saving\" button."),
 			NULL, 1,
 			N_("OK"), NULL, B_ESC | B_ENTER);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	push_hierbox_goto_button(dlg_data, button);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 push_toggle_dontsave_button(struct dialog_data *dlg_data,
 			    struct widget_data *button)
 {
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 	struct formhist_data *formhist_data;
 
-	if (!box->sel || !box->sel->udata) return 0;
+	if (!box->sel || !box->sel->udata) return EVENT_PROCESSED;
 
 	formhist_data = box->sel->udata;
 
 	formhist_data->dontsave = !formhist_data->dontsave;
-	return 0;
+	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	save_forms_to_file();
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 static struct hierbox_browser_button formhist_buttons[] = {

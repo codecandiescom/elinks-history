@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.106 2004/11/11 20:31:38 miciah Exp $ */
+/* $Id: text.c,v 1.107 2004/11/17 19:10:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,7 +240,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	if (saved && saved_pos) *saved_pos = saved;
 }
 
-static void
+static t_handler_event_status
 display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
 	struct window *win = dlg_data->win;
@@ -254,7 +254,8 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 		1,
 		widget_data->box.height);
 
-	if (!text_is_scrollable(widget_data) || box.height <= 0) return;
+	if (!text_is_scrollable(widget_data) || box.height <= 0)
+		return EVENT_PROCESSED;
 
 	draw_box(win->term, &box, ' ', 0,
 		 get_bfu_color(win->term, "dialog.scrollbar"));
@@ -290,6 +291,8 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	 * and window pointer to start of the first text line. */
 	set_cursor(win->term, widget_data->box.x, widget_data->box.y, 0);
 	set_window_ptr(win, widget_data->box.x, widget_data->box.y);
+
+	return EVENT_PROCESSED;
 }
 
 static void
@@ -322,7 +325,7 @@ format_and_display_text(struct widget_data *widget_data,
 	redraw_from_window(dlg_data->win);
 }
 
-static int
+static t_handler_event_status
 kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	 struct term_event *ev)
 {
@@ -362,7 +365,7 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
-static int
+static t_handler_event_status
 mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {

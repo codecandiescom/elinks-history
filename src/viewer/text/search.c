@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.30 2003/10/05 15:48:22 pasky Exp $ */
+/* $Id: search.c,v 1.31 2003/10/05 16:11:36 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,14 +292,19 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	regmatch_t regmatch;
 
 	doclen = s2 - s1 + l;
+	if (!doclen) return 0;
 	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
 	if (!doc) return 0;
 	
-	for (i = 0; i < doclen; i++)
+	for (i = 0; i < doclen; i++) {
+		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
+			doc[i - 1] = '\n';
+		}
 		doc[i] = s1[i].c;
+	}
 	doc[doclen] = 0;
 
-	if (regcomp(&regex, text, REG_ICASE | reg_extended)) {
+	if (regcomp(&regex, text, REG_ICASE | REG_NEWLINE | reg_extended)) {
 		mem_free(doc);
 		return 0;
 	}
@@ -487,16 +492,20 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	regmatch_t regmatch;
 
 	doclen = s2 - s1 + l;
+	if (!doclen) goto ret;
 	doc = mem_alloc(sizeof(unsigned char) * (doclen + 1));
 	if (!doc) goto ret;
 	
-	for (i = 0; i < doclen; i++)
+	for (i = 0; i < doclen; i++) {
+		if (i > 0 && s1[i - 1].c == ' ' && s1[i - 1].y != s1[i].y) {
+			doc[i - 1] = '\n';
+		}
 		doc[i] = s1[i].c;
-
+	}
 	doc[doclen] = 0;
 
 	/* TODO: show error message */
-	if (regcomp(&regex, *scr->search_word, REG_ICASE | reg_extended)) {
+	if (regcomp(&regex, *scr->search_word, REG_ICASE | REG_NEWLINE | reg_extended)) {
 		mem_free(doc);
 		goto ret;
 	}

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.57 2002/12/10 20:58:47 pasky Exp $ */
+/* $Id: download.c,v 1.58 2002/12/10 21:43:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -939,7 +939,7 @@ tp_display(struct session *ses)
 
 void
 type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
-	   struct option *assoc)
+	   struct option *assoc, int mailcap)
 {
 	unsigned char *content_type;
 
@@ -981,11 +981,23 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				TEXT(T_CANCEL), tp_cancel, B_ESC);
 		}
 	} else {
-		unsigned char *name = assoc->name;
-		if (!name) {
-			mem_free(content_type);
-			return;
+		unsigned char *name = NULL;
+
+		if (mailcap) {
+			name = assoc->name;
+		} else {
+			/* XXX: This should be maybe handled generically by
+			 * some function in protocol/mime.c. --pasky */
+			unsigned char *mt = get_mime_type_name(ct);
+			struct option *opt;
+
+			if (mt) {
+				opt = get_opt_rec_real(&root_options, mt);
+				mem_free(mt);
+				if (opt) name = opt->ptr;
+			}
 		}
+		if (!name) name = "";
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(content_type, NULL),
@@ -1061,7 +1073,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 
 	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
-	type_query(ses, ce, ct, assoc);
+	type_query(ses, ce, ct, assoc, !!mailcap);
 	mem_free(ct);
 #ifdef MAILCAP
 	if (mailcap) delete_option(mailcap);

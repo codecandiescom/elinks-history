@@ -59,7 +59,7 @@ COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
 HEADERS = $(COMHDRS) libgnuintl.h libgettext.h libintl.h loadinfo.h
 COMHDRS = gettext.h gettextP.h hash-string.h
-SOURCES = $(COMSRCS) intl-compat.c
+SOURCES = $(COMSRCS) intl-compat.c libintl.c
 COMSRCS = bindtextdom.c dcgettext.c dgettext.c gettext.c \
 finddomain.c loadmsgcat.c localealias.c textdomain.c l10nflist.c \
 explodename.c dcigettext.c dcngettext.c dngettext.c ngettext.c plural.y \
@@ -68,7 +68,7 @@ OBJECTS = @INTLOBJS@ bindtextdom.$lo dcgettext.$lo dgettext.$lo gettext.$lo \
 finddomain.$lo loadmsgcat.$lo localealias.$lo textdomain.$lo l10nflist.$lo \
 explodename.$lo dcigettext.$lo dcngettext.$lo dngettext.$lo ngettext.$lo \
 plural.$lo localcharset.$lo
-GETTOBJS = intl-compat.$lo
+GETTOBJS = intl-compat.$lo libintl.$lo
 DISTFILES.common = Makefile.in \
 config.charset locale.alias ref-add.sin ref-del.sin $(HEADERS) $(SOURCES)
 DISTFILES.generated = plural.c

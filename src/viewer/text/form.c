@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.107 2004/05/28 16:50:43 jonas Exp $ */
+/* $Id: form.c,v 1.108 2004/05/29 00:45:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -504,6 +504,17 @@ encode_controls(struct list_head *l, struct string *data,
 #define realloc_bound_ptrs(bptrs, bptrs_size) \
 	mem_align_alloc(bptrs, bptrs_size, bptrs_size + 1, int, 0xFF)
 
+static inline void
+add_boundary(struct string *data, unsigned char *bound,
+	     int **bound_ptrs, int *nbound_ptrs)
+{
+	add_to_string(data, "--");
+	if (realloc_bound_ptrs(bound_ptrs, *nbound_ptrs))
+		*bound_ptrs[*nbound_ptrs++] = data->length;
+
+	add_bytes_to_string(data, bound, BL);
+}
+
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void
 encode_multipart(struct session *ses, struct list_head *l, struct string *data,
@@ -513,7 +524,6 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	struct submitted_value *sv;
 	int *bound_ptrs = NULL;
 	int nbound_ptrs = 0;
-	int flg = 0;
 	register int i;
 
 	assert(ses && l && data && bound);
@@ -524,17 +534,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	memset(bound, 'x', BL);
 
 	foreach (sv, *l) {
-
-bnd:
-		add_to_string(data, "--");
-		if (!realloc_bound_ptrs(&bound_ptrs, nbound_ptrs))
-			goto xx;
-
-		bound_ptrs[nbound_ptrs++] = data->length;
-
-xx:
-		add_bytes_to_string(data, bound, BL);
-		if (flg) break;
+		add_boundary(data, bound, &bound_ptrs, &nbound_ptrs);
 
 		/* FIXME: name is not encoded.
 		 * from RFC 1867:
@@ -612,11 +612,7 @@ xx:
 		add_to_string(data, "\r\n");
 	}
 
-	if (!flg) {
-		flg = 1;
-		goto bnd;
-	}
-
+	add_boundary(data, bound, &bound_ptrs, &nbound_ptrs);
 	add_to_string(data, "--\r\n");
 	memset(bound, '0', BL);
 

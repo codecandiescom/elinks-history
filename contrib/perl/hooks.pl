@@ -125,7 +125,7 @@ sub pre_format_html_hook
 sub proxy_for_hook
 {
 	my $url = shift;
-	my $proxy_url = '';
+	my $proxy_url = undef;
 
 	return $proxy_url;
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.175 2003/07/12 12:59:28 jonas Exp $ */
+/* $Id: http.c,v 1.176 2003/07/15 06:32:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,7 +994,7 @@ thats_all_folks:
 	/* There's no content but an error so just print
 	 * that instead of nothing. */
 	/* TODO: Make sure that Content-type is text/html. --pasky */
-	if (!conn->from && info->http_code) {
+	if (!conn->from) {
 		unsigned char *str = http_error_document(info->http_code);
 
 		if (str) {

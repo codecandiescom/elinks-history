@@ -1,6 +1,6 @@
 See ChangeLog for recent changes, bugfixes and new features.
 
-ELinks-now: (codename Thelma)
+ELinks-0.10.0: (codename Thelma)
 
 * simple CSS
 * simple JavaScript/ECMAScript support by the SpiderMonkey Mozilla JS engine

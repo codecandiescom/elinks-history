@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.85 2004/11/18 23:52:20 zas Exp $ */
+/* $Id: checkbox.c,v 1.86 2004/11/19 09:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,10 +119,9 @@ select_checkbox(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	} else {
 		/* Group of radio buttons. */
-		int i;
+		struct widget_data *wdata;
 
-		for (i = 0; i < dlg_data->n; i++) {
-			struct widget_data *wdata = &dlg_data->widgets_data[i];
+		foreach_widget(dlg_data, wdata) {
 			int *cdata = (int *) wdata->cdata;
 
 			if (wdata->widget->type != WIDGET_CHECKBOX)

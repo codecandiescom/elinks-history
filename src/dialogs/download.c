@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.64 2004/11/17 19:12:29 zas Exp $ */
+/* $Id: download.c,v 1.65 2004/11/19 09:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 			dialog_text_color, ALIGN_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data, dlg_data->n, 0, &y, w,
+	dlg_format_buttons(NULL, dlg_data->widgets_data,
+			   dlg_data->number_of_widgets, 0, &y, w,
 			   &rw, ALIGN_CENTER);
 
 	draw_dialog(dlg_data, w, y);
@@ -232,7 +233,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 			dialog_text_color, ALIGN_LEFT);
 
 	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data, dlg_data->n, x, &y, w,
+	dlg_format_buttons(term, dlg_data->widgets_data,
+			   dlg_data->number_of_widgets, x, &y, w,
 			   NULL, ALIGN_CENTER);
 
 	mem_free(url);

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.176 2004/11/19 09:28:40 zas Exp $ */
+/* $Id: dialog.c,v 1.177 2004/11/19 09:39:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	}
 
 	dlg_data->dlg = dlg;
-	dlg_data->n = dlg->widgets_size;
+	dlg_data->number_of_widgets = dlg->widgets_size;
 	dlg_data->ml = ml;
 	add_window(term, dialog_func, dlg_data);
 
@@ -204,10 +204,10 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 	do {
 		dlg_data->selected_widget_id += direction;
 
-		if (dlg_data->selected_widget_id >= dlg_data->n)
+		if (dlg_data->selected_widget_id >= dlg_data->number_of_widgets)
 			dlg_data->selected_widget_id = 0;
 		else if (dlg_data->selected_widget_id < 0)
-			dlg_data->selected_widget_id = dlg_data->n - 1;
+			dlg_data->selected_widget_id = dlg_data->number_of_widgets - 1;
 
 	} while (!widget_is_focusable(selected_widget(dlg_data))
 		 && dlg_data->selected_widget_id != prev_selected);
@@ -221,7 +221,8 @@ dialog_ev_init(struct dialog_data *dlg_data)
 {
 	int i;
 
-	for (i = dlg_data->n - 1; i >= 0; i--) {
+	/* TODO: foreachback_widget() */
+	for (i = dlg_data->number_of_widgets - 1; i >= 0; i--) {
 		struct widget_data *widget_data;
 
 		widget_data = init_widget(dlg_data, i);
@@ -487,7 +488,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 	       int x, int *y, int w, int h, int *rw)
 {
 	struct widget_data *wdata = dlg_data->widgets_data;
-	int widgets = dlg_data->n;
+	int widgets = dlg_data->number_of_widgets;
 
 	/* TODO: Do something if (*y) gets > height. */
 	for (; widgets > 0; widgets--, wdata++, (*y)++) {

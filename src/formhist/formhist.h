@@ -1,5 +1,4 @@
-/* Implementation of a login manager for HTML forms */
-/* $Id: formhist.h,v 1.12 2003/08/22 15:07:47 zas Exp $ */
+/* $Id: formhist.h,v 1.13 2003/08/29 21:18:43 pasky Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -25,4 +24,4 @@ void done_form_history(void);
 void free_form(struct formhist_data *form);
 struct list_head *memorize_form(struct session *ses, struct list_head *submit, struct form_control *frm);
 
-#endif
+#endif /* EL__FORMHIST_FORMHIST_H */

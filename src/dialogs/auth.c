@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.42 2003/07/23 08:37:47 zas Exp $ */
+/* $Id: auth.c,v 1.43 2003/07/23 15:07:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ do_auth_dialog(struct session *ses)
 	a->blocked = 1;
 
 	snprintf(sticker, sizeof(sticker),
-		_("Authentication required for %s at %s\n", term),
+		_("Authentication required for %s at %s", term),
 		a->realm, a->url);
 
 #define DLG_SIZE sizeof(struct dialog) + 5 * sizeof(struct widget)

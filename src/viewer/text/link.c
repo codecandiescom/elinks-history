@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.18 2003/07/27 17:51:58 jonas Exp $ */
+/* $Id: link.c,v 1.19 2003/07/27 20:20:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,11 +224,15 @@ clear_link(struct terminal *t, struct document_view *scr)
 	if_assert_failed return;
 
 	if (scr->link_bg) {
+		struct link_bg *link_bg = scr->link_bg;
 		int i;
 
-		for (i = scr->link_bg_n - 1; i >= 0; i--)
-			set_char(t, scr->link_bg[i].x, scr->link_bg[i].y,
-				 scr->link_bg[i].c);
+		for (i = scr->link_bg_n - 1; i >= 0; i--) {
+			struct link_bg *bgchar = &link_bg[i];
+
+			if (bgchar->x != -1 && bgchar->y != -1)
+				set_char(t, bgchar->x, bgchar->y, bgchar->c);
+		}
 		free_link(scr);
 	}
 }

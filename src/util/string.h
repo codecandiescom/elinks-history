@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.32 2003/06/02 10:02:42 zas Exp $ */
+/* $Id: string.h,v 1.33 2003/06/02 15:55:16 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -82,34 +82,23 @@ isA(unsigned char c)
 #undef HAVE_STRERROR
 #undef HAVE_STRNCASECMP
 #undef HAVE_STRSTR
-#undef HAVE_STRCHR
-#undef HAVE_INDEX
-#undef HAVE_STRRCHR
-#undef HAVE_RINDEX
 
 #endif /* USE_LIBC */
 
 /** strchr() */
-#ifndef HAVE_STRCHR
-#undef strchr
-#ifdef HAVE_INDEX /* for old BSD systems. */
-#define strchr(a, b) index(a, b)
-#else
-char *elinks_strchr(register const char *s, int c);
-#define strchr(a, b) elinks_strchr(a, b)
-#endif
-#endif
 
-/** strrchr() */
-#ifndef HAVE_STRRCHR
+#ifndef HAVE_STRCHR
+#ifdef HAVE_INDEX /* for old BSD systems. */
+
+#undef strchr
+#define strchr(a, b) index(a, b)
 #undef strrchr
-#ifdef HAVE_RINDEX /* for old BSD systems. */
 #define strrchr(a, b) rindex(a, b)
-#else
-char *elinks_strrchr(register const char *s, int c);
-#define strrchr(a, b) elinks_strrchr(a, b)
-#endif
-#endif
+
+#else /* ! HAVE_INDEX */
+# error You have neither strchr() nor index() function. Please go upgrade your system.
+#endif /* HAVE_INDEX */
+#endif /* HAVE_STRCHR */
 
 /** strerror() */
 #ifndef HAVE_STRERROR
@@ -132,7 +121,7 @@ char *elinks_strstr(const char *, const char *);
 #else
 #undef memmove
 #define memmove(dst, src, n) elinks_memmove(dst, src, n)
-void *elinks_memmove(void *d, const void *s, size_t n);
+char *elinks_memmove(char *, const char *, size_t);
 #endif
 #endif
 

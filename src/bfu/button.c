@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.86 2005/03/05 20:50:34 zas Exp $ */
+/* $Id: button.c,v 1.87 2005/03/19 00:31:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,8 @@ add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 		  widget_handler_T *handler, void *data,
 		  done_handler_T *done, void *done_data)
 {
+	int textlen = strlen(text);
+	unsigned char *pos = NULL;
 	struct widget *widget = &dlg->widgets[dlg->number_of_widgets++];
 
 	widget->type	= WIDGET_BUTTON;
@@ -47,6 +49,12 @@ add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 	widget->info.button.flags     = flags;
 	widget->info.button.done      = done;
 	widget->info.button.done_data = done_data;
+	widget->info.button.textlen = textlen;
+	if (textlen > 1)
+		pos = memchr(text, '~', textlen - 1);
+	widget->info.button.hotkey_pos = (pos ? pos - text: -1);
+	widget->info.button.truetextlen = textlen;
+	widget->info.button.textlen = textlen - (pos != NULL);
 }
 
 static void
@@ -59,7 +67,7 @@ buttons_width(struct widget_data *widget_data, int n,
 	if_assert_failed return;
 
 	while (n--) {
-		int minw = strlen((widget_data++)->widget->text)
+		int minw = (widget_data++)->widget->info.button.textlen
 			   + BUTTON_HSPACING + BUTTON_LR_LEN;
 
 		maxw += minw;
@@ -99,7 +107,8 @@ dlg_format_buttons(struct terminal *term,
 			for (i = i1; i < i2; i++) {
 				set_box(&widget_data[i].box,
 					 p, *y,
-					 strlen(widget_data[i].widget->text) + BUTTON_LR_LEN, 1);
+					 widget_data[i].widget->info.button.textlen
+					 + BUTTON_LR_LEN, 1);
 
 				p += widget_data[i].box.width + BUTTON_HSPACING;
 			}
@@ -131,13 +140,27 @@ display_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	draw_text(term, pos->x, pos->y, BUTTON_LEFT, BUTTON_LEFT_LEN, 0, color);
 	if (len > 0) {
+		int hk_pos = widget_data->widget->info.button.hotkey_pos;
 		int attr;
 
 		attr = get_opt_bool("ui.dialogs.underline_button_shortcuts")
 		     ? SCREEN_ATTR_UNDERLINE : 0;
 
-		draw_text(term, x, pos->y, widget_data->widget->text, 1, attr, shortcut_color);
-		draw_text(term, x + 1, pos->y, &widget_data->widget->text[1], len - 1, 0, color);
+		if (hk_pos >= 0) {
+			int right = widget_data->widget->info.button.truetextlen - hk_pos - 1;
+
+			if (hk_pos) {
+				draw_text(term, x, pos->y, widget_data->widget->text, hk_pos, 0, color);
+			}
+			draw_text(term, x + hk_pos, pos->y, &widget_data->widget->text[hk_pos + 1], 1, attr, shortcut_color);
+			if (right > 1) {
+				draw_text(term, x + hk_pos + 1, pos->y, &widget_data->widget->text[hk_pos + 2], right - - 1, 0, color);
+			}
+
+		} else {
+			draw_text(term, x, pos->y, widget_data->widget->text, 1, attr, shortcut_color);
+			draw_text(term, x + 1, pos->y, &widget_data->widget->text[1], len - 1, 0, color);
+		}
 	}
 	draw_text(term, x + len, pos->y, BUTTON_RIGHT, BUTTON_RIGHT_LEN, 0, color);
 

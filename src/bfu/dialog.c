@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.199 2005/03/05 21:21:27 zas Exp $ */
+/* $Id: dialog.c,v 1.200 2005/03/19 00:31:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,11 +269,25 @@ select_button_by_key(struct dialog_data *dlg_data)
 	key = toupper(get_kbd_key(ev));
 
 	foreach_widget(dlg_data, widget_data) {
-		if (widget_data->widget->type == WIDGET_BUTTON
-		    && toupper(widget_data->widget->text[0]) == key) {
-			select_dlg_item(dlg_data, widget_data);
-			break;
+		int hk_pos;
+
+		if (widget_data->widget->type != WIDGET_BUTTON)
+			continue;
+
+		/* We first try to match marked hotkey if there is
+		 * one else we fallback to first character in button
+		 * name. */
+		hk_pos = widget_data->widget->info.button.hotkey_pos;
+		if (hk_pos >= 0) {
+			if (toupper(widget_data->widget->text[hk_pos + 1]) != key)
+				continue;
+		} else {
+			if (toupper(widget_data->widget->text[0]) != key)
+				continue;
 		}
+
+		select_dlg_item(dlg_data, widget_data);
+		break;
 	}
 }
 

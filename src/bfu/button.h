@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.37 2005/03/05 20:50:34 zas Exp $ */
+/* $Id: button.h,v 1.38 2005/03/19 00:31:52 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -14,6 +14,9 @@ typedef void (done_handler_T)(void *);
 
 struct widget_info_button {
 	int flags;
+	int hotkey_pos;	/* -1 means no hotkey, hotkeys are marked by ~. */
+	int textlen;	/* Text lenght without hotkey */
+	int truetextlen; /* Original text lenght (with hotkey if any) */
 	/* Used by some default handlers like ok_dialog()
 	 * as a callback. */
 	done_handler_T *done;

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.175 2004/07/14 18:13:49 zas Exp $ */
+/* $Id: dialogs.c,v 1.176 2004/07/18 13:33:57 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -126,15 +126,15 @@ static struct listbox_ops_messages bookmarks_messages = {
 	/* cant_delete_used_item */
 	N_("Sorry, but bookmark \"%s\" is being used by something else."),
 	/* cant_delete_folder */
-	N_("Sorry, but bookmark's folder \"%s\" cannot be deleted."),
+	N_("Sorry, but folder \"%s\" cannot be deleted."),
 	/* cant_delete_used_folder */
-	N_("Sorry, but bookmark's folder \"%s\" is being used by something else."),
+	N_("Sorry, but folder \"%s\" is being used by something else."),
 	/* delete_marked_items_title */
 	N_("Delete marked bookmarks"),
 	/* delete_marked_items */
 	N_("Delete marked bookmarks?"),
 	/* delete_folder_title */
-	N_("Delete bookmark's folder"),
+	N_("Delete folder"),
 	/* delete_folder */
 	N_("Delete folder \"%s\" and all bookmarks in it?"),
 	/* delete_item_title */

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.115 2004/12/29 14:59:34 zas Exp $ */
+/* $Id: connect.c,v 1.116 2004/12/29 21:30:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,8 +236,8 @@ get_pasv6_socket(struct connection *conn, int ctrl_sock,
 	struct sockaddr_in6 s0;
 	int len = sizeof(struct sockaddr_in6);
 
-	memset(&s0, 0, sizeof(s0));
-	memset(s6, 0, sizeof(s6));
+	memset(&s0, 0, sizeof(struct sockaddr_in6));
+	memset(s6, 0, sizeof(struct sockaddr_storage));
 
 	/* Get our endpoint of the control socket */
 

@@ -306,5 +306,6 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
+	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.53 2002/04/19 16:15:04 pasky Exp $
+$Id: AUTHORS,v 1.54 2002/04/22 15:39:26 pasky Exp $

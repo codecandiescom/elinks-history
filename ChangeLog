@@ -1,8 +1,117 @@
-Tue Oct 14 21:52:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+Wed Oct 15 21:40:15 2003  Laurent Monin <zas@norz.org>:
 
-	* doc/book/tools/: .cvsignore, .vimrc, help2doc:
+	* src/document/cache.c:
 
-	help2doc was moved to doc/tools so kill the fairies.  
+	enlarge() was renamed resize_entry() since it may reduce entry size
+	too. Misc cleanups.  
+
+Wed Oct 15 20:25:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Added default settings for xterm-256color.  
+
+Wed Oct 15 19:39:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Fixed broken defaults for terminal._template_.underline - it is now
+	by default off, which is much safer and more reasonable.
+	Co-suggested by Jonas, fixes bug 252.  
+
+Wed Oct 15 19:31:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Massive Czech translation update. Jonas has no chance.  
+
+Wed Oct 15 19:22:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix by Zardoz to handle --with-gnutls=/path/to/gnutls again.  
+
+Wed Oct 15 17:15:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Wed Oct 15 16:59:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Better handling of memory cache size reduction by user while cache
+	usage is currently over given value. document.cache.memory.size
+	option changes are now detected and minimal cache size is tested and
+	eventually modified to be a reasonable value.  
+
+Wed Oct 15 14:19:40 2003  Laurent Monin <zas@norz.org>:
+
+	* po/gen_translations_stats.sh:
+
+	Sort lines by percentage of translation and alphabetic order of .po
+	file.  
+
+Wed Oct 15 14:02:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Light unfuzziation and continued new translation.  
+
+Wed Oct 15 13:56:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elinks.h:
+
+	Removed exporting util/profile.h to the whole ELinks source. It is
+	useless for most of it and slows down compilation etc.  
+
+Wed Oct 15 13:42:45 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation fixes.  
+
+Wed Oct 15 13:17:04 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Wed Oct 15 11:59:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Really fix problem reported by David Gómez where openssl was
+	disabled when calling configure with --without-gnutls.  
+
+Wed Oct 15 11:01:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	defrag_entry() minor cleanup.  
+
+Wed Oct 15 10:55:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	document.cache.memory.size is in bytes not in kilobytes.  
+
+Wed Oct 15 10:50:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Cache debug macros cleanup, use debug() instead of internal() for gc
+	failure, defrag_entry() cleanup.  
+
+Wed Oct 15 07:51:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/ssl/connect.c:
+
+	Fix compilation error due to unused label.  
 
 Tue Oct 14 20:06:05 2003  Varga Balázs <vinnui@ent.hu>:
 

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.100 2004/06/08 14:15:27 jonas Exp $ */
+/* $Id: task.c,v 1.101 2004/06/08 14:46:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,7 +274,7 @@ ses_imgmap(struct session *ses)
 
 	if (get_image_map(cached->head, fr->data, fr->data + fr->length,
 			  pos, &menu, &ml,
-			  ses->imgmap_href_base, ses->imgmap_target_base,
+			  ses->imgmap_href_base, ses->task.target_frame,
 			  get_opt_int_tree(ses->tab->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))
@@ -296,6 +296,8 @@ do_move(struct session *ses, struct download **stat)
 	if (ses->loading_uri->protocol == PROTOCOL_UNKNOWN)
 		return 0;
 
+	/* Handling image map needs to scan the source of the loaded document
+	 * so all of it has to be available. */
 	if (ses->task.type == TASK_IMGMAP && is_in_progress_state((*stat)->state))
 		return 0;
 
@@ -566,6 +568,5 @@ goto_imgmap(struct session *ses, struct uri *uri, unsigned char *target)
 {
 	if (ses->imgmap_href_base) done_uri(ses->imgmap_href_base);
 	ses->imgmap_href_base = get_uri_reference(uri);
-	mem_free_set(&ses->imgmap_target_base, target);
 	follow_url(ses, struri(uri), target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.132 2004/06/08 14:15:27 jonas Exp $ */
+/* $Id: session.h,v 1.133 2004/06/08 14:46:21 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -137,7 +137,6 @@ struct session {
 	struct uri *referrer;
 
 	struct uri *imgmap_href_base;
-	unsigned char *imgmap_target_base;
 
 
 	/* The current action-in-progress selector */

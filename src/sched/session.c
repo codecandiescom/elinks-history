@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.421 2004/06/08 14:15:27 jonas Exp $ */
+/* $Id: session.c,v 1.422 2004/06/08 14:46:21 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -889,7 +889,6 @@ destroy_session(struct session *ses)
 	if (ses->loading_uri) done_uri(ses->loading_uri);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
 	if (ses->imgmap_href_base) done_uri(ses->imgmap_href_base);
-	mem_free_if(ses->imgmap_target_base);
 
 	while (!list_empty(ses->type_queries))
 		done_type_query(ses->type_queries.next);

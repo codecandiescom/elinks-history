@@ -1,3 +1,159 @@
+Mon Jul 12 20:55:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Revert changes to line terminators, it breaks post on fm, need to be
+	rechecked.  
+
+Mon Jul 12 20:48:49 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	encode_multipart(): use add_crlf_to_string(), add_char_to_string()
+	were applicable, and cleanup.  
+
+Mon Jul 12 20:40:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Use \r\n instead of \n as line terminators. It seems to be more
+	conform to RFCs and to behavior of other web browsers. Please test
+	heavily.  
+
+Mon Jul 12 18:32:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, options.h, renderer.c:
+
+	Make render_document_frames() always rerender the document by
+	disabling the formatted cache using new document_options->no_cache
+	boolean member. Idea by Miciah. It should fix amongst other things
+	the View :: Rerender menu action and also rerendering document when
+	draw_formatted(..., @rerender) is called with non-zero @rerender.
+	This will make followed links from a document appear visited when
+	going back (hmm should this only be done when CONFIG_GLOBHIST is
+	defined?). Bad thing is a lot of rerendering can be result and it
+	may have to be fine-tuned a bit or even reverted if it is too
+	annoying.  
+
+Mon Jul 12 18:25:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, options.h, renderer.c, html/parser.c:
+
+	Revert last patch. My tree was poisoned.  
+
+Mon Jul 12 18:23:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, options.h, renderer.c, html/parser.c,
+	html/parser.c:
+
+	html_hr(): Use get_html_max_width() if get_width() fails. This fixes
+	an off by something error in the width calculation that was spotted
+	by zas. Note usage of get_html_max_width() don't add extra margin
+	width which the old code did (by looking at links2) but using the
+	max width is more in the spirit of what mozilla and opera does. The
+	bad width calculation was introduced in (1.145 -> 1.146) 'Bunch of
+	miscelleanous cleanup, optimizations, assert(), ....' over a year
+	ago.  
+
+Mon Jul 12 18:16:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: internal.h, parser/parse.c, parser/table.c:
+
+	Introduce get_html_max_width() macro.  
+
+Mon Jul 12 15:07:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	enter(): For text-input form-field when insert mode is off simply
+	submit form.  
+
+Mon Jul 12 14:31:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h, view.c:
+
+	next_link_in_dir(): Use get_current_link() so somthing bad dosn't
+	happen if current link is -1.  
+
+Mon Jul 12 14:03:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/protocol.c:
+
+	get_protocol(): Try to make code simpler.  
+
+Mon Jul 12 13:52:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Replaced unused PROTOCOL_INVALID with PROTOCOL_BACKENDS for proocol
+	backend index checking.  
+
+Mon Jul 12 13:43:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	@s -> @socket.  
+
+Mon Jul 12 13:39:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	log_data(): make it static and reduce indentation level.  
+
+Mon Jul 12 12:07:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	link_typeahead_handler(): 'I shall proceed and continue to rock the
+	mic' when an error occurs so you don't have to start all over.
+	Requested by calmar.  
+
+Mon Jul 12 12:00:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	do_typeahead(): Use separate arg (@match) for the returned link
+	number.  
+
+Mon Jul 12 11:58:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	do_typeahead(): Oops fix wrong renaming in (1.242 -> 1.243) -
+	'Rename enum typeahead_code values to better match what they are
+	mapped to.' 
+
+Mon Jul 12 11:31:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/Makefile.am, protocol/protocol.c,
+	protocol/protocol.h, protocol/http/Makefile.am,
+	protocol/http/http.h, protocol/http/https.c, protocol/http/https.h,
+	sched/connection.c:
+
+	Introduce need_ssl boolean member to protocol_backend. It will make
+	it easier to add nntps:// support. SSL initialization now happens in
+	run_connection() and nicely pair up with the SSL teardown in
+	interrupt_connection().  
+
+Mon Jul 12 11:16:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h, uri.c:
+
+	Reintroduce free_syntax boolean member in protocol backends. For now
+	about: uses it.  
+
+Mon Jul 12 10:59:23 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/config/cmdline.c, src/lowlevel/connect.c,
+	src/lowlevel/dns.c, src/lowlevel/interlink.c,
+	src/osdep/getifaddrs.c, src/osdep/osdep.c, src/osdep/osdep.h,
+	src/protocol/ftp/ftp.c:
+
+	set_ip_tos_throughput() was introduced in osdep.c, and a test for
+	sys/socket.h was added to configure.in, headers inclusion was
+	modified/improved according to these changes. It simplifies things a
+	bit.  
+
 Sat Jul 10 18:57:23 2004  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/connect.c:

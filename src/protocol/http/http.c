@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.333 2004/09/22 17:01:41 zas Exp $ */
+/* $Id: http.c,v 1.334 2004/09/26 15:10:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -803,10 +803,12 @@ is_line_in_buffer(struct read_buffer *rb)
 static void read_http_data(struct connection *conn, struct read_buffer *rb);
 
 static void
-read_more_http_data(struct connection *conn, struct read_buffer *rb)
+read_more_http_data(struct connection *conn, struct read_buffer *rb,
+                    int already_got_anything)
 {
 	read_from_socket(conn, &conn->socket, rb, read_http_data);
-	set_connection_state(conn, S_TRANS);
+	if (already_got_anything)
+		set_connection_state(conn, S_TRANS);
 }
 
 static void
@@ -841,6 +843,7 @@ static int
 read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
+	int total_data_len = 0;
 
 	while (1) {
 		/* Chunked. Good luck! */
@@ -862,7 +865,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 				kill_buffer_data(rb, l);
 				if (l <= 2) {
 					/* Empty line. */
-					return 1;
+					return 2;
 				}
 				continue;
 			}
@@ -916,6 +919,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 			if (data && data != rb->data) mem_free(data);
 
 			conn->from += data_len;
+			total_data_len += data_len;
 
 			kill_buffer_data(rb, len);
 
@@ -949,7 +953,7 @@ read_chunked_http_data(struct connection *conn, struct read_buffer *rb)
 	}
 
 	/* More to read. */
-	return 0;
+	return !!total_data_len;
 }
 
 /* Returns 0 if more data, 1 if done. */
@@ -980,10 +984,10 @@ read_normal_http_data(struct connection *conn, struct read_buffer *rb)
 	kill_buffer_data(rb, len);
 
 	if (!info->length && !rb->close) {
-		return 1;
+		return 2;
 	}
 
-	return 0;
+	return !!data_len;
 }
 
 static void
@@ -1016,9 +1020,12 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		abort_conn_with_state(conn, S_HTTP_ERROR);
 		break;
 	case 0:
-		read_more_http_data(conn, rb);
+		read_more_http_data(conn, rb, 0);
 		break;
 	case 1:
+		read_more_http_data(conn, rb, 1);
+		break;
+	case 2:
 		read_http_data_done(conn);
 		break;
 	default:

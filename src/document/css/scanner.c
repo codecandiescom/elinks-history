@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.20 2004/01/19 07:05:26 jonas Exp $ */
+/* $Id: scanner.c,v 1.21 2004/01/19 14:43:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,19 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		hexdigits = string - token->string - 1;
 		token->type = (hexdigits == 3 || hexdigits == 6)
 			    ? CSS_TOKEN_HEX_COLOR : CSS_TOKEN_GARBAGE;
+
+	} else if (first_char == '@') {
+
+		/* Compose token containing @<ident> */
+		if (is_css_ident_start(*string)) {
+			/* Scan both ident start and ident */
+			scan_css(string, CSS_CHAR_IDENT);
+			token->type = CSS_TOKEN_ATRULE;
+
+		} else {
+			token->type = CSS_TOKEN_GARBAGE;
+		}
+
 
 	} else if (first_char == '"' || first_char == '\'') {
 		/* TODO: Escaped delimiters --jonas */

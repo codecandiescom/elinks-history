@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.91 2004/01/02 15:39:41 pasky Exp $ */
+/* $Id: string.c,v 1.92 2004/01/16 23:48:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,9 +240,7 @@ done_string(struct string *string)
 	if_assert_failed { return; }
 	check_string_magic(string);
 
-	if (string->source) {
-		mem_free(string->source);
-	}
+	if (string->source) mem_free(string->source);
 	/* Blast everything including the magic */
 	memset(string, 0, sizeof(struct string));
 }
@@ -370,4 +368,32 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 	string->source[newlength] = 0;
 
 	return string;
+}
+
+struct string *
+add_to_string_list(struct list_head *list, unsigned char *source)
+{
+	struct string *string = mem_alloc(sizeof(struct string));
+
+	if (!string) return NULL;
+
+	if (!init_string(string) || !add_to_string(string, source)) {
+		done_string(string);
+		return NULL;
+	}
+
+	add_to_list_end(*list, string);
+	return string;
+}
+
+void
+free_string_list(struct list_head *list)
+{
+	while (!list_empty(*list)) {
+		struct string *string = list->next;
+
+		del_from_list(string);
+		done_string(string);
+		mem_free(string);
+	}
 }

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.61 2004/01/02 15:38:06 pasky Exp $ */
+/* $Id: string.h,v 1.62 2004/01/16 23:48:47 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -10,6 +10,7 @@
 
 #include "osdep/ascii.h"
 #include "util/error.h"
+#include "util/lists.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
 
@@ -108,6 +109,8 @@ int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 #endif
 
 struct string {
+	LIST_HEAD(struct string);
+
 #ifdef DEBUG_STRING
 	int magic;
 #endif
@@ -123,13 +126,13 @@ struct string {
 #define STRING_MAGIC 0x2E5BF271
 #define check_string_magic(x) assertm((x)->magic == STRING_MAGIC, "String magic check failed.")
 #define set_string_magic(x) do { (x)->magic = STRING_MAGIC; } while (0)
-#define NULL_STRING { STRING_MAGIC, NULL, 0 }
-#define INIT_STRING(s, l) { STRING_MAGIC, s, l }
+#define NULL_STRING { NULL_LIST_HEAD, STRING_MAGIC, NULL, 0 }
+#define INIT_STRING(s, l) { NULL_LIST_HEAD, STRING_MAGIC, s, l }
 #else
 #define check_string_magic(x)
 #define set_string_magic(x)
-#define NULL_STRING { NULL, 0 }
-#define INIT_STRING(s, l) { s, l }
+#define NULL_STRING { NULL_LIST_HEAD, NULL, 0 }
+#define INIT_STRING(s, l) { NULL_LIST_HEAD, s, l }
 #endif
 
 /* Initializes the passed string struct by preallocating the @source member. */
@@ -151,6 +154,10 @@ struct string *add_xchar_to_string(struct string *string, unsigned char characte
 
 /* Add printf-style format string to @string. */
 struct string *add_format_to_string(struct string *string, unsigned char *format, ...);
+
+
+struct string *add_to_string_list(struct list_head *list, unsigned char *string);
+void free_string_list(struct list_head *list);
 
 
 #undef realloc_string

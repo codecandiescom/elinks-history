@@ -3,7 +3,7 @@
 # ELinks debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 #
-# $Id: rules,v 1.13 2005/01/11 21:32:04 jonas Exp $
+# $Id: rules,v 1.14 2005/01/12 02:46:30 jonas Exp $
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -30,15 +30,13 @@ CONFIGURE_MODE	= --enable-debug
 endif
 
 ifneq (,$(findstring noopt, $(DEB_BUILD_OPTIONS)))
-CFLAGS	       += -O0
+# Export it so configure can grab it
+export CFLAGS  += -O0 -Wall
 else
 ifeq (,$(CONFIGURE_MODE))
 CONFIGURE_MODE	= --enable-fastmem
 endif
 endif
-
-# Export it so configure can grab it
-export CFLAGS
 
 
 ## Compile Configuration

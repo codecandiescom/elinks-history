@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.123 2003/12/21 02:06:23 jonas Exp $ */
+/* $Id: menu.c,v 1.124 2003/12/21 02:22:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,6 +542,9 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 				}
 					break;
 #undef DIST
+				case ACT_ENTER:
+					goto enter;
+
 				case ACT_CANCEL:
 					if ((void *) win->next != &win->term->windows
 					    && win->next->handler == mainmenu_handler)
@@ -572,7 +575,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 			}
 
 			display_menu(win->term, menu);
-			if (s || ev->x == KBD_ENTER || ev->x == ' ') {
+			if (s) {
 enter:
 				select_menu(win->term, menu);
 			}
@@ -748,8 +751,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 		{
 			enum keyact action = kbd_action(KM_MENU, ev, NULL);
 
-			if (ev->x == ' '
-			    || action == ACT_ENTER
+			if (action == ACT_ENTER
 			    || action == ACT_DOWN
 			    || action == ACT_UP
 			    || action == ACT_PAGE_UP
@@ -775,22 +777,21 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 				select_mainmenu(win->term, menu);
 				break;
 			}
-		}
 
 			if (ev->x > ' ' && ev->x < 256 &&
 			    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
 				s = 2;
 
-			if (!s) {
-				delete_window_ev(win, ev->x != KBD_ESC  ? ev
-									: NULL);
+			if (!s || action == ACT_CANCEL) {
+				delete_window_ev(win, action == ACT_CANCEL
+						      ? ev : NULL);
 			} else {
-
 				display_mainmenu(win->term, menu);
 				if (s == 2)
 					select_mainmenu(win->term, menu);
 			}
 			break;
+		}
 
 		case EV_ABORT:
 			break;

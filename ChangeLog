@@ -1,3 +1,287 @@
+Thu Oct  2 22:08:02 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	Spec polished.  
+
+Thu Oct  2 21:49:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Provide a color_mode_info fallback when 256 color are not compiled
+	in.  
+
+Thu Oct  2 21:28:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, screen.c:
+
+	Make COLOR_MODE_256 visible even when 256 color support is not
+	enabled. As fabiob says never trust the users.  
+
+Thu Oct  2 20:49:55 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/config/kbdbind.c:
+
+	Remove unneeded header.  
+
+Thu Oct  2 20:13:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Generalize adding of the char data.  
+
+Thu Oct  2 17:28:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Use white not purple as fallback.  
+
+Thu Oct  2 17:27:37 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	Whitespace fix.  
+
+Thu Oct  2 17:21:01 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Thu Oct  2 17:16:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Fix comment.  
+
+Thu Oct  2 17:14:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: draw.c, draw.h, screen.c:
+
+	Update screen_char->color[] to have 2 chars in a 256 color build.  
+	Add add_char256() and 256 color mode loop to redraw_screen().  
+
+Thu Oct  2 17:12:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Make it possible to choose 256 color mode.  
+
+Thu Oct  2 17:10:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Add 256 color mode info and setting.  
+
+Thu Oct  2 17:09:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, acconfig.h:
+
+	Add configuration of 256 color support.  
+
+Thu Oct  2 16:42:14 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/lowlevel/home.c:
+
+	Simplify loop.  
+
+Thu Oct  2 16:37:06 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/util/conv.h:
+
+	Typo fix in comment.  
+
+Thu Oct  2 16:25:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	Free u if needed at function end only, reducing code redundancy,
+	variables declarations were moved near usage, useless return were
+	removed.  
+
+Thu Oct  2 16:02:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Move add_cursor_move_to_string().  
+
+Thu Oct  2 15:51:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, document/cache.c, document/html/renderer.c:
+
+	Use whole instead of less significant u.  
+
+Thu Oct  2 15:37:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Fix off by one error. ;P 
+
+Thu Oct  2 15:29:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Obsolete commented out code was removed.  
+
+Thu Oct  2 15:18:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elusive/renderer/text/renderer.c, terminal/color.c,
+	terminal/draw.c, terminal/draw.h, terminal/screen.c:
+
+	Make screen_char->color an array. ELusives unmaintained code is a
+	PITA.  
+
+Thu Oct  2 15:02:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	No need for add_chars16() so removed.  
+
+Thu Oct  2 14:58:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Macrofy add_chars() .. Although it is a bit ugly this way we can
+	reduce code dublication I hope.  
+
+Thu Oct  2 14:36:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Functions were provided to ease cache debugging (disabled by
+	default).  
+
+Thu Oct  2 14:05:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Use trigger_event_name().  
+
+Thu Oct  2 14:04:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	enlarge() is now an inlined function instead of a macro.  
+
+Thu Oct  2 13:38:28 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: main.c, dialogs/menu.c:
+
+	Use trigger_event_name where appropriate.  
+
+Thu Oct  2 13:35:18 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/sched/: event.c, event.h:
+
+	Add trigger_event_name(unsigned char *name, ...) 
+
+Thu Oct  2 13:24:35 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* doc/events.txt:
+
+	Add description of dialog-lua-console and free-history to
+	doc/events.txt 
+
+Thu Oct  2 12:54:35 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: viewer/text/view.c, scripting/lua/core.c,
+	scripting/lua/core.h, scripting/lua/hooks.c:
+
+	Use event system for dialog_lua_console.  
+
+Thu Oct  2 12:47:15 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: dialogs/menu.c, scripting/lua/core.c, scripting/lua/core.h,
+	scripting/lua/hooks.c:
+
+	Use event system for free_lua_console_history.  
+
+Thu Oct  2 12:29:03 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/scripting/lua/core.c:
+
+	Compile fix because of wrong pointer type.  
+
+Thu Oct  2 12:16:04 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* contrib/lua/bm.lua, contrib/lua/config.lua,
+	contrib/lua/hooks.lua.in, contrib/lua/remote.lua,
+	src/scripting/lua/core.c:
+
+	Make elinks_home available for Lua and use it.  
+
+Thu Oct  2 11:09:12 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/scripting/lua/: core.c, core.h:
+
+	Move run_lua_func near l_bind_key and make it static.  
+
+Thu Oct  2 10:46:22 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, scripting/lua/core.c,
+	scripting/lua/core.h, viewer/text/view.c:
+
+	Use event calls to provide keybinding functionality for scripting
+	backends.  
+
+Thu Oct  2 08:43:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Fix bold attribute detection by using ch->color again.  
+
+Thu Oct  2 05:53:41 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	- Polish translation update 
+
+Thu Oct  2 00:07:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Compile fix. Hmm time to sign off ;) 
+
+Thu Oct  2 00:06:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Wrap color comparison and copying in macros.  
+
+Wed Oct  1 23:48:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Tidyup.  
+
+Wed Oct  1 23:24:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Tidyup and a small "experimental" simplification.  
+
+Wed Oct  1 23:12:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.h, document/html/renderer.c,
+	terminal/color.c, terminal/color.h, terminal/screen.c:
+
+	Move the underline color enhancement to set_term_color() and out of
+	the critical screen drawing loop so it can be simplified. This is
+	done using a new COLOR_ENHANCE type. Underlining is now part of the
+	document options.  
+
+Wed Oct  1 22:49:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Alphabetize #includes.  
+
+Wed Oct  1 22:18:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Bug 86 is now fixed, nothing to do ifno fragment in cache entry.  
+
 Wed Oct  1 20:02:32 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/renderer.c:

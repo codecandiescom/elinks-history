@@ -1,3 +1,16 @@
+Thu Dec 27 04:41:31 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, sched.c:
+	
+	DNS support for more RRs per host looks done - some mem_free()s
+	moved, debug()s removed, no leaks or crashes occured to me for now
+
+Thu Dec 27 03:59:59 2001  Petr Baudis <pasky@ji.cz>:
+
+	* connect.c, dns.c, sched.c:
+	
+	next version of my leaky multi-RR DNS beast ;p
+
 Thu Dec 27 02:53:59 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, default.c, dns.c, links.h, sched.c:

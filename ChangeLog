@@ -1,3 +1,18 @@
+Wed Mar 13 21:13:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* bfu.c:
+	
+	strip leading/trailing spaces from URLs which are going to be saved
+	into history => no duplicites in history with only differences in
+	this
+
+Wed Mar 13 20:59:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html_r.c:
+	
+	off-by-one bug in justify code fixed (see diff, comment near
+	malloc()); looks like i should release pre2 soon ;)
+
 Wed Mar 13 19:03:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-19 19:16+0200\n"
-"PO-Revision-Date: 2004-10-19 20:00+0200\n"
+"POT-Creation-Date: 2004-10-23 14:42+0200\n"
+"PO-Revision-Date: 2004-10-23 15:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -50,8 +50,8 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/dialogs/info.c:44 src/dialogs/info.c:133 src/dialogs/info.c:155
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:505 src/dialogs/menu.c:553
 #: src/dialogs/options.c:176 src/dialogs/options.c:249
-#: src/ecmascript/spidermonkey.c:373 src/ecmascript/spidermonkey.c:861
-#: src/ecmascript/spidermonkey.c:878 src/formhist/dialogs.c:183
+#: src/ecmascript/spidermonkey.c:407 src/ecmascript/spidermonkey.c:934
+#: src/ecmascript/spidermonkey.c:955 src/formhist/dialogs.c:183
 #: src/mime/dialogs.c:134 src/protocol/auth/dialogs.c:92
 #: src/protocol/protocol.c:226 src/protocol/user.c:206
 #: src/sched/download.c:232 src/sched/download.c:328 src/sched/download.c:369
@@ -60,7 +60,7 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/sched/session.c:735 src/scripting/lua/core.c:400
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:599
 #: src/scripting/lua/core.c:723 src/viewer/text/draw.c:66
-#: src/viewer/text/form.c:843 src/viewer/text/search.c:949
+#: src/viewer/text/form.c:847 src/viewer/text/search.c:949
 #: src/viewer/text/search.c:1010 src/viewer/text/search.c:1454
 #: src/viewer/text/search.c:1567 src/viewer/text/textarea.c:365
 #: src/viewer/text/textarea.c:374 src/viewer/text/view.c:694
@@ -174,9 +174,9 @@ msgstr "Nazwa"
 #: src/dialogs/edit.c:103 src/dialogs/menu.c:96 src/dialogs/menu.c:505
 #: src/dialogs/menu.c:553 src/dialogs/options.c:179 src/dialogs/options.c:250
 #: src/mime/dialogs.c:135 src/protocol/auth/dialogs.c:93
-#: src/sched/download.c:552 src/sched/download.c:1047
-#: src/sched/download.c:1057 src/sched/download.c:1078
-#: src/sched/download.c:1091 src/scripting/lua/core.c:401
+#: src/sched/download.c:552 src/sched/download.c:1018
+#: src/sched/download.c:1028 src/sched/download.c:1049
+#: src/sched/download.c:1062 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:723
 #: src/viewer/text/search.c:1568 src/viewer/text/view.c:694
 msgid "Cancel"
@@ -460,8 +460,8 @@ msgstr "Wyczy¶æ"
 #: src/bookmarks/dialogs.c:460 src/config/dialogs.c:521
 #: src/config/dialogs.c:943 src/cookies/dialogs.c:392
 #: src/dialogs/options.c:178 src/formhist/dialogs.c:220
-#: src/globhist/dialogs.c:240 src/sched/download.c:1044
-#: src/sched/download.c:1075
+#: src/globhist/dialogs.c:240 src/sched/download.c:1015
+#: src/sched/download.c:1046
 msgid "Save"
 msgstr "Zapisz"
 
@@ -3989,7 +3989,7 @@ msgstr "Tekst"
 msgid "Dialog text colors."
 msgstr "Kolory tekstu w oknie dialogowym."
 
-#: src/config/options.inc:1175 src/viewer/text/form.c:1409
+#: src/config/options.inc:1175 src/viewer/text/form.c:1417
 msgid "Checkbox"
 msgstr "Przycisk wyboru"
 
@@ -4023,7 +4023,7 @@ msgstr "Wybrany przycisk"
 msgid "Dialog selected button colors."
 msgstr "Kolory wybranego przycisku."
 
-#: src/config/options.inc:1191 src/viewer/text/form.c:1413
+#: src/config/options.inc:1191 src/viewer/text/form.c:1421
 msgid "Text field"
 msgstr "Pole tekstowe"
 
@@ -4522,7 +4522,7 @@ msgid "Folder"
 msgstr "Folder"
 
 #. name:
-#: src/cookies/cookies.c:80 src/cookies/cookies.c:854
+#: src/cookies/cookies.c:80 src/cookies/cookies.c:853
 msgid "Cookies"
 msgstr "Ciasteczka"
 
@@ -5485,7 +5485,7 @@ msgstr ""
 "Zostaw jako \"\", ¿eby u¿ywaæ wbudowanych styli dokumentu."
 
 #. name:
-#: src/ecmascript/ecmascript.c:44 src/ecmascript/ecmascript.c:172
+#: src/ecmascript/ecmascript.c:44 src/ecmascript/ecmascript.c:177
 msgid "ECMAScript"
 msgstr "ECMAScript"
 
@@ -5506,47 +5506,47 @@ msgstr "Raportowanie b³êdów skryptu"
 msgid "Open a message box when a script reports an error."
 msgstr "Czy otwieraæ okienko dialogowe z raportem o b³êdzie skryptu?"
 
-#: src/ecmascript/spidermonkey.c:370
+#: src/ecmascript/spidermonkey.c:404
 msgid "JavaScript Alert"
 msgstr "Alert JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:844
+#: src/ecmascript/spidermonkey.c:909
 msgid "JavaScript Error"
 msgstr "B³±d JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:847
+#: src/ecmascript/spidermonkey.c:912
 #, c-format
 msgid ""
-"A script embedded in the current document raised the following exception: \n"
+"A script embedded in the current document raised the following%s%s%s%s: \n"
 "\n"
 "%s\n"
 "\n"
 "%s\n"
 ".%*s^%*s."
 msgstr ""
-"Skrypt zawarty w bie¿±cym dokumencie spowodowa³ nastêpuj±cy wyj±tek: \n"
+"Skrypt zawarty w bie¿±cym dokumencie spowodowa³ %s%s%s%s: \n"
 "\n"
 "%s\n"
 "\n"
 "%s\n"
 ".%*s^%*s."
 
-#: src/ecmascript/spidermonkey.c:855
+#: src/ecmascript/spidermonkey.c:924
 #, c-format
 msgid ""
-"A script embedded in the current document raised the following exception: \n"
+"A script embedded in the current document raised the following%s%s%s%s: \n"
 "\n"
 "%s"
 msgstr ""
-"Skrypt zawarty w bie¿±cym dokumencie spowodowa³ nastêpuj±cy wyj±tek: \n"
+"Skrypt zawarty w bie¿±cym dokumencie spowodowa³ %s%s%s%s: \n"
 "\n"
 "%s"
 
-#: src/ecmascript/spidermonkey.c:872
+#: src/ecmascript/spidermonkey.c:949
 msgid "JavaScript Emergency"
 msgstr "Wypadek JavaScriptu"
 
-#: src/ecmascript/spidermonkey.c:873
+#: src/ecmascript/spidermonkey.c:950
 msgid ""
 "A script embedded in the current document was running for more than 5 "
 "seconds in line. This probably means there is a bug in the script and it "
@@ -5967,20 +5967,20 @@ msgstr "%d b³êdów select()."
 msgid "Cannot create a pipe for internal communication."
 msgstr "Nie mo¿na utworzyæ potoku dla wewnêtrznej komunikacji."
 
-#: src/main.c:180
+#: src/main.c:186
 msgid "No running ELinks found."
 msgstr "¯adnego dzia³aj±cego ELinksa nie znaleziono."
 
 #. The remote session(s) can not be created
-#: src/main.c:187
+#: src/main.c:193
 msgid "No remote session to connect to."
 msgstr "Brak zdalnej sesji, ¿eby siê przy³±czyæ."
 
-#: src/main.c:196
+#: src/main.c:202
 msgid "Unable to encode session info."
 msgstr "Nie jestem w stanie zdekodowaæ informacji o sesji."
 
-#: src/main.c:213
+#: src/main.c:219
 msgid "Unable to attach_terminal()."
 msgstr "Nie jestem w stanie przy³±czyæ terminala."
 
@@ -6722,35 +6722,35 @@ msgstr ""
 "Nie mo¿na utworzyæ pliku '%s':\n"
 "%s"
 
-#: src/sched/download.c:1038 src/sched/download.c:1050
+#: src/sched/download.c:1009 src/sched/download.c:1021
 msgid "Unknown type"
 msgstr "Nieznany typ"
 
-#: src/sched/download.c:1039
+#: src/sched/download.c:1010
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Czy chcesz zapisaæ plik '%s' (typu %s) czy wy¶wietliæ go?"
 
-#: src/sched/download.c:1045 src/sched/download.c:1055
-#: src/sched/download.c:1076 src/sched/download.c:1089
+#: src/sched/download.c:1016 src/sched/download.c:1026
+#: src/sched/download.c:1047 src/sched/download.c:1060
 msgid "Display"
 msgstr "Wy¶wietl"
 
-#: src/sched/download.c:1046 src/sched/download.c:1056
-#: src/sched/download.c:1077 src/sched/download.c:1090
+#: src/sched/download.c:1017 src/sched/download.c:1027
+#: src/sched/download.c:1048 src/sched/download.c:1061
 msgid "Show header"
 msgstr "Poka¿ nag³ówek"
 
-#: src/sched/download.c:1051
+#: src/sched/download.c:1022
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Czy chcesz wy¶wietliæ plik '%s' (typu %s)?"
 
-#: src/sched/download.c:1067 src/sched/download.c:1081
+#: src/sched/download.c:1038 src/sched/download.c:1052
 msgid "What to do?"
 msgstr "Co mam zrobiæ?"
 
-#: src/sched/download.c:1068
+#: src/sched/download.c:1039
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -6759,11 +6759,11 @@ msgstr ""
 "Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
 "przy u¿yciu '%s', zapisaæ go, czy wy¶wietliæ?"
 
-#: src/sched/download.c:1074 src/sched/download.c:1088
+#: src/sched/download.c:1045 src/sched/download.c:1059
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/sched/download.c:1082
+#: src/sched/download.c:1053
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -7188,160 +7188,165 @@ msgstr "Brakuj±cy fragment"
 msgid "The requested fragment \"#%s\" doesn't exist."
 msgstr "¯±dany fragment \"#%s\" nie istnieje."
 
-#: src/viewer/text/form.c:839
+#: src/viewer/text/form.c:843
 msgid "Error while posting form"
 msgstr "Wyst±pi³ b³±d podczas wysy³ania formularza"
 
-#: src/viewer/text/form.c:840
+#: src/viewer/text/form.c:844
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Nie mo¿na pobraæ pliku %s: %s"
 
-#: src/viewer/text/form.c:1396
+#: src/viewer/text/form.c:1402
 msgid "Reset form"
 msgstr "Wyczy¶æ formularz"
 
+#
 #: src/viewer/text/form.c:1404
+msgid "Harmless button"
+msgstr "Nieszkodliwy przycisk"
+
+#: src/viewer/text/form.c:1412
 msgid "Submit form to"
 msgstr "Prze¶lij formularz do"
 
-#: src/viewer/text/form.c:1405
+#: src/viewer/text/form.c:1413
 msgid "Post form to"
 msgstr "Wy¶lij formularz do"
 
-#: src/viewer/text/form.c:1407
+#: src/viewer/text/form.c:1415
 msgid "Radio button"
 msgstr "Okr±g³y przycisk"
 
-#: src/viewer/text/form.c:1411
+#: src/viewer/text/form.c:1419
 msgid "Select field"
 msgstr "Pole wyboru"
 
-#: src/viewer/text/form.c:1415
+#: src/viewer/text/form.c:1423
 msgid "Text area"
 msgstr "Pole tekstowe"
 
-#: src/viewer/text/form.c:1417
+#: src/viewer/text/form.c:1425
 msgid "File upload"
 msgstr "£adowanie pliku"
 
-#: src/viewer/text/form.c:1419
+#: src/viewer/text/form.c:1427
 msgid "Password field"
 msgstr "Pole has³a"
 
-#: src/viewer/text/form.c:1457
+#: src/viewer/text/form.c:1465
 msgid "name"
 msgstr "nazwa"
 
-#: src/viewer/text/form.c:1466
+#: src/viewer/text/form.c:1474
 msgid "value"
 msgstr "warto¶æ"
 
-#: src/viewer/text/form.c:1474
+#: src/viewer/text/form.c:1482
 msgid "read only"
 msgstr "tylko do odczytu"
 
-#: src/viewer/text/form.c:1485
+#: src/viewer/text/form.c:1493
 #, c-format
 msgid "press %s to navigate"
 msgstr "wci¶nij %s aby nawigowaæ"
 
-#: src/viewer/text/form.c:1487
+#: src/viewer/text/form.c:1495
 #, c-format
 msgid "press %s to edit"
 msgstr "wci¶nij %s aby edytowaæ"
 
-#: src/viewer/text/form.c:1509
+#: src/viewer/text/form.c:1517
 #, c-format
 msgid "press %s to submit to"
 msgstr "wci¶nij %s aby wys³aæ do"
 
-#: src/viewer/text/form.c:1511
+#: src/viewer/text/form.c:1519
 #, c-format
 msgid "press %s to post to"
 msgstr "wci¶nij %s aby wys³aæ do"
 
-#: src/viewer/text/link.c:1055
+#: src/viewer/text/link.c:1105
 msgid "Display ~usemap"
 msgstr "Poka¿ ~mapê obrazków"
 
-#: src/viewer/text/link.c:1058
+#: src/viewer/text/link.c:1108
 msgid "~Follow link"
 msgstr "Wybierz od~no¶nik"
 
-#: src/viewer/text/link.c:1060
+#: src/viewer/text/link.c:1110
 msgid "Follow link and r~eload"
 msgstr "Wybierz odno¶nik i p~rze³aduj"
 
-#: src/viewer/text/link.c:1064
+#: src/viewer/text/link.c:1114
 msgid "Open in new ~window"
 msgstr "~Otwórz w nowym oknie"
 
-#: src/viewer/text/link.c:1066
+#: src/viewer/text/link.c:1116
 msgid "Open in new ~tab"
 msgstr "Otwórz w nowej ~karcie"
 
-#: src/viewer/text/link.c:1068
+#: src/viewer/text/link.c:1118
 msgid "Open in new tab in ~background"
 msgstr "Otwórz w nowej k~arcie w tle"
 
-#: src/viewer/text/link.c:1073
+#: src/viewer/text/link.c:1123
 msgid "~Download link"
 msgstr "~Pobierz"
 
-#: src/viewer/text/link.c:1076
+#: src/viewer/text/link.c:1126
 msgid "~Add link to bookmarks"
 msgstr "~Dodaj zak³adkê"
 
-#: src/viewer/text/link.c:1088 src/viewer/text/link.c:1122
+#: src/viewer/text/link.c:1138 src/viewer/text/link.c:1172
 msgid "~Reset form"
 msgstr "Wy~czy¶æ formularz"
 
-#: src/viewer/text/link.c:1100
+#: src/viewer/text/link.c:1150
 msgid "Open in ~external editor"
 msgstr "Otwórz w zewnêtrznym ~edytorze"
 
-#: src/viewer/text/link.c:1106
+#: src/viewer/text/link.c:1156
 msgid "~Submit form"
 msgstr "~Prze¶lij formularz"
 
-#: src/viewer/text/link.c:1107
+#: src/viewer/text/link.c:1157
 msgid "Submit form and rel~oad"
 msgstr "Prze¶lij f~ormularz i prze³aduj"
 
-#: src/viewer/text/link.c:1110
+#: src/viewer/text/link.c:1160
 msgid "Submit form and open in new ~window"
 msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
 
-#: src/viewer/text/link.c:1112
+#: src/viewer/text/link.c:1162
 msgid "Submit form and open in new ~tab"
 msgstr "Prze¶lij formularz i otwórz na nowej ~karcie"
 
-#: src/viewer/text/link.c:1115
+#: src/viewer/text/link.c:1165
 msgid "Submit form and open in new tab in ~background"
 msgstr "Prze¶lij formularz i otwórz w ~tle na nowej karcie"
 
-#: src/viewer/text/link.c:1120
+#: src/viewer/text/link.c:1170
 msgid "Submit form and ~download"
 msgstr "Prze¶lij formu~larz i ¶ci±gnij"
 
-#: src/viewer/text/link.c:1127
+#: src/viewer/text/link.c:1177
 msgid "V~iew image"
 msgstr "Poka¿ o~brazek"
 
-#: src/viewer/text/link.c:1129
+#: src/viewer/text/link.c:1179
 msgid "Download ima~ge"
 msgstr "Pobierz ~obrazek"
 
-#: src/viewer/text/link.c:1134
+#: src/viewer/text/link.c:1187
 msgid "No link selected"
 msgstr "Nie wybrano ¿adnego odno¶nika"
 
-#: src/viewer/text/link.c:1184
+#: src/viewer/text/link.c:1239
 msgid "Image"
 msgstr "Obrazek"
 
-#: src/viewer/text/link.c:1189
+#: src/viewer/text/link.c:1244
 msgid "Usemap"
 msgstr "Mapa obrazków"
 

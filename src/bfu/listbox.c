@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.65 2003/04/29 13:18:21 zas Exp $ */
+/* $Id: listbox.c,v 1.66 2003/04/29 17:17:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,6 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 
 			if (deleted) {
 				item = (offset >= 0 ? prev : next);
-				continue;
 			}
 			if (!offset) {
 				infinite = 0; /* safety (matches) */

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.405 2003/11/21 01:13:26 jonas Exp $ */
+/* $Id: options.c,v 1.406 2003/11/21 23:38:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -482,13 +482,12 @@ copy_option(struct option *template)
 	option->desc = template->desc;
 	option->change_hook = template->change_hook;
 
-	option->box_item = init_option_listbox_item(template);
+	option->box_item = init_option_listbox_item(option);
 	if (option->box_item) {
 		if (template->box_item) {
 			option->box_item->type = template->box_item->type;
 			option->box_item->depth = template->box_item->depth;
 		}
-		option->box_item->udata = option;
 	}
 
 	if (option_types[template->type].dup) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.250 2003/11/06 09:45:59 zas Exp $ */
+/* $Id: parser.c,v 1.251 2003/11/06 22:25:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -991,8 +991,10 @@ html_body(unsigned char *a)
 	if (get_bgcolor(a, &format.bg) >= 0) {
 		/* Modify the root HTML element - format_html_part() will take
 		 * this from there. */
-		((struct html_element *) html_stack.prev)->parattr.bgcolor = par_format.bgcolor;
-		((struct html_element *) html_stack.prev)->attr.bg = format.bg;
+		struct html_element *e = html_stack.prev;
+
+		e->parattr.bgcolor = par_format.bgcolor;
+		e->attr.bg = format.bg;
 	}
 	special_f(ff, SP_COLOR_LINK_LINES);
 }

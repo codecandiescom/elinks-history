@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.41 2003/07/03 20:38:09 jonas Exp $ */
+/* $Id: connection.c,v 1.42 2003/07/03 20:52:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ struct k_conn {
 };
 
 
-static unsigned int connection_count = 0;
+static unsigned int connection_id = 0;
 static int active_connections = 0;
 static int st_r = 0;
 static int keepalive_timeout = -1;
@@ -125,12 +125,12 @@ connect_info(int type)
 }
 
 static inline int
-connection_disappeared(struct connection *c, unsigned int count)
+connection_disappeared(struct connection *c, unsigned int id)
 {
 	struct connection *d;
 
 	foreach (d, queue)
-		if (c == d && count == d->count)
+		if (c == d && id == d->id)
 			return 0;
 
 	return 1;
@@ -196,7 +196,7 @@ set_connection_state(struct connection *c, int state)
 	c->state = state;
 	if (c->state == S_TRANS) {
 		if (prg->timer == -1) {
-			unsigned int count = c->count;
+			unsigned int id = c->id;
 
 			if (!prg->valid) {
 				int tmp = prg->start;
@@ -212,7 +212,7 @@ set_connection_state(struct connection *c, int state)
 			st_r = 1;
 			stat_timer(c);
 			st_r = 0;
-			if (connection_disappeared(c, count))
+			if (connection_disappeared(c, id))
 				return;
 		}
 
@@ -350,7 +350,7 @@ void
 send_connection_info(struct connection *c)
 {
 	int state = c->state;
-	unsigned int count = c->count;
+	unsigned int id = c->id;
 	struct status *stat = c->statuss.next;
 
 	while ((void *)stat != &c->statuss) {
@@ -358,7 +358,7 @@ send_connection_info(struct connection *c)
 		stat = stat->next;
 		if (stat->prev->end)
 			stat->prev->end(stat->prev, stat->prev->data);
-		if (state >= 0 && connection_disappeared(c, count))
+		if (state >= 0 && connection_disappeared(c, id))
 			return;
 	}
 }
@@ -943,7 +943,7 @@ load_url(unsigned char *url, unsigned char *ref_url, struct status *stat,
 		return -1;
 	}
 
-	c->count = connection_count++;
+	c->id = connection_id++;
 	c->url = u;
 	c->ref_url = ref_url;
 

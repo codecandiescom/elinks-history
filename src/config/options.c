@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.271 2003/09/05 13:40:32 jonas Exp $ */
+/* $Id: options.c,v 1.272 2003/09/05 20:33:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1150,7 +1150,9 @@ register_options(void)
 
 	add_opt_bool("document.browse", N_("Document meta refresh"),
 		"refresh", 0, 0,
-		N_("Enable the use of document meta refresh."));
+		N_("Automatically follow document-specified refresh directives ('<meta>\n"
+		"refresh' tags). Web-page authors use these to instruct the browser\n"
+		"to reload a document at a given interval or to load another page."));
 
 	add_opt_int("document.browse", N_("Horizontal text margin"),
 		"margin_width", 0, 0, 9, 3,

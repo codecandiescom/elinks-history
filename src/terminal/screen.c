@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.10 2003/07/22 00:14:34 jonas Exp $ */
+/* $Id: screen.c,v 1.11 2003/07/25 13:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,31 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+void
+alloc_term_screen(struct terminal *term, int x, int y)
+{
+	unsigned *s;
+	unsigned *t;
+	int space = x * y * sizeof(unsigned);
+
+	s = mem_realloc(term->screen, space);
+	if (!s) return;
+
+	t = mem_realloc(term->last_screen, space);
+	if (!t) {
+		mem_free(s);
+		return;
+	}
+
+	memset(t, -1, space);
+	term->x = x;
+	term->y = y;
+	term->last_screen = t;
+	memset(s, 0, space);
+	term->screen = s;
+	term->dirty = 1;
+}
 
 /* TODO: We must use termcap/terminfo if available! --pasky */
 

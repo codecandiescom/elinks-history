@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.36 2003/07/25 13:21:11 pasky Exp $ */
+/* $Id: terminal.c,v 1.37 2003/07/25 13:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,31 +65,6 @@ set_cwd(unsigned char *path)
 
 INIT_LIST_HEAD(terminals);
 
-static void
-alloc_term_screen(struct terminal *term, int x, int y)
-{
-	unsigned *s;
-	unsigned *t;
-	int space = x * y * sizeof(unsigned);
-
-	s = mem_realloc(term->screen, space);
-	if (!s) return;
-
-	t = mem_realloc(term->last_screen, space);
-	if (!t) {
-		mem_free(s);
-		return;
-	}
-
-	memset(t, -1, space);
-	term->x = x;
-	term->y = y;
-	term->last_screen = t;
-	memset(s, 0, space);
-	term->screen = s;
-	term->dirty = 1;
-}
-
 
 static void check_if_no_terminal(void);
 
@@ -132,7 +107,7 @@ void
 redraw_terminal_cls(struct terminal *term)
 {
 	erase_screen(term);
-	alloc_term_screen(term, term->x, term->y);
+	alloc_screen(term, term->x, term->y);
 	redraw_terminal_all(term);
 }
 
@@ -166,7 +141,7 @@ init_term(int fdin, int fdout,
 	term->blocked = -1;
 	term->spec = get_opt_rec(config_options, "terminal._template_");
 
-	/* alloc_term_screen(term, 80, 25); */
+	/* alloc_screen(term, 80, 25); */
 	add_to_list(terminals, term);
 
 	init_list(term->windows);

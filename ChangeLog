@@ -1,3 +1,85 @@
+Sun Nov 21 17:15:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, listbox.c,
+	text.c, widget.h:
+
+	Add a clear handler for widgets and make clear_dialog() more
+	generic.  
+
+Sun Nov 21 16:54:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/inpfield.c,
+	bfu/widget.h, viewer/text/search.c:
+
+	Struct widget @data and @udata fields were merged. @datalen usage
+	was clarified a bit.  
+
+Sun Nov 21 14:53:30 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/hierbox.c, bfu/inpfield.c,
+	bfu/msgbox.c, config/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, dialogs/edit.c, dialogs/options.c,
+	mime/dialogs.c, protocol/auth/dialogs.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Reorder parameters of add_dlg*button*() to match syntax of other
+	kind of widgets.  
+
+Sun Nov 21 14:17:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Use correct type for @done.  
+
+Sun Nov 21 14:14:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h:
+
+	Use t_widget_handler * instead of void * for @handler.  
+
+Sun Nov 21 14:07:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h:
+
+	@key -> @flags.  
+
+Sun Nov 21 14:03:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/msgbox.c,
+	bookmarks/dialogs.c, dialogs/edit.c, dialogs/edit.h,
+	dialogs/options.c, globhist/dialogs.c, mime/dialogs.c,
+	protocol/auth/dialogs.c:
+
+	BUTTON_DONE_FUNC() macro was dropped in favor of t_done_handler
+	typdef. Functions declarations were fixed to match correct
+	prototype.  
+
+Sun Nov 21 13:35:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/msgbox.c:
+
+	@fn -> @done.  
+
+Sun Nov 21 13:33:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/dialog.c, bfu/inpfield.c, bfu/widget.h,
+	dialogs/options.c:
+
+	Field @fn of struct widget was renamed @handler.  
+
+Sun Nov 21 13:23:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: common.h, hierbox.h, inpfield.c, inpfield.h, widget.h:
+
+	t_widget_handler -> t_widget_handler *. Suggested by Miciah.  
+
+Sun Nov 21 05:20:14 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Avoid an infinite loop when a page redirects to itself, as the
+	search form on www.bestbuy.com will.  
+
 Sat Nov 20 11:32:57 2004  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/: common.h, hierbox.h, inpfield.c, inpfield.h, widget.h:

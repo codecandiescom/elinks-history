@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.64 2004/01/27 02:07:33 pasky Exp $ */
+/* $Id: parser.c,v 1.65 2004/01/27 02:09:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,7 +317,7 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 		mirror_css_selector(fpkg->selector, pkg->selector);
 		pkg = pkg->next;
 	}
-	free_list(selectors);
+	free_list(*selectors);
 }
 
 

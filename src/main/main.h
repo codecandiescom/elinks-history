@@ -1,4 +1,4 @@
-/* $Id: main.h,v 1.15 2004/03/02 17:06:15 witekfl Exp $ */
+/* $Id: main.h,v 1.16 2004/04/14 19:43:02 jonas Exp $ */
 
 #ifndef EL__MAIN_H
 #define EL__MAIN_H
@@ -18,6 +18,5 @@ extern int ac;
 extern unsigned char **av;
 
 void shrink_memory(int);
-void init(void);
 
 #endif

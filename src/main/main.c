@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.194 2004/04/14 19:40:06 jonas Exp $ */
+/* $Id: main.c,v 1.195 2004/04/14 19:43:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ int ac;
 unsigned char **av;
 static int init_b = 0;
 
-void
+static void
 init(void)
 {
 	INIT_LIST_HEAD(url_list);

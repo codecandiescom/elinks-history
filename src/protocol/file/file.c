@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.173 2004/07/18 02:21:37 jonas Exp $ */
+/* $Id: file.c,v 1.174 2004/07/18 04:28:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,8 +103,7 @@ add_dir_entry(struct directory_entry *entry, struct string *page,
 }
 
 /* First information such as permissions is gathered for each directory entry.
- * All entries are then sorted and finally the sorted entries are added to the
- * @data->fragment one by one. */
+ * Finally the sorted entries are added to the @data->fragment one by one. */
 static inline void
 add_dir_entries(struct directory_entry *entries, unsigned char *dirpath,
 		struct string *page)
@@ -174,8 +173,6 @@ list_directory(unsigned char *dirpath, struct string *page)
 	return S_OK;
 }
 
-
-/* File reading */
 
 /* To reduce redundant error handling code [calls to abort_conn_with_state()]
  * most of the function is build around conditions that will assign the error

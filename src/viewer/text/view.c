@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.171 2003/07/28 09:39:08 jonas Exp $ */
+/* $Id: view.c,v 1.172 2003/07/28 09:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ set_xchar(struct terminal *t, int x, int y, enum frame_cross_direction dir)
 	if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
 
 	screen_char = get_char(t, x, y);
-	if (!(screen_char->attr & 0x80)) return;
+	if (!(screen_char->attr & SCREEN_ATTR_FRAME)) return;
 
 	d = dir>>1;
 	if (screen_char->data == frame_trans[d][0])

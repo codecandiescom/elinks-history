@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.35 2003/07/28 09:18:16 jonas Exp $ */
+/* $Id: screen.c,v 1.36 2003/07/28 09:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 {
 	unsigned char c = ch->data;
 	unsigned char attrib = ch->attr & 0x7f;
-	unsigned char mode = ch->attr & 0x80;
+	unsigned char mode = ch->attr & SCREEN_ATTR_FRAME;
 
 	if (opt_cache->type == TERM_LINUX) {
 		if (opt_cache->m11_hack && !opt_cache->utf_8_io) {

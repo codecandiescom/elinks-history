@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.22 2003/07/28 09:39:08 jonas Exp $ */
+/* $Id: draw.c,v 1.23 2003/07/28 09:53:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,8 @@ set_color(struct terminal *term, int x, int y, unsigned c)
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
 
-	screen->image[position].attr = (screen->image[position].attr & 0x80) | (get_screen_char_attr(c) & ~0x80);
+	c = get_screen_char_attr(c) & ~SCREEN_ATTR_FRAME;
+	screen->image[position].attr = c | (screen->image[position].attr & SCREEN_ATTR_FRAME);
 	screen->dirty = 1;
 }
 

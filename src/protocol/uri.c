@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.36 2003/07/24 03:02:08 jonas Exp $ */
+/* $Id: uri.c,v 1.37 2003/07/24 11:47:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,14 +117,12 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		/* Check for valid length.
 		 * addrlen >= sizeof(hostbuf) is theorically impossible
 		 * but i keep the test in case of... Safer, imho --Zas */
-		if (addrlen < 0 || addrlen > NI_MAXHOST) {
-			internal("parse_uri(): addrlen value is bad "
-				"(%d) for URL '%s'. Problems are "
-				"likely to be encountered. Please "
-				"report this, it is a security bug!",
-				addrlen, uristring);
-			return 0;
-		}
+		assertm(addrlen >= 0 && addrlen < NI_MAXHOST,
+			"parse_uri(): addrlen value is bad (%d) for URL '%s'. "
+			"Problems are likely to be encountered. Please report "
+			"this, it is a security bug!", addrlen, uristring);
+		if_assert_failed return 0;
+
 		uri->host = lbracket + 1;
 		uri->hostlen = addrlen;
 	} else

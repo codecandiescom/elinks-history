@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.104 2004/01/26 23:30:01 jonas Exp $ */
+/* $Id: scanner.c,v 1.105 2004/01/26 23:37:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,9 @@ struct scanner_string_mapping {
 };
 
 struct scanner_info {
+	/* Table containing how to map strings to token types */
+	struct scanner_string_mapping *string_mappings;
+
 	/* Information for how to initialize the scanner table */
 	struct scan_table_info *scan_table_info;
 
@@ -85,6 +88,21 @@ init_scanner_info(struct scanner_info *scanner_info)
 	}
 }
 
+static int
+map_scanner_string(struct scanner_string_mapping *mappings,
+		   unsigned char *ident, unsigned char *end, int base_type)
+{
+	int length = end - ident;
+
+	for (; mappings->name; mappings++) {
+		if (mappings->base_type == base_type
+		    && !strlcasecmp(mappings->name, -1, ident, length))
+			return mappings->type;
+	}
+
+	return base_type;
+}
+
 
 
 /* Bitmap entries for the CSS character groups used in the scanner table */
@@ -125,7 +143,37 @@ static struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_END,
 };
 
+static struct scanner_string_mapping css_string_mappings[] = {
+	{ "Hz",		CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
+	{ "cm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+	{ "deg",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
+	{ "em",		CSS_TOKEN_EM,		CSS_TOKEN_DIMENSION },
+	{ "ex",		CSS_TOKEN_EX,		CSS_TOKEN_DIMENSION },
+	{ "grad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
+	{ "in",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+	{ "kHz",	CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
+	{ "mm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+	{ "ms",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
+	{ "pc",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+	{ "pt",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+	{ "px",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
+	{ "rad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
+	{ "s",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
+
+	{ "rgb",	CSS_TOKEN_RGB,		CSS_TOKEN_FUNCTION },
+	{ "url",	CSS_TOKEN_URL,		CSS_TOKEN_FUNCTION },
+
+	{ "charset",	CSS_TOKEN_AT_CHARSET,	CSS_TOKEN_AT_KEYWORD },
+	{ "font-face",	CSS_TOKEN_AT_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
+	{ "import",	CSS_TOKEN_AT_IMPORT,	CSS_TOKEN_AT_KEYWORD },
+	{ "media",	CSS_TOKEN_AT_MEDIA,	CSS_TOKEN_AT_KEYWORD },
+	{ "page",	CSS_TOKEN_AT_PAGE,	CSS_TOKEN_AT_KEYWORD },
+
+	{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
+};
+
 static struct scanner_info css_scanner_info = {
+	css_string_mappings,
 	css_scan_table_info,
 };
 
@@ -140,51 +188,8 @@ static struct scanner_info css_scanner_info = {
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 #define	is_css_token_start(c)	check_css_table(c, CSS_CHAR_TOKEN_START)
 
-
-static enum css_token_type
-ident2type(unsigned char *ident, unsigned char *end,
-	       enum css_token_type base_type)
-{
-	static struct scanner_string_mapping identifiers2type[] = {
-		{ "Hz",		CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
-		{ "cm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
-		{ "deg",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
-		{ "em",		CSS_TOKEN_EM,		CSS_TOKEN_DIMENSION },
-		{ "ex",		CSS_TOKEN_EX,		CSS_TOKEN_DIMENSION },
-		{ "grad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
-		{ "in",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
-		{ "kHz",	CSS_TOKEN_FREQUENCY,	CSS_TOKEN_DIMENSION },
-		{ "mm",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
-		{ "ms",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
-		{ "pc",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
-		{ "pt",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
-		{ "px",		CSS_TOKEN_LENGTH,	CSS_TOKEN_DIMENSION },
-		{ "rad",	CSS_TOKEN_ANGLE,	CSS_TOKEN_DIMENSION },
-		{ "s",		CSS_TOKEN_TIME,		CSS_TOKEN_DIMENSION },
-
-		{ "rgb",	CSS_TOKEN_RGB,		CSS_TOKEN_FUNCTION },
-		{ "url",	CSS_TOKEN_URL,		CSS_TOKEN_FUNCTION },
-
-		{ "charset",	CSS_TOKEN_AT_CHARSET,	CSS_TOKEN_AT_KEYWORD },
-		{ "font-face",	CSS_TOKEN_AT_FONT_FACE,	CSS_TOKEN_AT_KEYWORD },
-		{ "import",	CSS_TOKEN_AT_IMPORT,	CSS_TOKEN_AT_KEYWORD },
-		{ "media",	CSS_TOKEN_AT_MEDIA,	CSS_TOKEN_AT_KEYWORD },
-		{ "page",	CSS_TOKEN_AT_PAGE,	CSS_TOKEN_AT_KEYWORD },
-
-		{ NULL, CSS_TOKEN_NONE, CSS_TOKEN_NONE },
-	};
-
-	struct scanner_string_mapping *ident2type = identifiers2type;
-	int length = end - ident;
-
-	for (; ident2type->name; ident2type++) {
-		if (ident2type->base_type == base_type
-		    && !strlcasecmp(ident2type->name, -1, ident, length))
-			return ident2type->type;
-	}
-
-	return base_type;
-}
+#define ident2type(ident, end, base_type) \
+	map_scanner_string(css_string_mappings, ident, end, base_type)
 
 
 /* This macro checks that if the scanners table is full the last token skipping

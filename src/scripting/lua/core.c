@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.131 2003/11/24 01:22:21 jonas Exp $ */
+/* $Id: core.c,v 1.132 2003/11/24 12:00:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,8 @@
 #include "viewer/dump/dump.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
+
+#define LUA_HOOKS_FILENAME		"hooks.lua"
 
 
 lua_State *lua_state;
@@ -531,8 +533,8 @@ init_lua(struct module *module)
 	lua_pushstring(L, elinks_home ? elinks_home : (unsigned char *)CONFDIR);
 	lua_call(L, 1, 0);
 
-	do_hooks_file(L, CONFDIR, "hooks.lua");
-	if (elinks_home) do_hooks_file(L, elinks_home, "hooks.lua");
+	do_hooks_file(L, CONFDIR, LUA_HOOKS_FILENAME);
+	if (elinks_home) do_hooks_file(L, elinks_home, LUA_HOOKS_FILENAME);
 }
 
 static void

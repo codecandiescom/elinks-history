@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.29 2003/10/29 14:47:13 zas Exp $ */
+/* $Id: urlhist.c,v 1.30 2003/11/24 12:00:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,8 @@
 #include "bfu/inphist.h"
 #include "config/urlhist.h"
 #include "util/lists.h"
+
+#define GOTO_HISTORY_FILENAME		"gotohist"
 
 
 struct input_history goto_url_history = {
@@ -22,11 +24,11 @@ struct input_history goto_url_history = {
 void
 load_url_history(void)
 {
-	load_input_history(&goto_url_history, "gotohist");
+	load_input_history(&goto_url_history, GOTO_HISTORY_FILENAME);
 }
 
 void
 save_url_history(void)
 {
-	save_input_history(&goto_url_history, "gotohist");
+	save_input_history(&goto_url_history, GOTO_HISTORY_FILENAME);
 }

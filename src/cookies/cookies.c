@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.100 2003/11/22 13:54:36 jonas Exp $ */
+/* $Id: cookies.c,v 1.101 2003/11/24 12:00:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,8 @@
 #include "util/secsave.h"
 #include "util/string.h"
 
-#define COOKIES_FILENAME	"cookies"
+#define COOKIES_FILENAME		"cookies"
+
 
 static int cookies_nosave = 0;
 

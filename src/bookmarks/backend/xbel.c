@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.26 2003/11/21 22:23:04 zas Exp $ */
+/* $Id: xbel.c,v 1.27 2003/11/24 12:00:33 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -32,6 +32,8 @@
 #include "util/conv.h"
 #include "util/lists.h"
 #include "util/string.h"
+
+#define BOOKMARKS_XBEL_FILENAME		"bookmarks.xbel"
 
 
 /* Elements' attributes */
@@ -158,7 +160,7 @@ static unsigned char *
 filename_bookmarks_xbel(int writing)
 {
 	if (writing && !readok) return NULL;
-	return "bookmarks.xbel";
+	return BOOKMARKS_XBEL_FILENAME;
 }
 
 static void

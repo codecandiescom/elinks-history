@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.11 2003/09/12 10:48:39 zas Exp $ */
+/* $Id: default.c,v 1.12 2003/11/24 12:00:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,8 @@
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+#define BOOKMARKS_FILENAME		"bookmarks"
 
 
 /* Loads the bookmarks from file */
@@ -145,7 +147,7 @@ write_bookmarks_default(struct secure_save_info *ssi,
 static unsigned char *
 filename_bookmarks_default(int writing)
 {
-	return "bookmarks";
+	return BOOKMARKS_FILENAME;
 }
 
 

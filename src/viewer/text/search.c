@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.129 2003/11/24 01:22:21 jonas Exp $ */
+/* $Id: search.c,v 1.130 2003/11/24 12:00:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,9 @@
 #include "viewer/text/search.h"
 #include "viewer/text/view.h"
 #include "viewer/text/vs.h"
+
+#define SEARCH_HISTORY_FILENAME		"searchhist"
+
 
 /* FIXME: Add comments!! --Zas */
 
@@ -1087,12 +1090,12 @@ search_dlg(struct session *ses, struct document_view *doc_view, int a)
 void
 init_search_history(void)
 {
-	load_input_history(&search_history, "searchhist");
+	load_input_history(&search_history, SEARCH_HISTORY_FILENAME);
 }
 
 void
 done_search_history(void)
 {
-	save_input_history(&search_history, "searchhist");
+	save_input_history(&search_history, SEARCH_HISTORY_FILENAME);
 	free_list(search_history.entries);
 }

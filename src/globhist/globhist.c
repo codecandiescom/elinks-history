@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.51 2003/11/21 16:15:06 jonas Exp $ */
+/* $Id: globhist.c,v 1.52 2003/11/24 12:00:34 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -34,6 +34,8 @@
 #include "util/string.h"
 #include "util/lists.h"
 #include "util/object.h"
+
+#define GLOBAL_HISTORY_FILENAME		"globhist"
 
 
 struct global_history_list global_history = {
@@ -329,7 +331,7 @@ static void
 read_global_history(void)
 {
 	unsigned char in_buffer[MAX_STR_LEN];
-	unsigned char *file_name = "globhist";
+	unsigned char *file_name = GLOBAL_HISTORY_FILENAME;
 	unsigned char *title, *url, *last_visit;
 	FILE *f;
 
@@ -383,7 +385,7 @@ write_global_history(void)
 	    || !get_globhist_enable())
 		return;
 
-	file_name = straconcat(elinks_home, "globhist", NULL);
+	file_name = straconcat(elinks_home, GLOBAL_HISTORY_FILENAME, NULL);
 	if (!file_name) return;
 
 	ssi = secure_open(file_name, 0177); /* rw for user only */

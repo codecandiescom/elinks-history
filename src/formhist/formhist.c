@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.58 2003/11/23 23:01:07 fabio Exp $ */
+/* $Id: formhist.c,v 1.59 2003/11/24 12:00:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,11 +23,12 @@
 #include "util/string.h"
 #include "viewer/text/form.h"
 
+#define FORMS_HISTORY_FILENAME		"formhist"
+
+
 /* TODO: Remember multiple login for the same form.
  * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky). */
 
-
-#define FORMHIST_FILENAME		"formhist"
 
 static struct option_info forms_history_options[] = {
 	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
@@ -120,7 +121,7 @@ load_saved_forms(void)
 
 	if (!elinks_home) return 0;
 
-	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
+	file = straconcat(elinks_home, FORMS_HISTORY_FILENAME, NULL);
 	if (!file) return 0;
 
 	f = fopen(file, "r");
@@ -183,7 +184,7 @@ save_saved_forms(void)
 
 	if (!elinks_home) return 0;
 
-	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
+	file = straconcat(elinks_home, FORMS_HISTORY_FILENAME, NULL);
 	if (!file) return 0;
 
 	ssi = secure_open(file, 0177);

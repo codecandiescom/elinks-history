@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.99 2003/11/20 01:14:17 jonas Exp $ */
+/* $Id: cookies.c,v 1.100 2003/11/22 13:54:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ static struct option_info cookies_options[] = {
 static void accept_cookie(struct cookie *);
 
 
-static void
+void
 free_cookie(struct cookie *c)
 {
 	if (c->box_item) done_browser_box(&cookie_browser, c->box_item);

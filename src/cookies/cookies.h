@@ -1,4 +1,4 @@
-/* $Id: cookies.h,v 1.15 2003/11/19 01:55:15 jonas Exp $ */
+/* $Id: cookies.h,v 1.16 2003/11/22 13:54:36 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
@@ -31,6 +31,7 @@ struct cookie {
 	int refcount;
 };
 
+void free_cookie(struct cookie *);
 void set_cookie(struct uri *, unsigned char *);
 void send_cookies(struct string *header, struct uri *uri);
 void load_cookies(void);

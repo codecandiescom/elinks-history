@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.10 2003/11/21 01:13:26 jonas Exp $ */
+/* $Id: dialogs.c,v 1.11 2003/11/22 13:54:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,13 +28,64 @@
 #include "util/string.h"
 
 
+static void
+lock_cookie(struct listbox_item *item)
+{
+	object_lock((struct cookie *)item->udata);
+}
+
+static void
+unlock_cookie(struct listbox_item *item)
+{
+	object_unlock((struct cookie *)item->udata);
+}
+
+static int
+is_cookie_used(struct listbox_item *item)
+{
+	return is_object_used((struct cookie *)item->udata);
+}
+
+static unsigned char *
+get_cookie_info(struct cookie *cookie, struct terminal *term);
+
+static unsigned char *
+get_cookie_item_info(struct listbox_item *item, struct terminal *term)
+{
+	return get_cookie_info(item->udata, term);
+}
+
+static void
+done_cookie_item(struct listbox_item *item, int last)
+{
+	struct cookie *cookie = item->udata;
+
+	assert(!is_object_used(cookie));
+
+	del_from_list(cookie);
+	free_cookie(cookie);
+
+	if (last
+	    && get_opt_bool("cookies.save")
+	    && get_opt_bool("cookies.resave"))
+		save_cookies();
+}
+
+static struct listbox_ops cookies_listbox_ops = {
+	lock_cookie,
+	unlock_cookie,
+	is_cookie_used,
+	get_cookie_item_info,
+	done_cookie_item,
+};
+
 static INIT_LIST_HEAD(cookie_box_items);
 
 struct hierbox_browser cookie_browser = {
 	{ D_LIST_HEAD(cookie_browser.boxes) },
 	&cookie_box_items,
 	{ D_LIST_HEAD(cookie_browser.dialogs) },
-	NULL,
+	&cookies_listbox_ops,
 };
 
 
@@ -121,5 +172,6 @@ menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 			0, &cookie_browser, ses,
 			2,
 			N_("Info"), push_info_button, B_ENTER, ses,
+			N_("Delete"), push_hierbox_delete_button, B_ENTER, ses,
 			N_("Save"), push_save_button, B_ENTER, ses);
 }

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.21 2003/06/07 20:51:42 pasky Exp $ */
+/* $Id: menu.h,v 1.22 2003/06/07 20:51:57 pasky Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -50,7 +50,7 @@ struct menu_item {
 	void *data;
 	enum item_free item_free;
 	unsigned int submenu:1;
-	int ignore_hotkey:2;
+	unsigned int ignore_hotkey:2;
 	int hotkey_pos;
 };
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.253 2003/11/07 15:04:30 pasky Exp $ */
+/* $Id: parser.c,v 1.254 2003/11/11 15:05:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1675,7 +1675,9 @@ xxx:
 				put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, ff);
 			put_chrs("&nbsp;]", 7, put_chars_f, ff);
 			break;
-		default:
+		case FC_TEXTAREA:
+		case FC_SELECT:
+		case FC_HIDDEN:
 			internal("bad control type");
 	}
 	kill_html_stack_item(&html_top);

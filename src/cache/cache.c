@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.87 2003/11/08 13:03:50 zas Exp $ */
+/* $Id: cache.c,v 1.88 2003/11/11 15:08:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,8 +85,6 @@ cache_info(int type)
 			return i;
 		case INFO_LIST:
 			return (long) &cache;
-		default:
-			internal("cache_info: bad request");
 	}
 	return 0;
 }
@@ -136,7 +134,7 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 	init_list(ce->frag);
 	ce->id_tag = id_tag_counter++;
 	cache_entry_nolock(ce); /* Debugging purpose. */
-	
+
 	add_to_list(cache, ce);
 	*cep = ce;
 

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.116 2003/11/08 12:34:15 zas Exp $ */
+/* $Id: connection.c,v 1.117 2003/11/11 15:00:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,9 +107,8 @@ connect_info(int type)
 		case INFO_KEEP:
 			foreach (keep_conn, keepalive_connections) info++;
 			break;
-		default:
-			internal("connect_info: bad request");
 	}
+
 	return info;
 }
 

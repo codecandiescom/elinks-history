@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.367 2003/11/10 21:27:49 jonas Exp $ */
+/* $Id: renderer.c,v 1.368 2003/11/11 15:12:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,7 +758,10 @@ new_link(struct document *document, int link_number,
 		case FC_SELECT:
 			link->type = LINK_SELECT;
 			break;
-		default:
+		case FC_SUBMIT:
+		case FC_IMAGE:
+		case FC_RESET:
+		case FC_HIDDEN:
 			link->type = LINK_BUTTON;
 		}
 		link->form = form;
@@ -1160,9 +1163,6 @@ html_special(struct part *part, enum html_special_type c, ...)
 			if (document && document->options.use_document_colours == 2)
 				color_link_lines(document);
 			break;
-		default:
-			va_end(l);
-			internal("html_special: unknown code %d", c);
 	}
 
 	return NULL;

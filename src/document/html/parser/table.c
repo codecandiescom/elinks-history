@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.14 2004/06/29 04:06:26 jonas Exp $ */
+/* $Id: table.c,v 1.15 2004/06/29 07:16:29 pasky Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -35,7 +35,7 @@
 	mem_align_alloc(bad_html, size, (size) + 1, struct html_start_end, 0xFF)
 
 static inline void
-add_bad_table_html_start(struct table *table, unsigned char *start)
+add_table_bad_html_start(struct table *table, unsigned char *start)
 {
 	/* Either no bad html or last one not needing @end pointer */
 	if (table->bad_html_size
@@ -47,7 +47,7 @@ add_bad_table_html_start(struct table *table, unsigned char *start)
 }
 
 static inline void
-add_bad_table_html_end(struct table *table, unsigned char *end)
+add_table_bad_html_end(struct table *table, unsigned char *end)
 {
 	if (table->bad_html_size
 	    && !table->bad_html[table->bad_html_size - 1].end)
@@ -494,14 +494,14 @@ se:
 see:
 	html = en;
 	if (!in_cell) {
-		add_bad_table_html_start(table, html);
+		add_table_bad_html_start(table, html);
 	}
 
 	while (html < eof && *html != '<') html++;
 
 	if (html >= eof) {
 		if (in_cell) CELL(table, col, row)->end = html;
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 		goto scan_done;
 	}
 
@@ -524,7 +524,7 @@ see:
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 		if (in_cell) CELL(table, col, row)->end = html;
 
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 
 		goto scan_done;
 	}
@@ -532,7 +532,7 @@ see:
 	if (!strlcasecmp(t_name, t_namelen, "COLGROUP", 8)) {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 
 		c_al = ALIGN_TR;
 		c_val = VALIGN_TR;
@@ -548,7 +548,7 @@ see:
 	if (!strlcasecmp(t_name, t_namelen, "/COLGROUP", 9)) {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 
 		c_span = 0;
 		c_al = ALIGN_TR;
@@ -560,7 +560,7 @@ see:
 	if (!strlcasecmp(t_name, t_namelen, "COL", 3)) {
 		int sp, width, al, val;
 
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 
 		sp = get_num(t_attr, "span");
 		if (sp == -1) sp = 1;
@@ -591,7 +591,7 @@ see:
 				in_cell = 0;
 			}
 
-			add_bad_table_html_end(table, html);
+			add_table_bad_html_end(table, html);
 		}
 	}
 
@@ -607,7 +607,7 @@ see:
 			in_cell = 0;
 		}
 
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 
 		if (group) group--;
 		l_al = ALIGN_LEFT;
@@ -629,7 +629,7 @@ see:
 		(!strncasecmp(&t_name[1], "FOOT", 4)))) {
 		if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
-		add_bad_table_html_end(table, html);
+		add_table_bad_html_end(table, html);
 
 		group = 2;
 	}
@@ -642,7 +642,7 @@ see:
 
 	if (c_span) new_columns(table, c_span, c_width, c_al, c_val, 1);
 
-	add_bad_table_html_end(table, html);
+	add_table_bad_html_end(table, html);
 
 	if (in_cell) {
 		CELL(table, col, row)->end = html;

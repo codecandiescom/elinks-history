@@ -803,7 +803,7 @@ dnl Checking for X11 (window title restoring).
 dnl ===================================================================
 
 AC_PATH_X
-if test -z "$no_x"; then
+if test x"$no_x" != xyes; then
 	if test -n "$x_includes"; then
 		CFLAGS="$CFLAGS -I$x_includes"
 		CPPFLAGS="$CPPFLAGS -I$x_includes"

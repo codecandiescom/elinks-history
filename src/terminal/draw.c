@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.51 2003/08/25 22:22:33 jonas Exp $ */
+/* $Id: draw.c,v 1.52 2003/08/25 22:32:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,34 +190,40 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	  unsigned char data, enum screen_char_attr attr,
 	  struct color_pair *color)
 {
-	unsigned char enc_color;
+	struct screen_char *line;
+	struct screen_char area;
 	int position;
 	int endx, endy;
-	register int j;
+	register int i;
 
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	enc_color = color ?  encode_color(color) : 0;
-
-	endx = int_min(xw, term->x - x);
 	endy = int_min(yw, term->y - y);
+	endx = int_min(xw, term->x - x);
+
+	if (endy <= 0 || endx <= 0) return;
 
 	position = x + term->x * y;
+	line = &term->screen->image[position];
 
-	for (j = 0; j < endy; j++) {
-		register int offset = position + term->x * j;
-		register int i;
+	/* Make an Use*/
+	area.color = color ?  encode_color(color) : 0;
+	area.data = data;
+	area.attr = attr;
 
-		/* No, we can't use memset() here :(. It's int, not char. */
-		/* TODO: Make screen two arrays actually. Enables various
-		 * optimalizations, consumes nearly same memory. --pasky */
-		for (i = offset; i < endx + offset; i++) {
-			term->screen->image[i].data = data;
-			term->screen->image[i].color = enc_color;
-			term->screen->image[i].attr = attr;
-		}
+	for (i = 0; i < endx; i++) {
+		memcpy(&line[i], &area, sizeof(struct screen_char));
+	}
+
+	endx *= sizeof(struct screen_char);
+
+	/* For the rest of the area use the first area line. */
+	for (i = 1; i < endy; i++) {
+		register int offset = position + term->x * i;
+
+		memcpy(&term->screen->image[offset], line, endx);
 	}
 
 	term->screen->dirty = 1;

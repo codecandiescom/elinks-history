@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.195 2004/02/05 10:29:12 jonas Exp $ */
+/* $Id: search.c,v 1.196 2004/02/05 11:03:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1029,8 +1029,12 @@ fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
 	struct link *link = &doc_view->document->links[current_link];
 
 	doc_view->height -= 1;
-	if (!in_viewy(doc_view, link))
+	if (!in_viewy(doc_view, link)) {
 		scroll(ses, doc_view, 1);
+		/* Scrolling might update the current link but we don't want
+		 * that so reset it to the matched one. */
+		doc_view->vs->current_link = current_link;
+	}
 	doc_view->height += 1;
 }
 

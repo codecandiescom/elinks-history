@@ -1,10 +1,11 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.23 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: tables.c,v 1.24 2002/12/14 18:36:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -110,7 +111,9 @@ struct s_e {
 
 /* Global variables */
 
-unsigned char frame_table[81] = {
+int table_level;
+
+static unsigned char frame_table[81] = {
 	0x00, 0xb3, 0xba,	0xc4, 0xc0, 0xd3,	0xcd, 0xd4, 0xc8,
 	0xc4, 0xd9, 0xbd,	0xc4, 0xc1, 0xd0,	0xcd, 0xd4, 0xc8,
 	0xcd, 0xbe, 0xbc,	0xcd, 0xbe, 0xbc,	0xcd, 0xcf, 0xca,
@@ -124,18 +127,14 @@ unsigned char frame_table[81] = {
 	0xbb, 0xbb, 0xb9,	0xbb, 0xbb, 0xb9,	0xcb, 0xcb, 0xce,
 };
 
-unsigned char hline_table[3] = { 0x20, 0xc4, 0xcd };
-unsigned char vline_table[3] = { 0x20, 0xb3, 0xba };
-
-int table_level;
+static unsigned char hline_table[3] = { 0x20, 0xc4, 0xcd };
+static unsigned char vline_table[3] = { 0x20, 0xb3, 0xba };
 
 
-
-
-void
-get_align(char *attr, int *a)
+static inline void
+get_align(unsigned char *attr, int *a)
 {
-	char *al = get_attr_val(attr, "align");
+	unsigned char *al = get_attr_val(attr, "align");
 
 	if (al) {
 		if (!(strcasecmp(al, "left"))) *a = AL_LEFT;
@@ -147,10 +146,10 @@ get_align(char *attr, int *a)
 	}
 }
 
-void
-get_valign(char *attr, int *a)
+static inline void
+get_valign(unsigned char *attr, int *a)
 {
-	char *al = get_attr_val(attr, "valign");
+	unsigned char *al = get_attr_val(attr, "valign");
 
 	if (al) {
 		if (!(strcasecmp(al, "top"))) *a = VAL_TOP;
@@ -161,19 +160,20 @@ get_valign(char *attr, int *a)
 	}
 }
 
-void
-get_c_width(char *attr, int *w, int sh)
+static inline void
+get_c_width(unsigned char *attr, int *w, int sh)
 {
-	char *al = get_attr_val(attr, "width");
+	unsigned char *al = get_attr_val(attr, "width");
 
 	if (al) {
 		if (*al && al[strlen(al) - 1] == '*') {
-			char *en;
+			unsigned char *en;
 			int n;
 
 			al[strlen(al) - 1] = 0;
-			n = strtoul(al, &en, 10);
-			if (n >= 0 && !*en) *w = W_REL - n;
+			errno = 0;
+			n = strtoul(al, (char **)&en, 10);
+			if (!errno && n >= 0 && !*en) *w = W_REL - n;
 		} else {
 			int p = get_width(attr, "width", sh);
 
@@ -183,7 +183,7 @@ get_c_width(char *attr, int *w, int sh)
 	}
 }
 
-struct table *
+static struct table *
 new_table()
 {
 	struct table *t = mem_calloc(1, sizeof(struct table));
@@ -218,7 +218,7 @@ new_table()
 	return t;
 }
 
-void
+static void
 free_table(struct table *t)
 {
 	if (t->min_c) mem_free(t->min_c);
@@ -231,7 +231,7 @@ free_table(struct table *t)
 	mem_free(t);
 }
 
-void
+static void
 expand_cells(struct table *t, int x, int y)
 {
 	int i, j;
@@ -269,7 +269,7 @@ expand_cells(struct table *t, int x, int y)
 	}
 }
 
-struct table_cell *
+static struct table_cell *
 new_cell(struct table *t, int x, int y)
 {
 	struct table nt;
@@ -306,7 +306,7 @@ ret:
 	return CELL(t, x, y);
 }
 
-void
+static inline void
 new_columns(struct table *t, int span, int width, int align,
 	    int valign, int group)
 {
@@ -332,7 +332,7 @@ new_columns(struct table *t, int span, int width, int align,
 	}
 }
 
-void
+static void
 set_td_width(struct table *t, int x, int width, int f)
 {
 	if (x >= t->xc) {
@@ -368,7 +368,7 @@ set_td_width(struct table *t, int x, int width, int f)
 	t->xcols[x] = (t->xcols[x] + width) / 2;
 }
 
-unsigned char *
+static unsigned char *
 skip_table(unsigned char *html, unsigned char *eof)
 {
 	int level = 1;
@@ -391,7 +391,7 @@ skip_table(unsigned char *html, unsigned char *eof)
 	}
 }
 
-struct table *
+static struct table *
 parse_table(unsigned char *html, unsigned char *eof,
 	    unsigned char **end, struct rgb *bgcolor,
 	    int sh, struct s_e **bad_html, int *bhp)
@@ -727,9 +727,9 @@ scan_done:
 	return t;
 }
 
-void
-get_cell_width(char *start, char *end, int cellpd, int w, int a,
-	       int *min, int *max, int n_link, int *n_links)
+static inline void
+get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
+	       int a, int *min, int *max, int n_link, int *n_links)
 {
 	struct part *p;
 
@@ -769,7 +769,7 @@ check_cell_widths(struct table *t)
 	}
 }
 
-void
+static inline void
 get_cell_widths(struct table *t)
 {
 	int nl = t->p->link_num;
@@ -799,7 +799,7 @@ get_cell_widths(struct table *t)
 	t->link_num = nl;
 }
 
-void
+static inline void
 dst_width(int *p, int n, int w, int *lim)
 {
 	int i, s = 0, d, r;
@@ -830,7 +830,7 @@ again:
 
 
 /* Returns: -1 none, 0, space, 1 line, 2 double */
-int
+static inline int
 get_vline_width(struct table *t, int col)
 {
 	int w = 0;
@@ -847,7 +847,7 @@ get_vline_width(struct table *t, int col)
 	return w;
 }
 
-int
+static int
 get_hline_width(struct table *t, int row)
 {
 	int w = 0;
@@ -874,7 +874,7 @@ x:
 	return w;
 }
 
-int
+static int
 get_column_widths(struct table *t)
 {
 	int i, j, s, ns;
@@ -957,7 +957,7 @@ get_column_widths(struct table *t)
 	return 0;
 }
 
-void
+static void
 get_table_width(struct table *t)
 {
 	int i, vl;
@@ -981,7 +981,7 @@ get_table_width(struct table *t)
 	if (min > max) internal("min(%d) > max(%d)", min, max);
 }
 
-void
+static void
 distribute_widths(struct table *t, int width)
 {
 	int i;
@@ -1143,7 +1143,7 @@ end:
 
 
 #ifdef HTML_TABLE_2ND_PASS /* This is by default ON! (<setup.h>) */
-void
+static void
 check_table_widths(struct table *t)
 {
 	int i, j;
@@ -1279,7 +1279,7 @@ check_table_widths(struct table *t)
 }
 #endif
 
-void
+static void
 get_table_heights(struct table *t)
 {
 	int s, ns;
@@ -1349,7 +1349,7 @@ get_table_heights(struct table *t)
 	}
 }
 
-void
+static void
 display_complicated_table(struct table *t, int x, int y, int *yy)
 {
 	int i, j;
@@ -1480,7 +1480,7 @@ if (H_LINE_X((ii), (jj)) >= 0) \
 }
 
 
-void
+static void
 display_table_frames(struct table *t, int x, int y)
 {
 	signed char *fh, *fv;

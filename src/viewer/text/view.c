@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.304 2003/12/21 19:09:19 jonas Exp $ */
+/* $Id: view.c,v 1.305 2003/12/21 19:40:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,11 +371,13 @@ down(struct session *ses, struct document_view *doc_view, int a)
 
 	current_link = doc_view->vs->current_link;
 
-	if (get_opt_int("document.browse.links.wraparound")
-	    && current_link >= doc_view->document->nlinks - 1) {
-		jump_to_link_number(ses, doc_view, 0);
-		/* FIXME: This needs further work, we should call page_down()
-		 * and set_textarea() under some conditions as well. --pasky */
+	if (current_link == doc_view->document->nlinks - 1) {
+		if (get_opt_int("document.browse.links.wraparound")) {
+			jump_to_link_number(ses, doc_view, 0);
+			/* FIXME: This needs further work, we should call
+			 * page_down() and set_textarea() under some conditions
+			 * as well. --pasky */
+		}
 		return;
 	}
 
@@ -402,8 +404,9 @@ up(struct session *ses, struct document_view *doc_view, int a)
 	if (current_link == 0) {
 		if (get_opt_int("document.browse.links.wraparound")) {
 	   		jump_to_link_number(ses, doc_view, doc_view->document->nlinks - 1);
-			/* FIXME: This needs further work, we should call page_down()
-			 * and set_textarea() under some conditions as well. --pasky */
+			/* FIXME: This needs further work, we should call
+			 * page_down() and set_textarea() under some conditions
+			 * as well. --pasky */
 		}
 		return;
 	}

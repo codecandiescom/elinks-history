@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.386 2004/04/23 13:21:10 zas Exp $ */
+/* $Id: session.c,v 1.387 2004/04/23 19:42:00 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -705,8 +705,8 @@ decode_session_info(const void *pdata)
 
 		info->remote = *(data++);
 
-		str  = (unsigned char *) data;
-		len  -= 3 * sizeof(int);
+		str = (unsigned char *) data;
+		len -= 3 * sizeof(int);
 
 		/* Extract multiple NUL terminated URIs */
 		while (len > 0) {
@@ -731,8 +731,8 @@ decode_session_info(const void *pdata)
 		 *	1: URI length <int>
 		 *	2: URI length bytes containing the URI <unsigned char>*
 		 */
-		str   = (unsigned char *) data;
-		len  -= 2 * sizeof(int);
+		str = (unsigned char *) data;
+		len -= 2 * sizeof(int);
 
 		if (magic <= 0 || len <= 0 || magic > len)
 			return info;

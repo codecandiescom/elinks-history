@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.80 2003/11/28 16:32:36 jonas Exp $ */
+/* $Id: info.c,v 1.81 2003/11/28 19:38:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 
 	add_keyactions_to_string(&keys, actions, term);
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Keys"), AL_LEFT,
 		keys.source,
 		NULL, 1,

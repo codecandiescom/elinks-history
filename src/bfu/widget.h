@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.41 2003/11/28 16:32:36 jonas Exp $ */
+/* $Id: widget.h,v 1.42 2003/11/28 19:38:00 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -68,8 +68,7 @@ struct widget {
 		} button;
 		struct {
 			enum format_align align;
-			unsigned int is_label:1;
-			unsigned int is_scrollable:1;
+			int is_label;
 		} text;
 	} info;
 
@@ -95,13 +94,6 @@ struct widget_data {
 		struct {
 			int checked;
 		} checkbox;
-		struct {
-			/* Used only for the scrollable text widget */
-			int current;
-
-			/* The number of lines saved in @cdata */
-			int lines;
-		} text;
 	} info;
 };
 
@@ -117,22 +109,8 @@ void dlg_set_history(struct widget_data *);
 #define widget_is_textfield(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
 					  || (widget_data)->widget->type == WIDGET_FIELD_PASS)
 
-static inline int
-widget_is_focusable(struct widget_data *widget_data)
-{
-	enum widget_type type = widget_data->widget->type;
-
-	switch (type) {
-		case WIDGET_LISTBOX:
-			return 0;
-		case WIDGET_TEXT:
-			/* Only focus if there is something to scroll */
-			return (widget_data->widget->info.text.is_scrollable
-				&& widget_data->h < widget_data->info.text.lines);
-		default:
-			return 1;
-	}
-}
+#define widget_is_focusable(widget_data) ((widget_data)->widget->type != WIDGET_LISTBOX \
+					  && (widget_data)->widget->type != WIDGET_TEXT)
 
 #define widget_has_group(widget_data)	((widget_data)->widget->type == WIDGET_CHECKBOX \
 					  ? (widget_data)->widget->info.checkbox.gid : -1)

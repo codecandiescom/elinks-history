@@ -1,9 +1,10 @@
-/* $Id: mime.h,v 1.7 2003/06/18 00:30:25 jonas Exp $ */
+/* $Id: mime.h,v 1.8 2003/10/25 19:10:18 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
 
 #include "config/options.h"
+#include "modules/module.h"
 
 struct mime_handler {
 	unsigned char *program;
@@ -13,9 +14,7 @@ struct mime_handler {
 	unsigned int block:1;
 };
 
-/* Start up and teardown of mime system. */
-void init_mime(void);
-void done_mime(void);
+extern struct module mime_module;
 
 /* Guess content type of the document. Either from the (http) @header or
  * using the @uri (extension). */

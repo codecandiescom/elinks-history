@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.25 2003/07/21 17:37:00 pasky Exp $ */
+/* $Id: mime.c,v 1.26 2003/10/25 19:10:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,20 +12,22 @@
 #include "config/options.h"
 #include "mime/backend/common.h"
 #include "mime/mime.h"
+#include "modules/module.h"
 #include "protocol/http/header.h"	/* For parse_http_header() */
 #include "protocol/uri.h"
 #include "util/encoding.h"
 #include "util/memory.h"
 #include "util/string.h"
 
-void
-init_mime(void)
+
+static void
+init_mime(struct module *module)
 {
 	init_mime_backends();
 }
 
-void
-done_mime(void)
+static void
+done_mime(struct module *module)
 {
 	done_mime_backends();
 }
@@ -137,3 +139,11 @@ get_mime_type_handler(unsigned char *content_type, int xwin)
 {
 	return get_mime_handler_backends(content_type, xwin);
 }
+
+struct module mime_module = INIT_MODULE(
+	/* name: */		"mime",
+	/* options: */		NULL,
+	/* submodules: */	NULL,
+	/* init: */		init_mime,
+	/* done: */		done_mime
+);

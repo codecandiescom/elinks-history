@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.75 2004/04/02 22:05:00 jonas Exp $ */
+/* $Id: uri.h,v 1.76 2004/04/02 22:35:10 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -65,13 +65,6 @@ struct uri {
  * set. */
 /* Returns 1 if parsing went well or 0 if some error was found. */
 int parse_uri(struct uri *uri, unsigned char *uristring);
-
-
-/* Deinitializes the members of the uri struct. Note that this function will
- * not free() the @uri pointer (nor any other pointers, for that matter ;-). */
-/* Returns pointer to the original uristring, as passed to parse_uri(). */
-unsigned char *unparse_uri(struct uri *uri);
-
 
 
 /* Returns the raw zero-terminated URI string the (struct uri) is associated

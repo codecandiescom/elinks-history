@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.2 2003/12/01 11:23:47 jonas Exp $ */
+/* $Id: status.c,v 1.3 2003/12/01 11:28:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,6 +207,82 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	mem_free(msg);
 }
 
+static inline void
+display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
+{
+	struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
+	struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
+	struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
+	struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
+	int tab_width = int_max(1, term->width / tabs_count);
+	int tab_total_width = tab_width * tabs_count;
+	int tab_remain_width = int_max(0, term->width - tab_total_width);
+	int tab_num;
+	int ypos = term->height - (ses->visible_status_bar ? 2 : 1);
+	int xpos = 0;
+
+	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
+		struct color_pair *color;
+		struct window *tab = get_tab_by_number(term, tab_num);
+		struct document_view *doc_view;
+		int actual_tab_width = tab_width;
+		unsigned char *msg;
+		int msglen;
+
+		/* Adjust tab size to use full term width. */
+		if (tab_remain_width) {
+			actual_tab_width++;
+			tab_remain_width--;
+			if (tab_num == tabs_count - 1) {
+				actual_tab_width += tab_remain_width;
+			}
+		}
+
+		doc_view = tab->data ? current_frame(tab->data) : NULL;
+
+		if (doc_view) {
+			if (doc_view->document->title
+			    && *(doc_view->document->title))
+				msg = doc_view->document->title;
+			else
+				msg = _("Untitled", term);
+		} else {
+			msg = _("No document", term);
+		}
+
+		if (tab_num) {
+			draw_text(term, xpos, ypos, "|", 1, 0, tabsep_color);
+			xpos += 1;
+		}
+
+		/* TODO: fresh_color, for tabs that have not been
+		 * selected since they completed loading. -- Miciah */
+		if (tab_num == term->current_tab) {
+			color = selected_color;
+		} else {
+			struct download *stat;
+
+			stat = get_current_download(tab->data);
+
+			if (stat && stat->state != S_OK)
+				color = loading_color;
+			else
+				color = normal_color;
+		}
+
+		draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
+
+		msglen = strlen(msg);
+		if (msglen >= actual_tab_width)
+			msglen = actual_tab_width - 1;
+
+		draw_text(term, xpos, ypos, msg, msglen, 0, color);
+		tab->xpos = xpos;
+		tab->width = actual_tab_width;
+		xpos += actual_tab_width;
+	}
+}
+
 /* Print statusbar and titlebar, set terminal title. */
 void
 print_screen_status(struct session *ses)
@@ -223,76 +299,7 @@ print_screen_status(struct session *ses)
 	}
 
 	if (ses->visible_tabs_bar) {
-		struct color_pair *normal_color = get_bfu_color(term, "tabs.normal");
-		struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
-		struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
-		struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
-		int tab_width = int_max(1, term->width / tabs_count);
-		int tab_total_width = tab_width * tabs_count;
-		int tab_remain_width = int_max(0, term->width - tab_total_width);
-		int tab_num;
-		int ypos = term->height - (ses->visible_status_bar ? 2 : 1);
-		int xpos = 0;
-
-		for (tab_num = 0; tab_num < tabs_count; tab_num++) {
-			struct color_pair *color;
-			struct window *tab = get_tab_by_number(term, tab_num);
-			struct document_view *doc_view;
-			int actual_tab_width = tab_width;
-			int msglen;
-
-			/* Adjust tab size to use full term width. */
-			if (tab_remain_width) {
-				actual_tab_width++;
-				tab_remain_width--;
-				if (tab_num == tabs_count - 1) {
-					actual_tab_width += tab_remain_width;
-				}
-			}
-
-			doc_view = tab->data ? current_frame(tab->data) : NULL;
-
-			if (doc_view) {
-				if (doc_view->document->title
-				    && *(doc_view->document->title))
-					msg = doc_view->document->title;
-				else
-					msg = _("Untitled", term);
-			} else {
-				msg = _("No document", term);
-			}
-
-			if (tab_num) {
-				draw_text(term, xpos, ypos, "|", 1, 0, tabsep_color);
-				xpos += 1;
-			}
-
-			/* TODO: fresh_color, for tabs that have not been
-			 * selected since they completed loading. -- Miciah */
-			if (tab_num == term->current_tab) {
-				color = selected_color;
-			} else {
-				struct download *stat;
-
-				stat = get_current_download(tab->data);
-
-				if (stat && stat->state != S_OK)
-					color = loading_color;
-				else
-					color = normal_color;
-			}
-
-			draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
-
-			msglen = strlen(msg);
-			if (msglen >= actual_tab_width)
-				msglen = actual_tab_width - 1;
-
-			draw_text(term, xpos, ypos, msg, msglen, 0, color);
-			tab->xpos = xpos;
-			tab->width = actual_tab_width;
-			xpos += actual_tab_width;
-		}
+		display_tab_bar(ses, term, tabs_count);
 	}
 
 	if (ses_tab_is_current && ses->visible_title_bar) {

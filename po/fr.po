@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-01 18:57+0100\n"
-"PO-Revision-Date: 2005-01-01 18:59+0100\n"
+"POT-Creation-Date: 2005-01-02 16:18+0100\n"
+"PO-Revision-Date: 2005-01-02 16:26+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr "Fermer"
 
 #. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:444 src/bfu/hierbox.c:455 src/cache/dialogs.c:219
-#: src/config/dialogs.c:519 src/cookies/dialogs.c:420
+#: src/config/dialogs.c:519 src/cookies/dialogs.c:421
 #: src/dialogs/document.c:44 src/dialogs/document.c:223
 #: src/dialogs/download.c:470 src/formhist/dialogs.c:212
 #: src/globhist/dialogs.c:225 src/protocol/auth/dialogs.c:254
@@ -38,7 +38,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/config/dialogs.c:56 src/config/dialogs.c:101 src/config/dialogs.c:341
 #: src/config/dialogs.c:410 src/config/dialogs.c:440 src/config/dialogs.c:478
 #: src/config/dialogs.c:498 src/config/dialogs.c:850 src/config/dialogs.c:869
-#: src/config/dialogs.c:908 src/cookies/dialogs.c:355
+#: src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/document.c:50 src/dialogs/document.c:226
 #: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:95
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
@@ -157,8 +157,8 @@ msgid "Search string '%s' not found"
 msgstr "Chaîne recherchée '%s' introuvable"
 
 #: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
-#: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:137
-#: src/cookies/dialogs.c:349 src/dialogs/edit.c:89 src/dialogs/edit.c:91
+#: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:35
+#: src/cookies/dialogs.c:350 src/dialogs/edit.c:89 src/dialogs/edit.c:91
 #: src/scripting/lua/core.c:391 src/scripting/lua/core.c:392
 #: src/scripting/lua/core.c:473
 msgid "Name"
@@ -166,7 +166,7 @@ msgstr "Nom"
 
 #: src/bfu/hierbox.c:974 src/bookmarks/dialogs.c:263
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
-#: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:356
+#: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
 #: src/dialogs/menu.c:515 src/dialogs/menu.c:566 src/dialogs/options.c:177
 #: src/dialogs/options.c:255 src/mime/dialogs.c:131
@@ -414,13 +414,13 @@ msgid "Goto"
 msgstr "Aller à"
 
 #: src/bookmarks/dialogs.c:446 src/config/dialogs.c:367
-#: src/config/dialogs.c:435 src/config/dialogs.c:520 src/cookies/dialogs.c:322
-#: src/cookies/dialogs.c:422
+#: src/config/dialogs.c:435 src/config/dialogs.c:520 src/cookies/dialogs.c:323
+#: src/cookies/dialogs.c:423
 msgid "Edit"
 msgstr "Modifier"
 
 #: src/bookmarks/dialogs.c:447 src/cache/dialogs.c:221
-#: src/config/dialogs.c:522 src/config/dialogs.c:943 src/cookies/dialogs.c:423
+#: src/config/dialogs.c:522 src/config/dialogs.c:943 src/cookies/dialogs.c:424
 #: src/formhist/dialogs.c:213 src/globhist/dialogs.c:229
 #: src/protocol/auth/dialogs.c:255
 msgid "Delete"
@@ -431,11 +431,11 @@ msgid "Move"
 msgstr "Déplacer"
 
 #: src/bookmarks/dialogs.c:450 src/config/dialogs.c:521
-#: src/config/dialogs.c:942 src/cookies/dialogs.c:421
+#: src/config/dialogs.c:942 src/cookies/dialogs.c:422
 msgid "Add"
 msgstr "Ajouter"
 
-#: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:424
+#: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
 #: src/dialogs/download.c:476 src/dialogs/edit.c:96 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
@@ -443,7 +443,7 @@ msgstr "Effacer"
 
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:524
-#: src/config/dialogs.c:946 src/cookies/dialogs.c:425
+#: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:176 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
 #: src/sched/download.c:1050
@@ -1158,8 +1158,8 @@ msgstr "N/A"
 msgid "Type"
 msgstr "Type"
 
-#: src/config/dialogs.c:198 src/config/dialogs.c:406 src/cookies/dialogs.c:138
-#: src/cookies/dialogs.c:350
+#: src/config/dialogs.c:198 src/config/dialogs.c:406 src/cookies/dialogs.c:36
+#: src/cookies/dialogs.c:351
 msgid "Value"
 msgstr "Valeur"
 
@@ -3089,7 +3089,7 @@ msgstr "Rendu des éléments html link"
 
 #: src/config/options.inc:657
 msgid ""
-"What to render from links in the HTML header:\n"
+"How to render <link> tags from the HTML header:\n"
 "0 is nothing\n"
 "1 is title\n"
 "2 is name in addition\n"
@@ -3097,7 +3097,7 @@ msgid ""
 "4 is type in addition\n"
 "5 is everything"
 msgstr ""
-"Rendu des éléments html link:\n"
+"Comment rendre les éléments <link> des en-têtes HTML:\n"
 "0 rien\n"
 "1 titre\n"
 "2 nom en plus\n"
@@ -4075,7 +4075,7 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:81 src/cookies/cookies.c:822
+#: src/cookies/cookies.c:81 src/cookies/cookies.c:824
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -4125,27 +4125,32 @@ msgstr "Sécurité maximale (parano.)"
 #: src/cookies/cookies.c:102
 msgid ""
 "When enabled, we'll require three dots in cookies domain for all\n"
-"non-international domains (instead of just two dots). Please see\n"
-"code (cookies.c:check_domain_security()) for explanation."
+"non-international domains (instead of just two dots). Some countries\n"
+"have generic second level domains (eg. .com.pl, .co.uk) and allowing\n"
+"sites to set cookies for these generic domains could potentially be\n"
+"very bad. Note, it is off by default as it breaks a lot of sites."
 msgstr ""
-"Si activé, nous insistons pour avoir 3 points dans le nom de domaine\n"
-"des cookies pour tous les domaines non-internationaux (au lieu de 2 "
-"points).\n"
-"Voir le code (cookies.c:check_domain_security()) pour explications."
+"Si activé, nous insistons pour avoir trois points dans le nom de\n"
+"domaine des cookies pour tous les domaines non-internationaux\n"
+"(au lieu de deux points seulement). Certains pays ont des domaines\n"
+"génériques de second niveau (par exemple, .com.pl, .co.uk) et\n"
+"autoriser les sites à envoyer des cookies pour ces domaines peut\n"
+"potentiellement être très mauvais. Notez, cette option est désactivée\n"
+"par défaut car elle empêche le bon fonctionnement de nombreux sites."
 
-#: src/cookies/cookies.c:106
+#: src/cookies/cookies.c:108
 msgid "Saving"
 msgstr "Sauvegarde"
 
-#: src/cookies/cookies.c:108
+#: src/cookies/cookies.c:110
 msgid "Load/save cookies from/to disk?"
 msgstr "Charger/sauver les cookies sur disque ?"
 
-#: src/cookies/cookies.c:110
+#: src/cookies/cookies.c:112
 msgid "Resaving"
 msgstr "Sauvegarde répétée"
 
-#: src/cookies/cookies.c:112
+#: src/cookies/cookies.c:114
 msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
@@ -4153,138 +4158,124 @@ msgstr ""
 "Sauvegarde des cookies après chaque modification ?\n"
 "Aucun effet si la sauvegarde est désactivée."
 
-#: src/cookies/dialogs.c:51
-msgid "at quit time"
-msgstr "au moment de quitter"
-
-#: src/cookies/dialogs.c:54
-msgid "Accept cookie?"
-msgstr "Accepter le cookie ?"
-
-#: src/cookies/dialogs.c:55
-#, c-format
-msgid ""
-"Do you want to accept a cookie from %s?\n"
-"\n"
-"Name: %s\n"
-"Value: %s\n"
-"Domain: %s\n"
-"Expires: %s\n"
-"Secure: %s\n"
-msgstr ""
-"Voulez-vous accepter le cookie de %s ?\n"
-"\n"
-"Nom: %s\n"
-"Valeur: %s\n"
-"Domaine: %s\n"
-"Expiration: %s\n"
-"Securisé: %s\n"
-
-#: src/cookies/dialogs.c:64 src/cookies/dialogs.c:150
-msgid "yes"
-msgstr "oui"
-
-#: src/cookies/dialogs.c:64 src/cookies/dialogs.c:150
-msgid "no"
-msgstr "non"
-
-#: src/cookies/dialogs.c:66
-msgid "Accept"
-msgstr "Accepter"
-
-#: src/cookies/dialogs.c:67
-msgid "Reject"
-msgstr "Rejeter"
-
-#: src/cookies/dialogs.c:136 src/cookies/dialogs.c:341
-#: src/dialogs/document.c:113
-msgid "Server"
-msgstr "Serveur"
-
-#: src/cookies/dialogs.c:139 src/cookies/dialogs.c:351
+#: src/cookies/dialogs.c:37 src/cookies/dialogs.c:352
 msgid "Domain"
 msgstr "Domaine"
 
-#: src/cookies/dialogs.c:140 src/mime/backend/mailcap.c:98
+#: src/cookies/dialogs.c:38 src/mime/backend/mailcap.c:98
 #: src/mime/backend/mimetypes.c:57 src/protocol/file/file.c:47
 msgid "Path"
 msgstr "Chemin"
 
-#: src/cookies/dialogs.c:144 src/cookies/dialogs.c:352
+#: src/cookies/dialogs.c:41 src/cookies/dialogs.c:45 src/cookies/dialogs.c:353
 msgid "Expires"
 msgstr "Expiration"
 
-#: src/cookies/dialogs.c:149 src/cookies/dialogs.c:353
+#: src/cookies/dialogs.c:42
+msgid "at quit time"
+msgstr "au moment de quitter"
+
+#: src/cookies/dialogs.c:50 src/cookies/dialogs.c:354
 msgid "Secure"
 msgstr "Sécurisé"
 
+#: src/cookies/dialogs.c:51
+msgid "yes"
+msgstr "oui"
+
+#: src/cookies/dialogs.c:51
+msgid "no"
+msgstr "non"
+
+#: src/cookies/dialogs.c:70
+#, c-format
+msgid "Do you want to accept a cookie from %s?"
+msgstr "Voulez-vous accepter un cookie en provenance de %s ?"
+
+#: src/cookies/dialogs.c:78
+msgid "Accept cookie?"
+msgstr "Accepter le cookie ?"
+
+#: src/cookies/dialogs.c:81
+msgid "Accept"
+msgstr "Accepter"
+
+#: src/cookies/dialogs.c:82
+msgid "Reject"
+msgstr "Rejeter"
+
+#: src/cookies/dialogs.c:149 src/cookies/dialogs.c:342
+#: src/dialogs/document.c:113
+msgid "Server"
+msgstr "Serveur"
+
 #. cant_delete_item
-#: src/cookies/dialogs.c:201
+#: src/cookies/dialogs.c:202
 #, c-format
 msgid "Sorry, but cookie \"%s\" cannot be deleted."
 msgstr "Désolé, mais le cookie \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_item
-#: src/cookies/dialogs.c:203
+#: src/cookies/dialogs.c:204
 #, c-format
 msgid "Sorry, but cookie \"%s\" is being used by something else."
 msgstr "Désolé, mais le cookie \"%s\" est actuellement utilisé ailleurs."
 
 #. cant_delete_folder
-#: src/cookies/dialogs.c:205
+#: src/cookies/dialogs.c:206
 #, c-format
 msgid "Sorry, but cookie domain \"%s\" cannot be deleted."
 msgstr "Désolé, mais le domaine du cookie \"%s\" ne peut être supprimé."
 
 #. cant_delete_used_folder
-#: src/cookies/dialogs.c:207
+#: src/cookies/dialogs.c:208
 #, c-format
 msgid "Sorry, but cookie domain \"%s\" is being used by something else."
 msgstr ""
 "Désolé, mais le domaine du cookie \"%s\" est actuellement utilisé ailleurs."
 
 #. delete_marked_items_title
-#: src/cookies/dialogs.c:209
+#: src/cookies/dialogs.c:210
 msgid "Delete marked cookies"
 msgstr "Supprimer les cookies marqués"
 
 #. delete_marked_items
-#: src/cookies/dialogs.c:211
+#: src/cookies/dialogs.c:212
 msgid "Delete marked cookies?"
 msgstr "Supprimer les cookies marqués ?"
 
 #. delete_folder_title
-#: src/cookies/dialogs.c:213
+#: src/cookies/dialogs.c:214
 msgid "Delete domain's cookies"
 msgstr "Supprimer les cookies du domaine"
 
 #. delete_folder
-#: src/cookies/dialogs.c:215
+#: src/cookies/dialogs.c:216
 #, c-format
 msgid "Delete all cookies from domain \"%s\"?"
 msgstr "Supprimer tous les cookies du domaine \"%s\" ?"
 
 #. delete_item_title
-#: src/cookies/dialogs.c:217
+#: src/cookies/dialogs.c:218
 msgid "Delete cookie"
 msgstr "Supprimer un cookie"
 
 #. delete_item
-#: src/cookies/dialogs.c:219
+#: src/cookies/dialogs.c:220
 msgid "Delete this cookie?"
 msgstr "Supprimer ce cookie ?"
 
 #. clear_all_items_title
-#: src/cookies/dialogs.c:221
+#: src/cookies/dialogs.c:222
 msgid "Clear all cookies"
 msgstr "Effacer tous les cookies"
 
 #. clear_all_items_title
-#: src/cookies/dialogs.c:223
+#: src/cookies/dialogs.c:224
 msgid "Do you really want to remove all cookies?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les cookies ?"
 
-#: src/cookies/dialogs.c:430
+#: src/cookies/dialogs.c:431
 msgid "Cookie manager"
 msgstr "Gestionnaire de cookies"
 
@@ -6461,11 +6452,11 @@ msgstr ""
 #: src/protocol/rewrite/rewrite.c:75
 #, no-c-format
 msgid ""
-"Replacement URI for this dumbprefix.\n"
+"Replacement URI for this dumbprefix:\n"
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
-"URI de remplacement pour ce préfixe simple.\n"
+"URI de remplacement pour ce préfixe simple:\n"
 "%c dans la chaîne signifie URL courante\n"
 "%% dans la chaîne signifie '%'"
 
@@ -6481,13 +6472,13 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:87
 msgid ""
-"Replacement URI for this smartprefix.\n"
+"Replacement URI for this smartprefix:\n"
 "%c in the string means the current URL\n"
 "%s in the string means the whole argument to smartprefix\n"
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
-"URI de remplacement pour ce préfixe intelligent.\n"
+"URI de remplacement pour ce préfixe intelligent:\n"
 "%c dans la chaîne signifie URL courante\n"
 "%s dans la chaîne signifie argument complet du préfixe\n"
 "%0,%1,...,%9 signifie argument 0, 1, ..., 9\n"

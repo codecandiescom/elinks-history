@@ -1,5 +1,5 @@
-/* Sessions task managment */
-/* $Id: task.c,v 1.1 2003/12/06 02:56:02 jonas Exp $ */
+/* Sessions task management */
+/* $Id: task.c,v 1.2 2003/12/06 02:57:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

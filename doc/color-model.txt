@@ -182,8 +182,10 @@ Maybe the option system can be made to handle it even though it might not be opt
 
 Rather hostile but quite usable for testing.
 
+Including text attributes in the color model
+--------------------------------------------
 
-Hmmm, since we use colors to render text attributes, i (zas) think we need to
+Hmmm, since we use colors to render text attributes, I (zas) think we need to
 integrate them in the process.
 Ie. italics are rendered by color, so let the user tells which color to use.
 
@@ -193,6 +195,7 @@ Type is (link|normal) and/or italic and/or bold and/or underline and/or
 (subscript|supscript) etc...
 Note link is not a text attribute (in the terminal sense of it), that's all the
 magic.
+Also note that the attribute enhancement should be fully optional.
 
 In solution we'll have (bg, fg, attributes), where bg and fg are colors.
 Attributes are the ones supported by displaying device (ie normal bold underline
@@ -227,13 +230,8 @@ Blue is [2*360/3, 0[
 It will be convenient to have intermediate hues, between red and green ;)
 So just let divide by a value greater than 3, and name each part.
 Using 12 subdivisions seems to be sufficient, since we want to keep it simple.
-Eeach subdivision should be equal but it may not reflect reality of human color
+Each subdivision should be equal but it may not reflect reality of human color
 perception, using "uniform" color models instead of HLS may help here.
-
-
-
-
-
 
 Implementation
 --------------
@@ -296,5 +294,5 @@ http://www.lighthouse.org/color_contrast.htm
 
 	Basic introduction to usage of HSL colors.
 
-$Id: color-model.txt,v 1.8 2003/10/08 10:45:31 zas Exp $
+$Id: color-model.txt,v 1.9 2003/10/08 11:08:59 jonas Exp $
 vim: textwidth=80

@@ -1,7 +1,12 @@
-/* $Id: snprintf.h,v 1.11 2003/06/21 14:10:27 pasky Exp $ */
+/* $Id: snprintf.h,v 1.12 2003/08/29 23:06:01 pasky Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
+
+
+/* Do not use a 'format' token here as it gets defined at some dirty stinking
+ * places of ELinks, causing bug 244 (read as "compilation failures"). 'fmt'
+ * should do fine. --pasky */
 
 
 #include <stdarg.h>
@@ -44,13 +49,13 @@ int elinks_snprintf(char *str, size_t count, const char *fmt, ...);
 #ifndef HAVE_VASPRINTF
 #undef vasprintf
 #define vasprintf elinks_vasprintf
-int elinks_vasprintf(char **ptr, const char *format, va_list ap);
+int elinks_vasprintf(char **ptr, const char *fmt, va_list ap);
 #endif
 
 #ifndef HAVE_ASPRINTF
 #undef asprintf
 #define asprintf elinks_asprintf
-int elinks_asprintf(char **ptr, const char *format, ...);
+int elinks_asprintf(char **ptr, const char *fmt, ...);
 #endif
 
 
@@ -65,10 +70,10 @@ int elinks_asprintf(char **ptr, const char *format, ...);
 #include "util/string.h"
 
 static inline unsigned char *
-vasprintfa(const char *format, va_list ap) {
+vasprintfa(const char *fmt, va_list ap) {
 	unsigned char *str1, *str2;
 
-	if (vasprintf((char **) &str1, format, ap) < 0)
+	if (vasprintf((char **) &str1, fmt, ap) < 0)
 		return NULL;
 
 	str2 = stracpy(str1);
@@ -78,13 +83,13 @@ vasprintfa(const char *format, va_list ap) {
 }
 
 static inline unsigned char *
-asprintfa(const char *format, ...)
+asprintfa(const char *fmt, ...)
 {
 	unsigned char *str;
 	va_list ap;
 
-	va_start(ap, format);
-	str = vasprintfa(format, ap);
+	va_start(ap, fmt);
+	str = vasprintfa(fmt, ap);
 	va_end(ap);
 
 	return str;

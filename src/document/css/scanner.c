@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.53 2004/01/20 18:25:50 jonas Exp $ */
+/* $Id: scanner.c,v 1.54 2004/01/20 20:00:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -256,7 +256,8 @@ scan_css_tokens(struct css_scanner *scanner)
 	struct css_token *table = scanner->table;
 	int tokens = scanner->tokens;
 	int move_to_front = int_max(tokens - scanner->current, 0);
-	int current = move_to_front ? scanner->current : 0;
+	struct css_token *current = move_to_front ? &table[scanner->current] : table;
+	struct css_token *table_end;
 
 #ifdef CSS_SCANNER_DEBUG
 	if (tokens > 0) WDBG("Rescanning");
@@ -266,11 +267,12 @@ scan_css_tokens(struct css_scanner *scanner)
 	if (move_to_front) {
 		int size = move_to_front * sizeof(struct css_token);
 
-		memmove(table, &table[current], size);
+		memmove(table, current, size);
+		current = &table[move_to_front];
 	}
 
 	/* Set all unused tokens to CSS_TOKEN_NONE */
-	memset(&table[move_to_front], 0, sizeof(struct css_token) * (CSS_SCANNER_TOKENS - move_to_front));
+	memset(current, 0, sizeof(struct css_token) * (CSS_SCANNER_TOKENS - move_to_front));
 
 	if (!scanner->position) {
 		scanner->tokens = move_to_front ? move_to_front : -1;
@@ -279,24 +281,22 @@ scan_css_tokens(struct css_scanner *scanner)
 	}
 
 	/* Scan tokens til we have filled the table */
-	for (current = move_to_front;
-	     current < CSS_SCANNER_TOKENS && *scanner->position;
+	for (table_end = table + CSS_SCANNER_TOKENS;
+	     current < table_end && *scanner->position;
 	     current++) {
-		struct css_token *token = &table[current];
-
 		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
 		if (!*scanner->position) break;
 
-		scan_css_token(scanner, token);
+		scan_css_token(scanner, current);
 
-		if (token->type == CSS_TOKEN_NONE) {
+		if (current->type == CSS_TOKEN_NONE) {
  			current--;
 			/* Did some one scream for us to end scanning? */
 			if (!scanner->position) break;
 		}
 	}
 
-	scanner->tokens = current;
+	scanner->tokens = (current - table);
 	scanner->current = 0;
 	if (scanner->position && !*scanner->position)
 		scanner->position = NULL;

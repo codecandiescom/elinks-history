@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.41 2004/12/05 22:19:40 miciah Exp $ */
+/* $Id: link.c,v 1.42 2004/12/08 17:27:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,8 +99,11 @@ html_a(unsigned char *a)
 	set_fragment_identifier(a, "name");
 }
 
+/* Get image filename from its src attribute.
+ * If none or disabled it retuns "IMG".
+ */
 static unsigned char *
-get_image_text(unsigned char *attr)
+get_image_filename_from_src(unsigned char *attr)
 {
 	unsigned char *text;
 	unsigned char *src = NULL;
@@ -134,6 +137,9 @@ get_image_text(unsigned char *attr)
 	return text;
 }
 
+/* Returns possibly truncated title of image.
+ * It returns IMG if no title or disabled by option.
+ */
 static unsigned char *
 truncate_title(unsigned char *title)
 {
@@ -167,7 +173,7 @@ truncate_title(unsigned char *title)
 
 		memcpy(text, title, max_part_len);
 		text[max_part_len] = '*';
-		memcpy(text + max_part_len + 1, 
+		memcpy(text + max_part_len + 1,
 		       title + len - max_part_len, max_part_len + 1);
 
 		/* For great safety! */
@@ -207,17 +213,24 @@ html_img(unsigned char *a)
 	}
 	ismap = format.link && has_attr(a, "ismap") && !usemap;
 
+	/* Has image tag an attribute |alt| ? */
 	al = get_attr_val(a, "alt");
+	/* If not, let's see if there is a |title| */
 	if (!al) al = get_attr_val(a, "title");
 	/* Little hack to preserve rendering of [   ], in directories listing,
 	 * but we still want to drop extra spaces in alt or title attribute
 	 * to limit display width on certain websites. --Zas */
 	if (al && strlen(al) > 5) clr_spaces(al);
 
+	/* If we have no label yet (no title or alt), so
+	 * just use default ones, or image filename. */
 	if (!al || !*al) {
 		mem_free_if(al);
+		/* Do we want to display images with no link on them ?
+		 * If not, just exit now. */
 		if (!global_doc_opts->images && !format.link) return;
 
+		/* We want label to use brackets (or prefix/suffix). */
 		add_brackets = 1;
 
 		if (usemap) {
@@ -225,10 +238,12 @@ html_img(unsigned char *a)
 		} else if (ismap) {
 			al = stracpy("ISMAP");
 		} else {
-			al = get_image_text(a);
+			al = get_image_filename_from_src(a);
 		}
 	}
 
+	/* Truncate current label, actual result is
+	 * configured by option. */
 	if (al) al = truncate_title(al);
 
 	mem_free_set(&format.image, NULL);
@@ -239,6 +254,7 @@ html_img(unsigned char *a)
 		unsigned char *s;
 		color_t fg;
 
+		/* Add brackets or prefix/suffix defined by options. */
 		if (img_link_tag && (img_link_tag == 2 || add_brackets)) {
 			unsigned char *img_link_prefix = get_opt_str("document.browse.images.image_link_prefix");
 			unsigned char *img_link_suffix = get_opt_str("document.browse.images.image_link_suffix");
@@ -250,6 +266,7 @@ html_img(unsigned char *a)
 			}
 		}
 
+		/* ??? */
 		if (!get_opt_bool("document.browse.images.show_any_as_links")) {
 			ismap = 0;
 			goto show_al;
@@ -291,8 +308,10 @@ show_al:
 		 * show_any_as_links variable being off! */
 	}
 
+	/* XXX: are these needed ? --Zas */
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);
+
 	mem_free_if(al);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.6 2004/01/25 05:02:15 jonas Exp $ */
+/* $Id: stylesheet.h,v 1.7 2004/01/26 20:21:57 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -27,6 +27,7 @@
  * to keep track in some table what properties was already applied so we only
  * overwrite when we have to. --jonas */
 
+
 /* The {struct css_selector} is used for mapping elements (or nodes) in the
  * document structure to properties. */
 /* For now we only handle really ``flat'' stylesheets. No complicated selectors
@@ -37,6 +38,7 @@ struct css_selector {
 	unsigned char *element;
 	struct list_head properties;
 };
+
 
 /* The {struct css_stylesheet} describes all the useful data that was extracted from
  * the CSS source. Currently we don't cache anything other than the default
@@ -57,6 +59,7 @@ struct css_stylesheet {
 		import,						\
 		{ D_LIST_HEAD(css.selectors) },			\
 	}
+
 
 /* Returns a new freshly made selector adding it to the given stylesheet or NULL. */
 struct css_selector *

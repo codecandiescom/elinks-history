@@ -1,7 +1,9 @@
 See ChangeLog for recent changes, bugfixes and new features.
 
-ELinks 0.10.3:
-* Support for Lua 4.x was dropped, we only support Lua 5.x now.
+ELinks now:
+
+* support for Lua 4.x was dropped, we only support Lua 5.x now.
+* button shortcuts
 
 ELinks 0.10.2:
 

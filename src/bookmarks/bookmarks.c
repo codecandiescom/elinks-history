@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.156 2005/01/03 02:11:56 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.157 2005/01/05 04:32:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,15 +220,15 @@ delete_bookmark(struct bookmark *bm)
 		delete_bookmark(bm->child.next);
 	}
 
-	set_event_id(delete_bookmark_event_id, "bookmark-delete");
-	trigger_event(delete_bookmark_event_id, bm);
-
 	if (check_bookmark_cache(bm->url)) {
 		struct hash_item *item;
 
 		item = get_hash_item(bookmark_cache, bm->url, strlen(bm->url));
 		if (item) del_hash_item(bookmark_cache, item);
 	}
+
+	set_event_id(delete_bookmark_event_id, "bookmark-delete");
+	trigger_event(delete_bookmark_event_id, bm);
 
 	del_from_list(bm);
 	bookmarks_set_dirty();

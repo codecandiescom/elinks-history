@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.6 2003/01/04 13:46:11 pasky Exp $ */
+/* $Id: libintl.h,v 1.7 2003/01/04 16:45:30 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -29,8 +29,13 @@
 static inline unsigned char *
 _(unsigned char *msg, struct terminal *term) {
 	static int current_charset = -1;
-	int new_charset = get_opt_int_tree(term->spec, "charset");
+	int new_charset;
 
+	/* Prevent useless (and possibly dangerous) calls. */
+	if (!msg || !*msg) return msg;
+
+	/* Prevent useless switching. */
+	new_charset = get_opt_int_tree(term->spec, "charset");
 	if (current_charset != new_charset) {
 		current_charset = new_charset;
 		bind_textdomain_codeset(/* PACKAGE */ "elinks",

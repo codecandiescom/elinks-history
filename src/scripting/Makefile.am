@@ -1,9 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2003/09/26 14:00:02 jonas Exp $
+## $Id: Makefile.am,v 1.8 2004/03/02 17:06:15 witekfl Exp $
 
 include $(top_srcdir)/Makefile.base
 
-SUBDIRS = guile lua
+SUBDIRS = guile lua perl
 
 EXTRA_DIST = TODO
 

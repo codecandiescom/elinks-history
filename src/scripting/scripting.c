@@ -1,5 +1,5 @@
 /* General scripting system functionality */
-/* $Id: scripting.c,v 1.9 2003/10/27 01:12:15 jonas Exp $ */
+/* $Id: scripting.c,v 1.10 2004/03/02 17:06:15 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 
 #include "scripting/guile/core.h"
 #include "scripting/lua/core.h"
+#include "scripting/perl/core.h"
 
 static struct module *scripting_modules[] = {
 #ifdef HAVE_LUA
@@ -26,6 +27,9 @@ static struct module *scripting_modules[] = {
 #endif
 #ifdef HAVE_GUILE
 	&guile_scripting_module,
+#endif
+#ifdef HAVE_PERL
+	&perl_scripting_module,
 #endif
 	NULL,
 };

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-07 00:17+0100\n"
-"PO-Revision-Date: 2003-11-05 15:47+0100\n"
+"PO-Revision-Date: 2003-11-07 16:02+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3886,9 +3886,9 @@ msgid "Memory info"
 msgstr "Informace o pamìti"
 
 #: src/dialogs/info.c:201
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated."
-msgstr "%ld bytù zafláknutý pamìti.%s"
+msgstr "%ld bytù zafláknutý pamìti."
 
 #: src/dialogs/menu.c:143
 msgid "Exit ELinks"

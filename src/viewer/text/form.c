@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.126 2004/06/11 18:54:07 jonas Exp $ */
+/* $Id: form.c,v 1.127 2004/06/11 18:58:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -571,9 +571,8 @@ again:
 	for (i = 0; i <= data->length - BL; i++) {
 		register int j;
 
-		for (j = 0; j < BL; j++)
-			if ((data->source)[i + j] != bound[j])
-				goto next_boundary;
+		if (memcmp(&data->source[i], bound, BL))
+			continue;
 
 		for (j = BL - 1; j >= 0; j--)
 			if (bound[j]++ >= '9')
@@ -582,8 +581,6 @@ again:
 				goto again;
 
 		INTERNAL("Could not assing boundary");
-
-next_boundary:;
 	}
 
 	for (i = 0; i < nbound_ptrs; i++)

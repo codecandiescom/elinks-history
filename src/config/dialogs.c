@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.101 2003/11/06 22:02:51 jonas Exp $ */
+/* $Id: dialogs.c,v 1.102 2003/11/07 13:45:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,7 +197,6 @@ static void
 edit_dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
 	int w = dialog_max_width(term);
 	int rw = 0;
 	int y = -1;
@@ -223,17 +222,6 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 		if (desc) mem_free(desc);
 		return;
 	}
-
-	text_width(term, name, &min, &max);
-	text_width(term, type, &min, &max);
-	text_width(term, value, &min, &max);
-	text_width(term, desc, &min, &max);
-	buttons_width(dlg_data->widgets_data + 1, 2, &min, &max);
-
-	int_bounds(&w, min, max);
-	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
-
-	rw = 0;
 
 	dlg_format_text(NULL, name, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);

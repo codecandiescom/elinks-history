@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.120 2004/06/21 07:23:09 jonas Exp $ */
+/* $Id: options.inc,v 1.121 2004/06/24 11:11:06 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -123,7 +123,7 @@ struct option_info config_options_info[] = {
 		"considered dangerous.")),
 
 	INIT_OPT_INT("document.browse.accesskey", N_("Accesskey priority"),
-		"priority", 0, 0, 2, 1,
+		"priority", 0, 0, 2, 0,
 		N_("Priority of 'accesskey' HTML attribute:\n"
 		"0 is first try all normal bindings; if it fails, check accesskey\n"
 		"1 is first try only frame bindings; if it fails, check accesskey\n"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.141 2002/12/10 21:56:16 pasky Exp $ */
+/* $Id: options.c,v 1.142 2002/12/10 22:28:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1223,17 +1223,17 @@ register_options()
 
 	add_opt_bool("protocol.mailcap",
 		"enable", 0, 1,
-		"Enable mailcap support ?");
+		"Enable mailcap support?");
 
 	add_opt_string("protocol.mailcap",
 		"path", 0, "",
-		"Mailcap search path. List of files are colon seperated."
-		"Leave as \"\" to use MAILCAP environment or build in"
+		"Mailcap search path. List of files are colon seperated.\n"
+		"Leave as \"\" to use MAILCAP environment or build in\n"
 		"defaults instead.");
 
 	add_opt_bool("protocol.mailcap",
 		"ask", 0, 1,
-		"Wether to perform query when using handlers provided from"
+		"Wether to perform query when using handlers provided from\n"
 		"mailcap entries.");
 
 	

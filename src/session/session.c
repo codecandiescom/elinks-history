@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.266 2003/12/01 20:31:07 jonas Exp $ */
+/* $Id: session.c,v 1.267 2003/12/02 11:23:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ x:
 		vs = &frame->vs;
 		destroy_vs(vs);
 		init_vs(vs, ses->loading_url, vs->plain);
-		
+
 		if (!loaded_in_frame) {
 			if (ses->goto_position) {
 				if (frame->vs.goto_position)
@@ -869,7 +869,7 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 		return NULL;
 	}
 	ftl->target_frame = stracpy(name);
-	
+
 	ftl->stat.end = (void (*)(struct download *, void *)) file_end_load;
 	ftl->stat.data = ftl;
 	ftl->pri = pri;
@@ -1030,9 +1030,13 @@ create_session(struct window *tab)
 static inline void
 copy_session(struct session *old, struct session *new)
 {
+	unsigned char *url;
+
 	if (!have_location(old)) return;
 
-	goto_url(new, cur_loc(old)->vs.url);
+	url = get_no_post_url(cur_loc(old)->vs.url, NULL);
+	goto_url(new, url);
+	mem_free(url);
 }
 
 void *
@@ -1203,7 +1207,7 @@ destroy_session(struct session *ses)
 		if (tq->target_frame) mem_free(tq->target_frame);
 	}
 	free_list(ses->tq);
-	
+
 	if (ses->dn_url) mem_free(ses->dn_url);
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);

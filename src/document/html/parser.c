@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.259 2003/11/14 08:40:01 miciah Exp $ */
+/* $Id: parser.c,v 1.260 2003/11/14 11:51:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1431,8 +1431,9 @@ get_html_form(unsigned char *a, struct form *form)
 	} else {
 		form->action = stracpy(format.href_base);
 		if (form->action) {
-			unsigned char *ch = strchr(form->action, POST_CHAR);
-			if (ch) *ch = '\0';
+			int len = get_no_post_url_length(form->action);
+
+			form->action[len] = '\0';
 
 			/* We have to do following for GET method, because we would end
 			 * up with two '?' otherwise. */

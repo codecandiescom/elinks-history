@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.3 2003/05/05 21:55:37 zas Exp $ */
+/* $Id: window.c,v 1.4 2003/05/06 15:20:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,35 +18,33 @@ void
 redraw_from_window(struct window *win)
 {
 	struct terminal *term = win->term;
+	struct event ev = {EV_REDRAW, term->x, term->y, 0};
+	struct window *end = (void *)&term->windows;
 
-	if (term->redrawing == 0) {
-		struct event ev = {EV_REDRAW, term->x, term->y, 0};
-		struct window *end = (void *)&term->windows;
+	if (term->redrawing != 0) return;
 
-		term->redrawing = 1;
-		for (win = win->prev; win != end; win = win->prev) {
-			IF_ACTIVE(win, term) win->handler(win, &ev, 0);
-		}
-		term->redrawing = 0;
+	term->redrawing = 1;
+	for (win = win->prev; win != end; win = win->prev) {
+		IF_ACTIVE(win, term) win->handler(win, &ev, 0);
 	}
+	term->redrawing = 0;
 }
 
 void
 redraw_below_window(struct window *win)
 {
 	struct terminal *term = win->term;
+	struct event ev = {EV_REDRAW, term->x, term->y, 0};
+	struct window *end = win;
+	int tr = term->redrawing;
 
-	if (term->redrawing < 2) {
-		struct event ev = {EV_REDRAW, term->x, term->y, 0};
-		struct window *end = win;
-		int tr = term->redrawing;
+	if (term->redrawing > 1) return;
 
-		term->redrawing = 2;
-		for (win = term->windows.prev; win != end; win = win->prev) {
-			IF_ACTIVE(win, term) win->handler(win, &ev, 0);
-		}
-		term->redrawing = tr;
+	term->redrawing = 2;
+	for (win = term->windows.prev; win != end; win = win->prev) {
+		IF_ACTIVE(win, term) win->handler(win, &ev, 0);
 	}
+	term->redrawing = tr;
 }
 
 static void
@@ -55,19 +53,19 @@ add_window_at_pos(struct terminal *term,
 		  void *data, struct window *at)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
+	struct event ev = {EV_INIT, term->x, term->y, 0};
 
-	if (win) {
-		struct event ev = {EV_INIT, term->x, term->y, 0};
-
-		win->handler = handler;
-		win->data = data; /* freed later in delete_window() */
-		win->term = term;
-		win->type = WT_NORMAL;
-		add_at_pos(at, win);
-		win->handler(win, &ev, 0);
-	} else {
-		if (data) mem_free(data); /* Free data on error */
+	if (!win) {
+		if (data) mem_free(data);
+		return;
 	}
+
+	win->handler = handler;
+	win->data = data; /* freed later in delete_window() */
+	win->term = term;
+	win->type = WT_NORMAL;
+	add_at_pos(at, win);
+	win->handler(win, &ev, 0);
 }
 
 void
@@ -95,7 +93,7 @@ delete_window_ev(struct window *win, struct event *ev)
 {
 	struct window *w = win->next;
 
-	if ((void *)w == &win->term->windows) w = NULL;
+	if ((void *) w == &win->term->windows) w = NULL;
 	delete_window(win);
 	if (ev && w && w->next != w) w->handler(w, ev, 1);
 }
@@ -171,10 +169,9 @@ add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 {
 	struct ewd *ewd = mem_alloc(sizeof(struct ewd));
 
-	if (ewd) {
-		ewd->fn = fn;
-		ewd->data = data;
-		ewd->b = 0;
-		add_window(term, empty_window_handler, ewd);
-	}
+	if (!ewd) return NULL;
+	ewd->fn = fn;
+	ewd->data = data;
+	ewd->b = 0;
+	add_window(term, empty_window_handler, ewd);
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.133 2003/06/21 11:54:04 pasky Exp $ */
+/* $Id: http.c,v 1.134 2003/06/21 11:58:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -891,7 +891,9 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		if (!info->length && !rb->close)
 			goto thats_all_folks;
 
-	} else {
+		goto read_more;
+	}
+
 		/* Chunked. Good luck! */
 		/* See RFC2616, section 3.6.1. Basically, it looks like:
 		 * 1234 ; a = b ; c = d\r\n
@@ -1001,7 +1003,6 @@ next_chunk:
 				goto next_chunk;
 			}
 		}
-	}
 
 read_more:
 	read_from_socket(conn, conn->sock1, rb, read_http_data);

@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.23 2004/09/24 01:52:21 pasky Exp $ */
+/* $Id: stack.c,v 1.24 2004/09/24 10:27:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,9 @@ search_html_stack(unsigned char *name)
 void
 kill_html_stack_item(struct html_element *e)
 {
+#ifdef CONFIG_ECMASCRIPT
 	unsigned char *onload = NULL;
+#endif
 
 	assert(e);
 	if_assert_failed return;
@@ -84,6 +86,7 @@ kill_html_stack_item(struct html_element *e)
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
 
+#ifdef CONFIG_ECMASCRIPT
 	/* As our another tiny l33t extension, we allow the onLoad attribute for
 	 * any element, executing it when that element is fully loaded. */
 	if (e->options)	onload = get_attr_val(e->options, "onLoad");
@@ -93,6 +96,7 @@ kill_html_stack_item(struct html_element *e)
 		                   onload, -1);
 	}
 	if (onload) mem_free(onload);
+#endif
 
 	mem_free_if(e->attr.link);
 	mem_free_if(e->attr.target);

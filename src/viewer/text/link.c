@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.243 2004/06/21 09:50:38 miciah Exp $ */
+/* $Id: link.c,v 1.244 2004/06/21 09:54:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -709,7 +709,7 @@ get_link_at_coordinates(struct document_view *doc_view, int x, int y)
 			l2 = doc_view->document->lines2[i];
 	}
 
-	/* Is there a link under mouse cursor ? */
+	/* Is there a link at the given coordinates ? */
 	x += doc_view->vs->x;
 	y += doc_view->vs->y;
 

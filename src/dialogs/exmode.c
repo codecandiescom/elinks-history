@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.45 2004/07/02 00:24:55 pasky Exp $ */
+/* $Id: exmode.c,v 1.46 2004/07/02 00:26:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,6 +69,9 @@ exmode_confcmd_handler(struct session *ses, unsigned char *command,
 	enum parse_error err;
 
 	assert(ses && command && args);
+
+	if (get_cmd_opt_int("anonymous"))
+		return 0;
 
 	/* Undo the arguments separation. */
 	if (*args) *(--args) = ' ';

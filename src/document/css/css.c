@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: css.c,v 1.9 2004/01/17 14:38:35 pasky Exp $ */
+/* $Id: css.c,v 1.10 2004/01/17 14:57:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,6 +305,38 @@ ride_on:
 }
 
 
+typedef void (*css_applier_t)(struct html_element *element,
+			      struct css_property *prop);
+
+void
+css_apply_color(struct html_element *element, struct css_property *prop)
+{
+	assert(prop->value_type == CSS_DV_COLOR);
+	element->attr.fg = prop->value.color;
+}
+
+void
+css_apply_background_color(struct html_element *element,
+			   struct css_property *prop)
+{
+	assert(prop->value_type == CSS_DV_COLOR);
+	element->attr.bg = prop->value.color;
+}
+
+void
+css_apply_font_weight(struct html_element *element, struct css_property *prop)
+{
+	assert(prop->value_type == CSS_DV_FONT_ATTRIBUTE);
+	element->attr.attr |= prop->value.font_attribute;
+}
+
+static css_applier_t css_appliers[CSS_DP_LAST] = {
+	/* CSS_DP_NONE */		NULL,
+	/* CSS_DP_COLOR */		css_apply_color,
+	/* CSS_DP_BACKGROUND_COLOR */	css_apply_background_color,
+	/* CSS_DP_FONT_WEIGHT */	css_font_weight,
+};
+
 void
 css_apply(struct html_element *element)
 {
@@ -322,23 +354,12 @@ css_apply(struct html_element *element)
 	mem_free(code);
 
 	foreach (prop, props) {
-		switch (prop->property) {
-			case CSS_DP_BACKGROUND_COLOR:
-				assert(prop->value_type == CSS_DV_COLOR);
-				element->attr.bg = prop->value.color;
-				break;
-			case CSS_DP_COLOR:
-				assert(prop->value_type == CSS_DV_COLOR);
-				element->attr.fg = prop->value.color;
-				break;
-			case CSS_DP_FONT_WEIGHT:
-				assert(prop->value_type == CSS_DV_FONT_ATTRIBUTE);
-				element->attr.attr |= prop->value.font_attribute;
-				break;
-			default:
-				INTERNAL("Unknown property %d!",
-					 prop->property);
-		}
+		assert(prop->property < CSS_DP_LAST);
+		/* We don't assert general prop->value_type here because I
+		 * don't want hinder properties' ability to potentially make
+		 * use of multiple value types. */
+		assert(css_appliers[prop->property]);
+		css_appliers[prop->property](element, prop);
 	}
 
 	while (!list_empty(props)) {

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.57 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: leds.c,v 1.58 2004/12/16 19:39:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ init_led_panel(struct led_panel *leds)
 	for (i = 0; i < LEDS_COUNT; i++) {
 		leds->leds[i].number = i;
 		leds->leds[i].value = '-';
-		leds->leds[i].__used = 0;
+		leds->leds[i].used__ = 0;
 		leds->leds_backup[i] = 0; /* assure first redraw */
 	}
 }
@@ -271,10 +271,10 @@ register_led(struct session *ses, int number)
 	if (number >= LEDS_COUNT || number < 0)
 		return NULL;
 
-	if (ses->status.leds.leds[number].__used)
+	if (ses->status.leds.leds[number].used__)
 		return NULL;
 
-	ses->status.leds.leds[number].__used = 1;
+	ses->status.leds.leds[number].used__ = 1;
 
 	return &ses->status.leds.leds[number];
 }
@@ -282,8 +282,8 @@ register_led(struct session *ses, int number)
 void
 unregister_led(struct led *led)
 {
-	assertm(led->__used, "Attempted to unregister unused led!");
-	led->__used = 0;
+	assertm(led->used__, "Attempted to unregister unused led!");
+	led->used__ = 0;
 	led->value = '-';
 }
 

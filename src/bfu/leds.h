@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.16 2004/01/01 14:03:51 jonas Exp $ */
+/* $Id: leds.h,v 1.17 2004/12/16 19:39:59 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -27,7 +27,7 @@ struct led {
 	unsigned char value;
 
 	/* Private data. */
-	int __used;
+	int used__;
 };
 
 /* Per-session led panel structure. */

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.112 2004/01/28 07:53:54 jonas Exp $ */
+/* $Id: inpfield.c,v 1.113 2004/01/28 08:13:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -521,8 +521,14 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	update_dialog_data(dlg_data, NULL);
 
 	/* Then pass it on to the specialized handler */
-	if (handler(ses, action, buffer))
-		cancel_dialog(dlg_data, NULL);
+	switch (handler(ses, action, buffer)) {
+		case INPUT_LINE_CANCEL:
+			cancel_dialog(dlg_data, NULL);
+			break;
+
+		default:
+			break;
+	}
 
 	/* Completely bypass any further dialog event handling */
 	return EVENT_PROCESSED;

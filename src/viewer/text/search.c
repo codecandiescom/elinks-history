@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.168 2004/01/28 07:57:57 jonas Exp $ */
+/* $Id: search.c,v 1.169 2004/01/28 08:13:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1068,21 +1068,21 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	return TYPEAHEAD_STOP;
 }
 
-static int
+static enum input_line_code
 typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 {
 	struct document_view *doc_view = current_frame(ses);
 
 	assertm(doc_view, "document not formatted");
-	if_assert_failed return 0;
+	if_assert_failed return INPUT_LINE_CANCEL;
 
 	/* If there is nothing to match with don't start searching */
-	if (!*buffer) return 0;
+	if (!*buffer) return INPUT_LINE_CANCEL;
 
 	switch (do_typeahead(ses, doc_view, buffer, action)) {
 		case TYPEAHEAD_MATCHED:
 			draw_formatted(ses, 0);
-			return 0;
+			return INPUT_LINE_PROCEED;
 
 		case TYPEAHEAD_STOP:
 			typeahead_error(ses, buffer);
@@ -1090,7 +1090,7 @@ typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 
 		case TYPEAHEAD_ESCAPE:
 		default:
-			return 1;
+			return INPUT_LINE_CANCEL;
 	}
 }
 

@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.27 2004/01/28 06:14:54 jonas Exp $ */
+/* $Id: inpfield.h,v 1.28 2004/01/28 08:13:35 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -53,8 +53,13 @@ void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 #define INPUT_LINE_BUFFER_SIZE	80
 #define INPUT_LINE_WIDGETS	1
 
+enum input_line_code {
+	INPUT_LINE_CANCEL,
+	INPUT_LINE_PROCEED,
+};
+
 /* If the handler returns non zero value it means to cancel the input line */
-typedef int (*input_line_handler)(struct session *ses, int action, unsigned char *buffer);
+typedef enum input_line_code (*input_line_handler)(struct session *ses, int action, unsigned char *buffer);
 
 void
 input_field_line(struct session *ses, unsigned char *prompt,

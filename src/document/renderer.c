@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.86 2004/09/25 01:04:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.87 2004/09/25 20:02:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	struct string_list_item *doc_current = NULL;
 
 #ifdef CONFIG_LEDS
-	if (!*current)
+	if (!*current && interpreter->doc_view->session)
 		interpreter->doc_view->session->status.ecmascript_led->value = '-';
 #endif
 

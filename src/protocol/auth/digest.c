@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.24 2004/11/20 01:32:47 jonas Exp $ */
+/* $Id: digest.c,v 1.25 2004/11/22 16:52:58 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -47,8 +47,9 @@ convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1], md5_hex_digest hex)
 	hex[MD5_HEX_DIGEST_LENGTH] = '\0';
 }
 
+/* Creates a random cnonce that is also a hexed md5 digest. */
 static void
-init_random_cnonce(md5_hex_digest cnonce)
+init_cnonce_digest(md5_hex_digest cnonce)
 {
 	unsigned char md5[MD5_DIGEST_LENGTH + 1];
 	int random;
@@ -61,6 +62,10 @@ init_random_cnonce(md5_hex_digest cnonce)
 	convert_hex(md5, cnonce);
 }
 
+/* Creates what RFC 2617 refers to as H(A1) by digesting and hexing the
+ * credentials: <user> ':' <realm> ':' <password> */
+/* FIXME: Support for further digesting: H(A1) ':' <nonce> ':' <cnonce> if
+ * the server requests algorithm = "MD5-sess". */
 static void
 init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
 {
@@ -78,6 +83,15 @@ init_credential_digest(md5_hex_digest ha1, struct auth_entry *entry)
 	convert_hex(skey, ha1);
 }
 
+/* Creates what RFC 2617 refers to as H(A2) by digesting and hexing the method
+ * and requested URI path. */
+/* FIXME: Support for more HTTP access methods (POST). */
+/* FIXME: Support for by appending ':' H(entity body) if qop = "auti-int". The
+ * H(entity-body) is the hash of the entity body, not the message body - it is
+ * computed before any transfer encoding is applied by the sender and after it
+ * has been removed by the recipient. Note that this includes multipart
+ * boundaries and embedded headers in each part of any multipart content-type.
+ */
 static void
 init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
 {
@@ -93,9 +107,13 @@ init_uri_method_digest(md5_hex_digest uri_method, struct uri *uri)
 	convert_hex(ha2, uri_method);
 }
 
+/* Calculates the value of the response parameter in the Digest header entry. */
+/* FIXME: Support for also digesting: <nonce-count> ':' <cnonce> ':' <qoup> ':'
+ * before digesting the H(A2) value if the qop Digest header entry parameter is
+ * non-empty. */
 static void
-digest_calc_response(md5_hex_digest response, struct auth_entry *entry,
-		     struct uri *uri, unsigned char *cnonce)
+init_response_digest(md5_hex_digest response, struct auth_entry *entry,
+		     struct uri *uri, md5_hex_digest cnonce)
 {
 	MD5_CTX MD5Ctx;
 	md5_hex_digest ha1;
@@ -133,8 +151,8 @@ get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 	if (!init_string(&string))
 		return NULL;
 
-	init_random_cnonce(cnonce);
-	digest_calc_response(response, entry, uri, cnonce);
+	init_cnonce_digest(cnonce);
+	init_response_digest(response, entry, uri, cnonce);
 
 	add_to_string(&string, "username=\"");
 	add_to_string(&string, entry->user);

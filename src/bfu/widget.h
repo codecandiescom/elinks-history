@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.48 2003/12/22 04:30:37 miciah Exp $ */
+/* $Id: widget.h,v 1.49 2003/12/22 17:18:16 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -127,7 +127,9 @@ void dlg_set_history(struct widget_data *);
 
 #define text_is_scrollable(widget_data) \
 	((widget_data)->widget->info.text.is_scrollable \
-	 && (widget_data)->h < (widget_data)->info.text.lines)
+	 && (widget_data)->h > 0 \
+	 && (widget_data)->info.text.lines > 0 \
+	 && (widget_data)->h <= (widget_data)->info.text.lines)
 
 static inline int
 widget_is_focusable(struct widget_data *widget_data)

@@ -1,3 +1,104 @@
+Fri Jun 21 20:28:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/terminal.c, util/string.c, util/string.h:
+
+	debug_*acpy() made static inline and moved to .h. Options used
+	inside redraw_screen() are now cached - RAPID SPEEDUP..  
+
+Fri Jun 21 19:25:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, document/history.c, document/location.c,
+	util/memory.c:
+
+	Use leak debugger only when DEBUG is defined. Compilation fix in
+	mem_calloc(). Fix in freeing histories.  
+
+Fri Jun 21 18:16:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	PRINT_CHAR -> static inline print_char(); get_cp_index() is now
+	cached, it should result in *big* performance increase.  
+
+Fri Jun 21 17:52:24 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Some variables declarations were moved to a better place.  
+
+Fri Jun 21 17:32:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/: conv.c, conv.h:
+
+	Moved upcase() to .h and made static inline, as it was gross cpu
+	eater otherwise.  
+
+Fri Jun 21 16:54:59 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/options.c, document/cache.c,
+	document/html/renderer.c, lowlevel/sched.c:
+
+	document.cache.format/memory.size is now generalized.  
+
+Fri Jun 21 16:23:44 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, util/secsave.c:
+
+	Option secure_save was renamed to secure_file_saving.  
+
+Fri Jun 21 14:13:01 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/globhist.c:
+
+	enable_global_history -> global.enable 
+
+Fri Jun 21 14:11:04 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, dialogs/options.c, document/options.c,
+	document/html/renderer.c:
+
+	avoid_dark_on_black -> allow_dark_on_black 
+
+Fri Jun 21 14:04:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/session.c:
+
+	Moved show_*_bar and startup_goto_dialog from document.browse to ui.  
+
+Fri Jun 21 13:58:44 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, cookies/cookies.c:
+
+	cookies namespace fixes - policy -> accept_policy.  
+
+Fri Jun 21 13:51:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, dialogs/options.c, document/options.c,
+	document/session.c:
+
+	document namespace fixes - assume_codepage -> codepage.assume,
+	force_assume_codepage -> codepage.force_assumed.  
+
+Fri Jun 21 13:35:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, dialogs/menu.c, dialogs/options.c,
+	document/download.c:
+
+	document.download namespace fixes - download_dir -> directory,
+	download_utime -> set_original_time.  
+
+Fri Jun 21 13:28:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.h, opttypes.c:
+
+	Removed OPT_PROGRAM.  
+
+Fri Jun 21 13:27:10 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/opttypes.c:
+
+	Removed stale type handlers.  
+
 Thu Jun 20 11:37:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/conf.c:

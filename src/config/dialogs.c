@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.54 2003/06/08 14:53:18 pasky Exp $ */
+/* $Id: dialogs.c,v 1.55 2003/06/08 14:54:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -124,7 +124,7 @@ push_info_button(struct dialog_data *dlg,
 				option->name, option_types[option->type].name,
 				value, _(option->desc ? option->desc
 						      : (unsigned char *) "N/A",
-					 term));
+					 term)),
 			option, 1,
 			N_("OK"), done_info_button, B_ESC | B_ENTER);
 	} else {

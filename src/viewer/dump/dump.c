@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.20 2003/06/21 00:17:39 pasky Exp $ */
+/* $Id: dump.c,v 1.21 2003/06/21 00:17:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ nextfrag:
 				error(gettext("Can't write to stdout."));
 
 			retval = RET_ERROR;
-			return -2;
+			return 1;
 		}
 
 		dump_pos += w;

@@ -1,3 +1,265 @@
+Sat Jan 24 22:52:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Fixed toggle_display_action_listboxes() to handle the new
+	organization.  
+
+Sat Jan 24 22:52:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Make document.css.stylesheet description more clear.  
+
+Sat Jan 24 22:45:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/css/css.c, protocol/file/file.c,
+	protocol/file/file.h:
+
+	Purge all the crappy code I added yesterday in an attempt to import
+	css and use read_encoded_file() for sucking in the default css file.  
+
+Sat Jan 24 22:35:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Reorganized the keybinding manager - now the actions are grouped by
+	keymap instead of vice versa.  
+
+Sat Jan 24 22:32:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Move file reading specific part of file_func() to separate function.  
+
+Sat Jan 24 21:31:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.h:
+
+	Removed trailing comma from the always-to-be-last enum members.  
+
+Sat Jan 24 21:17:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Compilation fixes.  
+
+Sat Jan 24 21:09:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	When keybinding is associated with ACT_NONE, it is like it wouldn't
+	exist at all so don't ask for confirmation.  
+
+Sat Jan 24 21:07:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Default keybindings are now flagged appropriatelly and are not
+	deleted but just rebound to ACT_NONE, therefore also saved so to the
+	configuration file. This should fix removed default keybindings
+	reappearing after ELinks restart, reported by many people over the
+	ELinks history.  
+
+Sat Jan 24 20:37:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated.  
+
+Sat Jan 24 20:28:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Split bind_config_string() core to single_bind_config_string().  
+
+Sat Jan 24 20:08:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Split add_default_keybindings() to three
+	add_keymap_default_keybindings().  
+
+Sat Jan 24 20:05:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	The missing braces around for() body in bind_config_string() were
+	making me nervous.  
+
+Sat Jan 24 20:04:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	add_keybinding() reindentation.  
+
+Sat Jan 24 20:03:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	add_keybinding() returns (struct keybinding *) 
+
+Sat Jan 24 19:57:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/css.c:
+
+	Terminate a sentence :-).  
+
+Sat Jan 24 19:55:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Moved add_keystroke_to_string() and add_actions_to_string() from
+	default kbdbinds neighbourhood near make_keystroke() where they seem
+	to fit more naturally.  
+
+Sat Jan 24 19:53:30 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Move config file tools at the end of file, particularily after
+	default keybindings.  
+
+Sat Jan 24 19:53:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Clarification.  
+
+Sat Jan 24 19:20:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memdebug.c:
+
+	Support for CHECK_DOUBLE_FREE, by default enabled. It reported
+	xflows before, which was quite confusing.  
+
+Sat Jan 24 19:08:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/memdebug.c:
+
+	Minor tidyup.  
+
+Sat Jan 24 18:24:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/Makefile.am,
+	dialogs/exmode.c, dialogs/exmode.h, sched/action.c:
+
+	Basic framework for ex-mode (command line) support, triggered by
+	'exmode' action (':'). It does nothing now, some action
+	parser/executer needs to be implemented, but that's already work for
+	someone else ;-).  
+
+Sat Jan 24 17:57:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Simplify.  
+
+Sat Jan 24 17:46:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/garbage.html:
+
+	File style="{ ... }" testcase under garbage.  
+
+Sat Jan 24 17:31:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Tidyup.  
+
+Sat Jan 24 17:29:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Fix infinite loop in property parser when handling style="{ ... }".
+	Reported by Zas.  
+
+Sat Jan 24 13:00:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	get_attr_val_(): simplify test_only mode, just return as soon we
+	found matching atttribute.  
+
+Sat Jan 24 12:52:17 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Jan 24 12:36:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	get_num(): use strtol() and a long variable @num, then check range
+	and then only type cast to int. More correct, imho.  
+
+Sat Jan 24 10:25:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Note one textmode User-Agent token user (OSNews.com) at least, shall
+	someone even think about removing it.  
+
+Sat Jan 24 10:25:10 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Describe the 'textmode' token.  
+
+Sat Jan 24 10:09:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Do not dump @full_static_version twice if CONFIG_BACKTRACE and
+	segfault was forced by force_dump().  
+
+Sat Jan 24 10:08:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.c:
+
+	Try to make the I-crashed epitaph more brief so that the actually
+	useful info is less likely to scroll out of the screen.  
+
+Sat Jan 24 03:35:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: apply.c, stylesheet.c:
+
+	Use free_list(). Hmm.  
+
+Sat Jan 24 02:53:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: parser.c, stylesheet.c, stylesheet.h:
+
+	Move selector initialization to separate function.  
+
+Sat Jan 24 02:41:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: Makefile.am, css/parser.c:
+
+	Move style sheet and selector stuff to own file.  
+
+Sat Jan 24 02:04:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/Makefile.am, css/apply.c, css/css.c,
+	css/parser.c, css/parser.h, css/stylesheet.c, css/stylesheet.h,
+	html/parser.c:
+
+	Move style sheet and selector stuff to own file.  
+
+Sat Jan 24 01:17:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/css.c:
+
+	Try to hint that document.css.stylesheet is relative to ELinks' home
+	dir.  
+
+Fri Jan 23 23:59:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: css.h, parser.h:
+
+	Add some small meditations about cascading and default stylesheets.  
+
 Fri Jan 23 22:31:05 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/parser.c:

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.213 2003/10/05 13:37:08 kuser Exp $ */
+/* $Id: parser.c,v 1.214 2003/10/05 13:55:30 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3310,6 +3310,55 @@ look_for_map(unsigned char **pos, unsigned char *eof, unsigned char *tag)
 	return 0;
 }
 
+static int
+look_for_tag(unsigned char **pos, unsigned char *eof,
+	     unsigned char *name, int namelen, unsigned char **label)
+{
+	unsigned char *pos2;
+	struct string str;
+
+	if (!init_string(&str)) {
+		/* Is this the right way to bail out? --jonas */
+		*pos = eof;
+		return 0;
+	}
+
+	pos2 = *pos;
+	while (pos2 < eof && *pos2 != '<') {
+		pos2++;
+	}
+
+	if (pos2 >= eof) {
+		done_string(&str);
+		*pos = eof;
+		return 0;
+	}
+	if (pos2 - *pos)
+		add_bytes_to_string(&str, *pos, pos2 - *pos);
+	*label = str.source;
+
+	*pos = pos2;
+
+	if (*pos + 2 <= eof && ((*pos)[1] == '!' || (*pos)[1] == '?')) {
+		*pos = skip_comment(*pos, eof);
+		return 1;
+	}
+
+	if (parse_element(*pos, eof, NULL, NULL, NULL, &pos2)) return 1;
+
+	if (!((namelen == 1 && !strncasecmp(name, "A", 1)) ||
+	      (namelen == 2 && !strncasecmp(name, "/A", 2)) ||
+	      (namelen == 3 && !strncasecmp(name, "MAP", 3)) ||
+	      (namelen == 4 && !strncasecmp(name, "/MAP", 4)) ||
+	      (namelen == 4 && !strncasecmp(name, "AREA", 4)) ||
+	      (namelen == 5 && !strncasecmp(name, "/AREA", 5)))) {
+		*pos = pos2;
+		return 1;
+	}
+
+	return 0;
+}
+
 /* TODO: Split this function so that we can get rid of that gotos. */
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
@@ -3367,51 +3416,12 @@ look_for_link:
 	}
 
 	if (namelen == 1 && !strncasecmp(name, "A", 1)) {
-		unsigned char *pos2;
-		struct string str;
+		while (look_for_tag(&pos, eof, name, namelen, &label));
 
-		if (!init_string(&str)) {
-			/* Is this the right way to bail out? --jonas */
+		if (pos >= eof) {
 			freeml(*ml);
 			mem_free(*menu);
 			return -1;
-		}
-
-look_for_tag:
-		pos2 = pos;
-		while (pos2 < eof && *pos2 != '<') {
-			pos2++;
-		}
-
-		if (pos2 >= eof) {
-			done_string(&str);
-			freeml(*ml);
-			mem_free(*menu);
-			return -1;
-		}
-		if (pos2 - pos)
-			add_bytes_to_string(&str, pos, pos2 - pos);
-		label = str.source;
-
-		pos = pos2;
-
-		if (pos + 2 <= eof && (pos[1] == '!' || pos[1] == '?')) {
-			pos = skip_comment(pos, eof);
-			goto look_for_tag;
-		}
-
-		if (parse_element(pos, eof, NULL, NULL, NULL, &pos2)) {
-			goto look_for_tag;
-		}
-
-		if (!((namelen == 1 && !strncasecmp(name, "A", 1)) ||
-		      (namelen == 2 && !strncasecmp(name, "/A", 2)) ||
-		      (namelen == 3 && !strncasecmp(name, "MAP", 3)) ||
-		      (namelen == 4 && !strncasecmp(name, "/MAP", 4)) ||
-		      (namelen == 4 && !strncasecmp(name, "AREA", 4)) ||
-		      (namelen == 5 && !strncasecmp(name, "/AREA", 5)))) {
-			pos = pos2;
-			goto look_for_tag;
 		}
 
 	} else if (namelen == 4 && !strncasecmp(name, "AREA", 4)) {

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.49 2003/07/20 23:43:21 pasky Exp $ */
+/* $Id: charsets.c,v 1.50 2003/07/21 10:17:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,10 +710,8 @@ charsets_list_reset(void)
 	i_alias = 0;
 }
 
-/* Returns a pointer to a struct that contains
- * current key and data pointers and increment
- * internal pointer.
- * It returns NULL when key is NULL. */
+/* Returns a pointer to a struct that contains current key and data pointers
+ * and increment internal pointer.  It returns NULL when key is NULL. */
 struct fastfind_key_value *
 charsets_list_next(void)
 {
@@ -741,8 +739,8 @@ get_cp_index(unsigned char *name)
 {
 	/* We assume sizeof(void *) == sizeof(unsigned int), it may cause
 	 * issue on 64bits platforms... How can we do better ? --Zas */
-	return ((unsigned int) fastfind_search(name, strlen(name),
-					       ff_info_charsets) - 1);
+	return ((unsigned int)
+		fastfind_search(name, strlen(name), ff_info_charsets) - 1);
 }
 
 #endif /* USE_FASTFIND */

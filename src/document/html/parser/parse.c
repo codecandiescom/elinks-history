@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.106 2005/02/20 00:33:43 jonas Exp $ */
+/* $Id: parse.c,v 1.107 2005/02/20 21:41:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -429,21 +429,21 @@ struct element_info {
 	/* Element name, uppercase. */
 	unsigned char *name;
 
-	/* Element hander, doing relevant arguments processing and formatting
-	 * (by calling renderer hooks). Note that in few cases the functions
-	 * are just placeholders and the element is given a special care in
-	 * start_element() (where we also call these handlers). */
+	/* Element handler. This does the relevant arguments processing and
+	 * formatting (by calling renderer hooks). Note that in a few cases,
+	 * this is just a placeholder and the element is given a special case
+	 * in start_element() (which is also where we call these handlers). */
 	void (*func)(unsigned char *);
 
-	/* Basically something like how many times to break a line before (and
-	 * sometimes after) an element. Also for various element closing
-	 * precedence heuristics, zero value means inline element and non-zero
-	 * value is a block element. */
+	/* Basically something like how many line-breaks to put before
+	 * (and sometimes after) an element. Also, for various element closing
+	 * precedence heuristics, a value of zero signifies an inline element
+	 * and a non-zero value indicates a block element. */
 	int linebreak;
 
 	/* 0 - normal pair tags
 	 * 1 - normal non-pair tags
-	 * 2 - pair tags which cannot be nested (ie. you cannot have <a><a>)
+	 * 2 - pair tags which cannot be nested (e.g., you cannot have <a><a>)
 	 * 3 - similiar to 2 but a little stricter, seems to be a
 	 *     <li>-specific hack */
 	int nopair;

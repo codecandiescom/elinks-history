@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.6 2004/09/22 22:32:36 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.7 2004/09/22 23:13:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,8 @@ static const JSPropertySpec document_props[] = {
 static JSBool
 document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document *document = JS_GetPrivate(ctx, obj);
+	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct document *document = doc_view->document;
 
 	VALUE_TO_JSVAL_START;
 
@@ -191,7 +192,8 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document *document = JS_GetPrivate(ctx, obj);
+	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct document *document = doc_view->document;
 
 	JSVAL_TO_VALUE_START;
 
@@ -246,14 +248,12 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 		return NULL;
 	}
 	JS_InitStandardClasses(ctx, global_obj);
+	JS_SetContextPrivate(ctx, interpreter->doc_view);
 
 	document_obj = JS_InitClass(ctx, global_obj, NULL,
 	                            (JSClass *) &document_class, NULL, 0,
 	                            (JSPropertySpec *) document_props, NULL,
 	                            NULL, NULL);
-	if (document_obj)
-		JS_SetPrivate(ctx, document_obj,
-		              interpreter->doc_view->document);
 
 	return ctx;
 }

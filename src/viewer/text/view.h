@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.29 2003/10/23 15:18:53 zas Exp $ */
+/* $Id: view.h,v 1.30 2003/10/23 23:09:42 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -39,6 +39,9 @@ void toggle_images(struct session *ses, struct document_view *doc_view, int a);
 
 /* Toggle link numbering */
 void toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a);
+
+/* Toggle document colors */
+void toggle_document_colors(struct session *ses, struct document_view *doc_view, int a);
 
 /* File menu handlers. */
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.226 2003/10/23 15:18:53 zas Exp $ */
+/* $Id: view.c,v 1.227 2003/10/23 23:09:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -621,6 +621,29 @@ toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a
 	draw_formatted(ses);
 }
 
+void
+toggle_document_colors(struct session *ses, struct document_view *doc_view, int a)
+{
+	assert(ses && doc_view && ses->tab && ses->tab->term);
+	if_assert_failed return;
+
+	if (!doc_view->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
+
+	/* TODO: toggle per document. --Zas */
+	{
+		int mode = get_opt_int("document.colors.use_document_colors");
+
+		get_opt_int("document.colors.use_document_colors") =
+			(mode + 1 <= 2) ? mode + 1 : 0;
+	}
+
+	html_interpret(ses);
+	draw_formatted(ses);
+}
+
 
 static inline void
 rep_ev(struct session *ses, struct document_view *doc_view,
@@ -1141,13 +1164,7 @@ quit:
 				toggle_link_numbering(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_DOCUMENT_COLORS:
-			{
-				int *mode = (int *) &get_opt_int("document.colors.use_document_colors");
-
-				*mode = (*mode + 1 <= 2) ? *mode + 1 : 0;
-			}
-				html_interpret(ses);
-				draw_formatted(ses);
+				toggle_document_colors(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_OPEN_NEW_WINDOW:
 				open_in_new_window(ses->tab->term, send_open_new_window, ses);

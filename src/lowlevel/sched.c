@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.46 2002/10/12 15:01:46 pasky Exp $ */
+/* $Id: sched.c,v 1.47 2002/10/12 19:49:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -851,7 +851,13 @@ load_url(unsigned char *url, unsigned char *prev_url,
 		if (stat) {
 			stat->ce = e;
 			stat->state = S_OK;
-			if (stat->prg) stat->prg->start = start;
+			/* XXX: This doesn't work since sometimes stat->prg is
+			 * undefined and contains random memory locations. It's
+			 * not supposed to point on anything here since stat
+			 * has no connection attached. Downloads resuming will
+			 * probably break in some cases without this, though.
+			 * FIXME: Needs more investigation. --pasky */
+			/* if (stat->prg) stat->prg->start = start; */
 			if (stat->end) stat->end(stat, stat->data);
 		}
 		return 0;

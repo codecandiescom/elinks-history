@@ -174,7 +174,7 @@ msgid ""
 "\n"
 "URL: \"%s\""
 msgstr ""
-"Eliminare il segnalibro\"%s\"?\n"
+"Eliminare il segnalibro \"%s\"?\n"
 "\n"
 "URL: \"%s\""
 
@@ -420,11 +420,11 @@ msgstr ""
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
-msgstr "Gestore delle associazioni di tasti"
+msgstr "Gestore associazioni di tasti"
 
 #: src/config/dialogs.c:784 src/globhist/dialogs.c:492
 msgid "Toggle display"
-msgstr "Cambia vista"
+msgstr "URL/Titolo"
 
 #: src/config/kbdbind.c:257
 msgid "Main mapping"
@@ -4121,7 +4121,7 @@ msgstr "Gestore ~opzioni"
 
 #: src/dialogs/menu.c:521
 msgid "~Keybinding manager"
-msgstr "Gestore delle associazioni di tasti"
+msgstr "Gestore ~associazioni di tasti"
 
 #: src/dialogs/menu.c:522
 msgid "~Save options"
@@ -4137,7 +4137,7 @@ msgstr "~Visualizza"
 
 #: src/dialogs/menu.c:557
 msgid "~Link"
-msgstr "~Link"
+msgstr "~Collegamento"
 
 #: src/dialogs/menu.c:558
 msgid "~Downloads"
@@ -4238,7 +4238,7 @@ msgstr "Trasparenza"
 
 #: src/dialogs/options.c:137
 msgid "Underline"
-msgstr "Sottolineato"
+msgstr "Sottolineature"
 
 #: src/dialogs/options.c:138
 msgid "UTF-8 I/O"
@@ -4278,7 +4278,7 @@ msgstr ""
 
 #: src/globhist/dialogs.c:146
 msgid "Search history"
-msgstr "Cronologia ricerche"
+msgstr "Ricerca nello storico"
 
 #: src/globhist/dialogs.c:239 src/globhist/dialogs.c:325
 #: src/globhist/dialogs.c:334

@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.26 2004/06/23 10:07:33 zas Exp $ */
+/* $Id: internal.h,v 1.27 2004/06/23 10:26:16 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -6,12 +6,6 @@
 #include "document/css/stylesheet.h"
 #include "document/html/parser.h"
 #include "util/lists.h"
-
-extern struct list_head html_stack;
-
-#define format (((struct html_element *) html_stack.next)->attr)
-#define par_format (((struct html_element *) html_stack.next)->parattr)
-#define html_top (*(struct html_element *) html_stack.next)
 
 void ln_break(int n, void (*line_break)(void *), void *f);
 
@@ -21,6 +15,12 @@ void process_head(unsigned char *head);
 void put_chrs(unsigned char *start, int len, void (*put_chars)(void *, unsigned char *, int), void *f);
 
 struct html_context {
+	/* For:
+	 * html/parser/parse.c
+	 * html/parser/stack.c
+	 * html/parser.c */
+	struct list_head html_stack;
+
 	/* For parser/parse.c: */
 	unsigned char *eoff; /* For parser/forms.c too */
 	int line_breax;
@@ -79,6 +79,11 @@ struct html_context {
 	 * html/parser.c */
 	void *(*special_f)(void *, enum html_special_type, ...);
 };
+
+#define format (((struct html_element *) html_context.html_stack.next)->attr)
+#define par_format (((struct html_element *) html_context.html_stack.next)->parattr)
+#define html_top (*(struct html_element *) html_context.html_stack.next)
+
 
 extern struct html_context html_context;
 

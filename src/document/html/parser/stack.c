@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.15 2004/06/22 23:16:30 zas Exp $ */
+/* $Id: stack.c,v 1.16 2004/06/23 10:26:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,9 +26,6 @@
 #include "document/html/internal.h"
 
 
-INIT_LIST_HEAD(html_stack);
-
-
 #if 0
 void
 dump_html_stack(void)
@@ -36,7 +33,7 @@ dump_html_stack(void)
 	struct html_element *element;
 
 	DBG("HTML stack debug:");
-	foreach (element, html_stack) {
+	foreach (element, html_context.html_stack) {
 		DBG("&name/len:%p:%d name:%.*s type:%d",
 		    element->name, element->namelen,
 		    element->namelen, element->name,
@@ -60,7 +57,7 @@ search_html_stack(unsigned char *name)
 	dump_html_stack();
 #endif
 
-	foreach (element, html_stack) {
+	foreach (element, html_context.html_stack) {
 		if (element == &html_top)
 			continue; /* skip the top element */
 		if (strlcasecmp(element->name, element->namelen, name, namelen))
@@ -77,7 +74,7 @@ kill_html_stack_item(struct html_element *e)
 {
 	assert(e);
 	if_assert_failed return;
-	assertm((void *) e != &html_stack, "trying to free bad html element");
+	assertm((void *) e != &html_context.html_stack, "trying to free bad html element");
 	if_assert_failed return;
 	assertm(e->type != ELEMENT_IMMORTAL, "trying to kill unkillable element");
 	if_assert_failed return;
@@ -92,7 +89,8 @@ kill_html_stack_item(struct html_element *e)
 	del_from_list(e);
 	mem_free(e);
 #if 0
-	if (list_empty(html_stack) || !html_stack.next) {
+	if (list_empty(html_context.html_stack)
+	    || !html_context.html_stack.next) {
 		DBG("killing last element");
 	}
 #endif
@@ -103,9 +101,9 @@ void
 html_stack_dup(enum html_element_type type)
 {
 	struct html_element *e;
-	struct html_element *ep = html_stack.next;
+	struct html_element *ep = html_context.html_stack.next;
 
-	assertm(ep && (void *) ep != &html_stack, "html stack empty");
+	assertm(ep && (void *) ep != &html_context.html_stack, "html stack empty");
 	if_assert_failed return;
 
 	e = mem_alloc(sizeof(struct html_element));
@@ -137,7 +135,7 @@ html_stack_dup(enum html_element_type type)
 	e->namelen = 0;
 	e->type = type;
 
-	add_to_list(html_stack, e);
+	add_to_list(html_context.html_stack, e);
 }
 
 
@@ -149,7 +147,7 @@ kill_html_stack_until(int ls, ...)
 
 	if (ls) e = e->next;
 
-	while ((void *) e != &html_stack) {
+	while ((void *) e != &html_context.html_stack) {
 		int sk = 0;
 		va_list arg;
 
@@ -203,8 +201,8 @@ kill_html_stack_until(int ls, ...)
 
 killll:
 	l = 0;
-	while ((void *) e != &html_stack) {
-		if (ls && e == html_stack.next)
+	while ((void *) e != &html_context.html_stack) {
+		if (ls && e == html_context.html_stack.next)
 			break;
 
 		if (e->linebreak > l)

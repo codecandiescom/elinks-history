@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.460 2004/06/23 10:07:33 zas Exp $ */
+/* $Id: parser.c,v 1.461 2004/06/23 10:26:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -367,7 +367,7 @@ html_body(unsigned char *a)
 	if (par_format.bgcolor != format.bg) {
 		/* Modify the root HTML element - format_html_part() will take
 		 * this from there. */
-		struct html_element *e = html_stack.prev;
+		struct html_element *e = html_context.html_stack.prev;
 
 		e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
 	}
@@ -614,7 +614,7 @@ html_base(unsigned char *a)
 	unsigned char *al = get_url_val(a, "href");
 
 	if (al) {
-		struct html_element *element = html_stack.prev;
+		struct html_element *element = html_context.html_stack.prev;
 		unsigned char *base = join_urls(element->attr.href_base, al);
 		struct uri *uri = base ? get_uri(base, 0) : NULL;
 
@@ -624,7 +624,7 @@ html_base(unsigned char *a)
 		if (!uri) return;
 
 		/* Now distribute the base URL */
-		foreach (element, html_stack) {
+		foreach (element, html_context.html_stack) {
 			if (compare_uri(element->attr.href_base, uri, 0))
 				continue;
 
@@ -1288,8 +1288,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	assert(uri && options);
 	if_assert_failed return;
-	assertm(list_empty(html_stack), "something on html stack");
-	if_assert_failed init_list(html_stack);
+	
+	init_list(html_context.html_stack);
 
 	html_context.startf = start;
 	html_context.eofff = end;
@@ -1301,7 +1301,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;
 
-	add_to_list(html_stack, e);
+	add_to_list(html_context.html_stack, e);
 
 	format.attr = 0;
 	format.fontsize = 3;
@@ -1357,9 +1357,9 @@ done_html_parser(void)
 
 	done_form();
 
-	kill_html_stack_item(html_stack.next);
+	kill_html_stack_item(html_context.html_stack.next);
 
-	assertm(list_empty(html_stack),
+	assertm(list_empty(html_context.html_stack),
 		"html stack not empty after operation");
-	if_assert_failed init_list(html_stack);
+	if_assert_failed init_list(html_context.html_stack);
 }

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.62 2004/06/22 23:24:17 zas Exp $ */
+/* $Id: parse.c,v 1.63 2004/06/23 10:26:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -779,17 +779,17 @@ start_element(struct element_info *ei,
 		struct html_element *e;
 
 		if (ei->nopair == 2) {
-			foreach (e, html_stack) {
+			foreach (e, html_context.html_stack) {
 				if (e->type < ELEMENT_KILLABLE) break;
 				if (e->linebreak || !ei->linebreak) break;
 			}
-		} else foreach (e, html_stack) {
+		} else foreach (e, html_context.html_stack) {
 			if (e->linebreak && !ei->linebreak) break;
 			if (e->type < ELEMENT_KILLABLE) break;
 			if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 		}
 		if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
-			while (e->prev != (void *) &html_stack)
+			while (e->prev != (void *) &html_context.html_stack)
 				kill_html_stack_item(e->prev);
 
 			if (e->type > ELEMENT_IMMORTAL)
@@ -854,7 +854,7 @@ end_element(struct element_info *ei,
 		return html;
 
 	/* dump_html_stack(); */
-	foreach (e, html_stack) {
+	foreach (e, html_context.html_stack) {
 		if (e->linebreak && !ei->linebreak) kill = 1;
 		if (strlcasecmp(e->name, e->namelen, name, namelen)) {
 			if (e->type < ELEMENT_KILLABLE)
@@ -866,11 +866,13 @@ end_element(struct element_info *ei,
 			kill_html_stack_item(e);
 			break;
 		}
-		for (elt = e; elt != (void *) &html_stack; elt = elt->prev)
+		for (elt = e;
+		     elt != (void *) &html_context.html_stack;
+		     elt = elt->prev)
 			if (elt->linebreak > lnb)
 				lnb = elt->linebreak;
 		ln_break(lnb, html_context.line_break_f, f);
-		while (e->prev != (void *) &html_stack)
+		while (e->prev != (void *) &html_context.html_stack)
 			kill_html_stack_item(e->prev);
 		kill_html_stack_item(e);
 		break;

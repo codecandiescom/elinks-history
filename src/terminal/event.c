@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.46 2004/06/13 03:25:47 jonas Exp $ */
+/* $Id: event.c,v 1.47 2004/06/13 03:37:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,17 +310,19 @@ in_term(struct terminal *term)
 
 	while (term->qlen >= sizeof(struct term_event)) {
 		struct term_event *ev = (struct term_event *)iq;
-		int event_size = = handle_interlink_event(term, ev);
+		int event_size = handle_interlink_event(term, ev);
 
-		if (!event_size) return;
+		/* If the event was not handled save the bytes in the queue for
+		 * later in case more stuff is read later. */
+		if (!event_size) break;
 
-		if (term->qlen == event_size) {
-			term->qlen = 0;
-		} else {
-			term->qlen -= event_size;
-			memmove(iq, iq + event_size, term->qlen);
-		}
-
+		/* Acount for the handled bytes */
+		term->qlen -= event_size;
 		term->qfreespace += event_size;
+
+		/* If there are no more bytes to handle stop else move next
+		 * event bytes to the front of the queue. */
+		if (!term->qlen) break;
+		memmove(iq, iq + event_size, term->qlen);
 	}
 }

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.37 2003/05/11 19:49:47 zas Exp $ */
+/* $Id: string.c,v 1.38 2003/05/11 22:42:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,11 +423,10 @@ elinks_longcat(unsigned char *s, unsigned int *slen,
 	unsigned char *p = s;
 
 	if (number < 0) {
-		if (slen) p[*slen++] = '-';
+		if (slen) p[(*slen)++] = '-';
 		else p[0] = '-';
 		number = -number;
 		width--;
-		p++;
 	}
 	return elinks_ulongcat(p, slen, number, width, fillchar);
 }

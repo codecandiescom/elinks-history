@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.120 2004/04/14 20:21:31 jonas Exp $ */
+/* $Id: dump.c,v 1.121 2004/04/14 20:50:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *cached)
 }
 
 static unsigned char *
-subst_url(unsigned char *str, unsigned char *url, int length)
+subst_url(unsigned char *str, struct string *url)
 {
 	struct string string;
 
@@ -171,7 +171,8 @@ subst_url(unsigned char *str, unsigned char *url, int length)
 		str++;
 		switch (*str) {
 			case 'u':
-				add_bytes_to_string(&string, url, length);
+				if (!url) break;
+				add_bytes_to_string(&string, url->source, url->length);
 				break;
 		}
 		if (*str) str++;
@@ -180,12 +181,12 @@ subst_url(unsigned char *str, unsigned char *url, int length)
 }
 
 static void
-dump_print(unsigned char *option, unsigned char *url, int length)
+dump_print(unsigned char *option, struct string *url)
 {
 	unsigned char *str = get_opt_str(option);
 
 	if (str) {
-		unsigned char *realstr = subst_url(str, url, length);
+		unsigned char *realstr = subst_url(str, url);
 
 		if (realstr) {
 			printf("%s", realstr);
@@ -219,11 +220,11 @@ dump_pre_start(struct list_head *url_list)
 		terminate = 0;
 		del_from_list(item);
 		add_to_list(done_list, item);
-		if (!first) dump_print("document.dump.separator", "", 0);
+		if (!first) dump_print("document.dump.separator", NULL);
 		else first = 0;
-		dump_print("document.dump.header", item->string.source, item->string.length);
+		dump_print("document.dump.header", &item->string);
 		dump_start(item->string.source);
-		dump_print("document.dump.footer", item->string.source, item->string.length);
+		dump_print("document.dump.footer", &item->string);
 	} else {
 		free_string_list(&done_list);
 		terminate = 1;
@@ -240,7 +241,7 @@ dump_end(struct download *status, void *p)
 	if (cached && cached->redirect && dump_redir_count++ < MAX_REDIRECTS) {
 		struct uri *uri = cached->redirect;
 
-		if (status->state >= 0)
+		if (is_in_progress_state(status->state))
 			change_connection(status, NULL, PRI_CANCEL, 0);
 
 		load_uri(uri, get_cache_uri(cached), status, PRI_MAIN, 0, -1);

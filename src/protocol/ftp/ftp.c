@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.170 2004/09/27 00:57:54 pasky Exp $ */
+/* $Id: ftp.c,v 1.171 2004/09/27 01:10:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,6 +258,40 @@ send_cmd(struct connection *conn, struct string *cmd, void *callback, int state)
 	set_connection_state(conn, state);
 }
 
+/* Check if this auth token really belongs to this URI. */
+static int
+auth_user_matching_uri(struct http_auth_basic *auth, struct uri *uri)
+{
+	if (!uri->userlen) /* Noone said it doesn't. */
+		return 1;
+	return !strlcasecmp(auth->user, -1, uri->user, uri->userlen);
+}
+
+
+/* Kill the current connection and ask for a username/password for the next
+ * try. */
+static void
+prompt_username_pw(struct connection *conn)
+{
+	if (!conn->cached) {
+		conn->cached = get_cache_entry(conn->uri);
+		if (!conn->cached) {
+			abort_conn_with_state(conn, S_OUT_OF_MEM);
+			return;
+		}
+	}
+
+	mem_free_set(&conn->cached->content_type, stracpy("text/html"));
+	if (!conn->cached->content_type) {
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return;
+	}
+
+	add_auth_entry(conn->uri, "FTP Login");
+
+	abort_conn_with_state(conn, S_OK);
+}
+
 /* Send USER command. */
 static void
 ftp_login(struct connection *conn)
@@ -347,7 +381,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	 * requiring it will fail (332). */
 
 	if (response == 332 || response >= 500) {
-		abort_conn_with_state(conn, S_FTP_LOGIN);
+		prompt_username_pw(conn);
 		return;
 	}
 
@@ -365,40 +399,6 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 	}
 
 	ftp_pass(conn);
-}
-
-/* Check if this auth token really belongs to this URI. */
-static int
-auth_user_matching_uri(struct http_auth_basic *auth, struct uri *uri)
-{
-	if (!uri->userlen) /* Noone said it doesn't. */
-		return 1;
-	return !strlcasecmp(auth->user, -1, uri->user, uri->userlen);
-}
-
-
-/* Kill the current connection and ask for a username/password for the next
- * try. */
-static void
-prompt_username_pw(struct connection *conn)
-{
-	if (!conn->cached) {
-		conn->cached = get_cache_entry(conn->uri);
-		if (!conn->cached) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
-		}
-	}
-
-	mem_free_set(&conn->cached->content_type, stracpy("text/html"));
-	if (!conn->cached->content_type) {
-		abort_conn_with_state(conn, S_OUT_OF_MEM);
-		return;
-	}
-
-	add_auth_entry(conn->uri, "FTP Login");
-
-	abort_conn_with_state(conn, S_OK);
 }
 
 /* Send PASS command. */

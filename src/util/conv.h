@@ -1,8 +1,9 @@
-/* $Id: conv.h,v 1.8 2003/05/15 21:20:29 zas Exp $ */
+/* $Id: conv.h,v 1.9 2003/05/25 09:22:53 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
+#include "lowlevel/ttime.h" /* ttime type */
 
 static inline unsigned char
 upcase(unsigned char ch)
@@ -17,10 +18,12 @@ long strtolx(unsigned char *, unsigned char **);
 unsigned char hx(int);
 int unhx(unsigned char);
 
-/* These use granular allocation stuff like some others funtions
- * in util/string.c, we should perhaps group them. --Zas */
+/* These use granular allocation stuff. */
 int add_num_to_str(unsigned char **str, int *len, long num);
 int add_knum_to_str(unsigned char **str, int *len, long num);
+void add_xnum_to_str(unsigned char **s, int *l, int n);
+void add_time_to_str(unsigned char **s, int *l, ttime t);
+
 void add_htmlesc_str(unsigned char **, int *, unsigned char *, int);
 
 

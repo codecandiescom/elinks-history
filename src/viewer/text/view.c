@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.638 2004/10/17 21:36:25 miciah Exp $ */
+/* $Id: view.c,v 1.639 2004/10/19 08:40:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -859,9 +859,14 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		status = FRAME_EVENT_IGNORED;
 	}
 
+	/* Is this assertion correct ? It is triggered when
+	 * pressing a checkbox or submit in elinks bugzilla.
+	 * XXX: I disabled it for now, please check.
+	 * --Zas
 	if (ses->insert_mode == INSERT_MODE_ON) {
 		assert(link == get_current_link(doc_view));
 	}
+	*/
 
 	return status;
 }

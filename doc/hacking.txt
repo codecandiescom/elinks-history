@@ -348,7 +348,7 @@ func(int a, int b)
 - Indent.
 
 	Use:
-		foreach(a, b)
+		foreach (a, b)
 			if (a == c)
 				...
 			else
@@ -443,4 +443,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.4 2003/05/06 12:10:02 zas Exp $
+$Id: hacking.txt,v 1.5 2003/05/08 01:24:34 pasky Exp $

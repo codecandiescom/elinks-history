@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.20 2003/08/24 00:32:46 jonas Exp $ */
+/* $Id: kbd.c,v 1.21 2003/08/24 12:01:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,7 +331,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	if ((env & ENV_TWIN) && !strcmp(ts, "linux"))
 		itrm->flags |= USE_TWIN_MOUSE;
 
-	if (env & (ENV_SCREEN | ENV_XWIN))
+	if (env & ENV_SCREEN)
 		itrm->flags |= USE_ALTSCREEN;
 
 	if (queue_ts(itrm, ts, strlen(ts), MAX_TERM_LEN)) {

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.370 2004/11/20 02:08:57 jonas Exp $ */
+/* $Id: http.c,v 1.371 2004/11/20 02:50:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -400,6 +400,7 @@ http_send_header(struct connection *conn)
 		unsigned char *user = get_opt_str("protocol.http.proxy.user");
 		unsigned char *passwd = get_opt_str("protocol.http.proxy.passwd");
 
+#ifdef CONFIG_SSL_DIGEST
 		if (proxy_auth.digest) {
 			unsigned char *response;
 			int userlen = int_min(strlen(user), HTTP_AUTH_USER_MAXLEN - 1);
@@ -423,7 +424,9 @@ http_send_header(struct connection *conn)
 				mem_free(response);
 			}
 
-		} else {
+		} else
+#endif
+		{
 			if (user[0]) {
 				unsigned char *proxy_data;
 

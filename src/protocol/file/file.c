@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.52 2003/06/22 16:03:41 jonas Exp $ */
+/* $Id: file.c,v 1.53 2003/06/22 16:19:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -302,65 +302,8 @@ file_func(struct connection *c)
 		return;
 	}
 
-	/* First, we try with name as is. */
-	fd = open(name, O_RDONLY | O_NOCTTY);
-	saved_errno = errno;
-	if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
-		int enc;
-
-		/* No file of that name was found, try some others names. */
-		for (enc = 1; enc < ENCODINGS_KNOWN; enc++) {
-			unsigned char **ext = listext_encoded(enc);
-
-			while (ext && *ext) {
-				unsigned char *tname = init_str();
-				int tname_len = 0;
-
-				if (!tname) {
-					mem_free(name);
-					abort_conn_with_state(c, S_OUT_OF_MEM);
-					return;
-				}
-
-				add_to_str(&tname, &tname_len, name);
-				add_to_str(&tname, &tname_len, *ext);
-
-				/* We try with some extensions. */
-				fd = open(tname, O_RDONLY | O_NOCTTY);
-				if (fd >= 0) {
-					/* Ok, found one, use it. */
-					mem_free(name);
-					name = tname;
-					namelen = strlen(tname);
-					encoding = enc;
-					enc = ENCODINGS_KNOWN;
-					break;
-				}
-				mem_free(tname);
-				ext++;
-			}
-		}
-	}
-
-	if (fd == -1) {
-		d = opendir(name);
-		if (d) goto dir;
-
-		mem_free(name);
-		abort_conn_with_state(c, -saved_errno);
-		return;
-	}
-
-	set_bin(fd);
-	if (fstat(fd, &stt)) {
-		saved_errno = errno;
-		close(fd);
-		mem_free(name);
-		abort_conn_with_state(c, -saved_errno);
-		return;
-	}
-
-	if (S_ISDIR(stt.st_mode)) {
+	d = opendir(name);
+	if (d) {
 		struct dirs *dir;
 		int dirl;
 		int i;
@@ -368,11 +311,6 @@ file_func(struct connection *c)
 		unsigned char dircolor[8];
 		int colorize_dir;
 
-		d = opendir(name);
-
-		close(fd);
-
-dir:
 		dir = NULL;
 		dirl = 0;
 
@@ -408,7 +346,6 @@ dir:
 		fl = 0;
 
 		if (!file) {
-			close(fd);
 			abort_conn_with_state(c, S_OUT_OF_MEM);
 			return;
 		}
@@ -590,6 +527,61 @@ dir:
 	} else {
 		struct stream_encoded *stream;
 		int readlen;
+
+		/* First, we try with name as is. */
+		fd = open(name, O_RDONLY | O_NOCTTY);
+		saved_errno = errno;
+		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
+			int enc;
+
+			/* No file of that name was found, try some others names. */
+			for (enc = 1; enc < ENCODINGS_KNOWN; enc++) {
+				unsigned char **ext = listext_encoded(enc);
+
+				while (ext && *ext) {
+					unsigned char *tname = init_str();
+					int tname_len = 0;
+
+					if (!tname) {
+						mem_free(name);
+						abort_conn_with_state(c, S_OUT_OF_MEM);
+						return;
+					}
+
+					add_to_str(&tname, &tname_len, name);
+					add_to_str(&tname, &tname_len, *ext);
+
+					/* We try with some extensions. */
+					fd = open(tname, O_RDONLY | O_NOCTTY);
+					if (fd >= 0) {
+						/* Ok, found one, use it. */
+						mem_free(name);
+						name = tname;
+						namelen = strlen(tname);
+						encoding = enc;
+						enc = ENCODINGS_KNOWN;
+						break;
+					}
+					mem_free(tname);
+					ext++;
+				}
+			}
+		}
+
+		if (fd == -1) {
+			mem_free(name);
+			abort_conn_with_state(c, -saved_errno);
+			return;
+		}
+
+		set_bin(fd);
+		if (fstat(fd, &stt)) {
+			saved_errno = errno;
+			close(fd);
+			mem_free(name);
+			abort_conn_with_state(c, -saved_errno);
+			return;
+		}
 
 		if (encoding == ENCODING_NONE)
 			encoding = guess_encoding(name);

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.1 2005/01/09 01:36:22 jonas Exp $
+## $Id: Makefile.am,v 1.2 2005/01/09 01:50:17 jonas Exp $
 
 EXTRA_DIST = README $(PACKAGE).pot $(POFILES) $(GMOFILES)
 
@@ -63,6 +63,9 @@ $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 ### Updating po and gmo files
 #
 # Update by merging all .po files with the .po template master file.
+#
+# It is possible to update only a single .po file by setting the PO variable to
+# either <lang> or <lang>.po when calling make. Example: make update-po PO=is
 
 update-po: Makefile $(srcdir)/$(PACKAGE).pot
 	@cd $(srcdir); \

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.142 2003/06/26 13:55:56 zas Exp $ */
+/* $Id: parser.c,v 1.143 2003/06/29 16:07:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2247,14 +2247,15 @@ html_frame(unsigned char *a)
 		put_link_line("Frame: ", name, url, "");
 
 	} else {
-		struct frame_param fp;
+		if (special_f(ff, SP_USED, NULL)) {
+			struct frame_param fp;
 
-		fp.name = name;
-		fp.url = url;
-		fp.parent = html_top.frameset;
+			fp.name = name;
+			fp.url = url;
+			fp.parent = html_top.frameset;
 
-		if (special_f(ff, SP_USED, NULL))
 			special_f(ff, SP_FRAME, &fp);
+		}
 	}
 
 	mem_free(name);

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.303 2004/07/22 21:28:38 zas Exp $ */
+/* $Id: download.c,v 1.304 2004/07/22 21:39:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,12 +289,28 @@ write_error:
 }
 
 static void
+abort_download_and_beep(struct file_download *file_download, struct terminal *term)
+{
+	if (term && get_opt_int("document.download.notify_bell")
+		    + file_download->notify >= 2) {
+		beep_terminal(term);
+	}
+
+	abort_download(file_download);
+}
+
+static void
 download_data_store(struct download *download, struct file_download *file_download)
 {
 	struct session *ses = get_download_ses(file_download);
-	struct terminal *term = NULL;
+	struct terminal *term;
 
-	if (!ses) goto abort;
+	if (!ses) {
+		/* No term here, so no beep. --Zas */
+		abort_download(file_download);
+		return;
+	}
+
 	term = ses->tab->term;
 
 	if (is_in_progress_state(download->state)) {
@@ -367,12 +383,7 @@ download_data_store(struct download *download, struct file_download *file_downlo
 	}
 
 abort:
-	if (term && get_opt_int("document.download.notify_bell")
-		    + file_download->notify >= 2) {
-		beep_terminal(term);
-	}
-
-	abort_download(file_download);
+	abort_download_and_beep(file_download, term);
 }
 
 static void

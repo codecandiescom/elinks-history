@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.39 2003/12/01 18:13:21 jonas Exp $ */
+/* $Id: document.h,v 1.40 2003/12/01 18:23:37 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -143,7 +143,6 @@ void release_document(struct document *document);
 long formatted_info(int);
 
 void shrink_format_cache(int);
-void count_format_cache(void);
 
 void init_documents(void);
 void done_documents(void);

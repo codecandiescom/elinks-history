@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.410 2003/12/01 14:51:33 pasky Exp $ */
+/* $Id: options.c,v 1.411 2003/12/01 18:23:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1024,7 +1024,6 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 static int
 change_hook_cache(struct session *ses, struct option *current, struct option *changed)
 {
-	count_format_cache();
 	shrink_memory(0);
 	return 0;
 }

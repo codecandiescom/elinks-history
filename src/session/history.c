@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.9 2003/06/10 14:35:43 pasky Exp $ */
+/* $Id: history.c,v 1.10 2003/06/10 14:38:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -65,6 +65,8 @@ clean_unhistory(struct session *ses)
 
 /* Common ses_(un)back() backend, doing the actions common for leaving of the
  * current location for movement in the history. */
+/* Returns > 0 upon error, 0 if we should abort the movement and 1 if we should
+ * proceed fearlessly. */
 static void
 ses_leave_location(struct session *ses)
 {
@@ -74,6 +76,11 @@ ses_leave_location(struct session *ses)
 		mem_free(ses->search_word);
 		ses->search_word = NULL;
 	}
+
+	if (!have_location(ses))
+		return 0;
+
+	return 1;
 }
 
 void
@@ -81,10 +88,10 @@ ses_back(struct session *ses)
 {
 	struct location *loc;
 
-	ses_leave_location(ses);
+	if (ses_leave_location(ses) < 1)
+		return;
 
 	/* This is the current location. */
-	if (!have_location(ses)) return;
 	loc = cur_loc(ses);
     	del_from_list(loc);
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.186 2005/01/03 13:39:02 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.187 2005/01/04 01:49:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,7 +364,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 	if (!*string)
 		return JS_TRUE;
 
-	msg_box(vs->doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT | MSGBOX_NO_TEXT_INTL,
+	msg_box(vs->doc_view->session->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("JavaScript Alert"), ALIGN_CENTER,
 		stracpy(string),
 		NULL, 1,

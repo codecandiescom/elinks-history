@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.208 2003/12/07 00:26:03 pasky Exp $ */
+/* $Id: menu.c,v 1.209 2003/12/07 00:26:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -347,7 +347,7 @@ static struct menu_item file_menu21[] = {
 	INIT_MENU_ITEM(N_("Save UR~L as"), "", menu_save_url_as, NULL, 0),
 	INIT_MENU_ITEM(N_("Save formatted ~document"), "", menu_save_formatted, NULL, 0),
 #ifdef BOOKMARKS
-	INIT_MENU_ITEM(N_("Boo~kmark document"), "a", launch_bm_add_doc_dialog, NULL, 0),
+	INIT_MENU_ITEM(N_("Bookm~ark document"), "a", launch_bm_add_doc_dialog, NULL, 0),
 #endif
 };
 

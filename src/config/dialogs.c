@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.203 2005/01/12 16:32:56 jonas Exp $ */
+/* $Id: dialogs.c,v 1.204 2005/01/19 11:11:44 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -172,6 +172,9 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 				_("(expand by pressing space)", term), NULL);
 	}
 
+	add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
+	add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
+
 	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
 
 	if (option_types[option->type].write) {
@@ -185,8 +188,6 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 
 		option_types[option->type].write(option, &value);
 
-		add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
-		add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
 		range = get_range_string(option);
 		if (range) {
 			if (*range) {
@@ -196,21 +197,17 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 			mem_free(range);
 		}
 		add_format_to_string(&info, "\n%s: %s", _("Value", term), value.source);
+		done_string(&value);
 
 		if (option->flags & OPT_TOUCHED)
 			add_to_string(&info, _("\n\nThis value has been changed"
 					     " since you last saved your"
 					     " configuration.", term));
 
-		if (*desc)
-			add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
-		done_string(&value);
-	} else {
-		add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
-		add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
-		if (*desc)
-			add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
 	}
+
+	if (*desc)
+		add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
 
 	if (option->type == OPT_TREE) {
 		mem_free(type);

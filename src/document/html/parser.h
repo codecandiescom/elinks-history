@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.4 2002/03/18 06:33:13 pasky Exp $ */
+/* $Id: parser.h,v 1.5 2002/03/19 20:40:04 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -9,6 +9,8 @@ struct form_control;
 struct f_data;
 
 #include <links.h>
+#include <bfu/align.h>
+#include <bfu/bfu.h>
 #include <document/session.h>
 #include <document/html/colors.h>
 #include <document/html/renderer.h>
@@ -90,21 +92,6 @@ enum format_attr {
 	AT_UNDERLINE = 4,
 	AT_FIXED = 8,
 	AT_GRAPHICS = 16,
-};
-
-/* XXX: I'm not sure this file is the best place for this. --pasky */
-/* This enum is pretty ugly, yes ;). */
-enum format_align {
-	AL_LEFT,
-	AL_CENTER,
-	AL_RIGHT,
-	AL_BLOCK,
-	AL_NO,
-
-	AL_MASK = 0x7f,
-
-	/* XXX: DIRTY! For backward compatibility with old menu code: */
-	AL_EXTD_TEXT = 0x80,
 };
 
 struct text_attrib_beginning {

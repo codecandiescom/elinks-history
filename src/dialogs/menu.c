@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.5 2002/03/18 22:12:32 pasky Exp $ */
+/* $Id: menu.c,v 1.6 2002/03/19 20:40:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include <links.h>
 
 #include <main.h>
+#include <bfu/align.h>
 #include <bfu/bfu.h>
 #include <dialogs/info.h>
 #include <dialogs/menu.h>

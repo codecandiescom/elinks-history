@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.7 2002/03/19 18:22:42 pasky Exp $ */
+/* $Id: bfu.c,v 1.8 2002/03/19 20:40:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 
 #include <links.h>
 
+#include <bfu/align.h>
 #include <bfu/bfu.h>
 #include <config/kbdbind.h>
 #include <document/html/parser.h>
@@ -1440,7 +1441,7 @@ void min_text_width(struct terminal *term, unsigned char *text, int *width)
 /* dlg_format_text() */
 void dlg_format_text(struct terminal *term, struct terminal *t2,
 		     unsigned char *text, int x, int *y, int w,	int *rw,
-		     int co, int align)
+		     int co, enum format_align align)
 {
 	text = _(text, t2);
 	do {
@@ -1512,7 +1513,7 @@ void min_buttons_width(struct terminal *term, struct dialog_item_data *butt,
 /* dlg_format_buttons() */
 void dlg_format_buttons(struct terminal *term, struct terminal *t2,
 			struct dialog_item_data *butt, int n,
-			int x, int *y, int w, int *rw, int align)
+			int x, int *y, int w, int *rw, enum format_align align)
 {
 	int i1 = 0;
 
@@ -1598,7 +1599,7 @@ void checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
 /* dlg_format_field() */
 void dlg_format_field(struct terminal *term, struct terminal *t2,
 		      struct dialog_item_data *item,
-		      int x, int *y, int w, int *rw, int align)
+		      int x, int *y, int w, int *rw, enum format_align align)
 {
 	item->x = x;
 	item->y = *y;
@@ -1614,7 +1615,7 @@ void dlg_format_field(struct terminal *term, struct terminal *t2,
 /* Layout for generic boxes */
 void dlg_format_box(struct terminal *term, struct terminal *t2,
 		    struct dialog_item_data *item,
-		    int x, int *y, int w, int *rw, int align)
+		    int x, int *y, int w, int *rw, enum format_align align)
 {
 	item->x = x;
 	item->y = *y;
@@ -1897,7 +1898,7 @@ int msg_box_button(struct dialog_data *dlg, struct dialog_item_data *di)
  *
  * You should always align it in a similiar way. */
 void msg_box(struct terminal *term, struct memory_list *ml,
-	     unsigned char *title, int align,
+	     unsigned char *title, enum format_align align,
 	     ...)
 {
 	unsigned char **info = DUMMY;

@@ -1,9 +1,10 @@
-/* $Id: bfu.h,v 1.4 2002/03/18 06:33:12 pasky Exp $ */
+/* $Id: bfu.h,v 1.5 2002/03/19 20:40:03 pasky Exp $ */
 
 #ifndef EL__BFU_H
 #define EL__BFU_H
 
 #include <links.h> /* list_head */
+#include <bfu/align.h>
 #include <lowlevel/terminal.h>
 
 
@@ -106,7 +107,7 @@ struct dialog {
 	void (*abort)(struct dialog_data *);
 	void *udata;
 	void *udata2;
-	int align;
+	enum format_align align;
 	void (*refresh)(void *);
 	void *refresh_data;
 	struct dialog_item items[1];
@@ -164,23 +165,23 @@ int check_nonempty(struct dialog_data *, struct dialog_item_data *);
 
 void max_text_width(struct terminal *, unsigned char *, int *);
 void min_text_width(struct terminal *, unsigned char *, int *);
-void dlg_format_text(struct terminal *, struct terminal *, unsigned char *, int, int *, int, int *, int, int);
+void dlg_format_text(struct terminal *, struct terminal *, unsigned char *, int, int *, int, int *, int, enum format_align);
 
 void max_buttons_width(struct terminal *, struct dialog_item_data *, int, int *);
 void min_buttons_width(struct terminal *, struct dialog_item_data *, int, int *);
-void dlg_format_buttons(struct terminal *, struct terminal *, struct dialog_item_data *, int, int, int *, int, int *, int);
+void dlg_format_buttons(struct terminal *, struct terminal *, struct dialog_item_data *, int, int, int *, int, int *, enum format_align);
 
 void checkboxes_width(struct terminal *, unsigned char **, int *, void (*)(struct terminal *, unsigned char *, int *));
 void dlg_format_checkbox(struct terminal *, struct terminal *, struct dialog_item_data *, int, int *, int, int *, unsigned char *);
 void dlg_format_checkboxes(struct terminal *, struct terminal *, struct dialog_item_data *, int, int, int *, int, int *, unsigned char **);
 
-void dlg_format_field(struct terminal *, struct terminal *, struct dialog_item_data *, int, int *, int, int *, int);
+void dlg_format_field(struct terminal *, struct terminal *, struct dialog_item_data *, int, int *, int, int *, enum format_align);
 
 void max_group_width(struct terminal *, unsigned char **, struct dialog_item_data *, int, int *);
 void min_group_width(struct terminal *, unsigned char **, struct dialog_item_data *, int, int *);
 void dlg_format_group(struct terminal *, struct terminal *, unsigned char **, struct dialog_item_data *, int, int, int *, int, int *);
 
-void dlg_format_box(struct terminal *, struct terminal *, struct dialog_item_data *, int, int *, int, int *, int);
+void dlg_format_box(struct terminal *, struct terminal *, struct dialog_item_data *, int, int *, int, int *, enum format_align);
 
 void checkbox_list_fn(struct dialog_data *);
 void group_fn(struct dialog_data *);
@@ -194,7 +195,7 @@ int ok_dialog(struct dialog_data *, struct dialog_item_data *);
 int cancel_dialog(struct dialog_data *, struct dialog_item_data *);
 int clear_dialog(struct dialog_data *, struct dialog_item_data *);
 
-void msg_box(struct terminal *, struct memory_list *, unsigned char *, int, /*unsigned char *, void *, int,*/ ...);
+void msg_box(struct terminal *, struct memory_list *, unsigned char *, enum format_align, /*unsigned char *, void *, int,*/ ...);
 
 void input_field_fn(struct dialog_data *);
 void input_field(struct terminal *, struct memory_list *, unsigned char *, unsigned char *, unsigned char *, unsigned char *, void *, struct history *, int, unsigned char *, int, int, int (*)(struct dialog_data *, struct dialog_item_data *), void (*)(void *, unsigned char *), void (*)(void *));

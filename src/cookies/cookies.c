@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.135 2004/05/22 13:18:34 jonas Exp $ */
+/* $Id: cookies.c,v 1.136 2004/05/22 19:27:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -255,7 +255,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	date = parse_http_header_param(str, "expires");
 	if (date) {
-		cookie->expires = parse_http_date(date); /* Convert date to seconds. */
+		cookie->expires = parse_date(date); /* Convert date to seconds. */
 
 		if (cookie->expires) {
 			int max_age = get_cookies_max_age(); /* Max. age in days */

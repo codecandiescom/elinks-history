@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.285 2004/05/21 11:39:54 jonas Exp $ */
+/* $Id: download.c,v 1.286 2004/05/22 19:27:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -378,7 +378,7 @@ download_data(struct download *download, struct file_download *file_download)
 		goto store;
 
 	if (cached->last_modified)
-		file_download->remotetime = parse_http_date(cached->last_modified);
+		file_download->remotetime = parse_date(cached->last_modified);
 
 	if (cached->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
 		if (is_in_progress_state(download->state))

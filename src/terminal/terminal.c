@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.17 2003/05/06 20:28:47 pasky Exp $ */
+/* $Id: terminal.c,v 1.18 2003/05/08 01:06:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,8 +19,6 @@
 #include "dialogs/menu.h" /* XXX */
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
-/* We don't require this ourselves, but view.h does, and directly including
- * view.h w/o session.h already loaded doesn't work :/. --pasky */
 #include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/hardio.h"
@@ -307,7 +305,7 @@ test_queue:
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
 		term->environment = *(int *)(iq + evtermcwd_len);
-		ev->b = (long)(iq + evtermcwd1int_len);
+		ev->b = (long) decode_session_info(iq + evtermcwd1int_len);
 		r = evtermcwd2int_len + init_len;
 	}
 

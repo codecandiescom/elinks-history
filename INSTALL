@@ -64,8 +64,6 @@ well.  Lastly, you can go to the Unicode/ and intl/ directories, then edit
 index.txt and remove any codepages or translations you don't like; especially
 for translations, it can significantly reduce the resulting binary size as well.
 
-Good luck!
-
   !BEWARE!  If you _distribute_ a binary of ELinks with OpenSSL linked to it,
 and the OpenSSL library is not part of your base system, you are VIOLATING THE
 GPL (although I believe that for this absurd case no ELinks copyright holder
@@ -80,6 +78,13 @@ compile ELinks with the --with-gnutls configure option (assuming that you have
 GNUTLS 0.5.0 or later [tested with 0.5.4] installed).  However, as GNUTLS is not
 yet 100% stable and its support in ELinks is not so well tested yet, it's
 recommended for users to give a strong preference to OpenSSL whenever possible.
+
+  ELinks includes support for scripting in the Lua language, however be warned
+that it works currently only with lua-4.0, not lua-5.0 ! Updating this to
+support both of these is currently not a priority, however such a patch would be
+welcomed.
+
+  Good luck!
 
   The basic compilation looks like:
 
@@ -168,5 +173,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.21 2002/09/13 20:50:14 pasky Exp $
+$Id: INSTALL,v 1.22 2003/05/20 17:44:57 pasky Exp $
 vim: textwidth=80

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.83 2004/12/24 02:34:48 jonas Exp $ */
+/* $Id: connection.h,v 1.84 2005/02/02 17:33:15 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -95,6 +95,8 @@ enum connection_state {
 	S_GOPHER_CSO_ERROR	= -10500,
 
 	S_NO_JAVASCRIPT		= -10600,
+
+	S_PROXY_ERROR		= -10700,
 };
 
 struct progress {

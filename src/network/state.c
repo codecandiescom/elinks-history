@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.36 2004/12/19 14:37:42 pasky Exp $ */
+/* $Id: state.c,v 1.37 2005/02/02 17:33:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,6 +101,12 @@ struct s_msg_dsc {
 #ifdef CONFIG_GOPHER
 	{S_GOPHER_CSO_ERROR,	N_("The CSO phone-book protocol is not supported.")},
 #endif
+
+	{S_PROXY_ERROR,		N_("The proxy configuration encountered an error.\n"
+				"This usually means that either an environment\n"
+				"variable with proxy info or a proxy scripting\n"
+				"hook did not provide proxy configuration info\n"
+				"in the correct format.")},
 
 	{0,			NULL}
 };

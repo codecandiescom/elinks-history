@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.47 2004/10/01 16:03:47 pasky Exp $ */
+/* $Id: proxy.c,v 1.48 2005/02/02 17:33:15 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -18,6 +18,7 @@
 #include "protocol/protocol.h"
 #include "protocol/proxy.h"
 #include "protocol/uri.h"
+#include "sched/connection.h"
 #include "sched/event.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -53,7 +54,7 @@ proxy_probe_no_proxy(unsigned char *url, unsigned char *no_proxy)
 }
 
 static struct uri *
-proxy_uri(struct uri *uri, unsigned char *proxy)
+proxy_uri(struct uri *uri, unsigned char *proxy, int *connection_state)
 {
 	struct string string;
 
@@ -64,8 +65,13 @@ proxy_uri(struct uri *uri, unsigned char *proxy)
 		 * because URI_BASE should not add any fragments in the first
 		 * place. */
 		uri = get_uri(string.source, 0);
+		/* XXX: Assume the problem is due to @proxy having bad format.
+		 * This is a lot faster easier than checking the format. */
+		if (!uri)
+			*connection_state = S_PROXY_ERROR;
 	} else {
 		uri = NULL;
+		*connection_state = S_OUT_OF_MEM;
 	}
 
 	done_string(&string);
@@ -98,13 +104,13 @@ get_protocol_proxy(unsigned char *opt,
 }
 
 static struct uri *
-get_proxy_worker(struct uri *uri, unsigned char *proxy)
+get_proxy_worker(struct uri *uri, unsigned char *proxy, int *connection_state)
 {
 	unsigned char *protocol_proxy = NULL;
 
 	if (proxy) {
 		if (*proxy)
-			return proxy_uri(uri, proxy);
+			return proxy_uri(uri, proxy, connection_state);
 
 		/* "" from script_hook_get_proxy() */
 		return get_composed_uri(uri, URI_BASE);
@@ -154,14 +160,14 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		if (!no_proxy || !*no_proxy) no_proxy = getenv("no_proxy");
 
 		if (!proxy_probe_no_proxy(uri->host, no_proxy))
-			return proxy_uri(uri, protocol_proxy);
+			return proxy_uri(uri, protocol_proxy, connection_state);
 	}
 
 	return get_composed_uri(uri, URI_BASE);
 }
 
 struct uri *
-get_proxy_uri(struct uri *uri)
+get_proxy_uri(struct uri *uri, int *connection_state)
 {
 	if (uri->protocol == PROTOCOL_PROXY) {
 		return get_composed_uri(uri, URI_BASE);
@@ -172,11 +178,12 @@ get_proxy_uri(struct uri *uri)
 
 		set_event_id(get_proxy_event_id, "get-proxy");
 		trigger_event(get_proxy_event_id, &tmp, struri(uri));
-		uri = get_proxy_worker(uri, tmp);
+
+		uri = get_proxy_worker(uri, tmp, connection_state);
 		mem_free_if(tmp);
 		return uri;
 #else
-		return get_proxy_worker(uri, NULL);
+		return get_proxy_worker(uri, NULL, connection_state);
 #endif
 	}
 }

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.211 2004/12/30 23:50:40 jonas Exp $ */
+/* $Id: connection.c,v 1.212 2005/02/02 17:33:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,7 +432,7 @@ static int
 do_keepalive_connection_callback(struct keepalive_connection *keep_conn)
 {
 	struct uri *proxied_uri = get_proxied_uri(keep_conn->uri);
-	struct uri *proxy_uri   = get_proxy_uri(keep_conn->uri);
+	struct uri *proxy_uri   = get_proxy_uri(keep_conn->uri, NULL);
 
 	if (proxied_uri && proxy_uri) {
 		struct connection *conn;
@@ -813,6 +813,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	struct cache_entry *cached;
 	struct connection *conn;
 	struct uri *proxy_uri, *proxied_uri;
+	enum connection_state connection_state = S_OK;
 
 	if (download) {
 		download->conn = NULL;
@@ -859,7 +860,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	}
 
 	proxied_uri = get_proxied_uri(uri);
-	proxy_uri   = get_proxy_uri(uri);
+	proxy_uri   = get_proxy_uri(uri, &connection_state);
 
 	if (!proxy_uri
 	    || !proxied_uri
@@ -867,7 +868,12 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		&& !proxy_uri->hostlen)) {
 
 		if (download) {
-			download->state = proxy_uri && proxied_uri ? S_BAD_URL : S_OUT_OF_MEM;
+			if (connection_state == S_OK) {
+				connection_state = proxy_uri && proxied_uri
+						 ? S_BAD_URL : S_OUT_OF_MEM;
+			}
+
+			download->state = connection_state;
 			download->callback(download, download->data);
 		}
 		if (proxy_uri) done_uri(proxy_uri);

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.194 2004/12/19 18:04:39 jonas Exp $ */
+/* $Id: cache.c,v 1.195 2005/02/02 17:33:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ get_cache_entry(struct uri *uri)
 		return NULL;
 	}
 
-	cached->proxy_uri = get_proxy_uri(uri);
+	cached->proxy_uri = get_proxy_uri(uri, NULL);
 	if (!cached->proxy_uri) {
 		done_uri(cached->uri);
 		mem_free(cached);

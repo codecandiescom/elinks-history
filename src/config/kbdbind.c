@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.117 2003/12/21 00:40:15 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.118 2003/12/21 02:06:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,6 +384,7 @@ static struct strtonum action_table[] = {
 	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
 	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
+	{ "cancel", ACT_CANCEL, DACT(N_("Cancel current state")) },
 	{ "cookie-manager", ACT_COOKIE_MANAGER, DACT(N_("Open cookie manager")) },
 	{ "cookies-load", ACT_COOKIES_LOAD, DACT(N_("Reload cookies file")) },
 	{ "copy-clipboard", ACT_COPY_CLIPBOARD, DACT(N_("Copy text to clipboard")) },
@@ -426,6 +427,7 @@ static struct strtonum action_table[] = {
 	{ "mark-item", ACT_MARK_ITEM, DACT(N_("Mark item")) },
 	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
 	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
+	{ "next-item", ACT_NEXT_ITEM, DACT(N_("Move to the next item")) },
 	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
 	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in background")) },
 	{ "open-new-window", ACT_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
@@ -781,11 +783,13 @@ static struct default_kb default_edit_keymap[] = {
 	{ KBD_DOWN,	 0,		ACT_DOWN },
 	{ KBD_END,	 0,		ACT_END },
 	{ KBD_ENTER,	 0,		ACT_ENTER },
+	{ KBD_ESC,	 0,		ACT_CANCEL },
 	{ KBD_F4,	 0,		ACT_EDIT },
 	{ KBD_HOME,	 0,		ACT_HOME },
 	{ KBD_INS,	 KBD_CTRL,	ACT_COPY_CLIPBOARD },
 	{ KBD_LEFT,	 0,		ACT_LEFT },
 	{ KBD_RIGHT,	 0,		ACT_RIGHT },
+	{ KBD_TAB,	 0,		ACT_NEXT_ITEM },
 	{ KBD_UP,	 0,		ACT_UP },
 	{ 0, 0, 0 }
 };
@@ -807,12 +811,14 @@ static struct default_kb default_menu_keymap[] = {
 	{ KBD_DOWN,	 0,		ACT_DOWN },
 	{ KBD_END,	 0,		ACT_END },
 	{ KBD_ENTER,	 0,		ACT_ENTER },
+	{ KBD_ESC,	 0,		ACT_CANCEL },
 	{ KBD_HOME,	 0,		ACT_HOME },
 	{ KBD_INS,	 0,		ACT_MARK_ITEM },
 	{ KBD_LEFT,	 0,		ACT_LEFT },
 	{ KBD_PAGE_DOWN, 0,		ACT_PAGE_DOWN },
 	{ KBD_PAGE_UP,	 0,		ACT_PAGE_UP },
 	{ KBD_RIGHT,	 0,		ACT_RIGHT },
+	{ KBD_TAB,	 0,		ACT_NEXT_ITEM },
 	{ KBD_UP,	 0,		ACT_UP },
 	{ 0, 0, 0}
 };

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.122 2003/12/18 22:37:29 pasky Exp $ */
+/* $Id: menu.c,v 1.123 2003/12/21 02:06:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,21 +542,20 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 				}
 					break;
 #undef DIST
+				case ACT_CANCEL:
+					if ((void *) win->next != &win->term->windows
+					    && win->next->handler == mainmenu_handler)
+						delete_window_ev(win, ev);
+					else
+						delete_window_ev(win, NULL);
+
+					goto break2;
+
 				default:
 				{
 					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
 					    ev->y == KBD_ALT) {
 						delete_window_ev(win, ev);
-						goto break2;
-					}
-
-					if (ev->x == KBD_ESC) {
-						if ((void *) win->next != &win->term->windows
-						    && win->next->handler == mainmenu_handler)
-							delete_window_ev(win, ev);
-						else
-							delete_window_ev(win, NULL);
-
 						goto break2;
 					}
 

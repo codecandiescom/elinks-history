@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.81 2004/02/06 18:38:23 jonas Exp $ */
+/* $Id: renderer.c,v 1.82 2004/02/08 17:37:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,22 +401,16 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 {
 	struct fragment *fr = ce->frag.next;
 	struct conv_table *convert_table;
-	struct string head;
+	unsigned char *head = empty_string_or_(ce->head);
 	struct plain_renderer renderer;
 
 	assert(!list_empty(ce->frag));
 
-	if (!init_string(&head)) return;
-
-	if (ce->head) add_to_string(&head, ce->head);
-
-	convert_table = get_convert_table(head.source, document->options.cp,
+	convert_table = get_convert_table(head, document->options.cp,
 					  document->options.assume_cp,
 					  &document->cp,
 					  &document->cp_status,
 					  document->options.hard_assume);
-
-	done_string(&head);
 
 	document->title = get_no_post_url(document->url, NULL);
 	document->bgcolor = global_doc_opts->default_bg;

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.188 2004/12/31 11:44:30 jonas Exp $ */
+/* $Id: file.c,v 1.189 2005/02/20 00:12:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,7 +204,9 @@ list_directory(unsigned char *dirpath, struct string *page)
 
 	add_to_string(page, "<html>\n<head><title>");
 	add_html_to_string(page, dirpath, strlen(dirpath));
-	add_to_string(page, "</title></head>\n<body>\n<h2>Directory /");
+	add_to_string(page, "</title>\n<base href=\"");
+	add_html_to_string(page, dirpath, strlen(dirpath));
+	add_to_string(page, "\" />\n</head>\n<body>\n<h2>Directory /");
 
 	/* Make the directory path with links to each subdir. */
 	while ((slash = strchr(slash, '/'))) {

@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.26 2004/07/20 21:46:01 zas Exp $ */
+/* $Id: proxy.c,v 1.27 2004/07/20 21:52:20 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -73,7 +73,11 @@ static struct uri *
 get_proxy_worker(struct uri *uri, unsigned char *proxy)
 {
 	if (proxy) {
-		if (!*proxy) proxy = NULL; /* "" from script_hook_get_proxy() */
+		if (!*proxy)
+			return get_composed_uri(uri, URI_BASE); /* "" from script_hook_get_proxy() */
+		else
+			return proxy_uri(uri, proxy);
+
 	} else {
 		unsigned char *http_proxy, *https_proxy, *ftp_proxy, *no_proxy;
 		unsigned char *protocol_proxy = NULL;
@@ -125,13 +129,12 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 			if (!proxy_probe_no_proxy(uri->host, no_proxy))
 				proxy = protocol_proxy;
 		}
-	}
 
-	if (proxy) {
-		return proxy_uri(uri, proxy);
+		if (proxy)
+			return proxy_uri(uri, proxy);
+		else
+			return get_composed_uri(uri, URI_BASE);
 	}
-
-	return get_composed_uri(uri, URI_BASE);
 }
 
 struct uri *

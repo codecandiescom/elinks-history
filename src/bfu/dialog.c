@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.156 2004/11/17 00:54:12 zas Exp $ */
+/* $Id: dialog.c,v 1.157 2004/11/17 00:58:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -240,26 +240,33 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		return;
 
 	/* Can we select? */
-	if ((action == ACT_MENU_ENTER || action == ACT_MENU_SELECT)
+	if (action == ACT_MENU_SELECT
 	    && widget_data->widget->ops->select) {
 		widget_data->widget->ops->select(widget_data, dlg_data);
 		return;
 	}
 
 	/* Submit button. */
-	if (action == ACT_MENU_ENTER
-	    && (widget_is_textfield(widget_data)
-		|| check_kbd_modifier(ev, KBD_CTRL)
-		|| check_kbd_modifier(ev, KBD_ALT))) {
-		int i;
+	if (action == ACT_MENU_ENTER) {
+		if (widget_data->widget->ops->select)
+			widget_data->widget->ops->select(widget_data, dlg_data);
+			return;
+		}
+		
+		if (widget_is_textfield(widget_data)
+		    || check_kbd_modifier(ev, KBD_CTRL)
+		    || check_kbd_modifier(ev, KBD_ALT)) {
+			int i;
 
-		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-			    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
-				select_dlg_item(dlg_data, i);
-				return;
+			for (i = 0; i < dlg_data->n; i++) {
+				if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
+				    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
+					select_dlg_item(dlg_data, i);
+					break;
+				}
 			}
 		}
+		return;
 	}
 
 	/* Cancel button. */

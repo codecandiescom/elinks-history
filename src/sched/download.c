@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.230 2004/04/01 01:51:42 jonas Exp $ */
+/* $Id: download.c,v 1.231 2004/04/01 02:48:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -929,11 +929,11 @@ tp_display(struct tq *tq)
 	struct view_state *vs;
 	struct session *ses = tq->ses;
 	unsigned char *goto_position = ses->goto_position;
-	unsigned char *loading_uri = ses->loading_uri;
+	struct uri *loading_uri = ses->loading_uri;
 	unsigned char *target_frame = ses->task.target_frame;
 
 	ses->goto_position = tq->goto_position;
-	ses->loading_uri = struri(tq->uri);
+	ses->loading_uri = tq->uri;
 	ses->task.target_frame = tq->target_frame;
 	vs = ses_forward(ses, tq->frame);
 	if (vs) vs->plain = 1;
@@ -1083,17 +1083,14 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 		goto plaintext_follow;
 
 	foreach (tq, ses->tq)
-		if (!strcmp(struri(tq->uri), ses->loading_uri))
+		/* There can be only one ... */
+		if (tq->uri == ses->loading_uri)
 			goto do_not_follow;
 
 	tq = mem_calloc(1, sizeof(struct tq));
 	if (!tq) goto do_not_follow;
 
-	tq->uri = get_uri(ses->loading_uri);
-	if (!tq->uri) {
-		mem_free(tq);
-		goto do_not_follow;
-	}
+	tq->uri = get_uri_reference(ses->loading_uri);
 
 	add_to_list(ses->tq, tq);
 	ret = 1;

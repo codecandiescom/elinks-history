@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.67 2004/04/01 01:09:40 jonas Exp $ */
+/* $Id: history.c,v 1.68 2004/04/01 02:48:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "cache/cache.h"
 #include "config/options.h"
 #include "dialogs/status.h"
+#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/history.h"
 #include "sched/location.h"
@@ -113,7 +114,7 @@ ses_history_move(struct session *ses)
 
 	loc = cur_loc(ses);
 
-	if (!strcmp(loc->vs.url, ses->loading_uri))
+	if (!strcmp(loc->vs.url, struri(ses->loading_uri)))
 		return;
 
 	/* Remake that location. */

@@ -270,6 +270,7 @@ LIBS_X="$LIBS"
 cf_result=no
 
 if test -z "$disable_ssl"; then
+	AC_CHECK_LIB(dl, dlopen) # OpenSSL needs it?
 	for ssldir in "" /usr /usr/local/openssl /usr/lib/openssl \
 			 /usr/local/ssl /usr/local/www /usr/lib/ssl \
 			 /usr/local /usr/pkg /opt /opt/openssl; do

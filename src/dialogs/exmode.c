@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.22 2004/01/28 05:05:32 jonas Exp $ */
+/* $Id: exmode.c,v 1.23 2004/01/28 05:07:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,6 @@
  * bottom of the screen when you press ':' and lets you enter various commands
  * (just like in vi), especially actions, events (where they make sense) and
  * config-file commands. */
-
-/* TODO: Compile-time configurable? */
 
 #define EXMODE_BUFFER_SIZE 80
 
@@ -149,13 +147,13 @@ static exmode_handler exmode_handlers[] = {
 };
 
 static void
-exmode_exec(struct exmode_data *data, struct session *ses)
+exmode_exec(struct session *ses, unsigned char buffer[EXMODE_BUFFER_SIZE])
 {
 	/* First look it up as action, then try it as an event (but the event
 	 * part should be thought out somehow yet, I s'pose... let's leave it
 	 * off for now). Then try to evaluate it as configfile command. Then at
 	 * least pop up an error. */
-	unsigned char *command = data->buffer;
+	unsigned char *command = buffer;
 	unsigned char *args = command;
 	int i;
 
@@ -208,7 +206,7 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 
 			switch (kbd_action(KM_EDIT, ev, NULL)) {
 				case ACT_EDIT_ENTER:
-					exmode_exec(data, ses);
+					exmode_exec(ses, data->buffer);
 					/* Falling */
 				case ACT_EDIT_CANCEL:
 					cancel_dialog(dlg_data, NULL);

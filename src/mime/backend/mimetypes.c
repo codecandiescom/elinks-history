@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.9 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: mimetypes.c,v 1.10 2003/06/08 18:47:01 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -228,28 +228,35 @@ mimetypes_change_hook(struct session *ses, struct option *current,
 
 
 static unsigned char *
-get_content_type_mimetypes(unsigned char *url)
+get_content_type_mimetypes(unsigned char *extension)
 {
-	unsigned char *extension;
 	struct hash_item *item;
 	int extensionlen;
 
 	if (!mimetypes_map)
 		return NULL;
 
-	extensionlen = get_extension_from_url(url, &extension);
+	extensionlen = strlen(extension);
+	while (1) {
+		unsigned char *trimmed;
 
-	if (extensionlen == 0)
-		return NULL;
+		/* First the given type is looked up. */
+		item = get_hash_item(mimetypes_map, extension, extensionlen);
 
-	/* First the given type is looked up. */
-	item = get_hash_item(mimetypes_map, extension, extensionlen);
+		/* Check list of entries */
+		if (item && item->value) {
+			struct mimetypes_entry *entry = item->value;
 
-	/* Check list of entries */
-	if (item && item->value) {
-		struct mimetypes_entry *entry = item->value;
+			return stracpy(entry->content_type);
+		}
 
-		return stracpy(entry->content_type);
+		/* Try to trim the extension from the left. */
+		trimmed = strchr(extension, '.');
+		if (!trimmed)
+			break;
+
+		extensionlen -= trimmed - extension + 1;
+		extension = trimmed + 1;
 	}
 
 	return NULL;

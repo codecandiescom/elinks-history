@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.9 2003/06/08 17:42:49 jonas Exp $ */
+/* $Id: common.c,v 1.10 2003/06/08 18:47:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ done_mime_backends(void)
 /* TODO Make backend selection scheme configurable */
 
 unsigned char *
-get_content_type_backends(unsigned char *uri)
+get_content_type_backends(unsigned char *extension)
 {
 	struct mime_backend *backend;
 
@@ -66,7 +66,7 @@ get_content_type_backends(unsigned char *uri)
 		if (backend->get_content_type) {
 			unsigned char *content_type;
 
-			content_type = backend->get_content_type(uri);
+			content_type = backend->get_content_type(extension);
 			if (content_type) return content_type;
 		}
 

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.10 2003/06/08 17:42:49 jonas Exp $ */
+/* $Id: mime.c,v 1.11 2003/06/08 18:47:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,31 +60,32 @@ get_content_type(unsigned char *head, unsigned char *url)
 	 * want to support also things like "ps.gz" - that'd never work, as we
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
-	content_type = get_content_type_backends(url);
-	if (content_type)
-		return content_type;
-
 	extension = get_extensionpart_from_url(url);
 	if (extension) {
-		int extensionlen = strlen(extension);
-		unsigned char *ext_type = mem_alloc(15 + extensionlen);
+		int extlen;
 
-		if (!ext_type) {
+		content_type = get_content_type_backends(extension);
+		if (content_type) {
 			mem_free(extension);
-			return NULL;
+			return content_type;
 		}
 
-		/* Try to make application/x-<extension> from it */
-		memcpy(ext_type, "application/x-", 14);
-		safe_strncpy(ext_type + 14, extension, extensionlen + 1);
+		extlen = strlen(extension);
+		content_type = mem_alloc(15 + extlen);
+		if (content_type) {
+			/* Try to make application/x-<extension> from it */
+			memcpy(content_type, "application/x-", 14);
+			safe_strncpy(content_type + 14, extension, extlen + 1);
 
-		if (get_mime_type_handler(NULL, ext_type)) {
-			mem_free(extension);
-			return ext_type;
+			if (get_mime_type_handler(NULL, content_type)) {
+				mem_free(extension);
+				return content_type;
+			}
+
+			mem_free(content_type);
 		}
 
 		mem_free(extension);
-		mem_free(ext_type);
 	}
 
 	/* Fallback.. use some hardwired default */

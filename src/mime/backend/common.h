@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.10 2003/06/08 17:42:49 jonas Exp $ */
+/* $Id: common.h,v 1.11 2003/06/08 18:47:01 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -18,9 +18,8 @@ struct mime_backend {
 	void (*init)(void);
 	void (*done)(void);
 
-	/* Given an @uri resolve the content type. For know it (mostly)
-	 * comes down to using the the extension. */
-	unsigned char *(*get_content_type)(unsigned char *uri);
+	/* Resolve the content type from the @extension. */
+	unsigned char *(*get_content_type)(unsigned char *extension);
 
 	/* Given a mime type find a associated handler. The handler can
 	 * be given options such */
@@ -33,7 +32,7 @@ void init_mime_backends(void);
 
 void done_mime_backends(void);
 
-unsigned char *get_content_type_backends(unsigned char *uri);
+unsigned char *get_content_type_backends(unsigned char *extension);
 
 struct mime_handler *
 get_mime_handler_backends(unsigned char *content_type, int have_x);

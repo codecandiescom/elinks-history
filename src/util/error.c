@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.45 2003/05/07 15:11:45 pasky Exp $ */
+/* $Id: error.c,v 1.46 2003/05/07 15:16:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,12 +137,12 @@ dump_backtrace(FILE *f, int trouble)
 #ifdef HAVE_EXECINFO_H
 	/* glibc way of doing this */
 
-	void *stack[30];
+	void *stack[20];
 	size_t size;
 	char **strings;
 	size_t i;
 
-	size = backtrace(stack, 30);
+	size = backtrace(stack, 20);
 
 	if (trouble) {
 		/* Let's hope fileno() is safe. */

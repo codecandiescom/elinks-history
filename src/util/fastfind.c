@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.21 2003/06/14 20:29:28 pasky Exp $ */
+/* $Id: fastfind.c,v 1.22 2003/06/14 20:42:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,6 +156,8 @@ struct fastfind_info {
 		(x)->testsdelta += (x)->tests - (x)->teststmp;		\
 		(x)->found++;						\
 	} while (0)
+/* ACCounted IF ;-) */
+#define accif(x) testinc(x); if
 
 #else /* !FASTFIND_DEBUG */
 
@@ -163,6 +165,7 @@ struct fastfind_info {
 #define testinc(x)
 #define iterinc(x)
 #define foundinc(x)
+#define accif(x) if
 
 #endif
 
@@ -421,17 +424,11 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	info->total_key_len += key_len;
 	info->teststmp = info->tests;
 	info->itertmp = info->iterations;
-
-	testinc(info);
-   	if (!key) return NULL;
-	testinc(info);
-	if (key_len > info->max_key_len) return NULL;
-	testinc(info);
-	if (key_len < info->min_key_len) return NULL;
-#else
-	if (!key || key_len > info->max_key_len || key_len < info->min_key_len)
-		return NULL;
 #endif
+
+   	accif(info) (!key) return NULL;
+	accif(info) (key_len > info->max_key_len) return NULL;
+	accif(info) (key_len < info->min_key_len) return NULL;
 
 	current = info->root_line;
 
@@ -445,28 +442,24 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 
 		iterinc(info);
 
-		testinc(info);
-		if (lidx < 0) return NULL;
+		accif(info) (lidx < 0) return NULL;
 
-		testinc(info);
-		if (current->c) {
+		accif(info) (current->c) {
 			/* It is a compressed line. */
-			testinc(info);
-			if (((struct ff_elt_c *) current)->ch != lidx)
+			accif(info) (((struct ff_elt_c *) current)->ch != lidx)
 				return NULL;
 		} else {
 			current = &current[lidx];
 		}
 
-		testinc(info);
-		if (current->e && key_len == info->keylen_list[current->p]) {
+		accif(info) (current->e
+			     && key_len == info->keylen_list[current->p]) {
 			testinc(info);
 			foundinc(info);
 			return info->pointers[current->p];
 		}
 
-		testinc(info);
-		if (!current->l)
+		accif(info) (!current->l)
 			return NULL;
 
 		current = (struct ff_elt *) info->lines[current->l];

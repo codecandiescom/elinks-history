@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.33 2002/06/22 16:45:19 pasky Exp $ */
+/* $Id: types.c,v 1.34 2002/06/23 11:42:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -803,7 +803,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 
 	do_dialog(term, d, getml(d, NULL));
 
-	mem_free(fcp);
+	if (fcp) mem_free(fcp);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.21 2003/10/24 21:17:56 pasky Exp $ */
+/* $Id: history.h,v 1.22 2003/10/26 02:46:26 zas Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -36,11 +36,17 @@ add_to_history(struct ses_history *history, struct location *loc)
 static inline void
 del_from_history(struct ses_history *history, struct location *loc)
 {
+	/* FIXME: workaround for the 0x25254545 segfault. --Zas */
+	void *prev = loc->prev;
+	void *next = loc->next;
+
 	del_from_list(loc);
 	if (history->current == loc)
-		history->current = loc->prev;
+		history->current = prev;
+
 	if (history->current == (struct location *) &history->history)
-		history->current = loc->next;
+		history->current = next;
+
 	if (history->current == (struct location *) &history->history)
 		history->current = NULL;
 }

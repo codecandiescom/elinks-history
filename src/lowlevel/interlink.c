@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.52 2003/06/20 12:06:06 zas Exp $ */
+/* $Id: interlink.c,v 1.53 2003/06/20 16:33:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,20 +68,20 @@ af_unix_close(void)
 #endif
 
 /* FIXME: Separate client and server code. --Zas */
-struct s_addr_info {
+struct addr_info {
 	struct sockaddr *addr;
 	int size;
 	int fd;
 };
 
 /* Accepted socket info */
-static struct s_addr_info s_info_accept;
+static struct addr_info s_info_accept;
 
 /* Listening socket info */
-static struct s_addr_info s_info_listen;
+static struct addr_info s_info_listen;
 
 /* Connect socket info */
-static struct s_addr_info s_info_connect;
+static struct addr_info s_info_connect;
 
 enum addr_type {
 	ADDR_LOCAL,
@@ -117,7 +117,7 @@ get_sun_path(unsigned char **sun_path, int *sun_path_len)
 
 /* type is ignored here => always local */
 static int
-get_address(struct s_addr_info *info, enum addr_type type)
+get_address(struct addr_info *info, enum addr_type type)
 {
 	struct sockaddr_un *addr = NULL;
 	int sun_path_freespace;
@@ -189,7 +189,7 @@ free_and_error:
 }
 
 static int
-alloc_address(struct s_addr_info *info)
+alloc_address(struct addr_info *info)
 {
 	struct sockaddr_un *sa;
 
@@ -206,11 +206,11 @@ alloc_address(struct s_addr_info *info)
 }
 
 static void
-unlink_unix(struct sockaddr *s_addr)
+unlink_unix(struct sockaddr *addr)
 {
-	assert(s_addr);
+	assert(addr);
 
-	unlink(((struct sockaddr_un *) s_addr)->sun_path);
+	unlink(((struct sockaddr_un *) addr)->sun_path);
 }
 
 #define setsock_reuse_addr(fd)
@@ -232,7 +232,7 @@ unlink_unix(struct sockaddr *s_addr)
 /* FIXME: IPv6 support. */
 
 static int
-get_address(struct s_addr_info *info, enum addr_type type)
+get_address(struct addr_info *info, enum addr_type type)
 {
 	struct sockaddr_in *sin;
 	unsigned short port;
@@ -278,7 +278,7 @@ get_address(struct s_addr_info *info, enum addr_type type)
 }
 
 static int
-alloc_address(struct s_addr_info *info)
+alloc_address(struct addr_info *info)
 {
 	struct sockaddr_in *sa;
 
@@ -314,7 +314,7 @@ setsock_reuse_addr(int fd)
 
 /* Called when we receive a connection on listening socket. */
 static void
-af_unix_connection(struct s_addr_info *info)
+af_unix_connection(struct addr_info *info)
 {
 	int ns;
 	int l = info->size;

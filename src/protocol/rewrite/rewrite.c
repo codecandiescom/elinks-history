@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.31 2004/07/15 15:44:05 jonas Exp $ */
+/* $Id: rewrite.c,v 1.32 2004/07/22 01:56:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,15 +53,21 @@ static struct option_info uri_rewrite_options[] = {
 
 	INIT_OPT_BOOL("protocol.rewrite", N_("Enable dumb prefixes"),
 		"enable-dumb", 0, 1,
-		N_("Enable dumb prefixes.")),
+		N_("Enable dumb prefixes - simple URI abbreviations which can\n"
+		"be written to the Goto URL dialog instead of actual URIs - i.e.\n"
+		"if you write 'elinks' there, you are directed to\n"
+		"http://elinks.or.cz/.")),
 
 	INIT_OPT_BOOL("protocol.rewrite", N_("Enable smart prefixes"),
 		"enable-smart", 0, 1,
-		N_("Enable smart prefixes.")),
+		N_("Enable smart prefixes - URI templates triggered by writing\n"
+		"given abbreviation to the Goto URL dialog followed by a list\n"
+		"of arguments from which the actual URI is composed - i.e.\n"
+		"'gg:search keywords' or 'gn search keywords for news'.")),
 
 	INIT_OPT_TREE("protocol.rewrite", N_("Dumb Prefixes"),
 		"dumb", OPT_AUTOCREATE | OPT_SORT,
-		N_("Dumb prefixes.")),
+		N_("Dumb prefixes, see enable-dumb description for details.")),
 
 	INIT_OPT_STRING("protocol.rewrite.dumb", NULL,
 		"_template_", 0, "",
@@ -71,7 +77,7 @@ static struct option_info uri_rewrite_options[] = {
 
 	INIT_OPT_TREE("protocol.rewrite", N_("Smart Prefixes"),
 		"smart", OPT_AUTOCREATE | OPT_SORT,
-		N_("Smart prefixes.")),
+		N_("Smart prefixes, see enable-smart description for details.")),
 
 	/* TODO: In some rare occations current link URI and referrer might
 	 * also be useful and dare I mention some kind of proxy argument. --jonas */

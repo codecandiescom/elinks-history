@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.3 2003/05/05 09:17:26 zas Exp $ */
+/* $Id: draw.c,v 1.4 2003/05/05 09:27:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,15 +121,24 @@ draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 		FRAMED_HLINE,
 	};
 	enum frame_char *p = w > 1 ? p2 : p1;
+	int xt = x + xw - 1;
+	int yt = y + yw - 1;
+	int y1 = y + 1;
+	int x1 = x + 1;
+	int ywt = yw - 2;
+	int xwt = xw - 2;
+	int cp4 = c + p[4];
+	int cp5 = c + p[5];
 
-	set_char(t, x, y, c+p[0]);
-	set_char(t, x+xw-1, y, c+p[1]);
-	set_char(t, x, y+yw-1, c+p[2]);
-	set_char(t, x+xw-1, y+yw-1, c+p[3]);
-	fill_area(t, x, y+1, 1, yw-2, c+p[4]);
-	fill_area(t, x+xw-1, y+1, 1, yw-2, c+p[4]);
-	fill_area(t, x+1, y, xw-2, 1, c+p[5]);
-	fill_area(t, x+1, y+yw-1, xw-2, 1, c+p[5]);
+	set_char(t, x, y, c + p[0]);
+	set_char(t, xt, y, c + p[1]);
+	set_char(t, x, yt, c + p[2]);
+	set_char(t, xt, yt, c + p[3]);
+
+	fill_area(t, x, y1, 1, ywt, cp4);
+	fill_area(t, xt, y1, 1, ywt, cp4);
+	fill_area(t, x1, y, xwt, 1, cp5);
+	fill_area(t, x1, yt, xwt, 1, cp5);
 }
 
 void

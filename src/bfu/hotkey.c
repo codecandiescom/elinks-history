@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.19 2004/05/26 20:40:44 zas Exp $ */
+/* $Id: hotkey.c,v 1.20 2004/05/26 21:12:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,18 +167,15 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 
 	start = i;
 
-	while (1) {
-		if (i + 1 == menu->size) i = 0;
-		else i++;
+	do {
+		if (++i == menu->size) i = 0;
 
 		if (is_hotkey(&menu->items[i], key, term)) {
 			menu->selected = i;
 			return 1;
 		}
 
-		if (i == start) break;
-
-	};
+	} while (i != start);
 
 	return 0;
 }
@@ -190,7 +187,6 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 int
 check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *term)
 {
-	unsigned char *text;
 	unsigned char k = upcase(key);
 	int i = menu->selected;
 	int start;
@@ -201,26 +197,25 @@ check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *ter
 	if (i < 0) i += menu->size;
 
 	start = i;
+	do {
+		unsigned char *text;
 
-	while (1) {
-		if (i + 1 == menu->size) i = 0;
-		else i++;
+		if (++i == menu->size) i = 0;
 
 		if (!mi_has_left_text(menu->items[i])) continue;
 
 		text = menu->items[i].text;
+		if (!text) continue;
 
 		if (mi_text_translate(menu->items[i])) text = _(text, term);
 		if (!*text) continue;
 
-		if (text && upcase(text[0]) == k) {
+		if (upcase(text[0]) == k) {
 			menu->selected = i;
 			return 1;
 		}
 
-		if (i == start) break;
-	};
+	} while (i != start);
 
 	return 0;
-
 }

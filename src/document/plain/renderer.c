@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.100 2004/05/14 00:43:27 jonas Exp $ */
+/* $Id: renderer.c,v 1.101 2004/05/21 10:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,8 +14,8 @@
 #include "cache/cache.h"
 #include "document/docdata.h"
 #include "document/document.h"
-#include "document/html/renderer.h" /* TODO: Move get_convert_table() */
 #include "document/plain/renderer.h"
+#include "document/renderer.h"
 #include "intl/charsets.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.62 2004/05/16 12:57:47 zas Exp $ */
+/* $Id: renderer.h,v 1.63 2004/05/21 10:54:50 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -41,7 +41,5 @@ struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, s
 
 /* FIXME: Following probably breaks encapsulation of renderer? --pasky */
 extern int margin;
-
-struct conv_table *get_convert_table(unsigned char *head, int to_cp, int default_cp, int *from_cp, enum cp_status *cp_status, int ignore_server_cp);
 
 #endif

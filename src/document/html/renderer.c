@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.437 2004/05/16 14:34:13 zas Exp $ */
+/* $Id: renderer.c,v 1.438 2004/05/21 10:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,13 +17,13 @@
 #include "document/document.h"
 #include "document/options.h"
 #include "document/refresh.h"
+#include "document/renderer.h"
 #include "document/html/frames.h"
 #include "document/html/parser/parse.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
 #include "intl/charsets.h"
-#include "protocol/http/header.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/color.h"
@@ -1433,63 +1433,6 @@ ret:
 end:
 
 	return part;
-}
-
-struct conv_table *
-get_convert_table(unsigned char *head, int to_cp,
-		  int default_cp, int *from_cp,
-		  enum cp_status *cp_status, int ignore_server_cp)
-{
-	unsigned char *a, *b;
-	unsigned char *part = head;
-	int from = -1;
-
-	assert(head);
-	if_assert_failed return NULL;
-
-	while (from == -1) {
-		a = parse_http_header(part, "Content-Type", &part);
-		if (a) {
-			b = parse_http_header_param(a, "charset");
-			if (b) {
-				from = get_cp_index(b);
-				mem_free(b);
-			}
-			mem_free(a);
-		} else break;
-	}
-
-	if (from == -1) {
-		a = parse_http_header(head, "Content-Charset", NULL);
-		if (a) {
-			from = get_cp_index(a);
-			mem_free(a);
-		}
-	}
-
-	if (from == -1) {
-		a = parse_http_header(head, "Charset", NULL);
-		if (a) {
-			from = get_cp_index(a);
-			mem_free(a);
-		}
-	}
-
-	if (cp_status) {
-		if (from == -1)
-			*cp_status = CP_STATUS_ASSUMED;
-		else {
-			if (ignore_server_cp)
-				*cp_status = CP_STATUS_IGNORED;
-			else
-				*cp_status = CP_STATUS_SERVER;
-		}
-	}
-
-	if (ignore_server_cp || from == -1) from = default_cp;
-	if (from_cp) *from_cp = from;
-
-	return get_translation_table(from, to_cp);
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.419 2004/05/16 12:40:34 zas Exp $ */
+/* $Id: parser.c,v 1.420 2004/05/21 10:54:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
+#include "document/renderer.h"
 #include "intl/charsets.h"
 #include "osdep/ascii.h"
 #include "protocol/http/header.h"

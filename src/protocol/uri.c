@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.225 2004/06/05 21:14:33 jonas Exp $ */
+/* $Id: uri.c,v 1.226 2004/06/06 12:21:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -665,17 +665,12 @@ join_urls(struct uri *base, unsigned char *rel)
 
 		return normalize_uri_reparse(&uri, n);
 	} else if (rel[0] == '/' && rel[1] == '/') {
-		/* FIXME: This is equal to checking if
-		 * get_protocol_need_slashes(base->protocol), is it not? */
-		unsigned char *s = strstr(struri(base), "//");
-
-		if (!s) {
-			INTERNAL("bad base url: %s", base);
+		if (!get_protocol_need_slashes(base->protocol))
 			return NULL;
-		}
 
-		n = memacpy(struri(base), s - struri(base));
-		add_to_strn(&n, rel);
+		/* Get `<protocol>://' and add stuff after `//' from @rel */
+		n = get_uri_string(base, URI_PROTOCOL);
+		add_to_strn(&n, rel + 2);
 		return n;
 	}
 

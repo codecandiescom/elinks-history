@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.141 2004/12/18 02:33:26 jonas Exp $ */
+/* $Id: task.c,v 1.142 2004/12/18 19:22:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,9 +43,6 @@ free_task(struct session *ses)
 		ses->loading_uri = NULL;
 	}
 	ses->task.type = TASK_NONE;
-
-	/* Clear so there are no dangling pointers. (bug 559) */
-	memset(&ses->loading, 0, sizeof(struct download));
 }
 
 void

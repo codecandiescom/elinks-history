@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.94 2004/10/14 20:28:24 jonas Exp $ */
+/* $Id: cache.h,v 1.95 2004/12/18 19:22:03 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -85,6 +85,9 @@ struct cache_entry *get_cache_entry(struct uri *uri);
 /* Searches the cache for a matching entry and checks if it is still valid and
  * usable. Returns NULL if the @cache_mode suggests to reload it again. */
 struct cache_entry *get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode);
+
+/* Checks if a dangling cache entry pointer is still valid. */
+int cache_entry_is_valid(struct cache_entry *cached);
 
 /* Add a fragment to the @cached object at the given @offset containing @length
  * bytes from the @data pointer. */

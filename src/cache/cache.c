@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.192 2004/12/16 23:10:41 pasky Exp $ */
+/* $Id: cache.c,v 1.193 2004/12/18 19:22:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -190,6 +190,20 @@ get_validated_cache_entry(struct uri *uri, enum cache_mode cache_mode)
 
 	return cached;
 }
+
+int
+cache_entry_is_valid(struct cache_entry *cached)
+{
+	struct cache_entry *valid_cached;
+
+	foreach (valid_cached, cache_entries) {
+		if (valid_cached == cached)
+			return 1;
+	}
+
+	return 0;
+}
+
 
 static inline void
 enlarge_entry(struct cache_entry *cached, int size)

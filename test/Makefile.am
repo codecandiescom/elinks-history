@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2002/06/16 23:38:24 pasky Exp $
+## $Id: Makefile.am,v 1.3 2004/01/17 01:20:11 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
-EXTRA_DIST = *
+EXTRA_DIST = * css/*
 

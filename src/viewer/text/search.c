@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.224 2004/05/25 06:54:39 jonas Exp $ */
+/* $Id: search.c,v 1.225 2004/06/03 13:27:52 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -573,7 +573,7 @@ find_next:
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
 	while (pos < doclen && search_start[pos].y + yoffset >= box->y - 1
-			    && search_start[pos].y + yoffset <=  box->y + box->height)
+			    && search_start[pos].y + yoffset <= box->y + box->height)
 		pos++;
 	save_c = doc[pos];
 	doc[pos] = 0;
@@ -637,8 +637,7 @@ get_searched(struct document_view *doc_view, struct point **pt, int *pl)
 	get_search_data(doc_view->document);
 	l = strlen(*doc_view->search_word);
 	if (get_range(doc_view->document, doc_view->vs->y,
-		      doc_view->box.height, l, &s1, &s2)
-	   ) {
+		      doc_view->box.height, l, &s1, &s2)) {
 		*pt = NULL;
 		*pl = 0;
 
@@ -947,14 +946,21 @@ static inline int
 search_link_text(struct document *document, int current_link, int i,
 		 unsigned char *text, int direction, int *offset)
 {
-	/* The link interval in which we are currently searching */
-	/* Set up the range of links that should be search in first attempt */
-	int upper_link = (direction > 0) ? document->nlinks : i + 1;
-	int lower_link = (direction > 0) ? i - 1 : -1;
+	int upper_link, lower_link;
 	int case_sensitive = get_opt_bool("document.browse.search.case");
 	int textlen = strlen(text);
 
 	assert(textlen && direction && offset);
+
+	/* The link interval in which we are currently searching */
+	/* Set up the range of links that should be search in first attempt */
+	if (direction > 0) {
+		upper_link = document->nlinks;
+		lower_link = i - 1;
+	} else {
+		upper_link = i + 1;
+		lower_link = -1;
+	}
 
 #define match_link_text(t1, t2)					\
 	(case_sensitive ? strstr(t1, t2) : strcasestr(t1, t2))

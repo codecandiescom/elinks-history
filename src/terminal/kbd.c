@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.63 2004/05/25 23:06:54 jonas Exp $ */
+/* $Id: kbd.c,v 1.64 2004/05/26 07:54:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,8 +91,8 @@ write_ev_queue(struct itrm *itrm)
 	if_assert_failed return;
 
 	written = safe_write(itrm->sock_out, itrm->ev_queue, qlen);
-	if (written < 1) {
-		if (written == -1) free_trm(itrm);
+	if (written <= 0) {
+		if (written < 0) free_trm(itrm); /* write error */
 		return;
 	}
 
@@ -216,11 +216,11 @@ resize_terminal(void)
 	/* get_terminal_size() might not actually assign anything
 	 * to these variables which can be fatal if the terminal
 	 * is a pipe. */
-	int x = 0, y = 0;
+	int width = 0, height = 0;
 
-	if (get_terminal_size(ditrm->std_out, &x, &y)) return;
-	ev.x = x;
-	ev.y = y;
+	if (get_terminal_size(ditrm->std_out, &width, &height)) return;
+	ev.x = width;
+	ev.y = height;
 	queue_event(ditrm, (char *)&ev, sizeof(struct term_event));
 }
 
@@ -251,10 +251,10 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len)
 {
 	struct itrm *itrm;
-	int x = 80, y = 24;
-	int terminal_size_error = get_terminal_size(ctl_in, &x, &y);
+	int width = 80, height = 24;
+	int terminal_size_error = get_terminal_size(ctl_in, &width, &height);
 	struct terminal_info info = {
-		INIT_TERM_EVENT(EV_INIT, x, y, 0),
+		INIT_TERM_EVENT(EV_INIT, width, height, 0),
 		"",
 		"",
 		get_system_env(),
@@ -395,16 +395,25 @@ free_trm(struct itrm *itrm)
 	mem_free(itrm);
 }
 
-/* Resize term: text should look like 'x,y' where x and y are integer. */
+/* Resize terminal to dimensions specified by @text string.
+ * @text should look like 'width,height' where width and height are integers. */
 static inline void
-resize_terminal_x(unsigned char *text)
+resize_terminal_from_str(unsigned char *text)
 {
-	unsigned char *ys = strchr(text, ',');
+	unsigned char *p;
+	int width, height;
 
-	if (!ys) return;
+	assert(text && *text);
+	if_assert_failed return;
 
-	*ys++ = '\0';
-	resize_window(atoi(text), atoi(ys));
+	p = strchr(text, ',');
+	if (!p) return;
+
+	*p++ = '\0';
+	width = atoi(text);
+	height = atoi(p);
+
+	resize_window(width, height);
 	resize_terminal();
 }
 
@@ -418,7 +427,7 @@ dispatch_special(unsigned char *text)
 			set_window_title(text + 1);
 			break;
 		case TERM_FN_RESIZE:
-			resize_terminal_x(text + 1);
+			resize_terminal_from_str(text + 1);
 			break;
 	}
 }

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.317 2004/06/29 23:08:35 pasky Exp $ */
+/* $Id: tables.c,v 1.318 2004/06/29 23:12:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,34 +49,35 @@ get_table_frames(struct table *table, struct table_frames *result)
 	}
 }
 
+/* This in fact returns an indent from the document margin. */
 static int
 get_table_margin(struct table *table)
 {
 	int width = par_format.width - table->real_width;
-	int x;
+	int margin;
 
 	switch (table->align) {
 	case ALIGN_CENTER:
-		x = (width + par_format.leftmargin - par_format.rightmargin) / 2;
+		margin = (width + par_format.leftmargin - par_format.rightmargin) / 2;
 		break;
 
 	case ALIGN_RIGHT:
-		x = width - par_format.rightmargin;
+		margin = width - par_format.rightmargin;
 		break;
 
 	case ALIGN_LEFT:
 	case ALIGN_NONE:
 	case ALIGN_JUSTIFY:
 	default:
-		x = par_format.leftmargin;
+		margin = par_format.leftmargin;
 	}
 
 	/* Don't use int_bounds(&x, 0, width) here,
 	 * width may be < 0. --Zas */
-	if (x > width) x = width;
-	if (x < 0) x = 0;
+	if (margin > width) margin = width;
+	if (margin < 0) margin = 0;
 
-	return x;
+	return margin;
 }
 
 static inline struct part *
@@ -1114,8 +1115,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct table *table;
 	struct node *node, *new_node;
 	struct html_element *state;
-	int x;
-	int margins;
+	int margin, margins;
 
 	html_context.table_level++;
 
@@ -1162,11 +1162,11 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	node = part->document->nodes.next;
 	node->box.height = part->box.y - node->box.y + part->cy;
 
-	x = get_table_margin(table);
+	margin = get_table_margin(table);
 
-	draw_table_bad_html(table, x, part->cy);
-	draw_table_cells(table, x, part->cy);
-	draw_table_frames(table, x, part->cy);
+	draw_table_bad_html(table, margin, part->cy);
+	draw_table_cells(table, margin, part->cy);
+	draw_table_frames(table, margin, part->cy);
 
 	part->cy += table->real_height;
 	part->cx = -1;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.269 2004/04/14 00:42:28 jonas Exp $ */
+/* $Id: download.c,v 1.270 2004/04/16 10:16:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,7 @@ destroy_downloads(struct session *ses)
 static void
 download_error_dialog(struct file_download *file_download, int saved_errno)
 {
-	unsigned char *emsg = strerror(saved_errno);
+	unsigned char *emsg = (unsigned char *) strerror(saved_errno);
 	struct session *ses = get_download_ses(file_download);
 
 	if (!ses) return;

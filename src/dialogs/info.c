@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.67 2003/11/04 23:18:24 pasky Exp $ */
+/* $Id: info.c,v 1.68 2003/11/06 22:01:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,55 +188,18 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 
 #ifdef LEAK_DEBUG
 
-#define EXTENDED_MEMORY_INFO
-
 void
 memory_inf(struct terminal *term, void *d, struct session *ses)
 {
 	struct refresh *r;
-	unsigned char more_info_buffer[256];
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	memset(more_info_buffer, 0, sizeof(more_info_buffer));
-
-#ifdef EXTENDED_MEMORY_INFO
-	{
-		FILE *f = fopen("/proc/self/statm", "r");
-
-		if (f) {
-			long page_size = sysconf(_SC_PAGESIZE) / 1024;
-			long size, resident, shared, trs, drs, lrs, dt;
-
-			if (fscanf(f, "%li %li %li %li %li %li %li", &size, &resident, &shared, &trs, &drs, &lrs, &dt) == 7)
-				snprintf(more_info_buffer, sizeof(more_info_buffer),
-					 _("\n\n"
-					 "Internally allocated = %li KiB\n"
-					 "Total program size = %li KiB\n"
-					 "Resident set size = %li KiB\n"
-					 "Shared pages = %li KiB\n"
-					 "Text (code) = %li KiB\n"
-					 "Data/stack = %li KiB\n"
-					 "Libraries = %li KiB\n"
-					 "Dirty pages = %li KiB", term),
-					 mem_amount / 1024,
-					 size * page_size,
-					 resident * page_size,
-					 shared * page_size,
-					 trs * page_size,
-					 drs * page_size,
-					 lrs * page_size,
-					 dt * page_size);
-			fclose(f);
-		}
-	}
-#endif
-
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Memory info"), AL_LEFT,
-		msg_text(term, N_("%ld bytes of memory allocated.%s"),
-			mem_amount, more_info_buffer),
+		msg_text(term, N_("%ld bytes of memory allocated."),
+			 mem_amount),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

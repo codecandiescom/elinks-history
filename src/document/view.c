@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.59 2002/07/04 15:45:39 pasky Exp $ */
+/* $Id: view.c,v 1.60 2002/07/08 17:19:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2540,6 +2540,13 @@ void send_event(struct session *ses, struct event *ev)
 
 				if (!get_current_link_url(ses, url, sizeof url)) goto quak;
 				dialog_goto_url(ses, url);
+				goto x;
+			}
+			case ACT_GOTO_URL_HOME: {
+				unsigned char *url = getenv("WWW_HOME");
+
+				if (!url || !*url) url = WWW_HOME_URL;
+				goto_url_with_hook(ses, url);
 				goto x;
 			}
 			case ACT_SAVE_FORMATTED:

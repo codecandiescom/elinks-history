@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.48 2002/07/08 15:20:44 pasky Exp $ */
+/* $Id: session.c,v 1.49 2002/07/08 17:19:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1355,6 +1355,16 @@ void goto_url(struct session *ses, unsigned char *url)
 	goto_url_w(ses, url, NULL, WTD_FORWARD, NC_CACHE);
 }
 
+void
+goto_url_with_hook(struct session *ses, unsigned char *url)
+{
+#ifdef HAVE_SCRIPTING
+	script_hook_goto_url(ses, url);
+#else
+	goto_url(ses, url);
+#endif
+}
+
 /* TODO: Should there be goto_imgmap_reload() ? */
 
 void
@@ -1542,4 +1552,3 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 
 	return safe_strncpy(str, l->where ? l->where : l->where_img, str_size);
 }
-

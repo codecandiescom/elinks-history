@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.13 2002/06/17 08:00:15 pasky Exp $ */
+/* $Id: session.h,v 1.14 2002/07/08 17:19:40 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -107,6 +107,7 @@ void win_func(struct window *, struct event *, int);
 void goto_url_frame_reload(struct session *, unsigned char *, unsigned char *);
 void goto_url_frame(struct session *, unsigned char *, unsigned char *);
 void goto_url(struct session *, unsigned char *);
+void goto_url_with_hook(struct session *, unsigned char *);
 void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned char *);
 
 void ses_forward(struct session *);

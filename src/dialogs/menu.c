@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.39 2002/07/05 19:03:39 pasky Exp $ */
+/* $Id: menu.c,v 1.40 2002/07/08 17:19:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,16 +512,6 @@ activate_bfu_technology(struct session *ses, int item)
 }
 
 struct input_history goto_url_history = { 0, {&goto_url_history.items, &goto_url_history.items} };
-
-void
-goto_url_with_hook(struct session *ses, unsigned char *url)
-{
-#ifdef HAVE_SCRIPTING
-	script_hook_goto_url(ses, url);
-#else
-	goto_url(ses, url);
-#endif
-}
 
 void
 dialog_goto_url(struct session *ses, char *url)

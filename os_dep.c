@@ -1302,7 +1302,7 @@ struct {
 #ifdef BEOS
 	{ENV_BE, open_in_new_be, TEXT(T_BEOS_TERMINAL), TEXT(T_HK_BEOS_TERMINAL)},
 #endif
-	0, NULL, NULL
+	{0, NULL, NULL}
 };
 
 struct open_in_new *get_open_in_new(int environment)

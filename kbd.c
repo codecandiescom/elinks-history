@@ -436,7 +436,7 @@ struct key os2xtd[256] = {
 /* 40 */
 {'\'',KBD_ALT}, {'`',KBD_ALT}, {0,0}, {'\\',KBD_ALT}, {'Z',KBD_ALT}, {'X',KBD_ALT}, {'C',KBD_ALT}, {'V',KBD_ALT}, 
 /* 48 */
-{'B',KBD_ALT}, {'N',KBD_ALT}, {'M',KBD_ALT}, {','}, {KBD_ALT,'.'}, {KBD_ALT,'/'}, {KBD_ALT,0}, {0,'*'}, KBD_ALT,
+{'B',KBD_ALT}, {'N',KBD_ALT}, {'M',KBD_ALT}, {',', KBD_ALT}, {'.', KBD_ALT}, {'/', KBD_ALT}, {0, 0}, {'*', KBD_ALT},
 /* 56 */
 {0,0}, {' ',KBD_ALT}, {0,0}, {KBD_F1,0}, {KBD_F2,0}, {KBD_F3,0}, {KBD_F4,0}, {KBD_F5,0}, 
 /* 64 */

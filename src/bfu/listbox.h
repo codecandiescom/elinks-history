@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.47 2003/11/22 12:28:31 jonas Exp $ */
+/* $Id: listbox.h,v 1.48 2003/11/22 13:44:19 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -24,8 +24,6 @@ struct listbox_data;
 struct listbox_item;
 
 struct listbox_ops {
-	void (*del)(struct terminal *, struct listbox_data *);
-
 	/* Some basic util/object.h wrappers */
 	void (*lock)(struct listbox_item *);
 	void (*unlock)(struct listbox_item *);

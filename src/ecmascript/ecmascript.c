@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.11 2004/09/23 16:25:18 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.12 2004/09/25 00:19:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,6 +39,10 @@ static struct option_info ecmascript_options[] = {
 	INIT_OPT_BOOL("ecmascript", N_("Enable"),
 		"enable", 0, 1,
 		N_("Whether to run those scripts inside of documents.")),
+
+	INIT_OPT_BOOL("ecmascript", N_("Script error reporting"),
+		"error_reporting", 0, 0,
+		N_("Open a message box when a script reports an error.")),
 
 	NULL_OPTION_INFO,
 };

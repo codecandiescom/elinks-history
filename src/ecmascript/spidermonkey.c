@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.32 2004/09/25 00:03:31 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.33 2004/09/25 00:19:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,6 +408,9 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
 	struct terminal *term = interpreter->doc_view->session->tab->term;
+
+	if (!get_opt_bool("ecmascript.error_reporting"))
+		return;
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("JavaScript Error"), ALIGN_CENTER,

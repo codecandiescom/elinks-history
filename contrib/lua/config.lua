@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.9 2005/03/27 22:31:16 miciah Exp $
+-- $Id: config.lua,v 1.10 2005/03/27 22:36:46 miciah Exp $
 
 -- ** IMPORTANT **
 -- Individual functions may be disabled for security by assigning them
@@ -40,6 +40,11 @@
 -- uncomment and clone following line:
 
 --  dofile (elinks_home.."/script.lua")
+
+-- The following commands, when uncommented, will load certain scripts that are
+-- distributed with ELinks. If you enable any of them, you will need either
+-- to copy the scripts to your home directory or to update the paths
+-- in the commands relevant commands below.
 
 -- Bookmarks: Uncomment the following line to enable the Lua bookmarks
 -- manager

@@ -243,7 +243,7 @@ void dns_found(void *data, int state)
 		close(sock);
 	}
 
-	if (i == c_i->addrno) {
+	if (i >= c_i->addrno) {
 		/* Tried everything, but it didn't help :(. */
 	
 		/* We set new state only if we already tried something new. */

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.15 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: parser.h,v 1.16 2003/05/02 14:55:06 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -20,14 +20,14 @@ struct f_data;
  * files - there's lack of any well defined interface and it's all randomly
  * mixed up :/. */
 
-struct form {
+struct a_form {
 	unsigned char *action;
 	unsigned char *target;
 	int method;
 	int num;
 };
 
-extern struct form form;
+extern struct a_form form;
 
 enum form_method {
 	FM_GET,

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.16 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: renderer.h,v 1.17 2003/05/02 14:55:06 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -55,7 +55,7 @@ struct line {
 	chr *d;
 };
 
-/* For struct link */
+/* For struct a_link */
 enum link_type {
 	L_LINK,
 	L_BUTTON,
@@ -65,14 +65,14 @@ enum link_type {
 	L_AREA,
 };
 
-/* For struct link */
+/* For struct a_link */
 struct point {
 	int x;
 	int y;
 };
 
 /* For struct f_data */
-struct link {
+struct a_link {
 	enum link_type type;
 	int num;
 	long accesskey;
@@ -115,10 +115,10 @@ struct f_data {
 	struct frameset_desc *frame_desc;
 	int bg;
 	struct line *data;
-	struct link *links;
+	struct a_link *links;
 	int nlinks;
-	struct link **lines1;
-	struct link **lines2;
+	struct a_link **lines1;
+	struct a_link **lines2;
 	struct list_head forms;
 	struct list_head tags;
 	struct list_head nodes;

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.34 2003/04/29 08:20:37 zas Exp $ */
+/* $Id: core.c,v 1.35 2003/05/02 14:55:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ l_current_link(LS)
 	struct f_data_c *fd = current_frame(lua_ses);
 
 	if (fd && fd->vs->current_link != -1) {
-		struct link *l = &fd->f_data->links[fd->vs->current_link];
+		struct a_link *l = &fd->f_data->links[fd->vs->current_link];
 
 		if (l->type == L_LINK) {
 			lua_pushstring(S, l->where);

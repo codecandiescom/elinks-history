@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.2 2003/01/05 16:48:17 pasky Exp $ */
+/* $Id: view.h,v 1.3 2003/05/02 14:55:06 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -10,7 +10,7 @@
 #include "sched/session.h"
 
 extern int textarea_editor;
-void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct link *);
+void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct a_link *);
 
 int can_open_in_new(struct terminal *);
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *), struct session *);
@@ -55,8 +55,8 @@ void find_next_back(struct session *, struct f_data_c *, int);
 void set_frame(struct session *, struct f_data_c *, int);
 struct f_data_c *current_frame(struct session *);
 
-void set_pos_x(struct f_data_c *, struct link *);
-void set_pos_y(struct f_data_c *, struct link *);
+void set_pos_x(struct f_data_c *, struct a_link *);
+void set_pos_y(struct f_data_c *, struct a_link *);
 void find_link(struct f_data_c *, int, int);
 int c_in_view(struct f_data_c *);
 

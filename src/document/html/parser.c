@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.78 2003/04/30 16:59:38 zas Exp $ */
+/* $Id: parser.c,v 1.79 2003/05/02 14:55:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,11 +610,11 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 
 #if 0
 int form_num;
-struct form form = { 0, NULL, 0 };
+struct a_form form = { 0, NULL, 0 };
 int g_ctrl_num;
 #endif
 
-struct form form = { NULL, NULL, 0, 0 };
+struct a_form form = { NULL, NULL, 0, 0 };
 
 unsigned char *last_form_tag;
 unsigned char *last_form_attr;
@@ -1308,21 +1308,21 @@ html_dd(unsigned char *a)
 }
 
 static void
-get_html_form(unsigned char *a, struct form *frm)
+get_html_form(unsigned char *a, struct a_form *form)
 {
 	unsigned char *al;
 
-	frm->method = FM_GET;
+	form->method = FM_GET;
 
 	al = get_attr_val(a, "method");
 	if (al) {
 		if (!strcasecmp(al, "post")) {
 			char *ax = get_attr_val(a, "enctype");
 
-			frm->method = FM_POST;
+			form->method = FM_POST;
 			if (ax) {
 				if (!strcasecmp(ax, "multipart/form-data"))
-					frm->method = FM_POST_MP;
+					form->method = FM_POST_MP;
 				mem_free(ax);
 			}
 		}
@@ -1331,18 +1331,18 @@ get_html_form(unsigned char *a, struct form *frm)
 
 	al = get_attr_val(a, "action");
 	if (al) {
-		frm->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
+		form->action = join_urls(format.href_base, trim_chars(al, ' ', 0));
 		mem_free(al);
 	} else {
-		frm->action = stracpy(format.href_base);
-		if (frm->action) {
-			unsigned char *ch = strchr(frm->action, POST_CHAR);
+		form->action = stracpy(format.href_base);
+		if (form->action) {
+			unsigned char *ch = strchr(form->action, POST_CHAR);
 			if (ch) *ch = 0;
 
 			/* We have to do following for GET method, because we would end
 			 * up with two '?' otherwise. */
-			if (frm->method == FM_GET) {
-				ch = strchr(frm->action, '?');
+			if (form->method == FM_GET) {
+				ch = strchr(form->action, '?');
 				if (ch) *ch = 0;
 			}
 		}
@@ -1350,12 +1350,12 @@ get_html_form(unsigned char *a, struct form *frm)
 
 	al = get_target(a);
 	if (al) {
-		frm->target = al;
+		form->target = al;
 	} else {
-		frm->target = stracpy(format.target_base);
+		form->target = stracpy(format.target_base);
 	}
 
-	frm->num = a - startf;
+	form->num = a - startf;
 }
 
 static void
@@ -1407,7 +1407,7 @@ end_parse:
 		last_input_tag = i;
 		get_html_form(la, &form);
 	} else {
-		memset(&form, 0, sizeof(struct form));
+		memset(&form, 0, sizeof(struct a_form));
 	}
 }
 

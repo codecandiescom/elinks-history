@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.6 2003/05/02 11:15:10 zas Exp $ */
+/* $Id: session.c,v 1.7 2003/05/02 14:55:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1692,7 +1692,7 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l;
+	struct a_link *l;
 
 	l = get_current_link(ses);
 
@@ -1708,7 +1708,7 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 unsigned char *
 get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 {
-	struct link *l;
+	struct a_link *l;
 
 	l = get_current_link(ses);
 
@@ -1717,11 +1717,11 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 	return NULL;
 }
 
-struct link *
+struct a_link *
 get_current_link(struct session *ses)
 {
 	struct f_data_c *fd;
-	struct link *l;
+	struct a_link *l;
 
 	/* What the hell is an 'fd'? */
 	fd = (struct f_data_c *)current_frame(ses);

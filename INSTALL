@@ -141,7 +141,7 @@ recommended for users to give a strong preference to OpenSSL whenever possible.
 
   Now, check the contrib/ directory again.  There may be some useful config
 file examples there, along with a few support tools and some Lua scripts - you
-probably want them ;) so just copy the hooks.lua to ~/.links, and edit the
+probably want them ;) so just copy the hooks.lua to ~/.elinks, and edit the
 configuration part - it adds various functionality to ELinks, like
 decompression of gzipped files or user-defined protocols.
 
@@ -173,5 +173,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.27 2004/05/06 00:14:36 jonas Exp $
+$Id: INSTALL,v 1.28 2004/09/22 15:25:41 pasky Exp $
 vim: textwidth=80

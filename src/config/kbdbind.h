@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.9 2002/05/23 18:33:14 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.10 2002/06/14 21:41:05 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -18,6 +18,7 @@ enum keymap {
 enum keyact {
 	ACT_ADD_BOOKMARK,
 	ACT_AUTO_COMPLETE,
+	ACT_AUTO_COMPLETE_UNAMBIGUOUS,
 	ACT_BACK,
 	ACT_BACKSPACE,
 	ACT_BOOKMARK_MANAGER,

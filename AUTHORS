@@ -206,6 +206,7 @@ Michal Maruska <mmc@maruska.dyndns.org>
 Miciah Dashiel <theweirdo@subdimension.com>
 	Document-specific colors usage switch possibility, colourful cleanup
 	Global history
+	Unambiguous autocompletion
 
 Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
@@ -323,4 +324,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.61 2002/05/25 19:34:10 pasky Exp $
+$Id: AUTHORS,v 1.62 2002/06/14 21:41:04 pasky Exp $

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.19 2002/05/10 17:32:44 pasky Exp $ */
+/* $Id: bfu.c,v 1.20 2002/06/14 21:41:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,13 +277,13 @@ void redraw_dialog(struct dialog_data *dlg)
 	redraw_from_window(dlg->win);
 }
 
-/* tab_compl() */
-void tab_compl(struct terminal *term, unsigned char *item, struct window *win)
+void
+tab_compl_n(struct terminal *term, unsigned char *item, int len,
+	    struct window *win)
 {
 	struct event ev = {EV_REDRAW, 0, 0, 0};
-	struct dialog_item_data *di =
-		&((struct dialog_data *) win->data)->items[((struct dialog_data *) win->data)->selected];
-	int len = strlen(item);
+	struct dialog_data *dd = (struct dialog_data *) win->data;
+	struct dialog_item_data *di = &(dd)->items[dd->selected];
 
 	if (len >= di->item->dlen)
 		len = di->item->dlen - 1;
@@ -296,12 +296,20 @@ void tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 	dialog_func(win, &ev, 0);
 }
 
-/* do_tab_compl() */
-void do_tab_compl(struct terminal *term, struct list_head *history,
-		  struct window *win)
+void
+tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 {
-	unsigned char *cdata =
-		((struct dialog_data *) win->data)->items[((struct dialog_data *) win->data)->selected].cdata;
+	tab_compl_n(term, item, strlen(item), win);
+}
+
+/* Complete to last unambiguous character, and display menu for all possible
+ * further completions. */
+void
+do_tab_compl(struct terminal *term, struct list_head *history,
+	     struct window *win)
+{
+	struct dialog_data *dd = (struct dialog_data *) win->data;
+	unsigned char *cdata = dd->items[dd->selected].cdata;
 	int l = strlen(cdata);
 	int n = 0;
 	struct input_history_item *hi;
@@ -341,6 +349,45 @@ void do_tab_compl(struct terminal *term, struct list_head *history,
 		memset(&items[n], 0, sizeof(struct menu_item));
 		do_menu_selected(term, items, win, n - 1);
 	}
+}
+
+/* Complete to the last unambiguous character. Eg., I've been to google.com,
+ * google.com/search?q=foo, and google.com/search?q=bar.  This function then
+ * completes `go' to `google.com' and `google.com/' to `google.com/search?q='.
+ */
+void
+do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
+			 struct window *win)
+{
+	struct dialog_data *dd = (struct dialog_data *) win->data;
+	unsigned char *cdata = dd->items[dd->selected].cdata;
+	int cdata_len = strlen(cdata);
+	int match_len = cdata_len;
+	/* Maximum number of characters in a match. Characters after this
+	 * position are varying in other matches. Zero means that no max has
+	 * been set yet. */
+	int max = 0;
+	unsigned char *match = NULL;
+	struct input_history_item *cur;
+
+	foreach(cur, *history) {
+		unsigned char *c = cur->d - 1;
+		unsigned char *m = (match ? match : cdata) - 1;
+		int len = 0;
+
+		while (*++m && *++c && *m == *c && (++len, !max || len < max));
+		if (len < cdata_len)
+			continue;
+		if (len < match_len || (*c && m != cdata + len))
+			max = len;
+		match = cur->d;
+		match_len = (m == cdata + len && !*m) ? strlen(cur->d) : len;
+	}
+
+	if (!match)
+		return;
+
+	tab_compl_n(term, match, match_len, win);
 }
 
 /* TODO: This is too long and ugly. Rewrite and split. */
@@ -525,6 +572,10 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 
 					case ACT_AUTO_COMPLETE:
 						do_tab_compl(term, &di->history, win);
+						goto dsp_f;
+
+					case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
+						do_tab_compl_unambiguous(term, &di->history, win);
 						goto dsp_f;
 
 					default:

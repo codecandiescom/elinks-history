@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.18 2002/06/09 14:53:22 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.19 2002/06/14 21:41:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -207,6 +207,7 @@ parse_act(unsigned char *s)
 	struct strtonum table[] = {
 		{ "add-bookmark", ACT_ADD_BOOKMARK },
 		{ "auto-complete", ACT_AUTO_COMPLETE },
+		{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS },
 		{ "back", ACT_BACK },
 		{ "backspace", ACT_BACKSPACE },
 		{ "bookmark-manager", ACT_BOOKMARK_MANAGER },
@@ -462,6 +463,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ ACT_KILL_TO_BOL, 'U', KBD_CTRL },
 	{ ACT_KILL_TO_EOL, 'K', KBD_CTRL },
     	{ ACT_AUTO_COMPLETE, 'W', KBD_CTRL },
+	{ ACT_AUTO_COMPLETE_UNAMBIGUOUS, 'R', KBD_CTRL },
 	{ 0, 0, 0 }
 };
 

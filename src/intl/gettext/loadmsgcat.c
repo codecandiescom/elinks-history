@@ -348,7 +348,7 @@ source_tree_filename(struct loaded_l10nfile *domain_file)
 	unsigned char *dirname = strdup(path_to_exe), *slash = NULL;
 	unsigned char *filename = NULL, *fp;
 
-	if (!language) return strdup("");
+	if (!language) return NULL;
 	strncpy(language, domain_file->langdirname,
 			domain_file->langdirnamelen);
 	language[domain_file->langdirnamelen] = 0;
@@ -361,7 +361,7 @@ source_tree_filename(struct loaded_l10nfile *domain_file)
 				+ 6 + 3 + 1);
 		if (!filename) {
 			free(dirname);
-			return strdup("");
+			return NULL;
 		}
 		fp = stpcpy(filename, dirname);
 		fp = stpcpy(fp, "../po/");
@@ -371,7 +371,7 @@ source_tree_filename(struct loaded_l10nfile *domain_file)
 	} else {
 		filename = malloc(strlen(language) + 6 + 3 + 1);
 		if (!filename) {
-			return strdup("");
+			return NULL;
 		}
 		fp = stpcpy(filename, "../po/");
 		fp = stpcpy(fp, language);
@@ -414,8 +414,10 @@ _nl_load_domain (domain_file, domainbinding)
   {
 	  unsigned char *name = source_tree_filename(domain_file);
 
-	  fd = open (name, O_RDONLY | O_BINARY);
-	  free(name);
+	  if (name) {
+		  fd = open (name, O_RDONLY | O_BINARY);
+		  free(name);
+	  }
 
 	  if (fd != -1)
 	      goto source_success;

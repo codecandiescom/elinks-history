@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.237 2003/09/06 19:37:00 jonas Exp $ */
+/* $Id: renderer.c,v 1.238 2003/09/06 19:45:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -840,7 +840,6 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 		if_assert_failed return;
 
 		link = &part->document->links[part->document->nlinks - 1];
-		goto set_link;
 
 	} else {
 		if (last_link) mem_free(last_link);	/* !!! FIXME: optimize */
@@ -937,19 +936,18 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 		}
 
 		link->n = 0;
-set_link:
-		pt = mem_realloc(link->pos,
-				 (link->n + charslen) * sizeof(struct point));
-		if (pt) {
-			register int i;
+	}
 
-			link->pos = pt;
-			for (i = 0; i < charslen; i++) {
-				pt[link->n + i].x = X(part->cx) + i;
-				pt[link->n + i].y = Y(part->cy);
-			}
-			link->n += i;
+	pt = mem_realloc(link->pos, (link->n + charslen) * sizeof(struct point));
+	if (pt) {
+		register int i;
+
+		link->pos = pt;
+		for (i = 0; i < charslen; i++) {
+			pt[link->n + i].x = X(part->cx) + i;
+			pt[link->n + i].y = Y(part->cy);
 		}
+		link->n += i;
 	}
 }
 

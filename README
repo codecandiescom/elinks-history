@@ -22,7 +22,7 @@ If you want to write some patches, please first read the doc/hacking.txt
 document.
 
 If you want to add a new language or update the translation for an existing
-one, please read intl/README document.
+one, please read po/README document.
 
 If you want to write some documentation, well you're welcomed ;)
 
@@ -56,6 +56,6 @@ For more about ELinks history, see http://elinks.or.cz/history.html
 
 
 
-$Id: README,v 1.23 2004/12/28 12:26:30 zas Exp $
+$Id: README,v 1.24 2005/01/11 15:51:02 jonas Exp $
 
 vim: textwidth=80

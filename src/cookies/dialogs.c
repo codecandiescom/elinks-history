@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.35 2004/03/11 04:44:23 witekfl Exp $ */
+/* $Id: dialogs.c,v 1.36 2004/03/11 13:43:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #ifdef CONFIG_COOKIES
 
+#include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -153,7 +154,7 @@ draw_cookie(struct listbox_item *item, struct listbox_context *data,
 		text = item->text;
 	} else {
 		struct cookie *cookie = item->udata;
-	
+
 		text = cookie ? cookie->name : (unsigned char *)"";
 	}
 	len = strlen(text);
@@ -213,10 +214,16 @@ set_cookie_expires(struct dialog_data *dlg_data, struct widget_data *widget_data
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
 	unsigned char *value = widget_data->cdata;
+	unsigned char *end;
+	long number;
 
 	if (!value || !cookie) return 1;
-	/* FIXME: check whether string is a number */
-	cookie->expires = atol(value);
+
+	errno = 0;
+	number = strtol(value, (char **)&end, 10);
+	if (errno || *end || number < 0) return 1;
+
+	cookie->expires = (ttime) number;
 	return 0;
 }
 
@@ -225,10 +232,16 @@ set_cookie_secure(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct cookie *cookie = dlg_data->dlg->udata;
 	unsigned char *value = widget_data->cdata;
+	unsigned char *end;
+	long number;
 
 	if (!value || !cookie) return 1;
-	/* FIXME: check whether string is a number */
-	cookie->secure = !!atoi(value);
+
+	errno = 0;
+	number = strtol(value, (char **)&end, 10);
+	if (errno || *end) return 1;
+
+	cookie->secure = (number != 0);
 	return 0;
 }
 

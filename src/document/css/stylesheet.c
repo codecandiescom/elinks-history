@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.32 2004/09/19 22:59:09 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.33 2004/09/20 16:22:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,8 +150,11 @@ merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)
 		struct css_property *origprop;
 
 		foreach (origprop, sel1->properties)
-			if (origprop->type == prop->type)
-				goto found;
+			if (origprop->type == prop->type) {
+				del_from_list(origprop);
+				mem_free(origprop);
+				break;
+			}
 
 		/* Not there yet, let's add it. */
 		origprop = mem_calloc(1, sizeof(struct css_property));
@@ -159,9 +162,6 @@ merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)
 			continue;
 		*origprop = *prop;
 		add_to_list(sel1->properties, origprop);
-
-found:
-		continue;
 	}
 }
 

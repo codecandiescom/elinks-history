@@ -1,3 +1,201 @@
+Thu Apr 15 17:30:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Fix assertion failure.  
+
+Thu Apr 15 16:57:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Make everybody use open_url_in_new_window() as backend.  
+
+Thu Apr 15 16:44:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, viewer/text/link.c:
+
+	Hmm try to centralize newwin.h usage a bit more.  
+
+Thu Apr 15 16:32:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, viewer/text/link.c,
+	viewer/text/view.c, viewer/text/view.h:
+
+	Move all the nice open in new window code.  
+
+Thu Apr 15 16:16:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, viewer/text/view.c, viewer/text/view.h:
+
+	Fully support the -remote 'openurl(..., new-win)' thing.  
+
+Thu Apr 15 16:13:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	Damn zas was right. I did break something :(.  
+
+Thu Apr 15 15:35:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	foreach_oinw(): Everything to save a line of code. ;) .. fix bug
+	from last patch.  
+
+Thu Apr 15 15:28:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: newwin.c, newwin.h:
+
+	Gross memory waste by adding term_env_type to open_in_new struct.
+	But it simplifies a lot.  
+
+Thu Apr 15 15:25:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/newwin.c, osdep/newwin.h, viewer/text/view.c:
+
+	get_open_in_new(): Take term arg and do one allocation by getting
+	size from can_open_in_new().  
+
+Thu Apr 15 14:58:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/newwin.c:
+
+	can_open_in_new(): No need to allocate when a simple loop will do.  
+
+Thu Apr 15 14:31:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Make debugging code more obviously separated from true code, got rid
+	of awful and misleading accif() macro, all debuggung macros are now
+	prefixed with FF_DBG_. It improves readibility of non-debugging
+	code.  
+
+Thu Apr 15 14:27:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/backend/default.c, osdep/osdep.c, protocol/user.c:
+
+	get_system_str(): Return static string and shrink using code.  
+
+Thu Apr 15 14:21:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/user.c:
+
+	get_user_program(): Use temp instead of wrapping funny code.  
+
+Thu Apr 15 09:29:40 2004  Laurent Monin <zas@norz.org>:
+
+	* NEWS:
+
+	New options -remote and -ping were added.  
+
+Thu Apr 15 09:18:57 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Apr 15 08:32:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.h:
+
+	Whoops bug in binary flag.  
+
+Thu Apr 15 08:28:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/cmdline.c, sched/session.c, sched/session.h:
+
+	-remote-session was replaced by lazy mozilla compliant -remote
+	handling. elinks -remote <urls> will just open <urls> in new
+	backgrounded tabs and elinks -remote openURL(<url>, ...) will make
+	it possible to do more finegrained control. Open in new window is
+	still not supported.  
+
+Thu Apr 15 02:39:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Move session info comments.  
+
+Thu Apr 15 02:24:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, main.h, config/cmdline.c, sched/session.c,
+	sched/session.h:
+
+	Add support for -remote-session that will connect to an already
+	running ELinks (or bail out) and open all the provided URIs. Again
+	the intension is to support -remote argument similar to that of
+	mozilla and either this can be a backend for that or just be a
+	starting point for it.  
+
+Thu Apr 15 00:55:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, main.h, config/cmdline.c, terminal/event.c:
+
+	Implement a -ping command line argument that will hopefully help to
+	make -remote handling easier. Else we can remove it later when
+	-remote is running.  
+
+Thu Apr 15 00:36:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, terminal.c:
+
+	Improve the term->spec reference counting by also locking the
+	default one. Else assertion failure can appear if the connecting
+	ELinks exists immediately.  
+
+Wed Apr 14 23:35:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/osdep.c, osdep/osdep.h, terminal/terminal.c,
+	terminal/terminal.h:
+
+	Move get_cwd() and set_cwd() to osdep department.  
+
+Wed Apr 14 22:59:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	in_term(): The joy of switch statements. Decrease indentation.  
+
+Wed Apr 14 22:55:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Ctrl+L should now be a RESIZE event in order to always force
+	redrawing.  
+
+Wed Apr 14 22:50:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	term_send_event():Move comment.  
+
+Wed Apr 14 22:47:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, terminal.c, terminal.h:
+
+	redraw_terminal_ev(): Use term_send_event() as backend an removing
+	code duplication.  
+	
+	redraw_terminal_cls(): Was the only user of redraw_terminal_all()
+	and is now the defined as the old redraw_terminal_all which just
+	calls redraw_terminal_ev() and lets term_send_event() handle screen
+	erasing and resizing.  
+
+Wed Apr 14 22:35:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	term_send_event(): Only resize and erase screen when handling INIT
+	and RESIZE events. Inspired by redraw_terminal_ev().  
+
+Wed Apr 14 22:30:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	term_send_event(): Handle INIT, RESIZE and REDRAW events by sending
+	them to all windwows.  
+
 Wed Apr 14 22:10:17 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/inpfield.c:

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.183 2003/10/24 20:39:38 pasky Exp $ */
+/* $Id: session.c,v 1.184 2003/10/24 20:46:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -767,7 +767,9 @@ b:
 			ses_history_move(ses);
 			break;
 		case TASK_RELOAD:
-			ses_history_move(ses), ses_forward(ses);
+			ses->task_target_location = cur_loc(ses)->prev;
+			ses_history_move(ses);
+			ses_forward(ses);
 			break;
 		default:
 			break;

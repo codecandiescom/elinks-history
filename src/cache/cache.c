@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.70 2003/11/08 01:56:50 pasky Exp $ */
+/* $Id: cache.c,v 1.71 2003/11/08 01:58:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -527,7 +527,7 @@ garbage_collection(int whole)
 	foreachback (ce, cache) {
 		/* We would have shrinked enough already? */
 		if (!whole && new_cache_size <= gc_cache_size)
-			goto g;
+			goto shrinked_enough;
 
 		/* Skip used cache entries. */
 		if (ce->refcount || is_entry_used(ce)) {
@@ -552,8 +552,9 @@ garbage_collection(int whole)
 		cache_size, new_cache_size);
 	if_assert_failed { new_cache_size = 0; }
 
+shrinked_enough:
 
-g:
+
 	/* Now turn around and start walking in the opposite direction. */
 	ce = ce->next;
 

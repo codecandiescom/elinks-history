@@ -1,3 +1,130 @@
+Tue Apr 29 17:34:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	A issue about hotkeys not printed in help menu was fixed.  
+
+Tue Apr 29 17:24:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	A debugging ouput was removed ;).  
+
+Tue Apr 29 17:22:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Hotkeys are useless for that menu. Fixed.  
+
+Tue Apr 29 17:17:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	A superfluous continue force some branches to be visited twice.
+	Fixed by Witold Filipczyk.  
+
+Tue Apr 29 17:11:07 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/menu.c, bfu/menu.h, dialogs/menu.c,
+	dialogs/mime.c, dialogs/options.c, document/html/parser.c,
+	sched/session.c, viewer/text/view.c:
+
+	Hotkeys handling was completly reworked. Performance was enhanced,
+	issue with goto history completion was fixed, hotkeys now appear
+	even when menu item is selected. Many changes were made, so please
+	test a lot.  
+
+Tue Apr 29 13:22:22 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A line was removed. Kooool.  
+
+Tue Apr 29 13:18:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/bookmarks.c,
+	bookmarks/dialogs.c, globhist/dialogs.c, globhist/globhist.c:
+
+	Marked items deletion was finally fixed. Thanks to Witold Filipczyk
+	for the patch.  
+
+Tue Apr 29 09:28:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 08:44:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, sched/download.h, viewer/dump/dump.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 08:34:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailcap.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 08:30:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: file.c, ftp.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 08:25:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: osdep/os_dep.c, protocol/http/http.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 08:20:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lua/core.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 08:03:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 07:59:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 07:53:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
+Tue Apr 29 07:51:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/elusive/layouter/syntree/layouter.c:
+
+	A minor typecasting issue was fixed, a void * was used in
+	arithmetic.  
+
+Tue Apr 29 07:49:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: parser.c, tables.c:
+
+	Some variables shadowing global declarations or previous local
+	variables were renamed.  
+
 Mon Apr 28 15:37:31 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: bookmarks/bookmarks.c, config/opttypes.c:

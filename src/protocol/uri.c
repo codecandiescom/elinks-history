@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.55 2003/11/14 02:15:12 jonas Exp $ */
+/* $Id: uri.c,v 1.56 2003/11/14 11:15:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -712,22 +712,28 @@ http:				prefix = "http://";
 unsigned char *
 extract_position(unsigned char *uri)
 {
-	unsigned char *fragment;
-	unsigned char *start = strchr(uri, '#');
-	unsigned char *end;
+	unsigned char *fragment, *frag_start, *post_start;
+	size_t frag_len;
 
-	if (!start) return NULL;
+	assert(uri);
+	if_assert_failed return NULL;
 
-	start++;
-	/* TODO: use get_no_post_url(). --Zas */
-	end = strchr(start, POST_CHAR);
-	if (!end) end = start + strlen(start);
+	/* Empty string ? */
+	if (!*uri) return NULL;
 
-	fragment = memacpy(start, end - start);
+	/* Is there a fragment part in uri ? */
+	frag_start = strchr(uri, '#');
+	if (!frag_start) return NULL;
 
-	/* Even though fragment wasn't allocated remove it from the @uri */
-	/* FIXME: why ??? --Zas */
-	memmove(start - 1, end, strlen(end) + 1);
+	/* Copy fragment string (without '#') and without trailing
+	 * post data if any. */
+	fragment = get_no_post_url(frag_start + 1, &frag_len);
+
+	/* Start position of post data if any. */
+	post_start = frag_start + frag_len + 1;
+
+	/* Even though fragment wasn't allocated remove it from the @uri. */
+	memmove(frag_start, post_start, strlen(post_start) + 1);
 
 	return fragment;
 }

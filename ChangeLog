@@ -1,3 +1,9 @@
+Wed Mar 13 19:03:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	one bug removed, one bug changed (added)
+
 Tue Mar 12 22:33:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:

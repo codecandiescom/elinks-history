@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.558 2004/09/24 00:03:35 pasky Exp $ */
+/* $Id: session.c,v 1.559 2004/09/25 00:50:57 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -748,6 +748,8 @@ init_session(struct session *base_session, struct terminal *term,
 	ses->status.ssl_led = register_led(ses, 0);
 	ses->status.insert_mode_led = register_led(ses, 1);
 #endif
+	ses->status.force_show_status_bar = -1;
+	ses->status.force_show_title_bar = -1;
 
 	add_to_list(sessions, ses);
 

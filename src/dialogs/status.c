@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.82 2004/08/18 14:12:42 jonas Exp $ */
+/* $Id: status.c,v 1.83 2004/09/25 00:50:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,11 +159,15 @@ update_status(void)
 			tabs = number_of_tabs(term);
 		}
 
+		if (status->force_show_title_bar >= 0)
+			show_title_bar = status->force_show_title_bar;
 		if (status->show_title_bar != show_title_bar) {
 			status->show_title_bar = show_title_bar;
 			dirty = 1;
 		}
 
+		if (status->force_show_status_bar >= 0)
+			show_status_bar = status->force_show_status_bar;
 		if (status->show_status_bar != show_status_bar) {
 			status->show_status_bar = show_status_bar;
 			dirty = 1;

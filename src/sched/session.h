@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.158 2004/07/27 03:07:54 jonas Exp $ */
+/* $Id: session.h,v 1.159 2004/09/25 00:50:57 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -76,6 +76,9 @@ struct session_status {
 	unsigned int show_tabs_bar:1;
 	unsigned int show_status_bar:1;
 	unsigned int show_title_bar:1;
+
+	int force_show_status_bar:2;
+	int force_show_title_bar:2;
 
 	unsigned int set_window_title:1;
 	unsigned char *last_title;

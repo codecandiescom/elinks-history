@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.33 2004/09/25 00:19:37 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.34 2004/09/25 00:50:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,11 +27,13 @@
 
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
+#include "dialogs/status.h"
 #include "document/document.h"
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
 #include "ecmascript/spidermonkey.h"
 #include "intl/gettext/libintl.h"
+#include "lowlevel/select.h"
 #include "protocol/uri.h"
 #include "sched/task.h"
 #include "terminal/tab.h"
@@ -184,14 +186,18 @@ enum window_prop {
 	JSP_WIN_CLOSED,
 	JSP_WIN_DOC,
 	JSP_WIN_LOC,
+	JSP_WIN_MBAR,
 	JSP_WIN_SELF,
+	JSP_WIN_SBAR,
 	JSP_WIN_TOP,
 };
 static const JSPropertySpec window_props[] = {
 	{ "closed",	JSP_WIN_CLOSED,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "document",	JSP_WIN_DOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "location",	JSP_WIN_LOC,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "menubar",	JSP_WIN_MBAR,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "self",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
+	{ "statusbar",	JSP_WIN_SBAR,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "top",	JSP_WIN_TOP,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "window",	JSP_WIN_SELF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ NULL }
@@ -398,6 +404,94 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 }
 
 
+static JSBool unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+static JSBool unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
+
+static const JSClass menubar_class = {
+	"menubar",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	unibar_get_property, unibar_set_property,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+static const JSClass statusbar_class = {
+	"statusbar",
+	JSCLASS_HAS_PRIVATE,
+	JS_PropertyStub, JS_PropertyStub,
+	unibar_get_property, unibar_set_property,
+	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
+};
+
+enum unibar_prop { JSP_UNIBAR_VISIBLE };
+static const JSPropertySpec unibar_props[] = {
+	{ "visible",	JSP_UNIBAR_VISIBLE,	JSPROP_ENUMERATE },
+	{ NULL }
+};
+
+static JSBool
+unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct session_status *status = &doc_view->session->status;
+	unsigned char *bar = JS_GetPrivate(ctx, obj);
+
+	VALUE_TO_JSVAL_START;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_UNIBAR_VISIBLE:
+#define unibar_fetch(bar) \
+	p.boolean = status->force_show_##bar##_bar >= 0 \
+	            ? status->force_show_##bar##_bar \
+	            : status->show_##bar##_bar
+		switch (*bar) {
+			case 's': unibar_fetch(status); break;
+			case 't': unibar_fetch(title); break;
+			default: p.boolean = 0; break;
+		}
+		prop_type = JSPT_BOOLEAN;
+#undef unibar_fetch
+		break;
+	default:
+		INTERNAL("Invalid ID %d in unibar_get_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	VALUE_TO_JSVAL_END(vp);
+}
+
+static JSBool
+unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
+{
+	JSObject *parent = JS_GetParent(ctx, obj);
+	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct session_status *status = &doc_view->session->status;
+	unsigned char *bar = JS_GetPrivate(ctx, obj);
+
+	JSVAL_TO_VALUE_START;
+
+	switch (JSVAL_TO_INT(id)) {
+	case JSP_UNIBAR_VISIBLE:
+		JSVAL_REQUIRE(vp, BOOLEAN);
+#define unibar_set(bar) \
+	status->force_show_##bar##_bar = v.boolean;
+		switch (*bar) {
+			case 's': unibar_set(status); break;
+			case 't': unibar_set(title); break;
+			default: v.boolean = 0; break;
+		}
+		register_bottom_half((void (*)(void*)) update_status, NULL);
+#undef unibar_set
+		break;
+	default:
+		INTERNAL("Invalid ID %d in unibar_set_property().", JSVAL_TO_INT(id));
+		goto bye;
+	}
+
+	JSVAL_TO_VALUE_END;
+}
+
+
 
 /*** The ELinks interface */
 
@@ -480,7 +574,8 @@ void *
 spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	JSContext *ctx;
-	JSObject *window_obj, *document_obj, *location_obj;
+	JSObject *window_obj, *document_obj, *location_obj,
+	         *statusbar_obj, *menubar_obj;
 
 	assert(interpreter);
 
@@ -510,6 +605,18 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 				    (JSClass *) &location_class, NULL, 0,
 				    (JSPropertySpec *) location_props, NULL,
 				    NULL, NULL);
+
+	menubar_obj = JS_InitClass(ctx, window_obj, NULL,
+				   (JSClass *) &menubar_class, NULL, 0,
+				   (JSPropertySpec *) unibar_props, NULL,
+				   NULL, NULL);
+	JS_SetPrivate(ctx, menubar_obj, "t");
+
+	statusbar_obj = JS_InitClass(ctx, window_obj, NULL,
+				     (JSClass *) &statusbar_class, NULL, 0,
+				     (JSPropertySpec *) unibar_props, NULL,
+				     NULL, NULL);
+	JS_SetPrivate(ctx, statusbar_obj, "s");
 
 	return ctx;
 }

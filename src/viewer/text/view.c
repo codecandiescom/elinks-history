@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.427 2004/06/01 06:19:21 miciah Exp $ */
+/* $Id: view.c,v 1.428 2004/06/01 06:21:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -868,7 +868,7 @@ send_to_frame(struct session *ses, struct term_event *ev)
 }
 
 #ifdef CONFIG_MOUSE
-static void
+static int
 do_mouse_event(struct session *ses, struct term_event *ev,
 	       struct document_view *doc_view)
 {
@@ -876,13 +876,13 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	struct document_view *matched = NULL, *first = doc_view;
 
 	assert(ses && ev);
-	if_assert_failed return;
+	if_assert_failed return 0;
 
 	do {
 		struct document_options *o = &doc_view->document->options;
 
 		assert(doc_view && doc_view->document);
-		if_assert_failed return;
+		if_assert_failed return 0;
 
 		/* FIXME: is_in_box() ? */
 		if (ev->x >= o->box.x && ev->x < o->box.x + doc_view->box.width
@@ -896,14 +896,14 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 
 	} while (doc_view != first);
 
-	if (!matched) return;
+	if (!matched) return 0;
 
 	if (doc_view != first) draw_formatted(ses, 0);
 
 	memcpy(&evv, ev, sizeof(struct term_event));
 	evv.x -= doc_view->box.x;
 	evv.y -= doc_view->box.y;
-	send_to_frame(ses, &evv);
+	return send_to_frame(ses, &evv);
 }
 #endif /* CONFIG_MOUSE */
 

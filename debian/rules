@@ -3,7 +3,7 @@
 # ELinks debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 #
-# $Id: rules,v 1.14 2005/01/12 02:46:30 jonas Exp $
+# $Id: rules,v 1.15 2005/01/18 22:32:46 jonas Exp $
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -90,12 +90,11 @@ install: build
 	
 	mkdir -p $(DEB_ROOT)/etc/elinks
 	install -o root -g root -m 644 contrib/elinks.conf $(DEB_ROOT)/etc/elinks/elinks.conf
-# KDE menu integration
-	mkdir -p debian/elinks/usr/share/applnk/Internet/
-	cp debian/elinks.desktop $(DEB_ROOT)/usr/share/applnk/Internet/
-# upstream CVS bug hack: remove double contrib dirs
+	# KDE and Gnome menu integration (freedesktop.org)
+	dh_install debian/elinks.desktop usr/share/applications/
+	# upstream CVS bug hack: remove double contrib dirs
 	-rm -rf contrib/lua/lua contrib/conv/conv contrib/guile/guile
-# locale.alias causes conflicts and I believe it's not necessary
+	# locale.alias causes conflicts and I believe it's not necessary
 	-rm -f $(DEB_ROOT)/usr/share/locale/locale.alias
 
 # Build architecture-independent files here.

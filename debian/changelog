@@ -10,6 +10,8 @@ elinks (0.11.CVS-1.1) unstable; urgency=low
   * Update and cleanup debian/rules
   * Pass -force-html in the debian/mime mailcap entries so problems with
     viewing files without an extension are fixed
+  * Enhance desktop file and install it in /usr/share/applications/ which
+    seems to be the new standard
   * Many problems related to mangleme tools fixed (closes: #277283)
   * Documentation updates (closes: #215619)
   * Fix IPv6 URI parsing (closes: #173378)

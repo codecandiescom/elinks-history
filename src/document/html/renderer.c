@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.255 2003/09/09 21:57:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.256 2003/09/10 03:14:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -746,8 +746,10 @@ align_line(struct part *part, int y, int last)
 }
 
 static struct link *
-new_link(struct document *f)
+new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 {
+	struct link *link;
+
 	assert(f);
 	if_assert_failed return NULL;
 
@@ -762,7 +764,57 @@ new_link(struct document *f)
 
 	memset(&f->links[f->nlinks], 0, sizeof(struct link));
 
-	return &f->links[f->nlinks++];
+	link = &f->links[f->nlinks++];
+
+	link->num = format.tabindex + link_number - 1;
+	link->accesskey = format.accesskey;
+	link->pos = NULL;
+	link->n = 0;
+
+	link->title = format.title ? stracpy(format.title) : NULL;
+
+	if (!last_form) {
+		link->type = L_LINK;
+		link->where = last_link ? stracpy(last_link) : NULL;
+		link->target = last_target ? stracpy(last_target) : NULL;
+		link->name = memacpy(name, namelen);
+
+	} else {
+		switch (last_form->type) {
+		case FC_TEXT:
+		case FC_PASSWORD:
+		case FC_FILE:
+			link->type = L_FIELD;
+			break;
+		case FC_TEXTAREA:
+			link->type = L_AREA;
+			break;
+		case FC_CHECKBOX:
+		case FC_RADIO:
+			link->type = L_CHECKBOX;
+			break;
+		case FC_SELECT:
+			link->type = L_SELECT;
+			break;
+		default:
+			link->type = L_BUTTON;
+		}
+		link->form = last_form;
+		link->target = last_form->target ?
+			stracpy(last_form->target) : NULL;
+	}
+
+	link->where_img = last_image ? stracpy(last_image) : NULL;
+
+	if (link->type != L_FIELD && link->type != L_AREA) {
+		link->color.background = format.clink;
+		link->color.foreground = format.bg;
+	} else {
+		link->color.foreground = format.fg;
+		link->color.background = format.bg;
+	}
+
+	return link;
 }
 
 static void
@@ -879,57 +931,8 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 
 		if (!part->document) return;
 
-		link = new_link(part->document);
+		link = new_link(part->document, part->link_num, chars, charslen);
 		if (!link) return;
-
-		link->num = format.tabindex + part->link_num - 1;
-		link->accesskey = format.accesskey;
-		link->pos = NULL;
-
-		link->title = format.title ? stracpy(format.title) : NULL;
-
-		if (!last_form) {
-			link->type = L_LINK;
-			link->where = last_link ? stracpy(last_link) : NULL;
-			link->target = last_target ? stracpy(last_target) : NULL;
-			link->name = memacpy(chars, charslen);
-
-		} else {
-			switch (last_form->type) {
-				case FC_TEXT:
-				case FC_PASSWORD:
-				case FC_FILE:
-						link->type = L_FIELD;
-						break;
-				case FC_TEXTAREA:
-						link->type = L_AREA;
-						break;
-				case FC_CHECKBOX:
-				case FC_RADIO:
-						link->type = L_CHECKBOX;
-						break;
-				case FC_SELECT:
-						link->type = L_SELECT;
-						break;
-				default:
-						link->type = L_BUTTON;
-			}
-			link->form = last_form;
-			link->target = last_form->target ?
-				       stracpy(last_form->target) : NULL;
-		}
-
-		link->where_img = last_image ? stracpy(last_image) : NULL;
-
-		if (link->type != L_FIELD && link->type != L_AREA) {
-			link->color.background = format.clink;
-			link->color.foreground = format.bg;
-		} else {
-			link->color.foreground = format.fg;
-			link->color.background = format.bg;
-		}
-
-		link->n = 0;
 	}
 
 	pt = mem_realloc(link->pos, (link->n + charslen) * sizeof(struct point));

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.50 2003/10/24 17:05:28 pasky Exp $ */
+/* $Id: session.h,v 1.51 2003/10/24 20:51:41 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -59,8 +59,7 @@ enum task_type {
 	TASK_FORWARD,
 	TASK_IMGMAP,
 	TASK_RELOAD,
-	TASK_BACK,
-	TASK_UNBACK,
+	TASK_HISTORY,
 };
 
 /* This is one of the building stones of ELinks architecture --- this structure

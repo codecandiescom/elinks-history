@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.185 2003/10/24 20:49:34 pasky Exp $ */
+/* $Id: session.c,v 1.186 2003/10/24 20:51:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -677,8 +677,7 @@ do_move(struct session *ses, struct download **stat)
 		unsigned char *u;
 		enum task_type task = ses->task;
 
-		if ((task == TASK_BACK || task == TASK_UNBACK)
-		    && !have_location(ses))
+		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
 		u = join_urls(ses->loading_url, ce->redirect);
@@ -728,8 +727,7 @@ do_move(struct session *ses, struct download **stat)
 			if (gp) mem_free(gp);
 			return 2;
 			}
-		case TASK_BACK:
-		case TASK_UNBACK:
+		case TASK_HISTORY:
 			ses_goto(ses, u, NULL, ses->task_target_location,
 				 PRI_MAIN, NC_CACHE, TASK_RELOAD,
 				 NULL, end_load, 1);
@@ -763,8 +761,7 @@ b:
 		case TASK_IMGMAP:
 			ses_imgmap(ses);
 			break;
-		case TASK_BACK  :
-		case TASK_UNBACK:
+		case TASK_HISTORY:
 			ses_history_move(ses);
 			break;
 		case TASK_RELOAD:

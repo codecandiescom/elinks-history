@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-05 01:47+0100\n"
-"PO-Revision-Date: 2003-11-05 00:17+0100\n"
+"PO-Revision-Date: 2003-11-05 15:47+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3882,7 +3882,7 @@ msgid "Cache content: %s"
 msgstr "Obsah cache: %s"
 
 #: src/dialogs/info.c:214
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "\n"
 "\n"
@@ -3897,14 +3897,14 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"internì naalokováno = %li KiB\n"
-"celková velikost programu = %li KiB\n"
-"zabraná rezidentní pamì» = %li KiB\n"
-"sdílené stránky = %li KiB\n"
-"text (kód) = %li KiB\n"
-"data/stack = %li KiB\n"
-"knihovny = %li KiB\n"
-"dirty stránky = %li KiB"
+"Internì naalokováno = %li KiB\n"
+"Celková velikost programu = %li KiB\n"
+"Zabraná rezidentní pamì» = %li KiB\n"
+"Sdílené stránky = %li KiB\n"
+"Text (kód) = %li KiB\n"
+"Data/stack = %li KiB\n"
+"Knihovny = %li KiB\n"
+"Dirty stránky = %li KiB"
 
 #: src/dialogs/info.c:237
 msgid "Memory info"
@@ -4300,7 +4300,7 @@ msgstr ""
 
 #: src/formhist/formhist.c:382
 msgid "Never for this site"
-msgstr ""
+msgstr "Nikdy pro tento server"
 
 #. name:
 #: src/formhist/formhist.c:402

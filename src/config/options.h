@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.25 2002/05/26 17:56:21 pasky Exp $ */
+/* $Id: options.h,v 1.26 2002/06/07 17:14:57 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -79,12 +79,14 @@ extern struct option *get_opt_rec(struct list_head *, unsigned char *);
 extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *);
 #define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
 
+#define get_opt_bool_tree(tree, name) *((int *) get_opt(tree, name))
 #define get_opt_int_tree(tree, name) *((int *) get_opt(tree, name))
 #define get_opt_long_tree(tree, name) *((long *) get_opt(tree, name))
 #define get_opt_char_tree(tree, name) *((unsigned char *) get_opt(tree, name))
 #define get_opt_str_tree(tree, name) ((unsigned char *) get_opt(tree, name))
 #define get_opt_ptr_tree(tree, name) ((void *) get_opt(tree, name))
 
+#define get_opt_bool(name) get_opt_bool_tree(root_options, name)
 #define get_opt_int(name) get_opt_int_tree(root_options, name)
 #define get_opt_long(name) get_opt_long_tree(root_options, name)
 #define get_opt_char(name) get_opt_char_tree(root_options, name)

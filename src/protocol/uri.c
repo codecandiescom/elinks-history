@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.210 2004/05/30 00:57:09 jonas Exp $ */
+/* $Id: uri.c,v 1.211 2004/05/30 12:39:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,23 +359,26 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
 	/* We can not test uri->datalen here since we need to always
 	 * add '/'. */
-	if (wants(URI_PATH)) {
-		unsigned char *path_end = uri->data;
+	if (wants(URI_PATH) || wants(URI_FILENAME)) {
+		unsigned char *filename = uri->data;
+		unsigned char *pos;
 
-		assertm(wants(URI_PATH) == components,
-			"URI_PATH should be used alone %d", components);
+		if (uri->protocol != PROTOCOL_UNKNOWN
+		    && get_protocol_need_slash_after_host(uri->protocol))
+			filename--;
 
-		if (!is_uri_dir_sep(uri, *uri->data)) {
+		if (wants(URI_PATH) && !is_uri_dir_sep(uri, *filename)) {
 			/* FIXME: Add correct separator */
 			add_char_to_string(string, '/');
 		}
 
 		if (!uri->datalen) return string;
 
-		while (*path_end && !end_of_dir(uri, *path_end))
-			path_end++;
+		for (pos = filename; *pos && !end_of_dir(uri, *pos); pos++)
+			if (wants(URI_FILENAME) && is_uri_dir_sep(uri, *pos))
+				filename = pos + 1;
 
-		add_bytes_to_string(string, uri->data, path_end - uri->data);
+		return add_bytes_to_string(string, filename, pos - filename);
 	}
 
 	if (wants(URI_QUERY) && uri->datalen) {
@@ -388,7 +391,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
 		query++;
 		/* Check fragment and POST_CHAR */
-		add_bytes_to_string(string, query, strcspn(query, "#\001"));
+		return add_bytes_to_string(string, query, strcspn(query, "#\001"));
 	}
 
 	if (wants(URI_POST) && uri->post) {
@@ -913,7 +916,6 @@ struct string *
 add_uri_filename_to_string(struct string *string, struct uri *uri)
 {
 	unsigned char *filename = get_content_filename(uri);
-	unsigned char *pos;
 
 	assert(uri->data);
 
@@ -924,11 +926,7 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 		return string;
 	}
 
-	for (pos = filename = uri->data; *pos && !end_of_dir(uri, *pos); pos++)
-		if (is_uri_dir_sep(uri, *pos))
-			filename = pos + 1;
-
-	return add_bytes_to_string(string, filename, pos - filename);
+	return add_uri_to_string(string, uri, URI_FILENAME);
 }
 
 unsigned char *

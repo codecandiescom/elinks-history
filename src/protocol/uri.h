@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.107 2004/05/29 18:14:03 jonas Exp $ */
+/* $Id: uri.h,v 1.108 2004/05/30 12:39:04 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -104,13 +104,17 @@ enum uri_component {
 	/* Add stuff from uri->data and up and prefixes a '/' */
 	URI_PATH		= (1 << 9),
 
+	/* Add filename from last direcory separator in uri->data to end of
+	 * path. */
+	URI_FILENAME		= (1 << 10),
+
 	/* Add query part from uri->data not including the '?' */
-	URI_QUERY		= (1 << 10),
+	URI_QUERY		= (1 << 11),
 
 	/* Some predefined classes for formatting of URIs */
 
 	/* Special flags */
-	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH | URI_QUERY,
+	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH | URI_FILENAME | URI_QUERY,
 
 	/* The usual suspects */
 	URI_RARE		= URI_SPECIAL | URI_POST | URI_IDN,

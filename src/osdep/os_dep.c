@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.93 2003/10/27 00:55:55 pasky Exp $ */
+/* $Id: os_dep.c,v 1.94 2003/10/27 01:02:58 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -395,14 +395,6 @@ is_xterm(void)
 	}
 
 	return xt;
-}
-
-#elif defined(BEOS)
-
-int
-is_xterm(void)
-{
-	return 0;
 }
 
 #elif defined(RISCOS)
@@ -967,109 +959,6 @@ unblock_stdin(void)
 #endif
 
 #if defined(BEOS)
-
-#include <be/kernel/OS.h>
-
-int thr_sem_init = 0;
-sem_id thr_sem;
-
-
-struct active_thread {
-	LIST_HEAD(struct active_thread);
-
-	thread_id tid;
-	void (*fn)(void *);
-	void *data;
-};
-
-INIT_LIST_HEAD(active_threads);
-
-int32
-started_thr(void *data)
-{
-	struct active_thread *thrd = data;
-
-	thrd->fn(thrd->data);
-	if (acquire_sem(thr_sem) < B_NO_ERROR) return 0;
-	del_from_list(thrd);
-	free(thrd);
-	release_sem(thr_sem);
-
-	return 0;
-}
-
-int
-start_thr(void (*fn)(void *), void *data, unsigned char *name)
-{
-	struct active_thread *thrd;
-	int tid;
-
-	if (!thr_sem_init) {
-		thr_sem = create_sem(0, "thread_sem");
-		if (thr_sem < B_NO_ERROR) return -1;
-		thr_sem_init = 1;
-	} else if (acquire_sem(thr_sem) < B_NO_ERROR) return -1;
-
-	thrd = malloc(sizeof(struct active_thread));
-	if (!thrd) goto rel;
-	thrd->fn = fn;
-	thrd->data = data;
-	thrd->tid = spawn_thread(started_thr, name, B_NORMAL_PRIORITY, thrd);
-	tid = thrd->tid;
-
-	if (tid < B_NO_ERROR) {
-		free(thrd);
-
-rel:
-		release_sem(thr_sem);
-		return -1;
-	}
-
-	resume_thread(thrd->tid);
-	add_to_list(active_threads, thrd);
-	release_sem(thr_sem);
-
-	return tid;
-}
-
-void
-terminate_osdep(void)
-{
-	struct list_head *p;
-	struct active_thread *thrd;
-
-	if (acquire_sem(thr_sem) < B_NO_ERROR) return;
-	foreach (thrd, active_threads) kill_thread(thrd->tid);
-
-	while ((p = active_threads.next) != &active_threads) {
-		del_from_list(p);
-		free(p);
-	}
-	release_sem(thr_sem);
-}
-
-int
-start_thread(void (*fn)(void *, int), void *ptr, int l)
-{
-	int p[2];
-	struct tdata *t;
-
-	if (c_pipe(p) < 0) return -1;
-
-	t = malloc(sizeof(struct tdata) + l);
-	if (!t) return -1;
-	t->fn = fn;
-	t->h = p[1];
-	memcpy(t->data, ptr, l);
-	if (start_thr((void (*)(void *))bgt, t, "elinks_thread") < 0) {
-		close(p[0]);
-		close(p[1]);
-		mem_free(t);
-		return -1;
-	}
-
-	return p[0];
-}
 
 
 #elif defined(HAVE_BEGINTHREAD)
@@ -1751,17 +1640,6 @@ get_system_env(void)
 
 #elif defined(BEOS)
 
-int
-get_system_env(void)
-{
-	int env = get_common_env();
-	unsigned char *term = getenv("TERM");
-
-	if (!term || (upcase(term[0]) == 'B' && upcase(term[1]) == 'E'))
-		env |= ENV_BE;
-
-	return env;
-}
 
 #elif defined(WIN32)
 
@@ -1847,12 +1725,8 @@ open_in_new_win32(struct terminal *term, unsigned char *exe_name,
 #endif
 
 #ifdef BEOS
-void
-open_in_new_be(struct terminal *term, unsigned char *exe_name,
-	       unsigned char *param)
-{
-	exec_new_elinks(term, DEFAULT_BEOS_TERM_CMD, exe_name, param);
-}
+void open_in_new_be(struct terminal *term, unsigned char *exe_name,
+		    unsigned char *param);
 #endif
 
 struct {

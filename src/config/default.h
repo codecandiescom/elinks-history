@@ -1,4 +1,4 @@
-/* $Id: default.h,v 1.6 2002/04/19 14:28:00 pasky Exp $ */
+/* $Id: default.h,v 1.7 2002/04/26 18:14:08 pasky Exp $ */
 
 #ifndef EL__CONFIG_DEFAULT_H
 #define EL__CONFIG_DEFAULT_H
@@ -110,6 +110,7 @@ extern unsigned char http_proxy[];
 extern unsigned char ftp_proxy[];
 extern unsigned char no_proxy_for[];
 extern unsigned char download_dir[];
+extern unsigned char default_mime_type[];
 
 extern unsigned char proxy_user[];
 extern unsigned char proxy_passwd[];

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.9 2002/04/26 18:09:31 pasky Exp $ */
+/* $Id: types.c,v 1.10 2002/04/26 18:14:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include <bfu/align.h>
 #include <bfu/bfu.h>
 #include <bfu/menu.h>
+#include <config/default.h>
 #include <intl/language.h>
 #include <lowlevel/terminal.h>
 #include <protocol/http/header.h>
@@ -136,7 +137,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 	/* Fallback.. use some hardwired default */
 
-	return stracpy("text/plain");
+	return stracpy(default_mime_type);
 }
 
 struct assoc *get_type_assoc(struct terminal *term, unsigned char *type)

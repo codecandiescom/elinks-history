@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.20 2002/04/26 17:26:47 pasky Exp $ */
+/* $Id: default.c,v 1.21 2002/04/26 18:14:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1048,6 +1048,8 @@ unsigned char ftp_proxy[MAX_STR_LEN] = "";
 
 unsigned char download_dir[MAX_STR_LEN] = "./";
 
+unsigned char default_mime_type[MAX_STR_LEN] = "text/plain";
+
 unsigned char default_anon_pass[MAX_STR_LEN] = "somebody@host.domain";
 
 unsigned char user_agent[MAX_STR_LEN] = "";
@@ -1174,6 +1176,13 @@ struct option links_options[] = {
 	       	gen_cmd, color_rd, NULL,
 		0, 1, &default_vlink,
 		"Default vlink color." },
+
+	{	"default-mime-type", "default_mime_type",
+		gen_cmd, str_rd, str_wr,
+		0, MAX_STR_LEN, default_mime_type,
+		"MIME type for a document we should assume by default (when we are\n"
+		"unable to guess it properly from known informations about the\n"
+		"document)." },
 
 	{	"download-dir", "download_dir",
 		gen_cmd, str_rd, str_wr,

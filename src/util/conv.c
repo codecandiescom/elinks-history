@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.51 2004/01/03 15:07:43 zas Exp $ */
+/* $Id: conv.c,v 1.52 2004/03/16 09:14:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -294,10 +294,16 @@ add_quoted_to_string(struct string *string, unsigned char *src, int len)
 struct string *
 add_shell_safe_to_string(struct string *string, unsigned char *cmd, int cmdlen)
 {
+	int prev_safe = 0;
+
 	for (; cmdlen; cmdlen--, cmd++) {
-		if (is_safe_in_shell(*cmd)) {
+		if ((*cmd == '-' && prev_safe) ||
+		    (prev_safe = is_safe_in_shell(*cmd))) {
 			add_char_to_string(string, *cmd);
 		} else {
+			/* XXX: Not all programs we might exec are capable of
+			 * decoding these.  For some, we should just report
+			 * an error rather than exec with an encoded string. */
 			add_char_to_string(string, '%');
 			add_char_to_string(string, hx((*cmd & 0xf0) >> 4));
 			add_char_to_string(string, hx(*cmd & 0x0f));

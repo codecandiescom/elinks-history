@@ -21,9 +21,6 @@
 /* Define to 1 if we should use pthreads */
 #undef HAVE_PTHREADS
 
-/* Define to 1 if we should use regex */
-#undef HAVE_REGEX_H
-
 /* Define to 1 if we should use scripting */
 #undef HAVE_SCRIPTING
 

@@ -164,16 +164,7 @@ dnl ===================================================================
 dnl Check for POSIX <regex.h>
 dnl ===================================================================
 
-AC_MSG_CHECKING([for POSIX regex.h])
-AC_TRY_COMPILE([
-#include <sys/types.h>
-#include <regex.h>
-], [
-regex_t a;
-], have_posix_regex_h=yes, have_posix_regex_h=no)
-
-test "$have_posix_regex_h" && AC_DEFINE(HAVE_REGEX_H)
-AC_MSG_RESULT($have_posix_regex_h)
+EL_CHECK_SYS_TYPE(regex_t, HAVE_REGEX_H, [#include <regex.h>])
 
 dnl ===================================================================
 dnl Checks for library functions.

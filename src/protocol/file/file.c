@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.153 2004/04/02 23:33:39 jonas Exp $ */
+/* $Id: file.c,v 1.154 2004/04/02 23:38:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,7 +627,7 @@ file_func(struct connection *connection)
 	DIR *directory;
 	struct string page;
 	enum connection_state state;
-	unsigned char *head = NULL;
+	unsigned char *head = "";
 
 	if (get_opt_int_tree(cmdline_options, "anonymous")
 	    || filenamelen > MAX_STR_LEN - 1 || filenamelen <= 0) {
@@ -666,13 +666,14 @@ file_func(struct connection *connection)
 
 	} else {
 		state = read_encoded_file(filename, filenamelen, &page);
-		if (state == S_OK) head = "";
 	}
 
 	if (state == S_OK) {
+		struct cache_entry *cache;
+
 		/* Try to add fragment data to the connection cache if either
 		 * file reading or directory listing worked out ok. */
-		connection->cache = get_cache_entry(connection->uri);
+		cache = connection->cache = get_cache_entry(connection->uri);
 		if (!connection->cache) {
 			if (!redirect_directory) done_string(&page);
 			state = S_OUT_OF_MEM;
@@ -682,13 +683,6 @@ file_func(struct connection *connection)
 				state = S_OUT_OF_MEM;
 
 		} else {
-			assert(head);
-			if_assert_failed {
-				done_string(&page);
-				abort_conn_with_state(connection, S_INTERNAL);
-				return;
-			}
-
 			/* Setup file read or directory listing for viewing. */
 			if (cache->head) mem_free(cache->head);
 			cache->head = stracpy(head);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.75 2003/07/23 15:20:48 pasky Exp $ */
+/* $Id: cookies.c,v 1.76 2003/08/23 10:41:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,8 @@
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
+
+#define COOKIES_FILENAME	"cookies"
 
 static int cookies_nosave = 0;
 
@@ -76,8 +78,6 @@ static int cookies_dirty = 0;
 
 #ifdef COOKIES
 
-void load_cookies(void);
-
 static void accept_cookie(struct cookie *);
 static void save_cookies(void);
 
@@ -97,7 +97,8 @@ free_cookie(struct cookie *c)
 static int
 check_domain_security(unsigned char *domain, unsigned char *server, int server_len)
 {
-	int i, j, domain_len;
+	register int i, j;
+	int domain_len;
 	int need_dots;
 
 	if (domain[0] == '.') domain++;
@@ -482,12 +483,8 @@ is_path_prefix(unsigned char *d, unsigned char *s, int sl)
 }
 
 
-static inline int
-cookie_expired(struct cookie *c)
-{
-  	return (c->expires && c->expires < time(NULL));
-}
-
+#define is_expired(t) ((t) && (t) <= time(NULL))
+#define is_dead(t) (!(t) || (t) <= time(NULL))
 
 void
 send_cookies(struct string *header, struct uri *uri)
@@ -513,7 +510,7 @@ send_cookies(struct string *header, struct uri *uri)
 		    || !is_path_prefix(c->path, data, datalen))
 			continue;
 
-		if (cookie_expired(c)) {
+		if (is_expired(c->expires)) {
 #ifdef COOKIES_DEBUG
 			debug("Cookie %s=%s (exp %d) expired.\n",
 			      c->name, c->value, c->expires);
@@ -560,7 +557,7 @@ load_cookies(void) {
 	 * save_cookies may write. 6 is choosen after the fprintf(..) call
 	 * in save_cookies(). --Zas */
 	unsigned char in_buffer[6 * MAX_STR_LEN];
-	unsigned char *cookfile = "cookies";
+	unsigned char *cookfile = COOKIES_FILENAME;
 	FILE *fp;
 
 	if (elinks_home) {
@@ -583,6 +580,9 @@ load_cookies(void) {
 		unsigned char *p, *q = in_buffer;
 		enum { NAME = 0, VALUE, SERVER, PATH, DOMAIN, MEMBERS } member;
 		unsigned char *members[MEMBERS];
+		ttime expires = 0;
+
+		memset(members, 0, sizeof(unsigned char *) * MEMBERS);
 
 		/* First read in and allocate all members. */
 		for (member = NAME; member < MEMBERS; member++, q = p) {
@@ -596,13 +596,22 @@ load_cookies(void) {
 		/* Finally get a hold of the expire field. */
 		p = (member == MEMBERS ? strchr(q, '\t') : NULL);
 
+		if (p) {
+			expires = atol(q);
+			if (is_dead(expires)) {
+				p = NULL;
+				cookies_dirty = 1;
+			}
+		}
+
 		/* Prepare cookie if all members and fields was read. */
 		cookie = (p ? mem_calloc(1, sizeof(struct cookie)) : NULL);
 
 		if (!cookie) {
 			/* Something went wrong so clean up. */
-			for (member -= 1; member >= 0; member--)
-				mem_free(members[member]);
+			for (member = NAME; member < MEMBERS; member++)
+				if (members[member])
+					mem_free(members[member]);
 			continue;
 		}
 
@@ -613,7 +622,7 @@ load_cookies(void) {
 		cookie->domain	= members[DOMAIN];
 
 		*p++ = '\0';
-		cookie->expires = atol(q);
+		cookie->expires = expires;
 
 		/* Drop ending '\n'. */
 		if (*p) p[strlen(p) - 1] = 0;
@@ -640,7 +649,7 @@ save_cookies(void) {
 
 	if (cookies_nosave || !elinks_home || !cookies_dirty) return;
 
-	cookfile = straconcat(elinks_home, "cookies", NULL);
+	cookfile = straconcat(elinks_home, COOKIES_FILENAME, NULL);
 	if (!cookfile) return;
 
 	ssi = secure_open(cookfile, 0177); /* rw for user only */
@@ -648,7 +657,7 @@ save_cookies(void) {
 	if (!ssi) return;
 
 	foreach (c, cookies) {
-		if (cookie_expired(c)) continue;
+		if (is_dead(c->expires)) continue;
 		if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
 				   c->name, c->value,
 				   c->server ? c->server : (unsigned char *) "",

@@ -1,3 +1,153 @@
+Tue Dec 10 23:02:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/backend/xbel.c:
+
+	XBEL compilation fix when libexpat is not available.  
+
+Tue Dec 10 22:53:29 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/czech.lng:
+
+	Czech translation update.  
+
+Tue Dec 10 22:52:15 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, configure.in, src/bookmarks/Makefile.am,
+	src/bookmarks/backend/Makefile.am, src/bookmarks/backend/common.c,
+	src/bookmarks/backend/xbel.c, src/bookmarks/backend/xbel.h:
+
+	XBEL bookmarks support, patch by Fabio Bonelli
+	<fabiobonelli@libero.it>.  
+
+Tue Dec 10 22:49:18 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	config_saving_style aliased to config.saving_style now.  
+
+Tue Dec 10 22:40:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/download.c:
+
+	Fixed compilation error when mailcap is disabled at compile time.  
+
+Tue Dec 10 22:28:08 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Fixed description of mailcap options (added newlines).  
+
+Tue Dec 10 22:25:30 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Removed keybinding.watermark in favour of keybinding.flags,
+	introduced KBDB_WATERMARK and KBDB_TOUCHED (that one is not used
+	yet).  
+
+Tue Dec 10 22:12:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, dialogs.c:
+
+	Show error msgbox when secure_open() fails (like during -no-connect
+	fly).  
+
+Tue Dec 10 21:56:16 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, dialogs.c, options.c:
+
+	Set OPT_TOUCHED when modifying option value, clear it when saving
+	options. Not caring about it anywhere yet.  
+
+Tue Dec 10 21:43:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/download.c:
+
+	Fixed displaying of handler type in the type query dialog.  
+
+Tue Dec 10 21:24:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/mailcap.c:
+
+	Show mailcap as a handler name in the type query dialog.  
+
+Tue Dec 10 21:22:13 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/: mailcap.c, mailcap.h:
+
+	Fixed Id tag ;-).  
+
+Tue Dec 10 21:21:32 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/mailcap.html:
+
+	Moved anchors before the headings. Added Id tag.  
+
+Tue Dec 10 21:17:19 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Added slashdot's smartprefixes, patch by Miciah.  
+
+Tue Dec 10 21:16:16 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Added smartprefix a (acronymfinder.com), patch by Miciah.  
+
+Tue Dec 10 21:09:00 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Improved URL escaping in default Lua hooks. Patch by Miciah.  
+
+Tue Dec 10 21:04:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/polish.lng:
+
+	Polish translation update, patch by witekfl.  
+
+Tue Dec 10 20:58:45 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, acconfig.h, configure.in, doc/mailcap.html, src/main.c,
+	src/config/options.c, src/document/download.c,
+	src/protocol/Makefile.am, src/protocol/mailcap.c,
+	src/protocol/mailcap.h, src/protocol/mime.c, src/util/file.c,
+	src/util/file.h:
+
+	Mailcap support - if we have no configuration entry for given MIME
+	type, have a look at mailcap (introduces protocol.mailcap.*). Patch
+	by Jonas Fonseca <foncseca@diku.dk>.  
+
+Tue Dec 10 19:52:10 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/danish.lng:
+
+	Danish translation update (typo fix), patch by Jonas.  
+
+Tue Dec 10 10:54:50 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/backend/Makefile.in:
+
+	Makefile.in was removed from CVS.  
+
+Tue Dec 10 10:50:54 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/config/opttypes.c:
+
+	Translation of option types was enabled. French translation was
+	updated.  
+
 Mon Dec  9 21:53:07 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/lowlevel/sched.c:

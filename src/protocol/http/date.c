@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.16 2003/09/21 12:29:51 zas Exp $ */
+/* $Id: date.c,v 1.17 2003/09/21 12:35:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,10 @@ parse_month(const unsigned char *date)
 
 	switch (date[0]) {
 	case 'J': /* Jan, Jun, Jul */
-		if (date[1] == 'a' && date[2] == 'n') return 0; /* Jan */
+		if (date[1] == 'a') {
+			if (date[2] == 'n') return 0; /* Jan */
+			return -1;
+		}
 		if (date[1] == 'u') {
 			if (date[2] == 'n') return 5; /* Jun */
 			if (date[2] == 'l') return 6; /* Jul */
@@ -103,7 +106,10 @@ parse_month(const unsigned char *date)
 		}
 		return -1;
 	case 'A': /* Apr, Aug */
-		if (date[1] == 'p' && date[2] == 'r') return 3; /* Apr */
+		if (date[1] == 'p') {
+			if (date[2] == 'r') return 3; /* Apr */
+			return -1;
+		}
 		if (date[1] == 'u' && date[2] == 'g') return 7; /* Aug */
 		return -1;
 	case 'S':

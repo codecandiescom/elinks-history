@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.383 2004/04/22 23:50:29 jonas Exp $ */
+/* $Id: session.c,v 1.384 2004/04/22 23:56:22 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -423,15 +423,10 @@ doc_end_load(struct download *stat, struct session *ses)
 #endif
 
 	if (submit) {
-		/* This is broken as hell. First passing NULL fc to
-		 * get_form_url() will hit assertion failure (btw submit_form()
-		 * should probably be used) and will need the current link to
-		 * be pointing to a form link. Next we all know the outcome of
-		 * (NULL)->target ;) */
-		struct form_control *fc = NULL;
+		struct form_control *fc = ses->doc_view->document->forms.next;
+		unsigned char *url = get_form_url(ses, ses->doc_view, fc);
 
-		goto_link(get_form_url(ses, ses->doc_view, fc), fc->target, ses,
-			  1);
+		if (url) goto_link(url, fc->target, ses, 1);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.131 2004/04/30 08:48:55 zas Exp $ */
+/* $Id: screen.c,v 1.132 2004/04/30 09:03:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -661,24 +661,24 @@ redraw_screen(struct terminal *term)
 		add_bytes_to_string(&image, "\033[0m", 4);
 
 		/* If we ended in border state end the frame mode. */
-		if (state.border && driver->frame_seqs) {
+		if (state.border && driver->frame_seqs)
 			add_term_string(&image, driver->frame_seqs[0]);
+
+		if (image.length
+		    || screen->cx != screen->lcx
+		    || screen->cy != screen->lcy) {
+			screen->lcx = screen->cx;
+			screen->lcy = screen->cy;
+
+			add_cursor_move_to_string(&image, screen->cy + 1,
+						  screen->cx + 1);
 		}
-	}
 
-	if (image.length
-	    || screen->cx != screen->lcx
-	    || screen->cy != screen->lcy) {
-		screen->lcx = screen->cx;
-		screen->lcy = screen->cy;
-
-		add_cursor_move_to_string(&image, screen->cy + 1, screen->cx + 1);
-	}
-
-	if (image.length) {
-		if (term->master) want_draw();
-		hard_write(term->fdout, image.source, image.length);
-		if (term->master) done_draw();
+		if (image.length) {
+			if (term->master) want_draw();
+			hard_write(term->fdout, image.source, image.length);
+			if (term->master) done_draw();
+		}
 	}
 
 	done_string(&image);

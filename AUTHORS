@@ -8,6 +8,9 @@ or some of your contributions is, tell me):
 Adam Harvey <matlhdam@iinet.net.au>
 	Fixed sometimes badly posted form
 
+<akishan@cs.stanford.edu>
+	ftpparse.{c,h} update for gcc 2.95	
+
 Alberto García <berto@gpul.org>
 	Galician translation
 
@@ -105,6 +108,9 @@ Denis Lackovic <delacko@fly.srk.fer.hr>
 
 Dimitar Dimitrov <mitaka_ddd@yahoo.com>
 	Bulgarian translation updates
+
+D.J. Bernstein <djb@cr.yp.to>
+	ftpparse.{c,h}
 
 Dmitry M. Klimov <dmk@gtrk.kmtn.ru>
 	KOI8-R frames
@@ -378,4 +384,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.88 2002/10/01 16:18:47 zas Exp $
+$Id: AUTHORS,v 1.89 2002/10/01 16:28:01 zas Exp $

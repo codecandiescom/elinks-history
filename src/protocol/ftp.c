@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.39 2002/10/01 15:54:20 zas Exp $ */
+/* $Id: ftp.c,v 1.40 2002/10/01 16:28:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "lowlevel/select.h"
 #include "lowlevel/sched.h"
 #include "protocol/ftp.h"
+#include "protocol/ftpparse.h"
 #include "protocol/url.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -50,7 +51,6 @@ struct ftp_connection_info {
 	int rest_sent;	/* Sent RESTor command */
 	int conn_state;
 	int has_data;   /* Do we have data socket? */
-	int dpos;
 	int buf_pos;
 	int use_pasv; /* Use PASV (yes or no) */
 #ifdef IPV6
@@ -810,7 +810,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 		return;
 	}
 
-	if (response >= 550) {
+	if (response >= 550 || response == 450) {
 		/* Requested action not taken.
 		 * File unavailable (e.g., file not found, no access). */
 
@@ -856,7 +856,7 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 
 /* List a directory in html format. */
 static int
-ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
+ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 		    unsigned char *buffer, int buflen, int last,
 		    int *tries)
 {
@@ -876,6 +876,7 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 		int bufp;
 		int strl;
 		int newline = 0;
+		struct ftpparse ftpInfo;
 
 		/* Newline quest. */
 
@@ -897,88 +898,79 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos, int *dpos,
 
 		/* Process line whose end we've already found. */
 
-		str = init_str();
-		if (!str) return -1;
+		if (ftpparse(&ftpInfo, buf, bufp) == 1) {
+			unsigned char tmp[128];
 
-		strl = 0;
-		/* add_to_str(&str, &strl, "   "); */
+			str = init_str();
+			if (!str) return -1;
 
-		if (*dpos && *dpos < bufp && WHITECHAR(buf[*dpos - 1])) {
-			int symlinkpos;
-direntry:
-			for (symlinkpos = *dpos;
-			     symlinkpos <= bufp - strlen(" -> "); symlinkpos++)
-				if (!memcmp(buf + symlinkpos, " -> ", 4))
-					break;
+			strl = 0;
 
-			if (symlinkpos > bufp - strlen(" -> ")) {
-				/* It's not a symlink. */
-				symlinkpos = bufp;
+			if (ftpInfo.flagtrycwd) {
+				if (ftpInfo.flagtryretr)
+					add_to_str(&str, &strl, "[LNK] ");
+				else {
+					if (colorize_dir) {
+						/* The <b> is here for the case when we've
+						* use_document_colors off. */
+						add_to_str(&str, &strl, "<font color=\"");
+						add_to_str(&str, &strl, dircolor);
+						add_to_str(&str, &strl, "\"><b>");
+					}
+					add_to_str(&str, &strl, "[DIR] ");
+					if (colorize_dir) {
+						add_to_str(&str, &strl, "</b></font>");
+					}
+				}
+			} else {
+				add_to_str(&str, &strl, "[   ] ");
 			}
 
-			add_htmlesc_str(&str, &strl, buf, *dpos);
+			if (ftpInfo.mtime) {
+				if (FTPPARSE_MTIME_LOCAL == ftpInfo.mtimetype)
+					strftime(tmp, 128, "%d-%b-%Y %H:%M LOC ",
+						 localtime(&ftpInfo.mtime));
+				else
+					strftime(tmp, 128, "%d-%b-%Y %H:%M     ",
+						 gmtime(&ftpInfo.mtime));
 
-			add_to_str(&str, &strl, "<a href=\"");
-			add_htmlesc_str(&str, &strl, buf + *dpos,
-					symlinkpos - *dpos);
-			if (buf[0] == 'd')
-				add_chr_to_str(&str, &strl, '/');
-			add_to_str(&str, &strl, "\">");
+				add_to_str(&str, &strl, tmp);
+			}
 
-			if (buf[0] == 'd' && colorize_dir) {
-				/* The <b> is here for the case when we've
-				 * use_document_colors off. */
+			if (!ftpInfo.flagtrycwd) {
+				snprintf(tmp, 128, "%12lu ",ftpInfo.size);
+				add_to_str(&str, &strl, tmp);
+			} else {
+				add_to_str(&str, &strl, "           - ");
+			}
+
+			if (ftpInfo.flagtrycwd && !ftpInfo.flagtryretr && colorize_dir) {
 				add_to_str(&str, &strl, "<font color=\"");
 				add_to_str(&str, &strl, dircolor);
 				add_to_str(&str, &strl, "\"><b>");
 			}
 
-			add_htmlesc_str(&str, &strl, buf + *dpos,
-					symlinkpos - *dpos);
-
-			if (buf[0] == 'd' && colorize_dir) {
+			add_to_str(&str, &strl, "<a href=\"");
+			add_htmlesc_str(&str, &strl, ftpInfo.name, ftpInfo.namelen);
+			if (ftpInfo.flagtrycwd && !ftpInfo.flagtryretr)
+				add_chr_to_str(&str, &strl, '/');
+			add_to_str(&str, &strl, "\">");
+			add_htmlesc_str(&str, &strl, ftpInfo.name, ftpInfo.namelen);
+			add_to_str(&str, &strl, "</a>");
+			if (ftpInfo.flagtrycwd && !ftpInfo.flagtryretr && colorize_dir) {
 				add_to_str(&str, &strl, "</b></font>");
 			}
+			if (ftpInfo.symlink) {
+				add_to_str(&str, &strl, " -&gt; ");
+				add_htmlesc_str(&str, &strl, ftpInfo.symlink, ftpInfo.symlinklen);
+			}
+			add_chr_to_str(&str, &strl, '\n');
 
-			add_to_str(&str, &strl, "</a>");
+			if (add_fragment(c_e, *pos, str, strl)) *tries = 0;
+			*pos += strl;
 
-			/* The symlink stuff ;) */
-			add_htmlesc_str(&str, &strl, buf + symlinkpos,
-					bufp - symlinkpos);
-
-		} else {
-			int symlinkpos;
-
-			if (bufp > strlen("total") &&
-			    !strncasecmp(buf, "total", 5))
-				goto rawentry;
-
-			for (symlinkpos = bufp - 1; symlinkpos >= 0;
-			     symlinkpos--)
-				if (!WHITECHAR(buf[symlinkpos]))
-					break;
-			if (symlinkpos < 0)
-				goto rawentry;
-
-			for (; symlinkpos >= 0; symlinkpos--)
-				if (WHITECHAR(buf[symlinkpos])
-				    && (symlinkpos < 3
-					|| memcmp(buf + symlinkpos - 3, " -> ", 4))
-				    && (symlinkpos > bufp - 4
-					|| memcmp(buf + symlinkpos, " -> ", 4)))
-					break;
-			*dpos = symlinkpos + 1;
-			goto direntry;
-rawentry:
-			add_htmlesc_str(&str, &strl, buf, bufp);
+			mem_free(str);
 		}
-
-		add_chr_to_str(&str, &strl, '\n');
-
-		if (add_fragment(c_e, *pos, str, strl)) *tries = 0;
-		*pos += strl;
-
-		mem_free(str);
 	}
 }
 
@@ -1079,7 +1071,6 @@ out_of_mem:
 			conn->received += len;
 			proceeded = ftp_process_dirlist(conn->cache,
 							&conn->from,
-							&c_i->dpos,
 							c_i->ftp_buffer,
 							len + c_i->buf_pos,
 							0, &conn->tries);
@@ -1097,7 +1088,7 @@ out_of_mem:
 		return;
 	}
 
-	if (ftp_process_dirlist(conn->cache, &conn->from, &c_i->dpos,
+	if (ftp_process_dirlist(conn->cache, &conn->from,
 				c_i->ftp_buffer, c_i->buf_pos, 1,
 				&conn->tries) == -1)
 		goto out_of_mem;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.187 2004/06/24 15:12:21 zas Exp $ */
+/* $Id: tables.c,v 1.188 2004/06/24 15:16:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1231,9 +1231,9 @@ check_table_widths(struct table *table)
 	register int i, j;
 	int s, ns;
 	int max, max_index = 0; /* go away, warning! */
-	int *w = mem_calloc(table->x, sizeof(int));
+	int *widths = mem_calloc(table->x, sizeof(int));
 
-	if (!w) return;
+	if (!widths) return;
 
 	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
 		struct table_cell *cell = CELL(table, i, j);
@@ -1269,7 +1269,7 @@ check_table_widths(struct table *table)
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(w + i, s, cell->width - p, table->max_c + i);
+				dst_width(&widths[i], s, cell->width - p, table->max_c + i);
 
 			} else if (cell->colspan > s && cell->colspan < ns) {
 				ns = cell->colspan;
@@ -1281,7 +1281,7 @@ check_table_widths(struct table *table)
 	s = ns = 0;
 	for (i = 0; i < table->x; i++) {
 		s += table->columns_width[i];
-		ns += w[i];
+		ns += widths[i];
 	}
 
 	if (ns > s) {
@@ -1297,16 +1297,16 @@ check_table_widths(struct table *table)
 		}
 
 	if (max != -1) {
-		w[max_index] += s - ns;
-		if (w[max_index] <= table->max_c[max_index]) {
+		widths[max_index] += s - ns;
+		if (widths[max_index] <= table->max_c[max_index]) {
 			mem_free(table->columns_width);
-			table->columns_width = w;
+			table->columns_width = widths;
 			return;
 		}
 	}
 
 end:
-	mem_free(w);
+	mem_free(widths);
 }
 #endif
 

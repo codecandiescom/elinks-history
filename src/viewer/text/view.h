@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.40 2004/01/08 03:15:02 jonas Exp $ */
+/* $Id: view.h,v 1.41 2004/01/21 10:09:02 witekfl Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -24,6 +24,9 @@ void down(struct session *ses, struct document_view *doc_view, int a);
 
 /* Used for changing between formatted and source (plain) view. */
 void toggle_plain_html(struct session *ses, struct document_view *doc_view, int a);
+
+/* Used for changing wrapping of text */
+void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a);
 
 /* File menu handlers. */
 

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.66 2003/12/29 19:44:49 zas Exp $ */
+/* $Id: renderer.c,v 1.67 2004/01/21 10:09:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,11 +298,12 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
 		int width, added, only_spaces = 1, spaces = 0, was_spaces = 0;
+		int last_space = 0;
 		int step = 0;
-
+		int doc_width = document->options.wrap ? (document->options.width < length ? document->options.width : length) : length;
 		/* End of line detection.
 		 * We handle \r, \r\n and \n types here. */
-		for (width = 0; width < length; width++) {
+		for (width = 0; width < doc_width; width++) {
 			if (source[width] == ASCII_CR)
 				step++;
 			if (source[width + step] == ASCII_LF)
@@ -310,6 +311,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 			if (step) break;
 
 			if (isspace(source[width])) {
+				last_space = width;
 				if (only_spaces)
 					spaces++;
 				else
@@ -344,6 +346,10 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 				/* Drop trailing whitespaces. */
 				width -= was_spaces;
 				step += was_spaces;
+			}
+			if (!step && (width < length) && last_space) {
+				width = last_space;
+				step = 1;
 			}
 		}
 

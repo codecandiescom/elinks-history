@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.11 2003/11/24 23:22:02 pasky Exp $ */
+/* $Id: vs.h,v 1.12 2004/01/21 10:09:02 witekfl Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -18,6 +18,7 @@ struct view_state {
 	int current_link;
 
 	int plain;
+	int wrap:1;
 
 	int url_len;
 	unsigned char url[1];	/* Must be last. */

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.357 2004/01/17 01:53:40 jonas Exp $ */
+/* $Id: view.c,v 1.358 2004/01/21 10:09:02 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -503,6 +503,20 @@ toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
 	draw_formatted(ses, 1);
 }
 
+void
+toggle_wrap_text(struct session *ses, struct document_view *doc_view, int a)
+{
+	assert(ses && doc_view && ses->tab && ses->tab->term);
+	if_assert_failed return;
+
+	if (!doc_view->vs) {
+		nowhere_box(ses->tab->term, NULL);
+		return;
+	}
+
+	doc_view->vs->wrap = !doc_view->vs->wrap;
+	draw_formatted(ses, 1);
+}
 
 static inline void
 rep_ev(struct session *ses, struct document_view *doc_view,

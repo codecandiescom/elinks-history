@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.163 2004/01/14 17:10:00 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.164 2004/01/21 10:09:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -496,6 +496,7 @@ static struct strtonum action_table[KEYACTS + 1] = {
 	{ "toggle-html-plain", ACT_TOGGLE_HTML_PLAIN, DACT(N_("Toggle rendering page as HTML / plain text")) },
 	{ "toggle-numbered-links", ACT_TOGGLE_NUMBERED_LINKS, DACT(N_("Toggle displaying of links numbers")) },
 	{ "toggle-plain-compress-empty-lines", ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES, DACT(N_("Toggle plain renderer compression of empty lines")) },
+	{ "toggle-wrap-text", ACT_TOGGLE_WRAP_TEXT, DACT(N_("Toggle wrapping of text")) },
 	{ "unback", ACT_UNBACK, DACT(N_("Go forward in the unhistory")) },
 	{ "unexpand", ACT_UNEXPAND, DACT(N_("Collapse item")) },
 	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },
@@ -758,6 +759,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'Q',		 0,		ACT_REALLY_QUIT },
 	{ 'R',		 KBD_CTRL,	ACT_RELOAD },
 	{ 'T',		 0,		ACT_OPEN_LINK_IN_NEW_TAB },
+	{ 'W',		 0,		ACT_TOGGLE_WRAP_TEXT },
 	{ '[',		 0,		ACT_SCROLL_LEFT },
 	{ '\'',		 0,		ACT_MARK_GOTO },
 	{ '\\',		 0,		ACT_TOGGLE_HTML_PLAIN },

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.85 2004/01/14 17:10:00 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.86 2004/01/21 10:09:01 witekfl Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -124,6 +124,7 @@ enum action {
 	ACT_TOGGLE_HTML_PLAIN,
 	ACT_TOGGLE_NUMBERED_LINKS,
 	ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES,
+	ACT_TOGGLE_WRAP_TEXT,
 	ACT_UNBACK,
 	ACT_UNEXPAND,
 	ACT_UP,

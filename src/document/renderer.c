@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.24 2004/01/08 22:14:57 zas Exp $ */
+/* $Id: renderer.c,v 1.25 2004/01/21 10:09:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,6 +132,7 @@ render_document_frames(struct session *ses)
 	if (vs) {
 		if (vs->plain < 0) vs->plain = 0;
 		doc_opts.plain = vs->plain;
+		doc_opts.wrap = vs->wrap;
 	} else {
 		doc_opts.plain = 1;
 	}

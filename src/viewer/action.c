@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.41 2004/01/17 01:53:40 jonas Exp $ */
+/* $Id: action.c,v 1.42 2004/01/21 10:09:02 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -451,6 +451,10 @@ do_action(struct session *ses, enum action action, int verbose)
 
 		case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
 			toggle_document_option(ses, "document.plain.compress_empty_lines");
+			break;
+
+		case ACT_TOGGLE_WRAP_TEXT:
+			toggle_wrap_text(ses, ses->doc_view, 0);
 			break;
 
 		case ACT_UNBACK:

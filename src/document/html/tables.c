@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.19 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: tables.c,v 1.20 2002/11/29 18:01:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,9 +224,9 @@ free_table(struct table *t)
 	if (t->min_c) mem_free(t->min_c);
 	if (t->max_c) mem_free(t->max_c);
 	if (t->w_c) mem_free(t->w_c);
-	mem_free(t->r_heights);
+	if (t->r_heights) mem_free(t->r_heights);
 	mem_free(t->cols);
-	mem_free(t->xcols);
+	if (t->xcols) mem_free(t->xcols);
 	mem_free(t->cells);
 	mem_free(t);
 }
@@ -1700,7 +1700,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	t = parse_table(html, eof, end, &bgcolor, (p->data || p->xp), &bad_html, &bad_html_n);
 	if (!t) {
-		mem_free(bad_html);
+		if (bad_html) mem_free(bad_html);
 		goto ret0;
 	}
 
@@ -1714,7 +1714,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 				   init_f, special_f, p, NULL);
 	}
 
-	mem_free(bad_html);
+	if (bad_html) mem_free(bad_html);
 	html_stack_dup();
 	html_top.dontkill = 1;
 	par_format.align = AL_LEFT;

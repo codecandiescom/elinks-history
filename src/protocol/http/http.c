@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.271 2004/04/08 19:47:27 jonas Exp $ */
+/* $Id: http.c,v 1.272 2004/04/09 02:19:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -433,11 +433,10 @@ http_send_header(struct connection *conn)
 			break;
 
 		case REFERER_TRUE:
-			if (conn->referrer) {
-				add_to_string(&header, "Referer: ");
-				add_url_to_http_string(&header, struri(conn->referrer));
-				add_to_string(&header, "\r\n");
-			}
+			if (!conn->referrer) break;
+			add_to_string(&header, "Referer: ");
+			add_url_to_http_string(&header, struri(conn->referrer));
+			add_to_string(&header, "\r\n");
 			break;
 
 		case REFERER_SAME_URL:

@@ -1,4 +1,4 @@
-/* $Id: auth.h,v 1.26 2004/11/14 15:49:05 jonas Exp $ */
+/* $Id: auth.h,v 1.27 2004/11/14 18:57:00 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_AUTH_AUTH_H
 #define EL__PROTOCOL_AUTH_AUTH_H
@@ -12,7 +12,12 @@ struct listbox_item;
 struct auth_entry {
 	LIST_HEAD(struct auth_entry);
 
+	/* Only the user, password and host part is supposed to be used in this
+	 * URI. It is mainly a convenient way to store host info so later when
+	 * finding auth entries it can be compared as a reference against the
+	 * current URI that needs to send authorization. */
 	struct uri *uri;
+
 	unsigned char *realm;
 	unsigned char *nonce;
 	unsigned char *opaque;

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.56 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: download.c,v 1.57 2002/12/10 20:58:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "lowlevel/terminal.h"
 #include "lowlevel/ttime.h"
 #include "protocol/http/date.h"
+#include "protocol/mailcap.h"
 #include "protocol/mime.h"
 #include "protocol/url.h"
 #include "util/error.h"
@@ -940,7 +941,7 @@ void
 type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	   struct option *assoc)
 {
-	unsigned char *m1;
+	unsigned char *content_type;
 
 	if (ses->tq_prog) {
 		mem_free(ses->tq_prog);
@@ -957,68 +958,52 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		return;
 	}
 
-	m1 = stracpy(ct);
-	if (!m1) return;
+	content_type = stracpy(ct);
+	if (!content_type) return;
 
 	if (!assoc) {
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->term, getml(m1, NULL),
+			msg_box(ses->term, getml(content_type, NULL),
 				TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
-				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
 				TEXT(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL,
 				ses, 3,
 				TEXT(T_SAVE), tp_save, B_ENTER,
 				TEXT(T_DISPLAY), tp_display, 0,
 				TEXT(T_CANCEL), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->term, getml(m1, NULL),
+			msg_box(ses->term, getml(content_type, NULL),
 				TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
-				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
 				TEXT(T_DO_YOU_WANT_TO_SAVE_OR_DISLPAY_THIS_FILE), NULL,
 				ses, 2,
 				TEXT(T_DISPLAY), tp_display, B_ENTER,
 				TEXT(T_CANCEL), tp_cancel, B_ESC);
 		}
 	} else {
-		unsigned char *m2;
-		struct option *opt;
-
-		m2 = get_mime_type_name(ct);
-		if (!m2) {
-			mem_free(m1);
-			return;
-		}
-
-		opt = get_opt_rec_real(&root_options, m2);
-		mem_free(m2);
-		if (!opt) {
-			mem_free(m1);
-			return;
-		}
-
-		m2 = stracpy((unsigned char *) opt->ptr);
-		if (!m2) {
-			mem_free(m1);
+		unsigned char *name = assoc->name;
+		if (!name) {
+			mem_free(content_type);
 			return;
 		}
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->term, getml(m1, m2, NULL),
+			msg_box(ses->term, getml(content_type, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
-				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
 				TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
-				" ", m2, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL,
+				" ", name, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL,
 				ses, 4,
 				TEXT(T_OPEN), tp_open, B_ENTER,
 				TEXT(T_SAVE), tp_save, 0,
 				TEXT(T_DISPLAY), tp_display, 0,
 				TEXT(T_CANCEL), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->term, getml(m1, m2, NULL),
+			msg_box(ses->term, getml(content_type, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
-				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
+				TEXT(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
 				TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
-				" ", m2, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL,
+				" ", name, ", ", TEXT(T_SAVE_IT_OR_DISPLAY_IT), NULL,
 				ses, 3,
 				TEXT(T_OPEN), tp_open, B_ENTER,
 				TEXT(T_DISPLAY), tp_display, 0,
@@ -1032,6 +1017,10 @@ int
 ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 {
 	struct option *assoc;
+#ifdef MAILCAP
+	/* Used to see if association came from mailcap or not */
+	struct option *mailcap = NULL;
+#endif
 	int r = 0;
 	unsigned char *ct;
 
@@ -1044,6 +1033,20 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;
 
 	assoc = get_mime_type_handler(ses->term, ct);
+
+#ifdef MAILCAP
+	if (!assoc) {
+		/* 
+		 * XXX: Mailcap handling goes here since it mimics the
+		 * option system based mime handling. This requires that
+		 * a new option is allocated and we want to control how
+		 * it should be freed before returning.
+		 */
+		mailcap = mailcap_lookup(ct, NULL);
+		assoc = mailcap;
+	}
+#endif
+
 	if (!assoc && strlen(ct) >= 4 && !strncasecmp(ct, "text", 4)) goto free_ct;
 
 	if (ses->tq_url)
@@ -1060,6 +1063,9 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
 	type_query(ses, ce, ct, assoc);
 	mem_free(ct);
+#ifdef MAILCAP
+	if (mailcap) delete_option(mailcap);
+#endif
 
 	return 1;
 
@@ -1067,6 +1073,9 @@ free_ct:
 	mem_free(ct);
 
 end:
+#ifdef MAILCAP
+	if (mailcap) delete_option(mailcap);
+#endif
 	if (ses->wtd_target && r) *ses->wtd_target = 0;
 	ses_forward(ses);
 	cur_loc(ses)->vs.plain = r;

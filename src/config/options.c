@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.139 2002/12/08 20:41:32 pasky Exp $ */
+/* $Id: options.c,v 1.140 2002/12/10 20:58:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -237,18 +237,17 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *name,
 
 	if (option->type == OPT_ALIAS || tree != &root_options) {
 		option->box_item = NULL;
-		goto add_it;
+	} else {
+		option->box_item = mem_calloc(1, sizeof(struct listbox_item));
+		if (option->box_item) {
+			init_list(option->box_item->child);
+			option->box_item->visible = 1;
+			option->box_item->text = option->name;
+			option->box_item->box = &option_boxes;
+			option->box_item->udata = option;
+			option->box_item->type = type == OPT_TREE ? BI_FOLDER : BI_LEAF;
+		}
 	}
-	option->box_item = mem_calloc(1, sizeof(struct listbox_item));
-	if (option->box_item) {
-		init_list(option->box_item->child);
-		option->box_item->visible = 1;
-		option->box_item->text = option->name;
-		option->box_item->box = &option_boxes;
-		option->box_item->udata = option;
-		option->box_item->type = type == OPT_TREE ? BI_FOLDER : BI_LEAF;
-	}
-add_it:
 
 	add_opt_rec(tree, path, option);
 	return option;
@@ -295,7 +294,7 @@ void
 delete_option(struct option *option)
 {
 	free_option(option);
-	del_from_list(option);
+	if (option->next) del_from_list(option);
 	mem_free(option);
 }
 
@@ -1214,6 +1213,26 @@ register_options()
 		"%u in the string means the whole URL");
 
 
+	add_opt_tree("protocol",
+		"mailcap", 0,
+		"Options for mailcap support.");
+
+	add_opt_bool("protocol.mailcap",
+		"enable", 0, 1,
+		"Enable mailcap support ?");
+
+	add_opt_string("protocol.mailcap",
+		"path", 0, "",
+		"Mailcap search path. List of files are colon seperated."
+		"Leave as \"\" to use MAILCAP environment or build in"
+		"defaults instead.");
+
+	add_opt_bool("protocol.mailcap",
+		"ask", 0, 1,
+		"Wether to perform query when using handlers provided from"
+		"mailcap entries.");
+
+	
 	add_opt_string("protocol",
 		"no_proxy", 0, "",
 		"Comma separated list of domains for which the proxy (HTTP/FTP)\n"

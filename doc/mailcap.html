@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+	
+<title> ELinks Mailcap support </title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta name="robots" content="index,follow" />
+<meta name="author" content="Jonas Fonseca" />
+<meta name="description" content="How to use ELinks mailcap support" />
+<meta name="keywords" content="ELinks mailcap rfc1524 images view" />
+
+</head>
+<body>
+
+<h1> ELinks Mailcap support </h1>
+
+<p>
+This document describes the support for mailcap (rfc1524) in ELinks.
+It does not describe the mailcap format. There are plenty of documents
+on the web that does this. Google and thou shall find. ;)
+</p>
+
+<p>Index:<br />
+<a href="#intro">	1. A short intro to mailcap</a><br />
+<a href="#parameters">	2. Parameters</a><br />
+<a href="#reading">	3. Reading of mailcap files</a><br />
+<a href="#fields">	4. Fields</a><br />
+<a href="#config">	5. Configuration</a><br />
+<a href="#sample">	6. Some sample mailcap entries</a><br />
+</p>
+
+<hr />
+<h2>1. A short intro to mailcap <a id="intro"></a></h2>
+<p>
+Mailcap is a file format defined in rfc 1524. It is purpose is to
+inform multiple mail reading user agent (MUA) programs about the
+locally-installed facilities for handling mail in various formats.
+It is designed to work with the Multipurpose Internet Mail Extensions,
+known as MIME.
+</p>
+<p>
+ELinks supports <a href="mime.html">MIME</a> quite well already
+so why support mailcap ? It can be seen as an alternative or simply as
+a supplement for setting up mime handler. Mailcap files are present at
+most UNIX systems (/etc/mailcap) so this makes it possible for ELinks
+to know how to handle a great variety of file formats with little
+configuration.
+</p>
+
+<hr />
+<h2>2. Parameters <a id="parameters"></a></h2>
+
+<p>
+The code has been ported from mutt and thereby inherits some of it's various
+features and limitation.
+</p>
+
+<p>
+The following parameters are not supported. Since they do not make
+much sense for non-MUA:</p>
+<dl>
+	<dt><b>%n</b></dt>
+	<dd> is the integer number of sub-parts in the multipart</dd>
+
+	<dt><b>%F</b></dt>
+	<dd>is "content-type filename" repeated for each sub-part</dd>
+	
+	<dt><b>%{parameter}</b></dt>
+	<dd>is replaced by the parameter value from the content-type field</dd>
+</dl>
+
+<p> The following parameters are supported: </p>
+<dl>
+	<dt><b>%s</b></dt>
+	<dd>is the filename that contains the data.</dd>
+
+	<dt><b>%f</b></dt>
+	<dd>is the content type, like text/plain</dd>
+</dl>
+
+<hr />
+<h2>3. Reading of mailcap files <a id="reading"></a></h2>
+
+<p>
+Mailcap files will be read when starting ELinks. The mailcap files
+to use will be found from the a mailcap path a colon seperated list
+of files similar to $PATH environment variable. The mailcap path
+will be determined in the following way:
+</p>
+<ul>
+	<li>From the value of the <i>protocol.mailcap.path</i> option in
+	<b>elinks.conf</b> For example:
+	<pre>
+        <b>set</b> <i>protocol.mailcap.path</i> = <b>"~/.mailcap:/usr/local/etc/mailcap"</b></pre>
+	</li>
+	<li>From <b>MAILCAP</b> environment variable</li>
+	<li>If non of the above is defined the mailcap path defaults to
+	<b>"~/.mailcap:/etc/mailcap"</b></li>
+</ul>
+
+<hr />
+<h2>4. Fields <a id="fields"></a></h2>
+
+<p>
+Since mailcap handling is primarily for displaying of resources all
+fields like <b>edit</b>, <b>print</b>, <b>compose</b> etc. is ignored.
+</p>
+
+<p>
+<b>Note:</b>
+Test commands are supported but unfortunately it's not possible to
+provide the file when running the test. So any test that requires a
+file will be considered failed and the handler will not be used.
+</p>
+
+<p>
+Unfortunately there are no 'native' support for the <b>copiousoutput</b>
+field. The field basicly mean 'needs pager'. So it is handled by appending
+a pipe and a pager program to the command. The pager program will be
+read from the <b>PAGER</b> environment variable. If this fails test are made
+for common pager programs (<b>/usr/bin/pager</b>, <b>/usr/bin/less</b> and
+<b>/usr/bin/more</b> in that order). So if you define <b>png2ascii</b>
+as your handler for <i>image/png</i> and specify copiousoutput then the
+executed command will be <b>png2ascii |/usr/bin/less</b> if less is
+your pager or present on your system.
+</p>
+
+<hr />
+<h2>5. Mailcap configuration <a id="config"></a></h2>
+
+<p>
+Besides the option <i>protocol.mailcap.path</i> there's only
+<i>protocol.mailcap.ask</i> which controls wether to ask before opening
+a file. The option is a boolian and can be set like this:
+</p>
+<pre>
+        <b>set</b> <i>protocol.mailcap.ask</i> = <b>1</b></pre>
+
+<p>if you would like to be asked before opening a file.</p>
+
+<hr />
+<h2>6. Some sample mailcap entries <a id="sample"></a></h2>
+<pre>
+<b># Convert images to text using the netpbm tools</b>
+<i>image/*</i>;                (anytopnm %s | pnmscale -xysize 200 150 | \
+				pnminvert | ppmtopgm | pgmtopbm | \
+				pbmtoascii -1x2 ) 2&gt;&amp;1 ; copiousoutput
+
+<b># Obscure</b>
+<i>application/x-gunzip</i>;   gunzip --to-stdout %s ; copiousoutput
+<i>application/x-tar-gz</i>;   gunzip --to-stdout %s | tar -tf - ; copiousoutput
+<i>application/postscript</i>; ps2ascii %s ; copiousoutput
+
+
+</pre>
+</body>
+</html>

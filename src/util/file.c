@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.5 2002/12/09 13:00:54 zas Exp $ */
+/* $Id: file.c,v 1.6 2002/12/10 20:58:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,4 +92,61 @@ get_unique_name(unsigned char *fileprefix)
 
 	if (prefix != file && prefix != fileprefix) mem_free(prefix);
 	return file;
+}
+
+/*
+ * Read a line from ``file'' into the dynamically allocated ``line'',
+ * increasing ``line'' if necessary. The ending "\n" or "\r\n" is removed.
+ * If a line ends with "\", this char and the linefeed is removed,
+ * and the next line is read too. Thanks Mutt.
+ */
+
+unsigned char *
+file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
+{
+	size_t offset = 0;
+	unsigned char *ch;
+
+	if (!line) {
+		line = mem_alloc(MAX_STR_LEN);
+		*size = MAX_STR_LEN;
+	}
+
+	while (1) {
+		if (fgets(line + offset, *size - offset, file) == NULL) {
+			if (line) mem_free(line);
+			return NULL;
+		}
+
+		if ((ch = strchr(line + offset, '\n')) != NULL) {
+			(*lineno)++;
+			*ch = 0;
+			if (ch > line && *(ch - 1) == '\r')
+				*--ch = 0;
+			if (ch == line || *(ch - 1) != '\\')
+				return line;
+			offset = ch - line - 1;
+		} else {
+			int c;
+			/*
+			 * This is kind of a hack. We want to know if the
+			 * char at the current point in the input stream is EOF.
+			 * feof() will only tell us if we've already hit EOF, not
+			 * if the next character is EOF. So, we need to read in
+			 * the next character and manually check if it is EOF.
+			 */
+			c = getc(file);
+			if (c == EOF) {
+				/* The last line of file isn't \n terminated */
+				(*lineno)++;
+				return line;
+			} else {
+				ungetc(c, file); /* undo our dammage */
+				/* There wasn't room for the line -- increase ``line'' */
+				offset = *size - 1; /* overwrite the terminating 0 */
+				*size += MAX_STR_LEN;
+				mem_realloc(line, *size);
+			}
+		}
+	}
 }

@@ -188,6 +188,7 @@ Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 Jonas Fonseca <fonseca@diku.dk>
 	Danish translation
 	Unique download filenames
+	Mailcap support
 	Random hacking
 
 José Luis González González <jlg80@mi.madritel.es>
@@ -408,4 +409,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.103 2002/12/07 22:11:37 pasky Exp $
+$Id: AUTHORS,v 1.104 2002/12/10 20:58:45 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.9 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: mime.c,v 1.10 2002/12/10 20:58:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,7 +180,12 @@ get_mime_handler_name(unsigned char *type, int xwin)
 	return name;
 }
 
-/* Return tree containing options specific to this type. */
+/*
+ * Return tree containing options specific to this type.
+ *
+ * XXX: Handlers from mailcap support are not handled here but
+ *	are looked up in src/document/download.c:ses_chktype()
+ */
 struct option *
 get_mime_type_handler(struct terminal *term, unsigned char *type)
 {

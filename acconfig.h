@@ -69,5 +69,8 @@
 /* Define to 1 if we should include global history */
 #undef GLOBHIST
 
+/* Define to 1 if we should include mailcap support */
+#undef MAILCAP
+
 /* Directory containing default config */
 #undef CONFDIR

@@ -558,6 +558,10 @@ AC_ARG_ENABLE(globhist, [  --disable-globhist      disable global history],
               [if test "$enableval" = yes; then AC_DEFINE(GLOBHIST) fi],
 	      AC_DEFINE(GLOBHIST))
 
+AC_ARG_ENABLE(mailcap, [  --disable-mailcap       disable mailcap support],
+              [if test "$enableval" = yes; then AC_DEFINE(MAILCAP) fi],
+	      AC_DEFINE(MAILCAP))
+
 
 
 dnl == EMX hack

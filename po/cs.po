@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-15 14:13+0200\n"
-"PO-Revision-Date: 2003-10-15 16:02+0200\n"
+"PO-Revision-Date: 2003-10-15 19:14+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -964,7 +964,7 @@ msgstr "Asynchronní DNS"
 
 #: src/config/options.c:986
 msgid "Use asynchronous DNS resolver?"
-msgstr ""
+msgstr "Pou¾ívat asynchronní vyhledávání hostitelù?"
 
 #: src/config/options.c:988
 msgid "Maximum connections"
@@ -972,7 +972,7 @@ msgstr "Maximální poèet spojení"
 
 #: src/config/options.c:990
 msgid "Maximum number of concurrent connections."
-msgstr ""
+msgstr "Maximální poèet paralelních spojení."
 
 #: src/config/options.c:992
 msgid "Maximum connections per host"
@@ -980,7 +980,7 @@ msgstr "Maximální poèet spojení na jeden server"
 
 #: src/config/options.c:994
 msgid "Maximum number of concurrent connections to a given host."
-msgstr ""
+msgstr "Maximální poèet paralelních spojení na daný server."
 
 #: src/config/options.c:996
 msgid "Connection retries"
@@ -991,6 +991,8 @@ msgid ""
 "Number of tries to establish a connection.\n"
 "Zero means try forever."
 msgstr ""
+"Poèet pokusù o navázání spojení.\n"
+"Nula znamená neomezený poèet pokusù."
 
 #: src/config/options.c:1001 src/sched/error.c:50
 msgid "Receive timeout"
@@ -998,7 +1000,7 @@ msgstr "Èasový limit pro vypr¹ení spojení"
 
 #: src/config/options.c:1003
 msgid "Receive timeout (in seconds)."
-msgstr ""
+msgstr "Èasový limit pro vypr¹ení spojení (v sekundách)."
 
 #: src/config/options.c:1005
 msgid "Timeout for non-restartable connections"
@@ -1006,16 +1008,16 @@ msgstr "Èasový limit pro neobnovitelná spojení"
 
 #: src/config/options.c:1007
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
+msgstr "Èasový limit pro vypr¹ení neobnovitelných spojení (v sekundách)."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
 msgid "Cookies"
-msgstr ""
+msgstr "Cookies"
 
 #: src/config/options.c:1015
 msgid "Cookies options."
-msgstr ""
+msgstr "Nastavení cookies."
 
 #: src/config/options.c:1017
 msgid "Accept policy"
@@ -1028,6 +1030,10 @@ msgid ""
 "1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
 "2 is accept all cookies"
 msgstr ""
+"Re¾im pøijímání cookies:\n"
+"0 je nepøijímat cookies\n"
+"1 je po¾ádat o potvrzení pøed akceptováním cookie (NEIMPLEMENTOVÁNO)\n"
+"2 je pøijímat v¹echny cookies"
 
 #: src/config/options.c:1025
 msgid "Maximum age"
@@ -1041,6 +1047,12 @@ msgid ""
 "date\n"
 "1+ is use cookie's expiration date, but limit age to the given number of days"
 msgstr ""
+"Maximální vìk cookie (ve dnech):\n"
+"-1 znamená pou¾ít datum vypr¹ení dané cookie (pokud je nastaveno)\n"
+"0  znamená donutit vypr¹ení v¹ech cookies na konci sezení, bez ohledu na "
+"datum vypr¹ení dané cookie\n"
+"1+ znamená pou¾ít datum vypr¹ení cookie, leè limitovat délku uchování cookie "
+"daným poètem dní"
 
 #: src/config/options.c:1032
 msgid "Paranoid security"
@@ -1059,7 +1071,7 @@ msgstr "Ukládání"
 
 #: src/config/options.c:1040
 msgid "Load/save cookies from/to disk?"
-msgstr ""
+msgstr "Nahrávat cookies z disku a ukládat je zpìt na disk?"
 
 #: src/config/options.c:1042
 msgid "Resaving"
@@ -1070,6 +1082,8 @@ msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
 "cookies_save is off."
 msgstr ""
+"Ulo¾it cookies po ka¾dé zmìnì v seznamu cookies?\n"
+"Tato volba nemá ¾ádný vliv, pokud je vypnuto ukládání cookies."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1051
@@ -1086,21 +1100,22 @@ msgstr "Prohlí¾ení"
 
 #: src/config/options.c:1057
 msgid "Document browsing options (mainly interactivity)."
-msgstr ""
+msgstr "Nastavení prohlí¾ení dokumentu (zejména interaktivita)."
 
 #: src/config/options.c:1061
 msgid "Accesskeys"
-msgstr ""
+msgstr "Pøístupové klávesy"
 
 #: src/config/options.c:1063
 msgid ""
 "Options for handling of the accesskey attribute of the active\n"
 "HTML elements."
 msgstr ""
+"Volby pro obsluhu atributu \"accesskey\" aktivních HTML elementù."
 
 #: src/config/options.c:1066
 msgid "Automatic links following"
-msgstr "Automatické následování linkù"
+msgstr "Automatické následování odkazù"
 
 #: src/config/options.c:1068
 msgid ""
@@ -1127,7 +1142,7 @@ msgstr "Formuláøe"
 
 #: src/config/options.c:1082
 msgid "Options for handling of the forms interaction."
-msgstr ""
+msgstr "Volby pro obsluhu formuláøù"
 
 #: src/config/options.c:1084
 msgid "Submit form automatically"
@@ -1138,6 +1153,7 @@ msgid ""
 "Automagically submit a form when enter is pressed with a text\n"
 "field selected."
 msgstr ""
+"Automagicky ode¹li formuláø, pokud je stisknut enter na textovém políèku."
 
 #: src/config/options.c:1089
 msgid "Confirm submission"
@@ -1145,11 +1161,11 @@ msgstr "Potvrzování odesílání"
 
 #: src/config/options.c:1091
 msgid "Ask for confirmation when submitting a form."
-msgstr ""
+msgstr "Pøi odesílání formuláøe po¾ádej o potvrzení."
 
 #: src/config/options.c:1093
 msgid "Show forms history dialog"
-msgstr ""
+msgstr "Zobrazování dialogu pro zapamatování formuláøe"
 
 #: src/config/options.c:1095
 msgid ""
@@ -1157,6 +1173,9 @@ msgid ""
 "This option only disables the dialog, already saved login\n"
 "forms are unaffected."
 msgstr ""
+"Zeptej se, jestli má být pøihla¹ovací formuláø ulo¾enu do souboru èi\n"
+"nikoliv. Tato volba pouze potlaèuje dialog, ji¾ ulo¾ené pøihla¹ovací\n"
+"formuláøe jsou nadále pou¾ívány."
 
 #: src/config/options.c:1100
 msgid "Images"
@@ -1164,7 +1183,7 @@ msgstr "Obrázky"
 
 #: src/config/options.c:1102
 msgid "Options for handling of images."
-msgstr ""
+msgstr "Nastavení obsluhy obrázkù."
 
 #: src/config/options.c:1104
 msgid "Display style for image links"
@@ -1181,7 +1200,7 @@ msgstr ""
 
 #: src/config/options.c:1112
 msgid "Image links tagging"
-msgstr ""
+msgstr "Znaèkování odkazù na obrázky"
 
 #: src/config/options.c:1114
 msgid ""
@@ -1193,7 +1212,7 @@ msgstr ""
 
 #: src/config/options.c:1119
 msgid "Image link prefix"
-msgstr ""
+msgstr "Prefix odkazu na obrázek"
 
 #: src/config/options.c:1121
 msgid "Prefix string to use to mark image links."
@@ -1201,7 +1220,7 @@ msgstr ""
 
 #: src/config/options.c:1123
 msgid "Image link suffix"
-msgstr ""
+msgstr "Suffix odkazu na obrázek."
 
 #: src/config/options.c:1125
 msgid "Suffix string to use to mark image links."
@@ -1333,7 +1352,7 @@ msgstr "Horizontální okraj textu."
 
 #: src/config/options.c:1201
 msgid "Document meta refresh"
-msgstr "Automatická obnova dokumentù"
+msgstr "Automatické obnovování dokumentù"
 
 #: src/config/options.c:1203
 msgid ""

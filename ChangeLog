@@ -1,3 +1,10 @@
+Tue Nov 16 10:32:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/globhist/globhist.c:
+
+	Drop useless tests in search loop (search_title, search_url are
+	non-NULL at this point), add some comments.  
+
 Mon Nov 15 15:08:54 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/auth/dialogs.c:

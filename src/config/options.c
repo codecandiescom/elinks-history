@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.321 2003/10/20 16:10:13 zas Exp $ */
+/* $Id: options.c,v 1.322 2003/10/21 15:36:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -934,7 +934,7 @@ register_options(void)
 		"3 is values of current options are altered and missing options\n"
 		"     CHANGED during this ELinks session are added at the end of\n"
 		"     the file"));
-	
+
 	add_opt_bool("config", N_("Comments localization"),
 		"i18n", 0, 0,
 		N_("If set to 1, comments in the configuration file will be\n"
@@ -944,7 +944,7 @@ register_options(void)
 		"terminal where you saved the file, but it should be generally\n"
 		"considered unpredictable."));
 
-	
+
 	add_opt_bool("config", N_("Saving style warnings"),
 		"saving_style_w", 0, 0,
 		N_("This is internal option used when displaying a warning about\n"
@@ -1241,6 +1241,11 @@ register_options(void)
 		"2 for extended regular expression searches. (DISABLED)"));
 #endif
 
+	add_opt_bool("document.browse.search", N_("Show search hit top or bottom dialogs"),
+		"show_hit_top_bottom", 0, 1,
+		N_("Whether to show a dialog when the search hits top or bottom of the\n"
+		"document."));
+
 
 	add_opt_int("document.browse", N_("Horizontal text margin"),
 		"margin_width", 0, 0, 9, 3,
@@ -1469,7 +1474,7 @@ register_options(void)
 	get_opt_rec(config_options, "document.history.global.write_interval")
 		->change_hook = global_history_write_timer_change_hook;
 #endif /* GLOBHIST */
-	
+
 	add_opt_bool("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,
 		N_("Keep unhistory (\"forward history\")?"));

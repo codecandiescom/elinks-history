@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.13 2005/03/28 19:09:19 jonas Exp $ */
+/* $Id: parse.c,v 1.14 2005/03/28 22:17:19 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -655,7 +655,7 @@ parse_ftp_file_info(struct ftp_file_info *info, unsigned char *src, int len)
 	case 'p':
 	case 's':
 	case '-':
-		return parse_ftp_unix_response(info, src, len);
+		break;
 
 	default:
 		if (memchr(src, ';', len))

@@ -1,7 +1,7 @@
-/* $Id: auth.h,v 1.14 2003/07/23 08:29:19 zas Exp $ */
+/* $Id: auth.h,v 1.15 2003/12/20 16:59:02 pasky Exp $ */
 
-#ifndef EL__PROTOCOL_HTTP_AUTH_H
-#define EL__PROTOCOL_HTTP_AUTH_H
+#ifndef EL__PROTOCOL_AUTH_AUTH_H
+#define EL__PROTOCOL_AUTH_AUTH_H
 
 #include "protocol/uri.h"
 

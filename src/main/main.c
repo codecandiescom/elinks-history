@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.155 2003/11/25 22:55:02 pasky Exp $ */
+/* $Id: main.c,v 1.156 2003/12/20 16:59:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@
 #include "modules/module.h"
 #include "modules/version.h"
 #include "osdep/osdep.h"
-#include "protocol/http/auth.h"
+#include "protocol/auth/auth.h"
 #include "sched/connection.h"
 #include "sched/download.h"
 #include "sched/error.h"

@@ -1,12 +1,10 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.20 2003/11/30 19:45:00 jonas Exp $
+## $Id: Makefile.am,v 1.21 2003/12/20 16:59:02 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libdialogs.a
 libdialogs_a_SOURCES = \
- auth.c \
- auth.h \
  document.c \
  document.h \
  download.c \

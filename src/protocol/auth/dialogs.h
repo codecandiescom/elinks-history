@@ -1,7 +1,7 @@
-/* $Id: dialogs.h,v 1.3 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: dialogs.h,v 1.4 2003/12/20 16:59:02 pasky Exp $ */
 
-#ifndef EL__DIALOGS_AUTH_H
-#define EL__DIALOGS_AUTH_H
+#ifndef EL__PROTOCOL_AUTH_DIALOGS_H
+#define EL__PROTOCOL_AUTH_DIALOGS_H
 
 #include "sched/session.h"
 

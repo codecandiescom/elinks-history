@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.166 2004/06/15 01:12:52 jonas Exp $ */
+/* $Id: form.c,v 1.167 2004/06/15 01:18:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1298,30 +1298,39 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		add_to_string(&str, fc->name);
 	}
 
-	if ((fc->type == FC_CHECKBOX || fc->type == FC_RADIO)
-	    && fc->default_value && fc->default_value[0]) {
+	switch (fc->type) {
+	case FC_CHECKBOX:
+	case FC_RADIO:
+		if (!fc->default_value || !fc->default_value[0])
+			break;
+
 		add_to_string(&str, ", ");
 		add_to_string(&str, _("value", term));
 		add_char_to_string(&str, ' ');
 		add_to_string(&str, fc->default_value);
-	}
+		break;
 
-	if (link->type == LINK_FIELD
-	    && fc->action
-	    && has_form_submit(doc_view->document, fc)) {
-		unsigned char *msg;
+	case FC_TEXT:
+	case FC_PASSWORD:
+	case FC_FILE:
+		if (!fc->action || !has_form_submit(doc_view->document, fc))
+			break;
 
 		if (fc->method == FM_GET)
-			msg = N_("hit ENTER to submit to");
+			label = N_("hit ENTER to submit to");
 		else
-			msg = N_("hit ENTER to post to");
+			label = N_("hit ENTER to post to");
 
 		add_to_string(&str, ", ");
-		add_to_string(&str, _(msg, term));
+		add_to_string(&str, _(label, term));
 		add_char_to_string(&str, ' ');
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
+		break;
+
+	default:
+		break;
 	}
 
 	return str.source;

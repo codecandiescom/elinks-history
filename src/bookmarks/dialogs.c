@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.213 2005/03/30 09:59:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.214 2005/03/30 10:01:39 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -562,8 +562,6 @@ static void
 bookmark_search_do(void *data)
 {
 	struct dialog *dlg = data;
-	unsigned char *title = dlg->widgets[0].data;
-	unsigned char *url = dlg->widgets[1].data;
 	struct bookmark_search_ctx ctx = NULL_BOOKMARK_SEARCH_CTX;
 	struct listbox_data *box;
 	struct dialog_data *dlg_data;
@@ -571,22 +569,22 @@ bookmark_search_do(void *data)
 	assertm(dlg->udata, "Bookmark search with NULL udata in dialog");
 	if_assert_failed return;
 
-	if (!title || !url)
+	ctx.title = dlg->widgets[0].data;
+	ctx.url   = dlg->widgets[1].data;
+
+	if (!ctx.title || !ctx.url)
 		return;
 
 	/* Memorize last searched title */
-	mem_free_set(&bm_last_searched_name, stracpy(title));
+	mem_free_set(&bm_last_searched_name, stracpy(ctx.title));
 	if (!bm_last_searched_name) return;
 
 	/* Memorize last searched url */
-	mem_free_set(&bm_last_searched_url, stracpy(url));
+	mem_free_set(&bm_last_searched_url, stracpy(ctx.url));
 	if (!bm_last_searched_url) {
 		mem_free(bm_last_searched_name);
 		return;
 	}
-
-	ctx.url = url;
-	ctx.title = title;
 
 	dlg_data = (struct dialog_data *) dlg->udata;
 	box = get_dlg_listbox_data(dlg_data);

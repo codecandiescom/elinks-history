@@ -1,8 +1,8 @@
 Known bugs:
 
-	get_unique_name() and expand_tilde() are buggy, this will be fixed
-soon.
-
+	Tilde doesn't expand as it should when used in goto dialog, ~ -> /home
+	and ~/ -> current directory.
+	
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -29,6 +29,6 @@ top/bottom of screen.
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.34 2003/04/30 18:28:45 zas Exp $
+$Id: BUGS,v 1.35 2003/05/01 10:46:43 zas Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.15 2002/05/09 21:16:37 pasky Exp $ */
+/* $Id: file.c,v 1.16 2002/05/09 21:32:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -616,7 +616,21 @@ dir:
 				return;
 			}
 
-			fl += r; r = 0;
+			fl += r;
+
+#if 0
+			/* This didn't work so well as it should (I had to
+			 * implement end of stream handling to bzip2 anyway),
+			 * so I better disabled this. */
+			if (r < stt.st_size) {
+				/* This is much safer. It should always mean
+				 * that we already read everything possible,
+				 * and it permits us more elegant of handling
+				 * end of file with bzip2. */
+				break;
+			}
+#endif
+
 			file = mem_realloc(file, fl + stt.st_size);
 			if (!file) {
 				close_encoded(stream);

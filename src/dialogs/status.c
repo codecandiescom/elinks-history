@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.47 2004/01/04 18:56:35 jonas Exp $ */
+/* $Id: status.c,v 1.48 2004/01/06 06:28:15 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	add_to_string(&msg, _("Received", term));
 	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, stat->prg->pos + stat->prg->start);
+	add_xnum_to_string(&msg, stat->prg->pos);
 	if (stat->prg->size >= 0) {
 		add_char_to_string(&msg, ' ');
 		add_to_string(&msg, _("of", term));

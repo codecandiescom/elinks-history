@@ -97,6 +97,9 @@ Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 	Win NT port
 	Saving goto history
 
+<darix@irssi.org>
+	RPM elinks.spec updates
+
 David D. Kilzer <ddkilzer@lubricants-oil.com>
 	Part of -no-home support
 	Support for -eval option
@@ -447,4 +450,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.133 2003/09/22 22:00:46 jonas Exp $
+$Id: AUTHORS,v 1.134 2003/09/28 18:22:41 jonas Exp $

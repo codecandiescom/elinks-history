@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.189 2003/08/23 18:15:24 jonas Exp $ */
+/* $Id: view.c,v 1.190 2003/08/23 18:16:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,7 +597,35 @@ rep_ev(struct session *ses, struct document_view *fd,
 }
 
 
-void frm_download(struct session *, struct document_view *, int resume);
+static void
+frm_download(struct session *ses, struct document_view *fd, int resume)
+{
+	struct link *link;
+
+	assert(ses && fd && fd->vs && fd->document);
+	if_assert_failed return;
+
+	if (fd->vs->current_link == -1) return;
+	if (ses->dn_url) {
+		mem_free(ses->dn_url);
+		ses->dn_url = NULL;
+	}
+	link = &fd->document->links[fd->vs->current_link];
+	if (link->type != L_LINK && link->type != L_BUTTON) return;
+
+	ses->dn_url = get_link_url(ses, fd, link);
+	if (ses->dn_url) {
+		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
+			mem_free(ses->dn_url);
+			ses->dn_url = NULL;
+			return;
+		}
+		if (ses->ref_url) mem_free(ses->ref_url);
+		ses->ref_url = stracpy(fd->document->url);
+		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
+	}
+}
+
 
 static int
 frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
@@ -1188,35 +1216,6 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 	assert(ses);
 	if_assert_failed return;
 	send_event(ses, &ev);
-}
-
-void
-frm_download(struct session *ses, struct document_view *fd, int resume)
-{
-	struct link *link;
-
-	assert(ses && fd && fd->vs && fd->document);
-	if_assert_failed return;
-
-	if (fd->vs->current_link == -1) return;
-	if (ses->dn_url) {
-		mem_free(ses->dn_url);
-		ses->dn_url = NULL;
-	}
-	link = &fd->document->links[fd->vs->current_link];
-	if (link->type != L_LINK && link->type != L_BUTTON) return;
-
-	ses->dn_url = get_link_url(ses, fd, link);
-	if (ses->dn_url) {
-		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
-			mem_free(ses->dn_url);
-			ses->dn_url = NULL;
-			return;
-		}
-		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->document->url);
-		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
-	}
 }
 
 enum dl_type {

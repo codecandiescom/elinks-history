@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.42 2002/10/02 08:52:06 zas Exp $ */
+/* $Id: ftp.c,v 1.43 2002/10/02 10:08:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,7 +125,7 @@ again:
 #ifdef IPV6
 			if (response == 229) { /* EPSV response parsing. */
 				/* See RFC 2428 */
-				unsigned char h1, h2, h3, h4, p1, p2;
+				unsigned char h1, h2, h3, h4;
 				unsigned int port;
 				int ret;
 				unsigned char *begin = strchr(num_end, '(');

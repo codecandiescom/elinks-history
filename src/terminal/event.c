@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.4 2003/07/26 10:39:47 pasky Exp $ */
+/* $Id: event.c,v 1.5 2003/07/26 10:55:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,9 +204,13 @@ send_redraw:
 		else if (ev->ev == EV_KBD && ev->x == KBD_CTRL_C)
 			((struct window *) &term->windows)->prev->handler(term->windows.prev, ev, 0);
 		else if (ev->ev == EV_KBD) {
+			int utf8_io = -1;
+
 			if (term->utf_8.len) {
+				utf8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+
 				if ((ev->x & 0xC0) == 0x80
-				    && get_opt_bool_tree(term->spec, "utf_8_io")) {
+				    && utf8_io) {
 					term->utf_8.ucs <<= 6;
 					term->utf_8.ucs |= ev->x & 0x3F;
 					if (! --term->utf_8.len) {
@@ -222,7 +226,9 @@ send_redraw:
 				}
 			}
 			if (ev->x < 0x80 || ev->x > 0xFF
-			    || !get_opt_bool_tree(term->spec, "utf_8_io")) {
+			    || (utf8_io == -1
+				? !get_opt_bool_tree(term->spec, "utf_8_io")
+				: !utf8_io)) {
 				term_send_event(term, ev);
 				goto mm;
 			} else if ((ev->x & 0xC0) == 0xC0 && (ev->x & 0xFE) != 0xFE) {

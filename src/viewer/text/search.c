@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.49 2003/10/10 19:49:12 kuser Exp $ */
+/* $Id: search.c,v 1.50 2003/10/10 19:55:25 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,6 +291,7 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	int found = 0;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	int regex_flags = REG_NEWLINE;
+	int regexec_flags = 0;
 	register int i;
 	int reg_err;
 	regex_t regex;
@@ -324,7 +325,8 @@ is_in_range_regex(struct document *f, int y, int yy, unsigned char *text, int l,
 	}
 
 	doctmp = doc;
-	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, 0)) {
+	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
+		regexec_flags = REG_NOTBOL;
 		l = regmatch.rm_eo - regmatch.rm_so;
 		s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;
@@ -517,6 +519,7 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	int len = 0;
 	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	int regex_flags = REG_NEWLINE;
+	int regexec_flags = 0;
 	int reg_err;
 	register int i;
 	regex_t regex;
@@ -563,7 +566,8 @@ get_searched_regex(struct document_view *scr, struct point **pt, int *pl,
 	ypv= yp - scr->vs->view_pos;
 
 	doctmp = doc;
-	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, 0)) {
+	while (*doctmp && !regexec(&regex, doctmp, 1, &regmatch, regexec_flags)) {
+		regexec_flags = REG_NOTBOL;
 		l = regmatch.rm_eo - regmatch.rm_so;
 		s1 += regmatch.rm_so;
 		doctmp += regmatch.rm_so;

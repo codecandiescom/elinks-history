@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.164 2004/01/09 10:44:35 pasky Exp $ */
+/* $Id: menu.c,v 1.165 2004/01/09 10:51:46 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,7 +272,6 @@ draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
 }
 
 
-/* FIXME: Negative value for len means hotkey position here... */
 static inline void
 draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 		       int x, int y, int width, struct color_pair *color,

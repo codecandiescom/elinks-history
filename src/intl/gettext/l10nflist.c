@@ -118,8 +118,6 @@ argz_next__(unsigned char *argz, size_t argz_len, const unsigned char *entry)
 #endif /* !HAVE___ARGZ_NEXT */
 
 /* Return number of bits set in X.  */
-static int pop(int x);
-
 static inline int
 pop(int x)
 {

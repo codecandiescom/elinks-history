@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.14 2002/12/08 20:41:32 pasky Exp $ */
+/* $Id: cmdline.c,v 1.15 2003/04/19 17:27:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "config/cmdline.h"
 #include "config/options.h"
 #include "config/opttypes.h"
+#include "intl/gettext/libintl.h"
 #include "util/memory.h"
 
 
@@ -53,7 +54,7 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 
 				if (err) {
 					if (err[0])
-						fprintf(stderr, "Error parsing option %s: %s\n", argv[-1], err);
+						error(gettext("Error parsing option %s: %s"), argv[-1], err);
 
 					return NULL;
 				}
@@ -65,8 +66,8 @@ _parse_options(int argc, unsigned char *argv[], struct option *opt)
 			location = argv[-1];
 
 		} else {
-unknown_option:	
-			fprintf(stderr, "Unknown option %s\n", argv[-1]);
+unknown_option:
+			error(gettext("Unknown option %s"), argv[-1]);
 			return NULL;
 		}
 	}

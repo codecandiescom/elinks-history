@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.33 2005/03/23 15:52:37 miciah Exp $
+-- $Id: hooks.lua.in,v 1.34 2005/03/23 22:28:05 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -169,12 +169,22 @@ end
 -- Note that this is _mostly_ obsoleted by the URI rewrite plugin. (It can't do the
 -- metas, though.)
 
+function bugzilla (base_url, arguments)
+	if not arguments or arguments == '' then return base_url end
+
+	if string.find(arguments, '^[%d]+$') then
+		return base_url..'show_bug.cgi?id='..arguments
+	end
+
+	return base_url..'buglist.cgi?short_desc='..escape(arguments)
+end
+	
 smartprefixes = {
     arc = "http://web.archive.org/web/*/%s",
     bb = "http://babelfish.altavista.com/babelfish/tr?urltext=%s",
     bb_fr_en = "http://babelfish.altavista.com/babelfish/tr?lp=fr_en&submit=1&urltext=%s",
     bb_en_fr = "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s",
-    bug = "http://bugzilla.elinks.or.cz/show_bug.cgi?id=%s",
+    bug = function (url) return bugzilla('http://bugzilla.elinks.or.cz/', url) end,
     cambridge = "http://dictionary.cambridge.org/results.asp?searchword=%s",
     cliki = "http://www.cliki.net/admin/search?words=%s",
     -- If you want to add a smartprefix for another project's CVSweb,

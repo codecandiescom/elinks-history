@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.213 2003/06/04 09:59:14 zas Exp $ */
+/* $Id: options.c,v 1.214 2003/06/04 22:43:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -519,6 +519,13 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	fflush(stdout);
 
+	return NULL;
+}
+
+static unsigned char *
+forcehtml_cmd(struct option *o, unsigned char ***argv, int *argc)
+{
+	strcpy(get_opt_str("document.download.default_mime_type"), "text/html");
 	return NULL;
 }
 
@@ -2584,6 +2591,12 @@ register_options()
 		"eval", 0, eval_cmd,
 		N_("Specify elinks.conf config options on the command-line:\n"
 		"  -eval 'set protocol.file.allow_special_files = 1'"));
+
+	/* lynx compatibility */
+	add_opt_command_tree(&cmdline_options, "", N_("Assume the file is HTML"),
+		"force-html", 0, forcehtml_cmd,
+		N_("This makes ELinks assume that the files it sees are HTML. This is\n"
+		"equivalent to -default-mime-type text/html."));
 
 	/* XXX: -?, -h and -help share the same caption and should be kept in
 	 * the current order for usage help printing to be ok */

@@ -1,5 +1,9 @@
 #include "links.h"
 
+/* Whether to save bookmarks after each modification of their list
+ * (add/modify/delete). */
+#define BOOKMARKS_RESAVE	1
+
 /* The location of the box in the bookmark manager */
 #define	BM_BOX_IND		6
 
@@ -601,6 +605,10 @@ void bookmark_edit_done(struct dialog *d) {
 	/* Tell the bookmark dialog to redraw */
 	if (parent) 
 		bookmark_dlg_list_update(&(((struct dlg_data_item_data_box*)parent->dlg->items[BM_BOX_IND].data)->items));
+
+#ifdef BOOKMARKS_RESAVE
+	write_bookmarks();
+#endif
 }
 
 /* Called when the edit button is pushed */
@@ -651,6 +659,10 @@ void really_del_bookmark(void *vhop) {
 
 	/* Made in push_delete_button() */
 	/*mem_free(vhop);*/
+
+#ifdef BOOKMARKS_RESAVE
+	write_bookmarks();
+#endif
 }
 
 
@@ -780,6 +792,10 @@ void bookmark_add_add(struct dialog *d)
 	/* Tell the bookmark dialog to redraw */
 	if (parent)
 		bookmark_dlg_list_update(&(((struct dlg_data_item_data_box *) parent->dlg->items[BM_BOX_IND].data)->items));
+
+#ifdef BOOKMARKS_RESAVE
+	write_bookmarks();
+#endif
 }
 	
 /* Search bookmarks */

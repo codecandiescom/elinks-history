@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.35 2004/10/12 14:26:48 zas Exp $ */
+/* $Id: state.c,v 1.36 2004/12/19 14:37:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ struct s_msg_dsc {
 	{S_SSL_ERROR,		N_("This version of ELinks does not contain SSL/TLS support")},
 #endif
 
-	{S_NO_JAVASCRIPT,	N_("JavaScript is currently not supported.")},
+	{S_NO_JAVASCRIPT,	N_("JavaScript support is not enabled.")},
 
 #ifdef CONFIG_NNTP
 	{S_NNTP_ERROR,		N_("Bad NNTP response")},

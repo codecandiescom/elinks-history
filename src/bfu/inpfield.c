@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.121 2004/02/08 20:20:29 jonas Exp $ */
+/* $Id: inpfield.c,v 1.122 2004/02/08 20:29:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -521,7 +521,6 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 			break;
 	}
 
-	widget_data->widget->text = input_line->prompt;
 	/* First let the input field do its business */
 	kbd_field(widget_data, dlg_data, ev);
 	update_dialog_data(dlg_data, widget_data);
@@ -556,7 +555,6 @@ input_field_line(struct session *ses, unsigned char *prompt, void *data,
 	input_line = (void *) get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
 	input_line->ses = ses;
 	input_line->data = data;
-	input_line->prompt = prompt;
 	input_line->handler = handler;
 	buffer = input_line->buffer;
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.203 2004/02/06 22:41:06 jonas Exp $ */
+/* $Id: search.c,v 1.204 2004/02/08 20:29:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1122,6 +1122,7 @@ text_typeahead_handler(struct input_line *line, int action)
 	struct session *ses = line->ses;
 	unsigned char *buffer = line->buffer;
 	struct document_view *doc_view = current_frame(ses);
+	int direction = ((unsigned char *) line->data)[0] == '/' ? 1 : -1;
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return INPUT_LINE_CANCEL;
@@ -1140,7 +1141,7 @@ text_typeahead_handler(struct input_line *line, int action)
 			break;
 
 		default:
-			search_for_do(ses, buffer, *line->prompt == '/' ? 1 : -1);
+			search_for_do(ses, buffer, direction);
 	}
 
 	draw_formatted(ses, 0);

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.189 2004/06/09 22:12:28 jonas Exp $ */
+/* $Id: link.c,v 1.190 2004/06/10 01:10:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -781,11 +781,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (!link) goto end;
 
 	if (link->where && !link_is_form(link)) {
-		if (strlen(link->where) >= 4
-		    && !strncasecmp(link->where, "MAP@", 4))
+		if (link->type == LINK_MAP) {
 			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_ENTER,
 				    NULL, NULL, SUBMENU);
-		else {
+		} else {
 			add_menu_action(&mi, N_("~Follow link"), ACT_MAIN_ENTER);
 
 			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_MAIN_ENTER_RELOAD);
@@ -810,7 +809,6 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 #endif
 				add_uri_command_to_menu(&mi);
 			}
-
 		}
 	}
 
@@ -887,7 +885,7 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 
 	if (!link_is_form(link)) {
 		struct string str;
-		unsigned char *uristring;
+		unsigned char *uristring = link->where;
 
 		if (!init_string(&str)) return NULL;
 
@@ -896,14 +894,9 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 			add_char_to_string(&str, ' ');
 			uristring = link->where_img;
 
-		} else if (strlen(link->where) >= 4
-			   && !strncasecmp(link->where, "MAP@", 4)) {
+		} else if (link->type == LINK_MAP) {
 			add_to_string(&str, _("Usemap", term));
 			add_char_to_string(&str, ' ');
-			uristring = link->where + 4;
-
-		} else {
-			uristring = link->where;
 		}
 
 		/* Add the uri with password and post info stripped */

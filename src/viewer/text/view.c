@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.570 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: view.c,v 1.571 2004/07/30 10:17:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1003,9 +1003,10 @@ quit:
 	}
 #ifdef CONFIG_MOUSE
 	if (ev->ev == EVENT_MOUSE) {
+		struct term_event_mouse *mouse = &ev->info.mouse;
 		int bars;
 
-		if (ev->info.mouse.y == 0
+		if (mouse->y == 0
 		    && check_mouse_action(ev, B_DOWN)
 		    && !check_mouse_wheel(ev)) {
 			struct window *m;
@@ -1022,8 +1023,7 @@ quit:
 
 		if (ev->info.mouse.y == ses->tab->term->height - bars
 		    && check_mouse_action(ev, B_DOWN)) {
-			int xpos = ev->info.mouse.x;
-			int tab = get_tab_number_by_xpos(ses->tab->term, xpos);
+			int tab = get_tab_number_by_xpos(ses->tab->term, mouse->x);
 
 			if (check_mouse_button(ev, B_WHEEL_UP)) {
 				switch_to_prev_tab(ses->tab->term);
@@ -1037,8 +1037,7 @@ quit:
 				if (check_mouse_button(ev, B_RIGHT)) {
 					struct window *tab = get_current_tab(ses->tab->term);
 
-					tab_menu(tab->data, ev->info.mouse.x,
-						 ev->info.mouse.y, 1);
+					tab_menu(tab->data, mouse->x, mouse->y, 1);
 				}
 			}
 
@@ -1047,7 +1046,7 @@ quit:
 
 		if (!do_mouse_event(ses, ev, doc_view)
 		    && check_mouse_button(ev, B_RIGHT)) {
-			tab_menu(ses, ev->info.mouse.x, ev->info.mouse.y, 0);
+			tab_menu(ses, mouse->x, mouse->y, 0);
 		}
 	}
 #endif /* CONFIG_MOUSE */

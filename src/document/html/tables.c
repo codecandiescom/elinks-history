@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.43 2003/06/30 21:17:04 zas Exp $ */
+/* $Id: tables.c,v 1.44 2003/06/30 21:47:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1320,33 +1320,32 @@ get_table_heights(struct table *t)
 static void
 display_complicated_table(struct table *t, int x, int y, int *yy)
 {
-	int i, j;
+	register int i, j;
 	struct f_data *f = t->p->data;
 	int yp;
-	int xp = x + ((t->frame & F_LHS) && t->border);
+	int xp = x + (t->border && (t->frame & F_LHS));
 
 	for (i = 0; i < t->x; i++) {
-		yp = y + ((t->frame & F_ABOVE) && t->border);
+		yp = y + (t->border && (t->frame & F_ABOVE));
 		for (j = 0; j < t->y; j++) {
 			struct table_cell *cell = CELL(t, i, j);
 
 			if (cell->start) {
-				int yt;
 				struct part *p = NULL;
-				int xw = 0, yw = 0, s;
+				int xw = 0;
+				int yw = 0;
+				register int s;
 
 				for (s = 0; s < cell->colspan; s++) {
-					xw += t->w_c[i + s];
-					if (s < cell->colspan - 1
-					    && get_vline_width(t, i + s + 1) >= 0)
-						xw++;
+					xw += t->w_c[i + s] +
+					      (s < cell->colspan - 1 &&
+					       get_vline_width(t, i + s + 1) >= 0);
 				}
 
 				for (s = 0; s < cell->rowspan; s++) {
-					yw += t->r_heights[j + s];
-					if (s < cell->rowspan - 1
-					    && get_hline_width(t, j + s + 1) >= 0)
-						yw++;
+					yw += t->r_heights[j + s] +
+					      (s < cell->rowspan - 1 &&
+					       get_hline_width(t, j + s + 1) >= 0);
 				}
 
 				html_stack_dup();
@@ -1363,7 +1362,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 					if (cell->valign == VAL_MIDDLE)
 						tmpy += (yw - cell->height)/2;
-					if (cell->valign == VAL_BOTTOM)
+					else if (cell->valign == VAL_BOTTOM)
 						tmpy += (yw - cell->height);
 
 				   	p = format_html_part(cell->start,
@@ -1381,6 +1380,8 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				cell->yw = yw;
 
 				if (p) {
+					int yt;
+
 					for (yt = 0; yt < p->y; yt++) {
 						expand_lines(t->p, yp + yt);
 						expand_line(t->p, yp + yt, xp + t->w_c[i]);
@@ -1394,27 +1395,27 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			cell->xpos = xp;
 			cell->ypos = yp;
 			cell->xw = t->w_c[i];
-			yp += t->r_heights[j];
 
-			if (j < t->y - 1 &&
-			    get_hline_width(t, j + 1) >= 0)
-				yp++;
+			yp += t->r_heights[j] +
+			      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);
 		}
+
 		if (i < t->x - 1) {
-			xp += t->w_c[i];
-			if (get_vline_width(t, j + 1) >= 0)
-				xp++;
+			xp += t->w_c[i] + (get_vline_width(t, j + 1) >= 0);
 		}
 	}
 
 	yp = y;
 	for (j = 0; j < t->y; j++) {
-		yp += t->r_heights[j];
-		if (j < t->y - 1
-		    && get_hline_width(t, j + 1) >= 0)
-			yp ++;
+		yp += t->r_heights[j] +
+		      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);
 	}
-	*yy = yp + (!!(t->frame & F_ABOVE) + !!(t->frame & F_BELOW)) * !!t->border;
+
+	*yy = yp;
+	if (t->border) {
+		if (t->frame & F_ABOVE) (*yy)++;
+		if (t->frame & F_BELOW) (*yy)++;
+	}
 }
 
 
@@ -1440,15 +1441,16 @@ if (H_LINE_X((ii), (jj)) >= 0) \
 
 
 #define draw_frame_vline(xx, yy, ll, ii, jj) \
-{ \
-	int qq; \
-	if (V_LINE_X((ii), (jj)) >= 0) \
-		for (qq = 0; qq < (ll); qq++) \
-			xset_hchar(t->p, (xx), (yy) + qq, \
-				   vline_table[V_LINE((ii), (jj))] \
-				   | ATTR_FRAME \
-				   | find_nearest_color(&par_format.bgcolor, 8) << 11); \
-}
+	if (V_LINE_X((ii), (jj)) >= 0) { \
+		int c = vline_table[V_LINE((ii), (jj))] | \
+			ATTR_FRAME | \
+			find_nearest_color(&par_format.bgcolor, 8) << 11;\
+		register int qq = 0; \
+		while (qq < (ll)) { \
+			xset_hchar(t->p, (xx), (yy) + qq, c); \
+			qq++; \
+		} \
+	}
 
 
 static void

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.682 2005/02/23 20:05:34 miciah Exp $ */
+/* $Id: view.c,v 1.683 2005/03/02 13:50:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,8 +203,8 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 			}
 
 		} else {
-			if (next_link_in_view(doc_view, current_link + direction,
-					      direction, link_in_view_y, set_pos_x))
+			if (next_link_in_view_y(doc_view, current_link + direction,
+					        direction))
 				continue;
 		}
 

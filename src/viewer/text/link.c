@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.313 2005/02/28 15:35:49 zas Exp $ */
+/* $Id: link.c,v 1.314 2005/03/02 13:50:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -397,7 +397,7 @@ link_in_view_x(struct document_view *doc_view, struct link *link)
 	return 0;
 }
 
-int
+static int
 link_in_view_y(struct document_view *doc_view, struct link *link)
 {
 	int i, dy, height;
@@ -418,7 +418,7 @@ link_in_view_y(struct document_view *doc_view, struct link *link)
 	return 0;
 }
 
-int
+static int
 link_in_view(struct document_view *doc_view, struct link *link)
 {
 	assert(doc_view && link);
@@ -462,10 +462,10 @@ get_visible_links_range(struct document_view *doc_view, int *first, int *last)
 	}
 }
 
-int
-next_link_in_view(struct document_view *doc_view, int current, int direction,
-	          int (*fn)(struct document_view *, struct link *),
-	          void (*cntr)(struct document_view *, struct link *))
+static int
+next_link_in_view_(struct document_view *doc_view, int current, int direction,
+	           int (*fn)(struct document_view *, struct link *),
+	           void (*cntr)(struct document_view *, struct link *))
 {
 	struct document *document;
 	struct view_state *vs;
@@ -495,6 +495,18 @@ next_link_in_view(struct document_view *doc_view, int current, int direction,
 
 	vs->current_link = -1;
 	return 0;
+}
+
+int
+next_link_in_view(struct document_view *doc_view, int current, int direction)
+{
+	return next_link_in_view_(doc_view, current, direction, link_in_view, NULL);
+}
+
+int
+next_link_in_view_y(struct document_view *doc_view, int current, int direction)
+{
+	return next_link_in_view_(doc_view, current, direction, link_in_view_y, set_pos_x);
 }
 
 /* Get the bounding columns of @link at line @y (or all lines if @y == -1). */
@@ -788,7 +800,7 @@ find_link(struct document_view *doc_view, int direction, int page_mode)
 	link_pos = link - doc_view->document->links;
 	if (page_mode) {
 		/* PAGE */
-		next_link_in_view(doc_view, link_pos, direction, link_in_view, NULL);
+		next_link_in_view(doc_view, link_pos, direction);
 		return;
 	}
 	current_link_blur(doc_view);

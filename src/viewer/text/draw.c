@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.18 2004/09/30 21:11:28 pasky Exp $ */
+/* $Id: draw.c,v 1.19 2004/10/16 20:15:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -163,6 +163,22 @@ draw_view_status(struct session *ses, struct document_view *doc_view, int active
 	}
 }
 
+/* Checks if there is a link under the cursor so it can become the current
+ * highlighted link. */
+static void
+check_link_under_cursor(struct session *ses, struct document_view *doc_view)
+{
+	int x = ses->tab->x;
+	int y = ses->tab->y;
+	struct box *box = &doc_view->box;
+	struct link *link;
+
+	link = get_link_at_coordinates(doc_view, x - box->x, y - box->y);
+	if (link && link != get_current_link(doc_view)) {
+		doc_view->vs->current_link = link - doc_view->document->links;
+	}
+}
+
 /* Puts the formatted document on the given terminal's screen. */
 /* @active indicates whether the document is focused -- i.e.,
  * whether it is displayed in the selected frame or document. */
@@ -214,8 +230,12 @@ draw_doc(struct session *ses, struct document_view *doc_view, int active)
 		return;
 	}
 
-	if (ses->navigate_mode == NAVIGATE_LINKWISE)
+	if (ses->navigate_mode == NAVIGATE_LINKWISE) {
 		check_vs(doc_view);
+
+	} else {
+		check_link_under_cursor(ses, doc_view);
+	}
 
 	if (!vs->did_fragment) {
 		vy = check_document_fragment(ses, doc_view);

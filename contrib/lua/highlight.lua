@@ -1,61 +1,26 @@
 -- Source-code highlighting hook
--- $Id: highlight.lua,v 1.3 2005/03/25 18:58:58 miciah Exp $
+-- $Id: highlight.lua,v 1.4 2005/03/25 19:00:46 miciah Exp $
+
+highlight_file_types = {
+    patch = "%.patch$",
+    python = "%.py$",
+    perl = "%.pl$",
+    awk = "%.awk$",
+    c = "%.[ch]$",
+    sh = "%.sh$",
+}
 
 function highlight (url, html)
     local ret=nil
 
--- highlight patches
-    if string.find (url, "%.patch$") then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto()
-        html = pipe_read ("(code2html -l patch "..tmp.." - ) 2>/dev/null")
-        os.remove(tmp)
-        ret = 1
-    end
-
--- Python
-    if string.find (url, "%.py$") then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto()
-        html = pipe_read ("(code2html -l python "..tmp.." - ) 2>/dev/null")
-        os.remove(tmp)
-        ret = 1
-    end
-
--- Perl
-    if string.find (url, "%.pl$") then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto()
-        html = pipe_read ("(code2html -l perl "..tmp.." - ) 2>/dev/null")
-        os.remove(tmp)
-        ret = 1
-    end
-
--- awk
-    if string.find (url, "%.awk$") then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto()
-        html = pipe_read ("(code2html -l awk "..tmp.." - ) 2>/dev/null")
-        os.remove(tmp)
-        ret = 1
-    end
-
--- hightlight C code
-    if string.find (url, "%.[ch]$") then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto ()
-        html = pipe_read ("(code2html -l c "..tmp.." - ) 2>/dev/null")
-        os.remove (tmp)
-        ret = 1
-    end
-
--- shell
-    if string.find (url, "%.sh$") then
-        local tmp = tmpname ()
-        writeto (tmp) write (html) writeto ()
-        html = pipe_read ("(code2html -l sh "..tmp.." - ) 2>/dev/null")
-        os.remove (tmp)
-        ret = 1
+    for language,pattern in pairs(highlight_file_types) do
+        if string.find (url, pattern) then
+            local tmp = tmpname ()
+            writeto (tmp) write (html) writeto()
+            html = pipe_read ("(code2html -l "..language.." "..tmp.." - ) 2>/dev/null")
+            os.remove(tmp)
+            ret = 1
+        end
     end
 
     return (ret and html),nil

@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.3 2003/01/01 17:16:19 pasky Exp $ */
+/* $Id: renderer.h,v 1.4 2003/01/17 23:09:33 pasky Exp $ */
 
 #ifndef EL__USIVE_RENDERER_RENDERER_H
 #define EL__USIVE_RENDERER_RENDERER_H
@@ -11,8 +11,8 @@
 
 
 enum renderer_backend_type {
-	LAYOUTER_TEXT,
-	LAYOUTER_GR,
+	RENDERER_TEXT,
+	RENDERER_GR,
 };
 
 /* This is the ELusive renderer state - it is created by init() and destroyed

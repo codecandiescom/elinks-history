@@ -1,7 +1,12 @@
 Elinks installation guidelines
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  Quick guide for impatient:
+  ./configure && make && make install
+  Check out bottom of this file if you're upgrading from Links or older ELinks!
+
 ##########
+
   In order to check out the latest tree from CVS:
 
 $ export CVSROOT=check_file_SITES_for_value_of_this
@@ -30,6 +35,7 @@ don't need to do this there.
 
 
 ##########
+
   If you'll want to compile elinks, first check directory contrib/, if it
 doesn't contain some patches which would be interesting for you. If you're
 excited by any of them, try to apply it by doing
@@ -61,7 +67,6 @@ reduce resulting binary size as well. Good luck!
 
          $ ./configure
          $ make
-         # make install
 
 	 should be enough. However, in some FreeBSD 3 distributions you have to
 	 set CFLAGS=-aout before running ./configure.
@@ -85,6 +90,7 @@ reduce resulting binary size as well. Good luck!
 
 
 ##########
+
   Ok, now let's install it:
 
   Unix - # make install
@@ -102,5 +108,31 @@ want them ;) so just copy the hooks.lua to ~/.links, and edit the configuration
 part - it adds various nice functionality to elinks, like decompression of
 gzipped files or user-defined protocols.
 
-$Id: INSTALL,v 1.10 2002/06/30 21:21:29 pasky Exp $
+
+##########
+
+  If you're upgrading from Links or older ELinks (0.4pre7 or older), you will
+notice that serveral things changed. First, binary name is elinks, not links,
+now; however, basic usage is almost same and it still looks like the old
+(E)Links, so you probably want to make links symlink pointing to elinks.
+
+  Then, note that configuration files were moved from /etc to /etc/elinks and
+from ~/.links to ~/.elinks, because name and format of part of them changed:
+
+  links.cfg became elinks.conf and you need to convert it with
+contrib/conv/conf-links2elinks.awk; html.cfg was merged to elinks.conf
+
+  bookmarks are still bookmarks, but you need to convert it with
+old_to_new_bookmarks.sh.
+
+  links.his became gotohist and the format is same
+
+  history became globhist and the format is same
+
+  cookies are still cookies, but you need to convert it with tr " " "\t"
+
+
+##########
+
+$Id: INSTALL,v 1.11 2002/07/02 21:40:25 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.3 2002/03/18 13:01:59 pasky Exp $ */
+/* $Id: date.c,v 1.4 2002/03/19 15:03:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,6 +221,7 @@ time_t parse_http_date(const char *date)
 #else
 	/* Since mktime thinks we have localtime, we need a wrapper
 	 * to handle GMT. */
+	/* FIXME: It was reported that it doesn't work somewhere :/. */
 	{
 		char *tz = getenv("TZ");
 

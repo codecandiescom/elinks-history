@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.5 2003/06/07 22:18:20 jonas Exp $ */
+/* $Id: mime.h,v 1.6 2003/06/18 00:21:20 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -7,7 +7,6 @@
 #include "terminal/terminal.h"
 
 struct mime_handler {
-	int flags;
 	unsigned char *program;
 	unsigned char *description;
 	unsigned char *backend_name;

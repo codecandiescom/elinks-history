@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.17 2004/09/14 23:09:28 pasky Exp $ */
+/* $Id: memory.c,v 1.18 2004/09/19 11:40:47 jonas Exp $ */
 
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
 
@@ -128,7 +128,7 @@ void *
 mem_mmap_alloc(size_t size)
 {
 	if (size) {
-		void *p = mmap(NULL, round_size(size), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, 0, 0);
+		void *p = mmap(NULL, round_size(size), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANON, -1, 0);
 
 		return p;
 	}

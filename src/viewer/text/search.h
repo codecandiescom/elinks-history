@@ -1,4 +1,4 @@
-/* $Id: search.h,v 1.14 2003/12/26 13:37:18 jonas Exp $ */
+/* $Id: search.h,v 1.15 2003/12/26 23:16:42 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
@@ -6,6 +6,7 @@
 #include "document/view.h"
 
 struct session;
+struct terminal;
 
 void draw_searched(struct terminal *term, struct document_view *doc_view);
 

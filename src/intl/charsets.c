@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.63 2003/10/25 14:41:43 jonas Exp $ */
+/* $Id: charsets.c,v 1.64 2003/10/28 16:28:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,14 +532,15 @@ get_entity_string(const unsigned char *str, const int strlen, int encoding)
 end:
 	/* Take care of potential buffer overflow. */
 	if (strlen < sizeof(entity_cache[slen][0].str)) {
+		struct entity_cache *ece = &entity_cache[slen][nb_entity_cache[slen]];
 
 		/* Copy new entry to cache. */
-		entity_cache[slen][nb_entity_cache[slen]].hits = 1;
-		entity_cache[slen][nb_entity_cache[slen]].strlen = strlen;
-		entity_cache[slen][nb_entity_cache[slen]].encoding = encoding;
-		entity_cache[slen][nb_entity_cache[slen]].result = result;
-		memcpy(entity_cache[slen][nb_entity_cache[slen]].str, str, strlen);
-		entity_cache[slen][nb_entity_cache[slen]].str[strlen] = '\0';
+		ece->hits = 1;
+		ece->strlen = strlen;
+		ece->encoding = encoding;
+		ece->result = result;
+		memcpy(ece->str, str, strlen);
+		ece->str[strlen] = '\0';
 
 		/* Increment number of cache entries if possible. */
 		if (nb_entity_cache[slen] < ENTITY_CACHE_SIZE) nb_entity_cache[slen]++;
@@ -556,12 +557,16 @@ end:
 			      sizeof(struct entity_cache), (void *)hits_cmp);
 
 #ifdef DEBUG_ENTITY_CACHE
+	{
+		unsigned int i;
+
 		fprintf(stderr, "- Cache entries [%d] -\n", slen);
 		for (i = 0; i < nb_entity_cache[slen] ; i++)
 			fprintf(stderr, "%d: hits=%d l=%d st='%s'\n", i,
 				entity_cache[slen][i].hits, entity_cache[slen][i].strlen,
 				entity_cache[slen][i].str);
 		fprintf(stderr, "-----------------\n");
+	}
 #endif
 	}
 	return result;

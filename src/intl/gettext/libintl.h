@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.4 2003/01/03 02:04:15 pasky Exp $ */
+/* $Id: libintl.h,v 1.5 2003/01/03 02:29:35 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -17,10 +17,10 @@
 
 
 /* TODO: Make use of the term. */
-#define _(msg,term) gettext(msg)
+#define _(msg,term) (term=term,gettext(msg))
 
 /* no-op - just for marking */
-#define N_(msg) gettext_noop(msg)
+#define N_(msg) (gettext_noop(msg))
 
 
 /* Languages table lookups. */

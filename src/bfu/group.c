@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.69 2005/03/24 09:21:16 zas Exp $ */
+/* $Id: group.c,v 1.70 2005/03/24 09:33:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,20 +45,15 @@ dlg_format_group(struct terminal *term,
 	if_assert_failed return;
 
 	while (n--) {
-		int sl;
 		int wx = base;
-		unsigned char *text = empty_string_or_(widget_data->widget->text);
-
-		if (text[0]) {
-			sl = strlen(text);
-		} else {
-			sl = -1;
-		}
+		unsigned char *text = widget_data->widget->text;
+		int sl = (text && *text) ? strlen(text) : -1;
 
 		wx += sl;
+
 		if (nx && nx + wx > w) {
 			nx = 0;
-			(*y) += 2;
+			(*y) += 2;	/* Next line */
 		}
 
 		if (term) {
@@ -66,17 +61,22 @@ dlg_format_group(struct terminal *term,
 			int width = 1;
 
 			if (widget_data->widget->type == WIDGET_CHECKBOX) {
-				draw_text(term, xnx + 4, *y,
-					  text, ((sl == -1) ? strlen(text) : sl),
-					  0, color);
-
+				if (sl > 0) {
+					/* Draw text at right of checkbox. */
+					draw_text(term, xnx + 4, *y,
+						  text, sl,
+						  0, color);
+				}
 				width = 4;
 				set_box(&widget_data->box, xnx, *y, width, 1);
 
 			} else {
-				draw_text(term, xnx, *y,
-					  text, ((sl == -1) ? strlen(text) : sl),
-					  0, color);
+				if (sl > 0) {
+					/* Draw label at left of widget. */
+					draw_text(term, xnx, *y,
+						  text, sl,
+						  0, color);
+				}
 
 				if (widget_is_textfield(widget_data))
 					width = widget_data->widget->datalen;

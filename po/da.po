@@ -154,9 +154,9 @@ msgid "No"
 msgstr "Nej"
 
 #: src/bookmarks/dialogs.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Delete content of folder \"%s\" ?"
-msgstr "Slet mappe indholdet \"%s\"?"
+msgstr "Slet indholdet af mappen \"%s\"?"
 
 #: src/bookmarks/dialogs.c:428
 #, c-format
@@ -216,41 +216,39 @@ msgid "Search bookmarks"
 msgstr "Søg bogmærker"
 
 #: src/config/cmdline.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Error parsing option %s: %s"
-msgstr "Fejl ved parsning af konfigurations variabel %s: %s"
+msgstr "Fejl ved parsning af indstilingen %s: %s"
 
 #: src/config/cmdline.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown option %s"
-msgstr "Forbindelser"
+msgstr "Ukendt indstilling %s"
 
 #: src/config/conf.c:670
 msgid "File saving disabled by option"
-msgstr ""
+msgstr "Mulighed for at gemme filer slået fra"
 
 #: src/config/conf.c:673 src/sched/error.c:44
 msgid "Out of memory"
 msgstr "Hukommelse opbrugt"
 
 #: src/config/conf.c:676
-#, fuzzy
 msgid "Cannot write the file"
-msgstr "Fejl ved skrivning til fil"
+msgstr "Kan ikke skrive filen"
 
 #: src/config/conf.c:679
-#, fuzzy
 msgid "Secure open failed"
-msgstr "Fejl ved åbning af fil"
+msgstr "Sikker åbning af file mislykkedes"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
 msgstr "Konfigurationsfejl"
 
 #: src/config/dialogs.c:40
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Kan ikke skrive til konfigurationsfil"
+msgstr "Kan ikke skrive til konfigurationsfilen %s: %s"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:130 src/config/dialogs.c:515
 #: src/dialogs/document.c:50 src/dialogs/document.c:205
@@ -267,6 +265,11 @@ msgid ""
 "\n"
 "Description: %s\n"
 msgstr ""
+"Navn: %s\n"
+"Type: %s\n"
+"Værdi: %s\n"
+"\n"
+"Beskrivelse: %s\n"
 
 #: src/config/dialogs.c:131
 #, c-format
@@ -275,6 +278,9 @@ msgid ""
 "Type: %s\n"
 "Description: %s\n"
 msgstr ""
+"Navn: %s\n"
+"Type: %s\n"
+"Beskrivelse: %s\n"
 
 #: src/config/dialogs.c:186 src/protocol/url.c:64 src/sched/session.c:332
 #: src/viewer/text/view.c:2029
@@ -283,7 +289,7 @@ msgstr "Fejl"
 
 #: src/config/dialogs.c:187
 msgid "Bad option value."
-msgstr "Ukorrekt værdi for indstilling"
+msgstr "Ukorrekt værdi for indstilling."
 
 #: src/config/dialogs.c:204 src/config/dialogs.c:406 src/dialogs/edit.c:26
 #: src/lua/core.c:307 src/lua/core.c:308
@@ -295,7 +301,6 @@ msgid "Type"
 msgstr "Type"
 
 #: src/config/dialogs.c:207
-#, fuzzy
 msgid "Value"
 msgstr "Værdi"
 
@@ -304,11 +309,12 @@ msgid "Description"
 msgstr "Beskrivelse"
 
 #: src/config/dialogs.c:356
-#, fuzzy
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
-msgstr "Denne indstilling kan ikke ændres."
+msgstr ""
+"Denne indstilling kan ikke ændres. Dette betyder det er en speciel indstilling "
+"eksempelvis en mappe - prøv at trykke \"Mellemrum\" for at åbne den."
 
 #: src/config/dialogs.c:392 src/config/dialogs.c:406
 msgid "Add option"
@@ -327,9 +333,9 @@ msgid "Cannot delete this option."
 msgstr "Denne indstilling kan ikke slettes."
 
 #: src/config/dialogs.c:474
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the option \"%s\" ?"
-msgstr "Vil du virkelig slette indstillingen"
+msgstr "Vil du virkelig slette indstillingen \"%s\"?"
 
 #: src/config/dialogs.c:505
 msgid "Options manager"
@@ -379,16 +385,18 @@ msgid "Delete keybinding"
 msgstr "Slet tastaturgenvej"
 
 #: src/config/dialogs.c:722
-#, fuzzy
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
-msgstr "Dette er ikke en tastaturgenvej."
+msgstr ""
+"Dette er ikke en tastaturgenvej. Prøv at trykke \"Mellemrum\" for at "
+"gøre tastaturgenvejene synlige."
 
 #: src/config/dialogs.c:733
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Vil du virkelig slette tastaturgenvejen"
+msgstr "Vil du virkelig slette tastaturgenvejen \"%s\" "
+"(handling \"%s\", Tasteoversigt \"%s\")?"
 
 #: src/config/dialogs.c:765
 msgid "Keybinding manager"
@@ -400,218 +408,199 @@ msgstr "Skifte mellem visning"
 
 #: src/config/kbdbind.c:256
 msgid "Main mapping"
-msgstr ""
+msgstr "Main tastaturoversigt"
 
 #: src/config/kbdbind.c:257
 msgid "Edit mapping"
-msgstr ""
+msgstr "Edit tastaturoversigt"
 
 #: src/config/kbdbind.c:258
 msgid "Menu mapping"
-msgstr ""
+msgstr "Menu tastaturoversigt"
 
 #: src/config/kbdbind.c:366
-#, fuzzy
 msgid "Abort connection"
-msgstr "forbindelser"
+msgstr "Afbryd forbindelse"
 
 #: src/config/kbdbind.c:367
-#, fuzzy
 msgid "Add a new bookmark"
 msgstr "Tilføj bogmærke"
 
 #: src/config/kbdbind.c:368
 msgid "Add a new bookmark using current link"
-msgstr ""
+msgstr "Tilføj bogmærke med nuværende henvisning"
 
 #: src/config/kbdbind.c:369
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Forsøg automatisk at færdiggøre input"
 
 #: src/config/kbdbind.c:370
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Forsøg automatisk utvetydigt at færdiggøre input"
 
 #: src/config/kbdbind.c:371
 msgid "Return to the previous document in history"
-msgstr ""
+msgstr "Gå tilbage til de forrige dokument i historik"
 
 #: src/config/kbdbind.c:372
 msgid "Delete character in front of the cursor"
-msgstr ""
+msgstr "Slet tegn foran markøren"
 
 #: src/config/kbdbind.c:373
-#, fuzzy
 msgid "Open bookmark manager"
-msgstr "Bogmærkehåndtering"
+msgstr "Åben bogmærkehåndteringen"
 
 #: src/config/kbdbind.c:374
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Genindlæs cookie fil"
 
 #: src/config/kbdbind.c:375
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Kopier tekst til udklipsholder"
 
 #: src/config/kbdbind.c:376
 msgid "Delete text from clipboard"
-msgstr ""
+msgstr "Slet tekst fra udklipsholder"
 
 #: src/config/kbdbind.c:377
 msgid "Delete character under cursor"
-msgstr ""
+msgstr "Slet tegn under markør"
 
 #: src/config/kbdbind.c:378
 msgid "Show informations about the current page"
-msgstr ""
+msgstr "Vis information om nuværende side"
 
 #: src/config/kbdbind.c:379
 msgid "Move cursor downwards"
-msgstr ""
+msgstr "Flyt markøren nedad"
 
 #: src/config/kbdbind.c:380
-#, fuzzy
 msgid "Download the current link"
-msgstr "Hent lænke"
+msgstr "Hent det nuværende lænke"
 
 #: src/config/kbdbind.c:381
-#, fuzzy
 msgid "Download the current image"
-msgstr "Hent billede"
+msgstr "Hent det nuværende billede"
 
 #: src/config/kbdbind.c:382
 msgid "Begin editing"
-msgstr ""
+msgstr "Begynd redigering"
 
-#. FIXME
 #: src/config/kbdbind.c:383
 msgid "Go to the end of the page/line"
-msgstr ""
+msgstr "Gå til enden af siden/linjen"
 
 #: src/config/kbdbind.c:384
-#, fuzzy
 msgid "Follow the current link"
-msgstr "~Følg lænke"
+msgstr "~Følg det nuværende lænke"
 
 #: src/config/kbdbind.c:385
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Følg det nuværende lænke og genindlæs siden"
 
 #: src/config/kbdbind.c:386
 msgid "Open the File menu"
-msgstr ""
+msgstr "Åben fil menuen"
 
 #: src/config/kbdbind.c:387
 msgid "Find the next occurrence of the current search text"
-msgstr ""
+msgstr "Find næste forkommelse af det nuværende søgestreng"
 
 #: src/config/kbdbind.c:388
 msgid "Find the next occurrence of the current search text, in reverse"
-msgstr ""
+msgstr "Find forrige forkommelse af det nuværende søgestreng"
 
 #: src/config/kbdbind.c:389
-#, fuzzy
 msgid "Forget authentication credentials"
-msgstr "HTTP verificering"
+msgstr "Ignorer HTTP verificering"
 
 #: src/config/kbdbind.c:390
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "Åben \"Gå til URL\" dialogvindue"
 
 #: src/config/kbdbind.c:391
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "Åben \"Gå til URL\" dialogvindue med nuværende URL"
 
 #: src/config/kbdbind.c:392
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "Åben \"Gå til URL\" dialogvindue med nuværende URL"
 
 #: src/config/kbdbind.c:393
 msgid "Go to the homepage"
-msgstr ""
+msgstr "Gå til hjemmesiden"
 
 #: src/config/kbdbind.c:394
 msgid "Show informations about the the current page HTTP headers"
-msgstr ""
+msgstr "Vi information om den nuværende side"
 
 #: src/config/kbdbind.c:395
-#, fuzzy
 msgid "Open history manager"
-msgstr "Indstillingshåndtering"
+msgstr "Åben historikhåndtering"
 
 #: src/config/kbdbind.c:396
 msgid "Go to the start of the page/line"
-msgstr ""
+msgstr "Gå til begyndelsen af siden/linjen"
 
 #: src/config/kbdbind.c:397
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Slet filendelse"
+msgstr "Slet til linjestart"
 
 #: src/config/kbdbind.c:398
-#, fuzzy
 msgid "Delete to end of line"
-msgstr "Slet filendelse"
+msgstr "Slet til enden af linje"
 
 #: src/config/kbdbind.c:399
-#, fuzzy
 msgid "Open keybinding manager"
-msgstr "Tastaturgenvejshåndtering"
+msgstr "Åben tastaturgenvejshåndtering"
 
 #: src/config/kbdbind.c:400
-#, fuzzy
 msgid "Move the cursor left"
-msgstr "Udfyld markør"
+msgstr "Flyt markør til venstre"
 
 #: src/config/kbdbind.c:401
 msgid "Activate the link context menu"
-msgstr ""
+msgstr "Åben link menu"
 
 #: src/config/kbdbind.c:402
-#, fuzzy
 msgid "Jump to link"
 msgstr "Gå til lænke"
 
 #: src/config/kbdbind.c:404
-#, fuzzy
 msgid "Open a Lua console"
-msgstr "Lua-konsol"
+msgstr "Åben en lua-konsol"
 
 #: src/config/kbdbind.c:406
 msgid "Open a Lua console (DISABLED)"
-msgstr ""
+msgstr "Åben en lua-konsol (Deaktiveret)"
 
-#. internal use only
 #: src/config/kbdbind.c:409
 msgid "Activate the menu"
-msgstr ""
+msgstr "Åben menuen"
 
 #: src/config/kbdbind.c:410
 msgid "Move to the next frame"
-msgstr ""
+msgstr "Flyt til næste ramme"
 
 #: src/config/kbdbind.c:411
-#, fuzzy
 msgid "Open a new window"
 msgstr "Åben i nyt vindue"
 
 #: src/config/kbdbind.c:412
-#, fuzzy
 msgid "Open the current link in a new window"
-msgstr "Åben i nyt vindue"
+msgstr "Åben det nuværende lænke i nyt vindue"
 
 #: src/config/kbdbind.c:413
-#, fuzzy
 msgid "Open options manager"
 msgstr "Indstillingshåndtering"
 
 #: src/config/kbdbind.c:414
 msgid "Move downwards by a page"
-msgstr ""
+msgstr "Flyt en side ned"
 
 #: src/config/kbdbind.c:415
 msgid "Move upwards by a page"
-msgstr ""
+msgstr "Flyt en side op"
 
 #: src/config/kbdbind.c:416
 msgid "Paste text from the clipboard"

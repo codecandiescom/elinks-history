@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.342 2004/07/01 15:07:59 jonas Exp $ */
+/* $Id: tables.c,v 1.343 2004/07/01 17:48:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -969,22 +969,9 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 }
 
 static void
-draw_table_frames(struct table *table, int x, int y)
+init_table_rules(struct table *table, signed char *frame[2])
 {
-	struct table_frames table_frames;
-	signed char *frame[2];
 	int col, row;
-	int cx, cy;
-	int fh_size = (table->cols + 2) * (table->rows + 1);
-	int fv_size = (table->cols + 1) * (table->rows + 2);
-
-	frame[0] = fmem_alloc(fh_size + fv_size);
-	if (!frame[0]) return;
-	memset(frame[0], -1, fh_size + fv_size);
-
-	frame[1] = &frame[0][fh_size];
-
-	if (table->rules == TABLE_RULE_NONE) goto cont2;
 
 	for (row = 0; row < table->rows; row++) for (col = 0; col < table->cols; col++) {
 		int xsp, ysp;
@@ -1021,8 +1008,26 @@ draw_table_frames(struct table *table, int x, int y)
 cont:;
 		}
 	}
+}
 
-cont2:
+static void
+draw_table_frames(struct table *table, int x, int y)
+{
+	struct table_frames table_frames;
+	signed char *frame[2];
+	int col, row;
+	int cx, cy;
+	int fh_size = (table->cols + 2) * (table->rows + 1);
+	int fv_size = (table->cols + 1) * (table->rows + 2);
+
+	frame[0] = fmem_alloc(fh_size + fv_size);
+	if (!frame[0]) return;
+	memset(frame[0], -1, fh_size + fv_size);
+
+	frame[1] = &frame[0][fh_size];
+
+	if (table->rules != TABLE_RULE_NONE)
+		init_table_rules(table, frame);
 
 	get_table_frames(table, &table_frames);
 	memset(&H_FRAME_POSITION(table, 0, 0), table_frames.top, table->cols);

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.47 2003/12/01 15:23:00 pasky Exp $ */
+/* $Id: widget.h,v 1.48 2003/12/22 04:30:37 miciah Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -97,13 +97,17 @@ struct widget_data {
 			int checked;
 		} checkbox;
 		struct {
-			/* Used only for the scrollable text widget */
+			/* The number of the first line that should be
+			 * displayed within the widget.
+			 * This is used only for scrollable text widgets */
 			int current;
 
 			/* The number of lines saved in @cdata */
 			int lines;
 
-			/* The maximum dialog width the lines are valid for */
+			/* The dialog width to which the lines are wrapped.
+			 * This is used to check whether the lines must be
+			 * rewrapped. */
 			int max_width;
 		} text;
 	} info;

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.146 2003/12/25 10:02:07 jonas Exp $ */
+/* $Id: search.c,v 1.147 2003/12/25 10:46:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -968,6 +968,8 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	int upper_link, lower_link;
 	enum keyact action = kbd_action(KM_EDIT, event, NULL);
 	int direction, case_sensitive;
+
+	if (i == -1) i = 0;
 
 	switch (action) {
 		case ACT_BACKSPACE:

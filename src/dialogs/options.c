@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.40 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: options.c,v 1.41 2002/12/08 21:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@
 #include "util/memlist.h"
 
 
-void
+static void
 display_codepage(struct terminal *term, void *pcp, struct session *ses)
 {
 	get_opt_int_tree(term->spec, "charset") = (int) pcp;
@@ -65,13 +65,13 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 	do_menu_selected(term, mi, ses, sel);
 }
 
-void
+static void
 set_val(struct terminal *term, void *ip, int *d)
 {
 	*d = (int) ip;
 }
 
-void
+static void
 charset_sel_list(struct terminal *term, struct session *ses, int *ptr)
 {
 	int i, sel;
@@ -89,13 +89,13 @@ charset_sel_list(struct terminal *term, struct session *ses, int *ptr)
 }
 
 
-void
+static void
 terminal_options_ok(void *p)
 {
 	cls_redraw_all_terminals();
 }
 
-unsigned char *td_labels[] = {
+static unsigned char *td_labels[] = {
 	TEXT(T_NO_FRAMES),
 	TEXT(T_VT_100_FRAMES),
 	TEXT(T_LINUX_OR_OS2_FRAMES),
@@ -187,7 +187,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 }
 
 
-unsigned char *http_labels[] = {
+static unsigned char *http_labels[] = {
 	TEXT(T_USE_HTTP_10),
 	TEXT(T_ALLOW_SERVER_BLACKLIST),
 	TEXT(T_BROKEN_302_REDIRECT),
@@ -203,7 +203,7 @@ unsigned char *http_labels[] = {
 	NULL
 };
 
-void
+static void
 httpopt_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
@@ -269,7 +269,7 @@ httpopt_fn(struct dialog_data *dlg)
 }
 
 
-int
+static int
 dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 {
 #if 0
@@ -366,7 +366,7 @@ dlg_http_options(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-int
+static int
 dlg_ftp_options(struct dialog_data *dlg, struct widget_data *di)
 {
 	struct dialog *d;
@@ -400,13 +400,13 @@ dlg_ftp_options(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
-unsigned char max_c_str[3];
-unsigned char max_cth_str[2];
-unsigned char max_t_str[2];
-unsigned char time_str[5];
-unsigned char unrtime_str[5];
+static unsigned char max_c_str[3];
+static unsigned char max_cth_str[2];
+static unsigned char max_t_str[2];
+static unsigned char time_str[5];
+static unsigned char unrtime_str[5];
 
-void
+static void
 refresh_net(void *xxx)
 {
 	/* abort_all_connections(); */
@@ -419,7 +419,7 @@ refresh_net(void *xxx)
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
-unsigned char *net_msg[] = {
+static unsigned char *net_msg[] = {
 	TEXT(T_HTTP_PROXY__HOST_PORT),
 	TEXT(T_FTP_PROXY__HOST_PORT),
 	TEXT(T_MAX_CONNECTIONS),
@@ -434,7 +434,7 @@ unsigned char *net_msg[] = {
 	NULL
 };
 
-void
+static void
 netopt_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
@@ -597,7 +597,7 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 }
 
 
-unsigned char *prg_msg[] = {
+static unsigned char *prg_msg[] = {
 	TEXT(T_MAILTO_PROG),
 	TEXT(T_TELNET_PROG),
 	TEXT(T_TN3270_PROG),
@@ -605,7 +605,7 @@ unsigned char *prg_msg[] = {
 	NULL
 };
 
-void
+static void
 netprog_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
@@ -737,7 +737,7 @@ net_programs(struct terminal *term, void *xxx, void *yyy)
 }
 
 #if 0
-void
+static void
 net_opt_ask(struct terminal *term, void *xxx, void *yyy)
 {
 	if (list_empty(downloads)) {
@@ -755,10 +755,10 @@ net_opt_ask(struct terminal *term, void *xxx, void *yyy)
 #endif
 
 
-unsigned char mc_str[8];
-unsigned char doc_str[4];
+static unsigned char mc_str[8];
+static unsigned char doc_str[4];
 
-void
+static void
 cache_refresh(void *xxx)
 {
 	get_opt_long("document.cache.memory.size") = atoi(mc_str) * 1024;
@@ -767,7 +767,7 @@ cache_refresh(void *xxx)
 	shrink_memory(0);
 }
 
-unsigned char *cache_texts[] = {
+static unsigned char *cache_texts[] = {
 	TEXT(T_MEMORY_CACHE_SIZE__KB),
 	TEXT(T_NUMBER_OF_FORMATTED_DOCUMENTS),
 	NULL
@@ -825,9 +825,9 @@ menu_save_html_options(struct terminal *term, void *xxx, struct session *ses)
 	write_config(term);
 }
 
-unsigned char marg_str[2];
+static unsigned char marg_str[2];
 
-void
+static void
 html_refresh(struct session *ses)
 {
 	get_opt_int("document.browse.margin_width") = atoi(marg_str);
@@ -838,7 +838,7 @@ html_refresh(struct session *ses)
 	print_screen_status(ses);
 }
 
-unsigned char *html_texts[] = {
+static unsigned char *html_texts[] = {
 	TEXT(T_DISPLAY_TABLES),
 	TEXT(T_DISPLAY_FRAMES),
 	TEXT(T_DISPLAY_LINKS_TO_IMAGES),
@@ -851,7 +851,7 @@ unsigned char *html_texts[] = {
 	TEXT(T_ALLOW_DARK_ON_BLACK)
 };
 
-int
+static int
 dlg_assume_cp(struct dialog_data *dlg, struct widget_data *di)
 {
 	charset_sel_list(dlg->win->term, dlg->dlg->udata2, (int *)di->cdata);
@@ -937,7 +937,7 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 }
 
 
-void
+static void
 menu_set_language(struct terminal *term, void *pcp, struct session *ses)
 {
 	set_language((int)pcp);
@@ -962,15 +962,17 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 }
 
 
-unsigned char *resize_texts[] = {
+/* FIXME: This doesn't in fact belong here at all. --pasky */
+
+static unsigned char *resize_texts[] = {
 	TEXT(T_COLUMNS),
 	TEXT(T_ROWS)
 };
 
-unsigned char x_str[4];
-unsigned char y_str[4];
+static unsigned char x_str[4];
+static unsigned char y_str[4];
 
-void
+static void
 do_resize_terminal(struct terminal *term)
 {
 	unsigned char str[8];

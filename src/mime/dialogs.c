@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.6 2002/12/07 20:05:53 pasky Exp $ */
+/* $Id: dialogs.c,v 1.7 2002/12/08 21:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 #include "util/string.h"
 
 
-struct option *
+static struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
 	struct option *opt;
@@ -40,13 +40,13 @@ get_real_opt(unsigned char *base, unsigned char *id)
 }
 
 
-unsigned char *ext_msg[] = {
+static unsigned char *ext_msg[] = {
 	TEXT(T_EXTENSION_S),
 	TEXT(T_CONTENT_TYPE),
 };
 
 
-void
+static void
 add_ext_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
@@ -121,13 +121,13 @@ add_ext_fn(struct dialog_data *dlg)
 }
 
 
-void
+static void
 free_translated(void *fcp)
 {
 	mem_free(fcp);
 }
 
-void
+static void
 really_del_ext(void *fcp)
 {
 	struct option *opt;
@@ -183,7 +183,7 @@ struct extension {
 	unsigned char *ct;
 };
 
-void
+static void
 really_add_ext(void *fcp)
 {
 	struct extension *ext = (struct extension *) fcp;
@@ -283,7 +283,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 }
 
 
-struct menu_item mi_no_ext[] = {
+static struct menu_item mi_no_ext[] = {
 	{TEXT(T_NO_EXTENSIONS), "", M_BAR, NULL, NULL, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };

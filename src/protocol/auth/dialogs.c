@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.13 2002/12/07 20:05:53 pasky Exp $ */
+/* $Id: dialogs.c,v 1.14 2002/12/08 21:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include "util/memory.h"
 
 
-void
+static void
 auth_layout(struct dialog_data *dlg)
 {
         struct terminal *term = dlg->win->term;
@@ -90,7 +90,7 @@ auth_layout(struct dialog_data *dlg)
 			   dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
-int
+static int
 auth_ok(struct dialog_data *dlg, struct widget_data *di)
 {
         ((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;
@@ -98,7 +98,7 @@ auth_ok(struct dialog_data *dlg, struct widget_data *di)
         return ok_dialog(dlg, di);
 }
 
-int
+static int
 auth_cancel(struct dialog_data *dlg, struct widget_data *di)
 {
         ((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;

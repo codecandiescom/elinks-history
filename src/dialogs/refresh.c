@@ -1,5 +1,5 @@
 /* Periodic refresh of dialogs */
-/* $Id: refresh.c,v 1.7 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: refresh.c,v 1.8 2002/12/08 21:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,7 +22,8 @@
 #include "util/memory.h"
 
 
-void refresh(struct refresh *r)
+static void
+refresh(struct refresh *r)
 {
 	struct refresh rr;
 
@@ -32,19 +33,22 @@ void refresh(struct refresh *r)
 	rr.fn(rr.term, rr.data, rr.ses);
 }
 
-void refresh_end(struct refresh *r)
+static void
+refresh_end(struct refresh *r)
 {
 	if (r->timer != -1) kill_timer(r->timer);
 	mem_free(r);
 }
 
-void refresh_abort(struct dialog_data *dlg)
+static void
+refresh_abort(struct dialog_data *dlg)
 {
 	refresh_end(dlg->dlg->udata2);
 }
 
-void refresh_init(struct refresh *r, struct terminal *term,
-		  struct session *ses, void *data, refresh_handler fn)
+void
+refresh_init(struct refresh *r, struct terminal *term,
+	     struct session *ses, void *data, refresh_handler fn)
 {
 	r->term = term;
 	r->win = term->windows.next;

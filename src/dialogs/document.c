@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.18 2002/12/07 20:05:53 pasky Exp $ */
+/* $Id: document.c,v 1.19 2002/12/08 21:01:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@
 #include "util/string.h"
 
 /* Location info. message box. */
-void
+static void
 loc_msg(struct terminal *term, struct location *location,
 	struct f_data_c *frame)
 {

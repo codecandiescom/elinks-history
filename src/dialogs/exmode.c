@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.10 2004/01/26 05:50:17 jonas Exp $ */
+/* $Id: exmode.c,v 1.11 2004/01/26 06:04:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,6 +51,34 @@ struct input_history exmode_history = {
 	/* nosave: */	0,
 };
 
+typedef int (*exmode_handler)(struct session *, unsigned char *, unsigned char *);
+
+static int
+exmode_action_handler(struct session *ses, unsigned char *command,
+		      unsigned char *args)
+{
+	enum main_action action = read_action(KM_MAIN, command);
+
+	if (action == ACT_MAIN_NONE) return 0;
+
+	if (!*args)
+		return do_action(ses, action, 0) == action;
+
+	switch (action) {
+		case ACT_MAIN_GOTO_URL:
+			goto_url_with_hook(ses, args);
+			return 1;
+		default:
+			break;
+	}
+	return 0;
+}
+
+
+static exmode_handler exmode_handlers[] = {
+	exmode_action_handler,
+	NULL,
+};
 
 static void
 exmode_exec(struct exmode_data *data)
@@ -60,40 +88,19 @@ exmode_exec(struct exmode_data *data)
 	 * off for now). Then try to evaluate it as configfile command. Then at
 	 * least pop up an error. */
 	struct session *ses = data->dlg_data->dlg->udata2;
-	enum main_action action;
 	unsigned char *command = data->dlg_data->widgets_data->cdata;
 	unsigned char *end = command;
-	unsigned char end_char = 0;
+	int i;
 
 	if (!*command) return;
 
 	add_to_input_history(&exmode_history, command, 1);
 
 	while (*end && !isspace(*end)) end++;
-	if (*end) {
-		end_char = *end;
-		*end = 0;
-	}
+	if (*end) *end++ = 0;
 
-	action = read_action(KM_MAIN, command);
-	if (end_char) *end = end_char;
-
-	if (action == ACT_MAIN_NONE) {
-		/* TODO; A timed error message */
-		return;
-
-	} else if (!*end) {
-		if (do_action(ses, action, 0) != action) {
-			/* TODO; A timed error message */
-		}
-		return;
-	}
-
-	switch (action) {
-		case ACT_MAIN_GOTO_URL:
-			goto_url_with_hook(ses, end + 1);
-			break;
-		default:
+	for (i = 0; exmode_handlers[i]; i++) {
+		if (exmode_handlers[i](ses, command, end))
 			break;
 	}
 }

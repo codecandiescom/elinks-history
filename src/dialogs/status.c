@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.21 2003/12/02 20:53:17 jonas Exp $ */
+/* $Id: status.c,v 1.22 2003/12/03 18:31:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/snprintf.h"
 #include "util/string.h"
 #include "viewer/text/form.h"
 #include "viewer/text/link.h"

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.12 2002/03/27 21:30:25 pasky Exp $ */
+/* $Id: session.c,v 1.13 2002/03/27 21:43:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1161,12 +1161,15 @@ void request_frame(struct session *ses, unsigned char *name, unsigned char *uurl
 	url = stracpy(uurl);
 	pos = extract_position(url);
 	if (!(frm = mem_alloc(sizeof(struct frame) + strlen(url) + 1))) {
-		mem_free(url); if (pos) mem_free(pos);
+		mem_free(url);
+		if (pos) mem_free(pos);
 		return;
 	}
 	memset(frm, 0, sizeof(struct frame));
 	if (!(frm->name = stracpy(name))) {
 		mem_free(frm);
+		mem_free(url);
+		if (pos) mem_free(pos);
 		return;
 	}
 	init_vs(&frm->vs, url);

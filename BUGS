@@ -1,21 +1,34 @@
 Known bugs:
 
-Can't connect to some FTP servers (Novell, NT). Connection stays in "Request
-sent" state.
 
-Frames don't work if there's more frames with same name. Turn them off in such
-case.
+	Can't connect to some FTP servers (Novell, NT). Connection stays in
+"Request sent" state.
 
-You can't upload large files; it takes _lots_ of memory.
+	Frames don't work if there's more frames with same name. Turn them off
+in such case.
 
-You shouldn't press '^Z' when you are in a viewer
+	You can't upload large files; it takes _lots_ of memory.
 
-Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
+	You shouldn't press '^Z' when you are in a viewer
 
-Tags inside <XMP> are still interpreted.
+	Handling of &#13; is not lynx-compatible in <pre> tag (should be
+newline).
 
-DNS lookups / IPv6 support may not be yet entirely stable.
+	Tags inside <XMP> are still interpreted.
 
-$Id: BUGS,v 1.7 2002/02/01 21:49:59 pasky Exp $
+	DNS lookups / IPv6 support may not be yet entirely stable.
+
+	links '...?q=foo+bar' when launching new instance in xterm leads to
+incorrectly decoding +ba to 0xba.
+
+	When switching between source view and rendered view, the position of
+the view is based on the page number of the previous view, not on the content of
+the previous view.
+
+	Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
+combinations.
+
+
+$Id: BUGS,v 1.8 2002/02/07 00:12:53 pasky Exp $
 
 vim: textwidth=80

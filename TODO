@@ -1,4 +1,5 @@
-TODO list for links (partially sorted by importance):
+TODO list for links (sorted approximatelly by priority):
+
 
 	HTTP Auth (User/password) (URGENT) (being worked on)
 
@@ -8,13 +9,20 @@ TODO list for links (partially sorted by importance):
 
 	Support for vlink
 
+	Use terminfo instead of hardwired ANSI control sequences
+
 	User interface for keys rebinding
 
 	User interface for options changing
 
 	Reorganization of user interface
 
+	When calling external viewer on files, assign temporary files the
+suffix appropriate to the file type.
+
 	Cookies manager
+
+	Possibility to read HTML source from stdin
 
 	Passing url to external command
 
@@ -32,4 +40,5 @@ TODO list for links (partially sorted by importance):
 
 	CSS (?)
 
-$Id: TODO,v 1.8 2002/02/01 21:49:59 pasky Exp $
+
+$Id: TODO,v 1.9 2002/02/07 00:12:53 pasky Exp $

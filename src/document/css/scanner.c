@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.92 2004/01/23 17:33:55 jonas Exp $ */
+/* $Id: scanner.c,v 1.93 2004/01/23 20:12:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,15 +259,17 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			}
 		}
 
-	} else if (first_char == '/' && *string == '*') {
+	} else if (first_char == '/') {
 		/* Comments */
-		type = CSS_TOKEN_SKIP;
+		if (*string == '*') {
+			type = CSS_TOKEN_SKIP;
 
-		for (string++; *string; string++)
-			if (*string == '*' && string[1] == '/') {
-				string += 2;
-				break;
-			}
+			for (string++; *string; string++)
+				if (*string == '*' && string[1] == '/') {
+					string += 2;
+					break;
+				}
+		}
 
 	} else {
 		INTERNAL("Someone forgot to put code for recognizing tokens "

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.63 2003/05/08 01:18:13 pasky Exp $ */
+/* $Id: osdep.c,v 1.64 2003/05/08 01:20:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1797,40 +1797,33 @@ void
 open_in_new_tab(struct terminal *term, unsigned char *exe_name,
                 unsigned char *param)
 {
-	int base_session = -1;
-	unsigned char *url = NULL;
+	struct window *tab;
+	struct initial_session_info *info;
+	struct event ev = {EV_INIT, 0, 0, 0};
 
-	/* FIXME: This param parsing is way too ugly (and could prepare nice
-	 * surprises to us in the future) to survive in the codebase. We should
+	tab = init_tab(term);
+	if (!tab) return;
+
+	info = mem_calloc(1, sizeof(struct initial_session_info));
+	if (!info) {
+		mem_free(tab);
+		return;
+	}
+	info->base_session = -1;
+
+	/* FIXME: This param parsing is way too ugly (and could prepare us some
+	 * nice surprises in the future) to survive in the codebase. We should
 	 * call some common creating the commandline directly in the open_in_..
 	 * function. --pasky */
 
 	if (!strncmp(param, "-base-session ", 13)) {
-		base_session = atoi(param + strlen("-base-session "));
+		info->base_session = atoi(param + strlen("-base-session "));
 	} else {
-		url = param;
+		info->url = decode_url(param);
 	}
 
-	{
-		struct window *tab;
-		struct initial_session_info *info;
-		struct event ev = {EV_INIT, 0, 0, 0};
-
-		tab = init_tab(term);
-		if (!tab) return;
-
-		info = mem_calloc(1, sizeof(struct initial_session_info));
-		if (!info) {
-			mem_free(tab);
-			return;
-		}
-
-		info->base_session = base_session;
-		if (url) info->url = decode_url(url);
-
-		ev.b = (long) info;
-		tab->handler(tab, &ev, 0);
-	}
+	ev.b = (long) info;
+	tab->handler(tab, &ev, 0);
 }
 
 void

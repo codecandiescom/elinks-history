@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.221 2004/07/12 20:48:49 zas Exp $ */
+/* $Id: form.c,v 1.222 2004/07/12 20:55:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1021,19 +1021,19 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		add_to_string(&go, fc->action);
 		add_char_to_string(&go, POST_CHAR);
 		if (fc->method == FM_POST) {
-			add_to_string(&go, "application/x-www-form-urlencoded\r\n");
+			add_to_string(&go, "application/x-www-form-urlencoded\n");
 
 		} else if (fc->method == FM_POST_TEXT_PLAIN) {
 			/* Dunno about this one but we don't want the full
 			 * hextcat thingy. --jonas */
-			add_to_string(&go, "text/plain\r\n");
+			add_to_string(&go, "text/plain\n");
 			add_to_string(&go, data.source);
 			break;
 
 		} else {
 			add_to_string(&go, "multipart/form-data; boundary=");
 			add_bytes_to_string(&go, boundary.string, BOUNDARY_LENGTH);
-			add_crlf_to_string(&go);
+			add_char_to_string(&go, '\n');
 		}
 
 		for (i = 0; i < data.length; i++) {

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.125 2004/12/19 11:31:41 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.126 2004/12/19 11:32:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1211,7 +1211,6 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			counter++;
 
 		P_INT(counter);
-		DBG("*counter%d*",counter);
 		break;
 	}
 	default:

@@ -774,6 +774,8 @@ AC_OUTPUT([ \
  src/intl/gettext/Makefile \
  src/lowlevel/Makefile \
  src/lua/Makefile \
+ src/mime/Makefile \
+ src/mime/backend/Makefile \
  src/osdep/Makefile \
  src/protocol/Makefile \
  src/protocol/http/Makefile \

@@ -57,7 +57,7 @@ LDFLAGS = @LDFLAGS@
 
 COMPILE = $(CC) -c $(DEFS) $(INCLUDES) $(CPPFLAGS) $(CFLAGS) $(XCFLAGS)
 
-HEADERS = $(COMHDRS) libgnuintl.h libgettext.h loadinfo.h
+HEADERS = $(COMHDRS) libgnuintl.h libgettext.h libintl.h loadinfo.h
 COMHDRS = gettext.h gettextP.h hash-string.h
 SOURCES = $(COMSRCS) intl-compat.c
 COMSRCS = bindtextdom.c dcgettext.c dgettext.c gettext.c \

@@ -60,6 +60,7 @@ Christian Häggström <c00chm@cs.umu.se>
 Cliff Cunnington <cliff@ccnet.demon.nl>
 	Links' website at http://links.sf.net/
 	User's manual at http://links.sf.net/docs/manual-0.82-en/
+	Minor fixes/improvements
 
 Cristiano Guadagnino <cris@geppo.cmb2000.it>
 	Updated italian translation
@@ -236,4 +237,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.21 2002/01/30 13:42:43 pasky Exp $
+$Id: AUTHORS,v 1.22 2002/01/30 14:48:56 pasky Exp $

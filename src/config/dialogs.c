@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.131 2003/11/26 21:39:21 jonas Exp $ */
+/* $Id: dialogs.c,v 1.132 2003/11/26 22:27:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,7 +516,7 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 static INIT_LIST_HEAD(keybinding_dialog_list);
 
 static struct hierbox_browser_button keybinding_buttons[] = {
-	{ N_("Add"),		push_kbdbind_add_button,		1 },
+	{ N_("Add"),		push_kbdbind_add_button,		0 },
 	{ N_("Delete"),		push_kbdbind_del_button,		0 },
 	{ N_("Toggle display"),	push_kbdbind_toggle_display_button,	1 },
 	{ N_("Save"),		push_kbdbind_save_button,		0 },

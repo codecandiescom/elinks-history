@@ -97,8 +97,8 @@ control hints:
 
 		means that the string was changed in the code and the translator
 		needs to check if the translation is still ok. When it has been
-		checked or updated it is safe to remove 'fuzzy' and the following
-		comma.
+		checked or updated it is safe to remove 'fuzzy' and the
+		following comma.
 
 	'c-format'
 
@@ -121,9 +121,8 @@ will be visible.
 Some translations may become obsolete due to code modifications, these will be
 marked by #~ prefix, and moved at end of file. Keeping them may be a good thing
 since a modification can be reversed later and then gettext tools will reuse
-these special lines at resync time.
-If, at some time, you think some of these lines will never be reused, feel free
-to delete them to reduce file size.
+these special lines at resync time. If, at some time, you think some of these
+lines will never be reused, feel free to delete them to reduce file size.
 
 A special msgid at top of file contains some useful info, you may update it as
 well, especially Last-Translator and PO-Revision-Date fields.
@@ -149,7 +148,22 @@ If this fails or you want to update all .po files, use:
 
 	cd po/ ; make update-po
 
-2.4 Making the updates part of ELinks:
+2.4 Checking updated .po files
+------------------------------
+
+After updating a .po file you should always check it for errors in the c-format
+fragments, etc. You can do this by running:
+
+	cd po/ ; make check-po PO=<lang>.po
+
+or
+
+	cd po/ ; make check-po PO=<lang>
+
+It can potentially report some false positives if the .po file contains fuzzy
+message strings.
+
+2.5 Making the updates part of ELinks:
 --------------------------------------
 
 If the language file is already added finally run make to compile and check the
@@ -168,5 +182,5 @@ current status of each language file. Be proud if your language file rank higher
 or the same as the French one.
 
 
-$Id: README,v 1.7 2004/12/29 17:00:47 jonas Exp $
+$Id: README,v 1.8 2005/02/02 01:01:01 jonas Exp $
 vim: textwidth=80

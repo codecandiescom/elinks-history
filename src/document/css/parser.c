@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.51 2004/01/26 18:27:17 pasky Exp $ */
+/* $Id: parser.c,v 1.52 2004/01/26 22:57:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,20 +184,61 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 	/* TODO: comma-separated list of simple selectors. */
 	/* FIXME: element can be even '*' --pasky */
 
-	if (token->type != CSS_TOKEN_IDENT
-	    || !check_next_css_token(scanner, '{')) {
+	if (token->type != CSS_TOKEN_IDENT) {
 		skip_css_tokens(scanner, '}');
 		return NULL;
 	}
 
 	/* Check if we have already encountered the selector */
+	/* FIXME: This is totally broken because we have to do this _after_
+	 * scanning for id/class/pseudo. --pasky */
 	selector = get_css_selector(css, token->string, token->length);
 	if (!selector)
 		selector = init_css_selector(css, token->string, token->length);
 
 	if (!selector) {
+syntax_error:
 		skip_css_block(scanner);
 		return NULL;
+	}
+
+	/* Let's see if we will get anything else of this. */
+
+	token = get_next_css_token(css);
+
+	if (token->type == CSS_TOKEN_HASH
+	    || token->type == CSS_TOKEN_HEX_COLOR) {
+		/* id */
+		token = get_next_css_token(css);
+		if (token->type != CSS_TOKEN_IDENT) {
+			goto syntax_error;
+		}
+		selector->id = memacpy(token->string, token->length);
+		token = get_next_css_token(css);
+	}
+
+	if (token->type == '.') {
+		/* class */
+		token = get_next_css_token(css);
+		if (token->type != CSS_TOKEN_IDENT) {
+			goto syntax_error;
+		}
+		selector->class = memacpy(token->string, token->length);
+		token = get_next_css_token(css);
+	}
+
+	if (token->type == ':') {
+		/* pseudo */
+		token = get_next_css_token(css);
+		if (token->type != CSS_TOKEN_IDENT) {
+			goto syntax_error;
+		}
+		selector->pseudo = memacpy(token->string, token->length);
+		token = get_next_css_token(css);
+	}
+
+	if (token->type != '{') {
+		goto syntax_error;
 	}
 
 	return selector;

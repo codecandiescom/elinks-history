@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.7 2004/01/26 20:21:57 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.8 2004/01/26 22:57:44 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -32,10 +32,17 @@
  * document structure to properties. */
 /* For now we only handle really ``flat'' stylesheets. No complicated selectors
  * only good clean element ones. */
+/* TODO: Form the selectors to trees, both in-element and pan-element. --pasky */
 struct css_selector {
 	LIST_HEAD(struct css_selector);
 
 	unsigned char *element;
+
+	/* May be NULL */
+	unsigned char *id;
+	unsigned char *class;
+	unsigned char *pseudo;
+
 	struct list_head properties;
 };
 

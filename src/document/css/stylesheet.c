@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.5 2004/01/25 05:02:15 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.6 2004/01/26 22:57:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,6 +60,9 @@ done_css_stylesheet(struct css_stylesheet *css)
 		del_from_list(selector);
 		free_list(selector->properties);
 		mem_free(selector->element);
+		if (selector->id) mem_free(selector->id);
+		if (selector->class) mem_free(selector->class);
+		if (selector->pseudo) mem_free(selector->pseudo);
 		mem_free(selector);
 	}
 }

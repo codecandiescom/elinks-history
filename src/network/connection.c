@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.185 2004/07/27 03:07:54 jonas Exp $ */
+/* $Id: connection.c,v 1.186 2004/07/27 17:30:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,8 +249,8 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->prg.timer = -1;
 	conn->timer = -1;
 
-	/* Don't set referrer when it is the file protocol so information
-	 * about the local system is leaked. */
+	/* Don't set referrer when it is the file protocol so that no
+	 * information about the local system is leaked. */
 	/* FIXME: Maybe we should allow referrers when the target URI is also
 	 * file:// so that CGI scripts will have it available? --jonas */
 	if (referrer && referrer->protocol != PROTOCOL_FILE)

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.109 2003/10/27 02:47:08 pasky Exp $ */
+/* $Id: os_dep.c,v 1.110 2003/10/27 02:47:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,7 +576,6 @@ get_common_env(void)
 {
 	int env = 0;
 
-	/* TODO: This should be named uniformly ;-). --pasky */
 	if (is_xterm()) env |= ENV_XWIN;
 	if (is_twterm()) env |= ENV_TWIN;
 	if (getenv("STY")) env |= ENV_SCREEN;

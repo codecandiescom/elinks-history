@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.459 2004/07/14 14:00:39 jonas Exp $ */
+/* $Id: options.c,v 1.460 2004/07/15 10:54:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,8 +481,6 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 static void
 delete_option_do(struct option *option, int recursive)
 {
-	if (option->next) del_from_list(option);
-
 	if (recursive == -1) {
 		ERROR("Orphaned option %s", option->name);
 	}
@@ -514,12 +512,15 @@ delete_option_do(struct option *option, int recursive)
 		done_listbox_item(&option_browser, option->box_item);
 
 	if (option->flags & OPT_ALLOC) {
+		del_from_list(option);
 		mem_free_if(option->name);
 		mem_free(option);
 	} else if (!option->capt) {
 		/* We are probably dealing with a built-in autocreated option
-		 * that will be attempted to be deleted when shutting down.
-		 * Clear it so nothing will be done later. */
+		 * that will be attempted to be deleted when shutting down. */
+		if (option->next) del_from_list(option);
+
+		/* Clear it so nothing will be done later. */
 		memset(option, 0, sizeof(struct option));
 	}
 }

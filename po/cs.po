@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-28 03:44+0100\n"
-"PO-Revision-Date: 2003-10-25 18:32+0200\n"
+"PO-Revision-Date: 2003-10-28 03:47+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4305,7 +4305,6 @@ msgstr ""
 
 #. name:
 #: src/formhist/formhist.c:373
-#, fuzzy
 msgid "Forms History"
 msgstr "Formuláøová pamì»"
 
@@ -4580,7 +4579,6 @@ msgstr "MIME typ odpovídající této pøíponì (místo '.' se pou¾ívá '*')."
 
 #. name:
 #: src/mime/backend/default.c:227
-#, fuzzy
 msgid "Option system"
 msgstr "Konfiguraèní systém"
 
@@ -5173,9 +5171,8 @@ msgstr "Zadej výraz"
 
 #. name:
 #: src/scripting/scripting.c:34
-#, fuzzy
 msgid "Scripting"
-msgstr "Popis"
+msgstr "Skriptování"
 
 #: src/terminal/event.c:90
 #, c-format

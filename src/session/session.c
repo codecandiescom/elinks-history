@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.593 2004/12/19 18:04:42 jonas Exp $ */
+/* $Id: session.c,v 1.594 2004/12/25 20:42:45 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -233,12 +233,12 @@ print_error_dialog(struct session *ses, enum connection_state state,
 	/* Don't show error dialogs for missing CSS stylesheets */
 	if (priority == PRI_CSS) return;
 
-	msg_box(ses->tab->term, NULL, MSGBOX_NO_INTL,
-		_("Error", ses->tab->term), ALIGN_CENTER,
+	msg_box(ses->tab->term, NULL, MSGBOX_NO_TEXT_INTL,
+		N_("Error"), ALIGN_CENTER,
 		get_err_msg(state, ses->tab->term),
 		ses, 1,
-		_("OK", ses->tab->term), NULL, B_ENTER | B_ESC /*,
-		N_("Retry", ses->tab->term), NULL, 0 */ /* !!! TODO: retry */);
+		N_("OK"), NULL, B_ENTER | B_ESC /*,
+		N_("Retry"), NULL, 0 */ /* !!! TODO: retry */);
 }
 
 static void

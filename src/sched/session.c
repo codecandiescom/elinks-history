@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.410 2004/05/27 12:19:56 jonas Exp $ */
+/* $Id: session.c,v 1.411 2004/05/28 23:43:35 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1062,22 +1062,21 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 unsigned char *
 get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 {
-	unsigned char *here;
-	int url_len;
+	struct uri *uri;
+	int length;
 
 	/* Not looking at anything */
 	if (!have_location(ses))
 		return NULL;
 
-	here = struri(cur_loc(ses)->vs.uri);
-	url_len = get_no_post_url_length(here);
+	uri = cur_loc(ses)->vs.uri;
 
 	/* Ensure that the url size is not greater than str_size.
 	 * We can't just happily strncpy(str, here, str_size)
 	 * because we have to stop at POST_CHAR, not only at NULL. */
-	int_upper_bound(&url_len, str_size - 1);
+	length = int_min(get_real_uri_length(uri), str_size - 1);
 
-	return safe_strncpy(str, here, url_len + 1);
+	return safe_strncpy(str, struri(uri), length + 1);
 }
 
 /*

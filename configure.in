@@ -23,6 +23,7 @@ dnl ===================================================================
 
 AC_PROG_CC
 AC_PROG_AWK
+AC_PATH_PROGS(AWK, "$AWK")
 AC_PROG_RANLIB
 
 dnl gcc specific options (to be continued at the bottom of configure)
@@ -1070,6 +1071,7 @@ AC_OUTPUT([ \
  contrib/Makefile \
  contrib/elinks.spec \
  contrib/lua/hooks.lua \
+ contrib/conv/w3m2links.awk \
  debian/Makefile \
  doc/Makefile \
  doc/man/Makefile \

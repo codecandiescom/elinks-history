@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.321 2004/06/30 00:47:40 jonas Exp $ */
+/* $Id: tables.c,v 1.322 2004/06/30 01:07:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,8 +92,8 @@ format_cell(struct table *table, int col, int row,
 	}
 
 	return format_html_part(cell->start, cell->end, cell->align,
-	                        table->cellpadding, width, document, x, y,
-	                        NULL, cell->link_num);
+				table->cellpadding, width, document, x, y,
+				NULL, cell->link_num);
 }
 
 static inline void
@@ -109,7 +109,7 @@ get_cell_width(unsigned char *start, unsigned char *end,
 	if (new_link_num) *new_link_num = link_num;
 
 	part = format_html_part(start, end, ALIGN_LEFT, cellpadding, width, NULL,
-			        !!a, !!a, NULL, link_num);
+				!!a, !!a, NULL, link_num);
 	if (!part) return;
 
 	if (min) *min = part->box.width;
@@ -261,7 +261,7 @@ get_column_widths(struct table *table)
 
 	if (!table->max_cols_widths) {
 		table->max_cols_widths = mem_calloc(table->cols, sizeof(int));
-	   	if (!table->max_cols_widths) {
+		if (!table->max_cols_widths) {
 			mem_free_set(&table->min_cols_widths, NULL);
 			return -1;
 		}
@@ -368,7 +368,7 @@ distribute_widths(struct table *table, int width)
 		return;
 
 	assertm(spare_width >= 0, "too small width %d, required %d",
-	        width, table->min_width);
+		width, table->min_width);
 
 	for (col = 0; col < table->cols; col++)
 		int_lower_bound(&max_cols_width, table->max_cols_widths[col]);
@@ -668,8 +668,8 @@ check_table_height(struct table *table, struct table_frames *frames, int y)
 
 	for (row = 0; row < table->rows; row++) {
 		our_height += table->rows_heights[row] +
-		              (row < table->rows - 1 &&
-		               has_hline_width(table, row + 1));
+			      (row < table->rows - 1 &&
+			       has_hline_width(table, row + 1));
 	}
 
 	assertm(old_height == our_height, "size not matching! %d vs %d",
@@ -712,8 +712,8 @@ get_table_heights(struct table *table)
 
 			for (sp = 0; sp < cell->colspan; sp++) {
 				width += table->cols_widths[col + sp] +
-				         (sp < cell->colspan - 1 &&
-				          has_vline_width(table, col + sp + 1));
+					 (sp < cell->colspan - 1 &&
+					  has_vline_width(table, col + sp + 1));
 			}
 
 			part = format_cell(table, col, row, NULL, 2, 2, width);
@@ -811,7 +811,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 		else if (cell->valign == VALIGN_BOTTOM)
 			tmpy += (height - cell->height);
 
-	   	part = format_cell(table, col, row, document, x, tmpy, width);
+		part = format_cell(table, col, row, document, x, tmpy, width);
 		if (part) {
 			int yt;
 
@@ -929,15 +929,15 @@ static inline void
 draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
- 	static unsigned char const hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
- 	int pos = H_FRAME_POSITION(table, col, row);
+	static unsigned char const hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
+	int pos = H_FRAME_POSITION(table, col, row);
 
- 	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
+	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->cols_widths[col] <= 0) return;
+	if (pos < 0 || table->cols_widths[col] <= 0) return;
 
- 	draw_frame_hchars(table->part, x, y, table->cols_widths[col], hltable[pos],
+	draw_frame_hchars(table->part, x, y, table->cols_widths[col], hltable[pos],
 			  bgcolor, fgcolor);
 }
 
@@ -945,15 +945,15 @@ static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
- 	static unsigned char const vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
- 	int pos = V_FRAME_POSITION(table, col, row);
+	static unsigned char const vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
+	int pos = V_FRAME_POSITION(table, col, row);
 
- 	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
+	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->rows_heights[row] <= 0) return;
+	if (pos < 0 || table->rows_heights[row] <= 0) return;
 
- 	draw_frame_vchars(table->part, x, y, table->rows_heights[row], vltable[pos],
+	draw_frame_vchars(table->part, x, y, table->rows_heights[row], vltable[pos],
 			  bgcolor, fgcolor);
 }
 
@@ -961,17 +961,17 @@ static void
 draw_table_frames(struct table *table, int x, int y)
 {
 	struct table_frames table_frames;
- 	signed char *frame[2];
-  	int col, row;
-  	int cx, cy;
-  	int fh_size = (table->cols + 2) * (table->rows + 1);
-  	int fv_size = (table->cols + 1) * (table->rows + 2);
+	signed char *frame[2];
+	int col, row;
+	int cx, cy;
+	int fh_size = (table->cols + 2) * (table->rows + 1);
+	int fv_size = (table->cols + 1) * (table->rows + 2);
 
- 	frame[0] = fmem_alloc(fh_size + fv_size);
- 	if (!frame[0]) return;
- 	memset(frame[0], -1, fh_size + fv_size);
+	frame[0] = fmem_alloc(fh_size + fv_size);
+	if (!frame[0]) return;
+	memset(frame[0], -1, fh_size + fv_size);
 
- 	frame[1] = &frame[0][fh_size];
+	frame[1] = &frame[0][fh_size];
 
 	if (table->rules == TABLE_RULE_NONE) goto cont2;
 
@@ -1076,6 +1076,9 @@ cont2:
 	fmem_free(frame[0]);
 }
 
+/* This in fact renders stuff like the <caption>-tag, but also other tags that
+ * confused the <table> parser. The formatting is done so that it has same
+ * alignment and width as the main table. */
 static void
 draw_table_bad_html(struct table *table, int x, int y)
 {

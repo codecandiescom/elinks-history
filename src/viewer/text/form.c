@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.220 2004/07/12 20:40:14 zas Exp $ */
+/* $Id: form.c,v 1.221 2004/07/12 20:48:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -718,6 +718,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 	foreach (sv, *l) {
 		add_boundary(data, boundary);
+		add_crlf_to_string(data);
 
 		/* FIXME: name is not encoded.
 		 * from RFC 1867:
@@ -729,22 +730,24 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 		 * where xxxxx is the field name corresponding to that field.
 		 * Field names originally in non-ASCII character sets may be
 		 * encoded using the method outlined in RFC 1522. */
-		add_to_string(data, "\r\nContent-Disposition: form-data; name=\"");
+		add_to_string(data, "Content-Disposition: form-data; name=\"");
 		add_to_string(data, sv->name);
+		add_char_to_string(data, '"');
+
 		if (sv->type == FC_FILE) {
 #define F_BUFLEN 1024
 			int fh, rd;
 			unsigned char buffer[F_BUFLEN];
 			unsigned char *extension;
 
-			add_to_string(data, "\"; filename=\"");
+			add_to_string(data, "; filename=\"");
 			add_to_string(data, get_filename_position(sv->value));
 			/* It sends bad data if the file name contains ", but
 			   Netscape does the same */
 			/* FIXME: We should follow RFCs 1522, 1867,
 			 * 2047 (updated by rfc 2231), to provide correct support
 			 * for non-ASCII and special characters in values. --Zas */
-			add_to_string(data, "\"");
+			add_to_string(data, "\"\r\n");
 
 			/* Add a Content-Type header if the type is configured */
 			extension = strrchr(sv->value, '.');
@@ -752,13 +755,14 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 				unsigned char *type = get_extension_content_type(extension);
 
 				if (type) {
-					add_to_string(data, "\r\nContent-Type: ");
+					add_to_string(data, "Content-Type: ");
 					add_to_string(data, type);
+					add_crlf_to_string(data);
 					mem_free(type);
 				}
 			}
 
-			add_to_string(data, "\r\n\r\n");
+			add_crlf_to_string(data);
 
 			if (*sv->value) {
 				unsigned char *filename;
@@ -784,7 +788,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			}
 #undef F_BUFLEN
 		} else {
-			add_to_string(data, "\"\r\n\r\n");
+			add_to_string(data, "\r\n\r\n");
 
 			/* Convert back to original encoding (see
 			 * html_form_control() for the original recoding). */
@@ -807,9 +811,10 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			}
 		}
 
-		add_to_string(data, "\r\n");
+		add_crlf_to_string(data);
 	}
 
+	/* End-boundary */
 	add_boundary(data, boundary);
 	add_to_string(data, "--\r\n");
 
@@ -894,7 +899,7 @@ encode_text_plain(struct list_head *l, struct string *data,
 			if (value != sv->value) mem_free(value);
 		}
 
-		add_to_string(data, "\r\n");
+		add_crlf_to_string(data);
 	}
 }
 

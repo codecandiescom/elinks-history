@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-01-08 22:57+0100\n"
-"PO-Revision-Date: 2004-01-08 23:02+0100\n"
+"PO-Revision-Date: 2004-01-11 23:16+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2084,7 +2084,6 @@ msgid "Document meta refresh"
 msgstr "Automatické obnovování dokumentù"
 
 #: src/config/options.inc:318
-#, fuzzy
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2096,7 +2095,10 @@ msgstr ""
 "Automaticky následovat obnovovací direktivy specifikované v dokumentu\n"
 "('<meta> refresh' tagy). Autoøi webových stránek pou¾ívají tento\n"
 "mechanismus k automatickému znovunahrání dokumentu v daném intervalu\n"
-"èi pro pøesmìrování na jinou stránku."
+"èi pro pøesmìrování na jinou stránku. Nezávisle na nastavení je cílová\n"
+"adresa k dispozici na zaèátku dokumentu i jako odkaz. Pokud chcete\n"
+"zdola omezit minimální interval pro obnovení dokumentu, hejbnìte tro¹ku\n"
+"s volbou document.browse.minimum_refresh_time."
 
 #: src/config/options.inc:325
 msgid "Document meta refresh minimum time"
@@ -3721,7 +3723,7 @@ msgstr ""
 
 #: src/config/options.inc:1223
 msgid "Show a message box when file is saved sucessfully"
-msgstr ""
+msgstr "Uka¾ dialogové okénko, pokud byl soubor úspì¹nì ulo¾en"
 
 #: src/config/options.inc:1225
 msgid ""
@@ -3729,6 +3731,8 @@ msgid ""
 "will make sure that a box confirming success of the operation will\n"
 "pop up."
 msgstr ""
+"Kdy¾ v nìjakém mana¾eru zmáèknete tlaèítko [ Ulo¾it ], tato volba\n"
+"zajistí, ¾e vám vyskoèí okénko, potvrzující úspì¹nost této operace."
 
 #: src/config/options.inc:1230
 msgid "Sessions"
@@ -3786,6 +3790,9 @@ msgid ""
 "Set to \"\" if the environment variable WWW_HOME should be used\n"
 "used as homepage URI instead."
 msgstr ""
+"Adresa stránky, která by se mìla nahrát automaticky po spu¹tìní\n"
+"ELinksu èi pøi vyvolání akce goto-url-home. Pokud je tato volba\n"
+"prázdná, pou¾ije se místo toho adresa v promìnné prostøedí $WWW_HOME."
 
 #: src/config/options.inc:1257
 msgid "Set window title"

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.76 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: dialogs.c,v 1.77 2005/01/02 14:11:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,29 @@
 
 INIT_LIST_HEAD(cookie_queries);
 
+static void
+add_cookie_info_to_string(struct string *string, struct cookie *cookie,
+			  struct terminal *term)
+{
+	add_format_to_string(string, "\n%s: %s", _("Name", term), cookie->name);
+	add_format_to_string(string, "\n%s: %s", _("Value", term), cookie->value);
+	add_format_to_string(string, "\n%s: %s", _("Domain", term), cookie->domain);
+	add_format_to_string(string, "\n%s: %s", _("Path", term), cookie->path);
+
+	if (!cookie->expires) {
+		add_format_to_string(string, "\n%s: ", _("Expires", term));
+		add_to_string(string, _("at quit time", term));
+#ifdef HAVE_STRFTIME
+	} else {
+		add_format_to_string(string, "\n%s: ", _("Expires", term));
+		add_date_to_string(string, get_opt_str("ui.date_format"), &cookie->expires);
+#endif
+	}
+
+	add_format_to_string(string, "\n%s: %s", _("Secure", term),
+			     _(cookie->secure ? N_("yes") : N_("no"), term));
+}
+
 /* TODO: Store cookie in data arg. --jonas*/
 void
 accept_cookie_dialog(struct session *ses, void *data)
@@ -43,30 +66,20 @@ accept_cookie_dialog(struct session *ses, void *data)
 
 	del_from_list(cookie);
 
-#ifdef HAVE_STRFTIME
-	if (cookie->expires) {
-		add_date_to_string(&string, get_opt_str("ui.date_format"), &cookie->expires);
-	} else
-#endif
-		add_to_string(&string, _("at quit time", ses->tab->term));
+	add_format_to_string(&string,
+		_("Do you want to accept a cookie from %s?", ses->tab->term),
+		cookie->server->host);
+
+	add_to_string(&string, "\n\n");
+
+	add_cookie_info_to_string(&string, cookie, ses->tab->term);
 
 	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 		N_("Accept cookie?"), ALIGN_LEFT,
-		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
-		"from %s?\n\n"
-		"Name: %s\n"
-		"Value: %s\n"
-		"Domain: %s\n"
-		"Expires: %s\n"
-		"Secure: %s\n"),
-		cookie->server->host, cookie->name, cookie->value,
-		cookie->domain, string.source,
-		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
+		string.source,
 		cookie, 2,
 		N_("Accept"), accept_cookie, B_ENTER,
 		N_("Reject"), free_cookie, B_ESC);
-
-	done_string(&string);
 }
 
 
@@ -134,20 +147,8 @@ get_cookie_info(struct listbox_item *item, struct terminal *term)
 	server = cookie->server;
 
 	add_format_to_string(&string, "%s: %s", _("Server", term), server->host);
-	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
-	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
-	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
-	add_format_to_string(&string, "\n%s: %s", _("Path", term), cookie->path);
 
-#ifdef HAVE_STRFTIME
-	if (cookie->expires) {
-		add_format_to_string(&string, "\n%s: ", _("Expires", term));
-		add_date_to_string(&string, get_opt_str("ui.date_format"), &cookie->expires);
-	}
-#endif
-
-	add_format_to_string(&string, "\n%s: %s", _("Secure", term),
-			     _(cookie->secure ? N_("yes") : N_("no"), term));
+	add_cookie_info_to_string(&string, cookie, term);
 
 	return string.source;
 }

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.81 2002/12/07 22:15:31 pasky Exp $ */
+/* $Id: http.c,v 1.82 2002/12/21 19:47:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ struct http_connection_info {
 static void uncompress_shutdown(struct connection *);
 
 
-static unsigned char *
+static inline unsigned char *
 subst_user_agent(unsigned char *fmt, unsigned char *version,
 		 unsigned char *sysname, unsigned char *termsize)
 {
@@ -140,7 +140,7 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 }
 
 
-static int
+static inline int
 get_http_code(unsigned char *head, int *code, int *version)
 {
 	/* \s* */
@@ -176,19 +176,19 @@ get_http_code(unsigned char *head, int *code, int *version)
 	return 0;
 }
 
-unsigned char *buggy_servers[] = {
-	"mod_czech/3.1.0",
-	"Purveyor",
-	"Netscape-Enterprise",
-	NULL
-};
 
-int
+static inline int
 check_http_server_bugs(unsigned char *url,
 		       struct http_connection_info *info,
 		       unsigned char *head)
 {
 	unsigned char *server, **s;
+	static unsigned char *buggy_servers[] = {
+		"mod_czech/3.1.0",
+		"Purveyor",
+		"Netscape-Enterprise",
+		NULL
+	};
 
 	if (!get_opt_int("protocol.http.bugs.allow_blacklist") || info->http10)
 		return 0;
@@ -239,7 +239,7 @@ http_end_request(struct connection *c, int state)
 	}
 }
 
-void http_send_header(struct connection *);
+static void http_send_header(struct connection *);
 
 void
 http_func(struct connection *c)
@@ -267,12 +267,12 @@ proxy_func(struct connection *c)
 	http_func(c);
 }
 
-void http_get_header(struct connection *);
+static void http_get_header(struct connection *);
 
 #define IS_PROXY_URL(x) (upcase((x)[0]) == 'P')
 #define GET_REAL_URL(x) (IS_PROXY_URL((x)) ? get_url_data((x)) : (x))
 
-void
+static void
 http_send_header(struct connection *c)
 {
 	static unsigned char *accept_charset = NULL;
@@ -429,7 +429,7 @@ http_send_header(struct connection *c)
 		case REFERER_TRUE:
 			if (c->prev_url && c->prev_url[0]) {
 				unsigned char *tmp_post = strchr(c->prev_url, POST_CHAR);
-				
+
 				if (tmp_post) tmp_post++;
 				add_to_str(&hdr, &l, "Referer: ");
 				add_url_to_http_str(&hdr, &l, c->prev_url, tmp_post);
@@ -638,21 +638,6 @@ http_send_header(struct connection *c)
 	setcstate(c, S_SENT);
 }
 
-int
-is_line_in_buffer(struct read_buffer *rb)
-{
-	int l;
-
-	for (l = 0; l < rb->len; l++) {
-		if (rb->data[l] == 10) return l + 1;
-		if (l < rb->len - 1 && rb->data[l] == 13
-		    && rb->data[l + 1] == 10)
-			return l + 2;
-		if (l == rb->len - 1 && rb->data[l] == 13) return 0;
-		if (rb->data[l] < ' ') return -1;
-	}
-	return 0;
-}
 
 /** @func	uncompress_data(struct connection *conn, unsigned char *data,
 		int len, int *dlen)
@@ -699,11 +684,11 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 
 	*new_len = 0; /* new_len must be zero if we would ever return NULL */
 
-	if (conn->stream_pipes[0] == -1) {
-		if (c_pipe(conn->stream_pipes) < 0) return NULL;
-		if (set_nonblocking_fd(conn->stream_pipes[0]) < 0) return NULL;
-		if (set_nonblocking_fd(conn->stream_pipes[1]) < 0) return NULL;
-	}
+	if (conn->stream_pipes[0] == -1
+	    && (c_pipe(conn->stream_pipes) < 0
+		|| set_nonblocking_fd(conn->stream_pipes[0]) < 0
+		|| set_nonblocking_fd(conn->stream_pipes[1]) < 0))
+		return NULL;
 
 	while (r == ret) {
 		if (!finishing) {
@@ -781,6 +766,22 @@ uncompress_shutdown(struct connection *conn)
 	if (conn->stream_pipes[1] >= 0)
 		close(conn->stream_pipes[1]);
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
+}
+
+static inline int
+is_line_in_buffer(struct read_buffer *rb)
+{
+	int l;
+
+	for (l = 0; l < rb->len; l++) {
+		if (rb->data[l] == 10) return l + 1;
+		if (l < rb->len - 1 && rb->data[l] == 13
+		    && rb->data[l + 1] == 10)
+			return l + 2;
+		if (l == rb->len - 1 && rb->data[l] == 13) return 0;
+		if (rb->data[l] < ' ') return -1;
+	}
+	return 0;
 }
 
 void
@@ -945,7 +946,7 @@ read_more:
 	setcstate(conn, S_TRANS);
 }
 
-int
+static inline int
 get_header(struct read_buffer *rb)
 {
 	int i;
@@ -966,7 +967,7 @@ get_header(struct read_buffer *rb)
 	return 0;
 }
 
-void
+static void
 http_got_header(struct connection *c, struct read_buffer *rb)
 {
 	int cf;
@@ -1242,7 +1243,7 @@ again:
 		if (!e->etag) e->etag = d;
 		else mem_free(d);
 	}
-	
+
 	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
 
 	d = parse_http_header(e->head, "Content-Type", NULL);
@@ -1273,7 +1274,7 @@ again:
 	read_http_data(c, rb);
 }
 
-void
+static void
 http_get_header(struct connection *conn)
 {
 	struct read_buffer *rb;

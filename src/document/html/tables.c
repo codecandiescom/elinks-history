@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.207 2004/06/25 13:32:13 zas Exp $ */
+/* $Id: tables.c,v 1.208 2004/06/25 13:34:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -874,12 +874,12 @@ static inline void
 get_cell_widths(struct table *table)
 {
 	int nl = table->part->link_num;
-	int i, j;
+	int col, row;
 
 	if (!global_doc_opts->table_order)
-		for (j = 0; j < table->y; j++)
-			for (i = 0; i < table->x; i++) {
-				struct table_cell *cell = CELL(table, i, j);
+		for (row = 0; row < table->y; row++)
+			for (col = 0; col < table->x; col++) {
+				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->start) continue;
 				cell->link_num = nl;
@@ -887,9 +887,9 @@ get_cell_widths(struct table *table)
 					       &cell->min_width, &cell->max_width, nl, &nl);
 			}
 	else
-		for (i = 0; i < table->x; i++)
-			for (j = 0; j < table->y; j++) {
-				struct table_cell *cell = CELL(table, i, j);
+		for (col = 0; col < table->x; col++)
+			for (row = 0; row < table->y; row++) {
+				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->start) continue;
 				cell->link_num = nl;

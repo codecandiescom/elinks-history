@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.12 2003/10/30 18:30:31 jonas Exp $ */
+/* $Id: document.c,v 1.13 2003/10/30 19:29:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,18 +182,22 @@ shrink_format_cache(int whole)
 	struct document *document;
 	int format_cache_size = get_opt_int("document.cache.format.size");
 
-	delete_unused_format_cache_entries();
+	foreach (document, format_cache) {
+		if (!whole) {
+			struct cache_entry *ce = NULL;
 
-	assertm(format_cache_entries >= 0, "format_cache_entries underflow");
-	if_assert_failed format_cache_entries = 0;
+			/* If we are not purging the whole format cache delete
+			 * unreferenced documents or until we are below maximum
+			 * number of entries. */
+			if (document->refcount
+			    || format_cache_entries <= format_cache_size)
+				continue;
 
-	document = format_cache.prev;
-	while ((whole || format_cache_entries > format_cache_size)
-	       && (void *)document != &format_cache) {
-
-		if (document->refcount) {
-			document = document->prev;
-			continue;
+			/* Keep unreferenced documents that are in sync with
+			 * the (resource) cache entry. */
+			if (find_in_cache(document->url, &ce)
+			    && ce && ce->id_tag == document->id_tag)
+				continue;
 		}
 
 		document = document->prev;
@@ -211,27 +215,6 @@ count_format_cache(void)
 	foreach (document, format_cache)
 		if (!document->refcount)
 			format_cache_entries++;
-}
-
-void
-delete_unused_format_cache_entries(void)
-{
-	struct document *document;
-
-	foreach (document, format_cache) {
-		if (!document->refcount) {
-			struct cache_entry *ce = NULL;
-
-			if (!find_in_cache(document->url, &ce) || !ce
-			    || ce->id_tag != document->id_tag) {
-				assertm(ce, "file %s disappeared from cache",
-					document->url);
-				document = document->prev;
-				done_document(document->next);
-				format_cache_entries--;
-			}
-		}
-	}
 }
 
 void

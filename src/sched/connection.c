@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.113 2003/10/30 17:01:41 pasky Exp $ */
+/* $Id: connection.c,v 1.114 2003/10/30 19:29:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 
 #include "config/options.h"
 #include "cache/cache.h"
-#include "document/html/renderer.h"
+#include "document/document.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
@@ -953,7 +953,7 @@ detach_connection(struct download *download, int pos)
 		/* No recovery path should be necessary...? */
 
 		/* Pre-clean cache. */
-		delete_unused_format_cache_entries();
+		shrink_format_cache(0);
 
 		if (total_pri != 1 || conn->cache->refcount) {
 			/* We're too important, or someone uses our cache

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.42 2004/04/27 13:48:08 zas Exp $ */
+/* $Id: smb.c,v 1.43 2004/04/27 14:11:58 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -194,12 +194,12 @@ end_smb_connection(struct connection *conn)
 		si->text[si->textlen++] = '\n';
 	si->text[si->textlen] = '\0';
 
-	if ((strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
-	     || strstr(si->text, "NT_STATUS_ACCESS_DENIED")
-	     || strstr(si->text, "ERRbadfile"))
-	    && conn->uri->datalen
+	if (conn->uri->datalen
 	    && conn->uri->data[conn->uri->datalen - 1] != '/'
-	    && conn->uri->data[conn->uri->datalen - 1] != '\\') {
+	    && conn->uri->data[conn->uri->datalen - 1] != '\\'
+	    && (strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
+		|| strstr(si->text, "NT_STATUS_ACCESS_DENIED")
+		|| strstr(si->text, "ERRbadfile"))) {
 		redirect_cache(conn->cached, "/", 1, 0);
 
 	} else {

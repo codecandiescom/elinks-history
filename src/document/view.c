@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.88 2002/10/18 19:39:46 pasky Exp $ */
+/* $Id: view.c,v 1.89 2002/11/12 10:39:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,6 +111,7 @@ clear_formatted(struct f_data *scr)
 		if (l->title) mem_free(l->title);
 		if (l->where_img) mem_free(l->where_img);
 		if (l->pos) mem_free(l->pos);
+		if (l->name) mem_free(l->name);
 	}
 	mem_free(scr->links);
 	for (y = 0; y < scr->y; y++) mem_free(scr->data[y].d);

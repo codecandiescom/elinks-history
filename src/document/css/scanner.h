@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.8 2004/01/18 16:25:44 jonas Exp $ */
+/* $Id: scanner.h,v 1.9 2004/01/18 16:27:50 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -42,10 +42,7 @@ struct css_token {
  * the scanner. */
 #define CSS_SCANNER_TOKENS 10
 
-/* The {struct css_scanner} describes the current state of the CSS scanner. The
- * scanner maintains a table of tokens in order to optimize the scanning a bit
- * and make it possible to look ahead at the next token. You should always use
- * the accessors for the scanner table defined below. */
+/* The {struct css_scanner} describes the current state of the CSS scanner. */
 struct css_scanner {
 	/* The very start of the scanned string */
 	unsigned char *string;
@@ -55,6 +52,10 @@ struct css_scanner {
 	 * it is because there are no more tokens in the string. */
 	int current, tokens;
 
+	/* The table continain already scanned tokens. It is maintained in
+	 * order to optimize the scanning a bit and make it possible to look
+	 * ahead at the next token. You should always use the accessors
+	 * (defined below) for getting tokens from the scanner. */
 	struct css_token table[CSS_SCANNER_TOKENS];
 };
 

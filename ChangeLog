@@ -1,10 +1,9 @@
-Tue Mar 16 15:38:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+Wed Mar 17 09:08:22 2004  Laurent Monin <zas@norz.org>:
 
-	* src/bfu/listbox.c:
+	* src/bfu/menu.c:
 
-	Only restore the previous listbox context when there are any boxes
-	and thus the restore sanity checking will run. Fixes bug 391 -
-	assertion failure when reopening download manager.  
+	A segfault occuring while navigating through main menu was fixed
+	(bug 394). It was a missing break statement.  
 
 Tue Mar 16 09:14:39 2004  Laurent Monin <zas@norz.org>:
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.39 2002/10/10 21:40:23 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.40 2002/10/17 20:26:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,6 +286,7 @@ make_keystroke(unsigned char **str, int *len, long key, long meta)
 static struct strtonum action_table[] = {
 	{ "none", ACT_NONE },
 	{ "add-bookmark", ACT_ADD_BOOKMARK },
+	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK},
 	{ "auto-complete", ACT_AUTO_COMPLETE },
 	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS },
 	{ "back", ACT_BACK },
@@ -535,7 +536,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_GOTO_URL_HOME, 'm' },
 	{ ACT_GOTO_URL_HOME, 'M' },
 	{ ACT_ADD_BOOKMARK, 'a' },
-	{ ACT_ADD_BOOKMARK, 'A' },
+	{ ACT_ADD_BOOKMARK_LINK, 'A' },
 	{ ACT_BOOKMARK_MANAGER, 's' },
 	{ ACT_BOOKMARK_MANAGER, 'S' },
 	{ ACT_HISTORY_MANAGER, 'h' },

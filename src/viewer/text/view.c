@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.412 2004/05/14 10:19:19 zas Exp $ */
+/* $Id: view.c,v 1.413 2004/05/24 01:43:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1037,10 +1037,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 			return;
 	}
 
-	if (!url || !strncasecmp(url, "MAP@", 4)) {
-		mem_free_if(url);
-		return;
-	}
+	if (!url) return;
 
 	ses->download_uri = get_uri(url, -1);
 	mem_free(url);

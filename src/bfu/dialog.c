@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.92 2003/11/10 17:06:54 jonas Exp $ */
+/* $Id: dialog.c,v 1.93 2003/11/10 22:31:15 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -480,8 +480,8 @@ draw_dialog(struct dialog_data *dlg_data, int width, int height)
 	dlg_data->width = int_min(term->width, width + 2 * DIALOG_LB);
 	dlg_data->height = int_min(term->height, height + 2 * DIALOG_TB);
 
-	dlg_data->x = (term->width - int_min(term->width, dlg_data->width)) / 2;
-	dlg_data->y = (term->height - int_min(term->height, dlg_data->height)) / 2;
+	dlg_data->x = (term->width - dlg_data->width) / 2;
+	dlg_data->y = (term->height - dlg_data->height) / 2;
 
 	draw_area(term, dlg_data->x, dlg_data->y,
 		  dlg_data->width, dlg_data->height, ' ', 0,

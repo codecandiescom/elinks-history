@@ -1,3 +1,10 @@
+Mon Jan  6 21:14:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Added support for application/xhtml+xml (just behave identically as
+	with text/html) per RFC 3236.  
+
 Sun Jan  5 16:48:10 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* po/POTFILES.in, po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po,

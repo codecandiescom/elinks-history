@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.62 2003/11/14 12:45:39 jonas Exp $ */
+/* $Id: uri.c,v 1.63 2003/11/14 14:38:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,7 +428,7 @@ insert_wd(unsigned char **up, unsigned char *cwd)
 #endif
 
 	cwdlen = strlen(cwd);
-	url = mem_alloc(strlen(*up) + cwdlen + 2);
+	url = mem_alloc(strlen(*up) + cwdlen + 2); /*XXX:zas: Post data copy. */
 	if (!url) return;
 
 	memcpy(url, *up, 7);
@@ -579,7 +579,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 
 	/* Ordinary parse */
 	if (parse_uri(&uri, url)) {
-		newurl = stracpy(url);
+		newurl = stracpy(url); /* XXX: Post data copy. */
 		if (newurl) {
 			insert_wd(&newurl, cwd);
 			translate_directories(newurl);
@@ -589,7 +589,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	}
 
 	/* Try to add slash to end */
-	if (strstr(url, "//") && (newurl = stracpy(url))) {
+	if (strstr(url, "//") && (newurl = stracpy(url))) { /* XXX: Post data copy. */
 		add_to_strn(&newurl, "/");
 		if (parse_uri(&uri, newurl)) {
 			insert_wd(&newurl, cwd);
@@ -666,7 +666,7 @@ http:				prefix = "http://";
 
 		newurl = stracpy(prefix);
 		if (!newurl) return NULL;
-		add_to_strn(&newurl, url);
+		add_to_strn(&newurl, url); /* XXX: Post data copy. */
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
 
 		if (parse_uri(&uri, newurl)) {
@@ -680,7 +680,7 @@ http:				prefix = "http://";
 		return NULL;
 	}
 
-	newurl = memacpy(url, ch - url + 1);
+	newurl = memacpy(url, ch - url + 1); /* XXX: Post data copy. */
 	if (!newurl) return NULL;
 
 	/* Try prefix:some.url -> prefix://some.url.. */

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.90 2004/09/24 12:43:36 pasky Exp $ */
+/* $Id: parse.c,v 1.91 2004/09/24 13:07:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -801,12 +801,6 @@ start_element(struct element_info *ei,
 		do_html_textarea(attr, html, eof, &html, part);
 		return html;
 	}
-#ifdef CONFIG_ECMASCRIPT
-	if (ei->func == html_script) {
-		if (!do_html_script(attr, html, eof, &html, part))
-			return html;
-	}
-#endif
 #ifdef CONFIG_CSS
 	if (ei->func == html_style && global_doc_opts->css_enable) {
 		css_parse_stylesheet(&html_context.css_styles,
@@ -843,6 +837,15 @@ start_element(struct element_info *ei,
 		html_top.options = attr;
 		html_top.linebreak = ei->linebreak;
 	}
+
+#ifdef CONFIG_ECMASCRIPT
+	/* We need to have own element in the stack, that's why we waited for
+	 * so long. */
+	if (ei->func == html_script) {
+		if (!do_html_script(attr, html, eof, &html, part))
+			return html;
+	}
+#endif
 
 #ifdef CONFIG_CSS
 	if (html_top.options && global_doc_opts->css_enable) {

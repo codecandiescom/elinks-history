@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.495 2004/09/24 12:54:51 pasky Exp $ */
+/* $Id: parser.c,v 1.496 2004/09/24 13:07:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -411,7 +411,6 @@ do_html_script(unsigned char *a, unsigned char *html, unsigned char *eof, unsign
 	 * CSS property display: none processing. */
 	/* TODO: Charsets for external scripts. */
 	unsigned char *type, *src;
-	unsigned char *element_end = NULL;
 
 	html_skip(a);
 	
@@ -466,10 +465,10 @@ not_processed:
 
 		if (**end != '<')
 			continue;
-		/* We want to land before the closing element now but skip it
-		 * before going back to the HTML parser. */
-		if (parse_element(*end, eof, &name, &namelen, NULL,
-		                  &element_end))
+		/* We want to land before the closing element, that's why we
+		 * don't pass @end also as the appropriate parse_element()
+		 * argument. */
+		if (parse_element(*end, eof, &name, &namelen, NULL, NULL))
 			continue;
 		if (strlcasecmp(name, namelen, "/script", 7))
 			continue;
@@ -487,8 +486,6 @@ not_processed:
 		add_to_string_list(&part->document->onload_snippets,
 		                   html, *end - html);
 	}
-	assert(element_end);
-	*end = element_end;
 	return 0;
 }
 #endif

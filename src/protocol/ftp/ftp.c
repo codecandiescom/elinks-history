@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.202 2005/03/11 23:35:43 zas Exp $ */
+/* $Id: ftp.c,v 1.203 2005/03/12 00:06:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,19 +586,69 @@ add_eprtcmd_to_string(struct string *string, struct sockaddr_in6 *addr)
 }
 #endif
 
+static int
+get_ftp_data_socket(struct connection *conn, struct string *command)
+{
+	struct ftp_connection_info *c_i = conn->info;
+#ifdef CONFIG_IPV6
+	struct sockaddr_in6 data_addr;
+#endif
+	unsigned char pc[6];
+
+#ifdef CONFIG_IPV6
+	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
+
+	if (!c_i->use_epsv && conn->protocol_family == 1) {
+		int data_sock;
+
+		memset(&data_addr, 0, sizeof(data_addr));
+		data_sock = get_pasv6_socket(conn, conn->socket.fd,
+		 	    (struct sockaddr_storage *) &data_addr);
+		if (data_sock < 0) return 0;
+
+		conn->data_socket.fd = data_sock;
+	}
+#endif
+
+	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
+
+	if (!c_i->use_pasv && conn->protocol_family != 1) {
+		int data_sock;
+
+		memset(pc, 0, sizeof(pc));
+		data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
+		if (data_sock < 0) return 0;
+
+		conn->data_socket.fd = data_sock;
+	}
+
+#ifdef CONFIG_IPV6
+	if (conn->protocol_family == 1)
+		if (c_i->use_epsv)
+			add_to_string(command, "EPSV");
+		else
+			add_eprtcmd_to_string(command, &data_addr);
+	else
+#endif
+		if (c_i->use_pasv)
+			add_to_string(command, "PASV");
+		else
+			add_portcmd_to_string(command, pc);
+
+	add_crlf_to_string(command);
+
+	return 1;
+}
+
+
 /* Create passive socket and add appropriate announcing commands to str. Then
  * go and retrieve appropriate object from server.
  * Returns NULL if error. */
 static struct ftp_connection_info *
 add_file_cmd_to_str(struct connection *conn)
 {
-#ifdef CONFIG_IPV6
-	struct sockaddr_in6 data_addr;
-#endif
 	struct ftp_connection_info *c_i;
-	struct string command;
-	int data_sock;
-	unsigned char pc[6];
+	struct string command, ftp_data_command;
 
 	c_i = mem_calloc(1, sizeof(*c_i));
 	if (!c_i) {
@@ -613,36 +663,23 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 
-#ifdef CONFIG_IPV6
-	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
-
-	if (!c_i->use_epsv && conn->protocol_family == 1) {
-		memset(&data_addr, 0, sizeof(data_addr));
-		data_sock = get_pasv6_socket(conn, conn->socket.fd,
-		 	    (struct sockaddr_storage *) &data_addr);
-		if (data_sock < 0) {
-			INTERNAL("Failed to create IPv6 ftp data socket");
-			abort_conn_with_state(conn, S_INTERNAL);
-			return NULL;
-		}
-		conn->data_socket.fd = data_sock;
+	if (!init_string(&ftp_data_command)) {
+		done_string(&command);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
+		return NULL;
 	}
-#endif
 
-	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
-
-	if (!c_i->use_pasv && conn->protocol_family != 1) {
-		memset(pc, 0, sizeof(pc));
-		data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
-		if (data_sock < 0) {
-			INTERNAL("Failed to create IPv4 ftp data socket");
-			abort_conn_with_state(conn, S_INTERNAL);
-			return NULL;
-		}
-		conn->data_socket.fd = data_sock;
+	if (!get_ftp_data_socket(conn, &ftp_data_command)) {
+		done_string(&command);
+		done_string(&ftp_data_command);
+		INTERNAL("Ftp data socket failure");
+		abort_conn_with_state(conn, S_INTERNAL);
+		return NULL;
 	}
 
 	if (!conn->uri->data) {
+		done_string(&command);
+		done_string(&ftp_data_command);
 		INTERNAL("conn->uri->data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
 		return NULL;
@@ -659,20 +696,7 @@ add_file_cmd_to_str(struct connection *conn)
 		add_to_string(&command, "TYPE A");
 		add_crlf_to_string(&command);
 
-#ifdef CONFIG_IPV6
-		if (conn->protocol_family == 1)
-			if (c_i->use_epsv)
-				add_to_string(&command, "EPSV");
-			else
-				add_eprtcmd_to_string(&command, &data_addr);
-		else
-#endif
-			if (c_i->use_pasv)
-				add_to_string(&command, "PASV");
-			else
-				add_portcmd_to_string(&command, pc);
-
-		add_crlf_to_string(&command);
+		add_string_to_string(&command, &ftp_data_command);
 
 		add_to_string(&command, "CWD ");
 		add_uri_to_string(&command, conn->uri, URI_PATH);
@@ -693,20 +717,7 @@ add_file_cmd_to_str(struct connection *conn)
 		add_to_string(&command, "TYPE I");
 		add_crlf_to_string(&command);
 
-#ifdef CONFIG_IPV6
-		if (conn->protocol_family == 1)
-			if (c_i->use_epsv)
-				add_to_string(&command, "EPSV");
-			else
-				add_eprtcmd_to_string(&command, &data_addr);
-		else
-#endif
-			if (c_i->use_pasv)
-				add_to_string(&command, "PASV");
-			else
-				add_portcmd_to_string(&command, pc);
-
-		add_crlf_to_string(&command);
+		add_string_to_string(&command, &ftp_data_command);
 
 		if (conn->from || (conn->progress.start > 0)) {
 			add_to_string(&command, "REST ");
@@ -723,6 +734,8 @@ add_file_cmd_to_str(struct connection *conn)
 		add_uri_to_string(&command, conn->uri, URI_PATH);
 		add_crlf_to_string(&command);
 	}
+
+	done_string(&ftp_data_command);
 
 	c_i->opc = c_i->pending_commands;
 

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.53 2004/03/20 21:01:34 jonas Exp $ */
+/* $Id: user.c,v 1.54 2004/03/20 23:35:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,6 +79,7 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				break;
 			}
 			case 'h':
+			{
 				/* TODO	For some user protocols it would be
 				 *	better if substitution of each uri
 				 *	field was completely configurable. Now
@@ -88,16 +89,14 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				 *	protocol handling. */
 				/* It would break a lot of configurations so I
 				 * don't know. --jonas */
-				if (!string_is_empty(&uri->user) && uri->hostlen) {
-					int hostlen = uri->hoststr + uri->hostlen - uri->user.source;
+				unsigned char *host = get_uri_host(uri);
+				int hostlen = get_uri_host_length(uri, 0);
 
-					add_shell_safe_to_string(&string, uri->user.source,
+				if (host && hostlen)
+					add_shell_safe_to_string(&string, host,
 								 hostlen);
-				} else if (uri->hoststr) {
-					add_shell_safe_to_string(&string, uri->hoststr,
-								 uri->hostlen);
-				}
 				break;
+			}
 			case 'p':
 				if (uri->portlen)
 					add_shell_safe_to_string(&string, uri->port,

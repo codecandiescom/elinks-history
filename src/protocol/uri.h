@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.52 2004/03/20 21:01:34 jonas Exp $ */
+/* $Id: uri.h,v 1.53 2004/03/20 23:35:08 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -105,6 +105,22 @@ unsigned char *get_uri_string(struct uri *uri, enum uri_component components);
 /* Returns either the uri's port number if available or the protocol's
  * default port. It is zarro for user protocols. */
 int get_uri_port(struct uri *uri);
+
+/* Functions for extracting the host parts of an URI. */
+static inline unsigned char *
+get_uri_host(struct uri *uri)
+{
+	return string_is_empty(&uri->user)
+		? uri->hoststr : uri->user.source;
+}
+
+static inline int
+get_uri_host_length(struct uri *uri, enum uri_component components)
+{
+	return ((components & URI_PORT) && uri->port)
+		? uri->port + uri->portlen - get_uri_host(uri)
+		: uri->hoststr + uri->hostlen - get_uri_host(uri);
+}
 
 
 void encode_uri_string(struct string *, unsigned char *);

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.89 2003/11/09 15:19:37 jonas Exp $ */
+/* $Id: dialog.c,v 1.90 2003/11/10 00:15:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,6 +398,16 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 
 		case WIDGET_TEXT:
 			dlg_format_text(term, wdata, x, y, w, rw);
+			break;
+
+		case WIDGET_CHECKBOX:
+			dlg_format_checkbox(term, wdata, x, y, w, rw, AL_LEFT);
+			/* No horizontal space between checkboxes belonging to
+			 * the same group. */
+			if (widgets > 1
+			    && wdata[1].widget->type == WIDGET_CHECKBOX
+			    && wdata[1].widget->info.checkbox.gid == wdata->widget->info.checkbox.gid)
+				(*y)--;
 			break;
 
 		/* We assume that the buttons are all stuffed at the very end

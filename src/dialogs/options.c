@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.117 2003/11/09 13:44:27 pasky Exp $ */
+/* $Id: options.c,v 1.118 2003/11/10 00:15:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,37 +121,6 @@ terminal_options_save(struct dialog_data *dlg_data,
         return 0;
 }
 
-/* Stolen checkbox_list_fn(). Code duplication forever. */
-static void
-terminal_options_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = 0;
-
-	dlg_format_checkboxes(NULL, dlg_data->widgets_data, dlg_data->n - 3, 0, &y, w,
-			      &rw);
-
-	y++;
-	dlg_format_buttons(NULL, dlg_data->widgets_data + dlg_data->n - 3, 3, 0, &y, w,
-			   &rw, AL_CENTER);
-
-	w = rw;
-
-	draw_dialog(dlg_data, w, y);
-
-	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, dlg_data->widgets_data, dlg_data->n - 3,
-			      dlg_data->x + DIALOG_LB, &y, w, NULL);
-
-
-	y++;
-	dlg_format_buttons(term, dlg_data->widgets_data + dlg_data->n - 3, 3,
-			   dlg_data->x + DIALOG_LB, &y, w, &rw,
-			   AL_CENTER);
-}
-
 #ifdef USE_256_COLORS
 #define TERMOPT_WIDGETS_COUNT 16
 #else
@@ -184,7 +153,8 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
 	dlg->title = _("Terminal options", term);
-	dlg->layouter = terminal_options_layouter;
+	dlg->layouter = generic_dialog_layouter;
+	dlg->layout.padding_top = 1;
 	dlg->udata = termopt_hop;
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;

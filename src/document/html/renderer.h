@@ -1,14 +1,12 @@
-/* $Id: renderer.h,v 1.43 2003/10/18 16:55:52 jonas Exp $ */
+/* $Id: renderer.h,v 1.44 2003/10/23 21:43:29 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
 #include "intl/charsets.h"
-#include "document/options.h"
 #include "document/html/parser.h"
 #include "terminal/draw.h"
 #include "lowlevel/ttime.h"
-#include "sched/session.h"
 #include "util/color.h"
 #include "util/lists.h"
 /* We need this included later, otherwise it will miss some our
@@ -99,8 +97,6 @@ struct search {
 
 extern int format_cache_entries;
 
-#include "document/html/frames.h"
-
 
 long formatted_info(int);
 
@@ -109,7 +105,12 @@ void count_format_cache(void);
 void delete_unused_format_cache_entries(void);
 void format_cache_reactivate(struct document *);
 
+struct view_state;
+struct document_view;
+struct document_options;
 void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
+
+struct session;
 void html_interpret(struct session *);
 
 /* Interface with tables.c */

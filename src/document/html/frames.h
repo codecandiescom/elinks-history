@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.15 2003/10/17 11:12:48 zas Exp $ */
+/* $Id: frames.h,v 1.16 2003/10/23 21:43:29 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -83,7 +83,7 @@ struct document {
 	enum cp_status cp_status;
 };
 
-#include "viewer/text/vs.h"
+struct view_state;
 
 struct document_view {
 	LIST_HEAD(struct document_view);

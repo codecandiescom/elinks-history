@@ -1,17 +1,11 @@
-/* $Id: parser.h,v 1.33 2003/10/01 00:49:47 jonas Exp $ */
+/* $Id: parser.h,v 1.34 2003/10/23 21:43:29 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
 
-/* And this is stuff for session.h. */
-struct link;
-struct form_control;
-struct f_data;
-
 #include "bfu/dialog.h"
 #include "bfu/style.h"
-#include "document/html/renderer.h"
-#include "sched/session.h"
+#include "document/html/frames.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/memlist.h"
@@ -206,6 +200,8 @@ void html_stack_dup(void);
 void kill_html_stack_item(struct html_element *);
 unsigned char *skip_comment(unsigned char *, unsigned char *);
 
+struct menu_item;
+
 int get_image_map(unsigned char *, unsigned char *, unsigned char *, unsigned char *a, struct menu_item **, struct memory_list **, unsigned char *, unsigned char *, int, int, int);
 
 void scan_http_equiv(unsigned char *, unsigned char *, struct string *, struct string *);
@@ -232,6 +228,8 @@ enum html_special_type {
 
 
 void free_menu(struct menu_item *);
+
+struct session;
 void do_select_submenu(struct terminal *, struct menu_item *, struct session *);
 
 /* This releases the tags fastfind cache, if being in use. */

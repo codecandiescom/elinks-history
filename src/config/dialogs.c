@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.179 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: dialogs.c,v 1.180 2004/06/25 00:25:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,12 @@ delete_option_item(struct listbox_item *item, int last)
 
 	assert(!is_object_used(option));
 
-	mark_option_as_deleted(option);
+	/* Only built-in options needs to be marked as deleted, so if the
+	 * option is allocated call the cleaner. */
+	if (option->flags & OPT_ALLOC)
+		delete_option(option);
+	else
+		mark_option_as_deleted(option);
 }
 
 static struct listbox_ops options_listbox_ops = {

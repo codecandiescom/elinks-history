@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.116 2003/10/30 15:50:55 zas Exp $ */
+/* $Id: screen.c,v 1.117 2003/11/04 13:46:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -521,9 +521,8 @@ add_char256(struct string *screen, struct screen_driver *driver,
 	}
 
 	if ((attr_delta & SCREEN_ATTR_UNDERLINE) && driver->underline) {
-		register int pos = (ch->attr & SCREEN_ATTR_UNDERLINE);
-
-		add_term_string(screen, driver->underline[!!pos]);
+		state->underline = !!(ch->attr & SCREEN_ATTR_UNDERLINE);
+		add_term_string(screen, driver->underline[state->underline]);
 	}
 
 	add_char_data(screen, driver, ch->data, ch->attr & SCREEN_ATTR_FRAME);
@@ -555,7 +554,8 @@ add_char256(struct string *screen, struct screen_driver *driver,
 										\
 				/* Else if the color match and the data is
 				 * ``space''. */				\
-				if (pos->data <= ' ' && current->data <= ' ')	\
+				if (pos->data <= ' ' && current->data <= ' '	\
+				    && pos->attr == current->attr)		\
 					continue;				\
 			}							\
 										\

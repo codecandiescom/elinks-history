@@ -100,6 +100,9 @@ Dakshinamurthy Karra <kd@blr.vsnl.net.in>
 <darix@irssi.org>
 	RPM elinks.spec updates
 
+David A. Capello <dacap@users.sourceforge.net>
+	Made Document info message box scrollable
+
 David D. Kilzer <ddkilzer@lubricants-oil.com>
 	Part of -no-home support
 	Support for -eval option
@@ -479,4 +482,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.155 2004/01/03 01:11:31 pasky Exp $
+$Id: AUTHORS,v 1.156 2004/01/17 14:09:39 pasky Exp $

@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.73 2004/01/15 22:51:52 pasky Exp $ */
+/* $Id: document.c,v 1.74 2004/01/17 14:09:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,7 @@ loc_msg(struct terminal *term, struct location *location,
 #endif
 	}
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
+	msg_box(term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
 		N_("Info"), AL_LEFT,
 		msg.source,
 		NULL, 1,

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.118 2003/07/01 21:24:04 zas Exp $ */
+/* $Id: view.c,v 1.119 2003/07/01 21:36:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -854,7 +854,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			if (l->n < 2) break;
 			x = l->pos[1].x + xp - vx;
 			y = l->pos[1].y + yp - vy;
-			if (x >= xp && y >= yp && x < xp+xw && y < yp+yw)
+			if (x >= xp && y >= yp && x < xp + xw && y < yp + yw)
 				set_only_char(t, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
@@ -868,7 +868,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			for (i = 0; i < l->n; i++) {
 				x = l->pos[i].x + xp - vx;
 				y = l->pos[i].y + yp - vy;
-				if (x >= xp && y >= yp && x < xp+xw && y < yp+yw)
+				if (x >= xp && y >= yp && x < xp + xw && y < yp + yw)
 					set_only_char(t, x, y, i < sl ? s[i] : '_');
 			}
 			break;
@@ -877,6 +877,8 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 		case FC_RESET:
 		case FC_HIDDEN:
 			break;
+		default:
+			internal("Unknown form field type.");
 	}
 }
 

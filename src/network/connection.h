@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.74 2004/08/19 14:11:24 jonas Exp $ */
+/* $Id: connection.h,v 1.75 2004/08/23 17:04:40 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -89,10 +89,6 @@ enum connection_state {
 	S_NO_SSL		= -10401,
 
 	S_NO_JAVASCRIPT		= -10500,
-
-	S_NO_FINGER		= -10600,
-
-	S_NO_SMB		= -10700,
 
 	S_NNTP_ERROR		= -10800,
 	S_NNTP_NEWS_SERVER	= -10801,

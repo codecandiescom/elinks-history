@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.58 2003/07/31 15:40:14 zas Exp $ */
+/* $Id: tables.c,v 1.59 2003/08/01 12:32:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -978,8 +978,7 @@ get_column_widths(struct table *t)
 				for (k = 0; k < s; k++) {
 					int tmp = i + k;
 
-					if (t->min_c[tmp] > t->max_c[tmp])
-						t->max_c[tmp] = t->min_c[tmp];
+					t->max_c[tmp] = int_max(t->max_c[tmp], t->min_c[tmp]);
 				}
 
 			} else if (c->colspan > s && c->colspan < ns) {
@@ -1044,8 +1043,7 @@ distribute_widths(struct table *t, int width)
 	assertm(d >= 0, "too small width %d, required %d", width, t->min_t);
 
 	for (i = 0; i < t->x; i++)
-		if (t->max_c[i] > mmax_c)
-			mmax_c = t->max_c[i];
+		mmax_c = int_max(mmax_c, t->max_c[i]);
 
 	tx_size = t->x * sizeof(int);
 	memcpy(t->w_c, t->min_c, tx_size);
@@ -1213,8 +1211,7 @@ check_table_widths(struct table *t)
 		get_cell_width(c->start, c->end, t->cellpd, p, 1, &c->x_width,
 			       NULL, c->link_num, NULL);
 
-		if (c->x_width > p)
-			c->x_width = p;
+		int_upper_bound(&c->x_width, p);
 	}
 
 	s = 1;
@@ -1674,11 +1671,11 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	if (border) {
-		if (border > 2) border = 2;
+		int_upper_bound(&border, 2);
 
 		cellsp = get_num(attr, "cellspacing");
-		if (cellsp < 1) cellsp = 1;
-		else if (cellsp > 2) cellsp = 2;
+		int_lower_bound(&cellsp, 1);
+		int_upper_bound(&cellsp, 2);
 
 		frame = F_BOX;
 		al = get_attr_val(attr, "frame");
@@ -1780,16 +1777,11 @@ again:
 
 	margins = par_format.leftmargin + par_format.rightmargin;
 	if (!p->document && !p->xp) {
-		int tmp;
+		if (!wf) int_upper_bound(&t->max_t, width);
+		int_lower_bound(&t->max_t, t->min_t);
 
-		if (!wf && t->max_t > width) t->max_t = width;
-		if (t->max_t < t->min_t) t->max_t = t->min_t;
-
-		tmp = t->max_t + margins;
-		if (tmp > p->xmax) p->xmax = tmp;
-
-		tmp = t->min_t + margins;
-		if (tmp > p->x) p->x = tmp;
+		p->xmax = int_max(p->xmax, t->max_t + margins);
+		p->x = int_max(p->x, t->min_t + margins);
 
 		goto ret2;
 	}
@@ -1817,9 +1809,9 @@ again:
 	if (!p->document && p->xp == 1) {
 		int ww = t->rw + margins;
 
-		if (ww > par_format.width) ww = par_format.width;
-		if (ww < t->rw) ww = t->rw;
-		if (ww > p->x) p->x = ww;
+		int_upper_bound(&ww, par_format.width);
+		int_lower_bound(&ww, t->rw);
+		p->x = int_max(p->x, ww);
 		p->cy += t->rh;
 
 		goto ret2;
@@ -1847,9 +1839,7 @@ again:
 	get_table_heights(t);
 
 	if (!p->document) {
-		int ww = t->rw + margins;
-
-		if (ww > p->x) p->x = ww;
+		p->x = int_max(p->x, t->rw + margins);
 		p->cy += t->rh;
 		goto ret2;
 	}
@@ -1876,7 +1866,7 @@ again:
 
 ret2:
 	p->link_num = t->link_num;
-	if (p->cy > p->y) p->y = p->cy;
+	p->y = int_max(p->y, p->cy);
 	free_table(t);
 	kill_html_stack_item(&html_top);
 

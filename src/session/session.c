@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.217 2003/11/12 00:16:05 jonas Exp $ */
+/* $Id: session.c,v 1.218 2003/11/12 00:21:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1440,11 +1440,14 @@ reload(struct session *ses, enum cache_mode cache_mode)
 {
 	abort_loading(ses, 0);
 
-	if (cache_mode == CACHE_MODE_INCREMENT)
-		cache_mode = ++ses->reloadlevel;
-	else
+	if (cache_mode == CACHE_MODE_INCREMENT) {
+		cache_mode = CACHE_MODE_NEVER;
+		if (ses->reloadlevel < CACHE_MODE_NEVER)
+			cache_mode = ++ses->reloadlevel;
+	} else {
 		ses->reloadlevel = cache_mode;
-
+	}
+	
 	if (have_location(ses)) {
 		struct location *l = cur_loc(ses);
 		struct file_to_load *ftl;

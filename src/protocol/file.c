@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.58 2003/06/22 17:24:11 jonas Exp $ */
+/* $Id: file.c,v 1.59 2003/06/22 17:32:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -648,6 +648,7 @@ file_func(struct connection *c)
 				abort_conn_with_state(c, S_OUT_OF_MEM);
 				return;
 			}
+			fragment = tmp;
 		}
 
 		close_encoded(stream);

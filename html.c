@@ -1178,6 +1178,7 @@ void html_input(unsigned char *a)
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (fc->type == FC_CHECKBOX && !fc->default_value) fc->default_value = stracpy("on");
 	if ((fc->size = get_num(a, "size")) == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
+	fc->size++;
 	if (fc->size > d_opt->xw) fc->size = d_opt->xw;
 	if ((fc->maxlength = get_num(a, "maxlength")) == -1) fc->maxlength = MAXINT;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");

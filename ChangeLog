@@ -1,3 +1,15 @@
+Sat Nov  6 13:48:13 2004  Laurent Monin <zas@norz.org>:
+
+	* doc/small.txt:
+
+	Small/static ELinks compilation guide was updated a bit.  
+
+Sat Nov  6 13:40:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/unix/unix.c:
+
+	Do not try to include gmp.h header file when --without-gpm is used.  
+
 Fri Nov  5 23:02:28 2004  Laurent Monin <zas@norz.org>:
 
 	* src/sched/download.c:

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.28 2003/11/17 10:56:55 pasky Exp $ */
+/* $Id: leds.c,v 1.29 2003/11/17 11:09:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ draw_leds(struct session *ses)
 
 /* Determine if leds redrawing if necessary. Returns non-zero if so. */
 static int
-sync_leds(void)
+sync_leds(struct session *ses)
 {
 	int resync = 0;
 	int i;
@@ -169,12 +169,9 @@ redraw_leds(void *xxx)
 	if (drawing) return;
 	drawing = 1;
 
-	if (!sync_leds()) {
-		drawing = 0;
-		return;
-	}
-
 	foreach (ses, sessions) {
+		if (!sync_leds(ses))
+			continue;
 		redraw_terminal(ses->tab->term);
 		draw_leds(ses);
 	}

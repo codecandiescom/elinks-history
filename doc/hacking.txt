@@ -410,7 +410,7 @@ func(int a, int b)
   on the next line:
 
 	/* <short one-line description> */
-	/* $Id: hacking.txt,v 1.12 2003/06/24 20:49:40 jonas Exp $ */
+	/* $Id: hacking.txt,v 1.13 2003/06/24 20:58:28 pasky Exp $ */
 
 - All the .h files MUST start by a CVS Id tag and then anti-reinclusion ifdef.
   The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
@@ -453,8 +453,15 @@ removing above still applies.
 
 Big patches are hard to review so if your feature involves a lot of changes
 please consider splitting it in appropriate bits. Appropriate could mean:
+
 - Keep trivial changes like indenting, renaming, fixing comments separate.
+
 - Keep movements of (bigger) code snippets separate from changes in them.
+
+Note that it makes no sense to separate patches ie. by directories. The
+important thing is to separate big changes to smaller ones and smaller ones,
+breaking it to the "thinnest" possible level where the change is still
+sufficiently self-contained.
 
 
 5, Advantages of --enable-debug configure option and why everybody concerned
@@ -482,4 +489,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.12 2003/06/24 20:49:40 jonas Exp $
+$Id: hacking.txt,v 1.13 2003/06/24 20:58:28 pasky Exp $

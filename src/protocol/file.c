@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.95 2003/06/25 10:15:57 jonas Exp $ */
+/* $Id: file.c,v 1.96 2003/06/25 10:27:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,8 +133,9 @@ stat_links(unsigned char **p, int *l, struct stat *stp)
 #ifdef FS_UNIX_HARDLINKS
 	unsigned char lnk[64];
 
-	if (!stp) add_to_str(p, l, "    ");
-	else {
+	if (!stp) {
+		add_to_str(p, l, "    ");
+	} else {
 		ulongcat(lnk, NULL, stp->st_nlink, 3, ' ');
 		add_to_str(p, l, lnk);
 		add_chr_to_str(p, l, ' ');
@@ -167,7 +168,8 @@ stat_user(unsigned char **p, int *l, struct stat *stp)
 	}
 
 	add_to_str(p, l, last_user);
-	for (i = strlen(last_user); i < 8; i++) add_chr_to_str(p, l, ' ');
+	for (i = strlen(last_user); i < 8; i++)
+		add_chr_to_str(p, l, ' ');
 	add_chr_to_str(p, l, ' ');
 #endif
 }
@@ -197,8 +199,8 @@ stat_group(unsigned char **p, int *l, struct stat *stp)
 	}
 
 	add_to_str(p, l, last_group);
-		;
-	for (i = strlen(last_group); i < 8; i++) add_chr_to_str(p, l, ' ');
+	for (i = strlen(last_group); i < 8; i++)
+		add_chr_to_str(p, l, ' ');
 	add_chr_to_str(p, l, ' ');
 #endif
 }
@@ -367,10 +369,12 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		/* Always show "..", always hide ".", others like ".x" are shown if
 		 * show_hidden_files = 1 */
 		if (entry->d_name[0] == '.') {
-			if (entry->d_name[1] == '\0') continue;
+			if (entry->d_name[1] == '\0')
+				continue;
 
-			if (!show_hidden_files &&
-			    entry->d_name[1] != '.' && entry->d_name[2] != '\0')
+			if (!show_hidden_files
+			    && entry->d_name[1] != '.'
+			    && entry->d_name[2] != '\0')
 				continue;
 		}
 
@@ -613,8 +617,8 @@ file_func(struct connection *connection)
 		int fd = open(filename, O_RDONLY | O_NOCTTY);
 		int saved_errno = errno;
 
-		if (fd == -1 &&
-		    get_opt_bool("protocol.file.try_encoding_extensions")) {
+		if (fd == -1
+		    && get_opt_bool("protocol.file.try_encoding_extensions")) {
 			encoding = try_encoding_extensions(filename, &fd);
 		} else if (fd != -1) {
 			encoding = guess_encoding(filename);

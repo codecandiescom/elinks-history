@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.134 2003/06/21 11:58:34 pasky Exp $ */
+/* $Id: http.c,v 1.135 2003/06/21 12:01:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -894,13 +894,13 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		goto read_more;
 	}
 
+	while (1) {
 		/* Chunked. Good luck! */
 		/* See RFC2616, section 3.6.1. Basically, it looks like:
 		 * 1234 ; a = b ; c = d\r\n
 		 * aklkjadslkfjalkfjlkajkljfdkljdsfkljdf*1234\r\n
 		 * 0\r\n
 		 * \r\n */
-next_chunk:
 		if (info->chunk_remaining == CHUNK_DATA_END) {
 			int l = is_line_in_buffer(rb);
 
@@ -918,7 +918,7 @@ next_chunk:
 					/* Empty line. */
 					goto thats_all_folks;
 				}
-				goto next_chunk;
+				continue;
 			}
 
 		} else if (info->chunk_remaining == CHUNK_SIZE) {
@@ -947,7 +947,7 @@ next_chunk:
 				info->chunk_remaining = n;
 				if (!info->chunk_remaining)
 					info->chunk_remaining = CHUNK_ZERO_SIZE;
-				goto next_chunk;
+				continue;
 			}
 
 		} else {
@@ -982,7 +982,7 @@ next_chunk:
 				 * and now we can happily finish reading this
 				 * stuff. */
 				info->chunk_remaining = CHUNK_DATA_END;
-				goto next_chunk;
+				continue;
 			}
 
 			if (!info->chunk_remaining && rb->len > 0) {
@@ -996,13 +996,14 @@ next_chunk:
 						abort_conn_with_state(conn, S_HTTP_ERROR);
 						return;
 					}
-					if (rb->len < 2) goto read_more;
+					if (rb->len < 2) break;
 					kill_buffer_data(rb, 2);
 				}
 				info->chunk_remaining = CHUNK_SIZE;
-				goto next_chunk;
+				continue;
 			}
 		}
+	}
 
 read_more:
 	read_from_socket(conn, conn->sock1, rb, read_http_data);

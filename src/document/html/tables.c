@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.231 2004/06/27 08:56:57 zas Exp $ */
+/* $Id: tables.c,v 1.232 2004/06/27 08:58:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1209,7 +1209,7 @@ distribute_widths(struct table *table, int width)
 		if (u) memset(u, 0, table->cols);
 		dd = d;
 
-a:
+again:
 		mss = 0;
 		mii = -1;
 		for (col = 0; col < table->cols; col++) if (widths[col]) {
@@ -1237,7 +1237,7 @@ a:
 			}
 			assertm(table->cols_widths[mii] >= q, "shrinking cell");
 			wq = 1;
-			if (d) goto a;
+			if (d) goto again;
 		} else if (!wq) om++;
 	}
 

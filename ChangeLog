@@ -1,3 +1,32 @@
+Tue Oct 12 15:23:26 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/protocol/Makefile.am, src/protocol/finger.c,
+	src/protocol/finger.h, src/protocol/protocol.c:
+
+	Use a separate directory for finger protocol, more coherent with
+	other protocols.  
+
+Tue Oct 12 14:36:36 2004  Laurent Monin <zas@norz.org>:
+
+	* features.conf:
+
+	Definition of FTP protocol was added, borrowed from wikipedia.  
+
+Tue Oct 12 14:26:47 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in, features.conf, src/config/options.inc,
+	src/protocol/Makefile.am, src/protocol/protocol.c,
+	src/protocol/ftp/ftp.c, src/protocol/ftp/ftp.h, src/sched/error.c:
+
+	Make ftp protocol a module, introducing --disable-ftp configure
+	option.  
+
+Tue Oct 12 07:52:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Fix memleak (@src was not always freed) introduced by bug 532 fix.  
+
 Mon Oct 11 18:14:56 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/parser.c:

@@ -1,0 +1,124 @@
+This is the ELusive project, sub-project of the ELinks project. Here, we aim
+to rewrite the ELinks HTML engine in a sane way ;-).
+
+The problem is, that now it's all very messy and chaotic. We randomly jump
+around over the document source, skipping various parts and interpreting
+others, etc etc.  This is ugly. We should ONCE pass thru the whole file and
+parse it (and don't mix parser and renderer in one file), store the syntactic
+tree and then walk thru it. Sure that it'll be a bit more tricky as we won't
+know the whole document source at once frequently, but this is doable.
+
+What we should support (remember that this engine is intended to be universal,
+at least the parser should be usable for graphics as well):
+
+* XML+DTD processing, complete set
+* XHTML 1.0, complete set
+* CSS2, complete set
+* XSLT, complete set
+* scripting hooks (for ECMAScript)
+
+What do we support:
+
+* nothing ;-)
+
+
+
+I imagine something like:
+
+struct element_attr {
+  char *name;
+  char *value; /* will be converted to other types when needed */
+  struct element_attr *next;
+}
+
+struct element {
+  enum element_type type;
+  struct element_attr *attr;
+
+  struct element *parent;
+  struct element *child;
+  struct element *next;
+}
+
+Then thing like:
+
+<html>
+  <head>
+    <title>foo</title>
+  </head>
+  <body>
+    <h1>hey</h1>
+    <p>hello <b>developer</b> of elinks, how would you like:
+      <ul>
+        <li> rewritten html parser
+        <li> pasky dead
+        <li> some pizza
+      </ul>
+      Please tell me at <a>pasky@ucw.cz</a>.
+    </p>
+  </body>
+</html>
+
+would be stored as:
+
+   parent     child
+NULL -> <html> --> <head> --> <title> -> TEXT
+         |          |          |          |
+         |   next   |          |         NULL
+         |          |          NULL
+         |         <body> --> <h1> ----> TEXT
+         |          |          |          |
+         |          |          |         NULL
+         |          |          |
+         |          |         <p> -----> TEXT
+         |          |          |          |
+         |          |          |         <b> ----> TEXT
+         |          |          |          |         |
+         |          |          |          |        NULL
+         |          |          |          |
+         |          |          |         TEXT
+         |          |          |          |
+         |          |          |         <ul> ---> <li> ---> TEXT
+         |          |          |          |         |         |
+         |          |          |          |         |        NULL
+         |          |          |          |         |
+         |          |          |          |        <li> ---> TEXT
+         |          |          |          |         |         |
+         |          |          |          |         |        NULL
+         |          |          |          |         |
+         |          |          |          |        <li> ---> TEXT
+         |          |          |          |         |         |
+         |          |          |          |         |        NULL
+         |          |          |          |         |
+         |          |          |          |        NULL
+         |          |          |          |
+         |          |          |         TEXT
+         |          |          |          |
+         |          |          |         <a> ----> TEXT
+         |          |          |          |         |
+         |          |          |          |        NULL
+         |          |          |          |
+         |          |          |         TEXT
+         |          |          |          |
+         |          |          |         NULL
+         |          |         NULL
+         |         NULL
+        NULL
+
+Cute, isn't it? :)
+
+Note that in practice I want to rework this a bit, moving part of the stuff
+from renderer to parser, where it rather belongs - only real document
+"elements" will be in the hiearchy tree, with all attributes near them,
+independent on the real tags (thus we'll also have renderer
+language-independent; hi, XML).
+
+Planned structure:
+
+parser  : it will construct a syntactic tree from the source
+layouter: it will create a page layout from the tree in some abstract
+          fashion
+          (??? - not sure about this, maybe we'll drop this layer)
+renderer: it will create some image of the layout
+[viewer : it will display the image of the layout - this one will live in
+          ELinks itself]

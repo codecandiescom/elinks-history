@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.116 2003/07/01 20:59:01 zas Exp $ */
+/* $Id: view.c,v 1.117 2003/07/01 21:06:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -774,7 +774,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	switch (frm->type) {
 		struct line_info *ln, *lnx;
 		unsigned char *s;
-		int sl;
+		int sl, ye;
 		register int i, x, y;
 
 		case FC_TEXT:
@@ -807,16 +807,20 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			break;
 		case FC_TEXTAREA:
 			if (!l->n) break;
-			x = l->pos[0].x + xp - vx; y = l->pos[0].y + yp - vy;
 			_area_cursor(frm, fs);
 			lnx = format_text(fs->value, frm->cols, !!frm->wrap);
 			if (!lnx) break;
 			ln = lnx;
 			sl = fs->vypos;
 			while (ln->st && sl) sl--, ln++;
-			for (; ln->st && y < l->pos[0].y + yp - vy + frm->rows; ln++, y++) {
+
+			x = l->pos[0].x + xp - vx;
+			y = l->pos[0].y + yp - vy;
+			ye = y + frm->rows;
+			for (; ln->st && y < ye; ln++, y++) {
 				for (i = 0; i < frm->cols; i++) {
-					if (x+i >= xp && y >= yp && x+i < xp+xw && y < yp+yw) {
+					if (x + i >= xp && y >= yp &&
+					    x + i < xp + xw && y < yp + yw) {
 						if (fs->value && i >= -fs->vpos
 						    && i + fs->vpos < ln->en - ln->st)
 							set_only_char(t, x+i, y, ln->st[i + fs->vpos]);
@@ -824,9 +828,10 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 					}
 				}
 			}
-			for (; y < l->pos[0].y + yp - vy + frm->rows; y++) {
+			for (; y < ye; y++) {
 				for (i = 0; i < frm->cols; i++) {
-					if (x+i >= xp && y >= yp && x+i < xp+xw && y < yp+yw)
+					if (x + i >= xp && y >= yp &&
+					    x + i < xp + xw && y < yp + yw)
 						set_only_char(t, x+i, y, '_');
 				}
 			}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.106 2004/09/28 14:13:40 pasky Exp $ */
+/* $Id: renderer.c,v 1.107 2004/09/28 22:40:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,6 +182,7 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	doc_view->name = name;
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
+	/* DBG("Rendering %s on doc_view %p [%s] while attaching it to %p", struri(vs->uri), doc_view, name, vs); */
 	assert(!vs->doc_view);
 	vs->doc_view = doc_view;
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.66 2003/12/03 07:23:28 miciah Exp $ */
+/* $Id: form.c,v 1.67 2003/12/21 00:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -973,6 +973,11 @@ field_op(struct session *ses, struct document_view *doc_view, struct link *l,
 						strlen(rest) + 1);
 				}
 				break;
+
+			case ACT_REDRAW:
+				redraw_terminal_cls(ses->tab->term);
+				return 0;
+
 			default:
 				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
 					int value_len = strlen(fs->value);

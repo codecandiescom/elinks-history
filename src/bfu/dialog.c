@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.115 2003/12/20 21:41:56 pasky Exp $ */
+/* $Id: dialog.c,v 1.116 2003/12/21 00:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,6 +290,10 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			    || action == ACT_UP || action == ACT_LEFT) {
 				cycle_widget_focus(dlg_data, -1);
 				break;
+			}
+
+			if (action == ACT_REDRAW) {
+				redraw_terminal_cls(win->term);
 			}
 
 			break;

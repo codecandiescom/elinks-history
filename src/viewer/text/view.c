@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.297 2003/12/20 16:59:03 pasky Exp $ */
+/* $Id: view.c,v 1.298 2003/12/21 00:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1171,6 +1171,9 @@ quit:
 				goto x;
 			case ACT_TAB_PREV:
 				switch_to_prev_tab(ses->tab->term);
+				goto x;
+			case ACT_REDRAW:
+				redraw_terminal_cls(ses->tab->term);
 				goto x;
 
 			default:

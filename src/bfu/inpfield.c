@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.104 2003/12/09 20:18:27 jonas Exp $ */
+/* $Id: inpfield.c,v 1.105 2003/12/21 00:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,6 +432,10 @@ kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 			do_tab_compl_unambiguous(term, &widget_data->info.field.history, win);
 			goto dsp_f;
+
+		case ACT_REDRAW:
+			redraw_terminal_cls(term);
+			return EVENT_PROCESSED;
 
 		default:
 			if (ev->x >= ' ' && ev->x < 0x100 && !ev->y) {

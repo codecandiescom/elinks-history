@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.115 2003/12/20 23:53:02 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.116 2003/12/21 00:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,6 +440,7 @@ static struct strtonum action_table[] = {
 	{ "previous-frame", ACT_PREVIOUS_FRAME, DACT(N_("Move to the previous frame")) },
 	{ "quit", ACT_QUIT, DACT(N_("Open a quit confirmation dialog box")) },
 	{ "really-quit", ACT_REALLY_QUIT, DACT(N_("Quit without confirmation")) },
+	{ "redraw", ACT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
 	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
@@ -704,6 +705,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'K',		 0,		ACT_COOKIE_MANAGER },
 	{ 'K',		 KBD_CTRL,	ACT_COOKIES_LOAD },
 	{ 'L',		 0,		ACT_LINK_MENU },
+	{ 'L',		 KBD_CTRL,	ACT_REDRAW },
 	{ 'N',		 0,		ACT_FIND_NEXT_BACK },
 	{ 'N',		 KBD_CTRL,	ACT_SCROLL_DOWN },
 	{ 'P',		 KBD_CTRL,	ACT_SCROLL_UP },
@@ -723,6 +725,7 @@ static struct default_kb default_main_keymap[] = {
 	{ 'h',		 0,		ACT_HISTORY_MANAGER },
 	{ 'k',		 0,		ACT_KEYBINDING_MANAGER },
 	{ 'l',		 0,		ACT_JUMP_TO_LINK },
+	{ 'l',		 KBD_CTRL,	ACT_REDRAW },
 	{ 'm',		 0,		ACT_MARK_SET },
 	{ 'n',		 0,		ACT_FIND_NEXT },
 	{ 'o',		 0,		ACT_OPTIONS_MANAGER },
@@ -765,12 +768,14 @@ static struct default_kb default_edit_keymap[] = {
 	{ 'E',		 KBD_CTRL,	ACT_END },
 	{ 'H',		 KBD_CTRL,	ACT_BACKSPACE },
 	{ 'K',		 KBD_CTRL,	ACT_KILL_TO_EOL },
+	{ 'L',		 KBD_CTRL,	ACT_REDRAW },
 	{ 'R',		 KBD_CTRL,	ACT_AUTO_COMPLETE_UNAMBIGUOUS },
 	{ 'T',		 KBD_CTRL,	ACT_EDIT },
 	{ 'U',		 KBD_CTRL,	ACT_KILL_TO_BOL },
 	{ 'V',		 KBD_CTRL,	ACT_PASTE_CLIPBOARD },
 	{ 'W',		 KBD_CTRL,	ACT_AUTO_COMPLETE },
 	{ 'X',		 KBD_CTRL,	ACT_CUT_CLIPBOARD },
+	{ 'l',		 KBD_CTRL,	ACT_REDRAW },
 	{ KBD_BS,	 0,		ACT_BACKSPACE },
 	{ KBD_DEL,	 0,		ACT_DELETE },
 	{ KBD_DOWN,	 0,		ACT_DOWN },
@@ -791,10 +796,12 @@ static struct default_kb default_menu_keymap[] = {
 	{ 'B',		 KBD_CTRL,	ACT_PAGE_UP },
 	{ 'E',		 KBD_CTRL,	ACT_END },
 	{ 'F',		 KBD_CTRL,	ACT_PAGE_DOWN },
+	{ 'L',		 KBD_CTRL,	ACT_REDRAW },
 	{ 'N',		 KBD_CTRL,	ACT_DOWN },
 	{ 'P',		 KBD_CTRL,	ACT_UP },
 	{ 'V',		 KBD_ALT,	ACT_PAGE_UP },
 	{ 'V',		 KBD_CTRL,	ACT_PAGE_DOWN },
+	{ 'l',		 KBD_CTRL,	ACT_REDRAW },
 	{ KBD_DEL,	 0,		ACT_DELETE },
 	{ KBD_DOWN,	 0,		ACT_DOWN },
 	{ KBD_END,	 0,		ACT_END },

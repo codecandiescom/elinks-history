@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.18 2003/07/28 16:43:03 zas Exp $ */
+/* $Id: kbd.c,v 1.19 2003/07/28 20:53:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -868,25 +868,15 @@ process_queue(struct itrm *itrm)
 		if (!ev.x) ev.x = -1;
 		ev.y = os2xtd[itrm->kqueue[1]].y;
 		el = 2;
-		/*printf("%02x - %02x %02x\n", (int)itrm->kqueue[1], ev.x, ev.y);*/
 		goto l1;
 	}
 	el = 1;
 	ev.x = itrm->kqueue[0];
 
 l2:
-#if 0
-	if (ev.x == 1) ev.x = KBD_HOME;
-	if (ev.x == 2) ev.x = KBD_PAGE_UP;
-	if (ev.x == 4) ev.x = KBD_DEL;
-	if (ev.x == 5) ev.x = KBD_END;
-	if (ev.x == 6) ev.x = KBD_PAGE_DOWN;
-#endif
-	if (ev.x == ASCII_BS) ev.x = KBD_BS;
 	if (ev.x == ASCII_TAB) ev.x = KBD_TAB;
-	if (ev.x == ASCII_LF) ev.x = KBD_ENTER, ev.y = KBD_CTRL;
-	if (ev.x == ASCII_CR) ev.x = KBD_ENTER;
-	if (ev.x == ASCII_DEL) ev.x = KBD_BS;
+	else if (ev.x == ASCII_BS || ev.x == ASCII_DEL) ev.x = KBD_BS;
+	else if (ev.x == ASCII_LF || ev.x == ASCII_CR) ev.x = KBD_ENTER;
 	if (ev.x < ' ') {
 		ev.x += 'A' - 1;
 		ev.y = KBD_CTRL;

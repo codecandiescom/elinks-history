@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.373 2003/10/25 15:15:08 pasky Exp $ */
+/* $Id: options.c,v 1.374 2003/10/25 15:19:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,7 +408,8 @@ delete_option_do(struct option *option, int recursive)
 	}
 
 	if (option->box_item) {
-		del_from_list(option->box_item);
+		if (option->next)
+			del_from_list(option->box_item);
 		mem_free(option->box_item);
 	}
 

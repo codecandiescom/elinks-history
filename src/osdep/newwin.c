@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.5 2004/04/15 15:25:39 jonas Exp $ */
+/* $Id: newwin.c,v 1.6 2004/04/15 15:28:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,11 +58,7 @@ open_in_new_screen(struct terminal *term, unsigned char *exe_name,
 	exec_new_elinks(term, DEFAULT_SCREEN_CMD, exe_name, param);
 }
 
-struct {
-	enum term_env_type env;
-	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
-	unsigned char *text;
-} oinw[] = {
+struct open_in_new oinw[] = {
 	{ENV_XWIN, open_in_new_xterm, N_("~Xterm")},
 	{ENV_TWIN, open_in_new_twterm, N_("T~wterm")},
 	{ENV_SCREEN, open_in_new_screen, N_("~Screen")},
@@ -93,8 +89,7 @@ get_open_in_new(struct terminal *term)
 		if (!(term->environment & oinw[i].env))
 			continue;
 
-		oin[noin].text = oinw[i].text;
-		oin[noin++].fn = oinw[i].fn;
+		memcpy(&oin[noin], &oinw[i], sizeof(struct open_in_new));
 	}
 
 	return oin;

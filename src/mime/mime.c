@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.5 2003/06/04 18:05:25 jonas Exp $ */
+/* $Id: mime.c,v 1.6 2003/06/04 19:26:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,9 +92,9 @@ get_content_type(unsigned char *head, unsigned char *url)
 /* Find program to handle mimetype. The @term is for getting info about X
  * capabilities. */
 struct mime_handler *
-get_mime_type_handler(struct terminal *term, unsigned char *type)
+get_mime_type_handler(struct terminal *term, unsigned char *content_type)
 {
 	int have_x = term ? term->environment & ENV_XWIN : 0;
 
-	return get_mime_handler_backends(type, have_x);
+	return get_mime_handler_backends(content_type, have_x);
 }

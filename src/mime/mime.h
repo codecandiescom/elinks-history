@@ -1,4 +1,4 @@
-/* $Id: mime.h,v 1.1 2003/05/06 17:24:40 jonas Exp $ */
+/* $Id: mime.h,v 1.2 2003/06/04 19:26:22 jonas Exp $ */
 
 #ifndef EL__MIME_MIME_H
 #define EL__MIME_MIME_H
@@ -22,12 +22,13 @@ struct mime_handler {
 void init_mime();
 void done_mime();
 
-/* Guess content type of the document. */
-unsigned char *get_content_type(unsigned char *head, unsigned char *uri);
+/* Guess content type of the document. Either from the (http) @header or
+ * using the @uri (extension). */
+unsigned char *get_content_type(unsigned char *header, unsigned char *uri);
 
 /* Find program to handle mimetype. The @term is for getting info about X
  * capabilities. */
 struct mime_handler *
-get_mime_type_handler(struct terminal *term, unsigned char *type);
+get_mime_type_handler(struct terminal *term, unsigned char *content_type);
 
 #endif

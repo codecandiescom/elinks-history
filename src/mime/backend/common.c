@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.5 2003/06/04 19:04:33 jonas Exp $ */
+/* $Id: common.c,v 1.6 2003/06/04 19:26:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ get_content_type_backends(unsigned char *uri)
 }
 
 struct mime_handler *
-get_mime_handler_backends(unsigned char *uri, int have_x)
+get_mime_handler_backends(unsigned char *ctype, int have_x)
 {
 	int backend_index = 0;
 
@@ -95,7 +95,7 @@ get_mime_handler_backends(unsigned char *uri, int have_x)
 		if (backend->get_mime_handler) {
 			struct mime_handler *handler;
 
-			handler = backend->get_mime_handler(uri, have_x);
+			handler = backend->get_mime_handler(ctype, have_x);
 			if (handler) return handler;
 		}
 	}

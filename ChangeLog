@@ -1,3 +1,259 @@
+Tue Oct 28 02:48:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre8 
+
+Tue Oct 28 02:47:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Tue Oct 28 02:46:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Tue Oct 28 02:44:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Sort ordinary options behind tree options, this time for real.  
+
+Tue Oct 28 01:42:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/conv.c:
+
+	Substitute shell-unsafe chars in string passed to shell by %<hex>
+	instead of just _. Idea by Felix von Leitner <felix-elinks@fefe.de>,
+	fixes bug 243.  
+
+Tue Oct 28 01:25:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/unix/unix.c:
+
+	Compilation fix.  
+
+Tue Oct 28 01:22:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/unix/unix.c:
+
+	Minor tidyup.  
+
+Tue Oct 28 01:21:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/kbd.c:
+
+	Call suspend_mouse() / resume_mouse() when suspending or recovering
+	from a suspend. This should maybe fix bug 55.  
+
+Tue Oct 28 01:18:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: osdep.c, osdep.h, os2/os2.c, unix/unix.c:
+
+	Introduced suspend_mouse() and resume_mouse() - for GPM driver they
+	suspend the mouse temporarily, or resume it from sleep respectively.  
+
+Tue Oct 28 00:36:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp.c:
+
+	Include osdep/osdep.h.  
+
+Tue Oct 28 00:35:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/signals.h:
+
+	Compilation fix, spotted by Jonas.  
+
+Tue Oct 28 00:34:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: beos/.cvsignore, beos/.vimrc, os2/.cvsignore,
+	os2/.vimrc, riscos/.cvsignore, riscos/.vimrc, unix/.cvsignore,
+	unix/.vimrc, win32/.cvsignore, win32/.vimrc:
+
+	Populated with fairies.  
+
+Tue Oct 28 00:28:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/newwin.c:
+
+	Oops, forgot to include newwin.h. Spotted by Jonas.  
+
+Tue Oct 28 00:27:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/Makefile.am:
+
+	There's no sysinfo subdir.  
+
+Tue Oct 28 00:27:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Don't generate Makefile for src/osdep/sysinfo/.  
+
+Tue Oct 28 00:23:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: system.h, beos/Makefile.am, beos/sysinfo.h,
+	os2/Makefile.am, os2/sysinfo.h, riscos/Makefile.am,
+	riscos/sysinfo.h, unix/Makefile.am, unix/sysinfo.h,
+	win32/Makefile.am, win32/sysinfo.h:
+
+	Moved sysinfo/*.h -> */sysinfo.h.  
+
+Tue Oct 28 00:20:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Generate osdep Makefiles.  
+
+Tue Oct 28 00:17:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, os2.c, os2.h, osdep.h, riscos.c,
+	riscos.h, unix.c, unix.h, win32.c, win32.h, os2/Makefile.am,
+	os2/os2.c, os2/os2.h, riscos/Makefile.am, riscos/riscos.c,
+	riscos/riscos.h, unix/Makefile.am, unix/unix.c, unix/unix.h,
+	win32/Makefile.am, win32/win32.c, win32/win32.h:
+
+	Moved system-specific files to their own directories.  
+
+Tue Oct 28 00:04:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, Makefile.am, beos/Makefile.am:
+
+	Build fix.  
+
+Tue Oct 28 00:00:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/newwin.h:
+
+	Compilation fix.  
+
+Mon Oct 27 23:58:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: modules/module.c, ssl/ssl.h:
+
+	Properly export the SSL module .. ok 'nough SSL fun from me. ;) 
+
+Mon Oct 27 23:58:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, main.c, bfu/inpfield.c, config/conf.c,
+	dialogs/menu.c, lowlevel/connect.c, lowlevel/dns.c,
+	lowlevel/interlink.c, protocol/file.c, protocol/user.c,
+	protocol/http/http.c, sched/download.c, terminal/kbd.c,
+	terminal/screen.c, terminal/terminal.c, viewer/dump/dump.c,
+	viewer/text/form.c, viewer/text/view.c:
+
+	Do not include osdep/osdep.h by default anymore.  
+
+Mon Oct 27 23:55:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	Revert bogus init_gnutls() cleanup.  
+
+Mon Oct 27 23:53:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: osdep.c, osdep.h:
+
+	Removed unused check_file_name().  
+
+Mon Oct 27 23:46:55 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: system.h, beos/beos.c, beos/overrides.c,
+	beos/overrides.h, beos/sysinfo.h:
+
+	Moved BeOS POSIX emulation from beos/beos.c and sysinfo/beos.h to
+	beos/overrides.*.  
+
+Mon Oct 27 23:45:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	Move PATH_MAX definition inside #ifdef HAVE_OPENSSL.  
+
+Mon Oct 27 23:43:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	init_gnutls(): Cleanup.  
+
+Mon Oct 27 23:42:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, beos.c, beos.h, osdep.h, beos/beos.c,
+	beos/beos.h:
+
+	osdep/beos.* -> osdep/beos/beos.*.  
+
+Mon Oct 27 23:40:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/: Makefile.am, beos.h, os2.h, osdep.h, riscos.h,
+	system.h, unix.h, win32.h, beos/beos.h, beos/sysinfo.h, os2/os2.h,
+	os2/sysinfo.h, riscos/riscos.h, riscos/sysinfo.h, unix/sysinfo.h,
+	unix/unix.h, win32/sysinfo.h, win32/win32.h:
+
+	Moved system-definition records (plus things which need to be
+	propagated to *everywhere*) from <system>.h to sysinfo/<system>.h.
+	The <system>.h includes will instead serve just as osdep.h (which
+	won't be globally included) backends. Do not delete the empty ones.  
+
+Mon Oct 27 23:38:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	Split up lifecycle functions into *_openssl() and *_gnutls() and
+	initialize via the submodules.  
+
+Mon Oct 27 23:30:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	Remove bitching comment. ;) 
+
+Mon Oct 27 23:27:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/ssl.c:
+
+	init_ssl_connection(): Cleanup.  
+
+Mon Oct 27 23:26:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/setup.h:
+
+	Updated comment about external commands.  
+
+Mon Oct 27 23:25:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, setup.h, intl/gettext/dcigettext.c,
+	mime/backend/default.c, mime/backend/mailcap.c, osdep/Makefile.am,
+	osdep/newwin.c, osdep/os_dep.c, osdep/os_dep.h, osdep/osdep.c,
+	osdep/osdep.h:
+
+	osdep/os_dep.* -> osdep/osdep.* - the inconsistencies were here for
+	too long and writing the underscore all the time can really get on
+	your nerves.  
+
+Mon Oct 27 23:22:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, osdep/Makefile.am, osdep/newwin.c,
+	osdep/newwin.h, osdep/os_dep.c, osdep/os_dep.h, osdep/osdep.c,
+	osdep/osdep.h, viewer/text/link.c, viewer/text/view.c:
+
+	Moved stuff related to new windows business from osdep/os_dep.* to
+	osdep/newwin.*.  
+
+Mon Oct 27 23:14:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ssl/: connect.c, ssl.c, ssl.h:
+
+	Partially reverted ssl_t localization - moved the defintion back to
+	ssl.h, but without the accompanied SSL library includes.  
+
 Mon Oct 27 23:09:28 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/ssl/ssl.c:

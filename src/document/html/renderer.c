@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.417 2004/02/10 17:17:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.418 2004/02/15 12:14:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -203,9 +203,9 @@ clear_hchars(struct part *part, int x, int y, int xl)
 /* Allocates the required chars on the given line and returns the char at
  * position (x, y) ready to be used as a template char.  */
 static inline struct screen_char *
-get_frame_char(struct part *part, int x, int y, unsigned char data)
+get_frame_char(struct part *part, int x, int y, unsigned char data, color_t bgcolor, color_t fgcolor)
 {
-	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
+	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, fgcolor);
 	struct screen_char *template;
 	static enum color_flags color_flags;
 	static enum color_mode color_mode;
@@ -232,9 +232,9 @@ get_frame_char(struct part *part, int x, int y, unsigned char data)
 }
 
 void
-draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data)
+draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data, color_t bgcolor, color_t fgcolor)
 {
-	struct screen_char *template = get_frame_char(part, x + xl - 1, y, data);
+	struct screen_char *template = get_frame_char(part, x + xl - 1, y, data, bgcolor, fgcolor);
 
 	assert(xl > 0);
 	if_assert_failed return;
@@ -248,9 +248,9 @@ draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 }
 
 void
-draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data)
+draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data, color_t bgcolor, color_t fgcolor)
 {
-	struct screen_char *template = get_frame_char(part, x, y, data);
+	struct screen_char *template = get_frame_char(part, x, y, data, bgcolor, fgcolor);
 
 	if (!template) return;
 

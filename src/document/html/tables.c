@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.139 2004/02/05 23:17:56 jonas Exp $ */
+/* $Id: tables.c,v 1.140 2004/02/15 12:14:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,6 +100,7 @@ struct table {
 	struct table_column *columns;
 	unsigned char *fragment_id;
 	color_t bgcolor;
+	color_t bordercolor;
 	int *min_c, *max_c;
 	int *columns_width;
 	int *xcols;
@@ -1483,7 +1484,7 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
-		 int i, int j)
+		 int i, int j, color_t bgcolor, color_t fgcolor)
 {
 	/* TODO: Use /BORDER._.* / macros ! --pasky */
 	static unsigned char border_chars[81] = {
@@ -1514,12 +1515,12 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	    +  9 * int_max(left,   0)
 	    + 27 * int_max(bottom, 0);
 
-	draw_frame_hchars(table->p, x, y, 1, border_chars[pos]);
+	draw_frame_hchars(table->p, x, y, 1, border_chars[pos], bgcolor, fgcolor);
 }
 
 static inline void
 draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
-		 int i, int j)
+		 int i, int j, color_t bgcolor, color_t fgcolor)
 {
  	static unsigned char hltable[] = { ' ', BORDER_SHLINE, BORDER_DHLINE };
  	int pos = H_FRAME_POSITION(table, i, j);
@@ -1529,12 +1530,12 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 
  	if (pos < 0 || table->columns_width[i] <= 0) return;
 
- 	draw_frame_hchars(table->p, x, y, table->columns_width[i], hltable[pos]);
+ 	draw_frame_hchars(table->p, x, y, table->columns_width[i], hltable[pos], bgcolor, fgcolor);
 }
 
 static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
-		 int i, int j)
+		 int i, int j, color_t bgcolor, color_t fgcolor)
 {
  	static unsigned char vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
  	int pos = V_FRAME_POSITION(table, i, j);
@@ -1544,7 +1545,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 
  	if (pos < 0 || table->rows_height[j] <= 0) return;
 
- 	draw_frame_vchars(table->p, x, y, table->rows_height[j], vltable[pos]);
+ 	draw_frame_vchars(table->p, x, y, table->rows_height[j], vltable[pos], bgcolor, fgcolor);
 }
 
 static void
@@ -1628,20 +1629,20 @@ cont2:
 					w = get_vline_width(t, i);
 
 				if (w >= 0) {
-					draw_frame_point(t, frame, cx, cy, i, j);
+					draw_frame_point(t, frame, cx, cy, i, j, par_format.bgcolor, t->bordercolor);
 					if (j < t->y)
-						draw_frame_vline(t, frame, cx, cy + 1, i, j);
+						draw_frame_vline(t, frame, cx, cy + 1, i, j, par_format.bgcolor, t->bordercolor);
 					cx++;
 				}
 
-				draw_frame_hline(t, frame, cx, cy, i, j);
+				draw_frame_hline(t, frame, cx, cy, i, j, par_format.bgcolor, t->bordercolor);
 				cx += t->columns_width[i];
 			}
 
 			if (fr) {
-				draw_frame_point(t, frame, cx, cy, i, j);
+				draw_frame_point(t, frame, cx, cy, i, j, par_format.bgcolor, t->bordercolor);
 				if (j < t->y)
-					draw_frame_vline(t, frame, cx, cy + 1, i, j);
+					draw_frame_vline(t, frame, cx, cy + 1, i, j, par_format.bgcolor, t->bordercolor);
 				cx++;
 			}
 
@@ -1652,7 +1653,7 @@ cont2:
 				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
 				    || (i == 0 && fl)
 				    || (i == t->x && fr)) {
-					draw_frame_vline(t, frame, cx, cy, i, j);
+					draw_frame_vline(t, frame, cx, cy, i, j, par_format.bgcolor, t->bordercolor);
 					cx++;
 				}
 				if (i < t->x) cx += t->columns_width[i];
@@ -1666,6 +1667,27 @@ cont2:
 	fmem_free(frame[0]);
 }
 
+static inline int
+get_bordercolor(unsigned char *a, color_t *rgb)
+{
+	unsigned char *at;
+	int r;
+
+	if (!use_document_fg_colors(global_doc_opts))
+		return -1;
+
+	at = get_attr_val(a, "bordercolor");
+	/* Try some other MSIE-specific attributes if any. */
+	if (!at) at = get_attr_val(a, "bordercolorlight");
+	if (!at) at = get_attr_val(a, "bordercolordark");
+	if (!at) return -1;
+
+	r = decode_color(at, strlen(at), rgb);
+	mem_free(at);
+
+	return r;
+}
+
 void
 format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	     unsigned char **end, void *f)
@@ -1677,6 +1699,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
+	color_t bordercolor = 0;
 	unsigned char *fragment_id;
 	int border, cellspacing, vcellpadding, cellpadding, align;
 	int frame, rules, width, wf;
@@ -1689,6 +1712,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	table_level++;
 	get_bgcolor(attr, &bgcolor);
+	get_bordercolor(attr, &bordercolor);
 
 	/* From http://www.w3.org/TR/html4/struct/tables.html#adef-border-TABLE
 	 * The following settings should be observed by user agents for
@@ -1795,6 +1819,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	t->p = p;
 	t->border = border;
+	t->bordercolor = bordercolor;
 	t->cellpadding = cellpadding;
 	t->vcellpadding = vcellpadding;
 	t->cellspacing = cellspacing;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.270 2004/01/07 15:23:16 jonas Exp $ */
+/* $Id: menu.c,v 1.271 2004/01/07 16:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,26 +57,6 @@ menu_url_shortcut(struct terminal *term, void *d, struct session *ses)
 	if (!u) return;
 	goto_url(ses, u);
 	mem_free(u);
-}
-
-static inline void
-menu_for_frame(struct terminal *term,
-	       void (*f)(struct session *, struct document_view *, int),
-	       struct session *ses)
-{
-	struct document_view *doc_view;
-
-	assert(ses && f);
-	if_assert_failed return;
-
-	if (!have_location(ses)) return;
-
-	doc_view = current_frame(ses);
-
-	assertm(doc_view, "document not formatted");
-	if_assert_failed return;
-
-	f(ses, doc_view, 0);
 }
 
 void
@@ -230,8 +210,7 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 	add_menu_action(&menu, N_("~Reload"), ACT_RELOAD);
 
 	if (ses->doc_view && document_has_frames(ses->doc_view->document))
-		add_to_menu(&menu, N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME,
-			    (menu_func) menu_for_frame, (void *)set_frame, 0);
+		add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_ZOOM_FRAME);
 
 	/* Keep tab related operations below this separator */
 	add_separator_to_menu(&menu);
@@ -365,11 +344,11 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 }
 
 static struct menu_item view_menu[] = {
-	INIT_MENU_ITEM(N_("~Search"), NULL, ACT_SEARCH, menu_for_frame, (void *)search_dlg, 0),
-	INIT_MENU_ITEM(N_("Search ~backward"), NULL, ACT_SEARCH_BACK, menu_for_frame, (void *)search_back_dlg, 0),
-	INIT_MENU_ITEM(N_("Find ~next"), NULL, ACT_FIND_NEXT, menu_for_frame, (void *)find_next, 0),
-	INIT_MENU_ITEM(N_("Find ~previous"), NULL, ACT_FIND_NEXT_BACK, menu_for_frame, (void *)find_next_back, 0),
-	INIT_MENU_ITEM(N_("T~ypeahead search"), NULL, ACT_SEARCH_TYPEAHEAD, menu_for_frame, (void *)search_typeahead, 0),
+	INIT_MENU_ACTION(N_("~Search"), ACT_SEARCH),
+	INIT_MENU_ACTION(N_("Search ~backward"), ACT_SEARCH_BACK),
+	INIT_MENU_ACTION(N_("Find ~next"), ACT_FIND_NEXT),
+	INIT_MENU_ACTION(N_("Find ~previous"), ACT_FIND_NEXT_BACK),
+	INIT_MENU_ACTION(N_("T~ypeahead search"), ACT_SEARCH_TYPEAHEAD),
 	BAR_MENU_ITEM,
 	INIT_MENU_ACTION(N_("Toggle ~html/plain"), ACT_TOGGLE_HTML_PLAIN),
 	INIT_MENU_ACTION(N_("Toggle i~mages"), ACT_TOGGLE_DISPLAY_IMAGES),
@@ -377,7 +356,7 @@ static struct menu_item view_menu[] = {
 	INIT_MENU_ACTION(N_("Toggle ~document colors"), ACT_TOGGLE_DOCUMENT_COLORS),
 	INIT_MENU_ACTION(N_("Document ~info"), ACT_DOCUMENT_INFO),
 	INIT_MENU_ACTION(N_("H~eader info"), ACT_HEADER_INFO),
-	INIT_MENU_ITEM(N_("Frame at ~full-screen"), NULL, ACT_ZOOM_FRAME, menu_for_frame, (void *)set_frame, 0),
+	INIT_MENU_ACTION(N_("Frame at ~full-screen"), ACT_ZOOM_FRAME),
 	BAR_MENU_ITEM,
 	INIT_MENU_ACTION(N_("Nex~t tab"), ACT_TAB_NEXT),
 	INIT_MENU_ACTION(N_("Pre~v tab"), ACT_TAB_PREV),

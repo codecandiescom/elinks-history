@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.9 2004/01/07 14:44:15 jonas Exp $ */
+/* $Id: action.c,v 1.10 2004/01/07 16:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "sched/event.h"
 #include "sched/session.h"
 #include "sched/task.h"
+#include "viewer/text/search.h"
 #include "viewer/text/view.h"
 
 
@@ -57,6 +58,25 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 	option->value.number = (number <= option->max) ? number : option->min;
 
 	draw_formatted(ses, 1);
+}
+
+static void
+do_frame_action(struct session *ses,
+	       void (*func)(struct session *, struct document_view *, int))
+{
+	struct document_view *doc_view;
+
+	assert(ses && func);
+	if_assert_failed return;
+
+	if (!have_location(ses)) return;
+
+	doc_view = current_frame(ses);
+
+	assertm(doc_view, "document not formatted");
+	if_assert_failed return;
+
+	func(ses, doc_view, 0);
 }
 
 
@@ -123,6 +143,14 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			download_manager(ses);
 			break;
 
+		case ACT_FIND_NEXT:
+			do_frame_action(ses, find_next);
+			break;
+
+		case ACT_FIND_NEXT_BACK:
+			do_frame_action(ses, find_next_back);
+			break;
+
 		case ACT_FORMHIST_MANAGER:
 #ifdef CONFIG_FORMHIST
 			formhist_manager(ses);
@@ -160,6 +188,7 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_WINDOW:
+			/* FIXME: Use do_frame_action(). --jonas */
 			if (!doc_view || doc_view->vs->current_link == -1) break;
 			open_in_new_window(ses->tab->term, send_open_in_new_window, ses);
 			break;
@@ -187,6 +216,18 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_RELOAD:
 			reload(ses, CACHE_MODE_INCREMENT);
+			break;
+
+		case ACT_SEARCH:
+			do_frame_action(ses, search_dlg);
+			break;
+
+		case ACT_SEARCH_BACK:
+			do_frame_action(ses, search_back_dlg);
+			break;
+
+		case ACT_SEARCH_TYPEAHEAD:
+			do_frame_action(ses, search_typeahead);
 			break;
 
 		case ACT_TAB_NEXT:
@@ -233,6 +274,10 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			go_unback(ses);
 			break;
 
+		case ACT_ZOOM_FRAME:
+			do_frame_action(ses, set_frame);
+			break;
+
 		case ACT_ABORT_CONNECTION:
 		case ACT_AUTO_COMPLETE:
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
@@ -253,8 +298,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_ENTER_RELOAD:
 		case ACT_EXPAND:
 		case ACT_FILE_MENU:
-		case ACT_FIND_NEXT:
-		case ACT_FIND_NEXT_BACK:
 		case ACT_FORGET_CREDENTIALS:
 		case ACT_GOTO_URL_CURRENT:
 		case ACT_GOTO_URL_CURRENT_LINK:
@@ -290,16 +333,12 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_SCROLL_LEFT:
 		case ACT_SCROLL_RIGHT:
 		case ACT_SCROLL_UP:
-		case ACT_SEARCH:
-		case ACT_SEARCH_BACK:
-		case ACT_SEARCH_TYPEAHEAD:
 		case ACT_SELECT:
 		case ACT_SHOW_TERM_OPTIONS:
 		case ACT_TAB_MENU:
 		case ACT_UNEXPAND:
 		case ACT_UP:
 		case ACT_VIEW_IMAGE:
-		case ACT_ZOOM_FRAME:
 		default:
 			if (verbose) {
 				INTERNAL("No action handling defined for '%s'.",

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.337 2004/01/07 14:44:15 jonas Exp $ */
+/* $Id: view.c,v 1.338 2004/01/07 16:29:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -713,15 +713,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
 			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 0); break;
 			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 1); break;
-			case ACT_SEARCH: search_dlg(ses, doc_view, 0); break;
-			case ACT_SEARCH_BACK: search_back_dlg(ses, doc_view, 0); break;
-			case ACT_SEARCH_TYPEAHEAD:
-				search_typeahead(ses, NULL, 1);
-				x = 1;
-				break;
-			case ACT_FIND_NEXT: find_next(ses, doc_view, 0); break;
-			case ACT_FIND_NEXT_BACK: find_next_back(ses, doc_view, 0); break;
-			case ACT_ZOOM_FRAME: set_frame(ses, doc_view, 0), x = 2; break;
 			case ACT_VIEW_IMAGE: send_image(ses->tab->term, NULL, ses); break;
 			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->tab->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->tab->term, NULL, ses); break;

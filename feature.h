@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.11 2004/01/01 01:49:23 pasky Exp $ */
+/* $Id: feature.h,v 1.12 2004/01/01 02:06:03 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -131,18 +131,19 @@
  * The goto dialog through which new URIs can be entered is an essential part
  * of browsing in ELinks. This feature makes the dialog more powerful by making
  * it possible to extend how entered text is handled through a set of rewrite
- * rules.
+ * rules (see protocol.rewrite options).
  *
  * There are two types of rules: simple and smart ones.
  *
  * Simple rewriting rules are basicly URI abbreviations, making it possible to
  * map a word to the full URI. They can also be used for hierarchic navigation
  * to ease moving from some nested directory to the parent directory or doing
- * other stuff with the current URI.
+ * other stuff with the current URI. For example, when you type 'gg' into the
+ * goto dialog, you will be materialized at Google's homepage.
  *
  * Smart rules can take arguments and therefore enable more advanced rewriting.
  * The arguments could be search words to google for or a lookup query for a
- * dictionary.
+ * dictionary. Eg. type 'gg:Petr Baudis king of ELinks cvs'.
  *
  * This feature is also available in a more powerful form in the Lua and Guile
  * extensions, so if you plan to or already use those, you won't miss anything

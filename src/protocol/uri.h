@@ -1,9 +1,8 @@
-/* $Id: uri.h,v 1.33 2003/07/25 19:22:29 pasky Exp $ */
+/* $Id: uri.h,v 1.34 2003/07/25 19:23:51 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
 
-#include "protocol/protocol.h"
 #include "util/string.h"
 
 #define POST_CHAR 1
@@ -25,7 +24,7 @@ struct uri {
 	unsigned char *string;
 
 	/* The internal type of protocol. Can _never_ be PROTOCOL_UNKNOWN. */
-	enum protocol protocol;
+	int protocol; /* enum protocol */
 
 	/* @protocollen should only be usable if @protocol is either
 	 * PROTOCOL_USER or an uri string should be composed. */

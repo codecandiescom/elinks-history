@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.466 2004/06/30 02:11:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.467 2004/06/30 05:33:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,8 +758,7 @@ align_line(struct part *part, int y, int last)
 
 	len = LEN(y);
 
-	if (!len || par_format.align == ALIGN_LEFT ||
-		    par_format.align == ALIGN_NONE)
+	if (!len || par_format.align == ALIGN_LEFT)
 		return;
 
 	if (par_format.align == ALIGN_JUSTIFY) {
@@ -1063,7 +1062,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	 * of a line trim whitespace. */
 	if (part->cx == -1) {
 		/* If we are not handling verbatim aligning trim whitespace. */
-		if  (par_format.align != ALIGN_NONE) {
+		if  (!html_is_preformatted()) {
 			while (charslen && *chars == ' ') {
 				chars++;
 				charslen--;
@@ -1123,7 +1122,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	part->cx += charslen;
 	renderer_context.nobreak = 0;
 
-	if (par_format.align != ALIGN_NONE) {
+	if (!html_is_preformatted()) {
 		while (part->cx > overlap(par_format)
 		       && part->cx > par_format.leftmargin) {
 			int x = split_line(part);
@@ -1140,7 +1139,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	int_lower_bound(&part->max_width, part->xa
 			+ par_format.leftmargin + par_format.rightmargin
 			- (chars[charslen - 1] == ' '
-			   && par_format.align != ALIGN_NONE));
+			   && !html_is_preformatted()));
 	return;
 
 }

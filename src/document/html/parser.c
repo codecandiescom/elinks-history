@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.469 2004/06/28 11:14:20 jonas Exp $ */
+/* $Id: parser.c,v 1.470 2004/06/30 05:33:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,7 +172,7 @@ void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
-	if (par_format.align == ALIGN_NONE) html_context.putsp = 0;
+	if (html_is_preformatted()) html_context.putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (html_context.putsp == 1) {
 		put_chars(f, " ", 1);
@@ -185,11 +185,11 @@ put_chrs(unsigned char *start, int len,
 	}
 	if (!len) {
 		html_context.putsp = -1;
-		if (par_format.align == ALIGN_NONE) html_context.putsp = 0;
+		if (html_is_preformatted()) html_context.putsp = 0;
 		return;
 	}
 	if (isspace(start[len - 1])) html_context.putsp = -1;
-	if (par_format.align == ALIGN_NONE) html_context.putsp = 0;
+	if (html_is_preformatted()) html_context.putsp = 0;
 	html_context.was_br = 0;
 	put_chars(f, start, len);
 	html_context.position += len;
@@ -491,9 +491,6 @@ html_h(int h, unsigned char *a,
 		case ALIGN_JUSTIFY:
 			par_format.leftmargin = par_format.rightmargin = h * 2;
 			break;
-		case ALIGN_NONE:
-			/* Silence compiler warnings */
-			break;
 	}
 }
 
@@ -537,7 +534,7 @@ html_h6(unsigned char *a)
 void
 html_pre(unsigned char *a)
 {
-	par_format.align = ALIGN_NONE;
+	format.attr |= AT_PREFORMATTED;
 	par_format.leftmargin = (par_format.leftmargin > 1);
 	par_format.rightmargin = 0;
 }

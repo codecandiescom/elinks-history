@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.31 2004/06/23 12:44:27 jonas Exp $ */
+/* $Id: internal.h,v 1.32 2004/06/30 05:33:56 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -90,6 +90,7 @@ struct html_context {
 #define par_format (((struct html_element *) html_context.stack.next)->parattr)
 #define html_top (*(struct html_element *) html_context.stack.next)
 
+#define html_is_preformatted() (format.attr & AT_PREFORMATTED)
 
 extern struct html_context html_context;
 

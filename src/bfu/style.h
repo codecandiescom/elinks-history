@@ -1,4 +1,4 @@
-/* $Id: style.h,v 1.5 2004/06/28 11:14:19 jonas Exp $ */
+/* $Id: style.h,v 1.6 2004/06/30 05:33:56 jonas Exp $ */
 
 #ifndef EL__BFU_STYLE_H
 #define EL__BFU_STYLE_H
@@ -11,7 +11,6 @@ enum format_align {
 	ALIGN_CENTER,
 	ALIGN_RIGHT,
 	ALIGN_JUSTIFY,
-	ALIGN_NONE,
 };
 
 /* Get the colors of the bfu element. If @color is 0 a style suitable for

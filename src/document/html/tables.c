@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.326 2004/06/30 03:00:32 jonas Exp $ */
+/* $Id: tables.c,v 1.327 2004/06/30 05:33:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,6 @@ get_table_indent(struct table *table)
 		break;
 
 	case ALIGN_LEFT:
-	case ALIGN_NONE:
 	case ALIGN_JUSTIFY:
 	default:
 		indent = par_format.leftmargin;

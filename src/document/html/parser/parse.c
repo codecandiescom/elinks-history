@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.73 2004/06/28 15:31:42 jonas Exp $ */
+/* $Id: parse.c,v 1.74 2004/06/30 05:33:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -595,7 +595,7 @@ main_loop:
 			noupdate = 0;
 		}
 
-		if (isspace(*html) && par_format.align != ALIGN_NONE) {
+		if (isspace(*html) && !html_is_preformatted()) {
 			unsigned char *h = html;
 
 			while (h < eof && isspace(*h))
@@ -632,7 +632,7 @@ put_sp:
 			put_chrs(" ", 1, html_context.put_chars_f, f);
 		}
 
-		if (par_format.align == ALIGN_NONE) {
+		if (html_is_preformatted()) {
 			html_context.putsp = 0;
 			if (*html == ASCII_TAB) {
 				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
@@ -662,7 +662,7 @@ next_break:
 				 * the entity handling done in the renderer,
 				 * since checking #13 value there would require
 				 * something along the lines of NBSP_CHAR or
-				 * checking for '\n's in ALIGN_NONE text. */
+				 * checking for '\n's in AT_PREFORMATTED text. */
 				/* See bug 52 and 387 for more info. */
 				int length = html - base_pos;
 				int newlines = 0;
@@ -716,7 +716,7 @@ element:
 		if (!endingtag && html_context.putsp == 1 && !html_top.invisible)
 			goto put_sp;
 		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
-		if (par_format.align != ALIGN_NONE && !endingtag && !html_context.putsp) {
+		if (!html_is_preformatted() && !endingtag && !html_context.putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
@@ -772,7 +772,7 @@ start_element(struct element_info *ei,
 		return html;
 	}
 
-	restore_format = (par_format.align == ALIGN_NONE);
+	restore_format = html_is_preformatted();
 	old_format = par_format;
 
 	if (ei->func == html_table && global_doc_opts->tables

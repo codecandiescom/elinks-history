@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.13 2003/12/04 09:27:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.14 2003/12/05 13:50:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,10 +79,13 @@ render_document(struct view_state *vs, struct document_view *document_view,
 	}
 
 	document_view->document = document;
-	document_view->width = document->options.width;
-	document_view->height = document->options.height;
 	document_view->x = document->options.x;
 	document_view->y = document->options.y;
+	document_view->width = document->options.width;
+	/* We allow the height to differ if the document do not use frames or
+	 * textareas. */
+	document_view->height = document->options.needs_height
+				? document->options.height : options->height;
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.31 2003/11/27 00:05:06 jonas Exp $ */
+/* $Id: options.h,v 1.32 2003/12/05 13:50:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -23,11 +23,11 @@ struct document_options {
 	color_t default_link;
 	color_t default_vlink;
 
-	/* The size of the window. */
-	/* This controls how wide tables can be rendered and so on thus also is
-	 * to blame for the extra memory consumption when resizing because all
-	 * documents has to be rerendered. */
-	int width, height;
+	/* The width of the window. */
+	/* This controls how wide tables can be rendered and so on. It is thus
+	 * also to blame for the extra memory consumption when resizing because
+	 * all documents has to be rerendered. */
+	int width;
 
 	/* Color model/optimizations */
 	enum color_flags color_flags;
@@ -62,6 +62,12 @@ struct document_options {
 	/* This is not compared at all since it doesn't make any difference
 	 * what position the document will fit into a frameset or so. */
 	int x, y;
+
+	/* The height of the window */
+	/* It is placed here because only documents containing textarea or
+	 * frames uses it and we only compare it if @needs_height is set. */
+	int height;
+	unsigned int needs_height:1;
 
 	/* Active link coloring */
 	/* This is mostly here to make use of this option cache so link

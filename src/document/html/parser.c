@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.289 2003/12/01 15:35:50 pasky Exp $ */
+/* $Id: parser.c,v 1.290 2003/12/05 13:50:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2241,6 +2241,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (rows <= 0) rows = 1;
 	if (rows > global_doc_opts->height) rows = global_doc_opts->height;
 	fc->rows = rows;
+	global_doc_opts->needs_height = 1;
 
 	wrap_attr = get_attr_val(attr, "wrap");
 	if (wrap_attr) {
@@ -2490,6 +2491,7 @@ html_frameset(unsigned char *a)
 	if (!html_top.frameset) {
 		width = global_doc_opts->width;
 		height = global_doc_opts->height;
+		global_doc_opts->needs_height = 1;
 	} else {
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;

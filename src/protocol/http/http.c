@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.248 2004/03/21 14:30:25 jonas Exp $ */
+/* $Id: http.c,v 1.249 2004/03/21 15:29:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,9 +318,9 @@ http_send_header(struct connection *conn)
 
 	/* Setup the real uri. */
 	if (IS_PROXY_URI(conn->uri)) {
-		assertm(conn->uri.datastr, "No proxy data");
+		assertm(!string_is_empty(&conn->uri.data), "No proxy data");
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri.datastr))
+		if (!parse_uri(uri, conn->uri.data.source))
 			uri = NULL;
 
 	} else {
@@ -379,9 +379,9 @@ http_send_header(struct connection *conn)
 		}
 	} else {
 		if (IS_PROXY_URI(conn->uri) && (uri->protocol == PROTOCOL_HTTPS) && conn->ssl) {
-			add_url_to_http_string(&header, uri->datastr);
+			add_url_to_http_string(&header, uri->data.source);
 		} else {
-			add_url_to_http_string(&header, conn->uri.datastr);
+			add_url_to_http_string(&header, conn->uri.data.source);
 		}
 	}
 
@@ -473,7 +473,7 @@ http_send_header(struct connection *conn)
 				add_char_to_string(&header, '/');
 
 			if (uri->datastr)
-				add_url_to_http_string(&header, uri->datastr);
+				add_url_to_http_string(&header, uri->data.source);
 
 			add_to_string(&header, "\r\n");
 			break;
@@ -1062,9 +1062,9 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	set_connection_timeout(conn);
 
 	/* Setup the real uri. */
-	if (IS_PROXY_URI(conn->uri) && conn->uri.datastr) {
+	if (IS_PROXY_URI(conn->uri) && !string_is_empty(&conn->uri.data)) {
 		uri = &real_uri;
-		if (!parse_uri(uri, conn->uri.datastr)) {
+		if (!parse_uri(uri, conn->uri.data.source)) {
 			abort_conn_with_state(conn, S_BAD_URL);
 			return;
 		}

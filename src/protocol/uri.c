@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.131 2004/04/05 01:17:20 jonas Exp $ */
+/* $Id: uri.c,v 1.132 2004/04/05 03:33:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,53 +607,66 @@ prx:
 	return n;
 }
 
+static inline void
+insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
+{
+	int urilen = strlen(*uri);
+	unsigned char *string = mem_realloc(*uri, urilen + seqlen + 1);
+
+	if (!string) return;
+
+	memmove(string + pos + seqlen, string + pos, urilen - pos + 1);
+	memcpy(string + pos, seq, seqlen);
+	*uri = string;
+}
 
 static unsigned char *
 translate_url(unsigned char *url, unsigned char *cwd)
 {
-	unsigned char *ch;
 	unsigned char *newurl;
 	struct uri uri;
+	enum uri_errno uri_errno, prev_errno = URI_ERRNO_EMPTY;
 
 	/* Strip starting spaces */
 	while (*url == ' ') url++;
+	if (!*url) return NULL;
 
-	/* XXX: Why?! */
-	if (!strncasecmp("proxy://", url, 8)) goto proxy;
+	newurl = stracpy(url); /* XXX: Post data copy. */
+	if (!newurl) return NULL;
 
+parse_uri:
 	/* Ordinary parse */
-	if (parse_uri(&uri, url) == URI_ERRNO_OK) {
-		newurl = stracpy(url); /* XXX: Post data copy. */
-		if (newurl) {
-			transform_file_url(&newurl, cwd);
-			translate_directories(newurl);
-		}
+	uri_errno = parse_uri(&uri, newurl);
 
-		return newurl;
-	}
-
-	/* Try to add slash to end */
-	if (strstr(url, "//") && (newurl = stracpy(url))) { /* XXX: Post data copy. */
-		add_to_strn(&newurl, "/");
-		if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
-			transform_file_url(&newurl, cwd);
-			translate_directories(newurl);
-
-			return newurl;
-		}
+	/* Bail out if the same error occurs twice */
+	if (uri_errno == prev_errno) {
 		mem_free(newurl);
+		return NULL;
 	}
 
-proxy:
-	/* No protocol name */
-	ch = url + strcspn(url, ".:/@");
-#ifdef IPV6
-	if (*ch != ':' || *url == '[' || url[strcspn(url, "/@")] == '@') {
-#else
-	if (*ch != ':' || url[strcspn(url, "/@")] == '@') {
-#endif
+	prev_errno = uri_errno;
+
+	switch (uri_errno) {
+	case URI_ERRNO_OK:
+		transform_file_url(&newurl, cwd);
+		translate_directories(newurl);
+		return newurl;
+
+	case URI_ERRNO_NO_SLASHES:
+		/* Try prefix:some.url -> prefix://some.url.. */
+		insert_in_uri(&newurl, uri.protocollen + 1, "//", 2);
+		goto parse_uri;
+
+	case URI_ERRNO_NO_HOST_SLASH:
+		add_to_strn(&newurl, "/");
+		goto parse_uri;
+
+	case URI_ERRNO_INVALID_PROTOCOL:
+	{
+		/* No protocol name */
 		unsigned char *prefix = "file://";
 		unsigned char *expanded = expand_tilde(url);
+		unsigned char *ch = url + strcspn(url, ".:/@");
 		int not_file = 0;
 
 		if (!expanded) return NULL;
@@ -725,54 +738,25 @@ http:				prefix = "http://";
 			}
 		}
 end:
-		newurl = stracpy(prefix);
-		if (!newurl) {
-			mem_free(expanded);
-			return NULL;
-		}
 		if (!not_file) {
-			if (!dir_sep(*expanded)) add_to_strn(&newurl, "./");
-			add_to_strn(&newurl, expanded);
+			mem_free(newurl);
+			if (!dir_sep(*expanded))
+				insert_in_uri(&expanded, 0, "./", 2);
+			newurl = straconcat(prefix, expanded, NULL);
 		} else {
-			add_to_strn(&newurl, url); /* XXX: Post data copy. */
+			insert_in_uri(&newurl, 0, prefix, strlen(prefix));
+			if (!strchr(url, '/')) add_to_strn(&newurl, "/");
 		}
 		mem_free(expanded);
 
-		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
-
-		if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
-			transform_file_url(&newurl, cwd);
-			translate_directories(newurl);
-
-			return newurl;
-		}
-
-		mem_free(newurl);
-		return NULL;
+		if (!newurl) return NULL;
+		goto parse_uri;
 	}
-
-	newurl = memacpy(url, ch - url + 1); /* XXX: Post data copy. */
-	if (!newurl) return NULL;
-
-	/* Try prefix:some.url -> prefix://some.url.. */
-	if (strncmp(ch + 1, "//", 2)) {
-		add_to_strn(&newurl, "//");
-		add_to_strn(&newurl, ch + 1);
-		if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
-			transform_file_url(&newurl, cwd);
-			translate_directories(newurl);
-
-			return newurl;
-		}
-	}
-
-	/* ..and with slash */
-	add_to_strn(&newurl, "/");
-	if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
-		transform_file_url(&newurl, cwd);
-		translate_directories(newurl);
-
-		return newurl;
+	case URI_ERRNO_EMPTY:
+	case URI_ERRNO_IPV6_SECURITY:
+	case URI_ERRNO_INVALID_PORT:
+	case URI_ERRNO_INVALID_PORT_RANGE:
+		break;
 	}
 
 	mem_free(newurl);

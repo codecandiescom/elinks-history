@@ -1,3 +1,153 @@
+Thu Apr 29 17:04:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	The color mapping seems to work fine now.  
+
+Thu Apr 29 16:01:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: color.c, color.inc:
+
+	Fix colors stuff: always include color_s.inc before (optionnal)
+	color.inc, which was stripped down. It should fix the white ->
+	0xFFFFFF -> gray100 issue reported by Jonas.  
+
+Thu Apr 29 15:06:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Thu Apr 29 15:03:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	More help2doc tool fixing.  
+
+Thu Apr 29 14:24:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Fix elinks version extraction.  
+
+Thu Apr 29 14:17:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.base:
+
+	Tidyup.  
+
+Thu Apr 29 14:11:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.base:
+
+	Yay .. get rid of that `dirname ...` hack and just include .  
+
+Thu Apr 29 14:07:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	Apply last chunk of Harold L Hunt II's patch fixing bug 353.  
+
+Thu Apr 29 13:52:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/Makefile.am:
+
+	Try to improve builddir != srcdir situation.  
+
+Thu Apr 29 13:30:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: parser.c, parser/forms.c, parser/forms.h:
+
+	Do not export struct form, introduce and use done_form() instead,
+	use enum form_method as type for struct form method field.  
+
+Thu Apr 29 13:15:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	get_html_form():  char *ax -> unsigned char *enctype, tidy up.  
+
+Thu Apr 29 13:09:38 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	do_html_select(): @val -> @values, tidy up.  
+
+Thu Apr 29 12:40:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	EL_DEFINE() a few variables.  
+
+Thu Apr 29 12:17:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_CHECK_TYPE() -> EL_CHECK_CODE(). Use it for variadic macro
+	checking.  
+
+Thu Apr 29 11:50:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_CHECK_SPECIAL_TYPE() -> EL_CHECK_INT_TYPE().  
+
+Thu Apr 29 11:49:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h:
+
+	Whoops forgot to remove HAVE_SA_STORAGE declaration.  
+
+Thu Apr 29 11:48:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add EL_CHECK_NET_TYPE() for all the sockaddr_* and addrinfo struct
+	checking.  
+
+Thu Apr 29 11:41:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* acconfig.h, configure.in:
+
+	Use EL_CHECK_SYS_TYPE() for regex_t and HAVE_REGEX_H config.  
+
+Thu Apr 29 11:37:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Add EL_CHECK_SYS_TYPE() which #includes <sys/types.h> and tries to
+	do sizeof(type).  
+
+Thu Apr 29 11:32:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Use EL_CHECK_TYPE() for typeof() checking.  
+
+Thu Apr 29 11:28:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_CHECK_TYPE(): Takes care of the messaging an type checking.  
+
+Thu Apr 29 11:23:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_DEFINE(): Wraps AC_DEFINE() to shorten lines.  
+
+Thu Apr 29 11:18:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Group macros.  
+
+Thu Apr 29 00:37:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Use EL_* namespace for own macros.  
+
 Wed Apr 28 19:54:46 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:

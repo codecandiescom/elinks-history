@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.152 2004/06/14 18:44:26 jonas Exp $ */
+/* $Id: form.c,v 1.153 2004/06/14 18:47:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1159,30 +1159,25 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 					strlen(fs->value + fs->state));
 			break;
 		case ACT_EDIT_KILL_TO_BOL:
-			if (!frm->ro && fs->state > 0) {
-				unsigned char *prev;
+			if (frm->ro || fs->state <= 0)
+				break;
 
-				/* TODO: Make this memrchr(), and
-				 * introduce stub for that function
-				 * into util/string.*. --pasky */
-				for (prev = fs->value + fs->state - 1;
-				     prev > fs->value
-					&& *prev != ASCII_LF;
-				     prev--)
-					;
+			/* TODO: Make this memrchr(), and
+			 * introduce stub for that function
+			 * into util/string.*. --pasky */
+			text = fs->value + fs->state - 1;
+			while (text > fs->value && *text != ASCII_LF)
+				text--;
 
-				if (prev > fs->value
-				    && fs->value[fs->state - 1]
-					    != ASCII_LF)
-					prev++;
+			if (text > fs->value
+			    && fs->value[fs->state - 1] != ASCII_LF)
+				text++;
 
-				memmove(prev,
-					fs->value + fs->state,
-					strlen(fs->value + fs->state)
-					 + 1);
+			memmove(text,
+				fs->value + fs->state,
+				strlen(fs->value + fs->state) + 1);
 
-				fs->state = (int) (prev - fs->value);
-			}
+			fs->state = (int) (text - fs->value);
 			break;
 		case ACT_EDIT_KILL_TO_EOL:
 			if (!frm->ro && fs->value[fs->state]) {

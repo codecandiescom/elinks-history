@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.9 2002/09/10 14:30:27 zas Exp $ */
+/* $Id: colors.c,v 1.10 2002/09/12 17:16:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,7 +352,7 @@ find_nearest_color(struct rgb *r, int l)
 	rgb_cache[h].rgb.b = r->b;
 	return min;
 
-#undef HAHS_RGB
+#undef HASH_RGB
 #undef RGB_HASH_SIZE
 }
 

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.9 2003/12/01 20:44:17 jonas Exp $ */
+/* $Id: status.c,v 1.10 2003/12/01 20:55:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,8 +285,8 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 }
 
 /* Print page's title and numbering at window top. */
-static unsigned char *
-print_current_title(struct session *ses)
+static inline void
+display_title_bar(struct session *ses, struct terminal *term)
 {
 	struct document_view *doc_view;
 	struct document *document;
@@ -295,15 +295,14 @@ print_current_title(struct session *ses)
 	int buflen = 0;
 	int width;
 
-	assert(ses && ses->tab && ses->tab->term);
-	if_assert_failed return NULL;
+	/* Clear the old title */
+	draw_area(term, 0, 0, term->width, 1, ' ', 0,
+		  get_bfu_color(term, "title.title-bar"));
 
 	doc_view = current_frame(ses);
+	if (!doc_view || !doc_view->document) return;
 
-	assert(doc_view && doc_view->document);
-	if_assert_failed return NULL;
-
-	if (!init_string(&title)) return NULL;
+	if (!init_string(&title)) return;
 
 	document = doc_view->document;
 	width = ses->tab->term->width;
@@ -340,7 +339,14 @@ print_current_title(struct session *ses)
 	if (buflen > 0)
 		add_bytes_to_string(&title, buf, buflen);
 
-	return title.source;
+	if (title.length) {
+		int x = int_max(term->width - 1 - title.length, 0);
+
+		draw_text(term, x, 0, title.source, title.length, 0,
+			  get_bfu_color(term, "title.title-text"));
+	}
+
+	done_string(&title);
 }
 
 /* Print statusbar and titlebar, set terminal title. */
@@ -363,20 +369,7 @@ print_screen_status(struct session *ses)
 	}
 
 	if (ses_tab_is_current && ses->visible_title_bar) {
-		draw_area(term, 0, 0, term->width, 1, ' ', 0,
-			  get_bfu_color(term, "title.title-bar"));
-
-		if (current_frame(ses)) {
-			msg = print_current_title(ses);
-			if (msg) {
-				int msglen = strlen(msg);
-				int pos = int_max(term->width - 1 - msglen, 0);
-
-				draw_text(term, pos, 0, msg, msglen, 0,
-					  get_bfu_color(term, "title.title-text"));
-				mem_free(msg);
-			}
-		}
+		display_title_bar(ses, term);
 	}
 
 	if (!ses_tab_is_current || !ses->set_window_title)

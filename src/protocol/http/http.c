@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.6 2002/04/17 22:22:20 pasky Exp $ */
+/* $Id: http.c,v 1.7 2002/04/21 19:12:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include <protocol/http/http.h>
 #include <protocol/url.h>
 #include <util/base64.h>
+#include <util/blacklist.h>
 
 struct http_connection_info {
 	enum blacklist_flags bl_flags;

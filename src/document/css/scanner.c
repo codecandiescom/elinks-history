@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.10 2004/01/18 22:25:43 jonas Exp $ */
+/* $Id: scanner.c,v 1.11 2004/01/18 22:38:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,18 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 		token->type = CSS_TOKEN_HEX_COLOR;
 		scan_css(string, CSS_CHAR_HEX_DIGIT);
 		/* FIXME: Check that it is either 3 or 6 chars */
+
+	} else if (first_char == '"' || first_char == '\'') {
+		unsigned char *string_end = strchr(string, first_char);
+
+		if (string_end) {
+			/* Get rid of the string delimiters */
+			token->string = string;
+			token->length = string_end - string - 1;
+			string = string_end + 1;
+		} else {
+			token->type = CSS_TOKEN_GARBAGE;
+		}
 
 	} else if (is_css_ident(first_char)) {
 		token->type = is_css_ident_start(first_char)

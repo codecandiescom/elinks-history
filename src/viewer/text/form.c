@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.241 2004/09/15 23:37:45 pasky Exp $ */
+/* $Id: form.c,v 1.242 2004/09/23 15:40:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1528,6 +1528,13 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_RESET:
 	case FC_SELECT:
 		break;
+	}
+
+	if (link->accesskey
+	    && get_opt_int("document.browse.accesskey.display")) {
+		add_to_string(&str, " (");
+		make_keystroke(&str, link->accesskey, 0, 0);
+		add_char_to_string(&str, ')');
 	}
 
 	return str.source;

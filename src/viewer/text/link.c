@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.290 2004/08/06 18:26:05 jonas Exp $ */
+/* $Id: link.c,v 1.291 2004/09/23 15:40:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1191,6 +1191,13 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 
 		/* Add the uri with password and post info stripped */
 		add_string_uri_to_string(&str, uristring, URI_PUBLIC);
+		if (link->accesskey
+		    && get_opt_int("document.browse.accesskey.display")) {
+			add_to_string(&str, " (");
+			make_keystroke(&str, link->accesskey, 0, 0);
+			add_char_to_string(&str, ')');
+		}
+
 		decode_uri_string(str.source);
 		return str.source;
 	}

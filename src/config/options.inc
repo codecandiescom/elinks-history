@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.137 2004/09/21 13:52:55 pasky Exp $ */
+/* $Id: options.inc,v 1.138 2004/09/23 15:40:33 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -157,6 +157,10 @@ struct option_info config_options_info[] = {
 		N_("Automatically follow a link or submit a form if appropriate\n"
 		"accesskey is pressed - this is the standard behaviour, but it's\n"
 		"considered dangerous.")),
+
+	INIT_OPT_BOOL("document.browse.accesskey", N_("Display access key in link info"),
+		"display", 0, 0,
+		N_("Display access key in link info.")),
 
 	INIT_OPT_INT("document.browse.accesskey", N_("Accesskey priority"),
 		"priority", 0, 0, 2, 0,

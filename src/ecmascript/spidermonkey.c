@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.66 2004/10/23 10:04:40 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.67 2004/10/25 12:41:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,7 +472,6 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 	    && !get_cmd_opt_bool("anonymous")
 	    && can_open_in_new(ses->tab->term)) {
 		open_uri_in_new_window(ses, uri, ~0 /* any env */);
-		done_uri(uri);
 		p.boolean = 1; prop_type = JSPT_BOOLEAN;
 	} else {
 		/* When opening a new tab, we might get rerendered, losing our
@@ -481,14 +480,14 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 
 		if (deo) {
 			deo->ses = ses;
-			deo->uri = uri;
+			deo->uri = get_uri_reference(uri);
 			register_bottom_half((void (*)(void *)) delayed_open,
 			                     deo);
 			p.boolean = 1; prop_type = JSPT_BOOLEAN;
-		} else {
-			done_uri(deo->uri);
 		}
 	}
+
+	done_uri(uri);
 
 	VALUE_TO_JSVAL_END(rval);
 }

@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.12 2003/05/06 16:47:44 zas Exp $ */
+/* $Id: os_dep.h,v 1.13 2003/05/06 18:25:29 zas Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -9,6 +9,7 @@
 #define ASCII_TAB 9
 #define ASCII_LF 10
 #define ASCII_CR 13
+#define ASCII_ESC 27
 #define ASCII_DEL 127
 
 /* System-type identifier */

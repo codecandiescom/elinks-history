@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.132 2003/06/17 13:18:32 zas Exp $ */
+/* $Id: renderer.c,v 1.133 2003/06/17 13:24:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1004,8 +1004,11 @@ line_break(struct part *part)
 {
 	struct tag *t;
 
+	assert(part);
+
 	if (part->cx + par_format.rightmargin > part->x)
 		part->x = part->cx + par_format.rightmargin;
+
 	if (nobreak) {
 		/* if (part->y < part->cy) part->y = part->cy; */
 		nobreak = 0;
@@ -1015,6 +1018,9 @@ line_break(struct part *part)
 	}
 
 	if (!part->data) goto end;
+
+	assert(part->data->data);
+
 	/* move_links(part, part->cx, part->cy, 0, part->cy + 1); */
 	xpand_lines(part, part->cy + 1);
 	if (part->cx > par_format.leftmargin && LEN(part->cy) > part->cx - 1
@@ -1026,14 +1032,13 @@ line_break(struct part *part)
 	/*if (LEN(part->cy) > part->x) part->x = LEN(part->cy);*/
 	if (part->cx > 0) align_line(part, part->cy, 1);
 
-	if (part->data) {
-		for (t = last_tag_for_newline;
-		     t && (void *)t != &part->data->tags;
-		     t = t->prev) {
-			t->x = X(0);
-			t->y = Y(part->cy + 1);
-		}
+	for (t = last_tag_for_newline;
+	     t && (void *)t != &part->data->tags;
+	     t = t->prev) {
+		t->x = X(0);
+		t->y = Y(part->cy + 1);
 	}
+
 end:
 	part->cy++;
 	part->cx = -1;

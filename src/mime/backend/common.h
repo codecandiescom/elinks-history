@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.5 2003/06/05 14:18:37 zas Exp $ */
+/* $Id: common.h,v 1.6 2003/06/05 22:46:48 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -10,8 +10,8 @@
 
 struct mime_backend {
 	/* Startup and teardown. */
-	void (*init)();
-	void (*done)();
+	void (*init)(void);
+	void (*done)(void);
 
 	/* Given an @uri resolve the content type. For know it (mostly)
 	 * comes down to using the the extension to resolve. */

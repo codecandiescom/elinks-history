@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.133 2004/04/05 04:27:29 jonas Exp $ */
+/* $Id: uri.c,v 1.134 2004/04/05 04:33:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -424,13 +424,8 @@ proceed: ;
 static void
 transform_file_url(unsigned char **up, unsigned char *cwd)
 {
-	unsigned char *url = *up;
+	unsigned char *url = *up + 7; /* file:// */
 	unsigned char *path;
-
-	if (!url || !cwd || !*cwd
-	    || strncasecmp(url, "file://", 7))
-		return;
-	url += 7; /* file:// */
 
 	/* Sort out the host part. We currently support only host "localhost"
 	 * (plus empty host part will be assumed to be "localhost" as well).
@@ -648,7 +643,9 @@ parse_uri:
 
 	switch (uri_errno) {
 	case URI_ERRNO_OK:
-		transform_file_url(&newurl, cwd);
+		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd)
+			transform_file_url(&newurl, cwd);
+
 		translate_directories(newurl);
 		return newurl;
 

@@ -1,3 +1,23 @@
+Sun Jul  7 11:15:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* SITES:
+
+	Added CYGWIN binaries site, contributed by Frédéric L. W. Meunier
+	<lists@pervalidus.net>.  
+
+Sun Jul  7 11:10:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/leds.c:
+
+	Moved first timer setup to draw_leds() (fixes segfault upon slow
+	ELinks startup), reentrance of redraw_leds().  
+
+Sat Jul  6 22:10:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/leds.c:
+
+	Paranoia.  
+
 Sat Jul  6 22:09:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lua/TODO:

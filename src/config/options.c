@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.116 2002/11/29 19:11:35 zas Exp $ */
+/* $Id: options.c,v 1.117 2002/11/29 20:20:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 	}
 
 	foreach (option, *tree) {
-		if (!strcmp(option->name, name)) {
+		if (options->name && !strcmp(option->name, name)) {
 			mem_free(aname);
 			return option;
 		}
@@ -123,10 +123,6 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 		}
 		if (option->name) mem_free(option->name);
 		option->name = stracpy(name);
-		if (!option->name) {
-			mem_free(aname);
-			return NULL;
-		}
 
 		add_opt_rec(tree, "", option);
 
@@ -193,10 +189,6 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	if (!option) return NULL;
 
 	option->name = stracpy(name); /* I hope everyone will like this. */
-	if (!option->name) {
-		mem_free(option);
-		return NULL;
-	}
 	option->flags = flags;
 	option->type = type;
 	option->min = min;
@@ -231,7 +223,7 @@ free_option(struct option *option)
 		free_options_tree((struct list_head *) option->ptr);
 	}
 
-	mem_free(option->name);
+	if (option->name) mem_free(option->name);
 }
 
 void
@@ -246,14 +238,10 @@ struct option *
 copy_option(struct option *template)
 {
 	struct option *option = mem_alloc(sizeof(struct option));
-	
+
 	if (!option) return NULL;
-	
-	option->name = stracpy(template->name);
-	if (!option->name) {
-		mem_free(option);
-		return NULL;
-	}
+
+	option->name = template->name ? stracpy(template->name) : NULL;
 	option->flags = template->flags;
 	option->type = template->type;
 	option->min = template->min;
@@ -273,7 +261,7 @@ struct list_head *
 init_options_tree()
 {
 	struct list_head *list = mem_alloc(sizeof(struct list_head));
-	
+
 	if (list) init_list(*list);
 
 	return list;

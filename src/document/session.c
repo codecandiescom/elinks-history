@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.79 2002/12/12 22:22:32 pasky Exp $ */
+/* $Id: session.c,v 1.80 2002/12/16 23:21:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,9 +44,6 @@
 #include "util/string.h"
 
 
-void check_questions_queue(struct session *ses);
-
-
 struct file_to_load {
 	struct file_to_load *next;
 	struct file_to_load *prev;
@@ -58,28 +55,27 @@ struct file_to_load {
 	struct status stat;
 };
 
-struct file_to_load * request_additional_file(struct session *,
-					      unsigned char *, int);
-struct file_to_load *request_additional_loading_file(struct session *,
-						     unsigned char *,
-						     struct status *, int);
-
-
-struct list_head sessions = {&sessions, &sessions};
-
-int session_id = 1;
-
-
 struct strerror_val {
 	struct strerror_val *next;
 	struct strerror_val *prev;
 	unsigned char msg[1];
 };
 
-struct list_head strerror_buf = { &strerror_buf, &strerror_buf };
+
+struct list_head sessions = {&sessions, &sessions};
+
+static int session_id = 1;
+static struct list_head strerror_buf = { &strerror_buf, &strerror_buf };
 
 
-void
+void check_questions_queue(struct session *ses);
+struct file_to_load * request_additional_file(struct session *,
+					      unsigned char *, int);
+struct file_to_load *request_additional_loading_file(struct session *,
+						     unsigned char *,
+						     struct status *, int);
+
+inline void
 free_strerror_buf()
 {
 	free_list(strerror_buf);
@@ -171,7 +167,7 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 	add_to_str(s, l, q);
 }
 
-unsigned char *
+static unsigned char *
 get_stat_msg(struct status *stat, struct terminal *term)
 {
 	if (stat->state == S_TRANS && stat->prg->elapsed / 100) {
@@ -318,7 +314,7 @@ print_error_dialog(struct session *ses, struct status *stat,
 		_("Retry"), NULL, 0 */ /* !!! FIXME: retry */);
 }
 
-void
+static void
 free_wtd(struct session *ses)
 {
 	if (!ses->wtd) {
@@ -338,7 +334,7 @@ free_wtd(struct session *ses)
 	ses->wtd = WTD_NO;
 }
 
-void
+static void
 abort_files_load(struct session *ses, int interrupt)
 {
 	struct file_to_load *ftl;
@@ -447,7 +443,7 @@ x:
 	}
 }
 
-void
+static void
 ses_imgmap(struct session *ses)
 {
 	struct cache_entry *ce;
@@ -475,7 +471,7 @@ ses_imgmap(struct session *ses)
 	do_menu(ses->term, menu, ses);
 }
 
-void
+inline void
 map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
 	goto_url_frame(ses, ld->link, ld->target);
@@ -497,7 +493,7 @@ struct wtd_data {
 };
 
 
-void
+static void
 post_yes(struct wtd_data *w)
 {
 	abort_preloading(w->ses, 0);
@@ -514,7 +510,7 @@ post_yes(struct wtd_data *w)
 		 w->pri, w->cache_mode, -1);
 }
 
-void
+static inline void
 post_no(struct wtd_data *w)
 {
 	/* Ok, no test needed, see ses_goto() */
@@ -522,7 +518,7 @@ post_no(struct wtd_data *w)
 	post_yes(w);
 }
 
-void
+static inline void
 post_cancel(struct wtd_data *w)
 {
 	reload(w->ses, NC_CACHE);
@@ -588,7 +584,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		TEXT(T_CANCEL), post_cancel, B_ESC);
 }
 
-int
+static int
 do_move(struct session *ses, struct status **stat)
 {
 	struct cache_entry *ce = NULL;
@@ -688,7 +684,7 @@ b:
 
 void request_frameset(struct session *, struct frameset_desc *);
 
-void
+static void
 request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 {
 	struct location *loc = cur_loc(ses);
@@ -776,7 +772,7 @@ request_frameset(struct session *ses, struct frameset_desc *fd)
 	depth--;
 }
 
-void
+inline void
 load_frames(struct session *ses, struct f_data_c *fd)
 {
 	struct f_data *ff = fd->f_data;
@@ -1044,7 +1040,7 @@ process_file_requests(struct session *ses)
 	stop_recursion = 0;
 }
 
-struct session *
+static struct session *
 create_session(struct window *win)
 {
 	struct terminal *term = win->term;
@@ -1121,7 +1117,7 @@ create_session(struct window *win)
 	return ses;
 }
 
-void
+static inline void
 copy_session(struct session *old, struct session *new)
 {
 	if (have_location(old)) {
@@ -1199,7 +1195,7 @@ decode_url(unsigned char *url)
 int startup_goto_dialog_paint = 0;
 struct session *startup_goto_dialog_ses;
 
-int
+static int
 read_session_info(int fd, struct session *ses, void *data, int len)
 {
 	unsigned char *h;
@@ -1277,7 +1273,7 @@ abort_loading(struct session *ses, int interrupt)
 	abort_preloading(ses, interrupt);
 }
 
-void
+static void
 destroy_session(struct session *ses)
 {
 	struct f_data_c *fdc;
@@ -1318,7 +1314,7 @@ destroy_session(struct session *ses)
 	/*mem_free(ses);*/
 }
 
-void
+inline void
 destroy_all_sessions()
 {
 	/*while (!list_empty(sessions)) destroy_session(sessions.next);*/
@@ -1430,7 +1426,7 @@ end:
 	clean_unhistory(ses);
 }
 
-void
+static void
 goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 	   enum session_wtd wtd, enum cache_mode cache_mode)
 {

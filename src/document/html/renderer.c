@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.299 2003/10/17 18:46:44 jonas Exp $ */
+/* $Id: renderer.c,v 1.300 2003/10/17 20:57:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,12 @@
 #include "viewer/text/vs.h"
 
 /* Types and structs */
+
+enum link_state {
+	LINK_STATE_NONE,
+	LINK_STATE_NEW,
+	LINK_STATE_SAME,
+};
 
 struct table_cache_entry_key {
 	unsigned char *start;
@@ -250,7 +256,7 @@ xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 }
 
 static inline struct screen_char *
-get_format_screen_char(struct part *part)
+get_format_screen_char(struct part *part, enum link_state link_state)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
 	static struct screen_char schar_cache;
@@ -290,6 +296,11 @@ get_format_screen_char(struct part *part)
 			if (format.attr & AT_GRAPHICS) {
 				schar_cache.attr |= SCREEN_ATTR_FRAME;
 			}
+		}
+
+		if (link_state != LINK_STATE_NONE
+		    && d_opt->underline_links) {
+			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 		}
 
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
@@ -333,9 +344,10 @@ get_format_screen_char(struct part *part)
 /* First possibly do the format change and then find out what coordinates
  * to use since sub- or superscript might change them */
 static inline void
-set_hline(struct part *part, unsigned char *chars, int charslen)
+set_hline(struct part *part, unsigned char *chars, int charslen,
+	  enum link_state link_state)
 {
-	struct screen_char *schar = get_format_screen_char(part);
+	struct screen_char *schar = get_format_screen_char(part, link_state);
 	int x = part->cx;
 	int y = part->cy;
 
@@ -745,8 +757,23 @@ new_link(struct document *document, int link_number,
 	}
 
 	if (link->type != L_FIELD && link->type != L_AREA) {
-		link->color.background = format.clink;
-		link->color.foreground = format.bg;
+		if (d_opt) {
+			if (d_opt->color_active_link) {
+				link->color.foreground = d_opt->active_link_fg;
+				link->color.background = d_opt->active_link_bg;
+
+			} else if (d_opt->invert_active_link) {
+				link->color.foreground = format.bg;
+				link->color.background = format.clink;
+
+			} else {
+				link->color.foreground = format.clink;
+				link->color.background = format.bg;
+			}
+		} else {
+			link->color.background = format.clink;
+			link->color.foreground = format.bg;
+		}
 	} else {
 		link->color.foreground = format.fg;
 		link->color.background = format.bg;
@@ -828,12 +855,6 @@ put_link_number(struct part *part)
 	format.image = fi;
 	format.form = ff;
 }
-
-enum link_state {
-	LINK_STATE_NONE,
-	LINK_STATE_NEW,
-	LINK_STATE_SAME,
-};
 
 #define realloc_points(link, size) \
 	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
@@ -952,7 +973,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		put_link_number(part);
 	}
 
-	set_hline(part, chars, charslen);
+	set_hline(part, chars, charslen, link_state);
 
 	if (link_state != LINK_STATE_NONE) {
 		process_link(part, link_state, chars, charslen);

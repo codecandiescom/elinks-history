@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.299 2003/10/17 20:16:42 zas Exp $ */
+/* $Id: options.c,v 1.300 2003/10/17 20:57:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1133,6 +1133,36 @@ register_options(void)
 		"links", 0,
 		N_("Options for handling of links to other documents."));
 
+	add_opt_tree("document.browse.links", N_("Active link"),
+		"active_link", 0,
+		N_("Options for the active link."));
+
+	add_opt_tree("document.browse.links.active_link", N_("Colors"),
+		"colors", 0,
+		N_("Active link colors."));
+
+	add_opt_color("document.browse.links.active_link.colors", N_("Background color"),
+		"background", 0, "#0000ff",
+		N_("Default background color."));
+
+	add_opt_color("document.browse.links.active_link.colors", N_("Text color"),
+		"text", 0, "black",
+		N_("Default text color."));
+
+	add_opt_bool("document.browse.links.active_link", N_("Enable color"),
+		"enable_color", 0, 0,
+		N_("Enable use of the active link background and text color "
+		"settings instead of browse.links from the document."));
+
+	add_opt_bool("document.browse.links.active_link", N_("Invert colors"),
+		"invert", 0, 1,
+		N_("Invert the fore- and background color so the link "
+		"stands out."));
+
+	add_opt_bool("document.browse.links.active_link", N_("Underline"),
+		"underline", 0, 0,
+		N_("Underline the active link."));
+
 	add_opt_bool("document.browse.links", N_("Directory highlighting"),
 		"color_dirs", 0, 1,
 		N_("Highlight links to directories in FTP and local directory listing."));
@@ -1289,6 +1319,7 @@ register_options(void)
 		N_("Default document color settings."));
 	get_opt_rec(config_options, "document.colors")->change_hook = change_hook_html;
 
+
 	add_opt_color("document.colors", N_("Text color"),
 		"text", 0, "#bfbfbf",
 		N_("Default text color."));
@@ -1334,6 +1365,7 @@ register_options(void)
 		"  that obviously if the background isn't black, it will\n"
 		"  break transparency, if you have it enabled for your terminal\n"
 		"  and on your terminal."));
+
 
 	/* Keep options in alphabetical order. */
 
@@ -1454,6 +1486,10 @@ register_options(void)
 		"3 is hreflang in addition\n"
 		"4 is type in addition\n"
 		"5 is everything"));
+
+	add_opt_bool("document.html", N_("Underline links"),
+		"underline_links", 0, 0,
+		N_("Underline links."));
 
 	/* Keep options in alphabetical order. */
 

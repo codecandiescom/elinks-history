@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.19 2003/10/17 18:46:43 jonas Exp $ */
+/* $Id: options.h,v 1.20 2003/10/17 20:57:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -28,18 +28,26 @@ struct document_options {
 	int xw, yw;
 
 	/* XXX: Keep boolean options grouped to save padding */
-	/* TODO: Store the color_flags options in an enum variable. */
-	unsigned int allow_dark_on_black:1;
-	unsigned int ensure_contrast:1;
+	/* HTML stuff */
 	unsigned int tables:1;
 	unsigned int table_order:1;
 	unsigned int frames:1;
 	unsigned int images:1;
+
+	/* Color model/optimizations */
+	/* TODO: Store the color_flags options in an enum variable. */
+	unsigned int allow_dark_on_black:1;
+	unsigned int ensure_contrast:1;
 	unsigned int underline:1;
 	unsigned int display_subs:1;
 	unsigned int display_sups:1;
+	unsigned int invert_active_link:1;
+	unsigned int underline_links:1;
+
+	/* Link navigation */
 	unsigned int num_links_display:1;
 	unsigned int use_tabindex:1;
+
 	unsigned int plain:1;
 
 	/* XXX: Everything past this comment is specialy handled by compare_opt() */
@@ -49,6 +57,14 @@ struct document_options {
 	/* This is not compared at all since it doesn't make any difference
 	 * what position the document will fit into a frameset or so. */
 	int xp, yp;
+
+	/* Active link coloring */
+	/* This is mostly here to make use of this option cache so link
+	 * drawing is faster. --jonas */
+	unsigned int color_active_link:1;
+	unsigned int underline_active_link:1;
+	color_t active_link_fg;
+	color_t active_link_bg;
 };
 
 extern struct document_options *d_opt;

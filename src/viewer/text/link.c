@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.72 2003/10/17 18:46:44 jonas Exp $ */
+/* $Id: link.c,v 1.73 2003/10/17 20:57:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,14 +140,6 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	assertm(!doc_view->link_bg, "link background not empty");
 	if_assert_failed mem_free(doc_view->link_bg);
 
-	if (d_opt) {
-		if (!d_opt->allow_dark_on_black)
-			color_flags |= COLOR_INCREASE_CONTRAST;
-
-		if (d_opt->ensure_contrast)
-			color_flags |= COLOR_ENSURE_CONTRAST;
-	}
-
 	if (l == -1) return;
 
 	link = &doc_view->document->links[l];
@@ -190,6 +182,18 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	/* Setup the template char. */
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = 0;
+
+	if (d_opt) {
+		if (!d_opt->allow_dark_on_black)
+			color_flags |= COLOR_INCREASE_CONTRAST;
+
+		if (d_opt->ensure_contrast)
+			color_flags |= COLOR_ENSURE_CONTRAST;
+
+		if (d_opt->underline_active_link)
+			template->attr |= SCREEN_ATTR_UNDERLINE;
+	}
+
 	set_term_color(template, &link->color, color_flags,
 		       doc_view->document->opt.color_mode);
 

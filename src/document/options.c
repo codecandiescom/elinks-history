@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.29 2003/10/17 18:46:43 jonas Exp $ */
+/* $Id: options.c,v 1.30 2003/10/17 20:57:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,14 @@ init_document_options(struct document_options *doo)
 	doo->default_link = get_opt_color("document.colors.link");
 	doo->default_vlink = get_opt_color("document.colors.vlink");
 
+	doo->active_link_fg = get_opt_color("document.browse.links.active_link.colors.text");
+	doo->active_link_bg = get_opt_color("document.browse.links.active_link.colors.background");
+
 	/* Boolean options. */
 	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
+	doo->color_active_link = get_opt_bool("document.browse.links.active_link.enable_color");
+	doo->invert_active_link = get_opt_bool("document.browse.links.active_link.invert");
+	doo->underline_active_link = get_opt_bool("document.browse.links.active_link.underline");
 	doo->use_tabindex = get_opt_bool("document.browse.links.use_tabindex");
 	doo->allow_dark_on_black = get_opt_bool("document.colors.allow_dark_on_black");
 	doo->ensure_contrast = get_opt_bool("document.colors.ensure_contrast");
@@ -54,6 +60,7 @@ init_document_options(struct document_options *doo)
 	doo->images = get_opt_bool("document.browse.images.show_as_links");
 	doo->display_subs = get_opt_bool("document.html.display_subs");
 	doo->display_sups = get_opt_bool("document.html.display_sups");
+	doo->underline_links = get_opt_bool("document.html.underline_links");
 
 	doo->framename = "";
 }

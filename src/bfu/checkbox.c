@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.42 2003/10/05 19:11:41 pasky Exp $ */
+/* $Id: checkbox.c,v 1.43 2003/10/05 19:55:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "terminal/terminal.h"
 
 
-void
+static void
 dlg_format_checkbox(struct terminal *term, struct terminal *t2,
 		    struct widget_data *chkb,
 		    int x, int *y, int w, int *rw,

@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.18 2003/07/14 19:51:32 jonas Exp $ */
+/* $Id: finger.c,v 1.19 2003/07/21 04:11:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,19 +31,18 @@ finger_func(struct connection *c)
 
 static void finger_send_request(struct connection *c)
 {
-	unsigned char *req = init_str();
-	int rl = 0;
+	struct string req;
 
-	if (!req) return;
-	/* add_to_str(&req, &rl, "/W"); */
+	if (!init_string(&req)) return;
+	/* add_to_string(&req, &rl, "/W"); */
 
 	if (c->uri.user) {
-		add_chr_to_str(&req, &rl, ' ');
-		add_bytes_to_str(&req, &rl, c->uri.user, c->uri.userlen);
+		add_char_to_string(&req, ' ');
+		add_bytes_to_string(&req, c->uri.user, c->uri.userlen);
 	}
-	add_to_str(&req, &rl, "\r\n");
-	write_to_socket(c, c->sock1, req, rl, finger_sent_request);
-	mem_free(req);
+	add_to_string(&req, "\r\n");
+	write_to_socket(c, c->sock1, req.source, req.length, finger_sent_request);
+	done_string(&req);
 	set_connection_state(c, S_SENT);
 }
 

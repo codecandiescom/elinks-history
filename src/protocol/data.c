@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.3 2004/08/23 02:37:22 jonas Exp $ */
+/* $Id: data.c,v 1.4 2004/08/23 02:50:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,6 +48,11 @@
  * The ";base64" extension is distinguishable from a content-type parameter by
  * the fact that it doesn't have a following "=" sign. */
 
+#define	DEFAULT_DATA_MEDIATYPE	"text/plain;charset=US-ASCII"
+
+#define data_has_mediatype(header, headerlen) \
+	((headerlen) > 3 && memchr(header, '/', headerlen))
+
 #define data_has_base64_attribute(typelen, endstr) \
 	((typelen) >= sizeof(";base64") - 1 \
 	 && !memcmp(";base64", (end) - sizeof(";base64") + 1, sizeof(";base64") - 1))
@@ -57,6 +62,8 @@ init_data_protocol_header(struct cache_entry *cached,
 			  unsigned char *type, int typelen)
 {
 	unsigned char *head;
+
+	assert(typelen);
 
 	type = memacpy(type, typelen);
 	if (!type) return NULL;
@@ -75,26 +82,24 @@ parse_data_protocol_header(struct connection *conn, int *base64)
 {
 	struct uri *uri = conn->uri;
 	unsigned char *end = memchr(uri->data, ',', uri->datalen);
-	unsigned char *type = NULL;
-	int typelen = 0;
+	unsigned char *type = DEFAULT_DATA_MEDIATYPE;
+	int typelen = sizeof(DEFAULT_DATA_MEDIATYPE) - 1;
 
 	if (end) {
-		type	= uri->data;
-		typelen	= end - type;
+		int headerlen = end - uri->data;
 
-		if (data_has_base64_attribute(typelen, end)) {
+		if (data_has_base64_attribute(headerlen, end)) {
 			*base64 = 1;
-			typelen -= sizeof(";base64") - 1;
+			headerlen -= sizeof(";base64") - 1;
+		}
+
+		if (data_has_mediatype(uri->data, headerlen)) {
+			type	= uri->data;
+			typelen	= headerlen;
 		}
 	}
 
-	/* Either no ',' was found or the type was missing */
-	if (!typelen) {
-		type	= "text/plain;charset=US-ASCII";
-		typelen	= strlen(type);
-	}
-
-	if (!type || !init_data_protocol_header(conn->cached, type, typelen))
+	if (!init_data_protocol_header(conn->cached, type, typelen))
 		return NULL;
 
 	/* Return char after ',' or complete data part */

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.52 2005/03/25 04:54:54 miciah Exp $
+-- $Id: hooks.lua.in,v 1.53 2005/03/25 04:57:48 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -359,21 +359,18 @@ table.insert(goto_url_hooks, complete_uri_prefix)
 --  follow_url_hook
 ---------------------------------------------------------------------
 
-function follow_url_hook_ (url)
-    -- Using bookmark addon.
+function bookmarks_follow_url_hook (url)
     if bookmark_addon then
 	if bm_is_category (url) then
-	    return nil
+	    return nil,true
 	else
-	    return bm_get_bookmark_url (url) or url
+	    return (bm_get_bookmark_url (url) or url),true
 	end
-
-    -- Not using bookmark addon.
-    else
-	return url
     end
+
+    return nil,nil
 end
-table.insert(follow_url_hooks, follow_url_hook_)
+table.insert(follow_url_hooks, bookmarks_follow_url_hook)
 
 
 ----------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.111 2003/11/08 22:36:23 jonas Exp $ */
+/* $Id: dialogs.c,v 1.112 2003/11/09 00:11:10 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -550,15 +550,14 @@ push_move_button(struct dialog_data *dlg_data,
 
 /**** MANAGEMENT *****************************************************/
 
-/* Number of widgets */
-#define	BOOKMARK_WIDGETS	9
+#define	BOOKMARK_MANAGER_BUTTONS	7
+#define	BOOKMARK_MANAGER_ADDSIZE	(sizeof(struct bookmark) + 2 * MAX_STR_LEN)
 
 /* Builds the "Bookmark manager" dialog */
 void
 menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct bookmark *new_bm;
-	struct dialog *dlg;
 
 	/* Show all bookmarks */
 	foreach (new_bm, bookmarks) {
@@ -576,30 +575,16 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 		bm_last_searched_url = NULL;
 	}
 
-	/* Create the dialog */
-	dlg = calloc_dialog(BOOKMARK_WIDGETS, sizeof(struct bookmark) + 2 * MAX_STR_LEN);
-	if (!dlg) return;
-
-	dlg->title = _("Bookmark manager", term);
-	dlg->layouter = hierbox_browser_layouter;
-	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = hierbox_dialog_abort_handler;
-	dlg->udata = ses;
-
-	add_dlg_listbox(dlg, 12, bookmark_dlg_box_build());
-
-	add_dlg_button(dlg, B_ENTER, push_goto_button, _("Goto", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_edit_button, _("Edit", term), ses);
-	add_dlg_button(dlg, B_ENTER, push_delete_button, _("Delete", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_move_button, _("Move", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_add_folder_button, _("Add folder", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_add_button, _("Add", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_search_button, _("Search", term), NULL);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-
-	add_dlg_end(dlg, BOOKMARK_WIDGETS);
-
-	do_dialog(term, dlg, getml(dlg, NULL));
+	hierbox_browser(term, N_("Bookmark manager"),
+			BOOKMARK_MANAGER_ADDSIZE, bookmark_dlg_box_build(), ses,
+			BOOKMARK_MANAGER_BUTTONS,
+			N_("Goto"), push_goto_button, B_ENTER, ses,
+			N_("Edit"), push_edit_button, B_ENTER, ses,
+			N_("Delete"), push_delete_button, B_ENTER, NULL,
+			N_("Move"), push_move_button, B_ENTER, NULL,
+			N_("Add folder"), push_add_folder_button, B_ENTER, NULL,
+			N_("Add"), push_add_button, B_ENTER, NULL,
+			N_("Search"), push_search_button, B_ENTER, NULL);
 }
 
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.64 2003/05/11 16:28:14 zas Exp $ */
+/* $Id: kbdbind.c,v 1.65 2003/05/21 10:19:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -406,7 +406,7 @@ static struct strtonum action_table[] = {
 	{ " *lua-function*", ACT_LUA_FUNCTION, NULL }, /* internal use only */
 	{ "menu", ACT_MENU, N_("Activate the menu") },
 	{ "next-frame", ACT_NEXT_FRAME, N_("Move to the next frame") },
-	{ "open-new-window", ACT_OPEN_NEW_WINDOW, N_("Open in a new window") },
+	{ "open-new-window", ACT_OPEN_NEW_WINDOW, N_("Open a new window") },
 	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, N_("Open the current link in a new window") },
 	{ "options-manager", ACT_OPTIONS_MANAGER, N_("Open options manager") },
 	{ "page-down", ACT_PAGE_DOWN, N_("Move downwards by a page") },

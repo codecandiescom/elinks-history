@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.86 2003/11/22 16:10:21 jonas Exp $ */
+/* $Id: hierbox.c,v 1.87 2003/11/22 16:48:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -349,7 +349,7 @@ scan_for_used(struct listbox_item *item, void *info_, int *offset)
 	return 0;
 }
 
-struct hierbox_action_info *
+static struct hierbox_action_info *
 init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
 			 int (*scanner)(struct listbox_item *, void *, int *))
 {

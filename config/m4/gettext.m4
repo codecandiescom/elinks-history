@@ -50,6 +50,7 @@ AC_DEFUN([AM_WITH_NLS],
       [  --disable-nls           do not use Native Language Support])
 
     AC_MSG_RESULT($CONFIG_NLS)
+    AC_SUBST(CONFIG_NLS)
 
     BUILD_INCLUDED_LIBINTL=no
     USE_INCLUDED_LIBINTL=no

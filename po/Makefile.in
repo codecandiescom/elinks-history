@@ -100,7 +100,7 @@ $(srcdir)/$(PACKAGE).pot: $(POTFILES_REL)
 
 install: install-exec install-data
 install-exec:
-install-data: install-data-@USE_NLS@
+install-data: install-data-@CONFIG_NLS@
 install-data-no: all
 install-data-yes: all
 	$(mkinstalldirs) $(DESTDIR)$(datadir)

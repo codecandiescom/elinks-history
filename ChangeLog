@@ -1,3 +1,153 @@
+Thu Jun 17 21:25:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Move @vs initialization up, and do not check for NULL @vs twice.  
+
+Thu Jun 17 19:16:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	field_op(): Missing usage of form_field_is_readonly() even tho' we
+	never get there if it is disabled. Spotted by Miciah.  
+
+Thu Jun 17 13:10:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	download_link(): Check where_img before getting image download URI.
+	Related to viewer/text/view.c:1.347->1.348 and spotted by Miciah.  
+
+Thu Jun 17 11:27:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/setup.h:
+
+	Fix last patch: s/%s/%f/.  
+
+Thu Jun 17 11:24:04 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/setup.h:
+
+	Add '-i "%s"' to DEFAULT_AC_OPT_MAILTO so that Mutt gets the form
+	fields when one submits a form with action="mailto:foo@bar.net".  
+
+Thu Jun 17 10:02:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, bfu/hierbox.c, bfu/inphist.c,
+	bookmarks/bookmarks.c, config/conf.c, config/options.h,
+	cookies/cookies.c, dialogs/exmode.c, dialogs/menu.c,
+	dialogs/options.c, formhist/formhist.c, globhist/globhist.c,
+	lowlevel/connect.c, lowlevel/home.c, lowlevel/interlink.c,
+	mime/backend/mailcap.c, mime/backend/mimetypes.c,
+	protocol/file/file.c, sched/action.c, sched/download.c,
+	sched/session.c, scripting/lua/core.c, terminal/kbd.c,
+	terminal/terminal.c, util/secsave.c, viewer/dump/dump.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/textarea.c:
+
+	Introduce and use get_cmd_opt_*() macros instead of
+	get_opt_*_tree(cmdline_options, ...).  
+
+Thu Jun 17 09:01:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	Tidy up.  
+
+Thu Jun 17 08:41:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	horizontal_scroll(): code simplification.  
+
+Thu Jun 17 08:38:05 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Drop |nb_tab| from send_event and pass -1 in its place to
+	switch_to_tab, which will compute the value itself.  
+
+Thu Jun 17 08:36:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Fix scroll down + page down behavior.  
+
+Thu Jun 17 07:06:11 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	In push_kbdbind_add_button, we were assigning the selected action's
+	key-map to the hop structure's action member. This prevented one
+	from adding new bindings. Remove this assignment, which appeared in
+	revision 1.167, entitled 'make' (really descriptive, Jonas!).  
+
+Thu Jun 17 06:35:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: textarea.c, textarea.h, view.c:
+
+	In set_textarea, call textarea_op_eob or textarea_op_bob directly
+	instead of calling field_op with a generated up- or down-key-press
+	event. The necessary setup which must be copied from field_op adds
+	several lines, but this change eliminates a hack and causes a text
+	area to be scrolled properly to the top or bottom when one selects
+	it with the down or up actions, even when the up and down arrow-keys
+	are not bound to the up and down actions in the edit map.  
+
+Thu Jun 17 06:02:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	Do not refresh in set_textarea: set_textarea is only called by
+	either up() or down(), which are only called by frame_ev_kbd(),
+	which, when it calls up() or down(), returns FRAME_EVENT_REFRESH,
+	which is passed up to frame_ev_kbd's only caller, frame_ev, which
+	passes the value to its only caller, send_to_frame, which performs a
+	refresh.  
+
+Thu Jun 17 05:22:49 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In textarea_op_up and textarea_op_down, the value of |fs->state| is
+	modified during the loop, so assign |position = fs->value +
+	fs->state| within the loop, not before.  Move the declaration of
+	|position| within the loop, too, now that it is not touched outside
+	the loop.  
+	
+	This fixes a bug whereby ELinks would freeze when one selected a
+	text area.  
+	
+	The problem appeared with the introduction of the |position|
+	variable in textarea.c 1.72 (textarea_op_down) and 1.74
+	(textarea_op_up).  
+
+Thu Jun 17 04:07:43 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Correct an error in the next-to-last patch to this file, 'Use @fc
+	instead of @frm for form control.', which substituted |fc| instead
+	of |fc2| for |frm| in get_succesful_controls.  
+
+Thu Jun 17 00:35:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser/forms.c, viewer/text/form.c,
+	viewer/text/form.h, viewer/text/link.c, viewer/text/textarea.c:
+
+	Introduce enum form_mode and replace form_control.ro with
+	form_control.mode member. Macro named form_field_is_readonly() used
+	to replace tests of ro. Later we can make the testing more
+	finegrained if needed. Two small cleanups: remove check of not ro
+	before textarea_edit() call since it is already checked in the first
+	if test, in textarea_op_enter() return FRAME_EVENT_OK if area is
+	readonly -- no need to refresh the view.  
+
+Thu Jun 17 00:12:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/forms.c:
+
+	get_form_mode(): Introduced to initialize form_control->ro value.  
+
 Wed Jun 16 21:47:13 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

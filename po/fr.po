@@ -2,7 +2,7 @@
 # Fabrice Haberer-Proust <fric@gmx.li>
 # Laurent Monin <zas@norz.org>, 2001 - 2002
 #
-msgid ""
+msgid "_this_is_a_workaround_\n"
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-01-09 14:48+0100\n"
@@ -2454,13 +2454,13 @@ msgstr ""
 
 #: src/config/options.c:2354
 msgid "Write formatted version of given URL to stdout"
-msgstr "Exporter le document formaté sur la sortie standart"
+msgstr "Exporter le document formaté sur la sortie standard"
 
 #: src/config/options.c:2356
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
-msgstr "Exporter le document formaté sur la sortie standart."
+msgstr "Exporter le document formaté sur la sortie standard."
 
 #: src/config/options.c:2359
 msgid "Codepage to use with -dump"
@@ -2580,15 +2580,15 @@ msgstr ""
 
 #: src/config/options.c:2426
 msgid "Write the source of given URL to stdout"
-msgstr "Ecrire la source de l'URL sur la sortie standart"
+msgstr "Ecrire la source de l'URL sur la sortie standard"
 
 #: src/config/options.c:2428
 msgid "Write the given HTML document in source form to stdout."
-msgstr "Ecrire la source du document sur la sortie standart."
+msgstr "Ecrire la source du document sur la sortie standard."
 
 #: src/config/options.c:2430
 msgid "Read document from stdin"
-msgstr "Lire le document sur l'entrée standart"
+msgstr "Lire le document sur l'entrée standard"
 
 #: src/config/options.c:2432
 msgid ""
@@ -2598,7 +2598,7 @@ msgid ""
 "stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 "know why you would use -source -stdin, though ;-)"
 msgstr ""
-"Ouvre l'entrée standart en tant que document HTML - ceci est équivalent à:\n"
+"Ouvre l'entrée standard en tant que document HTML - ceci est équivalent à:\n"
 " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
 "Seulement utile avec les options -dump ou -source !! (Toutefois, \n"
 "-source -stdin a peu de sens... ;-)"
@@ -3254,7 +3254,7 @@ msgstr "Bloquer le curseur"
 
 #: src/dialogs/options.c:119
 msgid "Transparency"
-msgstr ""
+msgstr "Transparence"
 
 #: src/dialogs/options.c:120
 msgid "UTF-8 I/O"
@@ -3529,7 +3529,7 @@ msgstr "Réponse HTTP incorrecte"
 
 #: src/sched/sched.c:85
 msgid "HTTP 100 (???)"
-msgstr ""
+msgstr "HTTP 100 (???)"
 
 #: src/sched/sched.c:86
 msgid "No content"
@@ -3800,5 +3800,5 @@ msgstr "Envoi à"
 msgid "post to"
 msgstr "Transfert à"
 
-#~ msgid "Cache redirect information"
-#~ msgstr "Attente de confirmation de redirection"
+msgid "Cache redirect information"
+msgstr "Informations au sujet du cache et des redirections"

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.25 2003/04/20 15:05:49 zas Exp $ */
+/* $Id: string.c,v 1.26 2003/04/21 20:38:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -381,8 +381,10 @@ strdup(const unsigned char *str)
 	int str_len = strlen(str);
 	unsigned char *new = malloc(str_len + 1);
 
-	strcpy(new, str);
-	new[str_len] = 0;
+	if (new) {
+		if (str_len) memcpy(new, str, str_len);
+		new[str_len] = 0;
+	}
 	return new;
 }
 #endif
@@ -455,14 +457,14 @@ inline unsigned char *
 trim_chars(unsigned char *s, unsigned char c, int *len)
 {
 	int l = strlen(s);
-	unsigned char *p = s;	
-	
+	unsigned char *p = s;
+
 	while (*p == c) p++, l--;
 	while (l && p[l - 1] == c) p[--l] = '\0';
 
 	memmove(s, p, l + 1);
 	if (len) *len = l;
-	
+
 	return s;
 }
 

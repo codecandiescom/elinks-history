@@ -80,7 +80,7 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Errore nell'analisi di %s alla linea %d colonna %d:\n"
+"read_bookmarks_xbel(): Errore nell'analisi di %s alla riga %d colonna %d:\n"
 "%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
@@ -509,7 +509,7 @@ msgstr "Avvia la modifica"
 #. FIXME
 #: src/config/kbdbind.c:384
 msgid "Go to the end of the page/line"
-msgstr "Vai alla fine della pagina/linea"
+msgstr "Vai alla fine della pagina/riga"
 
 #: src/config/kbdbind.c:385
 msgid "Follow the current link"
@@ -538,7 +538,7 @@ msgstr "Dimentica le credenziali di autenticazione"
 
 #: src/config/kbdbind.c:391
 msgid "Open \"Go to URL\" dialog box"
-msgstr "Apri la finestra di dialogo \"Vai a\""
+msgstr "Apri la finestra di dialogo \"Apri URL\""
 
 #: src/config/kbdbind.c:392
 msgid "Open \"Go to URL\" dialog box containing the current URL"
@@ -563,15 +563,15 @@ msgstr "Gestore storico"
 
 #: src/config/kbdbind.c:397
 msgid "Go to the start of the page/line"
-msgstr "Vai all'inizio della pagina/linea"
+msgstr "Vai all'inizio della pagina/riga"
 
 #: src/config/kbdbind.c:398
 msgid "Delete to beginning of line"
-msgstr "Cancella fino all'inizio della linea"
+msgstr "Cancella fino all'inizio della riga"
 
 #: src/config/kbdbind.c:399
 msgid "Delete to end of line"
-msgstr "Cancella fino alla fine della linea"
+msgstr "Cancella fino alla fine della riga"
 
 #: src/config/kbdbind.c:400
 msgid "Open keybinding manager"
@@ -632,7 +632,7 @@ msgstr "Incolla testo dalla clipboard"
 
 #: src/config/kbdbind.c:418
 msgid "Move to the previous frame"
-msgstr "Passa al frame successivo"
+msgstr "Passa al frame precedente"
 
 #: src/config/kbdbind.c:419
 msgid "Open a quit confirmation dialog box"
@@ -1556,9 +1556,8 @@ msgid "Size"
 msgstr "Dimensione"
 
 #: src/config/options.c:1269
-#, fuzzy
 msgid "Memory cache size (in bytes)."
-msgstr "Dimensione memoria cache (in kilobyte)."
+msgstr "Dimensione memoria cache (in byte)."
 
 #: src/config/options.c:1273
 msgid "Charset"
@@ -3439,9 +3438,8 @@ msgstr ""
 "Questa è un'opzione interna di ELinks, non vuoi usarla."
 
 #: src/config/options.c:2809
-#, fuzzy
 msgid "Set config dir to given string"
-msgstr "Imposta la directory di configurazione alla stringa data."
+msgstr "Imposta la directory di configurazione alla stringa data"
 
 #: src/config/options.c:2811
 msgid ""
@@ -4806,7 +4804,7 @@ msgstr ""
 "predefinito in passato, sostituito dalla stringa User-Agent predefinita di "
 "ELinks. Tuttavia, ora questo signigica che NESSUN HEADER User-Agent SARÀ "
 "INVIATO - se questo è quello che si desidera veramente, impostare il valore "
-"a \" \", altrimenti si cancelli la linea con questa impostazione dal file di "
+"a \" \", altrimenti si cancelli la riga con questa impostazione dal file di "
 "configurazione (se non si ha idea di cosa stia parlando, fare questo), in "
 "questo modo l'impostazione predefinita corretta sarà usata. Le mie scuse per "
 "qualsiasi inconveniente causato."

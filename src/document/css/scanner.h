@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.30 2004/01/20 06:25:29 jonas Exp $ */
+/* $Id: scanner.h,v 1.31 2004/01/20 15:59:40 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -31,6 +31,7 @@ enum css_token_type {
 	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
 	CSS_TOKEN_NUMBER,	/* [0-9]+|[0-9]*"."[0-9]+ */
 	CSS_TOKEN_PERCENTAGE,	/* <number>% */
+	CSS_TOKEN_RGB,		/* rgb( */
 	CSS_TOKEN_STRING,	/* Char sequence delimted by matching ' or " */
 	CSS_TOKEN_TIME,		/* <number>ms or <number>s */
 

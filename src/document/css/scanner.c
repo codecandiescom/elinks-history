@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.45 2004/01/20 14:57:57 jonas Exp $ */
+/* $Id: scanner.c,v 1.46 2004/01/20 15:59:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,12 +176,21 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			type = CSS_TOKEN_NAME;
 
 		} else if (*string == '(') {
-			/* TODO: Currently we only handle rgb() functions which
-			 * means all other functions are retrieved part by
-			 * part. For url() it means the URI arg is skipped in
-			 * small bits which is stupid. If the funtion is
-			 * unknown skip to next ), ; or }. --jonas */
-			type = CSS_TOKEN_FUNCTION;
+			if (string - token->string == 3
+			    && memcmp(token->string, "rgb", 3)) {
+				type = CSS_TOKEN_RGB;
+
+			} else {
+				unsigned char *function_end = strchr(string, ')');
+
+				/* Try to skip to the end so we do not generate
+				 * tokens for every argument. */
+				if (function_end) {
+					type = CSS_TOKEN_FUNCTION;
+					string = function_end;
+				}
+			}
+
 			string++;
 
 		} else {

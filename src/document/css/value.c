@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.39 2004/01/20 00:13:08 jonas Exp $ */
+/* $Id: value.c,v 1.40 2004/01/20 15:59:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,8 +29,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
 
-	if (token->type == CSS_TOKEN_FUNCTION
-	    && css_token_contains(token, "rgb(")) {
+	if (token->type == CSS_TOKEN_RGB) {
 		/* RGB function */
 		int shift;
 

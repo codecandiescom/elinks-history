@@ -3,7 +3,8 @@ See ChangeLog for recent changes, bugfixes and new features.
 ELinks now:
 
 * support for Lua 4.x was dropped, we only support Lua 5.x now.
-* button shortcuts
+* explicit keyboard accelerators were defined for buttons in dialogue boxes
+  and are now highlighted.
 
 ELinks 0.10.2:
 

@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.14 2003/11/28 00:48:21 pasky Exp $ */
+/* $Id: signals.c,v 1.15 2003/11/28 00:57:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,8 @@ got_signal(int sig)
 	struct signal_info *s;
 
 	if (sig >= NUM_SIGNALS || sig < 0) {
-		error(gettext("Bad signal number: %d"), sig);
+		/* Signal handler - we have no good way how to tell this the
+		 * user. She won't care anyway, tho'. */
 		return;
 	}
 

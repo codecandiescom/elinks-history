@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.2 2005/03/27 04:12:06 jonas Exp $ */
+/* $Id: parse.c,v 1.3 2005/03/27 07:09:56 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -27,6 +27,24 @@
 #include "util/conv.h"
 #include "util/string.h"
 #include "util/ttime.h"
+
+
+static long
+parse_ftp_number(unsigned char **src, unsigned char *end, long from, long to)
+{
+	long number = 0;
+	unsigned char *pos = *src;
+
+	for (; pos < end && isdigit(*pos); pos++)
+		number = (*pos - '0') + 10 * number;
+
+	*src = pos;
+
+	if (number < from || to < number)
+		return -1;
+
+	return number;
+}
 
 
 /* Converts Un*x-style symbolic permissions to number-style ones, e.g. string
@@ -129,12 +147,12 @@ parse_ftp_eplf_response(struct ftp_file_info *info, unsigned char *src, int len)
 
 		case FTP_EPLF_SIZE:
 			if (src >= pos) break;
-			info->size = strtolx(src, &pos);
+			info->size = parse_ftp_number(&src, pos, 0, LONG_MAX);
 			break;
 
 		case FTP_EPLF_MTIME:
 			if (src >= pos) break;
-			info->mtime = str_to_time_T(src);
+			info->mtime = (time_t) parse_ftp_number(&src, pos, 0, LONG_MAX);
 			break;
 		case FTP_EPLF_ID:
 			/* Not used */

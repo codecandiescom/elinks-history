@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.74 2003/09/21 14:47:28 jonas Exp $ */
+/* $Id: error.c,v 1.75 2003/09/28 23:31:53 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -103,6 +103,7 @@ elinks_assertm(int x, unsigned char *fmt, ...)
 	unsigned char *buf = NULL;
 	va_list params;
 
+	if (assert_failed) return;
 	if (!(assert_failed = !x)) return;
 
 	va_start(params, fmt);

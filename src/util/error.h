@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.33 2003/09/12 21:14:24 miciah Exp $ */
+/* $Id: error.h,v 1.34 2003/09/28 23:31:53 zas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -48,7 +48,7 @@ void elinks_internal(unsigned char *fmt, ...);
 #define assert(x) /* We don't do anything in FASTMEM mode. */
 #else
 #define assert(x) \
-do { if ((assert_failed = !(x))) { \
+do { if (!assert_failed && (assert_failed = !(x))) { \
 	internal("assertion " #x " failed!"); \
 } } while (0)
 #endif
@@ -67,7 +67,7 @@ do { if ((assert_failed = !(x))) { \
 #define assertm(x,m...) /* We don't do anything in FASTMEM mode. */
 #else
 #define assertm(x,m...) \
-do { if ((assert_failed = !(x))) { \
+do { if (!assert_failed && (assert_failed = !(x))) { \
 	internal("assertion " #x " failed: " m); \
 } } while (0)
 #endif
@@ -128,7 +128,7 @@ extern int assert_failed;
 #ifdef FASTMEM
 #define if_assert_failed if (0) /* This should be optimalized away. */
 #else
-#define if_assert_failed if (assert_failed)
+#define if_assert_failed if (assert_failed && !(assert_failed = 0))
 #endif
 
 

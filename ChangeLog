@@ -1,3 +1,174 @@
+Wed Nov 19 18:38:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/dump/dump.c:
+
+	A weird line was disabled and heavily commented. Please help, this
+	point needs to be clarified.  
+
+Wed Nov 19 18:15:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.c, document/document.h,
+	document/html/renderer.c, document/plain/renderer.c,
+	viewer/dump/dump.c, viewer/text/search.c, viewer/text/view.c:
+
+	struct line: @d -> @chars.  
+
+Wed Nov 19 17:59:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	document/plain/renderer.c, viewer/dump/dump.c,
+	viewer/text/search.c, viewer/text/view.c:
+
+	struct line: @l -> @length.  
+
+Wed Nov 19 17:22:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+
+	Indentations fixes.  
+
+Wed Nov 19 16:49:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Make the default abort handler part of the event handler so the
+	abort handler is usable for private dialog cleanup. Idea by Miciah.  
+
+Wed Nov 19 08:58:40 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/plain/renderer.c:
+
+	In add_document_lines, use memchr instead of strcspn to compute the
+	width of the line. Now, the full line is displayed even if it
+	contains the null character.  
+
+Wed Nov 19 08:18:14 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Delete an ancient comment that was never even accurate (it
+	originated in src/dialogs/globhist.c:1.3->1.4 and was incorrectly
+	copied in src/document/globhist.c:1.20->1.21).  
+
+Wed Nov 19 07:48:55 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	In hierbox_browser(), handle do_dialog() returning NULL.  
+
+Wed Nov 19 07:44:47 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.h:
+
+	Put back the #include "util/lists.h", which was dropped in
+	src/bfu/hierbox.h:1.15->1.16 (the introduction of struct
+	hierbox_browser).  
+
+Wed Nov 19 05:15:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.c:
+
+	In src/viewer/text/textarea.c, complete kuser's fix (1.30->1.31:
+	"Set @y to 0.") for his earlier change (1.29->1.30: "Don't use gotos
+	in a row.") to textarea_op_(up|down): He forgot to fix
+	textarea_op_down, only fixing textarea_op_up.  
+
+Wed Nov 19 02:29:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/: dialogs.c, globhist.c:
+
+	No need to allocate the listbox item text + use init_browser_box().  
+
+Wed Nov 19 02:09:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bookmarks/dialogs.c, cookies/dialogs.c,
+	globhist/dialogs.c:
+
+	Generalize visibility setup.  
+
+Wed Nov 19 02:08:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Fix hotkey take 2.  
+
+Wed Nov 19 01:55:15 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/: cookies.c, cookies.h, dialogs.c:
+
+	Cleanup.  
+
+Wed Nov 19 01:45:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	cache/cache.c, cache/dialogs.c, cache/dialogs.h, config/dialogs.c,
+	cookies/cookies.c, cookies/dialogs.c, cookies/dialogs.h,
+	globhist/dialogs.c, globhist/dialogs.h, globhist/globhist.c:
+
+	Generalize even more of the hierbox code by taking next step and
+	introduce a hierbox_browser structure with the most important lists
+	and the listbox operations.  
+
+Wed Nov 19 01:39:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Make l the hotkey for kill background connection. #ifdef cookie
+	manager although we probably can't build without cookies.  
+
+Wed Nov 19 01:29:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Add missing #include.  
+
+Wed Nov 19 00:02:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	Added missing include.  
+
+Wed Nov 19 00:02:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Enlarge @cur_len to strlen(entry->data) when matching yet the
+	original string. Also always set @longest_common_match if it has
+	been zero.  
+
+Tue Nov 18 23:59:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Make the @match initialized to NULL.  
+
+Tue Nov 18 23:53:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Simplify loop condition.  
+
+Tue Nov 18 23:53:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Instead of staring at the tangled original code, let's just use
+	common sense. This changes do_tab_compl_unambiguous() to make some
+	sense :).  
+
+Tue Nov 18 23:49:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Comment :-).  
+
+Tue Nov 18 23:17:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/dialogs.c, globhist/dialogs.c:
+
+	Yay more uncompiled code (untill pasky fixes his patches ;). Use
+	hierbox_dialog_list_item.  
+
 Tue Nov 18 23:08:51 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/plain/renderer.c:

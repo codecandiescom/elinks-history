@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.127 2004/04/04 17:31:43 jonas Exp $ */
+/* $Id: uri.c,v 1.128 2004/04/04 20:51:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -750,7 +750,7 @@ end:
 	if (strncmp(ch + 1, "//", 2)) {
 		add_to_strn(&newurl, "//");
 		add_to_strn(&newurl, ch + 1);
-		if (!parse_uri(&uri, newurl)) {
+		if (parse_uri(&uri, newurl)) {
 			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 

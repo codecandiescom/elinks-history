@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.16 2003/07/21 22:01:06 jonas Exp $ */
+/* $Id: file.c,v 1.17 2003/12/21 14:56:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ get_unique_name(unsigned char *fileprefix)
 	while (file_exists(file)) {
 		if (!(suffix < memtrigger)) {
 			if (suffix >= 10000)
-				internal("Too big suffix in get_unique_name().");
+				INTERNAL("Too big suffix in get_unique_name().");
 			memtrigger *= 10;
 			digits++;
 

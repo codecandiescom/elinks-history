@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.13 2003/12/19 23:21:24 pasky Exp $ */
+/* $Id: task.c,v 1.14 2003/12/21 14:56:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,7 @@ ses_imgmap(struct session *ses)
 	struct menu_item *menu;
 
 	if (!ce) {
-		internal("can't find cache entry");
+		INTERNAL("can't find cache entry");
 		return;
 	}
 	defrag_entry(ce);

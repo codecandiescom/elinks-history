@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.38 2003/12/21 14:13:20 zas Exp $ */
+/* $Id: select.c,v 1.39 2003/12/21 14:56:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ get_handler(int fd, int tp)
 		case H_DATA:	return threads[fd].data;
 	}
 
-	internal("get_handler: bad type %d", tp);
+	INTERNAL("get_handler: bad type %d", tp);
 	return NULL;
 }
 
@@ -339,7 +339,7 @@ select_loop(void (*init)(void))
 				ERROR(gettext("select() failed: %d (%s)"),
 				      errno, (unsigned char *) strerror(errno));
 				if (++select_errors > 10) /* Infinite loop prevention. */
-					internal(gettext("%d select() failures."),
+					INTERNAL(gettext("%d select() failures."),
 						 select_errors);
 			}
 			continue;

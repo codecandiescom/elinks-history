@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.124 2003/12/21 14:46:40 pasky Exp $ */
+/* $Id: link.c,v 1.125 2003/12/21 14:56:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -675,7 +675,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		do_select_submenu(ses->tab->term, link->form->menu, ses);
 
 	} else {
-		internal("bad link type %d", link->type);
+		INTERNAL("bad link type %d", link->type);
 	}
 
 	return 1;

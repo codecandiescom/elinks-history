@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.67 2003/12/21 00:30:15 jonas Exp $ */
+/* $Id: form.c,v 1.68 2003/12/21 14:56:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -627,7 +627,7 @@ again:
 		for (j = BL - 1; j >= 0; j--)
 			if (bound[j]++ >= '9') bound[j] = '0';
 			else goto again;
-		internal("Could not assing boundary");
+		INTERNAL("Could not assing boundary");
 
 nb:;
 	}

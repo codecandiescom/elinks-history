@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.57 2003/12/19 12:03:40 pasky Exp $ */
+/* $Id: globhist.c,v 1.58 2003/12/21 14:56:55 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -225,7 +225,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		history_item = global_history.items.prev;
 
 		if ((void *) history_item == &global_history.items) {
-			internal("global history is empty");
+			INTERNAL("global history is empty");
 			global_history.n = 0;
 			return;
 		}

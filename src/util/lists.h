@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.36 2003/12/07 15:59:23 pasky Exp $ */
+/* $Id: lists.h,v 1.37 2003/12/21 14:56:56 zas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -68,7 +68,7 @@ do { \
 } while (0)
 
 
-#define list_magic_error(where,what) internal("[%s] %s - bad list magic", where, #what)
+#define list_magic_error(where,what) INTERNAL("[%s] %s - bad list magic", where, #what)
 
 
 #define list_magic_set(x) \

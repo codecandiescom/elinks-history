@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.14 2003/12/21 14:13:21 zas Exp $ */
+/* $Id: memory.c,v 1.15 2003/12/21 14:56:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ patience(unsigned char *of)
 	}
 
 #ifdef CRASH_IF_ALLOC_MAXTRIES
-	internal("Out of memory (%s returned NULL) after %d tries,"
+	INTERNAL("Out of memory (%s returned NULL) after %d tries,"
 		" I give up. See ya on the other side.",
 		of, alloc_try);
 #else
@@ -73,7 +73,7 @@ void
 mem_free(void *p)
 {
 	if (!p) {
-		internal("mem_free(NULL)");
+		INTERNAL("mem_free(NULL)");
 		return;
 	}
 

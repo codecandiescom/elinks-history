@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.42 2003/12/01 19:04:22 pasky Exp $ */
+/* $Id: document.c,v 1.43 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ done_document(struct document *document)
 
 	ce = find_in_cache(document->url);
 	if (!ce)
-		internal("no cache entry for document");
+		INTERNAL("no cache entry for document");
 	else
 		object_unlock(ce);
 

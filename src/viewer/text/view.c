@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.298 2003/12/21 00:30:15 jonas Exp $ */
+/* $Id: view.c,v 1.299 2003/12/21 14:56:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1303,7 +1303,7 @@ send_download_do(struct session *ses, enum dl_type dlt)
 
 		if (wi) ses->dn_url = stracpy(wi);
 	} else {
-		internal("Unknown dl_type");
+		INTERNAL("Unknown dl_type");
 		ses->dn_url = NULL;
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.119 2003/12/07 11:29:06 pasky Exp $ */
+/* $Id: ftp.c,v 1.120 2003/12/21 14:56:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,7 +558,7 @@ add_file_cmd_to_str(struct connection *conn)
 
 	data = conn->uri.data;
 	if (!data) {
-		internal("conn->uri.data empty");
+		INTERNAL("conn->uri.data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
 		return NULL;
 	}
@@ -843,7 +843,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 				break;
 
 			default:
-				internal("WHAT???");
+				INTERNAL("WHAT???");
 		}
 
 		ftp_send_retr_req(conn, S_GETH);

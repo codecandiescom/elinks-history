@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.298 2003/12/21 14:51:19 zas Exp $ */
+/* $Id: parser.c,v 1.299 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1707,7 +1707,7 @@ xxx:
 		case FC_TEXTAREA:
 		case FC_SELECT:
 		case FC_HIDDEN:
-			internal("bad control type");
+			INTERNAL("bad control type");
 	}
 	kill_html_stack_item(&html_top);
 	put_chrs(" ", 1, put_chars_f, ff);
@@ -1754,7 +1754,7 @@ html_option(unsigned char *a)
 
 		if (!init_string(&str)) goto x;
 		if (parse_element(p, eoff, NULL, NULL, NULL, &p)) {
-			internal("parse element failed");
+			INTERNAL("parse element failed");
 			val = str.source;
 			goto x;
 		}
@@ -2188,7 +2188,7 @@ end_parse:
 static void
 html_textarea(unsigned char *a)
 {
-	internal("This should be never called");
+	INTERNAL("This should be never called");
 }
 
 static void

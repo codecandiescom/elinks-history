@@ -1,4 +1,4 @@
-/* $Id: error.h,v 1.38 2003/12/21 14:51:21 zas Exp $ */
+/* $Id: error.h,v 1.39 2003/12/21 14:56:56 zas Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
@@ -41,13 +41,13 @@ void elinks_error(unsigned char *fmt, ...);
 /* @internal(format_string) is used to report fatal errors during the ELinks
  * run. It tries to draw user's attention to the error and dumps core if ELinks
  * is running in the DEBUG mode. */
-#undef internal
-#define internal errfile = __FILE__, errline = __LINE__, elinks_internal
+#undef INTERNAL
+#define INTERNAL errfile = __FILE__, errline = __LINE__, elinks_internal
 void elinks_internal(unsigned char *fmt, ...);
 
 
 
-/* This is our smart assert(). It is basically equivalent to if (x) internal(),
+/* This is our smart assert(). It is basically equivalent to if (x) INTERNAL(),
  * but it generates a uniform message and mainly does not do the test if we are
  * supposed to be lightning fast. Use it, use it a lot! And never forget the
  * recovery path, see below if_assert_failed. */
@@ -58,7 +58,7 @@ void elinks_internal(unsigned char *fmt, ...);
 #else
 #define assert(x) \
 do { if (!assert_failed && (assert_failed = !(x))) { \
-	internal("assertion " #x " failed!"); \
+	INTERNAL("assertion " #x " failed!"); \
 } } while (0)
 #endif
 
@@ -77,7 +77,7 @@ do { if (!assert_failed && (assert_failed = !(x))) { \
 #else
 #define assertm(x,m...) \
 do { if (!assert_failed && (assert_failed = !(x))) { \
-	internal("assertion " #x " failed: " m); \
+	INTERNAL("assertion " #x " failed: " m); \
 } } while (0)
 #endif
 #else /* HAVE_VARIADIC_MACROS */

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.14 2003/12/05 13:50:29 jonas Exp $ */
+/* $Id: renderer.c,v 1.15 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ render_document(struct view_state *vs, struct document_view *document_view,
 
 	cache_entry = find_in_cache(vs->url);
 	if (!cache_entry) {
-		internal("document %s to format not found", vs->url);
+		INTERNAL("document %s to format not found", vs->url);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.281 2003/12/19 23:37:07 pasky Exp $ */
+/* $Id: session.c,v 1.282 2003/12/21 14:56:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -858,7 +858,7 @@ ses_load_notify(struct download *stat, struct session *ses)
 		mem_free(ses->loading_url);
 		if (ses->wtd == WTD_FORWARD) {
 			ses_forward(ses);
-		} else internal("bad ses->wtd");
+		} else INTERNAL("bad ses->wtd");
 		return;
 	}
 	if (stat->state >= 0) print_screen_status(ses);

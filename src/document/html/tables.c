@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.132 2003/12/21 14:51:20 zas Exp $ */
+/* $Id: tables.c,v 1.133 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -725,7 +725,7 @@ nc:
 
 				if (sc->mx == x && sc->my == y) continue;
 
-				/* internal("boo"); */
+				/* INTERNAL("boo"); */
 
 				for (l = 0; l < k; l++)
 					memset(CELL(t, x + l, y + j), 0,
@@ -1149,7 +1149,7 @@ distribute_widths(struct table *t, int width)
 					mx[i] = MAXINT;
 					break;
 				default:
-					internal("could not expand table");
+					INTERNAL("could not expand table");
 					goto end2;
 			}
 			p += w[i];
@@ -1269,7 +1269,7 @@ check_table_widths(struct table *t)
 	}
 
 	if (ns > s) {
-		/* internal("new width(%d) is larger than previous(%d)", ns, s); */
+		/* INTERNAL("new width(%d) is larger than previous(%d)", ns, s); */
 		goto end;
 	}
 

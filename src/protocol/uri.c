@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.77 2003/12/01 20:42:56 pasky Exp $ */
+/* $Id: uri.c,v 1.78 2003/12/21 14:56:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,7 +524,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		unsigned char *s = strstr(base, "//");
 
 		if (!s) {
-			internal("bad base url: %s", base);
+			INTERNAL("bad base url: %s", base);
 			return NULL;
 		}
 
@@ -559,7 +559,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 prx:
 	if (!parse_uri(&uri, base) || !uri.data) {
-		internal("bad base url");
+		INTERNAL("bad base url");
 		return NULL;
 	}
 	path = uri.data;

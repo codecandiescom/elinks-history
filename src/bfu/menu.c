@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.125 2003/12/21 13:43:27 pasky Exp $ */
+/* $Id: menu.c,v 1.126 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,7 +249,7 @@ display_menu(struct terminal *term, struct menu *menu)
 #ifdef DEBUG
 		/* Sanity check. */
 		if (!menu->items[p].text)
-			internal("[%p] menu->items[%d].text == NULL", menu->items[p],
+			INTERNAL("[%p] menu->items[%d].text == NULL", menu->items[p],
 				 menu->items[p].text);
 #endif
 

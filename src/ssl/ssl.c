@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.44 2003/12/21 14:51:21 zas Exp $ */
+/* $Id: ssl.c,v 1.45 2003/12/21 14:56:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,16 +131,16 @@ init_gnutls(struct module *module)
 	int ret = gnutls_global_init();
 
 	if (ret < 0)
-		internal("GNUTLS init failed: %s", gnutls_strerror(ret));
+		INTERNAL("GNUTLS init failed: %s", gnutls_strerror(ret));
 
 	ret = gnutls_anon_allocate_client_sc(&anon_cred);
 	if (ret < 0)
-		internal("GNUTLS anon credentials alloc failed: %s",
+		INTERNAL("GNUTLS anon credentials alloc failed: %s",
 			 gnutls_strerror(ret));
 
 	ret = gnutls_certificate_allocate_sc(&xcred);
 	if (ret < 0)
-		internal("GNUTLS X509 credentials alloc failed: %s",
+		INTERNAL("GNUTLS X509 credentials alloc failed: %s",
 			 gnutls_strerror(ret));
 
 	/* Here, we should load certificate files etc. */

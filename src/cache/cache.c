@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.103 2003/12/21 14:51:18 zas Exp $ */
+/* $Id: cache.c,v 1.104 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ defrag_entry(struct cache_entry *ce)
 		if (overlay > 0) break;
 		if (overlay == 0) continue;
 
-		internal("fragments overlay");
+		INTERNAL("fragments overlay");
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.68 2003/11/19 00:02:17 pasky Exp $ */
+/* $Id: inphist.c,v 1.69 2003/12/21 14:56:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 	 * removing first entries if needed */
 	for (; history->size > MAX_INPUT_HISTORY_ENTRIES; history->size--) {
 		if (list_empty(history->entries)) {
-			internal("history is empty");
+			INTERNAL("history is empty");
 			history->size = 0;
 			return;
 		}

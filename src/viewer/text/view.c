@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.632 2004/10/17 20:45:16 miciah Exp $ */
+/* $Id: view.c,v 1.633 2004/10/17 21:25:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -702,6 +702,27 @@ try_prefix_key(struct session *ses, struct document_view *doc_view,
 }
 
 static enum frame_event_status
+try_form_action(struct session *ses, struct document_view *doc_view,
+		struct link *link, struct term_event *ev)
+{
+	enum frame_event_status status;
+
+	if (link && link_is_textinput(link)) {
+		status = field_op(ses, doc_view, link, ev);
+
+		if (status != FRAME_EVENT_IGNORED) {
+			if (ses->insert_mode == INSERT_MODE_ON) {
+				assert(link == get_current_link(doc_view));
+			}
+
+			return status;
+		}
+	}
+
+	return FRAME_EVENT_IGNORED;
+}
+
+static enum frame_event_status
 frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_IGNORED;
@@ -824,17 +845,9 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 
 	link = get_current_link(doc_view);
 
-	if (link && link_is_textinput(link)) {
-		status = field_op(ses, doc_view, link, ev);
-
-		if (status != FRAME_EVENT_IGNORED) {
-			if (ses->insert_mode == INSERT_MODE_ON) {
-				assert(link == get_current_link(doc_view));
-			}
-
-			return status;
-		}
-	}
+	status = try_form_action(ses, doc_view, link, ev);
+	if (status != FRAME_EVENT_IGNORED)
+		return status;
 
 	if (ev->ev == EVENT_KBD) {
 		status = frame_ev_kbd(ses, doc_view, ev);

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.6 2002/04/02 15:58:33 pasky Exp $ */
+/* $Id: globhist.c,v 1.7 2002/04/02 16:00:22 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -46,10 +46,10 @@ history_dialog_list_update(struct list_head *list)
 	history_dialog_list_clear(list);
 
 	foreach (historyitem, global_history.items) {
-		if ((last_searched_globhist_title && *last_searched_globhist_title
-		     && !strcasestr(historyitem->title, last_searched_globhist_title))
-		    || (last_searched_globhist_url && *last_searched_globhist_url
-			&& !strcasestr(historyitem->url, last_searched_globhist_url)))
+		if ((gh_last_searched_title && *gh_last_searched_title
+		     && !strcasestr(historyitem->title, gh_last_searched_title))
+		    || (gh_last_searched_url && *gh_last_searched_url
+			&& !strcasestr(historyitem->url, gh_last_searched_url)))
 			continue;
 
 		/* Deleted in history_dialog_clear_list() */
@@ -273,11 +273,11 @@ history_search_do(struct dialog *d)
 	if (!d->items[0].data && !d->items[1].data)
 		return;
 
-	if (last_searched_globhist_title) mem_free(last_searched_globhist_title);
-	last_searched_globhist_title = stracpy(d->items[0].data);
+	if (gh_last_searched_title) mem_free(gh_last_searched_title);
+	gh_last_searched_title = stracpy(d->items[0].data);
 
-	if (last_searched_globhist_url) mem_free(last_searched_globhist_url);
-	last_searched_globhist_url = stracpy(d->items[1].data);
+	if (gh_last_searched_url) mem_free(gh_last_searched_url);
+	gh_last_searched_url = stracpy(d->items[1].data);
 
 	parent = d->udata;
 	if (!parent) return;
@@ -293,8 +293,8 @@ static void
 launch_search_dialog(struct terminal *term, struct dialog_data *parent,
 		     struct session *ses)
 {
-	do_edit_dialog(term, TEXT(T_SEARCH_HISTORY), last_searched_globhist_title,
-		       last_searched_globhist_url, ses, parent, history_search_do,
+	do_edit_dialog(term, TEXT(T_SEARCH_HISTORY), gh_last_searched_title,
+		       gh_last_searched_url, ses, parent, history_search_do,
 		       NULL, 0);
 }
 
@@ -443,14 +443,14 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *d;
 
-	if (last_searched_globhist_title) {
-		mem_free(last_searched_globhist_title);
-		last_searched_globhist_title = NULL;
+	if (gh_last_searched_title) {
+		mem_free(gh_last_searched_title);
+		gh_last_searched_title = NULL;
 	}
 
-	if (last_searched_globhist_url) {
-		mem_free(last_searched_globhist_url);
-		last_searched_globhist_url = NULL;
+	if (gh_last_searched_url) {
+		mem_free(gh_last_searched_url);
+		gh_last_searched_url = NULL;
 	}
 
 #define DIALOG_MEMSIZE (sizeof(struct dialog) \

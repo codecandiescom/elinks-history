@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.89 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: formhist.c,v 1.90 2004/08/20 23:46:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ str2form_type(unsigned char *s)
 			return form_type2name[n].num;
 
 	return -1;
-};
+}
 
 unsigned char *
 form_type2str(enum form_type num)
@@ -84,7 +84,7 @@ form_type2str(enum form_type num)
 			return form_type2name[n].name;
 
 	return NULL;
-};
+}
 
 #undef FORM_TYPE_COUNT
 

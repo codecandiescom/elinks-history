@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.198 2004/08/14 06:57:35 jonas Exp $ */
+/* $Id: connection.c,v 1.199 2004/08/20 23:46:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,7 +263,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	}
 
 	return conn;
-};
+}
 
 static void stat_timer(struct connection *conn);
 

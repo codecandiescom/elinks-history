@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.83 2004/07/18 18:29:54 zas Exp $ */
+/* $Id: parse.c,v 1.84 2004/08/20 23:46:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,7 +288,7 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 
 	/* Skip spaces between width number and percentage if any. */
 	while (len && isspace(str[len - 1])) len--;
-	if (!len) { mem_free(value); return -1; }; /* Nothing to parse. */
+	if (!len) { mem_free(value); return -1; } /* Nothing to parse. */
 
 	/* Shorten the string a bit, so strtoul() will work on useful
 	 * part of it. */

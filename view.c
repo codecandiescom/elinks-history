@@ -2750,7 +2750,7 @@ unsigned char *print_current_linkx(struct f_data_c *fd, struct terminal *term)
 	
 	if (!fd) return NULL;
 	if (fd->vs->current_link == -1
-	    || fd->vs->current_link >= f->f_data->nlinks
+	    || fd->vs->current_link >= fd->f_data->nlinks
 	    || fd->f_data->frame) return NULL;
 	l = &fd->f_data->links[fd->vs->current_link];
 	if (l->type == L_LINK) {

@@ -5,30 +5,31 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-26 18:24+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-11-26 21:32+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:288
 msgid "Close"
 msgstr "Fermer"
 
 #: src/bfu/hierbox.c:391 src/cache/dialogs.c:144 src/config/dialogs.c:347
-#: src/cookies/dialogs.c:130 src/dialogs/document.c:41
-#: src/dialogs/document.c:229 src/dialogs/download.c:404
-#: src/formhist/dialogs.c:122 src/globhist/dialogs.c:181
+#: src/cookies/dialogs.c:130 src/cookies/dialogs.c:137
+#: src/dialogs/document.c:41 src/dialogs/document.c:229
+#: src/dialogs/download.c:404 src/formhist/dialogs.c:125
+#: src/formhist/dialogs.c:133 src/globhist/dialogs.c:181
 msgid "Info"
 msgstr "Info"
 
 #. if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty;
-#: src/bfu/hierbox.c:394 src/bfu/hierbox.c:438 src/bfu/hierbox.c:452
-#: src/bfu/hierbox.c:555 src/bfu/inpfield.c:47 src/bfu/inpfield.c:56
-#: src/bfu/inpfield.c:76 src/bookmarks/dialogs.c:190 src/config/dialogs.c:45
+#: src/bfu/hierbox.c:394 src/bfu/hierbox.c:468 src/bfu/hierbox.c:572
+#: src/bfu/inpfield.c:47 src/bfu/inpfield.c:56 src/bfu/inpfield.c:76
+#: src/bookmarks/dialogs.c:190 src/config/dialogs.c:45
 #: src/config/dialogs.c:193 src/config/dialogs.c:252 src/config/dialogs.c:282
 #: src/config/dialogs.c:317 src/config/dialogs.c:329 src/config/dialogs.c:396
 #: src/config/dialogs.c:418 src/config/dialogs.c:445 src/config/dialogs.c:486
@@ -44,78 +45,78 @@ msgstr "Info"
 #: src/sched/error.c:41 src/sched/session.c:416 src/sched/session.c:1270
 #: src/sched/session.c:1287 src/sched/session.c:1311 src/sched/session.c:1565
 #: src/scripting/lua/core.c:400 src/scripting/lua/core.c:483
-#: src/scripting/lua/core.c:590 src/scripting/lua/core.c:716
+#: src/scripting/lua/core.c:590 src/scripting/lua/core.c:719
 #: src/viewer/text/form.c:652 src/viewer/text/search.c:853
 #: src/viewer/text/search.c:879 src/viewer/text/search.c:885
 #: src/viewer/text/search.c:907 src/viewer/text/search.c:1073
 #: src/viewer/text/search.c:1084 src/viewer/text/textarea.c:268
-#: src/viewer/text/view.c:780 src/viewer/text/view.c:1469
+#: src/viewer/text/view.c:780 src/viewer/text/view.c:1468
 msgid "OK"
 msgstr "OK"
 
-#: src/bfu/hierbox.c:433
-msgid "Deleting used folder"
-msgstr "Suppression d'un dossier utilisé"
+#: src/bfu/hierbox.c:436
+#, c-format
+msgid "Sorry, but the item \"%s\" can not be deleted."
+msgstr "Désolé, mais l'item \"%s\" ne peut être supprimé."
 
-#: src/bfu/hierbox.c:434
+#: src/bfu/hierbox.c:437
+#, c-format
+msgid "Sorry, but the item \"%s\" is being used by something else."
+msgstr "Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs."
+
+#: src/bfu/hierbox.c:440
+#, c-format
+msgid "Sorry, but the folder \"%s\" can not be deleted."
+msgstr "Désolé, mais le dossier \"%s\" ne peut être supprimé."
+
+#: src/bfu/hierbox.c:441
 #, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
 msgstr "Désolé, mais le dossier \"%s\" est actuellement utilisé ailleurs."
 
-#: src/bfu/hierbox.c:446
-msgid "Deleting used item"
-msgstr "Suppression d'un item utilisé"
+#: src/bfu/hierbox.c:465
+msgid "Delete error"
+msgstr "Erreur de suppression"
 
-#: src/bfu/hierbox.c:447
-#, c-format
-msgid ""
-"Sorry, but the item \"%s\" is being used by something else.\n"
-"\n"
-"%s"
-msgstr ""
-"Désolé, mais l'item \"%s\" est actuellement utilisé ailleurs.\n"
-"\n"
-"%s"
-
-#: src/bfu/hierbox.c:541
+#: src/bfu/hierbox.c:558
 msgid "Delete marked items"
 msgstr "Supprimer les items sélectionnés"
 
-#: src/bfu/hierbox.c:542
+#: src/bfu/hierbox.c:559
 msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
-#: src/bfu/hierbox.c:544 src/bfu/hierbox.c:565 src/bfu/hierbox.c:579
-#: src/bfu/hierbox.c:634 src/dialogs/menu.c:153 src/dialogs/mime.c:86
-#: src/formhist/formhist.c:478 src/sched/session.c:701 src/terminal/tab.c:195
+#: src/bfu/hierbox.c:561 src/bfu/hierbox.c:582 src/bfu/hierbox.c:596
+#: src/bfu/hierbox.c:655 src/dialogs/menu.c:153 src/dialogs/mime.c:86
+#: src/formhist/formhist.c:489 src/sched/session.c:701 src/terminal/tab.c:195
 msgid "Yes"
 msgstr "Oui"
 
-#: src/bfu/hierbox.c:545 src/bfu/hierbox.c:566 src/bfu/hierbox.c:580
-#: src/bfu/hierbox.c:635 src/dialogs/menu.c:154 src/dialogs/mime.c:87
-#: src/formhist/formhist.c:479 src/sched/session.c:702 src/terminal/tab.c:196
+#: src/bfu/hierbox.c:562 src/bfu/hierbox.c:583 src/bfu/hierbox.c:597
+#: src/bfu/hierbox.c:656 src/dialogs/menu.c:154 src/dialogs/mime.c:87
+#: src/formhist/formhist.c:490 src/sched/session.c:702 src/terminal/tab.c:196
 msgid "No"
 msgstr "Non"
 
-#: src/bfu/hierbox.c:551 src/bfu/hierbox.c:574
+#: src/bfu/hierbox.c:568 src/bfu/hierbox.c:591
 msgid "Delete item"
 msgstr "Supprimer un item"
 
-#: src/bfu/hierbox.c:552
+#: src/bfu/hierbox.c:569
 #, c-format
 msgid "Cannot delete \"%s\""
 msgstr "Impossible de supprimer \"%s\""
 
-#: src/bfu/hierbox.c:561
+#: src/bfu/hierbox.c:578
 msgid "Delete folder"
 msgstr "Supprimer un dossier"
 
-#: src/bfu/hierbox.c:562
+#: src/bfu/hierbox.c:579
 #, c-format
 msgid "Delete the folder \"%s\" and its content?"
 msgstr "Supprimer le dossier \"%s\" et son contenu?"
 
-#: src/bfu/hierbox.c:575
+#: src/bfu/hierbox.c:592
 #, c-format
 msgid ""
 "Delete \"%s\"?\n"
@@ -126,11 +127,11 @@ msgstr ""
 "\n"
 "%s"
 
-#: src/bfu/hierbox.c:631
+#: src/bfu/hierbox.c:652
 msgid "Clear all items"
 msgstr "Effacer tous les items"
 
-#: src/bfu/hierbox.c:632
+#: src/bfu/hierbox.c:653
 msgid "Do you really want to remove all items?"
 msgstr "Êtes-vous sûr de vouloir effacer tous les items?"
 
@@ -257,7 +258,7 @@ msgstr "Nom du dossier"
 #: src/sched/download.c:482 src/sched/download.c:977 src/sched/download.c:986
 #: src/sched/download.c:1013 src/sched/download.c:1025
 #: src/scripting/lua/core.c:401 src/scripting/lua/core.c:484
-#: src/scripting/lua/core.c:716 src/viewer/text/search.c:1073
+#: src/scripting/lua/core.c:719 src/viewer/text/search.c:1073
 #: src/viewer/text/search.c:1084 src/viewer/text/view.c:780
 msgid "Cancel"
 msgstr "Annuler"
@@ -278,7 +279,8 @@ msgstr "Modifier"
 
 #: src/bookmarks/dialogs.c:375 src/cache/dialogs.c:146
 #: src/config/dialogs.c:350 src/config/dialogs.c:520 src/cookies/dialogs.c:131
-#: src/formhist/dialogs.c:123 src/globhist/dialogs.c:185
+#: src/cookies/dialogs.c:138 src/formhist/dialogs.c:126
+#: src/formhist/dialogs.c:134 src/globhist/dialogs.c:185
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -301,7 +303,7 @@ msgstr "Chercher"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:382 src/config/dialogs.c:351
 #: src/config/dialogs.c:522 src/cookies/dialogs.c:133
-#: src/dialogs/options.c:190 src/formhist/dialogs.c:125
+#: src/dialogs/options.c:190 src/formhist/dialogs.c:128
 #: src/globhist/dialogs.c:191 src/sched/download.c:975
 #: src/sched/download.c:1011
 msgid "Save"
@@ -3679,7 +3681,7 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:90 src/cookies/cookies.c:812
+#: src/cookies/cookies.c:90 src/cookies/cookies.c:814
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -3817,12 +3819,14 @@ msgstr ""
 "Expiration: %s\n"
 "Sécurisé: %s"
 
-#: src/cookies/dialogs.c:132 src/dialogs/download.c:406 src/dialogs/edit.c:102
-#: src/formhist/dialogs.c:124 src/globhist/dialogs.c:188
+#: src/cookies/dialogs.c:132 src/cookies/dialogs.c:139
+#: src/dialogs/download.c:406 src/dialogs/edit.c:102
+#: src/formhist/dialogs.c:127 src/formhist/dialogs.c:135
+#: src/globhist/dialogs.c:188
 msgid "Clear"
 msgstr "Effacer"
 
-#: src/cookies/dialogs.c:137
+#: src/cookies/dialogs.c:143 src/cookies/dialogs.c:154
 msgid "Cookie manager"
 msgstr "Gestionnaire de cookies"
 
@@ -3835,7 +3839,7 @@ msgstr "Authentication requise pour %s à %s"
 msgid "HTTP Authentication"
 msgstr "Authentification HTTP"
 
-#: src/dialogs/auth.c:76 src/formhist/dialogs.c:121
+#: src/dialogs/auth.c:76 src/formhist/dialogs.c:124 src/formhist/dialogs.c:132
 msgid "Login"
 msgstr "Login"
 
@@ -4374,7 +4378,11 @@ msgstr "E/S UTF-8"
 msgid "Resize terminal"
 msgstr "Redimensionner le terminal"
 
-#: src/formhist/dialogs.c:129
+#: src/formhist/dialogs.c:68
+msgid "Forms are never saved for this URL."
+msgstr "Les formulaires ne sont jamais sauvés pour cette URL."
+
+#: src/formhist/dialogs.c:139 src/formhist/dialogs.c:150
 msgid "Form history manager"
 msgstr "Gestionnaire de l'historique formulaires"
 
@@ -4395,11 +4403,11 @@ msgstr ""
 "Cette option désactive seulement le dialogue, les formulaires\n"
 "déjà mémorisés ne sont pas affectés."
 
-#: src/formhist/formhist.c:472
+#: src/formhist/formhist.c:483
 msgid "Forms memory"
 msgstr "Mémorisation formulaires"
 
-#: src/formhist/formhist.c:473
+#: src/formhist/formhist.c:484
 msgid ""
 "Should I remember this login?\n"
 "\n"
@@ -4415,12 +4423,12 @@ msgstr ""
 "\n"
 "Si ces informations sont sensibles, répondez NON."
 
-#: src/formhist/formhist.c:480
+#: src/formhist/formhist.c:491
 msgid "Never for this site"
 msgstr "Jamais pour ce site"
 
 #. name:
-#: src/formhist/formhist.c:505
+#: src/formhist/formhist.c:516
 msgid "Forms History"
 msgstr "Mémorisation formulaires"
 
@@ -4495,7 +4503,7 @@ msgstr ""
 "(en secondes; 0 pour désactiver)"
 
 #. name:
-#: src/globhist/globhist.c:495
+#: src/globhist/globhist.c:497
 msgid "Global History"
 msgstr "Historique Global"
 
@@ -5198,11 +5206,11 @@ msgstr "Dialogue utilisateur"
 msgid "Lua Error"
 msgstr "Erreur Lua"
 
-#: src/scripting/lua/core.c:715
+#: src/scripting/lua/core.c:718
 msgid "Lua Console"
 msgstr "Console Lua"
 
-#: src/scripting/lua/core.c:715
+#: src/scripting/lua/core.c:718
 msgid "Enter expression"
 msgstr "Entrez une expression"
 
@@ -5507,13 +5515,19 @@ msgstr "Aller au lien"
 msgid "Enter link number"
 msgstr "Entrez le numéro du lien"
 
-#: src/viewer/text/view.c:1466
+#: src/viewer/text/view.c:1465
 msgid "Save error"
 msgstr "Erreur d'enregistrement"
 
-#: src/viewer/text/view.c:1467
+#: src/viewer/text/view.c:1466
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Deleting used folder"
+#~ msgstr "Suppression d'un dossier utilisé"
+
+#~ msgid "Deleting used item"
+#~ msgstr "Suppression d'un item utilisé"
 
 #~ msgid "No downloads"
 #~ msgstr "Aucun téléchargement"

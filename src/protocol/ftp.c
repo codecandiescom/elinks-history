@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.27 2002/09/08 19:12:23 pasky Exp $ */
+/* $Id: ftp.c,v 1.28 2002/09/09 15:45:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -542,7 +542,8 @@ ftp_retr_1(struct connection *conn)
 }
 
 /* Parse RETR response and return file size or -1 on error. */
-long int get_filesize_from_RETR(unsigned char *data, int data_len)
+long int
+get_filesize_from_RETR(unsigned char *data, int data_len)
 {
 	long int file_len;
 	int pos, pos_file_len = 0;

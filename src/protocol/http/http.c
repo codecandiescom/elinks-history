@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.46 2002/09/09 12:55:41 zas Exp $ */
+/* $Id: http.c,v 1.48 2002/09/09 15:50:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,8 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 }
 
 
-static int get_http_code(unsigned char *head, int *code, int *version)
+static int
+get_http_code(unsigned char *head, int *code, int *version)
 {
 	/* \s* */
 	while (head[0] == ' ')
@@ -173,9 +174,10 @@ unsigned char *buggy_servers[] = {
 	NULL
 };
 
-int check_http_server_bugs(unsigned char *url,
-			   struct http_connection_info *info,
-			   unsigned char *head)
+int
+check_http_server_bugs(unsigned char *url,
+		       struct http_connection_info *info,
+		       unsigned char *head)
 {
 	unsigned char *server, **s;
 
@@ -202,7 +204,8 @@ int check_http_server_bugs(unsigned char *url,
 	return 0;
 }
 
-static void http_end_request(struct connection *c, int state)
+static void
+http_end_request(struct connection *c, int state)
 {
 	setcstate(c, state);
 
@@ -228,7 +231,8 @@ static void http_end_request(struct connection *c, int state)
 
 void http_send_header(struct connection *);
 
-void http_func(struct connection *c)
+void
+http_func(struct connection *c)
 {
 	/* setcstate(c, S_CONN); */
 	set_timeout(c);
@@ -247,7 +251,8 @@ void http_func(struct connection *c)
 	}
 }
 
-void proxy_func(struct connection *c)
+void
+proxy_func(struct connection *c)
 {
 	http_func(c);
 }
@@ -255,12 +260,13 @@ void proxy_func(struct connection *c)
 void http_get_header(struct connection *);
 
 #define IS_PROXY_URL(x) (upcase((x)[0]) == 'P')
-#define HOST_FROM_URL(x) (IS_PROXY_URL((x)) ? get_url_data((x)) : (x))
+#define GET_REAL_URL(x) (IS_PROXY_URL((x)) ? get_url_data((x)) : (x))
 
-void http_send_header(struct connection *c)
+void
+http_send_header(struct connection *c)
 {
 	static unsigned char *accept_charset = NULL;
-	unsigned char *host = HOST_FROM_URL(c->url);
+	unsigned char *host = GET_REAL_URL(c->url);
 	struct http_connection_info *info;
 	int http10 = get_opt_int("protocol.http.bugs.http10");
 	unsigned char *post;
@@ -608,7 +614,8 @@ void http_send_header(struct connection *c)
 	setcstate(c, S_SENT);
 }
 
-int is_line_in_buffer(struct read_buffer *rb)
+int
+is_line_in_buffer(struct read_buffer *rb)
 {
 	int l;
 
@@ -718,7 +725,8 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 	return output;
 }
 
-void read_http_data(struct connection *conn, struct read_buffer *rb)
+void
+read_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;
 
@@ -874,7 +882,8 @@ read_more:
 	setcstate(conn, S_TRANS);
 }
 
-int get_header(struct read_buffer *rb)
+int
+get_header(struct read_buffer *rb)
 {
 	int i;
 
@@ -894,7 +903,8 @@ int get_header(struct read_buffer *rb)
 	return 0;
 }
 
-void http_got_header(struct connection *c, struct read_buffer *rb)
+void
+http_got_header(struct connection *c, struct read_buffer *rb)
 {
 	int cf;
 	int state = c->state != S_PROC ? S_GETH : S_PROC;
@@ -906,7 +916,7 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	unsigned char *d;
 	struct cache_entry *e;
 	struct http_connection_info *info;
-	unsigned char *host = HOST_FROM_URL(c->url);
+	unsigned char *host = GET_REAL_URL(c->url);
 
 	set_timeout(c);
 	info = c->info;
@@ -961,7 +971,7 @@ again:
 #ifdef COOKIES
 	ch = head;
 	while ((cookie = parse_http_header(ch, "Set-Cookie", &ch))) {
-		unsigned char *host = HOST_FROM_URL(c->url);
+		unsigned char *host = GET_REAL_URL(c->url);
 
 		set_cookie(NULL, host, cookie);
 		mem_free(cookie);
@@ -1138,7 +1148,8 @@ again:
 	read_http_data(c, rb);
 }
 
-void http_get_header(struct connection *conn)
+void
+http_get_header(struct connection *conn)
 {
 	struct read_buffer *rb;
 

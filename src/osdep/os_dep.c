@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.27 2002/09/09 12:55:41 zas Exp $ */
+/* $Id: os_dep.c,v 1.28 2002/09/09 15:44:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,8 @@
 
 /* Set a file descriptor to non-blocking mode. It returns a negative value
  * on error. */
-int set_nonblocking_fd(int fd)
+int
+set_nonblocking_fd(int fd)
 {
 	int flags = fcntl(fd, F_GETFL, 0);
 
@@ -61,7 +62,8 @@ int set_nonblocking_fd(int fd)
 
 /* Set a file descriptor to blocking mode. It returns a negative value on
  * error. */
-int set_blocking_fd(int fd)
+int
+set_blocking_fd(int fd)
 {
 	int flags = fcntl(fd, F_GETFL, 0);
 

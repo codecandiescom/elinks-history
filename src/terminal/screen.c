@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.82 2003/09/25 21:47:16 jonas Exp $ */
+/* $Id: screen.c,v 1.83 2003/09/29 23:32:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,7 +290,7 @@ struct screen_state {
 
 /* Time critical section. */
 static inline void
-print_char(struct string *screen, struct screen_driver *driver,
+add_char16(struct string *screen, struct screen_driver *driver,
 	   struct screen_char *ch, struct screen_state *state)
 {
 	unsigned char c = ch->data;
@@ -428,30 +428,16 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	return add_bytes_to_string(screen, code, length);
 }
 
-/* Updating of the driverinal screen is done by checking what needs to be updated
- * using the last screen. */
-void
-redraw_screen(struct terminal *term)
+
+static inline void
+add_chars16(struct string *image, struct terminal *term,
+	    struct screen_state *state, struct screen_driver *driver)
 {
-	struct screen_driver *driver = get_screen_driver(term);
-	struct string image;
+	register struct screen_char *current = term->screen->last_image;
+	register struct screen_char *pos = term->screen->image;
+	register struct screen_char *prev_pos = NULL;
 	register int y = 0;
 	int prev_y = -1;
-	struct screen_state state = { 0xFF, 0xFF, 0xFF };
-	struct terminal_screen *screen = term->screen;
-	register struct screen_char *current;
-	register struct screen_char *pos;
-	register struct screen_char *prev_pos;
-
-	if (!driver
-	    || !screen
-	    || !screen->dirty
-	    || (term->master && is_blocked())
-	    || !init_string(&image)) return;
-
-	current = screen->last_image;
-	pos = screen->image;
-	prev_pos = NULL;
 
 	for (; y < term->y; y++) {
 		register int x = 0;
@@ -471,14 +457,42 @@ redraw_screen(struct terminal *term)
 			/* Move the cursor when @prev_pos is more than 10 chars
 			 * away. */
 			if (prev_y != y || prev_pos + 10 <= pos) {
-				add_cursor_move_to_string(&image, y + 1, x + 1);
+				add_cursor_move_to_string(image, y + 1, x + 1);
 				prev_pos = pos;
 				prev_y = y;
 			}
 
 			for (; prev_pos <= pos ; prev_pos++)
-				print_char(&image, driver, prev_pos, &state);
+				add_char16(image, driver, prev_pos, state);
 		}
+	}
+}
+
+/* Updating of the terminal screen is done by checking what needs to be updated
+ * using the last screen. */
+void
+redraw_screen(struct terminal *term)
+{
+	struct screen_driver *driver = get_screen_driver(term);
+	struct string image;
+	struct screen_state state = { 0xFF, 0xFF, 0xFF };
+	struct terminal_screen *screen = term->screen;
+
+	if (!driver
+	    || !screen
+	    || !screen->dirty
+	    || (term->master && is_blocked())
+	    || !init_string(&image)) return;
+
+	switch (driver->colors) {
+	case COLOR_MODE_MONO:
+	case COLOR_MODE_16:
+		add_chars16(&image, term, &state, driver);
+		break;
+
+	default:
+		internal("Invalid color mode");
+		return;
 	}
 
 	if (image.length) {

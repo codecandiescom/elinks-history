@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.180 2003/07/24 11:23:36 miciah Exp $ */
+/* $Id: renderer.c,v 1.181 2003/07/28 07:33:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,13 +320,16 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 					if (yt >= 0) {
 						link->pos[i].y = Y(yt);
 						link->pos[i].x += -xf + xt;
-					} else {
+					} else if (i < link->n - 1) {
 						memmove(&link->pos[i],
 							&link->pos[i + 1],
 							(link->n - i - 1) *
 							sizeof(struct point));
 						link->n--;
 						i--;
+					} else {
+						 /* assert(i < (link->n-1));
+						  * ABORT? */
 					}
 				}
 			}

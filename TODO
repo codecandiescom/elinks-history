@@ -3,10 +3,16 @@ TODO list for links (sorted approximatelly by priority):
 
 	Resuming of downloads (URGENT)
 
-	Passive FTP mode support (needed since client-side firewalls may
-block FTP data connections from servers in active mode) 
+	Show all downloads in one window, kind of "download manager"
 
-	Strip spaces from the end of the URL
+	Passive FTP mode support (needed since client-side firewalls may
+block FTP data connections from servers in active mode); IPv6 FTP support
+
+	Rewrite html parser
+
+	CSS support
+
+	Strip spaces from the end of the URL (?)
 
 	Support for <xmp>
 
@@ -27,20 +33,21 @@ block FTP data connections from servers in active mode)
 	Reorganization of user interface
 
 	When calling external viewer on files, assign temporary files the
-suffix appropriate to the file type.
+suffix appropriate to the file type (?)
 
 	Cookies manager
 
-	HTTPS proxy support
+	HTTPS proxy support (!) (I have no idea how to do it so someone else
+have to; good job for wannabe ELinks developer ;)
 
 	Take info about proxies from env variables (?)
 
 	Possibility to read HTML source from stdin
 
 	Passing url to external command (possibly make alt+[0-9] to pass
-current link to external command).
+current link to external command (?)).
 
-	Terminal-specific MIME associations.
+	Terminal-specific MIME associations (?)
 
 	Something like indicator-bar, simple letter-flags indicating current
 state of browser, or changeable thru Lua.
@@ -56,6 +63,11 @@ existed first.
 These are more long-term goals:
 
 
+	EcmaScript (http://home.worldcom.ch/~jmlugrin/fesi/)
+
+	Then, support for proxy autoconfiguration
+(http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html).
+
 	Multiple windows in one console
 
 	Possibility to use commandline-driven interface instead of BFU
@@ -67,14 +79,5 @@ optionally.
 
 	Disk cache (?)
 
-	Rewrite html parser (?)
 
-	EcmaScript (?) (http://home.worldcom.ch/~jmlugrin/fesi/)
-
-	Then, support for proxy autoconfiguration
-(http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html).
-
-	CSS (?)
-
-
-$Id: TODO,v 1.25 2002/04/28 13:31:57 pasky Exp $
+$Id: TODO,v 1.26 2002/06/23 09:37:34 pasky Exp $

@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.8 2004/04/17 11:19:03 jonas Exp $ */
+/* $Id: listmenu.c,v 1.9 2004/04/17 14:15:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,9 +29,11 @@ menu_contains(struct menu_item *m, int f)
 {
 	if (m->func != (menu_func) do_select_submenu)
 		return (int)m->data == f;
-	for (m = m->data; !mi_is_end_of_menu(*m); m++)
+
+	foreach_menu_item (m, m->data)
 		if (menu_contains(m, f))
 			return 1;
+
 	return 0;
 }
 
@@ -44,9 +46,13 @@ do_select_submenu(struct terminal *term, struct menu_item *menu,
 	int sel = 0;
 
 	if (def < 0) def = 0;
-	for (m = menu; !mi_is_end_of_menu(*m); m++, sel++)
+
+	foreach_menu_item (m, menu) {
+		sel++;
 		if (menu_contains(m, def))
 			goto found;
+	}
+
 	sel = 0;
 
 found:
@@ -142,10 +148,11 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 
 	if (!m) return; /* XXX: Who knows... need to be verified */
 
-	for (mm = m; !mi_is_end_of_menu(*mm); mm++) {
+	foreach_menu_item (mm, m) {
 		mem_free_if(mm->text);
 		if (mm->func == (menu_func) do_select_submenu) free_menu(mm->data);
 	}
+
 	mem_free(m);
 }
 
@@ -170,11 +177,12 @@ destroy_menu(struct list_menu *menu)
 }
 
 void
-menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
+menu_labels(struct menu_item *items, unsigned char *base, unsigned char **lbls)
 {
+	struct menu_item *m;
 	unsigned char *bs;
 
-	for (; !mi_is_end_of_menu(*m); m++) {
+	foreach_menu_item (m, items) {
 		if (m->func == (menu_func) do_select_submenu) {
 			bs = stracpy(base);
 			if (bs) {

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.13 2003/05/22 14:35:38 pasky Exp $ */
+/* $Id: encoding.c,v 1.14 2003/06/11 11:03:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ static unsigned char **dummy_listext(void)
 	return NULL;
 }
 
-struct decoding_handlers dummy_handlers = {
+static struct decoding_handlers dummy_handlers = {
 	dummy_open,
 	dummy_read,
 	dummy_close,
@@ -119,7 +119,7 @@ gzip_listext(void)
 }
 
 
-struct decoding_handlers gzip_handlers = {
+static struct decoding_handlers gzip_handlers = {
 	gzip_open,
 	gzip_read,
 	gzip_close,
@@ -205,7 +205,7 @@ bzip2_listext(void)
 	return ext;
 }
 
-struct decoding_handlers bzip2_handlers = {
+static struct decoding_handlers bzip2_handlers = {
 	bzip2_open,
 	bzip2_read,
 	bzip2_close,
@@ -221,7 +221,7 @@ unsigned char *encoding_names[] = {
 	"bzip2",
 };
 
-struct decoding_handlers *handlers[] = {
+static struct decoding_handlers *handlers[] = {
 	&dummy_handlers,
 #ifdef HAVE_ZLIB_H
 	&gzip_handlers,

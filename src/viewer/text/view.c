@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.336 2004/01/07 14:41:33 jonas Exp $ */
+/* $Id: view.c,v 1.337 2004/01/07 14:44:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -935,7 +935,7 @@ send_event(struct session *ses, struct term_event *ev)
 
 		action = kbd_action(KM_MAIN, ev, &func_ref);
 
-		if (do_action(ses, action, NULL, 0) == action) {
+		if (do_action(ses, action, 0) == action) {
 			/* Did the session disappear in some EV_ABORT handler? */
 			if (action == ACT_TAB_CLOSE
 			    || action == ACT_TAB_CLOSE_ALL_BUT_CURRENT)

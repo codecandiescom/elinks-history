@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.194 2004/04/29 23:11:43 jonas Exp $ */
+/* $Id: uri.c,v 1.195 2004/05/23 01:31:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,9 @@
 
 #include <ctype.h>
 #include <errno.h>
+#ifdef HAVE_LIBIDN
+#include <idna.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -271,7 +274,33 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
 		if (brackets) add_char_to_string(string, '[');
 #endif
-		add_bytes_to_string(string, uri->host, uri->hostlen);
+#ifdef HAVE_LIBIDN
+		/* Support for the GNU International Domain Name library.
+		 *
+		 * http://www.gnu.org/software/libidn/manual/html_node/IDNA-Functions.html
+		 *
+		 * Now it is probably not perfect because idna_to_ascii_lz()
+		 * will be using a ``zero terminated input string encoded in
+		 * the current locale's character set''. Anyway I don't know
+		 * how to convert anything to UTF-8 or Unicode. --jonas */
+		if (wants(URI_IDN)) {
+			unsigned char *host = memacpy(uri->host, uri->hostlen);
+
+			if (host) {
+				char *idname;
+				int code = idna_to_ascii_lz(host, &idname, 0);
+
+				/* FIXME: Return NULL if it coughed? --jonas */
+				if (code == IDNA_SUCCESS) {
+					add_to_string(string, idname);
+					free(idname);
+				}
+
+				mem_free(host);
+			}
+		} else
+#endif
+			add_bytes_to_string(string, uri->host, uri->hostlen);
 #ifdef CONFIG_IPV6
 		if (brackets) add_char_to_string(string, ']');
 #endif

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.74 2004/05/22 13:44:26 jonas Exp $ */
+/* $Id: connect.c,v 1.75 2004/05/23 01:31:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ void
 make_connection(struct connection *conn, int port, int *sock,
 		void (*func)(struct connection *))
 {
-	unsigned char *host = memacpy(conn->uri->host, conn->uri->hostlen);
+	unsigned char *host = get_uri_string(conn->uri, URI_DNS_HOST);
 	struct conn_info *c_i;
 	int async;
 

@@ -246,6 +246,9 @@ EL_CHECK_OPTIONAL_LIBRARY(zlib, zlib.h, z, gzdopen,
 EL_CHECK_OPTIONAL_LIBRARY(bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
 	[  --without-bzlib         disable bzlib support])
 
+EL_CHECK_OPTIONAL_LIBRARY(idn, idna.h, idn, stringprep_check_version,
+	[  --without-idn           disable international domain names support])
+
 dnl ===================================================================
 dnl Bookmark and XBEL support
 dnl ===================================================================

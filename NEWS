@@ -12,6 +12,7 @@ ELinks-now:
 * experimental Perl scripting extensions
 * configurability through features.conf
 * Mozilla-compliant support for -remote option
+* internationalized domain name support
 * -localhost option to only permit local connections
 * -config-dir replaces -confdir option
 * -config-file replaces -conffile option

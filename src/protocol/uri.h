@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.96 2004/04/09 03:20:57 jonas Exp $ */
+/* $Id: uri.h,v 1.97 2004/05/23 01:31:20 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -90,16 +90,21 @@ enum uri_component {
 	URI_DATA		= (1 << 6),
 	URI_POST		= (1 << 7),
 
+	/* Control for ``encoding'' URIs into Internationalized Domain Names.
+	 * Hopefully only a few lowlevel places should have to use it and it
+	 * should never be exposed to the user. */
+	URI_IDN			= (1 << 8),
+
 	/* Some predefined classes for formatting of URIs */
 
 	/* Used for public display either in dialogs or sent over the Net */
-	URI_PUBLIC		= ~(URI_PASSWORD | URI_DEFAULT_PORT | URI_POST),
+	URI_PUBLIC		= ~(URI_PASSWORD | URI_DEFAULT_PORT | URI_POST | URI_IDN),
 
 	/* Used for getting the original URI with no internal encoding */
-	URI_ORIGINAL		= ~(URI_DEFAULT_PORT | URI_POST),
+	URI_ORIGINAL		= ~(URI_DEFAULT_PORT | URI_POST | URI_IDN),
 
 	/* Used in the HTTP Auth code for ma*/
-	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_DATA | URI_POST),
+	URI_HTTP_AUTH		= ~(URI_DEFAULT_PORT | URI_DATA | URI_POST | URI_IDN),
 
 	/* Used for the value of HTTP "Host" header info */
 	URI_HTTP_HOST		= URI_HOST | URI_PORT,
@@ -109,6 +114,12 @@ enum uri_component {
 
 	/* Used for HTTP CONNECT method info */
 	URI_HTTP_CONNECT	= URI_HOST | URI_PORT | URI_DEFAULT_PORT,
+
+	/* Used for getting the host of a DNS query */
+	URI_DNS_HOST		= URI_HOST | URI_IDN,
+
+	/* Used for adding the proxied URI after the '/' in the proxy URI */
+	URI_PROXY		= ~URI_DEFAULT_PORT,
 };
 
 

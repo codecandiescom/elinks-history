@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.88 2004/02/03 16:00:27 jonas Exp $ */
+/* $Id: parser.c,v 1.89 2004/02/05 15:46:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,6 +146,8 @@ css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
 			/* TODO: Unkown @-rule so either skip til ';' or next block. */
 			while (scanner_has_tokens(scanner)) {
 				token = get_next_scanner_token(scanner);
+
+				if (!token) break;
 
 				if (token->type == ';') {
 					skip_css_tokens(scanner, ';');

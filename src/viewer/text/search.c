@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.153 2004/01/07 21:24:56 jonas Exp $ */
+/* $Id: search.c,v 1.154 2004/01/09 12:57:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1073,6 +1073,8 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			}
 		}
 	}
+
+#undef case_compare_chars
 
 	return typeahead_error(ses, typeahead);
 }

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.77 2003/12/28 20:01:26 jonas Exp $ */
+/* $Id: text.c,v 1.78 2003/12/29 07:43:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,19 +259,18 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	current = widget_data->info.text.current;
 	scale = (height + 1) * 100 / lines;
 
+	/* Scale the offset of @current */
+	step = (current + 1) * scale / 100;
+	int_bounds(&step, 0, widget_data->h - 1);
+
 	/* Scale the number of visible lines */
 	height = (height + 1) * scale / 100;
+	int_bounds(&height, 1, int_max(widget_data->h - step, 1));
 
-	/* Scale the offset of @current */
-	if (lines - widget_data->h <= current) {
+	if (widget_data->h - height <= step) {
 		step = widget_data->h - height;
-	} else {
-		step = (current + 1) * scale / 100;
 	}
 	y += step;
-
-	int_bounds(&step, 0, widget_data->h - 1);
-	int_bounds(&height, 1, int_max(widget_data->h - step, 1));
 
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		  get_bfu_color(win->term, "dialog.scrollbar-selected"));

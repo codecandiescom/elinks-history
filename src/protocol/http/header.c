@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.10 2002/12/21 19:58:20 zas Exp $ */
+/* $Id: header.c,v 1.11 2003/07/27 17:43:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "protocol/http/header.h"
 #include "util/conv.h"
+#include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -55,31 +56,38 @@ cont:;
 	return h;
 }
 
+/* Extract the value of name part of the value of attribute content.
+ * Ie. @name = "charset" and @str = "text/html; charset=iso-8859-1"
+ * will return allocated string containing "iso-8859-1".
+ * It supposes that separator is ';' and ignore first element in the
+ * list. (ie. '1' is ignored in "1; URL=xxx") */
+/* FIXME: rename it, any idea ? --Zas */
 unsigned char *
-parse_http_header_param(unsigned char *x, unsigned char *e)
+parse_http_header_param(unsigned char *str, unsigned char *name)
 {
-	int le = strlen(e);
-	int lp;
-	unsigned char *y = x;
+	register unsigned char *p = str;
+	int namelen, plen = 0;
+	
+	assert(str && *str && name && *name);
+	if_assert_failed return NULL;
+	
+	namelen = strlen(name);
+	do {
+		p = strchr(p, ';');
+		if (!p) return NULL;
 
-again:
-	y = strchr(y, ';');
-	if (!y) return NULL;
+		while (*p && (*p == ';' || *p <= ' ')) p++;
+		if (strlen(p) < namelen) return NULL;
+	} while (strncasecmp(p, name, namelen));
 
-	while (*y && (*y == ';' || *y <= ' ')) y++;
-	if (strlen(y) < le) return NULL;
-
-	if (strncasecmp(y, e, le)) goto again;
-
-	y += le;
-
-	while (*y && (*y <= ' ' || *y == '=')) y++;
-	if (!*y) return stracpy("");
-
-	lp = 0;
-	while (y[lp] >= ' ' && y[lp] != ';') lp++;
-
-	return memacpy(y, lp);
+	p += namelen;
+	
+	while (*p && (*p <= ' ' || *p == '=')) p++;
+	if (!*p) return stracpy("");
+	
+	while (p[plen] >= ' ' && p[plen] != ';') plen++;
+	
+	return memacpy(p, plen);
 }
 
 /* Parse string param="value", return value as new string or NULL if any

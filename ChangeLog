@@ -1,3 +1,113 @@
+Wed Jun  9 21:42:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/form.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Add an int frames arg to refresh_view(). Idea by Jonas.  
+
+Wed Jun  9 21:29:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Revert part of last patch: draw_frames() has to be called after
+	draw_doc().  
+
+Wed Jun  9 21:22:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	menu_url_shortcut(): Use get_uri() and goto_uri().  
+
+Wed Jun  9 21:14:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Trailing spaces fix.  
+
+Wed Jun  9 21:13:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bookmarks/bookmarks.c, document/refresh.c,
+	sched/session.c, sched/task.c, sched/task.h, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Introduce goto_uri() to battle against 'leaking' of referrer caused
+	by goto_url() -> goto_url_frame() changes. Also rename
+	goto_url_frame() to goto_uri_frame().  
+
+Wed Jun  9 21:12:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	Use refresh_view() where applicable.  
+
+Wed Jun  9 21:05:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/listmenu.c, viewer/text/form.c, viewer/text/form.h,
+	viewer/text/link.c, viewer/text/link.h, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Move selected_item() from link.c to form.c, and make
+	init_form_state() static.  refresh_view() was introduced to help
+	this move, and to reduce code redundancy.  
+
+Wed Jun  9 20:49:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	goto_url_with_hook(): Bail out if passed empty string (from goto-url
+	dialog).  
+
+Wed Jun  9 20:48:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	init_ctrl() -> init_form_state().  
+
+Wed Jun  9 07:49:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.h:
+
+	Use enum form_type for type field in struct form_state, and
+	rearrange fields in related structs.  
+
+Wed Jun  9 00:22:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	follow_url() stuff now tries to pass the URI struct all the way.  
+
+Tue Jun  8 23:26:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/session.c:
+
+	open_url_in_new_window(): Rename to open_uri_in... and take clean
+	URI.  
+
+Tue Jun  8 23:22:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bookmarks/bookmarks.c, sched/action.c,
+	sched/session.c, terminal/tab.c, terminal/tab.h:
+
+	open_url_in_new_tab(): Rename to open_uri_in... and take clean URI.  
+
+Tue Jun  8 23:16:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/bookmarks.c:
+
+	open_bookmark_folder(): Use URI structs.  
+
+Tue Jun  8 23:05:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, task.c, task.h:
+
+	process_session_info(): Use get_hooked_uri().  
+
+Tue Jun  8 22:54:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	get_hooked_uri(): Pass the session so it can do all the dirty work.  
+
 Tue Jun  8 19:33:50 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bfu/hierbox.c, bfu/listbox.h, bookmarks/dialogs.c,

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.56 2003/10/16 08:35:43 zas Exp $ */
+/* $Id: cache.c,v 1.57 2003/10/17 09:07:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,6 @@ add_fragment(struct cache_entry *e, int offset,
 	}
 
 	/* Make up new fragment. */
-	/* One byte is reserved for data in struct fragment. */
 	nf = mem_calloc(1, FRAGSIZE(CACHE_PAD(length)));
 	if (!nf) return -1;
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.217 2004/04/18 01:30:32 jonas Exp $ */
+/* $Id: menu.c,v 1.218 2004/04/18 01:35:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -642,13 +642,11 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			break;
 
 		case ACT_MENU_HOME:
-			menu->selected = -1;
-			scroll_menu(menu, 1);
+			scroll_menu(menu, -menu->selected);
 			break;
 
 		case ACT_MENU_END:
-			menu->selected = menu->size;
-			scroll_menu(menu, -1);
+			scroll_menu(menu, menu->size - menu->selected - 1);
 			break;
 
 		case ACT_MENU_PAGE_UP:

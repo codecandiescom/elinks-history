@@ -1,3 +1,13 @@
+Mon Nov 11 23:05:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/dialogs.c, document/session.c,
+	document/session.h, document/html/renderer.c,
+	document/html/renderer.h:
+
+	When transforming a link to a bookmark, pre-fill the title with the
+	link text. Patch by Fabio, code eyecandy fixes by me. Too late for
+	me to actually test it now.  
+
 Mon Nov  4 16:57:00 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: main.c, lua/core.c, lua/core.h, protocol/http/http.c:

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.271 2004/06/29 02:42:06 jonas Exp $ */
+/* $Id: tables.c,v 1.272 2004/06/29 02:43:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1008,7 +1008,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	unsigned char *al;
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
-	int border, align;
+	int align;
 	int cye;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
@@ -1031,15 +1031,15 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	 * interpreted as the value of the frame attribute. It implies
 	 * rules="all" and some default (non-zero) value for the border
 	 * attribute. */
-	border = get_num(attr, "border");
- 	if (border == -1) {
-		border = has_attr(attr, "border")
-			 || has_attr(attr, "rules")
-			 || has_attr(attr, "frame");
+	table->border = get_num(attr, "border");
+ 	if (table->border == -1) {
+		table->border = has_attr(attr, "border")
+				|| has_attr(attr, "rules")
+				|| has_attr(attr, "frame");
 	}
 
-	if (border) {
-		int_upper_bound(&border, 2);
+	if (table->border) {
+		int_upper_bound(&table->border, 2);
 
 		table->cellspacing = get_num(attr, "cellspacing");
 		int_bounds(&table->cellspacing, 1, 2);
@@ -1065,7 +1065,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->cellpadding = get_num(attr, "cellpadding");
 	if (table->cellpadding == -1) {
 		table->vcellpadding = 0;
-		table->cellpadding = !!border;
+		table->cellpadding = !!table->border;
 	} else {
 		table->vcellpadding = (table->cellpadding >= HTML_CHAR_HEIGHT / 2 + 1);
 		table->cellpadding = (table->cellpadding >= HTML_CHAR_WIDTH / 2 + 1);
@@ -1082,7 +1082,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		mem_free(al);
 	}
 
-	table->rules = border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
+	table->rules = table->border ? TABLE_RULE_ALL : TABLE_RULE_NONE;
 	al = get_attr_val(attr, "rules");
 	if (al) {
 		if (!strcasecmp(al, "none")) table->rules = TABLE_RULE_NONE;
@@ -1094,7 +1094,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	table->part = part;
-	table->border = border;
 
 	format_bad_table_html(table);
 

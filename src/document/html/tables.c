@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.248 2004/06/28 18:31:15 zas Exp $ */
+/* $Id: tables.c,v 1.249 2004/06/28 18:35:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1548,7 +1548,7 @@ get_frame_pos(int a, int a_size, int b, int b_size)
 
 static inline void
 draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
-		 int i, int j, color_t bgcolor, color_t fgcolor)
+		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
 	/* TODO: Use /BORDER._.* / macros ! --pasky */
 	static unsigned char border_chars[81] = {
@@ -1566,10 +1566,10 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	};
 	/* Note: I have no clue wether any of these names are suitable but they
 	 * should give an idea of what is going on. --jonas */
-	signed char left   = H_FRAME_POSITION(table, i - 1,     j);
-	signed char right  = H_FRAME_POSITION(table,     i,     j);
-	signed char top    = V_FRAME_POSITION(table,     i, j - 1);
-	signed char bottom = V_FRAME_POSITION(table,     i,     j);
+	signed char left   = H_FRAME_POSITION(table, col - 1,     row);
+	signed char right  = H_FRAME_POSITION(table,     col,     row);
+	signed char top    = V_FRAME_POSITION(table,     col, row - 1);
+	signed char bottom = V_FRAME_POSITION(table,     col,     row);
 	int pos;
 
 	if (left < 0 && right < 0 && top < 0 && bottom < 0) return;

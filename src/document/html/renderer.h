@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.36 2003/08/23 06:18:22 jonas Exp $ */
+/* $Id: renderer.h,v 1.37 2003/08/23 06:19:25 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -115,7 +115,6 @@ void html_interpret(struct session *);
 /* Interface with html_tbl.c */
 
 struct part {
-	struct list_head uf;
 	struct document *document;
 
 	unsigned char *spaces;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.202 2003/08/23 06:18:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.203 2003/08/23 06:19:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1068,7 +1068,7 @@ html_form_control(struct part *part, struct form_control *fc)
 	if_assert_failed return;
 
 	if (!part->document) {
-		add_to_list(part->uf, fc);
+		done_form_control(fc);
 		return;
 	}
 
@@ -1186,7 +1186,6 @@ format_html_part(unsigned char *start, unsigned char *end,
 	/*struct tag *ltn = last_tag_for_newline;*/
 	int lm = margin;
 	int ef = empty_format;
-	struct form_control *fc;
 	struct table_cache_entry *tce;
 
 	/* Hash creation if needed. */
@@ -1265,7 +1264,6 @@ format_html_part(unsigned char *start, unsigned char *end,
 	part->cx = -1;
 	part->cy = 0;
 	part->link_num = link_num;
-	init_list(part->uf);
 
 	html_stack_dup();
 	e = &html_top;
@@ -1313,9 +1311,6 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 		n->yw = ys - n->y + part->y;
 	}
-
-	foreach (fc, part->uf) done_form_control(fc);
-	free_list(part->uf);
 
 ret:
 	last_link_to_move = llm;

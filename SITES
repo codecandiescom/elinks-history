@@ -5,16 +5,18 @@ RPMs:
 	ftp://ftp.pld.org.pl/pool/e/elinks/
 	http://ftp.pld.org.pl/pool/e/elinks/
 
+CYGWIN binaries:
+	http://www.pervalidus.net/Windows/devel/lynx/links/
+
 CVS root:
 	:pserver:anonymous@cvs.pld.org.pl:/cvsroot
-	:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks
+	:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks (master, DEPRECATED)
 
 Mailing list:
 	http://links.sf.net/mailing.html
 	links-list@linuxfromscratch.org (bug reports, announcements)
 	links-discuss@linuxfromscratch.org (feature requests, development)
 	listar@linuxfromscratch.org (Subject: subscribe links-list)
-
 
 
 If you want to see the original Links as well, try:
@@ -41,4 +43,4 @@ RPMs:
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-$Id: SITES,v 1.9 2002/05/12 20:28:41 pasky Exp $
+$Id: SITES,v 1.10 2002/07/07 11:15:30 pasky Exp $

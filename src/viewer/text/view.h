@@ -1,12 +1,12 @@
-/* $Id: view.h,v 1.34 2003/11/18 21:52:06 pasky Exp $ */
+/* $Id: view.h,v 1.35 2003/12/01 14:08:20 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
 
-#include "document/html/frames.h"
-#include "sched/session.h"
-#include "terminal/event.h"
-#include "terminal/terminal.h"
+struct document_view;
+struct session;
+struct term_event;
+struct terminal;
 
 
 /* Releases the document view's resources. But doesn't free() the @view. */

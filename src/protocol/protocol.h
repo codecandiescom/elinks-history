@@ -1,10 +1,10 @@
-/* $Id: protocol.h,v 1.18 2003/11/13 13:17:27 zas Exp $ */
+/* $Id: protocol.h,v 1.19 2003/12/01 14:11:30 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
-#include "sched/connection.h"
-#include "sched/session.h"
+struct connection;
+struct session;
 
 enum protocol {
 	PROTOCOL_INVALID = -1,

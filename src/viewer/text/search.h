@@ -1,10 +1,10 @@
-/* $Id: search.h,v 1.9 2003/10/27 15:52:45 jonas Exp $ */
+/* $Id: search.h,v 1.10 2003/12/01 14:08:20 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
 
-#include "sched/session.h"
-#include "terminal/terminal.h"
+struct document_view;
+struct session;
 
 void draw_searched(struct terminal *term, struct document_view *doc_view);
 

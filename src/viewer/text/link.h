@@ -1,12 +1,14 @@
-/* $Id: link.h,v 1.11 2003/10/31 01:38:12 jonas Exp $ */
+/* $Id: link.h,v 1.12 2003/12/01 14:08:20 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
 
-#include "document/document.h"
-#include "document/view.h"
-#include "sched/session.h"
-#include "terminal/terminal.h"
+struct document;
+struct document_view;
+struct link;
+struct session;
+struct term_event;
+struct terminal;
 
 /* Free's the allocated members of the link. */
 void done_link_members(struct link *link);

@@ -1,12 +1,16 @@
-/* $Id: textarea.h,v 1.10 2003/11/28 00:53:30 pasky Exp $ */
+/* $Id: textarea.h,v 1.11 2003/12/01 14:08:20 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
 
-#include "document/view.h"
-#include "sched/session.h"
-#include "terminal/terminal.h"
+/* This file is largely a supserset of this header, so it doesn't hurt to just
+ * include it here, IMHO. --pasky */
 #include "viewer/text/form.h"
+
+struct document_view;
+struct link;
+struct session;
+struct terminal;
 
 int area_cursor(struct form_control *frm, struct form_state *fs);
 void draw_textarea(struct terminal *t, struct form_state *fs, struct document_view *doc_view, struct link *l);

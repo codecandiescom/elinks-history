@@ -1,11 +1,16 @@
-/* $Id: form.h,v 1.10 2003/11/28 04:58:25 jonas Exp $ */
+/* $Id: form.h,v 1.11 2003/12/01 14:08:20 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
 
-#include "sched/session.h"
-#include "terminal/terminal.h"
 #include "util/lists.h" /* LIST_HEAD */
+
+struct document_view;
+struct link;
+struct menu_item;
+struct session;
+struct term_event;
+struct terminal;
 
 enum form_method {
 	FM_GET,

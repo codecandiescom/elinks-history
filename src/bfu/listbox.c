@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.18 2002/08/29 15:34:43 pasky Exp $ */
+/* $Id: listbox.c,v 1.19 2002/08/29 16:28:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,12 +156,21 @@ box_sel_move_do(struct listbox_item *item, void *data_)
 {
 	struct box_context *data = data_;
 
-	data->offset += (data->dist > 0) ? 1 : -1;
-	if (data->offset < 0) {
-		data->new_top = item;
-	} else if (data->offset > data->listbox_item_data->item->gid) {
-		data->new_top = traverse_listbox_items_list(data->new_top, 1,
+	if (data->dist > 0) {
+		if (data->box->sel_offset <
+		    data->listbox_item_data->item->gid) {
+			data->box->sel_offset++;
+		} else {
+			data->new_top =
+				traverse_listbox_items_list(data->new_top, 1,
 							    NULL, NULL);
+		}
+	} else if (data->dist < 0) {
+		if (data->box->sel_offset > 0) {
+			data->box->sel_offset--;
+		} else {
+			data->new_top = item;
+		}
 	}
 }
 
@@ -180,12 +189,12 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 	}
 
 	data = mem_alloc(sizeof(struct box_context));
+	data->box = box;
 	data->new_top = box->top;
 	data->listbox_item_data = listbox_item_data;
 	data->dist = dist;
-	data->offset = 0;
 
-	box->sel = traverse_listbox_items_list(box->top, dist,
+	box->sel = traverse_listbox_items_list(box->sel, dist,
 					       box_sel_move_do, data);
 
 	box->top = data->new_top;
@@ -288,6 +297,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 			int offset;
 
 			offset = ev->y - di->y;
+			box->sel_offset = offset;
 			box->sel = traverse_listbox_items_list(box->top,
 							       offset,
 							       NULL, NULL);

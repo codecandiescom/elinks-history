@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.47 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: url.c,v 1.48 2002/12/11 22:50:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,10 @@
 
 #include "elinks.h"
 
+#include "bfu/msgbox.h"
 #include "config/options.h"
+#include "document/session.h"
+#include "intl/language.h"
 #include "lowlevel/sched.h"
 #include "protocol/file.h"
 #include "protocol/finger.h"
@@ -28,6 +31,8 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+static void dummyjs_func(struct session *, unsigned char *);
 
 struct {
 	unsigned char *prot;
@@ -46,9 +51,21 @@ struct {
 	{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
 	{"ftp", 21, ftp_func, NULL, 0, 1, 1},
 	{"finger", 79, finger_func, NULL, 0, 1, 1},
+	{"javascript", 0, NULL, dummyjs_func, 0, 0, 0},
 	{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
 	{NULL, 0, NULL}
 };
+
+
+static void
+dummyjs_func(struct session *ses, unsigned char *url)
+{
+	msg_box(ses->term, NULL,
+		TEXT(T_ERROR), AL_CENTER,
+		TEXT(T_JS_NOT_SUPPORTED),
+		NULL, 1,
+		TEXT(T_CANCEL), NULL, B_ENTER | B_ESC);
+}
 
 
 int

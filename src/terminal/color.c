@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.45 2003/10/01 23:12:06 jonas Exp $ */
+/* $Id: color.c,v 1.46 2003/10/02 15:18:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ set_term_color16(struct screen_char *schar, enum color_type type,
 		schar->attr |= SCREEN_ATTR_STANDOUT;
 	}
 
-	schar->color = (bg << 4 | fg);
+	schar->color[0] = (bg << 4 | fg);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.93 2003/10/02 15:02:15 jonas Exp $ */
+/* $Id: screen.c,v 1.94 2003/10/02 15:18:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,13 +283,13 @@ done_screen_drivers(void)
 
 
 struct screen_state {
-	unsigned char color;
 	unsigned char border;
 	unsigned char underline;
+	unsigned char color[0];
 };
 
-#define compare_color(a, b)	((a) == (b))
-#define copy_color(a, b)	((a) = (b))
+#define compare_color(a, b)	((a)[0] == (b)[0])
+#define copy_color(a, b)	((a)[0] = (b)[0])
 #define use_utf8_io(driver)	((driver)->charsets[0] != -1)
 
 /* Time critical section. */
@@ -318,7 +318,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 
 		if (driver->color_mode == COLOR_MODE_16) {
 			static unsigned char code[6] = ";30;40";
-			unsigned char color = ch->color;
+			unsigned char color = ch->color[0];
 			unsigned char bgcolor = TERM_COLOR_BACKGROUND(color);
 
 			code[2] = '0' + TERM_COLOR_FOREGROUND(color);
@@ -341,7 +341,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		}
 
 		/* Check if the char should be rendered bold. */
-		if (ch->color & SCREEN_ATTR_BOLD) {
+		if (ch->color[0] & SCREEN_ATTR_BOLD) {
 			add_bytes_to_string(screen, ";1", 2);
 		}
 
@@ -440,7 +440,7 @@ redraw_screen(struct terminal *term)
 {
 	struct screen_driver *driver = get_screen_driver(term);
 	struct string image;
-	struct screen_state state = { 0xFF, 0xFF, 0xFF };
+	struct screen_state state = { 0xFF, 0xFF, { 0xFF } };
 	struct terminal_screen *screen = term->screen;
 
 	if (!driver

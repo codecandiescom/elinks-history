@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.37 2003/09/15 20:30:10 jonas Exp $ */
+/* $Id: draw.h,v 1.38 2003/10/02 15:18:28 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -25,7 +25,7 @@ struct screen_char {
 	unsigned char attr;
 
 	/* The encoded fore- and background color. */
-	unsigned char color;
+	unsigned char color[1];
 };
 
 #define copy_screen_chars(to, from, amount) \

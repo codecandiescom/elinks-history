@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.10 2003/10/27 02:44:45 pasky Exp $ */
+/* $Id: beos.c,v 1.11 2003/10/27 03:10:22 pasky Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -8,6 +8,8 @@
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define NO_OVERRIDES /* We are those who declare them. */
 
 #include "osdep/system.h"
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.16 2004/01/01 15:12:12 pasky Exp $ */
+/* $Id: common.c,v 1.17 2004/05/02 13:07:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,11 @@
 
 static struct bookmarks_backend *bookmarks_backends[] = {
 	&default_bookmarks_backend,
+#ifdef CONFIG_XBEL_BOOKMARKS
 	&xbel_bookmarks_backend,
+#else
+	NULL,
+#endif
 };
 
 
@@ -44,7 +48,8 @@ bookmarks_read(void)
 	unsigned char *file_name;
 	FILE *f;
 
-	if (!bookmarks_backends[backend]->read
+	if (!bookmarks_backends[backend]
+	    || !bookmarks_backends[backend]->read
 	    || !bookmarks_backends[backend]->filename) return;
 
 	file_name = bookmarks_backends[backend]->filename(0);
@@ -72,7 +77,8 @@ bookmarks_write(struct list_head *bookmarks_list)
 	unsigned char *file_name;
 
 	if (!bookmarks_dirty) return;
-	if (!bookmarks_backends[backend]->write
+	if (!bookmarks_backends[backend]
+	    || !bookmarks_backends[backend]->write
 	    || !elinks_home
 	    || !bookmarks_backends[backend]->filename) return;
 

@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.23 2004/01/07 00:21:48 jonas Exp $ */
+/* $Id: tab.h,v 1.24 2004/01/17 01:43:15 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -23,8 +23,7 @@ void close_all_tabs_but_current(struct session *ses);
 #define inactive_tab(win) ((win)->type != WT_NORMAL && (win) != get_current_tab((win->term)))
 
 void open_url_in_new_tab(struct session *ses, unsigned char *url, int in_background);
-void open_in_new_tab(struct terminal *term, int link, struct session *ses);
-void open_in_new_tab_in_background(struct terminal *term, int link, struct session *ses);
+void open_in_new_tab(struct session *ses, int link, int in_background);
 
 #define foreach_tab(tab, terminal) \
 	foreach (tab, terminal) if (tab->type == WT_TAB)

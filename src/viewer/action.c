@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.38 2004/01/14 19:54:32 jonas Exp $ */
+/* $Id: action.c,v 1.39 2004/01/17 01:43:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,11 +290,11 @@ do_action(struct session *ses, enum action action, int verbose)
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_TAB:
-			open_in_new_tab(term, 1, ses);
+			open_in_new_tab(ses, 1, 0);
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			open_in_new_tab_in_background(term, 1, ses);
+			open_in_new_tab(ses, 1, 1);
 			break;
 
 		case ACT_OPEN_LINK_IN_NEW_WINDOW:
@@ -304,11 +304,11 @@ do_action(struct session *ses, enum action action, int verbose)
 			break;
 
 		case ACT_OPEN_NEW_TAB:
-			open_in_new_tab(term, 0, ses);
+			open_in_new_tab(ses, 0, 0);
 			break;
 
 		case ACT_OPEN_NEW_TAB_IN_BACKGROUND:
-			open_in_new_tab_in_background(term, 0, ses);
+			open_in_new_tab(ses, 0, 1);
 			break;
 
 		case ACT_OPEN_NEW_WINDOW:

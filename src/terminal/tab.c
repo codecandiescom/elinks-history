@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.43 2004/01/16 23:49:55 jonas Exp $ */
+/* $Id: tab.c,v 1.44 2004/01/17 01:43:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,16 +275,9 @@ get_tab_link_url(struct session *ses)
 }
 
 void
-open_in_new_tab(struct terminal *term, int link, struct session *ses)
+open_in_new_tab(struct session *ses, int link, int in_background)
 {
-	do_open_in_new_tab(term, ses, link ? get_tab_link_url(ses) : NULL, 0);
-}
-
-void
-open_in_new_tab_in_background(struct terminal *term, int link,
-			      struct session *ses)
-{
-	do_open_in_new_tab(term, ses, link ? get_tab_link_url(ses) : NULL, 1);
+	do_open_in_new_tab(ses->tab->term, ses, link ? get_tab_link_url(ses) : NULL, in_background);
 }
 
 void

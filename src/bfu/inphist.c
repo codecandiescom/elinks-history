@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.77 2004/01/25 13:59:54 jonas Exp $ */
+/* $Id: inphist.c,v 1.78 2004/02/09 01:41:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,14 +157,13 @@ check_duplicate_entries(struct input_history *history, unsigned char *data)
 		duplicate = entry;
 		entry = entry->prev;
 
-		del_from_list(duplicate);
+		del_from_history_list(history, duplicate);
 
 		/* Save the first duplicate entry */
 		if (!first_duplicate) {
 			first_duplicate = duplicate;
 		} else {
 			mem_free(duplicate);
-			history->size--;
 		}
 	}
 
@@ -190,8 +189,7 @@ add_to_input_history(struct input_history *history, unsigned char *data,
 	if (check_duplicate) {
 		entry = check_duplicate_entries(history, data);
 		if (entry) {
-			add_to_list(history->entries, entry);
-			if (!history->nosave) history->dirty = 1;
+			add_to_history_list(history, entry);
 			return;
 		}
 	}

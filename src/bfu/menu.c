@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.282 2004/11/11 20:20:39 miciah Exp $ */
+/* $Id: menu.c,v 1.283 2004/11/11 20:29:40 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -389,7 +389,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 		hk_color_sel = tmp;
 	}
 
-	for (x = 0; x < w + !!hk_state && (c = text[x]); x++) {
+	for (x = 0; x - !!hk_state < w && (c = text[x]); x++) {
 		if (!hk_state && x == hotkey_pos - 1) {
 			hk_state = 1;
 			continue;

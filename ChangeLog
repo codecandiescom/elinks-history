@@ -1,3 +1,22 @@
+Sun Jan 30 22:03:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Add 0.10.2 entries.  
+
+Sun Jan 30 21:11:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/Makefile.am:
+
+	A useless ruby hooks file.  
+
+Sun Jan 30 13:44:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	This one translates one untranslated msgid. Patch by Adam
+	Golebiowski.  
+
 Sat Jan 29 12:08:41 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/da.po:

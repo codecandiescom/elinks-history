@@ -1,3 +1,475 @@
+Sat Jan 17 23:05:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Converted Jonas' strlcasecmp()s to strncasecmp()s, which actually
+	make sense :^). Should fix 'text-align: right;' bug reported by
+	Jonas.  
+
+Sat Jan 17 22:49:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Hotkey conflicts fixes.  
+
+Sat Jan 17 22:12:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Fixed string shufflink in TEXT_ALIGN value parser.  
+
+Sat Jan 17 22:11:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simpletext.html:
+
+	Jonas' div right; testcase.  
+
+Sat Jan 17 22:04:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simpletext.html:
+
+	Also a <div> test.  
+
+Sat Jan 17 21:22:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simpletext.html:
+
+	Added text-align tests.  
+
+Sat Jan 17 21:18:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Compilation fix.  
+
+Sat Jan 17 21:17:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, property.h, value.c:
+
+	Added support for text-align property.  
+
+Sat Jan 17 20:24:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, property.h, value.c:
+
+	Fixed support for lighter and normal values of font-* properties.  
+
+Sat Jan 17 19:59:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simplefont.html:
+
+	Enhance the font-weight: normal testing.  
+
+Sat Jan 17 19:53:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Added support for font-weight lighter, bolder and normal.  
+
+Sat Jan 17 19:52:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/README:
+
+	About current big design problems.  
+
+Sat Jan 17 19:43:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Removed redundant skip_whitespace() from FONT_ATTRIBUTE parser.  
+
+Sat Jan 17 19:40:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simplefont.html, src/document/css/apply.c,
+	src/document/css/parser.c, src/document/css/property.h,
+	src/document/css/value.c:
+
+	font-style property support.  
+
+Sat Jan 17 17:35:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Alphabetize.  
+
+Sat Jan 17 16:46:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/Makefile.am:
+
+	Fixed linking of the CSS code.  
+
+Sat Jan 17 16:46:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c:
+
+	Sort CSS appliers like the css_decl_propery enum.  
+
+Sat Jan 17 16:46:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Removed obsolete TODOs.  
+
+Sat Jan 17 16:45:18 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.c:
+
+	Cleaned up the spaghetti rgb() parsing code by moving the color
+	component extraction to rgb_component_parser().  
+
+Sat Jan 17 16:36:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: Makefile.am, apply.c, apply.h, parser.c,
+	property.h, value.c, value.h:
+
+	Moved {struct css_property} from apply.h to property.h.  
+
+Sat Jan 17 16:26:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/apply.h:
+
+	Moved generic stuff from parser.h to README.  
+
+Sat Jan 17 16:23:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.h:
+
+	Removed redundant struct list_head.  
+
+Sat Jan 17 16:23:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: parser.h, README, Makefile.am:
+
+	Moved generic stuff from parser.h to README.  
+
+Sat Jan 17 16:01:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: css/Makefile.am, css/apply.c, css/apply.h,
+	css/css.c, css/css.h, html/parser.c:
+
+	document/css/css.* -> document/css/apply.* 
+
+Sat Jan 17 15:54:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: Makefile.am, apply.c, css.c, parser.c,
+	parser.h:
+
+	Moved the current stub of future CSS parser from document/css/css.*
+	to document/css/parser.*.  
+
+Sat Jan 17 15:46:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/value.h:
+
+	Typo fix.  
+
+Sat Jan 17 15:45:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: Makefile.am, apply.c, css.c, value.c, value.h:
+
+	Moved CSS value parser from document/css/css.* to
+	document/css/value.*.  
+
+Sat Jan 17 15:40:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Removed already obsolete TODO.  
+
+Sat Jan 17 15:36:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.h, css.h:
+
+	Update the _H define.  
+
+Sat Jan 17 15:32:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Oops, include document/css/css.h.  
+
+Sat Jan 17 15:32:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Moved value parsing to separate functions.  
+
+Sat Jan 17 15:25:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Statify the appliers.  
+
+Sat Jan 17 15:22:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.h, css.h:
+
+	Include some stuff required by {struct css_property}.  
+
+Sat Jan 17 15:21:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/document.c, document/css/apply.c,
+	document/css/css.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c, sched/session.c,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/textarea.c:
+
+	Moved document/html/parser.h inclusion to the usual place, since it
+	should be safe now.  
+
+Sat Jan 17 15:18:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: Makefile.am, internal.h, parser.c, parser.h,
+	renderer.c, tables.c:
+
+	Moved the aggressive format/par_format #defines (together with
+	html_top and html_stack) from document/html/parser.h to
+	document/html/internal.h.  
+
+Sat Jan 17 15:05:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, apply.h, css.c, css.h:
+
+	Export {struct css_property}.  
+
+Sat Jan 17 14:59:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Compilation fix.  
+
+Sat Jan 17 14:57:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Moved proprety applying to separate functions.  
+
+Sat Jan 17 14:49:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/idnes_mail.html:
+
+	This is a nice test for font-weight, color, background-color on body
+	etc. And it's all inlined in the style attributes.  
+
+Sat Jan 17 14:44:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Make sure that background-color property on body element gets
+	handled properly. Well, it's a mess.  
+
+Sat Jan 17 14:38:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c:
+
+	Compilation fix.  
+
+Sat Jan 17 14:33:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/: simplecolors.html, simplefont.html:
+
+	Separated font-related tests to simplefont.html, making them also
+	more elaborate.  
+
+Sat Jan 17 14:26:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, css.c, apply.h, css.h:
+
+	css_apply() now returns void instead of int because we do not use
+	the return value anywhere anyway. Proposed by Jonas.  
+
+Sat Jan 17 14:18:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, config/opttypes.c, cookies/parser.c,
+	document/html/parser.c, document/html/tables.c,
+	protocol/http/header.c, protocol/smb/smb.c, util/string.h:
+
+	Removed the WHITECHAR() macro, we use the standard builtin isspace()
+	macro instead which should be completely equivalent.  
+
+Sat Jan 17 14:16:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/css/apply.c, document/css/css.c, util/string.h:
+
+	Make util/string.h directly include its prerequisite <ctype.h>.  
+
+Sat Jan 17 14:12:34 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simplecolors.html:
+
+	Made the bold tests a little more explicit.  
+
+Sat Jan 17 14:09:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/dialogs/document.c:
+
+	Made the Document info msgbox scrollable, usable ie. for long
+	titles/urls (test/longtitle.html). Patch by David A. Capello
+	<dacap@users.sourceforge.net>.  
+
+Sat Jan 17 14:06:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, src/document/Makefile.am,
+	src/document/html/Makefile.am, src/document/html/css.c,
+	src/document/html/css.h, src/document/html/parser.c,
+	src/document/css/Makefile.am:
+
+	document/html/css.* -> document/css/css.* 
+
+Sat Jan 17 07:49:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/css.c, html/css.c:
+
+	Make the font-weight evaluation correct. Values pointed out by
+	Miciah.  
+
+Sat Jan 17 07:43:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/css.c, html/css.c:
+
+	Make property name to property enum data driven.  
+
+Sat Jan 17 07:23:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/css.c, html/css.c:
+
+	Add support for font-weight (bold) support.  
+
+Sat Jan 17 07:22:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/simplecolors.html:
+
+	Add background-color and font-weight tests.  
+
+Sat Jan 17 06:45:38 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Sat Jan 17 02:24:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/css.c, html/css.c:
+
+	Handle the background-color property.  
+
+Sat Jan 17 02:09:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/css.c, html/css.c:
+
+	Use skip_whitespace() macro.  
+
+Sat Jan 17 01:56:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	open_current_link_in_new_tab(): Merge in get_tab_link_url(). Fix
+	leak related to url list introduction previous today.  
+
+Sat Jan 17 01:53:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, terminal/tab.c, terminal/tab.h,
+	viewer/text/view.c:
+
+	Specialize open_in_new_tab() to open current link in new tab. Rename
+	to open_current_link_in_new_tab().  
+
+Sat Jan 17 01:50:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Call open_url_in_new_tab() directly.  
+
+Sat Jan 17 01:48:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Merge backend for 'tab openers' with open_url_in_new_tab().  
+
+Sat Jan 17 01:43:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, terminal/tab.c, terminal/tab.h,
+	viewer/text/view.c:
+
+	Make open_in_new_tab() more generic to also handle backgrounded
+	tabs.  
+
+Sat Jan 17 01:29:07 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/Makefile.am:
+
+	We actually don't use libhtml.a anywhere, so it'd be good to say so.  
+
+Sat Jan 17 01:26:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, css/apply.c, css/apply.h, css/css.c,
+	css/css.h, html/Makefile.am, html/css.c, html/css.h, html/parser.c:
+
+	Very trivial CSS support introducted. It includes mostly the most
+	basic framework for the style managment (basically just a temporary
+	properties list), bunch of ideas in comments, and the initial
+	css_apply(), which now just orders parsing of the element's style
+	attribute (no real stylesheet yet, therefore). Oh and only 'color'
+	property is supported for now, however it should be easy to
+	introduce more. Have fun.  
+
+Sat Jan 17 01:21:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/css/simplecolors.html:
+
+	Very simple test case for the 'color' property specified in the
+	'style' attribute of an element.  
+
+Sat Jan 17 01:20:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* test/Makefile.am:
+
+	New css/ directory.  
+
+Sat Jan 17 01:09:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Rename @i to @current_frame_number and initialize it to 0 if it is
+	-1 (no frame has been chosen yet). This fixes drawing of title for
+	backgrounded tabs containing frame documents.  
+
+Sat Jan 17 00:27:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, util/string.c, util/string.h:
+
+	Define a string item struct for string lists moving list members out
+	of struct string. Requested by pasky.  
+
+Sat Jan 17 00:11:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: util/color.c, util/color.h, config/options.c,
+	document/html/parser.c, config/opttypes.c:
+
+	decode_color() now takes the source string length as an additional
+	argument.  
+
+Sat Jan 17 00:05:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/color.c:
+
+	Make more use of @slen in decode_color().  
+
+Fri Jan 16 23:49:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/cmdline.c, sched/session.c, sched/session.h,
+	terminal/tab.c:
+
+	Use string lists instead of url_list structure and remove lot of
+	trivial boring code.  
+
+Fri Jan 16 23:48:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: string.c, string.h:
+
+	Add support for string lists. This adds list members to struct
+	string but since we mostly use it via local variables it should not
+	have a big impact.  
+
 Fri Jan 16 22:31:44 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/tab.c:

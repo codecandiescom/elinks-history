@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.22 2004/01/19 17:03:49 jonas Exp $ */
+/* $Id: parser.c,v 1.23 2004/01/19 18:52:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ css_parse_properties(struct list_head *props, unsigned char *string)
 		struct css_token *token = get_css_token(&scanner);
 		int i;
 
-		if (!token) break;
+		if (!token || token->type == '}') break;
 
 		/* Extract property name. */
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.85 2003/10/24 22:38:08 pasky Exp $ */
+/* $Id: options.c,v 1.86 2003/10/24 22:46:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,15 +189,6 @@ terminal_options_fn(struct dialog_data *dlg_data)
 
 #define TERMOPT_WIDGET_SIZE (TERMOPT_WIDGETS * sizeof(struct widget))
 
-#define set_dlg_button(dlg, n, key, handler, button_text)		\
-	do {								\
-		(dlg)->items[n].type = D_BUTTON;			\
-		(dlg)->items[n].gid = (key);				\
-		(dlg)->items[n].fn = (handler);				\
-		(dlg)->items[n].text = (button_text);			\
-		(n)++;						\
-	} while (0)
-
 void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
@@ -248,9 +239,9 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->underline);
 	set_dlg_checkbox(dlg, n, 0, 0, termopt_hop->utf_8_io);
 
-	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term));
-	set_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term));
-	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term));
+	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
+	set_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);
+	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	assert(n == TERMOPT_WIDGETS);
 	dlg->items[n].type = D_END;

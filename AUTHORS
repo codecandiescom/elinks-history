@@ -195,7 +195,7 @@ Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 
 Jonas Fonseca <fonseca@diku.dk>
 	Danish translation
-	http://elinks.or.cz/
+	http://elinks.or.cz/ and doc/book keeper
 	Mailcap support
 	Random hacking
  
@@ -442,4 +442,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.125 2003/05/20 21:27:40 pasky Exp $
+$Id: AUTHORS,v 1.126 2003/06/15 15:04:10 jonas Exp $

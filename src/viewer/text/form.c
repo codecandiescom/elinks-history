@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.151 2004/06/13 00:30:42 jonas Exp $ */
+/* $Id: form.c,v 1.152 2004/06/14 18:44:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1036,6 +1036,7 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 	    struct form_control *frm, struct form_state *fs, struct link *link,
 	    struct term_event *ev, int rep)
 {
+	unsigned char *text;
 	int x = 1;
 
 	switch (kbd_action(KM_EDIT, ev, NULL)) {
@@ -1117,27 +1118,25 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			if (!frm->ro) fs->value[0] = 0;
 			fs->state = 0;
 			break;
-		case ACT_EDIT_PASTE_CLIPBOARD: {
-			char *clipboard = get_clipboard_text();
+		case ACT_EDIT_PASTE_CLIPBOARD:
+			if (frm->ro) break;
 
-			if (!clipboard)
-				break;
-			if (!frm->ro) {
-				int cb_len = strlen(clipboard);
+			text = get_clipboard_text();
+			if (text) {
+				int cb_len = strlen(text);
 
 				if (cb_len <= frm->maxlength) {
 					unsigned char *v = mem_realloc(fs->value, cb_len + 1);
 
 					if (v) {
 						fs->value = v;
-						memmove(v, clipboard, cb_len + 1);
+						memmove(v, text, cb_len + 1);
 						fs->state = strlen(fs->value);
 					}
 				}
+				mem_free(text);
 			}
-			mem_free(clipboard);
 			break;
-		}
 		case ACT_EDIT_ENTER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_enter(fs, frm, rep)) {

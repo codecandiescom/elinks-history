@@ -352,7 +352,7 @@ source_success:
 		/* The magic number is wrong: not a message catalog file.  */
 #ifdef HAVE_MMAP
 		if (use_mmap)
-			munmap((caddr_t) data, size);
+			munmap((void *) data, size);
 		else
 #endif
 			free(data);
@@ -389,7 +389,7 @@ default:
 			/* This is an invalid revision.  */
 #ifdef HAVE_MMAP
 			if (use_mmap)
-				munmap((caddr_t) data, size);
+				munmap((void *) data, size);
 			else
 #endif
 				free(data);
@@ -462,7 +462,7 @@ _nl_unload_domain(struct loaded_domain *domain)
 
 #ifdef _POSIX_MAPPED_FILES
 	if (domain->use_mmap)
-		munmap((caddr_t) domain->data, domain->mmap_size);
+		munmap((void *) domain->data, domain->mmap_size);
 	else
 #endif	/* _POSIX_MAPPED_FILES */
 		free((void *) domain->data);

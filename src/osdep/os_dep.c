@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.85 2003/09/25 19:34:14 zas Exp $ */
+/* $Id: os_dep.c,v 1.86 2003/09/25 19:54:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1157,7 +1157,7 @@ struct os2_mouse_spec {
 	int p[2];
 	void (*fn)(void *, unsigned char *, int);
 	void *data;
-	unsigned char buffer[sizeof(struct event)];
+	unsigned char buffer[sizeof(struct term_event)];
 	int bufptr;
 	int terminate;
 };
@@ -1171,7 +1171,7 @@ mouse_thread(void *p)
 	A_DECL(MOUEVENTINFO, ms);
 	A_DECL(USHORT, rd);
 	A_DECL(USHORT, mask);
-	struct event ev;
+	struct term_event ev;
 
 	signal(SIGPIPE, SIG_IGN);
 	ev.ev = EV_MOUSE;
@@ -1214,7 +1214,7 @@ mouse_thread(void *p)
 			ev.b = (status & BM_BUTT) | B_UP;
 			status = -1;
 		}
-		if (hard_write(oms->p[1], (unsigned char *)&ev, sizeof(struct event)) != sizeof(struct event)) break;
+		if (hard_write(oms->p[1], (unsigned char *)&ev, sizeof(struct term_event)) != sizeof(struct term_event)) break;
 	}
 #ifdef HAVE_SYS_FMUTEX_H
 	_fmutex_request(&mouse_mutex, _FMR_IGNINT);
@@ -1234,7 +1234,7 @@ void
 mouse_handle(struct os2_mouse_spec *oms)
 {
 	int r = read(oms->p[0], oms->buffer + oms->bufptr,
-		     sizeof(struct event) - oms->bufptr);
+		     sizeof(struct term_event) - oms->bufptr);
 
 	if (r <= 0) {
 		unhandle_mouse(oms);
@@ -1242,9 +1242,9 @@ mouse_handle(struct os2_mouse_spec *oms)
 	}
 
 	oms->bufptr += r;
-	if (oms->bufptr == sizeof(struct event)) {
+	if (oms->bufptr == sizeof(struct term_event)) {
 		oms->bufptr = 0;
-		oms->fn(oms->data, oms->buffer, sizeof(struct event));
+		oms->fn(oms->data, oms->buffer, sizeof(struct term_event));
 	}
 }
 

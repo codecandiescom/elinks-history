@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.2 2004/04/23 23:22:44 pasky Exp $ */
+/* $Id: internal.h,v 1.3 2004/04/23 23:23:10 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -12,7 +12,7 @@ extern struct list_head html_stack;
 #define par_format (((struct html_element *) html_stack.next)->parattr)
 #define html_top (*(struct html_element *) html_stack.next)
 
-void *ff;
-void (*line_break_f)(void *);
+extern void *ff;
+extern void (*line_break_f)(void *);
 
 #endif

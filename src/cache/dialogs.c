@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.5 2003/11/17 18:22:24 pasky Exp $ */
+/* $Id: dialogs.c,v 1.6 2003/11/17 18:22:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ push_info_button(struct dialog_data *dlg_data,
 	/* Add the uri with password and post info stripped */
 	add_uri_to_string(&msg, &ce->uri, ~(URI_PASSWORD | URI_POST));
 
-	add_format_to_string(&msg, "\n%s: %s", _("Last modified time", term),
+	add_format_to_string(&msg, "\n%s: %s", _("Last modified", term),
 						ce->last_modified);
 	add_format_to_string(&msg, "\n%s: %d", _("Size", term), ce->length);
 	add_format_to_string(&msg, "\n%s: %d", _("Loaded size", term), ce->data_size);

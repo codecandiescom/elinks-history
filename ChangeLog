@@ -1,3 +1,327 @@
+Fri Jun 11 21:58:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	BL -> BOUNDARY_LENGTH 
+
+Fri Jun 11 21:56:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	check_range(): Fix a few comments and only initialize the boundary
+	counter once. The reason to do it twice before was that we could
+	match the boundary but we don't search them anymore.  
+
+Fri Jun 11 21:48:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	check_boundary(): Code bloat and optimization. But it is mostly
+	comments. The boundary string 'incrementation' was split out to
+	separate function.  
+
+Fri Jun 11 19:38:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Make the bound string part of the boundary_info struct.  
+
+Fri Jun 11 19:32:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Use boundary_info struct to pass boundary offset info around. Fixes
+	file uploading (and other multipart post handling). Guilty code was
+	the *nbound_ptrs++ which didn't do what was expected.  
+
+Fri Jun 11 19:21:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	check_boundary(): Outdent the loop. Bad idea.  
+
+Fri Jun 11 19:05:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	check_boundary(): Indent the loop nothing else.  
+
+Fri Jun 11 19:04:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	check_boundary(): Use string pointers.  
+
+Fri Jun 11 18:58:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	check_boundary(): Use memcmp().  
+
+Fri Jun 11 18:54:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Move boundary check to separate function.  
+
+Fri Jun 11 17:35:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/form.c:
+
+	Send Content-Type header for file uploads if the MIME subsystems
+	knows it. Make autodetection of bugzilla attachment creation
+	possible.  
+
+Fri Jun 11 14:56:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/tab.c, terminal/tab.h:
+
+	init_tab(): No need to take in_background arg.  
+
+Fri Jun 11 14:55:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/tab.c:
+
+	Do all the tab switching in init_session() since we have more
+	control there.  
+
+Fri Jun 11 14:43:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/event.c:
+
+	Only destroy the terminal if first tab fails to be created.  
+
+Fri Jun 11 14:39:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/tab.c, terminal/tab.h:
+
+	Merge create_session() into init_session(). init_tab() now takes
+	data pointer. The reverse order of initialization of sessions should
+	help improve error handling.  
+
+Fri Jun 11 14:12:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/event.c:
+
+	Remove the need for initial_session_info by calling create_session()
+	in init_session(). Ahh :)) 
+
+Fri Jun 11 14:02:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h:
+
+	Make tabwin_func static.  
+
+Fri Jun 11 14:00:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/interlink.c, terminal/terminal.c,
+	terminal/terminal.h:
+
+	init_term(): No need to take root_window arg anymore.  
+
+Fri Jun 11 13:58:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/terminal.c:
+
+	Make init_session() do all the tab creation.  
+
+Fri Jun 11 13:54:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h:
+
+	init_session(): Return initial_session_info for no good reason.  
+
+Fri Jun 11 13:29:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/tab.c, terminal/tab.h,
+	terminal/terminal.c:
+
+	init_tab(): Take the handler as arg.  
+
+Fri Jun 11 13:04:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	follow_url(): Also send fragment stuff to the event.  
+
+Fri Jun 11 12:36:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	follow_url(): Use URI_BASE instead of URI_ORIGINAL so we get the
+	post stuff right in the returned URI. Note added about a possible
+	future scenario where post data should be fixed up. Spotted by
+	pasky.  
+
+Fri Jun 11 10:30:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	search_dlg_do(): drop more constant parameters.  
+
+Fri Jun 11 10:13:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.h:
+
+	add_dlg_field_do(): use struct widget * and reduce code redundancy.  
+
+Fri Jun 11 10:02:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	search_dlg_do(): drop unused parameters and simplify code a lot.  
+
+Fri Jun 11 03:22:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Revert last patch. It is too unpredictable.  
+
+Fri Jun 11 03:03:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Make link typeahead searching honor links in the current view. Idea
+	by Miciah altho' it still doesn't fix his problem since links in the
+	lower half of the view will become centered so scrolling is done
+	even though it might not be what you want.  
+
+Fri Jun 11 02:00:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	request_additional_file(): URIs can potentially contain fragments so
+	compare using URI_BASE.  
+
+Fri Jun 11 01:21:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	setup_first_session(): Only greet people on first_use if they don't
+	pass any URI on the command line. Is this bad practice? 
+
+Fri Jun 11 01:06:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	get_real_uri_length(): Fix off by one error.  
+
+Fri Jun 11 00:54:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	setup_first_session(): Dammit. Goto URL home.  
+
+Fri Jun 11 00:47:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, sched/session.c, sched/session.h:
+
+	create_session_info() -> encode_session_info().  
+
+Fri Jun 11 00:44:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	handler_remote_session() -> init_remote_session().  
+
+Fri Jun 11 00:42:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Shorten lines but using temporary variable.  
+
+Fri Jun 11 00:39:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	dialog_goto_url_open_first() was removed and the s/_first// one is
+	used instead and first_use is set to zero right away. I can't see
+	why it has to be done in the button handler.  
+
+Fri Jun 11 00:28:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	setup_session(): Cleanup and describe. No need to check first_use
+	before showing goto URL dialog.  
+
+Fri Jun 11 00:22:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	process_session_info() -> setup_session() and merge in
+	copy_session().  
+
+Fri Jun 11 00:18:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	setup_first_session(): Only open goto URL dialog if no URL was
+	passed on the command line.  
+
+Fri Jun 11 00:10:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	setup_first_session(): Take URI arg and duplicate code a bit. It
+	will help fix a bug and makes the session autosave stuff much saner.  
+
+Thu Jun 10 23:55:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	create_session(): Only copy session if not the first one.  
+
+Thu Jun 10 23:52:12 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Fix possible leak of initial_session_info.  
+
+Thu Jun 10 23:47:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	create_session(): session_info can never be NULL. We check for it at
+	initialization time.  
+
+Thu Jun 10 23:43:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Cleanup.  
+
+Thu Jun 10 23:22:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Move functions around so they don't have to be predeclared.  
+
+Thu Jun 10 22:56:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	init_session_info(): No remote arg is needed.  
+
+Thu Jun 10 22:28:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Random cleanups.  
+
+Thu Jun 10 22:21:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Fix start up with no URIs on the command
+	line.  
+
+Thu Jun 10 22:11:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Small cleanup.  
+
 Thu Jun 10 21:55:36 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/session.c:

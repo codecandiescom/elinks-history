@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.143 2004/06/12 18:05:54 zas Exp $ */
+/* $Id: form.c,v 1.144 2004/06/12 18:06:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,7 +1009,7 @@ auto_submit_form(struct session *ses)
 	submit_form(ses, ses->doc_view, 0);
 }
 
-int
+static int
 field_op_do(struct terminal *term, struct document_view *doc_view,
 	    struct form_control *frm, struct form_state *fs, struct link *link,
 	    struct term_event *ev, int rep)

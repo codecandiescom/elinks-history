@@ -4046,7 +4046,7 @@ struct translation translation_french [] = {
   {T_CLEAR, "Effacer"},
   {T_ADD_BOOKMARK_LINK, "Ajouter ce lien aux signets"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
-  {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_LANGUAGE, "Langues préférées (liste de codes ISO séparés par une virgule)"},
   {0, NULL}
 };
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.57 2003/05/04 14:08:08 zas Exp $ */
+/* $Id: menu.c,v 1.58 2003/05/04 14:18:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,12 +97,12 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
 			items[i].hotkey_pos = find_hotkey_pos(_(items[i].text, term));
 #ifdef DEBUG
-			/* negative value for hotkey_pos means the key is already
+			/* Negative value for hotkey_pos means the key is already
 			 * used by another entry. We mark it to be able to highlight
 			 * this hotkey in menus. --Zas */
 			if (items[i].hotkey_pos) {
 				unsigned char *text = _(items[i].text, term);
-				unsigned char *used = &used_hotkeys[text[items[i].hotkey_pos]];
+				unsigned char *used = &used_hotkeys[upcase(text[items[i].hotkey_pos])];
 
 				switch (*used) {
 					case 0: *used = 1; break;

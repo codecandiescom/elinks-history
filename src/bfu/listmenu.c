@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.28 2004/05/28 15:43:00 zas Exp $ */
+/* $Id: listmenu.c,v 1.29 2004/06/09 21:05:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"
+#include "viewer/text/form.h" /* selected_item() */
 #include "viewer/text/link.h" /* get_current_state() */
 
 /* TODO: massive cleanup, merging, code redundancy tracking between this file

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.48 2004/05/29 13:54:17 jonas Exp $ */
+/* $Id: view.h,v 1.49 2004/06/09 21:05:53 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -40,5 +40,7 @@ void send_event(struct session *, struct term_event *);
 void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a);
 void view_image(struct session *ses, struct document_view *doc_view, int a);
 void download_link(struct session *ses, struct document_view *doc_view, int image);
+
+void refresh_view(struct session *ses, struct document_view *doc_view);
 
 #endif

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.186 2004/06/07 23:38:54 jonas Exp $ */
+/* $Id: link.c,v 1.187 2004/06/09 21:05:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -593,46 +593,6 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	}
 
 	return 1;
-}
-
-
-void
-selected_item(struct terminal *term, void *pitem, struct session *ses)
-{
-	int item = (int) pitem;
-	struct document_view *doc_view;
-	struct link *l;
-	struct form_state *fs;
-
-	assert(term && ses);
-	if_assert_failed return;
-	doc_view = current_frame(ses);
-
-	assert(doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
-
-	l = get_current_link(doc_view);
-	if (!l || l->type != LINK_SELECT) return;
-
-	fs = find_form_state(doc_view, l->form);
-	if (fs) {
-		struct form_control *frm = l->form;
-
-		if (item >= 0 && item < frm->nvalues) {
-			fs->state = item;
-			mem_free_set(&fs->value, stracpy(frm->values[item]));
-		}
-		fixup_select_state(frm, fs);
-	}
-
-	draw_doc(ses, doc_view, 1);
-	print_screen_status(ses);
-	redraw_from_window(ses->tab);
-#if 0
-	if (!has_form_submit(doc_view->document, l->form)) {
-		goto_form(ses, doc_view, l->form, l->target);
-	}
-#endif
 }
 
 int

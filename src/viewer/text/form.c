@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.119 2004/06/09 20:48:47 zas Exp $ */
+/* $Id: form.c,v 1.120 2004/06/09 21:05:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,7 @@
 
 /* FIXME: Add comments!! --Zas */
 
-
-void
+static void
 fixup_select_state(struct form_control *fc, struct form_state *fs)
 {
 	register int i;
@@ -75,6 +74,38 @@ fixup_select_state(struct form_control *fc, struct form_state *fs)
 	mem_free_set(&fs->value, stracpy(fc->nvalues
 					 ? fc->values[0]
 					 : (unsigned char *) ""));
+}
+
+void
+selected_item(struct terminal *term, void *pitem, struct session *ses)
+{
+	int item = (int) pitem;
+	struct document_view *doc_view;
+	struct link *link;
+	struct form_state *fs;
+
+	assert(term && ses);
+	if_assert_failed return;
+	doc_view = current_frame(ses);
+
+	assert(doc_view && doc_view->vs && doc_view->document);
+	if_assert_failed return;
+
+	link = get_current_link(doc_view);
+	if (!link || link->type != LINK_SELECT) return;
+
+	fs = find_form_state(doc_view, link->form);
+	if (fs) {
+		struct form_control *frm = link->form;
+
+		if (item >= 0 && item < frm->nvalues) {
+			fs->state = item;
+			mem_free_set(&fs->value, stracpy(frm->values[item]));
+		}
+		fixup_select_state(frm, fs);
+	}
+
+	refresh_view(ses, doc_view);
 }
 
 static void

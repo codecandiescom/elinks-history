@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.24 2004/05/25 00:48:40 jonas Exp $ */
+/* $Id: link.h,v 1.25 2004/06/09 21:05:53 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -17,8 +17,6 @@ void clear_link(struct terminal *t, struct document_view *doc_view);
 void draw_current_link(struct terminal *t, struct document_view *doc_view);
 
 void link_menu(struct terminal *, void *, struct session *);
-void selected_item(struct terminal *, void *, struct session *);
-
 int get_current_state(struct session *);
 
 struct link *get_first_link(struct document_view *doc_view);

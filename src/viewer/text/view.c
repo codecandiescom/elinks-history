@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.442 2004/06/08 16:36:13 jonas Exp $ */
+/* $Id: view.c,v 1.443 2004/06/09 21:05:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1123,4 +1123,12 @@ void
 save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a)
 {
 	query_file(ses, doc_view->vs->uri, ses, save_formatted, NULL, 1);
+}
+
+void
+refresh_view(struct session *ses, struct document_view *doc_view)
+{
+	draw_doc(ses, doc_view, 1);
+	print_screen_status(ses);
+	redraw_from_window(ses->tab);
 }

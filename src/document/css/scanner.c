@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.102 2004/01/26 22:59:06 jonas Exp $ */
+/* $Id: scanner.c,v 1.103 2004/01/26 23:01:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ static struct scan_table_info css_scan_table_info[] = {
 	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
 	/* This should contain mostly used char tokens like ':' and maybe a few
 	 * garbage chars that people might put in their CSS code */
-	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
+	SCAN_TABLE_STRING("({});:,*.",	 CSS_CHAR_TOKEN),
 	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
 
 	SCAN_TABLE_END,

@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.33 2004/07/22 01:58:06 pasky Exp $ */
+/* $Id: rewrite.c,v 1.34 2004/07/22 01:59:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,6 +109,7 @@ static struct option_info uri_rewrite_options[] = {
 	INIT_OPT_DUMB_PREFIX("dbug", "http://bugs.debian.org/"),
 	INIT_OPT_DUMB_PREFIX("dpkg", "http://packages.debian.org/"),
 	/* Hm, is this Debian-centric? -- Miciah */
+	/* Well, does anyone but Debian use lua40 naming convention? --pasky */
 	INIT_OPT_DUMB_PREFIX("lua", "file:///usr/share/doc/lua40-doc/manual/idx.html"),
 	INIT_OPT_DUMB_PREFIX("pycur", "http://www.python.org/doc/current/"),
 	INIT_OPT_DUMB_PREFIX("pydev", "http://www.python.org/dev/doc/devel/"),

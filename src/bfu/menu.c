@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.149 2003/12/30 17:54:24 jonas Exp $ */
+/* $Id: menu.c,v 1.150 2003/12/30 18:44:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,6 +270,8 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 {
 	struct color_pair *hk_color = get_bfu_color(term, "menu.hotkey.normal");
 	struct color_pair *hk_color_sel = get_bfu_color(term, "menu.hotkey.selected");
+	enum screen_char_attr hk_attr = get_opt_bool("ui.dialogs.underline_hotkeys")
+				      ? SCREEN_ATTR_UNDERLINE : 0;
 	unsigned char c;
 	int xbase = x;
 	int hk = 0;
@@ -300,10 +302,10 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 
 		if (hk == 1) {
 #ifdef DEBUG
-			draw_char(term, xbase + x - 1, y, c, SCREEN_ATTR_UNDERLINE,
+			draw_char(term, xbase + x - 1, y, c, hk_attr,
 				  (double_hk ? hk_color_sel : hk_color));
 #else
-			draw_char(term, xbase + x - 1, y, c, SCREEN_ATTR_UNDERLINE, hk_color);
+			draw_char(term, xbase + x - 1, y, c, hk_attr, hk_color);
 #endif
 			hk = 2;
 		} else {

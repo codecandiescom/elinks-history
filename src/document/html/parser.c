@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.492 2004/09/24 01:43:51 pasky Exp $ */
+/* $Id: parser.c,v 1.493 2004/09/24 02:51:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,7 +418,8 @@ html_html(unsigned char *a)
 	 * this from there. */
 	struct html_element *e = html_context.stack.prev;
 
-	e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
+	if (par_format.bgcolor != format.bg)
+		e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
 }
 
 void

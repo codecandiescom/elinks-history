@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.63 2004/04/23 22:24:58 pasky Exp $ */
+/* $Id: cmdline.c,v 1.64 2004/04/23 22:54:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -651,9 +651,18 @@ struct option_info cmdline_options_info[] = {
 
 	INIT_OPT_COMMAND("", N_("Control an already running ELinks"),
 		"remote", 0, remote_cmd,
-		N_("Mozilla compliant support for controlling an already running instance\n"
-		"of ELinks by openning URLs and tabs:\n"
-		"  -remote 'openURL(http://elinks.or.cz)'")),
+		N_("Mozilla compliant support for controlling an already running\n"
+		"instance of ELinks by openning URLs and tabs. The command line takes\n"
+		"an additional argument that contains the method which should be envoked\n"
+		"in the remote running instance. For ease of use this special argument\n"
+		"can be omitted in which case any additional URL arguments will be opened\n"
+		"in new tabs in the remote instance. Following is a list of the methods\n"
+		"that are supported:\n"
+		"  ping()                                   -- check for remote instance\n"
+		"  openURL()                                -- open new tab\n"
+		"  openURL(http://elinks.or.cz)             -- open URL in new tab\n"
+		"  openURL(http://elinks.or.cz, new-window) -- open URL in new window\n"
+		"  xfeDoCommand(openBrowser)                -- open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, MAXINT, 0,

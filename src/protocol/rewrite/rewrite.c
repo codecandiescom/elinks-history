@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.4 2003/12/07 02:04:20 jonas Exp $ */
+/* $Id: rewrite.c,v 1.5 2003/12/07 02:18:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,23 +112,26 @@ encode_uri_string_len(struct string *s, unsigned char *a, int alen)
 	a[alen] = c;
 }
 
+#define MAX_URI_ARGS 10
+
 static unsigned char *
 substitute_url(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 {
 	struct string n = NULL_STRING;
-	unsigned char *args[10];
-	int argslen[10];
+	unsigned char *args[MAX_URI_ARGS];
+	int argslen[MAX_URI_ARGS];
 	int argc = 0;
 	int i;
 
 	if (!init_string(&n)) return NULL;
 
+	/* Extract space separated list of arguments */
 	args[argc] = arg;
 	for (i = 0; ; i++) {
 		if (args[argc][i] == ' ') {
 			argslen[argc] = i;
 			argc++;
-			if (argc == 10) break;
+			if (argc == MAX_URI_ARGS) break;
 			args[argc] = &args[argc - 1][i];
 			i = 0;
 			for (; *args[argc] && *args[argc] == ' '; args[argc]++);

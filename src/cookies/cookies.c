@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.83 2003/10/26 18:13:19 jonas Exp $ */
+/* $Id: cookies.c,v 1.84 2003/10/26 18:25:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,19 @@ static int cookies_dirty = 0;
 
 #ifdef COOKIES
 
-struct option_info cookies_options[] = {
+enum cookies_option {
+	COOKIES_TREE,
+
+	COOKIES_ACCEPT_POLICY,
+	COOKIES_MAX_AGE,
+	COOKIES_PARANOID_SECURITY,
+	COOKIES_SAVE,
+	COOKIES_RESAVE,
+
+	COOKIES_OPTIONS,
+};
+
+static struct option_info cookies_options[] = {
 	INIT_OPT_TREE("", N_("Cookies"),
 		"cookies", 0,
 		N_("Cookies options.")),
@@ -117,6 +129,13 @@ struct option_info cookies_options[] = {
 
 	NULL_OPTION_INFO,
 };
+
+#define get_opt_cookies(which)		cookies_options[(which)].option.value
+#define get_cookies_accept_policy()	get_opt_cookies(COOKIES_ACCEPT_POLICY).number
+#define get_cookies_max_age()		get_opt_cookies(COOKIES_MAX_AGE).number
+#define get_cookies_paranoid_security()	get_opt_cookies(COOKIES_PARANOID_SECURITY).number
+#define get_cookies_save()		get_opt_cookies(COOKIES_SAVE).number
+#define get_cookies_resave()		get_opt_cookies(COOKIES_RESAVE).number
 
 static void accept_cookie(struct cookie *);
 static void save_cookies(void);
@@ -166,7 +185,7 @@ check_domain_security(unsigned char *domain, unsigned char *server, int server_l
 
 	need_dots = 1;
 
-	if (get_opt_int("cookies.paranoid_security")) {
+	if (get_cookies_paranoid_security()) {
 		/* This is somehow controversial attempt (by the way violating
 		 * RFC) to increase cookies security in national domains, done
 		 * by Mikulas. As it breaks a lot of sites, I decided to make
@@ -206,7 +225,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	struct c_server *cs;
 	struct cookie_str cstr;
 
-	if (get_opt_int("cookies.accept_policy") == COOKIES_ACCEPT_NONE)
+	if (get_cookies_accept_policy() == COOKIES_ACCEPT_NONE)
 		return 0;
 
 #ifdef COOKIES_DEBUG
@@ -244,7 +263,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		cookie->expires = parse_http_date(date); /* Convert date to seconds. */
 
 		if (cookie->expires) {
-			int max_age = get_opt_int("cookies.max_age"); /* Max. age in days */
+			int max_age = get_cookies_max_age(); /* Max. age in days */
 
 			if (max_age == 0) cookie->expires = 0; /* Always expires at session end. */
 			else if (max_age > 0) {
@@ -369,7 +388,7 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 		return 0;
 	}
 
-	if (get_opt_int("cookies.accept_policy") != COOKIES_ACCEPT_ALL) {
+	if (get_cookies_accept_policy() != COOKIES_ACCEPT_ALL) {
 		/* TODO */
 		free_cookie(cookie);
 		return 1;
@@ -414,7 +433,7 @@ accept_cookie(struct cookie *c)
 	memcpy(cd->domain, c->domain, domain_len + 1);
 	add_to_list(c_domains, cd);
 
-	if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
+	if (get_cookies_save() && get_cookies_resave())
 		save_cookies();
 }
 
@@ -441,7 +460,7 @@ end:
 	del_from_list(c);
 	free_cookie(c);
 
-	if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
+	if (get_cookies_save() && get_cookies_resave())
 		save_cookies();
 }
 
@@ -601,7 +620,7 @@ send_cookies(struct string *header, struct uri *uri)
 	if (nc)
 		add_to_string(header, "\r\n");
 
-	if (cookies_dirty && get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
+	if (cookies_dirty && get_cookies_save() && get_cookies_resave())
 		save_cookies();
 }
 
@@ -729,7 +748,7 @@ save_cookies(void) {
 static void
 init_cookies(struct module *module)
 {
-	if (get_opt_int("cookies.save"))
+	if (get_cookies_save())
 		load_cookies();
 }
 
@@ -739,7 +758,7 @@ done_cookies(struct module *module)
 {
 	free_list(c_domains);
 
-	if (!cookies_nosave && get_opt_int("cookies.save"))
+	if (!cookies_nosave && get_cookies_save())
 		save_cookies();
 
 	while (!list_empty(cookies)) {

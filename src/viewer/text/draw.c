@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.19 2004/10/16 20:15:42 jonas Exp $ */
+/* $Id: draw.c,v 1.20 2004/11/08 21:55:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
 #include "document/options.h"
+#include "document/refresh.h"
 #include "document/renderer.h"
 #include "document/view.h"
 #include "dialogs/status.h"		/* print_screen_status() */
@@ -331,6 +332,15 @@ draw_formatted(struct session *ses, int rerender)
 		if (!(rerender & 2) && session_is_loading(ses))
 			rerender |= 2;
 		render_document_frames(ses, rerender);
+
+		/* Rerendering kills the document refreshing so restart it. */
+		if (ses->doc_view
+		    && ses->doc_view->document
+		    && ses->doc_view->document->refresh
+		    && get_opt_bool("document.browse.refresh")) {
+			start_document_refresh(ses->doc_view->document->refresh,
+					       ses);
+		}
 	}
 
 	if (ses->tab != get_current_tab(ses->tab->term))

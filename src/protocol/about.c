@@ -1,5 +1,5 @@
 /* Pseudo about: protocol implementation */
-/* $Id: about.c,v 1.4 2004/07/23 15:52:37 zas Exp $ */
+/* $Id: about.c,v 1.5 2004/07/25 05:03:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,7 @@
 #include "cache/cache.h"
 #include "protocol/protocol.h"
 #include "sched/connection.h"
-#include "util/memory.h"
+#include "util/string.h"
 
 
 void

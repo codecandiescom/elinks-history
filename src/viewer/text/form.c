@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.158 2004/06/14 19:05:16 jonas Exp $ */
+/* $Id: form.c,v 1.159 2004/06/14 19:09:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1158,9 +1158,14 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			fs->state--;
 			break;
 		case ACT_EDIT_DELETE:
-			if (!frm->ro && fs->state < strlen(fs->value))
-				memmove(fs->value + fs->state, fs->value + fs->state + 1,
-					strlen(fs->value + fs->state));
+			if (frm->ro) break;
+
+			length = strlen(fs->value);
+			if (fs->state >= length) break;
+
+			text = fs->value + fs->state;
+
+			memmove(text, text + 1, length - fs->state);
 			break;
 		case ACT_EDIT_KILL_TO_BOL:
 			if (frm->ro || fs->state <= 0)

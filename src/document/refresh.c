@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.10 2003/12/21 19:08:27 jonas Exp $ */
+/* $Id: refresh.c,v 1.11 2003/12/21 20:46:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,7 +73,7 @@ do_document_refresh(void *data)
 			return;
 
 	if (!strcasecmp(refresh->url, ses->doc_view->document->url)) {
-		/* If the refreshing is for the current URI force a reload */
+		/* If the refreshing is for the current URI, force a reload. */
 		reload(ses, CACHE_MODE_FORCE_RELOAD);
 	} else {
 		/* This makes sure that we send referer. */

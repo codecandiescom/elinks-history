@@ -1005,7 +1005,7 @@ msgstr "Chyba pri zis»ovaní IP adresy"
 #: src/config/options.c:789
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
-msgstr "ELinks %s - Textový WWW prehliadaè"
+msgstr "ELinks %s - Textový WWW prehliadaè\n"
 
 #: src/config/options.c:829
 msgid "Template option folder"

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.538 2004/06/26 22:59:27 pasky Exp $ */
+/* $Id: view.c,v 1.539 2004/06/26 23:03:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 		}
 
 		if (current_link != wraparound_bound
-		    && next_in_view(doc_view, current_link + direction, direction, in_viewy, set_pos_x))
+		    && next_link_in_view(doc_view, current_link + direction, direction, in_viewy, set_pos_x))
 			continue;
 
 		if (direction > 0) {

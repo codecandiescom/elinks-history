@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.261 2004/06/26 22:57:10 pasky Exp $ */
+/* $Id: link.c,v 1.262 2004/06/26 23:03:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,9 +404,9 @@ get_visible_links_range(struct document_view *doc_view, int *first, int *last)
 }
 
 int
-next_in_view(struct document_view *doc_view, int current, int direction,
-	     int (*fn)(struct document_view *, struct link *),
-	     void (*cntr)(struct document_view *, struct link *))
+next_link_in_view(struct document_view *doc_view, int current, int direction,
+	          int (*fn)(struct document_view *, struct link *),
+	          void (*cntr)(struct document_view *, struct link *))
 {
 	struct document *document;
 	struct view_state *vs;
@@ -725,7 +725,7 @@ find_link(struct document_view *doc_view, int direction, int page_mode)
 	link_pos = link - doc_view->document->links;
 	if (page_mode) {
 		/* PAGE */
-		next_in_view(doc_view, link_pos, direction, in_view, NULL);
+		next_link_in_view(doc_view, link_pos, direction, in_view, NULL);
 		return;
 	}
 	doc_view->vs->current_link = link_pos;

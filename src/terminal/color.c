@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.22 2003/09/01 23:59:50 jonas Exp $ */
+/* $Id: color.c,v 1.23 2003/09/03 22:43:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,21 +233,16 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr,
 		fg = fg_color[fg][bg];
 	}
 
-	/* If foreground color is not contained within the mask ( it's >7 )
-	 * we are dealing with a bright (bold) color so mirror that. */
 	if (fg & ~TERM_COLOR_MASK) {
+		/* If foreground color is not contained within the mask ( it's
+		 * >7 ) we are dealing with a bright (bold) color so mirror
+		 * that. */
 		bold = SCREEN_ATTR_BOLD;
 		fg &= TERM_COLOR_MASK;
-	}
-
-	/* If fg and bg color are the same use white fg color _unless_ we are
-	 * dealing with a ``bright'' (bold) color. */
-	/* TODO: Wtf is (bg & 0x02) about? It basicly means if the background
-	 *	 color is not green, brown, cyan or white! */
-	/* TODO: This test should probably only be done if !d_opt->allow...
-	 *	 since we should trust that fg_color[][] avoids this problem. */
-	if (bg == fg && !bold && !(bg & 0x02)) {
-		fg = 0x07;
+	} else if (bg == fg && !bold) {
+		/* If fg and bg color are the same use white fg color _unless_
+		 * we are dealing with a ``bright'' (bold) color. */
+		bold = SCREEN_ATTR_BOLD;
 	}
 
 	return (bold | (bg << 3) | fg);

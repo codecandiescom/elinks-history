@@ -1,9 +1,11 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.20 2004/01/26 08:14:42 jonas Exp $ */
+/* $Id: exmode.c,v 1.21 2004/01/26 18:52:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef CONFIG_EXMODE
 
 #include <ctype.h>
 #include <string.h>
@@ -255,3 +257,5 @@ exmode_start(struct session *ses)
 	dlg_data = do_dialog(ses->tab->term, &data->dlg, getml(data, NULL));
 	if (dlg_data) data->dlg_data = dlg_data;
 }
+
+#endif /* CONFIG_EXMODE */

@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.33 2004/01/01 16:34:41 jonas Exp $ */
+/* $Id: feature.h,v 1.34 2004/01/26 18:52:01 jonas Exp $ */
 
 #ifndef EL__DOTDOT_FEATURE_H
 #define EL__DOTDOT_FEATURE_H
@@ -338,5 +338,18 @@
 /* #undef CONFIG_SMB */
 #endif
 
+
+/*** Ex-mode
+ *
+ * The ex-mode makes a prompt available when pressing ':'. The prompt can be
+ * used for entering actions like ':goto-url' and currently also URI rewrite
+ * prefixes if that is enabled.
+ *
+ * The code is still very experimental and lacks much work such as tab
+ * completion.
+ *
+ * Default: enabled */
+
+#define CONFIG_EXMODE
 
 #endif

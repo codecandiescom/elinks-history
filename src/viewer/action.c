@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.49 2004/01/25 14:24:19 jonas Exp $ */
+/* $Id: action.c,v 1.50 2004/01/26 18:52:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_EXMODE:
+#ifdef CONFIG_EXMODE
 			exmode_start(ses);
+#endif
 			break;
 
 		case ACT_MAIN_FILE_MENU:

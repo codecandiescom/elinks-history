@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.15 2002/11/11 23:05:49 pasky Exp $ */
+/* $Id: session.h,v 1.16 2002/12/05 23:16:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -118,7 +118,7 @@ void ses_goto(struct session *, unsigned char *, unsigned char *, int,
 void end_load(struct status *, struct session *);
 void doc_end_load(struct status *, struct session *);
 
-void abort_loading(struct session *);
+void abort_loading(struct session *, int);
 void reload(struct session *, enum cache_mode);
 void load_frames(struct session *, struct f_data_c *);
 

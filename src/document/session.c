@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.73 2002/12/05 22:35:07 pasky Exp $ */
+/* $Id: session.c,v 1.74 2002/12/05 23:16:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ free_wtd(struct session *ses)
 }
 
 void
-abort_files_load(struct session *ses)
+abort_files_load(struct session *ses, int interrupt)
 {
 	struct file_to_load *ftl;
 	int q;
@@ -335,7 +335,7 @@ abort_files_load(struct session *ses)
 		foreach(ftl, ses->more_files) {
 			if (ftl->stat.state >= 0 && ftl->req_sent) {
 				q = 1;
-				change_connection(&ftl->stat, NULL, PRI_CANCEL, 0);
+				change_connection(&ftl->stat, NULL, PRI_CANCEL, interrupt);
 			}
 		}
 	} while (q);
@@ -346,7 +346,7 @@ free_files(struct session *ses)
 {
 	struct file_to_load *ftl;
 
-	abort_files_load(ses);
+	abort_files_load(ses, 0);
 	foreach(ftl, ses->more_files) {
 		if (ftl->ce) ftl->ce->refcount--;
 		if (ftl->url) mem_free(ftl->url);
@@ -470,7 +470,7 @@ map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 
 
 void file_end_load(struct status *, struct file_to_load *);
-void abort_preloading(struct session *);
+void abort_preloading(struct session *, int);
 
 struct wtd_data {
 	struct session *ses;
@@ -487,7 +487,7 @@ struct wtd_data {
 void
 post_yes(struct wtd_data *w)
 {
-	abort_preloading(w->ses);
+	abort_preloading(w->ses, 0);
 	if (w->ses->goto_position) mem_free(w->ses->goto_position);
 
 	w->ses->goto_position = w->pos ? stracpy(w->pos) : NULL;
@@ -610,7 +610,7 @@ do_move(struct session *ses, struct status **stat)
 		/* ^^^^ According to RFC2068 POST must not be redirected to GET, but
 			some BUGGY message boards rely on it :-( */
 
-		abort_loading(ses);
+		abort_loading(ses, 0);
 		if (have_location(ses))
 			*stat = &cur_loc(ses)->stat;
 		else
@@ -1218,25 +1218,25 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 }
 
 void
-abort_preloading(struct session *ses)
+abort_preloading(struct session *ses, int interrupt)
 {
 	if (ses->wtd) {
-		change_connection(&ses->loading, NULL, PRI_CANCEL, 0);
+		change_connection(&ses->loading, NULL, PRI_CANCEL, interrupt);
 		free_wtd(ses);
 	}
 }
 
 void
-abort_loading(struct session *ses)
+abort_loading(struct session *ses, int interrupt)
 {
 	struct location *l = cur_loc(ses);
 
 	if (have_location(ses)) {
 		if (l->stat.state >= 0)
-			change_connection(&l->stat, NULL, PRI_CANCEL, 0);
-		abort_files_load(ses);
+			change_connection(&l->stat, NULL, PRI_CANCEL, interrupt);
+		abort_files_load(ses, interrupt);
 	}
-	abort_preloading(ses);
+	abort_preloading(ses, interrupt);
 }
 
 void
@@ -1247,7 +1247,7 @@ destroy_session(struct session *ses)
 	if (!ses) return;
 
 	destroy_downloads(ses);
-	abort_loading(ses);
+	abort_loading(ses, 0);
 	free_files(ses);
 	if (ses->screen) {
 		detach_formatted(ses->screen);
@@ -1292,7 +1292,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	struct location *l;
 	struct f_data_c *fd = current_frame(ses);
 
-	abort_loading(ses);
+	abort_loading(ses, 0);
 	if (cache_mode == -1)
 		cache_mode = ++ses->reloadlevel;
 	else
@@ -1373,7 +1373,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 		}
 	}
 
-	abort_loading(ses);
+	abort_loading(ses, 0);
 	if (ses->ref_url) {
 		mem_free(ses->ref_url);
 		ses->ref_url = NULL;

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.57 2002/12/05 17:29:02 pasky Exp $ */
+/* $Id: menu.c,v 1.58 2002/12/05 23:16:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 		mem_free(ses->search_word), ses->search_word = NULL;
 #endif
 
-	abort_loading(ses);
+	abort_loading(ses, 0);
 
 	if (steps > 1) {
 		/* When we go back by multiple steps, we must move the first
@@ -201,7 +201,7 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps;
 
-	abort_loading(ses);
+	abort_loading(ses, 0);
 
 	/* Move all intermediate items to history... */
 

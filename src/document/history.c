@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.12 2002/12/01 19:42:34 zas Exp $ */
+/* $Id: history.c,v 1.13 2002/12/05 23:16:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ go_back(struct session *ses)
 	ses->reloadlevel = NC_CACHE;
 	if (ses->wtd) {
 		if (1 || ses->wtd != WTD_BACK) {
-			abort_loading(ses);
+			abort_loading(ses, 0);
 			print_screen_status(ses);
 			reload(ses, NC_CACHE);
 		}
@@ -135,7 +135,7 @@ go_back(struct session *ses)
 	if (!have_location(ses) || ses->history.next == ses->history.prev)
 		/* There's no history, maximally only current location. */
 		return;
-	abort_loading(ses);
+	abort_loading(ses, 0);
 
 	url = stracpy(((struct location *)ses->history.next)->next->vs.url);
 	if (!url) return;
@@ -165,7 +165,7 @@ go_unback(struct session *ses)
 	/* XXX: why wtd checking is not here? --pasky */
 	if (list_empty(ses->unhistory)) return;
 
-	abort_loading(ses);
+	abort_loading(ses, 0);
 
 	url = stracpy(((struct location *)ses->unhistory.next)->vs.url);
 	if (!url) return;

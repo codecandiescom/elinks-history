@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.58 2002/12/05 22:35:07 pasky Exp $ */
+/* $Id: sched.c,v 1.59 2002/12/05 23:16:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1052,10 +1052,10 @@ change_connection(struct status *oldstat, struct status *newstat,
 		newstat->pri = newpri;
 		newstat->c = c;
 		newstat->ce = c->cache;
-	}
 
-	if ((c->detached || interrupt) && !newstat)
+	} else if (c->detached || interrupt) {
 		abort_conn_with_state(c, S_INTERRUPTED);
+	}
 
 	sort_queue();
 

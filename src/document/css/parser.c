@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.62 2004/01/27 01:23:17 pasky Exp $ */
+/* $Id: parser.c,v 1.63 2004/01/27 02:05:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,6 +162,11 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 }
 
 
+struct selector_pkg {
+	LIST_HEAD(struct selector_pkg);
+	struct css_selector *selector;
+};
+
 /* Selector grammar:
  *
  * selector:
@@ -178,6 +183,7 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
 	static struct list_head selectors;
+	struct selector_pkg *pkg;
 	struct css_selector *selector;
 
 	init_list(selectors);
@@ -188,6 +194,7 @@ css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 	/* FIXME: element can be even '*' --pasky */
 
 next_one:
+	pkg = NULL;
 
 	if (token->type != CSS_TOKEN_IDENT) {
 		skip_css_tokens(scanner, '}');
@@ -200,6 +207,11 @@ next_one:
 	selector = get_css_selector(css, token->string, token->length);
 	if (!selector)
 		goto out_of_memory;
+
+	pkg = mem_alloc(sizeof(struct selector_pkg));
+	if (!pkg)
+		goto out_of_memory;
+	pkg->selector = selector;
 
 	/* Let's see if we will get anything else of this. */
 
@@ -232,7 +244,7 @@ next_one:
 		token = get_next_css_token(scanner);
 	}
 
-	add_to_list(selectors, selector);
+	add_to_list(selectors, pkg);
 
 	if (token->type == ',') {
 		/* Multiple elements hooked up to this ruleset. */
@@ -245,13 +257,16 @@ syntax_error:
                 if (selector->id) mem_free(selector->id);
                 if (selector->class) mem_free(selector->class);
                 if (selector->pseudo) mem_free(selector->pseudo);
+		if (pkg) mem_free(pkg);
 
 out_of_memory:
-		foreach (selector, selectors) {
+		foreach (pkg, selectors) {
+			selector = pkg->selector;
 			if (selector->id) mem_free(selector->id);
 			if (selector->class) mem_free(selector->class);
 			if (selector->pseudo) mem_free(selector->pseudo);
 		}
+		free_list(selectors);
 
 		skip_css_block(scanner);
 		return NULL;
@@ -269,7 +284,7 @@ out_of_memory:
 static void
 css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 {
-	struct css_selector *selector;
+	struct selector_pkg *pkg, *fpkg;
 	struct list_head *selectors;
 
 	selectors = css_parse_selector(css, scanner);
@@ -291,16 +306,16 @@ css_parse_ruleset(struct css_stylesheet *css, struct css_scanner *scanner)
 	 * waste that having the property multiple times in a selector, I
 	 * believe. --pasky */
 
-	selector = selectors->next;
-	css_parse_properties(&selector->properties, scanner);
+	pkg = selectors->next;
+	css_parse_properties(&pkg->selector->properties, scanner);
 
 	skip_css_tokens(scanner, '}');
 
 	/* Mirror the properties to all the selectors. */
-	selector = selector->next;
-	while ((struct list_head *) selector != selectors) {
-		mirror_css_selector(selectors->next, selector);
-		selector = selector->next;
+	fpkg = pkg; pkg = pkg->next;
+	while ((struct list_head *) pkg != selectors) {
+		mirror_css_selector(fpkg->selector, pkg->selector);
+		pkg = pkg->next;
 	}
 }
 

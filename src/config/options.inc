@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.114 2004/06/14 10:02:56 zas Exp $ */
+/* $Id: options.inc,v 1.115 2004/06/14 13:06:43 miciah Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -262,6 +262,26 @@ struct option_info config_options_info[] = {
 		"vice versa.")),
 
 
+	INIT_OPT_TREE("document.browse", N_("Scrolling"),
+		"scrolling", OPT_SORT,
+		N_("Scrolling options.")),
+
+	INIT_OPT_INT("document.browse.scrolling", N_("Margin"),
+		"margin", 0, 0, 20, 3,
+		N_("Size of the virtual margin - when you click inside of that margin,\n"
+		"document scrolls in that direction.")),
+
+	INIT_OPT_INT("document.browse.scrolling", N_("Vertical step"),
+		"vertical_step", 0, 0, 9999, 2,
+		N_("Number of lines to scroll when a key bound to scroll-up or scroll-\n"
+		"down is pressed and no prefix was given.")),
+
+	INIT_OPT_INT("document.browse.scrolling", N_("Horizontal step"),
+		"horizontal_step", 0, 0, 9999, 8,
+		N_("Number of columns to scroll when a key bound to scroll-left or scroll-\n"
+		"right is pressed and no prefix was given.")),
+
+
 	INIT_OPT_TREE("document.browse", N_("Searching"),
 		"search", 0,
 		N_("Options for searching.")),
@@ -324,25 +344,6 @@ struct option_info config_options_info[] = {
 		"refreshing. If set to zero the document refresh time is used\n"
 		"unchanged. It can fix going back in history for some sites that\n"
 		"use refreshing with zero values.")),
-
-	INIT_OPT_TREE("document.browse", N_("Scrolling"),
-		"scrolling", OPT_SORT,
-		N_("Scrolling options.")),
-
-	INIT_OPT_INT("document.browse.scrolling", N_("Margin"),
-		"margin", 0, 0, 20, 3,
-		N_("Size of the virtual margin - when you click inside of that margin,\n"
-		"document scrolls in that direction.")),
-
-	INIT_OPT_INT("document.browse.scrolling", N_("Vertical step"),
-		"vertical_step", 0, 0, 9999, 2,
-		N_("Number of lines to scroll when a key bound to scroll-up or scroll-\n"
-		"down is pressed and no prefix was given.")),
-
-	INIT_OPT_INT("document.browse.scrolling", N_("Horizontal step"),
-		"horizontal_step", 0, 0, 9999, 8,
-		N_("Number of columns to scroll when a key bound to scroll-left or scroll-\n"
-		"right is pressed and no prefix was given.")),
 
 	INIT_OPT_BOOL("document.browse", N_("Tables navigation order"),
 		"table_move_order", 0, 0,

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.122 2003/11/09 23:54:50 jonas Exp $ */
+/* $Id: core.c,v 1.123 2003/11/10 14:12:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,6 +373,7 @@ l_edit_bookmark_dialog(LS)
 
 	dlg->title = _("Edit bookmark", term);
 	dlg->layouter = generic_dialog_layouter;
+	dlg->layout.maximize_width = 1;
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
@@ -453,6 +454,7 @@ l_xdialog(LS)
 
 	dlg->title = _("User dialog", term);
 	dlg->layouter = generic_dialog_layouter;
+	dlg->layout.maximize_width = 1;
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
 

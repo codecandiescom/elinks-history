@@ -1,3 +1,81 @@
+Tue May 11 19:45:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Fix scrollable text widget.  
+
+Tue May 11 19:23:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	Fix wrong widget dimensions, revealed by broken radio buttons
+	changing in search dialog.  
+
+Tue May 11 18:43:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Fix bad move introduced in rev 1.163. Mouse click detection on
+	certain links was broken.  
+
+Tue May 11 17:50:40 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Tue May 11 14:59:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_table(): set rx,ry,real_columns_count only if table was
+	successfully allocated.  
+
+Tue May 11 14:56:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_columns(): tidy up.  
+
+Tue May 11 14:50:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_table(): really allocated values (rx,ry,real_columns_count)
+	should not be changed before allocation attempts.  
+
+Tue May 11 14:45:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Field @rc of struct table was renamed @real_columns_count.  
+
+Tue May 11 13:00:21 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Use AC_CHECK_FILE macro to test for features.conf file, "test -e" is
+	not portable. Issue pointed out by Stephane Chazelas.  
+
+Tue May 11 09:56:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/frames.h:
+
+	Unused field @line was removed from struct frame_desc.  
+
+Tue May 11 09:32:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/frames.c, document/html/frames.h,
+	document/html/parser.c, viewer/text/view.c:
+
+	Use struct rect in struct frameset_desc.  
+
+Mon May 10 23:12:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, protocol/Makefile.am:
+
+	Merge ftp objects in the protocol/ dir.  
+
 Mon May 10 17:15:22 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: dialogs/status.c, document/renderer.c, document/view.h,

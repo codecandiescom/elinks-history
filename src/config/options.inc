@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.176 2005/01/03 02:01:53 jonas Exp $ */
+/* $Id: options.inc,v 1.177 2005/01/03 02:04:34 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1082,7 +1082,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("ui.timer", N_("Duration"),
 		"duration", 0, 1, 86400, 86400,
-		N_("Inactivity timeout in second. A maximum of one day\n"
+		N_("Inactivity timeout in seconds. The maximum of one day\n"
 		"should be enough for just everyone (TM).")),
 
 	INIT_OPT_STRING("ui.timer", N_("Action"),

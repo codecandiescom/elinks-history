@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.42 2003/12/26 13:15:44 zas Exp $ */
+/* $Id: menu.h,v 1.43 2003/12/27 04:29:58 miciah Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -6,6 +6,7 @@
 #include "config/kbdbind.h"
 
 struct terminal;
+struct window;
 
 typedef void (*menu_func)(struct terminal *, void *, void *);
 

@@ -1,3 +1,181 @@
+Tue Jun 22 22:05:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/parse.c:
+
+	@was_br was added to struct html_parser.  
+
+Tue Jun 22 21:53:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	@putsp was added to struct html_parser.  
+
+Tue Jun 22 21:49:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: dialogs.h, backend/default.h:
+
+	Cleanup #includes.  
+
+Tue Jun 22 21:47:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	@position was added to struct html_parser.  
+
+Tue Jun 22 21:43:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.h, backend/common.h:
+
+	Remove unneeded #includes.  
+
+Tue Jun 22 21:43:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/parse.c:
+
+	@line_breax was added to struct html_parser.  
+
+Tue Jun 22 21:39:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser/forms.c,
+	parser/parse.c:
+
+	struct html_context was introduced. For now, it has only one field
+	@eoff, more is coming.  
+
+Tue Jun 22 15:47:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	get_convert_table(): move @a declaration near its use.  
+
+Tue Jun 22 15:45:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	get_convert_table(): skip header parsing if @ignore_server_cp is
+	set.  
+
+Tue Jun 22 15:38:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	get_convert_table(): @b -> @ct_charset.  
+
+Tue Jun 22 15:37:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	get_convert_table(): @from -> @cp_index.  
+
+Tue Jun 22 15:25:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	get_convert_table(): reduce indentation level.  
+
+Tue Jun 22 14:42:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Size of action_box_items[KM_MAX] array was put in ACTION_BOX_SIZE,
+	and reduced to 128. Two assertions were added to check for
+	sufficient array size.  
+
+Tue Jun 22 14:12:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Compilation fix, last patch was incomplete, move-link-(up,down) ->
+	move-link-(prev,next).  
+
+Tue Jun 22 11:21:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Two blank lines reintroduced.  
+
+Tue Jun 22 10:53:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	move_link_{up,down}() -> move_link_{prev,next}() 
+
+Tue Jun 22 10:52:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c,
+	sched/action.c, viewer/text/view.c:
+
+	Main actions move-link-(up,down) renamed to move-link-(prev,next),
+	because that's what they really do. Since the old names are quite
+	recent, no compatibility aliases introduced (also since I intend to
+	reuse move-link-(up,down) soon).  
+
+Tue Jun 22 07:10:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: osdep/stub.c, osdep/beos/beos.c, protocol/uri.c:
+
+	Missing upcase() -> toupper() stuff.  
+
+Tue Jun 22 06:46:15 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: main.c, bfu/button.h, bfu/inpfield.c, bfu/listmenu.c,
+	bookmarks/dialogs.c, bookmarks/backend/xbel.c, cache/cache.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, dialogs/menu.c, dialogs/options.c,
+	document/css/value.c, document/html/frames.c,
+	document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, document/html/parser/parse.c,
+	document/html/parser/stack.c, formhist/dialogs.c,
+	globhist/dialogs.c, intl/charsets.c, lowlevel/connect.c,
+	lowlevel/interlink.c, lowlevel/select.c, lowlevel/signals.c,
+	osdep/stub.c, osdep/beos/beos.c, osdep/beos/overrides.c,
+	osdep/os2/os2.c, protocol/auth/dialogs.c, protocol/ftp/ftp.c,
+	protocol/http/http.c, sched/connection.c, sched/session.c,
+	sched/task.c, scripting/lua/core.c, scripting/lua/hooks.c,
+	terminal/event.c, terminal/kbd.c, terminal/terminal.c,
+	util/color.c, util/memory.h, viewer/text/form.c:
+
+	Put a space after each type-cast that lacks one.  
+
+Tue Jun 22 05:02:37 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	Remove uchar typedef and substitute unsigned char.  
+
+Tue Jun 22 04:54:45 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Rename get_succesful_controls to get_successful_controls.  
+
+Tue Jun 22 04:48:57 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/textarea.h:
+
+	Update area_cursor's prototype, reflecting that its first parameter 
+	was renamed from |frm| to |fs| in textarea.c revision 1.81.  
+
+Tue Jun 22 00:59:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/: connect.c, connect.h:
+
+	Unexport struct write_buffer.  
+
+Tue Jun 22 00:50:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Revert zas' 1.419, dropping some 'useless' blank lines. I could also
+	imagine a line I could drop... :E CCMAIL: zas@norz.org 
+
+Tue Jun 22 00:36:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/bookmarks.txt:
+
+	Mention that it's incomplete.  
+
 Mon Jun 21 21:43:45 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

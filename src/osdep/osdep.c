@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.54 2003/05/03 18:14:50 pasky Exp $ */
+/* $Id: osdep.c,v 1.55 2003/05/03 19:40:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1796,18 +1796,21 @@ void
 open_in_new_tab(struct terminal *term, unsigned char *exe_name,
                 unsigned char *param)
 {
-	int base = 0;
-	unsigned char *url = "";
+	int base = 0; /* FIXME: Ignored. */
+	unsigned char *url = NULL;
+
+	/* FIXME: This is way too ugly to survive in the codebase. --pasky */
 
 	if (!strncmp(param, "-base-session ",13)) {
 		base = atoi(param + strlen("-base-session "));
-	} else
+	} else {
 		url = param;
+	}
 
 	{
 		/* Now lets create new session... */
 		struct event ev = {EV_RESIZE, 0, 0, 0};
-		struct window *	win = mem_alloc(sizeof (struct window));
+		struct window *win = mem_alloc(sizeof(struct window));
 
 		win->handler = get_root_window(term)->handler;
 		win->data = NULL;
@@ -1822,20 +1825,20 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 
 		win->handler(win, &ev, 0);
 
-		if(*url) {
+		if (url) {
 			unsigned char *u = decode_url(url);
 
 			if (u) {
-				goto_url((struct session *)win->data, u);
+				goto_url((struct session *) win->data, u);
 				mem_free(u);
 			}
-		}
-		else {
+		} else {
 			unsigned char *h = getenv("WWW_HOME");
+
 			if (!h || !*h)
 				h = WWW_HOME_URL;
 			if (h && *h)
-				goto_url((struct session *)win->data, h);
+				goto_url((struct session *) win->data, h);
 		}
 	}
 }

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2003/11/09 00:19:41 jonas Exp $
+## $Id: Makefile.am,v 1.18 2003/11/26 01:29:20 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,8 @@ libdialogs_a_SOURCES = \
  auth.h \
  document.c \
  document.h \
+ download.c \
+ download.h \
  edit.c \
  edit.h \
  info.c \

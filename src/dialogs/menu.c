@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.198 2003/11/26 00:18:18 fabio Exp $ */
+/* $Id: menu.c,v 1.199 2003/11/26 01:29:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "config/urlhist.h"
 #include "cookies/dialogs.h"
 #include "dialogs/document.h"
+#include "dialogs/download.h"
 #include "dialogs/info.h"
 #include "dialogs/menu.h"
 #include "dialogs/mime.h"

@@ -1,5 +1,5 @@
 /* HTML colors parser */
-/* $Id: colors.c,v 1.19 2003/06/15 11:07:50 pasky Exp $ */
+/* $Id: colors.c,v 1.20 2003/06/15 11:13:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,8 @@ static struct color_spec color_specs[] = {
 };
 
 #ifdef USE_FASTFIND
-static struct fastfind_info *ff_info_colors = NULL;
+
+static struct fastfind_info *ff_info_colors;
 static struct color_spec *internal_pointer;
 
 /* Reset internal list pointer */
@@ -197,6 +198,7 @@ colors_list_next(void)
 
 	return &kv;
 }
+
 #endif /* USE_FASTFIND */
 
 void

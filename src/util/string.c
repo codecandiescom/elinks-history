@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.92 2004/01/16 23:48:47 jonas Exp $ */
+/* $Id: string.c,v 1.93 2004/01/17 00:27:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -373,16 +373,21 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 struct string *
 add_to_string_list(struct list_head *list, unsigned char *source)
 {
-	struct string *string = mem_alloc(sizeof(struct string));
+	struct string_list_item *item;
+	struct string *string;
 
-	if (!string) return NULL;
+	item = mem_alloc(sizeof(struct string_list_item));
+	if (!item) return NULL;
+
+	string = &item->string;
 
 	if (!init_string(string) || !add_to_string(string, source)) {
 		done_string(string);
+		mem_free(item);
 		return NULL;
 	}
 
-	add_to_list_end(*list, string);
+	add_to_list_end(*list, item);
 	return string;
 }
 
@@ -390,10 +395,10 @@ void
 free_string_list(struct list_head *list)
 {
 	while (!list_empty(*list)) {
-		struct string *string = list->next;
+		struct string_list_item *item = list->next;
 
-		del_from_list(string);
-		done_string(string);
-		mem_free(string);
+		del_from_list(item);
+		done_string(&item->string);
+		mem_free(item);
 	}
 }

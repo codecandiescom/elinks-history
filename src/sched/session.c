@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.296 2004/01/16 23:49:54 jonas Exp $ */
+/* $Id: session.c,v 1.297 2004/01/17 00:27:20 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -652,11 +652,11 @@ void *
 create_session_info(int cp, struct list_head *url_list, int *ll)
 {
 	int l = 0;
-	struct string *url;
+	struct string_list_item *url;
 	int *i;
 
 	foreach (url, *url_list) {
-		l += url->length + 1;
+		l += url->string.length + 1;
 	}
 	*ll = 2 * sizeof(int) + l;
 
@@ -669,7 +669,7 @@ create_session_info(int cp, struct list_head *url_list, int *ll)
 		unsigned char *start = (unsigned char *)(i + 2);
 
 		foreach (url, *url_list) {
-			start = stpcpy(start, url->source) + 1;
+			start = stpcpy(start, url->string.source) + 1;
 		}
 	}
 
@@ -761,10 +761,11 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	}
 
 	if (!list_empty(info->url_list)) {
-		struct string *str;
+		struct string_list_item *str;
 
 		foreach (str, info->url_list) {
-			unsigned char *url = decode_shell_safe_url(str->source);
+			unsigned char *source = str->string.source;
+			unsigned char *url = decode_shell_safe_url(source);
 
 			if (!url) continue;
 

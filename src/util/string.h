@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.62 2004/01/16 23:48:47 jonas Exp $ */
+/* $Id: string.h,v 1.63 2004/01/17 00:27:20 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -109,8 +109,6 @@ int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 #endif
 
 struct string {
-	LIST_HEAD(struct string);
-
 #ifdef DEBUG_STRING
 	int magic;
 #endif
@@ -126,13 +124,13 @@ struct string {
 #define STRING_MAGIC 0x2E5BF271
 #define check_string_magic(x) assertm((x)->magic == STRING_MAGIC, "String magic check failed.")
 #define set_string_magic(x) do { (x)->magic = STRING_MAGIC; } while (0)
-#define NULL_STRING { NULL_LIST_HEAD, STRING_MAGIC, NULL, 0 }
-#define INIT_STRING(s, l) { NULL_LIST_HEAD, STRING_MAGIC, s, l }
+#define NULL_STRING { STRING_MAGIC, NULL, 0 }
+#define INIT_STRING(s, l) { STRING_MAGIC, s, l }
 #else
 #define check_string_magic(x)
 #define set_string_magic(x)
-#define NULL_STRING { NULL_LIST_HEAD, NULL, 0 }
-#define INIT_STRING(s, l) { NULL_LIST_HEAD, s, l }
+#define NULL_STRING { NULL, 0 }
+#define INIT_STRING(s, l) { s, l }
 #endif
 
 /* Initializes the passed string struct by preallocating the @source member. */
@@ -154,10 +152,6 @@ struct string *add_xchar_to_string(struct string *string, unsigned char characte
 
 /* Add printf-style format string to @string. */
 struct string *add_format_to_string(struct string *string, unsigned char *format, ...);
-
-
-struct string *add_to_string_list(struct list_head *list, unsigned char *string);
-void free_string_list(struct list_head *list);
 
 
 #undef realloc_string
@@ -210,6 +204,17 @@ add_bytes_to_string__(
 
 	return string;
 }
+
+
+struct string_list_item {
+	LIST_HEAD(struct string_list_item);
+
+	struct string string;
+};
+
+struct string *add_to_string_list(struct list_head *list, unsigned char *string);
+void free_string_list(struct list_head *list);
+
 
 /* Returns an empty C string or @str if different from NULL. */
 #define empty_string_or_(str) ((str) ? (unsigned char *) (str) : (unsigned char *) "")

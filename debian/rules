@@ -1,7 +1,9 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.11 2005/01/11 14:57:08 jonas Exp $
-# Sample debian/rules that uses debhelper.
+#
+# ELinks debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
+#
+# $Id: rules,v 1.12 2005/01/11 15:34:44 jonas Exp $
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
@@ -67,23 +69,23 @@ debian/build-stamp:
 clean:
 	dh_testdir
 	dh_testroot
-
+	
 	# Add here commands to clean up after the build process.
 	-$(MAKE) distclean
-
+	
 	# handle non-linux archs, patch by Robert Millan <rmh@debian.org>, bug#262350
 	cat debian/control.in \
 	| sed "s/@linux-gnu@/`type-handling any linux-gnu`/g" \
 	> debian/control
-
-	dh_clean -XChangelog.orig
+	
+	dh_clean
 
 install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-
+	
 	# Add here commands to install the package into debian/elinks.
 	$(MAKE) install DESTDIR=$(DEB_ROOT)
 	
@@ -97,15 +99,12 @@ install: build
 # locale.alias causes conflicts and I believe it's not necessary
 	-rm -f $(DEB_ROOT)/usr/share/locale/locale.alias
 
-	touch install-stamp
-
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
 
 # Build architecture-dependent files here.
 binary-arch: build install
-#	dh_testversion
 	dh_testdir
 	dh_testroot
 	dh_installdebconf	
@@ -113,32 +112,21 @@ binary-arch: build install
 	dh_installexamples \
 		-X colws.diff -X elinks.spec -X hooks.lua.in -X links_wps.zip \
 		-X wipe-out-ssl -X LinksOS2Icon.zip -X js-1.5-rc6a contrib/
-
-	# Remove additional files that dh_installexamples -X won't handle
-
 	dh_installmime
 	dh_installmenu
-#	dh_installemacsen
-#	dh_installpam
-#	dh_installinit
-##	dh_installcron
-# The build system installs the manpages
-#	dh_installman
-
+	dh_installman
+	
 # comment out for slink:
 ##	dh_installinfo
-
-#	dh_undocumented
-	dh_installchangelogs ChangeLog changelog.orig
-
+	
+	dh_installchangelogs ChangeLog
+	
 # comment out for slink:
 ##	dh_link
 	
 	dh_strip
 	dh_compress
 	dh_fixperms
-# You may want to make some executables suid here.
-##	dh_suidregister
 #	dh_makeshlibs
 	dh_installdeb
 #	dh_perl

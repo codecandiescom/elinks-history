@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.515 2004/06/22 10:53:27 pasky Exp $ */
+/* $Id: view.c,v 1.516 2004/06/23 07:50:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,10 +454,9 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 			 * as well. --pasky */
 			return;
 		}
-		current_link = -1;
 	}
 
-	if (current_link == -1
+	if (current_link == wraparound_bound
 	    || !next_in_view(doc_view, current_link + direction, direction, in_viewy, set_pos_x)) {
 		if (direction > 0)
 			move_down(ses, doc_view, 1);
@@ -465,7 +464,8 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 			move_up(ses, doc_view, 1);
 	}
 
-	if (current_link != -1 && current_link != doc_view->vs->current_link) {
+	if (current_link != wraparound_bound
+	    && current_link != doc_view->vs->current_link) {
 		set_textarea(doc_view, -direction);
 	}
 }

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.9 2003/08/30 19:36:48 jonas Exp $ */
+/* $Id: color.c,v 1.10 2003/08/30 20:51:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,6 +198,33 @@ fg_color(unsigned char fg, unsigned char bg)
 /* TODO: Either only #define mix_color_pair() in header file to use
  * mix_attr_colors() as backend or reduce code duplication some other way. */
 
+/* Terminal color encoding: */
+/* Below color pairs are encoded to terminal colors. Both the terminal fore-
+ * and background color are a number between 0 and 7. They are stored in an
+ * unsigned as specified in the following bit sequence:
+ *
+ *	00bbbfff (0 = not used, f = foreground bit, b = background bit)
+ */
+
+#if YOU_WANT_TO_TRY_SOMETHING_WEIRD
+#define encode_colors(color, bg, fg) \
+	do { \
+		color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07); \
+		\
+		if (!(color & 0x40) && bg == fg && !(bg & 0x02)) \
+			color |= 0x07; \
+	} while (0)
+#else
+#define encode_color(color, bg, fg) \
+	do { \
+		color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07); \
+		\
+		if (!(color & 0x40) && bg == (fg & 0x07)) \
+			color = (color & 0x38) | 7 * !(color & 0x10); \
+	} while (0)
+#endif
+			
+
 unsigned char
 mix_color_pair(struct color_pair *pair)
 {
@@ -207,11 +234,7 @@ mix_color_pair(struct color_pair *pair)
 
 	fg = fg_color(fg, bg);
 
-	color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
-
-	if (!(color & 0x40) && bg == (fg & 0x07)) {
-		color = (color & 0x38) | 7 * !(color & 0x10);
-	}
+	encode_color(color, bg, fg);
 
 	return color;
 }
@@ -250,11 +273,8 @@ mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
 	}
 
 	fg = fg_color(fg, bg);
-	color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
 
-	if (!(color & 0x40) && bg == (fg & 0x07)) {
-		color = (color & 0x38) | 7 * !(color & 0x10);
-	}
+	encode_color(color, bg, fg);
 
 	return color;
 }

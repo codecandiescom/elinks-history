@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.164 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: cookies.c,v 1.165 2004/10/23 00:01:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -826,6 +826,16 @@ init_cookies(struct module *module)
 		load_cookies();
 }
 
+static void
+free_cookies_list(struct list_head *list)
+{
+	while (!list_empty(*list)) {
+		struct cookie *cookie = list->next;
+
+		del_from_list(cookie);
+		free_cookie(cookie);
+	}
+}
 
 static void
 done_cookies(struct module *module)
@@ -835,19 +845,8 @@ done_cookies(struct module *module)
 	if (!cookies_nosave && get_cookies_save())
 		save_cookies();
 
-	while (!list_empty(cookies)) {
-		struct cookie *cookie = cookies.next;
-
-		del_from_list(cookie);
-		free_cookie(cookie);
-	}
-
-	while (!list_empty(cookie_queries)) {
-		struct cookie *cookie = cookie_queries.next;
-
-		del_from_list(cookie);
-		free_cookie(cookie);
-	}
+	free_cookies_list(&cookies);
+	free_cookies_list(&cookie_queries);
 }
 
 struct module cookies_module = struct_module(

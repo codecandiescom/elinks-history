@@ -1,4 +1,4 @@
-/* $Id: align.h,v 1.16 2003/06/18 11:53:19 pasky Exp $ */
+/* $Id: align.h,v 1.17 2003/06/29 21:55:26 zas Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
@@ -17,6 +17,7 @@ enum format_align {
 #include "config/options.h"
 #include "document/html/colors.h"
 #include "terminal/terminal.h"
+#include "util/error.h"
 #include "util/string.h"
 
 #define COL(x)	((x)<<8)
@@ -26,29 +27,38 @@ static inline int
 get_bfu_color(struct terminal *term, unsigned char *color_class)
 {
 	struct option *opt_tree;
-	int colors;
 	unsigned char *opt;
-	int fg = 0, bg = 0;
-	int nofg = (color_class[0] == '=');
+	int fg;
+	int bg;
+	int nofg;
 
-	if (nofg) color_class++;
+	assert(term && color_class && *color_class);
 
-	if (!term) return 0;
 	opt_tree = term->spec;
 
-	colors = get_opt_bool_tree(opt_tree, "colors");
-	opt = straconcat((unsigned char *) "ui.colors.",
-			 colors ? "color" : "mono", ".", color_class, NULL);
-	if (!opt) return 0;
-	opt_tree = get_opt_rec(&root_options, opt);
-	mem_free(opt);
-	if (!opt_tree) return 0;
+	nofg = (color_class[0] == '=');
+	if (nofg) color_class++;
 
-	if (!nofg)
-		fg = find_nearest_color(get_opt_ptr_tree(opt_tree, "text"), 16);
+	/* Here we use malloc()+strcpy()+strcat() instead of straconcat() since
+	 * performance matters. --Zas */
+	opt = fmem_alloc(strlen(color_class) + 16 /* strlen("ui.colors.color.") */ + 1);
+	if (!opt) return 0;
+	if (get_opt_bool_tree(opt_tree, "colors"))
+		strcpy(opt, "ui.colors.color.");
+	else
+		strcpy(opt, "ui.colors.mono.");
+	strcat(opt, color_class);
+
+	opt_tree = get_opt_rec(&root_options, opt);
+	fmem_free(opt);
+	if (!opt_tree) return 0;
 
 	bg = find_nearest_color(get_opt_ptr_tree(opt_tree, "background"), 8);
 	/* XXX: Call fg_color() ? --pasky */
+
+	if (nofg) return COL(bg<<3);
+
+	fg = find_nearest_color(get_opt_ptr_tree(opt_tree, "text"), 16);
 
 	return COL(((fg&0x08)<<3)|(bg<<3)|(fg&0x07));
 }

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.164 2003/07/03 21:26:45 zas Exp $ */
+/* $Id: renderer.c,v 1.165 2003/07/04 09:39:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "document/cache.h"
 #include "document/options.h"
 #include "document/html/colors.h"
+#include "document/html/frames.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "document/html/tables.h"
@@ -1144,63 +1145,6 @@ html_form_control(struct part *part, struct form_control *fc)
 	add_to_list(part->data->forms, fc);
 }
 
-static void
-add_frameset_entry(struct frameset_desc *fsd,
-		   struct frameset_desc *subframe,
-		   unsigned char *name, unsigned char *url)
-{
-	int idx;
-
-	assert(fsd && fsd->yp < fsd->y);
-
-	idx = fsd->xp + fsd->yp * fsd->x;
-	fsd->f[idx].subframe = subframe;
-	fsd->f[idx].name = name ? stracpy(name) : NULL;
-	fsd->f[idx].url = url ? stracpy(url) : NULL;
-	fsd->xp++;
-	if (fsd->xp >= fsd->x) {
-		fsd->xp = 0;
-		fsd->yp++;
-	}
-}
-
-static struct frameset_desc *
-create_frameset(struct f_data *fda, struct frameset_param *fp)
-{
-	int i;
-	struct frameset_desc *fd;
-
-	assert(fp);
-	assertm(fp->x > 0 && fp->y > 0,
-		"Bad size of frameset: x=%d y=%d", fp->x, fp->y);
-
-	fd = mem_calloc(1, sizeof(struct frameset_desc)
-			   + fp->x * fp->y * sizeof(struct frame_desc));
-	if (!fd) return NULL;
-
-	fd->n = fp->x * fp->y;
-	fd->x = fp->x;
-	fd->y = fp->y;
-
-	for (i = 0; i < fd->n; i++) {
-		fd->f[i].xw = fp->xw[i % fp->x];
-		fd->f[i].yw = fp->yw[i / fp->x];
-	}
-
-	if (fp->parent) add_frameset_entry(fp->parent, fd, NULL, NULL);
-	else if (!fda->frame_desc) fda->frame_desc = fd;
-	     else mem_free(fd), fd = NULL;
-
-	return fd;
-}
-
-static inline void
-create_frame(struct frame_param *fp)
-{
-	assert(fp && fp->parent);
-
-	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
-}
 
 static void *
 html_special(struct part *part, enum html_special_type c, ...)
@@ -1848,133 +1792,6 @@ formatted_info(int type)
 	return 0;
 }
 
-static void
-add_frame_to_list(struct session *ses, struct f_data_c *fd)
-{
-	struct f_data_c *f;
-
-	assert(ses && fd);
-
-	foreach (f, ses->scrn_frames) {
-		if (f->yp > fd->yp || (f->yp == fd->yp && f->xp > fd->xp)) {
-			add_at_pos(f->prev, fd);
-			return;
-		}
-	}
-
-	add_to_list_bottom(ses->scrn_frames, fd);
-}
-
-static struct f_data_c *
-find_fd(struct session *ses, unsigned char *name,
-	int depth, int x, int y)
-{
-	struct f_data_c *fd;
-
-	assert(ses && name);
-
-	foreachback (fd, ses->scrn_frames) {
-		if (!fd->used && !strcasecmp(fd->name, name)) {
-			fd->used = 1;
-			fd->depth = depth;
-			return fd;
-		}
-	}
-
-	fd = mem_calloc(1, sizeof(struct f_data_c));
-	if (!fd) return NULL;
-
-	fd->used = 1;
-	fd->name = stracpy(name);
-	if (!fd->name) {
-		mem_free(fd);
-		return NULL;
-	}
-	fd->depth = depth;
-	fd->xp = x;
-	fd->yp = y;
-	fd->search_word = &ses->search_word;
-
-	/*add_to_list(ses->scrn_frames, fd);*/
-	add_frame_to_list(ses, fd);
-
-	return fd;
-}
-
-static struct f_data_c *
-format_frame(struct session *ses, unsigned char *name,
-	     struct document_options *o, int depth)
-{
-	struct cache_entry *ce;
-	struct view_state *vs;
-	struct f_data_c *fd;
-	struct frame *fr;
-
-	assert(ses && name && o);
-
-repeat:
-	fr = ses_find_frame(ses, name);
-	if (!fr) return NULL;
-
-	vs = &fr->vs;
-	if (!find_in_cache(vs->url, &ce) || !ce) return NULL;
-
-	if (ce->redirect && fr->redirect_cnt < MAX_REDIRECTS) {
-		unsigned char *u = join_urls(vs->url, ce->redirect);
-
-		if (u) {
-			fr->redirect_cnt++;
-			ses_change_frame_url(ses, name, u);
-			mem_free(u);
-			goto repeat;
-		}
-	}
-
-	fd = find_fd(ses, name, depth, o->xp, o->yp);
-	if (fd) cached_format_html(vs, fd, o);
-
-	return fd;
-}
-
-static void
-format_frames(struct session *ses, struct frameset_desc *fsd,
-	      struct document_options *op, int depth)
-{
-	struct document_options o;
-	int j, n;
-
-	assert(ses && fsd && op);
-
-	if (depth > HTML_MAX_FRAME_DEPTH) return;
-
-	memcpy(&o, op, sizeof(struct document_options));
-
-	if (o.margin) o.margin = 1;
-
-	n = 0;
-	for (j = 0; j < fsd->y; j++) {
-		register int i;
-
-		o.xp = op->xp;
-		for (i = 0; i < fsd->x; i++) {
-			struct f_data_c *fdc;
-
-			o.xw = fsd->f[n].xw;
-			o.yw = fsd->f[n].yw;
-			o.framename = fsd->f[n].name;
-			if (fsd->f[n].subframe)
-				format_frames(ses, fsd->f[n].subframe, &o, depth + 1);
-			else if (fsd->f[n].name) {
-				fdc = format_frame(ses, fsd->f[n].name, &o, depth);
-				if (fdc && fdc->f_data && fdc->f_data->frame)
-					format_frames(ses, fdc->f_data->frame_desc, &o, depth + 1);
-			}
-			o.xp += o.xw + 1;
-			n++;
-		}
-		o.yp += o.yw + 1;
-	}
-}
 
 void
 html_interpret(struct session *ses)

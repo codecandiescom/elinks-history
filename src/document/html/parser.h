@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.23 2003/06/26 13:55:56 zas Exp $ */
+/* $Id: parser.h,v 1.24 2003/07/04 09:39:32 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -220,17 +220,6 @@ enum html_special_type {
 	SP_NOWRAP,
 };
 
-struct frameset_param {
-	struct frameset_desc *parent;
-	int x, y;
-	int *xw, *yw;
-};
-
-struct frame_param {
-	struct frameset_desc *parent;
-	unsigned char *name;
-	unsigned char *url;
-};
 
 void free_menu(struct menu_item *);
 void do_select_submenu(struct terminal *, struct menu_item *, struct session *);

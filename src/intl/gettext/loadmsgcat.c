@@ -90,6 +90,10 @@ char *alloca ();
 # define munmap __munmap
 #endif
 
+#ifndef HAVE_STPCPY
+static char *stpcpy PARAMS ((char *dest, const char *src));
+#endif
+
 /* Names for the libintl functions are a problem.  They must not clash
    with existing names and they should follow ANSI C.  But this source
    code is also used in GNU C Library where the names have a __
@@ -634,5 +638,23 @@ _nl_unload_domain (domain)
     free ((void *) domain->data);
 
   free (domain);
+}
+#endif
+
+/* @@ begin of epilog @@ */
+
+/* We don't want libintl.a to depend on any other library.  So we
+ * avoid the non-standard function stpcpy.  In GNU C Library this
+ * function is available, though.  Also allow the symbol HAVE_STPCPY
+ * to be defined.  */
+#ifndef HAVE_STPCPY
+static char *
+stpcpy (dest, src)
+     char *dest;
+     const char *src;
+{
+  while ((*dest++ = *src++) != '\0')
+    /* Do nothing. */ ;
+  return dest - 1;
 }
 #endif

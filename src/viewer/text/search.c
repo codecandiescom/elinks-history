@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.226 2004/06/03 13:47:29 zas Exp $ */
+/* $Id: search.c,v 1.227 2004/06/03 21:01:54 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -521,6 +521,7 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	struct search *search_start = s1;
 	unsigned char save_c;
 	struct box *box;
+	int y1, y2;
 
 	if (get_opt_int("document.browse.search.regex") == 2)
 		regex_flags |= REG_EXTENDED;
@@ -563,18 +564,27 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	box = &doc_view->box;
 	xoffset = box->x - doc_view->vs->x;
 	yoffset = box->y - doc_view->vs->y;
+	y1 = doc_view->vs->y - 1;
+	y2 = doc_view->vs->y + box->height;
 
 	doctmp = doc;
 
 find_next:
-	while (pos < doclen && (search_start[pos].y + yoffset < box->y - 1
-				|| search_start[pos].y + yoffset > box->y + box->height))
+	while (pos < doclen) {
+		register int y = search_start[pos].y;
+
+		if (y >= y1 && y <= y2) break;
 		pos++;
+	}
 	doctmp = &doc[pos];
 	s1 = &search_start[pos];
-	while (pos < doclen && search_start[pos].y + yoffset >= box->y - 1
-			    && search_start[pos].y + yoffset <= box->y + box->height)
+
+	while (pos < doclen) {
+		register int y = search_start[pos].y;
+
+		if (y < y1 || y > y2) break;
 		pos++;
+	}
 	save_c = doc[pos];
 	doc[pos] = 0;
 

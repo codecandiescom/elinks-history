@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.323 2004/01/07 20:01:14 pasky Exp $ */
+/* $Id: parser.c,v 1.324 2004/01/07 20:02:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2141,12 +2141,11 @@ html_iframe(unsigned char *a)
 	if (!url) return;
 
 	name = get_attr_val(a, "name");
+	if (!name) name = get_attr_val(a, "id");
+	if (!name) name = stracpy("");
 	if (!name) {
-		name = stracpy("");
-		if (!name) {
-			mem_free(url);
-			return;
-		}
+		mem_free(url);
+		return;
 	}
 
 	html_focusable(a);

@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-26 08:56+0100\n"
-"PO-Revision-Date: 2004-02-26 09:00+0100\n"
+"POT-Creation-Date: 2004-03-09 06:25+0100\n"
+"PO-Revision-Date: 2004-03-09 07:00+0100\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -25,7 +25,7 @@ msgstr "Zamknij"
 
 #. | MSGBOX_SCROLLABLE
 #: src/bfu/hierbox.c:446 src/bfu/hierbox.c:468 src/cache/dialogs.c:145
-#: src/config/dialogs.c:423 src/cookies/dialogs.c:154
+#: src/config/dialogs.c:425 src/cookies/dialogs.c:154
 #: src/dialogs/document.c:44 src/dialogs/document.c:227
 #: src/dialogs/download.c:414 src/formhist/dialogs.c:165
 #: src/globhist/dialogs.c:182
@@ -42,14 +42,14 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/bfu/msgbox.c:185 src/bookmarks/dialogs.c:192
 #: src/bookmarks/dialogs.c:606 src/config/dialogs.c:45 src/config/dialogs.c:71
 #: src/config/dialogs.c:255 src/config/dialogs.c:327 src/config/dialogs.c:357
-#: src/config/dialogs.c:392 src/config/dialogs.c:404 src/config/dialogs.c:487
-#: src/config/dialogs.c:532 src/config/dialogs.c:559 src/config/dialogs.c:600
-#: src/config/dialogs.c:613 src/dialogs/document.c:50
+#: src/config/dialogs.c:394 src/config/dialogs.c:406 src/config/dialogs.c:489
+#: src/config/dialogs.c:534 src/config/dialogs.c:561 src/config/dialogs.c:602
+#: src/config/dialogs.c:615 src/dialogs/document.c:50
 #: src/dialogs/document.c:230 src/dialogs/document.c:300
 #: src/dialogs/document.c:312 src/dialogs/edit.c:99 src/dialogs/info.c:48
 #: src/dialogs/info.c:137 src/dialogs/info.c:158 src/dialogs/menu.c:64
-#: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:169
-#: src/dialogs/options.c:242 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
+#: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:170
+#: src/dialogs/options.c:243 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
 #: src/protocol/auth/dialogs.c:78 src/protocol/protocol.c:67
 #: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:188
 #: src/sched/download.c:276 src/sched/download.c:311 src/sched/download.c:582
@@ -61,7 +61,7 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/viewer/text/search.c:887 src/viewer/text/search.c:912
 #: src/viewer/text/search.c:943 src/viewer/text/search.c:1392
 #: src/viewer/text/textarea.c:270 src/viewer/text/textarea.c:279
-#: src/viewer/text/view.c:707 src/viewer/text/view.c:1223
+#: src/viewer/text/view.c:710 src/viewer/text/view.c:1223
 msgid "OK"
 msgstr "OK"
 
@@ -98,14 +98,14 @@ msgid "Delete marked items?"
 msgstr "Czy usun±æ zaznaczone elementy?"
 
 #: src/bfu/hierbox.c:700 src/bfu/hierbox.c:721 src/bfu/hierbox.c:735
-#: src/bfu/hierbox.c:795 src/config/dialogs.c:508 src/dialogs/menu.c:93
+#: src/bfu/hierbox.c:795 src/config/dialogs.c:510 src/dialogs/menu.c:93
 #: src/formhist/formhist.c:492 src/mime/dialogs.c:86 src/sched/task.c:169
 #: src/terminal/tab.c:194 src/terminal/tab.c:230
 msgid "Yes"
 msgstr "Tak"
 
 #: src/bfu/hierbox.c:701 src/bfu/hierbox.c:722 src/bfu/hierbox.c:736
-#: src/bfu/hierbox.c:796 src/config/dialogs.c:509 src/dialogs/menu.c:94
+#: src/bfu/hierbox.c:796 src/config/dialogs.c:511 src/dialogs/menu.c:94
 #: src/formhist/formhist.c:493 src/mime/dialogs.c:87 src/sched/task.c:170
 #: src/terminal/tab.c:195 src/terminal/tab.c:231
 msgid "No"
@@ -172,8 +172,8 @@ msgid "LEDs (visual indicators) options."
 msgstr "Ustawienia dotycz±ce LEDów (wska¼ników)"
 
 #
-#: src/bfu/leds.c:70 src/config/options.inc:1166 src/config/options.inc:1173
-#: src/config/options.inc:1192 src/globhist/globhist.c:70
+#: src/bfu/leds.c:70 src/config/options.inc:1167 src/config/options.inc:1174
+#: src/config/options.inc:1193 src/globhist/globhist.c:70
 #: src/mime/backend/mailcap.c:96 src/mime/backend/mimetypes.c:55
 #: src/ssl/ssl.c:82
 msgid "Enable"
@@ -255,7 +255,7 @@ msgstr ""
 "0 - domy¶lny format ELinksa (kompatybilny z Linksem 0.9x)\n"
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!) (WY£¡CZONE)"
 
-#: src/bookmarks/dialogs.c:77 src/config/options.inc:1036
+#: src/bookmarks/dialogs.c:77 src/config/options.inc:1037
 #: src/dialogs/document.c:84 src/globhist/dialogs.c:62
 msgid "Title"
 msgstr "Tytu³"
@@ -275,16 +275,16 @@ msgid "Folder name"
 msgstr "Nazwa foldera"
 
 #: src/bookmarks/dialogs.c:192 src/bookmarks/dialogs.c:606
-#: src/config/dialogs.c:328 src/config/dialogs.c:404 src/config/dialogs.c:559
-#: src/config/dialogs.c:614 src/dialogs/edit.c:103 src/dialogs/menu.c:64
-#: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:172
-#: src/dialogs/options.c:243 src/mime/dialogs.c:160
+#: src/config/dialogs.c:328 src/config/dialogs.c:406 src/config/dialogs.c:561
+#: src/config/dialogs.c:616 src/dialogs/edit.c:103 src/dialogs/menu.c:64
+#: src/dialogs/menu.c:446 src/dialogs/menu.c:473 src/dialogs/options.c:173
+#: src/dialogs/options.c:244 src/mime/dialogs.c:160
 #: src/protocol/auth/dialogs.c:79 src/sched/download.c:498
 #: src/sched/download.c:1008 src/sched/download.c:1017
 #: src/sched/download.c:1037 src/sched/download.c:1049
 #: src/scripting/lua/core.c:402 src/scripting/lua/core.c:483
 #: src/scripting/lua/core.c:715 src/viewer/text/search.c:1392
-#: src/viewer/text/view.c:707
+#: src/viewer/text/view.c:710
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -298,12 +298,12 @@ msgid "Goto"
 msgstr "Przejd¼ do"
 
 #: src/bookmarks/dialogs.c:376 src/config/dialogs.c:281
-#: src/config/dialogs.c:352 src/config/dialogs.c:424
+#: src/config/dialogs.c:352 src/config/dialogs.c:426
 msgid "Edit"
 msgstr "Edytuj"
 
 #: src/bookmarks/dialogs.c:377 src/cache/dialogs.c:147
-#: src/config/dialogs.c:426 src/config/dialogs.c:634 src/cookies/dialogs.c:155
+#: src/config/dialogs.c:428 src/config/dialogs.c:636 src/cookies/dialogs.c:155
 #: src/formhist/dialogs.c:166 src/globhist/dialogs.c:186
 msgid "Delete"
 msgstr "Usuñ"
@@ -312,8 +312,8 @@ msgstr "Usuñ"
 msgid "Move"
 msgstr "Przenie¶"
 
-#: src/bookmarks/dialogs.c:380 src/config/dialogs.c:425
-#: src/config/dialogs.c:633
+#: src/bookmarks/dialogs.c:380 src/config/dialogs.c:427
+#: src/config/dialogs.c:635
 msgid "Add"
 msgstr "Dodaj"
 
@@ -324,9 +324,9 @@ msgid "Search"
 msgstr "Szukaj"
 
 #. TODO: Would this be useful? --jonas
-#: src/bookmarks/dialogs.c:384 src/config/dialogs.c:427
-#: src/config/dialogs.c:636 src/cookies/dialogs.c:157
-#: src/dialogs/options.c:171 src/formhist/dialogs.c:169
+#: src/bookmarks/dialogs.c:384 src/config/dialogs.c:429
+#: src/config/dialogs.c:638 src/cookies/dialogs.c:157
+#: src/dialogs/options.c:172 src/formhist/dialogs.c:169
 #: src/globhist/dialogs.c:192 src/sched/download.c:1006
 #: src/sched/download.c:1035
 msgid "Save"
@@ -767,7 +767,7 @@ msgstr "Wypisz informacje o wersji i zakoñcz dzia³anie"
 msgid "Print ELinks version information and exit."
 msgstr "Wypisz informacje o wersji ELinksa i zakoñcz dzia³anie."
 
-#: src/config/conf.c:652
+#: src/config/conf.c:669
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -780,7 +780,7 @@ msgstr ""
 "## tylko warto¶ci opcji bêd± zmienione a formatowanie, komentarze\n"
 "## itp. pozostan± niezmienione.\n"
 
-#: src/config/conf.c:660
+#: src/config/conf.c:677
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so; this file is edited by ELinks when you save\n"
@@ -799,7 +799,7 @@ msgstr ""
 "## traktowana jako brakuj±ca. Wiedz, ¿e sposób formatowania\n"
 "## i komentarze pozostan± niezmienione.\n"
 
-#: src/config/conf.c:670
+#: src/config/conf.c:687
 msgid ""
 "## This is ELinks configuration file. You can edit it manually,\n"
 "## if you wish so, but keep in mind that this file is overwritten\n"
@@ -811,7 +811,7 @@ msgstr ""
 "## przez ELinksa gdy zapiszesz konfiguracjê poprzez menad¿era ustawieñ\n"
 "## Twoje formatowanie i komentarze zostan± utracone.\n"
 
-#: src/config/conf.c:681
+#: src/config/conf.c:698
 msgid ""
 "## Obviously, if you don't like what ELinks is going to do with\n"
 "## this file, you can change it by altering the config.saving_style\n"
@@ -820,47 +820,47 @@ msgstr ""
 "## Oczywi¶cie, je¶li nie podoba Ci siê to, co ELinks robi z tym plikiem\n"
 "## mo¿esz to zmieniæ ustawiaj±c odpowiednio zmienn± config.saving_style.\n"
 
-#: src/config/conf.c:696
+#: src/config/conf.c:713
 msgid "Automatically saved options\n"
 msgstr "Automatycznie zapisane ustawienia\n"
 
-#: src/config/conf.c:711
+#: src/config/conf.c:728
 msgid "Automatically saved keybindings\n"
 msgstr "Automatycznie zapisane przypisania klawiszy\n"
 
-#: src/config/conf.c:760
+#: src/config/conf.c:777
 msgid "Secure file error"
 msgstr "B³±d przy bezpiecznym otwieraniu pliku"
 
-#: src/config/conf.c:766
+#: src/config/conf.c:783
 msgid "Cannot read the file"
 msgstr "B³±d odczytu z pliku"
 
-#: src/config/conf.c:769
+#: src/config/conf.c:786
 msgid "Cannot stat the file"
 msgstr "B³±d przy wykonywaniu stat()"
 
-#: src/config/conf.c:772
+#: src/config/conf.c:789
 msgid "Cannot access the file"
 msgstr "B³±d dostêpu do pliku"
 
-#: src/config/conf.c:775
+#: src/config/conf.c:792
 msgid "Cannot create temp file"
 msgstr "B³±d przy tworzeniu pliku tymczasowego"
 
-#: src/config/conf.c:778
+#: src/config/conf.c:795
 msgid "Cannot rename the file"
 msgstr "B³±d przy zmianie nazwy pliku"
 
-#: src/config/conf.c:781
+#: src/config/conf.c:798
 msgid "File saving disabled by option"
 msgstr "Zapis pliku zablokowany przez opcjê"
 
-#: src/config/conf.c:784 src/sched/error.c:46
+#: src/config/conf.c:801 src/sched/error.c:46
 msgid "Out of memory"
 msgstr "Brak pamiêci"
 
-#: src/config/conf.c:787
+#: src/config/conf.c:804
 msgid "Cannot write the file"
 msgstr "B³±d zapisu do pliku"
 
@@ -899,7 +899,7 @@ msgid "N/A"
 msgstr "Brak"
 
 #: src/config/dialogs.c:147 src/config/dialogs.c:163 src/config/dialogs.c:290
-#: src/config/dialogs.c:403 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
+#: src/config/dialogs.c:405 src/cookies/dialogs.c:86 src/dialogs/edit.c:92
 #: src/scripting/lua/core.c:397 src/scripting/lua/core.c:398
 #: src/scripting/lua/core.c:478
 msgid "Name"
@@ -935,31 +935,31 @@ msgstr ""
 "To nie jest edytowalna opcja, ale co¶ podobnego do folderu. Naci¶nij spacjê, "
 "a zobaczysz zawarto¶æ."
 
-#: src/config/dialogs.c:389 src/config/dialogs.c:403
+#: src/config/dialogs.c:391 src/config/dialogs.c:405
 msgid "Add option"
 msgstr "Dodaj opcjê"
 
-#: src/config/dialogs.c:390
+#: src/config/dialogs.c:392
 msgid "Cannot add an option here."
 msgstr "Nie mo¿na dodaæ tu opcji."
 
-#: src/config/dialogs.c:432
+#: src/config/dialogs.c:434
 msgid "Option manager"
 msgstr "Menad¿er ustawieñ"
 
-#: src/config/dialogs.c:484 src/config/dialogs.c:529 src/config/dialogs.c:558
+#: src/config/dialogs.c:486 src/config/dialogs.c:531 src/config/dialogs.c:560
 msgid "Add keybinding"
 msgstr "Dodaj przypisanie"
 
-#: src/config/dialogs.c:485
+#: src/config/dialogs.c:487
 msgid "Invalid keystroke."
 msgstr "Niepoprawny skrót klawiszowy."
 
-#: src/config/dialogs.c:502
+#: src/config/dialogs.c:504
 msgid "Keystroke already used"
 msgstr "Skrót klawiszowy jest ju¿ u¿ywany"
 
-#: src/config/dialogs.c:503
+#: src/config/dialogs.c:505
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
@@ -968,19 +968,19 @@ msgstr ""
 "Skrót klawiszowy \"%s\" jest u¿ywany przez \"%s\".\n"
 "Czy na pewno chcesz go zmieniæ?"
 
-#: src/config/dialogs.c:530
+#: src/config/dialogs.c:532
 msgid "Need to select a keymap."
 msgstr "Trzeba wybraæ mapowanie klawiatury"
 
-#: src/config/dialogs.c:545 src/config/options.inc:1185
+#: src/config/dialogs.c:547 src/config/options.inc:1186
 msgid "Action"
 msgstr "Akcja"
 
-#: src/config/dialogs.c:546
+#: src/config/dialogs.c:548
 msgid "Keymap"
 msgstr "Mapowanie klawiatury"
 
-#: src/config/dialogs.c:547
+#: src/config/dialogs.c:549
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -991,32 +991,32 @@ msgstr ""
 "Przedrostek: Shift, Ctrl, Alt\n"
 "Klawisz: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:551
+#: src/config/dialogs.c:553
 msgid "Keystroke"
 msgstr "Skrót klawiszowy"
 
-#: src/config/dialogs.c:596 src/config/dialogs.c:607
+#: src/config/dialogs.c:598 src/config/dialogs.c:609
 msgid "Delete keybinding"
 msgstr "Skasuj przypisanie"
 
-#: src/config/dialogs.c:597
+#: src/config/dialogs.c:599
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr "To nie jest przypisanie. Naci¶nij spacjê, ¿eby otrzymaæ przypisanie."
 
-#: src/config/dialogs.c:608
+#: src/config/dialogs.c:610
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Czy na pewno skasowaæ przypisanie \"%s\" (akcja \"%s\", mapa klawiatury \"%s"
 "\"?"
 
-#: src/config/dialogs.c:635 src/dialogs/info.c:138 src/globhist/dialogs.c:188
+#: src/config/dialogs.c:637 src/dialogs/info.c:138 src/globhist/dialogs.c:188
 msgid "Toggle display"
 msgstr "Krótki/d³ugi opis"
 
-#: src/config/dialogs.c:641
+#: src/config/dialogs.c:643
 msgid "Keybinding manager"
 msgstr "Menad¿er przypisañ klawiszy"
 
@@ -1033,7 +1033,7 @@ msgid "Menu mapping"
 msgstr "Mapa klawiszy menu"
 
 #
-#: src/config/kbdbind.c:452 src/config/kbdbind.c:561 src/config/kbdbind.c:591
+#: src/config/kbdbind.c:452 src/config/kbdbind.c:563 src/config/kbdbind.c:593
 msgid "Do nothing"
 msgstr "Nie rób nic"
 
@@ -1079,11 +1079,11 @@ msgstr "Otwórz menad¿era ciasteczek"
 msgid "Reload cookies file"
 msgstr "Prze³aduj plik ciasteczek"
 
-#: src/config/kbdbind.c:464 src/config/kbdbind.c:568
+#: src/config/kbdbind.c:464 src/config/kbdbind.c:570
 msgid "Copy text to clipboard"
 msgstr "Skopiuj tekst do schowka"
 
-#: src/config/kbdbind.c:465 src/config/kbdbind.c:570 src/config/kbdbind.c:594
+#: src/config/kbdbind.c:465 src/config/kbdbind.c:572 src/config/kbdbind.c:596
 msgid "Delete character under cursor"
 msgstr "Skasuj znak pod kursorem"
 
@@ -1091,7 +1091,7 @@ msgstr "Skasuj znak pod kursorem"
 msgid "Show information about the current page"
 msgstr "Poka¿ informacje na temat bie¿±cej strony"
 
-#: src/config/kbdbind.c:467 src/config/kbdbind.c:571 src/config/kbdbind.c:595
+#: src/config/kbdbind.c:467 src/config/kbdbind.c:573 src/config/kbdbind.c:597
 msgid "Move cursor downwards"
 msgstr "Przesuñ kursor w dó³"
 
@@ -1107,16 +1107,16 @@ msgstr "Pobierz obrazek"
 msgid "Open download manager"
 msgstr "Otwórz menad¿era pobierania"
 
-#: src/config/kbdbind.c:471 src/config/kbdbind.c:572
+#: src/config/kbdbind.c:471 src/config/kbdbind.c:574
 msgid "Begin editing"
 msgstr "Zacznij edycjê"
 
 #. FIXME
-#: src/config/kbdbind.c:472 src/config/kbdbind.c:573 src/config/kbdbind.c:596
+#: src/config/kbdbind.c:472 src/config/kbdbind.c:575 src/config/kbdbind.c:598
 msgid "Go to the end of the page/line"
 msgstr "Przejd¼ na koniec strony/linii"
 
-#: src/config/kbdbind.c:473 src/config/kbdbind.c:575 src/config/kbdbind.c:597
+#: src/config/kbdbind.c:473 src/config/kbdbind.c:577 src/config/kbdbind.c:599
 msgid "Follow the current link"
 msgstr "Pod±¿aj za bie¿±cym odno¶nikiem"
 
@@ -1173,7 +1173,7 @@ msgstr "Poka¿ informacje na temat pól nag³ówka HTTP bie¿±cej strony"
 msgid "Open history manager"
 msgstr "Otwórz menad¿era historii"
 
-#: src/config/kbdbind.c:487 src/config/kbdbind.c:576 src/config/kbdbind.c:599
+#: src/config/kbdbind.c:487 src/config/kbdbind.c:578 src/config/kbdbind.c:601
 msgid "Go to the start of the page/line"
 msgstr "Przejd¼ do pocz±tku strony/linii"
 
@@ -1189,7 +1189,7 @@ msgstr "Otwórz menad¿era przypisañ klawiszy"
 msgid "Kill all backgrounded connections"
 msgstr "Przerwij wszystkie po³±czenia w tle"
 
-#: src/config/kbdbind.c:491 src/config/kbdbind.c:579 src/config/kbdbind.c:600
+#: src/config/kbdbind.c:491 src/config/kbdbind.c:581 src/config/kbdbind.c:602
 msgid "Move the cursor left"
 msgstr "Przesuñ kursor w lewo"
 
@@ -1253,11 +1253,11 @@ msgstr "Otwórz pow³okê systemow±"
 msgid "Open options manager"
 msgstr "Otwórz menad¿er ustawieñ"
 
-#: src/config/kbdbind.c:510 src/config/kbdbind.c:604
+#: src/config/kbdbind.c:510 src/config/kbdbind.c:606
 msgid "Move downwards by a page"
 msgstr "Przesuñ w dó³ o stronê"
 
-#: src/config/kbdbind.c:511 src/config/kbdbind.c:605
+#: src/config/kbdbind.c:511 src/config/kbdbind.c:607
 msgid "Move upwards by a page"
 msgstr "Przesuñ w górê o stronê"
 
@@ -1273,7 +1273,7 @@ msgstr "Otwórz okno dialogowe potwierdzania zakoñczenia dzia³ania"
 msgid "Quit without confirmation"
 msgstr "Zakoñcz bez potwierdzenia"
 
-#: src/config/kbdbind.c:515 src/config/kbdbind.c:583 src/config/kbdbind.c:606
+#: src/config/kbdbind.c:515 src/config/kbdbind.c:585 src/config/kbdbind.c:608
 msgid "Redraw the terminal"
 msgstr "Odrysuj terminal"
 
@@ -1297,7 +1297,7 @@ msgstr "Poka¿ informacje na temat obecnie u¿ywanych zasobów"
 msgid "Attempt to resume download of the current link"
 msgstr "Próba wznowienia pobierania bie¿±cego odno¶nika"
 
-#: src/config/kbdbind.c:521 src/config/kbdbind.c:584 src/config/kbdbind.c:607
+#: src/config/kbdbind.c:521 src/config/kbdbind.c:586 src/config/kbdbind.c:609
 msgid "Move the cursor right"
 msgstr "Przesuñ kursor w prawo"
 
@@ -1378,138 +1378,146 @@ msgid "Open the tab menu"
 msgstr "Otwórz menu kart"
 
 #: src/config/kbdbind.c:542
+msgid "Move the current tab one step ahead"
+msgstr "Przesuñ bie¿±c± kartê o krok do przodu"
+
+#: src/config/kbdbind.c:543
+msgid "Move the current tab one step back"
+msgstr "Przesuñ bie¿±c± kartê o krok w ty³"
+
+#: src/config/kbdbind.c:544
 msgid "Next tab"
 msgstr "Nastêpna karta"
 
-#: src/config/kbdbind.c:543
+#: src/config/kbdbind.c:545
 msgid "Previous tab"
 msgstr "Poprzednia karta"
 
-#: src/config/kbdbind.c:544
+#: src/config/kbdbind.c:546
 msgid "Toggle displaying of links to images"
 msgstr "Zmieñ sposób wy¶wietlania odno¶ników do obrazków"
 
-#: src/config/kbdbind.c:545
+#: src/config/kbdbind.c:547
 msgid "Toggle rendering of page using CSS"
 msgstr "Zmieñ formatowanie strony u¿ywaj±c CSS"
 
-#: src/config/kbdbind.c:546
+#: src/config/kbdbind.c:548
 msgid "Toggle rendering of tables"
 msgstr "Zmieñ sposób wy¶wietlania tabel"
 
-#: src/config/kbdbind.c:547
+#: src/config/kbdbind.c:549
 msgid "Toggle usage of document specific colors"
 msgstr "Prze³±cz sposób u¿ycia kolorów podanych w dokumencie"
 
-#: src/config/kbdbind.c:548
+#: src/config/kbdbind.c:550
 msgid "Toggle rendering page as HTML / plain text"
 msgstr "Prze³±cz wy¶wietlanie strony jako HTML / zwyk³y tekst"
 
-#: src/config/kbdbind.c:549
+#: src/config/kbdbind.c:551
 msgid "Toggle displaying of links numbers"
 msgstr "Prze³±cz sposób wy¶wietlania numerów odno¶ników"
 
-#: src/config/kbdbind.c:550
+#: src/config/kbdbind.c:552
 msgid "Toggle plain renderer compression of empty lines"
 msgstr "Prze³±cz sposób kompresji pustych linii przez renderer zwyk³ego tekstu"
 
-#: src/config/kbdbind.c:551
+#: src/config/kbdbind.c:553
 msgid "Toggle wrapping of text"
 msgstr "Zmieñ sposób zawijania tekstu"
 
-#: src/config/kbdbind.c:552
+#: src/config/kbdbind.c:554
 msgid "Go forward in the unhistory"
 msgstr "Przejd¼ naprzód w \"antyhistorii\""
 
-#: src/config/kbdbind.c:553 src/config/kbdbind.c:585 src/config/kbdbind.c:610
+#: src/config/kbdbind.c:555 src/config/kbdbind.c:587 src/config/kbdbind.c:612
 msgid "Move cursor upwards"
 msgstr "Przesuñ kursor w górê"
 
-#: src/config/kbdbind.c:554
+#: src/config/kbdbind.c:556
 msgid "View the current image"
 msgstr "Poka¿ bie¿±cy obrazek"
 
-#: src/config/kbdbind.c:555
+#: src/config/kbdbind.c:557
 msgid "Maximize the current frame"
 msgstr "Powiêksz bie¿±c± ramkê"
 
 #. internal use only
-#: src/config/kbdbind.c:563
+#: src/config/kbdbind.c:565
 msgid "Attempt to auto-complete the input"
 msgstr "Próba automatycznego dope³nienia wprowadzanego tekstu"
 
-#: src/config/kbdbind.c:564
+#: src/config/kbdbind.c:566
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr "Próba automatycznego jednoznacznego dope³nienia tekstu"
 
-#: src/config/kbdbind.c:565
+#: src/config/kbdbind.c:567
 msgid "Delete character in front of the cursor"
 msgstr "Skasuj znak na prawo od kursora"
 
-#: src/config/kbdbind.c:566
+#: src/config/kbdbind.c:568
 msgid "Go to the first line of the buffer"
 msgstr "Przejd¼ do pierwszej linii bufora"
 
 #. internal use only
-#: src/config/kbdbind.c:567 src/config/kbdbind.c:593
+#: src/config/kbdbind.c:569 src/config/kbdbind.c:595
 msgid "Cancel current state"
 msgstr "Anuluj bie¿±cy stan"
 
-#: src/config/kbdbind.c:569
+#: src/config/kbdbind.c:571
 msgid "Delete text from clipboard"
 msgstr "Skasuj tekst w schowku"
 
-#: src/config/kbdbind.c:574
+#: src/config/kbdbind.c:576
 msgid "Go to the last line of the buffer"
 msgstr "Przejd¼ do ostatniej linii bufora"
 
-#: src/config/kbdbind.c:577
+#: src/config/kbdbind.c:579
 msgid "Delete to beginning of line"
 msgstr "Skasuj do pocz±tku linii"
 
-#: src/config/kbdbind.c:578
+#: src/config/kbdbind.c:580
 msgid "Delete to end of line"
 msgstr "Skasuj do koñca linii"
 
-#: src/config/kbdbind.c:580 src/config/kbdbind.c:602
+#: src/config/kbdbind.c:582 src/config/kbdbind.c:604
 msgid "Move to the next item"
 msgstr "Przesuñ do nastêpnej pozycji"
 
-#: src/config/kbdbind.c:581 src/config/kbdbind.c:603
+#: src/config/kbdbind.c:583 src/config/kbdbind.c:605
 msgid "Move to the previous item"
 msgstr "Przesuñ do poprzedniej pozycji"
 
-#: src/config/kbdbind.c:582
+#: src/config/kbdbind.c:584
 msgid "Paste text from the clipboard"
 msgstr "Wstaw tekst ze schowka"
 
 #
-#: src/config/kbdbind.c:598
+#: src/config/kbdbind.c:600
 msgid "Expand item"
 msgstr "Rozszerz pozycjê"
 
 #
-#: src/config/kbdbind.c:601
+#: src/config/kbdbind.c:603
 msgid "Mark item"
 msgstr "Pod¶wietl pozycjê"
 
-#: src/config/kbdbind.c:608
+#: src/config/kbdbind.c:610
 msgid "Select current highlighted item"
 msgstr "Wybierz bie¿±co pod¶wietlon± pozycjê"
 
-#: src/config/kbdbind.c:609
+#: src/config/kbdbind.c:611
 msgid "Collapse item"
 msgstr "Zwiñ pozycjê"
 
-#: src/config/kbdbind.c:743
+#: src/config/kbdbind.c:745
 msgid "Unrecognised keymap"
 msgstr "Nierozpoznana mapa klawiszy"
 
-#: src/config/kbdbind.c:745
+#: src/config/kbdbind.c:747
 msgid "Error parsing keystroke"
 msgstr "B³±d przy odczytywaniu kombinacji klawiszy"
 
-#: src/config/kbdbind.c:747
+#: src/config/kbdbind.c:749
 msgid "Unrecognised action (internal error)"
 msgstr "Nierozpoznana akcja (b³±d wewnêtrzny)"
 
@@ -1899,13 +1907,13 @@ msgstr "Kolory aktywnego odno¶nika."
 
 #
 #: src/config/options.inc:203 src/config/options.inc:416
-#: src/config/options.inc:930
+#: src/config/options.inc:931
 msgid "Background color"
 msgstr "Kolor t³a"
 
 #
 #: src/config/options.inc:205 src/config/options.inc:418
-#: src/config/options.inc:931
+#: src/config/options.inc:932
 msgid "Default background color."
 msgstr "Domy¶lny kolor t³a."
 
@@ -1919,12 +1927,12 @@ msgstr "Domy¶lny kolor t³a."
 #. The colors and mono tree should be similar but with different default
 #. * values of course so always use the macros below.
 #: src/config/options.inc:207 src/config/options.inc:412
-#: src/config/options.inc:928
+#: src/config/options.inc:929
 msgid "Text color"
 msgstr "Kolor tekstu"
 
 #: src/config/options.inc:209 src/config/options.inc:414
-#: src/config/options.inc:929
+#: src/config/options.inc:930
 msgid "Default text color."
 msgstr "Domy¶lny kolor tekstu."
 
@@ -1958,7 +1966,7 @@ msgstr "Inwersja kolorów"
 msgid "Invert the fore- and background color so the link stands out."
 msgstr "Odwróæ kolory tekstu i t³a tak, ¿eby wyró¿niæ odno¶nik."
 
-#: src/config/options.inc:225 src/dialogs/options.c:166
+#: src/config/options.inc:225 src/dialogs/options.c:167
 msgid "Underline"
 msgstr "Podkre¶lenie"
 
@@ -2470,7 +2478,7 @@ msgstr "Zrzuty"
 msgid "Dump output options."
 msgstr "Ustawienia dotycz±ce zrzutów."
 
-#: src/config/options.inc:500 src/config/options.inc:898
+#: src/config/options.inc:500 src/config/options.inc:899
 #: src/config/opttypes.c:365 src/dialogs/document.c:102
 msgid "Codepage"
 msgstr "Strona kodowa"
@@ -2734,8 +2742,8 @@ msgstr "U¿ywanie HTTP/1.0"
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
 msgstr "U¿yj protoko³u HTTP/1.0 zamiast HTTP/1.1."
 
-#: src/config/options.inc:632 src/config/options.inc:711
-#: src/config/options.inc:725
+#: src/config/options.inc:632 src/config/options.inc:712
+#: src/config/options.inc:726
 msgid "Proxy configuration"
 msgstr "Konfiguracja proxy"
 
@@ -2744,8 +2752,8 @@ msgid "HTTP proxy configuration."
 msgstr "Konfiguracja proxy dla protoko³u HTTP."
 
 #
-#: src/config/options.inc:636 src/config/options.inc:715
-#: src/config/options.inc:729
+#: src/config/options.inc:636 src/config/options.inc:716
+#: src/config/options.inc:730
 msgid "Host and port-number"
 msgstr "Host i numer portu"
 
@@ -2879,6 +2887,7 @@ msgid ""
 "%v in the string means ELinks version\n"
 "%s in the string means system identification\n"
 "%t in the string means size of the terminal\n"
+"%b in the string means number of bars displayed by ELinks\n"
 "Use \" \" if you don't want any User-Agent header to be sent at all."
 msgstr ""
 "Zmienia identyfikator przegl±darki. To znaczy ³añcuch, który jest wysy³any\n"
@@ -2890,21 +2899,22 @@ msgstr ""
 "%v - wersja ELinksa\n"
 "%s - nazwa systemu\n"
 "%t - rozmiar terminala\n"
+"%b - liczba pasków wy¶wietlanych przez ELinksa\n"
 "U¿yj \" \" je¶li nie chcesz wysy³ania ¿adnej informacji o przegl±darce."
 
-#: src/config/options.inc:707
+#: src/config/options.inc:708
 msgid "HTTPS"
 msgstr "HTTPS"
 
-#: src/config/options.inc:709
+#: src/config/options.inc:710
 msgid "HTTPS-specific options."
 msgstr "Ustawienia dotycz±ce protoko³u HTTPS."
 
-#: src/config/options.inc:713
+#: src/config/options.inc:714
 msgid "HTTPS proxy configuration."
 msgstr "Konfiguracja proxy dla protoko³u HTTPS."
 
-#: src/config/options.inc:717
+#: src/config/options.inc:718
 msgid ""
 "Host and port-number (host:port) of the HTTPS CONNECT proxy, or blank.\n"
 "If it's blank, HTTPS_PROXY environment variable is checked as well."
@@ -2912,19 +2922,19 @@ msgstr ""
 "Host i numer portu (host:port) serwera proxy HTTPS, lub puste.\n"
 "Je¶li puste sprawdzana jest zmienna ¶rodowiskowa HTTPS_PROXY."
 
-#: src/config/options.inc:721
+#: src/config/options.inc:722
 msgid "FTP"
 msgstr "FTP"
 
-#: src/config/options.inc:723
+#: src/config/options.inc:724
 msgid "FTP specific options."
 msgstr "Opcje dotycz±ce protoko³u FTP."
 
-#: src/config/options.inc:727
+#: src/config/options.inc:728
 msgid "FTP proxy configuration."
 msgstr "Konfiguracja proxy dla protoko³u FTP."
 
-#: src/config/options.inc:731
+#: src/config/options.inc:732
 msgid ""
 "Host and port-number (host:port) of the FTP proxy, or blank.\n"
 "If it's blank, FTP_PROXY environment variable is checked as well."
@@ -2932,31 +2942,31 @@ msgstr ""
 "Host i numer portu (host:port) serwera proxy FTP, albo puste.\n"
 "Je¶li puste sprawdzana jest zmienna ¶rodowiskowa FTP_PROXY."
 
-#: src/config/options.inc:734
+#: src/config/options.inc:735
 msgid "Anonymous password"
 msgstr "Has³o dla anonimowego FTP"
 
-#: src/config/options.inc:736
+#: src/config/options.inc:737
 msgid "FTP anonymous password to be sent."
 msgstr "Has³o wysy³ane do anonimowych serwerów FTP."
 
-#: src/config/options.inc:738
+#: src/config/options.inc:739
 msgid "Use passive mode (IPv4)"
 msgstr "U¿ywanie trybu pasywnego (IPv4)"
 
-#: src/config/options.inc:740
+#: src/config/options.inc:741
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
 msgstr "U¿ywaj PASV zamiast PORT (tryb pasywny kontra aktywny, tylko IPv4)."
 
-#: src/config/options.inc:742 src/config/options.inc:746
+#: src/config/options.inc:743 src/config/options.inc:747
 msgid "Use passive mode (IPv6)"
 msgstr "U¿ywanie trybu pasywnego (IPv6)"
 
-#: src/config/options.inc:744
+#: src/config/options.inc:745
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
 msgstr "U¿ywaj EPSV zamiast EPRT (tryb pasywny kontra aktywny, tylko IPv6)."
 
-#: src/config/options.inc:748
+#: src/config/options.inc:749
 msgid ""
 "Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 "Works only with IPv6 enabled, so nothing interesting for you."
@@ -2965,62 +2975,62 @@ msgstr ""
 "Dzia³a tylko z w³±czonym IPv6, wiêc nic ciekawego dla Ciebie."
 
 #
-#: src/config/options.inc:754
+#: src/config/options.inc:755
 msgid "Local files"
 msgstr "Lokalne pliki"
 
-#: src/config/options.inc:756
+#: src/config/options.inc:757
 msgid "Options specific to local browsing."
 msgstr "Ustawienia dotycz±ce przegl±dania lokalnych plików."
 
 #
-#: src/config/options.inc:759 src/config/options.inc:771
+#: src/config/options.inc:760 src/config/options.inc:772
 msgid "Local CGI"
 msgstr "Lokalne CGI"
 
-#: src/config/options.inc:761
+#: src/config/options.inc:762
 msgid "Local CGI specific options."
 msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI."
 
-#: src/config/options.inc:763 src/config/options.inc:775
+#: src/config/options.inc:764 src/config/options.inc:776
 #: src/mime/backend/mailcap.c:100 src/mime/backend/mimetypes.c:59
 msgid "Path"
 msgstr "¦cie¿ka"
 
-#: src/config/options.inc:765
+#: src/config/options.inc:766
 msgid "Colon separated list of directories, where CGI scripts are stored."
 msgstr ""
 "Oddzielona dwukropkami lista katalogów, w których s± umieszczone\n"
 "skrypty CGI."
 
-#: src/config/options.inc:767 src/config/options.inc:779
+#: src/config/options.inc:768 src/config/options.inc:780
 msgid "Allow local CGI"
 msgstr "Pozwolenie na wykonywanie skryptów CGI"
 
-#: src/config/options.inc:769
+#: src/config/options.inc:770
 msgid "Whether to execute local CGI scripts."
 msgstr "Czy uruchamiaæ lokalne skrypty CGI."
 
-#: src/config/options.inc:773
+#: src/config/options.inc:774
 msgid "Local CGI specific options. (DISABLED)"
 msgstr "Ustawienia dotycz±ce lokalnych skryptów CGI. (WY£¡CZONE)"
 
-#: src/config/options.inc:777
+#: src/config/options.inc:778
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "Oddzielona dwukropkami lista katalogów, z których mo¿na wykonywaæ\n"
 "skrypty CGI. (WY£¡CZONE)"
 
-#: src/config/options.inc:781
+#: src/config/options.inc:782
 msgid "Whether to execute local CGI scripts. (DISABLED)"
 msgstr "Czy uruchamiaæ lokalne skrypty CGI. (WY£¡CZONE)"
 
-#: src/config/options.inc:784
+#: src/config/options.inc:785
 msgid "Allow reading special files"
 msgstr "Zezwolenie na czytanie plików specjalnych"
 
-#: src/config/options.inc:786
+#: src/config/options.inc:787
 msgid ""
 "Allow reading from non-regular files? (DANGEROUS - reading\n"
 "/dev/urandom or /dev/zero can ruin your day!)"
@@ -3029,11 +3039,11 @@ msgstr ""
 "czytanie\n"
 "/dev/urandom czy /dev/zero mo¿e zepsuæ Ci dzieñ!)"
 
-#: src/config/options.inc:789
+#: src/config/options.inc:790
 msgid "Show hidden files in directory listing"
 msgstr "Pokazuj ukryte pliki przy wy¶wietlaniu katalogów"
 
-#: src/config/options.inc:791
+#: src/config/options.inc:792
 msgid ""
 "Show hidden files in directory listing ?\n"
 "If set to false, files with name starting with a dot will be\n"
@@ -3044,11 +3054,11 @@ msgstr ""
 "pokazywane."
 
 #
-#: src/config/options.inc:795
+#: src/config/options.inc:796
 msgid "Try encoding extensions"
 msgstr "Próbuj ró¿ne rozszerzenia plików"
 
-#: src/config/options.inc:797
+#: src/config/options.inc:798
 msgid ""
 "When set, if we can't open a file named 'filename', we'll try\n"
 "to open 'filename' with some encoding extension appended\n"
@@ -3059,11 +3069,11 @@ msgstr ""
 "'plik.gz'); zale¿y to od wspieranych formatów kompresji."
 
 #
-#: src/config/options.inc:801
+#: src/config/options.inc:802
 msgid "User protocols"
 msgstr "Protoko³y u¿ytkownika"
 
-#: src/config/options.inc:803
+#: src/config/options.inc:804
 msgid ""
 "User protocols. Options in this tree specify external\n"
 "handlers for the appropriate protocols. Ie.\n"
@@ -3073,7 +3083,7 @@ msgstr ""
 "uchwytów dla odpowiadaj±cych im protoko³ów.\n"
 "Np. protocol.user.mailto.unix."
 
-#: src/config/options.inc:814
+#: src/config/options.inc:815
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
@@ -3081,7 +3091,7 @@ msgstr ""
 "Uchwyt (zewnêtrzny program) dla tego protoko³u. Nazwij\n"
 "ustawienia w tym drzewie zgodnie z Twoim systemem (np. unix, unix-xwin)."
 
-#: src/config/options.inc:819
+#: src/config/options.inc:820
 msgid ""
 "Handler (external program) for this protocol and system.\n"
 "%h in the string means hostname (or email address)\n"
@@ -3097,11 +3107,11 @@ msgstr ""
 "%s - tytu³ maila (?subject=<tytu³>)\n"
 "%u - ca³y URL"
 
-#: src/config/options.inc:827
+#: src/config/options.inc:828
 msgid "No-proxy domains"
 msgstr "Domeny dostêpne bez udzia³u proxy"
 
-#: src/config/options.inc:829
+#: src/config/options.inc:830
 msgid ""
 "Comma separated list of domains for which the proxy (HTTP/FTP)\n"
 "should be disabled. Optionally, a port can be specified for some\n"
@@ -3114,25 +3124,25 @@ msgstr ""
 
 #
 #. Keep options in alphabetical order.
-#: src/config/options.inc:838
+#: src/config/options.inc:839
 msgid "Terminals"
 msgstr "Terminale"
 
 #
-#: src/config/options.inc:840
+#: src/config/options.inc:841
 msgid "Terminal options."
 msgstr "Ustawienia terminala"
 
-#: src/config/options.inc:844
+#: src/config/options.inc:845
 msgid "Options specific to this terminal type (according to $TERM value)."
 msgstr ""
 "Ustawienia specyficzne dla danego typu terminala (nawi±zuj±c do $TERM)."
 
-#: src/config/options.inc:846
+#: src/config/options.inc:847
 msgid "Border type"
 msgstr "Typ ramek"
 
-#: src/config/options.inc:848
+#: src/config/options.inc:849
 msgid ""
 "Terminal type; matters mostly only when drawing frames and\n"
 "dialog box borders:\n"
@@ -3150,11 +3160,11 @@ msgstr ""
 "3 - KOI-8\n"
 "4 - FreeBSD"
 
-#: src/config/options.inc:856
+#: src/config/options.inc:857
 msgid "Switch fonts for line drawing"
 msgstr "Zmiana fontu do rysowania linii"
 
-#: src/config/options.inc:858
+#: src/config/options.inc:859
 msgid ""
 "Switch fonts when drawing lines, enabling both local characters\n"
 "and lines working at the same time. Makes sense only with linux\n"
@@ -3163,11 +3173,11 @@ msgstr ""
 "Zmienia font podczas rysowania linii, w³±czaj±c oba zestawy\n"
 "znaków. Ma sens jedynie na linuksowym terminalu."
 
-#: src/config/options.inc:862
+#: src/config/options.inc:863
 msgid "I/O in UTF8"
 msgstr "I/O in UTF8"
 
-#: src/config/options.inc:864
+#: src/config/options.inc:865
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
@@ -3176,11 +3186,11 @@ msgstr ""
 "jedynie podzbiór UTF8 jest u¿ywany w zale¿no¶ci od u¿ywanej\n"
 "strony kodowej."
 
-#: src/config/options.inc:867 src/dialogs/options.c:163
+#: src/config/options.inc:868 src/dialogs/options.c:164
 msgid "Restrict frames in cp850/852"
 msgstr "Ogranicz ramki w cp850/852"
 
-#: src/config/options.inc:869
+#: src/config/options.inc:870
 msgid ""
 "Restrict the characters used when drawing lines. Makes sense\n"
 "only with linux terminals using the cp850/852 character sets."
@@ -3189,11 +3199,11 @@ msgstr ""
 "z terminalami linuksowymi u¿ywaj±cymi stron kodowych cp850/852."
 
 #
-#: src/config/options.inc:872
+#: src/config/options.inc:873
 msgid "Block cursor"
 msgstr "Kursor blokowy"
 
-#: src/config/options.inc:874
+#: src/config/options.inc:875
 msgid ""
 "Move cursor to bottom right corner when done drawing.\n"
 "This is particularly useful when we have a block cursor,\n"
@@ -3203,11 +3213,11 @@ msgstr ""
 "Jest to szczególnie u¿yteczne z kursorem blokowym, tekst\n"
 "z inwersj± jest wy¶wietlany poprawnie."
 
-#: src/config/options.inc:878
+#: src/config/options.inc:879
 msgid "Color mode"
 msgstr "Tryb kolorowy"
 
-#: src/config/options.inc:880
+#: src/config/options.inc:881
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -3222,11 +3232,11 @@ msgstr ""
 "2 - tryb 256 kolorowy, potrzebuje xterma z obs³ug± 256 kolorów\n"
 
 #
-#: src/config/options.inc:886
+#: src/config/options.inc:887
 msgid "Enable transparency"
 msgstr "Przezroczysto¶æ"
 
-#: src/config/options.inc:888
+#: src/config/options.inc:889
 msgid ""
 "If we should not set the background to black. This is particularly\n"
 "useful when we have a terminal (typically in some windowing\n"
@@ -3241,342 +3251,342 @@ msgstr ""
 "Wiedz, ¿e to ustawienie ma sens jedynie, gdy u¿ywanie kolorów jest\n"
 "w³±czone."
 
-#: src/config/options.inc:894
+#: src/config/options.inc:895
 msgid "Use underline"
 msgstr "U¿yj podkre¶lenia"
 
-#: src/config/options.inc:896
+#: src/config/options.inc:897
 msgid "If we should use underline or enhance the color instead."
 msgstr "Czy powinno siê u¿ywaæ podkre¶lenia czy wzmocnienia koloru."
 
-#: src/config/options.inc:900
+#: src/config/options.inc:901
 msgid "Codepage of charset used for displaying content on terminal."
 msgstr "Strona kodowa u¿ywana do wy¶wietlania na terminalu."
 
 #. Keep options in alphabetical order.
-#: src/config/options.inc:906
+#: src/config/options.inc:907
 msgid "User interface"
 msgstr "Interfejs u¿ytkownika"
 
 #
-#: src/config/options.inc:908
+#: src/config/options.inc:909
 msgid "User interface options."
 msgstr "Ustawienia interfejsu u¿ytkownika."
 
-#: src/config/options.inc:912
+#: src/config/options.inc:913
 msgid "Color settings"
 msgstr "Ustawienia kolorów"
 
-#: src/config/options.inc:914
+#: src/config/options.inc:915
 msgid "Default user interface color settings."
 msgstr "Domy¶lne ustawienia kolorów interfejsu u¿ytkownika."
 
 #
-#: src/config/options.inc:941
+#: src/config/options.inc:942
 msgid "Color terminals"
 msgstr "Kolorowe terminale"
 
-#: src/config/options.inc:943
+#: src/config/options.inc:944
 msgid "Color settings for color terminal."
 msgstr "Ustawienia kolorów dla kolorowych terminali."
 
-#: src/config/options.inc:945
+#: src/config/options.inc:946
 msgid "Non-color terminals"
 msgstr "Terminale monochromatyczne"
 
-#: src/config/options.inc:947
+#: src/config/options.inc:948
 msgid "Color settings for non-color terminal."
 msgstr "Ustawienia kolorów dla terminali monochromatycznych."
 
 #. FIXME: obsolete, how to alias them correctly ? --Zas
-#: src/config/options.inc:950
+#: src/config/options.inc:951
 msgid "Main menu bar"
 msgstr "Pasek menu g³ównego"
 
-#: src/config/options.inc:952
+#: src/config/options.inc:953
 msgid "Main menu bar colors."
 msgstr "Kolory g³ównego paska menu."
 
-#: src/config/options.inc:954
+#: src/config/options.inc:955
 msgid "Unselected main menu bar item"
 msgstr "Pasek niewybranego elementu menu"
 
-#: src/config/options.inc:956
+#: src/config/options.inc:957
 msgid "Unselected main menu bar item colors."
 msgstr "Kolory dla paska niewybranego elementu menu."
 
-#: src/config/options.inc:958
+#: src/config/options.inc:959
 msgid "Selected main menu bar item"
 msgstr "Pasek wybranego elementu menu"
 
-#: src/config/options.inc:960
+#: src/config/options.inc:961
 msgid "Selected main menu bar item colors."
 msgstr "Kolory dla paska wybranego elementu menu."
 
-#: src/config/options.inc:962 src/config/options.inc:991
+#: src/config/options.inc:963 src/config/options.inc:992
 msgid "Hotkey"
 msgstr "Klawisz skrótu"
 
-#: src/config/options.inc:964
+#: src/config/options.inc:965
 msgid "Main menu hotkey colors."
 msgstr "Kolory klawiszy skrótu g³ównego paska menu."
 
-#: src/config/options.inc:966 src/config/options.inc:995
+#: src/config/options.inc:967 src/config/options.inc:996
 msgid "Unselected hotkey"
 msgstr "Niewybrany klawisz skrótu"
 
-#: src/config/options.inc:968
+#: src/config/options.inc:969
 msgid "Main menu unselected hotkey colors."
 msgstr "Kolory niewybranych klawiszy skrótu g³ównego menu"
 
 #
-#: src/config/options.inc:970 src/config/options.inc:999
+#: src/config/options.inc:971 src/config/options.inc:1000
 msgid "Selected hotkey"
 msgstr "Wybrany klawisz skrótu"
 
-#: src/config/options.inc:972
+#: src/config/options.inc:973
 msgid "Main menu selected hotkey colors."
 msgstr "Kolory wybranych klawiszy skrótu g³ównego menu."
 
-#: src/config/options.inc:975
+#: src/config/options.inc:976
 msgid "Menu bar"
 msgstr "Pasek menu"
 
-#: src/config/options.inc:977
+#: src/config/options.inc:978
 msgid "Menu bar colors."
 msgstr "Kolory paska menu."
 
-#: src/config/options.inc:979
+#: src/config/options.inc:980
 msgid "Unselected menu item"
 msgstr "Niewybrane elementy menu"
 
-#: src/config/options.inc:981
+#: src/config/options.inc:982
 msgid "Unselected menu item colors."
 msgstr "Kolory niewybranego elementu menu."
 
 #
-#: src/config/options.inc:983
+#: src/config/options.inc:984
 msgid "Selected menu item"
 msgstr "Pod¶wietlone elementy menu"
 
-#: src/config/options.inc:985
+#: src/config/options.inc:986
 msgid "Selected menu item colors."
 msgstr "Kolory wybranych elementów menu."
 
 #
-#: src/config/options.inc:987
+#: src/config/options.inc:988
 msgid "Marked menu item"
 msgstr "Pod¶wietlone elementy menu"
 
-#: src/config/options.inc:989
+#: src/config/options.inc:990
 msgid "Marked menu item colors."
 msgstr "Kolory pod¶wietlonych elementów menu."
 
-#: src/config/options.inc:993
+#: src/config/options.inc:994
 msgid "Menu item hotkey colors."
 msgstr "Kolory klawiszy skrótu menu."
 
-#: src/config/options.inc:997
+#: src/config/options.inc:998
 msgid "Menu item unselected hotkey colors."
 msgstr "Kolory niewybranych klawiszy skrótu menu."
 
-#: src/config/options.inc:1001
+#: src/config/options.inc:1002
 msgid "Menu item selected hotkey colors."
 msgstr "Kolory wybranych klawiszy skrótu menu."
 
 #
-#: src/config/options.inc:1003
+#: src/config/options.inc:1004
 msgid "Menu frame"
 msgstr "Ramka menu"
 
-#: src/config/options.inc:1005
+#: src/config/options.inc:1006
 msgid "Menu frame colors."
 msgstr "Kolory ramki menu."
 
-#: src/config/options.inc:1008
+#: src/config/options.inc:1009
 msgid "Dialog"
 msgstr "Okno dialogowe"
 
-#: src/config/options.inc:1010
+#: src/config/options.inc:1011
 msgid "Dialog colors."
 msgstr "Kolory okna dialogowego."
 
-#: src/config/options.inc:1020
+#: src/config/options.inc:1021
 msgid "Generic"
 msgstr "Zwyk³e"
 
-#: src/config/options.inc:1022
+#: src/config/options.inc:1023
 msgid "Generic dialog colors."
 msgstr "Zwyk³e kolory okienka dialogowego."
 
 #
-#: src/config/options.inc:1024
+#: src/config/options.inc:1025
 msgid "Frame"
 msgstr "Ramka"
 
-#: src/config/options.inc:1026
+#: src/config/options.inc:1027
 msgid "Dialog frame colors."
 msgstr "Kolory ramki okna dialogowego."
 
-#: src/config/options.inc:1028
+#: src/config/options.inc:1029
 msgid "Scrollbar"
 msgstr "Pasek przewijania"
 
-#: src/config/options.inc:1030
+#: src/config/options.inc:1031
 msgid "Scrollbar colors."
 msgstr "Kolory paska przewijania."
 
-#: src/config/options.inc:1032
+#: src/config/options.inc:1033
 msgid "Scrollbar selected"
 msgstr "Pasek przewijania wybrany"
 
-#: src/config/options.inc:1034
+#: src/config/options.inc:1035
 msgid "Scrollbar selected colors."
 msgstr "Kolory wybranego paska przewijania."
 
-#: src/config/options.inc:1038
+#: src/config/options.inc:1039
 msgid "Dialog title colors."
 msgstr "Kolory tytu³u okna dialogowego."
 
 #
-#: src/config/options.inc:1040
+#: src/config/options.inc:1041
 msgid "Text"
 msgstr "Tekst"
 
-#: src/config/options.inc:1042
+#: src/config/options.inc:1043
 msgid "Dialog text colors."
 msgstr "Kolory tekstu w oknie dialogowym."
 
-#: src/config/options.inc:1044 src/viewer/text/link.c:1004
+#: src/config/options.inc:1045 src/viewer/text/link.c:1004
 msgid "Checkbox"
 msgstr "Przycisk wyboru"
 
-#: src/config/options.inc:1046
+#: src/config/options.inc:1047
 msgid "Dialog checkbox colors."
 msgstr "Kolory przycisku wyboru."
 
 #
-#: src/config/options.inc:1048
+#: src/config/options.inc:1049
 msgid "Checkbox label"
 msgstr "Etykieta przycisku wyboru"
 
-#: src/config/options.inc:1050
+#: src/config/options.inc:1051
 msgid "Dialog checkbox label colors."
 msgstr "Kolory etykiety przycisku wyboru."
 
-#: src/config/options.inc:1052
+#: src/config/options.inc:1053
 msgid "Button"
 msgstr "Przycisk"
 
-#: src/config/options.inc:1054
+#: src/config/options.inc:1055
 msgid "Dialog button colors."
 msgstr "Kolory przycisku."
 
 #
-#: src/config/options.inc:1056
+#: src/config/options.inc:1057
 msgid "Selected button"
 msgstr "Wybrany przycisk"
 
-#: src/config/options.inc:1058
+#: src/config/options.inc:1059
 msgid "Dialog selected button colors."
 msgstr "Kolory wybranego przycisku."
 
-#: src/config/options.inc:1060 src/viewer/text/link.c:1010
+#: src/config/options.inc:1061 src/viewer/text/link.c:1010
 msgid "Text field"
 msgstr "Pole tekstowe"
 
-#: src/config/options.inc:1062
+#: src/config/options.inc:1063
 msgid "Dialog text field colors."
 msgstr "Kolory pola tekstowego."
 
 #
-#: src/config/options.inc:1064
+#: src/config/options.inc:1065
 msgid "Text field text"
 msgstr "Tekst w polu tekstowym"
 
-#: src/config/options.inc:1066
+#: src/config/options.inc:1067
 msgid "Dialog field text colors."
 msgstr "Kolory tekstu w polu tekstowym."
 
-#: src/config/options.inc:1068
+#: src/config/options.inc:1069
 msgid "Meter"
 msgstr "Licznik"
 
-#: src/config/options.inc:1070
+#: src/config/options.inc:1071
 msgid "Dialog meter colors."
 msgstr "Kolory licznika."
 
-#: src/config/options.inc:1072
+#: src/config/options.inc:1073
 msgid "Shadow"
 msgstr "Cieñ"
 
-#: src/config/options.inc:1074
+#: src/config/options.inc:1075
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr "Kolory cienia (zobacz opcjê ui.shadows)."
 
 #
-#: src/config/options.inc:1076
+#: src/config/options.inc:1077
 msgid "Title bar"
 msgstr "Pasek tytu³owy"
 
-#: src/config/options.inc:1078
+#: src/config/options.inc:1079
 msgid "Title bar colors."
 msgstr "Kolory paska tytu³owego."
 
-#: src/config/options.inc:1080
+#: src/config/options.inc:1081
 msgid "Generic title bar"
 msgstr "Zwyk³y pasek tytu³owy"
 
-#: src/config/options.inc:1082
+#: src/config/options.inc:1083
 msgid "Generic title bar colors."
 msgstr "Kolory zwyk³ego paska tytu³owego."
 
-#: src/config/options.inc:1084
+#: src/config/options.inc:1085
 msgid "Title bar text"
 msgstr "Tekst na pasku tytu³owym"
 
-#: src/config/options.inc:1086
+#: src/config/options.inc:1087
 msgid "Title bar text colors."
 msgstr "Kolory tekstu na pasku tytu³owym."
 
-#: src/config/options.inc:1089
+#: src/config/options.inc:1090
 msgid "Status bar"
 msgstr "Pasek statusu"
 
-#: src/config/options.inc:1091
+#: src/config/options.inc:1092
 msgid "Status bar colors."
 msgstr "Kolory paska statusu."
 
-#: src/config/options.inc:1093
+#: src/config/options.inc:1094
 msgid "Generic status bar"
 msgstr "Zwyk³y pasek statusu"
 
-#: src/config/options.inc:1095
+#: src/config/options.inc:1096
 msgid "Generic status bar colors."
 msgstr "Kolory zwyk³ego paska statusu."
 
 #
-#: src/config/options.inc:1097
+#: src/config/options.inc:1098
 msgid "Status bar text"
 msgstr "Tekst na pasku statusu"
 
-#: src/config/options.inc:1099
+#: src/config/options.inc:1100
 msgid "Status bar text colors."
 msgstr "Kolory tekstu na pasku statusu."
 
-#: src/config/options.inc:1102
+#: src/config/options.inc:1103
 msgid "Tabs bar"
 msgstr "Pasek kart"
 
-#: src/config/options.inc:1104
+#: src/config/options.inc:1105
 msgid "Tabs bar colors."
 msgstr "Kolory paska kart."
 
-#: src/config/options.inc:1106
+#: src/config/options.inc:1107
 msgid "Unvisited tab"
 msgstr "Nieodwiedzana karta"
 
-#: src/config/options.inc:1108
+#: src/config/options.inc:1109
 msgid ""
 "Tab colors for tabs that have not been\n"
 "selected since they completed loading."
@@ -3584,44 +3594,44 @@ msgstr ""
 "Kolory karty dla kart, które nie zosta³y\n"
 "wybrane od zakoñczenia ³adowania."
 
-#: src/config/options.inc:1111
+#: src/config/options.inc:1112
 msgid "Unselected tab"
 msgstr "Niewybrana karta"
 
-#: src/config/options.inc:1113
+#: src/config/options.inc:1114
 msgid "Unselected tab colors."
 msgstr "Kolory niewybranych kart."
 
-#: src/config/options.inc:1115
+#: src/config/options.inc:1116
 msgid "Loading tab"
 msgstr "Karta, do której wczytywany jest dokument"
 
-#: src/config/options.inc:1117
+#: src/config/options.inc:1118
 msgid "Tab colors for tabs that are loading in the background."
 msgstr "Kolory kart dla kart, do których wczytywany jest dokument w tle."
 
 #
-#: src/config/options.inc:1119
+#: src/config/options.inc:1120
 msgid "Selected tab"
 msgstr "Wybrana karta"
 
-#: src/config/options.inc:1121
+#: src/config/options.inc:1122
 msgid "Selected tab colors."
 msgstr "Kolory wybranej karty."
 
-#: src/config/options.inc:1123
+#: src/config/options.inc:1124
 msgid "Tab separator"
 msgstr "Separator kart"
 
-#: src/config/options.inc:1125
+#: src/config/options.inc:1126
 msgid "Tab separator colors."
 msgstr "Kolory separatora kart."
 
-#: src/config/options.inc:1128
+#: src/config/options.inc:1129
 msgid "Searched strings"
 msgstr "Szukane ³añcuchy"
 
-#: src/config/options.inc:1130
+#: src/config/options.inc:1131
 msgid "Searched string highlight colors."
 msgstr "Kolory pod¶wietlenia szukanych ³añcuchów."
 
@@ -3629,19 +3639,19 @@ msgstr "Kolory pod¶wietlenia szukanych ³añcuchów."
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
 #. Keep options in alphabetical order.
-#: src/config/options.inc:1139
+#: src/config/options.inc:1140
 msgid "Dialog settings"
 msgstr "Ustawienia okien dialogowych"
 
-#: src/config/options.inc:1141
+#: src/config/options.inc:1142
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr "Ustawienia dotycz±ce wygl±du i zachowania okien dialogowych."
 
-#: src/config/options.inc:1143
+#: src/config/options.inc:1144
 msgid "Minimal height of listbox widget"
 msgstr "Minimalna wysoko¶æ listy wyboru"
 
-#: src/config/options.inc:1145
+#: src/config/options.inc:1146
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
@@ -3649,11 +3659,11 @@ msgstr ""
 "Minimalna wysoko¶æ listy wyboru (u¿ywanej np. przy zak³adkach\n"
 "czy globalnej historii)."
 
-#: src/config/options.inc:1148
+#: src/config/options.inc:1149
 msgid "Drop shadows"
 msgstr "Rzucanie cienia"
 
-#: src/config/options.inc:1150
+#: src/config/options.inc:1151
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
@@ -3664,11 +3674,11 @@ msgstr ""
 "Mo¿esz te¿ wyeliminowaæ szerokie obrze¿a przez dostosowanie pliku\n"
 "setup.h."
 
-#: src/config/options.inc:1154
+#: src/config/options.inc:1155
 msgid "Underline hotkeys"
 msgstr "Podkre¶lanie klawiszy skrótu"
 
-#: src/config/options.inc:1156
+#: src/config/options.inc:1157
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
@@ -3677,11 +3687,11 @@ msgstr ""
 "Wymaga w³±czenia podkre¶lania dla terminala."
 
 #
-#: src/config/options.inc:1160
+#: src/config/options.inc:1161
 msgid "Timer options"
 msgstr "Ustawienia stopera"
 
-#: src/config/options.inc:1162
+#: src/config/options.inc:1163
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
@@ -3689,7 +3699,7 @@ msgstr ""
 "Odmierzane akcje po pewnym okresie bezczynno¶ci u¿ytkownika.\n"
 "Komu¶ mo¿e siê to przyda, chocia¿ mo¿esz w to nie wierzyæ."
 
-#: src/config/options.inc:1168
+#: src/config/options.inc:1169
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3701,7 +3711,7 @@ msgstr ""
 "1 - odlicza, ale nie pokazuje stopera\n"
 "2 - odlicza i pokazuje stoper w pobli¿u LEDów"
 
-#: src/config/options.inc:1175
+#: src/config/options.inc:1176
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -3714,30 +3724,30 @@ msgstr ""
 "2 - odlicza i pokazuje stoper w pobli¿u LEDów (WY£¡CZONE)"
 
 #
-#: src/config/options.inc:1181
+#: src/config/options.inc:1182
 msgid "Duration"
 msgstr "Czas trwania"
 
-#: src/config/options.inc:1183
+#: src/config/options.inc:1184
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr ""
 "Limit czasu bezczynno¶ci. Jeden dzieñ powinien wystarczyæ ka¿demu (TM)."
 
-#: src/config/options.inc:1187
+#: src/config/options.inc:1188
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
 "Akcja powi±zana z klawiatur±, która ma byæ wyzwolona gdy stoper\n"
 "osi±gnie zero."
 
-#: src/config/options.inc:1189
+#: src/config/options.inc:1190
 msgid "Clock"
 msgstr "Zegar"
 
-#: src/config/options.inc:1190
+#: src/config/options.inc:1191
 msgid "Digital clock."
 msgstr "Cyfrowy zegar."
 
-#: src/config/options.inc:1194
+#: src/config/options.inc:1195
 msgid ""
 "Whether to enable displaying of digital clock. Note that,\n"
 "timer and LEDs should be enabled to make effect."
@@ -3746,31 +3756,31 @@ msgstr ""
 "stoper i wska¼niki LED powinny byæ w³±czone by zegar wy¶wietla³\n"
 "poprawnie czas."
 
-#: src/config/options.inc:1197
+#: src/config/options.inc:1198
 msgid "Format"
 msgstr "Format"
 
-#: src/config/options.inc:1199
+#: src/config/options.inc:1200
 msgid "Format string for digital clock. See strftime(3) man page for details."
 msgstr ""
 "£añcuch formatuj±cy dla cyfrowego zegara. Zobacz stronê podrêcznika strftime"
 "(3),\n"
 "¿eby dowiedzieæ siê szczegó³ów."
 
-#: src/config/options.inc:1201
+#: src/config/options.inc:1202
 msgid "Window tabs"
 msgstr "Karty"
 
-#: src/config/options.inc:1203
+#: src/config/options.inc:1204
 msgid "Window tabs settings."
 msgstr "Ustawienia kart."
 
 #
-#: src/config/options.inc:1205
+#: src/config/options.inc:1206
 msgid "Display tabs bar"
 msgstr "Wy¶wietl pasek kart"
 
-#: src/config/options.inc:1207
+#: src/config/options.inc:1208
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never.\n"
@@ -3782,29 +3792,29 @@ msgstr ""
 "1 - tylko gdy wiêcej ni¿ jeden tab.\n"
 "2 - zawsze."
 
-#: src/config/options.inc:1212
+#: src/config/options.inc:1213
 msgid "Wrap-around tabs cycling"
 msgstr "Cykliczno¶æ kart"
 
-#: src/config/options.inc:1214
+#: src/config/options.inc:1215
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr "Przeskakiwanie z ostatniej karty do pierwszej i na odwrót."
 
-#: src/config/options.inc:1217
+#: src/config/options.inc:1218
 msgid "Confirm tab closing"
 msgstr "Potwierdzenie zamkniêcia karty"
 
-#: src/config/options.inc:1219
+#: src/config/options.inc:1220
 msgid "When closing a tab show confirmation dialog."
 msgstr "Przy zamykaniu karty pokazuj okienko dialogowe potwierdzania."
 
-#: src/config/options.inc:1223 src/config/opttypes.c:366
+#: src/config/options.inc:1224 src/config/opttypes.c:366
 msgid "Language"
 msgstr "Jêzyk"
 
-#: src/config/options.inc:1225
+#: src/config/options.inc:1226
 msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
@@ -3813,37 +3823,37 @@ msgstr ""
 "w sposób dynamiczny."
 
 #
-#: src/config/options.inc:1228
+#: src/config/options.inc:1229
 msgid "Display status bar"
 msgstr "Wy¶wietlanie paska statusu"
 
-#: src/config/options.inc:1230
+#: src/config/options.inc:1231
 msgid "Show status bar on the screen."
 msgstr "Pokazuje pasek statusu na ekranie"
 
 #
-#: src/config/options.inc:1232
+#: src/config/options.inc:1233
 msgid "Display title bar"
 msgstr "Wy¶wietlanie paska tytu³owego"
 
-#: src/config/options.inc:1234
+#: src/config/options.inc:1235
 msgid "Show title bar on the screen."
 msgstr "Pokazuje pasek tytu³owy na ekranie."
 
-#: src/config/options.inc:1236
+#: src/config/options.inc:1237
 msgid "Display goto dialog on startup"
 msgstr "Wy¶wietlanie okienka \"goto\" przy starcie"
 
-#: src/config/options.inc:1238
+#: src/config/options.inc:1239
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
 "Gdy nie ma ustawionej strony domowej wy¶wietlaj okienko wpisywania adresu."
 
-#: src/config/options.inc:1240
+#: src/config/options.inc:1241
 msgid "Show a message box when file is saved sucessfully"
 msgstr "Pokazuj okienko dialogowe, gdy plik zostanie pomy¶lnie zapisany"
 
-#: src/config/options.inc:1242
+#: src/config/options.inc:1243
 msgid ""
 "When you pressed a [ Save ] button in some manager, this option\n"
 "will make sure that a box confirming success of the operation will\n"
@@ -3852,19 +3862,19 @@ msgstr ""
 "Gdy wci¶niesz przycisk [ Zapisz ] w jakim¶ menad¿erze, te ustawienie\n"
 "zapewni, ¿e pojawi siê okienko potwierdzaj±ce pomy¶lne wykonanie operacji."
 
-#: src/config/options.inc:1247
+#: src/config/options.inc:1248
 msgid "Sessions"
 msgstr "Sesje"
 
-#: src/config/options.inc:1249
+#: src/config/options.inc:1250
 msgid "Sessions settings."
 msgstr "Ustawienia sesji."
 
-#: src/config/options.inc:1251
+#: src/config/options.inc:1252
 msgid "Auto save session"
 msgstr "Automatyczne zapisywanie sesji"
 
-#: src/config/options.inc:1253
+#: src/config/options.inc:1254
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
@@ -3872,11 +3882,11 @@ msgstr ""
 "Automatycznie zapisuj sesjê przy koñczeniu dzia³ania.\n"
 "Wymagana jest obs³uga zak³adek."
 
-#: src/config/options.inc:1256
+#: src/config/options.inc:1257
 msgid "Auto restore session"
 msgstr "Automatyczne odtwarzanie sesji"
 
-#: src/config/options.inc:1258
+#: src/config/options.inc:1259
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
@@ -3884,11 +3894,11 @@ msgstr ""
 "Automatycznie odtwarzaj sesjê na starcie.\n"
 "Wymagana jest obs³uga zak³adek."
 
-#: src/config/options.inc:1261
+#: src/config/options.inc:1262
 msgid "Auto save and restore session folder name"
 msgstr "Nazwa foldera do automatycznego zapisywania i odtwarzania sesji"
 
-#: src/config/options.inc:1263
+#: src/config/options.inc:1264
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
@@ -3897,11 +3907,11 @@ msgstr ""
 "i odtwarzania sesji. Ma sens jedynie wtedy, gdy wkompilowana jest obs³uga\n"
 "zak³adek."
 
-#: src/config/options.inc:1266
+#: src/config/options.inc:1267
 msgid "Homepage URI"
 msgstr "URI strony domowej"
 
-#: src/config/options.inc:1268
+#: src/config/options.inc:1269
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -3914,11 +3924,11 @@ msgstr ""
 "u¿yta jako strona domowa."
 
 #
-#: src/config/options.inc:1274
+#: src/config/options.inc:1275
 msgid "Set window title"
 msgstr "Ustalenie tytu³u okna"
 
-#: src/config/options.inc:1276
+#: src/config/options.inc:1277
 msgid ""
 "Set the window title when running in a windowing environment\n"
 "in an xterm-like terminal. This way the document's title is\n"
@@ -3928,11 +3938,11 @@ msgstr ""
 "w terminalu jak xterm. W ten sposób tytu³ dokumentu bêdzie widoczny\n"
 "na pasku tytu³owym okna."
 
-#: src/config/options.inc:1282
+#: src/config/options.inc:1283
 msgid "Use secure file saving"
 msgstr "U¿ywanie bezpiecznego zapisu plików"
 
-#: src/config/options.inc:1284
+#: src/config/options.inc:1285
 msgid ""
 "First write data to unique temporary file, then rename this file\n"
 "upon successfully finishing this. Note that this relates only to\n"
@@ -4619,67 +4629,67 @@ msgstr "Przejd¼ do URL-a"
 msgid "Save to file"
 msgstr "Zapisz do pliku"
 
-#: src/dialogs/options.c:143
+#: src/dialogs/options.c:144
 msgid "Terminal options"
 msgstr "Opcje terminala"
 
-#: src/dialogs/options.c:148
+#: src/dialogs/options.c:149
 msgid "Frame handling:"
 msgstr "Rysowanie ramek:"
 
-#: src/dialogs/options.c:149
+#: src/dialogs/options.c:150
 msgid "No frames"
 msgstr "Brak ramek"
 
-#: src/dialogs/options.c:150
+#: src/dialogs/options.c:151
 msgid "VT 100 frames"
 msgstr "Ramki VT100"
 
-#: src/dialogs/options.c:151
+#: src/dialogs/options.c:152
 msgid "Linux or OS/2 frames"
 msgstr "Ramki typu Linux lub OS/2"
 
-#: src/dialogs/options.c:152
+#: src/dialogs/options.c:153
 msgid "FreeBSD frames"
 msgstr "Ramki FreeBSD"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:154
 msgid "KOI8-R frames"
 msgstr "Ramki KOI8-R"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:156
 msgid "Color mode:"
 msgstr "Tryb kolorowy:"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:157
 msgid "No colors (mono)"
 msgstr "Brak kolorów (mono)"
 
-#: src/dialogs/options.c:157
+#: src/dialogs/options.c:158
 msgid "16 colors"
 msgstr "16 kolorów"
 
-#: src/dialogs/options.c:159
+#: src/dialogs/options.c:160
 msgid "256 colors"
 msgstr "256 kolorów"
 
-#: src/dialogs/options.c:162
+#: src/dialogs/options.c:163
 msgid "Use ^[[11m"
 msgstr "U¿ywaj ^[[11m"
 
-#: src/dialogs/options.c:164
+#: src/dialogs/options.c:165
 msgid "Block the cursor"
 msgstr "Kursor blokowy"
 
-#: src/dialogs/options.c:165
+#: src/dialogs/options.c:166
 msgid "Transparency"
 msgstr "Przezroczysto¶æ"
 
-#: src/dialogs/options.c:167
+#: src/dialogs/options.c:168
 msgid "UTF-8 I/O"
 msgstr "I/O w UTF-8"
 
-#: src/dialogs/options.c:236
+#: src/dialogs/options.c:237
 msgid "Resize terminal"
 msgstr "Zmieñ rozmiar terminala"
 
@@ -5935,7 +5945,7 @@ msgid "Enter expression"
 msgstr "Wprowad¼ wyra¿enie"
 
 #. name:
-#: src/scripting/scripting.c:34
+#: src/scripting/scripting.c:38
 msgid "Scripting"
 msgstr "Skryptowanie"
 
@@ -6057,71 +6067,71 @@ msgstr "Wyst±pi³ b³±d podczas wysy³ania formularza"
 msgid "Could not get file %s: %s"
 msgstr "Nie mo¿na pobraæ pliku %s: %s"
 
-#: src/viewer/text/link.c:828
+#: src/viewer/text/link.c:833
 msgid "Display ~usemap"
 msgstr "Poka¿ ~mapê obrazków"
 
-#: src/viewer/text/link.c:833
+#: src/viewer/text/link.c:838
 msgid "~Follow link"
 msgstr "Wybierz od~no¶nik"
 
-#: src/viewer/text/link.c:835
+#: src/viewer/text/link.c:840
 msgid "Follow link and r~eload"
 msgstr "Wybierz odno¶nik i p~rze³aduj"
 
-#: src/viewer/text/link.c:839
+#: src/viewer/text/link.c:844
 msgid "Open in new ~window"
 msgstr "~Otwórz w nowym oknie"
 
-#: src/viewer/text/link.c:845
+#: src/viewer/text/link.c:850
 msgid "Open in new ~tab"
 msgstr "Otwórz w nowej ~karcie"
 
-#: src/viewer/text/link.c:847
+#: src/viewer/text/link.c:852
 msgid "Open in new tab in ~background"
 msgstr "Otwórz w nowej k~arcie w tle"
 
-#: src/viewer/text/link.c:852
+#: src/viewer/text/link.c:857
 msgid "~Download link"
 msgstr "~Pobierz"
 
-#: src/viewer/text/link.c:855
+#: src/viewer/text/link.c:860
 msgid "~Add link to bookmarks"
 msgstr "~Dodaj zak³adkê"
 
-#: src/viewer/text/link.c:865 src/viewer/text/link.c:886
+#: src/viewer/text/link.c:870 src/viewer/text/link.c:891
 msgid "~Reset form"
 msgstr "Wy~czy¶æ formularz"
 
-#: src/viewer/text/link.c:870
+#: src/viewer/text/link.c:875
 msgid "Open in ~external editor"
 msgstr "Otwórz w zewnêtrznym ~edytorze"
 
-#: src/viewer/text/link.c:874
+#: src/viewer/text/link.c:879
 msgid "~Submit form"
 msgstr "~Prze¶lij formularz"
 
-#: src/viewer/text/link.c:875
+#: src/viewer/text/link.c:880
 msgid "Submit form and rel~oad"
 msgstr "Prze¶lij f~ormularz i prze³aduj"
 
-#: src/viewer/text/link.c:878
+#: src/viewer/text/link.c:883
 msgid "Submit form and open in new ~window"
 msgstr "Prze¶lij ~formularz i otwórz w nowym oknie"
 
-#: src/viewer/text/link.c:884
+#: src/viewer/text/link.c:889
 msgid "Submit form and ~download"
 msgstr "Prze¶lij formu~larz i ¶ci±gnij"
 
-#: src/viewer/text/link.c:891
+#: src/viewer/text/link.c:896
 msgid "V~iew image"
 msgstr "Poka¿ o~brazek"
 
-#: src/viewer/text/link.c:893
+#: src/viewer/text/link.c:898
 msgid "Download ima~ge"
 msgstr "Pobierz ~obrazek"
 
-#: src/viewer/text/link.c:898
+#: src/viewer/text/link.c:903
 msgid "No link selected"
 msgstr "Nie wybrano ¿adnego odno¶nika"
 
@@ -6247,11 +6257,11 @@ msgstr "Nie mo¿esz uruchomiæ zewnêtrznego edytora w trybie anonimowym."
 msgid "You can do this only on the master terminal"
 msgstr "Mo¿esz zrobiæ to jedynie na g³ównym terminalu"
 
-#: src/viewer/text/view.c:706
+#: src/viewer/text/view.c:709
 msgid "Go to link"
 msgstr "Przejd¼ do odno¶nika"
 
-#: src/viewer/text/view.c:706
+#: src/viewer/text/view.c:709
 msgid "Enter link number"
 msgstr "Wprowad¼ numer odno¶nika"
 

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.27 2003/10/25 22:11:08 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.28 2003/10/25 22:21:52 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -57,7 +57,7 @@ static struct option_info mimetypes_options[] = {
 		N_("Enable mime.types support.")),
 
 	INIT_OPT_STRING("mime.mimetypes", N_("Path"),
-		"path", 0, "",
+		"path", 0, DEFAULT_MIMETYPES_PATH,
 		N_("Mimetypes search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use built-in default instead.")),
 
@@ -191,8 +191,7 @@ init_mimetypes_map(void)
 
 	/* Determine the path  */
 	path = get_mimetypes_path();
-	if (!path || !*path)
-		path = DEFAULT_MIMETYPES_PATH;
+	if (!path || !*path) return mimetypes_map;
 
 	while (*path) {
 		unsigned char *filename = get_next_path_filename(&path, ':');

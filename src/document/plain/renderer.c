@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.126 2004/08/17 06:59:31 miciah Exp $ */
+/* $Id: renderer.c,v 1.127 2004/08/17 07:09:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,9 +164,11 @@ get_uri_length(unsigned char *line, int length)
 }
 
 static int
-print_document_link(struct document *document, int lineno, unsigned char *line,
-		    int line_pos, int width, int expanded)
+print_document_link(struct plain_renderer *renderer, int lineno,
+		    unsigned char *line, int line_pos, int width,
+		    int expanded)
 {
+	struct document *document = renderer->document;
 	unsigned char *start = &line[line_pos];
 	int len = get_uri_length(start, width - line_pos);
 	int link_end = line_pos + len;
@@ -317,7 +319,7 @@ add_document_line(struct plain_renderer *renderer,
 					int backup = !!line_pos;
 
 					last_link_end =
-						print_document_link(document,
+						print_document_link(renderer,
 								lineno, line,
 								line_pos
 								 - backup,

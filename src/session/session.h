@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.147 2004/06/11 14:12:48 jonas Exp $ */
+/* $Id: session.h,v 1.148 2004/06/12 11:24:53 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -191,7 +191,10 @@ print_error_dialog(struct session *ses, enum connection_state state,
 void process_file_requests(struct session *);
 
 struct string *encode_session_info(struct string *info, int id, struct list_head *url_list);
-struct session *decode_session_info(struct terminal *term, int len, const int *data);
+
+/* Returns zero if the info was remote sessions or if it failed to create any
+ * sessions. */
+int decode_session_info(struct terminal *term, int len, const int *data);
 
 struct session *init_session(struct session *ses, struct terminal *term,
 	     struct uri *uri, int in_background);

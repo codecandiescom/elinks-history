@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.490 2004/06/12 11:19:29 jonas Exp $ */
+/* $Id: session.c,v 1.491 2004/06/12 11:24:53 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -771,7 +771,7 @@ encode_session_info(struct string *info, int cp, struct list_head *url_list)
 	return NULL;
 }
 
-struct session *
+int
 decode_session_info(struct terminal *term, int len, const int *data)
 {
 	struct session *info = NULL;
@@ -781,7 +781,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	unsigned char *str;
 	int magic;
 
-	if (len < 2 * sizeof(int)) return NULL;
+	if (len < 2 * sizeof(int)) return 0;
 
 	/* This is the only place where the session id comes into game - we're
 	 * comparing it to possibly supplied -base-session here, and clone the
@@ -801,7 +801,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 *	3: NUL terminated URIs <unsigned char>+
 		 */
 		if (len < 3 * sizeof(int))
-			return NULL;
+			return 0;
 
 		remote = *(data++);
 		len -= 3 * sizeof(int);
@@ -811,7 +811,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		if (!remote) break;
 
 		base_session = get_master_session();
-		if (!base_session) return NULL;
+		if (!base_session) return 0;
 
 		break;
 
@@ -838,12 +838,12 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 	if (len <= 0) {
 		if (!remote)
-			return init_session(base_session, term, NULL, 0);
+			return !!init_session(base_session, term, NULL, 0);
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
 		init_remote_session(base_session, remote, NULL);
-		return NULL;
+		return 0;
 	}
 
 	current_uri = base_session && have_location(base_session)
@@ -871,7 +871,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 			} else if (!info) {
 				info = init_session(base_session, term, uri, 0);
-				if (!info) return NULL;
+				if (!info) return 0;
 
 			} else {
 				init_session(base_session, term, uri, 1);
@@ -883,7 +883,9 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		str += urilength + 1;
 	}
 
-	return info;
+	/* If we only initialized remote sessions or didn't manage to add any
+	 * new tabs return failure code */
+	return remote ? 0 : !list_empty(term->windows);
 }
 
 

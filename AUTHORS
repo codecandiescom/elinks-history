@@ -141,6 +141,13 @@ Karel Kulhavy <clock@atrey.karlin.mff.cuni.cz>
 Karvinen Ilkka <ik@iki.fi>
 	Finnish translation
 
+Laurent Monin <zas@norz.org>
+	Updated French translation
+	Bookmarks hacking
+	Misc minor improvements
+	Big amount of bugfixes and tidyups
+	Referred as 'Zas' or 'zas' in the code
+
 Lukasz Dobrek <dobrek@student.ifpan.edu.pl>
 	$CONFIG_DIR for config directory
 
@@ -275,11 +282,4 @@ Wojtek Bojdo/l <wojboj@lp.net.pl>
 Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Updated Russian localization
 
-<zas@norz.org>
-	Updated French translation
-	Bookmarks hacking
-	Misc minor improvements
-	Big amount of bugfixes and tidyups
-	Referred as 'Zas' or 'zas' in the code
-
-$Id: AUTHORS,v 1.44 2002/04/01 15:52:40 pasky Exp $
+$Id: AUTHORS,v 1.45 2002/04/02 13:21:36 pasky Exp $

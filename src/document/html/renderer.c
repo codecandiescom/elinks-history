@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.93 2003/06/05 14:38:17 zas Exp $ */
+/* $Id: renderer.c,v 1.94 2003/06/07 12:58:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -560,7 +560,7 @@ align_line(struct part *part, int y, int last)
 	len = LEN(y);
 
 	if (!len || par_format.align == AL_LEFT ||
-		    par_format.align == AL_NO)
+		    par_format.align == AL_NONE)
 		return;
 
 	if (par_format.align == AL_BLOCK) {
@@ -715,7 +715,7 @@ put_chars(struct part *part, unsigned char *c, int l)
 	struct point *pt;
 	int tmp; /* used for temporary results. */
 
-	while (par_format.align != AL_NO && part->cx == -1 && l && *c == ' ') {
+	while (par_format.align != AL_NONE && part->cx == -1 && l && *c == ' ') {
 		c++;
 		l--;
 	}
@@ -738,7 +738,7 @@ no_l:
 	fg = fg_cache;
 
 end_format_change:
-	if (part->cx == par_format.leftmargin && *c == ' ' && par_format.align != AL_NO) {
+	if (part->cx == par_format.leftmargin && *c == ' ' && par_format.align != AL_NONE) {
 		c++;
 		l--;
 	}
@@ -752,7 +752,7 @@ end_format_change:
 	part->cx += l;
 	nobreak = 0;
 
-	if (par_format.align != AL_NO) {
+	if (par_format.align != AL_NONE) {
 		while (part->cx > overlap(par_format) && part->cx > par_format.leftmargin) {
 			int x;
 
@@ -773,7 +773,7 @@ end_format_change:
 	}
 
 	part->xa += l;
-	tmp = part->xa - (c[l - 1] == ' ' && par_format.align != AL_NO)
+	tmp = part->xa - (c[l - 1] == ' ' && par_format.align != AL_NONE)
 	      + par_format.leftmargin + par_format.rightmargin;
 
 	if (tmp > part->xmax) part->xmax = tmp;
@@ -1423,7 +1423,7 @@ push_base_format(unsigned char *url, struct document_options *opt)
 	format.target_base = opt->framename ? stracpy(opt->framename) : NULL;
 
 	if (opt->plain) {
-		par_format.align = AL_NO;
+		par_format.align = AL_NONE;
 		par_format.leftmargin = 0;
 		par_format.rightmargin = 0;
 	} else {

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.33 2003/05/13 15:48:04 zas Exp $ */
+/* $Id: tables.c,v 1.34 2003/06/07 12:58:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1672,7 +1672,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (cellsp > 2) cellsp = 2;
 
 	align = par_format.align;
-	if (align == AL_NO || align == AL_BLOCK) align = AL_LEFT;
+	if (align == AL_NONE || align == AL_BLOCK) align = AL_LEFT;
 
 	al = get_attr_val(attr, "align");
 	if (al) {

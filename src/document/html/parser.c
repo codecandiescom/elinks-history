@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.97 2003/06/05 16:40:31 zas Exp $ */
+/* $Id: parser.c,v 1.98 2003/06/07 12:58:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -460,7 +460,7 @@ put_chrs(unsigned char *start, int len,
 		was_li = 0;
 		line_breax = 0;
 	}
-	if (par_format.align == AL_NO) putsp = 0;
+	if (par_format.align == AL_NONE) putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
 	if (putsp == -1) {
@@ -469,11 +469,11 @@ put_chrs(unsigned char *start, int len,
 	}
 	if (!len) {
 		putsp = -1;
-		if (par_format.align == AL_NO) putsp = 0;
+		if (par_format.align == AL_NONE) putsp = 0;
 		return;
 	}
 	if (start[len - 1] == ' ') putsp = -1;
-	if (par_format.align == AL_NO) putsp = 0;
+	if (par_format.align == AL_NONE) putsp = 0;
 	was_br = 0;
 	put_chars(f, start, len);
 	position += len;
@@ -1050,7 +1050,7 @@ html_h(int h, unsigned char *a)
 		case AL_BLOCK:
 			par_format.leftmargin = par_format.rightmargin = (h - 2) * 2;
 			break;
-		case AL_NO:
+		case AL_NONE:
 		case AL_MASK:
 		case AL_EXTD_TEXT:
 			/* Silence compiler warnings */
@@ -1091,7 +1091,7 @@ html_h6(unsigned char *a)
 static void
 html_pre(unsigned char *a)
 {
-	par_format.align = AL_NO;
+	par_format.align = AL_NONE;
 	par_format.leftmargin = par_format.leftmargin > 1;
 	par_format.rightmargin = 0;
 }
@@ -2661,7 +2661,7 @@ set_lt:
 		int inv;
 		int dotcounter = 0;
 
-		if (WHITECHAR(*html) && par_format.align != AL_NO) {
+		if (WHITECHAR(*html) && par_format.align != AL_NONE) {
 			unsigned char *h = html;
 
 			/*if (putsp == -1) {
@@ -2699,7 +2699,7 @@ put_sp:
 			/*putsp = -1;*/
 		}
 
-		if (par_format.align == AL_NO) {
+		if (par_format.align == AL_NONE) {
 			putsp = 0;
 			if (*html == ASCII_TAB) {
 				put_chrs(lt, html - lt, put_chars, f);
@@ -2760,7 +2760,7 @@ element:
 		inv = *name == '/'; name += inv; namelen -= inv;
 		if (!inv && putsp == 1 && !html_top.invisible) goto put_sp;
 		put_chrs(lt, html - lt, put_chars, f);
-		if (par_format.align != AL_NO) if (!inv && !putsp) {
+		if (par_format.align != AL_NONE) if (!inv && !putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
@@ -2802,7 +2802,7 @@ ng:;
 					mem_free(a);
 				}
 				if (!html_top.invisible) {
-					int ali = (par_format.align == AL_NO);
+					int ali = (par_format.align == AL_NONE);
 					struct par_attrib pa = par_format;
 
 					if (ei->func == html_table && d_opt->tables && table_level < HTML_MAX_TABLE_LEVEL) {

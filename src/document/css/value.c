@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.44 2004/01/22 22:18:57 pasky Exp $ */
+/* $Id: value.c,v 1.45 2004/01/28 00:00:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 		      union css_property_value *value,
 		      struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
 
@@ -91,7 +91,7 @@ css_parse_background_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 	int success = 0;
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
@@ -121,7 +121,7 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
@@ -151,7 +151,7 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 			    union css_property_value *value,
 			    struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 	unsigned char *nstring;
 	int weight;
 
@@ -202,7 +202,7 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_TEXT_ALIGN);
 
@@ -234,7 +234,7 @@ css_parse_text_decoration_value(struct css_property_info *propinfo,
 				union css_property_value *value,
 				struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
@@ -262,7 +262,7 @@ css_parse_value(struct css_property_info *propinfo,
 		union css_property_value *value,
 		struct css_scanner *scanner)
 {
-	struct css_token *token;
+	struct scanner_token *token;
 
 	assert(scanner && value && propinfo);
 	assert(propinfo->parser);

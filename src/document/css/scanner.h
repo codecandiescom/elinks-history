@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.56 2004/01/27 23:54:12 jonas Exp $ */
+/* $Id: scanner.h,v 1.57 2004/01/28 00:00:07 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -93,15 +93,15 @@ enum css_token_type {
 	 (token_type) == '{' ? (1 <<  9) : \
 	 (token_type) == ';' ? (1 <<  8) : 0)
 
-/* The {struct css_token} describes one CSS scanner state. There are two kinds
+/* The {struct scanner_token} describes one CSS scanner state. There are two kinds
  * of tokens: char and non-char tokens. Char tokens contains only one char and
  * simply have their char value as type. They are tokens having special control
  * meaning in the CSS code, like ':', ';', '{', '}' and '*'. Non char tokens
  * has one or more chars and contain stuff like number or indentifier strings.
  * */
-struct css_token {
+struct scanner_token {
 	/* The type the token */
-	enum css_token_type type;
+	int type;
 
 	/* Some precedence value */
 	int precedence;
@@ -148,7 +148,7 @@ struct css_scanner {
 	/* The current token and number of scanned tokens in the table.
 	 * If the number of scanned tokens is less than CSS_SCANNER_TOKENS
 	 * it is because there are no more tokens in the string. */
-	struct css_token *current;
+	struct scanner_token *current;
 	int tokens;
 
 #ifdef SCANNER_DEBUG
@@ -161,7 +161,7 @@ struct css_scanner {
 	 * order to optimize the scanning a bit and make it possible to look
 	 * ahead at the next token. You should always use the accessors
 	 * (defined below) for getting tokens from the scanner. */
-	struct css_token table[SCANNER_TOKENS];
+	struct scanner_token table[SCANNER_TOKENS];
 };
 
 
@@ -174,7 +174,7 @@ void init_css_scanner(struct css_scanner *scanner, unsigned char *string);
 /* Fills the scanner with tokens. Already scanned tokens which have not been
  * requested remain and are moved to the start of the scanners token table. */
 /* Returns the current token or NULL if there are none. */
-struct css_token *scan_css_tokens(struct css_scanner *scanner);
+struct scanner_token *scan_css_tokens(struct css_scanner *scanner);
 
 /* Scanner table accessors and mutators */
 
@@ -187,14 +187,14 @@ struct css_token *scan_css_tokens(struct css_scanner *scanner);
 /* Access current and next token. Getting the next token might cause
  * a rescan so any token pointers that has been stored in a local variable
  * might not be valid after the call. */
-static inline struct css_token *
+static inline struct scanner_token *
 get_css_token(struct css_scanner *scanner)
 {
 	return css_scanner_has_tokens(scanner) ? (scanner)->current : NULL;
 }
 
 /* Do a scanning if we do not have also have access to next token. */
-static inline struct css_token *
+static inline struct scanner_token *
 get_next_css_token(struct css_scanner *scanner)
 {
 	return (css_scanner_has_tokens(scanner)
@@ -204,7 +204,7 @@ get_next_css_token(struct css_scanner *scanner)
 
 /* Removes tokens from the scanner until it meets a token of the given type.
  * This token will then also be skipped. */
-struct css_token *
+struct scanner_token *
 skip_scanner_tokens(struct css_scanner *scanner, int skipto, int precedence);
 
 #define skip_css_tokens(scanner, type) \

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.71 2004/01/27 23:08:28 pasky Exp $ */
+/* $Id: parser.c,v 1.72 2004/01/28 00:00:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ css_parse_properties(struct list_head *props, struct css_scanner *scanner)
 	while (css_scanner_has_tokens(scanner)) {
 		struct css_property_info *property_info = NULL;
 		struct css_property *prop;
-		struct css_token *token = get_css_token(scanner);
+		struct scanner_token *token = get_css_token(scanner);
 		int i;
 
 		if (!token || token->type == '}') break;
@@ -116,7 +116,7 @@ ride_on:
 static void
 css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 {
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 
 	/* Skip skip skip that code */
 	switch (token->type) {
@@ -183,7 +183,7 @@ static struct list_head *
 css_parse_selector(struct css_stylesheet *css, struct css_scanner *scanner)
 {
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
-	struct css_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_css_token(scanner);
 	static struct list_head selectors;
 	struct selector_pkg *pkg;
 	struct css_selector *selector;
@@ -347,7 +347,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 	init_css_scanner(&scanner, string);
 
 	while (css_scanner_has_tokens(&scanner)) {
-		struct css_token *token = get_css_token(&scanner);
+		struct scanner_token *token = get_css_token(&scanner);
 
 		assert(token);
 

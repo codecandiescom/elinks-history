@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.139 2004/06/12 16:27:39 zas Exp $ */
+/* $Id: form.c,v 1.140 2004/06/12 16:29:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1230,10 +1230,12 @@ field_op(struct session *ses, struct document_view *doc_view,
 	if (!fs || !fs->value) return 0;
 
 	if (ev->ev == EV_KBD) {
-		x = field_op_do(ses->tab->term, doc_view, fc, fs, link, ev, rep);
+		struct terminal *term = ses->tab->term;
+
+		x = field_op_do(term, doc_view, fc, fs, link, ev, rep);
 
 		if (x) {
-			draw_form_entry(ses->tab->term, doc_view, link);
+			draw_form_entry(term, doc_view, link);
 			redraw_from_window(ses->tab);
 		}
 	}

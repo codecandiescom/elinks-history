@@ -1,5 +1,9 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.4 2004/06/28 22:49:56 pasky Exp $ */
+/* $Id: table.c,v 1.5 2004/06/28 22:52:50 pasky Exp $ */
+
+/* Note that this does *not* fit to the HTML parser infrastructure yet, it has
+ * some special custom calling conventions and is managed from
+ * document/html/tables.c. */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

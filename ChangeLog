@@ -1,3 +1,10 @@
+Fri Aug 22 21:43:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Unicode/gen-cp:
+
+	Fix `tr' usage so "VISCII 1.1" (spaces in aliases) are handled
+	correctly.  
+
 Thu Aug 21 14:55:27 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/: memory.h, string.c:

@@ -1,9 +1,10 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.152 2003/07/15 22:32:11 zas Exp $ */
+/* $Id: parser.c,v 1.153 2003/07/20 10:17:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
 #include <errno.h>
 #include <stdarg.h>
@@ -2425,99 +2426,381 @@ free_cd:
 	mem_free(d);
 }
 
+/* Link types
+
+Alternate
+	Designates substitute versions for the document in which the link
+	occurs. When used together with the lang attribute, it implies a
+	translated version of the document. When used together with the
+	media attribute, it implies a version designed for a different
+	medium (or media).
+
+Stylesheet
+	Refers to an external style sheet. See the section on external style
+	sheets for details. This is used together with the link type
+	"Alternate" for user-selectable alternate style sheets.
+
+Start
+	Refers to the first document in a collection of documents. This link
+	type tells search engines which document is considered by the author
+	to be the starting point of the collection.
+
+Next
+	Refers to the next document in a linear sequence of documents. User
+	agents may choose to preload the "next" document, to reduce the
+	perceived load time.
+
+Prev
+	Refers to the previous document in an ordered series of documents.
+	Some user agents also support the synonym "Previous".
+
+Contents
+	Refers to a document serving as a table of contents.
+	Some user agents also support the synonym ToC (from "Table of Contents").
+
+Index
+	Refers to a document providing an index for the current document.
+
+Glossary
+	Refers to a document providing a glossary of terms that pertain to the
+	current document.
+
+Copyright
+	Refers to a copyright statement for the current document.
+
+Chapter
+        Refers to a document serving as a chapter in a collection of documents.
+
+Section
+	Refers to a document serving as a section in a collection of documents.
+
+Subsection
+	Refers to a document serving as a subsection in a collection of
+	documents.
+
+Appendix
+	Refers to a document serving as an appendix in a collection of
+	documents.
+
+Help
+	Refers to a document offering help (more information, links to other
+	sources information, etc.)
+
+Bookmark
+	Refers to a bookmark. A bookmark is a link to a key entry point
+	within an extended document. The title attribute may be used, for
+	example, to label the bookmark. Note that several bookmarks may be
+	defined in each document.
+
+Some were added like top, ... --Zas
+*/
+enum hlink_type {
+	LT_UNKNOWN = 0,
+	LT_START,
+	LT_TOP,
+	LT_PARENT,
+	LT_NEXT,
+	LT_PREV,
+	LT_CONTENTS,
+	LT_INDEX,
+	LT_GLOSSARY,
+	LT_CHAPTER,
+	LT_SECTION,
+	LT_SUBSECTION,
+	LT_APPENDIX,
+	LT_HELP,
+	LT_SEARCH,
+	LT_BOOKMARK,
+	LT_COPYRIGHT,
+	LT_AUTHOR,
+	LT_ICON,
+	LT_ALTERNATE,
+	LT_ALTERNATE_LANG,
+	LT_ALTERNATE_MEDIA,
+	LT_ALTERNATE_STYLESHEET,
+	LT_STYLESHEET,
+
+};
+
+struct lt_default_name {
+	enum hlink_type type;
+	unsigned char *str;
+};
+
+/* TODO: i18n */
+static struct lt_default_name lt_names[] = {
+	{ LT_START, "start" },
+	{ LT_TOP, "top" },
+	{ LT_PARENT, "parent" },
+	{ LT_NEXT, "next" },
+	{ LT_PREV, "previous" },
+	{ LT_CONTENTS, "contents" },
+	{ LT_INDEX, "index" },
+	{ LT_GLOSSARY, "glossary" },
+	{ LT_CHAPTER, "chapter" },
+	{ LT_SECTION, "section" },
+	{ LT_SUBSECTION, "subsection" },
+	{ LT_APPENDIX, "appendix" },
+	{ LT_HELP, "help" },
+	{ LT_SEARCH, "search" },
+	{ LT_BOOKMARK, "bookmark" },
+	{ LT_ALTERNATE_LANG, "language" },
+	{ LT_ALTERNATE_MEDIA, "media" },
+	{ LT_ALTERNATE_STYLESHEET, "stylesheet-alt" },
+	{ LT_STYLESHEET, "stylesheet" },
+	{ LT_ALTERNATE, "alternate" },
+	{ LT_COPYRIGHT, "copyright" },
+	{ LT_AUTHOR, "author" },
+	{ LT_ICON, "icon" },
+	{ LT_UNKNOWN, NULL }
+};
+
+enum hlink_direction {
+	LD_UNKNOWN = 0,
+	LD_REV,
+	LD_REL,
+};
+
+struct hlink {
+	enum hlink_type type;
+	enum hlink_direction direction;
+	unsigned char *content_type;
+	unsigned char *media;
+	unsigned char *href;
+	unsigned char *hreflang;
+	unsigned char *title;
+	unsigned char *lang;
+	unsigned char *name;
+/* Not used implemented.
+	unsigned char *charset;
+	unsigned char *target;
+	unsigned char *id;
+	unsigned char *class;
+	unsigned char *dir;
+*/
+};
+
+static unsigned char *
+get_lt_default_name(enum hlink_type type)
+{
+	struct lt_default_name *entry = lt_names;
+
+	while (entry && entry->str) {
+		if (entry->type == type) return entry->str;
+		entry++;
+	}
+
+	return "unknown";
+}
+
+static void
+html_link_clear(struct hlink *link)
+{
+	assert(link);
+
+	if (link->content_type) mem_free(link->content_type);
+	if (link->media) mem_free(link->media);
+	if (link->href) mem_free(link->href);
+	if (link->hreflang) mem_free(link->hreflang);
+	if (link->title) mem_free(link->title);
+	if (link->lang) mem_free(link->lang);
+	if (link->name) mem_free(link->name);
+
+	memset(link, 0, sizeof(struct hlink));
+}
+
+static int
+html_link_parse(unsigned char *a, struct hlink *link)
+{
+	assert(a && link);
+	memset(link, 0, sizeof(struct hlink));
+
+	link->href = get_url_val(a, "href");
+	if (!link->href) return 0;
+
+	link->lang = get_attr_val(a, "lang");
+	link->hreflang = get_attr_val(a, "hreflang");
+	link->title = get_attr_val(a, "title");
+	link->content_type = get_attr_val(a, "type");
+	link->media = get_attr_val(a, "media");
+
+	link->name = get_attr_val(a, "rel");
+	if (link->name) link->direction = LD_REL;
+	else {
+		link->name = get_attr_val(a, "rev");
+		if (link->name) link->direction = LD_REV;
+	}
+
+	if (!link->name) return 1;
+
+	/* TODO: fastfind */
+	if (!strcasecmp(link->name, "start"))
+		link->type = LT_START;
+	else if (!strcasecmp(link->name, "top"))
+		link->type = LT_TOP;
+	else if (!strcasecmp(link->name, "parent"))
+		link->type = LT_PARENT;
+	else if (!strcasecmp(link->name, "next"))
+		link->type = LT_NEXT;
+	else if (!strcasecmp(link->name, "prev") || !strcasecmp(link->name, "previous"))
+		link->type = LT_PREV;
+	else if (!strcasecmp(link->name, "contents") || !strcasecmp(link->name, "toc"))
+		link->type = LT_CONTENTS;
+	else if (!strcasecmp(link->name, "index"))
+		link->type = LT_INDEX;
+	else if (!strcasecmp(link->name, "glossary"))
+		link->type = LT_GLOSSARY;
+	else if (!strcasecmp(link->name, "chapter"))
+		link->type = LT_CHAPTER;
+	else if (!strcasecmp(link->name, "section"))
+		link->type = LT_SECTION;
+	else if (!strcasecmp(link->name, "subsection"))
+		link->type = LT_SUBSECTION;
+	else if (!strcasecmp(link->name, "appendix"))
+		link->type = LT_APPENDIX;
+	else if (!strcasecmp(link->name, "help"))
+		link->type = LT_HELP;
+	else if (!strcasecmp(link->name, "search"))
+		link->type = LT_SEARCH;
+	else if (!strcasecmp(link->name, "bookmark"))
+		link->type = LT_BOOKMARK;
+	else if (!strcasecmp(link->name, "copyright"))
+		link->type = LT_COPYRIGHT;
+	else if (!strcasecmp(link->name, "author"))
+		link->type = LT_AUTHOR;
+	else if (strcasestr(link->name, "icon") ||
+		 (link->content_type && strcasestr(link->content_type, "icon")))
+		link->type = LT_ICON;
+	if (!strcasecmp(link->name, "stylesheet") ||
+		 (link->content_type && strcasestr(link->content_type, "css")))
+		link->type = LT_STYLESHEET;
+	else if (strcasestr(link->name, "alternate")) {
+		link->type = LT_ALTERNATE;
+		if (link->lang)
+			link->type = LT_ALTERNATE_LANG;
+		else if (strcasestr(link->name, "stylesheet") ||
+			 (link->content_type && strcasestr(link->content_type, "css")))
+			link->type = LT_ALTERNATE_STYLESHEET;
+		else if (link->media)
+			link->type = LT_ALTERNATE_MEDIA;
+	}
+
+	return 1;
+}
 
 static void
 html_link(unsigned char *a)
 {
+	struct hlink link;
+	unsigned char *title, *default_title;
+	unsigned char *text = init_str();
+	int textlen = 0;
+	int showit = 0;
+	int sep = 0;
 	int link_display = get_opt_int("document.html.link_display");
-	unsigned char *name = NULL;
-	unsigned char *type = NULL;
-	unsigned char *url;
+	/*FIXME: option of type int should be replaced by string... */
 
-	if (!link_display) return;
+	if (!link_display || !text) return;
 
-	url = get_url_val(a, "href");
-	if (!url) return;
+	if (!html_link_parse(a, &link)) return;
 
-	type = get_attr_val(a, "type");
-	if (type) {
-		/* Ignore links of type:
-		 * - text/css...
-		 * - image/x-icon...
-		 * */
-		if (!strncasecmp(type, "text/css", 8) ||
-		    !strncasecmp(type, "image/x-icon", 12))
-			if (link_display < 5) goto free_and_return;
+	switch (link.type) {
+		case LT_START:
+		case LT_TOP:
+		case LT_PARENT:
+		case LT_NEXT:
+		case LT_PREV:
+			if (link_display > 0) showit = 1;
+			break;
+		case LT_CONTENTS:
+		case LT_INDEX:
+		case LT_GLOSSARY:
+			if (link_display > 1) showit = 1;
+			break;
+		case LT_CHAPTER:
+		case LT_SECTION:
+		case LT_SUBSECTION:
+		case LT_APPENDIX:
+			if (link_display > 2) showit = 1;
+			break;
+		case LT_HELP:
+		case LT_SEARCH:
+		case LT_BOOKMARK:
+			if (link_display > 3) showit = 1;
+			break;
+		case LT_ALTERNATE_LANG:
+			if (link_display > 4) showit = 1;
+			break;
+		case LT_ALTERNATE_MEDIA:
+		case LT_ALTERNATE_STYLESHEET:
+		case LT_STYLESHEET:
+			if (link_display > 5) showit = 1;
+		case LT_ALTERNATE:
+		case LT_COPYRIGHT:
+		case LT_AUTHOR:
+			if (link_display > 6) showit = 1;
+			break;
+		case LT_ICON:
+			if (link_display > 7) showit = 1;
+			break;
+		case LT_UNKNOWN:
+			if (link_display > 8) showit = 1;
+			break;
+		default:
+			internal("unknown html link type");
 	}
 
-	name = get_attr_val(a, "rel");
-	if (!name) name = get_attr_val(a, "rev");
-	if (!name) name = stracpy(url);
+	if (!showit) goto free_and_return;
 
-	/* Ignore few annoying links.. */
-	if (name &&
-	    (link_display >= 5 ||
-	     (strcasecmp(name, "STYLESHEET") &&
-	      strcasecmp(name, "made") &&
-	      strcasecmp(name, "icon") &&
-	      strcasecmp(name, "SHORTCUT ICON")))) {
-		unsigned char *text;
-		int textlen = 0;
-		unsigned char *title;
-		unsigned char *hreflang;
+	default_title = get_lt_default_name(link.type);
+	if (link.title && strcasecmp(link.title, default_title))
+		title = link.title;
+	else
+		title = default_title;
 
-		text = init_str();
-		if (!text) goto free_and_return;
+	add_to_str(&text, &textlen, title);
 
-		html_focusable(a);
-
-		title = get_attr_val(a, "title");
-		if (title) {
-			add_to_str(&text, &textlen, title);
-			mem_free(title);
-		}
-
-		if (link_display == 1) goto only_title;
-
+	if (link.name && strcasecmp(link.name, title)) {
 		add_to_str(&text, &textlen, " (");
-		add_to_str(&text, &textlen, name);
-
-		if (link_display >= 3) {
-			hreflang = get_attr_val(a, "hreflang");
-			if (hreflang) {
-				add_to_str(&text, &textlen, ", ");
-				add_to_str(&text, &textlen, hreflang);
-				mem_free(hreflang);
-			}
-		}
-
-		if (link_display >= 4) {
-			if (type) {
-				add_to_str(&text, &textlen, ", ");
-				add_to_str(&text, &textlen, type);
-
-			}
-		}
-		add_chr_to_str(&text, &textlen, ')');
-
-only_title:
-		if (text) {
-			if (*text)
-				put_link_line("Link: ", text, url, format.target_base);
-			else
-				put_link_line("Link: ", name, url, format.target_base);
-			mem_free(text);
-
-		} else {
-			put_link_line("Link: ", name, url, format.target_base);
-		}
+		if (strcasecmp(link.name, default_title))
+			add_to_str(&text, &textlen, link.name);
+		else
+			add_to_str(&text, &textlen, default_title);
+		sep = 1;
 	}
+	if (link.lang) {
+		if (sep) add_to_str(&text, &textlen, ", ");
+		else add_to_str(&text, &textlen, " (");
+		add_to_str(&text, &textlen, link.lang), sep = 1;
+	}
+	if (link.hreflang &&
+	    (!link.lang || strcasecmp(link.hreflang, link.lang))) {
+		if (sep) add_to_str(&text, &textlen, ", ");
+		else add_to_str(&text, &textlen, " (");
+		add_to_str(&text, &textlen, link.hreflang), sep = 1;
+	}
+	if (link.media) {
+		if (sep) add_to_str(&text, &textlen, ", ");
+		else add_to_str(&text, &textlen, " (");
+		add_to_str(&text, &textlen, link.media), sep = 1;
+	}
+	if (link.content_type &&
+	    (link.type == LT_UNKNOWN || link.type == LT_ALTERNATE || link.type == LT_ALTERNATE_MEDIA)) {
+		if (sep) add_to_str(&text, &textlen, ", ");
+		else add_to_str(&text, &textlen, " (");
+		add_to_str(&text, &textlen, link.content_type), sep = 1;
+	}
+	if (sep) add_chr_to_str(&text, &textlen, ')');
+
+	/* TODO: contextual? bfu menu ! --Zas */
+	html_focusable(a);
+	put_link_line("Link: ", text, link.href, format.target_base);
 
 free_and_return:
-	if (type) mem_free(type);
-	if (name) mem_free(name);
-	mem_free(url);
+	mem_free(text);
+	html_link_clear(&link);
 }
+
 
 struct element_info {
 	unsigned char *name;

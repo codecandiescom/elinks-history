@@ -1,3 +1,26 @@
+Mon Mar 18 20:51:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c:
+	
+	Moving SSL to ssl/, attempt 2, part 3 and last (fixed the problem);
+	move completed another time ;)
+
+Mon Mar 18 20:28:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/connect.c, lowlevel/connect.h, lowlevel/sched.c,
+	ssl/Makefile.am:
+	
+	Moving SSL to ssl/, attempt 2, part 2 (only export more things from
+	lowlevel/connect.c)
+
+Mon Mar 18 20:12:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in, src/Makefile.am, src/main.c,
+	src/lowlevel/connect.c, src/protocol/http/https.c,
+	src/protocol/http/https.h, src/ssl/Makefile.am:
+	
+	Moving SSL to ssl/, attempt 2, part 1
+
 Mon Mar 18 15:14:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in, src/Makefile.am, src/main.c,

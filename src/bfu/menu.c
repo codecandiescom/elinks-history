@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.212 2004/04/18 00:41:01 jonas Exp $ */
+/* $Id: menu.c,v 1.213 2004/04/18 00:44:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -934,7 +934,6 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 {
 	struct window *win = menu->win;
 	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
-	int s = 0;
 
 	switch (action) {
 	case ACT_MENU_ENTER:
@@ -947,8 +946,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	case ACT_MENU_LEFT:
 	case ACT_MENU_RIGHT:
-		s = (action == ACT_MENU_LEFT ? -1 : 1);
-		menu->selected += s;
+		menu->selected += (action == ACT_MENU_LEFT ? -1 : 1);
 
 		/* Handle wrap around */
 		if (menu->selected < 0)
@@ -956,17 +954,13 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 		else if (menu->selected >= menu->size)
 			menu->selected = 0;
 
-		if (!fwd) break;
-
-		display_mainmenu(win->term, menu);
-		select_menu(win->term, menu);
-		return;
+		break;
 
 	default:
 		/* Fallback to see if any hotkey matches the pressed key */
 		if (ev->x > ' ' && ev->x < 256
 		    && check_hotkeys(menu, ev->x, win->term)) {
-			s = 2;
+			fwd = 1;
 			break;
 		}
 
@@ -976,7 +970,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	/* Redraw the menu */
 	display_mainmenu(win->term, menu);
-	if (s == 2) select_menu(win->term, menu);
+	if (fwd) select_menu(win->term, menu);
 }
 
 static void

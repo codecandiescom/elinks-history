@@ -1,3 +1,40 @@
+Sat Apr 26 09:47:44 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	BUGS file was updated.  
+
+Sat Apr 26 09:47:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	Lists debugging feature is now enabled when --enable-debug is used.  
+
+Sat Apr 26 09:41:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Cleanups and minor optimizations.  
+
+Sat Apr 26 09:01:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	Lists debugging was improved a bit. Some pointers are now set to
+	specific values after action.  
+
+Sat Apr 26 08:03:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Minor cleanup.  
+
+Sat Apr 26 07:57:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lua/core.c:
+
+	A list head structure initialization was fixed.  
+
 Thu Apr 24 08:52:10 2003  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/view.c:

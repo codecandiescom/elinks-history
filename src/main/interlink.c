@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.81 2004/07/18 12:40:23 pasky Exp $ */
+/* $Id: interlink.c,v 1.82 2004/07/18 15:38:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,7 +440,10 @@ again:
 	}
 
 	if (connect(s_info_connect.fd, s_info_connect.addr,
-		    s_info_connect.size) < 0) {
+		    s_info_connect.size) >= 0)
+			return s_info_connect.fd;
+
+	{
 		if (errno != ECONNREFUSED && errno != ENOENT)
 			ERROR(G_("connect() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
@@ -454,11 +457,8 @@ again:
 
 		close(s_info_connect.fd); s_info_connect.fd = -1;
 
-		goto free_and_error;
 	}
-
-	return s_info_connect.fd;
-
+	
 free_and_error:
 	mem_free_set(&s_info_connect.addr, NULL);
 	return -1;

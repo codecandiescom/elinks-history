@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.35 2003/08/23 04:44:59 jonas Exp $ */
+/* $Id: link.c,v 1.36 2003/08/23 04:46:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,9 +186,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 		scr->link_bg[i].y = y;
 
 		co = get_char(t, x, y);
-		scr->link_bg[i].c.data = co->data;
 		scr->link_bg[i].c.color = co->color;
-		scr->link_bg[i].c.attr = co->attr;
 
 		if (i == cursor_offset) {
 			int blockable;
@@ -234,9 +232,13 @@ clear_link(struct terminal *t, struct document_view *scr)
 			struct link_bg *bgchar = &link_bg[i];
 
 			if (bgchar->x != -1 && bgchar->y != -1) {
-				draw_line(t, bgchar->x, bgchar->y, 1, &bgchar->c);
+				struct screen_char *co;
+
+				co = get_char(t, bgchar->x, bgchar->y);
+				co->color = bgchar->c.color;
 			}
 		}
+
 		free_link(scr);
 	}
 }

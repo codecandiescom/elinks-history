@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.152 2005/01/03 00:29:54 miciah Exp $ */
+/* $Id: bookmarks.c,v 1.153 2005/01/03 00:31:27 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,6 +272,14 @@ add_bookmark_item_to_bookmarks(struct bookmark *bm, struct bookmark *root, int p
 			add_to_list(bookmarks, bm);
 	}
 	bookmarks_set_dirty();
+
+	/* Hash creation if needed. */
+	if (!bookmark_cache)
+		bookmark_cache = init_hash(8, &strhash);
+
+	/* Create a new entry. */
+	if (check_bookmark_cache(bm->url))
+		add_hash_item(bookmark_cache, bm->url, strlen(bm->url), bm);
 }
 
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
@@ -339,14 +347,6 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 		else
 			add_to_list(bookmark_browser.root.child, bm->box_item);
 	}
-
-	/* Hash creation if needed. */
-	if (!bookmark_cache)
-		bookmark_cache = init_hash(8, &strhash);
-
-	/* Create a new entry. */
-	if (check_bookmark_cache(bm->url))
-		add_hash_item(bookmark_cache, bm->url, strlen(bm->url), bm);
 
 	return bm;
 }

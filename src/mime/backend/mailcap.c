@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.2 2003/05/07 18:26:23 jonas Exp $ */
+/* $Id: mailcap.c,v 1.3 2003/05/16 23:09:26 zas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -100,6 +100,9 @@ free_mailcap_entry(struct mailcap_entry *entry)
  * ELinks supports just % in mime types which is equivalent to %s.
  */
 
+/* FIXME: this function is potentially subject to overflow.
+ * y < sizeof(buffer) test is not sufficient, the copious output part
+ * write more data to buffer... Please fix it asap. --Zas */
 static unsigned char *
 convert_command(unsigned char *command, int copiousoutput)
 {
@@ -149,6 +152,7 @@ convert_command(unsigned char *command, int copiousoutput)
 		}
 
 		if (pager) {
+			/* FIXME: what if y == sizeof(buffer) - 1 ? --Zas */
 			buffer[y++] = ' ';
 			buffer[y++] = '|';
 			safe_strncpy(buffer + y, pager, sizeof(buffer) - y);

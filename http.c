@@ -336,7 +336,8 @@ void http_send_header(struct connection *c)
 		add_num_to_str(&hdr, &l, c->from);
 		add_to_str(&hdr, &l, "-\r\n");
 	}
-	if ((h = find_auth(host))) {
+	h = find_auth(host);
+	if (h) {
 		add_to_str(&hdr, &l, "Authorization: Basic ");
 		add_to_str(&hdr, &l, h);
 		add_to_str(&hdr, &l, "\r\n");
@@ -600,14 +601,17 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 			e->redirect_get = h == 303;
 		}
 	}
- 	/*if (h == 401) if ((d = parse_http_header(e->head, "WWW-Authenticate", NULL))) {
- 		if (!strncasecmp(d, "Basic", 5)) {
- 			add_auth_entry(host, get_param(d, "realm"));
- 			add_questions_entry(do_auth_dialog);
- 			setcstate(c, S_QUESTIONS);
-  		}
- 		mem_free(d);
-  	}*/
+	
+ 	if (h == 401) {
+		if ((d = parse_http_header(e->head, "WWW-Authenticate", NULL))) {
+			if (!strncasecmp(d, "Basic", 5)
+			    && add_auth_entry(host, get_param(d, "realm")) > 0) {
+				add_questions_entry(do_auth_dialog);
+			}
+			mem_free(d);
+		}
+  	}
+
 	kill_buffer_data(rb, a);
 	c->cache = e;
 	info->close = 0;

@@ -4,6 +4,8 @@ int keep_unhistory;
 
 struct list_head downloads = {&downloads, &downloads};
 
+void check_questions_queue(struct session *ses);
+
 int are_there_downloads()
 {
 	int d = 0;
@@ -933,7 +935,10 @@ void ses_goto(struct session *ses, unsigned char *url, unsigned char *target, in
 	struct wtd_data *w;
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
-	if (!strchr(url, POST_CHAR) || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e) && !e->incomplete) || !(w = mem_alloc(sizeof(struct wtd_data)))) {
+	
+	if (!strchr(url, POST_CHAR)
+	    || (cache == NC_ALWAYS_CACHE && !find_in_cache(url, &e) && !e->incomplete)
+	    || !(w = mem_alloc(sizeof(struct wtd_data)))) {
 		if (ses->goto_position) mem_free(ses->goto_position);
 		ses->goto_position = pos;
 		ses->loading.end = (void (*)(struct status *, void *))fn;
@@ -963,13 +968,16 @@ int do_move(struct session *ses, struct status **stat)
 {
 	struct cache_entry *ce = NULL;
 	int l = 0;
+	
 	if (!ses->loading_url) {
 		internal("no ses->loading_url");
 		return 0;
 	}
+	
 	if (!(ce = (*stat)->ce) || (ses->wtd == WTD_IMGMAP && (*stat)->state >= 0)) {
 		return 0;
 	}
+
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u, *p, *gp;
 		int w = ses->wtd;
@@ -1124,6 +1132,7 @@ void add_questions_entry(void *callback)
 void end_load(struct status *stat, struct session *ses)
 {
 	int d;
+	
 	if (!ses->wtd) {
 		internal("end_load: !ses->wtd");
 		return;
@@ -1143,7 +1152,7 @@ void end_load(struct status *stat, struct session *ses)
 	if (stat->state < 0 && stat->state != S_OK && d != 2) {
 		print_error_dialog(ses, stat, TEXT(T_ERROR));
 	}
-	if (stat->state == S_QUESTIONS) check_questions_queue(ses);
+	check_questions_queue(ses);
 	print_screen_status(ses);
 }
 
@@ -1204,7 +1213,7 @@ void doc_end_load(struct status *stat, struct session *ses)
 		process_file_requests(ses);
 		if (stat->state != S_OK) print_error_dialog(ses, stat, TEXT(T_ERROR));
 	} else if (ses->display_timer == -1) display_timer(ses);
-	if (stat->state == S_QUESTIONS) check_questions_queue(ses);
+	check_questions_queue(ses);
 	print_screen_status(ses);
 }
 

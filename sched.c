@@ -808,36 +808,57 @@ struct list_head http_auth_basic_list = { &http_auth_basic_list, &http_auth_basi
 struct http_auth_basic *find_auth_entry(unsigned char *url)
 {
 	struct http_auth_basic *a;
-	foreach(a, http_auth_basic_list) if (!strncmp(a->url, url, a->url_len)) return a;
+	
+	foreach(a, http_auth_basic_list) {
+		if (!strncmp(a->url, url, a->url_len)) return a;
+	}
+	
 	return NULL;
 }
 
-void add_auth_entry(unsigned char* url, unsigned char *realm)
+int add_auth_entry(unsigned char *url, unsigned char *realm)
 {
+	/* TODO: complete rewrite */
 	struct http_auth_basic *a;
+	
 	if ((a = find_auth_entry(url))) {
+#if 0
 		a->valid = 0;
 		if (a->realm) mem_free(a->realm);
 		a->realm = realm;
 		del_from_list(a);
 		add_to_list(http_auth_basic_list, a);
 		return;
+#else
+		/* We won't just switch the entry, but recreate it. Who knows
+		 * why... */
+		if (a->blocked == 1) return 1;
+		del_auth_entry(a);
+#endif
 	}
-	if (!(a = mem_alloc(sizeof(struct http_auth_basic)))) return;
+	
+	if (!(a = mem_alloc(sizeof(struct http_auth_basic)))) return -1;
 	memset(a, 0, sizeof(struct http_auth_basic));
+
 	while (url[a->url_len] && !end_of_dir(url[a->url_len])) a->url_len++;
 	while (a->url_len && url[a->url_len - 1] != '/') a->url_len--;
-	if (a->url_len < 8) goto err;
-	if (!(a->url = mem_alloc(a->url_len + 1))) {
-		err:
+	
+	if (a->url_len < 9) {
+err:
 		mem_free(a);
-		return;
+		return -1;
 	}
+	
+	if (!(a->url = mem_alloc(a->url_len + 1))) {
+		goto err;
+	}
+	
 	memcpy(a->url, url, a->url_len);
 	a->url[a->url_len] = 0;
 	a->realm = realm;
+
 	add_to_list(http_auth_basic_list, a);
-	return;
+	return 1;
 }
 
 unsigned char *base64_encode(unsigned char *);
@@ -846,17 +867,24 @@ unsigned char *find_auth(unsigned char *url)
 {
 	struct http_auth_basic *a = NULL;
 	unsigned char *uid, *b64;
-	if ((a = find_auth_entry(url))) {
-		int n;
-		if (!(uid = mem_alloc(strlen(a->uid) + strlen(a->passwd) + 2))) return NULL;
-		strcpy(uid, a->uid);
-		uid[n = strlen(a->uid)] = ':';
-		strcpy(&uid[n + 1], a->passwd);
-		b64 = base64_encode(uid);
-		mem_free(uid);
-		return b64;
+	int n;
+	
+	a = find_auth_entry(url);
+	if (!a)	return NULL;
+
+	if ((a->passwd == NULL) || (a->uid == NULL)) {
+		del_auth_entry(a); 
+		del_from_list(a);
+		return NULL; 
 	}
-	return NULL;
+
+	if (!(uid = mem_alloc(strlen(a->uid) + strlen(a->passwd) + 2))) return NULL;
+	strcpy(uid, a->uid);
+	uid[n = strlen(a->uid)] = ':';
+	strcpy(&uid[n + 1], a->passwd);
+	b64 = base64_encode(uid);
+	mem_free(uid);
+	return b64;
 }
 
 void del_auth_entry(struct http_auth_basic *a)
@@ -871,7 +899,8 @@ void del_auth_entry(struct http_auth_basic *a)
 
 void free_auth()
 {
-	while (!list_empty(http_auth_basic_list)) del_auth_entry(http_auth_basic_list.next);
+        while (!list_empty(http_auth_basic_list)) del_auth_entry(http_auth_basic_list.next);
+	free_list(questions_queue);
 }
 
 unsigned char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

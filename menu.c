@@ -1458,12 +1458,16 @@ extern struct list_head http_auth_basic_list;
 
 void do_auth_dialog(struct session *ses)
 {
+	/* TODO: complete rewrite */
 	struct dialog *d;
 	struct terminal *term = ses->term;
 	struct http_auth_basic *a = NULL;
-	if (!list_empty(http_auth_basic_list) && !((struct http_auth_basic*)http_auth_basic_list.next)->valid) a = (struct http_auth_basic*)http_auth_basic_list.next;
-	if (!a) return;
+	if (!list_empty(http_auth_basic_list)
+	    && !((struct http_auth_basic *) http_auth_basic_list.next)->valid)
+		a = (struct http_auth_basic *) http_auth_basic_list.next;
+	if (!a || a->blocked) return;
 	a->valid = 1;
+	a->blocked = 1;
 	if (!a->uid) {
 		if (!(a->uid = mem_alloc(MAX_UID_LEN))) {
 			del_auth_entry(a);
@@ -1478,9 +1482,13 @@ void do_auth_dialog(struct session *ses)
 		}
 		*a->passwd = 0;
 	}
-	if (!(d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item) + strlen(_(TEXT(T_ENTER_USERNAME), term))+(a->realm ? strlen(a->realm) : 0)+strlen(_(TEXT(T_AT), term))+strlen(a->url)+1))) return;
+	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item)
+		      + strlen(_(TEXT(T_ENTER_USERNAME), term))
+		      + (a->realm ? strlen(a->realm) : 0)
+		      + strlen(_(TEXT(T_AT), term)) + strlen(a->url) + 1);
+	if (!d)	return;
 	memset(d, 0, sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
-	d->title = TEXT(T_PASSWORD);
+	d->title = TEXT(T_AUTHEN);
 	d->fn = auth_layout;
 
 	d->udata = (char *)d + sizeof(struct dialog) + 5 * sizeof(struct dialog_item);
@@ -1512,4 +1520,5 @@ void do_auth_dialog(struct session *ses)
 
 	d->items[4].type = D_END;
 	do_dialog(term, d, getml(d, NULL));
+	a->blocked = 0;
 }

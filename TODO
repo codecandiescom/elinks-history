@@ -1,8 +1,6 @@
 TODO list for links (sorted approximatelly by priority):
 
 
-	HTTP Auth (User/password) (URGENT) (being worked on)
-
 	Resuming of downloads (URGENT)
 
 	Support for <xmp>
@@ -41,4 +39,4 @@ suffix appropriate to the file type.
 	CSS (?)
 
 
-$Id: TODO,v 1.9 2002/02/07 00:12:53 pasky Exp $
+$Id: TODO,v 1.10 2002/03/02 14:04:07 pasky Exp $

@@ -771,6 +771,7 @@ struct status {
 struct http_auth_basic {
 	struct http_auth_basic *next;
 	struct http_auth_basic *prev;
+	int blocked;
 	int valid;
 	unsigned char *url;
 	int url_len;
@@ -804,7 +805,7 @@ void free_blacklist();
 void update_noproxy();
 void free_noproxy();
 unsigned char *find_auth(unsigned char *);
-void add_auth_entry(unsigned char*, unsigned char *);
+int add_auth_entry(unsigned char *, unsigned char *);
 void del_auth_entry(struct http_auth_basic *);
 void free_auth();
 
@@ -1201,6 +1202,8 @@ struct form {
 	int method;
 	int num;
 };
+
+extern struct list_head questions_queue;
 
 #define FM_GET		0
 #define FM_POST		1

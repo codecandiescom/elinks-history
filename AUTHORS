@@ -109,6 +109,9 @@ Jacek Fedorynski <jfedor@jfedor.org>
 Jan Bobrowski <jb@mohan.krakow.pl>
 	Small optimization in file listing
 
+Jan Sembera <fis@ji.cz>
+	HTTP-auth support fixes and rewrite
+
 Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 	Spanish translation
 
@@ -247,4 +250,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.26 2002/02/04 14:13:06 pasky Exp $
+$Id: AUTHORS,v 1.27 2002/03/02 14:04:07 pasky Exp $

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.43 2002/05/10 17:16:00 pasky Exp $ */
+/* $Id: view.c,v 1.44 2002/05/10 17:34:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1862,6 +1862,12 @@ yy:
 						if (fs->value + fs->state >= ln[y].st &&
 						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
 							fs->state = ln[y].en - fs->value;
+
+							/* Don't jump to next line when wrapping. */
+							if (fs->state && fs->state < strlen(fs->value)
+							    && ln[y+1].st == ln[y].en)
+								fs->state--;
+							
 							goto yyyy;
 						}
 					}

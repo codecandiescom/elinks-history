@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.41 2002/09/14 19:56:49 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.42 2002/09/14 21:21:39 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -315,22 +315,11 @@ read_bookmarks()
 
 /* Saves the bookmarks to file */
 void
-write_bookmarks()
+write_bookmarks_do(struct secure_save_info *ssi, struct list_head *bookmarks)
 {
 	struct bookmark *bm;
-	struct secure_save_info *ssi;
-	unsigned char *file_name;
 
-	if (!bookmarks_dirty) return;
-
-	file_name = straconcat(elinks_home, "bookmarks", NULL);
-	if (!file_name) return;
-
-	ssi = secure_open(file_name, 0177);
-	mem_free(file_name);
-	if (!ssi) return;
-
-	foreachback (bm, bookmarks) {
+	foreach (bm, *bookmarks) {
 		unsigned char depth[16];
 		unsigned char *p = stracpy(bm->title);
 		int i;
@@ -347,7 +336,28 @@ write_bookmarks()
 		secure_fputc(ssi, '\n');
 		mem_free(p);
 		if (ssi->err) break;
+
+		if (!list_empty(bm->child))
+			write_bookmarks_do(ssi, &bm->child);
 	}
+}
+
+void
+write_bookmarks()
+{
+	struct secure_save_info *ssi;
+	unsigned char *file_name;
+
+	if (!bookmarks_dirty) return;
+
+	file_name = straconcat(elinks_home, "bookmarks", NULL);
+	if (!file_name) return;
+
+	ssi = secure_open(file_name, 0177);
+	mem_free(file_name);
+	if (!ssi) return;
+
+	write_bookmarks_do(ssi, &bookmarks);
 
 	if (!secure_close(ssi)) bookmarks_dirty = 0;
 }

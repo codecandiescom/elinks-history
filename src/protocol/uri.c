@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.164 2004/04/07 15:40:06 jonas Exp $ */
+/* $Id: uri.c,v 1.165 2004/04/07 15:43:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -600,10 +600,9 @@ prx:
 static inline enum protocol
 find_uri_protocol(unsigned char *newurl)
 {
-	unsigned char *ch = newurl + strcspn(newurl, ".:/@");
-	enum protocol protocol = PROTOCOL_FILE;
+	unsigned char *ch;
 
-	if (file_exists(newurl)) goto end;
+	if (file_exists(newurl)) return PROTOCOL_FILE;
 #if 0
 	/* This (not_file thing) is a bad assumption since @prefix is
 	 * not changed which again causes any URI that is not
@@ -619,10 +618,11 @@ find_uri_protocol(unsigned char *newurl)
 	/* Yes, it would be simpler to make test for IPv6 address first,
 	 * but it would result in confusing mix of ifdefs ;-). */
 
+	ch = newurl + strcspn(newurl, ".:/@");
 	if (*ch == '@' || (*ch == ':' && *newurl != '[')
 		|| !strncasecmp(newurl, "ftp.", 4)) {
 		/* Contains user/password/ftp-hostname */
-		protocol = PROTOCOL_FTP;
+		return PROTOCOL_FTP;
 
 #ifdef IPV6
 	} else if (*newurl == '[' && *ch == ':') {
@@ -633,7 +633,7 @@ find_uri_protocol(unsigned char *newurl)
 		bracket2 = strchr(ch, ']');
 		colon2 = strchr(ch, ':');
 		if (bracket2 && colon2 && bracket2 > colon2)
-			goto http;
+			return PROTOCOL_HTTP;
 #endif
 
 	} else if (*newurl != '.' && *ch == '.') {
@@ -650,7 +650,7 @@ find_uri_protocol(unsigned char *newurl)
 		for (ipscan = ch; isdigit(*ipscan) || *ipscan == '.';
 			ipscan++);
 		if (!*ipscan || *ipscan == ':' || *ipscan == '/')
-			goto http;
+			return PROTOCOL_HTTP;
 
 		/* FIXME: Following is completely braindead.
 		 * TODO: Remove it. We should rather first try file:// and
@@ -659,16 +659,16 @@ find_uri_protocol(unsigned char *newurl)
 
 		/* It's two-letter TLD? */
 		if (host_end - domain == 2) {
-http:				protocol = PROTOCOL_HTTP;
+			return PROTOCOL_HTTP;
 
 		} else {
 			/* See above the braindead FIXME :^). */
 			if (end_with_known_tld(domain, host_end - domain) >= 0)
-				goto http;
+				return PROTOCOL_HTTP;
 		}
 	}
-end:
-	return protocol;
+
+	return PROTOCOL_FILE;
 }
 
 static unsigned char *

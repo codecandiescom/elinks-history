@@ -21,9 +21,6 @@
 /* Define to 1 if we should use GNUTLS */
 #undef CONFIG_GNUTLS
 
-/* Define to 1 if we should include leak debugger and internal error checking facilites */
-#undef CONFIG_DEBUG
-
 /* Directory containing default config */
 #undef CONFDIR
 
@@ -32,22 +29,5 @@
 
 /* Directory containing libraries */
 #undef LIBDIR
-
-/* Enable direct use of system allocation functions */
-#undef CONFIG_FASTMEM
-
-/* Force use of internal functions instead of those of system libc */
-#undef CONFIG_OWN_LIBC
-
-/* Define to 1 if we should include a generic backtrace printing infrastructure */
-/* (you will still need some support from the libc) */
-#undef CONFIG_BACKTRACE
-
-/* Define to 1 to reduce binary size as far as possible. */
-#undef CONFIG_SMALL
-
-/* Define to 1 to enable support for SMB protocol (requires smbclient). */
-#undef CONFIG_SMB
-
 
 #include "../feature.h"

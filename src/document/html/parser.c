@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.264 2003/11/15 14:00:33 zas Exp $ */
+/* $Id: parser.c,v 1.265 2003/11/15 14:15:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1815,11 +1815,15 @@ clr_spaces(unsigned char *name)
 
 /* TODO: Move following stuff to special file. */
 
-static int menu_stack_size;
-static struct menu_item **menu_stack;
+struct list_menu {
+	struct menu_item **stack;
+	int stack_size;
+};
+
+static struct list_menu lnk_menu;
 
 static void
-new_menu_item(unsigned char *name, int data, int fullname)
+new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullname)
 	/* name == NULL - up;	data == -1 - down */
 {
 	struct menu_item *top, *item, *nmenu = NULL; /* no uninitialized warnings */
@@ -1838,8 +1842,8 @@ new_menu_item(unsigned char *name, int data, int fullname)
 		/*nmenu->text = "";*/
 	}
 
-	if (menu_stack_size && name) {
-		top = item = menu_stack[menu_stack_size - 1];
+	if (menu->stack_size && name) {
+		top = item = menu->stack[menu->stack_size - 1];
 		while (item->text) item++;
 
 		top = mem_realloc(top, (char *)(item + 2) - (char *)top);
@@ -1848,10 +1852,10 @@ new_menu_item(unsigned char *name, int data, int fullname)
 			mem_free(name);
 			return;
 		}
-		item = item - menu_stack[menu_stack_size - 1] + top;
-		menu_stack[menu_stack_size - 1] = top;
-		if (menu_stack_size >= 2) {
-			struct menu_item *below = menu_stack[menu_stack_size - 2];
+		item = item - menu->stack[menu->stack_size - 1] + top;
+		menu->stack[menu->stack_size - 1] = top;
+		if (menu->stack_size >= 2) {
+			struct menu_item *below = menu->stack[menu->stack_size - 2];
 
 			while (below->text) below++;
 			below[-1].data = top;
@@ -1873,22 +1877,22 @@ new_menu_item(unsigned char *name, int data, int fullname)
 	} else if (name) mem_free(name);
 
 	if (name && data == -1) {
-		struct menu_item **ms = mem_realloc(menu_stack, (menu_stack_size + 1) * sizeof(struct menu_item *));
+		struct menu_item **ms = mem_realloc(menu->stack, (menu->stack_size + 1) * sizeof(struct menu_item *));
 
 		if (!ms) return;
-		menu_stack = ms;
-		menu_stack[menu_stack_size++] = nmenu;
+		menu->stack = ms;
+		menu->stack[menu->stack_size++] = nmenu;
 	}
 
-	if (!name) menu_stack_size--;
+	if (!name) menu->stack_size--;
 }
 
 static inline void
-init_menu(void)
+init_menu(struct list_menu *menu)
 {
-	menu_stack_size = 0;
-	menu_stack = NULL;
-	new_menu_item(stracpy(""), -1, 0);
+	menu->stack_size = 0;
+	menu->stack = NULL;
+	new_menu_item(menu, stracpy(""), -1, 0);
 }
 
 void
@@ -1906,23 +1910,23 @@ free_menu(struct menu_item *m) /* Grrr. Recursion */
 }
 
 static inline struct menu_item *
-detach_menu(void)
+detach_menu(struct list_menu *menu)
 {
 	struct menu_item *i = NULL;
 
-	if (menu_stack) {
-		if (menu_stack_size) i = menu_stack[0];
-		mem_free(menu_stack);
+	if (menu->stack) {
+		if (menu->stack_size) i = menu->stack[0];
+		mem_free(menu->stack);
 	}
 
 	return i;
 }
 
 static inline void
-destroy_menu(void)
+destroy_menu(struct list_menu *menu)
 {
-	if (menu_stack) free_menu(menu_stack[0]);
-	detach_menu();
+	if (menu->stack) free_menu(menu->stack[0]);
+	detach_menu(menu);
 }
 
 static void
@@ -1995,7 +1999,7 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	html_focusable(attr);
 	val = NULL;
 	order = 0, group = 0, preselect = -1;
-	init_menu();
+	init_menu(&lnk_menu);
 
 se:
         en = html;
@@ -2016,7 +2020,7 @@ abort:
 					mem_free(val[j]);
 			mem_free(val);
 		}
-		destroy_menu();
+		destroy_menu(&lnk_menu);
 		*end = en;
 		return 0;
 	}
@@ -2051,7 +2055,7 @@ abort:
 		if (dont_add) {						\
 			done_string(&(string));				\
 		} else {						\
-			new_menu_item((string).source, (order) - 1, 1);	\
+			new_menu_item(&lnk_menu, (string).source, (order) - 1, 1);	\
 			(string).source = NULL;				\
 			(string).length = 0;				\
 		}							\
@@ -2081,7 +2085,7 @@ abort:
 
 		val[order++] = v;
 		vx = get_attr_val(t_attr, "label");
-		if (vx) new_menu_item(vx, order - 1, 0);
+		if (vx) new_menu_item(&lnk_menu, vx, order - 1, 0);
 		if (!v || !vx) {
 			init_string(&lbl);
 			nnmi = !!vx;
@@ -2093,7 +2097,7 @@ abort:
 	    || (t_namelen == 9 && !strncasecmp(t_name, "/OPTGROUP", 9))) {
 		add_select_item(lbl, val, order, nnmi);
 
-		if (group) new_menu_item(NULL, -1, 0), group = 0;
+		if (group) new_menu_item(&lnk_menu, NULL, -1, 0), group = 0;
 	}
 
 #undef add_select_item
@@ -2105,7 +2109,7 @@ abort:
 			la = stracpy("");
 			if (!la) goto see;
 		}
-		new_menu_item(la, -1, 0);
+		new_menu_item(&lnk_menu, la, -1, 0);
 		group = 1;
 	}
 	goto see;
@@ -2136,7 +2140,7 @@ end_parse:
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
 	fc->nvalues = order;
 	fc->values = val;
-	fc->menu = detach_menu();
+	fc->menu = detach_menu(&lnk_menu);
 	fc->labels = lbls;
 	menu_labels(fc->menu, "", lbls);
 	put_chrs("[", 1, put_chars_f, f);
@@ -2162,8 +2166,6 @@ end_parse:
 
 	return 0;
 }
-
-
 
 static void
 html_textarea(unsigned char *a)

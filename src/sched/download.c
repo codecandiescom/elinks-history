@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.197 2003/12/01 13:55:41 pasky Exp $ */
+/* $Id: download.c,v 1.198 2003/12/06 16:44:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -891,16 +891,16 @@ tp_display(struct tq *tq)
 	struct session *ses = tq->ses;
 	unsigned char *goto_position = ses->goto_position;
 	unsigned char *loading_url = ses->loading_url;
-	unsigned char *target_frame = ses->task_target_frame;
+	unsigned char *target_frame = ses->task.target_frame;
 
 	ses->goto_position = tq->goto_position;
 	ses->loading_url = tq->url;
-	ses->task_target_frame = tq->target_frame;
+	ses->task.target_frame = tq->target_frame;
 	vs = ses_forward(ses, tq->frame);
 	if (vs) vs->plain = 1;
 	ses->goto_position = goto_position;
 	ses->loading_url = loading_url;
-	ses->task_target_frame = target_frame;
+	ses->task.target_frame = target_frame;
 
 	if (!tq->frame) {
 		tq->goto_position = NULL;
@@ -1066,8 +1066,8 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	object_lock(tq->ce);
 
 	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);
-	if (ses->task_target_frame)
-		tq->target_frame = stracpy(ses->task_target_frame);
+	if (ses->task.target_frame)
+		tq->target_frame = stracpy(ses->task.target_frame);
 	tq->ses = ses;
 
 	type_query(tq, ctype, handler);

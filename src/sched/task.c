@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.2 2003/12/06 02:57:46 jonas Exp $ */
+/* $Id: task.c,v 1.3 2003/12/06 16:44:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	pos = extract_fragment(u);
 
-	if (ses->task == task) {
+	if (ses->task.type == task) {
 		if (!strcmp(ses->loading_url, u)) {
 			/* We're already loading the URL. */
 			mem_free(u);

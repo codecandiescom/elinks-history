@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.272 2003/12/06 02:56:02 jonas Exp $ */
+/* $Id: session.c,v 1.273 2003/12/06 16:44:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,7 @@ get_current_download(struct session *ses)
 
 	if (!ses) return NULL;
 
-	if (ses->task)
+	if (ses->task.type)
 		stat = &ses->loading;
 	else if (have_location(ses))
 		stat = &cur_loc(ses)->download;
@@ -127,7 +127,7 @@ print_error_dialog(struct session *ses, struct download *stat)
 static void
 free_task(struct session *ses)
 {
-	assertm(ses->task, "Session has no task");
+	assertm(ses->task.type, "Session has no task");
 	if_assert_failed return;
 
 	if (ses->goto_position) {
@@ -139,7 +139,7 @@ free_task(struct session *ses)
 		mem_free(ses->loading_url);
 		ses->loading_url = NULL;
 	}
-	ses->task = TASK_NONE;
+	ses->task.type = TASK_NONE;
 }
 
 static void
@@ -203,7 +203,7 @@ x:
 		memcpy(&loc->download, &ses->loading, sizeof(struct download));
 	}
 
-	if (ses->task_target_frame && *ses->task_target_frame) {
+	if (ses->task.target_frame && *ses->task.target_frame) {
 		struct frame *frame;
 
 		assertm(have_location(ses), "no location yet");
@@ -213,7 +213,7 @@ x:
 			copy_location(loc, cur_loc(ses));
 			add_to_history(&ses->history, loc);
 		}
-		frame = ses_change_frame_url(ses, ses->task_target_frame,
+		frame = ses_change_frame_url(ses, ses->task.target_frame,
 					     ses->loading_url);
 
 		if (!frame) {
@@ -221,7 +221,7 @@ x:
 				del_from_history(&ses->history, loc);
 				destroy_location(loc);
 			}
-			ses->task_target_frame = NULL;
+			ses->task.target_frame = NULL;
 			goto x;
 		}
 
@@ -255,7 +255,7 @@ x:
 
 	/* This is another "branch" in the browsing, so throw away the current
 	 * unhistory, we are venturing in another direction! */
-	if (ses->task == TASK_FORWARD)
+	if (ses->task.type == TASK_FORWARD)
 		clean_unhistory(&ses->history);
 	return vs;
 }
@@ -317,9 +317,9 @@ post_yes(struct task *task)
 	ses->loading.end = (void (*)(struct download *, void *))task->fn;
 	ses->loading.data = task->ses;
 	ses->loading_url = stracpy(task->url);
-	ses->task = task->type;
-	ses->task_target_frame = task->target_frame;
-	ses->task_target_location = task->target_location;
+	ses->task.type = task->type;
+	ses->task.target_frame = task->target_frame;
+	ses->task.target_location = task->target_location;
 
 	load_url(ses->loading_url, ses->ref_url,
 		 &ses->loading, task->pri, task->cache_mode, -1);
@@ -365,9 +365,9 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
 		ses->loading_url = url;
-		ses->task = task_type;
-		ses->task_target_frame = target_frame;
-		ses->task_target_location = target_location;
+		ses->task.type = task_type;
+		ses->task.target_frame = target_frame;
+		ses->task.target_location = target_location;
 
 		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
 
@@ -416,7 +416,7 @@ do_move(struct session *ses, struct download **stat)
 	protocol = known_protocol(ses->loading_url, NULL);
 	if (protocol == PROTOCOL_UNKNOWN) return 0;
 
-	if (ses->task == TASK_IMGMAP && (*stat)->state >= 0)
+	if (ses->task.type == TASK_IMGMAP && (*stat)->state >= 0)
 		return 0;
 
 	ce = (*stat)->ce;
@@ -424,7 +424,7 @@ do_move(struct session *ses, struct download **stat)
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u;
-		enum task_type task = ses->task;
+		enum task_type task = ses->task.type;
 
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
@@ -471,14 +471,14 @@ do_move(struct session *ses, struct download **stat)
 					    ? stracpy(ses->goto_position)
 					    : NULL;
 
-			ses_goto(ses, u, ses->task_target_frame, NULL,
+			ses_goto(ses, u, ses->task.target_frame, NULL,
 				 PRI_MAIN, CACHE_MODE_NORMAL, task,
 				 gp, end_load, 1);
 			if (gp) mem_free(gp);
 			return 2;
 			}
 		case TASK_HISTORY:
-			ses_goto(ses, u, NULL, ses->task_target_location,
+			ses_goto(ses, u, NULL, ses->task.target_location,
 				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
@@ -515,7 +515,7 @@ b:
 			ses_history_move(ses);
 			break;
 		case TASK_RELOAD:
-			ses->task_target_location = cur_loc(ses)->prev;
+			ses->task.target_location = cur_loc(ses)->prev;
 			ses_history_move(ses);
 			ses_forward(ses, 0);
 			break;
@@ -692,7 +692,7 @@ end_load(struct download *stat, struct session *ses)
 {
 	int d;
 
-	assertm(ses->task, "end_load: no ses->task");
+	assertm(ses->task.type, "end_load: no ses->task");
 	if_assert_failed return;
 
 	d = do_move(ses, &stat);
@@ -705,7 +705,7 @@ end_load(struct download *stat, struct session *ses)
 	}
 
 	if (stat->state < 0) {
-		if (ses->task) free_task(ses);
+		if (ses->task.type) free_task(ses);
 		if (d == 1) doc_end_load(stat, ses);
 	}
 
@@ -822,13 +822,13 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 	if (ftl->ce && !ftl->ce->redirect_get) {
 		struct session *ses = ftl->ses;
 		unsigned char *loading_url = ses->loading_url;
-		unsigned char *target_frame = ses->task_target_frame;
+		unsigned char *target_frame = ses->task.target_frame;
 
 		ses->loading_url = ftl->url;
-		ses->task_target_frame = ftl->target_frame;
+		ses->task.target_frame = ftl->target_frame;
 		ses_chktype(ses, &ftl->stat, ftl->ce, 1);
 		ses->loading_url = loading_url;
-		ses->task_target_frame = target_frame;
+		ses->task.target_frame = target_frame;
 	}
 #if 0
 		free_wtd(ftl->ses);
@@ -940,7 +940,7 @@ create_basic_session(struct window *tab)
 	init_list(ses->tq);
 	ses->tab = tab;
 	ses->id = session_id++;
-	ses->task = TASK_NONE;
+	ses->task.type = TASK_NONE;
 	ses->display_timer = -1;
 
 #ifdef USE_LEDS
@@ -1132,7 +1132,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 void
 abort_preloading(struct session *ses, int interrupt)
 {
-	if (!ses->task) return;
+	if (!ses->task.type) return;
 
 	change_connection(&ses->loading, NULL, PRI_CANCEL, interrupt);
 	free_task(ses);

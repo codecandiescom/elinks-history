@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.79 2003/12/06 02:56:02 jonas Exp $ */
+/* $Id: session.h,v 1.80 2003/12/06 16:44:24 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -49,17 +49,6 @@ struct kbdprefix {
 	enum { KP_MARK_NOTHING, KP_MARK_SET, KP_MARK_GOTO } mark;
 };
 
-/* This describes, what are we trying to do right now. We pass this around so
- * that we can use generic scheduler routines and when the control will get
- * back to our subsystem, we will know what are we up to. */
-enum task_type {
-	TASK_NONE,
-	TASK_FORWARD,
-	TASK_IMGMAP,
-	TASK_RELOAD,
-	TASK_HISTORY,
-};
-
 struct session;
 
 struct tq {
@@ -74,6 +63,24 @@ struct tq {
 	int prog_flags;
 	int frame;
 };
+
+/* This describes, what are we trying to do right now. We pass this around so
+ * that we can use generic scheduler routines and when the control will get
+ * back to our subsystem, we will know what are we up to. */
+enum task_type {
+	TASK_NONE,
+	TASK_FORWARD,
+	TASK_IMGMAP,
+	TASK_RELOAD,
+	TASK_HISTORY,
+};
+
+struct session_task {
+	enum task_type type;
+	/* TODO: union --pasky */
+	unsigned char *task_target_frame;
+	struct location *task_target_location;
+}
 
 struct session_status {
 	unsigned int show_tabs_bar:1;
@@ -136,10 +143,7 @@ struct session {
 
 	/* The current action-in-progress selector */
 
-	enum task_type task;
-	/* TODO: union --pasky */
-	unsigned char *task_target_frame;
-	struct location *task_target_location;
+	struct session_task task;
 
 
 	/* The current browsing state */

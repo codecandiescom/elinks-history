@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.8 2003/05/06 18:25:29 zas Exp $ */
+/* $Id: kbd.c,v 1.9 2003/05/06 18:39:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -900,15 +900,15 @@ l1:
 		internal("event queue underflow");
 		itrm->qlen = el;
 	}
-	if (ev.x != -1) {
+
+	itrm->qlen -= el;
+
+	if (ev.x != -1)
 		queue_event(itrm, (char *)&ev, sizeof(struct event));
-		itrm->qlen -= el;
-		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
-	} else {
-		/*printf("%d %d\n", itrm->qlen, el); fflush(stdout);*/
-		itrm->qlen -= el;
-		memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
-	}
+	/* else printf("%d %d\n", itrm->qlen, el); fflush(stdout);*/
+
+	memmove(itrm->kqueue, itrm->kqueue + el, itrm->qlen);
+
 
 end:
 	if (itrm->qlen < IN_BUF_SIZE)

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.13 2003/06/06 11:41:46 jonas Exp $ */
+/* $Id: mailcap.c,v 1.14 2003/06/06 12:46:06 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -73,7 +73,7 @@ done_mailcap_entry(struct mailcap_entry *entry)
  * the map. Clear memory to make freeing it safer later and we get
  * needsterminal and copiousoutput inialized for free. */
 static inline struct mailcap_entry *
-init_mailcap_entry(unsigned char *type, int priority)
+init_mailcap_entry(unsigned char *type, unsigned char *command, int priority)
 {
 	struct mailcap_entry *entry;
 	struct hash_item *item;
@@ -85,6 +85,17 @@ init_mailcap_entry(unsigned char *type, int priority)
 
 	typelen = strlen(type);
 	entry->type = memacpy(type, typelen);
+	if (!entry->type) {
+		mem_free(entry);
+		return NULL;
+	}
+
+	entry->command = stracpy(command);
+	if (!entry->command) {
+		done_mailcap_entry(entry);
+		return NULL;
+	}
+
 	entry->priority = priority;
 
 	/* Time to get the entry into the mailcap_map */
@@ -109,86 +120,6 @@ init_mailcap_entry(unsigned char *type, int priority)
 
 	mailcap_map_entries++;
 	return entry;
-}
-
-
-/* The command semantics include the following:
- *
- * %s		is the filename that contains the mail body data
- * %t		is the content type, like text/plain
- * %{parameter} is replaced by the parameter value from the content-type
- *		field
- * \%		is %
- *
- * Unsupported rfc1524 parameters: these would probably require some doing
- * by mutt, and can probably just be done by piping the message to metamail:
- *
- * %n		is the integer number of sub-parts in the multipart
- * %F		is "content-type filename" repeated for each sub-part
- *
- * ELinks supports just % in mime types which is equivalent to %s. */
-
-/* FIXME: this function is potentially subject to overflow.
- * y < sizeof(buffer) test is not sufficient, the copious output part
- * write more data to buffer... Please fix it asap. --Zas */
-static unsigned char *
-convert_command(unsigned char *command, int copiousoutput)
-{
-	int x = 0, y = 0; /* x used as command index, y as buffer index */
-	unsigned char buffer[MAX_STR_LEN];
-	int commandlen = strlen(command);
-
-	while (command[x] && x < commandlen && y < sizeof(buffer)) {
-		if (command[x] == '\\') {
-			x++;
-			buffer[y++] = command[x++];
-
-		} else if (command[x] == '%') {
-			x++;
-			if (command[x] == 's') {
-				buffer[y++] = '%';
-				x++;
-			} else if (command[x] == 't') {
-				buffer[y++] = '%';
-				buffer[y++] = 't';
-				x++;
-			} else {
-				/* Skip parameter - until next whitespace */
-				while (command[x] && !isspace(command[x])) x++;
-			}
-
-		} else {
-			buffer[y++] = command[x++];
-		}
-	}
-
-	if (copiousoutput) {
-		/*
-		 * Here we handle copiousoutput flag by appending $PAGER.
-		 * It would of course be better to pipe the output into a
-		 * buffer and let elinks display it but this will have to do
-		 * for now.
-		 */
-		unsigned char *pager = getenv("PAGER");
-
-		if (!pager && file_exists(DEFAULT_PAGER_PATH)) {
-			pager = DEFAULT_PAGER_PATH;
-		} else if (!pager && file_exists(DEFAULT_LESS_PATH)) {
-			pager = DEFAULT_LESS_PATH;
-		} else if (!pager && file_exists(DEFAULT_MORE_PATH)) {
-			pager = DEFAULT_MORE_PATH;
-		}
-
-		if (pager) {
-			/* FIXME: what if y == sizeof(buffer) - 1 ? --Zas */
-			buffer[y++] = ' ';
-			buffer[y++] = '|';
-			safe_strncpy(buffer + y, pager, sizeof(buffer) - y);
-			y += strlen(pager);
-		}
-	}
-
-	return memacpy(buffer, y);
 }
 
 
@@ -281,23 +212,21 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 			entry->copiousoutput = 1;
 
 		} else if (!strncasecmp(field, "test", 4)) {
-			field = get_field_text(field + 4);
-			if (!field) {
+			entry->testcommand = get_field_text(field + 4);
+			if (!entry->testcommand) {
 				error_code = 0;
 				continue;
 			}
 
-			entry->testcommand = convert_command(field, 0);
-			mem_free(field);
-
 			/* Find out wether testing requires filename */
-			field = entry->testcommand;
-			for (field = entry->testcommand; *field; field++) {
-				if (*field == '%') {
+			for (field = entry->testcommand; *field; field++)
+				if (*field == '%' && *(field+1) == 's') {
+					mem_free(entry->testcommand);
+					entry->testcommand = NULL;
 					entry->testneedsfile = 1;
 					break;
 				}
-			}
+
 		} else if (!strncasecmp(field, "description", 11)) {
 			field = get_field_text(field + 11);
 			if (!field) {
@@ -343,18 +272,11 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		command = get_field(&linepos);
 		if (!command) continue;
 
-		entry = init_mailcap_entry(type, priority);
+		entry = init_mailcap_entry(type, command, priority);
 
 		if (!parse_optional_fields(entry, linepos)) {
 			error("Bad formated entry for type %s in \"%s\" line %d",
 			      entry->type, filename, lineno);
-		}
-
-		/* Keep after parsing of optional fields (hint: copiousoutput) */
-		entry->command = convert_command(command, entry->copiousoutput);
-		if (!entry->command) {
-			done_mailcap_entry(entry);
-			continue;
 		}
 	}
 
@@ -424,56 +346,105 @@ done_mailcap(void)
 }
 
 
-/* Basicly this is just convert_command() handling only %t */
+/* The command semantics include the following:
+ *
+ * %s		is the filename that contains the mail body data
+ * %t		is the content type, like text/plain
+ * %{parameter} is replaced by the parameter value from the content-type
+ *		field
+ * \%		is %
+ *
+ * Unsupported rfc1524 parameters: these would probably require some doing
+ * by mutt, and can probably just be done by piping the message to metamail:
+ *
+ * %n		is the integer number of sub-parts in the multipart
+ * %F		is "content-type filename" repeated for each sub-part
+ * Only % is supported by subst_file() which is equivalent to %s. */
+
+/* The formating is prosponed to when the command is needed. This means
+ * @type can be NULL */
 static unsigned char *
-expand_command(unsigned char *command, unsigned char *type)
+format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 {
-	int x = 0; /* command index */
-	int y = 0; /* buffer index */
-	unsigned char buffer[MAX_STR_LEN];
-	int commandlen;
-	int typelen;
+	unsigned char *cmd = init_str();
+	int cmdlen = 0;
 
-	if (!command) return NULL;
+	if (!cmd)
+		return NULL;
 
-	typelen = strlen(type);
-	commandlen = strlen(command);
+	while (*command) {
+		unsigned char *start = command;
 
-	while (command[x] && x < commandlen && y < sizeof(buffer)) {
-		if (command[x] == '%' && command[x + 1] == 't') {
-			safe_strncpy(buffer + y, type, sizeof(buffer) - y);
-			y += typelen;
-			x += 2;
-		} else {
-			buffer[y++] = command[x++];
+		while (*command && *command != '%' && *command != '\\')
+			command++;
+
+		if (start < command)
+			add_bytes_to_str(&cmd, &cmdlen, start, command - start);
+
+		if (*command == '%') {
+			command++;
+
+			if (*command == 's')
+				add_chr_to_str(&cmd, &cmdlen, '%');
+			else if (*command == 't' && type)
+				add_to_str(&cmd, &cmdlen, type);
+
+			command++;
+
+		} else if (*command == '\\') {
+			command++;
+			if (*command)
+				add_chr_to_str(&cmd, &cmdlen, *command++);
 		}
 	}
 
-	return memacpy(buffer, y);
+	if (copiousoutput) {
+		/* Here we handle copiousoutput flag by appending $PAGER.
+		 * It would of course be better to pipe the output into a
+		 * buffer and let elinks display it but this will have to do
+		 * for now. */
+		unsigned char *pager = getenv("PAGER");
+
+		if (!pager && file_exists(DEFAULT_PAGER_PATH)) {
+			pager = DEFAULT_PAGER_PATH;
+		} else if (!pager && file_exists(DEFAULT_LESS_PATH)) {
+			pager = DEFAULT_LESS_PATH;
+		} else if (!pager && file_exists(DEFAULT_MORE_PATH)) {
+			pager = DEFAULT_MORE_PATH;
+		}
+
+		if (pager) {
+			add_chr_to_str(&cmd, &cmdlen, '|');
+			add_to_str(&cmd, &cmdlen, pager);
+		}
+	}
+
+	return cmd;
 }
 
 /* Returns first usable mailcap_entry from a list where @entry is the head.
  * Use of @filename is not supported (yet). */
 static struct mailcap_entry *
-check_entries(struct mailcap_entry *entry, unsigned char *filename)
+check_entries(struct mailcap_entry *entry)
 {
 	/* Use the list of entries to find a final match */
 	for (; entry; entry = entry->next) {
-		unsigned char *testcommand;
+		unsigned char *test;
+
+		/* TODO Entries with testneedsfile should not be in the map */
+		if (entry->testneedsfile)
+			continue;
 
 		/* Accept current if no test is needed */
 		if (!entry->testcommand)
 			break;
 
-		if (entry->testneedsfile && !filename)
-			continue;
-
 		/* We have to run the test command */
-		testcommand = subst_file(entry->testcommand, filename);
-		if (testcommand) {
-			int exitcode = exe(testcommand);
+		test = format_command(entry->testcommand, NULL, 0);
+		if (test) {
+			int exitcode = exe(test);
 
-			mem_free(testcommand);
+			mem_free(test);
 			if (!exitcode)
 				break;
 		}
@@ -509,7 +480,8 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 	item = get_hash_item(mailcap_map, type, strlen(type));
 
 	/* Check list of entries */
-	if (item && item->value) entry = check_entries(item->value, NULL);
+	if (item && item->value)
+		entry = check_entries(item->value);
 
 	if (!entry || get_opt_bool("mime.mailcap.prioritize")) {
 		/* The type lookup has either failed or we need to check
@@ -538,7 +510,7 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 			if (item && item->value) {
 				struct mailcap_entry *wildcard;
 
-				wildcard = check_entries(item->value, NULL);
+				wildcard = check_entries(item->value);
 
 				if (wildcard &&
 			    	    (!entry ||
@@ -552,7 +524,8 @@ get_mime_handler_mailcap(unsigned char *type, int options)
 		struct mime_handler *handler;
 		unsigned char *program;
 
-		program = expand_command(entry->command, type);
+		program = format_command(entry->command, type,
+					 entry->copiousoutput);
 		if (!program) return NULL;
 
 		handler = mem_alloc(sizeof(struct mime_handler));

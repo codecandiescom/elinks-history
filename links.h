@@ -2079,6 +2079,13 @@ extern int base_session;
 extern int dmp;
 extern int dump_width;
 
+typedef enum {
+	COOKIES_ACCEPT_NONE,
+	COOKIES_ACCEPT_ASK,
+	COOKIES_ACCEPT_ALL
+} cookies_accept_t;
+
+extern cookies_accept_t cookies_accept;
 extern int cookies_save;
 extern int cookies_resave;
 

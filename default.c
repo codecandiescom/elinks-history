@@ -932,6 +932,8 @@ int base_session = 0;
 int dmp = 0;
 int dump_width = 80;
 
+
+cookies_accept_t cookies_accept = COOKIES_ACCEPT_ALL;
 int cookies_save = 1;
 int cookies_resave = 1;
 
@@ -1031,6 +1033,14 @@ struct option links_options[] = {
 	       	gen_cmd, num_rd, num_wr,
 		0, 1, &color_dirs,
 		"Highlight directories when listing local disk content." },
+
+	{	"cookies-accept", "cookies_accept",
+	       	gen_cmd, num_rd, num_wr,
+		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, &cookies_accept,
+		"Mode of accepting cookies:\n"
+		"0 is accept no cookies\n"
+		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
+		"2 is accept all cookies"},
 
 	{	"cookies-save", "cookies_save",
 	       	gen_cmd, num_rd, num_wr,
@@ -1148,6 +1158,7 @@ struct option links_options[] = {
 	{	"http-referer", "http_referer",
 		gen_cmd, num_rd, num_wr,
 	 	0, 3, &referer,
+		"Mode of sending HTTP referer:\n"
 		"0 is send no referer\n"
 		"1 is send previous URL as referer\n"
 		"2 is send current URL as referer\n"

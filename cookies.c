@@ -2,14 +2,6 @@
 
 /* #define COOKIES_DEBUG */
 
-/* TODO: make this changeable at runtime */
-
-#define ACCEPT_NONE	0
-#define ACCEPT_ASK	1 /* TODO */
-#define ACCEPT_ALL	2
-
-int accept_cookies = ACCEPT_ALL;
-
 tcount cookie_id = 0;
 
 struct cookie {
@@ -85,7 +77,7 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	unsigned char *pos, *nam_end = NULL, *val_start = NULL, *val_end = NULL;
 	int last_was_eq = 0, last_was_ws = 0;
 	
-	if (accept_cookies == ACCEPT_NONE)
+	if (cookies_accept == COOKIES_ACCEPT_NONE)
 		return 0;
 
 #ifdef COOKIES_DEBUG
@@ -239,7 +231,8 @@ int set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		return 0;
 	}
 	
-	if (accept_cookies != ACCEPT_ALL) {
+	if (cookies_accept != COOKIES_ACCEPT_ALL) {
+		/* TODO */
 		free_cookie(cookie);
 		mem_free(cookie);
 		mem_free(server);

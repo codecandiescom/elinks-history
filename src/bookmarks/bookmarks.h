@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.22 2003/10/25 10:31:26 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.23 2003/10/25 16:38:43 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -6,6 +6,7 @@
 /* #include "bfu/listbox.h" */
 struct listbox_item;
 
+#include "modules/module.h"
 #include "util/lists.h"
 
 /* Bookmark record structure */
@@ -34,10 +35,9 @@ extern struct list_head bookmark_boxes; /* struct listbox_data */
 
 extern int bookmarks_dirty;
 
-/* Life functions */
+/* The bookmarks module */
 
-void init_bookmarks(void);
-void done_bookmarks(void);
+extern struct module bookmarks_module;
 
 /* Read/write bookmarks functions */
 

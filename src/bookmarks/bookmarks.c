@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.85 2003/10/25 14:09:40 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.86 2003/10/25 16:38:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,11 +61,9 @@ static struct option_info bookmark_options_info[] = {
 	NULL_OPTION_INFO
 };
 
-void
-init_bookmarks(void)
+static void
+init_bookmarks(struct module *module)
 {
-	register_options(bookmark_options_info, config_options);
-
 	read_bookmarks();
 }
 
@@ -88,17 +86,22 @@ free_bookmarks(struct list_head *bookmarks_list,
 }
 
 /* Does final cleanup and saving of bookmarks */
-void
-done_bookmarks(void)
+static void
+done_bookmarks(struct module *module)
 {
 	write_bookmarks();
 	free_bookmarks(&bookmarks, &bookmark_box_items);
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
-
-	unregister_options(bookmark_options_info, config_options);
 }
 
+struct module bookmarks_module = INIT_MODULE(
+	/* name: */		"bookmarks",
+	/* options: */		bookmark_options_info,	
+	/* submodules: */	NULL,
+	/* init: */		init_bookmarks,	
+	/* done: */		done_bookmarks
+);
 
 
 

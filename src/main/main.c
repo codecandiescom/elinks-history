@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.133 2003/10/25 10:26:02 pasky Exp $ */
+/* $Id: main.c,v 1.134 2003/10/25 16:38:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,6 +103,7 @@ init(void)
 
 	init_event();
 	init_options();
+	register_modules_options();
 	set_sigcld();
 	get_system_name();
 	init_keymaps();
@@ -164,13 +165,11 @@ init(void)
 	parse_options(ac - 1, av + 1);
 
 	init_b = 1;
+	init_modules();
 #ifdef USE_LEDS
 	init_leds();
 #endif
 	init_timer();
-#ifdef BOOKMARKS
-	init_bookmarks();
-#endif
 #ifdef GLOBHIST
 	init_global_history();
 #endif
@@ -246,15 +245,13 @@ terminate_all_subsystems(void)
 #ifdef GLOBHIST
 		done_global_history();
 #endif
-#ifdef BOOKMARKS
-		done_bookmarks();
-#endif
 #ifdef COOKIES
 		cleanup_cookies();
 #endif
 #ifdef HAVE_SCRIPTING
 		done_scripting();
 #endif
+		done_modules();
 	}
 
 	shrink_memory(1);
@@ -279,6 +276,7 @@ terminate_all_subsystems(void)
 	done_screen_drivers();
 	done_bfu_colors();
 	done_timer();
+	unregister_modules_options();
 	done_options();
 	done_event();
 	terminate_osdep();

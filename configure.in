@@ -962,6 +962,7 @@ AC_OUTPUT([ \
  src/lowlevel/Makefile \
  src/mime/Makefile \
  src/mime/backend/Makefile \
+ src/modules/Makefile \
  src/osdep/Makefile \
  src/protocol/Makefile \
  src/protocol/http/Makefile \

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.252 2003/09/09 20:46:43 jonas Exp $ */
+/* $Id: renderer.c,v 1.253 2003/09/09 21:16:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -956,27 +956,25 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	assert(chars);
 	if_assert_failed return;
 
-	while (par_format.align != AL_NONE && part->cx == -1
-	       && charslen && *chars == ' ') {
-		chars++;
-		charslen--;
+	/* If we are not handling verbatim aligning and we are at the begining
+	 * of a line trim whitespace. */
+	if (part->cx == -1) {
+		/* If we are not handling verbatim aligning trim whitespace. */
+		if  (par_format.align != AL_NONE) {
+			while (charslen && *chars == ' ') {
+				chars++;
+				charslen--;
+			}
+
+			if (charslen < 1) return;
+		}
+
+		part->cx = par_format.leftmargin;
 	}
 
-	if (!charslen) return;
-
-	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
+	if (chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
 		last_tag_for_newline = (void *)&part->document->tags;
 	}
-
-	if (part->cx == -1) part->cx = par_format.leftmargin;
-
-	if (part->cx == par_format.leftmargin && *chars == ' '
-	    && par_format.align != AL_NONE) {
-		chars++;
-		charslen--;
-	}
-
-	if (!charslen) return;
 
 	int_lower_bound(&part->y, part->cy + 1);
 

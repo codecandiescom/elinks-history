@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.4 2003/07/06 23:17:35 pasky Exp $ */
+/* $Id: uri.c,v 1.5 2003/07/08 12:23:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
-#include "protocol/url.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"

@@ -1,15 +1,9 @@
-/* $Id: url.h,v 1.15 2003/06/26 17:06:39 jonas Exp $ */
+/* $Id: url.h,v 1.16 2003/07/08 12:23:23 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URL_H
 #define EL__PROTOCOL_URL_H
 
 #define POST_CHAR 1
-
-static inline int
-end_of_dir(unsigned char c)
-{
-	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
-}
 
 unsigned char *get_protocol_name(unsigned char *);
 unsigned char *get_host_name(unsigned char *);

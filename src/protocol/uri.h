@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.4 2003/07/08 02:25:40 jonas Exp $ */
+/* $Id: uri.h,v 1.5 2003/07/08 12:23:23 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -37,5 +37,11 @@ int parse_uri(struct uri *uri);
 /* Returns either the uri's port number if available or the protocol's
  * default port. For user protocols this is 0. */
 int get_uri_port(struct uri *uri);
+
+static inline int
+end_of_dir(unsigned char c)
+{
+	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
+}
 
 #endif

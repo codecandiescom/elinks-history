@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.116 2003/06/09 00:08:59 zas Exp $ */
+/* $Id: parser.c,v 1.117 2003/06/09 01:48:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,14 +85,32 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (name && namelen) *namelen = e - *name;
 
 	while (WHITECHAR(*e) || *e == ':') e++;
-	if (!ATTR_CHAR(*e) && !TAG_DELIM(e)) goto end_1;
-
 	if (attr) *attr = e;
 
 nextattr:
 	while (WHITECHAR(*e)) e++;
-	if (TAG_DELIM(e)) goto end;
-	if (!ATTR_CHAR(*e)) goto end_1;
+	if (!*e || TAG_DELIM(e)) goto end;
+
+	if (!ATTR_CHAR(*e)) {
+		/* Bad attribute, skip it. */
+		do {
+			e++;
+			if (IS_QUOTE(*e)) {
+				unsigned char quote = *e;
+
+skip_quoted_value:
+				e++;
+				while (*e != quote && *e) e++;
+				if (*e) {
+					e++;
+					if (*e == quote)
+						goto skip_quoted_value;
+				}
+			}
+		} while (*e && !WHITECHAR(*e) && !TAG_DELIM(e));
+
+		goto endattr;
+	}
 
 	while (ATTR_CHAR(*e)) e++;
 	while (WHITECHAR(*e)) e++;
@@ -159,7 +177,7 @@ get_attr_val(register unsigned char *e, unsigned char *name)
 
 aa:
 	while (WHITECHAR(*e)) e++;
-	if (TAG_DELIM(e)) {
+	if (!*e || !ATTR_CHAR(*e) || TAG_DELIM(e)) {
 		if (TAG_END_XML(e)) e++;
 		return NULL;
 	}

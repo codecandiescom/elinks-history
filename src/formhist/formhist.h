@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.22 2003/11/24 17:07:09 fabio Exp $ */
+/* $Id: formhist.h,v 1.23 2003/11/24 23:34:23 zas Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -22,6 +22,10 @@ struct formhist_data {
 	/* <action> URI for this form. Must be at end of struct. */
 	unsigned char url[1];
 };
+
+/* Numerical form type <-> form type name */
+int str2form_type(unsigned char *s);
+unsigned char *form_type2str(enum form_type num);
 
 /* Look up @name form of @url document in the form history. Returns the saved
  * value if present, NULL upon an error. */

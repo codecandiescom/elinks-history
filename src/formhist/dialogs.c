@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.4 2003/11/24 17:07:09 fabio Exp $ */
+/* $Id: dialogs.c,v 1.5 2003/11/24 23:34:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,16 +52,32 @@ get_formhist_data_info(struct listbox_item *item, struct terminal *term,
 {
 	struct formhist_data *formhist_data = item->udata;
 	struct string info;
+	struct submitted_value *sv;
 
 	if (listbox_info == LISTBOX_URI)
 		return stracpy(formhist_data->url);
 
 	if (!init_string(&info)) return NULL;
 
-	/* TODO: More info --jonas */
 	add_to_string(&info, _("URL", term));
 	add_to_string(&info, ": ");
 	add_to_string(&info, formhist_data->url);
+	add_char_to_string(&info, '\n');
+
+	foreach (sv, *formhist_data->submit) {
+		add_char_to_string(&info, '\n');
+		add_to_string(&info, sv->name);
+		add_to_string(&info, " = ");
+		if (sv->value && *sv->value) {
+			if (sv->type != FC_PASSWORD)
+				add_to_string(&info, sv->value);
+			else
+				add_to_string(&info, "********");
+		}
+		add_to_string(&info, " (");
+		add_to_string(&info, form_type2str(sv->type));
+		add_char_to_string(&info, ')');
+	}
 
 	return info.source;
 }

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.92 2004/04/13 22:31:09 jonas Exp $ */
+/* $Id: dialogs.c,v 1.93 2004/04/13 22:36:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ add_mime_extension(struct extension *ext)
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
-	struct option *opt;
+	struct option *opt = NULL;
 	struct extension *new;
 	struct dialog *dlg;
 	struct string translated;
@@ -111,8 +111,6 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	if (fcp && init_string(&translated)
 	    && add_optname_to_string(&translated, fcp, strlen(fcp))) {
 		opt = get_real_opt("mime.extension", translated.source);
-	} else {
-		opt = NULL;
 	}
 
 #define MIME_WIDGETS_COUNT 4
@@ -133,7 +131,10 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 		safe_strncpy(new->ext_orig, empty_string_or_(translated.source), MAX_STR_LEN);
 	}
 
-	if (fcp) done_string(&translated);
+	if (fcp) {
+		done_string(&translated);
+		mem_free(fcp);
+	}
 
 	dlg->title = _("Extension", term);
 	dlg->layouter = generic_dialog_layouter;
@@ -147,8 +148,6 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_dlg_end(dlg, MIME_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
-
-	if (fcp) mem_free(fcp);
 }
 
 

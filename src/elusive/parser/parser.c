@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.9 2002/12/30 16:42:05 pasky Exp $ */
+/* $Id: parser.c,v 1.10 2002/12/30 17:49:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 struct parser_backend *parser_backends[] = {
 	NULL,
 	NULL,
-	&html_backend,
+	&html_parser_backend,
 };
 
 

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.22 2002/12/30 12:44:50 pasky Exp $ */
+/* $Id: parser.c,v 1.23 2002/12/30 17:49:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -664,7 +664,7 @@ html_done(struct parser_state *state)
 }
 
 
-struct parser_backend html_backend = {
+struct parser_backend html_parser_backend = {
 	html_init,
 	html_parse,
 	html_done,

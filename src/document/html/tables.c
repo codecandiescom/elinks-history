@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.256 2004/06/29 01:37:41 jonas Exp $ */
+/* $Id: tables.c,v 1.257 2004/06/29 01:43:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -999,6 +999,23 @@ get_bordercolor(unsigned char *a, color_t *rgb)
 	return r;
 }
 
+static void
+format_bad_table_html(struct table *table)
+{
+	int i;
+
+	for (i = 0; i < table->bad_html_size; i++) {
+	    	struct html_start_end *bad_html = table->bad_html;
+
+		while (bad_html[i].start < bad_html[i].end && isspace(*bad_html[i].start))
+			bad_html[i].start++;
+		while (bad_html[i].start < bad_html[i].end && isspace(bad_html[i].end[-1]))
+			bad_html[i].end--;
+		if (bad_html[i].start < bad_html[i].end)
+			parse_html(bad_html[i].start, bad_html[i].end, table->part, NULL);
+	}
+}
+
 void
 format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	     unsigned char **end, void *f)
@@ -1015,7 +1032,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int frame, rules, width, has_width;
 	int cye;
 	int x;
-	int i;
 	int cpd_pass, cpd_width, cpd_last;
 	int margins;
 
@@ -1112,19 +1128,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		goto ret0;
 	}
 
-	for (i = 0; i < table->bad_html_size; i++) {
-	    	struct html_start_end *bad_html = table->bad_html;
-
-		while (bad_html[i].start < bad_html[i].end && isspace(*bad_html[i].start))
-			bad_html[i].start++;
-		while (bad_html[i].start < bad_html[i].end && isspace(bad_html[i].end[-1]))
-			bad_html[i].end--;
-		if (bad_html[i].start < bad_html[i].end)
-			parse_html(bad_html[i].start, bad_html[i].end, part, NULL);
-	}
-
-	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
-
 	table->part = part;
 	table->border = border;
 	table->bordercolor = bordercolor;
@@ -1137,6 +1140,10 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	/* table->has_width = has_width; not used. */
 	table->fragment_id = fragment_id;
 	fragment_id = NULL;
+
+	format_bad_table_html(table);
+
+	state = init_html_parser_state(ELEMENT_DONT_KILL, ALIGN_LEFT, 0, 0);
 
 	cpd_pass = 0;
 	cpd_last = table->cellpadding;

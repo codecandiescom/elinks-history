@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2005/01/11 00:05:32 jonas Exp $
+## $Id: Makefile.am,v 1.3 2005/01/11 14:36:47 jonas Exp $
 
 EXTRA_DIST = \
  README.Debian \
@@ -15,3 +15,5 @@ EXTRA_DIST = \
  menu \
  mime \
  rules
+
+DISTCLEANFILES = build-stamp elinks

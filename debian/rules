@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.9 2005/01/11 13:35:57 jonas Exp $
+# $Id: rules,v 1.10 2005/01/11 14:36:47 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -51,18 +51,16 @@ CONFIGURE_OPTIONS = \
 DEB_ROOT = debian/elinks
 
 
-build: build-stamp
-build-stamp:
+build: debian/build-stamp
+debian/build-stamp:
 	dh_testdir
 	./configure $(CONFIGURE_MODE) $(CONFIGURE_OPTIONS)
 	$(MAKE)
-	touch build-stamp
+	touch debian/build-stamp
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp
-	rm -rf $(DEB_ROOT)
 
 	# Add here commands to clean up after the build process.
 	-$(MAKE) distclean

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.36 2003/10/25 10:26:03 pasky Exp $ */
+/* $Id: globhist.c,v 1.37 2003/10/26 15:10:52 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -25,6 +25,7 @@
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
+#include "modules/module.h"
 #include "util/file.h"
 #include "util/hash.h"
 #include "util/memory.h"
@@ -465,8 +466,8 @@ global_history_write_timer_change_hook(struct session *ses,
 	return 0;
 }
 
-void
-init_global_history(void)
+static void
+init_global_history(struct module *module)
 {
 	struct change_hook_info global_history_change_hooks[] = {
 		{ "document.history.global.write_interval",
@@ -481,8 +482,8 @@ init_global_history(void)
 		global_history_write_timer_handler(NULL);
 }
 
-void
-done_global_history(void)
+static void
+done_global_history(struct module *module)
 {
 	if (global_history_write_timer >= 0)
 		kill_timer(global_history_write_timer);
@@ -491,5 +492,15 @@ done_global_history(void)
 	if (gh_last_searched_title) mem_free(gh_last_searched_title);
 	if (gh_last_searched_url) mem_free(gh_last_searched_url);
 }
+
+struct module global_history_module = struct_module(
+	/* name: */		"cookies",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_global_history,
+	/* done: */		done_global_history
+);
 
 #endif /* GLOBHIST */

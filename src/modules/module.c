@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.8 2003/10/26 14:58:55 jonas Exp $ */
+/* $Id: module.c,v 1.9 2003/10/26 15:10:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "bfu/leds.h"
 #include "cookies/cookies.h"
 #include "bookmarks/bookmarks.h"
+#include "globhist/globhist.h"
 #include "mime/mime.h"
 #include "scripting/scripting.h"
 
@@ -29,6 +30,9 @@ static struct module *builtin_modules[] = {
 #endif
 #ifdef COOKIES
 	&cookies_module,
+#endif
+#ifdef GLOBHIST
+	&global_history_module,
 #endif
 #ifdef HAVE_SCRIPTING
 	&scripting_module,

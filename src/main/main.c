@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.139 2003/10/26 15:00:25 jonas Exp $ */
+/* $Id: main.c,v 1.140 2003/10/26 15:10:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,6 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "formhist/formhist.h"
-#include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
@@ -163,9 +162,6 @@ init(void)
 	init_b = 1;
 	init_modules();
 	init_timer();
-#ifdef GLOBHIST
-	init_global_history();
-#endif
 	load_url_history();
 	load_search_history();
 	init_ssl();
@@ -227,9 +223,6 @@ terminate_all_subsystems(void)
 #endif
 		save_url_history();
 		save_search_history();
-#ifdef GLOBHIST
-		done_global_history();
-#endif
 		done_modules();
 	}
 

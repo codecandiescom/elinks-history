@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.10 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: widget.h,v 1.11 2003/05/07 12:49:04 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -21,6 +21,7 @@ enum widget_type {
 };
 
 struct widget_ops {
+	/* XXX: Order matters here. --Zas */
 	void (*display)(struct widget_data *, struct dialog_data *, int);
 	void (*init)(struct widget_data *, struct dialog_data *, struct event *);
 	int (*mouse)(struct widget_data *, struct dialog_data *, struct event *);
@@ -29,33 +30,38 @@ struct widget_ops {
 };
 
 struct widget {
-	enum widget_type type;
 	struct widget_ops *ops;
 
-	/* for buttons: gid - flags B_XXX
-	 * for fields:  min/max
-	 * for box:     gid is box height */
-	int gid, gnum;
 	struct input_history *history;
-	/* void *widget_data; */
+
+	unsigned char *text;
+	unsigned char *data;
 
 	void *udata;
 
 	int (*fn)(struct dialog_data *, struct widget_data *);
 
+	/* for buttons: gid - flags B_XXX
+	 * for fields:  min/max
+	 * for box:     gid is box height */
+	int gid, gnum;
 	int dlen;
-	unsigned char *data;
-	unsigned char *text;
+
+	enum widget_type type;
 };
 
 struct widget_data {
-	int x, y, l, h;
+	struct list_head history;
+
+	struct widget *item;
+	struct input_history_item *cur_hist;
+
+	unsigned char *cdata;
+
+	int x, y;
+	int l, h;
 	int vpos, cpos;
 	int checked;
-	struct widget *item;
-	struct list_head history;
-	struct input_history_item *cur_hist;
-	unsigned char *cdata;
 };
 
 void display_dlg_item(struct dialog_data *, struct widget_data *, int);

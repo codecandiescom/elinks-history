@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.163 2004/12/26 23:44:26 jonas Exp $ */
+/* $Id: options.c,v 1.164 2004/12/28 13:24:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "sched/session.h"
 #include "terminal/color.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/memory.h"
 #include "util/memlist.h"
 
@@ -210,8 +211,8 @@ menu_language_list(struct terminal *term, void *xxx, void *ses)
 
 /* FIXME: This doesn't in fact belong here at all. --pasky */
 
-static unsigned char x_str[4];
-static unsigned char y_str[4];
+static unsigned char width_str[4];
+static unsigned char height_str[4];
 
 static void
 push_resize_button(void *data)
@@ -220,7 +221,7 @@ push_resize_button(void *data)
 	unsigned char str[MAX_STR_LEN];
 
 	snprintf(str, sizeof(str), "%s,%s,%d,%d",
-		 x_str, y_str, term->width, term->height);
+		 width_str, height_str, term->width, term->height);
 
 	do_terminal_function(term, TERM_FN_RESIZE, str);
 }
@@ -230,11 +231,11 @@ void
 dlg_resize_terminal(struct terminal *term, void *xxx, void *xxxx)
 {
 	struct dialog *dlg;
-	int x = int_min(term->width, 999);
-	int y = int_min(term->height, 999);
+	int width = int_min(term->width, 999);
+	int height = int_min(term->height, 999);
 
-	sprintf(x_str, "%d", x);
-	sprintf(y_str, "%d", y);
+	ulongcat(width_str, NULL, width, 3, ' ');
+	ulongcat(height_str, NULL, height, 3, ' ');
 
 #define RESIZE_WIDGETS_COUNT 4
 	dlg = calloc_dialog(RESIZE_WIDGETS_COUNT, 0);
@@ -243,8 +244,8 @@ dlg_resize_terminal(struct terminal *term, void *xxx, void *xxxx)
 	dlg->title = _("Resize terminal", term);
 	dlg->layouter = group_layouter;
 
-	add_dlg_field(dlg, NULL, 1, 999, check_number, 4, x_str, NULL);
-	add_dlg_field(dlg, NULL, 1, 999, check_number, 4, y_str, NULL);
+	add_dlg_field(dlg, _("Width=",term), 1, 999, check_number, 4, width_str, NULL);
+	add_dlg_field(dlg, _("Height=",term), 1, 999, check_number, 4, height_str, NULL);
 
 	add_dlg_ok_button(dlg, _("OK", term), B_ENTER, push_resize_button, term);
 	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.279 2004/06/29 03:47:37 jonas Exp $ */
+/* $Id: tables.c,v 1.280 2004/06/29 03:48:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -533,7 +533,7 @@ get_table_cellpadding(struct table *table)
 
 again:
 	get_cell_widths(table);
-	if (get_column_widths(table)) return 1;
+	if (get_column_widths(table)) return -1;
 
 	get_table_width(table);
 
@@ -545,7 +545,7 @@ again:
 		int_lower_bound(&part->max_width, table->max_width + margins);
 		int_lower_bound(&part->box.width, table->min_width + margins);
 
-		return 1;
+		return -1;
 	}
 
 	if (!cpd_pass && table->min_width > table->width && table->cellpadding) {

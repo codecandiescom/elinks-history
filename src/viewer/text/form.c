@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.148 2004/06/12 19:29:39 jonas Exp $ */
+/* $Id: form.c,v 1.149 2004/06/12 19:43:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1311,15 +1311,16 @@ get_form_info(struct document_view *doc_view, struct terminal *term)
 	}
 
 	if ((fc->type == FC_CHECKBOX || fc->type == FC_RADIO)
-		&& fc->default_value && fc->default_value[0]) {
+	    && fc->default_value && fc->default_value[0]) {
 		add_to_string(&str, ", ");
 		add_to_string(&str, _("value", term));
 		add_char_to_string(&str, ' ');
 		add_to_string(&str, fc->default_value);
 	}
 
-	if (link->type == LINK_FIELD && fc->action
-		&& !has_form_submit(doc_view->document, fc)) {
+	if (link->type == LINK_FIELD
+	    && fc->action
+	    && !has_form_submit(doc_view->document, fc)) {
 		add_to_string(&str, ", ");
 		add_to_string(&str, _("hit ENTER to", term));
 		add_char_to_string(&str, ' ');

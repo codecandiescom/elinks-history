@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.325 2004/10/08 16:41:07 zas Exp $ */
+/* $Id: download.c,v 1.326 2004/10/08 16:54:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,9 +236,9 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 {
 	struct fragment *frag;
 
-	if (file_download->download.prg && file_download->download.prg->seek) {
-		file_download->last_pos = file_download->download.prg->seek;
-		file_download->download.prg->seek = 0;
+	if (file_download->download.progress && file_download->download.progress->seek) {
+		file_download->last_pos = file_download->download.progress->seek;
+		file_download->download.progress->seek = 0;
 		/* This is exclusive with the prealloc, thus we can perform
 		 * this in front of that thing safely. */
 		if (lseek(file_download->handle, file_download->last_pos, SEEK_SET) < 0) {
@@ -258,13 +258,13 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 #ifdef USE_OPEN_PREALLOC
 		if (!file_download->last_pos
 		    && (!file_download->download.prg
-			|| file_download->download.prg->size > 0)) {
+			|| file_download->download.progress->size > 0)) {
 			close(*h);
 			*h = open_prealloc(file_download->file,
 					   O_CREAT|O_WRONLY|O_TRUNC,
 					   0666,
 					   file_download->download.prg
-					   ? file_download->download.prg->size
+					   ? file_download->download.progress->size
 					   : cached->length);
 			if (*h == -1) {
 				download_error_dialog(file_download, errno);
@@ -411,7 +411,7 @@ download_data(struct download *download, struct file_download *file_download)
 
 		load_uri(file_download->uri, get_cache_uri(cached), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
-			 download->prg ? download->prg->start : 0);
+			 download->progress ? download->progress->start : 0);
 
 		return;
 	}

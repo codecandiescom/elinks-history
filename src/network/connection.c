@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.206 2004/10/08 16:35:05 zas Exp $ */
+/* $Id: connection.c,v 1.207 2004/10/08 16:54:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -247,8 +247,8 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 	init_list(conn->downloads);
 	conn->est_length = -1;
-	conn->prg.start = start;
-	conn->prg.timer = -1;
+	conn->progress.start = start;
+	conn->progress.timer = -1;
 	conn->timer = -1;
 
 	if (referrer) {
@@ -269,30 +269,30 @@ static void stat_timer(struct connection *conn);
 static void
 update_remaining_info(struct connection *conn)
 {
-	struct remaining_info *prg = &conn->prg;
-	ttime a = get_time() - prg->last_time;
+	struct remaining_info *progress = &conn->progress;
+	ttime a = get_time() - progress->last_time;
 
-	prg->loaded = conn->received;
-	prg->size = conn->est_length;
-	prg->pos = conn->from;
-	if (prg->size < prg->pos && prg->size != -1)
-		prg->size = conn->from;
+	progress->loaded = conn->received;
+	progress->size = conn->est_length;
+	progress->pos = conn->from;
+	if (progress->size < progress->pos && progress->size != -1)
+		progress->size = conn->from;
 
-	prg->dis_b += a;
-	while (prg->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
-		prg->cur_loaded -= prg->data_in_secs[0];
-		memmove(prg->data_in_secs, prg->data_in_secs + 1,
+	progress->dis_b += a;
+	while (progress->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
+		progress->cur_loaded -= progress->data_in_secs[0];
+		memmove(progress->data_in_secs, progress->data_in_secs + 1,
 			sizeof(int) * (CURRENT_SPD_SEC - 1));
-		prg->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
-		prg->dis_b -= SPD_DISP_TIME;
+		progress->data_in_secs[CURRENT_SPD_SEC - 1] = 0;
+		progress->dis_b -= SPD_DISP_TIME;
 	}
 
-	prg->data_in_secs[CURRENT_SPD_SEC - 1] += prg->loaded - prg->last_loaded;
-	prg->cur_loaded += prg->loaded - prg->last_loaded;
-	prg->last_loaded = prg->loaded;
-	prg->last_time += a;
-	prg->elapsed += a;
-	prg->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
+	progress->data_in_secs[CURRENT_SPD_SEC - 1] += progress->loaded - progress->last_loaded;
+	progress->cur_loaded += progress->loaded - progress->last_loaded;
+	progress->last_loaded = progress->loaded;
+	progress->last_time += a;
+	progress->elapsed += a;
+	progress->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
 }
 
 static void
@@ -306,33 +306,33 @@ void
 set_connection_state(struct connection *conn, enum connection_state state)
 {
 	struct download *download;
-	struct remaining_info *prg = &conn->prg;
+	struct remaining_info *progress = &conn->progress;
 
 	if (is_in_result_state(conn->state) && is_in_progress_state(state))
 		conn->prev_error = conn->state;
 
 	conn->state = state;
 	if (conn->state == S_TRANS) {
-		if (prg->timer == -1) {
-			if (!prg->valid) {
-				int tmp = prg->start;
-				int tmp2 = prg->seek;
+		if (progress->timer == -1) {
+			if (!progress->valid) {
+				int tmp = progress->start;
+				int tmp2 = progress->seek;
 
-				memset(prg, 0, sizeof(struct remaining_info));
-				prg->start = tmp;
-				prg->seek = tmp2;
-				prg->valid = 1;
+				memset(progress, 0, sizeof(struct remaining_info));
+				progress->start = tmp;
+				progress->seek = tmp2;
+				progress->valid = 1;
 			}
-			prg->last_time = get_time();
-			prg->last_loaded = prg->loaded;
+			progress->last_time = get_time();
+			progress->last_loaded = progress->loaded;
 			update_remaining_info(conn);
 			if (connection_disappeared(conn))
 				return;
 		}
 
-	} else if (prg->timer != -1) {
-		kill_timer(prg->timer);
-		prg->timer = -1;
+	} else if (progress->timer != -1) {
+		kill_timer(progress->timer);
+		progress->timer = -1;
 	}
 
 	foreach (download, conn->downloads) {
@@ -844,14 +844,14 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			download->cached = cached;
 			download->state = S_OK;
 			/* XXX:
-			 * This doesn't work since sometimes |download->prg|
+			 * This doesn't work since sometimes |download->progress|
 			 * is undefined and contains random memory locations.
 			 * It's not supposed to point on anything here since
 			 * |download| has no connection attached.
 			 * Downloads resuming will probably break in some
 			 * cases without this, though.
 			 * FIXME: Needs more investigation. --pasky */
-			/* if (download->prg) download->prg->start = start; */
+			/* if (download->progress) download->progress->start = start; */
 			if (download->callback)
 				download->callback(download, download->data);
 		}
@@ -893,7 +893,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		}
 
 		if (download) {
-			download->prg = &conn->prg;
+			download->progress = &conn->progress;
 			download->conn = conn;
 			download->cached = conn->cached;
 			add_to_list(conn->downloads, download);
@@ -920,7 +920,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		conn->from = ((struct fragment *) cached->frag.next)->length;
 
 	if (download) {
-		download->prg = &conn->prg;
+		download->progress = &conn->progress;
 		download->conn = conn;
 		download->cached = NULL;
 		add_to_list(conn->downloads, download);
@@ -969,7 +969,7 @@ change_connection(struct download *old, struct download *new,
 	old->state = S_INTERRUPTED;
 
 	if (new) {
-		new->prg = &conn->prg;
+		new->progress = &conn->progress;
 		add_to_list(conn->downloads, new);
 		new->state = conn->state;
 		new->prev_error = conn->prev_error;

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.80 2004/10/08 16:04:12 zas Exp $ */
+/* $Id: connection.h,v 1.81 2004/10/08 16:54:57 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -103,7 +103,7 @@ struct remaining_info {
 	int size, loaded, last_loaded, cur_loaded;
 
 	/* This is offset where the download was resumed possibly */
-	/* prg->start == -1 means normal session, not download
+	/* progress->start == -1 means normal session, not download
 	 *            ==  0 means download
 	 *             >  0 means resume
 	 * --witekfl */
@@ -136,7 +136,7 @@ struct connection {
 	LIST_HEAD(struct connection);
 
 	struct list_head downloads;
-	struct remaining_info prg;
+	struct remaining_info progress;
 
 	struct uri *uri;
 	struct uri *proxied_uri;
@@ -206,7 +206,7 @@ struct download {
 	 * the download starts receiving some data. */
 	void (*callback)(struct download *, void *);
 	void *data;
-	struct remaining_info *prg;
+	struct remaining_info *progress;
 
 	enum connection_state state;
 	int prev_error;

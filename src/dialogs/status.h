@@ -1,4 +1,4 @@
-/* $Id: status.h,v 1.7 2004/10/08 16:25:13 zas Exp $ */
+/* $Id: status.h,v 1.8 2004/10/08 16:54:57 zas Exp $ */
 
 #ifndef EL__DIALOGS_STATUS_H
 #define EL__DIALOGS_STATUS_H
@@ -10,7 +10,7 @@
 #define download_is_progressing(download) \
 	((download) && \
 	 (download)->state == S_TRANS && \
-	 ((download)->prg->elapsed / 100))
+	 ((download)->progress->elapsed / 100))
 
 void print_screen_status(struct session *);
 

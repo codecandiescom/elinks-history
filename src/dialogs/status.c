@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.88 2004/10/08 16:20:52 zas Exp $ */
+/* $Id: status.c,v 1.89 2004/10/08 16:54:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,17 +71,17 @@ get_download_msg(struct download *download, struct terminal *term,
 
 	add_to_string(&msg, _("Received", term));
 	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, download->prg->pos);
-	if (download->prg->size >= 0) {
+	add_xnum_to_string(&msg, download->progress->pos);
+	if (download->progress->size >= 0) {
 		add_char_to_string(&msg, ' ');
 		add_to_string(&msg, _("of", term));
 		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, download->prg->size);
+		add_xnum_to_string(&msg, download->progress->size);
 	}
 
 	add_to_string(&msg, separator);
 
-	if (wide && download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+	if (wide && download->progress->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
 			      _(full ? (newlines ? N_("Average speed")
 					         : N_("average speed"))
@@ -93,15 +93,15 @@ get_download_msg(struct download *download, struct terminal *term,
 	}
 
 	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, average_speed(download->prg));
+	add_xnum_to_string(&msg, average_speed(download->progress));
 	add_to_string(&msg, "/s");
 
-	if (wide && download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+	if (wide && download->progress->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, ", ");
 		add_to_string(&msg,
 			      _(full ? N_("current speed") : N_("cur"), term));
 		add_char_to_string(&msg, ' '),
-		add_xnum_to_string(&msg, current_speed(download->prg));
+		add_xnum_to_string(&msg, current_speed(download->progress));
 		add_to_string(&msg, "/s");
 	}
 
@@ -115,16 +115,16 @@ get_download_msg(struct download *download, struct terminal *term,
 					   : N_("ETT"),
 				   term));
 		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, download->prg->elapsed);
+		add_time_to_string(&msg, download->progress->elapsed);
 	}
 
-	if (download->prg->size >= 0 && download->prg->loaded > 0) {
+	if (download->progress->size >= 0 && download->progress->loaded > 0) {
 		if (wide) add_to_string(&msg, ", ");
 		add_to_string(&msg, _(full ? N_("estimated time")
 					   : N_("ETA"),
 				      term));
 		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, estimated_time(download->prg));
+		add_time_to_string(&msg, estimated_time(download->progress));
 	}
 
 	return msg.source;
@@ -300,7 +300,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		  msg, msglen, 0, text_color);
 	mem_free(msg);
 
-	if (download_is_progressing(download) && download->prg->size > 0) {
+	if (download_is_progressing(download) && download->progress->size > 0) {
 		int xend = term->width - 1;
 		int width;
 
@@ -314,7 +314,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		int_upper_bound(&width, 20);
 		download_progress_bar(term, xend - width, term->height - 1,
 				      width, NULL, NULL,
-				      download->prg->pos, download->prg->size);
+				      download->progress->pos, download->progress->size);
 	}
 }
 
@@ -382,7 +382,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			}
 
 			if (!download_is_progressing(download)
-			    || download->prg->size <= 0)
+			    || download->progress->size <= 0)
 				download = NULL;
 		}
 
@@ -392,7 +392,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		if (download) {
 			download_progress_bar(term, box.x, box.y,
 					      actual_tab_width, msg, NULL,
-					      download->prg->pos, download->prg->size);
+					      download->progress->pos, download->progress->size);
 		} else {
 			int msglen = int_min(strlen(msg), actual_tab_width);
 

@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.62 2004/10/08 16:20:52 zas Exp $ */
+/* $Id: download.c,v 1.63 2004/10/08 16:54:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,7 +171,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 	unsigned char *msg = get_download_msg(download, term, 1, 1, "\n");
 	int show_meter = (download_is_progressing(download)
-			  && download->prg->size >= 0);
+			  && download->progress->size >= 0);
 
 	redraw_below_window(dlg_data->win);
 	file_download->dlg_data = dlg_data;
@@ -222,8 +222,8 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	if (show_meter) {
 		y++;
 		download_progress_bar(term, x, y, w, NULL, NULL,
-				      download->prg->pos,
-				      download->prg->size);
+				      download->progress->pos,
+				      download->progress->size);
 		y++;
 	}
 
@@ -382,9 +382,9 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 		trimmedlen += 3;
 	}
 
-	if (download->prg->size < 0
+	if (download->progress->size < 0
 	    || download->state != S_TRANS
-	    || !(download->prg->elapsed / 100)) {
+	    || !(download->progress->elapsed / 100)) {
 		/* TODO: Show trimmed error message. */
 		return;
 	}
@@ -397,8 +397,8 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 	x += width - meter;
 
 	download_progress_bar(context->term, x, y, meter, NULL, NULL,
-			      download->prg->pos,
-			      download->prg->size);
+			      download->progress->pos,
+			      download->progress->size);
 }
 
 static struct listbox_ops_messages download_messages = {

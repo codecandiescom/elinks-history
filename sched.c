@@ -182,9 +182,11 @@ void free_connection_data(struct connection *c)
 	c->running = 0;
 	if (c->dnsquery) {
 		kill_dns_request(&c->dnsquery);
+#if 0
 		debug("freeeee!");
 		mem_free(*((void **) c->buffer)); /* XXX */
 		debug("freeeeed!");
+#endif
 	}
 	if (c->buffer) {
 		mem_free(c->buffer);

@@ -225,51 +225,58 @@ void dns_found(void *data, int state)
 
 void connected(void *data)
 {
-        struct connection *c = (struct connection *) data;
-	struct conn_info *b = c->buffer;
-	void (*func)(struct connection *) = b->func;
+        struct connection *conn = (struct connection *) data;
+	struct conn_info *c_i = conn->buffer;
 	int err = 0;
 	int len = sizeof(int);
-	/*if (!connect(*b->sock, (struct sockaddr *)&b->sa, sizeof b->sa) || errno == EISCONN) {
-		mem_free(b);
-		func(c);
-		return;
-	}
-	mem_free(b);
-	setcstate(c, -errno);*/
-	if (getsockopt(*b->sock, SOL_SOCKET, SO_ERROR, (void *)&err, &len))
+	
+	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *)&err, &len))
 		if (!(err = errno)) {
 			err = -S_STATE;
-			goto bla;
+			goto skiperrdec;
 		}
+	
 	if (err >= 10000) err -= 10000;	/* Why does EMX return so large values? */
-	bla:
-	if (err > 0) setcstate(c, -err), retry_connection(c);
-	else {
+	
+skiperrdec:
+	if (err > 0) {
+		setcstate(conn, -err);
+		retry_connection(conn);
+		
+	} else {
+		void (*func)(struct connection *) = c_i->func;
+
 #ifdef HAVE_SSL
-		if(c->ssl) {
-			c->ssl = getSSL();
-			SSL_set_fd(c->ssl, *b->sock);
-			if (c->no_tsl) c->ssl->options |= SSL_OP_NO_TLSv1;
-			switch (SSL_get_error(c->ssl, SSL_connect(c->ssl))) {
+		if (conn->ssl) {
+			conn->ssl = getSSL();
+			SSL_set_fd(conn->ssl, *c_i->sock);
+			if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
+			
+			switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
 				case SSL_ERROR_WANT_READ:
-					setcstate(c, S_SSL_NEG);
-					set_handlers(*b->sock, (void(*)(void *))ssl_want_read, NULL, (void(*)(void *))exception, c);
+					setcstate(conn, S_SSL_NEG);
+					set_handlers(*c_i->sock,
+						     (void (*)(void *)) ssl_want_read,
+						     NULL, (void (*)(void *)) exception,
+						     conn);
 					return;
+					
 				case SSL_ERROR_NONE:
 					break;
+					
 				default:
-					c->no_tsl++;
-					setcstate(c, S_SSL_ERROR);
-					retry_connection(c);
+					conn->no_tsl++;
+					setcstate(conn, S_SSL_ERROR);
+					retry_connection(conn);
 					return;
 			}
 		}
 #endif
-		c->buffer = NULL;
-		//mem_free(b->addr);
-		mem_free(b);
-		func(c);
+		
+		conn->buffer = NULL;
+		func(conn);
+		mem_free(c_i->addr);
+		mem_free(c_i);
 	}
 }
 

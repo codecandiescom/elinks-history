@@ -231,7 +231,7 @@ done:
 	data = q->data;
 	
 	if (q->s) *q->s = NULL;
-	if (q->addr && !(res < 0)) mem_free(*q->addr);
+	/* q->addr is freed later by dns_found() */
 	mem_free(q);
 	
 	fn(data, res);
@@ -290,10 +290,7 @@ void kill_dns_request(void **qp)
 	close(q->h);
 	mem_free(q);*/
 	q->fn = NULL;
-	debug("freed");
-	free(*q->addr);
-	debug("freed");
-	q->addr = NULL;
+	mem_free(q->addr); q->addr = NULL;
 	*qp = NULL;
 }
 

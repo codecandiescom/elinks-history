@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.243 2004/06/18 04:46:01 jonas Exp $ */
+/* $Id: search.c,v 1.244 2004/06/22 11:21:36 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -705,6 +705,7 @@ draw_searched(struct terminal *term, struct document_view *doc_view)
 	mem_free_if(pt);
 }
 
+
 static void
 search_for_do(struct session *ses, unsigned char *str, int direction)
 {
@@ -750,6 +751,7 @@ search_for(struct session *ses, unsigned char *str)
 
 	search_for_do(ses, str, 1);
 }
+
 
 static inline int
 point_intersect(struct point *p1, int l1, struct point *p2, int l2)

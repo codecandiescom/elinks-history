@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.6 2003/05/08 01:23:15 zas Exp $ */
+/* $Id: hardio.c,v 1.7 2003/08/25 02:45:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,5 +138,3 @@ hard_read(int fd, unsigned char *p, int l)
 
 	return t;
 }
-
-

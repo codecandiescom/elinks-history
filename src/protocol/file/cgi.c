@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.51 2004/03/21 14:41:20 jonas Exp $ */
+/* $Id: cgi.c,v 1.52 2004/03/21 15:10:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,7 +279,7 @@ execute_cgi(struct connection *conn)
 {
 	unsigned char *last_slash;
 	unsigned char *question_mark;
-	unsigned char *script = conn->uri.datastr;
+	unsigned char *script = conn->uri.data.source;
 	int scriptlen = conn->uri.datalen;
 	struct stat buf;
 	int res;
@@ -293,7 +293,7 @@ execute_cgi(struct connection *conn)
 		return 1;
 	}
 
-	question_mark = memchr(conn->uri.datastr, '?', scriptlen);
+	question_mark = string_strchr(&conn->uri.data, '?');
 	if (question_mark) scriptlen = question_mark - script;
 
 	script = memacpy(script, scriptlen);

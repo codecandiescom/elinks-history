@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.367 2004/01/19 17:03:49 jonas Exp $ */
+/* $Id: parser.c,v 1.368 2004/01/19 19:58:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,7 +1064,8 @@ html_body(unsigned char *a)
 	get_bgcolor(a, &format.bg);
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
-	css_apply(&html_top, &css_styles);
+	if (global_doc_opts->css_enable)
+		css_apply(&html_top, &css_styles);
 
 	if (par_format.bgcolor != format.bg) {
 		/* Modify the root HTML element - format_html_part() will take
@@ -3289,8 +3290,8 @@ ng:;
 						do_html_textarea(attr, html, eof, &html, f);
 						goto set_lt;
 					}
-					if (ei->func == html_style) {
-						css_parse_stylesheet(&css_styles, html);
+					if (ei->func == html_style && global_doc_opts->css_enable) {
+							css_parse_stylesheet(&css_styles, html);
 					}
 					if (ei->nopair == 2 || ei->nopair == 3) {
 						struct html_element *e;
@@ -3319,7 +3320,7 @@ ng:;
 						html_top.options = attr;
 						html_top.linebreak = ei->linebreak;
 					}
-					if (html_top.options) {
+					if (html_top.options && global_doc_opts->css_enable) {
 						/* XXX: We should apply CSS
 						 * otherwise as well, but
 						 * that'll need some deeper
@@ -3338,7 +3339,7 @@ ng:;
 						css_apply(&html_top, &css_styles);
 					}
 					if (ei->func) ei->func(attr);
-					if (html_top.options) {
+					if (html_top.options && global_doc_opts->css_enable) {
 						/* Call it now to override
 						 * default colors of the
 						 * elements. */
@@ -3849,7 +3850,8 @@ init_html_parser(unsigned char *url, struct document_options *options,
 void
 done_html_parser(void)
 {
-	done_css_stylesheet(&css_styles);
+	if (global_doc_opts->css_enable)
+		done_css_stylesheet(&css_styles);
 
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;

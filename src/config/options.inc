@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.87 2004/01/08 23:26:17 jonas Exp $ */
+/* $Id: options.inc,v 1.88 2004/01/19 19:58:10 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -515,6 +515,14 @@ struct option_info config_options_info[] = {
 		"keep_unhistory", 0, 1,
 		N_("Keep unhistory (\"forward history\")?")),
 
+
+	INIT_OPT_TREE("document", N_("Cascading Style Sheets"),
+		"css", 0,
+		N_("Options concerning how to use CSS for styling documents.")),
+
+	INIT_OPT_BOOL("document.css", N_("Enable CSS"),
+		"enable", 0, 1,
+		N_("Enable adding of CSS style info to documents.")),
 
 
 	INIT_OPT_TREE("document", N_("HTML rendering"),

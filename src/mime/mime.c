@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.12 2003/06/08 20:00:52 jonas Exp $ */
+/* $Id: mime.c,v 1.13 2003/06/11 03:01:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,26 +64,24 @@ try_extension_type(unsigned char *extension)
 unsigned char *
 get_content_type(unsigned char *head, unsigned char *url)
 {
-	unsigned char *content_type;
 	unsigned char *extension;
 
 	/* If there's one in header, it's simple.. */
 	if (head) {
-	       	content_type = parse_http_header(head, "Content-Type", NULL);
+		unsigned char *ctype;
 
-		if (content_type) {
-			unsigned char *s;
-			int slen;
+		ctype = parse_http_header(head, "Content-Type", NULL);
+		if (ctype) {
+			unsigned char *end = strchr(ctype, ';');
+			int ctypelen;
 
-			s = strchr(content_type, ';');
-			if (s) *s = '\0';
+			if (end) *end = '\0';
 
-			slen = strlen(content_type);
-			while (slen && content_type[--slen] <= ' ') {
-				content_type[slen] = '\0';
-			}
+			ctypelen = strlen(ctype);
+			while (ctypelen && ctype[--ctypelen] <= ' ')
+				ctype[ctypelen] = '\0';
 
-			return content_type;
+			return ctype;
 		}
 	}
 
@@ -93,16 +91,16 @@ get_content_type(unsigned char *head, unsigned char *url)
 	/* Guess type accordingly to the extension */
 	extension = get_extensionpart_from_url(url);
 	if (extension) {
-		content_type = get_content_type_backends(extension);
+		unsigned char *ctype = get_content_type_backends(extension);
 
 		/* Check if application/x-<extension> has any handlers. */
-		if (!content_type)
-			content_type = try_extension_type(extension);
+		if (!ctype)
+			ctype = try_extension_type(extension);
 
 		mem_free(extension);
 
-		if (content_type)
-			return content_type;
+		if (ctype)
+			return ctype;
 	}
 
 	/* Fallback.. use some hardwired default */

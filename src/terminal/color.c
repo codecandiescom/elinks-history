@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.4 2003/08/29 11:16:58 jonas Exp $ */
+/* $Id: color.c,v 1.5 2003/08/29 12:16:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ extern int dump_pos;
 /* Locates the nearest terminal color. */
 /* Hint: @level should be 16 for foreground colors and 8 for backgrounds. */
 static inline unsigned char
-find_nearest_color(color_t color, int l)
+find_nearest_color(color_t color, int level)
 {
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
 	/*static struct rgb_cache_entry rgb_bgcache[RGB_HASH_SIZE];*/
@@ -151,14 +151,14 @@ find_nearest_color(color_t color, int l)
 	}
 
 	INT2RGB(color, rgb);
-	h = HASH_RGB(rgb, l);
+	h = HASH_RGB(rgb, level);
 
 	if (rgb_cache[h].color != -1
-	    && rgb_cache[h].l == l
+	    && rgb_cache[h].l == level
 	    && rgb_cache[h].rgb == color)
 		return rgb_cache[h].color;
 
-	for (i = 0; i < l; i++) {
+	for (i = 0; i < level; i++) {
 		int dist = color_distance(&rgb, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
 
 		if (dist < min_dist) {
@@ -168,7 +168,7 @@ find_nearest_color(color_t color, int l)
 	}
 
 	rgb_cache[h].color = nearest_color;
-	rgb_cache[h].l = l;
+	rgb_cache[h].l = level;
 	rgb_cache[h].rgb = color;
 
 	return nearest_color;

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.60 2004/07/15 08:42:16 zas Exp $ */
+/* $Id: group.c,v 1.61 2004/07/17 20:13:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,9 @@ dlg_format_group(struct terminal *term,
 	int nx = 0;
 	int base = base_group_width(widget_data);
 	struct color_pair *color = get_bfu_color(term, "dialog.text");
+
+	assert(n > 0);
+	if_assert_failed return;
 
 	while (n--) {
 		int sl;

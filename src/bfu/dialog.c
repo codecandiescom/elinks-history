@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.138 2004/05/13 09:07:44 zas Exp $ */
+/* $Id: dialog.c,v 1.139 2004/05/13 20:31:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ static inline void cycle_widget_focus(struct dialog_data *dlg_data, int directio
 void
 redraw_dialog(struct dialog_data *dlg_data, int layout)
 {
-	int i, x, y;
+	int i;
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
 
@@ -84,23 +84,26 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 	}
 
 	if (!dlg_data->dlg->layout.only_widgets) {
-		x = dlg_data->dimensions.x + DIALOG_LEFT_BORDER;
-		y = dlg_data->dimensions.y + DIALOG_TOP_BORDER;
+		struct rect box;
 
-		draw_border(term, x, y,
-			    dlg_data->dimensions.width - 2 * DIALOG_LEFT_BORDER,
-			    dlg_data->dimensions.height - 2 * DIALOG_TOP_BORDER,
-			    get_bfu_color(term, "dialog.frame"),
-			    DIALOG_FRAME);
+		set_rect(&box,
+			 dlg_data->dimensions.x + (DIALOG_LEFT_BORDER + 1),
+			 dlg_data->dimensions.y + (DIALOG_TOP_BORDER + 1),
+			 dlg_data->dimensions.width - 2 * (DIALOG_LEFT_BORDER + 1),
+			 dlg_data->dimensions.height - 2 * (DIALOG_TOP_BORDER + 1));
+
+		draw_border_box(term, &box, get_bfu_color(term, "dialog.frame"),
+			         DIALOG_FRAME);
 
 		assert(dlg_data->dlg->title);
 
 		title_color = get_bfu_color(term, "dialog.title");
-		if (title_color && dlg_data->dimensions.width >= 2) {
+		if (title_color && box.width > 2) {
 			unsigned char *title = dlg_data->dlg->title;
-			int titlelen = int_min(dlg_data->dimensions.width - 2, strlen(title));
+			int titlelen = int_min(box.width - 2, strlen(title));
+			int x = (box.width - titlelen) / 2 + box.x;
+			int y = box.y - 1;
 
-			x = (dlg_data->dimensions.width - titlelen) / 2 + dlg_data->dimensions.x;
 			draw_text(term, x - 1, y, " ", 1, 0, title_color);
 			draw_text(term, x, y, title, titlelen, 0, title_color);
 			draw_text(term, x + titlelen, y, " ", 1, 0, title_color);

@@ -41,12 +41,16 @@ Known bugs:
 - Call to OS Shell doesn't release mouse handler.
 
 + Spaces added by justification are not highlighted in links when those links
-  are selected.
+  are selected. The general problem is that the background is not set properly
+  when the spaces are inserted.
 
 - Searches match links' prefixes (when document.browse.links.numbering = 1).
+
+- Searches do not scroll horizontally to show matched text that is beyond
+  the left- or right-edge of the screen.
 
 
 Key: - nothing done + work in progress * almost fixed
      (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.55 2003/05/06 23:10:45 pasky Exp $
+$Id: BUGS,v 1.56 2003/05/08 11:07:29 miciah Exp $

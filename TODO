@@ -59,24 +59,31 @@ Text HTML viewer:
 
 - Configurable highlight colour for text matched after a search
 
+- Scroll when searching so that the current match is always displayed at
+  the top of the screen (optional?)
+
 
 User interface / terminal stuff:
 
 - Use terminfo instead of hardwired ANSI control sequences
 
-- Show certain information specified with <meta> and <link> tags in the
+- Show any information specified with <meta> and <link> tags in the
   Document Info box
 
-- Kill-ring for edit-boxes
+- More key-bindings for edit-boxes, including cut, copy, and paste
 
 - Show selected link's title (which is specified by the title attribute) in the
   statusbar
 
 - Support using the hardstatus line to display current page's title, URL, or
-  whatever
+  whatever. (The hardstatus line is a fixed line in mythical terminals which
+  GNU Screen emulates by using the last line of the terminal and people emulate
+  in XTerms by changing the XTerms' windows' titles.) This merely entails
+  sending the right escape sequences (the termcap/terminfo tsl/ts and fsl/fs
+  capabilities) for the appropriate terminals.
 
-- Use the alternate screen (terminfo capabilities smcup and rmcup) in XTerms
-  and GNU Screen
+- Use the alternate screen (termcap/terminfo capabilities smcup/ti
+  and rmcup/te) in XTerms and GNU Screen
 
 - Insert should toggle insert/overwrite mode.
 
@@ -85,13 +92,13 @@ User interface / terminal stuff:
 
 Generic listboxes:
 
-- 'Search' in the bookmark mgr. should be able to search collapsed folders
+- Easily togglable option for 'Search' in the bookmark mgr. to search
+  collapsed folders
 
 - Expand or collapse recursively and expand or collapse all folders in
   hierarchical listboxes
 
-- Highlight marked listbox items instead of or in addition to putting asterisks
-  next to them
+- Highlight marked listbox items in addition to putting asterisks next to them
 
 
 Bookmarks:
@@ -108,7 +115,7 @@ Bookmarks:
 Global history:
 
 + Show any info that can be found in globhist for the selected link in the Info
-  box
+  box (last-visit-time and possibly page-title)
 
 
 Options / keybindings / runtime configuration:
@@ -120,6 +127,11 @@ Options / keybindings / runtime configuration:
 - Support prefixes for more bindings; candidates: goto-url-current-link,
   add-bookmark-link, back, unback, document-info, next-frame, previous-frame,
   tab-prev, tab-next, tab-close, zoom-frame
+
+- More tab-related bindings, such as select-tab (jump to the nth tab
+  where n is specified by the key prefix), select-other-tab (select
+  the previously selected tab), and move-tab-left and move-tab-right
+  (to change the current tab's position on the tab-bar)
 
 
 Downloads / scheduling:
@@ -146,9 +158,12 @@ Protocols / network:
 - HTTPS proxy support (!) (I have no idea how to do it so someone else will
   have to; good job for a wannabe ELinks developer ;)
 
+- Optional support for meta-refresh (that is, <meta http-equiv="refresh"
+  content="5;url=http://foo.com/" />)
 
 Scripting:
 
+- Rewrite Lua APIs
 - Add Lua APIs to manipulate bookmarks and other things
 
 
@@ -158,6 +173,8 @@ Generic code changes:
 
 - Optimize multiple _()s of the same strings by using temporary variables
 
+- Create and use a structure to store URLs, instead of using a string (this
+  should fix the bug that file-uploads are very slow and memory-consumptive)
 
 Build-time configuration / build:
 
@@ -176,4 +193,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.49 2003/05/06 23:09:51 pasky Exp $
+$Id: TODO,v 1.50 2003/05/08 11:07:29 miciah Exp $

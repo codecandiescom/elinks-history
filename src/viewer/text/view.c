@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.404 2004/05/10 17:15:22 zas Exp $ */
+/* $Id: view.c,v 1.405 2004/05/11 09:33:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,18 +100,18 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 	if_assert_failed return;
 
 	y = yp - 1;
-	for (j = 0; j < frameset_desc->height; j++) {
+	for (j = 0; j < frameset_desc->dimensions.height; j++) {
 		register int x, i;
-		int height = frameset_desc->frame_desc[j * frameset_desc->width].height;
+		int height = frameset_desc->frame_desc[j * frameset_desc->dimensions.width].height;
 
 		x = xp - 1;
-		for (i = 0; i < frameset_desc->width; i++) {
+		for (i = 0; i < frameset_desc->dimensions.width; i++) {
 			int width = frameset_desc->frame_desc[i].width;
 
 			if (i) {
 				draw_area(t, x, y + 1, 1, height, BORDER_SVLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (j == frameset_desc->height - 1)
+				if (j == frameset_desc->dimensions.height - 1)
 					draw_border_cross(t, x, y + height + 1,
 							  BORDER_X_UP, &colors);
 			} else if (j) {
@@ -123,7 +123,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 			if (j) {
 				draw_area(t, x + 1, y, width, 1, BORDER_SHLINE,
 					  SCREEN_ATTR_FRAME, &colors);
-				if (i == frameset_desc->width - 1
+				if (i == frameset_desc->dimensions.width - 1
 				    && x + width + 1 < t->width)
 					draw_border_cross(t, x + width + 1, y,
 							  BORDER_X_LEFT, &colors);
@@ -140,13 +140,13 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *frameset_desc,
 	}
 
 	y = yp - 1;
-	for (j = 0; j < frameset_desc->height; j++) {
+	for (j = 0; j < frameset_desc->dimensions.height; j++) {
 		register int x, i;
-		int pj = j * frameset_desc->width;
+		int pj = j * frameset_desc->dimensions.width;
 		int height = frameset_desc->frame_desc[pj].height;
 
 		x = xp - 1;
-		for (i = 0; i < frameset_desc->width; i++) {
+		for (i = 0; i < frameset_desc->dimensions.width; i++) {
 			int width = frameset_desc->frame_desc[i].width;
 			int p = pj + i;
 

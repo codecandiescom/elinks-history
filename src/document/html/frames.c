@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.67 2004/05/10 17:15:22 zas Exp $ */
+/* $Id: frames.c,v 1.68 2004/05/11 09:32:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,18 +42,20 @@ add_frameset_entry(struct frameset_desc *frameset_desc,
 	 * There may exist a true fix for this... --Zas */
 	/* May the one truly fixing this notify'n'close bug 237 in the
 	 * Bugzilla... --pasky */
-	if (frameset_desc->y >= frameset_desc->height) return;
+	if (frameset_desc->dimensions.y >= frameset_desc-> dimensions.height)
+		return;
 
-	offset = frameset_desc->x + frameset_desc->y * frameset_desc->width;
+	offset = frameset_desc->dimensions.x
+		 + frameset_desc->dimensions.y * frameset_desc->dimensions.width;
 	frame_desc = &frameset_desc->frame_desc[offset];
 	frame_desc->subframe = subframe;
 	frame_desc->name = null_or_stracpy(name);
 	frame_desc->uri = url ? get_uri(url, -1) : NULL;
 
-	frameset_desc->x++;
-	if (frameset_desc->x >= frameset_desc->width) {
-		frameset_desc->x = 0;
-		frameset_desc->y++;
+	frameset_desc->dimensions.x++;
+	if (frameset_desc->dimensions.x >= frameset_desc->dimensions.width) {
+		frameset_desc->dimensions.x = 0;
+		frameset_desc->dimensions.y++;
 		/* FIXME: check y here ? --Zas */
 	}
 }
@@ -91,8 +93,8 @@ create_frameset(struct frameset_param *fp)
 	}
 
 	fd->n = size;
-	fd->width = fp->x;
-	fd->height = fp->y;
+	fd->dimensions.width = fp->x;
+	fd->dimensions.height = fp->y;
 
 	if (fp->parent)
 		add_frameset_entry(fp->parent, fd, NULL, NULL);
@@ -213,11 +215,11 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 	o.margin = !!o.margin;
 
 	n = 0;
-	for (j = 0; j < fsd->height; j++) {
+	for (j = 0; j < fsd->dimensions.height; j++) {
 		register int i;
 
 		o.x = op->x;
-		for (i = 0; i < fsd->width; i++) {
+		for (i = 0; i < fsd->dimensions.width; i++) {
 			struct frame_desc *frame_desc = &fsd->frame_desc[n];
 
 			o.width = frame_desc->width;

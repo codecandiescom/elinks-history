@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.123 2004/06/09 22:42:45 zas Exp $ */
+/* $Id: form.c,v 1.124 2004/06/09 22:54:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -659,15 +659,21 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 again:
 	for (i = 0; i <= data->length - BL; i++) {
-		int j;
+		register int j;
 
-		for (j = 0; j < BL; j++) if ((data->source)[i + j] != bound[j]) goto nb;
+		for (j = 0; j < BL; j++)
+			if ((data->source)[i + j] != bound[j])
+				goto next_boundary;
+
 		for (j = BL - 1; j >= 0; j--)
-			if (bound[j]++ >= '9') bound[j] = '0';
-			else goto again;
+			if (bound[j]++ >= '9')
+				bound[j] = '0';
+			else
+				goto again;
+
 		INTERNAL("Could not assing boundary");
 
-nb:;
+next_boundary:;
 	}
 
 	for (i = 0; i < nbound_ptrs; i++)

@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.5 2003/08/24 02:30:37 jonas Exp $ */
+/* $Id: style.c,v 1.6 2003/08/24 13:35:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@ static struct hash *bfu_colors = NULL;
 struct color_pair *
 get_bfu_color(struct terminal *term, unsigned char *stylename)
 {
+	static unsigned int color_term;
 	struct bfu_color_entry *entry;
 	int stylenamelen;
 	struct hash_item *item;
@@ -39,6 +40,20 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 	if (!bfu_colors) {
 		bfu_colors = init_hash(8, &strhash);
 		if (!bfu_colors) return NULL;
+
+		color_term = get_opt_bool_tree(term->spec, "colors");
+
+	} else if (get_opt_bool_tree(term->spec, "colors") != color_term) {
+		int i;
+
+		/* Empty the cache. */
+		foreach_hash_item (item, *bfu_colors, i) {
+			if (item->value) mem_free(item->value);
+			item = item->prev;
+			del_hash_item(bfu_colors, item->next);
+		}
+
+		color_term = !color_term;
 	}
 
 	stylenamelen = strlen(stylename);
@@ -50,11 +65,7 @@ get_bfu_color(struct terminal *term, unsigned char *stylename)
 		struct option *opt;
 
 		/* Construct a the style. */
-		/* Do we need to flag wether entries are for mono or color?
-		 * That is can it happen that both mono and colors lookups
-		 * occur? --jonas */
-		opt = get_opt_rec_real(config_options,
-				       get_opt_bool_tree(term->spec, "colors")
+		opt = get_opt_rec_real(config_options, color_term
 				       ? "ui.colors.color" : "ui.colors.mono");
 		if (!opt) return NULL;
 

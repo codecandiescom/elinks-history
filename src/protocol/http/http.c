@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.100 2003/04/16 21:36:24 pasky Exp $ */
+/* $Id: http.c,v 1.101 2003/04/17 15:07:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,10 +721,12 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 				data += written;
 				len -= written;
 
-				/* if info->length == LEN_CHUNKED, info->length < 0 */
+				/* In non-keep-alive connections info->length == -1, so the test below */
 				if (*length_of_block > 0)
 					*length_of_block -= written;
-				if (*length_of_block) {
+				/* info->length is 0 at the end of block for all modes: keep-alive,
+				 * non-keep-alive and chunked */
+				if (!info->length) {
 					/* That's all, folks - let's finish this. */
 					to_read = 65536;
 				} else if (!len) {
@@ -745,7 +747,9 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 			conn->stream = open_encoded(conn->stream_pipes[0],
 					conn->content_encoding);
 			if (!conn->stream) return NULL;
-			else if (to_read != 65536) init = 1; /* at the end caution doesn't make sense */
+			/* On "startup" pipe is treated with care, but if everything
+			 * was already written to the pipe, caution isn't necessary */
+			else if (to_read != 65536) init = 1;
 		} else init = 0;
 
 		output = (unsigned char *) mem_realloc(output, *new_len + to_read);

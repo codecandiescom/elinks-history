@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.120 2004/06/08 00:00:59 jonas Exp $ */
+/* $Id: uri.h,v 1.121 2004/06/08 00:04:19 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -138,6 +138,9 @@ enum uri_component {
 
 	/* Used for getting the host of a DNS query */
 	URI_DNS_HOST		= URI_HOST | URI_IDN,
+
+	/* Used for adding the unproxied URI and encode it using IDN to string */
+	URI_PROXY		= URI_BASE | URI_IDN,
 
 	/* Used for comparing keepalive connection URIs */
 	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT,

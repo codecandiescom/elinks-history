@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: history.h,v 1.2 2003/06/11 22:42:04 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -16,13 +16,6 @@ void ses_unback(struct session *);
 void create_history(struct session *);
 void destroy_history(struct session *);
 void clean_unhistory(struct session *);
-
-/* Return if we have anything being loaded in this session already. If you
- * don't understand, please read top of history.c about ses->history. */
-static inline int
-have_location(struct session *ses) {
-	return !list_empty(ses->history);
-}
 
 static inline void
 add_to_history(struct session *ses, struct location *loc) {

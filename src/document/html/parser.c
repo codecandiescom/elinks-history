@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.232 2003/10/29 21:58:29 jonas Exp $ */
+/* $Id: parser.c,v 1.233 2003/10/29 22:11:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/form.h"
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
 
@@ -474,7 +475,7 @@ void (*line_break_f)(void *);
 void (*init_f)(void *);
 void *(*special_f)(void *, int, ...);
 
-unsigned char *eoff;
+static unsigned char *eoff;
 static unsigned char *eofff;
 static unsigned char *startf;
 

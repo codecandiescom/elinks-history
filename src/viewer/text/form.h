@@ -1,13 +1,56 @@
-/* $Id: form.h,v 1.8 2003/10/29 20:18:29 jonas Exp $ */
+/* $Id: form.h,v 1.9 2003/10/29 22:11:02 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
 
-#include "document/html/parser.h"
-#include "document/html/renderer.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/lists.h" /* LIST_HEAD */
+
+enum form_method {
+	FM_GET,
+	FM_POST,
+	FM_POST_MP,
+};
+
+enum form_type {
+	FC_TEXT,
+	FC_PASSWORD,
+	FC_FILE,
+	FC_TEXTAREA,
+	FC_CHECKBOX,
+	FC_RADIO,
+	FC_SELECT,
+	FC_SUBMIT,
+	FC_IMAGE,
+	FC_RESET,
+	FC_HIDDEN,
+};
+
+struct form_control {
+	LIST_HEAD(struct form_control);
+
+	int form_num;
+	int ctrl_num;
+	int g_ctrl_num;
+	int position;
+	enum form_method method;
+	unsigned char *action;
+	unsigned char *target;
+	enum form_type type;
+	unsigned char *name;
+	unsigned char *alt;
+	int ro;
+	unsigned char *default_value;
+	int default_state;
+	int size;
+	int cols, rows, wrap;
+	int maxlength;
+	int nvalues;
+	unsigned char **values;
+	unsigned char **labels;
+	struct menu_item *menu;
+};
 
 struct form_state {
 	int form_num;

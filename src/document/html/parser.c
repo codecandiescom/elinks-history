@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.155 2003/07/21 00:17:58 pasky Exp $ */
+/* $Id: parser.c,v 1.156 2003/07/21 00:21:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2297,10 +2297,8 @@ new_ch:
 	q = n;
 	if (*a == '%') q = q * ww / 100;
 	else if (*a != '*') q = (q + (www - 1) / 2) / www;
-	else {
-		q = -q;
-		if (!q) q = -1;
-	}
+	else if (!q) q = -1;
+	else q = -q;
 
 	oo = mem_realloc(o, (ol + 1) * sizeof(int));
 	if (oo) (o = oo)[ol++] = q;

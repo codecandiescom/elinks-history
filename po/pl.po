@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.9.0.CVS\n"
 "POT-Creation-Date: 2003-12-30 22:00+0100\n"
-"PO-Revision-Date: 2003-12-28 08:00+0200\n"
+"PO-Revision-Date: 2004-01-04 08:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2032,7 +2032,6 @@ msgid "Document meta refresh"
 msgstr "Obs³uga meta refresh"
 
 #: src/config/options.inc:302
-#, fuzzy
 msgid ""
 "Automatically follow document-specified refresh directives ('<meta>\n"
 "refresh' tags). Web-page authors use these to instruct the browser\n"
@@ -2044,12 +2043,14 @@ msgstr ""
 "Automatycznie pod±¿aj za podan± w dokumencie dyrektyw± refresh\n"
 "(tagi '<meta> refresh'). Autorzy stron u¿ywaj± jej do poinstruowania\n"
 "przegl±darki, ¿eby po danym okresie czasu prze³adowa³a dokument\n"
-"lub za³adowa³a inn± stronê."
+"lub za³adowa³a inn± stronê. Niezale¿nie od warto¶ci od¶wie¿any URI\n"
+"jest dostêpny jako odno¶nik. U¿yj document.browse.minimum_refresh_time,\n"
+"aby kontrolowaæ minimaln± liczbê sekund oczekiwania na prze³adowanie\n"
+"strony."
 
 #: src/config/options.inc:309
-#, fuzzy
 msgid "Document meta refresh minimum time"
-msgstr "Obs³uga meta refresh"
+msgstr "Minimalny czas zw³oki przy prze³adowaniu strony"
 
 #: src/config/options.inc:311
 msgid ""
@@ -2058,6 +2059,12 @@ msgid ""
 "unchanged. It can fix going back in history for some sites that\n"
 "use refreshing with zero values."
 msgstr ""
+"Minimalny czas zw³oki w milisekundach przed prze³adowaniem strony\n"
+"Je¶li ustawiony na zero u¿ywany jest niezmieniony czas od¶wie¿ania\n"
+"z dokumentu. Ustawienie na warto¶æ wiêksz± od zera mo¿e naprawiæ\n"
+"b³êdy przy powrotach w historii dla pewnych stron, które u¿ywaj±\n"
+"zerowej warto¶ci czasu od¶wie¿ania."
+
 
 #: src/config/options.inc:316
 msgid "Scroll margin"
@@ -2521,13 +2528,12 @@ msgstr ""
 "tak, ¿eby nie by³o potrzebne przewijanie w poziomie."
 
 #: src/config/options.inc:558
-#, fuzzy
 msgid "Default form input size"
-msgstr "Domy¶lne ustawienia kolorów"
+msgstr "Domy¶lny rozmiar formularzy"
 
 #: src/config/options.inc:560
 msgid "Default form input size if none is specified."
-msgstr ""
+msgstr "Domy¶lny rozmiar formularzy, je¶li nie podany w dokumencie."
 
 #
 #: src/config/options.inc:563
@@ -3569,15 +3575,16 @@ msgstr ""
 "setup.h."
 
 #: src/config/options.inc:1137
-#, fuzzy
 msgid "Underline hotkeys"
-msgstr "Podkre¶lanie odno¶ników"
+msgstr "Podkre¶lanie klawiszy skrótu"
 
 #: src/config/options.inc:1139
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
+"Czy podkre¶laæ klawisze skrótu w menu, by by³y bardziej widoczne?\n"
+"Wymaga w³±czenia podkre¶lania dla terminala."
 
 #
 #: src/config/options.inc:1143
@@ -3715,47 +3722,49 @@ msgstr ""
 "Gdy nie ma ustawionej strony domowej wy¶wietlaj okienko wpisywania adresu."
 
 #: src/config/options.inc:1213
-#, fuzzy
 msgid "Sessions"
-msgstr "Zapisana sesja"
+msgstr "Sesje"
 
 #: src/config/options.inc:1215
-#, fuzzy
 msgid "Sessions settings."
-msgstr "Ustawienia kart."
+msgstr "Ustawienia sesji."
 
 #: src/config/options.inc:1217
-#, fuzzy
 msgid "Auto save session"
-msgstr "Automatycznie zapisana sesja"
+msgstr "Automatyczne zapisywanie sesji"
 
 #: src/config/options.inc:1219
 msgid ""
 "Automatically save the session when quitting.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automatycznie zapisuj sesjê przy koñczeniu dzia³ania.\n"
+"Wymagana jest obs³uga zak³adek."
 
 #: src/config/options.inc:1222
-#, fuzzy
 msgid "Auto restore session"
-msgstr "Automatyczne zapisywanie i odtwarzanie sesji"
+msgstr "Automatyczne odtwarzanie sesji"
 
 #: src/config/options.inc:1224
 msgid ""
 "Automatically restore the session at start.\n"
 "This feature requires bookmark support."
 msgstr ""
+"Automatycznie odtwarzaj sesjê na starcie.\n"
+"Wymagana jest obs³uga zak³adek."
 
 #: src/config/options.inc:1227
-#, fuzzy
 msgid "Auto save and restore session folder name"
-msgstr "Automatyczne zapisywanie i odtwarzanie sesji"
+msgstr "Nazwa foldera do automatycznego zapisywania i odtwarzania sesji"
 
 #: src/config/options.inc:1229
 msgid ""
 "Name of the bookmarks folder used for auto saving and restoring session.\n"
 "This only makes sense with bookmark support."
 msgstr ""
+"Nazwa foldera zak³adek u¿ywanego do automatycznego zapisywania\n"
+"i odtwarzania sesji. Ma sens jedynie wtedy, gdy wkompilowana jest obs³uga\n"
+"zak³adek."
 
 #
 #: src/config/options.inc:1233
@@ -4205,7 +4214,6 @@ msgstr "Z~amknij wszystkie karty za wyj±tkiem bie¿±cej"
 
 #
 #: src/dialogs/menu.c:352
-#, fuzzy
 msgid "B~ookmark all tabs"
 msgstr "~Zapisz informacje o wszystkich kartach"
 
@@ -4339,9 +4347,8 @@ msgid "~Bugs information"
 msgstr "Informacje o ~b³êdach"
 
 #: src/dialogs/menu.c:497
-#, fuzzy
 msgid "ELinks C~vsWeb"
-msgstr "~ELinks CVSWeb"
+msgstr "ELinks C~VSWeb"
 
 #: src/dialogs/menu.c:500
 msgid "~Copying"
@@ -6047,16 +6054,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1581
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid ""
-#~ "Automatically save and restore the session when quitting so\n"
-#~ "it can be continued later. Requires bookmark support:\n"
-#~ "0 means no auto saving and restoring\n"
-#~ "1 means auto save session when quitting\n"
-#~ "2 means auto save and restore session"
-#~ msgstr ""
-#~ "Automatycznie zapisuj sesjê przy koñczeniu, tak by mog³a byæ\n"
-#~ "wznowiona pó¼niej. Wymaga obs³ugi zak³adek:\n"
-#~ "0 - brak automatycznego zapisywania i odtwarzania\n"
-#~ "1 - autozapisywanie przy koñczeniu sesji\n"
-#~ "2 - autozapisywanie i odtwarzanie sesji"

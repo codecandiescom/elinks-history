@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.226 2003/10/23 13:21:12 zas Exp $ */
+/* $Id: parser.c,v 1.227 2003/10/24 15:11:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,7 @@ parse_element(register unsigned char *e, unsigned char *eof,
 	if (e >= eof) goto parse_error;
 
 	/* Skip bad attribute */
-	while (!atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e)) e++;
+	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e)) e++;
 	if (e >= eof) goto parse_error;
 
 	if (attr) *attr = e;
@@ -96,7 +96,7 @@ next_attr:
 	if (e >= eof) goto parse_error;
 
 	/* Skip bad attribute */
-	while (!atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e)) e++;
+	while (*e && !atchr(*e) && *e != '>' && *e != '<' && !WHITECHAR(*e)) e++;
 	if (e >= eof) goto parse_error;
 	if (*e == '>' || *e == '<') goto end;
 

@@ -1,5 +1,17 @@
 Known bugs:
 
+	Moving bookmarks to empty higher level folders doesn't work:
+---- snip ----
+[-]- test1
+     [-]- test2
+           `--*heise online
+---- snap ----
+I've marked this bookmark and I am trying to move it from test2 up to test1.
+This doesn't work as long as test1 does not have any bookmarks.
+Problem seems to be that moving to a folder requires selecting a bookmark in
+the folder, not the folder itself. (at least when moving "up").
+
+
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -26,6 +38,6 @@ top/bottom of screen.
 
 	Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.28 2002/12/01 12:52:36 pasky Exp $
+$Id: BUGS,v 1.29 2003/04/21 21:12:00 zas Exp $
 
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.164 2003/10/24 01:09:20 pasky Exp $ */
+/* $Id: menu.c,v 1.165 2003/10/24 01:17:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,10 +242,9 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 
 	if (!have_location(ses)) goto loop_done;
 
-	for (loc = ses->history.history.next;
-	     loc != (struct location *) &ses->history.history
-		&& loc != cur_loc(ses);
-	     loc = loc->next) {
+	for (loc = cur_loc(ses)->prev;
+	     loc != (struct location *) &ses->history.history;
+	     loc = loc->prev) {
 		unsigned char *url;
 
 		if (!n) {

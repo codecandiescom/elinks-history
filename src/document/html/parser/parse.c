@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.40 2004/06/20 09:59:00 zas Exp $ */
+/* $Id: parse.c,v 1.41 2004/06/20 10:10:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,17 +252,21 @@ get_num(unsigned char *a, unsigned char *name)
 	return result;
 }
 
-/* Parse 'width[%],....'-like string, and return width value in chars.
+/* Returns width value from attribute named @name.
+ * Parse 'width[%],....'-like string, and return width value in chars.
  * If @limit_it is set, it will limit width value to current useable width,
  * note that @limit_it must be set to be able to parse width expressed in
  * percentage.
  * It returns -1 in case of error. */
-static inline int
-parse_width(unsigned char *str, int limit_it)
+int
+get_width(unsigned char *a, unsigned char *name, int limit_it)
 {
 	int percentage = 0;
-	int width;
 	int len;
+	int width;
+	unsigned char *str = get_attr_val(a, name);
+
+	if (!str) return -1;
 
 	/* Skip spaces at start of string if any. */
 	while (isspace(*str)) str++;
@@ -316,18 +320,6 @@ parse_width(unsigned char *str, int limit_it)
 
 	if (width < 0) width = 0;
 
-	return width;
-}
-
-/* Returns width value from attribute named @name. */
-int
-get_width(unsigned char *a, unsigned char *name, int limit_it)
-{
-	int width;
-	unsigned char *str = get_attr_val(a, name);
-
-	if (!str) return -1;
-	width = parse_width(str, limit_it);
 	mem_free(str);
 
 	return width;

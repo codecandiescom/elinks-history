@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.3 2003/05/04 19:38:05 pasky Exp $ */
+/* $Id: screen.c,v 1.4 2003/05/04 19:38:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,11 +267,10 @@ redraw_screen(struct terminal *term)
 void
 erase_screen(struct terminal *term)
 {
-	if (!term->master || !is_blocked()) {
-		if (term->master) want_draw();
-		hard_write(term->fdout, "\033[2J\033[1;1H", 10);
-		if (term->master) done_draw();
-	}
+	if (term->master && is_blocked()) return;
+	if (term->master) want_draw();
+	hard_write(term->fdout, "\033[2J\033[1;1H", 10);
+	if (term->master) done_draw();
 }
 
 void

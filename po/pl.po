@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-29 13:02+0100\n"
-"PO-Revision-Date: 2005-01-29 18:20+0100\n"
+"POT-Creation-Date: 2005-02-04 01:34+0100\n"
+"PO-Revision-Date: 2005-02-04 01:40+0100\n"
 "Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -177,11 +177,9 @@ msgstr "Nazwa"
 #: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
 #: src/dialogs/options.c:283 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
-#: src/sched/download.c:1022 src/sched/download.c:1032
-#: src/sched/download.c:1053 src/sched/download.c:1066
-#: src/scripting/lua/core.c:396 src/scripting/lua/core.c:477
-#: src/scripting/lua/core.c:717 src/viewer/text/search.c:1571
-#: src/viewer/text/view.c:730
+#: src/sched/download.c:1130 src/scripting/lua/core.c:396
+#: src/scripting/lua/core.c:477 src/scripting/lua/core.c:717
+#: src/viewer/text/search.c:1571 src/viewer/text/view.c:730
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -481,8 +479,7 @@ msgstr "Wyczy¶æ"
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
 #: src/dialogs/options.c:204 src/formhist/dialogs.c:216
-#: src/globhist/dialogs.c:235 src/sched/download.c:1019
-#: src/sched/download.c:1050
+#: src/globhist/dialogs.c:235 src/sched/download.c:1114
 msgid "Save"
 msgstr "Zapisz"
 
@@ -6747,55 +6744,40 @@ msgstr "Nadpisz oryginalny plik"
 msgid "Resume download of the original file"
 msgstr "Wznów pobieranie oryginalnego pliku"
 
-#: src/sched/download.c:1013 src/sched/download.c:1025
-msgid "Unknown type"
-msgstr "Nieznany typ"
-
-#: src/sched/download.c:1014
-#, c-format
-msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr "Czy chcesz zapisaæ plik '%s' (typu %s) czy wy¶wietliæ go?"
-
-#: src/sched/download.c:1020 src/sched/download.c:1030
-#: src/sched/download.c:1051 src/sched/download.c:1064
-msgid "Display"
-msgstr "Wy¶wietl"
-
-#: src/sched/download.c:1021 src/sched/download.c:1031
-#: src/sched/download.c:1052 src/sched/download.c:1065
-msgid "Show header"
-msgstr "Poka¿ nag³ówek"
-
-#: src/sched/download.c:1026
-#, c-format
-msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr "Czy chcesz wy¶wietliæ plik '%s' (typu %s)?"
-
-#: src/sched/download.c:1042 src/sched/download.c:1056
+#: src/sched/download.c:1033
 msgid "What to do?"
 msgstr "Co mam zrobiæ?"
 
-#: src/sched/download.c:1043
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', save it or display it?"
-msgstr ""
-"Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
-"przy u¿yciu '%s', zapisaæ go, czy wy¶wietliæ?"
+#: src/sched/download.c:1036
+msgid "Unknown type"
+msgstr "Nieznany typ"
 
-#: src/sched/download.c:1049 src/sched/download.c:1063
+#: src/sched/download.c:1053
+#, c-format
+msgid "What would you like to do with the file '%s' (type: %s%s%s)?"
+msgstr "Co chcesz zrobiæ z plikiem '%s' (typu %s%s%s)?"
+
+#: src/sched/download.c:1083
+#, no-c-format
+msgid "Program ('%' will be replaced by the filename)"
+msgstr "Program ('%' zostanie zast±pione nazw± pliku)"
+
+#: src/sched/download.c:1090
+#, c-format
+msgid "The file will be opened with the program '%s'."
+msgstr "Plik zostanie otwarty przy u¿yciu programu '%s'."
+
+#: src/sched/download.c:1107
 msgid "Open"
 msgstr "Otwórz"
 
-#: src/sched/download.c:1057
-#, c-format
-msgid ""
-"Would you like to open the file '%s' (type: %s%s%s)\n"
-"with '%s', or display it?"
-msgstr ""
-"Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
-"przy u¿yciu '%s', czy wy¶wietliæ go?"
+#: src/sched/download.c:1120
+msgid "Display"
+msgstr "Wy¶wietl"
+
+#: src/sched/download.c:1124
+msgid "Show header"
+msgstr "Poka¿ nag³ówek"
 
 #: src/sched/error.c:31
 msgid "Waiting in queue"
@@ -6985,7 +6967,21 @@ msgstr ""
 msgid "The CSO phone-book protocol is not supported."
 msgstr "Protokó³ CSO phone-book nie jest obs³ugiwany."
 
-#: src/sched/error.c:126
+#: src/sched/error.c:105
+msgid ""
+"The proxy configuration encountered an error.\n"
+"This usually means that either an environment\n"
+"variable with proxy info or a proxy scripting\n"
+"hook did not provide proxy configuration info\n"
+"in the correct format."
+msgstr ""
+"Konfiguracja proxy napotka³a b³±d.\n"
+"Zazwyczaj oznacza to, ¿e zmienna ¶rodowiska\n"
+"zawieraj±ca informacje o proxy lub zaczepienia\n"
+"skryptowe nie dostarczy³y informacji o konfiguracji\n"
+"proxy w odpowiednim formacie."
+
+#: src/sched/error.c:132
 msgid "Unknown error"
 msgstr "Nieznany b³±d"
 
@@ -7483,6 +7479,23 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1281
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
+
+#~ msgid "Would you like to save the file '%s' (type: %s) or display it?"
+#~ msgstr "Czy chcesz zapisaæ plik '%s' (typu %s) czy wy¶wietliæ go?"
+
+#~ msgid ""
+#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
+#~ "with '%s', save it or display it?"
+#~ msgstr ""
+#~ "Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
+#~ "przy u¿yciu '%s', zapisaæ go, czy wy¶wietliæ?"
+
+#~ msgid ""
+#~ "Would you like to open the file '%s' (type: %s%s%s)\n"
+#~ "with '%s', or display it?"
+#~ msgstr ""
+#~ "Czy chcesz otworzyæ plik '%s' (typu %s%s%s)\n"
+#~ "przy u¿yciu '%s', czy wy¶wietliæ go?"
 
 #~ msgid "Cannot stat the file"
 #~ msgstr "B³±d przy wykonywaniu stat()"

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.25 2004/05/29 00:45:16 jonas Exp $ */
+/* $Id: file.c,v 1.26 2004/06/02 10:34:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,4 +205,36 @@ file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 
 	mem_free_if(line);
 	return NULL;
+}
+
+
+/* Some mkstemp() implementations do not set safe permissions,
+ * so it may result in temporary files readable by all users.
+ * This may be a problem when textarea fields are edited through
+ * an external editor (see src/viewer/text/textarea.c).
+ *
+ * From 2001-12-23 mkstemp(3) gnu man page:
+ *
+ * ...
+ * The file is then created with mode read/write and permissions 0666
+ * (glibc  2.0.6 and  earlier), 0600 (glibc 2.0.7 and later).
+ * ...
+ *
+ * NOTES:
+ * The old behaviour (creating a file with mode 0666) may be a security
+ * risk, especially since other Unix flavours use 0600, and somebody
+ * might overlook this detail when porting programs.
+ * More generally, the POSIX specification does not say anything
+ * about file modes, so the application should make sure its umask is
+ * set appropriately before calling mkstemp.
+ */
+int
+safe_mkstemp(unsigned char *template)
+{
+	mode_t saved_mask = umask(0177);
+	int fd = mkstemp(template);
+
+	umask(saved_mask);
+
+	return fd;
 }

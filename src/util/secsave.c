@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.35 2004/04/16 16:35:52 zas Exp $ */
+/* $Id: secsave.c,v 1.36 2004/06/02 10:34:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,6 +159,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 			goto free_file_name;
 		}
 
+		/* No need to use safe_mkstemp() here. --Zas */
 		fd = mkstemp(randname);
 		if (fd == -1) {
 			secsave_errno = SS_ERR_MKSTEMP;

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.71 2004/05/29 18:14:58 jonas Exp $ */
+/* $Id: user.c,v 1.72 2004/06/02 10:34:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ save_form_data_to_file(struct uri *uri)
 
 	if (!filename) return NULL;
 
-	formfd = mkstemp(filename);
+	formfd = safe_mkstemp(filename);
 	if (formfd < 0) {
 		mem_free(filename);
 		return NULL;

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.54 2004/05/29 00:45:16 jonas Exp $ */
+/* $Id: textarea.c,v 1.55 2004/06/02 10:34:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -292,7 +292,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		fn = get_tempdir_filename("linksarea-XXXXXX");
 		if (!fn) goto free_and_return;
 
-		h = mkstemp(fn);
+		h = safe_mkstemp(fn);
 		if (h < 0) goto free_and_return;
 
 		taf = fdopen(h, "w");

@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.12 2004/05/29 00:45:16 jonas Exp $ */
+/* $Id: file.h,v 1.13 2004/06/02 10:34:58 zas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
@@ -33,5 +33,10 @@ unsigned char *get_tempdir_filename(unsigned char *name);
  * @line is free()d. */
 unsigned char *file_read_line(unsigned char *line, size_t *linesize,
 			      FILE *file, int *linenumber);
+
+/* Safe wrapper for mkstemp().
+ * It enforces permissions by calling umask(0177), call mkstemp(), then
+ * restore previous umask(). */
+int safe_mkstemp(unsigned char *template);
 
 #endif

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.180 2004/06/16 06:34:41 miciah Exp $ */
+/* $Id: form.c,v 1.181 2004/06/16 07:15:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/uri.h"
+#include "sched/action.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -1031,7 +1032,7 @@ auto_submit_form(struct session *ses)
 	submit_form(ses, ses->doc_view, 0);
 }
 
-int
+enum frame_event_status
 field_op(struct session *ses, struct document_view *doc_view,
 	 struct link *link, struct term_event *ev, int rep)
 {
@@ -1040,30 +1041,30 @@ field_op(struct session *ses, struct document_view *doc_view,
 	enum edit_action action;
 	unsigned char *text;
 	int length;
-	int x = 1;
+	enum frame_event_status status = FRAME_EVENT_REFRESH;
 
 	assert(ses && doc_view && link && ev);
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_IGNORED;
 
 	frm = link->form_control;
 	assertm(frm, "link has no form control");
-	if_assert_failed return 0;
+	if_assert_failed return FRAME_EVENT_IGNORED;
 
 	if (frm->ro == 2 || ev->ev != EV_KBD)
-		return 0;
+		return FRAME_EVENT_IGNORED;
 
 	action = kbd_action(KM_EDIT, ev, NULL);
 	if (ses->insert_mode == INSERT_MODE_OFF) {
 		if (action == ACT_EDIT_ENTER) {
 			ses->insert_mode = INSERT_MODE_ON;
-			return 1;
+			return FRAME_EVENT_REFRESH;
 		}
 
-		return 0;
+		return FRAME_EVENT_IGNORED;
 	}
 
 	fs = find_form_state(doc_view, frm);
-	if (!fs || !fs->value) return 0;
+	if (!fs || !fs->value) return FRAME_EVENT_IGNORED;
 
 	switch (action) {
 		case ACT_EDIT_LEFT:
@@ -1075,7 +1076,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_HOME:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_home(fs, frm, rep)) {
-					x = 0;
+					status = FRAME_EVENT_IGNORED;
 					break;
 				}
 			} else {
@@ -1085,17 +1086,17 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_UP:
 			if (frm->type != FC_TEXTAREA
 			    || textarea_op_up(fs, frm, rep))
-				x = 0;
+				status = FRAME_EVENT_IGNORED;
 			break;
 		case ACT_EDIT_DOWN:
 			if (frm->type != FC_TEXTAREA
 			    || textarea_op_down(fs, frm, rep))
-				x = 0;
+				status = FRAME_EVENT_IGNORED;
 			break;
 		case ACT_EDIT_END:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_end(fs, frm, rep)) {
-					x = 0;
+					status = FRAME_EVENT_IGNORED;
 					break;
 				}
 			} else {
@@ -1105,7 +1106,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_BEGINNING_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_bob(fs, frm, rep)) {
-					x = 0;
+					status = FRAME_EVENT_IGNORED;
 					break;
 				}
 			} else {
@@ -1115,7 +1116,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_END_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_eob(fs, frm, rep)) {
-					x = 0;
+					status = FRAME_EVENT_IGNORED;
 					break;
 				}
 			} else {
@@ -1155,7 +1156,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 		case ACT_EDIT_ENTER:
 			if (frm->type != FC_TEXTAREA
 			    || textarea_op_enter(fs, frm, rep))
-				x = 0;
+				status = FRAME_EVENT_IGNORED;
 			break;
 		case ACT_EDIT_BACKSPACE:
 			if (frm->ro || !fs->state)
@@ -1219,12 +1220,12 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(ses->tab->term);
-			x = 0;
+			status = FRAME_EVENT_IGNORED;
 			break;
 
 		default:
 			if (ev->y || ev->x < 32 || ev->x >= 256) {
-				x = 0;
+				status = FRAME_EVENT_IGNORED;
 				break;
 			}
 
@@ -1232,7 +1233,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 
 			length = strlen(fs->value);
 			if (length >= frm->maxlength) {
-				x = 0;
+				status = FRAME_EVENT_IGNORED;
 				break;
 			}
 
@@ -1247,7 +1248,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 	}
 
-	return x;
+	return status;
 }
 
 unsigned char *

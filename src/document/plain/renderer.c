@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.153 2004/09/15 10:13:22 jonas Exp $ */
+/* $Id: renderer.c,v 1.154 2004/09/15 23:37:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,7 +234,7 @@ add_document_line(struct plain_renderer *renderer,
 	int width = line_width;
 	int line_pos;
 
-	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width);
+	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width, NULL, NULL);
 	if (!line) return 0;
 
 	/* Now expand tabs */

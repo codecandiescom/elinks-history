@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.494 2004/08/21 21:51:28 miciah Exp $ */
+/* $Id: renderer.c,v 1.495 2004/09/15 23:37:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -935,8 +935,6 @@ html_tag(struct document *document, unsigned char *t, int x, int y)
 static void
 put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
-	unsigned char *buffer;
-
 	assert(part && chars && charslen);
 	if_assert_failed return;
 
@@ -945,15 +943,8 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 		return;
 	}
 
-	/* XXX: Perhaps doing the whole string at once could be an ugly memory
-	 * hit? Dunno, someone should measure that. --pasky */
-
-	buffer = convert_string(renderer_context.convert_table, chars, charslen,
-			        CSM_DEFAULT, NULL);
-	if (buffer) {
-		if (*buffer) put_chars(part, buffer, strlen(buffer));
-		mem_free(buffer);
-	}
+	convert_string(renderer_context.convert_table, chars, charslen,
+	               CSM_DEFAULT, NULL, (void (*)(void *, unsigned char *, int)) put_chars, part);
 }
 
 static inline void
@@ -1304,7 +1295,7 @@ html_form_control(struct part *part, struct form_control *fc)
 		unsigned char *dv = convert_string(renderer_context.convert_table,
 						   fc->default_value,
 						   strlen(fc->default_value),
-						   CSM_QUERY, NULL);
+						   CSM_QUERY, NULL, NULL, NULL);
 
 		if (dv) mem_free_set(&fc->default_value, dv);
 	}
@@ -1624,7 +1615,7 @@ render_html_document(struct cache_entry *cached, struct document *document,
 	if (title.length) {
 		document->title = convert_string(renderer_context.convert_table,
 						 title.source, title.length,
-						 CSM_DEFAULT, NULL);
+						 CSM_DEFAULT, NULL, NULL, NULL);
 	}
 	done_string(&title);
 

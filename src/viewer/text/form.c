@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.240 2004/08/15 11:52:51 jonas Exp $ */
+/* $Id: form.c,v 1.241 2004/09/15 23:37:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -587,7 +587,7 @@ encode_controls(struct list_head *l, struct string *data,
 					convert_table = get_translation_table(cp_from, cp_to);
 
 				p2 = convert_string(convert_table, p,
-						    strlen(p), CSM_FORM, NULL);
+						    strlen(p), CSM_FORM, NULL, NULL, NULL);
 				mem_free(p);
 			}
 		} else if (sv->type == FC_TEXT ||
@@ -596,7 +596,7 @@ encode_controls(struct list_head *l, struct string *data,
 				convert_table = get_translation_table(cp_from, cp_to);
 
 			p2 = convert_string(convert_table, sv->value,
-					    strlen(sv->value), CSM_FORM, NULL);
+					    strlen(sv->value), CSM_FORM, NULL, NULL, NULL);
 		} else {
 			p2 = stracpy(sv->value);
 		}
@@ -805,7 +805,8 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 									      cp_to);
 
 				p = convert_string(convert_table, sv->value,
-						   strlen(sv->value), CSM_FORM, NULL);
+						   strlen(sv->value), CSM_FORM, NULL,
+						   NULL, NULL);
 				if (p) {
 					add_to_string(data, p);
 					mem_free(p);
@@ -889,7 +890,8 @@ encode_text_plain(struct list_head *l, struct string *data,
 			/* Convert back to original encoding (see
 			 * html_form_control() for the original recoding). */
 			value = convert_string(convert_table, value,
-					       strlen(value), CSM_FORM, NULL);
+					       strlen(value), CSM_FORM, NULL,
+					       NULL, NULL);
 		default:
 			/* Falling right through to free that textarea stuff */
 			mem_free_if(area51);

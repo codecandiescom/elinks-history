@@ -1,4 +1,4 @@
-/* $Id: charsets.h,v 1.19 2004/07/01 12:13:22 jonas Exp $ */
+/* $Id: charsets.h,v 1.20 2004/09/15 23:37:45 pasky Exp $ */
 
 #ifndef EL__INTL_CHARSETS_H
 #define EL__INTL_CHARSETS_H
@@ -41,7 +41,9 @@ struct conv_table *get_translation_table(int, int);
 
 unsigned char *convert_string(struct conv_table *convert_table,
 			      unsigned char *chars, int charslen,
-			      enum convert_string_mode mode, int *length);
+			      enum convert_string_mode mode, int *length,
+			      void (*callback)(void *data, unsigned char *buf, int buflen),
+			      void *callback_data);
 
 int get_cp_index(unsigned char *);
 unsigned char *get_cp_name(int);

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.99 2004/09/11 04:42:25 miciah Exp $ */
+/* $Id: charsets.c,v 1.100 2004/09/15 23:37:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -588,18 +588,26 @@ end:
 unsigned char *
 convert_string(struct conv_table *convert_table,
 	       unsigned char *chars, int charslen,
-	       enum convert_string_mode mode, int *length)
+	       enum convert_string_mode mode, int *length,
+	       void (*callback)(void *data, unsigned char *buf, int buflen),
+	       void *callback_data)
 {
 	unsigned char *buffer;
 	int bufferpos = 0;
 	int charspos = 0;
 
-	if (!convert_table && !memchr(chars, '&', charslen))
-		return memacpy(chars, charslen);
+	if (!convert_table && !memchr(chars, '&', charslen)) {
+		if (callback) {
+			callback(callback_data, chars, charslen);
+			return NULL;
+		} else {
+			return memacpy(chars, charslen);
+		}
+	}
 
 	/* Buffer allocation */
 
-	buffer = mem_alloc(ALLOC_GR);
+	buffer = mem_alloc(ALLOC_GR + !!callback /* trailing \0 */);
 	if (!buffer) return NULL;
 
 	/* Iterate ;-) */
@@ -679,12 +687,18 @@ convert_string(struct conv_table *convert_table,
 flush:
 			if (bufferpos & (ALLOC_GR - 1)) continue;
 
-			new = mem_realloc(buffer, bufferpos + ALLOC_GR);
-			if (!new) {
-				mem_free(buffer);
-				return NULL;
+			if (callback) {
+				buffer[bufferpos] = 0;
+				callback(callback_data, buffer, bufferpos);
+				bufferpos = 0;
+			} else {
+				new = mem_realloc(buffer, bufferpos + ALLOC_GR);
+				if (!new) {
+					mem_free(buffer);
+					return NULL;
+				}
+				buffer = new;
 			}
-			buffer = new;
 		}
 #undef PUTC
 	}
@@ -693,7 +707,14 @@ flush:
 
 	buffer[bufferpos] = 0;
 	if (length) *length = bufferpos;
-	return buffer;
+
+	if (callback) {
+		callback(callback_data, buffer, bufferpos);
+		mem_free(buffer);
+		return NULL;
+	} else {
+		return buffer;
+	}
 }
 
 

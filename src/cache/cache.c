@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.181 2004/09/14 23:09:28 pasky Exp $ */
+/* $Id: cache.c,v 1.182 2004/09/15 23:37:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,9 +230,8 @@ enlarge_entry(struct cache_entry *cached, int size)
  * aren't, except on Linux.
  *
  * Of course for all this to really completely prevent the pathological cases,
- * we need to stuff the rendered documents in too and prevent the
- * convert_string() call from HTML renderer to duplicate the whole rendered
- * document (in regular memory, of course). */
+ * we need to stuff the rendered documents in too, because they seem to amount
+ * the major memory bursts. */
 
 static struct fragment *
 frag_alloc(size_t size)

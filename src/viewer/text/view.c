@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.299 2003/12/21 14:56:56 zas Exp $ */
+/* $Id: view.c,v 1.300 2003/12/21 16:37:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,18 +76,11 @@ detach_formatted(struct document_view *doc_view)
 	assert(doc_view);
 	if_assert_failed return;
 
-	if (doc_view->document) {
-		release_document(doc_view->document);
-		doc_view->document = NULL;
-	}
-	doc_view->vs = NULL;
-	if (doc_view->link_bg) {
-		mem_free(doc_view->link_bg), doc_view->link_bg = NULL;
-		doc_view->link_bg_n = 0;
-	}
-	if (doc_view->name) {
-		mem_free(doc_view->name), doc_view->name = NULL;
-	}
+	if (doc_view->document) release_document(doc_view->document);
+	if (doc_view->link_bg)	mem_free(doc_view->link_bg);
+	if (doc_view->name)	mem_free(doc_view->name);
+
+	memset(doc_view, 0, sizeof(struct document_view));
 }
 
 static inline int

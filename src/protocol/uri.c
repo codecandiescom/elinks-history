@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.251 2004/06/18 18:48:05 jonas Exp $ */
+/* $Id: uri.c,v 1.252 2004/06/19 16:12:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,6 +710,7 @@ join_urls(struct uri *base, unsigned char *rel)
 {
 	unsigned char *uristring, *path;
 	int add_slash = 0;
+	int translate = 0;
 	int length = 0;
 
 	/* See RFC 1808 */
@@ -742,6 +743,10 @@ join_urls(struct uri *base, unsigned char *rel)
 		/* Get `<protocol>:' from the base URI and append the `//' part
 		 * from @rel. */
 		length = base->protocollen + 1;
+
+		/* We need to sanitize the relative part and add stuff like
+		 * host slash. */
+		translate = 1;
 	}
 
 	/* If one of the tests above set @length to something useful */
@@ -751,6 +756,13 @@ join_urls(struct uri *base, unsigned char *rel)
 
 		add_to_strn(&uristring, rel);
 
+		if (translate) {
+			unsigned char *translated;
+
+			translated = translate_url(uristring, NULL);
+			mem_free(uristring);
+			return translated;
+		}
 		return normalize_uri_reparse(uristring);
 	}
 

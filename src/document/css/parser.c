@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.111 2004/09/20 22:48:38 pasky Exp $ */
+/* $Id: parser.c,v 1.112 2004/09/20 22:56:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,7 +261,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* Look ahead at what's coming next */
 
-		memcpy(&last_token, token, sizeof(token));
+		memcpy(&last_token, token, sizeof(*token));
 		token = get_next_scanner_token(scanner);
 		/* FIXME: This could create possible leaks with very broken
 		 * stylesheets ending in the middle of selector? --pasky */

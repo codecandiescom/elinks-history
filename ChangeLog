@@ -1,3 +1,24 @@
+Fri Mar  5 17:58:53 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/config/dialogs.c:
+
+	Allow to add again previously deleted option.  
+
+Fri Mar  5 10:41:10 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/config/: conf.c, options.h, options.c:
+
+	Support for saving deleted options. Heavy use of watermarks.  
+	Prevented unsetting builtin options.  
+
+Fri Mar  5 01:05:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS:
+
+	Summarize new stuff for those too lazy to read the ChangeLog file.
+	Please help keeping it updated (although some of the entries added
+	with this patch might be to unimportant?) 
+
 Thu Mar  4 10:57:27 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.153 2003/06/18 17:21:17 zas Exp $ */
+/* $Id: renderer.c,v 1.154 2003/06/19 12:22:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,18 +557,23 @@ justify_line(struct part *part, int y)
 			/* We have to increase line length by 'insert' num. of
 			 * characters, so we move 'word'th word 'word_shift'
 			 * characters right. */
-
 			int word_start = space_list[word] + 1;
 			int word_len = space_list[word + 1] - word_start;
-			int word_shift = (word * insert) / (spaces - 1);
-			int new_start = word_start + word_shift;
+			int word_shift;
+			int new_start;
+
+			assert(word_len >= 0);
+			if (!word_len) continue;
+
+			word_shift = (word * insert) / (spaces - 1);
+			new_start = word_start + word_shift;
 
 			copy_chars(part, new_start, y, word_len,
 				   &line[word_start]);
 
 			/* There are now (new_start - prev_end) spaces before
 			 * the word. */
-			if (word != 0)
+			if (word)
 				move_links(part, prev_end + 1, y, new_start, y);
 
 			prev_end = new_start + word_len;

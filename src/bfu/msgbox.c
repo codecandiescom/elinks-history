@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.52 2003/10/09 05:57:28 witekfl Exp $ */
+/* $Id: msgbox.c,v 1.53 2003/10/11 05:39:45 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,8 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	do_dialog(term, dlg, ml);
 }
 
-
+/* Do not inline this function, because with inline
+ * elinks segfaults on Cygwin */
 static unsigned char *
 msg_text_do(unsigned char *format, va_list ap)
 {

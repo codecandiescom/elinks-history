@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.13 2003/12/30 11:22:43 zas Exp $ */
+/* $Id: refresh.c,v 1.14 2004/01/04 16:54:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ do_document_refresh(void *data)
 		/* This makes sure that we send referer. */
 		goto_url_frame(ses, refresh->url, NULL);
 	}
-};
+}
 
 void
 start_document_refresh(struct document_refresh *refresh, struct session *ses)
@@ -89,4 +89,4 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 	int time = int_max(1000 * refresh->seconds, minimum);
 
 	refresh->timer = install_timer(time, do_document_refresh, ses);
-};
+}

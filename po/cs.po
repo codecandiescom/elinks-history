@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-17 09:39+0200\n"
-"PO-Revision-Date: 2003-10-17 00:21+0200\n"
+"PO-Revision-Date: 2003-10-17 18:24+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -2037,7 +2037,6 @@ msgid "Program"
 msgstr "Program"
 
 #: src/config/options.c:1510
-#, fuzzy, c-format
 msgid ""
 "External viewer for this file type. '%' in this string will be\n"
 "substituted by a file name."
@@ -2262,6 +2261,13 @@ msgid ""
 "can unfortunately considerably affect privacy and can lead even to a\n"
 "security problem on some badly designed web pages."
 msgstr ""
+"Volby pro posílání HTTP refereru. HTTP referer je speciální hlavièka,\n"
+"kterou webový klient posílá v HTTP po¾adavcích serveru. Tato hlavièka\n"
+"obvykle obsahuje dokument, ze kterého u¾ivatel pøe¹el na dokument,\n"
+"který se právì stahuje. Takto se mù¾e server dozvìdìt, odkud jste se\n"
+"na danou stránku dostali. Bohu¾el v¹ak mù¾e toto chování znaènì naru¹it\n"
+"soukromí u¾ivatele a v pøípadì nìkterých ¹patnì zabezpeèených webových\n"
+"aplikací i bezpeènostní ohro¾ení."
 
 #: src/config/options.c:1639
 msgid "Policy"
@@ -2434,6 +2440,9 @@ msgid ""
 "If set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
+"Tato volba rozhoduje o zobrazování skrytých souborù ve výpisech adresáøù.\n"
+"Pokud je tato volba vypnuta, soubory, zaèínající teèkou, nebudou ve výpisech\n"
+"lokálních adresáøù uvedeny."
 
 #: src/config/options.c:1738
 msgid "User protocols"
@@ -2445,12 +2454,16 @@ msgid ""
 "handlers for the appropriate protocols. Ie.\n"
 "protocol.user.mailto.unix."
 msgstr ""
+"U¾ivatelské protokoly. Volby v tomto stromu specifikují externí ovladaèe\n"
+"pro odpovídající protokoly. Napøíklad protocol.user.mailto.unix."
 
 #: src/config/options.c:1751
 msgid ""
 "Handler (external program) for this protocol. Name the\n"
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
+"Ovladaè (externí program) pro tento protokol. Pojmenujte volby v tomto\n"
+"stromì podle svého systému (napø. unix, unix-xwin, ...)."
 
 #: src/config/options.c:1756
 msgid ""
@@ -2461,6 +2474,12 @@ msgid ""
 "%s in the string means subject (?subject=<this>)\n"
 "%u in the string means the whole URL"
 msgstr ""
+"Ovladaè (externí program) pro tento protokol a systém.\n"
+"%h uvnitø øetìzce znamená jméno hostitele (èi emailovou adresu)\n"
+"%p uvnitø øetìzce znamená port\n"
+"%d uvnitø øetìzce znamená cestu (v¹echno za èíslem portu)\n"
+"%s uvnitø øetìzce znamená pøedmìt (?subject=<tohle>)\n"
+"%u uvnitø øetìzce znamená celou URL"
 
 #: src/config/options.c:1769
 msgid ""
@@ -2475,28 +2494,36 @@ msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
 msgstr ""
+"Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
+"Prosím pou¾ijte radìji volbu mime.mailcap.enable."
 
 #: src/config/options.c:1779
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
 msgstr ""
+"Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
+"Prosím pou¾ijte radìji volbu mime.mailcap.path."
 
 #: src/config/options.c:1784
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
 msgstr ""
+"Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
+"Prosím pou¾ijte radìji volbu mime.mailcap.ask."
 
 #: src/config/options.c:1789
 msgid "This option is deprecated and will be removed very soon.\n"
-msgstr ""
+msgstr "Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
 
 #: src/config/options.c:1793
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
+"Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
+"Prosím pou¾ijte radìji volbu mime.mailcap.prioritize."
 
 #: src/config/options.c:1797
 msgid "No-proxy domains"
@@ -2509,6 +2536,10 @@ msgid ""
 "domains as well. If it's blank, NO_PROXY environment variable is\n"
 "checked as well."
 msgstr ""
+"Seznam èárkou oddìlených domén, pro jejich¾ pøístup (pøes HTTP ani FTP)\n"
+"nebude pou¾ita proxy. Volitelnì mù¾e být uveden pro nìkteré domény\n"
+"i port. Pokud je tato volba prázdná, bude pou¾it také obsah promìnné\n"
+"prostøedí NO_PROXY."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1808
@@ -3054,7 +3085,7 @@ msgstr "Dialogová okna"
 
 #: src/config/options.c:2681
 msgid "Dialogs-specific appearance and behaviour settings."
-msgstr ""
+msgstr "Nastavení vzhledu a chování dialogových oken."
 
 #: src/config/options.c:2683
 msgid "Minimal height of listbox widget"
@@ -3065,6 +3096,8 @@ msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
+"Minimální vý¹ka listboxového udìlátka (to se pou¾ívá napøíklad pro\n"
+"zálo¾ky nebo globální historii)."
 
 #: src/config/options.c:2688
 msgid "Drop shadows"
@@ -3086,6 +3119,8 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
+"Naèasovaná akce, která se spustí po urèitém èase neèinnosti u¾ivatele.\n"
+"Nìkomu se to dokonce mù¾e i hodit, i kdy¾ tomu nemusíte vìøit."
 
 #: src/config/options.c:2703
 msgid ""
@@ -3110,11 +3145,13 @@ msgstr "Délka trvání"
 
 #: src/config/options.c:2718
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
-msgstr ""
+msgstr "Èas neèinnosti u¾ivatele. Jeden den by mìl ka¾dému staèit."
 
 #: src/config/options.c:2722
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
+"Akce (stejná jako ve správci kláves), která bude vyvolána po vypr¹ení\n"
+"èasovaèe."
 
 #: src/config/options.c:2725
 msgid "Window tabs"
@@ -3155,12 +3192,16 @@ msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
+"Jazyk u¾ivatelského rozhraní. \"System\" znamená, ¾e bude jazyk pøi ka¾dém\n"
+"spu¹tìní vytáhnut z relevantních promìnných prostøedí."
 
 #: src/config/options.c:2753
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the ui.dialog.shadows option instead."
 msgstr ""
+"Tato volba by se nemìla pou¾ívat a bude brzy odstranìna.\n"
+"Prosím pou¾ívejte radìji volbu ui.dialog.shadows."
 
 #: src/config/options.c:2756
 msgid "Display status bar"
@@ -4900,9 +4941,6 @@ msgstr "Chyba pøi ukládání"
 #: src/viewer/text/view.c:1461
 msgid "Error writing to file"
 msgstr "Chyba pøi zápisu do souboru"
-
-#~ msgid "HTTP referer sending options."
-#~ msgstr "Volby pro posílání HTTP refereru."
 
 #~ msgid "Restrict CP852"
 #~ msgstr "Omezit CP852"

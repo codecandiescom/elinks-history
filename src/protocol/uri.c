@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.303 2004/12/19 00:57:48 jonas Exp $ */
+/* $Id: uri.c,v 1.304 2004/12/20 00:29:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,9 @@
 
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
 #endif
 #ifdef HAVE_ARPA_INET_H
 #include <arpa/inet.h>
@@ -51,12 +54,18 @@ is_uri_dir_sep(struct uri *uri, unsigned char pos)
 }
 
 
+#ifdef CONFIG_IPV6
+#define IP_ADDRESS_BUFFER_SIZE INET6_ADDRSTRLEN
+#else
+#define IP_ADDRESS_BUFFER_SIZE INET_ADDRSTRLEN
+#endif
+
 int
 is_ip_address(unsigned char *address, int addresslen)
 {
 	/* The @address has well defined limits so it would be a shame to
 	 * allocate it. */
-	unsigned char buffer[64];
+	unsigned char buffer[IP_ADDRESS_BUFFER_SIZE];
 
 	if (addresslen >= sizeof(buffer))
 		return 0;
@@ -66,9 +75,9 @@ is_ip_address(unsigned char *address, int addresslen)
 #ifdef HAVE_INET_PTON
 #ifdef CONFIG_IPV6
 	{
-		struct in6_addr addr6;
+		struct sockaddr_in6 addr6;
 
-		if (inet_pton(AF_INET6, buffer, &addr6) > 0)
+		if (inet_pton(AF_INET6, buffer, &addr6.sin6_addr) > 0)
 			return 1;
 	}
 #endif /* CONFIG_IPV6 */

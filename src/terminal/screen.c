@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.52 2003/08/31 00:13:53 jonas Exp $ */
+/* $Id: screen.c,v 1.53 2003/08/31 09:00:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,15 +318,15 @@ redraw_screen(struct terminal *term)
 
  		for (; x < term->x; x++, current++, pos++) {
 
-			/* No update for exact match. */
- 			if (!memcmp(pos, current, sizeof(struct screen_char)))
-				continue;
-
-			/* Else if the color match and the data is ``space''. */
- 			if (pos->color == current->color
-			    && (pos->data <= 1 || pos->data == ' ')
-			    && (current->data <= 1 || current->data == ' '))
-				continue;
+			if (pos->color == current->color) {
+				/* No update for exact match. */
+				if (pos->data == current->data && pos->attr == current->attr)
+					continue;
+				/* Else if the color match and the data is ``space''. */
+				if ((pos->data <= 1 || pos->data == ' ') &&
+ 				    (current->data <= 1 || current->data == ' '))
+					continue;
+			}
 
 			/* Move the cursor when @prev_pos is more than 10 chars
 			 * away. */

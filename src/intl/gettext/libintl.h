@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.16 2003/06/07 14:51:26 pasky Exp $ */
+/* $Id: libintl.h,v 1.17 2003/10/20 15:47:30 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -27,6 +27,7 @@
  * --pasky */
 
 #ifndef DEBUG_IT
+
 /* Wraps around gettext(), employing charset multiplexing. If you don't care
  * about charset (usually during initialization or when you don't use terminals
  * at all), use gettext() directly. */
@@ -42,8 +43,8 @@ _(unsigned char *msg, struct terminal *term)
 
 	if (!term) goto do_lookup;
 
-	/* Prevent useless switching. */
 	new_charset = get_opt_int_tree(term->spec, "charset");
+	/* Prevent useless switching. */
 	if (current_charset != new_charset) {
 		current_charset = new_charset;
 		bind_textdomain_codeset( /* PACKAGE */ "elinks",
@@ -53,6 +54,7 @@ _(unsigned char *msg, struct terminal *term)
 do_lookup:
 	return (unsigned char *) gettext(msg);
 }
+
 #else
 
 /* This one will emit errors on null/empty msgs and when multiple calls are
@@ -63,7 +65,7 @@ do_lookup:
 /* __FUNCTION__ isn't supported by all, but it's debugging code. */
 #define _(m, t) __(__FILE__, __LINE__, __FUNCTION__, m, t)
 
-/* overflows are theorically possible here. Debug purpose only. */
+/* Overflows are theorically possible here. Debug purpose only. */
 static inline unsigned char *
 __(unsigned char *file, unsigned int line, unsigned char *func,
    unsigned char *msg, struct terminal *term)
@@ -134,7 +136,7 @@ extern unsigned char *language_to_iso639(int language);
 
 extern int get_system_language_index(void);
 
-/* The current state. The state should be initialized a by set_language(0)
+/* The current state. The state should be initialized by a set_language(0)
  * call. */
 
 extern int current_language, system_language;

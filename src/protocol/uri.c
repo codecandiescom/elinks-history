@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.81 2004/02/15 12:49:30 witekfl Exp $ */
+/* $Id: uri.c,v 1.82 2004/02/18 06:27:47 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -658,6 +658,8 @@ proxy:
 #endif
 		unsigned char *prefix = "file://";
 		int not_file = 0;
+		
+		if (!access(url, R_OK)) goto end;
 
 		/* Yes, it would be simpler to make test for IPv6 address first,
 		 * but it would result in confusing mix of ifdefs ;-). */
@@ -712,7 +714,7 @@ http:				prefix = "http://";
 					goto http;
 			}
 		}
-
+end:
 		newurl = stracpy(prefix);
 		if (!newurl) return NULL;
 		if (!not_file) {

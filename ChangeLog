@@ -1,3 +1,52 @@
+Wed Jan 14 19:54:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Add temporary fix for redrawing after calling find_next*(). It broke
+	during do_action() generalization.  
+
+Wed Jan 14 18:22:44 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/download.c:
+
+	Swap two lines. This should fix bug 366.  
+
+Wed Jan 14 18:00:06 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Minor fix.  
+
+Wed Jan 14 17:40:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Bug 231 (memory corruption in html renderer) should be fixed now.
+	Patch by Miciah and me.  
+
+Wed Jan 14 17:10:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/listbox.c, bfu/menu.c,
+	bfu/menu.h, config/dialogs.c, config/kbdbind.c, config/kbdbind.h,
+	dialogs/info.c, sched/action.c, sched/action.h,
+	viewer/text/search.c, viewer/text/view.c:
+
+	Rename keyact enum to action. Function names changed to reflect
+	this.  
+
+Wed Jan 14 16:53:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Binding keys to ACT_NONE is useful to get rid of default
+	keybindings. Suggested by Jonas.  
+
+Wed Jan 14 12:25:21 2004  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
 Tue Jan 13 18:46:57 2004  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

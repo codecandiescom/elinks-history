@@ -1,10 +1,13 @@
-/* $Id: options.h,v 1.17 2003/10/09 09:49:38 jonas Exp $ */
+/* $Id: options.h,v 1.18 2003/10/09 10:36:59 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
 
 #include "util/color.h"
 
+/* This mostly acts as a option cache so rendering will be faster. However it
+ * is also used to validate and invalidate documents in the format cache as to
+ * whether they satisfy the current state of the document options. */
 struct document_options {
 	int color_mode, cp, assume_cp, hard_assume;
 	int margin;
@@ -12,14 +15,19 @@ struct document_options {
 	int use_document_colours;
 	int meta_link_display;
 
+	/* The default (fallback) colors. */
 	color_t default_fg;
 	color_t default_bg;
 	color_t default_link;
 	color_t default_vlink;
 
-	/* The size of the window */
+	/* The size of the window. */
+	/* This controls how wide tables can be rendered and so on thus also is
+	 * to blame for the extra memory consumption when resizing because all
+	 * documents has to be rerendered. */
 	int xw, yw;
 
+	/* XXX: Keep boolean options grouped to save padding */
 	unsigned int allow_dark_on_black:1;
 	unsigned int tables:1;
 	unsigned int table_order:1;
@@ -35,14 +43,23 @@ struct document_options {
 	/* XXX: Everything past this comment is specialy handled by compare_opt() */
 	unsigned char *framename;
 
-	/* The position of the window */
+	/* The position of the window. */
+	/* This is not compared at all since it doesn't make any difference
+	 * what position the document will fit into a frameset or so. */
 	int xp, yp;
 };
 
 extern struct document_options *d_opt;
 
+/* Fills the structure with values from the option system. */
 void init_document_options(struct document_options *doo);
-void copy_opt(struct document_options *o1, struct document_options *o2);
+
+/* Copies the values of one struct @from to the other @to.
+ * Note that the framename is dynamically allocated. */
+void copy_opt(struct document_options *to, struct document_options *from);
+
+/* Compares comparable values from the two structures according to
+ * the comparable members described in the struct definition. */
 int compare_opt(struct document_options *o1, struct document_options *o2);
 
 #endif

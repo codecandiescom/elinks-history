@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.27 2003/10/09 09:49:38 jonas Exp $ */
+/* $Id: options.c,v 1.28 2003/10/09 10:36:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@ struct document_options *d_opt;
 void
 init_document_options(struct document_options *doo)
 {
+	/* Ensure that any padding bytes are cleared. */
 	memset(doo, 0, sizeof(struct document_options));
 
 	doo->assume_cp = get_opt_int("document.codepage.assume");
@@ -36,7 +37,7 @@ init_document_options(struct document_options *doo)
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 	doo->meta_link_display = get_opt_int("document.html.link_display");
 
-	/* Default colors. */
+	/* Color options. */
 	doo->default_fg = get_opt_color("document.colors.text");
 	doo->default_bg = get_opt_color("document.colors.background");
 	doo->default_link = get_opt_color("document.colors.link");

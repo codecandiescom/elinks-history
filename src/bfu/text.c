@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.73 2003/12/22 16:25:47 zas Exp $ */
+/* $Id: text.c,v 1.74 2003/12/24 10:45:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -351,6 +351,7 @@ static int
 mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	   struct term_event *ev)
 {
+#ifdef USE_MOUSE
 	int x = dlg_data->x + dlg_data->width - DIALOG_LEFT_BORDER - 1;
 	int y = widget_data->y;
 	int height = widget_data->h;
@@ -368,6 +369,9 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		current++;
 
 	format_and_display_text(widget_data, dlg_data, current);
+
+#endif /* USE_MOUSE */
+
 	return EVENT_PROCESSED;
 }
 

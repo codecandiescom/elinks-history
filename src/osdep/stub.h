@@ -1,8 +1,9 @@
-/* $Id: stub.h,v 1.10 2004/11/13 13:31:54 witekfl Exp $ */
+/* $Id: stub.h,v 1.11 2004/11/18 17:59:32 witekfl Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
 
+#include <ctype.h>
 #include <string.h>
 #if 0
 #ifdef CONFIG_DEBUG

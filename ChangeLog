@@ -1,3 +1,15 @@
+Tue Sep 21 21:26:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: .cvsignore, .vimrc:
+
+	Fairies.  
+
+Tue Sep 21 21:24:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.10pre1.CVS 
+
 Tue Sep 21 21:18:01 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:
@@ -761,16 +773,16 @@ Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
-	* AUTHORS:
-
-	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
-
-Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
-
 	* src/util/memory.c:
 
 	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
 	Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
 
 Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
 

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.95 2004/09/19 17:24:59 pasky Exp $ */
+/* $Id: parser.c,v 1.96 2004/09/19 21:24:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		/* Check if we have already encountered the selector */
 
-		selector = get_css_selector(css, element.string, element.length);
+		selector = get_css_base_selector(css, element.string, element.length);
 		if (!selector) continue;
 
 		pkg = mem_calloc(1, sizeof(struct selector_pkg));

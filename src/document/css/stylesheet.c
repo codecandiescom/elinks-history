@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.28 2004/09/19 20:34:33 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.29 2004/09/19 21:24:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,14 +26,14 @@
 
 
 struct css_selector *
-find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element,
+find_css_selector_by_element(struct list_head *sels, unsigned char *element,
                              int elementlen)
 {
 	struct css_selector *selector;
 
-	assert(css && element);
+	assert(sels && element);
 
-	foreach (selector, css->selectors) {
+	foreach (selector, *sels) {
 		if (!strlcasecmp(element, elementlen, selector->name, -1))
 			return selector;
 	}
@@ -42,7 +42,7 @@ find_css_selector_by_element(struct css_stylesheet *css, unsigned char *element,
 }
 
 struct css_selector *
-init_css_selector(struct css_stylesheet *css,
+init_css_selector(struct list_head *sels,
                   unsigned char *element, int elementlen)
 {
 	struct css_selector *selector;
@@ -62,27 +62,27 @@ init_css_selector(struct css_stylesheet *css,
 		}
 	}
 
-	if (css) {
-		add_to_list(css->selectors, selector);
+	if (sels) {
+		add_to_list(*sels, selector);
 	}
 
 	return selector;
 }
 
 struct css_selector *
-get_css_selector(struct css_stylesheet *css,
+get_css_selector(struct list_head *sels,
                  unsigned char *element, int elementlen)
 {
 	struct css_selector *selector = NULL;
 
-	if (css && element && elementlen) {
-		selector = find_css_selector_by_element(css, element,
+	if (sels && element && elementlen) {
+		selector = find_css_selector_by_element(sels, element,
 		                                        elementlen);
 		if (selector)
 			return selector;
 	}
 
-	selector = init_css_selector(css, element, elementlen);
+	selector = init_css_selector(sels, element, elementlen);
 	if (selector)
 		return selector;
 
@@ -96,7 +96,8 @@ copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 
 	assert(css && orig);
 
-	copy = init_css_selector(css, orig->name, strlen(orig->name));
+	copy = init_css_selector(&css->selectors,
+	                         orig->name, strlen(orig->name));
 	if (!copy)
 		return NULL;
 

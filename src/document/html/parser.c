@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.102 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: parser.c,v 1.103 2003/06/08 13:04:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,7 +43,16 @@ INIT_LIST_HEAD(html_stack);
 static inline int
 atchr(unsigned char c)
 {
-	return isA(c) || (c > ' ' && c != '=' && c != '<' && c != '>');
+	/* Attribute names are strings that follow the same rules as element
+        names. That is, attribute names must contain one or more characters,
+        and the first character must be a letter or the underscore (_).
+        Subsequent characters in the name may include letters, digits,
+        underscores, hyphens, and periods. They may not include white space
+        or other punctuation marks. */
+	return (c >= 'A' && c <= 'Z')
+                || (c >= 'a' && c <= 'z')
+                || (c >= '0' && c <= '9')
+                || c == '_' || c == '.' || c == '-';
 }
 
 /* This function eats one html element. */

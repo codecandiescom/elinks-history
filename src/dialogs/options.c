@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.7 2002/05/11 16:47:55 pasky Exp $ */
+/* $Id: options.c,v 1.8 2002/05/17 23:18:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -282,13 +282,13 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[4].gid = 1;
 	d->items[4].gnum = REFERER_NONE;
 	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (void *) &referer;
+	d->items[4].data = (void *) get_opt_ptr("http_referer");
 
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 1;
 	d->items[5].gnum = REFERER_SAME_URL;
 	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (void *) &referer;
+	d->items[5].data = (void *) get_opt_ptr("http_referer");
 
 	/* This should be last, but I did it wrong originally and now I would
 	 * break backwards compatibility by changing it :/. */
@@ -296,25 +296,25 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[6].gid = 1;
 	d->items[6].gnum = REFERER_FAKE;
 	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (void *) &referer;
+	d->items[6].data = (void *) get_opt_ptr("http_referer");
 
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 1;
 	d->items[7].gnum = REFERER_TRUE;
 	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (void *) &referer;
+	d->items[7].data = (void *) get_opt_ptr("http_referer");
 
 	d->items[8].type = D_FIELD;
 	d->items[8].dlen = MAX_STR_LEN;
-	d->items[8].data = fake_referer;
+	d->items[8].data = get_opt_str("fake_referer");
 
 	d->items[9].type = D_FIELD;
 	d->items[9].dlen = MAX_STR_LEN;
-	d->items[9].data = user_agent;
+	d->items[9].data = get_opt_str("user_agent");
 
 	d->items[10].type = D_FIELD;
 	d->items[10].dlen = MAX_STR_LEN;
-	d->items[10].data = accept_language;
+	d->items[10].data = get_opt_str("accept_language");
 
 	d->items[11].type = D_BUTTON;
 	d->items[11].gid = B_ENTER;
@@ -378,11 +378,12 @@ void
 refresh_net(void *xxx)
 {
 	/* abort_all_connections(); */
-	max_connections = atoi(max_c_str);
-	max_connections_to_host = atoi(max_cth_str);
-	max_tries = atoi(max_t_str);
-	receive_timeout = atoi(time_str);
-	unrestartable_receive_timeout = atoi(unrtime_str);
+	get_opt_int("max_connections") = atoi(max_c_str);
+	get_opt_int("max_connections_to_host") = atoi(max_cth_str);
+	get_opt_int("retries") = atoi(max_t_str);
+	get_opt_int("receive_timeout") = atoi(time_str);
+	get_opt_int("unrestartable_receive_timeout") = atoi(unrtime_str);
+
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
@@ -452,11 +453,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 {
 	struct dialog *d;
 
-	snprint(max_c_str, 3, max_connections);
-	snprint(max_cth_str, 2, max_connections_to_host);
-	snprint(max_t_str, 2, max_tries);
-	snprint(time_str, 5, receive_timeout);
-	snprint(unrtime_str, 5, unrestartable_receive_timeout);
+	snprint(max_c_str, 3, get_opt_int("max_connections"));
+	snprint(max_cth_str, 2, get_opt_int("max_connections_to_host"));
+	snprint(max_t_str, 2, get_opt_int("retries"));
+	snprint(time_str, 5, get_opt_int("receive_timeout"));
+	snprint(unrtime_str, 5, get_opt_int("unrestartable_receive_timeout"));
 
 	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
 	if (!d) return;
@@ -468,11 +469,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = http_proxy;
+	d->items[0].data = get_opt_str("http_proxy");
 
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = ftp_proxy;
+	d->items[1].data = get_opt_str("ftp_proxy");
 
 	d->items[2].type = D_FIELD;
 	d->items[2].data = max_c_str;
@@ -510,11 +511,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	d->items[6].gnum = 1800;
 
 	d->items[7].type = D_CHECKBOX;
-	d->items[7].data = (unsigned char *) &async_lookup;
+	d->items[7].data = (unsigned char *) get_opt_ptr("async_dns");
 	d->items[7].dlen = sizeof(int);
 
 	d->items[8].type = D_CHECKBOX;
-	d->items[8].data = (unsigned char *) &download_utime;
+	d->items[8].data = (unsigned char *) get_opt_ptr("download_utime");
 	d->items[8].dlen = sizeof(int);
 
 	d->items[9].type = D_BUTTON;
@@ -528,7 +529,7 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	d->items[10].gid = 0;
 	d->items[10].fn = dlg_ftp_options;
 	d->items[10].text = TEXT(T_FTP_OPTIONS);
-	d->items[10].data = default_anon_pass;
+	d->items[10].data = get_opt_str("ftp.anonymous_password");
 	d->items[10].dlen = MAX_STR_LEN;
 
 	d->items[11].type = D_BUTTON;
@@ -666,8 +667,8 @@ unsigned char doc_str[4];
 void
 cache_refresh(void *xxx)
 {
-	memory_cache_size = atoi(mc_str) * 1024;
-	max_format_cache_entries = atoi(doc_str);
+	get_opt_long("memory_cache_size") = atoi(mc_str) * 1024;
+	get_opt_int("format_cache_size") = atoi(doc_str);
 	count_format_cache();
 	shrink_memory(0);
 }
@@ -683,8 +684,8 @@ cache_opt(struct terminal *term, void *xxx, void *yyy)
 {
 	struct dialog *d;
 
-	snprint(mc_str, 8, memory_cache_size / 1024);
-	snprint(doc_str, 4, max_format_cache_entries);
+	snprint(mc_str, 8, get_opt_long("memory_cache_size") / 1024);
+	snprint(doc_str, 4, get_opt_int("format_cache_size"));
 
 	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
 	if (!d) return;

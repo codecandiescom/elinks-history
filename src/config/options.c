@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.326 2003/10/22 19:46:46 jonas Exp $ */
+/* $Id: options.c,v 1.327 2003/10/22 19:50:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -431,7 +431,7 @@ free_options_tree(struct list_head *tree)
 void
 done_options(void)
 {
-	free_options_tree(options_root.value.tree);
+	free_options_tree(&options_root_tree);
 }
 
 void

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.26 2003/11/11 15:20:46 zas Exp $ */
+/* $Id: document.c,v 1.27 2003/11/11 17:50:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,6 +140,7 @@ release_document(struct document *document)
 	assert(document);
 	if_assert_failed return;
 
+	if (document->refresh) kill_document_refresh(document->refresh);
 	document_unlock(document);
 	if (!is_document_locked(document)) format_cache_entries++;
 	del_from_list(document);

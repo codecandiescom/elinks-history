@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.12 2003/12/02 20:53:17 jonas Exp $ */
+/* $Id: renderer.c,v 1.13 2003/12/04 09:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,12 +109,12 @@ render_document_frames(struct session *ses)
 	doc_opts.width = ses->tab->term->width;
 	doc_opts.height = ses->tab->term->height;
 
-	if (ses->visible_title_bar) {
+	if (ses->status.show_title_bar) {
 		doc_opts.y++;
 		doc_opts.height--;
 	}
-	if (ses->visible_status_bar) doc_opts.height--;
-	if (ses->visible_tabs_bar) doc_opts.height--;
+	if (ses->status.show_status_bar) doc_opts.height--;
+	if (ses->status.show_tabs_bar) doc_opts.height--;
 
 	doc_opts.color_mode = get_opt_int_tree(ses->tab->term->spec, "colors");
 	if (!get_opt_int_tree(ses->tab->term->spec, "underline"))

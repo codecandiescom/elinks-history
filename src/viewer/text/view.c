@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.286 2003/12/03 17:10:38 jonas Exp $ */
+/* $Id: view.c,v 1.287 2003/12/04 09:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1190,8 +1190,8 @@ quit:
 		}
 
 		bars = 0;
-		if (ses->visible_tabs_bar) bars++;
-		if (ses->visible_status_bar) bars++;
+		if (ses->status.show_tabs_bar) bars++;
+		if (ses->status.show_status_bar) bars++;
 
 		if (ev->y == ses->tab->term->height - bars && (ev->b & BM_ACT) == B_DOWN) {
 			int nb_tabs = number_of_tabs(ses->tab->term);

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.77 2003/12/01 20:31:07 jonas Exp $ */
+/* $Id: session.h,v 1.78 2003/12/04 09:27:19 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -14,6 +14,7 @@
 
 struct document_view;
 struct location;
+struct session_status;
 struct term_event;
 struct terminal;
 struct window;
@@ -79,6 +80,20 @@ struct tq {
 	unsigned char *prog;
 	int prog_flags;
 	int frame;
+};
+
+struct session_status {
+	unsigned int show_tabs_bar:1;
+	unsigned int show_status_bar:1;
+	unsigned int show_title_bar:1;
+
+	unsigned int set_window_title:1;
+	unsigned char *last_title;
+
+#ifdef USE_LEDS
+	struct led_panel leds;
+	struct led *ssl_led;
+#endif
 };
 
 /* This is one of the building stones of ELinks architecture --- this structure
@@ -148,19 +163,8 @@ struct session {
 	/* The possibly running type query (what-to-do-with-that-file?) */
 	struct list_head tq; /* -> struct tq */
 
-	/* The Bars */
-
-	int visible_tabs_bar;
-	int visible_status_bar;
-	int visible_title_bar;
-
-	unsigned char *last_title;
-	int set_window_title;
-
-#ifdef USE_LEDS
-	struct led_panel leds;
-	struct led *ssl_led;
-#endif
+	/* The info for status displaying */
+	struct session_status status;
 };
 
 extern struct list_head sessions; /* -> struct session */

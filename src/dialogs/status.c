@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.22 2003/12/03 18:31:56 jonas Exp $ */
+/* $Id: status.c,v 1.23 2003/12/04 09:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,6 +140,7 @@ update_status(void)
 	struct terminal *term = NULL;
 
 	foreach (ses, sessions) {
+		struct session_status *status = &ses->status;
 		int dirty = 0;
 
 		/* Try to descrease the number of tab calculation using that
@@ -149,18 +150,18 @@ update_status(void)
 			tabs = number_of_tabs(term);
 		}
 
-		if (ses->visible_title_bar != show_title_bar) {
-			ses->visible_title_bar = show_title_bar;
+		if (status->show_title_bar != show_title_bar) {
+			status->show_title_bar = show_title_bar;
 			dirty = 1;
 		}
 
-		if (ses->visible_status_bar != show_status_bar) {
-			ses->visible_status_bar = show_status_bar;
+		if (status->show_status_bar != show_status_bar) {
+			status->show_status_bar = show_status_bar;
 			dirty = 1;
 		}
 
-		if (show_tabs(show_tabs_bar, tabs) != ses->visible_tabs_bar) {
-			ses->visible_tabs_bar = show_tabs(show_tabs_bar, tabs);
+		if (show_tabs(show_tabs_bar, tabs) != status->show_tabs_bar) {
+			status->show_tabs_bar = show_tabs(show_tabs_bar, tabs);
 			/* Force the current document to be rerendered so the
 			 * document view and document height is updated to fit
 			 * into the new dimensions. Related to bug 87. */
@@ -168,7 +169,7 @@ update_status(void)
 			dirty = 1;
 		}
 
-		ses->set_window_title = set_window_title;
+		status->set_window_title = set_window_title;
 
 		if (!dirty) continue;
 
@@ -183,6 +184,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	unsigned char *msg = NULL;
 	unsigned int tab_info_len = 0;
 	struct download *stat = get_current_download(ses);
+	struct session_status *status = &ses->status;
 	struct color_pair *text_color = NULL;
 
 	if (stat) {
@@ -211,7 +213,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	draw_area(term, 0, term->height - 1, term->width, 1, ' ', 0,
 		get_bfu_color(term, "status.status-bar"));
 
-	if (!ses->visible_tabs_bar && tabs_count > 1) {
+	if (!status->show_tabs_bar && tabs_count > 1) {
 		unsigned char tab_info[8];
 
 		tab_info[tab_info_len++] = '[';
@@ -242,11 +244,12 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct color_pair *selected_color = get_bfu_color(term, "tabs.selected");
 	struct color_pair *loading_color = get_bfu_color(term, "tabs.loading");
 	struct color_pair *tabsep_color = get_bfu_color(term, "tabs.separator");
+	struct session_status *status = &ses->status;
 	int tab_width = int_max(1, term->width / tabs_count);
 	int tab_total_width = tab_width * tabs_count;
 	int tab_remain_width = int_max(0, term->width - tab_total_width);
 	int tab_num;
-	int ypos = term->height - (ses->visible_status_bar ? 2 : 1);
+	int ypos = term->height - (status->show_status_bar ? 2 : 1);
 	int xpos = 0;
 
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
@@ -378,6 +381,7 @@ static inline void
 display_window_title(struct session *ses, struct terminal *term)
 {
 	static struct session *last_ses;
+	struct session_status *status = &ses->status;
 	unsigned char *doc_title = NULL;
 	unsigned char *title;
 	int titlelen;
@@ -396,11 +400,11 @@ display_window_title(struct session *ses, struct terminal *term)
 
 	titlelen = strlen(title);
 	if (last_ses != ses
-	    || !ses->last_title
-	    || strlen(ses->last_title) != titlelen
-	    || memcmp(ses->last_title, title, titlelen)) {
-		if (ses->last_title) mem_free(ses->last_title);
-		ses->last_title = title;
+	    || !status->last_title
+	    || strlen(status->last_title) != titlelen
+	    || memcmp(status->last_title, title, titlelen)) {
+		if (status->last_title) mem_free(status->last_title);
+		status->last_title = title;
 		set_terminal_title(term, title);
 		last_ses = ses;
 	} else {
@@ -413,21 +417,22 @@ void
 print_screen_status(struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
+	struct session_status *status = &ses->status;
 	int tabs_count = number_of_tabs(term);
 	int ses_tab_is_current = (ses->tab == get_current_tab(ses->tab->term));
 
 	if (ses_tab_is_current) {
-		if (ses->set_window_title)
+		if (status->set_window_title)
 			display_window_title(ses, term);
 
-		if (ses->visible_title_bar)
+		if (status->show_title_bar)
 			display_title_bar(ses, term);
 
-		if (ses->visible_status_bar)
+		if (status->show_status_bar)
 			display_status_bar(ses, term, tabs_count);
 	}
 
-	if (ses->visible_tabs_bar) {
+	if (status->show_tabs_bar) {
 		display_tab_bar(ses, term, tabs_count);
 	}
 
@@ -440,11 +445,11 @@ print_screen_status(struct session *ses)
 			find_in_cache(ses->doc_view->document->url);
 
 		if (cache_entry) {
-			ses->ssl_led->value = (cache_entry->ssl_info)
+			status->ssl_led->value = (cache_entry->ssl_info)
 					    ? 'S' : '-';
 		} else {
 			/* FIXME: We should do this thing better. */
-			ses->ssl_led->value = '?';
+			status->ssl_led->value = '?';
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.37 2003/12/01 15:02:51 pasky Exp $ */
+/* $Id: leds.c,v 1.38 2003/12/04 09:27:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ draw_leds(struct session *ses)
 	color.background = led_color->background;
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		struct led *led = &ses->leds.leds[i];
+		struct led *led = &ses->status.leds.leds[i];
 
 		color.foreground = led->__used  ? led->fgcolor
 						: led_color->foreground;
@@ -176,8 +176,8 @@ sync_leds(struct session *ses)
 	}
 
 	for (i = 0; i < LEDS_COUNT; i++) {
-		struct led *led = &ses->leds.leds[i];
-		unsigned char *led_backup = &ses->leds.leds_backup[i];
+		struct led *led = &ses->status.leds.leds[i];
+		unsigned char *led_backup = &ses->status.leds.leds_backup[i];
 
 		if (led->value != *led_backup) {
 			*led_backup = led->value;
@@ -220,12 +220,12 @@ register_led(struct session *ses, int number)
 	if (number >= LEDS_COUNT || number < 0)
 		return NULL;
 
-	if (ses->leds.leds[number].__used)
+	if (ses->status.leds.leds[number].__used)
 		return NULL;
 
-	ses->leds.leds[number].__used = 1;
+	ses->status.leds.leds[number].__used = 1;
 
-	return &ses->leds.leds[number];
+	return &ses->status.leds.leds[number];
 }
 
 void

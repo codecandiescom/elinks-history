@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.270 2003/12/03 11:27:37 miciah Exp $ */
+/* $Id: session.c,v 1.271 2003/12/04 09:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -949,8 +949,8 @@ create_basic_session(struct window *tab)
 	ses->display_timer = -1;
 
 #ifdef USE_LEDS
-	init_led_panel(&ses->leds);
-	ses->ssl_led = register_led(ses, 0);
+	init_led_panel(&ses->status.leds);
+	ses->status.ssl_led = register_led(ses, 0);
 #endif
 
 	add_to_list(sessions, ses);
@@ -1202,7 +1202,7 @@ destroy_session(struct session *ses)
 	if (ses->dn_url) mem_free(ses->dn_url);
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);
-	if (ses->last_title) mem_free(ses->last_title);
+	if (ses->status.last_title) mem_free(ses->status.last_title);
 	del_from_list(ses);
 }
 

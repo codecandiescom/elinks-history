@@ -1,10 +1,11 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.68 2003/12/14 14:09:46 zas Exp $ */
+/* $Id: text.c,v 1.69 2003/12/14 14:46:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -49,15 +50,7 @@ split_line(unsigned char *text, int max_width)
 				 * this rule will not match often.
 				 * We match dash and quotes too. */
 				while (--split != text) {
-					if (*split != '.'
-					    && *split != ','
-					    && *split != ';'
-					    && *split != '?'
-					    && *split != '!'
-					    && *split != ':'
-					    && *split != '-'
-					    && *split != '"'
-					    && *split != '\'') continue;
+					if (!ispunct(*split)) continue;
 					split++;
 					break;
 				}
@@ -95,15 +88,18 @@ split_lines(struct widget_data *widget_data, int max_width)
 
 	for (; *text; text += width) {
 
+		/* Skip first leading \n. */
+		if (*text == '\n') text++;
+
 		/* Skip any leading space from last line split */
-		while (*text == ' ' || *text == '\n') text++;
+		while (isspace(*text) && *text != '\n') text++;
 		if (!*text) break;
 
 		width = split_line(text, max_width);
 
 		/* split_line() may return 0. */
 		if (width < 1) {
-			text++; /* Infinite loop prevention. */
+			width = 1; /* Infinite loop prevention. */
 			continue;
 		}
 
@@ -112,7 +108,7 @@ split_lines(struct widget_data *widget_data, int max_width)
 		if (!realloc_lines(&lines, line, line + 1))
 			break;
 
-		lines[line++]= text;
+		lines[line++] = text;
 	}
 
 	/* Yes it might be a bit ugly on the other hand it will be autofreed
@@ -135,14 +131,18 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 	for (; *text; text += line_width, (*y)++) {
 		int shift;
 
+		/* Skip first leading \n. */
+		if (*text == '\n') text++;
+
 		/* Skip any leading space from last line split */
-		while (*text == ' ' || *text == '\n') text++;
+		while (isspace(*text) && *text != '\n') text++;
 		if (!*text) break;
 
 		line_width = split_line(text, width);
+
 		/* split_line() may return 0. */
 		if (line_width < 1) {
-			text++; /* Infinite loop prevention. */
+			line_width = 1; /* Infinite loop prevention. */
 			continue;
 		}
 

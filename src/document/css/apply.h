@@ -1,4 +1,4 @@
-/* $Id: apply.h,v 1.6 2004/01/17 16:01:48 pasky Exp $ */
+/* $Id: apply.h,v 1.7 2004/01/17 16:26:21 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_APPLY_H
 #define EL__DOCUMENT_CSS_APPLY_H
@@ -9,24 +9,8 @@
 
 struct html_element;
 
-/* This is a super-simplistic CSS micro-engine. */
-
-/* What Is Gonna Be A FAQ: Why isn't the CSS support optional? */
-/* Answer: Because I want to eliminate all trivial styling (like html_h*())
- * and substitute it with default stylesheet information, so that this can be
- * user-configured. On the other side we might yet reconsider whether we want
- * that before 1.0. Maybe we don't. */
-
-/* TODO: Its job is separated to two phases. The first phase is a parser, it
- * takes a string with CSS code and transforms it to an internal set of
- * structures describing the data (let's call it a "rawer"). The second phase
- * is an applier, which applies given rawer to the current element. --pasky */
-
-/* Currently only the element's 'style' attribute is checked, therefore the
- * first stage is not exported yet (it'd be useless for that). Only the second
- * stage is available now, and it doesn't take the stylesheet argument yet.  It
- * will automatically scan the current element, and if a 'style' attribute is
- * found, it is parsed and applied to the current element. */
+/* This is the main entry point for the CSS micro-engine. It throws all the
+ * power of the stylesheets at a given element. */
 
 
 /* The {struct css_property} describes one CSS declaration in a rule. One list of

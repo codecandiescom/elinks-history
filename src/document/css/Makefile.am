@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.4 2004/01/17 16:01:48 pasky Exp $
+## $Id: Makefile.am,v 1.5 2004/01/17 16:23:13 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,8 @@ include $(top_srcdir)/Makefile.base
 
 # However, we apparently need to create the library in order to convience
 # automake to compile the objects :/. We DON'T use libcss.a ANYWHERE.
+
+EXTRA_DIST = README
 
 noinst_LIBRARIES = libcss.a
 libcss_a_SOURCES = \

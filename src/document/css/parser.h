@@ -1,9 +1,9 @@
-/* $Id: parser.h,v 1.1 2004/01/17 15:54:42 pasky Exp $ */
+/* $Id: parser.h,v 1.2 2004/01/17 16:23:07 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
 
-struct list_head;
+#include "util/lists.h"
 
 /* This is interface for the value parser. It is intended to be used only
  * internally inside of the CSS engine. */

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.86 2003/12/12 14:24:19 jonas Exp $ */
+/* $Id: string.c,v 1.87 2003/12/12 14:36:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,9 +241,9 @@ done_string(struct string *string)
 
 	if (string->source) {
 		mem_free(string->source);
-		string->source = NULL;
 	}
-	string->length = 0;
+	/* Blast everything including the magic */
+	memset(string, 0, sizeof(struct string));
 }
 
 inline struct string *

@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.8 2004/01/18 22:58:26 jonas Exp $ */
+/* $Id: color.c,v 1.9 2004/01/19 00:20:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,7 +221,7 @@ int
 decode_color(unsigned char *str, int slen, color_t *color)
 {
 	if (*str == '#' && (slen == 7 || slen == 4)) {
-		unsigned char buffer[6];
+		unsigned char buffer[7];
 		unsigned char *end;
 		color_t string_color;
 
@@ -232,6 +232,7 @@ decode_color(unsigned char *str, int slen, color_t *color)
 			buffer[0] = buffer[1] = str[0];
 			buffer[2] = buffer[3] = str[1];
 			buffer[4] = buffer[5] = str[2];
+			buffer[6] = 0;
 			str = buffer;
 		}
 

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.117 2004/01/30 19:01:45 jonas Exp $ */
+/* $Id: inpfield.c,v 1.118 2004/01/30 19:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 
 	switch (get_mouse_button(ev)) {
 		case B_WHEEL_UP:
-			if ((ev->b & BM_ACT) == B_DOWN &&
+			if (check_mouse_action(ev, B_DOWN) &&
 			    (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
 				dlg_set_history(widget_data);
@@ -294,7 +294,7 @@ mouse_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			return EVENT_PROCESSED;
 
 		case B_WHEEL_DOWN:
-			if ((ev->b & BM_ACT) == B_DOWN &&
+			if (check_mouse_action(ev, B_DOWN) &&
 			    (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 				dlg_set_history(widget_data);

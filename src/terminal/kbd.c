@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.45 2004/01/30 19:01:46 jonas Exp $ */
+/* $Id: kbd.c,v 1.46 2004/01/30 19:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -887,7 +887,7 @@ process_queue(struct itrm *itrm)
 						 * sequence. Since we can't reliably guess what we're talking
 						 * with from $TERM, we will rather support Eterm/aterm, as in
 						 * rxvt, at least each second wheel up move will work. */
-						if ((ev.b & BM_ACT) == B_DOWN)
+						if (check_mouse_action(&ev, B_DOWN))
 #if 0
 						    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
 							 && (ev.b & BM_BUTT) >= B_WHEEL_UP))

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.193 2004/01/30 19:01:45 jonas Exp $ */
+/* $Id: menu.c,v 1.194 2004/01/30 19:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -509,13 +509,13 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		 * action after the former switch, replace the
 		 * return with goto here. --pasky */
 		case B_WHEEL_UP:
-			if ((ev->b & BM_ACT) == B_DOWN) {
+			if (check_mouse_action(ev, B_DOWN)) {
 				scroll_menu(menu, -1);
 				display_menu(win->term, menu);
 			}
 			return;
 		case B_WHEEL_DOWN:
-			if ((ev->b & BM_ACT) == B_DOWN) {
+			if (check_mouse_action(ev, B_DOWN)) {
 				scroll_menu(menu, 1);
 				display_menu(win->term, menu);
 			}
@@ -526,7 +526,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 	    || ev->x >= menu->x + menu->width
 	    || ev->y < menu->y
 	    || ev->y >= menu->y + menu->height) {
-		if ((ev->b & BM_ACT) == B_DOWN) {
+		if (check_mouse_action(ev, B_DOWN)) {
 			delete_window_ev(win, NULL);
 
 		} else {
@@ -568,7 +568,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 				scroll_menu(menu, 0);
 				display_menu(win->term, menu);
 
-				if ((ev->b & BM_ACT) == B_UP ||
+				if (check_mouse_action(ev, B_UP) ||
 				    mi_is_submenu(menu->items[sel]))
 					select_menu(win->term, menu);
 			}
@@ -885,7 +885,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 	if (check_mouse_wheel(ev))
 		return;
 
-	if ((ev->b & BM_ACT) == B_DOWN && ev->y) {
+	if (check_mouse_action(ev, B_DOWN) && ev->y) {
 		delete_window_ev(win, NULL);
 
 	} else if (!ev->y) {
@@ -934,7 +934,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 
 			display_mainmenu(win->term, menu);
 
-			if ((ev->b & BM_ACT) == B_UP
+			if (check_mouse_action(ev, B_UP)
 			    || mi_is_submenu(menu->items[menu->selected])) {
 				select_mainmenu(win->term,
 						menu);

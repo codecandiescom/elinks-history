@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.140 2004/01/30 19:01:45 jonas Exp $ */
+/* $Id: listbox.c,v 1.141 2004/01/30 19:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -517,7 +517,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		if (!box->sel) box->sel = box->top;
 	}
 
-	if ((ev->b & BM_ACT) == B_DOWN) {
+	if (check_mouse_action(ev, B_DOWN)) {
 		struct widget_data *dlg_item = dlg_data->widgets_data;
 
 		switch (get_mouse_button(ev)) {
@@ -533,7 +533,7 @@ mouse_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		}
 	}
 
-	if ((ev->b & BM_ACT) == B_UP) {
+	if (check_mouse_action(ev, B_UP)) {
 		if (!check_mouse_wheel(ev) &&
 		    (ev->y >= widget_data->y && ev->y < widget_data->y + widget_data->h) &&
 		    (ev->x >= widget_data->x && ev->x <= widget_data->x + widget_data->w)) {

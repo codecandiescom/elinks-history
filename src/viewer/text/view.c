@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.364 2004/01/30 19:01:46 jonas Exp $ */
+/* $Id: view.c,v 1.365 2004/01/30 19:13:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,7 +723,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		struct link *link = choose_mouse_link(doc_view, ev);
 
 		if (check_mouse_wheel(ev)) {
-			if ((ev->b & BM_ACT) != B_DOWN) {
+			if (!check_mouse_action(ev, B_DOWN)) {
 				/* We handle only B_DOWN case... */
 			} else if (check_mouse_button(ev, B_WHEEL_UP)) {
 				rep_ev(ses, doc_view, scroll, -2);
@@ -736,7 +736,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			doc_view->vs->current_link = link - doc_view->document->links;
 
 			if (!link_is_textinput(link)
-			    && (ev->b & BM_ACT) == B_UP) {
+			    && check_mouse_action(ev, B_UP)) {
 
 				draw_doc(ses->tab->term, doc_view, 1);
 				print_screen_status(ses);
@@ -941,7 +941,8 @@ quit:
 	if (ev->ev == EV_MOUSE) {
 		int bars;
 
-		if (ev->y == 0 && (ev->b & BM_ACT) == B_DOWN
+		if (ev->y == 0
+		    && check_mouse_action(ev, B_DOWN)
 		    && !check_mouse_wheel(ev)) {
 			struct window *m;
 
@@ -955,7 +956,7 @@ quit:
 		if (ses->status.show_tabs_bar) bars++;
 		if (ses->status.show_status_bar) bars++;
 
-		if (ev->y == ses->tab->term->height - bars && (ev->b & BM_ACT) == B_DOWN) {
+		if (ev->y == ses->tab->term->height - bars && check_mouse_action(ev, B_DOWN)) {
 			int nb_tabs = number_of_tabs(ses->tab->term);
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 

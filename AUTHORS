@@ -54,6 +54,9 @@ beckers <beckers@st-oneline.de>
 Benjamin Michotte <binny@baby-linux.net>
 	User-Agent browser ID string changing support
 
+Bunch <kisto@go2.pl>
+	HTML renderer hacking
+
 Carles Sadurni Anguita <isard@ctv.es>
 	Catalan translation
 
@@ -260,4 +263,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.33 2002/03/05 11:49:33 pasky Exp $
+$Id: AUTHORS,v 1.34 2002/03/06 17:34:13 pasky Exp $

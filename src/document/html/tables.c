@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.319 2004/06/29 23:13:41 pasky Exp $ */
+/* $Id: tables.c,v 1.320 2004/06/29 23:15:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,35 +49,35 @@ get_table_frames(struct table *table, struct table_frames *result)
 	}
 }
 
-/* This in fact returns an indent from the document margin. */
+/* Distance of the table from the left margin. */
 static int
-get_table_margin(struct table *table)
+get_table_indent(struct table *table)
 {
 	int width = par_format.width - table->real_width;
-	int margin;
+	int indent;
 
 	switch (table->align) {
 	case ALIGN_CENTER:
-		margin = (width + par_format.leftmargin - par_format.rightmargin) / 2;
+		indent = (width + par_format.leftmargin - par_format.rightmargin) / 2;
 		break;
 
 	case ALIGN_RIGHT:
-		margin = width - par_format.rightmargin;
+		indent = width - par_format.rightmargin;
 		break;
 
 	case ALIGN_LEFT:
 	case ALIGN_NONE:
 	case ALIGN_JUSTIFY:
 	default:
-		margin = par_format.leftmargin;
+		indent = par_format.leftmargin;
 	}
 
 	/* Don't use int_bounds(&x, 0, width) here,
 	 * width may be < 0. --Zas */
-	if (margin > width) margin = width;
-	if (margin < 0) margin = 0;
+	if (indent > width) indent = width;
+	if (indent < 0) indent = 0;
 
-	return margin;
+	return indent;
 }
 
 static inline struct part *
@@ -1115,7 +1115,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct table *table;
 	struct node *node, *new_node;
 	struct html_element *state;
-	int margin, margins;
+	int indent, margins;
 
 	html_context.table_level++;
 
@@ -1162,11 +1162,11 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	node = part->document->nodes.next;
 	node->box.height = part->box.y - node->box.y + part->cy;
 
-	margin = get_table_margin(table);
+	indent = get_table_indent(table);
 
-	draw_table_bad_html(table, margin, part->cy);
-	draw_table_cells(table, margin, part->cy);
-	draw_table_frames(table, margin, part->cy);
+	draw_table_bad_html(table, indent, part->cy);
+	draw_table_cells(table, indent, part->cy);
+	draw_table_frames(table, indent, part->cy);
 
 	part->cy += table->real_height;
 	part->cx = -1;

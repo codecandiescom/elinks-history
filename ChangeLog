@@ -1,3 +1,9 @@
+Mon Feb  4 14:13:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, links.1, os_dep.c, os_dep.h:
+	
+	Port to RISC OS by Peter Naulls <peter@chocky.org>
+
 Sun Feb  3 07:50:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.96 2004/02/08 00:17:09 witekfl Exp $ */
+/* $Id: options.inc,v 1.97 2004/02/11 11:44:25 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1258,11 +1258,14 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("", N_("Use secure file saving"),
 		"secure_file_saving", 0, 1,
-		N_("First write data to 'file.tmp', then rename to 'file' upon\n"
-		"successfully finishing this. Note that this relates only to\n"
+		N_("First write data to unique temporary file, then rename this file\n"
+		"upon successfully finishing this. Note that this relates only to\n"
 		"config files, not downloaded files. You may want to disable\n"
-		"it, if you want some config file with some exotic permissions.\n"
-		"Secure file saving is automagically disabled if file is symlink.")),
+		"it if you are using some exotic permissions for concerned files.\n"
+		"Secure file saving is automagically disabled if file is symlink.\n"
+		"Warning: some systems (ie. OS/2, Win32) require that destination\n"
+		"file doesn't exist when rename() is called, breaking atomicity,\n"
+		"and reducing reliability of this feature.")),
 
 	NULL_OPTION_INFO,
 };

@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.10 2003/10/26 19:49:02 zas Exp $ */
+/* $Id: hardio.c,v 1.11 2004/07/14 21:27:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ int
 hard_write(int fd, unsigned char *p, int l)
 {
 	int w = 1;
-	int t = 0;
+	int t = l;
 
 	debug_open("hard_write", fd, p, l);
 
@@ -99,21 +99,21 @@ hard_write(int fd, unsigned char *p, int l)
 
 		debug_write(p, w);
 
-		t += w;
 		p += w;
 		l -= w;
 	}
 
 	debug_flush();
 
-	return t;
+	/* Return number of bytes written. */
+	return (t - l);
 }
 
 int
 hard_read(int fd, unsigned char *p, int l)
 {
 	int r = 1;
-	int t = 0;
+	int t = l;
 
 	debug_open("hard_read", fd, p, l);
 
@@ -123,12 +123,12 @@ hard_read(int fd, unsigned char *p, int l)
 
 		debug_write(p, r);
 
-		t += r;
 		p += r;
 		l -= r;
 	}
 
 	debug_flush();
 
-	return t;
+	/* Return number of bytes read. */
+	return (t - l);
 }

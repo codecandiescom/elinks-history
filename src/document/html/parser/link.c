@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.20 2004/07/15 06:22:30 miciah Exp $ */
+/* $Id: link.c,v 1.21 2004/07/15 06:53:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,8 +123,7 @@ get_image_text(unsigned char *attr)
 		unsigned char *start;
 
 		for (start = src + len; start > src; start--)
-			if (dir_sep(*start)) {
-				start++;
+			if (dir_sep(start[-1])) {
 				break;
 			}
 

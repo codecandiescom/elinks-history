@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.210 2003/11/08 16:58:16 zas Exp $ */
+/* $Id: session.c,v 1.211 2003/11/10 16:49:31 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -805,8 +805,17 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	if_assert_failed return;
 
 	foreach (frame, loc->frames) {
+		struct document_view *doc_view;
+
 		if (strcasecmp(frame->name, name))
 			continue;
+
+		foreach(doc_view, ses->scrn_frames) {
+			if (doc_view->vs == &frame->vs && doc_view->document->frame_desc) {
+				request_frameset(ses, doc_view->document->frame_desc);
+				return;
+			}
+		}
 
 		url = memacpy(frame->vs.url, frame->vs.url_len);
 		if (!url) return;

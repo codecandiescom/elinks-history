@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.86 2004/11/19 09:39:25 zas Exp $ */
+/* $Id: checkbox.c,v 1.87 2004/11/19 10:48:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,21 @@
 #define CHECKBOX_LEN 3	/* "[X]" or "(X)" */
 #define CHECKBOX_SPACING 1	/* "[X]" + " " + "Label" */
 #define CHECKBOX_LS (CHECKBOX_LEN + CHECKBOX_SPACING)	/* "[X] " */
+
+void
+add_dlg_radio_do(struct dialog *dlg, unsigned char *text,
+		 int groupid, int groupnum, void *data)
+{
+	struct widget *widget;
+
+	widget = &dlg->widgets[dlg->number_of_widgets++];
+	widget->type = WIDGET_CHECKBOX;
+	widget->text = text;
+	widget->info.checkbox.gid = groupid;
+	widget->info.checkbox.gnum = groupnum;
+	widget->datalen = sizeof(int);
+	widget->data = (unsigned char *) data;
+}
 
 void
 dlg_format_checkbox(struct terminal *term,

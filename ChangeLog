@@ -1,3 +1,156 @@
+Mon Sep 22 22:00:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Note who to blame for the event system.  
+
+Mon Sep 22 21:54:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: scripting/lua/core.c, scripting/lua/hooks.c,
+	scripting/lua/hooks.h, main.c, scripting/guile/core.c,
+	scripting/guile/core.h, scripting/guile/hooks.c,
+	scripting/guile/hooks.h:
+
+	Move guile hooks to the event system. --Karsten Schölzel 
+
+Mon Sep 22 21:48:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, protocol/proxy.c:
+
+	Use the event system to call the scripting hooks, calling
+	set_event_id() to get rid of unnecessary event id lookups. --Karsten
+	Schölzel 
+
+Mon Sep 22 21:46:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	One byte memleak was fixed. Cleanup and optimization of
+	shrink_dns_cache().  
+
+Mon Sep 22 19:45:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/event.h:
+
+	Safer macro definition for set_event_id().  
+
+Mon Sep 22 18:41:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Remove useless #includes. Patch by kuser.  
+
+Mon Sep 22 18:37:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/event.h:
+
+	Introduces set_event_id(event, name) macro. --Karsten Schölzel 
+
+Mon Sep 22 16:35:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Call done_event in terminate_all_subsystems as late as possible to
+	make the event system usable in cleanup stage. --Karsten Schölzel 
+
+Mon Sep 22 16:23:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Add variable declaration needed by the last patch.  
+
+Mon Sep 22 16:21:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	Move out the known mime type strings to a structure that can be
+	looped.  Use assertion and cleanup so we don't leak.  
+
+Mon Sep 22 15:44:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.c:
+
+	new_form(): Use one byte less when allocating the url.  
+
+Mon Sep 22 15:39:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/error.c:
+
+	get_err_msg(): Minor optimization and allocate one byte less.  
+
+Mon Sep 22 15:31:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	One byte memleak was fixed.  
+
+Mon Sep 22 15:25:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	More one-byte memleaks fixed. Please review this one carefully ;) 
+
+Mon Sep 22 15:15:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/frames.c:
+
+	sizeof(struct frame_desc) bytes memleak was fixed.  
+
+Mon Sep 22 15:10:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	One byte memleak fixed.  
+
+Mon Sep 22 15:08:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Rename free_mimetype_entry() to done_... + allocate
+	mimetype_entry->extension with the entry and save a few bytes.  
+
+Mon Sep 22 15:06:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	One byte memory leak was fixed.  
+
+Mon Sep 22 14:59:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	We already allocate mailcap_entry->command with the entry. Make it
+	'official' and save a few bytes. ;) 
+
+Mon Sep 22 14:59:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inphist.c, inphist.h:
+
+	One byte memory leak was fixed.  
+
+Mon Sep 22 14:52:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	1 byte is already reserved for cmd_buffer in struct
+	ftp_connection_info, so no need to allocate it. I think there is
+	some other places with the same minor issue (well, 1 byte memory
+	leak per allocation), please help me to fix them.  
+
+Mon Sep 22 14:22:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/: ftpparse.c, http/date.c:
+
+	Previous bug was cutnpasted to date.c, fixed. Small month2num()
+	wrappers are now inlined.  
+
+Mon Sep 22 14:14:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftpparse.c:
+
+	A stupid bug introduced by month2num() patch was fixed. Now ftp
+	should work as usual ;).  
+
 Sun Sep 21 14:47:26 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: bfu/dialog.c, bfu/inphist.c, globhist/dialogs.c,

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.320 2003/10/20 15:51:52 pasky Exp $ */
+/* $Id: options.c,v 1.321 2003/10/20 16:10:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -942,7 +942,7 @@ register_options(void)
 		"different language set in different terminals, the language\n"
 		"used in the configuration file MAY be the same as on the\n"
 		"terminal where you saved the file, but it should be generally\n"
-		"considered unpredicatble."));
+		"considered unpredictable."));
 
 	
 	add_opt_bool("config", N_("Saving style warnings"),

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.208 2005/03/24 08:42:41 zas Exp $ */
+/* $Id: inpfield.c,v 1.209 2005/03/24 09:39:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,7 +343,7 @@ field_prev_history(struct widget_data *widget_data)
 static int
 field_next_history(struct widget_data *widget_data)
 {
-	if ((void *) widget_data->info.field.cur_hist->next != &widget_data->info.field.history) {
+	if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
 		widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
 		dlg_set_history(widget_data);
 		return 1;

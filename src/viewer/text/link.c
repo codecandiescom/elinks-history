@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.68 2003/10/17 15:12:03 zas Exp $ */
+/* $Id: link.c,v 1.69 2003/10/17 15:24:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,9 +243,9 @@ free_link(struct document_view *doc_view)
 
 
 void
-clear_link(struct terminal *t, struct document_view *doc_view)
+clear_link(struct terminal *term, struct document_view *doc_view)
 {
-	assert(t && doc_view);
+	assert(term && doc_view);
 	if_assert_failed return;
 
 	if (doc_view->link_bg) {
@@ -258,7 +258,7 @@ clear_link(struct terminal *t, struct document_view *doc_view)
 			if (bgchar->x != -1 && bgchar->y != -1) {
 				struct screen_char *co;
 
-				co = get_char(t, bgchar->x, bgchar->y);
+				co = get_char(term, bgchar->x, bgchar->y);
 				copy_screen_chars(co, &bgchar->c, 1);
 			}
 		}
@@ -418,21 +418,21 @@ next_in_view(struct document_view *doc_view, int p, int d,
 
 
 void
-set_pos_x(struct document_view *doc_view, struct link *l)
+set_pos_x(struct document_view *doc_view, struct link *link)
 {
 	int xm = 0;
 	int xl = MAXINT;
 	register int i;
 
-	assert(doc_view && l);
+	assert(doc_view && link);
 	if_assert_failed return;
 
-	for (i = 0; i < l->n; i++) {
-		if (l->pos[i].y >= doc_view->vs->view_pos
-		    && l->pos[i].y < doc_view->vs->view_pos + doc_view->yw) {
+	for (i = 0; i < link->n; i++) {
+		if (link->pos[i].y >= doc_view->vs->view_pos
+		    && link->pos[i].y < doc_view->vs->view_pos + doc_view->yw) {
 			/* XXX: bug ?? if l->pos[i].x == xm => xm = xm + 1 --Zas*/
-			if (l->pos[i].x >= xm) xm = l->pos[i].x + 1;
-			xl = int_min(xl, l->pos[i].x);
+			if (link->pos[i].x >= xm) xm = link->pos[i].x + 1;
+			xl = int_min(xl, link->pos[i].x);
 		}
 	}
 	if (xl == MAXINT) return;
@@ -442,19 +442,19 @@ set_pos_x(struct document_view *doc_view, struct link *l)
 }
 
 void
-set_pos_y(struct document_view *doc_view, struct link *l)
+set_pos_y(struct document_view *doc_view, struct link *link)
 {
 	int ym = 0;
 	int yl;
 	register int i;
 
-	assert(doc_view && doc_view->document && doc_view->vs && l);
+	assert(doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
 
 	yl = doc_view->document->y;
-	for (i = 0; i < l->n; i++) {
-		if (l->pos[i].y >= ym) ym = l->pos[i].y + 1;
-		yl = int_min(yl, l->pos[i].y);
+	for (i = 0; i < link->n; i++) {
+		if (link->pos[i].y >= ym) ym = link->pos[i].y + 1;
+		yl = int_min(yl, link->pos[i].y);
 	}
 	doc_view->vs->view_pos = (ym + yl) / 2 - doc_view->document->opt.yw / 2;
 	int_bounds(&doc_view->vs->view_pos, 0,

@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.1 2003/10/31 02:08:37 jonas Exp $ */
+/* $Id: refresh.c,v 1.2 2003/11/12 01:29:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ do_document_refresh(void *data)
 	if (ses->tq_url && !strcasecmp(refresh->url, ses->tq_url))
 		return;
 
-	goto_url(ses, refresh->url);
+	goto_url_frame(ses, refresh->url, NULL);
 };
 
 void

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.222 2003/11/12 01:15:11 jonas Exp $ */
+/* $Id: session.c,v 1.223 2003/11/12 01:29:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1494,12 +1494,11 @@ ses_load_notify(struct download *stat, struct session *ses)
 
 static void
 do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
-	      enum task_type task, enum cache_mode cache_mode)
+	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
-	unsigned char *u, *referrer;
+	unsigned char *u, *referrer = NULL;
 	unsigned char *pos;
 	protocol_external_handler *fn;
-	struct document_view *doc_view;
 
 	fn = get_protocol_external_handler(url);
 	if (fn) {
@@ -1536,9 +1535,12 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 	abort_loading(ses, 0);
 
-	doc_view = current_frame(ses);
-	referrer = (doc_view && doc_view->document)
-		? doc_view->document->url : NULL;
+	if (do_referrer) {
+		struct document_view *doc_view = current_frame(ses);
+
+		if (doc_view && doc_view->document)
+			referrer = doc_view->document->url;
+	}
 
 	set_referrer(ses, referrer);
 
@@ -1551,7 +1553,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 
 static void
 follow_url(struct session *ses, unsigned char *url, unsigned char *target,
-	   enum task_type task, enum cache_mode cache_mode)
+	   enum task_type task, enum cache_mode cache_mode, int referrer)
 {
 	unsigned char *new_url = url;
 #ifdef HAVE_SCRIPTING
@@ -1562,7 +1564,8 @@ follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	if (!new_url) return;
 #endif
 
-	if (*new_url) do_follow_url(ses, new_url, target, task, cache_mode);
+	if (*new_url) 
+		do_follow_url(ses, new_url, target, task, cache_mode, referrer);
 
 #ifdef HAVE_SCRIPTING
 	if (new_url != url) mem_free(new_url);
@@ -1573,20 +1576,20 @@ void
 goto_url_frame_reload(struct session *ses, unsigned char *url,
 		      unsigned char *target)
 {
-	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_FORCE_RELOAD);
+	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_FORCE_RELOAD, 1);
 }
 
 void
 goto_url_frame(struct session *ses, unsigned char *url,
 	       unsigned char *target)
 {
-	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_NORMAL);
+	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_NORMAL, 1);
 }
 
 void
 goto_url(struct session *ses, unsigned char *url)
 {
-	follow_url(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL);
+	follow_url(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
 }
 
 void
@@ -1618,7 +1621,7 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 	ses->imgmap_href_base = href;
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 	ses->imgmap_target_base = target;
-	follow_url(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL);
+	follow_url(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL, 1);
 }
 
 struct frame *

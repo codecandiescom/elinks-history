@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.4 2002/11/25 12:04:56 zas Exp $ */
+/* $Id: memory.c,v 1.5 2002/11/28 22:45:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,33 +17,42 @@
 
 int alloc_try = 0;
 
+int
+patience(unsigned char *of)
+{
+	++alloc_try;
+	if (alloc_try < ALLOC_MAXTRIES) {
+		error("Out of memory (%s returned NULL): retry #%d,"
+			" I still exercise my patience and retry tirelessly.",
+			of, alloc_try);
+		sleep(ALLOC_DELAY);
+		return alloc_try;
+	}
+
+#ifdef CRASH_IF_ALLOC_MAXTRIES
+	internal("Out of memory (%s returned NULL) after %d tries,"
+		" I give up. See ya on the other side.",
+		of, alloc_try);
+#else
+	error("Out of memory (%s returned NULL) after %d tries,"
+		" I give up and try to continue. Pray for me, please.",
+		of, alloc_try);
+#endif
+	alloc_try = 0;
+	return 0;
+}
+
 void *
 mem_alloc(size_t size)
 {
-	void *p;
+	void *p = NULL;
 
 	if (!size) return DUMMY;
 
-again:
-	p = malloc(size);
-	if (!p) {
-		++alloc_try;
-		if (alloc_try < ALLOC_MAXTRIES) {
-			fprintf(stderr, "out of memory (malloc returned NULL) retry %d,"
-					" i wait and retry.", alloc_try);
-			sleep(ALLOC_DELAY);
-			goto again;
-		} else {
-			alloc_try = 0;
-#ifdef CRASH_IF_ALLOC_MAXTRIES
-			internal(stderr, "out of memory (malloc returned NULL) after %d tries,"
-					 " i give up.", alloc_try);
-#else
-			fprintf(stderr, "out of memory (malloc returned NULL) after %d tries,"
-					" i give up and try to continue.", alloc_try);
-#endif
-		}
-	}
+	do {
+		p = malloc(size);
+		if (p) break;
+	} while (patience("malloc"));
 
 	return p;
 }
@@ -55,26 +64,10 @@ mem_calloc(size_t count, size_t eltsize)
 
 	if (!eltsize || !count) return DUMMY;
 
-again:
-	p = calloc(count, eltsize);
-	if (!p) {
-		++alloc_try;
-		if (alloc_try < ALLOC_MAXTRIES) {
-			fprintf(stderr, "out of memory (calloc returned NULL) retry %d,"
-					" i wait and retry.", alloc_try);
-			sleep(ALLOC_DELAY);
-			goto again;
-		} else {
-			alloc_try = 0;
-#ifdef CRASH_IF_ALLOC_MAXTRIES
-			internal(stderr, "out of memory (calloc returned NULL) after %d tries,"
-					 " i give up.", alloc_try);
-#else
-			fprintf(stderr, "out of memory (calloc returned NULL) after %d tries,"
-					" i give up and try to continue.", alloc_try);
-#endif
-		}
-	}
+	do {
+		p = calloc(count, eltsize);
+		if (p) break;
+	} while (patience("calloc"));
 
 	return p;
 }
@@ -102,26 +95,10 @@ mem_realloc(void *p, size_t size)
 		return DUMMY;
 	}
 
-again:
-	p = realloc(p, size);
-	if (!p) {
-		++alloc_try;
-		if (alloc_try < ALLOC_MAXTRIES) {
-			fprintf(stderr, "out of memory (realloc returned NULL) retry %d,"
-					" i wait and retry.", alloc_try);
-			sleep(ALLOC_DELAY);
-			goto again;
-		} else {
-			alloc_try = 0;
-#ifdef CRASH_IF_ALLOC_MAXTRIES
-			internal(stderr, "out of memory (realloc returned NULL) after %d tries,"
-					 " i give up.", alloc_try);
-#else
-			fprintf(stderr, "out of memory (realloc returned NULL) after %d tries,"
-					" i give up and try to continue.", alloc_try);
-#endif
-		}
-	}
+	do {
+		p = realloc(p, size);
+		if (p) break;
+	} while (patience("realloc"));
 
 	return p;
 }

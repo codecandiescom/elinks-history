@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.7 2003/11/14 01:35:32 jonas Exp $ */
+/* $Id: renderer.c,v 1.8 2003/11/14 02:07:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ add_document_line(struct document *document, int lineno,
 		  unsigned char *line, int width, struct screen_char *template)
 {
 	struct screen_char *pos, *end;
-	int line_pos, expanded = 0, was_space = 1;
+	int line_pos, expanded = 0;
 	struct uri uri;
 
 	for (line_pos = 0; line_pos < width; line_pos++) {
@@ -117,43 +117,47 @@ add_document_line(struct document *document, int lineno,
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 
 			expanded += tab_width;
-			was_space = 1;
+			continue;
 
 		} else if (line_char < ' ' || line_char == ASCII_ESC) {
 			line[line_pos] = ' ';
-			was_space = 1;
+			continue;
 
-		} else if (was_space) {
-			if (!document->options.plain_display_links) continue;
+		} else 	if (document->options.plain_display_links) {
+			int uri_end = line_pos;
+			unsigned char keep;
 
-			if (isalpha(line_char)) {
-				int urllen = line_pos;
-				unsigned char keep;
+			if (!isalpha(line_char)) continue;
 
-				/* Coding style goes crasy here! :( --jonas */
+			/* Coding style goes crasy here! :( --jonas */
 
-				while (line[urllen] && !isspace(line[urllen]))
-					urllen++;
+			while (line[uri_end] && !isspace(line[uri_end]))
+				uri_end++;
 
-				urllen -= line_pos;
-				keep = line[line_pos + urllen];
-				line[line_pos + urllen] = 0;
-
-				/* TODO: Handle email@adresses.to and maybe
-				 * <URL:...> too --jonas */
-				if (parse_uri(&uri, &line[line_pos])
-				    && (uri.datalen || uri.hostlen)) {
-					add_document_link(document,
-							  line_pos + expanded,
-							  lineno, urllen,
-							  struri(uri));
-				}
-
-				line[line_pos + urllen] = keep;
-				was_space = 0;
-			} else {
-				was_space = isspace(line_char);
+			for (; uri_end > line_pos; uri_end--) {
+				if (line[uri_end - 1] != '>'
+				    && line[uri_end - 1] != ')'
+				    && line[uri_end - 1] != '.'
+				    && line[uri_end - 1] != ',')
+					break;
 			}
+
+			if (uri_end == line_pos) continue;
+
+			keep = line[uri_end];
+			line[uri_end] = 0;
+
+			/* TODO: Handle email@adresses.to and maybe
+			 * <URL:...> too --jonas */
+			if (parse_uri(&uri, &line[line_pos])
+			    && (uri.datalen || uri.hostlen)) {
+				add_document_link(document, line_pos + expanded,
+						  lineno, uri_end - line_pos,
+						  struri(uri));
+			}
+
+			line[uri_end] = keep;
+			line_pos = uri_end;
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.175 2004/01/29 07:49:21 jonas Exp $ */
+/* $Id: search.c,v 1.176 2004/01/29 07:54:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1097,7 +1097,7 @@ text_typeahead_handler(struct input_line *line, int action)
 			break;
 
 		default:
-			search_for(ses, buffer);
+			search_for_do(ses, buffer, *line->prompt == '/' ? 1 : -1);
 	}
 
 	draw_formatted(ses, 0);
@@ -1122,6 +1122,11 @@ link_typeahead_handler(struct input_line *line, int action)
 		switch (*buffer) {
 			case '#':
 				line->data = "#";
+				break;
+
+			case '?':
+				line->prompt = line->data = "?";
+				line->handler = text_typeahead_handler;
 				break;
 
 			case '/':

@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.7 2004/08/14 23:48:38 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.8 2004/08/14 23:53:30 jonas Exp $ */
 
 #ifndef EL__OSDEP_OS2_SYSINFO_H
 #define EL__OSDEP_OS2_SYSINFO_H
@@ -17,7 +17,6 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define DOS_FS
 #define NO_FILE_SECURITY
 #define NO_FORK_ON_EXIT
-#define ASSOC_CONS_XWIN
 #ifdef HAVE_BEGINTHREAD
 #define THREAD_SAFE_LOOKUP
 #endif

@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.6 2004/08/14 23:48:41 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.7 2004/08/14 23:53:30 jonas Exp $ */
 
 #ifndef EL__OSDEP_UNIX_SYSINFO_H
 #define EL__OSDEP_UNIX_SYSINFO_H
@@ -25,8 +25,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 #else
 #define DONT_USE_AF_UNIX
 #endif
-#define ASSOC_BLOCK
-#define ASSOC_CONS_XWIN
 
 #endif
 

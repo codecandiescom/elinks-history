@@ -1,4 +1,4 @@
-/* $Id: sysinfo.h,v 1.6 2004/08/14 23:48:37 jonas Exp $ */
+/* $Id: sysinfo.h,v 1.7 2004/08/14 23:53:29 jonas Exp $ */
 
 #ifndef EL__OSDEP_BEOS_SYSINFO_H
 #define EL__OSDEP_BEOS_SYSINFO_H
@@ -20,7 +20,6 @@ static inline int dir_sep(char x) { return x == '/'; }
 #include <grp.h>
 
 #define NO_FORK_ON_EXIT
-#define ASSOC_BLOCK
 #define THREAD_SAFE_LOOKUP
 
 #endif

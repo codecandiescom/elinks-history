@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.89 2003/05/24 22:32:52 pasky Exp $ */
+/* $Id: renderer.c,v 1.90 2003/05/27 20:03:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -660,13 +660,21 @@ decode:
 			}
 			pp = i + 1;
 		} else {
-			int i = pp + 1;
+			int start = pp + 1;
+			int i = start;
 
 			if (d_opt->plain) goto putc;
-			while (i < l && c[i] != ';' && c[i] != '&' && c[i] > ' ') i++;
-			e = get_entity_string(&c[pp + 1], i - pp - 1, d_opt->cp);
-			if (!e) goto putc;
-			pp = i + (i < l && c[i] == ';');
+			while (i < l && c[i] != ';'
+			       && ((c[i] >= 'A' && c[i] <= 'Z')
+				   || (c[i] >= 'a' && c[i] <= 'z')
+				   || (c[i] >= '0' && c[i] <= '9')))
+				i++;
+
+			if (c[i] == ';' && i > start) {
+				e = get_entity_string(&c[start], i - start, d_opt->cp);
+				if (!e) goto putc;
+				pp = i + (i < l);
+			} else goto putc;
 		}
 
 		if (!e[0]) continue;

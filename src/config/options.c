@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.304 2003/10/18 12:29:18 jonas Exp $ */
+/* $Id: options.c,v 1.305 2003/10/18 12:32:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2084,6 +2084,7 @@ register_options(void)
 		"dialog", 0,
 		N_("Dialog colors."));
 
+	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
 	add_opt_alias("ui.colors.color.dialog", NULL,
 		"background", 0, "ui.colors.color.dialog.generic.background",
 		N_("This option is deprecated and will be removed very soon.\n"
@@ -2492,6 +2493,7 @@ register_options(void)
 		"dialog", 0,
 		N_("Dialog colors."));
 
+	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
 	add_opt_alias("ui.colors.mono.dialog", NULL,
 		"background", 0, "ui.colors.mono.dialog.generic.background",
 		N_("This option is deprecated and will be removed very soon.\n"

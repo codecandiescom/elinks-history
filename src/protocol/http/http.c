@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.151 2003/07/04 21:41:46 jonas Exp $ */
+/* $Id: http.c,v 1.152 2003/07/04 23:35:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -375,7 +375,6 @@ http_send_header(struct connection *conn)
 	} else if (post) {
 		post++;
 		add_to_str(&hdr, &l, "POST ");
-		conn->unrestartable = 2;
 	} else {
 		add_to_str(&hdr, &l, "GET ");
 	}

@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.29 2003/07/04 23:20:21 jonas Exp $ */
+/* $Id: connection.h,v 1.30 2003/07/04 23:35:06 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -133,11 +133,11 @@ struct connection {
 	int tries;
 	int received;
 	int est_length;
-	int unrestartable;
 	int timer;
 	int stream_pipes[2];
 
 	unsigned int running:1;
+	unsigned int unrestartable:1;
 	unsigned int detached:1;
 	unsigned int no_tsl:1;
 

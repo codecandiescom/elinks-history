@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.71 2003/07/04 21:41:46 jonas Exp $ */
+/* $Id: connection.c,v 1.72 2003/07/04 23:35:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,7 +559,7 @@ retry_connection(struct connection *c)
 	int max_tries = get_opt_int("connection.retries");
 
 	interrupt_connection(c);
-	if (c->unrestartable >= 2 || !max_tries || ++c->tries >= max_tries) {
+	if (c->uri.post || !max_tries || ++c->tries >= max_tries) {
 		/*send_connection_info(c);*/
 		del_connection(c);
 		register_bottom_half((void (*)(void *))check_queue, NULL);
@@ -628,7 +628,7 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 	foreachback (d, queue) {
 		if (get_priority(d) <= priority) return -1;
 		if (d->state == S_WAIT) continue;
-		if (d->unrestartable == 2 && get_priority(d) < PRI_CANCEL) continue;
+		if (d->uri.post && get_priority(d) < PRI_CANCEL) continue;
 		if (ho && strncmp(c->uri.host, ho, c->uri.hostlen)) continue;
 		suspend_connection(d);
 		return 0;

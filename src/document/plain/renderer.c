@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.60 2003/12/29 17:46:34 zas Exp $ */
+/* $Id: renderer.c,v 1.61 2003/12/29 17:54:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,7 +142,7 @@ add_document_line(struct document *document, int lineno,
 		  struct conv_table *convert_table)
 {
 	struct screen_char *pos;
-	int expanded;
+	int expanded = 0;
 	register int line_pos;
 
 	/* Drop bad chars before anything else. */
@@ -167,8 +167,6 @@ add_document_line(struct document *document, int lineno,
 	/* Now expand tabs and handle urls if needed.
 	 * Here little code redundancy to improve performance. */
 	if (document->options.plain_display_links) {
-
-		expanded = 0;
 		for (line_pos = 0; line_pos < width; line_pos++) {
 			unsigned char line_char = line[line_pos];
 
@@ -182,15 +180,12 @@ add_document_line(struct document *document, int lineno,
 				int len = get_uri_length(start, width - line_pos);
 				int x = line_pos + expanded;
 
-				if (!len) continue;
-
-				if (check_link_word(document, start, len, x, lineno))
+				if (len
+				    && check_link_word(document, start, len, x, lineno))
 					line_pos += len - 1;
 			}
 		}
-
 	} else {
-		expanded = 0;
 		for (line_pos = 0; line_pos < width; line_pos++) {
 			unsigned char line_char = line[line_pos];
 
@@ -198,7 +193,6 @@ add_document_line(struct document *document, int lineno,
 				int tab_width = 7 - ((line_pos + expanded) & 7);
 
 				expanded += tab_width;
-
 			}
 		}
 	}
@@ -216,9 +210,9 @@ add_document_line(struct document *document, int lineno,
 		if (line_char == ASCII_TAB) {
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 
-			template->data = ' ';
 			expanded += tab_width;
 
+			template->data = ' ';
 			do
 				copy_screen_chars(pos++, template, 1);
 			while (tab_width--);

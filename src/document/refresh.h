@@ -1,13 +1,15 @@
-/* $Id: refresh.h,v 1.3 2004/04/02 15:03:33 jonas Exp $ */
+/* $Id: refresh.h,v 1.4 2005/03/04 17:36:29 zas Exp $ */
 
 #ifndef EL__DOCUMENT_REFRESH_H
 #define EL__DOCUMENT_REFRESH_H
+
+#include "lowlevel/timers.h" /* timer_id_T */
 
 struct session;
 struct uri;
 
 struct document_refresh {
-	int timer;
+	timer_id_T timer;
 	unsigned long seconds;
 	struct uri *uri;
 };

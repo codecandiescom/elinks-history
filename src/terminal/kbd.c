@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.121 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: kbd.c,v 1.122 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,7 @@ struct itrm {
 	unsigned char *ev_queue;
 	int eqlen;
 
-	int timer;			/* ESC timeout timer */
+	timer_id_T timer;		/* ESC timeout timer */
 	struct termios t;		/* For restoring original attributes */
 	void *mouse_h;			/* Mouse handle */
 	unsigned char *orig_title;	/* For restoring window title */
@@ -286,7 +286,7 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	itrm->sock_in = sock_in;
 	itrm->sock_out = sock_out;
 	itrm->ctl_in = ctl_in;
-	itrm->timer = -1;
+	itrm->timer = TIMER_ID_UNDEF;
 
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */
@@ -397,7 +397,7 @@ free_trm(struct itrm *itrm)
 	set_handlers(itrm->std_out, NULL, NULL, NULL, NULL);
 	set_handlers(itrm->sock_out, NULL, NULL, NULL, NULL);
 
-	if (itrm->timer != -1)
+	if (itrm->timer != TIMER_ID_UNDEF)
 		kill_timer(itrm->timer);
 
 	if (itrm == ditrm) ditrm = NULL;
@@ -592,7 +592,7 @@ kbd_timeout(struct itrm *itrm)
 {
 	struct term_event ev = INIT_TERM_EVENT(EVENT_KBD, KBD_ESC, 0, 0);
 
-	itrm->timer = -1;
+	itrm->timer = TIMER_ID_UNDEF;
 
 	if (can_read(itrm->std_in)) {
 		in_kbd(itrm);
@@ -977,9 +977,9 @@ in_kbd(struct itrm *itrm)
 
 	if (!can_read(itrm->std_in)) return;
 
-	if (itrm->timer != -1) {
+	if (itrm->timer != TIMER_ID_UNDEF) {
 		kill_timer(itrm->timer);
-		itrm->timer = -1;
+		itrm->timer = TIMER_ID_UNDEF;
 	}
 
 	if (itrm->qlen >= IN_BUF_SIZE) {

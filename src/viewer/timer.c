@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.17 2005/03/04 13:25:32 zas Exp $ */
+/* $Id: timer.c,v 1.18 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,9 +18,9 @@
 
 
 /* Timer for periodically saving configuration files to disk */
-static int periodic_save_timer = -1;
+static timer_id_T periodic_save_timer = TIMER_ID_UNDEF;
 
-static int countdown = -1;
+static timer_id_T countdown = TIMER_ID_UNDEF;
 
 static int timer_duration = 0;
 
@@ -42,7 +42,7 @@ count_down(void *xxx)
 		countdown = install_timer(1000, count_down, NULL);
 		return;
 	} else {
-		countdown = -1;
+		countdown = TIMER_ID_UNDEF;
 	}
 
 	kb = kbd_nm_lookup(KEYMAP_MAIN, get_opt_str("ui.timer.action"), NULL);
@@ -61,9 +61,9 @@ count_down(void *xxx)
 void
 reset_timer(void)
 {
-	if (countdown >= 0) {
+	if (countdown != TIMER_ID_UNDEF) {
 		kill_timer(countdown);
-		countdown = -1;
+		countdown = TIMER_ID_UNDEF;
 	}
 
 	if (!get_opt_int("ui.timer.enable")) return;
@@ -98,9 +98,9 @@ periodic_save_change_hook(struct session *ses, struct option *current,
 {
 	if (get_cmd_opt_bool("anonymous")) return 0;
 
-	if (periodic_save_timer != -1) {
+	if (periodic_save_timer != TIMER_ID_UNDEF) {
 		kill_timer(periodic_save_timer);
-		periodic_save_timer = -1;
+		periodic_save_timer = TIMER_ID_UNDEF;
 	}
 
 	periodic_save_handler(NULL);

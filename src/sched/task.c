@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.163 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: task.c,v 1.164 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -472,9 +472,9 @@ do_move(struct session *ses, struct download **download_p)
 		if (d != DO_MOVE_DISPLAY) return d;
 	}
 
-	if (ses->display_timer != -1) {
+	if (ses->display_timer != TIMER_ID_UNDEF) {
 		kill_timer(ses->display_timer);
-	       	ses->display_timer = -1;
+	       	ses->display_timer = TIMER_ID_UNDEF;
 	}
 
 	switch (ses->task.type) {

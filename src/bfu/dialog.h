@@ -1,10 +1,11 @@
-/* $Id: dialog.h,v 1.53 2005/01/15 18:15:18 miciah Exp $ */
+/* $Id: dialog.h,v 1.54 2005/03/04 17:36:29 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
 
 #include "bfu/style.h"
 #include "bfu/widget.h"
+#include "lowlevel/timers.h" /* timer_id_T */
 #include "terminal/terminal.h"
 #include "terminal/window.h" /* dialog_data->win->term is so common that... */
 #include "util/memlist.h"
@@ -43,7 +44,7 @@ typedef enum dlg_refresh_code (*dialog_refresh_handler)(struct dialog_data *, vo
 struct dialog_refresh {
 	dialog_refresh_handler handler;
 	void *data;
-	int timer;
+	timer_id_T timer;
 };
 
 struct dialog {
@@ -73,7 +74,7 @@ struct dialog {
 	(((unsigned char *) dlg) + sizeof_dialog(n, 0))
 
 #define dialog_has_refresh(dlg_data) \
-	((dlg_data)->dlg->refresh && (dlg_data)->dlg->refresh->timer != -1)
+	((dlg_data)->dlg->refresh && (dlg_data)->dlg->refresh->timer != TIMER_ID_UNDEF)
 
 static inline int
 dialog_max_width(struct terminal *term)

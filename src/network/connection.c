@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.224 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: connection.c,v 1.225 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ struct keepalive_connection {
 
 static unsigned int connection_id = 0;
 static int active_connections = 0;
-static int keepalive_timeout = -1;
+static timer_id_T keepalive_timeout = TIMER_ID_UNDEF;
 
 static INIT_LIST_HEAD(connection_queue);
 static INIT_LIST_HEAD(host_connections);
@@ -243,8 +243,8 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	init_list(conn->downloads);
 	conn->est_length = -1;
 	conn->progress.start = start;
-	conn->progress.timer = -1;
-	conn->timer = -1;
+	conn->progress.timer = TIMER_ID_UNDEF;
+	conn->timer = TIMER_ID_UNDEF;
 
 	if (referrer) {
 		/* Don't set referrer when it is the file protocol and the URI
@@ -308,7 +308,7 @@ set_connection_state(struct connection *conn, enum connection_state state)
 
 	conn->state = state;
 	if (conn->state == S_TRANS) {
-		if (progress->timer == -1) {
+		if (progress->timer == TIMER_ID_UNDEF) {
 			if (!progress->valid) {
 				int tmp = progress->start;
 				int tmp2 = progress->seek;
@@ -325,9 +325,9 @@ set_connection_state(struct connection *conn, enum connection_state state)
 				return;
 		}
 
-	} else if (progress->timer != -1) {
+	} else if (progress->timer != TIMER_ID_UNDEF) {
 		kill_timer(progress->timer);
-		progress->timer = -1;
+		progress->timer = TIMER_ID_UNDEF;
 	}
 
 	foreach (download, conn->downloads) {
@@ -379,9 +379,9 @@ free_connection_data(struct connection *conn)
 	mem_free_set(&conn->buffer, NULL);
 	mem_free_set(&conn->info, NULL);
 
-	if (conn->timer != -1) {
+	if (conn->timer != TIMER_ID_UNDEF) {
 		kill_timer(conn->timer);
-		conn->timer = -1;
+		conn->timer = TIMER_ID_UNDEF;
 	}
 
 	active_connections--;
@@ -560,7 +560,7 @@ done:
 static void
 keepalive_timer(void *x)
 {
-	keepalive_timeout = -1;
+	keepalive_timeout = TIMER_ID_UNDEF;
 	check_keepalive_connections();
 }
 
@@ -571,9 +571,9 @@ check_keepalive_connections(void)
 	ttime ct = get_time();
 	int p = 0;
 
-	if (keepalive_timeout != -1) {
+	if (keepalive_timeout != TIMER_ID_UNDEF) {
 		kill_timer(keepalive_timeout);
-		keepalive_timeout = -1;
+		keepalive_timeout = TIMER_ID_UNDEF;
 	}
 
 	foreachsafe (keep_conn, next, keepalive_connections) {
@@ -1050,7 +1050,7 @@ detach_connection(struct download *download, int pos)
 static void
 connection_timeout(struct connection *conn)
 {
-	conn->timer = -1;
+	conn->timer = TIMER_ID_UNDEF;
 	set_connection_state(conn, S_TIMEOUT);
 	if (conn->dnsquery) {
 		abort_connection(conn);
@@ -1076,7 +1076,9 @@ connection_timeout_1(struct connection *conn)
 void
 set_connection_timeout(struct connection *conn)
 {
-	if (conn->timer != -1) kill_timer(conn->timer);
+	if (conn->timer != TIMER_ID_UNDEF)
+		kill_timer(conn->timer);
+
 	conn->timer = install_timer((conn->unrestartable
 				     ? get_opt_int("connection.unrestartable_receive_timeout")
 				     : get_opt_int("connection.receive_timeout"))

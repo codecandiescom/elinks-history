@@ -1,10 +1,11 @@
-/* $Id: connection.h,v 1.90 2005/03/03 15:43:26 zas Exp $ */
+/* $Id: connection.h,v 1.91 2005/03/04 17:36:29 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
 
 #include "cache/cache.h"
 #include "encoding/encoding.h"
+#include "lowlevel/timers.h" /* timer_id_T */
 #include "util/lists.h"
 #include "util/ttime.h"
 
@@ -125,7 +126,7 @@ struct progress {
 	 * counter then, obviously). */
 	int seek;
 
-	int timer;
+	timer_id_T timer;
 	int data_in_secs[CURRENT_SPD_SEC];
 };
 
@@ -176,7 +177,7 @@ struct connection {
 	int tries;
 	int received;
 	int est_length;
-	int timer;
+	timer_id_T timer;
 	int cgi_pipes[2];
 	int stream_pipes[2];
 

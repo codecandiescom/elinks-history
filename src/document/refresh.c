@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.41 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: refresh.c,v 1.42 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ init_document_refresh(unsigned char *url, unsigned long seconds)
 	}
 
 	refresh->seconds = seconds;
-	refresh->timer = -1;
+	refresh->timer = TIMER_ID_UNDEF;
 
 	return refresh;
 }
@@ -48,9 +48,9 @@ init_document_refresh(unsigned char *url, unsigned long seconds)
 void
 kill_document_refresh(struct document_refresh *refresh)
 {
-	if (refresh->timer != -1) {
+	if (refresh->timer != TIMER_ID_UNDEF) {
 		kill_timer(refresh->timer);
-		refresh->timer = -1;
+		refresh->timer = TIMER_ID_UNDEF;
 	}
 }
 
@@ -71,7 +71,7 @@ do_document_refresh(void *data)
 
 	assert(refresh);
 
-	refresh->timer = -1;
+	refresh->timer = TIMER_ID_UNDEF;
 
 	/* When refreshing documents that will trigger a download (like
 	 * sourceforge's download pages) make sure that we do not endlessly
@@ -101,7 +101,7 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 	 * to the session? The multiple refresh timers is triggered by
 	 * http://ttforums.owenrudge.net/login.php when pressing 'Log in' and
 	 * waiting for it to refresh. --jonas */
-	if (refresh->timer != -1)
+	if (refresh->timer != TIMER_ID_UNDEF)
 		return;
 
 	/* Like bug 289 another sourceforge download thingy this time with

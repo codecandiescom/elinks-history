@@ -1,10 +1,11 @@
-/* $Id: session.h,v 1.167 2005/03/02 16:37:50 zas Exp $ */
+/* $Id: session.h,v 1.168 2005/03/04 17:36:29 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
 
 #include "bfu/dialog.h"
 #include "cache/cache.h"
+#include "lowlevel/timers.h" /* timer_id_T */
 #include "sched/connection.h"
 #include "sched/history.h"
 #include "util/lists.h"
@@ -164,7 +165,7 @@ struct session {
 	int search_direction;
 	struct kbdprefix kbdprefix;
 	int exit_query;
-	int display_timer;
+	timer_id_T display_timer;
 
 	/* The text input form insert mode. It is a tristate controlled by the
 	 * boolean document.browse.forms.insert_mode option. When disabled we

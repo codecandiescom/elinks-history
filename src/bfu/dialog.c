@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.192 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: dialog.c,v 1.193 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,7 +344,7 @@ dialog_ev_abort(struct dialog_data *dlg_data)
 	if (dlg_data->dlg->refresh) {
 		struct dialog_refresh *refresh = dlg_data->dlg->refresh;
 
-		if (refresh->timer != -1)
+		if (refresh->timer != TIMER_ID_UNDEF)
 			kill_timer(refresh->timer);
 		mem_free(refresh);
 	}
@@ -600,7 +600,7 @@ do_refresh_dialog(struct dialog_data *dlg_data)
 
 	if (refresh_code == REFRESH_CANCEL
 	    || refresh_code == REFRESH_STOP) {
-		refresh->timer = -1;
+		refresh->timer = TIMER_ID_UNDEF;
 		if (refresh_code == REFRESH_CANCEL)
 			cancel_dialog(dlg_data, NULL);
 		return;
@@ -627,7 +627,7 @@ refresh_dialog(struct dialog_data *dlg_data, dialog_refresh_handler handler, voi
 
 		dlg_data->dlg->refresh = refresh;
 
-	} else if (refresh->timer != -1) {
+	} else if (refresh->timer != TIMER_ID_UNDEF) {
 		kill_timer(refresh->timer);
 	}
 

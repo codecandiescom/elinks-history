@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.605 2005/03/04 13:19:37 zas Exp $ */
+/* $Id: session.c,v 1.606 2005/03/04 17:36:29 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -79,7 +79,7 @@ struct session_info {
 	LIST_HEAD(struct session_info);
 
 	int id;
-	int timer;
+	timer_id_T timer;
 	struct session *ses;
 	struct uri *uri;
 };
@@ -128,7 +128,7 @@ static void
 done_session_info(struct session_info *info)
 {
 	del_from_list(info);
-	if (info->timer != -1)
+	if (info->timer != TIMER_ID_UNDEF)
 		kill_timer(info->timer);
 
 	if (info->uri) done_uri(info->uri);
@@ -148,7 +148,7 @@ session_info_timeout(int id)
 	struct session_info *info = get_session_info(id);
 
 	if (!info) return;
-	info->timer = -1;
+	info->timer = TIMER_ID_UNDEF;
 	done_session_info(info);
 }
 
@@ -521,9 +521,9 @@ doc_loading_callback(struct download *download, struct session *ses)
 #ifdef CONFIG_SCRIPTING
 		maybe_pre_format_html(download->cached, ses);
 #endif
-		if (ses->display_timer != -1) {
+		if (ses->display_timer != TIMER_ID_UNDEF) {
 			kill_timer(ses->display_timer);
-			ses->display_timer = -1;
+			ses->display_timer = TIMER_ID_UNDEF;
 		}
 
 		draw_formatted(ses, 1);
@@ -551,7 +551,7 @@ doc_loading_callback(struct download *download, struct session *ses)
 		}
 
 	} else if (is_in_transfering_state(download->state)
-	           && ses->display_timer == -1) {
+	           && ses->display_timer == TIMER_ID_UNDEF) {
 		display_timer(ses);
 	}
 
@@ -802,7 +802,7 @@ init_session(struct session *base_session, struct terminal *term,
 	init_list(ses->more_files);
 	init_list(ses->type_queries);
 	ses->task.type = TASK_NONE;
-	ses->display_timer = -1;
+	ses->display_timer = TIMER_ID_UNDEF;
 
 #ifdef CONFIG_LEDS
 	init_led_panel(&ses->status.leds);
@@ -1080,7 +1080,8 @@ destroy_session(struct session *ses)
 	set_session_referrer(ses, NULL);
 
 	if (ses->loading_uri) done_uri(ses->loading_uri);
-	if (ses->display_timer != -1) kill_timer(ses->display_timer);
+	if (ses->display_timer != TIMER_ID_UNDEF)
+		kill_timer(ses->display_timer);
 
 	while (!list_empty(ses->type_queries))
 		done_type_query(ses->type_queries.next);

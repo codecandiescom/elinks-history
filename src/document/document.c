@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.92 2005/03/04 02:05:57 jonas Exp $ */
+/* $Id: document.c,v 1.93 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,7 +307,7 @@ formatted_info(int type)
 		case INFO_TIMERS:
 			foreach (document, format_cache)
 				if (document->refresh
-				    && document->refresh->timer != -1)
+				    && document->refresh->timer != TIMER_ID_UNDEF)
 					i++;
 			return i;
 	}

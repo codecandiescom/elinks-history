@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.64 2005/03/04 13:25:32 zas Exp $ */
+/* $Id: leds.c,v 1.65 2005/03/04 17:36:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@
 
 static int timer_duration_backup = 0;
 
-static int redraw_timer = -1;
+static timer_id_T redraw_timer = TIMER_ID_UNDEF;
 static int drawing = 0;
 
 static void redraw_leds(void *);
@@ -116,7 +116,8 @@ init_leds(struct module *module)
 void
 done_leds(struct module *module)
 {
-	if (redraw_timer >= 0) kill_timer(redraw_timer);
+	if (redraw_timer != TIMER_ID_UNDEF)
+		kill_timer(redraw_timer);
 }
 
 void
@@ -199,7 +200,7 @@ draw_leds(struct session *ses)
 
 end:
 	/* Redraw each 100ms. */
-	if (!drawing && redraw_timer < 0)
+	if (!drawing && redraw_timer == TIMER_ID_UNDEF)
 		redraw_timer = install_timer(100, redraw_leds, NULL);
 }
 
@@ -236,7 +237,7 @@ redraw_leds(void *xxx)
 
 	if (!get_leds_panel_enable()
 	    && get_opt_int("ui.timer.enable") != 2) {
-		redraw_timer = -1;
+		redraw_timer = TIMER_ID_UNDEF;
 		return;
 	}
 

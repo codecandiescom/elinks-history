@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.117 2004/09/20 23:23:28 pasky Exp $ */
+/* $Id: parser.c,v 1.118 2004/09/20 23:26:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -182,8 +182,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		   struct list_head *selectors)
 {
 	struct selector_pkg *pkg = NULL;
-	struct css_selector *prev_element_sel = NULL;
-	struct css_selector *prev_specific_sel = NULL;
+	struct css_selector *prev_element_selector = NULL;
+	struct css_selector *prev_specific_selector = NULL;
 	int last_fragment = 0;
 
 	/* FIXME: element can be even '*' --pasky */
@@ -285,9 +285,9 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 		} else if (reltype == CSR_SPECIFITY) {
 			/* We append under the last fragment. */
-			struct css_selector *base_sel = last_specific_selector;
+			struct css_selector *base_sel = prev_specific_selector;
 
-			if (!base_sel) base_sel = last_element_selector;
+			if (!base_sel) base_sel = prev_element_selector;
 			assert(base_sel);
 
 			selector = get_css_selector(&base_sel->leaves,
@@ -308,9 +308,10 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 					last_token.length);
 			if (!selector) continue;
 
-			assert(last_element_selector);
-			add_to_list(selector->leaves, last_element_selector);
-			last_element_selector->relation = reltype;
+			assert(prev_element_selector);
+			add_to_list(selector->leaves, prev_element_selector);
+
+			prev_element_selector->relation = reltype;
 		}
 
 		pkg->selector = selector;

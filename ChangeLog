@@ -1,3 +1,15 @@
+Wed Nov 20 12:42:41 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/ukrainian.lng, src/intl/language.inc:
+
+	Ukrainian update by Dmitry.  
+
+Wed Nov 20 09:15:11 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, protocol/http/http.c:
+
+	ignorecachecontrol -> ignore_cache_control 
+
 Tue Nov 19 22:41:58 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/mime.c:

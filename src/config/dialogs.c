@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.160 2004/04/11 20:41:13 jonas Exp $ */
+/* $Id: dialogs.c,v 1.161 2004/04/11 20:44:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,13 @@
 #include "util/secsave.h"
 
 
+static void
+toggle_success_msgbox(void *dummy)
+{
+	get_opt_bool("ui.success_msgbox") = !get_opt_bool("ui.success_msgbox");
+	get_opt_rec(config_options, "ui.success_msgbox")->flags |= OPT_TOUCHED;
+}
+
 void
 write_config_error(struct terminal *term, unsigned char *config_file,
 		   int secsave_error, int stdio_error)
@@ -42,7 +49,15 @@ write_config_error(struct terminal *term, unsigned char *config_file,
 	unsigned char *strerr;
 
 	if (secsave_error == SS_ERR_NONE && !stdio_error) {
-		write_config_success(term, config_file);
+		if (!get_opt_bool("ui.success_msgbox")) return;
+
+		msg_box(term, NULL, MSGBOX_FREE_TEXT,
+			N_("Write config success"), AL_CENTER,
+			msg_text(term, N_("Options were saved successfully to config file %s."),
+				 config_file),
+			NULL, 2,
+			N_("OK"), NULL, B_ENTER | B_ESC,
+			N_("Do not show anymore"), toggle_success_msgbox, 0);
 		return;
 	}
 
@@ -89,27 +104,6 @@ write_config_error(struct terminal *term, unsigned char *config_file,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 	if (errmsg) mem_free(errmsg);
-}
-
-static void
-toggle_success_msgbox(void *dummy)
-{
-	get_opt_bool("ui.success_msgbox") = !get_opt_bool("ui.success_msgbox");
-	get_opt_rec(config_options, "ui.success_msgbox")->flags |= OPT_TOUCHED;
-}
-
-void
-write_config_success(struct terminal *term, unsigned char *config_file)
-{
-	if (!get_opt_bool("ui.success_msgbox")) return;
-
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Write config success"), AL_CENTER,
-		msg_text(term, N_("Options were saved successfully to config file %s."),
-			 config_file),
-		NULL, 2,
-		N_("OK"), NULL, B_ENTER | B_ESC,
-		N_("Do not show anymore"), toggle_success_msgbox, 0);
 }
 
 

@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.15 2004/04/11 20:41:13 jonas Exp $ */
+/* $Id: dialogs.h,v 1.16 2004/04/11 20:44:03 jonas Exp $ */
 
 #ifndef EL__CONFIG_DIALOGS_H
 #define EL__CONFIG_DIALOGS_H
@@ -13,7 +13,6 @@ extern struct hierbox_browser keybinding_browser;
 
 void write_config_error(struct terminal *term, unsigned char *config_file,
 			int secsave_error, int stdio_error);
-void write_config_success(struct terminal *term, unsigned char *config_file);
 void options_manager(struct session *);
 void keybinding_manager(struct session *);
 

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.159 2005/01/03 03:22:51 jonas Exp $ */
+/* $Id: osdep.c,v 1.160 2005/02/05 03:00:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,10 @@
 #include <netinet/ip.h>
 #endif
 
+#ifdef HAVE_TERMIOS_H
 #include <termios.h>
+#endif
+
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

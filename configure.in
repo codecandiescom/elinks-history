@@ -106,6 +106,7 @@ AC_CHECK_HEADERS(sys/un.h)
 AC_CHECK_HEADERS(sys/utsname.h)
 AC_CHECK_HEADERS(stdint.h inttypes.h)
 AC_CHECK_HEADERS(locale.h pwd.h)
+AC_CHECK_HEADERS(termios.h)
 
 dnl ===================================================================
 dnl Checks for typedefs, structures, and compiler characteristics.

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.115 2005/02/03 23:36:59 adamg Exp $ */
+/* $Id: kbd.c,v 1.116 2005/02/05 03:00:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#ifdef HAVE_TERMIOS_H
 #include <termios.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

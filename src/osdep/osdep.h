@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.42 2004/12/26 23:36:47 jonas Exp $ */
+/* $Id: osdep.h,v 1.43 2005/02/05 03:00:02 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -59,10 +59,13 @@ void set_cwd(unsigned char *);
 
 unsigned char *get_shell(void);
 
+#ifdef HAVE_TERMIOS_H
+#include <termios.h>
+#endif
+
 /* We define own cfmakeraw() wrapper because cfmakeraw() is broken on AIX,
  * thus we fix it right away. We can also emulate cfmakeraw() if it is not
  * available at all. Face it, we are just cool. */
-#include <termios.h>
 void elinks_cfmakeraw(struct termios *t);
 
 #endif

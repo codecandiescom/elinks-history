@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.147 2003/07/03 22:31:04 zas Exp $ */
+/* $Id: parser.c,v 1.148 2003/07/04 20:04:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2426,7 +2426,12 @@ html_link(unsigned char *a)
 
 	name = get_attr_val(a, "type");
 	if (name) {
-		if (strncasecmp(name, "text/css", 8)) {
+		/* Ignore links of type:
+		 * - text/css...
+		 * - image/x-icon...
+		 * */
+		if (!strncasecmp(name, "text/css", 8) ||
+		    !strncasecmp(name, "image/x-icon", 12)) {
 			mem_free(name);
 			return;
 		}
@@ -2447,14 +2452,17 @@ html_link(unsigned char *a)
 	/* Ignore few annoying links.. */
 	if (strcasecmp(name, "STYLESHEET") &&
 	    strcasecmp(name, "made") &&
+	    strcasecmp(name, "icon") &&
 	    strcasecmp(name, "SHORTCUT ICON")) {
 		unsigned char *linktext = NULL;
 		unsigned char *title = get_attr_val(a, "title");
 
 		html_focusable(a);
 
-		if (title)
+		if (title) {
 			linktext = straconcat(title, " (", name, ")", NULL);
+			mem_free(title);
+		}
 
 		if (linktext) {
 			put_link_line("Link: ", linktext, url, format.target_base);
@@ -2462,8 +2470,6 @@ html_link(unsigned char *a)
 		} else {
 			put_link_line("Link: ", name, url, format.target_base);
 		}
-
-		if (title) mem_free(title);
 	}
 
 	mem_free(name);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.53 2002/10/12 23:42:11 zas Exp $ */
+/* $Id: http.c,v 1.54 2002/10/13 15:49:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "config/options.h"
 #include "cookies/cookies.h"
 #include "document/cache.h"
+#include "document/download.h"
 #include "document/session.h"
 #include "intl/charsets.h"
 #include "intl/language.h"
@@ -548,9 +549,12 @@ http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
 	}
 
-	if (c->from + c->prg.start) {
+	if (c->from || c->prg.start) {
+		/* c->from takes precedence. c->prg.start is set only the first
+		 * time, then c->from gets updated and in case of any retries
+		 * etc we have everything interesting in c->from already. */
 		add_to_str(&hdr, &l, "Range: bytes=");
-		add_num_to_str(&hdr, &l, c->from + c->prg.start);
+		add_num_to_str(&hdr, &l, c->from ? c->from : c->prg.start);
 		add_to_str(&hdr, &l, "-\r\n");
 	}
 
@@ -1063,6 +1067,30 @@ again:
 	if (c->from > cf || c->from < 0) {
 		abort_conn_with_state(c, S_HTTP_ERROR);
 		return;
+	}
+
+#if 0	
+	{
+		struct status *s;
+		foreach (s, c->statuss) {
+			fprintf(stderr, "c %p status %p pri %d st %d er %d :: ce %s",
+				c, s, s->pri, s->state, s->prev_error,
+				s->ce ? s->ce->url : (unsigned char *) "N-U-L-L");
+		}
+	}
+#endif
+
+	if (c->prg.start) {
+		/* I'm not really sure about this. --pasky */
+		struct download *down = ((struct status *) c->statuss.next)->data;
+
+		if (!down)
+			internal("Eek! We've NULL down (c->stat->data) even when "
+				 "we got c->prg.start! Call pasky@ji.cz immediatelly, "
+				 "please. And expect segfault right now.");
+		lseek(down->handle, c->from, SEEK_SET);
+		/* Update to the real value which we've got from Content-Range. */
+		c->prg.start = c->from;
 	}
 
 	d = parse_http_header(e->head, "Content-Length", NULL);

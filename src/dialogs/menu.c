@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.11 2002/03/29 10:36:56 pasky Exp $ */
+/* $Id: menu.c,v 1.12 2002/04/01 19:59:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include <dialogs/menu.h>
 #include <bookmarks/bookmarks.h>
 #include <config/default.h>
+#include <dialogs/globhist.h>
 #include <document/download.h>
 #include <document/history.h>
 #include <document/location.h>
@@ -316,7 +317,17 @@ void terminal_options_ok(void *p)
 	cls_redraw_all_terminals();
 }
 
-unsigned char *td_labels[] = { TEXT(T_NO_FRAMES), TEXT(T_VT_100_FRAMES), TEXT(T_LINUX_OR_OS2_FRAMES), TEXT(T_KOI8R_FRAMES), TEXT(T_USE_11M), TEXT(T_RESTRICT_FRAMES_IN_CP850_852), TEXT(T_BLOCK_CURSOR), TEXT(T_COLOR), NULL };
+unsigned char *td_labels[] = {
+	TEXT(T_NO_FRAMES),
+	TEXT(T_VT_100_FRAMES),
+	TEXT(T_LINUX_OR_OS2_FRAMES),
+	TEXT(T_KOI8R_FRAMES),
+	TEXT(T_USE_11M),
+	TEXT(T_RESTRICT_FRAMES_IN_CP850_852),
+	TEXT(T_BLOCK_CURSOR),
+	TEXT(T_COLOR),
+	NULL
+};
 
 void terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
@@ -998,6 +1009,7 @@ struct menu_item file_menu11[] = {
 };
 
 struct menu_item file_menu12[] = {
+	{TEXT(T_GLOBAL_HISTORY), "y", TEXT(T_HK_GLOBAL_HISTORY), MENU_FUNC menu_history_manager, (void *)0, 0, 0},
 	{TEXT(T_BOOKMARKS), "s", TEXT(T_HK_BOOKMARKS), MENU_FUNC menu_bookmark_manager, (void *)0, 0, 0},
 	{TEXT(T_ADD_BOOKMARK), "a", TEXT(T_HK_ADD_BOOKMARK), MENU_FUNC launch_bm_add_doc_dialog, (void *)0, 0, 0},
 };

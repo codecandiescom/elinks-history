@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.92 2002/11/23 19:21:49 zas Exp $ */
+/* $Id: view.c,v 1.93 2002/11/27 17:43:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1290,6 +1290,8 @@ encode_textarea(unsigned char *t)
 	int len = 0;
 	unsigned char *o = init_str();
 
+	if (!o) return NULL;
+
 	for (; *t; t++) {
 		if (*t != '\n') add_chr_to_str(&o, &len, *t);
 		else add_to_str(&o, &len, "\r\n");
@@ -1429,8 +1431,10 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 			p2 = stracpy(p);
 		}
 
-		encode_url_string(p2, data, len);
-		mem_free(p2);
+		if (p2) {
+			encode_url_string(p2, data, len);
+			mem_free(p2);
+		}
 		if (sv->type == FC_TEXTAREA) mem_free(p);
 	}
 }
@@ -1674,7 +1678,10 @@ goto_link(unsigned char *url, unsigned char *target, struct session *ses,
 
 	if (strlen(url) >= 4 && !strncasecmp(url, "MAP@", 4)) {
 		/* TODO: Test reload? */
-		goto_imgmap(ses, url + 4, stracpy(url + 4),
+		unsigned char *s = stracpy(url + 4);
+
+		if (!s) return 1;
+		goto_imgmap(ses, url + 4, s,
 			    target ? stracpy(target) : NULL);
 	} else {
 		if (reload) {
@@ -1902,6 +1909,11 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		int h;
 
 		fn = stracpy("linksarea-XXXXXX");
+		if (!fn) {
+			fs = NULL;
+			return;
+		}
+
 		h = mkstemp(fn);
 		if (h < 0) {
 			mem_free(fn); fn = NULL; fs = NULL;
@@ -1917,7 +1929,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		fwrite(fs->value, strlen(fs->value), 1, taf);
 		fclose(taf);
 
-		if (!ed) ed = "vi";
+		if (!ed || !*ed) ed = "vi";
 
 		ex = mem_alloc(strlen(ed) + strlen(fn) + 2);
 		if (!ex) {
@@ -1937,6 +1949,7 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 		FILE *taf = fopen(fn, "r+");
 
 		if (taf) {
+			/* FIXME: error checking !! */
 			fseek(taf, 0, SEEK_END);
 			flen = ftell(taf);
 			fseek(taf, 0, SEEK_SET);
@@ -2202,32 +2215,36 @@ set_textarea(struct session *ses, struct f_data_c *f, int kbd)
 	}
 }
 
-void
-search_for_back(struct session *ses, unsigned char *str)
+static void
+_search_for(struct session *ses, unsigned char *str, int direction)
 {
 	struct f_data_c *f = current_frame(ses);
 
 	if (!f || !str || !str[0]) return;
 	if (ses->search_word) mem_free(ses->search_word);
 	ses->search_word = stracpy(str);
+	if (!ses->search_word) return;
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	ses->last_search_word = stracpy(str);
-	ses->search_direction = -1;
+	if (!ses->last_search_word) {
+		mem_free(ses->search_word);
+		return;
+	}
+	ses->search_direction = direction;
 	find_next(ses, f, 1);
+}
+
+
+void
+search_for_back(struct session *ses, unsigned char *str)
+{
+	_search_for(ses, str, -1);
 }
 
 void
 search_for(struct session *ses, unsigned char *str)
 {
-	struct f_data_c *f = current_frame(ses);
-
-	if (!f || !str || !str[0]) return;
-	if (ses->search_word) mem_free(ses->search_word);
-	ses->search_word = stracpy(str);
-	if (ses->last_search_word) mem_free(ses->last_search_word);
-	ses->last_search_word = stracpy(str);
-	ses->search_direction = 1;
-	find_next(ses, f, 1);
+	_search_for(ses, str, 1);
 }
 
 int
@@ -2805,10 +2822,12 @@ quak:
 
 				if (!have_location(ses)) goto quak;
 				s = stracpy(cur_loc(ses)->vs.url);
-				postchar = strchr(s, POST_CHAR);
-				if (postchar) *postchar = 0;
-				dialog_goto_url(ses, s);
-				mem_free(s);
+				if (s) {
+					postchar = strchr(s, POST_CHAR);
+					if (postchar) *postchar = 0;
+					dialog_goto_url(ses, s);
+					mem_free(s);
+				}
 				goto x;
 			}
 			case ACT_GOTO_URL_CURRENT_LINK: {
@@ -2978,12 +2997,14 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 	ses->dn_url = get_link_url(ses, fd, link);
 	if (ses->dn_url) {
 		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
+no_mem:
 			mem_free(ses->dn_url);
 			ses->dn_url = NULL;
 			return;
 		}
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
+		if (!ses->ref_url) goto no_mem;
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
@@ -3002,6 +3023,11 @@ send_download_image(struct terminal *term, void *xxx, struct session *ses)
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
+		if (!ses->ref_url) {
+			mem_free(ses->dn_url);
+			ses->dn_url = NULL;
+			return;
+		}
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
@@ -3020,6 +3046,11 @@ send_download(struct terminal *term, void *xxx, struct session *ses)
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
 		ses->ref_url = init_str();
+		if (!ses->ref_url) {
+			mem_free(ses->dn_url);
+			ses->dn_url = NULL;
+			return;
+		}
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
@@ -3069,6 +3100,7 @@ send_open_new_xterm(struct terminal *term,
 
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = init_str();
+	if (!ses->dn_url) return;
 	add_to_str(&ses->dn_url, &l, "-base-session ");
 	add_num_to_str(&ses->dn_url, &l, ses->id);
 	add_session_ring_to_str(&ses->dn_url, &l);
@@ -3135,6 +3167,7 @@ save_url(struct session *ses, unsigned char *url)
 	if (ses->ref_url) mem_free(ses->ref_url);
 	ses->dn_url = u;
 	ses->ref_url = init_str();
+	if (!ses->ref_url) return;
 	add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
@@ -3342,6 +3375,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 	if (link->type == L_LINK) {
 		if (!link->where && link->where_img) {
 			str = init_str();
+			if (!str) return NULL;
 			strl = 0;
 
 			add_to_str(&str, &strl, _(TEXT(T_IMAGE), term));
@@ -3357,6 +3391,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4)) {
 			str = init_str();
+			if (!str) return NULL;
 			strl = 0;
 
 			add_to_str(&str, &strl, _(TEXT(T_USEMAP), term));
@@ -3388,6 +3423,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		}
 
 		str = init_str();
+		if (!str) return NULL;
 		strl = 0;
 
 		if (link->form->method == FM_GET)
@@ -3407,6 +3443,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 	if (link->type == L_CHECKBOX || link->type == L_SELECT
 	    || link->type == L_FIELD || link->type == L_AREA) {
 		str = init_str();
+		if (!str) return NULL;
 		strl = 0;
 
 		if (link->form->type == FC_RADIO)

@@ -1,3 +1,114 @@
+Tue Sep 30 16:31:51 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	French translation was updated and .po were resynced.  
+
+Tue Sep 30 16:22:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Typo fix (missing \n).  
+
+Tue Sep 30 11:49:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h:
+
+	Add missing #include and comments.  
+
+Tue Sep 30 11:47:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Simplify things to how they was before I unrolled the code array.  
+
+Tue Sep 30 08:43:23 2003  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Fix brackets escaping (with-gnutls and with-openssl configure
+	options).  
+
+Tue Sep 30 00:24:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Checkbox the color mode choosing.  
+
+Tue Sep 30 00:17:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.h, document/html/parser.c,
+	document/html/renderer.c, viewer/dump/dump.c, viewer/text/link.c:
+
+	struct document_options: Rename @col to @color_mode.  
+
+Tue Sep 30 00:03:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Handle more than two color modes (part two).  
+
+Mon Sep 29 23:51:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Handle more than two color modes + fix #include.  
+
+Mon Sep 29 23:49:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Store the color mode in the screen drivers.  
+
+Mon Sep 29 23:44:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Make the terminal._template_.colors option hold the color mode.  
+
+Mon Sep 29 23:36:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Cleanup.  
+
+Mon Sep 29 23:32:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	redraw_screen(): Factor out the looping into add_chars16() + rename
+	print_char() to add_char16().  
+
+Mon Sep 29 23:09:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.h:
+
+	Fix comment.  
+
+Mon Sep 29 23:07:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h:
+
+	Introducing struct color_mode_info and use the color mode to control
+	the blending.  Finally rename find_nearest_color() to get_color().  
+
+Mon Sep 29 22:28:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: color.c, color.h:
+
+	Add 256 color mode to enum and move out 16 color mode setting to
+	seperate function.  
+
+Mon Sep 29 22:13:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/color.c,
+	terminal/color.h, terminal/draw.c, viewer/text/link.c:
+
+	set_term_color(): Take color mode as an argument.  
+
 Mon Sep 29 21:15:45 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/version.c:

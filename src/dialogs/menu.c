@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.362 2004/07/27 22:05:06 jonas Exp $ */
+/* $Id: menu.c,v 1.363 2004/07/27 22:41:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,10 +230,10 @@ tab_menu(struct session *ses, int x, int y, int place_above_cursor)
 
 	add_menu_action(&menu, N_("~Reload"), ACT_MAIN_RELOAD);
 
-	if (ses->doc_view && document_has_frames(ses->doc_view->document))
+	if (ses->doc_view && document_has_frames(ses->doc_view->document)) {
 		add_menu_action(&menu, N_("Frame at ~full-screen"), ACT_MAIN_FRAME_MAXIMIZE);
-
-	add_uri_command_to_menu(&menu, 1);
+		add_uri_command_to_menu(&menu, PASS_URI_FRAME);
+	}
 
 	/* Keep tab related operations below this separator */
 	add_menu_separator(&menu);
@@ -255,6 +255,8 @@ tab_menu(struct session *ses, int x, int y, int place_above_cursor)
 		}
 #endif
 	}
+
+	add_uri_command_to_menu(&menu, PASS_URI_TAB);
 
 	/* Adjust the menu position taking the menu frame into account */
 	if (place_above_cursor) {
@@ -752,7 +754,7 @@ format_command(unsigned char *format, struct uri *uri)
 
 void
 pass_uri_to_command(struct session *ses, struct document_view *doc_view,
-		    int document_uri)
+		    enum pass_uri_type type)
 {
 	struct list_head *tree = get_opt_tree("document.uri_passing");
 	struct menu_item *items;
@@ -760,17 +762,25 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view,
 	struct uri *uri;
 	int commands = 0;
 
-	if (document_uri) {
+	switch (type) {
+	case PASS_URI_FRAME:
 		uri = get_uri_reference(doc_view->document->uri);
+		break;
 
-	} else {
+	case PASS_URI_LINK:
+	{
 		struct link *link = get_current_link(doc_view);
 
 		if (!link) return;
 
 		uri = get_link_uri(ses, doc_view, link);
 		if (!uri) return;
+		break;
 	}
+	default:
+	case PASS_URI_TAB:
+		uri = get_uri_reference(ses->doc_view->document->uri);
+	};
 
 	items = new_menu(FREE_LIST | FREE_TEXT | FREE_DATA | NO_INTL);
 	if (!items) {
@@ -813,14 +823,27 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view,
 }
 
 void
-add_uri_command_to_menu(struct menu_item **mi, int document_uri)
+add_uri_command_to_menu(struct menu_item **mi, enum pass_uri_type type)
 {
 	struct list_head *tree = get_opt_tree("document.uri_passing");
 	struct option *option;
 	int commands = 0;
 	enum menu_item_flags flags = NO_FLAG;
-	int action = document_uri ? ACT_MAIN_FRAME_EXTERNAL_COMMAND
-				  : ACT_MAIN_LINK_EXTERNAL_COMMAND;
+	int action;
+
+	switch (type) {
+	case PASS_URI_FRAME:
+		action = ACT_MAIN_FRAME_EXTERNAL_COMMAND;
+		break;
+
+	case PASS_URI_LINK:
+		action = ACT_MAIN_LINK_EXTERNAL_COMMAND;
+		break;
+
+	default:
+	case PASS_URI_TAB:
+		action = ACT_MAIN_TAB_EXTERNAL_COMMAND;
+	};
 
 	foreach (option, *tree) {
 		if (!strcmp(option->name, "_template_"))

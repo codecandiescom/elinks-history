@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.283 2004/07/27 22:05:06 jonas Exp $ */
+/* $Id: link.c,v 1.284 2004/07/27 22:41:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1068,7 +1068,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				add_menu_action(&mi, N_("~Add link to bookmarks"),
 						ACT_MAIN_ADD_BOOKMARK_LINK);
 #endif
-				add_uri_command_to_menu(&mi, 0);
+				add_uri_command_to_menu(&mi, PASS_URI_LINK);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.48 2004/07/27 22:05:06 jonas Exp $ */
+/* $Id: menu.h,v 1.49 2004/07/27 22:41:00 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -42,10 +42,16 @@ open_in_new_window(struct terminal *term,
 void add_new_win_to_menu(struct menu_item **mi, unsigned char *text, struct terminal *term);
 
 /* URI passing: */
-/* For both functions @document_uri controls whether to pass current link (if
- * zero) or frame URI (if non-zero). */
-void add_uri_command_to_menu(struct menu_item **mi, int document_uri);
-void pass_uri_to_command(struct session *ses, struct document_view *doc_view, int document_uri);
+
+/* Controls what URI to use */
+enum pass_uri_type {
+	PASS_URI_FRAME,
+	PASS_URI_LINK,
+	PASS_URI_TAB,
+};
+
+void add_uri_command_to_menu(struct menu_item **mi, enum pass_uri_type type);
+void pass_uri_to_command(struct session *ses, struct document_view *doc_view, enum pass_uri_type type);
 
 void
 auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.91 2004/07/27 22:05:06 jonas Exp $ */
+/* $Id: action.c,v 1.92 2004/07/27 22:41:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,11 +329,15 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_EXTERNAL_COMMAND:
-			do_frame_action(ses, pass_uri_to_command, 0);
+			do_frame_action(ses, (frame_action) pass_uri_to_command, PASS_URI_LINK);
 			break;
 
 		case ACT_MAIN_FRAME_EXTERNAL_COMMAND:
-			do_frame_action(ses, pass_uri_to_command, 1);
+			do_frame_action(ses, (frame_action) pass_uri_to_command, PASS_URI_FRAME);
+			break;
+
+		case ACT_MAIN_TAB_EXTERNAL_COMMAND:
+			do_frame_action(ses, (frame_action) pass_uri_to_command, PASS_URI_TAB);
 			break;
 
 		case ACT_MAIN_FRAME_PREV:

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.252 2004/07/27 22:05:06 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.253 2004/07/27 22:41:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -525,6 +525,7 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "submit-form-reload", ACT_MAIN_SUBMIT_FORM_RELOAD, DACT(N_("Submit form and reload")) },
 	{ "tab-close", ACT_MAIN_TAB_CLOSE, DACT(N_("Close tab")) },
 	{ "tab-close-all-but-current", ACT_MAIN_TAB_CLOSE_ALL_BUT_CURRENT, DACT(N_("Close all tabs but the current one")) },
+	{ "tab-external-command", ACT_MAIN_TAB_EXTERNAL_COMMAND, DACT(N_("Pass URI of current tab to external command")) },
 	{ "tab-menu", ACT_MAIN_TAB_MENU, DACT(N_("Open the tab menu")) },
 	{ "tab-move-left", ACT_MAIN_TAB_MOVE_LEFT, DACT(N_("Move the current tab to the left")) },
 	{ "tab-move-right", ACT_MAIN_TAB_MOVE_RIGHT, DACT(N_("Move the current tab to the right")) },

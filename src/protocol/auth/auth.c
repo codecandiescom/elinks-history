@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.95 2004/11/15 02:20:44 jonas Exp $ */
+/* $Id: auth.c,v 1.96 2004/11/18 17:23:09 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,6 +157,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
 					return NULL;
 				}
 				if (nonce) {
+					mem_free_if(entry->nonce);
 					entry->nonce = stracpy(nonce);
 					if (!entry->nonce) {
 						del_auth_entry(entry);
@@ -164,6 +165,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm, unsigned char *nonce,
 					}
 				}
 				if (opaque) {
+					mem_free_if(entry->opaque);
 					entry->opaque = stracpy(opaque);
 					if (!entry->opaque) {
 						del_auth_entry(entry);

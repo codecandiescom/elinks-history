@@ -1,10 +1,11 @@
-/* $Id: dump.h,v 1.10 2004/02/10 06:35:44 witekfl Exp $ */
+/* $Id: dump.h,v 1.11 2004/02/10 20:29:24 jonas Exp $ */
 
 #ifndef EL__VIEWER_DUMP_DUMP_H
 #define EL__VIEWER_DUMP_DUMP_H
 
+#include "util/lists.h"
+
 struct download;
-struct list_head;
 
 void dump_pre_start(struct list_head *);
 void dump_end(struct download *, void *);

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.132 2004/04/05 03:33:54 jonas Exp $ */
+/* $Id: uri.c,v 1.133 2004/04/05 04:27:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,7 +607,7 @@ prx:
 	return n;
 }
 
-static inline void
+static void
 insert_in_uri(unsigned char **uri, int pos, unsigned char *seq, int seqlen)
 {
 	int urilen = strlen(*uri);

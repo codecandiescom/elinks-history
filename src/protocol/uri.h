@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.85 2004/04/05 01:17:20 jonas Exp $ */
+/* $Id: uri.h,v 1.86 2004/04/05 04:27:29 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -29,31 +29,27 @@ struct uri {
 	/* The internal type of protocol. Can _never_ be PROTOCOL_UNKNOWN. */
 	int protocol; /* enum protocol */
 
-	/* @protocollen should only be usable if @protocol is either
-	 * PROTOCOL_USER or an uri string should be composed. */
-	int protocollen;
-
 	unsigned char *user;
-	int userlen;
-
 	unsigned char *password;
-	int passwordlen;
-
 	unsigned char *host;
-	int hostlen;
-
 	unsigned char *port;
-	int portlen;
-
 	/* @data can contain both the path and query uri fields.
 	 * It can never be NULL but can have zero length. */
 	unsigned char *data;
-	int datalen;
+	unsigned char *post;
+
+	/* @protocollen should only be usable if @protocol is either
+	 * PROTOCOL_USER or an uri string should be composed. */
+	int protocollen:16;
+	int userlen:16;
+	int passwordlen:16;
+	int hostlen:16;
+	int portlen:16;
+	int datalen:16;
 
 	/* @post can contain some special encoded form data, used internally
 	 * to make form data handling more efficient. The data is marked by
 	 * POST_CHAR in the uri string. */
-	unsigned char *post;
 
 	/* Usage count object. */
 	struct object object;

@@ -15,7 +15,6 @@ norwegian
 romanian
 russian
 slovak
-spanish
 swedish
 turkish
 ukrainian

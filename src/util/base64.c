@@ -1,5 +1,5 @@
 /* Base64 encoder implementation. */
-/* $Id: base64.c,v 1.7 2003/07/25 00:39:28 jonas Exp $ */
+/* $Id: base64.c,v 1.8 2003/08/01 17:28:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,3 +52,38 @@ base64_encode(unsigned char *str)
 
 	return outstr;
 }
+
+/* Base64 decoding is used only with the FORMS_MEMORY feature, so i'll #ifdef it */
+#ifdef FORMS_MEMORY
+#define INDEXOF(x) ((unsigned char *) strchr(base64_chars, (x)) - base64_chars)
+/* base64_decode:  @in string to decode
+ *                 returns the string decoded (must be freed by the caller) */
+unsigned char *
+base64_decode(unsigned char *in)
+{
+	unsigned char *out, *outstr;
+	unsigned int buffer = 0;
+	int tmp;
+	int inlen = strlen(in);
+
+	assert(in && *in);
+
+	outstr = out = mem_alloc(inlen / 4 * 3 + 1);
+	if (!outstr) return NULL;
+
+	while (*in) {
+	        buffer = INDEXOF(*in++) << 18;
+	        buffer |= INDEXOF(*in++) << 12;
+	        if (*in++ != '=') buffer |= INDEXOF(*(in - 1)) << 6;
+	        if (*in++ != '=') buffer |= INDEXOF(*(in - 1));
+	        *out++ = buffer >> 16;
+	        tmp = (buffer & 0xFF00) >> 8;
+	        if (tmp) *out++ = tmp;
+	        tmp = (buffer & 0xFF);
+	        if (tmp) *out++ = tmp;
+	        buffer = 0;
+	 }
+	*out = '\0';
+	return outstr;
+}
+#endif /* FORMS_MEMORY */

@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.13 2003/07/26 20:34:36 pasky Exp $ */
+/* $Id: version.c,v 1.14 2003/08/01 17:28:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,10 @@ get_dyn_full_version(struct terminal *term, int more)
 		"gzip" ", ",
 #endif
 #ifdef HAVE_BZLIB_H
-		"bzip2",
+		"bzip2", ", ",
+#endif
+#ifdef FORMS_MEMORY
+		_("Forms memory", term),
 #endif
 		NULL
 	);

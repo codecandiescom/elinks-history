@@ -831,6 +831,10 @@ AC_ARG_ENABLE(mimetypes, [  --disable-mimetypes     disable /etc/mime.types supp
 	      [if test "$enableval" = yes; then AC_DEFINE(MIMETYPES) fi],
 	      AC_DEFINE(MIMETYPES))
 
+AC_ARG_ENABLE(formsmemory, [  --disable-formsmemory   disable login manager for HTML forms],
+              [if test "$enableval" = yes; then AC_DEFINE(FORMS_MEMORY) fi],
+             AC_DEFINE(FORMS_MEMORY))
+
 AC_ARG_ENABLE(fastmem, [  --enable-fastmem        enable direct use of system allocation functions, not useable with --enable-debug],
 	      [if test "$enableval" = yes && test "$hm_enabled_debug" = no; then AC_DEFINE(FASTMEM) fi])
 
@@ -932,6 +936,7 @@ AC_OUTPUT([ \
  src/elusive/parser/html/Makefile \
  src/elusive/renderer/Makefile \
  src/elusive/renderer/text/Makefile \
+ src/formsmem/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \
  src/intl/gettext/Makefile \

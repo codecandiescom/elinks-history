@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.115 2003/07/28 16:18:56 zas Exp $ */
+/* $Id: main.c,v 1.116 2003/08/01 17:28:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "document/html/colors.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
+#include "formsmem/formsmem.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
@@ -275,6 +276,9 @@ terminate_all_subsystems(void)
 	check_bottom_halves();
 	free_home();
 	free_strerror_buf();
+#ifdef FORMS_MEMORY
+	free_formsmemory();
+#endif
 #ifdef USE_LEDS
 	done_leds();
 #endif

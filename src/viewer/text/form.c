@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.18 2003/08/01 12:39:28 zas Exp $ */
+/* $Id: form.c,v 1.19 2003/08/01 17:28:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
+#include "formsmem/formsmem.h"
 #include "osdep/os_dep.h" /* ASCII_* */
 #include "protocol/uri.h"
 #include "sched/session.h"
@@ -267,8 +268,25 @@ draw_forms(struct terminal *t, struct document_view *f)
 		return;
 	}
 	do {
-		if (l1->type != L_LINK)
+		if (l1->type == L_LINK) continue;
+#ifdef FORMS_MEMORY
+		if (l1->form->type == FC_TEXT
+		    || l1->form->type == FC_PASSWORD) {
+			unsigned char *saved;
+
+			saved = get_saved_control_value(l1->form->action,
+							l1->form->name);
+
+			if (saved) {
+				if (l1->form->default_value)
+					mem_free(l1->form->default_value);
+
+				l1->form->default_value = stracpy(saved);
+			}
+		}
+#endif /* FORMS_MEMORY */
 			draw_form_entry(t, f, l1);
+
 	} while (l1++ < l2);
 }
 
@@ -646,11 +664,15 @@ unsigned char *
 get_form_url(struct session *ses, struct document_view *f,
 	     struct form_control *frm)
 {
-	struct list_head submit;
+	struct list_head submit, *sb = NULL;
 	struct string data;
 	struct string go;
 	unsigned char bound[BL];
 	int cp_from, cp_to;
+#ifdef FORMS_MEMORY
+	int save = 0;
+	struct submitted_value *sv;
+#endif
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
@@ -676,6 +698,63 @@ get_form_url(struct session *ses, struct document_view *f,
 		free_succesful_controls(&submit);
 		return NULL;
 	}
+
+#ifdef FORMS_MEMORY
+	foreach(sv, submit) {
+		if (!sv->value || !*sv->value) {
+			save = 0;
+			break;
+		}
+		if (sv->type == FC_PASSWORD) {
+			save = 1;
+			break;
+		}
+	}
+
+	if (save && !form_already_saved(frm->action, &submit)) {
+		struct formsmem_data *fmem_data;
+
+		fmem_data = mem_alloc(sizeof(struct formsmem_data));
+		if (!fmem_data) {
+			free_succesful_controls(&submit);
+			return NULL;
+		}
+
+		sb = mem_alloc(sizeof(struct list_head));
+		if (!sb) {
+			mem_free(fmem_data);
+			free_succesful_controls(&submit);
+			return NULL;
+		}
+
+		/* Set up a new list_head, as @submit will be destroyed as soon as
+		 * get_form_url() returns */
+		sb->next = submit.next;
+		sb->prev = submit.prev;
+		((struct submitted_value *) sb->next)->prev = (struct submitted_value *) sb;
+		((struct submitted_value *) sb->prev)->next = (struct submitted_value *) sb;
+
+		fmem_data->url = stracpy(frm->action);
+		if (!fmem_data->url) {
+			mem_free(fmem_data);
+			mem_free(sb);
+			free_succesful_controls(&submit);
+			return NULL;
+		}
+
+		fmem_data->submit = sb;
+
+		msg_box(ses->tab->term, NULL, 0,
+			N_("Form memory"), AL_CENTER,
+			N_("Should I remember this login?\n\n"
+			"Please note that passwords will be stored "
+			"obscured (i.e. unencrypted) in a file on your disk.\n\n"
+			"If you are using a valuable password answer NO."),
+			fmem_data, 2,
+			N_("Yes"), remember_form, B_ENTER,
+			N_("No"), free_form, NULL);
+	}
+#endif /* FORMS_MEMORY */
 
 	if (!init_string(&go)) return NULL;
 
@@ -717,7 +796,12 @@ get_form_url(struct session *ses, struct document_view *f,
 	}
 
 	done_string(&data);
-	free_succesful_controls(&submit);
+
+	/* if (sb) we free that stuff in
+	 * formsmem/formsmem.c:free_form() instead (msg_box's handler
+	 * associated with "No") */
+	if (!sb) free_succesful_controls(&submit);
+
 	return go.source;
 }
 

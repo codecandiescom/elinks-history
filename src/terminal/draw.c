@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.68 2003/09/15 20:28:20 jonas Exp $ */
+/* $Id: draw.c,v 1.69 2003/09/15 20:29:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,37 +188,39 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	  unsigned char data, enum screen_char_attr attr,
 	  struct color_pair *color)
 {
-	struct screen_char *line;
-	struct screen_char area = INIT_SCREEN_CHAR(data, attr, 0);
-	int position;
-	int endx, endy;
-	register int i;
+	struct screen_char *line, *pos, *end;
+	int width, height;
 
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	endy = int_min(yw, term->y - y);
-	endx = int_min(xw, term->x - x);
+	height = int_min(yw, term->y - y);
+	width = int_min(xw, term->x - x);
 
-	if (endy <= 0 || endx <= 0) return;
+	if (height <= 0 || width <= 0) return;
 
-	position = x + term->x * y;
-	line = &term->screen->image[position];
+	line = &term->screen->image[x + term->x * y];
 
-	/* Compose a screen position in the area so memcpy() can be used. */
-	if (color) set_term_color(&area, color, COLOR_DEFAULT);
-
-	/* Draw the first area line. */
-	for (i = 0; i < endx; i++) {
-		copy_screen_chars(&line[i], &area, 1);
+	/* Compose off the ending screen position in the areas first line. */
+	end = &line[width - 1];
+	end->attr = attr;
+	end->data = data;
+	if (color) {
+		set_term_color(end, color, COLOR_DEFAULT);
+	} else {
+		end->color = 0;
 	}
 
-	/* For the rest of the area use the first area line. */
-	for (i = 1; i < endy; i++) {
-		register int offset = position + term->x * i;
+	/* Draw the first area line. */
+	for (pos = line; pos < end; pos++) {
+		copy_screen_chars(pos, end, 1);
+	}
 
-		copy_screen_chars(&term->screen->image[offset], line, endx);
+	/* Now make @end point to the last line */
+	/* For the rest of the area use the first area line. */
+	for (pos = line + term->x, height -= 1; height; height--, pos += term->x) {
+		copy_screen_chars(pos, line, width);
 	}
 
 	term->screen->dirty = 1;

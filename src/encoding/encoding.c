@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.26 2003/12/20 18:35:17 pasky Exp $ */
+/* $Id: encoding.c,v 1.27 2004/01/01 04:17:56 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,7 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
-static unsigned char *bzip2_extensions[] = { ".bz2", NULL };
+static unsigned char *bzip2_extensions[] = { ".bz2", ".tbz", NULL };
 
 static struct decoding_backend bzip2_decoding_backend = {
 	"bzip2",

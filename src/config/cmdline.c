@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.26 2003/12/22 11:54:12 pasky Exp $ */
+/* $Id: cmdline.c,v 1.27 2003/12/22 11:54:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,8 +29,6 @@
 #include "util/memory.h"
 
 
-/* TODO: This ought to be rewritten - we want special tree for commandline
- * options as "aliases" there. */
 static unsigned char *
 _parse_options(int argc, unsigned char *argv[], struct option *opt)
 {

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.8 2002/03/22 18:57:21 pasky Exp $ */
+/* $Id: types.c,v 1.9 2002/04/26 18:09:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,31 +66,76 @@ int is_in_list(unsigned char *list, unsigned char *str, int l)
 	goto rep;
 }
 
-unsigned char *get_content_type(unsigned char *head, unsigned char *url)
+/* Guess content type of the document. */
+unsigned char *
+get_content_type(unsigned char *head, unsigned char *url)
 {
-	struct extension *e;
+	struct extension *ext;
 	struct assoc *a;
-	unsigned char *ct, *ext, *exxt;
-	int extl, el;
-	if (head && (ct = parse_http_header(head, "Content-Type", NULL))) {
-		unsigned char *s;
-		if ((s = strchr(ct, ';'))) *s = 0;
-		while (*ct && ct[strlen(ct) - 1] <= ' ') ct[strlen(ct) - 1] = 0;
-		return ct;
+	unsigned char *pos, *extension, *exxt;
+	int ext_len, el;
+
+	/* If there's one in header, it's simple.. */
+
+	if (head) {
+	       	char *ctype = parse_http_header(head, "Content-Type", NULL);
+		if (ctype) {
+			unsigned char *s;
+
+			s = strchr(ctype, ';'); if (s) *s = 0;
+
+			while (*ctype && ctype[strlen(ctype) - 1] <= ' ')
+				ctype[strlen(ctype) - 1] = 0;
+			return ctype;
+		}
 	}
-	ext = NULL, extl = 0;
-	for (ct = url; *ct && !end_of_dir(*ct); ct++)
-		if (*ct == '.') ext = ct + 1;
-		else if (dir_sep(*ct)) ext = NULL;
-	if (ext) while (ext[extl] && !dir_sep(ext[extl]) && !end_of_dir(ext[extl])) extl++;
-	if ((extl == 3 && !casecmp(ext, "htm", 3)) ||
-	    (extl == 4 && !casecmp(ext, "html", 4))) return stracpy("text/html");
-	foreach(e, extensions) if (is_in_list(e->ext, ext, extl)) return stracpy(e->ct);
+
+	/* Get extension */
+
+	extension = NULL, ext_len = 0;
+
+	for (pos = url; *pos && !end_of_dir(*pos); pos++) {
+		if (*pos == '.') {
+			extension = pos + 1;
+		} else if (dir_sep(*ct)) {
+			extension = NULL;
+		}
+	}
+
+	if (extension) {
+		while (extension[ext_len]
+		       && !dir_sep(extension[ext_len])
+		       && !end_of_dir(extension[ext_len])) {
+			ext_len++;
+		}
+	}
+
+	/* Guess type accordingly to the extension */
+
+	if ((ext_len == 3 && !casecmp(extension, "htm", 3)) ||
+	    (ext_len == 4 && !casecmp(extension, "html", 4)))
+		return stracpy("text/html");
+
+	foreach(ext, extensions) {
+		if (is_in_list(ext->ext, extension, ext_len))
+			return stracpy(ext->ct);
+	}
+
+	/* Try to make application/x-extension from it */
+
 	exxt = init_str(); el = 0;
 	add_to_str(&exxt, &el, "application/x-");
-	add_bytes_to_str(&exxt, &el, ext, extl);
-	foreach(a, assoc) if (is_in_list(a->ct, exxt, el)) return exxt;
+	add_bytes_to_str(&exxt, &el, extension, ext_len);
+
+	foreach(a, assoc) {
+		if (is_in_list(a->ct, exxt, el))
+			return exxt;
+	}
+
 	mem_free(exxt);
+
+	/* Fallback.. use some hardwired default */
+
 	return stracpy("text/plain");
 }
 

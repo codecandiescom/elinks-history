@@ -1,4 +1,4 @@
-/* $Id: os_dep.h,v 1.10 2003/01/20 13:58:43 pasky Exp $ */
+/* $Id: os_dep.h,v 1.11 2003/05/03 17:11:49 pasky Exp $ */
 
 #ifndef EL__OS_DEP_H
 #define EL__OS_DEP_H
@@ -194,6 +194,7 @@ int resize_window(int, int);
 int can_resize_window(int);
 int can_open_os_shell(int);
 struct open_in_new *get_open_in_new(int);
+int can_open_in_new(struct terminal *);
 void set_highpri();
 
 #ifdef USE_OPEN_PREALLOC

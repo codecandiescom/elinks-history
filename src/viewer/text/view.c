@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.44 2003/05/03 15:24:38 pasky Exp $ */
+/* $Id: view.c,v 1.45 2003/05/03 17:11:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3306,20 +3306,6 @@ open_in_new_window(struct terminal *term,
 		add_to_menu(&mi, oi->text, "", MENU_FUNC xxx, oi->fn, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses, 1);
-}
-
-int
-can_open_in_new(struct terminal *term)
-{
-	struct open_in_new *oin = get_open_in_new(term->environment);
-
-	if (!oin) return 0;
-	if (!oin[1].text) {
-		mem_free(oin);
-		return 1;
-	}
-	mem_free(oin);
-	return 2;
 }
 
 void

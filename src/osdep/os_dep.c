@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.52 2003/05/03 17:07:48 pasky Exp $ */
+/* $Id: os_dep.c,v 1.53 2003/05/03 17:11:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1952,6 +1952,25 @@ get_open_in_new(int environment)
 	}
 
 	return oin;
+}
+
+/* Returns:
+ * 0 if it is impossible to open anything in anything new
+ * 1 if there is one possible object capable of being spawn
+ * >1 if there is >1 such available objects (it may not be the actual number of
+ *    them, though) */
+int
+can_open_in_new(struct terminal *term)
+{
+	struct open_in_new *oin = get_open_in_new(term->environment);
+
+	if (!oin) return 0;
+	if (!oin[1].text) {
+		mem_free(oin);
+		return 1;
+	}
+	mem_free(oin);
+	return 2;
 }
 
 int

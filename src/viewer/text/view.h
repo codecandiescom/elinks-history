@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.4 2003/05/02 22:16:19 zas Exp $ */
+/* $Id: view.h,v 1.5 2003/05/03 17:11:49 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -12,7 +12,6 @@
 extern int textarea_editor;
 void textarea_edit(int, struct terminal *, struct form_control *, struct form_state *, struct f_data_c *, struct link *);
 
-int can_open_in_new(struct terminal *);
 void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *), struct session *);
 /* void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *); */
 void send_open_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);

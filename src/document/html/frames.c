@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.17 2003/10/17 13:15:57 jonas Exp $ */
+/* $Id: frames.c,v 1.18 2003/10/17 13:28:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,14 +107,16 @@ create_frame(struct frame_param *fp)
 static void
 add_frame_to_list(struct session *ses, struct document_view *doc_view)
 {
-	struct document_view *f;
+	struct document_view *ses_doc_view;
 
 	assert(ses && doc_view);
 	if_assert_failed return;
 
-	foreach (f, ses->scrn_frames) {
-		if (f->yp > doc_view->yp || (f->yp == doc_view->yp && f->xp > doc_view->xp)) {
-			add_at_pos(f->prev, doc_view);
+	foreach (ses_doc_view, ses->scrn_frames) {
+		if (ses_doc_view->yp > doc_view->yp
+		    || (ses_doc_view->yp == doc_view->yp
+			&& ses_doc_view->xp > doc_view->xp)) {
+			add_at_pos(ses_doc_view->prev, doc_view);
 			return;
 		}
 	}

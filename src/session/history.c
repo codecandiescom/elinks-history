@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.28 2003/09/15 14:06:19 zas Exp $ */
+/* $Id: history.c,v 1.29 2003/10/17 13:26:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ ses_unback(struct session *ses)
 static int
 go_away(struct session *ses, int dir)
 {
-	struct document_view *fd = current_frame(ses);
+	struct document_view *doc_view = current_frame(ses);
 	struct list_head *history = (dir == 1	? &ses->unhistory
 						: &ses->history);
 
@@ -168,8 +168,8 @@ go_away(struct session *ses, int dir)
 		ses->ref_url = NULL;
 	}
 
-	if (fd && fd->document && fd->document->url)
-		ses->ref_url = stracpy(fd->document->url);
+	if (doc_view && doc_view->document && doc_view->document->url)
+		ses->ref_url = stracpy(doc_view->document->url);
 
 	return 1;
 }

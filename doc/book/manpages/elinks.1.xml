@@ -1,8 +1,8 @@
-<!-- $Id: elinks.1.xml,v 1.3 2003/05/09 21:58:29 jonas Exp $ -->
+<!-- $Id: elinks.1.xml,v 1.4 2003/05/21 02:02:56 jonas Exp $ -->
 
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
 	"http://www.oasis-open.org/docbook/sgml/4.2/docbook.dtd">
-	
+
 <!--DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN">
 	http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"-->
 	

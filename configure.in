@@ -752,14 +752,16 @@ fi
 
 AC_OUTPUT([ \
  Makefile \
- elinkskeys.5 \
  Unicode/Makefile \
  contrib/Makefile \
  contrib/elinks.spec \
  contrib/lua/hooks.lua \
  doc/Makefile \
  doc/book/Makefile \
+ doc/man/Makefile \
+ doc/man/man1/Makefile \
  doc/man/man1/elinks.1 \
+ doc/man/man5/Makefile \
  intl/Makefile \
  po/Makefile.in \
  src/Makefile \

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.200 2004/11/21 14:53:30 zas Exp $ */
+/* $Id: dialogs.c,v 1.201 2004/12/01 03:37:37 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -150,6 +150,10 @@ get_option_text(struct listbox_item *item, struct terminal *term)
 	struct option *option = item->udata;
 	unsigned char *desc = option->capt ? option->capt : option->name;
 
+	if (option->flags & OPT_TOUCHED)
+		return straconcat(_(desc, term),
+				  " (", _("modified", term), ")", NULL);
+
 	return stracpy(_(desc, term));
 }
 
@@ -192,6 +196,11 @@ get_option_info(struct listbox_item *item, struct terminal *term)
 			mem_free(range);
 		}
 		add_format_to_string(&info, "\n%s: %s", _("Value", term), value.source);
+
+		if (option->flags & OPT_TOUCHED)
+			add_to_string(&info, _("\n\nThis value has been changed"
+					     " since you last saved your"
+					     " configuration.", term));
 
 		if (*desc)
 			add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
@@ -498,6 +507,8 @@ push_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	write_config(dlg_data->win->term);
+
+	update_hierbox_browser(&option_browser);
 
 	return EVENT_PROCESSED;
 }

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.47 2002/11/29 20:53:13 pasky Exp $ */
+/* $Id: parser.c,v 1.48 2002/12/01 15:50:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,10 +117,16 @@ end:
 	return 0;
 }
 
-unsigned char *_xx_;
-
-#define add_chr(s, l, c)	do {\
-	if ((_xx_ = s, l % ALLOC_GR) || (_xx_ = mem_realloc(s, l + ALLOC_GR))) s = _xx_, s[l++] = c;	\
+#define add_chr(s, l, c) \
+	do {\
+	if (l % ALLOC_GR) { \
+		s[l++] = c; \
+	} else { \
+		unsigned char *_xx_ = mem_realloc(s, l + ALLOC_GR); \
+		if (!_xx_) return NULL; \
+		s = _xx_; \
+		s[l++] = c; \
+	}\
 	} while (0)
 
 
@@ -164,7 +170,7 @@ a:
 		e++;
 		while (*e != uu) {
 			if (!*e) {
-				mem_free(a);
+				if (a) mem_free(a);
 				return NULL;
 			}
 			if (!f && *e != 13) {
@@ -202,6 +208,8 @@ ea:
 
 	goto aa;
 }
+
+#undef add_chr
 
 unsigned char *
 get_url_val(unsigned char *e, unsigned char *name)
@@ -704,6 +712,7 @@ html_a(unsigned char *a)
 		/* Strip spaces */
 
 		while (href_pos[0] == ' ') href_pos++;
+		/* XXX: Optimization possible here */
 		while (href_pos[0] &&
 		       href_pos[strlen(href_pos) - 1] == ' ')
 			href_pos[strlen(href_pos) - 1] = 0;
@@ -784,6 +793,10 @@ html_img(unsigned char *a)
 		if (format.link) mem_free(format.link);
 		if (format.form) format.form = NULL;
 		u = join_urls(format.href_base, al);
+		if (!u) {
+			mem_free(al);
+			return;
+		}
 
 		format.link = mem_alloc(strlen(u) + 5);
 		if (format.link) {
@@ -885,16 +898,18 @@ html_img(unsigned char *a)
 
 			html_stack_dup();
 			h = stracpy(format.link);
-			add_to_strn(&h, "?0,0");
-			mem_free(format.link);
-			format.link = h;
+			if (h) {
+				add_to_strn(&h, "?0,0");
+				mem_free(format.link);
+				format.link = h;
+			}
 		}
 		put_chrs(al, strlen(al), put_chars_f, ff);
 		if (ismap) kill_html_stack_item(&html_top);
 	}
 	if (format.image) mem_free(format.image), format.image = NULL;
 	if (format.title) mem_free(format.title), format.title = NULL;
-	mem_free(al);
+	if (al) mem_free(al);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/
 }
@@ -1275,10 +1290,10 @@ get_html_form(unsigned char *a, struct form *form)
 	al = get_attr_val(a, "method");
 	if (al) {
 		if (!strcasecmp(al, "post")) {
-			char *ax;
+			char *ax = get_attr_val(a, "enctype");
 
 			form->method = FM_POST;
-			if ((ax = get_attr_val(a, "enctype"))) {
+			if (ax) {
 				if (!strcasecmp(ax, "multipart/form-data"))
 					form->method = FM_POST_MP;
 				mem_free(ax);
@@ -1292,22 +1307,22 @@ get_html_form(unsigned char *a, struct form *form)
 		char *all = al;
 
 		while (all[0] == ' ') all++;
+		/* XXX: Optimization possible */
 		while (all[0] && all[strlen(all) - 1] == ' ') all[strlen(all) - 1] = 0;
 		form->action = join_urls(format.href_base, all);
 		mem_free(al);
 	} else {
-		unsigned char *ch;
-
 		form->action = stracpy(format.href_base);
-
-		ch = strchr(form->action, POST_CHAR);
-		if (ch) *ch = 0;
-
-		/* We have to do following for GET method, because we would end
-		 * up with two '?' otherwise. */
-		if (form->method == FM_GET) {
-			ch = strchr(form->action, '?');
+		if (form->action) {
+			unsigned char *ch = strchr(form->action, POST_CHAR);
 			if (ch) *ch = 0;
+
+			/* We have to do following for GET method, because we would end
+			 * up with two '?' otherwise. */
+			if (form->method == FM_GET) {
+				ch = strchr(form->action, '?');
+				if (ch) *ch = 0;
+			}
 		}
 	}
 
@@ -1543,7 +1558,7 @@ xxx:
 	kill_html_stack_item(&html_top);
 	put_chrs(" ", 1, put_chars_f, ff);
 
-	hid:
+hid:
 	special_f(ff, SP_CONTROL, fc);
 }
 
@@ -1621,7 +1636,7 @@ x:
 	fc->method = form.method;
 	fc->action = form.action ? stracpy(form.action) : NULL;
 	fc->type = FC_CHECKBOX;
-	fc->name = stracpy(format.select);
+	fc->name = format.select ? stracpy(format.select) : NULL;
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
 	fc->ro = format.select_disabled;
@@ -1729,9 +1744,11 @@ void
 free_menu(struct menu_item *m) /* Grrr. Recursion */
 {
 	struct menu_item *mm;
-
+	
+	if (!m) return; /* XXX: Who knows... need to be verified */ 
+	
 	for (mm = m; mm->text; mm++) {
-		mem_free(mm->text);
+		if (mm->text) mem_free(mm->text);
 		if (mm->func == MENU_FUNC do_select_submenu) free_menu(mm->data);
 	}
 	mem_free(m);
@@ -1841,10 +1858,12 @@ see:
 abort:
 		*end = html;
 		if (lbl) mem_free(lbl);
-		for (i = 0; i < order; i++)
-			if (val[i])
-				mem_free(val[i]);
-		mem_free(val);
+		if (val) {
+			for (i = 0; i < order; i++)
+				if (val[i])
+					mem_free(val[i]);
+			mem_free(val);
+		}
 		destroy_menu();
 		*end = en;
 		return 0;
@@ -1909,7 +1928,8 @@ abort:
 			val = vv;
 		}
 		val[order++] = v;
-		if ((vx = get_attr_val(t_attr, "label"))) new_menu_item(vx, order - 1, 0);
+		vx = get_attr_val(t_attr, "label");
+		if (vx) new_menu_item(vx, order - 1, 0);
 		if (!v || !vx) {
 			lbl = init_str(), lbl_l = 0;
 			nnmi = !!vx;
@@ -2088,7 +2108,13 @@ html_iframe(unsigned char *a)
 	if (!url) return;
 
 	name = get_attr_val(a, "name");
-	if (!name) name = stracpy("");
+	if (!name) {
+		name = stracpy("");
+		if (!name) {
+			mem_free(url);
+			return;
+		}
+	}
 
 	html_focusable(a);
 
@@ -2157,11 +2183,9 @@ parse_frame_widths(unsigned char *a, int ww, int www, int **op, int *olp)
 	unsigned char *aa;
 	int q, qq, i, d, nn;
 	unsigned long n;
-	int *oo, *o;
-	int ol;
-
-	ol = 0;
-	o = NULL;
+	int *oo;
+	int *o = NULL;
+	int ol = 0;
 
 new_ch:
 	while (WHITECHAR(*a)) a++;
@@ -2174,7 +2198,10 @@ new_ch:
 
 	oo = mem_realloc(o, (ol + 1) * sizeof(int));
 	if (oo) (o = oo)[ol++] = q;
-
+	else {
+		*olp = 0;
+		return;
+	}
 	aa = strchr(a, ',');
 	if (aa) {
 		a = aa + 1;
@@ -2360,7 +2387,11 @@ html_link(unsigned char *a)
 	name = get_attr_val(a, "rel");
 	if (!name) name = get_attr_val(a, "rev");
 	if (!name) name = stracpy(url);
-
+	if (!name) {
+		mem_free(url);
+		return;
+	}
+	
 	/* Ignore few annoying links.. */
 	if (strcasecmp(name, "STYLESHEET") &&
 	    strcasecmp(name, "made") &&
@@ -2763,6 +2794,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	int hdl = 0;
 	struct conv_table *ct;
 
+	if (!hd) return -1;
+	
 	if (head) add_to_str(&hd, &hdl, head);
 	scan_http_equiv(pos, eof, &hd, &hdl, NULL);
 	ct = get_convert_table(hd, to, def, NULL, NULL, hdef);
@@ -2894,7 +2927,12 @@ look_for_tag:
 	target = get_target(attr);
 	if (!target) target = target_base ? stracpy(target_base) : NULL;
 	if (!target) target = stracpy("");
-
+	if (!target) {
+		if (label) mem_free(label);
+		mem_free(target);
+		goto look_for_link;
+	}
+	
 	ld = mem_alloc(sizeof(struct link_def));
 	if (!ld) {
 		if (label) mem_free(label);
@@ -2978,7 +3016,10 @@ scan_http_equiv(unsigned char *s, unsigned char *eof, unsigned char **head,
 	int namelen;
 	int tlen = 0;
 
-	if (title) *title = init_str();
+	if (title) {
+		*title = init_str();
+		if (!*title) return;
+	}
 	add_chr_to_str(head, hdl, '\n');
 
 se:

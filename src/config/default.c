@@ -1,13 +1,10 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.7 2002/03/19 20:40:04 pasky Exp $ */
+/* $Id: default.c,v 1.8 2002/03/26 17:08:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_ARPA_INET_H
-#include <arpa/inet.h>
-#endif
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h>
 #endif
@@ -19,6 +16,11 @@
 #include <sys/types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+
+/* We need to have it here. Stupid BSD. */
+#ifdef HAVE_ARPA_INET_H
+#include <arpa/inet.h>
 #endif
 
 #include <links.h>

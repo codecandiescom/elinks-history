@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.78 2004/10/25 19:41:01 pasky Exp $ */
+/* $Id: tab.c,v 1.79 2004/10/26 17:03:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,6 @@ struct window *
 init_tab(struct terminal *term, void *data, window_handler handler)
 {
 	struct window *win = mem_calloc(1, sizeof(struct window));
-	struct window *last_tab;
 
 	if (!win) return NULL;
 
@@ -41,16 +40,7 @@ init_tab(struct terminal *term, void *data, window_handler handler)
 	win->type = WINDOW_TAB;
 	win->resize = 1;
 
-	/* Keep tabs together. */
-	for (last_tab = term->windows.next;
-	     (struct list_head *) last_tab->next != &term->windows;
-	     last_tab = last_tab->next) {
-		if (last_tab->type == WINDOW_TAB) {
-			last_tab = last_tab->prev;
-			break;
-		}
-	}
-	add_at_pos(last_tab, win);
+	add_to_list(term->windows, win);
 
 	return win;
 }

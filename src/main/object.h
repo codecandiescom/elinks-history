@@ -1,11 +1,7 @@
-/* $Id: object.h,v 1.3 2003/11/17 21:31:16 pasky Exp $ */
+/* $Id: object.h,v 1.4 2003/11/17 21:31:38 pasky Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
 
 #if 0
 #define DEBUG_REFCOUNT

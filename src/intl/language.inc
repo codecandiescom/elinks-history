@@ -3514,7 +3514,7 @@ struct translation translation_french [] = {
   {T_NEED_MASTER_TERMINAL, "Vous ne pouvez faire ça que dans le terminal maître"},
   {T_SEARCH_BOOKMARK, "Rechercher des signets"},
   {T_CLEAR, "Effacer"},
-  {T_ADD_BOOKMARK_LINK, "Ajouter lien aux signets"},
+  {T_ADD_BOOKMARK_LINK, "Ajouter ce lien aux signets"},
   {T_HK_ADD_BOOKMARK_LINK, "A"},
   {0, NULL}
 };

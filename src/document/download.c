@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.59 2002/12/10 22:40:07 pasky Exp $ */
+/* $Id: download.c,v 1.60 2002/12/10 23:23:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -984,7 +984,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		unsigned char *name = NULL;
 
 		if (mailcap) {
-			name = assoc->name;
+			name = stracpy(assoc->name);
 		} else {
 			/* XXX: This should be maybe handled generically by
 			 * some function in protocol/mime.c. --pasky */
@@ -994,13 +994,13 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 			if (mt) {
 				opt = get_opt_rec_real(&root_options, mt);
 				mem_free(mt);
-				if (opt) name = opt->ptr;
+				if (opt) name = stracpy(opt->ptr);
 			}
 		}
-		if (!name) name = "";
+		if (!name) name = stracpy("");
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->term, getml(content_type, NULL),
+			msg_box(ses->term, getml(content_type, name, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
 				TEXT(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
 				TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),
@@ -1011,7 +1011,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 				TEXT(T_DISPLAY), tp_display, 0,
 				TEXT(T_CANCEL), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->term, getml(content_type, NULL),
+			msg_box(ses->term, getml(content_type, name, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
 				TEXT(T_CONTEN_TYPE_IS), " ", content_type, ".\n",
 				TEXT(T_DO_YOU_WANT_TO_OPEN_FILE_WITH),

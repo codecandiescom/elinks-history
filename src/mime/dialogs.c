@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.80 2003/11/27 01:43:16 jonas Exp $ */
+/* $Id: dialogs.c,v 1.81 2003/11/27 01:55:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,7 +102,7 @@ push_add_button(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	update_dialog_data(dlg_data, widget_data);
 
-	if (!ext || !check_dialog(dlg_data) || !init_string(&name)) return 1;
+	if (!ext || check_dialog(dlg_data) || !init_string(&name)) return 1;
 
 	add_to_string(&name, "mime.extension.");
 	add_optname_to_string(&name, ext->ext, strlen(ext->ext));

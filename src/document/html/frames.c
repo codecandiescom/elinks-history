@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.49 2004/01/22 17:46:57 pasky Exp $ */
+/* $Id: frames.c,v 1.50 2004/03/19 08:45:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -354,10 +354,16 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 
 		while (isspace(*str)) str++;
 
-		/* Extract number. */
-		errno = 0;
-		number = strtoul(str, (char **)&str, 10);
-		if (errno) return 0;
+		/* strtoul() will set errno on some platforms if first char is
+		 * not a digit. */
+		if (isdigit(*str)) {
+			/* Extract number. */
+			errno = 0;
+			number = strtoul(str, (char **)&str, 10);
+			if (errno) return 0;
+		} else {
+			number = 0;
+		}
 
 		/* @number is an ulong, but @val is int,
 		 * so check if @number is in a reasonable

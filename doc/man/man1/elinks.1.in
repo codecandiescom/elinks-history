@@ -68,7 +68,7 @@ file. It forces use of default keybindings and will reset
 user-defined ones on save.
 .TP
 \fB-dump [0|1] (default: 0) \fR
-Write a plain-text version of the given URL to stdout.
+Write a plain-text version of the document at the given URL to stdout.
 .TP
 \fB-dump-charset (alias for document.dump.codepage) \fR
 Codepage used in dump output.

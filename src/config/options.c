@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.159 2002/12/15 11:32:06 pasky Exp $ */
+/* $Id: options.c,v 1.160 2002/12/18 15:30:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,9 @@ copy_option(struct option *template)
 	option->type = template->type;
 	option->min = template->min;
 	option->max = template->max;
+	option->capt = template->capt;
 	option->desc = template->desc;
+	option->change_hook = template->change_hook;
 
 	option->box_item = mem_calloc(1, sizeof(struct listbox_item));
 	if (option->box_item) {

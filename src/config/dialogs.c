@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.25 2002/12/17 15:17:24 pasky Exp $ */
+/* $Id: dialogs.c,v 1.26 2002/12/18 15:30:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 
 			/* This boolean thing can look a little weird - it
 			 * basically says that we should proceed when there's
-			 * no change_hook or there's one and it's return value
+			 * no change_hook or there's one and its return value
 			 * was zero. */
 			while (current && (!current->change_hook ||
 				!current->change_hook(ses, current, option))) {

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.84 2003/05/18 23:00:48 zas Exp $ */
+/* $Id: renderer.c,v 1.85 2003/05/18 23:05:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -810,7 +810,7 @@ x:;
 			format.form = NULL;
 
 			s[slen++] = '[';
-			ulongcat(s + 1, &slen, part->link_num, sizeof(s) - 3, 0);
+			ulongcat(s, &slen, part->link_num, sizeof(s) - 3, 0);
 			s[slen++] = ']';
 			s[slen] = '\0';
 

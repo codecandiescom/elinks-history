@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.18 2005/04/01 16:21:02 jonas Exp $ */
+/* $Id: date.c,v 1.19 2005/04/01 16:25:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,17 +238,17 @@ parse_date(const unsigned char *date)
 	} while (0)
 
 	struct tm tm;
-	unsigned char c;
 
 	if (!date) return 0;
 
 	/* Skip day-of-week */
 
-	while ((c = *date++) != ' ') if (!c) return 0;
+	for (; *date != ' '; date++)
+		if (!*date) return 0;
 
-	while ((c = *date) == ' ') date++;
+	while (*date == ' ') date++;
 
-	if (isdigit(c)) {
+	if (isdigit(*date)) {
 		/* RFC 1036 / RFC 1123 */
 
 		/* Eat day */

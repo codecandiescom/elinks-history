@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.21 2003/07/03 20:52:47 jonas Exp $ */
+/* $Id: connection.h,v 1.22 2003/07/04 00:25:36 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -22,6 +22,57 @@ enum connection_priority {
 	PRI_PRELOAD	= 4,
 	PRI_CANCEL	= 5,
 	PRIORITIES	= 6,
+};
+
+/* Numbers < 0 and > -10000 are reserved for system errors reported via
+ * errno/strerror(), see session.c and connection.c for further information. */
+/* WARNING: an errno value <= -10000 may cause some bad things... */
+enum connection_state {
+	/* States >= 0 are used for connections still in progress. */
+	S_WAIT			= 0,
+	S_DNS			= 1,
+	S_CONN			= 2,
+	S_SSL_NEG		= 3,
+	S_SENT			= 4,
+	S_LOGIN			= 5,
+	S_GETH			= 6,
+	S_PROC			= 7,
+	S_TRANS			= 8,
+	S_QUESTIONS		= 9,
+
+	/* State < 0 are used for the final result of a connection
+	 * (it's finished already and it ended up like this) */
+	S_OK			= -10000,
+	S_INTERRUPTED		= -10001,
+	S_EXCEPT		= -10002,
+	S_INTERNAL		= -10003,
+	S_OUT_OF_MEM		= -10004,
+	S_NO_DNS		= -10005,
+	S_CANT_WRITE		= -10006,
+	S_CANT_READ		= -10007,
+	S_MODIFIED		= -10008,
+	S_BAD_URL		= -10009,
+	S_TIMEOUT		= -10010,
+	S_RESTART		= -10011,
+	S_STATE			= -10012,
+	S_WAIT_REDIR		= -10013,
+
+	S_HTTP_ERROR		= -10100,
+	S_HTTP_100		= -10101,
+	S_HTTP_204		= -10102,
+
+	S_FILE_TYPE		= -10200,
+	S_FILE_ERROR		= -10201,
+
+	S_FTP_ERROR		= -10300,
+	S_FTP_UNAVAIL		= -10301,
+	S_FTP_LOGIN		= -10302,
+	S_FTP_PORT		= -10303,
+	S_FTP_NO_FILE		= -10304,
+	S_FTP_FILE_ERROR	= -10305,
+
+	S_SSL_ERROR		= -10400,
+	S_NO_SSL		= -10401,
 };
 
 struct remaining_info {
@@ -73,7 +124,7 @@ struct connection {
 	unsigned int id;
 
 	int pf; /* 1 == PF_INET, 2 == PF_INET6 */
-	int state;
+	enum connection_state state;
 	int prev_error;
 	int from;
 	int sock1;
@@ -103,55 +154,6 @@ struct connection {
 	enum stream_encoding content_encoding;
 };
 
-/* Connection states */
-#define S_WAIT		0
-#define S_DNS		1
-#define S_CONN		2
-#define S_SSL_NEG	3
-#define S_SENT		4
-#define S_LOGIN		5
-#define S_GETH		6
-#define S_PROC		7
-#define S_TRANS		8
-#define S_QUESTIONS	9
-
-/* Numbers < 0 and > -10000 are reserved for system errors reported via
- * errno/strerror(), see session.c and sched.c for further information. */
-
-/* WARNING: an errno value <= -10000 may cause some bad things... */
-
-#define S_OK			-10000
-#define S_INTERRUPTED		-10001
-#define S_EXCEPT		-10002
-#define S_INTERNAL		-10003
-#define S_OUT_OF_MEM		-10004
-#define S_NO_DNS		-10005
-#define S_CANT_WRITE		-10006
-#define S_CANT_READ		-10007
-#define S_MODIFIED		-10008
-#define S_BAD_URL		-10009
-#define S_TIMEOUT		-10010
-#define S_RESTART		-10011
-#define S_STATE			-10012
-#define S_WAIT_REDIR		-10013
-
-#define S_HTTP_ERROR		-10100
-#define S_HTTP_100		-10101
-#define S_HTTP_204		-10102
-
-#define S_FILE_TYPE		-10200
-#define S_FILE_ERROR		-10201
-
-#define S_FTP_ERROR		-10300
-#define S_FTP_UNAVAIL		-10301
-#define S_FTP_LOGIN		-10302
-#define S_FTP_PORT		-10303
-#define S_FTP_NO_FILE		-10304
-#define S_FTP_FILE_ERROR	-10305
-
-#define S_SSL_ERROR		-10400
-#define S_NO_SSL		-10401
-
 
 struct status {
 	/* XXX: order matters there, there's some hard initialization in
@@ -164,7 +166,7 @@ struct status {
 	void *data;
 	struct remaining_info *prg;
 
-	int state;
+	enum connection_state state;
 	int prev_error;
 	enum connection_priority pri;
 };

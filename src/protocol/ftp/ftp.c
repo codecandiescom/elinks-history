@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.89 2003/07/03 01:26:21 jonas Exp $ */
+/* $Id: ftp.c,v 1.90 2003/07/04 00:25:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1256,7 +1256,7 @@ out_of_mem:
 }
 
 static void
-ftp_end_request(struct connection *conn, int state)
+ftp_end_request(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 

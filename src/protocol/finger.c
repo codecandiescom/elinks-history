@@ -1,5 +1,5 @@
 /* Internal "finger" protocol implementation */
-/* $Id: finger.c,v 1.14 2003/07/03 01:26:21 jonas Exp $ */
+/* $Id: finger.c,v 1.15 2003/07/04 00:25:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ finger_get_response(struct connection *c, struct read_buffer *rb)
 }
 
 static void
-finger_end_request(struct connection *c, int state)
+finger_end_request(struct connection *c, enum connection_state state)
 {
 	set_connection_state(c, state);
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.146 2003/07/03 01:26:22 jonas Exp $ */
+/* $Id: http.c,v 1.147 2003/07/04 00:25:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,7 @@ check_http_server_bugs(unsigned char *url,
 }
 
 static void
-http_end_request(struct connection *conn, int state)
+http_end_request(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 	uncompress_shutdown(conn);
@@ -1070,7 +1070,7 @@ static void
 http_got_header(struct connection *conn, struct read_buffer *rb)
 {
 	int cf;
-	int state = conn->state != S_PROC ? S_GETH : S_PROC;
+	enum connection_state state = (conn->state != S_PROC ? S_GETH : S_PROC);
 	unsigned char *head;
 #ifdef COOKIES
 	unsigned char *cookie, *ch;

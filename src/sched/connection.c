@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.52 2003/07/03 23:30:32 jonas Exp $ */
+/* $Id: connection.c,v 1.53 2003/07/04 00:25:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ stat_timer(struct connection *c)
 }
 
 void
-set_connection_state(struct connection *c, int state)
+set_connection_state(struct connection *c, enum connection_state state)
 {
 	struct status *stat;
 	struct remaining_info *prg = &c->prg;
@@ -294,7 +294,7 @@ free_connection_data(struct connection *c)
 void
 send_connection_info(struct connection *c)
 {
-	int state = c->state;
+	enum connection_state state = c->state;
 	struct status *stat = c->statuss.next;
 
 	while ((void *)stat != &c->statuss) {
@@ -618,7 +618,7 @@ abort_connection(struct connection *c)
 
 /* Set certain state on a connection and then abort the connection. */
 void
-abort_conn_with_state(struct connection *conn, int state)
+abort_conn_with_state(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 	abort_connection(conn);
@@ -626,7 +626,7 @@ abort_conn_with_state(struct connection *conn, int state)
 
 /* Set certain state on a connection and then retry the connection. */
 void
-retry_conn_with_state(struct connection *conn, int state)
+retry_conn_with_state(struct connection *conn, enum connection_state state)
 {
 	set_connection_state(conn, state);
 	retry_connection(conn);

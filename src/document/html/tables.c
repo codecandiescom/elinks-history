@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.314 2004/06/29 22:55:14 pasky Exp $ */
+/* $Id: tables.c,v 1.315 2004/06/29 22:58:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,7 +360,7 @@ distribute_widths(struct table *table, int width)
 	char *visited_cols;
 	int *widths, *max_widths;
 	int max_cols_width = 0;
-	int cols_size;
+	int cols_array_size;
 
 	if (!table->cols)
 		return;
@@ -371,17 +371,17 @@ distribute_widths(struct table *table, int width)
 	for (col = 0; col < table->cols; col++)
 		int_lower_bound(&max_cols_width, table->max_cols_widths[col]);
 
-	cols_size = table->cols * sizeof(int);
-	memcpy(table->cols_widths, table->min_cols_widths, cols_size);
+	cols_array_size = table->cols * sizeof(int);
+	memcpy(table->cols_widths, table->min_cols_widths, cols_array_size);
 	table->real_width = width;
 
 	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
 	visited_cols = fmem_alloc(table->cols);
 
-	widths = fmem_alloc(cols_size);
+	widths = fmem_alloc(cols_array_size);
 	if (!widths) goto end;
 
-	max_widths = fmem_alloc(cols_size);
+	max_widths = fmem_alloc(cols_array_size);
 	if (!max_widths) goto end1;
 
 	while (spare_width) {
@@ -390,8 +390,8 @@ distribute_widths(struct table *table, int width)
 		int did_stretch;
 		int total_spare_width;
 
-		memset(widths, 0, cols_size);
-		memset(max_widths, 0, cols_size);
+		memset(widths, 0, cols_array_size);
+		memset(max_widths, 0, cols_array_size);
 
 		for (col = 0; col < table->cols; col++) {
 			switch (stretch_method) {

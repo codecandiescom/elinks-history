@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.13 2004/09/12 21:12:53 miciah Exp $ */
+/* $Id: gopher.c,v 1.14 2004/09/12 22:03:21 miciah Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -415,7 +415,7 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 		}
 	}
 
-	/* Nameless files are a separator line */
+	/* Nameless files are separator lines */
 	if (entity == GOPHER_FILE) {
 		int i = strlen(name) - 1;
 

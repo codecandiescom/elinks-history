@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.256 2004/08/09 08:47:34 miciah Exp $ */
+/* $Id: kbdbind.c,v 1.257 2004/08/14 13:29:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,8 +506,8 @@ static struct strtonum main_action_table[MAIN_ACTIONS + 1] = {
 	{ "rerender", ACT_MAIN_RERENDER, DACT(N_("Re-render the current page")) },
 	{ "reset-form", ACT_MAIN_RESET_FORM, DACT(N_("Reset form items to their initial values")) },
 	{ "resource-info", ACT_MAIN_RESOURCE_INFO, DACT(N_("Show information about the currently used resources")) },
-	{ "save-as", ACT_MAIN_SAVE_AS, DACT(N_("Save as")) },
-	{ "save-formatted", ACT_MAIN_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
+	{ "save-as", ACT_MAIN_SAVE_AS, DACT(N_("Save the current document in source form")) },
+	{ "save-formatted", ACT_MAIN_SAVE_FORMATTED, DACT(N_("Save the current document in formatted form")) },
 	{ "save-options", ACT_MAIN_SAVE_OPTIONS, DACT(N_("Save options")), },
 	{ "save-url-as", ACT_MAIN_SAVE_URL_AS, DACT(N_("Save URL as")) },
 	{ "scroll-down", ACT_MAIN_SCROLL_DOWN, DACT(N_("Scroll down")) },

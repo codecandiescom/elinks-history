@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.28 2004/01/19 23:31:56 jonas Exp $ */
+/* $Id: scanner.c,v 1.29 2004/01/19 23:48:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,6 +183,9 @@ scan_css_tokens(struct css_scanner *scanner)
 
 /* Scanner table accessors and mutators */
 
+/* This macro checks that if the scanners table is full the last token skipping
+ * or get_next_css_token() call made it possible to get the type of the next
+ * token. */
 #define check_css_scanner(scanner) \
 	(scanner->tokens < CSS_SCANNER_TOKENS \
 	 || scanner->current + 1 < scanner->tokens)
@@ -190,12 +193,7 @@ scan_css_tokens(struct css_scanner *scanner)
 struct css_token *
 get_css_token_(struct css_scanner *scanner)
 {
-	assert(scanner);
-
-	/* If the scanners table is full make sure that last token skipping
-	 * or get_next_css_token() call made it possible to check the type
-	 * of the next token. */
-	assert(check_css_scanner(scanner));
+	assert(scanner && check_css_scanner(scanner));
 
 #ifdef CSS_SCANNER_DEBUG
 	if (css_scanner_has_tokens(scanner)) {
@@ -249,9 +247,7 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type)
 int
 check_next_css_token(struct css_scanner *scanner, enum css_token_type type)
 {
-	/* See comment about alignment of the scanners token table */
-	assert(check_css_scanner(scanner));
-
+	assert(scanner && check_css_scanner(scanner));
 	return css_scanner_has_tokens(scanner)
 		&& scanner->table[scanner->current + 1].type == type;
 }

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.159 2004/01/28 06:16:12 jonas Exp $ */
+/* $Id: search.c,v 1.160 2004/01/28 06:43:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -933,6 +933,12 @@ get_document_char(struct document *document, int x, int y)
 }
 
 
+enum typeahead_code {
+	TYPEAHEAD_MATCHED,
+	TYPEAHEAD_STOP,
+	TYPEAHEAD_ESCAPE,
+};
+
 static enum typeahead_code
 typeahead_error(struct session *ses, unsigned char *typeahead)
 {
@@ -957,16 +963,16 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 	return TYPEAHEAD_STOP;
 }
 
+/* Link typeahead */
 /* XXX: This is a bit hackish for some developers taste. */
-enum typeahead_code
+static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
-	     unsigned char *typeahead, struct term_event *event)
+	     unsigned char *typeahead, int action)
 {
 	int current_link = doc_view->vs->current_link;
 	int charpos = strlen(typeahead);
 	/* The link interval in which we are currently searching */
 	int upper_link, lower_link;
-	enum edit_action action = kbd_action(KM_EDIT, event, NULL);
 	int direction, case_sensitive, i;
 
 	if (current_link == -1) current_link = 0;
@@ -975,7 +981,6 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	switch (action) {
 		case ACT_EDIT_BACKSPACE:
 			if (charpos > 0) charpos--;
-			typeahead[charpos] = 0;
 			direction = -1;
 			break;
 
@@ -1003,18 +1008,20 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			break;
 
 		case ACT_EDIT_KILL_TO_BOL:
-			memset(typeahead, 0, charpos);
 			return TYPEAHEAD_MATCHED;
 
 		case ACT_EDIT_REDRAW:
 			redraw_terminal_cls(ses->tab->term);
 			return TYPEAHEAD_MATCHED;
 
-		default:
-			if (!isprint(event->x) || charpos >= MAX_STR_LEN - 1)
-				return TYPEAHEAD_ESCAPE;
+		case ACT_EDIT_CANCEL:
+			return TYPEAHEAD_ESCAPE;
 
-			typeahead[charpos++] = event->x;
+ 		case ACT_EDIT_ENTER:
+			send_enter(ses->tab->term, NULL, ses);
+			return TYPEAHEAD_ESCAPE;
+
+		default:
 			direction = 1;
 	}
 
@@ -1079,10 +1086,28 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	return typeahead_error(ses, typeahead);
 }
 
+static int
+typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
+{
+	struct document_view *doc_view = current_frame(ses);
+	enum typeahead_code code;
+
+	assertm(doc_view, "document not formatted");
+	if_assert_failed return 0;
+
+	code = do_typeahead(ses, doc_view, buffer, action);
+	if (code == TYPEAHEAD_MATCHED) {
+		draw_formatted(ses, 0);
+		return 0;
+	}
+
+	return 1;
+}
+
 void
 search_typeahead(struct session *ses, struct document_view *doc_view, int a)
 {
-	ses->kbdprefix.typeahead = mem_calloc(1, MAX_STR_LEN);
+	input_field_line(ses, "#", NULL, typeahead_input_handler);
 	if (!a) draw_formatted(ses, 0);
 }
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.360 2004/01/25 13:17:23 jonas Exp $ */
+/* $Id: view.c,v 1.361 2004/01/28 06:43:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -592,20 +592,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			ses->kbdprefix.rep = 0;
 			ses->kbdprefix.mark = KP_MARK_NOTHING;
 			return 1;
-		} else if (ses->kbdprefix.typeahead) {
-			/* Link typeahead */
-			unsigned char *typeahead = ses->kbdprefix.typeahead;
-			enum typeahead_code code;
-
-			code = do_typeahead(ses, doc_view, typeahead, ev);
-			if (code == TYPEAHEAD_MATCHED) return 1;
-
-			mem_free(ses->kbdprefix.typeahead);
-			ses->kbdprefix.typeahead = NULL;
-
-			if (ev->x == KBD_ESC
-			    || code == TYPEAHEAD_STOP)
-				return 1;
 		}
 
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'

@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.9 2005/01/10 23:54:23 jonas Exp $
+## $Id: Makefile.am,v 1.10 2005/01/29 00:48:08 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -17,6 +17,7 @@ EXTRA_DIST = \
  links_wps.zip \
  wipe-out-ssl \
  wipe-out-ssl.awk \
+ user.css \
  conv/conf-links2elinks.pl \
  conv/mailcap.pl \
  conv/old_to_new_bookmarks.sh \

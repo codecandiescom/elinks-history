@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.57 2003/07/21 06:05:54 jonas Exp $ */
+/* $Id: opttypes.c,v 1.58 2003/07/22 02:43:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,16 +257,15 @@ static unsigned char *
 str_rd(struct option *opt, unsigned char **file)
 {
 	unsigned char *str = *file;
-	unsigned char *str2 = init_str();
-	int str2l = 0;
+	struct string str2;
 
-	if (!str2) return NULL;
+	if (!init_string(&str2)) return NULL;
 
 	/* We're getting used in some parser functions in conf.c as well, and
 	 * that's w/ opt == NULL; so don't rely on opt to point anywhere. */
 	if (!commandline) {
 		if (*str != '"') {
-			mem_free(str2);
+			done_string(&str2);
 			return NULL;
 		}
 		str++;
@@ -284,12 +283,12 @@ str_rd(struct option *opt, unsigned char **file)
 			/* \\ means \. */
 			if (str[1] == '\\') str++;
 		}
-		add_chr_to_str(&str2, &str2l, *str);
+		add_char_to_string(&str2, *str);
 		str++;
 	}
 
 	if (!commandline && !*str) {
-		mem_free(str2);
+		done_string(&str2);
 		*file = str;
 		return NULL;
 	}
@@ -297,12 +296,12 @@ str_rd(struct option *opt, unsigned char **file)
 	str++; /* Skip the quote. */
 	if (!commandline) *file = str;
 
-	if (opt && opt->max && str2l >= opt->max) {
-		mem_free(str2);
+	if (opt && opt->max && str2.length >= opt->max) {
+		done_string(&str2);
 		return NULL;
 	}
 
-	return str2;
+	return str2.source;
 }
 
 static int

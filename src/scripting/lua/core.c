@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.73 2003/10/02 11:09:12 kuser Exp $ */
+/* $Id: core.c,v 1.74 2003/10/02 12:16:04 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -669,6 +669,12 @@ init_lua(void)
 	lua_register(L, "bind_key", l_bind_key);
 	lua_register(L, "edit_bookmark_dialog", l_edit_bookmark_dialog);
 	lua_register(L, "xdialog", l_xdialog);
+	
+	lua_dostring(L, "function set_elinks_home(s) elinks_home = s end");
+	lua_getglobal(L, "set_elinks_home");
+	lua_pushstring(L, elinks_home ? elinks_home : CONFDIR);
+	lua_call(L, 1, 0);
+
 	do_hooks_file(L, CONFDIR, "hooks.lua");
 	if (elinks_home) do_hooks_file(L, elinks_home, "hooks.lua");
 }

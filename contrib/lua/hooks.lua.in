@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.23 2003/09/13 05:03:46 miciah Exp $
+-- $Id: hooks.lua.in,v 1.24 2003/10/02 12:16:04 kuser Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -11,7 +11,7 @@
 
 dofile ("@sysconfdir@/config.lua")
 home_dir = (getenv and (getenv ("HOME") or "/home/"..getenv("USER"))) or "."
-dofile (home_dir.."/.elinks/config.lua")
+dofile (elinks_home.."/config.lua")
 
 ----------------------------------------------------------------------
 --  case-insensitive gsub
@@ -498,7 +498,7 @@ end
 
 if bookmark_addon then
 
-    dofile (home_dir.."/.elinks/bm.lua")
+    dofile (elinks_home.."/bm.lua")
 
     -- Add/change any bookmark options here.
 

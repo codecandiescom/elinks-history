@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.3 2003/01/23 03:13:34 pasky Exp $
+-- $Id: config.lua,v 1.4 2003/10/02 12:16:04 kuser Exp $
 
 -- ** IMPORTANT **
 -- For security reasons, systems functions are not enabled by default.
@@ -23,7 +23,7 @@
 -- need to set the following to your home directory.
 
     home_dir = home_dir or (getenv and getenv ("HOME")) or "/home/MYSELF"
-    hooks_file = home_dir.."/.elinks/hooks.lua"
+    hooks_file = elinks_home.."/hooks.lua"
 
 -- Pausing: When external programs are run, sometimes we need to pause
 -- to see the output.  This is the string we append to the command
@@ -61,7 +61,7 @@
 -- will just enable bookmark_addon variable), uncomment and clone following
 -- line:
 
---  dofile (home_dir.."/.elinks/script.lua")
+--  dofile (elinks_home.."/script.lua")
 
---  dofile (home_dir.."/.elinks/md5checks.lua")
---  dofile (home_dir.."/.elinks/remote.lua")
+--  dofile (elinks_home.."/md5checks.lua")
+--  dofile (elinks_home.."/remote.lua")

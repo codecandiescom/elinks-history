@@ -1,12 +1,12 @@
 -- Bookmark system for Links-Lua.
--- $Id: bm.lua,v 1.1 2002/06/30 22:21:06 pasky Exp $
+-- $Id: bm.lua,v 1.2 2003/10/02 12:16:04 kuser Exp $
 
 -----------------------------------------------------------------------
 --  User options
 ---------------------------------------------------------------------
 
 -- Default location to save and load bookmarks from.
-bm_bookmark_file = home_dir.."/.elinks/bookmark.lst"
+bm_bookmark_file = elinks_home.."/bookmark.lst"
 
 -- Set to non-`nil' to see URLs in the generated page.
 bm_display_urls = nil

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.116 2003/07/03 01:40:44 jonas Exp $ */
+/* $Id: menu.c,v 1.117 2003/07/04 00:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -291,7 +291,7 @@ static struct menu_item no_downloads_menu[] = {
 static void
 downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 {
-	struct download *d;
+	struct file_download *d;
 	struct menu_item *mi = NULL;
 	int n = 0;
 

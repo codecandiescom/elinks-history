@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.70 2003/07/03 01:03:35 jonas Exp $ */
+/* $Id: download.c,v 1.71 2003/07/04 00:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ INIT_LIST_HEAD(downloads);
 int
 are_there_downloads(void)
 {
-	struct download *down;
+	struct file_download *down;
 
 	foreach (down, downloads)
 		if (!down->prog)
@@ -74,7 +74,7 @@ are_there_downloads(void)
 
 
 static struct session *
-get_download_ses(struct download *down)
+get_download_ses(struct file_download *down)
 {
 	struct session *ses;
 
@@ -90,7 +90,7 @@ get_download_ses(struct download *down)
 
 
 static void
-abort_download(struct download *down, int stop)
+abort_download(struct file_download *down, int stop)
 {
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
@@ -117,7 +117,7 @@ abort_download(struct download *down, int stop)
 static void
 kill_downloads_to_file(unsigned char *file)
 {
-	struct download *down;
+	struct file_download *down;
 
 	foreach (down, downloads) {
 		if (!strcmp(down->file, file)) {
@@ -139,7 +139,7 @@ abort_all_downloads(void)
 void
 destroy_downloads(struct session *ses)
 {
-	struct download *d;
+	struct file_download *d;
 
 	foreach (d, downloads) {
 		if (d->ses == ses && d->prog) {
@@ -151,13 +151,13 @@ destroy_downloads(struct session *ses)
 
 
 static void
-undisplay_download(struct download *down)
+undisplay_download(struct file_download *down)
 {
 	if (down->win) delete_window(down->win);
 }
 
 static void
-do_abort_download(struct download *down)
+do_abort_download(struct file_download *down)
 {
 	abort_download(down, 1);
 }
@@ -166,7 +166,7 @@ do_abort_download(struct download *down)
 static int
 dlg_set_notify(struct dialog_data *dlg, struct widget_data *di)
 {
-	struct download *down = dlg->dlg->udata;
+	struct file_download *down = dlg->dlg->udata;
 
 	down->notify = 1;
 	undisplay_download(down);
@@ -194,7 +194,7 @@ dlg_undisplay_download(struct dialog_data *dlg, struct widget_data *di)
 static void
 download_abort_function(struct dialog_data *dlg)
 {
-	struct download *down = dlg->dlg->udata;
+	struct file_download *down = dlg->dlg->udata;
 
 	down->win = NULL;
 }
@@ -203,7 +203,7 @@ download_abort_function(struct dialog_data *dlg)
 static void
 download_window_function(struct dialog_data *dlg)
 {
-	struct download *down = dlg->dlg->udata;
+	struct file_download *down = dlg->dlg->udata;
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;
 	int w, x, y;
@@ -378,11 +378,11 @@ download_window_function(struct dialog_data *dlg)
 
 
 void
-display_download(struct terminal *term, struct download *down,
+display_download(struct terminal *term, struct file_download *down,
 		 struct session *ses)
 {
 	struct dialog *dlg;
-	struct download *dd;
+	struct file_download *dd;
 
 	foreach (dd, downloads)
 		if (dd == down)
@@ -423,7 +423,7 @@ found:
 
 
 static void
-download_data(struct status *status, struct download *down)
+download_data(struct status *status, struct file_download *down)
 {
 	struct cache_entry *ce;
 	struct fragment *frag;
@@ -936,13 +936,13 @@ static void
 common_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct cmdw_hop *cmdw_hop = data;
-	struct download *down = NULL;
+	struct file_download *down = NULL;
 	unsigned char *url = cmdw_hop->ses->dn_url;
 	struct stat buf;
 
 	if (!cmdw_hop->real_file) goto download_error;
 
-	down = mem_calloc(1, sizeof(struct download));
+	down = mem_calloc(1, sizeof(struct file_download));
 	if (!down) goto download_error;
 
 	down->url = stracpy(url);
@@ -1031,12 +1031,12 @@ static void
 continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
-	struct download *down = NULL;
+	struct file_download *down = NULL;
 	unsigned char *url = codw_hop->ses->tq_url;
 
 	if (!codw_hop->real_file) goto cancel;
 
-	down = mem_calloc(1, sizeof(struct download));
+	down = mem_calloc(1, sizeof(struct file_download));
 	if (!down) goto cancel;
 
 	down->url = stracpy(url);

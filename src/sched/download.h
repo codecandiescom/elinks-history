@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.9 2003/07/03 01:03:35 jonas Exp $ */
+/* $Id: download.h,v 1.10 2003/07/04 00:52:32 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -13,8 +13,8 @@
 #include "sched/connection.h"
 #include "util/lists.h"
 
-struct download {
-	LIST_HEAD(struct download);
+struct file_download {
+	LIST_HEAD(struct file_download);
 
 	unsigned char *url;
 	struct status stat;
@@ -41,7 +41,7 @@ int are_there_downloads(void);
 
 void start_download(struct session *, unsigned char *);
 void resume_download(struct session *, unsigned char *);
-void display_download(struct terminal *, struct download *, struct session *);
+void display_download(struct terminal *, struct file_download *, struct session *);
 void create_download_file(struct terminal *, unsigned char *, unsigned char **,
 			  int, int,
 			  void (*)(struct terminal *, int, void *, int),

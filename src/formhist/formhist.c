@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.31 2003/09/01 19:32:27 zas Exp $ */
+/* $Id: formhist.c,v 1.32 2003/09/01 20:32:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,6 +32,30 @@
 INIT_LIST_HEAD(saved_forms);
 
 static int loaded = 0;
+
+static void
+free_form_in_list(struct formhist_data *form)
+{
+	struct submitted_value *sv;
+
+	if (form->url) mem_free(form->url);
+
+	if (form->submit) {
+		foreachback (sv, *form->submit) {
+			if (sv->name) mem_free(sv->name);
+			if (sv->value) mem_free(sv->value);
+		}
+		free_list(*form->submit);
+		mem_free(form->submit);
+	}
+}
+
+static void
+free_form(struct formhist_data *form)
+{
+	free_form_in_list(form);
+	mem_free(form);
+}
 
 static int
 load_saved_forms(void)
@@ -114,27 +138,52 @@ fail:
 	return 0;
 }
 
-unsigned char *
-get_form_history_value(unsigned char *url, unsigned char *name)
+static int
+save_saved_forms(void)
 {
+	struct secure_save_info *ssi;
+	unsigned char *file;
 	struct formhist_data *form;
 
-	if (!loaded && !load_saved_forms()) return NULL;
+	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
+	if (!file) return 0;
+
+	ssi = secure_open(file, 0177);
+	mem_free(file);
+	if (!ssi) return 0;
+
+	/* Write the list to password file */
 
 	foreach (form, saved_forms) {
-		if (!strcmp(form->url, url)) {
-			struct submitted_value *sv;
+		struct submitted_value *sv;
 
-			foreach (sv, *form->submit)
-				if (!strcmp(sv->name, name))
-					return sv->value;
+		secure_fprintf(ssi, "%s\n", form->url);
+
+		foreach (sv, *form->submit) {
+			/* Obfuscate the password. If we do
+			 * $ cat ~/.elinks/password
+			 * we don't want someone behind our back to read our
+			 * password (androids don't count). */
+			if (sv->value && *sv->value) {
+				unsigned char *encvalue = base64_encode(sv->value);
+
+				if (!encvalue) return 0;
+				secure_fprintf(ssi, "%s\t%s\n", sv->name, encvalue);
+				mem_free(encvalue);
+			} else {
+				secure_fprintf(ssi, "%s\t\n", sv->name);
+			}
 		}
+
+		secure_fputc(ssi, '\n');
 	}
 
-	return NULL;
+	return secure_close(ssi);
 }
 
-int
+/* Check whether the form (chain of @submit submitted_values at @url document)
+ * is already present in the form history. */
+static int
 form_already_saved(unsigned char *url, struct list_head *submit)
 {
 	struct formhist_data *form;
@@ -153,7 +202,8 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 
 			if (savedsv == (struct submitted_value *) form->submit)
 				break;
-		
+
+			/* FIXME: order vs comparaison --Zas */
 			if (strcmp(sv->name, savedsv->name) ||
 			    strcmp(sv->value, savedsv->value)) return 0;
 
@@ -168,13 +218,24 @@ form_already_saved(unsigned char *url, struct list_head *submit)
 	return 0;
 }
 
-int
-remember_form(struct formhist_data *form1)
+static int
+add_to_saved_forms(struct formhist_data *form1)
 {
-	struct formhist_data *form, *tmpform;
+	struct formhist_data *form;
 	struct submitted_value *sv;
-	struct secure_save_info *ssi;
-	unsigned char *file;
+
+	/* Check if same url already exists, we only want to save one form per
+	 * action url.
+	 * FIXME: for some yet unknown reason, there's still some duplicate
+	 * url entries in formhist file... --Zas */
+	foreach (form, saved_forms) {
+		if (!strcmp(form->url, form1->url)) {
+			/* Delete entry. */
+			del_from_list(form);
+			free_form(form);
+			break;
+		}
+	}
 
 	form = mem_calloc(1, sizeof(struct formhist_data));
 	if (!form) return 0;
@@ -188,16 +249,8 @@ remember_form(struct formhist_data *form1)
 	init_list(*form);
 	init_list(*form->submit);
 
-	file = straconcat(elinks_home, FORMHIST_FILENAME, NULL);
-	if (!file) goto fail;
-
-	ssi = secure_open(file, 0177);
-	mem_free(file);
-	if (!ssi) goto fail;
-
 	/* We're going to save just <input type="text"> and
 	 * <input type="password">. */
-
 	foreach (sv, *form1->submit) {
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
@@ -223,34 +276,8 @@ remember_form(struct formhist_data *form1)
 	}
 
 	add_to_list(saved_forms, form);
-
-	/* Write the list to password file */
-
-	foreach (tmpform, saved_forms) {
-		secure_fprintf(ssi, "%s\n", tmpform->url);
-
-		foreachback (sv, *tmpform->submit) {
-			unsigned char *encvalue = "";
-
-			/* Obfuscate the password. If we do
-			 * $ cat ~/.elinks/password
-			 * we don't want someone behind our back to read our
-			 * password (androids don't count). */
-			if (sv->value && *sv->value) {
-				encvalue = base64_encode(sv->value);
-				if (!encvalue) return 0;
-			}
-			secure_fprintf(ssi, "%s\t%s\n", sv->name, encvalue);
-
-			if (*encvalue) mem_free(encvalue);
-		}
-
-		secure_fputc(ssi, '\n');
-	}
-
-	secure_close(ssi);
-
 	free_form(form1);
+
 	return 1;
 
 fail:
@@ -258,39 +285,42 @@ fail:
 	return 0;
 }
 
-void
-free_form_in_list(struct formhist_data *form)
+
+/* Appends form data @form1 (url and submitted_value(s)) to the password file.
+ * Returns 1 on success, 0 otherwise. */
+static int
+remember_form(struct formhist_data *form1)
 {
-	struct submitted_value *sv;
-
-	if (form->url) mem_free(form->url);
-
-	if (form->submit) {
-		foreachback (sv, *form->submit) {
-			if (sv->name) mem_free(sv->name);
-			if (sv->value) mem_free(sv->value);
-		}
-		free_list(*form->submit);
-		mem_free(form->submit);
-	}
+	if (!add_to_saved_forms(form1)) return 0;
+	if (!save_saved_forms()) return 0;
+	return 1;
 }
 
-void
-done_form_history(void)
+int
+forget_form(struct formhist_data *form)
+{
+	/* FIXME: write me. */
+	return 0;
+}
+
+unsigned char *
+get_form_history_value(unsigned char *url, unsigned char *name)
 {
 	struct formhist_data *form;
 
-	foreach(form, saved_forms)
-		free_form_in_list(form);
+	if (!loaded && !load_saved_forms()) return NULL;
 
-	free_list(saved_forms);
-}
+	foreach (form, saved_forms) {
+		if (!strcmp(form->url, url)) {
+			struct submitted_value *sv;
 
-void
-free_form(struct formhist_data *form)
-{
-	free_form_in_list(form);
-	mem_free(form);
+			foreach (sv, *form->submit)
+				if (!strcmp(sv->name, name))
+					return sv->value;
+		}
+	}
+
+	return NULL;
 }
 
 struct list_head *
@@ -346,6 +376,17 @@ memorize_form(struct session *ses, struct list_head *submit,
 		N_("No"), free_form, NULL);
 
 	return sb;
+}
+
+void
+done_form_history(void)
+{
+	struct formhist_data *form;
+
+	foreach(form, saved_forms)
+		free_form_in_list(form);
+
+	free_list(saved_forms);
 }
 
 #endif /* FORMS_MEMORY */

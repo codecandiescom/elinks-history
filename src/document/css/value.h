@@ -1,9 +1,9 @@
-/* $Id: value.h,v 1.2 2004/01/17 15:46:31 pasky Exp $ */
+/* $Id: value.h,v 1.3 2004/01/17 16:36:16 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_VALUE_H
 #define EL__DOCUMENT_CSS_VALUE_H
 
-#include "document/css/css.h"
+#include "document/css/property.h"
 
 /* This is interface for the value parser. It is intended to be used only
  * internally inside of the CSS engine. */

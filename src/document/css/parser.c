@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.1 2004/01/17 15:54:42 pasky Exp $ */
+/* $Id: parser.c,v 1.2 2004/01/17 16:36:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,8 +10,8 @@
 
 #include "elinks.h"
 
-#include "document/css/css.h"
 #include "document/css/parser.h"
+#include "document/css/property.h"
 #include "document/css/value.h"
 #include "document/html/parser.h"
 #include "util/color.h"

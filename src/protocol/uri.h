@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.51 2004/03/20 18:55:22 jonas Exp $ */
+/* $Id: uri.h,v 1.52 2004/03/20 21:01:34 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -33,8 +33,9 @@ struct uri {
 
 	struct string user;
 	struct string password;
+	struct string host;
 
-	unsigned char *host;
+	unsigned char *hoststr;
 	int hostlen;
 
 	unsigned char *port;

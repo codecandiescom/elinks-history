@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.121 2004/03/11 04:44:23 witekfl Exp $ */
+/* $Id: cookies.c,v 1.122 2004/03/20 21:01:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,9 +238,9 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	cookie->name = memacpy(str, cstr.nam_end - str);
 	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
-	cookie->server = memacpy(uri->host, uri->hostlen);
+	cookie->server = memacpy(uri->hoststr, uri->hostlen);
 	cookie->domain = parse_http_header_param(str, "domain");
-	if (!cookie->domain) cookie->domain = memacpy(uri->host, uri->hostlen);
+	if (!cookie->domain) cookie->domain = memacpy(uri->hoststr, uri->hostlen);
 
 	/* Now check that all is well */
 	if (!cookie->domain
@@ -342,7 +342,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 #ifdef COOKIES_DEBUG
 	{
-		unsigned char *server = memacpy(uri->host, uri->hostlen);
+		unsigned char *server = memacpy(uri->hoststr, uri->hostlen);
 
 		DBG("Got cookie %s = %s from %s (%s), domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
@@ -352,19 +352,19 @@ set_cookie(struct uri *uri, unsigned char *str)
 	}
 #endif
 
-	if (!check_domain_security(cookie->domain, uri->host, uri->hostlen)) {
+	if (!check_domain_security(cookie->domain, uri->hoststr, uri->hostlen)) {
 #ifdef COOKIES_DEBUG
 		DBG("Domain security violated: %s vs %*s", cookie->domain,
-				uri->host, uri->hostlen);
+				uri->hoststr, uri->hostlen);
 #endif
 		mem_free(cookie->domain);
-		cookie->domain = memacpy(uri->host, uri->hostlen);
+		cookie->domain = memacpy(uri->hoststr, uri->hostlen);
 	}
 
 	cookie->id = cookie_id++;
 
 	foreach (cs, c_servers) {
-		if (strlcasecmp(cs->server, -1, uri->host, uri->hostlen))
+		if (strlcasecmp(cs->server, -1, uri->hoststr, uri->hostlen))
 			continue;
 
 		if (cs->accept)	goto ok;
@@ -602,11 +602,11 @@ send_cookies(struct uri *uri)
 	int datalen = uri->datalen + 1;
 	static struct string header;
 
-	if (!uri->host || !uri->data)
+	if (!uri->hoststr || !uri->data)
 		return NULL;
 
 	foreach (cd, c_domains)
-		if (is_in_domain(cd->domain, uri->host, uri->hostlen)) {
+		if (is_in_domain(cd->domain, uri->hoststr, uri->hostlen)) {
 			data = uri->data - 1;
 			break;
 		}
@@ -616,7 +616,7 @@ send_cookies(struct uri *uri)
 	init_string(&header);
 
 	foreach (c, cookies) {
-		if (!is_in_domain(c->domain, uri->host, uri->hostlen)
+		if (!is_in_domain(c->domain, uri->hoststr, uri->hostlen)
 		    || !is_path_prefix(c->path, data, datalen))
 			continue;
 

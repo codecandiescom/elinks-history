@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.86 2004/03/20 18:55:22 jonas Exp $ */
+/* $Id: uri.c,v 1.87 2004/03/20 21:01:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,12 +175,12 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 			"this, it is a security bug!", addrlen, uristring);
 		if_assert_failed return 0;
 
-		uri->host = lbracket + 1;
+		uri->hoststr = lbracket + 1;
 		uri->hostlen = addrlen;
 	} else
 #endif
 	{
-		uri->host = prefix_end;
+		uri->hoststr = prefix_end;
 		uri->hostlen = host_end - prefix_end;
 	}
 
@@ -283,11 +283,11 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
  	if (wants(URI_HOST) && uri->hostlen) {
 #ifdef IPV6
- 		int brackets = !!memchr(uri->host, ':', uri->hostlen);
+ 		int brackets = !!memchr(uri->hoststr, ':', uri->hostlen);
 
 		if (brackets) add_char_to_string(string, '[');
 #endif
-		add_bytes_to_string(string, uri->host, uri->hostlen);
+		add_bytes_to_string(string, uri->hoststr, uri->hostlen);
 #ifdef IPV6
 		if (brackets) add_char_to_string(string, ']');
 #endif

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.137 2004/03/20 18:32:46 jonas Exp $ */
+/* $Id: connection.c,v 1.138 2004/03/20 21:01:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,7 +143,7 @@ struct host_connection {
 static struct host_connection *
 get_host_connection(struct connection *conn)
 {
-	unsigned char *host = conn->uri.host;
+	unsigned char *host = conn->uri.hoststr;
 	int hostlen = conn->uri.hostlen;
 	struct host_connection *host_conn;
 
@@ -162,11 +162,11 @@ add_host_connection(struct connection *conn)
 {
 	struct host_connection *host_conn = get_host_connection(conn);
 
-	if (!host_conn && conn->uri.host) {
+	if (!host_conn && conn->uri.hoststr) {
 		host_conn = mem_calloc(1, sizeof(struct host_connection) + conn->uri.hostlen);
 		if (!host_conn) return 0;
 
-		memcpy(host_conn->host, conn->uri.host, conn->uri.hostlen);
+		memcpy(host_conn->host, conn->uri.hoststr, conn->uri.hostlen);
 		add_to_list(host_connections, host_conn);
 	}
 	if (host_conn) host_conn->connections++;
@@ -432,11 +432,11 @@ init_keepalive_connection(struct connection *conn, ttime timeout)
 	struct keepalive_connection *keep_conn;
 	struct uri *uri = &conn->uri;
 	unsigned char *host = string_is_empty(&uri->user)
-			    ? uri->host : uri->user.source;
+			    ? uri->hoststr : uri->user.source;
 	int hostlen  = (uri->port ? uri->port + uri->portlen - host
-				  : uri->host + uri->hostlen - host);
+				  : uri->hoststr + uri->hostlen - host);
 
-	assert(uri->host);
+	assert(uri->hoststr);
 	if_assert_failed return NULL;
 
 	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection) + hostlen);
@@ -461,11 +461,11 @@ get_keepalive_connection(struct connection *conn)
 	protocol_handler *handler = get_protocol_handler(uri->protocol);
 	int port = get_uri_port(uri);
 	unsigned char *host = string_is_empty(&uri->user)
-			    ? uri->host : uri->user.source;
+			    ? uri->hoststr : uri->user.source;
 	int hostlen  = (uri->port ? uri->port + uri->portlen - host
-				  : uri->host + uri->hostlen - host);
+				  : uri->hoststr + uri->hostlen - host);
 
-	if (!uri->host) return NULL;
+	if (!uri->hoststr) return NULL;
 
 	foreach (keep_conn, keepalive_connections)
 		if (keep_conn->protocol == handler
@@ -689,7 +689,7 @@ try_to_suspend_connection(struct connection *conn, unsigned char *host)
 		if (get_priority(c) <= priority) return -1;
 		if (c->state == S_WAIT) continue;
 		if (c->uri.post && get_priority(c) < PRI_CANCEL) continue;
-		if (host && strlcmp(host, -1, c->uri.host, c->uri.hostlen)) continue;
+		if (host && strlcmp(host, -1, c->uri.hoststr, c->uri.hostlen)) continue;
 		suspend_connection(c);
 		return 0;
 	}

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.241 2004/03/03 12:00:06 witekfl Exp $ */
+/* $Id: http.c,v 1.242 2004/03/20 21:01:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ check_http_server_bugs(struct uri *uri, struct http_connection_info *info,
 
 	for (s = buggy_servers; *s; s++) {
 		if (strstr(server, *s)) {
-			add_blacklist_entry(uri->host, uri->hostlen, BL_HTTP10);
+			add_blacklist_entry(uri->hoststr, uri->hostlen, BL_HTTP10);
 			break;
 		}
 	}
@@ -303,14 +303,14 @@ static void
 add_uri_host_to_string(struct string *header, struct uri *uri)
 {
 #ifdef IPV6
-	if (memchr(uri->host, ':', uri->hostlen)) {
+	if (memchr(uri->hoststr, ':', uri->hostlen)) {
 		/* IPv6 address */
 		add_char_to_string(header, '[');
-		add_bytes_to_string(header, uri->host, uri->hostlen);
+		add_bytes_to_string(header, uri->hoststr, uri->hostlen);
 		add_char_to_string(header, ']');
 	} else
 #endif
-		add_bytes_to_string(header, uri->host, uri->hostlen);
+		add_bytes_to_string(header, uri->hoststr, uri->hostlen);
 
 	if (uri->portlen) {
 		add_char_to_string(header, ':');
@@ -347,7 +347,7 @@ http_send_header(struct connection *conn)
 	}
 
 	/* Sanity check for a host */
-	if (!uri || !uri->host || !*uri->host || !uri->hostlen) {
+	if (!uri || !uri->hoststr || !*uri->hoststr || !uri->hostlen) {
 		http_end_request(conn, S_BAD_URL, 0);
 		return;
 	}
@@ -360,7 +360,7 @@ http_send_header(struct connection *conn)
 	conn->info = info;
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
-	info->bl_flags = get_blacklist_flags(uri->host, uri->hostlen);
+	info->bl_flags = get_blacklist_flags(uri->hoststr, uri->hostlen);
 
 	if (info->bl_flags & BL_HTTP10
 	    || get_opt_int("protocol.http.bugs.http10")) {
@@ -1093,8 +1093,8 @@ http_got_header(struct connection *conn, struct read_buffer *rb)
 	}
 
 	if (rb->close == 2) {
-		if (!conn->tries && uri->host) {
-			unsigned char *hstr = uri->host;
+		if (!conn->tries && uri->hoststr) {
+			unsigned char *hstr = uri->hoststr;
 			int len = uri->hostlen;
 
 			if (info->bl_flags & BL_NO_CHARSET) {

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.52 2004/03/20 18:32:45 jonas Exp $ */
+/* $Id: user.c,v 1.53 2004/03/20 21:01:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,12 +89,12 @@ subst_cmd(unsigned char *cmd, struct uri *uri, unsigned char *subj)
 				/* It would break a lot of configurations so I
 				 * don't know. --jonas */
 				if (!string_is_empty(&uri->user) && uri->hostlen) {
-					int hostlen = uri->host + uri->hostlen - uri->user.source;
+					int hostlen = uri->hoststr + uri->hostlen - uri->user.source;
 
 					add_shell_safe_to_string(&string, uri->user.source,
 								 hostlen);
-				} else if (uri->host) {
-					add_shell_safe_to_string(&string, uri->host,
+				} else if (uri->hoststr) {
+					add_shell_safe_to_string(&string, uri->hoststr,
 								 uri->hostlen);
 				}
 				break;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.1 2002/08/29 23:58:23 pasky Exp $ */
+/* $Id: globhist.c,v 1.2 2002/08/30 10:58:28 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -56,7 +56,7 @@ void
 delete_global_history_item(struct global_history_item *historyitem)
 {
 	struct listbox_item *item = historyitem->box_item;
-	struct listbox_data *box = item->data;
+	struct listbox_data *box = item->box;
 
 	/* If this happens inside of the box, move top/sel if needed. */
 
@@ -162,8 +162,8 @@ add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 	history_item->box_item->text = ((unsigned char *) history_item->box_item
 					+ sizeof(struct listbox_item));
 	if (!list_empty(gh_box_items))
-		history_item->box_item->data = ((struct listbox_item *)
-						gh_box_items.next)->data;
+		history_item->box_item->box = ((struct listbox_item *)
+						gh_box_items.next)->box;
 	history_item->box_item->udata = (void *) history_item;
 
 	strcpy(history_item->box_item->text, history_item->url);

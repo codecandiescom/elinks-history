@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.11 2002/08/29 22:36:41 pasky Exp $ */
+/* $Id: listbox.h,v 1.12 2002/08/30 10:58:28 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -40,7 +40,7 @@ struct listbox_item {
 	/* Run when the user selects on this item. Returns pointer to the
 	 * listbox_item that should be selected after execution. */
 	int (*on_selected)(struct terminal *, struct listbox_data *, struct listbox_item *);
-	void *data;
+	struct listbox_data *box;
 	void *udata;
 	enum item_free item_free;
 };

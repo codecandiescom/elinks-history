@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.1 2002/08/29 23:58:23 pasky Exp $ */
+/* $Id: dialogs.c,v 1.2 2002/08/30 10:58:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ history_dialog_box_build()
 	memset(box, 0, sizeof(struct listbox_data));
 	box->items = &gh_box_items;
 	foreach (item, *box->items) {
-		item->data = box;
+		item->box = box;
 	}
 
 	return box;
@@ -91,7 +91,7 @@ history_dialog_abort_handler(struct dialog_data *dlg)
 	}
 
 	foreach (litem, *box->items) {
-		litem->data = NULL;
+		litem->box = NULL;
 	}
 
 	mem_free(box);
@@ -232,7 +232,7 @@ history_search_do(struct dialog *d)
 {
 	if (globhist_simple_search(d->items[1].data, d->items[0].data)) {
 		struct listbox_item *item = gh_box_items.next;
-		struct listbox_data *box = (struct listbox_data *) item->data;
+		struct listbox_data *box = item->box;
 
 		if (!list_empty(gh_box_items)) {
 			box->top = item;

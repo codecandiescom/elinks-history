@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.22 2002/08/30 09:26:16 pasky Exp $ */
+/* $Id: dialogs.c,v 1.23 2002/08/30 10:58:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ bookmark_dlg_box_build()
 	memset(box, 0, sizeof(struct listbox_data));
 	box->items = &bookmark_box_items;
 	foreach (item, *box->items) {
-		item->data = box;
+		item->box = box;
 	}
 
 	return box;
@@ -493,7 +493,7 @@ bookmark_add_add(struct dialog *d)
 	struct listbox_data *box;
 
 	bm = add_bookmark(d->items[0].data, d->items[1].data);
-	box = (struct listbox_data *) bm->box_item->data;
+	box = bm->box_item->box;
 	if (box) {
 		box->sel = bm->box_item;
 		box->top = bm->box_item; /* XXX: BLEARGH! */
@@ -511,7 +511,7 @@ bookmark_search_do(struct dialog *d)
 {
 	if (bookmark_simple_search(d->items[1].data, d->items[0].data)) {
 		struct listbox_item *item = bookmark_box_items.next;
-		struct listbox_data *box = (struct listbox_data *) item->data;
+		struct listbox_data *box = item->box;
 
 		if (!list_empty(bookmark_box_items)) {
 			box->top = item;

@@ -1,13 +1,7 @@
-/* $Id: screen.h,v 1.11 2003/07/30 20:58:41 jonas Exp $ */
+/* $Id: screen.h,v 1.12 2003/07/30 21:17:43 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
-
-#define get_screen_char_data(x)	((unsigned char) ((x) & 0xff))
-#define get_screen_char_attr(x)	((unsigned char) ((x) >> 8))
-#define encode_screen_char(x)	((unsigned) (x).data + ((x).attr << 8))
-
-#define SCREEN_ATTR_FRAME	0x80
 
 /* One position in the terminal screen's image. */
 struct screen_char {

@@ -1,11 +1,17 @@
-/* $Id: draw.h,v 1.8 2003/07/30 00:22:41 jonas Exp $ */
+/* $Id: draw.h,v 1.9 2003/07/30 21:17:43 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
 
+#include "terminal/screen.h"
 #include "terminal/terminal.h"
 
-#define ATTR_FRAME      0x8000
+#define ATTR_FRAME 		0x8000
+#define SCREEN_ATTR_FRAME	0x80
+
+#define get_screen_char_data(x)	((unsigned char) ((x) & 0xff))
+#define get_screen_char_attr(x)	((unsigned char) ((x) >> 8))
+#define encode_screen_char(x)	((unsigned) (x).data + ((x).attr << 8))
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */

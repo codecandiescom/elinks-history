@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.130 2004/04/03 13:10:45 jonas Exp $ */
+/* $Id: cache.c,v 1.131 2004/04/03 13:49:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,12 +59,12 @@ do { \
 
 
 static int
-is_entry_used(struct cache_entry *cache)
+is_entry_used(struct cache_entry *cached)
 {
 	struct connection *conn;
 
 	foreach (conn, queue)
-		if (conn->cache == cache)
+		if (conn->cache == cached)
 			return 1;
 
 	return 0;
@@ -75,19 +75,19 @@ long
 cache_info(int type)
 {
 	int i = 0;
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 
 	switch (type) {
 		case INFO_BYTES:
 			return cache_size;
 		case INFO_FILES:
-			foreach (cache, cache_entries) i++;
+			foreach (cached, cache_entries) i++;
 			return i;
 		case INFO_LOCKED:
-			foreach (cache, cache_entries) i += is_object_used(cache);
+			foreach (cached, cache_entries) i += is_object_used(cached);
 			return i;
 		case INFO_LOADING:
-			foreach (cache, cache_entries) i += is_entry_used(cache);
+			foreach (cached, cache_entries) i += is_entry_used(cached);
 			return i;
 		case INFO_LIST:
 			return (long) &cache_entries;
@@ -98,7 +98,7 @@ cache_info(int type)
 struct cache_entry *
 find_in_cache(struct uri *uri)
 {
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 	struct cache_entry *found = NULL;
 	struct uri *proxy_uri = NULL;
 
@@ -115,14 +115,14 @@ find_in_cache(struct uri *uri)
 		if (!proxy_uri) return NULL;
 	}
 
-	foreach (cache, cache_entries) {
-		if (!cache->valid || cache->uri != uri) continue;
+	foreach (cached, cache_entries) {
+		if (!cached->valid || cached->uri != uri) continue;
 
 		/* Move it on the top of the list. */
-		del_from_list(cache);
-		add_to_list(cache_entries, cache);
+		del_from_list(cached);
+		add_to_list(cache_entries, cached);
 
-		found = cache;
+		found = cached;
 		break;
 	}
 
@@ -134,40 +134,40 @@ find_in_cache(struct uri *uri)
 struct cache_entry *
 get_cache_entry(struct uri *uri)
 {
-	struct cache_entry *cache = find_in_cache(uri);
+	struct cache_entry *cached = find_in_cache(uri);
 
-	if (cache) return cache;
+	if (cached) return cached;
 
 	shrink_memory(0);
 
-	cache = mem_calloc(1, sizeof(struct cache_entry));
-	if (!cache) return NULL;
+	cached = mem_calloc(1, sizeof(struct cache_entry));
+	if (!cached) return NULL;
 
-	cache->uri = get_proxied_uri(uri);
-	if (!cache->uri) {
-		mem_free(cache);
+	cached->uri = get_proxied_uri(uri);
+	if (!cached->uri) {
+		mem_free(cached);
 		return NULL;
 	}
 
-	cache->incomplete = 1;
-	cache->valid = 1;
-	init_list(cache->frag);
-	cache->id_tag = id_tag_counter++;
-	object_nolock(cache); /* Debugging purpose. */
+	cached->incomplete = 1;
+	cached->valid = 1;
+	init_list(cached->frag);
+	cached->id_tag = id_tag_counter++;
+	object_nolock(cached); /* Debugging purpose. */
 
-	add_to_list(cache_entries, cache);
+	add_to_list(cache_entries, cached);
 
-	cache->box_item = add_listbox_item(&cache_browser, struri(cache->uri), cache);
+	cached->box_item = add_listbox_item(&cache_browser, struri(cached->uri), cached);
 
-	return cache;
+	return cached;
 }
 
 static inline void
-enlarge_entry(struct cache_entry *cache, int size)
+enlarge_entry(struct cache_entry *cached, int size)
 {
-	cache->data_size += size;
-	assertm(cache->data_size >= 0, "cache entry data_size underflow: %ld", cache->data_size);
-	if_assert_failed { cache->data_size = 0; }
+	cached->data_size += size;
+	assertm(cached->data_size >= 0, "cache entry data_size underflow: %ld", cached->data_size);
+	if_assert_failed { cached->data_size = 0; }
 
 	cache_size += size;
 	assertm(cache_size >= 0, "cache_size underflow: %ld", cache_size);
@@ -184,7 +184,7 @@ enlarge_entry(struct cache_entry *cache, int size)
 /* Note that this function is maybe overcommented, but I'm certainly not
  * unhappy from that. */
 int
-add_fragment(struct cache_entry *cache, int offset,
+add_fragment(struct cache_entry *cached, int offset,
 	     unsigned char *data, int length)
 {
 	struct fragment *f, *nf;
@@ -195,15 +195,15 @@ add_fragment(struct cache_entry *cache, int offset,
 	if (!length) return 0;
 
 	end_offset = offset + length;
-	if (cache->length < end_offset)
-		cache->length = end_offset;
+	if (cached->length < end_offset)
+		cached->length = end_offset;
 
 	/* id_tag marks each entry, and change each time it's modified,
 	 * used in HTML renderer. */
-	cache->id_tag = id_tag_counter++;
+	cached->id_tag = id_tag_counter++;
 
 	/* Possibly insert the new data in the middle of existing fragment. */
-	foreach (f, cache->frag) {
+	foreach (f, cached->frag) {
 		f_end_offset = f->offset + f->length;
 
 		/* No intersection? */
@@ -224,7 +224,7 @@ add_fragment(struct cache_entry *cache, int offset,
 			if (end_offset - f->offset <= f->real_length) {
 				/* We fit here, so let's enlarge it by delta of
 				 * old and new end.. */
-				enlarge_entry(cache, end_offset - f_end_offset);
+				enlarge_entry(cached, end_offset - f_end_offset);
 				/* ..and length is now total length. */
 				f->length = end_offset - f->offset;
 			} else {
@@ -259,14 +259,14 @@ add_fragment(struct cache_entry *cache, int offset,
 	f = nf;
 
 	ret = 1;
-	enlarge_entry(cache, length);
+	enlarge_entry(cached, length);
 
 remove_overlaps:
 	/* Contatenate overlapping fragments. */
 
 	f_end_offset = f->offset + f->length;
 	/* Iterate thru all fragments we still overlap to. */
-	while ((void *) f->next != &cache->frag
+	while ((void *) f->next != &cached->frag
 		&& f_end_offset > f->next->offset) {
 
 		end_offset = f->next->offset + f->next->length;
@@ -291,7 +291,7 @@ remove_overlaps:
 			       f->next->data + f_end_offset - f->next->offset,
 			       end_offset - f_end_offset);
 
-			enlarge_entry(cache, end_offset - f_end_offset);
+			enlarge_entry(cached, end_offset - f_end_offset);
 			f->length = f->real_length = end_offset - f->offset;
 
 ff:;
@@ -306,29 +306,29 @@ ff:;
 
 		/* Remove the fragment, it influences our new one! */
 		nf = f->next;
-		enlarge_entry(cache, -nf->length);
+		enlarge_entry(cached, -nf->length);
 		del_from_list(nf);
 		mem_free(nf);
 	}
 
-	if (trunc) truncate_entry(cache, offset + length, 0);
+	if (trunc) truncate_entry(cached, offset + length, 0);
 
-	dump_frags(cache, "add_fragment");
+	dump_frags(cached, "add_fragment");
 
 	return ret;
 }
 
 void
-defrag_entry(struct cache_entry *cache)
+defrag_entry(struct cache_entry *cached)
 {
 	struct fragment *first_frag, *adj_frag, *frag, *new_frag;
 	int new_frag_len;
 
-	if (list_empty(cache->frag)) return;
-	first_frag = cache->frag.next;
+	if (list_empty(cached->frag)) return;
+	first_frag = cached->frag.next;
 	if (first_frag->offset) return;
 
-	for (adj_frag = first_frag->next; adj_frag != (void *) &cache->frag;
+	for (adj_frag = first_frag->next; adj_frag != (void *) &cached->frag;
 	     adj_frag = adj_frag->next) {
 		long overlay = adj_frag->offset
 				- (adj_frag->prev->offset
@@ -367,41 +367,41 @@ defrag_entry(struct cache_entry *cache)
 		mem_free(tmp);
 	}
 
-	add_to_list(cache->frag, new_frag);
+	add_to_list(cached->frag, new_frag);
 
-	dump_frags(cache, "defrag_entry");
+	dump_frags(cached, "defrag_entry");
 }
 
 void
-truncate_entry(struct cache_entry *cache, int off, int final)
+truncate_entry(struct cache_entry *cached, int off, int final)
 {
 	struct fragment *f;
 
-	if (cache->length > off) {
-		cache->length = off;
-		cache->incomplete = 1;
+	if (cached->length > off) {
+		cached->length = off;
+		cached->incomplete = 1;
 	}
 
-	foreach (f, cache->frag) {
+	foreach (f, cached->frag) {
 		long size = off - f->offset;
 
 		if (size <= 0) {
 
 del:
-			while ((void *)f != &cache->frag) {
+			while ((void *)f != &cached->frag) {
 				struct fragment *tmp = f->next;
 
-				enlarge_entry(cache, -f->length);
+				enlarge_entry(cached, -f->length);
 				del_from_list(f);
 				mem_free(f);
 				f = tmp;
 			}
-			dump_frags(cache, "truncate_entry");
+			dump_frags(cached, "truncate_entry");
 			return;
 		}
 
 		if (f->length > size) {
-			enlarge_entry(cache, -(f->length - size));
+			enlarge_entry(cached, -(f->length - size));
 			f->length = size;
 
 			if (final) {
@@ -422,22 +422,22 @@ del:
 }
 
 void
-free_entry_to(struct cache_entry *cache, int off)
+free_entry_to(struct cache_entry *cached, int off)
 {
 	struct fragment *f;
 
-	foreach (f, cache->frag) {
+	foreach (f, cached->frag) {
 		if (f->offset + f->length <= off) {
 			struct fragment *tmp = f;
 
-			enlarge_entry(cache, -f->length);
+			enlarge_entry(cached, -f->length);
 			f = f->prev;
 			del_from_list(tmp);
 			mem_free(tmp);
 		} else if (f->offset < off) {
 			long size = off - f->offset;
 
-			enlarge_entry(cache, -size);
+			enlarge_entry(cached, -size);
 			f->length -= size;
 			memmove(f->data, f->data + size, f->length);
 			f->offset = off;
@@ -446,50 +446,50 @@ free_entry_to(struct cache_entry *cache, int off)
 }
 
 void
-delete_entry_content(struct cache_entry *cache)
+delete_entry_content(struct cache_entry *cached)
 {
-	enlarge_entry(cache, -cache->data_size);
+	enlarge_entry(cached, -cached->data_size);
 
-	free_list(cache->frag);
-	cache->id_tag = id_tag_counter++;
-	cache->length = 0;
-	cache->incomplete = 1;
+	free_list(cached->frag);
+	cached->id_tag = id_tag_counter++;
+	cached->length = 0;
+	cached->incomplete = 1;
 
-	if (cache->last_modified) {
-		mem_free(cache->last_modified);
-		cache->last_modified = NULL;
+	if (cached->last_modified) {
+		mem_free(cached->last_modified);
+		cached->last_modified = NULL;
 	}
 
-	if (cache->etag) {
-		mem_free(cache->etag);
-		cache->etag = NULL;
+	if (cached->etag) {
+		mem_free(cached->etag);
+		cached->etag = NULL;
 	}
 }
 
 void
-delete_cache_entry(struct cache_entry *cache)
+delete_cache_entry(struct cache_entry *cached)
 {
-	assertm(!is_object_used(cache), "deleting locked cache entry");
-	assertm(!is_entry_used(cache), "deleting loading cache entry");
+	assertm(!is_object_used(cached), "deleting locked cache entry");
+	assertm(!is_entry_used(cached), "deleting loading cache entry");
 
-	delete_entry_content(cache);
-	del_from_list(cache);
+	delete_entry_content(cached);
+	del_from_list(cached);
 
-	if (cache->box_item) done_listbox_item(&cache_browser, cache->box_item);
-	if (cache->uri) done_uri(cache->uri);
-	if (cache->head) mem_free(cache->head);
-	if (cache->last_modified) mem_free(cache->last_modified);
-	if (cache->redirect) done_uri(cache->redirect);
-	if (cache->ssl_info) mem_free(cache->ssl_info);
-	if (cache->encoding_info) mem_free(cache->encoding_info);
-	if (cache->etag) mem_free(cache->etag);
+	if (cached->box_item) done_listbox_item(&cache_browser, cached->box_item);
+	if (cached->uri) done_uri(cached->uri);
+	if (cached->head) mem_free(cached->head);
+	if (cached->last_modified) mem_free(cached->last_modified);
+	if (cached->redirect) done_uri(cached->redirect);
+	if (cached->ssl_info) mem_free(cached->ssl_info);
+	if (cached->encoding_info) mem_free(cached->encoding_info);
+	if (cached->etag) mem_free(cached->etag);
 
-	mem_free(cache);
+	mem_free(cached);
 }
 
 
 struct uri *
-redirect_cache(struct cache_entry *cache, unsigned char *location,
+redirect_cache(struct cache_entry *cached, unsigned char *location,
 	       int get, int incomplete)
 {
 	unsigned char *uristring;
@@ -500,38 +500,38 @@ redirect_cache(struct cache_entry *cache, unsigned char *location,
 	 * special dunno if join_urls() could be made to handle that.
 	 * --jonas */
 	if (location[0] == '/' && location[1] == 0)
-		uristring = straconcat(struri(cache->uri), location, NULL);
+		uristring = straconcat(struri(cached->uri), location, NULL);
 	else
-		uristring = join_urls(struri(cache->uri), location);
+		uristring = join_urls(struri(cached->uri), location);
 	if (!uristring) return NULL;
 
 	/* According to RFC2068 POST must not be redirected to GET,
 	 * but some BUGGY message boards rely on it :-( */
-	if (cache->uri
-	    && cache->uri->post
-	    && !cache->redirect_get
+	if (cached->uri
+	    && cached->uri->post
+	    && !cached->redirect_get
 	    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
 		/* XXX: Add POST_CHAR and post data assuming URI components
 		 * belong to one string. */
-		add_to_strn(&uristring, cache->uri->post - 1);
+		add_to_strn(&uristring, cached->uri->post - 1);
 	}
 
-	if (cache->redirect) mem_free(cache->redirect);
+	if (cached->redirect) mem_free(cached->redirect);
 
-	cache->redirect = get_uri(uristring, -1);
-	cache->redirect_get = get;
-	if (incomplete >= 0) cache->incomplete = incomplete;
+	cached->redirect = get_uri(uristring, -1);
+	cached->redirect_get = get;
+	if (incomplete >= 0) cached->incomplete = incomplete;
 
 	mem_free(uristring);
 
-	return cache->redirect;
+	return cached->redirect;
 }
 
 
 void
 garbage_collection(int whole)
 {
-	struct cache_entry *cache;
+	struct cache_entry *cached;
 	/* We recompute cache_size when scanning cache entries, to ensure
 	 * consistency. */
 	long old_cache_size = 0;
@@ -567,13 +567,13 @@ garbage_collection(int whole)
 	 * will work only with the unused entries from then on. Also ensure
 	 * that @cache_size is in sync. */
 
-	foreach (cache, cache_entries) {
-		old_cache_size += cache->data_size;
+	foreach (cached, cache_entries) {
+		old_cache_size += cached->data_size;
 
-		if (!is_object_used(cache) && !is_entry_used(cache))
+		if (!is_object_used(cached) && !is_entry_used(cached))
 			continue;
 
-		new_cache_size -= cache->data_size;
+		new_cache_size -= cached->data_size;
 
 		assertm(new_cache_size >= 0,
 				"cache_size (%ld) underflow: %ld",
@@ -593,23 +593,23 @@ garbage_collection(int whole)
 	 * Mark potential targets for destruction, from the oldest to the
 	 * newest. */
 
-	foreachback (cache, cache_entries) {
+	foreachback (cached, cache_entries) {
 		/* We would have shrinked enough already? */
 		if (!whole && new_cache_size <= gc_cache_size)
 			goto shrinked_enough;
 
 		/* Skip used cache entries. */
-		if (is_object_used(cache) || is_entry_used(cache)) {
+		if (is_object_used(cached) || is_entry_used(cached)) {
 #ifdef DEBUG_CACHE
 			obstacle_entry = 1;
 #endif
-			cache->gc_target = 0;
+			cached->gc_target = 0;
 			continue;
 		}
 
 		/* Mark me for destruction, sir. */
-		cache->gc_target = 1;
-		new_cache_size -= cache->data_size;
+		cached->gc_target = 1;
+		new_cache_size -= cached->data_size;
 
 		assertm(new_cache_size >= 0,
 			"cache_size (%ld) underflow: %ld",
@@ -627,11 +627,11 @@ shrinked_enough:
 
 
 	/* Now turn around and start walking in the opposite direction. */
-	cache = cache->next;
+	cached = cached->next;
 
 	/* Something is strange when we decided all is ok before dropping any
 	 * cache entry. */
-	if ((void *) cache == &cache_entries) return;
+	if ((void *) cached == &cache_entries) return;
 
 
 	if (!whole) {
@@ -647,7 +647,7 @@ shrinked_enough:
 		 * be enough to free the huge entry. This actually fixes that
 		 * situation. */
 
-		for (entry = cache; (void *) entry != &cache_entries; entry = entry->next) {
+		for (entry = cached; (void *) entry != &cache_entries; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
 			if (newer_cache_size > gc_cache_size)
@@ -662,10 +662,10 @@ shrinked_enough:
 	/* Scanning cache, pass #4:
 	 * Destroy the marked entries. So sad, but that's life, bro'. */
 
-	for (; (void *) cache != &cache_entries; ) {
-		cache = cache->next;
-		if (cache->prev->gc_target)
-			delete_cache_entry(cache->prev);
+	for (; (void *) cached != &cache_entries; ) {
+		cached = cached->next;
+		if (cached->prev->gc_target)
+			delete_cache_entry(cached->prev);
 	}
 
 

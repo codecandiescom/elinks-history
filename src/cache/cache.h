@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.79 2004/04/03 12:33:52 jonas Exp $ */
+/* $Id: cache.h,v 1.80 2004/04/03 13:49:06 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -105,7 +105,7 @@ void delete_cache_entry(struct cache_entry *);
  * Returns the URI being redirected to or NULL if allocation failed.
  */
 struct uri *
-redirect_cache(struct cache_entry *cache_entry, unsigned char *location,
+redirect_cache(struct cache_entry *cached, unsigned char *location,
 		int get, int incomplete);
 
 /* The garbage collector trigger. If @whole is zero, remove unused cache

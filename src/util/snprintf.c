@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.13 2003/06/07 10:21:37 pasky Exp $ */
+/* $Id: snprintf.c,v 1.14 2003/06/07 10:24:04 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -92,7 +92,7 @@
 void dummy_snprintf(void);
 void dummy_snprintf(void) {}
 
-#else
+#else /* defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) && defined(HAVE_C99_VSNPRINTF) */
 
 #ifdef HAVE_LONG_DOUBLE
 #define LDOUBLE long double
@@ -793,6 +793,7 @@ vsnprintf(char *str, size_t count, const char *fmt, va_list args)
 }
 #endif
 
+
 /* yes this really must be a ||. Don't muck wiith this (tridge)
  *
  * The logic for these two is that we need our own definition if the
@@ -816,7 +817,8 @@ snprintf(char *str, size_t count, const char *fmt, ...)
 }
 #endif
 
-#endif
+#endif /* defined(HAVE_SNPRINTF) && defined(HAVE_VSNPRINTF) && defined(HAVE_C99_VSNPRINTF) */
+
 
 #ifndef HAVE_VASPRINTF
 int

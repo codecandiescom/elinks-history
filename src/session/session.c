@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.451 2004/06/10 18:15:52 jonas Exp $ */
+/* $Id: session.c,v 1.452 2004/06/10 18:18:53 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -734,7 +734,7 @@ handle_remote_session(struct session *ses, enum remote_session_flags remote,
 		/* FIXME: It is quite rude because we just take the first
 		 * possibility and should maybe make it possible to specify
 		 * new-screen etc via -remote "openURL(..., new-*)" --jonas */
-		if (can_open_in_new(ses->tab->term))
+		if (!can_open_in_new(ses->tab->term))
 			return remote;
 
 		open_uri_in_new_window(ses, uri, ses->tab->term->environment);

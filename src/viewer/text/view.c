@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.14 2003/01/22 00:49:19 pasky Exp $ */
+/* $Id: view.c,v 1.15 2003/01/23 02:47:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3273,7 +3273,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 }
 
 void
-save_formatted_finish(struct terminal *term, int h, void *data)
+save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 {
 	struct f_data *f_data = data;
 

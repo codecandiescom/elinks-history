@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.186 2003/01/19 14:13:12 pasky Exp $ */
+/* $Id: options.c,v 1.187 2003/01/23 02:47:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1254,11 +1254,13 @@ register_options()
 		N_("Set the timestamp of each downloaded file to the timestamp\n"
 		"stored on the server."));
 
+	/* Does automatic resuming make sense as an option? */
 	add_opt_int("document.download", N_("Prevent overwriting"),
-		"overwrite", 0, 0, 1, 0,
+		"overwrite", 0, 0, 2, 2,
 		N_("Prevent overwriting the local files:\n"
 		"0 is files will silently be overwritten.\n"
-		"1 is add a suffix .{number} (for example '.1') to the name."));
+		"1 is add a suffix .{number} (for example '.1') to the name.\n"
+		"2 is ask the user."));
 
 	add_opt_int("document.download", N_("Notify download completion by bell"),
 		"notify_bell", 0, 0, 2, 0,

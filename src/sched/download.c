@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.5 2003/01/23 02:36:50 pasky Exp $ */
+/* $Id: download.c,v 1.6 2003/01/23 02:47:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,11 +597,50 @@ end_store:
 }
 
 
+/* XXX: We assume that resume is everytime zero in lun's callbacks. */
+struct lun_hop {
+	struct terminal *term;
+	unsigned char *ofile, *file;
+
+	void (*callback)(struct terminal *, unsigned char *, void *, int);
+	void *data;
+};
+
 static void
-lookup_unique_name(struct terminal *term, unsigned char *file, int resume,
-		void (*callback)(struct terminal *, unsigned char *, void *),
+lun_alternate(struct lun_hop *lun_hop)
+{
+	lun_hop->callback(lun_hop->term, lun_hop->file, lun_hop->data, 0);
+	mem_free(lun_hop->ofile);
+	mem_free(lun_hop);
+}
+
+static void
+lun_overwrite(struct lun_hop *lun_hop)
+{
+	lun_hop->callback(lun_hop->term, lun_hop->ofile, lun_hop->data, 0);
+	mem_free(lun_hop->file);
+	mem_free(lun_hop);
+}
+
+static void
+lun_resume(struct lun_hop *lun_hop)
+{
+	lun_hop->callback(lun_hop->term, lun_hop->ofile, lun_hop->data, 1);
+	mem_free(lun_hop->file);
+	mem_free(lun_hop);
+}
+
+static void
+lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
+		void (*callback)(struct terminal *, unsigned char *, void *, int),
 		void *data)
 {
+	struct lun_hop *lun_hop;
+	/* !overwrite means always silently overwrite, which may be admitelly
+	 * indeed a little confusing ;-) */
+	int overwrite = get_opt_int("document.download.overwrite");
+	unsigned char *file;
+
 	/* TODO: If the file already exists, possibly:
 	 * * inform the user
 	 * * allow to resume the download
@@ -609,47 +648,74 @@ lookup_unique_name(struct terminal *term, unsigned char *file, int resume,
 	 * * allow to rename the old file
 	 * --pasky */
 
-	if (!get_opt_int("document.download.overwrite") || resume) {
+	if (!overwrite || resume) {
 		/* Nothing special to do... */
-		file = expand_tilde(file);
-		callback(term, file, data);
+		file = expand_tilde(ofile);
+		callback(term, file, data, resume);
 		return;
 	}
 
 	/* expand_tilde() lives inside! */
-	file = get_unique_name(file);
+	file = get_unique_name(ofile);
 
-	callback(term, file, data);
+	if (!file || !strcmp(ofile, file) || overwrite == 1) {
+		/* Still nothing special to do... */
+		callback(term, file, data, 0);
+		return;
+	}
+
+	/* overwrite == 2 (ask) and file != ofile (=> original file already
+	 * exists) */
+
+	lun_hop = mem_calloc(1, sizeof(struct lun_hop));
+	if (!lun_hop) {
+		mem_free(file);
+		callback(term, NULL, data, 0);
+		return;
+	}
+	lun_hop->term = term;
+	lun_hop->ofile = stracpy(ofile);
+	lun_hop->file = file;
+	lun_hop->callback = callback;
+	lun_hop->data = data;
+
+	msg_box(term, NULL,
+		N_("File exists"), AL_CENTER | AL_EXTD_TEXT,
+		N_("This file already exists:\n"), ofile, "\n\n",
+		N_("The alternative filename is:\n"), file, NULL,
+		lun_hop, 3,
+		N_("Save under the alternative name"), lun_alternate, B_ENTER,
+		N_("Overwrite the original file"), lun_overwrite, 0,
+		N_("Resume download of the original file"), lun_resume, B_ESC);
 }
 
 
-static void create_download_file_do(struct terminal *, unsigned char *, void *);
+static void create_download_file_do(struct terminal *, unsigned char *, void *, int);
 
 struct cdf_hop {
 	unsigned char **real_file;
-	int safe, resume;
+	int safe;
 
-	void (*callback)(struct terminal *, int, void *);
+	void (*callback)(struct terminal *, int, void *, int);
 	void *data;
 };
 
 void
 create_download_file(struct terminal *term, unsigned char *fi,
 		     unsigned char **real_file, int safe, int resume,
-		     void (*callback)(struct terminal *, int, void *),
+		     void (*callback)(struct terminal *, int, void *, int),
 		     void *data)
 {
 	struct cdf_hop *cdf_hop = mem_calloc(1, sizeof(struct cdf_hop));
 	unsigned char *wd;
 
 	if (!cdf_hop) {
-		callback(term, -1, data);
+		callback(term, -1, data, 0);
 		return;
 	}
 
 	cdf_hop->real_file = real_file;
 	cdf_hop->safe = safe;
-	cdf_hop->resume = resume;
 	cdf_hop->callback = callback;
 	cdf_hop->data = data;
 
@@ -667,7 +733,8 @@ create_download_file(struct terminal *term, unsigned char *fi,
 }
 
 static void
-create_download_file_do(struct terminal *term, unsigned char *file, void *data)
+create_download_file_do(struct terminal *term, unsigned char *file, void *data,
+			int resume)
 {
 	struct cdf_hop *cdf_hop = data;
 	unsigned char *download_dir = get_opt_str("document.download.directory");
@@ -686,7 +753,7 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data)
 	wd = get_cwd();
 	set_cwd(term->cwd);
 
-	h = open(file, O_CREAT | O_WRONLY | (sf && !cdf_hop->resume ? O_EXCL : 0),
+	h = open(file, O_CREAT | O_WRONLY | (sf && !resume ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
 	saved_errno = errno; /* Saved in case of ... --Zas */
 
@@ -731,7 +798,7 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data)
 		mem_free(file);
 
 finish:
-	cdf_hop->callback(term, h, cdf_hop->data);
+	cdf_hop->callback(term, h, cdf_hop->data, resume);
 	mem_free(cdf_hop);
 	return;
 }
@@ -813,12 +880,11 @@ subst_file(unsigned char *prog, unsigned char *file)
 }
 
 
-static void common_download_do(struct terminal *, int, void *);
+static void common_download_do(struct terminal *, int, void *, int);
 
 struct cmdw_hop {
 	struct session *ses;
 	unsigned char *real_file;
-	int resume;
 };
 
 static void
@@ -831,7 +897,6 @@ common_download(struct session *ses, unsigned char *file, int resume)
 	cmdw_hop = mem_calloc(1, sizeof(struct cmdw_hop));
 	if (!cmdw_hop) return;
 	cmdw_hop->ses = ses;
-	cmdw_hop->resume = resume;
 
 	kill_downloads_to_file(file);
 
@@ -840,7 +905,7 @@ common_download(struct session *ses, unsigned char *file, int resume)
 }
 
 static void
-common_download_do(struct terminal *term, int fd, void *data)
+common_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct cmdw_hop *cmdw_hop = data;
 	struct download *down = NULL;
@@ -866,7 +931,7 @@ common_download_do(struct terminal *term, int fd, void *data)
 
 	add_to_list(downloads, down);
 	load_url(url, cmdw_hop->ses->ref_url, &down->stat, PRI_DOWNLOAD, NC_CACHE,
-		 (cmdw_hop->resume ? down->last_pos : 0));
+		 (resume ? down->last_pos : 0));
 	display_download(cmdw_hop->ses->term, down, cmdw_hop->ses);
 
 	mem_free(cmdw_hop);
@@ -897,7 +962,7 @@ void tp_cancel(struct session *);
 void tp_free(struct session *);
 
 
-static void continue_download_do(struct terminal *, int, void *);
+static void continue_download_do(struct terminal *, int, void *, int);
 
 struct codw_hop {
 	struct session *ses;
@@ -933,7 +998,7 @@ continue_download(struct session *ses, unsigned char *file)
 }
 
 static void
-continue_download_do(struct terminal *term, int fd, void *data)
+continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
 	struct download *down = NULL;

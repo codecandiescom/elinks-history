@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.592 2004/09/22 22:06:23 pasky Exp $ */
+/* $Id: view.c,v 1.593 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,6 @@
 #include "document/options.h"
 #include "document/renderer.h"
 #include "document/view.h"
-#include "ecmascript/ecmascript.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "osdep/osdep.h"
@@ -73,15 +72,12 @@ detach_formatted(struct document_view *doc_view)
 		release_document(doc_view->document);
 		doc_view->document = NULL;
 	}
-	doc_view->vs = NULL;
+	if (doc_view->vs) {
+		doc_view->vs->doc_view = NULL;
+		doc_view->vs = NULL;
+	}
 	if (doc_view->link_bg) free_link(doc_view);
 	mem_free_set(&doc_view->name, NULL);
-#ifdef CONFIG_ECMASCRIPT
-	if (doc_view->ecmascript) {
-		ecmascript_put_interpreter(doc_view->ecmascript);
-		doc_view->ecmascript = NULL;
-	}
-#endif
 }
 
 /* type == 0 -> PAGE_DOWN

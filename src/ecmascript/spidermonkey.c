@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.45 2004/09/26 00:30:15 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.46 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@
 #include "terminal/terminal.h"
 #include "util/conv.h"
 #include "util/string.h"
+#include "viewer/text/vs.h"
 
 
 /*** Global methods */
@@ -232,7 +233,8 @@ find_child_frame(struct document_view *doc_view, struct frame_desc *tframe)
 static JSBool
 window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, obj);
+	struct document_view *doc_view = vs->doc_view;
 
 	VALUE_TO_JSVAL_START;
 	/* No need for special location measurements - when location is
@@ -293,8 +295,8 @@ found_parent:
 	{
 		struct document_view *top_view = doc_view->session->doc_view;
 
-		assert(top_view && top_view->ecmascript);
-		p.object=JS_GetGlobalObject(top_view->ecmascript->backend_data);
+		assert(top_view && top_view->vs && top_view->vs->ecmascript);
+		p.object=JS_GetGlobalObject(top_view->vs->ecmascript->backend_data);
 		prop_type = JSPT_OBJECT;
 		break;
 	}
@@ -311,7 +313,8 @@ static void location_goto(struct document_view *doc_view, unsigned char *url);
 static JSBool
 window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, obj);
+	struct document_view *doc_view = vs->doc_view;
 
 	JSVAL_TO_VALUE_START;
 	if (JSVAL_IS_STRING(id)) {
@@ -348,7 +351,8 @@ static const JSFunctionSpec window_funcs[] = {
 static JSBool
 window_alert(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, obj);
+	struct document_view *doc_view = vs->doc_view;
 	union jsval_union v;
 	enum prop_type prop_type;
 	union prop_union p;
@@ -390,7 +394,8 @@ delayed_open(void *data)
 static JSBool
 window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 {
-	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
+	struct view_state *vs = JS_GetPrivate(ctx, obj);
+	struct document_view *doc_view = vs->doc_view;
 	struct session *ses = doc_view->session;
 	union jsval_union v;
 	unsigned char *url;
@@ -474,7 +479,8 @@ static JSBool
 document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 	struct session *ses = doc_view->session;
 
@@ -523,7 +529,8 @@ static JSBool
 document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
 
 	JSVAL_TO_VALUE_START;
@@ -563,8 +570,7 @@ static JSBool
 location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
-	struct view_state *vs = &cur_loc(doc_view->session)->vs;
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
 
 	VALUE_TO_JSVAL_START;
 	if (!JSVAL_IS_INT(id))
@@ -584,7 +590,8 @@ static JSBool
 location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
 
 	JSVAL_TO_VALUE_START;
 	if (!JSVAL_IS_INT(id))
@@ -664,7 +671,8 @@ static JSBool
 unibar_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
 	struct session_status *status = &doc_view->session->status;
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
 
@@ -698,7 +706,8 @@ static JSBool
 unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
-	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
+	struct view_state *vs = JS_GetPrivate(ctx, parent);
+	struct document_view *doc_view = vs->doc_view;
 	struct session_status *status = &doc_view->session->status;
 	unsigned char *bar = JS_GetPrivate(ctx, obj);
 
@@ -737,10 +746,10 @@ static void
 error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
-	struct terminal *term = interpreter->doc_view->session->tab->term;
+	struct terminal *term = interpreter->vs->doc_view->session->tab->term;
 
 #ifdef CONFIG_LEDS
-	interpreter->doc_view->session->status.ecmascript_led->value = 'J';
+	interpreter->vs->doc_view->session->status.ecmascript_led->value = 'J';
 #endif
 
 	if (!get_opt_bool("ecmascript.error_reporting"))
@@ -774,7 +783,7 @@ safeguard(JSContext *ctx, JSScript *script)
 
 	if (time(NULL) - interpreter->exec_start > 5) {
 		/* A killer script! Alert! */
-		msg_box(interpreter->doc_view->session->tab->term, NULL, 0,
+		msg_box(interpreter->vs->doc_view->session->tab->term, NULL, 0,
 			N_("JavaScript Emergency"), ALIGN_CENTER,
 			N_("A script embedded in the current document was running "
 			"for more than 5 seconds in line. This probably means "
@@ -834,7 +843,7 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 	JS_InitStandardClasses(ctx, window_obj);
 	JS_DefineProperties(ctx, window_obj, (JSPropertySpec *) window_props);
 	JS_DefineFunctions(ctx, window_obj, (JSFunctionSpec *) window_funcs);
-	JS_SetPrivate(ctx, window_obj, interpreter->doc_view);
+	JS_SetPrivate(ctx, window_obj, interpreter->vs);
 
 	document_obj = JS_InitClass(ctx, window_obj, NULL,
 				    (JSClass *) &document_class, NULL, 0,

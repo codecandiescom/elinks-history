@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.123 2004/09/14 20:24:42 pasky Exp $ */
+/* $Id: task.c,v 1.124 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,6 +229,9 @@ x:
 		vs = &frame->vs;
 		done_uri(vs->uri);
 		vs->uri = get_uri_reference(ses->loading_uri);
+#ifdef CONFIG_ECMASCRIPT
+		vs->ecmascript_fragile = 1;
+#endif
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
 			init_vs(vs, ses->loading_uri, vs->plain);

@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.41 2004/09/24 21:21:51 pasky Exp $ */
+/* $Id: vs.c,v 1.42 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "document/document.h"
 #include "document/view.h"
+#include "ecmascript/ecmascript.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "util/memory.h"
@@ -28,9 +29,10 @@ init_vs(struct view_state *vs, struct uri *uri, int plain)
 	memset(vs, 0, sizeof(struct view_state));
 	vs->current_link = -1;
 	vs->plain = plain;
-	vs->uri = get_uri_reference(uri);
+	vs->uri = uri ? get_uri_reference(uri) : NULL;
 	vs->did_fragment = !uri->fragmentlen;
 #ifdef CONFIG_ECMASCRIPT
+	vs->ecmascript = ecmascript_get_interpreter(vs);
 	init_list(vs->onload_snippets);
 #endif
 }
@@ -46,6 +48,8 @@ destroy_vs(struct view_state *vs)
 	if (vs->uri) done_uri(vs->uri);
 	mem_free_if(vs->form_info);
 #ifdef CONFIG_ECMASCRIPT
+	if (vs->ecmascript)
+		ecmascript_put_interpreter(vs->ecmascript);
 	free_string_list(&vs->onload_snippets);
 #endif
 }
@@ -53,23 +57,10 @@ destroy_vs(struct view_state *vs)
 void
 copy_vs(struct view_state *dst, struct view_state *src)
 {
-#ifdef CONFIG_ECMASCRIPT
-	struct string_list_item *snippet;
-#endif
-
 	memcpy(dst, src, sizeof(struct view_state));
 
-#ifdef CONFIG_ECMASCRIPT
-	init_list(dst->onload_snippets);
-	dst->current_onload_snippet = NULL;
-	foreach (snippet, src->onload_snippets) {
-		add_to_string_list(&dst->onload_snippets,
-		                   snippet->string.source,
-		                   snippet->string.length);
-		if (snippet == src->current_onload_snippet)
-			dst->current_onload_snippet = dst->onload_snippets.prev;
-	}
-#endif
+	/* We do not copy ecmascript stuff around since it's specific for
+	 * a single location, offsprings (followups and so) nedd their own. */
 
 	dst->uri = get_uri_reference(src->uri);
 	/* Redo fragment if there is one? */

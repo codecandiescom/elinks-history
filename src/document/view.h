@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.24 2004/09/23 00:07:21 pasky Exp $ */
+/* $Id: view.h,v 1.25 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_VIEW_H
 #define EL__DOCUMENT_VIEW_H
@@ -9,7 +9,6 @@
 
 
 struct document;
-struct ecmascript_interpreter;
 struct view_state;
 
 struct link_bg {
@@ -27,9 +26,6 @@ struct document_view {
 	struct document *document;
 	struct view_state *vs;
 	struct link_bg *link_bg;
-#ifdef CONFIG_ECMASCRIPT
-	struct ecmascript_interpreter *ecmascript;
-#endif
 
 	int link_bg_n;
 	struct box box;	/* pos and size of window */

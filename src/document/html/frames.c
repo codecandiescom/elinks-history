@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.87 2004/09/25 19:56:37 pasky Exp $ */
+/* $Id: frames.c,v 1.88 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,6 @@
 #include "document/options.h"
 #include "document/renderer.h"
 #include "document/view.h"
-#include "ecmascript/ecmascript.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "terminal/draw.h"
@@ -160,10 +159,6 @@ find_fd(struct session *ses, unsigned char *name,
 	doc_view->search_word = &ses->search_word;
 	set_box(&doc_view->box, x, y, 0, 0);
 
-#ifdef CONFIG_ECMASCRIPT
-	doc_view->ecmascript = ecmascript_get_interpreter(doc_view);
-#endif
-
 	add_frame_to_list(ses, doc_view);
 
 	return doc_view;
@@ -196,6 +191,9 @@ repeat:
 		frame->redirect_cnt++;
 		done_uri(vs->uri);
 		vs->uri = get_uri_reference(cached->redirect);
+#ifdef CONFIG_ECMASCRIPT
+		vs->ecmascript_fragile = 1;
+#endif
 		o->plain = plain;
 		goto repeat;
 	}

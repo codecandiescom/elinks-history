@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.87 2004/09/25 20:02:55 jonas Exp $ */
+/* $Id: renderer.c,v 1.88 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,8 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	struct string_list_item *doc_current = NULL;
 
 #ifdef CONFIG_LEDS
-	if (!*current && interpreter->doc_view->session)
-		interpreter->doc_view->session->status.ecmascript_led->value = '-';
+	if (!*current && interpreter->vs->doc_view->session)
+		interpreter->vs->doc_view->session->status.ecmascript_led->value = '-';
 #endif
 
 	if (list_empty(*doc_snippets))
@@ -154,9 +154,6 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		struct document_options *options)
 {
 	unsigned char *name;
-#ifdef CONFIG_ECMASCRIPT
-	struct ecmascript_interpreter *interpreter;
-#endif
 	struct document *document;
 	struct cache_entry *cached;
 
@@ -166,26 +163,17 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	name = doc_view->name;
 	doc_view->name = NULL;
 
-	/* We do the @interpreter dances to preserve the interpreter over
-	 * gradual rerenderings of the document. And most importantly we need
-	 * to always stay in sync with onload_snippets.
-	 * And if this isn't a gradual rerendering, we've already put the
-	 * interpreter in render_document_frames(). */
-#ifdef CONFIG_ECMASCRIPT
-	interpreter = doc_view->ecmascript;
-	doc_view->ecmascript = NULL;
-#endif
 	detach_formatted(doc_view);
-#ifdef CONFIG_ECMASCRIPT
-	doc_view->ecmascript = interpreter;
-#endif
 
 	doc_view->name = name;
 	doc_view->vs = vs;
 	doc_view->last_x = doc_view->last_y = -1;
+	assert(!vs->doc_view);
+	vs->doc_view = doc_view;
+
 #ifdef CONFIG_ECMASCRIPT
-	if (!doc_view->ecmascript)
-		doc_view->ecmascript = ecmascript_get_interpreter(doc_view);
+	if (vs->ecmascript_fragile)
+		ecmascript_reset_state(vs);
 #endif
 
 	cached = find_in_cache(vs->uri);
@@ -224,7 +212,8 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 #endif
 	}
 #ifdef CONFIG_ECMASCRIPT
-	process_snippets(doc_view->ecmascript,
+	assert(vs->ecmascript);
+	process_snippets(vs->ecmascript,
 	                 &document->onload_snippets,
 	                 &vs->onload_snippets,
 	                 &vs->current_onload_snippet);
@@ -280,14 +269,6 @@ render_document_frames(struct session *ses, int no_cache)
 	doc_opts.no_cache = no_cache == 1;
 
 	if (vs) {
-#ifdef CONFIG_ECMASCRIPT
-		if (no_cache != 2) {
-			/* This means we aren't doing gradual re-rendering,
-			 * thus don't need to preserve the online snippets
-			 * evaluation progress status. */
-			ecmascript_cleanup_state(ses->doc_view, vs);
-		}
-#endif
 		if (vs->plain < 0) vs->plain = 0;
 		doc_opts.plain = vs->plain;
 		doc_opts.wrap = vs->wrap;

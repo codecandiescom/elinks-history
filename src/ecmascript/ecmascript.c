@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.17 2004/09/25 15:40:21 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.18 2004/09/26 09:56:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,17 +74,17 @@ ecmascript_done(struct module *module)
 
 
 struct ecmascript_interpreter *
-ecmascript_get_interpreter(struct document_view *doc_view)
+ecmascript_get_interpreter(struct view_state *vs)
 {
 	struct ecmascript_interpreter *interpreter;
 
-	assert(doc_view);
+	assert(vs);
 
 	interpreter = mem_calloc(1, sizeof(struct ecmascript_interpreter));
 	if (!interpreter)
 		return NULL;
 
-	interpreter->doc_view = doc_view;
+	interpreter->vs = vs;
 	spidermonkey_get_interpreter(interpreter);
 
 	return interpreter;
@@ -99,12 +99,12 @@ ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter)
 }
 
 void
-ecmascript_cleanup_state(struct document_view *doc_view, struct view_state *vs)
+ecmascript_reset_state(struct view_state *vs)
 {
-	if (doc_view->ecmascript) {
-		ecmascript_put_interpreter(doc_view->ecmascript);
-		doc_view->ecmascript = NULL;
-	}
+	vs->ecmascript_fragile = 0;
+	if (vs->ecmascript)
+		ecmascript_put_interpreter(vs->ecmascript);
+	vs->ecmascript = ecmascript_get_interpreter(vs);
 	free_string_list(&vs->onload_snippets);
 	vs->current_onload_snippet = NULL;
 }
@@ -140,10 +140,11 @@ ecmascript_protocol_handler(struct session *ses, struct uri *uri)
 	unsigned char *redirect_url, *redirect_abs_url;
 	struct uri *redirect_uri;
 
-	if (!doc_view)
+	if (!doc_view) /* Blank initial document. TODO: Start at about:blank? */
 		return;
+	assert(doc_view->vs);
 
-	redirect_url = ecmascript_eval_stringback(doc_view->ecmascript,
+	redirect_url = ecmascript_eval_stringback(doc_view->vs->ecmascript,
 		&current_url);
 	if (!redirect_url)
 		return;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.561 2004/09/26 00:28:24 pasky Exp $ */
+/* $Id: session.c,v 1.562 2004/09/26 09:56:55 pasky Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -29,6 +29,7 @@
 #include "document/html/renderer.h"
 #include "document/refresh.h"
 #include "document/view.h"
+#include "ecmascript/ecmascript.h"
 #include "globhist/globhist.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
@@ -1039,10 +1040,13 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	}
 
 	if (have_location(ses)) {
-		struct location *loc  = cur_loc(ses);
+		struct location *loc = cur_loc(ses);
 		struct file_to_load *ftl;
 		struct document_view *doc_view = current_frame(ses);
 
+#ifdef CONFIG_ECMASCRIPT
+		loc->vs.ecmascript_fragile = 1;
+#endif
 		loc->download.data = ses;
 		loc->download.end = (void *) doc_end_load;
 		load_uri(loc->vs.uri, ses->referrer, &loc->download, PRI_MAIN, cache_mode, -1);

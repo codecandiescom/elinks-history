@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.94 2004/11/14 18:46:37 jonas Exp $ */
+/* $Id: auth.c,v 1.95 2004/11/15 02:20:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,16 +233,15 @@ find_auth(struct uri *uri)
 #endif
 
 	entry = find_auth_entry(uri, NULL);
-
 	/* Check is user/pass info is in url. */
 	if (uri->userlen || uri->passwordlen) {
-		/* If there's no entry a new one is added else if the entry
-		 * does not correspond to any existing one update it with the
-		 * user and password from the uri. */
+		/* Add a new entry either to save the user/password info from the URI
+		 * so it is available if we later get redirected to a URI with
+		 * the user/password stripped. Else if update with entry with
+		 * the user/password from the URI. */
 		if (!entry
-		    || (auth_entry_has_userinfo(entry)
-		        && !strlcmp(entry->password, -1, uri->password, uri->passwordlen)
-		        && !strlcmp(entry->user, -1, uri->user, uri->userlen))) {
+		    || (uri->userlen && strlcmp(entry->user, -1, uri->user, uri->userlen))
+		    || (uri->password && strlcmp(entry->password, -1, uri->password, uri->passwordlen))) {
 
 			entry = add_auth_entry(uri, NULL, NULL, NULL, 0);
 		}

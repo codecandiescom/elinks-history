@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.112 2004/11/15 00:58:56 jonas Exp $ */
+/* $Id: dialogs.c,v 1.113 2004/11/15 02:20:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "protocol/auth/dialogs.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
+#include "sched/task.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -35,10 +36,27 @@ static void
 auth_ok(struct dialog *dlg)
 {
 	struct auth_entry *entry = dlg->udata2;
+	struct session *ses = dlg->udata;
 
 	entry->blocked = 0;
 	entry->valid = auth_entry_has_userinfo(entry);
-	reload(dlg->udata, CACHE_MODE_INCREMENT);
+
+	if (entry->valid && have_location(ses)) {
+		struct location *loc = cur_loc(ses);
+		struct uri *uri = loc->vs.uri;
+
+		if ((uri->userlen && strlcmp(entry->user, -1, uri->user, uri->userlen))
+		    || (uri->password && strlcmp(entry->password, -1, uri->password, uri->passwordlen))) {
+			uri = get_composed_uri(uri, URI_HTTP_AUTH | URI_DATA | URI_POST);
+			if (uri) {
+				goto_uri_frame(ses, uri, NULL, CACHE_MODE_INCREMENT);
+				done_uri(uri);			
+				return;
+			}
+		}
+	}
+
+	reload(ses, CACHE_MODE_INCREMENT);
 }
 
 static void

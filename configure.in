@@ -797,7 +797,7 @@ AC_ARG_ENABLE(debug,
 	      [if test "$enableval" = yes; then EL_CONFIG(CONFIG_DEBUG, [leak debugging and error checking]) fi])
 
 AC_ARG_ENABLE(fastmem,
-              [  --enable-fastmem        enable direct use of system allocation functions, not useable with --enable-debug],
+              [  --enable-fastmem        enable direct use of system allocation functions, not usable with --enable-debug],
 	      [if test "$enableval" = yes && test "$CONFIG_DEBUG" != yes; then EL_CONFIG(CONFIG_FASTMEM, [fast memory and no error checking]) fi])
 
 AC_ARG_ENABLE(own-libc,

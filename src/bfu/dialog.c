@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.103 2003/11/28 19:38:00 jonas Exp $ */
+/* $Id: dialog.c,v 1.104 2003/11/28 19:49:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,6 +201,12 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_RESIZE:
 		case EV_REDRAW:
 			dlg_data->dlg->layouter(dlg_data);
+			/* This might not be the best place. We need to be able
+			 * to make focusability of widgets dynamic so widgets
+			 * like scrollable text don't receive focus when there
+			 * is nothing to scroll. */
+			if (!widget_is_focusable(selected_widget(dlg_data)))
+				cycle_widget_focus(dlg_data, 1);
 			redraw_dialog(dlg_data);
 			break;
 

@@ -5,36 +5,12 @@ Major goals:
 
 + Rewrite HTML parser (see ELusive)
 
-- EcmaScript (http://home.worldcom.ch/~jmlugrin/fesi/)
-
-- Then, support for proxy autoconfiguration
-  (http://www.netscape.com/eng/mozilla/2.0/relnotes/demo/proxy-live.html)
-
-- Graphics support
-
-- Possibility to optionally use commandline-driven interface instead of BFU
-
-- Full modularization, plugins mechanism
-
-- Generalised scripting interface, possibly also supporting SWIG backend
-  (http://www.swig.org/)
-
 + Reorganization of user interface
 
 
 Minor first-level goals:
 
-- Show all downloads in one window, kind of "download manager"
-
 - Forward/backward history manager
-
-- Cookie manager
-
-- Disk cache
-
-- Maintain in-core user URL "protocols" (like g:, gg:) instead of them living
-  in Lua hooks. This also means much more user-friendly configuration, perhaps
-  using Prefixes manager or so.
 
 
 ELusive:
@@ -42,41 +18,14 @@ ELusive:
 See src/elusive/TODO.
 
 
-Original HTML engine:
-
-- Better support for vlink - we have to update already rendered document
-
-- Support nested <sub>script tags. Maybe use parentheses to disambiguate
-  superscript?
-
-
 Text HTML viewer:
-
-- Display links to or with images with a distinct colour
-
-- Allow resizing of frames
-
-- Alert user when he attempts to follow a broken link to a fragment on the
-  current page
 
 * Include search string in 'Search string not found' error box
 
-- Incremental-search
-
 * Configurable highlight colour for text matched after a search
-
-- Scroll when searching so that the current match is always displayed at
-  the top of the screen (optional?)
 
 
 User interface / terminal stuff:
-
-- Use terminfo instead of hardwired ANSI control sequences
-
-- Show any information specified with <meta> and <link> tags in the
-  Document Info box
-
-- More key-bindings for edit-boxes, including cut, copy, and paste
 
 - Show selected link's title (which is specified by the title attribute) in the
   statusbar
@@ -87,11 +36,6 @@ User interface / terminal stuff:
   in XTerms by changing the XTerms' windows' titles.) This merely entails
   sending the right escape sequences (the termcap/terminfo tsl/ts and fsl/fs
   capabilities) for the appropriate terminals.
-
-- Use the alternate screen (termcap/terminfo capabilities smcup/ti
-  and rmcup/te) in XTerms and GNU Screen
-
-- Insert should toggle insert/overwrite mode.
 
 - Copy URL to X clipboard (using X selections).
 
@@ -207,4 +151,4 @@ Permanent goals:
 Key: - nothing done + work in progress * almost ready
      (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.56 2003/05/08 15:39:58 zas Exp $
+$Id: TODO,v 1.57 2003/05/12 08:07:31 miciah Exp $

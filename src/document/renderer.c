@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.55 2004/06/22 15:25:40 zas Exp $ */
+/* $Id: renderer.c,v 1.56 2004/06/22 15:37:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,12 +243,12 @@ get_convert_table(unsigned char *head, int to_cp,
 {
 	unsigned char *a;
 	unsigned char *part = head;
-	int from = -1;
+	int cp_index = -1;
 
 	assert(head);
 	if_assert_failed return NULL;
 
-	while (from == -1) {
+	while (cp_index == -1) {
 		unsigned char *b;
 
 		a = parse_http_header(part, "Content-Type", &part);
@@ -256,30 +256,30 @@ get_convert_table(unsigned char *head, int to_cp,
 
 		b = parse_http_header_param(a, "charset");
 		if (b) {
-			from = get_cp_index(b);
+			cp_index = get_cp_index(b);
 			mem_free(b);
 		}
 		mem_free(a);
 	}
 
-	if (from == -1) {
+	if (cp_index == -1) {
 		a = parse_http_header(head, "Content-Charset", NULL);
 		if (a) {
-			from = get_cp_index(a);
+			cp_index = get_cp_index(a);
 			mem_free(a);
 		}
 	}
 
-	if (from == -1) {
+	if (cp_index == -1) {
 		a = parse_http_header(head, "Charset", NULL);
 		if (a) {
-			from = get_cp_index(a);
+			cp_index = get_cp_index(a);
 			mem_free(a);
 		}
 	}
 
 	if (cp_status) {
-		if (from == -1)
+		if (cp_index == -1)
 			*cp_status = CP_STATUS_ASSUMED;
 		else {
 			if (ignore_server_cp)
@@ -289,9 +289,9 @@ get_convert_table(unsigned char *head, int to_cp,
 		}
 	}
 
-	if (ignore_server_cp || from == -1) from = default_cp;
-	if (from_cp) *from_cp = from;
+	if (ignore_server_cp || cp_index == -1) cp_index = default_cp;
+	if (from_cp) *from_cp = cp_index;
 
-	return get_translation_table(from, to_cp);
+	return get_translation_table(cp_index, to_cp);
 }
 

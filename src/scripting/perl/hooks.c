@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.3 2004/04/02 07:27:01 zas Exp $ */
+/* $Id: hooks.c,v 1.4 2004/04/16 09:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,8 @@
 #include "scripting/scripting.h"
 #include "util/string.h"
 
+#define my_XPUSHs(s, slen) XPUSHs(sv_2mortal(newSVpvn(s, slen)))
+
 /* The events that will trigger the functions below and what they are expected
  * to do is explained in doc/events.txt */
 
@@ -28,21 +30,22 @@ script_hook_goto_url(va_list ap, void *data)
 	unsigned char *new_url = NULL;
 	STRLEN n_a;
 	int err;
+	dSP;
 
 	if (*url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
-
-	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(sv_2mortal(newSVpvn(*url, strlen(*url))));
+	my_XPUSHs(*url, strlen(*url));
 
 	if (!have_location(ses)) {
 		XPUSHs(sv_2mortal(newSV(0)));
 	} else {
-		XPUSHs(sv_2mortal(newSVpvn(struri(cur_loc(ses)->vs.uri), strlen(struri(cur_loc(ses)->vs.uri)))));
+		unsigned char *uri = struri(cur_loc(ses)->vs.uri);
+
+		my_XPUSHs(uri, strlen(uri));
 	}
 	PUTBACK;
 	err = call_pv("goto_url_hook", G_EVAL | G_SCALAR);
@@ -71,16 +74,16 @@ script_hook_follow_url(va_list ap, void *data)
 	unsigned char *new_url = NULL;
 	STRLEN n_a;
 	int err;
+	dSP;
 
 	if (*url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 
-	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(sv_2mortal(newSVpvn(*url, strlen(*url))));
+	my_XPUSHs(*url, strlen(*url));
 	PUTBACK;
 	err = call_pv("follow_url_hook", G_EVAL | G_SCALAR);
 	if (SvTRUE(ERRSV)) err = 0;
@@ -108,22 +111,23 @@ script_hook_pre_format_html(va_list ap, void *data)
 	int *html_len = va_arg(ap, int *);
 	unsigned char *url;
 	unsigned char *new_html = NULL;
+	struct session *ses;
 	STRLEN n_a;
 	int err;
+	dSP;
 
-	va_arg(ap, struct session *);
+	ses = va_arg(ap, struct session *);
 	url = va_arg(ap, unsigned char *);
 
 	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 
-	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(sv_2mortal(newSVpvn(url, strlen(url))));
-	XPUSHs(sv_2mortal(newSVpvn(*html, *html_len)));
+	my_XPUSHs(url, strlen(url));
+	my_XPUSHs(*html, *html_len);
 	PUTBACK;
 	err = call_pv("pre_format_html_hook", G_EVAL | G_SCALAR);
 	if (SvTRUE(ERRSV)) err = 0;
@@ -152,16 +156,16 @@ script_hook_get_proxy(va_list ap, void *data)
 	unsigned char *new_url = NULL;
 	STRLEN n_a;
 	int err;
+	dSP;
 
 	if (*new_proxy_url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 
-	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
 
-	XPUSHs(sv_2mortal(newSVpvn(url, strlen(url))));
+	my_XPUSHs(url, strlen(url));
 	PUTBACK;
 	err = call_pv("proxy_for_hook", G_EVAL | G_SCALAR);
 	if (SvTRUE(ERRSV)) err = 0;

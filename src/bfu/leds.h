@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.14 2003/12/27 12:27:49 pasky Exp $ */
+/* $Id: leds.h,v 1.15 2003/12/27 12:50:35 pasky Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -9,7 +9,7 @@
 struct session;
 
 /* TODO: Variable count! */
-#define LEDS_COUNT	5
+#define LEDS_COUNT	6
 
 /* We use struct in order to at least somehow 'authorize' client to use certain
  * LED, preventing possible mess i.e. with conflicting patches or Lua scripts.

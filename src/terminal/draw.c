@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.61 2003/09/07 00:10:16 jonas Exp $ */
+/* $Id: draw.c,v 1.62 2003/09/08 15:43:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ draw_border_cross(struct terminal *term, int x, int y,
 		screen_char->data = border_trans[d][3];
 	}
 
-	set_term_color8(screen_char, color, 8, 16);
+	set_term_color(screen_char, color, COLOR_DEFAULT);
 }
 
 void
@@ -65,7 +65,7 @@ draw_border_char(struct terminal *term, int x, int y,
 	position = x + term->x * y;
 	term->screen->image[position].data = (unsigned char) border;
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
-	set_term_color8(&term->screen->image[position], color, 8, 16);
+	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT);
 	term->screen->dirty = 1;
 }
 
@@ -90,7 +90,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	check_range(term, x, y);
 
 	position = x + term->x * y;
-	set_term_color8(&term->screen->image[position], color, 8, 16);
+	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT);
 	term->screen->dirty = 1;
 }
 
@@ -179,7 +179,7 @@ draw_char(struct terminal *term, int x, int y,
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
 	term->screen->image[position].attr = attr;
-	set_term_color8(&term->screen->image[position], color, 8, 16);
+	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT);
 	term->screen->dirty = 1;
 }
 
@@ -207,7 +207,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	line = &term->screen->image[position];
 
 	/* Compose a screen position in the area so memcpy() can be used. */
-	if (color) set_term_color8(&area, color, 8, 16);
+	if (color) set_term_color(&area, color, COLOR_DEFAULT);
 
 	/* Draw the first area line. */
 	for (i = 0; i < endx; i++) {
@@ -238,7 +238,7 @@ draw_text(struct terminal *term, int x, int y,
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	if (color) set_term_color8(&schar, color, 8, 16);
+	if (color) set_term_color(&schar, color, COLOR_DEFAULT);
 
 	end = int_min(length, term->x - x);
 	position = x + term->x * y;

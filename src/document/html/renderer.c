@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.242 2003/09/07 20:23:31 pasky Exp $ */
+/* $Id: renderer.c,v 1.243 2003/09/08 15:43:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,7 +150,7 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	set_term_color8(&schar, &colors, 8, 16);
+	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 	for (i = line->l; i <= x; i++) {
 		memcpy(&line->d[i], &schar, sizeof(struct screen_char));
@@ -253,7 +253,7 @@ set_hchars(struct part *part, int x, int y, int xl,
 		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
 		struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
 
-		set_term_color8(&schar, &colors, 8, 16);
+		set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 		for (; xl; xl--, x++) {
 			memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
@@ -284,7 +284,7 @@ xset_hchar(struct part *part, int x, int y,
 
 	POS(x, y).data = data;
 	POS(x, y).attr = attr;
-	set_term_color8(&POS(x, y), &colors, 8, 16);
+	set_term_color(&POS(x, y), &colors, COLOR_DEFAULT);
 }
 
 void
@@ -310,7 +310,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	set_term_color8(&schar, &colors, 8, 16);
+	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
 	for (; yl; yl--, y++) {
 	    	if (xpand_line(part, y, x)) return;
@@ -782,7 +782,7 @@ put_chars_format_change(struct part *part, unsigned char *color,
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	set_term_color8(&schar_cache, &colors, 8, 16);
+	set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
 
 	*color = schar_cache.color;
 	*attr = schar_cache.attr;

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.34 2003/09/07 00:10:16 jonas Exp $ */
+/* $Id: color.c,v 1.35 2003/09/08 15:43:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,17 +155,19 @@ extern int dump_pos;
 #define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
 #define use_inverse(bg, fg) CMPCODE(fg & TERM_COLOR_MASK) < CMPCODE(bg)
 
-/* Terminal color encoding: */
-/* Below color pairs are encoded to terminal colors. Both the terminal fore-
- * and background color are a number between 0 and 7. They are stored in an
- * unsigned as specified in the following bit sequence:
- *
- *	00bbbfff (f = foreground, b = background)
- */
+struct color_level {
+	int bglevel;
+	int fglevel;
+};
+
+static struct color_level levels[] = {
+	/* COLOR_DEFAULT */	{ 8, 16 },
+	/* COLOR_LINK */	{ 8,  8 },
+};
 
 void
-set_term_color8(struct screen_char *schar, struct color_pair *pair,
-		int bglevel, int fglevel)
+set_term_color(struct screen_char *schar, struct color_pair *pair,
+	       enum color_type type)
 {
 	register unsigned char fg;
 	register unsigned char bg;
@@ -174,8 +176,8 @@ set_term_color8(struct screen_char *schar, struct color_pair *pair,
 
 	if (dump_pos) return;
 
-	fg = find_nearest_color(pair->foreground, fglevel);
-	bg = find_nearest_color(pair->background, bglevel);
+	fg = find_nearest_color(pair->foreground, levels[type].fglevel);
+	bg = find_nearest_color(pair->background, levels[type].bglevel);
 
 	/* Adjusts the foreground color to be more visible. */
 	if (d_opt && !d_opt->allow_dark_on_black) {

@@ -1,3 +1,61 @@
+Tue Sep 16 18:25:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_frames(): Simplification.  
+
+Tue Sep 16 18:11:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Add missing assertion handling.  
+
+Tue Sep 16 18:08:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Rename: [HV]_LINE_X() -> [HV]_FRAME_POSITION() ... or should we
+	static inline it all? 
+
+Tue Sep 16 18:00:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Cleanup [HV]_LINE_X() macros to bug via an assertion instead of via
+	the cruel *(unsigned char *)NULL.  
+
+Tue Sep 16 14:58:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/: hash.c, hash.h:
+
+	Allocate hash and hash->hash in one time, X31 strhash() was
+	optimized by unrolling the loop, some variables are now unsigned int
+	instead of int, general cleanup.  
+
+Tue Sep 16 00:04:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Slightly more elegant fix.  
+
+Mon Sep 15 23:24:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	Fix input field off by one bug.  
+
+Mon Sep 15 22:41:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Minor code diet using memset() instead of for loops.  
+
+Mon Sep 15 22:18:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Since item->l = w, int_bounds(rw, item->l, w) is is useless.  
+
 Mon Sep 15 21:30:39 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/tables.c:

@@ -1,4 +1,6 @@
-Unicode2ascii replacement and entity name tables taken from lynx.
+Unicode2ascii replacement, entity name tables and Gopher code taken from lynx.
+Initial mailcap and mime.types file handling inspired from Mutt.
+FTP directory listing parsing based on GNU Wget code.
 
 
 People who contributed to Links/ELinks, in alphabetical order (if you are
@@ -542,4 +544,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.186 2005/03/02 09:36:15 jonas Exp $
+$Id: AUTHORS,v 1.187 2005/03/27 19:39:11 jonas Exp $

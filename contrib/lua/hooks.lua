@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua,v 1.2 2002/06/30 22:33:22 pasky Exp $
+-- $Id: hooks.lua,v 1.3 2002/06/30 22:51:16 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -7,6 +7,7 @@
 --  Load configuration
 ----------------------------------------------------------------------
 
+home_dir = (getenv and getenv ("HOME")) or "/home/"..getenv("USER")
 dofile ("/etc/elinks/config.lua")
 dofile (home_dir.."/.elinks/config.lua")
 

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.62 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: main.c,v 1.63 2002/12/07 15:28:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,21 +283,21 @@ init()
 		return;
 	}
 
-	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
+	if (!get_opt_bool_tree(&cmdline_options, "no-home")) {
 		init_home();
 	}
 
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	if (!get_opt_bool_tree(cmdline_options, "no-connect") &&
-	    !get_opt_bool_tree(cmdline_options, "dump") &&
-	    !get_opt_bool_tree(cmdline_options, "source")) {
+	if (!get_opt_bool_tree(&cmdline_options, "no-connect") &&
+	    !get_opt_bool_tree(&cmdline_options, "dump") &&
+	    !get_opt_bool_tree(&cmdline_options, "source")) {
 		uh = bind_to_af_unix();
 		if (uh != -1) {
 			close(terminal_pipe[0]);
 			close(terminal_pipe[1]);
 
-			info = create_session_info(get_opt_int_tree(cmdline_options, "base-session"), u, &len);
+			info = create_session_info(get_opt_int_tree(&cmdline_options, "base-session"), u, &len);
 			if (!info) {
 				retval = RET_FATAL;
 				terminate = 1;
@@ -341,9 +341,9 @@ init()
     	init_lua();
 #endif
 
-	if (get_opt_int_tree(cmdline_options, "dump") ||
-	    get_opt_int_tree(cmdline_options, "source")) {
-		if (get_opt_bool_tree(cmdline_options, "stdin")) {
+	if (get_opt_int_tree(&cmdline_options, "dump") ||
+	    get_opt_int_tree(&cmdline_options, "source")) {
+		if (get_opt_bool_tree(&cmdline_options, "stdin")) {
 			get_opt_bool("protocol.file.allow_special_files") = 1;
 			u = "file:///dev/stdin";
 		}
@@ -359,7 +359,7 @@ init()
 	} else {
 		int attached;
 
-		info = create_session_info(get_opt_int_tree(cmdline_options, "base-session"), u, &len);
+		info = create_session_info(get_opt_int_tree(&cmdline_options, "base-session"), u, &len);
 		if (!info) goto fatal_error;
 
 		attached = attach_terminal(get_input_handle(),

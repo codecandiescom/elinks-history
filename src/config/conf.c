@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.57 2002/12/05 15:02:48 pasky Exp $ */
+/* $Id: conf.c,v 1.58 2002/12/07 15:28:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ enum parse_error {
  * will only possibly set OPT_WATERMARK flag to the option (if enabled). */
 
 enum parse_error
-parse_set(struct list_head *opt_tree, unsigned char **file, int *line,
+parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	  unsigned char **str, int *len)
 {
 	unsigned char *orig_pos = *file;
@@ -156,7 +156,7 @@ parse_set(struct list_head *opt_tree, unsigned char **file, int *line,
 }
 
 enum parse_error
-parse_bind(struct list_head *opt_tree, unsigned char **file, int *line,
+parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	   unsigned char **str, int *len)
 {
 	unsigned char *orig_pos = *file;
@@ -213,11 +213,11 @@ parse_bind(struct list_head *opt_tree, unsigned char **file, int *line,
 	return error;
 }
 
-int load_config_file(unsigned char *, unsigned char *, struct list_head *,
+int load_config_file(unsigned char *, unsigned char *, struct option *,
 		     unsigned char **, int *);
 
 enum parse_error
-parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
+parse_include(struct option *opt_tree, unsigned char **file, int *line,
 	      unsigned char **str, int *len)
 {
 	unsigned char *orig_pos = *file;
@@ -261,7 +261,7 @@ parse_include(struct list_head *opt_tree, unsigned char **file, int *line,
 
 struct parse_handler {
 	unsigned char *command;
-	enum parse_error (*handler)(struct list_head *opt_tree,
+	enum parse_error (*handler)(struct option *opt_tree,
 				    unsigned char **file, int *line,
 				    unsigned char **str, int *len);
 };
@@ -275,7 +275,7 @@ struct parse_handler parse_handlers[] = {
 
 
 void
-parse_config_file(struct list_head *options, unsigned char *name,
+parse_config_file(struct option *options, unsigned char *name,
 		  unsigned char *file, unsigned char **str, int *len)
 {
 	int line = 1;
@@ -397,7 +397,7 @@ read_config_file(unsigned char *name)
 /* Return 0 on success. */
 int
 load_config_file(unsigned char *prefix, unsigned char *name,
-		 struct list_head *options, unsigned char **str, int *len)
+		 struct option *options, unsigned char **str, int *len)
 {
 	unsigned char *config_str, *config_file;
 
@@ -429,9 +429,9 @@ void
 load_config()
 {
 	load_config_file(CONFDIR, "elinks.conf",
-			 root_options, NULL, NULL);
+			 &root_options, NULL, NULL);
 	load_config_file(elinks_home, "elinks.conf",
-			 root_options, NULL, NULL);
+			 &root_options, NULL, NULL);
 }
 
 
@@ -510,7 +510,7 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 
 unsigned char *
 create_config_string(unsigned char *prefix, unsigned char *name,
-		     struct list_head *options)
+		     struct option *options)
 {
 	unsigned char *str = init_str();
 	int len = 0;
@@ -566,7 +566,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	add_to_str(&tmpstr, &tmplen, NEWLINE);
 
 	origlen = tmplen;
-	smart_config_string(&tmpstr, &tmplen, 2, options, NULL, 0, smart_config_output_fn);
+	smart_config_string(&tmpstr, &tmplen, 2, options->ptr, NULL, 0, smart_config_output_fn);
 	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
 	mem_free(tmpstr);
 
@@ -582,7 +582,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	mem_free(tmpstr);
 
 get_me_out:
-	unmark_options_tree(options);
+	unmark_options_tree(options->ptr);
 
 	return str;
 }
@@ -590,7 +590,7 @@ get_me_out:
 /* TODO: The error condition should be handled somewhere else. */
 int
 write_config_file(unsigned char *prefix, unsigned char *name,
-		  struct list_head *options, struct terminal *term)
+		  struct option *options, struct terminal *term)
 {
 	int ret = -1;
 	struct secure_save_info *ssi;
@@ -631,5 +631,5 @@ free_cfg_str:
 void
 write_config(struct terminal *term)
 {
-	write_config_file(elinks_home, "elinks.conf", root_options, term);
+	write_config_file(elinks_home, "elinks.conf", &root_options, term);
 }

@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.12 2002/11/29 18:39:07 zas Exp $ */
+/* $Id: language.c,v 1.13 2002/12/07 15:28:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,11 +67,10 @@ shutdown_trans()
 unsigned char *
 get_text_translation(unsigned char *text, struct terminal *term)
 {
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	unsigned char **current_tra;
 	struct conv_table *conv_table;
 	unsigned char *trn;
-	int charset = get_opt_int_tree(opt_tree, "charset");
+	int charset = get_opt_int_tree(term->spec, "charset");
 
 	if (text < dummyarray || text > dummyarray + T__N_TEXTS)
 		return text;

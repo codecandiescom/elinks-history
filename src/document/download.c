@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.54 2002/12/05 22:35:07 pasky Exp $ */
+/* $Id: download.c,v 1.55 2002/12/07 15:28:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -940,7 +940,6 @@ void
 type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	   struct option *assoc)
 {
-	struct list_head *a = (struct list_head *) assoc ? assoc->ptr : NULL;
 	unsigned char *m1;
 
 	if (ses->tq_prog) {
@@ -948,12 +947,12 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		ses->tq_prog = NULL;
 	}
 
-	if (a) {
-		ses->tq_prog = stracpy(get_opt_str_tree(a, "program"));
-		ses->tq_prog_flags = get_opt_bool_tree(a, "block");
+	if (assoc) {
+		ses->tq_prog = stracpy(get_opt_str_tree(assoc, "program"));
+		ses->tq_prog_flags = get_opt_bool_tree(assoc, "block");
 	}
 
-	if (a && !get_opt_bool_tree(a, "ask")) {
+	if (assoc && !get_opt_bool_tree(assoc, "ask")) {
 		tp_open(ses);
 		return;
 	}
@@ -961,8 +960,8 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 	m1 = stracpy(ct);
 	if (!m1) return;
 
-	if (!a) {
-		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
+	if (!assoc) {
+		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(m1, NULL),
 				TEXT(T_UNKNOWN_TYPE), AL_CENTER | AL_EXTD_TEXT,
 				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",
@@ -990,7 +989,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 			return;
 		}
 
-		opt = get_opt_rec_real(root_options, m2);
+		opt = get_opt_rec_real(&root_options, m2);
 		mem_free(m2);
 		if (!opt) {
 			mem_free(m1);
@@ -1003,7 +1002,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 			return;
 		}
 
-		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
+		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->term, getml(m1, m2, NULL),
 				TEXT(T_WHAT_TO_DO), AL_CENTER | AL_EXTD_TEXT,
 				TEXT(T_CONTEN_TYPE_IS), " ", m1, ".\n",

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.31 2002/12/07 14:26:52 pasky Exp $ */
+/* $Id: opttypes.c,v 1.32 2002/12/07 15:28:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ exec_cmd(struct option *o, unsigned char ***argv, int *argc)
 unsigned char *
 redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 {
-	struct option *real = get_opt_rec(root_options, opt->ptr);
+	struct option *real = get_opt_rec(&root_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -113,7 +113,7 @@ redir_cmd(struct option *opt, unsigned char ***argv, int *argc)
 unsigned char *
 redir_rd(struct option *opt, unsigned char **file)
 {
-	struct option *real = get_opt_rec(root_options, opt->ptr);
+	struct option *real = get_opt_rec(&root_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -130,7 +130,7 @@ redir_rd(struct option *opt, unsigned char **file)
 int
 redir_set(struct option *opt, unsigned char *str)
 {
-	struct option *real = get_opt_rec(root_options, opt->ptr);
+	struct option *real = get_opt_rec(&root_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -147,7 +147,7 @@ redir_set(struct option *opt, unsigned char *str)
 int
 redir_add(struct option *opt, unsigned char *str)
 {
-	struct option *real = get_opt_rec(root_options, opt->ptr);
+	struct option *real = get_opt_rec(&root_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",
@@ -164,7 +164,7 @@ redir_add(struct option *opt, unsigned char *str)
 int
 redir_remove(struct option *opt, unsigned char *str)
 {
-	struct option *real = get_opt_rec(root_options, opt->ptr);
+	struct option *real = get_opt_rec(&root_options, opt->ptr);
 
 	if (!real) {
 		internal("Alias %s leads to unknown option %s!",

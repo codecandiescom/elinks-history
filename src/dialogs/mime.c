@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: mime.c,v 1.4 2002/09/17 13:52:36 zas Exp $ */
+/* $Id: mime.c,v 1.5 2002/12/07 15:28:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@ get_real_opt(unsigned char *base, unsigned char *id)
 
 	if (!name) return NULL;
 
-	opt = get_opt_rec_real(root_options, name);
+	opt = get_opt_rec_real(&root_options, name);
 
 	mem_free(name);
 	return opt;

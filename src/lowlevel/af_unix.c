@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.21 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: af_unix.c,v 1.22 2002/12/07 15:28:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ int get_address()
 	addr->sun_family = AF_UNIX;
 
 	add_to_str(&path, &pathl, LINKS_SOCK_NAME);
-	add_num_to_str(&path, &pathl, get_opt_int_tree(cmdline_options, "session-ring"));
+	add_num_to_str(&path, &pathl, get_opt_int_tree(&cmdline_options, "session-ring"));
 	strcpy(addr->sun_path, path);
 	mem_free(path);
 

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.39 2002/12/07 14:26:52 pasky Exp $ */
+/* $Id: options.h,v 1.40 2002/12/07 15:28:36 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -70,8 +70,8 @@ struct option {
 };
 
 
-extern struct list_head *root_options;
-extern struct list_head *cmdline_options;
+extern struct option root_options;
+extern struct option cmdline_options;
 
 extern struct list_head root_option_box_items;
 extern struct list_head option_boxes;
@@ -81,7 +81,6 @@ extern void init_options();
 extern void done_options();
 
 extern struct list_head *init_options_tree();
-extern void free_options_tree(struct list_head *);
 extern void unmark_options_tree(struct list_head *);
 
 extern void smart_config_string(unsigned char **, int *, int, struct list_head *, unsigned char *, int,
@@ -97,9 +96,9 @@ extern void delete_option(struct option *);
  * use get_opt_type() and add_opt_type(). For command line options, you want to
  * use get_opt_type_tree(cmdline_options). */
 
-extern struct option *get_opt_rec(struct list_head *, unsigned char *);
-extern struct option *get_opt_rec_real(struct list_head *, unsigned char *);
-extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *);
+extern struct option *get_opt_rec(struct option *, unsigned char *);
+extern struct option *get_opt_rec_real(struct option *, unsigned char *);
+extern void *get_opt_(unsigned char *, int, struct option *, unsigned char *);
 #define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
 
 #define get_opt_bool_tree(tree, name) *((int *) get_opt(tree, name))
@@ -109,15 +108,15 @@ extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *)
 #define get_opt_str_tree(tree, name) ((unsigned char *) get_opt(tree, name))
 #define get_opt_ptr_tree(tree, name) ((void *) get_opt(tree, name))
 
-#define get_opt_bool(name) get_opt_bool_tree(root_options, name)
-#define get_opt_int(name) get_opt_int_tree(root_options, name)
-#define get_opt_long(name) get_opt_long_tree(root_options, name)
-#define get_opt_char(name) get_opt_char_tree(root_options, name)
-#define get_opt_str(name) get_opt_str_tree(root_options, name)
-#define get_opt_ptr(name) get_opt_ptr_tree(root_options, name)
+#define get_opt_bool(name) get_opt_bool_tree(&root_options, name)
+#define get_opt_int(name) get_opt_int_tree(&root_options, name)
+#define get_opt_long(name) get_opt_long_tree(&root_options, name)
+#define get_opt_char(name) get_opt_char_tree(&root_options, name)
+#define get_opt_str(name) get_opt_str_tree(&root_options, name)
+#define get_opt_ptr(name) get_opt_ptr_tree(&root_options, name)
 
 
-extern struct option *add_opt(struct list_head *, unsigned char *, unsigned char *,
+extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 			      enum option_flags, enum option_type, int, int, void *,
 			      unsigned char *);
 
@@ -175,17 +174,17 @@ extern int color_set(struct option *, unsigned char *); /* XXX */
 #define add_opt_tree_tree(tree, path, name, flags, desc) \
 	add_opt(tree, path, name, flags, OPT_TREE, 0, 0, init_options_tree(), desc);
 
-#define add_opt_bool(path, name, flags, def, desc) add_opt_bool_tree(root_options, path, name, flags, def, desc)
-#define add_opt_int(path, name, flags, min, max, def, desc) add_opt_int_tree(root_options, path, name, flags, min, max, def, desc)
-#define add_opt_long(path, name, flags, min, max, def, desc) add_opt_long_tree(root_options, path, name, flags, min, max, def, desc)
-#define add_opt_string(path, name, flags, def, desc) add_opt_string_tree(root_options, path, name, flags, def, desc)
-#define add_opt_codepage(path, name, flags, def, desc) add_opt_codepage_tree(root_options, path, name, flags, def, desc)
-#define add_opt_color(path, name, flags, def, desc) add_opt_color_tree(root_options, path, name, flags, def, desc)
-#define add_opt_ptr(path, name, flags, type, def, desc) add_opt_ptr_tree(root_options, path, name, flags, type, def, desc)
-#define add_opt_void(path, name, flags, type, desc) add_opt_void_tree(root_options, path, name, flags, type, desc)
-#define add_opt_command(path, name, flags, cmd, desc) add_opt_command_tree(root_options, path, name, flags, cmd, desc)
-#define add_opt_alias(path, name, flags, def, desc) add_opt_alias_tree(root_options, path, name, flags, def, desc)
-#define add_opt_tree(path, name, flags, desc) add_opt_tree_tree(root_options, path, name, flags, desc)
+#define add_opt_bool(path, name, flags, def, desc) add_opt_bool_tree(&root_options, path, name, flags, def, desc)
+#define add_opt_int(path, name, flags, min, max, def, desc) add_opt_int_tree(&root_options, path, name, flags, min, max, def, desc)
+#define add_opt_long(path, name, flags, min, max, def, desc) add_opt_long_tree(&root_options, path, name, flags, min, max, def, desc)
+#define add_opt_string(path, name, flags, def, desc) add_opt_string_tree(&root_options, path, name, flags, def, desc)
+#define add_opt_codepage(path, name, flags, def, desc) add_opt_codepage_tree(&root_options, path, name, flags, def, desc)
+#define add_opt_color(path, name, flags, def, desc) add_opt_color_tree(&root_options, path, name, flags, def, desc)
+#define add_opt_ptr(path, name, flags, type, def, desc) add_opt_ptr_tree(&root_options, path, name, flags, type, def, desc)
+#define add_opt_void(path, name, flags, type, desc) add_opt_void_tree(&root_options, path, name, flags, type, desc)
+#define add_opt_command(path, name, flags, cmd, desc) add_opt_command_tree(&root_options, path, name, flags, cmd, desc)
+#define add_opt_alias(path, name, flags, def, desc) add_opt_alias_tree(&root_options, path, name, flags, def, desc)
+#define add_opt_tree(path, name, flags, desc) add_opt_tree_tree(&root_options, path, name, flags, desc)
 
 
 /* TODO: We need to do *something* with this ;). */

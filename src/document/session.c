@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.75 2002/12/07 00:12:10 pasky Exp $ */
+/* $Id: session.c,v 1.76 2002/12/07 15:28:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,7 +450,6 @@ x:
 void
 ses_imgmap(struct session *ses)
 {
-	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct cache_entry *ce;
 	struct fragment *fr;
 	struct memory_list *ml;
@@ -467,7 +466,7 @@ ses_imgmap(struct session *ses)
 	if (get_image_map(ce->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
-			  get_opt_int_tree(opt_tree, "charset"),
+			  get_opt_int_tree(ses->term->spec, "charset"),
 			  get_opt_int("document.codepage.assume"),
 			  get_opt_int("document.codepage.force_assumed")))
 		return;
@@ -905,11 +904,11 @@ doc_end_load(struct status *stat, struct session *ses)
 		}
 		html_interpret(ses);
 		draw_formatted(ses);
-		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
+		if (get_opt_bool_tree(&cmdline_options, "auto-submit")) {
 			fc = (struct form_control *)
 				ses->screen->f_data->forms.next;
 			if (fc != fc->next) {
-				get_opt_bool_tree(cmdline_options,
+				get_opt_bool_tree(&cmdline_options,
 						  "auto-submit") = 0;
 				submit = 1;
 			}

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.36 2002/12/05 11:18:32 zas Exp $ */
+/* $Id: terminal.c,v 1.37 2002/12/07 15:28:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -417,7 +417,7 @@ init_term(int fdin, int fdout,
 	term->blocked = -1;
 	term->screen = NULL;
 	term->last_screen = NULL;
-	term->spec = get_opt_rec(root_options, "terminal._template_");
+	term->spec = get_opt_rec(&root_options, "terminal._template_");
 	term->term[0] = 0;
 	term->cwd[0] = 0;
 	term->input_queue = NULL;
@@ -458,11 +458,10 @@ term_send_event(struct terminal *term, struct event *ev)
 static inline void
 term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 {
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	unsigned char *recoded;
 
 	if (u == 0xA0) u = ' ';
-	recoded = u2cp(u, get_opt_int_tree(opt_tree, "charset"));
+	recoded = u2cp(u, get_opt_int_tree(term->spec, "charset"));
 	if (! recoded) recoded = "*";
 	while (*recoded) {
 		ev->x = *recoded;
@@ -474,7 +473,6 @@ term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 void
 in_term(struct terminal *term)
 {
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	struct event *ev;
 	int r;
 	unsigned char *iq = term->input_queue;
@@ -555,7 +553,7 @@ test_queue:
 				strcat(name, term->term);
 			}
 
-			term->spec = get_opt_rec(root_options, name);
+			term->spec = get_opt_rec(&root_options, name);
 		}
 
 		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);
@@ -613,7 +611,7 @@ send_redraw:
 		else if (ev->ev == EV_KBD) {
 			if (term->utf_8.len) {
 				if ((ev->x & 0xC0) == 0x80
-				    && get_opt_bool_tree(opt_tree, "utf_8_io")) {
+				    && get_opt_bool_tree(term->spec, "utf_8_io")) {
 					term->utf_8.ucs <<= 6;
 					term->utf_8.ucs |= ev->x & 0x3F;
 					if (! --term->utf_8.len) {
@@ -629,7 +627,7 @@ send_redraw:
 				}
 			}
 			if (ev->x < 0x80 || ev->x > 0xFF
-			    || !get_opt_bool_tree(opt_tree, "utf_8_io")) {
+			    || !get_opt_bool_tree(term->spec, "utf_8_io")) {
 				term_send_event(term, ev);
 				goto mm;
 			} else if ((ev->x & 0xC0) == 0xC0 && (ev->x & 0xFE) != 0xFE) {
@@ -808,7 +806,6 @@ redraw_all_terminals()
 void
 redraw_screen(struct terminal *term)
 {
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	int x, y, p = 0;
 	int cx = -1, cy = -1;
 	unsigned char *a;
@@ -837,12 +834,12 @@ redraw_screen(struct terminal *term)
 	opt_cache.koi8r = 1;
 #else
 	/* Fill the cache */
-	opt_cache.type = get_opt_int_tree(opt_tree, "type");
-	opt_cache.m11_hack = get_opt_bool_tree(opt_tree, "m11_hack");
-	opt_cache.utf_8_io = get_opt_bool_tree(opt_tree, "utf_8_io");
-	opt_cache.colors = get_opt_bool_tree(opt_tree, "colors");
-	opt_cache.charset = get_opt_int_tree(opt_tree, "charset");
-	opt_cache.restrict_852 = get_opt_bool_tree(opt_tree, "restrict_852");
+	opt_cache.type = get_opt_int_tree(term->spec, "type");
+	opt_cache.m11_hack = get_opt_bool_tree(term->spec, "m11_hack");
+	opt_cache.utf_8_io = get_opt_bool_tree(term->spec, "utf_8_io");
+	opt_cache.colors = get_opt_bool_tree(term->spec, "colors");
+	opt_cache.charset = get_opt_int_tree(term->spec, "charset");
+	opt_cache.restrict_852 = get_opt_bool_tree(term->spec, "restrict_852");
 	/* Cache these values as they don't change and
 	 * get_cp_index() is pretty CPU-intensive. */
 	opt_cache.cp437 = get_cp_index("cp437");
@@ -1095,10 +1092,8 @@ print_text(struct terminal *t, int x, int y, int l,
 void
 set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
-
 	term->dirty = 1;
-	if (get_opt_bool_tree(opt_tree, "block_cursor")) {
+	if (get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = altx;
 		y = alty;
 	}

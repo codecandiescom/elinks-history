@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.38 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: options.c,v 1.39 2002/12/07 15:28:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,16 +43,13 @@
 void
 display_codepage(struct terminal *term, void *pcp, struct session *ses)
 {
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
-
-	get_opt_int_tree(opt_tree, "charset") = (int) pcp;
+	get_opt_int_tree(term->spec, "charset") = (int) pcp;
 	cls_redraw_all_terminals();
 }
 
 void
 charset_list(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	int i, sel;
 	unsigned char *n;
 	struct menu_item *mi = new_menu(FREE_LIST);
@@ -63,7 +60,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 		add_to_menu(&mi, get_cp_name(i), "", "",
 			    MENU_FUNC display_codepage, (void *)i, 0);
 	}
-	sel = get_opt_int_tree(opt_tree, "charset");
+	sel = get_opt_int_tree(term->spec, "charset");
 	if (sel < 0) sel = 0;
 	do_menu_selected(term, mi, ses, sel);
 }
@@ -115,8 +112,7 @@ void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *d;
-	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
-	void *opt_term_type = (void *) get_opt_ptr_tree(opt_tree, "type");
+	void *opt_term_type = (void *) get_opt_ptr_tree(term->spec, "type");
 
 	d = mem_calloc(1, sizeof(struct dialog) + 12 * sizeof(struct widget));
 	if (!d) return;
@@ -153,27 +149,27 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 0;
 	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (void *) get_opt_ptr_tree(opt_tree, "m11_hack");
+	d->items[4].data = (void *) get_opt_ptr_tree(term->spec, "m11_hack");
 
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 0;
 	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (void *) get_opt_ptr_tree(opt_tree, "restrict_852");
+	d->items[5].data = (void *) get_opt_ptr_tree(term->spec, "restrict_852");
 
 	d->items[6].type = D_CHECKBOX;
 	d->items[6].gid = 0;
 	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (void *) get_opt_ptr_tree(opt_tree, "block_cursor");
+	d->items[6].data = (void *) get_opt_ptr_tree(term->spec, "block_cursor");
 
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 0;
 	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (void *) get_opt_ptr_tree(opt_tree, "colors");
+	d->items[7].data = (void *) get_opt_ptr_tree(term->spec, "colors");
 
 	d->items[8].type = D_CHECKBOX;
 	d->items[8].gid = 0;
 	d->items[8].dlen = sizeof(int);
-	d->items[8].data = (void *) get_opt_ptr_tree(opt_tree, "utf_8_io");
+	d->items[8].data = (void *) get_opt_ptr_tree(term->spec, "utf_8_io");
 
 	d->items[9].type = D_BUTTON;
 	d->items[9].gid = B_ENTER;

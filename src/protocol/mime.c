@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: mime.c,v 1.7 2002/12/01 17:45:11 pasky Exp $ */
+/* $Id: mime.c,v 1.8 2002/12/07 15:28:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	/* Guess type accordingly to the extension */
 
 	{
-		struct option *opt_tree = get_opt_rec_real(root_options,
+		struct option *opt_tree = get_opt_rec_real(&root_options,
 							   "mime.extension");
 		struct option *opt;
 
@@ -166,7 +166,7 @@ get_mime_handler_name(unsigned char *type, int xwin)
 
 	if (!name) return NULL;
 
-	opt = get_opt_rec_real(root_options, name);
+	opt = get_opt_rec_real(&root_options, name);
 	mem_free(name);
 	if (!opt) return NULL;
 
@@ -191,7 +191,7 @@ get_mime_type_handler(struct terminal *term, unsigned char *type)
 	name = get_mime_handler_name(type, xwin);
 	if (!name) return NULL;
 
-	opt_tree = get_opt_rec_real(root_options, name);
+	opt_tree = get_opt_rec_real(&root_options, name);
 
 	mem_free(name);
 

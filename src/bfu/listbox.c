@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.52 2002/12/06 22:35:17 pasky Exp $ */
+/* $Id: listbox.c,v 1.53 2002/12/07 15:28:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -316,7 +316,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 
 		for (i = depth - d; i; i--) {
 			child = root;
-			root = root->root;
+			if (root) root = root->root;
 		}
 
 		if (root ? root->child.prev == child

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.133 2002/12/07 14:26:52 pasky Exp $ */
+/* $Id: options.c,v 1.134 2002/12/07 15:28:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,8 +51,18 @@
  * (struct option *) instead. This applies to bookmarks, global history and
  * listbox items as well, though. --pasky */
 
-struct list_head *root_options;
-struct list_head *cmdline_options;
+struct option root_options = {
+	NULL, NULL,
+	"", 0, OPT_TREE, 0, 0,
+	NULL, "",
+	NULL,
+};
+struct option cmdline_options = {
+	NULL, NULL,
+	"", 0, OPT_TREE, 0, 0,
+	NULL, "",
+	NULL,
+};
 
 struct list_head root_option_box_items = {
 	&root_option_box_items, &root_option_box_items
@@ -60,7 +70,8 @@ struct list_head root_option_box_items = {
 
 struct list_head option_boxes = { &option_boxes, &option_boxes };
 
-static void add_opt_rec(struct list_head *, unsigned char *, struct option *);
+static void add_opt_rec(struct option *, unsigned char *, struct option *);
+static void free_options_tree(struct list_head *);
 
 /**********************************************************************
  Options interface
@@ -75,7 +86,7 @@ static int no_autocreate = 0;
 
 /* Get record of option of given name, or NULL if there's no such option. */
 struct option *
-get_opt_rec(struct list_head *tree, unsigned char *name_)
+get_opt_rec(struct option *tree, unsigned char *name_)
 {
 	struct option *cat = NULL;
 	struct option *option;
@@ -100,13 +111,13 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 			return NULL;
 		}
 
-		tree = (struct list_head *) cat->ptr;
+		tree = cat;
 
 		*sep = '.';
 		name = sep + 1;
 	}
 
-	foreach (option, *tree) {
+	foreach (option, *((struct list_head *) tree->ptr)) {
 		if (option->name && !strcmp(option->name, name)) {
 			mem_free(aname);
 			return option;
@@ -152,7 +163,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
  * do not create the option if it doesn't exist and there's autocreation
  * enabled. */
 struct option *
-get_opt_rec_real(struct list_head *tree, unsigned char *name)
+get_opt_rec_real(struct option *tree, unsigned char *name)
 {
 	struct option *opt;
 
@@ -165,7 +176,7 @@ get_opt_rec_real(struct list_head *tree, unsigned char *name)
 /* Fetch pointer to value of certain option. It is guaranteed to never return
  * NULL. Note that you are supposed to use wrapper get_opt(). */
 void *
-get_opt_(unsigned char *file, int line, struct list_head *tree,
+get_opt_(unsigned char *file, int line, struct option *tree,
 	 unsigned char *name)
 {
 	struct option *opt = get_opt_rec(tree, name);
@@ -182,27 +193,21 @@ get_opt_(unsigned char *file, int line, struct list_head *tree,
 
 /* Add option to tree. */
 static void
-add_opt_rec(struct list_head *tree, unsigned char *path, struct option *option)
+add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 {
-	struct option ruler;
-	struct option *opt_tree = NULL;
-	struct list_head *cat = tree;
+	struct list_head *cat = tree->ptr;
 
 	if (*path) {
-		opt_tree = get_opt_rec(tree, path);
-		cat = opt_tree->ptr;
-	} else if (tree != cmdline_options && tree != root_options) {
-		/* Ugh. Yes, I must be kidding. Will disappear soon. --pasky */
-		opt_tree = (struct option *) ((char *) tree - ((char *) &ruler.ptr - (char *) &ruler));
-		cat = opt_tree->ptr;
+		tree = get_opt_rec(tree, path);
+		cat = tree->ptr;
 	}
 	if (!cat) return;
 
-	if (opt_tree && opt_tree->box_item && option->box_item) {
-		option->box_item->depth = opt_tree->box_item->depth + 1;
-		option->box_item->root = opt_tree->box_item;
+	if (tree->box_item && option->box_item) {
+		option->box_item->depth = tree->box_item->depth + 1;
+		option->box_item->root = tree->box_item;
 
-		add_at_pos((struct listbox_item *) opt_tree->box_item->child.prev,
+		add_at_pos((struct listbox_item *) tree->box_item->child.prev,
 				option->box_item);
 	} else if (option->box_item) {
 		add_at_pos((struct listbox_item *) root_option_box_items.prev,
@@ -213,7 +218,7 @@ add_opt_rec(struct list_head *tree, unsigned char *path, struct option *option)
 }
 
 struct option *
-add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
+add_opt(struct option *tree, unsigned char *path, unsigned char *name,
 	enum option_flags flags, enum option_type type,
 	int min, int max, void *ptr,
 	unsigned char *desc)
@@ -230,7 +235,7 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	option->ptr = ptr;
 	option->desc = desc;
 
-	if (option->type == OPT_ALIAS || tree != root_options) {
+	if (option->type == OPT_ALIAS || tree != &root_options) {
 		option->box_item = NULL;
 		goto add_it;
 	}
@@ -259,17 +264,19 @@ add_it:
 void
 free_option(struct option *option)
 {
+	if (option->type == OPT_TREE) {
+		free_options_tree((struct list_head *) option->ptr);
+	}
+
 	if (option->type == OPT_BOOL ||
 			option->type == OPT_INT ||
 			option->type == OPT_LONG ||
 			option->type == OPT_STRING ||
 			option->type == OPT_CODEPAGE ||
 			option->type == OPT_COLOR ||
-			option->type == OPT_ALIAS) {
+			option->type == OPT_ALIAS ||
+			option->type == OPT_TREE) {
 		mem_free(option->ptr);
-
-	} else if (option->type == OPT_TREE) {
-		free_options_tree((struct list_head *) option->ptr);
 	}
 
 	if (option->name) mem_free(option->name);
@@ -331,22 +338,21 @@ void register_options();
 struct list_head *
 init_options_tree()
 {
-	struct list_head *list = mem_alloc(sizeof(struct list_head));
+	struct list_head *ptr = mem_alloc(sizeof(struct list_head));
 
-	if (list) init_list(*list);
-
-	return list;
+	if (ptr) init_list(*ptr);
+	return ptr;
 }
 
 void
 init_options()
 {
-	root_options = init_options_tree();
-	cmdline_options = init_options_tree();
+	root_options.ptr = init_options_tree();
+	cmdline_options.ptr = init_options_tree();
 	register_options();
 }
 
-void
+static void
 free_options_tree(struct list_head *tree)
 {
 	struct option *option;
@@ -356,14 +362,13 @@ free_options_tree(struct list_head *tree)
 	}
 
 	free_list(*tree);
-	mem_free(tree);
 }
 
 void
 done_options()
 {
-	free_options_tree(root_options);
-	free_options_tree(cmdline_options);
+	free_options_tree(root_options.ptr);
+	free_options_tree(cmdline_options.ptr);
 }
 
 void
@@ -489,7 +494,7 @@ unsigned char *eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 	(*argv)++; (*argc)--;	/* Consume next argument */
 
-	parse_config_file(root_options, "-eval", *(*argv - 1), NULL, NULL);
+	parse_config_file(&root_options, "-eval", *(*argv - 1), NULL, NULL);
 
 	fflush(stdout);
 
@@ -567,7 +572,7 @@ printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 		printf("Options:\n\n");
 	}
 
-	foreachback (option, *cmdline_options) {
+	foreachback (option, *((struct list_head *) cmdline_options.ptr)) {
 		if (1 /*option->flags & OPT_CMDLINE*/) {
 			printf("-%s ", option->name);
 
@@ -1974,74 +1979,74 @@ register_options()
 
 	/* Commandline-only options */
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"anonymous", 0, 0,
 		"Restrict ELinks so that it can run on an anonymous account.\n"
 		"No local file browsing, no downloads. Executing of viewers\n"
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"auto-submit", 0, 0,
 		"Go and submit the first form you'll stumble upon.");
 
-	add_opt_int_tree(cmdline_options, "",
+	add_opt_int_tree(&cmdline_options, "",
 		"base-session", 0, 0, MAXINT, 0,
 		"ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it.");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"dump", 0, 0,
 		"Write a plain-text version of the given HTML document to\n"
 		"stdout.");
 
-	add_opt_alias_tree(cmdline_options, "",
+	add_opt_alias_tree(&cmdline_options, "",
 		"dump-charset", 0, "document.dump.codepage",
 		"Codepage used in dump output.");
 
-	add_opt_alias_tree(cmdline_options, "",
+	add_opt_alias_tree(&cmdline_options, "",
 		"dump-width", 0, "document.dump.width",
 		"Width of the dump output.");
 
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"eval", 0, eval_cmd,
 		"Specify elinks.conf config options on the command-line:\n"
 		"  -eval 'set protocol.file.allow_special_files = 1'");
 
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"?", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"h", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"help", 0, printhelp_cmd,
 		"Print usage help and exit.");
 
 #if 0
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"help-config", 0, printhelp_cmd,
 		"Print help on configuration options and exit.");
 #endif
 
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"lookup", 0, lookup_cmd,
 		"Make lookup for specified host.");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"no-connect", 0, 0,
 		"Run ELinks as a separate instance - instead of connecting to\n"
 		"existing instance. Note that normally no runtime state files\n"
 		"(I mean bookmarks, history and so on) are written to the disk\n"
 		"with this option on - see also -touch-files.");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"no-home", 0, 0,
 		"Don't attempt to create and/or use home rc directory (~/.elinks).");
 
-	add_opt_int_tree(cmdline_options, "",
+	add_opt_int_tree(&cmdline_options, "",
 		"session-ring", 0, 0, MAXINT, 0,
 		"ID of session ring this ELinks should connect to. The ELinks\n"
 		"works in so-called session rings, where all instances of ELinks\n"
@@ -2057,11 +2062,11 @@ register_options()
 		"commandline option. Also note that normally no runtime state files\n"
 		"are written to the disk with this option on - see also -touch-files.\n");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"source", 0, 0,
 		"Write the given HTML document in source form to stdout.");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"stdin", 0, 0,
 		"Open stdin as HTML document - it is fully equivalent to:\n"
 		" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
@@ -2069,13 +2074,13 @@ register_options()
 		"stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 		"know why you would use -source -stdin, though ;-)");
 
-	add_opt_bool_tree(cmdline_options, "",
+	add_opt_bool_tree(&cmdline_options, "",
 		"touch-files", 0, 0,
 		"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 		"changed even when -no-connect is used; has no effect if not used\n"
 		"in connection with the -no-connect commandline option.");
 
-	add_opt_command_tree(cmdline_options, "",
+	add_opt_command_tree(&cmdline_options, "",
 		"version", 0, version_cmd,
 		"Print ELinks version information and exit.");
 

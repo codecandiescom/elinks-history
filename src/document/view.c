@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.107 2002/12/07 00:12:10 pasky Exp $ */
+/* $Id: view.c,v 1.108 2002/12/07 15:28:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1527,7 +1527,7 @@ xx:
 				goto error;
 			}*/
 			if (*sv->value) {
-				if (get_opt_int_tree(cmdline_options, "anonymous"))
+				if (get_opt_int_tree(&cmdline_options, "anonymous"))
 					goto error;
 				fh = open(sv->value, O_RDONLY);
 				if (fh == -1) goto error;
@@ -1593,7 +1593,6 @@ unsigned char *
 get_form_url(struct session *ses, struct f_data_c *f,
 	     struct form_control *form)
 {
-	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct list_head submit;
 	unsigned char *data;
 	unsigned char bound[BL];
@@ -1608,7 +1607,7 @@ get_form_url(struct session *ses, struct f_data_c *f,
 	}
 	if (!form->action) return NULL;
 	get_succesful_controls(f, form, &submit);
-	cp_from = get_opt_int_tree(opt_tree, "charset");
+	cp_from = get_opt_int_tree(ses->term->spec, "charset");
 	cp_to = f->f_data->cp;
 	if (form->method == FM_GET || form->method == FM_POST)
 		encode_controls(&submit, &data, &len, cp_from, cp_to);
@@ -2594,8 +2593,8 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_END:  rep_ev(ses, fd, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, fd, 0); break;
 			case ACT_ENTER_RELOAD: x = enter(ses, fd, 1); break;
-			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
-			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
+			case ACT_DOWNLOAD: if (!get_opt_int_tree(&cmdline_options, "anonymous")) frm_download(ses, fd, 0); break;
+			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(&cmdline_options, "anonymous")) frm_download(ses, fd, 1); break;
 			case ACT_SEARCH: search_dlg(ses, fd, 0); break;
 			case ACT_SEARCH_BACK: search_back_dlg(ses, fd, 0); break;
 			case ACT_FIND_NEXT: find_next(ses, fd, 0); break;
@@ -2889,30 +2888,30 @@ quak:
 				menu_save_formatted(ses->term, (void *) 1, ses);
 				goto x;
 			case ACT_ADD_BOOKMARK:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 					launch_bm_add_doc_dialog(ses->term, NULL, ses);
 				goto x;
 			case ACT_ADD_BOOKMARK_LINK:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 					launch_bm_add_link_dialog(ses->term, NULL, ses);
 				goto x;
 			case ACT_BOOKMARK_MANAGER:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 					menu_bookmark_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_HISTORY_MANAGER:
 #ifdef GLOBHIST
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 					menu_history_manager(ses->term, NULL, ses);
 #endif
 				goto x;
 			case ACT_OPTIONS_MANAGER:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 					menu_options_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef COOKIES
-				if (!get_opt_int_tree(cmdline_options, "anonymous")
+				if (!get_opt_int_tree(&cmdline_options, "anonymous")
 				    && get_opt_int("cookies.save"))
 					load_cookies();
 #endif
@@ -3103,7 +3102,7 @@ send_download(struct terminal *term, void *xxx, struct session *ses)
 static int
 add_session_ring_to_str(unsigned char **str, int *len)
 {
-	int ring = get_opt_int_tree(cmdline_options, "session-ring");
+	int ring = get_opt_int_tree(&cmdline_options, "session-ring");
 
 	if (ring) {
 		add_to_str(str, len, " -session-ring ");
@@ -3315,7 +3314,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					     MENU_FUNC open_in_new_window,
 					     send_open_in_new_xterm, c - 1);
 
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 				add_to_menu(&mi, TEXT(T_DOWNLOAD_LINK),
 					    "d", TEXT(T_HK_DOWNLOAD_LINK),
 					    MENU_FUNC send_download, NULL, 0);
@@ -3354,7 +3353,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 					    MENU_FUNC open_in_new_window,
 					    send_open_in_new_xterm, c - 1);
 
-			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 				add_to_menu(&mi, TEXT(T_SUBMIT_FORM_AND_DOWNLOAD),
 					    "d", TEXT(T_HK_SUBMIT_FORM_AND_DOWNLOAD),
 					    MENU_FUNC send_download, NULL, 0);
@@ -3366,7 +3365,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		add_to_menu(&mi, TEXT(T_VIEW_IMAGE),
 			    "", TEXT(T_HK_VIEW_IMAGE),
 			    MENU_FUNC send_image, NULL, 0);
-		if (!get_opt_int_tree(cmdline_options, "anonymous"))
+		if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 			add_to_menu(&mi, TEXT(T_DOWNLOAD_IMAGE),
 				    "", TEXT(T_HK_DOWNLOAD_IMAGE),
 				    MENU_FUNC send_download_image, NULL, 0);

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.31 2002/06/20 11:05:32 pasky Exp $ */
+/* $Id: types.c,v 1.32 2002/06/22 10:42:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,9 +101,29 @@ get_content_type(unsigned char *head, unsigned char *url)
 		return stracpy("text/html");
 
 	if (extension) {
-		struct option *opt = get_real_opt("mime.extension", extension);
+		struct option *opt_tree = get_opt_rec_real(root_options,
+							   "mime.extension");
+		struct option *opt;
 
-		if (opt) return opt->ptr;
+		foreach (opt, *((struct list_head *) opt_tree->ptr)) {
+			/* strrcmp */
+			int i, j;
+
+			/* Match the longest possible part of URL.. */
+
+			for (i = strlen(url) - 1, j = strlen(opt->name) - 1;
+			     i >= 0 && j >= 0
+			     && url[i] == (opt->name[j] == '-' ? '.'
+				     			       : opt->name[j]);
+			     i--, j--)
+				/* */ ;
+
+			/* If we matched whole extension and it is really an
+			 * extension.. */
+			if (j < 0 && i >= 0 && url[i] == '.') {
+				return stracpy(opt->ptr);
+			}
+		}
 	}
 
 	/* Try to make application/x-extension from it */
@@ -123,6 +143,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	}
 
 	/* Fallback.. use some hardwired default */
+	/* TODO: Make this rather mime.extension._template_ ..? --pasky */
 
 	return stracpy(get_opt_str("document.download.default_mime_type"));
 }
@@ -176,6 +197,8 @@ get_type_assoc(struct terminal *term, unsigned char *type)
 
 
 
+
+#if 0
 
 unsigned char *ct_msg[] = {
 	TEXT(T_LABEL),
@@ -300,8 +323,6 @@ add_ct_fn(struct dialog_data *dlg)
 			   AL_CENTER);
 }
 
-
-#if 0
 
 void
 really_del_ct(void *fcp)
@@ -606,6 +627,12 @@ add_ext_fn(struct dialog_data *dlg)
 
 
 void
+free_translated(void *fcp)
+{
+	mem_free(fcp);
+}
+
+void
 really_del_ext(void *fcp)
 {
 	struct option *opt;
@@ -618,11 +645,20 @@ really_del_ext(void *fcp)
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 {
+	unsigned char *translated = stracpy((unsigned char *) fcp);
 	struct option *opt;
 	unsigned char *str;
 	int strl;
-	
-	opt = get_real_opt("mime.extension", (unsigned char *) fcp);
+
+	if (translated) {
+		int i;
+		
+		for (i = strlen(translated) - 1; i >= 0; i--)
+			if (translated[i] == '.')
+				translated[i] = '-';
+	} else return;
+
+	opt = get_real_opt("mime.extension", translated);
 	if (!opt) return;
 
 	str = init_str();
@@ -635,9 +671,11 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 	msg_box(term, getml(str, NULL),
 		TEXT(T_DELETE_EXTENSION), AL_CENTER | AL_EXTD_TEXT,
 		TEXT(T_DELETE_EXTENSION), " ", str, "?", NULL,
-		fcp, 2,
+		translated, 2,
 		TEXT(T_YES), really_del_ext, B_ENTER,
-		TEXT(T_NO), NULL, B_ESC);
+		TEXT(T_NO), free_translated, B_ESC);
+
+	mem_free(fcp);
 }
 
 
@@ -651,9 +689,20 @@ void
 really_add_ext(void *fcp)
 {
 	struct extension *ext = (struct extension *) fcp;
-	unsigned char *name = straconcat("mime.extension", ".", ext->ext, NULL);
+	unsigned char *translated = stracpy(ext->ext);
+	unsigned char *name;
 
+	if (translated) {
+		int i;
+
+		for (i = strlen(translated) - 1; i >= 0; i--)
+			if (translated[i] == '.')
+				translated[i] = '-';
+	} else return;
+
+	name = straconcat("mime.extension", ".", translated, NULL);
 	if (!name) return;
+	mem_free(translated);
 
 	really_del_ext(ext->ext_orig); /* ..or rename ;) */
 	safe_strncpy(get_opt_str(name), ext->ct, MAX_STR_LEN);
@@ -663,6 +712,7 @@ really_add_ext(void *fcp)
 void
 menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 {
+	unsigned char *translated = stracpy((unsigned char *) fcp);
 	struct option *opt = NULL;
 	struct extension *new;
 	unsigned char *ext;
@@ -670,7 +720,15 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	unsigned char *ext_orig;
 	struct dialog *d;
 
-	if (fcp) opt = get_real_opt("mime.extension", (unsigned char *) fcp);
+	if (translated) {
+		int i;
+
+		for (i = strlen(translated) - 1; i >= 0; i--)
+			if (translated[i] == '.')
+				translated[i] = '-';
+	}
+
+	if (translated) opt = get_real_opt("mime.extension", translated);
 
 #define DIALOG_MEMSIZE sizeof(struct dialog) + 5 * sizeof(struct dialog_item) \
 		       + sizeof(struct extension) + 3 * MAX_STR_LEN
@@ -689,8 +747,12 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	if (opt) {
 		safe_strncpy(ext, (unsigned char *) fcp, MAX_STR_LEN);
 		safe_strncpy(ct, (unsigned char *) opt->ptr, MAX_STR_LEN);
-		safe_strncpy(ext_orig, (unsigned char *) fcp, MAX_STR_LEN);
+		safe_strncpy(ext_orig, translated ? translated
+						  : (unsigned char *) "",
+			     MAX_STR_LEN);
 	}
+
+	if (translated) mem_free(translated);
 
 	d->title = TEXT(T_EXTENSION);
 	d->fn = add_ext_fn;
@@ -720,6 +782,8 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	d->items[4].type = D_END;
 
 	do_dialog(term, d, getml(d, NULL));
+
+	mem_free(fcp);
 }
 
 
@@ -738,14 +802,26 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 	opt_tree = (struct list_head *) get_opt_ptr("mime.extension");
 
 	foreachback (opt, *opt_tree) {
+		unsigned char *translated;
+
 		if (!strcmp(opt->name, "_template_")) continue;
+
+		translated = stracpy(opt->name);
+		if (translated) {
+			int i;
+
+			for (i = strlen(translated) - 1; i >= 0; i--)
+				if (translated[i] == '-')
+					translated[i] = '.';
+		} else continue;
+
 		if (!mi) {
 			mi = new_menu(7);
 		       	if (!mi) return;
 		}
-		add_to_menu(&mi, stracpy(opt->name),
+		add_to_menu(&mi, translated,
 			    stracpy((unsigned char *) opt->ptr),
-			    "", MENU_FUNC fn, opt->name, 0);
+			    "", MENU_FUNC fn, stracpy(translated), 0);
 	}
 
 	if (!mi)

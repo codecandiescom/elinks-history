@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.31 2004/04/29 23:32:18 jonas Exp $ */
+/* $Id: module.c,v 1.32 2004/05/02 13:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include "formhist/formhist.h"
 #include "globhist/globhist.h"
 #include "mime/mime.h"
-#include "protocol/rewrite/rewrite.h"
+#include "protocol/protocol.h"
 #include "scripting/scripting.h"
 #include "ssl/ssl.h"
 
@@ -34,6 +34,7 @@ struct module *main_modules[] = {
 /* This is also used for version string composing so keep NULL terminated */
 struct module *builtin_modules[] = {
 	&css_module,
+	&protocol_module,
 #ifdef CONFIG_SSL
 	&ssl_module,
 #endif
@@ -52,9 +53,6 @@ struct module *builtin_modules[] = {
 #endif
 #ifdef CONFIG_GLOBHIST
 	&global_history_module,
-#endif
-#ifdef CONFIG_URI_REWRITE
-	&uri_rewrite_module,
 #endif
 #ifdef CONFIG_SCRIPTING
 	&scripting_module,

@@ -1,7 +1,9 @@
-/* $Id: protocol.h,v 1.24 2004/04/11 15:32:22 jonas Exp $ */
+/* $Id: protocol.h,v 1.25 2004/05/02 13:30:15 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
+
+#include "modules/module.h"
 
 struct connection;
 struct session;
@@ -54,5 +56,7 @@ protocol_external_handler *get_protocol_external_handler(enum protocol protocol)
  * PROTOCOL_UNKOWN or PROTOCOL_INVALID if no protocol part could be identified.
  * User defined protocols (configurable via protocol.user) takes precedence. */
 enum protocol get_protocol(unsigned char *name, int namelen);
+
+extern struct module protocol_module;
 
 #endif

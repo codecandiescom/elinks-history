@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.39 2004/04/11 15:32:22 jonas Exp $ */
+/* $Id: protocol.c,v 1.40 2004/05/02 13:30:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "protocol/ftp/ftp.h"
 #include "protocol/http/http.h"
 #include "protocol/http/https.h"
+#include "protocol/rewrite/rewrite.h"
 #include "protocol/smb/smb.h"
 #include "protocol/user.h"
 
@@ -172,3 +173,21 @@ get_protocol_external_handler(enum protocol protocol)
 	if_assert_failed return NULL;
 	return protocol_backends[protocol]->external_handler;
 }
+
+
+static struct module *protocol_submodules[] = {
+#ifdef CONFIG_URI_REWRITE
+	&uri_rewrite_module,
+#endif
+	NULL,
+};
+
+struct module protocol_module = struct_module(
+	/* name: */		N_("Protocol"),
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	protocol_submodules,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.112 2004/01/28 00:15:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.113 2004/01/28 00:27:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,6 +104,93 @@ map_scanner_string(struct scanner_string_mapping *mappings,
 }
 
 
+struct scanner_token *
+skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence)
+{
+	struct scanner_token *token = get_scanner_token(scanner);
+
+	/* Skip tokens while handling some basic precedens of special chars
+	 * so we don't skip to long. */
+	while (token) {
+		if (token->type == skipto
+		    || token->precedence > precedence)
+			break;
+		token = get_next_scanner_token(scanner);
+	}
+
+	return (token && token->type == skipto)
+		? get_next_scanner_token(scanner) : NULL;
+}
+
+#ifdef SCANNER_DEBUG
+void
+dump_scanner(struct scanner *scanner)
+{
+	unsigned char buffer[MAX_STR_LEN];
+	struct scanner_token *token = scanner->current;
+	struct scanner_token *table_end = scanner->table + scanner->tokens;
+	unsigned char *srcpos = token->string, *bufpos = buffer;
+	int src_lookahead = 50;
+	int token_lookahead = 4;
+	int srclen;
+
+	if (!scanner_has_tokens(scanner)) return;
+
+	memset(buffer, 0, MAX_STR_LEN);
+	for (; token_lookahead > 0 && token < table_end; token++, token_lookahead--) {
+		int buflen = MAX_STR_LEN - (bufpos - buffer);
+		int added = snprintf(bufpos, buflen, "[%.*s] ", token->length, token->string);
+
+		bufpos += added;
+	}
+
+	if (scanner->tokens > token_lookahead) {
+		memcpy(bufpos, "... ", 4);
+		bufpos += 4;
+	}
+
+	srclen = strlen(srcpos);
+	int_upper_bound(&src_lookahead, srclen);
+	*bufpos++ = '[';
+
+	/* Compress the lookahead string */
+	for (; src_lookahead > 0; src_lookahead--, srcpos++, bufpos++) {
+		if (*srcpos == '\n' || *srcpos == '\r' || *srcpos == '\t') {
+			*bufpos++ = '\\';
+			*bufpos = *srcpos == '\n' ? 'n'
+				: (*srcpos == '\r' ? 'r' : 't');
+		} else {
+			*bufpos = *srcpos;
+		}
+	}
+
+	if (srclen > src_lookahead)
+		memcpy(bufpos, "...]", 4);
+	else
+		memcpy(bufpos, "]", 2);
+
+	errfile = scanner->file, errline = scanner->line;
+	elinks_wdebug("%s", buffer);
+}
+
+struct scanner_token *
+get_scanner_token_debug(struct scanner *scanner)
+{
+	if (!scanner_has_tokens(scanner)) return NULL;
+
+	dump_scanner(scanner);
+
+	/* Make sure we do not return invalid tokens */
+	assert(!scanner_has_tokens(scanner)
+		|| scanner->current->type != 0);
+
+	return get_scanner_token(scanner);
+}
+#endif
+
+
+
+/* CSS scanner stuff */
 
 /* Bitmap entries for the CSS character groups used in the scanner table */
 
@@ -191,13 +278,6 @@ static struct scanner_info css_scanner_info = {
 #define ident2type(ident, end, base_type) \
 	map_scanner_string(css_string_mappings, ident, end, base_type)
 
-
-/* This macro checks that if the scanners table is full the last token skipping
- * or get_next_scanner_token() call made it possible to get the type of the next
- * token. */
-#define check_scanner(scanner) \
-	(scanner->tokens < SCANNER_TOKENS \
-	 || scanner->current + 1 < scanner->table + scanner->tokens)
 
 #define	skip_css(s, skipto)							\
 	while (*(s) && *(s) != (skipto) && check_css_precedence(*(s), skipto)) {\
@@ -406,8 +486,6 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 	scanner->position = string;
 }
 
-#define SCANNER_TABLE_SIZE (sizeof(struct scanner_token) * SCANNER_TOKENS)
-
 static struct scanner_token *
 scan_css_tokens(struct scanner *scanner)
 {
@@ -469,94 +547,6 @@ scan_css_tokens(struct scanner *scanner)
 
 	assert(check_scanner(scanner));
 	return table;
-}
-
-
-/* Scanner table accessors and mutators */
-
-#ifdef SCANNER_DEBUG
-void
-dump_scanner(struct scanner *scanner)
-{
-	unsigned char buffer[MAX_STR_LEN];
-	struct scanner_token *token = scanner->current;
-	struct scanner_token *table_end = scanner->table + scanner->tokens;
-	unsigned char *srcpos = token->string, *bufpos = buffer;
-	int src_lookahead = 50;
-	int token_lookahead = 4;
-	int srclen;
-
-	if (!scanner_has_tokens(scanner)) return;
-
-	memset(buffer, 0, MAX_STR_LEN);
-	for (; token_lookahead > 0 && token < table_end; token++, token_lookahead--) {
-		int buflen = MAX_STR_LEN - (bufpos - buffer);
-		int added = snprintf(bufpos, buflen, "[%.*s] ", token->length, token->string);
-
-		bufpos += added;
-	}
-
-	if (scanner->tokens > token_lookahead) {
-		memcpy(bufpos, "... ", 4);
-		bufpos += 4;
-	}
-
-	srclen = strlen(srcpos);
-	int_upper_bound(&src_lookahead, srclen);
-	*bufpos++ = '[';
-
-	/* Compress the lookahead string */
-	for (; src_lookahead > 0; src_lookahead--, srcpos++, bufpos++) {
-		if (*srcpos == '\n' || *srcpos == '\r' || *srcpos == '\t') {
-			*bufpos++ = '\\';
-			*bufpos = *srcpos == '\n' ? 'n'
-				: (*srcpos == '\r' ? 'r' : 't');
-		} else {
-			*bufpos = *srcpos;
-		}
-	}
-
-	if (srclen > src_lookahead)
-		memcpy(bufpos, "...]", 4);
-	else
-		memcpy(bufpos, "]", 2);
-
-	errfile = scanner->file, errline = scanner->line;
-	elinks_wdebug("%s", buffer);
-}
-
-struct scanner_token *
-get_scanner_token_debug(struct scanner *scanner)
-{
-	if (!scanner_has_tokens(scanner)) return NULL;
-
-	dump_scanner(scanner);
-
-	/* Make sure we do not return invalid tokens */
-	assert(!scanner_has_tokens(scanner)
-		|| scanner->current->type != 0);
-
-	return get_scanner_token(scanner);
-}
-
-#endif
-
-struct scanner_token *
-skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence)
-{
-	struct scanner_token *token = get_scanner_token(scanner);
-
-	/* Skip tokens while handling some basic precedens of special chars
-	 * so we don't skip to long. */
-	while (token) {
-		if (token->type == skipto
-		    || token->precedence > precedence)
-			break;
-		token = get_next_scanner_token(scanner);
-	}
-
-	return (token && token->type == skipto)
-		? get_next_scanner_token(scanner) : NULL;
 }
 
 

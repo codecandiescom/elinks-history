@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.61 2004/01/28 00:20:55 jonas Exp $ */
+/* $Id: scanner.h,v 1.62 2004/01/28 00:27:07 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -45,6 +45,7 @@ struct scanner_token {
  * should be no less than 2 in order to be able to peek at the next token in
  * the scanner. */
 #define SCANNER_TOKENS 10
+#define SCANNER_TABLE_SIZE (sizeof(struct scanner_token) * SCANNER_TOKENS)
 
 /* The {struct scanner} describes the current state of the CSS scanner. */
 struct scanner {
@@ -80,6 +81,13 @@ struct scanner {
 
 #define scanner_has_tokens(scanner) \
 	((scanner)->tokens > 0 && (scanner)->current < (scanner)->table + (scanner)->tokens)
+
+/* This macro checks if the current scanner state is valid. Meaning if the
+ * scanners table is full the last token skipping or get_next_scanner_token()
+ * call made it possible to get the type of the next token. */
+#define check_scanner(scanner) \
+	(scanner->tokens < SCANNER_TOKENS \
+	 || scanner->current + 1 < scanner->table + scanner->tokens)
 
 
 /* Scanner table accessors and mutators */

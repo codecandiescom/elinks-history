@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.192 2004/02/03 20:31:35 jonas Exp $ */
+/* $Id: search.c,v 1.193 2004/02/05 10:03:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1020,6 +1020,26 @@ search_link_text(struct document *document, int current_link, int i,
 	return -1;
 }
 
+static inline void
+draw_link_text(struct terminal *term, struct document_view *doc_view, int chars)
+{	
+	struct color_pair *color = get_bfu_color(term, "searched");
+	int xoffset = doc_view->x - doc_view->vs->x;
+	int yoffset = doc_view->y - doc_view->vs->y;
+	int link = doc_view->vs->current_link;
+	struct point *points = doc_view->document->links[link].pos;
+	register int i;
+
+	for (i = 0; i < chars; i++) {
+		int x = points[i].x + xoffset;
+		int y = points[i].y + yoffset;
+
+		/* TODO: We should take in account original colors and
+		 * combine them with defined color. */
+		draw_char_color(term, x, y, color);
+	}
+}
+
 static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
 	     unsigned char *text, int action)
@@ -1152,6 +1172,7 @@ link_typeahead_handler(struct input_line *line, int action)
 	switch (do_typeahead(ses, doc_view, buffer, action)) {
 		case TYPEAHEAD_MATCHED:
 			draw_formatted(ses, 0);
+			draw_link_text(ses->tab->term, doc_view, strlen(buffer));
 			return INPUT_LINE_PROCEED;
 
 		case TYPEAHEAD_STOP:

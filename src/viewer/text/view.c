@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.617 2004/10/10 04:40:58 miciah Exp $ */
+/* $Id: view.c,v 1.618 2004/10/10 20:08:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,6 +607,9 @@ try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 	if (link_number < 0) return 1;
 
 	ses->kbdprefix.repeat_count = 0;
+
+	if (!doc_view) return 0;
+
 	if (link_number >= doc_view->document->nlinks)
 		return 0;
 

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.15 2002/09/01 11:57:05 pasky Exp $ */
+/* $Id: select.c,v 1.16 2002/12/05 11:59:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,7 +152,8 @@ ttime last_time;
 void
 check_timers()
 {
-	ttime interval = get_time() - last_time;
+	ttime now = get_time();
+	ttime interval = now - last_time;
 	struct timer *t;
 
 	foreach(t, timers) t->interval -= interval;
@@ -168,7 +169,7 @@ ch:
 		goto ch;
 	} else break;
 
-	last_time += interval;
+	last_time = now;
 }
 
 int

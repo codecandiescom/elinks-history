@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.28 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: af_unix.c,v 1.29 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ int s_unix_fd = -1;
 
 #ifdef USE_AF_UNIX
 
-int get_address(void)
+static int get_address(void)
 {
 	struct sockaddr_un *addr;
 	unsigned char *path;
@@ -109,7 +109,8 @@ int get_address(void)
 	return AF_UNIX;
 }
 
-void unlink_unix(void)
+static void
+unlink_unix(void)
 {
 	unlink(((struct sockaddr_un *) s_unix)->sun_path);
 #if 0

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.46 2003/05/07 15:16:30 pasky Exp $ */
+/* $Id: error.c,v 1.47 2003/05/08 23:03:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ do_not_optimize_here(void *p)
 	/* stop GCC optimization - avoid bugs in it */
 }
 
-void
+static void
 er(int bell, unsigned char *fmt, va_list params)
 {
 	if (bell) fputc(7, stderr);

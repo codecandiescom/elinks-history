@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.17 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: sched.c,v 1.18 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -884,7 +884,7 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 	return stracpy(url);
 }
 
-unsigned char *
+static unsigned char *
 get_proxy(unsigned char *url)
 {
 #ifdef HAVE_SCRIPTING

@@ -1,4 +1,4 @@
-/* $Id: memdebug.h,v 1.2 2002/09/11 18:37:33 zas Exp $ */
+/* $Id: memdebug.h,v 1.3 2003/05/08 23:03:08 zas Exp $ */
 
 #ifndef EL__UTIL_MEMDEBUG_H
 #define EL__UTIL_MEMDEBUG_H
@@ -15,7 +15,7 @@ void debug_mem_free(unsigned char *, int, void *);
 void *debug_mem_realloc(unsigned char *, int, void *, size_t);
 void set_mem_comment(void *, unsigned char *, int);
 
-void check_memory_leaks();
+void check_memory_leaks(void);
 
 #else
 #define set_mem_comment(p, c, l)

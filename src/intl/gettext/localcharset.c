@@ -192,6 +192,9 @@ get_charset_aliases(void)
    If the canonical name cannot be determined, the result is a non-canonical
    name.  */
 
+/* Should be in .h file, used in _nl_init_domain_conv() function. */
+const unsigned char *locale_charset(void);
+
 #ifdef STATIC
 STATIC
 #endif

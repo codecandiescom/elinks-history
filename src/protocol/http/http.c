@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.106 2003/05/06 16:47:44 zas Exp $ */
+/* $Id: http.c,v 1.107 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -804,7 +804,7 @@ is_line_in_buffer(struct read_buffer *rb)
 	return 0;
 }
 
-void
+static void
 read_http_data(struct connection *conn, struct read_buffer *rb)
 {
 	struct http_connection_info *info = conn->info;

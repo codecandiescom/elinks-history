@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.8 2003/05/08 21:50:09 zas Exp $ */
+/* $Id: encoding.c,v 1.9 2003/05/08 23:03:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,8 @@ gzip_close(struct stream_encoded *stream)
 	gzclose((gzFile *) stream->data);
 }
 
-unsigned char **gzip_listext(void)
+static unsigned char **
+gzip_listext(void)
 {
 	static unsigned char *ext[] = { ".gz", ".tgz", NULL};
 
@@ -195,7 +196,8 @@ bzip2_close(struct stream_encoded *stream)
 	mem_free(data);
 }
 
-unsigned char **bzip2_listext(void)
+static unsigned char **
+bzip2_listext(void)
 {
 	static unsigned char *ext[] = { ".bz2", NULL};
 

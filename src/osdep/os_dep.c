@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.65 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: os_dep.c,v 1.66 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,6 +44,7 @@
 #include "elinks.h"
 
 #include "intl/gettext/libintl.h"
+#include "osdep/os_dep.h"
 #include "terminal/kbd.h"
 #include "lowlevel/select.h"
 #include "terminal/tab.h"
@@ -119,7 +120,7 @@ check_shell_security(unsigned char **cmd)
 	}
 }
 
-int
+static int
 get_e(char *env)
 {
 	char *v = getenv(env);
@@ -175,7 +176,7 @@ prealloc_truncate(int h, int siz)
 
 #if defined(UNIX) || defined(BEOS) || defined(RISCOS) || defined(WIN32)
 
-void
+static void
 sigwinch(void *s)
 {
 	((void (*)(void))s)();
@@ -1624,7 +1625,7 @@ struct gpm_mouse_spec {
 	void *data;
 };
 
-void
+static void
 gpm_mouse_in(struct gpm_mouse_spec *gms)
 {
 	Gpm_Event gev;
@@ -1782,7 +1783,7 @@ get_system_env()
 
 #endif
 
-void
+static void
 exec_new_elinks(struct terminal *term, unsigned char *xterm,
 		unsigned char *exe_name, unsigned char *param)
 {
@@ -1793,7 +1794,7 @@ exec_new_elinks(struct terminal *term, unsigned char *xterm,
 	mem_free(str);
 }
 
-void
+static void
 open_in_new_tab(struct terminal *term, unsigned char *exe_name,
                 unsigned char *param)
 {
@@ -1826,7 +1827,7 @@ open_in_new_tab(struct terminal *term, unsigned char *exe_name,
 	tab->handler(tab, &ev, 0);
 }
 
-void
+static void
 open_in_new_twterm(struct terminal *term, unsigned char *exe_name,
 		   unsigned char *param)
 {
@@ -1838,7 +1839,7 @@ open_in_new_twterm(struct terminal *term, unsigned char *exe_name,
 	exec_new_elinks(term, twterm, exe_name, param);
 }
 
-void
+static void
 open_in_new_xterm(struct terminal *term, unsigned char *exe_name,
 		  unsigned char *param)
 {
@@ -1850,7 +1851,7 @@ open_in_new_xterm(struct terminal *term, unsigned char *exe_name,
 	exec_new_elinks(term, xterm, exe_name, param);
 }
 
-void
+static void
 open_in_new_screen(struct terminal *term, unsigned char *exe_name,
 		   unsigned char *param)
 {

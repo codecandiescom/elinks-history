@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.58 2003/05/04 20:42:12 pasky Exp $ */
+/* $Id: url.c,v 1.59 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -529,7 +529,7 @@ strip_url_password(unsigned char *url)
 
 #define dsep(x) (lo ? dir_sep(x) : (x) == '/')
 
-void
+static void
 translate_directories(unsigned char *url)
 {
 	unsigned char *url_data = get_url_data(url);
@@ -595,7 +595,7 @@ proceed: ;
 }
 
 
-void
+static void
 insert_wd(unsigned char **up, unsigned char *cwd)
 {
 	unsigned char *url = *up;

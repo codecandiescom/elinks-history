@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.8 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: menu.h,v 1.9 2003/05/08 23:03:07 zas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -22,5 +22,7 @@ void search_back_dlg(struct session *, struct f_data_c *, int);
 void exit_prog(struct terminal *, void *, struct session *);
 
 void do_auth_dialog(struct session *);
+
+void really_exit_prog(struct session *ses);
 
 #endif

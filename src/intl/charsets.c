@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.24 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: charsets.c,v 1.25 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,7 +69,7 @@ char *strings[256] = {
 	"\370", "\371", "\372", "\373", "\374", "\375", "\376", "\377",
 };
 
-void
+static void
 free_translation_table(struct conv_table *p)
 {
 	int i;
@@ -83,7 +83,7 @@ free_translation_table(struct conv_table *p)
 
 unsigned char *no_str = NULL;
 
-void
+static void
 new_translation_table(struct conv_table *p)
 {
 	int i;
@@ -152,7 +152,7 @@ u2cp(unicode_val u, int to)
 
 unsigned char utf_buffer[7];
 
-unsigned char *
+static unsigned char *
 encode_utf_8(unicode_val u)
 {
 	memset(utf_buffer, 0, 7);
@@ -206,7 +206,7 @@ cp2utf_8(int from, int c)
 	return encode_utf_8(UCS_NO_CHAR);
 }
 
-void
+static void
 add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 {
 	unsigned char *p = encode_utf_8(u);
@@ -240,7 +240,7 @@ add_utf_8(struct conv_table *ct, unicode_val u, unsigned char *str)
 struct conv_table utf_table[256];
 int utf_table_init = 1;
 
-void
+static void
 free_utf_table(void)
 {
 	int i;
@@ -249,7 +249,7 @@ free_utf_table(void)
 		mem_free(utf_table[i].u.str);
 }
 
-struct conv_table *
+static struct conv_table *
 get_translation_table_to_utf_8(int from)
 {
 	int i;

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.35 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: socket.c,v 1.36 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ dns_exception(void *data)
 	dns_found(conn, 0);
 }
 
-void
+static void
 exception(void *data)
 {
 	retry_conn_with_state((struct connection *) data, S_EXCEPT);
@@ -386,7 +386,7 @@ connected(void *data)
 	mem_free(c_i);
 }
 
-void
+static void
 write_select(struct connection *c)
 {
 	struct write_buffer *wb = c->buffer;
@@ -454,7 +454,7 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 #define RD_ALLOC_GR (2<<11) /* 4096 */
 #define RD_MEM (sizeof(struct read_buffer) + 4 * RD_ALLOC_GR + RD_ALLOC_GR)
 
-void
+static void
 read_select(struct connection *c)
 {
 	struct read_buffer *rb = c->buffer;

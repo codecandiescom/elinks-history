@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.6 2003/05/04 17:25:57 pasky Exp $ */
+/* $Id: view.h,v 1.7 2003/05/08 23:03:09 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -58,5 +58,10 @@ void set_pos_x(struct f_data_c *, struct link *);
 void set_pos_y(struct f_data_c *, struct link *);
 void find_link(struct f_data_c *, int, int);
 int c_in_view(struct f_data_c *);
+
+int goto_link(unsigned char *, unsigned char *, struct session *, int);
+unsigned char *get_form_url(struct session *, struct f_data_c *,
+			    struct form_control *);
+
 
 #endif

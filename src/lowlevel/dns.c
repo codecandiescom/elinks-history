@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.28 2003/04/24 08:23:39 zas Exp $ */
+/* $Id: dns.c,v 1.29 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,7 +140,7 @@ do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno
 	return 0;
 }
 
-void
+static void
 lookup_fn(void *data, int h)
 {
 	unsigned char *name = (unsigned char *) data;
@@ -174,7 +174,7 @@ lookup_fn(void *data, int h)
 	free(addrs);
 }
 
-void
+static void
 end_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
@@ -224,7 +224,7 @@ done:
 	query->xfn(query, res);
 }
 
-void
+static void
 failed_real_lookup(void *data)
 {
 	struct dnsquery *query = (struct dnsquery *) data;
@@ -234,7 +234,7 @@ failed_real_lookup(void *data)
 	query->xfn(query, -1);
 }
 
-int
+static int
 do_lookup(struct dnsquery *query, int force_async)
 {
 	/* debug("starting lookup for %s", q->name); */
@@ -260,7 +260,7 @@ sync_lookup:
 #endif
 }
 
-int
+static int
 do_queued_lookup(struct dnsquery *query)
 {
 #ifndef THREAD_SAFE_LOOKUP
@@ -284,7 +284,7 @@ do_queued_lookup(struct dnsquery *query)
 #endif
 }
 
-int
+static int
 find_in_dns_cache(char *name, struct dnsentry **dnsentry)
 {
 	struct dnsentry *e;
@@ -299,7 +299,7 @@ find_in_dns_cache(char *name, struct dnsentry **dnsentry)
 	return -1;
 }
 
-void
+static void
 end_dns_lookup(struct dnsquery *q, int res)
 {
 	struct dnsentry *dnsentry;

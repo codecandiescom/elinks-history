@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.17 2003/04/19 18:39:56 zas Exp $ */
+/* $Id: home.c,v 1.18 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 unsigned char *elinks_home = NULL;
 int first_use = 0;
 
-unsigned char *
+static unsigned char *
 get_home(int *new)
 {
 	struct stat st;

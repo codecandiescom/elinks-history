@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.25 2003/05/04 20:54:23 pasky Exp $ */
+/* $Id: download.c,v 1.26 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1087,7 +1087,7 @@ tp_cancel(struct session *ses)
 }
 
 
-void
+static void
 tp_save(struct session *ses)
 {
 	if (ses->tq_prog) {
@@ -1098,7 +1098,7 @@ tp_save(struct session *ses)
 }
 
 
-void
+static void
 tp_open(struct session *ses)
 {
 	continue_download(ses, "");
@@ -1108,7 +1108,7 @@ tp_open(struct session *ses)
 /* FIXME: We need to modify this function to take frame data instead, as we
  * want to use this function for frames as well (now, when frame has content
  * type text/plain, it is ignored and displayed as HTML). */
-void
+static void
 tp_display(struct session *ses)
 {
 	struct location *l;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.79 2003/05/07 08:42:03 zas Exp $ */
+/* $Id: renderer.c,v 1.80 2003/05/08 23:03:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,7 +388,7 @@ del_chars(struct part *part, int x, int y)
 
 #define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
 
-int
+static int
 split_line(struct part *part)
 {
 	int i;

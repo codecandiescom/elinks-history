@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.69 2003/05/08 15:39:58 zas Exp $ */
+/* $Id: view.c,v 1.70 2003/05/08 23:03:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1663,7 +1663,7 @@ error:
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
 }
 
-void
+static void
 reset_form(struct f_data_c *f, int form_num)
 {
 	struct form_control *frm;
@@ -3263,7 +3263,7 @@ send_download_image(struct terminal *term, void *xxx, struct session *ses)
 	_send_download(term, xxx, ses, IMAGE);
 }
 
-void
+static void
 send_download(struct terminal *term, void *xxx, struct session *ses)
 {
 	_send_download(term, xxx, ses, URL);
@@ -3403,7 +3403,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	}
 }
 
-void
+static void
 save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 {
 	struct f_data *f_data = data;
@@ -3419,7 +3419,7 @@ save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 	close(h);
 }
 
-void
+static void
 save_formatted(struct session *ses, unsigned char *file)
 {
 	struct f_data_c *f = current_frame(ses);
@@ -3715,7 +3715,7 @@ print_current_link(struct session *ses)
 
 
 /* Print page's title and numbering at window top. */
-unsigned char *
+static unsigned char *
 print_current_titlex(struct f_data_c *fd, int w)
 {
 	int ml = 0, pl = 0;

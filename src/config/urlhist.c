@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.17 2003/05/08 21:46:00 zas Exp $ */
+/* $Id: urlhist.c,v 1.18 2003/05/08 23:03:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 
 #include "bfu/inphist.h"
 #include "config/options.h"
+#include "config/urlhist.h"
 #include "lowlevel/home.h"
 #include "util/file.h"
 #include "util/memory.h"

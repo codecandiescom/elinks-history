@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.57 2003/05/08 01:28:35 pasky Exp $ */
+/* $Id: session.c,v 1.58 2003/05/08 23:03:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -974,7 +974,7 @@ end_load(struct status *stat, struct session *ses)
 }
 
 #ifdef HAVE_SCRIPTING
-void
+static void
 maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 {
 	struct fragment *fr;
@@ -997,12 +997,13 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 }
 #endif
 
+unsigned char *get_form_url(struct session *, struct f_data_c *,
+				    struct form_control *);
+int goto_link(unsigned char *, unsigned char *, struct session *, int);
+
 void
 doc_end_load(struct status *stat, struct session *ses)
 {
-	unsigned char *get_form_url(struct session *, struct f_data_c *,
-				    struct form_control *);
-	int goto_link(unsigned char *, unsigned char *, struct session *, int);
 	int submit = 0;
 	struct form_control *fc = NULL;
 

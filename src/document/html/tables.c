@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.206 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: tables.c,v 1.207 2004/06/25 13:32:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1015,10 +1015,10 @@ get_column_widths(struct table *table)
 
 	colspan = 1;
 	do {
-		int i = 0, j;
+		int i, j;
 		int new_colspan = MAXINT;
 
-		for (; i < table->x; i++) for (j = 0; j < table->y; j++) {
+		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 
 			if (cell->is_spanned || !cell->is_used) continue;

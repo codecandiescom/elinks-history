@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.108 2004/07/19 23:09:33 jonas Exp $ */
+/* $Id: renderer.c,v 1.109 2004/08/16 01:02:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,9 +380,9 @@ add_document_lines(struct plain_renderer *renderer)
 }
 
 void
-render_plain_document(struct cache_entry *cached, struct document *document)
+render_plain_document(struct cache_entry *cached, struct document *document,
+		      struct string *buffer)
 {
-	struct fragment *fr = cached->frag.next;
 	struct conv_table *convert_table;
 	unsigned char *head = empty_string_or_(cached->head);
 	struct plain_renderer renderer;
@@ -398,9 +398,10 @@ render_plain_document(struct cache_entry *cached, struct document *document)
 	document->bgcolor = global_doc_opts->default_bg;
 	document->width = 0;
 
+	renderer.source = buffer->source;
+	renderer.length = buffer->length;
+
 	renderer.document = document;
-	renderer.source = fr->data;
-	renderer.length = fr->length;
 	renderer.lineno = 0;
 	renderer.convert_table = convert_table;
 	renderer.compress = document->options.plain_compress_empty_lines;

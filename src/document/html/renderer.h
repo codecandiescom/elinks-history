@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.68 2004/07/08 15:29:19 jonas Exp $ */
+/* $Id: renderer.h,v 1.69 2004/08/16 01:02:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -7,9 +7,10 @@
 
 struct box;
 struct cache_entry;
+struct string;
 
 
-void render_html_document(struct cache_entry *cached, struct document *document);
+void render_html_document(struct cache_entry *cached, struct document *document, struct string *buffer);
 
 /* Interface with tables.c */
 

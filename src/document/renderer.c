@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.69 2004/08/13 20:54:43 jonas Exp $ */
+/* $Id: renderer.c,v 1.70 2004/08/16 01:02:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,50 @@
 
 static void sort_links(struct document *document);
 
+static void
+render_encoded_document(struct cache_entry *cached, struct document *document)
+{
+	struct fragment *fr = cached->frag.next;
+	struct uri *uri = cached->uri;
+	enum stream_encoding encoding = ENCODING_NONE;
+	struct string buffer = INIT_STRING(fr->data, fr->length);
+	unsigned char *extension;
+
+	if (list_empty(cached->frag) || fr->offset || !fr->length)
+		return;
+
+	extension = get_extension_from_uri(uri);
+	if (extension) {
+		encoding = guess_encoding(extension);
+		mem_free(extension);
+	}
+
+	if (encoding != ENCODING_NONE) {
+		int length = 0;
+		unsigned char *source;
+
+		source = decode_encoded_buffer(encoding, buffer.source,
+					       buffer.length, &length);
+		if (source) {
+			buffer.source = source;
+			buffer.length = length;
+		} else {
+			encoding = ENCODING_NONE;
+		}
+	}
+
+	if (document->options.plain) {
+		render_plain_document(cached, document, &buffer);
+
+	} else {
+		render_html_document(cached, document, &buffer);
+	}
+
+	if (encoding != ENCODING_NONE) {
+		done_string(&buffer);
+	}
+}
+
 void
 render_document(struct view_state *vs, struct document_view *doc_view,
 		struct document_options *options)
@@ -66,25 +110,14 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 
 	document = get_cached_document(cached, options);
 	if (!document) {
-		struct fragment *fr;
-
 		document = init_document(cached, options);
 		if (!document) return;
 
 		shrink_memory(0);
 
 		defrag_entry(cached);
-		fr = cached->frag.next;
 
-		if (list_empty(cached->frag) || fr->offset || !fr->length) {
-
-		} else if (document->options.plain) {
-			render_plain_document(cached, document);
-
-		} else {
-			render_html_document(cached, document);
-		}
-
+		render_encoded_document(cached, document);
 		sort_links(document);
 		if (!document->title) {
 			if (document->uri->protocol == PROTOCOL_FILE) {

@@ -85,6 +85,48 @@ if (!(foo = mem_alloc(1234))) panic(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 Use blank lines frequently to separate chunks of code. And use magic "/*" and
 "*/" to give others an idea about what it does and about possible pitfalls.
 
+Keep in mind that if there's an object and verb in the comment (and it is, in
+most cases), it is a sentence, so it has to start with capital letter and end
+with a fullstop ;-). If you want to share your opinion or investigations, you
+should sign yourself, i.e. /* TODO: Move this far away! --pasky */
+
+All three following styles of comments are acceptable:
+
+/*
+ * Bla bla bla.
+ * blabla?
+ */
+
+/* Bla bla bla.
+ * blabla?
+ */
+
+/* Bla bla bla.
+ * blabla? */
+
+The best one usually depends on the actual context.
+
+If you describe a structure, make either:
+
+        char *name; /* name of the tag */
+        void (*func)(unsigned char *); /* function hopefully handling the
+                                        * content of the tag */
+        int linebreak; /* need for break of a line? */
+
+or
+
+        /* Name of the tag */
+        char *name;
+        /* Function hopefully handling the content of the tag */
+        void (*func)(unsigned char *);
+        /* Do we need to break a line? */
+        int linebreak;
+
+Same if you comment the code. If the comment is /* then do it now! */, place it
+on the same line as the command, if it's
+/* We have to parse this crap now, as it is going to be freed in free_crap() */
+place it on the preceding line.
+
 
 4, Patches
 ~~~~~~~~~~

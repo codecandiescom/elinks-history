@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.28 2003/11/13 18:44:15 jonas Exp $ */
+/* $Id: options.inc,v 1.29 2003/11/14 01:35:32 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -533,6 +533,15 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.html", N_("Underline links"),
 		"underline_links", 0, 0,
 		N_("Underline links.")),
+
+
+	INIT_OPT_TREE("document", N_("Plain rendering"),
+		"plain", 0,
+		N_("Options concerning the display of plain text pages.")),
+
+	INIT_OPT_BOOL("document.plain", N_("Display URIs"),
+		"display_links", 0, 1,
+		N_("Display URIs in the document as links.")),
 
 	/* Keep options in alphabetical order. */
 

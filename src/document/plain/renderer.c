@@ -1,10 +1,11 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.6 2003/11/13 14:28:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.7 2003/11/14 01:35:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -14,19 +15,23 @@
 #include "document/document.h"
 #include "document/html/renderer.h" /* TODO: Move get_convert_table() */
 #include "document/plain/renderer.h"
+#include "protocol/uri.h"
 #include "terminal/draw.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
 
 
-/* TODO: Highlight uris in the plaintext (optional ofcourse) */
-
 #define LINES_GRANULARITY	0x7F
 #define LINE_GRANULARITY	0x0F
+#define LINK_GRANULARITY	0x7F
 
 #define ALIGN_LINES(x, o, n) mem_align_alloc(x, o, n, sizeof(struct line), LINES_GRANULARITY)
 #define ALIGN_LINE(x, o, n) mem_align_alloc(x, o, n, sizeof(struct screen_char), LINE_GRANULARITY)
+#define ALIGN_LINK(x, o, n) mem_align_alloc(x, o, n, sizeof(struct link), LINK_GRANULARITY)
+
+#define realloc_points(link, size) \
+	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
 
 static struct line *
 realloc_lines(struct document *document, int y)
@@ -61,12 +66,49 @@ realloc_line(struct document *document, int y, int x)
 	return line->d;
 }
 
+static void
+add_document_link(struct document *document, int x, int y, int length,
+		  unsigned char *uri)
+{
+	struct link *link;
+
+	assert(document);
+	if_assert_failed return;
+
+	if (!ALIGN_LINK(&document->links, document->nlinks, document->nlinks + 1))
+		return;
+
+	link = &document->links[document->nlinks];
+
+	link->type = LINK_HYPERTEXT;
+	link->where = memacpy(uri, length);
+	link->target = memacpy(uri, length);
+	link->name = memacpy(uri, length);
+
+	link->color.background = document->options.default_bg;
+	link->color.foreground = document->options.default_vlink;
+
+	if (realloc_points(link, length)) {
+		struct point *point = link->pos;
+
+		link->n = length;
+
+		for (; length > 0; length--, point++, x++) {
+			point->x = x;
+			point->y = y;
+		}
+
+		document->nlinks++;
+	}
+}
+
 static inline int
 add_document_line(struct document *document, int lineno,
 		  unsigned char *line, int width, struct screen_char *template)
 {
 	struct screen_char *pos, *end;
-	int line_pos, expanded = 0;
+	int line_pos, expanded = 0, was_space = 1;
+	struct uri uri;
 
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
@@ -75,8 +117,43 @@ add_document_line(struct document *document, int lineno,
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 
 			expanded += tab_width;
+			was_space = 1;
+
 		} else if (line_char < ' ' || line_char == ASCII_ESC) {
 			line[line_pos] = ' ';
+			was_space = 1;
+
+		} else if (was_space) {
+			if (!document->options.plain_display_links) continue;
+
+			if (isalpha(line_char)) {
+				int urllen = line_pos;
+				unsigned char keep;
+
+				/* Coding style goes crasy here! :( --jonas */
+
+				while (line[urllen] && !isspace(line[urllen]))
+					urllen++;
+
+				urllen -= line_pos;
+				keep = line[line_pos + urllen];
+				line[line_pos + urllen] = 0;
+
+				/* TODO: Handle email@adresses.to and maybe
+				 * <URL:...> too --jonas */
+				if (parse_uri(&uri, &line[line_pos])
+				    && (uri.datalen || uri.hostlen)) {
+					add_document_link(document,
+							  line_pos + expanded,
+							  lineno, urllen,
+							  struri(uri));
+				}
+
+				line[line_pos + urllen] = keep;
+				was_space = 0;
+			} else {
+				was_space = isspace(line_char);
+			}
 		}
 	}
 
@@ -182,6 +259,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 
 	document->title = stracpy(document->url);
 	add_document_lines(document, source);
+
 	document->bgcolor = global_doc_opts->default_bg;
 
 	mem_free(source);

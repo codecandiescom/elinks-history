@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.58 2003/11/29 02:26:05 jonas Exp $ */
+/* $Id: text.c,v 1.59 2003/11/29 02:40:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 	 * scrolling. */
 	widget_data->x = x;
 	widget_data->y = *y;
-	widget_data->h = max_height * 7 / 10 - 3;
+	widget_data->h = max_height - 3;
 	if (widget_data->h < 0) widget_data->h = max_height;
 
 	/* Always reset @current if we do not need to scroll */

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.41 2003/11/05 20:08:16 jonas Exp $ */
+/* $Id: group.c,v 1.42 2003/11/05 20:21:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,7 @@
 
 
 static inline int
-base_group_width(struct terminal *term, struct widget_data *widget_data)
+base_group_width(struct widget_data *widget_data)
 {
 	if (widget_data->widget->type == WIDGET_CHECKBOX)
 		return 4;
@@ -36,7 +36,7 @@ group_width(struct terminal *term,
   	    struct widget_data *widget_data, int n,
 	    int *min_width, int *max_width)
 {
-	int base = base_group_width(term, widget_data);
+	int base = base_group_width(widget_data);
 	int minw = 0;
 	int maxw = 0;
 
@@ -60,12 +60,12 @@ group_width(struct terminal *term,
 }
 
 void
-dlg_format_group(struct terminal *term, struct terminal *t2,
+dlg_format_group(struct terminal *term,
 		 struct widget_data *widget_data,
 		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
-	int base = base_group_width(t2, widget_data);
+	int base = base_group_width(widget_data);
 	struct color_pair *color = get_bfu_color(term, "dialog.text");
 
 	while (n--) {
@@ -123,7 +123,7 @@ group_fn(struct dialog_data *dlg_data)
 	int_bounds(&w, 1, term->width - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_group(NULL, term, dlg_data->widgets_data, n,
+	dlg_format_group(NULL, dlg_data->widgets_data, n,
 			 0, &y, w, &rw);
 
 	y++;
@@ -138,7 +138,7 @@ group_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_group(term, term, dlg_data->widgets_data, n,
+	dlg_format_group(term, dlg_data->widgets_data, n,
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;

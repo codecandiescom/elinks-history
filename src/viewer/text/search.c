@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.97 2003/11/05 20:16:24 jonas Exp $ */
+/* $Id: search.c,v 1.98 2003/11/05 20:21:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -991,11 +991,11 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			 AL_LEFT);
 
 	y++;
-	dlg_format_group(NULL, term, dlg_data->widgets_data + 1, 3, 0,
+	dlg_format_group(NULL, dlg_data->widgets_data + 1, 3, 0,
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_group(NULL, term, dlg_data->widgets_data + 4, 2, 0,
+	dlg_format_group(NULL, dlg_data->widgets_data + 4, 2, 0,
 			 &y, w, &rw);
 
 	y++;
@@ -1016,11 +1016,11 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_group(term, term, dlg_data->widgets_data + 1, 3,
+	dlg_format_group(term, dlg_data->widgets_data + 1, 3,
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_group(term, term, dlg_data->widgets_data + 4, 2,
+	dlg_format_group(term, dlg_data->widgets_data + 4, 2,
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;

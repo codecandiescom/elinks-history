@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.118 2004/10/13 21:50:43 pasky Exp $ */
+/* $Id: renderer.c,v 1.119 2004/10/14 12:35:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,8 +117,12 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 		*current = snippets->next;
 	for (; *current != (struct string_list_item *) snippets;
 	     (*current) = (*current)->next) {
-		if ((*current)->string.length > 0
-		    && *(*current)->string.source == '^') {
+		struct string *string = &(*current)->string;
+
+		if (string->length == 0)
+			continue;
+
+		if (*string->source == '^') {
 			/* External reference! */
 
 			unsigned char *url = memacpy((*current)->string.source + 1,
@@ -151,7 +155,7 @@ next_snippet:
 			continue;
 		}
 
-		ecmascript_eval(interpreter, &(*current)->string);
+		ecmascript_eval(interpreter, string);
 	}
 }
 #endif

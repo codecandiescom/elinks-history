@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.17 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: core.c,v 1.18 2002/09/12 16:33:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,10 +142,10 @@ l_current_document_formatted(LS)
 	int l = 0;
 
 	if (lua_gettop(S) == 0) width = -1;
-	else if (!lua_isnumber(S, 1)) goto err;
-	else if ((width = lua_tonumber(S, 1)) <= 0) goto err;
+	else if (!lua_isnumber(S, 1)) goto error;
+	else if ((width = lua_tonumber(S, 1)) <= 0) goto error;
 
-	if (!ses || !(f = current_frame(ses))) goto err;
+	if (!ses || !(f = current_frame(ses))) goto error;
 	if (width > 0) {
 		old_width = ses->term->x, ses->term->x = width;
 		html_interpret(ses);
@@ -154,10 +154,14 @@ l_current_document_formatted(LS)
 	buf = init_str();
 	for (y = 0; y < fd->y; y++) for (x = 0; x <= fd->data[y].l; x++) {
 		int c;
-		if (x == fd->data[y].l) c = '\n';
-		else {
-			if (((c = fd->data[y].d[x]) & 0xff) == 1) c += ' ' - 1;
-			if ((c >> 15) && (c & 0xff) >= 176 && (c & 0xff) < 224) c = frame_dumb[(c & 0xff) - 176];
+
+		if (x == fd->data[y].l) {
+			c = '\n';
+		} else {
+			c = fd->data[y].d[x];
+			if ((c & 0xff) == 1) c += ' ' - 1;
+			if ((c >> 15) && (c & 0xff) >= 176 && (c & 0xff) < 224)
+				c = frame_dumb[(c & 0xff) - 176];
 		}
 		add_chr_to_str(&buf, &l, c);
 	}
@@ -169,7 +173,7 @@ l_current_document_formatted(LS)
 	}
 	return 1;
 
-	err:
+error:
 	lua_pushnil(S);
 	return 1;
 }
@@ -181,10 +185,10 @@ l_pipe_read(LS)
 	unsigned char *s = NULL;
 	int len = 0;
 
-	if (!lua_isstring(S, 1) || !(fp = popen(lua_tostring(S, 1), "r"))) {
-		lua_pushnil(S);
-		return 1;
-	}
+	if (!lua_isstring(S, 1)) goto error;
+
+	fp = popen(lua_tostring(S, 1), "r");
+	if (!fp) goto error;
 
 	while (!feof(fp)) {
 		unsigned char buf[1024];
@@ -198,6 +202,10 @@ l_pipe_read(LS)
 
 	lua_pushlstring(S, s, len);
 	mem_free(s);
+	return 1;
+
+error:
+	lua_pushnil(S);
 	return 1;
 }
 
@@ -237,6 +245,7 @@ l_enable_systems_functions(LS)
 	lua_register(S, "pipe_read", l_pipe_read);
 	lua_register(S, "execute", l_execute);
 	lua_register(S, "tmpname", l_tmpname);
+
 	return 0;
 }
 
@@ -246,7 +255,8 @@ l_bind_key(LS)
 	int ref;
 	unsigned char *err;
 
-	if (!lua_isstring(S, 1) || !lua_isstring(S, 2) || !lua_isfunction(S, 3)) {
+	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
+	    || !lua_isfunction(S, 3)) {
 		alert_lua_error("bad arguments to bind_key");
 		goto error;
 	}
@@ -254,7 +264,9 @@ l_bind_key(LS)
 	lua_pushvalue(S, 3);
 	ref = lua_ref(S, 1);
 
-	if ((err = bind_lua_func((uchar *)lua_tostring(S, 1), (uchar *)lua_tostring(S, 2), ref))) {
+	err = bind_lua_func((uchar *)lua_tostring(S, 1),
+			    (uchar *)lua_tostring(S, 2), ref);
+	if (err) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
 		goto error;
@@ -311,6 +323,7 @@ dialog_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
+	int dialog_text_color =  get_bfu_color(term, "dialog.text");
 
 	max_text_width(term, dlg_msg[0], &max);
 	min_text_width(term, dlg_msg[0], &min);
@@ -323,33 +336,45 @@ dialog_fn(struct dialog_data *dlg)
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
-	if (w > dlg->win->term->x - 2 * DIALOG_LB) w = dlg->win->term->x - 2 * DIALOG_LB;
+	if (w > dlg->win->term->x - 2 * DIALOG_LB)
+		w = dlg->win->term->x - 2 * DIALOG_LB;
 	if (w < 1) w = 1;
 	rw = 0;
 	/*HACK*/ w = rw = 50;
-	dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw,
+			dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, dlg_msg[1], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(NULL, term, dlg_msg[1], 0, &y, w, &rw,
+			dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_text(NULL, term, dlg_msg[2], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(NULL, term, dlg_msg[2], 0, &y, w, &rw,
+			dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_buttons(NULL, term, dlg->items + 3, 2, 0, &y, w, &rw, AL_CENTER);
+	dlg_format_buttons(NULL, term, dlg->items + 3, 2, 0, &y, w, &rw,
+			   AL_CENTER);
 	w = rw;
 	dlg->xw = w + 2 * DIALOG_LB;
 	dlg->yw = y + 2 * DIALOG_TB;
 	center_dlg(dlg);
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
-	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL,
+			 dialog_text_color, AL_LEFT);
+	dlg_format_field(term, term, &dlg->items[0], dlg->x + DIALOG_LB, &y, w,
+			 NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, dlg_msg[1], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
-	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, dlg_msg[1], dlg->x + DIALOG_LB, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
+	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB, &y, w,
+			 NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, dlg_msg[2], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
-	dlg_format_field(term, term, &dlg->items[2], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	dlg_format_text(term, term, dlg_msg[2], dlg->x + DIALOG_LB, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
+	dlg_format_field(term, term, &dlg->items[2], dlg->x + DIALOG_LB, &y, w,
+			 NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[3], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(term, term, &dlg->items[3], 2, dlg->x + DIALOG_LB,
+			   &y, w, NULL, AL_CENTER);
 }
 
 static int
@@ -359,13 +384,15 @@ l_edit_bookmark_dialog(LS)
 	size_t sz;
 	struct dlg_data *data;
 
-	if (!lua_isstring(S, 1) || !lua_isstring(S, 2) || !lua_isstring(S, 3) || !lua_isfunction(S, 4)) {
+	if (!lua_isstring(S, 1) || !lua_isstring(S, 2)
+	    || !lua_isstring(S, 3) || !lua_isfunction(S, 4)) {
 		lua_pushnil(S);
 		return 1;
 	}
 
 	sz = sizeof(struct dialog) + 6 * sizeof(struct widget) + sizeof *data;
-	if (!(d = mem_alloc(sz))) return 0;
+	d = mem_alloc(sz);
+	if (!d) return 0;
 	memset(d, 0, sz);
 
 	data = (struct dlg_data *)&d->items[6];
@@ -451,6 +478,7 @@ xdialog_fn(struct dialog_data *dlg)
 	int y = -1;
 	int i;
 	int nfields;
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	for (nfields = 0; dlg->items[nfields].item->type == D_FIELD; nfields++);
 
@@ -461,15 +489,18 @@ xdialog_fn(struct dialog_data *dlg)
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
 	if (w < min) w = min;
-	if (w > dlg->win->term->x - 2 * DIALOG_LB) w = dlg->win->term->x - 2 * DIALOG_LB;
+	if (w > dlg->win->term->x - 2 * DIALOG_LB)
+		w = dlg->win->term->x - 2 * DIALOG_LB;
 	if (w < 1) w = 1;
 	rw = 0;
 	/*HACK*/ w = rw = 50;
 	for (i = 0; i < nfields; i++) {
-	    dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	    dlg_format_text(NULL, term, dlg_msg[0], 0, &y, w, &rw,
+			    dialog_text_color, AL_LEFT);
 	    y += 2;
 	}
-	dlg_format_buttons(NULL, term, dlg->items + nfields, 2, 0, &y, w, &rw, AL_CENTER);
+	dlg_format_buttons(NULL, term, dlg->items + nfields, 2,
+			   0, &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg->xw = w + 2 * DIALOG_LB;
 	dlg->yw = y + 2 * DIALOG_TB;
@@ -477,11 +508,17 @@ xdialog_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 	y = dlg->y + DIALOG_TB;
 	for (i = 0; i < nfields; i++) {
-	    dlg_format_text(term, term, dlg_msg[0], dlg->x + DIALOG_LB, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
-	    dlg_format_field(term, term, &dlg->items[i], dlg->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
+	    dlg_format_text(term, term, dlg_msg[0],
+			    dlg->x + DIALOG_LB, &y, w, NULL,
+			    dialog_text_color, AL_LEFT);
+	    dlg_format_field(term, term, &dlg->items[i],
+			     dlg->x + DIALOG_LB, &y, w,
+			     NULL, AL_LEFT);
 	    y++;
 	}
-	dlg_format_buttons(term, term, &dlg->items[nfields], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(term, term, &dlg->items[nfields],
+			   2, dlg->x + DIALOG_LB, &y, w,
+			   NULL, AL_CENTER);
 }
 
 static int
@@ -502,14 +539,16 @@ l_xdialog(LS)
 	if (!lua_isfunction(S, nargs)) goto error;
 
 	sz = sizeof(struct dialog) + nitems * sizeof(struct widget) + sizeof *data;
-	if (!(d = mem_alloc(sz))) return 0;
+	d = mem_alloc(sz);
+	if (!d) return 0;
 	memset(d, 0, sz);
 
 	data = (struct xdialog_data *)&d->items[nitems];
 	data->state = S;
 	data->nfields = nfields;
 	for (i = 0; i < nfields; i++)
-		safe_strncpy(data->fields[i], (uchar *)lua_tostring(S, i+1), MAX_STR_LEN-1);
+		safe_strncpy(data->fields[i], (uchar *)lua_tostring(S, i+1),
+			     MAX_STR_LEN-1);
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
 
@@ -602,6 +641,7 @@ prepare_lua(struct session *_ses)
 	errterm = ses ? ses->term : NULL;
 	/* XXX this uses the wrong term, I think */
 	install_signal_handler(SIGINT, (void (*)(void *))handle_sigint, NULL, 1);
+
 	return sigsetjmp(errjmp, 1);
 }
 
@@ -656,10 +696,10 @@ alert_lua_error2(unsigned char *msg, unsigned char *msg2)
 static void
 handle_ret_eval(struct session *ses)
 {
-	const unsigned char *expr;
+	const unsigned char *expr = lua_tostring(L, -1);
 	int oldtop;
 
-	if (!(expr = lua_tostring(L, -1))) {
+	if (!expr) {
 		alert_lua_error("bad argument for eval");
 		return;
 	}
@@ -675,9 +715,9 @@ handle_ret_eval(struct session *ses)
 static void
 handle_ret_run(struct session *ses)
 {
-	unsigned char *cmd;
+	unsigned char *cmd = (uchar *)lua_tostring(L, -1);
 
-	if (!(cmd = (uchar *)lua_tostring(L, -1)))
+	if (!cmd)
 		alert_lua_error("bad argument for run");
 	else
 		exec_on_terminal(ses->term, cmd, "", 1);
@@ -686,9 +726,9 @@ handle_ret_run(struct session *ses)
 static void
 handle_ret_goto_url(struct session *ses)
 {
-	unsigned char *url;
+	unsigned char *url = (uchar *)lua_tostring(L, -1);
 
-	if (!(url = (uchar *)lua_tostring(L, -1)))
+	if (!url)
 		alert_lua_error("bad argument for goto_url");
 	else
 		goto_url(ses, url);
@@ -697,9 +737,9 @@ handle_ret_goto_url(struct session *ses)
 static void
 handle_standard_lua_returns(unsigned char *from)
 {
-	const unsigned char *act;
+	const unsigned char *act = lua_tostring(L, -2);
 
-	if ((act = lua_tostring(L, -2))) {
+	if (act) {
 		if (!strcmp(act, "eval"))
 			handle_ret_eval(ses);
 		else if (!strcmp(act, "run"))
@@ -735,6 +775,7 @@ lua_console(struct session *ses, unsigned char *expr)
 	lua_pushstring(L, expr);
 	if (prepare_lua(ses) == 0) {
 		int err = lua_call(L, 1, 2);
+
 		finish_lua();
 		if (!err)
 			handle_standard_lua_returns("lua_console_hook");
@@ -744,7 +785,13 @@ lua_console(struct session *ses, unsigned char *expr)
 void
 dialog_lua_console(struct session *ses)
 {
-	input_field(ses->term, NULL, TEXT(T_LUA_CONSOLE), TEXT(T_ENTER_EXPRESSION), TEXT(T_OK), TEXT(T_CANCEL), ses, &lua_console_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) lua_console, NULL);
+	input_field(ses->term, NULL,
+		    TEXT(T_LUA_CONSOLE),
+		    TEXT(T_ENTER_EXPRESSION),
+		    TEXT(T_OK),
+		    TEXT(T_CANCEL), ses, &lua_console_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) lua_console, NULL);
 }
 
 void

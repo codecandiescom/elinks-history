@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.290 2004/06/29 10:29:54 jonas Exp $ */
+/* $Id: tables.c,v 1.291 2004/06/29 10:43:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -738,14 +738,84 @@ get_table_heights(struct table *table)
 	table->real_height = get_table_real_height(table);
 }
 
+static inline void
+draw_table_cell(struct table *table, int col, int row, int xp, int yp)
+{
+	struct table_cell *cell = CELL(table, col, row);
+	int xw = 0;
+	int yw = 0;
+	int s;
+	struct html_element *state;
+
+	if (!cell->start) return;
+
+	for (s = 0; s < cell->colspan; s++) {
+		xw += table->cols_widths[col + s] +
+		      (s < cell->colspan - 1 &&
+		       has_vline_width(table, col + s + 1));
+	}
+
+	for (s = 0; s < cell->rowspan; s++) {
+		yw += table->rows_heights[row + s] +
+		      (s < cell->rowspan - 1 &&
+		       get_hline_width(table, row + s + 1) >= 0);
+	}
+
+	if (global_doc_opts && global_doc_opts->table_expand_cols) {
+		/* This is not working correctly. Some
+		 * pages will be rendered much better
+		 * (/.) while other will look very ugly
+		 * and broken. */
+		par_format.bgcolor = table->bgcolor;
+		for (s = yp; s < yp + yw; s++) {
+			expand_lines(table->part, s);
+			expand_line(table->part, s, xp - 1);
+		}
+	}
+
+	state = init_html_parser_state(ELEMENT_DONT_KILL,
+				       par_format.align, 0, 0);
+
+	if (cell->is_header) format.attr |= AT_BOLD;
+
+	format.bg = cell->bgcolor;
+	par_format.bgcolor = cell->bgcolor;
+	{
+		struct document *document = table->part->document;
+		struct part *part;
+		int tmpy = yp;
+
+		if (cell->valign == VALIGN_MIDDLE)
+			tmpy += (yw - cell->height)>>1;
+		else if (cell->valign == VALIGN_BOTTOM)
+			tmpy += (yw - cell->height);
+
+	   	part = format_cell(table, col, row, document, xp, tmpy, xw);
+		if (part) {
+			int yt;
+
+			for (yt = 0; yt < part->box.height; yt++) {
+				expand_lines(table->part, yp + yt);
+				expand_line(table->part, yp + yt,
+					    xp + table->cols_widths[col]);
+			}
+
+			if (cell->fragment_id)
+				add_fragment_identifier(part, cell->fragment_id);
+
+			mem_free(part);
+		}
+	}
+
+	done_html_parser_state(state);
+}
+
 /* FIXME: too long, split it. */
 static void
 draw_table_cells(struct table *table, int x, int y)
 {
 	int col, row;
-	struct document *document = table->part->document;
 	int xp;
-	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 	color_t default_bgcolor = par_format.bgcolor;
 	struct table_frames table_frames;
 
@@ -759,7 +829,6 @@ draw_table_cells(struct table *table, int x, int y)
 		int yp = y + table_frames.top;
 
 		for (row = 0; row < table->rows; row++) {
-			struct table_cell *cell = CELL(table, col, row);
 			int row_height = table->rows_heights[row] +
 				(row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
 			int row2;
@@ -772,71 +841,7 @@ draw_table_cells(struct table *table, int x, int y)
 				expand_line(table->part, row2, x - 1);
 			}
 
-			if (cell->start) {
-				int xw = 0;
-				int yw = 0;
-				int s;
-				struct html_element *state;
-
-				for (s = 0; s < cell->colspan; s++) {
-					xw += table->cols_widths[col + s] +
-					      (s < cell->colspan - 1 &&
-					       has_vline_width(table, col + s + 1));
-				}
-
-				for (s = 0; s < cell->rowspan; s++) {
-					yw += table->rows_heights[row + s] +
-					      (s < cell->rowspan - 1 &&
-					       get_hline_width(table, row + s + 1) >= 0);
-				}
-
-				if (expand_cols) {
-					/* This is not working correctly. Some
-					 * pages will be rendered much better
-					 * (/.) while other will look very ugly
-					 * and broken. */
-					par_format.bgcolor = table->bgcolor;
-					for (s = yp; s < yp + yw; s++) {
-						expand_lines(table->part, s);
-						expand_line(table->part, s, xp - 1);
-					}
-				}
-
-				state = init_html_parser_state(ELEMENT_DONT_KILL,
-							       par_format.align, 0, 0);
-
-				if (cell->is_header) format.attr |= AT_BOLD;
-
-				format.bg = cell->bgcolor;
-				par_format.bgcolor = cell->bgcolor;
- 				{
-					struct part *part;
-					int tmpy = yp;
-
-					if (cell->valign == VALIGN_MIDDLE)
-						tmpy += (yw - cell->height)>>1;
-					else if (cell->valign == VALIGN_BOTTOM)
-						tmpy += (yw - cell->height);
-
-				   	part = format_cell(table, col, row, document, xp, tmpy, xw);
-					if (part) {
-						int yt;
-
-						for (yt = 0; yt < part->box.height; yt++) {
-							expand_lines(table->part, yp + yt);
-							expand_line(table->part, yp + yt,
-								    xp + table->cols_widths[col]);
-						}
-
-						if (cell->fragment_id)
-							add_fragment_identifier(part, cell->fragment_id);
-
-						mem_free(part);
-					}
-				}
-
-				done_html_parser_state(state);
-			}
+			draw_table_cell(table, col, row, xp, yp);
 
 			yp += table->rows_heights[row] +
 			      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);

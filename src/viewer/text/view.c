@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.18 2003/04/18 07:39:00 zas Exp $ */
+/* $Id: view.c,v 1.19 2003/04/20 08:27:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1533,6 +1533,7 @@ xx:
 					goto error;
 				fh = open(sv->value, O_RDONLY);
 				if (fh == -1) goto error;
+				set_bin(fh);
 				do {
 					rd = read(fh, buffer, F_BUFLEN);
 					if (rd == -1) goto error;

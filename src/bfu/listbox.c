@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.121 2003/11/26 22:21:48 jonas Exp $ */
+/* $Id: listbox.c,v 1.122 2003/11/26 22:35:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -246,20 +246,11 @@ done_down:
 	return visible_item;
 }
 
-struct box_context {
-	struct terminal *term;
-	struct widget_data *widget_data;
-	struct listbox_data *box;
-	struct dialog_data *dlg_data;
-	int dist;
-	int offset;
-};
-
 /* Takes care about listbox top moving. */
 static int
 box_sel_move_do(struct listbox_item *item, void *data_, int *offset)
 {
-	struct box_context *data = data_;
+	struct listbox_context *data = data_;
 
 	if (item == data->box->top)
 		data->box->sel_offset = 0; /* assure resync */
@@ -307,9 +298,9 @@ box_sel_move(struct widget_data *widget_data, int dist)
 
 	if (traverse_listbox_items_list(box->sel, box, dist, 1, NULL, NULL)
 	    != box->sel) {
-		struct box_context data;
+		struct listbox_context data;
 
-		memset(&data, 0, sizeof(struct box_context));
+		memset(&data, 0, sizeof(struct listbox_context));
 
 		data.box = box;
 		data.widget_data = widget_data;
@@ -327,7 +318,7 @@ box_sel_move(struct widget_data *widget_data, int dist)
 static int
 display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 {
-	struct box_context *data = data_;
+	struct listbox_context *data = data_;
 	unsigned char *text = item->text;
 	unsigned char *stylename;
 	int len; /* Length of the current text field. */
@@ -426,7 +417,7 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
-	struct box_context data;
+	struct listbox_context data;
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -446,7 +437,7 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		box->sel = box->top;
 	}
 
-	memset(&data, 0, sizeof(struct box_context));
+	memset(&data, 0, sizeof(struct listbox_context));
 	data.term = term;
 	data.widget_data = widget_data;
 	data.box = box;

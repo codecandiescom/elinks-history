@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.52 2003/11/25 13:29:34 jonas Exp $ */
+/* $Id: listbox.h,v 1.53 2003/11/26 22:35:28 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -27,6 +27,25 @@ struct listbox_item;
 enum listbox_info {
 	LISTBOX_URI,
 	LISTBOX_ALL,
+};
+
+/* Structure used for storing all relevant info when traversing listboxes */
+struct listbox_context {
+	/* The terminal we are running on */
+	struct terminal *term;
+
+	/* The current listbox widgets data */
+	struct listbox_data *box;
+
+	/* The current (hierbox browser) dialog stuff */
+	struct dialog_data *dlg_data;
+	struct widget_data *widget_data;
+
+	/* The offset of the current box from the top */
+	int dist;
+
+	/* The offset of the current box from the top */
+	int offset;
 };
 
 /* TODO: We can maybe find a better way of figuring out whether a user of a

@@ -1,3 +1,231 @@
+Wed Jun 18 21:16:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	elinks_usleep() was introduced, it resides here for now.  
+
+Wed Jun 18 20:37:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Prevent memleak in alloc_address(), assertions are now used.  
+
+Wed Jun 18 20:29:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	alloc_address() was introduced.  
+
+Wed Jun 18 20:11:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	void unlink_unix() -> void unlink_unix(struct sockaddr *s_addr) 
+
+Wed Jun 18 20:05:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	get_sun_path() was introduced, it computes unix socket path.  
+
+Wed Jun 18 19:44:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	get_address() now set values of passed parameters.  
+
+Wed Jun 18 18:58:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Humm, better like that. ;) 
+
+Wed Jun 18 18:39:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Well, struct sockaddr_un is a total mess. So i did it like that,
+	have a look and comment.  
+
+Wed Jun 18 17:21:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	part->data->data == NULL is acceptable in line_break() but there is
+	no need to call xpand_lines() or following stuff in this case.
+	Assertion was replaced by a if + goto end. It fixes bug 206 reported
+	by pasky.  
+
+Wed Jun 18 17:00:29 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Compilation fix: stdlib.h was not included, and free() declaration
+	was missing.  
+
+Wed Jun 18 14:04:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Use string utils for @saved option names. Fixes bug 207.  
+
+Wed Jun 18 12:10:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Use SUN_LEN() macro to evaluate to actual length of the sockaddr_un
+	structure and provide a definition of it for systems that may not
+	have it.  
+
+Wed Jun 18 11:53:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/align.h:
+
+	Moved the #includes back near the COL() and get_bfu_color()
+	declaration, keeping the tightly related and somewhat alien stuff
+	together. Hm, the #includes position doesn't really matter here, but
+	when I was already doing at, I moved it back as I liked it more
+	before. I don't care, though.  
+
+Wed Jun 18 11:49:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Fixed memory leak in elinks_assertm() (@buf wasn't free()d). Also
+	fixed possible usage of undefined value if @buf allocation failed.  
+
+Wed Jun 18 11:46:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Tab must have always a terminal attached, must not it? 
+
+Wed Jun 18 10:49:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	AF_UNIX get_address() was reworked. A check about too long path
+	(elinks_home) was added. An error produced by connect() is ignored,
+	since this case is normal.  
+
+Wed Jun 18 08:51:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Adequate error messages are now printed on socket(), connect(),
+	bind() failures.  
+
+Wed Jun 18 08:20:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Dummy entry to fix last message log: accept() failure is now
+	handled.  
+
+Wed Jun 18 07:59:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Connect() failure is now handled.  
+
+Wed Jun 18 07:48:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Some variables were marked as static, minor comments were added
+	about future work to be done here.  
+
+Wed Jun 18 01:55:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/: conv.h, hash.h, version.h:
+
+	Cleanups.  
+
+Wed Jun 18 01:11:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/align.h:
+
+	Tidyup: Move enum declaration below header files.  
+
+Wed Jun 18 01:05:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hotkey.h:
+
+	Convert to standard header file format.  
+
+Wed Jun 18 00:59:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.h:
+
+	Declare one-bit fields unsigned.  
+
+Wed Jun 18 00:55:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/snprintf.h:
+
+	Added TODO note about trouble with usage of (v)asprintf() under
+	--enable-debug mode.  
+
+Wed Jun 18 00:34:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	In try_extension_type() always do lookup with xwin on (even if ...)
+	since we are only interested in the content type.  
+
+Wed Jun 18 00:30:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/mime.c, mime/mime.h, sched/download.c:
+
+	No need to let mime/ know about terminals only about xwin
+	capabilities.  
+
+Wed Jun 18 00:21:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.h:
+
+	Removed @flags member that is now represented by bitfields.  
+
+Wed Jun 18 00:19:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	Removed comment that has been moved to header file.  
+
+Wed Jun 18 00:09:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Danish translation updated.  
+
+Tue Jun 17 23:47:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Danish update, that goes out to Miciah who doesn't speak a word
+	Danish and still spotted a few errors in my translations. One
+	thorough reviewer ;) 
+
+Tue Jun 17 23:44:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Character sequence '< ' in <PRE></PRE> caused the document to not be
+	entirely rendered. This was introduced by bug 200 fix. Concerned
+	code was fixed.  
+
+Tue Jun 17 23:23:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/af_unix.c:
+
+	Static + minor cleanup.  
+
+Tue Jun 17 23:04:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/fastfind.c:
+
+	Redundant code was moved to a FF_SEARCH() macro. Idea by Pasky ;).  
+
 Tue Jun 17 16:47:08 2003  Laurent Monin <zas@norz.org>:
 
 	* src/util/fastfind.c:

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.80 2004/07/14 19:15:29 zas Exp $ */
+/* $Id: globhist.c,v 1.81 2004/07/16 18:30:28 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -47,16 +47,12 @@ INIT_INPUT_HISTORY(global_history);
 unsigned char *gh_last_searched_title = NULL;
 unsigned char *gh_last_searched_url = NULL;
 
-/* Timer for periodically writing the history to disk. */
-static int global_history_write_timer = -1;
-
 enum global_history_options {
 	GLOBHIST_TREE,
 
 	GLOBHIST_ENABLE,
 	GLOBHIST_MAX_ITEMS,
 	GLOBHIST_DISPLAY_TYPE,
-	GLOBHIST_WRITE_INTERVAL,
 
 	GLOBHIST_OPTIONS,
 };
@@ -80,10 +76,7 @@ static struct option_info global_history_options[] = {
 		"0 is URLs\n"
 		"1 is page titles")),
 
-	INIT_OPT_INT("document.history.global", N_("Auto-save interval"),
-		"write_interval", 0, 0, INT_MAX, 300,
-		N_("Interval at which to write global history to disk if it\n"
-		"has changed (seconds; 0 to disable)")),
+	INIT_OPT_ALIAS("document.history.global", "write_interval", "infofiles.save_interval"),
 
 	NULL_OPTION_INFO,
 };
@@ -92,7 +85,6 @@ static struct option_info global_history_options[] = {
 #define get_globhist_enable()		get_opt_globhist(GLOBHIST_ENABLE).number
 #define get_globhist_max_items()	get_opt_globhist(GLOBHIST_MAX_ITEMS).number
 #define get_globhist_display_type()	get_opt_globhist(GLOBHIST_DISPLAY_TYPE).number
-#define get_globhist_write_interval()	get_opt_globhist(GLOBHIST_WRITE_INTERVAL).number
 
 static struct hash *globhist_cache = NULL;
 static int globhist_cache_entries = 0;
@@ -364,61 +356,28 @@ free_global_history(void)
 		delete_global_history_item(global_history.entries.next);
 }
 
-static void
-global_history_write_timer_handler(void *xxx)
+static enum evhook_status
+global_history_write_hook(va_list ap, void *data)
 {
-	int interval;
-
-	if (get_cmd_opt_int("anonymous")) return;
-
 	write_global_history();
-	interval = get_globhist_write_interval();
-	if (!interval) return;
-
-	global_history_write_timer =
-		install_timer(interval * 1000,
-			      global_history_write_timer_handler,
-			      NULL);
+	return EVENT_HOOK_STATUS_NEXT;
 }
 
-static int
-global_history_write_timer_change_hook(struct session *ses,
-				       struct option *current,
-				       struct option *changed)
-{
-	if (get_cmd_opt_int("anonymous")) return 0;
+struct event_hook_info global_history_hooks[] = {
+	{ "periodic-saving", global_history_write_hook, NULL },
 
-	if (global_history_write_timer >= 0) {
-		kill_timer(global_history_write_timer);
-		global_history_write_timer = -1;
-	}
-
-	global_history_write_timer_handler(NULL);
-
-	return 0;
-}
+	NULL_EVENT_HOOK_INFO,
+};
 
 static void
 init_global_history(struct module *module)
 {
-	struct change_hook_info global_history_change_hooks[] = {
-		{ "document.history.global.write_interval",
-		  global_history_write_timer_change_hook },
-		{ NULL,	NULL },
-	};
-
-	register_change_hooks(global_history_change_hooks);
 	read_global_history();
-
-	global_history_write_timer_handler(NULL);
 }
 
 static void
 done_global_history(struct module *module)
 {
-	if (global_history_write_timer >= 0)
-		kill_timer(global_history_write_timer);
-
 	write_global_history();
 	free_global_history();
 	mem_free_if(gh_last_searched_title);
@@ -428,7 +387,7 @@ done_global_history(struct module *module)
 struct module global_history_module = struct_module(
 	/* name: */		N_("Global History"),
 	/* options: */		global_history_options,
-	/* events: */		NULL,
+	/* events: */		global_history_hooks,
 	/* submodules: */	NULL,
 	/* data: */		NULL,
 	/* init: */		init_global_history,

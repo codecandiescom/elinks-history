@@ -1,5 +1,5 @@
 /* Internal inactivity timer. */
-/* $Id: timer.c,v 1.11 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: timer.c,v 1.12 2004/07/16 18:30:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,9 +11,13 @@
 #include "config/options.h"
 #include "lowlevel/select.h"
 #include "lowlevel/timer.h"
+#include "sched/event.h"
 #include "terminal/event.h"
 #include "terminal/terminal.h"
 
+
+/* Timer for periodically saving configuration files to disk */
+static int periodic_save_timer = -1;
 
 static int countdown = -1;
 
@@ -60,14 +64,60 @@ reset_timer(void)
 	countdown = install_timer(1000, count_down, NULL);
 }
 
+
+static void
+periodic_save_handler(void *xxx)
+{
+	static int periodic_save_event_id = EVENT_NONE;
+	int interval;
+
+	if (get_cmd_opt_int("anonymous")) return;
+
+	/* Don't trigger anything at startup */
+	if (periodic_save_event_id == EVENT_NONE)
+		set_event_id(periodic_save_event_id, "periodic-saving");
+	else
+		trigger_event(periodic_save_event_id);
+
+	interval = get_opt_int("infofiles.save_interval") * 1000;
+	if (!interval) return;
+
+	periodic_save_timer = install_timer(interval, periodic_save_handler, NULL);
+}
+
+static int
+periodic_save_change_hook(struct session *ses, struct option *current,
+			  struct option *changed)
+{
+	if (get_cmd_opt_int("anonymous")) return 0;
+
+	if (periodic_save_timer != -1) {
+		kill_timer(periodic_save_timer);
+		periodic_save_timer = -1;
+	}
+
+	periodic_save_handler(NULL);
+
+	return 0;
+}
+
+
 void
 init_timer(void)
 {
+	struct change_hook_info timer_change_hooks[] = {
+		{ "infofiles.save_interval", periodic_save_change_hook },
+		{ NULL,	NULL },
+	};
+
+	register_change_hooks(timer_change_hooks);
+	periodic_save_handler(NULL);
 	reset_timer();
 }
 
 void
 done_timer(void)
 {
+	if (periodic_save_timer >= 0) kill_timer(periodic_save_timer);
 	if (countdown >= 0) kill_timer(countdown);
 }

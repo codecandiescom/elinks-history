@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.127 2004/07/14 00:58:31 jonas Exp $ */
+/* $Id: options.inc,v 1.128 2004/07/16 18:30:27 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -627,6 +627,18 @@ struct option_info config_options_info[] = {
 		"The format is:\n"
 		"%c in the string means the current URL\n"
 		"%% in the string means '%'")),
+
+
+	/* Keep options in alphabetical order. */
+
+	INIT_OPT_TREE("", N_("Information files"),
+		"infofiles", OPT_SORT,
+		N_("Options for information files in ~/.elinks.")),
+
+	INIT_OPT_INT("infofiles", N_("Save interval"),
+		"save_interval", 0, 0, INT_MAX, 300,
+		N_("Interval at which to trigger information files in ~/.elinks\n"
+		"to be saved to disk if they has changed (seconds; 0 to disable)")),
 
 	/* Keep options in alphabetical order. */
 

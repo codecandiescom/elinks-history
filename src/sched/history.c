@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.25 2003/07/03 01:03:35 jonas Exp $ */
+/* $Id: history.c,v 1.26 2003/07/15 12:52:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -168,8 +168,8 @@ go_away(struct session *ses, int dir)
 		ses->ref_url = NULL;
 	}
 
-	if (fd && fd->f_data && fd->f_data->url)
-		ses->ref_url = stracpy(fd->f_data->url);
+	if (fd && fd->document && fd->document->url)
+		ses->ref_url = stracpy(fd->document->url);
 
 	return 1;
 }

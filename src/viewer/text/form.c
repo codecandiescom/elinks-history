@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.5 2003/07/12 20:21:15 jonas Exp $ */
+/* $Id: form.c,v 1.6 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,10 +165,10 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	int xw, yw;
 	int vx, vy;
 
-	assert(t && f && f->f_data && f->vs && l);
+	assert(t && f && f->document && f->vs && l);
 	if_assert_failed return;
 	frm = l->form;
-	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
+	assertm(frm, "link %d has no form", (int)(l - f->document->links));
 	if_assert_failed return;
 
 	fs = find_form_state(f, frm);
@@ -275,7 +275,7 @@ draw_forms(struct terminal *t, struct f_data_c *f)
 
 
 int
-has_form_submit(struct f_data *f, struct form_control *frm)
+has_form_submit(struct document *f, struct form_control *frm)
 {
 	struct form_control *i;
 	int q = 0;
@@ -316,11 +316,11 @@ get_succesful_controls(struct f_data_c *f, struct form_control *fc,
 	struct form_control *frm;
 	int ch;
 
-	assert(f && f->f_data && fc && subm);
+	assert(f && f->document && fc && subm);
 	if_assert_failed return;
 
 	init_list(*subm);
-	foreach (frm, f->f_data->forms) {
+	foreach (frm, f->document->forms) {
 		if (frm->form_num == fc->form_num
 		    && ((frm->type != FC_SUBMIT &&
 			 frm->type != FC_IMAGE &&
@@ -634,10 +634,10 @@ reset_form(struct f_data_c *f, int form_num)
 {
 	struct form_control *frm;
 
-	assert(f && f->f_data);
+	assert(f && f->document);
 	if_assert_failed return;
 
-	foreach (frm, f->f_data->forms) if (frm->form_num == form_num) {
+	foreach (frm, f->document->forms) if (frm->form_num == form_num) {
 		struct form_state *fs = find_form_state(f, frm);
 
 		if (fs) init_ctrl(frm, fs);
@@ -657,7 +657,7 @@ get_form_url(struct session *ses, struct f_data_c *f,
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
-	assert(f && f->f_data && frm);
+	assert(f && f->document && frm);
 	if_assert_failed return NULL;
 
 	go = init_str();
@@ -672,7 +672,7 @@ get_form_url(struct session *ses, struct f_data_c *f,
 	get_succesful_controls(f, frm, &submit);
 
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
-	cp_to = f->f_data->cp;
+	cp_to = f->document->cp;
 	if (frm->method == FM_GET || frm->method == FM_POST)
 		encode_controls(&submit, &data, &len, cp_from, cp_to);
 	else
@@ -742,10 +742,10 @@ submit_form_do(struct terminal *term, void *xxx, struct session *ses,
 	if_assert_failed return 1;
 	fd = current_frame(ses);
 
-	assert(fd && fd->vs && fd->f_data);
+	assert(fd && fd->vs && fd->document);
 	if_assert_failed return 1;
 	if (fd->vs->current_link == -1) return 1;
-	link = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->document->links[fd->vs->current_link];
 
 	return goto_link(get_form_url(ses, fd, link->form), link->target, ses, do_reload);
 }

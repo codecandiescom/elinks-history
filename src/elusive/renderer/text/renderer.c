@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.19 2003/05/04 19:30:53 pasky Exp $ */
+/* $Id: renderer.c,v 1.20 2003/07/15 12:52:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,58 +55,58 @@ struct text_renderer_state {
 #define ALIGN(x) (((x)+0x7f)&~0x7f)
 
 static int
-realloc_lines(struct f_data *f_data, int y)
+realloc_lines(struct document *document, int y)
 {
 	int i;
 	int newsize = ALIGN(y + 1);
 
-	if (newsize >= ALIGN(f_data->y)
-	    && (!f_data->data || f_data->data->size < newsize)) {
+	if (newsize >= ALIGN(document->y)
+	    && (!document->data || document->data->size < newsize)) {
 		struct line *l;
 
-		l = mem_realloc(f_data->data, newsize * sizeof(struct line));
+		l = mem_realloc(document->data, newsize * sizeof(struct line));
 		if (!l) return -1;
 
-		f_data->data = l;
-		f_data->data->size = newsize;
+		document->data = l;
+		document->data->size = newsize;
 	}
 
-	for (i = f_data->y; i <= y; i++) {
-		f_data->data[i].l = 0;
+	for (i = document->y; i <= y; i++) {
+		document->data[i].l = 0;
 		/* This should be sacrified on the altar of clarity. */
-		f_data->data[i].c = 0;
-		f_data->data[i].d = NULL;
+		document->data[i].c = 0;
+		document->data[i].d = NULL;
 	}
 
-	f_data->y = i;
+	document->y = i;
 
 	return 0;
 }
 
 static int
-realloc_line(struct f_data *f_data, int y, int x)
+realloc_line(struct document *document, int y, int x)
 {
 	int i;
 	int newsize = ALIGN(x + 1);
 
-	if (newsize >= ALIGN(f_data->data[y].l)
-	    && (!f_data->data[y].d || f_data->data[y].dsize < newsize)) {
+	if (newsize >= ALIGN(document->data[y].l)
+	    && (!document->data[y].d || document->data[y].dsize < newsize)) {
 		chr *l;
 
-		l = mem_realloc(f_data->data[y].d, newsize * sizeof(chr));
+		l = mem_realloc(document->data[y].d, newsize * sizeof(chr));
 		if (!l) return -1;
 
-		f_data->data[y].d = l;
-		f_data->data[y].dsize = newsize;
+		document->data[y].d = l;
+		document->data[y].dsize = newsize;
 	}
 
-	f_data->data[y].c = 0;
+	document->data[y].c = 0;
 
-	for (i = f_data->data[y].l; i <= x; i++) {
-		f_data->data[y].d[i] = (f_data->data[y].c << 11) | ' ';
+	for (i = document->data[y].l; i <= x; i++) {
+		document->data[y].d[i] = (document->data[y].c << 11) | ' ';
 	}
 
-	f_data->data[y].l = i;
+	document->data[y].l = i;
 
 	return 0;
 }
@@ -114,7 +114,7 @@ realloc_line(struct f_data *f_data, int y, int x)
 #undef ALIGN
 
 static void
-put_text(struct f_data *frame_data, int x, int y, unsigned char *str, int len)
+put_text(struct document *frame_data, int x, int y, unsigned char *str, int len)
 {
 	int i;
 
@@ -135,7 +135,7 @@ render_box(struct renderer_state *state, struct layout_box *box)
 {
 	struct text_renderer_state *rstate = state->data;
 	struct f_data_c *console_frame_data = state->output;
-	struct f_data *frame_data = console_frame_data->f_data;
+	struct document *frame_data = console_frame_data->document;
 	int y = frame_data->y;
 	struct layout_box *leaf_box;
 	int orig_leftpad = rstate->leftpad;
@@ -215,12 +215,12 @@ text_init(struct renderer_state *state)
 	console_frame_data->xp = document_options->xp;
 	console_frame_data->yp = document_options->yp;
 
-	console_frame_data->f_data = mem_calloc(1, sizeof(struct f_data));
-	if (!console_frame_data->f_data) return;
+	console_frame_data->document = mem_calloc(1, sizeof(struct document));
+	if (!console_frame_data->document) return;
 
-	init_formatted(console_frame_data->f_data);
-	console_frame_data->f_data->refcount = 1;
-	copy_opt(&console_frame_data->f_data->opt, document_options);
+	init_formatted(console_frame_data->document);
+	console_frame_data->document->refcount = 1;
+	copy_opt(&console_frame_data->document->opt, document_options);
 }
 
 static void
@@ -235,7 +235,7 @@ static void
 text_done(struct renderer_state *state)
 {
 	struct f_data_c *console_frame_data = state->output;
-	struct f_data *frame_data = console_frame_data->f_data;
+	struct document *frame_data = console_frame_data->document;
 	int i;
 
 	elusive_layouter_done(state->layouter_state);

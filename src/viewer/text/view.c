@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.157 2003/07/14 19:51:34 jonas Exp $ */
+/* $Id: view.c,v 1.158 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,13 +62,13 @@
 
 
 void
-init_formatted(struct f_data *scr)
+init_formatted(struct document *scr)
 {
 	struct list_head tmp;
 
-	memcpy(&tmp, (struct f_data **)scr, sizeof(struct list_head));
-	memset(((struct f_data **)scr), 0, sizeof(struct f_data));
-	memcpy((struct f_data **)scr, &tmp, sizeof(struct list_head));
+	memcpy(&tmp, (struct document **)scr, sizeof(struct list_head));
+	memset(((struct document **)scr), 0, sizeof(struct document));
+	memcpy((struct document **)scr, &tmp, sizeof(struct list_head));
 
 	init_list(scr->forms);
 	init_list(scr->tags);
@@ -89,7 +89,7 @@ free_frameset_desc(struct frameset_desc *fd)
 }
 
 static void
-clear_formatted(struct f_data *scr)
+clear_formatted(struct document *scr)
 {
 	int n;
 	int y;
@@ -138,7 +138,7 @@ clear_formatted(struct f_data *scr)
 }
 
 void
-destroy_formatted(struct f_data *scr)
+destroy_formatted(struct document *scr)
 {
 	assert(scr);
 	if_assert_failed return;
@@ -156,16 +156,16 @@ detach_formatted(struct f_data_c *scr)
 	assert(scr);
 	if_assert_failed return;
 
-	if (scr->f_data) {
-		format_cache_reactivate(scr->f_data);
-		if (!--scr->f_data->refcount) {
+	if (scr->document) {
+		format_cache_reactivate(scr->document);
+		if (!--scr->document->refcount) {
 			format_cache_entries++;
 			/*shrink_format_cache();*/
 		}
-		assertm(scr->f_data->refcount >= 0,
+		assertm(scr->document->refcount >= 0,
 			"format_cache refcount underflow");
-		if_assert_failed scr->f_data->refcount = 0;
-		scr->f_data = NULL;
+		if_assert_failed scr->document->refcount = 0;
+		scr->document = NULL;
 	}
 	scr->vs = NULL;
 	if (scr->link_bg) {
@@ -178,7 +178,7 @@ detach_formatted(struct f_data_c *scr)
 }
 
 static inline int
-find_tag(struct f_data *f, unsigned char *name)
+find_tag(struct document *f, unsigned char *name)
 {
 	struct tag *tag;
 
@@ -306,21 +306,21 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 	if (!scr->vs) {
-		fill_area(t, xp, yp, xw, yw, scr->f_data->y ? scr->f_data->bg : ' ');
+		fill_area(t, xp, yp, xw, yw, scr->document->y ? scr->document->bg : ' ');
 		return;
 	}
-	if (scr->f_data->frame) {
-	 	fill_area(t, xp, yp, xw, yw, scr->f_data->y ? scr->f_data->bg : ' ');
-		draw_frame_lines(t, scr->f_data->frame_desc, xp, yp);
+	if (scr->document->frame) {
+	 	fill_area(t, xp, yp, xw, yw, scr->document->y ? scr->document->bg : ' ');
+		draw_frame_lines(t, scr->document->frame_desc, xp, yp);
 		if (scr->vs && scr->vs->current_link == -1) scr->vs->current_link = 0;
 		return;
 	}
 	check_vs(scr);
 	vs = scr->vs;
 	if (vs->goto_position) {
-		vy = find_tag(scr->f_data, vs->goto_position);
+		vy = find_tag(scr->document, vs->goto_position);
 	       	if (vy != -1) {
-			if (vy > scr->f_data->y) vy = scr->f_data->y - 1;
+			if (vy > scr->document->y) vy = scr->document->y - 1;
 			if (vy < 0) vy = 0;
 			vs->view_pos = vy;
 			set_link(scr);
@@ -342,17 +342,17 @@ draw_doc(struct terminal *t, struct f_data_c *scr, int active)
 	free_link(scr);
 	scr->xl = vx;
 	scr->yl = vy;
-	fill_area(t, xp, yp, xw, yw, scr->f_data->y ? scr->f_data->bg : ' ');
-	if (!scr->f_data->y) return;
+	fill_area(t, xp, yp, xw, yw, scr->document->y ? scr->document->bg : ' ');
+	if (!scr->document->y) return;
 
-	while (vs->view_pos >= scr->f_data->y) vs->view_pos -= yw;
+	while (vs->view_pos >= scr->document->y) vs->view_pos -= yw;
 	if (vs->view_pos < 0) vs->view_pos = 0;
 	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(scr);
-	for (y = vy <= 0 ? 0 : vy; y < (-vy + scr->f_data->y <= yw ? scr->f_data->y : yw + vy); y++) {
+	for (y = vy <= 0 ? 0 : vy; y < (-vy + scr->document->y <= yw ? scr->document->y : yw + vy); y++) {
 		int st = vx <= 0 ? 0 : vx;
-		int en = -vx + scr->f_data->data[y].l <= xw ? scr->f_data->data[y].l : xw + vx;
+		int en = -vx + scr->document->data[y].l <= xw ? scr->document->data[y].l : xw + vx;
 
-		set_line(t, xp + st - vx, yp + y - vy, en - st, &scr->f_data->data[y].d[st]);
+		set_line(t, xp + st - vx, yp + y - vy, en - st, &scr->document->data[y].d[st]);
 	}
 	draw_forms(t, scr);
 	if (active) draw_current_link(t, scr);
@@ -366,10 +366,10 @@ draw_frames(struct session *ses)
 	int *l;
 	int n, i, d, more;
 
-	assert(ses && ses->screen && ses->screen->f_data);
+	assert(ses && ses->screen && ses->screen->document);
 	if_assert_failed return;
 
-	if (!ses->screen->f_data->frame) return;
+	if (!ses->screen->document->frame) return;
 	n = 0;
 	foreach (f, ses->scrn_frames) f->xl = f->yl = -1, n++;
 	l = &cur_loc(ses)->vs.current_link;
@@ -400,7 +400,7 @@ draw_formatted(struct session *ses)
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;
 
-	if (!ses->screen || !ses->screen->f_data) {
+	if (!ses->screen || !ses->screen->document) {
 		/*internal("document not formatted");*/
 		fill_area(ses->tab->term, 0, 1, ses->tab->term->x, ses->tab->term->y - 2, ' ');
 		return;
@@ -423,8 +423,8 @@ page_down(struct session *ses, struct f_data_c *f, int a)
 	assert(ses && f && f->vs);
 	if_assert_failed return;
 
-	newpos = f->vs->view_pos + f->f_data->opt.yw;
-	if (newpos < f->f_data->y) {
+	newpos = f->vs->view_pos + f->document->opt.yw;
+	if (newpos < f->document->y) {
 		f->vs->view_pos = newpos;
 		find_link(f, 1, a);
 	} else {
@@ -449,13 +449,13 @@ down(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link;
 
-	assert(ses && fd && fd->vs && fd->f_data);
+	assert(ses && fd && fd->vs && fd->document);
 	if_assert_failed return;
 
 	current_link = fd->vs->current_link;
 
 	if (get_opt_int("document.browse.links.wraparound")
-	    && current_link >= fd->f_data->nlinks - 1) {
+	    && current_link >= fd->document->nlinks - 1) {
 		jump_to_link_number(ses, fd, 0);
 		/* FIXME: This needs further work, we should call page_down()
 		 * and set_textarea() under some conditions as well. --pasky */
@@ -478,14 +478,14 @@ up(struct session *ses, struct f_data_c *fd, int a)
 {
 	int current_link;
 
-	assert(ses && fd && fd->vs && fd->f_data);
+	assert(ses && fd && fd->vs && fd->document);
 	if_assert_failed return;
 
 	current_link = fd->vs->current_link;
 
 	if (get_opt_int("document.browse.links.wraparound")
 	    && current_link == 0) {
-		jump_to_link_number(ses, fd, fd->f_data->nlinks - 1);
+		jump_to_link_number(ses, fd, fd->document->nlinks - 1);
 		/* FIXME: This needs further work, we should call page_down()
 		 * and set_textarea() under some conditions as well. --pasky */
 		return;
@@ -508,14 +508,14 @@ up(struct session *ses, struct f_data_c *fd, int a)
 static void
 scroll(struct session *ses, struct f_data_c *f, int a)
 {
-	assert(ses && f && f->vs && f->f_data);
+	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
 
-	if (f->vs->view_pos + f->f_data->opt.yw >= f->f_data->y && a > 0)
+	if (f->vs->view_pos + f->document->opt.yw >= f->document->y && a > 0)
 		return;
 	f->vs->view_pos += a;
-	if (f->vs->view_pos > f->f_data->y - f->f_data->opt.yw && a > 0)
-		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
+	if (f->vs->view_pos > f->document->y - f->document->opt.yw && a > 0)
+		f->vs->view_pos = f->document->y - f->document->opt.yw;
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
 	if (c_in_view(f)) return;
 	find_link(f, a < 0 ? -1 : 1, 0);
@@ -524,12 +524,12 @@ scroll(struct session *ses, struct f_data_c *f, int a)
 static void
 hscroll(struct session *ses, struct f_data_c *f, int a)
 {
-	assert(ses && f && f->vs && f->f_data);
+	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
 
 	f->vs->view_posx += a;
-	if (f->vs->view_posx >= f->f_data->x)
-		f->vs->view_posx = f->f_data->x - 1;
+	if (f->vs->view_posx >= f->document->x)
+		f->vs->view_posx = f->document->x - 1;
 	if (f->vs->view_posx < 0) f->vs->view_posx = 0;
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
@@ -549,18 +549,18 @@ home(struct session *ses, struct f_data_c *f, int a)
 static void
 x_end(struct session *ses, struct f_data_c *f, int a)
 {
-	assert(ses && f && f->vs && f->f_data);
+	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
 
 	f->vs->view_posx = 0;
-	if (f->vs->view_pos < f->f_data->y - f->f_data->opt.yw)
-		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
+	if (f->vs->view_pos < f->document->y - f->document->opt.yw)
+		f->vs->view_pos = f->document->y - f->document->opt.yw;
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
 	find_link(f, -1, 0);
 }
 
 inline void
-decrement_fc_refcount(struct f_data *f)
+decrement_fc_refcount(struct document *f)
 {
 	assert(f);
 	if_assert_failed return;
@@ -621,21 +621,21 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 {
 	int x = 1;
 
-	assert(ses && fd && fd->f_data && fd->vs && ev);
+	assert(ses && fd && fd->document && fd->vs && ev);
 	if_assert_failed return 1;
 
 	if (fd->vs->current_link >= 0
-	    && (fd->f_data->links[fd->vs->current_link].type == L_FIELD ||
-		fd->f_data->links[fd->vs->current_link].type == L_AREA)
-	    && field_op(ses, fd, &fd->f_data->links[fd->vs->current_link], ev, 0))
+	    && (fd->document->links[fd->vs->current_link].type == L_FIELD ||
+		fd->document->links[fd->vs->current_link].type == L_AREA)
+	    && field_op(ses, fd, &fd->document->links[fd->vs->current_link], ev, 0))
 		return 1;
 
 	if (ev->ev == EV_KBD) {
 		if (ev->x >= '0' + !ses->kbdprefix.rep && ev->x <= '9'
 		    && (ev->y
-			|| !fd->f_data->opt.num_links_key
-			|| (fd->f_data->opt.num_links_key == 1
-			    && !fd->f_data->opt.num_links_display))) {
+			|| !fd->document->opt.num_links_key
+			|| (fd->document->opt.num_links_key == 1
+			    && !fd->document->opt.num_links_display))) {
 			/* Repeat count */
 
 			if (!ses->kbdprefix.rep)
@@ -670,7 +670,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 				if (!ses->kbdprefix.rep) break;
 
 				if (ses->kbdprefix.rep_num
-				    > fd->f_data->nlinks) {
+				    > fd->document->nlinks) {
 					ses->kbdprefix.rep = 0;
 					return 2;
 				}
@@ -722,19 +722,19 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					/* FIXME: This probably doesn't work
 					 * together with the keybinding...? */
 
-					struct f_data *f_data = fd->f_data;
+					struct document *document = fd->document;
 					int nl, lnl;
 					unsigned char d[2];
 
 					d[0] = ev->x;
 					d[1] = 0;
-					nl = f_data->nlinks, lnl = 1;
+					nl = document->nlinks, lnl = 1;
 					while (nl) nl /= 10, lnl++;
 					if (lnl > 1)
 						input_field(ses->tab->term, NULL, 1,
 							    N_("Go to link"), N_("Enter link number"),
 							    N_("OK"), N_("Cancel"), ses, NULL,
-							    lnl, d, 1, f_data->nlinks, check_number,
+							    lnl, d, 1, document->nlinks, check_number,
 							    (void (*)(void *, unsigned char *)) goto_link_number, NULL);
 				}
 #if 0
@@ -747,7 +747,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 					clear_link(ses->tab->term, fd);
 					n++;
 					i = n;
-					foreachback (node, fd->f_data->nodes) {
+					foreachback (node, fd->document->nodes) {
 						if (!i--) {
 							int x, y;
 							for (y = 0; y < node->yw; y++) for (x = 0; x < node->xw && x < 1000; x++) {
@@ -788,7 +788,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 
 		} else if (link) {
 			x = 1;
-			fd->vs->current_link = link - fd->f_data->links;
+			fd->vs->current_link = link - fd->document->links;
 
 			if ((link->type == L_LINK || link->type == L_BUTTON ||
 			     link->type == L_CHECKBOX || link->type == L_SELECT)
@@ -848,12 +848,12 @@ current_frame(struct session *ses)
 	if (!have_location(ses)) return NULL;
 	i = cur_loc(ses)->vs.current_link;
 	foreach (fd, ses->scrn_frames) {
-		if (fd->f_data && fd->f_data->frame) continue;
+		if (fd->document && fd->document->frame) continue;
 		if (!i--) return fd;
 	}
 	fd = cur_loc(ses)->vs.f;
 	/* The fd test probably only hides bugs in history handling. --pasky */
-	if (/*fd &&*/ fd->f_data && fd->f_data->frame) return NULL;
+	if (/*fd &&*/ fd->document && fd->document->frame) return NULL;
 	return fd;
 }
 
@@ -905,19 +905,19 @@ do_mouse_event(struct session *ses, struct event *ev)
 	assert(ses && ev);
 	if_assert_failed return;
 	fd = current_frame(ses);
-	assert(fd && fd->f_data);
+	assert(fd && fd->document);
 	if_assert_failed return;
 
-	o = &fd->f_data->opt;
+	o = &fd->document->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) goto ok;
 
 r:
 	next_frame(ses, 1);
 	fdd = current_frame(ses);
-	assert(fdd && fdd->f_data);
+	assert(fdd && fdd->document);
 	if_assert_failed return;
-	o = &fdd->f_data->opt;
+	o = &fdd->document->opt;
 	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
 	    ev->y >= o->yp && ev->y < o->yp + o->yw) {
 		draw_formatted(ses);
@@ -1218,7 +1218,7 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 {
 	struct link *link;
 
-	assert(ses && fd && fd->vs && fd->f_data);
+	assert(ses && fd && fd->vs && fd->document);
 	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
@@ -1226,7 +1226,7 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
 	}
-	link = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->document->links[fd->vs->current_link];
 	if (link->type != L_LINK && link->type != L_BUTTON) return;
 
 	ses->dn_url = get_link_url(ses, fd, link);
@@ -1237,7 +1237,7 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 			return;
 		}
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->f_data->url);
+		ses->ref_url = stracpy(fd->document->url);
 		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
@@ -1256,7 +1256,7 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 	assert(term && ses);
 	if_assert_failed return;
 	fd = current_frame(ses);
-	assert(fd && fd->vs && fd->f_data);
+	assert(fd && fd->vs && fd->document);
 	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
@@ -1266,9 +1266,9 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 	}
 
 	if (dlt == URL) {
-		ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
+		ses->dn_url = get_link_url(ses, fd, &fd->document->links[fd->vs->current_link]);
 	} else if (dlt == IMAGE) {
-		unsigned char *wi = fd->f_data->links[fd->vs->current_link].where_img;
+		unsigned char *wi = fd->document->links[fd->vs->current_link].where_img;
 
 		if (wi) ses->dn_url = stracpy(wi);
 	} else {
@@ -1279,7 +1279,7 @@ send_download_do(struct terminal *term, void *xxx, struct session *ses,
 
 	if (ses->dn_url) {
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->f_data->url);
+		ses->ref_url = stracpy(fd->document->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -1329,12 +1329,12 @@ send_open_in_new_xterm(struct terminal *term,
 	assert(term && open_window && ses);
 	if_assert_failed return;
 	fd = current_frame(ses);
-	assert(fd && fd->vs && fd->f_data);
+	assert(fd && fd->vs && fd->document);
 	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
+	ses->dn_url = get_link_url(ses, fd, &fd->document->links[fd->vs->current_link]);
 	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_str(). --pasky */
 	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
 	if (ses->dn_url) {
@@ -1423,10 +1423,10 @@ save_url(struct session *ses, unsigned char *url)
 	if (ses->ref_url) mem_free(ses->ref_url);
 
 	fd = current_frame(ses);
-	assert(fd && fd->f_data && fd->f_data->url);
+	assert(fd && fd->document && fd->document->url);
 	if_assert_failed return;
 
-	ses->ref_url = stracpy(fd->f_data->url);
+	ses->ref_url = stracpy(fd->document->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
 
@@ -1439,11 +1439,11 @@ send_image(struct terminal *term, void *xxx, struct session *ses)
 	assert(term && ses);
 	if_assert_failed return;
 	fd = current_frame(ses);
-	assert(fd && fd->f_data && fd->vs);
+	assert(fd && fd->document && fd->vs);
 	if_assert_failed return;
 
 	if (fd->vs->current_link == -1) return;
-	u = fd->f_data->links[fd->vs->current_link].where_img;
+	u = fd->document->links[fd->vs->current_link].where_img;
 	if (!u) return;
 	goto_url(ses, u);
 }
@@ -1463,11 +1463,11 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	if (ses->dn_url) {
 		struct f_data_c *fd = current_frame(ses);
 
-		assert(fd && fd->f_data && fd->f_data->url);
+		assert(fd && fd->document && fd->document->url);
 		if_assert_failed return;
 
 		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(fd->f_data->url);
+		ses->ref_url = stracpy(fd->document->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -1475,13 +1475,13 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 static void
 save_formatted_finish(struct terminal *term, int h, void *data, int resume)
 {
-	struct f_data *f_data = data;
+	struct document *document = data;
 
-	assert(term && f_data);
+	assert(term && document);
 	if_assert_failed return;
 
 	if (h == -1) return;
-	if (dump_to_file(f_data, h)) {
+	if (dump_to_file(document, h)) {
 		msg_box(term, NULL, 0,
 			N_("Save error"), AL_CENTER,
 			N_("Error writing to file"),
@@ -1499,11 +1499,11 @@ save_formatted(struct session *ses, unsigned char *file)
 	assert(ses && ses->tab && ses->tab->term && file);
 	if_assert_failed return;
 	fd = current_frame(ses);
-	assert(fd && fd->f_data);
+	assert(fd && fd->document);
 	if_assert_failed return;
 
 	create_download_file(ses->tab->term, file, NULL, 0, 0,
-			     save_formatted_finish, fd->f_data);
+			     save_formatted_finish, fd->document);
 }
 
 void
@@ -1536,19 +1536,19 @@ print_current_titlex(struct f_data_c *fd, int w)
 	p = init_str();
 	if (!p) return NULL;
 
-	if (fd->yw < fd->f_data->y) {
+	if (fd->yw < fd->document->y) {
 		int pp = 1;
 		int pe = 1;
 
 		if (fd->yw) {
 			pp = (fd->vs->view_pos + fd->yw / 2) / fd->yw + 1;
-			pe = (fd->f_data->y + fd->yw - 1) / fd->yw;
+			pe = (fd->document->y + fd->yw - 1) / fd->yw;
 			if (pp > pe) pp = pe;
 		}
 
-		if (fd->vs->view_pos + fd->yw >= fd->f_data->y)
+		if (fd->vs->view_pos + fd->yw >= fd->document->y)
 			pp = pe;
-		if (fd->f_data->title)
+		if (fd->document->title)
 			add_chr_to_str(&p, &pl, ' ');
 
 		add_chr_to_str(&p, &pl, '(');
@@ -1558,12 +1558,12 @@ print_current_titlex(struct f_data_c *fd, int w)
 		add_chr_to_str(&p, &pl, ')');
 	}
 
-	if (!fd->f_data->title) return p;
+	if (!fd->document->title) return p;
 
 	m = init_str();
 	if (!m) goto end;
 
-	add_to_str(&m, &ml, fd->f_data->title);
+	add_to_str(&m, &ml, fd->document->title);
 
 	if (ml + pl > w - 4) {
 		ml = w - 4 - pl;

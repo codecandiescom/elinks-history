@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.7 2003/07/03 02:18:54 jonas Exp $ */
+/* $Id: vs.c,v 1.8 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,13 +75,13 @@ check_vs(struct f_data_c *f)
 {
 	struct view_state *vs = f->vs;
 
-	if (vs->current_link >= f->f_data->nlinks)
-		vs->current_link = f->f_data->nlinks - 1;
+	if (vs->current_link >= f->document->nlinks)
+		vs->current_link = f->document->nlinks - 1;
 
 	if (vs->current_link != -1) {
 		if (!c_in_view(f)) {
-			set_pos_x(f, &f->f_data->links[vs->current_link]);
-			set_pos_y(f, &f->f_data->links[vs->current_link]);
+			set_pos_x(f, &f->document->links[vs->current_link]);
+			set_pos_y(f, &f->document->links[vs->current_link]);
 		}
 	} else {
 		find_link(f, 1, 0);
@@ -96,15 +96,15 @@ next_frame(struct session *ses, int p)
 	int n;
 
 	if (!have_location(ses)
-	    || (ses->screen && ses->screen->f_data
-		&& !ses->screen->f_data->frame))
+	    || (ses->screen && ses->screen->document
+		&& !ses->screen->document->frame))
 		return;
 
 	vs = &cur_loc(ses)->vs;
 
 	n = 0;
 	foreach (fd, ses->scrn_frames) {
-		if (!(fd->f_data && fd->f_data->frame))
+		if (!(fd->document && fd->document->frame))
 			n++;
 	}
 

@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.4 2003/07/14 19:51:31 jonas Exp $ */
+/* $Id: frames.c,v 1.5 2003/07/15 12:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ add_frameset_entry(struct frameset_desc *fsd,
 }
 
 struct frameset_desc *
-create_frameset(struct f_data *fda, struct frameset_param *fp)
+create_frameset(struct document *fda, struct frameset_param *fp)
 {
 	struct frameset_desc *fd;
 
@@ -213,8 +213,8 @@ format_frames(struct session *ses, struct frameset_desc *fsd,
 				format_frames(ses, fsd->f[n].subframe, &o, depth + 1);
 			else if (fsd->f[n].name) {
 				fdc = format_frame(ses, fsd->f[n].name, &o, depth);
-				if (fdc && fdc->f_data && fdc->f_data->frame)
-					format_frames(ses, fdc->f_data->frame_desc,
+				if (fdc && fdc->document && fdc->document->frame)
+					format_frames(ses, fdc->document->frame_desc,
 						      &o, depth + 1);
 			}
 			o.xp += o.xw + 1;

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.17 2003/07/09 23:03:11 jonas Exp $ */
+/* $Id: view.h,v 1.18 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -13,9 +13,9 @@ void open_in_new_window(struct terminal *, void (*)(struct terminal *, void (*)(
 /* void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *); */
 void send_open_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
 
-void destroy_formatted(struct f_data *);
-/* void clear_formatted(struct f_data *); */
-void init_formatted(struct f_data *);
+void destroy_formatted(struct document *);
+/* void clear_formatted(struct document *); */
+void init_formatted(struct document *);
 void detach_formatted(struct f_data_c *);
 
 /* void draw_doc(struct terminal *, struct f_data_c *, int); */
@@ -37,7 +37,7 @@ struct f_data_c *current_frame(struct session *);
 
 /* Bruteforce compilation fixes */
 void down(struct session *ses, struct f_data_c *fd, int a);
-inline void decrement_fc_refcount(struct f_data *f);
+inline void decrement_fc_refcount(struct document *f);
 void draw_doc(struct terminal *t, struct f_data_c *scr, int active);
 void send_enter(struct terminal *term, void *xxx, struct session *ses);
 void send_enter_reload(struct terminal *term, void *xxx, struct session *ses);

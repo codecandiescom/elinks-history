@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.4 2003/07/09 23:03:11 jonas Exp $ */
+/* $Id: link.h,v 1.5 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -8,7 +8,7 @@
 #include "sched/session.h"
 #include "terminal/terminal.h"
 
-void sort_links(struct f_data *);
+void sort_links(struct document *);
 
 void set_link(struct f_data_c *f);
 void free_link(struct f_data_c *scr);

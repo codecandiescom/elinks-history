@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.168 2003/07/14 19:51:31 jonas Exp $ */
+/* $Id: renderer.c,v 1.169 2003/07/15 12:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,27 +101,27 @@ realloc_lines(struct part *p, int y)
 	int i;
 	int newsize = ALIGN(y + 1);
 
-	assert(p && p->data);
+	assert(p && p->document);
 	if_assert_failed return 0;
 
-	if (newsize >= ALIGN(p->data->y)
-	    && (!p->data->data || p->data->data->size < newsize)) {
+	if (newsize >= ALIGN(p->document->y)
+	    && (!p->document->data || p->document->data->size < newsize)) {
 		struct line *l;
 
-		l = mem_realloc(p->data->data, newsize * sizeof(struct line));
+		l = mem_realloc(p->document->data, newsize * sizeof(struct line));
 		if (!l)	return -1;
 
-		p->data->data = l;
-		p->data->data->size = newsize;
+		p->document->data = l;
+		p->document->data->size = newsize;
 	}
 
-	for (i = p->data->y; i <= y; i++) {
-		p->data->data[i].l = 0;
-		p->data->data[i].c = find_nearest_color(&par_format.bgcolor, 8);
-		p->data->data[i].d = NULL;
+	for (i = p->document->y; i <= y; i++) {
+		p->document->data[i].l = 0;
+		p->document->data[i].c = find_nearest_color(&par_format.bgcolor, 8);
+		p->document->data[i].d = NULL;
 	}
 
-	p->data->y = i;
+	p->document->y = i;
 
 	return 0;
 }
@@ -132,27 +132,27 @@ realloc_line(struct part *p, int y, int x)
 	int i;
 	int newsize = ALIGN(x + 1);
 
-	assert(p && p->data);
+	assert(p && p->document);
 	if_assert_failed return 0;
 
-	if (newsize >= ALIGN(p->data->data[y].l)
-	    && (!p->data->data[y].d || p->data->data[y].dsize < newsize)) {
+	if (newsize >= ALIGN(p->document->data[y].l)
+	    && (!p->document->data[y].d || p->document->data[y].dsize < newsize)) {
 		chr *l;
 
-		l = mem_realloc(p->data->data[y].d, newsize * sizeof(chr));
+		l = mem_realloc(p->document->data[y].d, newsize * sizeof(chr));
 		if (!l)	return -1;
 
-		p->data->data[y].d = l;
-		p->data->data[y].dsize = newsize;
+		p->document->data[y].d = l;
+		p->document->data[y].dsize = newsize;
 	}
 
-	p->data->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
+	p->document->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
 
-	for (i = p->data->data[y].l; i <= x; i++) {
-		p->data->data[y].d[i] = (p->data->data[y].c << 11) | ' ';
+	for (i = p->document->data[y].l; i <= x; i++) {
+		p->document->data[y].d[i] = (p->document->data[y].c << 11) | ' ';
 	}
 
-	p->data->data[y].l = i;
+	p->document->data[y].l = i;
 
 	return 0;
 }
@@ -162,11 +162,11 @@ realloc_line(struct part *p, int y, int x)
 static inline int
 xpand_lines(struct part *p, int y)
 {
-	assert(p && p->data);
+	assert(p && p->document);
 	if_assert_failed return 0;
 
 	y += p->yp;
-	if (y >= p->data->y) return realloc_lines(p, y);
+	if (y >= p->document->y) return realloc_lines(p, y);
 
 	return 0;
 }
@@ -180,16 +180,16 @@ expand_lines(struct part *part, int y)
 static inline int
 xpand_line(struct part *p, int y, int x)
 {
-	assert(p && p->data && p->data->data);
+	assert(p && p->document && p->document->data);
 	if_assert_failed return 0;
 
 	x += p->xp;
 	y += p->yp;
 
-	assertm(y < p->data->y, "line does not exist");
+	assertm(y < p->document->y, "line does not exist");
 	if_assert_failed return 0;
 
-	if (x < p->data->data[y].l)
+	if (x < p->document->data[y].l)
 		return 0;
 
 	return realloc_line(p, y, x);
@@ -224,9 +224,9 @@ xpand_spaces(struct part *p, int l)
 }
 
 
-#define POS(x, y) (part->data->data[part->yp + (y)].d[part->xp + (x)])
-#define LEN(y) (part->data->data[part->yp + (y)].l - part->xp < 0 ? 0 : part->data->data[part->yp + (y)].l - part->xp)
-#define SLEN(y, x) part->data->data[part->yp + (y)].l = part->xp + x;
+#define POS(x, y) (part->document->data[part->yp + (y)].d[part->xp + (x)])
+#define LEN(y) (part->document->data[part->yp + (y)].l - part->xp < 0 ? 0 : part->document->data[part->yp + (y)].l - part->xp)
+#define SLEN(y, x) part->document->data[part->yp + (y)].l = part->xp + x;
 #define X(x) (part->xp + (x))
 #define Y(y) (part->yp + (y))
 
@@ -234,14 +234,14 @@ xpand_spaces(struct part *p, int l)
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
 {
-	assert(part && part->data);
+	assert(part && part->document);
 	if_assert_failed return;
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x))
 		return;
 
-	assert(part->data->data);
+	assert(part->document->data);
 	if_assert_failed return;
 
 	POS(x, y) = c;
@@ -250,14 +250,14 @@ set_hchar(struct part *part, int x, int y, unsigned c)
 static inline void
 set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
-	assert(part && part->data);
+	assert(part && part->document);
 	if_assert_failed return;
 
 	if (xpand_lines(part, y)
 	    || xpand_line(part, y, x + xl - 1))
 		return;
 
-	assert(part->data->data);
+	assert(part->document->data);
 	if_assert_failed return;
 
 	for (; xl; xl--, x++) POS(x, y) = c;
@@ -282,7 +282,7 @@ set_hline(struct part *part, int x, int y,
 	assert(part);
 	if_assert_failed return;
 
-	if (part->data) {
+	if (part->document) {
 		if (xpand_lines(part, y)
 		    || xpand_line(part, y, x + charslen - 1))
 			return;
@@ -293,7 +293,7 @@ set_hline(struct part *part, int x, int y,
 
 	for (; charslen > 0; charslen--, x++, chars++) {
 		part->spaces[x] = (*chars == ' ');
-		if (part->data && part->data->data)
+		if (part->document && part->document->data)
 			POS(x, y) = (*chars | attr);
 	}
 }
@@ -305,12 +305,12 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 	int nlink;
 	int matched = 0;
 
-	assert(part && part->data);
+	assert(part && part->document);
 	if_assert_failed return;
 	xpand_lines(part, yt);
 
-	for (nlink = last_link_to_move; nlink < part->data->nlinks; nlink++) {
-		struct link *link = &part->data->links[nlink];
+	for (nlink = last_link_to_move; nlink < part->document->nlinks; nlink++) {
+		struct link *link = &part->document->links[nlink];
 		int i;
 
 		for (i = 0; i < link->n; i++) {
@@ -338,8 +338,8 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 			if (link->target) mem_free(link->target);
 			if (link->where_img) mem_free(link->where_img);
 			if (link->pos) mem_free(link->pos);
-			memmove(link, link + 1, (part->data->nlinks - nlink - 1) * sizeof(struct link));
-			part->data->nlinks --;
+			memmove(link, link + 1, (part->document->nlinks - nlink - 1) * sizeof(struct link));
+			part->document->nlinks --;
 			nlink--;
 		}
 #endif
@@ -351,7 +351,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 
 	if (yt >= 0) {
 		for (tag = last_tag_to_move->next;
-	   	     (void *) tag != &part->data->tags;
+	   	     (void *) tag != &part->document->tags;
 		     tag = tag->next) {
 			if (tag->y == Y(yf)) {
 				matched = 1;
@@ -367,7 +367,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 static inline void
 copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
-	assert(xl > 0 && part && part->data && part->data->data);
+	assert(xl > 0 && part && part->document && part->document->data);
 	if_assert_failed return;
 
 	if (xpand_lines(part, y)
@@ -380,7 +380,7 @@ copy_chars(struct part *part, int x, int y, int xl, chr *d)
 static inline void
 move_chars(struct part *part, int x, int y, int nx, int ny)
 {
-	assert(part && part->data && part->data->data);
+	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
 	if (LEN(y) - x <= 0) return;
@@ -395,7 +395,7 @@ shift_chars(struct part *part, int y, int shift)
 	chr *a;
 	int len;
 
-	assert(part && part->data && part->data->data);
+	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
 	len = LEN(y);
@@ -414,7 +414,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * already got that idea; results in even more stains since we probably
 	 * shift chars even on surrounding lines when realigning tables
 	 * maniacally. --pasky */
-	set_hchars(part, 0, y, shift, (part->data->data[y].c << 11) | ' ');
+	set_hchars(part, 0, y, shift, (part->document->data[y].c << 11) | ' ');
 	copy_chars(part, shift, y, len, a);
 	fmem_free(a);
 
@@ -424,7 +424,7 @@ shift_chars(struct part *part, int y, int shift)
 static inline void
 del_chars(struct part *part, int x, int y)
 {
-	assert(part && part->data && part->data->data);
+	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
 	SLEN(y, x);
@@ -447,8 +447,8 @@ split_line_at(struct part *part, register int x)
 	if (new_x > part->x)
 		part->x = new_x;
 
-	if (part->data) {
-		assert(part->data->data);
+	if (part->document) {
+		assert(part->document->data);
 		if_assert_failed return 0;
 		assertm((POS(x, part->cy) & 0xff) == ' ',
 			"bad split: %c", (char) POS(x, part->cy));
@@ -535,7 +535,7 @@ justify_line(struct part *part, int y)
 	int *space_list;
 	int spaces;
 
-	assert(part && part->data && part->data->data);
+	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
 	len = LEN(y);
@@ -583,7 +583,7 @@ justify_line(struct part *part, int y)
 
 		/* See shift_chars() about why this is broken. */
 		set_hchars(part, 0, y, overlap(par_format),
-			   (part->data->data[y].c << 11) | ' ');
+			   (part->document->data[y].c << 11) | ' ');
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of
@@ -623,7 +623,7 @@ align_line(struct part *part, int y, int last)
 	int shift;
 	int len;
 
-	assert(part && part->data && part->data->data);
+	assert(part && part->document && part->document->data);
 	if_assert_failed return;
 
 	len = LEN(y);
@@ -646,7 +646,7 @@ align_line(struct part *part, int y, int last)
 }
 
 static struct link *
-new_link(struct f_data *f)
+new_link(struct document *f)
 {
 	assert(f);
 	if_assert_failed return NULL;
@@ -666,7 +666,7 @@ new_link(struct f_data *f)
 }
 
 static void
-html_tag(struct f_data *f, unsigned char *t, int x, int y)
+html_tag(struct document *f, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
 	int tsize;
@@ -808,7 +808,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if_assert_failed return;
 
 	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
-		last_tag_for_newline = (void *)&part->data->tags;
+		last_tag_for_newline = (void *)&part->document->tags;
 	}
 	if (part->cx == -1) part->cx = par_format.leftmargin;
 
@@ -858,7 +858,7 @@ end_format_change:
 				part->x = LEN(part->cy-1);
 #endif
 
-			if (part->data)
+			if (part->document)
 				align_line(part, part->cy - 1, 0);
 			nobreak = x - 1;
 		}
@@ -879,10 +879,10 @@ process_link:
 	    && !xstrcmp(format.target, last_target)
 	    && !xstrcmp(format.image, last_image)
 	    && format.form == last_form) {
-		if (part->data) {
-			assertm(part->data->nlinks > 0, "no link");
+		if (part->document) {
+			assertm(part->document->nlinks > 0, "no link");
 			if_assert_failed goto no_link;
-			link = &part->data->links[part->data->nlinks - 1];
+			link = &part->document->links[part->document->nlinks - 1];
 			goto set_link;
 		}
 		goto no_link;
@@ -928,9 +928,9 @@ process_link:
 		last_image = format.image ? stracpy(format.image) : NULL;
 		last_form = format.form;
 
-		if (!part->data) goto no_link;
+		if (!part->document) goto no_link;
 
-		link = new_link(part->data);
+		link = new_link(part->document);
 		if (!link) goto no_link;
 
 		link->num = format.tabindex + part->link_num - 1;
@@ -1067,7 +1067,7 @@ line_break(struct part *part)
 		return;
 	}
 
-	if (!part->data || !part->data->data) goto end;
+	if (!part->document || !part->document->data) goto end;
 
 	/* move_links(part, part->cx, part->cy, 0, part->cy + 1); */
 	xpand_lines(part, part->cy + 1);
@@ -1081,7 +1081,7 @@ line_break(struct part *part)
 	if (part->cx > 0) align_line(part, part->cy, 1);
 
 	for (t = last_tag_for_newline;
-	     t && (void *)t != &part->data->tags;
+	     t && (void *)t != &part->document->tags;
 	     t = t->prev) {
 		t->x = X(0);
 		t->y = Y(part->cy + 1);
@@ -1132,7 +1132,7 @@ html_form_control(struct part *part, struct form_control *fc)
 	assert(part && fc);
 	if_assert_failed return;
 
-	if (!part->data) {
+	if (!part->document) {
 #if 0
 		destroy_fc(fc);
 		mem_free(fc);
@@ -1169,7 +1169,7 @@ html_form_control(struct part *part, struct form_control *fc)
 #endif
 	}
 
-	add_to_list(part->data->forms, fc);
+	add_to_list(part->document->forms, fc);
 }
 
 
@@ -1189,8 +1189,8 @@ html_special(struct part *part, enum html_special_type c, ...)
 	switch (c) {
 		case SP_TAG:
 			t = va_arg(l, unsigned char *);
-			if (part->data)
-				html_tag(part->data, t, X(part->cx), Y(part->cy));
+			if (part->document)
+				html_tag(part->document, t, X(part->cx), Y(part->cy));
 			va_end(l);
 			break;
 		case SP_CONTROL:
@@ -1203,11 +1203,11 @@ html_special(struct part *part, enum html_special_type c, ...)
 			return convert_table;
 		case SP_USED:
 			va_end(l);
-			return (void *)!!part->data;
+			return (void *)!!part->document;
 		case SP_FRAMESET:
 			fsp = va_arg(l, struct frameset_param *);
 			va_end(l);
-			return create_frameset(part->data, fsp);
+			return create_frameset(part->document, fsp);
 		case SP_FRAME:
 			fp = va_arg(l, struct frame_param *);
 			va_end(l);
@@ -1258,7 +1258,7 @@ free_table_cache(void)
 
 struct part *
 format_html_part(unsigned char *start, unsigned char *end,
-		 int align, int m, int width, struct f_data *data,
+		 int align, int m, int width, struct document *document,
 		 int xs, int ys, unsigned char *head,
 		 int link_num)
 {
@@ -1275,7 +1275,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	/* Hash creation if needed. */
 	if (!table_cache) {
 		table_cache = init_hash(8, &strhash);
-	} else if (!data) {
+	} else if (!document) {
 		/* Search for cached entry. */
 		struct table_cache_entry_key key;
 		struct hash_item *item;
@@ -1309,20 +1309,20 @@ format_html_part(unsigned char *start, unsigned char *end,
 	assertm(ys >= 0, "format_html_part: ys == %d", ys);
 	if_assert_failed return NULL;
 
-	if (data) {
+	if (document) {
 		struct node *n = mem_alloc(sizeof(struct node));
 
 		if (n) {
 			n->x = xs;
 			n->y = ys;
 			n->xw = !table_level ? MAXINT : width;
-			add_to_list(data->nodes, n);
+			add_to_list(document->nodes, n);
 		}
-		/*sdbg(data);*/
+		/*sdbg(document);*/
 
-		last_link_to_move = data->nlinks;
-		last_tag_to_move = (void *)&data->tags;
-		last_tag_for_newline = (void *)&data->tags;
+		last_link_to_move = document->nlinks;
+		last_tag_to_move = (void *)&document->tags;
+		last_tag_for_newline = (void *)&document->tags;
 	} else {
 		last_link_to_move = 0;
 		last_tag_to_move = NULL;
@@ -1330,7 +1330,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	}
 
 	margin = m;
-	empty_format = !data;
+	empty_format = !document;
 
 	if (last_link) mem_free(last_link);
 	if (last_image) mem_free(last_image);
@@ -1343,7 +1343,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	part = mem_calloc(1, sizeof(struct part));
 	if (!part) goto ret;
 
-	part->data = data;
+	part->document = document;
 	part->xp = xs;
 	part->yp = ys;
 	part->cx = -1;
@@ -1387,8 +1387,8 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	if (part->spaces) mem_free(part->spaces);
 
-	if (data) {
-		struct node *n = data->nodes.next;
+	if (document) {
+		struct node *n = document->nodes.next;
 
 		n->yw = ys - n->y + part->y;
 	}
@@ -1403,7 +1403,7 @@ ret:
 	margin = lm;
 	empty_format = ef;
 
-	if (table_level > 1 && !data && table_cache
+	if (table_level > 1 && !document && table_cache
 	    && table_cache_entries < MAX_TABLE_CACHE_ENTRIES) {
 		/* Create a new entry. */
 		/* Clear memory to prevent bad key comparaison due to alignment
@@ -1550,7 +1550,7 @@ get_convert_table(unsigned char *head, int to_cp,
 }
 
 static void
-format_html(struct cache_entry *ce, struct f_data *screen)
+format_html(struct cache_entry *ce, struct document *screen)
 {
 	struct fragment *fr;
 	struct part *rp;
@@ -1661,7 +1661,7 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 void
 shrink_format_cache(int u)
 {
-	struct f_data *ce;
+	struct document *ce;
 
 	delete_unused_format_cache_entries();
 
@@ -1686,7 +1686,7 @@ shrink_format_cache(int u)
 void
 count_format_cache(void)
 {
-	struct f_data *ce;
+	struct document *ce;
 
 	format_cache_entries = 0;
 	foreach (ce, format_cache)
@@ -1697,7 +1697,7 @@ count_format_cache(void)
 void
 delete_unused_format_cache_entries(void)
 {
-	struct f_data *ce;
+	struct document *ce;
 
 	foreach (ce, format_cache) {
 		struct cache_entry *cee = NULL;
@@ -1716,7 +1716,7 @@ delete_unused_format_cache_entries(void)
 }
 
 void
-format_cache_reactivate(struct f_data *ce)
+format_cache_reactivate(struct document *ce)
 {
 	assert(ce);
 	if_assert_failed return;
@@ -1730,7 +1730,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 		   struct document_options *opt)
 {
 	unsigned char *n;
-	struct f_data *ce;
+	struct document *ce;
 	struct cache_entry *cee = NULL;
 
 	assert(vs && screen && opt);
@@ -1747,7 +1747,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 
 	screen->vs = vs;
 	screen->xl = screen->yl = -1;
-	screen->f_data = NULL;
+	screen->document = NULL;
 
 	if (!find_in_cache(vs->url, &cee) || !cee) {
 		internal("document %s to format not found", vs->url);
@@ -1771,7 +1771,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 		format_cache_reactivate(ce);
 
 		if (!ce->refcount++) format_cache_entries--;
-		screen->f_data = ce;
+		screen->document = ce;
 
 		goto sx;
 	}
@@ -1779,7 +1779,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	cee->refcount++;
 	shrink_memory(0);
 
-	ce = mem_alloc(sizeof(struct f_data));
+	ce = mem_alloc(sizeof(struct document));
 	if (!ce) {
 		cee->refcount--;
 		return;
@@ -1798,7 +1798,7 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	copy_opt(&ce->opt, opt);
 	add_to_list(format_cache, ce);
 
-	screen->f_data = ce;
+	screen->document = ce;
 	ce->time_to_get = -get_time();
 	format_html(cee, ce);
 	ce->time_to_get += get_time();
@@ -1814,7 +1814,7 @@ long
 formatted_info(int type)
 {
 	int i = 0;
-	struct f_data *ce;
+	struct document *ce;
 
 	switch (type) {
 		case INFO_FILES:
@@ -1872,9 +1872,9 @@ html_interpret(struct session *ses)
 
 	if (l) cached_format_html(l, ses->screen, &o);
 
-	if (ses->screen->f_data && ses->screen->f_data->frame) {
+	if (ses->screen->document && ses->screen->document->frame) {
 		cf = current_frame(ses);
-		format_frames(ses, ses->screen->f_data->frame_desc, &o, 0);
+		format_frames(ses, ses->screen->document->frame_desc, &o, 0);
 	}
 
 	foreach (fd, ses->scrn_frames) if (!fd->used) {
@@ -1890,7 +1890,7 @@ html_interpret(struct session *ses)
 		int n = 0;
 
 		foreach (fd, ses->scrn_frames) {
-			if (fd->f_data && fd->f_data->frame) continue;
+			if (fd->document && fd->document->frame) continue;
 			if (fd == cf) {
 				cur_loc(ses)->vs.current_link = n;
 				break;

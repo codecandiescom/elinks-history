@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.47 2003/07/13 13:09:06 jonas Exp $ */
+/* $Id: document.c,v 1.48 2003/07/15 12:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,10 +100,10 @@ loc_msg(struct terminal *term, struct location *location,
 
 	add_chr_to_str(&str, &strl, '\n');
 
-	if (frame && frame->f_data->title) {
+	if (frame && frame->document->title) {
 		add_to_str(&str, &strl, _("Title", term));
 		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, frame->f_data->title);
+		add_to_str(&str, &strl, frame->document->title);
 	}
 
 	add_chr_to_str(&str, &strl, '\n');
@@ -123,13 +123,13 @@ loc_msg(struct terminal *term, struct location *location,
 		add_chr_to_str(&str, &strl, '\n');
 		add_to_str(&str, &strl, _("Codepage", term));
 		add_to_str(&str, &strl, ": ");
-		add_to_str(&str, &strl, get_cp_name(location->vs.f->f_data->cp));
+		add_to_str(&str, &strl, get_cp_name(location->vs.f->document->cp));
 
-		if (location->vs.f->f_data->cp_status == CP_STATUS_ASSUMED) {
+		if (location->vs.f->document->cp_status == CP_STATUS_ASSUMED) {
 			add_to_str(&str, &strl, " (");
 			add_to_str(&str, &strl, _("assumed", term));
 			add_chr_to_str(&str, &strl, ')');
-		} else if (location->vs.f->f_data->cp_status == CP_STATUS_IGNORED) {
+		} else if (location->vs.f->document->cp_status == CP_STATUS_IGNORED) {
 			add_to_str(&str, &strl, " (");
 			add_to_str(&str, &strl, _("ignoring server setting", term));
 			add_chr_to_str(&str, &strl, ')');

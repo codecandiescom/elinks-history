@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.28 2003/07/04 10:57:16 zas Exp $ */
+/* $Id: renderer.h,v 1.29 2003/07/15 12:52:32 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -106,7 +106,7 @@ long formatted_info(int);
 void shrink_format_cache(int);
 void count_format_cache(void);
 void delete_unused_format_cache_entries(void);
-void format_cache_reactivate(struct f_data *);
+void format_cache_reactivate(struct document *);
 
 void cached_format_html(struct view_state *, struct f_data_c *, struct document_options *);
 void html_interpret(struct session *);
@@ -117,7 +117,7 @@ void destroy_fc(struct form_control *);
 
 struct part {
 	struct list_head uf;
-	struct f_data *data;
+	struct document *document;
 
 	unsigned char *spaces;
 	int spaces_len;
@@ -137,7 +137,7 @@ void xset_hchars(struct part *, int, int, int, unsigned);
 
 void free_table_cache(void);
 
-struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, struct f_data *, int, int, unsigned char *, int);
+struct part *format_html_part(unsigned char *, unsigned char *, int, int, int, struct document *, int, int, unsigned char *, int);
 
 /* Interface with html.c */
 

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.7 2003/07/06 23:17:36 pasky Exp $ */
+/* $Id: textarea.c,v 1.8 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,10 +141,10 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	int sl, ye;
 	register int x, y;
 
-	assert(t && f && f->f_data && f->vs && l);
+	assert(t && f && f->document && f->vs && l);
 	if_assert_failed return;
 	frm = l->form;
-	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
+	assertm(frm, "link %d has no form", (int)(l - f->document->links));
 	if_assert_failed return;
 
 	xp = f->xp;
@@ -511,14 +511,14 @@ textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 void
 set_textarea(struct session *ses, struct f_data_c *f, int kbd)
 {
-	assert(ses && f && f->vs && f->f_data);
+	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
 
 	if (f->vs->current_link != -1
-	    && f->f_data->links[f->vs->current_link].type == L_AREA) {
+	    && f->document->links[f->vs->current_link].type == L_AREA) {
 		struct event ev = { EV_KBD, 0, 0, 0 };
 
 		ev.x = kbd;
-		field_op(ses, f, &f->f_data->links[f->vs->current_link], &ev, 1);
+		field_op(ses, f, &f->document->links[f->vs->current_link], &ev, 1);
 	}
 }

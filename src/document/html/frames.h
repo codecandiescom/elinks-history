@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.1 2003/07/04 09:40:00 zas Exp $ */
+/* $Id: frames.h,v 1.2 2003/07/15 12:52:32 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -44,8 +44,8 @@ enum cp_status {
 	CP_STATUS_IGNORED
 };
 
-struct f_data {
-	LIST_HEAD(struct f_data);
+struct document {
+	LIST_HEAD(struct document);
 
 	struct document_options opt;
 
@@ -90,7 +90,7 @@ struct f_data_c {
 	unsigned char *name;
 	unsigned char **search_word;
 
-	struct f_data *f_data;
+	struct document *document;
 	struct view_state *vs;
 	struct link_bg *link_bg;
 
@@ -115,7 +115,7 @@ struct frame_param {
 	unsigned char *url;
 };
 
-struct frameset_desc *create_frameset(struct f_data *fda, struct frameset_param *fp);
+struct frameset_desc *create_frameset(struct document *doc, struct frameset_param *fp);
 void create_frame(struct frame_param *fp);
 struct f_data_c *format_frame(struct session *ses, unsigned char *name, struct document_options *o, int depth);
 void format_frames(struct session *ses, struct frameset_desc *fsd, struct document_options *op, int depth);

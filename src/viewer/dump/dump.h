@@ -1,4 +1,4 @@
-/* $Id: dump.h,v 1.4 2003/07/04 01:49:03 jonas Exp $ */
+/* $Id: dump.h,v 1.5 2003/07/15 12:52:33 jonas Exp $ */
 
 #ifndef EL__VIEWER_DUMP_DUMP_H
 #define EL__VIEWER_DUMP_DUMP_H
@@ -10,6 +10,6 @@ void dump_start(unsigned char *);
 
 #include "document/html/renderer.h"
 
-int dump_to_file(struct f_data *, int);
+int dump_to_file(struct document *, int);
 
 #endif

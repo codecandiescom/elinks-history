@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.50 2003/07/05 09:16:01 zas Exp $ */
+/* $Id: tables.c,v 1.51 2003/07/15 12:52:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1323,7 +1323,7 @@ static void
 display_complicated_table(struct table *t, int x, int y, int *yy)
 {
 	register int i, j;
-	struct f_data *f = t->p->data;
+	struct document *f = t->p->document;
 	int yp;
 	int xp = x + (t->border && (t->frame & F_LHS));
 
@@ -1704,14 +1704,14 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	wf = 0;
-	width = get_width(attr, "width", (p->data || p->xp));
+	width = get_width(attr, "width", (p->document || p->xp));
 	if (width == -1) {
 		width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (width < 0) width = 0;
 		wf = 1;
 	}
 
-	t = parse_table(html, eof, end, &bgcolor, (p->data || p->xp), &bad_html, &bad_html_n);
+	t = parse_table(html, eof, end, &bgcolor, (p->document || p->xp), &bad_html, &bad_html_n);
 	if (!t) {
 		if (bad_html) mem_free(bad_html);
 		goto ret0;
@@ -1752,7 +1752,7 @@ again:
 	get_table_width(t);
 
 	margins = par_format.leftmargin + par_format.rightmargin;
-	if (!p->data && !p->xp) {
+	if (!p->document && !p->xp) {
 		int tmp;
 
 		if (!wf && t->max_t > width) t->max_t = width;
@@ -1787,7 +1787,7 @@ again:
 	else
 		distribute_widths(t, width);
 
-	if (!p->data && p->xp == 1) {
+	if (!p->document && p->xp == 1) {
 		int ww = t->rw + margins;
 
 		if (ww > par_format.width) ww = par_format.width;
@@ -1817,7 +1817,7 @@ again:
 
 	get_table_heights(t);
 
-	if (!p->data) {
+	if (!p->document) {
 		int ww = t->rw + margins;
 
 		if (ww > p->x) p->x = ww;
@@ -1825,7 +1825,7 @@ again:
 		goto ret2;
 	}
 
-	n = p->data->nodes.next;
+	n = p->document->nodes.next;
 	n->yw = p->yp - n->y + p->cy;
 
 	display_complicated_table(t, x, p->cy, &cye);
@@ -1836,7 +1836,7 @@ again:
 		nn->x = n->x;
 		nn->y = p->yp + cye;
 		nn->xw = n->xw;
-		add_to_list(p->data->nodes, nn);
+		add_to_list(p->document->nodes, nn);
 	}
 
 	if (p->cy + t->rh != cye)

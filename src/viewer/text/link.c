@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.8 2003/07/14 19:51:34 jonas Exp $ */
+/* $Id: link.c,v 1.9 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ comp_links(struct link *l1, struct link *l2)
 }
 
 void
-sort_links(struct f_data *f)
+sort_links(struct document *f)
 {
 	int i;
 
@@ -131,7 +131,7 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 
 	if (l == -1) return;
 
-	link = &scr->f_data->links[l];
+	link = &scr->document->links[l];
 	xp = scr->xp;
 	yp = scr->yp;
 	xw = scr->xw;
@@ -251,19 +251,19 @@ get_first_link(struct f_data_c *f)
 	struct link *l;
 	register int i;
 
-	assert(f && f->f_data);
+	assert(f && f->document);
 	if_assert_failed return NULL;
 
-	if (!f->f_data->lines1) return NULL;
+	if (!f->document->lines1) return NULL;
 
-	l = f->f_data->links + f->f_data->nlinks;
+	l = f->document->links + f->document->nlinks;
 
 	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->f_data->y && f->f_data->lines1[i]
-		    && f->f_data->lines1[i] < l)
-			l = f->f_data->lines1[i];
+		if (i >= 0 && i < f->document->y && f->document->lines1[i]
+		    && f->document->lines1[i] < l)
+			l = f->document->lines1[i];
 
-	if (l == f->f_data->links + f->f_data->nlinks) l = NULL;
+	if (l == f->document->links + f->document->nlinks) l = NULL;
 	return l;
 }
 
@@ -273,14 +273,14 @@ get_last_link(struct f_data_c *f)
 	struct link *l = NULL;
 	register int i;
 
-	assert(f && f->f_data);
+	assert(f && f->document);
 	if_assert_failed return NULL;
 
-	if (!f->f_data->lines2) return NULL;
+	if (!f->document->lines2) return NULL;
 
 	for (i = f->vs->view_pos; i < f->vs->view_pos + f->yw; i++)
-		if (i >= 0 && i < f->f_data->y && f->f_data->lines2[i] > l)
-			l = f->f_data->lines2[i];
+		if (i >= 0 && i < f->document->y && f->document->lines2[i] > l)
+			l = f->document->lines2[i];
 	return l;
 }
 
@@ -331,7 +331,7 @@ c_in_view(struct f_data_c *f)
 	assert(f && f->vs);
 	if_assert_failed return 0;
 	return (f->vs->current_link != -1
-		&& in_view(f, &f->f_data->links[f->vs->current_link]));
+		&& in_view(f, &f->document->links[f->vs->current_link]));
 }
 
 int
@@ -342,24 +342,24 @@ next_in_view(struct f_data_c *f, int p, int d,
 	int p1, p2 = 0;
 	int y, yl;
 
-	assert(f && f->f_data && f->vs && fn);
+	assert(f && f->document && f->vs && fn);
 	if_assert_failed return 0;
 
-	p1 = f->f_data->nlinks - 1;
+	p1 = f->document->nlinks - 1;
 	yl = f->vs->view_pos + f->yw;
 
-	if (yl > f->f_data->y) yl = f->f_data->y;
+	if (yl > f->document->y) yl = f->document->y;
 	for (y = f->vs->view_pos < 0 ? 0 : f->vs->view_pos; y < yl; y++) {
-		if (f->f_data->lines1[y] && f->f_data->lines1[y] - f->f_data->links < p1)
-			p1 = f->f_data->lines1[y] - f->f_data->links;
-		if (f->f_data->lines2[y] && f->f_data->lines2[y] - f->f_data->links > p2)
-			p2 = f->f_data->lines2[y] - f->f_data->links;
+		if (f->document->lines1[y] && f->document->lines1[y] - f->document->links < p1)
+			p1 = f->document->lines1[y] - f->document->links;
+		if (f->document->lines2[y] && f->document->lines2[y] - f->document->links > p2)
+			p2 = f->document->lines2[y] - f->document->links;
 	}
-	/*while (p >= 0 && p < f->f_data->nlinks) {*/
+	/*while (p >= 0 && p < f->document->nlinks) {*/
 	while (p >= p1 && p <= p2) {
-		if (fn(f, &f->f_data->links[p])) {
+		if (fn(f, &f->document->links[p])) {
 			f->vs->current_link = p;
-			if (cntr) cntr(f, &f->f_data->links[p]);
+			if (cntr) cntr(f, &f->document->links[p]);
 			return 1;
 		}
 		p += d;
@@ -399,17 +399,17 @@ set_pos_y(struct f_data_c *f, struct link *l)
 	int yl;
 	register int i;
 
-	assert(f && f->f_data && f->vs && l);
+	assert(f && f->document && f->vs && l);
 	if_assert_failed return;
 
-	yl = f->f_data->y;
+	yl = f->document->y;
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= ym) ym = l->pos[i].y + 1;
 		if (l->pos[i].y < yl) yl = l->pos[i].y;
 	}
-	f->vs->view_pos = (ym + yl) / 2 - f->f_data->opt.yw / 2;
-	if (f->vs->view_pos > f->f_data->y - f->f_data->opt.yw)
-		f->vs->view_pos = f->f_data->y - f->f_data->opt.yw;
+	f->vs->view_pos = (ym + yl) / 2 - f->document->opt.yw / 2;
+	if (f->vs->view_pos > f->document->y - f->document->opt.yw)
+		f->vs->view_pos = f->document->y - f->document->opt.yw;
 	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
 }
 
@@ -421,21 +421,21 @@ find_link(struct f_data_c *f, int p, int s)
 	struct link *link;
 	int y, l;
 
-	assert(f && f->f_data && f->vs);
+	assert(f && f->document && f->vs);
 	if_assert_failed return;
 
 	if (p == -1) {
-		line = f->f_data->lines2;
+		line = f->document->lines2;
 		if (!line) goto nolink;
 		y = f->vs->view_pos + f->yw - 1;
-		if (y >= f->f_data->y) y = f->f_data->y - 1;
+		if (y >= f->document->y) y = f->document->y - 1;
 		if (y < 0) goto nolink;
 	} else {
-		line = f->f_data->lines1;
+		line = f->document->lines1;
 		if (!line) goto nolink;
 		y = f->vs->view_pos;
 		if (y < 0) y = 0;
-		if (y >= f->f_data->y) goto nolink;
+		if (y >= f->document->y) goto nolink;
 	}
 
 	link = NULL;
@@ -446,11 +446,11 @@ find_link(struct f_data_c *f, int p, int s)
 		y += p;
 	} while (!(y < 0
 		   || y < f->vs->view_pos
-		   || y >= f->vs->view_pos + f->f_data->opt.yw
-		   || y >= f->f_data->y));
+		   || y >= f->vs->view_pos + f->document->opt.yw
+		   || y >= f->document->y));
 
 	if (!link) goto nolink;
-	l = link - f->f_data->links;
+	l = link - f->document->links;
 
 	if (s == 0) {
 		next_in_view(f, l, p, in_view, NULL);
@@ -525,14 +525,14 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 {
 	struct link *link;
 
-	assert(ses && fd && fd->vs && fd->f_data);
+	assert(ses && fd && fd->vs && fd->document);
 	if_assert_failed return 1;
 
 	if (fd->vs->current_link == -1) return 1;
-	link = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->document->links[fd->vs->current_link];
 
 	if (link->type == L_LINK || link->type == L_BUTTON
-	    || ((has_form_submit(fd->f_data, link->form)
+	    || ((has_form_submit(fd->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link->type == L_FIELD || link->type == L_AREA))) {
 		unsigned char *url = get_link_url(ses, fd, link);
@@ -557,7 +557,7 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 		} else {
 			struct form_control *fc;
 
-			foreach (fc, fd->f_data->forms) {
+			foreach (fc, fd->document->forms) {
 				if (fc->form_num == link->form->form_num
 				    && fc->type == FC_RADIO
 				    && !xstrcmp(fc->name, link->form->name)) {
@@ -574,10 +574,10 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 		if (link->form->ro)
 			return 1;
 
-		fd->f_data->refcount++;
+		fd->document->refcount++;
 		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) decrement_fc_refcount,
-				 fd->f_data);
+				 fd->document);
 		do_select_submenu(ses->tab->term, link->form->menu, ses);
 
 	} else {
@@ -600,10 +600,10 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	if_assert_failed return;
 	f = current_frame(ses);
 
-	assert(f && f->vs && f->f_data);
+	assert(f && f->vs && f->document);
 	if_assert_failed return;
 	if (f->vs->current_link == -1) return;
-	l = &f->f_data->links[f->vs->current_link];
+	l = &f->document->links[f->vs->current_link];
 	if (l->type != L_SELECT) return;
 
 	fs = find_form_state(f, l->form);
@@ -622,7 +622,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	print_screen_status(ses);
 	redraw_from_window(ses->tab);
 #if 0
-	if (!has_form_submit(f->f_data, l->form)) {
+	if (!has_form_submit(f->document, l->form)) {
 		goto_form(ses, f, l->form, l->target);
 	}
 #endif
@@ -639,10 +639,10 @@ get_current_state(struct session *ses)
 	if_assert_failed return -1;
 	f = current_frame(ses);
 
-	assert(f && f->vs && f->f_data);
+	assert(f && f->vs && f->document);
 	if_assert_failed return -1;
 	if (f->vs->current_link == -1) return -1;
-	l = &f->f_data->links[f->vs->current_link];
+	l = &f->document->links[f->vs->current_link];
 	if (l->type != L_SELECT) return -1;
 	fs = find_form_state(f, l->form);
 	if (fs) return fs->state;
@@ -656,23 +656,23 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 	struct link *l1, *l2, *l;
 	register int i;
 
-	assert(f && f->vs && f->f_data && ev);
+	assert(f && f->vs && f->document && ev);
 	if_assert_failed return NULL;
 
-	l1 = f->f_data->links + f->f_data->nlinks;
-	l2 = f->f_data->links;
+	l1 = f->document->links + f->document->nlinks;
+	l2 = f->document->links;
 
-	if (!f->f_data->nlinks
+	if (!f->document->nlinks
 	    || ev->x < 0 || ev->y < 0 || ev->x >= f->xw || ev->y >= f->yw)
 		return NULL;
 
 	for (i = f->vs->view_pos;
-	     i < f->f_data->y && i < f->vs->view_pos + f->yw;
+	     i < f->document->y && i < f->vs->view_pos + f->yw;
 	     i++) {
-		if (f->f_data->lines1[i] && f->f_data->lines1[i] < l1)
-			l1 = f->f_data->lines1[i];
-		if (f->f_data->lines2[i] && f->f_data->lines2[i] > l2)
-			l2 = f->f_data->lines2[i];
+		if (f->document->lines1[i] && f->document->lines1[i] < l1)
+			l1 = f->document->lines1[i];
+		if (f->document->lines2[i] && f->document->lines2[i] > l2)
+			l2 = f->document->lines2[i];
 	}
 
 	for (l = l1; l <= l2; l++) {
@@ -693,7 +693,7 @@ jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 	assert(ses && fd && fd->vs);
 	if_assert_failed return;
 
-	if (n < 0 || n > fd->f_data->nlinks) return;
+	if (n < 0 || n > fd->document->nlinks) return;
 	fd->vs->current_link = n;
 	check_vs(fd);
 }
@@ -704,12 +704,12 @@ goto_link_number_do(struct session *ses, struct f_data_c *fd, int n)
 {
 	struct link *link;
 
-	assert(ses && fd && fd->f_data);
+	assert(ses && fd && fd->document);
 	if_assert_failed return;
-	if (n < 0 || n > fd->f_data->nlinks) return;
+	if (n < 0 || n > fd->document->nlinks) return;
 	jump_to_link_number(ses, fd, n);
 
-	link = &fd->f_data->links[n];
+	link = &fd->document->links[n];
 	if (link->type != L_AREA
 	    && link->type != L_FIELD
 	    && get_opt_int("document.browse.accesskey.auto_follow"))
@@ -738,7 +738,7 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 	int passed = -1;
 	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
 
-	assert(ses && fd && fd->f_data && fd->vs && ev);
+	assert(ses && fd && fd->document && fd->vs && ev);
 	if_assert_failed return 0;
 
 	x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
@@ -750,8 +750,8 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 	/* Run through all the links and see if one of them is bound to the
 	 * key we test.. */
 
-	for (i = 0; i < fd->f_data->nlinks; i++) {
-		struct link *link = &fd->f_data->links[i];
+	for (i = 0; i < fd->document->nlinks; i++) {
+		struct link *link = &fd->document->links[i];
 
 		if (x == link->accesskey) {
 			if (passed != i && i <= fd->vs->current_link) {
@@ -764,7 +764,7 @@ try_document_key(struct session *ses, struct f_data_c *fd,
 			return 1;
 		}
 
-		if (i == fd->f_data->nlinks - 1 && passed >= 0) {
+		if (i == fd->document->nlinks - 1 && passed >= 0) {
 			/* Return to the start. */
 			i = passed - 1;
 		}
@@ -792,11 +792,11 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (!mi) return;
 	if (!fd) goto end;
 
-	assert(fd->vs && fd->f_data);
+	assert(fd->vs && fd->document);
 	if_assert_failed return;
 	if (fd->vs->current_link < 0) goto end;
 
-	link = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->document->links[fd->vs->current_link];
 	if (link->type == L_LINK && link->where) {
 		l = 1;
 		if (strlen(link->where) >= 4
@@ -882,14 +882,14 @@ print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 {
 	struct link *link;
 
-	assert(term && fd && fd->f_data && fd->vs);
+	assert(term && fd && fd->document && fd->vs);
 	if_assert_failed return NULL;
 
-	if (fd->f_data->frame || fd->vs->current_link == -1
-	    || fd->vs->current_link >= fd->f_data->nlinks)
+	if (fd->document->frame || fd->vs->current_link == -1
+	    || fd->vs->current_link >= fd->document->nlinks)
 		return NULL;
 
-	link = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->document->links[fd->vs->current_link];
 
 	if (link->title)
 		return stracpy(link->title);
@@ -903,15 +903,15 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 {
 	struct link *link;
 
-	assert(term && fd && fd->f_data && fd->vs);
+	assert(term && fd && fd->document && fd->vs);
 	if_assert_failed return NULL;
 
-	if (fd->f_data->frame || fd->vs->current_link == -1
-	    || fd->vs->current_link >= fd->f_data->nlinks) {
+	if (fd->document->frame || fd->vs->current_link == -1
+	    || fd->vs->current_link >= fd->document->nlinks) {
 		return NULL;
 	}
 
-	link = &fd->f_data->links[fd->vs->current_link];
+	link = &fd->document->links[fd->vs->current_link];
 
 	if (link->type == L_LINK) {
 		if (!link->where && link->where_img) {
@@ -1032,7 +1032,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		}
 
 		if (link->type == L_FIELD
-		    && !has_form_submit(fd->f_data, link->form)
+		    && !has_form_submit(fd->document, link->form)
 		    && link->form->action) {
 			unsigned char *url;
 

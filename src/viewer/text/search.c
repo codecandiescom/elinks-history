@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.6 2003/07/06 23:17:36 pasky Exp $ */
+/* $Id: search.c,v 1.7 2003/07/15 12:52:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 /* FIXME: Add comments!! --Zas */
 
 static inline void
-add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
+add_srch_chr(struct document *f, unsigned char c, int x, int y, int nn)
 {
 	int n;
 
@@ -45,7 +45,7 @@ add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 #if 0
 /* Debugging code, please keep it. */
 void
-sdbg(struct f_data *f)
+sdbg(struct document *f)
 {
 	struct node *n;
 
@@ -60,7 +60,7 @@ sdbg(struct f_data *f)
 
 
 static void
-sort_srch(struct f_data *f)
+sort_srch(struct document *f)
 {
 	int i;
 	int *min, *max;
@@ -115,7 +115,7 @@ sort_srch(struct f_data *f)
 }
 
 static int
-get_srch(struct f_data *f)
+get_srch(struct document *f)
 {
 	struct node *n;
 	int cnt = 0;
@@ -188,7 +188,7 @@ get_srch(struct f_data *f)
 }
 
 static void
-get_search_data(struct f_data *f)
+get_search_data(struct document *f)
 {
 	int n;
 
@@ -221,7 +221,7 @@ srch_cmp(unsigned char c1, unsigned char c2)
 }
 
 static int
-get_range(struct f_data *f, int y, int yw, int l,
+get_range(struct document *f, int y, int yw, int l,
 	  struct search **s1, struct search **s2)
 {
 	register int i;
@@ -253,7 +253,7 @@ get_range(struct f_data *f, int y, int yw, int l,
 }
 
 static int
-is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
+is_in_range(struct document *f, int y, int yw, unsigned char *txt,
 	    int *min, int *max)
 {
 	struct search *s1, *s2;
@@ -323,9 +323,9 @@ get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 	vx = scr->vs->view_posx;
 	vy = scr->vs->view_pos;
 
-	get_search_data(scr->f_data);
+	get_search_data(scr->document);
 	l = strlen(*scr->search_word);
-	if (get_range(scr->f_data, scr->vs->view_pos, scr->yw, l, &s1, &s2))
+	if (get_range(scr->document, scr->vs->view_pos, scr->yw, l, &s1, &s2))
 		goto ret;
 
 	c = (*scr->search_word)[0];
@@ -506,7 +506,7 @@ find_next_link_in_search(struct f_data_c *f, int d)
 		find_link(f, d, 0);
 		return 1;
 	}
-	link = &f->f_data->links[f->vs->current_link];
+	link = &f->document->links[f->vs->current_link];
 	get_searched(f, &pt, &len);
 	if (point_intersect(pt, len, link->pos, link->n)) {
 		mem_free(pt);
@@ -543,10 +543,10 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 		if (!ses->search_word) return;
 	}
 
-	get_search_data(f->f_data);
+	get_search_data(f->document);
 
 	do {
-		if (is_in_range(f->f_data, p, f->yw, ses->search_word, &min, &max)) {
+		if (is_in_range(f->document, p, f->yw, ses->search_word, &min, &max)) {
 			f->vs->view_pos = p;
 			if (max >= min) {
 				if (max > f->vs->view_posx + f->xw)
@@ -564,16 +564,16 @@ find_next(struct session *ses, struct f_data_c *f, int a)
 			return;
 		}
 		p += ses->search_direction * f->yw;
-		if (p > f->f_data->y) {
+		if (p > f->document->y) {
 			/* TODO: A notice for user? --pasky */
 			p = 0;
 		}
 		if (p < 0) {
 			p = 0;
-			while (p < f->f_data->y) p += f->yw;
+			while (p < f->document->y) p += f->yw;
 			p -= f->yw;
 		}
-	} while ((c += f->yw) < f->f_data->y + f->yw);
+	} while ((c += f->yw) < f->document->y + f->yw);
 
 #if 0
 	draw_doc(ses->tab->term, f, 1);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.118 2003/07/14 19:51:33 jonas Exp $ */
+/* $Id: session.c,v 1.119 2003/07/15 12:52:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,8 +129,8 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 	int show_tabs_bar = get_opt_int("ui.tabs.show_bar");
 	int tabs_cnt = number_of_tabs(ses->tab->term);
 
-	if (!doo && ses->screen && ses->screen->f_data)
-		doo = &ses->screen->f_data->opt;
+	if (!doo && ses->screen && ses->screen->document)
+		doo = &ses->screen->document->opt;
 
 	if (tabs_count) *tabs_count = tabs_cnt;
 	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
@@ -258,9 +258,9 @@ print_screen_status(struct session *ses)
 				? selected_color : normal_color;
 
 			if (tab->data && current_frame(tab->data)) {
-				if (current_frame(tab->data)->f_data->title &&
-				    *(current_frame(tab->data)->f_data->title))
-					msg = current_frame(tab->data)->f_data->title;
+				if (current_frame(tab->data)->document->title &&
+				    *(current_frame(tab->data)->document->title))
+					msg = current_frame(tab->data)->document->title;
 				else
 					msg = _("Untitled", term);
 			} else {
@@ -314,11 +314,11 @@ print_screen_status(struct session *ses)
 		int msglen;
 		static void *last_ses = NULL;
 
-		if (ses->screen && ses->screen->f_data
-		    && ses->screen->f_data->title
-		    && ses->screen->f_data->title[0]) {
+		if (ses->screen && ses->screen->document
+		    && ses->screen->document->title
+		    && ses->screen->document->title[0]) {
 			add_to_strn(&msg, " - ");
-			add_to_strn(&msg, ses->screen->f_data->title);
+			add_to_strn(&msg, ses->screen->document->title);
 		}
 
 		msglen = strlen(msg);
@@ -742,10 +742,10 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 
 		url = stracpy(frm->vs.url);
 		if (!url
-		    || (frm->vs.f && frm->vs.f->f_data
-		    && frm->vs.f->f_data->frame)) {
+		    || (frm->vs.f && frm->vs.f->document
+		    && frm->vs.f->document->frame)) {
 			/* del_from_list(frm); */
-			request_frameset(ses, frm->vs.f->f_data->frame_desc);
+			request_frameset(ses, frm->vs.f->document->frame_desc);
 #if 0
 			destroy_vs(&frm->vs);
 			mem_free(frm->name);
@@ -816,7 +816,7 @@ request_frameset(struct session *ses, struct frameset_desc *fd)
 inline void
 load_frames(struct session *ses, struct f_data_c *fd)
 {
-	struct f_data *ff = fd->f_data;
+	struct document *ff = fd->document;
 
 	if (!ff || !ff->frame) return;
 	request_frameset(ses, ff->frame_desc);
@@ -942,7 +942,7 @@ doc_end_load(struct download *stat, struct session *ses)
 		draw_formatted(ses);
 		if (get_opt_bool_tree(&cmdline_options, "auto-submit")) {
 			fc = (struct form_control *)
-				ses->screen->f_data->forms.next;
+				ses->screen->document->forms.next;
 			if (fc != fc->next) {
 				get_opt_bool_tree(&cmdline_options,
 						  "auto-submit") = 0;
@@ -961,7 +961,7 @@ doc_end_load(struct download *stat, struct session *ses)
 
 #ifdef GLOBHIST
 	add_global_history_item(cur_loc(ses)->vs.url,
-				ses->screen->f_data->title, time(NULL));
+				ses->screen->document->title, time(NULL));
 #endif
 
 	if (submit) {
@@ -1070,7 +1070,7 @@ process_file_requests(struct session *ses)
 				continue;
 
 			ftl->req_sent = 1;
-			load_url(ftl->url, (fd && fd->f_data) ? fd->f_data->url
+			load_url(ftl->url, (fd && fd->document) ? fd->document->url
 							      : NULL,
 				 &ftl->stat, ftl->pri, NC_CACHE, -1);
 			more = 1;
@@ -1380,7 +1380,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
-			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL,
+			load_url(ftl->url, fd?fd->document?fd->document->url:NULL:NULL,
 				 &ftl->stat, PRI_FRAME, cache_mode, -1);
 		}
 	}
@@ -1453,8 +1453,8 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	}
 
 	fd = current_frame(ses);
-	if (fd && fd->f_data && fd->f_data->url)
- 		ses->ref_url = stracpy(fd->f_data->url);
+	if (fd && fd->document && fd->document->url)
+ 		ses->ref_url = stracpy(fd->document->url);
 
 	ses_goto(ses, u, target, PRI_MAIN, cache_mode, task, pos, end_load, 0);
 
@@ -1671,8 +1671,8 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 	struct f_data_c *fd = current_frame(ses);
 
 	/* Ensure that the title is defined */
-	if (fd && fd->f_data->title)
-		return safe_strncpy(str, fd->f_data->title, str_size);
+	if (fd && fd->document->title)
+		return safe_strncpy(str, fd->document->title, str_size);
 
 	return NULL;
 }
@@ -1711,7 +1711,7 @@ get_current_link(struct session *ses)
 	struct f_data_c *fd = current_frame(ses); /* What the hell is an 'fd'? */
 
 	if (fd && fd->vs->current_link != -1) {
-		struct link *l = &fd->f_data->links[fd->vs->current_link];
+		struct link *l = &fd->document->links[fd->vs->current_link];
 
 		/* Only return a link */
 		if (l->type == L_LINK) return l;

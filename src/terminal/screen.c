@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.108 2003/10/17 15:46:06 jonas Exp $ */
+/* $Id: screen.c,v 1.109 2003/10/17 23:54:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,15 +319,14 @@ struct screen_state {
 
 #ifdef USE_256_COLORS
 #define compare_color(a, b)	(!memcmp((a), (b), 2))
-#define compare_bg_color(a, b)	((a)[1] == (b)[1])
-#define compare_fg_color(a, b)	((a)[0] == (b)[0])
 #define copy_color(a, b)	memcpy((a), (b), 2)
 #else
 #define compare_color(a, b)	((a)[0] == (b)[0])
 #define copy_color(a, b)	((a)[0] = (b)[0])
+#endif
+
 #define compare_bg_color(a, b)	(TERM_COLOR_BACKGROUND(a) == TERM_COLOR_BACKGROUND(b))
 #define compare_fg_color(a, b)	(TERM_COLOR_FOREGROUND(a) == TERM_COLOR_FOREGROUND(b))
-#endif
 
 #define use_utf8_io(driver)	((driver)->charsets[0] != -1)
 

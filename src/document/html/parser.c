@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.358 2004/01/18 16:12:13 zas Exp $ */
+/* $Id: parser.c,v 1.359 2004/01/18 16:24:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2260,7 +2260,7 @@ html_frame(unsigned char *a)
 #define foreach_values(i) for (i = 0; i < values_count; i++)
 
 /* Returns 0 on error. */
-int
+static int
 distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 {
 	register int i;
@@ -2301,7 +2301,7 @@ distribute_rows_or_cols(int *val_, int max_value, int *values, int values_count)
 }
 
 /* Returns 0 on error. */
-int
+static int
 distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int values_count)
 {
 	register int i;
@@ -2341,37 +2341,27 @@ distribute_rows_or_cols_that_left(int *val_, int max_value, int *values, int val
 	return 1;
 }
 
-/* Parse rows and cols attribute values and calculate appropriated values for display.
- * It handles things like:
- * <frameset cols="140,260,160">			values in pixels
- * <frameset cols="1*,2*,3*"> 				values in fractions
- * <frameset cols="320,*">				wildcard
- * <frameset cols="33%,33%,33%" rows="33%,33%,33%"> 	values in percentage
- * */
-/* TODO: split it. --Zas */
-static void
-parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
+/* Returns 0 on error. */
+static int
+extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_char,
+			    int **new_values, int *new_values_count)
 {
 	unsigned char *tmp_str;
-	int val, ret = 0;
 	int *values = NULL;
 	int values_count = 0;
-	register int i;
 
 	while (1) {
 		int *tmp_values;
 		unsigned long number;
-
+		int val;
+		
 		while (isspace(*str)) str++;
 
 		/* Extract number. */
 		errno = 0;
 		number = strtoul(str, (char **)&str, 10);
-		if (errno) {
-			*new_values_count = 0;
-			return;
-		}
-
+		if (errno) return 0;
+		
 		val = number;
 		if (*str == '%')	/* Percentage */
 			val = val * max_value / 100;
@@ -2384,10 +2374,7 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 
 		/* Save value. */
 		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
-		if (!tmp_values) {
-			*new_values_count = 0;
-			return;
-		}
+		if (!tmp_values) return 0;
 		
 		values = tmp_values;
 		values[values_count++] = val;
@@ -2399,6 +2386,35 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 		str = tmp_str + 1;
 	}
 	
+	*new_values = values;
+	*new_values_count = values_count;
+	
+	return 1;
+}
+
+/* Parse rows and cols attribute values and calculate appropriated values for display.
+ * It handles things like:
+ * <frameset cols="140,260,160">			values in pixels
+ * <frameset cols="1*,2*,3*"> 				values in fractions
+ * <frameset cols="320,*">				wildcard
+ * <frameset cols="33%,33%,33%" rows="33%,33%,33%"> 	values in percentage
+ * */
+static void
+parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char,
+		   int **new_values, int *new_values_count)
+{
+	int val, ret = 0;
+	int *values = NULL;
+	int values_count = 0;
+	register int i;
+
+	ret = extract_rows_or_cols_values(str, max_value, pixels_per_char,
+					  &values, &values_count);
+	if (!ret) {
+		*new_values_count = 0;
+		return;
+	}
+
 	*new_values = values;
 	*new_values_count = values_count;
 	

@@ -1,3 +1,54 @@
+Mon Apr 19 15:56:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, cache/cache.c, config/options.c,
+	cookies/dialogs.c, dialogs/status.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c,
+	globhist/dialogs.c, globhist/globhist.c, lowlevel/connect.c,
+	lowlevel/dns.c, protocol/uri.c, protocol/auth/auth.c,
+	protocol/file/file.c, protocol/http/codes.c, protocol/http/http.c,
+	sched/connection.c, sched/download.c, sched/event.c,
+	sched/history.c, sched/task.c, terminal/terminal.c, util/memory.h,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/search.c,
+	viewer/text/textarea.c, viewer/text/view.c:
+
+	mem_free_set_if(x, v) -> mem_free_set(&x, v) as proposed on irc,
+	mem_free_if() do not set pointer to NULL anymore since this is a
+	bloat, programmers just have to change  #if 0 to #if 1 in memory.h
+	to force pointers nullification (for debugging purposes only).  
+
+Mon Apr 19 14:39:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/dialogs.c, config/options.c, cookies/dialogs.c,
+	dialogs/status.c, document/html/parser.c, document/html/renderer.c,
+	document/html/tables.c, globhist/globhist.c, lowlevel/connect.c,
+	protocol/file/file.c, protocol/http/codes.c, protocol/http/http.c,
+	sched/task.c, terminal/terminal.c:
+
+	Use mem_free_set_if() where applicable.  
+
+Mon Apr 19 09:41:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	Unify read/write loops style, shorten lines by introducing @todo,
+	initialize @done just before loops, tidy up.  
+
+Mon Apr 19 08:58:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	end_dns_lookup(): assert dnsentry before it is used, use mem_alloc()
+	instead of mem_calloc() where zeroing is useless, cleanup.  
+
+Mon Apr 19 08:50:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/dns.c:
+
+	find_host(): assert dnsentry before using it, assert
+	dnsentry->addrno is positive, remove a goto and a label, and use
+	mem_alloc() since zeroing is useless due to memcpy() few lines
+	later.  
+
 Sun Apr 18 14:24:46 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/listmenu.c:

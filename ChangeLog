@@ -1,3 +1,153 @@
+Sun Sep 19 21:46:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	TODO about hash^Wbinary trees.  
+
+Sun Sep 19 21:38:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, stylesheet.h:
+
+	*_css_base_selector() now takes @type argument too.  
+
+Sun Sep 19 21:33:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, stylesheet.c, stylesheet.h:
+
+	Added @type argument to the basic *_css_selector() suite, defaulting
+	to CSS_ELEMENT for *_base_css_selector().  
+
+Sun Sep 19 21:28:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, stylesheet.c, stylesheet.h:
+
+	Reverted back @element* -> @name*, find_css_selector_by_element() ->
+	find_css_selector().  
+
+Sun Sep 19 21:24:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, parser.c, stylesheet.c, stylesheet.h:
+
+	Convert find_css_selector_by_element(), get_css_selector() and
+	init_css_selector() to just work on a list of selectors instead of
+	{struct css_stylesheet}, making them more generic.  
+
+Sun Sep 19 20:45:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	Unify declaration style.  
+
+Sun Sep 19 20:44:28 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	Minor stylistical nitpicking.  
+
+Sun Sep 19 20:38:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.h:
+
+	Adjust things to my 80 columns.  
+
+Sun Sep 19 20:34:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: stylesheet.c, stylesheet.h:
+
+	Blasted css_selector.(element,id,class,pseudo) and introduced
+	css_selector.name, now equivalent to .element. Things may look a
+	little weird now but it will settle down as fast as the C2H5OH in my
+	head.  
+
+Sun Sep 19 19:28:20 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Hungarian translation update.  
+
+Sun Sep 19 18:29:05 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/README:
+
+	How I foresee implementing the selectors tree. Let's drink some wine
+	now so mail me if you think it's a total bullshit.  
+
+Sun Sep 19 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/README:
+
+	$Id$ tag.  
+
+Sun Sep 19 17:35:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Miciah is too humble.  
+
+Sun Sep 19 17:30:19 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Typo fixes.  
+
+Sun Sep 19 17:24:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	The selector grammar description was rewritten, simplified, and made
+	more flexible.  
+
+Sun Sep 19 17:21:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Reduced another TODO.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/memory.c:
+
+	Fix mmap() usage on FreeBSD filed as bug 501. Patch by Lewis
+	Collard.  
+
+Sun Sep 19 11:40:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Fix mmap() usage on FreeBSD. Patch by Lewis Collard.  
+
+Sun Sep 19 09:56:02 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Boost my entry with various stuff so that I don't look as such a
+	loser near zas and Jonas. ;-) 
+
+Fri Sep 17 23:17:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/parser.c:
+
+	Blasted two obsolete FIXMEs. Feels good.  
+
+Fri Sep 17 23:03:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: stylesheet.c, stylesheet.h:
+
+	s/name/element/ in argument list of all CSS selector functions.  
+
+Fri Sep 17 23:01:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/stylesheet.c:
+
+	Tidyup. Living with 80 columns :-).  
+
+Fri Sep 17 22:58:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/css/: apply.c, stylesheet.c, stylesheet.h:
+
+	find_css_selector() -> find_css_selector_by_element(), arguments
+	renamed appropriately.  
+
 Fri Sep 17 17:21:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* NEWS:

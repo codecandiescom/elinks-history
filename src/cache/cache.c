@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.101 2003/11/26 11:29:41 miciah Exp $ */
+/* $Id: cache.c,v 1.102 2003/12/19 12:03:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ get_cache_entry(unsigned char *url)
 
 	add_to_list(cache, ce);
 
-	ce->box_item = init_browser_box_item(&cache_browser, struri(ce->uri),
+	ce->box_item = init_listbox_item(&cache_browser, struri(ce->uri),
 					     ce);
 
 	return ce;
@@ -463,7 +463,7 @@ delete_cache_entry(struct cache_entry *ce)
 	delete_entry_content(ce);
 	del_from_list(ce);
 
-	if (ce->box_item) done_browser_box(&cache_browser, ce->box_item);
+	if (ce->box_item) done_listbox_item(&cache_browser, ce->box_item);
 	if (struri(ce->uri)) mem_free(struri(ce->uri));
 	if (ce->head) mem_free(ce->head);
 	if (ce->last_modified) mem_free(ce->last_modified);

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.40 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: hierbox.h,v 1.41 2003/12/19 12:03:37 pasky Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -35,8 +35,8 @@ struct hierbox_browser {
 };
 
 struct listbox_item *
-init_browser_box_item(struct hierbox_browser *browser, unsigned char *text, void *data);
-void done_browser_box(struct hierbox_browser *browser, struct listbox_item *box);
+init_listbox_item(struct hierbox_browser *browser, unsigned char *text, void *data);
+void done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box);
 void update_hierbox_browser(struct hierbox_browser *browser);
 
 /* We use hierarchic listbox browsers for the various managers. They consist

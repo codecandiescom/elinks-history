@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.202 2003/12/19 11:32:08 pasky Exp $ */
+/* $Id: download.c,v 1.203 2003/12/19 12:03:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ void
 abort_download(struct file_download *down, int stop)
 {
 	if (down->box_item)
-		done_browser_box(&download_browser, down->box_item);
+		done_listbox_item(&download_browser, down->box_item);
 	if (down->dlg_data) cancel_dialog(down->dlg_data, NULL);
 	if (down->download.state >= 0)
 		change_connection(&down->download, NULL, PRI_CANCEL, stop);
@@ -700,7 +700,7 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->handle = fd;
 	file_download->ses = cmdw_hop->ses;
 	file_download->remotetime = 0;
-	file_download->box_item = init_browser_box_item(&download_browser,
+	file_download->box_item = init_listbox_item(&download_browser,
 					file_download->url, file_download);
 
 	add_to_list(downloads, file_download);
@@ -820,7 +820,7 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 
 	file_download->prog_flags = codw_hop->tq->prog_flags;
 
-	file_download->box_item = init_browser_box_item(&download_browser,
+	file_download->box_item = init_listbox_item(&download_browser,
 					file_download->url, file_download);
 
 	add_to_list(downloads, file_download);

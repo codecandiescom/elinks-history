@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.72 2003/11/27 19:40:41 fabio Exp $ */
+/* $Id: formhist.c,v 1.73 2003/12/19 12:03:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ new_form(unsigned char *url)
 	if (!form->submit) { mem_free(form); return NULL; }
 
 	init_list(*form->submit);
-	form->box_item = init_browser_box_item(&formhist_browser, form->url,
+	form->box_item = init_listbox_item(&formhist_browser, form->url,
 					       form);
 
 	return form;
@@ -153,7 +153,7 @@ free_form(struct formhist_data *form)
 	free_form_in_list(form);
 	mem_free(form->submit);
 	if (form->box_item)
-		done_browser_box(&formhist_browser, form->box_item);
+		done_listbox_item(&formhist_browser, form->box_item);
 	mem_free(form);
 }
 
@@ -508,7 +508,7 @@ done_form_history(struct module *module)
 		free_form_in_list(form);
 		mem_free(form->submit);
 		if (form->box_item)
-			done_browser_box(&formhist_browser, form->box_item);
+			done_listbox_item(&formhist_browser, form->box_item);
 
 	}
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.122 2003/12/19 11:53:01 pasky Exp $ */
+/* $Id: hierbox.c,v 1.123 2003/12/19 12:03:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,8 @@ update_hierbox_browser(struct hierbox_browser *browser)
 
 
 struct listbox_item *
-init_browser_box_item(struct hierbox_browser *browser, unsigned char *text,
-		      void *data)
+init_listbox_item(struct hierbox_browser *browser, unsigned char *text,
+		  void *data)
 {
 	struct listbox_item *item = mem_calloc(1, sizeof(struct listbox_item));
 
@@ -67,7 +67,7 @@ init_browser_box_item(struct hierbox_browser *browser, unsigned char *text,
  * up and if both traversals end up returning the box we want to replace bail
  * out using NULL. */
 static inline struct listbox_item *
-replace_box_item(struct listbox_item *item, struct listbox_data *data)
+replace_listbox_item(struct listbox_item *item, struct listbox_data *data)
 {
 	struct listbox_item *box;
 
@@ -79,7 +79,7 @@ replace_box_item(struct listbox_item *item, struct listbox_data *data)
 }
 
 void
-done_browser_box(struct hierbox_browser *browser, struct listbox_item *box_item)
+done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item)
 {
 	struct listbox_data *box_data;
 
@@ -90,10 +90,10 @@ done_browser_box(struct hierbox_browser *browser, struct listbox_item *box_item)
 
 	foreach (box_data, browser->boxes) {
 		if (box_data->sel == box_item)
-			box_data->sel = replace_box_item(box_item, box_data);
+			box_data->sel = replace_listbox_item(box_item, box_data);
 
 		if (box_data->top == box_item)
-			box_data->top = replace_box_item(box_item, box_data);
+			box_data->top = replace_listbox_item(box_item, box_data);
 	}
 
 	/* The option dialog needs this test */

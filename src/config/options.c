@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.418 2003/12/08 02:56:43 jonas Exp $ */
+/* $Id: options.c,v 1.419 2003/12/19 12:03:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -455,7 +455,7 @@ delete_option_do(struct option *option, int recursive)
 	}
 
 	if (option->box_item)
-		done_browser_box(&option_browser, option->box_item);
+		done_listbox_item(&option_browser, option->box_item);
 
 	if (option->flags & OPT_ALLOC) {
 		if (option->name) mem_free(option->name);

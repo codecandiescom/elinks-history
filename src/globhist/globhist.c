@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.56 2003/12/03 12:37:39 miciah Exp $ */
+/* $Id: globhist.c,v 1.57 2003/12/19 12:03:40 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -125,7 +125,7 @@ free_global_history_item(struct global_history_item *historyitem)
 		}
 	}
 
-	done_browser_box(&globhist_browser, historyitem->box_item);
+	done_listbox_item(&globhist_browser, historyitem->box_item);
 	mem_free(historyitem->title);
 	mem_free(historyitem->url);
 }
@@ -258,7 +258,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		? history_item->title : history_item->url;
 	if (!*text) text = history_item->url;
 
-	history_item->box_item = init_browser_box_item(&globhist_browser, text,
+	history_item->box_item = init_listbox_item(&globhist_browser, text,
 						       history_item);
 	if (!history_item->box_item) return;
 

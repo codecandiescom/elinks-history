@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.109 2003/12/13 00:32:42 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.110 2003/12/19 12:03:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ boom:
 void
 free_keybinding(struct keybinding *kb)
 {
-	if (kb->box_item) done_browser_box(&keybinding_browser, kb->box_item);
+	if (kb->box_item) done_listbox_item(&keybinding_browser, kb->box_item);
 #ifdef HAVE_SCRIPTING
 /* TODO: unref function must be implemented. */
 /*	if (kb->func_ref != EVENT_NONE)

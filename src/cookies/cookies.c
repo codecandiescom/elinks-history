@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.111 2003/12/06 02:27:15 jonas Exp $ */
+/* $Id: cookies.c,v 1.112 2003/12/19 12:03:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ static void accept_cookie(struct cookie *);
 void
 free_cookie(struct cookie *c)
 {
-	if (c->box_item) done_browser_box(&cookie_browser, c->box_item);
+	if (c->box_item) done_listbox_item(&cookie_browser, c->box_item);
 	if (c->name) mem_free(c->name);
 	if (c->value) mem_free(c->value);
 	if (c->server) mem_free(c->server);
@@ -399,7 +399,7 @@ accept_cookie(struct cookie *c)
 	struct cookie *d, *e;
 	int domain_len;
 
-	c->box_item = init_browser_box_item(&cookie_browser, c->server, c);
+	c->box_item = init_listbox_item(&cookie_browser, c->server, c);
 
 	foreach (d, cookies) {
 		if (strcasecmp(d->name, c->name)

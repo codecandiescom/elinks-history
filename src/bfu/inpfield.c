@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.207 2005/03/23 14:26:42 zas Exp $ */
+/* $Id: inpfield.c,v 1.208 2005/03/24 08:42:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,6 +329,28 @@ init_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return EVENT_PROCESSED;
 }
 
+static int
+field_prev_history(struct widget_data *widget_data)
+{
+	if ((void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
+		widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
+		dlg_set_history(widget_data);
+		return 1;
+	}
+	return 0;
+}
+
+static int
+field_next_history(struct widget_data *widget_data)
+{
+	if ((void *) widget_data->info.field.cur_hist->next != &widget_data->info.field.history) {
+		widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
+		dlg_set_history(widget_data);
+		return 1;
+	}
+	return 0;
+}
+
 static widget_handler_status_T
 mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
@@ -342,20 +364,16 @@ mouse_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 
 	switch (get_mouse_button(ev)) {
 		case B_WHEEL_UP:
-			if (check_mouse_action(ev, B_DOWN) &&
-			    (void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
-				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
-				dlg_set_history(widget_data);
+			if (check_mouse_action(ev, B_DOWN)
+			    && field_prev_history(widget_data)) {
 				select_widget(dlg_data, widget_data);
 			}
 			return EVENT_PROCESSED;
 
 		case B_WHEEL_DOWN:
-			if (check_mouse_action(ev, B_DOWN) &&
-			    (void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
-				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
-				dlg_set_history(widget_data);
-				select_widget(dlg_data, widget_data);
+			if (check_mouse_action(ev, B_DOWN)
+			    && field_next_history(widget_data)) {
+			  	select_widget(dlg_data, widget_data);
 			}
 			return EVENT_PROCESSED;
 	}
@@ -380,9 +398,7 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
-			if ((void *) widget_data->info.field.cur_hist->prev != &widget_data->info.field.history) {
-				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->prev;
-				dlg_set_history(widget_data);
+			if (field_prev_history(widget_data)) {
 				goto display_field;
 			}
 			break;
@@ -391,9 +407,7 @@ kbd_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 			if (!widget_has_history(widget_data))
 				return EVENT_NOT_PROCESSED;
 
-			if ((void *) widget_data->info.field.cur_hist != &widget_data->info.field.history) {
-				widget_data->info.field.cur_hist = widget_data->info.field.cur_hist->next;
-				dlg_set_history(widget_data);
+			if (field_next_history(widget_data)) {
 				goto display_field;
 			}
 			break;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.244 2003/10/30 13:12:59 zas Exp $ */
+/* $Id: view.c,v 1.245 2003/10/30 13:30:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,7 +334,7 @@ page_down(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs);
 	if_assert_failed return;
 
-	newpos = doc_view->vs->y + doc_view->document->options.yw;
+	newpos = doc_view->vs->y + doc_view->document->options.height;
 	if (newpos < doc_view->document->height) {
 		doc_view->vs->y = newpos;
 		find_link(doc_view, 1, a);
@@ -418,15 +418,15 @@ up(struct session *ses, struct document_view *doc_view, int a)
 static void
 scroll(struct session *ses, struct document_view *doc_view, int a)
 {
+	int max_height;
+	
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	/* XXX:zas: use intermediate variable here. */
-	if (a > 0 && doc_view->vs->y >= doc_view->document->height - doc_view->document->options.yw)
-		return;
+	max_height = doc_view->document->height - doc_view->document->options.height;
+	if (a > 0 && doc_view->vs->y >= max_height) return;
 	doc_view->vs->y += a;
-	if (a > 0)
-		int_upper_bound(&doc_view->vs->y, doc_view->document->height - doc_view->document->options.yw);
+	if (a > 0) int_upper_bound(&doc_view->vs->y, max_height);
 	int_lower_bound(&doc_view->vs->y, 0);
 	if (c_in_view(doc_view)) return;
 	find_link(doc_view, a < 0 ? -1 : 1, 0);
@@ -459,12 +459,14 @@ home(struct session *ses, struct document_view *doc_view, int a)
 static void
 x_end(struct session *ses, struct document_view *doc_view, int a)
 {
+	int max_height;
+	
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
+	max_height = doc_view->document->height - doc_view->document->options.height;
 	doc_view->vs->x = 0;
-	int_lower_bound(&doc_view->vs->y, doc_view->document->height - doc_view->document->options.yw);
-	int_lower_bound(&doc_view->vs->y, 0);
+	int_bounds(&doc_view->vs->y, 0, max_height);
 	find_link(doc_view, -1, 0);
 }
 
@@ -884,8 +886,8 @@ do_mouse_event(struct session *ses, struct term_event *ev,
 	if_assert_failed return;
 
 	o = &doc_view->document->options;
-	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
-	    ev->y >= o->yp && ev->y < o->yp + o->yw) goto ok;
+	if (ev->x >= o->xp && ev->x < o->xp + o->width &&
+	    ev->y >= o->yp && ev->y < o->yp + o->height) goto ok;
 
 r:
 	next_frame(ses, 1);
@@ -893,8 +895,8 @@ r:
 	assert(current_doc_view && current_doc_view->document);
 	if_assert_failed return;
 	o = &current_doc_view->document->options;
-	if (ev->x >= o->xp && ev->x < o->xp + o->xw &&
-	    ev->y >= o->yp && ev->y < o->yp + o->yw) {
+	if (ev->x >= o->xp && ev->x < o->xp + o->width &&
+	    ev->y >= o->yp && ev->y < o->yp + o->height) {
 		draw_formatted(ses);
 		doc_view = current_doc_view;
 		goto ok;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.195 2003/10/30 11:41:17 zas Exp $ */
+/* $Id: session.c,v 1.196 2003/10/30 13:30:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,11 +161,11 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 		doo->xp = 0;
 		doo->yp = 0;
 		if (ses->visible_title_bar) doo->yp = 1;
-		doo->xw = ses->tab->term->x;
-		doo->yw = ses->tab->term->y;
-		if (ses->visible_title_bar) doo->yw--;
-		if (ses->visible_status_bar) doo->yw--;
-		if (ses->visible_tabs_bar) doo->yw--;
+		doo->width = ses->tab->term->x;
+		doo->height = ses->tab->term->y;
+		if (ses->visible_title_bar) doo->height--;
+		if (ses->visible_status_bar) doo->height--;
+		if (ses->visible_tabs_bar) doo->height--;
 	}
 }
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.240 2003/10/30 11:57:07 zas Exp $ */
+/* $Id: parser.c,v 1.241 2003/10/30 13:30:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1624,7 +1624,7 @@ xxx:
 	fc->size = get_num(a, "size");
 	if (fc->size == -1) fc->size = HTML_DEFAULT_INPUT_SIZE;
 	fc->size++;
-	if (fc->size > d_opt->xw) fc->size = d_opt->xw;
+	if (fc->size > d_opt->width) fc->size = d_opt->width;
 	fc->maxlength = get_num(a, "maxlength");
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 	if (fc->type == FC_CHECKBOX || fc->type == FC_RADIO) fc->default_state = has_attr(a, "checked");
@@ -2205,12 +2205,12 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	if (cols <= 0) cols = HTML_DEFAULT_INPUT_SIZE;
 	cols++; /* Add 1 column, other browsers may have different
 		   behavior here (mozilla adds 2) --Zas */
-	if (cols > d_opt->xw) cols = d_opt->xw;
+	if (cols > d_opt->width) cols = d_opt->width;
 	fc->cols = cols;
 
 	rows = get_num(attr, "rows");
 	if (rows <= 0) rows = 1;
-	if (rows > d_opt->yw) rows = d_opt->yw;
+	if (rows > d_opt->height) rows = d_opt->height;
 	fc->rows = rows;
 
 	wrap_attr = get_attr_val(attr, "wrap");
@@ -2465,8 +2465,8 @@ html_frameset(unsigned char *a)
 	}
 
 	if (!html_top.frameset) {
-		x = d_opt->xw;
-		y = d_opt->yw;
+		x = d_opt->width;
+		y = d_opt->height;
 	} else {
 		struct frameset_desc *frameset_desc = html_top.frameset;
 		int offset;
@@ -3753,7 +3753,7 @@ init_html_parser(unsigned char *url, struct document_options *options,
 		par_format.rightmargin = options->margin;
 	}
 
-	par_format.width = options->xw;
+	par_format.width = options->width;
 	par_format.list_level = par_format.list_number = 0;
 	par_format.dd_margin = options->margin;
 	par_format.flags = P_NONE;

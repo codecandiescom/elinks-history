@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.339 2003/10/30 13:12:58 zas Exp $ */
+/* $Id: renderer.c,v 1.340 2003/10/30 13:30:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1462,7 +1462,7 @@ format_html(struct cache_entry *ce, struct document *document)
 	done_string(&title);
 
 	rp = format_html_part(start, end, par_format.align,
-			      par_format.leftmargin, document->options.xw, document,
+			      par_format.leftmargin, document->options.width, document,
 			      0, 0, head.source, 1);
 	if (rp) mem_free(rp);
 
@@ -1570,8 +1570,8 @@ cached_format_html(struct view_state *vs, struct document_view *document_view,
 	format_html(cache_entry, document);
 
 sx:
-	document_view->width = document->options.xw;
-	document_view->height = document->options.yw;
+	document_view->width = document->options.width;
+	document_view->height = document->options.height;
 	document_view->x = document->options.xp;
 	document_view->y = document->options.yp;
 }

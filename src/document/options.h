@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.25 2003/10/28 12:47:19 jonas Exp $ */
+/* $Id: options.h,v 1.26 2003/10/30 13:30:32 zas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -27,7 +27,7 @@ struct document_options {
 	/* This controls how wide tables can be rendered and so on thus also is
 	 * to blame for the extra memory consumption when resizing because all
 	 * documents has to be rerendered. */
-	int xw, yw;
+	int width, height;
 
 	/* Color model/optimizations */
 	enum color_flags color_flags;

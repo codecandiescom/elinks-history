@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.92 2003/10/30 12:04:59 zas Exp $ */
+/* $Id: link.c,v 1.93 2003/10/30 13:30:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,9 +483,9 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 		if (link->pos[i].y >= ym) ym = link->pos[i].y + 1;
 		yl = int_min(yl, link->pos[i].y);
 	}
-	doc_view->vs->y = (ym + yl) / 2 - doc_view->document->options.yw / 2;
+	doc_view->vs->y = (ym + yl) / 2 - doc_view->document->options.height / 2;
 	int_bounds(&doc_view->vs->y, 0,
-		   doc_view->document->height - doc_view->document->options.yw);
+		   doc_view->document->height - doc_view->document->options.height);
 }
 
 void
@@ -521,7 +521,7 @@ find_link(struct document_view *doc_view, int p, int s)
 		y += p;
 	} while (!(y < 0
 		   || y < doc_view->vs->y
-		   || y >= doc_view->vs->y + doc_view->document->options.yw
+		   || y >= doc_view->vs->y + doc_view->document->options.height
 		   || y >= doc_view->document->height));
 
 	if (!link) goto nolink;

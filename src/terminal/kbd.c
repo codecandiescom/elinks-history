@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.3 2003/05/04 17:51:07 pasky Exp $ */
+/* $Id: kbd.c,v 1.4 2003/05/04 18:11:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,21 +157,31 @@ unsigned char *term_seq = "\033[2J\033[?1000l\033[?47l\0338\b \b";
 static unsigned char *init_seq = "\033)0\0337";
 static unsigned char *init_seq_x_mouse = "\033[?1000h";
 static unsigned char *init_seq_tw_mouse = "\033[?9h";
+
+static int init_seq_len = sizeof(init_seq) / sizeof(unsigned char) - 1;
+static int init_seq_x_mouse_len = sizeof(init_seq_x_mouse) / sizeof(unsigned char) - 1;
+static int init_seq_tw_mouse_len = sizeof(init_seq_tw_mouse) / sizeof(unsigned char) - 1;
+
 static unsigned char *term_seq = "\033[2J\0338\r \b";
 static unsigned char *term_seq_x_mouse = "\033[?1000l";
 static unsigned char *term_seq_tw_mouse = "\033[?9l";
+
+static int term_seq_len = sizeof(term_seq) / sizeof(unsigned char) - 1;
+static int term_seq_x_mouse_len = sizeof(term_seq_x_mouse) / sizeof(unsigned char) - 1;
+static int term_seq_tw_mouse_len = sizeof(term_seq_tw_mouse) / sizeof(unsigned char) - 1;
+
 
 /*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
 
 static void
 send_init_sequence(int h, int flags)
 {
-	hard_write(h, init_seq, strlen(init_seq));
+	hard_write(h, init_seq, init_seq_len);
 
 	if (flags & USE_TWIN_MOUSE) {
-		hard_write(h, init_seq_tw_mouse, strlen(init_seq_tw_mouse));
+		hard_write(h, init_seq_tw_mouse, init_seq_tw_mouse_len);
 	} else {
-		hard_write(h, init_seq_x_mouse, strlen(init_seq_x_mouse));
+		hard_write(h, init_seq_x_mouse, init_seq_x_mouse_len);
 	}
 }
 
@@ -179,12 +189,12 @@ send_init_sequence(int h, int flags)
 static void
 send_term_sequence(int h, int flags)
 {
-	hard_write(h, term_seq, strlen(term_seq));
+	hard_write(h, term_seq, term_seq_len);
 
 	if (flags & USE_TWIN_MOUSE) {
-		hard_write(h, term_seq_tw_mouse, strlen(term_seq_tw_mouse));
+		hard_write(h, term_seq_tw_mouse, term_seq_tw_mouse_len);
 	} else {
-		hard_write(h, term_seq_x_mouse, strlen(term_seq_x_mouse));
+		hard_write(h, term_seq_x_mouse, term_seq_x_mouse_len);
 	}
 }
 

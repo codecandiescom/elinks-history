@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.40 2002/09/12 17:02:46 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.41 2002/09/14 19:56:49 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -84,7 +84,11 @@ add_bookmark(struct bookmark *root, const unsigned char *title,
 	bm->refcount = 0;
 
 	/* Actually add it */
-	add_to_list(root ? root->child : bookmarks, bm);
+	/* add_at_pos() is here to add it at the _end_ of the list,
+	 * not vice versa. */
+	add_at_pos((struct bookmark *) (root ? root->child.prev
+					      : bookmarks.prev),
+		   bm);
 	bookmarks_dirty = 1;
 
 	/* Setup box_item */
@@ -93,8 +97,11 @@ add_bookmark(struct bookmark *root, const unsigned char *title,
 	bm->box_item = mem_calloc(1, sizeof(struct listbox_item)
 				     + strlen(bm->title) + 1);
 	if (!bm->box_item) return NULL;
+	bm->box_item->root = root ? root->box_item : NULL;
+	bm->box_item->depth = root ? root->box_item->depth + 1 : 0;
 	init_list(bm->box_item->child);
 	bm->box_item->visible = 1;
+	bm->box_item->expanded = 1; /* XXX: Temporary hack. */
 
 	bm->box_item->text = ((unsigned char *) bm->box_item
 			      + sizeof(struct listbox_item));
@@ -103,7 +110,9 @@ add_bookmark(struct bookmark *root, const unsigned char *title,
 
 	strcpy(bm->box_item->text, bm->title);
 
-	add_to_list(bookmark_box_items, bm->box_item);
+	add_at_pos((struct listbox_item *) (root ? root->box_item->child.prev
+						 : bookmark_box_items.prev),
+		   bm->box_item);
 
 	return bm;
 }
@@ -214,13 +223,15 @@ void
 read_bookmarks()
 {
 	/* INBUF_SIZE = max. title length + 1 byte for separator
-	 * + max. url length + 1 byte for end of line + 1 byte for null char */
-#define INBUF_SIZE (MAX_STR_LEN - 1) + 1 + (MAX_STR_LEN - 1) + 1 + 1
+	 * + max. url length + 1 byte for separator + 4 bytes for depth
+	 * + 1 byte for end of line + 1 byte for null char + reserve */
+#define INBUF_SIZE ((MAX_STR_LEN - 1) + 1 + (MAX_STR_LEN - 1) + 1 + 4 + 1 + 1 \
+		    + MAX_STR_LEN)
 	unsigned char in_buffer[INBUF_SIZE]; /* read buffer */
 	unsigned char *file_name;
-	unsigned char *title;	/* Pointer to the start of title in buffer */
-	unsigned char *url;	/* Pointer to the start of url in buffer */
 	FILE *f;
+	struct bookmark *last_bm = NULL;
+	int last_depth = 0;
 
 	file_name = straconcat(elinks_home, "bookmarks", NULL);
 	if (!file_name) return;
@@ -229,32 +240,72 @@ read_bookmarks()
 	mem_free(file_name);
 	if (!f) return;
 
-	title = in_buffer;
-
 	/* TODO: Ignore lines with bad chars in title or url (?). -- Zas */
 	while (fgets(in_buffer, INBUF_SIZE, f)) {
-		unsigned char *urlend;
+		unsigned char *title = in_buffer;
+		unsigned char *url;
+		unsigned char *depth_str;
+		int depth;
+		unsigned char *line_end;
+
+		/* Load URL. */
 
 		url = strchr(in_buffer, '\t');
 
 		/* If separator is not found, or title is empty or too long,
-		 * skip that line -- Zas */
+		 * skip that line. */
 		if (!url || url == in_buffer
 		    || url - in_buffer > MAX_STR_LEN - 1)
 			continue;
 		*url = '\0';
-
-		/* Move to start of url */
 		url++;
 
-		urlend = strchr(url, '\n');
-		/* If end of line is not found, or url is empty or too long,
-		 * skip that line -- Zas */
-		if (!urlend || url == urlend || urlend - url > MAX_STR_LEN - 1)
-			continue;
-		*urlend = '\0';
+		/* Load depth. */
 
-		add_bookmark(NULL, title, url);
+		depth_str = strchr(url, '\t');
+
+		if (depth_str && (depth_str - url > MAX_STR_LEN - 1
+				  || depth_str == url))
+			continue;
+
+		if (!depth_str) {
+			depth_str = url;
+			depth = 0;
+		} else {
+			*depth_str = '\0';
+			depth_str++;
+			depth = atoi(depth_str);
+			if (depth < 0) depth = 0;
+			if (depth > last_depth + 1) depth = last_depth + 1;
+			if (!last_bm && depth > 0) depth = 0;
+		}
+
+		/* Load EOLN. */
+
+		line_end = strchr(depth_str, '\n');
+		if (!line_end)
+			continue;
+		*line_end = '\0';
+
+		{
+			struct bookmark *root = NULL;
+
+			if (depth > 0) {
+				if (depth == last_depth) {
+					root = last_bm->root;
+				} else if (depth > last_depth) {
+					root = last_bm;
+				} else {
+					while (last_depth - depth) {
+						last_bm = last_bm->root;
+						last_depth--;
+					}
+					root = last_bm;
+				}
+			}
+			last_bm = add_bookmark(root, title, url);
+			last_depth = depth;
+		}
 	}
 
 	fclose(f);
@@ -279,7 +330,8 @@ write_bookmarks()
 	mem_free(file_name);
 	if (!ssi) return;
 
-	foreachback(bm, bookmarks) {
+	foreachback (bm, bookmarks) {
+		unsigned char depth[16];
 		unsigned char *p = stracpy(bm->title);
 		int i;
 
@@ -289,6 +341,9 @@ write_bookmarks()
 		secure_fputs(ssi, p);
 		secure_fputc(ssi, '\t');
 		secure_fputs(ssi, bm->url);
+		secure_fputc(ssi, '\t');
+		snprintf(depth, 16, "%d", bm->box_item->depth);
+		secure_fputs(ssi, depth);
 		secure_fputc(ssi, '\n');
 		mem_free(p);
 		if (ssi->err) break;
@@ -299,18 +354,19 @@ write_bookmarks()
 
 /* Clears the bookmark list */
 void
-free_bookmarks()
+free_bookmarks(struct list_head *bookmarks, struct list_head *box_items)
 {
 	struct bookmark *bm;
 
-	foreach (bm, bookmarks) {
-		del_from_list(bm->box_item);
-		mem_free(bm->box_item);
+	foreach (bm, *bookmarks) {
+		if (!list_empty(bm->child))
+			free_bookmarks(&bm->child, &bm->box_item->child);
 		mem_free(bm->title);
 		mem_free(bm->url);
 	}
 
-	free_list(bookmarks);
+	free_list(*box_items);
+	free_list(*bookmarks);
 }
 
 /* Does final cleanup and saving of bookmarks */
@@ -318,7 +374,7 @@ void
 finalize_bookmarks()
 {
 	write_bookmarks();
-	free_bookmarks();
+	free_bookmarks(&bookmarks, &bookmark_box_items);
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 }

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.32 2002/09/13 15:17:40 pasky Exp $ */
+/* $Id: dialogs.c,v 1.33 2002/09/14 19:56:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,7 +53,7 @@ bookmark_dlg_box_build()
 	if (!box) return NULL;
 
 	memset(box, 0, sizeof(struct listbox_data));
-	box->order = 1;
+	box->order = 0;
 	box->items = &bookmark_box_items;
 	add_to_list(bookmark_boxes, box);
 

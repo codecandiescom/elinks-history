@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.27 2002/09/14 12:09:44 pasky Exp $ */
+/* $Id: listbox.c,v 1.28 2002/09/14 19:56:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,16 +77,18 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 {
 	struct listbox_item *visible_item = item;
 	struct listbox_data *box;
+	int levmove = 0;
+	int stop = 0;
 
 	if (!item) return NULL;
 	box = item->box->next;
 
-	while (offset) {
+	while (offset && !stop) {
 		if (fn && (!follow_visible || item->visible))
 			offset = fn(item, d, offset);
 
 		if (offset > 0) {
-			/* Direction UP. */
+			/* Direction DOWN. */
 
 			offset--;
 
@@ -95,7 +97,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 				/* Descend to children. */
 				item = item->child.next;
 				visible_item = item;
-				goto next;
+				continue;
 			}
 
 			while (item->root
@@ -107,7 +109,7 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 
 			if (!item->root && (void *) item->next == box->items) {
 				/* Last item in the root list, quit. */
-				break;
+				stop = 1;
 			}
 
 			/* We're not at the end of anything, go on. */
@@ -120,32 +122,36 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 			}
 
 		} else {
-			/* Direction DOWN. */
+			/* Direction UP. */
 
 			offset++;
 
-			if (!list_empty(item->child) && item->expanded
-			    && (!follow_visible || item->visible)) {
-				/* Descend to children. */
-				item = item->child.prev;
-				visible_item = item;
-				goto next;
-			}
-
-			while (item->root
-			       && (void *) item->prev == &item->root->child) {
+			if (item->root
+			    && (void *) item->prev == &item->root->child) {
 				/* First item in a non-root list, climb to your
 				 * root. */
 				item = item->root;
+				levmove = 1;
 			}
 
 			if (!item->root && (void *) item->prev == box->items) {
 				/* First item in the root list, quit. */
-				break;
+				stop = 1;
 			}
 
 			/* We're not at the start of anything, go on. */
-			item = item->prev;
+			if (!levmove) {
+				item = item->prev;
+
+				while (!list_empty(item->child) && item->expanded
+				    && (!follow_visible || item->visible)) {
+					/* Descend to children. */
+					item = item->child.prev;
+					visible_item = item;
+				}
+			} else {
+				levmove = 0;
+			}
 
 			if (follow_visible && !item->visible) {
 				offset--;
@@ -153,9 +159,6 @@ traverse_listbox_items_list(struct listbox_item *item, int offset,
 				visible_item = item;
 			}
 		}
-
-next:
-		/* Hmm.. sometimes I need this place ;-). --pasky */
 	}
 
 	return visible_item;
@@ -250,12 +253,12 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 	struct box_context *data = data_;
 	int len; /* Length of the current text field. */
 	int color;
-	int depth = item->depth * 5;
+	int depth = item->depth + 1;
 	int d;
 
 	len = strlen(item->text);
-	if (len > data->listbox_item_data->l - depth) {
-		len = data->listbox_item_data->l - depth;
+	if (len > data->listbox_item_data->l - depth * 5) {
+		len = data->listbox_item_data->l - depth * 5;
 	}
 
 	if (item == data->box->sel) {
@@ -266,23 +269,25 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 
 	/* TODO: Use graphics chars for lines if available. --pasky */
 
-	for (d = 0; depth < depth; d += 5) {
+	for (d = 0; d < depth - 1; d++) {
 		/* TODO: Don't draw this if there's no further child of
 		 * parent in that depth! Links suffers with the same, it
 		 * looks sooo ugly ;-). --pasky */
-		print_text(data->term, data->listbox_item_data->x + d,
+		print_text(data->term, data->listbox_item_data->x + d * 5,
 			   data->listbox_item_data->y + data->offset,
 			   5, " |   ", color);
 	}
 
-	print_text(data->term, data->listbox_item_data->x + d,
+	if (depth) {
+	print_text(data->term, data->listbox_item_data->x + (depth - 1) * 5,
 		   data->listbox_item_data->y + data->offset,
-		   5, list_empty(item->child) ? " +-- "
+		   5, list_empty(item->child) ? " |-- "
 		   			      : item->expanded ? "[-]- "
 		 					       : "[+]- ",
 		   color);
+	}
 
-	print_text(data->term, data->listbox_item_data->x + depth,
+	print_text(data->term, data->listbox_item_data->x + depth * 5,
 		   data->listbox_item_data->y + data->offset,
 		   len, item->text, color);
 

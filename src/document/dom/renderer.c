@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.7 2004/09/26 01:41:36 jonas Exp $ */
+/* $Id: renderer.c,v 1.8 2004/09/26 01:46:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,13 +493,21 @@ static inline void
 render_dom_node_text(struct dom_renderer *renderer, struct screen_char *template,
 		     struct dom_node *node)
 {
-	if (check_dom_node_source(renderer, node->string, node->length)) {
-		render_dom_flush(renderer, node->string);
-		renderer->position = node->string + node->length;
+	unsigned char *string = node->string;
+	int length = node->length;
+
+	if (node->type == DOM_NODE_ENTITY_REFERENCE) {
+		string -= 1;
+		length += 2;
+	}
+
+	if (check_dom_node_source(renderer, string, length)) {
+		render_dom_flush(renderer, string);
+		renderer->position = string + length;
 		assert_source(renderer, renderer->position, 0);
 	}
 
-	render_dom_text(renderer, template, node->string, node->length);
+	render_dom_text(renderer, template, string, length);
 }
 
 static struct dom_node *

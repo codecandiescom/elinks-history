@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.37 2005/03/26 17:23:03 pasky Exp $
+# $Id: hooks.pl,v 1.38 2005/03/26 17:48:06 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -211,62 +211,26 @@ sub goto_url_hook
 	{
 		my ($search) = $url =~ /^[a-z0-9\/\.]* (.*)/;
 		my (%news_, $news_);
-		$news_{"bbc"}       = 'http://news.bbc.co.uk';
-		# The bastard child of Microsoft and the National Broadcasting Corporation
-		$news_{"msnbc"}     = 'http://msnbc.com';
-		$news_{"cnn"}       = 'http://cnn.com';
-		$news_{"fox"}       = 'http://foxnews.com';
-		$news_{"google"}    = 'http://news.google.com';
-		$news_{"yahoo"}     = 'http://news.yahoo.com';
-		$news_{"reuters"}   = 'http://reuters.com';
-		$news_{"eff"}       = 'http://eff.org';
-		$news_{"wired"}     = 'http://wired.com';
-		$news_{"slashdot"}  = 'http://slashdot.org';
-		$news_{"newsforge"} = 'http://newsforge.com';
-		$news_{"usnews"}    = 'http://usnews.com';
-		$news_{"newsci"}    = 'http://newscientist.com';
-		$news_{"discover"}  = 'http://discover.com';
-		$news_{"sciam"}     = 'http://sciam.com';
-
-		if ($search) {
-			$news_{"bbc"}       = 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=' . $search;
-			$news_{"msnbc"}     = 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=' . $search;
-			$news_{"cnn"}       = 'http://search.cnn.com/pages/search.jsp?query=' . $search;
-			$news_{"fox"}       = 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw='
-			                      . $search;
-			$news_{"google"}    = 'http://news.google.com/news?q=' . $search;
-			$news_{"yahoo"}     = 'http://news.search.yahoo.com/search/news/?p=' . $search;
-			$news_{"reuters"}   = 'http://reuters.com/newsSearchResultsHome.jhtml?query=' . $search;
-			$news_{"eff"}       = 'http://google.com/search?sitesearch=' . $news_{"eff"} . '&q=' . $search;
-			$news_{"wired"}     = 'http://search.wired.com/wnews/default.asp?query=' . $search;
-			$news_{"slashdot"}  = 'http://slashdot.org/search.pl?query=' . $search;
-			$news_{"newsforge"} = 'http://newsforge.com/search.pl?query=' . $search;
-			$news_{"usnews"}    = 'http://www.usnews.com/search/Search?keywords=' . $search;
-			$news_{"newsci"}    = 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString='
-			                      . $search;
-			$news_{"discover"}  = 'http://www.discover.com/search-results/?searchStr=' . $search;
-			$news_{"sciam"}     = 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=' . $search;
-		}
+		my $key;
 
 		my $agency = $url;
-		$url = $news_{"bbc"}; # default
-		$url = $news_{loadrc("news")} if $news_{loadrc("news")};
-		$url = $news_{"bbc"}       if ($agency =~ '^bbc(| .*)$');
-		$url = $news_{"msnbc"}     if ($agency =~ '^msnbc(| .*)$');
-		$url = $news_{"cnn"}       if ($agency =~ '^cnn(| .*)$');
-		$url = $news_{"fox"}       if ($agency =~ '^fox(| .*)$');
-		$url = $news_{"google"}    if ($agency =~ '^gn(| .*)$');
-		$url = $news_{"yahoo"}     if ($agency =~ '^yn(| .*)$');
-		$url = $news_{"reuters"}   if ($agency =~ '^(reuters|rs)(| .*)$');
-		$url = $news_{"eff"}       if ($agency =~ '^eff(| .*)$');
-		$url = $news_{"wired"}     if ($agency =~ '^(wired|wd)(| .*)$');
-		$url = $news_{"slashdot"}  if ($agency =~ '^(\/\.|slashdot|sd)(| .*)$');
-		$url = $news_{"newsforge"} if ($agency =~ '^(newsforge|nf)(| .*)$');
-		$url = $news_{"usnews"}    if ($agency =~ '^(us|usnews)(| .*)$');
-		$url = $news_{"newsci"}    if ($agency =~ '^(nsci|newsci)(| .*)$');
-		$url = $news_{"discover"}  if ($agency =~ '^dm(| .*)$');
-		$url = $news_{"sciam"}     if ($agency =~ '^(sa|sciam)(| .*)$');
-		return $url;
+		$key = loadrc("news");
+		$key = "bbc"          if ($agency =~ '^bbc(| .*)$');
+		$key = "msnbc"        if ($agency =~ '^msnbc(| .*)$');
+		$key = "cnn"          if ($agency =~ '^cnn(| .*)$');
+		$key = "fox"          if ($agency =~ '^fox(| .*)$');
+		$key = "google"       if ($agency =~ '^gn(| .*)$');
+		$key = "yahoo"        if ($agency =~ '^yn(| .*)$');
+		$key = "reuters"      if ($agency =~ '^(reuters|rs)(| .*)$');
+		$key = "eff"          if ($agency =~ '^eff(| .*)$');
+		$key = "wired"        if ($agency =~ '^(wired|wd)(| .*)$');
+		$key = "slashdot"     if ($agency =~ '^(\/\.|slashdot|sd)(| .*)$');
+		$key = "newsforge"    if ($agency =~ '^(newsforge|nf)(| .*)$');
+		$key = "usnews"       if ($agency =~ '^(us|usnews)(| .*)$');
+		$key = "newsci"       if ($agency =~ '^(nsci|newsci)(| .*)$');
+		$key = "discover"     if ($agency =~ '^dm(| .*)$');
+		$key = "sciam"        if ($agency =~ '^(sa|sciam)(| .*)$');
+		return news($key, $search);
 	}
 
 	# Locators
@@ -763,5 +727,86 @@ sub search
 		$url =~ s/!bork!/$bork/;
 	}
 
+	return $url;
+}
+
+
+################################################################################
+### News servers ###############################################################
+
+my %news_servers_ = (
+	"bbc" => {
+		home => 'http://news.bbc.co.uk',
+		search => 'http://newssearch.bbc.co.uk/cgi-bin/search/results.pl?q=',
+	},
+	# The bastard child of Microsoft and the National Broadcasting Corporation
+	"msnbc" => {
+		home => 'http://msnbc.com',
+		search => 'http://msnbc.msn.com/?id=3053419&action=fulltext&querytext=',
+	},
+	"cnn" => {
+		home => 'http://cnn.com',
+		search => 'http://search.cnn.com/pages/search.jsp?query=',
+	},
+	"fox" => {
+		home => 'http://foxnews.com',
+		search => 'http://search.foxnews.com/info.foxnws/redirs_all.htm?pgtarg=wbsdogpile&qkw=',
+	},
+	"google" => {
+		home => 'http://news.google.com',
+		search => 'http://news.google.com/news?q=',
+	},
+	"yahoo" => {
+		home => 'http://news.yahoo.com',
+		search => 'http://news.search.yahoo.com/search/news/?p=',
+	},
+	"reuters" => {
+		home => 'http://reuters.com',
+		search => 'http://reuters.com/newsSearchResultsHome.jhtml?query=',
+	},
+	"eff" => {
+		home => 'http://eff.org',
+		search => 'http://google.com/search?sitesearch=http://eff.org&q=',
+	},
+	"wired" => {
+		home => 'http://wired.com',
+		search => 'http://search.wired.com/wnews/default.asp?query=',
+	},
+	"slashdot" => {
+		home => 'http://slashdot.org',
+		search => 'http://slashdot.org/search.pl?query=',
+	},
+	"newsforge" => {
+		home => 'http://newsforge.com',
+		search => 'http://newsforge.com/search.pl?query=',
+	},
+	"usnews" => {
+		home => 'http://usnews.com',
+		search => 'http://www.usnews.com/search/Search?keywords=',
+	},
+	"newsci" => {
+		home => 'http://newscientist.com',
+		search => 'http://www.newscientist.com/search.ns?doSearch=true&articleQuery.queryString=',
+	},
+	"discover" => {
+		home => 'http://discover.com',
+		search => 'http://www.discover.com/search-results/?searchStr=',
+	},
+	"sciam" => {
+		home => 'http://sciam.com',
+		search => 'http://sciam.com/search/index.cfm?QT=Q&SC=Q&Q=',
+	},
+);
+
+sub news
+{
+	my ($server, $search) = @_;
+	my $key = $search ? 'search' : 'home';
+
+	# Google is the default, Google is the best!
+	$server = 'bbc' unless $news_servers_{$server}
+	                          and $news_servers_{$server}->{$key};
+	my $url = $news_servers_{$server}->{$key};
+	$url .= $search if $search;
 	return $url;
 }

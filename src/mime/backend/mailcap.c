@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.77 2004/01/01 15:47:25 jonas Exp $ */
+/* $Id: mailcap.c,v 1.78 2004/01/04 17:53:37 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -10,7 +10,7 @@
  * content type.
  *
  * Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
- * Copyright (c) 2002-2003 The ELinks project
+ * Copyright (c) 2002-2004 The ELinks project
  *
  * This file was hijacked from the Mutt project <URL:http://www.mutt.org>
  * (version 1.4) on Saturday the 7th December 2002. It has been heavily

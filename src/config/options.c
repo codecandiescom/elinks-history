@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.90 2002/08/28 23:27:31 pasky Exp $ */
+/* $Id: options.c,v 1.91 2002/08/28 23:55:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -877,7 +877,8 @@ register_options()
 		"is sent to HTTP server when a document is requested.\n"
 		"%v in the string means ELinks version\n"
 		"%s in the string means system identification\n"
-		"%t in the string means size of the terminal");
+		"%t in the string means size of the terminal\n"
+		"Use \" \" if you don't want any User-Agent header to be sent at all.");
 
 
 

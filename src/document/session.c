@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.57 2002/08/26 23:40:20 pasky Exp $ */
+/* $Id: session.c,v 1.58 2002/08/28 23:55:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1041,6 +1041,24 @@ create_session(struct window *win)
 			TEXT(T_WELCOME), AL_CENTER | AL_EXTD_TEXT,
 			TEXT(T_WELCOME_TO_LINKS), "\n\n",
 			TEXT(T_BASIC_HELP), NULL,
+			NULL, 1,
+			TEXT(T_OK), NULL, B_ENTER | B_ESC);
+	}
+
+	if (!*get_opt_str("protocol.http.user_agent")) {
+		msg_box(term, NULL,
+			TEXT(T_WARNING), AL_CENTER,
+			"You have empty string in protocol.http.user_agent - "
+			"this was a default value in the past, substituted by "
+			"default ELinks User-Agent string. However, now the "
+			"string itself is a default value, and empty value of "
+			"protocol.http.user_agent means that NO User-Agent HEADER "
+			"WILL BE SENT AT ALL - if this is really what you want, "
+			"set its value to \" \", otherwise please delete line "
+			"with this settings from your configuration file (if you "
+			"have no idea what I'm talking about, just do this), so "
+			"that correct default setting will be used. Apologies for "
+			"any caused inconvience.",
 			NULL, 1,
 			TEXT(T_OK), NULL, B_ENTER | B_ESC);
 	}

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.40 2002/08/27 19:01:40 pasky Exp $ */
+/* $Id: http.c,v 1.41 2002/08/28 23:55:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,7 +368,8 @@ void http_send_header(struct connection *c)
 		}
 	}
 	
-	{
+	if (*get_opt_str("protocol.http.user_agent") &&
+	    strcmp(get_opt_str("protocol.http.user_agent"), " ")) {
 		unsigned char *ustr, ts[64] = "";
 
                 add_to_str(&hdr, &l, "User-Agent: ");

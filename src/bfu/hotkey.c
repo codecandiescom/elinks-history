@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.27 2004/08/03 21:25:00 zas Exp $ */
+/* $Id: hotkey.c,v 1.28 2004/08/03 21:53:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,9 +134,8 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	if (!mi_has_left_text(item)) return 0;
 
 	text = item->text;
-
 	if (mi_text_translate(item)) text = _(text, term);
-	if (!*text) return 0;
+	if (!text || !*text) return 0;
 
 	key_pos = item->hotkey_pos;
 
@@ -144,12 +143,30 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	if (key_pos < 0) key_pos = -key_pos;
 #endif
 
-	return (key_pos && text && (toupper(text[key_pos]) == key));
+	return (key_pos && (toupper(text[key_pos]) == key));
 }
 
-/* Returns true if a hotkey was found in the menu, and set menu->selected. */
-int
-check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
+/* Returns true if key (upcased) matches first letter of menu item left text. */
+static inline int
+is_not_so_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
+{
+	unsigned char *text;
+
+	assert(item);
+	if_assert_failed return 0;
+
+	if (!mi_has_left_text(item)) return 0;
+
+	text = item->text;
+	if (mi_text_translate(item)) text = _(text, term);
+	if (!text || !*text) return 0;
+
+	return (toupper(*text) == key);
+}
+
+static int
+check_hotkeys_common(struct menu *menu, unsigned char hotkey, struct terminal *term,
+		     int (*func)(struct menu_item *, unsigned char, struct terminal *))
 {
 	unsigned char key = toupper(hotkey);
 	int i = menu->selected;
@@ -161,11 +178,10 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 	if (i < 0) i += menu->size;
 
 	start = i;
-
 	do {
 		if (++i == menu->size) i = 0;
 
-		if (is_hotkey(&menu->items[i], key, term)) {
+		if (func(&menu->items[i], key, term)) {
 			menu->selected = i;
 			return 1;
 		}
@@ -175,6 +191,13 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 	return 0;
 }
 
+/* Returns true if a hotkey was found in the menu, and set menu->selected. */
+int
+check_hotkeys(struct menu *menu, unsigned char key, struct terminal *term)
+{
+	return check_hotkeys_common(menu, key, term, is_hotkey);
+}
+
 /* Search if first letter of an entry in menu matches the key (caseless comp.).
  * It searchs in all entries, from selected entry to bottom and then from top
  * to selected entry.
@@ -182,37 +205,5 @@ check_hotkeys(struct menu *menu, unsigned char hotkey, struct terminal *term)
 int
 check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *term)
 {
-	unsigned char k = toupper(key);
-	int i = menu->selected;
-	int start;
-
-	if (menu->size < 1) return 0;
-
-	i %= menu->size;
-	if (i < 0) i += menu->size;
-
-	start = i;
-	do {
-		struct menu_item *mi;
-		unsigned char *text;
-
-		if (++i == menu->size) i = 0;
-
-		mi = &menu->items[i];
-		if (!mi_has_left_text(mi)) continue;
-
-		text = mi->text;
-		if (!text) continue;
-
-		if (mi_text_translate(mi)) text = _(text, term);
-		if (!*text) continue;
-
-		if (toupper(text[0]) == k) {
-			menu->selected = i;
-			return 1;
-		}
-
-	} while (i != start);
-
-	return 0;
+	return check_hotkeys_common(menu, key, term, is_not_so_hotkey);
 }

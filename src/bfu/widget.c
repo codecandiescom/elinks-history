@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.24 2003/10/29 15:01:32 zas Exp $ */
+/* $Id: widget.c,v 1.25 2003/11/28 14:02:20 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
-#include "bfu/listbox.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.45 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.46 2002/12/10 22:25:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		kb->key = key;
 		kb->meta = meta;
 		kb->func_ref = func_ref;
-		kb->watermark = 0;
+		kb->flags &= ~KBDB_WATERMARK;
 		add_to_list(keymaps[km], kb);
 	}
 }
@@ -415,7 +415,7 @@ fail:
 	action = write_action(kb->action);
 	if (!action) goto fail;
 
-	kb->watermark = 1;
+	kb->flags |= KBDB_WATERMARK;
 	add_to_str(str, len, "\"");
 	add_to_str(str, len, action);
 	add_to_str(str, len, "\"");
@@ -436,8 +436,8 @@ bind_config_string(unsigned char **file, int *len)
 			if (!keymap_str || !action_str || action_str[0] == ' ')
 				continue;
 
-			if (keybinding->watermark) {
-				keybinding->watermark = 0;
+			if (keybinding->flags & KBDB_WATERMARK) {
+				keybinding->flags &= ~KBDB_WATERMARK;
 				continue;
 			}
 

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.27 2002/12/06 20:28:47 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.28 2002/12/10 22:25:30 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -85,6 +85,11 @@ enum keyact {
 	ACT_ZOOM_FRAME
 };
 
+enum kbdbind_flags {
+	KBDB_WATERMARK = 1,
+	KBDB_TOUCHED = 2,
+};
+
 struct keybinding {
 	struct keybinding *next;
 	struct keybinding *prev;
@@ -92,7 +97,7 @@ struct keybinding {
 	long key;
 	long meta;
 	int func_ref;
-	int watermark;
+	int flags;
 };
 
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.83 2004/09/24 22:35:05 pasky Exp $ */
+/* $Id: renderer.c,v 1.84 2004/09/24 22:43:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,16 +214,16 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 			}
 		}
 
-#ifdef CONFIG_ECMASCRIPT
-		process_snippets(doc_view->ecmascript,
-		                 &document->onload_snippets,
-		                 &vs->onload_snippets,
-		                 &vs->current_onload_snippet);
-#endif
 #ifdef CONFIG_CSS
 		document->css_magic = get_document_css_magic(document);
 #endif
 	}
+#ifdef CONFIG_ECMASCRIPT
+	process_snippets(doc_view->ecmascript,
+	                 &document->onload_snippets,
+	                 &vs->onload_snippets,
+	                 &vs->current_onload_snippet);
+#endif
 
 	/* If we do not care about the height and width of the document
 	 * just use the setup values. */

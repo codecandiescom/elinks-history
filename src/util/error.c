@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.57 2003/06/08 12:46:22 pasky Exp $ */
+/* $Id: error.c,v 1.58 2003/06/08 12:55:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,14 +21,6 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "util/version.h"
-
-void
-list_magic_error_(unsigned char *where, unsigned char *what, unsigned char *file, int line)
-{
-	fprintf(stderr, "%s:%d", file, line);
-	fprintf(stderr, " %s %s: bad list magic\n", where, what);
-	force_dump();
-}
 
 void
 force_dump(void)

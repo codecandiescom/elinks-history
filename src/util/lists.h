@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.28 2003/06/05 21:54:38 pasky Exp $ */
+/* $Id: lists.h,v 1.29 2003/06/08 12:55:20 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -72,8 +72,7 @@ do { \
 #define LISTMAGIC2 ((void *) 0xd0d0b0b0)
 
 
-/* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
-#define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
+#define list_magic_error(where,what) internal("[%s] %s - bad list magic", where, #what)
 
 
 #define list_magic_set(x) \

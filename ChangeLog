@@ -1,3 +1,13 @@
+Sat May 25 22:55:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/opttypes.c:
+
+	Fixed the last remains of the string option buffer overflow - don't
+	replace string pointer in str_rd() (it took me about an hour to
+	trace it there and don't ask what all i had to use! ;). Download
+	(and modifying string constants in general) should now cause no
+	problems.  
+
 Sat May 25 21:40:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/options.h:

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.35 2003/10/05 20:03:38 jonas Exp $ */
+/* $Id: inphist.c,v 1.36 2003/10/25 11:33:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,8 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	    struct window *win)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_REDRAW, term->x, term->y, 0);
-	struct dialog_data *dd = (struct dialog_data *) win->data;
-	struct widget_data *di = &(dd)->items[dd->selected];
+	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
+	struct widget_data *di = &(dlg_data)->items[dlg_data->selected];
 
 	int_upper_bound(&len, di->item->dlen - 1);
 	memcpy(di->cdata, item, len);
@@ -57,8 +57,8 @@ void
 do_tab_compl(struct terminal *term, struct list_head *history,
 	     struct window *win)
 {
-	struct dialog_data *dd = (struct dialog_data *) win->data;
-	unsigned char *cdata = dd->items[dd->selected].cdata;
+	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
+	unsigned char *cdata = dlg_data->items[dlg_data->selected].cdata;
 	int l = strlen(cdata);
 	int n = 0;
 	struct input_history_item *hi;
@@ -96,8 +96,8 @@ void
 do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 			 struct window *win)
 {
-	struct dialog_data *dd = (struct dialog_data *) win->data;
-	unsigned char *cdata = dd->items[dd->selected].cdata;
+	struct dialog_data *dlg_data = (struct dialog_data *) win->data;
+	unsigned char *cdata = dlg_data->items[dlg_data->selected].cdata;
 	int cdata_len = strlen(cdata);
 	int match_len = cdata_len;
 	/* Maximum number of characters in a match. Characters after this

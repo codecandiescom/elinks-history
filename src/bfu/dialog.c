@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.45 2003/10/18 12:29:18 jonas Exp $ */
+/* $Id: dialog.c,v 1.46 2003/10/25 11:29:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,67 +45,67 @@ struct dialog_data *
 do_dialog(struct terminal *term, struct dialog *dlg,
 	  struct memory_list *ml)
 {
-	struct dialog_data *dd;
+	struct dialog_data *dlg_data;
 	struct widget *d;
 	int n = 0;
 
 	/* FIXME: maintain a counter, and don't recount each time. --Zas */
 	for (d = dlg->items; d->type != D_END; d++) n++;
 
-	dd = mem_alloc(sizeof(struct dialog_data) +
-		       sizeof(struct widget_data) * n);
-	if (!dd) return NULL;
+	dlg_data = mem_alloc(sizeof(struct dialog_data) +
+		             sizeof(struct widget_data) * n);
+	if (!dlg_data) return NULL;
 
-	dd->dlg = dlg;
-	dd->n = n;
-	dd->ml = ml;
-	add_window(term, dialog_func, dd);
+	dlg_data->dlg = dlg;
+	dlg_data->n = n;
+	dlg_data->ml = ml;
+	add_window(term, dialog_func, dlg_data);
 
-	return dd;
+	return dlg_data;
 }
 
 static void
-redraw_dialog(struct dialog_data *dlg)
+redraw_dialog(struct dialog_data *dlg_data)
 {
 	int i;
-	int x = dlg->x + DIALOG_LEFT_BORDER;
-	int y = dlg->y + DIALOG_TOP_BORDER;
-	struct terminal *term = dlg->win->term;
+	int x = dlg_data->x + DIALOG_LEFT_BORDER;
+	int y = dlg_data->y + DIALOG_TOP_BORDER;
+	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
 
 	draw_border(term, x, y,
-		    dlg->xw - 2 * DIALOG_LEFT_BORDER,
-		    dlg->yw - 2 * DIALOG_TOP_BORDER,
+		    dlg_data->xw - 2 * DIALOG_LEFT_BORDER,
+		    dlg_data->yw - 2 * DIALOG_TOP_BORDER,
 		    get_bfu_color(term, "dialog.frame"),
 		    DIALOG_FRAME);
 
 	title_color = get_bfu_color(term, "dialog.title");
 	if (title_color) {
-		unsigned char *title = dlg->dlg->title;
+		unsigned char *title = dlg_data->dlg->title;
 		int titlelen = strlen(title);
 
-		x = (dlg->xw - titlelen) / 2 + dlg->x;
+		x = (dlg_data->xw - titlelen) / 2 + dlg_data->x;
 		draw_text(term, x - 1, y, " ", 1, 0, title_color);
 		draw_text(term, x, y, title, titlelen, 0, title_color);
 		draw_text(term, x + titlelen, y, " ", 1, 0, title_color);
 	}
 
-	for (i = 0; i < dlg->n; i++)
-		display_dlg_item(dlg, &dlg->items[i], i == dlg->selected);
+	for (i = 0; i < dlg_data->n; i++)
+		display_dlg_item(dlg_data, &dlg_data->items[i], i == dlg_data->selected);
 
-	redraw_from_window(dlg->win);
+	redraw_from_window(dlg_data->win);
 }
 
 static void
-select_dlg_item(struct dialog_data *dlg, int i)
+select_dlg_item(struct dialog_data *dlg_data, int i)
 {
-	if (dlg->selected != i) {
-		display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-		display_dlg_item(dlg, &dlg->items[i], 1);
-		dlg->selected = i;
+	if (dlg_data->selected != i) {
+		display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+		display_dlg_item(dlg_data, &dlg_data->items[i], 1);
+		dlg_data->selected = i;
 	}
-	if (dlg->items[i].item->ops->select)
-		dlg->items[i].item->ops->select(&dlg->items[i], dlg);
+	if (dlg_data->items[i].item->ops->select)
+		dlg_data->items[i].item->ops->select(&dlg_data->items[i], dlg_data);
 }
 
 
@@ -114,23 +114,23 @@ void
 dialog_func(struct window *win, struct term_event *ev, int fwd)
 {
 	int i;
-	struct dialog_data *dlg = win->data;
+	struct dialog_data *dlg_data = win->data;
 
-	dlg->win = win;
+	dlg_data->win = win;
 
 	/* Look whether user event handlers can help us.. */
-	if (dlg->dlg->handle_event &&
-	    (dlg->dlg->handle_event(dlg, ev) == EVENT_PROCESSED)) {
+	if (dlg_data->dlg->handle_event &&
+	    (dlg_data->dlg->handle_event(dlg_data, ev) == EVENT_PROCESSED)) {
 		return;
 	}
 
 	switch (ev->ev) {
 		case EV_INIT:
-			for (i = 0; i < dlg->n; i++) {
-				struct widget_data *widget = &dlg->items[i];
+			for (i = 0; i < dlg_data->n; i++) {
+				struct widget_data *widget = &dlg_data->items[i];
 
 				memset(widget, 0, sizeof(struct widget_data));
-				widget->item = &dlg->dlg->items[i];
+				widget->item = &dlg_data->dlg->items[i];
 
 				if (widget->item->dlen) {
 					widget->cdata = mem_alloc(widget->item->dlen);
@@ -163,22 +163,22 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 						   &widget->history;
 
 				if (widget->item->ops->init)
-					widget->item->ops->init(widget, dlg,
+					widget->item->ops->init(widget, dlg_data,
 								ev);
 			}
-			dlg->selected = 0;
+			dlg_data->selected = 0;
 
 		case EV_RESIZE:
 		case EV_REDRAW:
-			dlg->dlg->fn(dlg);
-			redraw_dialog(dlg);
+			dlg_data->dlg->fn(dlg_data);
+			redraw_dialog(dlg_data);
 			break;
 
 		case EV_MOUSE:
 #ifdef USE_MOUSE
-			for (i = 0; i < dlg->n; i++)
-				if (dlg->items[i].item->ops->mouse
-				    && dlg->items[i].item->ops->mouse(&dlg->items[i], dlg, ev)
+			for (i = 0; i < dlg_data->n; i++)
+				if (dlg_data->items[i].item->ops->mouse
+				    && dlg_data->items[i].item->ops->mouse(&dlg_data->items[i], dlg_data, ev)
 				       == EVENT_PROCESSED)
 					break;
 #endif /* USE_MOUSE */
@@ -188,28 +188,28 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			{
 			struct widget_data *di;
 
-			di = &dlg->items[dlg->selected];
+			di = &dlg_data->items[dlg_data->selected];
 
 			/* First let the widget try out. */
 			if (di->item->ops->kbd
-			    && di->item->ops->kbd(di, dlg, ev)
+			    && di->item->ops->kbd(di, dlg_data, ev)
 			       == EVENT_PROCESSED)
 				break;
 
 			/* Can we select? */
 			if ((ev->x == KBD_ENTER || ev->x == ' ')
 			    && di->item->ops->select) {
-				di->item->ops->select(di, dlg);
+				di->item->ops->select(di, dlg_data);
 				break;
 			}
 
 			/* Look up for a button with matching starting letter. */
 			if (ev->x > ' ' && ev->x < 0x100) {
-				for (i = 0; i < dlg->n; i++)
-					if (dlg->dlg->items[i].type == D_BUTTON
-					    && upcase(dlg->dlg->items[i].text[0])
+				for (i = 0; i < dlg_data->n; i++)
+					if (dlg_data->dlg->items[i].type == D_BUTTON
+					    && upcase(dlg_data->dlg->items[i].text[0])
 					       == upcase(ev->x)) {
-						select_dlg_item(dlg, i);
+						select_dlg_item(dlg_data, i);
 						return;
 					}
 			}
@@ -219,20 +219,20 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			    && (di->item->type == D_FIELD
 				|| di->item->type == D_FIELD_PASS
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
-				for (i = 0; i < dlg->n; i++)
-					if (dlg->dlg->items[i].type == D_BUTTON
-					    && dlg->dlg->items[i].gid & B_ENTER) {
-						select_dlg_item(dlg, i);
+				for (i = 0; i < dlg_data->n; i++)
+					if (dlg_data->dlg->items[i].type == D_BUTTON
+					    && dlg_data->dlg->items[i].gid & B_ENTER) {
+						select_dlg_item(dlg_data, i);
 						return;
 					}
 			}
 
 			/* Cancel button. */
 			if (ev->x == KBD_ESC) {
-				for (i = 0; i < dlg->n; i++)
-					if (dlg->dlg->items[i].type == D_BUTTON
-					    && dlg->dlg->items[i].gid & B_ESC) {
-						select_dlg_item(dlg, i);
+				for (i = 0; i < dlg_data->n; i++)
+					if (dlg_data->dlg->items[i].type == D_BUTTON
+					    && dlg_data->dlg->items[i].gid & B_ESC) {
+						select_dlg_item(dlg_data, i);
 						return;
 					}
 			}
@@ -241,27 +241,27 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 			if ((ev->x == KBD_TAB && !ev->y) || ev->x == KBD_DOWN
 			    || ev->x == KBD_RIGHT) {
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
 
-				dlg->selected++;
-				if (dlg->selected >= dlg->n)
-					dlg->selected = 0;
+				dlg_data->selected++;
+				if (dlg_data->selected >= dlg_data->n)
+					dlg_data->selected = 0;
 
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
-				redraw_from_window(dlg->win);
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
+				redraw_from_window(dlg_data->win);
 				break;
 			}
 
 			if ((ev->x == KBD_TAB && ev->y) || ev->x == KBD_UP
 			    || ev->x == KBD_LEFT) {
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
 
-				dlg->selected--;
-				if (dlg->selected < 0)
-					dlg->selected = dlg->n - 1;
+				dlg_data->selected--;
+				if (dlg_data->selected < 0)
+					dlg_data->selected = dlg_data->n - 1;
 
-				display_dlg_item(dlg, &dlg->items[dlg->selected], 1);
-				redraw_from_window(dlg->win);
+				display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 1);
+				redraw_from_window(dlg_data->win);
 				break;
 			}
 
@@ -271,35 +271,35 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_ABORT:
 			/* Moved this line up so that the dlg would have access
 			   to its member vars before they get freed. */
-			if (dlg->dlg->abort)
-				dlg->dlg->abort(dlg);
+			if (dlg_data->dlg->abort)
+				dlg_data->dlg->abort(dlg_data);
 
-			for (i = 0; i < dlg->n; i++) {
-				struct widget_data *di = &dlg->items[i];
+			for (i = 0; i < dlg_data->n; i++) {
+				struct widget_data *di = &dlg_data->items[i];
 
 				if (di->cdata) mem_free(di->cdata);
 				free_list(di->history);
 			}
 
-			freeml(dlg->ml);
+			freeml(dlg_data->ml);
 	}
 }
 
 int
-check_dialog(struct dialog_data *dlg)
+check_dialog(struct dialog_data *dlg_data)
 {
 	int i;
 
-	for (i = 0; i < dlg->n; i++) {
-		if (dlg->dlg->items[i].type != D_CHECKBOX &&
-		    dlg->dlg->items[i].type != D_FIELD &&
-		    dlg->dlg->items[i].type != D_FIELD_PASS)
+	for (i = 0; i < dlg_data->n; i++) {
+		if (dlg_data->dlg->items[i].type != D_CHECKBOX &&
+		    dlg_data->dlg->items[i].type != D_FIELD &&
+		    dlg_data->dlg->items[i].type != D_FIELD_PASS)
 			continue;
 
-		if (dlg->dlg->items[i].fn &&
-		    dlg->dlg->items[i].fn(dlg, &dlg->items[i])) {
-			dlg->selected = i;
-			redraw_dialog(dlg);
+		if (dlg_data->dlg->items[i].fn &&
+		    dlg_data->dlg->items[i].fn(dlg_data, &dlg_data->items[i])) {
+			dlg_data->selected = i;
+			redraw_dialog(dlg_data);
 			return 1;
 		}
 	}
@@ -308,81 +308,81 @@ check_dialog(struct dialog_data *dlg)
 }
 
 int
-cancel_dialog(struct dialog_data *dlg, struct widget_data *di)
+cancel_dialog(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	delete_window(dlg->win);
+	delete_window(dlg_data->win);
 	return 0;
 }
 
 int
-update_dialog_data(struct dialog_data *dlg, struct widget_data *di)
+update_dialog_data(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	int i;
 
-	for (i = 0; i < dlg->n; i++)
-		memcpy(dlg->dlg->items[i].data,
-		       dlg->items[i].cdata,
-		       dlg->dlg->items[i].dlen);
+	for (i = 0; i < dlg_data->n; i++)
+		memcpy(dlg_data->dlg->items[i].data,
+		       dlg_data->items[i].cdata,
+		       dlg_data->dlg->items[i].dlen);
 
 	return 0;
 }
 
 int
-ok_dialog(struct dialog_data *dlg, struct widget_data *di)
+ok_dialog(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	void (*fn)(void *) = dlg->dlg->refresh;
-	void *data = dlg->dlg->refresh_data;
+	void (*fn)(void *) = dlg_data->dlg->refresh;
+	void *data = dlg_data->dlg->refresh_data;
 
-	if (check_dialog(dlg)) return 1;
+	if (check_dialog(dlg_data)) return 1;
 
-	update_dialog_data(dlg, di);
+	update_dialog_data(dlg_data, di);
 
 	if (fn) fn(data);
-	return cancel_dialog(dlg, di);
+	return cancel_dialog(dlg_data, di);
 }
 
 int
-clear_dialog(struct dialog_data *dlg, struct widget_data *di)
+clear_dialog(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	int i;
 
-	for (i = 0; i < dlg->n; i++) {
-		if (dlg->dlg->items[i].type != D_FIELD &&
-		    dlg->dlg->items[i].type != D_FIELD_PASS)
+	for (i = 0; i < dlg_data->n; i++) {
+		if (dlg_data->dlg->items[i].type != D_FIELD &&
+		    dlg_data->dlg->items[i].type != D_FIELD_PASS)
 			continue;
-		memset(dlg->items[i].cdata, 0, dlg->dlg->items[i].dlen);
-		dlg->items[i].cpos = 0;
+		memset(dlg_data->items[i].cdata, 0, dlg_data->dlg->items[i].dlen);
+		dlg_data->items[i].cpos = 0;
 	}
 
-	redraw_dialog(dlg);
+	redraw_dialog(dlg_data);
 	return 0;
 }
 
 void
-center_dlg(struct dialog_data *dlg)
+center_dlg(struct dialog_data *dlg_data)
 {
-	dlg->x = (dlg->win->term->x - dlg->xw) / 2;
-	dlg->y = (dlg->win->term->y - dlg->yw) / 2;
+	dlg_data->x = (dlg_data->win->term->x - dlg_data->xw) / 2;
+	dlg_data->y = (dlg_data->win->term->y - dlg_data->yw) / 2;
 }
 
 void
-draw_dlg(struct dialog_data *dlg)
+draw_dlg(struct dialog_data *dlg_data)
 {
-	draw_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw, ' ', 0,
-		  get_bfu_color(dlg->win->term, "dialog.generic"));
+	draw_area(dlg_data->win->term, dlg_data->x, dlg_data->y, dlg_data->xw, dlg_data->yw, ' ', 0,
+		  get_bfu_color(dlg_data->win->term, "dialog.generic"));
 
 	if (get_opt_bool("ui.dialogs.shadows")) {
 		/* Draw shadow */
 		struct color_pair * shadow_color;
 
-		shadow_color = get_bfu_color(dlg->win->term, "dialog.shadow");
+		shadow_color = get_bfu_color(dlg_data->win->term, "dialog.shadow");
 
 		/* (horizontal) */
-		draw_area(dlg->win->term, dlg->x + 2, dlg->y + dlg->yw,
-			  dlg->xw - 2, 1, ' ', 0, shadow_color);
+		draw_area(dlg_data->win->term, dlg_data->x + 2, dlg_data->y + dlg_data->yw,
+			  dlg_data->xw - 2, 1, ' ', 0, shadow_color);
 
 		/* (vertical) */
-		draw_area(dlg->win->term, dlg->x + dlg->xw, dlg->y + 1,
-			  2, dlg->yw, ' ', 0, shadow_color);
+		draw_area(dlg_data->win->term, dlg_data->x + dlg_data->xw, dlg_data->y + 1,
+			  2, dlg_data->yw, ' ', 0, shadow_color);
 	}
 }

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.25 2003/10/05 20:47:34 pasky Exp $ */
+/* $Id: group.c,v 1.26 2003/10/25 11:31:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,42 +129,42 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 }
 
 void
-group_fn(struct dialog_data *dlg)
+group_fn(struct dialog_data *dlg_data)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = 0;
-	int n = dlg->n - 2;
+	int n = dlg_data->n - 2;
 
-	max_group_width(term, 1, dlg->dlg->udata, dlg->items, n, &max);
-	min_group_width(term, 1, dlg->dlg->udata, dlg->items, n, &min);
-	buttons_width(term, dlg->items + n, 2, &min, &max);
+	max_group_width(term, 1, dlg_data->dlg->udata, dlg_data->items, n, &max);
+	min_group_width(term, 1, dlg_data->dlg->udata, dlg_data->items, n, &min);
+	buttons_width(term, dlg_data->items + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
 	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_group(NULL, term, 1, dlg->dlg->udata, dlg->items, n,
+	dlg_format_group(NULL, term, 1, dlg_data->dlg->udata, dlg_data->items, n,
 			 0, &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + n, 2, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->items + n, 2, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
-	dlg->xw = rw + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
+	dlg_data->xw = rw + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
 
-	draw_dlg(dlg);
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
 
-	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_group(term, term, 1, dlg->dlg->udata, dlg->items, n,
-			 dlg->x + DIALOG_LB, &y, w, NULL);
+	y = dlg_data->y + DIALOG_TB + 1;
+	dlg_format_group(term, term, 1, dlg_data->dlg->udata, dlg_data->items, n,
+			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + n, 2,
-			   dlg->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
+	dlg_format_buttons(term, term, dlg_data->items + n, 2,
+			   dlg_data->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }

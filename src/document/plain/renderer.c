@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.26 2003/11/18 19:51:31 pasky Exp $ */
+/* $Id: renderer.c,v 1.27 2003/11/18 19:57:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ add_document_line(struct document *document, int lineno,
 			expanded += tab_width;
 
 		} else if (line_char < ' ' || line_char == ASCII_ESC) {
-			line[line_pos] = ' ';
+			line[line_pos] = '.';
 
 		} else 	if (document->options.plain_display_links
 			    && isalpha(line_char) ) {

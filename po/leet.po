@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-07-23 17:23+0200\n"
+"POT-Creation-Date: 2003-07-23 18:18+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.82 2003/09/07 19:13:22 zas Exp $ */
+/* $Id: os_dep.c,v 1.83 2003/09/20 12:05:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -448,7 +448,7 @@ exe(unsigned char *path)
 #elif defined(WIN32)
 
 int
-exe(char *path)
+exe(unsigned char *path)
 {
 	int r;
 	unsigned char *x1 = !GETSHELL ? DEFAULT_SHELL : GETSHELL;

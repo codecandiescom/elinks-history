@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.219 2003/10/13 12:50:55 pasky Exp $ */
+/* $Id: parser.c,v 1.220 2003/10/14 11:16:30 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3456,6 +3456,8 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 		return 1;
 	}
 
+	mem_free(href);
+
 	ld->link = join_urls(href_base, href);
 	if (!ld->link) {
 		if (label) mem_free(label);
@@ -3465,7 +3467,6 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 		return 1;
 	}
 
-	mem_free(href);
 
 	ld->target = target;
 	for (i = 0; i < nmenu; i++) {
@@ -3493,8 +3494,9 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 	if (!label) {
 		label = stracpy(ld->link);
 		if (!label) {
-			mem_free(href);
 			mem_free(target);
+			mem_free(ld->link);
+			mem_free(ld);
 			return 1;
 		}
 	}

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.298 2004/07/13 19:44:57 zas Exp $ */
+/* $Id: download.c,v 1.299 2004/07/13 19:50:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,8 +548,6 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 }
 
 
-static void create_download_file_do(struct terminal *, unsigned char *, void *, int);
-
 struct cdf_hop {
 	unsigned char **real_file;
 	int safe;
@@ -557,38 +555,6 @@ struct cdf_hop {
 	void (*callback)(struct terminal *, int, void *, int);
 	void *data;
 };
-
-void
-create_download_file(struct terminal *term, unsigned char *fi,
-		     unsigned char **real_file, int safe, int resume,
-		     void (*callback)(struct terminal *, int, void *, int),
-		     void *data)
-{
-	struct cdf_hop *cdf_hop = mem_calloc(1, sizeof(struct cdf_hop));
-	unsigned char *wd;
-
-	if (!cdf_hop) {
-		callback(term, -1, data, 0);
-		return;
-	}
-
-	cdf_hop->real_file = real_file;
-	cdf_hop->safe = safe;
-	cdf_hop->callback = callback;
-	cdf_hop->data = data;
-
-	/* FIXME: The wd bussiness is probably useless here? --pasky */
-	wd = get_cwd();
-	set_cwd(term->cwd);
-
-	/* Also the tilde will be expanded here. */
-	lookup_unique_name(term, fi, resume, create_download_file_do, cdf_hop);
-
-	if (wd) {
-		set_cwd(wd);
-		mem_free(wd);
-	}
-}
 
 static void
 create_download_file_do(struct terminal *term, unsigned char *file, void *data,
@@ -659,6 +625,38 @@ finish:
 	cdf_hop->callback(term, h, cdf_hop->data, resume);
 	mem_free(cdf_hop);
 	return;
+}
+
+void
+create_download_file(struct terminal *term, unsigned char *fi,
+		     unsigned char **real_file, int safe, int resume,
+		     void (*callback)(struct terminal *, int, void *, int),
+		     void *data)
+{
+	struct cdf_hop *cdf_hop = mem_calloc(1, sizeof(struct cdf_hop));
+	unsigned char *wd;
+
+	if (!cdf_hop) {
+		callback(term, -1, data, 0);
+		return;
+	}
+
+	cdf_hop->real_file = real_file;
+	cdf_hop->safe = safe;
+	cdf_hop->callback = callback;
+	cdf_hop->data = data;
+
+	/* FIXME: The wd bussiness is probably useless here? --pasky */
+	wd = get_cwd();
+	set_cwd(term->cwd);
+
+	/* Also the tilde will be expanded here. */
+	lookup_unique_name(term, fi, resume, create_download_file_do, cdf_hop);
+
+	if (wd) {
+		set_cwd(wd);
+		mem_free(wd);
+	}
 }
 
 

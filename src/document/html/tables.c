@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.247 2004/06/28 18:30:02 zas Exp $ */
+/* $Id: tables.c,v 1.248 2004/06/28 18:31:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1600,17 +1600,17 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 
 static inline void
 draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
-		 int i, int j, color_t bgcolor, color_t fgcolor)
+		 int col, int row, color_t bgcolor, color_t fgcolor)
 {
  	static unsigned char vltable[] = { ' ', BORDER_SVLINE, BORDER_DVLINE };
- 	int pos = V_FRAME_POSITION(table, i, j);
+ 	int pos = V_FRAME_POSITION(table, col, row);
 
  	assertm(pos < 3, "Vertical table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->rows_heights[j] <= 0) return;
+ 	if (pos < 0 || table->rows_heights[row] <= 0) return;
 
- 	draw_frame_vchars(table->part, x, y, table->rows_heights[j], vltable[pos],
+ 	draw_frame_vchars(table->part, x, y, table->rows_heights[row], vltable[pos],
 			  bgcolor, fgcolor);
 }
 

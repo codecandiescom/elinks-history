@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.64 2003/07/23 12:52:48 pasky Exp $ */
+/* $Id: auth.c,v 1.65 2003/07/23 12:55:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,14 +151,14 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			}
 		}
 
-		if (!*entry->user || strlen(entry->user) != uri->userlen
-		    || strncmp(entry->user, uri->user, uri->userlen)) {
+		if (!*entry->user
+		    || strlcmp(entry->user, -1, uri->user, uri->userlen)) {
 			entry->valid = 0;
 			set_auth_user(entry, uri);
 		}
 
-		if (!*entry->password || strlen(entry->password) != uri->passwordlen
-		    || strncmp(entry->password, uri->password, uri->passwordlen)) {
+		if (!*entry->password
+		    || strlcmp(entry->password, -1, uri->password, uri->passwordlen)) {
 			entry->valid = 0;
 			set_auth_password(entry, uri);
 		}
@@ -200,13 +200,10 @@ find_auth(struct uri *uri)
 		/* If there's no entry a new one is added else if the entry
 		 * does not correspond to any existing one update it with the
 		 * user and password from the uri. */
-		/* FIXME BOOLEAN OVERLOAD! */
 		if (!entry
 		    || (auth_entry_has_userinfo(entry)
-			&& strlen(entry->password) == uri->passwordlen
-		        && strlen(entry->user) == uri->userlen
-		        && !strncmp(entry->password, uri->password, uri->passwordlen)
-		        && !strncmp(entry->user, uri->user, uri->userlen))) {
+		        && !strlcmp(entry->password, -1, uri->password, uri->passwordlen)
+		        && !strlcmp(entry->user, -1, uri->user, uri->userlen))) {
 
 			entry = add_auth_entry(uri, NULL);
 		}

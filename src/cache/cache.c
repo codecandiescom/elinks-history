@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.191 2004/12/16 15:34:02 zas Exp $ */
+/* $Id: cache.c,v 1.192 2004/12/16 23:10:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,7 +28,7 @@
 static INIT_LIST_HEAD(cache_entries);
 
 static long cache_size;
-static int id_counter = 0;
+static int id_counter = 1;
 
 
 /* Change 0 to 1 to enable cache debugging features (redirect stderr to a file). */

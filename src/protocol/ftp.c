@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.56 2002/10/12 17:55:10 zas Exp $ */
+/* $Id: ftp.c,v 1.57 2002/10/12 18:55:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -926,10 +926,6 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 	if (ftp_info->flagtrycwd) {
 		if (ftp_info->flagtryretr) {
 			add_to_str(&str, &strl, "[LNK] ");
-			if (!ftp_info->perm) {
-				ftp_info->perm = "rwxrwxrwx";
-				ftp_info->permlen = 9;
-			}
 		} else {
 			if (colorize_dir) {
 				/* The <b> is here for the case when we've
@@ -942,27 +938,17 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 			if (colorize_dir) {
 				add_to_str(&str, &strl, "</b></font>");
 			}
-			if (!ftp_info->perm) {
-				ftp_info->perm = "r-xr-xr-x";
-				ftp_info->permlen = 9;
-			}
 		}
 	} else {
 		add_to_str(&str, &strl, "[   ] ");
-		if (!ftp_info->perm) {
-			ftp_info->perm = "r--r--r--";
-			ftp_info->permlen = 9;
-		}
 	}
 
-	if (ftp_info->perm) {
-		if (ftp_info->permlen)
-			add_bytes_to_str(&str, &strl, ftp_info->perm,
-					 ftp_info->permlen);
-		else
-			add_to_str(&str, &strl, "-        ");
-		add_to_str(&str, &strl, " ");
-	}
+	if (ftp_info->perm && ftp_info->permlen)
+		add_bytes_to_str(&str, &strl, ftp_info->perm, ftp_info->permlen);
+	else
+		add_to_str(&str, &strl, "-        ");
+	add_to_str(&str, &strl, " ");
+	
 
 	if (ftp_info->mtime) {
 		if (ftp_info->mtime == -1)
@@ -1152,7 +1138,7 @@ out_of_mem:
 			ftp_info.idlen = 0;
 			ftp_info.symlink = NULL;
 			ftp_info.symlinklen = 0;
-			ftp_info.perm = ""; /* still align - looks good in most cases */
+			ftp_info.perm = 0;
 			ftp_info.permlen = 0;
 
 			display_dir_entry(conn->cache, &conn->from, &conn->tries,

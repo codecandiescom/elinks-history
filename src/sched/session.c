@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.468 2004/06/11 00:22:19 jonas Exp $ */
+/* $Id: session.c,v 1.469 2004/06/11 00:28:34 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -649,6 +649,9 @@ setup_first_session(struct session *ses, struct uri *uri)
 	}
 }
 
+/* First load the current URI of the base session. In most cases it will just
+ * be fetched from the cache so that the new tab will not appear ``empty' while
+ * loading the real URI or showing the goto URL dialog. */
 static void 
 setup_session(struct session *ses, struct uri *uri, struct session *base)
 {
@@ -658,14 +661,10 @@ setup_session(struct session *ses, struct uri *uri, struct session *base)
 	if (uri) {
 		goto_uri(ses, uri);
 
-	} else {
-		if (!goto_url_home(ses)) {
-			if ((get_opt_int("ui.startup_goto_dialog")
-			    && !first_use)) {
-				/* We can't create new window in EV_INIT
-				 * handler! */
-				register_bottom_half(dialog_goto_url_open, ses);
-			}
+	} else if (!goto_url_home(ses)) {
+		if (get_opt_int("ui.startup_goto_dialog")) {
+			/* We can't create new window in EV_INIT handler! */
+			register_bottom_half(dialog_goto_url_open, ses);
 		}
 	}
 }

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.38 2004/06/13 12:14:36 jonas Exp $ */
+/* $Id: terminal.h,v 1.39 2004/06/14 01:27:22 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -144,8 +144,6 @@ void cls_redraw_all_terminals(void);
 
 void redraw_all_terminals(void);
 void destroy_all_terminals(void);
-void block_itrm(int);
-int unblock_itrm(int);
 void exec_thread(unsigned char *, int);
 void close_handle(void *);
 

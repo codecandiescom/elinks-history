@@ -1,4 +1,4 @@
-/* $Id: kbd.h,v 1.5 2004/06/14 00:53:48 jonas Exp $ */
+/* $Id: kbd.h,v 1.6 2004/06/14 01:27:22 jonas Exp $ */
 
 #ifndef EL__TERMINAL_KBD_H
 #define EL__TERMINAL_KBD_H
@@ -41,6 +41,8 @@ void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len, int remote);
 
+void block_itrm(int);
+int unblock_itrm(int);
 void free_all_itrms(void);
 void resize_terminal(void);
 void dispatch_special(unsigned char *);

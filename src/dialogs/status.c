@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.66 2004/05/10 17:15:22 zas Exp $ */
+/* $Id: status.c,v 1.67 2004/05/13 09:33:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,7 +201,8 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	struct session_status *status = &ses->status;
 	struct color_pair *text_color = NULL;
 	int msglen;
-
+	struct rect box;
+	
 	if (stat) {
 		/* Show S_INTERRUPTED message *once* but then show links
 		 * again as usual. */
@@ -225,8 +226,8 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 	}
 
-	draw_area(term, 0, term->height - 1, term->width, 1, ' ', 0,
-		get_bfu_color(term, "status.status-bar"));
+	set_rect(&box, 0, term->height - 1, term->width, 1);
+	draw_box(term, &box, ' ', 0, get_bfu_color(term, "status.status-bar"));
 
 	if (!status->show_tabs_bar && tabs_count > 1) {
 		unsigned char tab_info[8];
@@ -286,9 +287,10 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int tab_remain_width = int_max(0, term->width - tab_total_width);
 	int tab_add = int_max(1, (tab_remain_width / tabs_count));
 	int tab_num;
-	int ypos = term->height - (status->show_status_bar ? 2 : 1);
-	int xpos = 0;
+	struct rect box;
 
+	set_rect(&box, 0, term->height - (status->show_status_bar ? 2 : 1), 0, 1);
+	
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
 		struct download *stat = NULL;
 		struct color_pair *color = normal_color;
@@ -317,9 +319,9 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 		}
 
 		if (tab_num) {
-			draw_char(term, xpos, ypos, BORDER_SVLINE,
+			draw_char(term, box.x, box.y, BORDER_SVLINE,
 				  SCREEN_ATTR_FRAME, tabsep_color);
-			xpos += 1;
+			box.x++;
 		}
 
 		if (tab_num == term->current_tab) {
@@ -339,19 +341,20 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 				stat = NULL;
 		}
 
-		draw_area(term, xpos, ypos, actual_tab_width + 1, 1, ' ', 0, color);
+		box.width = actual_tab_width + 1;
+		draw_box(term, &box, ' ', 0, color);
 
 		if (stat) {
-			download_progress_bar(term, xpos, ypos,
+			download_progress_bar(term, box.x, box.y,
 					      actual_tab_width, msg, NULL,
 					      stat->prg->pos, stat->prg->size);
 		} else {
 			int msglen = int_min(strlen(msg), actual_tab_width);
 
-			draw_text(term, xpos, ypos, msg, msglen, 0, color);
+			draw_text(term, box.x, box.y, msg, msglen, 0, color);
 		}
 
-		tab->xpos = xpos;
+		tab->xpos = box.x;
 		tab->width = actual_tab_width;
 		if (tab_num == tabs_count - 1) {
 			/* This is the last tab, and is therefore followed
@@ -361,7 +364,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			tab->width++;
 		}
 
-		xpos += actual_tab_width;
+		box.x += actual_tab_width;
 	}
 }
 
@@ -375,10 +378,11 @@ display_title_bar(struct session *ses, struct terminal *term)
 	unsigned char buf[80];
 	int buflen = 0;
 	int height;
+	struct rect box;
 	
 	/* Clear the old title */
-	draw_area(term, 0, 0, term->width, 1, ' ', 0,
-		  get_bfu_color(term, "title.title-bar"));
+	set_rect(&box, 0, 0, term->width, 1);
+	draw_box(term, &box, ' ', 0, get_bfu_color(term, "title.title-bar"));
 
 	doc_view = current_frame(ses);
 	if (!doc_view || !doc_view->document) return;

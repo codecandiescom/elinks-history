@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.10 2003/06/05 22:40:27 jonas Exp $ */
+/* $Id: mailcap.c,v 1.11 2003/06/05 23:34:56 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -283,19 +283,18 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 static void
 parse_mailcap_file(unsigned char *filename, unsigned int priority)
 {
-	FILE *file;
+	struct mailcap_entry *entry = NULL;
+	FILE *file = fopen(filename, "r");
 	unsigned char *line = NULL;
 	size_t linelen;
 	int lineno = 0;
-	struct mailcap_entry *entry = NULL;
-	size_t typelen;
-	unsigned char *field;	/* Points to the current field */
-	unsigned char *next;	/* Points to the next field */
 
-	file = fopen(filename, "r");
 	if (!file) return;
 
 	while ((line = file_read_line(line, &linelen, file, &lineno))) {
+		unsigned char *field;	/* Points to the current field */
+		unsigned char *next;	/* Points to the next field */
+
 		/* Ignore comments */
 		if (*line == '#') continue;
 
@@ -316,7 +315,6 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		field = get_field(&next);
 		if (!field) continue;
 
-		typelen     = strlen(field);
 		entry->type = stracpy(field);
 		if (!entry->type) continue;
 
@@ -339,6 +337,7 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		/* Time to get the entry into the mailcap_map */
 		if (entry->command) {
 			struct hash_item *item;
+			int typelen = strlen(entry->type);
 
 			/* First check if the type is already checked in */
 			item = get_hash_item(mailcap_map, entry->type, typelen);

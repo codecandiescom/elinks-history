@@ -1,9 +1,9 @@
-/* $Id: error.h,v 1.6 2003/05/02 12:10:03 pasky Exp $ */
+/* $Id: error.h,v 1.7 2003/05/02 13:44:15 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
 
-void list_magic_error_(unsigned char *, unsigned char *, int);
+void list_magic_error_(unsigned char *, unsigned char *, unsigned char *, int);
 
 void force_dump();
 void do_not_optimize_here(void *);

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.11 2003/05/02 13:26:37 pasky Exp $ */
+/* $Id: lists.h,v 1.12 2003/05/02 13:44:15 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -109,7 +109,8 @@ do { \
 
 #define LISTMAGIC 0xdadababa
 
-#define list_magic_error(where) list_magic_error_(where, __FILE__, __LINE__)
+/* I hope #xyz is ANSI C ;-). Or.. oh well, it's just debug :^). --pasky */
+#define list_magic_error(where,what) list_magic_error_(where, #what, __FILE__, __LINE__)
 
 struct list_head {
 	unsigned int magic1;
@@ -139,12 +140,12 @@ do { \
 
 #define list_empty(x) \
 	((((x).magic1 == LISTMAGIC && (x).magic2 == LISTMAGIC) \
-	  || (list_magic_error("list_empty"), 1)) && (x).next == &(x))
+	  || (list_magic_error("list_empty", x), 1)) && (x).next == &(x))
 
 #define del_from_list(x) \
 do { \
 	if ((x)->magic1 != LISTMAGIC || (x)->magic2 != LISTMAGIC) \
-		list_magic_error("del_from_list"); \
+		list_magic_error("del_from_list", x); \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
@@ -156,7 +157,7 @@ do { \
 #define add_at_pos(p,x) \
 do { \
 	if ((p)->magic1 != LISTMAGIC || (p)->magic2 != LISTMAGIC) \
-		list_magic_error("add_at_pos"); \
+		list_magic_error("add_at_pos", p); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \

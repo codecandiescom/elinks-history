@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.131 2003/09/25 16:39:43 zas Exp $ */
+/* $Id: menu.c,v 1.132 2003/09/25 16:56:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -400,13 +400,13 @@ static struct menu_item file_menu22[] = {
 #ifdef LEAK_DEBUG
 	INIT_MENU_ITEM(N_("~Memory info"), "", memory_inf, NULL, FREE_NOTHING, 0),
 #endif
-	NULL_MENU_ITEM,
+	BAR_MENU_ITEM,
 };
 
 static struct menu_item file_menu3[] = {
-	{"", M_BAR, NULL, NULL, 0, 0},
-	{N_("E~xit"), "q", MENU_FUNC exit_prog, (void *)0, 0, 0},
-	{NULL, NULL, NULL, NULL, 0, 0}
+	BAR_MENU_ITEM,
+	INIT_MENU_ITEM(N_("E~xit"), "q", exit_prog, NULL, FREE_NOTHING, 0),
+	NULL_MENU_ITEM,
 };
 
 static void

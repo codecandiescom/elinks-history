@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.221 2003/12/21 21:28:00 jonas Exp $ */
+/* $Id: menu.c,v 1.222 2003/12/21 21:54:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -127,12 +127,15 @@ menu_goto_url(struct terminal *term, void *d, struct session *ses)
 	dialog_goto_url(ses, "");
 }
 
-static void dialog_save_url(struct session *ses);
-
 static inline void
 menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 {
-	dialog_save_url(ses);
+	input_field(ses->tab->term, NULL, 1,
+		    N_("Save URL"), N_("Enter URL"),
+		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
+		    MAX_STR_LEN, "", 0, 0, NULL,
+		    (void (*)(void *, unsigned char *)) save_url,
+		    NULL);
 }
 
 static inline void
@@ -602,17 +605,6 @@ dialog_goto_url(struct session *ses, char *url)
 		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
 		    MAX_STR_LEN, url, 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) goto_url_with_hook,
-		    NULL);
-}
-
-static void
-dialog_save_url(struct session *ses)
-{
-	input_field(ses->tab->term, NULL, 1,
-		    N_("Save URL"), N_("Enter URL"),
-		    N_("OK"), N_("Cancel"), ses, &goto_url_history,
-		    MAX_STR_LEN, "", 0, 0, NULL,
-		    (void (*)(void *, unsigned char *)) save_url,
 		    NULL);
 }
 

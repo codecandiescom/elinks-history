@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.44 2003/12/01 16:05:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.45 2003/12/21 21:54:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -222,6 +222,9 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 		unsigned char *line_end = memchr(source, '\n', length);
 		int width = line_end ? line_end - source : length;
 		int added;
+
+		if (line_end && width > 0 && line_end[-1] == '\r')
+			width--;
 
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);

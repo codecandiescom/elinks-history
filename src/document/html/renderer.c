@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.319 2003/10/26 22:22:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.320 2003/10/26 23:29:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -781,28 +781,9 @@ new_link(struct document *document, int link_number,
 		link->target = form->target ? stracpy(form->target) : NULL;
 	}
 
-	if (link->type != L_FIELD && link->type != L_AREA) {
-		if (d_opt) {
-			if (d_opt->color_active_link) {
-				link->color.foreground = d_opt->active_link_fg;
-				link->color.background = d_opt->active_link_bg;
-
-			} else if (d_opt->invert_active_link) {
-				link->color.foreground = format.bg;
-				link->color.background = format.clink;
-
-			} else {
-				link->color.foreground = format.clink;
-				link->color.background = format.bg;
-			}
-		} else {
-			link->color.background = format.clink;
-			link->color.foreground = format.bg;
-		}
-	} else {
-		link->color.foreground = format.fg;
-		link->color.background = format.bg;
-	}
+	link->color.background = format.bg;
+	link->color.foreground = (link->type != L_FIELD && link->type != L_AREA)
+				? format.clink : format.fg;
 
 	return link;
 }

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.22 2003/10/18 23:42:09 jonas Exp $ */
+/* $Id: options.h,v 1.23 2003/10/26 23:29:37 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -42,7 +42,6 @@ struct document_options {
 	unsigned int underline:1;
 	unsigned int display_subs:1;
 	unsigned int display_sups:1;
-	unsigned int invert_active_link:1;
 	unsigned int underline_links:1;
 
 	/* Link navigation */
@@ -65,6 +64,7 @@ struct document_options {
 	unsigned int color_active_link:1;
 	unsigned int underline_active_link:1;
 	unsigned int bold_active_link:1;
+	unsigned int invert_active_link:1;
 	color_t active_link_fg;
 	color_t active_link_bg;
 };

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.80 2003/10/21 14:34:34 jonas Exp $ */
+/* $Id: link.c,v 1.81 2003/10/26 23:29:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,6 +134,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	int cursor_offset = 0;
 	struct screen_char *template;
 	enum color_flags color_flags = COLOR_DECREASE_LIGHTNESS;
+	struct color_pair colors;
 
 	assert(t && doc_view && doc_view->vs);
 	if_assert_failed return;
@@ -197,8 +198,22 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 			template->attr |= SCREEN_ATTR_BOLD;
 	}
 
-	set_term_color(template, &link->color, color_flags,
-		       doc_view->document->opt.color_mode);
+	if (d_opt->color_active_link) {
+		colors.foreground = d_opt->active_link_fg;
+		colors.background = d_opt->active_link_bg;
+
+	} else if (d_opt->invert_active_link
+		   && link->type != L_FIELD
+		   && link->type != L_AREA) {
+		colors.foreground = link->color.background;
+		colors.background = link->color.foreground;
+
+	} else {
+		colors.foreground = link->color.foreground;
+		colors.background = link->color.background;
+	}
+
+	set_term_color(template, &colors, color_flags, d_opt->color_mode);
 
 	xmax = doc_view->xp + doc_view->xw;
 	ymax = doc_view->yp + doc_view->yw;

@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.15 2003/06/20 15:24:43 jonas Exp $ */
+/* $Id: encoding.c,v 1.16 2003/06/20 15:37:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,21 +283,21 @@ unsigned char **listext_encoded(enum stream_encoding encoding)
 }
 
 enum stream_encoding
-guess_encoding(unsigned char *fname)
+guess_encoding(unsigned char *filename)
 {
-	int fname_len = strlen(fname);
-	unsigned char *fname_end = fname + fname_len;
-	unsigned char **ext;
+	int fname_len = strlen(filename);
+	unsigned char *fname_end = filename + fname_len;
 	int enc;
 
 	for (enc = 1; enc < NB_KNOWN_ENCODING; enc++) {
-		ext = listext_encoded(enc);
+		unsigned char **ext = listext_encoded(enc);
+
 		while (ext && *ext) {
 			int len = strlen(*ext);
 
-			if (fname_len > len
-			    && !strcmp(fname_end - len, *ext))
+			if (fname_len > len && !strcmp(fname_end - len, *ext))
 				return enc;
+
 			ext++;
 		}
 	}

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.1 2002/05/23 18:50:36 pasky Exp $ */
+/* $Id: opttypes.c,v 1.2 2002/05/23 18:59:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,6 +111,8 @@ str_rd(struct option *opt, unsigned char **file)
 			 * we will treat it just as '"', ignoring the backslash
 			 * itself. */
 			if (str[1] == '"') str++;
+			/* \\ means \. */
+			if (str[1] == '\\') str++;
 		}
 		add_chr_to_str(&str2, &str2l, *str);
 		str++;

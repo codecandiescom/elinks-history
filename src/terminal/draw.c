@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.23 2003/07/28 09:53:54 jonas Exp $ */
+/* $Id: draw.c,v 1.24 2003/07/28 09:59:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,31 @@ set_char(struct terminal *term, int x, int y, unsigned c)
 	screen->image[position].attr = get_screen_char_attr(c);
 	screen->dirty = 1;
 }
+
+unsigned char frame_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc5}};
+
+void
+set_xchar(struct terminal *t, int x, int y, enum frame_cross_direction dir)
+{
+	unsigned int d;
+	struct screen_char *screen_char;
+
+	assert(t);
+	if_assert_failed return;
+
+	if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
+
+	screen_char = get_char(t, x, y);
+	if (!(screen_char->attr & SCREEN_ATTR_FRAME)) return;
+
+	d = dir>>1;
+	if (screen_char->data == frame_trans[d][0])
+		screen_char->data = frame_trans[d][1 + (dir & 1)] | ATTR_FRAME;
+	else
+		if (screen_char->data == frame_trans[d][2 - (dir & 1)])
+			screen_char->data = frame_trans[d][3] | ATTR_FRAME;
+}
+
 
 struct screen_char *
 get_char(struct terminal *term, int x, int y)

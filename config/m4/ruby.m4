@@ -18,7 +18,7 @@ AC_MSG_RESULT($CONFIG_RUBY)
 
 if test "$CONFIG_RUBY" = "yes"; then
 
-	AC_PATH_PROG(CONFIG_RUBY, ruby, "no", "$withval:$PATH")
+	AC_PATH_PROG(CONFIG_RUBY, ruby, no, $withval:$PATH)
 	if test "$CONFIG_RUBY" != "no"; then
 
 		AC_MSG_CHECKING(Ruby version)

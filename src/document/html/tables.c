@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.219 2004/06/26 19:03:09 zas Exp $ */
+/* $Id: tables.c,v 1.220 2004/06/26 19:15:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ new_table(void)
 static void
 free_table(struct table *table)
 {
-	int i, j;
+	int col, row;
 
 	mem_free_if(table->min_cols_widths);
 	mem_free_if(table->max_cols_widths);
@@ -251,9 +251,9 @@ free_table(struct table *table)
 	mem_free_if(table->fragment_id);
 	mem_free_if(table->cols_x);
 
-	for (i = 0; i < table->cols; i++)
-		for (j = 0; j < table->rows; j++)
-			mem_free_if(CELL(table, i, j)->fragment_id);
+	for (col = 0; col < table->cols; col++)
+		for (row = 0; row < table->rows; row++)
+			mem_free_if(CELL(table, col, row)->fragment_id);
 
 	mem_free(table->cells);
 	mem_free(table->columns);
@@ -828,21 +828,22 @@ format_cell(struct table *table, int column, int row,
 static inline void
 get_cell_width(unsigned char *start, unsigned char *end,
 	       int cellpadding, int width,
-	       int a, int *min, int *max, int n_link, int *n_links)
+	       int a, int *min, int *max,
+	       int link_num, int *new_link_num)
 {
 	struct part *part;
 
 	if (min) *min = -1;
 	if (max) *max = -1;
-	if (n_links) *n_links = n_link;
+	if (new_link_num) *new_link_num = link_num;
 
 	part = format_html_part(start, end, AL_LEFT, cellpadding, width, NULL,
-			        !!a, !!a, NULL, n_link);
+			        !!a, !!a, NULL, link_num);
 	if (!part) return;
 
 	if (min) *min = part->box.width;
 	if (max) *max = part->max_width;
-	if (n_links) *n_links = part->link_num;
+	if (n_links) *new_link_num = part->link_num;
 
 	if (min && max) {
 		assertm(*min <= *max, "get_cell_width: %d > %d", *min, *max);
@@ -873,7 +874,7 @@ check_cell_widths(struct table *table)
 static inline void
 get_cell_widths(struct table *table)
 {
-	int nl = table->part->link_num;
+	int link_num = table->part->link_num;
 	int col, row;
 
 	if (!global_doc_opts->table_order)
@@ -882,9 +883,10 @@ get_cell_widths(struct table *table)
 				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->start) continue;
-				cell->link_num = nl;
+				cell->link_num = link_num;
 				get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
-					       &cell->min_width, &cell->max_width, nl, &nl);
+					       &cell->min_width, &cell->max_width,
+					       link_num, &link_num);
 			}
 	else
 		for (col = 0; col < table->cols; col++)
@@ -892,12 +894,13 @@ get_cell_widths(struct table *table)
 				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->start) continue;
-				cell->link_num = nl;
+				cell->link_num = link_num;
 				get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
-					       &cell->min_width, &cell->max_width, nl, &nl);
+					       &cell->min_width, &cell->max_width,
+					       link_num, &link_num);
 			}
 
-	table->link_num = nl;
+	table->link_num = link_num;
 }
 
 static inline void

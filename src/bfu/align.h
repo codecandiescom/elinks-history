@@ -1,7 +1,12 @@
-/* $Id: align.h,v 1.14 2003/06/07 13:46:36 pasky Exp $ */
+/* $Id: align.h,v 1.15 2003/06/18 01:11:44 jonas Exp $ */
 
 #ifndef EL__BFU_ALIGN_H
 #define EL__BFU_ALIGN_H
+
+#include "config/options.h"
+#include "document/html/colors.h"
+#include "terminal/terminal.h"
+#include "util/string.h"
 
 /* This enum is pretty ugly, yes ;). */
 enum format_align {
@@ -11,11 +16,6 @@ enum format_align {
 	AL_BLOCK,
 	AL_NONE,
 };
-
-#include "config/options.h"
-#include "document/html/colors.h"
-#include "terminal/terminal.h"
-#include "util/string.h"
 
 #define COL(x)	((x)<<8)
 

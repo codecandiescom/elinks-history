@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.165 2004/01/28 07:35:58 jonas Exp $ */
+/* $Id: search.c,v 1.166 2004/01/28 07:39:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -975,9 +975,6 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 	int upper_link, lower_link;
 	int direction, case_sensitive, i = current_link;
 
-	/* If there is nothing to match with don't start searching */
-	if (!charpos) return TYPEAHEAD_MATCHED;
-
 	switch (action) {
 		case ACT_EDIT_UP:
 			direction = -1;
@@ -1078,6 +1075,9 @@ typeahead_input_handler(struct session *ses, int action, unsigned char *buffer)
 
 	assertm(doc_view, "document not formatted");
 	if_assert_failed return 0;
+
+	/* If there is nothing to match with don't start searching */
+	if (!*buffer) return 0;
 
 	code = do_typeahead(ses, doc_view, buffer, action);
 	if (code == TYPEAHEAD_MATCHED) {

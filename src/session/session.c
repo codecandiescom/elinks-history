@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.452 2004/06/10 18:18:53 jonas Exp $ */
+/* $Id: session.c,v 1.453 2004/06/10 18:44:44 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -792,15 +792,21 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			return NULL;
 
 		remote = *(data++);
+		len -= 3 * sizeof(int);
 
 		/* If processing session info from a -remote instance we just
 		 * want to hook up with the master. */
-		if (remote) {
-			base_session = get_master_session();
-			if (!base_session) return NULL;
-		}
+		if (!remote) break;
 
-		len -= 3 * sizeof(int);
+		base_session = get_master_session();
+		if (!base_session) return NULL;
+
+		/* Even though there are no URIs we still have to
+		 * handle remote stuff. */
+		if (len <= 0) {
+			handle_remote_session(base_session, remote, NULL);
+			return NULL;
+		}
 
 		break;
 

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.36 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: checkbox.c,v 1.37 2003/08/29 14:29:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,9 +79,10 @@ checkbox_list_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = 0;
+	int n = dlg->n - 2;
 
 	checkboxes_width(term, 1, dlg->dlg->udata, &min, &max);
-	buttons_width(term, dlg->items + dlg->n - 2, 2, &min, &max);
+	buttons_width(term, dlg->items + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_upper_bound(&w, max);
@@ -90,11 +91,11 @@ checkbox_list_fn(struct dialog_data *dlg)
 	int_lower_bound(&w, 5);
 
 	rw = 0;
-	dlg_format_checkboxes(NULL, term, 1, dlg->items, dlg->n - 2, 0, &y, w,
+	dlg_format_checkboxes(NULL, term, 1, dlg->items, n, 0, &y, w,
 			      &rw, dlg->dlg->udata);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 2, 2, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg->items + n, 2, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
@@ -105,12 +106,12 @@ checkbox_list_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 
 	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, 1, dlg->items, dlg->n - 2,
+	dlg_format_checkboxes(term, term, 1, dlg->items, n,
 			      dlg->x + DIALOG_LB, &y, w, NULL,
 			      dlg->dlg->udata);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + dlg->n - 2, 2,
+	dlg_format_buttons(term, term, dlg->items + n, 2,
 			   dlg->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }

@@ -1,14 +1,10 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.29 2002/05/04 09:00:03 pasky Exp $ */
+/* $Id: session.c,v 1.30 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,7 +30,7 @@
 #include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
 #include <lowlevel/ttime.h>
-#include <lua/lua.h>
+#include <lua/hooks.h>
 #include <protocol/types.h>
 #include <protocol/url.h>
 #include <util/conv.h>
@@ -637,55 +633,33 @@ void end_load(struct status *stat, struct session *ses)
 	print_screen_status(ses);
 }
 
-#ifdef HAVE_LUA
-unsigned char *pre_format_html_hook(struct session *ses, unsigned char *url, unsigned char *html, int *len)
+#ifdef HAVE_SCRIPTING
+void maybe_pre_format_html(struct status *stat, struct session *ses)
 {
-	lua_State *L = lua_state;
-	unsigned char *s = NULL;
-	int err;
+	struct fragment *fr;
+	unsigned char *s;
+	int len;
 
-	lua_getglobal(L, "pre_format_html_hook");
-	if (lua_isnil(L, -1)) {
-		lua_pop(L, 1);
-		return NULL;
+	if (stat->ce && !stat->ce->done_pre_format_html_hook) {
+		defrag_entry(stat->ce);
+		fr = stat->ce->frag.next;
+		len = fr->length;
+		s = script_hook_pre_format_html(ses, stat->ce->url, fr->data, &len);
+		if (s) {
+			add_fragment(stat->ce, 0, s, len);
+			truncate_entry(stat->ce, len, 1);
+			mem_free(s);
+		}
+		stat->ce->done_pre_format_html_hook = 1;
 	}
-
-	lua_pushstring(L, url);
-	lua_pushlstring(L, html, *len);
-
-	if (prepare_lua(ses)) return NULL;
-	err = lua_call(L, 2, 1);
-	finish_lua();
-	if (err) return NULL;
-
-	if (lua_isstring(L, -1)) {
-		*len = lua_strlen(L, -1);
-		s = memacpy((unsigned char *) lua_tostring(L, -1), *len);
-	}
-	else if (!lua_isnil(L, -1)) alert_lua_error("pre_format_html_hook must return a string or nil");
-	lua_pop(L, 1);
-	return s;
 }
 #endif
 
 void doc_end_load(struct status *stat, struct session *ses)
 {
 	if (stat->state < 0) {
-#ifdef HAVE_LUA
-		struct fragment *fr;
-		unsigned char *s;
-		int len;
-		if (stat->ce && !stat->ce->done_pre_format_html_hook) {
-			defrag_entry(stat->ce);
-			fr = stat->ce->frag.next;
-			len = fr->length;
-			if ((s = pre_format_html_hook(ses, stat->ce->url, fr->data, &len))) {
-				add_fragment(stat->ce, 0, s, len);
-				truncate_entry(stat->ce, len, 1);
-				mem_free(s);
-			}
-			stat->ce->done_pre_format_html_hook = 1;
-		}
+#ifdef HAVE_SCRIPTING
+		maybe_pre_format_html(stat, ses);
 #endif
 		if (ses->display_timer != -1) kill_timer(ses->display_timer), ses->display_timer = -1;
 		html_interpret(ses);
@@ -983,45 +957,15 @@ void ses_load_notify(struct status *stat, struct session *ses)
 }
 #endif
 
-#ifdef HAVE_LUA
-unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
-{
-	lua_State *L = lua_state;
-	unsigned char *s = NULL;
-	int err;
-	lua_getglobal(L, "follow_url_hook");
-	if (lua_isnil(L, -1)) return stracpy(url);
-	lua_pushstring(L, url);
-	if (prepare_lua(ses)) return NULL;
-	err = lua_call(L, 1, 1);
-	finish_lua();
-	if (err) return NULL;
-	if (lua_isstring(L, -1)) {
-		int len = lua_strlen(L, -1);
-		s = memacpy((unsigned char *)lua_tostring(L, -1), len);
-	}
-	else if (!lua_isnil(L, -1)) alert_lua_error("follow_url_hook must return a string or nil");
-	lua_pop(L, 1);
-	return s;
-}
-#endif
-
-void
-goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
-	   enum session_wtd wtd, enum cache_mode cache_mode)
+static void
+really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
+		  enum session_wtd wtd, enum cache_mode cache_mode)
 {
 	unsigned char *u;
 	unsigned char *pos;
 	void (*fn)(struct session *, unsigned char *);
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
-#ifdef HAVE_LUA
-	unsigned char *tofree = NULL;
-
-	url = follow_url_hook(ses, url);
-	if (!url) goto end;
-	tofree = url;
-#endif
 
 	fn = get_external_protocol_function(url);
 	if (fn) {
@@ -1068,8 +1012,20 @@ goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 
 end:
 	clean_unhistory(ses);
-#ifdef HAVE_LUA
-	if (tofree) mem_free(tofree);
+}
+
+void
+goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
+	   enum session_wtd wtd, enum cache_mode cache_mode)
+{
+#ifdef HAVE_SCRIPTING
+	url = script_hook_follow_url(ses, url);
+	if (url) {
+		really_goto_url_w(ses, url, target, wtd, cache_mode);
+		mem_free(url);
+	}
+#else
+	really_goto_url_w(ses, url, target, wtd, cache_mode);
 #endif
 }
 

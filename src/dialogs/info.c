@@ -1,14 +1,10 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.7 2002/04/27 13:15:52 pasky Exp $ */
+/* $Id: info.c,v 1.8 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

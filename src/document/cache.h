@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: cache.h,v 1.3 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -23,7 +23,7 @@ struct cache_entry {
 #ifdef HAVE_SSL
 	unsigned char *ssl_info;
 #endif
-#ifdef HAVE_LUA
+#ifdef HAVE_SCRIPTING
 	int done_pre_format_html_hook;
 #endif
 };

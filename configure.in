@@ -209,6 +209,7 @@ if test "$cf_result" != yes; then
 	LIBS="$LIBS_X"
 else
 	AC_DEFINE(HAVE_LUA)
+	AC_DEFINE(HAVE_SCRIPTING)
 fi
 
 AC_MSG_RESULT($cf_result)

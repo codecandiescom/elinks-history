@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.22 2002/05/05 12:36:07 pasky Exp $ */
+/* $Id: sched.c,v 1.23 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include <lowlevel/dns.h>
 #include <lowlevel/select.h>
 #include <lowlevel/ttime.h>
+#include <lua/hooks.h>
 #include <protocol/url.h>
 #include <util/base64.h>
 #include <util/error.h>
@@ -786,8 +787,16 @@ unsigned char *get_proxy(unsigned char *url)
 	unsigned char *proxy = NULL;
 	unsigned char *u;
 
-	if (*http_proxy && l >= 7 && !casecmp(url, "http://", 7)) proxy = http_proxy;
-	if (*ftp_proxy && l >= 6 && !casecmp(url, "ftp://", 6)) proxy = ftp_proxy;
+#ifdef HAVE_SCRIPTING
+	proxy = script_hook_get_proxy(url);
+#endif
+
+	if (proxy) {
+		if (!*proxy) proxy = NULL;  /* "" from script_hook_get_proxy() */
+	} else {
+		if (*http_proxy && l >= 7 && !casecmp(url, "http://", 7)) proxy = http_proxy;
+		if (*ftp_proxy && l >= 6 && !casecmp(url, "ftp://", 6)) proxy = ftp_proxy;
+	}
 
 	u = mem_alloc(l + 1 + (proxy ? strlen(proxy) + 9 : 0));
 	if (!u) return NULL;

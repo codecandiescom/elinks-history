@@ -1,9 +1,11 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.12 2002/05/04 08:14:45 pasky Exp $ */
+/* $Id: core.c,v 1.1 2002/05/07 13:19:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#ifdef HAVE_LUA
 
 #include <setjmp.h>
 #include <signal.h>
@@ -11,6 +13,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
+
+#include <lua.h>
+#include <lualib.h>
 
 #include <links.h>
 
@@ -28,9 +33,8 @@
 #include <lowlevel/home.h>
 #include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
-#include <lua/lua.h>
+#include <lua/core.h>
 
-#ifdef HAVE_LUA
 
 lua_State *lua_state;
 
@@ -43,60 +47,83 @@ static jmp_buf errjmp;
 
 typedef	unsigned char uchar;
 
-static int l_alert(LS)
+static void handle_standard_lua_returns(unsigned char *from);
+
+
+/*
+ * Functions exported to the lua_State.
+ */
+
+static int
+l_alert(LS)
 {
 	alert_lua_error((uchar *) lua_tostring(S, 1));
 	return 0;
 }
 
-static int l_current_url(LS)
+static int
+l_current_url(LS)
 {
 	struct view_state *vs;
-	if (!have_location(ses) || !(vs = ses ? &cur_loc(ses)->vs : 0))
-		lua_pushnil(S);
-	else
+
+	if (have_location(ses) && (vs = ses ? &cur_loc(ses)->vs : 0))
 		lua_pushstring(S, vs->url);
+	else
+		lua_pushnil(S);
+
 	return 1;
 }
 
-static int l_current_link(LS)
+static int
+l_current_link(LS)
 {
 	struct f_data_c *fd = current_frame(ses);
+
 	if (fd && fd->vs->current_link != -1) {
 		struct link *l = &fd->f_data->links[fd->vs->current_link];
+
 		if (l->type == L_LINK) {
 			lua_pushstring(S, l->where);
 			return 1;
 		}
 	}
+
 	lua_pushnil(S);
 	return 1;
 }
 
-static int l_current_title(LS)
+static int
+l_current_title(LS)
 {
-	struct f_data_c *fd;
-	if (!(fd = current_frame(ses)))
-		lua_pushnil(S);
-	else
+	struct f_data_c *fd = current_frame(ses);
+
+	if (fd)
 		lua_pushstring(S, fd->f_data->title);
+	else
+		lua_pushnil(S);
+
 	return 1;
 }
 
-static int l_current_document(LS)
+static int
+l_current_document(LS)
 {
 	unsigned char *url;
 	struct cache_entry *ce;
 	struct fragment *f;
-	if (!ses || !(url = cur_loc(ses)->vs.url) || !find_in_cache(url, &ce) || !(f = ce->frag.next))
-		lua_pushnil(S);
-	else
+
+	if (ses && (url = cur_loc(ses)->vs.url)
+	    && find_in_cache(url, &ce) && (f = ce->frag.next))
 		lua_pushlstring(S, f->data, f->length);
+	else
+		lua_pushnil(S);
+
 	return 1;
 }
 
-/* This function is mostly copied from `dump_to_file'.  */
-static int l_current_document_formatted(LS)
+/* XXX: This function is mostly copied from `dump_to_file'. */
+static int
+l_current_document_formatted(LS)
 {
 	extern unsigned char frame_dumb[];
 	int width, old_width = 0;
@@ -139,47 +166,74 @@ static int l_current_document_formatted(LS)
 	return 1;
 }
 
-static int l_pipe_read(LS)
+static int
+l_pipe_read(LS)
 {
 	FILE *fp;
 	unsigned char *s = NULL;
 	int len = 0;
+
 	if (!lua_isstring(S, 1) || !(fp = popen(lua_tostring(S, 1), "r"))) {
-		lua_pushnil(S); return 1;
+		lua_pushnil(S);
+		return 1;
 	}
+
 	while (!feof(fp)) {
 		unsigned char buf[1024];
 		int l = fread(buf, 1, sizeof buf, fp);
+
 		s = (!s) ? s = mem_alloc(l) : mem_realloc(s, len+l);
 		memcpy(s+len, buf, l);
 		len += l;
 	}
 	pclose(fp);
+
 	lua_pushlstring(S, s, len);
 	mem_free(s);
 	return 1;
 }
 
-static int l_execute(LS)
+static int
+l_execute(LS)
 {
-	if (!lua_isstring(L, 1))
+	if (lua_isstring(S, 1)) {
+		exec_on_terminal(ses->term, (uchar *)lua_tostring(S, 1), "", 0);
+		lua_pushnumber(S, 0);
+	} else {
 		lua_pushnil(L);
-	else {
-		exec_on_terminal(ses->term, (uchar *)lua_tostring(L, 1), "", 0);
-		lua_pushnumber(L, 0);
 	}
+
 	return 1;
 }
 
-static int l_enable_systems_functions(LS)
+static int
+l_tmpname(LS)
+{
+	char *fn = tempnam(NULL, "links");
+
+	if (fn) {
+		lua_pushstring(S, fn);
+		free(fn);
+	} else {
+		alert_lua_error("Error generating temporary file name");
+		lua_pushnil(S);
+	}
+
+	return 1;
+}
+
+static int
+l_enable_systems_functions(LS)
 {
 	lua_iolibopen(S);
 	lua_register(S, "pipe_read", l_pipe_read);
 	lua_register(S, "execute", l_execute);
+	lua_register(S, "tmpname", l_tmpname);
 	return 0;
 }
 
-static int l_bind_key(LS)
+static int
+l_bind_key(LS)
 {
 	int ref;
 	unsigned char *err;
@@ -201,10 +255,11 @@ static int l_bind_key(LS)
 	lua_pushnumber(S, 1);
 	return 1;
 
-	error:
+error:
 	lua_pushnil(S);
 	return 1;
 }
+
 
 /* Begin very hackish bit for bookmark editing dialog.  */
 /* XXX: Add history and generalise.  */
@@ -224,10 +279,12 @@ struct dlg_data {
 	int func_ref;
 };
 
-static void dialog_run_lua(struct dlg_data *data)
+static void
+dialog_run_lua(struct dlg_data *data)
 {
 	lua_State *L = data->state;
 	int err;
+
 	lua_getref(L, data->func_ref);
 	lua_pushstring(L, data->cat);
 	lua_pushstring(L, data->name);
@@ -239,12 +296,14 @@ static void dialog_run_lua(struct dlg_data *data)
 	handle_standard_lua_returns("post dialog function");
 }
 
-static void dialog_fn(struct dialog_data *dlg)
+static void
+dialog_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
+
 	max_text_width(term, dlg_msg[0], &max);
 	min_text_width(term, dlg_msg[0], &min);
 	max_text_width(term, dlg_msg[1], &max);
@@ -285,7 +344,8 @@ static void dialog_fn(struct dialog_data *dlg)
 	dlg_format_buttons(term, term, &dlg->items[3], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
-static int l_edit_bookmark_dialog(LS)
+static int
+l_edit_bookmark_dialog(LS)
 {
 	struct dialog *d;
 	size_t sz;
@@ -338,6 +398,7 @@ static int l_edit_bookmark_dialog(LS)
 
 /* End very hackish bit.  */
 
+
 /* Begin hackish bit for half-generalised dialog.  */
 /* XXX: Add history and custom labels.  */
 
@@ -357,11 +418,13 @@ struct xdialog_data {
 	unsigned char fields[XDIALOG_MAX_FIELDS][MAX_STR_LEN];
 };
 
-static void xdialog_run_lua(struct xdialog_data *data)
+static void
+xdialog_run_lua(struct xdialog_data *data)
 {
 	lua_State *L = data->state;
 	int err;
 	int i;
+
 	lua_getref(L, data->func_ref);
 	for (i = 0; i < data->nfields; i++) lua_pushstring(L, data->fields[i]);
 	if (prepare_lua(ses)) return;
@@ -371,7 +434,8 @@ static void xdialog_run_lua(struct xdialog_data *data)
 	handle_standard_lua_returns("post xdialog function");
 }
 
-static void xdialog_fn(struct dialog_data *dlg)
+static void
+xdialog_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;
@@ -412,7 +476,8 @@ static void xdialog_fn(struct dialog_data *dlg)
 	dlg_format_buttons(term, term, &dlg->items[nfields], 2, dlg->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 
-static int l_xdialog(LS)
+static int
+l_xdialog(LS)
 {
 	struct dialog *d;
 	size_t sz;
@@ -465,24 +530,32 @@ static int l_xdialog(LS)
 	lua_pushnumber(S, 1);
 	return 1;
 
-	error:
+error:
 	lua_pushnil(S);
 	return 1;
 }
 
 /* End xdialog bit.  */
 
-static void do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
+
+/*
+ * Initialisation
+ */
+
+static void
+do_hooks_file(LS, unsigned char *prefix, unsigned char *filename)
 {
 	int oldtop = lua_gettop(S);
 	unsigned char *file = stracpy(prefix);
+
 	add_to_strn(&file, filename);
 	lua_dofile(S, file);
 	mem_free(file);
 	lua_settop(S, oldtop);
 }
 
-void init_lua()
+void
+init_lua(void)
 {
 	L = lua_open(0);
 	lua_baselibopen(L);
@@ -501,7 +574,47 @@ void init_lua()
 	if (links_home) do_hooks_file(L, links_home, "hooks.lua");
 }
 
-void alert_lua_error(unsigned char *msg)
+
+/*
+ * Attempt to handle infinite loops by trapping SIGINT.  If we get a
+ * SIGINT, we longjump to where prepare_lua was called.  finish_lua()
+ * disables the trapping.
+ */
+
+static void
+handle_sigint(void *data)
+{
+	finish_lua();
+	siglongjmp(errjmp, -1);
+}
+
+int
+prepare_lua(struct session *_ses)
+{
+	ses = _ses;
+	errterm = ses ? ses->term : NULL;
+	/* XXX this uses the wrong term, I think */
+	install_signal_handler(SIGINT, (void (*)(void *))handle_sigint, NULL, 1);
+	return sigsetjmp(errjmp, 1);
+}
+
+void
+sig_ctrl_c(struct terminal *t);
+
+void
+finish_lua(void)
+{
+	/* XXX should save previous handler instead of assuming this one */
+	install_signal_handler(SIGINT, (void (*)(void *))sig_ctrl_c, errterm, 0);
+}
+
+
+/*
+ * Error reporting.
+ */
+
+void
+alert_lua_error(unsigned char *msg)
 {
 	if (errterm) {
 		msg_box(errterm, NULL,
@@ -515,104 +628,147 @@ void alert_lua_error(unsigned char *msg)
 	}
 }
 
-void alert_lua_error2(unsigned char *msg, unsigned char *msg2)
+void
+alert_lua_error2(unsigned char *msg, unsigned char *msg2)
 {
 	unsigned char *tmp;
+
 	tmp = stracpy(msg);
 	add_to_strn(&tmp, msg2);
 	alert_lua_error(tmp);
 	mem_free(tmp);
 }
 
-static void handle_sigint(void *data)
-{
-	finish_lua();
-	siglongjmp(errjmp, -1);
-}
 
-int prepare_lua(struct session *_ses)
-{
-	ses = _ses;
-	errterm = ses ? ses->term : NULL;
-	/* XXX this uses the wrong term, I think */
-	install_signal_handler(SIGINT, (void (*)(void *))handle_sigint, NULL, 1);
-	return sigsetjmp(errjmp, 1);
-}
+/*
+ * The following stuff is to handle the return values of
+ * lua_console_hook and keystroke functions, and also the xdialog
+ * function.  It expects two values on top of the stack.
+ */
 
-void sig_ctrl_c(struct terminal *t);
-
-void finish_lua()
-{
-	/* XXX should save previous handler instead of assuming this one */
-	install_signal_handler(SIGINT, (void (*)(void *))sig_ctrl_c, errterm, 0);
-}
-
-static void lua_console_eval(struct session *ses)
+static void
+handle_ret_eval(struct session *ses)
 {
 	const unsigned char *expr;
 	int oldtop;
+
 	if (!(expr = lua_tostring(L, -1))) {
-		alert_lua_error("bad argument for eval"); return;
+		alert_lua_error("bad argument for eval");
+		return;
 	}
+
 	oldtop = lua_gettop(L);
-	if (!prepare_lua(ses)) {
+	if (prepare_lua(ses) == 0) {
 		lua_dostring(L, expr);
 		lua_settop(L, oldtop);
 		finish_lua();
 	}
 }
 
-static void lua_console_run(struct session *ses)
+static void
+handle_ret_run(struct session *ses)
 {
 	unsigned char *cmd;
+
 	if (!(cmd = (uchar *)lua_tostring(L, -1)))
 		alert_lua_error("bad argument for run");
 	else
 		exec_on_terminal(ses->term, cmd, "", 1);
 }
 
-static void lua_console_goto_url(struct session *ses)
+static void
+handle_ret_goto_url(struct session *ses)
 {
 	unsigned char *url;
+
 	if (!(url = (uchar *)lua_tostring(L, -1)))
 		alert_lua_error("bad argument for goto_url");
 	else
 		goto_url(ses, url);
 }
 
-void lua_console(struct session *ses, unsigned char *expr)
-{
-	int err;
-
-	lua_getglobal(L, "lua_console_hook");
-	if (lua_isnil(L, -1)) {
-		lua_pop(L, 1);
-		lua_console_eval(ses);
-		return;
-	}
-	lua_pushstring(L, expr);
-	if (prepare_lua(ses)) return;
-	err = lua_call(L, 1, 2);
-	finish_lua();
-	if (err) return;
-
-	handle_standard_lua_returns("lua_console_hook");
-}
-
-/* This is used to handle the return values of lua_console_hook and
- * keystroke functions.  It expects two values on top of the stack.  */
-void handle_standard_lua_returns(unsigned char *from)
+static void
+handle_standard_lua_returns(unsigned char *from)
 {
 	const unsigned char *act;
+
 	if ((act = lua_tostring(L, -2))) {
-		if (!strcmp(act, "eval")) lua_console_eval(ses);
-		else if (!strcmp(act, "run")) lua_console_run(ses);
-		else if (!strcmp(act, "goto_url")) lua_console_goto_url(ses);
-		else alert_lua_error2("unrecognised return value from ", from);
+		if (!strcmp(act, "eval"))
+			handle_ret_eval(ses);
+		else if (!strcmp(act, "run"))
+			handle_ret_run(ses);
+		else if (!strcmp(act, "goto_url"))
+			handle_ret_goto_url(ses);
+		else
+			alert_lua_error2("unrecognised return value from ", from);
 	}
 	else if (!lua_isnil(L, -2))
 		alert_lua_error2("bad return type from ", from);
+
 	lua_pop(L, 2);
 }
+
+
+/*
+ * Console stuff.
+ */
+
+static struct input_history lua_console_history = { 0, {&lua_console_history.items, &lua_console_history.items} };
+
+static void
+lua_console(struct session *ses, unsigned char *expr)
+{
+	lua_getglobal(L, "lua_console_hook");
+	if (lua_isnil(L, -1)) {
+		lua_pop(L, 1);
+		handle_ret_eval(ses);
+		return;
+	}
+
+	lua_pushstring(L, expr);
+	if (prepare_lua(ses) == 0) {
+		int err = lua_call(L, 1, 2);
+		finish_lua();
+		if (!err)
+			handle_standard_lua_returns("lua_console_hook");
+	}
+}
+
+void
+dialog_lua_console(struct session *ses)
+{
+	input_field(ses->term, NULL, TEXT(T_LUA_CONSOLE), TEXT(T_ENTER_EXPRESSION), TEXT(T_OK), TEXT(T_CANCEL), ses, &lua_console_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) lua_console, NULL);
+}
+
+void
+free_lua_console_history(void)
+{
+	free_list(lua_console_history.items);
+}
+
+
+/*
+ * Helper to run Lua functions bound to keystrokes.
+ */
+
+void
+run_lua_func(struct session *ses, int func_ref)
+{
+	int err;
+
+	if (func_ref == LUA_NOREF) {
+		alert_lua_error("key bound to nothing (internal error)");
+		return;
+	}
+
+	lua_getref(L, func_ref);
+	if (prepare_lua(ses))
+		return;
+	err = lua_call(L, 0, 2);
+	finish_lua();
+	if (!err)
+		handle_standard_lua_returns("keyboard function");
+}
+
 
 #endif

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.13 2002/05/04 08:23:40 pasky Exp $ */
+/* $Id: http.c,v 1.14 2002/05/07 13:19:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,7 +115,7 @@ void http_end_request(struct connection *c)
 		if (c->cache) {
 			truncate_entry(c->cache, c->from, 1);
 			c->cache->incomplete = 0;
-#ifdef HAVE_LUA
+#ifdef HAVE_SCRIPTING
 			c->cache->done_pre_format_html_hook = 0;
 #endif
 		}

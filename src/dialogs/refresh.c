@@ -1,14 +1,10 @@
 /* Periodic refresh of dialogs */
-/* $Id: refresh.c,v 1.1 2002/03/18 22:26:21 pasky Exp $ */
+/* $Id: refresh.c,v 1.2 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

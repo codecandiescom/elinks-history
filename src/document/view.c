@@ -1,15 +1,11 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.37 2002/05/06 15:19:36 pasky Exp $ */
+/* $Id: view.c,v 1.38 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,7 +44,7 @@
 #include <intl/language.h>
 #include <lowlevel/kbd.h>
 #include <lowlevel/terminal.h>
-#include <lua/lua.h>
+#include <lua/core.h>
 #include <protocol/url.h>
 #include <util/error.h>
 
@@ -2431,25 +2427,6 @@ void do_mouse_event(struct session *ses, struct event *ev)
 }
 
 void send_open_in_new_xterm(struct terminal *, void (*)(struct terminal *, unsigned char *, unsigned char *), struct session *);
-
-#ifdef HAVE_LUA
-void run_lua_func(struct session *ses, int func_ref)
-{
-	lua_State *L = lua_state;
-	int err;
-
-	if (func_ref == LUA_NOREF) {
-		alert_lua_error("key bound to nothing (internal error)");
-		return;
-	}
-	if (lua_getref(L, func_ref)) {
-		if (prepare_lua(ses)) return;
-		err = lua_call(L, 0, 2);
-		finish_lua();
-		if (!err) handle_standard_lua_returns("keyboard function");
-	}
-}
-#endif
 
 void send_event(struct session *ses, struct event *ev)
 {

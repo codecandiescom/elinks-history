@@ -1,15 +1,11 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.23 2002/05/06 14:12:12 pasky Exp $ */
+/* $Id: main.c,v 1.24 2002/05/07 13:19:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <signal.h>
 #include <stdio.h>
 #include <string.h>
@@ -51,7 +47,8 @@
 #include <lowlevel/select.h>
 #include <lowlevel/sysname.h>
 #include <lowlevel/terminal.h>
-#include <lua/lua.h>
+#include <lua/core.h>
+#include <lua/hooks.h>
 #include <protocol/types.h>
 #include <ssl/ssl.h>
 #include <util/blacklist.h>
@@ -366,11 +363,9 @@ terminate_all_subsystems()
 #ifdef HAVE_SSL
 	ssl_finish();
 #endif
-#ifdef HAVE_LUA
-	if (init_b && !prepare_lua(NULL)) {
-		lua_dostring(lua_state, "if quit_hook then quit_hook() end");
-		finish_lua();
-	}
+#ifdef HAVE_SCRIPTING
+	if (init_b)
+		script_hook_quit();
 #endif
 	shrink_memory(1);
 	if (init_b) save_url_history();

@@ -1,15 +1,11 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.9 2002/05/06 14:12:13 pasky Exp $ */
+/* $Id: dump.c,v 1.10 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <errno.h>
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <stdio.h>
 #include <string.h>
 #ifdef HAVE_SYS_SIGNAL_H

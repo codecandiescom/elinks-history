@@ -1,14 +1,10 @@
 /* Menu system */
-/* $Id: menu.c,v 1.19 2002/04/28 11:17:29 pasky Exp $ */
+/* $Id: menu.c,v 1.20 2002/05/07 13:19:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lualib.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 
@@ -36,7 +32,8 @@
 #include <lowlevel/sched.h>
 #include <lowlevel/select.h>
 #include <lowlevel/terminal.h>
-#include <lua/lua.h>
+#include <lua/core.h>
+#include <lua/hooks.h>
 #include <protocol/types.h>
 #include <protocol/url.h>
 #include <util/memlist.h>
@@ -510,31 +507,10 @@ struct input_history goto_url_history = { 0, {&goto_url_history.items, &goto_url
 void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
-#ifndef HAVE_LUA
-	goto_url(ses, url);
+#ifdef HAVE_SCRIPTING
+	script_hook_goto_url(ses, url);
 #else
-	lua_State *L = lua_state;
-	int err;
-
-	lua_getglobal(L, "goto_url_hook");
-	if (lua_isnil(L, -1)) {
-		lua_pop(L, 1);
-		goto_url(ses, url);
-		return;
-	}
-
-	lua_pushstring(L, url);
-	if (list_empty(ses->history)) lua_pushnil(L);
-	else lua_pushstring(L, cur_loc(ses)->vs.url);
-
-	if (prepare_lua(ses)) return;
-	err = lua_call(L, 2, 1);
-	finish_lua();
-	if (err) return;
-
-	if (lua_isstring(L, -1)) goto_url(ses, (unsigned char *) lua_tostring(L, -1));
-	else if (!lua_isnil(L, -1)) alert_lua_error("goto_url_hook must return a string or nil");
-	lua_pop(L, 1);
+	goto_url(ses, url);
 #endif
 }
 
@@ -581,18 +557,6 @@ search_dlg(struct session *ses, struct f_data_c *f, int a)
 	input_field(ses->term, NULL, TEXT(T_SEARCH), TEXT(T_SEARCH_FOR_TEXT), TEXT(T_OK), TEXT(T_CANCEL), ses, &search_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) search_for, NULL);
 }
 
-#ifdef HAVE_LUA
-
-struct input_history lua_console_history = { 0, {&lua_console_history.items, &lua_console_history.items} };
-
-void
-dialog_lua_console(struct session *ses)
-{
-	input_field(ses->term, NULL, TEXT(T_LUA_CONSOLE), TEXT(T_ENTER_EXPRESSION), TEXT(T_OK), TEXT(T_CANCEL), ses, &lua_console_history, MAX_STR_LEN, "", 0, 0, NULL, (void (*)(void *, unsigned char *)) lua_console, NULL);
-}
-
-#endif
-
 void
 free_history_lists()
 {
@@ -600,7 +564,7 @@ free_history_lists()
 	free_list(file_history.items);
 	free_list(search_history.items);
 #ifdef HAVE_LUA
-	free_list(lua_console_history.items);
+	free_lua_console_history();
 #endif
 }
 

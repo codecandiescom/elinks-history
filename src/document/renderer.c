@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.67 2004/07/13 15:09:16 jonas Exp $ */
+/* $Id: renderer.c,v 1.68 2004/07/23 03:48:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "intl/charsets.h"
 #include "protocol/header.h"
 #include "protocol/uri.h"
+#include "protocol/protocol.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -84,8 +85,16 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		}
 
 		sort_links(document);
-		if (!document->title)
-			document->title = get_uri_string(document->uri, URI_PUBLIC);
+		if (!document->title) {
+			if (document->uri->protocol == PROTOCOL_FILE) {
+				document->title = get_uri_string(document->uri,
+								 URI_PATH);
+				decode_uri_string(document->title);
+			} else {
+				document->title = get_uri_string(document->uri,
+								 URI_PUBLIC);
+			}
+		}
 
 		document->css_magic = get_document_css_magic(document);
 	}

@@ -1,3 +1,147 @@
+Fri Nov 21 23:07:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.h:
+
+	Define hierbox_browsers as extern.  
+
+Fri Nov 21 22:39:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/dialogs.h, cookies/dialogs.h, globhist/dialogs.h:
+
+	Declare hierbox_browsers extern.  
+
+Fri Nov 21 22:36:34 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Minor cleanup.  
+
+Fri Nov 21 22:31:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	Cleanup/minor optim. related to strange_chars.  
+
+Fri Nov 21 22:23:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/xbel.c, intl/charsets.c, intl/charsets.h,
+	terminal/event.c:
+
+	Attempt to fix some issues consisting of char 1 to be printed in
+	place of space when &nbsp; is encountered: one issue in xbel.c, and
+	a simplification in terminal/event.c.  
+
+Fri Nov 21 21:27:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, listbox.c, listbox.h:
+
+	Move listbox_data initialization to init_listbox(). This looks like
+	were it was designed to be done although error handling is not
+	possible.  
+
+Fri Nov 21 16:18:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.h:
+
+	Remove unused listbox_item members and save a few bytes.  
+
+Fri Nov 21 16:15:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bookmarks/dialogs.c, config/dialogs.c,
+	globhist/globhist.c:
+
+	Generalize replacing of the selected and top box item in
+	done_browser_box().  The code is not equivalent to all the current
+	way of doing it since it is basicly doing it the globhist way. This
+	however seems more correct and it should now be consistent across
+	all hierbox browsers. Also note that this seem to fix a bug where
+	before it was not possible to highlight the bottom box unless the
+	browser was first scrolled up.  
+
+Fri Nov 21 11:01:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	l_current_title() now cleans the title from bad chars before
+	returning it. It should fix bug 183. Miciah, please verify.  
+
+Fri Nov 21 10:22:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/parser.c, intl/charsets.c, intl/charsets.h,
+	viewer/dump/dump.c:
+
+	Use NBSP_CHAR and NBSP_CHAR_STRING macros to mark the use of special
+	encoding for non-breaking spaces. It clarifies char 1 related
+	issues. Thanks to Mikulas.  
+
+Fri Nov 21 04:57:22 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/: download.c, download.h, history.c, session.c,
+	session.h:
+
+	Rendering of plaintext document in frames should be fine now.  
+
+Fri Nov 21 04:54:33 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/session.c:
+
+	Added field target_frame to struct ftl.  
+
+Fri Nov 21 04:52:23 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/: download.c, download.h, session.c:
+
+	Additional parameter for ses_chktype.  
+
+Fri Nov 21 04:50:28 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: document/refresh.c, sched/download.c, sched/session.c,
+	sched/session.h:
+
+	Introduced list of struct tq.  
+
+Fri Nov 21 04:47:50 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/: download.c, session.h:
+
+	tp_* functions use struct tq * instead of struct sesssion *.  
+
+Fri Nov 21 04:45:10 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/download.c,
+	sched/download.h, viewer/text/view.c:
+
+	Additional param for query_file 
+
+Fri Nov 21 01:13:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/bookmarks.c,
+	bookmarks/bookmarks.h, bookmarks/dialogs.c, cache/cache.c,
+	cache/cache.h, cache/dialogs.c, config/dialogs.c, config/kbdbind.c,
+	config/kbdbind.h, config/options.c, config/options.h,
+	cookies/dialogs.c, globhist/dialogs.c, globhist/globhist.c,
+	globhist/globhist.h:
+
+	The hierbox_browser now 0wnz the boxes list_head. Idea by Miciah.
+	(Fixes bug with wrong ordering of list_head pointers introduced with
+	the hierbox_browser structure) 
+
+Fri Nov 21 00:59:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	globhist/dialogs.c:
+
+	The hierbox_browser now 0wnz the dialog list_head. Idea by Miciah.  
+
+Fri Nov 21 00:44:21 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/renderer.c:
+
+	Clean up a comment that was introduced in
+	src/document/html/renderer.c:1.278->1.279. @o was renamed to
+	@doc_opts long ago, and it never was named @0.  
+
 Thu Nov 20 21:27:12 2003  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/dump/dump.c:

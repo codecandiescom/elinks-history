@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.64 2003/11/19 16:49:35 jonas Exp $ */
+/* $Id: hierbox.c,v 1.65 2003/11/19 23:44:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,6 +117,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			struct widget_data *widget_data =
 						dlg_data->widgets_data;
 			struct listbox_data *box;
+			struct listbox_item *selected;
 
 			/* Check if listbox has something to say to this */
                         if (widget_data->widget->ops->kbd
@@ -126,57 +127,51 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 				return EVENT_PROCESSED;
 
 			box = get_dlg_listbox_data(dlg_data);
+			selected = box->sel;
 
 			if (ev->x == ' ') {
-				if (box->sel) {
-					if (box->sel->type != BI_FOLDER)
-						return EVENT_NOT_PROCESSED;
-					box->sel->expanded = !box->sel->expanded;
-					goto display_dlg;
-				}
-				return EVENT_PROCESSED;
+				if (!selected) return EVENT_PROCESSED;
+				if (selected->type != BI_FOLDER)
+					return EVENT_NOT_PROCESSED;
+				selected->expanded = !selected->expanded;
+				goto display_dlg;
 			}
 
 			/* Recursively unexpand all folders */
 			if (ev->x == '[' || ev->x == '-' || ev->x == '_') {
-				if (box->sel) {
-					/* Special trick: if the folder is
-					 * already folded, jump at the parent
-					 * folder, so the next time when user
-					 * presses the key, the whole parent
-					 * folder will be closed. */
-					if (list_empty(box->sel->child)
-					    || !box->sel->expanded) {
-						if (box->sel->root) {
-							struct ctx ctx =
-								{ box->sel, 1 };
+				if (!selected) return EVENT_PROCESSED;
 
-							traverse_listbox_items_list(
-								box->sel->root,
+				/* Special trick: if the folder is already
+				 * folded, jump at the parent folder, so the
+				 * next time when user presses the key, the
+				 * whole parent folder will be closed. */
+				if (list_empty(selected->child)
+				    || !selected->expanded) {
+					if (selected->root) {
+						struct ctx ctx = { selected, 1 };
+
+						traverse_listbox_items_list(
+								selected->root,
 								0, 1,
 								test_search,
 								&ctx);
-							box_sel_move(
-								dlg_data->widgets_data,
-								ctx.offset);
-						}
-					} else if (box->sel->type
-						    == BI_FOLDER) {
-						recursively_set_expanded(
-								box->sel, 0);
+						box_sel_move(dlg_data->widgets_data,
+							     ctx.offset);
 					}
-					goto display_dlg;
+				} else if (selected->type == BI_FOLDER) {
+					recursively_set_expanded(selected, 0);
 				}
-				return EVENT_PROCESSED;
+
+				goto display_dlg;
 			}
 
 			/* Recursively expand all folders */
 			if (ev->x == ']' || ev->x == '+' || ev->x == '=') {
-				if (box->sel && box->sel->type == BI_FOLDER) {
-					recursively_set_expanded(box->sel, 1);
-					goto display_dlg;
-				}
-				return EVENT_PROCESSED;
+				if (!selected || box->sel->type != BI_FOLDER)
+					return EVENT_PROCESSED;
+
+				recursively_set_expanded(box->sel, 1);
+				goto display_dlg;
 			}
 
 			return EVENT_NOT_PROCESSED;

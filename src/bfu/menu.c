@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.234 2004/06/14 00:53:47 jonas Exp $ */
+/* $Id: menu.c,v 1.235 2004/06/14 12:56:58 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -772,16 +772,16 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	 * instead of looping and calculate them each time. --Zas */
 
 	/* Try to make current selected menu entry visible. */
-	while (1) {
-		if (menu->selected < menu->first) {
-			menu->first--;
-			menu->last--;
+	if (menu->selected < menu->first) {
+		int num_items_offscreen = menu->selected - menu->first;
 
-		} else if (menu->selected > menu->last) {
-			menu->first++;
-			menu->last++;
-		} else
-			break;
+		menu->first += num_items_offscreen;
+		menu->last += num_items_offscreen;
+	} else if (menu->selected > menu->last) {
+		int num_items_offscreen = menu->last - menu->selected;
+
+		menu->first -= num_items_offscreen;
+		menu->last -= num_items_offscreen;
 	}
 
 	if (menu->last <= 0)

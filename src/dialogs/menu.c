@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.46 2002/08/29 23:58:22 pasky Exp $ */
+/* $Id: menu.c,v 1.47 2002/09/05 10:10:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,11 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+void
+menu_elinks_home(struct terminal *term, void *d, struct session *ses)
+{
+	goto_url(ses, ELINKS_HOMEPAGE);
+}
 
 void
 menu_manual(struct terminal *term, void *d, struct session *ses)
@@ -480,6 +485,7 @@ struct menu_item help_menu[] = {
 	{TEXT(T_KEYS), "", TEXT(T_HK_KEYS), MENU_FUNC menu_keys, (void *)0, 0, 0},
 	{TEXT(T_MANUAL), "", TEXT(T_HK_MANUAL), MENU_FUNC menu_manual, (void *)0, 0, 0},
 	{TEXT(T_COPYING), "", TEXT(T_HK_COPYING), MENU_FUNC menu_copying, (void *)0, 0, 0},
+	{TEXT(T_ELINKS_HOME), "", TEXT(T_HK_ELINKS_HOME), MENU_FUNC menu_elinks_home, (void *)0, 0, 0},
 	{NULL, NULL, 0, NULL, NULL, 0, 0}
 };
 

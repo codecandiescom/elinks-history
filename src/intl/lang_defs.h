@@ -410,4 +410,6 @@
 #define T_SSL_CIPHER    406	
 #define T_ENCODING    407	
 #define T_BOOKMARK_USED    408	
-#define T__N_TEXTS    409	
+#define T_ELINKS_HOME    409	
+#define T_HK_ELINKS_HOME    410	
+#define T__N_TEXTS    411	

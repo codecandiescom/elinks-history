@@ -410,6 +410,8 @@ struct translation translation_english [] = {
   {T_SSL_CIPHER, "SSL Cipher"},
   {T_ENCODING, "Encoding"},
   {T_BOOKMARK_USED, "Sorry, but this bookmark is already being used by something right now."},
+  {T_ELINKS_HOME, "ELinks homepage"},
+  {T_HK_ELINKS_HOME, "E"},
   {0, NULL}
 };
 
@@ -823,6 +825,8 @@ struct translation translation_brazilian_portuguese [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, "codificação"},
   {T_BOOKMARK_USED, "Este bookmark já está a ser usado"},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -1236,6 +1240,8 @@ struct translation translation_bulgarian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -1649,6 +1655,8 @@ struct translation translation_catalan [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -2062,6 +2070,8 @@ struct translation translation_croatian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -2475,6 +2485,8 @@ struct translation translation_czech [] = {
   {T_SSL_CIPHER, "SSL ¹ifra"},
   {T_ENCODING, "Kódování"},
   {T_BOOKMARK_USED, "Sorry, ale s tímto bookmarkem právì pracuje nìco jiného."},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -2888,6 +2900,8 @@ struct translation translation_danish [] = {
   {T_SSL_CIPHER, "SSL ciffer"},
   {T_ENCODING, "Indkodning"},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -3301,6 +3315,8 @@ struct translation translation_dutch [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -3714,6 +3730,8 @@ struct translation translation_estonian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -4127,6 +4145,8 @@ struct translation translation_finnish [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -4540,6 +4560,8 @@ struct translation translation_french [] = {
   {T_SSL_CIPHER, "Chiffrement SSL"},
   {T_ENCODING, "Encodage"},
   {T_BOOKMARK_USED, "Désolé, mais ce signet est déjà utilisé par quelque chose."},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -4953,6 +4975,8 @@ struct translation translation_galician [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -5366,6 +5390,8 @@ struct translation translation_german [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -5779,6 +5805,8 @@ struct translation translation_greek [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -6192,6 +6220,8 @@ struct translation translation_hungarian [] = {
   {T_SSL_CIPHER, "SSL algoritmus"},
   {T_ENCODING, "Kódolás"},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -6605,6 +6635,8 @@ struct translation translation_icelandic [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -7018,6 +7050,8 @@ struct translation translation_indonesian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -7431,6 +7465,8 @@ struct translation translation_italian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -7844,6 +7880,8 @@ struct translation translation_lithuanian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -8257,6 +8295,8 @@ struct translation translation_norwegian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -8670,6 +8710,8 @@ struct translation translation_polish [] = {
   {T_SSL_CIPHER, "Szyfr SSL"},
   {T_ENCODING, "Kodowanie"},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -9083,6 +9125,8 @@ struct translation translation_portuguese [] = {
   {T_SSL_CIPHER, "Cifra SSL"},
   {T_ENCODING, "Codificação"},
   {T_BOOKMARK_USED, "Este bookmark já está a ser usado"},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -9496,6 +9540,8 @@ struct translation translation_romanian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -9909,6 +9955,8 @@ struct translation translation_russian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -10322,6 +10370,8 @@ struct translation translation_slovak [] = {
   {T_SSL_CIPHER, "SSL ¹ifra"},
   {T_ENCODING, "Kódovanie"},
   {T_BOOKMARK_USED, "Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program"},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -10735,6 +10785,8 @@ struct translation translation_spanish [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -11148,6 +11200,8 @@ struct translation translation_swedish [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -11561,6 +11615,8 @@ struct translation translation_turkish [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 
@@ -11974,6 +12030,8 @@ struct translation translation_ukrainian [] = {
   {T_SSL_CIPHER, NULL},
   {T_ENCODING, NULL},
   {T_BOOKMARK_USED, NULL},
+  {T_ELINKS_HOME, NULL},
+  {T_HK_ELINKS_HOME, NULL},
   {0, NULL}
 };
 

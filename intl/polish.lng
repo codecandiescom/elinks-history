@@ -406,3 +406,5 @@ T_ACCEPT_UI_LANGUAGE, "Jêzyk interfejsu taki jak Zaakceptowane-Jêzyki (ma³a stra
 T_SSL_CIPHER, "Szyfr SSL",
 T_ENCODING, "Kodowanie",
 T_BOOKMARK_USED, NULL,
+T_ELINKS_HOME, NULL,
+T_HK_ELINKS_HOME, NULL,

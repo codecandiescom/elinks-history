@@ -406,3 +406,5 @@ T_ACCEPT_UI_LANGUAGE, "Language of the interface as Accept-Language (little loss
 T_SSL_CIPHER, "SSL Cipher",
 T_ENCODING, "Encoding",
 T_BOOKMARK_USED, "Sorry, but this bookmark is already being used by something right now.",
+T_ELINKS_HOME, "ELinks homepage",
+T_HK_ELINKS_HOME, "E",

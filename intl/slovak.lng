@@ -406,3 +406,5 @@ T_ACCEPT_UI_LANGUAGE, "Pou¾i» jazyk u¾ívateµského rozhrania ako preferovaný jazy
 T_SSL_CIPHER, "SSL ¹ifra",
 T_ENCODING, "Kódovanie",
 T_BOOKMARK_USED, "Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program",
+T_ELINKS_HOME, NULL,
+T_HK_ELINKS_HOME, NULL,

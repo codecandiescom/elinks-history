@@ -406,3 +406,5 @@ T_ACCEPT_UI_LANGUAGE, "A kezelöfelület nyelve legyen Accept-Language-ként elküld
 T_SSL_CIPHER, "SSL algoritmus",
 T_ENCODING, "Kódolás",
 T_BOOKMARK_USED, NULL,
+T_ELINKS_HOME, NULL,
+T_HK_ELINKS_HOME, NULL,

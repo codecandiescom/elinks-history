@@ -406,3 +406,5 @@ T_ACCEPT_UI_LANGUAGE, "Brug sprog-indstilling som Accept-Language (mindre tab af
 T_SSL_CIPHER, "SSL ciffer",
 T_ENCODING, "Indkodning",
 T_BOOKMARK_USED, NULL,
+T_ELINKS_HOME, NULL,
+T_HK_ELINKS_HOME, NULL,

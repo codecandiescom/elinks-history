@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.36 2004/07/17 20:22:17 pasky Exp $ */
+/* $Id: inpfield.h,v 1.37 2004/08/13 21:28:05 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -57,6 +57,7 @@ void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 enum input_line_code {
 	INPUT_LINE_CANCEL,
 	INPUT_LINE_PROCEED,
+	INPUT_LINE_REWIND,
 };
 
 struct input_line;

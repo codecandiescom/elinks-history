@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.157 2004/08/09 05:18:09 miciah Exp $ */
+/* $Id: inpfield.c,v 1.158 2004/08/13 21:28:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -582,9 +582,21 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 	update_dialog_data(dlg_data, widget_data);
 
 	/* Then pass it on to the specialized handler */
-	if (handler(input_line, action) == INPUT_LINE_CANCEL) {
+	switch (handler(input_line, action)) {
+	case INPUT_LINE_CANCEL:
 cancel_input_line:
 		cancel_dialog(dlg_data, widget_data);
+		break;
+
+	case INPUT_LINE_REWIND:
+		/* This is stolen kbd_field() handling for ACT_EDIT_BACKSPACE */
+		memmove(widget_data->cdata + widget_data->info.field.cpos - 1,
+			widget_data->cdata + widget_data->info.field.cpos,
+			strlen(widget_data->cdata) - widget_data->info.field.cpos + 1);
+		widget_data->info.field.cpos--;
+
+	case INPUT_LINE_PROCEED:
+		break;
 	}
 
 	/* Completely bypass any further dialog event handling */

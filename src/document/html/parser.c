@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.315 2004/01/01 18:21:56 zas Exp $ */
+/* $Id: parser.c,v 1.316 2004/01/01 22:02:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -436,8 +436,7 @@ kill_html_stack_item(struct html_element *e)
 static inline void
 kill_elem(unsigned char *e)
 {
-	if (html_top.namelen == strlen(e)
-	    && !strncasecmp(html_top.name, e, html_top.namelen))
+	if (is_same_str(html_top.name, html_top.namelen, e, strlen(e)))
 		kill_html_stack_item(&html_top);
 }
 
@@ -575,8 +574,7 @@ kill_until(int ls, ...)
 			} else {
 				int slen = strlen(s);
 
-				if (e->namelen == slen
-				    && !strncasecmp(e->name, s, slen)) {
+				if (is_same_str(e->name, e->namelen, s, slen)) {
 					if (!sk) {
 						if (e->type != ELEMENT_KILLABLE) break;
 						va_end(arg);
@@ -593,7 +591,7 @@ kill_until(int ls, ...)
 		va_end(arg);
 
 		if (e->type != ELEMENT_KILLABLE
-		    || (e->namelen == 5 && !strncasecmp(e->name, "TABLE", 5)))
+		    || (is_same_str(e->name, e->namelen, "TABLE", 5)))
 			break;
 
 		if (e->namelen == 2 && upcase(e->name[0]) == 'T') {
@@ -1542,7 +1540,7 @@ sp:
 	}
 	ss = s;
 	if (parse_element(s, i, &name, &namelen, &attr, &s)) goto sp;
-	if (namelen != 4 || strncasecmp(name, "FORM", 4)) goto se;
+	if (!is_same_str(name, namelen, "FORM", 4)) goto se;
 	lf = ss;
 	la = attr;
 	goto se;
@@ -1809,12 +1807,14 @@ pppp:
 			goto rrrr;
 		}
 		if (parse_element(r, eoff, &name, &namelen, NULL, &p)) goto pppp;
-		if (!((namelen == 6 && !strncasecmp(name, "OPTION", 6)) ||
-		    (namelen == 7 && !strncasecmp(name, "/OPTION", 7)) ||
-		    (namelen == 6 && !strncasecmp(name, "SELECT", 6)) ||
-		    (namelen == 7 && !strncasecmp(name, "/SELECT", 7)) ||
-		    (namelen == 8 && !strncasecmp(name, "OPTGROUP", 8)) ||
-		    (namelen == 9 && !strncasecmp(name, "/OPTGROUP", 9)))) goto rrrr;
+		if (!(is_same_str(name, namelen, "OPTION", 6) ||
+		      is_same_str(name, namelen, "/OPTION", 7) ||
+		      is_same_str(name, namelen, "SELECT", 6) ||
+		      is_same_str(name, namelen, "/SELECT", 7) ||
+		      is_same_str(name, namelen, "OPTGROUP", 8) ||
+		      is_same_str(name, namelen, "/OPTGROUP", 9)
+		      ))
+			goto rrrr;
 	}
 
 x:
@@ -2115,17 +2115,17 @@ abort:
 		goto se;
 	}
 
-	if (t_namelen == 7 && !strncasecmp(t_name, "/SELECT", 7)) {
+	if (is_same_str(t_name, t_namelen, "/SELECT", 7)) {
 		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 		goto end_parse;
 	}
 
-	if (t_namelen == 7 && !strncasecmp(t_name, "/OPTION", 7)) {
+	if (is_same_str(t_name, t_namelen, "/OPTION", 7)) {
 		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 		goto see;
 	}
 
-	if (t_namelen == 6 && !strncasecmp(t_name, "OPTION", 6)) {
+	if (is_same_str(t_name, t_namelen, "OPTION", 6)) {
 		unsigned char *v, *vx;
 
 		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
@@ -2147,14 +2147,14 @@ abort:
 		goto see;
 	}
 
-	if ((t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8))
-	    || (t_namelen == 9 && !strncasecmp(t_name, "/OPTGROUP", 9))) {
+	if (is_same_str(t_name, t_namelen, "OPTGROUP", 8)
+	    || is_same_str(t_name, t_namelen, "/OPTGROUP", 9)) {
 		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 
 		if (group) new_menu_item(&lnk_menu, NULL, -1, 0), group = 0;
 	}
 
-	if (t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8)) {
+	if (is_same_str(t_name, t_namelen, "OPTGROUP", 8)) {
 		unsigned char *label = get_attr_val(t_attr, "label");
 
 		if (!label) {
@@ -2246,7 +2246,7 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		return;
 	}
 	if (parse_element(p, eof, &t_name, &t_namelen, NULL, end)) goto pp;
-	if (t_namelen != 9 || strncasecmp(t_name, "/TEXTAREA", 9)) goto pp;
+	if (!is_same_str(t_name, t_namelen, "/TEXTAREA", 9)) goto pp;
 
 	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) return;
@@ -3279,7 +3279,7 @@ ng:;
 		html = end;
 #if 0
 		for (ei = elements; ei->name; ei++) {
-			if ((strlen(ei->name) != namelen || strncasecmp(ei->name, name, namelen)))
+			if (!is_same_str(ei->name, strlen(ei->name), name, namelen))
 				continue;
 #endif
 
@@ -3340,9 +3340,9 @@ ng:;
 						} else foreach (e, html_stack) {
 							if (e->linebreak && !ei->linebreak) break;
 							if (e->type != ELEMENT_KILLABLE) break;
-							if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) break;
+							if (is_same_str(e->name, e->namelen, name, namelen)) break;
 						}
-						if (e->namelen == namelen && !strncasecmp(e->name, name, e->namelen)) {
+						if (is_same_str(e->name, e->namelen, name, namelen)) {
 							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 
 							if (e->type != ELEMENT_IMMORTAL)
@@ -3377,7 +3377,7 @@ ng:;
 				/*debug_stack();*/
 				foreach (e, html_stack) {
 					if (e->linebreak && !ei->linebreak) xxx = 1;
-					if (e->namelen != namelen || strncasecmp(e->name, name, e->namelen)) {
+					if (!is_same_str(e->name, e->namelen, name, namelen)) {
 						if (e->type != ELEMENT_KILLABLE)
 							break;
 						else
@@ -3431,7 +3431,7 @@ look_for_map(unsigned char **pos, unsigned char *eof, unsigned char *tag)
 		return 1;
 	}
 
-	if (namelen != 3 || strncasecmp(name, "MAP", 3)) return 1;
+	if (!is_same_str(name, namelen, "MAP", 3)) return 1;
 
 	if (tag && *tag) {
 		al = get_attr_val(attr, "name");
@@ -3484,12 +3484,12 @@ look_for_tag(unsigned char **pos, unsigned char *eof,
 
 	if (parse_element(*pos, eof, NULL, NULL, NULL, &pos2)) return 1;
 
-	if (!((namelen == 1 && !strncasecmp(name, "A", 1)) ||
-	      (namelen == 2 && !strncasecmp(name, "/A", 2)) ||
-	      (namelen == 3 && !strncasecmp(name, "MAP", 3)) ||
-	      (namelen == 4 && !strncasecmp(name, "/MAP", 4)) ||
-	      (namelen == 4 && !strncasecmp(name, "AREA", 4)) ||
-	      (namelen == 5 && !strncasecmp(name, "/AREA", 5)))) {
+	if (!(is_same_str(name, namelen, "A", 1) ||
+	      is_same_str(name, namelen, "/A", 2) ||
+	      is_same_str(name, namelen, "MAP", 3) ||
+	      is_same_str(name, namelen, "/MAP", 4) ||
+	      is_same_str(name, namelen, "AREA", 4) ||
+	      is_same_str(name, namelen, "/AREA", 5))) {
 		*pos = pos2;
 		return 1;
 	}
@@ -3525,12 +3525,12 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 		return 1;
 	}
 
-	if (namelen == 1 && !strncasecmp(name, "A", 1)) {
+	if (is_same_str(name, namelen, "A", 1)) {
 		while (look_for_tag(pos, eof, name, namelen, &label));
 
 		if (*pos >= eof) return 0;
 
-	} else if (namelen == 4 && !strncasecmp(name, "AREA", 4)) {
+	} else if (is_same_str(name, namelen, "AREA", 4)) {
 		unsigned char *alt = get_attr_val(attr, "alt");
 
 		if (alt) {
@@ -3540,7 +3540,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 			label = NULL;
 		}
 
-	} else if (namelen == 4 && !strncasecmp(name, "/MAP", 4)) {
+	} else if (is_same_str(name, namelen, "/MAP", 4)) {
 		/* This is the only successful return from here! */
 		add_to_ml(ml, *menu, NULL);
 		return 0;
@@ -3655,10 +3655,10 @@ sp:
 	if (parse_element(s, eof, &name, &namelen, &attr, &s)) goto sp;
 
 ps:
-	if (namelen == 4 && !strncasecmp(name, "HEAD", 4)) goto se;
-	if (namelen == 5 && !strncasecmp(name, "/HEAD", 5)) return;
-	if (namelen == 4 && !strncasecmp(name, "BODY", 4)) return;
-	if (title && !title->length && namelen == 5 && !strncasecmp(name, "TITLE", 5)) {
+	if (is_same_str(name, namelen, "HEAD", 4)) goto se;
+	if (is_same_str(name, namelen, "/HEAD", 5)) return;
+	if (is_same_str(name, namelen, "BODY", 4)) return;
+	if (title && !title->length && is_same_str(name, namelen, "TITLE", 5)) {
 		unsigned char *s1;
 
 xse:
@@ -3678,7 +3678,7 @@ xsp:
 		clr_spaces(title->source);
 		goto ps;
 	}
-	if (namelen != 4 || strncasecmp(name, "META", 4)) goto se;
+	if (!is_same_str(name, namelen, "META", 4)) goto se;
 
 	he = get_attr_val(attr, "charset");
 	if (he) {

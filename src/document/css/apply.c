@@ -1,5 +1,5 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.15 2004/01/17 15:32:01 pasky Exp $ */
+/* $Id: apply.c,v 1.16 2004/01/17 15:32:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,8 +10,8 @@
 
 #include "elinks.h"
 
+#include "document/css/css.h"
 #include "document/html/parser.h"
-#include "document/options.h"
 #include "util/color.h"
 #include "util/lists.h"
 #include "util/error.h"

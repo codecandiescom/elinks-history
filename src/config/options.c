@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.68 2002/07/05 20:51:05 pasky Exp $ */
+/* $Id: options.c,v 1.69 2002/07/06 09:20:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -997,7 +997,7 @@ register_options()
 		"association table.");
 
 	add_opt_int_tree(cmdline_options, "",
-		"base_session", 0, 0, MAXINT, 0,
+		"base-session", 0, 0, MAXINT, 0,
 		"Session ID of this ELinks. You don't want to change this.\n");
 
 	add_opt_bool_tree(cmdline_options, "",

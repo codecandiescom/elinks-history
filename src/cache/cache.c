@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.168 2004/07/24 18:39:25 zas Exp $ */
+/* $Id: cache.c,v 1.169 2004/07/24 18:42:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -224,25 +224,24 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 			 * So try to append overlapping part of that fragment
 			 * to us. */
 			nf = mem_realloc(f, FRAGSIZE(end_offset - f->offset));
-			if (!nf) goto ff;
+			if (nf) {
+				nf->prev->next = nf;
+				nf->next->prev = nf;
+				f = nf;
 
-			nf->prev->next = nf;
-			nf->next->prev = nf;
-			f = nf;
+				if (memcmp(f->data + f->next->offset - f->offset,
+					   f->next->data,
+					   f->offset + f->length - f->next->offset))
+					*trunc = 1;
 
-			if (memcmp(f->data + f->next->offset - f->offset,
-				   f->next->data,
-				   f->offset + f->length - f->next->offset))
-				*trunc = 1;
+				memcpy(f->data + f->length,
+				       f->next->data + f_end_offset - f->next->offset,
+				       end_offset - f_end_offset);
 
-			memcpy(f->data + f->length,
-			       f->next->data + f_end_offset - f->next->offset,
-			       end_offset - f_end_offset);
+				enlarge_entry(cached, end_offset - f_end_offset);
+				f->length = f->real_length = end_offset - f->offset;
+			}
 
-			enlarge_entry(cached, end_offset - f_end_offset);
-			f->length = f->real_length = end_offset - f->offset;
-
-ff:;
 		} else {
 			/* We will just discard this, it's complete subset of
 			 * our new fragment. */

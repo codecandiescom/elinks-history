@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-08 19:09+0100\n"
-"PO-Revision-Date: 2003-12-08 18:51+0100\n"
+"PO-Revision-Date: 2003-12-09 17:35+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -323,7 +323,7 @@ msgstr "URL"
 
 #: src/cache/dialogs.c:65
 msgid "Redirect"
-msgstr ""
+msgstr "Presmerovanie"
 
 #: src/cache/dialogs.c:73 src/config/options.inc:353 src/dialogs/document.c:95
 msgid "Size"
@@ -367,7 +367,7 @@ msgstr "Hlavièka"
 
 #: src/cache/dialogs.c:151
 msgid "Cache manager"
-msgstr "Správca cache"
+msgstr "Správca ke¹e"
 
 #: src/config/cmdline.c:57
 #, c-format
@@ -677,7 +677,7 @@ msgstr "Otvori» správcu zálo¾iek"
 
 #: src/config/kbdbind.c:386
 msgid "Open cache manager"
-msgstr "Otvori» správcu cache"
+msgstr "Otvori» správcu ke¹e"
 
 #: src/config/kbdbind.c:387
 msgid "Open cookie manager"
@@ -1072,10 +1072,10 @@ msgid ""
 "3 is full comments are written"
 msgstr ""
 "Spôsob ukladania komentárov do konfiguraèného súboru:\n"
-"0 znamená nezapísa» ¾iadne komentáre\n"
-"1 znamená uklada» iba struèné komentáre (meno a typ)\n"
-"2 znamená uklada» iba popis voµby\n"
-"3 znamená uklada» v¹etky komentáre"
+"0 = nezapísa» ¾iadne komentáre\n"
+"1 = uklada» iba struèné komentáre (meno a typ)\n"
+"2 = uklada» iba popis voµby\n"
+"3 = uklada» v¹etky komentáre"
 
 #: src/config/options.inc:30
 msgid "Indentation"
@@ -1270,11 +1270,11 @@ msgid ""
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
 "Priorita HTML atribútu 'accesskey':\n"
-"0 znamená vyskú¹a» najskôr v¹etky normálne klávesové skratky: ak pre\n"
-"  klávesu nie sú ¾iadne definované, skúsi» accesskey\n"
-"1 znamená vyskú¹a» najskôr iba klávesové skratky rámcov: ak pre\n"
-"  klávesu nie sú ¾iadne definované, skúsi» accesskey\n"
-"2 znamená najskôr skúsi» accesskey (to mô¾e by» nebezpeèné)"
+"0 = vyskú¹a» najskôr v¹etky normálne klávesové skratky: ak pre\n"
+"    klávesu nie sú ¾iadne definované, skúsi» accesskey\n"
+"1 = vyskú¹a» najskôr iba klávesové skratky rámcov: ak pre klávesu\n"
+"    nie su ¾iadne definované, skúsi» accesskey\n"
+"2 = najskôr skúsi» accesskey (to mô¾e by» nebezpeèné)"
 
 #: src/config/options.inc:132
 msgid "Forms"
@@ -1340,9 +1340,9 @@ msgid ""
 "2 means always"
 msgstr ""
 "Kedy dáva» odkazy na obrázky do zátvoriek:\n"
-"0 znamená nikdy\n"
-"1 znamená iba keï obrázku chýba popiska (alt) alebo titulok\n"
-"2 znamená v¾dy"
+"0 = nikdy\n"
+"1 = iba keï obrázku chýba popiska (alt) alebo titulok\n"
+"2 = v¾dy"
 
 #: src/config/options.inc:165
 msgid "Image link prefix"
@@ -1627,9 +1627,9 @@ msgid ""
 msgstr ""
 "Numerické klávesy vyberajú odkazy namiesto toho aby urèovali opakovacie\n"
 "prefixy pre ostatné akcie. Táto voµba ma 3 stavy:\n"
-"0 znamená nikdy\n"
-"1 znamená iba ak document.browse.links.numbering = 1\n"
-"2 znamená v¾dy"
+"0 = nikdy\n"
+"1 = iba ak document.browse.links.numbering = 1\n"
+"2 = v¾dy"
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
@@ -1676,9 +1676,9 @@ msgid ""
 "2 for extended regular expression searches."
 msgstr ""
 "Zapnú» hµadanie pomocou regulárnych výrazov.\n"
-"0 znamená hµadanie èistého textu.\n"
-"1 znamená vyhµadávanie základných regulárnych výrazov.\n"
-"2 znamená vyhµadávanie roz¹írených regulárnych výrazov."
+"0 = hµadanie èistého textu.\n"
+"1 = vyhµadávanie základných regulárnych výrazov.\n"
+"2 = vyhµadávanie roz¹írených regulárnych výrazov."
 
 #: src/config/options.inc:272
 msgid ""
@@ -1729,44 +1729,49 @@ msgstr ""
 
 #: src/config/options.inc:294
 msgid "Scroll margin"
-msgstr ""
+msgstr "Okraj textu citlivý na skrolovanie"
 
 #: src/config/options.inc:296
 msgid ""
 "Size of the virtual margin - when you click inside of that margin,\n"
 "document scrolls in that direction."
 msgstr ""
+"Veµkos» virtuálneho okraja - po kliknutí do tohto citlivého okraja,\n"
+"dokument odskroluje v danom smere."
 
 #: src/config/options.inc:299
 msgid "Scroll step"
-msgstr ""
+msgstr "Krok skrolovania"
 
 #: src/config/options.inc:301
 msgid ""
 "Number of lines to scroll when a key bound to scroll-up or scroll-\n"
 "down is pressed and no prefix was given."
 msgstr ""
+"Poèet riadkov, o ktoré sa má dokument odskrolova» po stlaèení klávesy\n"
+"zodpovedajúcej akcii scroll-up/scroll-down (hore/dolu) a nebol daný ¾iadny\n"
+"èíselný prefix."
 
 #: src/config/options.inc:304
 msgid "Tables navigation order"
-msgstr ""
+msgstr "Poradie navigácie v tabuµkách"
 
 #: src/config/options.inc:306
 msgid "Move by columns in table, instead of rows."
-msgstr ""
+msgstr "Presun po odkazoch pôjde po ståpcoch namiesto po riadkoch."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:312
 msgid "Cache"
-msgstr "Doèasná pamä» (cache)"
+msgstr "Ke¹ (doèasná pamä»)"
 
 #: src/config/options.inc:314
 msgid "Cache options."
-msgstr "Nastavenie cache."
+msgstr "Nastavenie ke¹e."
 
 #: src/config/options.inc:316
 msgid "Cache information about redirects"
-msgstr ""
+msgstr "Ke¹ova» informáciu o presmerovaniach"
 
 #: src/config/options.inc:318
 msgid ""
@@ -1837,11 +1842,11 @@ msgstr "Nastavenie znakovej sady."
 
 #: src/config/options.inc:363
 msgid "Default codepage"
-msgstr ""
+msgstr "©tandardná kódová stránka"
 
 #: src/config/options.inc:365
 msgid "Default document codepage."
-msgstr ""
+msgstr "©tandardná kódová stránka dokumentu."
 
 #: src/config/options.inc:367
 msgid "Ignore charset info from server"
@@ -1929,31 +1934,35 @@ msgstr "S»ahovanie"
 
 #: src/config/options.inc:431
 msgid "Options regarding files downloading and handling."
-msgstr ""
+msgstr "Nastavenie s»ahovania súborov a ich obsluhy."
 
 #: src/config/options.inc:436
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.default_type option instead."
 msgstr ""
+"Táto voµba by sa u¾ nemala pou¾íva» a bude èoskoro odstránená.\n"
+"Prosím pou¾ite rad¹ej voµbu mime.default_type."
 
 #: src/config/options.inc:439
 msgid "Default download directory"
-msgstr ""
+msgstr "©tandardný adresár pre s»ahované súbory"
 
 #: src/config/options.inc:441
 msgid "Default download directory."
-msgstr ""
+msgstr "©tandardný adresár pre s»ahované súbory."
 
 #: src/config/options.inc:443
 msgid "Set original time"
-msgstr ""
+msgstr "Nastavi» pôvodný èas"
 
 #: src/config/options.inc:445
 msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
+"Nastavi» èas vytvorenia stiahnutého súboru na taký èas vytvorenia,\n"
+"aký je ulo¾ený na serveri."
 
 #. Does automatic resuming make sense as an option?
 #: src/config/options.inc:449
@@ -1967,6 +1976,10 @@ msgid ""
 "1 is add a suffix .{number} (for example '.1') to the name.\n"
 "2 is ask the user."
 msgstr ""
+"Zabráni» prepísaniu lokálnych súborov:\n"
+"0 = prepísa» bez upozornenia\n"
+"1 = prida» príponu .<èíslo> (napr. '.1'), ak také meno existuje\n"
+"2 = opýta» sa u¾ívateµa."
 
 #: src/config/options.inc:456
 msgid "Notify download completion by bell"
@@ -1979,10 +1992,14 @@ msgid ""
 "1 is when background notification is active.\n"
 "2 is always"
 msgstr ""
+"Zvukové upozornenie po ukonèení s»ahovania:\n"
+"0 = nikdy\n"
+"1 = ak je nastavené upozoròovanie na skonèenie s»ahovania\n"
+"2 = v¾dy"
 
 #: src/config/options.inc:464
 msgid "Dump output"
-msgstr ""
+msgstr "Dump výstup"
 
 #: src/config/options.inc:466
 msgid "Dump output options."
@@ -1991,11 +2008,11 @@ msgstr "Nastavenie dump výstupu."
 #: src/config/options.inc:468 src/config/options.inc:865
 #: src/config/opttypes.c:368 src/dialogs/document.c:102
 msgid "Codepage"
-msgstr "Kódovanie"
+msgstr "Kódová stránka"
 
 #: src/config/options.inc:470 src/config/options.inc:1933
 msgid "Codepage used in dump output."
-msgstr ""
+msgstr "Kódová stránka pou¾itá v dump výstupe."
 
 #: src/config/options.inc:472
 msgid "Width"
@@ -2091,15 +2108,15 @@ msgstr ""
 
 #: src/config/options.inc:526
 msgid "Underline links"
-msgstr ""
+msgstr "Podèiarkova» odkazy"
 
 #: src/config/options.inc:528
 msgid "Underline links."
-msgstr ""
+msgstr "Podèiarkova» odkazy."
 
 #: src/config/options.inc:530
 msgid "Wrap non breaking space"
-msgstr ""
+msgstr "Rozdeµova» nedeliteµné medzery"
 
 #: src/config/options.inc:532
 msgid ""
@@ -2127,7 +2144,7 @@ msgstr ""
 #. Keep options in alphabetical order.
 #: src/config/options.inc:549
 msgid "Protocols"
-msgstr ""
+msgstr "Protokoly"
 
 #: src/config/options.inc:551
 msgid "Protocol specific options."
@@ -2135,7 +2152,7 @@ msgstr "Nastavenie jednotlivých protokolov."
 
 #: src/config/options.inc:553
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: src/config/options.inc:555
 msgid "HTTP-specific options."
@@ -2143,33 +2160,35 @@ msgstr "Nastavenie HTTP."
 
 #: src/config/options.inc:558
 msgid "Server bug workarounds"
-msgstr ""
+msgstr "Obchádzanie chýb v serveroch"
 
 #: src/config/options.inc:560
 msgid "Server-side HTTP bugs workarounds."
-msgstr ""
+msgstr "Obchádzanie chýb v HTTP serveroch"
 
 #: src/config/options.inc:562
 msgid "Do not send Accept-Charset"
-msgstr ""
+msgstr "Neposiela» Accept-Charset"
 
 #: src/config/options.inc:564
 msgid ""
 "The Accept-Charset header is quite long and sending it can trigger\n"
 "bugs in some rarely found servers."
 msgstr ""
+"Hlavièka Accept-Charset býva veµmi dlhá a jej posielanie mô¾e vyvola»\n"
+"chyby v niektorých zriedkavo sa vyskytujúcich serveroch."
 
 #: src/config/options.inc:567
 msgid "Allow blacklisting"
-msgstr ""
+msgstr "Povoli» èiernu listinu"
 
 #: src/config/options.inc:569
 msgid "Allow blacklisting of buggy servers."
-msgstr ""
+msgstr "Povoli» èiernu listinu chybných serverov."
 
 #: src/config/options.inc:571
 msgid "Broken 302 redirects"
-msgstr ""
+msgstr "Chybné presmerovania HTTP kódom 302"
 
 #: src/config/options.inc:573
 msgid ""
@@ -2177,30 +2196,34 @@ msgid ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
+"Chybné presmerovanie HTTP kódom 302 síce odporujú RFC, ale sú kompatibilné\n"
+"s Netscape a ostatnými roz¹írenými prehliadaèmi. Na túto chybu sa spolieha\n"
+"veµa webových diskusných boardov a podobných. Ak vám spôsobujú podivné\n"
+"problémy, skúste sa pohra» s týmto nastavením."
 
 #: src/config/options.inc:577
 msgid "No keepalive after POST requests"
-msgstr ""
+msgstr "Nepou¾íva» keepalive spojenie po po¾iadavku POST"
 
 #: src/config/options.inc:579
 msgid "Disable keepalive connection after POST request."
-msgstr ""
+msgstr "Nepou¾íva» keepalive spojenie po po¾iadavku POST."
 
 #: src/config/options.inc:581
 msgid "Use HTTP/1.0"
-msgstr ""
+msgstr "Pou¾íva» HTTP/1,0"
 
 #: src/config/options.inc:583
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
-msgstr ""
+msgstr "Pou¾íva» protokol HTTP/1,0 namiesto HTTP/1.1."
 
 #: src/config/options.inc:585 src/config/options.inc:660
 msgid "Proxy configuration"
-msgstr ""
+msgstr "Nastavenie proxy"
 
 #: src/config/options.inc:587
 msgid "HTTP proxy configuration."
-msgstr ""
+msgstr "Nastavenie HTTP proxy."
 
 #: src/config/options.inc:589 src/config/options.inc:664
 msgid "Host and port-number"
@@ -2211,6 +2234,9 @@ msgid ""
 "Host and port-number (host:port) of the HTTP proxy, or blank.\n"
 "If it's blank, HTTP_PROXY environment variable is checked as well."
 msgstr ""
+"Hostiteµ a èíslo portu (host:port) HTTP proxy, alebo niè, ak proxy\n"
+"nepou¾ívate. Ak je voµba nevyplnená, ELinks sa e¹te pokúsi pou¾i»\n"
+"hodnotu ulo¾enú v premennej prostredia HTTP_PROXY."
 
 #: src/config/options.inc:594
 msgid "Username"
@@ -2230,7 +2256,7 @@ msgstr "Heslo na prihlasovanie cez proxy"
 
 #: src/config/options.inc:603
 msgid "Referer sending"
-msgstr ""
+msgstr "Posiela» referer"
 
 #: src/config/options.inc:605
 msgid ""
@@ -2241,10 +2267,16 @@ msgid ""
 "can unfortunately considerably affect privacy and can lead even to a\n"
 "security problem on some badly designed web pages."
 msgstr ""
+"Voµby pre posielanie HTTP refereru. HTTP referer je ¹peciálna hlavièka\n"
+"posielaná v HTTP po¾iadavkoch, ktorá by mala obsahova» predchádzajúci\n"
+"dokument nav¹tívený prehliadaèom. Takto sa mô¾e server dozvedie» odkiaµ\n"
+"sa èlovek na danú stránku dostal. Bohu¾iaµ toto chovanie mô¾e podstatne\n"
+"naru¹i» súkromie u¾ívateµa a v prípade niektorých zle zabezpeèených\n"
+"webových aplikácií spôsobi» ohrozenie bezpeènosti."
 
 #: src/config/options.inc:612
 msgid "Policy"
-msgstr ""
+msgstr "Politika"
 
 #: src/config/options.inc:615
 msgid ""
@@ -2254,26 +2286,31 @@ msgid ""
 "2 is send fixed fake referer\n"
 "3 is send previous URL as referer (correct, but insecure)\n"
 msgstr ""
+"Re¾im posielania HTTP refereru:\n"
+"0 = neposiela» referer\n"
+"1 = posiela» súèasné URL ako referer\n"
+"2 = posiela» stály falo¹ný referer\n"
+"3 = posiela» predchádzajúce URL ako referer (správne, ale nebezpeèné)\n"
 
 #: src/config/options.inc:621
 msgid "Fake referer URL"
-msgstr ""
+msgstr "Falo¹né referer URL"
 
 #: src/config/options.inc:623
 msgid "Fake referer to be sent when policy is 2."
-msgstr ""
+msgstr "Falo¹ný referer, ktorý sa posiela ak je politika nastavená na 2."
 
 #: src/config/options.inc:626
 msgid "Send Accept-Language header"
-msgstr ""
+msgstr "Posiela» hlavièku Accept-Language (Akceptuj-Jazyk)"
 
 #: src/config/options.inc:628
 msgid "Send Accept-Language header."
-msgstr ""
+msgstr "Posiela» hlavièku Accept-Language (Akceptuj-Jazyk)."
 
 #: src/config/options.inc:630
 msgid "Use UI language as Accept-Language"
-msgstr ""
+msgstr "Pou¾i» jazyk u¾ívateµského rozhrania ako Accept-Language"
 
 #: src/config/options.inc:632
 msgid ""
@@ -2282,10 +2319,15 @@ msgid ""
 "ELinks' user-interface. Note that some see this as a potential security\n"
 "risk because it tells web-masters about your preference in language."
 msgstr ""
+"Vy¾iada» si lokalizované verzie dokumentov od webových serverov (pomocou\n"
+"hlavièky Accept-Language) v závislosti na jazyku, ktorý je nastavený pre\n"
+"u¾ívateµské rozhranie ELinksu. Niektorí to vnímajú ako potenciálne\n"
+"bezpeènostné riziko, preto¾e potom webmasteri vedia akým jazykom dávate\n"
+"prednos». Hmm."
 
 #: src/config/options.inc:637
 msgid "Activate HTTP TRACE debugging"
-msgstr ""
+msgstr "Aktivova» ladenie pomocou HTTP TRACE"
 
 #: src/config/options.inc:639
 msgid ""
@@ -2312,7 +2354,7 @@ msgstr ""
 
 #: src/config/options.inc:656
 msgid "FTP"
-msgstr ""
+msgstr "FTP"
 
 #: src/config/options.inc:658
 msgid "FTP specific options."
@@ -2320,7 +2362,7 @@ msgstr "Nastavenie FTP."
 
 #: src/config/options.inc:662
 msgid "FTP proxy configuration."
-msgstr ""
+msgstr "Nastavenie FTP proxy."
 
 #: src/config/options.inc:666
 msgid ""
@@ -2330,27 +2372,27 @@ msgstr ""
 
 #: src/config/options.inc:669
 msgid "Anonymous password"
-msgstr ""
+msgstr "Anonymné heslo"
 
 #: src/config/options.inc:671
 msgid "FTP anonymous password to be sent."
-msgstr ""
+msgstr "Heslo pre anonymné FTP."
 
 #: src/config/options.inc:673
 msgid "Use passive mode (IPv4)"
-msgstr ""
+msgstr "Pou¾íva» pasívny re¾im (IPv4)"
 
 #: src/config/options.inc:675
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr ""
+msgstr "Pou¾i» príkaz PASV namiesto PORT (pasívny vs. aktívny re¾im, iba IPv4)."
 
 #: src/config/options.inc:677 src/config/options.inc:681
 msgid "Use passive mode (IPv6)"
-msgstr ""
+msgstr "Pou¾íva» pasívny re¾im (IPv6)"
 
 #: src/config/options.inc:679
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr ""
+msgstr "Pou¾i» príkaz EPSV namiesto EPRT (pasívny vs. aktívny re¾im, iba IPv6)."
 
 #: src/config/options.inc:683
 msgid ""
@@ -2368,7 +2410,7 @@ msgstr ""
 
 #: src/config/options.inc:693
 msgid "Allow reading special files"
-msgstr ""
+msgstr "Povoli» èítanie ¹peciálnych súborov"
 
 #: src/config/options.inc:695
 msgid ""
@@ -2554,7 +2596,7 @@ msgstr ""
 
 #: src/config/options.inc:823
 msgid "Switch fonts for line drawing"
-msgstr ""
+msgstr "Prepína» fonty pri kreslení èiar"
 
 #: src/config/options.inc:825
 msgid ""
@@ -2565,13 +2607,16 @@ msgstr ""
 
 #: src/config/options.inc:829
 msgid "I/O in UTF8"
-msgstr ""
+msgstr "V/V v UTF8"
 
 #: src/config/options.inc:831
 msgid ""
 "Enable I/O in UTF8 for Unicode terminals. Note that currently,\n"
 "only the subset of UTF8 according to terminal codepage is used."
 msgstr ""
+"Pou¾íva» UTF8 vstup/výstup pre Unicode podporujúce terminály. Treba\n"
+"si ale uvedomi», ¾e v súèasnosti je podporovaná iba podmno¾ina UTF8 v\n"
+"závislosti na aktuálne zvolenom kódovaní terminálu."
 
 #: src/config/options.inc:834 src/dialogs/options.c:184
 msgid "Restrict frames in cp850/852"
@@ -2630,7 +2675,7 @@ msgstr ""
 
 #: src/config/options.inc:867
 msgid "Codepage of charset used for displaying content on terminal."
-msgstr ""
+msgstr "Kódová stránka znakovej sady pou¾itej na zobrazovanie na terminále."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:873
@@ -3331,7 +3376,7 @@ msgstr ""
 
 #: src/config/options.inc:1931
 msgid "Codepage to use with -dump"
-msgstr ""
+msgstr "Kódová stránka, ktorá má by» pou¾itá na -dump výstup"
 
 #: src/config/options.inc:1935
 msgid "Width of document formatted with -dump"

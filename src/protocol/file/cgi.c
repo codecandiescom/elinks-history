@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.79 2004/09/15 14:51:53 jonas Exp $ */
+/* $Id: cgi.c,v 1.80 2004/09/15 14:53:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,28 +178,28 @@ set_vars(struct connection *conn, unsigned char *script)
 	}
 
 	switch (get_opt_int("protocol.http.referer.policy")) {
-		case REFERER_NONE:
-			/* oh well */
-			break;
+	case REFERER_NONE:
+		/* oh well */
+		break;
 
-		case REFERER_FAKE:
-			setenv("HTTP_REFERER",
-				get_opt_str("protocol.http.referer.fake"), 1);
-			break;
+	case REFERER_FAKE:
+		setenv("HTTP_REFERER",
+			get_opt_str("protocol.http.referer.fake"), 1);
+		break;
 
-		case REFERER_TRUE:
-			/* XXX: Encode as in add_url_to_http_string() ? --pasky */
-			if (conn->referrer) setenv("HTTP_REFERER", struri(conn->referrer), 1);
-			break;
+	case REFERER_TRUE:
+		/* XXX: Encode as in add_url_to_http_string() ? --pasky */
+		if (conn->referrer) setenv("HTTP_REFERER", struri(conn->referrer), 1);
+		break;
 
-		case REFERER_SAME_URL:
-			str = get_uri_string(conn->uri, URI_HTTP_REFERRER);
+	case REFERER_SAME_URL:
+		str = get_uri_string(conn->uri, URI_HTTP_REFERRER);
 
-			if (str) {
-				setenv("HTTP_REFERER", str, 1);
-				mem_free(str);
-			}
-			break;
+		if (str) {
+			setenv("HTTP_REFERER", str, 1);
+			mem_free(str);
+		}
+		break;
 	}
 
 	/* Protection against vim cindent bugs ;-). */

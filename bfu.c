@@ -187,6 +187,8 @@ void scroll_menu(struct menu *menu, int d)
 	if (w < 0) w = 0;
 	
 	menu->selected += d;
+	menu->selected %= menu->ni;
+	if (menu->selected < 0) menu->selected += menu->ni;
 	
 	while (1) {
 		if (c++ > menu->ni) {

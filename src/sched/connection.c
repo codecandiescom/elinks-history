@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.188 2004/07/27 17:48:07 jonas Exp $ */
+/* $Id: connection.c,v 1.189 2004/07/30 14:31:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -512,7 +512,7 @@ keepalive_timer(void *x)
 void
 check_keepalive_connections(void)
 {
-	struct keepalive_connection *keep_conn;
+	struct keepalive_connection *keep_conn, *next;
 	ttime ct = get_time();
 	int p = 0;
 
@@ -521,11 +521,10 @@ check_keepalive_connections(void)
 		keepalive_timeout = -1;
 	}
 
-	foreach (keep_conn, keepalive_connections) {
+	foreachsafe (keep_conn, next, keepalive_connections) {
 		if (can_read(keep_conn->socket)
 		    || ct - keep_conn->add_time > keep_conn->timeout) {
-			keep_conn = keep_conn->prev;
-			done_keepalive_connection(keep_conn->next);
+			done_keepalive_connection(keep_conn);
 		} else {
 			p++;
 		}

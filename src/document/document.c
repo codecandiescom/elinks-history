@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.43 2003/12/21 14:56:54 zas Exp $ */
+/* $Id: document.c,v 1.44 2003/12/30 13:02:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 
 	foreach (document, format_cache) {
 		if (strcmp(document->url, uri)
-		    || compare_opt(&document->options, options))
+		    || compare_opt_but_size(&document->options, options))
 			continue;
 
 		if (id != document->id_tag) {

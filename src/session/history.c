@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.55 2003/11/13 21:42:24 pasky Exp $ */
+/* $Id: history.c,v 1.56 2003/11/21 04:57:22 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ ses_history_move(struct session *ses)
 
     	del_from_history(&ses->history, loc);
 	destroy_location(loc);
-	ses_forward(ses);
+	ses_forward(ses, 0);
 
 	/* Maybe trash the unhistory. */
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.247 2003/11/21 04:54:33 witekfl Exp $ */
+/* $Id: session.c,v 1.248 2003/11/21 04:57:22 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -468,29 +468,33 @@ free_files(struct session *ses)
 
 
 struct view_state *
-ses_forward(struct session *ses)
+ses_forward(struct session *ses, int loaded_in_frame)
 {
-	struct location *loc;
+	struct location *loc = NULL;
 	struct view_state *vs;
 	int len;
 
-	free_files(ses);
+	if (!loaded_in_frame) {
+		free_files(ses);
 
-	if (ses->search_word) {
-		mem_free(ses->search_word);
-		ses->search_word = NULL;
+		if (ses->search_word) {
+			mem_free(ses->search_word);
+			ses->search_word = NULL;
+		}
 	}
 
 x:
-	len = strlen(ses->loading_url);
-	if (have_location(ses))
-		int_lower_bound(&len, strlen(cur_loc(ses)->vs.url));
+	if (!loaded_in_frame) {
+		len = strlen(ses->loading_url);
+		if (have_location(ses))
+			int_lower_bound(&len, strlen(cur_loc(ses)->vs.url));
 
 	/* struct view_state reserves one byte, so len is sufficient. */
-	loc = mem_alloc(sizeof(struct location) + len);
-	if (!loc) return NULL;
-	memset(loc, 0, sizeof(struct location));
-	memcpy(&loc->download, &ses->loading, sizeof(struct download));
+		loc = mem_alloc(sizeof(struct location) + len);
+		if (!loc) return NULL;
+		memset(loc, 0, sizeof(struct location));
+		memcpy(&loc->download, &ses->loading, sizeof(struct download));
+	}
 
 	if (ses->task_target_frame && *ses->task_target_frame) {
 		struct frame *frame;
@@ -498,14 +502,18 @@ x:
 		assertm(have_location(ses), "no location yet");
 		if_assert_failed return NULL;
 
-		copy_location(loc, cur_loc(ses));
-		add_to_history(&ses->history, loc);
+		if (!loaded_in_frame) {
+			copy_location(loc, cur_loc(ses));
+			add_to_history(&ses->history, loc);
+		}
 		frame = ses_change_frame_url(ses, ses->task_target_frame,
 					     ses->loading_url);
 
 		if (!frame) {
-			del_from_history(&ses->history, loc);
-			destroy_location(loc);
+			if (!loaded_in_frame) {
+				del_from_history(&ses->history, loc);
+				destroy_location(loc);
+			}
 			ses->task_target_frame = NULL;
 			goto x;
 		}
@@ -514,12 +522,13 @@ x:
 		destroy_vs(vs);
 		init_vs(vs, ses->loading_url, vs->plain);
 		
-		
-		if (ses->goto_position) {
-			if (frame->vs.goto_position)
-				mem_free(frame->vs.goto_position);
-			frame->vs.goto_position = ses->goto_position;
-			ses->goto_position = NULL;
+		if (!loaded_in_frame) {
+			if (ses->goto_position) {
+				if (frame->vs.goto_position)
+					mem_free(frame->vs.goto_position);
+				frame->vs.goto_position = ses->goto_position;
+				ses->goto_position = NULL;
+			}
 		}
 #if 0
 		request_additional_loading_file(ses, ses->loading_url,
@@ -792,7 +801,7 @@ b:
 		case TASK_NONE:
 			break;
 		case TASK_FORWARD:
-			if (ses_chktype(ses, &ses->loading, stat, ce)) {
+			if (ses_chktype(ses, &ses->loading, stat, ce, 0)) {
 				free_task(ses);
 				reload(ses, CACHE_MODE_NORMAL);
 				return 2;
@@ -807,7 +816,7 @@ b:
 		case TASK_RELOAD:
 			ses->task_target_location = cur_loc(ses)->prev;
 			ses_history_move(ses);
-			ses_forward(ses);
+			ses_forward(ses, 0);
 			break;
 	}
 
@@ -1109,12 +1118,20 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 
 	/* FIXME: We need to do content-type check here! However, we won't
 	 * handle properly the "Choose action" dialog now :(. */
-#if 0
-	if (ses_chktype(ftl->ses, stat, ftl->ce)) {
+	if (ftl->ce && !ftl->ce->redirect_get) {
+		struct session *ses = ftl->ses;
+		unsigned char *loading_url = ses->loading_url;
+		unsigned char *target_frame = ses->task_target_frame;
+
+		ses->loading_url = ftl->url;
+		ses->task_target_frame = ftl->target_frame;
+		ses_chktype(ses, &ftl->stat, &stat, ftl->ce, 1);
+		ses->loading_url = loading_url;
+		ses->task_target_frame = target_frame;
+	}
 #if 0
 		free_wtd(ftl->ses);
 		reload(ses, CACHE_MODE_NORMAL);
-#endif
 		return;
 	}
 #endif

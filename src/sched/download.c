@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.179 2003/11/21 04:52:23 witekfl Exp $ */
+/* $Id: download.c,v 1.180 2003/11/21 04:57:22 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1115,6 +1115,7 @@ tp_free(struct tq *tq)
 	mem_free(tq->url);
 	if (tq->goto_position) mem_free(tq->goto_position);
 	if (tq->prog) mem_free(tq->prog);
+	if (tq->target_frame) mem_free(tq->target_frame);
 	del_from_list(tq);
 	mem_free(tq);
 }
@@ -1157,23 +1158,28 @@ tp_display(struct tq *tq)
 	struct session *ses = tq->ses;
 	unsigned char *goto_position = ses->goto_position;
 	unsigned char *loading_url = ses->loading_url;
+	unsigned char *target_frame = ses->task_target_frame;
 
 	ses->goto_position = tq->goto_position;
 	ses->loading_url = tq->url;
-	vs = ses_forward(ses);
+	ses->task_target_frame = tq->target_frame;
+	vs = ses_forward(ses, tq->frame);
 	if (vs) vs->plain = 1;
 	ses->goto_position = goto_position;
 	ses->loading_url = loading_url;
-	tq->goto_position = NULL;
+	ses->task_target_frame = target_frame;
 
-	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
+	if (!tq->frame) {
+		tq->goto_position = NULL;
+		cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				     doc_end_load;
-	cur_loc(ses)->download.data = ses;
+		cur_loc(ses)->download.data = ses;
 
-	if (tq->download.state >= 0)
-		change_connection(&tq->download, &cur_loc(ses)->download, PRI_MAIN, 0);
-	else
-		cur_loc(ses)->download.state = tq->download.state;
+		if (tq->download.state >= 0)
+			change_connection(&tq->download, &cur_loc(ses)->download, PRI_MAIN, 0);
+		else
+			cur_loc(ses)->download.state = tq->download.state;
+	}
 
 	display_timer(ses);
 	tp_free(tq);
@@ -1284,7 +1290,8 @@ struct {
 };
 
 int
-ses_chktype(struct session *ses, struct download *loading, struct download **download, struct cache_entry *ce)
+ses_chktype(struct session *ses, struct download *loading,
+	struct download **download, struct cache_entry *ce, int frame)
 {
 	struct mime_handler *handler;
 	struct view_state *vs;
@@ -1310,6 +1317,10 @@ ses_chktype(struct session *ses, struct download *loading, struct download **dow
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto free_ct;
 
+	foreach (tq, ses->tq)
+		if (!strcmp(tq->url, ses->loading_url))
+			goto ret1;
+
 	tq = mem_calloc(1, sizeof(struct tq));
 	if (!tq) goto ret1;
 	add_to_list(ses->tq, tq);
@@ -1323,6 +1334,8 @@ ses_chktype(struct session *ses, struct download *loading, struct download **dow
 	object_lock(tq->ce);
 
 	if (ses->goto_position) tq->goto_position = stracpy(ses->goto_position);
+	if (ses->task_target_frame)
+		tq->target_frame = stracpy(ses->task_target_frame);
 	tq->ses = ses;
 
 	type_query(tq, ctype, handler);
@@ -1340,7 +1353,7 @@ free_ct:
 	mem_free(ctype);
 
 end:
-	vs = ses_forward(ses);
+	vs = ses_forward(ses, frame);
 	if (vs) vs->plain = plaintext;
 	return 0;
 }

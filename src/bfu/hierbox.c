@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.101 2003/11/25 13:29:34 jonas Exp $ */
+/* $Id: hierbox.c,v 1.102 2003/11/26 04:28:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -568,14 +568,13 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		unsigned char *msg;
 
 		msg = box->ops->get_info(delete_info->item, term, LISTBOX_ALL);
-		if (!msg) return 0;
 		box->ops->lock(delete_info->item);
 
 		msg_box(term, getml(delete_info, msg, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete item"), AL_CENTER,
 			msg_text(term, N_("Delete \"%s\"?\n\n"
 				"%s"),
-				delete_info->item->text, msg),
+				delete_info->item->text, empty_string_or_(msg)),
 			delete_info, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_hierbox_action_info, B_ESC);

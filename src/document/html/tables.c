@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.70 2003/09/12 15:15:05 zas Exp $ */
+/* $Id: tables.c,v 1.71 2003/09/15 20:57:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1440,54 +1440,52 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 }
 
 
-
 #ifndef DEBUG
-#define H_LINE_X(xx, yy) fh[(xx) + 1 + (t->x + 2) * (yy)]
-#define V_LINE_X(xx, yy) fv[(yy) + 1 + (t->y + 2) * (xx)]
+#define H_LINE_X(term, xx, yy) fh[(xx) + 1 + ((term)->x + 2) * (yy)]
+#define V_LINE_X(term, xx, yy) fv[(yy) + 1 + ((term)->y + 2) * (xx)]
 #else
-#define H_LINE_X(xx, yy) (*(xx < -1 || xx > t->x + 1 || yy < 0 || yy > t->y ? \
-		   	(signed char *) NULL : &fh[(xx) + 1 + (t->x + 2) * (yy)]))
-#define V_LINE_X(xx, yy) (*(xx < 0 || xx > t->x || yy < -1 || yy > t->y + 1 ? \
-			(signed char *) NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
+#define H_LINE_X(term, xx, yy) (*(xx < -1 || xx > (term)->x + 1 || yy < 0 || yy > (term)->y ? \
+		   	(signed char *) NULL : &fh[(xx) + 1 + ((term)->x + 2) * (yy)]))
+#define V_LINE_X(term, xx, yy) (*(xx < 0 || xx > (term)->x || yy < -1 || yy > (term)->y + 1 ? \
+			(signed char *) NULL : &fv[(yy) + 1 + ((term)->y + 2) * (xx)]))
 #endif
 
-#define H_LINE(xx, yy) int_max(H_LINE_X((xx), (yy)), 0)
-#define V_LINE(xx, yy) int_max(V_LINE_X((xx), (yy)), 0)
+#define H_LINE(term, xx, yy) int_max(H_LINE_X(term, (xx), (yy)), 0)
+#define V_LINE(term, xx, yy) int_max(V_LINE_X(term, (xx), (yy)), 0)
 
-#define draw_frame_point(xx, yy, ii, jj)                                \
-{                                                                       \
-        if (H_LINE_X((ii) - 1, (jj)) >= 0                               \
-            || H_LINE_X((ii), (jj)) >= 0                                \
-            || V_LINE_X((ii), (jj) - 1) >= 0                            \
-            || V_LINE_X((ii), (jj)) >= 0) {                             \
-                register int pos = V_LINE((ii), (jj) - 1)               \
-                                 + 3 * H_LINE((ii), (jj))               \
-                                 + 9 * H_LINE((ii) - 1, (jj))           \
-                                 + 27 * V_LINE((ii), (jj));             \
-                                                                        \
-                xset_hchar(t->p, (xx), (yy), frame_table[pos],          \
-                           par_format.bgcolor, SCREEN_ATTR_FRAME);      \
-        }                                                               \
+#define draw_frame_point(term, xx, yy, ii, jj)				\
+{									\
+	if (H_LINE_X(term, (ii) - 1, (jj)) >= 0				\
+	    || H_LINE_X(term, (ii), (jj)) >= 0				\
+	    || V_LINE_X(term, (ii), (jj) - 1) >= 0				\
+	    || V_LINE_X(term, (ii), (jj)) >= 0) {				\
+		register int pos = V_LINE(term, (ii), (jj) - 1)		\
+				 + 3 * H_LINE(term, (ii), (jj))		\
+				 + 9 * H_LINE(term, (ii) - 1, (jj)) 		\
+				 + 27 * V_LINE(term, (ii), (jj));		\
+									\
+		xset_hchar((term)->p, (xx), (yy), frame_table[pos],	\
+			   par_format.bgcolor, SCREEN_ATTR_FRAME);	\
+	}								\
 }
 
-#define draw_frame_hline(xx, yy, ii, jj)				\
+#define draw_frame_hline(term, xx, yy, ii, jj)				\
 {									\
-	if (H_LINE_X((ii), (jj)) >= 0) {				\
-		xset_hchars(t->p, (xx), (yy), t->w_c[(ii)],		\
-			    hline_table[H_LINE((ii), (jj))],		\
+	if (H_LINE_X(term, (ii), (jj)) >= 0) {				\
+		xset_hchars((term)->p, (xx), (yy), (term)->w_c[(ii)],	\
+			    hline_table[H_LINE(term, (ii), (jj))],		\
 			    par_format.bgcolor, SCREEN_ATTR_FRAME);	\
 	}								\
 }
 
-#define draw_frame_vline(xx, yy, ii, jj)				\
+#define draw_frame_vline(term, xx, yy, ii, jj)				\
 {									\
-	if (V_LINE_X((ii), (jj)) >= 0) {				\
-		xset_vchars(t->p, (xx), (yy), t->r_heights[(jj)],	\
-			    vline_table[V_LINE((ii), (jj))],		\
+	if (V_LINE_X(term, (ii), (jj)) >= 0) {				\
+		xset_vchars((term)->p, (xx), (yy), (term)->r_heights[(jj)], \
+			    vline_table[V_LINE(term, (ii), (jj))],		\
 			    par_format.bgcolor, SCREEN_ATTR_FRAME);	\
 	}								\
 }
-
 
 static void
 display_table_frames(struct table *t, int x, int y)
@@ -1526,8 +1524,8 @@ display_table_frames(struct table *t, int x, int y)
 			register int lx;
 
 			for (lx = 0; lx < xsp; lx++) {
-				H_LINE_X(i + lx, j) = t->cellsp;
-				H_LINE_X(i + lx, j + ysp) = t->cellsp;
+				H_LINE_X(t, i + lx, j) = t->cellsp;
+				H_LINE_X(t, i + lx, j + ysp) = t->cellsp;
 			}
 		}
 
@@ -1535,8 +1533,8 @@ display_table_frames(struct table *t, int x, int y)
 			register int ly;
 
 			for (ly = 0; ly < ysp; ly++) {
-				V_LINE_X(i, j + ly) = t->cellsp;
-				V_LINE_X(i + xsp, j + ly) = t->cellsp;
+				V_LINE_X(t, i, j + ly) = t->cellsp;
+				V_LINE_X(t, i + xsp, j + ly) = t->cellsp;
 			}
 		}
 	}
@@ -1544,14 +1542,14 @@ display_table_frames(struct table *t, int x, int y)
 	if (t->rules == R_GROUPS) {
 		for (i = 1; i < t->x; i++) {
 			if (/*i < t->xc &&*/ t->xcols[i]) continue;
-			for (j = 0; j < t->y; j++) V_LINE_X(i, j) = 0;
+			for (j = 0; j < t->y; j++) V_LINE_X(t, i, j) = 0;
 		}
 		for (j = 1; j < t->y; j++) {
 			for (i = 0; i < t->x; i++)
 				if (CELL(t, i, j)->group)
 					goto cont;
 			for (i = 0; i < t->x; i++)
-				H_LINE_X(i, j) = 0;
+				H_LINE_X(t, i, j) = 0;
 cont:;
 		}
 	}
@@ -1565,13 +1563,13 @@ cont2:
 	}
 
 	for (i = 0; i < t->x; i++) {
-		H_LINE_X(i, 0) = fa;
-		H_LINE_X(i, t->y) = fb;
+		H_LINE_X(t, i, 0) = fa;
+		H_LINE_X(t, i, t->y) = fb;
 	}
 
 	for (j = 0; j < t->y; j++) {
-		V_LINE_X(0, j) = fl;
-		V_LINE_X(t->x, j) = fr;
+		V_LINE_X(t, 0, j) = fl;
+		V_LINE_X(t, t->x, j) = fr;
 	}
 
 	cy = y;
@@ -1587,20 +1585,20 @@ cont2:
 					w = get_vline_width(t, i);
 
 				if (w >= 0) {
-					draw_frame_point(cx, cy, i, j);
+					draw_frame_point(t, cx, cy, i, j);
 					if (j < t->y)
-						draw_frame_vline(cx, cy + 1, i, j);
+						draw_frame_vline(t, cx, cy + 1, i, j);
 					cx++;
 				}
 
-				draw_frame_hline(cx, cy, i, j);
+				draw_frame_hline(t, cx, cy, i, j);
 				cx += t->w_c[i];
 			}
 
 			if (fr) {
-				draw_frame_point(cx, cy, i, j);
+				draw_frame_point(t, cx, cy, i, j);
 				if (j < t->y)
-					draw_frame_vline(cx, cy + 1, i, j);
+					draw_frame_vline(t, cx, cy + 1, i, j);
 				cx++;
 			}
 
@@ -1611,7 +1609,7 @@ cont2:
 				if ((i > 0 && i < t->x && get_vline_width(t, i) >= 0)
 				    || (i == 0 && fl)
 				    || (i == t->x && fr)) {
-					draw_frame_vline(cx, cy, i, j);
+					draw_frame_vline(t, cx, cy, i, j);
 					cx++;
 				}
 				if (i < t->x) cx += t->w_c[i];

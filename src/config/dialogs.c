@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.105 2003/11/07 23:51:20 jonas Exp $ */
+/* $Id: dialogs.c,v 1.106 2003/11/08 00:13:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,28 +202,25 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 	struct option *option = dlg_data->dlg->udata;
-	unsigned char *name, *type, *desc;
+	unsigned char *name, *desc;
 
-	name = straconcat(_("Name", term), ": ", option->name, NULL);
-	type = straconcat(_("Type", term), ": ",
+	name = straconcat(_("Name", term), ": ", option->name, "\n",
+			  _("Type", term), ": ",
 			  _(option_types[option->type].name, term), NULL);
 	desc = straconcat(_("Description", term), ": \n",
 			  _(option->desc ? option->desc
 				  	 : (unsigned char *) "N/A", term),
 			  NULL);
 
-	if (name && type && desc)
-		add_to_ml(&dlg_data->ml, name, type, desc, NULL);
+	if (name && desc)
+		add_to_ml(&dlg_data->ml, name, desc, NULL);
 	else {
 		if (name) mem_free(name);
-		if (type) mem_free(type);
 		if (desc) mem_free(desc);
 		return;
 	}
 
 	dlg_format_text(NULL, name, 0, &y,
-			w, &rw, dialog_text_color, AL_LEFT);
-	dlg_format_text(NULL, type, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	dlg_format_field(NULL, &dlg_data->widgets_data[0],
 			 0, &y, w, &rw, AL_NONE);
@@ -239,8 +236,6 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, name, dlg_data->x + DIALOG_LB,
-			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_text(term, type, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 
 	dlg_format_field(term, &dlg_data->widgets_data[0],

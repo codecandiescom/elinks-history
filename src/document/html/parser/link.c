@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.67 2004/12/15 13:53:46 zas Exp $ */
+/* $Id: link.c,v 1.68 2004/12/15 14:53:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,12 +178,9 @@ static unsigned char *
 get_image_label(unsigned char *label)
 {
 	unsigned char *formatted_label;
-	int max_len = get_opt_int("document.browse.images.file_tags");
+	int max_len = get_opt_int("document.browse.images.label_maxlen");
 
-	if (max_len < 0 || !label) {
-		mem_free_if(label);
-		return NULL;
-	}
+	if (!label) return NULL;
 
 	formatted_label = truncate_label(label, max_len);
 	mem_free(label);

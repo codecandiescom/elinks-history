@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.151 2004/11/25 23:53:05 miciah Exp $ */
+/* $Id: options.inc,v 1.152 2004/12/15 14:53:42 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -223,6 +223,13 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_STRING("document.browse.images", N_("Image link suffix"),
 		"image_link_suffix", 0, "]",
 		N_("Suffix string to use to mark image links.")),
+
+	INIT_OPT_INT("document.browse.images", N_("Max. length for image label"),
+		"label_maxlen", 0, 0, 500, 0,
+		N_("Maximum length of image label (alt/title):\n"
+		"0     means always display full label\n"
+		"1-500 means display label with this maximal length;\n"
+		"      if it is longer, the middle is substituted by an asterisk")),
 
 	INIT_OPT_BOOL("document.browse.images", N_("Display links to images w/o alt"),
 		"show_as_links", 0, 0,

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.369 2004/11/19 23:45:42 jonas Exp $ */
+/* $Id: http.c,v 1.370 2004/11/20 02:08:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1159,6 +1159,46 @@ get_header(struct read_buffer *rb)
 	return 0;
 }
 
+
+static void
+check_http_authentication(struct uri *uri, unsigned char *header,
+			  unsigned char *header_field)
+{
+	unsigned char *str, *d;
+
+	d = parse_header(header, header_field, &str);
+	while (d) {
+		if (!strncasecmp(d, "Basic", 5)) {
+			unsigned char *realm = get_header_param(d, "realm");
+
+			if (realm) {
+				add_auth_entry(uri, realm, NULL, NULL, 0);
+				mem_free(realm);
+				mem_free(d);
+				break;
+			}
+		}
+#ifdef CONFIG_SSL_DIGEST
+		else if (!strncasecmp(d, "Digest", 6)) {
+			unsigned char *realm = get_header_param(d, "realm");
+			unsigned char *nonce = get_header_param(d, "nonce");
+			unsigned char *opaque = get_header_param(d, "opaque");
+
+			add_auth_entry(uri, realm, nonce, opaque, 1);
+
+			mem_free_if(realm);
+			mem_free_if(nonce);
+			mem_free_if(opaque);
+			mem_free(d);
+			break;
+		}
+#endif
+		mem_free(d);
+		d = parse_header(str, header_field, &str);
+	}
+}
+
+
 void
 http_got_header(struct connection *conn, struct read_buffer *rb)
 {
@@ -1347,38 +1387,9 @@ again:
 	}
 
 	if (h == 401) {
-		unsigned char *str;
+		unsigned char *head = conn->cached->head;
 
-		d = parse_header(conn->cached->head, "WWW-Authenticate", &str);
-		while (d) {
-			if (!strncasecmp(d, "Basic", 5)) {
-				unsigned char *realm = get_header_param(d, "realm");
-
-				if (realm) {
-					add_auth_entry(uri, realm, NULL, NULL, 0);
-					mem_free(realm);
-					mem_free(d);
-					break;
-				}
-			}
-#ifdef CONFIG_SSL_DIGEST
-			else if (!strncasecmp(d, "Digest", 6)) {
-				unsigned char *realm = get_header_param(d, "realm");
-				unsigned char *nonce = get_header_param(d, "nonce");
-				unsigned char *opaque = get_header_param(d, "opaque");
-
-				add_auth_entry(uri, realm, nonce, opaque, 1);
-
-				mem_free_if(realm);
-				mem_free_if(nonce);
-				mem_free_if(opaque);
-				mem_free(d);
-				break;
-			}
-#endif
-			mem_free(d);
-			d = parse_header(str, "WWW-Authenticate", &str);
-		}
+		check_http_authentication(uri, head, "WWW-Authenticate");
 	}
 
 	if (h == 407) {
@@ -1406,7 +1417,7 @@ again:
 				mem_free_set(&proxy_auth.nonce, nonce);
 				mem_free_set(&proxy_auth.opaque, opaque);
 				proxy_auth.digest = 1;
-				
+
 				mem_free(d);
 				break;
 			}
@@ -1415,6 +1426,7 @@ again:
 			d = parse_header(str, "Proxy-Authenticate", &str);
 		}
 	}
+
 	kill_buffer_data(rb, a);
 	info->close = 0;
 	info->length = -1;

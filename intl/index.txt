@@ -19,6 +19,7 @@ italian
 lithuanian
 norwegian
 polish
+portuguese
 romanian
 russian
 slovak

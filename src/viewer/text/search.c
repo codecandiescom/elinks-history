@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.260 2004/07/17 16:28:41 jonas Exp $ */
+/* $Id: search.c,v 1.261 2004/08/09 05:18:10 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1165,6 +1165,12 @@ text_typeahead_handler(struct input_line *line, int action)
 
 	switch (action) {
 		case ACT_EDIT_ENTER:
+			if (!*buffer) {
+				/* This ensures that search-typeahead-text
+				 * followed immediately with enter
+				 * clears the last search. */
+				search_for_do(ses, buffer, direction);
+			}
 			goto_current_link(ses, doc_view, 0);
 			return INPUT_LINE_CANCEL;
 

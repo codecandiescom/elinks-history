@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.261 2004/08/03 21:25:00 zas Exp $ */
+/* $Id: menu.c,v 1.262 2004/08/09 05:18:09 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -694,9 +694,6 @@ menu_search_handler(struct input_line *line, int action)
 	int pos = menu->selected;
 	int direction;
 
-	/* If there is nothing to match with don't start searching */
-	if (!*buffer) return INPUT_LINE_PROCEED;
-
 	switch (action) {
 	case ACT_EDIT_ENTER:
 		/* XXX: The input line dialog window is above the menu window.
@@ -716,6 +713,9 @@ menu_search_handler(struct input_line *line, int action)
 	default:
 		direction = 1;
 	}
+
+	/* If there is nothing to match with don't start searching */
+	if (!*buffer) return INPUT_LINE_PROCEED;
 
 	pos = (pos + direction) % menu->size;
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.159 2004/04/07 15:06:13 jonas Exp $ */
+/* $Id: uri.c,v 1.160 2004/04/07 15:15:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -607,7 +607,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	while (*url == ' ') url++;
 	if (!*url) return NULL;
 
-	newurl = stracpy(url); /* XXX: Post data copy. */
+	newurl = expand_tilde(url); /* XXX: Post data copy. */
 	if (!newurl) return NULL;
 
 parse_uri:
@@ -644,13 +644,9 @@ parse_uri:
 	{
 		/* No protocol name */
 		unsigned char *prefix = "file://";
-		unsigned char *expanded = expand_tilde(url);
 		unsigned char *ch = url + strcspn(url, ".:/@");
 		int not_file = 0;
 
-		if (!expanded) break;
-		mem_free(newurl);
-		newurl = expanded;
 		if (file_exists(newurl)) goto end;
 #if 0
 		/* This (not_file thing) is a bad assumption since @prefix is

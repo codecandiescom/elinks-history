@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.30 2005/03/30 13:00:45 zas Exp $ */
+/* $Id: parse.c,v 1.31 2005/03/30 13:12:29 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -165,9 +165,10 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
 	int perms = 0;
 
 	if (len != 9
-		&& !(len == 10 && src[9] == '+'))   /* ACL tag */
+	    && !(len == 10 && src[9] == '+'))   /* ACL tag */
 		return 0;
 
+	/* User permissions */
 	switch (src[0]) {
 	case('r'): perms |= S_IRUSR; break;
 	case('-'): break;
@@ -188,20 +189,20 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
 	default: return 0;
 	}
 
-	src += 3;
-	switch (src[0]) {
+	/* Group permissions */
+	switch (src[3]) {
 	case('r'): perms |= S_IRGRP; break;
 	case('-'): break;
 	default: return 0;
 	}
 
-	switch (src[1]) {
+	switch (src[4]) {
 	case('w'): perms |= S_IWGRP; break;
 	case('-'): break;
 	default: return 0;
 	}
 
-	switch (src[2]) {
+	switch (src[5]) {
 	case('S'): perms |= S_ISGID; break;
 	case('s'): perms |= S_ISGID; /* fall-through */
 	case('x'): perms |= S_IXGRP; break;
@@ -209,20 +210,20 @@ parse_ftp_unix_permissions(const unsigned char *src, int len)
 	default: return 0;
 	}
 
-	src += 3;
-	switch (src[0]) {
+	/* Others permissions */
+	switch (src[6]) {
 	case('r'): perms |= S_IROTH; break;
 	case('-'): break;
 	default: return 0;
 	}
 
-	switch (src[1]) {
+	switch (src[7]) {
 	case('w'): perms |= S_IWOTH; break;
 	case('-'): break;
 	default: return 0;
 	}
 
-	switch (src[2]) {
+	switch (src[8]) {
 	case('T'): perms |= S_ISVTX; break;
 	case('t'): perms |= S_ISVTX; /* fall-through */
 	case('x'): perms |= S_IXOTH; break;

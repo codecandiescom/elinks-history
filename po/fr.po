@@ -391,7 +391,7 @@ msgid ""
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 "Cette option ne peut être modifiée. Cela signifie qu'il s'agit d'une option "
-"spéciale (comme un répertoire), essayez de presser la touche ESPACE pour "
+"spéciale (comme un dossier), essayez de presser la touche ESPACE pour "
 "voir son contenu."
 
 #: src/config/dialogs.c:389 src/config/dialogs.c:403
@@ -1749,7 +1749,7 @@ msgstr ""
 
 #: src/config/options.c:1265
 msgid "Tables navigation order"
-msgstr "Ordre de navigation dans les tableaux."
+msgstr "Ordre de navigation dans les tableaux"
 
 #: src/config/options.c:1267
 msgid "Move by columns in table, instead of rows."
@@ -1814,7 +1814,7 @@ msgstr "Cache des documents formatés"
 
 #: src/config/options.c:1305
 msgid "Format cache options."
-msgstr "Options du cache des documents formatés"
+msgstr "Options du cache des documents formatés."
 
 #: src/config/options.c:1307
 msgid "Number"
@@ -1830,7 +1830,7 @@ msgstr "Cache mémoire"
 
 #: src/config/options.c:1313
 msgid "Memory cache options."
-msgstr "Options du cache mémoire"
+msgstr "Options du cache mémoire."
 
 #: src/config/options.c:1315 src/dialogs/document.c:104
 msgid "Size"
@@ -1838,7 +1838,7 @@ msgstr "Taille"
 
 #: src/config/options.c:1317
 msgid "Memory cache size (in bytes)."
-msgstr "Taille du cache mémoire (en octets)"
+msgstr "Taille du cache mémoire (en octets)."
 
 #: src/config/options.c:1321
 msgid "Charset"
@@ -1846,7 +1846,7 @@ msgstr "Jeu de caractères"
 
 #: src/config/options.c:1323
 msgid "Charset options."
-msgstr "Options des jeux de caractères"
+msgstr "Options des jeux de caractères."
 
 #: src/config/options.c:1325
 msgid "Default codepage"
@@ -1858,7 +1858,7 @@ msgstr "Page de caractères par défaut pour le document."
 
 #: src/config/options.c:1329
 msgid "Ignore charset info from server"
-msgstr "Ignorer le jeu de caractères indiqué par le serveur."
+msgstr "Ignorer le jeu de caractères indiqué par le serveur"
 
 #: src/config/options.c:1331
 msgid "Ignore charset info sent by server."
@@ -1870,7 +1870,7 @@ msgstr "Configuration des couleurs par défaut"
 
 #: src/config/options.c:1337
 msgid "Default document color settings."
-msgstr "Configuration des couleurs par défaut"
+msgstr "Configuration des couleurs par défaut."
 
 #: src/config/options.c:1349
 msgid "Link color"
@@ -2048,7 +2048,7 @@ msgstr "Historique global"
 
 #: src/config/options.c:1448
 msgid "Global history options."
-msgstr "Options de l'historique global"
+msgstr "Options de l'historique global."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.c:1451 src/config/options.c:1597
@@ -2200,7 +2200,7 @@ msgstr "MIME"
 
 #: src/config/options.c:1528
 msgid "MIME-related options (handlers of various MIME types)."
-msgstr "Options et gestion des types MIME"
+msgstr "Options et gestion des types MIME."
 
 #: src/config/options.c:1531
 msgid "Default MIME-type"
@@ -2322,7 +2322,7 @@ msgstr "Options pour le support mailcap"
 
 #: src/config/options.c:1599
 msgid "Enable mailcap support."
-msgstr "Activer le support mailcap"
+msgstr "Activer le support mailcap."
 
 #: src/config/options.c:1601 src/config/options.c:1636
 msgid "Path"
@@ -2821,7 +2821,7 @@ msgstr "Terminaux"
 
 #: src/config/options.c:1879
 msgid "Terminal options."
-msgstr "Options du terminal"
+msgstr "Options du terminal."
 
 #: src/config/options.c:1884
 msgid "Options specific to this terminal type (according to $TERM value)."
@@ -2957,7 +2957,7 @@ msgstr "Interface utilisateur"
 
 #: src/config/options.c:1947
 msgid "User interface options."
-msgstr "Options de l'interface utilisateur"
+msgstr "Options de l'interface utilisateur."
 
 #: src/config/options.c:1951
 msgid "Color settings"
@@ -2965,7 +2965,7 @@ msgstr "Configuration des couleurs"
 
 #: src/config/options.c:1953
 msgid "Default user interface color settings."
-msgstr "Configuration des couleurs de l'interface utilisateur"
+msgstr "Configuration des couleurs de l'interface utilisateur."
 
 #. ==========================================================
 #. ============= BORING PART (colors) START =================
@@ -2979,7 +2979,7 @@ msgstr "Terminaux couleur"
 
 #: src/config/options.c:1965
 msgid "Color settings for color terminal."
-msgstr "Configuration des couleurs des terminaux couleur"
+msgstr "Configuration des couleurs des terminaux couleur."
 
 #: src/config/options.c:1968 src/config/options.c:2377
 msgid "Main menu bar"
@@ -2987,7 +2987,7 @@ msgstr "Barre du menu principal"
 
 #: src/config/options.c:1970 src/config/options.c:2379
 msgid "Main menu bar colors."
-msgstr "Couleurs de la barre du menu principal"
+msgstr "Couleurs de la barre du menu principal."
 
 #: src/config/options.c:1972
 msgid "Unselected main menu bar item"
@@ -3012,7 +3012,7 @@ msgstr "Raccourci clavier"
 
 #: src/config/options.c:1998 src/config/options.c:2407
 msgid "Main menu hotkey colors."
-msgstr "Couleurs des raccourcis de la barre du menu principal"
+msgstr "Couleurs des raccourcis de la barre du menu principal."
 
 #: src/config/options.c:2000 src/config/options.c:2069
 #: src/config/options.c:2409 src/config/options.c:2478
@@ -3036,7 +3036,7 @@ msgstr "Couleurs des raccourcis sélectionnés du menu principal."
 msgid "Main menu unselected hotkey default text color."
 msgstr ""
 "Couleur par défaut du texte des raccourcis non\n"
-"sélectionnés du menu principal"
+"sélectionnés du menu principal."
 
 #: src/config/options.c:2014 src/config/options.c:2423
 msgid "Main menu unselected hotkey default background color."
@@ -3483,7 +3483,7 @@ msgstr "Onglets"
 
 #: src/config/options.c:2824
 msgid "Window tabs settings."
-msgstr "Configuration des onglets"
+msgstr "Configuration des onglets."
 
 #: src/config/options.c:2826
 msgid "Display tabs bar"

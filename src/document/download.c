@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.38 2002/09/13 20:34:59 pasky Exp $ */
+/* $Id: download.c,v 1.39 2002/09/14 11:10:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,26 +625,20 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe)
 			if (msge) mem_free(msge);
 		}
 
-		h = -1;
-		goto end;
-	}
+	} else {
+		set_bin(h);
 
-	set_bin(h);
+		if (!safe) {
+			safe_strncpy(download_dir, file, MAX_STR_LEN);
 
-	if (safe) goto end;
-
-	safe_strncpy(download_dir, file, MAX_STR_LEN);
-
-	for (i = strlen(download_dir) - 1; i >= 0; i--) {
-		if (dir_sep(download_dir[i])) {
+			/* Find the used directory so it's available in history */
+			for (i = strlen(download_dir); i >= 0; i--)
+				if (dir_sep(download_dir[i]))
+					break;
 			download_dir[i + 1] = 0;
-			goto end;
 		}
 	}
 
-	download_dir[0] = 0;
-
-end:
 	if (file != fi) mem_free(file);
 	return h;
 }

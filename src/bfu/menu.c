@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.131 2003/12/26 09:41:53 zas Exp $ */
+/* $Id: menu.c,v 1.132 2003/12/26 09:54:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,8 +31,9 @@ struct mainmenu {
 	int sp;
 };
 
-/* Global variables */
-unsigned char m_submenu[] = ">>";
+/* Submenu indicator, displayed at right. */
+static unsigned char m_submenu[] = ">>";
+static int m_submenu_len = sizeof(m_submenu) - 1;
 
 /* Prototypes */
 static void menu_handler(struct window *, struct term_event *, int);
@@ -162,7 +163,10 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				     - !!menu->items[my].hotkey_pos;
 		}
 
-		if (mi_has_right_text(menu->items[my])) {
+		if (mi_is_submenu(menu->items[my])) {
+			s += MENU_HOTKEY_SPACE + m_submenu_len;
+
+		} else if (mi_has_right_text(menu->items[my])) {
 			unsigned char *rtext = menu->items[my].rtext;
 
 			if (mi_text_translate(menu->items[my]))
@@ -336,7 +340,24 @@ display_menu(struct terminal *term, struct menu *menu)
 				}
 			}
 
-			if (mi_has_right_text(menu->items[p])) {
+			if (mi_is_submenu(menu->items[p])) {
+				unsigned char *rtext = menu->items[p].rtext;
+
+				if (mi_text_translate(menu->items[p]))
+					rtext = _(rtext, term);
+
+				if (m_submenu_len) {
+					int l = m_submenu_len;
+					int xbase = menu->x + mxw - l;
+
+					for (x = l - 1;
+					     (x >= 0) && (mxw - 2 >= l - x)
+					     && (c = m_submenu[x]);
+				    	     x--)
+						draw_char(term, xbase + x, s, c, 0, color);
+				}
+
+			} else if (mi_has_right_text(menu->items[p])) {
 				unsigned char *rtext = menu->items[p].rtext;
 
 				if (mi_text_translate(menu->items[p]))

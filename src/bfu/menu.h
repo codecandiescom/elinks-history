@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.36 2003/12/26 09:41:53 zas Exp $ */
+/* $Id: menu.h,v 1.37 2003/12/26 09:54:38 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -6,10 +6,6 @@
 struct terminal;
 
 typedef void (*menu_func)(struct terminal *, void *, void *);
-
-extern unsigned char m_submenu[];
-#define M_SUBMENU ((unsigned char *) m_submenu)
-
 
 /* Which fields to free when zapping a list item - bitwise. */
 enum menu_item_flags {

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.127 2003/12/26 09:26:14 zas Exp $ */
+/* $Id: link.c,v 1.128 2003/12/26 09:54:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -899,7 +899,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	if (link->type == LINK_HYPERTEXT && link->where) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
-			add_to_menu(&mi, N_("Display ~usemap"), M_SUBMENU,
+			add_to_menu(&mi, N_("Display ~usemap"), NULL,
 				    (menu_func) send_enter, NULL, SUBMENU);
 		else {
 			int c = can_open_in_new(term);
@@ -913,7 +913,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_separator_to_menu(&mi);
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
-					     c - 1 ? M_SUBMENU : (unsigned char *) "",
+					     c - 1 ? NULL : (unsigned char *) "",
 					     (menu_func) open_in_new_window,
 					     send_open_in_new_window, c - 1 ? SUBMENU : 0);
 
@@ -958,7 +958,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    c - 1 ? M_SUBMENU : (unsigned char *) "",
+					    c - 1 ? NULL : (unsigned char *) "",
 					    (menu_func) open_in_new_window,
 					    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 

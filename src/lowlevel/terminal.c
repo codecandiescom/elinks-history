@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.16 2002/06/19 13:26:07 zas Exp $ */
+/* $Id: terminal.c,v 1.17 2002/06/20 10:13:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -411,7 +411,7 @@ struct terminal *init_term(int fdin, int fdout,
 	term->blocked = -1;
 	term->screen = DUMMY;
 	term->last_screen = DUMMY;
-	term->spec = get_opt_rec(root_options, "terminal.default");
+	term->spec = get_opt_rec(root_options, "terminal._template_");
 	term->term[0] = 0;
 	term->cwd[0] = 0;
 	term->input_queue = DUMMY;

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.20 2003/09/01 20:49:10 jonas Exp $ */
+/* $Id: color.c,v 1.21 2003/09/01 21:11:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,7 +191,7 @@ static unsigned char fg_color[16][8] = {
 	/* 14 (brightcyan) */
 	{ 14, 14, 14, 14, 14, 14, 14, 14 },
 	/* 15 (brightwhite) */
-	{ 15, 15, 15, 15, 15, 15, 15,  7 },
+	{ 15, 15, 15, 15, 15, 15, 15, 15 },
 };
 
 /* Terminal color encoding: */

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.35 2003/11/07 15:59:15 jonas Exp $ */
+/* $Id: text.c,v 1.36 2003/11/07 16:00:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,6 +44,35 @@ text_width(struct terminal *term, register unsigned char *text,
 
 #define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
 
+static inline int
+split_line(unsigned char *text, int w, int x)
+{
+	unsigned char *tx;
+	unsigned char *split = text;
+	int line_x = x;
+	int line_width;
+
+	do {
+		while (is_unsplitable(split)) {
+			split++;
+			line_x++;
+		}
+
+		tx = ++split;
+		line_width = line_x - x;
+		line_x++;
+		if (*(split - 1) != ' ') break;
+
+		while (is_unsplitable(tx))
+			tx++;
+	} while (tx - split < w - line_width);
+
+	assertm(split - text == line_x - x);
+	assertm(line_width + 1 == line_x - x);
+
+	return line_width;
+}
+
 /* Format text according to dialog dimensions and alignment. */
 /* TODO: Longer names for local variables. */
 void
@@ -52,29 +81,8 @@ dlg_format_text(struct terminal *term,
 		struct color_pair *color, enum format_align align)
 {
 	do {
-		unsigned char *tx;
-		unsigned char *split = text;
 		int shift;
-		int line_x = x;
-		int line_width;
-
-		do {
-			while (is_unsplitable(split)) {
-				split++;
-			       	line_x++;
-			}
-
-			tx = ++split;
-			line_width = line_x - x;
-			line_x++;
-			if (*(split - 1) != ' ') break;
-
-			while (is_unsplitable(tx))
-				tx++;
-		} while (tx - split < w - line_width);
-
-		assertm(split - text == line_x - x);
-		assertm(line_width + 1 == line_x - x);
+		int line_width = split_line(text, w, x);
 
 		shift = (align == AL_CENTER ? int_max((w - line_width) / 2, 0) : 0);
 

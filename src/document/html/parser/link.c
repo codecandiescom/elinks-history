@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.44 2004/12/08 18:29:52 zas Exp $ */
+/* $Id: link.c,v 1.45 2004/12/10 17:28:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,14 +103,10 @@ html_a(unsigned char *a)
  * If none or disabled it retuns "IMG".
  */
 static unsigned char *
-get_image_filename_from_src(unsigned char *attr)
+get_image_filename_from_src(unsigned char *src)
 {
 	unsigned char *text;
-	unsigned char *src = NULL;
 	int max_len;
-
-	src = null_or_stracpy(object_src);
-	if (!src) src = get_url_val(attr, "src");
 
 	/* We can display image as [foo.gif]. */
 
@@ -131,8 +127,6 @@ get_image_filename_from_src(unsigned char *attr)
 	} else {
 		text = stracpy("IMG");
 	}
-
-	mem_free_if(src);
 
 	return text;
 }
@@ -210,6 +204,7 @@ html_img(unsigned char *a)
 {
 	int ismap, usemap = 0;
 	int add_brackets = 0;
+	unsigned char *src = NULL;
 	unsigned char *al = get_attr_val(a, "usemap");
 
 	if (al) {
@@ -241,13 +236,21 @@ html_img(unsigned char *a)
 	 * to limit display width on certain websites. --Zas */
 	if (al && strlen(al) > 5) clr_spaces(al);
 
+	/* Get the |src| value for this tag if any. */
+	src = null_or_stracpy(object_src);
+	if (!src) src = get_url_val(a, "src");
+	if (!src) src = get_url_val(a, "dynsrc");
+
 	/* If we have no label yet (no title or alt), so
 	 * just use default ones, or image filename. */
 	if (!al || !*al) {
 		mem_free_if(al);
 		/* Do we want to display images with no link on them ?
 		 * If not, just exit now. */
-		if (!global_doc_opts->images && !format.link) return;
+		if (!global_doc_opts->images && !format.link) {
+			mem_free_if(src);
+			return;
+		}
 
 		/* We want label to use brackets (or prefix/suffix). */
 		add_brackets = 1;
@@ -257,7 +260,7 @@ html_img(unsigned char *a)
 		} else if (ismap) {
 			al = stracpy("ISMAP");
 		} else {
-			al = get_image_filename_from_src(a);
+			al = get_image_filename_from_src(src);
 		}
 	}
 
@@ -269,7 +272,6 @@ html_img(unsigned char *a)
 
 	if (al) {
 		int img_link_tag = get_opt_int("document.browse.images.image_link_tagging");
-		unsigned char *s;
 		color_t fg;
 
 		/* Add brackets or prefix/suffix defined by options. */
@@ -290,12 +292,8 @@ html_img(unsigned char *a)
 			goto show_al;
 		}
 
-		s = null_or_stracpy(object_src);
-		if (!s) s = get_url_val(a, "src");
-		if (!s) s = get_url_val(a, "dynsrc");
-		if (s) {
-			format.image = join_urls(html_context.base_href, s);
-			mem_free(s);
+		if (src) {
+			format.image = join_urls(html_context.base_href, src);
 		}
 
 		format.title = get_attr_val(a, "title");
@@ -330,6 +328,7 @@ show_al:
 	mem_free_set(&format.image, NULL);
 	mem_free_set(&format.title, NULL);
 
+	mem_free_if(src);
 	mem_free_if(al);
 	if (usemap) kill_html_stack_item(&html_top);
 	/*put_chrs(" ", 1, put_chars_f, ff);*/

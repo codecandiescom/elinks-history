@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.118 2003/11/26 12:33:13 miciah Exp $ */
+/* $Id: listbox.c,v 1.119 2003/11/26 14:23:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -427,7 +427,7 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 {
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_listbox_widget_data(widget_data);
-	struct box_context *data;
+	struct box_context data;
 
 	if (!list_empty(*box->items)) {
 		if (!box->top) box->top = box->items->next;
@@ -447,18 +447,14 @@ display_listbox(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		box->sel = box->top;
 	}
 
-	data = mem_calloc(1, sizeof(struct box_context));
-	if (data) {
-		data->term = term;
-		data->widget_data = widget_data;
-		data->box = box;
-		data->dlg_data = dlg_data;
+	memset(&data, 0, sizeof(struct box_context));
+	data.term = term;
+	data.widget_data = widget_data;
+	data.box = box;
+	data.dlg_data = dlg_data;
 
-		traverse_listbox_items_list(box->top, box, widget_data->h,
-					    1, display_listbox_item, data);
-
-		mem_free(data);
-	}
+	traverse_listbox_items_list(box->top, box, widget_data->h,
+				    1, display_listbox_item, &data);
 }
 
 static void

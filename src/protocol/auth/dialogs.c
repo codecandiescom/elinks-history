@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.123 2005/03/27 18:04:38 miciah Exp $ */
+/* $Id: dialogs.c,v 1.124 2005/03/27 18:06:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ do_auth_dialog(struct session *ses, void *data)
 	if (sticker_len < 0 || sticker_len > MAX_STR_LEN) return;
 
 #define AUTH_WIDGETS_COUNT 5
-	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);
+	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, sticker_len);
 	if (!dlg) return;
 
 	a->blocked = 1;
@@ -98,7 +98,7 @@ do_auth_dialog(struct session *ses, void *data)
 	dlg->layouter = generic_dialog_layouter;
 
 	text = get_dialog_offset(dlg, AUTH_WIDGETS_COUNT);
-	strcpy(text, sticker);
+	memcpy(text, sticker, sticker_len);
 
 	dlg->udata = (void *) ses;
 	dlg->udata2 = a;

@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.21 2004/07/08 12:44:32 jonas Exp $ */
+/* $Id: table.c,v 1.22 2004/07/08 20:33:27 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -148,8 +148,9 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 
 	table->width = get_width(attr, "width", real);
 	if (table->width == -1) {
-		table->width = par_format.width - par_format.leftmargin - par_format.rightmargin;
-		if (table->width < 0) table->width = 0;
+		int margins = par_format.leftmargin + par_format.rightmargin;
+
+		table->width = int_max(par_format.width - margins, 0);
 		table->full_width = 1;
 	}
 

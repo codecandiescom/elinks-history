@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.129 2004/07/13 22:11:23 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.130 2004/07/14 00:31:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -408,6 +408,20 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 
 		add_bookmark(folder, 1, title, url);
 	}
+}
+
+void
+bookmark_auto_save_tabs(struct terminal *term)
+{
+	unsigned char *foldername;
+
+	if (get_cmd_opt_bool("anonymous")
+	    || !get_opt_bool("ui.sessions.auto_save"))
+		return;
+
+	foldername = get_opt_str("ui.sessions.auto_save_foldername");
+
+	bookmark_terminal_tabs(term, foldername);
 }
 
 void

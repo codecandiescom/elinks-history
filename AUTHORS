@@ -195,10 +195,10 @@ Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 
 Jonas Fonseca <fonseca@diku.dk>
 	Danish translation
-	Unique download filenames
+	http://elinks.or.cz/
 	Mailcap support
 	Random hacking
-
+ 
 John <martian202002@yahoo.com>
 	Tab browsing initial patch
 
@@ -263,6 +263,9 @@ Martin Norback <d95mback@dtek.chalmers.se>
 
 Matthew Mueller <donut@azstarnet.com>
 	Random hacking
+
+Michael R. Elkins <me@cs.hmc.edu>
+	Original mailcap code from Mutt
 
 Michail Litvak <mci@owl.openwall.com>
 	Patch configure.in to force error if OpenSSL not found
@@ -436,4 +439,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.123 2003/05/11 18:34:26 miciah Exp $
+$Id: AUTHORS,v 1.124 2003/05/11 21:28:06 jonas Exp $

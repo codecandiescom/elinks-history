@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.8 2003/04/26 09:47:03 zas Exp $ */
+/* $Id: lists.h,v 1.9 2003/05/02 12:10:03 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -109,7 +109,7 @@ do { \
 
 #define LISTMAGIC 0xdadababa
 
-#define listmagicerror(x) _listmagicerror(x, __FILE__, __LINE__)
+#define list_magic_error(where) list_magic_error_(where, __FILE__, __LINE__)
 
 struct list_head {
 	unsigned int magic1;
@@ -138,12 +138,12 @@ do { \
 
 
 #define list_empty(x) ((((x).magic1 == LISTMAGIC && (x).magic2 == LISTMAGIC)\
-		       	|| (listmagicerror("list_empty"), 1)) && (x).next == &(x))
+		       	|| (list_magic_error("list_empty"), 1)) && (x).next == &(x))
 
 #define del_from_list(x) \
 do { \
 	if ((x)->magic1 != LISTMAGIC || (x)->magic2 != LISTMAGIC) \
-		listmagicerror("del_from_list"); \
+		list_magic_error("del_from_list"); \
 	do_not_optimize_here(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
@@ -155,7 +155,7 @@ do { \
 #define add_at_pos(p,x) \
 do { \
 	if ((p)->magic1 != LISTMAGIC || (p)->magic2 != LISTMAGIC) \
-		listmagicerror("add_at_pos"); \
+		list_magic_error("add_at_pos"); \
 	do_not_optimize_here(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.67 2003/10/22 20:19:01 jonas Exp $ */
+/* $Id: opttypes.c,v 1.68 2003/10/22 20:22:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,14 +33,13 @@ int commandline = 0;
 static unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	unsigned char *err;
 	unsigned char *str;
 
 	if (!*argc) return gettext("Parameter expected");
 
 	/* FIXME!! We will modify argv! (maybe) */
 	commandline = 1;
-	str = option_types[o->type].read(o, *argv - 0);
+	str = option_types[o->type].read(o, *argv);
 	commandline = 0;
 	if (str) {
 		/* We ate parameter */
@@ -51,9 +50,8 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 		}
 		mem_free(str);
 	}
-	err = gettext("Read error");
 
-	return err;
+	return gettext("Read error");
 }
 
 /* If 0 follows, disable option and eat 0. If 1 follows, enable option and

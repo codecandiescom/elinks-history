@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.22 2004/12/16 15:05:12 zas Exp $ */
+/* $Id: libintl.h,v 1.23 2004/12/26 20:14:47 jonas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -18,6 +18,13 @@
 #include "intl/charsets.h"
 #include "terminal/terminal.h"
 
+/* The number of the charset to which the "elinks" domain was last
+ * bound with bind_textdomain_codeset(), or -1 if none yet.  This
+ * cannot be a static variable in _(), because then it would get
+ * duplicated in every translation unit, even though the actual
+ * binding is global.  */
+extern int el_gettext_current_charset;
+
 /* Define it to find redundant useless calls */
 /* #define DEBUG_IT */
 
@@ -33,7 +40,6 @@
 static inline unsigned char *
 _(unsigned char *msg, struct terminal *term)
 {
-	static int current_charset = -1;
 	int new_charset;
 
 	/* Prevent useless (and possibly dangerous) calls. */
@@ -44,10 +50,10 @@ _(unsigned char *msg, struct terminal *term)
 
 	new_charset = get_opt_codepage_tree(term->spec, "charset");
 	/* Prevent useless switching. */
-	if (current_charset != new_charset) {
-		current_charset = new_charset;
+	if (el_gettext_current_charset != new_charset) {
 		bind_textdomain_codeset( /* PACKAGE */ "elinks",
-					get_cp_mime_name(current_charset));
+					get_cp_mime_name(new_charset));
+		el_gettext_current_charset = new_charset;
 	}
 
 do_lookup:
@@ -75,7 +81,6 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 	static unsigned int last_line = 0;
 	static unsigned char last_func[1024] = "";
 	static unsigned char last_result[16384] = "";
-	static int current_charset = -1;
 	int new_charset;
 	unsigned char *result;
 
@@ -89,10 +94,10 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 
 	/* Prevent useless switching. */
 	new_charset = get_opt_int_tree(term->spec, "charset");
-	if (current_charset != new_charset) {
-		current_charset = new_charset;
+	if (el_gettext_current_charset != new_charset) {
 		bind_textdomain_codeset( /* PACKAGE */ "elinks",
-					get_cp_mime_name(current_charset));
+					get_cp_mime_name(new_charset));
+		el_gettext_current_charset = new_charset;
 	}
 
 do_lookup:

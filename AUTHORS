@@ -257,6 +257,7 @@ Julian Kinraid <jkinraid@clear.net.nz>
 Kalle Olavi Niemitalo <kon@iki.fi>
 	HTTP Accept-Charset header fix
 	Finnish translation update
+	Fixed unnecessary or possibly skipped calls to bind_textdomain_codeset()
 
 Kaloian Doganov <kaloian@europe.com>
 	Bulgarian translation
@@ -531,4 +532,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.179 2004/12/26 19:11:55 jonas Exp $
+$Id: AUTHORS,v 1.180 2004/12/26 20:14:47 jonas Exp $

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.31 2003/06/08 22:11:47 pasky Exp $ */
+/* $Id: af_unix.c,v 1.32 2003/06/17 23:23:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,11 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+#if 0	/* Testing purpose. */
+#undef DONT_USE_AF_UNIX
+#undef USE_AF_UNIX
+#endif
+
 #ifdef DONT_USE_AF_UNIX
 
 int
@@ -60,8 +65,6 @@ af_unix_close(void)
 #ifdef USE_AF_UNIX
 #include <sys/un.h>
 #endif
-
-void af_unix_connection(void *);
 
 /* Accepted socket */
 struct sockaddr *s_unix_accept = NULL;
@@ -127,7 +130,14 @@ unlink_unix(void)
 
 #else
 
-int
+/* It may not be defined in netinet/in.h on some systems. */
+#ifndef INADDR_LOOPBACK
+#define INADDR_LOOPBACK         ((unsigned long int) 0x7f000001)
+#endif
+
+/* FIXME: IPv6 support. */
+
+static int
 get_address(void)
 {
 	struct sockaddr_in *sin;
@@ -143,7 +153,7 @@ get_address(void)
 
 	sin->sin_family = AF_INET;
 	sin->sin_port = htons(ELINKS_PORT);
-	sin->sin_addr.s_addr = htonl(0x7f000001); /* localhost */
+	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
 	s_unix = (struct sockaddr *) sin;
 	s_unix_l = sizeof(struct sockaddr_in);
@@ -151,12 +161,23 @@ get_address(void)
 	return AF_INET;
 }
 
-void
-unlink_unix(void)
-{
-}
+#define unlink_unix()
 
 #endif
+
+static void
+af_unix_connection(void *dummy)
+{
+	int l = s_unix_l;
+	int ns;
+
+	memset(s_unix_accept, 0, l);
+	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);
+
+	init_term(ns, ns, tabwin_func);
+
+	set_highpri();
+}
 
 int
 bind_to_af_unix(void)
@@ -244,20 +265,6 @@ again:
 	set_handlers(s_unix_fd, af_unix_connection, NULL, NULL, NULL);
 
 	return -1;
-}
-
-void
-af_unix_connection(void *dummy)
-{
-	int l = s_unix_l;
-	int ns;
-
-	memset(s_unix_accept, 0, l);
-	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);
-
-	init_term(ns, ns, tabwin_func);
-
-	set_highpri();
 }
 
 void

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.291 2004/10/18 03:12:23 miciah Exp $ */
+/* $Id: search.c,v 1.292 2004/10/18 03:14:45 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1059,16 +1059,16 @@ match_link_text(struct link *link, unsigned char *text, int textlen,
 		int case_sensitive)
 {
 	unsigned char *match = get_link_typeahead_text(link);
+	unsigned char *matchpos;
 
-	if (!link_is_form(link)
-	    && textlen <= strlen(match)) {
-		unsigned char *matchpos = case_sensitive
-					   ? strstr(match, text)
-					   : strcasestr(match, text);
+	if (link_is_form(link) || textlen > strlen(match))
+		return -1;
 
-		if (matchpos) {
-			return matchpos - match;
-		}
+	matchpos = case_sensitive ? strstr(match, text)
+				  : strcasestr(match, text);
+
+	if (matchpos) {
+		return matchpos - match;
 	}
 
 	return -1;

@@ -1,9 +1,10 @@
-/* $Id: document.h,v 1.17 2003/10/31 01:38:12 jonas Exp $ */
+/* $Id: document.h,v 1.18 2003/10/31 02:08:37 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
 #include "document/options.h"
+#include "document/refresh.h"
 #include "terminal/draw.h"
 #include "util/color.h"
 #include "util/lists.h"
@@ -50,12 +51,6 @@ enum cp_status {
 	CP_STATUS_SERVER,
 	CP_STATUS_ASSUMED,
 	CP_STATUS_IGNORED
-};
-
-struct document_refresh {
-	int timer;
-	unsigned long seconds;
-	unsigned char url[1]; /* XXX: Keep last! */
 };
 
 enum link_type {

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.55 2003/10/31 01:38:12 jonas Exp $ */
+/* $Id: session.h,v 1.56 2003/10/31 02:08:37 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -225,12 +225,5 @@ unsigned char *get_current_link_name(struct session *, unsigned char *, size_t);
 extern struct list_head questions_queue;
 
 void add_questions_entry(void *);
-
-/* Document (meta) refresh. */
-
-struct document_refresh *init_document_refresh(unsigned char *url, unsigned long seconds);
-void done_document_refresh(struct document_refresh *refresh);
-void kill_document_refresh(struct document_refresh *refresh);
-void start_document_refresh(struct document_refresh *refresh, struct session *ses);
 
 #endif

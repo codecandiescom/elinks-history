@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.52 2003/12/28 13:58:57 zas Exp $ */
+/* $Id: renderer.c,v 1.53 2003/12/28 15:44:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ realloc_line(struct document *document, int y, int x)
 
 	if (!line) return NULL;
 
-	if (x >= line->length) {
+	if (x > line->length) {
 		if (!ALIGN_LINE(&line->chars, line->length, x))
 			return NULL;
 
@@ -171,7 +171,13 @@ add_document_line(struct document *document, int lineno,
 	line = convert_string(convert_table, line, width, CSM_DEFAULT);
 	if (!line) return 0;
 
+	if (!*line) {
+		mem_free(line);
+		return 0;
+	}
+
 	width = strlen(line) + expanded;
+	assert(width > 0);
 
 	pos = realloc_line(document, lineno, width);
 	if (!pos) {
@@ -179,9 +185,24 @@ add_document_line(struct document *document, int lineno,
 		return 0;
 	}
 
+/* Temporary debug stuff, i will remove it later. --Zas */
+/* #define DEBUG_NUL_CHARS */
+#ifdef DEBUG_NUL_CHARS
+#define SWAP_NULS if (line_char == '#') line_char = ' ';
+#define DISPLAY_NULS \
+	} else if (!line_char) { \
+		template->data = '#'; \
+		copy_screen_chars(pos++, template, 1);
+#else
+#define SWAP_NULS
+#define DISPLAY_NULS
+#endif
+
 	expanded = 0;
 	for (line_pos = 0, end = pos + width; pos < end; line_pos++) {
 		unsigned char line_char = line[line_pos];
+
+		SWAP_NULS
 
 		if (line_char == ASCII_TAB) {
 			int tab_width = 7 - ((line_pos + expanded) & 7);
@@ -189,15 +210,22 @@ add_document_line(struct document *document, int lineno,
 			template->data = ' ';
 			expanded += tab_width;
 
-			copy_screen_chars(pos++, template, 1);
-
-			while (tab_width--)
+			do
 				copy_screen_chars(pos++, template, 1);
+			while (tab_width--);
+
+			DISPLAY_NULS
 
 		} else {
 			template->data = line_char;
 			copy_screen_chars(pos++, template, 1);
 		}
+
+		/* We still copy nul chars to screen, this should not occur.
+		 * This is due to bad @width calculation in certain conditions
+		 * especially when expanding tabs in binary file (but not everytime).
+		 * --Zas */
+		assert(pos[-1].data);
 	}
 
 	mem_free(line);
@@ -277,6 +305,8 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 			}
 		}
 
+		assert(width >= 0);
+
 		/* We will touch the supplied source, so better replicate it. */
 		xsource = memacpy(source, width);
 		if (!xsource) continue;
@@ -304,6 +334,8 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 		length -= width;
 		source += width;
 	}
+
+	assert(!length);
 }
 
 void

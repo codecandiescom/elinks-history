@@ -1,3 +1,167 @@
+Mon Sep 27 18:15:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, dialogs/menu.c:
+
+	Add LXR URI shortcut to Help menu. Move menu separator so non-debug
+	builds has it after the bugzilla entry.  
+
+Mon Sep 27 12:28:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	add_dom_link(): Use init_template() which also initializes the
+	template chars data and attribute members. Fixes problem with
+	obfuscated link text on dpreview.com in the highlighted source.  
+
+Mon Sep 27 12:24:34 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	Updated spec for ELinks-now.  
+
+Mon Sep 27 11:40:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/file.c:
+
+	Fix bug 507 (reloading disables HTML highlighting) problem which
+	apparently only affected reloading of local files. It was introduced
+	in version 1.177 that caused the cache entries content type to
+	always be updated (I didn't mention a reason in the log) and for
+	files that would remove the content type assigned by ses_chktype().
+	So the check in render_encoded_document() for whether to highlight
+	would fail because the content type was NULL.  
+
+Mon Sep 27 11:30:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Check for non-empty content type like we already do for cache header
+	checking.  
+
+Mon Sep 27 09:37:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Compilation fix.  
+
+Mon Sep 27 09:37:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Compilation fixes.  
+
+Mon Sep 27 09:36:48 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	add_snippets() doesn't need @current.  
+
+Mon Sep 27 09:36:16 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	process_snippets() now also handles NULL *current.  
+
+Mon Sep 27 09:35:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	ecmascript_eval() now moved to new process_snippets() which just
+	goes from *current to the end of queue and evals the snippets.  
+
+Mon Sep 27 09:32:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	process_snippets() -> add_snippets().  
+
+Mon Sep 27 09:31:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Changed process_snippets() to ignore *current for now.  
+
+Mon Sep 27 07:42:31 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Sep 27 07:33:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix compilation without CONFIG_LEDS.  
+
+Mon Sep 27 02:29:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cache/cache.c:
+
+	Ufff. Finally fixed the bug I was hunting for about 1.5 days with
+	every weapon I had available. When reloading document, don't assume
+	it is the same if the already loaded data is same and just truncate
+	it anyway, because that wasn't healthy for the snippets at all. I'm
+	so tired that I can't even celebrate much.  
+
+Mon Sep 27 02:27:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Two more assertions discovering real and difficult bugs.  
+
+Mon Sep 27 01:10:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Oops, prompt for credentials if username was invalid too.  
+
+Mon Sep 27 01:03:58 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: document.c, document.h, html/renderer.c:
+
+	link.event_hooks is now pointer to list, giving it more flexibility
+	and fixing one nice infinite loop when freeing up the document.  
+
+Mon Sep 27 00:57:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Compilation fix. Didn't I say it? 
+
+Mon Sep 27 00:56:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	Compilation fix.  
+
+Mon Sep 27 00:55:40 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: document.c, document.h, html/renderer.c:
+
+	Introduced yet-unused link.event_hooks list.  
+
+Mon Sep 27 00:43:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	+its in a comment, spotted by biesi.  
+
+Mon Sep 27 00:38:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/protocol/auth/auth.c, src/protocol/auth/auth.h,
+	src/protocol/ftp/ftp.c:
+
+	Support for FTP authentication over user interface, fixing bug 194.
+	Patch by Christian Biesinger <cbiesinger@gmx.at>, tuned by me based
+	on further IRC discussion. So if it breaks, it's probably my fault
+	;-).  
+
+Mon Sep 27 00:10:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Simplify have_location(). Patch by Christian Biesinger.  
+
 Sun Sep 26 20:57:26 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in:

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.334 2003/10/23 00:59:03 jonas Exp $ */
+/* $Id: options.c,v 1.335 2003/10/23 07:58:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -675,8 +675,6 @@ print_full_help(struct option *tree, unsigned char *path)
 	struct option *option;
 	unsigned char saved[MAX_STR_LEN];
 	unsigned char *savedpos = saved;
-	unsigned char *default_str = gettext("default");
-	unsigned char *alias_for = gettext("alias for");
 
 	*savedpos = 0;
 
@@ -709,37 +707,37 @@ print_full_help(struct option *tree, unsigned char *path)
 
 		/* Print the 'title' of each option type. */
 		if (type == OPT_INT || type == OPT_BOOL || type == OPT_LONG) {
-			printf("    %s%s%s %s (%s: %ld)",
-				path, saved, option->name, help, default_str,
+			printf(gettext("    %s%s%s %s (default: %ld)"),
+				path, saved, option->name, help,
 				(long) option->value.number);
 
 		} else if (type == OPT_STRING && option->value.string) {
-			printf("    %s%s%s %s (%s: \"%s\")",
-				path, saved, option->name, help, default_str,
+			printf(gettext("    %s%s%s %s (default: \"%s\")"),
+				path, saved, option->name, help,
 				option->value.string);
 
 		} else if (type == OPT_ALIAS) {
-			printf("    %s%s%s %s (%s %s)",
-				path, saved, option->name, help, alias_for,
+			printf(gettext("    %s%s%s %s (alias for %s)"),
+				path, saved, option->name, help,
 				option->value.string);
 
 		} else if (type == OPT_CODEPAGE) {
-			printf("    %s%s%s %s (%s: %s)",
-				path, saved, option->name, help, default_str,
+			printf(gettext("    %s%s%s %s (default: %s)"),
+				path, saved, option->name, help,
 				get_cp_name(option->value.number));
 
 		} else if (type == OPT_COLOR) {
 			color_t color = option->value.color;
 
-			printf("    %s%s%s %s (%s: #%06x)",
-			       path, saved, option->name, help, default_str, color);
+			printf(gettext("    %s%s%s %s (default: #%06x)"),
+			       path, saved, option->name, help, color);
 
 		} else if (type == OPT_COMMAND) {
 			printf("    %s%s%s", path, saved, option->name);
 
 		} else if (type == OPT_LANGUAGE) {
-			printf("    %s%s%s %s (%s: \"%s\")",
-				path, saved, option->name, help, default_str,
+			printf(gettext("    %s%s%s %s (default: \"%s\")"),
+				path, saved, option->name, help,
 				language_to_name(option->value.number));
 
 		} else if (type == OPT_TREE) {

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.107 2003/11/29 19:03:49 jonas Exp $ */
+/* $Id: dialog.c,v 1.108 2003/11/29 19:16:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,9 +66,7 @@ static inline void cycle_widget_focus(struct dialog_data *dlg_data, int directio
 void
 redraw_dialog(struct dialog_data *dlg_data, int layout)
 {
-	int i;
-	int x = dlg_data->x + DIALOG_LEFT_BORDER;
-	int y = dlg_data->y + DIALOG_TOP_BORDER;
+	int i, x, y;
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *title_color;
 
@@ -81,6 +79,9 @@ redraw_dialog(struct dialog_data *dlg_data, int layout)
 		if (!widget_is_focusable(selected_widget(dlg_data)))
 			cycle_widget_focus(dlg_data, 1);
 	}
+
+	x = dlg_data->x + DIALOG_LEFT_BORDER;
+	y = dlg_data->y + DIALOG_TOP_BORDER;
 
 	draw_border(term, x, y,
 		    dlg_data->width - 2 * DIALOG_LEFT_BORDER,

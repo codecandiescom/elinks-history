@@ -6,15 +6,15 @@ files in the project's root directory.
 
 Other things you will find in this directory are:
 
-	book/ -	Where development on moving existing documentation to docbook
+	book/ -	Where development on moving existing documentation to DocBook
 		format goes on.
 
-	man/  -	The place where manpages will be moved to once they are
-		integrated from doc/book/manpages.
+	man/  -	The place where the manpages live. They are generated from the
+		DocBook documents found in doc/book/manpages.
 
 	html/ - Will (in the future) contain processed docbook documents.
 		Manual pages and man pages should be already processed.
 
 If you'd like to contribute please read book/README.
 
-$Id: README,v 1.2 2003/10/04 20:56:04 pasky Exp $
+$Id: README,v 1.3 2003/10/04 23:16:09 jonas Exp $

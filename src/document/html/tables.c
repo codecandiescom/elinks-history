@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.127 2003/11/17 13:18:28 jonas Exp $ */
+/* $Id: tables.c,v 1.128 2003/11/17 17:18:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1785,7 +1785,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 
 	if (bad_html) mem_free(bad_html);
 
-	state = init_html_parser_state(1, AL_LEFT, 0, 0);
+	state = init_html_parser_state(ELEMENT_DONT_KILL, AL_LEFT, 0, 0);
 
 	t->p = p;
 	t->border = border;

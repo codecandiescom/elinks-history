@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.139 2003/12/29 22:43:46 zas Exp $ */
+/* $Id: kbdbind.c,v 1.140 2004/01/01 07:16:48 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -400,6 +400,7 @@ static struct strtonum action_table[] = {
 	{ "auto-complete-unambiguous", ACT_AUTO_COMPLETE_UNAMBIGUOUS, DACT(N_("Attempt to unambiguously auto-complete the input")) },
 	{ "back", ACT_BACK, DACT(N_("Return to the previous document in history")) },
 	{ "backspace", ACT_BACKSPACE, DACT(N_("Delete character in front of the cursor")) },
+	{ "beginning-of-buffer", ACT_BEGINNING_OF_BUFFER, DACT(N_("Go to the first line of the buffer.")) },
 	{ "bookmark-manager", ACT_BOOKMARK_MANAGER, DACT(N_("Open bookmark manager")) },
 	{ "cache-manager", ACT_CACHE_MANAGER, DACT(N_("Open cache manager")) },
 	{ "cancel", ACT_CANCEL, DACT(N_("Cancel current state")) },
@@ -416,6 +417,7 @@ static struct strtonum action_table[] = {
 	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
 	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
 	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
+	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer.")) },
 	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
 	{ "file-menu", ACT_FILE_MENU, DACT(N_("Open the File menu")) },

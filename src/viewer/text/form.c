@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.74 2003/12/25 13:57:04 jonas Exp $ */
+/* $Id: form.c,v 1.75 2004/01/01 07:16:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -884,6 +884,26 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 		case ACT_END:
 			if (frm->type == FC_TEXTAREA) {
 				if (textarea_op_end(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				fs->state = strlen(fs->value);
+			}
+			break;
+		case ACT_BEGINNING_OF_BUFFER:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_bob(fs, frm, rep)) {
+					x = 0;
+					break;
+				}
+			} else {
+				fs->state = 0;
+			}
+			break;
+		case ACT_END_OF_BUFFER:
+			if (frm->type == FC_TEXTAREA) {
+				if (textarea_op_eob(fs, frm, rep)) {
 					x = 0;
 					break;
 				}

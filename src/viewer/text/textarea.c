@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.39 2003/12/22 09:53:29 jonas Exp $ */
+/* $Id: textarea.c,v 1.40 2004/01/01 07:16:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -518,6 +518,70 @@ textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 	}
 	fs->state = strlen(fs->value);
 yyyy:
+	mem_free(ln);
+	return 0;
+}
+
+int
+textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
+{
+	unsigned char *position = fs->value + fs->state;
+	struct line_info *ln;
+	int y;
+
+	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+	for (y = 0; ln[y].st; y++) {
+		if (position <= ln[y].en) {
+			fs->state -= ln[y].st - fs->value;
+
+			position = fs->value + fs->state;
+			if (position > ln[0].en)
+				fs->state = ln[0].en - fs->value;
+
+			goto x;
+		}
+	}
+	fs->state = 0;
+
+x:
+	mem_free(ln);
+	return 0;
+}
+
+int
+textarea_op_eob(struct form_state *fs, struct form_control *frm, int rep)
+{
+	unsigned char *position = fs->value + fs->state;
+	struct line_info *ln;
+	int y;
+
+	assert(fs && fs->value && frm);
+	if_assert_failed return 0;
+
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!ln) return 0;
+
+	for (y = 0; ln[y].st; y++) {
+		if (position <= ln[y].en) {
+			for (; ln[y].st && ln[y + 1].st; y++) {
+				fs->state += ln[y].en - ln[y].st + 1;
+			}
+
+			position = fs->value + fs->state;
+			if (position > ln[y].en)
+				fs->state = ln[y].en - fs->value;
+
+			goto x;
+		}
+	}
+	fs->state = strlen(fs->value);
+
+x:
 	mem_free(ln);
 	return 0;
 }

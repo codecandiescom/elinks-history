@@ -1,4 +1,4 @@
-/* $Id: textarea.h,v 1.11 2003/12/01 14:08:20 pasky Exp $ */
+/* $Id: textarea.h,v 1.12 2004/01/01 07:16:49 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
@@ -24,6 +24,8 @@ int textarea_op_home(struct form_state *fs, struct form_control *frm, int rep);
 int textarea_op_up(struct form_state *fs, struct form_control *frm, int rep);
 int textarea_op_down(struct form_state *fs, struct form_control *frm, int rep);
 int textarea_op_end(struct form_state *fs, struct form_control *frm, int rep);
+int textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep);
+int textarea_op_eob(struct form_state *fs, struct form_control *frm, int rep);
 int textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep);
 
 void set_textarea(struct session *ses, struct document_view *doc_view, int kbd);

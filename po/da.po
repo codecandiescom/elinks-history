@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-02-11 22:37+0100\n"
-"PO-Revision-Date: 2005-02-11 23:31+0100\n"
+"PO-Revision-Date: 2005-02-16 23:50+0100\n"
 "Last-Translator: Morten Bo Johansen <mojo@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -856,7 +856,7 @@ msgstr "Kontakt den specificerede værtsmaskine"
 msgid "Look up specified host and print all DNS resolved IP addresses."
 msgstr ""
 "Kontakt den specificerede værtsmaskine og udskriv alle IP-adresser\n"
-"fundet ved DNS-opslag"
+"fundet ved DNS-opslag."
 
 #: src/config/cmdline.c:703
 msgid "Run as separate instance"
@@ -1257,7 +1257,7 @@ msgstr "Tilføj tastetildeling"
 
 #: src/config/dialogs.c:845
 msgid "Invalid keystroke."
-msgstr "Ugyldig tastetildeling"
+msgstr "Ugyldig tastetildeling."
 
 #: src/config/dialogs.c:864
 msgid "Need to select a keymap."
@@ -1965,7 +1965,7 @@ msgstr "Forbindelser"
 
 #: src/config/options.inc:73
 msgid "Connection options."
-msgstr "Forbindelsesindstillinger"
+msgstr "Forbindelsesindstillinger."
 
 #: src/config/options.inc:76
 msgid "Asynchronous DNS"
@@ -2333,7 +2333,7 @@ msgstr "Aktivt link"
 
 #: src/config/options.inc:260
 msgid "Options for the active link."
-msgstr "Indstillinger for aktuelle link"
+msgstr "Indstillinger for aktuelle link."
 
 #: src/config/options.inc:262
 msgid "Colors"
@@ -2406,7 +2406,7 @@ msgstr "Understreg"
 
 #: src/config/options.inc:290
 msgid "Underline the active link."
-msgstr "Understreg det aktive link"
+msgstr "Understreg det aktive link."
 
 #: src/config/options.inc:293
 msgid "Directory highlighting"
@@ -2665,7 +2665,7 @@ msgstr "Vandret tekstmargin"
 
 #: src/config/options.inc:417
 msgid "Horizontal text margin."
-msgstr "Vandret tekstmargin"
+msgstr "Vandret tekstmargin."
 
 #: src/config/options.inc:419
 msgid "Document meta refresh"
@@ -2711,7 +2711,7 @@ msgstr "Navigeringsorden i tabeller"
 
 #: src/config/options.inc:437
 msgid "Move by columns in table, instead of rows."
-msgstr "Naviger tabeller kolonnevis i stedet for rækkevis"
+msgstr "Naviger tabeller kolonnevis i stedet for rækkevis."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:443
@@ -2785,7 +2785,7 @@ msgstr "Formaterede dokumenter"
 
 #: src/config/options.inc:474
 msgid "Format cache options."
-msgstr "Indstillinger for tekstformaterede dokumenter"
+msgstr "Indstillinger for tekstformaterede dokumenter."
 
 #: src/config/options.inc:476
 msgid "Number"
@@ -2862,7 +2862,7 @@ msgstr "Ignorér information om tegnsæt fra server"
 
 #: src/config/options.inc:513
 msgid "Ignore charset info sent by server."
-msgstr "Ignorér information om tegnsæt sendt fra server"
+msgstr "Ignorér information om tegnsæt sendt fra server."
 
 #: src/config/options.inc:517
 msgid "Default color settings"
@@ -2870,7 +2870,7 @@ msgstr "Forvalgte farveindstillinger"
 
 #: src/config/options.inc:519
 msgid "Default document color settings."
-msgstr "Forvalgte farveindstillinger for dokumenter"
+msgstr "Forvalgte farveindstillinger for dokumenter."
 
 #: src/config/options.inc:530
 msgid "Link color"
@@ -2882,7 +2882,7 @@ msgstr "Forvalgt linkfarve."
 
 #: src/config/options.inc:534
 msgid "Visited-link color"
-msgstr "Farve for besøgte links."
+msgstr "Farve for besøgte links"
 
 #: src/config/options.inc:536
 msgid "Default visited link color."
@@ -2890,7 +2890,7 @@ msgstr "Forvalgt farve for besøgte links."
 
 #: src/config/options.inc:538
 msgid "Image-link color"
-msgstr "Farve for billedlinks."
+msgstr "Farve for billedlinks"
 
 #: src/config/options.inc:540
 msgid "Default image link color."
@@ -3121,7 +3121,7 @@ msgstr "Vis matematisk indeks (<sub> tag)"
 
 #: src/config/options.inc:656
 msgid "Display subscripts (as [thing])."
-msgstr "Vis matematisk indeks (<sub> tag) som [indeks]"
+msgstr "Vis matematisk indeks (<sub> tag) som [indeks]."
 
 #: src/config/options.inc:658
 msgid "Display superscripts"
@@ -3129,7 +3129,7 @@ msgstr "Vis matematisk overskrift (<sup> tag)"
 
 #: src/config/options.inc:660
 msgid "Display superscripts (as ^thing)."
-msgstr "Vis matematisk overskrift (<sup> tag) som ^overskrift"
+msgstr "Vis matematisk overskrift (<sup> tag) som ^overskrift."
 
 #: src/config/options.inc:662
 msgid "Rendering of html link element"
@@ -3418,7 +3418,7 @@ msgstr "Brugergrænseflade"
 
 #: src/config/options.inc:807
 msgid "User interface options."
-msgstr "Indstillinger for brugergrænseflade"
+msgstr "Indstillinger for brugergrænseflade."
 
 #: src/config/options.inc:811
 msgid "Color settings"
@@ -3434,7 +3434,7 @@ msgstr "Farveterminaler"
 
 #: src/config/options.inc:842
 msgid "Color settings for color terminal."
-msgstr "Farveindstillinger for farveterminaler"
+msgstr "Farveindstillinger for farveterminaler."
 
 #: src/config/options.inc:844
 msgid "Non-color terminals"
@@ -3459,7 +3459,7 @@ msgstr "Inaktive menupunkter i hovedmenu"
 
 #: src/config/options.inc:855
 msgid "Unselected main menu bar item colors."
-msgstr "Farver for inaktive menupunkter i hovedmenu"
+msgstr "Farver for inaktive menupunkter i hovedmenu."
 
 #: src/config/options.inc:857
 msgid "Selected main menu bar item"
@@ -3467,7 +3467,7 @@ msgstr "Aktive menupunkter i hovedmenu"
 
 #: src/config/options.inc:859
 msgid "Selected main menu bar item colors."
-msgstr "Farver for aktive menupunkter i hovedmenu"
+msgstr "Farver for aktive menupunkter i hovedmenu."
 
 #: src/config/options.inc:861 src/config/options.inc:890
 msgid "Hotkey"
@@ -3483,7 +3483,7 @@ msgstr "Inaktiv hurtigtast"
 
 #: src/config/options.inc:867
 msgid "Main menu unselected hotkey colors."
-msgstr "Farver for inaktiv hurtigtast"
+msgstr "Farver for inaktiv hurtigtast."
 
 #: src/config/options.inc:869 src/config/options.inc:898
 msgid "Selected hotkey"
@@ -3551,7 +3551,7 @@ msgstr "Dialogboks"
 
 #: src/config/options.inc:909
 msgid "Dialog colors."
-msgstr "Farver for dialogboks"
+msgstr "Farver for dialogboks."
 
 #: src/config/options.inc:919
 msgid "Generic"
@@ -3575,11 +3575,11 @@ msgstr "Rullebjælke"
 
 #: src/config/options.inc:929
 msgid "Scrollbar colors."
-msgstr "Farver for rullebjælke"
+msgstr "Farver for rullebjælke."
 
 #: src/config/options.inc:931
 msgid "Selected scrollbar"
-msgstr "Farver for aktivt faneblad."
+msgstr "Farver for aktivt faneblad"
 
 #: src/config/options.inc:933
 msgid "Scrollbar selected colors."
@@ -3595,7 +3595,7 @@ msgstr "Tekst"
 
 #: src/config/options.inc:941
 msgid "Dialog text colors."
-msgstr "Farver på tekst i dialogboks"
+msgstr "Farver på tekst i dialogboks."
 
 #: src/config/options.inc:943 src/viewer/text/form.c:1442
 msgid "Checkbox"
@@ -3675,7 +3675,7 @@ msgstr "Titelbjælke"
 
 #: src/config/options.inc:985
 msgid "Title bar colors."
-msgstr "Farver for titelbjælke"
+msgstr "Farver for titelbjælke."
 
 #: src/config/options.inc:987
 msgid "Generic title bar"
@@ -3683,7 +3683,7 @@ msgstr "Fælles titelbjælke"
 
 #: src/config/options.inc:989
 msgid "Generic title bar colors."
-msgstr "Farver for fælles titelbjælke"
+msgstr "Farver for fælles titelbjælke."
 
 #: src/config/options.inc:991
 msgid "Title bar text"
@@ -3691,7 +3691,7 @@ msgstr "Titelbjælketekst"
 
 #: src/config/options.inc:993
 msgid "Title bar text colors."
-msgstr "Tekstfarve for titelbjælke"
+msgstr "Tekstfarve for titelbjælke."
 
 #: src/config/options.inc:996
 msgid "Status bar"
@@ -4395,7 +4395,7 @@ msgstr "Intern serverinformation om side"
 
 #: src/dialogs/document.c:287
 msgid "No header info."
-msgstr "Ingen serverinformation om side"
+msgstr "Ingen serverinformation om side."
 
 #: src/dialogs/download.c:253 src/dialogs/menu.c:570 src/sched/download.c:363
 msgid "Download"
@@ -5105,7 +5105,7 @@ msgstr "Indstillinger for ECMAScript."
 
 #: src/ecmascript/ecmascript.c:43
 msgid "Whether to run those scripts inside of documents."
-msgstr "Om scripts i dokumentet skal anvendes og køres"
+msgstr "Om scripts i dokumentet skal anvendes og køres."
 
 #: src/ecmascript/ecmascript.c:45
 msgid "Script error reporting"
@@ -6602,7 +6602,7 @@ msgstr "Intet program"
 #: src/protocol/user.c:265
 #, c-format
 msgid "No program specified for protocol %s."
-msgstr "Intet program angivet for protokol %s"
+msgstr "Intet program angivet for protokol %s."
 
 #: src/sched/download.c:225 src/sched/download.c:322 src/sched/download.c:501
 #: src/sched/download.c:595
@@ -7107,7 +7107,7 @@ msgstr "SSL"
 
 #: src/ssl/ssl.c:180
 msgid "SSL options."
-msgstr "SSL-indstillinger"
+msgstr "SSL-indstillinger."
 
 #: src/terminal/event.c:71
 #, c-format
@@ -7151,7 +7151,7 @@ msgstr "Kan ikke skrive til standarduddata: %s"
 
 #: src/viewer/dump/dump.c:82
 msgid "Can't write to stdout."
-msgstr "Kan ikke skrive til standarduddata"
+msgstr "Kan ikke skrive til standarduddata."
 
 #: src/viewer/dump/dump.c:256
 #, c-format

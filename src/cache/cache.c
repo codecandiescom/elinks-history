@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.179 2004/08/14 05:56:22 jonas Exp $ */
+/* $Id: cache.c,v 1.180 2004/09/14 22:31:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,10 +204,32 @@ enlarge_entry(struct cache_entry *cached, int size)
 	if_assert_failed { cache_size = 0; }
 }
 
+
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
 
 /* One byte is reserved for data in struct fragment. */
 #define FRAGSIZE(x) (sizeof(struct fragment) + (x) - 1)
+
+static struct fragment *
+frag_alloc(size_t size)
+{
+	struct fragment *f = mem_calloc(1, FRAGSIZE(size));
+	/* Do not simplify here, please. */
+	return f;
+}
+
+static struct fragment *
+frag_realloc(struct fragment *f, size_t size)
+{
+	return mem_realloc(f, FRAGSIZE(size));
+}
+
+static void
+frag_free(struct fragment *f)
+{
+	mem_free(f);
+}
+
 
 /* Contatenate overlapping fragments. */
 static void
@@ -225,7 +247,7 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 			/* We end before end of the following fragment, though.
 			 * So try to append overlapping part of that fragment
 			 * to us. */
-			nf = mem_realloc(f, FRAGSIZE(end_offset - f->offset));
+			nf = frag_realloc(f, end_offset - f->offset);
 			if (nf) {
 				nf->prev->next = nf;
 				nf->next->prev = nf;
@@ -257,7 +279,7 @@ remove_overlaps(struct cache_entry *cached, struct fragment *f, int *trunc)
 		nf = f->next;
 		enlarge_entry(cached, -nf->length);
 		del_from_list(nf);
-		mem_free(nf);
+		frag_free(nf);
 	}
 }
 
@@ -336,7 +358,7 @@ add_fragment(struct cache_entry *cached, int offset,
 	}
 
 	/* Make up new fragment. */
-	nf = mem_calloc(1, FRAGSIZE(CACHE_PAD(length)));
+	nf = frag_alloc(CACHE_PAD(length));
 	if (!nf) return -1;
 
 	nf->offset = offset;
@@ -386,7 +408,7 @@ defrag_entry(struct cache_entry *cached)
 		new_frag_len += frag->length;
 
 	/* One byte is reserved for data in struct fragment. */
-	new_frag = mem_calloc(1, FRAGSIZE(new_frag_len));
+	new_frag = frag_alloc(new_frag_len);
 	if (!new_frag) return;
 	new_frag->length = new_frag_len;
 	new_frag->real_length = new_frag_len;
@@ -401,7 +423,7 @@ defrag_entry(struct cache_entry *cached)
 
 		frag = frag->prev;
 		del_from_list(tmp);
-		mem_free(tmp);
+		frag_free(tmp);
 	}
 
 	add_to_list(cached->frag, new_frag);
@@ -417,7 +439,7 @@ delete_fragment(struct cache_entry *cached, struct fragment *f)
 
 		enlarge_entry(cached, -f->length);
 		del_from_list(f);
-		mem_free(f);
+		frag_free(f);
 		f = tmp;
 	}
 }
@@ -447,7 +469,7 @@ truncate_entry(struct cache_entry *cached, int offset, int final)
 			if (final) {
 				struct fragment *nf;
 
-				nf = mem_realloc(f, FRAGSIZE(f->length));
+				nf = frag_realloc(f->length);
 				if (nf) {
 					nf->next->prev = nf;
 					nf->prev->next = nf;
@@ -478,7 +500,7 @@ free_entry_to(struct cache_entry *cached, int offset)
 			enlarge_entry(cached, -f->length);
 			f = f->prev;
 			del_from_list(tmp);
-			mem_free(tmp);
+			frag_free(tmp);
 		} else if (f->offset < offset) {
 			long size = offset - f->offset;
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.102 2003/06/07 20:05:18 pasky Exp $ */
+/* $Id: menu.c,v 1.103 2003/06/07 20:08:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,7 +441,7 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = o - 1 ? M_SUBMENU : (unsigned char *) "";
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
-		e->submenu = o - 1;
+		e->submenu = !!(o - 1);
 		e->item_free = FREE_NOTHING;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;

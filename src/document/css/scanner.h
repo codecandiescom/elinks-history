@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.1 2004/01/18 15:41:04 jonas Exp $ */
+/* $Id: scanner.h,v 1.2 2004/01/18 15:52:07 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -21,8 +21,6 @@ enum css_token_type {
 	CSS_TOKEN_PERCENTAGE,
 
 	CSS_TOKEN_GARBAGE,
-
-	CSS_TOKENS,
 };
 
 /* This is a token and scanner state */

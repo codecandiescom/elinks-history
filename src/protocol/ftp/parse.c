@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.24 2005/03/29 01:04:26 jonas Exp $ */
+/* $Id: parse.c,v 1.25 2005/03/29 01:16:20 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -162,77 +162,77 @@ enum ftp_unix {
 static int
 parse_ftp_unix_permissions(const unsigned char *src, int len)
 {
-   int perms = 0;
+	int perms = 0;
 
-   if (len != 9
-       && !(len == 10 && src[9] == '+'))   /* ACL tag */
-      	return -1;
+	if (len != 9
+		&& !(len == 10 && src[9] == '+'))   /* ACL tag */
+		return -1;
 
-   switch (src[0]) {
-   case('r'): perms |= S_IRUSR; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[0]) {
+	case('r'): perms |= S_IRUSR; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   switch (src[1]) {
-   case('w'): perms |= S_IWUSR; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[1]) {
+	case('w'): perms |= S_IWUSR; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   switch (src[2]) {
-   case('S'): perms |= S_ISUID; break;
-   case('s'): perms |= S_ISUID; /* fall-through */
-   case('x'): perms |= S_IXUSR; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[2]) {
+	case('S'): perms |= S_ISUID; break;
+	case('s'): perms |= S_ISUID; /* fall-through */
+	case('x'): perms |= S_IXUSR; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   src += 3;
-   switch (src[0]) {
-   case('r'): perms |= S_IRGRP; break;
-   case('-'): break;
-   default: return -1;
-   }
+	src += 3;
+	switch (src[0]) {
+	case('r'): perms |= S_IRGRP; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   switch (src[1]) {
-   case('w'): perms |= S_IWGRP; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[1]) {
+	case('w'): perms |= S_IWGRP; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   switch (src[2]) {
-   case('S'): perms |= S_ISGID; break;
-   case('s'): perms |= S_ISGID; /* fall-through */
-   case('x'): perms |= S_IXGRP; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[2]) {
+	case('S'): perms |= S_ISGID; break;
+	case('s'): perms |= S_ISGID; /* fall-through */
+	case('x'): perms |= S_IXGRP; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   src += 3;
-   switch (src[0]) {
-   case('r'): perms |= S_IROTH; break;
-   case('-'): break;
-   default: return -1;
-   }
+	src += 3;
+	switch (src[0]) {
+	case('r'): perms |= S_IROTH; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   switch (src[1]) {
-   case('w'): perms |= S_IWOTH; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[1]) {
+	case('w'): perms |= S_IWOTH; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   switch (src[2]) {
-   case('T'): perms |= S_ISVTX; break;
-   case('t'): perms |= S_ISVTX; /* fall-through */
-   case('x'): perms |= S_IXOTH; break;
-   case('l'):
-   case('L'): perms |= S_ISGID; perms &= ~S_IXGRP; break;
-   case('-'): break;
-   default: return -1;
-   }
+	switch (src[2]) {
+	case('T'): perms |= S_ISVTX; break;
+	case('t'): perms |= S_ISVTX; /* fall-through */
+	case('x'): perms |= S_IXOTH; break;
+	case('l'):
+	case('L'): perms |= S_ISGID; perms &= ~S_IXGRP; break;
+	case('-'): break;
+	default: return -1;
+	}
 
-   return perms;
+	return perms;
 }
 
 static struct ftp_file_info *
@@ -372,7 +372,7 @@ parse_ftp_unix_response(struct ftp_file_info *info, unsigned char *src, int len)
 						info->name.length = pos - src;
 						break;
 					}
-		
+
 					pos = memchr(pos, ' ', end - pos);
 				}
 
@@ -666,6 +666,7 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 		info->type = FTP_FILE_PLAINFILE;
 		info->size = parse_ftp_number(&src, end, 0, LONG_MAX);
 		info->permissions = 0644;
+
 	} else {
 		info->type = FTP_FILE_UNKNOWN;
 	}

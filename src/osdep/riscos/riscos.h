@@ -1,9 +1,9 @@
-/* $Id: riscos.h,v 1.3 2003/10/28 00:17:49 pasky Exp $ */
+/* $Id: riscos.h,v 1.4 2004/08/14 23:00:08 jonas Exp $ */
 
 #ifndef EL__OSDEP_RISCOS_RISCOS_H
 #define EL__OSDEP_RISCOS_RISCOS_H
 
-#ifdef RISCOS
+#ifdef CONFIG_RISCOS
 
 /* TODO */
 

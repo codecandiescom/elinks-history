@@ -1,9 +1,9 @@
-/* $Id: sysinfo.h,v 1.2 2003/10/28 00:23:53 pasky Exp $ */
+/* $Id: sysinfo.h,v 1.3 2004/08/14 23:00:08 jonas Exp $ */
 
 #ifndef EL__OSDEP_RISCOS_SYSINFO_H
 #define EL__OSDEP_RISCOS_SYSINFO_H
 
-#ifdef RISCOS
+#ifdef CONFIG_RISCOS
 
 static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define SYSTEM_ID SYS_RISCOS

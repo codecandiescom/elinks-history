@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.144 2004/08/12 08:40:36 miciah Exp $ */
+/* $Id: osdep.c,v 1.145 2004/08/14 23:00:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,7 @@ get_terminal_size(int fd, int *x, int *y)
 
 /* Pipe */
 
-#if defined(UNIX) || defined(BEOS) || defined(RISCOS)
+#if defined(UNIX) || defined(BEOS) || defined(CONFIG_RISCOS)
 
 void
 set_bin(int fd)
@@ -615,7 +615,7 @@ get_input_handle(void)
 #endif
 
 
-#if defined(UNIX) || defined(OS2) || defined(RISCOS)
+#if defined(UNIX) || defined(OS2) || defined(CONFIG_RISCOS)
 
 void
 terminate_osdep(void)
@@ -709,7 +709,7 @@ get_common_env(void)
 	return env;
 }
 
-#if defined(UNIX) || defined(RISCOS)
+#if defined(UNIX) || defined(CONFIG_RISCOS)
 int
 get_system_env(void)
 {

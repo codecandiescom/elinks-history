@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.12 2004/08/14 21:15:09 jonas Exp $ */
+/* $Id: system.h,v 1.13 2004/08/14 23:00:07 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -17,7 +17,6 @@
 #undef OS2
 #undef WIN32
 #undef BEOS
-#undef RISCOS
 
 #if defined(CONFIG_OS2)
 # define OS2
@@ -25,12 +24,8 @@
 # define WIN32
 #elif defined(CONFIG_BEOS)
 # define BEOS
-#elif defined(CONFIG_RISCOS)
-# define RISCOS
 #elif defined(CONFIG_UNIX)
 # define UNIX
-#else
-# error No OS defined by configure
 #endif
 
 #include "osdep/beos/overrides.h"

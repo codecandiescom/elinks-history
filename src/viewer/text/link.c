@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.9 2003/07/15 12:52:34 jonas Exp $ */
+/* $Id: link.c,v 1.10 2003/07/15 17:48:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -960,7 +960,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		int strl = 0;
 
 		if (link->form->type == FC_RESET)
-			return stracpy(_("~Reset form", term));
+			return stracpy(_("Reset form", term));
 
 		if (!link->form->action) return NULL;
 

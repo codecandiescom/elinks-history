@@ -1,3 +1,10 @@
+Mon Mar 25 18:38:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: lowlevel/connect.c, ssl/connect.c:
+	
+	SSL works once again now - the API i made for SSL sockets first
+	time was completely broken
+
 Mon Mar 25 17:18:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/dns.c, lowlevel/sched.c, util/error.c:

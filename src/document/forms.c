@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: forms.c,v 1.6 2004/12/18 20:31:58 pasky Exp $ */
+/* $Id: forms.c,v 1.7 2005/01/01 16:37:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,9 @@ done_form(struct form *form)
 {
 	struct form_control *fc;
 
+	if (form->next)
+		del_from_list(form);
+
 	mem_free_if(form->action);
 	mem_free_if(form->name);
 	mem_free_if(form->target);
@@ -43,6 +46,8 @@ done_form(struct form *form)
 		done_form_control(fc);
 	}
 	free_list(form->items);
+
+	mem_free(form);
 }
 
 int

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.89 2004/12/18 10:53:03 miciah Exp $ */
+/* $Id: document.c,v 1.90 2005/01/01 16:37:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,6 @@ void
 done_document(struct document *document)
 {
 	struct cache_entry *cached;
-	struct form *form;
 	int pos;
 
 	assert(document);
@@ -146,8 +145,8 @@ done_document(struct document *document)
 	mem_free_if(document->lines2);
 	mem_free_if(document->options.framename);
 
-	foreach (form, document->forms) {
-		done_form(form);
+	while (!list_empty(document->forms)) {
+		done_form(document->forms.next);
 	}
 
 #ifdef CONFIG_CSS
@@ -158,7 +157,6 @@ done_document(struct document *document)
 	free_uri_list(&document->ecmascript_imports);
 #endif
 
-	free_list(document->forms);
 	free_list(document->tags);
 	free_list(document->nodes);
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.520 2004/12/30 23:50:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.521 2005/01/01 16:37:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1332,7 +1332,6 @@ html_special_form(struct part *part, struct form *form)
 
 	if (!part->document) {
 		done_form(form);
-		mem_free(form);
 		return;
 	}
 

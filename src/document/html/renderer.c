@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.475 2004/07/02 23:34:59 pasky Exp $ */
+/* $Id: renderer.c,v 1.476 2004/07/02 23:38:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1093,11 +1093,12 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 		part->cx = par_format.leftmargin;
 	}
 
-	if (chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
+	if (html_is_preformatted()
+	    || chars[0] != ' ' || (charslen > 1 && chars[1] != ' ')) {
 		renderer_context.last_tag_for_newline = (void *) &part->document->tags;
 	}
 #ifndef CONFIG_FASTMEM
-	else if (!html_is_preformatted()) {
+	else {
 		/* XXX: I believe the test above is just a funny (and errie)
 		 * way to make sure we carry some real non-whitespace content.
 		 * --pasky */

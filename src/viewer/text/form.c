@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.196 2004/06/16 20:49:17 jonas Exp $ */
+/* $Id: form.c,v 1.197 2004/06/16 21:33:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ init_submitted_value(unsigned char *name, unsigned char *value, enum form_type t
 	if (!sv->name) { mem_free(sv->value); mem_free(sv); return NULL; }
 
 	sv->type = type;
-	sv->frm = fc;
+	sv->form_control = fc;
 	sv->position = position;
 
 	return sv;

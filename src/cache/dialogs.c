@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.25 2003/11/20 02:49:55 miciah Exp $ */
+/* $Id: dialogs.c,v 1.26 2003/11/20 02:51:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,9 +131,7 @@ push_info_button(struct dialog_data *dlg_data,
 void
 menu_cache_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog_data *dlg_data;
-
-	dlg_data = hierbox_browser(term, N_("Cache"),
+	hierbox_browser(term, N_("Cache"),
 			0, &cache_browser, ses,
 			1,
 			N_("Info"), push_info_button, B_ENTER, ses);

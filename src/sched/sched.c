@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.12 2003/04/20 08:25:32 zas Exp $ */
+/* $Id: sched.c,v 1.13 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,15 +35,15 @@
 
 /* Types and structs */
 struct h_conn {
-	struct h_conn *next;
-	struct h_conn *prev;
+	LIST_HEAD(struct h_conn);
+
 	unsigned char *host;
 	int conn;
 };
 
 struct k_conn {
-	struct k_conn *next;
-	struct k_conn *prev;
+	LIST_HEAD(struct k_conn);
+
 	void (*protocol)(struct connection *);
 	unsigned char *host;
 	int port;
@@ -111,9 +111,9 @@ static int keepalive_timeout = -1;
  * separate it to an own module and define operations on it (especially
  * foreach_queue or so). Ok ok, that's nothing important and I'm not even
  * sure I would really like it ;-). --pasky */
-struct list_head queue = {&queue, &queue};
-static struct list_head h_conns = {&h_conns, &h_conns};
-static struct list_head keepalive_connections = {&keepalive_connections, &keepalive_connections};
+INIT_LIST_HEAD(queue);
+static INIT_LIST_HEAD(h_conns);
+static INIT_LIST_HEAD(keepalive_connections);
 
 
 /* Prototypes */
@@ -645,7 +645,7 @@ void
 retry_connection(struct connection *c)
 {
 	int max_tries = get_opt_int("connection.retries");
-	
+
 	interrupt_connection(c);
 	if (c->unrestartable >= 2 || !max_tries || ++c->tries >= max_tries) {
 		/*send_connection_info(c);*/

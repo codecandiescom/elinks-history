@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.20 2003/01/13 11:18:15 zas Exp $ */
+/* $Id: globhist.c,v 1.21 2003/04/24 08:23:39 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -34,12 +34,11 @@
 
 struct global_history_list global_history = {
 	0,
-	{ &global_history.items, &global_history.items }
+	{ D_LIST_HEAD(global_history.items) }
 };
 
-struct list_head gh_box_items = { &gh_box_items, &gh_box_items };
-
-struct list_head gh_boxes = { &gh_boxes, &gh_boxes };
+INIT_LIST_HEAD(gh_box_items);
+INIT_LIST_HEAD(gh_boxes);
 
 
 /* GUI stuff. Declared here because finalize_global_history() frees it. */
@@ -50,8 +49,8 @@ unsigned char *gh_last_searched_url = NULL;
 #ifdef GLOBHIST
 
 struct globhist_cache_entry {
-	struct globhist_cache_entry *next;
-	struct globhist_cache_entry *prev;
+	LIST_HEAD(struct globhist_cache_entry);
+
 	struct global_history_item *item;
 };
 

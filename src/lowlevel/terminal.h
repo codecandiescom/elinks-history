@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.22 2003/01/18 23:05:22 pasky Exp $ */
+/* $Id: terminal.h,v 1.23 2003/04/24 08:23:40 zas Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -47,8 +47,8 @@ enum term_env_type {
 };
 
 struct terminal {
-	struct terminal *next;
-	struct terminal *prev;
+	LIST_HEAD(struct terminal);
+
 	int master;
 	int fdin;
 	int fdout;
@@ -80,8 +80,8 @@ struct terminal {
 };
 
 struct window {
-	struct window *next;
-	struct window *prev;
+	LIST_HEAD(struct window);
+
 	void (*handler)(struct window *, struct event *, int fwd);
 	void *data;
 	int xp, yp;

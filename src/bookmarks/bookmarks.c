@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.66 2003/04/19 12:25:39 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.67 2003/04/24 08:23:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,11 +21,9 @@
 #include "util/string.h"
 
 /* The list of bookmarks */
-struct list_head bookmarks = { &bookmarks, &bookmarks };
-struct list_head bookmark_box_items = { &bookmark_box_items,
-					&bookmark_box_items };
-struct list_head bookmark_boxes = { &bookmark_boxes, &bookmark_boxes };
-
+INIT_LIST_HEAD(bookmarks);
+INIT_LIST_HEAD(bookmark_box_items);
+INIT_LIST_HEAD(bookmark_boxes);
 
 #ifdef BOOKMARKS
 

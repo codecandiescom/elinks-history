@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.58 2003/01/04 20:41:46 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.59 2003/04/24 08:23:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,8 +25,8 @@
 #define table table_dirty_workaround_for_name_clash_with_libraries_on_macos
 
 
-struct list_head kbdbind_box_items = { &kbdbind_box_items, &kbdbind_box_items };
-struct list_head kbdbind_boxes = { &kbdbind_boxes, &kbdbind_boxes };
+INIT_LIST_HEAD(kbdbind_box_items);
+INIT_LIST_HEAD(kbdbind_boxes);
 static struct listbox_item *keyact_box_items[ACT_ZOOM_FRAME + 1];
 
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.20 2003/04/19 17:22:31 zas Exp $ */
+/* $Id: xbel.c,v 1.21 2003/04/24 08:23:38 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -36,8 +36,7 @@
 
 /* Elements' attributes */
 struct attributes {
-	struct attributes *next;
-	struct attributes *prev;
+	LIST_HEAD(struct attributes);
 
 	unsigned char *name;
 };

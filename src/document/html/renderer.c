@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.61 2003/04/22 10:09:24 zas Exp $ */
+/* $Id: renderer.c,v 1.62 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ static int g_ctrl_num;
 static int empty_format;
 
 static struct hash *table_cache = NULL;
-static struct list_head format_cache = {&format_cache, &format_cache};
+static INIT_LIST_HEAD(format_cache);
 
 
 /* Prototypes */

@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.14 2003/01/05 16:48:15 pasky Exp $ */
+/* $Id: parser.h,v 1.15 2003/04/24 08:23:39 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -50,8 +50,8 @@ enum form_type {
 };
 
 struct form_control {
-	struct form_control *next;
-	struct form_control *prev;
+	LIST_HEAD(struct form_control);
+
 	int form_num;
 	int ctrl_num;
 	int g_ctrl_num;
@@ -154,8 +154,8 @@ struct par_attrib {
 };
 
 struct html_element {
-	struct html_element *next;
-	struct html_element *prev;
+	LIST_HEAD(struct html_element);
+
 	struct text_attrib attr;
 	struct par_attrib parattr;
 	int invisible;

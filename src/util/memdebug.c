@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.17 2002/12/18 13:51:13 zas Exp $ */
+/* $Id: memdebug.c,v 1.18 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,8 +75,8 @@
 
 
 struct alloc_header {
-	struct alloc_header *next;
-	struct alloc_header *prev;
+	LIST_HEAD(struct alloc_header);
+
 #ifdef CHECK_AH_SANITY
 	int magic;
 #endif
@@ -120,7 +120,7 @@ struct alloc_header {
 
 long mem_amount = 0;
 
-struct list_head memory_list = { &memory_list, &memory_list };
+INIT_LIST_HEAD(memory_list);
 
 #ifdef LOG_MEMORY_ALLOC
 static void

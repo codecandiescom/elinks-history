@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.35 2003/04/19 11:00:17 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.36 2003/04/24 08:23:38 zas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -96,8 +96,7 @@ enum kbdbind_flags {
 };
 
 struct keybinding {
-	struct keybinding *next;
-	struct keybinding *prev;
+	LIST_HEAD(struct keybinding);
 	enum keymap keymap;
 	enum keyact action;
 	long key;

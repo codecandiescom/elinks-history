@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.37 2003/04/19 17:20:47 zas Exp $ */
+/* $Id: error.c,v 1.38 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,15 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+void
+_listmagicerror(unsigned char *m, unsigned char *file, int line)
+{
+	fprintf(stderr, "%s:%d %s bad list magic\n", file, line, m);
+	fflush(stderr);
+#ifdef LISTDEBUGFATAL
+	raise(SIGSEGV);
+#endif
+}
 
 void
 force_dump()

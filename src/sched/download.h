@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.3 2003/01/23 02:47:42 pasky Exp $ */
+/* $Id: download.h,v 1.4 2003/04/24 08:23:40 zas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -13,8 +13,8 @@
 #include "util/lists.h"
 
 struct download {
-	struct download *next;
-	struct download *prev;
+	LIST_HEAD(struct download);
+
 	unsigned char *url;
 	struct status stat;
 	unsigned char *file;

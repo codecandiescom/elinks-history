@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.22 2003/01/20 16:21:40 pasky Exp $ */
+/* $Id: select.c,v 1.23 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,15 +50,15 @@ struct thread {
 };
 
 struct timer {
-	struct timer *next;
-	struct timer *prev;
+	LIST_HEAD(struct timer);
+
 	ttime interval;
 	void (*func)(void *);
 	void *data;
 	int id;
 };
 
-static struct list_head timers = {&timers, &timers};
+static INIT_LIST_HEAD(timers);
 static struct thread threads[FD_SETSIZE];
 
 static fd_set w_read;
@@ -99,13 +99,13 @@ select_info(int type)
 }
 
 struct bottom_half {
-	struct bottom_half *next;
-	struct bottom_half *prev;
+	LIST_HEAD(struct bottom_half);
+
 	void (*fn)(void *);
 	void *data;
 };
 
-static struct list_head bottom_halves = { &bottom_halves, &bottom_halves };
+static INIT_LIST_HEAD(bottom_halves);
 
 int
 register_bottom_half(void (*fn)(void *), void *data)

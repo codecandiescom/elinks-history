@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.13 2003/04/20 08:40:50 zas Exp $ */
+/* $Id: download.c,v 1.14 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@
 /* TODO: tp_*() should be in separate file, I guess? --pasky */
 
 
-struct list_head downloads = {&downloads, &downloads};
+INIT_LIST_HEAD(downloads);
 
 
 int

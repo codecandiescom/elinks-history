@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.46 2003/01/18 23:05:22 pasky Exp $ */
+/* $Id: terminal.c,v 1.47 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,7 @@ set_cwd(unsigned char *path)
 }
 
 
-struct list_head terminals = {&terminals, &terminals};
+INIT_LIST_HEAD(terminals);
 
 static void
 alloc_term_screen(struct terminal *term, int x, int y)

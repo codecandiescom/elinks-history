@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.42 2003/04/20 08:49:13 zas Exp $ */
+/* $Id: os_dep.c,v 1.43 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -991,15 +991,16 @@ unblock_stdin()
 int thr_sem_init = 0;
 sem_id thr_sem;
 
-struct list_head active_threads = { &active_threads, &active_threads };
 
 struct active_thread {
-	struct active_thread *next;
-	struct active_thread *prev;
+	LIST_HEAD(struct active_thread);
+
 	thread_id tid;
 	void (*fn)(void *);
 	void *data;
 };
+
+INIT_LIST_HEAD(active_threads);
 
 int32
 started_thr(void *data)
@@ -1343,8 +1344,8 @@ done_draw()
 #include <sched.h>
 
 struct thread_stack {
-	struct thread_stack *next;
-	struct thread_stack *prev;
+	LIST_HEAD(struct thread_stack);
+
 	int pid;
 	void *stack;
 	void (*fn)(void *, int);
@@ -1361,7 +1362,7 @@ bglt(struct thread_stack *ts)
 	close(ts->h);
 }
 
-struct list_head thread_stacks = { &thread_stacks, &thread_stacks };
+INIT_LIST_HEAD(thread_stacks);
 
 int
 start_thread(void (*fn)(void *, int), void *ptr, int l)

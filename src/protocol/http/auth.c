@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.12 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: auth.c,v 1.13 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 #include "util/string.h"
 
 
-struct list_head http_auth_basic_list = { &http_auth_basic_list, &http_auth_basic_list };
+INIT_LIST_HEAD(http_auth_basic_list);
 
 /* Returns a valid host url for http authentification or NULL. */
 /* FIXME: This really belongs to url.c, but it would look alien there. */

@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.27 2003/04/17 17:44:27 zas Exp $ */
+/* $Id: dns.c,v 1.28 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,8 +34,8 @@
 
 
 struct dnsentry {
-	struct dnsentry *next;
-	struct dnsentry *prev;
+	LIST_HEAD(struct dnsentry);
+
 	ttime get_time;
 	struct sockaddr_storage *addr; /* pointer to array of addresses */
 	int addrno; /* array len / sizeof(sockaddr_storage) */
@@ -65,7 +65,7 @@ struct dnsquery {
 	char name[1];
 };
 
-struct list_head dns_cache = {&dns_cache, &dns_cache};
+INIT_LIST_HEAD(dns_cache);
 
 int
 do_real_lookup(unsigned char *name, struct sockaddr_storage **addrs, int *addrno,

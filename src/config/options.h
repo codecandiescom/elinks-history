@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.44 2002/12/14 16:21:27 jonas Exp $ */
+/* $Id: options.h,v 1.45 2003/04/24 08:23:38 zas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -60,8 +60,7 @@ enum option_type {
 struct session;
 
 struct option {
-	struct option *next;
-	struct option *prev;
+	LIST_HEAD(struct option);
 
 	unsigned char *name;
 	enum option_flags flags;

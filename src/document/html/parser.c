@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.73 2003/04/22 13:01:46 zas Exp $ */
+/* $Id: parser.c,v 1.74 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 
 /* TODO: This needs rewrite. Yes, no kidding. */
 
-struct list_head html_stack = {&html_stack, &html_stack};
+INIT_LIST_HEAD(html_stack);
 
 static inline int
 atchr(unsigned char c)

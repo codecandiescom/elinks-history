@@ -1,4 +1,4 @@
-/* $Id: box.h,v 1.4 2003/01/18 01:41:14 pasky Exp $ */
+/* $Id: box.h,v 1.5 2003/04/24 08:23:39 zas Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_BOX_H
 #define EL__USIVE_LAYOUTER_BOX_H
@@ -34,8 +34,7 @@ struct layout_box {
 	/* Tree position stuff. First, for easy lists handling, position in the
 	 * list of leafs of the parent box. */
 
-	struct layout_box *next;
-	struct layout_box *prev;
+	LIST_HEAD(struct layout_box);
 
 	struct layout_box *root;
 	struct list_head leafs; /* -> struct layout_box */

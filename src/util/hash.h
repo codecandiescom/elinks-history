@@ -1,4 +1,4 @@
-/* $Id: hash.h,v 1.5 2002/06/17 08:00:16 pasky Exp $ */
+/* $Id: hash.h,v 1.6 2003/04/24 08:23:40 zas Exp $ */
 
 #ifndef EL__UTIL_HASH_H
 #define EL__UTIL_HASH_H
@@ -12,8 +12,7 @@ typedef unsigned long hash_value;
 typedef hash_value (* hash_func)(unsigned char *key, unsigned int keylen, hash_value magic);
 
 struct hash_item {
-	struct hash_item *next;
-	struct hash_item *prev;
+	LIST_HEAD(struct hash_item);
 	unsigned char *key;
 	unsigned int keylen;
 	void *value;

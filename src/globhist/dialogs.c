@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.17 2003/04/18 07:35:12 zas Exp $ */
+/* $Id: dialogs.c,v 1.18 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,15 +29,11 @@
 #define HISTORY_BOX_IND 7
 
 struct history_dialog_list_item {
-	struct history_dialog_list_item *next;
-	struct history_dialog_list_item *prev;
+	LIST_HEAD(struct history_dialog_list_item);
 	struct dialog_data *dlg;
 };
 
-static struct list_head history_dialog_list = {
-	&history_dialog_list,
-	&history_dialog_list
-};
+static INIT_LIST_HEAD(history_dialog_list);
 
 static void listbox_delete_historyitem(struct terminal *,
 				       struct listbox_data *);

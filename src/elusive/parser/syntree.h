@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.10 2003/01/18 01:32:07 pasky Exp $ */
+/* $Id: syntree.h,v 1.11 2003/04/24 08:23:39 zas Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -31,8 +31,7 @@ struct syntree_node {
 	/* Tree position stuff. First, for easy lists handling, position in the
 	 * list of leafs of the parent node. */
 
-	struct syntree_node *next;
-	struct syntree_node *prev;
+	LIST_HEAD(struct syntree_node);
 
 	struct syntree_node *root;
 	struct list_head leafs; /* -> struct syntree_node */

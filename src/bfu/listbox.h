@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.22 2003/01/04 17:04:39 pasky Exp $ */
+/* $Id: listbox.h,v 1.23 2003/04/24 08:23:38 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -20,8 +20,7 @@ struct listbox_ops {
 
 /* Stores display information about a box. Kept in cdata. */
 struct listbox_data {
-	struct listbox_data *next;
-	struct listbox_data *prev;
+	LIST_HEAD(struct listbox_data);
 
 	struct listbox_ops *ops; /* Backend-provided operations */
 
@@ -33,8 +32,7 @@ struct listbox_data {
 
 /* An item in a box */
 struct listbox_item {
-	struct listbox_item *next;
-	struct listbox_item *prev;
+	LIST_HEAD(struct listbox_item);
 
 	/* These may be NULL/empty list for root/leaf nodes or non-hiearchic
 	 * listboxes. */

@@ -1,4 +1,4 @@
-/* $Id: location.h,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: location.h,v 1.2 2003/04/24 08:23:40 zas Exp $ */
 
 #ifndef EL__SCHED_LOCATION_H
 #define EL__SCHED_LOCATION_H
@@ -8,8 +8,7 @@
 #include "viewer/text/vs.h"
 
 struct location {
-	struct location *next;
-	struct location *prev;
+	LIST_HEAD(struct location);
 
 	/* In order to move stuff around properly when going back by multiple
 	 * steps, we need this temporary pointer to pass the proper unhistory

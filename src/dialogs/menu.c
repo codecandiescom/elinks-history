@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.77 2003/02/05 08:58:08 zas Exp $ */
+/* $Id: menu.c,v 1.78 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -612,7 +612,7 @@ activate_bfu_technology(struct session *ses, int item)
 }
 
 /* XXX: Used at foreign places. */
-struct input_history goto_url_history = { 0, {&goto_url_history.items, &goto_url_history.items} };
+struct input_history goto_url_history = { 0, {D_LIST_HEAD(goto_url_history.items)} };
 
 void
 dialog_goto_url(struct session *ses, char *url)
@@ -634,7 +634,7 @@ dialog_save_url(struct session *ses)
 		    NULL);
 }
 
-static struct input_history file_history = { 0, {&file_history.items, &file_history.items} };
+static struct input_history file_history = { 0, {D_LIST_HEAD(file_history.items)} };
 
 void
 query_file(struct session *ses, unsigned char *url,
@@ -669,7 +669,7 @@ query_file(struct session *ses, unsigned char *url,
 	mem_free(def);
 }
 
-static struct input_history search_history = { 0, {&search_history.items, &search_history.items} };
+static struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };
 
 void
 search_back_dlg(struct session *ses, struct f_data_c *f, int a)

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.197 2003/04/20 08:54:56 zas Exp $ */
+/* $Id: options.c,v 1.198 2003/04/24 08:23:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,23 +58,20 @@
  * listbox items as well, though. --pasky */
 
 struct option root_options = {
-	NULL, NULL,
+	NULL_LIST_HEAD,
 	"", 0, OPT_TREE, 0, 0,
 	NULL, "",
 	NULL,
 };
 struct option cmdline_options = {
-	NULL, NULL,
+	NULL_LIST_HEAD,
 	"", 0, OPT_TREE, 0, 0,
 	NULL, "",
 	NULL,
 };
 
-struct list_head root_option_box_items = {
-	&root_option_box_items, &root_option_box_items
-};
-
-struct list_head option_boxes = { &option_boxes, &option_boxes };
+INIT_LIST_HEAD(root_option_box_items);
+INIT_LIST_HEAD(option_boxes);
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
 static void free_options_tree(struct list_head *);

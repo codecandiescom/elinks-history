@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.15 2003/01/05 16:48:15 pasky Exp $ */
+/* $Id: renderer.h,v 1.16 2003/04/24 08:23:39 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -15,16 +15,16 @@
 /* #include "vs.h" */
 
 struct tag {
-	struct tag *next;
-	struct tag *prev;
+	LIST_HEAD(struct tag);
+
 	int x;
 	int y;
 	unsigned char name[1];
 };
 
 struct node {
-	struct node *next;
-	struct node *prev;
+	LIST_HEAD(struct node);
+
 	int x, y;
 	int xw, yw;
 };
@@ -101,8 +101,8 @@ struct search {
 };
 
 struct f_data {
-	struct f_data *next;
-	struct f_data *prev;
+	LIST_HEAD(struct f_data);
+
 	int refcount;
 	unsigned char *url;
 	struct document_options opt;
@@ -131,8 +131,8 @@ struct f_data {
 #include "viewer/text/vs.h"
 
 struct f_data_c {
-	struct f_data_c *next;
-	struct f_data_c *prev;
+	LIST_HEAD(struct f_data_c);
+
 	int used;
 	unsigned char *name;
 	struct f_data *f_data;

@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.6 2002/12/07 20:05:57 pasky Exp $ */
+/* $Id: blacklist.c,v 1.7 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,13 +15,13 @@
 
 
 struct blacklist_entry {
-	struct blacklist_entry *next;
-	struct blacklist_entry *prev;
+	LIST_HEAD(struct blacklist_entry);
+
 	enum blacklist_flags flags;
 	unsigned char host[1];
 };
 
-struct list_head blacklist = { &blacklist, &blacklist };
+INIT_LIST_HEAD(blacklist);
 
 void
 add_blacklist_entry(unsigned char *host, enum blacklist_flags flags)

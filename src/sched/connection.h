@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.4 2003/01/23 02:29:28 pasky Exp $ */
+/* $Id: connection.h,v 1.5 2003/04/24 08:23:40 zas Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -55,8 +55,8 @@ struct remaining_info {
 };
 
 struct connection {
-	struct connection *next;
-	struct connection *prev;
+	LIST_HEAD(struct connection);
+
 	tcount count;
 	unsigned char *url;
 	unsigned char *prev_url;
@@ -150,8 +150,8 @@ extern struct s_msg_dsc {
 } msg_dsc[];
 
 struct status {
-	struct status *next;
-	struct status *prev;
+	LIST_HEAD(struct status);
+
 	struct connection *c;
 	struct cache_entry *ce;
 	int state;

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.11 2002/12/08 20:17:43 pasky Exp $ */
+/* $Id: cache.h,v 1.12 2003/04/24 08:23:39 zas Exp $ */
 
 #ifndef EL__CACHE_H
 #define EL__CACHE_H
@@ -15,8 +15,8 @@ enum cache_mode {
 };
 
 struct cache_entry {
-	struct cache_entry *next;
-	struct cache_entry *prev;
+	LIST_HEAD(struct cache_entry);
+
 	unsigned char *url;
 	unsigned char *head;
 	unsigned char *redirect;
@@ -39,8 +39,8 @@ struct cache_entry {
 };
 
 struct fragment {
-	struct fragment *next;
-	struct fragment *prev;
+	LIST_HEAD(struct fragment);
+
 	int offset;
 	int length;
 	int real_length;

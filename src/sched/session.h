@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: session.h,v 1.2 2003/04/24 08:23:40 zas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -23,8 +23,8 @@ struct link_def {
 
 /* For ses_*_frame*() */
 struct frame {
-	struct frame *next;
-	struct frame *prev;
+	LIST_HEAD(struct frame);
+
 	unsigned char *name;
 	int redirect_cnt;
 	struct view_state vs;
@@ -48,8 +48,8 @@ enum session_wtd {
 };
 
 struct session {
-	struct session *next;
-	struct session *prev;
+	LIST_HEAD(struct session);
+
 	struct list_head history;
 	struct list_head unhistory;
 	struct terminal *term;

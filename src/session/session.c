@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.2 2003/04/20 08:29:48 zas Exp $ */
+/* $Id: session.c,v 1.3 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,8 +45,8 @@
 
 
 struct file_to_load {
-	struct file_to_load *next;
-	struct file_to_load *prev;
+	LIST_HEAD(struct file_to_load);
+
 	struct session *ses;
 	int req_sent;
 	int pri;
@@ -56,16 +56,16 @@ struct file_to_load {
 };
 
 struct strerror_val {
-	struct strerror_val *next;
-	struct strerror_val *prev;
+	LIST_HEAD(struct strerror_val);
+
 	unsigned char msg[1];
 };
 
 
-struct list_head sessions = {&sessions, &sessions};
+INIT_LIST_HEAD(sessions);
 
 static int session_id = 1;
-static struct list_head strerror_buf = { &strerror_buf, &strerror_buf };
+static INIT_LIST_HEAD(strerror_buf);
 
 
 void check_questions_queue(struct session *ses);
@@ -799,13 +799,13 @@ display_timer(struct session *ses)
 }
 
 
-struct list_head questions_queue = {&questions_queue, &questions_queue};
-
 struct questions_entry {
-	struct questions_entry *next;
-	struct questions_entry *prev;
+	LIST_HEAD(struct questions_entry);
+
 	void (*callback)(struct session *);
 };
+
+INIT_LIST_HEAD(questions_queue);
 
 
 void
@@ -1390,7 +1390,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 
 	u = translate_url(url, ses->term->cwd);
 	if (!u) {
-		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL,
+		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL,
 				       PRI_CANCEL, 0, NULL, NULL };
 
 		print_error_dialog(ses, &stat, N_("Error"));

@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.16 2002/12/05 21:30:05 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.17 2003/04/24 08:23:38 zas Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -10,8 +10,7 @@ struct listbox_item;
 
 /* Bookmark record structure */
 struct bookmark {
-	struct bookmark *next;
-	struct bookmark *prev;
+	LIST_HEAD(struct bookmark);
 
 	struct bookmark *root;
 	struct list_head child;

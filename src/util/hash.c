@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.16 2003/01/20 10:22:37 pasky Exp $ */
+/* $Id: hash.c,v 1.17 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ free_hash(struct hash *hash)
 
 /* I've no much idea about what to set here.. I think it doesn't matter much
  * anyway.. ;) --pasky */
-#define magic 0xdeadbeef
+#define hashmagic 0xdeadbeef
 
 
 /* Returns hash_item if ok, NULL if error. */
@@ -80,7 +80,7 @@ add_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen,
 
 	if (!item) return NULL;
 
-	hashval = hash->func(key, keylen, magic) & hash_mask(hash->width);
+	hashval = hash->func(key, keylen, hashmagic) & hash_mask(hash->width);
 
 	item->key = key;
 	item->keylen = keylen;
@@ -95,7 +95,7 @@ inline struct hash_item *
 get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 {
 	struct hash_item *item;
-	hash_value hashval = hash->func(key, keylen, magic)
+	hash_value hashval = hash->func(key, keylen, hashmagic)
 			     & hash_mask(hash->width);
 
 	foreach (item, hash->hash[hashval]) {
@@ -115,7 +115,7 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 	return NULL;
 }
 
-#undef magic
+#undef hashmagic
 
 /* If key and/or value were dynamically allocated, think about freeing them.
  * This function doesn't do that. */

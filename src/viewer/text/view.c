@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.21 2003/04/20 12:30:10 zas Exp $ */
+/* $Id: view.c,v 1.22 2003/04/24 08:23:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,10 +64,11 @@ init_formatted(struct f_data *scr)
 {
 	memset(((struct f_data **)scr) + 2, 0,
 	       sizeof(struct f_data) - 2 * sizeof(struct f_data *));
+
 	scr->data = NULL;
 	scr->nlinks = 0;
 	scr->links = NULL;
-	init_list(scr->forms);
+       	init_list(scr->forms);
 	init_list(scr->tags);
 	init_list(scr->nodes);
 }
@@ -1321,8 +1322,7 @@ decrement_fc_refcount(struct f_data *f)
 }
 
 struct submitted_value {
-	struct submitted_value *next;
-	struct submitted_value *prev;
+	LIST_HEAD(struct submitted_value);
 	int type;
 	unsigned char *name;
 	unsigned char *value;
@@ -3283,7 +3283,7 @@ save_url(struct session *ses, unsigned char *url)
 	unsigned char *u = translate_url(url, ses->term->cwd);
 
 	if (!u) {
-		struct status stat = { NULL, NULL, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
+		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
 
 		print_error_dialog(ses, &stat, N_("Error"));
 		return;

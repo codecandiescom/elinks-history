@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.46 2003/01/13 11:18:15 zas Exp $ */
+/* $Id: cookies.c,v 1.47 2003/04/24 08:23:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,8 +43,8 @@ static int cookies_nosave = 0;
 static tcount cookie_id = 0;
 
 struct cookie {
-	struct cookie *next;
-	struct cookie *prev;
+	LIST_HEAD(struct cookie);
+
 	unsigned char *name, *value;
 	unsigned char *server;
 	unsigned char *path, *domain;
@@ -53,24 +53,24 @@ struct cookie {
 	int id;
 };
 
-static struct list_head cookies = { &cookies, &cookies };
+static INIT_LIST_HEAD(cookies);
 
 struct c_domain {
-	struct c_domain *next;
-	struct c_domain *prev;
+	LIST_HEAD(struct c_domain);
+
 	unsigned char domain[1];
 };
 
-static struct list_head c_domains = { &c_domains, &c_domains };
+static INIT_LIST_HEAD(c_domains);
 
 struct c_server {
-	struct c_server *next;
-	struct c_server *prev;
+	LIST_HEAD(struct c_server);
+
 	int accept;
 	unsigned char server[1];
 };
 
-static struct list_head c_servers = { &c_servers, &c_servers };
+static INIT_LIST_HEAD(c_servers);
 
 static int cookies_dirty = 0;
 

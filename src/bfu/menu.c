@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.102 2003/09/28 13:43:55 jonas Exp $ */
+/* $Id: menu.c,v 1.103 2003/09/28 14:55:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -157,7 +157,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 
 			if (text[0])
 				s += strlen(text)
-				     - (menu->items[my].hotkey_pos ? 1 : 0)
+				     - !!menu->items[my].hotkey_pos
 				     + 1;
 		}
 
@@ -314,7 +314,7 @@ display_menu(struct terminal *term, struct menu *menu)
 #endif
 							hk = 2;
 						} else {
-							draw_char(term, xbase + x - (hk ? 1 : 0), s, c, 0, color);
+							draw_char(term, xbase + x - !!hk, s, c, 0, color);
 						}
 					}
 
@@ -641,8 +641,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (!menu->items[i].no_intl) tmptext = _(tmptext, term);
 
 		if (i == menu->selected) {
-			int tmptextlen = strlen(tmptext)
-					 - (key_pos ? 1 : 0);
+			int tmptextlen = strlen(tmptext) - !!key_pos;
 
 			co = selected_color;
 			hkco = selected_hotkey_color;
@@ -754,8 +753,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 
 					if (text && text[0])
 						p += strlen(text) + 4
-							    - (menu->items[i].hotkey_pos
-							    ? 1 : 0);
+						     - !!menu->items[i].hotkey_pos;
 
 					if (ev->x < o || ev->x >= p)
 						continue;

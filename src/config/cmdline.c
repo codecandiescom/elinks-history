@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.112 2005/01/02 19:31:50 jonas Exp $ */
+/* $Id: cmdline.c,v 1.113 2005/01/02 22:47:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -739,7 +739,7 @@ struct option_info cmdline_options_info[] = {
 		"\topenURL(URL, new-tab)     : open URL in new tab\n"
 		"\topenURL(URL, new-window)  : open URL in new window\n"
 		"\taddBookmark(URL)          : bookmark URL\n"
-		"\txfeDoCommand(openBrowser) : open instance in new window")),
+		"\txfeDoCommand(openBrowser) : open new window")),
 
 	INIT_OPT_INT("", N_("Connect to session ring with given ID"),
 		"session-ring", 0, 0, INT_MAX, 0,

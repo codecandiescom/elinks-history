@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.2 2003/07/15 20:18:11 jonas Exp $ */
+/* $Id: vs.h,v 1.3 2003/09/12 22:49:57 zas Exp $ */
 
 /* Placing this before the #ifndef, we'll fix some crossdep problems. */
 #include "document/html/parser.h"
@@ -8,15 +8,16 @@
 #define EL__VIEWER_TEXT_VS_H
 
 struct view_state {
+	unsigned char *goto_position;
+	struct document_view *view;
+	struct form_state *form_info;
+	int form_info_len;
 	int view_pos;
 	int view_posx;
 	int current_link;
 	int plain;
-	unsigned char *goto_position;
-	struct form_state *form_info;
-	int form_info_len;
-	struct document_view *view;
-	unsigned char url[1];
+
+	unsigned char url[1];	/* Must be last. */
 };
 
 void init_vs(struct view_state *, unsigned char *);

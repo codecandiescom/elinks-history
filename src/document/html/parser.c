@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.366 2004/01/18 17:14:03 zas Exp $ */
+/* $Id: parser.c,v 1.367 2004/01/19 17:03:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "config/options.h"
 #include "config/kbdbind.h"
 #include "document/css/apply.h"
+#include "document/css/parser.h"
 #include "document/html/frames.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
@@ -721,6 +722,7 @@ add_fragment_identifier(void *part, unsigned char *attr)
 }
 
 static struct form form = NULL_STRUCT_FORM;
+static struct css_stylesheet css_styles;
 
 static unsigned char *last_form_tag;
 static unsigned char *last_form_attr;
@@ -1062,7 +1064,7 @@ html_body(unsigned char *a)
 	get_bgcolor(a, &format.bg);
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
-	css_apply(&html_top);
+	css_apply(&html_top, &css_styles);
 
 	if (par_format.bgcolor != format.bg) {
 		/* Modify the root HTML element - format_html_part() will take
@@ -1084,6 +1086,12 @@ html_skip(unsigned char *a)
 {
 	html_top.invisible = 1;
 	html_top.type = ELEMENT_DONT_KILL;
+}
+
+static void
+html_style(unsigned char *a)
+{
+	html_skip(a);
 }
 
 static void
@@ -2961,7 +2969,7 @@ static struct element_info elements[] = {
 	{"SPAN",	html_span,	0, 0},
 	{"STRIKE",	html_underline,	0, 0},
 	{"STRONG",	html_bold,	0, 0},
-	{"STYLE",	html_skip,	0, 0},
+	{"STYLE",	html_style,	0, 0},
 	{"SUB",		html_subscript, 0, 0},
 	{"SUP",		html_superscript,0,0},
 	{"TABLE",	html_table,	2, 0},
@@ -3281,6 +3289,9 @@ ng:;
 						do_html_textarea(attr, html, eof, &html, f);
 						goto set_lt;
 					}
+					if (ei->func == html_style) {
+						css_parse_stylesheet(&css_styles, html);
+					}
 					if (ei->nopair == 2 || ei->nopair == 3) {
 						struct html_element *e;
 
@@ -3324,14 +3335,14 @@ ng:;
 						/* Call it now to gain some of
 						 * the stuff which might affect
 						 * formatting of some elements. */
-						css_apply(&html_top);
+						css_apply(&html_top, &css_styles);
 					}
 					if (ei->func) ei->func(attr);
 					if (html_top.options) {
 						/* Call it now to override
 						 * default colors of the
 						 * elements. */
-						css_apply(&html_top);
+						css_apply(&html_top, &css_styles);
 					}
 					if (ei->func != html_br) was_br = 0;
 					if (ali) par_format = pa;
@@ -3787,6 +3798,9 @@ init_html_parser(unsigned char *url, struct document_options *options,
 	special_f = special;
 	scan_http_equiv(start, end, head, title);
 
+	memset(&css_styles, 0, sizeof(struct css_stylesheet));
+	init_list(css_styles.selectors);
+
 	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;
 
@@ -3835,6 +3849,8 @@ init_html_parser(unsigned char *url, struct document_options *options,
 void
 done_html_parser(void)
 {
+	done_css_stylesheet(&css_styles);
+
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;
 

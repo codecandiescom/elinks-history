@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.35 2004/01/19 17:00:34 jonas Exp $ */
+/* $Id: apply.c,v 1.36 2004/01/19 17:03:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 #include "util/lists.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 
 /* TODO: A way to disable CSS completely, PLUS a way to stop various property
@@ -76,21 +77,38 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 };
 
 void
-css_apply(struct html_element *element)
+css_apply(struct html_element *element, struct css_stylesheet *css)
 {
 	INIT_LIST_HEAD(props);
 	unsigned char *code;
 	struct css_property *property;
 	struct list_head *properties = &props;
 
-	assert(element && element->options);
+	assert(element && element->options && css);
 
 	code = get_attr_val(element->options, "style");
-	if (!code)
-		return;
+	if (code) {
+		css_parse_properties(&props, code);
+		mem_free(code);
 
-	css_parse_properties(&props, code);
-	mem_free(code);
+	} else {
+		struct css_selector *selector;
+
+		if (list_empty(css->selectors))
+			return;
+
+		properties = NULL;
+
+		foreach (selector, css->selectors) {
+			if (strlcasecmp(element->name, element->namelen,
+					selector->element, -1))
+				continue;
+
+			properties = &selector->properties;
+		}
+
+		if (!properties) return;
+	}
 
 	foreach (property, *properties) {
 		assert(property->type < CSS_PT_LAST);

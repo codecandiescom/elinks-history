@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.143 2004/04/22 21:12:45 jonas Exp $ */
+/* $Id: cache.c,v 1.144 2004/04/22 21:14:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,6 @@ get_cache_entry(struct uri *uri)
 	cached->proxy_uri = get_uri_reference(uri);
 	cached->incomplete = 1;
 	cached->valid = 1;
-	cached->preformatted = 1;
 
 	init_list(cached->frag);
 	cached->id_tag = id_tag_counter++;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.90 2004/09/26 20:23:56 pasky Exp $ */
+/* $Id: renderer.c,v 1.91 2004/09/26 20:24:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,25 +61,12 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	 * @queued_snippets. */
 	if (!*current) {
 		doc_current = doc_snippets->next;
-		DBG("Fresh queue.");
 	} else {
 		struct string_list_item *iterator = queued_snippets->next;
-
-		DBG("Scarlett walk.");
 
 		doc_current = doc_snippets->next;
 		assert(!list_empty(*queued_snippets));
 		while (iterator != *current) {
-			assert(!strlcmp(iterator->string.source,
-			                iterator->string.length,
-					doc_current->string.source,
-			                doc_current->string.length));
-			DBG("Tripping over doc %.*s -------and------- que %.*s",
-				doc_current->string.length,
-				doc_current->string.source,
-				iterator->string.length,
-				iterator->string.source);
-
 			doc_current = doc_current->next;
 			iterator = iterator->next;
 
@@ -99,7 +86,6 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 	assert(doc_current);
 	for (; doc_current != (struct string_list_item *) doc_snippets;
 	     doc_current = doc_current->next) {
-		DBG("Adding snippet %.*s.", doc_current->string.length, doc_current->string.source);
 		add_to_string_list(queued_snippets, doc_current->string.source,
 		                   doc_current->string.length);
 		/* TODO: Support for external references. --pasky */
@@ -110,8 +96,6 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 			*current = queued_snippets->next;
 		}
 	}
-
-	DBG("Snipping over.");
 }
 #endif
 
@@ -188,11 +172,8 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	vs->doc_view = doc_view;
 
 #ifdef CONFIG_ECMASCRIPT
-	if (vs->ecmascript_fragile) {
-		DBG("Resetting state of %s.", struri(vs->uri));
+	if (vs->ecmascript_fragile)
 		ecmascript_reset_state(vs);
-	}
-	assert(vs->ecmascript);
 #endif
 
 	cached = find_in_cache(vs->uri);

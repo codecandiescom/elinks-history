@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.4 2002/08/31 00:27:54 pasky Exp $ */
+/* $Id: globhist.c,v 1.5 2002/09/01 11:57:04 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -21,6 +21,7 @@
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
 #include "lowlevel/home.h"
+#include "lowlevel/ttime.h"
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
@@ -101,7 +102,7 @@ delete_global_history_item(struct global_history_item *historyitem)
 /* Search global history for certain item. There must be full match with the
  * parameter or the parameter must be NULL/zero. */
 struct global_history_item *
-get_global_history_item(unsigned char *url, unsigned char *title, time_t time)
+get_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
 	struct global_history_item *historyitem;
 
@@ -120,7 +121,7 @@ get_global_history_item(unsigned char *url, unsigned char *title, time_t time)
 /* Add a new entry in history list, take care of duplicate, respect history
  * size limit, and update any open history dialogs. */
 void
-add_global_history_item(unsigned char *url, unsigned char *title, time_t time)
+add_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
 	struct global_history_item *history_item;
 
@@ -253,7 +254,7 @@ read_global_history()
 		last_visit++;
 
 		/* Is using atol() in this way acceptable? It seems
-		 * non-portable to me; time_t might not be a long. -- Miciah */
+		 * non-portable to me; ttime might not be a long. -- Miciah */
 		add_global_history_item(url, title, atol(last_visit));
 	}
 
@@ -333,7 +334,7 @@ void finalize_global_history() {}
 
 void free_global_history_item(struct global_history_item *i) {}
 void delete_global_history_item(struct global_history_item *historyitem) {}
-struct global_history_item *get_global_history_item(unsigned char *url, unsigned char *title, time_t time) {}
-void add_global_history_item(unsigned char *ur, unsigned char *ti, time_t t) {}
+struct global_history_item *get_global_history_item(unsigned char *url, unsigned char *title, ttime time) {}
+void add_global_history_item(unsigned char *ur, unsigned char *ti, ttime t) {}
 
 #endif

@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.9 2002/08/27 03:22:28 pasky Exp $ */
+/* $Id: date.c,v 1.10 2002/09/01 11:57:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ time_t my_timegm(struct tm tm) {
 }
 
 
-time_t parse_http_date(const char *date)
+ttime parse_http_date(const char *date)
 {
 #define skip_time_sep() \
 	if (c != ' ' && c != '-') return 0; \
@@ -282,5 +282,5 @@ time_t parse_http_date(const char *date)
 	}
 #undef skip_time_sep
 
-	return my_timegm(tm);
+	return (ttime) my_timegm(tm);
 }

@@ -1,20 +1,19 @@
-/* $Id: globhist.h,v 1.3 2002/08/31 00:27:54 pasky Exp $ */
+/* $Id: globhist.h,v 1.4 2002/09/01 11:57:05 pasky Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
 
-#include <time.h>
-
 /* #include "bfu/listbox.h" */
 struct listbox_item;
 
+#include "lowlevel/ttime.h"
 #include "util/lists.h"
 
 struct global_history_item {
 	struct global_history_item *next;
 	struct global_history_item *prev;
 
-	time_t last_visit;
+	ttime last_visit;
 	unsigned char *title;
 	unsigned char *url;
 	int refcount;
@@ -40,8 +39,8 @@ void finalize_global_history();
 
 void free_global_history_item(struct global_history_item *);
 void delete_global_history_item(struct global_history_item *historyitem);
-struct global_history_item *get_global_history_item(unsigned char *url, unsigned char *title, time_t time);
-void add_global_history_item(unsigned char *, unsigned char *, time_t);
+struct global_history_item *get_global_history_item(unsigned char *url, unsigned char *title, ttime time);
+void add_global_history_item(unsigned char *, unsigned char *, ttime);
 int globhist_simple_search(unsigned char *, unsigned char *);
 
 #endif

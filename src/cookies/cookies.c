@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.31 2002/08/27 03:22:27 pasky Exp $ */
+/* $Id: cookies.c,v 1.32 2002/09/01 11:57:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 #include "document/session.h"
 #include "lowlevel/home.h"
 #include "lowlevel/terminal.h"
+#include "lowlevel/ttime.h"
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
 #include "protocol/url.h"
@@ -46,7 +47,7 @@ struct cookie {
 	unsigned char *name, *value;
 	unsigned char *server;
 	unsigned char *path, *domain;
-	time_t expires; /* zero means undefined */
+	ttime expires; /* zero means undefined */
 	int secure;
 	int id;
 };
@@ -200,13 +201,13 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		if (!cookie->expires) {
 			/* We use zero for cookies which expire with
 			 * browser shutdown. */
-			cookie->expires = (time_t) 1;
+			cookie->expires = (ttime) 1;
 		}
 #endif
 		mem_free(date);
 
 	} else {
-		cookie->expires = (time_t) 0;
+		cookie->expires = (ttime) 0;
 	}
 
 	cookie->path = parse_http_header_param(str, "path");

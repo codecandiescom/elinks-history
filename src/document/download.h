@@ -1,12 +1,15 @@
-/* $Id: download.h,v 1.4 2002/07/09 15:43:47 pasky Exp $ */
+/* $Id: download.h,v 1.5 2002/09/01 11:57:04 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOWNLOAD_H
 #define EL__DOCUMENT_DOWNLOAD_H
+
+#include <sys/types.h>
 
 #include "document/cache.h"
 #include "document/session.h"
 #include "lowlevel/sched.h"
 #include "lowlevel/terminal.h"
+#include "lowlevel/ttime.h"
 #include "util/lists.h"
 
 struct download {
@@ -21,7 +24,7 @@ struct download {
 	int notify;
 	unsigned char *prog;
 	int prog_flags;
-	time_t remotetime;
+	ttime remotetime;
 	struct session *ses;
 	struct window *win;
 	struct window *ask;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.143 2003/07/02 23:41:47 zas Exp $ */
+/* $Id: view.c,v 1.144 2003/07/02 23:47:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1366,13 +1366,21 @@ free_succesful_controls(struct list_head *submit)
 	free_list(*submit);
 }
 
-static inline unsigned char *
-encode_textarea(unsigned char *text)
+static unsigned char *
+encode_textarea(struct submitted_value *sv)
 {
+	unsigned char *text = sv->value;
 	unsigned char *newtext;
 	int len = 0;
+	void *blabla;
 
 	assert(text);
+
+	/* We need to reformat text now if it has to be wrapped
+	 * hard, just before encoding it. */
+	blabla = format_text(text, sv->frm->cols,
+			     sv->frm->wrap);
+	if (blabla) mem_free(blabla);
 
 	newtext = init_str();
 	if (!newtext) return NULL;
@@ -1524,15 +1532,8 @@ encode_controls(struct list_head *l, unsigned char **data, int *len,
 		 * for the original recoding). */
 		if (sv->type == FC_TEXTAREA) {
 			unsigned char *p;
-			void *blabla;
 
-			/* We need to reformat text now if it has to be wrapped
-			 * hard, just before encoding it. */
-			blabla = format_text(sv->value, sv->frm->cols,
-					     sv->frm->wrap);
-			if (blabla) mem_free(blabla);
-
-			p = encode_textarea(sv->value);
+			p = encode_textarea(sv);
 			if (p) {
 				if (!convert_table)
 					convert_table = get_translation_table(cp_from, cp_to);

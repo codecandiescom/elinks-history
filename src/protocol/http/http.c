@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.359 2004/11/14 16:52:32 jonas Exp $ */
+/* $Id: http.c,v 1.360 2004/11/14 18:46:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,7 +602,7 @@ http_send_header(struct connection *conn)
 			add_to_string(&header, entry->nonce);
 			add_to_string(&header, "\", ");
 			add_to_string(&header, "uri=\"/");
-			add_to_string(&header, entry->uri->data);
+			add_bytes_to_string(&header, uri->data, uri->datalen);
 			add_to_string(&header, "\", ");
 			add_to_string(&header, "qop=auth, nc=00000001, ");
 			add_to_string(&header, "cnonce=\"");

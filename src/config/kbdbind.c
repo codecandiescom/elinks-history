@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.52 2002/12/20 21:46:56 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.53 2002/12/20 21:52:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,7 +446,7 @@ init_action_listboxes()
 				box_item);
 		box_item->root = NULL;
 		init_list(box_item->child);
-		box_item->visible = 1;
+		box_item->visible = (act->num != ACT_LUA_FUNCTION); /* XXX */
 		box_item->udata = (void *) act->num;
 		box_item->type = BI_FOLDER;
 		box_item->expanded = 0; /* Maybe you would like this being 1? */

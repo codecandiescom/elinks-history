@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.222 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: main.c,v 1.223 2004/10/21 21:18:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,6 +172,12 @@ init(void)
 	if (get_cmd_opt_int("dump")
 	    || get_cmd_opt_int("source")) {
 		/* Dump the URL list */
+#ifdef CONFIG_ECMASCRIPT
+		/* The ECMAScript code is not good at coping with this. And it
+		 * makes currently no sense to evaluate ECMAScript in this
+		 * context anyway. */
+		get_opt_bool("ecmascript.enable") = 0;
+#endif
 		dump_next(&url_list);
 
 	} else if (remote_session_flags & SES_REMOTE_PING) {

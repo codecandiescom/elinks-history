@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.167 2004/01/24 19:53:30 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.168 2004/01/24 19:55:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,6 +379,40 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 
 	add_to_string(str, key_string);
 }
+
+void
+add_keystroke_to_string(struct string *string, enum action action,
+			enum keymap map)
+{
+	struct keybinding *kb = kbd_act_lookup(map, action);
+
+	if (kb)
+		make_keystroke(string, kb->key, kb->meta, 0);
+}
+
+void
+add_actions_to_string(struct string *string, enum action *actions,
+		      enum keymap map, struct terminal *term)
+{
+	int i;
+
+	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, map), term));
+
+	for (i = 0; actions[i] != ACT_NONE; i++) {
+		struct keybinding *kb = kbd_act_lookup(map, actions[i]);
+		int keystrokelen = string->length;
+		unsigned char *desc = numtodesc(action_table, actions[i]);
+
+		if (!kb) continue;
+
+		add_char_to_string(string, '\n');
+		make_keystroke(string, kb->key, kb->meta, 0);
+		keystrokelen = string->length - keystrokelen;
+		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
+		add_to_string(string, _(desc, term));
+	}
+}
+
 
 #ifndef ELINKS_SMALL
 #define DACT(x) (x)
@@ -812,39 +846,6 @@ add_default_keybindings(void)
 
 	for (kb = default_menu_keymap; kb->key; kb++)
 		add_keybinding(KM_MENU, kb->action, kb->key, kb->meta, EVENT_NONE);
-}
-
-void
-add_keystroke_to_string(struct string *string, enum action action,
-			enum keymap map)
-{
-	struct keybinding *kb = kbd_act_lookup(map, action);
-
-	if (kb)
-		make_keystroke(string, kb->key, kb->meta, 0);
-}
-
-void
-add_actions_to_string(struct string *string, enum action *actions,
-		      enum keymap map, struct terminal *term)
-{
-	int i;
-
-	add_format_to_string(string, "%s:\n", _(numtodesc(keymap_table, map), term));
-
-	for (i = 0; actions[i] != ACT_NONE; i++) {
-		struct keybinding *kb = kbd_act_lookup(map, actions[i]);
-		int keystrokelen = string->length;
-		unsigned char *desc = numtodesc(action_table, actions[i]);
-
-		if (!kb) continue;
-
-		add_char_to_string(string, '\n');
-		make_keystroke(string, kb->key, kb->meta, 0);
-		keystrokelen = string->length - keystrokelen;
-		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
-		add_to_string(string, _(desc, term));
-	}
 }
 
 

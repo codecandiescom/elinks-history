@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.59 2004/12/27 21:59:09 jonas Exp $ */
+/* $Id: leds.c,v 1.60 2005/01/05 00:51:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,6 +251,29 @@ redraw_leds(void *xxx)
 		draw_leds(ses);
 	}
 	drawing = 0;
+}
+
+void
+menu_leds_info(struct terminal *term, void *xxx, void *xxxx)
+{
+	/* If LEDs ever get more dynamic we might have to change this, but it
+	 * should do for now. --jonas */
+	msg_box(term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
+		N_("LED indicators"), ALIGN_LEFT,
+		msg_text(term, N_("What the different LED indicates:\n"
+			"\n"
+			"[SIJ---]\n"
+			" |||||`- Unused\n"
+			" ||||`-- Unused\n"
+			" |||`--- Unused\n"
+			" ||`---- A JavaScript error occured\n"
+			" |`----- The state of insert mode for text-input form-fields\n"
+			" |       'I' means modeless, 'i' means insert mode is on\n"
+			" `------ Whether an SSL connection was used\n"
+			"\n"
+			"'-' generally indicates that the LED is off")),
+		NULL, 1,
+		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
 

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.382 2004/12/30 23:42:02 jonas Exp $ */
+/* $Id: menu.c,v 1.383 2005/01/05 00:51:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "bfu/dialog.h"
+#include "bfu/leds.h"
 #include "bfu/menu.h"
 #include "config/options.h"
 #include "config/urlhist.h"
@@ -418,6 +419,7 @@ static struct menu_item help_menu[] = {
 	INIT_MENU_ITEM(N_("~ELinks homepage"), NULL, ACT_MAIN_NONE, menu_url_shortcut, ELINKS_HOMEPAGE, 0),
 	INIT_MENU_ITEM(N_("~Documentation"), NULL, ACT_MAIN_NONE, menu_url_shortcut, ELINKS_DOC_URL, 0),
 	INIT_MENU_ITEM(N_("~Keys"), NULL, ACT_MAIN_NONE, menu_keys, NULL, 0),
+	INIT_MENU_ITEM(N_("LED ~indicators"), NULL, ACT_MAIN_NONE, menu_leds_info, NULL, 0),
 	BAR_MENU_ITEM,
 	INIT_MENU_ITEM(N_("~Bugs information"), NULL, ACT_MAIN_NONE, menu_url_shortcut, ELINKS_BUGS_URL, 0),
 #ifdef CONFIG_DEBUG

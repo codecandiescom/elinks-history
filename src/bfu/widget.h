@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.90 2004/11/23 13:08:29 zas Exp $ */
+/* $Id: widget.h,v 1.91 2005/01/05 00:51:44 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -11,9 +11,9 @@
 #include "bfu/group.h"
 #include "bfu/inpfield.h"
 #include "bfu/inphist.h"
-#include "bfu/msgbox.h"
 #include "bfu/leds.h"
 #include "bfu/listbox.h"
+#include "bfu/msgbox.h"
 #include "bfu/text.h"
 #include "util/lists.h"
 #include "util/box.h"

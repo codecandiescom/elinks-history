@@ -1,4 +1,4 @@
-/* $Id: leds.h,v 1.17 2004/12/16 19:39:59 pasky Exp $ */
+/* $Id: leds.h,v 1.18 2005/01/05 00:51:44 jonas Exp $ */
 
 #ifndef EL__BFU_LEDS_H
 #define EL__BFU_LEDS_H
@@ -9,6 +9,7 @@
 #include "util/color.h"
 
 struct session;
+struct terminal;
 
 /* TODO: Variable count! */
 #define LEDS_COUNT	6
@@ -42,6 +43,8 @@ extern struct module leds_module;
 void init_led_panel(struct led_panel *leds);
 
 void draw_leds(struct session *ses);
+
+void menu_leds_info(struct terminal *term, void *xxx, void *xxxx);
 
 struct led *register_led(struct session *ses, int number);
 void unregister_led(struct led *);

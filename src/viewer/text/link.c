@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.156 2004/04/15 16:32:02 jonas Exp $ */
+/* $Id: link.c,v 1.157 2004/04/15 16:44:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "document/options.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
-#include "osdep/newwin.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
 #include "sched/task.h"
@@ -834,19 +833,14 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_to_menu(&mi, N_("Display ~usemap"), NULL, ACT_MAIN_ENTER,
 				    NULL, NULL, SUBMENU);
 		else {
-			int c = can_open_in_new(term);
-
 			add_menu_action(&mi, N_("~Follow link"), ACT_MAIN_ENTER);
 
 			add_menu_action(&mi, N_("Follow link and r~eload"), ACT_MAIN_ENTER_RELOAD);
 
 			add_separator_to_menu(&mi);
-			if (c)
-				add_to_menu(&mi, N_("Open in new ~window"),
-					     NULL,
-					     ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW,
-					     (menu_func) open_in_new_window,
-					     send_open_in_new_window, c - 1 ? SUBMENU : 0);
+
+			add_new_win_to_menu(&mi, N_("Open in new ~window"),
+					    ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, term);
 
 			add_menu_action(&mi, N_("Open in new ~tab"), ACT_MAIN_OPEN_LINK_IN_NEW_TAB);
 
@@ -870,8 +864,6 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		if (link->form->type == FC_RESET) {
 			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
 		} else {
-			int c = can_open_in_new(term);
-
 			if (link->form->type == FC_TEXTAREA && !link->form->ro) {
 				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
@@ -880,11 +872,9 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
 			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 
-			if (c && link->form->method == FM_GET)
-				add_to_menu(&mi, N_("Submit form and open in new ~window"),
-					    NULL, ACT_MAIN_NONE,
-					    (menu_func) open_in_new_window,
-					    send_open_in_new_window, c - 1 ? SUBMENU : 0);
+			if (link->form->method == FM_GET)
+				add_new_win_to_menu(&mi, N_("Submit form and open in new ~window"),
+						    ACT_MAIN_NONE, term);
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_menu_action(&mi, N_("Submit form and ~download"), ACT_MAIN_DOWNLOAD);

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.29 2004/04/15 16:32:02 jonas Exp $ */
+/* $Id: menu.h,v 1.30 2004/04/15 16:44:57 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -6,6 +6,7 @@
 #include "sched/session.h"
 #include "terminal/terminal.h"
 
+struct menu_item;
 struct uri;
 
 void activate_bfu_technology(struct session *, int);
@@ -43,5 +44,9 @@ open_in_new_window(struct terminal *term,
 			    void (*)(struct terminal *, unsigned char *, unsigned char *),
 			    struct session *ses),
 		   struct session *ses);
+
+void
+add_new_win_to_menu(struct menu_item **mi, unsigned char *text, int action,
+		    struct terminal *term);
 
 #endif

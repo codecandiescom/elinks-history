@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.119 2004/04/14 20:14:40 jonas Exp $ */
+/* $Id: dump.c,v 1.120 2004/04/14 20:21:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,19 +249,19 @@ dump_end(struct download *status, void *p)
 
 	if (is_in_queued_state(status->state)) return;
 
-	if (is_in_transfering_state(status->state)
-	    && get_opt_int_tree(cmdline_options, "dump"))
-		return;
+	if (get_opt_int_tree(cmdline_options, "dump")) {
+		if (is_in_transfering_state(status->state))
+			return;
 
-	if (get_opt_int_tree(cmdline_options, "source")) {
+		dump_formatted(fd, status, cached);
+
+	} else {
 		if (dump_source(fd, status, cached) > 0)
 			goto terminate;
 
 		if (status->state >= 0)
 			return;
 
-	} else {
-		dump_formatted(fd, status, cached);
 	}
 
 	if (status->state != S_OK) {

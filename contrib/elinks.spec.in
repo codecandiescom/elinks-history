@@ -1,0 +1,63 @@
+# This is RPM spec file for ELinks. This file is currently not officially
+# maintained, so the informations here are probably totally obsolete, and you
+# should update them before making a package.
+#
+# This file was contributed by <zimon@niksula.hut.fi> and
+# <yanek@yankuv.koniec.sk>.
+#
+# Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
+
+Summary: Enhanced version of Links (Lynx-like text WWW browser)
+Name: elinks
+Version: @VERSION@
+Release: 1
+Prefix: /usr
+Copyright: GPL
+Vendor: ELinks project <pasky@ji.cz>
+#Packager: Petr Baudis <pasky@ji.cz>
+Group: Applications/Internet
+Source: http://elinks.pld.org.pl/download/%{name}-%{version}.tar.bz2
+URL: http://elinks.pld.org.pl/
+Conflicts: links
+BuildRoot: /tmp/%{name}-%{version}-root
+
+%description
+Enhanced version of Links (Lynx-like text WWW browser), with more liberal
+features policy and development style.
+
+ELinks aims to provide feature-rich version of Links.  Its purpuose is to make
+alternative to Links, and to test and tune various new features, but still
+provide good rock-solid releases inside stable branches.
+
+%prep
+%setup
+
+%build
+
+%configure
+make
+
+%install
+rm -rf $RPM_BUILD_ROOT
+make DESTDIR=$RPM_BUILD_ROOT install
+
+%clean
+rm -rf $RPM_BUILD_ROOT
+
+%files 
+%doc AUTHORS* BUGS* ChangeLog* COPYING* HACKING* LUA* README* SITES* TODO*
+%{prefix}/bin/links
+%{_mandir}/man1/links.1.gz
+
+# date +"%a %b %d %Y"
+%changelog
+* Mon May 06 2002 yanek@yankuv.koniec.sk
+- general update - cleanup of .spec file, massive simplifications
+
+* Thu Apr 04 2002 pasky@ji.cz
+- Changed some stuff so that it's now ready for inclusion..
+
+* Sat Mar 16 2002 zimon (ät) iki fi
+- Made my own elinks.spec file as the one I found with Google didn't work how
+  I wanted
+

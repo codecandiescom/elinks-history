@@ -409,6 +409,7 @@ AC_OUTPUT([ \
  src/protocol/http/Makefile \
  src/ssl/Makefile \
  src/util/Makefile \
+ contrib/elinks.spec
 ])
 
 

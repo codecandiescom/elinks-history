@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.13 2003/01/24 14:01:06 pasky Exp $ */
+/* $Id: layouter.c,v 1.14 2003/04/29 07:51:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,7 @@ format_node(struct layouter_state *state, struct syntree_node *node)
 		box = spawn_box(state);
 		box->data_type = RECT_TEXT;
 		box->data = text = mem_alloc(sizeof(struct layout_box_text) + numbuflen);
-		text->str = box->data + sizeof(struct layout_box_text);
+		text->str = (unsigned char *)(box->data) + sizeof(struct layout_box_text);
 		text->len = numbuflen - 1;
 		memcpy(text->str, numbuf, numbuflen);
 	}

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.21 2002/06/30 15:16:02 pasky Exp $ */
+/* $Id: opttypes.c,v 1.22 2002/07/06 17:41:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,6 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 	unsigned char *str;
 
 	if (!*argc) return "Parameter expected";
-	(*argv)++; (*argc)--;
 
 	/* FIXME!! We will modify argv! (maybe) */
 	str = option_types[o->type].read(o, *argv - 0);
@@ -43,8 +42,6 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 		mem_free(str);
 	}
 	error = "Read error";
-
-	(*argv)--; (*argc)++;
 
 	return error;
 }
@@ -195,7 +192,7 @@ num_rd(struct option *opt, unsigned char **file)
 
 	*value = strtolx(*file, file);
 
-	if ((!WHITECHAR(**file) && **file != '#')
+	if ((**file != 0 && !WHITECHAR(**file) && **file != '#')
 	    || (*value < opt->min || *value > opt->max)) {
 		mem_free(value);
 		return NULL;

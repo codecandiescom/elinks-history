@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.326 2004/06/12 19:23:19 zas Exp $ */
+/* $Id: menu.c,v 1.327 2004/06/13 00:46:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,7 +652,8 @@ add_new_win_to_menu(struct menu_item **mi, unsigned char *text, int action,
 	int c = can_open_in_new(term);
 
 	if (!c) return;
-	add_to_menu(mi, text, NULL, action, (menu_func) open_in_new_window,
+	add_to_menu(mi, text, NULL, ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
+		    (menu_func) open_in_new_window,
 		    send_open_in_new_window, c - 1 ? SUBMENU : 0);
 }
 

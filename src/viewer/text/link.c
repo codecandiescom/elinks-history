@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.204 2004/06/13 00:39:37 jonas Exp $ */
+/* $Id: link.c,v 1.205 2004/06/13 00:46:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -758,8 +758,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 			add_menu_separator(&mi);
 
-			add_new_win_to_menu(&mi, N_("Open in new ~window"),
-					    ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW, term);
+			add_new_win_to_menu(&mi, N_("Open in new ~window"), term);
 
 			add_menu_action(&mi, N_("Open in new ~tab"), ACT_MAIN_OPEN_LINK_IN_NEW_TAB);
 
@@ -795,9 +794,15 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
 			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 
-			if (link->form_control->method == FM_GET)
-				add_new_win_to_menu(&mi, N_("Submit form and open in new ~window"),
-						    ACT_MAIN_NONE, term);
+			if (link->form_control->method == FM_GET) {
+				add_new_win_to_menu(&mi, N_("Submit form and open in new ~window"), term);
+
+				add_menu_action(&mi, N_("Submit form and open in new ~tab"),
+						ACT_MAIN_OPEN_LINK_IN_NEW_TAB);
+
+				add_menu_action(&mi, N_("Submit form and open in new tab in ~background"),
+						ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND);
+			}
 
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_menu_action(&mi, N_("Submit form and ~download"), ACT_MAIN_DOWNLOAD);

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.126 2003/12/27 11:25:56 zas Exp $ */
+/* $Id: kbdbind.c,v 1.127 2003/12/27 11:37:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,6 +449,7 @@ static struct strtonum action_table[] = {
 	{ "reload", ACT_RELOAD, DACT(N_("Reload the current page")) },
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
 	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
+        { "save-as", ACT_SAVE_AS, DACT(N_("Save as")) },
 	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
 	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },

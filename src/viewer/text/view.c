@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.311 2003/12/27 11:25:57 zas Exp $ */
+/* $Id: view.c,v 1.312 2003/12/27 11:37:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1060,6 +1060,10 @@ quak:
 			case ACT_FORGET_CREDENTIALS:
 				free_auth();
 				shrink_memory(1); /* flush caches */
+				goto x;
+			case ACT_SAVE_AS:
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					save_as(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_SAVE_FORMATTED:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))

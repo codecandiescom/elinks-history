@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.200 2005/03/11 15:13:30 zas Exp $ */
+/* $Id: ftp.c,v 1.201 2005/03/11 23:22:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1017,19 +1017,18 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 		  int colorize_dir, unsigned char *dircolor,
 		  struct ftpparse *ftp_info)
 {
+	int is_file, is_dir = 0;
+	unsigned char typechr = '-';
 	struct string string;
 
 	if (!init_string(&string)) return -1;
 
-	if (ftp_info->flagtrycwd) {
-		if (ftp_info->flagtryretr) {
-			add_char_to_string(&string, 'l');
-		} else {
-			add_char_to_string(&string, 'd');
-		}
-	} else {
-		add_char_to_string(&string, '-');
+	is_file = !ftp_info->flagtrycwd;
+	if (!is_file) {
+		is_dir = !ftp_info->flagtryretr;
+		typechr = is_dir ? 'd' : 'l';
 	}
+	add_char_to_string(&string, typechr);
 
 	if (ftp_info->perm && ftp_info->permlen)
 		add_bytes_to_string(&string, ftp_info->perm, ftp_info->permlen);
@@ -1040,16 +1039,13 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 	add_to_string(&string, "   1 ftp      ftp ");
 
 	if (ftp_info->sizetype != FTPPARSE_SIZE_UNKNOWN) {
-		unsigned char tmp[128];
-
-		snprintf(tmp, 128, "%12lu ", ftp_info->size);
-		add_to_string(&string, tmp);
+		add_format_to_string(&string, "%12lu ", ftp_info->size);
 	} else {
 		add_to_string(&string, "           - ");
 	}
 
 #ifdef HAVE_STRFTIME
-	if (ftp_info->mtime && ftp_info->mtime != -1) {
+	if (ftp_info->mtime > 0) {
 		time_t current_time = time(NULL);
 		time_t when = ftp_info->mtime;
 		struct tm *when_tm;
@@ -1079,7 +1075,7 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 
 	add_char_to_string(&string, ' ');
 
-	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
+	if (is_dir && colorize_dir) {
 		add_to_string(&string, "<font color=\"");
 		add_to_string(&string, dircolor);
 		add_to_string(&string, "\"><b>");
@@ -1087,12 +1083,12 @@ display_dir_entry(struct cache_entry *cached, int *pos, int *tries,
 
 	add_to_string(&string, "<a href=\"");
 	add_html_to_string(&string, ftp_info->name, ftp_info->namelen);
-	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr)
+	if (is_dir)
 		add_char_to_string(&string, '/');
 	add_to_string(&string, "\">");
 	add_html_to_string(&string, ftp_info->name, ftp_info->namelen);
 	add_to_string(&string, "</a>");
-	if (ftp_info->flagtrycwd && !ftp_info->flagtryretr && colorize_dir) {
+	if (is_dir && colorize_dir) {
 		add_to_string(&string, "</b></font>");
 	}
 	if (ftp_info->symlink) {

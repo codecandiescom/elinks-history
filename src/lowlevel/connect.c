@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.83 2004/07/22 17:15:09 pasky Exp $ */
+/* $Id: connect.c,v 1.84 2004/07/22 17:25:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,6 +516,13 @@ write_select(struct connection *conn)
 		return;
 	}
 
+	/* We are making some progress, therefore reset the timeout; ie.  when
+	 * uploading large files the time needed for all the data to be sent
+	 * can easily exceed the timeout. We don't need to do this for
+	 * read_select() because it calls user handler every time new data is
+	 * acquired and the user handler does this. */
+	set_connection_timeout(conn);
+
 #if 0
 	printf("ws: %d\n",wb->len-wb->pos);
 	for (wr = wb->pos; wr < wb->len; wr++) printf("%c", wb->data[wr]);
@@ -590,6 +597,9 @@ read_select(struct connection *conn)
 		abort_conn_with_state(conn, S_INTERNAL);
 		return;
 	}
+
+	/* XXX: Should we set_connection_timeout() as we do in write_select()?
+	 * --pasky */
 
 	set_handlers(rb->sock, NULL, NULL, NULL, NULL);
 

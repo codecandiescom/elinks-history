@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.337 2004/12/17 22:59:01 jonas Exp $ */
+/* $Id: download.c,v 1.338 2004/12/18 19:12:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,7 +132,7 @@ abort_download(struct file_download *file_download)
 		done_listbox_item(&download_browser, file_download->box_item);
 	if (file_download->dlg_data)
 		cancel_dialog(file_download->dlg_data, NULL);
-	if (file_download->download.state >= 0)
+	if (is_in_progress_state(file_download->download.state))
 		change_connection(&file_download->download, NULL, PRI_CANCEL,
 				  file_download->stop);
 	if (file_download->uri) done_uri(file_download->uri);
@@ -974,7 +974,7 @@ tp_display(struct type_query *type_query)
 				doc_loading_callback;
 		new->data = ses;
 
-		if (old->state >= 0)
+		if (is_in_progress_state(old->state))
 			change_connection(old, new, PRI_MAIN, 0);
 		else
 			new->state = old->state;

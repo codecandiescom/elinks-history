@@ -9621,7 +9621,7 @@ struct translation translation_ukrainian [] = {
   {T_NO_NEW_ADDRESSES, "Нема нових адрес"},
   {T_MEMORY_INFO, "╤нформац╕я про пам'ять"},
   {T_MARK, "В╕дм╕тити"},
-  {T_NO_HISTORY, "╤стор╕я порожн╕й"},
+  {T_NO_HISTORY, "╤стор╕я порожня"},
   {T_NO_DOWNLOADS, "Нема╓ завантажень"},
   {T_NO_FRAMES, "Без рамок"},
   {T_VT_100_FRAMES, "Рамки VT 100"},

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.110 2004/06/09 20:49:22 jonas Exp $ */
+/* $Id: task.c,v 1.111 2004/06/09 21:13:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,7 +495,13 @@ follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 }
 
 void
-goto_url_frame(struct session *ses, struct uri *uri,
+goto_uri(struct session *ses, struct uri *uri)
+{
+	follow_url(ses, uri, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
+}
+
+void
+goto_uri_frame(struct session *ses, struct uri *uri,
 	       unsigned char *target, enum cache_mode cache_mode)
 {
 	follow_url(ses, uri, target, TASK_FORWARD, cache_mode, 1);
@@ -506,16 +512,17 @@ map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
 	struct uri *uri = get_uri(ld->link, 0);
 
-	goto_url_frame(ses, uri, ld->target, CACHE_MODE_NORMAL);
+	goto_uri_frame(ses, uri, ld->target, CACHE_MODE_NORMAL);
 	if (uri) done_uri(uri);
 }
+
 
 void
 goto_url(struct session *ses, unsigned char *url)
 {
 	struct uri *uri = get_uri(url, 0);
 
-	follow_url(ses, uri, NULL, TASK_FORWARD, CACHE_MODE_NORMAL, 0);
+	goto_uri(ses, uri);
 	if (uri) done_uri(uri);
 }
 
@@ -554,7 +561,7 @@ goto_url_with_hook(struct session *ses, unsigned char *url)
 	if (!*url) return;
 
 	uri = get_hooked_uri(ses, url);
-	goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
+	goto_uri(ses, uri);
 	if (uri) done_uri(uri);
 }
 

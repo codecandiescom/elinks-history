@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.187 2004/06/09 21:05:53 zas Exp $ */
+/* $Id: link.c,v 1.188 2004/06/09 21:13:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -521,7 +521,7 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 		enum cache_mode mode = do_reload ? CACHE_MODE_FORCE_RELOAD
 						 : CACHE_MODE_NORMAL;
 
-		goto_url_frame(ses, uri, link->target, mode);
+		goto_uri_frame(ses, uri, link->target, mode);
 	}
 
 	done_uri(uri);

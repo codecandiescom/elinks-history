@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.166 2004/06/08 23:22:22 jonas Exp $ */
+/* $Id: hierbox.c,v 1.167 2004/06/09 21:13:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -535,7 +535,7 @@ push_hierbox_goto_button(struct dialog_data *dlg_data,
 		struct uri *uri = box->ops->get_uri(box->sel);
 
 		if (uri) {
-			goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
+			goto_uri(ses, uri);
 			done_uri(uri);
 		}
 	}

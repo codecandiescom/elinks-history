@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.426 2004/06/08 23:26:45 jonas Exp $ */
+/* $Id: session.c,v 1.427 2004/06/09 21:13:18 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -607,7 +607,7 @@ copy_session(struct session *old, struct session *new)
 {
 	if (!have_location(old)) return;
 
-	goto_url_frame(new, cur_loc(old)->vs.uri, NULL, CACHE_MODE_NORMAL);
+	goto_uri(new, cur_loc(old)->vs.uri);
 }
 
 /* The session info encoder and decoder:
@@ -780,7 +780,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 			if (first) {
 				/* Open first url. */
-				goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
+				goto_uri(ses, uri);
 				first = 0;
 
 			} else if (info->remote & SES_REMOTE_ADD_BOOKMARK) {

@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.105 2004/07/31 05:30:07 miciah Exp $ */
+/* $Id: kbd.c,v 1.106 2004/07/31 09:53:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -720,6 +720,10 @@ decode_terminal_mouse_escape_sequence(struct itrm *itrm, struct term_event *ev,
 		el += 3;
 	}
 
+	/* Prospone changing of the event type until all errors has sanity
+	 * checks have been done. */
+	ev->ev = EVENT_MOUSE;
+
 	return el;
 }
 #endif /* CONFIG_MOUSE */
@@ -821,7 +825,6 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 	case 'R': resize_terminal(); break;
 	case 'M':
 #ifdef CONFIG_MOUSE
-		ev->ev = EVENT_MOUSE;
 		el = decode_terminal_mouse_escape_sequence(itrm, ev, el, v);
 #endif /* CONFIG_MOUSE */
 		break;
@@ -937,7 +940,9 @@ process_queue(struct itrm *itrm)
 
 	itrm->qlen -= el;
 
-	if (ev.info.keyboard.key != -1)
+	/* The call to decode_terminal_escape_sequence() might have changed the
+	 * keyboard event to a mouse event. */
+	if (ev.ev == EVENT_MOUSE || ev.info.keyboard.key != -1)
 		queue_event(itrm, (char *) &ev, sizeof(struct term_event));
 
 	if (itrm->qlen)

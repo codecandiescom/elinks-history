@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.55 2004/04/03 17:40:52 jonas Exp $ */
+/* $Id: dialogs.c,v 1.56 2004/04/07 14:09:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 
 	if (cached->redirect) {
 		add_format_to_string(&msg, "\n%s: %s", _("Redirect", term),
-						cached->redirect);
+						struri(cached->redirect));
 
 		if (cached->redirect_get) {
 			add_to_string(&msg, " (GET)");

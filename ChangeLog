@@ -1,3 +1,51 @@
+Mon Mar 21 11:29:51 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Mar 21 11:26:16 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, config/options.inc:
+
+	Add dialog.checkbox-selected color to options and fix bug 644.  
+
+Mon Mar 21 11:20:31 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, group.c, inpfield.c, widget.h:
+
+	Width and height fields were added to struct widget, it will help to
+	move display dimensions calculations to proper widget file. Drop
+	base_group_width().  
+
+Mon Mar 21 09:14:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Only add /dev/stdin to the URL list when no URLs was given on the
+	command line. Allow special files when /dev/stdin is added. (debian
+	bug #296976) 
+
+Mon Mar 21 09:09:14 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	... and now revert part of last patch that was not part of revert of
+	1.234->1.235.  
+
+Mon Mar 21 09:06:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Revert 1.234->1.235, the quit hook has to happen before the
+	scripting modules are shut down. Doh.  
+
+Mon Mar 21 00:37:56 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/encoding/encoding.c:
+
+	Use get_opt_bool for protocol.file.allow_special_files.  
+
 Sun Mar 20 17:40:35 2005  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/button.c:

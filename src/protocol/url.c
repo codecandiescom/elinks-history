@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.5 2002/03/26 19:47:54 pasky Exp $ */
+/* $Id: url.c,v 1.6 2002/03/26 21:09:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -674,4 +674,33 @@ void get_filename_from_url(unsigned char *url, unsigned char **s, int *l)
 		url++;
 	}
 	*l = url - *s;
+}
+
+/* URL encoding, escaping unallowed characters. */
+
+static inline int safe_char(unsigned char c)
+{
+	/* RFC 2396, Page 8, Section 2.3 ;-) */
+	return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') ||
+	       (c >= 'a' && c <= 'z')
+	       || c == '-' || c == '_' || c == '.' || c == '!' || c == '~'
+	       || c == '*' || c == '\''|| c == '(' || c == ')';
+}
+
+void encode_string(unsigned char *name, unsigned char **data, int *len)
+{
+	for (; *name; name++) {
+#if 0
+		/* This is probably correct only for query part of URL..? */
+		if (*name == ' ') add_chr_to_str(data, len, '+');
+		else
+#endif
+		if (safe_char(*name)) {
+			add_chr_to_str(data, len, *name);
+		} else {
+			unsigned char n[4];
+			snprintf(n, 3, "%%%02X", *name);
+			add_to_str(data, len, n);
+		}
+	}
 }

@@ -1,5 +1,5 @@
 /* HTML viewer (and many more) */
-/* $Id: view.c,v 1.10 2002/03/22 18:57:21 pasky Exp $ */
+/* $Id: view.c,v 1.11 2002/03/26 21:09:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1283,24 +1283,6 @@ unsigned char *strip_file_name(unsigned char *f)
 
 	for (n = f; *n; n++) if (dir_sep(*n)) l = n;
 	return l + 1;
-}
-
-static inline int safe_char(unsigned char c)
-{
-	return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c== '.' || c == '-' || c == '_';
-}
-
-void encode_string(unsigned char *name, unsigned char **data, int *len)
-{
-	for (; *name; name++) {
-		if (*name == ' ') add_chr_to_str(data, len, '+');
-		else if (safe_char(*name)) add_chr_to_str(data, len, *name);
-		else {
-			unsigned char n[4];
-			sprintf(n, "%%%02X", *name);
-			add_to_str(data, len, n);
-		}
-	}
 }
 
 void encode_controls(struct list_head *l, unsigned char **data, int *len,

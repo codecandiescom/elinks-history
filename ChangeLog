@@ -1,3 +1,52 @@
+Tue Feb 22 21:11:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/changelog:
+
+	Merge changelog changes from the recently uploaded 0.10.2 package.  
+
+Tue Feb 22 15:53:40 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/perl/hooks.pl:
+
+	Added two smart prefixes.  Coral cache and Babelfish.  To use the 
+	babelfish prefix, goto "babelfish german english" (or "bf de en") to 
+	translate the current page from German to English.  It recognizes
+	all languages supported by babelfish.  
+	
+	Patch by Russ Rowan.  
+
+Tue Feb 22 14:39:03 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* debian/Makefile.am:
+
+	Doh. Add elinks.docs to EXTRA_DIST.  
+
+Mon Feb 21 23:31:47 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Again, move the call up the call-chain, this time to frame_ev_kbd.  
+
+Mon Feb 21 23:29:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/: form.c, view.c:
+
+	Move the call to try_form_insert_mode up the call-chain, from
+	field_op to try_form_action.  
+
+Mon Feb 21 23:26:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Clean up try_form_insert_mode.  
+
+Mon Feb 21 23:25:33 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	Factor the code to toggle insert mode out from field_op into the new
+	try_form_insert_mode.  
+
 Mon Feb 21 22:52:34 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/view.c:

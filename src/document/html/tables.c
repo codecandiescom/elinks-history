@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.193 2004/06/24 15:43:13 zas Exp $ */
+/* $Id: tables.c,v 1.194 2004/06/25 08:15:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1230,7 +1230,8 @@ static void
 check_table_widths(struct table *table)
 {
 	register int i, j;
-	int s, ns;
+	int colspan, new_colspan;
+	int width, new_width;
 	int max, max_index = 0; /* go away, warning! */
 	int *widths = mem_calloc(table->x, sizeof(int));
 
@@ -1253,9 +1254,9 @@ check_table_widths(struct table *table)
 		int_upper_bound(&cell->width, p);
 	}
 
-	s = 1;
+	colspan = 1;
 	do {
-		ns = MAXINT;
+		new_colspan = MAXINT;
 		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
 			struct table_cell *cell = CELL(table, i, j);
 
@@ -1264,29 +1265,30 @@ check_table_widths(struct table *table)
 			assertm(cell->colspan + i <= table->x, "colspan out of table");
 			if_assert_failed goto end;
 
-			if (cell->colspan == s) {
+			if (cell->colspan == colspan) {
 				int k, p = 0;
 
-				for (k = 1; k < s; k++)
+				for (k = 1; k < colspan; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(&widths[i], s, cell->width - p, &table->max_c[i]);
+				dst_width(&widths[i], colspan, cell->width - p, &table->max_c[i]);
 
-			} else if (cell->colspan > s && cell->colspan < ns) {
-				ns = cell->colspan;
+			} else if (cell->colspan > colspan
+				   && cell->colspan < new_colspan) {
+				new_colspan = cell->colspan;
 			}
 		}
-		s = ns;
-	} while (s != MAXINT);
+		colspan = new_colspan;
+	} while (colspan != MAXINT);
 
-	s = ns = 0;
+	width = new_width = 0;
 	for (i = 0; i < table->x; i++) {
-		s += table->cols_widths[i];
-		ns += widths[i];
+		width += table->cols_widths[i];
+		new_width += widths[i];
 	}
 
-	if (ns > s) {
-		/* INTERNAL("new width(%d) is larger than previous(%d)", ns, s); */
+	if (new_width > width) {
+		/* INTERNAL("new width(%d) is larger than previous(%d)", new_width, width); */
 		goto end;
 	}
 
@@ -1298,7 +1300,7 @@ check_table_widths(struct table *table)
 		}
 
 	if (max != -1) {
-		widths[max_index] += s - ns;
+		widths[max_index] += width - new_width;
 		if (widths[max_index] <= table->max_c[max_index]) {
 			mem_free(table->cols_widths);
 			table->cols_widths = widths;

@@ -1,5 +1,5 @@
 /* Marks registry */
-/* $Id: marks.c,v 1.2 2004/01/01 03:27:48 zas Exp $ */
+/* $Id: marks.c,v 1.3 2004/01/08 13:37:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,13 +59,13 @@ static inline int
 index_from_char(unsigned char mark)
 {
 	assert(is_valid_mark_char(mark));
-		
+
 	if (mark >= 'A' && mark <= 'Z')
 		return mark - 'A';
-	
+
 	return mark - 'a' + 26;
 }
-		
+
 struct view_state *
 get_mark(unsigned char mark)
 {
@@ -85,13 +85,13 @@ set_mark(unsigned char mark, struct view_state *mark_vs)
 {
 	struct view_state *vs;
 	int i;
-	
+
 	if (!is_valid_mark_char(mark))
 		return;
 
 	i = index_from_char(mark);
 	assert(is_valid_mark_index(i));
-	
+
 	if (marks[i]) {
 		destroy_vs(marks[i]);
 		mem_free(marks[i]);

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.44 2003/12/30 19:37:16 jonas Exp $ */
+/* $Id: options.c,v 1.45 2004/01/08 13:37:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ init_document_options(struct document_options *doo)
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
 	doo->meta_link_display = get_opt_int("document.html.link_display");
 	doo->default_form_input_size = get_opt_int("document.html.default_form_input_size");
-	
+
 	/* Color options. */
 	doo->default_fg = get_opt_color("document.colors.text");
 	doo->default_bg = get_opt_color("document.colors.background");

@@ -1,3 +1,280 @@
+Fri Dec 26 17:23:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Nullify rtext when possible.  
+
+Fri Dec 26 17:14:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	DEBUG mode visual helper to detect useless rtext if an action is
+	given.  
+
+Fri Dec 26 17:06:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	rtext can now be set to NULL instead of hardcoded string, since we
+	use dynamic keybindings.  
+
+Fri Dec 26 16:57:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/menu.c:
+
+	Align antislashes in macro description to improved readibility.  
+
+Fri Dec 26 16:43:33 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Dec 26 16:28:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Main menu is now able to scroll horizontally, ever by keyboard or
+	mouse actions. An indicator now appears when menu is truncated.
+	Still need to tune up.  
+
+Fri Dec 26 16:18:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, dialogs/status.c:
+
+	Restore behavior and default values of loading tab color.  Make
+	unvisited tab text color green by default so it is distinct.  Tab
+	progress uses dialog.meter colors.  Ideas by pasky.  
+
+Fri Dec 26 14:21:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Remove https_real_uri and use @uri instead. Proxy URIs should always
+	contain data so assert it.  
+
+Fri Dec 26 14:14:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	viewer/text/view.c:
+
+	An action ACT_FORMHIST_MANAGER was added, associated default key is
+	F.  
+
+Fri Dec 26 14:10:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Setup ssl connection establishment earlier .. improve error
+	handling. Patch by Timo Lindfors.  
+
+Fri Dec 26 14:08:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Unbind ACT_COPY_CLIPBOARD from Ctrl-C.  
+
+Fri Dec 26 14:02:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Don't be so optimistic we need atleast around 6 chars to make the
+	meter usable.  
+
+Fri Dec 26 13:57:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Add temporary status load progress meter next to leds.  
+
+Fri Dec 26 13:40:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Empty rtext string was replaced by NULL.  
+
+Fri Dec 26 13:37:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/search.c, viewer/text/search.h,
+	viewer/text/view.c:
+
+	Add typeahead search to menu.  
+
+Fri Dec 26 13:17:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	A minor taste of what macros can do to reduce trivial color option
+	code.  
+
+Fri Dec 26 13:15:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/menu.h, dialogs/menu.c,
+	dialogs/options.c, document/html/parser.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	We do not need empty strings as rtext anymore, just use NULL.  
+
+Fri Dec 26 13:08:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, dialogs/menu.c:
+
+	Display current keybinding in menus, if no key action, then provided
+	right text is used.  
+
+Fri Dec 26 12:55:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inphist.c, bfu/menu.c, bfu/menu.h, dialogs/menu.c,
+	dialogs/mime.c, dialogs/options.c, document/html/parser.c,
+	viewer/text/link.c, viewer/text/view.c:
+
+	Key actions were added to menu items.  
+
+Fri Dec 26 12:20:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.h:
+
+	@keyact -> @action in struct menu_item, since we use action
+	elsewhere (in kbdbind.c).  
+
+Fri Dec 26 12:18:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	add_keystroke_to_string() was introduced. It returns a string
+	representing a keystroke, for @action and @map.  
+
+Fri Dec 26 12:08:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.h:
+
+	A field keyact of enum keyact type was added to struct menu_item.  
+
+Fri Dec 26 12:01:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Right text is no more translated by default, a flag RIGHT_INTL was
+	added to menu_item flags to force translation.  
+
+Fri Dec 26 11:48:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Use draw_menu_left_text{,_hk}() for main menu.  
+
+Fri Dec 26 11:11:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, config/options.inc:
+
+	Mainmenu specific-colors are not used anymore. Though they are not
+	yet aliased in options.inc.  
+
+Fri Dec 26 10:55:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Do not add 1 to xbase, let the caller do it.  
+
+Fri Dec 26 10:49:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	draw_menu_left_text_hk() and draw_menu_left_text() are now used to
+	draw left text in menus.  
+
+Fri Dec 26 10:19:10 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	draw_menu_right_text() was introduced.  
+
+Fri Dec 26 10:10:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, dialogs/download.c, dialogs/download.h,
+	dialogs/status.c:
+
+	Revive loading tab color so it is used for drawing progress bar in
+	backgrounded tabs that are loading. We use unvisited color for the
+	non progress part.  
+
+Fri Dec 26 09:56:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Use macro to determine whether download is progressing.  
+
+Fri Dec 26 09:55:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, dialogs/status.c, sched/session.h:
+
+	Add support for fresh color in unvisited or incomplete tabs.  
+
+Fri Dec 26 09:54:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, bfu/menu.h, dialogs/menu.c,
+	document/html/parser.c, viewer/text/link.c:
+
+	M_SUBMENU was dropped. Macro mi_is_submenu() is used, and m_submenu
+	string is no more exported.  
+
+Fri Dec 26 09:41:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	mi_text_translate() macro is now used instead of direct flags
+	comparaison against NO_INTL.  
+
+Fri Dec 26 09:34:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	mi_is_submenu() is now used instead of direct flags comparaison.  
+
+Fri Dec 26 09:26:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/menu.c, bfu/menu.h, dialogs/menu.c, dialogs/mime.c,
+	viewer/text/link.c:
+
+	M_BAR was dropped, horizontal separator is now marked by NO_SELECT
+	flags, used for unselectable menu items too. Most tests were
+	replaced by macros. More to come.  
+
+Fri Dec 26 08:53:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	download_progress_bar(): Make it possible to pass the meter color
+	again. NULL means use dialog.meter (and who says C doesn.t support
+	default arg values ;-).  
+
+Fri Dec 26 08:46:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	download_progress_bar(): Make it possible to pass strings that will
+	be coloured. NULL means draw percentage string.  
+
+Fri Dec 26 08:33:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	Set ui.language to "System" if writing in conf file when configured
+	--without-nls. Patch by Timo Lindfors <lindi@kurp.hut.fi>.  
+
+Fri Dec 26 08:23:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Make progress bar drawing more safe and prioritize drawing of the
+	progress 'colouring' if width is small.  
+
+Fri Dec 26 08:04:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Move up the progress bar drawing.  
+
 Thu Dec 25 17:59:33 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* NEWS:

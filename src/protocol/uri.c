@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.173 2004/04/07 20:06:46 jonas Exp $ */
+/* $Id: uri.c,v 1.174 2004/04/07 21:15:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -698,8 +698,18 @@ parse_uri:
 		    && transform_file_url(&uri, cwd))
 			return normalize_uri_reparse(&uri, struri(&uri));
 
-		/* FIXME: For (commandline) proxy:// URIs we should
-		 * also translate the proxied URI. --jonas */
+		/* Translate the proxied URI too if proxy:// */
+		if (uri.protocol == PROTOCOL_PROXY) {
+			unsigned char *data = translate_url(uri.data, cwd);
+			int pos = uri.data - struri(&uri);
+
+			if (!data) break;
+			struri(&uri)[pos] = 0;
+			insert_in_string(&struri(&uri), pos, data, strlen(data));
+			mem_free(data);
+			return normalize_uri_reparse(&uri, struri(&uri));
+		}
+
 		return normalize_uri_noparse(&uri);
 
 	case URI_ERRNO_NO_SLASHES:

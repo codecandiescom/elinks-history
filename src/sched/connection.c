@@ -1,5 +1,5 @@
-/* Connections managment */
-/* $Id: connection.c,v 1.200 2004/08/21 14:57:55 jonas Exp $ */
+/* Connections management */
+/* $Id: connection.c,v 1.201 2004/08/23 00:20:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

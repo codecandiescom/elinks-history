@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.66 2003/07/23 15:35:50 zas Exp $ */
+/* $Id: string.c,v 1.67 2003/07/23 15:54:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,9 +35,10 @@
 
 #ifdef LEAK_DEBUG
 
-#define string_assertm(f, l, x, m) \
+#define string_assertm(f, l, x, o, m) \
 	if ((assert_failed = !(x))) { \
-		errfile = f, errline = l, elinks_internal(m); \
+		errfile = f, errline = l, \
+		elinks_internal("[" o "] assertion " #x " failed!"); \
 	}
 
 inline unsigned char *
@@ -45,7 +46,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	string_assertm(f, l, len >= 0, "len < 0");
+	string_assertm(f, l, len >= 0, "memacpy");
 	if_assert_failed len = 0;
 
 	m = debug_mem_alloc(f, l, len + 1);
@@ -60,7 +61,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 inline unsigned char *
 debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
-	string_assertm(f, l, src, "src == NULL");
+	string_assertm(f, l, src, "stracpy");
 	if_assert_failed return NULL;
 
 	return debug_memacpy(f, l, src, strlen(src));
@@ -70,7 +71,7 @@ unsigned char *
 debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		  unsigned char *src)
 {
-	string_assertm(f, l, src, "src == NULL");
+	string_assertm(f, l, src, "copy_string");
 	if_assert_failed { *dst = NULL; return NULL; }
 
 	*dst = debug_mem_alloc(f, l, strlen(src) + 1);

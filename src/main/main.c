@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.28 2002/05/18 19:23:50 pasky Exp $ */
+/* $Id: main.c,v 1.29 2002/05/19 11:05:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,7 +273,8 @@ init()
 	
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	if (!get_opt_int("no_connect")) {
+	if (!get_opt_int("no_connect")
+	    && !get_opt_int("dump") && !get_opt_int("source")) {
 		uh = bind_to_af_unix();
 		if (uh != -1) {
 			close(terminal_pipe[0]);
@@ -322,7 +323,7 @@ init()
 		return;
 	}
 	
-	if (get_opt_int("dump") != D_NONE) {
+	if (get_opt_int("dump") || get_opt_int("source")) {
 		dump_start(u);
 		if (terminate) {
 			/* XXX? */

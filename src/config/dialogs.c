@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.56 2003/06/11 09:30:38 miciah Exp $ */
+/* $Id: dialogs.c,v 1.57 2003/06/11 09:59:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -120,7 +120,7 @@ push_info_button(struct dialog_data *dlg,
 			msg_text(term, N_("Name: %s\n"
 				"Type: %s\n"
 				"Value: %s\n\n"
-				"Description: %s\n"),
+				"Description:\n%s"),
 				option->name, option_types[option->type].name,
 				value, _(option->desc ? option->desc
 						      : (unsigned char *) "N/A",
@@ -132,7 +132,7 @@ push_info_button(struct dialog_data *dlg,
 			N_("Info"), AL_LEFT,
 			msg_text(term, N_("Name: %s\n"
 				"Type: %s\n"
-				"Description: %s\n"),
+				"Description:\n%s"),
 				option->name, option_types[option->type].name,
 				_(option->desc  ? option->desc
 						: (unsigned char *) "N/A", term)),

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 12:23+0200\n"
+"POT-Creation-Date: 2003-06-09 17:35+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
@@ -25,17 +25,17 @@ msgstr "Δεν αναμενόταν αριθμός στο πεδίο"
 #: src/bfu/inpfield.c:45 src/bfu/inpfield.c:54 src/bfu/inpfield.c:74
 #: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:275
 #: src/bookmarks/dialogs.c:285 src/config/dialogs.c:43
-#: src/config/dialogs.c:189 src/config/dialogs.c:328 src/config/dialogs.c:360
-#: src/config/dialogs.c:395 src/config/dialogs.c:407 src/config/dialogs.c:462
-#: src/config/dialogs.c:478 src/config/dialogs.c:612 src/config/dialogs.c:634
-#: src/config/dialogs.c:661 src/config/dialogs.c:725 src/config/dialogs.c:739
+#: src/config/dialogs.c:192 src/config/dialogs.c:333 src/config/dialogs.c:365
+#: src/config/dialogs.c:400 src/config/dialogs.c:412 src/config/dialogs.c:467
+#: src/config/dialogs.c:483 src/config/dialogs.c:617 src/config/dialogs.c:639
+#: src/config/dialogs.c:666 src/config/dialogs.c:730 src/config/dialogs.c:744
 #: src/dialogs/auth.c:192 src/dialogs/edit.c:177 src/dialogs/menu.c:644
 #: src/dialogs/menu.c:655 src/dialogs/menu.c:684 src/dialogs/menu.c:702
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:278 src/dialogs/options.c:267
 #: src/dialogs/options.c:364 src/globhist/dialogs.c:240 src/lua/core.c:443
 #: src/lua/core.c:587 src/lua/core.c:811 src/protocol/url.c:67
 #: src/protocol/user.c:109 src/protocol/user.c:137 src/sched/download.c:527
-#: src/sched/download.c:561 src/sched/download.c:722 src/sched/download.c:812
+#: src/sched/download.c:561 src/sched/download.c:722 src/sched/download.c:811
 #: src/sched/download.c:1201 src/sched/download.c:1210
 #: src/sched/download.c:1246 src/sched/download.c:1257 src/sched/session.c:335
 #: src/viewer/text/view.c:1688 src/viewer/text/view.c:2032
@@ -84,9 +84,9 @@ msgstr ""
 msgid "Folder name"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:127
-#: src/config/dialogs.c:137 src/config/dialogs.c:324 src/config/dialogs.c:407
-#: src/config/dialogs.c:477 src/config/dialogs.c:661 src/config/dialogs.c:738
+#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:129
+#: src/config/dialogs.c:140 src/config/dialogs.c:329 src/config/dialogs.c:412
+#: src/config/dialogs.c:482 src/config/dialogs.c:666 src/config/dialogs.c:743
 #: src/dialogs/auth.c:188 src/dialogs/document.c:53 src/dialogs/document.c:208
 #: src/dialogs/document.c:231 src/dialogs/document.c:281
 #: src/dialogs/document.c:293 src/dialogs/edit.c:168 src/dialogs/info.c:48
@@ -168,13 +168,13 @@ msgstr "Διαχειριστής σελιδοδεικτών"
 msgid "Goto"
 msgstr "Πήγαινε"
 
-#: src/bookmarks/dialogs.c:626 src/config/dialogs.c:306
-#: src/config/dialogs.c:355 src/config/dialogs.c:521
+#: src/bookmarks/dialogs.c:626 src/config/dialogs.c:311
+#: src/config/dialogs.c:360 src/config/dialogs.c:526
 msgid "Edit"
 msgstr "Επεξεργασία"
 
-#: src/bookmarks/dialogs.c:631 src/config/dialogs.c:533
-#: src/config/dialogs.c:781 src/globhist/dialogs.c:475
+#: src/bookmarks/dialogs.c:631 src/config/dialogs.c:538
+#: src/config/dialogs.c:786 src/globhist/dialogs.c:475
 msgid "Delete"
 msgstr "Διαγραφή"
 
@@ -182,8 +182,8 @@ msgstr "Διαγραφή"
 msgid "Move"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:646 src/config/dialogs.c:527
-#: src/config/dialogs.c:775
+#: src/bookmarks/dialogs.c:646 src/config/dialogs.c:532
+#: src/config/dialogs.c:780
 msgid "Add"
 msgstr "Προσθήκη"
 
@@ -193,8 +193,8 @@ msgstr "Προσθήκη"
 msgid "Search"
 msgstr "Αναζήτηση"
 
-#: src/bookmarks/dialogs.c:656 src/config/dialogs.c:544
-#: src/config/dialogs.c:798 src/globhist/dialogs.c:495
+#: src/bookmarks/dialogs.c:656 src/config/dialogs.c:549
+#: src/config/dialogs.c:803 src/globhist/dialogs.c:495
 msgid "Close"
 msgstr "Κλείσιμο"
 
@@ -208,7 +208,7 @@ msgstr ""
 
 #: src/config/cmdline.c:57
 #, fuzzy, c-format
-msgid "Error parsing option %s: %s"
+msgid "Cannot parse option %s: %s"
 msgstr "Σφάλμα εγγραφής στον υποδοχέα"
 
 #: src/config/cmdline.c:70
@@ -243,7 +243,7 @@ msgstr "Σφάλμα ρυθμίσεων"
 msgid "Unable to write to config file %s: %s"
 msgstr "Αδύνατη η εγγραφή στο αρχείο ρυθμίσεων"
 
-#: src/config/dialogs.c:119 src/config/dialogs.c:130 src/config/dialogs.c:515
+#: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:520
 #: src/dialogs/document.c:50 src/dialogs/document.c:205
 #: src/globhist/dialogs.c:411 src/globhist/dialogs.c:470
 msgid "Info"
@@ -259,7 +259,11 @@ msgid ""
 "Description: %s\n"
 msgstr ""
 
-#: src/config/dialogs.c:131
+#: src/config/dialogs.c:126 src/config/dialogs.c:138 src/config/dialogs.c:213
+msgid "N/A"
+msgstr ""
+
+#: src/config/dialogs.c:133
 #, c-format
 msgid ""
 "Name: %s\n"
@@ -267,120 +271,120 @@ msgid ""
 "Description: %s\n"
 msgstr ""
 
-#: src/config/dialogs.c:186 src/protocol/url.c:64 src/sched/session.c:332
+#: src/config/dialogs.c:189 src/protocol/url.c:64 src/sched/session.c:332
 #: src/viewer/text/view.c:2029
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: src/config/dialogs.c:187
+#: src/config/dialogs.c:190
 msgid "Bad option value."
 msgstr ""
 
-#: src/config/dialogs.c:204 src/config/dialogs.c:406 src/dialogs/edit.c:26
+#: src/config/dialogs.c:207 src/config/dialogs.c:411 src/dialogs/edit.c:26
 #: src/lua/core.c:307 src/lua/core.c:308
 msgid "Name"
 msgstr "Όνομα"
 
-#: src/config/dialogs.c:205
+#: src/config/dialogs.c:208
 msgid "Type"
 msgstr ""
 
-#: src/config/dialogs.c:207
+#: src/config/dialogs.c:210
 #, fuzzy
 msgid "Value"
 msgstr "τιμή"
 
-#: src/config/dialogs.c:208
+#: src/config/dialogs.c:211
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:356
+#: src/config/dialogs.c:361
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
 
-#: src/config/dialogs.c:392 src/config/dialogs.c:406
+#: src/config/dialogs.c:397 src/config/dialogs.c:411
 msgid "Add option"
 msgstr ""
 
-#: src/config/dialogs.c:393
+#: src/config/dialogs.c:398
 msgid "Cannot add an option here."
 msgstr ""
 
-#: src/config/dialogs.c:459 src/config/dialogs.c:473
+#: src/config/dialogs.c:464 src/config/dialogs.c:478
 msgid "Delete option"
 msgstr ""
 
-#: src/config/dialogs.c:460
+#: src/config/dialogs.c:465
 msgid "Cannot delete this option."
 msgstr ""
 
-#: src/config/dialogs.c:474
+#: src/config/dialogs.c:479
 #, c-format
 msgid "Really delete the option \"%s\" ?"
 msgstr ""
 
-#: src/config/dialogs.c:505
+#: src/config/dialogs.c:510
 msgid "Options manager"
 msgstr ""
 
-#: src/config/dialogs.c:539 src/config/dialogs.c:793 src/dialogs/options.c:262
+#: src/config/dialogs.c:544 src/config/dialogs.c:798 src/dialogs/options.c:262
 #: src/sched/download.c:1199 src/sched/download.c:1244
 msgid "Save"
 msgstr "Αποθήκευση"
 
-#: src/config/dialogs.c:609 src/config/dialogs.c:631 src/config/dialogs.c:660
+#: src/config/dialogs.c:614 src/config/dialogs.c:636 src/config/dialogs.c:665
 msgid "Add keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:610
+#: src/config/dialogs.c:615
 msgid "Invalid keystroke."
 msgstr ""
 
-#: src/config/dialogs.c:632
+#: src/config/dialogs.c:637
 msgid "Need to select a keymap."
 msgstr ""
 
-#: src/config/dialogs.c:647 src/config/options.c:2482
+#: src/config/dialogs.c:652 src/config/options.c:2482
 msgid "Action"
 msgstr ""
 
-#: src/config/dialogs.c:648
+#: src/config/dialogs.c:653
 msgid "Keymap"
 msgstr ""
 
-#: src/config/dialogs.c:649
+#: src/config/dialogs.c:654
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
 
-#: src/config/dialogs.c:653
+#: src/config/dialogs.c:658
 msgid "Keystroke"
 msgstr ""
 
-#: src/config/dialogs.c:721 src/config/dialogs.c:732
+#: src/config/dialogs.c:726 src/config/dialogs.c:737
 msgid "Delete keybinding"
 msgstr ""
 
-#: src/config/dialogs.c:722
+#: src/config/dialogs.c:727
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
 
-#: src/config/dialogs.c:733
+#: src/config/dialogs.c:738
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 
-#: src/config/dialogs.c:765
+#: src/config/dialogs.c:770
 msgid "Keybinding manager"
 msgstr ""
 
-#: src/config/dialogs.c:787 src/globhist/dialogs.c:485
+#: src/config/dialogs.c:792 src/globhist/dialogs.c:485
 msgid "Toggle display"
 msgstr ""
 
@@ -492,7 +496,7 @@ msgid "Find the next occurrence of the current search text"
 msgstr ""
 
 #: src/config/kbdbind.c:388
-msgid "Find the next occurrence of the current search text, in reverse"
+msgid "Find the previous occurrence of the current search text"
 msgstr ""
 
 #: src/config/kbdbind.c:389
@@ -516,7 +520,7 @@ msgid "Go to the homepage"
 msgstr ""
 
 #: src/config/kbdbind.c:394
-msgid "Show informations about the the current page HTTP headers"
+msgid "Show informations about the current page HTTP headers"
 msgstr ""
 
 #: src/config/kbdbind.c:395
@@ -547,7 +551,7 @@ msgid "Move the cursor left"
 msgstr "Δρομέας μορφής μπλοκ"
 
 #: src/config/kbdbind.c:401
-msgid "Activate the link context menu"
+msgid "Open the link context menu"
 msgstr ""
 
 #: src/config/kbdbind.c:402
@@ -728,14 +732,13 @@ msgstr ""
 msgid "error"
 msgstr "Σφάλμα"
 
-#: src/config/options.c:546
-#, fuzzy
-msgid "error: host not found"
+#: src/config/options.c:546 src/sched/error.c:45
+msgid "Host not found"
 msgstr "Ο εξυπηρετητής δε βρέθηκε"
 
 #: src/config/options.c:560
 #, fuzzy
-msgid "Resolver error."
+msgid "Resolver error"
 msgstr "Σφάλμα αποθήκευσης"
 
 #: src/config/options.c:582
@@ -783,7 +786,7 @@ msgid "Options:\n"
 msgstr ""
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:868 src/version.c:78
+#: src/config/options.c:868 src/util/version.c:78
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
@@ -891,7 +894,7 @@ msgstr "Συνδέσεις"
 msgid "Connection options."
 msgstr "Συνδέσεις"
 
-#: src/config/options.c:938 src/version.c:63
+#: src/config/options.c:938 src/util/version.c:63
 msgid "SSL"
 msgstr ""
 
@@ -974,7 +977,7 @@ msgstr ""
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr ""
 
-#: src/config/options.c:986 src/version.c:81
+#: src/config/options.c:986 src/util/version.c:81
 msgid "Cookies"
 msgstr ""
 
@@ -3713,6 +3716,11 @@ msgid ""
 "Last visit time: %s"
 msgstr ""
 
+#: src/lowlevel/af_unix.c:235
+#, c-format
+msgid "listen() failed: %d (%s)"
+msgstr ""
+
 #: src/lowlevel/home.c:85
 #, c-format
 msgid "ELINKS_CONFDIR set to %s, but directory %s doesn't exist."
@@ -3724,6 +3732,16 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
+
+#: src/lowlevel/select.c:341
+#, c-format
+msgid "select() failed: %d (%s)"
+msgstr ""
+
+#: src/lowlevel/signals.c:235
+#, fuzzy, c-format
+msgid "Bad signal number: %d"
+msgstr "Μη έγκυρος αριθμός"
 
 #: src/lua/core.c:461
 msgid "A field"
@@ -3737,11 +3755,6 @@ msgstr ""
 msgid "Lua Error"
 msgstr ""
 
-#: src/lua/core.c:693
-#, c-format
-msgid "Lua Error: %s"
-msgstr ""
-
 #: src/lua/core.c:810
 msgid "Lua Console"
 msgstr ""
@@ -3750,32 +3763,36 @@ msgstr ""
 msgid "Enter expression"
 msgstr ""
 
-#: src/osdep/os_dep.c:1902
+#: src/main.c:106
+msgid "Cannot create a pipe for internal communication."
+msgstr ""
+
+#: src/osdep/os_dep.c:1896
 msgid "~Tab"
 msgstr ""
 
-#: src/osdep/os_dep.c:1903
+#: src/osdep/os_dep.c:1897
 msgid "~Xterm"
 msgstr "xterm"
 
-#: src/osdep/os_dep.c:1904
+#: src/osdep/os_dep.c:1898
 #, fuzzy
 msgid "T~wterm"
 msgstr "xterm"
 
-#: src/osdep/os_dep.c:1905
+#: src/osdep/os_dep.c:1899
 msgid "~Screen"
 msgstr "Οθόνη"
 
-#: src/osdep/os_dep.c:1907 src/osdep/os_dep.c:1911
+#: src/osdep/os_dep.c:1901 src/osdep/os_dep.c:1905
 msgid "~Window"
 msgstr "Παράθυρο"
 
-#: src/osdep/os_dep.c:1908
+#: src/osdep/os_dep.c:1902
 msgid "~Full screen"
 msgstr "Πλήρης οθόνη"
 
-#: src/osdep/os_dep.c:1914
+#: src/osdep/os_dep.c:1908
 msgid "~BeOS terminal"
 msgstr "Τερματικό BeOS"
 
@@ -3844,11 +3861,11 @@ msgstr ""
 msgid "Abort"
 msgstr "Διακοπή"
 
-#: src/sched/download.c:524 src/sched/download.c:558 src/sched/download.c:808
+#: src/sched/download.c:524 src/sched/download.c:558 src/sched/download.c:807
 msgid "Download error"
 msgstr "Σφάλμα μεταφόρτωσης"
 
-#: src/sched/download.c:525 src/sched/download.c:809
+#: src/sched/download.c:525
 #, fuzzy, c-format
 msgid "Could not create file %s: %s"
 msgstr "Αδύνατη η δημιουργία αρχείου"
@@ -3894,6 +3911,13 @@ msgstr ""
 #: src/sched/download.c:721
 msgid "Resume download of the original file"
 msgstr ""
+
+#: src/sched/download.c:808
+#, fuzzy, c-format
+msgid ""
+"Could not create file '%s':\n"
+"%s"
+msgstr "Αδύνατη η δημιουργία αρχείου"
 
 #: src/sched/download.c:1194 src/sched/download.c:1204
 msgid "Unknown type"
@@ -3993,10 +4017,6 @@ msgstr "Εξαίρεση υποδοχέα"
 #: src/sched/error.c:43
 msgid "Internal error"
 msgstr "Εσωτερικό σφάλμα"
-
-#: src/sched/error.c:45
-msgid "Host not found"
-msgstr "Ο εξυπηρετητής δε βρέθηκε"
 
 #: src/sched/error.c:46
 msgid "Error writing to socket"
@@ -4143,43 +4163,76 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/version.c:45
+#: src/sched/session.c:1605
+#, fuzzy
+msgid "Unknown event."
+msgstr "¶γνωστο είδος"
+
+#: src/terminal/kbd.c:275
+#, fuzzy
+msgid "Could not get terminal size"
+msgstr "Αδύνατη η λήψη αρχείου"
+
+#: src/terminal/kbd.c:963
+msgid "Too many bytes read from the itrm!"
+msgstr ""
+
+#: src/terminal/terminal.c:243
+#, fuzzy, c-format
+msgid "Could not read event: %d (%s)"
+msgstr "Αδύνατη η δημιουργία αρχείου"
+
+#: src/terminal/terminal.c:262
+#, c-format
+msgid "Bad event %d"
+msgstr ""
+
+#: src/terminal/terminal.c:299
+msgid "Warning: terminal name contains illicit chars."
+msgstr ""
+
+#: src/terminal/terminal.c:321
+#, c-format
+msgid "Bad terminal size: %d, %d"
+msgstr ""
+
+#: src/util/version.c:45
 msgid "Text WWW browser"
 msgstr "Φυλλομετρητής WWW κειμένου τύπου-Lynx"
 
-#: src/version.c:47
+#: src/util/version.c:47
 msgid "Features:"
 msgstr ""
 
-#: src/version.c:49
+#: src/util/version.c:49
 msgid "Standard"
 msgstr ""
 
-#: src/version.c:51
+#: src/util/version.c:51
 msgid "Debug"
 msgstr ""
 
-#: src/version.c:54
+#: src/util/version.c:54
 #, fuzzy
 msgid "Fastmem"
 msgstr "όνομα"
 
-#: src/version.c:57
+#: src/util/version.c:57
 msgid "Own_libc"
 msgstr ""
 
-#: src/version.c:60
+#: src/util/version.c:60
 #, fuzzy
 msgid "No backtrace"
 msgstr "Πήγαινε πίσω"
 
-#: src/version.c:84
+#: src/util/version.c:84
 msgid "GlobHist"
 msgstr ""
 
 #: src/viewer/dump/dump.c:97
 #, fuzzy, c-format
-msgid "Error writing to stdout: %s."
+msgid "Can't write to stdout: %s"
 msgstr "Σφάλμα εγγραφής στον υποδοχέα"
 
 #: src/viewer/dump/dump.c:100
@@ -4340,6 +4393,10 @@ msgstr "στείλετε σε"
 #: src/viewer/text/view.c:3725
 msgid "post to"
 msgstr "αποστείλετε σε"
+
+#, fuzzy
+#~ msgid "error: host not found"
+#~ msgstr "Ο εξυπηρετητής δε βρέθηκε"
 
 #~ msgid " at "
 #~ msgstr " στο "

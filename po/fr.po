@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-30 23:28+0100\n"
+"POT-Creation-Date: 2003-12-31 15:21+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:308
 msgid "Close"
@@ -37,21 +37,20 @@ msgstr "Info"
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
 #: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:116
-#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/mime.c:159
-#: src/dialogs/options.c:190 src/dialogs/options.c:263
-#: src/formhist/dialogs.c:132 src/protocol/auth/dialogs.c:77
-#: src/protocol/protocol.c:63 src/protocol/user.c:158 src/protocol/user.c:174
-#: src/sched/download.c:185 src/sched/download.c:273 src/sched/download.c:298
-#: src/sched/download.c:569 src/sched/error.c:42 src/sched/session.c:122
-#: src/sched/session.c:591 src/sched/session.c:608 src/sched/session.c:632
-#: src/sched/session.c:886 src/scripting/lua/core.c:401
-#: src/scripting/lua/core.c:482 src/scripting/lua/core.c:591
-#: src/scripting/lua/core.c:720 src/viewer/text/form.c:665
-#: src/viewer/text/search.c:861 src/viewer/text/search.c:889
-#: src/viewer/text/search.c:911 src/viewer/text/search.c:947
-#: src/viewer/text/search.c:1237 src/viewer/text/search.c:1248
-#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:822
-#: src/viewer/text/view.c:1583
+#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:190
+#: src/dialogs/options.c:263 src/formhist/dialogs.c:132 src/mime/dialogs.c:159
+#: src/protocol/auth/dialogs.c:77 src/protocol/protocol.c:63
+#: src/protocol/user.c:158 src/protocol/user.c:174 src/sched/download.c:185
+#: src/sched/download.c:273 src/sched/download.c:298 src/sched/download.c:569
+#: src/sched/error.c:42 src/sched/session.c:122 src/sched/session.c:591
+#: src/sched/session.c:608 src/sched/session.c:632 src/sched/session.c:886
+#: src/scripting/lua/core.c:401 src/scripting/lua/core.c:482
+#: src/scripting/lua/core.c:591 src/scripting/lua/core.c:720
+#: src/viewer/text/form.c:665 src/viewer/text/search.c:861
+#: src/viewer/text/search.c:889 src/viewer/text/search.c:911
+#: src/viewer/text/search.c:947 src/viewer/text/search.c:1237
+#: src/viewer/text/search.c:1248 src/viewer/text/textarea.c:272
+#: src/viewer/text/view.c:822 src/viewer/text/view.c:1583
 msgid "OK"
 msgstr "OK"
 
@@ -89,14 +88,14 @@ msgstr "Supprimer les items sélectionnés?"
 
 #: src/bfu/hierbox.c:640 src/bfu/hierbox.c:661 src/bfu/hierbox.c:675
 #: src/bfu/hierbox.c:735 src/config/dialogs.c:447 src/dialogs/menu.c:163
-#: src/dialogs/mime.c:86 src/formhist/formhist.c:492 src/sched/task.c:169
+#: src/formhist/formhist.c:492 src/mime/dialogs.c:86 src/sched/task.c:169
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:641 src/bfu/hierbox.c:662 src/bfu/hierbox.c:676
 #: src/bfu/hierbox.c:736 src/config/dialogs.c:448 src/dialogs/menu.c:164
-#: src/dialogs/mime.c:87 src/formhist/formhist.c:493 src/sched/task.c:170
+#: src/formhist/formhist.c:493 src/mime/dialogs.c:87 src/sched/task.c:170
 #: src/terminal/tab.c:193 src/terminal/tab.c:229
 msgid "No"
 msgstr "Non"
@@ -162,7 +161,7 @@ msgid "LEDs (visual indicators) options."
 msgstr "Options concernant les LEDs (indicateurs visuels)"
 
 #: src/bfu/leds.c:69 src/config/options.inc:1149 src/config/options.inc:1156
-#: src/globhist/globhist.c:74 src/mime/backend/mailcap.c:98
+#: src/globhist/globhist.c:74 src/mime/backend/mailcap.c:96
 #: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
 msgid "Enable"
 msgstr "Activation"
@@ -265,11 +264,11 @@ msgstr "Nom du dossier"
 #: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:609
 #: src/config/dialogs.c:263 src/config/dialogs.c:339 src/config/dialogs.c:498
 #: src/config/dialogs.c:553 src/dialogs/edit.c:103 src/dialogs/menu.c:116
-#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/mime.c:160
-#: src/dialogs/options.c:193 src/dialogs/options.c:264
+#: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/options.c:193
+#: src/dialogs/options.c:264 src/mime/dialogs.c:160
 #: src/protocol/auth/dialogs.c:78 src/sched/download.c:485
-#: src/sched/download.c:984 src/sched/download.c:993 src/sched/download.c:1020
-#: src/sched/download.c:1032 src/scripting/lua/core.c:402
+#: src/sched/download.c:984 src/sched/download.c:993 src/sched/download.c:1013
+#: src/sched/download.c:1025 src/scripting/lua/core.c:402
 #: src/scripting/lua/core.c:483 src/scripting/lua/core.c:720
 #: src/viewer/text/search.c:1237 src/viewer/text/search.c:1248
 #: src/viewer/text/view.c:822
@@ -316,7 +315,7 @@ msgstr "Chercher"
 #: src/config/dialogs.c:575 src/cookies/dialogs.c:132
 #: src/dialogs/options.c:192 src/formhist/dialogs.c:171
 #: src/globhist/dialogs.c:191 src/sched/download.c:982
-#: src/sched/download.c:1018
+#: src/sched/download.c:1011
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -2801,7 +2800,7 @@ msgid "Local CGI specific options."
 msgstr "Options des scripts CGI locaux."
 
 #: src/config/options.inc:741 src/config/options.inc:753
-#: src/mime/backend/mailcap.c:102 src/mime/backend/mimetypes.c:59
+#: src/mime/backend/mailcap.c:100 src/mime/backend/mimetypes.c:59
 msgid "Path"
 msgstr "Chemin"
 
@@ -3392,7 +3391,7 @@ msgstr "Onglet non visité"
 
 #: src/config/options.inc:1090
 msgid ""
-"Tab colors for tabs that have not completed or has not been\n"
+"Tab colors for tabs that have not been\n"
 "selected since they completed loading."
 msgstr "Couleurs pour les onglets non encore visités depuis leur chargement."
 
@@ -4339,31 +4338,6 @@ msgstr "Atteindre l'URL"
 msgid "Save to file"
 msgstr "Enregistrer dans le fichier"
 
-#: src/dialogs/mime.c:83
-msgid "Delete extension"
-msgstr "Supprimer l'extension"
-
-#: src/dialogs/mime.c:84
-#, c-format
-msgid "Delete extension %s?"
-msgstr "Supprimer l'extension %s ?"
-
-#: src/dialogs/mime.c:153
-msgid "Extension"
-msgstr "Extension"
-
-#: src/dialogs/mime.c:156
-msgid "Extension(s)"
-msgstr "Extension(s)"
-
-#: src/dialogs/mime.c:157
-msgid "Content-Type"
-msgstr "Type de contenu"
-
-#: src/dialogs/mime.c:171
-msgid "No extensions"
-msgstr "Aucune extension"
-
 #: src/dialogs/options.c:164
 msgid "Terminal options"
 msgstr "Options du terminal"
@@ -4506,6 +4480,10 @@ msgstr "Les formulaires ne sont jamais sauvés pour cette URL."
 #: src/formhist/dialogs.c:68
 msgid "Forms are saved for this URL."
 msgstr "Les formulaires sont sauvés pour cette URL."
+
+#: src/formhist/dialogs.c:127
+msgid "Form not saved"
+msgstr "Formulaire non sauvegardé"
 
 #: src/formhist/dialogs.c:128
 msgid ""
@@ -4888,7 +4866,7 @@ msgstr ""
 "Description du gestionnaire spécifique à ce système (par exemple,\n"
 "unix, unix-xwin, ...)."
 
-#: src/mime/backend/default.c:57 src/mime/backend/mailcap.c:108
+#: src/mime/backend/default.c:57 src/mime/backend/mailcap.c:106
 msgid "Ask before opening"
 msgstr "Demander avant ouverture"
 
@@ -4934,27 +4912,27 @@ msgstr ""
 "ici à la place de '.')."
 
 #. name:
-#: src/mime/backend/default.c:227
+#: src/mime/backend/default.c:220
 msgid "Option system"
 msgstr "Système de configuration"
 
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/mime/backend/mailcap.c:94 src/mime/backend/mailcap.c:130
-#: src/mime/backend/mailcap.c:718
+#: src/mime/backend/mailcap.c:92 src/mime/backend/mailcap.c:128
+#: src/mime/backend/mailcap.c:708
 msgid "Mailcap"
 msgstr "Mailcap"
 
-#: src/mime/backend/mailcap.c:96
+#: src/mime/backend/mailcap.c:94
 msgid "Options for mailcap support."
 msgstr "Options concernant le support mailcap."
 
-#: src/mime/backend/mailcap.c:100
+#: src/mime/backend/mailcap.c:98
 msgid "Enable mailcap support."
 msgstr "Activer le support mailcap."
 
-#: src/mime/backend/mailcap.c:104
+#: src/mime/backend/mailcap.c:102
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
 "Leave as \"\" to use MAILCAP environment variable or\n"
@@ -4965,15 +4943,15 @@ msgstr ""
 "Mettre la valeur \"\" pour utiliser la variable d'environnement MAILCAP ou\n"
 "les valeurs par défaut."
 
-#: src/mime/backend/mailcap.c:110
+#: src/mime/backend/mailcap.c:108
 msgid "Ask before using the handlers defined by mailcap."
 msgstr "Demander avant d'utiliser les programmes définis par mailcap."
 
-#: src/mime/backend/mailcap.c:112
+#: src/mime/backend/mailcap.c:110
 msgid "Type query string"
 msgstr "Chaîne de demande de type"
 
-#: src/mime/backend/mailcap.c:114
+#: src/mime/backend/mailcap.c:112
 msgid ""
 "Type of description to show in \"what shall I do with this file\"\n"
 "query dialog:\n"
@@ -4987,11 +4965,11 @@ msgstr ""
 "1 montrer le programme à éxécuter.\n"
 "2 montrer le champ de description mailcap si existent; \"mailcap\" sinon."
 
-#: src/mime/backend/mailcap.c:120
+#: src/mime/backend/mailcap.c:118
 msgid "Prioritize entries by file"
 msgstr "Ordre de priorité par fichier"
 
-#: src/mime/backend/mailcap.c:122
+#: src/mime/backend/mailcap.c:120
 msgid ""
 "Prioritize entries by the order of the files in the mailcap\n"
 "path. This means that wildcard entries (like: image/*) will\n"
@@ -5002,7 +4980,7 @@ msgstr ""
 "entrées joker (comme: image/*) seront aussi traitées avant\n"
 "le choix du gestionnaire."
 
-#: src/mime/backend/mailcap.c:132
+#: src/mime/backend/mailcap.c:130
 msgid ""
 "Options for mailcap support. (Deprecated. Please use\n"
 "mime.mailcap instead)"
@@ -5010,7 +4988,7 @@ msgstr ""
 "Options pour le support de mailcap. (Obsolète. Utilisez\n"
 "mime.mailcap)"
 
-#: src/mime/backend/mailcap.c:137
+#: src/mime/backend/mailcap.c:135
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.enable option instead."
@@ -5018,7 +4996,7 @@ msgstr ""
 "Option obsolète.\n"
 "Utilisez mime.mailcap.enable."
 
-#: src/mime/backend/mailcap.c:142
+#: src/mime/backend/mailcap.c:140
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.path option instead."
@@ -5026,7 +5004,7 @@ msgstr ""
 "Option obsolète.\n"
 "Utilisez mime.mailcap.path."
 
-#: src/mime/backend/mailcap.c:147
+#: src/mime/backend/mailcap.c:145
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.ask option instead."
@@ -5034,7 +5012,7 @@ msgstr ""
 "Option obsolète.\n"
 "Utilisez mime.mailcap.ask."
 
-#: src/mime/backend/mailcap.c:152
+#: src/mime/backend/mailcap.c:150
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use mime.mailcap.description option instead."
@@ -5042,7 +5020,7 @@ msgstr ""
 "Option obsolète.\n"
 "Utilisez mime.mailcap.description."
 
-#: src/mime/backend/mailcap.c:157
+#: src/mime/backend/mailcap.c:155
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the mime.mailcap.prioritize option instead."
@@ -5051,7 +5029,7 @@ msgstr ""
 "Utilisez mime.mailcap.prioritize."
 
 #. name:
-#: src/mime/backend/mimetypes.c:49 src/mime/backend/mimetypes.c:294
+#: src/mime/backend/mimetypes.c:49 src/mime/backend/mimetypes.c:291
 msgid "Mimetypes files"
 msgstr "Fichiers mime.types"
 
@@ -5077,6 +5055,31 @@ msgstr ""
 "Chemin de recherche pour les fichiers de types mime.\n"
 "Liste de fichiers séparés par des virgules.\n"
 "Mettre \"\" pour utiliser la valeur interne par défaut."
+
+#: src/mime/dialogs.c:83
+msgid "Delete extension"
+msgstr "Supprimer l'extension"
+
+#: src/mime/dialogs.c:84
+#, c-format
+msgid "Delete extension %s?"
+msgstr "Supprimer l'extension %s ?"
+
+#: src/mime/dialogs.c:153
+msgid "Extension"
+msgstr "Extension"
+
+#: src/mime/dialogs.c:156
+msgid "Extension(s)"
+msgstr "Extension(s)"
+
+#: src/mime/dialogs.c:157
+msgid "Content-Type"
+msgstr "Type de contenu"
+
+#: src/mime/dialogs.c:171
+msgid "No extensions"
+msgstr "Aucune extension"
 
 #. name:
 #: src/mime/mime.c:32 src/mime/mime.c:196
@@ -5346,8 +5349,8 @@ msgstr "Type inconnu"
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Voulez-vous sauvegarder le fichier '%s' (type: %s) ou l'afficher?"
 
-#: src/sched/download.c:983 src/sched/download.c:992 src/sched/download.c:1019
-#: src/sched/download.c:1031
+#: src/sched/download.c:983 src/sched/download.c:992 src/sched/download.c:1012
+#: src/sched/download.c:1024
 msgid "Display"
 msgstr "Afficher"
 
@@ -5356,11 +5359,11 @@ msgstr "Afficher"
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Voulez-vous afficher le fichier '%s' (type: %s)?"
 
-#: src/sched/download.c:1010 src/sched/download.c:1023
+#: src/sched/download.c:1003 src/sched/download.c:1016
 msgid "What to do?"
 msgstr "Que faire ?"
 
-#: src/sched/download.c:1011
+#: src/sched/download.c:1004
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -5369,11 +5372,11 @@ msgstr ""
 "Voulez-vous ouvrir le fichier '%s' (type: %s%s%s)\n"
 "avec '%s', l'enregistrer ou l'afficher ?"
 
-#: src/sched/download.c:1017 src/sched/download.c:1030
+#: src/sched/download.c:1010 src/sched/download.c:1023
 msgid "Open"
 msgstr "Ouvrir"
 
-#: src/sched/download.c:1024
+#: src/sched/download.c:1017
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"

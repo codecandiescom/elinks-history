@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.96 2003/06/07 21:39:49 pasky Exp $ */
+/* $Id: view.c,v 1.97 2003/06/07 21:41:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3493,7 +3493,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			int c = can_open_in_new(term);
 
 			add_to_menu(&mi, N_("~Follow link"), "",
-				    MENU_FUNC send_enter, NULL, 0);
+				    MENU_FUNC send_enter, NULL, 0, 0);
 
 			add_to_menu(&mi, N_("Follow link and r~eload"), "",
 				    MENU_FUNC send_enter_reload, NULL, 0, 0);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.99 2003/04/16 21:25:51 pasky Exp $ */
+/* $Id: http.c,v 1.100 2003/04/16 21:36:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -967,6 +967,7 @@ get_header(struct read_buffer *rb)
 		if (/*a < ' ' && a != 10 && a != 13*/!a) return -1;
 		if (i < rb->len - 1 && a == 10 && rb->data[i + 1] == 10) return i + 2;
 		if (i < rb->len - 3 && a == 13) {
+			if (rb->data[i + 1] == 13) continue;
 			if (rb->data[i + 1] != 10) return -1;
 			if (rb->data[i + 2] == 13) {
 				if (rb->data[i + 3] != 10) return -1;

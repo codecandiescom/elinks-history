@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.75 2004/12/20 11:07:31 miciah Exp $ */
+/* $Id: parser.h,v 1.76 2004/12/20 11:22:12 miciah Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -59,6 +59,8 @@ struct text_attrib {
 #ifdef CONFIG_BOOKMARKS
 	color_t bookmark_link;
 #endif
+	color_t image_link;
+
 	unsigned char *select;
 	int select_disabled;
 	unsigned int tabindex;

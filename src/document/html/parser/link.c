@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.74 2004/12/20 11:07:32 miciah Exp $ */
+/* $Id: link.c,v 1.75 2004/12/20 11:22:12 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -202,7 +202,7 @@ put_image_label(unsigned char *a, unsigned char *label)
 	html_focusable(a);
 
 	fg = format.fg;
-	format.fg = get_opt_color("document.colors.image");
+	format.fg = format.image_link;
 	put_chrs(label, strlen(label), html_context.put_chars_f, html_context.part);
 	format.fg = fg;
 }

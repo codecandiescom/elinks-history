@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.221 2003/11/12 01:07:26 jonas Exp $ */
+/* $Id: session.c,v 1.222 2003/11/12 01:15:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1493,8 +1493,8 @@ ses_load_notify(struct download *stat, struct session *ses)
 #endif
 
 static void
-really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
-		  enum task_type task, enum cache_mode cache_mode)
+do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
+	      enum task_type task, enum cache_mode cache_mode)
 {
 	unsigned char *u, *referrer;
 	unsigned char *pos;
@@ -1550,7 +1550,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 }
 
 static void
-goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
+follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	   enum task_type task, enum cache_mode cache_mode)
 {
 	unsigned char *new_url = url;
@@ -1562,7 +1562,7 @@ goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 	if (!new_url) return;
 #endif
 
-	if (*new_url) really_goto_url_w(ses, new_url, target, task, cache_mode);
+	if (*new_url) do_follow_url(ses, new_url, target, task, cache_mode);
 
 #ifdef HAVE_SCRIPTING
 	if (new_url != url) mem_free(new_url);
@@ -1573,20 +1573,20 @@ void
 goto_url_frame_reload(struct session *ses, unsigned char *url,
 		      unsigned char *target)
 {
-	goto_url_w(ses, url, target, TASK_FORWARD, CACHE_MODE_FORCE_RELOAD);
+	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_FORCE_RELOAD);
 }
 
 void
 goto_url_frame(struct session *ses, unsigned char *url,
 	       unsigned char *target)
 {
-	goto_url_w(ses, url, target, TASK_FORWARD, CACHE_MODE_NORMAL);
+	follow_url(ses, url, target, TASK_FORWARD, CACHE_MODE_NORMAL);
 }
 
 void
 goto_url(struct session *ses, unsigned char *url)
 {
-	goto_url_w(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL);
+	follow_url(ses, url, NULL, TASK_FORWARD, CACHE_MODE_NORMAL);
 }
 
 void
@@ -1618,7 +1618,7 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 	ses->imgmap_href_base = href;
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 	ses->imgmap_target_base = target;
-	goto_url_w(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL);
+	follow_url(ses, url, target, TASK_IMGMAP, CACHE_MODE_NORMAL);
 }
 
 struct frame *

@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.7 2003/06/13 22:14:02 zas Exp $ */
+/* $Id: fastfind.c,v 1.8 2003/06/13 22:31:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,6 +196,8 @@ init_idxtab(struct fastfind_info *info)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
+#define ifcase(c) (info->case_sensitive ? c : upcase(c))
+
 /* This function must be called once and only once per list. --Zas */
 void *
 fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void), int case_sensitive)
@@ -221,28 +223,19 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 			int found = 0;
 			int j;
 
+			/* ifcase() test should be move outside loops but
+			 * remember we call this routine only once per list.
+			 * So i go for code readibility vs performance here. --Zas */
 			for (j = 0; j < info->uniq_chars_count; j++) {
-				if (info->case_sensitive) {
-					if (info->uniq_chars[j] == p->key[i]) {
+				if (info->uniq_chars[j] == ifcase(p->key[i])) {
 						found = 1;
 						break;
-					}
-				} else {
-					if (info->uniq_chars[j] == upcase(p->key[i])) {
-						found = 1;
-						break;
-					}
 				}
 			}
 			/* FIXME: limit 128 */
 			if (!found) {
-				if (info->case_sensitive)
-					info->uniq_chars[info->uniq_chars_count++] = p->key[i];
-				else
-					info->uniq_chars[info->uniq_chars_count++] = upcase(p->key[i]);
+				info->uniq_chars[info->uniq_chars_count++] = ifcase(p->key[i]);
 			}
-
-
 		}
 		info->count++;
 	}

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.85 2004/01/29 13:32:05 jonas Exp $ */
+/* $Id: parser.c,v 1.86 2004/01/30 15:15:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 {
 	struct scanner scanner;
 
-	init_scanner(&scanner, string, &css_scanner_info);
+	init_scanner(&scanner, &css_scanner_info, string, NULL);
 
 	while (scanner_has_tokens(&scanner)) {
 		struct scanner_token *token = get_scanner_token(&scanner);

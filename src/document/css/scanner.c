@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.118 2004/01/28 01:32:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.119 2004/01/30 15:15:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ scan_css_tokens(struct scanner *scanner)
 
 	/* Scan tokens until we fill the table */
 	for (table_end = table + SCANNER_TOKENS;
-	     current < table_end && *scanner->position;
+	     current < table_end && scanner->position < scanner->end;
 	     current++) {
 		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
 		if (!*scanner->position) break;
@@ -368,7 +368,7 @@ scan_css_tokens(struct scanner *scanner)
 
 	scanner->tokens = (current - table);
 	scanner->current = table;
-	if (scanner->position && !*scanner->position)
+	if (scanner->position >= scanner->end)
 		scanner->position = NULL;
 
 	assert(check_scanner(scanner));

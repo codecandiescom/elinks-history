@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.7 2004/01/29 13:21:39 jonas Exp $ */
+/* $Id: scanner.h,v 1.8 2004/01/30 15:15:33 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -87,8 +87,8 @@ struct scanner_info {
 
 
 /* Initializes the scanner. */
-void init_scanner(struct scanner *scanner, unsigned char *string,
-		  struct scanner_info *scanner_info);
+void init_scanner(struct scanner *scanner, struct scanner_info *scanner_info,
+		  unsigned char *string, unsigned char *end);
 
 /* The number of tokens in the scanners token table:
  * At best it should be big enough to contain properties with space separated
@@ -100,10 +100,10 @@ void init_scanner(struct scanner *scanner, unsigned char *string,
 
 /* The {struct scanner} describes the current state of the scanner. */
 struct scanner {
-	/* The very start of the scanned string and the position in the string
-	 * where to scan next. If position is NULL it means that no more tokens
-	 * can be retrieved from the string. */
-	unsigned char *string, *position;
+	/* The very start of the scanned string, the position in the string
+	 * where to scan next and the end of the string. If position is NULL it
+	 * means that no more tokens can be retrieved from the string. */
+	unsigned char *string, *position, *end;
 
 	/* The current token and number of scanned tokens in the table.
 	 * If the number of scanned tokens is less than SCANNER_TOKENS

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.141 2003/09/05 13:40:33 jonas Exp $ */
+/* $Id: session.c,v 1.142 2003/09/08 23:16:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1769,6 +1769,9 @@ do_document_refresh(void *data)
 	assert(refresh);
 
 	refresh->timer = -1;
+	if (ses->tq_url && !strcasecmp(refresh->url, ses->tq_url))
+		return;
+
 	goto_url(ses, refresh->url);
 };
 

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.24 2004/01/19 23:52:01 jonas Exp $ */
+/* $Id: scanner.h,v 1.25 2004/01/20 00:11:57 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -6,6 +6,28 @@
 #include "document/css/property.h"
 #include "util/error.h"
 
+
+/* The various token types and what they contain. Patterns taken from
+ * the flex scanner declarations in the CSS 2 Specification. */
+enum css_token_type {
+	CSS_TOKEN_NONE,
+
+	/* Char tokens from 0-255 have their char value as type and non string
+	 * tokens have values from 256 and up. */
+
+	CSS_TOKEN_ATRULE = 256, /* "@<identifier>" */
+	CSS_TOKEN_DIGIT,	/* [0-9]+|[0-9]*"."[0-9]+ */
+	CSS_TOKEN_FUNCTION,	/* "<identifier>(" */
+	CSS_TOKEN_HEX_COLOR,	/* #[0-9a-f]\{3,6} */
+	CSS_TOKEN_IDENTIFIER,	/* [a-z_]|{nonascii} followed by *_NAME chars */
+	CSS_TOKEN_NAME,		/* [a-z0-9_-]|{nonascii}+ */
+	CSS_TOKEN_PERCENTAGE,	/* <number>% */
+	CSS_TOKEN_SGML_COMMENT,	/* "<!--" or "-->" */
+	CSS_TOKEN_STRING,	/* Char sequence delimted by matching ' or " */
+
+	/* A special token for unrecognized tokens */
+	CSS_TOKEN_GARBAGE,
+};
 
 /* Define if you want a talking scanner */
 /* #define CSS_SCANNER_DEBUG */
@@ -18,24 +40,7 @@
  * string. */
 struct css_token {
 	/* The type the token */
-	enum css_token_type {
-		CSS_TOKEN_NONE,
-
-		/* Char tokens have type (integer values) from 255 and down and
-		 * non char tokens have values from 256 and up. */
-		CSS_TOKEN_ATRULE = 256,
-		CSS_TOKEN_DIGIT,
-		CSS_TOKEN_FUNCTION,
-		CSS_TOKEN_HEX_COLOR,
-		CSS_TOKEN_IDENTIFIER,
-		CSS_TOKEN_NAME,
-		CSS_TOKEN_PERCENTAGE,
-		CSS_TOKEN_SGML_COMMENT,
-		CSS_TOKEN_STRING,
-
-		/* A special token for unrecognized tokens */
-		CSS_TOKEN_GARBAGE,
-	} type;
+	enum css_token_type type;
 
 	/* The start of the token string and the token length */
 	unsigned char *string;

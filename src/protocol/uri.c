@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.229 2004/06/08 12:19:06 jonas Exp $ */
+/* $Id: uri.c,v 1.230 2004/06/08 12:23:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -276,7 +276,7 @@ get_uri_port(struct uri *uri)
 }
 
 #define can_compare_uri_components(comp) \
-	((comp) == ((comp) & (URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT)))
+	((comp) == ((comp) & (URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT | URI_DATA | URI_FRAGMENT | URI_POST)))
 
 static inline int
 compare_component(unsigned char *a, int alen, unsigned char *b, int blen)
@@ -310,7 +310,13 @@ compare_uri(struct uri *a, struct uri *b, enum uri_component components)
 		&& (!wants(URI_HOST)
 		    || compare_component(a->host, a->hostlen, b->host, b->hostlen))
 		&& (!wants(URI_PORT)
-		    || compare_component(a->port, a->portlen, b->port, b->portlen));
+		    || compare_component(a->port, a->portlen, b->port, b->portlen))
+		&& (!wants(URI_DATA)
+		    || compare_component(a->data, a->datalen, b->data, b->datalen))
+		&& (!wants(URI_FRAGMENT)
+		    || compare_component(a->fragment, a->fragmentlen, b->fragment, b->fragmentlen))
+		&& (!wants(URI_POST)
+		    || compare_component(a->post, strlen(a->post), b->post, strlen(b->post)));
 }
 
 

@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.10 2005/04/01 09:11:38 zas Exp $ */
+/* $Id: core.c,v 1.11 2005/04/01 17:20:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,8 +17,6 @@
 #include "modules/module.h"
 #include "sched/session.h"
 #include "scripting/ruby/core.h"
-#include "scripting/ruby/hooks.h"
-#include "scripting/ruby/ruby.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/error.h"
@@ -235,7 +233,7 @@ init_erb_module(void)
 }
 
 
-static void
+void
 init_ruby(struct module *module)
 {
 	unsigned char *path;
@@ -274,14 +272,3 @@ init_ruby(struct module *module)
 
 	mem_free(path);
 }
-
-
-struct module ruby_scripting_module = struct_module(
-	/* name: */		"Ruby",
-	/* options: */		NULL,
-	/* events: */		ruby_scripting_hooks,
-	/* submodules: */	NULL,
-	/* data: */		NULL,
-	/* init: */		init_ruby,
-	/* done: */		NULL
-);

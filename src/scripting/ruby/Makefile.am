@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2005/01/30 22:41:31 jonas Exp $
+## $Id: Makefile.am,v 1.3 2005/04/01 17:20:59 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -11,5 +11,6 @@ libscriptingruby_a_SOURCES = \
  core.h \
  hooks.c \
  hooks.h \
+ ruby.c \
  ruby.h
 

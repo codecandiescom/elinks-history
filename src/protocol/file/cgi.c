@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.86 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: cgi.c,v 1.87 2005/02/04 00:21:49 adamg Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -134,7 +134,7 @@ set_vars(struct connection *conn, unsigned char *script)
 			if (res) return -1;
 			post = postend + 1;
 		}
-		snprintf(buf, 16, "%d", strlen(post) / 2);
+		snprintf(buf, 16, "%d", (int) strlen(post) / 2);
 		if (setenv("CONTENT_LENGTH", buf, 1)) return -1;
 	}
 

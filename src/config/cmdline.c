@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.108 2004/12/28 01:30:52 jonas Exp $ */
+/* $Id: cmdline.c,v 1.109 2004/12/29 19:37:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -646,10 +646,9 @@ struct option_info cmdline_options_info[] = {
 		   "file. It forces use of default keybindings and will reset\n"
 		   "user-defined ones on save.")),
 
-	INIT_OPT_BOOL("", N_("Write formatted version of given URL to stdout"),
+	INIT_OPT_BOOL("", N_("Write formatted versions of given URLs to stdout"),
 		"dump", 0, 0,
-		N_("Write a plain-text version of the given HTML document to\n"
-		"stdout.")),
+		N_("Write formatted plain-text versions of the given URLs to stdout.")),
 
 	INIT_OPT_CMDALIAS("", N_("Codepage to use with -dump"),
 		"dump-charset", 0, "document.dump.codepage",

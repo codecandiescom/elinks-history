@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.15 2003/11/27 19:40:41 fabio Exp $ */
+/* $Id: dialogs.c,v 1.16 2003/12/09 03:38:47 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,6 +115,34 @@ static struct listbox_ops formhist_listbox_ops = {
 };
 
 static int
+push_login_button(struct dialog_data *dlg_data,
+		  struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct formhist_data *formhist_data;
+	struct terminal *term = dlg_data->win->term;
+
+	if (!box->sel || !box->sel->udata) return 0;
+
+	formhist_data = box->sel->udata;
+
+	if (formhist_data->dontsave) {
+		msg_box(term, NULL, 0, "Form not saved", AL_CENTER,
+			"No saved information for this URL.\n"
+			"If you want to save passwords for this URL, just "
+			"use the \"Toggle saving\" button."
+			, NULL, 1,
+			N_("OK"), NULL, B_ESC | B_ENTER);
+		return 0;
+
+	} else {
+		push_hierbox_goto_button(dlg_data, button);
+	}
+
+	return 0;
+}
+
+static int
 push_toggle_dontsave_button(struct dialog_data *dlg_data,
 			    struct widget_data *button)
 {
@@ -139,7 +167,7 @@ push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 static INIT_LIST_HEAD(formhist_data_box_items);
 
 static struct hierbox_browser_button formhist_buttons[] = {
-	{ N_("Login"),		push_hierbox_goto_button,	1 },
+	{ N_("Login"),		push_login_button,		1 },
 	{ N_("Info"),		push_hierbox_info_button,	1 },
 	{ N_("Delete"),		push_hierbox_delete_button,	1 },
 	{ N_("Toggle saving"),	push_toggle_dontsave_button,	0 },

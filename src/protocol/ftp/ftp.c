@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.176 2004/10/13 00:09:06 jonas Exp $ */
+/* $Id: ftp.c,v 1.177 2004/10/13 08:28:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ struct option_info ftp_options[] = {
 	INIT_OPT_BOOL("protocol.ftp", N_("Use passive mode (IPv4)"),
 		"use_pasv", 0, 1,
 		N_("Use PASV instead of PORT (passive vs active mode, IPv4 only).")),
-#ifdef IPV6
+#ifdef CONFIG_IPV6
 	INIT_OPT_BOOL("protocol.ftp", N_("Use passive mode (IPv6)"),
 		"use_epsv", 0, 0,
 		N_("Use EPSV instead of EPRT (passive vs active mode, IPv6 only).")),
@@ -79,10 +79,10 @@ struct option_info ftp_options[] = {
 		"use_epsv", 0, 0,
 		N_("Use EPSV instead of EPRT (passive vs active mode, IPv6 only).\n"
 		"Works only with IPv6 enabled, so nothing interesting for you.")),
-
+#endif /* CONFIG_IPV6 */
 	NULL_OPTION_INFO,
 };
-#endif
+
 
 struct module ftp_protocol_module = struct_module(
 	/* name: */		N_("FTP"),

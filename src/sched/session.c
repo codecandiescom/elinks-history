@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.463 2004/06/10 23:47:00 jonas Exp $ */
+/* $Id: session.c,v 1.464 2004/06/10 23:52:12 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -672,12 +672,10 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 			}
 		}
 	}
-
-	free_session_info(info);
 }
 
 static struct session *
-create_session(struct window *tab, struct initial_session_info *session_info)
+create_session(struct window *tab, struct initial_session_info *info)
 {
 	struct session *ses = mem_calloc(1, sizeof(struct session));
 
@@ -703,7 +701,7 @@ create_session(struct window *tab, struct initial_session_info *session_info)
 
 	add_to_list(sessions, ses);
 
-	process_session_info(ses, session_info);
+	process_session_info(ses, info);
 
 	return ses;
 }
@@ -1062,6 +1060,7 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			break;
 		case EV_INIT:
 			ses = tab->data = create_session(tab, (struct initial_session_info *) ev->b);
+			free_session_info((struct initial_session_info *) ev->b);
 			if (!ses) {
 				register_bottom_half((void (*)(void *)) destroy_terminal, tab->term);
 				return;

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.67 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: smb.c,v 1.68 2005/02/28 14:20:01 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -140,7 +140,7 @@ smb_read_text(struct connection *conn, int sock)
 
 	/* We add 2 here to handle LF and NUL chars that are added in
 	 * smb_end_connection(). */
-	si = mem_realloc(si, sizeof(struct smb_connection_info) + si->textlen
+	si = mem_realloc(si, sizeof(*si) + si->textlen
 			     + READ_SIZE + 2);
 	if (!si) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -554,7 +554,7 @@ smb_protocol_handler(struct connection *conn)
 	struct smb_connection_info *si;
 	struct uri *uri;
 
-	si = mem_calloc(1, sizeof(struct smb_connection_info) + 2);
+	si = mem_calloc(1, sizeof(*si) + 2);
 	if (!si) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;

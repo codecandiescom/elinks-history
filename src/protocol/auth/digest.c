@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.28 2004/11/27 17:53:35 jonas Exp $ */
+/* $Id: digest.c,v 1.29 2005/02/28 14:16:53 zas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ init_cnonce_digest(md5_hex_digest cnonce)
 	srand(time(0));
 
 	random = rand();
-	MD5((const unsigned char *) &random, sizeof(int), md5);
+	MD5((const unsigned char *) &random, sizeof(random), md5);
 
 	convert_to_md5_hex_digest(md5, cnonce);
 }

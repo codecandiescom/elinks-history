@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.98 2004/11/20 04:29:57 jonas Exp $ */
+/* $Id: auth.c,v 1.99 2005/02/28 14:16:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ init_auth_entry(struct uri *uri, unsigned char *realm)
 	DBG("init_auth_entry: auth_url=%s realm=%s uri=%p", auth_url, realm, uri);
 #endif
 
-	entry = mem_calloc(1, sizeof(struct auth_entry));
+	entry = mem_calloc(1, sizeof(*entry));
 	if (!entry) return NULL;
 
 	entry->uri = get_uri_reference(uri);

@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.38 2005/02/03 23:36:59 adamg Exp $ */
+/* $Id: codes.c,v 1.39 2005/02/28 14:18:43 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -90,7 +90,7 @@ http_code_to_string(int code)
 {
 	struct http_code *element = bsearch((void *) (long) code, http_code,
 					    count(http_code),
-					    sizeof(struct http_code),
+					    sizeof(*element),
 					    compare_http_codes);
 
 	if (element) return element->str;
@@ -191,7 +191,7 @@ http_error_document(struct connection *conn, int code)
 
 	assert(conn && conn->uri);
 
-	info = mem_calloc(1, sizeof(struct http_error_info));
+	info = mem_calloc(1, sizeof(*info));
 	if (!info) return;
 
 	info->code = code;

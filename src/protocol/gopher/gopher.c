@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.32 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: gopher.c,v 1.33 2005/02/28 14:18:10 zas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -290,7 +290,7 @@ init_gopher_connection_info(struct connection *conn)
 	 * wazzup! */
 	assert(command.length >= 2);
 
-	size = sizeof(struct gopher_connection_info) + command.length;
+	size = sizeof(*gopher) + command.length;
 	gopher = mem_calloc(1, size);
 	if (!gopher) {
 		done_string(&command);

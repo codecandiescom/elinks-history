@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.3 2004/12/29 18:23:08 jonas Exp $ */
+/* $Id: codes.c,v 1.4 2005/02/28 14:19:24 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -156,7 +156,7 @@ nntp_error_dialog(struct connection *conn, enum nntp_code code)
 
 	assert(conn && conn->uri);
 
-	info = mem_calloc(1, sizeof(struct nntp_error_info));
+	info = mem_calloc(1, sizeof(*info));
 	if (!info) return;
 
 	info->code = code;

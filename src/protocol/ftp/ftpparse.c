@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.20 2004/07/04 12:13:42 jonas Exp $ */
+/* $Id: ftpparse.c,v 1.21 2005/02/28 14:17:51 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -207,7 +207,7 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 	long hour;
 	long minute;
 
-	memset(fp, 0, sizeof(struct ftpparse));
+	memset(fp, 0, sizeof(*fp));
 
 	if (len < 2)		/* an empty name in EPLF, with no info, could be 2 chars */
 		return 0;

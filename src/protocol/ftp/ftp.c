@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.187 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: ftp.c,v 1.188 2005/02/28 14:17:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,7 +149,7 @@ parse_psv_resp(unsigned char *data, int *n, int max_value)
 	unsigned char *p = data;
 	int i = 5;
 
-	memset(n, 0, 6 * sizeof(int));
+	memset(n, 0, 6 * sizeof(*n));
 
 	if (*p < ' ') return 0;
 
@@ -210,7 +210,7 @@ again:
 			if (parse_psv_resp(num_end, (int *) &n, 255) != 6)
 				return -1;
 
-			memset(s, 0, sizeof(struct sockaddr_in));
+			memset(s, 0, sizeof(*s));
 			s->sin_family = AF_INET;
 			s->sin_addr.s_addr = htonl((n[0] << 24) + (n[1] << 16) + (n[2] << 8) + n[3]);
 			s->sin_port = htons((n[4] << 8) + n[5]);
@@ -220,14 +220,14 @@ again:
 		if (sa && response == 229) { /* EPSV response parsing. */
 			/* See RFC 2428 */
 			struct sockaddr_in6 *s = (struct sockaddr_in6 *) sa;
-			int sal = sizeof(struct sockaddr_in6);
+			int sal = sizeof(*s);
 			int n[6];
 
 			if (parse_psv_resp(num_end, (int *) &n, 65535) != 1) {
 				return -1;
 			}
 
-			memset(s, 0, sizeof(struct sockaddr_in6));
+			memset(s, 0, sizeof(*s));
 			if (getpeername(conn->socket.fd, (struct sockaddr *) sa, &sal)) {
 				return -1;
 			}
@@ -603,7 +603,7 @@ add_file_cmd_to_str(struct connection *conn)
 	int data_sock;
 	unsigned char pc[6];
 
-	c_i = mem_calloc(1, sizeof(struct ftp_connection_info));
+	c_i = mem_calloc(1, sizeof(*c_i));
 	if (!c_i) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
@@ -616,7 +616,7 @@ add_file_cmd_to_str(struct connection *conn)
 		return NULL;
 	}
 #ifdef CONFIG_IPV6
-	memset(&data_addr, 0, sizeof(struct sockaddr_in6));
+	memset(&data_addr, 0, sizeof(data_addr));
 #endif
 	memset(pc, 0, 6);
 
@@ -728,8 +728,7 @@ add_file_cmd_to_str(struct connection *conn)
 	c_i->opc = c_i->pending_commands;
 
 	/* 1 byte is already reserved for cmd_buffer in struct ftp_connection_info. */
-	c_i = mem_realloc(c_i, sizeof(struct ftp_connection_info)
-			       + command.length);
+	c_i = mem_realloc(c_i, sizeof(*c_i) + command.length);
 	if (!c_i) {
 		done_string(&command);
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -1266,7 +1265,7 @@ out_of_mem:
 		if (conn->uri->datalen) {
 			struct ftpparse ftp_info;
 
-			memset(&ftp_info, 0, sizeof(struct ftpparse));
+			memset(&ftp_info, 0, sizeof(ftp_info));
 			ftp_info.name = "..";
 			ftp_info.namelen = 2;
 			ftp_info.flagtrycwd = 1;

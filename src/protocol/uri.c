@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.306 2005/01/06 13:13:55 jonas Exp $ */
+/* $Id: uri.c,v 1.307 2005/02/28 14:16:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,7 +210,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 #endif
 
 	assertm(uristring, "No uri to parse.");
-	memset(uri, 0, sizeof(struct uri));
+	memset(uri, 0, sizeof(*uri));
 
 	/* Nothing to do for an empty url. */
 	if_assert_failed return 0;
@@ -1489,7 +1489,7 @@ get_uri_cache_entry(unsigned char *string, int length)
 
 	/* Setup a new entry */
 
-	entry = mem_calloc(1, sizeof(struct uri_cache_entry) + length);
+	entry = mem_calloc(1, sizeof(*entry) + length);
 	if (!entry) return NULL;
 
 	object_nolock(&entry->uri, "uri");

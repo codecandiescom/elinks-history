@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.392 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: http.c,v 1.393 2005/02/28 14:19:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -500,7 +500,7 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
-	info = mem_calloc(1, sizeof(struct http_connection_info));
+	info = mem_calloc(1, sizeof(*info));
 	if (!info) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;

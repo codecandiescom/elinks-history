@@ -1,5 +1,5 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.4 2005/02/23 21:52:08 jonas Exp $ */
+/* $Id: connection.c,v 1.5 2005/02/28 14:19:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -104,7 +104,7 @@ init_nntp_connection_info(struct connection *conn)
 	unsigned char *data;
 	int datalen;
 
-	nntp = mem_calloc(1, sizeof(struct nntp_connection_info));
+	nntp = mem_calloc(1, sizeof(*nntp));
 	if (!nntp) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
@@ -195,7 +195,7 @@ nntp_quit(struct connection *conn)
 {
 	struct nntp_connection_info *info;
 
-	info = mem_calloc(1, sizeof(struct nntp_connection_info));
+	info = mem_calloc(1, sizeof(*info));
 	if (!info) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;

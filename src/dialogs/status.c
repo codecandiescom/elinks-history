@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.81 2004/08/15 08:28:24 miciah Exp $ */
+/* $Id: status.c,v 1.82 2004/08/18 14:12:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,6 +210,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	int msglen;
 	struct box box;
 
+#ifdef CONFIG_MARKS
 	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
 		switch (ses->kbdprefix.mark) {
 			case KP_MARK_NOTHING:
@@ -225,7 +226,9 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 							" to which to jump"));
 				break;
 		}
-	} else if (ses->kbdprefix.repeat_count) {
+	} else
+#endif
+	if (ses->kbdprefix.repeat_count) {
 		msg = msg_text(term, N_("Keyboard prefix: %d"),
 			       ses->kbdprefix.repeat_count);
 	} else if (stat) {

@@ -1,20 +1,55 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.27 2004/05/01 05:29:36 miciah Exp $
+-- $Id: hooks.lua.in,v 1.28 2005/03/23 04:48:48 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
 -- Take care about @SOMETHING@, we're processed with autoconf!
 
 ----------------------------------------------------------------------
+--  Compatibility routines for Lua 4 code.
+--  Taken from Lua's compat.lua.
+----------------------------------------------------------------------
+
+function writeto (name)
+  if name == nil then
+    local f, err, cod = io.close(_OUTPUT)
+    _OUTPUT = io.stdout
+    return f, err, cod
+  else
+    local f, err, cod = io.open(name, "w")
+    _OUTPUT = f or _OUTPUT
+    return f, err, cod
+  end
+end
+
+function write (...)
+  local f = _OUTPUT
+  if type(arg[1]) == 'userdata' then
+    f = tab.remove(arg, 1)
+  end
+  return f:write(unpack(arg))
+end
+
+function do_ (f, err)
+  if not f then print(err); return end
+  local a,b = pcall(f)
+  if not a then print(b); return nil
+  else return b or true
+  end
+end
+
+function dofile(s) return do_(loadfile(s)) end
+
+----------------------------------------------------------------------
 --  Load configuration
 ----------------------------------------------------------------------
 
 dofile ("@sysconfdir@/config.lua")
-home_dir = (getenv and (getenv ("HOME") or "/home/"..getenv("USER"))) or "."
+home_dir = (os and os.getenv and (os.getenv ("HOME") or "/home/"..os.getenv("USER"))) or "."
 dofile (elinks_home.."/config.lua")
 
 ----------------------------------------------------------------------
---  case-insensitive gsub
+--  case-insensitive string.gsub
 ----------------------------------------------------------------------
 
 -- Please note that this is not completely correct yet.
@@ -22,12 +57,12 @@ dofile (elinks_home.."/config.lua")
 -- FIXME: Handle pattern classes.
 
 function gisub (s, pat, repl, n)
-    pat = gsub (pat, '(%a)',
-	        function (v) return '['..strupper(v)..strlower(v)..']' end)
+    pat = string.gsub (pat, '(%a)',
+	        function (v) return '['..string.upper(v)..string.lower(v)..']' end)
     if n then
-	return gsub (s, pat, repl, n)
+	return string.gsub (s, pat, repl, n)
     else
-	return gsub (s, pat, repl)
+	return string.gsub (s, pat, repl)
     end
 end
 
@@ -37,19 +72,19 @@ end
 ----------------------------------------------------------------------
 
 function match (prefix, url)
-    return strsub (url, 1, strlen (prefix)) == prefix
+    return string.sub (url, 1, string.len (prefix)) == prefix
 end
 
 function hx (c)
-    return strchar((c >= 10 and (c - 10) + strbyte ('A')) or c + strbyte ('0'))
+    return string.char((c >= 10 and (c - 10) + string.byte ('A')) or c + string.byte ('0'))
 end
 
 function char2hex (c)
-    return '%'..hx (strbyte (c) / 16)..hx (mod(strbyte (c), 16))
+    return '%'..hx (string.byte (c) / 16)..hx (mod(string.byte (c), 16))
 end
 
 function escape (str)
-    return gsub (str, "(%W)", char2hex)
+    return string.gsub (str, "(%W)", char2hex)
 end
 
 -- You can write smt like "gg" to goto URL dialog and it'll go to google.com.
@@ -84,14 +119,14 @@ dumbprefixes = {
 function debian_contents (url)
 	local t = {}
 
-	url = gsub(url, '(%w+):(%w+)', function (key, val) %t[key] = val end)
+	url = string.gsub(url, '(%w+):(%w+)', function (key, val) t[key] = val end)
 
 	return 'http://packages.debian.org/cgi-bin/search_contents.pl?word='
-	..escape(gsub(url, '%s*([^%s]+)%s*', '%1'))
+	..escape(string.gsub(url, '%s*([^%s]+)%s*', '%1'))
 	..'&searchmode='..(t.searchmode or 'searchfilesanddirs')
 	..'&case='..(t.case or 'insensitive')
 	..'&version='..(t.version or pipe_read('cut -d/ -f1 /etc/debian_version | tr -d \\\\n') or 'stable')
-	..'&arch='..(t.arch or gsub(pipe_read('uname -m | tr -d \\\\n'), 'i%d86', 'i386') or 'i386') -- like this'll work...
+	..'&arch='..(t.arch or string.gsub(pipe_read('uname -m | tr -d \\\\n'), 'i%d86', 'i386') or 'i386') -- like this'll work...
 end
 
 function cvsweb (base, project, url)
@@ -100,11 +135,11 @@ function cvsweb (base, project, url)
 	local replacements
 
 	-- allow <file>:<revision>[-><revision>]
-	url,replacements = gsub(url, "^(.*):(.*)->(.*)$", "%1 %2 %3")
-	if replacements == 0 then url = gsub(url, "^(.*):(.*)$", "%1 %2") end
+	url,replacements = string.gsub(url, "^(.*):(.*)->(.*)$", "%1 %2 %3")
+	if replacements == 0 then url = string.gsub(url, "^(.*):(.*)$", "%1 %2") end
 
 	-- split into words
-	gsub(url, "([^%s]+)", function (w) tinsert(%t, w) end)
+	string.gsub(url, "([^%s]+)", function (w) table.tinsert(t, w) end)
 	file, old, new = t[1], t[2], t[3]
 
 	if t[4] then error('this smartprefix takes only two to three arguments') return nil end
@@ -119,7 +154,7 @@ end
 function gmane (url)
 	local group, words
 
-	_,_,group,words = strfind(url, "([^%s]+)%s%s*(.*)$")
+	_,_,group,words = string.find(url, "([^%s]+)%s%s*(.*)$")
 
 	if not words then return nil end
 
@@ -204,19 +239,19 @@ smartprefixes = {
 function goto_url_hook (url, current_url)
     if dumbprefixes[url] then
 	if current_url then
-	    return gsub(dumbprefixes[url], "%%c", current_url)
+	    return string.gsub(dumbprefixes[url], "%%c", current_url)
 	else
             return dumbprefixes[url]
 	end
     end
 
-    if strfind(url,'%s') or strfind(url, ':') then
-        local _,_,nick,val = strfind(url, "^([^%s:]+)[:%s]%s*(.-)%s*$")
+    if string.find(url,'%s') or string.find(url, ':') then
+        local _,_,nick,val = string.find(url, "^([^%s:]+)[:%s]%s*(.-)%s*$")
         if nick and smartprefixes[nick] then
             if type(smartprefixes[nick]) == 'function' then
                 return smartprefixes[nick](val)
             elseif type(smartprefixes[nick]) == 'string' then
-                return format(smartprefixes[nick], escape(val))
+                return string.format(smartprefixes[nick], escape(val))
             else
                 error('smartprefix "'..nick..'" has unsupported type "'
                       ..type(smartprefixes[nick])..'".')
@@ -227,10 +262,10 @@ function goto_url_hook (url, current_url)
 
     -- Expand ~ to home directories.
     if match ("~", url) then
-        if strsub(url, 2, 2) == "/" or strlen(url) == 1 then    -- ~/foo
-            return home_dir..strsub(url, 2)
+        if string.sub(url, 2, 2) == "/" or string.len(url) == 1 then    -- ~/foo
+            return home_dir..string.sub(url, 2)
         else                                -- ~foo/bar
-            return "/home/"..strsub(url, 2)
+            return "/home/"..string.sub(url, 2)
         end
     end
 
@@ -268,16 +303,16 @@ end
 --  pre_format_html_hook
 ----------------------------------------------------------------------
 
--- Plain strfind (no metacharacters).
+-- Plain string.find (no metacharacters).
 function sstrfind (s, pattern)
-    return strfind (s, pattern, 1, 1)
+    return string.find (s, pattern, 1, 1)
 end
 
 function highlight (url, html)
   local ret=nil
 
 -- highlight patches
-  if strfind (url, "%.patch$") then
+  if string.find (url, "%.patch$") then
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l patch "..tmp.." - ) 2>/dev/null")
@@ -286,7 +321,7 @@ function highlight (url, html)
   end
 
 -- Python
-  if strfind (url, "%.py$") then
+  if string.find (url, "%.py$") then
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l python "..tmp.." - ) 2>/dev/null")
@@ -295,7 +330,7 @@ function highlight (url, html)
   end
 
 -- Perl
-  if strfind (url, "%.pl$") then
+  if string.find (url, "%.pl$") then
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l perl "..tmp.." - ) 2>/dev/null")
@@ -304,7 +339,7 @@ function highlight (url, html)
   end
 
 -- awk
-  if strfind (url, "%.awk$") then
+  if string.find (url, "%.awk$") then
 	local tmp = tmpname ()
 	writeto (tmp) write (html) writeto()
 	html = pipe_read ("(code2html -l awk "..tmp.." - ) 2>/dev/null")
@@ -313,7 +348,7 @@ function highlight (url, html)
   end
 
 -- hightlight C code
-    if strfind (url, "%.[ch]$") then
+    if string.find (url, "%.[ch]$") then
         local tmp = tmpname ()
         writeto (tmp) write (html) writeto ()
         html = pipe_read ("(code2html -l c "..tmp.." - ) 2>/dev/null")
@@ -322,7 +357,7 @@ function highlight (url, html)
     end
 
 -- shell
-    if strfind (url, "%.sh$") then
+    if string.find (url, "%.sh$") then
         local tmp = tmpname ()
         writeto (tmp) write (html) writeto ()
         html = pipe_read ("(code2html -l sh "..tmp.." - ) 2>/dev/null")
@@ -341,11 +376,11 @@ function pre_format_html_hook (url, html)
     -- in core ELinks. I still keep it here for a reference (as an example),
     -- though. If you will add something similiar using pipe_read(), feel free
     -- to remove this. --pasky
---    if strfind (url, "%.gz$") and strlen (html) < 65536 then
+--    if string.find (url, "%.gz$") and string.len (html) < 65536 then
 --        local tmp = tmpname ()
 --        writeto (tmp) write (html) writeto ()
 --        html = pipe_read ("(gzip -dc "..tmp.." || cat "..tmp..") 2>/dev/null")
---        remove (tmp)
+--        os.remove (tmp)
 --        ret = 1
 --    end
 
@@ -380,21 +415,21 @@ function pre_format_html_hook (url, html)
     -- linuxtoday.com
     if sstrfind (url, "linuxtoday.com") then
         if sstrfind (url, "news_story") then
-            html = gsub (html, '<TABLE CELLSPACING="0".-</TABLE>', '', 1)
-            html = gsub (html, '<TR BGCOLOR="#FFF.-</TR></TABLE>', '', 1)
+            html = string.gsub (html, '<TABLE CELLSPACING="0".-</TABLE>', '', 1)
+            html = string.gsub (html, '<TR BGCOLOR="#FFF.-</TR></TABLE>', '', 1)
         else
-            html = gsub (html, 'WIDTH="120">\n<TR.+</TABLE></TD>', '>', 1)
+            html = string.gsub (html, 'WIDTH="120">\n<TR.+</TABLE></TD>', '>', 1)
         end
-        html = gsub (html, '<A HREF="http://www.internet.com.-</A>', '')
-        html = gsub (html, "<IFRAME.-</IFRAME>", "")
+        html = string.gsub (html, '<A HREF="http://www.internet.com.-</A>', '')
+        html = string.gsub (html, "<IFRAME.-</IFRAME>", "")
         -- emphasis in text is lost
-        return gsub (html, 'text="#002244"', 'text="#001133"', 1)
+        return string.gsub (html, 'text="#002244"', 'text="#001133"', 1)
 
     -- dictionary.com
     elseif sstrfind (url, "dictionary.com/cgi-bin/dict.pl") then
 	local t = { t = "" }
-	local _, n = gsub (html, "resultItemStart %-%-%>(.-)%<%!%-%- resultItemEnd",
-			   function (x) %t.t = %t.t.."<tr><td>"..x.."</td></tr>" end)
+	local _, n = string.gsub (html, "resultItemStart %-%-%>(.-)%<%!%-%- resultItemEnd",
+			   function (x) t.t = t.t.."<tr><td>"..x.."</td></tr>" end)
 	if n == 0 then
 	    -- we've already mangled this page before
 	    return html
@@ -404,7 +439,7 @@ function pre_format_html_hook (url, html)
 		    "</body></html>"
 	end
     elseif sstrfind (url, "allmusic.com") then
-        return gsub(html, "javascript:z%('(.-)'%)", "/cg/amg.dll?p=amg&sql=%1")
+        return string.gsub(html, "javascript:z%('(.-)'%)", "/cg/amg.dll?p=amg&sql=%1")
     end
 
     return ret and html
@@ -431,7 +466,7 @@ end
 function mutt ()
     local tmp = tmpname ()
     writeto (tmp) write (current_document ()) writeto ()
-    tinsert (tmp_files, tmp)
+    table.tinsert (tmp_files, tmp)
     return "run", "mutt -a "..tmp
 end
 
@@ -465,9 +500,9 @@ function quit_hook ()
 	bm_save_bookmarks ()
     end
 
-    if tmp_files and remove then
+    if tmp_files and os and os.remove then
         tmp_files.n = nil
-        for i,v in tmp_files do remove (v) end
+        for i,v in tmp_files do os.remove (v) end
     end
 end
 
@@ -503,7 +538,7 @@ if bookmark_addon then
 
     -- Be careful not to load bookmarks if this script is being
     -- reloaded while in ELinks, or we will lose unsaved changes.
-    if not bm_bookmarks or getn (bm_bookmarks) == 0 then
+    if not bm_bookmarks or table.getn (bm_bookmarks) == 0 then
 	bm_load_bookmarks ()
     end
 

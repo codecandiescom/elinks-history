@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.264 2004/06/29 02:29:39 jonas Exp $ */
+/* $Id: tables.c,v 1.265 2004/06/29 02:30:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1093,9 +1093,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	}
 
 	table = parse_table(html, eof, end, bgcolor, attr, (part->document || part->box.x));
-	if (!table) {
-		goto ret0;
-	}
+	if (!table) goto ret0;
 
 	table->part = part;
 	table->border = border;

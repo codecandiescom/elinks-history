@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.124 2003/11/10 20:53:22 jonas Exp $ */
+/* $Id: core.c,v 1.125 2003/11/11 09:13:32 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -458,9 +458,10 @@ l_xdialog(LS)
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
 
+	i = 0;
 	while (dlg->widgets_size < nfields) {
 		add_dlg_field(dlg, _("Name", term), 0, 0, NULL, MAX_STR_LEN,
-			      data->fields[i], NULL);
+			      data->fields[i++], NULL);
 	}
 
 	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);

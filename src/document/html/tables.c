@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.85 2003/09/16 18:11:12 jonas Exp $ */
+/* $Id: tables.c,v 1.86 2003/09/16 18:25:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1521,10 +1521,9 @@ display_table_frames(struct table *t, int x, int y)
 		struct table_cell *cell = CELL(t, i, j);
 
 		if (!cell->used || cell->spanned) continue;
-		xsp = cell->colspan;
-		if (!xsp) xsp = t->x - i;
-		ysp = cell->rowspan;
-		if (!ysp) ysp = t->y - j;
+
+		xsp = cell->colspan ? cell->colspan : t->x - i;
+		ysp = cell->rowspan ? cell->rowspan : t->y - j;
 
 		if (t->rules != R_COLS) {
 			memset(&H_FRAME_POSITION(t, i, j), t->cellsp, xsp);
@@ -1539,9 +1538,10 @@ display_table_frames(struct table *t, int x, int y)
 
 	if (t->rules == R_GROUPS) {
 		for (i = 1; i < t->x; i++) {
-			if (/*i < t->xc &&*/ t->xcols[i]) continue;
-			memset(&V_FRAME_POSITION(t, i, 0), 0, t->y);
+			if (!t->xcols[i])
+				memset(&V_FRAME_POSITION(t, i, 0), 0, t->y);
 		}
+
 		for (j = 1; j < t->y; j++) {
 			for (i = 0; i < t->x; i++)
 				if (CELL(t, i, j)->group)

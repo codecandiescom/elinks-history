@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.62 2003/06/23 01:49:10 jonas Exp $ */
+/* $Id: file.c,v 1.63 2003/06/23 02:21:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -515,6 +515,67 @@ try_encoding_extensions(unsigned char *prefixname, int *fd)
 	return ENCODING_NONE;
 }
 
+/* Reads the file from @stream in chunks of size @readsize. */
+/* Returns a connection state. S_OK if all is well. */
+static int
+read_file(struct stream_encoded *stream, int readsize, struct file_info *info)
+{
+	/* + 1 is there because of bug in Linux. Read returns -EACCES when
+	 * reading 0 bytes to invalid address */
+	unsigned char *fragment = mem_alloc(readsize + 1);
+	int fragmentlen;
+	int readlen;
+
+	if (!fragment)
+		return S_OUT_OF_MEM;
+
+	fragmentlen = 0;
+	/* We read with granularity of stt.st_size (given as @readsize) - this
+	 * does best job for uncompressed files, and doesn't hurt for
+	 * compressed ones anyway - very large files usually tend to inflate
+	 * fast anyway. At least I hope ;).  --pasky */
+	while ((readlen = read_encoded(stream, fragment + fragmentlen, readsize))) {
+		unsigned char *tmp;
+
+		if (readlen < 0) {
+			/* FIXME: We should get the correct error value.
+			 * But it's I/O error in 90% of cases anyway.. ;)
+			 * --pasky */
+			mem_free(fragment);
+			return -errno;
+		}
+
+		fragmentlen += readlen;
+
+#if 0
+		/* This didn't work so well as it should (I had to implement
+		 * end of stream handling to bzip2 anyway), so I rather
+		 * disabled this. */
+		if (readlen < stt.st_size) {
+			/* This is much safer. It should always mean that we
+			 * already read everything possible, and it permits us
+			 * more elegant of handling end of file with bzip2. */
+			break;
+		}
+#endif
+
+		tmp = mem_realloc(fragment, fragmentlen + readsize);
+		if (!tmp) {
+			mem_free(fragment);
+			return S_OUT_OF_MEM;
+		}
+
+		fragment = tmp;
+	}
+
+	fragment[fragmentlen] = '\0'; /* NULL-terminate just in case */
+
+	info->fragment = fragment;
+	info->fragmentlen = fragmentlen;
+	info->head = stracpy("");
+	return S_OK;
+}
+
 /* FIXME: Many return values aren't checked. And we should split it.
  * --Zas */
 void
@@ -534,8 +595,15 @@ file_func(struct connection *c)
 		return;
 	}
 
+	info = mem_alloc(sizeof(struct file_info));
+	if (!info) {
+		abort_conn_with_state(c, S_OUT_OF_MEM);
+		return;
+	}
+
 	get_filenamepart_from_url(c->url, &filename, &filenamelen);
 	if (!filename) {
+		mem_free(info);
 		abort_conn_with_state(c, S_OUT_OF_MEM);
 		return;
 	}
@@ -546,6 +614,7 @@ file_func(struct connection *c)
 
 		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
 			mem_free(filename);
+			mem_free(info);
 			closedir(d);
 
 			if (get_cache_entry(c->url, &e)) {
@@ -560,14 +629,6 @@ file_func(struct connection *c)
 			e->redirect = straconcat(c->url, "/", NULL);
 
 			goto end;
-		}
-
-		info = mem_alloc(sizeof(struct file_info));
-		if (!info) {
-			mem_free(filename);
-			closedir(d);
-			abort_conn_with_state(c, S_OUT_OF_MEM);
-			return;
 		}
 
 		state = list_directory(d, filename, info);
@@ -586,10 +647,10 @@ file_func(struct connection *c)
 		mem_free(info);
 	} else {
 		struct stream_encoded *stream;
-		int readlen;
 		struct stat stt;
 		enum stream_encoding encoding = ENCODING_NONE;
 		int fd = open(filename, O_RDONLY | O_NOCTTY);
+		int state;
 		int saved_errno = errno;
 
 		if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
@@ -601,6 +662,7 @@ file_func(struct connection *c)
 		mem_free(filename);
 
 		if (fd == -1) {
+			mem_free(info);
 			abort_conn_with_state(c, -saved_errno);
 			return;
 		}
@@ -608,6 +670,7 @@ file_func(struct connection *c)
 		set_bin(fd);
 		if (fstat(fd, &stt)) {
 			saved_errno = errno;
+			mem_free(info);
 			close(fd);
 			abort_conn_with_state(c, -saved_errno);
 			return;
@@ -615,6 +678,7 @@ file_func(struct connection *c)
 
 		if (encoding != ENCODING_NONE && !S_ISREG(stt.st_mode)) {
 			/* We only want to open regular encoded files. */
+			mem_free(info);
 			close(fd);
 			abort_conn_with_state(c, -saved_errno);
 			return;
@@ -623,69 +687,27 @@ file_func(struct connection *c)
 		if (!S_ISREG(stt.st_mode) &&
 		    !get_opt_int("protocol.file.allow_special_files")) {
 			close(fd);
+			mem_free(info);
 			abort_conn_with_state(c, S_FILE_TYPE);
 			return;
 		}
 
-		/* We read with granularity of stt.st_size - this does best
-		 * job for uncompressed files, and doesn't hurt for compressed
-		 * ones anyway - very large files usually tend to inflate fast
-		 * anyway. At least I hope ;). --pasky */
+		stream = open_encoded(fd, encoding);
+		state = read_file(stream, stt.st_size, info);
 
-		/* + 1 is there because of bug in Linux. Read returns -EACCES
-		 * when reading 0 bytes to invalid address */
+		close_encoded(stream);
+		close(fd);
 
-		fragment = mem_alloc(stt.st_size + 1);
-		if (!fragment) {
-			close(fd);
-			abort_conn_with_state(c, S_OUT_OF_MEM);
+		if (state != S_OK) {
+			mem_free(info);
+			abort_conn_with_state(c, state);
 			return;
 		}
 
-		stream = open_encoded(fd, encoding);
-		fragmentlen = 0;
-		while ((readlen = read_encoded(stream, fragment + fragmentlen, stt.st_size))) {
-			unsigned char *tmp;
-
-			if (readlen < 0) {
-				/* FIXME: We should get the correct error
-				 * value. But it's I/O error in 90% of cases
-				 * anyway.. ;) --pasky */
-				saved_errno = errno;
-				mem_free(fragment);
-				close_encoded(stream);
-				abort_conn_with_state(c, -saved_errno);
-				return;
-			}
-
-			fragmentlen += readlen;
-
-#if 0
-			/* This didn't work so well as it should (I had to
-			 * implement end of stream handling to bzip2 anyway),
-			 * so I rather disabled this. */
-			if (readlen < stt.st_size) {
-				/* This is much safer. It should always mean
-				 * that we already read everything possible,
-				 * and it permits us more elegant of handling
-				 * end of file with bzip2. */
-				break;
-			}
-#endif
-
-			tmp = mem_realloc(fragment, fragmentlen + stt.st_size);
-			if (!tmp) {
-				mem_free(fragment);
-				close_encoded(stream);
-				abort_conn_with_state(c, S_OUT_OF_MEM);
-				return;
-			}
-			fragment = tmp;
-		}
-
-		close_encoded(stream);
-		fragment[fragmentlen] = '\0'; /* NULL-terminate just in case */
-		head = stracpy("");
+		fragment = info->fragment;
+		fragmentlen = info->fragmentlen;
+		head = info->head;
+		mem_free(info);
 	}
 
 	if (get_cache_entry(c->url, &e)) {

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.159 2004/11/17 01:04:04 zas Exp $ */
+/* $Id: dialog.c,v 1.160 2004/11/17 01:07:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,6 +227,20 @@ dialog_ev_mouse(struct dialog_data *dlg_data, struct term_event *ev)
 #endif /* CONFIG_MOUSE */
 
 static void
+select_button_by_flag(struct dialog_data *dlg_data, int flag)
+{
+	int i;
+
+	for (i = 0; i < dlg_data->n; i++) {
+		if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
+		    && dlg_data->dlg->widgets[i].info.button.flags & flag) {
+			select_dlg_item(dlg_data, i);
+			break;
+		}
+	}
+}
+
+static void
 dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	struct widget_data *widget_data = selected_widget(dlg_data);
@@ -256,30 +270,15 @@ dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
 		if (widget_is_textfield(widget_data)
 		    || check_kbd_modifier(ev, KBD_CTRL)
 		    || check_kbd_modifier(ev, KBD_ALT)) {
-			int i;
-
-			for (i = 0; i < dlg_data->n; i++) {
-				if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-				    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
-					select_dlg_item(dlg_data, i);
-					break;
-				}
-			}
+			select_button_by_flag(dlg_data, B_ENTER);
 		}
 		return;
 	}
 
 	/* Cancel button. */
 	if (action == ACT_MENU_CANCEL) {
-		int i;
-
-		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-			    && dlg_data->dlg->widgets[i].info.button.flags & B_ESC) {
-				select_dlg_item(dlg_data, i);
-				return;
-			}
-		}
+		select_button_by_flag(dlg_data, B_ESC);
+		return;
 	}
 
 	/* Cycle focus. */

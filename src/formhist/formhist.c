@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.49 2003/09/26 22:12:19 pasky Exp $ */
+/* $Id: formhist.c,v 1.50 2003/10/20 15:39:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -332,7 +332,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	if (form_already_saved(form)) goto fail;
 
 	msg_box(ses->tab->term, NULL, 0,
-		N_("Form memory"), AL_CENTER,
+		N_("Forms memory"), AL_CENTER,
 		N_("Should I remember this login?\n\n"
 		"Please note that the password will be stored "
 		"obscured (but unencrypted) in a file on your disk.\n\n"

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.303 2004/07/16 15:32:49 zas Exp $ */
+/* $Id: http.c,v 1.304 2004/07/23 14:52:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -795,6 +795,38 @@ is_line_in_buffer(struct read_buffer *rb)
 	return 0;
 }
 
+static void read_http_data(struct connection *conn, struct read_buffer *rb);
+
+static void
+read_more_http_data(struct connection *conn, struct read_buffer *rb)
+{
+	read_from_socket(conn, conn->socket, rb, read_http_data);
+	set_connection_state(conn, S_TRANS);
+}
+
+static void
+read_http_data_done(struct connection *conn)
+{
+	struct http_connection_info *info = conn->info;
+
+	/* There's no content but an error so just print
+	 * that instead of nothing. */
+	if (!conn->from) {
+		if (info->http_code >= 400) {
+			http_error_document(conn, info->http_code);
+
+		} else {
+			/* This is not an error, thus fine. No need generate any
+			 * document, as this may be empty and it's not a problem.
+			 * In case of 3xx, we're probably just getting kicked to
+			 * another page anyway. And in case of 2xx, the document
+			 * may indeed be empty and thus the user should see it so. */
+		}
+	}
+
+	http_end_request(conn, S_OK, 0);
+}
+
 static void
 read_http_data(struct connection *conn, struct read_buffer *rb)
 {
@@ -807,7 +839,8 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 			/* Flush uncompression first. */
 			info->length = 0;
 		} else {
-			goto thats_all_folks;
+			read_http_data_done(conn);
+			return;
 		}
 	}
 
@@ -834,10 +867,13 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 
 		kill_buffer_data(rb, len);
 
-		if (!info->length && !rb->close)
-			goto thats_all_folks;
+		if (!info->length && !rb->close) {
+			read_http_data_done(conn);
+			return;
+		}
 
-		goto read_more;
+		read_more_http_data(conn, rb);
+		return;
 	}
 
 	while (1) {
@@ -862,7 +898,8 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 				kill_buffer_data(rb, l);
 				if (l <= 2) {
 					/* Empty line. */
-					goto thats_all_folks;
+					read_http_data_done(conn);
+					return;
 				}
 				continue;
 			}
@@ -951,28 +988,7 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		break;
 	}
 
-read_more:
-	read_from_socket(conn, conn->socket, rb, read_http_data);
-	set_connection_state(conn, S_TRANS);
-	return;
-
-thats_all_folks:
-	/* There's no content but an error so just print
-	 * that instead of nothing. */
-	if (!conn->from) {
-		if (info->http_code >= 400) {
-			http_error_document(conn, info->http_code);
-
-		} else {
-			/* This is not an error, thus fine. No need generate any
-			 * document, as this may be empty and it's not a problem.
-			 * In case of 3xx, we're probably just getting kicked to
-			 * another page anyway. And in case of 2xx, the document
-			 * may indeed be empty and thus the user should see it so. */
-		}
-	}
-
-	http_end_request(conn, S_OK, 0);
+	read_more_http_data(conn, rb);
 }
 
 /* Returns offset of the header end, zero if more data is needed, -1 when

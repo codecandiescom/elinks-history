@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.93 2004/03/13 15:12:23 zas Exp $ */
+/* $Id: dialogs.c,v 1.94 2004/03/13 15:17:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,11 +53,6 @@ do_auth_dialog(struct session *ses, void *data)
 	unsigned char *dlg_login, *dlg_pass;
 
 	if (!a || a->blocked) return;
-	a->blocked = 1;
-
-	snprintf(sticker, sizeof(sticker),
-		_("Authentication required for %s at %s", term),
-		a->realm, a->url);
 
 	dlg_login = straconcat(_("Login", term), ": ", NULL);
 	if (!dlg_login) return;
@@ -67,6 +62,10 @@ do_auth_dialog(struct session *ses, void *data)
 		return;
 	}
 
+	snprintf(sticker, sizeof(sticker),
+		 _("Authentication required for %s at %s", term),
+		 a->realm, a->url);
+
 #define AUTH_WIDGETS_COUNT 5
 	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);
 	if (!dlg) {
@@ -74,6 +73,8 @@ do_auth_dialog(struct session *ses, void *data)
 		mem_free(dlg_pass);
 		return;
 	}
+
+	a->blocked = 1;
 
 	dlg->title = _("HTTP Authentication", term);
 	dlg->layouter = generic_dialog_layouter;

@@ -1499,23 +1499,19 @@ void set_frame(struct session *ses, struct f_data_c *f, int a)
 }
 
 /* This is common backend for submit_form() and enter(). */
-static int submit_form_do(struct f_data_c *fd, struct link *link,
+static int submit_form_do(unsigned char *url, struct link *link,
 			  struct session *ses) {
-	unsigned char *url;
+	if (!url) return 1;
 	
-	if ((url = get_form_url(ses, fd, link->form))) {
-		if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
-			goto_imgmap(ses, url + 4, stracpy(url + 4),
-				    stracpy(link->target));
-		} else {
-			goto_url_f(ses, url, link->target);
-		}
-		
-		mem_free(url);
-		return 2;
+	if (strlen(url) >= 4 && !casecmp(url, "MAP@", 4)) {
+		goto_imgmap(ses, url + 4, stracpy(url + 4),
+			    stracpy(link->target));
+	} else {
+		goto_url_f(ses, url, link->target);
 	}
 	
-	return 1;
+	mem_free(url);
+	return 2;
 }
 
 static int submit_form(struct terminal *term, void *xxx,
@@ -1526,7 +1522,7 @@ static int submit_form(struct terminal *term, void *xxx,
 	if (fd->vs->current_link == -1) return 1;
 	link = &fd->f_data->links[fd->vs->current_link];
 	
-	return submit_form_do(fd, link, ses);
+	return submit_form_do(get_form_url(ses, fd, link->form), link, ses);
 }
 
 
@@ -1541,7 +1537,7 @@ static int enter(struct session *ses, struct f_data_c *fd, int a)
 	    || ((has_form_submit(fd->f_data, link->form) || form_submit_auto)
 		&& (link->type == L_FIELD || link->type == L_AREA))) {
 
-		return submit_form_do(fd, link, ses);
+		return submit_form_do(get_link_url(ses, fd, link), link, ses);
 
 	} else if (link->type == L_FIELD || link->type == L_AREA) {
 		/* We won't get here if (has_form_submit() ||

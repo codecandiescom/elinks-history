@@ -2,6 +2,7 @@
 # beckers <beckers@st-oneline.de>
 # Ingo Blechschmidt <iblech@web.de>
 # Josef 'Jupp' Schugt <jupp@gmx.de>, 2003
+# Karsten 'kuser' Schölzel <kuser@gmx.de>
 #
 #, fuzzy
 msgid ""
@@ -9,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-16 15:15+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
-"Last-Translator: Josef 'Jupp' Schugt <jupp@gmx.de>\n"
+"Last-Translator: Karsten 'kuser' Schölzel <kuser@gmx.de>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-15\n"

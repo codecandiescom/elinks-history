@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.62 2005/03/04 01:18:02 jonas Exp $ */
+/* $Id: select.c,v 1.63 2005/03/04 01:23:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,17 +194,15 @@ install_timer(ttime time, void (*func)(void *), void *data)
 void
 kill_timer(int id)
 {
-	struct timer *timer;
+	struct timer *timer, *next;
 	int k = 0;
 
-	foreach (timer, timers) if (timer->id == id) {
-		struct timer *tmp_timer = timer;
-
-		timer = timer->prev;
-		del_from_list(tmp_timer);
-		mem_free(tmp_timer);
-		k++;
-	}
+	foreachsafe (timer, next, timers)
+		if (timer->id == id) {
+			del_from_list(timer);
+			mem_free(timer);
+			k++;
+		}
 
 	assertm(k, "trying to kill nonexisting timer");
 	assertm(k < 2, "more timers with same id");

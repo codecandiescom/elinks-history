@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.14 2002/04/02 22:29:46 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.15 2002/04/06 17:52:09 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -24,7 +24,7 @@ struct list_head bookmarks = { &bookmarks, &bookmarks };
 /* The last used id of a bookmark */
 bookmark_id next_bookmark_id = 0;
 
-/* search memorization */
+/* Last searched values */
 unsigned char *bm_last_searched_name = NULL;
 unsigned char *bm_last_searched_url = NULL;
 
@@ -139,13 +139,14 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 {
 	struct bookmark *bm;
 
-	if (!search_title || !search_url) return 0;
+	if (!search_title || !search_url)
+		return 0;
 
-	/* memorize title criteria */
+	/* Memorize last searched title */
 	if (bm_last_searched_name) mem_free(bm_last_searched_name);
 	bm_last_searched_name = stracpy(search_title);
 
-	/* memorize url criteria */
+	/* Memorize last searched url */
 	if (bm_last_searched_url) mem_free(bm_last_searched_url);
 	bm_last_searched_url = stracpy(search_url);
 
@@ -172,7 +173,10 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 void
 read_bookmarks()
 {
-	unsigned char in_buffer[MAX_STR_LEN]; /* read buffer */
+	/* INBUF_SIZE = max. title length + 1 byte for separator
+	 * + max. url length + 1 byte for end of line + 1 byte for null char */
+#define INBUF_SIZE (MAX_STR_LEN - 1) + 1 + (MAX_STR_LEN - 1) + 1 + 1
+	unsigned char in_buffer[INBUF_SIZE]; /* read buffer */
 	unsigned char *file_name;
 	unsigned char *title;	/* Pointer to the start of title in buffer */
 	unsigned char *url;	/* Pointer to the start of url in buffer */
@@ -184,25 +188,38 @@ read_bookmarks()
 
 	f = fopen(file_name, "r");
 	mem_free(file_name);
-	if (!f)	return;
+	if (!f) return;
 
 	title = in_buffer;
 
-	/* FIXME: very long lines aren't handled !!! --Zas */
 	/* TODO: Use rather \t as a separator. */
-	while (fgets(in_buffer, MAX_STR_LEN, f)) {
+	/* TODO: Ignore lines with bad chars in title or url */
+	while (fgets(in_buffer, INBUF_SIZE, f)) {
 		unsigned char *urlend;
 
 		url = strchr(in_buffer, '|');
-		if (!url) continue;
+		/* If separator is not found, or title is empty or too long,
+		 * skip that line -- Zas */
+		if (!url || url == in_buffer
+		    || url - in_buffer > MAX_STR_LEN - 1)
+			continue;
 		*url = '\0';
+
+		/* Move to start of url */
 		url++;
+
 		urlend = strchr(url, '\n');
-		if (urlend) *urlend = '\0';
+		/* If end of line is not found, or url is empty or too long,
+		 * skip that line -- Zas */
+		if (!urlend || url == urlend || urlend - url > MAX_STR_LEN - 1)
+			continue;
+		*urlend = '\0';
+
 		add_bookmark(title, url);
 	}
 
 	fclose(f);
+#undef INBUF_SIZE
 }
 
 /* Saves the bookmarks to file */
@@ -228,7 +245,7 @@ write_bookmarks()
 
 		for (i = strlen(p) - 1; i >= 0; i--)
 			if (p[i] < ' '|| p[i] == '|')
-				p[i] = '*';
+				p[i] = ' ';
 		fputs(p,out);
 		fputc('|', out);
 		fputs(bm->url,out);

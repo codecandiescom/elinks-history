@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.91 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: menu.c,v 1.92 2003/08/29 04:40:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -749,7 +749,7 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 				break;
 
 			if ((ev->b & BM_ACT) == B_DOWN && ev->y) {
-				delete_window_ev(win, ev);
+				delete_window_ev(win, NULL);
 
 			} else if (!ev->y) {
 				int p = 2;

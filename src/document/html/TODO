@@ -102,7 +102,8 @@ NULL -> <html> --> <head> --> <title> -> TEXT ---> NULL
 
 Cute, isn't it? :)
 
-Note that any of this WILL NOT HAPPEN NOW! We postponed this to the time when
-js support and inline images displaying in original Links will be finished, so
-that we can easily merge it. So please choose something else to work on, as
-actually your work would turn to dust.
+Note that in practice I want to rework this a bit, moving part of the stuff
+from renderer to parser, where it rather belongs - only real document
+"elements" will be in the hiearchy tree, with all attributes near them,
+independent on the real tags (thus we'll also have renderer
+language-independent; hi, XML).

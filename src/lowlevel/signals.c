@@ -1,5 +1,5 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.18 2004/01/01 16:34:41 jonas Exp $ */
+/* $Id: signals.c,v 1.19 2004/01/08 13:13:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ sig_intr(struct terminal *t)
 	if (!t)
 		terminate = 1;
 	else
-		exit_prog(t, NULL, NULL);
+		register_bottom_half((void (*)(void *))destroy_terminal, t);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.278 2004/01/08 02:34:46 jonas Exp $ */
+/* $Id: menu.c,v 1.279 2004/01/08 13:13:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,15 +96,14 @@ query_exit(struct session *ses)
 void
 exit_prog(struct terminal *term, void *d, struct session *ses)
 {
-	if (!ses) {
-		register_bottom_half((void (*)(void *))destroy_terminal, term);
-		return;
-	}
+	assert(ses);
+
 	if (!ses->exit_query
 	    && (!d || (term->next == term->prev && are_there_downloads()))) {
 		query_exit(ses);
 		return;
 	}
+
 	really_exit_prog(ses);
 }
 

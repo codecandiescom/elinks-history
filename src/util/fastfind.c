@@ -14,7 +14,7 @@
  *
  *  (c) 2003 Laurent MONIN (aka Zas)
  * Feel free to do whatever you want with that code. */
-/* $Id: fastfind.c,v 1.8 2003/06/13 22:31:51 zas Exp $ */
+/* $Id: fastfind.c,v 1.9 2003/06/13 22:36:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,7 +209,7 @@ fastfind_index(void (*reset) (void), struct fastfind_key_value * (*next) (void),
 	if (!info) return NULL;
 
 	/* First search min, max, count */
-	reset();
+	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
 

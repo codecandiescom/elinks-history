@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.71 2003/11/27 19:12:48 fabio Exp $ */
+/* $Id: formhist.c,v 1.72 2003/11/27 19:40:41 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,16 +49,16 @@ struct form_type_name {
 };
 
 static struct form_type_name form_type2name[] = {
-	{ FC_TEXT, "text" },
-	{ FC_PASSWORD, "password" },
-	{ FC_FILE, "file" },
-	{ FC_TEXTAREA, "textarea" },
-	{ FC_CHECKBOX, "checkbox" },
-	{ FC_RADIO,"radio" },
-	{ FC_SELECT, "select" },
-	{ FC_SUBMIT, "submit" },
-	{ FC_IMAGE, "image" },
-	{ FC_HIDDEN, "hidden" },
+	{ FC_TEXT,	"text"		},
+	{ FC_PASSWORD,	"password"	},
+	{ FC_FILE,	"file"		},
+	{ FC_TEXTAREA,	"textarea"	},
+	{ FC_CHECKBOX,	"checkbox"	},
+	{ FC_RADIO,	"radio"		},
+	{ FC_SELECT,	"select"	},
+	{ FC_SUBMIT,	"submit"	},
+	{ FC_IMAGE,	"image"		},
+	{ FC_HIDDEN,	"hidden"	},
 };
 
 int

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.14 2003/11/26 23:49:47 jonas Exp $ */
+/* $Id: dialogs.c,v 1.15 2003/11/27 19:40:41 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ is_formhist_data_used(struct listbox_item *item)
 
 static unsigned char *
 get_formhist_data_info(struct listbox_item *item, struct terminal *term,
-		enum listbox_info listbox_info)
+		       enum listbox_info listbox_info)
 {
 	struct formhist_data *formhist_data = item->udata;
 	struct string info;

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.58 2003/11/17 18:39:14 jonas Exp $ */
+/* $Id: cache.h,v 1.59 2003/11/17 21:33:48 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -66,9 +66,6 @@ struct cache_entry {
 
 extern struct list_head cache_entry_box_items; /* struct listbox_item */
 extern struct list_head cache_entry_boxes; /* struct listbox_data */
-
-/* Please keep this one. It serves for debugging. --Zas */
-#define cache_entry_nolock(ce) do { ce_sanity_check(ce); ce_lock_debug(ce, "0"); } while (0)
 
 #define get_cache_uri(cache_entry) \
 	((cache_entry)->valid ? struri((cache_entry)->uri) : (unsigned char *) "")

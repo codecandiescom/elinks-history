@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.56 2003/10/31 02:08:37 jonas Exp $ */
+/* $Id: session.h,v 1.57 2003/11/12 00:16:05 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -175,6 +175,18 @@ go_unback(struct session *ses)
 	go_history(ses, cur_loc(ses)->next);
 }
 
+static inline void
+set_referrer(struct session *ses, unsigned char *referrer)
+{
+	if (ses->ref_url) mem_free(ses->ref_url);
+
+	if (referrer) {
+		/* TODO: Don't set referrer for file: protocol */
+		referrer = stracpy(referrer);
+	}
+
+	ses->ref_url = referrer;
+}
 
 void print_screen_status(struct session *);
 void print_error_dialog(struct session *, struct download *);

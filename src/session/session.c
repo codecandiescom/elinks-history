@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.216 2003/11/12 00:10:34 zas Exp $ */
+/* $Id: session.c,v 1.217 2003/11/12 00:16:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -705,8 +705,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(ce->url);
+		set_referrer(ses, ce->url);
 
 		switch (task) {
 		case TASK_NONE:
@@ -1415,6 +1414,7 @@ destroy_session(struct session *ses)
 	free_list(ses->scrn_frames);
 
 	destroy_history(&ses->history);
+	set_referrer(ses, NULL);
 
 	if (ses->loading_url) mem_free(ses->loading_url);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
@@ -1429,7 +1429,6 @@ destroy_session(struct session *ses)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 	if (ses->tq_prog) mem_free(ses->tq_prog);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url = NULL;
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	if (ses->last_title) mem_free(ses->last_title);
@@ -1492,7 +1491,7 @@ static void
 really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 		  enum task_type task, enum cache_mode cache_mode)
 {
-	unsigned char *u;
+	unsigned char *u, *referrer;
 	unsigned char *pos;
 	protocol_external_handler *fn;
 	struct document_view *doc_view;
@@ -1531,14 +1530,12 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	}
 
 	abort_loading(ses, 0);
-	if (ses->ref_url) {
-		mem_free(ses->ref_url);
-		ses->ref_url = NULL;
-	}
 
 	doc_view = current_frame(ses);
-	if (doc_view && doc_view->document && doc_view->document->url)
-		ses->ref_url = stracpy(doc_view->document->url);
+	referrer = (doc_view && doc_view->document)
+		? doc_view->document->url : NULL;
+
+	set_referrer(ses, referrer);
 
 	ses_goto(ses, u, target, NULL,
 		 PRI_MAIN, cache_mode, task,

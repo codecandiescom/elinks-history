@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.52 2003/11/11 21:57:31 pasky Exp $ */
+/* $Id: history.c,v 1.53 2003/11/12 00:16:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,10 +126,7 @@ go_history(struct session *ses, struct location *loc)
 
 	abort_loading(ses, 0);
 
-	if (ses->ref_url) {
-		mem_free(ses->ref_url);
-		ses->ref_url = NULL;
-	}
+	set_referrer(ses, NULL);
 
 	url = memacpy(loc->vs.url, loc->vs.url_len);
 	if (!url) return;

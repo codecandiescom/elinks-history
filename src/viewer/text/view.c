@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.261 2003/11/12 00:10:34 zas Exp $ */
+/* $Id: view.c,v 1.262 2003/11/12 00:16:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -588,8 +588,7 @@ frm_download(struct session *ses, struct document_view *doc_view, int resume)
 			ses->dn_url = NULL;
 			return;
 		}
-		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(doc_view->document->url);
+		set_referrer(ses, doc_view->document->url);
 		query_file(ses, ses->dn_url, (resume ? resume_download : start_download), NULL, 1);
 	}
 }
@@ -1200,8 +1199,7 @@ send_download_do(struct session *ses, enum dl_type dlt)
 	}
 
 	if (ses->dn_url) {
-		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(doc_view->document->url);
+		set_referrer(ses, doc_view->document->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }
@@ -1345,13 +1343,11 @@ save_url(struct session *ses, unsigned char *url)
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = u;
 
-	if (ses->ref_url) mem_free(ses->ref_url);
-
 	doc_view = current_frame(ses);
 	assert(doc_view && doc_view->document && doc_view->document->url);
 	if_assert_failed return;
 
-	ses->ref_url = stracpy(doc_view->document->url);
+	set_referrer(ses, doc_view->document->url);
 	query_file(ses, ses->dn_url, start_download, NULL, 1);
 }
 
@@ -1391,8 +1387,7 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 		assert(doc_view && doc_view->document && doc_view->document->url);
 		if_assert_failed return;
 
-		if (ses->ref_url) mem_free(ses->ref_url);
-		ses->ref_url = stracpy(doc_view->document->url);
+		set_referrer(ses, doc_view->document->url);
 		query_file(ses, ses->dn_url, start_download, NULL, 1);
 	}
 }

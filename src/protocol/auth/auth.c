@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.48 2003/07/12 17:17:43 jonas Exp $ */
+/* $Id: auth.c,v 1.49 2003/07/12 17:23:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,10 +128,6 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	if (entry) {
 		mem_free(newurl);
 
-		assert(entry->uid && entry->passwd);
-		if_assert_failed { return NULL; }
-
-		/* Found an entry. */
 		if (entry->blocked == 1) {
 			/* Waiting for user/pass in dialog. */
 			return NULL;
@@ -139,8 +135,7 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		/* In order to use an existing entry it has to match exactly.
 		 * This is done step by step. If something isn't equal the
-		 * entry is updated and temporarily marked as invalid. When
-		 * we first has reached */
+		 * entry is updated and marked as invalid. */
 
 		/* If only one realm is defined or they don't compare. */
 		if ((!!realm ^ !!entry->realm)
@@ -169,9 +164,6 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 			entry->valid = 0;
 			set_auth_passwd(entry, uri);
 		}
-
-		/* If all was matched exactly we have an existing entry. */
-		if (entry->valid) return entry;
 
 	} else {
 		/* Create a new entry. */
@@ -213,7 +205,7 @@ find_auth(struct uri *uri)
 		/* If there's no entry a new one is added else if the entry
 		 * does not correspond to any existing one update it with the
 		 * user and password from the uri. */
-		/* XXX BOOLEAN OVERLOAD! */
+		/* FIXME BOOLEAN OVERLOAD! */
 		if (!entry
 		    || (auth_entry_has_userinfo(entry)
 			&& strlen(entry->passwd) == uri->passwordlen

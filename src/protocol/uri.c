@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.161 2004/04/07 15:22:26 jonas Exp $ */
+/* $Id: uri.c,v 1.162 2004/04/07 15:32:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,9 +643,9 @@ parse_uri:
 	case URI_ERRNO_INVALID_PROTOCOL:
 	{
 		/* No protocol name */
-		unsigned char *prefix = "file://";
 		unsigned char *ch = newurl + strcspn(newurl, ".:/@");
-		int not_file = 0;
+		enum protocol protocol = PROTOCOL_FILE;
+		unsigned char *prefix;
 
 		if (file_exists(newurl)) goto end;
 #if 0
@@ -666,8 +666,7 @@ parse_uri:
 		if (*ch == '@' || (*ch == ':' && *newurl != '[')
 		    || !strncasecmp(newurl, "ftp.", 4)) {
 			/* Contains user/password/ftp-hostname */
-			prefix = "ftp://";
-			not_file = 1;
+			protocol = PROTOCOL_FTP;
 
 #ifdef IPV6
 		} else if (*newurl == '[' && *ch == ':') {
@@ -704,8 +703,7 @@ parse_uri:
 
 			/* It's two-letter TLD? */
 			if (host_end - domain == 2) {
-http:				prefix = "http://";
-				not_file = 1;
+http:				protocol = PROTOCOL_HTTP;
 
 			} else {
 				/* See above the braindead FIXME :^). */
@@ -714,9 +712,23 @@ http:				prefix = "http://";
 			}
 		}
 end:
-		if (!not_file && !dir_sep(*newurl))
+		if (protocol == PROTOCOL_FILE && !dir_sep(*newurl))
 			insert_in_string(&newurl, 0, "./", 2);
 
+		switch (protocol) {
+			case PROTOCOL_FTP:
+				prefix = "ftp://";
+				break;
+
+			case PROTOCOL_HTTP:
+				prefix = "http://";
+				break;
+
+			case PROTOCOL_FILE:
+			default:
+				prefix = "file://";
+		}
+			
 		insert_in_string(&newurl, 0, prefix, strlen(prefix));
 		goto parse_uri;
 	}

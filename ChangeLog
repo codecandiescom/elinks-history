@@ -1,3 +1,25 @@
+Mon Mar 11 13:45:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* html.c:
+	
+	tabindex fixes by <ff@partyticket.net>
+
+Mon Mar 11 13:37:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c:
+	
+	allow servers same as domains - based on patch by
+	<rono@sentuny.com.au>
+
+Mon Mar 11 13:17:24 2002  Petr Baudis <pasky@ji.cz>:
+
+	* cookies.c, default.c, links.h:
+	
+	don't require three dots for non-international domains by default
+	in check_domain_security() for cookies - reported by Christian
+	Häggström <c00chm@cs.umu.se>, he also proposed a patch on which
+	this is based ;)
+
 Mon Mar 11 12:56:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c:

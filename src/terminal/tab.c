@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.39 2004/01/09 09:14:21 miciah Exp $ */
+/* $Id: tab.c,v 1.40 2004/01/09 09:36:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,9 +166,10 @@ really_close_tab(struct session *ses)
 {
 	struct terminal *term = ses->tab->term;
 	int num_tabs = number_of_tabs(term);
+	struct window *current_tab = get_current_tab(term);
 
-	delete_window(get_current_tab(term));
 	switch_to_tab(term, term->current_tab - 1, num_tabs - 1);
+	delete_window(current_tab);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.6 2002/12/27 22:37:09 pasky Exp $ */
+/* $Id: parser.c,v 1.7 2002/12/27 23:49:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@ enum state_code {
 	HPT_PLAIN,
 	HPT_ENTITY,
 	HPT_TAG,
+	HPT_TAG_COMMENT,
 	HPT_NO,
 };
 
@@ -237,7 +238,8 @@ entity_parse(struct parser_state *state, unsigned char **str, int *len)
 	return -1;
 }
 
-/* This handles a sign of the allmighty tag, determines what the tag is about. */
+/* This handles a sign of the allmighty tag, determines what the tag is about.
+ * It also handles the tag's death. */
 static int
 tag_parse(struct parser_state *state, unsigned char **str, int *len)
 {
@@ -248,6 +250,13 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	if (pstate->data.tag.tagname) {
 		/* We've parsed the whole tag and now we're at '>'. */
+
+#ifdef DEBUG
+		/* Hopefully. */
+		if (*html != '>')
+			internal("At HPT_TAG [2], *html is '%c'(%x)! That means trouble. Serious trouble.", *html, *html);
+#endif
+
 		/* We don't have anything to do for now. So just retire. */
 		pstate = html_state_pop(state);
 #ifdef DEBUG
@@ -280,10 +289,16 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 		return -1;
 	}
 	if (*html == '?' || (*html == '!' && !strncmp(html + 1, "--", 2))) {
+		pstate->data.tag.tagname = ""; /* blah */
+
 		pstate->data.tag.type = *html;
 		pstate = html_state_push(state, HPT_TAG_COMMENT);
 		pstate->data.tag.type = *html;
 
+		if (*html == '!') {
+			/* Skip -- as well. */
+			html += 2, html_len -= 2;
+		}
 		html++, html_len--;
 		*str = html, *len = html_len;
 		return 0;
@@ -297,6 +312,62 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 	}
 
 	return 0;
+}
+
+/* Walk through a comment towards the light. */
+static int
+comment_parse(struct parser_state *state, unsigned char **str, int *len)
+{
+	struct html_parser_state *pstate = state->data;
+	unsigned char *html = *str;
+	int html_len = *len;
+	int name_len = 0;
+	unsigned char *end = "-->";
+	int endp = 0;
+
+	while (html_len) {
+		if (*html == '?') {
+			if (html_len == 1) {
+				*str = html, *len = html_len;
+				return -1;
+			}
+			if (html[1] == '>') {
+				html++, html_len--;
+
+comment_end:
+				/* TODO: Maybe skip directly the '>' and jump
+				 * straightly over HPT_TAG ? But we can't be
+				 * sure what we'll want to do in HPT_TAG [2]
+				 * in the future. --pasky */
+				pstate = html_state_pop(state);
+
+				*str = html, *len = html_len;
+				return 0;
+			}
+
+		} else if (*html == end[endp]) {
+			if (!endp) {
+				/* Checkpoint. */
+				*str = html, *len = html_len;
+			}
+			endp++;
+			if (endp == 3) {
+				goto comment_end;
+			}
+
+		} else if (endp) {
+			endp = 0;
+		}
+
+		html++, html_len--;
+	}
+
+	if (endp) {
+		return -1;
+	} else {
+		*str = html, *len = html_len;
+		return 1;
+	}
 }
 
 #if 0
@@ -404,6 +475,7 @@ static int (*state_parsers)(struct parser_state *, unsigned char *, int *)
 	plain_parse,
 	entity_parse,
 	tag_parse,
+	comment_parse,
 };
 
 

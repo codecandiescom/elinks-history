@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.6 2004/09/25 23:51:04 jonas Exp $ */
+/* $Id: scanner.c,v 1.7 2004/09/26 01:24:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,6 +173,23 @@ skip_sgml(struct scanner *scanner, unsigned char **string, unsigned char skipto,
 	return NULL;
 }
 
+static inline int
+skip_comment(struct scanner *scanner, unsigned char **string)
+{
+	unsigned char *pos = *string;
+	int length = 0;
+
+	for (; pos < scanner->end - 3; pos++)
+		if (pos[0] == '-' && pos[1] == '-' && pos[2] == '>') {
+			length = pos - *string;
+			pos += 3;
+			break;
+		}
+
+	*string = pos;
+	return length;
+}
+
 #define scan_sgml_attribute(scanner, str)				\
 	while ((str) < (scanner)->end && is_sgml_attribute(*(str)))	\
 	       (str)++;
@@ -220,25 +237,21 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 			string++;
 			scan_sgml(scanner, string, SGML_CHAR_WHITESPACE);
 			token->string = ident = string;
-			scan_sgml(scanner, string, SGML_CHAR_IDENT);
 
-			type = map_scanner_string(scanner, ident, string, base);
+			if (string + 1 < scanner->end
+			    && string[0] == '-' && string[1] == '-') {
+				type = SGML_TOKEN_NOTATION_COMMENT;
+			} else {
+				scan_sgml(scanner, string, SGML_CHAR_IDENT);
+				type = map_scanner_string(scanner, ident, string, base);
+			}
 
 			switch (type) {
 			case SGML_TOKEN_NOTATION_COMMENT:
 				token->string = string;
 
-				while (skip_sgml(scanner, &string, '>', 0)) {
-					unsigned char *pos = string - 3;
-
-					if (pos < token->string
-					    || pos[0] != '-' || pos[1] != '-')
-						continue;
-
-					real_length = pos - token->string;
-					assert(real_length >= 0);
-					break;
-				}
+				real_length = skip_comment(scanner, &string);
+				assert(real_length >= 0);
 				break;
 
 			default:

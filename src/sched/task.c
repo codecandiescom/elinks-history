@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.54 2004/04/03 02:21:51 jonas Exp $ */
+/* $Id: task.c,v 1.55 2004/04/03 03:04:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,7 +133,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
-		ses->loading_uri = uri;
+		ses->loading_uri = get_uri_reference(uri);
 
 		ses->task.type = task_type;
 		ses->task.target_frame = target_frame;
@@ -146,7 +146,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	}
 
 	task->ses = ses;
-	task->uri = uri;
+	task->uri = get_uri_reference(uri);
 	task->pri = pri;
 	task->cache_mode = cache_mode;
 	task->type = task_type;
@@ -306,7 +306,6 @@ do_move(struct session *ses, struct download **stat)
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		enum task_type task = ses->task.type;
-		struct uri *uri;
 
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
@@ -315,8 +314,6 @@ do_move(struct session *ses, struct download **stat)
 
 		if (ce->redirect->protocol == PROTOCOL_UNKNOWN)
 			return 0;
-
-		uri = get_uri_reference(ce->redirect);
 
 		abort_loading(ses, 0);
 		if (have_location(ses))
@@ -332,11 +329,11 @@ do_move(struct session *ses, struct download **stat)
 		case TASK_FORWARD:
 		{
 			protocol_external_handler *fn;
+			struct uri *uri = ce->redirect; 
 
 			fn = get_protocol_external_handler(uri->protocol);
 			if (fn) {
 				fn(ses, uri);
-				done_uri(uri);
 				*stat = NULL;
 				return 0;
 			}
@@ -348,19 +345,19 @@ do_move(struct session *ses, struct download **stat)
 					    ? stracpy(ses->goto_position)
 					    : NULL;
 
-			ses_goto(ses, uri, ses->task.target_frame, NULL,
+			ses_goto(ses, ce->redirect, ses->task.target_frame, NULL,
 				 PRI_MAIN, CACHE_MODE_NORMAL, task,
 				 gp, end_load, 1);
 			if (gp) mem_free(gp);
 			return 2;
 			}
 		case TASK_HISTORY:
-			ses_goto(ses, uri, NULL, ses->task.target_location,
+			ses_goto(ses, ce->redirect, NULL, ses->task.target_location,
 				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
 		case TASK_RELOAD:
-			ses_goto(ses, uri, NULL, NULL,
+			ses_goto(ses, ce->redirect, NULL, NULL,
 				 PRI_MAIN, ses->reloadlevel, TASK_RELOAD,
 				 NULL, end_load, 1);
 			return 2;
@@ -512,7 +509,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	ses_goto(ses, uri, target, NULL,
 		 PRI_MAIN, cache_mode, task,
 		 pos, end_load, 0);
-
+	done_uri(uri);
 	/* abort_loading(ses); */
 }
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.79 2004/12/17 00:20:49 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.80 2004/12/17 00:21:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -817,17 +817,18 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		}
 #endif
 		foreach (fc, document->forms) {
-			if (fc->formname && !strcasecmp(v.string, fc->formname)) {
-				jsval forms;
-				JSBool success;
+			jsval forms;
+			JSBool success;
 
-				success = JS_GetProperty(ctx, obj, "forms", &forms);
-				assert(success == JS_TRUE);
+			if (!fc->formname || strcasecmp(v.string, fc->formname))
+				continue;
 
-				p.object = get_form_control_object(ctx, JSVAL_TO_OBJECT(forms), fc);
-				prop_type = JSPT_OBJECT;
-				goto convert;
-			}
+			success = JS_GetProperty(ctx, obj, "forms", &forms);
+			assert(success == JS_TRUE);
+
+			p.object = get_form_control_object(ctx, JSVAL_TO_OBJECT(forms), fc);
+			prop_type = JSPT_OBJECT;
+			goto convert;
 		}
 		goto bye;
 	} else if (!JSVAL_IS_INT(id))

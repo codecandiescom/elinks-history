@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.15 2002/06/16 15:15:31 zas Exp $ */
+/* $Id: error.c,v 1.16 2002/06/16 15:37:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,25 @@
 
 
 #ifdef LEAK_DEBUG
+
+/* Fill memory on alloc() ?
+ * Default is defined. */
+#define FILL_ON_ALLOC
+#define FILL_ON_ALLOC_VALUE 'X'
+
+/* Fill memory on realloc() ?
+ * Default is defined. */
+#define FILL_ON_REALLOC
+#define FILL_ON_REALLOC_VALUE 'Y'
+
+/* Fill memory before free() ?
+ * Default is undef. */
+#undef FILL_ON_FREE
+#define FILL_ON_FREE_VALUE 'Z'
+
+/* Check for realloc(NULL, size) ?
+ * Default is undef. */
+#undef CHECK_REALLOC_NULL
 
 #ifndef LEAK_DEBUG_LIST
 struct alloc_header {
@@ -168,6 +187,10 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 		return NULL;
 	}
 
+#ifdef FILL_ON_ALLOC
+	memset(ah, FILL_ON_ALLOC_VALUE, size + SIZE_AH_ALIGNED);
+#endif
+
 	mem_amount += size;
 
 	ah->size = size;
@@ -240,6 +263,11 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 #endif
 
 	mem_amount -= ah->size;
+
+#ifdef FILL_ON_FREE
+	memset(ah, FILL_ON_FREE_VALUE, ah->size + SIZE_AH_ALIGNED);
+#endif
+
 	free(ah);
 }
 
@@ -280,6 +308,12 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 
 	mem_amount += size - ah->size;
 
+#ifdef FILL_ON_REALLOC
+	if (size > ah->size)
+		memset((char *) ah + SIZE_AH_ALIGNED + ah->size,
+		       FILL_ON_REALLOC_VALUE, size - ah->size);
+#endif
+
 	ah->size = size;
 #ifdef LEAK_DEBUG_LIST
 	ah->prev->next = ah;
@@ -305,6 +339,17 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 		safe_strncpy(ah->comment, str, len + 1);
 #endif
 }
+
+#undef FILL_ON_ALLOC
+#undef FILL_ON_ALLOC_VALUE
+
+#undef FILL_ON_REALLOC
+#undef FILL_ON_REALLOC_VALUE
+
+#undef FILL_ON_FREE
+#undef FILL_ON_FREE_VALUE
+
+#undef CHECK_REALLOC_NULL
 
 #endif
 

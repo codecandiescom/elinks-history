@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.49 2003/10/03 12:05:30 jonas Exp $ */
+/* $Id: mailcap.c,v 1.50 2003/10/03 12:26:45 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -345,18 +345,18 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
  *	o Finally fall back to reasonable default
  */
 
-static void
+static struct hash *
 init_mailcap_map(void)
 {
 	unsigned char *path;
 	unsigned int priority = 0;
 
 	if (!get_opt_bool_tree(mailcap_tree, "enable"))
-		return;
+		return NULL;
 
 	mailcap_map = init_hash(8, &strhash);
 	if (!mailcap_map)
-		return;
+		return NULL;
 
 	/* Try to setup mailcap_path */
 	path = get_opt_str_tree(mailcap_tree, "path");
@@ -370,6 +370,8 @@ init_mailcap_map(void)
 		parse_mailcap_file(filename, priority++);
 		mem_free(filename);
 	}
+
+	return mailcap_map;
 }
 
 static void
@@ -426,7 +428,6 @@ init_mailcap(void)
 {
 	mailcap_tree = get_opt_rec(config_options, "mime.mailcap");
 	mailcap_tree->change_hook = mailcap_change_hook;
-	init_mailcap_map();
 }
 
 /* The command semantics include the following:
@@ -555,7 +556,7 @@ get_mailcap_entry(unsigned char *type)
 	struct mailcap_entry *entry;
 	struct hash_item *item;
 
-	if (!mailcap_map)
+	if (!mailcap_map && !init_mailcap_map())
 		return NULL;
 
 	item = get_hash_item(mailcap_map, type, strlen(type));

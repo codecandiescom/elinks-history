@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.153 2004/02/12 17:11:28 jonas Exp $ */
+/* $Id: link.c,v 1.154 2004/03/03 18:14:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,10 +336,13 @@ in_view(struct document_view *doc_view, struct link *link)
 int
 current_link_is_visible(struct document_view *doc_view)
 {
+	struct link *link;
+
 	assert(doc_view && doc_view->vs);
 	if_assert_failed return 0;
-	return (doc_view->vs->current_link != -1
-		&& in_view(doc_view, &doc_view->document->links[doc_view->vs->current_link]));
+
+	link = get_current_link(doc_view);
+	return (link && in_view(doc_view, link));
 }
 
 int
@@ -544,8 +547,8 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return 1;
 
-	if (doc_view->vs->current_link == -1) return 1;
-	link = &doc_view->document->links[doc_view->vs->current_link];
+	link = get_current_link(doc_view);
+	if (!link) return 1;
 
 	if (link->type == LINK_HYPERTEXT || link->type == LINK_BUTTON
 	    || ((has_form_submit(doc_view->document, link->form)
@@ -617,9 +620,9 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
-	if (doc_view->vs->current_link == -1) return;
-	l = &doc_view->document->links[doc_view->vs->current_link];
-	if (l->type != LINK_SELECT) return;
+
+	l = get_current_link(doc_view);
+	if (!l || l->type != LINK_SELECT) return;
 
 	fs = find_form_state(doc_view, l->form);
 	if (fs) {
@@ -656,9 +659,10 @@ get_current_state(struct session *ses)
 
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return -1;
-	if (doc_view->vs->current_link == -1) return -1;
-	l = &doc_view->document->links[doc_view->vs->current_link];
-	if (l->type != LINK_SELECT) return -1;
+
+	l = get_current_link(doc_view);
+	if (!l || l->type != LINK_SELECT) return -1;
+
 	fs = find_form_state(doc_view, l->form);
 	if (fs) return fs->state;
 	return -1;
@@ -819,9 +823,10 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 	assert(doc_view->vs && doc_view->document);
 	if_assert_failed return;
-	if (doc_view->vs->current_link < 0) goto end;
 
-	link = &doc_view->document->links[doc_view->vs->current_link];
+	link = get_current_link(doc_view);
+	if (!link) goto end;
+
 	if (link->type == LINK_HYPERTEXT && link->where) {
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
@@ -912,16 +917,12 @@ print_current_link_title_do(struct document_view *doc_view, struct terminal *ter
 	assert(term && doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return NULL;
 
-	if (doc_view->document->frame_desc || doc_view->vs->current_link == -1
-	    || doc_view->vs->current_link >= doc_view->document->nlinks)
+	if (doc_view->document->frame_desc)
 		return NULL;
 
-	link = &doc_view->document->links[doc_view->vs->current_link];
+	link = get_current_link(doc_view);
 
-	if (link->title)
-		return stracpy(link->title);
-
-	return NULL;
+	return (link && link->title) ? stracpy(link->title) : NULL;
 }
 
 
@@ -933,12 +934,11 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 	assert(term && doc_view && doc_view->document && doc_view->vs);
 	if_assert_failed return NULL;
 
-	if (doc_view->document->frame_desc
-	    || doc_view->vs->current_link == -1
-	    || doc_view->vs->current_link >= doc_view->document->nlinks)
+	if (doc_view->document->frame_desc)
 		return NULL;
 
-	link = &doc_view->document->links[doc_view->vs->current_link];
+	link = get_current_link(doc_view);
+	if (!link) return NULL;
 
 	if (link->type == LINK_HYPERTEXT) {
 		struct string str;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.369 2004/03/03 17:08:55 jonas Exp $ */
+/* $Id: view.c,v 1.370 2004/03/03 18:12:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -544,14 +544,17 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 static int
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
+	struct link *link;
 	int x = 1;
 
 	assert(ses && doc_view && doc_view->document && doc_view->vs && ev);
 	if_assert_failed return 1;
 
-	if (doc_view->vs->current_link >= 0
-	    && link_is_textinput(&doc_view->document->links[doc_view->vs->current_link])
-	    && field_op(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link], ev, 0))
+	link = get_current_link(doc_view);
+
+	if (link
+	    && link_is_textinput(link)
+	    && field_op(ses, doc_view, link, ev, 0))
 		return 1;
 
 	if (ev->ev == EV_KBD) {
@@ -1001,17 +1004,15 @@ send_enter(struct terminal *term, void *xxx, struct session *ses)
 void
 download_link(struct session *ses, struct document_view *doc_view, int action)
 {
-	struct link *link;
+	struct link *link = get_current_link(doc_view);
 	void (*download)(void *ses, unsigned char *file) = start_download;
 
-	if (doc_view->vs->current_link == -1) return;
+	if (!link) return;
 
 	if (ses->dn_url) {
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
 	}
-
-	link = &doc_view->document->links[doc_view->vs->current_link];
 
 	switch (action) {
 		case ACT_MAIN_RESUME_DOWNLOAD:
@@ -1064,6 +1065,7 @@ send_open_in_new_window(struct terminal *term,
 		       struct session *ses)
 {
 	struct document_view *doc_view;
+	struct link *link;
 
 	assert(term && open_window && ses);
 	if_assert_failed return;
@@ -1071,9 +1073,11 @@ send_open_in_new_window(struct terminal *term,
 	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return;
 
-	if (doc_view->vs->current_link == -1) return;
+	link = get_current_link(doc_view);
+	if (!link) return;
+
 	if (ses->dn_url) mem_free(ses->dn_url);
-	ses->dn_url = get_link_url(ses, doc_view, &doc_view->document->links[doc_view->vs->current_link]);
+	ses->dn_url = get_link_url(ses, doc_view, link);
 	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_string(). --pasky */
 	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
 	if (ses->dn_url) {
@@ -1173,12 +1177,9 @@ save_url(struct session *ses, unsigned char *url)
 void
 view_image(struct session *ses, struct document_view *doc_view, int a)
 {
-	struct link *link;
+	struct link *link = get_current_link(doc_view);
 
-	if (doc_view->vs->current_link == -1) return;
-
-	link = &doc_view->document->links[doc_view->vs->current_link];
-	if (link->where_img)
+	if (link && link->where_img)
 		goto_url(ses, link->where_img);
 }
 

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.3 2003/06/26 18:34:38 jonas Exp $ */
+/* $Id: protocol.c,v 1.4 2003/06/26 19:17:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,16 +29,21 @@
 static void dummyjs_func(struct session *, unsigned char *);
 
 static struct protocol_backend protocol_backends[] = {
-	{"custom", 0, NULL, user_func, 0, 0, 0}, /* protocol.user.* */ /* DO NOT MOVE! */
-	{"file", 0, file_func, NULL, 1, 1, 0},
-	{"http", 80, http_func, NULL, 0, 1, 1},
-	{"https", 443, https_func, NULL, 0, 1, 1},
-	{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
-	{"ftp", 21, ftp_func, NULL, 0, 1, 1},
-	{"finger", 79, finger_func, NULL, 0, 1, 1},
-	{"javascript", 0, NULL, dummyjs_func, 0, 0, 0},
-	{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
-	{NULL, 0, NULL}
+	/* SCHEME_FILE */	{"file", 0, file_func, NULL, 1, 1, 0},
+	/* SCHEME_FINGER */	{"finger", 79, finger_func, NULL, 0, 1, 1},
+	/* SCHEME_FTP */	{"ftp", 21, ftp_func, NULL, 0, 1, 1},
+	/* SCHEME_HTTP */	{"http", 80, http_func, NULL, 0, 1, 1},
+	/* SCHEME_HTTPS */	{"https", 443, https_func, NULL, 0, 1, 1},
+	/* SCHEME_JAVASCRIPT */	{"javascript", 0, NULL, dummyjs_func, 0, 0, 0},
+	/* SCHEME_LUA */	{"user", 0, NULL, NULL, 0, 0, 0}, /* lua */
+	/* SCHEME_PROXY */	{"proxy", 3128, proxy_func, NULL, 0, 1, 1},
+
+	/* Keep these two last! */
+	/* SCHEME_UNKNOWN */	{NULL, 0, NULL},
+
+	/* Internal protocol for mapping to protocol.user.* handlers. Placed
+	 * last because it's checked first and else should be ignored. */
+	/* SCHEME_USER */	{"custom", 0, NULL, user_func, 0, 0, 0}
 };
 
 
@@ -53,7 +58,7 @@ dummyjs_func(struct session *ses, unsigned char *url)
 }
 
 
-int
+enum uri_scheme
 check_protocol(unsigned char *p, int l)
 {
 	int i;
@@ -67,17 +72,17 @@ check_protocol(unsigned char *p, int l)
 		p[l] = ':';
 		/* XXX: We rely on the fact that custom is at the top of the
 		 * protocols table. */
-		return 0;
+		return SCHEME_USER;
 	}
 
-	for (i = 0; protocol_backends[i].name; i++)
+	for (i = 0; i < SCHEME_UNKNOWN; i++)
 		if (!strcasecmp(protocol_backends[i].name, p)) {
 			p[l] = ':';
 			return i;
 		}
 
 	p[l] = ':';
-	return -1;
+	return SCHEME_UNKNOWN;
 }
 
 int
@@ -85,26 +90,28 @@ get_prot_info(unsigned char *prot, int *port,
 	      void (**func)(struct connection *),
 	      void (**nc_func)(struct session *ses, unsigned char *))
 {
-	int i = check_protocol(prot, strlen(prot));
+	enum uri_scheme scheme = check_protocol(prot, strlen(prot));
 
-	if (i < 0) return -1;
+	if (scheme == SCHEME_UNKNOWN) return -1;
 
-	if (port) *port = protocol_backends[i].port;
-	if (func) *func = protocol_backends[i].func;
-	if (nc_func) *nc_func = protocol_backends[i].nc_func;
+	if (port) *port = protocol_backends[scheme].port;
+	if (func) *func = protocol_backends[scheme].func;
+	if (nc_func) *nc_func = protocol_backends[scheme].nc_func;
 	return 0;
 }
 
 void
-get_prot_url_info(int i, int *free_syntax, int *need_slashes,
+get_prot_url_info(enum uri_scheme scheme, int *free_syntax, int *need_slashes,
                   int *need_slash_after_host)
 {
-        if (free_syntax)
-                *free_syntax = protocol_backends[i].free_syntax;
-        if (need_slashes)
-                *need_slashes = protocol_backends[i].need_slashes;
-        if (need_slash_after_host)
-                *need_slash_after_host = protocol_backends[i].need_slash_after_host;
+	assert(scheme != SCHEME_UNKNOWN);
+
+	if (free_syntax)
+		*free_syntax = protocol_backends[scheme].free_syntax;
+	if (need_slashes)
+		*need_slashes = protocol_backends[scheme].need_slashes;
+	if (need_slash_after_host)
+		*need_slash_after_host = protocol_backends[scheme].need_slash_after_host;
 }
 
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.71 2003/06/26 17:06:39 jonas Exp $ */
+/* $Id: url.c,v 1.72 2003/06/26 19:17:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 #include "util/string.h"
 
 
-/* If url is invalid, it will return -1. */
+/* Returns -1 if url is unknown or invalid. */
 static int
 parse_url(unsigned char *url, int *prlen,
           unsigned char **user, int *uslen,
@@ -41,7 +41,7 @@ parse_url(unsigned char *url, int *prlen,
 	int free_syntax;
 	int need_slashes;
 	int need_slash_after_host;
-	int protocol;
+	int scheme;
 
 	if (prlen) *prlen = 0;
 	if (user) *user = NULL;
@@ -71,9 +71,9 @@ parse_url(unsigned char *url, int *prlen,
 
 	/* Get protocol */
 
-	protocol = check_protocol(url, prefix_end - url);
-	if (protocol == -1) return -1;
-	get_prot_url_info(protocol, &free_syntax, &need_slashes,
+	scheme = check_protocol(url, prefix_end - url);
+	if (scheme == SCHEME_UNKNOWN) return -1;
+	get_prot_url_info(scheme, &free_syntax, &need_slashes,
 			  &need_slash_after_host);
 
 	prefix_end++; /* ':' */
@@ -378,7 +378,7 @@ strip_url_password(unsigned char *url)
 	int polen;
 	unsigned char *data;
 	int dalen;
-	int protocol = -1;
+	int scheme;
 
 	if (!str) return NULL;
 
@@ -390,15 +390,13 @@ strip_url_password(unsigned char *url)
 		return stracpy(url);
 	}
 
-	protocol = check_protocol(url, prlen);
+	scheme = check_protocol(url, prlen);
 
-	if (protocol <= 0)
-		free_syntax = 1;
-	else
-		get_prot_url_info(protocol, &free_syntax, &need_slashes,
+	if (scheme != SCHEME_UNKNOWN)
+		get_prot_url_info(scheme, &free_syntax, &need_slashes,
 				  &need_slash_after_host);
 
-	if (protocol <= 0 || free_syntax) {
+	if (scheme == SCHEME_UNKNOWN || free_syntax) {
 		/* Custom or unknown or free-syntax protocol;
 		 * keep the URL untouched. */
 		mem_free(str);

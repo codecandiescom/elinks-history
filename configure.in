@@ -692,6 +692,7 @@ AC_ARG_ENABLE(backtrace, [  --disable-backtrace     disable displaying of backtr
 AC_MSG_CHECKING(for backtrace displaying support)
 
 if test "x$hm_enabled_backtrace" = "xyes"; then
+	AC_MSG_RESULT(enabled)
 	AC_CHECK_HEADERS(execinfo.h, have_execinfo=yes, have_execinfo=no)
 	# possible checks for other system-specific means go here
 	if test "$have_execinfo" = yes; then

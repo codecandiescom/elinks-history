@@ -1,11 +1,9 @@
 /* Tool for testing of cookies string parser */
-/* $Id: parsetst.c,v 1.8 2004/06/26 14:36:57 jonas Exp $ */
+/* $Id: parsetst.c,v 1.9 2004/07/15 00:49:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_COOKIES
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,5 +42,3 @@ main(int argc, char *argv[])
 		printf("'%s' -> '%s' :: '%s'\n", string, name, value);
 	}
 }
-
-#endif /* CONFIG_COOKIES */

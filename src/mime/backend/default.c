@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.17 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: default.c,v 1.18 2003/07/21 05:12:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "mime/mime.h"
 #include "osdep/os_dep.h"		/* For get_system_str() */
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -58,35 +59,29 @@ get_content_type_default(unsigned char *extension)
 	return NULL;
 }
 
-static inline void
-rmdots(unsigned char *tok)
-{
-	while (*tok) {
-		if (*tok == '.') *tok = '*';
-		tok++;
-	}
-}
-
 static unsigned char *
 get_mime_type_name(unsigned char *type)
 {
-	unsigned char *class, *id;
-	unsigned char *name;
+	struct string name;
+	int oldlength;
 
-	class = encode_option_name(type);
-	if (!class) return NULL;
+	if (!init_string(&name)) return NULL;
 
-	id = strchr(class, '/');
-	if (!id) {
-		mem_free(class);
-		return NULL;
+	add_to_string(&name, "mime.type.");
+	oldlength = name.length;
+	if (add_optname_to_string(&name, type, strlen(type))) {
+		unsigned char *pos = name.source + oldlength;
+
+		/* Search for end of the base type. */
+		pos = strchr(pos, '/');
+		if (pos) {
+			*pos = '.';
+			return name.source;
+		}
 	}
-	*(id++) = '\0';
 
-	name = straconcat("mime.type.", class, ".", id, NULL);
-	mem_free(class);
-
-	return name;
+	done_string(&name);
+	return NULL;
 }
 
 static inline unsigned char *

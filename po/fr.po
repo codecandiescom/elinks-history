@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-01-24 11:39+0100\n"
-"PO-Revision-Date: 2005-01-24 11:42+0100\n"
+"POT-Creation-Date: 2005-01-31 11:23+0100\n"
+"PO-Revision-Date: 2005-01-31 11:25+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -43,7 +43,7 @@ msgstr "Pressez espace pour déployer le dossier."
 #: src/dialogs/document.c:226 src/dialogs/document.c:297 src/dialogs/edit.c:98
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:97 src/dialogs/menu.c:520 src/dialogs/menu.c:571
-#: src/dialogs/options.c:174 src/dialogs/options.c:254
+#: src/dialogs/options.c:202 src/dialogs/options.c:282
 #: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1937
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
@@ -169,8 +169,8 @@ msgstr "Nom"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:408
 #: src/config/dialogs.c:495 src/config/dialogs.c:908 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:177
-#: src/dialogs/options.c:255 src/mime/dialogs.c:131
+#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
+#: src/dialogs/options.c:283 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
 #: src/sched/download.c:1053 src/sched/download.c:1066
@@ -473,7 +473,7 @@ msgstr "Effacer"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
-#: src/dialogs/options.c:176 src/formhist/dialogs.c:216
+#: src/dialogs/options.c:204 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
 #: src/sched/download.c:1050
 msgid "Save"
@@ -2421,7 +2421,7 @@ msgstr ""
 "Inverser les couleurs de fond et de texte pour mettre le lien en évidence."
 
 #: src/config/options.inc:288 src/config/options.inc:792
-#: src/dialogs/options.c:171
+#: src/dialogs/options.c:199
 msgid "Underline"
 msgstr "Souligné"
 
@@ -3311,7 +3311,7 @@ msgstr ""
 "3 KOI-8\n"
 "4 FreeBSD"
 
-#: src/config/options.inc:754 src/dialogs/options.c:167
+#: src/config/options.inc:754 src/dialogs/options.c:195
 msgid "Switch fonts for line drawing"
 msgstr "Echanger les fontes pour dessiner les lignes"
 
@@ -3324,7 +3324,7 @@ msgstr ""
 "Echanger les fontes de caractères pour le dessin des lignes, seulement\n"
 "intéressant avec le terminal de type linux."
 
-#: src/config/options.inc:760 src/dialogs/options.c:172
+#: src/config/options.inc:760 src/dialogs/options.c:200
 msgid "UTF-8 I/O"
 msgstr "E/S UTF-8"
 
@@ -3338,7 +3338,7 @@ msgstr ""
 "seulement une partie de l'UTF8 est utilisée, en accord avec le jeu de "
 "caractères du terminal."
 
-#: src/config/options.inc:765 src/dialogs/options.c:168
+#: src/config/options.inc:765 src/dialogs/options.c:196
 msgid "Restrict frames in cp850/852"
 msgstr "Limiter les cadres dans cp850/852"
 
@@ -3351,7 +3351,7 @@ msgstr ""
 "N'a du sens que pour les terminaux linux utilisant les jeux de\n"
 "caractères cp850/852"
 
-#: src/config/options.inc:770 src/dialogs/options.c:169
+#: src/config/options.inc:770 src/dialogs/options.c:197
 msgid "Block cursor"
 msgstr "Bloquer le curseur"
 
@@ -3384,7 +3384,7 @@ msgstr ""
 "1 mode 16 couleurs, les couleurs ANSI sont utilisées\n"
 "2 mode 256 couleurs, utilise les codes RGB d'XTerm"
 
-#: src/config/options.inc:784 src/dialogs/options.c:170
+#: src/config/options.inc:784 src/dialogs/options.c:198
 msgid "Transparency"
 msgstr "Transparence"
 
@@ -4878,59 +4878,77 @@ msgstr "Répertoires:"
 msgid "Files:"
 msgstr "Fichiers:"
 
+#. 2 '\n' + 1 '\0'
 #: src/dialogs/options.c:148
+#, c-format
+msgid ""
+"The environmental variable TERM is set to '%s'.\n"
+"\n"
+"ELinks maintains separate sets of values for these options\n"
+"and chooses the appropriate set based on the value of TERM.\n"
+"This allows you to configure the settings appropriately for\n"
+"each terminal in which you run ELinks."
+msgstr ""
+"La variable d'environnement TERM vaut '%s'.\n"
+"\n"
+"ELinks maintient des groupes séparés de valeurs pour ces\n"
+"options et choisit le groupe approprié en fonction de la\n"
+"valeur de TERM. Cela vous permet de configurer chacun des\n"
+"terminaux où vous utilisez ELinks."
+
+#: src/dialogs/options.c:172
 msgid "Terminal options"
 msgstr "Options du terminal"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:181
 msgid "Frame handling:"
 msgstr "Gestion des cadres:"
 
-#: src/dialogs/options.c:154
+#: src/dialogs/options.c:182
 msgid "No frames"
 msgstr "Aucun cadre"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:183
 msgid "VT 100 frames"
 msgstr "Cadres VT 100"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:184
 msgid "Linux or OS/2 frames"
 msgstr "Cadres Linux ou OS/2"
 
-#: src/dialogs/options.c:157
+#: src/dialogs/options.c:185
 msgid "FreeBSD frames"
 msgstr "Cadres FreeBSD"
 
-#: src/dialogs/options.c:158
+#: src/dialogs/options.c:186
 msgid "KOI8-R frames"
 msgstr "Cadres KOI8-R"
 
-#: src/dialogs/options.c:160
+#: src/dialogs/options.c:188
 msgid "Color mode:"
 msgstr "Mode couleurs:"
 
-#: src/dialogs/options.c:161
+#: src/dialogs/options.c:189
 msgid "No colors (mono)"
 msgstr "Monochrome"
 
-#: src/dialogs/options.c:162
+#: src/dialogs/options.c:190
 msgid "16 colors"
 msgstr "16 couleurs"
 
-#: src/dialogs/options.c:164
+#: src/dialogs/options.c:192
 msgid "256 colors"
 msgstr "256 couleurs"
 
-#: src/dialogs/options.c:248
+#: src/dialogs/options.c:276
 msgid "Resize terminal"
 msgstr "Redimensionner le terminal"
 
-#: src/dialogs/options.c:251
+#: src/dialogs/options.c:279
 msgid "Width="
 msgstr "Largeur="
 
-#: src/dialogs/options.c:252
+#: src/dialogs/options.c:280
 msgid "Height="
 msgstr "Hauteur="
 

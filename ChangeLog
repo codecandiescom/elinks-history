@@ -1,3 +1,85 @@
+Fri Jan  7 22:47:44 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am:
+
+	Oops. Distribute the config/m4/ files.  
+
+Fri Jan  7 22:42:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* .cvsignore:
+
+	Ignore properly.  
+
+Fri Jan  7 22:34:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/.vimrc:
+
+	unm33p 
+
+Fri Jan  7 22:24:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* autogen.sh, m4/codeset.m4, m4/features.m4, m4/gettext.m4,
+	m4/glibc21.m4, m4/iconv.m4, m4/isc-posix.m4, m4/lcmessage.m4,
+	m4/os2.m4, m4/progtest.m4:
+
+	Move m4 macros to new config/ directory.  
+
+Fri Jan  7 22:04:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* config.guess, config.sub, configure.in:
+
+	Use the newly added config/ dir for keeping files for the
+	buildsystem.  
+
+Fri Jan  7 21:53:32 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	More merging of Danish translations by Morten Bo Johansen. Diff down
+	to ~600 lines.  
+
+Fri Jan  7 21:51:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, viewer/text/form.c:
+
+	3 small improvements.  
+
+Fri Jan  7 01:51:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	More merging of Danish translations by Morten Bo Johansen.  
+
+Fri Jan  7 00:47:55 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Don't hyphenate ELinks-version.  
+
+Fri Jan  7 00:46:20 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Just give the codenames without prefacing each one with 'codename'.  
+
+Fri Jan  7 00:44:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Move some colons around.  
+
+Fri Jan  7 00:42:10 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	Correction: Modal text editing is enabled, not disabled, by default.  
+
+Fri Jan  7 00:41:14 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* NEWS:
+
+	s/ELinks-now/ELinks-0.10.0/ 
+
 Thu Jan  6 21:59:00 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/viewer/text/view.c:

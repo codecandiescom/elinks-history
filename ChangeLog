@@ -1,3 +1,28 @@
+Thu Mar 21 18:39:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/http/: Makefile.am, README.timegm, date.c:
+	
+	explanation of my_timegm() by Stephane Chazelas
+
+Thu Mar 21 18:35:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+	
+	slightly effective wraparounding of scrolling in menus; gave zas a
+	favour
+
+Thu Mar 21 18:34:12 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS, src/lowlevel/terminal.c:
+	
+	*FINALLY* fixed the select/imagemap bug - patch by Zas
+
+Thu Mar 21 18:05:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/html/parser.c:
+	
+	tidyup of get_image_map()
+
 Tue Mar 19 20:40:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/Makefile.am, bfu/align.h, bfu/bfu.c, bfu/bfu.h,

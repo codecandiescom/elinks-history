@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.61 2002/10/13 07:03:34 pasky Exp $ */
+/* $Id: ftp.c,v 1.62 2002/10/13 18:43:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 
 #include "config/options.h"
 #include "document/cache.h"
+#include "document/download.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/select.h"
 #include "lowlevel/sched.h"
@@ -608,15 +609,6 @@ add_file_cmd_to_str(struct connection *conn)
 		/* BINARY */
 		add_to_str(&str, &strl, "TYPE I\r\n");
 
-		if (conn->from) {
-			add_to_str(&str, &strl, "REST ");
-			add_num_to_str(&str, &strl, conn->from);
-			add_to_str(&str, &strl, "\r\n");
-
-			c_i->rest_sent = 1;
-			c_i->pending_commands++;
-		}
-
 #ifdef IPV6
 		if (conn->pf == 2)
 			if (c_i->use_epsv)
@@ -629,6 +621,15 @@ add_file_cmd_to_str(struct connection *conn)
 				add_to_str(&str, &strl, "PASV\r\n");
 			else
 				add_portcmd_to_str(&str, &strl, pc);
+
+		if (conn->from) {
+			add_to_str(&str, &strl, "REST ");
+			add_num_to_str(&str, &strl, conn->from);
+			add_to_str(&str, &strl, "\r\n");
+
+			c_i->rest_sent = 1;
+			c_i->pending_commands++;
+		}
 
 		add_to_str(&str, &strl, "RETR /");
 		add_bytes_to_str(&str, &strl, data, data_end - data);
@@ -789,20 +790,20 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 			case 1:	/* TYPE */
 				break;
 
-			case 2:	/* REST / CWD */
+			case 2:	/* PORT */
+				if (response >= 400) {
+					abort_conn_with_state(conn, S_FTP_PORT);
+					return;
+				}
+				break;
+
+			case 3:	/* REST / CWD */
 				if (response >= 400) {
 					if (c_i->dir) {
 						abort_conn_with_state(conn, S_FTP_NO_FILE);
 						return;
 					}
 					conn->from = 0;
-				}
-				break;
-
-			case 3:	/* PORT */
-				if (response >= 400) {
-					abort_conn_with_state(conn, S_FTP_PORT);
-					return;
 				}
 				break;
 

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.76 2004/01/28 01:26:28 jonas Exp $ */
+/* $Id: parser.c,v 1.77 2004/01/29 04:05:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -180,15 +180,13 @@ struct selector_pkg {
  * chains are not supported yet.
  */
 static struct list_head *
-css_parse_selector(struct css_stylesheet *css, struct scanner *scanner)
+css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
+		   struct list_head *selectors)
 {
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
 	struct scanner_token *token = get_scanner_token(scanner);
-	static struct list_head selectors;
 	struct selector_pkg *pkg;
 	struct css_selector *selector;
-
-	init_list(selectors);
 
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
 	 * And anyway we should have css_parse_selector(). --pasky */
@@ -256,7 +254,7 @@ next_one:
 	 * favour the general selectors instead. Keep just the add_to_list()
 	 * when we will start supporting the id/class/pseudo. */
 	if (!id && !class && !pseudo) {
-		add_to_list(selectors, pkg);
+		add_to_list(*selectors, pkg);
 	} else {
 		if (id) mem_free(id), id = NULL;
 		if (class) mem_free(class), class = NULL;
@@ -284,13 +282,13 @@ syntax_error:
 		if (pseudo) mem_free(pseudo), pseudo = NULL;
 		if (name) mem_free(name), name = NULL;
 
-		free_list(selectors);
+		free_list(*selectors);
 
 		skip_css_block(scanner);
 		return NULL;
 	}
 
-	return &selectors;
+	return selectors;
 }
 
 
@@ -302,11 +300,11 @@ syntax_error:
 static void
 css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 {
+	INIT_LIST_HEAD(selectors);
 	struct selector_pkg *pkg, *fpkg;
-	struct list_head *selectors;
 
-	selectors = css_parse_selector(css, scanner);
-	if (!selectors || list_empty(*selectors)) {
+	if (!css_parse_selector(css, scanner, &selectors)
+	    || list_empty(selectors)) {
 		return;
 	}
 
@@ -324,18 +322,18 @@ css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 	 * waste that having the property multiple times in a selector, I
 	 * believe. --pasky */
 
-	pkg = selectors->next;
+	pkg = selectors.next;
 	css_parse_properties(&pkg->selector->properties, scanner);
 
 	skip_css_tokens(scanner, '}');
 
 	/* Mirror the properties to all the selectors. */
 	fpkg = pkg; pkg = pkg->next;
-	while ((struct list_head *) pkg != selectors) {
+	while ((struct list_head *) pkg != &selectors) {
 		mirror_css_selector(fpkg->selector, pkg->selector);
 		pkg = pkg->next;
 	}
-	free_list(*selectors);
+	free_list(selectors);
 }
 
 

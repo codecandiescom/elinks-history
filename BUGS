@@ -1,16 +1,23 @@
 Known bugs:
 
-- It seems that <meta http-equiv="refresh" content="5;url=http://foo.com/" />
-  tag is interpreted in that text file... Try to open it in ELinks.
+Key: (-) nothing done, (+) work in progress, (*) almost fixed
+     (reflects only what is already committed to CVS)
 
-- Go to http://www.computing.net/mac/wwwboard/forum/6268.html [;-)]
-  Goto the end of page, put cursor in Image URL: field,
-  then press up key, cursor will loop in some of the fields, but will never
-  enter the textarea field.
+Tabbed browsing:
+~~~~~~~~~~~~~~~~
 
 - With some opened tabs, go to freshmeat.net, when page is loaded, click on
   main menu bar to open it, then click in the center of screen, some form
   fields will be printed over current screen, but disappear on next action...
+
+- Black (blocked) cursor appear when viewing stepping back to the initial tab
+  after a second tab has been opened and ui.tabs.show_bar is on. Reproduce by
+  openning www.diku.dk. Navigate to 'About DIKU' link and open it in new tab.
+  Then press '<' to get back to the initial tab. A black cursor appears on the
+  'n' in the document title in the tab bar.
+
+Frame handling:
+~~~~~~~~~~~~~~~
 
 + Frames don't work if there's more frames with same name. Turn them off in such
   case.
@@ -21,10 +28,45 @@ Known bugs:
 
 - Loading a page in a frame does not add that page to the global history.
 
+Document handling:
+~~~~~~~~~~~~~~~~~~
+
+- It seems that <meta http-equiv="refresh" content="5;url=http://foo.com/" />
+  tag is interpreted in that text file... Try to open it in ELinks.
+
+- You can't upload large files; it takes _lots_ of memory.
+
+Form handling:
+~~~~~~~~~~~~~~
+
++ Handling of textareas splitted to two pages is just weird.  (Is this still
+  true with 0.5 CVS?)
+
+- Go to http://www.computing.net/mac/wwwboard/forum/6268.html [;-)]
+  Goto the end of page, put cursor in Image URL: field,
+  then press up key, cursor will loop in some of the fields, but will never
+  enter the textarea field.
+
+Searching:
+~~~~~~~~~~
+
+- Searches match links' prefixes (when document.browse.links.numbering = 1).
+
+- Searches do not scroll horizontally to show matched text that is beyond
+  the left- or right-edge of the screen.
+
+Links highlighting:
+~~~~~~~~~~~~~~~~~~~
+
++ Spaces added by justification are not highlighted in links when those links
+  are selected. The general problem is that the background is not set properly
+  when the spaces are inserted.
+
 - The 'enter' action does not cause a refresh, even when given a prefix.  Thus
   the newly selected link is not highlighted.
 
-- You can't upload large files; it takes _lots_ of memory.
+Misc:
+~~~~~
 
 - You shouldn't press '^Z' when you are in external program (viewer,
   editor,mailer, ...)
@@ -38,22 +80,6 @@ Known bugs:
 - Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
   combinations.
 
-+ Handling of textareas splitted to two pages is just weird.  (Is this still
-  true with 0.5 CVS?)
-
 - Call to OS Shell doesn't release mouse handler.
 
-+ Spaces added by justification are not highlighted in links when those links
-  are selected. The general problem is that the background is not set properly
-  when the spaces are inserted.
-
-- Searches match links' prefixes (when document.browse.links.numbering = 1).
-
-- Searches do not scroll horizontally to show matched text that is beyond
-  the left- or right-edge of the screen.
-
-
-Key: - nothing done + work in progress * almost fixed
-     (reflects only what is already committed to CVS)
-
-$Id: BUGS,v 1.57 2003/05/08 11:39:23 zas Exp $
+$Id: BUGS,v 1.58 2003/05/08 18:13:46 jonas Exp $

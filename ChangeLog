@@ -1,3 +1,44 @@
+Tue Jan 11 19:33:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/conf.c:
+
+	Show 'File saving disabled by option' error when saving and -no-home
+	was given. Assert that the term to write_config() is always set. We
+	get called from do_action() and places passing dlg_data->win->term
+	so it should be ok to be less defensive.  
+
+Tue Jan 11 15:51:02 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* README:
+
+	Translation stuff pointer update: s/intl/po/.  
+
+Tue Jan 11 02:26:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Tue Jan 11 00:38:00 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Makefile.am, configure.in:
+
+	Integrate debian/ with the build system.  
+
+Tue Jan 11 00:02:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Add debian/ files from the official debian package by Peter Gervai.
+	Only change is to install elinks.conf example from contrib/ instead
+	of debian/.  
+
+Mon Jan 10 23:54:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/: Makefile.am, elinks.conf:
+
+	Add example configuration file.  
+
 Mon Jan 10 12:56:57 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/da.po:

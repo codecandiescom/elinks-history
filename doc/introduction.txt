@@ -262,19 +262,43 @@ Forms:
 	press ENTER again.
 
 
-
-Note: This is still a work in progress and from here on an below everything is
-marked TODO!
-
 Searching
 ~~~~~~~~~
 
- - Text searching using the normal search dialog
+Searching is by default available by pressing '/'. This will open a search
+dialog with a input text field for entering the search term and checkboxes to
+control how searching is performed. You can indicate whether matching should
+be case sensitive and wether regular expressions or normal searching should be
+used.
 
- - Incremental document text searching
+It is also possible to make an incremental search, also called type-ahead
+searching. You can search either the whole document text or only link text.
+The latter can be useful if you see a link deep inside a page and want to get
+to it quickly.
 
- - Link searching
+Matches of the search term will be high-lighted. After having performed a
+document text search all matches will be high-lighted. To get rid of this
+high-lighting you have to ``search for the empty string'', that is open
+a search dialog an just press Enter in the input field.
 
+Previous search words is save in the search history, so they can easily be
+found and used later. Browsing the history will replace the current entered
+search term.
+
+The basic default controls for searching are the following:
+
+	'/'		Open search dialog
+	'?'		Open search dialog for backwards searching
+	'#'		Start incremental link text search
+	'#/'		Start incremental document search
+	'n'/'N'		Show next/previous match
+	Tab		Show next match (only for incremental searching)
+	Up/Down		Insert previous/next search word from history
+			(only when the input field is selected)
+
+
+Note: This is still a work in progress and from here on an below everything is
+marked TODO!
 
 Hints and Odd Features
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -291,4 +315,4 @@ Useful Document Display Options:
 
  - Insert mode in text-input form-fields
 
-$Id: introduction.txt,v 1.15 2005/01/03 20:45:49 miciah Exp $
+$Id: introduction.txt,v 1.16 2005/01/05 16:26:37 jonas Exp $

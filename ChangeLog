@@ -1,3 +1,37 @@
+Sat Oct 16 20:20:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	move_current_tab(): Honour ses->kbdprefix.repeat_count so you can
+	move the current tab a variable number of steps. However it doesn't
+	work well for wrap around.  
+
+Sat Oct 16 20:15:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/draw.c:
+
+	Check the link under the cursor using new check_link_under_cursor()
+	when drawing a document with cursor routing navigation enabled. This
+	fixes links not being highlighted correctly when moving back and
+	forth in history. It is kind of a parallel to check_vs() for
+	link-wise navigation.  
+
+Sat Oct 16 19:59:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	switch_current_tab(): Honour ses->kbdprefix.repeat_count so you can
+	jump variable number of tabs. However it doesn't work well for wrap
+	around due to switch_to_tab() usage.  
+
+Sat Oct 16 19:57:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: viewer/text/view.c, sched/action.c, terminal/tab.c,
+	terminal/tab.h:
+
+	Merge switch_to_(next|prev)_tab() into switch_current_tab()
+	controlled by a direction arg.  
+
 Fri Oct 15 02:39:46 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/dialogs/status.c:

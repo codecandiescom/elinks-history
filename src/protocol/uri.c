@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.141 2004/04/05 05:35:28 jonas Exp $ */
+/* $Id: uri.c,v 1.142 2004/04/06 00:08:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,13 +357,11 @@ translate_directories(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *src, *dest, *path;
 	int lo;
-	struct uri uri_struct;
 
-	if (!uri) {
-		uri = &uri_struct;
-		if (parse_uri(uri, uristring) != URI_ERRNO_OK)
-			return uristring;
-	}
+	if (!uristring)
+		uristring = struri(uri);
+	else if (parse_uri(uri, uristring) != URI_ERRNO_OK)
+		return uristring;
 
 	assert(uri->data);
 
@@ -514,7 +512,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		*p = '\0';
 		add_to_strn(&n, rel);
 
-		return translate_directories(NULL, n);
+		return translate_directories(&uri, n);
 	} else if (rel[0] == '?') {
 		n = stracpy(base);
 		if (!n) return NULL;
@@ -523,7 +521,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		*p = '\0';
 		add_to_strn(&n, rel);
 
-		return translate_directories(NULL, n);
+		return translate_directories(&uri, n);
 	} else if (rel[0] == '/' && rel[1] == '/') {
 		unsigned char *s = strstr(base, "//");
 
@@ -544,7 +542,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	switch (parse_uri(&uri, n)) {
 	case URI_ERRNO_OK:
-		return translate_directories(&uri, n);
+		return translate_directories(&uri, NULL);
 
 	case URI_ERRNO_NO_HOST_SLASH:
 	{
@@ -554,7 +552,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		add_to_strn(&n, "/");
 
 		if (parse_uri(&uri, n) == URI_ERRNO_OK)
-			return translate_directories(&uri, n);
+			return translate_directories(&uri, NULL);
 	}
 	default:
 		mem_free(n);
@@ -610,7 +608,7 @@ prx:
 	if (add_slash) n[tmp] = '/';
 	strcpy(n + tmp + add_slash, rel);
 
-	return translate_directories(NULL, n);
+	return translate_directories(&uri, n);
 }
 
 static unsigned char *
@@ -641,11 +639,14 @@ parse_uri:
 
 	switch (uri_errno) {
 	case URI_ERRNO_OK:
-		if (uri.protocol == PROTOCOL_FILE && cwd && *cwd
-		    && transform_file_url(&uri, cwd))
-			parse_uri(&uri, struri(&uri));
+		/* If no transformation is needed either because it is not a
+		 * file:// URI or it is not relative to the current working dir
+		 * set @newurl to NULL to avoid reparsing the @uri. */
+		if (uri.protocol != PROTOCOL_FILE || !cwd || !*cwd
+		    || !transform_file_url(&uri, cwd))
+			newurl = NULL;
 
-		return translate_directories(&uri, struri(&uri));
+		return translate_directories(&uri, newurl);
 
 	case URI_ERRNO_NO_SLASHES:
 		/* Try prefix:some.url -> prefix://some.url.. */

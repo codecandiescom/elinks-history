@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.27 2003/11/15 16:35:17 pasky Exp $ */
+/* $Id: document.h,v 1.28 2003/11/15 16:36:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -109,7 +109,7 @@ struct document {
 
 	unsigned int id_tag; /* Used to check cache entries. */
 
-	int locks; /* No direct access, use provided macros for that. */
+	int refcount; /* No direct access, use provided macros for that. */
 	int cp;
 	int width, height; /* size of document */
 	int nlinks;
@@ -124,7 +124,7 @@ struct document {
 #endif
 
 #ifdef DEBUG_DOCUMENT_LOCKS
-#define doc_lock_debug(doc, info) debug("document %p lock %s now %d url= %s", doc, info, (doc)->locks, (doc)->url)
+#define doc_lock_debug(doc, info) debug("document %p lock %s now %d url= %s", doc, info, (doc)->refcount, (doc)->url)
 #else
 #define doc_lock_debug(ce, info)
 #endif
@@ -133,17 +133,17 @@ struct document {
 #define doc_sanity_check(doc) \
 do { \
 	assert(doc); \
-	assertm((doc)->locks >= 0, "Document refcount underflow."); \
-	if_assert_failed (doc)->locks = 0; \
+	assertm((doc)->refcount >= 0, "Document refcount underflow."); \
+	if_assert_failed (doc)->refcount = 0; \
 } while (0)
 #else
 #define doc_sanity_check(doc)
 #endif
 
-#define get_document_locks(doc) ((doc)->locks)
-#define is_document_locked(doc) (!!(doc)->locks)
-#define document_lock(doc) do { doc_sanity_check(doc); (doc)->locks++; doc_lock_debug(doc, "+1"); } while (0)
-#define document_unlock(doc) do { (doc)->locks--; doc_lock_debug(doc, "-1"); doc_sanity_check(doc);} while (0)
+#define get_document_locks(doc) ((doc)->refcount)
+#define is_document_locked(doc) (!!(doc)->refcount)
+#define document_lock(doc) do { doc_sanity_check(doc); (doc)->refcount++; doc_lock_debug(doc, "+1"); } while (0)
+#define document_unlock(doc) do { (doc)->refcount--; doc_lock_debug(doc, "-1"); doc_sanity_check(doc);} while (0)
 
 /* Please keep this one. It serves for debugging. --Zas */
 #define document_nolock(doc) do { doc_sanity_check(doc); doc_lock_debug(doc, "0"); } while (0)

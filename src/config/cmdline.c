@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.55 2004/04/16 16:31:34 zas Exp $ */
+/* $Id: cmdline.c,v 1.56 2004/04/23 11:39:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,12 +548,6 @@ struct option_info cmdline_options_info[] = {
 		"is allowed, but user can't add or modify entries in\n"
 		"association table.")),
 
-	INIT_OPT_BOOL("", N_("Only permit local connections"),
-		"localhost", 0, 0,
-		N_("Restrict ELinks so that it can only open connections to\n"
-		"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
-		"to distant servers.")),
-
 	INIT_OPT_BOOL("", N_("Autosubmit first form"),
 		"auto-submit", 0, 0,
 		N_("Go and submit the first form you'll stumble upon.")),
@@ -579,6 +573,10 @@ struct option_info cmdline_options_info[] = {
 		N_("Name of the file with configuration, from which and to\n"
 		"which all the configuration shall be written. It should be\n"
 		"relative to config-dir.")),
+
+	INIT_OPT_COMMAND("", N_("Print help for configuration options"),
+		"config-help", 0, printhelp_cmd,
+		N_("Print help on configuration options and exit.")),
 
 	INIT_OPT_CMDALIAS("", N_("MIME type to assume for documents"),
 		"default-mime-type", 0, "mime.default_type",
@@ -622,9 +620,11 @@ struct option_info cmdline_options_info[] = {
 		"long-help", 0, printhelp_cmd,
 		N_("Print detailed usage help and exit.")),
 
-	INIT_OPT_COMMAND("", N_("Print help for configuration options"),
-		"config-help", 0, printhelp_cmd,
-		N_("Print help on configuration options and exit.")),
+	INIT_OPT_BOOL("", N_("Only permit local connections"),
+		"localhost", 0, 0,
+		N_("Restrict ELinks so that it can only open connections to\n"
+		"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
+		"to distant servers.")),
 
 	INIT_OPT_COMMAND("", N_("Look up specified host"),
 		"lookup", 0, lookup_cmd,
@@ -640,6 +640,12 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Don't use files in ~/.elinks"),
 		"no-home", 0, 0,
 		N_("Don't attempt to create and/or use home rc directory (~/.elinks).")),
+
+	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
+		"no-numbering", 0, 0,
+		N_("Prevents numbering of links (and showing their list at the end of\n"
+		"the dumped document) in the -dump output; this was the default behaviour\n"
+		"until 0.5pre12. Note that this really affects only --dump, nothing else.")),
 
 	INIT_OPT_BOOL("", N_("Check if ELinks is currently running"),
 		"ping", 0, 0,
@@ -671,12 +677,6 @@ struct option_info cmdline_options_info[] = {
 	INIT_OPT_BOOL("", N_("Write the source of given URL to stdout"),
 		"source", 0, 0,
 		N_("Write the given HTML document in source form to stdout.")),
-
-	INIT_OPT_BOOL("", N_("Do not number links in dump output"),
-		"no-numbering", 0, 0,
-		N_("Prevents numbering of links (and showing their list at the end of\n"
-		"the dumped document) in the -dump output; this was the default behaviour\n"
-		"until 0.5pre12. Note that this really affects only --dump, nothing else.")),
 
 	INIT_OPT_BOOL("", N_("Touch files in ~/.elinks when running with -no-connect/-session-ring"),
 		"touch-files", 0, 0,

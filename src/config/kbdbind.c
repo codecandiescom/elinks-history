@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.22 2002/06/30 15:18:27 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.23 2002/06/30 21:11:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,6 +238,8 @@ parse_act(unsigned char *s)
 		{ "kill-to-eol", ACT_KILL_TO_EOL },
 		{ "left", ACT_LEFT },
 		{ "link-menu", ACT_LINK_MENU },
+		{ "jump-to-link", ACT_JUMP_TO_LINK },
+		{ "follow-link", ACT_FOLLOW_LINK },
 		{ "lua-console", ACT_LUA_CONSOLE },
 		{ " *lua-function*", ACT_LUA_FUNCTION }, /* internal use only */
 		{ "menu", ACT_MENU },
@@ -390,8 +392,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_MENU, KBD_F9 },
 	{ ACT_FILE_MENU, KBD_F10 },
 	{ ACT_LUA_CONSOLE, ',' },
-	{ ACT_LINK_MENU, 'l' },
 	{ ACT_LINK_MENU, 'L' },
+	{ ACT_JUMP_TO_LINK, 'l' },
 	{ 0, 0, 0 }
 };
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.55 2002/06/29 15:24:06 pasky Exp $ */
+/* $Id: view.c,v 1.56 2002/06/30 21:11:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2281,6 +2281,26 @@ int frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_VIEW_IMAGE: send_image(ses->term, NULL, ses); break;
 			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->term, NULL, ses); break;
+			case ACT_JUMP_TO_LINK: {
+				int i = ses->kbdprefix.rep_num;
+
+				if (i && i <= fd->f_data->nlinks)
+					jump_to_link_number(ses, current_frame(ses),
+						i - 1);
+
+				break;
+			}
+			case ACT_FOLLOW_LINK: {
+				struct f_data_c *fd = current_frame(ses);
+				int i = ses->kbdprefix.rep_num;
+
+				if (i && i <= fd->f_data->nlinks) {
+					jump_to_link_number(ses, fd, i - 1);
+					enter(ses, fd, 0);
+				}
+
+				break;
+			}
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 					/* FIXME: This probably doesn't work

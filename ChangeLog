@@ -1,3 +1,71 @@
+Sun Mar 17 17:27:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, bfu/bfu.c, bfu/bfu.h, bookmarks/bookmarks.c,
+	config/default.c, config/kbdbind.c, cookies/cookies.c,
+	dialogs/menu.c, document/session.c, document/view.c,
+	document/html/colors.c, document/html/parser.c,
+	document/html/parser.h, document/html/renderer.c,
+	document/html/tables.c, intl/charsets.c, intl/lang_defs.h,
+	lowlevel/af_unix.c, lowlevel/connect.c, lowlevel/dns.c,
+	lowlevel/kbd.c, lowlevel/sched.c, lowlevel/select.c,
+	lowlevel/terminal.c, lowlevel/terminal.h, lua/lua.c,
+	osdep/os_dep.c, osdep/win32.c, protocol/file.c, protocol/ftp.c,
+	protocol/http.c, protocol/mailto.c, protocol/types.c,
+	protocol/url.c, util/error.c:
+	
+	remove trailing spaces/tabs and spaces before semicolons; simple
+	script by Zas :)
+
+Sun Mar 17 14:58:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
+	configure, configure.in, stamp-h.in, src/Makefile.am,
+	src/Makefile.in, src/bfu/Makefile.am, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.am, src/bookmarks/Makefile.in,
+	src/config/Makefile.am, src/config/Makefile.in,
+	src/cookies/Makefile.am, src/cookies/Makefile.in,
+	src/dialogs/Makefile.am, src/dialogs/Makefile.in,
+	src/document/Makefile.am, src/document/Makefile.in,
+	src/intl/Makefile.am, src/intl/Makefile.in,
+	src/lowlevel/Makefile.am, src/lowlevel/Makefile.in,
+	src/lua/Makefile.am, src/lua/Makefile.in, src/osdep/Makefile.am,
+	src/osdep/Makefile.in, src/document/html/Makefile.am,
+	src/document/html/Makefile.in, src/protocol/Makefile.am,
+	src/protocol/Makefile.in, src/util/Makefile.am,
+	src/util/Makefile.in:
+	
+	compilation fixes
+
+Sun Mar 17 14:58:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autocommit.sh:
+	
+	commit automatically also Makefile.am
+
+Sun Mar 17 14:39:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure, configure.in, src/Makefile.am, src/Makefile.in,
+	src/README, src/main.c, src/bfu/Makefile.am, src/bfu/Makefile.in,
+	src/bfu/menu.c, src/bfu/menu.h, src/dialogs/Makefile.am,
+	src/dialogs/Makefile.in, src/dialogs/menu.c, src/dialogs/menu.h,
+	src/document/session.c, src/document/view.c, src/protocol/http.c,
+	Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in, src/Makefile.in, src/bfu/Makefile.in,
+	src/bookmarks/Makefile.in, src/config/Makefile.in,
+	src/cookies/Makefile.in, src/dialogs/Makefile.in,
+	src/document/Makefile.in, src/intl/Makefile.in,
+	src/lowlevel/Makefile.in, src/lua/Makefile.in,
+	src/osdep/Makefile.in, src/document/html/Makefile.in,
+	src/protocol/Makefile.in, src/util/Makefile.in:
+	
+	moved menu from bfu/ to dialogs/
+
+Sun Mar 17 14:07:30 2002  Petr Baudis <pasky@ji.cz>:
+
+	* entity.inc:
+	
+	we somewhow forgot this to remove ;)
+
 Sun Mar 17 14:05:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure, configure.in, Unicode/README, Unicode/gen-7b,

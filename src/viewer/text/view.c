@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.646 2004/11/12 16:24:52 zas Exp $ */
+/* $Id: view.c,v 1.647 2004/11/12 16:48:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -761,10 +761,9 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 static enum frame_event_status
 frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
-	enum frame_event_status status = FRAME_EVENT_REFRESH;
 	int x = ev->info.mouse.x;
 	int y = ev->info.mouse.y;
-	struct link *link = get_link_at_coordinates(doc_view, x, y);
+	struct link *link;
 
 	if (check_mouse_wheel(ev)) {
 		if (!check_mouse_action(ev, B_DOWN)) {
@@ -775,7 +774,13 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 			scroll_mouse_down(ses, doc_view);
 		}
 
-	} else if (link) {
+		return FRAME_EVENT_REFRESH;
+	}
+
+	link = get_link_at_coordinates(doc_view, x, y);
+	if (link) {
+		enum frame_event_status status = FRAME_EVENT_REFRESH;
+
 		doc_view->vs->current_link = link - doc_view->document->links;
 
 		if (!link_is_textinput(link)) {
@@ -797,7 +802,10 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 			}
 		}
 
-	} else if (check_mouse_button(ev, B_LEFT)) {
+		return status;
+	}
+
+	if (check_mouse_button(ev, B_LEFT)) {
 		/* Clicking the edge of screen will scroll the document. */
 
 		int scrollmargin = get_opt_int("document.browse.scrolling.margin");
@@ -819,11 +827,10 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 			scroll_mouse_right(ses, doc_view);
 		}
 
-	} else {
-		status = FRAME_EVENT_IGNORED;
+		return FRAME_EVENT_REFRESH;
 	}
 
-	return status;
+	return FRAME_EVENT_IGNORED;
 }
 #endif /* CONFIG_MOUSE */
 

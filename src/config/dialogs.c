@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.155 2004/01/25 13:03:55 pasky Exp $ */
+/* $Id: dialogs.c,v 1.156 2004/01/25 13:09:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -539,8 +539,8 @@ push_kbdbind_add_button(struct dialog_data *dlg_data,
 
 	if (item->depth == 2)
 		item = item->root;
-	hop->keymap = (int) item->udata;
-	hop->action = (int) item->root->udata;
+	hop->action = (int) item->udata;
+	hop->keymap = (int) item->root->udata;
 
 	text = straconcat(_("Action", term), ": ", write_action(hop->keymap, hop->action), "\n",
 			  _("Keymap", term), ": ", write_keymap(hop->keymap), "\n",

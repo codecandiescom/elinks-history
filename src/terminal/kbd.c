@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.56 2004/04/23 19:26:47 pasky Exp $ */
+/* $Id: kbd.c,v 1.57 2004/05/24 17:23:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,6 +273,7 @@ void
 handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 	   void *init_string, int init_len)
 {
+	unsigned char buffer[MAX_TERM_LEN];
 	int x = 0, y = 0, i;
 	struct itrm *itrm;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 80, 24, 0);
@@ -310,26 +311,18 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 
 	env = get_system_env();
 
+	memset(buffer, 0, sizeof(buffer));
 	ts = getenv("TERM");
-	if (ts) ts = stracpy(ts);
-	else ts = stracpy("");
-	if (!ts) goto end;
-
-	for (i = 0; ts[i] != 0; ++i)
-		if (!isA(ts[i]))
-			ts[i] = '-';
+	if (ts) {
+		for (i = 0; ts[i] != 0 && i < sizeof(buffer); i++)
+			buffer[i] = isA(ts[i]) ? ts[i] : '-';
+	}
+	queue_event(itrm, buffer, MAX_TERM_LEN);
 
 	/* FIXME: Combination altscreen + xwin does not work as it should,
 	 * mouse clicks are reportedly partially ignored. */
 	if (env & (ENV_SCREEN | ENV_XWIN))
 		itrm->flags |= USE_ALTSCREEN;
-
-	if (queue_ts(itrm, ts, strlen(ts), MAX_TERM_LEN)) {
-		mem_free(ts);
-		return;
-	}
-
-	mem_free(ts);
 
 	ts = get_cwd();
 	if (!ts) {

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.109 2004/06/09 00:22:44 jonas Exp $ */
+/* $Id: task.c,v 1.110 2004/06/09 20:49:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,8 +548,12 @@ get_hooked_uri(struct session *ses, unsigned char *uristring)
 void
 goto_url_with_hook(struct session *ses, unsigned char *url)
 {
-	struct uri *uri = get_hooked_uri(ses, url);
+	struct uri *uri;
 
+	/* Bail out if passed empty string from goto-url dialog */
+	if (!*url) return;
+
+	uri = get_hooked_uri(ses, url);
 	goto_url_frame(ses, uri, NULL, CACHE_MODE_NORMAL);
 	if (uri) done_uri(uri);
 }

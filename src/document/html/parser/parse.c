@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.96 2004/10/27 16:52:51 zas Exp $ */
+/* $Id: parse.c,v 1.97 2004/10/27 17:17:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,8 +570,10 @@ void
 init_tags_lookup(void)
 {
 #ifdef USE_FASTFIND
-	ff_info_tags = fastfind_index(&tags_list_reset, &tags_list_next,
-				      0, 1, "tags_lookup");
+	ff_info_tags = fastfind_index(&tags_list_reset,
+				      &tags_list_next,
+				      FF_COMPRESS,
+				      "tags_lookup");
 #endif
 }
 

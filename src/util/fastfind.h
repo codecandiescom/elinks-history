@@ -1,4 +1,4 @@
-/* $Id: fastfind.h,v 1.16 2004/10/27 16:57:01 zas Exp $ */
+/* $Id: fastfind.h,v 1.17 2004/10/27 17:17:46 zas Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
@@ -19,17 +19,23 @@ struct fastfind_key_value {
 	void *data;
 };
 
+enum fastfind_flags {
+	FF_NONE = 0,
+	FF_CASE_AWARE = 1,	/* honour case when comparing */
+	FF_COMPRESS = 2,	/* compress nodes if possible */
+};
+
 /* Initialize and index a list of keys. */
 /* Keys are iterated using:
  * @reset		to start over and
  * @next		to get next struct fastfind_key_value in line.
- * @case_sensitive	denotes whether to honour case when comparing.
- * @compress		call fastfind_index_compress() before returning */
+ * @flags		control case sensitivity, compression.
+ * @comment		useful for debugging mode. */
 /* This function must be called once and only once per list and
  * returns a handle to the allocated structure. */
 struct fastfind_info *fastfind_index(void (*reset)(void),
 		struct fastfind_key_value *(*next)(void),
-		int case_sensitive, int compress,
+		enum fastfind_flags flags,
 		unsigned char *comment);
 
 /* The main reason of all that stuff is here. */

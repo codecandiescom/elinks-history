@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.66 2004/10/27 16:57:01 zas Exp $ */
+/* $Id: fastfind.c,v 1.67 2004/10/27 17:17:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,7 @@ struct fastfind_info {
 	int min_key_len;
 	int max_key_len;
 	int count;
-	int case_sensitive;
+	enum fastfind_flags flags;
 	int idxtab[FF_MAX_CHARS];
 
 	int pointers_count;
@@ -184,6 +184,9 @@ struct fastfind_info {
 
 	unsigned char uniq_chars[FF_MAX_CHARS];
 };
+
+#define ff_flags_case_aware(info) (info->flags & FF_CASE_AWARE)
+#define ff_flags_compress(info) (info->flags & FF_COMPRESS)
 
 
 #ifdef DEBUG_FASTFIND
@@ -222,7 +225,8 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 {
 	fprintf(stderr, "------ FastFind Statistics ------\n");
 	fprintf(stderr, "Comment     : %s\n", info->debug.comment);
-	fprintf(stderr, "Case        : %s\n", info->case_sensitive ? "sensitive" : "insensitive");
+	fprintf(stderr, "Case-aware  : %s\n", ff_flags_case_aware(info) ? "yes" : "no");
+	fprintf(stderr, "Compress    : %s\n", ff_flags_compress(info) ? "yes" : "no");
 	fprintf(stderr, "Uniq_chars  : %s\n", info->uniq_chars);
 	fprintf(stderr, "Uniq_chars #: %d/%d max.\n", info->uniq_chars_count, FF_MAX_CHARS);
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
@@ -266,7 +270,7 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 
 
 static struct fastfind_info *
-init_fastfind(int case_sensitive, unsigned char *comment)
+init_fastfind(enum fastfind_flags flags, unsigned char *comment)
 {
 	struct fastfind_info *info = mem_calloc(1, sizeof(struct fastfind_info));
 
@@ -277,7 +281,7 @@ init_fastfind(int case_sensitive, unsigned char *comment)
 
 	/* Non sense to use that code if key length > 255 so... */
 	info->min_key_len = 255;
-	info->case_sensitive = case_sensitive;
+	info->flags = flags;
 
 	return info;
 }
@@ -418,14 +422,14 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 	}
 }
 
-#define ifcase(c) ((info->case_sensitive) ? (c) : toupper(c))
+#define ifcase(c) (ff_flags_case_aware(info) ? (c) : toupper(c))
 
 struct fastfind_info *
 fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
-	       int case_sensitive, int compress, unsigned char *comment)
+	       enum fastfind_flags flags, unsigned char *comment)
 {
 	struct fastfind_key_value *p;
-	struct fastfind_info *info = init_fastfind(case_sensitive, comment);
+	struct fastfind_info *info = init_fastfind(flags, comment);
 
 	if (!info) goto return_error;
 
@@ -515,7 +519,8 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 		add_to_pointers(p->data, key_len, info);
 	}
 
-	if (compress) fastfind_node_compress(info->root_leafset, info);
+	if (ff_flags_compress(info))
+		fastfind_node_compress(info->root_leafset, info);
 
 	return info;
 
@@ -589,7 +594,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	 * propose it and be prepared to defend it. --Zas */
 
 	FF_DBG_test(info);
-	if (info->case_sensitive)
+	if (ff_flags_case_aware(info))
 		FF_SEARCH(key[i]);
 	else
 		FF_SEARCH(toupper(key[i]));

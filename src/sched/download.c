@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.318 2004/08/19 10:04:24 miciah Exp $ */
+/* $Id: download.c,v 1.319 2004/08/19 10:23:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,7 @@ abort_all_downloads(void)
 void
 destroy_downloads(struct session *ses)
 {
-	struct file_download *file_download;
+	struct file_download *file_download, *next;
 	struct session *s;
 
 	/* We are supposed to blat all downloads to external handlers belonging
@@ -199,7 +199,7 @@ destroy_downloads(struct session *ses)
 		return;
 	}
 
-	foreach (file_download, downloads) {
+	foreachsafe (file_download, next, downloads) {
 		if (file_download->ses != ses)
 			continue;
 
@@ -208,8 +208,7 @@ destroy_downloads(struct session *ses)
 			continue;
 		}
 
-		file_download = file_download->prev;
-		abort_download(file_download->next);
+		abort_download(file_download);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.46 2002/10/02 15:25:48 zas Exp $ */
+/* $Id: ftp.c,v 1.47 2002/10/02 15:29:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,15 +103,16 @@ static int parse_psv_resp(unsigned char *data, int *n, int max_value)
 	
 	memset(n, 0, 6 * sizeof(int));
 
-	/* Find the end. */
 	if (*p < ' ') return 0;
+
+	/* Find the end. */
 	while (*p >= ' ') p++;
 		
 	/* Ignore non-numeric ending chars. */
        	while (p != data && (*p < '0' || *p > '9')) p--;
 	if (p == data) return 0;
 		
-	while (i>=0) {
+	while (i >= 0) {
 		int x = 1;
 		
 		/* Parse one number. */
@@ -123,7 +124,7 @@ static int parse_psv_resp(unsigned char *data, int *n, int max_value)
 		}
 		/* Ignore non-numeric chars. */
 		while (p != data && (*p < '0' || *p > '9')) p--;
-		if (p == data) return 6-i;
+		if (p == data) return (6 - i);
 		/* Get the next one. */
 		i--;
 	}

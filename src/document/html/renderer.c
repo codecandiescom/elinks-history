@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.59 2003/01/05 16:48:15 pasky Exp $ */
+/* $Id: renderer.c,v 1.60 2003/04/21 20:04:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,16 +225,18 @@ xpand_spaces(struct part *p, int l)
 static inline void
 set_hchar(struct part *part, int x, int y, unsigned c)
 {
-	if (xpand_lines(part, y)) return;
-	if (xpand_line(part, y, x)) return;
+	if (xpand_lines(part, y)
+	    || xpand_line(part, y, x))
+		return;
 	POS(x, y) = c;
 }
 
 static inline void
 set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 {
-	if (xpand_lines(part, y)) return;
-	if (xpand_line(part, y, x + xl - 1)) return;
+	if (xpand_lines(part, y)
+	    || xpand_line(part, y, x + xl - 1))
+		return;
 	for (; xl; xl--, x++) POS(x, y) = c;
 }
 
@@ -254,9 +256,10 @@ static inline void
 set_hline(struct part *part, int x, int y,int xl,
           unsigned char *d, unsigned c, int spc)
 {
-	if (xpand_lines(part, y)) return;
-	if (xpand_line(part, y, x+xl-1)) return;
-	if (spc && xpand_spaces(part, x+xl-1)) return;
+	if (xpand_lines(part, y)
+	    || xpand_line(part, y, x + xl - 1)
+	    || (spc && xpand_spaces(part, x + xl - 1)))
+		return;
 
 	for (; xl; xl--, x++, d++) {
 		if (spc) part->spaces[x] = *d == ' ';
@@ -316,7 +319,7 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 
 	if (yt >= 0) {
 		for (tag = last_tag_to_move->next;
-	   			(void *) tag != &part->data->tags;
+	   	     (void *) tag != &part->data->tags;
 		     tag = tag->next) {
 			if (tag->y == Y(yf)) {
 				matched = 1;
@@ -332,9 +335,10 @@ move_links(struct part *part, int xf, int yf, int xt, int yt)
 static inline void
 copy_chars(struct part *part, int x, int y, int xl, chr *d)
 {
-	if (xl <= 0) return;
-	if (xpand_lines(part, y)) return;
-	if (xpand_line(part, y, x+xl-1)) return;
+	if (xl <= 0
+	    || xpand_lines(part, y)
+	    || xpand_line(part, y, x + xl - 1))
+		return;
 	for (; xl; xl--, x++, d++) POS(x, y) = *d;
 }
 
@@ -851,12 +855,11 @@ x:;
 		if (link->type != L_FIELD && link->type != L_AREA) {
 			bg = find_nearest_color(&format.clink, 8);
 			fg = find_nearest_color(&format.bg, 8);
-			fg = fg_color(fg, bg);
 		} else {
 			fg = find_nearest_color(&format.fg, 8);
 			bg = find_nearest_color(&format.bg, 8);
-			fg = fg_color(fg, bg);
 		}
+		fg = fg_color(fg, bg);
 
 		link->sel_color = ((fg & 8) << 3) | (fg & 7) | (bg << 3);
 		link->n = 0;
@@ -1248,9 +1251,7 @@ uncached:
 	if (last_image) mem_free(last_image);
 	if (last_target) mem_free(last_target);
 
-	last_link = NULL;
-	last_image = NULL;
-	last_target = NULL;
+	last_link = last_image = last_target = NULL;
 	last_form = NULL;
 	nobreak = 1;
 
@@ -1376,7 +1377,8 @@ push_base_format(unsigned char *url, struct document_options *opt)
 
 	format.attr = 0;
 	format.fontsize = 3;
-	format.link = format.target = format.image = format.select = NULL;
+	format.link = format.target = format.image = NULL;
+	format.select = NULL;
 	format.form = NULL;
 	format.title = NULL;
 
@@ -1526,15 +1528,8 @@ format_html(struct cache_entry *ce, struct f_data *screen)
 		if (screen->data[i].l > screen->x)
 			screen->x = screen->data[i].l;
 
-	if (form.action) {
-		mem_free(form.action);
-	   	form.action = NULL;
-	}
-
-	if (form.target) {
-		mem_free(form.target);
-		form.target = NULL;
-	}
+	if (form.action) mem_free(form.action), form.action = NULL;
+	if (form.target) mem_free(form.target), form.target = NULL;
 
 	screen->bg = find_nearest_color(&par_format.bgcolor, 8) << 11;
 
@@ -1660,8 +1655,9 @@ cached_format_html(struct view_state *vs, struct f_data_c *screen,
 	}
 
 	foreach(ce, format_cache) {
-		if (strcmp(ce->url, vs->url)) continue;
-		if (compare_opt(&ce->opt, opt)) continue;
+		if (strcmp(ce->url, vs->url)
+		    || compare_opt(&ce->opt, opt))
+			continue;
 
 		if (cee->count != ce->use_tag) {
 			if (!ce->refcount) {

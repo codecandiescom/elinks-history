@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.313 2005/03/05 20:46:47 zas Exp $ */
+/* $Id: search.c,v 1.314 2005/03/23 13:40:34 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -945,12 +945,10 @@ print_find_error_not_found(struct session *ses, unsigned char *title,
 {
 	switch (get_opt_int("document.browse.search.show_not_found")) {
 		case 2:
-			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				title, ALIGN_CENTER,
-				msg_text(ses->tab->term, message,
-					 search_string),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+			info_box(ses->tab->term, MSGBOX_FREE_TEXT,
+				 title, ALIGN_CENTER,
+				 msg_text(ses->tab->term, message,
+					  search_string));
 			break;
 
 		case 1:
@@ -1006,12 +1004,8 @@ print_find_error(struct session *ses, enum find_error find_error)
 			break;
 	}
 
-	if (message)
-		msg_box(ses->tab->term, NULL, 0,
-			N_("Search"), ALIGN_CENTER,
-			message,
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+	if (!message) return;
+	info_box(ses->tab->term, 0, N_("Search"), ALIGN_CENTER, message);
 }
 
 enum frame_event_status
@@ -1451,13 +1445,11 @@ search_typeahead(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-				N_("Typeahead"), ALIGN_CENTER,
-				msg_text(ses->tab->term,
-					 N_("No links in current document")),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
-
+			info_box(ses->tab->term, MSGBOX_FREE_TEXT,
+				 N_("Typeahead"), ALIGN_CENTER,
+				 msg_text(ses->tab->term,
+					  N_("No links in current document")));
+			
 			return FRAME_EVENT_OK;
 	}
 

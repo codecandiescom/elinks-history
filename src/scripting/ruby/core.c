@@ -1,5 +1,5 @@
 /* Ruby interface (scripting engine) */
-/* $Id: core.c,v 1.8 2005/01/21 14:05:04 jonas Exp $ */
+/* $Id: core.c,v 1.9 2005/03/23 13:40:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,11 +56,8 @@ alert_ruby_error(struct session *ses, unsigned char *msg)
 	msg = stracpy(msg);
 	if (!msg) return;
 
-	msg_box(term, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
-		N_("Ruby Error"), ALIGN_LEFT,
-		msg,
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
+		 N_("Ruby Error"), ALIGN_LEFT, msg);
 }
 
 /* Another Vim treat. */
@@ -152,11 +149,8 @@ erb_module_message(VALUE self, VALUE str)
 		return Qnil;
 	}
 
-	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
-		N_("Ruby Message"), ALIGN_LEFT,
-		message,
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(terminals.next, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
+		 N_("Ruby Message"), ALIGN_LEFT, message);
 
 	return Qnil;
 }
@@ -208,11 +202,8 @@ erb_stdout_p(int argc, VALUE *argv, VALUE self)
 		return Qnil;
 	}
 
-	msg_box(terminals.next, NULL, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
-		N_("Ruby Message"), ALIGN_LEFT,
-		string.source,
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(terminals.next, MSGBOX_NO_TEXT_INTL | MSGBOX_FREE_TEXT,
+		N_("Ruby Message"), ALIGN_LEFT, string.source);
 
 	return Qnil;
 }

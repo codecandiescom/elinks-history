@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.272 2005/03/05 20:31:11 zas Exp $ */
+/* $Id: form.c,v 1.273 2005/03/23 13:40:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -849,12 +849,10 @@ encode_error:
 	done_string(data);
 
 	/* XXX: This error message should move elsewhere. --Zas */
-	msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-		N_("Error while posting form"), ALIGN_CENTER,
-		msg_text(ses->tab->term, N_("Could not load file %s: %s"),
-			 sv->value, strerror(errno)),
-		ses, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(ses->tab->term, MSGBOX_FREE_TEXT,
+		 N_("Error while posting form"), ALIGN_CENTER,
+		 msg_text(ses->tab->term, N_("Could not load file %s: %s"),
+			  sv->value, strerror(errno)));
 }
 
 static void

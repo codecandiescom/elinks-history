@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.611 2005/03/05 22:14:32 zas Exp $ */
+/* $Id: session.c,v 1.612 2005/03/23 13:40:34 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -231,12 +231,10 @@ print_error_dialog(struct session *ses, enum connection_state state,
 	/* Don't show error dialogs for missing CSS stylesheets */
 	if (priority == PRI_CSS) return;
 
-	msg_box(ses->tab->term, NULL, MSGBOX_NO_TEXT_INTL,
-		N_("Error"), ALIGN_CENTER,
-		get_err_msg(state, ses->tab->term),
-		ses, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC /*,
-		N_("Retry"), NULL, 0 */ /* !!! TODO: retry */);
+	info_box(ses->tab->term, MSGBOX_NO_TEXT_INTL,
+		 N_("Error"), ALIGN_CENTER,
+		 get_err_msg(state, ses->tab->term));
+	/* TODO: retry */
 }
 
 static void
@@ -686,44 +684,40 @@ setup_first_session(struct session *ses, struct uri *uri)
 	struct terminal *term = ses->tab->term;
 
 	if (!*get_opt_str("protocol.http.user_agent")) {
-		msg_box(term, NULL, 0,
-			N_("Warning"), ALIGN_CENTER,
-			N_("You have empty string in protocol.http.user_agent - "
-			"this was a default value in the past, substituted by "
-			"default ELinks User-Agent string. However, currently "
-			"this means that NO User-Agent HEADER "
-			"WILL BE SENT AT ALL - if this is really what you want, "
-			"set its value to \" \", otherwise please delete line "
-			"with this settings from your configuration file (if you "
-			"have no idea what I'm talking about, just do this), so "
-			"that correct default setting will be used. Apologies for "
-			"any inconvience caused."),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(term, 0,
+			 N_("Warning"), ALIGN_CENTER,
+			 N_("You have empty string in protocol.http.user_agent - "
+			 "this was a default value in the past, substituted by "
+			 "default ELinks User-Agent string. However, currently "
+			 "this means that NO User-Agent HEADER "
+		 	 "WILL BE SENT AT ALL - if this is really what you want, "
+			 "set its value to \" \", otherwise please delete line "
+			 "with this settings from your configuration file (if you "
+			 "have no idea what I'm talking about, just do this), so "
+			 "that correct default setting will be used. Apologies for "
+			 "any inconvience caused."));
 	}
 
 	if (!get_opt_bool("config.saving_style_w")) {
 		get_opt_bool("config.saving_style_w") = 1;
 		get_opt_rec(config_options, "config.saving_style_w")->flags |= OPT_TOUCHED;
 		if (get_opt_int("config.saving_style") != 3) {
-			msg_box(term, NULL, 0,
-				N_("Warning"), ALIGN_CENTER,
-				N_("You have option config.saving_style set to "
-				"a de facto obsolete value. The configuration "
-				"saving algorithms of ELinks were changed from "
-				"the last time you upgraded ELinks. Now, only "
-				"those options which you actually changed are "
-				"saved to the configuration file, instead of "
-				"just all the options. This simplifies our "
-				"situation greatly when we see that some option "
-				"has inappropriate default value or we need to "
-				"change semantic of some option in a subtle way. "
-				"Thus, we recommend you to change the value of "
-				"config.saving_style option to 3 in order to get "
-				"the \"right\" behaviour. Apologies for any "
-				"inconvience caused."),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+			info_box(term, 0,
+				 N_("Warning"), ALIGN_CENTER,
+				 N_("You have option config.saving_style set to "
+				 "a de facto obsolete value. The configuration "
+				 "saving algorithms of ELinks were changed from "
+				 "the last time you upgraded ELinks. Now, only "
+				 "those options which you actually changed are "
+				 "saved to the configuration file, instead of "
+				 "just all the options. This simplifies our "
+				 "situation greatly when we see that some option "
+				 "has inappropriate default value or we need to "
+				 "change semantic of some option in a subtle way. "
+				 "Thus, we recommend you to change the value of "
+				 "config.saving_style option to 3 in order to get "
+				 "the \"right\" behaviour. Apologies for any "
+				 "inconvience caused."));
 		}
 	}
 

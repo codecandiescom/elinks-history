@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.21 2004/11/19 16:16:27 zas Exp $ */
+/* $Id: draw.c,v 1.22 2005/03/23 13:40:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,13 +58,11 @@ check_document_fragment(struct session *ses, struct document_view *doc_view)
 
 		fragment = memacpy(uri->fragment, uri->fragmentlen);
 
-		msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
-			N_("Missing fragment"), ALIGN_CENTER,
-			msg_text(ses->tab->term, N_("The requested fragment "
-				"\"#%s\" doesn't exist."),
-				fragment),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(ses->tab->term, MSGBOX_FREE_TEXT,
+			 N_("Missing fragment"), ALIGN_CENTER,
+			 msg_text(ses->tab->term, N_("The requested fragment "
+				  "\"#%s\" doesn't exist."),
+				  fragment));
 
 		mem_free_if(fragment);
 	} else {

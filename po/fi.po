@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 21:42+0100\n"
+"POT-Creation-Date: 2003-01-04 23:24+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Karvinen Ilkka <ik@iki.fi>\n"
 "Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
@@ -522,7 +522,7 @@ msgstr ""
 msgid "SSL options."
 msgstr "Tallenna a~setukset"
 
-#: src/config/options.c:925 src/config/options.c:930
+#: src/config/options.c:925 src/config/options.c:930 src/config/options.c:935
 msgid "Verify certificates"
 msgstr ""
 
@@ -538,12 +538,8 @@ msgid ""
 "probably doesn't work properly at all with GnuTLS."
 msgstr ""
 
-#: src/config/options.c:935
-msgid "Certificate verification"
-msgstr ""
-
-#: src/config/options.c:936
-msgid "cert_verify"
+#: src/config/options.c:937
+msgid "Verify the peer's SSL certificate."
 msgstr ""
 
 #: src/config/options.c:941
@@ -651,7 +647,7 @@ msgstr ""
 
 #: src/config/options.c:996
 #, fuzzy
-msgid "Documents"
+msgid "Document"
 msgstr "documentit"
 
 #: src/config/options.c:998
@@ -2164,8 +2160,8 @@ msgstr ""
 
 #: src/config/options.c:2269
 msgid ""
-"Language of user interface. System means that the language will be extracted "
-"from the environment dynamically."
+"Language of user interface. System means that the language will\n"
+"be extracted from the environment dynamically."
 msgstr ""
 
 #: src/config/options.c:2277

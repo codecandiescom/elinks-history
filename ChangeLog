@@ -1,3 +1,27 @@
+Mon Dec 15 20:21:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	Removed obsolete comment about bzlib weirdness.  
+
+Mon Dec 15 06:39:04 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	POST method should be handled correctly now.  
+
+Mon Dec 15 06:21:07 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Mon Dec 15 06:15:42 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Do not decompress files with suffixes 'gz' and 'bz2' sent via http.  
+
 Sun Dec 14 14:46:37 2003  Laurent Monin <zas@norz.org>:
 
 	* src/bfu/text.c:

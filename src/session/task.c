@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.44 2004/04/02 16:39:26 jonas Exp $ */
+/* $Id: task.c,v 1.45 2004/04/02 16:50:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 	    || !uri->post
 	    || !get_opt_int("document.browse.forms.confirm_submit")
 	    || (cache_mode == CACHE_MODE_ALWAYS
-		&& (e = find_in_cache(url))
+		&& (e = find_in_cache(struri(uri)))
 		&& !e->incomplete)) {
 
 		if (task) mem_free(task);
@@ -137,7 +137,6 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
 		ses->loading_uri = uri;
-		if (!ses->loading_uri) return;
 
 		ses->task.type = task_type;
 		ses->task.target_frame = target_frame;

@@ -6,8 +6,6 @@ TODO list for links (partially sorted by importance):
 
 	&#13; broken in <pre>
 
-	If host have multiple RRs, try each RR until connection is accepted.
-
 	IPv6 support
 
 	Disk cache

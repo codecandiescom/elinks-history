@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.269 2003/11/15 18:15:35 zas Exp $ */
+/* $Id: parser.c,v 1.270 2003/11/15 18:29:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2009,12 +2009,12 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	struct conv_table *ct = special_f(f, SP_TABLE, NULL);
 	struct form_control *fc;
 	struct string lbl = NULL_STRING;
-	unsigned char **val, **lbls;
+	unsigned char **val, **labels;
 	unsigned char *t_name, *t_attr, *en;
 	int t_namelen;
 	int nnmi = 0;
 	int order, preselect, group;
-	int i, mw;
+	int i, max_width;
 
 	if (has_attr(attr, "multiple")) return 1;
 	find_form_for_input(attr);
@@ -2107,13 +2107,13 @@ abort:
 	}
 
 	if (t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8)) {
-		unsigned char *la = get_attr_val(t_attr, "label");
+		unsigned char *label = get_attr_val(t_attr, "label");
 
-		if (!la) {
-			la = stracpy("");
-			if (!la) goto see;
+		if (!label) {
+			label = stracpy("");
+			if (!label) goto see;
 		}
-		new_menu_item(&lnk_menu, la, -1, 0);
+		new_menu_item(&lnk_menu, label, -1, 0);
 		group = 1;
 	}
 	goto see;
@@ -2126,8 +2126,8 @@ end_parse:
 	fc = mem_calloc(1, sizeof(struct form_control));
 	if (!fc) goto abort;
 
-	lbls = mem_calloc(order, sizeof(unsigned char *));
-	if (!lbls) {
+	labels = mem_calloc(order, sizeof(unsigned char *));
+	if (!labels) {
 		mem_free(fc);
 		goto abort;
 	}
@@ -2145,23 +2145,21 @@ end_parse:
 	fc->nvalues = order;
 	fc->values = val;
 	fc->menu = detach_menu(&lnk_menu);
-	fc->labels = lbls;
-	menu_labels(fc->menu, "", lbls);
+	fc->labels = labels;
+
+	menu_labels(fc->menu, "", labels);
 	put_chrs("[", 1, put_chars_f, f);
 	html_stack_dup(0);
 	format.form = fc;
 	format.attr |= AT_BOLD;
-	mw = 0;
 
+	max_width = 0;
 	for (i = 0; i < order; i++) {
-		if (lbls[i]) {
-			int len = strlen(lbls[i]);
-
-			if (len > mw) mw = len;
-		}
+		if (!labels[i]) continue;
+		int_lower_bound(&max_width, strlen(labels[i]));
 	}
 
-	for (i = 0; i < mw; i++)
+	for (i = 0; i < max_width; i++)
 		put_chrs("_", 1, put_chars_f, f);
 
 	kill_html_stack_item(&html_top);

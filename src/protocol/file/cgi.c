@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.5 2003/12/01 10:57:04 jonas Exp $ */
+/* $Id: cgi.c,v 1.6 2003/12/01 11:15:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ execute_cgi(struct connection *conn)
 {
 	unsigned char *last_slash;
 	unsigned char *question_mark;
-	unsigned char *post_char;
 	unsigned char *script;
 	int scriptlen = conn->uri.datalen;
 	struct stat buf;

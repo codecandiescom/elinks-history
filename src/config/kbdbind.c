@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.247 2004/07/20 00:14:41 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.248 2004/07/20 22:25:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,10 +554,10 @@ static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
 	{ "cut-clipboard", ACT_EDIT_CUT_CLIPBOARD, DACT(N_("Delete text from clipboard")) },
 	{ "delete", ACT_EDIT_DELETE, DACT(N_("Delete character under cursor")) },
 	{ "down", ACT_EDIT_DOWN, DACT(N_("Move cursor downwards")) },
-	{ "edit", ACT_EDIT_EDIT, DACT(N_("Open in external editor")) }, /* FIXME */
 	{ "end", ACT_EDIT_END, DACT(N_("Go to the end of the page/line")) },
 	{ "end-of-buffer", ACT_EDIT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer")) },
 	{ "enter", ACT_EDIT_ENTER, DACT(N_("Follow the current link")) },
+	{ "open-external", ACT_EDIT_OPEN_EXTERNAL, DACT(N_("Open in external editor")) },
 	{ "home", ACT_EDIT_HOME, DACT(N_("Go to the start of the page/line")) },
 	{ "kill-to-bol", ACT_EDIT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
 	{ "kill-to-eol", ACT_EDIT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
@@ -781,7 +781,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ 'K',		 KBD_CTRL,	ACT_EDIT_KILL_TO_EOL },
 	{ 'L',		 KBD_CTRL,	ACT_EDIT_REDRAW },
 	{ 'R',		 KBD_CTRL,	ACT_EDIT_AUTO_COMPLETE_UNAMBIGUOUS },
-	{ 'T',		 KBD_CTRL,	ACT_EDIT_EDIT },
+	{ 'T',		 KBD_CTRL,	ACT_EDIT_OPEN_EXTERNAL },
 	{ 'U',		 KBD_CTRL,	ACT_EDIT_KILL_TO_BOL },
 	{ 'V',		 KBD_CTRL,	ACT_EDIT_PASTE_CLIPBOARD },
 	{ 'W',		 KBD_CTRL,	ACT_EDIT_AUTO_COMPLETE },
@@ -792,7 +792,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ KBD_END,	 0,		ACT_EDIT_END },
 	{ KBD_ENTER,	 0,		ACT_EDIT_ENTER },
 	{ KBD_ESC,	 0,		ACT_EDIT_CANCEL },
-	{ KBD_F4,	 0,		ACT_EDIT_EDIT },
+	{ KBD_F4,	 0,		ACT_EDIT_OPEN_EXTERNAL },
 	{ KBD_HOME,	 0,		ACT_EDIT_HOME },
 	{ KBD_INS,	 KBD_CTRL,	ACT_EDIT_COPY_CLIPBOARD },
 	{ KBD_LEFT,	 0,		ACT_EDIT_LEFT },
@@ -905,9 +905,15 @@ static struct strtonum main_action_aliases[] = {
 	{ NULL, 0, NULL }
 };
 
+static struct strtonum edit_action_aliases[] = {
+	{ "edit", ACT_EDIT_OPEN_EXTERNAL, "open-external" },
+
+	{ NULL, 0, NULL }
+}
+
 static struct strtonum *action_aliases[KEYMAP_MAX] = {
 	main_action_aliases,
-	NULL,
+	edit_action_aliases,
 	NULL,
 };
 

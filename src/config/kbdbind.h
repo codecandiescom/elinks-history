@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.130 2004/07/20 00:14:41 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.131 2004/07/20 22:26:00 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -156,7 +156,7 @@ enum edit_action {
 	ACT_EDIT_CUT_CLIPBOARD,
 	ACT_EDIT_DELETE,
 	ACT_EDIT_DOWN,
-	ACT_EDIT_EDIT,
+	ACT_EDIT_OPEN_EXTERNAL,
 	ACT_EDIT_END,
 	ACT_EDIT_END_OF_BUFFER,
 	ACT_EDIT_ENTER,

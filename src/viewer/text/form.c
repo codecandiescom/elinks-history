@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.230 2004/07/18 04:38:25 jonas Exp $ */
+/* $Id: form.c,v 1.231 2004/07/20 22:25:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1200,7 +1200,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 				fs->state = strlen(fs->value);
 			}
 			break;
-		case ACT_EDIT_EDIT:
+		case ACT_EDIT_OPEN_EXTERNAL:
 			if (form_field_is_readonly(fc))
 				status = FRAME_EVENT_IGNORED;
 			else if (fc->type == FC_TEXTAREA)

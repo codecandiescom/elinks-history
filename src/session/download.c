@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: download.c,v 1.2 2003/01/06 21:14:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1050,6 +1050,8 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	if (!ct) goto end;
 
 	if (!strcasecmp(ct, "text/html")) goto free_ct;
+	/* RFC 3236 */
+	if (!strcasecmp(ct, "application/xhtml+xml")) goto free_ct;
 
 	r = 1;
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;

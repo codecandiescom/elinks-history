@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.16 2002/12/05 11:59:41 zas Exp $ */
+/* $Id: select.c,v 1.17 2002/12/05 13:16:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -147,7 +147,7 @@ rep:
 
 #define CHK_BH if (!list_empty(bottom_halves)) check_bottom_halves()
 
-ttime last_time;
+static ttime last_time;
 
 void
 check_timers()

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.25 2003/06/07 00:33:33 jonas Exp $ */
+/* $Id: msgbox.c,v 1.26 2003/06/07 00:54:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -312,7 +312,7 @@ msg_text(unsigned char *format, ...)
 		info = NULL;
 	} else {
 		/* Wear safety boots */
-		info[infolen - 1] = '\0';
+		info[infolen] = '\0';
 	}
 
 	va_end(ap);

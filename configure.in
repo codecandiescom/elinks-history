@@ -177,23 +177,20 @@ dnl ===================================================================
 dnl Check for Lua, optional even if installed.
 dnl ===================================================================
 
+dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
+dnl anything dnl other than /usr/lib, and Lua is very often in
+dnl /usr/local/lib.
+
 AC_ARG_WITH(lua, [  --without-lua           disable Lua support],
             [if test "$withval" = no;  then disable_lua=yes; fi])
+AC_MSG_CHECKING([for Lua])
 
 CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
 
 if test -z "$disable_lua"; then
-    AC_SEARCH_LIBS(lua_open, [lua lualib], [cf_result=yes], [cf_result=no], [-ldl -lm])
-    AC_MSG_CHECKING([for Lua])
-   
-    if test "$cf_result" = no; then
-	dnl Do this the long way, as FreeBSD reportedly needs -L<dir> for
-	dnl anything other than /usr/lib, and Lua is very often in /usr/local/lib.
-	LIBS=$LIBS_X
-	CFLAGS=$CFLAGS_X
-	for luadir in "" /usr /usr/local /opt; do
+	for luadir in "" /usr /usr/local; do
 		if test "$cf_result" = no; then
 			if test ! -z "$luadir"; then
 				LIBS="-L$luadir/lib -llua -llualib -lm $LIBS_X"
@@ -201,23 +198,18 @@ if test -z "$disable_lua"; then
 			else
 				LIBS="-llua -llualib -lm $LIBS_X"
 			fi
-
 			AC_TRY_LINK([#include <lua.h>],
 				    [lua_open(0)],
 				    cf_result=yes, cf_result=no)
 		fi
 	done
+fi
 
-	if test "$cf_result" != yes; then
-		if test "$withval" = yes; then
-			AC_MSG_ERROR("Lua not found")
-		fi
-		CFLAGS="$CFLAGS_X"
-		LIBS="$LIBS_X"
-	else
-		AC_DEFINE(HAVE_LUA)
-	fi
-    fi
+if test "$cf_result" != yes; then
+	CFLAGS="$CFLAGS_X"
+	LIBS="$LIBS_X"
+else
+	AC_DEFINE(HAVE_LUA)
 fi
 
 AC_MSG_RESULT($cf_result)
@@ -233,17 +225,13 @@ CFLAGS_X="$CFLAGS"
 LIBS_X="$LIBS"
 cf_result=no
 
+AC_CHECK_LIB(dl, dlopen) # OpenSSL needs it?
+
 AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support],
             [if test "$withval" = no;  then disable_ssl=yes; fi])
+AC_MSG_CHECKING([for OpenSSL])
 
 if test -z "$disable_ssl"; then
-    AC_SEARCH_LIBS(OpenSSL_add_all_algorithms, [ssl crypto], [cf_result=yes], [cf_result=no], [-ldl])
-    AC_MSG_CHECKING([for OpenSSL])
-    
-    if test "$cf_result" = no; then
-	dnl Recheck it longer way.
-	LIBS=$LIBS_X
-	CFLAGS=$CFLAGS_X
 	for ssldir in "" /usr /usr/local/openssl /usr/lib/openssl \
 			 /usr/local/ssl /usr/local/www /usr/lib/ssl \
 			 /usr/local /usr/pkg /opt /opt/openssl; do
@@ -264,7 +252,6 @@ if test -z "$disable_ssl"; then
 			fi
 		fi
 	done
-    fi	
 
 	if test "$cf_result" != yes; then
 		if test "$withval" = yes; then
@@ -275,7 +262,6 @@ if test -z "$disable_ssl"; then
 	else
 		AC_DEFINE(HAVE_SSL)
 	fi
-
 fi
 
 AC_MSG_RESULT($cf_result)

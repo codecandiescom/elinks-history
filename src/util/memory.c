@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.24 2004/10/13 15:34:47 zas Exp $ */
+/* $Id: memory.c,v 1.25 2004/10/19 14:38:00 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* MREMAP_MAYMOVE */
@@ -31,21 +31,21 @@ patience(unsigned char *of)
 {
 	++alloc_try;
 	if (alloc_try < ALLOC_MAXTRIES) {
-		ERROR("Out of memory (%s returned NULL): retry #%d,"
-			" I still exercise my patience and retry tirelessly.",
-			of, alloc_try);
+		ERROR("Out of memory (%s returned NULL): retry #%d/%d, "
+		      "I still exercise my patience and retry tirelessly.",
+		      of, alloc_try, ALLOC_MAXTRIES);
 		sleep(ALLOC_DELAY);
 		return alloc_try;
 	}
 
 #ifdef CRASH_IF_ALLOC_MAXTRIES
-	INTERNAL("Out of memory (%s returned NULL) after %d tries,"
-		" I give up. See ya on the other side.",
-		of, alloc_try);
+	INTERNAL("Out of memory (%s returned NULL) after %d tries, "
+		 "I give up. See ya on the other side.",
+		 of, alloc_try);
 #else
-	ERROR("Out of memory (%s returned NULL) after %d tries,"
-		" I give up and try to continue. Pray for me, please.",
-		of, alloc_try);
+	ERROR("Out of memory (%s returned NULL) after %d tries, "
+	      "I give up and try to continue. Pray for me, please.",
+	      of, alloc_try);
 #endif
 	alloc_try = 0;
 	return 0;

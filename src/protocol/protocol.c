@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.71 2004/09/21 19:15:53 jonas Exp $ */
+/* $Id: protocol.c,v 1.72 2004/09/22 21:57:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,14 +11,20 @@
 #include "elinks.h"
 
 #include "bfu/msgbox.h"
+#include "document/view.h"
+#ifdef CONFIG_ECMASCRIPT
+#include "ecmascript/ecmascript.h"
+#endif
 #include "intl/gettext/libintl.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
+#include "sched/task.h"
 #include "terminal/window.h"
 #include "util/memory.h"
 #include "util/string.h"
+#include "viewer/text/view.h" /* current_frame() */
 
 /* Backends dynamic area: */
 
@@ -195,7 +201,31 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 
 	switch (uri->protocol) {
 	case PROTOCOL_JAVASCRIPT:
+#ifdef CONFIG_ECMASCRIPT
+	{
+		struct document_view *doc_view = current_frame(ses);
+		struct string current_url = INIT_STRING(struri(uri), strlen(struri(uri)));
+		unsigned char *redirect_url;
+		struct uri *redirect_uri;
+
+		if (!doc_view)
+			return;
+		redirect_url = ecmascript_eval_stringback(doc_view->ecmascript,
+		                                          &current_url);
+		if (!redirect_url)
+			return;
+		redirect_uri = get_uri(redirect_url, URI_ORIGINAL);
+		mem_free(redirect_url);
+		if (!redirect_uri)
+			return;
+		/* XXX: Is that safe to do at this point? --pasky */
+		goto_uri_frame(ses, uri, doc_view->name, CACHE_MODE_NORMAL);
+		done_uri(uri);
+		return;
+	}
+#else
 		state = S_NO_JAVASCRIPT;
+#endif
 		break;
 
 	case PROTOCOL_UNKNOWN:

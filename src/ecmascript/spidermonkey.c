@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.2 2004/09/22 21:21:42 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.3 2004/09/22 21:57:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,7 @@
 #include "ecmascript/ecmascript.h"
 #include "ecmascript/spidermonkey.h"
 #include "protocol/uri.h"
+#include "util/string.h"
 
 
 /*** Global methods */
@@ -257,4 +258,29 @@ spidermonkey_put_interpreter(struct ecmascript_interpreter *interpreter)
 	assert(interpreter);
 	ctx = interpreter->backend_data;
 	JS_DestroyContext(ctx);
+}
+
+
+unsigned char *
+spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
+                             struct string *code)
+{
+	JSContext *ctx;
+	jsval rval;
+	unsigned char *string = NULL;
+	unsigned char *ret = NULL;
+
+	assert(interpreter);
+	ctx = interpreter->backend_data;
+	if (JS_EvaluateScript(ctx, JS_GetGlobalObject(ctx),
+	                      code->source, code->length, NULL, 0, &rval)
+	    == JS_FALSE)
+		return NULL;
+
+	JSVAL_REQUIRE(&rval, STRING, string);
+	if (string) {
+		ret = stracpy(string);
+		free(string);
+	}
+	return ret;
 }

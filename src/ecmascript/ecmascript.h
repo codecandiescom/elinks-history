@@ -1,4 +1,4 @@
-/* $Id: ecmascript.h,v 1.1 2004/09/21 22:11:43 pasky Exp $ */
+/* $Id: ecmascript.h,v 1.2 2004/09/22 21:57:55 pasky Exp $ */
 
 #ifndef EL__ECMASCRIPT_ECMASCRIPT_H
 #define EL__ECMASCRIPT_ECMASCRIPT_H
@@ -10,6 +10,7 @@
 #include "modules/module.h"
 
 struct document_view;
+struct string;
 
 struct ecmascript_interpreter {
 	struct document_view *doc_view;
@@ -25,6 +26,8 @@ struct ecmascript_interpreter {
  * contains a <script> area full of document.write()s. */
 struct ecmascript_interpreter *ecmascript_get_interpreter(struct document_view *doc_view);
 void ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter);
+
+unsigned char *ecmascript_eval_stringback(struct ecmascript_interpreter *interpreter, struct string *code);
 
 extern struct module ecmascript_module;
 

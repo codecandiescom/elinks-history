@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.3 2004/09/22 15:22:34 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.4 2004/09/22 21:57:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,6 +77,15 @@ ecmascript_put_interpreter(struct ecmascript_interpreter *interpreter)
 	assert(interpreter);
 	spidermonkey_put_interpreter(interpreter);
 	mem_free(interpreter);
+}
+
+
+unsigned char *
+ecmascript_eval_stringback(struct ecmascript_interpreter *interpreter,
+                           struct string *code)
+{
+	assert(interpreter);
+	return spidermonkey_eval_stringback(interpreter, code);
 }
 
 

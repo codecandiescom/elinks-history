@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.92 2003/10/27 00:37:45 pasky Exp $ */
+/* $Id: os_dep.c,v 1.93 2003/10/27 00:55:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,8 +319,6 @@ get_terminal_size(int fd, int *x, int *y)
 
 	return 0;
 }
-
-#elif defined(WIN32)
 
 #endif
 

@@ -1,5 +1,5 @@
 /* Option system based mime backend */
-/* $Id: default.c,v 1.18 2003/07/21 05:12:41 jonas Exp $ */
+/* $Id: default.c,v 1.19 2003/09/21 00:12:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,8 +28,7 @@ get_content_type_default(unsigned char *extension)
 	struct option *opt;
 	unsigned char *extend = extension + strlen(extension) - 1;
 
-	if (extend < extension)
-		return NULL;
+	if (extend < extension)	return NULL;
 
 	opt_tree = get_opt_rec_real(config_options, "mime.extension");
 
@@ -51,9 +50,8 @@ get_content_type_default(unsigned char *extension)
 
 		/* If we matched whole extension and it is really an
 		 * extension.. */
-		if (namepos < opt->name) {
+		if ((namepos < opt->name))
 			return stracpy(opt->ptr);
-		}
 	}
 
 	return NULL;
@@ -130,8 +128,7 @@ get_mime_handler_default(unsigned char *type, int have_x)
 			opt = get_opt_rec_real(config_options, mt);
 			mem_free(mt);
 
-			if (opt)
-				desc = opt->ptr;
+			if (opt) desc = opt->ptr;
 		}
 
 		handler = mem_alloc(sizeof(struct mime_handler));

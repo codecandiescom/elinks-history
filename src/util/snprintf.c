@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.11 2003/06/07 10:16:51 pasky Exp $ */
+/* $Id: snprintf.c,v 1.12 2003/06/07 10:20:36 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -104,12 +104,6 @@ void dummy_snprintf(void) {}
 #define LLONG long long
 #else
 #define LLONG long
-#endif
-
-/* XXX: Where is this used ?? --Zas */
-/* free memory if the pointer is valid and zero the pointer */
-#ifndef SAFE_FREE
-#define SAFE_FREE(x) do { if ((x)) { free((x)); (x) = NULL; } } while(0)
 #endif
 
 static size_t dopr(char *buffer, size_t maxlen, const char *format,

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.90 2004/03/22 03:58:20 jonas Exp $ */
+/* $Id: dump.c,v 1.91 2004/03/22 04:00:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,11 +104,12 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	struct view_state vs;
 
 	if (!ce) return 0;
-	if (!init_vs(&vs, get_cache_uri(ce), -1))
-		return 1;
 
 	memset(&vs, 0, sizeof(struct view_state));
 	memset(&formatted, 0, sizeof(struct document_view));
+
+	if (!init_vs(&vs, get_cache_uri(ce), -1))
+		return 1;
 
 	get_opt_bool("document.browse.links.numbering") =
 		!get_opt_bool_tree(cmdline_options, "no-numbering");

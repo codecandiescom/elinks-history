@@ -1,3 +1,10 @@
+Tue Mar 12 22:33:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	be more smart; if more accesskey links, rotate between them; if x
+	is letter and alt is not pressed, refuse it directly
+
 Tue Mar 12 20:09:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* kbd.c:

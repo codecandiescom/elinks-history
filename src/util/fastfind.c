@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.49 2004/02/13 20:33:31 zas Exp $ */
+/* $Id: fastfind.c,v 1.50 2004/04/15 14:31:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,10 +188,10 @@ struct fastfind_info {
 
 #ifdef FASTFIND_DEBUG
 /* These are for performance testing. */
-#define meminc(x, size) (x)->debug.memory_usage += (size)
-#define testinc(x) (x)->debug.tests++
-#define iterinc(x) (x)->debug.iterations++
-#define foundinc(x) \
+#define FF_DBG_mem(x, size) (x)->debug.memory_usage += (size)
+#define FF_DBG_test(x) (x)->debug.tests++
+#define FF_DBG_iter(x) (x)->debug.iterations++
+#define FF_DBG_found(x) \
 	do { \
 		unsigned long iter = (x)->debug.iterations - (x)->debug.itertmp;	\
 		unsigned long tests = (x)->debug.tests - (x)->debug.teststmp;		\
@@ -204,20 +204,17 @@ struct fastfind_info {
 			(x)->debug.testsmax = tests;					\
 		(x)->debug.found++;							\
 	} while (0)
-/* ACCounted IF ;-) */
-#define accif(x) testinc(x); if
-#define setcomment(x, comment) do { (x)->debug.comment = empty_string_or_(comment); } while (0)
+#define FF_DBG_comment(x, comment) do { (x)->debug.comment = empty_string_or_(comment); } while (0)
 
 #else /* !FASTFIND_DEBUG */
 
-#define meminc(x, size)
-#define testinc(x)
-#define iterinc(x)
-#define foundinc(x)
-#define accif(x) if
-#define setcomment(x, comment)
+#define FF_DBG_mem(x, size)
+#define FF_DBG_test(x)
+#define FF_DBG_iter(x)
+#define FF_DBG_found(x)
+#define FF_DBG_comment(x, comment)
 
-#endif
+#endif /* FASTFIND_DEBUG */
 
 
 static struct fastfind_info *
@@ -227,8 +224,8 @@ init_fastfind(int case_sensitive, unsigned char *comment)
 
 	if (!info) return NULL;
 
-	meminc(info, sizeof(struct fastfind_info) - sizeof(info->debug));
-	setcomment(info, comment);
+	FF_DBG_mem(info, sizeof(struct fastfind_info) - sizeof(info->debug));
+	FF_DBG_comment(info, comment);
 
 	/* Non sense to use that code if key length > 255 so... */
 	info->min_key_len = 255;
@@ -258,7 +255,7 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 	if (!keylen_list) return 0;
 	info->keylen_list = keylen_list;
 
-	meminc(info, sizeof(int) + sizeof(void *));
+	FF_DBG_mem(info, sizeof(int) + sizeof(void *));
 
 	/* Record new pointer and key len, used in search */
 	info->pointers[info->pointers_count] = p;
@@ -291,8 +288,8 @@ alloc_leafset(struct fastfind_info *info)
 			     sizeof(struct ff_node));
 	if (!leafset) return 0;
 
-	meminc(info, sizeof(struct ff_node *));
-	meminc(info, sizeof(struct ff_node) * info->uniq_chars_count);
+	FF_DBG_mem(info, sizeof(struct ff_node *));
+	FF_DBG_mem(info, sizeof(struct ff_node) * info->uniq_chars_count);
 
 	info->leafsets_count++;
 	info->leafsets[info->leafsets_count] = leafset;
@@ -475,8 +472,8 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 
 		mem_free(info->leafsets[i]);
 		info->leafsets[i] = (struct ff_node *) new;
-		meminc(info, sizeof(struct ff_node_c));
-		meminc(info, sizeof(struct ff_node) * -info->uniq_chars_count);
+		FF_DBG_mem(info, sizeof(struct ff_node_c));
+		FF_DBG_mem(info, sizeof(struct ff_node) * -info->uniq_chars_count);
 	}
 }
 
@@ -495,30 +492,34 @@ fastfind_index_compress(struct fastfind_info *info)
 	for (; i < key_len; i++) {						\
 		int lidx, k = what;						\
 										\
-		iterinc(info);							\
+		FF_DBG_iter(info);						\
 										\
-		accif(info) (k >= FF_MAX_CHARS) return NULL;			\
+		FF_DBG_test(info);						\
+		if (k >= FF_MAX_CHARS) return NULL;				\
 		lidx = info->idxtab[k];						\
 										\
-		accif(info) (lidx < 0) return NULL;				\
+		FF_DBG_test(info);						\
+		if (lidx < 0) return NULL;					\
 										\
-		accif(info) (current->c) {					\
+		FF_DBG_test(info);						\
+		if (current->c) {						\
 			/* It is a compressed leaf. */				\
-			accif(info) (((struct ff_node_c *) current)->ch != lidx)\
+			FF_DBG_test(info);					\
+			if (((struct ff_node_c *) current)->ch != lidx)		\
 				return NULL;					\
 		} else {							\
 			current = &current[lidx];				\
 		}								\
 										\
-		accif(info) (current->e						\
-			     && key_len == info->keylen_list[current->p]) {	\
-			testinc(info);						\
-			foundinc(info);						\
+		FF_DBG_test(info);						\
+		if (current->e && key_len == info->keylen_list[current->p]) {	\
+			FF_DBG_test(info);					\
+			FF_DBG_found(info);					\
 			return info->pointers[current->p];			\
 		}								\
 										\
-		accif(info) (!current->l)					\
-			return NULL;						\
+		FF_DBG_test(info);						\
+		if (!current->l) return NULL;					\
 		current = (struct ff_node *) info->leafsets[current->l];	\
 	}									\
 } while (0)
@@ -538,9 +539,9 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	info->debug.itertmp = info->debug.iterations;
 #endif
 
-   	accif(info) (!key) return NULL;
-	accif(info) (key_len > info->max_key_len) return NULL;
-	accif(info) (key_len < info->min_key_len) return NULL;
+   	FF_DBG_test(info); if (!key) return NULL;
+	FF_DBG_test(info); if (key_len > info->max_key_len) return NULL;
+	FF_DBG_test(info); if (key_len < info->min_key_len) return NULL;
 
 	current = info->root_leafset;
 
@@ -550,7 +551,8 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	 * If you find a better way (same or better performance) then
 	 * propose it and be prepared to defend it. --Zas */
 
-	accif(info) (info->case_sensitive)
+	FF_DBG_test(info);
+	if (info->case_sensitive)
 		FF_SEARCH(key[i]);
 	else
 		FF_SEARCH(upcase(key[i]));

@@ -1,5 +1,5 @@
 ## Base file for Makefile.am files in the tree, contains common stuff.
-## $Id: Makefile.base,v 1.4 2004/03/19 16:10:20 pasky Exp $
+## $Id: Makefile.base,v 1.5 2004/04/24 00:25:24 pasky Exp $
 
 INCLUDES = -I$(top_srcdir)/src
 
@@ -9,7 +9,7 @@ INCLUDES = -I$(top_srcdir)/src
 # dumb thing is that you can't just use @CONFIG_INCLUDE_SPEC@ in your own .am.
 
 COMPILE = $(CC) @DEFS@ -I`dirname $(CONFIG_HEADER)` $(INCLUDES) \
-$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+$(AM_CFLAGS) $(CFLAGS)
 
 # Rule for getting test dependencies right. This is a workaround since
 # automake doesn't support defining subdirs sources.

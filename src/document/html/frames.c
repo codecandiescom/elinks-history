@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.75 2004/06/25 10:52:29 zas Exp $ */
+/* $Id: frames.c,v 1.76 2004/06/27 18:36:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ add_frameset_entry(struct frameset_desc *frameset_desc,
 	frame_desc = &frameset_desc->frame_desc[offset];
 	frame_desc->subframe = subframe;
 	frame_desc->name = null_or_stracpy(name);
-	frame_desc->uri = url ? get_uri(url, 0) : NULL;
+	frame_desc->uri = url && *url ? get_uri(url, 0) : NULL;
 
 	frameset_desc->box.x++;
 	if (frameset_desc->box.x >= frameset_desc->box.width) {

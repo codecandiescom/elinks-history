@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.12 2002/11/29 16:26:12 zas Exp $ */
+/* $Id: msgbox.c,v 1.13 2002/11/29 18:28:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,6 +33,8 @@ msg_box_fn(struct dialog_data *dlg)
 	int textl = 0;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
+	if (!text) return;
+	
 	for (ptr = dlg->dlg->udata; *ptr; ptr++)
 		add_to_str(&text, &textl, _(*ptr, term));
 
@@ -107,7 +109,6 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	...)
 {
 	unsigned char **info = NULL;
-	int info_n = 0;
 	int button;
 	int buttons;
 	struct dialog *dlg;
@@ -118,19 +119,20 @@ msg_box(struct terminal *term, struct memory_list *ml,
 
 	if (align & AL_EXTD_TEXT) {
 		unsigned char *text = "";
+		int info_n = 0;
 
 		while (text) {
 			text = va_arg(ap, unsigned char *);
 
-			info_n++;
-			info = mem_realloc(info, info_n
+			info = mem_realloc(info, (info_n + 1)
 						 * sizeof(unsigned char *));
 			if (!info) {
 				va_end(ap);
 				return;
 			}
 
-			info[info_n - 1] = text;
+			info[info_n] = text;
+			info_n++;
 		}
 
 	} else {
@@ -138,11 +140,9 @@ msg_box(struct terminal *term, struct memory_list *ml,
 		unsigned char *text = va_arg(ap, unsigned char *);
 		unsigned char **info_;
 
-		info_n = 2;
-		info_ = mem_realloc(info, info_n
-					  * sizeof(unsigned char *));
+		info_ = mem_realloc(info, 2 * sizeof(unsigned char *));
 		if (!info_) {
-			mem_free(info);
+			if (info) mem_free(info);
 			va_end(ap);
 			return;
 	   	}
@@ -158,7 +158,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 	dlg = mem_calloc(1, sizeof(struct dialog) +
 			    (buttons + 1) * sizeof(struct widget));
 	if (!dlg) {
-		mem_free(info);
+		if (info) mem_free(info);
 		va_end(ap);
 		return;
 	}

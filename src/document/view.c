@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.99 2002/11/30 18:10:30 pasky Exp $ */
+/* $Id: view.c,v 1.100 2002/11/30 22:42:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2660,9 +2660,10 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 	} else if (ev->ev == EV_MOUSE) {
 		struct link *link = choose_mouse_link(fd, ev);
 
-		if ((ev->b & BM_BUTT) >= B_WHEEL_UP
-		    && (ev->b & BM_ACT) == B_DOWN) {
-			if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+		if ((ev->b & BM_BUTT) >= B_WHEEL_UP) {
+			if ((ev->b & BM_ACT) != B_DOWN) {
+				/* We handle only B_DOWN case... */
+			} else if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
 				rep_ev(ses, fd, scroll, -2);
 			} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
 				rep_ev(ses, fd, scroll, 2);
@@ -2978,7 +2979,8 @@ quit:
 	}
 
 	if (ev->ev == EV_MOUSE) {
-		if (ev->y == 0 && (ev->b & BM_ACT) == B_DOWN) {
+		if (ev->y == 0 && (ev->b & BM_ACT) == B_DOWN
+		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
 			struct window *m;
 
 			activate_bfu_technology(ses, -1);

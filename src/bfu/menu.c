@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.21 2002/11/30 01:20:18 pasky Exp $ */
+/* $Id: menu.c,v 1.22 2002/11/30 22:42:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -309,6 +309,26 @@ menu_func(struct window *win, struct event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
+			switch (ev->b & BM_BUTT) {
+				/* XXX: We return here directly because we
+				 * would just break this switch instead of the
+				 * large one. If you will add some generic
+				 * action after the former switch, replace the
+				 * return with goto here. --pasky */
+				case B_WHEEL_UP:
+					if ((ev->b & BM_ACT) == B_DOWN) {
+						scroll_menu(menu, -1);
+						display_menu(win->term, menu);
+					}
+					return;
+				case B_WHEEL_DOWN:
+					if ((ev->b & BM_ACT) == B_DOWN) {
+						scroll_menu(menu, 1);
+						display_menu(win->term, menu);
+					}
+					return;
+			}
+
 			if ((ev->x < menu->x) || (ev->x >= menu->x + menu->xw) ||
 			    (ev->y < menu->y) || (ev->y >= menu->y + menu->yw)) {
 				if ((ev->b & BM_ACT) == B_DOWN)
@@ -630,6 +650,9 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 			break;
 
 		case EV_MOUSE:
+			if ((ev->b & BM_BUTT) >= B_WHEEL_UP)
+				break;
+
 			if ((ev->b & BM_ACT) == B_DOWN && ev->y) {
 				delete_window_ev(win, ev);
 

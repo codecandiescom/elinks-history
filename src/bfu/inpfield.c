@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.15 2002/11/25 14:24:49 zas Exp $ */
+/* $Id: inpfield.c,v 1.16 2002/11/30 22:42:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "intl/language.h"
+#include "lowlevel/kbd.h"
 #include "lowlevel/terminal.h"
 #include "util/memlist.h"
 #include "util/memory.h"
@@ -308,6 +309,27 @@ mouse_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 	if (ev->y != di->y || ev->x < di->x
 	    || ev->x >= di->x + di->l)
 		return EVENT_NOT_PROCESSED;
+
+	switch (ev->b & BM_BUTT) {
+		case B_WHEEL_UP:
+			if ((ev->b & BM_ACT) == B_DOWN &&
+			    (void *) di->cur_hist->prev != &di->history) {
+				di->cur_hist = di->cur_hist->prev;
+				dlg_set_history(di);
+				goto dsp_f;
+			}
+			return EVENT_PROCESSED;
+
+		case B_WHEEL_DOWN:
+			if ((ev->b & BM_ACT) == B_DOWN &&
+			    (void *) di->cur_hist != &di->history) {
+				di->cur_hist = di->cur_hist->next;
+				dlg_set_history(di);
+				goto dsp_f;
+			}
+			return EVENT_PROCESSED;
+	}
+
 	di->cpos = di->vpos + ev->x - di->x;
 	{
 		int len = strlen(di->cdata);
@@ -317,6 +339,8 @@ mouse_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 	}
 	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 	dlg->selected = di - dlg->items;
+
+dsp_f:
 	display_dlg_item(dlg, di, 1);
 	return EVENT_PROCESSED;
 }

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.127 2004/04/16 16:36:59 zas Exp $ */
+/* $Id: screen.c,v 1.128 2004/04/27 16:28:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,6 +559,7 @@ add_char256(struct string *screen, struct screen_driver *driver,
 }
 #endif
 
+/* FIXME: static inline this. Long macros are a pain to edit. --Zas */
 #define add_chars(image_, term_, driver_, state_, ADD_CHAR)			\
 {										\
 	register int y = (term_)->screen->dirty_from;				\
@@ -573,8 +574,21 @@ add_char256(struct string *screen, struct screen_driver *driver,
 										\
 	for (; y <= (term_)->screen->dirty_to; y++) {				\
 		register int x = 0;						\
+		int is_last_line = (y == (term_)->height - 1);			\
 										\
 		for (; x < (term_)->width; x++, current++, pos++) {		\
+			/*  Workaround for terminals without
+			 *  "eat_newline_glitch (xn)", e.g., the cons25 family
+			 *  of terminals and cygwin terminal.
+			 *  It prevents display distortion, but char at bottom
+			 *  right of terminal will not be drawn.
+			 *  A better fix would be to correctly detects
+			 *  terminal type, and/or add a terminal option for
+			 *  this purpose. */					\
+										\
+			if (is_last_line && x == (term_)->width - 1)		\
+				break;						\
+										\
 			if (compare_bg_color(pos->color, current->color)) {	\
 				/* No update for exact match. */		\
 				if (compare_fg_color(pos->color, current->color)\

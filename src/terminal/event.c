@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.17 2003/11/21 22:23:05 zas Exp $ */
+/* $Id: event.c,v 1.18 2003/11/27 14:05:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 
 
@@ -150,6 +151,8 @@ test_queue:
 			}
 
 			term->spec = get_opt_rec(config_options, name);
+			/* Lock the term specs so it can not be deleted */
+			object_lock(term->spec);
 		}
 
 		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);

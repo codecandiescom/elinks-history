@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.10 2002/11/29 11:13:21 pasky Exp $ */
+/* $Id: memdebug.c,v 1.11 2002/11/29 11:15:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -374,7 +374,7 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 void *
 debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 {
-	struct alloc_header *ah;
+	struct alloc_header *ah, *ah2;
 
 #ifdef CHECK_REALLOC_NULL
 	if (!ptr) {
@@ -407,10 +407,13 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	if (ah->size == size) return (void *) ptr;
 
 	do {
-		ah = realloc(ah, SIZE_BASE2AH(size));
-		if (ah) break;
+		ah2 = realloc(ah, SIZE_BASE2AH(size));
+		if (ah2) {
+			ah = ah2;
+			break;
+		}
 	} while (patience(file, line, "realloc"));
-	if (!ah) return NULL;
+	if (!ah2) return NULL;
 
 	mem_amount += size - ah->size;
 

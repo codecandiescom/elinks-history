@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.6 2002/11/29 11:13:21 pasky Exp $ */
+/* $Id: memory.c,v 1.7 2002/11/29 11:15:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,6 +88,8 @@ mem_free(void *p)
 void *
 mem_realloc(void *p, size_t size)
 {
+	void *p2;
+
 	if (!p || p == DUMMY) return mem_alloc(size);
 
 	if (!size) {
@@ -96,9 +98,13 @@ mem_realloc(void *p, size_t size)
 	}
 
 	do {
-		p = realloc(p, size);
-		if (p) break;
+		p2 = realloc(p, size);
+		if (p2) {
+			p = p2;
+			break;
+		}
 	} while (patience("realloc"));
+	if (!p2) return NULL;
 
 	return p;
 }

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.55 2003/11/11 14:45:29 zas Exp $ */
+/* $Id: form.c,v 1.56 2003/11/11 15:29:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -394,6 +394,7 @@ fi_rep:
 				case FC_RADIO:
 				case FC_SUBMIT:
 				case FC_HIDDEN:
+				case FC_RESET:
 					sub->value = stracpy(frm->default_value);
 					break;
 				case FC_SELECT:
@@ -404,10 +405,6 @@ fi_rep:
 					add_to_strn(&sub->name, fi ? ".x" : ".y");
 					sub->value = stracpy("0");
 					break;
-				default:
-					internal("bad form control type");
-					mem_free(sub);
-					continue;
 			}
 
 			sub->frm = frm;

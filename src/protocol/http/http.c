@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.328 2004/08/23 17:15:05 jonas Exp $ */
+/* $Id: http.c,v 1.329 2004/09/07 10:47:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -315,7 +315,11 @@ http_send_header(struct connection *conn)
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	conn->info = info;
+
+	/* If called from HTTPS proxy connection the connection info might have
+	 * already been allocated. */
+	mem_free_set(&conn->info, info);
+
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
 	info->bl_flags = get_blacklist_flags(uri);
@@ -1168,6 +1172,7 @@ again:
 	}
 	if (h == 200 && connection_is_https_proxy(conn) && !conn->socket.ssl) {
 #ifdef CONFIG_SSL
+		mem_free(head);
 		conn->conn_info = init_connection_info(uri, &conn->socket,
 						       http_send_header);
 		if (!conn->conn_info) {

@@ -1,3 +1,397 @@
+Sun Oct 26 22:22:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Pass document color flags when coloring link lines. Spotted by
+	pasky.  
+
+Sun Oct 26 19:49:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/widget.h, config/conf.c, dialogs/menu.c,
+	dialogs/options.c, lowlevel/dns.c, mime/backend/mimetypes.c,
+	osdep/os_depx.h, terminal/event.c, terminal/hardio.c,
+	terminal/kbd.c:
+
+	Trailing spaces were trimmed.  
+
+Sun Oct 26 19:37:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/modules/module.c:
+
+	Use sizeof() to calculate number of builtin modules.  
+
+Sun Oct 26 19:18:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.h, cookies/cookies.h:
+
+	Move enum cookies_accept to cookie header.  
+
+Sun Oct 26 19:11:02 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation fixes suggested by beatricet@libero.it.  Thank
+	you Beatrice.  
+
+Sun Oct 26 19:10:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/lowlevel/sysname.c:
+
+	Fix buggy #ifdef.  
+
+Sun Oct 26 18:41:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/options.inc, formhist/formhist.c,
+	formhist/formhist.h, modules/module.c:
+
+	Modularize forms history and move options to the new module.  
+
+Sun Oct 26 18:25:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Access cookies options directly.  
+
+Sun Oct 26 18:13:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, cookies/cookies.c:
+
+	Move cookies options to module.  
+
+Sun Oct 26 18:09:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Access global history options directly.  
+
+Sun Oct 26 18:00:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, globhist/globhist.c:
+
+	Move global history options to the module.  
+
+Sun Oct 26 17:53:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Whoops .. module name should be "global history" 
+
+Sun Oct 26 17:22:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/mime/backend/default.c:
+
+	Added association for image/png.  
+
+Sun Oct 26 16:56:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: setup.h, mime/mime.c:
+
+	Move #define of default mime type to setup.  
+
+Sun Oct 26 16:53:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Access mime options directly.  
+
+Sun Oct 26 16:47:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.inc, mime/mime.c,
+	mime/backend/default.c:
+
+	Move remaining mime options to mime/. Initialize default mime
+	template options like ``ordinary'' options.  
+
+Sun Oct 26 16:29:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/: .cvsignore, .vimrc:
+
+	Added fairies. What a poor soul am I, having to do everything myself
+	;-).  
+
+Sun Oct 26 16:28:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Clean up whitespaces after zas.  
+
+Sun Oct 26 16:23:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Initialize and free widget history only if needed.  
+
+Sun Oct 26 16:23:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/screen.c:
+
+	Make it possible to turn UTF8 I/O off when some poor soul turned it
+	on once ;-).  
+
+Sun Oct 26 16:11:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/dialog.c, bfu/inpfield.c, bfu/inpfield.h, bfu/widget.c,
+	bfu/widget.h, viewer/text/search.c:
+
+	History only concerns text fields, so move history-related fields to
+	union.  
+
+Sun Oct 26 16:02:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/options.c:
+
+	Call change hook after the last change, not after the first change
+	to the terminal options.  
+
+Sun Oct 26 15:59:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, group.c, inpfield.c, listbox.c, widget.c,
+	widget.h:
+
+	Use w (for width) instead of l in struct widget_data. So now we have
+	x,y,w,h ;).  
+
+Sun Oct 26 15:47:24 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.h, bfu/dialog.c, bfu/group.c, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/inphist.c, bfu/msgbox.c, bfu/widget.c,
+	bfu/widget.h, scripting/lua/core.c, viewer/text/search.c:
+
+	Use datalen instead of dlen in struct widget.  
+
+Sun Oct 26 15:37:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: checkbox.c, dialog.c, inpfield.c, inphist.c, widget.c,
+	widget.h:
+
+	Use unnamed struct in unions. Use union in struct widget_data for
+	per-widget infos.  
+
+Sun Oct 26 15:24:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Compile fix by #including modules/module.h 
+
+Sun Oct 26 15:20:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: modules/module.c, main.c:
+
+	Moved triggering of the quit event back to
+	terminate_all_subsystems() - it just doesn't sound right
+	architecturally to have it in done_modules(). It prevents using
+	done_modules() in different contexts than quitting, for example.  
+
+Sun Oct 26 15:19:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.h, checkbox.c, checkbox.h, dialog.c, inpfield.c,
+	inpfield.h, listbox.h, msgbox.c, widget.h:
+
+	Use an union to handle struct widget per widget type infos.  
+
+Sun Oct 26 15:12:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, modules/module.c:
+
+	Move triggering of the quit event to done_modules().  
+
+Sun Oct 26 15:10:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, globhist/globhist.c, globhist/globhist.h,
+	modules/module.c:
+
+	Modularize global history.  
+
+Sun Oct 26 15:00:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Remove #include for things that has been modularized.  
+
+Sun Oct 26 14:58:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, main.c, cookies/cookies.c, cookies/cookies.h,
+	modules/module.c:
+
+	Modularize (yes money of Danish taxpayers have been wasted on me)
+	cookies.  
+
+Sun Oct 26 14:30:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, bfu/leds.c, bfu/leds.h, modules/module.c:
+
+	Modulize leds.  
+
+Sun Oct 26 14:20:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: mime/backend/mailcap.c, viewer/dump/dump.c:
+
+	Remove ending spaces.  
+
+Sun Oct 26 14:14:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/module.h:
+
+	Fix typo.  
+
+Sun Oct 26 14:04:09 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/button.h, bfu/checkbox.c, bfu/dialog.c,
+	bfu/group.c, bfu/group.h, bfu/inpfield.c, bfu/inphist.c,
+	bfu/listbox.c, bfu/msgbox.c, bfu/widget.c, bookmarks/dialogs.c,
+	config/dialogs.c, dialogs/auth.c, dialogs/edit.c,
+	globhist/dialogs.c, sched/download.c, viewer/text/search.c:
+
+	Always use widget_data for struct widget_data*.  
+
+Sun Oct 26 14:02:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, mime/mime.c, mime/backend/default.c,
+	mime/backend/mailcap.c, mime/backend/mimetypes.c, modules/module.c,
+	modules/module.h, scripting/scripting.c, scripting/guile/core.c,
+	scripting/guile/core.h, scripting/lua/core.c, scripting/lua/core.h:
+
+	Rename module.events to module.hooks and module_struct to
+	struct_module.  
+
+Sun Oct 26 13:47:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/modules/module.c:
+
+	Actually use the scripting modules. ;) 
+
+Sun Oct 26 13:46:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/guile/core.c:
+
+	Modulize guile scripting backend.  
+
+Sun Oct 26 13:46:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/: core.c, core.h:
+
+	Modulize lua scripting backend.  
+
+Sun Oct 26 13:46:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, scripting/scripting.c, scripting/scripting.h:
+
+	Modulize scripting core.  
+
+Sun Oct 26 13:26:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, mime/mime.c, mime/backend/default.c,
+	mime/backend/mailcap.c, mime/backend/mimetypes.c, modules/module.c,
+	modules/module.h:
+
+	Add an event_hook_info table to struct module. Rename INIT_MODULE to
+	module_struct.  
+
+Sun Oct 26 13:25:39 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h,
+	bfu/group.c, bfu/inpfield.c, bfu/listbox.c, bfu/msgbox.c,
+	bfu/widget.h, bookmarks/dialogs.c, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/hierbox.c, dialogs/mime.c,
+	dialogs/options.c, globhist/dialogs.c, sched/download.c,
+	scripting/lua/core.c, viewer/text/search.c:
+
+	Use widgets_data instead of items in struct dialog_data.  
+
+Sun Oct 26 13:13:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/event.c, sched/event.h, scripting/scripting.c,
+	scripting/scripting.h, scripting/guile/hooks.c,
+	scripting/guile/hooks.h, scripting/lua/hooks.c,
+	scripting/lua/hooks.h:
+
+	Rename struct scripting_hook to event_hook_info and make it part of
+	the event system.  
+
+Sun Oct 26 13:12:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.h, bfu/checkbox.h, bfu/dialog.c, bfu/dialog.h,
+	bfu/inpfield.c, bfu/inpfield.h, bfu/listbox.h, bfu/msgbox.c,
+	bfu/widget.h, bookmarks/dialogs.c, config/dialogs.c,
+	dialogs/edit.c, dialogs/mime.c, globhist/dialogs.c,
+	scripting/lua/core.c, viewer/text/search.c:
+
+	Use widgets instead of items in struct dialog.  
+
+Sun Oct 26 12:52:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/group.c,
+	bfu/inpfield.c, bfu/inphist.c, bfu/listbox.c, bfu/msgbox.c,
+	bfu/widget.c, bfu/widget.h, bookmarks/dialogs.c, dialogs/hierbox.c,
+	globhist/dialogs.c, scripting/lua/core.c, viewer/text/search.c:
+
+	Use widget variable name for struct widget *.  
+
+Sun Oct 26 12:26:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, checkbox.c, dialog.c, inpfield.c, inphist.c,
+	listbox.c, widget.h:
+
+	selected_widget() macro and init_widget() function were introduced.
+	Tidyup.  
+
+Sun Oct 26 07:35:15 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* contrib/elinks.spec.in:
+
+	Revert to version from 5 October.  
+
+Sun Oct 26 03:00:19 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/lists.h:
+
+	Explicit 0x25254545 as LISTMAGIC3 
+
+Sun Oct 26 02:46:26 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/history.h:
+
+	Workaround for the 0x25254545 segfault.  
+
+Sat Oct 25 22:34:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mailcap.c:
+
+	Make DEFAULT_MAILCAP_PATH available through option WITHOUT screwing
+	up compatibility. :) 
+
+Sat Oct 25 22:30:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bookmarks/bookmarks.c, mime/mime.c, mime/backend/default.c,
+	mime/backend/mailcap.c, modules/module.h:
+
+	Add @data to INIT_MODULE() args.  
+
+Sat Oct 25 22:26:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Revert the bad part like the last mailcap path.  
+
+Sat Oct 25 22:23:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/mime/backend/mailcap.c:
+
+	Reverted patch breaking mailcap functionality for users with default
+	value of mime.mailcap.path in their configuration file [rev 1.62].  
+
+Sat Oct 25 22:21:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Make DEFAULT_MIMETYPES_PATH available through option.  
+
+Sat Oct 25 22:11:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/mimetypes.c:
+
+	Access mimetypes options directly.  
+
 Sat Oct 25 22:09:05 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/mime/backend/mailcap.c:

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.86 2003/07/06 23:17:35 pasky Exp $ */
+/* $Id: connection.c,v 1.87 2003/07/07 19:14:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -204,41 +204,22 @@ check_queue_bugs(void)
 {
 	struct connection *d;
 	enum connection_priority prev_priority = 0;
-	int cc, ps = 0;
+	int cc = 0;
 
-again:
-	cc = 0;
 	foreach (d, queue) {
 		enum connection_priority priority = get_priority(d);
 
 		cc += d->running;
 
-		if (!ps) {
-			assertm(priority >= prev_priority, "queue is not sorted");
-			if_assert_failed {
-				sort_queue();
-				ps = 1;
-				goto again;
-			}
-		} else {
-			assertm(priority >= prev_priority, "queue is not sorted even after sort_queue!");
-			if_assert_failed break;
-		}
-
+		assertm(priority >= prev_priority, "queue is not sorted");
 		assertm(d->state >= 0, "interrupted connection on queue "
 			"(conn %s, state %d)", d->uri.protocol, d->state);
-		if_assert_failed {
-			d = d->prev;
-			abort_connection(d->next);
-		}
-
 		prev_priority = priority;
 	}
 
 	assertm(cc == active_connections,
 		"bad number of active connections (counted %d, stored %d)",
 		cc, active_connections);
-	if_assert_failed active_connections = cc;
 }
 #else
 #define check_queue_bugs()

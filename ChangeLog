@@ -1,8 +1,113 @@
+Fri Jan 16 22:31:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	do_open_in_new_tab(): Only add an url to list if it is non NULL
+	since we test !list_empty() in process_session_info().  
+
+Fri Jan 16 20:30:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Skip the 'MAP@' part of uris when dumping link references.  
+
+Fri Jan 16 20:26:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	Only dump link titles which are not empty.  
+
+Fri Jan 16 20:08:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, config/cmdline.c, config/cmdline.h:
+
+	Simplify the composing of the @url_list by using function variable
+	and passing the list_head pointer to parse_option(). Let
+	parse_option() return the first url again to simplify @url setup.  
+
+Fri Jan 16 19:50:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	No empty @url in the case where the url list returned from
+	parse_options() is empty is also a fatal error.  
+
+Fri Jan 16 18:51:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Minor fastmem mode optimization in parser.  
+
+Fri Jan 16 18:21:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: main.c, config/cmdline.c, config/cmdline.h,
+	sched/session.c, sched/session.h, terminal/tab.c:
+
+	Support for more than one url on command line. ELinks will open new
+	tabs for them. For now, -dump and -source will only consider first
+	url given (ideas?). Patch by Witold Filipczyk, slightly modified by
+	me.  
+
+Fri Jan 16 18:09:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/menu.c:
+
+	We the normal people put system include to other system includes. We
+	do not want to end up again like Links or some other software
+	packages, do we? 
+
+Fri Jan 16 17:49:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: .cvsignore, .vimrc:
+
+	Add control files.  
+
+Fri Jan 16 16:30:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Update link_state using get_link_state() safer since there might be
+	some corner cases.  
+
+Fri Jan 16 16:29:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix the leak related to <sub> and <sup> the Right Way[tm].  
+
+Fri Jan 16 16:18:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Revert last patch. It broke link numbering.  
+
+Fri Jan 16 15:35:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Make the HTML renders link_state variable global so recursive calls
+	to put_chars() also updates the outer put_chars() link_state. Should
+	fix leaks related to links in <sub> and <sup> tags.  
+
+Fri Jan 16 14:49:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Add some temporary assertions for detecting leak in the renderer.  
+
 Thu Jan 15 22:51:52 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/document.c:
 
 	Use directly @doc_view when gettin current link for globhist.  
+
+Thu Jan 15 22:51:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: session.c, session.h:
+
+	Introduced get_current_link_in_view() which is same as
+	get_current_link() but takes directly struct document_view as an
+	argument.  
 
 Thu Jan 15 22:51:06 2004  Petr Baudis <pasky@ucw.cz>:
 

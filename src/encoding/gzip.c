@@ -1,5 +1,5 @@
 /* Gzip encoding (ENCODING_GZIP) backend */
-/* $Id: gzip.c,v 1.5 2004/09/14 06:46:42 jonas Exp $ */
+/* $Id: gzip.c,v 1.6 2004/09/14 06:47:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 			size_t size = stream.total_out + MAX_STR_LEN;
 
 			assert(stream.total_out >= 0);
-			assert(stream.next_in && stream.avail_in > 0);
+			assert(stream.next_in);
 
 			new_buffer = mem_realloc(buffer, size);
 			if (!new_buffer) {
@@ -103,7 +103,7 @@ gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 				break;
 			}
 
-		} while (error == Z_OK);
+		} while (error == Z_OK && stream.avail_in > 0);
 
 		inflateEnd(&stream);
 

@@ -1,4 +1,4 @@
-/* $Id: fastfind.h,v 1.6 2003/06/14 20:05:23 pasky Exp $ */
+/* $Id: fastfind.h,v 1.7 2003/06/14 20:07:29 pasky Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
@@ -40,7 +40,7 @@ void *fastfind_search(unsigned char *key, int key_len, void *fastfind_handle);
 
 /* Fastfind cleanup. It frees the index given by the @fastfind_handle. */
 /* Must be called once per list. */
-void fastfind_terminate();
+void fastfind_terminate(void *fastfind_handle);
 
 extern void *ff_info_tags;
 #endif

@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.23 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: hotkey.c,v 1.24 2004/08/03 17:08:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,52 +47,55 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 		memset(used_hotkeys, 0, 255);
 
 		for (i = 0; i < ni; i++) {
-			unsigned char *text = items[i].text;
+			struct menu_item *mi = &items[i];
+			unsigned char *text = mi->text;
 
-			if (!mi_has_left_text(items[i])) continue;
-			if (mi_text_translate(items[i])) text = _(text, term);
+			if (!mi_has_left_text(mi)) continue;
+			if (mi_text_translate(mi)) text = _(text, term);
 			if (!*text) continue;
 
-			if (items[i].hotkey_state != HKS_CACHED && !items[i].hotkey_pos)
-				items[i].hotkey_pos = find_hotkey_pos(text);
+			if (mi->hotkey_state != HKS_CACHED && !mi->hotkey_pos)
+				mi->hotkey_pos = find_hotkey_pos(text);
 
 			/* Negative value for hotkey_pos means the key is already
 			 * used by another entry. We mark it to be able to highlight
 			 * this hotkey in menus. --Zas */
-			if (items[i].hotkey_pos) {
-				unsigned char *used = &used_hotkeys[toupper(text[items[i].hotkey_pos])];
+			if (mi->hotkey_pos) {
+				unsigned char *used = &used_hotkeys[toupper(text[mi->hotkey_pos])];
 
 				if (*used) {
 					int n = *used - 1;
 
-					items[i].hotkey_pos = -items[i].hotkey_pos;
+					mi->hotkey_pos = -mi->hotkey_pos;
 					if (items[n].hotkey_pos > 0)
 						items[n].hotkey_pos = -items[n].hotkey_pos;
 				}
 
 				*used = i + 1;
-				items[i].hotkey_state = HKS_CACHED;
+				mi->hotkey_state = HKS_CACHED;
 			}
 		}
 	}
 #endif
 
 	for (i = 0; i < ni; i++) {
-		if (!hotkeys) {
-			items[i].hotkey_pos = 0;
-			items[i].hotkey_state = HKS_IGNORE;
-		} else if (items[i].hotkey_state != HKS_CACHED
-			   && !items[i].hotkey_pos) {
-			unsigned char *text = items[i].text;
+		struct menu_item *mi = &items[i];
 
-			if (!mi_has_left_text(items[i])) continue;
-			if (mi_text_translate(items[i])) text = _(text, term);
+		if (!hotkeys) {
+			mi->hotkey_pos = 0;
+			mi->hotkey_state = HKS_IGNORE;
+		} else if (mi->hotkey_state != HKS_CACHED
+			   && !mi->hotkey_pos) {
+			unsigned char *text = mi->text;
+
+			if (!mi_has_left_text(mi)) continue;
+			if (mi_text_translate(mi)) text = _(text, term);
 			if (!*text) continue;
 
-			items[i].hotkey_pos = find_hotkey_pos(text);
+			mi->hotkey_pos = find_hotkey_pos(text);
 
-			if (items[i].hotkey_pos)
-				items[i].hotkey_state = HKS_CACHED;
+			if (mi->hotkey_pos)
+				mi->hotkey_state = HKS_CACHED;
 		}
 	}
 }
@@ -101,11 +104,11 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 void
 clear_hotkeys_cache(struct menu_item *items, int ni, int hotkeys)
 {
-	int i;
+	struct menu_item *item;
 
-	for (i = 0; i < ni; i++) {
-		items[i].hotkey_state = hotkeys ? HKS_SHOW : HKS_IGNORE;
-		items[i].hotkey_pos = 0;
+	foreach_menu_item(item, items) {
+		item->hotkey_state = hotkeys ? HKS_SHOW : HKS_IGNORE;
+		item->hotkey_pos = 0;
 	}
 }
 #endif
@@ -134,11 +137,11 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	assert(item);
 	if_assert_failed return 0;
 
-	if (!mi_has_left_text(*item)) return 0;
+	if (!mi_has_left_text(item)) return 0;
 
 	text = item->text;
 
-	if (mi_text_translate(*item)) text = _(text, term);
+	if (mi_text_translate(item)) text = _(text, term);
 	if (!*text) return 0;
 
 	key_pos = item->hotkey_pos;
@@ -196,16 +199,18 @@ check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *ter
 
 	start = i;
 	do {
+		struct menu_item *mi;
 		unsigned char *text;
 
 		if (++i == menu->size) i = 0;
 
-		if (!mi_has_left_text(menu->items[i])) continue;
+		mi = &menu->items[i];
+		if (!mi_has_left_text(mi)) continue;
 
-		text = menu->items[i].text;
+		text = mi->text;
 		if (!text) continue;
 
-		if (mi_text_translate(menu->items[i])) text = _(text, term);
+		if (mi_text_translate(mi)) text = _(text, term);
 		if (!*text) continue;
 
 		if (toupper(text[0]) == k) {

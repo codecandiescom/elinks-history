@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.258 2004/07/31 11:23:44 miciah Exp $ */
+/* $Id: menu.c,v 1.259 2004/08/03 17:08:09 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -128,9 +128,9 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	void *it_data = it->data;
 	enum main_action action = it->action;
 
-	if (!mi_is_selectable(*it)) return;
+	if (!mi_is_selectable(it)) return;
 
-	if (!mi_is_submenu(*it)) {
+	if (!mi_is_submenu(it)) {
 		/* Don't free data! */
 		it->flags &= ~FREE_DATA;
 
@@ -173,10 +173,10 @@ get_menuitem_text_width(struct terminal *term, struct menu_item *mi)
 {
 	unsigned char *text;
 
-	if (!mi_has_left_text(*mi)) return 0;
+	if (!mi_has_left_text(mi)) return 0;
 
 	text = mi->text;
-	if (mi_text_translate(*mi))
+	if (mi_text_translate(mi))
 		text = _(text, term);
 
 	if (!text[0]) return 0;
@@ -190,7 +190,7 @@ get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
 {
 	int rtext_width = 0;
 
-	if (mi_is_submenu(*mi)) {
+	if (mi_is_submenu(mi)) {
 		rtext_width = L_RTEXT_SPACE + m_submenu_len + R_RTEXT_SPACE;
 
 	} else if (mi->action != ACT_MAIN_NONE) {
@@ -202,10 +202,10 @@ get_menuitem_rtext_width(struct terminal *term, struct menu_item *mi)
 			done_string(&keystroke);
 		}
 
-	} else if (mi_has_right_text(*mi)) {
+	} else if (mi_has_right_text(mi)) {
 		unsigned char *rtext = mi->rtext;
 
-		if (mi_rtext_translate(*mi))
+		if (mi_rtext_translate(mi))
 			rtext = _(rtext, term);
 
 		if (rtext[0])
@@ -254,7 +254,7 @@ search_selectable(struct menu *menu, int pos, int dir)
 	assert(pos >= 0 && pos < menu->size && (dir == 1 || dir == -1));
 	if_assert_failed return -1;
 
-	while (!mi_is_selectable(menu->items[pos])) {
+	while (!mi_is_selectable(&menu->items[pos])) {
 		if (dir > 0 && pos == menu->size - 1)
 			return -1;
 		else if (dir < 0 && pos == 0)
@@ -444,17 +444,19 @@ display_menu(struct terminal *term, struct menu *menu)
 	     p < menu->size && p < menu->first + box.height;
 	     p++, y++) {
 		struct color_pair *color = normal_color;
+		struct menu_item *mi = &menu->items[p];
+		int selected = (p == menu->selected);
 
 #ifdef CONFIG_DEBUG
 		/* Sanity check. */
-		if (mi_is_end_of_menu(menu->items[p]))
-			INTERNAL("Unexpected end of menu [%p:%d]", menu->items[p], p);
+		if (mi_is_end_of_menu(mi))
+			INTERNAL("Unexpected end of menu [%p:%d]", mi, p);
 #endif
 
 		nbox.y = y;
 		nbox.height = 1;
 
-		if (p == menu->selected) {
+		if (selected) {
 			/* This entry is selected. */
 			color = selected_color;
 
@@ -463,7 +465,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_box(term, &nbox, ' ', 0, color);
 		}
 
-		if (mi_is_horizontal_bar(menu->items[p])) {
+		if (mi_is_horizontal_bar(mi)) {
 			/* Horizontal separator */
 			draw_border_char(term, menu->box.x, y,
 					 BORDER_SRTEE, frame_color);
@@ -475,20 +477,20 @@ display_menu(struct terminal *term, struct menu *menu)
 					 BORDER_SLTEE, frame_color);
 
 		} else {
-			if (mi_has_left_text(menu->items[p])) {
-				int l = menu->items[p].hotkey_pos;
-				unsigned char *text = menu->items[p].text;
+			if (mi_has_left_text(mi)) {
+				int l = mi->hotkey_pos;
+				unsigned char *text = mi->text;
 
-				if (mi_text_translate(menu->items[p]))
+				if (mi_text_translate(mi))
 					text = _(text, term);
 
-				if (!mi_is_selectable(menu->items[p]))
+				if (!mi_is_selectable(mi))
 					l = 0;
 
 				if (l) {
 					draw_menu_left_text_hk(term, text, l,
 							       box.x, y, box.width, color,
-							       (p == menu->selected));
+							       selected);
 
 				} else {
 					draw_menu_left_text(term, text, -1,
@@ -496,15 +498,15 @@ display_menu(struct terminal *term, struct menu *menu)
 		  		}
 			}
 
-			if (mi_is_submenu(menu->items[p])) {
+			if (mi_is_submenu(mi)) {
 				draw_menu_right_text(term, m_submenu, m_submenu_len,
 						     menu->box.x, y, box.width, color);
-			} else if (menu->items[p].action != ACT_MAIN_NONE) {
+			} else if (mi->action != ACT_MAIN_NONE) {
 				struct string keystroke;
 
 #ifdef CONFIG_DEBUG
 				/* Help to detect action + right text. --Zas */
-				if (mi_has_right_text(menu->items[p])) {
+				if (mi_has_right_text(mi)) {
 					if (color == selected_color)
 						color = normal_color;
 					else
@@ -514,7 +516,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 				if (init_string(&keystroke)) {
 					add_keystroke_to_string(&keystroke,
-								menu->items[p].action,
+								mi->action,
 								KEYMAP_MAIN);
 					draw_menu_right_text(term, keystroke.source,
 							     keystroke.length,
@@ -523,10 +525,10 @@ display_menu(struct terminal *term, struct menu *menu)
 					done_string(&keystroke);
 				}
 
-			} else if (mi_has_right_text(menu->items[p])) {
-				unsigned char *rtext = menu->items[p].rtext;
+			} else if (mi_has_right_text(mi)) {
+				unsigned char *rtext = mi->rtext;
 
-				if (mi_rtext_translate(menu->items[p]))
+				if (mi_rtext_translate(mi))
 					rtext = _(rtext, term);
 
 				if (*rtext) {
@@ -601,13 +603,13 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		int sel = ev->info.mouse.y - menu->box.y - 1 + menu->first;
 
 		if (sel >= 0 && sel < menu->size
-		    && mi_is_selectable(menu->items[sel])) {
+		    && mi_is_selectable(&menu->items[sel])) {
 			menu->selected = sel;
 			scroll_menu(menu, 0, 1);
 			display_menu(win->term, menu);
 
 			if (check_mouse_action(ev, B_UP) ||
-			    mi_is_submenu(menu->items[sel]))
+			    mi_is_submenu(&menu->items[sel]))
 				select_menu(win->term, menu);
 		}
 	}
@@ -625,7 +627,7 @@ menu_page_up(struct menu *menu)
 	int next_sep = 0;
 
 	for (i = current - 1; i > 0; i--)
-		if (mi_is_horizontal_bar(menu->items[i])) {
+		if (mi_is_horizontal_bar(&menu->items[i])) {
 			next_sep = i;
 			break;
 		}
@@ -645,7 +647,7 @@ menu_page_down(struct menu *menu)
 	int next_sep = menu->size - 1;
 
 	for (i = current + 1; i < menu->size; i++)
-		if (mi_is_horizontal_bar(menu->items[i])) {
+		if (mi_is_horizontal_bar(&menu->items[i])) {
 			next_sep = i;
 			break;
 		}
@@ -664,9 +666,9 @@ search_menu_item(struct menu_item *item, unsigned char *buffer,
 {
 	unsigned char *text, *match;
 
-	if (!mi_has_left_text(*item)) return 0;
+	if (!mi_has_left_text(item)) return 0;
 
-	text = mi_text_translate(*item) ? _(item->text, term) : item->text;
+	text = mi_text_translate(item) ? _(item->text, term) : item->text;
 
 	/* Crap. We have to remove the hotkey markers '~' */
 	text = stracpy(text);
@@ -950,17 +952,19 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 	p += L_MAINMENU_SPACE;
 
 	for (i = menu->first; i < menu->size; i++) {
+		struct menu_item *mi = &menu->items[i];
 		struct color_pair *color = normal_color;
-		unsigned char *text = menu->items[i].text;
-		int l = menu->items[i].hotkey_pos;
+		unsigned char *text = mi->text;
+		int l = mi->hotkey_pos;
 		int textlen;
+		int selected = (i == menu->selected);
 
-		if (mi_text_translate(menu->items[i]))
+		if (mi_text_translate(mi))
 			text = _(text, term);
 
 		textlen = strlen(text) - !!l;
 
-		if (i == menu->selected) {
+		if (selected) {
 			color = selected_color;
 			box.x = p;
 			box.width = L_MAINTEXT_SPACE + L_TEXT_SPACE
@@ -976,7 +980,7 @@ display_mainmenu(struct terminal *term, struct menu *menu)
 		if (l) {
 			draw_menu_left_text_hk(term, text, l,
 					       p, 0, textlen + R_TEXT_SPACE + L_TEXT_SPACE,
-					       color, (i == menu->selected));
+					       color, selected);
 		} else {
 			draw_menu_left_text(term, text, textlen,
 					    p, 0, textlen + R_TEXT_SPACE + L_TEXT_SPACE,
@@ -1039,9 +1043,9 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 		foreach_menu_item (item, menu->items) {
 			unsigned char *text = item->text;
 
-			if (!mi_has_left_text(*item)) continue;
+			if (!mi_has_left_text(item)) continue;
 
-			if (mi_text_translate(*item))
+			if (mi_text_translate(item))
 				text = _(item->text, win->term);
 
 			/* The label width is made up of a little padding on
@@ -1067,7 +1071,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	 * apparently because we will delete any drop down menus
 	 * in the clicking process. */
 	if (check_mouse_action(ev, B_UP)
-	    || mi_is_submenu(menu->items[menu->selected])) {
+	    || mi_is_submenu(&menu->items[menu->selected])) {
 		select_menu(win->term, menu);
 	}
 }

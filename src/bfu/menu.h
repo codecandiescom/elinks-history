@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.65 2004/07/20 01:36:33 jonas Exp $ */
+/* $Id: menu.h,v 1.66 2004/08/03 17:08:09 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -33,41 +33,41 @@ enum menu_item_flags {
 /*
  * Selectable menu item.
  */
-#define mi_is_selectable(mi) (!((mi).flags & NO_SELECT))
+#define mi_is_selectable(mi) (!((mi)->flags & NO_SELECT))
 
 /*
  * Menu item has left text.
  */
-#define mi_has_left_text(mi) ((mi).text && *(mi).text)
+#define mi_has_left_text(mi) ((mi)->text && *(mi)->text)
 
 /*
  * Menu item has right text.
  */
-#define mi_has_right_text(mi) ((mi).rtext && *(mi).rtext)
+#define mi_has_right_text(mi) ((mi)->rtext && *(mi)->rtext)
 
 /*
  * Horizontal bar
  */
-#define mi_is_horizontal_bar(mi) (!mi_is_selectable(mi) && (mi).text && !(mi).text[0])
+#define mi_is_horizontal_bar(mi) (!mi_is_selectable(mi) && (mi)->text && !(mi)->text[0])
 
 /*
  * Submenu item
  */
-#define mi_is_submenu(mi) ((mi).flags & SUBMENU)
+#define mi_is_submenu(mi) ((mi)->flags & SUBMENU)
 
 /*
  * Texts should be translated or not.
  */
-#define mi_text_translate(mi) (!((mi).flags & NO_INTL))
-#define mi_rtext_translate(mi) ((mi).flags & RIGHT_INTL)
+#define mi_text_translate(mi) (!((mi)->flags & NO_INTL))
+#define mi_rtext_translate(mi) ((mi)->flags & RIGHT_INTL)
 
 /*
  * End of menu items list
  */
-#define mi_is_end_of_menu(mi) (!(mi).text)
+#define mi_is_end_of_menu(mi) (!(mi)->text)
 
 #define foreach_menu_item(iterator, items) \
-	for (iterator = (items); !mi_is_end_of_menu(*(iterator)); (iterator)++)
+	for (iterator = (items); !mi_is_end_of_menu(iterator); (iterator)++)
 
 enum hotkey_state {
 	HKS_SHOW = 0,

@@ -1,3 +1,195 @@
+Tue Nov 25 22:59:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Cookies manager, cache manager 
+
+Tue Nov 25 22:57:00 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Forms history.  
+
+Tue Nov 25 22:56:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	Marks support.  
+
+Tue Nov 25 22:55:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: main.c, config/kbdbind.c, config/kbdbind.h,
+	sched/session.h, viewer/text/Makefile.am, viewer/text/marks.c,
+	viewer/text/marks.h, viewer/text/view.c:
+
+	Marks support. Rather simple for now, especially you can jump only
+	between marks set in the current document for now. (The marks have
+	only single namespace over all the documents, though.) 
+
+Tue Nov 25 22:03:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Tue Nov 25 21:58:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, opttypes.c:
+
+	Re-fixed bug 216, ELinks should now correctly save already-saved
+	aliases. It would be better if it actually deleted the aliases, but
+	that'd be more complicated and I don't want to get into *this*
+	trouble right now.  
+
+Tue Nov 25 21:45:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/opttypes.c:
+
+	The redir_*() handlers having tons of duplicate code were unified to
+	just frontends to a single wrap_or_() backend. F33r d4 pr3pr0c3ss0r.  
+
+Tue Nov 25 21:27:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Reverted my old fix (1.86) for bug 216 (invalid saving of aliased
+	options). It does not work, it turns out, and needs to be approached
+	from entirely different way.  
+
+Tue Nov 25 21:23:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Simplify parse_config_file()'s inner loop a little.  
+
+Tue Nov 25 21:06:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	goto-url-home was rebound from 'm' to 'H' (by default) 
+
+Tue Nov 25 19:48:01 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation updated.  
+
+Tue Nov 25 19:46:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.h:
+
+	Removed apparently-dead kbdprefix.prefix.  
+
+Tue Nov 25 19:35:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	Fix compile error.  
+
+Tue Nov 25 18:04:03 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Tue Nov 25 16:08:25 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Tue Nov 25 13:29:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,
+	bookmarks/bookmarks.c, bookmarks/dialogs.c, config/kbdbind.c,
+	config/options.c, globhist/dialogs.c:
+
+	Remove listbox_items box member. That part of the design was (to me)
+	a bit confusing since the items should not need know anything about
+	the listbox_data because it is dynamic and we can easily derive the
+	``correct'' box data in all functions that uses it.
+	traverse_listbox_items_list() was updated to take the box data as an
+	argument.  
+
+Tue Nov 25 12:51:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/opttypes.c:
+
+	Minor simplification.  
+
+Tue Nov 25 10:09:13 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/dialogs.c:
+
+	Fix can_delete_option to check whether the _parent_ option has the
+	auto-create flag.  
+
+Tue Nov 25 08:42:29 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,
+	po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po, po/gl.po,
+	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/leet.po,
+	po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/dialogs/menu.c:
+
+	Hotkey was added for form history menu entry. French translation was
+	updated and .po files resynced.  
+
+Tue Nov 25 01:12:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/dialogs.c:
+
+	Use generic delete button in the option manager.  
+
+Tue Nov 25 01:07:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/listbox.c, bfu/listbox.h,
+	bookmarks/dialogs.c, cache/dialogs.c, config/dialogs.c,
+	cookies/dialogs.c, formhist/dialogs.c, globhist/dialogs.c:
+
+	Add can_delete() method to listbox_ops.  
+
+Tue Nov 25 00:34:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: dialogs.c, options.h:
+
+	Introduce listbox_ops implementation for options and use it for the
+	info button.  
+
+Mon Nov 24 23:41:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Add comments for each button sectino and remove legacy code.  
+
+Mon Nov 24 23:34:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/: dialogs.c, formhist.h:
+
+	Formhist item info box is now more complete.  
+
+Mon Nov 24 23:22:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Typos fixes, oops. Compare types too in form_already_saved().  
+
+Mon Nov 24 23:22:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/: dump/dump.c, text/vs.c, text/vs.h:
+
+	Hrmpf. Reverted the view_state refcounting. It is not the way for
+	the thing I ponder about ;-).  
+
+Mon Nov 24 23:11:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Full field type information is now saved. formhist file format
+	changed again (but now is more coherent), new file format will be
+	automagically used and old files converted.  
+
 Mon Nov 24 23:06:40 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/viewer/dump/dump.c:

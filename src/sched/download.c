@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.260 2004/04/11 14:34:53 jonas Exp $ */
+/* $Id: download.c,v 1.261 2004/04/11 14:35:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -859,10 +859,6 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 cancel:
 	tp_cancel(tq);
 	if (tq->prog && codw_hop->file) mem_free(codw_hop->file);
-	if (file_download) {
-		if (file_download->uri) done_uri(file_download->uri);
-		mem_free(file_download);
-	}
 	mem_free(codw_hop);
 }
 

@@ -175,7 +175,7 @@ AC_ARG_WITH(zlib, [  --without-zlib          disable zlib support],
 AC_MSG_CHECKING([for zlib support])
 
 if test -z "$disable_zlib"; then
-	AC_CHECK_LIB(z, inflate)
+	AC_CHECK_LIB(z, gzdopen)
 	AC_CHECK_HEADERS(zlib.h, cf_result=yes, cf_result=no)
 else
 	AC_MSG_RESULT(no)
@@ -193,7 +193,7 @@ if test -z "$disable_bzlib"; then
 	# Note that we won't define HAVE_LIBBZ2, altough we will define
 	# HAVE_LIBZ. That's combination of autoconf's weirdness, my laziness
 	# and lack of need for such a thing. Always use HAVE_BZLIB_H. --pasky
-	AC_SEARCH_LIBS(BZ2_bzDecompress, bz2, cf_result=yes, cf_result=no)
+	AC_SEARCH_LIBS(BZ2_bzReadOpen, bz2, cf_result=yes, cf_result=no)
 	if test "$cf_result" = yes; then
 		AC_CHECK_HEADERS(bzlib.h, cf_result=yes, cf_result=no)
 	fi

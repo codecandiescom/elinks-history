@@ -1,4 +1,4 @@
-/* $Id: tab.h,v 1.21 2003/12/27 19:35:27 jonas Exp $ */
+/* $Id: tab.h,v 1.22 2003/12/27 22:18:01 jonas Exp $ */
 
 #ifndef EL__TERMINAL_TAB_H
 #define EL__TERMINAL_TAB_H
@@ -17,7 +17,7 @@ void switch_to_tab(struct terminal *, int, int);
 void switch_to_next_tab(struct terminal *term);
 void switch_to_prev_tab(struct terminal *term);
 void close_tab(struct terminal *, struct session *);
-void close_all_tabs_but_current(struct terminal *term, struct window *current, struct session *ses);
+void close_all_tabs_but_current(struct terminal *term, void *d, struct session *ses);
 
 #define get_current_tab(term) get_tab_by_number((term), (term)->current_tab)
 #define inactive_tab(win) ((win)->type != WT_NORMAL && (win) != get_current_tab((win->term)))

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.35 2003/12/27 21:57:04 jonas Exp $ */
+/* $Id: tab.c,v 1.36 2003/12/27 22:18:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "dialogs/menu.h"
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
+#include "lowlevel/select.h"
 #include "sched/session.h"
 #include "terminal/screen.h"
 #include "terminal/tab.h"
@@ -192,15 +193,12 @@ close_tab(struct terminal *term, struct session *ses)
 		N_("No"), NULL, B_ESC);
 }
 
-void
-close_all_tabs_but_current(struct terminal *term, struct window *current, struct session *ses)
+static void
+really_close_tabs(struct session *ses)
 {
+	struct terminal *term = ses->tab->term;
+	struct window *current = get_current_tab(term);
 	struct window *tab;
-
-	assert(term);
-	if_assert_failed return;
-
-	if (!current) current = get_current_tab(term);
 
 	foreach_tab (tab, term->windows) {
 		if (tab == current) continue;
@@ -208,9 +206,27 @@ close_all_tabs_but_current(struct terminal *term, struct window *current, struct
 		delete_window(tab->next);
 	}
 
-	/* Small hack to force a redrawing tab switching style */
 	term->current_tab = 0;
 	redraw_terminal(term);
+}
+
+void
+close_all_tabs_but_current(struct terminal *term, void *d, struct session *ses)
+{
+	assert(term);
+	if_assert_failed return;
+
+	if (!get_opt_bool("ui.tabs.confirm_close")) {
+		really_close_tabs(ses);
+		return;
+	}
+
+	msg_box(term, NULL, 0,
+		N_("Close tab"), AL_CENTER,
+		N_("Do you really want to close all except the current tab?"),
+		ses, 2,
+		N_("Yes"), (void (*)(void *)) really_close_tabs, B_ENTER,
+		N_("No"), NULL, B_ESC);
 }
 
 

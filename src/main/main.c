@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.152 2003/10/31 17:56:14 jonas Exp $ */
+/* $Id: main.c,v 1.153 2003/11/10 22:37:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,7 @@ static int init_b = 0;
 void
 init(void)
 {
-	unsigned char *u = NULL;
+	unsigned char *url = NULL;
 
 	init_static_version();
 
@@ -104,15 +104,15 @@ init(void)
 	}
 
 	/* Parsing command line options */
-	u = parse_options(ac - 1, av + 1);
-	if (!u) {
+	url = parse_options(ac - 1, av + 1);
+	if (!url) {
 		retval = RET_SYNTAX;
 		terminate = 1;
 		return;
 	}
 
-	u = stracpy(u);
-	if (!u) goto fatal_error;
+	url = stracpy(url);
+	if (!url) goto fatal_error;
 
 	if (!get_opt_bool_tree(cmdline_options, "no-home")) {
 		init_home();
@@ -133,7 +133,7 @@ init(void)
 
 		info = create_session_info(get_opt_int_tree(cmdline_options,
 							    "base-session"),
-					   u, &len);
+					   url, &len);
 		if (!info) goto fatal_error;
 
 		handle_trm(get_input_handle(), get_output_handle(),
@@ -160,11 +160,12 @@ init(void)
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
-		if (!*u || !strcmp(u, "-") || get_opt_bool_tree(cmdline_options, "stdin")) {
+		if (!*url || !strcmp(url, "-")
+		    || get_opt_bool_tree(cmdline_options, "stdin")) {
 			get_opt_bool("protocol.file.allow_special_files") = 1;
 			dump_start("file:///dev/stdin");
 		} else {
-			dump_start(u);
+			dump_start(url);
 		}
 
 		if (terminate) {
@@ -176,7 +177,7 @@ init(void)
 		int len;
 		void *info = create_session_info(get_opt_int_tree(cmdline_options,
 								  "base-session"),
-						 u, &len);
+						 url, &len);
 
 		if (!info) goto fatal_error;
 
@@ -192,7 +193,7 @@ fatal_error:
 	}
 
 end:
-	if (u) mem_free(u);
+	if (url) mem_free(url);
 }
 
 

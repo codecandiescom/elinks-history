@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.61 2003/06/15 23:05:50 jonas Exp $ */
+/* $Id: download.c,v 1.62 2003/06/15 23:25:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1203,33 +1203,43 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
 	} else {
-		unsigned char *name = handler->description;
+		unsigned char *description = handler->description;
+		unsigned char *desc_sep;
+		unsigned char *filename;
+		int filenamelen;
 
-		if (!name) name = stracpy(""); /* FIXME: unchecked return value */
-		if (!name) {
-			mem_free(content_type);
-			return;
+		get_filename_from_url(ses->tq_url, &filename, &filenamelen);
+
+		if (description) {
+			desc_sep = "; ";
+		} else {
+			desc_sep = "";
+			description = "";
 		}
 
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
-			msg_box(ses->tab->term, getml(content_type, name, NULL), MSGBOX_FREE_TEXT,
+			/* TODO: Improve the dialog to let the user correct the
+			 * used program. */
+			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Content type is %s.\n"
-					"Do you want to open file with %s, "
-					"save it or display it?"),
-					content_type, name),
+				msg_text(ses->tab->term, N_("Would you like to "
+					 "open the file '%s' (type: %s%s%s)\n"
+					 "with '%s', save it or display it?"),
+					 filename, content_type, desc_sep,
+					 description, handler->program),
 				ses, 4,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Save"), tp_save, 0,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(ses->tab->term, getml(content_type, name, NULL), MSGBOX_FREE_TEXT,
+			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Content type is %s.\n"
-					"Do you want to open file with %s, or "
-					"display it?"),
-					content_type, name),
+				msg_text(ses->tab->term, N_("Would you like to "
+					 "open the file '%s' (type: %s%s%s)\n"
+					 "with '%s', or display it?"),
+					 filename, content_type, desc_sep,
+					 description, handler->program),
 				ses, 3,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Display"), tp_display, 0,

@@ -46,6 +46,9 @@ current link to external command).
 	Something like indicator-bar, simple letter-flags indicating current
 state of browser, or changeable thru Lua.
 
+	Possibility to use commandline-driven interface instead of BFU
+optionally.
+
 
 
 	Multiple windows in one console
@@ -63,4 +66,4 @@ state of browser, or changeable thru Lua.
 	CSS (?)
 
 
-$Id: TODO,v 1.16 2002/03/29 21:38:09 pasky Exp $
+$Id: TODO,v 1.17 2002/03/30 09:10:54 pasky Exp $

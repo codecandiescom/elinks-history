@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.8 2004/09/26 16:43:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.9 2004/09/29 14:47:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -243,21 +243,14 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 
 			if (string + 1 < scanner->end
 			    && string[0] == '-' && string[1] == '-') {
+				string += 2;
 				type = SGML_TOKEN_NOTATION_COMMENT;
+				token->string = string;
+				real_length = skip_comment(scanner, &string);
+				assert(real_length >= 0);
 			} else {
 				scan_sgml(scanner, string, SGML_CHAR_IDENT);
 				type = map_scanner_string(scanner, ident, string, base);
-			}
-
-			switch (type) {
-			case SGML_TOKEN_NOTATION_COMMENT:
-				token->string = string;
-
-				real_length = skip_comment(scanner, &string);
-				assert(real_length >= 0);
-				break;
-
-			default:
 				skip_sgml(scanner, &string, '>', 0);
 			}
 

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.108 2004/09/14 17:14:32 pasky Exp $ */
+/* $Id: connect.c,v 1.109 2004/09/14 19:49:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,6 +355,12 @@ dns_found(void *data, int state)
 	int only_local = get_cmd_opt_int("localhost");
 	int saved_errno = 0;
 	int at_least_one_remote_ip = 0;
+	/* We tried something but we failed in such a way that we would rather
+	 * prefer the connection to retain the information about previous
+	 * failures.  That is, we i.e. decided we are forbidden to even think
+	 * about such a connection attempt.
+	 * XXX: Unify with @local_only handling? --pasky */
+	int silent_fail = 0;
 
 	if (state < 0) {
 		abort_conn_with_state(conn, S_NO_DNS);
@@ -373,6 +379,7 @@ dns_found(void *data, int state)
 		struct sockaddr_in addr = *((struct sockaddr_in *) &conn_info->addr[i]);
 #endif
 		int family;
+		int force_family = conn->uri->ip_family;
 
 #ifdef CONFIG_IPV6
 		family = addr.sin6_family;
@@ -399,12 +406,16 @@ dns_found(void *data, int state)
 		}
 
 #ifdef CONFIG_IPV6
-		if (family == AF_INET6 && !get_opt_bool("connection.try_ipv6"))
+		if (family == AF_INET6 && (!get_opt_bool("connection.try_ipv6") || (force_family && force_family != 6))) {
+			silent_fail = 1;
 			continue;
-		else
+		} else
 #endif
-		if (family == AF_INET && !get_opt_bool("connection.try_ipv4"))
+		if (family == AF_INET && (!get_opt_bool("connection.try_ipv4") || (force_family && force_family != 4))) {
+			silent_fail = 1;
 			continue;
+		}
+		silent_fail = 0;
 
 		sock = socket(family, SOCK_STREAM, IPPROTO_TCP);
 		if (sock == -1) {
@@ -470,7 +481,7 @@ dns_found(void *data, int state)
 		}
 
 		/* We set new state only if we already tried something new. */
-		if (trno != conn_info->triedno)
+		if (trno != conn_info->triedno && !silent_fail)
 			set_connection_state(conn, -errno);
 
 		retry_connection(conn);

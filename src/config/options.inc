@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.134 2004/09/14 17:14:31 pasky Exp $ */
+/* $Id: options.inc,v 1.135 2004/09/14 19:48:59 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -100,22 +100,34 @@ struct option_info config_options_info[] = {
 		N_("Whether to try to connect to a host over IPv4.\n"
 		"Note that if connection.try_ipv6 is enabled too,\n"
 		"it takes precedence. And better do not touch this\n"
-		"at all unless you are sure what are you doing.")),
+		"at all unless you are sure what are you doing.\n"
+		"Note that you can also force a given protocol\n"
+		"to be used on a per-connection basis by using an URL\n"
+		"in the style of i.e. http4://elinks.or.cz/.")),
 #else
 	INIT_OPT_BOOL("connection", N_("Try IPv4 when connecting"),
 		"try_ipv4", 0, 1,
 		N_("Whether to try to connect to a host over IPv4.\n"
-		"Do not touch this option.")),
+		"Do not touch this option.\n"
+		"Note that you can also force a given protocol\n"
+		"to be used on a per-connection basis by using an URL\n"
+		"in the style of i.e. http4://elinks.or.cz/.")),
 #endif
 
 #ifdef CONFIG_IPV6
 	INIT_OPT_BOOL("connection", N_("Try IPv6 when connecting"),
 		"try_ipv6", 0, 1,
-		N_("Whether to try to connect to a host over IPv6.")),
+		N_("Whether to try to connect to a host over IPv6.\n"
+		"Note that you can also force a given protocol\n"
+		"to be used on a per-connection basis by using an URL\n"
+		"in the style of i.e. http6://elinks.or.cz/.")),
 #else
 	INIT_OPT_BOOL("connection", N_("Try IPv6 when connecting"),
 		"try_ipv6", 0, 1,
-		N_("Whether to try to connect to a host over IPv6. (DISABLED)"));
+		N_("Whether to try to connect to a host over IPv6 (DISABLED).\n"
+		"Note that you could have also forced a given protocol\n"
+		"to be used on a per-connection basis by using an URL\n"
+		"in the style of i.e. http6://elinks.or.cz/.")),
 #endif
 
 	INIT_OPT_INT("connection", N_("Timeout for non-restartable connections"),

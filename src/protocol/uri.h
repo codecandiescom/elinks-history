@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.142 2004/08/28 14:23:24 jonas Exp $ */
+/* $Id: uri.h,v 1.143 2004/09/14 19:49:00 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -27,6 +27,10 @@ struct uri {
 
 	/* The internal type of protocol. Can _never_ be PROTOCOL_UNKNOWN. */
 	int protocol; /* enum protocol */
+
+	/* A special ELinks extension allows i.e. 'http4' or 'ftp6' protocols,
+	 * forcing the given IP family. 0 means the IP family is not forced. */
+	int ip_family;
 
 	unsigned char *user;
 	unsigned char *password;
@@ -87,15 +91,16 @@ enum uri_component {
 	/**** The "raw" URI components */
 
 	URI_PROTOCOL		= (1 << 0),
-	URI_USER		= (1 << 1),
-	URI_PASSWORD		= (1 << 2),
-	URI_HOST		= (1 << 3),
-	URI_PORT		= (1 << 4),
-	URI_DEFAULT_PORT	= (1 << 5),
-	URI_DATA		= (1 << 6),
-	URI_FRAGMENT		= (1 << 7),
-	URI_POST		= (1 << 8),
-	URI_POST_INFO		= (1 << 9),
+	URI_IP_FAMILY		= (1 << 1),
+	URI_USER		= (1 << 2),
+	URI_PASSWORD		= (1 << 3),
+	URI_HOST		= (1 << 4),
+	URI_PORT		= (1 << 5),
+	URI_DEFAULT_PORT	= (1 << 6),
+	URI_DATA		= (1 << 7),
+	URI_FRAGMENT		= (1 << 8),
+	URI_POST		= (1 << 9),
+	URI_POST_INFO		= (1 << 10),
 
 
 	/**** Flags affecting appearance of the components above, or special
@@ -104,17 +109,17 @@ enum uri_component {
 	/* Control for ``encoding'' URIs into Internationalized Domain Names.
 	 * Hopefully only a few lowlevel places should have to use it and it
 	 * should never be exposed to the user. */
-	URI_IDN			= (1 << 10),
+	URI_IDN			= (1 << 11),
 
 	/* Add stuff from uri->data and up and prefixes a '/' */
-	URI_PATH		= (1 << 11),
+	URI_PATH		= (1 << 12),
 
 	/* Add filename from last direcory separator in uri->data to end of
 	 * path. */
-	URI_FILENAME		= (1 << 12),
+	URI_FILENAME		= (1 << 13),
 
 	/* Add query part from uri->data not including the '?' */
-	URI_QUERY		= (1 << 13),
+	URI_QUERY		= (1 << 14),
 
 
 	/**** Some predefined classes for formatting of URIs */
@@ -159,6 +164,10 @@ enum uri_component {
 	URI_PROXY		= URI_BASE | URI_IDN,
 
 	/* Used for comparing keepalive connection URIs */
+	/* (We don't need to bother by explicit IP family, we don't care
+	 * whether the actual query goes over IPv4 or IPv6 but only about
+	 * new connections. Of course another thing is what the user expects
+	 * us to care about... ;-) --pasky */
 	URI_KEEPALIVE		= URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST | URI_PORT,
 
 	/* Used for the form action URI using the GET method */

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.275 2004/09/03 16:09:44 jonas Exp $ */
+/* $Id: uri.c,v 1.276 2004/09/14 19:49:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,8 +117,14 @@ get_protocol_length(const unsigned char *url)
 	while (isalnum(*end) || *end == '+' || *end == '-' || *end == '.')
 		end++;
 
+	/* Now we make something to support our "IP version in protocol scheme
+	 * name" hack and silently chop off the last digit if it's there. The
+	 * IETF's not gonna notice I hope or it'd be going after us hard. */
+	if (end != url && isdigit(end[-1]))
+		end--;
+
 	/* Also return 0 if there's no protocol name (@end == @url). */
-	return (*end == ':') ? end - url : 0;
+	return (*end == ':' || isdigit(*end)) ? end - url : 0;
 }
 
 enum uri_errno
@@ -147,7 +153,16 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	uri->protocol = get_protocol(struri(uri), uri->protocollen);
 	known = (uri->protocol != PROTOCOL_UNKNOWN);
 
-	prefix_end = uristring + uri->protocollen + 1; /* ':' */
+	prefix_end = uristring + uri->protocollen; /* ':' */
+
+	/* Check if there's a digit after the protocol name. */
+	if (isdigit(*prefix_end)) {
+		uri->ip_family = uristring[uri->protocollen] - '0';
+		prefix_end++;
+	}
+	if (*prefix_end != ':')
+		return URI_ERRNO_INVALID_PROTOCOL;
+	prefix_end++;
 
 	/* Skip slashes */
 
@@ -340,6 +355,7 @@ compare_uri(struct uri *a, struct uri *b, enum uri_component components)
 		"compare_uri() is a work in progress. Component unsupported");
 
 	return (!wants(URI_PROTOCOL) || a->protocol == b->protocol)
+		&& (!wants(URI_IP_FAMILY) || a->ip_family == b->ip_family)
 		&& (!wants(URI_USER)
 		    || compare_component(a->user, a->userlen, b->user, b->userlen))
 		&& (!wants(URI_PASSWORD)
@@ -368,6 +384,8 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
  	if (wants(URI_PROTOCOL)) {
 		add_bytes_to_string(string, uri->string, uri->protocollen);
+		if (wants(URI_IP_FAMILY) && uri->ip_family)
+			add_format_to_string(string, "%d", uri->ip_family);
 		add_char_to_string(string, ':');
  		if (get_protocol_need_slashes(uri->protocol))
 			add_to_string(string, "//");

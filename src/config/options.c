@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.289 2003/10/08 12:26:11 pasky Exp $ */
+/* $Id: options.c,v 1.290 2003/10/08 17:01:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2806,7 +2806,7 @@ register_options(void)
 		N_("ID of session (ELinks instance) which we want to clone.\n"
 		"This is internal ELinks option, you don't want to use it."));
 
-	add_opt_str_tree(cmdline_options, "", N_("Set config dir to given string."),
+	add_opt_str_tree(cmdline_options, "", N_("Set config dir to given string"),
 		"confdir", 0, "",
 		N_("Set the config dir to the given path. ELinks will read\n"
 		"its config files and writes to it. If the path begins with\n"

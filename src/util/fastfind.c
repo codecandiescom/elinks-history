@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.65 2004/10/27 16:52:51 zas Exp $ */
+/* $Id: fastfind.c,v 1.66 2004/10/27 16:57:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -368,6 +368,56 @@ init_idxtab(struct fastfind_info *info)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
+static void
+fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
+{
+	int cnt = 0;
+	int pos = 0;
+	int i;
+
+	assert(info);
+	if_assert_failed return;
+
+	for (i = 0; i < info->uniq_chars_count; i++) {
+		if (leafset[i].c) continue;
+
+		if (leafset[i].l) {
+			/* There's a leaf leafset, descend to it and recurse */
+			fastfind_node_compress(info->leafsets[leafset[i].l],
+					       info);
+		}
+
+		if (leafset[i].l || leafset[i].e) {
+			cnt++;
+			pos = i;
+		}
+	}
+
+	if (cnt != 1 || leafset[pos].c) return;
+
+	/* Compress if possible ;) */
+	for (i = 1; i < info->leafsets_count; i++)
+		if (info->leafsets[i] == leafset)
+			break;
+
+	if (i < info->leafsets_count) {
+		struct ff_node_c *new = mem_alloc(sizeof(struct ff_node_c));
+
+		if (!new) return;
+
+		new->c = 1;
+		new->e = leafset[pos].e;
+		new->p = leafset[pos].p;
+		new->l = leafset[pos].l;
+		new->ch = pos;
+
+		mem_free(info->leafsets[i]);
+		info->leafsets[i] = (struct ff_node *) new;
+		FF_DBG_mem(info, sizeof(struct ff_node_c));
+		FF_DBG_mem(info, sizeof(struct ff_node) * -info->uniq_chars_count);
+	}
+}
+
 #define ifcase(c) ((info->case_sensitive) ? (c) : toupper(c))
 
 struct fastfind_info *
@@ -465,7 +515,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 		add_to_pointers(p->data, key_len, info);
 	}
 
-	if (compress) fastfind_index_compress(info);
+	if (compress) fastfind_node_compress(info->root_leafset, info);
 
 	return info;
 
@@ -475,64 +525,6 @@ return_error:
 }
 
 #undef ifcase
-
-static void
-fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
-{
-	int cnt = 0;
-	int pos = 0;
-	int i;
-
-	assert(info);
-	if_assert_failed return;
-
-	for (i = 0; i < info->uniq_chars_count; i++) {
-		if (leafset[i].c) continue;
-
-		if (leafset[i].l) {
-			/* There's a leaf leafset, descend to it and recurse */
-			fastfind_node_compress(info->leafsets[leafset[i].l],
-					       info);
-		}
-
-		if (leafset[i].l || leafset[i].e) {
-			cnt++;
-			pos = i;
-		}
-	}
-
-	if (cnt != 1 || leafset[pos].c) return;
-
-	/* Compress if possible ;) */
-	for (i = 1; i < info->leafsets_count; i++)
-		if (info->leafsets[i] == leafset)
-			break;
-
-	if (i < info->leafsets_count) {
-		struct ff_node_c *new = mem_alloc(sizeof(struct ff_node_c));
-
-		if (!new) return;
-
-		new->c = 1;
-		new->e = leafset[pos].e;
-		new->p = leafset[pos].p;
-		new->l = leafset[pos].l;
-		new->ch = pos;
-
-		mem_free(info->leafsets[i]);
-		info->leafsets[i] = (struct ff_node *) new;
-		FF_DBG_mem(info, sizeof(struct ff_node_c));
-		FF_DBG_mem(info, sizeof(struct ff_node) * -info->uniq_chars_count);
-	}
-}
-
-void
-fastfind_index_compress(struct fastfind_info *info)
-{
-	assert(info);
-	if_assert_failed return;
-	fastfind_node_compress(info->root_leafset, info);
-}
 
 
 /* This macro searchs for the key in indexed list */

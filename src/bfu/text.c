@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.72 2003/12/21 22:01:43 miciah Exp $ */
+/* $Id: text.c,v 1.73 2003/12/22 16:25:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include "terminal/terminal.h"
 #include "util/color.h"
 
-#define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && *(pos) != ' ')
+#define is_unsplitable(pos) (*(pos) && *(pos) != '\n' && !isspace(*(pos)))
 
 /* Returns length of substring (from start of @text) before a split. */
 static inline int
@@ -88,11 +88,8 @@ split_lines(struct widget_data *widget_data, int max_width)
 
 	for (; *text; text += width) {
 
-		/* Skip first leading \n. */
-		if (*text == '\n') text++;
-
-		/* Skip any leading space from last line split */
-		while (isspace(*text) && *text != '\n') text++;
+		/* Skip first leading \n or space. */
+		if (isspace(*text)) text++;
 		if (!*text) break;
 
 		width = split_line(text, max_width);
@@ -131,11 +128,8 @@ dlg_format_text_do(struct terminal *term, unsigned char *text,
 	for (; *text; text += line_width, (*y)++) {
 		int shift;
 
-		/* Skip first leading \n. */
-		if (*text == '\n') text++;
-
-		/* Skip any leading space from last line split */
-		while (isspace(*text) && *text != '\n') text++;
+		/* Skip first leading \n or space. */
+		if (isspace(*text)) text++;
 		if (!*text) break;
 
 		line_width = split_line(text, width);

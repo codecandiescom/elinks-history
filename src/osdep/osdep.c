@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.71 2003/06/08 10:49:28 zas Exp $ */
+/* $Id: osdep.c,v 1.72 2003/06/08 15:20:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,12 +102,6 @@ set_blocking_fd(int fd)
 #else
 	return 0;
 #endif
-}
-
-int
-is_safe_in_shell(unsigned char c)
-{
-	return c == '@' || c == '+' || c == '.' || c == '/' || isA(c);
 }
 
 void

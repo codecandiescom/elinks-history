@@ -1,15 +1,22 @@
-/* $Id: conv.h,v 1.10 2003/05/25 09:35:22 zas Exp $ */
+/* $Id: conv.h,v 1.11 2003/06/08 15:20:29 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
 
 #include "lowlevel/ttime.h" /* ttime type */
+#include "util/string.h"
 
 static inline unsigned char
 upcase(unsigned char ch)
 {
 	if (ch >= 'a' && ch <= 'z') ch -= 0x20;
 	return ch;
+}
+
+static inline int
+is_safe_in_shell(unsigned char c)
+{
+	return c == '@' || c == '+' || c == '.' || c == '/' || isA(c);
 }
 
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.89 2004/12/17 13:21:05 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.90 2004/12/17 13:22:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1192,9 +1192,15 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 #define unibar_set(bar) \
 	status->force_show_##bar##_bar = v.boolean;
 		switch (*bar) {
-			case 's': unibar_set(status); break;
-			case 't': unibar_set(title); break;
-			default: v.boolean = 0; break;
+		case 's':
+			unibar_set(status);
+			break;
+		case 't':
+			unibar_set(title);
+			break;
+		default:
+			v.boolean = 0;
+			break;
 		}
 		register_bottom_half((void (*)(void*)) update_status, NULL);
 #undef unibar_set

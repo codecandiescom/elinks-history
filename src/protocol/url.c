@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.79 2003/07/01 16:27:10 jonas Exp $ */
+/* $Id: url.c,v 1.80 2003/07/06 23:24:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -801,12 +801,17 @@ get_extension_from_url(unsigned char *url)
 {
 	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
 	unsigned char *extension = NULL;
+	int afterslash = 1;
 
  	for (; *url && !end_of_dir(*url); url++) {
-		if (*url == '.' && !extension)
+		if (!afterslash && *url == '.' && !extension) {
 			extension = url + 1;
-		else if (dsep(*url))
+		} else if (dsep(*url)) {
 			extension = NULL;
+			afterslash = 1;
+		} else {
+			afterslash = 0;
+		}
 	}
 
 	if (extension && extension < url)

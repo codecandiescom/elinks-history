@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.102 2003/11/08 16:20:24 zas Exp $ */
+/* $Id: link.c,v 1.103 2003/11/11 14:43:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -172,10 +172,6 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 			fs = find_form_state(doc_view, link->form);
 			if (fs) cursor_offset = area_cursor(link->form, fs);
 			break;
-
-		default:
-			internal("bad link type");
-			return;
 	}
 
 	/* Allocate an extra background char to work on here. */

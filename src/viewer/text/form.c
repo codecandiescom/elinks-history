@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.54 2003/10/30 18:12:46 jonas Exp $ */
+/* $Id: form.c,v 1.55 2003/11/11 14:45:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,8 +109,6 @@ init_ctrl(struct form_control *frm, struct form_state *fs)
 		case FC_HIDDEN:
 			/* Silence compiler warnings. */
 			break;
-		default:
-			internal("unknown form field type");
 	}
 }
 
@@ -269,8 +267,6 @@ draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link 
 		case FC_RESET:
 		case FC_HIDDEN:
 			break;
-		default:
-			internal("Unknown form field type.");
 	}
 }
 

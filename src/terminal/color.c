@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.64 2003/10/28 14:14:36 jonas Exp $ */
+/* $Id: color.c,v 1.65 2003/11/11 14:39:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,11 +242,9 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	enum palette_range palette_range = PALETTE_FULL;
 	unsigned char fg, bg;
 
-	assert(0 <= color_mode && color_mode < COLOR_MODES);
-	mode = color_modes[color_mode];
-
 	/* Options for the various color modes. */
 	switch (color_mode) {
+	case COLOR_MODES:
 	case COLOR_MODE_DUMP:
 		return;
 
@@ -277,17 +275,20 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		/* TODO: Handle decrease lightness by converting to
 		 * hue-ligthness-saturation color model */
 		break;
-
-	default:
-		break;
 	}
 
 	assert(schar);
 
+	mode = color_modes[color_mode];
 	fg = get_color(pair->foreground, mode->palette, mode->palette_range[palette_range].fg);
 	bg = get_color(pair->background, mode->palette, mode->palette_range[palette_range].bg);
 
 	switch (color_mode) {
+	case COLOR_MODES:
+	case COLOR_MODE_DUMP:
+		internal("Bad color mode, it should _never_ occur here.");
+		break;
+
 	case COLOR_MODE_256:
 #ifdef USE_256_COLORS
 		/* Adjusts the foreground color to be more visible. */
@@ -309,7 +310,5 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	case COLOR_MODE_16:
 		set_term_color16(schar, flags, fg, bg);
 		break;
-	default:
-		internal("Invalid color mode");
 	}
 }

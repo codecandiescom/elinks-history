@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.51 2002/12/04 12:14:04 zas Exp $ */
+/* $Id: parser.c,v 1.52 2002/12/04 18:33:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -191,6 +191,7 @@ a:
 ea:
 	if (!f) {
 		unsigned char *b;
+		int len;
 
 		add_chr(a, l, 0);
 		if (strchr(a, '&')) {
@@ -199,9 +200,10 @@ ea:
 			a = convert_string(NULL, aa, strlen(aa));
 			mem_free(aa);
 		}
-		for (b = a; *b == ' '; b++);
-		if (b != a) memmove(a, b, strlen(b) + 1);
-		for (b = a + strlen(a) - 1; b >= a && *b == ' '; b--) *b = 0;
+
+		b = trim_chars(a, ' ', &len);
+		if (b != a) memmove(a, b, len + 1);
+
 		set_mem_comment(a, name, strlen(name));
 		return a;
 	}
@@ -706,19 +708,10 @@ html_a(unsigned char *a)
 
 	href = get_url_val(a, "href");
 	if (href) {
-		char *href_pos = href;
 		char *target;
 
-		/* Strip spaces */
-
-		while (href_pos[0] == ' ') href_pos++;
-		/* XXX: Optimization possible here */
-		while (href_pos[0] &&
-		       href_pos[strlen(href_pos) - 1] == ' ')
-			href_pos[strlen(href_pos) - 1] = 0;
-
 		if (format.link) mem_free(format.link);
-		format.link = join_urls(format.href_base, href_pos);
+		format.link = join_urls(format.href_base, trim_chars(href, ' ', 0));
 
 		mem_free(href);
 
@@ -1658,6 +1651,7 @@ clr_spaces(unsigned char *name)
 {
 	unsigned char *nm;
 
+	/* FIXME: Rewrite that --Zas */
 	for (nm = name; *nm; nm++)
 		if (WHITECHAR(*nm) || *nm == 1) *nm = ' ';
 	for (nm = name; *nm; nm++)

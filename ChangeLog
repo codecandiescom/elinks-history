@@ -1,3 +1,129 @@
+Sat Jan 18 23:05:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.c, lowlevel/terminal.c, lowlevel/terminal.h,
+	viewer/text/view.c:
+
+	Set the ATTR_FRAME bit directly in the frame symbols declaration.  
+
+Sat Jan 18 23:00:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Oops. Compilation fix.  
+
+Sat Jan 18 22:58:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/menu.c, document/html/tables.c, lowlevel/terminal.c,
+	lowlevel/terminal.h, viewer/text/view.c:
+
+	Introduced enum frame_char, converted most of frame codes to
+	FRAME._* defined in this enum. Inspired by witekfl's patch.  
+
+Sat Jan 18 14:47:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/common/: .cvsignore, .vimrc:
+
+	Added fairies.  
+
+Sat Jan 18 14:38:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Fixed HTTP communication when compiled --without-cookies. Patch by
+	Fabio.  
+
+Sat Jan 18 14:16:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/conv/conf-links2elinks.pl:
+
+	The attached diff updates the file
+	'contrib/conv/conf-links2elinks.pl' in the elinks distribution to
+	fix some problems in config file migration, specifically: 
+	
+	* the terminal.XXX.utf_8_io setting is now given a proper boolean
+	value 
+	
+	* spaces in extension lists and mime-type lists are (properly)
+	ignored 
+	
+	* regular expressions are converted to work in older Perl versions
+	too 
+	
+	* the mime.handler.XXX.YYY.block setting is now given a proper
+	boolean value 
+	
+	Patch by BC Sittler.  
+
+Sat Jan 18 02:12:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/syntree/layouter.c,
+	renderer/text/renderer.c:
+
+	Introduced some trivial padding and virtual flow cursor. Fixed nasty
+	mistake in syntree layouter and removed up strange hacks to
+	workaround it. Now the indentation finally works perfectly ;-).  
+
+Sat Jan 18 01:41:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/: box.c, box.h:
+
+	get_only_box_property() looks at the associated syntree node as
+	well.  
+
+Sat Jan 18 01:32:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/box.c, layouter/box.h, parser/syntree.c,
+	parser/syntree.h:
+
+	Introduced get_only_*_property(), looking only at the given node,
+	without any additional automagical lookups.  
+
+Sat Jan 18 01:20:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/box.c, parser/syntree.c:
+
+	Make get_*_property() descend to the root if the property isn't
+	found in the actual node/box. Enables the syntree indentation.  
+
+Sat Jan 18 01:15:26 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/syntree/layouter.c,
+	renderer/text/renderer.c:
+
+	Introduced some support for padding-left property in the text
+	renderer. Introduced indenting of syntax tree nodes in syntree
+	layouter.  
+
+Sat Jan 18 01:00:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/: layouter/syntree/layouter.c,
+	renderer/text/renderer.c:
+
+	Fixed the last bits of layouting and rendering. Initial support
+	looks more or less complete.  
+
+Sat Jan 18 00:41:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/layouter/syntree/layouter.c:
+
+	Improved format of output of the syntree layouter.  
+
+Sat Jan 18 00:36:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: Makefile.am, elusive/layouter/box.c,
+	elusive/layouter/syntree/layouter.c, elusive/parser/property.c,
+	elusive/parser/property.h, elusive/parser/syntree.c,
+	elusive/parser/html/parser.c, elusive/renderer/text/renderer.c:
+
+	Tons of random fixes. Now the renderer slowly starts to work in my
+	testing environment...  
+
+Fri Jan 17 23:16:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Random fix fix.  
+
 Fri Jan 17 23:09:33 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/elusive/renderer/renderer.h:

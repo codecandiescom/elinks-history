@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.95 2003/10/29 19:17:57 jonas Exp $ */
+/* $Id: tables.c,v 1.96 2003/10/29 19:30:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1634,7 +1634,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct part *p = f;
 	struct table *t;
 	struct s_e *bad_html;
-	struct node *n, *nn;
+	struct node *node, *new_node;
 	unsigned char *al;
 	color_t bgcolor = par_format.bgcolor;
 	int border, cellsp, vcellpd, cellpd, align;
@@ -1839,18 +1839,18 @@ again:
 		goto ret2;
 	}
 
-	n = p->document->nodes.next;
-	n->width = p->yp - n->y + p->cy;
+	node = p->document->nodes.next;
+	node->width = p->yp - node->y + p->cy;
 
 	display_complicated_table(t, x, p->cy, &cye);
 	display_table_frames(t, x, p->cy);
 
-	nn = mem_alloc(sizeof(struct node));
-	if (nn) {
-		nn->x = n->x;
-		nn->y = p->yp + cye;
-		nn->width = n->width;
-		add_to_list(p->document->nodes, nn);
+	new_node = mem_alloc(sizeof(struct node));
+	if (new_node) {
+		new_node->x = node->x;
+		new_node->y = p->yp + cye;
+		new_node->width = node->width;
+		add_to_list(p->document->nodes, new_node);
 	}
 
 	assertm(p->cy + t->rh == cye, "size does not match; 1:%d, 2:%d",

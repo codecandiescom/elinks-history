@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.324 2003/10/29 19:17:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.325 2003/10/29 19:29:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1261,13 +1261,13 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if_assert_failed return NULL;
 
 	if (document) {
-		struct node *n = mem_alloc(sizeof(struct node));
+		struct node *node = mem_alloc(sizeof(struct node));
 
-		if (n) {
-			n->x = xs;
-			n->y = ys;
-			n->width = !table_level ? MAXINT : width;
-			add_to_list(document->nodes, n);
+		if (node) {
+			node->x = xs;
+			node->y = ys;
+			node->width = !table_level ? MAXINT : width;
+			add_to_list(document->nodes, node);
 		}
 
 		last_link_to_move = document->nlinks;
@@ -1342,9 +1342,9 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (part->spaces) mem_free(part->spaces);
 
 	if (document) {
-		struct node *n = document->nodes.next;
+		struct node *node = document->nodes.next;
 
-		n->height = ys - n->y + part->y;
+		node->height = ys - node->y + part->y;
 	}
 
 ret:

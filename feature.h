@@ -1,7 +1,7 @@
-/* $Id: feature.h,v 1.27 2004/01/01 14:47:33 jonas Exp $ */
+/* $Id: feature.h,v 1.28 2004/01/01 15:14:47 pasky Exp $ */
 
-#ifndef ELINKS__DOTDOT_FEATURE_H
-#define ELINKS__DOTDOT_FEATURE_H
+#ifndef EL__DOTDOT_FEATURE_H
+#define EL__DOTDOT_FEATURE_H
 
 /* This file contains various compile-time configuration settings, which you
  * can adjust below. You can fine-tune the ELinks binary to include really only

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.45 2003/06/18 20:37:31 zas Exp $ */
+/* $Id: af_unix.c,v 1.46 2003/06/18 21:16:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,6 +274,20 @@ af_unix_connection(void *dummy)
 	set_highpri();
 }
 
+/* usleep() is not portable, so we use this replacement.
+ * TODO: move it to somewhere. */
+void
+elinks_usleep(unsigned long useconds)
+{
+	struct timeval delay;
+	fd_set dummy;
+
+	FD_ZERO(&dummy);
+
+	delay.tv_sec = 0;
+	delay.tv_usec = useconds;
+	select(0, &dummy, &dummy, &dummy, &delay);
+}
 
 /* TODO: separate to a client function and a server function. */
 int
@@ -304,6 +318,8 @@ again:
 #endif
 
 	if (bind(s_unix_fd, s_unix, s_unix_l) < 0) {
+		/* This error permit to determine if we're a master or
+		 * slave elinks. Dirty but how to do better ?. --Zas */
 		if (errno != EADDRINUSE) /* This will change soon --Zas */
 			error(gettext("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
@@ -329,13 +345,9 @@ again:
 				      errno, (unsigned char *) strerror(errno));
 
 			if (++attempts < MAX_BIND_TRIES) {
-				/* XXX: What's wrong with sleep(1) ?? --Zas */
-				struct timeval tv = { 0, 100000 };
-				fd_set dummy;
-
-				/* Sleep for a second */
-				FD_ZERO(&dummy);
-				select(0, &dummy, &dummy, &dummy, &tv);
+				/* Sleep 1/10 second. */
+				/* Is this really useful ? --Zas */
+				elinks_usleep(100000);
 				close(s_unix_fd);
 
 				goto again;

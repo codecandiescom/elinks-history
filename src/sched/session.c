@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.541 2004/07/26 22:15:55 zas Exp $ */
+/* $Id: session.c,v 1.542 2004/07/26 22:25:55 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1116,6 +1116,8 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	struct uri *uri;
 	int length;
 
+	assert(str && str_size > 0);
+
 	uri = have_location(ses) ? cur_loc(ses)->vs.uri : ses->loading_uri;
 
 	/* Not looking or loading anything */
@@ -1138,6 +1140,8 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 {
 	struct document_view *doc_view = current_frame(ses);
 
+	assert(str && str_size > 0);
+
 	/* Ensure that the title is defined */
 	/* TODO: Try globhist --jonas */
 	if (doc_view && doc_view->document->title)
@@ -1155,6 +1159,8 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 {
 	struct link *link = get_current_session_link(ses);
 
+	assert(str && str_size > 0);
+
 	if (!link) return NULL;
 
 	return safe_strncpy(str, link->where ? link->where : link->where_img, str_size);
@@ -1168,6 +1174,8 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 {
 	struct link *link = get_current_session_link(ses);
 	unsigned char *where, *name = NULL;
+
+	assert(str && str_size > 0);
 
 	if (!link) return NULL;
 

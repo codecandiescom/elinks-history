@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.509 2004/06/13 19:00:10 jonas Exp $ */
+/* $Id: session.c,v 1.510 2004/06/13 20:20:39 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -852,6 +852,22 @@ encode_session_info(struct string *info, struct list_head *url_list)
 	return NULL;
 }
 
+/* Older elinks versions (up to and including 0.9.1) sends no magic variable and if
+ * this is detected we fallback to the old session info format. For this format
+ * the magic member of terminal_info hold the length of the URI string. The
+ * old format is handled by the defualt label in the switch.
+ *
+ * The new session info format supports extraction of multiple URIS from the
+ * terminal_info data member. The magic variable controls how to interpret
+ * the fields:
+ *
+ *	INTERLINK_NORMAL_MAGIC will cause for us to use the terminal_info
+ *	session_info variable to look up wether we have to ``resume'' a saved
+ *	session.
+ *
+ *	INTERLINK_REMOTE_MAGIC means to use the terminal_info session_info
+ *	variable as the remote session flags.
+ */
 int
 decode_session_info(struct terminal *term, struct terminal_info *info)
 {
@@ -863,17 +879,6 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 
 	switch (info->magic) {
 	case INTERLINK_NORMAL_MAGIC:
-		/* SESSION_NORMAL_MAGIC and INTERLINK_REMOTE_MAGIC supports
-		 * multiple URIs, remote opening and magic variables. For
-		 * normal magic the session info field store info about
-		 * possibly saved sessions and for remote magic it stores
-		 * the remote flags:
-		 *
-		 *	0: session info (saved id or remote flags) <int>
-		 *	1: Session magic <int>
-		 *	3: NUL terminated URIs <unsigned char>+
-		 */
-
 		/* This is the only place where the session id comes into game.
 		 * We're comparing it to possibly supplied -base-session here,
 		 * and initialize from an already saved session with id of
@@ -899,16 +904,6 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		break;
 
 	default:
-		/* Older versions (up to and including 0.9.1) sends no magic
-		 * variable and if this is detected we fallback to the old
-		 * session info format. The format is the simplest possible
-		 * one:
-		 *
-		 *	0: base-session ID <int>
-		 *	1: URI length <int>
-		 *	2: URI length bytes containing the URI <unsigned char>*
-		 */
-
 		/* Extract URI containing @magic bytes */
 		if (info->magic <= 0 || info->magic > len)
 			len = 0;

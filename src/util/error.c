@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.24 2002/06/16 17:24:33 pasky Exp $ */
+/* $Id: error.c,v 1.25 2002/06/16 20:37:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,14 +49,6 @@
 #undef CHECK_REALLOC_NULL
 
 
-#ifndef LEAK_DEBUG_LIST
-struct alloc_header {
-#ifdef CHECK_AH_SANITY
-	int magic;
-#endif
-	int size;
-};
-#else
 struct alloc_header {
 	struct alloc_header *next;
 	struct alloc_header *prev;
@@ -68,7 +60,6 @@ struct alloc_header {
 	unsigned char *file;
 	unsigned char *comment;
 };
-#endif /* LEAK_DEBUG_LIST */
 
 /* Size is set to be on boundary of 8 (a multiple of 7) in order to have the
  * main ptr aligned properly (faster access). We hope that  */
@@ -169,9 +160,7 @@ debug_msg(unsigned char *fmt, ...)
 
 long mem_amount = 0;
 
-#ifdef LEAK_DEBUG_LIST
 struct list_head memory_list = { &memory_list, &memory_list };
-#endif
 
 #ifdef CHECK_AH_SANITY
 int
@@ -205,7 +194,6 @@ check_memory_leaks()
 	fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n",
 		mem_amount);
 
-#ifdef LEAK_DEBUG_LIST
 	fprintf(stderr, "\nList of blocks: ");
 	foreach (ah, memory_list) {
 #ifdef CHECK_AH_SANITY
@@ -219,7 +207,6 @@ check_memory_leaks()
 			fprintf(stderr, ":\"%s\"", ah->comment);
 	}
 	fprintf(stderr, "\n");
-#endif
 
 	force_dump();
 }
@@ -248,13 +235,11 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 #ifdef CHECK_AH_SANITY
 	ah->magic = AH_SANITY_MAGIC;
 #endif
-#ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
 	ah->comment = NULL;
 
 	add_to_list(memory_list, ah);
-#endif
 
 	return PTR_AH2BASE(ah);
 }
@@ -289,13 +274,11 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 #ifdef CHECK_AH_SANITY
 	ah->magic = AH_SANITY_MAGIC;
 #endif
-#ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
 	ah->comment = NULL;
 
 	add_to_list(memory_list, ah);
-#endif
 
 	return PTR_AH2BASE(ah);
 }
@@ -319,11 +302,9 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 	if (bad_ah_sanity(ah, "free()")) force_dump();
 #endif
 
-#ifdef LEAK_DEBUG_LIST
 	if (ah->comment)
 		free(ah->comment);
 	del_from_list(ah);
-#endif
 
 	mem_amount -= ah->size;
 
@@ -386,10 +367,8 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 #ifdef CHECK_AH_SANITY
 	ah->magic = AH_SANITY_MAGIC;
 #endif
-#ifdef LEAK_DEBUG_LIST
 	ah->prev->next = ah;
 	ah->next->prev = ah;
-#endif
 
 	return PTR_AH2BASE(ah);
 }
@@ -397,7 +376,6 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 void
 set_mem_comment(void *ptr, unsigned char *str, int len)
 {
-#ifdef LEAK_DEBUG_LIST
 	struct alloc_header *ah;
 
 	ah = PTR_BASE2AH(ptr);
@@ -408,7 +386,6 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 	ah->comment = malloc(len + 1);
 	if (ah->comment)
 		safe_strncpy(ah->comment, str, len + 1);
-#endif
 }
 
 #undef SIZE_BASE2AH

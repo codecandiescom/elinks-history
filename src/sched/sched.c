@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.6 2003/01/05 16:48:16 pasky Exp $ */
+/* $Id: sched.c,v 1.7 2003/01/07 19:57:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1211,16 +1211,4 @@ abort_background_connections()
 		else
 			i++;
 	}
-}
-
-int
-is_entry_used(struct cache_entry *e)
-{
-	struct connection *c;
-
-	foreach(c, queue)
-		if (c->cache == e)
-			return 1;
-
-	return 0;
 }

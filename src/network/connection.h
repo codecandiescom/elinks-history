@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.1 2003/01/01 20:30:36 pasky Exp $ */
+/* $Id: connection.h,v 1.2 2003/01/07 19:57:29 pasky Exp $ */
 
 #ifndef EL__SCHED_SCHED_H
 #define EL__SCHED_SCHED_H
@@ -180,8 +180,6 @@ void change_connection(struct status *, struct status *, int, int);
 void detach_connection(struct status *, int);
 void abort_all_connections();
 void abort_background_connections();
-
-int is_entry_used(struct cache_entry *);
 
 /* void connection_timeout(struct connection *); */
 void set_timeout(struct connection *);

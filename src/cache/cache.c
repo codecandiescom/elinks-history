@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.27 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: cache.c,v 1.28 2003/01/07 19:57:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,19 @@ static struct list_head cache = {&cache, &cache};
 static long cache_size;
 
 static int cache_count = 0;
+
+
+static int
+is_entry_used(struct cache_entry *e)
+{
+	struct connection *c;
+
+	foreach(c, queue)
+		if (c->cache == e)
+			return 1;
+
+	return 0;
+}
 
 
 long

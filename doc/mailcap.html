@@ -33,8 +33,7 @@ on the web that does this. Google and thou shall find. ;)
 </p>
 
 <hr />
-<a id="intro" />
-<h2>1. A short intro to mailcap</h2>
+<h2 id="intro">1. A short intro to mailcap</h2>
 <p>
 Mailcap is a file format defined in rfc 1524. It is purpose is to
 inform multiple mail reading user agent (MUA) programs about the
@@ -49,11 +48,14 @@ a supplement for setting up mime handler. Mailcap files are present at
 most UNIX systems (/etc/mailcap) so this makes it possible for ELinks
 to know how to handle a great variety of file formats with little
 configuration.
+
+To be able to use mailcap it has to be compiled into ELinks. This
+is the default. If you don't need mailcap support just configure
+ELinks with the flag: <b>--disable-mailcap</b>.
 </p>
 
 <hr />
-<a id="parameters" />
-<h2>2. Parameters</h2>
+<h2 id="parameters">2. Parameters</h2>
 
 <p>
 The code has been ported from mutt and thereby inherits some of it's various
@@ -84,8 +86,7 @@ much sense for non-MUA:</p>
 </dl>
 
 <hr />
-<a id="reading" />
-<h2>3. Reading of mailcap files</h2>
+<h2 id="reading">3. Reading of mailcap files</h2>
 
 <p>
 Mailcap files will be read when starting ELinks. The mailcap files
@@ -105,8 +106,7 @@ will be determined in the following way:
 </ul>
 
 <hr />
-<a id="fields" />
-<h2>4. Fields</h2>
+<h2 id="fields">4. Fields</h2>
 
 <p>
 Since mailcap handling is primarily for displaying of resources all
@@ -133,38 +133,47 @@ your pager or present on your system.
 </p>
 
 <hr />
-<a id="config" />
-<h2>5. Mailcap configuration</h2>
+<h2 id="config">5. Mailcap configuration</h2>
 
 <p>
-Besides the option <i>protocol.mailcap.path</i> there's only
-<i>protocol.mailcap.ask</i> which controls wether to ask before opening
-a file. The option is a boolian and can be set like this:
+Apart from the <i>protocol.mailcap.path</i> option you can configure
+if mailcap support should be disabled. The default being that it is
+enabled. To disable it just put:
+</p>
+<pre>
+        <b>set</b> <i>protocol.mailcap.enable</i> = <b>0</b></pre>
+<p>
+in <b>elinks.conf</b>.
+</p>
+<p>
+It is also possible to control wether ELinks should ask you before
+opening a file. The option is a boolian and can be set like this:
 </p>
 <pre>
         <b>set</b> <i>protocol.mailcap.ask</i> = <b>1</b></pre>
-
-<p>if you would like to be asked before opening a file.</p>
+<p>
+if you would like to be asked before opening a file.
+</p>
 
 <hr />
-<a id="sample" />
-<h2>6. Some sample mailcap entries</h2>
+<h2 id="sample">6. Some sample mailcap entries</h2>
 <pre>
+<b># Use xv if X is running</b>
+<i>image/*</i>;                xv %s ; test=test -n "$DISPLAY";
+
 <b># Convert images to text using the netpbm tools</b>
 <i>image/*</i>;                (anytopnm %s | pnmscale -xysize 200 150 | \
 				pnminvert | ppmtopgm | pgmtopbm | \
 				pbmtoascii -1x2 ) 2&gt;&amp;1 ; copiousoutput
 
-<b># Obscure</b>
-<i>application/x-gunzip</i>;   gunzip --to-stdout %s ; copiousoutput
-<i>application/x-tar-gz</i>;   gunzip --to-stdout %s | tar -tf - ; copiousoutput
+<b># Various multimedia files</b>
+<i>audio/mpeg</i>;             xmms '%s'; test=test -n "$DISPLAY";
+<i>application/pdf</i>;        xpdf '%s'; test=test -n "$DISPLAY";
 <i>application/postscript</i>; ps2ascii %s ; copiousoutput
-
-
 </pre>
 
 <p>
-<tt>$Id: mailcap.html,v 1.2 2002/12/10 21:21:32 pasky Exp $</tt>
+<tt>$Id: mailcap.html,v 1.3 2002/12/11 13:53:28 jonas Exp $</tt>
 </p>
 
 </body>

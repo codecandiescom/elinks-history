@@ -204,6 +204,11 @@ void dns_found(void *data, int state)
 		retry_connection(conn);
 		return;
 	}
+	
+	/* Clear handlers, the connection to the previous RR really timed
+	 * out and doesn't interest us anymore. */
+	if (c_i->sock && *c_i->sock >= 0)
+		set_handlers(*c_i->sock, NULL, NULL, NULL, conn);
 
 	for (i = c_i->triedno + 1; i < c_i->addrno; i++) {
 #ifdef IPV6

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.6 2002/03/19 17:28:08 pasky Exp $ */
+/* $Id: bfu.c,v 1.7 2002/03/19 18:22:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ void scroll_menu(struct menu *menu, int d)
 	if (w < 0) w = 0;
 
 	menu->selected += d;
-	menu->selected %= menu->ni;
+	if (menu->ni) menu->selected %= menu->ni;
 	if (menu->selected < 0) menu->selected += menu->ni;
 
 	while (1) {

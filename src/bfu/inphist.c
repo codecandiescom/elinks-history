@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.43 2003/10/27 15:40:30 jonas Exp $ */
+/* $Id: inphist.c,v 1.44 2003/10/27 16:19:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,76 +128,73 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 /* Search duplicate entries in history list and remove older ones. */
 static void
-remove_duplicate_from_history(struct input_history *historylist,
-			      unsigned char *url)
+remove_duplicate_entries(struct input_history *history, unsigned char *entry)
 {
-	struct input_history_item *historyitem;
+	struct input_history_item *item;
 
-	if (!historylist || !url || !*url) return;
+	if (!history || !entry || !*entry) return;
 
-	foreach (historyitem, historylist->items) {
-		struct input_history_item *tmphistoryitem;
+	foreach (item, history->items) {
+		struct input_history_item *duplicate;
 
-		if (strcmp(historyitem->d, url)) continue;
+		if (strcmp(item->d, entry)) continue;
 
 		/* found a duplicate -> remove it from history list */
 
-		tmphistoryitem = historyitem;
-		historyitem = historyitem->prev;
+		duplicate = item;
+		item = item->prev;
 
-		del_from_list(tmphistoryitem);
-		mem_free(tmphistoryitem);
+		del_from_list(duplicate);
+		mem_free(duplicate);
 
-		historylist->size--;
+		history->size--;
 	}
 }
 
 /* Add a new entry in inputbox history list, take care of duplicate if
  * check_duplicate and respect history size limit. */
 void
-add_to_input_history(struct input_history *historylist, unsigned char *url,
+add_to_input_history(struct input_history *history, unsigned char *entry,
 		     int check_duplicate)
 {
-	struct input_history_item *newhistoryitem;
-	int url_len;
+	struct input_history_item *item;
+	int length;
 
-	if (!historylist || !url)
+	if (!history || !entry || !*entry)
 		return;
 
 	/* Strip spaces at the margins */
-	trim_chars(url, ' ', &url_len);
-	if (!url_len) return;
+	trim_chars(entry, ' ', &length);
+	if (!length) return;
 
 	/* Copy it all etc. */
 	/* One byte is already reserved for url in struct input_history_item. */
-	newhistoryitem = mem_alloc(sizeof(struct input_history_item) + url_len);
-	if (!newhistoryitem) return;
+	item = mem_alloc(sizeof(struct input_history_item) + length);
+	if (!item) return;
 
-	memcpy(newhistoryitem->d, url, url_len + 1);
+	memcpy(item->d, entry, length + 1);
 
 	if (check_duplicate)
-		remove_duplicate_from_history(historylist, newhistoryitem->d);
+		remove_duplicate_entries(history, item->d);
 
 	/* add new entry to history list */
-	add_to_list(historylist->items, newhistoryitem);
-	historylist->size++;
+	add_to_list(history->items, item);
+	history->size++;
 
-	if (!historylist->nosave) historylist->dirty = 1;
+	if (!history->nosave) history->dirty = 1;
 
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */
-	while (historylist->size > MAX_HISTORY_ITEMS) {
-		struct input_history_item *tmphistoryitem = historylist->items.prev;
-
-		if ((void *) tmphistoryitem == &historylist->items) {
+	for (; history->size > MAX_HISTORY_ITEMS; history->size--) {
+		if (list_empty(history->items)) {
 			internal("history is empty");
-			historylist->size = 0;
+			history->size = 0;
 			return;
 		}
 
-		del_from_list(tmphistoryitem);
-		mem_free(tmphistoryitem);
-		historylist->size--;
+		item = history->items.prev;
+		del_from_list(item);
+		mem_free(item);
 	}
 }
 

@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.19 2003/09/21 13:01:53 zas Exp $ */
+/* $Id: conv.h,v 1.20 2003/09/21 14:10:07 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -26,7 +26,7 @@ long strtolx(unsigned char *, unsigned char **);
 static inline unsigned char
 hx(register int a)
 {
-       return a >= 10 ? a + 'A' - 10 : a + '0';
+	return a >= 10 ? a + 'A' - 10 : a + '0';
 }
 
 /* Convert an hexadecimal char ([0-9][a-z][A-Z]) to
@@ -35,10 +35,10 @@ hx(register int a)
 static inline int
 unhx(register unsigned char a)
 {
-       if (a >= '0' && a <= '9') return a - '0';
-       if (a >= 'A' && a <= 'F') return a - 'A' + 10;
-       if (a >= 'a' && a <= 'f') return a - 'a' + 10;
-       return -1;
+	if (a >= '0' && a <= '9') return a - '0';
+	if (a >= 'A' && a <= 'F') return a - 'A' + 10;
+	if (a >= 'a' && a <= 'f') return a - 'a' + 10;
+	return -1;
 }
 
 /* These use granular allocation stuff. */

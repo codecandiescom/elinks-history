@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.3 2003/07/15 20:18:08 jonas Exp $ */
+/* $Id: frames.h,v 1.4 2003/07/29 23:27:19 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -35,7 +35,7 @@ struct line {
 	int size;
 	int dsize;
 
-	chr c;
+	unsigned char color;
 };
 enum cp_status {
 	CP_STATUS_NONE,

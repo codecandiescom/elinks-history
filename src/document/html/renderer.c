@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.185 2003/07/29 23:09:31 jonas Exp $ */
+/* $Id: renderer.c,v 1.186 2003/07/29 23:27:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ realloc_lines(struct part *p, int y)
 
 	for (i = p->document->y; i <= y; i++) {
 		p->document->data[i].l = 0;
-		p->document->data[i].c = find_nearest_color(&par_format.bgcolor, 8);
+		p->document->data[i].color = find_nearest_color(&par_format.bgcolor, 8);
 		p->document->data[i].d = NULL;
 	}
 
@@ -149,10 +149,10 @@ realloc_line(struct part *p, int y, int x)
 		line->dsize = newsize;
 	}
 
-	p->document->data[y].c = find_nearest_color(&par_format.bgcolor, 8);
+	line->color = find_nearest_color(&par_format.bgcolor, 8);
 
 	for (i = line->l; i <= x; i++) {
-		line->d[i] = (line->c << 11) | ' ';
+		line->d[i] = (line->color << 11) | ' ';
 	}
 
 	line->l = i;
@@ -410,7 +410,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * already got that idea; results in even more stains since we probably
 	 * shift chars even on surrounding lines when realigning tables
 	 * maniacally. --pasky */
-	set_hchars(part, 0, y, shift, (part->document->data[y].c << 11) | ' ');
+	set_hchars(part, 0, y, shift, (part->document->data[y].color << 11) | ' ');
 	copy_chars(part, shift, y, len, a);
 	fmem_free(a);
 
@@ -581,7 +581,7 @@ justify_line(struct part *part, int y)
 
 		/* See shift_chars() about why this is broken. */
 		set_hchars(part, 0, y, overlap(par_format),
-			   (part->document->data[y].c << 11) | ' ');
+			   (part->document->data[y].color << 11) | ' ');
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of

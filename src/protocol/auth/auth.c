@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.82 2004/05/29 04:25:24 jonas Exp $ */
+/* $Id: auth.c,v 1.83 2004/05/30 16:11:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,7 +183,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		add_to_list(http_auth_basic_list, entry);
 	}
 
-	if (entry && !entry->valid)
+	/* Only pop up question if one of the protocols requested it */
+	if (entry && !entry->valid && entry->realm)
 		add_questions_entry(do_auth_dialog, entry);
 
 	return entry;

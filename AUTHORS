@@ -22,6 +22,9 @@ Alexander Mai <st002279@hrzpub.tu-darmstadt.de>
 Alejandros Diamandidis <adia@egnatia.ee.auth.gr>
 	Greek codepages & translation
 
+Ami Fischman <usenet@fischman.org>
+        URL parsing fix
+
 Anton Voloshin <vav@isv.ru>
 	Proper encoding of form entries
 

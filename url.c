@@ -113,7 +113,8 @@ int parse_url(unsigned char *url, int *prlen,
 	/* Isolate host */
 	
 	host_end = prefix_end + strcspn(prefix_end, "@");
-	if (*host_end) { /* we have auth info here */
+	if (prefix_end + strcspn(prefix_end, "/") > host_end
+	    && *host_end) { /* we have auth info here */
 		unsigned char *user_end = strchr(prefix_end, ':');
 		
 		if (!user_end || user_end > host_end) {

@@ -32,7 +32,6 @@ for details)
 * add your language (only the name without the .lng suffix) to
 * index.txt on single line
 * ./synclang
-* ./gen-intl
 * cd ..
 * make
 * check if the translation is correct

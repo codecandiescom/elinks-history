@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.35 2005/04/05 12:01:50 jonas Exp $ */
+/* $Id: parse.c,v 1.36 2005/04/05 12:35:51 jonas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -427,7 +427,8 @@ static unsigned char ftp_vms_responses[] =
  "CORE.DIR;1          1  8-SEP-1996 16:09 [SYSTEM] (RWE,RWE,RE,RE)\r\n"
  /* And non-MutliNet VMS: */
  "CII-MANUAL.TEX;1  213/216  29-JAN-1996 03:33:12  [ANONYMOU,ANONYMOUS]   (RWED,RWED,,)\r\n"
- "EA95_0PS.GZ;1      No privilege for attempted operation";
+ /* A garbage line which should fail: */
+ "EA95_0PS.GZ;1      No privilege for attempted operation\r\n";
 #endif
 
 /* Converts VMS symbolic permissions to number-style ones, e.g. string
@@ -588,8 +589,8 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 
 	src++;
 
-	mtime.tm_year = parse_ftp_number(&src, end, 0, LONG_MAX);
-	if (src >= end)
+	mtime.tm_year = parse_year((const unsigned char **) &src, end);
+	if (src >= end || mtime.tm_year == -1)
 		return NULL;
 
 	/* Assuming the epoch starting at 1.1.1970 */

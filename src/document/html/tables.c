@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.262 2004/06/29 02:21:50 jonas Exp $ */
+/* $Id: tables.c,v 1.263 2004/06/29 02:24:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1010,7 +1010,7 @@ parse_table_attributes(struct table *table, unsigned char *attr, int real)
 	if (table->width == -1) {
 		table->width = par_format.width - par_format.leftmargin - par_format.rightmargin;
 		if (table->width < 0) table->width = 0;
-		table->has_width = 1;
+		table->full_width = 1;
 	}
 
 }
@@ -1161,7 +1161,7 @@ again:
 
 	margins = par_format.leftmargin + par_format.rightmargin;
 	if (!part->document && !part->box.x) {
-		if (!table->has_width)
+		if (!table->full_width)
 			int_upper_bound(&table->max_width, table->width);
 		int_lower_bound(&table->max_width, table->min_width);
 
@@ -1186,7 +1186,7 @@ again:
 	/* DBG("%d %d %d", t->min_width, t->max_width, table->width); */
 	if (table->min_width >= table->width)
 		distribute_widths(table, table->min_width);
-	else if (table->max_width < table->width && table->has_width)
+	else if (table->max_width < table->width && table->full_width)
 		distribute_widths(table, table->max_width);
 	else
 		distribute_widths(table, table->width);

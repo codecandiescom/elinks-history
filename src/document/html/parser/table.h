@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.5 2004/06/29 02:21:50 jonas Exp $ */
+/* $Id: table.h,v 1.6 2004/06/29 02:24:15 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -91,13 +91,14 @@ struct table {
 	int vcellpadding;
 	int cellspacing;
 	int frame, rules, width;
-	int has_width; 
 	int real_width;
 	int real_height;
 	int min_width;
 	int max_width;
 
 	int link_num;
+
+	unsigned int full_width:1;
 
 	struct html_start_end *bad_html;
 	int bad_html_size;

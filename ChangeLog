@@ -1,3 +1,49 @@
+Fri Feb 27 16:22:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/intl/: charsets.c, charsets.h:
+
+	Make get_entity_string() static since it is only used by charsets.c
+	for now.  
+
+Fri Feb 27 11:30:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Fix: copy http_version structure contents not structure pointer. How
+	did it remain unnoticed until now ? 
+
+Fri Feb 27 11:20:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/: http.c, http.h:
+
+	Provide and use macros to check http version, some FIXME were added.  
+
+Fri Feb 27 10:46:27 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Minor tidyup: useless goto is gone, a typo in a comment was fixed,
+	minor style changes.  
+
+Fri Feb 27 09:27:52 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Feb 27 06:18:43 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
+Thu Feb 26 23:47:10 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/tab.c:
+
+	Select the clicked tab when the last character of the tab is
+	clicked. Really this time. Quazgaa promises.  
+
 Thu Feb 26 17:35:58 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/action.c:

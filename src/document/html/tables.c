@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.351 2004/07/02 02:14:08 jonas Exp $ */
+/* $Id: tables.c,v 1.352 2004/07/08 11:00:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,8 +820,6 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 
 		part = format_cell(table, col, row, document, x, tmpy, width);
 		if (part) {
-			int next_x = x + table->cols_widths[col];
-
 			/* The cell content doesn't necessarily fill out the
 			 * whole cell height so use the calculated @height
 			 * because it is an upper bound. */
@@ -830,7 +828,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 			/* The line expansion draws the _remaining_ background
 			 * color of both untouched lines and lines that doesn't
 			 * stretch the whole cell width. */
-			expand_lines(table->part, next_x, y, height);
+			expand_lines(table->part, x + width, y, height);
 
 			if (cell->fragment_id)
 				add_fragment_identifier(part, cell->fragment_id);

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.61 2003/12/28 02:12:54 jonas Exp $ */
+/* $Id: options.inc,v 1.62 2003/12/28 02:19:51 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -895,14 +895,20 @@ struct option_info config_options_info[] = {
 		      "background", 0, bg, N_("Default background color."))
 
 #define INIT_OPT_COLORS(subtree, capt, name, bg, fg, desc)		\
-	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, bg, fg, desc)
+	DO_INIT_OPT_COLORS("ui.colors.color" subtree, capt, name, bg, fg, desc), \
+	INIT_OPT_TREE("ui.colors.mono" subtree, capt, name, 0, desc)
 
 #define INIT_OPT_COLOR_TREE(subtree, capt, name, desc)			\
-	INIT_OPT_TREE("ui.colors.color" subtree, capt, name, 0, desc)
+	INIT_OPT_TREE("ui.colors.color" subtree, capt, name, 0, desc),	\
+	INIT_OPT_TREE("ui.colors.mono" subtree, capt, name, 0, desc)
 
 	INIT_OPT_TREE("ui.colors", N_("Color terminals"),
 		"color", 0,
 		N_("Color settings for color terminal.")),
+
+	INIT_OPT_TREE("ui.colors", N_("Non-color terminals"),
+		"mono", 0,
+		N_("Color settings for non-color terminal.")),
 
 	/* FIXME: obsolete, how to alias them correctly ? --Zas */
 	INIT_OPT_COLOR_TREE("", N_("Main menu bar"),
@@ -1087,19 +1093,8 @@ struct option_info config_options_info[] = {
 
 
 
-	INIT_OPT_TREE("ui.colors", N_("Non-color terminals"),
-		"mono", 0,
-		N_("Color settings for non-color terminal.")),
-
 
 	/* FIXME: obsolete. --Zas */
-	INIT_OPT_TREE("ui.colors.mono", N_("Main menu bar"),
-		"mainmenu", 0,
-		N_("Main menu bar colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.mainmenu", N_("Unselected menu bar item"),
-		"normal", 0,
-		N_("Unselected menu bar item colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.mainmenu.normal", N_("Text color"),
 		"text", 0, "black",
@@ -1109,9 +1104,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.mainmenu", N_("Selected menu bar item"),
-		"selected", 0,
-		N_("Selected menu bar item colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.mainmenu.selected", N_("Text color"),
 		"text", 0, "gray",
@@ -1121,17 +1113,7 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.mainmenu", N_("Hotkey"),
-		"hotkey", 0,
-		N_("Main menu hotkey colors.")),
 
-	INIT_OPT_TREE("ui.colors.mono.mainmenu.hotkey", N_("Unselected hotkey"),
-		"normal", 0,
-		N_("Main menu unselected hotkey colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.mainmenu.hotkey", N_("Selected hotkey"),
-		"selected", 0,
-		N_("Main menu selected hotkey colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.mainmenu.hotkey.normal", N_("Text color"),
 		"text", 0, "black",
@@ -1150,13 +1132,6 @@ struct option_info config_options_info[] = {
 		N_("Main menu selected hotkey default background color.")),
 
 
-	INIT_OPT_TREE("ui.colors.mono", N_("Menu bar"),
-		"menu", 0,
-		N_("Menu bar colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.menu", N_("Unselected menu item"),
-		"normal", 0,
-		N_("Unselected menu item colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.menu.normal", N_("Text color"),
 		"text", 0, "black",
@@ -1166,9 +1141,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.menu", N_("Selected menu item"),
-		"selected", 0,
-		N_("Selected menu item colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.menu.selected", N_("Text color"),
 		"text", 0, "gray",
@@ -1178,9 +1150,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.menu", N_("Marked menu item"),
-		"marked", 0,
-		N_("Marked menu item colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.menu.marked", N_("Text color"),
 		"text", 0, "gray",
@@ -1190,17 +1159,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.menu", N_("Hotkey"),
-		"hotkey", 0,
-		N_("Menu item hotkey colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.menu.hotkey", N_("Unselected hotkey"),
-		"normal", 0,
-		N_("Menu unselected hotkey colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.menu.hotkey", N_("Selected hotkey"),
-		"selected", 0,
-		N_("Menu selected hotkey colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.menu.hotkey.normal", N_("Text color"),
 		"text", 0, "gray",
@@ -1218,9 +1176,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Menu selected hotkey default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.menu", N_("Menu frame"),
-		"frame", 0,
-		N_("Menu frame colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.menu.frame", N_("Text color"),
 		"text", 0, "black",
@@ -1231,9 +1186,6 @@ struct option_info config_options_info[] = {
 		N_("Default background color.")),
 
 
-	INIT_OPT_TREE("ui.colors.mono", N_("Dialog"),
-		"dialog", 0,
-		N_("Dialog colors.")),
 
 	/* Compatibility alias: added by jonas at 2003-10-18, 0.5pre7.CVS. */
 	INIT_OPT_ALIAS("ui.colors.mono.dialog", NULL,
@@ -1241,9 +1193,6 @@ struct option_info config_options_info[] = {
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use ui.colors.mono.dialog.generic.background instead.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Generic"),
-		"generic", 0,
-		N_("Generic dialog colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.generic", N_("Text color"),
 		"text", 0, "black",
@@ -1253,9 +1202,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Frame"),
-		"frame", 0,
-		N_("Dialog frame colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.frame", N_("Text color"),
 		"text", 0, "black",
@@ -1265,9 +1211,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Scrollbar"),
-		"scrollbar", 0,
-		N_("Scrollbar colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar", N_("Text color"),
 		"text", 0, "white",
@@ -1277,9 +1220,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Scrollbar selected"),
-		"scrollbar-selected", 0,
-		N_("Scrollbar selected colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.scrollbar-selected", N_("Text color"),
 		"text", 0, "black",
@@ -1289,9 +1229,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Title"),
-		"title", 0,
-		N_("Dialog title colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.title", N_("Text color"),
 		"text", 0, "gray",
@@ -1301,9 +1238,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Text"),
-		"text", 0,
-		N_("Dialog text colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.text", N_("Text color"),
 		"text", 0, "black",
@@ -1313,9 +1247,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Checkbox"),
-		"checkbox", 0,
-		N_("Dialog checkbox colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.checkbox", N_("Text color"),
 		"text", 0, "black",
@@ -1325,9 +1256,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Checkbox label"),
-		"checkbox-label", 0,
-		N_("Dialog checkbox label colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.checkbox-label", N_("Text color"),
 		"text", 0, "black",
@@ -1337,9 +1265,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Button"),
-		"button", 0,
-		N_("Dialog button colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.button", N_("Text color"),
 		"text", 0, "black",
@@ -1349,9 +1274,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Selected button"),
-		"button-selected", 0,
-		N_("Dialog selected button colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.button-selected", N_("Text color"),
 		"text", 0, "white",
@@ -1361,9 +1283,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Text field"),
-		"field", 0,
-		N_("Dialog field colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.field", N_("Text color"),
 		"text", 0, "gray",
@@ -1373,9 +1292,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Text field text"),
-		"field-text", 0,
-		N_("Dialog field text colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.field-text", N_("Text color"),
 		"text", 0, "gray",
@@ -1385,9 +1301,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Meter"),
-		"meter", 0,
-		N_("Dialog meter colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.meter", N_("Text color"),
 		"text", 0, "gray",
@@ -1397,9 +1310,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.dialog", N_("Shadow"),
-		"shadow", 0,
-		N_("Dialog shadow colors (see ui.shadows option).")),
 
 	INIT_OPT_COLOR("ui.colors.mono.dialog.shadow", N_("Background color"),
 		"background", 0, "black",
@@ -1410,13 +1320,6 @@ struct option_info config_options_info[] = {
 		N_("Default text color.")),
 
 
-	INIT_OPT_TREE("ui.colors.mono", N_("Title bar"),
-		"title", 0,
-		N_("Title bar colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.title", N_("Generic title bar"),
-		"title-bar", 0,
-		N_("Generic title bar colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.title.title-bar", N_("Text color"),
 		"text", 0, "gray",
@@ -1426,9 +1329,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.title", N_("Title text"),
-		"title-text", 0,
-		N_("Title bar text colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.title.title-text", N_("Text color"),
 		"text", 0, "gray",
@@ -1439,13 +1339,6 @@ struct option_info config_options_info[] = {
 		N_("Default background color.")),
 
 
-	INIT_OPT_TREE("ui.colors.mono", N_("Status bar"),
-		"status", 0,
-		N_("Status bar colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.status", N_("Generic status bar"),
-		"status-bar", 0,
-		N_("Generic status bar colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.status.status-bar", N_("Text color"),
 		"text", 0, "gray",
@@ -1455,9 +1348,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.status", N_("Status bar text"),
-		"status-text", 0,
-		N_("Status bar text colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.status.status-text", N_("Text color"),
 		"text", 0, "black",
@@ -1468,13 +1358,6 @@ struct option_info config_options_info[] = {
 		N_("Default background color.")),
 
 
-	INIT_OPT_TREE("ui.colors.mono", N_("Tabs bar"),
-		"tabs", 0,
-		N_("Tabs bar colors.")),
-
-	INIT_OPT_TREE("ui.colors.mono.tabs", N_("Unselected tab"),
-		"normal", 0,
-		N_("Unselected tab colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.tabs.normal", N_("Text color"),
 		"text", 0, "black",
@@ -1484,9 +1367,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.tabs", N_("Selected tab"),
-		"selected", 0,
-		N_("Selected tab colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.tabs.selected", N_("Text color"),
 		"text", 0, "gray",
@@ -1496,9 +1376,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "black",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono.tabs", N_("Tab separator"),
-		"separator", 0,
-		N_("Tab separator colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.tabs.separator", N_("Text color"),
 		"text", 0, "gray",
@@ -1508,9 +1385,6 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.mono", N_("Searched strings"),
-		"searched", 0,
-		N_("Searched string highlight colors.")),
 
 	INIT_OPT_COLOR("ui.colors.mono.searched", N_("Text color"),
 		"text", 0, "black",

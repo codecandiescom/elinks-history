@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.393 2003/12/01 15:35:50 pasky Exp $ */
+/* $Id: renderer.c,v 1.394 2003/12/25 09:57:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,6 +80,7 @@ static unsigned char *last_target;
 static unsigned char *last_image;
 static struct form_control *last_form;
 static int nobreak;
+static int nosearchable;
 static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
 static struct conv_table *convert_table;
 static int g_ctrl_num;
@@ -330,6 +331,10 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 				}
 			}
 		}
+	}
+
+	if (!!(schar_cache.attr & SCREEN_ATTR_UNSEARCHABLE) ^ !!nosearchable) {
+		schar_cache.attr ^= SCREEN_ATTR_UNSEARCHABLE;
 	}
 
 	return &schar_cache;
@@ -856,7 +861,9 @@ put_link_number(struct part *part)
 	s[slen++] = ']';
 	s[slen] = '\0';
 
+	nosearchable = 1;
 	put_chars(part, s, slen);
+	nosearchable = 0;
 
 	if (ff && ff->type == FC_TEXTAREA) line_break(part);
 

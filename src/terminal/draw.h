@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.42 2003/12/01 14:24:20 pasky Exp $ */
+/* $Id: draw.h,v 1.43 2003/12/25 09:57:46 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -9,6 +9,7 @@ struct terminal;
 /* All attributes should fit inside an unsigned char. */
 /* XXX: The bold mask is used as part of the color encoding. */
 enum screen_char_attr {
+	SCREEN_ATTR_UNSEARCHABLE = 0x01,
 	SCREEN_ATTR_BOLD	= 0x08,
 	SCREEN_ATTR_ITALIC	= 0x10,
 	SCREEN_ATTR_UNDERLINE	= 0x20,

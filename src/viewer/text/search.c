@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.144 2003/12/25 08:29:11 jonas Exp $ */
+/* $Id: search.c,v 1.145 2003/12/25 09:57:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,6 +151,9 @@ get_srch(struct document *document)
 				unsigned char c = document->data[y].chars[x].data;
 				int count = 0;
 				int xx;
+
+				if (document->data[y].chars[x].attr & SCREEN_ATTR_UNSEARCHABLE)
+					continue;
 
 				if (c > ' ') {
 					ADD(c, 1);

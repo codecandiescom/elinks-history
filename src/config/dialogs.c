@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.47 2003/06/07 14:02:33 pasky Exp $ */
+/* $Id: dialogs.c,v 1.48 2003/06/07 14:16:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 {
 	msg_box(term, ml, MSGBOX_EXTD_TEXT,
 		N_("Config error"), AL_CENTER,
-		msg_text(N_("Unable to write to config file %s: %s"),
+		msg_text(term, N_("Unable to write to config file %s: %s"),
 			config_file, strerr),
 		NULL, 1,
 		N_("Cancel"), NULL, B_ENTER | B_ESC);
@@ -117,7 +117,7 @@ push_info_button(struct dialog_data *dlg,
 
 		msg_box(term, getml(value, NULL), MSGBOX_EXTD_TEXT,
 			N_("Info"), AL_LEFT,
-			msg_text(N_("Name: %s\n"
+			msg_text(term, N_("Name: %s\n"
 				"Type: %s\n"
 				"Value: %s\n\n"
 				"Description: %s\n"),
@@ -128,7 +128,7 @@ push_info_button(struct dialog_data *dlg,
 	} else {
 		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 			N_("Info"), AL_LEFT,
-			msg_text(N_("Name: %s\n"
+			msg_text(term, N_("Name: %s\n"
 				"Type: %s\n"
 				"Description: %s\n"),
 				option->name, option_types[option->type].name,
@@ -471,7 +471,8 @@ invalid_option:
 
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("Delete option"), AL_CENTER,
-		msg_text(N_("Really delete the option \"%s\" ?"), option->name),
+		msg_text(term, N_("Really delete the option \"%s\" ?"),
+			option->name),
 		option, 2,
 		N_("OK"), really_delete_option, B_ENTER,
 		N_("Cancel"), NULL, B_ESC);
@@ -728,7 +729,7 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("Delete keybinding"), AL_CENTER,
-		msg_text(N_("Really delete the keybinding \"%s\" "
+		msg_text(term, N_("Really delete the keybinding \"%s\" "
 			"(action \"%s\", keymap \"%s\")?"),
 			box->sel->text, write_action(keybinding->action),
 			write_keymap(keybinding->keymap)),

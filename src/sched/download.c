@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.40 2003/06/07 13:17:37 pasky Exp $ */
+/* $Id: download.c,v 1.41 2003/06/07 14:16:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -520,7 +520,7 @@ write_error:
 						msg_box(get_download_ses(down)->tab->term, getml(msg, emsg, NULL),
 								MSGBOX_EXTD_TEXT,
 							N_("Download error"), AL_CENTER,
-							msg_text(N_("Could not create file %s: %s"), msg, emsg),
+							msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
 							NULL, 1,
 							N_("Cancel"), NULL, B_ENTER | B_ESC);
 					} else {
@@ -552,7 +552,7 @@ end_store:
 
 					msg_box(get_download_ses(down)->tab->term, getml(tt, NULL), MSGBOX_EXTD_TEXT,
 						N_("Download error"), AL_CENTER,
-						msg_text(N_("Error downloading %s:\n\n%s"), tt, t),
+						msg_text(term, N_("Error downloading %s:\n\n%s"), tt, t),
 						get_download_ses(down), 1,
 						N_("Cancel"), NULL, B_ENTER | B_ESC /*,
 						N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
@@ -577,7 +577,7 @@ end_store:
 
 					msg_box(get_download_ses(down)->tab->term, getml(url, NULL), MSGBOX_EXTD_TEXT,
 						N_("Download"), AL_CENTER,
-						msg_text(N_("Download complete:\n%s"), url),
+						msg_text(term, N_("Download complete:\n%s"), url),
 						get_download_ses(down), 1,
 						N_("OK"), NULL, B_ENTER | B_ESC);
 				}
@@ -705,7 +705,7 @@ lookup_unique_name(struct terminal *term, unsigned char *ofile, int resume,
 
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("File exists"), AL_CENTER,
-		msg_text(N_("This file already exists:\n"
+		msg_text(term, N_("This file already exists:\n"
 			"%s\n\n"
 			"The alternative filename is:\n"
 			"%s"),
@@ -802,7 +802,7 @@ create_download_file_do(struct terminal *term, unsigned char *file, void *data,
 		if (msg && msge) {
 			msg_box(term, getml(msg, msge, NULL), MSGBOX_EXTD_TEXT,
 				N_("Download error"), AL_CENTER,
-				msg_text(N_("Could not create file %s: %s"),
+				msg_text(term, N_("Could not create file %s: %s"),
 					msg, msge),
 				NULL, 1,
 				N_("Cancel"), NULL, B_ENTER | B_ESC);
@@ -1188,7 +1188,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_EXTD_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(N_("Content type is %s.\n"
+				msg_text(term, N_("Content type is %s.\n"
 					"Do you want to save or display this file?"),
 					content_type),
 				ses, 3,
@@ -1198,7 +1198,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		} else {
 			msg_box(ses->tab->term, getml(content_type, NULL), MSGBOX_EXTD_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(N_("Content type is %s.\n"
+				msg_text(term, N_("Content type is %s.\n"
 					"Do you want to display this file?"),
 					content_type),
 				ses, 2,
@@ -1231,7 +1231,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 			msg_box(ses->tab->term, getml(content_type, name, NULL), MSGBOX_EXTD_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(N_("Content type is %s.\n"
+				msg_text(term, N_("Content type is %s.\n"
 					"Do you want to open file with %s, "
 					"save it or display it?"),
 					content_type, name),
@@ -1243,7 +1243,7 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		} else {
 			msg_box(ses->tab->term, getml(content_type, name, NULL), MSGBOX_EXTD_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(N_("Content type is %s.\n"
+				msg_text(term, N_("Content type is %s.\n"
 					"Do you want to open file with %s, or "
 					"display it?"),
 					content_type, name),

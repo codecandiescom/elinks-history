@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.25 2003/06/07 13:17:36 pasky Exp $ */
+/* $Id: dialogs.c,v 1.26 2003/06/07 14:16:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,8 +231,8 @@ do_delete_global_history_item(struct terminal *term,
 	if (historyitem->refcount > 0) {
 		msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 			N_("Delete history item"), AL_CENTER,
-			msg_text(N_("Sorry, but this history entry is already "
-				"being used by something right now.\n\n"
+			msg_text(term, N_("Sorry, but this history entry is "
+				"already being used by something right now.\n\n"
 				"Title: \"%s\"\n"
 				"URL: \"%s\"\n"),
 				historyitem->title, historyitem->url),
@@ -326,7 +326,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 	else
 		msg_box(term, getml(ctx, NULL), MSGBOX_EXTD_TEXT,
 			N_("Delete history item"), AL_CENTER,
-			msg_text(N_("Delete history item \"%s\" ?\n\n"
+			msg_text(term, N_("Delete history item \"%s\" ?\n\n"
 				"URL: \"%s\""),
 				historyitem->title, historyitem->url),
 			ctx, 2,
@@ -409,7 +409,7 @@ push_info_button(struct dialog_data *dlg,
 
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("Info"), AL_LEFT,
-		msg_text(N_("Title: %s\n"
+		msg_text(term, N_("Title: %s\n"
 			"URL: %s\n"
 			"Last visit time: %s"),
 			historyitem->title, historyitem->url,

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.52 2003/06/07 14:03:16 pasky Exp $ */
+/* $Id: info.c,v 1.53 2003/06/07 14:16:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ menu_copying(struct terminal *term, void *d, struct session *ses)
 {
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("Copying"), AL_CENTER,
-		msg_text(N_("ELinks %s\n"
+		msg_text(term, N_("ELinks %s\n"
 			"\n"
 			"(C) 1999 - 2002 Mikulas Patocka\n"
 			"(C) 2001 - 2003 Petr Baudis\n"
@@ -106,7 +106,7 @@ res_inf(struct terminal *term, void *d, struct session *ses)
 
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("Resources"), AL_LEFT,
-		msg_text(N_("Resources: %d handles, %d timers.\n"
+		msg_text(term, N_("Resources: %d handles, %d timers.\n"
 			"Connections: %d connections, %d connecting, %d "
 			"transferring, %d keepalive.\n"
 			"Memory cache: %d bytes, %d files, %d locked, %d "
@@ -181,7 +181,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 
 	msg_box(term, getml(a, NULL), MSGBOX_EXTD_TEXT,
 		N_("Cache info"), AL_LEFT,
-		msg_text(N_("Cache content: %s"), a),
+		msg_text(term, N_("Cache content: %s"), a),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
@@ -200,7 +200,8 @@ memory_inf(struct terminal *term, void *d, struct session *ses)
 
 	msg_box(term, NULL, MSGBOX_EXTD_TEXT,
 		N_("Memory info"), AL_CENTER,
-		msg_text(N_("%ld bytes of memory allocated."), mem_amount),
+		msg_text(term, N_("%ld bytes of memory allocated."),
+			mem_amount),
 		r, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 

@@ -1,5 +1,5 @@
 /* Libc stub functions */
-/* $Id: stub.c,v 1.7 2004/01/28 00:42:52 jonas Exp $ */
+/* $Id: stub.c,v 1.8 2004/02/19 14:39:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,31 +16,37 @@
 #include "osdep/stub.h"
 #include "util/conv.h"
 
+/* These stubs are exception to our "Use (unsigned char *)!" rule. This is
+ * because the stubbed functions are defined using (char *), and we could get
+ * in trouble with this. Or when you use (foo ? strstr() : strcasestr()) and
+ * one of these is system and another stub, we're in trouble and get "Pointer
+ * type mismatch in conditional expression", game over. */
+
 
 #ifndef HAVE_STRCASECMP
 inline int
-elinks_strcasecmp(const unsigned char *s1, const unsigned char *s2)
+elinks_strcasecmp(const char *s1, const char *s2)
 {
 	while ((*s1 != '\0')
-		 && (upcase(*(unsigned char *)s1) == upcase(*(unsigned char *)s2)))
+		 && (upcase(*(char *)s1) == upcase(*(char *)s2)))
 	{
 		s1++;
 		s2++;
 	}
 
-	return upcase(*(unsigned char *) s1) - upcase(*(unsigned char *) s2);
+	return upcase(*(char *) s1) - upcase(*(char *) s2);
 }
 #endif /* !HAVE_STRCASECMP */
 
 #ifndef HAVE_STRNCASECMP
 inline int
-elinks_strncasecmp(const unsigned char *s1, const unsigned char *s2, size_t len)
+elinks_strncasecmp(const char *s1, const char *s2, size_t len)
 {
 	if (len == 0)
 		return 0;
 
 	while ((len-- != 0)
-	       && (upcase(*(unsigned char *)s1) == upcase(*(unsigned char *)s2)))
+	       && (upcase(*(char *)s1) == upcase(*(char *)s2)))
 	{
 		if (len == 0 || *s1 == '\0' || *s2 == '\0')
 			return 0;
@@ -48,14 +54,14 @@ elinks_strncasecmp(const unsigned char *s1, const unsigned char *s2, size_t len)
 		s2++;
 	}
 
-	return upcase(*(unsigned char *) s1) - upcase(*(unsigned char *) s2);
+	return upcase(*(char *) s1) - upcase(*(char *) s2);
 }
 #endif /* !HAVE_STRNCASECMP */
 
 #ifndef HAVE_STRCASESTR
 /* Stub for strcasestr(), GNU extension */
-inline unsigned char *
-elinks_strcasestr(const unsigned char *haystack, const unsigned char *needle)
+inline char *
+elinks_strcasestr(const char *haystack, const char *needle)
 {
 	size_t haystack_length = strlen(haystack);
 	size_t needle_length = strlen(needle);
@@ -66,7 +72,7 @@ elinks_strcasestr(const unsigned char *haystack, const unsigned char *needle)
 
 	for (i = haystack_length - needle_length + 1; i; i--) {
 		if (!strncasecmp(haystack, needle, needle_length))
-			return (unsigned char *)haystack;
+			return (char *)haystack;
 		haystack++;
 	}
 
@@ -75,11 +81,11 @@ elinks_strcasestr(const unsigned char *haystack, const unsigned char *needle)
 #endif
 
 #ifndef HAVE_STRDUP
-inline unsigned char *
-elinks_strdup(const unsigned char *str)
+inline char *
+elinks_strdup(const char *str)
 {
 	int str_len = strlen(str);
-	unsigned char *new = malloc(str_len + 1);
+	char *new = malloc(str_len + 1);
 
 	if (new) {
 		if (str_len) memcpy(new, str, str_len);
@@ -140,8 +146,8 @@ elinks_strstr(const char *s, const char *p)
 inline void *
 elinks_memmove(void *d, const void *s, size_t n)
 {
-	register unsigned char *dst = (unsigned char *) d;
-	register unsigned char *src = (unsigned char *) s;
+	register char *dst = (char *) d;
+	register char *src = (char *) s;
 
 	if (!n || src == dst) return (void *) dst;
 
@@ -160,8 +166,8 @@ elinks_memmove(void *d, const void *s, size_t n)
 
 
 #ifndef HAVE_STPCPY
-inline unsigned char *
-elinks_stpcpy(unsigned char *dest, unsigned const char *src)
+inline char *
+elinks_stpcpy(char *dest, unsigned const char *src)
 {
 	while ((*dest++ = *src++));
 	return (dest - 1);
@@ -172,6 +178,6 @@ elinks_stpcpy(unsigned char *dest, unsigned const char *src)
 inline void *
 elinks_mempcpy(void *dest, const void *src, size_t n)
 {
-	return (void *) ((unsigned char *) memcpy(dest, src, n) + n);
+	return (void *) ((char *) memcpy(dest, src, n) + n);
 }
 #endif

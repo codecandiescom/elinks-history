@@ -1,4 +1,4 @@
-/* $Id: stub.h,v 1.4 2004/02/19 14:30:41 pasky Exp $ */
+/* $Id: stub.h,v 1.5 2004/02/19 14:39:39 pasky Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
@@ -24,6 +24,14 @@
 #undef HAVE_STRSTR
 
 #endif /* USE_OWN_LIBC */
+
+
+/* These stubs are exception to our "Use (unsigned char *)!" rule. This is
+ * because the stubbed functions are defined using (char *), and we could get
+ * in trouble with this. Or when you use (foo ? strstr() : strcasestr()) and
+ * one of these is system and another stub, we're in trouble and get "Pointer
+ * type mismatch in conditional expression", game over. */
+
 
 /** strchr() */
 
@@ -69,35 +77,35 @@ inline void *elinks_memmove(void *, const void *, size_t);
 #ifndef HAVE_STRCASECMP
 #undef strcasecmp
 #define strcasecmp(a, b) elinks_strcasecmp(a, b)
-int elinks_strcasecmp(const unsigned char *, const unsigned char *);
+int elinks_strcasecmp(const char *, const char *);
 #endif
 
 /** strncasecmp() */
 #ifndef HAVE_STRNCASECMP
 #undef strncasecmp
 #define strncasecmp(a, b, l) elinks_strncasecmp(a, b, l)
-int elinks_strncasecmp(const unsigned char *, const unsigned char *, size_t);
+int elinks_strncasecmp(const char *, const char *, size_t);
 #endif
 
 /** strcasestr() */
 #ifndef HAVE_STRCASESTR
 #undef strcasestr
 #define strcasestr(a, b) elinks_strcasestr(a, b)
-unsigned char *elinks_strcasestr(const unsigned char *, const unsigned char *);
+char *elinks_strcasestr(const char *, const char *);
 #endif
 
 /** strdup() */
 #ifndef HAVE_STRDUP
 #undef strdup
 #define strdup(s) elinks_strdup(s)
-unsigned char *elinks_strdup(const unsigned char *);
+char *elinks_strdup(const char *);
 #endif
 
 /* stpcpy() */
 #ifndef HAVE_STPCPY
 #undef stpcpy
 #define stpcpy(d, s) elinks_stpcpy(d, s)
-unsigned char *elinks_stpcpy(unsigned char *, unsigned const char *);
+char *elinks_stpcpy(char *, const char *);
 #endif
 
 /* mempcpy() */

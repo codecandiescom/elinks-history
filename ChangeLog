@@ -1,3 +1,10 @@
+Thu Mar 14 20:40:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* session.c:
+	
+	fixed stripping of last char from url when adding a bookmark -
+	thanks go to zas
+
 Thu Mar 14 20:21:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, bookmarks.c, default.c, lua.c, mailto.c, menu.c,

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.26 2004/09/24 23:24:49 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.27 2004/09/24 23:33:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,35 +104,36 @@ value_to_jsval(JSContext *ctx, jsval *vp, enum prop_type prop_type,
 	}
 }
 
+union jsval_union {
+	jsint boolean;
+	jsdouble *number;
+	unsigned char *string;
+};
+
 #define JSVAL_TO_VALUE_START \
-	jsint boolean = 0; \
-	jsdouble *number = NULL; \
-	unsigned char *string = NULL; \
+	union jsval_union v; \
  \
 	/* Prevent "Unused variable" warnings. */ \
-	if (!JSVAL_IS_INT(id) || boolean || number || string) \
+	if (!JSVAL_IS_INT(id) || (v.string = NULL)) \
 		goto bye;
 
-#define JSVAL_REQUIRE(vp, type, var) \
-	jsval_to_value(ctx, vp, JSTYPE_ ## type, &var);
+#define JSVAL_REQUIRE(vp, type) \
+	jsval_to_value(ctx, vp, JSTYPE_ ## type, &v);
 
 #define JSVAL_TO_VALUE_END \
 bye: \
 	return JS_TRUE;
 
 static void
-jsval_to_value(JSContext *ctx, jsval *vp, JSType type, void *var)
+jsval_to_value(JSContext *ctx, jsval *vp, JSType type, union jsval_union *var)
 {
-	jsint *boolean = var;
-	jsdouble **number = var;
-	unsigned char **string = var;
 	jsval val;
 
 	if (JS_ConvertValue(ctx, *vp, type, &val) == JS_FALSE) {
 		switch (type) {
-			case JSTYPE_BOOLEAN: *boolean = JS_FALSE; break;
-			case JSTYPE_NUMBER: *number = NULL; break;
-			case JSTYPE_STRING: *string = NULL; break;
+			case JSTYPE_BOOLEAN: var->boolean = JS_FALSE; break;
+			case JSTYPE_NUMBER: var->number = NULL; break;
+			case JSTYPE_STRING: var->string = NULL; break;
 			case JSTYPE_VOID:
 			case JSTYPE_OBJECT:
 			case JSTYPE_FUNCTION:
@@ -145,10 +146,10 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, void *var)
 	}
 
 	switch (type) {
-		case JSTYPE_BOOLEAN: *boolean = JSVAL_TO_BOOLEAN(val); break;
-		case JSTYPE_NUMBER: *number = JSVAL_TO_DOUBLE(val); break;
+		case JSTYPE_BOOLEAN: var->boolean = JSVAL_TO_BOOLEAN(val); break;
+		case JSTYPE_NUMBER: var->number = JSVAL_TO_DOUBLE(val); break;
 		case JSTYPE_STRING:
-			*string = JS_GetStringBytes(JS_ValueToString(ctx, val));
+			var->string = JS_GetStringBytes(JS_ValueToString(ctx, val));
 			break;
 		case JSTYPE_VOID:
 		case JSTYPE_OBJECT:
@@ -285,9 +286,9 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_DOC_TITLE:
-		JSVAL_REQUIRE(vp, STRING, string);
+		JSVAL_REQUIRE(vp, STRING);
 		if (document->title) mem_free(document->title);
-		document->title = stracpy(string);
+		document->title = stracpy(v.string);
 		break;
 	}
 
@@ -344,8 +345,8 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	{
 		struct uri *new_uri;
 
-		JSVAL_REQUIRE(vp, STRING, string);
-		new_uri = get_hooked_uri(string, doc_view->session,
+		JSVAL_REQUIRE(vp, STRING);
+		new_uri = get_hooked_uri(v.string, doc_view->session,
 					 doc_view->session->tab->term->cwd);
 		if (!new_uri)
 			break;
@@ -507,7 +508,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 {
 	JSContext *ctx;
 	jsval rval;
-	unsigned char *string = NULL;
+	union jsval_union v;
 	unsigned char *ret = NULL;
 
 	assert(interpreter);
@@ -523,9 +524,9 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 		return NULL;
 	}
 
-	JSVAL_REQUIRE(&rval, STRING, string);
-	if (string) {
-		ret = stracpy(string);
+	JSVAL_REQUIRE(&rval, STRING);
+	if (v.string) {
+		ret = stracpy(v.string);
 	}
 	return ret;
 }

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.66 2004/06/12 19:23:19 zas Exp $ */
+/* $Id: document.h,v 1.67 2004/06/26 12:45:45 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -125,8 +125,9 @@ struct document {
 	struct line *data;
 
 	struct link *links;
-	struct link **lines1;
-	struct link **lines2;
+	/* Arrays with one item per rendered document's line. */
+	struct link **lines1; /* The first link on the line. */
+	struct link **lines2; /* The last link on the line. */
 
 	struct search *search;
 	struct search **slines1;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.4 2002/12/07 22:26:30 pasky Exp $ */
+/* $Id: dialogs.c,v 1.5 2002/12/08 12:23:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "bfu/button.h"
 #include "bfu/listbox.h"
 #include "bfu/msgbox.h"
+#include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/options.h"
 #include "config/opttypes.h"
@@ -27,7 +28,7 @@
 #include "util/memory.h"
 
 /* The location of the box in the options manager */
-#define	OP_BOX_IND		2
+#define	OP_BOX_IND		3
 
 
 void
@@ -175,6 +176,15 @@ push_info_button(struct dialog_data *dlg,
 }
 
 
+static int
+push_save_button(struct dialog_data *dlg,
+		struct widget_data *some_useless_info_button)
+{
+	write_config(dlg->win->term);
+	return 0;
+}
+
+
 /* Builds the "Options manager" dialog */
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
@@ -200,9 +210,15 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	d->items[0].text = TEXT(T_INFO);
 
 	d->items[1].type = D_BUTTON;
-	d->items[1].gid = B_ESC;
-	d->items[1].fn = cancel_dialog;
-	d->items[1].text = TEXT(T_CLOSE);
+	d->items[1].gid = B_ENTER;
+	d->items[1].fn = push_save_button;
+	d->items[1].udata = ses;
+	d->items[1].text = TEXT(T_SAVE);
+
+	d->items[2].type = D_BUTTON;
+	d->items[2].gid = B_ESC;
+	d->items[2].fn = cancel_dialog;
+	d->items[2].text = TEXT(T_CLOSE);
 
 	d->items[OP_BOX_IND].type = D_BOX;
 	d->items[OP_BOX_IND].gid = 12;

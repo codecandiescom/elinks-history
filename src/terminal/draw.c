@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.42 2003/07/31 21:59:47 zas Exp $ */
+/* $Id: draw.c,v 1.43 2003/08/01 09:58:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,7 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 	if_assert_failed return;
 	if (out_of_range(term, x, y)) return;
 
-	end = (l <= term->x - x) ? l : term->x - x;
+	end = int_min(l, term->x - x);
 	if (end == 0) return;
 
 	position = x + term->x * y;
@@ -149,8 +149,8 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 	if_assert_failed return;
 	if (out_of_range(term, x, y)) return;
 
-	endx = (xw < term->x - x) ? xw : term->x - x;
-	endy = (yw < term->y - y) ? yw : term->y - y;
+	endx = int_min(xw, term->x - x);
+	endy = int_min(yw, term->y - y);
 
 	position = x + term->x * y;
 
@@ -218,7 +218,7 @@ print_text(struct terminal *term, int x, int y, int l,
 	if_assert_failed return;
 	if (out_of_range(term, x, y)) return;
 
-	end = (l <= term->x - x) ? l : term->x - x;
+	end = int_min(l, term->x - x);
 	position = x + term->x * y;
 
 	for (end += position; position < end && *text; text++, position++) {

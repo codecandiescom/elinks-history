@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.53 2005/03/27 00:49:19 rrowan Exp $
+# $Id: hooks.pl,v 1.54 2005/03/27 00:51:40 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -498,26 +498,30 @@ sub pre_format_html_hook
 	my $html = shift;
 
 	# /. sanitation
-	if ($url =~ 'slashdot\.org') {
+	if ($url =~ 'slashdot\.org')
+	{
 #		$html =~ s/^<!-- Advertisement code. -->.*<!-- end ad code -->$//sm;
 #		$html =~ s/<iframe.*><\/iframe>//g;
 #		$html =~ s/<B>Advertisement<\/B>//;
 	}
 
 	# Yes, I heard you the first time
-	if ($url =~ 'google\.com') {
+	if ($url =~ 'google\.com')
+	{
 		$html =~ s/Teep: In must broosers yuoo cun joost heet zee retoorn key insteed ooff cleecking oon zee seerch boottun\. Bork bork bork!//;
 		$html =~ s/Tip:<\/font> Save time by hitting the return key instead of clicking on "search"/<\/font>/;
 	}
 
 	# SourceForge ad smasher
-	if ($url =~ 'sourceforge\.net') {
+	if ($url =~ 'sourceforge\.net')
+	{
 		$html =~ s/<!-- AD POSITION \d+ -->.*?<!-- END AD POSITION \d+ -->//smg;
 		$html =~ s/<b>&nbsp\;&nbsp\;&nbsp\;Site Sponsors<\/b>//g;
 	}
 
 	# GMail has obviously never met ELinks
-	if ($url =~ 'gmail\.google\.com') {
+	if ($url =~ 'gmail\.google\.com')
+	{
 		$html =~ s/^<b>For a better Gmail experience, use a.+?Learn more<\/a><\/b>$//sm;
 	}
 

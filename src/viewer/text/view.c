@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.396 2004/04/15 15:25:39 jonas Exp $ */
+/* $Id: view.c,v 1.397 2004/04/15 16:16:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1054,6 +1054,23 @@ init_session_info_string(struct string *parameters, struct session *ses)
 	return parameters;
 }
 
+
+void
+open_url_in_new_window(struct session *ses, unsigned char *url,
+			void (*open_window)(struct terminal *, unsigned char *, unsigned char *))
+{
+	struct string parameters;
+
+	assert(open_window && ses && url);
+	if_assert_failed return;
+
+	if (!init_session_info_string(&parameters, ses)) return;
+	if (url) add_encoded_shell_safe_url(&parameters, url);
+
+	open_window(ses->tab->term, path_to_exe, parameters.source);
+	done_string(&parameters);
+}
+
 /* open a link in a new xterm */
 void
 send_open_in_new_window(struct terminal *term,
@@ -1103,6 +1120,7 @@ send_open_new_window(struct terminal *term,
 	open_window(term, path_to_exe, parameters.source);
 	done_string(&parameters);
 }
+
 
 void
 open_in_new_window(struct terminal *term,

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.369 2004/04/15 08:28:28 jonas Exp $ */
+/* $Id: session.c,v 1.370 2004/04/15 16:16:56 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -33,6 +33,7 @@
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
+#include "osdep/newwin.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
 #include "sched/connection.h"
@@ -769,6 +770,7 @@ get_homepage_url(void)
 static int
 process_session_info(struct session *ses, struct initial_session_info *info)
 {
+	void (*open_window)(struct terminal *term, unsigned char *, unsigned char *) = NULL;
 	struct session *s;
 
 	if (!info) return -1;
@@ -782,6 +784,17 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		 * want to hook up with the master. */
 		if (info->remote && s->tab->term->master) {
 			struct window *tab = get_current_tab(s->tab->term);
+
+			/* Let's hope the master can open windows ;) */
+			if (info->remote & SES_REMOTE_NEW_WINDOW) {
+				struct open_in_new *windows;
+
+				windows = get_open_in_new(s->tab->term);
+				if (windows) {
+					open_window = windows->fn;
+					mem_free(windows);
+				}
+			}
 
 			assert(tab);
 			ses = tab->data;
@@ -803,12 +816,15 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 			if (!url) continue;
 
-			/* TODO: Handle open in new window if the
-			 * SES_REMOTE_NEW_WINDOW remote flag is set */
 			if (first) {
 				/* Open first url. */
 				goto_url_with_hook(ses, url);
 				first = 0;
+
+			} else if (open_window) {
+				/* Open next ones in windoze. */
+				open_url_in_new_window(ses, url, open_window);
+
 			} else {
 				/* Open next ones. */
 				open_url_in_new_tab(ses, url, 1);
@@ -825,11 +841,14 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 			 * of thing or make the window focus detecting code
 			 * more intelligent. --jonas */
 			open_url_in_new_tab(ses, NULL, 0);
-		}
 
-		if (info->remote & SES_REMOTE_PROMPT_URL) {
-			/* We can't create new window in EV_INIT handler! */
-			register_bottom_half(dialog_goto_url_open, ses);
+			if (info->remote & SES_REMOTE_PROMPT_URL) {
+				/* We can't create new window in EV_INIT handler! */
+				register_bottom_half(dialog_goto_url_open, ses);
+			}
+
+		} else if (info->remote & SES_REMOTE_NEW_WINDOW && open_window) {
+			open_url_in_new_window(ses, NULL, open_window);
 		}
 
 #ifdef CONFIG_BOOKMARKS

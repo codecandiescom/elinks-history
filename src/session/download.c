@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.84 2003/07/23 02:43:07 pasky Exp $ */
+/* $Id: download.c,v 1.85 2003/07/23 02:46:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1181,9 +1181,10 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Content type is %s.\n"
-					"Do you want to save or display this file?"),
-					content_type),
+				msg_text(ses->tab->term, N_("Would you like to "
+					 "save the file '%s' (type: %s) "
+					 "or display it?"),
+					 filename.source, content_type),
 				ses, 3,
 				N_("Save"), tp_save, B_ENTER,
 				N_("Display"), tp_display, 0,
@@ -1191,9 +1192,9 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 		} else {
 			msg_box(ses->tab->term, getml(content_type, filename.source, NULL), MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(ses->tab->term, N_("Content type is %s.\n"
-					"Do you want to display this file?"),
-					content_type),
+				msg_text(ses->tab->term, N_("Would you like to "
+					 "display the file '%s' (type: %s)?"),
+					 filename.source, content_type),
 				ses, 2,
 				N_("Display"), tp_display, B_ENTER,
 				N_("Cancel"), tp_cancel, B_ESC);

@@ -31,11 +31,11 @@ User's Guide
 	Beginner's Topics
 		Bookmarks ............................... bookmarks.txt
 		Document Marks .............................. marks.txt
-		Ex-mode .................................... exmode.txt
 	Advanced Topics
 		Automatic MIME Type Resolution .............. mime.html
 		Mailcap MIME Handlers in ELinks .......... mailcap.html
 		JavaScript/ECMAScript in ELinks ........ ecmascript.txt
+		Ex-mode .................................... exmode.txt
 
 Developer's Guide
 	Internal Scripting (*)
@@ -68,7 +68,7 @@ detailed notes regarding given modules/subsystems.
 
 
 
-$Id: index.txt,v 1.1 2004/12/16 09:31:29 pasky Exp $
+$Id: index.txt,v 1.2 2004/12/16 10:54:33 pasky Exp $
 
 vim: textwidth=72
 (Note: Sometimes, I broke the lines manually earlier than gqap would,

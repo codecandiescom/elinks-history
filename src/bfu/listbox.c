@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.190 2005/03/18 13:30:53 zas Exp $ */
+/* $Id: listbox.c,v 1.191 2005/03/24 15:49:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,16 +48,9 @@ dlg_format_listbox(struct terminal *term, struct widget_data *widget_data,
 	           int x, int *y, int w, int max_height, int *rw,
 	           enum format_align align)
 {
-	int min, optimal_h;
-
-	set_box(&widget_data->box, x, *y, w, 1);
-
-	if (rw) int_bounds(rw, widget_data->box.width, w);
+	int min, optimal_h, height;
 
 	/* Height bussiness follows: */
-
-	/* We ignore this one happily now. Rather be Dynamic ;p. */
-	/* (*y) += widget_data->widget->gid; */
 
 	/* This is only weird heuristic, it could scale well I hope. */
 	optimal_h = max_height * 7 / 10 - VERTICAL_LISTBOX_MARGIN;
@@ -65,16 +58,16 @@ dlg_format_listbox(struct terminal *term, struct widget_data *widget_data,
 
 	if (max_height - VERTICAL_LISTBOX_MARGIN < min) {
 		/* Big trouble: can't satisfy even the minimum :-(. */
-		widget_data->box.height = max_height - VERTICAL_LISTBOX_MARGIN;
+		height = max_height - VERTICAL_LISTBOX_MARGIN;
 	} else if (optimal_h < min) {
-		widget_data->box.height = min;
+		height = min;
 	} else {
-		widget_data->box.height = optimal_h;
+		height = optimal_h;
 	}
 
-	/* DBG("::%d(%d)::%d::%d::", max_y, term?1:2, widget_data->h, *y); */
-
-	(*y) += widget_data->box.height;
+	set_box(&widget_data->box, x, *y, w, height);
+	(*y) += height;
+	if (rw) *rw = w;
 }
 
 

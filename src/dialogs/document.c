@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.98 2004/07/25 19:46:49 zas Exp $ */
+/* $Id: document.c,v 1.99 2004/10/19 04:54:22 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -303,5 +303,4 @@ protocol_header_dialog(struct session *ses)
 		N_("No header info."),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
-
 }

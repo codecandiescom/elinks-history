@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.24 2003/12/05 18:07:11 pasky Exp $ */
+/* $Id: cgi.c,v 1.25 2003/12/05 18:07:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ set_vars(struct connection *conn, unsigned char *script)
 					ts);
 
 		if (ustr) {
-			if (setenv("HTTP_USER_AGENT", ustr, 1)) return -1;
+			setenv("HTTP_USER_AGENT", ustr, 1);
 			mem_free(ustr);
 		}
 	}

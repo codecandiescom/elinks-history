@@ -2,7 +2,7 @@
 
 This document describes the support for Mailcap (RFC 1524) in ELinks. It does
 not describe the mailcap format. There are plenty of documents on the Web that
-does this. Google and thou shall find. ;)
+does this. Google and thou wilt find. ;)
 
 A Short Intro to Mailcap
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,4 +116,4 @@ Below are examples of how to specify external viewers:
 	application/postscript; ps2ascii %s ; copiousoutput
 
 
-$Id: mailcap.txt,v 1.3 2005/01/03 08:12:57 miciah Exp $
+$Id: mailcap.txt,v 1.4 2005/01/03 08:25:13 miciah Exp $

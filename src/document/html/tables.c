@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.334 2004/06/30 23:17:44 jonas Exp $ */
+/* $Id: tables.c,v 1.335 2004/06/30 23:19:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,7 +499,10 @@ distribute_widths(struct table *table, int width)
 	if (!widths) return;
 
 	max_widths = fmem_alloc(cols_array_size);
-	if (!max_widths) goto free_widths;
+	if (!max_widths) {
+		fmem_free(widths);
+		return;
+	}
 
 	while (spare_width) {
 		int stretched, total_width;
@@ -510,7 +513,7 @@ distribute_widths(struct table *table, int width)
 		total_width = apply_stretch_method(table, widths, max_widths, stretch_method, max_cols_width);
 		if (total_width == -1) {
 			INTERNAL("could not expand table");
-			goto free_all;
+			break;
 		}
 
 		if (!total_width) {
@@ -525,10 +528,7 @@ distribute_widths(struct table *table, int width)
 			spare_width -= stretched;
 	}
 
-free_all:
 	fmem_free(max_widths);
-
-free_widths:
 	fmem_free(widths);
 }
 

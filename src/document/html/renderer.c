@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.493 2004/08/21 21:47:49 miciah Exp $ */
+/* $Id: renderer.c,v 1.494 2004/08/21 21:51:28 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1023,7 +1023,8 @@ process_link(struct part *part, enum link_state link_state,
 	struct link *link;
 	int x_offset = 0;
 
-	if (link_state == LINK_STATE_SAME) {
+	switch (link_state) {
+	case LINK_STATE_SAME: {
 		unsigned char *name;
 
 		if (!part->document) return;
@@ -1044,10 +1045,10 @@ process_link(struct part *part, enum link_state link_state,
 			}
 		}
 
-	} else {
-		assert(link_state == LINK_STATE_NEW);
-		if_assert_failed return;
+		break;
+	}
 
+	case LINK_STATE_NEW:
 		part->link_num++;
 
 		init_link_state_info(format.link, format.target,
@@ -1066,6 +1067,13 @@ process_link(struct part *part, enum link_state link_state,
 		link = new_link(part->document, part->link_num,
 				chars, charslen);
 		if (!link) return;
+
+		break;
+
+	case LINK_STATE_NONE:
+	default:
+		INTERNAL("bad link_state %i", (int) link_state);
+		return;
 	}
 
 	/* Add new canvas positions to the link. */

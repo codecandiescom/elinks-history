@@ -4594,7 +4594,7 @@ struct translation translation_french [] = {
   {T_ADD_FOLDER, "Créer dossier"},
   {T_FOLDER_NAME, "Nom du dossier"},
   {T_MOVE, "Déplacer"},
-  {T_AFTER_RESUME, NULL},
+  {T_AFTER_RESUME, "après reprise"},
   {0, NULL}
 };
 

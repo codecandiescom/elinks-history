@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.52 2003/10/28 19:03:56 jonas Exp $ */
+/* $Id: checkbox.c,v 1.53 2003/10/28 20:38:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ checkboxes_width(struct terminal *term, int intl, unsigned char **texts,
 	*maxwidth += 4;
 }
 
-
+#if 0
 void
 checkbox_list_fn(struct dialog_data *dlg_data)
 {
@@ -113,6 +113,7 @@ checkbox_list_fn(struct dialog_data *dlg_data)
 			   dlg_data->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }
+#endif
 
 
 static void

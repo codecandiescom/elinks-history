@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.350 2004/11/10 18:39:44 witekfl Exp $ */
+/* $Id: http.c,v 1.351 2004/11/11 00:07:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1442,13 +1442,13 @@ again:
 		/* If the content is encoded, we want to preserve the encoding
 		 * if it is implied by the extension, so that saving the URI
 		 * will leave the saved file with the correct encoding. */
-#ifdef HAVE_ZLIB_H
+#ifdef CONFIG_GZIP
 		if (file_encoding != ENCODING_GZIP
 		    && (!strcasecmp(d, "gzip") || !strcasecmp(d, "x-gzip")))
 		    	conn->content_encoding = ENCODING_GZIP;
 #endif
 #ifdef BUG_517
-#ifdef HAVE_BZLIB_H
+#ifdef CONFIG_BZIP2
 		if (file_encoding != ENCODING_BZIP2
 		    && (!strcasecmp(d, "bzip2") || !strcasecmp(d, "x-bzip2")))
 			conn->content_encoding = ENCODING_BZIP2;

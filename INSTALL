@@ -62,16 +62,18 @@ translations you don't like; especially for translations, it can significantly
 reduce resulting binary size as well. Good luck!
 
   !BEWARE! If you _distribute_ binary of ELinks with OpenSSL linked to it, and
-OpenSSL library is not part of your base system, you are VIOLATING GPL!  Wo, we
-recommend people who are making ELinks binary for system with OpenSSL not in
-base system and who decided to link OpenSSL against ELinks binary NOT to publish
-or distribute such a binary, as it's breaking GPL 2(b), if they like to have
-everything legally perfect.  As a semi-solution to this, GNUTLS support was
-introduced; if you want to distribute ELinks binary with HTTPS support, compile
-ELinks with --with-gnutls configure option (assuming that you have GNUTLS
-installed). However, as GNUTLS is not yet 100% stable and also its support in
-ELinks is not so well tested, it's recommended for users to give strong
-preference to OpenSSL, whenever possible.
+OpenSSL library is not part of your base system, you are VIOLATING GPL (altough
+I believe that for this absurd case no ELinks copyright holder will sue you, and
+it's not problem for OpenSSL people as well, as they explicitly told me).  So,
+people who are making ELinks binary for system with OpenSSL not in base system
+and who decided to link OpenSSL against ELinks binary may wish NOT tp publish or
+distribute such a binary, as it's breaking GPL 2(b), if they like to have
+everything legally perfect (like Debian people ;).  As a semi-solution to this
+for these people, GNUTLS support was introduced; if you want to distribute
+ELinks binary with HTTPS support, compile ELinks with --with-gnutls configure
+option (assuming that you have GNUTLS installed). However, as GNUTLS is not yet
+100% stable and also its support in ELinks is not so well tested, it's
+recommended for users to give strong preference to OpenSSL, whenever possible.
 
   The basic compilation looks like:
 
@@ -146,5 +148,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.14 2002/07/05 13:06:46 pasky Exp $
+$Id: INSTALL,v 1.15 2002/07/05 13:16:10 pasky Exp $
 vim: textwidth=80

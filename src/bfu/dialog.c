@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.133 2004/04/30 13:45:41 jonas Exp $ */
+/* $Id: dialog.c,v 1.134 2004/05/02 10:53:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,11 +189,148 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 	redraw_from_window(dlg_data->win);
 }
 
-/* TODO: This is too long and ugly. Rewrite and split. */
+static void
+dialog_ev_init(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	int i;
+
+	for (i = dlg_data->n - 1; i >= 0; i--) {
+		struct widget_data *widget_data;
+
+		widget_data = init_widget(dlg_data, ev, i);
+
+		/* Make sure the selected widget is focusable */
+		if (widget_data
+		    && widget_is_focusable(widget_data))
+			dlg_data->selected = i;
+	}
+}
+
+#ifdef CONFIG_MOUSE
+static void
+dialog_ev_mouse(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	int i;
+
+	for (i = 0; i < dlg_data->n; i++)
+		if (dlg_data->widgets_data[i].widget->ops->mouse
+		    && dlg_data->widgets_data[i].widget->ops->mouse(&dlg_data->widgets_data[i], dlg_data, ev)
+		       == EVENT_PROCESSED)
+			break;
+}
+#endif /* CONFIG_MOUSE */
+
+static void
+dialog_ev_kbd(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	struct widget_data *widget_data = selected_widget(dlg_data);
+	/* XXX: KM_EDIT ? --pasky */
+	enum menu_action action = kbd_action(KM_MENU, ev, NULL);
+
+	/* First let the widget try out. */
+	if (widget_data->widget->ops->kbd
+	    && widget_data->widget->ops->kbd(widget_data, dlg_data, ev)
+	       == EVENT_PROCESSED)
+		return;
+
+	/* Can we select? */
+	if ((action == ACT_MENU_ENTER || action == ACT_MENU_SELECT)
+	    && widget_data->widget->ops->select) {
+		widget_data->widget->ops->select(widget_data, dlg_data);
+		return;
+	}
+
+	/* Look up for a button with matching starting letter. */
+	if (ev->x > ' ' && ev->x < 0x100) {
+		int i;
+
+		for (i = 0; i < dlg_data->n; i++) {
+			if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
+			    && upcase(dlg_data->dlg->widgets[i].text[0])
+			       == upcase(ev->x)) {
+				select_dlg_item(dlg_data, i);
+				return;
+			}
+		}
+	}
+
+	/* Submit button. */
+	if (action == ACT_MENU_ENTER
+	    && (widget_is_textfield(widget_data)
+		|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
+		int i;
+
+		for (i = 0; i < dlg_data->n; i++) {
+			if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
+			    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
+				select_dlg_item(dlg_data, i);
+				return;
+			}
+		}
+	}
+
+	/* Cancel button. */
+	if (action == ACT_MENU_CANCEL) {
+		int i;
+
+		for (i = 0; i < dlg_data->n; i++) {
+			if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
+			    && dlg_data->dlg->widgets[i].info.button.flags & B_ESC) {
+				select_dlg_item(dlg_data, i);
+				return;
+			}
+		}
+	}
+
+	/* Cycle focus. */
+	if (action == ACT_MENU_NEXT_ITEM
+	    || action == ACT_MENU_DOWN || action == ACT_MENU_RIGHT) {
+		cycle_widget_focus(dlg_data, 1);
+			return;
+	}
+
+	if (action == ACT_MENU_PREVIOUS_ITEM
+	    || action == ACT_MENU_UP || action == ACT_MENU_LEFT) {
+		cycle_widget_focus(dlg_data, -1);
+		return;
+	}
+
+	if (action == ACT_MENU_REDRAW) {
+		redraw_terminal_cls(dlg_data->win->term);
+	}
+}
+
+static void
+dialog_ev_abort(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	int i;
+
+	if (dlg_data->dlg->refresh) {
+		struct dialog_refresh *refresh = dlg_data->dlg->refresh;
+
+		if (refresh->timer != -1)
+			kill_timer(refresh->timer);
+		mem_free(refresh);
+	}
+
+	if (dlg_data->dlg->abort)
+		dlg_data->dlg->abort(dlg_data);
+
+	for (i = 0; i < dlg_data->n; i++) {
+		struct widget_data *widget_data = &dlg_data->widgets_data[i];
+
+		mem_free_if(widget_data->cdata);
+		if (widget_has_history(widget_data))
+			free_list(widget_data->info.field.history);
+	}
+
+	freeml(dlg_data->ml);
+}
+
+/* TODO: use EVENT_PROCESSED/EVENT_NOT_PROCESSED. */
 static void
 dialog_func(struct window *win, struct term_event *ev, int fwd)
 {
-	int i;
 	struct dialog_data *dlg_data = win->data;
 
 	dlg_data->win = win;
@@ -206,17 +343,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 	switch (ev->ev) {
 		case EV_INIT:
-			for (i = dlg_data->n - 1; i >= 0; i--) {
-				struct widget_data *widget_data;
-
-				widget_data = init_widget(dlg_data, ev, i);
-
-				/* Make sure the selected widget is focusable */
-				if (widget_data
-				    && widget_is_focusable(widget_data))
-					dlg_data->selected = i;
-			}
-
+			dialog_ev_init(dlg_data, ev);
+			/* fallback */
 		case EV_RESIZE:
 		case EV_REDRAW:
 			redraw_dialog(dlg_data, 1);
@@ -224,108 +352,17 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_MOUSE:
 #ifdef CONFIG_MOUSE
-			for (i = 0; i < dlg_data->n; i++)
-				if (dlg_data->widgets_data[i].widget->ops->mouse
-				    && dlg_data->widgets_data[i].widget->ops->mouse(&dlg_data->widgets_data[i], dlg_data, ev)
-				       == EVENT_PROCESSED)
-					break;
-#endif /* CONFIG_MOUSE */
+			dialog_ev_mouse(dlg_data, ev);
+#endif
 			break;
 
 		case EV_KBD:
-			{
-			struct widget_data *widget_data = selected_widget(dlg_data);
-			/* XXX: KM_EDIT ? --pasky */
-			enum menu_action action = kbd_action(KM_MENU, ev, NULL);
-
-			/* First let the widget try out. */
-			if (widget_data->widget->ops->kbd
-			    && widget_data->widget->ops->kbd(widget_data, dlg_data, ev)
-			       == EVENT_PROCESSED)
-				break;
-
-			/* Can we select? */
-			if ((action == ACT_MENU_ENTER || action == ACT_MENU_SELECT)
-			    && widget_data->widget->ops->select) {
-				widget_data->widget->ops->select(widget_data, dlg_data);
-				break;
-			}
-
-			/* Look up for a button with matching starting letter. */
-			if (ev->x > ' ' && ev->x < 0x100) {
-				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-					    && upcase(dlg_data->dlg->widgets[i].text[0])
-					       == upcase(ev->x)) {
-						select_dlg_item(dlg_data, i);
-						return;
-					}
-			}
-
-			/* Submit button. */
-			if (action == ACT_MENU_ENTER
-			    && (widget_is_textfield(widget_data)
-				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
-				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-					    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
-						select_dlg_item(dlg_data, i);
-						return;
-					}
-			}
-
-			/* Cancel button. */
-			if (action == ACT_MENU_CANCEL) {
-				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
-					    && dlg_data->dlg->widgets[i].info.button.flags & B_ESC) {
-						select_dlg_item(dlg_data, i);
-						return;
-					}
-			}
-
-			/* Cycle focus. */
-
-			if ((action == ACT_MENU_NEXT_ITEM)
-			    || action == ACT_MENU_DOWN || action == ACT_MENU_RIGHT) {
-				cycle_widget_focus(dlg_data, 1);
-				break;
-			}
-
-			if ((action == ACT_MENU_PREVIOUS_ITEM)
-			    || action == ACT_MENU_UP || action == ACT_MENU_LEFT) {
-				cycle_widget_focus(dlg_data, -1);
-				break;
-			}
-
-			if (action == ACT_MENU_REDRAW) {
-				redraw_terminal_cls(win->term);
-			}
-
+			dialog_ev_kbd(dlg_data, ev);
 			break;
-			}
 
 		case EV_ABORT:
-			if (dlg_data->dlg->refresh) {
-				struct dialog_refresh *refresh = dlg_data->dlg->refresh;
-
-				if (refresh->timer != -1)
-					kill_timer(refresh->timer);
-				mem_free(refresh);
-			}
-
-			if (dlg_data->dlg->abort)
-				dlg_data->dlg->abort(dlg_data);
-
-			for (i = 0; i < dlg_data->n; i++) {
-				struct widget_data *widget_data = &dlg_data->widgets_data[i];
-
-				mem_free_if(widget_data->cdata);
-				if (widget_has_history(widget_data))
-					free_list(widget_data->info.field.history);
-			}
-
-			freeml(dlg_data->ml);
+			dialog_ev_abort(dlg_data, ev);
+			break;
 	}
 }
 

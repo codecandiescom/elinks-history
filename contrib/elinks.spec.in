@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.11 2003/10/02 22:08:02 witekfl Exp $
+# $Id: elinks.spec.in,v 1.12 2003/10/05 05:26:53 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -35,7 +35,6 @@ URL:		http://elinks.or.cz/
 BuildRequires:	bzip2-devel
 BuildRequires:	expat-devel
 BuildRequires:	gpm-devel
-BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	zlib-devel
 BuildRequires:	/usr/bin/texi2html

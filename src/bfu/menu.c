@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.77 2003/06/07 21:33:52 pasky Exp $ */
+/* $Id: menu.c,v 1.78 2003/06/08 21:57:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -704,13 +704,21 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 		return;
 
 	if (!it->submenu) {
-		struct window *win;
+		struct window *win, *win1;
 
-		for (win = term->windows.next;
-		     (void *) win != &term->windows
-			&& (win->handler == menu_func ||
-			    win->handler == mainmenu_func);
-		     delete_window(win)) ;
+		/* Don't free data! */
+		it->item_free &= ~FREE_DATA;
+
+		win = term->windows.next;
+
+		while ((void *) win != &term->windows &&
+			(win->handler == menu_func ||
+			 win->handler == mainmenu_func)) {
+
+			win1 = win->next;
+			delete_window(win);
+			win = win1;
+		}
 	}
 
 #ifdef DEBUG

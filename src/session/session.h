@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.30 2003/06/11 22:42:04 pasky Exp $ */
+/* $Id: session.h,v 1.31 2003/06/12 00:02:08 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -54,13 +54,13 @@ struct kbdprefix {
 /* This describes, what are we trying to do right now. We pass this around so
  * that we can use generic scheduler routines and when the control will get
  * back to our subsystem, we will know what are we up to. */
-enum session_wtd { /* What To Do? */
-	WTD_NO,
-	WTD_FORWARD,
-	WTD_IMGMAP,
-	WTD_RELOAD,
-	WTD_BACK,
-	WTD_UNBACK,
+enum task_type {
+	TASK_NONE,
+	TASK_FORWARD,
+	TASK_IMGMAP,
+	TASK_RELOAD,
+	TASK_BACK,
+	TASK_UNBACK,
 };
 
 /* This is one of the building stones of ELinks architecture --- this tructure
@@ -118,8 +118,8 @@ struct session {
 
 	/* The current action-in-progress selector */
 
-	enum session_wtd wtd;
-	unsigned char *wtd_target;
+	enum task_type task;
+	unsigned char *task_target;
 
 
 	/* The current browsing state */
@@ -186,7 +186,7 @@ void goto_imgmap(struct session *, unsigned char *, unsigned char *, unsigned ch
 
 void ses_forward(struct session *);
 void ses_goto(struct session *, unsigned char *, unsigned char *, int,
-	      enum cache_mode, enum session_wtd, unsigned char *,
+	      enum cache_mode, enum task_type, unsigned char *,
 	      void (*)(struct status *, struct session *), int);
 
 void end_load(struct status *, struct session *);

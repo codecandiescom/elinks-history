@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.54 2003/06/11 05:08:42 miciah Exp $ */
+/* $Id: download.c,v 1.55 2003/06/12 00:02:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1325,7 +1325,7 @@ end:
 #ifdef MAILCAP
 	if (mailcap) delete_option(mailcap);
 #endif
-	if (ses->wtd_target && r) *ses->wtd_target = 0;
+	if (ses->task_target && r) *ses->task_target = 0;
 	ses_forward(ses);
 	cur_loc(ses)->vs.plain = r;
 	return 0;

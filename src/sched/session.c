@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.98 2003/06/11 22:49:48 pasky Exp $ */
+/* $Id: session.c,v 1.99 2003/06/12 00:02:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,7 @@ print_screen_status(struct session *ses)
 		unsigned int tab_info_len = 0;
 		struct status *stat = NULL;
 
-		if (ses->wtd)
+		if (ses->task)
 			stat = &ses->loading;
 		else if (have_location(ses))
 			stat = &cur_loc(ses)->stat;
@@ -337,10 +337,10 @@ print_error_dialog(struct session *ses, struct status *stat)
 }
 
 static void
-free_wtd(struct session *ses)
+free_task(struct session *ses)
 {
-	if (!ses->wtd) {
-		internal("no WTD");
+	if (!ses->task) {
+		internal("Session has no task");
 		return;
 	}
 
@@ -353,7 +353,7 @@ free_wtd(struct session *ses)
 		mem_free(ses->loading_url);
 		ses->loading_url = NULL;
 	}
-	ses->wtd = WTD_NO;
+	ses->task = TASK_NONE;
 }
 
 static void
@@ -422,7 +422,7 @@ x:
 	memset(l, 0, sizeof(struct location));
 	memcpy(&l->stat, &ses->loading, sizeof(struct status));
 
-	if (ses->wtd_target && *ses->wtd_target) {
+	if (ses->task_target && *ses->task_target) {
 		struct frame *frm;
 
 		if (!have_location(ses)) {
@@ -431,12 +431,12 @@ x:
 		}
 		copy_location(l, cur_loc(ses));
 		add_to_history(ses, l);
-		frm = ses_change_frame_url(ses, ses->wtd_target,
+		frm = ses_change_frame_url(ses, ses->task_target,
 					   ses->loading_url);
 
 		if (!frm) {
 			destroy_location(l);
-			ses->wtd_target = NULL;
+			ses->task_target = NULL;
 			goto x;
 		}
 
@@ -503,12 +503,12 @@ map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 void file_end_load(struct status *, struct file_to_load *);
 void abort_preloading(struct session *, int);
 
-struct wtd_data {
+struct task {
 	struct session *ses;
 	unsigned char *url;
 	int pri;
 	enum cache_mode cache_mode;
-	int wtd;
+	enum task_type type;
 	unsigned char *target;
 	unsigned char *pos;
 	void (*fn)(struct status *, struct session *);
@@ -516,46 +516,48 @@ struct wtd_data {
 
 
 static void
-post_yes(struct wtd_data *w)
+post_yes(struct task *task)
 {
-	abort_preloading(w->ses, 0);
-	if (w->ses->goto_position) mem_free(w->ses->goto_position);
+	struct session *ses = task->ses;
 
-	w->ses->goto_position = w->pos ? stracpy(w->pos) : NULL;
-	w->ses->loading.end = (void (*)(struct status *, void *))w->fn;
-	w->ses->loading.data = w->ses;
-	w->ses->loading_url = stracpy(w->url);
-	w->ses->wtd = w->wtd;
-	w->ses->wtd_target = w->target;
+	abort_preloading(task->ses, 0);
+	if (task->ses->goto_position) mem_free(task->ses->goto_position);
 
-	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading,
-		 w->pri, w->cache_mode, -1);
+	ses->goto_position = task->pos ? stracpy(task->pos) : NULL;
+	ses->loading.end = (void (*)(struct status *, void *))task->fn;
+	ses->loading.data = task->ses;
+	ses->loading_url = stracpy(task->url);
+	ses->task = task->type;
+	ses->task_target = task->target;
+
+	load_url(task->ses->loading_url, task->ses->ref_url,
+		 &task->ses->loading, task->pri, task->cache_mode, -1);
 }
 
 static void
-post_no(struct wtd_data *w)
+post_no(struct task *task)
 {
-	reload(w->ses, NC_CACHE);
+	reload(task->ses, NC_CACHE);
 }
 
 void
 ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
-	 int pri, enum cache_mode cache_mode, enum session_wtd wtd,
+	 int pri, enum cache_mode cache_mode, enum task_type task_type,
 	 unsigned char *pos,
 	 void (*fn)(struct status *, struct session *),
 	 int redir)
 {
-	struct wtd_data *wtd_data = mem_alloc(sizeof(struct wtd_data));
+	struct task *task = mem_alloc(sizeof(struct task));
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
 	unsigned char *post_char_pos = strchr(url, POST_CHAR);
 
-	if (!wtd_data || !get_opt_int("document.browse.forms.confirm_submit")
+	if (!task || !get_opt_int("document.browse.forms.confirm_submit")
 	    || !post_char_pos
 	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
 
-		if (wtd_data) mem_free(wtd_data);
+		if (task) mem_free(task);
 
 		if (ses->goto_position) mem_free(ses->goto_position);
 		ses->goto_position = pos;
@@ -563,38 +565,38 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		ses->loading.end = (void (*)(struct status *, void *))fn;
 		ses->loading.data = ses;
 		ses->loading_url = url;
-		ses->wtd = wtd;
-		ses->wtd_target = target;
+		ses->task = task_type;
+		ses->task_target = target;
 
 		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
 
 		return;
 	}
 
-	wtd_data->ses = ses;
-	wtd_data->url = url;
-	wtd_data->pri = pri;
-	wtd_data->cache_mode = cache_mode;
-	wtd_data->wtd = wtd;
-	wtd_data->target = target;
-	wtd_data->pos = pos;
-	wtd_data->fn = fn;
+	task->ses = ses;
+	task->url = url;
+	task->pri = pri;
+	task->cache_mode = cache_mode;
+	task->type = task_type;
+	task->target = target;
+	task->pos = pos;
+	task->fn = fn;
 
 	if (redir) {
 		m1 = N_("Do you want to follow redirect and post form data "
 			"to url %s?");
-	} else if (wtd == WTD_FORWARD) {
+	} else if (task_type == TASK_FORWARD) {
 		m1 = N_("Do you want to post form data to url %s?");
 	} else {
 		m1 = N_("Do you want to repost form data to url %s?");
 	}
 
 	m2 = memacpy(url, post_char_pos - url);
-	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
+	msg_box(ses->tab->term, getml(m2, task, task->url, task->pos,
 				 NULL), MSGBOX_FREE_TEXT,
 		N_("Warning"), AL_CENTER,
 		msg_text(ses->tab->term, m1, m2),
-		wtd_data, 2,
+		task, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);
 }
@@ -610,15 +612,15 @@ do_move(struct session *ses, struct status **stat)
 	}
 
 	ce = (*stat)->ce;
-	if (!ce || (ses->wtd == WTD_IMGMAP && (*stat)->state >= 0)) {
+	if (!ce || (ses->task == TASK_IMGMAP && (*stat)->state >= 0)) {
 		return 0;
 	}
 
 	if (ce->redirect && ses->redirect_cnt++ < MAX_REDIRECTS) {
 		unsigned char *u, *p;
-		enum session_wtd w = ses->wtd;
+		enum task_type task = ses->task;
 
-		if (ses->wtd == WTD_BACK && !have_location(ses))
+		if (task == TASK_BACK && !have_location(ses))
 			goto b;
 
 		u = join_urls(ses->loading_url, ce->redirect);
@@ -642,25 +644,26 @@ do_move(struct session *ses, struct status **stat)
 		if (ses->ref_url)
 			mem_free(ses->ref_url);
 		ses->ref_url = stracpy(ce->url);
-		if (w == WTD_FORWARD || w == WTD_IMGMAP) {
+
+		if (task == TASK_FORWARD || task == TASK_IMGMAP) {
 			unsigned char *gp = ses->goto_position ?
 					    stracpy(ses->goto_position) : NULL;
-			ses_goto(ses, u, ses->wtd_target, PRI_MAIN, NC_CACHE,
-				 w, gp, end_load, 1);
+			ses_goto(ses, u, ses->task_target, PRI_MAIN, NC_CACHE,
+				 task, gp, end_load, 1);
 
 			if (gp) mem_free(gp);
 
 			return 2;
 		}
 
-		if (w == WTD_BACK || w == WTD_UNBACK) {
+		if (task == TASK_BACK || task == TASK_UNBACK) {
 			ses_goto(ses, u, NULL, PRI_MAIN, NC_CACHE,
-				 WTD_RELOAD, NULL, end_load, 1);
+				 TASK_RELOAD, NULL, end_load, 1);
 			return 2;
 		}
-		if (w == WTD_RELOAD) {
+		if (task == TASK_RELOAD) {
 			ses_goto(ses, u, NULL, PRI_MAIN, ses->reloadlevel,
-				 WTD_RELOAD, NULL, end_load, 1);
+				 TASK_RELOAD, NULL, end_load, 1);
 			return 2;
 		}
 	} else {
@@ -672,17 +675,17 @@ b:
 		kill_timer(ses->display_timer);
 	       	ses->display_timer = -1;
 	}
-	if (ses->wtd == WTD_FORWARD) {
+	if (ses->task == TASK_FORWARD) {
 		if (ses_chktype(ses, stat, ce)) {
-			free_wtd(ses);
+			free_task(ses);
 			reload(ses, NC_CACHE);
 			return 2;
 		}
 	}
-	if (ses->wtd == WTD_IMGMAP) ses_imgmap(ses);
-	if (ses->wtd == WTD_BACK) ses_back(ses);
-	if (ses->wtd == WTD_UNBACK) ses_unback(ses);
-	if (ses->wtd == WTD_RELOAD) ses_back(ses), ses_forward(ses);
+	if (ses->task == TASK_IMGMAP) ses_imgmap(ses);
+	if (ses->task == TASK_BACK) ses_back(ses);
+	if (ses->task == TASK_UNBACK) ses_unback(ses);
+	if (ses->task == TASK_RELOAD) ses_back(ses), ses_forward(ses);
 	if ((*stat)->state >= 0) {
 		*stat = &cur_loc(ses)->stat;
 		change_connection(&ses->loading, *stat, PRI_MAIN, 0);
@@ -690,7 +693,7 @@ b:
 		cur_loc(ses)->stat.state = ses->loading.state;
 	}
 
-	free_wtd(ses);
+	free_task(ses);
 	return 1;
 }
 
@@ -848,8 +851,8 @@ end_load(struct status *stat, struct session *ses)
 {
 	int d;
 
-	if (!ses->wtd) {
-		internal("end_load: !ses->wtd");
+	if (!ses->task) {
+		internal("end_load: no ses->task");
 		return;
 	}
 	d = do_move(ses, &stat);
@@ -859,8 +862,8 @@ end_load(struct status *stat, struct session *ses)
 		display_timer(ses);
 	}
 	if (stat->state < 0) {
-		if (d != 2 && ses->wtd) {
-			free_wtd(ses);
+		if (d != 2 && ses->task) {
+			free_task(ses);
 		}
 		if (d == 1) doc_end_load(stat, ses);
 	}
@@ -1069,7 +1072,7 @@ create_basic_session(struct window *tab)
 	ses->tab = tab;
 	ses->id = session_id++;
 	ses->screen = NULL;
-	ses->wtd = WTD_NO;
+	ses->task = TASK_NONE;
 	ses->display_timer = -1;
 	ses->loading_url = NULL;
 	ses->goto_position = NULL;
@@ -1265,9 +1268,9 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 void
 abort_preloading(struct session *ses, int interrupt)
 {
-	if (ses->wtd) {
+	if (ses->task) {
 		change_connection(&ses->loading, NULL, PRI_CANCEL, interrupt);
-		free_wtd(ses);
+		free_task(ses);
 	}
 }
 
@@ -1382,7 +1385,7 @@ ses_load_notify(struct status *stat, struct session *ses)
 
 static void
 really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
-		  enum session_wtd wtd, enum cache_mode cache_mode)
+		  enum task_type task, enum cache_mode cache_mode)
 {
 	unsigned char *u;
 	unsigned char *pos;
@@ -1409,7 +1412,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 
 	pos = extract_position(u);
 
-	if (ses->wtd == wtd) {
+	if (ses->task == task) {
 		if (!strcmp(ses->loading_url, u)) {
 			/* We're already loading the URL. */
 			mem_free(u);
@@ -1432,7 +1435,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	if (fd && fd->f_data && fd->f_data->url)
  		ses->ref_url = stracpy(fd->f_data->url);
 
-	ses_goto(ses, u, target, PRI_MAIN, cache_mode, wtd, pos, end_load, 0);
+	ses_goto(ses, u, target, PRI_MAIN, cache_mode, task, pos, end_load, 0);
 
 	/* abort_loading(ses); */
 
@@ -1442,16 +1445,16 @@ end:
 
 static void
 goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
-	   enum session_wtd wtd, enum cache_mode cache_mode)
+	   enum task_type task, enum cache_mode cache_mode)
 {
 #ifdef HAVE_SCRIPTING
 	url = script_hook_follow_url(ses, url);
 	if (url) {
-		really_goto_url_w(ses, url, target, wtd, cache_mode);
+		really_goto_url_w(ses, url, target, task, cache_mode);
 		mem_free(url);
 	}
 #else
-	really_goto_url_w(ses, url, target, wtd, cache_mode);
+	really_goto_url_w(ses, url, target, task, cache_mode);
 #endif
 }
 
@@ -1459,20 +1462,20 @@ void
 goto_url_frame_reload(struct session *ses, unsigned char *url,
 		      unsigned char *target)
 {
-	goto_url_w(ses, url, target, WTD_FORWARD, NC_RELOAD);
+	goto_url_w(ses, url, target, TASK_FORWARD, NC_RELOAD);
 }
 
 void
 goto_url_frame(struct session *ses, unsigned char *url,
 	       unsigned char *target)
 {
-	goto_url_w(ses, url, target, WTD_FORWARD, NC_CACHE);
+	goto_url_w(ses, url, target, TASK_FORWARD, NC_CACHE);
 }
 
 void
 goto_url(struct session *ses, unsigned char *url)
 {
-	goto_url_w(ses, url, NULL, WTD_FORWARD, NC_CACHE);
+	goto_url_w(ses, url, NULL, TASK_FORWARD, NC_CACHE);
 }
 
 void
@@ -1495,7 +1498,7 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 	ses->imgmap_href_base = href;
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 	ses->imgmap_target_base = target;
-	goto_url_w(ses, url, target, WTD_IMGMAP, NC_CACHE);
+	goto_url_w(ses, url, target, TASK_IMGMAP, NC_CACHE);
 }
 
 struct frame *

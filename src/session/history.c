@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.20 2003/06/11 22:05:51 pasky Exp $ */
+/* $Id: history.c,v 1.21 2003/06/12 00:02:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ go_away(struct session *ses, int dir)
 
 	ses->reloadlevel = NC_CACHE;
 
-	if (ses->wtd) {
+	if (ses->task) {
 		abort_loading(ses, 0);
 		print_screen_status(ses);
 		reload(ses, NC_CACHE);
@@ -189,7 +189,7 @@ go_back(struct session *ses)
 	url = stracpy(((struct location *) ses->history.next)->next->vs.url);
 	if (!url) return;
 
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL,
+	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, TASK_BACK, NULL,
 		 end_load, 0);
 }
 
@@ -204,6 +204,6 @@ go_unback(struct session *ses)
 	url = stracpy(((struct location *) ses->unhistory.next)->vs.url);
 	if (!url) return;
 
-	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL,
+	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, TASK_UNBACK, NULL,
 		 end_load, 1);
 }

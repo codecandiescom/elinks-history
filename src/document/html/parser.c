@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.526 2005/02/28 11:18:16 zas Exp $ */
+/* $Id: parser.c,v 1.527 2005/03/05 00:13:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1137,36 +1137,36 @@ process_head(unsigned char *head)
 	unsigned char *refresh, *url;
 
 	refresh = parse_header(head, "Refresh", NULL);
-	if (refresh) {
-		url = parse_header_param(refresh, "URL");
-		if (!url) {
-			/* If the URL parameter is missing assume that the
-			 * document being processed should be refreshed. */
-			url = get_uri_string(html_context.base_href, URI_ORIGINAL);
-		}
-
-		if (url) {
-			unsigned char *saved_url = url;
-			/* Extraction of refresh time. */
-			unsigned long seconds;
-
-			errno = 0;
-			seconds = strtoul(refresh, NULL, 10);
-			if (errno || seconds > 7200)
-				seconds = 0;
-
-			html_focusable(NULL);
-
-			url = join_urls(html_context.base_href, saved_url);
-			put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
-			html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
-
-			mem_free(url);
-			mem_free(saved_url);
-		}
-
-		mem_free(refresh);
+	if (!refresh) return;
+	
+	url = parse_header_param(refresh, "URL");
+	if (!url) {
+		/* If the URL parameter is missing assume that the
+		 * document being processed should be refreshed. */
+		url = get_uri_string(html_context.base_href, URI_ORIGINAL);
 	}
+
+	if (url) {
+		unsigned char *saved_url = url;
+		/* Extraction of refresh time. */
+		unsigned long seconds;
+
+		errno = 0;
+		seconds = strtoul(refresh, NULL, 10);
+		if (errno || seconds > 7200)
+			seconds = 0;
+
+		html_focusable(NULL);
+
+		url = join_urls(html_context.base_href, saved_url);
+		put_link_line("Refresh: ", saved_url, url, global_doc_opts->framename);
+		html_context.special_f(html_context.part, SP_REFRESH, seconds, url);
+
+		mem_free(url);
+		mem_free(saved_url);
+	}
+
+	mem_free(refresh);
 }
 
 

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.49 2005/03/25 04:47:25 miciah Exp $
+-- $Id: hooks.lua.in,v 1.50 2005/03/25 04:50:37 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -316,6 +316,15 @@ end
 table.insert(goto_url_hooks, expand_tilde)
 
     
+-- Don't take localhost as directory name
+function expand_localhost (url)
+    if not match("localhost", url) then return nil,nil end
+
+    return "http://"..url,nil
+end
+table.insert(goto_url_hooks, expand_localhost)
+
+
 function goto_url_hook_ (url, current_url)
     if dumbprefixes[url] then
 	if current_url then
@@ -338,11 +347,6 @@ function goto_url_hook_ (url, current_url)
                 return nil
             end
         end
-    end
-
-    -- Don't take localhost as directory name
-    if match("localhost", url) then
-	return "http://"..url
     end
 
     -- Unmatched.

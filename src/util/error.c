@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.30 2002/06/17 11:23:46 pasky Exp $ */
+/* $Id: error.c,v 1.31 2002/11/19 22:22:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,14 +64,18 @@ void
 int_error(unsigned char *fmt, ...)
 {
 	unsigned char errbuf[4096];
+	int size;
+	int maxsize = sizeof(errbuf) - strlen(fmt);
 	va_list params;
 
 	va_start(params, fmt);
 
-	sprintf(errbuf, "\033[1mINTERNAL ERROR\033[0m at %s:%d: ", errfile,
-		errline);
-	strcat(errbuf, fmt);
-	er(1, errbuf, params);
+	size = snprintf(errbuf, maxsize, "\033[1mINTERNAL ERROR\033[0m at %s:%d: ",
+			errfile, errline);
+	if (size < maxsize) {
+		strcat(errbuf, fmt);
+		er(1, errbuf, params);
+	}
 
 	va_end(params);
 	force_dump();
@@ -81,13 +85,18 @@ void
 debug_msg(unsigned char *fmt, ...)
 {
 	unsigned char errbuf[4096];
+	int size;
+	int maxsize = sizeof(errbuf) - strlen(fmt);
 	va_list params;
 
 	va_start(params, fmt);
 
-	sprintf(errbuf, "DEBUG MESSAGE at %s:%d: ", errfile, errline);
-	strcat(errbuf, fmt);
-	er(0, errbuf, params);
+	size = snprintf(errbuf, maxsize, "DEBUG MESSAGE at %s:%d: ",
+			errfile, errline);
+	if (size < maxsize) {
+		strcat(errbuf, fmt);
+		er(0, errbuf, params);
+	}
 
 	va_end(params);
 }

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.73 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: parser.c,v 1.74 2004/01/28 00:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ css_parse_properties(struct list_head *props, struct scanner *scanner)
 	while (scanner_has_tokens(scanner)) {
 		struct css_property_info *property_info = NULL;
 		struct css_property *prop;
-		struct scanner_token *token = get_css_token(scanner);
+		struct scanner_token *token = get_scanner_token(scanner);
 		int i;
 
 		if (!token || token->type == '}') break;
@@ -39,7 +39,7 @@ css_parse_properties(struct list_head *props, struct scanner *scanner)
 		/* Extract property name. */
 
 		if (token->type != CSS_TOKEN_IDENT
-		    || !check_next_css_token(scanner, ':')) {
+		    || !check_next_scanner_token(scanner, ':')) {
 			/* Some use style="{ properties }" so we have to be
 			 * check what to skip to. */
 			if (token->type == '{') {
@@ -53,7 +53,7 @@ css_parse_properties(struct list_head *props, struct scanner *scanner)
 		for (i = 0; css_property_info[i].name; i++) {
 			struct css_property_info *info = &css_property_info[i];
 
-			if (css_token_strlcasecmp(token, info->name, -1)) {
+			if (scanner_token_strlcasecmp(token, info->name, -1)) {
 				property_info = info;
 				break;
 			}
@@ -116,12 +116,12 @@ ride_on:
 static void
 css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 
 	/* Skip skip skip that code */
 	switch (token->type) {
 		case CSS_TOKEN_AT_IMPORT:
-			token = get_next_css_token(scanner);
+			token = get_next_scanner_token(scanner);
 			if (!token) break;
 
 			if (token->type == CSS_TOKEN_STRING
@@ -145,7 +145,7 @@ css_parse_atrule(struct css_stylesheet *css, struct scanner *scanner)
 		case CSS_TOKEN_AT_KEYWORD:
 			/* TODO: Unkown @-rule so either skip til ';' or next block. */
 			while (scanner_has_tokens(scanner)) {
-				token = get_next_css_token(scanner);
+				token = get_next_scanner_token(scanner);
 
 				if (token->type == ';') {
 					skip_css_tokens(scanner, ';');
@@ -183,7 +183,7 @@ static struct list_head *
 css_parse_selector(struct css_stylesheet *css, struct scanner *scanner)
 {
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 	static struct list_head selectors;
 	struct selector_pkg *pkg;
 	struct css_selector *selector;
@@ -222,33 +222,33 @@ next_one:
 
 	/* Let's see if we will get anything else of this. */
 
-	token = get_next_css_token(scanner);
+	token = get_next_scanner_token(scanner);
 
 	if (token->type == CSS_TOKEN_HASH
 	    || token->type == CSS_TOKEN_HEX_COLOR) {
 		/* id */
 		id = memacpy(token->string + 1, token->length - 1);
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 	}
 
 	if (token->type == '.') {
 		/* class */
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
 		class = memacpy(token->string, token->length);
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 	}
 
 	if (token->type == ':') {
 		/* pseudo */
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 		if (token->type != CSS_TOKEN_IDENT) {
 			goto syntax_error;
 		}
 		pseudo = memacpy(token->string, token->length);
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 	}
 
 	/* This is a temporary measure, so that overly specific selectors won't
@@ -267,7 +267,7 @@ next_one:
 
 	if (token->type == ',') {
 		/* Multiple elements hooked up to this ruleset. */
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 		goto next_one;
 	}
 
@@ -347,7 +347,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string)
 	init_css_scanner(&scanner, string);
 
 	while (scanner_has_tokens(&scanner)) {
-		struct scanner_token *token = get_css_token(&scanner);
+		struct scanner_token *token = get_scanner_token(&scanner);
 
 		assert(token);
 

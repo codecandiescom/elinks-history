@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.110 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: scanner.c,v 1.111 2004/01/28 00:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,7 +193,7 @@ static struct scanner_info css_scanner_info = {
 
 
 /* This macro checks that if the scanners table is full the last token skipping
- * or get_next_css_token() call made it possible to get the type of the next
+ * or get_next_scanner_token() call made it possible to get the type of the next
  * token. */
 #define check_scanner(scanner) \
 	(scanner->tokens < SCANNER_TOKENS \
@@ -529,17 +529,17 @@ dump_scanner(struct scanner *scanner)
 }
 
 struct scanner_token *
-get_css_token_debug(struct scanner *scanner)
+get_scanner_token_debug(struct scanner *scanner)
 {
 	if (!scanner_has_tokens(scanner)) return NULL;
 
 	dump_scanner(scanner);
 
-	/* Make sure we do not return CSS_TOKEN_NONE tokens */
+	/* Make sure we do not return invalid tokens */
 	assert(!scanner_has_tokens(scanner)
-		|| scanner->current->type != CSS_TOKEN_NONE);
+		|| scanner->current->type != 0);
 
-	return get_css_token_(scanner);
+	return get_scanner_token(scanner);
 }
 
 #endif
@@ -547,7 +547,7 @@ get_css_token_debug(struct scanner *scanner)
 struct scanner_token *
 skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 
 	/* Skip tokens while handling some basic precedens of special chars
 	 * so we don't skip to long. */
@@ -555,11 +555,11 @@ skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence)
 		if (token->type == skipto
 		    || token->precedence > precedence)
 			break;
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 	}
 
 	return (token && token->type == skipto)
-		? get_next_css_token(scanner) : NULL;
+		? get_next_scanner_token(scanner) : NULL;
 }
 
 

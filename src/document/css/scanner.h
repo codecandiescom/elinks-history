@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.58 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: scanner.h,v 1.59 2004/01/28 00:11:19 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -123,12 +123,12 @@ check_css_precedence(int type, int skipto)
  * be short. --jonas */
 
 /* Compare the string of @token with @string */
-#define css_token_strlcasecmp(token, str, len) \
+#define scanner_token_strlcasecmp(token, str, len) \
 	((token) && !strlcasecmp((token)->string, (token)->length, str, len))
 
 /* Also compares the token string but using a "static" string */
-#define css_token_contains(token, str) \
-	css_token_strlcasecmp(token, str, sizeof(str) - 1)
+#define scanner_token_contains(token, str) \
+	scanner_token_strlcasecmp(token, str, sizeof(str) - 1)
 
 
 /* The number of tokens in the scanners token table:
@@ -179,7 +179,7 @@ struct scanner_token *scan_css_tokens(struct scanner *scanner);
 /* Scanner table accessors and mutators */
 
 /* Checks the type of the next token */
-#define check_next_css_token(scanner, token_type)				\
+#define check_next_scanner_token(scanner, token_type)				\
 	(scanner_has_tokens(scanner)					\
 	 && ((scanner)->current + 1 < (scanner)->table + (scanner)->tokens)	\
 	 && (scanner)->current[1].type == (token_type))
@@ -188,18 +188,18 @@ struct scanner_token *scan_css_tokens(struct scanner *scanner);
  * a rescan so any token pointers that has been stored in a local variable
  * might not be valid after the call. */
 static inline struct scanner_token *
-get_css_token(struct scanner *scanner)
+get_scanner_token(struct scanner *scanner)
 {
 	return scanner_has_tokens(scanner) ? (scanner)->current : NULL;
 }
 
 /* Do a scanning if we do not have also have access to next token. */
 static inline struct scanner_token *
-get_next_css_token(struct scanner *scanner)
+get_next_scanner_token(struct scanner *scanner)
 {
 	return (scanner_has_tokens(scanner)
 		&& (++(scanner)->current + 1 >= (scanner)->table + (scanner)->tokens)
-		? scan_css_tokens(scanner) : get_css_token(scanner));
+		? scan_css_tokens(scanner) : get_scanner_token(scanner));
 }
 
 /* Removes tokens from the scanner until it meets a token of the given type.

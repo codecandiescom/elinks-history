@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.46 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: value.c,v 1.47 2004/01/28 00:11:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 		      union css_property_value *value,
 		      struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
 
@@ -33,7 +33,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 		/* RGB function */
 		int shift;
 
-		token = get_next_css_token(scanner);
+		token = get_next_scanner_token(scanner);
 
 		/* First color component is shifted 16, next is shifted 8 and
 		 * last is not shifted. */
@@ -47,7 +47,7 @@ css_parse_color_value(struct css_property_info *propinfo,
 			/* Are the current and next token valid? */
 			if ((token->type != CSS_TOKEN_NUMBER
 			     && token->type != CSS_TOKEN_PERCENTAGE)
-			    || !check_next_css_token(scanner, paskynator))
+			    || !check_next_scanner_token(scanner, paskynator))
 				return 0;
 
 			/* Parse the digit */
@@ -91,7 +91,7 @@ css_parse_background_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 	int success = 0;
 
 	assert(propinfo->value_type == CSS_VT_COLOR);
@@ -101,15 +101,15 @@ css_parse_background_value(struct css_property_info *propinfo,
 
 	while (token && check_css_precedence(token->type, ';')) {
 		if (!css_parse_color_value(propinfo, value, scanner)) {
-			token = get_next_css_token(scanner);
+			token = get_next_scanner_token(scanner);
 			continue;
 		}
 
 		success++;
-		if (check_next_css_token(scanner, ','))
+		if (check_next_scanner_token(scanner, ','))
 			skip_css_tokens(scanner, ','); /* Uh. */
 
-		token = get_css_token(scanner);
+		token = get_scanner_token(scanner);
 	}
 
 	return success;
@@ -121,20 +121,20 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (token->type != CSS_TOKEN_IDENT) return 0;
 
-	if (css_token_contains(token, "italic")
-	    || css_token_contains(token, "oblique")) {
+	if (scanner_token_contains(token, "italic")
+	    || scanner_token_contains(token, "oblique")) {
 		value->font_attribute.add |= AT_ITALIC;
 
-	} else if (css_token_contains(token, "underline")) {
+	} else if (scanner_token_contains(token, "underline")) {
 		value->font_attribute.add |= AT_UNDERLINE;
 
-	} else if (css_token_contains(token, "normal")) {
+	} else if (scanner_token_contains(token, "normal")) {
 		value->font_attribute.rem |= AT_ITALIC;
 
 	} else {
@@ -151,23 +151,23 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 			    union css_property_value *value,
 			    struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 	unsigned char *nstring;
 	int weight;
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (token->type == CSS_TOKEN_IDENT) {
-		if (css_token_contains(token, "bolder")) {
+		if (scanner_token_contains(token, "bolder")) {
 			value->font_attribute.add |= AT_BOLD;
 
-		} else if (css_token_contains(token, "lighter")) {
+		} else if (scanner_token_contains(token, "lighter")) {
 			value->font_attribute.rem |= AT_BOLD;
 
-		} else if (css_token_contains(token, "bold")) {
+		} else if (scanner_token_contains(token, "bold")) {
 			value->font_attribute.add |= AT_BOLD;
 
-		} else if (css_token_contains(token, "normal")) {
+		} else if (scanner_token_contains(token, "normal")) {
 			value->font_attribute.rem |= AT_BOLD;
 
 		} else {
@@ -202,22 +202,22 @@ css_parse_text_align_value(struct css_property_info *propinfo,
 			   union css_property_value *value,
 			   struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_TEXT_ALIGN);
 
 	if (token->type != CSS_TOKEN_IDENT) return 0;
 
-	if (css_token_contains(token, "left")) {
+	if (scanner_token_contains(token, "left")) {
 		value->text_align = AL_LEFT;
 
-	} else 	if (css_token_contains(token, "right")) {
+	} else 	if (scanner_token_contains(token, "right")) {
 		value->text_align = AL_RIGHT;
 
-	} else 	if (css_token_contains(token, "center")) {
+	} else 	if (scanner_token_contains(token, "center")) {
 		value->text_align = AL_CENTER;
 
-	} else 	if (css_token_contains(token, "justify")) {
+	} else 	if (scanner_token_contains(token, "justify")) {
 		value->text_align = AL_BLOCK;
 
 	} else {
@@ -234,7 +234,7 @@ css_parse_text_decoration_value(struct css_property_info *propinfo,
 				union css_property_value *value,
 				struct scanner *scanner)
 {
-	struct scanner_token *token = get_css_token(scanner);
+	struct scanner_token *token = get_scanner_token(scanner);
 
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
@@ -242,10 +242,10 @@ css_parse_text_decoration_value(struct css_property_info *propinfo,
 
 	/* TODO: It is possible to have multiple values here,
 	 * 'background'-style. --pasky */
-	if (css_token_contains(token, "underline")) {
+	if (scanner_token_contains(token, "underline")) {
 		value->font_attribute.add |= AT_UNDERLINE;
 
-	} else if (css_token_contains(token, "none")) {
+	} else if (scanner_token_contains(token, "none")) {
 		value->font_attribute.rem |= AT_UNDERLINE;
 
 	} else {
@@ -268,7 +268,7 @@ css_parse_value(struct css_property_info *propinfo,
 	assert(propinfo->parser);
 
 	/* Check that we actually have some token to pass on */
-	token = get_css_token(scanner);
+	token = get_scanner_token(scanner);
 	if (!token) return 0;
 
 	return propinfo->parser(propinfo, value, scanner);

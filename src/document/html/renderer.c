@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.118 2003/06/17 07:43:32 zas Exp $ */
+/* $Id: renderer.c,v 1.119 2003/06/17 08:55:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,6 +389,12 @@ static int inline
 split_line_at(struct part *part, register int x)
 {
 	register int tmp;
+	int new_x = x + par_format.rightmargin;
+
+	/* Make sure that we count the right margin to the total
+	 * actual box width. */
+	if (new_x > part->x)
+		part->x = new_x;
 
 	if (part->data) {
 		assertm((POS(x, part->cy) & 0xff) == ' ',

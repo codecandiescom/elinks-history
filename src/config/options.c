@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.100 2002/09/17 16:29:05 zas Exp $ */
+/* $Id: options.c,v 1.101 2002/09/17 16:36:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1716,7 +1716,9 @@ register_options()
 	add_opt_bool_tree(cmdline_options, "",
 		"no-connect", 0, 0,
 		"Run ELinks as a separate instance - instead of connecting to\n"
-		"existing instance.");
+		"existing instance. Note that normally no runtime state files\n"
+		"(I mean bookmarks, history and so on) are written to the disk\n"
+		"with this option on - see also -touch-files.");
 
 	add_opt_bool_tree(cmdline_options, "",
 		"no-home", 0, 0,
@@ -1736,7 +1738,8 @@ register_options()
 
 	add_opt_bool_tree(cmdline_options, "",
 		"touch-files", 0, 0,
-		"Set to 1 to have files changed when -no-connect is used.");
+		"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
+		"changed when -no-connect is used; has no effect otherwise.");
 	
 	add_opt_command_tree(cmdline_options, "",
 		"version", 0, version_cmd,

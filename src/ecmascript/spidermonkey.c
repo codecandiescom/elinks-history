@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.123 2004/12/19 11:26:48 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.124 2004/12/19 11:27:10 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,7 +562,7 @@ static const JSPropertySpec input_props[] = {
 	{ "defaultValue",JSP_INPUT_DEFAULT_VALUE,JSPROP_ENUMERATE },
 	{ "disabled",	JSP_INPUT_DISABLED,	JSPROP_ENUMERATE },
 	{ "form",	JSP_INPUT_FORM,		JSPROP_ENUMERATE | JSPROP_READONLY },
-	{ "max_length",	JSP_INPUT_MAX_LENGTH,	JSPROP_ENUMERATE },
+	{ "maxLength",	JSP_INPUT_MAX_LENGTH,	JSPROP_ENUMERATE },
 	{ "name",	JSP_INPUT_NAME,		JSPROP_ENUMERATE },
 	{ "readonly",	JSP_INPUT_READONLY,	JSPROP_ENUMERATE },
 	{ "size",	JSP_INPUT_SIZE,		JSPROP_ENUMERATE | JSPROP_READONLY },

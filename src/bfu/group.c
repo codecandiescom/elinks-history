@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.22 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: group.c,v 1.23 2003/08/29 14:30:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ max_group_width(struct terminal *term, int intl, unsigned char **texts,
 		item++;
 	}
 
-	if (ww > *w) *w = ww;
+	int_lower_bound(w, ww);
 }
 
 static inline void
@@ -69,7 +69,7 @@ min_group_width(struct terminal *term, int intl, unsigned char **texts,
 		if (intl) text = _(text, term);
 		wx = strlen(text);
 
-		if (wx > wt) wt = wx;
+		int_lower_bound(&wt, wx);
 		texts++;
 		item++;
 	}
@@ -106,19 +106,22 @@ dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 		}
 
 		if (term) {
-			draw_text(term, x + nx + 4 * (item->item->type == D_CHECKBOX), *y,
+			int is_checkbox = (item->item->type == D_CHECKBOX);
+			int xnx = x + nx;
+
+			draw_text(term, xnx + 4 * is_checkbox, *y,
 				  text, ((sl == -1) ? strlen(text) : sl),
 				  0, color);
-			item->x = x + nx + (sl + 1) * (item->item->type != D_CHECKBOX);
+			item->x = xnx + !is_checkbox * (sl + 1);
 			item->y = *y;
 			if (item->item->type == D_FIELD ||
 			    item->item->type == D_FIELD_PASS)
 				item->l = item->item->dlen;
 		}
 
-		if (rw && nx + wx > *rw) {
-			*rw = nx + wx;
-			if (*rw > w) *rw = w;
+		if (rw) {
+			int_lower_bound(rw, nx + wx);
+			int_upper_bound(rw, w);
 		}
 		nx += wx + 1;
 		texts++;
@@ -134,10 +137,11 @@ group_fn(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, rw;
 	int y = 0;
+	int n = dlg->n - 2;
 
-	max_group_width(term, 1, dlg->dlg->udata, dlg->items, dlg->n - 2, &max);
-	min_group_width(term, 1, dlg->dlg->udata, dlg->items, dlg->n - 2, &min);
-	buttons_width(term, dlg->items + dlg->n - 2, 2, &min, &max);
+	max_group_width(term, 1, dlg->dlg->udata, dlg->items, n, &max);
+	min_group_width(term, 1, dlg->dlg->udata, dlg->items, n, &min);
+	buttons_width(term, dlg->items + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_upper_bound(&w, max);
@@ -146,11 +150,11 @@ group_fn(struct dialog_data *dlg)
 	int_lower_bound(&w, 1);
 
 	rw = 0;
-	dlg_format_group(NULL, term, 1, dlg->dlg->udata, dlg->items, dlg->n - 2,
+	dlg_format_group(NULL, term, 1, dlg->dlg->udata, dlg->items, n,
 			 0, &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + dlg->n - 2, 2, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg->items + n, 2, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
@@ -161,10 +165,10 @@ group_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 
 	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_group(term, term, 1, dlg->dlg->udata, dlg->items, dlg->n - 2,
+	dlg_format_group(term, term, 1, dlg->dlg->udata, dlg->items, n,
 			 dlg->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + dlg->n - 2, 2,
+	dlg_format_buttons(term, term, dlg->items + n, 2,
 			   dlg->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }

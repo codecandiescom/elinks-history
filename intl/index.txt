@@ -3,6 +3,7 @@ brazilian_portuguese
 bulgarian
 catalan
 czech
+danish
 dutch
 estonian
 finnish

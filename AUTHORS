@@ -137,6 +137,9 @@ Jan Sembera <fis@ji.cz>
 Jimenez Martinez Angel Luis <al026635@alumail.uji.es>
 	Spanish translation
 
+Jonas Fonseca <fonseca@diku.dk>
+	Danish translation
+
 Julian Kinraid <jkinraid@clear.net.nz>
 	QNX-related fixes
 
@@ -304,4 +307,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 <zimon@niksula.hut.fi>
 	RPM spec file in contrib/
 
-$Id: AUTHORS,v 1.52 2002/04/17 22:22:19 pasky Exp $
+$Id: AUTHORS,v 1.53 2002/04/19 16:15:04 pasky Exp $

@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.21 2003/09/22 23:19:43 jonas Exp $ */
+/* $Id: hooks.c,v 1.22 2003/09/22 23:34:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,25 +63,16 @@ script_hook_goto_url(va_list ap)
 
 		finish_lua();
 
-		if (err) {
-			url = "";
-
-		} else if (lua_isstring(L, -1)) {
-			url = (unsigned char *) lua_tostring(L, -1);
-
+		if (!err && lua_isstring(L, -1)) {
+			url = stracpy((unsigned char *) lua_tostring(L, -1));
 		} else if (!lua_isnil(L, -1)) {
 			alert_lua_error("goto_url_hook must return a string or nil");
-
-		} else {
-			url = "";
 		}
 
 		lua_pop(L, 1);
-	} else {
-		url = "";
 	}
 
-	return str_event_code(returl, url ? stracpy(url) : NULL);
+	return str_event_code(returl, url);
 }
 
 

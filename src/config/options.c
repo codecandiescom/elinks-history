@@ -1,10 +1,11 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.428 2004/01/02 18:37:57 jonas Exp $ */
+/* $Id: options.c,v 1.429 2004/01/07 23:24:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -67,6 +68,28 @@ struct option *cmdline_options;
 
 static void add_opt_rec(struct option *, unsigned char *, struct option *);
 static void free_options_tree(struct list_head *, int recursive);
+
+#ifdef DEBUG
+/* Detect ending '.' (and some others) in options captions.
+ * It will emit a message in debug mode only. --Zas */
+void
+check_caption(unsigned char *caption)
+{
+	int len;
+	unsigned char c;
+
+	if (!caption) return;
+
+	len = strlen(caption);
+	if (!len) return;
+
+	c = caption[len - 1];
+	if (isspace(c) || (c != ')' && ispunct(c)))
+		DBG("bad char at end of caption [%s]", caption);
+}
+#else
+#define check_caption(caption)
+#endif
 
 
 /**********************************************************************
@@ -354,6 +377,8 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 	option->max = max;
 	option->capt = capt;
 	option->desc = desc;
+
+	check_caption(option->capt);
 
 	if (option->type != OPT_ALIAS
 	    && ((tree->flags & OPT_LISTBOX) || (option->flags & OPT_LISTBOX))) {
@@ -837,6 +862,8 @@ register_options(struct option_info info[], struct option *tree)
 	for (i = 0; info[i].path; i++) {
 		struct option *option = &info[i].option;
 		unsigned char *string;
+
+		check_caption(option->capt);
 
 		if (option->type != OPT_ALIAS
 		    && ((tree->flags & OPT_LISTBOX)

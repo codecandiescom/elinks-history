@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.73 2003/11/09 14:55:22 jonas Exp $ */
+/* $Id: edit.c,v 1.74 2003/11/23 17:07:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,8 @@ my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
  * If either of src_name or src_url are NULL, try to obtain the name and url
  * of the current document. If you want to create two null fields, pass in a
  * pointer to a zero length string (""). */
+/* TODO: In bookmark/dialogs.c most users seem to want also the dialog_data
+ * so we should make when_*() functions take dialog_data instead. --jonas */
 void
 do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	       const unsigned char *src_name,

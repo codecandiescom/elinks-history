@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-01-03 23:18+0100\n"
-"PO-Revision-Date: 2005-01-03 23:19+0100\n"
+"POT-Creation-Date: 2005-01-04 11:06+0100\n"
+"PO-Revision-Date: 2005-01-04 11:07+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -645,16 +645,15 @@ msgstr "Restriction au mode anonyme"
 #: src/config/cmdline.c:607
 msgid ""
 "Restricts ELinks so it can run on an anonymous account.\n"
-"Local file browsing, downloads, and modification of option and\n"
+"Local file browsing, downloads, and modification of options\n"
 "will be disabled. Execution of viewers is allowed, but entries\n"
 "in the association table can't be added or modified."
 msgstr ""
 "Restreint ELinks de manière à permettre de l'exécuter sur un\n"
-"compte anonyme.\n"
-"La navigation dans les fichiers locaux, les téléchargements de\n"
-"fichiers, et la modification d'options sont désactivés.\n"
-"L'utilisation de visualisateurs externes reste possible, mais\n"
-"les associations ne peuvent être modifiées."
+"compte anonyme. La navigation dans les fichiers locaux, les\n"
+"téléchargements de fichiers, et la modification d'options sont\n"
+"désactivés. L'utilisation de visualisateurs externes reste \n"
+"possible, mais les associations ne peuvent être modifiées."
 
 #: src/config/cmdline.c:612
 msgid "Autosubmit first form"
@@ -3268,8 +3267,8 @@ msgstr ""
 "Echanger les fontes de caractères pour le dessin des lignes, seulement\n"
 "intéressant avec le terminal de type linux."
 
-#: src/config/options.inc:749
-msgid "UTF-8 I/0"
+#: src/config/options.inc:749 src/dialogs/options.c:172
+msgid "UTF-8 I/O"
 msgstr "E/S UTF-8"
 
 #: src/config/options.inc:751
@@ -4862,10 +4861,6 @@ msgstr "16 couleurs"
 #: src/dialogs/options.c:164
 msgid "256 colors"
 msgstr "256 couleurs"
-
-#: src/dialogs/options.c:172
-msgid "UTF-8 I/O"
-msgstr "E/S UTF-8"
 
 #: src/dialogs/options.c:248
 msgid "Resize terminal"

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.174 2004/01/24 21:07:59 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.175 2004/01/24 21:17:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,6 +25,7 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
+static struct strtonum action_table[];
 static struct listbox_item *action_box_items[KEYACTS];
 static struct list_head keymaps[KM_MAX];
 
@@ -57,17 +58,17 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 	if (action == ACT_NONE) {
 		/* We don't want such a listbox_item, do we? */
 		kb->box_item = NULL;
-		return; /* Or goto. */
+		return NULL; /* Or goto. */
 	}
 
-	if (!init_string(&keystroke)) return;
+	if (!init_string(&keystroke)) return NULL;
 
 	make_keystroke(&keystroke, key, meta, 0);
 	kb->box_item = mem_calloc(1, sizeof(struct listbox_item)
 				  + keystroke.length + 1);
 	if (!kb->box_item) {
 		done_string(&keystroke);
-		return; /* Or just goto after end of this if block. */
+		return NULL; /* Or just goto after end of this if block. */
 	}
 	kb->box_item->text = ((unsigned char *) kb->box_item
 				+ sizeof(struct listbox_item));
@@ -78,7 +79,7 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 boom:
 		mem_free(kb->box_item);
 		kb->box_item = NULL;
-		return; /* Or goto ;-). */
+		return NULL; /* Or goto ;-). */
 	}
 	for (keymap = action_box_items[action]->child.next;
 	     keymap != (struct listbox_item *) &action_box_items[action]->child && km;
@@ -860,8 +861,6 @@ add_keymap_default_keybindings(enum keymap keymap, struct default_kb *defaults)
 static void
 add_default_keybindings(void)
 {
-	struct default_kb *kb;
-
 	/* Maybe we shouldn't delete old keybindings. But on the other side, we
 	 * can't trust clueless users what they'll push into sources modifying
 	 * defaults, can we? ;)) */
@@ -922,7 +921,7 @@ bind_act(unsigned char *keymap, unsigned char *keystroke)
 }
 
 static void
-single_bind_config_string(struct string *file, enum keymap,
+single_bind_config_string(struct string *file, enum keymap keymap,
 			  struct keybinding *keybinding)
 {
 	unsigned char *keymap_str = write_keymap(keymap);
@@ -930,11 +929,11 @@ single_bind_config_string(struct string *file, enum keymap,
 		write_action(keybinding->action);
 
 	if (!keymap_str || !action_str || action_str[0] == ' ')
-		continue;
+		return;
 
 	if (keybinding->flags & KBDB_WATERMARK) {
 		keybinding->flags &= ~KBDB_WATERMARK;
-		continue;
+		return;
 	}
 
 	/* TODO: Maybe we should use string.write.. */

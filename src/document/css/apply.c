@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.73 2004/09/21 09:24:09 pasky Exp $ */
+/* $Id: apply.c,v 1.74 2004/09/21 09:45:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,10 @@ examine_element(struct css_selector *base,
 	struct css_selector *selector;
 	unsigned char *code;
 
+#ifdef CSS_DEBUG
+ 	DBG("examine_element(%s, %d, %d, %p, %.*s);", base->name, seltype, rel, selectors, element->namelen, element->name);
+#endif
+
 #define process_found_selector(sel, type, base) \
 	if (selector) { \
 		merge_css_selectors(base, sel); \
@@ -140,8 +144,16 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	if (!selector)
 		return;
 
+#ifdef CSS_DEBUG
+	WDBG("Applying to element %.*s...", element->namelen, element->name);
+#endif
+
 	examine_element(selector, CST_ELEMENT, CSR_ROOT,
 	                &css->selectors, element);
+
+#ifdef CSS_DEBUG
+	WDBG("Element %.*s applied.", element->namelen, element->name);
+#endif
 
 	code = get_attr_val(element->options, "style");
 	if (code) {

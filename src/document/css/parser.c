@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.129 2004/09/21 09:41:04 pasky Exp $ */
+/* $Id: parser.c,v 1.130 2004/09/21 09:45:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -449,6 +449,13 @@ css_parse_ruleset(struct css_stylesheet *css, struct scanner *scanner)
 
 	/* Mirror the properties to all the selectors. */
 	foreach (pkg, selectors) {
+#ifdef CSS_DEBUG
+		DBG("Binding properties (!!%d) to selector %s (type %d, relation %d, children %d)",
+			!list_empty(properties),
+			pkg->selector->name, pkg->selector->type,
+			pkg->selector->relation,
+			!list_empty(pkg->selector->leaves));
+#endif
 		add_selector_properties(pkg->selector, &properties);
 	}
 	free_list(selectors);
@@ -484,4 +491,7 @@ css_parse_stylesheet(struct css_stylesheet *css, unsigned char *string,
 			css_parse_ruleset(css, &scanner);
 		}
 	}
+#ifdef CSS_DEBUG
+	WDBG("That's it.");
+#endif
 }

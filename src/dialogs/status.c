@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.45 2004/01/01 14:03:51 jonas Exp $ */
+/* $Id: status.c,v 1.46 2004/01/01 18:50:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ update_status(void)
 			render_document_frames(ses);
 			dirty = 1;
 		}
-#if CONFIG_LEDS
+#ifdef CONFIG_LEDS
 		if (status->show_leds != show_leds) {
 			status->show_leds = show_leds;
 			dirty = 1;

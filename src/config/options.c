@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.403 2003/11/20 01:14:17 jonas Exp $ */
+/* $Id: options.c,v 1.404 2003/11/20 02:14:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,6 +314,8 @@ next:
 		add_to_list_end(*tree->value.tree, option);
 		if (abi) add_to_list_end(tree->box_item->child, option->box_item);
 	}
+
+	update_hierbox_browser(&option_browser);
 }
 
 static inline struct listbox_item *
@@ -330,8 +332,6 @@ init_option_listbox_item(struct option *option)
 	box->box = &option_boxes;
 	box->udata = option;
 	box->type = (option->type == OPT_TREE) ? BI_FOLDER : BI_LEAF;
-
-	update_hierbox_browser(&option_browser);
 
 	return box;
 }

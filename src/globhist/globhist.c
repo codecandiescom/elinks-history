@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.95 2004/12/21 07:22:10 miciah Exp $ */
+/* $Id: globhist.c,v 1.96 2004/12/21 07:24:36 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -90,8 +90,8 @@ static struct hash *globhist_cache = NULL;
 static int globhist_cache_entries = 0;
 
 
-void
-delete_global_history_item(struct global_history_item *history_item)
+static void
+remove_item_from_global_history(struct global_history_item *history_item)
 {
 	del_from_history_list(&global_history, history_item);
 
@@ -104,6 +104,12 @@ delete_global_history_item(struct global_history_item *history_item)
 			globhist_cache_entries--;
 		}
 	}
+}
+
+void
+delete_global_history_item(struct global_history_item *history_item)
+{
+	remove_item_from_global_history(history_item);
 
 	done_listbox_item(&globhist_browser, history_item->box_item);
 	mem_free(history_item->title);

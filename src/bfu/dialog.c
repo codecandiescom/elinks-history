@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.91 2003/11/10 15:08:25 jonas Exp $ */
+/* $Id: dialog.c,v 1.92 2003/11/10 17:06:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,7 @@ format_widgets(struct terminal *term, struct dialog_data *dlg_data,
 		{
 			int group = widget_has_group(wdata);
 
-			if (group && dlg_data->dlg->layout.float_groups) {
+			if (group > 0 && dlg_data->dlg->layout.float_groups) {
 				int size;
 
 				/* Find group size */

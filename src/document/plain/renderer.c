@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.9 2003/11/14 02:15:12 jonas Exp $ */
+/* $Id: renderer.c,v 1.10 2003/11/14 02:20:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,11 +149,14 @@ add_document_line(struct document *document, int lineno,
 
 			/* TODO: Handle email@adresses.to and maybe
 			 * <URL:...> too --jonas */
-			if (parse_uri(&uri, &line[line_pos])) {
-				add_document_link(document, line_pos + expanded,
-						  lineno, uri_end - line_pos,
-						  struri(uri));
+			if (!parse_uri(&uri, &line[line_pos])) {
+				line[uri_end] = keep;
+				continue;
 			}
+
+			add_document_link(document, line_pos + expanded,
+					  lineno, uri_end - line_pos,
+					  struri(uri));
 
 			line[uri_end] = keep;
 			line_pos = uri_end;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.221 2004/06/01 07:14:23 miciah Exp $ */
+/* $Id: uri.c,v 1.222 2004/06/03 22:55:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -532,8 +532,9 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 				src += 2;
 				continue;
 
-			} else if (src[2] == '.' && is_uri_dir_sep(uri, src[3])) {
-				/* /../ - strip that and preceding element. */
+			} else if (src[2] == '.'
+				   && (is_uri_dir_sep(uri, src[3]) || !src[3])) {
+				/* /../ or /.. - skip it and preceding element. */
 
 				/* First back out the last incrementation of
 				 * @dest (dest++) to get the position that was
@@ -547,14 +548,15 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 					if (is_uri_dir_sep(uri, *dest)) break;
 				}
 
+				if (!src[3]) {
+					/* /.. - add ending slash and stop */
+					*dest++ = *src;
+					*dest = 0;
+					break;
+				}
+
 				src += 3;
 				continue;
-
-			} else if (src[2] == '.' && !src[3]) {
-				/* /.. - nothing to skip */
-				*dest++ = *src;
-				*dest = 0;
-				break;
 			}
 
 		} else if (is_uri_dir_sep(uri, src[1])) {

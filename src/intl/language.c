@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.9 2002/09/02 17:49:11 pasky Exp $ */
+/* $Id: language.c,v 1.10 2002/09/03 08:05:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,11 +139,11 @@ language_name(int l)
 unsigned char *
 language_iso639_code(int l)
 {
-	/* XXX: In fact this is _NOT_ a real ISO639 code but RFC1766 code (as
+	/* XXX: In fact this is _NOT_ a real ISO639 code but RFC3066 code (as
 	 * we're supposed to use that one when sending language tags through
 	 * HTTP/1.1) and that one consists basically from ISO639[-ISO3166].
 	 * This is important for ie. pt vs pt-BR. */
-	/* TODO: We should reflext this in name of this function and of the
+	/* TODO: We should reflect this in name of this function and of the
 	 * tag. --pasky */
 	return translations[l].t[T__ISO_639_CODE].name;
 }

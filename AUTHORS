@@ -401,11 +401,12 @@ Petr Baudis <pasky@ucw.cz>
 	Initial cleanups
 	Options system
 	DNS hacking
-	Initial CSS support
+	Initial CSS and ECMAScript support
 	Random hacking all over the map
 	Feature of the Day implementation
-	LEDs, exmode and other worthless toys
-	http://elinks.or.cz/
+	LEDs, exmode, marks and other worthless toys
+	Actually even some documentation!
+	http://elinks.or.cz/ (original cut)
 
 Petr Cech <cech@atrey.karlin.mff.cuni.cz>
 	Allow spaces at the beginning of URL
@@ -526,4 +527,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.175 2004/12/03 17:12:34 zas Exp $
+$Id: AUTHORS,v 1.176 2004/12/15 22:25:16 pasky Exp $

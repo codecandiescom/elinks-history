@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.87 2003/12/12 14:36:56 jonas Exp $ */
+/* $Id: string.c,v 1.88 2004/01/02 14:42:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,7 +173,7 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 	/* XXX: The return value is inconsistent. Hrmpf. Making it consistent
 	 * would make the @n1 != @n2 case significantly more expensive, though.
 	 * So noone should better rely on the return value actually meaning
-	 * anything quantitively. --pasky */ \
+	 * anything quantitatively. --pasky */ \
  \
 	string_assert(errfile, errline, s1 && s2, c); \
  \

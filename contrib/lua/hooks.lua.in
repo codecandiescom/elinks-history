@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.14 2003/05/06 22:34:43 pasky Exp $
+-- $Id: hooks.lua.in,v 1.15 2003/05/06 22:36:03 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -137,7 +137,7 @@ function goto_url_hook (url, current_url)
 
     -- Expand ~ to home directories.
     if match ("~", url) then
-        if strsub(url, 2, 2) == "/" then    -- ~/foo
+        if strsub(url, 2, 2) == "/" or strlen(url) == 1 then    -- ~/foo
             return home_dir..strsub(url, 2)
         else                                -- ~foo/bar
             return "/home/"..strsub(url, 2)

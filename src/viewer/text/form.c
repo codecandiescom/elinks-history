@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.121 2004/06/09 21:42:19 zas Exp $ */
+/* $Id: form.c,v 1.122 2004/06/09 22:36:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,28 +434,9 @@ fi_rep:
 }
 
 static void
-get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
-		       struct list_head *subm)
+sort_submitted_values(struct list_head *subm)
 {
-	struct form_control *frm;
 	int ch;
-
-	assert(doc_view && doc_view->document && fc && subm);
-	if_assert_failed return;
-
-	foreach (frm, doc_view->document->forms) {
-		if (frm->form_num == fc->form_num
-		    && ((frm->type != FC_SUBMIT &&
-			 frm->type != FC_IMAGE &&
-			 frm->type != FC_RESET) || frm == fc)
-		    && frm->name && frm->name[0]) {
-			struct form_state *fs = find_form_state(doc_view, frm);
-
-			if (!fs) continue;
-
-			add_submitted_value_to_list(frm, fs, subm);
-		}
-	}
 
 	do {
 		struct submitted_value *sub, *nx;
@@ -478,7 +459,32 @@ get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 				ch = 1;
 			}
 	} while (ch);
+}
 
+static void
+get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
+		       struct list_head *subm)
+{
+	struct form_control *frm;
+
+	assert(doc_view && doc_view->document && fc && subm);
+	if_assert_failed return;
+
+	foreach (frm, doc_view->document->forms) {
+		if (frm->form_num == fc->form_num
+		    && ((frm->type != FC_SUBMIT &&
+			 frm->type != FC_IMAGE &&
+			 frm->type != FC_RESET) || frm == fc)
+		    && frm->name && frm->name[0]) {
+			struct form_state *fs = find_form_state(doc_view, frm);
+
+			if (!fs) continue;
+
+			add_submitted_value_to_list(frm, fs, subm);
+		}
+	}
+
+	sort_submitted_values(subm);
 }
 
 static void

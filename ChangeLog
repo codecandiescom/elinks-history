@@ -1,3 +1,304 @@
+Sun Sep 26 20:57:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	In features.log and so, add (JavaScript) to ECMAScript.
+	Experimentally confirmed that people don't know what ECMAScript is.  
+
+Sun Sep 26 20:31:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Once upon a time, there was a .po resync, and then translators
+	stopped by, and happily updated their translations.  
+
+Sun Sep 26 20:24:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Oops, revert my debugging squad.  
+
+Sun Sep 26 20:23:56 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, ecmascript/spidermonkey.c:
+
+	Return undef from window.open() if failed. Otherwise it should
+	return the new window's pointer but we can't handle that now so
+	still return true on success.  
+
+Sun Sep 26 20:13:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window.alert() now returns undef instead of true. Dunno about
+	window.open() (returning true/false now) and document.true (always
+	gives false back).  
+
+Sun Sep 26 18:21:58 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Forgotten ~ 
+
+Sun Sep 26 17:45:07 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Sun Sep 26 17:21:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Add TODO about checking for URI strings in certain DOM nodes.  
+
+Sun Sep 26 17:15:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Highlight links using information about whether they are visited or
+	bookmarked.  
+
+Sun Sep 26 16:43:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: dom/renderer.c, sgml/scanner.c:
+
+	Fix double rendering of ';' in entity references the right way by
+	ommiting ';' before continuing the text node scanning.  
+
+Sun Sep 26 16:09:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/util/types.h:
+
+	Check for uint16_t type and merge fallback macros from the
+	ECMACSRIPT branch.  
+
+Sun Sep 26 15:10:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/http.c:
+
+	Set S_TRANS state only after we actually received anything. See? It
+	crashes a little later now.  
+
+Sun Sep 26 15:03:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Call display_timer() only after we already get to receive something.
+	Should help to fix the reload-on-javascript-page crash.  
+
+Sun Sep 26 14:47:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/marks.c:
+
+	Another ECMAScript-less compilation fixes spotted by zas.  
+
+Sun Sep 26 14:34:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	ECMAScriptless compilation fix, spotted by zas.  
+
+Sun Sep 26 14:02:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	'T' now by default opens the link in new tab in background instead
+	of in foreground. It's so *MUCH* more practical, everyone else is
+	doing it that way and so and so and so. Who'll kill me this time? ;) 
+
+Sun Sep 26 13:28:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.c:
+
+	Something about download->end() calling from load_url().  
+
+Sun Sep 26 12:55:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	document.write() *PLACEHOLDER* just to silence those annoying
+	warnings.  
+
+Sun Sep 26 12:23:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	In copy_vs(), reset destination doc_view to NULL too. Another
+	hopefully crash-fixing measurement. Damn, are there really no better
+	test cases for these ECMAScript dances that those stupid porn sites? 
+
+Sun Sep 26 12:17:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	Reset destination ecmascript and ecmascript_fragile. This could cure
+	few crashes.  
+
+Sun Sep 26 12:13:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/location.c, sched/task.c, viewer/dump/dump.c,
+	viewer/text/marks.c, viewer/text/vs.c, viewer/text/vs.h:
+
+	destroy_vs() now takes an additional parameter telling it whether to
+	put the associated ecmascript interpreter. Useful for marks.  
+
+Sun Sep 26 11:18:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Only implicit render DOM text nodes via the flush calls. Fixes
+	double rendering of ';' in entity references.  
+
+Sun Sep 26 11:00:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/README:
+
+	Mostly some TODO items for the SGML parser.  
+
+Sun Sep 26 10:40:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/parser.c:
+
+	More tagsoup navigation enhancements. Add attributes even if the
+	value is missing (example: "attrname=").  
+
+Sun Sep 26 10:15:33 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.h:
+
+	Throw unsigned in. Spotted by Jonas.  
+
+Sun Sep 26 10:05:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Fix linkifying of DOM attribute values. Damn quoted strings. ;) 
+
+Sun Sep 26 10:03:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, ecmascript/ecmascript.c,
+	ecmascript/ecmascript.h, viewer/text/vs.c, viewer/text/vs.h:
+
+	onload_snippets are now stored inside of struct
+	ecmascript_interpreter instead of struct view_state.  
+
+Sun Sep 26 09:56:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/renderer.c, document/view.h,
+	document/html/frames.c, ecmascript/ecmascript.c,
+	ecmascript/ecmascript.h, ecmascript/spidermonkey.c,
+	sched/session.c, sched/task.c, viewer/text/view.c,
+	viewer/text/vs.c, viewer/text/vs.h:
+
+	struct ecmascript_interpreter is now associated with struct
+	view_state rather than struct document_view. This simplifies things
+	a lot, making the interpreter really reliably persistent over
+	rerenderings (to indicate real document replaces in the scope of a
+	single view_state, view_state.ecmascript_fragile is used).
+	view_state now holds pointer to the current document_view
+	associated. ecmascript_cleanup_state() -> ecmascript_reset_state().
+	This also fixes location ECMAScript object to contain the self
+	location instead of top location as another side-effect.  
+
+Sun Sep 26 09:50:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	When rendering "attr1='val1'attr2='val2'" the DOM node string can be
+	located at the renderers current position.  
+
+Sun Sep 26 01:53:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/parser.c:
+
+	Shoot, @valtoken can be NULL in add_sgml_attribute(). Fixes quoted
+	attribute value highlighting patch.  
+
+Sun Sep 26 01:46:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Also highlight the entity reference delimiters ('&' and ';').
+	Requested by pasky.  
+
+Sun Sep 26 01:41:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: dom/node.h, dom/renderer.c, sgml/parser.c:
+
+	Also highlight the string delimiters of attribute values. Requested
+	by pasky.  
+
+Sun Sep 26 01:24:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/scanner.c:
+
+	Simplify comment skipping and move to separate function. The
+	changing of '<' and '>' precedence could have caused more problems.
+	Fix also scanning of '<a' that would cause lookup of '--a' instead
+	of '--'. Now it is specialized and will not cause any table lookup.  
+
+Sun Sep 26 00:30:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window.open() support. Opens to a new window if possible, to a new
+	tab (on foreground) otherwise.  
+
+Sun Sep 26 00:28:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bookmarks/bookmarks.c, sched/action.c, sched/session.c,
+	terminal/tab.c, terminal/tab.h, bfu/hierbox.c:
+
+	open_uri_in_new_tab() now takes additional @based option telling it
+	whether to preload the current location in the new tab or not.  
+
+Sat Sep 25 23:57:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Comment out attr="value""continuinghere" handling since this is
+	extremely rare and you rather meet broken code where this hurts
+	(i.e. some idos.cz page pointed out by Miernik). And we were already
+	doing this when scanning for the tag end anyway.  
+
+Sat Sep 25 23:51:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/: scanner.c, scanner.h:
+
+	Improve handling of '</a<b>' tagsoup by treating it as '</a><b>'.  
+
+Sat Sep 25 23:38:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/scanner.c:
+
+	Improve handling of '<a<b>' tagsoup by treating it as '<a><b>' and
+	remove guarding assertion. The scanner now handles both yahoo (bug
+	510) and test/garbage.html .. more tagsoup handling comming up.  
+
+Sat Sep 25 23:10:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/scanner.c:
+
+	Optimize the main SGML scanner loop. Allow NUL chars in elements.  
+
+Sat Sep 25 22:39:49 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/osdep/newwin.c:
+
+	When looking for a suitable command, stop at the first match.  
+
+Sat Sep 25 22:19:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/navigator.h:
+
+	Fix off by one error in the foreachback_dom_state iterator causing
+	search_dom_navigator() to never search in the DOM state at the
+	bottom. (bug 505) 
+
 Sat Sep 25 22:06:33 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/parser/parse.c:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.643 2004/11/12 16:07:35 zas Exp $ */
+/* $Id: view.c,v 1.644 2004/11/12 16:10:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,17 +177,20 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	while (count--) {
 		int current_link = doc_view->vs->current_link;
 
-		if (current_link == wraparound_bound && wraparound) {
-			jump_to_link_number(ses, doc_view, wraparound_link);
-			/* FIXME: This needs further work, we should call
-			 * page_down() and set_textarea() under some conditions
-			 * as well. --pasky */
-			continue;
-		}
+		if (current_link == wraparound_bound) {
+			if (wraparound) {
+				jump_to_link_number(ses, doc_view, wraparound_link);
+				/* FIXME: This needs further work, we should call
+				 * page_down() and set_textarea() under some conditions
+				 * as well. --pasky */
+				continue;
+			}
 
-		if (current_link != wraparound_bound
-		    && next_link_in_view(doc_view, current_link + direction, direction, link_in_view_y, set_pos_x))
-			continue;
+		} else {
+			if (next_link_in_view(doc_view, current_link + direction,
+					      direction, link_in_view_y, set_pos_x))
+				continue;
+		}
 
 		/* This is a work around for the case where the index of
 		 * @wraparound_bound is not necessarily the index of the first

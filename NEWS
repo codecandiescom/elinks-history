@@ -12,7 +12,7 @@ ELinks-now:
 * cursor routing (aka w3m-style navigation)
 * modal text-input form-fields editing (disabled by default)
 * manual cookies creating and editing
-* typeahead text searching (press '#/')
+* incremental searching (press '#/')
 * Perl scripting back-end (experimental)
 * build-time configurability and feature documentation through features.conf
 * Mozilla-compatible -remote option (http://www.mozilla.org/unix/remote.html)

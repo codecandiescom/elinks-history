@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.35 2002/09/08 19:12:22 pasky Exp $ */
+/* $Id: download.c,v 1.36 2002/09/10 13:13:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,6 +198,7 @@ download_window_function(struct dialog_data *dlg)
 	int t = 0;
 	unsigned char *m, *u;
 	struct status *stat = &down->stat;
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	redraw_below_window(dlg->win);
 	down->win = dlg->win;
@@ -295,14 +296,17 @@ download_window_function(struct dialog_data *dlg)
 	if (w < 1) w = 1;
 
 	y = 0;
-	dlg_format_text(NULL, term, u, 0, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(NULL, term, u, 0, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
 
 	y++;
 	if (t && stat->prg->size >= 0) y += 2;
-	dlg_format_text(NULL, term, m, 0, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(NULL, term, m, 0, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items, dlg->n, 0, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(NULL, term, dlg->items, dlg->n, 0, &y, w,
+			   NULL, AL_CENTER);
 
 	dlg->xw = w + 2 * DIALOG_LB;
 	dlg->yw = y + 2 * DIALOG_TB;
@@ -312,7 +316,8 @@ download_window_function(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB + 1;
 	x = dlg->x + DIALOG_LB;
-	dlg_format_text(term, term, u, x, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(term, term, u, x, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
 
 	if (t && stat->prg->size >= 0) {
 		unsigned char q[64];
@@ -328,15 +333,17 @@ download_window_function(struct dialog_data *dlg)
 		sprintf(q, "%3d%%",
 			  (int) ((longlong) 100 * (longlong) stat->prg->pos
 			         / (longlong) stat->prg->size));
-		print_text(term, x + w - 4, y, strlen(q), q, get_bfu_color(term, "dialog.text"));
+		print_text(term, x + w - 4, y, strlen(q), q, dialog_text_color);
 		y++;
 	}
 
 	y++;
-	dlg_format_text(term, term, m, x, &y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
+	dlg_format_text(term, term, m, x, &y, w, NULL,
+			dialog_text_color, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items, dlg->n, x, &y, w, NULL, AL_CENTER);
+	dlg_format_buttons(term, term, dlg->items, dlg->n, x, &y, w,
+			   NULL, AL_CENTER);
 
 	mem_free(u);
 	mem_free(m);
@@ -532,7 +539,7 @@ end_store:
 				mem_free(down->prog);
 				down->prog = NULL;
 
-			} else { 
+			} else {
 				if (down->notify) {
 					unsigned char *url = stracpy(down->url);
 

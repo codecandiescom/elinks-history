@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.8 2002/09/11 16:10:00 pasky Exp $ */
+/* $Id: string.c,v 1.9 2002/09/11 18:37:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,53 @@
 /* Note that, contrary to init_str() & co, these functions are NOT granular,
  * thus you can't simply reuse strings allocated by these in add_to_str()-style
  * functions. */
+
+#ifdef LEAK_DEBUG
+inline unsigned char *
+debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
+{
+	unsigned char *m = debug_mem_alloc(f, l, len + 1);
+
+	if (!m) return NULL;
+
+	memcpy(m, src, len);
+	m[len] = 0;
+
+	return m;
+}
+
+inline unsigned char *
+debug_stracpy(unsigned char *f, int l, unsigned char *src)
+{
+	if (!src) return NULL;
+
+	return debug_memacpy(f, l, src, (src != DUMMY) ? strlen(src) : 0);
+}
+
+#else /* LEAK_DEBUG */
+
+inline unsigned char *
+memacpy(unsigned char *src, int len)
+{
+	unsigned char *m = mem_alloc(len + 1);
+
+	if (!m) return NULL;
+
+	memcpy(m, src, len);
+	m[len] = 0;
+
+	return m;
+}
+
+inline unsigned char *
+stracpy(unsigned char *src)
+{
+	if (!src) return NULL;
+
+	return memacpy(src, (src != DUMMY) ? strlen(src) : 0);
+}
+#endif /* LEAK_DEBUG */
+
 
 unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)
@@ -96,16 +143,25 @@ straconcat(unsigned char *str, ...)
 
 
 /* Granular autoallocation dynamic string functions */
-
-unsigned char *
-init_str_x(unsigned char *file, int line)
+#ifdef LEAK_DEBUG
+inline unsigned char *
+debug_init_str(unsigned char *file, int line)
 {
 	unsigned char *p = debug_mem_alloc(file, line, ALLOC_GR);
 
 	if (p) *p = 0;
 	return p;
 }
+#else
+inline unsigned char *
+init_str()
+{
+	unsigned char *p = mem_alloc(ALLOC_GR);
 
+	if (p) *p = 0;
+	return p;
+}
+#endif 
 
 void
 add_to_str(unsigned char **s, int *l, unsigned char *a)

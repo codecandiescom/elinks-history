@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.7 2002/09/08 19:12:23 pasky Exp $ */
+/* $Id: string.h,v 1.8 2002/09/11 18:37:33 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -10,40 +10,31 @@
 #include "util/memdebug.h"
 #include "util/memory.h"
 
-/* Overhead is minimal when DEBUG is not defined, and we will still in fact use
- * normal functions as we have wrappers all around. */
+#define ALLOC_GR 0x100 /* must be power of 2 */
 
-static inline unsigned char *
-debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
-{
-	unsigned char *m = debug_mem_alloc(f, l, len + 1);
-
-	if (!m) return NULL;
-
-	memcpy(m, src, len);
-	m[len] = 0;
-
-	return m;
-}
+#ifdef LEAK_DEBUG
+unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
 #define memacpy(s, l) debug_memacpy(__FILE__, __LINE__, s, l)
 
-static inline unsigned char *
-debug_stracpy(unsigned char *f, int l, unsigned char *src)
-{
-	if (!src) return NULL;
-
-	return debug_memacpy(f, l, src, (src != DUMMY) ? strlen(src) : 0);
-}
+unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
 #define stracpy(s) debug_stracpy(__FILE__, __LINE__, s)
+
+unsigned char *debug_init_str(unsigned char *, int);
+#define init_str() debug_init_str(__FILE__, __LINE__)
+
+#else /* LEAK_DEBUG */
+
+unsigned char *memacpy(unsigned char *, int);
+unsigned char *stracpy(unsigned char *);
+unsigned char *init_str();
+
+#endif /* LEAK_DEBUG */
 
 
 unsigned char *copy_string(unsigned char **, unsigned char *);
 void add_to_strn(unsigned char **, unsigned char *);
 unsigned char *straconcat(unsigned char *, ...);
 
-#define ALLOC_GR 0x100 /* must be power of 2 */
-#define init_str() init_str_x(__FILE__, __LINE__)
-unsigned char *init_str_x(unsigned char *, int);
 void add_to_str(unsigned char **, int *, unsigned char *);
 void add_bytes_to_str(unsigned char **, int *, unsigned char *, int);
 void add_chr_to_str(unsigned char **, int *, unsigned char);

@@ -2037,6 +2037,7 @@ extern struct rgb default_link;
 extern struct rgb default_vlink;
 
 extern int color_dirs;
+extern int allow_special_files;
 
 #define REFERER_NONE 0
 #define REFERER_SAME_URL 1

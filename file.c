@@ -340,6 +340,11 @@ void file_func(struct connection *c)
 
 		mem_free(name);
 
+		if (!allow_special_files) {
+			close(h);
+			setcstate(c, S_FILE_TYPE); abort_connection(c); return;
+		}
+		
 		file = mem_alloc(bufsize + 1);
 		if (!file) {
 			close(h);

@@ -939,6 +939,7 @@ struct rgb default_link = { 0, 0, 255 };
 struct rgb default_vlink = { 255, 255, 0 };
 
 int color_dirs = 1;
+int allow_special_files = 0;
 
 int default_left_margin = HTML_LEFT_MARGIN;
 
@@ -969,8 +970,14 @@ struct option links_options[] = {
 	/* <optname>, <cfgoptname>,
 	 * <cmdread_cmdline>, <cmdread_file>, <cmdwrite_file>,
 	 * <minval>, <maxval>, <varname>
-	 * <description> */
-		 
+	 * <description> */ 
+	 
+	{	"allow-special-files", "allow_special_files",
+		gen_cmd, num_rd, num_wr,
+	 	0, 1, &allow_special_files,
+		"Allow reading from non-regular files? (DANGEROUS - reading\n"
+		"/dev/urandom or /dev/zero can ruing your day!)" },
+	
 	{	"anonymous", NULL,
 		anonymous_cmd, NULL, NULL,
 	 	0, 0, NULL,

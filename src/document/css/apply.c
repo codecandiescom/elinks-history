@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.31 2004/01/18 16:59:15 pasky Exp $ */
+/* $Id: apply.c,v 1.32 2004/01/19 00:56:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,7 @@ static css_applier_t css_appliers[CSS_PT_LAST] = {
 	/* CSS_PT_FONT_STYLE */		css_apply_font_attribute,
 	/* CSS_PT_FONT_WEIGHT */	css_apply_font_attribute,
 	/* CSS_PT_TEXT_ALIGN */		css_apply_text_align,
+	/* CSS_PT_TEXT_DECORATION */	css_apply_font_attribute,
 };
 
 void

@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.36 2004/01/19 00:43:24 jonas Exp $ */
+/* $Id: value.c,v 1.37 2004/01/19 00:56:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,6 +131,9 @@ css_parse_font_style_value(struct css_property_info *propinfo,
 	if (css_token_contains(token, "italic")
 	    || css_token_contains(token, "oblique")) {
 		value->font_attribute.add |= AT_ITALIC;
+
+	} else if (css_token_contains(token, "underline")) {
+		value->font_attribute.add |= AT_UNDERLINE;
 
 	} else if (css_token_contains(token, "normal")) {
 		value->font_attribute.rem |= AT_ITALIC;

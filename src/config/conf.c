@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.113 2003/12/22 02:53:28 pasky Exp $ */
+/* $Id: conf.c,v 1.114 2004/01/01 07:03:49 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,8 @@
  * ;). Then this will come handy. */
 
 
-/* Skip block of whitespaces. */
+/* Skip comments and whitespace,
+ * setting *@line to the number of lines skipped. */
 static unsigned char *
 skip_white(unsigned char *start, int *line)
 {
@@ -306,7 +307,7 @@ parse_config_file(struct option *options, unsigned char *name,
 	while (file && *file) {
 		unsigned char *orig_pos = file;
 
-		/* Skip all possible comments and whitespaces. */
+		/* Skip all possible comments and whitespace. */
 		file = skip_white(file, &line);
 
 		/* Mirror what we already have */

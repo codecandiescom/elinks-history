@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.78 2002/12/11 21:54:01 pasky Exp $ */
+/* $Id: session.c,v 1.79 2002/12/12 22:22:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1104,7 +1104,7 @@ create_session(struct window *win)
 				"saving algorithms of ELinks were changed from "
 				"the last time you upgraded ELinks. Now, only "
 				"those options which you actually changed are "
-				"saved to the configruation file, instead of "
+				"saved to the configuration file, instead of "
 				"just all the options. This simplifies our "
 				"situation greatly when we see that some option "
 				"has inappropriate default value or we need to "

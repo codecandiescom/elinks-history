@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-09 17:35+0200\n"
+"POT-Creation-Date: 2003-06-11 09:09+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Andre Valente <a.valente@netcabo.pt>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -32,12 +32,12 @@ msgstr "Espera-se número no campo"
 #: src/dialogs/auth.c:192 src/dialogs/edit.c:177 src/dialogs/menu.c:644
 #: src/dialogs/menu.c:655 src/dialogs/menu.c:684 src/dialogs/menu.c:702
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:278 src/dialogs/options.c:267
-#: src/dialogs/options.c:364 src/globhist/dialogs.c:240 src/lua/core.c:443
-#: src/lua/core.c:587 src/lua/core.c:811 src/protocol/url.c:67
+#: src/dialogs/options.c:364 src/globhist/dialogs.c:240 src/lua/core.c:440
+#: src/lua/core.c:584 src/lua/core.c:808 src/protocol/url.c:67
 #: src/protocol/user.c:109 src/protocol/user.c:137 src/sched/download.c:527
-#: src/sched/download.c:561 src/sched/download.c:722 src/sched/download.c:811
-#: src/sched/download.c:1201 src/sched/download.c:1210
-#: src/sched/download.c:1246 src/sched/download.c:1257 src/sched/session.c:335
+#: src/sched/download.c:561 src/sched/download.c:722 src/sched/download.c:808
+#: src/sched/download.c:1196 src/sched/download.c:1205
+#: src/sched/download.c:1241 src/sched/download.c:1252 src/sched/session.c:335
 #: src/viewer/text/view.c:1688 src/viewer/text/view.c:2032
 #: src/viewer/text/view.c:2465 src/viewer/text/view.c:2514
 #: src/viewer/text/view.c:2756 src/viewer/text/view.c:3448
@@ -95,15 +95,15 @@ msgstr "Nome da directoria"
 #: src/dialogs/info.c:186 src/dialogs/info.c:206 src/dialogs/menu.c:644
 #: src/dialogs/menu.c:655 src/dialogs/menu.c:684 src/dialogs/menu.c:702
 #: src/dialogs/menu.c:713 src/dialogs/mime.c:274 src/dialogs/options.c:257
-#: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:439
-#: src/lua/core.c:582 src/lua/core.c:691 src/lua/core.c:811
+#: src/dialogs/options.c:359 src/globhist/dialogs.c:418 src/lua/core.c:436
+#: src/lua/core.c:579 src/lua/core.c:688 src/lua/core.c:808
 #: src/sched/download.c:586 src/sched/error.c:40 src/sched/session.c:1101
 #: src/sched/session.c:1118 src/sched/session.c:1142
 #: src/viewer/text/view.c:2756
 msgid "OK"
 msgstr "OK"
 
-#: src/bookmarks/dialogs.c:241 src/lua/core.c:423
+#: src/bookmarks/dialogs.c:241 src/lua/core.c:420
 msgid "Edit bookmark"
 msgstr "Editar bookmark"
 
@@ -217,20 +217,20 @@ msgstr "Erro ao gravar pelo socket"
 msgid "Unknown option %s"
 msgstr "Conexões"
 
-#: src/config/conf.c:670
+#: src/config/conf.c:671
 msgid "File saving disabled by option"
 msgstr ""
 
-#: src/config/conf.c:673 src/sched/error.c:44
+#: src/config/conf.c:674 src/sched/error.c:44
 msgid "Out of memory"
 msgstr "Sem memória"
 
-#: src/config/conf.c:676
+#: src/config/conf.c:677
 #, fuzzy
 msgid "Cannot write the file"
 msgstr "Erro ao gravar em arquivo"
 
-#: src/config/conf.c:679
+#: src/config/conf.c:680
 #, fuzzy
 msgid "Secure open failed"
 msgstr "Erro ao abrir arquivo"
@@ -282,7 +282,7 @@ msgid "Bad option value."
 msgstr ""
 
 #: src/config/dialogs.c:207 src/config/dialogs.c:411 src/dialogs/edit.c:26
-#: src/lua/core.c:307 src/lua/core.c:308
+#: src/lua/core.c:304 src/lua/core.c:305
 msgid "Name"
 msgstr "Nome"
 
@@ -331,7 +331,7 @@ msgid "Options manager"
 msgstr ""
 
 #: src/config/dialogs.c:544 src/config/dialogs.c:798 src/dialogs/options.c:262
-#: src/sched/download.c:1199 src/sched/download.c:1244
+#: src/sched/download.c:1194 src/sched/download.c:1239
 msgid "Save"
 msgstr "Salvar"
 
@@ -788,7 +788,7 @@ msgid "Options:\n"
 msgstr ""
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:868 src/util/version.c:78
+#: src/config/options.c:868 src/util/version.c:79
 #, fuzzy
 msgid "Bookmarks"
 msgstr "Bookmark~s (marcadores)"
@@ -897,7 +897,7 @@ msgstr "Conexões"
 msgid "Connection options."
 msgstr "Conexões"
 
-#: src/config/options.c:938 src/util/version.c:63
+#: src/config/options.c:938 src/util/version.c:64
 msgid "SSL"
 msgstr ""
 
@@ -980,7 +980,7 @@ msgstr ""
 msgid "Timeout for non-restartable connections (in seconds)."
 msgstr ""
 
-#: src/config/options.c:986 src/util/version.c:81
+#: src/config/options.c:986 src/util/version.c:82
 msgid "Cookies"
 msgstr ""
 
@@ -3162,7 +3162,7 @@ msgstr "Autenticação HTTP"
 msgid "You are nowhere!"
 msgstr "Você está aqui!!!"
 
-#: src/dialogs/document.c:61 src/dialogs/edit.c:27 src/lua/core.c:309
+#: src/dialogs/document.c:61 src/dialogs/edit.c:27 src/lua/core.c:306
 msgid "URL"
 msgstr "URL"
 
@@ -3755,23 +3755,23 @@ msgstr ""
 msgid "Bad signal number: %d"
 msgstr "Número inválido"
 
-#: src/lua/core.c:461
+#: src/lua/core.c:458
 msgid "A field"
 msgstr ""
 
-#: src/lua/core.c:570
+#: src/lua/core.c:567
 msgid "User dialog"
 msgstr ""
 
-#: src/lua/core.c:688
+#: src/lua/core.c:685
 msgid "Lua Error"
 msgstr "Erro Lua"
 
-#: src/lua/core.c:810
+#: src/lua/core.c:807
 msgid "Lua Console"
 msgstr ""
 
-#: src/lua/core.c:810
+#: src/lua/core.c:807
 msgid "Enter expression"
 msgstr "Introduza expressão"
 
@@ -3873,7 +3873,7 @@ msgstr "Segundo plano com notificação"
 msgid "Abort"
 msgstr "Cancelar"
 
-#: src/sched/download.c:524 src/sched/download.c:558 src/sched/download.c:807
+#: src/sched/download.c:524 src/sched/download.c:558 src/sched/download.c:804
 msgid "Download error"
 msgstr "Erro de download"
 
@@ -3924,52 +3924,52 @@ msgstr ""
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:808
+#: src/sched/download.c:805
 #, fuzzy, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr "Não posso gravar no arquivo"
 
-#: src/sched/download.c:1194 src/sched/download.c:1204
+#: src/sched/download.c:1189 src/sched/download.c:1199
 msgid "Unknown type"
 msgstr "Tipo desconhecido"
 
-#: src/sched/download.c:1195
+#: src/sched/download.c:1190
 #, fuzzy, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to save or display this file?"
 msgstr "Deseja salvar ou exibir este arquivo?"
 
-#: src/sched/download.c:1200 src/sched/download.c:1209
-#: src/sched/download.c:1245 src/sched/download.c:1256
+#: src/sched/download.c:1195 src/sched/download.c:1204
+#: src/sched/download.c:1240 src/sched/download.c:1251
 msgid "Display"
 msgstr "Exibir"
 
-#: src/sched/download.c:1205
+#: src/sched/download.c:1200
 #, fuzzy, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to display this file?"
 msgstr "Deseja salvar ou exibir este arquivo?"
 
-#: src/sched/download.c:1237 src/sched/download.c:1249
+#: src/sched/download.c:1232 src/sched/download.c:1244
 msgid "What to do?"
 msgstr "Fazer o que?"
 
-#: src/sched/download.c:1238
+#: src/sched/download.c:1233
 #, c-format
 msgid ""
 "Content type is %s.\n"
 "Do you want to open file with %s, save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1243 src/sched/download.c:1255
+#: src/sched/download.c:1238 src/sched/download.c:1250
 msgid "Open"
 msgstr "Abrir"
 
-#: src/sched/download.c:1250
+#: src/sched/download.c:1245
 #, c-format
 msgid ""
 "Content type is %s.\n"
@@ -4208,40 +4208,40 @@ msgstr ""
 msgid "Bad terminal size: %d, %d"
 msgstr ""
 
-#: src/util/version.c:45
+#: src/util/version.c:46
 msgid "Text WWW browser"
 msgstr "Browser WWW em modo texto"
 
-#: src/util/version.c:47
+#: src/util/version.c:48
 #, fuzzy
 msgid "Features:"
 msgstr "Características extra"
 
-#: src/util/version.c:49
+#: src/util/version.c:50
 msgid "Standard"
 msgstr ""
 
-#: src/util/version.c:51
+#: src/util/version.c:52
 msgid "Debug"
 msgstr ""
 
-#: src/util/version.c:54
+#: src/util/version.c:55
 #, fuzzy
 msgid "Fastmem"
 msgstr "nome"
 
-#: src/util/version.c:57
-msgid "Own_libc"
+#: src/util/version.c:58
+msgid "Own Libc Routines"
 msgstr ""
 
-#: src/util/version.c:60
+#: src/util/version.c:61
 #, fuzzy
-msgid "No backtrace"
+msgid "No Backtrace"
 msgstr "Voltar"
 
-#: src/util/version.c:84
+#: src/util/version.c:85
 #, fuzzy
-msgid "GlobHist"
+msgid "Global History"
 msgstr "Gerenciador de Histórico"
 
 #: src/viewer/dump/dump.c:97
@@ -4407,6 +4407,10 @@ msgstr "enviar para"
 #: src/viewer/text/view.c:3725
 msgid "post to"
 msgstr "postar para"
+
+#, fuzzy
+#~ msgid "GlobHist"
+#~ msgstr "Gerenciador de Histórico"
 
 #, fuzzy
 #~ msgid "error: host not found"

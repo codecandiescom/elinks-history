@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.181 2004/01/15 16:04:19 zas Exp $ */
+/* $Id: menu.c,v 1.182 2004/01/15 16:11:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,6 +576,67 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 }
 #endif
 
+#define DIST 5
+
+static void
+menu_page_up(struct menu *menu)
+{
+	int i = menu->selected - 2;
+	int found = 0;
+	int step = -1;
+
+	for (; i >= 0; i--) {
+		if (mi_is_horizontal_bar(menu->items[i])) {
+			found = 1;
+			break;
+		}
+	}
+
+	if (found) {
+		step = i + 1 - menu->selected;
+	} else {
+		step = -DIST;
+	}
+
+	if (menu->selected + step < 0)
+		step = -menu->selected;
+
+	if (step < -DIST) step = DIST;
+	if (step > 0)
+		step = menu->selected - menu->ni - 1;
+
+	scroll_menu(menu, step);
+}
+
+static void
+menu_page_down(struct menu *menu)
+{
+	int i = int_max(0, menu->selected);
+	int found = 0;
+	int step = 1;
+
+	for (; i < menu->ni; i++) {
+		if (mi_is_horizontal_bar(menu->items[i])) {
+			found = 1;
+			break;
+		}
+	}
+
+	if (found) {
+		step = i + 1 - menu->selected;
+	} else {
+		step = DIST;
+	}
+
+	int_upper_bound(&step, menu->ni - menu->selected - 1);
+	int_upper_bound(&step, DIST);
+	int_upper_bound(&step, menu->ni - 1);
+
+	scroll_menu(menu, step);
+}
+
+#undef DIST
+
 static void
 menu_kbd_handler(struct menu *menu, struct term_event *ev)
 {
@@ -615,63 +676,17 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			menu->selected = menu->ni;
 			scroll_menu(menu, -1);
 			break;
-#define DIST 5
+
 		case ACT_PAGE_UP:
-		{
-			int i = menu->selected - 2;
-			int found = 0;
-			int step = -1;
+			menu_page_up(menu);
+			break;
 
-			for (; i >= 0; i--) {
-				if (mi_is_horizontal_bar(menu->items[i])) {
-					found = 1;
-					break;
-				}
-			}
-
-			if (found) {
-				step = i + 1 - menu->selected;
-			} else {
-				step = -DIST;
-			}
-
-			if (menu->selected + step < 0)
-				step = -menu->selected;
-			if (step < -DIST) step = DIST;
-			if (step > 0)
-				step = menu->selected - menu->ni - 1;
-
-			scroll_menu(menu, step);
-		}
 			break;
 
 		case ACT_PAGE_DOWN:
-		{
-			int i = int_max(0, menu->selected);
-			int found = 0;
-			int step = 1;
-
-			for (; i < menu->ni; i++) {
-				if (mi_is_horizontal_bar(menu->items[i])) {
-					found = 1;
-					break;
-				}
-			}
-
-			if (found) {
-				step = i + 1 - menu->selected;
-			} else {
-				step = DIST;
-			}
-
-			int_upper_bound(&step, menu->ni - menu->selected - 1);
-			int_upper_bound(&step, DIST);
-			int_upper_bound(&step, menu->ni - 1);
-
-			scroll_menu(menu, step);
-		}
+			menu_page_down(menu);
 			break;
-#undef DIST
+
 		case ACT_ENTER:
 		case ACT_SELECT:
 			goto enter;

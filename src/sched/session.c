@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.574 2004/10/14 12:28:02 jonas Exp $ */
+/* $Id: session.c,v 1.575 2004/10/14 18:04:30 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -535,10 +535,6 @@ doc_loading_callback(struct download *download, struct session *ses)
 
 		if (download->state != S_OK) {
 			print_error_dialog(ses, download->state, download->pri);
-		}
-
-		if (ses->insert_mode == INSERT_MODE_ON) {
-			ses->insert_mode = INSERT_MODE_OFF;
 		}
 
 	} else if (is_in_transfering_state(download->state)

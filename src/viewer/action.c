@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.109 2004/10/10 20:17:15 miciah Exp $ */
+/* $Id: action.c,v 1.110 2004/10/14 18:04:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,7 @@ do_action(struct session *ses, enum main_action action, int verbose)
 	enum frame_event_status status = FRAME_EVENT_OK;
 	struct terminal *term = ses->tab->term;
 	struct document_view *doc_view = current_frame(ses);
+	struct link *link = doc_view ? get_current_link(doc_view) : NULL;
 
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort
@@ -691,6 +692,10 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 			status = FRAME_EVENT_IGNORED;
 	}
+
+	if (ses->insert_mode == INSERT_MODE_ON
+	    && link != get_current_link(doc_view))
+		ses->insert_mode = INSERT_MODE_OFF;
 
 	if (status == FRAME_EVENT_REFRESH && doc_view)
 		refresh_view(ses, doc_view, 0);

@@ -1,7 +1,14 @@
-/* $Id: fastfind.h,v 1.5 2003/06/14 18:58:32 jonas Exp $ */
+/* $Id: fastfind.h,v 1.6 2003/06/14 20:05:23 pasky Exp $ */
 
 #ifndef EL__UTIL_FASTFIND_H
 #define EL__UTIL_FASTFIND_H
+
+/* Whether to use these routines or not. */
+/* TODO: Remove this macro altogether after this will be sufficiently tested.
+ * --pasky */
+#define USE_FASTFIND 1
+
+#ifdef USE_FASTFIND
 
 struct fastfind_key_value {
 	unsigned char *key;
@@ -33,6 +40,9 @@ void *fastfind_search(unsigned char *key, int key_len, void *fastfind_handle);
 
 /* Fastfind cleanup. It frees the index given by the @fastfind_handle. */
 /* Must be called once per list. */
-void fastfind_terminate(void *fastfind_handle);
+void fastfind_terminate();
+
+extern void *ff_info_tags;
+#endif
 
 #endif /* EL__UTIL_FASTFIND_H */

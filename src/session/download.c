@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.148 2003/11/09 22:27:26 zas Exp $ */
+/* $Id: download.c,v 1.149 2003/11/09 22:41:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -516,19 +516,15 @@ download_data_store(struct download *download, struct file_download *file_downlo
 		struct terminal *term = get_download_ses(file_download)->tab->term;
 
 		if (download->state != S_OK) {
-			unsigned char *t = get_err_msg(download->state, term);
+			unsigned char *errmsg = get_err_msg(download->state, term);
 
-			if (t) {
-				unsigned char *tt = stracpy(file_download->url);
+			if (errmsg) {
+				unsigned char *url = get_no_post_url(file_download->url);
 
-				if (tt) {
-					unsigned char *p = strchr(tt, POST_CHAR);
-
-					if (p) *p = '\0';
-
-					msg_box(term, getml(tt, NULL), MSGBOX_FREE_TEXT,
+				if (url) {
+					msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
 						N_("Download error"), AL_CENTER,
-						msg_text(term, N_("Error downloading %s:\n\n%s"), tt, t),
+						msg_text(term, N_("Error downloading %s:\n\n%s"), url, errmsg),
 						get_download_ses(file_download), 1,
 						N_("OK"), NULL, B_ENTER | B_ESC /*,
 						N_(T_RETRY), NULL, 0 */ /* FIXME: retry */);
@@ -549,13 +545,15 @@ download_data_store(struct download *download, struct file_download *file_downlo
 
 			} else {
 				if (file_download->notify) {
-					unsigned char *url = stracpy(file_download->url);
+					unsigned char *url = get_no_post_url(file_download->url);
 
-					msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
-						N_("Download"), AL_CENTER,
-						msg_text(term, N_("Download complete:\n%s"), url),
-						get_download_ses(file_download), 1,
-						N_("OK"), NULL, B_ENTER | B_ESC);
+					if (url) {
+						msg_box(term, getml(url, NULL), MSGBOX_FREE_TEXT,
+							N_("Download"), AL_CENTER,
+							msg_text(term, N_("Download complete:\n%s"), url),
+							get_download_ses(file_download), 1,
+							N_("OK"), NULL, B_ENTER | B_ESC);
+					}
 				}
 
 				if (get_opt_int("document.download.notify_bell")

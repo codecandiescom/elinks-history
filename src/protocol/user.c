@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.64 2004/04/11 17:23:09 jonas Exp $ */
+/* $Id: user.c,v 1.65 2004/04/15 14:21:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,8 +29,8 @@ unsigned char *
 get_user_program(struct terminal *term, unsigned char *progid, int progidlen)
 {
 	struct option *opt;
-	unsigned char *system_str =
-		get_system_str(term ? term->environment & ENV_XWIN : 0);
+	int xwin = term ? term->environment & ENV_XWIN : 0;
+	unsigned char *system_str = get_system_str(xwin);
 	struct string name;
 
 	if (!system_str) return NULL;

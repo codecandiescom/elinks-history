@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.16 2004/09/23 23:17:50 pasky Exp $ */
+/* $Id: draw.c,v 1.17 2004/09/28 23:57:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ check_document_fragment(struct session *ses, struct document_view *doc_view)
 		struct cache_entry *cached = find_in_cache(document->uri);
 		unsigned char *fragment;
 
-		if (!cached || cached->incomplete)
+		if (!cached || cached->incomplete || cached->id != document->id)
 			return -2;
 
 		fragment = memacpy(uri->fragment, uri->fragmentlen);

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.75 2004/04/03 01:22:46 jonas Exp $ */
+/* $Id: cache.h,v 1.76 2004/04/03 01:35:51 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -97,7 +97,7 @@ void delete_cache_entry(struct cache_entry *);
 
 /* Returns a reference to the redirect URI. */
 struct uri *
-get_cache_redirect_uri(struct cache_entry *cache_entry, struct uri *base);
+get_cache_redirect_uri(struct cache_entry *cache_entry);
 
 /* Sets up the cache entry to redirect to a new location
  * @location	decides where to redirect to by resolving it relative to the

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.122 2004/04/03 01:22:46 jonas Exp $ */
+/* $Id: cache.c,v 1.123 2004/04/03 01:35:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,8 +488,12 @@ delete_cache_entry(struct cache_entry *ce)
 
 
 struct uri *
-get_cache_redirect_uri(struct cache_entry *entry, struct uri *base)
+get_cache_redirect_uri(struct cache_entry *entry)
 {
+	/* XXX: I am a little puzzled whether we should only use the cache
+	 * entry's URI if it is valid. Hopefully always using it won't hurt
+	 * --jonas */
+	struct uri *base = entry->uri;
 	unsigned char *basestring = base ? struri(base) : NULL;
 	unsigned char *uristring = empty_string_or_(basestring);
 	struct uri *uri;

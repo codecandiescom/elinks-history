@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.238 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: download.c,v 1.239 2004/04/03 01:35:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -348,7 +348,8 @@ download_data(struct download *download, struct file_download *file_download)
 		if (download->state >= 0)
 			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
 
-		uri = get_cache_redirect_uri(ce, file_download->uri);
+		assertm(ce->uri == file_download->uri, "Redirecting using bad base URI");
+		uri = get_cache_redirect_uri(ce);
 		if (!uri) break;
 
 		done_uri(file_download->uri);

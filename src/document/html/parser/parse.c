@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.38 2004/06/20 09:51:05 zas Exp $ */
+/* $Id: parse.c,v 1.39 2004/06/20 09:55:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,7 @@ parse_width(unsigned char *str, int limit_it)
 
 	} else {
 		if (percentage) {
-			/* No sense, we need @trunc and @maxwidth for percentage. */
+			/* No sense, we need @limit_it and @maxwidth for percentage. */
 			return -1;
 		} else {
 			/* Value is a number of pixels, makes an approximation,
@@ -313,7 +313,7 @@ parse_width(unsigned char *str, int limit_it)
 		}
 	}
 
-#undef WIDTH_2CHAR
+#undef WIDTH_PIXELS2CHARS
 
 	if (width < 0) width = 0;
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.93 2003/11/20 01:14:16 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.94 2003/11/20 16:09:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,6 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	     const unsigned char *url)
 {
 	struct bookmark *bm;
-	int title_size;
 
 	if (!sanitize_url(url)) return NULL;
 
@@ -242,9 +241,7 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 
 	/* Setup box_item */
 	/* Note that item_free is left at zero */
-	title_size = strlen(bm->title) + 1;
-	bm->box_item = mem_calloc(1, sizeof(struct listbox_item)
-				     + title_size);
+	bm->box_item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!bm->box_item) return NULL;
 	if (root) {
 		bm->box_item->root = root->box_item;
@@ -253,12 +250,9 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	init_list(bm->box_item->child);
 	bm->box_item->visible = 1;
 
-	bm->box_item->text = ((unsigned char *) bm->box_item
-			      + sizeof(struct listbox_item));
+	bm->box_item->text = bm->title;
 	bm->box_item->box = &bookmark_boxes;
 	bm->box_item->udata = (void *) bm;
-
-	memcpy(bm->box_item->text, bm->title, title_size);
 
 	if (place) {
 		if (root)

@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.62 2004/10/26 21:36:38 zas Exp $ */
+/* $Id: fastfind.c,v 1.63 2004/10/27 16:38:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,10 +377,10 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	struct fastfind_key_value *p;
 	struct fastfind_info *info = init_fastfind(case_sensitive, comment);
 
-	if (!info) goto alloc_error;
+	if (!info) goto return_error;
 
 	assert(reset && next);
-	if_assert_failed goto alloc_error;
+	if_assert_failed goto return_error;
 
 	/* First search min, max, count and uniq_chars. */
 	(*reset)();
@@ -389,7 +389,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 		int i;
 
 		assert(key_len); /* We do not want empty keys. */
-		if_assert_failed goto alloc_error;
+		if_assert_failed goto return_error;
 
 		if (key_len < info->min_key_len)
 			info->min_key_len = key_len;
@@ -405,11 +405,11 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			int k = ifcase(p->key[i]);
 
 			assert(k < FF_MAX_CHARS);
-			if_assert_failed goto alloc_error;
+			if_assert_failed goto return_error;
 
 			if (char2idx(k, info) == -1) {
 				assert(info->uniq_chars_count < FF_MAX_CHARS);
-				if_assert_failed goto alloc_error;
+				if_assert_failed goto return_error;
 
 				info->uniq_chars[info->uniq_chars_count++] = k;
 			}
@@ -423,11 +423,11 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 	init_idxtab(info);
 
 	/* Root leafset allocation */
-	if (!alloc_leafset(info)) goto alloc_error;
+	if (!alloc_leafset(info)) goto return_error;
 
 	info->root_leafset = info->leafsets[info->leafsets_count];
 
-	if (!alloc_pointers(info)) goto alloc_error;
+	if (!alloc_pointers(info)) goto return_error;
 
 	/* Build the tree */
 	(*reset)();
@@ -447,7 +447,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 			if (leafset[idx].l == 0) {
 				/* There's no leaf yet */
-				if (!alloc_leafset(info)) goto alloc_error;
+				if (!alloc_leafset(info)) goto return_error;
 				leafset[idx].l = info->leafsets_count;
 			}
 
@@ -467,7 +467,7 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 	return info;
 
-alloc_error:
+return_error:
 	fastfind_done(info);
 	return NULL;
 }

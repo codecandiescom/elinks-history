@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.87 2002/08/27 00:34:41 pasky Exp $ */
+/* $Id: options.c,v 1.88 2002/08/27 15:45:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -858,10 +858,12 @@ register_options()
 		"Use the language of the interface as Accept-Language.");
 
 	add_opt_string("protocol.http",
-		"user_agent", 0, "",
+		"user_agent", 0, "ELinks (%v; %s; %t)",
 		"Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested.\n"
-		"If empty, defaults to: ELinks (<version>; <system_id>; <term_size>)");
+		"%v in the string means ELinks version\n"
+		"%s in the string means system identification\n"
+		"%t in the string means size of the terminal");
 
 
 

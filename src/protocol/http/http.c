@@ -1,10 +1,11 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.37 2002/08/27 13:31:23 pasky Exp $ */
+/* $Id: http.c,v 1.38 2002/08/27 15:45:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -52,6 +53,48 @@ struct http_connection_info {
 #define CHUNK_SIZE	-1
 	int chunk_remaining;
 };
+
+
+static unsigned char *
+subst_user_agent(unsigned char *fmt, unsigned char *version,
+		 unsigned char *sysname, unsigned char *termsize)
+{
+	unsigned char *n = init_str();
+	int l = 0;
+
+	if (!n) return NULL;
+
+	while (*fmt) {
+		int p;
+
+		for (p = 0; fmt[p] && fmt[p] != '%'; p++);
+
+		add_bytes_to_str(&n, &l, fmt, p);
+		fmt += p;
+
+		if (*fmt == '%') {
+			fmt++;
+			switch (*fmt) {
+				case 'v':
+					add_to_str(&n, &l, version);
+					break;
+				case 's':
+					add_to_str(&n, &l, sysname);
+					break;
+				case 't':
+					if (termsize)
+						add_to_str(&n, &l, termsize);
+					break;
+				default:
+					add_bytes_to_str(&n, &l, fmt - 1, 2);
+					break;
+			}
+			if (*fmt) fmt++;
+		}
+	}
+
+	return n;
+}
 
 static int get_http_code(unsigned char *head, int *code, int *version)
 {
@@ -317,25 +360,22 @@ void http_send_header(struct connection *c)
 		}
 	}
 	
-	if (!get_opt_str("protocol.http.user_agent")[0]) {
-                add_to_str(&hdr, &l,
-			   "User-Agent: ELinks (" VERSION_STRING "; ");
-                add_to_str(&hdr, &l, system_name);
+	{
+		unsigned char *ustr, ts[64] = "";
+
+                add_to_str(&hdr, &l, "User-Agent: ");
 
 		if (!list_empty(terminals)) {
 			struct terminal *term = terminals.prev;
 
-			add_to_str(&hdr, &l, "; ");
-			add_num_to_str(&hdr, &l, term->x);
-			add_to_str(&hdr, &l, "x");
-			add_num_to_str(&hdr, &l, term->y);
+			snprintf(ts, 64, "%dx%d", term->x, term->y);
 		}
-                add_to_str(&hdr, &l, ")\r\n");
+		ustr = subst_user_agent(get_opt_str("protocol.http.user_agent"),
+					VERSION_STRING, system_name, ts);
+                add_to_str(&hdr, &l, ustr);
+		mem_free(ustr);
 
-        } else {
-                add_to_str(&hdr, &l, "User-Agent: ");
-                add_to_str(&hdr, &l, get_opt_str("protocol.http.user_agent"));
-                add_to_str(&hdr, &l, "\r\n");
+		add_to_str(&hdr, &l, "\r\n");
         }
 
 	switch (get_opt_int("protocol.http.referer.policy")) {

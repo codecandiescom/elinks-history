@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.306 2004/07/22 21:56:04 zas Exp $ */
+/* $Id: download.c,v 1.307 2004/07/22 22:02:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,7 +283,7 @@ write_cache_entry_to_file(struct cache_entry *cached, struct file_download *file
 	return 1;
 
 write_error:
-	if (!list_empty(sessions)) download_error_dialog(file_download, errno);
+	download_error_dialog(file_download, errno);
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.363 2003/10/25 12:49:59 pasky Exp $ */
+/* $Id: options.c,v 1.364 2003/10/25 12:50:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -544,7 +544,7 @@ init_options(void)
 }
 
 static void
-free_options_tree(struct list_head *tree, recursive)
+free_options_tree(struct list_head *tree, int recursive)
 {
 	while (!list_empty(*tree))
 		delete_option_do(tree->next, recursive);

@@ -1,4 +1,4 @@
-/* $Id: history.h,v 1.16 2003/10/24 20:56:32 pasky Exp $ */
+/* $Id: history.h,v 1.17 2003/10/24 20:57:05 pasky Exp $ */
 
 #ifndef EL__SCHED_HISTORY_H
 #define EL__SCHED_HISTORY_H
@@ -24,7 +24,8 @@ void destroy_history(struct ses_history *history);
 void clean_unhistory(struct ses_history *history);
 
 static inline void
-add_to_history(struct ses_history *history, struct location *loc) {
+add_to_history(struct ses_history *history, struct location *loc)
+{
 	if (!history->current)
 		add_to_list(history->history, loc);
 	else
@@ -33,7 +34,8 @@ add_to_history(struct ses_history *history, struct location *loc) {
 }
 
 static inline void
-del_from_history(struct ses_history *history, struct location *loc) {
+del_from_history(struct ses_history *history, struct location *loc)
+{
 	del_from_list(loc);
 	if (history->current == loc)
 		history->current = loc->prev;
@@ -47,13 +49,15 @@ del_from_history(struct ses_history *history, struct location *loc) {
 void go_history(struct session *ses, struct location *loc);
 
 static inline void
-go_back(struct session *ses) {
+go_back(struct session *ses)
+{
 	if (!cur_loc(ses)) return;
 	go_history(ses, cur_loc(ses)->prev);
 }
 
 static inline void
-go_unback(struct session *ses) {
+go_unback(struct session *ses)
+{
 	if (!cur_loc(ses)) return;
 	go_history(ses, cur_loc(ses)->next);
 }

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.102 2004/09/19 22:32:10 pasky Exp $ */
+/* $Id: parser.c,v 1.103 2004/09/19 22:32:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,10 +197,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		assert(token);
 
 
-		/* This is basicly check_css_precedence(token->type, ','))
-		 * meaning check if the token precedence is less than or equal
-		 * some ordinary token. But that would be too corny to write at
-		 * this stage. */
 		if (token->type == '{'
 		    || token->type == '}'
 		    || token->type == ';')

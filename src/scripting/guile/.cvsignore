@@ -1,8 +1,4 @@
 Makefile
 Makefile.in
-core.lo
-hooks.lo
-libscriptingguile.la
 .deps
-.libs
 *.swp

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.94 2004/12/17 13:48:47 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.95 2004/12/17 13:56:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,6 @@ static JSBool
 window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
-	struct document_view *doc_view = vs->doc_view;
 	VALUE_TO_JSVAL_START;
 
 	/* No need for special window.location measurements - when
@@ -268,6 +267,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	 * is called which we overrode for that class below, so
 	 * everything's fine. */
 	if (JSVAL_IS_STRING(id)) {
+		struct document_view *doc_view = vs->doc_view;
 		JSObject *obj;
 		JSVAL_TO_VALUE_START;
 
@@ -305,6 +305,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 #if 0
 	{
 		/* This is horrible. */
+		struct document_view *doc_view = vs->doc_view;
 		struct session *ses = doc_view->session;
 		struct frame_desc *frame = doc_view->document->frame;
 
@@ -336,6 +337,7 @@ found_parent:
 #endif
 	case JSP_WIN_TOP:
 	{
+		struct document_view *doc_view = vs->doc_view;
 		struct document_view *top_view = doc_view->session->doc_view;
 
 		assert(top_view && top_view->vs);
@@ -361,12 +363,13 @@ static JSBool
 window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
 	struct view_state *vs = JS_GetPrivate(ctx, obj);
-	struct document_view *doc_view = vs->doc_view;
 	JSVAL_TO_VALUE_START;
 
 	if (JSVAL_IS_STRING(id)) {
 		JSVAL_REQUIRE(&id, STRING);
 		if (!strcmp(v.string, "location")) {
+			struct document_view *doc_view = vs->doc_view;
+
 			JSVAL_REQUIRE(vp, STRING);
 			location_goto(doc_view, v.string);
 			/* Do NOT touch our .location property, evil

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.102 2003/11/07 13:45:54 jonas Exp $ */
+/* $Id: dialogs.c,v 1.103 2003/11/07 21:23:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ edit_dialog_layouter(struct dialog_data *dlg_data)
 	dlg_format_text(term, value, dlg_data->x + DIALOG_LB,
 			&y, w, &rw, dialog_text_color, AL_LEFT);
 	y--;
-	dlg_format_field(NULL, &dlg_data->widgets_data[0], rw + dlg_data->x + DIALOG_LB,
+	dlg_format_field(term, &dlg_data->widgets_data[0], rw + dlg_data->x + DIALOG_LB,
 			 &y, w - rw, NULL, AL_LEFT);
 
 	y++;

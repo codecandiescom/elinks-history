@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.93 2003/11/07 20:56:31 jonas Exp $ */
+/* $Id: inpfield.c,v 1.94 2003/11/07 21:23:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,11 +83,12 @@ dlg_format_field(struct terminal *term,
 		 struct widget_data *widget_data,
 		 int x, int *y, int w, int *rw, enum format_align align)
 {
-	widget_data->x = x;
-	widget_data->y = *y;
-	widget_data->w = w;
+	if (term) {
+		widget_data->x = x;
+		widget_data->y = *y;
+		widget_data->w = w;
+	}
 
-	if (rw && w > *rw) *rw = w;
 	(*y)++;
 }
 

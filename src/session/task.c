@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.169 2005/03/23 15:43:42 miciah Exp $ */
+/* $Id: task.c,v 1.170 2005/04/06 17:29:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,7 +531,8 @@ loading_callback(struct download *download, struct session *ses)
 	}
 
 	if (is_in_result_state(download->state) && download->state != S_OK) {
-		print_error_dialog(ses, download->state, download->pri);
+		print_error_dialog(ses, download->state, download->conn->uri,
+				   download->pri);
 		if (d == DO_MOVE_ABORT) reload(ses, CACHE_MODE_NORMAL);
 	}
 
@@ -549,7 +550,7 @@ do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	protocol_external_handler_T *external_handler;
 
 	if (!uri) {
-		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
+		print_error_dialog(ses, S_BAD_URL, uri, PRI_CANCEL);
 		return;
 	}
 

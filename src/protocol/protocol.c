@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.94 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: protocol.c,v 1.95 2005/04/06 17:29:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,7 +228,7 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 		return;
 	}
 
-	print_error_dialog(ses, state, PRI_CANCEL);
+	print_error_dialog(ses, state, uri, PRI_CANCEL);
 }
 
 protocol_external_handler_T *

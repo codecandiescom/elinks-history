@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.168 2005/03/04 17:36:29 zas Exp $ */
+/* $Id: session.h,v 1.169 2005/04/06 17:29:05 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -224,7 +224,7 @@ void set_session_referrer(struct session *ses, struct uri *referrer);
 
 void
 print_error_dialog(struct session *ses, enum connection_state state,
-		   enum connection_priority priority);
+		   struct uri *uri, enum connection_priority priority);
 
 void process_file_requests(struct session *);
 

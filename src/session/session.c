@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.613 2005/03/23 15:43:42 miciah Exp $ */
+/* $Id: session.c,v 1.614 2005/04/06 17:29:05 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -226,14 +226,29 @@ get_current_download(struct session *ses)
 
 void
 print_error_dialog(struct session *ses, enum connection_state state,
-		   enum connection_priority priority)
+		   struct uri *uri, enum connection_priority priority)
 {
-	/* Don't show error dialogs for missing CSS stylesheets */
-	if (priority == PRI_CSS) return;
+	struct string msg;
 
-	info_box(ses->tab->term, MSGBOX_NO_TEXT_INTL,
+	/* Don't show error dialogs for missing CSS stylesheets */
+	if (priority == PRI_CSS
+	    || !init_string(&msg))
+		return;
+
+	if (uri) {
+		add_to_string(&msg,
+			_("Unable to complete the request for:", ses->tab->term));
+		add_to_string(&msg, "\n");
+		add_uri_to_string(&msg, uri, URI_PUBLIC);
+		add_to_string(&msg, "\n\n");
+	}
+
+	add_to_string(&msg, get_err_msg(state, ses->tab->term));
+
+	info_box(ses->tab->term, MSGBOX_FREE_TEXT,
 		 N_("Error"), ALIGN_CENTER,
-		 get_err_msg(state, ses->tab->term));
+		 msg.source);
+
 	/* TODO: retry */
 }
 
@@ -541,7 +556,9 @@ doc_loading_callback(struct download *download, struct session *ses)
 		}
 
 		if (download->state != S_OK) {
-			print_error_dialog(ses, download->state, download->pri);
+			print_error_dialog(ses, download->state,
+					   ses->doc_view->document->uri,
+					   download->pri);
 		}
 
 	} else if (is_in_transfering_state(download->state)
@@ -1018,7 +1035,7 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 				/* End loop if initialization fails */
 				len = 0;
 			} else if (bad_url) {
-				print_error_dialog(ses, S_BAD_URL, PRI_MAIN);
+				print_error_dialog(ses, S_BAD_URL, NULL, PRI_MAIN);
 			}
 
 		}

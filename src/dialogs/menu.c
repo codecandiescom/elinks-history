@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.392 2005/03/23 15:43:41 miciah Exp $ */
+/* $Id: menu.c,v 1.393 2005/04/06 17:29:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ save_url(struct session *ses, unsigned char *url)
 
 	uri = get_translated_uri(url, ses->tab->term->cwd);
 	if (!uri) {
-		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
+		print_error_dialog(ses, S_BAD_URL, uri, PRI_CANCEL);
 		return;
 	}
 
@@ -548,12 +548,12 @@ query_file(struct session *ses, struct uri *uri, void *data,
 	 * the checking? --jonas */
 
 	if (uri->protocol == PROTOCOL_UNKNOWN) {
-		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, PRI_CANCEL);
+		print_error_dialog(ses, S_UNKNOWN_PROTOCOL, uri, PRI_CANCEL);
 		return;
 	}
 
 	if (get_protocol_external_handler(uri->protocol)) {
-		print_error_dialog(ses, S_EXTERNAL_PROTOCOL, PRI_CANCEL);
+		print_error_dialog(ses, S_EXTERNAL_PROTOCOL, uri, PRI_CANCEL);
 		return;
 	}
 

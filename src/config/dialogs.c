@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.133 2003/11/26 23:49:46 jonas Exp $ */
+/* $Id: dialogs.c,v 1.134 2003/11/27 11:34:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,11 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 	if (!init_string(&info)) return NULL;
 
 	type = _(option_types[option->type].name, term);
+	if (option->type == OPT_TREE) {
+		type = straconcat(type, " ",
+				_("(expand by pressing space)", term), NULL);
+	}
+
 	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
 
 	if (option_types[option->type].write) {
@@ -107,6 +112,10 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 				"Type: %s\n\n"
 				"Description:\n%s", term),
 				option->name, type, desc);
+	}
+
+	if (option->type == OPT_TREE) {
+		mem_free(type);
 	}
 
 	return info.source;

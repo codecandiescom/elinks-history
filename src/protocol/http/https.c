@@ -1,5 +1,5 @@
 /* Internal "https" protocol implementation */
-/* $Id: https.c,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: https.c,v 1.1 2002/03/17 17:38:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

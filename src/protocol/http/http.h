@@ -1,7 +1,7 @@
-/* $Id: http.h,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: http.h,v 1.1 2002/03/17 17:38:34 pasky Exp $ */
 
-#ifndef EL__HTTP_H
-#define EL__HTTP_H
+#ifndef EL__PROTOCOL_HTTP_H
+#define EL__PROTOCOL_HTTP_H
 
 #include <lowlevel/sched.h>
 

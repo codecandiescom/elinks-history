@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.2 2002/03/17 14:58:59 pasky Exp $
+## $Id: Makefile.am,v 1.3 2002/03/17 17:39:16 pasky Exp $
 
 INCLUDES = \
  -I$(srcdir)/..

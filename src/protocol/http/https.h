@@ -1,7 +1,7 @@
-/* $Id: https.h,v 1.2 2002/03/17 13:54:14 pasky Exp $ */
+/* $Id: https.h,v 1.1 2002/03/17 17:38:34 pasky Exp $ */
 
-#ifndef EL__HTTPS_H
-#define EL__HTTPS_H
+#ifndef EL__PROTOCOL_HTTPS_H
+#define EL__PROTOCOL_HTTPS_H
 
 #include <lowlevel/sched.h>
 

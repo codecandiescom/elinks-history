@@ -3493,6 +3493,7 @@ trap 'rm -fr `echo " \
  src/lua/Makefile \
  src/osdep/Makefile \
  src/protocol/Makefile \
+ src/protocol/http/Makefile \
  src/util/Makefile \
  config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
@@ -3598,6 +3599,7 @@ CONFIG_FILES=\${CONFIG_FILES-"\
  src/lua/Makefile \
  src/osdep/Makefile \
  src/protocol/Makefile \
+ src/protocol/http/Makefile \
  src/util/Makefile \
 "}
 EOF

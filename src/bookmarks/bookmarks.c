@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.73 2003/06/05 14:38:16 zas Exp $ */
+/* $Id: bookmarks.c,v 1.74 2003/07/25 17:21:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,12 +20,12 @@
 #include "util/secsave.h"
 #include "util/string.h"
 
+#ifdef BOOKMARKS
+
 /* The list of bookmarks */
 INIT_LIST_HEAD(bookmarks);
 INIT_LIST_HEAD(bookmark_box_items);
 INIT_LIST_HEAD(bookmark_boxes);
-
-#ifdef BOOKMARKS
 
 /* Set to 1, if bookmarks have changed. */
 int bookmarks_dirty = 0;

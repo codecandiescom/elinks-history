@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.384 2004/12/19 14:13:46 pasky Exp $ */
+/* $Id: http.c,v 1.385 2004/12/20 20:24:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -673,13 +673,19 @@ http_send_header(struct connection *conn)
 	add_to_string(&header, "Accept: */*");
 	add_crlf_to_string(&header);
 
-	/* TODO: Make this encoding.c function. */
+	/* TODO: The SSL and gzip combination is a killer for big documents,
+	 * you just always get a load of garbage. It is triggerable at
+	 * https://www.christianbook.com/Christian/Books/place_order and filed
+	 * as bug 592 and bug 524. For now work around the problem by
+	 * never accepting gzip for HTTPS connections. */
+	if (uri->protocol != PROTOCOL_HTTPS) {
+		/* TODO: Make this encoding.c function. */
 #if defined(CONFIG_GZIP) || defined(CONFIG_BZIP2)
-	add_to_string(&header, "Accept-Encoding: ");
+		add_to_string(&header, "Accept-Encoding: ");
 
 #ifdef BUG_517
 #ifdef CONFIG_BZIP2
-	add_to_string(&header, "bzip2");
+		add_to_string(&header, "bzip2");
 #endif
 #endif
 
@@ -687,14 +693,15 @@ http_send_header(struct connection *conn)
 
 #ifdef BUG_517
 #ifdef CONFIG_BZIP2
-	add_to_string(&header, ", ");
+		add_to_string(&header, ", ");
 #endif
 #endif
 
-	add_to_string(&header, "gzip");
+		add_to_string(&header, "gzip");
 #endif
-	add_crlf_to_string(&header);
+		add_crlf_to_string(&header);
 #endif
+	}
 
 	if (!accept_charset) {
 		init_accept_charset();

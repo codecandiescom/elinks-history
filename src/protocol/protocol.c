@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.28 2003/11/13 13:17:27 zas Exp $ */
+/* $Id: protocol.c,v 1.29 2003/11/26 22:26:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,9 +21,9 @@
 
 /* Backends dynamic area: */
 
-#include "protocol/file.h"
+#include "protocol/file/file.h"
 #include "protocol/finger.h"
-#include "protocol/ftp.h"
+#include "protocol/ftp/ftp.h"
 #include "protocol/http/http.h"
 #include "protocol/http/https.h"
 #include "protocol/user.h"

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.208 2004/02/12 17:11:28 jonas Exp $ */
+/* $Id: search.c,v 1.209 2004/02/18 18:46:08 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -1028,6 +1028,13 @@ fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
 	doc_view->height += 1;
 }
 
+static inline unsigned char
+get_document_char(struct document *document, int x, int y)
+{
+	return (document->height > y && document->data[y].length > x)
+		? document->data[y].chars[x].data : 0;
+}
+
 static inline void
 draw_link_text(struct terminal *term, struct document_view *doc_view,
 	       int chars, int offset)
@@ -1037,23 +1044,29 @@ draw_link_text(struct terminal *term, struct document_view *doc_view,
 	int yoffset = doc_view->y - doc_view->vs->y;
 	int current_link = doc_view->vs->current_link;
 	struct link *link = &doc_view->document->links[current_link];
-	struct point *points;
-	register int i;
+	unsigned char *text = link->name ? link->name : link->where;
+	int end = offset + chars;
+	register int i, j;
 
-	/* We need to do some sanity since the search string length
-	 * doesn't map directly to link->n. */
-	int_upper_bound(&chars, link->n);
-	int_upper_bound(&offset, link->n - chars);
+	for (i = 0, j = 0; text[j] && i < end; i++, j++) {
+		int x = link->pos[i].x;
+		int y = link->pos[i].y;
+		unsigned char data = get_document_char(doc_view->document, x, y);
 
-	points = &link->pos[offset];
+		/* Text wrapping might remove space chars from the link
+		 * position array so try to align the matched typeahead text
+		 * with what is actually on the screen by shifting the link
+		 * position variables if the canvas data do not match. */
+		if (data != text[j]) {
+			i--;
+			end--;
+			offset--;
 
-	for (i = 0; i < chars; i++) {
-		int x = points[i].x + xoffset;
-		int y = points[i].y + yoffset;
-
-		/* TODO: We should take in account original colors and
-		 * combine them with defined color. */
-		draw_char_color(term, x, y, color);
+		} else if (i >= offset) {
+			/* TODO: We should take in account original colors and
+			 * combine them with defined color. */
+			draw_char_color(term, xoffset + x, yoffset + y, color);
+		}
 	}
 }
 

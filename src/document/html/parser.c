@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.72 2003/04/21 20:16:22 zas Exp $ */
+/* $Id: parser.c,v 1.73 2003/04/22 13:01:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1092,10 +1092,10 @@ static void
 html_hr(unsigned char *a)
 {
 	int i/* = par_format.width - 10*/;
-	unsigned char r = FRAMED_HLINE;
+	unsigned char r = (unsigned char)FRAMED_HLINE;
 	int q = get_num(a, "size");
 
-	if (q >= 0 && q < 2) r = FRAMES_HLINE;
+	if (q >= 0 && q < 2) r = (unsigned char)FRAMES_HLINE;
 	html_stack_dup();
 	par_format.align = AL_CENTER;
 	if (format.link) mem_free(format.link), format.link = NULL;

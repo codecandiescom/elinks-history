@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.68 2005/03/06 12:53:50 jonas Exp $ */
+/* $Id: leds.c,v 1.69 2005/03/23 11:19:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,10 +259,10 @@ menu_leds_info(struct terminal *term, void *xxx, void *xxxx)
 {
 	/* If LEDs ever get more dynamic we might have to change this, but it
 	 * should do for now. --jonas */
-	msg_box(term, NULL, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
-		N_("LED indicators"), ALIGN_LEFT,
-		msg_text(term, N_("What the different LEDs indicate:\n"
-			"\n"
+	info_box(term, MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,
+	 	 N_("LED indicators"), ALIGN_LEFT,
+		 msg_text(term, N_("What the different LEDs indicate:\n"
+		 	"\n"
 			"[SIJP--]\n"
 			" |||||`- Unused\n"
 			" ||||`-- Unused\n"
@@ -272,9 +272,7 @@ menu_leds_info(struct terminal *term, void *xxx, void *xxxx)
 			" |       'i' means modeless, 'I' means insert mode is on\n"
 			" `------ Whether an SSL connection was used\n"
 			"\n"
-			"'-' generally indicates that the LED is off.")),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+			"'-' generally indicates that the LED is off.")));
 }
 
 

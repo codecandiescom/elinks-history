@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.204 2005/03/22 14:56:23 zas Exp $ */
+/* $Id: inpfield.c,v 1.205 2005/03/23 11:19:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,22 +60,18 @@ check_number(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	l = strtol(widget_data->cdata, (char **) &end, 10);
 
 	if (errno || !*widget_data->cdata || *end) {
-		msg_box(dlg_data->win->term, NULL, 0,
-			N_("Bad number"), ALIGN_CENTER,
-			N_("Number expected in field"),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(dlg_data->win->term, 0,
+			 N_("Bad number"), ALIGN_CENTER,
+			 N_("Number expected in field"));
 		return EVENT_NOT_PROCESSED;
 	}
 
 	if (l < widget->info.field.min || l > widget->info.field.max) {
-		msg_box(dlg_data->win->term, NULL, MSGBOX_FREE_TEXT,
-			N_("Bad number"), ALIGN_CENTER,
-			msg_text(dlg_data->win->term,
-				 N_("Number should be in the range from %d to %d."),
-				 widget->info.field.min, widget->info.field.max),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
+		info_box(dlg_data->win->term, MSGBOX_FREE_TEXT,
+			 N_("Bad number"), ALIGN_CENTER,
+			 msg_text(dlg_data->win->term,
+				  N_("Number should be in the range from %d to %d."),
+				  widget->info.field.min, widget->info.field.max));
 		return EVENT_NOT_PROCESSED;
 	}
 
@@ -91,11 +87,9 @@ check_nonempty(struct dialog_data *dlg_data, struct widget_data *widget_data)
 		if (*p > ' ')
 			return EVENT_PROCESSED;
 
-	msg_box(dlg_data->win->term, NULL, 0,
-		N_("Bad string"), ALIGN_CENTER,
-		N_("Empty string not allowed"),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(dlg_data->win->term, 0,
+		 N_("Bad string"), ALIGN_CENTER,
+		 N_("Empty string not allowed"));
 
 	return EVENT_NOT_PROCESSED;
 }

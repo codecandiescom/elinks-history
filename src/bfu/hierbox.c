@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.206 2005/03/18 13:26:01 zas Exp $ */
+/* $Id: hierbox.c,v 1.207 2005/03/23 11:19:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -440,11 +440,8 @@ push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *butto
 	if (!msg) {
 		mem_free(context);
 		if (box->sel->type == BI_FOLDER) {
-			msg_box(term, NULL, 0,
-			N_("Info"), ALIGN_CENTER,
-			_("Press space to expand this folder.", term),
-			NULL, 1,
-			N_("OK"), NULL, B_ESC | B_ENTER);
+			info_box(term, 0, N_("Info"), ALIGN_CENTER,
+				 _("Press space to expand this folder.", term));
 		}
 		return EVENT_PROCESSED;
 	}
@@ -636,11 +633,8 @@ print_delete_error(struct listbox_item *item, struct terminal *term,
 		}
 	}
 
-	msg_box(term, NULL, MSGBOX_FREE_TEXT,
-		N_("Delete error"), ALIGN_LEFT,
-		msg.source,
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+	info_box(term, MSGBOX_FREE_TEXT, N_("Delete error"), ALIGN_LEFT,
+		 msg.source);
 }
 
 static void
@@ -941,13 +935,11 @@ search_hierbox_browser(void *data, unsigned char *text)
 	if (!context->item && *text) {
 		switch (get_opt_int("document.browse.search.show_not_found")) {
 		case 2:
-			msg_box(term, NULL, MSGBOX_FREE_TEXT,
-				N_("Search"), ALIGN_CENTER,
-				msg_text(term,
-					 N_("Search string '%s' not found"),
-					 text),
-				NULL, 1,
-				N_("OK"), NULL, B_ENTER | B_ESC);
+			info_box(term, MSGBOX_FREE_TEXT,
+				 N_("Search"), ALIGN_CENTER,
+				 msg_text(term,
+					  N_("Search string '%s' not found"),
+					  text));
 			break;
 
 		case 1:

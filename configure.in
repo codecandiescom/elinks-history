@@ -80,6 +80,7 @@ dnl ===================================================================
 
 dnl Replace `main' with a function in -lgpm:
 AC_CHECK_LIB(gpm, Gpm_Open)
+AC_CHECK_HEADERS(gpm.h)
 
 dnl Replace `main' with a function in -lsocket:
 AC_CHECK_FUNC(socket, cf_result=yes, cf_result=no)
@@ -117,8 +118,6 @@ AC_MSG_RESULT($cf_result)
 
 if test "$cf_result" = yes; then
 	AC_DEFINE(HAVE_BEGINTHREAD)
-	AC_CHECK_FUNC(MouOpen, AC_DEFINE(HAVE_MOUOPEN))
-	AC_CHECK_FUNC(_read_kbd, AC_DEFINE(HAVE_READ_KBD))
 else
 	CFLAGS="$CFLAGS_X"
         # AC_CHECK_FUNC(pthread_create, cf_result=yes, cf_result=no)
@@ -132,6 +131,8 @@ fi
 
 # AC_CHECK_FUNC(clone, AC_DEFINE(HAVE_CLONE))
 
+AC_CHECK_FUNC(MouOpen, AC_DEFINE(HAVE_MOUOPEN))
+AC_CHECK_FUNC(_read_kbd, AC_DEFINE(HAVE_READ_KBD))
 
 AC_MSG_CHECKING([for XFree for OS/2])
 

@@ -4,7 +4,11 @@
 #include <sys/ioctl.h>
 #endif
 
-#ifdef HAVE_LIBGPM
+#if defined(HAVE_LIBGPM) && defined(HAVE_GPM_H)
+#define USE_GPM
+#endif
+
+#ifdef USE_GPM
 #include <gpm.h>
 #endif
 
@@ -788,7 +792,7 @@ void input_thread(void *p)
 }
 #endif /* #ifdef HAVE_READ_KBD */
 
-#if defined(HAVE_MOUOPEN) && !defined(HAVE_LIBGPM)
+#if defined(HAVE_MOUOPEN) && !defined(USE_GPM)
 
 #define USING_OS2_MOUSE
 
@@ -1093,7 +1097,7 @@ int get_input_handle()
 	tp = fd[1];
 	_beginthread(input_thread, NULL, 0x10000, (void *)tp);
 /*
-#if defined(HAVE_MOUOPEN) && !defined(HAVE_LIBGPM)
+#if defined(HAVE_MOUOPEN) && !defined(USE_GPM)
 	_beginthread(mouse_thread, NULL, 0x10000, (void *)tp);
 #endif
 */
@@ -1144,7 +1148,7 @@ void cfmakeraw(struct termios *t)
 }
 #endif
 
-#ifdef HAVE_LIBGPM
+#ifdef USE_GPM
 
 struct gpm_mouse_spec {
 	int h;
@@ -1205,7 +1209,7 @@ void unhandle_mouse(void *h)
 void *handle_mouse(int cons, void (*fn)(void *, unsigned char *, int), void *data) { return NULL; }
 void unhandle_mouse(void *data) { }
 
-#endif /* #ifdef HAVE_LIBGPM */
+#endif /* #ifdef USE_GPM */
 
 #if defined(OS2)
 

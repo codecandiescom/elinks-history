@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.267 2004/08/09 09:16:02 miciah Exp $ */
+/* $Id: search.c,v 1.268 2004/08/12 04:31:30 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -949,7 +949,7 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 				case 2:
 					message = msg_text(ses->tab->term,
 							   N_("Search string"
-							      "'%s' not found"),
+							      " '%s' not found"),
 							   ses->search_word);
 					free_text = 1;
 					break;

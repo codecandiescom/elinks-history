@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.75 2003/05/04 17:25:52 pasky Exp $ */
+/* $Id: conf.c,v 1.76 2003/05/13 12:27:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -225,9 +225,8 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	return err;
 }
 
-static
-int load_config_file(unsigned char *, unsigned char *, struct option *,
-		     unsigned char **, int *);
+static int load_config_file(unsigned char *, unsigned char *, struct option *,
+			    unsigned char **, int *);
 
 static enum parse_error
 parse_include(struct option *opt_tree, unsigned char **file, int *line,
@@ -449,10 +448,16 @@ load_config_file(unsigned char *prefix, unsigned char *name,
 void
 load_config()
 {
-	load_config_file(CONFDIR, "elinks.conf",
+	static unsigned char *cf = "elinks.conf";
+
+	load_config_file(CONFDIR, cf,
 			 &root_options, NULL, NULL);
-	load_config_file(elinks_home, "elinks.conf",
-			 &root_options, NULL, NULL);
+	if (elinks_home)
+		load_config_file(elinks_home, cf,
+				 &root_options, NULL, NULL);
+	else
+		load_config_file((unsigned char *) "", cf,
+				 &root_options, NULL, NULL);
 }
 
 

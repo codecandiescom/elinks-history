@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.50 2003/05/08 21:50:07 zas Exp $ */
+/* $Id: cookies.c,v 1.51 2003/05/13 12:27:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -570,15 +570,15 @@ load_cookies() {
 	 * save_cookies may write. 6 is choosen after the fprintf(..) call
 	 * in save_cookies(). --Zas */
 	unsigned char in_buffer[6 * MAX_STR_LEN];
-	unsigned char *cookfile, *p, *q;
+	unsigned char *cookfile = "cookies";
+	unsigned char *p, *q;
 	FILE *fp;
 	struct cookie *c;
 
-	/* Must be called after init_home */
-	/* if (!elinks_home) return; */ /* straconcat() checks that --Zas */
-
-	cookfile = straconcat(elinks_home, "cookies", NULL);
-	if (!cookfile) return;
+	if (elinks_home) {
+		cookfile = straconcat(elinks_home, cookfile, NULL);
+		if (!cookfile) return;
+	}
 
 	/* Do it here, as we will delete whole cookies list if the file was
 	 * removed */
@@ -589,7 +589,7 @@ load_cookies() {
 	free_list(cookies);
 
 	fp = fopen(cookfile, "r");
-	mem_free(cookfile);
+	if (elinks_home) mem_free(cookfile);
 	if (!fp) return;
 
 	while (safe_fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
@@ -660,16 +660,18 @@ inv:
 static void
 save_cookies(void) {
 	struct cookie *c;
-	unsigned char *cookfile;
+	unsigned char *cookfile = "cookies";
 	struct secure_save_info *ssi;
 
 	if (cookies_nosave || !cookies_dirty) return;
 
-	cookfile = straconcat(elinks_home, "cookies", NULL);
-	if (!cookfile) return;
+	if (elinks_home) {
+		cookfile = straconcat(elinks_home, "cookies", NULL);
+		if (!cookfile) return;
+	}
 
 	ssi = secure_open(cookfile, 0177); /* rw for user only */
-	mem_free(cookfile);
+	if (elinks_home) mem_free(cookfile);
 	if (!ssi) return;
 
 	foreach (c, cookies) {

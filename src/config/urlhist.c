@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.18 2003/05/08 23:03:06 zas Exp $ */
+/* $Id: urlhist.c,v 1.19 2003/05/13 12:27:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,21 +30,18 @@ int
 load_url_history(void)
 {
 	FILE *fp;
-	unsigned char *history_file;
+	unsigned char *history_file = "gotohist";
 	unsigned char url[MAX_STR_LEN];
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) return 0;
-	/* Must have been called after init_home */
-	/* if (!elinks_home) return 0; */ /* strconcat() checks it --Zas */
-
-	history_file = straconcat(elinks_home, "gotohist", NULL);
-	if (!history_file) return 0;
+	if (elinks_home) {
+		history_file = straconcat(elinks_home, "gotohist", NULL);
+		if (!history_file) return 0;
+	}
 
 	fp = fopen(history_file, "r");
-	if (!fp) {
-		mem_free(history_file);
-		return 0;
-	}
+	if (elinks_home) mem_free(history_file);
+	if (!fp) return 0;
 
 	history_nosave = 1;
 	while (safe_fgets(url, MAX_STR_LEN, fp)) {

@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.9 2003/04/28 15:33:47 zas Exp $ */
+/* $Id: common.c,v 1.10 2003/05/13 12:27:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,11 +49,13 @@ bookmarks_read()
 
 	file_name = bookmarks_backends[backend]->filename(0);
 	if (!file_name) return;
-	file_name = straconcat(elinks_home, file_name, NULL);
+	if (elinks_home) {
+		file_name = straconcat(elinks_home, file_name, NULL);
+	}
 	if (!file_name) return;
 
 	f = fopen(file_name, "r");
-	mem_free(file_name);
+	if (elinks_home) mem_free(file_name);
 	if (!f) return;
 
 	bookmarks_backends[backend]->read(f);

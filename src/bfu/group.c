@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.10 2003/01/03 02:23:53 pasky Exp $ */
+/* $Id: group.c,v 1.11 2003/04/20 14:49:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,24 +17,28 @@
 #include "lowlevel/terminal.h"
 
 
+static int
+base_group_width(struct terminal *term, struct widget_data *item)
+{
+	if (item->item->type == D_CHECKBOX)
+		return 4;
+
+	if (item->item->type == D_BUTTON)
+		return strlen(_(item->item->text, term)) + 5;
+
+	return item->item->dlen + 1;
+}
+
 void
 max_group_width(struct terminal *term, unsigned char **texts,
 		struct widget_data *item, int n, int *w)
 {
 	int ww = 0;
+	int base = base_group_width(term, item);
 
 	while (n--) {
-		int wx;
+		int wx = base + strlen(_(texts[0], term));
 
-		if (item->item->type == D_CHECKBOX) {
-			wx = 4;
-		} else if (item->item->type == D_BUTTON) {
-			wx = strlen(_(item->item->text, term)) + 5;
-		} else {
-			wx = item->item->dlen + 1;
-		}
-
-		wx += strlen(_(texts[0], term));
 		if (n) wx++;
 		ww += wx;
 		texts++;
@@ -48,18 +52,11 @@ void
 min_group_width(struct terminal *term, unsigned char **texts,
 		struct widget_data *item, int n, int *w)
 {
+	int base = base_group_width(term, item);
+
 	while (n--) {
-		int wx;
+		int wx = base + strlen(_(texts[0], term));
 
-		if (item->item->type == D_CHECKBOX) {
-			wx = 4;
-		} else if (item->item->type == D_BUTTON) {
-			wx = strlen(_(item->item->text, term)) + 5;
-		} else {
-			wx = item->item->dlen + 1;
-		}
-
-		wx += strlen(_(texts[0], term));
 		if (wx > *w) *w = wx;
 		texts++;
 		item++;
@@ -72,18 +69,11 @@ dlg_format_group(struct terminal *term, struct terminal *t2,
 		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
+	int base = base_group_width(t2, item);
 
 	while (n--) {
 		int sl;
-		int wx;
-
-		if (item->item->type == D_CHECKBOX) {
-			wx = 4;
-		} else if (item->item->type == D_BUTTON) {
-			wx = strlen(_(item->item->text, t2)) + 5;
-		} else {
-			wx = item->item->dlen + 1;
-		}
+		int wx = base;
 
 		if (_(texts[0], t2)[0]) {
 			sl = strlen(_(texts[0], t2));

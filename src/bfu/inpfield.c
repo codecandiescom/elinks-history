@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.13 2002/09/17 20:33:13 pasky Exp $ */
+/* $Id: inpfield.c,v 1.14 2002/09/17 21:08:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,4 +454,5 @@ struct widget_ops field_pass_ops = {
 	init_field,
 	mouse_field,
 	kbd_field,
+	NULL,
 };

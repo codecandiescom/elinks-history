@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.6 2002/09/10 11:13:32 zas Exp $ */
+/* $Id: widget.c,v 1.7 2002/09/17 21:08:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,34 +23,6 @@ display_dlg_item(struct dialog_data *dialog, struct widget_data *widget,
 {
 	if (widget->item->ops->display)
 		widget->item->ops->display(widget, dialog, selected);
-}
-
-void
-dlg_select_item(struct dialog_data *dlg, struct widget_data *di)
-{
-	if (di->item->type == D_CHECKBOX) {
-		if (!di->item->gid) {
-			di->checked = *((int *) di->cdata)
-				    = !*((int *) di->cdata);
-		} else {
-			int i;
-
-			for (i = 0; i < dlg->n; i++) {
-				if (dlg->items[i].item->type == D_CHECKBOX
-				    && dlg->items[i].item->gid == di->item->gid) {
-					*((int *) dlg->items[i].cdata) = di->item->gnum;
-					dlg->items[i].checked = 0;
-					display_dlg_item(dlg, &dlg->items[i], 0);
-				}
-			}
-			di->checked = 1;
-		}
-		display_dlg_item(dlg, di, 1);
-
-	} else {
-		if (di->item->type == D_BUTTON)
-			di->item->fn(dlg, di);
-	}
 }
 
 void

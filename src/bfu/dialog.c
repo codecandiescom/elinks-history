@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.15 2002/09/17 20:33:13 pasky Exp $ */
+/* $Id: dialog.c,v 1.16 2002/09/17 21:08:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,6 +83,19 @@ redraw_dialog(struct dialog_data *dlg)
 	redraw_from_window(dlg->win);
 }
 
+void
+select_dlg_item(struct dialog_data *dlg, int i)
+{
+	if (dlg->selected != i) {
+		display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
+		display_dlg_item(dlg, &dlg->items[i], 1);
+		dlg->selected = i;
+	}
+	if (dlg->items[i].item->ops->select)
+		dlg->items[i].item->ops->select(&dlg->items[i], dlg);
+}
+
+
 /* TODO: This is too long and ugly. Rewrite and split. */
 void
 dialog_func(struct window *win, struct event *ev, int fwd)
@@ -160,51 +173,58 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 			struct widget_data *di;
 
 			di = &dlg->items[dlg->selected];
+
+			/* First let the widget to try out. */
 			if (di->item->ops->kbd
-			    && di->item->ops->kbd(di, dlg, ev) == EVENT_PROCESSED)
+			    && di->item->ops->kbd(di, dlg, ev)
+			       == EVENT_PROCESSED)
 				break;
 
-			if ((ev->x == KBD_ENTER || ev->x == KBD_ENTER || ev->x == ' ')
-			    && (di->item->type == D_BUTTON || di->item->type == D_CHECKBOX)) {
-				dlg_select_item(dlg, di);
+			/* We can select? */
+			if ((ev->x == KBD_ENTER || ev->x == ' ')
+			    && di->item->ops->select) {
+				di->item->ops->select(di, dlg);
 				break;
 			}
 
+			/* Look up for a button with matching starting letter. */
 			if (ev->x > ' ' && ev->x < 0x100) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
 					    && upcase(_(dlg->dlg->items[i].text, term)[0])
 					       == upcase(ev->x)) {
-sel:
-						if (dlg->selected != i) {
-							display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-							display_dlg_item(dlg, &dlg->items[i], 1);
-							dlg->selected = i;
-						}
-						dlg_select_item(dlg, &dlg->items[i]);
+						select_dlg_item(dlg, i);
 						return;
 					}
 			}
 
-			if ((ev->x == KBD_ENTER && (di->item->type == D_FIELD ||
-						    di->item->type == D_FIELD_PASS))
-			    || (ev->x == KBD_ENTER && (ev->y == KBD_CTRL || ev->y == KBD_ALT))) {
+			/* Submit button. */
+			if (ev->x == KBD_ENTER
+			    && (di->item->type == D_FIELD
+				|| di->item->type == D_FIELD_PASS
+			        || ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
-					    && dlg->dlg->items[i].gid & B_ENTER)
-						goto sel;
+					    && dlg->dlg->items[i].gid & B_ENTER) {
+						select_dlg_item(dlg, i);
+						return;
+					}
 			}
 
+			/* Cancel button. */
 			if (ev->x == KBD_ESC) {
 				for (i = 0; i < dlg->n; i++)
 					if (dlg->dlg->items[i].type == D_BUTTON
-					    && dlg->dlg->items[i].gid & B_ESC)
-						goto sel;
+					    && dlg->dlg->items[i].gid & B_ESC) {
+						select_dlg_item(dlg, i);
+						return;
+					}
 			}
 
-			if ((ev->x == KBD_TAB && !ev->y) ||
-			     ev->x == KBD_DOWN ||
-			     ev->x == KBD_RIGHT) {
+			/* Cycle focus. */
+
+			if ((ev->x == KBD_TAB && !ev->y) || ev->x == KBD_DOWN
+			    || ev->x == KBD_RIGHT) {
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 
 				dlg->selected++;
@@ -216,9 +236,8 @@ sel:
 				break;
 			}
 
-			if ((ev->x == KBD_TAB && ev->y) ||
-			     ev->x == KBD_UP ||
-			     ev->x == KBD_LEFT) {
+			if ((ev->x == KBD_TAB && ev->y) || ev->x == KBD_UP
+			    || ev->x == KBD_LEFT) {
 				display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 
 				dlg->selected--;
@@ -229,6 +248,7 @@ sel:
 				redraw_from_window(dlg->win);
 				break;
 			}
+
 			break;
 			}
 
@@ -326,4 +346,4 @@ draw_dlg(struct dialog_data *dlg)
 {
 	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw,
 		  get_bfu_color(dlg->win->term, "=dialog"));
- }
+}

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.13 2002/09/17 20:33:13 pasky Exp $ */
+/* $Id: checkbox.c,v 1.14 2002/09/17 21:08:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,9 +151,31 @@ mouse_checkbox(struct widget_data *di, struct dialog_data *dlg,
 	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
 	dlg->selected = di - dlg->items;
 	display_dlg_item(dlg, di, 1);
-	if ((ev->b & BM_ACT) == B_UP)
-		dlg_select_item(dlg, di);
+	if ((ev->b & BM_ACT) == B_UP && di->item->ops->select)
+		di->item->ops->select(di, dlg);
 	return EVENT_PROCESSED;
+}
+
+void
+select_checkbox(struct widget_data *di, struct dialog_data *dlg)
+{
+	if (!di->item->gid) {
+		di->checked = *((int *) di->cdata)
+			    = !*((int *) di->cdata);
+	} else {
+		int i;
+
+		for (i = 0; i < dlg->n; i++) {
+			if (dlg->items[i].item->type == D_CHECKBOX
+			    && dlg->items[i].item->gid == di->item->gid) {
+				*((int *) dlg->items[i].cdata) = di->item->gnum;
+				dlg->items[i].checked = 0;
+				display_dlg_item(dlg, &dlg->items[i], 0);
+			}
+		}
+		di->checked = 1;
+	}
+	display_dlg_item(dlg, di, 1);
 }
 
 struct widget_ops checkbox_ops = {
@@ -161,4 +183,5 @@ struct widget_ops checkbox_ops = {
 	init_checkbox,
 	mouse_checkbox,
 	NULL,
+	select_checkbox,
 };

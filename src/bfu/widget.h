@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.7 2002/09/17 20:33:13 pasky Exp $ */
+/* $Id: widget.h,v 1.8 2002/09/17 21:08:48 pasky Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -25,6 +25,7 @@ struct widget_ops {
 	void (*init)(struct widget_data *, struct dialog_data *, struct event *);
 	int (*mouse)(struct widget_data *, struct dialog_data *, struct event *);
 	int (*kbd)(struct widget_data *, struct dialog_data *, struct event *);
+	void (*select)(struct widget_data *, struct dialog_data *);
 };
 
 struct widget {
@@ -59,7 +60,6 @@ struct widget_data {
 
 void display_dlg_item(struct dialog_data *, struct widget_data *, int);
 
-void dlg_select_item(struct dialog_data *, struct widget_data *);
 void dlg_set_history(struct widget_data *);
 
 #endif

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.44 2004/04/25 16:28:03 pasky Exp $ */
+/* $Id: dialogs.c,v 1.45 2004/05/20 23:02:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,6 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
                 enum listbox_info listbox_info)
 {
 	struct cookie *cookie = item->udata;
-	unsigned char *expires = NULL;
 	struct string string;
 
 	if (listbox_info == LISTBOX_URI)
@@ -76,27 +75,26 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 
 	if (!init_string(&string)) return NULL;
 
+	add_format_to_string(&string, "%s: %s", _("Server", term), cookie->server);
+	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
+	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
+	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
+
 #ifdef HAVE_STRFTIME
 	if (cookie->expires) {
 		struct tm *when_local = localtime(&cookie->expires);
 		unsigned char str[13];
 		int wr = strftime(str, sizeof(str), "%b %e %H:%M", when_local);
 
-		if (wr > 0) expires = memacpy(str, wr);
+		if (wr > 0)
+			add_format_to_string(&string,
+				"\n%s: %s", _("Expires", term), str);
 	}
 #endif
-
-	add_format_to_string(&string, "%s: %s", _("Server", term), cookie->server);
-	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
-	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
-	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
-	if (expires)
-		add_format_to_string(&string, "\n%s: %s", _("Expires", term), expires);
 
 	add_format_to_string(&string, "\n%s: %s", _("Secure", term),
 			     _(cookie->secure ? N_("yes") : N_("no"), term));
 
-	mem_free_if(expires);
 	return string.source;
 }
 

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.84 2003/06/11 09:30:38 miciah Exp $ */
+/* $Id: dialogs.c,v 1.85 2003/06/11 10:05:03 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -425,7 +425,7 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	else
 	msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete bookmark"), AL_CENTER,
-		msg_text(term, N_("Delete bookmark \"%s\" ?\n\n"
+		msg_text(term, N_("Delete bookmark \"%s\"?\n\n"
 			"URL: \"%s\""),
 			bm->title, bm->url),
 		hop, 2,

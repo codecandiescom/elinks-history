@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.29 2003/06/07 23:08:56 zas Exp $ */
+/* $Id: dialogs.c,v 1.30 2003/06/11 10:05:03 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -326,7 +326,7 @@ listbox_delete_historyitem(struct terminal *term, struct listbox_data *box)
 	else
 		msg_box(term, getml(ctx, NULL), MSGBOX_FREE_TEXT,
 			N_("Delete history item"), AL_CENTER,
-			msg_text(term, N_("Delete history item \"%s\" ?\n\n"
+			msg_text(term, N_("Delete history item \"%s\"?\n\n"
 				"URL: \"%s\""),
 				historyitem->title, historyitem->url),
 			ctx, 2,

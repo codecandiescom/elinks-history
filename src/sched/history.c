@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.4 2003/06/08 21:45:27 pasky Exp $ */
+/* $Id: history.c,v 1.5 2003/06/08 21:49:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,13 +121,24 @@ ses_unback(struct session *ses)
 }
 
 
+/* Returns > 0 upon error, 0 if we should abort the movement and 1 if we should
+ * proceed fearlessly. */
+static int
+go_away(struct session *ses)
+{
+	ses->reloadlevel = NC_CACHE;
+	return 1;
+}
+
 void
 go_back(struct session *ses)
 {
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
 
-	ses->reloadlevel = NC_CACHE;
+	if (go_away(ses) < 1)
+		return;
+
 	if (ses->wtd) {
 		if (1 || ses->wtd != WTD_BACK) {
 			abort_loading(ses, 0);
@@ -169,7 +180,9 @@ go_unback(struct session *ses)
 	unsigned char *url;
 	struct f_data_c *fd = current_frame(ses);
 
-	ses->reloadlevel = NC_CACHE;
+	if (go_away(ses) < 1)
+		return;
+
 	/* XXX: why wtd checking is not here? --pasky */
 	if (list_empty(ses->unhistory)) return;
 

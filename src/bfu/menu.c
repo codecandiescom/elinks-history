@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.211 2004/04/18 00:31:46 jonas Exp $ */
+/* $Id: menu.c,v 1.212 2004/04/18 00:41:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -963,21 +963,20 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 		return;
 
 	default:
-		break;
+		/* Fallback to see if any hotkey matches the pressed key */
+		if (ev->x > ' ' && ev->x < 256
+		    && check_hotkeys(menu, ev->x, win->term)) {
+			s = 2;
+			break;
+		}
+
+		delete_window_ev(win, action != ACT_MENU_CANCEL ? ev : NULL);
+		return;
 	}
 
-	if (ev->x > ' ' && ev->x < 256 &&
-	    check_hotkeys(menu, ev->x, win->term))
-		s = 2;
-
-	if (!s) {
-		delete_window_ev(win, action != ACT_MENU_CANCEL
-				      ? ev : NULL);
-	} else {
-		display_mainmenu(win->term, menu);
-		if (s == 2)
-			select_menu(win->term, menu);
-	}
+	/* Redraw the menu */
+	display_mainmenu(win->term, menu);
+	if (s == 2) select_menu(win->term, menu);
 }
 
 static void

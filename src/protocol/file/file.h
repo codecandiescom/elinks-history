@@ -1,4 +1,4 @@
-/* $Id: file.h,v 1.9 2004/05/07 17:27:46 jonas Exp $ */
+/* $Id: file.h,v 1.10 2004/05/21 11:57:50 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FILE_FILE_H
 #define EL__PROTOCOL_FILE_FILE_H
@@ -7,8 +7,5 @@
 struct string;
 
 extern protocol_handler file_protocol_handler;
-
-/* Reads the file with the given @filename into the string @source. */
-enum connection_state read_encoded_file(unsigned char *filename, int filenamelen, struct string *source);
 
 #endif

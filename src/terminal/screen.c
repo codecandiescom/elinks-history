@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.154 2004/12/27 10:34:47 jonas Exp $ */
+/* $Id: screen.c,v 1.155 2005/01/28 12:50:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,12 +523,16 @@ add_char256(struct string *screen, struct screen_driver *driver,
 			add_term_string(screen, driver->frame_seqs[state->border]);
 		}
 
+		if ((attr_delta & SCREEN_ATTR_UNDERLINE) && driver->underline) {
+			state->underline = !!(ch->attr & SCREEN_ATTR_UNDERLINE);
+			add_term_string(screen, driver->underline[state->underline]);
+		}
+
 		if (attr_delta & SCREEN_ATTR_BOLD) {
 			if (ch->attr & SCREEN_ATTR_BOLD) {
 				add_bytes_to_string(screen, "\033[1m", 4);
 			} else {
 				/* Force repainting of the other attributes. */
-				attr_delta |= SCREEN_ATTR_UNDERLINE;
 				state->color[0] = ch->color[0] + 1;
 			}
 		}
@@ -546,11 +550,11 @@ add_char256(struct string *screen, struct screen_driver *driver,
 
 		if (ch->attr & SCREEN_ATTR_BOLD)
 			add_bytes_to_string(screen, "\033[1m", 4);
-	}
 
-	if ((attr_delta & SCREEN_ATTR_UNDERLINE) && driver->underline) {
-		state->underline = !!(ch->attr & SCREEN_ATTR_UNDERLINE);
-		add_term_string(screen, driver->underline[state->underline]);
+		if (ch->attr & SCREEN_ATTR_UNDERLINE && driver->underline) {
+			state->underline = !!(ch->attr & SCREEN_ATTR_UNDERLINE);
+			add_term_string(screen, driver->underline[state->underline]);
+		}
 	}
 
 	add_char_data(screen, driver, ch->data, ch->attr & SCREEN_ATTR_FRAME);

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.270 2004/04/08 14:38:54 jonas Exp $ */
+/* $Id: http.c,v 1.271 2004/04/08 19:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ subst_user_agent(unsigned char *fmt, unsigned char *version,
 }
 
 static void
-add_url_to_http_string(struct string *header, unsigned char *url_data)
+add_url_to_http_string(struct string *header, unsigned char *data)
 {
 	/* This block substitues spaces in URL by %20s. This is
 	 * certainly not the right place where to do it, but now the
@@ -113,29 +113,23 @@ add_url_to_http_string(struct string *header, unsigned char *url_data)
 	 * before. We should probably encode all URLs as early as
 	 * possible, and possibly decode them back in protocol
 	 * backends. --pasky */
+	int datalen = get_no_post_url_length(data);
 
-	/* Nop, this doesn't stand for EuroURL, but Encoded URL. */
-	unsigned char *eurl = get_no_post_url(url_data, NULL);
-	unsigned char *p = eurl;
-	unsigned char *p1 = eurl;
+	while (datalen > 0) {
+		int len = int_min(strcspn(data, " \t\r\n\\"), datalen);
 
-	if (!eurl) return;
+		add_bytes_to_string(header, data, len);
 
-	while (*(p += strcspn(p, " \t\r\n\\"))) {
-		unsigned char ch = *p;
+		if (len == datalen) break;
 
-		*p = '\0';
-		add_to_string(header, p1);
-		if (ch == '\\')
+		if (data[len++] == '\\')
 			add_char_to_string(header, '/');
 		else
 			add_to_string(header, "%20");
-		p++;
-		p1 = p;
-	}
 
-	add_to_string(header, p1);
-	mem_free(eurl);
+		datalen	-= len;
+		data	+= len;
+	}
 }
 
 /* This function extracts code, major and minor version from string

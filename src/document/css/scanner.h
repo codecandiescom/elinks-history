@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.63 2004/01/28 00:57:56 jonas Exp $ */
+/* $Id: scanner.h,v 1.64 2004/01/28 01:23:04 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -87,8 +87,11 @@ enum css_token_type {
 	CSS_TOKEN_NONE = 0,
 };
 
+extern struct scanner_info css_scanner_info;
+
 /* Initializes the CSS scanner. */
-void init_css_scanner(struct scanner *scanner, unsigned char *string);
+void init_css_scanner(struct scanner *scanner, unsigned char *string,
+		      struct scanner_info *scanner_info);
 
 #define skip_css_tokens(scanner, type) \
 	skip_scanner_tokens(scanner, type, get_css_precedence(type))

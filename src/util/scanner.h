@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.3 2004/01/28 01:16:19 jonas Exp $ */
+/* $Id: scanner.h,v 1.4 2004/01/28 01:23:04 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -80,6 +80,9 @@ struct scanner_info {
 	/* Contains bitmaps for the various characters groups.
 	 * Idea sync'ed from mozilla browser. */
 	int scan_table[SCAN_TABLE_SIZE];
+
+	/* Has the scanner info been initialized? */
+	unsigned int initialized:1;
 };
 
 

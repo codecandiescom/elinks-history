@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.51 2004/01/28 00:04:52 jonas Exp $ */
+/* $Id: apply.c,v 1.52 2004/01/28 01:23:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	if (code) {
 		struct scanner scanner;
 
-		init_css_scanner(&scanner, code);
+		init_css_scanner(&scanner, code, &css_scanner_info);
 		css_parse_properties(&selector->properties, &scanner);
 		mem_free(code);
 	}

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.133 2003/11/24 13:15:48 zas Exp $ */
+/* $Id: core.c,v 1.134 2003/11/26 18:27:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -710,6 +710,9 @@ enum evhook_status
 dialog_lua_console(va_list ap, void *data)
 {
 	struct session *ses = va_arg(ap, struct session *);
+
+	if (get_opt_int_tree(cmdline_options, "anonymous"))
+		return EHS_NEXT;
 
 	input_field(ses->tab->term, NULL, 1,
 		    N_("Lua Console"), N_("Enter expression"),

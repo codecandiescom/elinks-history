@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.126 2004/02/09 02:59:33 jonas Exp $ */
+/* $Id: inpfield.c,v 1.127 2004/02/09 12:06:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -530,14 +530,27 @@ input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 			break;
 		}
 
+		/* First let the input field do its business */
+		kbd_field(widget_data, dlg_data, ev);
+		break;
+
+	case EV_REDRAW:
+		/* Try to catch the redraw event initiated by the history
+		 * completion and only respond if something was actually
+		 * updated. Meaning we have new data in the line buffer that
+		 * should be propagated to the line handler. */
+		if (!widget_has_history(widget_data)
+		    || widget_data->info.field.cpos <= 0
+		    || widget_data->info.field.cpos <= strlen(input_line->buffer))
+			return EVENT_NOT_PROCESSED;
+
+		action = ACT_EDIT_NONE;
 		break;
 
 	default:
 		return EVENT_NOT_PROCESSED;
 	}
 
-	/* First let the input field do its business */
-	kbd_field(widget_data, dlg_data, ev);
 	update_dialog_data(dlg_data, widget_data);
 
 	/* Then pass it on to the specialized handler */

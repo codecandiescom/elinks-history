@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.159 2004/12/25 15:25:37 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.160 2004/12/25 17:28:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,7 +212,7 @@ jsval_to_string(JSContext *ctx, jsval *vp)
 {
 	jsval val;
 
-	if (JS_ConvertValue(ctx, *vp, JSTYPE_STRING, &val) == JS_TRUE) {
+	if (JS_ConvertValue(ctx, *vp, JSTYPE_STRING, &val) == JS_FALSE) {
 		return "";
 	}
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.373 2003/11/13 22:40:44 jonas Exp $ */
+/* $Id: renderer.c,v 1.374 2003/11/13 22:44:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -679,6 +679,11 @@ justify_line(struct part *part, int y)
 			/* There are now (new_start - prev_end) spaces before
 			 * the word. */
 			if (word) {
+				/* The out commented code is a proposed fix for
+				 * bug 60. The align test page seems to work
+				 * but it failes for
+				 * http://www.chez.com/aikidossiers/francais/origines.htm
+				 */
 #if 0
 				int new_spaces = new_start - prev_end - 1;
 				struct link *link = part->document->nlinks > 0

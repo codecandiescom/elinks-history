@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.117 2003/08/02 14:59:54 jonas Exp $ */
+/* $Id: main.c,v 1.118 2003/08/02 15:51:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -277,7 +277,7 @@ terminate_all_subsystems(void)
 	free_home();
 	free_strerror_buf();
 #ifdef FORMS_MEMORY
-	free_formsmemory();
+	done_form_history();
 #endif
 #ifdef USE_LEDS
 	done_leds();

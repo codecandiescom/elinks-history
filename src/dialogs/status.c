@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.87 2004/10/06 13:48:31 zas Exp $ */
+/* $Id: status.c,v 1.88 2004/10/08 16:20:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,15 +52,15 @@
 	 * 1000)
 
 unsigned char *
-get_stat_msg(struct download *stat, struct terminal *term,
+get_download_msg(struct download *download, struct terminal *term,
 	     int wide, int full, unsigned char *separator)
 {
 	struct string msg;
 	int newlines = separator[strlen(separator) - 1] == '\n';
 
-	if (!download_is_progressing(stat)) {
-		/* DBG("%d -> %s", stat->state, _(get_err_msg(stat->state), term)); */
-		return stracpy(get_err_msg(stat->state, term));
+	if (!download_is_progressing(download)) {
+		/* DBG("%d -> %s", download->state, _(get_err_msg(download->state), term)); */
+		return stracpy(get_err_msg(download->state, term));
 	}
 
 	if (!init_string(&msg)) return NULL;
@@ -71,17 +71,17 @@ get_stat_msg(struct download *stat, struct terminal *term,
 
 	add_to_string(&msg, _("Received", term));
 	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, stat->prg->pos);
-	if (stat->prg->size >= 0) {
+	add_xnum_to_string(&msg, download->prg->pos);
+	if (download->prg->size >= 0) {
 		add_char_to_string(&msg, ' ');
 		add_to_string(&msg, _("of", term));
 		add_char_to_string(&msg, ' ');
-		add_xnum_to_string(&msg, stat->prg->size);
+		add_xnum_to_string(&msg, download->prg->size);
 	}
 
 	add_to_string(&msg, separator);
 
-	if (wide && stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+	if (wide && download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg,
 			      _(full ? (newlines ? N_("Average speed")
 					         : N_("average speed"))
@@ -93,15 +93,15 @@ get_stat_msg(struct download *stat, struct terminal *term,
 	}
 
 	add_char_to_string(&msg, ' ');
-	add_xnum_to_string(&msg, average_speed(stat->prg));
+	add_xnum_to_string(&msg, average_speed(download->prg));
 	add_to_string(&msg, "/s");
 
-	if (wide && stat->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
+	if (wide && download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
 		add_to_string(&msg, ", ");
 		add_to_string(&msg,
 			      _(full ? N_("current speed") : N_("cur"), term));
 		add_char_to_string(&msg, ' '),
-		add_xnum_to_string(&msg, current_speed(stat->prg));
+		add_xnum_to_string(&msg, current_speed(download->prg));
 		add_to_string(&msg, "/s");
 	}
 
@@ -115,16 +115,16 @@ get_stat_msg(struct download *stat, struct terminal *term,
 					   : N_("ETT"),
 				   term));
 		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, stat->prg->elapsed);
+		add_time_to_string(&msg, download->prg->elapsed);
 	}
 
-	if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
+	if (download->prg->size >= 0 && download->prg->loaded > 0) {
 		if (wide) add_to_string(&msg, ", ");
 		add_to_string(&msg, _(full ? N_("estimated time")
 					   : N_("ETA"),
 				      term));
 		add_char_to_string(&msg, ' ');
-		add_time_to_string(&msg, estimated_time(stat->prg));
+		add_time_to_string(&msg, estimated_time(download->prg));
 	}
 
 	return msg.source;
@@ -208,7 +208,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 {
 	unsigned char *msg = NULL;
 	unsigned int tab_info_len = 0;
-	struct download *stat = get_current_download(ses);
+	struct download *download = get_current_download(ses);
 	struct session_status *status = &ses->status;
 	struct color_pair *text_color = NULL;
 	int msglen;
@@ -235,7 +235,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 	if (ses->kbdprefix.repeat_count) {
 		msg = msg_text(term, N_("Keyboard prefix: %d"),
 			       ses->kbdprefix.repeat_count);
-	} else if (stat) {
+	} else if (download) {
 		struct document_view *doc_view = current_frame(ses);
 
 		/* Show S_INTERRUPTED message *once* but then show links
@@ -248,12 +248,12 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 			static int last_current_link;
 			int ncl = doc_view->vs->current_link;
 
-			if (stat->state == S_INTERRUPTED
+			if (download->state == S_INTERRUPTED
 			    && ncl != last_current_link)
-				stat->state = S_OK;
+				download->state = S_OK;
 			last_current_link = ncl;
 
-			if (stat->state == S_OK) {
+			if (download->state == S_OK) {
 				if (get_current_link(doc_view)) {
 					msg = get_current_link_info(ses, doc_view);
 				} else if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
@@ -269,7 +269,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 			int full = term->width > 130;
 			int wide = term->width > 80;
 
-			msg = get_stat_msg(stat, term, wide, full, ", ");
+			msg = get_download_msg(download, term, wide, full, ", ");
 		}
 	}
 
@@ -300,7 +300,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		  msg, msglen, 0, text_color);
 	mem_free(msg);
 
-	if (download_is_progressing(stat) && stat->prg->size > 0) {
+	if (download_is_progressing(download) && download->prg->size > 0) {
 		int xend = term->width - 1;
 		int width;
 
@@ -314,7 +314,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		int_upper_bound(&width, 20);
 		download_progress_bar(term, xend - width, term->height - 1,
 				      width, NULL, NULL,
-				      stat->prg->pos, stat->prg->size);
+				      download->prg->pos, download->prg->size);
 	}
 }
 
@@ -337,7 +337,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 	set_box(&box, 0, term->height - (status->show_status_bar ? 2 : 1), 0, 1);
 
 	for (tab_num = 0; tab_num < tabs_count; tab_num++) {
-		struct download *stat = NULL;
+		struct download *download = NULL;
 		struct color_pair *color = normal_color;
 		struct window *tab = get_tab_by_number(term, tab_num);
 		struct document_view *doc_view;
@@ -373,26 +373,26 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 			color = selected_color;
 
 		} else {
-			stat = get_current_download(tab_ses);
+			download = get_current_download(tab_ses);
 
-			if (stat && stat->state != S_OK) {
+			if (download && download->state != S_OK) {
 				color = loading_color;
 			} else if (!tab_ses || !tab_ses->status.visited) {
 				color = fresh_color;
 			}
 
-			if (!download_is_progressing(stat)
-			    || stat->prg->size <= 0)
-				stat = NULL;
+			if (!download_is_progressing(download)
+			    || download->prg->size <= 0)
+				download = NULL;
 		}
 
 		box.width = actual_tab_width + 1;
 		draw_box(term, &box, ' ', 0, color);
 
-		if (stat) {
+		if (download) {
 			download_progress_bar(term, box.x, box.y,
 					      actual_tab_width, msg, NULL,
-					      stat->prg->pos, stat->prg->size);
+					      download->prg->pos, download->prg->size);
 		} else {
 			int msglen = int_min(strlen(msg), actual_tab_width);
 

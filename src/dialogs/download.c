@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.61 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: download.c,v 1.62 2004/10/08 16:20:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	unsigned char *url;
 	struct download *download = &file_download->download;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
-	unsigned char *msg = get_stat_msg(download, term, 1, 1, "\n");
+	unsigned char *msg = get_download_msg(download, term, 1, 1, "\n");
 	int show_meter = (download_is_progressing(download)
 			  && download->prg->size >= 0);
 

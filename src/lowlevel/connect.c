@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.45 2003/07/25 21:48:37 zas Exp $ */
+/* $Id: connect.c,v 1.46 2003/07/29 22:43:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ close_socket(struct connection *conn, int *s)
 void
 dns_exception(void *data)
 {
-	struct connection *conn = (struct connection *) data;
+	struct connection *conn = data;
 
 	set_connection_state(conn, S_EXCEPT);
 	close_socket(NULL, conn->conn_info->sock);
@@ -100,7 +100,7 @@ make_connection(struct connection *conn, int port, int *sock,
 	int async;
 
 	if (!host) {
-		abort_conn_with_state(conn, S_INTERNAL);
+		retry_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -139,16 +139,14 @@ make_connection(struct connection *conn, int port, int *sock,
 int
 get_pasv_socket(struct connection *conn, int ctrl_sock, unsigned char *port)
 {
-	int sock;
-	struct sockaddr_in sa;
-	struct sockaddr_in sb;
-	int len = sizeof(sa);
+	struct sockaddr_in sa, sb;
+	int sock, len;
 
 	memset(&sa, 0, sizeof(sa));
 	memset(&sb, 0, sizeof(sb));
 
 	/* Get our endpoint of the control socket */
-
+	len = sizeof(sa);
 	if (getsockname(ctrl_sock, (struct sockaddr *) &sa, &len)) {
 sock_error:
 		retry_conn_with_state(conn, -errno);
@@ -291,9 +289,11 @@ dns_found(void *data, int state)
 		sock = socket(addr.sin_family, SOCK_STREAM, IPPROTO_TCP);
 #endif
 		if (sock == -1) continue;
-
+		if (set_nonblocking_fd(sock) < 0) {
+			close(sock);
+			continue;
+		}
 		*c_i->sock = sock;
-		if (set_nonblocking_fd(sock) < 0) /* FIXME: handle error here */;
 
 #ifdef IPV6
 		addr.sin6_port = htons(c_i->port);
@@ -355,7 +355,8 @@ connected(void *data)
 	int err = 0;
 	int len = sizeof(int);
 
-	if (!c_i) internal("Lost conn_info!");
+	assertm(c_i, "Lost conn_info!");
+	if_assert_failed return;
 
 	if (getsockopt(*c_i->sock, SOL_SOCKET, SO_ERROR, (void *) &err, &len) == 0) {
 		/* Why does EMX return so large values? */
@@ -391,8 +392,8 @@ write_select(struct connection *c)
 	struct write_buffer *wb = c->buffer;
 	int wr;
 
-	if (!wb) {
-		internal("write socket has no buffer");
+	assertm(wb, "write socket has no buffer");
+	if_assert_failed {
 		abort_conn_with_state(c, S_INTERNAL);
 		return;
 	}
@@ -407,6 +408,7 @@ write_select(struct connection *c)
 		wr = ssl_write(c, wb);
 		if (wr <= 0) return;
 	} else {
+		assert(wb->len - wb->pos > 0);
 		wr = write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
 			retry_conn_with_state(c, wr ? -errno : S_CANT_WRITE);
@@ -434,6 +436,9 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 
 	log_data(data, len);
 
+	assert(len > 0);
+	if_assert_failed return;
+
 	wb = mem_alloc(sizeof(struct write_buffer) + len);
 	if (!wb) {
 		abort_conn_with_state(c, S_OUT_OF_MEM);
@@ -460,8 +465,8 @@ read_select(struct connection *c)
 	struct read_buffer *rb = c->buffer;
 	int rd;
 
-	if (!rb) {
-		internal("read socket has no buffer");
+	assertm(rb, "read socket has no buffer");
+	if_assert_failed {
 		abort_conn_with_state(c, S_INTERNAL);
 		return;
 	}
@@ -477,6 +482,7 @@ read_select(struct connection *c)
 			return;
 		}
 		rb->freespace = size - sizeof(struct read_buffer);
+		assert(rb->freespace > 0);
 		c->buffer = rb;
 	}
 
@@ -501,6 +507,7 @@ read_select(struct connection *c)
 
 	rb->len += rd;
 	rb->freespace -= rd;
+	assert(rb->freespace >= 0);
 
 	rb->done(c, rb);
 }

@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.97 2004/09/11 04:32:38 miciah Exp $ */
+/* $Id: charsets.c,v 1.98 2004/09/11 04:39:29 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,6 +153,8 @@ u2cp_(unicode_val u, int to, int no_nbsp_hack)
 		return u2cp_(strange, to, no_nbsp_hack);
 	}
 
+	to &= ~SYSTEM_CHARSET_FLAG;
+
 	for (j = 0; codepages[to].table[j].c; j++)
 		if (codepages[to].table[j].u == u)
 			return strings[codepages[to].table[j].c];
@@ -205,6 +207,8 @@ unsigned char *
 cp2utf_8(int from, int c)
 {
 	int j;
+
+	to &= ~SYSTEM_CHARSET_FLAG;
 
 	if (codepages[from].table == table_utf_8 || c < 128)
 		return strings[c];

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.184 2004/12/30 20:28:31 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.185 2005/01/03 03:59:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1885,7 +1885,8 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 {
 	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
 	struct terminal *term;
-	unsigned char *strict, *exception, *warning, *error, *msg;
+	unsigned char *strict, *exception, *warning, *error;
+	struct string msg;
 
 	assert(interpreter && interpreter->vs && interpreter->vs->doc_view
 	       && interpreter->vs->doc_view->session
@@ -1898,7 +1899,8 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 	interpreter->vs->doc_view->session->status.ecmascript_led->value = 'J';
 #endif
 
-	if (!get_opt_bool("ecmascript.error_reporting"))
+	if (!get_opt_bool("ecmascript.error_reporting")
+	    || !init_string(&msg))
 		goto reported;
 
 	strict	  = JSREPORT_IS_STRICT(report->flags) ? " strict" : "";
@@ -1906,26 +1908,25 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 	warning   = JSREPORT_IS_WARNING(report->flags) ? " warning" : "";
 	error	  = !report->flags ? " error" : "";
 
+	add_format_to_string(&msg, _("A script embedded in the current "
+			"document raised the following%s%s%s%s", term),
+			strict, exception, warning, error);
+
+	add_to_string(&msg, ":\n\n");
+	add_to_string(&msg, message);
+
 	if (report->linebuf && report->tokenptr) {
 		int pos = report->tokenptr - report->linebuf;
 
-		msg = msg_text(term, N_("A script embedded in the current "
-			       "document raised the following%s%s%s%s: "
-			       "\n\n%s\n\n%s\n.%*s^%*s."),
-			       strict, exception, warning, error, message,
+		add_format_to_string(&msg, "\n\n%s\n.%*s^%*s.",
 			       report->linebuf,
 			       pos - 2, " ",
 			       strlen(report->linebuf) - pos - 1, " ");
-	} else {
-		msg = msg_text(term, N_("A script embedded in the current "
-			       "document raised the following%s%s%s%s: "
-			       "\n\n%s"),
-			       strict, exception, warning, error, message);
 	}
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("JavaScript Error"), ALIGN_CENTER,
-		msg, NULL, 1,
+		msg.source, NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 reported:

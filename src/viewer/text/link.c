@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.115 2003/12/03 15:30:20 miciah Exp $ */
+/* $Id: link.c,v 1.116 2003/12/05 20:49:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ static int
 comp_links(struct link *l1, struct link *l2)
 {
 	int res;
-	
+
 	assert(l1 && l2 && l1->pos && l2->pos);
 	if_assert_failed return 0;
 	res = l1->pos->y - l2->pos->y;
@@ -554,17 +554,24 @@ nolink:
 
 
 unsigned char *
-get_link_url(struct session *ses, struct document_view *doc_view, struct link *l)
+get_link_url(struct session *ses, struct document_view *doc_view,
+	     struct link *link)
 {
-	assert(ses && doc_view && l);
+	assert(ses && doc_view && link);
 	if_assert_failed return NULL;
 
-	if (l->type == LINK_HYPERTEXT) {
-		if (!l->where) return stracpy(l->where_img);
-		return stracpy(l->where);
+	switch (link->type) {
+		case LINK_HYPERTEXT:
+			if (link->where) return stracpy(link->where);
+			return stracpy(link->where_img);
+
+		case LINK_BUTTON:
+		case LINK_FIELD:
+			return get_form_url(ses, doc_view, link->form);
+
+		default:
+			return NULL;
 	}
-	if (l->type != LINK_BUTTON && l->type != LINK_FIELD) return NULL;
-	return get_form_url(ses, doc_view, l->form);
 }
 
 

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.111 2003/05/18 12:37:09 zas Exp $ */
+/* $Id: http.c,v 1.112 2003/05/18 12:45:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -156,14 +156,14 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
  * It returns a negative value on error, 0 on success.
  */
 static int
-get_http_code(unsigned char *head, int *code, int *maj_version, int *min_version)
+get_http_code(unsigned char *head, int *code, struct http_version *version)
 {
 	unsigned char *end, *start;
 	int q;
 
 	*code = 0;
-	*maj_version = 0;
-	*min_version = 0;
+	version->major = 0;
+	version->minor = 0;
 
 	/* Ignore spaces. */
 	while (*head == ' ') head++;
@@ -190,7 +190,7 @@ get_http_code(unsigned char *head, int *code, int *maj_version, int *min_version
 	do {
 		--head;
 		if (*head < '0' || *head > '9') return -3; /* NaN */
-		*maj_version += (*head - '0') * q;
+		version->major += (*head - '0') * q;
 		q *= 10;
 	} while (head != start);
 
@@ -206,7 +206,7 @@ get_http_code(unsigned char *head, int *code, int *maj_version, int *min_version
 	do {
 		--head;
 		if (*head < '0' || *head > '9') return -5; /* NaN */
-		*min_version += (*head - '0') * q;
+		version->minor += (*head - '0') * q;
 		q *= 10;
 	} while (head != start);
 	head = end;
@@ -1111,7 +1111,7 @@ again:
 		setcstate(c, state);
 		return;
 	}
-	if (get_http_code(rb->data, &h, &version.major, &version.minor)
+	if (get_http_code(rb->data, &h, &version)
 	    || h == 101) {
 		abort_conn_with_state(c, S_HTTP_ERROR);
 		return;

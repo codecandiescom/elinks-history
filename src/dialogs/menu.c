@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.346 2004/07/14 22:14:43 zas Exp $ */
+/* $Id: menu.c,v 1.347 2004/07/14 22:16:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -735,7 +735,7 @@ format_command(unsigned char *format, struct uri *uri)
 }
 
 void
-pass_uri_to_command(struct session *ses, struct document_view *doc_view, int a)
+pass_uri_to_command(struct session *ses, struct document_view *doc_view, int xxx)
 {
 	struct list_head *tree = get_opt_tree("document.uri_passing");
 	struct menu_item *items;

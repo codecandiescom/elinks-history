@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.16 2003/06/28 10:47:53 jonas Exp $ */
+/* $Id: osdep.h,v 1.17 2003/06/28 21:43:55 zas Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
@@ -175,7 +175,7 @@ struct open_in_new {
 
 int get_system_env(void);
 int is_xterm(void);
-int can_twterm(void);
+int is_twterm(void);
 int get_terminal_size(int, int *, int *);
 void handle_terminal_resize(int, void (*)(void));
 void unhandle_terminal_resize(int);
@@ -191,14 +191,14 @@ void *handle_mouse(int, void (*)(void *, unsigned char *, int), void *);
 void unhandle_mouse(void *);
 int check_file_name(unsigned char *);
 int start_thread(void (*)(void *, int), void *, int);
-char *get_clipboard_text(void);
-void set_clipboard_text(char *);
+unsigned char *get_clipboard_text(void);
+void set_clipboard_text(unsigned char *);
 void set_window_title(unsigned char *);
 unsigned char *get_window_title(void);
 void check_shell_security(unsigned char **);
 void block_stdin(void);
 void unblock_stdin(void);
-int exe(char *);
+int exe(unsigned char *);
 int resize_window(int, int);
 int can_resize_window(int);
 int can_open_os_shell(int);

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.76 2003/06/28 11:13:10 jonas Exp $ */
+/* $Id: os_dep.c,v 1.77 2003/06/28 21:43:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ set_blocking_fd(int fd)
 void
 check_shell_security(unsigned char **cmd)
 {
-	unsigned char *c = *cmd;
+	register unsigned char *c = *cmd;
 
 	while (*c) {
 		if (!is_safe_in_shell(*c)) *c = '_';
@@ -116,7 +116,7 @@ check_shell_security(unsigned char **cmd)
 }
 
 static int
-get_e(char *env)
+get_e(unsigned char *env)
 {
 	char *v = getenv(env);
 
@@ -150,7 +150,7 @@ get_e(char *env)
 
 #ifdef USE_OPEN_PREALLOC
 int
-open_prealloc(char *name, int flags, int mode, int siz)
+open_prealloc(unsigned char *name, int flags, int mode, int siz)
 {
 	/* This is good for OS/2, where this will prevent file fragmentation,
 	 * preallocating the desired file size upon open(). */
@@ -194,12 +194,16 @@ get_terminal_size(int fd, int *x, int *y)
 
 	if (!x || !y) return -1;
 	if (ioctl(1, TIOCGWINSZ, &ws) != -1) {
-		if (!(*x = ws.ws_col) && !(*x = get_e("COLUMNS"))) *x = 80;
-		if (!(*y = ws.ws_row) && !(*y = get_e("LINES"))) *y = 24;
-		return 0;
-	} else {
-		if (!(*x = get_e("COLUMNS"))) *x = 80;
-		if (!(*y = get_e("LINES"))) *y = 24;
+		*x = ws.ws_col;
+		*y = ws.ws_row;
+	}
+	if (!*x) {
+		*x = get_e("COLUMNS");
+		if (!*x) *x = 80;
+	}
+	if (!*y) {
+		*y = get_e("LINES");
+		if (!*y) *y = 24;
 	}
 
 	return 0;
@@ -243,7 +247,7 @@ winch_thread(void)
 			write(winch_pipe[1], "x", 1);
 			/* Resizing may take some time. So don't send a flood
                      of requests?! */
-			_sleep2(2*WINCH_SLEEPTIME);
+			_sleep2(2 * WINCH_SLEEPTIME);
 		} else {
 			_sleep2(WINCH_SLEEPTIME);
 		}
@@ -253,7 +257,7 @@ winch_thread(void)
 void
 winch(void *s)
 {
-	char c;
+	unsigned char c;
 
 	while (can_read(winch_pipe[0]) && read(winch_pipe[0], &c, 1) == 1);
 	((void (*)())s)();
@@ -310,18 +314,18 @@ get_terminal_size(int fd, int *x, int *y)
 		return 0;
 #endif
 	} else {
-		int a[2] = { 0, 0 };
+		int a[2] = {0, 0};
 
 		_scrsize(a);
 		*x = a[0];
 		*y = a[1];
-		if (*x == 0) {
+		if (!*x) {
 			*x = get_e("COLUMNS");
-			if (*x == 0) *x = 80;
+			if (!*x) *x = 80;
 		}
-		if (*y == 0) {
+		if (!*y) {
 			*y = get_e("LINES");
-			if (*y == 0) *y = 24;
+			if (!*y) *y = 24;
 		}
 	}
 
@@ -381,13 +385,13 @@ check_file_name(unsigned char *file)
 /* Exec */
 
 int
-can_twterm() /* Check if it make sense to call a twterm. */
+is_twterm(void) /* Check if it make sense to call a twterm. */
 {
-	static int xt = -1;
+	static int tw = -1;
 
-	if (xt == -1) xt = !!getenv("TWDISPLAY");
+	if (tw == -1) tw = !!getenv("TWDISPLAY");
 
-	return xt;
+	return tw;
 }
 
 
@@ -398,7 +402,11 @@ is_xterm(void)
 {
 	static int xt = -1;
 
-	if (xt == -1) xt = (getenv("DISPLAY") && *getenv("DISPLAY"));
+	if (xt == -1) {
+		unsigned char *display = getenv("DISPLAY");
+
+		xt = (display && *display);
+	}
 
 	return xt;
 }
@@ -428,9 +436,8 @@ tcount resize_count = 0;
 #if defined(BEOS) && defined(HAVE_SETPGID)
 
 int
-exe(char *path)
+exe(unsigned char *path)
 {
-	int s;
 	int p = fork();
 
 	if (!p) {
@@ -439,9 +446,11 @@ exe(char *path)
 		_exit(0);
 	}
 
-	if (p > 0)
+	if (p > 0) {
+		int s;
+
 		waitpid(p, &s, 0);
-	else
+	} else
 		return system(path);
 
 	return 0;
@@ -478,17 +487,17 @@ exe(char *path)
 #else
 
 int
-exe(char *path)
+exe(unsigned char *path)
 {
 	return system(path);
 }
 
 #endif
 
-char *
-get_clipboard_text()	/* !!! FIXME */
+unsigned char *
+get_clipboard_text(void)	/* !!! FIXME */
 {
-	char *ret = mem_alloc(1);
+	unsigned char *ret = mem_alloc(1);
 
 	if (ret) ret[0] = 0;
 
@@ -496,7 +505,7 @@ get_clipboard_text()	/* !!! FIXME */
 }
 
 void
-set_clipboard_text(char *data)
+set_clipboard_text(unsigned char *data)
 {
 	/* !!! FIXME */
 }
@@ -507,7 +516,7 @@ set_window_title(unsigned char *title)
 {
 	unsigned char *s;
 	int xsize, ysize;
-	int j = 0;
+	register int j = 0;
 
 	/* Check if we're in a xterm-like terminal. */
 	if (!is_xterm()) return;
@@ -524,7 +533,7 @@ set_window_title(unsigned char *title)
 
 	/* Copy title to s if different from NULL */
 	if (title) {
-		int i;
+		register int i;
 
 		/* We limit title length to terminal width and ignore control
 		 * chars if any. Note that in most cases window decoration
@@ -568,13 +577,13 @@ get_window_title(void)
 {
 #ifdef HAVE_X11
 	/* Following code is stolen from our beloved vim. */
-	char *winid;
+	unsigned char *winid;
 	Display *display;
 	Window window, root, parent, *children;
 	XTextProperty text_prop;
 	Status status;
 	unsigned int num_children;
-	char *ret = NULL;
+	unsigned char *ret = NULL;
 
 	if (!is_xterm())
 		return NULL;
@@ -629,11 +638,12 @@ resize_window(int x, int y)
 #elif defined(OS2)
 
 int
-exe(char *path)
+exe(unsigned char *path)
 {
 	int flags = P_SESSION;
-	int pid, ret;
-	char *shell;
+	int pid;
+	int ret = -1;
+	unsigned char *shell;
 
 	shell = GETSHELL;
 	if (!shell) shell = DEFAULT_SHELL;
@@ -642,13 +652,11 @@ exe(char *path)
 	pid = spawnlp(flags, shell, shell, "/c", path, NULL);
 	if (pid != -1)
 		waitpid(pid, &ret, 0);
-	else
-		ret = -1;
 
 	return ret;
 }
 
-char *
+unsigned char *
 get_clipboard_text(void)
 {
 	PTIB tib;
@@ -656,7 +664,7 @@ get_clipboard_text(void)
 	HAB hab;
 	HMQ hmq;
 	ULONG oldType;
-	char *ret = 0;
+	unsigned char *ret = 0;
 
 	DosGetInfoBlocks(&tib, &pib);
 
@@ -668,25 +676,20 @@ get_clipboard_text(void)
 	if (hab != NULLHANDLE) {
 		hmq = WinCreateMsgQueue(hab, 0);
 		if (hmq != NULLHANDLE) {
-
 			if (WinOpenClipbrd(hab)) {
 				ULONG fmtInfo = 0;
 
-				if (WinQueryClipbrdFmtInfo(hab, CF_TEXT, &fmtInfo)!=FALSE)
-				{
+				if (WinQueryClipbrdFmtInfo(hab, CF_TEXT, &fmtInfo) != FALSE) {
 					ULONG selClipText = WinQueryClipbrdData(hab, CF_TEXT);
 
-					if (selClipText)
-					{
-						PCHAR pchClipText = (PCHAR)selClipText;
+					if (selClipText) {
+						PCHAR pchClipText = (PCHAR) selClipText;
 
 						ret = stracpy(pchClipText);
 					}
 				}
-
 				WinCloseClipbrd(hab);
 			}
-
 			WinDestroyMsgQueue(hmq);
 		}
 		WinTerminate(hab);
@@ -698,7 +701,7 @@ get_clipboard_text(void)
 }
 
 void
-set_clipboard_text(char *data)
+set_clipboard_text(unsigned char *data)
 {
 	PTIB tib;
 	PPIB pib;
@@ -736,8 +739,8 @@ unsigned char *
 get_window_title(void)
 {
 #ifndef OS2_DEBUG
-	char *org_switch_title;
-	char *org_win_title = NULL;
+	unsigned char *org_switch_title;
+	unsigned char *org_win_title = NULL;
 	static PTIB tib = NULL;
 	static PPIB pib = NULL;
 	ULONG oldType;
@@ -791,7 +794,7 @@ set_window_title(unsigned char *title)
 	SWCNTRL swData;
 	HAB hab;
 	HMQ hmq;
-	char new_title[MAXNAMEL];
+	unsigned char new_title[MAXNAMEL];
 
 	if (!title) return;
 	if (!pib) DosGetInfoBlocks(&tib, &pib);
@@ -799,7 +802,7 @@ set_window_title(unsigned char *title)
 	memset(&swData, 0, sizeof swData);
 	if (hSw == NULLHANDLE) hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
 	if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
-		char *p;
+		unsigned char *p;
 
 		safe_strncpy(new_title, title, MAXNAMEL - 1);
 		while ((p = strchr(new_title, 1))) *p = ' ';
@@ -838,65 +841,59 @@ set_window_title(int init, const char *url)
 	HMQ hmq;
 	char new_title[MAXNAMEL];
 
-	switch (init)
-	{
+	switch (init) {
 	case 1:
-		DosGetInfoBlocks( &tib, &pib );
+		DosGetInfoBlocks(&tib, &pib);
 		oldType = pib->pib_ultype;
-		memset( &swData, 0, sizeof swData );
-		hSw = WinQuerySwitchHandle( 0, pib->pib_ulpid );
-		if ( hSw!=NULLHANDLE && !WinQuerySwitchEntry( hSw, &swData ) )
-		{
-			org_switch_title = mem_alloc( strlen( swData.szSwtitle )+1 );
-			strcpy( org_switch_title, swData.szSwtitle );
+		memset(&swData, 0, sizeof swData);
+		hSw = WinQuerySwitchHandle(0, pib->pib_ulpid);
+		if (hSw != NULLHANDLE && !WinQuerySwitchEntry(hSw, &swData)) {
+			org_switch_title = mem_alloc(strlen(swData.szSwtitle) + 1);
+			strcpy(org_switch_title, swData.szSwtitle);
 			pib->pib_ultype = 3;
-			hab = WinInitialize( 0 );
-			hmq = WinCreateMsgQueue( hab, 0 );
-			if ( hab!=NULLHANDLE && hmq!=NULLHANDLE )
-			{
-				org_win_title = mem_alloc( MAXNAMEL+1 );
-				WinQueryWindowText( swData.hwnd, MAXNAMEL+1, org_win_title );
-				WinDestroyMsgQueue( hmq );
-				WinTerminate( hab );
+			hab = WinInitialize(0);
+			hmq = WinCreateMsgQueue(hab, 0);
+			if (hab != NULLHANDLE && hmq != NULLHANDLE) {
+				org_win_title = mem_alloc(MAXNAMEL + 1);
+				WinQueryWindowText(swData.hwnd, MAXNAMEL + 1, org_win_title);
+				WinDestroyMsgQueue(hmq);
+				WinTerminate(hab);
 			}
 			pib->pib_ultype = oldType;
 		}
 		break;
 	case -1:
 		pib->pib_ultype = 3;
-		hab = WinInitialize( 0 );
-		hmq = WinCreateMsgQueue( hab, 0 );
-		if ( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
-		{
-			safe_strncpy( swData.szSwtitle, org_switch_title, MAXNAMEL );
-			WinChangeSwitchEntry( hSw, &swData );
+		hab = WinInitialize(0);
+		hmq = WinCreateMsgQueue(hab, 0);
+		if (hSw != NULLHANDLE && hab != NULLHANDLE && hmq != NULLHANDLE) {
+			safe_strncpy(swData.szSwtitle, org_switch_title, MAXNAMEL);
+			WinChangeSwitchEntry(hSw, &swData);
 
-			if ( swData.hwnd )
-				WinSetWindowText( swData.hwnd, org_win_title );
-			WinDestroyMsgQueue( hmq );
-			WinTerminate( hab );
+			if (swData.hwnd)
+				WinSetWindowText(swData.hwnd, org_win_title);
+			WinDestroyMsgQueue(hmq);
+			WinTerminate(hab);
 		}
 		pib->pib_ultype = oldType;
 		mem_free(org_switch_title);
 		mem_free(org_win_title);
 		break;
 	case 0:
-		if ( url != NULL && *url )
-		{
+		if (url && *url) {
 			safe_strncpy(new_title, url, MAXNAMEL - 10);
 			strcat(new_title, " - Links");
 			pib->pib_ultype = 3;
-			hab = WinInitialize( 0 );
-			hmq = WinCreateMsgQueue( hab, 0 );
-			if ( hSw!=NULLHANDLE && hab!=NULLHANDLE && hmq!=NULLHANDLE )
-			{
-				safe_strncpy( swData.szSwtitle, new_title, MAXNAMEL );
-				WinChangeSwitchEntry( hSw, &swData );
+			hab = WinInitialize(0);
+			hmq = WinCreateMsgQueue(hab, 0);
+			if (hSw != NULLHANDLE && hab != NULLHANDLE && hmq != NULLHANDLE) {
+				safe_strncpy(swData.szSwtitle, new_title, MAXNAMEL);
+				WinChangeSwitchEntry(hSw, &swData);
 
-				if ( swData.hwnd )
-					WinSetWindowText( swData.hwnd, new_title );
-					WinDestroyMsgQueue( hmq );
-					WinTerminate( hab );
+				if (swData.hwnd)
+					WinSetWindowText(swData.hwnd, new_title);
+				WinDestroyMsgQueue(hmq);
+				WinTerminate(hab);
 			}
 			pib->pib_ultype = oldType;
 		}
@@ -917,13 +914,13 @@ resize_window(int x, int y)
 	vmi->col = x;
 	vmi->row = y;
 	if (VioSetMode(vmi, 0)) return -1;
-	/*
+#if 0
 	unsigned char cmdline[16];
 	sprintf(cmdline, "mode ");
 	snprint(cmdline + 5, 5, x);
 	strcat(cmdline, ",");
 	snprint(cmdline + strlen(cmdline), 5, y);
-	*/
+#endif
 	return 0;
 }
 
@@ -1124,12 +1121,13 @@ int ti = -1;
 void
 input_thread(void *p)
 {
-	char c[2];
-	int h = (int)p;
+	unsigned char c[2];
+	int h = (int) p;
 
 	signal(SIGPIPE, SIG_IGN);
 	while (1) {
-		/*c[0] = _read_kbd(0, 1, 1);
+#if 0
+		c[0] = _read_kbd(0, 1, 1);
 		if (c[0]) if (write(h, c, 1) <= 0) break;
 		else {
 			int w;
@@ -1141,8 +1139,9 @@ input_thread(void *p)
 			if (w <= 0) break;
 			if (w == 1) if (write(h, c+1, 1) <= 0) break;
 			printf("4");fflush(stdout);
-		}*/
-           /* for the records:
+		}
+#endif
+            /* for the records:
                  _read_kbd(0, 1, 1) will
                  read a char, don't echo it, wait for one available and
                  accept CTRL-C.
@@ -1568,20 +1567,21 @@ void set_proc_id(int id);
 int
 get_input_handle(void)
 {
-	int	fd[2];
-	static int ti = -1, tp = -1;
-	int	pid;
+	int fd[2];
+	static int ti = -1;
+	static int tp = -1;
+	int pid;
 
 	if (ti != -1) return ti;
-	if (c_pipe (fd) < 0) return 0;
+	if (c_pipe(fd) < 0) return 0;
 	ti = fd[0];
 	tp = fd[1];
 
 	pid = fork();
 	if (!pid)
-		input_function (tp);
+		input_function(tp);
 	else
-		set_proc_id (pid);
+		set_proc_id(pid);
 
 	return ti;
 }
@@ -1718,7 +1718,7 @@ get_common_env(void)
 
 	/* TODO: This should be named uniformly ;-). --pasky */
 	if (is_xterm()) env |= ENV_XWIN;
-	if (can_twterm()) env |= ENV_TWIN;
+	if (is_twterm()) env |= ENV_TWIN;
 	if (getenv("STY")) env |= ENV_SCREEN;
 
 	/* ENV_CONSOLE is always set now and indicates that we are working w/ a
@@ -1840,9 +1840,8 @@ static void
 open_in_new_twterm(struct terminal *term, unsigned char *exe_name,
 		   unsigned char *param)
 {
-	unsigned char *twterm;
+	unsigned char *twterm = getenv("ELINKS_TWTERM");
 
-	twterm = getenv("ELINKS_TWTERM");
 	if (!twterm) twterm = getenv("LINKS_TWTERM");
 	if (!twterm) twterm = "twterm -e";
 	exec_new_elinks(term, twterm, exe_name, param);
@@ -1852,9 +1851,8 @@ static void
 open_in_new_xterm(struct terminal *term, unsigned char *exe_name,
 		  unsigned char *param)
 {
-	unsigned char *xterm;
+	unsigned char *xterm = getenv("ELINKS_XTERM");
 
-	xterm = getenv("ELINKS_XTERM");
 	if (!xterm) xterm = getenv("LINKS_XTERM");
 	if (!xterm) xterm = "xterm -e";
 	exec_new_elinks(term, xterm, exe_name, param);
@@ -1973,8 +1971,7 @@ can_open_in_new(struct terminal *term)
 int
 can_resize_window(int environment)
 {
-	if (environment & ENV_OS2VIO) return 1;
-	return 0;
+	return !!(environment & ENV_OS2VIO);
 }
 
 int

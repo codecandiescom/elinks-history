@@ -1,3 +1,9 @@
+Sat Aug  7 22:03:53 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/scripting/lua/core.c:
+
+	Delete a superfluous NULL check in do_hooks_file.  
+
 Fri Aug  6 18:26:05 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/link.c:

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.30 2003/10/03 15:57:37 kuser Exp $ */
+/* $Id: home.c,v 1.31 2003/10/03 16:15:25 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,7 +92,6 @@ elinks_dirname(unsigned char *path)
 static unsigned char *
 get_home(void)
 {
-	struct stat st;
 	unsigned char *home_elinks;
 	unsigned char *envhome = getenv("HOME");
 	unsigned char *home = envhome ? stracpy(envhome)
@@ -116,12 +115,12 @@ get_home(void)
 
 		strip_trailing_dir_sep(elinks_home);
 
-		if (stat(home_elinks, &st) != -1 && S_ISDIR(st.st_mode)) {
-			add_to_strn(&home_elinks, "/elinks");
+		if (test_confdir(home_elinks)) {
+			goto end;
 
 	    	} else {
 			error(gettext("ELINKS_CONFDIR set to %s, but "
-				      "directory %s doesn't exist."),
+				      "could not create directory %s."),
 			      envconfdir, home_elinks);
 			sleep(3);
 			mem_free(home_elinks);

@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.22 2004/03/31 20:29:11 jonas Exp $ */
+/* $Id: codes.c,v 1.23 2004/04/01 04:09:19 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -100,7 +100,7 @@ http_code_to_string(int code)
 
 /* TODO: Some short intermediate document for the 3xx messages? --pasky */
 static unsigned char *
-get_http_error_document(struct terminal *term, unsigned char *url, int code)
+get_http_error_document(struct terminal *term, struct uri *uri, int code)
 {
 	unsigned char *codestr = http_code_to_string(code);
 	unsigned char *title = asprintfa(_("HTTP error %03d", term), code);
@@ -140,7 +140,7 @@ get_http_error_document(struct terminal *term, unsigned char *url, int code)
 	add_format_to_string(&string,
 		"  </p>\n"
 		"  <p>\n"
-		"  URI: <a href=\"%s\">%s</a>\n", url, url);
+		"  URI: <a href=\"%s\">%s</a>\n", struri(uri), struri(uri));
 #endif
 	add_format_to_string(&string,
 #ifndef ELINKS_SMALL
@@ -157,7 +157,7 @@ get_http_error_document(struct terminal *term, unsigned char *url, int code)
 
 struct http_error_info {
 	int code;
-	unsigned char url[1];
+	struct uri *uri;
 };
 
 static void
@@ -165,11 +165,11 @@ show_http_error_document(struct session *ses, void *data)
 {
 	struct http_error_info *info = data;
 	struct terminal *term = ses->tab->term;
-	struct cache_entry *cached = find_in_cache(info->url);
-	struct cache_entry *cache = cached ? cached : get_cache_entry(info->url);
+	struct cache_entry *cached = find_in_cache(struri(info->uri));
+	struct cache_entry *cache = cached ? cached : get_cache_entry(struri(info->uri));
 	unsigned char *str = NULL;
 
-	if (cache) str = get_http_error_document(term, info->url, info->code);
+	if (cache) str = get_http_error_document(term, info->uri, info->code);
 
 	if (str) {
 		if (cached) delete_entry_content(cache);
@@ -181,6 +181,7 @@ show_http_error_document(struct session *ses, void *data)
 		draw_formatted(ses, 1);
 	}
 
+	done_uri(info->uri);
 	mem_free(info);
 }
 
@@ -189,17 +190,14 @@ void
 http_error_document(struct connection *conn, int code)
 {
 	struct http_error_info *info;
-	int urllen;
 
-	assert(conn && struri(conn->uri));
+	assert(conn && conn->uri);
 
-	urllen = strlen(struri(conn->uri));
-
-	info = mem_calloc(1, sizeof(struct http_error_info) + urllen);
+	info = mem_calloc(1, sizeof(struct http_error_info));
 	if (!info) return;
 
 	info->code = code;
-	memcpy(info->url, struri(conn->uri), urllen);
+	info->uri = get_uri_reference(conn->uri);
 
 	add_questions_entry(show_http_error_document, info);
 }

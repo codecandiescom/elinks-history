@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.233 2004/06/27 09:03:30 zas Exp $ */
+/* $Id: tables.c,v 1.234 2004/06/27 09:06:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1349,23 +1349,23 @@ static void
 get_table_heights(struct table *table)
 {
 	int rowspan;
-	int i, j;
+	int col, row;
 
-	for (j = 0; j < table->rows; j++) {
-		for (i = 0; i < table->cols; i++) {
-			struct table_cell *cell = CELL(table, i, j);
+	for (row = 0; row < table->rows; row++) {
+		for (col = 0; col < table->cols; col++) {
+			struct table_cell *cell = CELL(table, col, row);
 			struct part *part;
 			int width = 0, sp;
 
 			if (!cell->is_used || cell->is_spanned) continue;
 
 			for (sp = 0; sp < cell->colspan; sp++) {
-				width += table->cols_widths[i + sp] +
+				width += table->cols_widths[col + sp] +
 				         (sp < cell->colspan - 1 &&
-				          get_vline_width(table, i + sp + 1) >= 0);
+				          get_vline_width(table, col + sp + 1) >= 0);
 			}
 
-			part = format_cell(table, i, j, NULL, 2, 2, width);
+			part = format_cell(table, col, row, NULL, 2, 2, width);
 			if (!part) return;
 
 			cell->height = part->box.height;
@@ -1378,9 +1378,9 @@ get_table_heights(struct table *table)
 	do {
 		int new_rowspan = MAXINT;
 
-		for (j = 0; j < table->rows; j++) {
-			for (i = 0; i < table->cols; i++) {
-				struct table_cell *cell = CELL(table, i, j);
+		for (row = 0; row < table->rows; row++) {
+			for (col = 0; col < table->cols; col++) {
+				struct table_cell *cell = CELL(table, col, row);
 
 				if (!cell->is_used || cell->is_spanned) continue;
 
@@ -1388,9 +1388,9 @@ get_table_heights(struct table *table)
 					int k, p = 0;
 
 					for (k = 1; k < rowspan; k++)
-						p += (get_hline_width(table, j + k) >= 0);
+						p += (get_hline_width(table, row + k) >= 0);
 
-					distribute_values(&table->rows_heights[j],
+					distribute_values(&table->rows_heights[row],
 							  rowspan,
 							  cell->height - p,
 							  NULL);
@@ -1410,9 +1410,9 @@ get_table_heights(struct table *table)
 
 		get_table_frames(table, &table_frames);
 		table->real_height = table_frames.top + table_frames.bottom;
-		for (j = 0; j < table->rows; j++) {
-			table->real_height += table->rows_heights[j] +
-				 (j && get_hline_width(table, j) >= 0);
+		for (row = 0; row < table->rows; row++) {
+			table->real_height += table->rows_heights[row] +
+				 (row && get_hline_width(table, row) >= 0);
 		}
 	}
 }

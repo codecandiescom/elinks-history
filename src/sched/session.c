@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.40 2003/05/05 22:18:50 zas Exp $ */
+/* $Id: session.c,v 1.41 2003/05/05 22:36:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1659,7 +1659,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 
 			frm = nf;
 		}
-		strcpy(frm->vs.url, url);
+		memcpy(frm->vs.url, url, url_len + 1);
 
 		return frm;
 	}
@@ -1690,22 +1690,23 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 			}
 			/* fall-through */
 		case EV_RESIZE:
-			if (!ses) break;
-			html_interpret(ses);
-			draw_formatted(ses);
-			load_frames(ses, ses->screen);
-			process_file_requests(ses);
-			print_screen_status(ses);
+			if (ses) {
+				html_interpret(ses);
+				draw_formatted(ses);
+				load_frames(ses, ses->screen);
+				process_file_requests(ses);
+				print_screen_status(ses);
+			}
 			break;
 		case EV_REDRAW:
-			if (!ses) break;
-			draw_formatted(ses);
-			print_screen_status(ses);
+			if (ses) {
+				draw_formatted(ses);
+				print_screen_status(ses);
+			}
 			break;
 		case EV_KBD:
 		case EV_MOUSE:
-			if (!ses) break;
-			send_event(ses, ev);
+			if (ses) send_event(ses, ev);
 			break;
 		default:
 			error("ERROR: unknown event");

@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.1 2003/08/23 16:33:22 jonas Exp $ */
+/* $Id: color.c,v 1.2 2003/08/29 17:28:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,8 +267,5 @@ get_color_name(color_t color)
 void
 color_to_string(color_t color, unsigned char str[])
 {
-	struct rgb rgb;
-
-	INT2RGB(color, rgb);
-	snprintf(str, 8, "#%02x%02x%02x", rgb.r, rgb.g, rgb.b);
+	snprintf(str, 8, "#%06x", color);
 }

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.204 2004/06/25 10:09:20 zas Exp $ */
+/* $Id: tables.c,v 1.205 2004/06/25 10:18:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -901,42 +901,42 @@ get_cell_widths(struct table *table)
 }
 
 static inline void
-distribute_values(int *values, int n, int w, int *limits)
+distribute_values(int *values, int count, int wanted, int *limits)
 {
 	register int i;
-	int s = 0, d, r, t;
+	int sum = 0, d, r, t;
 
-	for (i = 0; i < n; i++) s += values[i];
-	if (s >= w) return;
+	for (i = 0; i < count; i++) sum += values[i];
+	if (sum >= wanted) return;
 
 again:
-	t = w - s;
-	d = t / n;
-	r = t % n;
-	w = 0;
+	t = wanted - sum;
+	d = t / count;
+	r = t % count;
+	wanted = 0;
 
 	if (limits) {
-		for (i = 0; i < n; i++) {
+		for (i = 0; i < count; i++) {
 			int delta;
 
 			values[i] += d + (i < r);
 
 			delta = values[i] - limits[i];
 			if (delta > 0) {
-				w += delta;
+				wanted += delta;
 				values[i] = limits[i];
 			}
 		}
 	} else {
-		for (i = 0; i < n; i++) {
+		for (i = 0; i < count; i++) {
 			values[i] += d + (i < r);
 		}
 	}
 
-	if (w) {
-		assertm(limits, "bug in distribute_values");
+	if (wanted) {
+		assertm(limits, "bug in distribute_values()");
 		limits = NULL;
-		s = 0;
+		sum = 0;
 		goto again;
 	}
 }

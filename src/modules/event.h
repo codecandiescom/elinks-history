@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.3 2003/09/22 19:45:13 zas Exp $ */
+/* $Id: event.h,v 1.4 2003/09/23 13:53:53 pasky Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -6,6 +6,7 @@
 #include <stdarg.h>
 
 #define EVENT_NONE (-1)
+
 
 /*** The life of events */
 
@@ -17,6 +18,11 @@ int register_event(unsigned char *name);
  * occupied, chain of associated hooks and unallocating the event id for
  * further recyclation. */
 int unregister_event(int event);
+
+int register_event_hook(int id, int (*callback)(va_list ap), int priority);
+
+void unregister_event_hook(int id, int (*callback)(va_list ap));
+
 
 /*** The events resolver */
 
@@ -35,18 +41,23 @@ int get_event_id(unsigned char *name);
  * such event). */
 unsigned char *get_event_name(int id);
 
-void trigger_event(int id, ...);
-
-int register_event_hook(int id, int (*callback)(va_list ap), int priority);
-void unregister_event_hook(int id, int (*callback)(va_list ap));
-
-void init_event(void);
-void done_event(void);
-
 #define set_event_id(event, name) 			\
 	do { 						\
 		if (event == EVENT_NONE) 		\
 			event = get_event_id(name);	\
 	} while (0)
+
+
+/*** The events generator */
+
+void trigger_event(int id, ...);
+
+
+/*** The very events subsystem itself */
+
+void init_event(void);
+
+void done_event(void);
+
 
 #endif

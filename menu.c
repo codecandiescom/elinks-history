@@ -269,22 +269,31 @@ void go_backwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps;
 
-	/*if (ses->tq_goto_position)
+#if 0
+	if (ses->tq_goto_position)
 		--steps;
 	if (ses->search_word)
-		mem_free(ses->search_word), ses->search_word = NULL;*/
+		mem_free(ses->search_word), ses->search_word = NULL;
+#endif
+	
 	abort_loading(ses);
 
-	while (steps--) {
+	while (steps-- > 1) {
 		struct location *loc = ses->history.next;
 		
 		if ((void *) loc == &ses->history) return;
 
+#if 1
+		/* Someone probably have to explain me this ;). --pasky */
+		loc = loc->next;
+		if ((void *) loc == &ses->history) return;
+#endif
+		
 		del_from_list(loc);
 		add_to_list(ses->unhistory, loc);
 	}
 
-	if (steps)
+	if (steps >= 0)
 		go_back(ses);
 }
 

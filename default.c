@@ -940,6 +940,7 @@ struct rgb default_vlink = { 255, 255, 0 };
 
 int color_dirs = 1;
 int allow_special_files = 0;
+int keep_unhistory = 0;
 
 int default_left_margin = HTML_LEFT_MARGIN;
 

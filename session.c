@@ -1,6 +1,6 @@
 #include "links.h"
 
-int keep_unhistory = 0;
+int keep_unhistory;
 
 struct list_head downloads = {&downloads, &downloads};
 
@@ -280,7 +280,9 @@ void ses_back(struct session *ses)
 	if (ses->search_word) mem_free(ses->search_word), ses->search_word = NULL;
 	if ((void *)loc == &ses->history) return;
     	del_from_list(loc);
-	add_to_list(ses->unhistory, loc);	
+	add_to_list(ses->unhistory, loc);
+	
+	/* XXX: What's the following?! --pasky */
 	loc = ses->history.next;
 	if ((void *)loc == &ses->history) return;
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
@@ -1515,23 +1517,36 @@ void go_back(struct session *ses)
 	abort_loading(ses);
 	if (!(url = stracpy(((struct location *)ses->history.next)->next->vs.url)))
 		return;
+	
 	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
+	
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_BACK, NULL, end_load, 0);
 }
 
 void go_unback(struct session *ses)
 {
 	unsigned char *url;
+	struct f_data_c *fd = current_frame(ses);
+	int l = 0;
+	
 	ses->reloadlevel = NC_CACHE;
+	/* XXX: why wtd checking is not here? --pasky */
 	if (ses->unhistory.next == &ses->unhistory)
 		return;
 	abort_loading(ses);
 	if (!(url = stracpy(((struct location *)ses->unhistory.next)->vs.url)))
 		return;
+	
+	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
+	if (fd && fd->f_data && fd->f_data->url) {
+		ses->ref_url = init_str();
+		add_to_str(&ses->ref_url, &l, fd->f_data->url);
+	}
+	
 	ses_goto(ses, url, NULL, PRI_MAIN, NC_ALWAYS_CACHE, WTD_UNBACK, NULL, end_load, 1);
 }
 

@@ -2059,7 +2059,8 @@ struct f_data_c *current_frame(struct session *ses)
 		if (!i--) return fd;
 	}
 	fd = cur_loc(ses)->vs.f;
-	if (fd && fd->f_data && fd->f_data->frame) return NULL;
+	/* The fd test probably only hides bugs in history handling. --pasky */
+	if (/*fd &&*/ fd->f_data && fd->f_data->frame) return NULL;
 	return fd;
 }
 

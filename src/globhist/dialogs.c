@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.72 2003/11/19 02:29:58 jonas Exp $ */
+/* $Id: dialogs.c,v 1.73 2003/11/21 00:59:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,8 +29,6 @@
 
 #ifdef GLOBHIST
 
-static INIT_LIST_HEAD(history_dialog_list);
-
 static void listbox_delete_historyitem(struct terminal *,
 				       struct listbox_data *);
 
@@ -41,7 +39,7 @@ static struct listbox_ops gh_listbox_ops = {
 struct hierbox_browser globhist_browser = {
 	&gh_boxes,
 	&gh_box_items,
-	&history_dialog_list,
+	{ D_LIST_HEAD(globhist_browser.dialogs) },
 	&gh_listbox_ops,
 };
 

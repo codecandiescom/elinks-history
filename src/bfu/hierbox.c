@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.71 2003/11/20 14:27:40 jonas Exp $ */
+/* $Id: hierbox.c,v 1.72 2003/11/21 00:59:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,7 +30,7 @@ update_hierbox_browser(struct hierbox_browser *browser)
 {
 	struct hierbox_dialog_list_item *item;
 
-	foreach (item, *browser->dialogs) {
+	foreach (item, browser->dialogs) {
 		struct widget_data *widget_data =
 			item->dlg_data->widgets_data;
 
@@ -203,7 +203,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 
 				item->dlg_data = dlg_data;
 				browser = dlg_data->dlg->udata2;
-				add_to_list(*browser->dialogs, item);
+				add_to_list(browser->dialogs, item);
 			}
 		}
 		case EV_RESIZE:
@@ -222,7 +222,7 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 			mem_free(box);
 
 			/* Delete the dialog list entry */
-			foreach (item, *browser->dialogs) {
+			foreach (item, browser->dialogs) {
 				if (item->dlg_data == dlg_data) {
 					del_from_list(item);
 					mem_free(item);

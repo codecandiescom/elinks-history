@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.8 2003/11/19 02:09:18 jonas Exp $ */
+/* $Id: dialogs.c,v 1.9 2003/11/21 00:59:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,14 +28,13 @@
 #include "util/string.h"
 
 
-static INIT_LIST_HEAD(cookie_dialog_list);
 static INIT_LIST_HEAD(cookie_box_items);
 static INIT_LIST_HEAD(cookie_boxes);
 
 struct hierbox_browser cookie_browser = {
 	&cookie_boxes,
 	&cookie_box_items,
-	&cookie_dialog_list,
+	{ D_LIST_HEAD(cookie_browser.dialogs) },
 	NULL,
 };
 

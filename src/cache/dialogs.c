@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.26 2003/11/20 02:51:03 miciah Exp $ */
+/* $Id: dialogs.c,v 1.27 2003/11/21 00:59:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,12 +27,10 @@
 #include "util/string.h"
 
 
-static INIT_LIST_HEAD(cache_dialog_list);
-
 struct hierbox_browser cache_browser = {
 	&cache_entry_box_items,
 	&cache_entry_boxes,
-	&cache_dialog_list,
+	{ D_LIST_HEAD(cache_browser.dialogs) },
 	NULL,
 };
 

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.43 2003/06/02 15:55:16 pasky Exp $ */
+/* $Id: string.c,v 1.44 2003/06/02 16:04:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,55 +298,6 @@ add_chr_to_str(unsigned char **s, int *l, unsigned char a)
 }
 
 
-/* String comparison functions */
-
-int
-xstrcmp(unsigned char *s1, unsigned char *s2)
-{
-	if (!s1 && !s2) return 0;
-	if (!s1) return -1;
-	if (!s2) return 1;
-	return strcmp(s1, s2);
-}
-
-/* Copies at most dst_size chars into dst. Ensures null termination of dst. */
-unsigned char *
-safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
-{
-#ifdef DEBUG
-	if (!dst) { fatal("safe_strncpy dst=NULL"); return NULL; }
-	if (!src) { fatal("safe_strncpy src=NULL"); return NULL; }
-	if (dst_size <= 0) { fatal("safe_strncpy dst_size <= 0"); return NULL; }
-#endif
-
-	strncpy(dst, src, dst_size);
-	dst[dst_size - 1] = 0;
-
-	return dst;
-}
-
-
-/* Trim starting and ending chars from a string.
- * Pointer to the string is passed.
- * WARNING: string is modified.
- * If len != NULL, it is set to length of the new string.
- */
-inline unsigned char *
-trim_chars(unsigned char *s, unsigned char c, int *len)
-{
-	int l = strlen(s);
-	unsigned char *p = s;
-
-	while (*p == c) p++, l--;
-	while (l && p[l - 1] == c) p[--l] = '\0';
-
-	memmove(s, p, l + 1);
-	if (len) *len = l;
-
-	return s;
-}
-
-
 /* libc stub functions */
 
 #ifndef HAVE_STRCASECMP
@@ -500,3 +451,52 @@ elinks_mempcpy(void *dest, const void *src, size_t n)
 	return (void *) ((unsigned char *) memcpy(dest, src, n) + n);
 }
 #endif
+
+
+/* String comparison functions */
+
+int
+xstrcmp(unsigned char *s1, unsigned char *s2)
+{
+	if (!s1 && !s2) return 0;
+	if (!s1) return -1;
+	if (!s2) return 1;
+	return strcmp(s1, s2);
+}
+
+/* Copies at most dst_size chars into dst. Ensures null termination of dst. */
+unsigned char *
+safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
+{
+#ifdef DEBUG
+	if (!dst) { fatal("safe_strncpy dst=NULL"); return NULL; }
+	if (!src) { fatal("safe_strncpy src=NULL"); return NULL; }
+	if (dst_size <= 0) { fatal("safe_strncpy dst_size <= 0"); return NULL; }
+#endif
+
+	strncpy(dst, src, dst_size);
+	dst[dst_size - 1] = 0;
+
+	return dst;
+}
+
+
+/* Trim starting and ending chars from a string.
+ * Pointer to the string is passed.
+ * WARNING: string is modified.
+ * If len != NULL, it is set to length of the new string.
+ */
+inline unsigned char *
+trim_chars(unsigned char *s, unsigned char c, int *len)
+{
+	int l = strlen(s);
+	unsigned char *p = s;
+
+	while (*p == c) p++, l--;
+	while (l && p[l - 1] == c) p[--l] = '\0';
+
+	memmove(s, p, l + 1);
+	if (len) *len = l;
+
+	return s;
+}

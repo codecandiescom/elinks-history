@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.141 2003/11/07 14:36:09 jonas Exp $ */
+/* $Id: download.c,v 1.142 2003/11/07 14:42:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -329,19 +329,11 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 
 	url = strchr(file_download->url, POST_CHAR);
 	url_len = url ? url - file_download->url : strlen(file_download->url);
-	url = memacpy(file_download->url, url_len > w ? w : url_len);
+	url = memacpy(file_download->url, url_len);
 
 	if (!url) {
 		done_string(&msg);
 		return;
-	} else if (url_len > w) {
-		/* Truncate too long urls */
-		url_len = w;
-		if (url_len > 4) {
-			url[--url_len] = '.';
-			url[--url_len] = '.';
-			url[--url_len] = '.';
-		}
 	}
 
 	if (t && download->prg->size >= 0) {
@@ -363,6 +355,16 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 
 	w = rw;
+	if (url_len > w) {
+		/* Truncate too long urls */
+		url_len = w;
+		url[url_len] = '\0';
+		if (url_len > 4) {
+			url[--url_len] = '.';
+			url[--url_len] = '.';
+			url[--url_len] = '.';
+		}
+	}
 	y = dlg_data->y + DIALOG_TB + 1;
 	x = dlg_data->x + DIALOG_LB;
 	dlg_format_text(term, url, x, &y, w, NULL,

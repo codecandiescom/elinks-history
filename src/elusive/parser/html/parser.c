@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.4 2002/12/27 22:31:51 pasky Exp $ */
+/* $Id: parser.c,v 1.5 2002/12/27 22:32:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,6 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 			return 0;
 		}
 
-#if 0
 		if (*html == '<') {
 			state->current->strlen += *len - html_len;
 
@@ -184,7 +183,6 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 			*str = html, *len = html_len;
 			return 0;
 		}
-#endif
 
 		html++, html_len--;
 	}

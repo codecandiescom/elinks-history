@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
-"POT-Creation-Date: 2003-11-15 15:49+0100\n"
+"POT-Creation-Date: 2003-11-15 17:53+0100\n"
 "PO-Revision-Date: 2003-11-14 07:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -920,7 +920,7 @@ msgstr "Folder szablonów opcji"
 msgid "(default: %ld)"
 msgstr "(domy¶lnie: %ld)"
 
-#: src/config/options.c:857 src/config/options.c:881
+#: src/config/options.c:857 src/config/options.c:891
 #, c-format
 msgid "(default: \"%s\")"
 msgstr "(domy¶lnie: \"%s\")"
@@ -930,21 +930,21 @@ msgstr "(domy¶lnie: \"%s\")"
 msgid "(alias for %s)"
 msgstr "(alias dla %s)"
 
-#: src/config/options.c:867
+#: src/config/options.c:867 src/config/options.c:877
 #, c-format
 msgid "(default: %s)"
 msgstr "(domy¶lnie: %s)"
 
-#: src/config/options.c:872
+#: src/config/options.c:881
 #, c-format
 msgid "(default: #%06x)"
 msgstr "(domy¶lnie: #%06x)"
 
-#: src/config/options.c:997
+#: src/config/options.c:1007
 msgid "Configuration options:\n"
 msgstr "Ustawienia:\n"
 
-#: src/config/options.c:1000
+#: src/config/options.c:1010
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -952,7 +952,7 @@ msgstr ""
 "U¿ycie: elinks [OPCJA]... [URL]\n"
 "\n"
 
-#: src/config/options.c:1001
+#: src/config/options.c:1011
 msgid "Options:\n"
 msgstr "Opcje:\n"
 
@@ -5366,7 +5366,7 @@ msgstr "B³±d przy zapisywaniu na standardowe wyj¶cie: %s"
 msgid "Can't write to stdout."
 msgstr "Nie mo¿na zapisaæ na standardowe wyj¶cie."
 
-#: src/viewer/dump/dump.c:196
+#: src/viewer/dump/dump.c:197
 #, c-format
 msgid "URL expected after %s."
 msgstr "Spodziewany URL po %s."

@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-15 15:49+0100\n"
+"POT-Creation-Date: 2003-11-15 17:53+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -899,7 +899,7 @@ msgstr "Skabelon indstillingsmappe"
 msgid "(default: %ld)"
 msgstr "    %s%s%s %s (standardværdi: %d)"
 
-#: src/config/options.c:857 src/config/options.c:881
+#: src/config/options.c:857 src/config/options.c:891
 #, fuzzy, c-format
 msgid "(default: \"%s\")"
 msgstr "    %s%s%s %s (standardværdi:\" %s\")"
@@ -909,21 +909,21 @@ msgstr "    %s%s%s %s (standardværdi:\" %s\")"
 msgid "(alias for %s)"
 msgstr "    %s%s%s %s (alias til %s)"
 
-#: src/config/options.c:867
+#: src/config/options.c:867 src/config/options.c:877
 #, fuzzy, c-format
 msgid "(default: %s)"
 msgstr "    %s%s%s %s (standardværdi: %s)"
 
-#: src/config/options.c:872
+#: src/config/options.c:881
 #, fuzzy, c-format
 msgid "(default: #%06x)"
 msgstr "    %s%s%s %s (standardværdi: %06x)"
 
-#: src/config/options.c:997
+#: src/config/options.c:1007
 msgid "Configuration options:\n"
 msgstr "Konfigurationsindstillinger:\n"
 
-#: src/config/options.c:1000
+#: src/config/options.c:1010
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
@@ -931,7 +931,7 @@ msgstr ""
 "Brug: elinks [INDSTILLING]... [URL]\n"
 "\n"
 
-#: src/config/options.c:1001
+#: src/config/options.c:1011
 msgid "Options:\n"
 msgstr "Indstilling:\n"
 
@@ -4872,7 +4872,7 @@ msgstr "Fejl ved skrivning til sokkel"
 msgid "Can't write to stdout."
 msgstr ""
 
-#: src/viewer/dump/dump.c:196
+#: src/viewer/dump/dump.c:197
 #, c-format
 msgid "URL expected after %s."
 msgstr ""

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.126 2003/09/14 02:15:55 miciah Exp $ */
+/* $Id: file.c,v 1.127 2003/10/25 04:39:07 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,6 +586,7 @@ file_func(struct connection *connection)
 
 	safe_strncpy(filename, connection->uri.data, filenamelen + 1);
 	decode_uri_string(filename);
+	filenamelen = strlen(filename);
 
 	directory = opendir(filename);
 	if (directory) {

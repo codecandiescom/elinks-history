@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-17 23:23+0200\n"
+"POT-Creation-Date: 2003-10-18 01:58+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -1433,8 +1433,8 @@ msgstr "Activer la couleur"
 
 #: src/config/options.c:1154
 msgid ""
-"Enable use of the active link background and text color settings instead of "
-"browse.links from the document."
+"Enable use of the active link background and text color\n"
+"settings instead of browse.links from the document."
 msgstr "Permettre l'utilisation des couleurs configurées pour le lien actif."
 
 #: src/config/options.c:1157

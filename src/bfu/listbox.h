@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.78 2004/11/19 15:45:46 zas Exp $ */
+/* $Id: listbox.h,v 1.79 2004/11/19 17:07:18 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -13,6 +13,11 @@ struct listbox_item;
 struct terminal;
 struct uri;
 struct widget_data;
+
+struct widget_info_listbox {
+	int height;
+};
+
 
 void add_dlg_listbox(struct dialog *dlg, int height, void *box_data);
 

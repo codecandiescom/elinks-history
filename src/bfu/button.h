@@ -1,4 +1,4 @@
-/* $Id: button.h,v 1.29 2004/11/19 15:33:07 zas Exp $ */
+/* $Id: button.h,v 1.30 2004/11/19 17:07:18 zas Exp $ */
 
 #ifndef EL__BFU_BUTTON_H
 #define EL__BFU_BUTTON_H
@@ -8,6 +8,14 @@
 struct dialog;
 struct terminal;
 struct widget_data;
+
+struct widget_info_button {
+	int flags;
+	/* Used by some default handlers like ok_dialog()
+	 * as a callback. */
+	void (*done)(void *);
+	void *done_data;
+};
 
 /* Button flags, go into widget.gid */
 #define B_ENTER		1

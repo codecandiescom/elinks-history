@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.77 2004/11/19 16:54:21 zas Exp $ */
+/* $Id: widget.h,v 1.78 2004/11/19 17:07:18 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -54,35 +54,11 @@ struct widget {
 	WIDGET_HANDLER_FUNC(fn);
 
 	union {
-		struct {
-			/* gid is 0 for checkboxes, or a positive int for
-			 * each group of radio buttons. */
-			int gid;
-			/* gnum is 0 for checkboxes, or a positive int for
-			 * each radio button in a group. */
-			int gnum;
-		} checkbox;
-		struct {
-			int min;
-			int max;
-			struct input_history *history;
-			int float_label;
-		} field;
-		struct {
-			int height;
-		} box;
-		struct {
-			int flags;
-			/* Used by some default handlers like ok_dialog()
-			 * as a callback. */
-			void (*done)(void *);
-			void *done_data;
-		} button;
-		struct {
-			enum format_align align;
-			unsigned int is_label:1;
-			unsigned int is_scrollable:1;
-		} text;
+		struct widget_info_checkbox checkbox;
+		struct widget_info_field field;
+		struct widget_info_listbox box;
+		struct widget_info_button button;
+		struct widget_info_text text;
 	} info;
 
 	int datalen;
@@ -97,43 +73,9 @@ struct widget_data {
 	struct box box;
 
 	union {
-		struct {
-			int vpos;
-			int cpos;
-			struct list_head history;
-			struct input_history_entry *cur_hist;
-		} field;
-		struct {
-			int checked;
-		} checkbox;
-		struct {
-			/* The number of the first line that should be
-			 * displayed within the widget.
-			 * This is used only for scrollable text widgets */
-			int current;
-
-			/* The number of lines saved in @cdata */
-			int lines;
-
-			/* The dialog width to which the lines are wrapped.
-			 * This is used to check whether the lines must be
-			 * rewrapped. */
-			int max_width;
-#ifdef CONFIG_MOUSE
-			/* For mouse scrollbar handling. See bfu/text.c.*/
-
-			/* Height of selected part of scrollbar. */
-			int scroller_height;
-
-			/* Position of selected part of scrollbar. */
-			int scroller_y;
-
-			/* Direction of last mouse scroll. Used to adjust
-			 * scrolling when selected bar part has a low height
-			 * (especially the 1 char height) */
-			int scroller_last_dir;
-#endif
-		} text;
+		struct widget_data_info_field field;
+		struct widget_data_info_checkbox checkbox;
+		struct widget_data_info_text text;
 	} info;
 };
 

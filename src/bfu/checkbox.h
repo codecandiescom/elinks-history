@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.34 2004/11/19 15:33:07 zas Exp $ */
+/* $Id: checkbox.h,v 1.35 2004/11/19 17:07:18 zas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -8,6 +8,20 @@
 struct dialog;
 struct terminal;
 struct widget_data;
+
+struct widget_info_checkbox {
+	/* gid is 0 for checkboxes, or a positive int for
+	 * each group of radio buttons. */
+	int gid;
+	/* gnum is 0 for checkboxes, or a positive int for
+	 * each radio button in a group. */
+	int gnum;
+};
+
+struct widget_data_info_checkbox {
+	int checked;
+} checkbox;
+
 
 void add_dlg_radio_do(struct dialog *dlg, unsigned char *text, int groupid, int groupnum, void *data);
 

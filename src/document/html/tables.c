@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.144 2004/03/28 17:58:22 zas Exp $ */
+/* $Id: tables.c,v 1.145 2004/03/28 18:00:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1371,8 +1371,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 {
 	register int i, j;
 	struct document *document = t->p->document;
-	int yp;
-	int xp = x;
+	int xp, yp;
 	int expand_cols = (global_doc_opts && global_doc_opts->table_expand_cols);
 	color_t default_bgcolor = par_format.bgcolor;
 	int top_frame = 0;
@@ -1388,8 +1387,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 	if (t->fragment_id)
 		add_fragment_identifier(t->p, t->fragment_id);
 
-	xp += left_frame;
-
+	xp = x + left_frame;
 	for (i = 0; i < t->x; i++) {
 		yp = y + top_frame;
 

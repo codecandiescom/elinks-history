@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.131 2004/07/22 01:49:43 pasky Exp $ */
+/* $Id: options.inc,v 1.132 2004/08/14 07:53:12 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -897,8 +897,10 @@ struct option_info config_options_info[] = {
 	INIT_OPT_USER_PROTOCOL("irc",	 "unix-xwin",	DEFAULT_AC_OPT_IRC),
 	INIT_OPT_USER_PROTOCOL("mailto", "unix",	DEFAULT_AC_OPT_MAILTO),
 	INIT_OPT_USER_PROTOCOL("mailto", "unix-xwin",	DEFAULT_AC_OPT_MAILTO),
+#ifndef CONFIG_NNTP
 	INIT_OPT_USER_PROTOCOL("news",	 "unix",	DEFAULT_AC_OPT_NEWS),
 	INIT_OPT_USER_PROTOCOL("news",	 "unix-xwin",	DEFAULT_AC_OPT_NEWS),
+#endif
 	INIT_OPT_USER_PROTOCOL("telnet", "unix",	DEFAULT_AC_OPT_TELNET),
 	INIT_OPT_USER_PROTOCOL("telnet", "unix-xwin",	DEFAULT_AC_OPT_TELNET),
 	INIT_OPT_USER_PROTOCOL("tn3270", "unix",	DEFAULT_AC_OPT_TN3270),

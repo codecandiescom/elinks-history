@@ -760,6 +760,10 @@ EL_ARG_ENABLE(CONFIG_FINGER, finger, [Finger protocol],
 	      [  --disable-finger        disable finger protocol support])
 AM_CONDITIONAL(CONFIG_FINGER, test "$CONFIG_FINGER" = yes)
 
+EL_ARG_ENABLE(CONFIG_NNTP, nntp, [NNTP protocol],
+	      [  --enable-nntp           enable nntp protocol support])
+AM_CONDITIONAL(CONFIG_NNTP, test "$CONFIG_NNTP" = yes)
+
 EL_ARG_DEPEND(CONFIG_SMB, smb, [HAVE_SMBCLIENT=yes], [SMB protocol],
 	      [  --disable-smb           disable SMB protocol support (requires smbclient)])
 AM_CONDITIONAL(CONFIG_SMB, test "$CONFIG_SMB" = yes)
@@ -947,6 +951,7 @@ AC_OUTPUT([ \
  src/protocol/file/Makefile \
  src/protocol/ftp/Makefile \
  src/protocol/http/Makefile \
+ src/protocol/nntp/Makefile \
  src/protocol/rewrite/Makefile \
  src/protocol/smb/Makefile \
  src/sched/Makefile \

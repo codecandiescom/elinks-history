@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.29 2004/07/22 22:20:30 zas Exp $ */
+/* $Id: state.c,v 1.30 2004/08/14 07:53:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,13 @@ struct s_msg_dsc {
 
 #ifndef CONFIG_SMB
 	{S_NO_SMB,		N_("This version of ELinks does not contain SMB protocol support")},
+#endif
+
+#ifdef CONFIG_NNTP
+	{S_NNTP_ERROR,		N_("Bad NNTP response")},
+	{S_NNTP_NEWS_SERVER,	N_("Unable to handle news: URI because no news server has been\n"
+				"been configured. Either set the option protocol.nntp.server\n"
+				"or set the NNTPSERVER environment variable.")},
 #endif
 
 	{0,			NULL}

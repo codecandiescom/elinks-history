@@ -1,3 +1,123 @@
+Tue Nov  4 23:10:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	Mimick the order of original shrink_format_cache() loop.  
+
+Tue Nov  4 23:06:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	shrink_format_cache(): Unify document->refcount. Mine is better!
+	;-))) 
+
+Tue Nov  4 23:04:49 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/document/document.c:
+
+	Eliminate an extra check for document->refcount in
+	shrink_format_cache().  
+
+Tue Nov  4 22:43:59 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/document.c:
+
+	Do not attempt to remove used document when shrinking cache. It
+	prevents assertion failure reported in bug 272.  
+
+Tue Nov  4 22:01:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: text.c, text.h:
+
+	text_width() now accepts NULL as minwidth or maxwidth parameters.
+	min_/max_text_width() were removed.  
+
+Tue Nov  4 21:56:56 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: group.c, group.h:
+
+	group_width() now accepts NULL as min_width or max_width parameters.
+	min_/max_group_width() functions were definitively removed.  
+
+Tue Nov  4 21:50:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h:
+
+	min/max_buttons_width() were replaced by a modified buttons_width()
+	which can now take NULL as min or max width parameter.  
+
+Tue Nov  4 20:15:54 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Tue Nov  4 19:56:01 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Tue Nov  4 17:11:57 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, sched/session.c:
+
+	Tab separator colors are now configurable.  
+
+Tue Nov  4 17:04:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Some assertions were added to add_opt_rec().  
+
+Tue Nov  4 15:28:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/info.c:
+
+	Extended memory info using /proc/self/statm. It works only on linux,
+	and will simply give no info on systems without /proc. Please check
+	units are correct. Only available when LEAK_DEBUG is used.  
+
+Tue Nov  4 14:25:47 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/group.c, bfu/group.h, viewer/text/search.c:
+
+	group_width() was introduced. It does the same of both min_/max_
+	group_width() functions. Code was populated with it, and old ones
+	are commented out for now.  
+
+Tue Nov  4 13:46:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Update underline state + compare attributes when we are dealing with
+	space (which probably defeats the whole idea about this branch).
+	Fixes underlining of the top and wide links on the mandrake security
+	site.  
+
+Tue Nov  4 13:41:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Clear deleted built-in autocreated option. Fix segfault when
+	deleting extensions in mime.extension.* 
+
+Tue Nov  4 10:04:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Cleanup of handling of protocol.http.accept_ui_language in
+	http_send_header().  
+
+Tue Nov  4 09:41:42 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/document/html/tables.c:
+
+	Fix bug 269, by renaming yw to height and not width.  
+
 Mon Nov  3 15:26:26 2003  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/http/header.c:

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.105 2004/09/28 14:02:58 pasky Exp $ */
+/* $Id: renderer.c,v 1.106 2004/09/28 14:13:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,14 +64,16 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 	if (list_empty(*doc_snippets) || !get_opt_bool("ecmascript.enable"))
 		return;
 
-#if 0
-	/* Position @doc_current in @doc_snippet to match the end of
-	 * @queued_snippets. */
-	if (list_empty(*queued_snippets)) {
-	} else {
+	/* We do this all only once per view_state now. */
+	if (!list_empty(*queued_snippets)) {
+		/* So if we already did it, we shouldn't need to do it again.
+		 * This is the case of moving around in history - we have all
+		 * what happenned recorded in the view_state and needn't bother
+		 * again. */
+#ifdef DEBUG
+		/* Hopefully. */
 		struct string_list_item *iterator = queued_snippets->next;
 
-		assert(!list_empty(*queued_snippets));
 		while (iterator != (struct string_list_item *) queued_snippets) {
 			if (doc_current == (struct string_list_item *) doc_snippets) {
 				INTERNAL("add_snippets(): doc_snippets shorter than queued_snippets!");
@@ -85,11 +87,9 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 			doc_current = doc_current->next;
 			iterator = iterator->next;
 		}
-	}
-#else
-	/* We do this only once per document now. */
-	assert(list_empty(*queued_snippets));
 #endif
+		return;
+	}
 
 	assert(doc_current);
 	for (; doc_current != (struct string_list_item *) doc_snippets;

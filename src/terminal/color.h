@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.23 2003/10/04 18:08:38 jonas Exp $ */
+/* $Id: color.h,v 1.24 2003/10/04 18:31:44 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -20,6 +20,8 @@
 #define TERM_COLOR_BACKGROUND(color) ((color >> 4) & TERM_COLOR_MASK)
 
 /* Controls what color ranges to use when setting the terminal color. */
+/* TODO: Make this rather some bitwise color_flags so we can also pass info
+ *	 about allow_dark_on_black so d_opt usage is no more neede. */
 enum color_type {
 	COLOR_DEFAULT = 0,
 	COLOR_LINK,

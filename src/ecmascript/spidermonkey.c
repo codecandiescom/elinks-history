@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.36 2004/09/25 12:46:25 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.37 2004/09/25 15:30:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@
 #include "sched/task.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/string.h"
 
 
@@ -246,8 +247,9 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	{
 		jsval location;
 
-		if (!JS_GetProperty(ctx, obj, "location", &location))
+		if (!JS_GetProperty(ctx, obj, "location", &location)) {
 			break;
+		}
 		location_set_property(ctx, JSVAL_TO_OBJECT(location),
 		                      /* JSP_LOC_HREF */ 0, vp);
 		break;
@@ -397,11 +399,14 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
 	{
+		unsigned char *new_abs_url;
 		struct uri *new_uri;
 
 		JSVAL_REQUIRE(vp, STRING);
-		new_uri = get_hooked_uri(v.string, doc_view->session,
-					 doc_view->session->tab->term->cwd);
+		new_abs_url = join_urls(doc_view->document->uri,
+		                        trim_chars(v.string, ' ', 0));
+		new_uri = get_uri(new_abs_url, 0);
+		mem_free(new_abs_url);
 		if (!new_uri)
 			break;
 		goto_uri_frame(doc_view->session, new_uri, doc_view->name,

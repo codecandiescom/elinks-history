@@ -1,5 +1,5 @@
 /* Base ECMAScript file. Mostly a proxy for specific library backends. */
-/* $Id: ecmascript.c,v 1.15 2004/09/25 01:31:53 pasky Exp $ */
+/* $Id: ecmascript.c,v 1.16 2004/09/25 15:30:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "document/document.h"
 #include "document/view.h"
 #include "ecmascript/ecmascript.h"
 #include "ecmascript/spidermonkey.h"
@@ -20,6 +21,7 @@
 #include "sched/task.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
+#include "util/conv.h"
 #include "viewer/text/view.h" /* current_frame() */
 #include "viewer/text/vs.h"
 
@@ -135,7 +137,7 @@ ecmascript_protocol_handler(struct session *ses, struct uri *uri)
 {
 	struct document_view *doc_view = current_frame(ses);
 	struct string current_url = INIT_STRING(struri(uri), strlen(struri(uri)));
-	unsigned char *redirect_url;
+	unsigned char *redirect_url, *redirect_abs_url;
 	struct uri *redirect_uri;
 
 	if (!doc_view)
@@ -145,9 +147,13 @@ ecmascript_protocol_handler(struct session *ses, struct uri *uri)
 		&current_url);
 	if (!redirect_url)
 		return;
-	redirect_uri = get_hooked_uri(redirect_url, doc_view->session,
-				      doc_view->session->tab->term->cwd);
+	/* XXX: This code snippet is duplicated over here,
+	 * location_set_property(), html_a() and who knows where else. */
+	redirect_abs_url = join_urls(doc_view->document->uri,
+	                             trim_chars(redirect_url, ' ', 0));
 	mem_free(redirect_url);
+	redirect_uri = get_uri(redirect_abs_url, 0);
+	mem_free(redirect_abs_url);
 	if (!redirect_uri)
 		return;
 

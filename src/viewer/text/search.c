@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.84 2003/10/29 19:30:41 jonas Exp $ */
+/* $Id: search.c,v 1.85 2003/10/29 23:59:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -923,19 +923,6 @@ static struct input_history search_history = {
  * etc. The useless cruft should be blasted out. And it's quite ugly anyway,
  * a nice cleanup target ;-). --pasky */
 
-static unsigned char *regex_labels[] = {
-	N_("Normal search"),
-	N_("Regexp search"),
-	N_("Extended regexp search"),
-	NULL
-};
-
-static unsigned char *case_labels[] = {
-	N_("Case sensitive"),
-	N_("Case insensitive"),
-	NULL
-};
-
 struct search_dlg_hop {
 	void *data;
 	int whether_regex, cases;
@@ -1006,10 +993,10 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	text_width(term, dlg_data->dlg->udata, &min, &max);
 	/* I'm leet! --pasky */
-	max_group_width(term, 1, regex_labels, dlg_data->widgets_data + 1, 3, &max);
-	min_group_width(term, 1, regex_labels, dlg_data->widgets_data + 1, 3, &min);
-	max_group_width(term, 1, case_labels, dlg_data->widgets_data + 4, 2, &max);
-	min_group_width(term, 1, case_labels, dlg_data->widgets_data + 4, 2, &min);
+	max_group_width(term, 1, dlg_data->widgets_data + 1, 3, &max);
+	min_group_width(term, 1, dlg_data->widgets_data + 1, 3, &min);
+	max_group_width(term, 1, dlg_data->widgets_data + 4, 2, &max);
+	min_group_width(term, 1, dlg_data->widgets_data + 4, 2, &min);
 	buttons_width(dlg_data->widgets_data + 6, 2, &min, &max);
 
 	int_lower_bound(&max, dlg_data->dlg->widgets->datalen);
@@ -1025,12 +1012,12 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			 AL_LEFT);
 
 	y++;
-	dlg_format_group(NULL, term, 1, regex_labels, dlg_data->widgets_data + 1, 3, 0,
-			 &y, w, &rw);
+	dlg_format_group(NULL, term, dlg_data->widgets_data + 1, 3, 0,
+			 &y, w, &rw, 1);
 
 	y++;
-	dlg_format_group(NULL, term, 1, case_labels, dlg_data->widgets_data + 4, 2, 0,
-			 &y, w, &rw);
+	dlg_format_group(NULL, term, dlg_data->widgets_data + 4, 2, 0,
+			 &y, w, &rw, 1);
 
 	y++;
 	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 6, 2, 0, &y, w, &rw,
@@ -1050,12 +1037,12 @@ search_dlg_fn(struct dialog_data *dlg_data)
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_group(term, term, 1, regex_labels, dlg_data->widgets_data + 1, 3,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL);
+	dlg_format_group(term, term, dlg_data->widgets_data + 1, 3,
+			 dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
 
 	y++;
-	dlg_format_group(term, term, 1, case_labels, dlg_data->widgets_data + 4, 2,
-			 dlg_data->x + DIALOG_LB, &y, w, NULL);
+	dlg_format_group(term, term, dlg_data->widgets_data + 4, 2,
+			 dlg_data->x + DIALOG_LB, &y, w, NULL, 1);
 
 	y++;
 	dlg_format_buttons(term, term, dlg_data->widgets_data + 6, 2, dlg_data->x + DIALOG_LB,
@@ -1118,11 +1105,11 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_dlg_field(dlg, n, min, max, check, l, field, history);
 
-	add_dlg_radio(dlg, n, 1, 0, hop->whether_regex);
-	add_dlg_radio(dlg, n, 1, 1, hop->whether_regex);
-	add_dlg_radio(dlg, n, 1, 2, hop->whether_regex);
-	add_dlg_radio(dlg, n, 2, 1, hop->cases);
-	add_dlg_radio(dlg, n, 2, 0, hop->cases);
+	add_dlg_radio(dlg, n, N_("Normal search"), 1, 0, hop->whether_regex);
+	add_dlg_radio(dlg, n, N_("Regexp search"), 1, 1, hop->whether_regex);
+	add_dlg_radio(dlg, n, N_("Extended regexp search"), 1, 2, hop->whether_regex);
+	add_dlg_radio(dlg, n, N_("Case sensitive"), 2, 1, hop->cases);
+	add_dlg_radio(dlg, n, N_("Case insensitive"), 2, 0, hop->cases);
 
 	add_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
 	add_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.30 2004/09/19 21:38:49 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.31 2004/09/19 21:46:21 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -34,6 +34,9 @@
  * selectors, only good clean element ones - CST_ELEMENT. */
 /* TODO: Form the selectors to trees, both in-element and pan-element, according
  * to les plans grands sketched in the README. --pasky */
+/* TODO: Then hash the selectors at least at the top levels? Binary trees could
+ * still give an excellent gain while not giving a constant memory usage hit.
+ * --pasky */
 struct css_selector {
 	LIST_HEAD(struct css_selector);
 

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.50 2003/11/09 11:40:14 jonas Exp $ */
+/* $Id: hierbox.c,v 1.51 2003/11/09 13:07:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,6 +18,7 @@
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 
+
 static void
 recursively_set_expanded(struct listbox_item *box, int expanded)
 {
@@ -28,6 +29,7 @@ recursively_set_expanded(struct listbox_item *box, int expanded)
 	foreach (child, box->child)
 		recursively_set_expanded(child, expanded);
 }
+
 
 struct ctx {
 	struct listbox_item *item;
@@ -44,16 +46,20 @@ test_search(struct listbox_item *item, void *data_, int *offset) {
 	return 0;
 }
 
+
 static int
 hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
 {
 	switch (ev->ev) {
 		case EV_KBD:
 		{
+			struct widget_data *widget_data =
+						dlg_data->widgets_data;
 			struct listbox_data *box;
 
-                        if (dlg_data->widgets_data->widget->ops->kbd
-			    && dlg_data->widgets_data->widget->ops->kbd(dlg_data->widgets_data, dlg_data, ev)
+                        if (widget_data->widget->ops->kbd
+			    && widget_data->widget->ops->kbd(widget_data,
+				   			     dlg_data, ev)
 			       == EVENT_PROCESSED)
 				return EVENT_PROCESSED;
 
@@ -76,11 +82,10 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 								{ box->sel, 1 };
 
 							traverse_listbox_items_list(
-									box->sel
-									 ->root,
-									0, 0,
-									test_search,
-									&ctx);
+								box->sel->root,
+								0, 0,
+								test_search,
+								&ctx);
 							box_sel_move(
 								dlg_data->widgets_data,
 								ctx.offset);
@@ -113,13 +118,13 @@ display_dlg:
 
 			return EVENT_PROCESSED;
 		}
-		break;
 
 		case EV_INIT:
 		case EV_RESIZE:
 		case EV_REDRAW:
 		case EV_MOUSE:
 			break;
+
 		case EV_ABORT:
 		{
 			/* Clean up after the dialog */
@@ -130,12 +135,14 @@ display_dlg:
 			mem_free(box);
 			break;
 		}
+
 		default:
 			internal("Unknown event received: %d", ev->ev);
 	}
 
 	return EVENT_NOT_PROCESSED;
 }
+
 
 struct dialog_data *
 hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,

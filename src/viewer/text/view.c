@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.628 2004/10/17 20:34:49 miciah Exp $ */
+/* $Id: view.c,v 1.629 2004/10/17 20:38:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,31 +624,31 @@ enum frame_event_status
 try_mark_key(struct session *ses, struct document_view *doc_view,
 	     struct term_event *ev)
 {
-	if (ses->kbdprefix.mark != KP_MARK_NOTHING) {
-		unsigned char mark = get_kbd_key(ev);
+	unsigned char mark = get_kbd_key(ev);
 
-		switch (ses->kbdprefix.mark) {
-			case KP_MARK_NOTHING:
-				assert(0);
-				break;
+	if (ses->kbdprefix.mark == KP_MARK_NOTHING)
+		return FRAME_EVENT_IGNORED;
 
-			case KP_MARK_SET:
-				/* It is intentional to set the mark
-				 * to NULL if !doc_view->vs. */
-				set_mark(mark, doc_view->vs);
-				break;
+	switch (ses->kbdprefix.mark) {
+		case KP_MARK_NOTHING:
+			assert(0);
+			break;
 
-			case KP_MARK_GOTO:
-				goto_mark(mark, doc_view->vs);
-				break;
-		}
+		case KP_MARK_SET:
+			/* It is intentional to set the mark
+			 * to NULL if !doc_view->vs. */
+			set_mark(mark, doc_view->vs);
+			break;
 
-		ses->kbdprefix.repeat_count = 0;
-		ses->kbdprefix.mark = KP_MARK_NOTHING;
-		return FRAME_EVENT_REFRESH;
+		case KP_MARK_GOTO:
+			goto_mark(mark, doc_view->vs);
+			break;
 	}
 
-	return FRAME_EVENT_IGNORED;
+	ses->kbdprefix.repeat_count = 0;
+	ses->kbdprefix.mark = KP_MARK_NOTHING;
+
+	return FRAME_EVENT_REFRESH;
 }
 #endif
 

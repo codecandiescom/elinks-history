@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.112 2004/06/18 13:55:45 jonas Exp $ */
+/* $Id: textarea.c,v 1.113 2004/06/18 14:16:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,8 +68,13 @@ format_text(unsigned char *text, int width, enum form_wrap wrap, int format)
 			int s;
 
 			skip = 0;
+
+			/* Find a place to wrap the text */
 			for (s = pos; s >= begin; s--) {
 				if (text[s] == ' ') {
+					/* When formatting text for form
+					 * submitting we have to apply the
+					 * wrapping mode. */
 					if (wrap == FORM_WRAP_HARD && format)
 						text[s] = '\n';
 					pos = s;
@@ -236,8 +241,8 @@ encode_textarea(struct submitted_value *sv)
 
 	fc = sv->form_control;
 
-	/* We need to reformat text now if it has to be wrapped
-	 * hard, just before encoding it. */
+	/* We need to reformat text now if it has to be wrapped hard, just
+	 * before encoding it. */
 	blabla = format_text(sv->value, fc->cols, fc->wrap, 1);
 	mem_free_if(blabla);
 
@@ -254,8 +259,7 @@ encode_textarea(struct submitted_value *sv)
 }
 
 
-/*
- * We use some evil hacking in order to make external textarea editor working.
+/* We use some evil hacking in order to make external textarea editor working.
  * We need to have some way how to be notified that the editor finished and we
  * should reload content of the textarea.  So we use global variable
  * textarea_editor as a flag whether we have one running, and if we have, we
@@ -266,8 +270,7 @@ encode_textarea(struct submitted_value *sv)
  * session, as it would be extremely ugly to hack (you would have to transfer
  * the content of it back to master somehow, add special flags for not deleting
  * of 'delete' etc) and I'm not going to do that now. Inter-links communication
- * *NEEDS* rewrite, as it looks just like quick messy hack now. --pasky
- */
+ * *NEEDS* rewrite, as it looks just like quick messy hack now. --pasky */
 
 int textarea_editor = 0;
 
@@ -535,7 +538,8 @@ textarea_op_end(struct form_state *fs, struct form_control *fc)
 	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
-/* BEGINNING_OF_BUFFER */
+/* Set the form state so the cursor is on the first line of the buffer.
+ * Preserve the column if possible. */
 enum frame_event_status
 textarea_op_bob(struct form_state *fs, struct form_control *fc)
 {
@@ -559,7 +563,10 @@ textarea_op_bob(struct form_state *fs, struct form_control *fc)
 	return fs->state == state ? FRAME_EVENT_OK : FRAME_EVENT_REFRESH;
 }
 
-/* END_OF_BUFFER */
+/* Set the form state so the cursor is on the last line of the buffer. Preserve
+ * the column if possible. This is done by getting current and last line and
+ * then shifting the state by the delta of both lines start position bounding
+ * the whole thing to the end of the last line. */
 enum frame_event_status
 textarea_op_eob(struct form_state *fs, struct form_control *fc)
 {
@@ -629,6 +636,8 @@ set_textarea(struct document_view *doc_view, int direction)
 		fs = find_form_state(doc_view, fc);
 		if (!fs || !fs->value) return;
 
+		/* Depending on which way we entered the textarea move cursor
+		 * so that it is available at end or start. */
 		if (direction == 1)
 			textarea_op_eob(fs, fc);
 		else

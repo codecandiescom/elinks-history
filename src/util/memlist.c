@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.9 2003/06/05 16:39:25 zas Exp $ */
+/* $Id: memlist.c,v 1.10 2003/06/05 16:55:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,14 +128,14 @@ add_to_ml(struct memory_list **ml, ...)
 void
 freeml(struct memory_list *ml)
 {
-	if (ml) {
-		int i;
+	int i;
 
-		for (i = 0; i < ml->n; i++)
-			mem_free(ml->p[i]);
+	if (!ml) return;
 
-		mem_free(ml);
-	}
+	for (i = 0; i < ml->n; i++)
+		mem_free(ml->p[i]);
+
+	mem_free(ml);
 }
 
 #undef ML_SIZE

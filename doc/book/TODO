@@ -1,0 +1,37 @@
+			ELinks manual TODO list
+
+Processing stuff:
+-----------------
+
+* Write processing (multiplexor) script.
+	This should probably only test/use the db2*, docbook2* and xmlto
+	wrappers. Calling jade, saxon or xsltproc directly would complicate
+	things a lot.
+
+* Write validation script (using nsgml. Others?)
+
+* Make sane rules for Makefile.am
+
+General manual mangling:
+------------------------
+
+* Find a sane order of the chapters/appendixes.
+
+* Make stylesheet for html processing.
+	This should set options to either not break up (chunk) chapters at all
+	or so that all sections are on separate pages.
+
+Suggestions for sections or chapter:
+------------------------------------
+
+* Overview/introduction to essential managers
+
+* FAQ ?
+
+* Tips/cheats ;)
+
+* Info about deficiencies in implementations.
+	Mainly to inform users about lack of security. SSL Certificate
+	verification come to mind.
+
+$Id: TODO,v 1.1 2002/12/28 19:49:20 jonas Exp $

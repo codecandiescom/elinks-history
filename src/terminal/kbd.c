@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.62 2004/05/25 23:00:11 jonas Exp $ */
+/* $Id: kbd.c,v 1.63 2004/05/25 23:06:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,30 +84,29 @@ free_all_itrms(void)
 static void
 write_ev_queue(struct itrm *itrm)
 {
-	int l;
-	int qlen = itrm->eqlen;
+	int written;
+	int qlen = int_min(itrm->eqlen, 128);
 
 	assertm(qlen, "event queue empty");
 	if_assert_failed return;
 
-	if (qlen > 128) qlen = 128;
-
-	l = safe_write(itrm->sock_out, itrm->ev_queue, qlen);
-	if (l < 1) {
-		if (l == -1) free_trm(itrm);
+	written = safe_write(itrm->sock_out, itrm->ev_queue, qlen);
+	if (written < 1) {
+		if (written == -1) free_trm(itrm);
 		return;
 	}
 
-	itrm->eqlen -= l;
-	assert(itrm->eqlen >= 0);
-	if (!itrm->eqlen) {
+	itrm->eqlen -= written;
+
+	if (itrm->eqlen == 0) {
 		set_handlers(itrm->sock_out,
 			     get_handler(itrm->sock_out, H_READ),
 			     NULL,
 			     get_handler(itrm->sock_out, H_ERROR),
 			     get_handler(itrm->sock_out, H_DATA));
 	} else {
-		memmove(itrm->ev_queue, itrm->ev_queue + l, itrm->eqlen);
+		assert(itrm->eqlen > 0);
+		memmove(itrm->ev_queue, itrm->ev_queue + written, itrm->eqlen);
 	}
 }
 

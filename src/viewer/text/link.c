@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.131 2003/12/26 17:23:20 zas Exp $ */
+/* $Id: link.c,v 1.132 2003/12/28 04:56:34 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -974,7 +974,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 	}
 
 	if (link->where_img) {
-		add_to_menu(&mi, N_("V~iew image"), NULL, ACT_NONE,
+		add_to_menu(&mi, N_("V~iew image"), NULL, ACT_VIEW_IMAGE,
 			    (menu_func) send_image, NULL, 0);
 		if (!get_opt_int_tree(cmdline_options, "anonymous"))
 			add_to_menu(&mi, N_("Download ima~ge"), NULL, ACT_DOWNLOAD_IMAGE,

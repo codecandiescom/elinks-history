@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.231 2003/12/26 14:21:40 jonas Exp $ */
+/* $Id: http.c,v 1.232 2003/12/26 23:53:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1186,7 +1186,7 @@ http_error:
 		abort_conn_with_state(conn, S_NO_SSL);
 #endif
 		return;
-	} 
+	}
 
 	conn->cache = get_cache_entry(struri(conn->uri));
 	if (!conn->cache) {

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.207 2003/12/22 02:15:02 pasky Exp $ */
+/* $Id: download.c,v 1.208 2003/12/26 23:53:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1080,7 +1080,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	if (!tq) goto do_not_follow;
 	add_to_list(ses->tq, tq);
 	ret = 1;
-	
+
 	tq->url = stracpy(ses->loading_url);
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;

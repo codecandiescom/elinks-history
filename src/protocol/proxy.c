@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.8 2003/12/24 00:59:01 pasky Exp $ */
+/* $Id: proxy.c,v 1.9 2003/12/26 23:53:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,7 +81,7 @@ get_proxy_worker(unsigned char *url, unsigned char *proxy)
 			    && !proxy_probe_no_proxy(url + 7, no_proxy))
 				proxy = http_proxy;
 		}
-		
+
 		if (https_proxy && *https_proxy) {
 			if (!strncasecmp(https_proxy, "http://", 7))
 				https_proxy += 7;

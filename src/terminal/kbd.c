@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.41 2003/12/21 14:13:21 zas Exp $ */
+/* $Id: kbd.c,v 1.42 2003/12/26 23:53:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -531,7 +531,7 @@ ex:
 
 	if (!*path.source) {
 		dispatch_special(delete.source);
-			
+
 	} else {
 		int blockh;
 		unsigned char *param;

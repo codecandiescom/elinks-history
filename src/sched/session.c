@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.473 2004/06/11 00:47:19 jonas Exp $ */
+/* $Id: session.c,v 1.474 2004/06/11 00:54:10 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -602,6 +602,8 @@ setup_first_session(struct session *ses, struct uri *uri)
 		folder = get_opt_str("ui.sessions.auto_save_foldername");
 		open_bookmark_folder(ses, folder);
 #endif
+	} else {
+		goto_url_home(ses);
 	}
 
 	if (!*get_opt_str("protocol.http.user_agent")) {

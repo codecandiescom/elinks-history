@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.70 2003/12/21 21:42:20 miciah Exp $ */
+/* $Id: text.c,v 1.71 2003/12/21 21:52:52 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,7 +259,7 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		    get_bfu_color(win->term, "dialog.scrollbar"));
 
-	current = sel ? widget_data->info.text.current : 0;
+	current = widget_data->info.text.current;
 	scale = height * 100 / widget_data->info.text.lines;
 
 	/* Scale the offset of @current */

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.315 2003/10/20 17:37:08 jonas Exp $ */
+/* $Id: renderer.c,v 1.316 2003/10/20 19:48:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,10 +174,13 @@ expand_line(struct part *part, int y, int x)
 static inline int
 realloc_spaces(struct part *part, int length)
 {
-	if (!ALIGN_SPACES(&part->spaces, part->spaces_len, length + 1))
+	if (length < part->spaces_len)
+		return 0;
+
+	if (!ALIGN_SPACES(&part->spaces, part->spaces_len, length))
 		return -1;
 
-	part->spaces_len = length + 1;
+	part->spaces_len = length;
 
 	return 0;
 }
@@ -380,7 +383,7 @@ set_hline(struct part *part, unsigned char *chars, int charslen,
 	assert(part);
 	if_assert_failed return;
 
-	if (realloc_spaces(part, x + charslen - 1))
+	if (realloc_spaces(part, x + charslen))
 		return;
 
 	if (part->document) {

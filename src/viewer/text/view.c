@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.685 2005/03/23 14:16:13 zas Exp $ */
+/* $Id: view.c,v 1.686 2005/03/31 10:24:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -909,8 +909,6 @@ frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_
 static enum frame_event_status
 frame_ev(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
-	enum frame_event_status status;
-
 	assertm(doc_view && doc_view->document, "document not formatted");
 	if_assert_failed return FRAME_EVENT_IGNORED;
 
@@ -920,28 +918,16 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 	/* When changing frame, vs may be NULL. See bug 525. */
 	if (!doc_view->vs) return FRAME_EVENT_IGNORED;
 
-	if (ev->ev == EVENT_KBD) {
-		status = frame_ev_kbd(ses, doc_view, ev);
-
+	switch (ev->ev) {
+	case EVENT_KBD:
+		return frame_ev_kbd(ses, doc_view, ev);
 #ifdef CONFIG_MOUSE
-	} else if (ev->ev == EVENT_MOUSE) {
-		status = frame_ev_mouse(ses, doc_view, ev);
+	case EVENT_MOUSE:
+		return frame_ev_mouse(ses, doc_view, ev);
 #endif /* CONFIG_MOUSE */
-
-	} else {
-		status = FRAME_EVENT_IGNORED;
+	default:
+		return FRAME_EVENT_IGNORED;
 	}
-
-	/* Is this assertion correct ? It is triggered when
-	 * pressing a checkbox or submit in elinks bugzilla.
-	 * XXX: I disabled it for now, please check.
-	 * --Zas
-	if (ses->insert_mode == INSERT_MODE_ON) {
-		assert(link == get_current_link(doc_view));
-	}
-	*/
-
-	return status;
 }
 
 struct document_view *

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.172 2004/01/09 14:14:35 pasky Exp $ */
+/* $Id: menu.c,v 1.173 2004/01/09 15:20:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,25 @@
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/memory.h"
+
+/* Left and right main menu reserved spaces. */
+#define L_MAINMENU_SPACE	2
+#define R_MAINMENU_SPACE	2
+
+/* Left and right padding spaces around labels in main menu. */
+#define L_MAINTEXT_SPACE	1
+#define R_MAINTEXT_SPACE	2
+
+/* Spaces before and after right text of submenu. */
+#define L_RTEXT_SPACE		2
+#define R_RTEXT_SPACE		1
+
+/* Spaces before and after left text of submenu. */
+#define L_TEXT_SPACE		1
+#define R_TEXT_SPACE		0
+
+/* Border size in submenu. */
+#define MENU_BORDER_SIZE	1
 
 
 /* Types and structures */
@@ -158,11 +177,12 @@ count_menu_size(struct terminal *term, struct menu *menu)
 {
 	int width = term->width;
 	int height = term->height;
-	int mx = 4;
+	int minwidth = MENU_BORDER_SIZE + L_TEXT_SPACE + R_RTEXT_SPACE + MENU_BORDER_SIZE;
+	int mx = minwidth;
 	int my;
 
 	for (my = 0; my < menu->ni; my++) {
-		int s = 4;
+		int s = minwidth;
 
 		if (mi_has_left_text(menu->items[my])) {
 			unsigned char *text = menu->items[my].text;
@@ -172,11 +192,12 @@ count_menu_size(struct terminal *term, struct menu *menu)
 
 			if (text[0])
 				s += strlen(text)
-				     - !!menu->items[my].hotkey_pos;
+				     - !!menu->items[my].hotkey_pos
+				     + R_TEXT_SPACE;
 		}
 
 		if (mi_is_submenu(menu->items[my])) {
-			s += MENU_HOTKEY_SPACE + m_submenu_len;
+			s += L_RTEXT_SPACE + m_submenu_len;
 
 		} else if (menu->items[my].action != ACT_NONE) {
 			struct string keystroke;
@@ -185,7 +206,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				add_keystroke_to_string(&keystroke,
 							menu->items[my].action,
 							KM_MAIN);
-				s += MENU_HOTKEY_SPACE + keystroke.length;
+				s += L_RTEXT_SPACE + keystroke.length;
 				done_string(&keystroke);
 			}
 
@@ -196,13 +217,13 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				rtext = _(rtext, term);
 
 			if (rtext[0])
-				s += MENU_HOTKEY_SPACE + strlen(rtext);
+				s += L_RTEXT_SPACE + strlen(rtext);
 		}
 
 		if (s > mx) mx = s;
 	}
 
-	my += 2;
+	my += MENU_BORDER_SIZE * 2;
 
 	int_upper_bound(&mx, width);
 	int_upper_bound(&my, height);
@@ -221,7 +242,7 @@ static void
 scroll_menu(struct menu *menu, int d)
 {
 	int c = 0;
-	int w = menu->height - 2;
+	int w = int_max(1, menu->height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
 
 	int_lower_bound(&scr_i, 0);
@@ -259,13 +280,14 @@ static inline void
 draw_menu_left_text(struct terminal *term, unsigned char *text, int len,
 		    int x, int y, int width, struct color_pair *color)
 {
-	int xbase;
+	int xbase = x + L_TEXT_SPACE;
+	int w = width - (L_TEXT_SPACE + R_TEXT_SPACE);
+
+	if (w <= 0) return;
 
 	if (len < 0) len = strlen(text);
 	if (!len) return;
-
-	xbase = x;
-	int_upper_bound(&len, width - 2);
+	if (len > w) len = w;
 
 	for (x = 0; len; x++, len--)
 		draw_char(term, xbase + x, y, text[x], 0, color);
@@ -282,7 +304,8 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 	enum screen_char_attr hk_attr = get_opt_bool("ui.dialogs.underline_hotkeys")
 				      ? SCREEN_ATTR_UNDERLINE : 0;
 	unsigned char c;
-	int xbase = x;
+	int xbase = x + L_TEXT_SPACE;
+	int w = width - (L_TEXT_SPACE + R_TEXT_SPACE);
 	int hk = 0;
 #ifdef DEBUG
 	/* For redundant hotkeys highlighting. */
@@ -291,7 +314,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 	if (hotkey_pos < 0) hotkey_pos = -hotkey_pos, double_hk = 1;
 #endif
 
-	if (!hotkey_pos) return;
+	if (!hotkey_pos || w <= 0) return;
 
 	if (selected) {
 		struct color_pair *tmp = hk_color;
@@ -301,7 +324,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text,
 	}
 
 	for (x = 0;
-	     x < width - 2 + !!hk
+	     x < w + !!hk
 	     && (c = text[x]);
 	     x++) {
 		if (!hk && x == hotkey_pos - 1) {
@@ -327,22 +350,19 @@ static inline void
 draw_menu_right_text(struct terminal *term, unsigned char *text, int len,
 		     int x, int y, int width, struct color_pair *color)
 {
-	unsigned char c;
-	int xbase;
+	int xbase = x;
+	int w = width - (L_RTEXT_SPACE + R_RTEXT_SPACE);
+
+	if (w <= 0) return;
 
 	if (len < 0) len = strlen(text);
 	if (!len) return;
+	if (len > w) len = w;
 
-	xbase = x + width - len;
+	xbase += w - len + L_RTEXT_SPACE + L_TEXT_SPACE;
 
-	for (x = len - 1;
-	     (x >= 0) && (width - 2 >= len + MENU_HOTKEY_SPACE - x)
-	     && (c = text[x]);
-	     x--)
-		draw_char(term, xbase + x, y, c, 0, color);
-
-	for (len = 0; len < MENU_HOTKEY_SPACE; len++)
-		draw_char(term, xbase + x - len, y, ' ', 0, color);
+	for (x = 0; len; x++, len--)
+		draw_char(term, xbase + x, y, text[x], 0, color);
 }
 
 static void
@@ -351,10 +371,10 @@ display_menu(struct terminal *term, struct menu *menu)
 	struct color_pair *normal_color = get_bfu_color(term, "menu.normal");
 	struct color_pair *selected_color = get_bfu_color(term, "menu.selected");
 	struct color_pair *frame_color = get_bfu_color(term, "menu.frame");
-	int mx = menu->x + 1;
-	int mwidth = menu->width - 2;
-	int my = menu->y + 1;
-	int mheight = menu->height - 2;
+	int mx = menu->x + MENU_BORDER_SIZE;
+	int mwidth = int_max(0, menu->width - MENU_BORDER_SIZE * 2);
+	int my = menu->y + MENU_BORDER_SIZE;
+	int mheight = int_max(0, menu->height - MENU_BORDER_SIZE * 2);
 	int p, y;
 
 	draw_area(term,	mx, my, mwidth, mheight, ' ', 0, normal_color);
@@ -404,12 +424,12 @@ display_menu(struct terminal *term, struct menu *menu)
 
 				if (l) {
 					draw_menu_left_text_hk(term, text, l,
-							       mx + 1, y, mwidth, color,
+							       mx, y, mwidth, color,
 							       (p == menu->selected));
 
 				} else {
 					draw_menu_left_text(term, text, -1,
-							    mx + 1, y, mwidth, color);
+							    mx, y, mwidth, color);
 		  		}
 			}
 
@@ -742,14 +762,6 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	}
 }
 
-/* Left and right main menu reserved spaces. */
-#define L_MENU_SPACE 2
-#define R_MENU_SPACE 2
-
-/* Left and right padding spaces around labels in main menu. */
-#define L_TEXT_SPACE 2
-#define R_TEXT_SPACE 2
-
 static void
 display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
@@ -784,9 +796,9 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	draw_area(term, 0, 0, term->width, 1, ' ', 0, normal_color);
 
 	if (menu->first_displayed != 0)
-		draw_area(term, 0, 0, L_MENU_SPACE, 1, '<', 0, normal_color);
+		draw_area(term, 0, 0, L_MAINMENU_SPACE, 1, '<', 0, normal_color);
 
-	p += L_MENU_SPACE;
+	p += L_MAINMENU_SPACE;
 
 	for (i = menu->first_displayed; i < menu->ni; i++) {
 		struct color_pair *color = normal_color;
@@ -802,36 +814,37 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (i == menu->selected) {
 			menu->sp = p;
 			color = selected_color;
-			draw_area(term, p, 0, L_TEXT_SPACE, 1, ' ', 0, color);
-			draw_area(term, p + textlen + L_TEXT_SPACE, 0, R_TEXT_SPACE, 1, ' ', 0, color);
+			draw_area(term, p, 0, L_MAINTEXT_SPACE + L_TEXT_SPACE, 1, ' ', 0, color);
+			draw_area(term, p + textlen + L_MAINTEXT_SPACE + L_TEXT_SPACE, 0,
+				  R_MAINTEXT_SPACE + R_TEXT_SPACE, 1, ' ', 0, color);
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);
 		}
 
-		p += L_TEXT_SPACE;
+		p += L_MAINTEXT_SPACE;
 
 		if (l) {
 			draw_menu_left_text_hk(term, text, l,
-					       p, 0, textlen + R_TEXT_SPACE,
+					       p, 0, textlen + R_MAINTEXT_SPACE,
 					       color, (i == menu->selected));
 		} else {
 			draw_menu_left_text(term, text, textlen,
-					    p, 0, textlen + R_TEXT_SPACE,
+					    p, 0, textlen + R_MAINTEXT_SPACE,
 					    color);
 		}
 
 		p += textlen;
 
-		if (p >= term->width - R_MENU_SPACE)
+		if (p >= term->width - R_MAINMENU_SPACE)
 			break;
 
-		p += R_TEXT_SPACE;
+		p += R_MAINTEXT_SPACE;
 	}
 
 	menu->last_displayed = i - 1;
 	int_lower_bound(&menu->last_displayed, menu->first_displayed);
 	if (menu->last_displayed < menu->ni - 1)
-		draw_area(term, term->width - R_MENU_SPACE, 0, R_MENU_SPACE, 1, '>', 0, normal_color);
+		draw_area(term, term->width - R_MAINMENU_SPACE, 0, R_MAINMENU_SPACE, 1, '>', 0, normal_color);
 
 	redraw_from_window(menu->win);
 }
@@ -859,7 +872,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 		delete_window_ev(win, NULL);
 
 	} else if (!ev->y) {
-		int p = L_MENU_SPACE;
+		int p = L_MAINMENU_SPACE;
 		int i;
 
 		/* We don't initialize to
@@ -876,14 +889,14 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 				if (mi_text_translate(menu->items[i]))
 					text = _(text, win->term);
 
-				p += L_TEXT_SPACE
+				p += L_MAINTEXT_SPACE
 				     + strlen(text)
 				     - !!menu->items[i].hotkey_pos
-				     + R_TEXT_SPACE;
+				     + R_MAINTEXT_SPACE;
 			}
 
 			if (ev->x < o) {
-				if (ev->x > L_MENU_SPACE)
+				if (ev->x > L_MAINMENU_SPACE)
 					continue;
 
 				menu->selected--;
@@ -891,7 +904,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 					menu->selected = menu->ni - 1;
 
 			} else if (ev->x >= p) {
-				if (ev->x < win->term->width - R_MENU_SPACE)
+				if (ev->x < win->term->width - R_MAINMENU_SPACE)
 					continue;
 
 				menu->selected++;
@@ -993,13 +1006,6 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 	}
 }
 
-
-#undef L_MENU_SPACE
-#undef R_MENU_SPACE
-#undef L_TEXT_SPACE
-#undef R_TEXT_SPACE
-
-
 /* For dynamic menus the last (cleared) item is used to mark the end. */
 #define realloc_menu_items(mi_, size) \
 	mem_align_alloc(mi_, size, (size) + 2, sizeof(struct menu_item), 0xF)
@@ -1034,3 +1040,13 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	SET_MENU_ITEM(item, text, rtext, action, func, data,
 		      item->flags | flags, HKS_SHOW, 0);
 }
+
+#undef L_MAINMENU_SPACE
+#undef R_MAINMENU_SPACE
+#undef L_MAINTEXT_SPACE
+#undef R_MAINTEXT_SPACE
+#undef L_RTEXT_SPACE
+#undef R_RTEXT_SPACE
+#undef L_TEXT_SPACE
+#undef R_TEXT_SPACE
+#undef MENU_BORDER_SIZE

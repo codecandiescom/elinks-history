@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.95 2004/01/25 03:16:06 jonas Exp $ */
+/* $Id: scanner.c,v 1.96 2004/01/25 03:42:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,10 +195,10 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 					scan_back_css(to, CSS_CHAR_WHITESPACE);
 
 					if (*from == '"' || *from == '\'') from++;
-					if (*to == '"' || *to == '\'') from++;
+					if (*to == '"' || *to == '\'') to--;
 
 					token->string = from;
-					real_length = to - from;
+					real_length = to - from + 1;
 					assert(real_length >= 0);
 					string = function_end;
 				}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.27 2004/02/06 15:58:15 jonas Exp $ */
+/* $Id: renderer.c,v 1.28 2004/02/06 18:38:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,15 +61,22 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 
 	document = get_cached_document(vs->url, options, cache_entry->id_tag);
 	if (!document) {
+		struct fragment *fr;
+
 		document = init_document(vs->url, cache_entry, options);
 		if (!document) return;
 
 		shrink_memory(0);
 
 		defrag_entry(cache_entry);
+		fr = cache_entry->frag.next;
 
-		if (document->options.plain) {
+		if (list_empty(cache_entry->frag) || fr->offset || !fr->length) {
+			document->title = get_no_post_url(document->url, NULL);
+
+		} else if (document->options.plain) {
 			render_plain_document(cache_entry, document);
+
 		} else {
 			render_html_document(cache_entry, document);
 		}

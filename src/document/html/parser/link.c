@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.35 2004/12/05 21:41:18 miciah Exp $ */
+/* $Id: link.c,v 1.36 2004/12/05 21:43:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,9 +114,7 @@ get_image_text(unsigned char *attr)
 
 	max_len = get_opt_int("document.browse.images.file_tags");
 
-	max_real_len = max_len;
-
-	if ((!max_len || max_real_len > 0) && src) {
+	if (max_len >= 0 && src) {
 		int len = strcspn(src, "?");
 		unsigned char *start;
 
@@ -127,8 +125,8 @@ get_image_text(unsigned char *attr)
 
 		len -= start - src;
 
-		if (max_len && len > max_real_len) {
-			int max_part_len = max_real_len / 2;
+		if (max_len && len > max_len) {
+			int max_part_len = max_len / 2;
 
 			text = mem_alloc(max_part_len * 2 + 2);
 			if (!text) goto free_src;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.599 2004/10/09 22:19:40 miciah Exp $ */
+/* $Id: view.c,v 1.600 2004/10/09 22:43:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,6 +506,33 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 }
 
 
+static void
+copy_current_link_to_clipboard(struct session *ses,
+			       struct document_view *doc_view)
+{
+	struct link *link;
+	struct uri *uri;
+	unsigned char *uristring;
+
+	if (!try_jump_to_link_number(ses, doc_view))
+		return;
+
+	link = get_current_link(doc_view);
+	if (!link) return;
+
+	uri = get_link_uri(ses, doc_view, link);
+	if (!uri) return;
+
+	uristring = get_uri_string(uri, URI_ORIGINAL);
+	done_uri(uri);
+
+	if (uristring) {
+		set_clipboard_text(uristring);
+		mem_free(uristring);
+	}
+}
+
+
 int
 try_jump_to_link_number(struct session *ses, struct document_view *doc_view)
 {
@@ -612,29 +639,10 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
-		case ACT_MAIN_COPY_CLIPBOARD: {
-			struct link *link;
-			struct uri *uri;
-			unsigned char *uristring;
-
-			if (!try_jump_to_link_number(ses, doc_view))
-				return FRAME_EVENT_OK;
-
-			link = get_current_link(doc_view);
-			if (!link) return FRAME_EVENT_OK;
-
-			uri = get_link_uri(ses, doc_view, link);
-			if (!uri) return FRAME_EVENT_OK;
-
-			uristring = get_uri_string(uri, URI_ORIGINAL);
-			done_uri(uri);
-
-			if (uristring) {
-				set_clipboard_text(uristring);
-				mem_free(uristring);
-			}
+		case ACT_MAIN_COPY_CLIPBOARD:
+			copy_current_link_to_clipboard(ses, doc_view);
+			status = FRAME_EVENT_OK;
 			break;
-		}
 
 		case ACT_MAIN_JUMP_TO_LINK:
 			try_jump_to_link_number(ses, doc_view);

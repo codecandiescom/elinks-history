@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.285 2004/11/30 06:15:23 miciah Exp $ */
+/* $Id: menu.c,v 1.286 2004/11/30 06:30:24 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -723,7 +723,7 @@ menu_search_handler(struct input_line *line, int action)
 		struct menu_item *item = &menu->items[pos];
 
 		if (search_menu_item(item, buffer, term)) {
-			menu->selected = pos;
+			scroll_menu(menu, pos - menu->selected, 0);
 			display_menu(term, menu);
 			return INPUT_LINE_PROCEED;
 		}

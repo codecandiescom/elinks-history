@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.78 2004/01/28 02:39:58 jonas Exp $ */
+/* $Id: renderer.c,v 1.79 2004/01/28 02:56:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,9 @@ struct plain_renderer {
 
 	/* The current line number */
 	int lineno;
+
+	/* Are we doing line compression */
+	unsigned int compress:1;
 };
 
 #define realloc_document_links(doc, size) \
@@ -283,13 +286,15 @@ init_template(struct screen_char *template, color_t background, color_t foregrou
 }
 
 static struct node *
-add_node(struct document *document, int x, int y, int width, int height)
+add_node(struct plain_renderer *renderer, int x, int width, int height)
 {
 	struct node *node = mem_alloc(sizeof(struct node));
 
 	if (node) {
+		struct document *document = renderer->document;
+
 		node->x = x;
-		node->y = y;
+		node->y = renderer->lineno;
 		node->width = width;
 		node->height = height;
 
@@ -305,11 +310,9 @@ add_node(struct document *document, int x, int y, int width, int height)
 static void
 add_document_lines(struct plain_renderer *renderer)
 {
-	struct document *document = renderer->document;
 	unsigned char *source = renderer->source;
 	int length = renderer->length;
 	int was_empty_line = 0;
-	int compress = document->options.plain_compress_empty_lines;
 
 	for (; length > 0; renderer->lineno++) {
 		unsigned char *xsource;
@@ -340,7 +343,7 @@ add_document_lines(struct plain_renderer *renderer)
 		}
 
 		if (only_spaces && step) {
-			if (compress && was_empty_line) {
+			if (renderer->compress && was_empty_line) {
 				/* Successive empty lines
 				 * will appear as one. */
 				length -= step + spaces;
@@ -381,7 +384,7 @@ add_document_lines(struct plain_renderer *renderer)
 
 		if (added) {
 			/* Add (search) nodes on a line by line basis */
-			add_node(renderer->document, 0, renderer->lineno, added, 1);
+			add_node(renderer, 0, added, 1);
 		}
 
 		/* Skip end of line chars too. */
@@ -425,13 +428,13 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	renderer.length = fr->length;
 	renderer.lineno = 0;
 	renderer.convert_table = convert_table;
+	renderer.compress = document->options.plain_compress_empty_lines;
 	renderer.max_width = document->options.wrap ? document->options.width
 						    : MAXINT;
 
 	/* Setup the style */
 	init_template(&renderer.template, global_doc_opts->default_bg,
 					  global_doc_opts->default_fg);
-
 
 	add_document_lines(&renderer);
 }

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.25 2003/10/28 09:29:02 zas Exp $ */
+/* $Id: widget.h,v 1.26 2003/10/28 19:03:56 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -12,17 +12,17 @@ struct widget_data;
 struct dialog_data; /* XXX */
 
 enum widget_type {
-	D_END,
-	D_CHECKBOX,
-	D_FIELD,
-	D_FIELD_PASS,
-	D_BUTTON,
-	D_BOX,
+	WIDGET_END,
+	WIDGET_CHECKBOX,
+	WIDGET_FIELD,
+	WIDGET_FIELD_PASS,
+	WIDGET_BUTTON,
+	WIDGET_LISTBOX,
 };
 
 #define add_dlg_end(dlg, n)						\
 	do {								\
-		(dlg)->widgets[n].type = D_END;				\
+		(dlg)->widgets[n].type = WIDGET_END;			\
 	} while (0)
 
 struct widget_ops {
@@ -93,10 +93,10 @@ void dlg_set_history(struct widget_data *);
 
 #define selected_widget(dlg_data) (&(dlg_data)->widgets_data[(dlg_data)->selected])
 
-#define widget_has_history(widget_data) ((widget_data)->widget->type == D_FIELD \
+#define widget_has_history(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
 					 && (widget_data)->widget->info.field.history)
 
-#define widget_is_textfield(widget_data) ((widget_data)->widget->type == D_FIELD \
-					  || (widget_data)->widget->type == D_FIELD_PASS)
+#define widget_is_textfield(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
+					  || (widget_data)->widget->type == WIDGET_FIELD_PASS)
 
 #endif

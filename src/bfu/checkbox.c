@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.51 2003/10/27 10:35:25 jonas Exp $ */
+/* $Id: checkbox.c,v 1.52 2003/10/28 19:03:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ select_checkbox(struct widget_data *widget_data, struct dialog_data *dlg_data)
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->widgets_data[i].widget->type != D_CHECKBOX
+			if (dlg_data->widgets_data[i].widget->type != WIDGET_CHECKBOX
 			    || dlg_data->widgets_data[i].widget->info.checkbox.gid
 			       != widget_data->widget->info.checkbox.gid)
 				continue;

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.60 2003/10/28 17:02:31 zas Exp $ */
+/* $Id: dialog.c,v 1.61 2003/10/28 19:03:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	int n = 0;
 
 	/* FIXME: maintain a counter, and don't recount each time. --Zas */
-	for (widget = dlg->widgets; widget->type != D_END; widget++) n++;
+	for (widget = dlg->widgets; widget->type != WIDGET_END; widget++) n++;
 
 	dlg_data = mem_alloc(sizeof(struct dialog_data) +
 		             sizeof(struct widget_data) * n);
@@ -207,7 +207,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			/* Look up for a button with matching starting letter. */
 			if (ev->x > ' ' && ev->x < 0x100) {
 				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->widgets[i].type == D_BUTTON
+					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
 					    && upcase(dlg_data->dlg->widgets[i].text[0])
 					       == upcase(ev->x)) {
 						select_dlg_item(dlg_data, i);
@@ -220,7 +220,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			    && (widget_is_textfield(widget_data)
 				|| ev->y == KBD_CTRL || ev->y == KBD_ALT)) {
 				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->widgets[i].type == D_BUTTON
+					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
 					    && dlg_data->dlg->widgets[i].info.button.flags & B_ENTER) {
 						select_dlg_item(dlg_data, i);
 						return;
@@ -230,7 +230,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 			/* Cancel button. */
 			if (ev->x == KBD_ESC) {
 				for (i = 0; i < dlg_data->n; i++)
-					if (dlg_data->dlg->widgets[i].type == D_BUTTON
+					if (dlg_data->dlg->widgets[i].type == WIDGET_BUTTON
 					    && dlg_data->dlg->widgets[i].info.button.flags & B_ESC) {
 						select_dlg_item(dlg_data, i);
 						return;
@@ -294,7 +294,7 @@ check_dialog(struct dialog_data *dlg_data)
 	for (i = 0; i < dlg_data->n; i++) {
 		struct widget_data *widget_data = &dlg_data->widgets_data[i];
 
-		if (widget_data->widget->type != D_CHECKBOX &&
+		if (widget_data->widget->type != WIDGET_CHECKBOX &&
 		    !widget_is_textfield(widget_data))
 			continue;
 

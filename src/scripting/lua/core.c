@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.99 2003/10/27 16:08:27 pasky Exp $ */
+/* $Id: core.c,v 1.100 2003/10/28 19:03:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -506,10 +506,11 @@ xdialog_fn(struct dialog_data *dlg_data)
 	int w, rw;
 	int y = -1;
 	int i;
-	int nfields;
+	int nfields = 0;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	for (nfields = 0; dlg_data->widgets_data[nfields].widget->type == D_FIELD; nfields++);
+	while (widget_is_textfield(&dlg_data->widgets_data[nfields]))
+		nfields++;
 
 	text_width(term, dlg_msg[0], &min, &max);
 	buttons_width(dlg_data->widgets_data + nfields, 2, &min, &max);
@@ -554,7 +555,7 @@ l_xdialog(LS)
 	struct dialog *dlg;
 	struct lua_xdialog_data *data;
 	int nargs, nfields, nitems;
-	int i;
+	int i = 0;
 
 	nargs = lua_gettop(S);
 	nfields = nargs - 1;
@@ -581,10 +582,9 @@ l_xdialog(LS)
 	dlg->refresh = (void (*)(void *))xdialog_run_lua;
 	dlg->refresh_data = data;
 
-	for (i = 0; i < nfields; i++) {
-		dlg->widgets[i].type = D_FIELD;
-		dlg->widgets[i].datalen = MAX_STR_LEN;
-		dlg->widgets[i].data = data->fields[i];
+	while (i < nfields) {
+		add_dlg_field(dlg, i, 0, 0, NULL, MAX_STR_LEN,
+			      data->fields[i], NULL);
 	}
 
 	add_dlg_button(dlg, i, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);

@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.16 2003/10/28 09:29:02 zas Exp $ */
+/* $Id: inpfield.h,v 1.17 2003/10/28 19:03:56 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -23,10 +23,10 @@
 	} while (0)
 
 #define add_dlg_field(dlg, n, min, max, handler, len, field, history)	\
-	add_dlg_field_do(dlg, n, D_FIELD, min, max, handler, len, field, history)
+	add_dlg_field_do(dlg, n, WIDGET_FIELD, min, max, handler, len, field, history)
 
 #define add_dlg_field_pass(dlg, n, min, max, handler, len, field)	\
-	add_dlg_field_do(dlg, n, D_FIELD_PASS, min, max, handler, len, field, NULL)
+	add_dlg_field_do(dlg, n, WIDGET_FIELD_PASS, min, max, handler, len, field, NULL)
 
 extern struct widget_ops field_ops;
 extern struct widget_ops field_pass_ops;

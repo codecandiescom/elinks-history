@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.120 2004/11/12 22:20:01 zas Exp $ */
+/* $Id: action.c,v 1.121 2004/11/12 22:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -609,14 +609,12 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_MOVE_DOCUMENT_START:
 			if (!has_vs) break;
-			move_document_start(ses, doc_view);
-			status = FRAME_EVENT_REFRESH;
+			status = move_document_start(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_END:
 			if (!has_vs) break;
-			move_document_end(ses, doc_view);
-			status = FRAME_EVENT_REFRESH;
+			status = move_document_end(ses, doc_view);
 			break;
 
 		case ACT_MAIN_SCROLL_DOWN:

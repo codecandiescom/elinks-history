@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.69 2004/11/12 22:20:01 zas Exp $ */
+/* $Id: view.h,v 1.70 2004/11/12 22:49:26 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -43,8 +43,8 @@ enum frame_event_status scroll_down(struct session *ses, struct document_view *d
 enum frame_event_status scroll_left(struct session *ses, struct document_view *doc_view);
 enum frame_event_status scroll_right(struct session *ses, struct document_view *doc_view);
 
-void move_document_start(struct session *ses, struct document_view *doc_view);
-void move_document_end(struct session *ses, struct document_view *doc_view);
+enum frame_event_status move_document_start(struct session *ses, struct document_view *doc_view);
+enum frame_event_status move_document_end(struct session *ses, struct document_view *doc_view);
 
 enum frame_event_status set_frame(struct session *ses, struct document_view *doc_view, int xxxx);
 struct document_view *current_frame(struct session *);

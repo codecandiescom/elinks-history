@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.657 2004/11/12 22:20:01 zas Exp $ */
+/* $Id: view.c,v 1.658 2004/11/12 22:49:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -403,11 +403,11 @@ static enum frame_event_status move_cursor(struct session *ses,
 					   struct document_view *doc_view,
 					   int x, int y);
 
-void
+enum frame_event_status
 move_document_start(struct session *ses, struct document_view *doc_view)
 {
 	assert(ses && doc_view && doc_view->vs);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	doc_view->vs->y = doc_view->vs->x = 0;
 
@@ -417,15 +417,17 @@ move_document_start(struct session *ses, struct document_view *doc_view)
 	} else {
 		find_link_page_down(doc_view);
 	}
+
+	return FRAME_EVENT_REFRESH;
 }
 
-void
+enum frame_event_status
 move_document_end(struct session *ses, struct document_view *doc_view)
 {
 	int max_height;
 
 	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
+	if_assert_failed return FRAME_EVENT_OK;
 
 	max_height = doc_view->document->height - doc_view->box.height;
 	doc_view->vs->x = 0;
@@ -441,6 +443,8 @@ move_document_end(struct session *ses, struct document_view *doc_view)
 	} else {
 		find_link_page_up(doc_view);
 	}
+
+	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status

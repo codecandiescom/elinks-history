@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.63 2004/07/05 11:38:24 jonas Exp $ */
+/* $Id: conv.c,v 1.64 2004/07/14 17:44:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -425,3 +425,37 @@ clr_spaces(unsigned char *str)
 
 	*dest = '\0';
 }
+
+/* Replace invalid chars in @title with ' ' and trim all starting/ending
+ * spaces. */
+void
+sanitize_title(unsigned char *title)
+{
+	int len = strlen(title);
+
+	if (!len) return;
+
+	while (len--) {
+		if (title[len] < ' ')
+			title[len] = ' ';
+	}
+	trim_chars(title, ' ', NULL);
+}
+
+/* Returns 0 if @url contains invalid chars, 1 if ok.
+ * It trims starting/ending spaces. */
+int
+sanitize_url(unsigned char *url)
+{
+	int len = strlen(url);
+
+	if (!len) return 1;
+
+	while (len--) {
+		if (url[len] < ' ')
+			return 0;
+	}
+	trim_chars(url, ' ', NULL);
+	return 1;
+}
+

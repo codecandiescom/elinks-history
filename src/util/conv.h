@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.37 2004/07/04 16:29:03 jonas Exp $ */
+/* $Id: conv.h,v 1.38 2004/07/14 17:44:40 zas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -162,5 +162,13 @@ convert_to_lowercase(unsigned char *string, int length)
 /* This function drops control chars, nbsp char and limit the number of consecutive
  * space chars to one. It modifies its argument. */
 void clr_spaces(unsigned char *str);
+
+/* Replace invalid chars in @title with ' ' and trim all starting/ending
+ * spaces. */
+void sanitize_title(unsigned char *title);
+
+/* Returns 0 if @url contains invalid chars, 1 if ok.
+ * It trims starting/ending spaces. */
+int sanitize_url(unsigned char *url);
 
 #endif

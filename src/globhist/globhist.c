@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.77 2004/06/27 18:34:30 pasky Exp $ */
+/* $Id: globhist.c,v 1.78 2004/07/14 17:44:40 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -27,6 +27,7 @@
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "modules/module.h"
+#include "util/conv.h"
 #include "util/file.h"
 #include "util/hash.h"
 #include "util/memory.h"
@@ -169,7 +170,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 	int max_globhist_items;
 
 	if (!url || !get_globhist_enable()) return;
-
+	
 	max_globhist_items = get_globhist_max_items();
 
 	history_item = get_global_history_item(url);
@@ -197,8 +198,11 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 		mem_free(history_item);
 		return;
 	}
+	sanitize_title(history_item->title);
+
 	history_item->url = stracpy(url);
-	if (!history_item->url) {
+	if (!history_item->url || !sanitize_url(history_item->url)) {
+		mem_free_if(history_item->url);
 		mem_free(history_item->title);
 		mem_free(history_item);
 		return;
@@ -337,22 +341,6 @@ write_global_history(void)
 	if (!ssi) return;
 
 	foreachback (historyitem, global_history.entries) {
-		unsigned char *p;
-		int i;
-		int bad = 0;
-
-		p = historyitem->title;
-		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ')
-				p[i] = ' ';
-
-		p = historyitem->url;
-		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ')
-				bad = 1; /* Incorrect url, skip it. */
-
-		if (bad) continue;
-
 		if (secure_fprintf(ssi, "%s\t%s\t%ld\n",
 				   historyitem->title,
 				   historyitem->url,

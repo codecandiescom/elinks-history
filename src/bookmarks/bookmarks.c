@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.133 2004/07/14 13:51:18 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.134 2004/07/14 17:44:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,39 +185,6 @@ delete_bookmark(struct bookmark *bm)
 	return 1;
 }
 
-/* Replace invalid chars in @title with ' ' and trim all starting/ending
- * spaces. */
-static inline void
-sanitize_title(unsigned char *title)
-{
-	int len = strlen(title);
-
-	if (!len) return;
-
-	while (len--) {
-		if (title[len] < ' ')
-			title[len] = ' ';
-	}
-	trim_chars(title, ' ', NULL);
-}
-
-/* Returns 0 if @url contains invalid chars, 1 if ok.
- * It trims starting/ending spaces. */
-static inline int
-sanitize_url(unsigned char *url)
-{
-	int len = strlen(url);
-
-	if (!len) return 1;
-
-	while (len--) {
-		if (url[len] < ' ')
-			return 0;
-	}
-	trim_chars(url, ' ', NULL);
-	return 1;
-}
-
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
  * bottom. NULL or "" @url means it is a bookmark folder. */
 struct bookmark *
@@ -226,7 +193,7 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 {
 	struct bookmark *bm;
 
-	if (url && !sanitize_url(url)) return NULL;
+	if (url) return NULL;
 
 	bm = mem_calloc(1, sizeof(struct bookmark));
 	if (!bm) return NULL;
@@ -239,7 +206,8 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	sanitize_title(bm->title);
 
 	bm->url = stracpy(empty_string_or_(url));
-	if (!bm->url) {
+	if (!bm->url || !sanitize_url(bm->url)) {
+		mem_free_if(bm->url);
 		mem_free(bm->title);
 		mem_free(bm);
 		return NULL;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.115 2004/10/10 20:12:06 pasky Exp $ */
+/* $Id: renderer.c,v 1.116 2004/10/10 20:33:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,8 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 #endif
 	}
 #ifdef CONFIG_ECMASCRIPT
-	assert(vs->ecmascript);
+	if (!vs->ecmascript_fragile)
+		assert(vs->ecmascript);
 	if (!options->gradual_rerendering) {
 		if (vs->ecmascript_fragile)
 			ecmascript_reset_state(vs);

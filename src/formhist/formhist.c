@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.76 2004/01/02 19:33:09 jonas Exp $ */
+/* $Id: formhist.c,v 1.77 2004/03/09 14:09:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,14 +61,16 @@ static struct form_type_name form_type2name[] = {
 	{ FC_HIDDEN,	"hidden"	},
 };
 
+#define FORM_TYPE_COUNT (sizeof(form_type2name)/sizeof(struct form_type_name))
+
 int
 str2form_type(unsigned char *s)
 {
 	register int n;
 
-	for (n = 0; n < (sizeof(form_type2name)/sizeof(struct form_type_name)); n++) {
-		if (!strcmp(form_type2name[n].name, s)) return form_type2name[n].num;
-	}
+	for (n = 0; n < FORM_TYPE_COUNT; n++)
+		if (!strcmp(form_type2name[n].name, s))
+			return form_type2name[n].num;
 
 	return -1;
 };
@@ -78,13 +80,14 @@ form_type2str(enum form_type num)
 {
 	register int n;
 
-	for (n = 0; n < (sizeof(form_type2name)/sizeof(struct form_type_name)); n++) {
-		if (form_type2name[n].num == num) return form_type2name[n].name;
-	}
+	for (n = 0; n < FORM_TYPE_COUNT; n++)
+		if (form_type2name[n].num == num)
+			return form_type2name[n].name;
 
 	return NULL;
 };
 
+#undef FORM_TYPE_COUNT
 
 static struct submitted_value *
 new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type)
@@ -142,7 +145,7 @@ new_form(unsigned char *url)
 
 	init_list(*form->submit);
 	form->box_item = add_listbox_item(&formhist_browser, form->url,
-					       form);
+					  form);
 
 	return form;
 }

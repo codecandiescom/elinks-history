@@ -3938,7 +3938,7 @@ msgstr "Nessun download"
 
 #: src/dialogs/menu.c:319
 msgid "Open new ~tab"
-msgstr "Apri nuova ~scheda"
+msgstr "Apri nuova sche~da"
 
 #: src/dialogs/menu.c:320
 msgid "Open new t~ab in background"
@@ -3982,7 +3982,7 @@ msgstr "Salva ~URL come"
 
 #: src/dialogs/menu.c:342
 msgid "Save formatted ~document"
-msgstr "Salva ~documento formattato"
+msgstr "Salva documento ~formattato"
 
 #: src/dialogs/menu.c:347
 msgid "~Kill background connections"
@@ -4026,7 +4026,7 @@ msgstr "~Cerca"
 
 #: src/dialogs/menu.c:427
 msgid "Search ~backward"
-msgstr "Cerca in~dietro"
+msgstr "Cerca i~ndietro"
 
 #: src/dialogs/menu.c:428
 msgid "Find ~next"
@@ -4050,7 +4050,7 @@ msgstr "Abilita/Disabilita co~llegamenti numerati"
 
 #: src/dialogs/menu.c:434
 msgid "Toggle ~document colors"
-msgstr "Abilita/Disabilita colori specificati nel ~documento"
+msgstr "Abilita/Disabilita colori del ~documento"
 
 #: src/dialogs/menu.c:435
 msgid "Document ~info"
@@ -4270,9 +4270,8 @@ msgid "Rows"
 msgstr "Righe"
 
 #: src/dialogs/options.c:316
-#, fuzzy
 msgid "Resize terminal"
-msgstr "Ridimensiona ~terminale"
+msgstr "Ridimensiona terminale"
 
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
@@ -4310,7 +4309,6 @@ msgstr ""
 
 #. name:
 #: src/formhist/formhist.c:373
-#, fuzzy
 msgid "Forms History"
 msgstr "Storico Form"
 
@@ -4595,7 +4593,6 @@ msgstr ""
 
 #. name:
 #: src/mime/backend/default.c:227
-#, fuzzy
 msgid "Option system"
 msgstr "Sistema di configurazione"
 
@@ -5184,9 +5181,8 @@ msgstr "Inserisci espressione"
 
 #. name:
 #: src/scripting/scripting.c:34
-#, fuzzy
 msgid "Scripting"
-msgstr "Descrizione"
+msgstr "Scripting"
 
 #: src/terminal/event.c:90
 #, c-format

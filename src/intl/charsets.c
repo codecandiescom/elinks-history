@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.2 2002/03/17 17:27:51 pasky Exp $ */
+/* $Id: charsets.c,v 1.3 2002/03/18 11:34:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,7 +7,7 @@
 
 #include <links.h>
 
-#include <document/html/renderer.h>
+#include <document/options.h>
 #include <intl/charsets.h>
 #include <util/error.h>
 

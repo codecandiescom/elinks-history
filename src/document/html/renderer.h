@@ -1,39 +1,18 @@
-/* $Id: renderer.h,v 1.5 2002/03/18 10:55:37 pasky Exp $ */
+/* $Id: renderer.h,v 1.6 2002/03/18 11:34:03 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
 #include <links.h> /* list_head */
-#include <document/html/colors.h>
 #include <intl/charsets.h>
+#include <document/options.h>
+#include <document/session.h>
+#include <document/html/parser.h>
 #include <lowlevel/terminal.h>
 #include <lowlevel/ttime.h>
 /* We need this included later, otherwise it will miss some our
  * declarations. */
-/* #include "html.h" */
-/* #include "session.h" */
 /* #include "view.h" */
-
-/* For struct f_data (also) */
-struct document_options {
-	int xw, yw; /* size of window */
-	int xp, yp; /* pos of window */
-	int col, cp, assume_cp, hard_assume;
-	int use_document_colours;
-	int avoid_dark_on_black;
-	/* if you add anything, fix it in compare_opt */
-	int tables, frames, images, margin;
-	int plain;
-	int num_links, table_order;
-	struct rgb default_fg;
-	struct rgb default_bg;
-	struct rgb default_link;
-	struct rgb default_vlink;
-	unsigned char *framename;
-};
-
-#include <document/html/parser.h>
-#include <document/session.h>
 
 struct tag {
 	struct tag *next;
@@ -162,8 +141,6 @@ struct f_data_c {
 	struct view_state *vs;
 	int depth;
 };
-
-extern struct document_options *d_opt;
 
 extern int format_cache_entries;
 

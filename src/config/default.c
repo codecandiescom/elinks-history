@@ -1,5 +1,5 @@
 /* Options settings and commandline proccessing */
-/* $Id: default.c,v 1.4 2002/03/17 17:27:49 pasky Exp $ */
+/* $Id: default.c,v 1.5 2002/03/18 11:34:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include <bfu/bfu.h>
 #include <config/default.h>
 #include <config/kbdbind.h>
-#include <document/session.h>
+#include <document/options.h>
 #include <document/html/colors.h>
 #include <document/html/renderer.h>
 #include <intl/charsets.h>

@@ -1,9 +1,9 @@
-/* $Id: default.h,v 1.2 2002/03/17 13:54:12 pasky Exp $ */
+/* $Id: default.h,v 1.3 2002/03/18 11:34:02 pasky Exp $ */
 
-#ifndef EL__DEFAULT_H
-#define EL__DEFAULT_H
+#ifndef EL__CONFIG_DEFAULT_H
+#define EL__CONFIG_DEFAULT_H
 
-#include <document/session.h>
+#include <document/options.h>
 #include <document/html/colors.h>
 #include <lowlevel/terminal.h>
 

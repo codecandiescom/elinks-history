@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.3 2002/03/17 21:53:08 pasky Exp $ */
+/* $Id: session.h,v 1.4 2002/03/18 11:34:03 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -8,6 +8,7 @@ struct location;
 struct session;
 
 #include <document/cache.h>
+#include <document/options.h>
 #include <document/view.h>
 #include <document/html/parser.h>
 #include <document/html/renderer.h>
@@ -29,30 +30,6 @@ struct link_def {
 	unsigned char *link;
 	unsigned char *target;
 };
-
-/* For struct session */
-struct document_setup {
-	int assume_cp, hard_assume;
-	int use_document_colours;
-	int avoid_dark_on_black;
-	int tables, frames, images;
-	int margin;
-	int num_links, table_order;
-};
-
-static inline void ds2do(struct document_setup *ds, struct document_options *doo)
-{
-	doo->assume_cp = ds->assume_cp;
-	doo->hard_assume = ds->hard_assume;
-	doo->use_document_colours = ds->use_document_colours;
-	doo->avoid_dark_on_black = ds->avoid_dark_on_black;
-	doo->tables = ds->tables;
-	doo->frames = ds->frames;
-	doo->images = ds->images;
-	doo->margin = ds->margin;
-	doo->num_links = ds->num_links;
-	doo->table_order = ds->table_order;
-}
 
 /* For ses_*_frame*() */
 struct frame {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.295 2003/10/16 13:36:04 pasky Exp $ */
+/* $Id: options.c,v 1.296 2003/10/17 07:38:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1629,7 +1629,7 @@ register_options(void)
 
 	add_opt_tree("protocol.http", N_("Referer sending"),
 		"referer", 0,
-		N_("HTTP referer sending options. HTTP refer is a special header\n"
+		N_("HTTP referer sending options. HTTP referer is a special header\n"
 		"sent in the HTTP requests, which is supposed to contain the previous\n"
 		"page visited by the browser. This way, the server can know what link\n"
 		"did you follow when accessing that page. However, this behaviour\n"

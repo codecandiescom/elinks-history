@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.440 2004/06/10 15:30:58 jonas Exp $ */
+/* $Id: session.c,v 1.441 2004/06/10 15:37:27 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -67,8 +67,9 @@ struct initial_session_info {
 	/* Whether to open URLs in the master using -remote */
 	enum remote_session_flags remote;
 
-	/* The URL we should load immediatelly. */
-	struct list_head url_list;
+	/* The URIs we should load. Multiple URIs are only used when
+	 * initializing a session from the command line. */
+	struct uri_list uri_list;
 };
 
 struct file_to_load {
@@ -684,9 +685,7 @@ init_session_info(struct session *base_session, enum remote_session_flags remote
 	info->base_session = base_session;
 	info->remote = remote;
 
-	init_list(info->url_list);
-
-	if (uri) add_to_string_list(&info->url_list, struri(uri), -1);
+	if (uri) add_to_uri_list(&info->uri_list, uri);
 
 	return info;
 }
@@ -712,6 +711,8 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	current_uri = base_session && have_location(base_session)
 		    ? cur_loc(base_session)->vs.uri : NULL;
 
+	/* TODO: Warn about bad syntax. --jonas */
+
 	switch (magic) {
 	case SESSION_MAGIC(1, 0):
 		/* SESSION_MAGIC(1, 0) supports multiple URIs, remote opening
@@ -730,6 +731,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		str = (unsigned char *) data;
 		len -= 3 * sizeof(int);
 
+		/* TODO: unsigned char *url = decode_shell_safe_url(source); */
 		/* Extract multiple NUL terminated URIs */
 		while (len > 0) {
 			unsigned char *end = memchr(str, 0, len);
@@ -739,7 +741,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			uri = get_hooked_uri(str, current_uri, term->cwd);
 
 			if (uri) {
-				add_to_string_list(&info->url_list, struri(uri), -1);
+				add_to_uri_list(&info->uri_list, uri);
 				done_uri(uri);
 			}
 
@@ -781,7 +783,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 static void
 free_session_info(struct initial_session_info *info)
 {
-	free_string_list(&info->url_list);
+	free_uri_list(&info->uri_list);
 	mem_free(info);
 }
 
@@ -817,22 +819,12 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 	if (info->base_session)
 		copy_session(info->base_session, ses);
 
-	if (!list_empty(info->url_list)) {
+	if (info->uri_list.size) {
 		int first = !info->remote || (info->remote & SES_REMOTE_CURRENT_TAB);
-		struct string_list_item *str;
+		struct uri *uri;
+		int index;
 
-		foreach (str, info->url_list) {
-			unsigned char *cwd = ses->tab->term->cwd;
-			unsigned char *source = str->string.source;
-			unsigned char *url = decode_shell_safe_url(source);
-			struct uri *current_uri = have_location(ses) ? cur_loc(ses)->vs.uri : NULL;
-			struct uri *uri = url ? get_hooked_uri(url, current_uri, cwd) : NULL;
-
-			mem_free_if(url);
-
-			/* TODO: Warn about bad syntax. --jonas */
-			if (!uri) continue;
-
+		foreach_uri (uri, index, &info->uri_list) {
 			if (first) {
 				/* Open first url. */
 				goto_uri(ses, uri);
@@ -853,8 +845,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				/* Open next ones. */
 				open_uri_in_new_tab(ses, uri, 1);
 			}
-
-			done_uri(uri);
 		}
 
 	} else if (info->remote) {

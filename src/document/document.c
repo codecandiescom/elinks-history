@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.17 2003/11/03 13:55:13 zas Exp $ */
+/* $Id: document.c,v 1.18 2003/11/04 22:43:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,6 +205,8 @@ shrink_format_cache(int whole)
 			    && ce && ce->id_tag == document->id_tag)
 				continue;
 		}
+
+		if (document->refcount) continue;
 
 		document = document->prev;
 		done_document(document->next);

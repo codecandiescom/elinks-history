@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.365 2004/11/17 19:09:36 witekfl Exp $ */
+/* $Id: http.c,v 1.366 2004/11/19 12:17:10 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,8 +48,18 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+static struct auth_entry proxy_auth;
+
 static void decompress_shutdown(struct connection *);
 
+void
+free_proxy_auth(void)
+{
+	mem_free_if(proxy_auth.realm);
+	mem_free_if(proxy_auth.nonce);
+	mem_free_if(proxy_auth.opaque);
+}
 
 unsigned char *
 subst_user_agent(unsigned char *fmt, unsigned char *version,
@@ -386,23 +396,74 @@ http_send_header(struct connection *conn)
 	add_uri_to_string(&header, uri, URI_HTTP_HOST);
 	add_crlf_to_string(&header);
 
-	optstr = get_opt_str("protocol.http.proxy.user");
-	if (optstr[0] && talking_to_proxy) {
-		unsigned char *proxy_data;
+	if (talking_to_proxy) {
+		unsigned char *user = get_opt_str("protocol.http.proxy.user");
+		unsigned char *passwd = get_opt_str("protocol.http.proxy.passwd");
 
-		proxy_data = straconcat(optstr, ":",
-					get_opt_str("protocol.http.proxy.passwd"),
-					NULL);
-		if (proxy_data) {
-			unsigned char *proxy_64 = base64_encode(proxy_data);
+		if (proxy_auth.digest) {
+			unsigned char *cnonce;
+			unsigned char *ha1;
+			unsigned char *response;
+			int userlen = int_min(strlen(user), HTTP_AUTH_USER_MAXLEN - 1);
+			int passwordlen = int_min(strlen(passwd), HTTP_AUTH_PASSWORD_MAXLEN - 1);
 
-			if (proxy_64) {
-				add_to_string(&header, "Proxy-Authorization: Basic ");
-				add_to_string(&header, proxy_64);
-				add_crlf_to_string(&header);
-				mem_free(proxy_64);
+			if (userlen)
+				memcpy(proxy_auth.user, user, userlen);
+			proxy_auth.user[userlen] = '\0';
+			if (passwordlen)
+				memcpy(proxy_auth.password, passwd, passwordlen);
+			proxy_auth.password[passwordlen] = '\0';
+
+			cnonce = random_cnonce();
+			ha1 = digest_calc_ha1(&proxy_auth, cnonce);
+			response = digest_calc_response(&proxy_auth, uri, ha1, cnonce);
+
+			add_to_string(&header, "Proxy-Authorization: Digest ");
+			add_to_string(&header, "username=\"");
+			add_to_string(&header, proxy_auth.user);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "realm=\"");
+			add_to_string(&header, proxy_auth.realm);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "nonce=\"");
+			add_to_string(&header, proxy_auth.nonce);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "uri=\"/");
+			add_bytes_to_string(&header, uri->data, uri->datalen);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "qop=auth, nc=00000001, ");
+			add_to_string(&header, "cnonce=\"");
+			add_to_string(&header, cnonce);
+			add_to_string(&header, "\", ");
+			add_to_string(&header, "response=\"");
+			add_to_string(&header, response);
+			add_to_string(&header, "\"");
+			if (proxy_auth.opaque) {
+				add_to_string(&header, ", opaque=\"");
+				add_to_string(&header, proxy_auth.opaque);
+				add_to_string(&header, "\"");
 			}
-			mem_free(proxy_data);
+			add_crlf_to_string(&header);
+			mem_free_if(cnonce);
+			mem_free_if(ha1);
+			mem_free_if(response);
+		} else {
+			if (user[0]) {
+				unsigned char *proxy_data;
+
+				proxy_data = straconcat(user, ":", passwd, NULL);
+				if (proxy_data) {
+					unsigned char *proxy_64 = base64_encode(proxy_data);
+
+					if (proxy_64) {
+						add_to_string(&header, "Proxy-Authorization: Basic ");
+						add_to_string(&header, proxy_64);
+						add_crlf_to_string(&header);
+						mem_free(proxy_64);
+					}
+					mem_free(proxy_data);
+				}
+			}
 		}
 	}
 
@@ -1367,6 +1428,40 @@ again:
 		}
 	}
 
+	if (h == 407) {
+		unsigned char *str;
+
+		d = parse_header(conn->cached->head, "Proxy-Authenticate", &str);
+		while (d) {
+			if (!strncasecmp(d, "Basic", 5)) {
+				unsigned char *realm = get_header_param(d, "realm");
+
+				if (realm) {
+					mem_free_set(&proxy_auth.realm, realm);
+					proxy_auth.digest = 0;
+					mem_free(d);
+					break;
+				}
+			}
+#ifdef CONFIG_SSL_DIGEST
+			else if (!strncasecmp(d, "Digest", 6)) {
+				unsigned char *realm = get_header_param(d, "realm");
+				unsigned char *nonce = get_header_param(d, "nonce");
+				unsigned char *opaque = get_header_param(d, "opaque");
+
+				mem_free_set(&proxy_auth.realm, realm);
+				mem_free_set(&proxy_auth.nonce, nonce);
+				mem_free_set(&proxy_auth.opaque, opaque);
+				proxy_auth.digest = 1;
+				
+				mem_free(d);
+				break;
+			}
+#endif
+			mem_free(d);
+			d = parse_header(str, "WWW-Authenticate", &str);
+		}
+	}
 	kill_buffer_data(rb, a);
 	info->close = 0;
 	info->length = -1;

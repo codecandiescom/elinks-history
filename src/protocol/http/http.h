@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.12 2004/11/10 11:06:36 zas Exp $ */
+/* $Id: http.h,v 1.13 2004/11/19 12:17:10 witekfl Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -51,6 +51,7 @@ extern protocol_handler proxy_protocol_handler;
 #define https_protocol_handler NULL
 #endif
 
+void free_proxy_auth(void);
 void http_got_header(struct connection *, struct read_buffer *);
 
 unsigned char *subst_user_agent(unsigned char *fmt, unsigned char *version,

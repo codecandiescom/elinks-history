@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.309 2004/12/20 23:52:31 pasky Exp $ */
+/* $Id: link.c,v 1.310 2004/12/28 23:04:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1035,7 +1035,7 @@ goto_link_number_do(struct session *ses, struct document_view *doc_view, int n)
 
 	link = &doc_view->document->links[n];
 	if (!link_is_textinput(link)
-	    && get_opt_int("document.browse.accesskey.auto_follow"))
+	    && get_opt_bool("document.browse.accesskey.auto_follow"))
 		enter(ses, doc_view, 0);
 }
 

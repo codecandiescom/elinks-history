@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-09-06 00:24+0200\n"
+"POT-Creation-Date: 2003-09-12 23:01+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dmitry M. Klimov <dmk@gtrk.kmtn.ru>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -36,15 +36,15 @@ msgstr "В поле должно быть число"
 #: src/dialogs/menu.c:710 src/dialogs/mime.c:255 src/dialogs/options.c:275
 #: src/dialogs/options.c:372 src/globhist/dialogs.c:241
 #: src/protocol/protocol.c:60 src/protocol/user.c:156 src/protocol/user.c:172
-#: src/sched/download.c:525 src/sched/download.c:559 src/sched/download.c:720
-#: src/sched/download.c:806 src/sched/download.c:1190
-#: src/sched/download.c:1199 src/sched/download.c:1226
-#: src/sched/download.c:1238 src/sched/session.c:360
+#: src/sched/download.c:502 src/sched/download.c:583 src/sched/download.c:738
+#: src/sched/download.c:824 src/sched/download.c:1208
+#: src/sched/download.c:1217 src/sched/download.c:1244
+#: src/sched/download.c:1256 src/sched/session.c:384
 #: src/scripting/lua/core.c:444 src/scripting/lua/core.c:587
 #: src/scripting/lua/core.c:811 src/viewer/text/form.c:667
 #: src/viewer/text/search.c:594 src/viewer/text/search.c:633
-#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:754
-#: src/viewer/text/view.c:1467
+#: src/viewer/text/textarea.c:272 src/viewer/text/view.c:753
+#: src/viewer/text/view.c:1466
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -99,11 +99,11 @@ msgstr ""
 #: src/dialogs/info.c:204 src/dialogs/menu.c:644 src/dialogs/menu.c:655
 #: src/dialogs/menu.c:681 src/dialogs/menu.c:699 src/dialogs/menu.c:710
 #: src/dialogs/mime.c:251 src/dialogs/options.c:265 src/dialogs/options.c:367
-#: src/globhist/dialogs.c:419 src/sched/download.c:584 src/sched/error.c:40
-#: src/sched/session.c:1135 src/sched/session.c:1152 src/sched/session.c:1176
+#: src/globhist/dialogs.c:419 src/sched/download.c:608 src/sched/error.c:40
+#: src/sched/session.c:1159 src/sched/session.c:1176 src/sched/session.c:1200
 #: src/scripting/lua/core.c:440 src/scripting/lua/core.c:582
 #: src/scripting/lua/core.c:691 src/scripting/lua/core.c:811
-#: src/viewer/text/view.c:754
+#: src/viewer/text/view.c:753
 msgid "OK"
 msgstr "ОК"
 
@@ -142,7 +142,7 @@ msgstr ""
 #: src/bookmarks/dialogs.c:431 src/dialogs/menu.c:149 src/dialogs/mime.c:162
 #: src/formhist/formhist.c:337 src/globhist/dialogs.c:323
 #: src/globhist/dialogs.c:334 src/globhist/dialogs.c:379
-#: src/sched/session.c:624
+#: src/sched/session.c:648
 msgid "Yes"
 msgstr "Да"
 
@@ -150,7 +150,7 @@ msgstr "Да"
 #: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:150 src/dialogs/mime.c:163
 #: src/formhist/formhist.c:338 src/globhist/dialogs.c:324
 #: src/globhist/dialogs.c:335 src/globhist/dialogs.c:380
-#: src/sched/session.c:625
+#: src/sched/session.c:649
 msgid "No"
 msgstr "Нет"
 
@@ -280,7 +280,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/config/dialogs.c:189 src/protocol/protocol.c:57 src/sched/session.c:357
+#: src/config/dialogs.c:189 src/protocol/protocol.c:57 src/sched/session.c:381
 #: src/viewer/text/textarea.c:269
 msgid "Error"
 msgstr "Ошибка"
@@ -339,7 +339,7 @@ msgid "Options manager"
 msgstr ""
 
 #: src/config/dialogs.c:536 src/config/dialogs.c:790 src/dialogs/options.c:270
-#: src/sched/download.c:1188 src/sched/download.c:1224
+#: src/sched/download.c:1206 src/sched/download.c:1242
 msgid "Save"
 msgstr "Сохранить"
 
@@ -355,7 +355,7 @@ msgstr ""
 msgid "Need to select a keymap."
 msgstr ""
 
-#: src/config/dialogs.c:644 src/config/options.c:2605
+#: src/config/dialogs.c:644 src/config/options.c:2617
 msgid "Action"
 msgstr ""
 
@@ -1436,20 +1436,20 @@ msgstr ""
 #: src/config/options.c:2100 src/config/options.c:2112
 #: src/config/options.c:2129 src/config/options.c:2141
 #: src/config/options.c:2158 src/config/options.c:2170
-#: src/config/options.c:2182 src/config/options.c:2205
-#: src/config/options.c:2217 src/config/options.c:2237
-#: src/config/options.c:2245 src/config/options.c:2262
-#: src/config/options.c:2274 src/config/options.c:2294
-#: src/config/options.c:2302 src/config/options.c:2314
-#: src/config/options.c:2335 src/config/options.c:2347
+#: src/config/options.c:2182 src/config/options.c:2194
+#: src/config/options.c:2217 src/config/options.c:2229
+#: src/config/options.c:2249 src/config/options.c:2257
+#: src/config/options.c:2274 src/config/options.c:2286
+#: src/config/options.c:2306 src/config/options.c:2314
+#: src/config/options.c:2326 src/config/options.c:2347
 #: src/config/options.c:2359 src/config/options.c:2371
 #: src/config/options.c:2383 src/config/options.c:2395
 #: src/config/options.c:2407 src/config/options.c:2419
 #: src/config/options.c:2431 src/config/options.c:2443
-#: src/config/options.c:2468 src/config/options.c:2480
-#: src/config/options.c:2497 src/config/options.c:2509
-#: src/config/options.c:2526 src/config/options.c:2538
-#: src/config/options.c:2550
+#: src/config/options.c:2455 src/config/options.c:2480
+#: src/config/options.c:2492 src/config/options.c:2509
+#: src/config/options.c:2521 src/config/options.c:2538
+#: src/config/options.c:2550 src/config/options.c:2562
 #, fuzzy
 msgid "Text color"
 msgstr "Текстовое поле"
@@ -1465,18 +1465,18 @@ msgstr "Текстовое поле"
 #: src/config/options.c:2102 src/config/options.c:2114
 #: src/config/options.c:2131 src/config/options.c:2143
 #: src/config/options.c:2160 src/config/options.c:2172
-#: src/config/options.c:2184 src/config/options.c:2207
-#: src/config/options.c:2219 src/config/options.c:2264
-#: src/config/options.c:2276 src/config/options.c:2316
-#: src/config/options.c:2337 src/config/options.c:2349
+#: src/config/options.c:2184 src/config/options.c:2196
+#: src/config/options.c:2219 src/config/options.c:2231
+#: src/config/options.c:2276 src/config/options.c:2288
+#: src/config/options.c:2328 src/config/options.c:2349
 #: src/config/options.c:2361 src/config/options.c:2373
 #: src/config/options.c:2385 src/config/options.c:2397
 #: src/config/options.c:2409 src/config/options.c:2421
 #: src/config/options.c:2433 src/config/options.c:2445
-#: src/config/options.c:2470 src/config/options.c:2482
-#: src/config/options.c:2499 src/config/options.c:2511
-#: src/config/options.c:2528 src/config/options.c:2540
-#: src/config/options.c:2552
+#: src/config/options.c:2457 src/config/options.c:2482
+#: src/config/options.c:2494 src/config/options.c:2511
+#: src/config/options.c:2523 src/config/options.c:2540
+#: src/config/options.c:2552 src/config/options.c:2564
 msgid "Default text color."
 msgstr ""
 
@@ -1494,20 +1494,20 @@ msgstr ""
 #: src/config/options.c:2116 src/config/options.c:2133
 #: src/config/options.c:2145 src/config/options.c:2162
 #: src/config/options.c:2174 src/config/options.c:2186
-#: src/config/options.c:2209 src/config/options.c:2221
-#: src/config/options.c:2241 src/config/options.c:2249
-#: src/config/options.c:2266 src/config/options.c:2278
-#: src/config/options.c:2298 src/config/options.c:2306
-#: src/config/options.c:2318 src/config/options.c:2339
+#: src/config/options.c:2198 src/config/options.c:2221
+#: src/config/options.c:2233 src/config/options.c:2253
+#: src/config/options.c:2261 src/config/options.c:2278
+#: src/config/options.c:2290 src/config/options.c:2310
+#: src/config/options.c:2318 src/config/options.c:2330
 #: src/config/options.c:2351 src/config/options.c:2363
 #: src/config/options.c:2375 src/config/options.c:2387
 #: src/config/options.c:2399 src/config/options.c:2411
 #: src/config/options.c:2423 src/config/options.c:2435
-#: src/config/options.c:2447 src/config/options.c:2455
-#: src/config/options.c:2472 src/config/options.c:2484
-#: src/config/options.c:2501 src/config/options.c:2513
-#: src/config/options.c:2530 src/config/options.c:2542
-#: src/config/options.c:2554
+#: src/config/options.c:2447 src/config/options.c:2459
+#: src/config/options.c:2467 src/config/options.c:2484
+#: src/config/options.c:2496 src/config/options.c:2513
+#: src/config/options.c:2525 src/config/options.c:2542
+#: src/config/options.c:2554 src/config/options.c:2566
 #, fuzzy
 msgid "Background color"
 msgstr "В фоне"
@@ -1524,18 +1524,18 @@ msgstr "В фоне"
 #: src/config/options.c:2118 src/config/options.c:2135
 #: src/config/options.c:2147 src/config/options.c:2164
 #: src/config/options.c:2176 src/config/options.c:2188
-#: src/config/options.c:2211 src/config/options.c:2223
-#: src/config/options.c:2268 src/config/options.c:2280
-#: src/config/options.c:2320 src/config/options.c:2341
+#: src/config/options.c:2200 src/config/options.c:2223
+#: src/config/options.c:2235 src/config/options.c:2280
+#: src/config/options.c:2292 src/config/options.c:2332
 #: src/config/options.c:2353 src/config/options.c:2365
 #: src/config/options.c:2377 src/config/options.c:2389
 #: src/config/options.c:2401 src/config/options.c:2413
 #: src/config/options.c:2425 src/config/options.c:2437
-#: src/config/options.c:2449 src/config/options.c:2457
-#: src/config/options.c:2474 src/config/options.c:2486
-#: src/config/options.c:2503 src/config/options.c:2515
-#: src/config/options.c:2532 src/config/options.c:2544
-#: src/config/options.c:2556
+#: src/config/options.c:2449 src/config/options.c:2461
+#: src/config/options.c:2469 src/config/options.c:2486
+#: src/config/options.c:2498 src/config/options.c:2515
+#: src/config/options.c:2527 src/config/options.c:2544
+#: src/config/options.c:2556 src/config/options.c:2568
 #, fuzzy
 msgid "Default background color."
 msgstr "Разорвать фоновые соединения"
@@ -1669,7 +1669,7 @@ msgstr ""
 msgid "Codepage"
 msgstr "Кодовая страница"
 
-#: src/config/options.c:1328 src/config/options.c:2708
+#: src/config/options.c:1328 src/config/options.c:2720
 msgid "Codepage used in dump output."
 msgstr ""
 
@@ -1701,8 +1701,8 @@ msgstr "Работа с историей"
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/config/options.c:1345 src/config/options.c:1475
-#: src/config/options.c:1510 src/config/options.c:2586
-#: src/config/options.c:2593
+#: src/config/options.c:1510 src/config/options.c:2598
+#: src/config/options.c:2605
 #, fuzzy
 msgid "Enable"
 msgstr "метка"
@@ -2471,11 +2471,11 @@ msgstr "Терминал BeOS"
 msgid "Color settings for color terminal."
 msgstr ""
 
-#: src/config/options.c:1829 src/config/options.c:2197
+#: src/config/options.c:1829 src/config/options.c:2209
 msgid "Main menu bar"
 msgstr ""
 
-#: src/config/options.c:1831 src/config/options.c:2199
+#: src/config/options.c:1831 src/config/options.c:2211
 msgid "Main menu bar colors."
 msgstr ""
 
@@ -2496,38 +2496,38 @@ msgid "Selected main menu bar item colors."
 msgstr ""
 
 #: src/config/options.c:1857 src/config/options.c:1914
-#: src/config/options.c:2225 src/config/options.c:2282
+#: src/config/options.c:2237 src/config/options.c:2294
 msgid "Hotkey"
 msgstr ""
 
-#: src/config/options.c:1859 src/config/options.c:2227
+#: src/config/options.c:1859 src/config/options.c:2239
 msgid "Main menu hotkey colors."
 msgstr ""
 
 #: src/config/options.c:1861 src/config/options.c:1918
-#: src/config/options.c:2229 src/config/options.c:2286
+#: src/config/options.c:2241 src/config/options.c:2298
 msgid "Unselected hotkey"
 msgstr ""
 
-#: src/config/options.c:1863 src/config/options.c:2231
+#: src/config/options.c:1863 src/config/options.c:2243
 msgid "Main menu unselected hotkey colors."
 msgstr ""
 
 #: src/config/options.c:1865 src/config/options.c:1922
-#: src/config/options.c:2233 src/config/options.c:2290
+#: src/config/options.c:2245 src/config/options.c:2302
 #, fuzzy
 msgid "Selected hotkey"
 msgstr "Выберите поле"
 
-#: src/config/options.c:1867 src/config/options.c:2235
+#: src/config/options.c:1867 src/config/options.c:2247
 msgid "Main menu selected hotkey colors."
 msgstr ""
 
-#: src/config/options.c:1871 src/config/options.c:2239
+#: src/config/options.c:1871 src/config/options.c:2251
 msgid "Main menu unselected hotkey default text color."
 msgstr ""
 
-#: src/config/options.c:1875 src/config/options.c:2243
+#: src/config/options.c:1875 src/config/options.c:2255
 #, fuzzy
 msgid "Main menu unselected hotkey default background color."
 msgstr "Разорвать фоновые соединения"
@@ -2536,37 +2536,37 @@ msgstr "Разорвать фоновые соединения"
 msgid "Main menu selected hotkey text color."
 msgstr ""
 
-#: src/config/options.c:1883 src/config/options.c:2251
+#: src/config/options.c:1883 src/config/options.c:2263
 #, fuzzy
 msgid "Main menu selected hotkey default background color."
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:1886 src/config/options.c:2254
+#: src/config/options.c:1886 src/config/options.c:2266
 msgid "Menu bar"
 msgstr ""
 
-#: src/config/options.c:1888 src/config/options.c:2256
+#: src/config/options.c:1888 src/config/options.c:2268
 msgid "Menu bar colors."
 msgstr ""
 
-#: src/config/options.c:1890 src/config/options.c:2258
+#: src/config/options.c:1890 src/config/options.c:2270
 msgid "Unselected menu item"
 msgstr ""
 
-#: src/config/options.c:1892 src/config/options.c:2260
+#: src/config/options.c:1892 src/config/options.c:2272
 msgid "Unselected menu item colors."
 msgstr ""
 
-#: src/config/options.c:1902 src/config/options.c:2270
+#: src/config/options.c:1902 src/config/options.c:2282
 #, fuzzy
 msgid "Selected menu item"
 msgstr "Выберите поле"
 
-#: src/config/options.c:1904 src/config/options.c:2272
+#: src/config/options.c:1904 src/config/options.c:2284
 msgid "Selected menu item colors."
 msgstr ""
 
-#: src/config/options.c:1916 src/config/options.c:2284
+#: src/config/options.c:1916 src/config/options.c:2296
 msgid "Menu item hotkey colors."
 msgstr ""
 
@@ -2596,20 +2596,20 @@ msgstr ""
 msgid "Menu item selected hotkey background color."
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:1942 src/config/options.c:2310
+#: src/config/options.c:1942 src/config/options.c:2322
 #, fuzzy
 msgid "Menu frame"
 msgstr "Нет рамок"
 
-#: src/config/options.c:1944 src/config/options.c:2312
+#: src/config/options.c:1944 src/config/options.c:2324
 msgid "Menu frame colors."
 msgstr ""
 
-#: src/config/options.c:1955 src/config/options.c:2323
+#: src/config/options.c:1955 src/config/options.c:2335
 msgid "Dialog"
 msgstr ""
 
-#: src/config/options.c:1957 src/config/options.c:2325
+#: src/config/options.c:1957 src/config/options.c:2337
 msgid "Dialog colors."
 msgstr ""
 
@@ -2618,73 +2618,73 @@ msgstr ""
 msgid "Generic background color"
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:1961 src/config/options.c:2329
+#: src/config/options.c:1961 src/config/options.c:2341
 msgid "Dialog generic background color."
 msgstr ""
 
-#: src/config/options.c:1963 src/config/options.c:2331
+#: src/config/options.c:1963 src/config/options.c:2343
 #, fuzzy
 msgid "Frame"
 msgstr "метка"
 
-#: src/config/options.c:1965 src/config/options.c:2333
+#: src/config/options.c:1965 src/config/options.c:2345
 msgid "Dialog frame colors."
 msgstr ""
 
-#: src/config/options.c:1975 src/config/options.c:2343
+#: src/config/options.c:1975 src/config/options.c:2355
 #: src/dialogs/document.c:98
 msgid "Title"
 msgstr "Заголовок"
 
-#: src/config/options.c:1977 src/config/options.c:2345
+#: src/config/options.c:1977 src/config/options.c:2357
 msgid "Dialog title colors."
 msgstr ""
 
-#: src/config/options.c:1987 src/config/options.c:2355
+#: src/config/options.c:1987 src/config/options.c:2367
 #, fuzzy
 msgid "Text"
 msgstr "Текстовое поле"
 
-#: src/config/options.c:1989 src/config/options.c:2357
+#: src/config/options.c:1989 src/config/options.c:2369
 msgid "Dialog text colors."
 msgstr ""
 
-#: src/config/options.c:1999 src/config/options.c:2367
-#: src/viewer/text/link.c:998
+#: src/config/options.c:1999 src/config/options.c:2379
+#: src/viewer/text/link.c:999
 msgid "Checkbox"
 msgstr "Отметка"
 
-#: src/config/options.c:2001 src/config/options.c:2369
+#: src/config/options.c:2001 src/config/options.c:2381
 msgid "Dialog checkbox colors."
 msgstr ""
 
-#: src/config/options.c:2011 src/config/options.c:2379
+#: src/config/options.c:2011 src/config/options.c:2391
 #, fuzzy
 msgid "Checkbox label"
 msgstr "Отметка"
 
-#: src/config/options.c:2013 src/config/options.c:2381
+#: src/config/options.c:2013 src/config/options.c:2393
 msgid "Dialog checkbox label colors."
 msgstr ""
 
-#: src/config/options.c:2023 src/config/options.c:2391
+#: src/config/options.c:2023 src/config/options.c:2403
 msgid "Button"
 msgstr ""
 
-#: src/config/options.c:2025 src/config/options.c:2393
+#: src/config/options.c:2025 src/config/options.c:2405
 msgid "Dialog button colors."
 msgstr ""
 
-#: src/config/options.c:2035 src/config/options.c:2403
+#: src/config/options.c:2035 src/config/options.c:2415
 msgid "Selected button"
 msgstr ""
 
-#: src/config/options.c:2037 src/config/options.c:2405
+#: src/config/options.c:2037 src/config/options.c:2417
 msgid "Dialog selected button colors."
 msgstr ""
 
-#: src/config/options.c:2047 src/config/options.c:2415
-#: src/viewer/text/link.c:1004
+#: src/config/options.c:2047 src/config/options.c:2427
+#: src/viewer/text/link.c:1005
 msgid "Text field"
 msgstr "Текстовое поле"
 
@@ -2692,45 +2692,45 @@ msgstr "Текстовое поле"
 msgid "Dialog text field colors."
 msgstr ""
 
-#: src/config/options.c:2059 src/config/options.c:2427
+#: src/config/options.c:2059 src/config/options.c:2439
 #, fuzzy
 msgid "Text field text"
 msgstr "Текстовое поле"
 
-#: src/config/options.c:2061 src/config/options.c:2429
+#: src/config/options.c:2061 src/config/options.c:2441
 msgid "Dialog field text colors."
 msgstr ""
 
-#: src/config/options.c:2071 src/config/options.c:2439
+#: src/config/options.c:2071 src/config/options.c:2451
 msgid "Meter"
 msgstr ""
 
-#: src/config/options.c:2073 src/config/options.c:2441
+#: src/config/options.c:2073 src/config/options.c:2453
 msgid "Dialog meter colors."
 msgstr ""
 
-#: src/config/options.c:2083 src/config/options.c:2451
+#: src/config/options.c:2083 src/config/options.c:2463
 msgid "Shadow"
 msgstr ""
 
-#: src/config/options.c:2085 src/config/options.c:2453
+#: src/config/options.c:2085 src/config/options.c:2465
 msgid "Dialog shadow colors (see ui.shadows option)."
 msgstr ""
 
-#: src/config/options.c:2092 src/config/options.c:2460
+#: src/config/options.c:2092 src/config/options.c:2472
 #, fuzzy
 msgid "Title bar"
 msgstr "Заголовок"
 
-#: src/config/options.c:2094 src/config/options.c:2462
+#: src/config/options.c:2094 src/config/options.c:2474
 msgid "Title bar colors."
 msgstr ""
 
-#: src/config/options.c:2096 src/config/options.c:2464
+#: src/config/options.c:2096 src/config/options.c:2476
 msgid "Generic title bar"
 msgstr ""
 
-#: src/config/options.c:2098 src/config/options.c:2466
+#: src/config/options.c:2098 src/config/options.c:2478
 msgid "Generic title bar colors."
 msgstr ""
 
@@ -2738,136 +2738,145 @@ msgstr ""
 msgid "Title bar text"
 msgstr ""
 
-#: src/config/options.c:2110 src/config/options.c:2478
+#: src/config/options.c:2110 src/config/options.c:2490
 msgid "Title bar text colors."
 msgstr ""
 
-#: src/config/options.c:2121 src/config/options.c:2489
+#: src/config/options.c:2121 src/config/options.c:2501
 msgid "Status bar"
 msgstr ""
 
-#: src/config/options.c:2123 src/config/options.c:2491
+#: src/config/options.c:2123 src/config/options.c:2503
 msgid "Status bar colors."
 msgstr ""
 
-#: src/config/options.c:2125 src/config/options.c:2493
+#: src/config/options.c:2125 src/config/options.c:2505
 msgid "Generic status bar"
 msgstr ""
 
-#: src/config/options.c:2127 src/config/options.c:2495
+#: src/config/options.c:2127 src/config/options.c:2507
 msgid "Generic status bar colors."
 msgstr ""
 
-#: src/config/options.c:2137 src/config/options.c:2505
+#: src/config/options.c:2137 src/config/options.c:2517
 #, fuzzy
 msgid "Status bar text"
 msgstr "Поиск текста"
 
-#: src/config/options.c:2139 src/config/options.c:2507
+#: src/config/options.c:2139 src/config/options.c:2519
 msgid "Status bar text colors."
 msgstr ""
 
-#: src/config/options.c:2150 src/config/options.c:2518
+#: src/config/options.c:2150 src/config/options.c:2530
 msgid "Tabs bar"
 msgstr ""
 
-#: src/config/options.c:2152 src/config/options.c:2520
+#: src/config/options.c:2152 src/config/options.c:2532
 msgid "Tabs bar colors."
 msgstr ""
 
-#: src/config/options.c:2154 src/config/options.c:2522
+#: src/config/options.c:2154 src/config/options.c:2534
 #, fuzzy
 msgid "Unselected tab"
 msgstr "Выберите поле"
 
-#: src/config/options.c:2156 src/config/options.c:2524
+#: src/config/options.c:2156 src/config/options.c:2536
 #, fuzzy
 msgid "Unselected tab colors."
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:2166 src/config/options.c:2534
+#: src/config/options.c:2166
+#, fuzzy
+msgid "Loading tab"
+msgstr "загружается"
+
+#: src/config/options.c:2168
+msgid "Tab colors for tabs that are loading in the background."
+msgstr ""
+
+#: src/config/options.c:2178 src/config/options.c:2546
 #, fuzzy
 msgid "Selected tab"
 msgstr "Выберите поле"
 
-#: src/config/options.c:2168 src/config/options.c:2536
+#: src/config/options.c:2180 src/config/options.c:2548
 #, fuzzy
 msgid "Selected tab colors."
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:2178 src/config/options.c:2546
+#: src/config/options.c:2190 src/config/options.c:2558
 #, fuzzy
 msgid "Searched strings"
 msgstr "Неверная строка"
 
-#: src/config/options.c:2180 src/config/options.c:2548
+#: src/config/options.c:2192 src/config/options.c:2560
 #, fuzzy
 msgid "Searched string highlight colors."
 msgstr "Искомая строка не найдена"
 
-#: src/config/options.c:2192
+#: src/config/options.c:2204
 msgid "Non-color terminals"
 msgstr ""
 
-#: src/config/options.c:2194
+#: src/config/options.c:2206
 msgid "Color settings for non-color terminal."
 msgstr ""
 
-#: src/config/options.c:2201
+#: src/config/options.c:2213
 msgid "Unselected menu bar item"
 msgstr ""
 
-#: src/config/options.c:2203
+#: src/config/options.c:2215
 msgid "Unselected menu bar item colors."
 msgstr ""
 
-#: src/config/options.c:2213
+#: src/config/options.c:2225
 msgid "Selected menu bar item"
 msgstr ""
 
-#: src/config/options.c:2215
+#: src/config/options.c:2227
 msgid "Selected menu bar item colors."
 msgstr ""
 
-#: src/config/options.c:2247
+#: src/config/options.c:2259
 msgid "Main menu selected hotkey default text color."
 msgstr ""
 
-#: src/config/options.c:2288
+#: src/config/options.c:2300
 msgid "Menu unselected hotkey colors."
 msgstr ""
 
-#: src/config/options.c:2292
+#: src/config/options.c:2304
 msgid "Menu selected hotkey colors."
 msgstr ""
 
-#: src/config/options.c:2296
+#: src/config/options.c:2308
 msgid "Menu unselected hotkey default text color."
 msgstr ""
 
-#: src/config/options.c:2300
+#: src/config/options.c:2312
 #, fuzzy
 msgid "Menu unselected hotkey default background color."
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:2304
+#: src/config/options.c:2316
 msgid "Menu selected hotkey default text color."
 msgstr ""
 
-#: src/config/options.c:2308
+#: src/config/options.c:2320
 #, fuzzy
 msgid "Menu selected hotkey default background color."
 msgstr "Разорвать фоновые соединения"
 
-#: src/config/options.c:2327
+#: src/config/options.c:2339
 msgid "Dialog generic background color"
 msgstr ""
 
-#: src/config/options.c:2417
+#: src/config/options.c:2429
 msgid "Dialog field colors."
 msgstr ""
 
-#: src/config/options.c:2476
+#: src/config/options.c:2488
 #, fuzzy
 msgid "Title text"
 msgstr "Заголовок"
@@ -2875,47 +2884,47 @@ msgstr "Заголовок"
 #. ==========================================================
 #. ============= BORING PART (colors) END ===================
 #. ==========================================================
-#: src/config/options.c:2564
+#: src/config/options.c:2576
 msgid "Dialog settings"
 msgstr ""
 
-#: src/config/options.c:2566
+#: src/config/options.c:2578
 msgid "Dialogs-specific appearance and behaviour settings."
 msgstr ""
 
-#: src/config/options.c:2568
+#: src/config/options.c:2580
 msgid "Minimal height of listbox widget"
 msgstr ""
 
-#: src/config/options.c:2570
+#: src/config/options.c:2582
 msgid ""
 "Minimal height of the listbox widget (used e.g. for bookmarks\n"
 "or global history)."
 msgstr ""
 
-#: src/config/options.c:2573
+#: src/config/options.c:2585
 msgid "Drop shadows"
 msgstr ""
 
-#: src/config/options.c:2575
+#: src/config/options.c:2587
 msgid ""
 "Make dialogs drop shadows (the shadows are solid, you can\n"
 "adjust their color by ui.colors.*.dialog.shadow). You may\n"
 "also want to eliminate the wide borders by adjusting setup.h."
 msgstr ""
 
-#: src/config/options.c:2580
+#: src/config/options.c:2592
 #, fuzzy
 msgid "Timer options"
 msgstr "Настройки терминала"
 
-#: src/config/options.c:2582
+#: src/config/options.c:2594
 msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
 
-#: src/config/options.c:2588
+#: src/config/options.c:2600
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -2923,7 +2932,7 @@ msgid ""
 "2 is count down and show the timer near LEDs"
 msgstr ""
 
-#: src/config/options.c:2595
+#: src/config/options.c:2607
 msgid ""
 "Whether to enable the timer or not:\n"
 "0 is don't count down anything\n"
@@ -2932,33 +2941,33 @@ msgid ""
 "DISABLED)"
 msgstr ""
 
-#: src/config/options.c:2601
+#: src/config/options.c:2613
 msgid "Duration"
 msgstr ""
 
-#: src/config/options.c:2603
+#: src/config/options.c:2615
 msgid "Inactivity timeout. One day should be enough for just everyone (TM)."
 msgstr ""
 
-#: src/config/options.c:2607
+#: src/config/options.c:2619
 msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
 
-#: src/config/options.c:2610
+#: src/config/options.c:2622
 #, fuzzy
 msgid "Window tabs"
 msgstr "Окно"
 
-#: src/config/options.c:2612
+#: src/config/options.c:2624
 msgid "Window tabs settings."
 msgstr ""
 
-#: src/config/options.c:2614
+#: src/config/options.c:2626
 #, fuzzy
 msgid "Display tabs bar"
 msgstr "Отобразить карту"
 
-#: src/config/options.c:2616
+#: src/config/options.c:2628
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never.\n"
@@ -2966,81 +2975,81 @@ msgid ""
 "2 means always."
 msgstr ""
 
-#: src/config/options.c:2621
+#: src/config/options.c:2633
 msgid "Wrap-around tabs cycling"
 msgstr ""
 
-#: src/config/options.c:2623
+#: src/config/options.c:2635
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
 msgstr ""
 
-#: src/config/options.c:2628 src/config/opttypes.c:447
+#: src/config/options.c:2640 src/config/opttypes.c:447
 msgid "Language"
 msgstr ""
 
-#: src/config/options.c:2630
+#: src/config/options.c:2642
 msgid ""
 "Language of user interface. System means that the language will\n"
 "be extracted from the environment dynamically."
 msgstr ""
 
-#: src/config/options.c:2638
+#: src/config/options.c:2650
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the ui.dialog.shadows option instead."
 msgstr ""
 
-#: src/config/options.c:2641
+#: src/config/options.c:2653
 #, fuzzy
 msgid "Display status bar"
 msgstr "Отобразить карту"
 
-#: src/config/options.c:2643
+#: src/config/options.c:2655
 msgid "Show status bar on the screen."
 msgstr ""
 
-#: src/config/options.c:2645
+#: src/config/options.c:2657
 #, fuzzy
 msgid "Display title bar"
 msgstr "Отобразить карту"
 
-#: src/config/options.c:2647
+#: src/config/options.c:2659
 msgid "Show title bar on the screen."
 msgstr ""
 
-#: src/config/options.c:2649
+#: src/config/options.c:2661
 msgid "Display goto dialog on startup"
 msgstr ""
 
-#: src/config/options.c:2651
+#: src/config/options.c:2663
 msgid "Pop up goto dialog on startup when there's no homepage set."
 msgstr ""
 
-#: src/config/options.c:2654
+#: src/config/options.c:2666
 #, fuzzy
 msgid "Set window title"
 msgstr "Заголовок ссылки"
 
-#: src/config/options.c:2656
+#: src/config/options.c:2668
 msgid ""
 "Set the window title when running in a windowing environment \n"
 "in an xterm-like terminal. This way the document's title is \n"
 "shown on the window titlebar."
 msgstr ""
 
-#: src/config/options.c:2666
+#: src/config/options.c:2678
 msgid ""
 "This option is deprecated and will be removed very soon.\n"
 "Please use the config.saving_style option instead."
 msgstr ""
 
-#: src/config/options.c:2669
+#: src/config/options.c:2681
 msgid "Use secure file saving"
 msgstr ""
 
-#: src/config/options.c:2671
+#: src/config/options.c:2683
 msgid ""
 "First write data to 'file.tmp', then rename to 'file' upon\n"
 "successfully finishing this. Note that this relates only to\n"
@@ -3050,11 +3059,11 @@ msgid ""
 msgstr ""
 
 #. Commandline options
-#: src/config/options.c:2681
+#: src/config/options.c:2693
 msgid "Restrict to anonymous mode"
 msgstr ""
 
-#: src/config/options.c:2683
+#: src/config/options.c:2695
 msgid ""
 "Restrict ELinks so that it can run on an anonymous account.\n"
 "No local file browsing, no downloads. Execution of viewers\n"
@@ -3062,115 +3071,115 @@ msgid ""
 "association table."
 msgstr ""
 
-#: src/config/options.c:2688
+#: src/config/options.c:2700
 #, fuzzy
 msgid "Autosubmit first form"
 msgstr "Послать форму"
 
-#: src/config/options.c:2690
+#: src/config/options.c:2702
 msgid "Go and submit the first form you'll stumble upon."
 msgstr ""
 
-#: src/config/options.c:2692
+#: src/config/options.c:2704
 msgid "Clone session with given ID"
 msgstr ""
 
-#: src/config/options.c:2694
+#: src/config/options.c:2706
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 msgstr ""
 
-#: src/config/options.c:2697
+#: src/config/options.c:2709
 msgid "MIME type to assume for documents"
 msgstr ""
 
-#: src/config/options.c:2699
+#: src/config/options.c:2711
 msgid "Default MIME type to assume for documents of unknown type."
 msgstr ""
 
-#: src/config/options.c:2701
+#: src/config/options.c:2713
 msgid "Write formatted version of given URL to stdout"
 msgstr ""
 
-#: src/config/options.c:2703
+#: src/config/options.c:2715
 msgid ""
 "Write a plain-text version of the given HTML document to\n"
 "stdout."
 msgstr ""
 
-#: src/config/options.c:2706
+#: src/config/options.c:2718
 msgid "Codepage to use with -dump"
 msgstr ""
 
-#: src/config/options.c:2710
+#: src/config/options.c:2722
 msgid "Width of document formatted with -dump"
 msgstr ""
 
-#: src/config/options.c:2712
+#: src/config/options.c:2724
 msgid "Width of the dump output."
 msgstr ""
 
-#: src/config/options.c:2714
+#: src/config/options.c:2726
 msgid "Evaluate given configuration option"
 msgstr ""
 
-#: src/config/options.c:2716
+#: src/config/options.c:2728
 msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
 
 #. lynx compatibility
-#: src/config/options.c:2720
+#: src/config/options.c:2732
 msgid "Assume the file is HTML"
 msgstr ""
 
-#: src/config/options.c:2722
+#: src/config/options.c:2734
 msgid ""
 "This makes ELinks assume that the files it sees are HTML. This is\n"
 "equivalent to -default-mime-type text/html."
 msgstr ""
 
-#: src/config/options.c:2735
+#: src/config/options.c:2747
 msgid "Print usage help and exit"
 msgstr ""
 
-#: src/config/options.c:2737
+#: src/config/options.c:2749
 msgid "Print usage help and exit."
 msgstr ""
 
-#: src/config/options.c:2739
+#: src/config/options.c:2751
 msgid "Print detailed usage help and exit"
 msgstr ""
 
-#: src/config/options.c:2741
+#: src/config/options.c:2753
 msgid "Print detailed usage help and exit."
 msgstr ""
 
-#: src/config/options.c:2743
+#: src/config/options.c:2755
 msgid "Print help for configuration options"
 msgstr ""
 
-#: src/config/options.c:2745
+#: src/config/options.c:2757
 msgid "Print help on configuration options and exit."
 msgstr ""
 
-#: src/config/options.c:2747
+#: src/config/options.c:2759
 #, fuzzy
 msgid "Look up specified host"
 msgstr "Не указана программа для"
 
-#: src/config/options.c:2749
+#: src/config/options.c:2761
 #, fuzzy
 msgid "Look up specified host."
 msgstr "Не указана программа для"
 
-#: src/config/options.c:2751
+#: src/config/options.c:2763
 msgid "Run as separate instance"
 msgstr ""
 
-#: src/config/options.c:2753
+#: src/config/options.c:2765
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -3178,19 +3187,19 @@ msgid ""
 "this option is used. See also -touch-files."
 msgstr ""
 
-#: src/config/options.c:2758
+#: src/config/options.c:2770
 msgid "Don't use files in ~/.elinks"
 msgstr ""
 
-#: src/config/options.c:2760
+#: src/config/options.c:2772
 msgid "Don't attempt to create and/or use home rc directory (~/.elinks)."
 msgstr ""
 
-#: src/config/options.c:2762
+#: src/config/options.c:2774
 msgid "Connect to session ring with given ID"
 msgstr ""
 
-#: src/config/options.c:2764
+#: src/config/options.c:2776
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -3208,19 +3217,19 @@ msgid ""
 "-touch-files."
 msgstr ""
 
-#: src/config/options.c:2779
+#: src/config/options.c:2791
 msgid "Write the source of given URL to stdout"
 msgstr ""
 
-#: src/config/options.c:2781
+#: src/config/options.c:2793
 msgid "Write the given HTML document in source form to stdout."
 msgstr ""
 
-#: src/config/options.c:2783
+#: src/config/options.c:2795
 msgid "Read document from stdin"
 msgstr ""
 
-#: src/config/options.c:2785
+#: src/config/options.c:2797
 msgid ""
 "Open stdin as an HTML document - this is fully equivalent to:\n"
 " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
@@ -3229,22 +3238,22 @@ msgid ""
 "know why you would use -source -stdin, though ;-)"
 msgstr ""
 
-#: src/config/options.c:2791
+#: src/config/options.c:2803
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 
-#: src/config/options.c:2793
+#: src/config/options.c:2805
 msgid ""
 "Set to 1 to have runtime state files (bookmarks, history, ...)\n"
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
 
-#: src/config/options.c:2797
+#: src/config/options.c:2809
 msgid "Print version information and exit"
 msgstr ""
 
-#: src/config/options.c:2799
+#: src/config/options.c:2811
 msgid "Print ELinks version information and exit."
 msgstr ""
 
@@ -3756,7 +3765,7 @@ msgstr "Введите URL"
 msgid "Save URL"
 msgstr "Сохранить URL"
 
-#: src/dialogs/menu.c:680 src/sched/download.c:400 src/sched/download.c:581
+#: src/dialogs/menu.c:680 src/sched/download.c:400 src/sched/download.c:605
 msgid "Download"
 msgstr "Закачка"
 
@@ -3908,12 +3917,12 @@ msgid ""
 "Last visit time: %s"
 msgstr ""
 
-#: src/lowlevel/home.c:85
+#: src/lowlevel/home.c:123
 #, c-format
 msgid "ELINKS_CONFDIR set to %s, but directory %s doesn't exist."
 msgstr ""
 
-#: src/lowlevel/home.c:160
+#: src/lowlevel/home.c:167
 msgid ""
 "Unable to find or create ELinks config directory. Please check if you have "
 "$HOME variable set correctly and if you have write permission to your home "
@@ -3956,7 +3965,7 @@ msgstr ""
 msgid "%d select() failures."
 msgstr ""
 
-#: src/lowlevel/signals.c:235
+#: src/lowlevel/signals.c:242
 #, fuzzy, c-format
 msgid "Bad signal number: %d"
 msgstr "Неверное число"
@@ -4064,16 +4073,16 @@ msgstr "В фоне с уведомлением"
 msgid "Abort"
 msgstr "Прервать"
 
-#: src/sched/download.c:522 src/sched/download.c:556 src/sched/download.c:802
+#: src/sched/download.c:499 src/sched/download.c:580 src/sched/download.c:820
 msgid "Download error"
 msgstr "Ошибка закачки"
 
-#: src/sched/download.c:523
+#: src/sched/download.c:500
 #, fuzzy, c-format
 msgid "Could not create file %s: %s"
 msgstr "Невозможно писать в файл"
 
-#: src/sched/download.c:557
+#: src/sched/download.c:581
 #, fuzzy, c-format
 msgid ""
 "Error downloading %s:\n"
@@ -4081,19 +4090,19 @@ msgid ""
 "%s"
 msgstr "Ошибка закачивания"
 
-#: src/sched/download.c:582
+#: src/sched/download.c:606
 #, fuzzy, c-format
 msgid ""
 "Download complete:\n"
 "%s"
 msgstr "Закачка завершена"
 
-#: src/sched/download.c:709
+#: src/sched/download.c:727
 #, fuzzy
 msgid "File exists"
 msgstr "Расширения файлов"
 
-#: src/sched/download.c:710
+#: src/sched/download.c:728
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4103,60 +4112,60 @@ msgid ""
 "%s"
 msgstr ""
 
-#: src/sched/download.c:717
+#: src/sched/download.c:735
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:718
+#: src/sched/download.c:736
 msgid "Overwrite the original file"
 msgstr ""
 
-#: src/sched/download.c:719
+#: src/sched/download.c:737
 msgid "Resume download of the original file"
 msgstr ""
 
-#: src/sched/download.c:803
+#: src/sched/download.c:821
 #, fuzzy, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
 msgstr "Невозможно писать в файл"
 
-#: src/sched/download.c:1182 src/sched/download.c:1193
+#: src/sched/download.c:1200 src/sched/download.c:1211
 msgid "Unknown type"
 msgstr "Неизвестный тип"
 
-#: src/sched/download.c:1183
+#: src/sched/download.c:1201
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:1189 src/sched/download.c:1198
-#: src/sched/download.c:1225 src/sched/download.c:1237
+#: src/sched/download.c:1207 src/sched/download.c:1216
+#: src/sched/download.c:1243 src/sched/download.c:1255
 msgid "Display"
 msgstr "Отобразить"
 
-#: src/sched/download.c:1194
+#: src/sched/download.c:1212
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1216 src/sched/download.c:1229
+#: src/sched/download.c:1234 src/sched/download.c:1247
 msgid "What to do?"
 msgstr "Что делать?"
 
-#: src/sched/download.c:1217
+#: src/sched/download.c:1235
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1223 src/sched/download.c:1236
+#: src/sched/download.c:1241 src/sched/download.c:1254
 msgid "Open"
 msgstr "Открыть"
 
-#: src/sched/download.c:1230
+#: src/sched/download.c:1248
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4299,40 +4308,40 @@ msgstr "в среднем"
 msgid "cur"
 msgstr "текущая"
 
-#: src/sched/session.c:272
+#: src/sched/session.c:284
 #, fuzzy
 msgid "Untitled"
 msgstr "Заголовок ссылки"
 
-#: src/sched/session.c:274
+#: src/sched/session.c:286
 #, fuzzy
 msgid "No document"
 msgstr "документов"
 
-#: src/sched/session.c:610
+#: src/sched/session.c:634
 #, fuzzy, c-format
 msgid "Do you want to follow redirect and post form data to url %s?"
 msgstr "Желаете последовать переадресации и отправить данные формы по адресу"
 
-#: src/sched/session.c:613
+#: src/sched/session.c:637
 #, fuzzy, c-format
 msgid "Do you want to post form data to url %s?"
 msgstr "Желаете отправить данные формы по адресу"
 
-#: src/sched/session.c:615
+#: src/sched/session.c:639
 #, fuzzy, c-format
 msgid "Do you want to repost form data to url %s?"
 msgstr "Желаете снова отправить данные формы по адресу"
 
-#: src/sched/session.c:621 src/sched/session.c:1140 src/sched/session.c:1160
+#: src/sched/session.c:645 src/sched/session.c:1164 src/sched/session.c:1184
 msgid "Warning"
 msgstr "Внимание"
 
-#: src/sched/session.c:1130
+#: src/sched/session.c:1154
 msgid "Welcome"
 msgstr "Здравствуйте"
 
-#: src/sched/session.c:1131
+#: src/sched/session.c:1155
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4342,7 +4351,7 @@ msgstr ""
 "Нажмите ESC для вызова меню. Прочтите руководство пользователя, выбрав в "
 "меню 'Помощь->Руководство'."
 
-#: src/sched/session.c:1141
+#: src/sched/session.c:1165
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -4353,7 +4362,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1161
+#: src/sched/session.c:1185
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -4366,7 +4375,7 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1632
+#: src/sched/session.c:1656
 #, fuzzy
 msgid "Unknown event."
 msgstr "Неизвестный тип"
@@ -4487,120 +4496,120 @@ msgstr "Ошибка при отправке формы"
 msgid "Could not get file %s: %s"
 msgstr "Невозможно получить файл"
 
-#: src/viewer/text/link.c:825
+#: src/viewer/text/link.c:826
 msgid "Display ~usemap"
 msgstr "Отобразить карту"
 
-#: src/viewer/text/link.c:830
+#: src/viewer/text/link.c:831
 msgid "~Follow link"
 msgstr "Следовать ссылке"
 
-#: src/viewer/text/link.c:833
+#: src/viewer/text/link.c:834
 msgid "Follow link and r~eload"
 msgstr "Следовать ссылке и перезагрузить"
 
-#: src/viewer/text/link.c:837
+#: src/viewer/text/link.c:838
 msgid "Open in new ~window"
 msgstr "Открыть в новом окне"
 
-#: src/viewer/text/link.c:843
+#: src/viewer/text/link.c:844
 msgid "~Download link"
 msgstr "Скачать по ссылке"
 
-#: src/viewer/text/link.c:847
+#: src/viewer/text/link.c:848
 msgid "~Add link to bookmarks"
 msgstr "Добавить ссылку в закладки"
 
-#: src/viewer/text/link.c:859
+#: src/viewer/text/link.c:860
 msgid "~Reset form"
 msgstr "Очистка формы"
 
-#: src/viewer/text/link.c:864
+#: src/viewer/text/link.c:865
 msgid "~Submit form"
 msgstr "Послать форму"
 
-#: src/viewer/text/link.c:867
+#: src/viewer/text/link.c:868
 msgid "Submit form and rel~oad"
 msgstr "Послать форму и перезагрузить"
 
-#: src/viewer/text/link.c:871
+#: src/viewer/text/link.c:872
 msgid "Submit form and open in new ~window"
 msgstr "Послать форму и открыть в новом окне"
 
-#: src/viewer/text/link.c:877
+#: src/viewer/text/link.c:878
 msgid "Submit form and ~download"
 msgstr "Послать форму и скачать"
 
-#: src/viewer/text/link.c:884
+#: src/viewer/text/link.c:885
 msgid "V~iew image"
 msgstr "Просмотреть изображение"
 
-#: src/viewer/text/link.c:887
+#: src/viewer/text/link.c:888
 msgid "Download ima~ge"
 msgstr "Скачать изображение"
 
-#: src/viewer/text/link.c:893
+#: src/viewer/text/link.c:894
 msgid "No link selected"
 msgstr "Нет выбранных ссылок"
 
-#: src/viewer/text/link.c:944
+#: src/viewer/text/link.c:945
 msgid "Image"
 msgstr "Рисунок"
 
-#: src/viewer/text/link.c:950
+#: src/viewer/text/link.c:951
 msgid "Usemap"
 msgstr "Карта ссылок"
 
-#: src/viewer/text/link.c:970
+#: src/viewer/text/link.c:971
 #, fuzzy
 msgid "Reset form"
 msgstr "Очистка формы"
 
-#: src/viewer/text/link.c:977
+#: src/viewer/text/link.c:978
 msgid "Submit form to"
 msgstr "Передача формы по адресу"
 
-#: src/viewer/text/link.c:979
+#: src/viewer/text/link.c:980
 msgid "Post form to"
 msgstr "Отправка формы по адресу"
 
-#: src/viewer/text/link.c:995
+#: src/viewer/text/link.c:996
 msgid "Radio button"
 msgstr "Радио-кнопка"
 
-#: src/viewer/text/link.c:1001
+#: src/viewer/text/link.c:1002
 msgid "Select field"
 msgstr "Выберите поле"
 
-#: src/viewer/text/link.c:1007
+#: src/viewer/text/link.c:1008
 msgid "Text area"
 msgstr "Текстовое поле"
 
-#: src/viewer/text/link.c:1010
+#: src/viewer/text/link.c:1011
 msgid "File upload"
 msgstr "Выгрузка файла"
 
-#: src/viewer/text/link.c:1013
+#: src/viewer/text/link.c:1014
 msgid "Password field"
 msgstr "Поле пароля"
 
-#: src/viewer/text/link.c:1022
+#: src/viewer/text/link.c:1023
 msgid "name"
 msgstr "метка"
 
-#: src/viewer/text/link.c:1032
+#: src/viewer/text/link.c:1033
 msgid "value"
 msgstr "значение"
 
-#: src/viewer/text/link.c:1041
+#: src/viewer/text/link.c:1042
 msgid "hit ENTER to"
 msgstr "нажмите ENTER, чтобы"
 
-#: src/viewer/text/link.c:1044
+#: src/viewer/text/link.c:1045
 msgid "submit to"
 msgstr "передать по адресу"
 
-#: src/viewer/text/link.c:1046
+#: src/viewer/text/link.c:1047
 msgid "post to"
 msgstr "отправить по адресу"
 
@@ -4617,19 +4626,19 @@ msgstr "Искомая строка не найдена"
 msgid "You can do this only on the master terminal"
 msgstr "Вы можете сделать это только на главном терминале"
 
-#: src/viewer/text/view.c:753
+#: src/viewer/text/view.c:752
 msgid "Go to link"
 msgstr "Пойти по ссылке"
 
-#: src/viewer/text/view.c:753
+#: src/viewer/text/view.c:752
 msgid "Enter link number"
 msgstr "Введите номер ссылки"
 
-#: src/viewer/text/view.c:1464
+#: src/viewer/text/view.c:1463
 msgid "Save error"
 msgstr "Ошибка сохранения"
 
-#: src/viewer/text/view.c:1465
+#: src/viewer/text/view.c:1464
 msgid "Error writing to file"
 msgstr "Ошибка записи в файл"
 
@@ -4686,9 +4695,6 @@ msgstr "Ошибка записи в файл"
 
 #~ msgid "locked"
 #~ msgstr "заблокировано"
-
-#~ msgid "loading"
-#~ msgstr "загружается"
 
 #~ msgid "Formatted document cache"
 #~ msgstr "Кэш форматированных документов"

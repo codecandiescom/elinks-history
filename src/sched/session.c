@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.12 2003/05/03 00:04:22 zas Exp $ */
+/* $Id: session.c,v 1.13 2003/05/03 01:53:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -228,8 +228,10 @@ print_screen_status(struct session *ses)
 		stat = &ses->loading;
 	else if (have_location(ses))
 		stat = &cur_loc(ses)->stat;
+	else
+		goto stat_shown;
 
-	if (stat && stat->state == S_OK) {
+	if (stat->state == S_OK) {
 		struct file_to_load *ftl;
 
 		foreach(ftl, ses->more_files) {
@@ -240,99 +242,97 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (stat) {
-		if (show_status_bar) {
-			static int last_current_link;
+	if (show_status_bar) {
+		static int last_current_link;
 
-			/* Show S_INTERRUPTED message *once* but then show links
-			 * again as usual. */
-			if (current_frame(ses)) {
-				int ncl = current_frame(ses)->vs->current_link;
+		/* Show S_INTERRUPTED message *once* but then show links
+		 * again as usual. */
+		if (current_frame(ses)) {
+			int ncl = current_frame(ses)->vs->current_link;
 
-				if (stat->state == S_INTERRUPTED
-				    && ncl != last_current_link)
-					stat->state = S_OK;
-				last_current_link = ncl;
-			}
-
-			if (stat->state == S_OK)
-				msg = print_current_link(ses);
-			if (!msg)
-				msg = get_stat_msg(stat, term);
-			if (msg) {
-				print_text(term, 0, term->y - 1, strlen(msg),
-					   msg, get_bfu_color(term, "status.status-text"));
-				mem_free(msg);
-			}
+			if (stat->state == S_INTERRUPTED
+			    && ncl != last_current_link)
+				stat->state = S_OK;
+			last_current_link = ncl;
 		}
 
-                if (show_tab_bar > 0) {
-                        int number = number_of_tabs(term);
-
-			if (!(show_tab_bar == 1 && number < 2)) {
-				int tab_width = term->x / number;
-				int tab;
-				int msglen;
-				int selected_color = xget_bfu_color(term, "selected", "ui.tabs_bar.colors.");
-				int normal_color = xget_bfu_color(term, "normal", "ui.tabs_bar.colors.");
-
-				for (tab = 0; tab < number; tab++){
-					struct window *win = get_tab_by_number(term,tab);
-
-					if (win->data &&
-					    current_frame(win->data) &&
-					    current_frame(win->data)->f_data->title &&
-					    strlen(current_frame(win->data)->f_data->title))
-						msg = current_frame(win->data)->f_data->title;
-					else
-						msg = N_("Untitled");
-
-					msglen = strlen(msg);
-					if(msglen > tab_width)
-						msglen = tab_width - 1;
-
-					fill_area(term,
-						  tab * tab_width, term->y - (show_status_bar ? 2 : 1),
-						  tab_width, 1,
-						  (tab == term->current_tab)
-						  ? selected_color
-						  : normal_color);
-					print_text(term,
-						   tab * tab_width, term->y - (show_status_bar ? 2 : 1),
-						   msglen, msg,
-						   (tab == term->current_tab)
-						   ? selected_color
-						   : normal_color);
-				}
-			}
-                }
-
-		if (show_title_bar) {
-			msg = print_current_title(ses);
-			if (msg) {
-				int msglen = strlen(msg);
-				int pos = term->x - 1 - msglen;
-
-				if (pos < 0) pos = 0;
-				print_text(term, pos, 0, msglen,
-					   msg, get_bfu_color(term, "title.title-text"));
-				mem_free(msg);
-			}
-		}
-
-		msg = stracpy("ELinks");
+		if (stat->state == S_OK)
+			msg = print_current_link(ses);
+		if (!msg)
+			msg = get_stat_msg(stat, term);
 		if (msg) {
-			if (ses->screen && ses->screen->f_data
-			    && ses->screen->f_data->title
-			    && ses->screen->f_data->title[0]) {
-				add_to_strn(&msg, " - ");
-				add_to_strn(&msg, ses->screen->f_data->title);
-			}
-			set_terminal_title(term, msg);
+			print_text(term, 0, term->y - 1, strlen(msg),
+				   msg, get_bfu_color(term, "status.status-text"));
 			mem_free(msg);
 		}
 	}
 
+        if (show_tab_bar > 0) {
+                int number = number_of_tabs(term);
+		int tab_width = term->x / number;
+		int tab;
+		int msglen;
+		int selected_color = xget_bfu_color(term, "selected", "ui.tabs_bar.colors.");
+		int normal_color = xget_bfu_color(term, "normal", "ui.tabs_bar.colors.");
+
+		if (show_tab_bar == 1 && number < 2)
+			goto tabs_shown;
+
+		for (tab = 0; tab < number; tab++) {
+			struct window *win = get_tab_by_number(term, tab);
+
+			if (win->dat
+			    && current_frame(win->data)
+			    && current_frame(win->data)->f_data->title
+			    && strlen(current_frame(win->data)->f_data->title))
+				msg = current_frame(win->data)->f_data->title;
+			else
+				msg = N_("Untitled");
+
+			msglen = strlen(msg);
+			if (msglen > tab_width)
+				msglen = tab_width - 1;
+
+			fill_area(term,
+				  tab * tab_width, term->y - (show_status_bar ? 2 : 1),
+				  tab_width, 1,
+				  (tab == term->current_tab) ? selected_color
+							     : normal_color);
+			print_text(term,
+				   tab * tab_width, term->y - (show_status_bar ? 2 : 1),
+				   msglen, msg,
+				   (tab == term->current_tab) ? selected_color
+							      : normal_color);
+		}
+tabs_shown:
+        }
+
+	if (show_title_bar) {
+		msg = print_current_title(ses);
+		if (msg) {
+			int msglen = strlen(msg);
+			int pos = term->x - 1 - msglen;
+
+			if (pos < 0) pos = 0;
+			print_text(term, pos, 0, msglen,
+				   msg, get_bfu_color(term, "title.title-text"));
+			mem_free(msg);
+		}
+	}
+
+	msg = stracpy("ELinks");
+	if (msg) {
+		if (ses->screen && ses->screen->f_data
+		    && ses->screen->f_data->title
+		    && ses->screen->f_data->title[0]) {
+			add_to_strn(&msg, " - ");
+			add_to_strn(&msg, ses->screen->f_data->title);
+		}
+		set_terminal_title(term, msg);
+		mem_free(msg);
+	}
+
+stat_shown:
 	redraw_from_window(ses->win);
 #ifdef USE_LEDS
 	draw_leds(term);

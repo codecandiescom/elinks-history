@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.34 2004/09/19 23:00:51 pasky Exp $ */
+/* $Id: stylesheet.h,v 1.35 2004/09/20 22:31:38 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -108,7 +108,8 @@ struct css_selector *get_css_selector(struct list_head *selector_list,
                                       unsigned char *name, int namelen);
 
 #define get_css_base_selector(stylesheet, type, name, namelen) \
-	get_css_selector(&stylesheet->selectors, type, name, namelen)
+	get_css_selector(stylesheet ? &stylesheet->selectors : NULL, \
+	                 type, name, namelen)
 
 /* Looks up the selector of the name @name and length @namelen in the
  * given list of selectors. */

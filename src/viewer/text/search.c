@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.118 2003/11/15 20:38:54 kuser Exp $ */
+/* $Id: search.c,v 1.119 2003/11/15 20:40:42 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -816,10 +816,12 @@ find_next_link_in_search(struct document_view *doc_view, int d)
 		d /= 2;
 		find_link(doc_view, d, 0);
 		if (doc_view->vs->current_link == -1) return 1;
+		goto nt;
 	}
 
 	while(doc_view->vs->current_link != -1
 	      && next_in_view(doc_view, doc_view->vs->current_link + d, d, in_view, NULL)) {
+nt:
 		link = &doc_view->document->links[doc_view->vs->current_link];
 		get_searched(doc_view, &pt, &len);
 		if (point_intersect(pt, len, link->pos, link->n)) {

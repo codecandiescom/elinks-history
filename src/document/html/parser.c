@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.284 2003/11/21 10:22:20 zas Exp $ */
+/* $Id: parser.c,v 1.285 2003/11/24 22:39:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2495,13 +2495,15 @@ html_frameset(unsigned char *a)
 		height = frameset_desc->frame_desc[offset].height;
 	}
 
+	fp.width = fp.height = NULL;
+
 	parse_frame_widths(cols, width, HTML_FRAME_CHAR_WIDTH, &fp.width, &fp.x);
 	parse_frame_widths(rows, height, HTML_FRAME_CHAR_HEIGHT, &fp.height, &fp.y);
 
 	fp.parent = html_top.frameset;
 	if (fp.x && fp.y) html_top.frameset = special_f(ff, SP_FRAMESET, &fp);
-	mem_free(fp.width);
-	mem_free(fp.height);
+	if (fp.width) mem_free(fp.width);
+	if (fp.height) mem_free(fp.height);
 
 free_and_return:
 	mem_free(cols);

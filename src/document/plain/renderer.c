@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.29 2003/11/18 20:05:37 pasky Exp $ */
+/* $Id: renderer.c,v 1.30 2003/11/18 20:07:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -273,6 +273,7 @@ void
 render_plain_document(struct cache_entry *ce, struct document *document)
 {
 	struct fragment *fr = ce->frag.next;
+	struct conv_table *convert_table;
 	struct string head;
 	unsigned char *source = NULL;
 	int length = 0;

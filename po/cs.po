@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-12-08 19:09+0100\n"
-"PO-Revision-Date: 2003-12-06 23:59+0100\n"
+"PO-Revision-Date: 2003-12-08 20:45+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -4152,7 +4152,6 @@ msgid "Open new ~tab"
 msgstr "Otevøít nový ~tab"
 
 #: src/dialogs/menu.c:335
-#, fuzzy
 msgid "Open new tab in backgroun~d"
 msgstr "Otevøít nový tab na ~pozadí"
 
@@ -4173,17 +4172,14 @@ msgid "~History"
 msgstr "~Historie"
 
 #: src/dialogs/menu.c:341
-#, fuzzy
 msgid "~Unhistory"
 msgstr "An~tihistorie"
 
 #: src/dialogs/menu.c:346
-#, fuzzy
 msgid "~Save as"
 msgstr "Ulo¾ pod ~jménem"
 
 #: src/dialogs/menu.c:347
-#, fuzzy
 msgid "Save UR~L as"
 msgstr "Ulo¾ ~URL pod jménem"
 
@@ -4192,22 +4188,18 @@ msgid "Save formatted ~document"
 msgstr "Ulo¾ zformátovaný ~dokument"
 
 #: src/dialogs/menu.c:350
-#, fuzzy
 msgid "Bookm~ark document"
-msgstr "®ádný dokument"
+msgstr "Boo~kmarknout dokument"
 
 #: src/dialogs/menu.c:356
-#, fuzzy
 msgid "~Kill background connections"
 msgstr "Ukonèit v¹echna ~spojení na pozadí"
 
 #: src/dialogs/menu.c:357
-#, fuzzy
 msgid "Flush all ~caches"
 msgstr "~Vylej v¹echny cache"
 
 #: src/dialogs/menu.c:358
-#, fuzzy
 msgid "Resource ~info"
 msgstr "~Informace o zdrojích"
 
@@ -4453,9 +4445,8 @@ msgid "Linux or OS/2 frames"
 msgstr "Rámeèky typu Linux nebo OS/2"
 
 #: src/dialogs/options.c:173
-#, fuzzy
 msgid "FreeBSD frames"
-msgstr "Vypnout rámeèky"
+msgstr "Rámeèky FreeBSD"
 
 #: src/dialogs/options.c:174
 msgid "KOI8-R frames"
@@ -5017,7 +5008,7 @@ msgstr "JavaScript v souèasnosti není podporován."
 
 #: src/protocol/rewrite/rewrite.c:41
 msgid "URI rewriting"
-msgstr ""
+msgstr "Pøepisování URI"
 
 #: src/protocol/rewrite/rewrite.c:43
 msgid ""
@@ -5028,30 +5019,37 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
+"Pravidla pro pøepisování URI adres zadaných v dialogu \"jít na\".\n"
+"Je mo¾né nadefinovat sadu prefixù, které budou rozvinuty v úplnou\n"
+"adresu podle urèitého vzoru, pokud odpovídají øetìzci, zadaného v\n"
+"onom dialogu. Prefixy mohou být \"krátké\", které fungují pouze\n"
+"jako zkratky urèitých URI. \"Chytrým\" prefixùm mù¾ete zadat za\n"
+"dvojteèkou doplòující údaje, jako napøíklad klíèová slova pro\n"
+"vyhledávaèe."
 
 #: src/protocol/rewrite/rewrite.c:50
 msgid "Enable dumb prefixes"
-msgstr ""
+msgstr "Zapnout krátké prefixy"
 
 #: src/protocol/rewrite/rewrite.c:52
 msgid "Enable dumb prefixes."
-msgstr ""
+msgstr "Zapne krátké prefixy."
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable smart prefixes"
-msgstr ""
+msgstr "Zapnout chytré prefixy"
 
 #: src/protocol/rewrite/rewrite.c:56
 msgid "Enable smart prefixes."
-msgstr ""
+msgstr "Zapne chytré prefixy"
 
 #: src/protocol/rewrite/rewrite.c:58
 msgid "Dumb Prefixes"
-msgstr ""
+msgstr "Krátké prefixy"
 
 #: src/protocol/rewrite/rewrite.c:60
 msgid "Dumb prefixes."
-msgstr ""
+msgstr "Krátké prefixy."
 
 #: src/protocol/rewrite/rewrite.c:64
 #, c-format
@@ -5060,14 +5058,17 @@ msgid ""
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
+"URI, které se má pou¾ít místo tohoto prefixu.\n"
+"%c v øetìzci znamená aktuální adresu\n"
+"%% v øetìzci znamená '%'"
 
 #: src/protocol/rewrite/rewrite.c:68
 msgid "Smart Prefixes"
-msgstr ""
+msgstr "Chytré prefixy"
 
 #: src/protocol/rewrite/rewrite.c:70
 msgid "Smart prefixes."
-msgstr ""
+msgstr "Chytré prefixy."
 
 #: src/protocol/rewrite/rewrite.c:76
 msgid ""
@@ -5077,11 +5078,16 @@ msgid ""
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
+"URI, které se má pou¾ít místo tohoto prefixu.\n"
+"%c v øetìzci znamená aktuální adresu\n"
+"%s v øetìzci znamená celý øetìzec za dvojteèkou\n"
+"%0,%1,...,%9 znamená parametr 0, 1, ..., 9\n"
+"%% v øetìzci znamená '%'"
 
 #. name:
 #: src/protocol/rewrite/rewrite.c:243
 msgid "URI rewrite"
-msgstr ""
+msgstr "Pøepisování URI"
 
 #: src/protocol/user.c:155 src/sched/error.c:51
 msgid "Bad URL syntax"

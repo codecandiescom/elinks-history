@@ -17,7 +17,7 @@ Major goals:
 - Generalised scripting interface, possibly also supporting SWIG backend
   (http://www.swig.org/)
 
-- Reorganization of user interface
++ Reorganization of user interface
 
 
 Minor first-level goals:
@@ -109,7 +109,7 @@ Bookmarks:
 
 Global history:
 
-- Show any info that can be found in globhist for the selected link in the Info
++ Show any info that can be found in globhist for the selected link in the Info
   box
 
 
@@ -151,7 +151,7 @@ Protocols / network:
 
 Scripting:
 
-- Add Lua APIs to manipulate bookmarks
+- Add Lua APIs to manipulate bookmarks and other things
 
 
 Generic code changes:
@@ -163,18 +163,19 @@ Generic code changes:
 
 Build-time configuration / build:
 
-- Some rules for sane handling of texinfo documentation
++ Some rules for sane handling of texinfo documentation
 
 
 Permanent goals:
 
-- General code cleanup
++ General code cleanup
 
-- Write some more documentation.. docs, a lot of docs!
++ Write some more documentation.. docs, a lot of docs!
 
-- Speed optimizations
++ Speed optimizations
 
 
 Key: - nothing done + work in progress * almost ready
+     (reflects only what is already committed to CVS)
 
-$Id: TODO,v 1.47 2003/05/03 22:28:04 pasky Exp $
+$Id: TODO,v 1.48 2003/05/03 23:43:07 pasky Exp $

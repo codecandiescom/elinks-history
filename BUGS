@@ -22,7 +22,7 @@ Known bugs:
 
 - You shouldn't press '^Z' when you are in a viewer
 
-- Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
++ Handling of &#13; is not lynx-compatible in <pre> tag (should be newline).
 
 - Tags inside <XMP> are still interpreted.
 
@@ -33,12 +33,12 @@ Known bugs:
 - Calling cfmakeraw() in kbd.c:setraw() breaks some exotic terminal
   combinations.
 
-- Handling of textareas splitted to two pages is just weird.  (Is this still
++ Handling of textareas splitted to two pages is just weird.  (Is this still
   true with 0.5 CVS?)
 
 - Call to OS Shell doesn't release mouse handler.
 
-- Spaces added by justification are not highlighted in links when those links
++ Spaces added by justification are not highlighted in links when those links
   are selected.
 
 - Searches match links' prefixes (when document.browse.links.numbering = 1).
@@ -50,6 +50,7 @@ Known bugs:
   under another list.
 
 
-Key: - nothing done + work in progress * almost ready
+Key: - nothing done + work in progress * almost fixed
+     (reflects only what is already committed to CVS)
 
-$Id: BUGS,v 1.42 2003/05/03 22:46:29 zas Exp $
+$Id: BUGS,v 1.43 2003/05/03 23:43:07 pasky Exp $

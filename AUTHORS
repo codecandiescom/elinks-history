@@ -244,7 +244,7 @@ Julian Kinraid <jkinraid@clear.net.nz>
 	QNX-related fixes
 
 Kalle Olavi Niemitalo <kon@iki.fi>
-	Http Accept-Charset header fix. (Debian bug #242524)
+	HTTP Accept-Charset header fix
 
 Kaloian Doganov <kaloian@europe.com>
 	Bulgarian translation
@@ -494,4 +494,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.160 2004/04/07 16:15:43 zas Exp $
+$Id: AUTHORS,v 1.161 2004/04/07 21:45:25 pasky Exp $

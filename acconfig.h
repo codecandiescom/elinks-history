@@ -42,6 +42,9 @@
 /* Define to 1 if we have X11 */
 #undef HAVE_X11
 
+/* Define to 1 if we should include leak debugger and internal error checking facilites */
+#undef DEBUG
+
 /* Define to 1 if we should include internal bookmark manager */
 #undef BOOKMARKS
 

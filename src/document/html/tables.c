@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.46 2003/06/30 22:57:14 zas Exp $ */
+/* $Id: tables.c,v 1.47 2003/06/30 23:08:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1460,17 +1460,19 @@ display_table_frames(struct table *t, int x, int y)
 	register int i, j;
 	int cx, cy;
 	int fa = 0, fb = 0, fl = 0, fr = 0;
+	int fh_size = (t->x + 2) * (t->y + 1);
+	int fv_size = (t->x + 1) * (t->y + 2);
 
-	fh = fmem_alloc((t->x + 2) * (t->y + 1));
+	fh = fmem_alloc(fh_size);
 	if (!fh) return;
-	memset(fh, -1, (t->x + 2) * (t->y + 1));
+	memset(fh, -1, fh_size);
 
-	fv = fmem_alloc((t->x + 1) * (t->y + 2));
+	fv = fmem_alloc(fv_size);
 	if (!fv) {
 		fmem_free(fh);
 		return;
 	}
-	memset(fv, -1, (t->x + 1) * (t->y + 2));
+	memset(fv, -1, fv_size);
 
 #ifndef DEBUG
 #define H_LINE_X(xx, yy) fh[(xx) + 1 + (t->x + 2) * (yy)]

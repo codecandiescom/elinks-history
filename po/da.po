@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-12-31 03:40+0100\n"
-"PO-Revision-Date: 2004-12-31 03:42+0100\n"
+"PO-Revision-Date: 2004-12-31 04:11+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -2021,7 +2021,7 @@ msgstr ""
 
 #: src/config/options.inc:148
 msgid "Automatic links following"
-msgstr "Automatisk forfølgelse af henvisninger"
+msgstr "Følg automatisk henvisninger"
 
 #: src/config/options.inc:150
 msgid ""
@@ -3376,7 +3376,7 @@ msgstr "Tekst"
 
 #: src/config/options.inc:934
 msgid "Dialog text colors."
-msgstr ""
+msgstr "Tekstfarver for dialogvinduer."
 
 #: src/config/options.inc:936 src/viewer/text/form.c:1442
 msgid "Checkbox"
@@ -3396,11 +3396,11 @@ msgstr ""
 
 #: src/config/options.inc:944
 msgid "Button"
-msgstr ""
+msgstr "Knao"
 
 #: src/config/options.inc:946 src/config/options.inc:954
 msgid "Dialog button colors."
-msgstr ""
+msgstr "Farver for knapper i dialogvinduer."
 
 #: src/config/options.inc:948
 msgid "Selected button"
@@ -5437,7 +5437,7 @@ msgstr ""
 #: src/modules/version.c:80
 #, c-format
 msgid "Built on %s %s"
-msgstr ""
+msgstr "Oversat den %s %s"
 
 #: src/modules/version.c:83
 msgid "Text WWW browser"
@@ -5446,7 +5446,7 @@ msgstr "Lynx-lignende browser for WWW"
 #: src/modules/version.c:85
 #, c-format
 msgid " (built on %s %s)"
-msgstr ""
+msgstr "(oversat den %s %s)"
 
 #: src/modules/version.c:91
 msgid "Features:"
@@ -5454,11 +5454,11 @@ msgstr "Egenskaber:"
 
 #: src/modules/version.c:93
 msgid "Standard"
-msgstr ""
+msgstr "Standard"
 
 #: src/modules/version.c:95
 msgid "Debug"
-msgstr ""
+msgstr "Fejlsøgning"
 
 #: src/modules/version.c:98
 msgid "Fastmem"
@@ -5466,7 +5466,7 @@ msgstr "Hurtighukommelse"
 
 #: src/modules/version.c:101
 msgid "Own Libc Routines"
-msgstr ""
+msgstr "Egen C-bibliotek"
 
 #: src/modules/version.c:104
 msgid "No Backtrace"
@@ -5515,7 +5515,7 @@ msgstr "Adgangskode"
 
 #: src/protocol/auth/dialogs.c:159
 msgid "Realm"
-msgstr ""
+msgstr "Område"
 
 #: src/protocol/auth/dialogs.c:171
 msgid "none"
@@ -5594,15 +5594,15 @@ msgstr "Indstillinger for lokale CGI-skripts."
 
 #: src/protocol/file/file.c:49
 msgid "Colon separated list of directories, where CGI scripts are stored."
-msgstr ""
+msgstr "Kolonsepararet liste af mapper, hvor CGI-skripts er placeret."
 
 #: src/protocol/file/file.c:51
 msgid "Allow local CGI"
-msgstr ""
+msgstr "Tillad lokale CGI-skripts"
 
 #: src/protocol/file/file.c:53
 msgid "Whether to execute local CGI scripts."
-msgstr ""
+msgstr "Om eksekvering af lokale CGI-skripts er tillads."
 
 #: src/protocol/file/file.c:56
 msgid "Allow reading special files"
@@ -5649,25 +5649,25 @@ msgstr "Finger-protokol"
 #. name:
 #: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:88
 msgid "FTP"
-msgstr ""
+msgstr "FTP"
 
 #: src/protocol/ftp/ftp.c:55
 msgid "FTP specific options."
-msgstr ""
+msgstr "FTP-indstillinger"
 
 #: src/protocol/ftp/ftp.c:57 src/protocol/http/http.c:90
 #: src/protocol/http/http.c:172
 msgid "Proxy configuration"
-msgstr ""
+msgstr "Proxy konfigurering"
 
 #: src/protocol/ftp/ftp.c:59
 msgid "FTP proxy configuration."
-msgstr ""
+msgstr "FTP proxy konfigurering"
 
 #: src/protocol/ftp/ftp.c:61 src/protocol/http/http.c:94
 #: src/protocol/http/http.c:176
 msgid "Host and port-number"
-msgstr "Vært og portnummer"
+msgstr "Værtsmaskine og portnummer"
 
 #: src/protocol/ftp/ftp.c:63
 msgid ""
@@ -5677,27 +5677,27 @@ msgstr ""
 
 #: src/protocol/ftp/ftp.c:66
 msgid "Anonymous password"
-msgstr ""
+msgstr "Anonym adgangskode"
 
 #: src/protocol/ftp/ftp.c:68
 msgid "FTP anonymous password to be sent."
-msgstr ""
+msgstr "Anonym adgangskode som sendes for FTP."
 
 #: src/protocol/ftp/ftp.c:70
 msgid "Use passive mode (IPv4)"
-msgstr ""
+msgstr "Anvend passiv modus (IPv4)"
 
 #: src/protocol/ftp/ftp.c:72
 msgid "Use PASV instead of PORT (passive vs active mode, IPv4 only)."
-msgstr ""
+msgstr "Anvend PASV i stedet for PORT (passiv vs aktiv modus, kun IPv4)."
 
 #: src/protocol/ftp/ftp.c:74 src/protocol/ftp/ftp.c:78
 msgid "Use passive mode (IPv6)"
-msgstr ""
+msgstr "Anvend passiv modus (IPv6)"
 
 #: src/protocol/ftp/ftp.c:76
 msgid "Use EPSV instead of EPRT (passive vs active mode, IPv6 only)."
-msgstr ""
+msgstr "Anvend EPSV i stedet for EPRT (passiv vs aktiv modus, kun IPv6)."
 
 #: src/protocol/ftp/ftp.c:80
 msgid ""
@@ -5708,12 +5708,12 @@ msgstr ""
 #. name:
 #: src/protocol/gopher/gopher.c:47
 msgid "Gopher"
-msgstr ""
+msgstr "Gopher"
 
 #: src/protocol/http/codes.c:107
 #, c-format
 msgid "HTTP error %03d"
-msgstr ""
+msgstr "HTTP fejl %03d"
 
 #: src/protocol/http/codes.c:130
 msgid ""
@@ -5731,23 +5731,23 @@ msgstr ""
 #. name:
 #: src/protocol/http/http.c:58 src/protocol/http/http.c:186
 msgid "HTTP"
-msgstr ""
+msgstr "HTTP"
 
 #: src/protocol/http/http.c:60
 msgid "HTTP-specific options."
-msgstr ""
+msgstr "HTTP-indstillinger"
 
 #: src/protocol/http/http.c:63
 msgid "Server bug workarounds"
-msgstr ""
+msgstr "Omgåelse af serverfejl"
 
 #: src/protocol/http/http.c:65
 msgid "Server-side HTTP bugs workarounds."
-msgstr ""
+msgstr "Omgåelse af HTTP-fejl host serveren"
 
 #: src/protocol/http/http.c:67
 msgid "Do not send Accept-Charset"
-msgstr ""
+msgstr "Send ikke Accept-Charset"
 
 #: src/protocol/http/http.c:69
 msgid ""
@@ -5757,15 +5757,15 @@ msgstr ""
 
 #: src/protocol/http/http.c:72
 msgid "Allow blacklisting"
-msgstr ""
+msgstr "Tillad mørklistning"
 
 #: src/protocol/http/http.c:74
 msgid "Allow blacklisting of buggy servers."
-msgstr ""
+msgstr "Tillad mørklistning af fejlbehæftigede servere."
 
 #: src/protocol/http/http.c:76
 msgid "Broken 302 redirects"
-msgstr ""
+msgstr "Fejlbehæftigede 302 omdirigeringer"
 
 #: src/protocol/http/http.c:78
 msgid ""
@@ -5776,7 +5776,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:82
 msgid "No keepalive after POST requests"
-msgstr ""
+msgstr "Hold ikke forbindelser i live efter POST forespørgelser"
 
 #: src/protocol/http/http.c:84
 msgid "Disable keepalive connection after POST request."
@@ -5784,15 +5784,15 @@ msgstr ""
 
 #: src/protocol/http/http.c:86
 msgid "Use HTTP/1.0"
-msgstr ""
+msgstr "Anvend HTTP/1.0"
 
 #: src/protocol/http/http.c:88
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
-msgstr ""
+msgstr "Anvend HTTP/1.0 protokollen i stedet for HTTP/1.1"
 
 #: src/protocol/http/http.c:92
 msgid "HTTP proxy configuration."
-msgstr ""
+msgstr "HTTP proxy konfiguration."
 
 #: src/protocol/http/http.c:96
 msgid ""
@@ -5849,15 +5849,15 @@ msgstr ""
 
 #: src/protocol/http/http.c:131
 msgid "Send Accept-Language header"
-msgstr ""
+msgstr "Indsend Accept-Language information"
 
 #: src/protocol/http/http.c:133
 msgid "Send Accept-Language header."
-msgstr ""
+msgstr "Indsend Accept-Language information."
 
 #: src/protocol/http/http.c:135
 msgid "Use UI language as Accept-Language"
-msgstr ""
+msgstr "Anvend brugergrænsefladens sprog som Accept-Language"
 
 #: src/protocol/http/http.c:137
 msgid ""
@@ -5871,7 +5871,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:144
 msgid "Activate HTTP TRACE debugging"
-msgstr ""
+msgstr "Aktiver HTTP TRACE (spor) fejlsøgning"
 
 #: src/protocol/http/http.c:146
 msgid ""
@@ -5904,7 +5904,7 @@ msgstr ""
 
 #: src/protocol/http/http.c:168
 msgid "HTTPS"
-msgstr ""
+msgstr "HTTPS"
 
 #: src/protocol/http/http.c:170
 msgid "HTTPS-specific options."
@@ -5936,7 +5936,7 @@ msgstr ""
 #. name:
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
 msgid "NNTP"
-msgstr ""
+msgstr "NNTP"
 
 #: src/protocol/nntp/nntp.c:35
 msgid "NNTP and news specific options."
@@ -5954,7 +5954,7 @@ msgstr ""
 
 #: src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
-msgstr ""
+msgstr "Visning af indgange fra protokolhoved i besked"
 
 #: src/protocol/nntp/nntp.c:44
 msgid ""
@@ -5970,15 +5970,15 @@ msgstr "Denne version af ELinks understøtter ikke protokollen %s"
 
 #: src/protocol/protocol.c:251
 msgid "Protocols"
-msgstr ""
+msgstr "Protookoller"
 
 #: src/protocol/protocol.c:253
 msgid "Protocol specific options."
-msgstr ""
+msgstr "Protokolindstillinger"
 
 #: src/protocol/protocol.c:255
 msgid "No-proxy domains"
-msgstr ""
+msgstr "Domæner uden proxy"
 
 #: src/protocol/protocol.c:257
 msgid ""
@@ -6009,7 +6009,7 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable dumb prefixes"
-msgstr ""
+msgstr "Anvend simple præfikser"
 
 #: src/protocol/rewrite/rewrite.c:56
 msgid ""
@@ -6021,7 +6021,7 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:61
 msgid "Enable smart prefixes"
-msgstr ""
+msgstr "Anvend smarte præfikser"
 
 #: src/protocol/rewrite/rewrite.c:63
 msgid ""
@@ -6033,7 +6033,7 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:68
 msgid "Dumb Prefixes"
-msgstr ""
+msgstr "Simple præfikser"
 
 #: src/protocol/rewrite/rewrite.c:70
 msgid "Dumb prefixes, see enable-dumb description for details."
@@ -6049,7 +6049,7 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:79
 msgid "Smart Prefixes"
-msgstr ""
+msgstr "Smarte præfikser"
 
 #: src/protocol/rewrite/rewrite.c:81
 msgid "Smart prefixes, see enable-smart description for details."
@@ -6080,11 +6080,11 @@ msgstr "SAMBA-indstillinger."
 
 #: src/protocol/smb/smb.c:77
 msgid "Credentials"
-msgstr ""
+msgstr "Akkreditiver"
 
 #: src/protocol/smb/smb.c:79
 msgid "Credentials file passed to smbclient via -A option."
-msgstr ""
+msgstr "Fil med akkreditiver som gives til smbclient via -A indstillingern."
 
 #. name:
 #: src/protocol/user.c:35 src/protocol/user.c:85
@@ -6179,15 +6179,15 @@ msgstr ""
 
 #: src/sched/download.c:548
 msgid "Save under the alternative name"
-msgstr ""
+msgstr "Gem med det alternative navn"
 
 #: src/sched/download.c:549
 msgid "Overwrite the original file"
-msgstr ""
+msgstr "Overskriv den originale fil"
 
 #: src/sched/download.c:550
 msgid "Resume download of the original file"
-msgstr ""
+msgstr "Genoptag filoverførelse af den originale fil"
 
 #: src/sched/download.c:1013 src/sched/download.c:1025
 msgid "Unknown type"

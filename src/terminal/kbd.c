@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.118 2005/03/01 11:08:40 zas Exp $ */
+/* $Id: kbd.c,v 1.119 2005/03/03 15:31:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,7 +129,7 @@ queue_event(struct itrm *itrm, unsigned char *data, int len)
 		w = safe_write(itrm->sock_out, data, len);
 		if (w <= 0 && HPUX_PIPE) {
 			/* free_trm(itrm); */
-			register_bottom_half((void (*)(void *)) free_trm, itrm);
+			register_bottom_half(free_trm, itrm);
 			return;
 		}
 	}

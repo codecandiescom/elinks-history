@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.68 2005/02/09 09:32:58 jonas Exp $ */
+/* $Id: download.c,v 1.69 2005/03/03 15:31:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,8 +66,7 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data
 	struct file_download *file_download = dlg_data->dlg->udata;
 
 	object_unlock(file_download);
-	register_bottom_half((void (*)(void *)) do_abort_download,
-			     file_download);
+	register_bottom_half(do_abort_download, file_download);
 	return EVENT_PROCESSED;
 }
 
@@ -78,8 +77,7 @@ push_delete_button(struct dialog_data *dlg_data, struct widget_data *widget_data
 
 	file_download->delete = 1;
 	object_unlock(file_download);
-	register_bottom_half((void (*)(void *)) do_abort_download,
-			     file_download);
+	register_bottom_half(do_abort_download, file_download);
 	return EVENT_PROCESSED;
 }
 
@@ -89,8 +87,7 @@ dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_
 	struct file_download *file_download = dlg_data->dlg->udata;
 
 	object_unlock(file_download);
-	register_bottom_half((void (*)(void *)) undisplay_download,
-			     file_download);
+	register_bottom_half(undisplay_download, file_download);
 	return EVENT_PROCESSED;
 }
 
@@ -334,8 +331,7 @@ delete_file_download(struct listbox_item *item, int last)
 	struct file_download *file_download = item->udata;
 
 	assert(!is_object_used(file_download));
-	register_bottom_half((void (*)(void *)) do_abort_download,
-			     file_download);
+	register_bottom_half(do_abort_download, file_download);
 }
 
 static enum dlg_refresh_code

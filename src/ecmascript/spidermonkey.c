@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.200 2005/02/28 15:57:07 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.201 2005/03/03 15:31:57 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -450,8 +450,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 		if (deo) {
 			deo->ses = ses;
 			deo->uri = get_uri_reference(uri);
-			register_bottom_half((void (*)(void *)) delayed_open,
-			                     deo);
+			register_bottom_half(delayed_open, deo);
 			boolean_to_jsval(ctx, rval, 1);
 		} else {
 			undef_to_jsval(ctx, rval);
@@ -1760,7 +1759,7 @@ location_goto(struct document_view *doc_view, unsigned char *url)
 	deg->uri = new_uri;
 	/* It does not seem to be very safe inside of frames to
 	 * call goto_uri() right away. */
-	register_bottom_half((void (*)(void *)) delayed_goto, deg);
+	register_bottom_half(delayed_goto, deg);
 }
 
 
@@ -1852,7 +1851,7 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		default:
 			break;
 		}
-		register_bottom_half((void (*)(void*)) update_status, NULL);
+		register_bottom_half(update_status, NULL);
 		break;
 	default:
 		INTERNAL("Invalid ID %d in unibar_set_property().", JSVAL_TO_INT(id));

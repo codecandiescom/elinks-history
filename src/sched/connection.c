@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.218 2005/03/03 15:14:20 zas Exp $ */
+/* $Id: connection.c,v 1.219 2005/03/03 15:31:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,7 +555,7 @@ add_keepalive_connection(struct connection *conn, ttime timeout,
 done:
 	free_connection_data(conn);
 	done_connection(conn);
-	register_bottom_half((void (*)(void *)) check_queue, NULL);
+	register_bottom_half(check_queue, NULL);
 }
 
 static void
@@ -688,7 +688,7 @@ retry_connection(struct connection *conn)
 	if (conn->uri->post || !max_tries || ++conn->tries >= max_tries) {
 		/* notify_connection_callbacks(conn); */
 		done_connection(conn);
-		register_bottom_half((void (*)(void *)) check_queue, NULL);
+		register_bottom_half(check_queue, NULL);
 	} else {
 		conn->prev_error = conn->state;
 		run_connection(conn);
@@ -701,7 +701,7 @@ abort_connection(struct connection *conn)
 	if (conn->running) interrupt_connection(conn);
 	/* notify_connection_callbacks(conn); */
 	done_connection(conn);
-	register_bottom_half((void (*)(void *)) check_queue, NULL);
+	register_bottom_half(check_queue, NULL);
 }
 
 /* Set certain state on a connection and then abort the connection. */
@@ -890,7 +890,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			del_from_list(conn);
 			conn->pri[pri]++;
 			add_to_queue(conn);
-			register_bottom_half((void (*)(void *)) check_queue, NULL);
+			register_bottom_half(check_queue, NULL);
 		} else {
 			conn->pri[pri]++;
 		}
@@ -934,7 +934,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 
 	check_queue_bugs();
 
-	register_bottom_half((void (*)(void *)) check_queue, NULL);
+	register_bottom_half(check_queue, NULL);
 	return 0;
 }
 
@@ -988,7 +988,7 @@ change_connection(struct download *old, struct download *new,
 	sort_queue();
 	check_queue_bugs();
 
-	register_bottom_half((void (*)(void *)) check_queue, NULL);
+	register_bottom_half(check_queue, NULL);
 }
 
 /* This will remove 'pos' bytes from the start of the cache for the specified

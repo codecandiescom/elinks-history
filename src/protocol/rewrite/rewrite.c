@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.23 2004/04/01 15:45:12 jonas Exp $ */
+/* $Id: rewrite.c,v 1.24 2004/04/02 22:16:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,7 +215,7 @@ encode_uri_string_len(struct string *s, unsigned char *a, int alen)
 #define MAX_URI_ARGS 10
 
 static unsigned char *
-rewrite_uri(unsigned char *url, unsigned char *current_url, unsigned char *arg)
+rewrite_uri(unsigned char *url, struct uri *current_uri, unsigned char *arg)
 {
 	struct string n = NULL_STRING;
 	unsigned char *args[MAX_URI_ARGS];
@@ -256,8 +256,8 @@ rewrite_uri(unsigned char *url, unsigned char *current_url, unsigned char *arg)
 		url++;
 		switch (*url) {
 			case 'c':
-				if (current_url)
-					add_to_string(&n, current_url);
+				if (current_uri)
+					add_to_string(&n, struri(current_uri));
 				break;
 			case 's':
 				if (arg) encode_uri_string(&n, arg);
@@ -324,10 +324,10 @@ goto_url_hook(va_list ap, void *data)
 		uu = get_uri_rewrite_prefix(URI_REWRITE_DUMB, *url);
 
 	if (uu) {
-		unsigned char *current_url = have_location(ses)
-					? struri(cur_loc(ses)->vs.uri) : NULL;
+		struct uri *uri = have_location(ses)
+				? cur_loc(ses)->vs.uri : NULL;
 
-		uu = rewrite_uri(uu, current_url, arg);
+		uu = rewrite_uri(uu, uri, arg);
 		if (uu) {
 			mem_free(*url);
 			*url = uu;

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.150 2004/12/16 15:23:20 zas Exp $ */
+/* $Id: conf.c,v 1.151 2004/12/22 12:47:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -144,7 +144,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 			if (option_types[opt->type].write) {
 				option_types[opt->type].write(opt, mirror);
 			}
-		} else if (!val || !option_types[opt->type].set
+		} else if (!option_types[opt->type].set
 			   || !option_types[opt->type].set(opt, val)) {
 			mem_free(val);
 			return ERROR_VALUE;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.547 2004/07/26 22:53:12 zas Exp $ */
+/* $Id: session.c,v 1.548 2004/07/26 23:01:04 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -584,11 +584,12 @@ load_file_from_doc_view(struct file_to_load *ftl,
 {
 	struct uri *referrer = NULL;
 
-	/* FIXME: set referrer for any protocol ?
-	 * In set_session_referrer() we don't set it for
-	 * PROTOCOL_FILE. --Zas */
-	if (doc_view && doc_view->document)
+	/* We set referrer here but for file protocol. */
+	if (doc_view && doc_view->document && doc_view->document->uri
+	    && doc_view->document->uri->protocol != PROTOCOL_FILE) {
+
 		referrer = doc_view->document->uri;
+	}
 
 	load_uri(ftl->uri, referrer, &ftl->stat, ftl->pri, cache_mode, -1);
 }

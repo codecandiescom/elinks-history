@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.44 2003/11/14 18:30:51 jonas Exp $ */
+/* $Id: cache.h,v 1.45 2003/11/14 19:21:59 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -54,12 +54,12 @@ struct cache_entry {
 	enum cache_mode cache_mode;
 };
 
-#if 0
+#if 1
 #define DEBUG_CACHE_ENTRIES_LOCKS
 #endif
 
 #ifdef DEBUG_CACHE_ENTRIES_LOCKS
-#define ce_lock_debug(ce, info) debug("cache entry %p lock %s now %d url= %s", ce, info, (ce)->locks, (ce)->url)
+#define ce_lock_debug(ce, info) debug("cache entry %p lock %s now %d url= %s", ce, info, (ce)->locks, struri((ce)->uri))
 #else
 #define ce_lock_debug(ce, info)
 #endif

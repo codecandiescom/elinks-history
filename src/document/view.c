@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.80 2002/10/03 11:36:34 pasky Exp $ */
+/* $Id: view.c,v 1.81 2002/10/04 19:05:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2504,6 +2504,24 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 		}
 
 		switch (kbd_action(KM_MAIN, ev, NULL)) {
+			case ACT_COPY_CLIPBOARD:
+			case ACT_ENTER:
+			case ACT_ENTER_RELOAD:
+			case ACT_DOWNLOAD:
+			case ACT_VIEW_IMAGE:
+			case ACT_DOWNLOAD_IMAGE:
+			case ACT_LINK_MENU:
+			case ACT_JUMP_TO_LINK:
+			case ACT_OPEN_LINK_IN_NEW_WINDOW:
+				if (ses->kbdprefix.rep
+					&& ses->kbdprefix.rep_num
+						<= fd->f_data->nlinks)
+					jump_to_link_number(ses,
+						current_frame(ses),
+						ses->kbdprefix.rep_num - 1);
+		}
+
+		switch (kbd_action(KM_MAIN, ev, NULL)) {
 			case ACT_PAGE_DOWN: rep_ev(ses, fd, page_down, 0); break;
 			case ACT_PAGE_UP: rep_ev(ses, fd, page_up, 0); break;
 			case ACT_DOWN: rep_ev(ses, fd, down, 0); break;
@@ -2537,26 +2555,7 @@ frame_ev(struct session *ses, struct f_data_c *fd, struct event *ev)
 			case ACT_VIEW_IMAGE: send_image(ses->term, NULL, ses); break;
 			case ACT_DOWNLOAD_IMAGE: send_download_image(ses->term, NULL, ses); break;
 			case ACT_LINK_MENU: link_menu(ses->term, NULL, ses); break;
-			case ACT_JUMP_TO_LINK: {
-				int i = ses->kbdprefix.rep_num;
-
-				if (i && i <= fd->f_data->nlinks)
-					jump_to_link_number(ses, current_frame(ses),
-						i - 1);
-
-				break;
-			}
-			case ACT_FOLLOW_LINK: {
-				struct f_data_c *fd = current_frame(ses);
-				int i = ses->kbdprefix.rep_num;
-
-				if (i && i <= fd->f_data->nlinks) {
-					jump_to_link_number(ses, fd, i - 1);
-					enter(ses, fd, 0);
-				}
-
-				break;
-			}
+			case ACT_JUMP_TO_LINK: break;
 			default:
 				if (ev->x >= '1' && ev->x <= '9' && !ev->y) {
 					/* FIXME: This probably doesn't work

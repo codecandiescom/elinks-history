@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.37 2002/09/13 13:10:32 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.38 2002/10/04 19:05:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,6 @@ static struct strtonum action_table[] = {
 	{ "left", ACT_LEFT },
 	{ "link-menu", ACT_LINK_MENU },
 	{ "jump-to-link", ACT_JUMP_TO_LINK },
-	{ "follow-link", ACT_FOLLOW_LINK },
 	{ "lua-console", ACT_LUA_CONSOLE },
 	{ " *lua-function*", ACT_LUA_FUNCTION }, /* internal use only */
 	{ "menu", ACT_MENU },

@@ -905,7 +905,7 @@ EL_ARG_ENABLE(CONFIG_CSS, css, [Cascading Style Sheets],
 AM_CONDITIONAL(CONFIG_CSS, test "$CONFIG_CSS" = yes)
 
 EL_ARG_DEPEND(CONFIG_HTML_HIGHLIGHT, html-highlight, [CONFIG_CSS=yes], [HTML highlighting],
-	      [  --enable-html-highlight HMTL highlighting using DOM engine])
+	      [  --enable-html-highlight HTML highlighting using DOM engine])
 AM_CONDITIONAL(CONFIG_HTML_HIGHLIGHT, test "$CONFIG_HTML_HIGHLIGHT" = yes)
 
 dnl Everything in the tree already uses CONFIG_DOM

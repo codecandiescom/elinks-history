@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.40 2003/09/25 14:29:04 zas Exp $ */
+/* $Id: edit.c,v 1.41 2003/10/24 16:04:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,26 +30,26 @@ static unsigned char *edit_add_msg[] = {
 
 
 static int
-my_cancel_dialog(struct dialog_data *dlg, struct widget_data *wd)
+my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *wd)
 {
-	((void (*)(struct dialog *)) dlg->dlg->items[4].data)(dlg->dlg);
-	return cancel_dialog(dlg, wd);
+	((void (*)(struct dialog *)) dlg_data->dlg->items[4].data)(dlg_data->dlg);
+	return cancel_dialog(dlg_data, wd);
 }
 
 
 /* Called to setup the edit dialog */
 static void
-layout_add_dialog(struct dialog_data *dlg)
+layout_add_dialog(struct dialog_data *dlg_data)
 {
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, edit_add_msg[0], &min, &max);
 	text_width(term, edit_add_msg[1], &min, &max);
-	buttons_width(term, dlg->items + 2, 2, &min, &max);
+	buttons_width(term, dlg_data->items + 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 
@@ -65,25 +65,25 @@ layout_add_dialog(struct dialog_data *dlg)
 	dlg_format_text(NULL, term, edit_add_msg[1], 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_buttons(NULL, term, dlg->items + 2, 2, 0,
+	dlg_format_buttons(NULL, term, dlg_data->items + 2, 2, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
-	draw_dlg(dlg);
-	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, edit_add_msg[0], dlg->x + DIALOG_LB,
+	dlg_data->xw = w + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
+	y = dlg_data->y + DIALOG_TB;
+	dlg_format_text(term, term, edit_add_msg[0], dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_field(NULL, term, &dlg->items[0], dlg->x + DIALOG_LB,
+	dlg_format_field(NULL, term, &dlg_data->items[0], dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_text(term, term, edit_add_msg[1], dlg->x + DIALOG_LB,
+	dlg_format_text(term, term, edit_add_msg[1], dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term, &dlg->items[1], dlg->x + DIALOG_LB,
+	dlg_format_field(term, term, &dlg_data->items[1], dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[2], 3, dlg->x + DIALOG_LB,
+	dlg_format_buttons(term, term, &dlg_data->items[2], 3, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -109,18 +109,18 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 #define EDIT_DIALOG_FIELDS_NB 5
 
 	unsigned char *name, *url;
-	struct dialog *d;
+	struct dialog *dlg;
 
 	if (intl) title = _(title, term);
 
 	/* Create the dialog */
-	d = mem_calloc(1, sizeof(struct dialog)
-			  + (EDIT_DIALOG_FIELDS_NB + 1)
-			    * sizeof(struct widget)
-			  + 2 * MAX_STR_LEN);
-	if (!d) return;
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (EDIT_DIALOG_FIELDS_NB + 1)
+			      * sizeof(struct widget)
+			    + 2 * MAX_STR_LEN);
+	if (!dlg) return;
 
-	name = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];
+	name = (unsigned char *) &dlg->items[EDIT_DIALOG_FIELDS_NB + 1];
 	url = name + MAX_STR_LEN;
 
 	/* Get the name */
@@ -141,42 +141,42 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 		safe_strncpy(url, src_url, MAX_STR_LEN);
 	}
 
-	d->title = title;
-	d->fn = layout_add_dialog;
-	d->refresh = (void (*)(void *)) when_done;
-	d->refresh_data = d;
-	d->udata = parent;
-	d->udata2 = done_data;
+	dlg->title = title;
+	dlg->fn = layout_add_dialog;
+	dlg->refresh = (void (*)(void *)) when_done;
+	dlg->refresh_data = dlg;
+	dlg->udata = parent;
+	dlg->udata2 = done_data;
 
-	d->items[0].type = D_FIELD;
-	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = name;
-	if (dialog_type == EDIT_DLG_ADD) d->items[0].fn = check_nonempty;
+	dlg->items[0].type = D_FIELD;
+	dlg->items[0].dlen = MAX_STR_LEN;
+	dlg->items[0].data = name;
+	if (dialog_type == EDIT_DLG_ADD) dlg->items[0].fn = check_nonempty;
 
-	d->items[1].type = D_FIELD;
-	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = url;
+	dlg->items[1].type = D_FIELD;
+	dlg->items[1].dlen = MAX_STR_LEN;
+	dlg->items[1].data = url;
 	/* if (dialog_type == EDIT_DLG_ADD) d->items[1].fn = check_nonempty; */
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = ok_dialog;
-	d->items[2].text = _("OK", term);
+	dlg->items[2].type = D_BUTTON;
+	dlg->items[2].gid = B_ENTER;
+	dlg->items[2].fn = ok_dialog;
+	dlg->items[2].text = _("OK", term);
 
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = 0;
-	d->items[3].text = _("Clear", term);
-	d->items[3].fn = clear_dialog;
+	dlg->items[3].type = D_BUTTON;
+	dlg->items[3].gid = 0;
+	dlg->items[3].text = _("Clear", term);
+	dlg->items[3].fn = clear_dialog;
 
-	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ESC;
-	d->items[4].text = _("Cancel", term);
-	d->items[4].data = (void *) when_cancel;
-	d->items[4].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
+	dlg->items[4].type = D_BUTTON;
+	dlg->items[4].gid = B_ESC;
+	dlg->items[4].text = _("Cancel", term);
+	dlg->items[4].data = (void *) when_cancel;
+	dlg ->items[4].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
 
-	d->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
+	dlg->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
 
-	do_dialog(term, d, getml(d, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 
 #undef EDIT_DIALOG_FIELDS_NB
 }

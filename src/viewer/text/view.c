@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.572 2004/07/30 10:26:00 jonas Exp $ */
+/* $Id: view.c,v 1.573 2004/07/30 10:26:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -951,7 +951,8 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 		activate_bfu_technology(ses, -1);
 		m = ses->tab->term->windows.next;
 		m->handler(m, ev, 0);
-		goto x;
+
+		return 1;
 	}
 
 	bars = 0;
@@ -978,7 +979,7 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 			}
 		}
 
-		goto x;
+		return 1;
 	}
 
 	if (!do_mouse_event(ses, ev, doc_view)
@@ -987,8 +988,6 @@ send_mouse_event(struct session *ses, struct document_view *doc_view,
 	}
 
 	return 0;
-x:
-	return 1;
 }
 #endif /* CONFIG_MOUSE */
 

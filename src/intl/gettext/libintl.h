@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.14 2003/05/19 13:21:16 zas Exp $ */
+/* $Id: libintl.h,v 1.15 2003/06/07 14:43:07 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -73,8 +73,8 @@ __(unsigned char *file, unsigned int line, unsigned char *func,
 	int new_charset;
 	unsigned char *result;
 
-
 	/* Prevent useless (and possibly dangerous) calls. */
+	if (!term) return msg;
 	if (!msg || !*msg) {
 		error("%s:%d %s msg parameter", file, line, msg ? "empty": "NULL");
 		return msg;

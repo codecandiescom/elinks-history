@@ -1,3 +1,286 @@
+Mon Jan 19 23:10:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Be more paranoid and don't count in CSS_TOKEN_NONE tokens.  
+
+Mon Jan 19 22:37:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Use macros in checks.  
+
+Mon Jan 19 22:36:15 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Jan 19 22:04:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/styletags.html:
+
+	<b> tag is not also red.  
+
+Mon Jan 19 21:56:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/styletags.html:
+
+	E&nbsp;L&nbsp;i&nbsp;n&nbsp;k&nbsp;s 
+
+Mon Jan 19 21:35:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Disable CSS by default. It is highly experimental and Zardoz pointed
+	out that http://blogs.law.harvard.edu/tech/2004/01/19 caused a
+	strange assertion failure.  
+
+Mon Jan 19 21:33:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, document/document.c, document/document.h,
+	modules/module.c, modules/module.h:
+
+	Add a main_modules table. First entry is a module for the document
+	subsystem. It will make it easy to move document options to
+	document/options or even separate document/subdir file.  
+
+Mon Jan 19 21:17:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Added assertions to check that the scanner token table is properly
+	aligned, meaning checking the next token will be safer and will
+	never force a rescan.  
+
+Mon Jan 19 20:35:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, modules/module.c, modules/module.h:
+
+	Module table handlers now take the table as arg.  
+
+Mon Jan 19 19:58:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.inc, document/options.c,
+	document/options.h, document/html/parser.c:
+
+	Make it possible to disable CSS support. Enabled by default.  
+
+Mon Jan 19 19:26:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Support for adding properties to already defined selectors.  
+
+Mon Jan 19 19:25:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/styletags.html:
+
+	Add test for adding properties to an already known selector.  
+
+Mon Jan 19 19:20:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Revert bad part of last patch.  
+
+Mon Jan 19 19:19:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: apply.c, parser.c:
+
+	Minor optimization if no selectors have been added.  
+
+Mon Jan 19 19:18:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Fix scary macros and loopings not enclosed in brackets.  
+
+Mon Jan 19 19:01:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: apply.c, parser.c, parser.h:
+
+	Move CSS selector lookup to separate function.  
+
+Mon Jan 19 18:53:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Try to handle precedens of special char tokens when skipping.  
+
+Mon Jan 19 18:52:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	We need to stop at '}' tokens when parsing properties of selectors.  
+
+Mon Jan 19 18:48:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/styletags.html:
+
+	More <style> tests.  
+
+Mon Jan 19 17:05:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c:
+
+	Describe why to use @props and now @properties.  
+
+Mon Jan 19 17:03:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: css/apply.c, css/apply.h, css/parser.c,
+	css/parser.h, html/parser.c:
+
+	Minimal support for grabbing CSS properties from <style> tags. Only
+	clean html element selectors are handled.  
+
+Mon Jan 19 17:00:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c:
+
+	Fix last patch.  
+
+Mon Jan 19 16:55:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c:
+
+	Use list_head pointers preparing for the invasion of <style>
+	handling. Uh oh and some renaming too. ;P 
+
+Mon Jan 19 16:51:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/styletags.html:
+
+	Add a test for using properties from <style> tags.  
+
+Mon Jan 19 16:17:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make the CSS scanner generate tokens for SGML comments.  
+
+Mon Jan 19 14:43:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Make the scanner generate atrule tokens containtin @<ident>.  
+
+Mon Jan 19 13:35:02 2004  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/document/css/apply.c:
+
+	Don't apply colors from styles if
+	document.colors.use_document_colors is 0.  
+
+Mon Jan 19 07:05:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Set string token type.  
+
+Mon Jan 19 06:29:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	We cannot get rid of string delimiters because token->length is set
+	later in the function .. but it should not matter.  
+
+Mon Jan 19 06:25:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Cleanup.  
+
+Mon Jan 19 06:10:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Fix comments.  
+
+Mon Jan 19 06:05:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Tidy up.  
+
+Mon Jan 19 06:03:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: scanner.c, scanner.h:
+
+	Store debug related info in the scanner struct so they do not have
+	to be passed to the functions even when CSS scanner debug is
+	disabled.  
+
+Mon Jan 19 05:52:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.h:
+
+	Update scanner comments.  
+
+Mon Jan 19 05:49:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Remove garbage macro.  
+
+Mon Jan 19 01:02:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Remove old TODO.  
+
+Mon Jan 19 01:00:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/css/: simplefont.html, simpletext.html:
+
+	Add text-decoration: underline tests.  
+
+Mon Jan 19 00:56:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/: apply.c, property.c, property.h, value.c:
+
+	Add support for text-decoration: underline.  
+
+Mon Jan 19 00:43:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Add comments to the rbg() parsers loop.  
+
+Mon Jan 19 00:30:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	Even use scanner for background property expression parsing.  
+
+Mon Jan 19 00:24:31 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/value.c:
+
+	css_parse_color_value(): Use the scanner for parsing. This partly
+	introduces spaghetti code in the rbg() handling. But we use a loop
+	so it should be easy to move things to separate function if we want
+	maybe even some generic function arg scanner.  
+
+Mon Jan 19 00:20:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/color.c:
+
+	Yes .. ermh buffer overflows .. that should be my apartment. This
+	one got fixed tho' ;/ 
+
+Mon Jan 19 00:02:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Also skip the % when scanning percentage tokens.  
+
+Sun Jan 18 23:54:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/scanner.c:
+
+	Add comma to char token list. Needed for function scanning.  
+
 Sun Jan 18 22:59:11 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* test/css/simplecolors.html:

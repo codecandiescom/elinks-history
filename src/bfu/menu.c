@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.197 2004/04/13 23:43:45 jonas Exp $ */
+/* $Id: menu.c,v 1.198 2004/04/16 09:44:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "terminal/window.h"
 #include "util/color.h"
 #include "util/conv.h"
+#include "util/math.h"
 #include "util/memory.h"
 
 /* Left and right main menu reserved spaces. */

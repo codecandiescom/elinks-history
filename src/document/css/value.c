@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.48 2004/03/30 00:36:46 jonas Exp $ */
+/* $Id: value.c,v 1.49 2004/04/16 09:44:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,6 +16,7 @@
 #include "document/html/parser.h"
 #include "util/color.h"
 #include "util/error.h"
+#include "util/math.h"
 #include "util/memory.h"
 #include "util/string.h"
 

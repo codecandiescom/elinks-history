@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.84 2004/01/04 00:20:31 zas Exp $ */
+/* $Id: draw.c,v 1.85 2004/04/16 09:44:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,7 @@
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
-
+#include "util/math.h"
 
 /* Makes sure that @x and @y are within the dimensions of the terminal. */
 #define check_range(term, x, y) \

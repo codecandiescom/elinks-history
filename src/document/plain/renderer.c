@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.94 2004/04/04 22:30:54 jonas Exp $ */
+/* $Id: renderer.c,v 1.95 2004/04/16 09:44:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "protocol/uri.h"
 #include "terminal/draw.h"
 #include "util/error.h"
+#include "util/math.h"
 #include "util/memory.h"
 #include "util/string.h"
 

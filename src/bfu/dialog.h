@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.38 2004/04/14 22:03:58 jonas Exp $ */
+/* $Id: dialog.h,v 1.39 2004/04/16 09:44:12 zas Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -7,6 +7,7 @@
 #include "bfu/widget.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h" /* dialog_data->win->term is so common that... */
+#include "util/math.h"
 #include "util/memlist.h"
 
 

@@ -1,4 +1,4 @@
-/* $Id: link.h,v 1.23 2004/05/25 00:28:41 jonas Exp $ */
+/* $Id: link.h,v 1.24 2004/05/25 00:48:40 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_LINK_H
 #define EL__VIEWER_TEXT_LINK_H
@@ -38,7 +38,7 @@ int next_in_view(struct document_view *doc_view, int p, int d, int (*fn)(struct 
 
 void jump_to_link_number(struct session *, struct document_view *doc_view, int);
 
-void goto_link(struct uri *, unsigned char *, struct session *, int, int);
+struct link *goto_current_link(struct session *, struct document_view *, int);
 void goto_link_number(struct session *ses, unsigned char *num);
 
 /* Bruteforce compilation fixes */

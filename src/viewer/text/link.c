@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.178 2004/05/25 00:28:41 jonas Exp $ */
+/* $Id: link.c,v 1.179 2004/05/25 00:48:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -494,24 +494,39 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 }
 
 /* This is common backend for submit_form_do() and enter(). */
-void
-goto_link(struct uri *uri, unsigned char *target, struct session *ses,
-	  int do_reload, int is_map)
+struct link *
+goto_current_link(struct session *ses, struct document_view *doc_view, int do_reload)
 {
-	assert(uri && ses);
-	if_assert_failed return;
+	struct link *link;
+	struct uri *uri;
 
-	if (is_map) {
+	assert(doc_view && ses);
+	if_assert_failed return NULL;
+
+	link = get_current_link(doc_view);
+	if (!link) return NULL;
+
+	if (link->form)
+		uri = get_form_uri(ses, doc_view, link->form);
+	else
+		uri = get_link_uri(ses, doc_view, link);
+
+	if (!uri) return NULL;
+
+	if (link->type == LINK_MAP) {
 		/* TODO: Test reload? */
-		goto_imgmap(ses, uri, null_or_stracpy(target));
+		goto_imgmap(ses, uri, null_or_stracpy(link->target));
 
 	} else {
 		if (do_reload) {
-			goto_url_frame_reload(ses, struri(uri), target);
+			goto_url_frame_reload(ses, struri(uri), link->target);
 		} else {
-			goto_url_frame(ses, struri(uri), target);
+			goto_url_frame(ses, struri(uri), link->target);
 		}
 	}
+
+	done_uri(uri);
+	return link;
 }
 
 
@@ -532,14 +547,9 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	    || ((has_form_submit(doc_view->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link_is_textinput(link)))) {
-		struct uri *uri = get_link_uri(ses, doc_view, link);
-		int is_map = link->type == LINK_MAP;
 
-		if (uri) {
-			goto_link(uri, link->target, ses, a, is_map);
-			done_uri(uri);
+		if (goto_current_link(ses, doc_view, a))
 			return 2;
-		}
 
 	} else if (link_is_textinput(link)) {
 		/* We won't get here if (has_form_submit() ||

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.284 2003/10/06 18:49:55 fabio Exp $ */
+/* $Id: options.c,v 1.285 2003/10/06 19:17:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1141,9 +1141,9 @@ register_options(void)
 		"number_keys_select_link", 0, 0, 2, 1,
 		N_("Number keys select links rather than specify command prefixes. This\n"
 		"is a tristate:\n"
-		"0 never\n"
-		"1 if document.browse.links.numbering = 1\n"
-		"2 always"));
+		"0 means never\n"
+		"1 means if document.browse.links.numbering = 1\n"
+		"2 means always"));
 
 	/* TODO - this is somehow implemented by ff, but disabled
 	 * for now as it doesn't work. */
@@ -1175,8 +1175,8 @@ register_options(void)
 	add_opt_bool("document.browse.search", N_("Overlapping matches"),
 		"overlap", 0, 0,
 		N_("Let matches overlap (only relevant to regex search).\n"
-		"0 matches should not overlap.\n"
-		"1 matches can overlap (CAUTION: can be cpu intensive with\n"
+		"0 means matches should not overlap.\n"
+		"1 means matches can overlap (CAUTION: can be cpu intensive with\n"
 		"  some expressions!)"));
 
 	add_opt_bool("document.browse", N_("Document meta refresh"),
@@ -1424,12 +1424,12 @@ register_options(void)
 	add_opt_int("document.html", N_("Rendering of html link element"),
 		"link_display", 0, 0, 5, 2,
 		N_("Html link rendering verbosity:\n"
-		"0 nothing\n"
-		"1 title\n"
-		"2 name in addition\n"
-		"3 hreflang in addition\n"
-		"4 type in addition\n"
-		"5 everything"));
+		"0 is nothing\n"
+		"1 is title\n"
+		"2 is name in addition\n"
+		"3 is hreflang in addition\n"
+		"4 is type in addition\n"
+		"5 is everything"));
 
 
 	add_opt_tree("", N_("MIME"),

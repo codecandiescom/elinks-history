@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.268 2003/11/15 17:25:45 zas Exp $ */
+/* $Id: parser.c,v 1.269 2003/11/15 18:15:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1982,6 +1982,26 @@ found:
 	do_menu_selected(term, menu, ses, sel, 0);
 }
 
+static void
+add_select_item(struct list_menu *menu, struct string *string,
+		unsigned char **value, int order, int dont_add)
+{
+	assert(menu && string);
+
+	if (!string->source) return;
+
+	if (!value[order - 1])
+		value[order - 1] = memacpy(string->source, string->length);
+
+	if (dont_add) {
+		done_string(string);
+	} else {
+		new_menu_item(menu, string->source, order - 1, 1);
+		string->source = NULL;
+		string->length = 0;
+	}
+}
+
 static int
 do_html_select(unsigned char *attr, unsigned char *html,
 	       unsigned char *eof, unsigned char **end, void *f)
@@ -2047,36 +2067,20 @@ abort:
 		goto se;
 	}
 
-#define add_select_item(string, value, order, dont_add) 		\
-	do {								\
-		if (!(string).source) break;				\
-									\
-		if (!value[(order) - 1])				\
-			value[(order) - 1] = memacpy((string).source,	\
-						     (string).length);	\
-		if (dont_add) {						\
-			done_string(&(string));				\
-		} else {						\
-			new_menu_item(&lnk_menu, (string).source, (order) - 1, 1);	\
-			(string).source = NULL;				\
-			(string).length = 0;				\
-		}							\
-	} while (0)
-
 	if (t_namelen == 7 && !strncasecmp(t_name, "/SELECT", 7)) {
-		add_select_item(lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 		goto end_parse;
 	}
 
 	if (t_namelen == 7 && !strncasecmp(t_name, "/OPTION", 7)) {
-		add_select_item(lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 		goto see;
 	}
 
 	if (t_namelen == 6 && !strncasecmp(t_name, "OPTION", 6)) {
 		unsigned char *v, *vx;
 
-		add_select_item(lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 
 		if (has_attr(t_attr, "disabled")) goto see;
 		if (preselect == -1 && has_attr(t_attr, "selected")) preselect = order;
@@ -2097,12 +2101,10 @@ abort:
 
 	if ((t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8))
 	    || (t_namelen == 9 && !strncasecmp(t_name, "/OPTGROUP", 9))) {
-		add_select_item(lbl, val, order, nnmi);
+		add_select_item(&lnk_menu, &lbl, val, order, nnmi);
 
 		if (group) new_menu_item(&lnk_menu, NULL, -1, 0), group = 0;
 	}
-
-#undef add_select_item
 
 	if (t_namelen == 8 && !strncasecmp(t_name, "OPTGROUP", 8)) {
 		unsigned char *la = get_attr_val(t_attr, "label");

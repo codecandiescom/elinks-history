@@ -1,4 +1,4 @@
-/* $Id: window.h,v 1.9 2004/07/15 15:38:22 jonas Exp $ */
+/* $Id: window.h,v 1.10 2004/07/28 16:03:33 jonas Exp $ */
 
 #ifndef EL__TERMINAL_WINDOW_H
 #define EL__TERMINAL_WINDOW_H
@@ -7,6 +7,7 @@
 
 struct term_event;
 struct terminal;
+struct window;
 
 enum window_type {
 	/* Normal windows: */
@@ -21,13 +22,15 @@ enum window_type {
 	WINDOW_TAB,
 };
 
+typedef void (window_handler)(struct window *, struct term_event *, int);
+
 struct window {
 	LIST_HEAD(struct window);
 
 	enum window_type type;
 
 	/* The window event handler */
-	void (*handler)(struct window *, struct term_event *, int fwd);
+	window_handler *handler;
 
 	/* For tab windows the session is stored in @data. For normal windows
 	 * it can contain dialog data. */
@@ -47,7 +50,7 @@ struct window {
 
 void redraw_from_window(struct window *);
 void redraw_below_window(struct window *);
-void add_window(struct terminal *, void (*)(struct window *, struct term_event *, int), void *);
+void add_window(struct terminal *, window_handler, void *);
 void delete_window(struct window *);
 void delete_window_ev(struct window *, struct term_event *ev);
 #define set_window_ptr(window, x_, y_) do { (window)->x = (x_); (window)->y = (y_); } while (0)

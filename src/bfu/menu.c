@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.256 2004/07/28 15:43:51 jonas Exp $ */
+/* $Id: menu.c,v 1.257 2004/07/28 16:03:32 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -57,8 +57,8 @@ static unsigned char m_submenu[] = ">>";
 static int m_submenu_len = sizeof(m_submenu) - 1;
 
 /* Prototypes */
-static void menu_handler(struct window *, struct term_event *, int);
-static void mainmenu_handler(struct window *, struct term_event *, int);
+static window_handler menu_handler;
+static window_handler mainmenu_handler;
 
 
 static inline int

@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.17 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: inphist.c,v 1.18 2003/05/04 19:54:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "bfu/menu.h"
 #include "config/urlhist.h"
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/lists.h"
 #include "util/memory.h"
 

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.8 2003/05/04 19:38:05 pasky Exp $ */
+/* $Id: terminal.c,v 1.9 2003/05/04 19:54:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "terminal/kbd.h"
 #include "terminal/screen.h"
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -92,8 +93,6 @@ static void in_term(struct terminal *);
 static void check_if_no_terminal();
 
 
-#define IF_ACTIVE(win,term) if(!(win)->type || (win)==get_tab_by_number((term),(term)->current_tab))
-
 void
 redraw_terminal_ev(struct terminal *term, int e)
 {
@@ -144,46 +143,6 @@ cls_redraw_all_terminals()
 		redraw_terminal_cls(term);
 }
 
-
-/* TODO: Move window stuff to a separate file ? --Zas */
-
-void
-redraw_from_window(struct window *win)
-{
-	struct terminal *term = win->term;
-	struct window *end = (void *)&term->windows;
-	struct event ev = {EV_REDRAW, 0, 0, 0};
-
-	ev.x = term->x;
-	ev.y = term->y;
-	if (term->redrawing) return;
-
-	term->redrawing = 1;
-	for (win = win->prev; win != end; win = win->prev) {
-		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
-	}
-	term->redrawing = 0;
-}
-
-void
-redraw_below_window(struct window *win)
-{
-	int tr;
-	struct terminal *term = win->term;
-	struct window *end = win;
-	struct event ev = {EV_REDRAW, 0, 0, 0};
-
-	ev.x = term->x;
-	ev.y = term->y;
-	if (term->redrawing >= 2) return;
-	tr = term->redrawing;
-	win->term->redrawing = 2;
-	for (win = term->windows.prev; win != end; win = win->prev) {
-		IF_ACTIVE(win,term) win->handler(win, &ev, 0);
-	}
-	term->redrawing = tr;
-}
-
 struct window *
 init_tab(struct terminal *term)
 {
@@ -200,93 +159,6 @@ init_tab(struct terminal *term)
 	term->current_tab = get_tab_number(win);
 
 	return win;
-}
-
-static void
-add_window_at_pos(struct terminal *term,
-		  void (*handler)(struct window *, struct event *, int),
-		  void *data, struct window *at)
-{
-	struct event ev = {EV_INIT, 0, 0, 0};
-	struct window *win;
-
-	ev.x = term->x;
-	ev.y = term->y;
-
-	win = mem_calloc(1, sizeof(struct window));
-	if (!win) {
-		if (data) mem_free(data);
-		return;
-	}
-
-	win->handler = handler;
-	win->data = data;
-	win->term = term;
-	win->type = WT_NORMAL;
-	add_at_pos(at, win);
-	win->handler(win, &ev, 0);
-}
-
-void
-add_window(struct terminal *term,
-	   void (*handler)(struct window *, struct event *, int),
-	   void *data)
-{
-	add_window_at_pos(term, handler, data, (struct window *) &term->windows);
-}
-
-void
-delete_window(struct window *win)
-{
-	struct event ev = {EV_ABORT, 0, 0, 0};
-
-	win->handler(win, &ev, 1);
-	del_from_list(win);
-	if (win->data) mem_free(win->data);
-	redraw_terminal(win->term);
-	mem_free(win);
-}
-
-void
-delete_window_ev(struct window *win, struct event *ev)
-{
-	struct window *w = win->next;
-
-	if ((void *)w == &win->term->windows) w = NULL;
-	delete_window(win);
-	if (ev && w && w->next != w) w->handler(w, ev, 1);
-}
-
-#if 0
-/* Converted to macro - see terminal.h */
-void
-set_window_ptr(struct window *win, int x, int y)
-{
-	win->xp = x;
-	win->yp = y;
-}
-#endif
-
-void
-get_parent_ptr(struct window *win, int *x, int *y)
-{
-	struct window *parent = win->next;
-
-#if 0
-	if ((void*) parent == &win->term->windows)
-		parent = NULL;
-	else
-#endif
-	if (parent->type)
-                parent = get_tab_by_number(win->term, win->term->current_tab);
-
-	if (parent) {
-		*x = parent->xp;
-		*y = parent->yp;
-	} else {
-		*x = 0;
-		*y = 0;
-	}
 }
 
 /* Number of tabs - just number of root windows in term->windows */
@@ -373,59 +245,6 @@ close_tab(struct terminal *term)
 	delete_window(get_root_window(term));
 
 	switch_to_tab(term, term->current_tab);
-}
-
-struct ewd {
-	void (*fn)(void *);
-	void *data;
-	int b;
-};
-
-
-static void
-empty_window_handler(struct window *win, struct event *ev, int fwd)
-{
-	struct window *n;
-	struct ewd *ewd = win->data;
-	int x, y;
-	void (*fn)(void *) = ewd->fn;
-	void *data = ewd->data;
-
-	if (ewd->b) return;
-
-	switch (ev->ev) {
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
-			get_parent_ptr(win, &x, &y);
-			set_window_ptr(win, x, y);
-			return;
-		case EV_ABORT:
-			fn(data);
-			return;
-		case EV_KBD:
-		case EV_MOUSE:
-			/* Silence compiler warnings */
-			break;
-	}
-
-	ewd->b = 1;
-	n = win->next;
-	delete_window(win);
-	fn(data);
-	if (n->next != n) n->handler(n, ev, fwd);
-}
-
-void
-add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
-{
-	struct ewd *ewd = mem_alloc(sizeof(struct ewd));
-
-	if (!ewd) return;
-	ewd->fn = fn;
-	ewd->data = data;
-	ewd->b = 0;
-	add_window(term, empty_window_handler, ewd);
 }
 
 struct terminal *

@@ -1,9 +1,10 @@
-/* $Id: inphist.h,v 1.3 2003/05/04 17:25:51 pasky Exp $ */
+/* $Id: inphist.h,v 1.4 2003/05/04 19:54:32 pasky Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
 
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/lists.h"
 
 

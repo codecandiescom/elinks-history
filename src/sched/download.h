@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.6 2003/05/04 17:25:56 pasky Exp $ */
+/* $Id: download.h,v 1.7 2003/05/04 19:54:33 pasky Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -6,8 +6,9 @@
 #include <sys/types.h>
 
 #include "document/cache.h"
-#include "terminal/terminal.h"
 #include "lowlevel/ttime.h"
+#include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "sched/session.h"
 #include "sched/sched.h"
 #include "util/lists.h"

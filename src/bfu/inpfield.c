@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.25 2003/05/04 19:30:46 pasky Exp $ */
+/* $Id: inpfield.c,v 1.26 2003/05/04 19:54:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
+#include "terminal/window.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 

@@ -1,3 +1,9 @@
+Tue Oct  8 22:10:49 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre18 
+
 Tue Oct  8 22:09:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/dialogs.c:

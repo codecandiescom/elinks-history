@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.21 2003/09/01 21:11:08 jonas Exp $ */
+/* $Id: color.c,v 1.22 2003/09/01 23:59:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,13 +210,13 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr,
 	register unsigned char bg = find_nearest_color(pair->background, bglevel);
 	register unsigned char bold = 0;
 
+	/* Adjusts the foreground color to be more visible. */
+	if (d_opt && !d_opt->allow_dark_on_black) {
+		fg = fg_color[fg][bg];
+	}
+
 	/* Add various color enhancement based on the attributes. */
 	if (attr) {
-		/* Adjusts the foreground color to be more visible. */
-		if (d_opt && !d_opt->allow_dark_on_black) {
-			fg = fg_color[fg][bg];
-		}
-
 		if (attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.277 2003/12/07 11:52:30 pasky Exp $ */
+/* $Id: session.c,v 1.278 2003/12/08 00:24:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,10 +389,14 @@ doc_end_load(struct download *stat, struct session *ses)
 	print_screen_status(ses);
 
 #ifdef GLOBHIST
-	if (stat->conn)
-		add_global_history_item(struri(stat->conn->uri),
-					ses->doc_view->document->title,
-					time(NULL));
+	if (stat->conn) {
+		unsigned char *title = ses->doc_view->document->title;
+		struct uri *uri = &stat->conn->uri;
+		unsigned char *uristring = uri->protocol == PROTOCOL_PROXY
+					 ? uri->data : struri(*uri);
+
+		add_global_history_item(uristring, title, time(NULL));
+	}
 #endif
 
 	if (submit) {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.255 2003/07/24 00:59:06 pasky Exp $ */
+/* $Id: options.c,v 1.256 2003/07/26 08:04:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1450,7 +1450,7 @@ register_options(void)
 		"path", 0, "",
 		N_("Mailcap search path. Colon-separated list of files.\n"
 		"Leave as \"\" to use MAILCAP environment variable or\n"
-		"build-in defaults instead."));
+		"built-in defaults instead."));
 
 	add_opt_bool("mime.mailcap", N_("Ask before opening"),
 		"ask", 0, 1,
@@ -1484,7 +1484,7 @@ register_options(void)
 	add_opt_str("mime.mimetypes", N_("Path"),
 		"path", 0, "",
 		N_("Mimetypes search path. Colon-separated list of files.\n"
-		"Leave as \"\" to use build-in default instead."));
+		"Leave as \"\" to use built-in default instead."));
 
 
 

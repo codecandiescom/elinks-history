@@ -3,7 +3,7 @@
 .\" <http://shell.ipoline.com/~elmert/comp/docbook2X/> 
 .\" Please send any bug reports, improvements, comments, patches, 
 .\" etc. to Steve Cheng <steve@ggi-project.org>.
-.TH "ELINKS" "1" "15 June 2003" "" ""
+.TH "ELINKS" "1" "23 December 2003" "" ""
 
 .SH NAME
 elinks \- lynx-like alternative character mode WWW browser

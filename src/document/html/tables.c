@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.186 2004/06/24 15:05:46 zas Exp $ */
+/* $Id: tables.c,v 1.187 2004/06/24 15:12:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1093,7 +1093,7 @@ distribute_widths(struct table *table, int width)
 	memcpy(table->columns_width, table->min_c, tx_size);
 	table->real_width = width;
 
-	/* XXX: We don't need to fail if unsuccessful.  See below. --Zas */
+	/* XXX: We don't need to fail if unsuccessful. See below. --Zas */
 	u = fmem_alloc(table->x);
 
 	w = fmem_alloc(tx_size);
@@ -1230,7 +1230,7 @@ check_table_widths(struct table *table)
 {
 	register int i, j;
 	int s, ns;
-	int m, mi = 0; /* go away, warning! */
+	int max, max_index = 0; /* go away, warning! */
 	int *w = mem_calloc(table->x, sizeof(int));
 
 	if (!w) return;
@@ -1289,16 +1289,16 @@ check_table_widths(struct table *table)
 		goto end;
 	}
 
-	m = -1;
+	max = -1;
 	for (i = 0; i < table->x; i++)
-		if (table->max_c[i] > m) {
-			m = table->max_c[i];
-			mi = i;
+		if (table->max_c[i] > max) {
+			max = table->max_c[i];
+			max_index = i;
 		}
 
-	if (m != -1) {
-		w[mi] += s - ns;
-		if (w[mi] <= table->max_c[mi]) {
+	if (max != -1) {
+		w[max_index] += s - ns;
+		if (w[max_index] <= table->max_c[max_index]) {
 			mem_free(table->columns_width);
 			table->columns_width = w;
 			return;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.214 2003/10/05 13:55:30 kuser Exp $ */
+/* $Id: parser.c,v 1.215 2003/10/05 13:58:55 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3359,21 +3359,150 @@ look_for_tag(unsigned char **pos, unsigned char *eof,
 	return 0;
 }
 
-/* TODO: Split this function so that we can get rid of that gotos. */
+static int
+look_for_link(unsigned char **pos, unsigned char *eof,
+	      unsigned char *tag, struct menu_item **menu,
+	      struct memory_list **ml, unsigned char *href_base,
+	      unsigned char *target_base, struct conv_table *ct)
+{
+	unsigned char *attr, *label, *href, *name, *target;
+	struct link_def *ld;
+	struct menu_item *nm;
+	int nmenu = 0;
+	int namelen;
+	int i;
+
+	while (*pos < eof && **pos != '<') {
+		(*pos)++;
+	}
+
+	if (*pos >= eof) return 0;
+
+	if (*pos + 2 <= eof && ((*pos)[1] == '!' || (*pos)[1] == '?')) {
+		*pos = skip_comment(*pos, eof);
+		return 1;
+	}
+
+	if (parse_element(*pos, eof, &name, &namelen, &attr, pos)) {
+		(*pos)++;
+		return 1;
+	}
+
+	if (namelen == 1 && !strncasecmp(name, "A", 1)) {
+		while (look_for_tag(pos, eof, name, namelen, &label));
+
+		if (*pos >= eof) return 0;
+
+	} else if (namelen == 4 && !strncasecmp(name, "AREA", 4)) {
+		unsigned char *alt = get_attr_val(attr, "alt");
+
+		if (alt) {
+			label = convert_string(ct, alt, strlen(alt), CSM_DEFAULT);
+			mem_free(alt);
+		} else {
+			label = NULL;
+		}
+
+	} else if (namelen == 4 && !strncasecmp(name, "/MAP", 4)) {
+		/* This is the only successful return from here! */
+		add_to_ml(ml, *menu, NULL);
+		return 0;
+
+	} else {
+		return 1;
+	}
+
+	target = get_target(attr);
+	if (!target) target = target_base ? stracpy(target_base) : NULL;
+	if (!target) target = stracpy("");
+	if (!target) {
+		if (label) mem_free(label);
+		return 1;
+	}
+
+	ld = mem_alloc(sizeof(struct link_def));
+	if (!ld) {
+		if (label) mem_free(label);
+		mem_free(target);
+		return 1;
+	}
+
+	href = get_url_val(attr, "href");
+	if (!href) {
+		if (label) mem_free(label);
+		mem_free(target);
+		mem_free(ld);
+		return 1;
+	}
+
+	ld->link = join_urls(href_base, href);
+	if (!ld->link) {
+		if (label) mem_free(label);
+		mem_free(target);
+		mem_free(ld);
+		mem_free(href);
+		return 1;
+	}
+
+	mem_free(href);
+
+	ld->target = target;
+	for (i = 0; i < nmenu; i++) {
+		struct link_def *ll = (*menu)[i].data;
+
+		if (!strcmp(ll->link, ld->link) &&
+		    !strcmp(ll->target, ld->target)) {
+			mem_free(ld->link);
+			mem_free(ld->target);
+			mem_free(ld);
+			if (label) mem_free(label);
+			return 1;
+		}
+	}
+
+	if (label) {
+		clr_spaces(label);
+
+		if (!*label) {
+			mem_free(label);
+			label = NULL;
+		}
+	}
+
+	if (!label) {
+		label = stracpy(ld->link);
+		if (!label) {
+			mem_free(href);
+			mem_free(target);
+			return 1;
+		}
+	}
+
+	nm = mem_realloc(*menu, (nmenu + 2) * sizeof(struct menu_item));
+	if (nm) {
+		*menu = nm;
+		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
+		nm[nmenu].text = label;
+		nm[nmenu].rtext = "";
+		nm[nmenu].func = (menu_func) map_selected;
+		nm[nmenu].data = ld;
+		nm[nmenu].no_intl = 1;
+		nm[++nmenu].text = NULL;
+	}
+
+	add_to_ml(ml, ld, ld->link, ld->target, label, NULL);
+
+	return 1;
+}
+
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      unsigned char *tag, struct menu_item **menu,
 	      struct memory_list **ml, unsigned char *href_base,
 	      unsigned char *target_base, int to, int def, int hdef)
 {
-	unsigned char *name, *attr, *label, *href, *target;
-	struct link_def *ld;
-	struct menu_item *nm;
 	struct conv_table *ct;
 	struct string hd;
-	int namelen;
-	int nmenu = 0;
-	int i;
 
 	if (!init_string(&hd)) return -1;
 
@@ -3394,10 +3523,8 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 
 	*ml = NULL;
 
-look_for_link:
-	while (pos < eof && *pos != '<') {
-		pos++;
-	}
+	while (look_for_link(&pos, eof, tag, menu, ml,
+			     href_base, target_base, ct));
 
 	if (pos >= eof) {
 		freeml(*ml);
@@ -3405,125 +3532,7 @@ look_for_link:
 		return -1;
 	}
 
-	if (pos + 2 <= eof && (pos[1] == '!' || pos[1] == '?')) {
-		pos = skip_comment(pos, eof);
-		goto look_for_link;
-	}
-
-	if (parse_element(pos, eof, &name, &namelen, &attr, &pos)) {
-		pos++;
-		goto look_for_link;
-	}
-
-	if (namelen == 1 && !strncasecmp(name, "A", 1)) {
-		while (look_for_tag(&pos, eof, name, namelen, &label));
-
-		if (pos >= eof) {
-			freeml(*ml);
-			mem_free(*menu);
-			return -1;
-		}
-
-	} else if (namelen == 4 && !strncasecmp(name, "AREA", 4)) {
-		unsigned char *alt = get_attr_val(attr, "alt");
-
-		if (alt) {
-			label = convert_string(ct, alt, strlen(alt), CSM_DEFAULT);
-			mem_free(alt);
-		} else {
-			label = NULL;
-		}
-
-	} else if (namelen == 4 && !strncasecmp(name, "/MAP", 4)) {
-		/* This is the only successful return from here! */
-		add_to_ml(ml, *menu, NULL);
-		return 0;
-
-	} else {
-		goto look_for_link;
-	}
-
-	target = get_target(attr);
-	if (!target) target = target_base ? stracpy(target_base) : NULL;
-	if (!target) target = stracpy("");
-	if (!target) {
-		if (label) mem_free(label);
-		goto look_for_link;
-	}
-
-	ld = mem_alloc(sizeof(struct link_def));
-	if (!ld) {
-		if (label) mem_free(label);
-		mem_free(target);
-		goto look_for_link;
-	}
-
-	href = get_url_val(attr, "href");
-	if (!href) {
-		if (label) mem_free(label);
-		mem_free(target);
-		mem_free(ld);
-		goto look_for_link;
-	}
-
-	ld->link = join_urls(href_base, href);
-	if (!ld->link) {
-		if (label) mem_free(label);
-		mem_free(target);
-		mem_free(ld);
-		mem_free(href);
-		goto look_for_link;
-	}
-
-	mem_free(href);
-
-	ld->target = target;
-	for (i = 0; i < nmenu; i++) {
-		struct link_def *ll = (*menu)[i].data;
-
-		if (!strcmp(ll->link, ld->link) &&
-		    !strcmp(ll->target, ld->target)) {
-			mem_free(ld->link);
-			mem_free(ld->target);
-			mem_free(ld);
-			if (label) mem_free(label);
-			goto look_for_link;
-		}
-	}
-
-	if (label) {
-		clr_spaces(label);
-
-		if (!*label) {
-			mem_free(label);
-			label = NULL;
-		}
-	}
-
-	if (!label) {
-		label = stracpy(ld->link);
-		if (!label) {
-			mem_free(href);
-			mem_free(target);
-			goto look_for_link;
-		}
-	}
-
-	nm = mem_realloc(*menu, (nmenu + 2) * sizeof(struct menu_item));
-	if (nm) {
-		*menu = nm;
-		memset(&nm[nmenu], 0, 2 * sizeof(struct menu_item));
-		nm[nmenu].text = label;
-		nm[nmenu].rtext = "";
-		nm[nmenu].func = (menu_func) map_selected;
-		nm[nmenu].data = ld;
-		nm[nmenu].no_intl = 1;
-		nm[++nmenu].text = NULL;
-	}
-
-	add_to_ml(ml, ld, ld->link, ld->target, label, NULL);
-
-	goto look_for_link;
+	return 0;
 }
 
 void

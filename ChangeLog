@@ -1,3 +1,79 @@
+Sat Jul  6 22:09:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lua/TODO:
+
+	Add documentation of Lua interface ;).  
+
+Sat Jul  6 21:53:00 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, bfu/leds.c, bfu/leds.h, document/session.c:
+
+	(Re)draw leds as well ;).  
+
+Sat Jul  6 21:08:43 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/: Makefile.am, leds.c, leds.h:
+
+	Add simple support for LED indicators ;).  
+
+Sat Jul  6 17:41:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/opttypes.c:
+
+	Command line options handler and numeric parser fixes, patch by
+	Stepan Roh.  
+
+Sat Jul  6 17:00:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* .cvsignore:
+
+	Added few more.  
+
+Sat Jul  6 12:00:13 2002  Petr Baudis <pasky@ji.cz>:
+
+	* .cvsignore:
+
+	Add the automake stuff to .cvsignore.  
+
+Sat Jul  6 11:44:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* autogen.sh, config.guess, config.sub, install-sh, missing,
+	mkinstalldirs:
+
+	Let automake create some files automagically. Now, it should work ok
+	even with newer automake versions.  
+
+Sat Jul  6 11:32:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/main.c:
+
+	Use really base-session insteead of base_session, patch by Stepan
+	Roh <stepan@srnet.cz>.  
+
+Sat Jul  6 09:20:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	base_session -> base-session, fixes opening new window.  
+
+Sat Jul  6 09:14:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/spanish.lng, src/intl/language.inc:
+
+	Spanish translation update by David Mediavilla.  
+
+Sat Jul  6 09:07:28 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/info.c:
+
+	SSL support type mentioned in about dialog.  
+
+Fri Jul  5 22:33:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	0.4pre11.CVS 
+
 Fri Jul  5 22:32:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* NEWS, configure.in:

@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
-"POT-Creation-Date: 2005-01-03 15:27+0100\n"
+"POT-Creation-Date: 2005-01-03 23:18+0100\n"
 "PO-Revision-Date: 2005-01-03 16:13+0100\n"
 "Last-Translator: Adam Golebiowski <adamg@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -45,7 +45,7 @@ msgstr "Wci¶nij spacjê by rozwin±æ ten folder."
 #: src/config/dialogs.c:498 src/config/dialogs.c:850 src/config/dialogs.c:869
 #: src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/document.c:50 src/dialogs/document.c:226
-#: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:95
+#: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:98
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:515 src/dialogs/menu.c:566
 #: src/dialogs/options.c:174 src/dialogs/options.c:254
@@ -163,7 +163,7 @@ msgstr "Nie znaleziono wyra¿enia '%s'"
 
 #: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
 #: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:35
-#: src/cookies/dialogs.c:350 src/dialogs/edit.c:89 src/dialogs/edit.c:91
+#: src/cookies/dialogs.c:350 src/dialogs/edit.c:92 src/dialogs/edit.c:94
 #: src/scripting/lua/core.c:391 src/scripting/lua/core.c:392
 #: src/scripting/lua/core.c:473
 msgid "Name"
@@ -172,7 +172,7 @@ msgstr "Nazwa"
 #: src/bfu/hierbox.c:974 src/bookmarks/dialogs.c:263
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:357
-#: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
+#: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:96
 #: src/dialogs/menu.c:515 src/dialogs/menu.c:566 src/dialogs/options.c:177
 #: src/dialogs/options.c:255 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
@@ -350,7 +350,7 @@ msgid "Title"
 msgstr "Tytu³"
 
 #: src/bookmarks/dialogs.c:76 src/cache/dialogs.c:65 src/dialogs/document.c:72
-#: src/dialogs/edit.c:93 src/formhist/dialogs.c:63 src/globhist/dialogs.c:67
+#: src/dialogs/edit.c:96 src/formhist/dialogs.c:63 src/globhist/dialogs.c:67
 #: src/protocol/auth/dialogs.c:156 src/scripting/lua/core.c:393
 msgid "URL"
 msgstr "URL"
@@ -443,7 +443,7 @@ msgid "Add"
 msgstr "Dodaj"
 
 #: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:476 src/dialogs/edit.c:96 src/formhist/dialogs.c:215
+#: src/dialogs/download.c:476 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Wyczy¶æ"
@@ -6507,7 +6507,8 @@ msgid "Smart prefixes, see enable-smart description for details."
 msgstr ""
 "Inteligentne przedrostki, zobacz opis w³±czania inteligentnych przedrostków"
 
-#: src/protocol/rewrite/rewrite.c:87
+#: src/protocol/rewrite/rewrite.c:88
+#, no-c-format
 msgid ""
 "Replacement URI for this smartprefix:\n"
 "%c in the string means the current URL\n"
@@ -6522,7 +6523,7 @@ msgstr ""
 "%% w ³añcuchu oznacza '%'"
 
 #. name:
-#: src/protocol/rewrite/rewrite.c:357
+#: src/protocol/rewrite/rewrite.c:358
 msgid "URI rewrite"
 msgstr "Przepisywanie URI"
 

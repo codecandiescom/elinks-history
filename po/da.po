@@ -4,14 +4,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-03 18:57+0100\n"
+"POT-Creation-Date: 2005-01-03 23:18+0100\n"
 "PO-Revision-Date: 2005-01-03 23:14+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:348
 msgid "Close"
@@ -39,7 +39,7 @@ msgstr "Tryk mellemrum for at åbne denne mappe."
 #: src/config/dialogs.c:498 src/config/dialogs.c:850 src/config/dialogs.c:869
 #: src/config/dialogs.c:908 src/cookies/dialogs.c:356
 #: src/dialogs/document.c:50 src/dialogs/document.c:226
-#: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:95
+#: src/dialogs/document.c:243 src/dialogs/document.c:301 src/dialogs/edit.c:98
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:96 src/dialogs/menu.c:515 src/dialogs/menu.c:566
 #: src/dialogs/options.c:174 src/dialogs/options.c:254
@@ -157,7 +157,7 @@ msgstr "Søgestrengen '%s' blev ikke fundet"
 
 #: src/bfu/hierbox.c:973 src/config/dialogs.c:188 src/config/dialogs.c:209
 #: src/config/dialogs.c:376 src/config/dialogs.c:497 src/cookies/dialogs.c:35
-#: src/cookies/dialogs.c:350 src/dialogs/edit.c:89 src/dialogs/edit.c:91
+#: src/cookies/dialogs.c:350 src/dialogs/edit.c:92 src/dialogs/edit.c:94
 #: src/scripting/lua/core.c:391 src/scripting/lua/core.c:392
 #: src/scripting/lua/core.c:473
 msgid "Name"
@@ -166,7 +166,7 @@ msgstr "Navn"
 #: src/bfu/hierbox.c:974 src/bookmarks/dialogs.c:263
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:411
 #: src/config/dialogs.c:498 src/config/dialogs.c:908 src/cookies/dialogs.c:357
-#: src/dialogs/edit.c:99 src/dialogs/edit.c:102 src/dialogs/menu.c:96
+#: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:96
 #: src/dialogs/menu.c:515 src/dialogs/menu.c:566 src/dialogs/options.c:177
 #: src/dialogs/options.c:255 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
@@ -343,7 +343,7 @@ msgid "Title"
 msgstr "Titel"
 
 #: src/bookmarks/dialogs.c:76 src/cache/dialogs.c:65 src/dialogs/document.c:72
-#: src/dialogs/edit.c:93 src/formhist/dialogs.c:63 src/globhist/dialogs.c:67
+#: src/dialogs/edit.c:96 src/formhist/dialogs.c:63 src/globhist/dialogs.c:67
 #: src/protocol/auth/dialogs.c:156 src/scripting/lua/core.c:393
 msgid "URL"
 msgstr "URL"
@@ -436,7 +436,7 @@ msgid "Add"
 msgstr "Tilføj"
 
 #: src/bookmarks/dialogs.c:452 src/cookies/dialogs.c:425
-#: src/dialogs/download.c:476 src/dialogs/edit.c:96 src/formhist/dialogs.c:215
+#: src/dialogs/download.c:476 src/dialogs/edit.c:99 src/formhist/dialogs.c:215
 #: src/globhist/dialogs.c:232 src/protocol/auth/dialogs.c:256
 msgid "Clear"
 msgstr "Ryd"
@@ -2698,13 +2698,16 @@ msgstr ""
 "websteder. De omdirigere ofte til en logind side, når en webside\n"
 "tilgås. Logindsiden giver dig en godkendelses cookie og dirigerer\n"
 "dig tilbage til den originale webside, som er omdirigeringssiden\n"
-"som blev tilføjet til cachen første gang!\n\n"
+"som blev tilføjet til cachen første gang!\n"
+"\n"
 "Hvis indstillingen er sat til 0 rettes der op på dette problem,\n"
 "men lejlighedsvis vil det være nødvendigt at foretage (ellers)\n"
-"unødvendige forespørgsler til serveren.\n\n"
+"unødvendige forespørgsler til serveren.\n"
+"\n"
 "Hvis denne indstilling er sat til 1 kan problemet stadig omgås\n"
 "for erfarne brugere ved at kombinere Ctrl+Enter med at hoppe\n"
-"rundt i sessionshistorikken.\n\n"
+"rundt i sessionshistorikken.\n"
+"\n"
 "Bemærk, at denne indstilling anvendes når der søges i cachen\n"
 "ikke når der gemmes til den. Hvis du aktivere den vil forrige\n"
 "eventuelle omdirigeringer stadig blive fundet i cachen i stedet\n"
@@ -5146,6 +5149,8 @@ msgstr "Skifte mellem gemning"
 msgid "Form history manager"
 msgstr "Formularhistorikhåndtering"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Vis formularhistorik dialogvindue"
@@ -6840,13 +6845,12 @@ msgid ""
 msgstr ""
 "Du har protocol.http.user_agent sat til en tom tekstreng, hvilket var "
 "standardværdien førhen. Denne praksis er blevet erstattet, så der nu "
-"anvendes en standard ELinks brugeragenttekststreng i stedet. Dette "
-"betyder altså at INGEN brugeragenttekststreng (User-Agent) vil blive "
-"send. Hvis du stadig øsnekr dette sæt indstillingensværdi til \" \". "
-"Ellers bedes du venligst slette denne indstilling fra din "
-"konfigurationsfil (hvis du ikke har nogen ide om hvad denne besked "
-"omhandler bare gør dette) så den korrekte standardværdi vil blive "
-"anvendt. Undskyld for ulejligheden."
+"anvendes en standard ELinks brugeragenttekststreng i stedet. Dette betyder "
+"altså at INGEN brugeragenttekststreng (User-Agent) vil blive send. Hvis du "
+"stadig øsnekr dette sæt indstillingensværdi til \" \". Ellers bedes du "
+"venligst slette denne indstilling fra din konfigurationsfil (hvis du ikke "
+"har nogen ide om hvad denne besked omhandler bare gør dette) så den korrekte "
+"standardværdi vil blive anvendt. Undskyld for ulejligheden."
 
 #: src/sched/session.c:716
 msgid ""
@@ -6861,13 +6865,13 @@ msgid ""
 "for any inconvience caused."
 msgstr ""
 "Du har indstillingen config.saving_style sat til en værdi, der er forældet. "
-"Algoritmen brugt til at gemme ELinks' konfigurationsfilen er blevet ændret "
-"i forhold til sidste gang du opgraderede ELinks. Nu gemmes kun de "
-"indstillinger som du faktisk har ændret i konfigurationsfilen i stedet "
-"for alle indstillinger. Dette gør det nemmere at undgå problemer med "
-"forældede værdier eller upassende standardværdier. Du rådes derfor til "
-"at ændre værdien af indstillingen config.saving_style til 3 for at opnå "
-"den \"rette\" adfærd. Undskyld for ulejligheden."
+"Algoritmen brugt til at gemme ELinks' konfigurationsfilen er blevet ændret i "
+"forhold til sidste gang du opgraderede ELinks. Nu gemmes kun de "
+"indstillinger som du faktisk har ændret i konfigurationsfilen i stedet for "
+"alle indstillinger. Dette gør det nemmere at undgå problemer med forældede "
+"værdier eller upassende standardværdier. Du rådes derfor til at ændre "
+"værdien af indstillingen config.saving_style til 3 for at opnå den \"rette\" "
+"adfærd. Undskyld for ulejligheden."
 
 #: src/sched/session.c:743
 msgid "Welcome"

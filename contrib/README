@@ -15,4 +15,8 @@ if you feel like fixing that, no problem.
 * dummy-js.diff - Jan Bobrowski <jb@mohan.krakow.pl>
 	Handler for few simple javascript functions.
 
-$Id: README,v 1.1 2001/12/28 17:25:34 pasky Exp $
+* hpux-pipe.diff - Stephane Chazelas <Stephane_Chazelas@Yahoo.fr>
+	Fix for arcane (appears to me that everything under HPUX is somewhat
+	arcane ;) handling of pipes in HPUX
+
+$Id: README,v 1.2 2002/01/20 15:27:24 pasky Exp $

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.87 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: menu.c,v 1.88 2003/08/01 11:44:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -325,7 +325,7 @@ display_menu(struct terminal *term, struct menu *menu)
 							set_char(term, menu->x + x - 1 + 2,
 								 s, c, (double_hk ?  menu_selected_hotkey_color : hkco));
 #else
-							set_char(term, menu->x + x - 1 + 2, s, hkco | c);
+							set_char(term, menu->x + x - 1 + 2, s, c, hkco);
 #endif
 							hk = 2;
 						} else {

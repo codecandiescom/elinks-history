@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.308 2005/03/20 10:57:52 jonas Exp $ */
+/* $Id: uri.c,v 1.309 2005/03/20 11:05:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1080,38 +1080,41 @@ parse_uri:
 		/* Fix translation of 1.2.3.4:5 so IP address part won't be
 		 * interpreted as the protocol name. */
 		if (uri.protocol == PROTOCOL_UNKNOWN) {
-			unsigned char *ipscan = newurl;
+			enum protocol protocol = find_uri_protocol(newurl);
 
-			/* FIXME: This is looking more and more like the code
-			 * for the URI_ERRNO_INVALID_PROTOCOL label and
-			 * find_uri_protocol(). Unite? --jonas */
-
-			/* Check if it could be just some local file with ':'
-			 * in its name. */
-			if (check_uri_file(newurl) >= 0) {
+			/* Code duplication with the URI_ERRNO_INVALID_PROTOCOL
+			 * case. */
+			if (protocol != PROTOCOL_UNKNOWN) {
 				struct string str;
 
 				if (!init_string(&str)) return NULL;
 
-				add_to_string(&str, "file://");
-				if (!dir_sep(*newurl))
-					add_to_string(&str, "./");
-				encode_file_uri_string(&str, newurl);
+				switch (protocol) {
+				case PROTOCOL_FTP:
+					add_to_string(&str, "ftp://");
+					encode_uri_string(&str, newurl, 0);
+					break;
+
+				case PROTOCOL_HTTP:
+					add_to_string(&str, "http://");
+					add_to_string(&str, newurl);
+					break;
+
+				case PROTOCOL_UNKNOWN:
+					break;
+
+				case PROTOCOL_FILE:
+				default:
+					add_to_string(&str, "file://");
+					if (!dir_sep(*newurl))
+						add_to_string(&str, "./");
+
+					encode_file_uri_string(&str, newurl);
+				}
 
 				mem_free(newurl);
 				newurl = str.source;
 
-				/* Work around the infinite loop prevention */
-				prev_errno = URI_ERRNO_EMPTY;
-				goto parse_uri;
-			}
-
-			/* Check if it's <IP-address>:<port> */
-			while (isdigit(*ipscan) || *ipscan == '.')
-				ipscan++;
-
-			if (!*ipscan || *ipscan == ':' || *ipscan == '/') {
-				insert_in_string(&newurl, 0, "http://", 7);
 				/* Work around the infinite loop prevention */
 				prev_errno = URI_ERRNO_EMPTY;
 				goto parse_uri;

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.110 2003/11/25 21:58:21 pasky Exp $ */
+/* $Id: conf.c,v 1.111 2003/12/21 17:25:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -365,15 +365,16 @@ test_end:
 			/* TODO: Make this a macro and report error directly
 			 * as it's stumbled upon; line info may not be accurate
 			 * anymore now (?). --pasky */
-			errfile = name, errline = line;
-			elinks_error("%s",  error_msg[err]);
+			fprintf(stderr, "%s:%d: %s\n",
+				name, line, error_msg[err]);
 			error_occured = 1;
 			err = 0;
 		}
 	}
 
 	if (error_occured) {
-		sleep(1);
+		fputc(7, stderr);
+		/* sleep(1); */
 	}
 }
 

@@ -399,7 +399,10 @@ dnl ===================================================================
 
 AC_CHECK_HEADERS(expat.h, cf_result=yes, cf_result=no)
 if test "$cf_result" = yes; then
-        AC_CHECK_LIB(expat, XML_ParserCreate, [have_expat=yes], [have_expat=no])
+	AC_CHECK_LIB(expat, XML_ParserCreate, [have_expat=yes], [have_expat=no])
+	if test "$have_expat" = yes; then
+		LIBS="$LIBS -lexpat"
+	fi
 fi
 
 

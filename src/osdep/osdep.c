@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.157 2004/12/28 16:53:09 zas Exp $ */
+/* $Id: osdep.c,v 1.158 2004/12/31 12:29:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -805,7 +805,6 @@ can_resize_window(int environment)
 int
 can_open_os_shell(int environment)
 {
-	if (environment & ENV_XWIN) return 0;
 	return 1;
 }
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.202 2004/06/13 00:25:07 jonas Exp $ */
+/* $Id: link.c,v 1.203 2004/06/13 00:30:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -584,28 +584,6 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	}
 
 	return FRAME_EVENT_REFRESH;
-}
-
-int
-get_current_state(struct session *ses)
-{
-	struct document_view *doc_view;
-	struct link *link;
-	struct form_state *fs;
-
-	assert(ses);
-	if_assert_failed return -1;
-	doc_view = current_frame(ses);
-
-	assert(doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return -1;
-
-	link = get_current_link(doc_view);
-	if (!link || link->type != LINK_SELECT) return -1;
-
-	fs = find_form_state(doc_view, link->form_control);
-	if (fs) return fs->state;
-	return -1;
 }
 
 struct link *

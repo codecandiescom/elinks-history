@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.150 2004/06/13 00:17:56 jonas Exp $ */
+/* $Id: form.c,v 1.151 2004/06/13 00:30:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,6 +214,28 @@ find_form_state(struct document_view *doc_view, struct form_control *frm)
 	init_form_state(frm, fs);
 
 	return fs;
+}
+
+int
+get_current_state(struct session *ses)
+{
+	struct document_view *doc_view;
+	struct link *link;
+	struct form_state *fs;
+
+	assert(ses);
+	if_assert_failed return -1;
+	doc_view = current_frame(ses);
+
+	assert(doc_view && doc_view->vs && doc_view->document);
+	if_assert_failed return -1;
+
+	link = get_current_link(doc_view);
+	if (!link || link->type != LINK_SELECT) return -1;
+
+	fs = find_form_state(doc_view, link->form_control);
+	if (fs) return fs->state;
+	return -1;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.81 2003/11/22 14:02:41 jonas Exp $ */
+/* $Id: hierbox.c,v 1.82 2003/11/22 14:08:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,15 +313,13 @@ struct hierbox_action_info {
 	struct terminal *term;
 };
 
-/* Delete action */
-
 static int
-scan_for_marks(struct listbox_item *item, void *info, int *offset)
+scan_for_marks(struct listbox_item *item, void *info_, int *offset)
 {
 	if (item->marked) {
-		struct hierbox_action_info *delete_info = info;
+		struct hierbox_action_info *action_info = info_;
 
-		delete_info->item = NULL;
+		action_info->item = NULL;
 		*offset = 0;
 	}
 
@@ -329,24 +327,29 @@ scan_for_marks(struct listbox_item *item, void *info, int *offset)
 }
 
 struct hierbox_action_info *
-get_hierbox_delete_info(struct listbox_data *box, struct terminal *term)
+init_hierbox_action_info(struct listbox_data *box, struct terminal *term,
+			int scan_marked)
 {
-	struct hierbox_action_info *delete_info;
+	struct hierbox_action_info *action_info;
 
-	delete_info = mem_alloc(sizeof(struct hierbox_action_info));
-	if (!delete_info) return NULL;
+	action_info = mem_alloc(sizeof(struct hierbox_action_info));
+	if (!action_info) return NULL;
 
-	delete_info->item = box->sel;
-	delete_info->term = term;
-	delete_info->box = box;
+	action_info->item = box->sel;
+	action_info->term = term;
+	action_info->box = box;
+
+	if (!scan_marked) return action_info;
 
 	/* Look if it wouldn't be more interesting to blast off the marked
 	 * item. */
 	traverse_listbox_items_list(box->items->next, 0, 0,
-				    scan_for_marks, delete_info);
+				    scan_for_marks, action_info);
 
-	return delete_info;
+	return action_info;
 }
+
+/* Delete action */
 
 static void
 do_delete_item(struct listbox_item *item, struct hierbox_action_info *info,
@@ -456,7 +459,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 
 	assert(box->ops);
 
-	delete_info = get_hierbox_delete_info(box, term);
+	delete_info = init_hierbox_action_info(box, term, 1);
 	if (!delete_info) return 0;
 
 	if (!delete_info->item) {

@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.62 2003/12/29 19:04:33 zas Exp $ */
+/* $Id: renderer.c,v 1.63 2003/12/29 19:35:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -249,11 +249,43 @@ add_document_line(struct document *document, int lineno,
 }
 
 static void
+init_template(struct screen_char *template, color_t background, color_t foreground)
+{
+	struct color_pair colors;
+
+	colors.background = background;
+	colors.foreground = foreground;
+
+	template->attr = 0;
+	template->data = ' ';
+	set_term_color(template, &colors, global_doc_opts->color_flags, global_doc_opts->color_mode);
+}
+
+static struct node *
+add_node(struct document *document, int x, int y, int width, int height)
+{
+	struct node *node = mem_alloc(sizeof(struct node));
+
+	if (node) {
+		node->x = x;
+		node->y = y;
+		node->width = width;
+		node->height = height;
+
+		int_lower_bound(&document->width, width);
+		int_lower_bound(&document->height, height);
+
+		add_to_list(document->nodes, node);
+	}
+
+	return node;
+}
+
+static void
 add_document_lines(struct document *document, unsigned char *source, int length,
 		   struct conv_table *convert_table)
 {
 	struct screen_char template;
-	struct color_pair colors;
 	int lineno;
 	int was_empty_line = 0;
 	int compress = document->options.plain_compress_empty_lines;
@@ -261,12 +293,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 	document->width = 0;
 
 	/* Setup the style */
-	colors.foreground = global_doc_opts->default_fg;
-	colors.background = global_doc_opts->default_bg;
-
-	template.attr = 0;
-	template.data = ' ';
-	set_term_color(&template, &colors, global_doc_opts->color_flags, global_doc_opts->color_mode);
+	init_template(&template, global_doc_opts->default_bg, global_doc_opts->default_fg);
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
@@ -332,16 +359,7 @@ add_document_lines(struct document *document, unsigned char *source, int length,
 
 		if (added) {
 			/* Add (search) nodes on a line by line basis */
-			struct node *node = mem_alloc(sizeof(struct node));
-			if (node) {
-				node->x = 0;
-				node->y = lineno;
-				node->height = 1;
-				node->width = added;
-				add_to_list(document->nodes, node);
-			}
-
-			int_lower_bound(&document->width, added);
+			add_node(document, 0, lineno, added, 1);
 		}
 
 		/* Skip end of line chars too. */

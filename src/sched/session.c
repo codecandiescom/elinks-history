@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.192 2003/10/28 10:17:58 zas Exp $ */
+/* $Id: session.c,v 1.193 2003/10/29 15:25:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -468,30 +468,30 @@ x:
 	memcpy(&loc->download, &ses->loading, sizeof(struct download));
 
 	if (ses->task_target_frame && *ses->task_target_frame) {
-		struct frame *frm;
+		struct frame *frame;
 
 		assertm(have_location(ses), "no location yet");
 		if_assert_failed return;
 
 		copy_location(loc, cur_loc(ses));
 		add_to_history(&ses->history, loc);
-		frm = ses_change_frame_url(ses, ses->task_target_frame,
-					   ses->loading_url);
+		frame = ses_change_frame_url(ses, ses->task_target_frame,
+					     ses->loading_url);
 
-		if (!frm) {
+		if (!frame) {
 			del_from_history(&ses->history, loc);
 			destroy_location(loc);
 			ses->task_target_frame = NULL;
 			goto x;
 		}
 
-		destroy_vs(&frm->vs);
-		init_vs(&frm->vs, ses->loading_url);
+		destroy_vs(&frame->vs);
+		init_vs(&frame->vs, ses->loading_url);
 
 		if (ses->goto_position) {
-			if (frm->vs.goto_position)
-				mem_free(frm->vs.goto_position);
-			frm->vs.goto_position = ses->goto_position;
+			if (frame->vs.goto_position)
+				mem_free(frame->vs.goto_position);
+			frame->vs.goto_position = ses->goto_position;
 			ses->goto_position = NULL;
 		}
 #if 0
@@ -796,26 +796,26 @@ static void
 request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 {
 	struct location *loc = cur_loc(ses);
-	struct frame *frm;
+	struct frame *frame;
 	unsigned char *url, *pos;
 
 	assertm(have_location(ses), "request_frame: no location");
 	if_assert_failed return;
 
-	foreach (frm, loc->frames) {
-		if (strcasecmp(frm->name, name))
+	foreach (frame, loc->frames) {
+		if (strcasecmp(frame->name, name))
 			continue;
 
-		url = memacpy(frm->vs.url, frm->vs.url_len);
+		url = memacpy(frame->vs.url, frame->vs.url_len);
 		if (!url) return;
 #if 0
 		/* This seems not to be needed anymore, it looks like this
 		 * condition should never happen. It's apparently what Mikulas
 		 * thought, at least. I'll review this more carefully when I
 		 * will understand this stuff better ;-). --pasky */
-		if (frm->vs.view && frm->vs.view->document
-		    && frm->vs.view->document->frame_desc)) {
-			request_frameset(ses, frm->vs.view->document->frame_desc);
+		if (frame->vs.view && frame->vs.view->document
+		    && frame->vs.view->document->frame_desc)) {
+			request_frameset(ses, frame->vs.view->document->frame_desc);
 			if (url) mem_free(url);
 			return;
 		}
@@ -828,26 +828,26 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	pos = extract_position(url);
 
 	/* strlen(url) without + 1 since vs have already reserved one byte. */
-	frm = mem_alloc(sizeof(struct frame) + strlen(url));
-	if (!frm) {
+	frame = mem_alloc(sizeof(struct frame) + strlen(url));
+	if (!frame) {
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
-	memset(frm, 0, sizeof(struct frame));
+	memset(frame, 0, sizeof(struct frame));
 
-	frm->name = stracpy(name);
-	if (!frm->name) {
-		mem_free(frm);
+	frame->name = stracpy(name);
+	if (!frame->name) {
+		mem_free(frame);
 		mem_free(url);
 		if (pos) mem_free(pos);
 		return;
 	}
 
-	init_vs(&frm->vs, url);
-	if (pos) frm->vs.goto_position = pos;
+	init_vs(&frame->vs, url);
+	if (pos) frame->vs.goto_position = pos;
 
-	add_to_list(loc->frames, frm);
+	add_to_list(loc->frames, frame);
 
 found:
 	if (*url)
@@ -1611,15 +1611,15 @@ goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href,
 struct frame *
 ses_find_frame(struct session *ses, unsigned char *name)
 {
-	struct location *l = cur_loc(ses);
-	struct frame *frm;
+	struct location *loc = cur_loc(ses);
+	struct frame *frame;
 
 	assertm(have_location(ses), "ses_request_frame: no location yet");
 	if_assert_failed return NULL;
 
-	foreachback (frm, l->frames)
-		if (!strcasecmp(frm->name, name))
-			return frm;
+	foreachback (frame, loc->frames)
+		if (!strcasecmp(frame->name, name))
+			return frame;
 
 	return NULL;
 }
@@ -1628,37 +1628,37 @@ struct frame *
 ses_change_frame_url(struct session *ses, unsigned char *name,
 		     unsigned char *url)
 {
-	struct location *l = cur_loc(ses);
-	struct frame *frm;
+	struct location *loc = cur_loc(ses);
+	struct frame *frame;
 	size_t url_len = strlen(url);
 
 	assertm(have_location(ses), "ses_change_frame_url: no location yet");
 	if_assert_failed { return NULL; }
 
-	foreachback (frm, l->frames) {
-		if (strcasecmp(frm->name, name)) continue;
+	foreachback (frame, loc->frames) {
+		if (strcasecmp(frame->name, name)) continue;
 
-		if (url_len > frm->vs.url_len) {
+		if (url_len > frame->vs.url_len) {
 			struct document_view *doc_view;
-			struct frame *nf = frm;
+			struct frame *new_frame = frame;
 
 			/* struct view_state reserves 1 byte for url, so
 			 * url_len is sufficient. */
-			nf = mem_realloc(frm, sizeof(struct frame) + url_len);
-			if (!nf) return NULL;
+			new_frame = mem_realloc(frame, sizeof(struct frame) + url_len);
+			if (!new_frame) return NULL;
 
-			nf->prev->next = nf->next->prev = nf;
+			new_frame->prev->next = new_frame->next->prev = new_frame;
 
 			foreach (doc_view, ses->scrn_frames)
-				if (doc_view->vs == &frm->vs)
-					doc_view->vs = &nf->vs;
+				if (doc_view->vs == &frame->vs)
+					doc_view->vs = &new_frame->vs;
 
-			frm = nf;
+			frame = new_frame;
 		}
-		memcpy(frm->vs.url, url, url_len + 1);
-		frm->vs.url_len = url_len;
+		memcpy(frame->vs.url, url, url_len + 1);
+		frame->vs.url_len = url_len;
 
-		return frm;
+		return frame;
 	}
 
 	return NULL;

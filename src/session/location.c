@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.7 2003/10/23 22:15:17 pasky Exp $ */
+/* $Id: location.c,v 1.8 2003/10/29 15:25:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,20 +18,21 @@
 void
 copy_location(struct location *dst, struct location *src)
 {
-	struct frame *f, *nf;
+	struct frame *frame, *new_frame;
 
 	init_list(dst->frames);
-	foreachback (f, src->frames) {
-		nf = mem_alloc(sizeof(struct frame) + f->vs.url_len + 1);
-		if (nf) {
-			nf->name = stracpy(f->name);
-			if (!nf->name) {
-				mem_free(nf);
+	foreachback (frame, src->frames) {
+		/* One byte is reserved in struct vs. */
+		new_frame = mem_alloc(sizeof(struct frame) + frame->vs.url_len);
+		if (new_frame) {
+			new_frame->name = stracpy(frame->name);
+			if (!new_frame->name) {
+				mem_free(new_frame);
 				return;
 			}
-			nf->redirect_cnt = 0;
-			copy_vs(&nf->vs, &f->vs);
-			add_to_list(dst->frames, nf);
+			new_frame->redirect_cnt = 0;
+			copy_vs(&new_frame->vs, &frame->vs);
+			add_to_list(dst->frames, new_frame);
 		}
 	}
 	copy_vs(&dst->vs, &src->vs);

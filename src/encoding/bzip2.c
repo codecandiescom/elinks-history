@@ -1,5 +1,5 @@
 /* Bzip2 encoding (ENCODING_BZIP2) backend */
-/* $Id: bzip2.c,v 1.3 2004/08/16 00:59:08 jonas Exp $ */
+/* $Id: bzip2.c,v 1.4 2004/09/13 20:04:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,11 @@ bzip2_decode_buffer(unsigned char *data, int len, int *new_len)
 			break;
 		}
 
-	} while (error == BZ_OK);
+		/* Apparently BZ_STREAM_END is not forced when the end of input
+		 * is reached. At least lindi- reported that it caused a
+		 * reproducable infinite loop. Maybe it has to do with decoding
+		 * an incomplete file. */
+	} while (error == BZ_OK && stream.avail_in > 0);
 
 	BZ2_bzDecompressEnd(&stream);
 

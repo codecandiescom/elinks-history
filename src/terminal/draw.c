@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.43 2003/08/01 09:58:55 zas Exp $ */
+/* $Id: draw.c,v 1.44 2003/08/01 10:39:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,13 @@
 #include "terminal/terminal.h"
 
 
-#define out_of_range(term, x, y) ((x) < 0 || (x) >= (term)->x || \
-				  (y) < 0 || (y) >= (term)->y)
+#define check_range(term, x, y) \
+	do { \
+		int_upper_bound(&(x), (term)->x - 1); \
+		int_lower_bound(&(x), 0); \
+		int_upper_bound(&(y), (term)->y - 1); \
+		int_lower_bound(&(y), 0); \
+	} while (0)
 
 void
 set_char(struct terminal *term, int x, int y,
@@ -24,7 +29,7 @@ set_char(struct terminal *term, int x, int y,
 
 	assert(term && term->screen);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	position = x + term->x * y;
 	term->screen->image[position].data = data;
@@ -42,7 +47,7 @@ set_xchar(struct terminal *term, int x, int y, enum frame_cross_direction dir)
 
 	assert(term && term->screen);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	screen_char = get_char(term, x, y);
 	if (!(screen_char->attr & SCREEN_ATTR_FRAME)) return;
@@ -64,7 +69,7 @@ set_border_char(struct terminal *term, int x, int y,
 
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	/* This should probably go.  */
 	if (!color)
@@ -82,7 +87,7 @@ get_char(struct terminal *term, int x, int y)
 {
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return 0;
-	if (out_of_range(term, x, y)) return 0;
+	check_range(term, x, y);
 
 	return &term->screen->image[x + term->x * y];
 }
@@ -95,7 +100,7 @@ set_color(struct terminal *term, int x, int y, unsigned char color)
 
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	position = x + term->x * y;
 	attr |= (term->screen->image[position].attr & SCREEN_ATTR_FRAME);
@@ -108,7 +113,7 @@ set_only_char(struct terminal *term, int x, int y, unsigned char data)
 {
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	term->screen->image[x + term->x * y].data = data;
 	term->screen->dirty = 1;
@@ -124,7 +129,7 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 
 	assert(term && term->screen && term->screen->image && line);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	end = int_min(l, term->x - x);
 	if (end == 0) return;
@@ -147,7 +152,7 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw,
 
 	assert(term && term->screen && term->screen->image);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	endx = int_min(xw, term->x - x);
 	endy = int_min(yw, term->y - y);
@@ -216,7 +221,7 @@ print_text(struct terminal *term, int x, int y, int l,
 
 	assert(term && term->screen && term->screen->image && text && l >= 0);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	end = int_min(l, term->x - x);
 	position = x + term->x * y;
@@ -234,7 +239,7 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 {
 	assert(term && term->screen);
 	if_assert_failed return;
-	if (out_of_range(term, x, y)) return;
+	check_range(term, x, y);
 
 	if (blockable && get_opt_bool_tree(term->spec, "block_cursor")) {
 		x = term->x - 1;

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.201 2004/06/25 09:27:40 zas Exp $ */
+/* $Id: tables.c,v 1.202 2004/06/25 10:04:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -901,12 +901,12 @@ get_cell_widths(struct table *table)
 }
 
 static inline void
-dst_width(int *p, int n, int w, int *lim)
+dst_width(int *values, int n, int w, int *limits)
 {
 	register int i;
 	int s = 0, d, r, t;
 
-	for (i = 0; i < n; i++) s += p[i];
+	for (i = 0; i < n; i++) s += values[i];
 	if (s >= w) return;
 
 again:
@@ -915,23 +915,23 @@ again:
 	r = t % n;
 	w = 0;
 
-	if (lim) {
+	if (limits) {
 		for (i = 0; i < n; i++) {
-			p[i] += d + (i < r);
-			if (p[i] > lim[i]) {
-				w += p[i] - lim[i];
-				p[i] = lim[i];
+			values[i] += d + (i < r);
+			if (values[i] > limits[i]) {
+				w += values[i] - limits[i];
+				values[i] = limits[i];
 			}
 		}
 	} else {
 		for (i = 0; i < n; i++) {
-			p[i] += d + (i < r);
+			values[i] += d + (i < r);
 		}
 	}
 
 	if (w) {
-		assertm(lim, "bug in dst_width");
-		lim = NULL;
+		assertm(limits, "bug in dst_width");
+		limits = NULL;
 		s = 0;
 		goto again;
 	}

@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.16 2004/05/24 02:30:04 jonas Exp $ */
+/* $Id: form.h,v 1.17 2004/05/25 00:16:40 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -83,8 +83,8 @@ struct submitted_value {
 	int position;
 };
 
-unsigned char *get_form_url(struct session *, struct document_view *,
-			    struct form_control *);
+struct uri *get_form_uri(struct session *, struct document_view *,
+			 struct form_control *);
 
 void fixup_select_state(struct form_control *fc, struct form_state *fs);
 struct form_state *find_form_state(struct document_view *doc_view, struct form_control *frm);

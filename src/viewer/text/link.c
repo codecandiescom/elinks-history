@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.174 2004/05/25 00:08:58 jonas Exp $ */
+/* $Id: link.c,v 1.175 2004/05/25 00:16:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -471,8 +471,8 @@ nolink:
 }
 
 
-static unsigned char *
-get_link_url(struct session *ses, struct document_view *doc_view,
+struct uri *
+get_link_uri(struct session *ses, struct document_view *doc_view,
 	     struct link *link)
 {
 	assert(ses && doc_view && link);
@@ -481,25 +481,16 @@ get_link_url(struct session *ses, struct document_view *doc_view,
 	switch (link->type) {
 		case LINK_HYPERTEXT:
 		case LINK_MAP:
-			if (link->where) return stracpy(link->where);
-			return stracpy(link->where_img);
+			if (link->where) return get_uri(link->where, -1);
+			return get_uri(link->where_img, -1);
 
 		case LINK_BUTTON:
 		case LINK_FIELD:
-			return get_form_url(ses, doc_view, link->form);
+			return get_form_uri(ses, doc_view, link->form);
 
 		default:
 			return NULL;
 	}
-}
-
-struct uri *
-get_link_uri(struct session *ses, struct document_view *doc_view,
-	     struct link *link)
-{
-	unsigned char *uristring = get_link_url(ses, doc_view, link);
-
-	return uristring ? get_uri(uristring, -1) : NULL;
 }
 
 /* This is common backend for submit_form_do() and enter(). */
@@ -547,13 +538,13 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 	    || ((has_form_submit(doc_view->document, link->form)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link_is_textinput(link)))) {
-		unsigned char *url = get_link_url(ses, doc_view, link);
+		struct uri *uri = get_link_uri(ses, doc_view, link);
 		int is_map = link->type == LINK_MAP;
 
-		if (url) {
-			int retval = goto_link(url, link->target, ses, a, is_map);
+		if (uri) {
+			int retval = goto_link(struri(uri), link->target, ses, a, is_map);
 
-			mem_free(url);
+			done_uri(uri);
 			return retval;
 		}
 

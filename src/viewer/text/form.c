@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.102 2004/05/25 00:08:58 jonas Exp $ */
+/* $Id: form.c,v 1.103 2004/05/25 00:16:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -666,8 +666,8 @@ reset_form(struct session *ses, struct document_view *doc_view, int a)
 	draw_forms(ses->tab->term, doc_view);
 }
 
-unsigned char *
-get_form_url(struct session *ses, struct document_view *doc_view,
+struct uri *
+get_form_uri(struct session *ses, struct document_view *doc_view,
 	     struct form_control *frm)
 {
 	struct list_head submit;
@@ -675,6 +675,7 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	struct string go;
 	unsigned char bound[BL];
 	int cp_from, cp_to;
+	struct uri *uri;
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
@@ -751,7 +752,10 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 
 	done_string(&data);
 
-	return go.source;
+	uri = get_uri(go.source, -1);
+	done_string(&go);
+
+	return uri;
 }
 
 #undef BL
@@ -761,14 +765,14 @@ void
 submit_form(struct session *ses, struct document_view *doc_view, int do_reload)
 {
 	struct link *link = get_current_link(doc_view);
-	unsigned char *url;
+	struct uri *uri;
 
 	if (!link) return;
 
-	url = get_form_url(ses, doc_view, link->form);
-	if (url) {
-		goto_link(url, link->target, ses, do_reload, 0);
-		mem_free(url);
+	uri = get_form_uri(ses, doc_view, link->form);
+	if (uri) {
+		goto_link(struri(uri), link->target, ses, do_reload, 0);
+		done_uri(uri);
 	}
 }
 

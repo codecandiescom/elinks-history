@@ -304,8 +304,8 @@ Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
 
 Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-	Original links author
-	Maintains and makes official releases.
+	Original Links author
+	Maintains and makes Links-0.9x official releases.
 	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/
 	One of Links authors; a lot of misc. features & code
 
@@ -459,4 +459,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.146 2003/12/03 23:20:42 pasky Exp $
+$Id: AUTHORS,v 1.147 2003/12/03 23:21:15 pasky Exp $

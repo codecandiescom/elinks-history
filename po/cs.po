@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-10-12 00:03+0200\n"
-"PO-Revision-Date: 2003-10-09 14:26+0200\n"
+"PO-Revision-Date: 2003-10-12 22:32+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3866,11 +3866,11 @@ msgstr "Prùhlednost"
 
 #: src/dialogs/options.c:137
 msgid "Underline"
-msgstr ""
+msgstr "Podtr¾ení"
 
 #: src/dialogs/options.c:138
 msgid "UTF-8 I/O"
-msgstr ""
+msgstr "UTF-8 I/O"
 
 #: src/dialogs/options.c:237
 msgid "Terminal options"
@@ -3897,6 +3897,12 @@ msgid ""
 "\n"
 "If you are using a valuable password, answer NO."
 msgstr ""
+"Mìl bych si zapamatovat tyto pøihla¹ovací informace?\n"
+"\n"
+"Uvìdomte si prosím, ¾e heslo bude ulo¾eno zakódované, av¹ak NEZA©IFROVANÉ "
+"v souboru na va¹em disku.\n"
+"\n"
+"Pokud se jedná o dùle¾ité heslo, odpovìzte ne."
 
 #: src/globhist/dialogs.c:146
 msgid "Search history"
@@ -3950,17 +3956,22 @@ msgid ""
 "URL: %s\n"
 "Last visit time: %s"
 msgstr ""
+"Titulek: %s\n"
+"URL: %s\n"
+"Èas poslední náv¹tìvy: %s"
 
 #: src/lowlevel/home.c:121
 #, c-format
 msgid ""
 "Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
+"Parametr -confdir byl nastaven na %s, ale nemù¾u bohu¾el vytvoøit adresáø %s."
 
 #: src/lowlevel/home.c:126
 #, c-format
 msgid "ELINKS_CONFDIR set to %s, but could not create directory %s."
 msgstr ""
+"ELINKS_CONFDIR je nastaven na %s, ale nemù¾u bohu¾el vytvoøit adresáø %s."
 
 #: src/lowlevel/home.c:150
 msgid ""
@@ -3968,42 +3979,45 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
+"Nemohu najít ani vytvoøit konfiguraèní adresáø pro ELinks. Prosím zkontrolujte, "
+"jestli máte promìnnou $HOME správnì nastavenou a jestli máte povolení k zápisu "
+"do va¹eho domovského adresáøe."
 
 #: src/lowlevel/interlink.c:333
 #, c-format
 msgid "accept() failed: %d (%s)"
-msgstr ""
+msgstr "accept() selhal: %d (%s)"
 
 #: src/lowlevel/interlink.c:372 src/lowlevel/interlink.c:431
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "socket() selhal: %d (%s)"
 
 #: src/lowlevel/interlink.c:381
 #, c-format
 msgid "bind() failed: %d (%s)"
-msgstr ""
+msgstr "bind() selhal: %d (%s)"
 
 #: src/lowlevel/interlink.c:401
 #, c-format
 msgid "listen() failed: %d (%s)"
-msgstr ""
+msgstr "listen() selhal: %d (%s)"
 
 #: src/lowlevel/interlink.c:443
 #, c-format
 msgid "connect() failed: %d (%s)"
-msgstr ""
+msgstr "connect() selhal: %d (%s)"
 
 #: src/lowlevel/select.c:341
 #, c-format
 msgid "select() failed: %d (%s)"
-msgstr ""
+msgstr "select() selhal: %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:344
 #, c-format
 msgid "%d select() failures."
-msgstr ""
+msgstr "%d selhání funkce select()."
 
 #: src/lowlevel/signals.c:242
 #, c-format
@@ -4012,7 +4026,7 @@ msgstr "Chybné èíslo signálu: %d"
 
 #: src/main.c:113
 msgid "Cannot create a pipe for internal communication."
-msgstr ""
+msgstr "Nemohu vytvoøit rouru pro interní komunikaci."
 
 #: src/osdep/os_dep.c:1901
 msgid "~Tab"
@@ -4479,16 +4493,16 @@ msgstr "Nemù¾u pøeèíst událost: %d (%s)"
 #: src/terminal/event.c:109
 #, c-format
 msgid "Bad event %d"
-msgstr ""
+msgstr "©patná událost %d"
 
 #: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
-msgstr ""
+msgstr "Varování: jméno terminálu obsahuje o¹klivé znaky."
 
 #: src/terminal/event.c:168
 #, c-format
 msgid "Bad terminal size: %d, %d"
-msgstr ""
+msgstr "©patná velikost terminálu: %d, %d"
 
 #: src/terminal/kbd.c:278
 msgid "Could not get terminal size"
@@ -4496,7 +4510,7 @@ msgstr "Nemù¾u získat velikost terminálu"
 
 #: src/terminal/kbd.c:944
 msgid "Too many bytes read from the itrm!"
-msgstr ""
+msgstr "Naèetl jsem z itrm pøíli¹ mnoho bytù!"
 
 #: src/util/version.c:48
 msgid "Text WWW browser"
@@ -4555,7 +4569,7 @@ msgstr "Chyba pøi zápisu na sandardní výstup."
 #: src/viewer/dump/dump.c:194
 #, c-format
 msgid "URL expected after %s."
-msgstr ""
+msgstr "Po %s oèekáváno URL."
 
 #: src/viewer/text/form.c:663
 msgid "Error while posting form"
@@ -4688,11 +4702,11 @@ msgstr "®ádné pøedchozí hledání"
 
 #: src/viewer/text/search.c:856
 msgid "Search hit bottom, continuing at top."
-msgstr ""
+msgstr "Vyhledávání dosáhlo konce dokumentu, pokraèuji od zaèátku."
 
 #: src/viewer/text/search.c:862
 msgid "Search hit top, continuing at bottom."
-msgstr ""
+msgstr "Vyhledávání dosáhlo zaèátku dokumentu, pokraèuji od konce."
 
 #: src/viewer/text/search.c:884
 #, c-format

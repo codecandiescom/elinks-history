@@ -1,3 +1,63 @@
+Sat Apr 27 11:34:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Moved AC_CHECK_LIB for -ldl above CFLAGS_X=CFLAGS - now the result
+	is actually even preserved. Makes more sense for me, let's see if
+	it'll break something ;).  
+
+Sat Apr 27 11:30:48 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Typo fixes.  
+
+Sat Apr 27 11:30:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* configure.in:
+
+	Reverted all OpenSSL+Lua-related recent changes (1.54 and 1.59+) -
+	it needs to be completely redone, now things are keeping breaking..  
+
+Fri Apr 26 21:32:40 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Tidy up, minor changes.  
+
+Fri Apr 26 18:14:56 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Compilation fixes.  
+
+Fri Apr 26 18:14:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/default.c, config/default.h, protocol/types.c:
+
+	Added default_mime_type option, with text/plain as a default value.  
+
+Fri Apr 26 18:09:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Tidyup of content type guessing code.  
+
+Fri Apr 26 17:56:53 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/finger.c:
+
+	Tidy up.  
+
+Fri Apr 26 17:49:46 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: README, colws.diff:
+
+	Added colws.diff (preserve two whitespaces after '.' or ':' in HTML
+	document) by <ard@waikato.ac.nz> to contrib. This behaviour is not
+	standart and not very intuitive, and may cause some problems, so I'm
+	not including it in the mainline.  
+
 Fri Apr 26 17:26:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, intl/brazilian_portuguese.lng, intl/bulgarian.lng,
@@ -12,573 +72,573 @@ Fri Apr 26 17:26:46 2002  Petr Baudis <pasky@ji.cz>:
 	src/dialogs/options.c, src/intl/charsets.c, src/intl/charsets.h,
 	src/intl/lang_defs.h, src/intl/language.inc,
 	src/lowlevel/terminal.c, src/lowlevel/terminal.h:
-	
-	Support for UTF8 I/O (terminal option utf8_io), patch by Ben
-	Sitter, cosmetical changes by me.
+
+	Support for UTF8 I/O (terminal option utf8_io), patch by Ben Sitter,
+	cosmetical changes by me.  
 
 Fri Apr 26 17:07:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/parser.c:
-	
+
 	Tidyup of various element handlers, some more fail checks. Call
 	html_focusable() before each put_link_line(), fixes the bug that
 	Link: lines and similiar have invalid tabindex, thus the navigation
-	messes up, reported by Kevin Everets <kevin.everets@alcatel.com>.
+	messes up, reported by Kevin Everets <kevin.everets@alcatel.com>.  
 
 Fri Apr 26 16:06:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/sched.c:
-	
+
 	Fixed possible segfault in memory allocation failure handling in
-	load_url() (stat may be NULL, but is always dereferenced).
+	load_url() (stat may be NULL, but is always dereferenced).  
 
 Fri Apr 26 15:48:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/protocol/http/http.c:
-	
-	Better ' ' -> %20 code, patch by Witold Filipczyk.
+
+	Better ' ' -> %20 code, patch by Witold Filipczyk.  
 
 Fri Apr 26 13:25:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/globhist.c:
-	
-	Global history clear button cleanup by Miciah.
+
+	Global history clear button cleanup by Miciah.  
 
 Fri Apr 26 13:23:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
+
 	AC_SEARCH_LIBS fixes for ssl and lua checks, it was completely
-	broken..
+	broken..  
 
 Fri Apr 26 13:03:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
+
 	SSL detection fixes. It was not used when first lib search
-	succeeded. Silly.
+	succeeded. Silly.  
 
 Wed Apr 24 19:20:00 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: lowlevel/sched.c, protocol/http/http.c:
-	
-	Almost complete http authentification rewriting.
+
+	Almost complete http authentification rewriting.  
 	
 	- Fix a bug (memleak) occuring with urls with port and no path
-	(:901/ bug).	Accessing to http://www.some.site:901 do not failed
-	anymore.  - Fix a major design error, realms concept wasn't
-	respected. So when accessing   to two directories at the same depth
-	on the same host and in the same realm,   authentification dialog
-	do not pop up anymore.	- Fix urls handling. WWW.some.site,
-	www.some.site and www.Some.Site:80 are now   equivalent in concern
-	of authentification.  - Added support for
-	http://user:pass@www.some.site/ syntax.
+	  (:901/ bug).  Accessing to http://www.some.site:901 do not failed
+	anymore.  
+	- Fix a major design error, realms concept wasn't respected. So when
+	  accessing to two directories at the same depth on the same host and
+	  in the same realm, authentification dialog do not pop up anymore.  
+	- Fix urls handling. WWW.some.site, www.some.site and
+	  www.Some.Site:80 are now equivalent in concern of authentification.  
+	- Added support for http://user:pass@www.some.site/ syntax.  
 
 Wed Apr 24 14:49:48 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/http/http.c:
-	
-	Fix a potential buffer overflow in proxy authorization code.
+
+	Fix a potential buffer overflow in proxy authorization code.  
 
 Wed Apr 24 14:14:17 2002  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/sched.c:
-	
-	HTTP auth related functions small tidy up.
+
+	HTTP auth related functions small tidy up.  
 
 Wed Apr 24 08:06:24 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/url.h:
-	
-	get_protocol_name() prototype added.
+
+	get_protocol_name() prototype added.  
 
 Tue Apr 23 20:47:29 2002  Laurent Monin <zas@norz.org>:
 
 	* src/cookies/Makefile.am:
-	
+
 	Some recently added lines may cause compilation to fail, disabled
-	for now.
+	for now.  
 
 Tue Apr 23 12:17:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	Typo fixes
+
+	Typo fixes 
 
 Tue Apr 23 08:46:11 2002  Laurent Monin <zas@norz.org>:
 
 	* TODO:
-	
-	TODO: Passive FTP mode support
+
+	TODO: Passive FTP mode support 
 
 Tue Apr 23 08:31:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/parser.c:
-	
-	Cookies parsing fixes, partially by <len@reeltwo.com>.
+
+	Cookies parsing fixes, partially by <len@reeltwo.com>.  
 
 Tue Apr 23 08:25:45 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/parsetst.c:
-	
-	Terminate name and value with \0.
+
+	Terminate name and value with \0.  
 
 Tue Apr 23 08:14:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/parsetst.c:
-	
-	Empty string really quits the creature now :).
+
+	Empty string really quits the creature now :).  
 
 Tue Apr 23 08:08:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/parsetst.c:
-	
-	Ehm, minor fixes ;).
+
+	Ehm, minor fixes ;).  
 
 Tue Apr 23 08:06:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/: Makefile.am, cookies.c, parser.c, parser.h,
 	parsetst.c:
-	
+
 	Moved parse_cookie_str() to parser.*, added parsetst.c for testing
-	the parser standalone.
+	the parser standalone.  
 
 Tue Apr 23 07:48:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
-	Move cookies parsing to parse_cookie_str().
+
+	Move cookies parsing to parse_cookie_str().  
 
 Mon Apr 22 15:39:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, configure.in:
-	
+
 	Lua/OpenSSL compile fixes - on RedHats it apparently needs -ldl
 	magical word in final link, and we did it wrong way because me ;).
-	Patch by <zimon@iki.fi>.
+	Patch by <zimon@iki.fi>.  
 
 Sun Apr 21 19:12:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, lowlevel/sched.c, lowlevel/sched.h,
 	protocol/http/http.c, util/Makefile.am, util/blacklist.c,
 	util/blacklist.h:
-	
+
 	Moved blacklist managment to util/blacklist.*. It's also possible I
-	made some very minor cleanups there.
+	made some very minor cleanups there.  
 
 Sat Apr 20 19:55:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:
-	
+
 	Another bit of cleanup of bottom part of join_urls(). Also fixed
 	another bug reported by kon@iki.fi and Peter Gervai
 	<grin@tolna.net>. Now, we sometimes add slash by ourselves in
 	join_urls(), if it's reasonable. Also left commented out debug()
-	things for future use ;).
+	things for future use ;).  
 
 Sat Apr 20 19:28:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:
-	
-	Tiny cleanup of bottom part of join_urls(). Also partially fixed
-	one bug reported by kon@iki.fi and Peter Gervai <grin@tolna.net>.
+
+	Tiny cleanup of bottom part of join_urls(). Also partially fixed one
+	bug reported by kon@iki.fi and Peter Gervai <grin@tolna.net>.  
 
 Sat Apr 20 16:53:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:
-	
-	Add .biz to our HTTP guessing code.
+
+	Add .biz to our HTTP guessing code.  
 
 Sat Apr 20 16:48:25 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:
-	
-	Minor clarification.
+
+	Minor clarification.  
 
 Sat Apr 20 15:13:30 2002  Laurent Monin <zas@norz.org>:
 
 	* src/protocol/ftp.c:
-	
+
 	A segfault occuring when listing certain FTP directories is now
 	fixed. This bug was introduced by Pasky while a goto-hunting after
-	0.3.0 release.
+	0.3.0 release.  
 
 Sat Apr 20 12:52:13 2002  Laurent Monin <zas@norz.org>:
 
 	* src/config/default.c:
-	
-	Read/write for user only and secure saving for links.his file.
+
+	Read/write for user only and secure saving for links.his file.  
 
 Sat Apr 20 12:25:31 2002  Laurent Monin <zas@norz.org>:
 
 	* src/config/default.c:
-	
-	Secure saving and r/w access for user only spread to *.cfg files.
+
+	Secure saving and r/w access for user only spread to *.cfg files.  
 
 Sat Apr 20 11:34:10 2002  Laurent Monin <zas@norz.org>:
 
 	* src/document/globhist.c:
-	
-	History file secure saving and r/w access mode for user only.
+
+	History file secure saving and r/w access mode for user only.  
 
 Sat Apr 20 11:26:29 2002  Laurent Monin <zas@norz.org>:
 
 	* src/bookmarks/bookmarks.c:
-	
-	Bookmarks file mode is now restricted to r/w for user only.
+
+	Bookmarks file mode is now restricted to r/w for user only.  
 
 Sat Apr 20 11:21:01 2002  Laurent Monin <zas@norz.org>:
 
 	* src/cookies/cookies.c:
-	
-	Secure saving for cookies file.
+
+	Secure saving for cookies file.  
 
 Sat Apr 20 10:16:36 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: Makefile.am, bookmarks/bookmarks.c, config/default.c:
-	
+
 	Bookmarks file secure saving is now activated as is secure_save
-	option.
+	option.  
 
 Sat Apr 20 09:49:43 2002  Laurent Monin <zas@norz.org>:
 
 	* src/: links.h, bookmarks/bookmarks.c, config/default.c,
 	cookies/cookies.c, document/globhist.c, util/secsave.c:
-	
+
 	Small change to straconcat() description and spread its use to more
-	places. Minor changes to still unused secure_open() function.
+	places. Minor changes to still unused secure_open() function.  
 
 Sat Apr 20 09:15:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/osdep/os_dep.c:
-	
-	More error handling in get_window_title(), thanks Peter :).
+
+	More error handling in get_window_title(), thanks Peter :).  
 
 Sat Apr 20 09:13:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/links.h:
-	
-	Include <stdarg.h> in links.h, thanks Miciah :).
+
+	Include <stdarg.h> in links.h, thanks Miciah :).  
 
 Fri Apr 19 16:15:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, intl/danish.lng, intl/index.txt, src/intl/lang_defs.h,
 	src/intl/language.inc:
-	
-	Danish translation by Jonas Fonseca <fonseca@diku.dk>.
+
+	Danish translation by Jonas Fonseca <fonseca@diku.dk>.  
 
 Fri Apr 19 14:28:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: config/default.c, config/default.h, util/Makefile.am,
 	util/secsave.c, util/secsave.h:
-	
+
 	Base stone of common secure save support. Introduced secure_save
 	option (not active yet), and added some utils for secure saving
-	inside util/secsave.*. Patch by Zas and me.
+	inside util/secsave.*. Patch by Zas and me.  
 
 Fri Apr 19 14:03:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/links.h:
-	
-	straconcat(), patch by Zas (will be used soon). Note that I
-	invented such a silly name :).
+
+	straconcat(), patch by Zas (will be used soon). Note that I invented
+	such a silly name :).  
 
 Fri Apr 19 14:02:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/bfu.c:
-	
-	Return NULL upon allocation failure in do_dialog().
+
+	Return NULL upon allocation failure in do_dialog().  
 
 Fri Apr 19 12:45:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/bfu.c, bfu/bfu.h, dialogs/globhist.c,
 	dialogs/globhist.h, document/globhist.c:
-	
+
 	Rewrite of box content handling in global history, update all
 	history boxes upon adding/removing something in global history.
-	Patch by Miciah Dashiel.
+	Patch by Miciah Dashiel.  
 
 Fri Apr 19 12:23:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
-	
-	ACT_REALLYQUIT -> ACT_REALLY_QUIT, patch by Peter Wang ;).
+
+	ACT_REALLYQUIT -> ACT_REALLY_QUIT, patch by Peter Wang ;).  
 
 Fri Apr 19 12:20:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* acconfig.h, configure.in, src/osdep/os_dep.c:
-	
+
 	Saving window title. We have to also link together with X11 (if
 	found, obviously), in order to be able to accomplish this. Patch by
-	Peter Wang.
+	Peter Wang.  
 	
-	I stole code from vim to save the xterm title.	The vim code is
-	much more complicated (and also shitty, like links :-), meaning I
-	made a lot of bad assumptions.	But it's a start.
+	I stole code from vim to save the xterm title.  The vim code is much 
+	more complicated (and also shitty, like links :-), meaning I made a 
+	lot of bad assumptions.  But it's a start.  
 
 Wed Apr 17 22:22:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/config/default.c, src/config/default.h,
 	src/protocol/http/http.c:
-	
+
 	Basic Proxy Auth support by Sergio R. Velasquez Zeballos
-	<svelasqu@thor.uc.edu.ve>.
+	<svelasqu@thor.uc.edu.ve>.  
 
 Wed Apr 17 19:15:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/ukrainian.lng, src/intl/language.inc:
-	
-	Ukrainian translation fixes by Dmitry.
+
+	Ukrainian translation fixes by Dmitry.  
 
 Wed Apr 17 08:53:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:
-	
-	Silence compiler warning.
+
+	Silence compiler warning.  
 
 Wed Apr 17 08:33:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, intl/german.lng, src/intl/language.inc:
-	
+
 	German translation updates by Ingo Blechschmidt <iblech@web.de>,
-	with corrections by Eduard Werner <edi.werner@gmx.de>.
+	with corrections by Eduard Werner <edi.werner@gmx.de>.  
 
 Wed Apr 17 08:26:45 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, linkskeys.5:
-	
+
 	Typo fixes in linkskeys.5 by Doug Kearns
-	<djkea2@mugca.its.monash.edu.au>.
+	<djkea2@mugca.its.monash.edu.au>.  
 
 Wed Apr 17 08:24:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/menu.h, dialogs/menu.c:
-	
-	Show 'h' as a global hotkey for global history, not 'y'; reported
-	by José Luis González González and many others. Also tiny TODO rel.
-	to keybindings near hotkey field in struct menu_field. Also log
-	message almost longer than the patch himself.
+
+	Show 'h' as a global hotkey for global history, not 'y'; reported by
+	José Luis González González and many others. Also tiny TODO rel. to
+	keybindings near hotkey field in struct menu_field. Also log message
+	almost longer than the patch himself.  
 
 Wed Apr 17 08:13:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/hooks.lua:
-	
-	Fixed error in Lua syntax, reported by Peter Gervai.
+
+	Fixed error in Lua syntax, reported by Peter Gervai.  
 
 Tue Apr 16 21:25:42 2002  Laurent Monin <zas@norz.org>:
 
 	* src/bookmarks/dialogs.c:
-	
-	last added bookmark is now selected when exiting add dialog
+
+	last added bookmark is now selected when exiting add dialog 
 
 Tue Apr 16 21:06:12 2002  Laurent Monin <zas@norz.org>:
 
 	* contrib/old_to_new_bookmarks.sh:
-	
-	Portable script by Stephane Chazelas <stephane.chazelas@free.fr>
+
+	Portable script by Stephane Chazelas <stephane.chazelas@free.fr> 
 
 Tue Apr 16 20:53:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
+
 	Expire cookies with invalid date on ELinks' quit. Also typo fix in
-	one comment. *yawn*
+	one comment. *yawn* 
 
 Tue Apr 16 18:34:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, configure.in, src/main.c, src/dialogs/options.c,
 	src/document/dump.c, src/lowlevel/select.c, src/osdep/os_dep.c:
-	
+
 	QNX-related fixes - added test for sys/signal.h, NULL terminated
-	some arrays, etc. Patch by Julian Kinraid <jkinraid@clear.net.nz>.
+	some arrays, etc. Patch by Julian Kinraid <jkinraid@clear.net.nz>.  
 
 Tue Apr 16 18:09:01 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/ukrainian.lng, src/intl/language.inc:
-	
+
 	Updated Ukrainian translation by Dmitry Pinchukov
-	<dpinch@viart.com.ua>.
+	<dpinch@viart.com.ua>.  
 
 Tue Apr 16 16:56:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
-	Cookies cleanup by Zas. Without my buggy modifications now ;).
+
+	Cookies cleanup by Zas. Without my buggy modifications now ;).  
 
 Tue Apr 16 16:16:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/download.c:
-	
-	Cleanup of download.c by Zas.
+
+	Cleanup of download.c by Zas.  
 
 Tue Apr 16 13:04:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/kbd.c:
-	
-	kbd.c tidyup, patch by Zas.
+
+	kbd.c tidyup, patch by Zas.  
 
 Tue Apr 16 12:45:05 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/session.c, osdep/win32.c:
-	
-	More Links -> ELinks; patch by Zas :).
+
+	More Links -> ELinks; patch by Zas :).  
 
 Tue Apr 16 12:43:25 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/terminal.c:
-	
-	Replace some code with an safe_strncpy() call, minor tidy up. --
-	Zas
+
+	Replace some code with an safe_strncpy() call, minor tidy up. -- Zas 
 
 Tue Apr 16 12:41:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/osdep/os_dep.c:
+
+	Add more checks to set_window_title() unix version.  
 	
-	Add more checks to set_window_title() unix version.
+	- It renames url parameter to a more consistent name: title 
+	- It fix a problem when title was NULL -> it prints nothing instead
+	  of printing (null).  
+	- It limits title length to a reasonable size according to terminal 
+	  width.  
+	- It replaces control chars with spaces, if any in title.  
+	- Comments were added.  
 	
-	- It renames url parameter to a more consistent name: title - It
-	fix a problem when title was NULL -> it prints nothing instead of  
-	printing (null).  - It limits title length to a reasonable size
-	according to terminal	width.	- It replaces control chars with
-	spaces, if any in title.  - Comments were added.
+	-- 
 	
-	--
-	
-	Zas
+	Zas 
 
 Tue Apr 16 12:34:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/view.c:
-	
-	
-	Fixing displaying of title and position in document..
+
+	Fixing displaying of title and position in document..  
 	
 	- When a page contains a very long title, page info on first line
-	seems	to be part of document.  - Page numbering is not
-	internationnalized ie. (p5 of 32) - We don't know if page title is
-	truncated or no.
+	  seems to be part of document.  
+	- Page numbering is not internationnalized ie. (p5 of 32) 
+	- We don't know if page title is truncated or no.  
 	
-	So this patch makes it to print as:
+	So this patch makes it to print as: 
 	
-	      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...
-			       Tuxfinder : Linux search tool (2/3)
-	   XTERM - Terminal emulator for the X Window System (1/2)
-	XTERM - Terminal emulator f... (1/3)
+	      AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...  
+	                       Tuxfinder : Linux search tool (2/3) 
+	   XTERM - Terminal emulator for the X Window System (1/2) XTERM -
+	Terminal emulator f... (1/3) 
 	
 	It solves i18n problems using a "(n/t)" instead of "(pn of t)" It
-	adds "..." to truncated titles.
+	adds "..." to truncated titles.  
 	
-	--
+	-- 
 	
-	Zas
+	Zas 
 
 Tue Apr 16 10:47:18 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/links.h:
-	
-	Indentation fix ;). Patch by Zas.
+
+	Indentation fix ;). Patch by Zas.  
 
 Tue Apr 16 10:43:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/bfu.c:
-	
-	BFU minor tidyup, patch by Zas
+
+	BFU minor tidyup, patch by Zas 
 
 Tue Apr 16 10:32:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/old_to_new_bookmarks.sh:
-	
+
 	Shell script by Zas for conversion from the old bookmarks file
-	format to the new one.
+	format to the new one.  
 
 Thu Apr 11 16:16:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/options.c:
-	
-	Terminate some texts in options dialogs by NULLs properly.
+
+	Terminate some texts in options dialogs by NULLs properly.  
 
 Wed Apr 10 13:00:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/tables.c:
-	
+
 	Fixed internal error at http://www.esolutions-ukraine.com/.
 	Something with more passes when calculating cell or so ;) (by
-	mikulas, from 0.97pre12).
+	mikulas, from 0.97pre12).  
 
 Tue Apr  9 13:08:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/german.lng, src/intl/language.inc:
-	
+
 	Fixed german translation (s/Links/ELinks). Thanks to Ingo
-	Blechschmidt <iblech@web.de> for report.
+	Blechschmidt <iblech@web.de> for report.  
 
 Tue Apr  9 08:07:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/czech.lng, intl/english.lng, intl/spanish.lng,
 	src/intl/language.inc, src/lowlevel/terminal.c,
 	src/lowlevel/terminal.h:
-	
+
 	Updated Spanish translation by David Mediavilla Ezquibela
 	<davidme.forum@bigfoot.com>. Also fixed misunderstanding of
 	block_cursor option (only in source, english and czech translation
-	yet, though), reported by David as well.
+	yet, though), reported by David as well.  
 
 Sun Apr  7 17:15:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* SITES:
-	
-	Added CVS mirror to SITES.
+
+	Added CVS mirror to SITES.  
 
 Sun Apr  7 14:35:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
-	0.4pre6-CVS
+
+	0.4pre6-CVS 
 
 Sun Apr  7 14:35:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
-	0.4pre5
+
+	0.4pre5 
 
 Sun Apr  7 14:13:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
+
 	Do not save bookmarks in new format yet, if they were loaded in the
-	old format.
+	old format.  
 
 Sun Apr  7 14:06:38 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/download.c:
-	
-	Reverted download cleanup by Zas. Caused VERY nasty problems.
+
+	Reverted download cleanup by Zas. Caused VERY nasty problems.  
 
 Sun Apr  7 13:55:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
-	Reverted cookies cleanup by Zas. Caused VERY nasty problems.
+
+	Reverted cookies cleanup by Zas. Caused VERY nasty problems.  
 
 Sun Apr  7 12:47:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
+
 	Breaking things at least partially working yet.. oh well ;) Now
-	we'll check for -ldl when checking for Lua as well.
+	we'll check for -ldl when checking for Lua as well.  
 
 Sun Apr  7 07:01:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lua/lua.c:
-	
+
 	Include stdio.h in lua.c, thanks to José Luis González González
-	<jlg80@mi.madritel.es>.
+	<jlg80@mi.madritel.es>.  
 
 Sat Apr  6 22:19:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/main.c:
-	
-	Fix in merge of OS/2 fix pipe-before-socket from 0.97pre11.
+
+	Fix in merge of OS/2 fix pipe-before-socket from 0.97pre11.  
 
 Sat Apr  6 22:10:17 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -592,90 +652,90 @@ Sat Apr  6 22:10:17 2002  Petr Baudis <pasky@ji.cz>:
 	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
 	intl/ukrainian.lng, src/document/view.c, src/intl/lang_defs.h,
 	src/intl/language.inc:
-	
+
 	Show page title and last visit time in location info dialog, patch
-	by Miciah.
+	by Miciah.  
 
 Sat Apr  6 18:02:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
+
 	By now on, use '\t' as separator in the ~/.links/bookmarks file
-	rather than '|'. We still accept '|' as a separator in old
-	bookmarks files. Patch by Zas and me.
+	rather than '|'. We still accept '|' as a separator in old bookmarks
+	files. Patch by Zas and me.  
 
 Sat Apr  6 17:52:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
-	Safe bookmarks loading, patch by Zas.
+
+	Safe bookmarks loading, patch by Zas.  
 
 Sat Apr  6 17:46:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
+
 	Cookies tidyup, more secure loading of cookies (allocate enough
-	space). Patch by Zas.
+	space). Patch by Zas.  
 
 Sat Apr  6 17:38:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/main.c:
-	
+
 	Workaround for some subtle bug in OS/2 - create pipe before socket
-	(by mikulas, from 0.97pre11).
+	(by mikulas, from 0.97pre11).  
 
 Sat Apr  6 17:08:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/: parser.c, parser.h, renderer.c:
-	
+
 	Fixed internal error: cell iw now wider. We don't allow overlapping
-	of hr linez anymore (by mikulas, from 0.97pre10)
+	of hr linez anymore (by mikulas, from 0.97pre10) 
 
 Sat Apr  6 16:57:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/: af_unix.c, connect.c:
-	
+
 	Zero all sockaddr structures before messing with them. Also some
 	various fixes in af_unix.c, probably causing some OS/2 problems (by
-	mikulas, from 0.97pre9)
+	mikulas, from 0.97pre9) 
 
 Sat Apr  6 16:51:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/af_unix.c, osdep/os_dep.c, osdep/os_dep.h:
-	
-	Increase priority on OS/2 (by mikulas, from 0.97pre9).
+
+	Increase priority on OS/2 (by mikulas, from 0.97pre9).  
 
 Fri Apr  5 23:16:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.am, links.1, linkskeys.5:
-	
-	Added manpage linkskeys.5, contributed by Peter Wang.
+
+	Added manpage linkskeys.5, contributed by Peter Wang.  
 
 Wed Apr  3 20:52:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, contrib/user-keybindings.example:
-	
+
 	Added contrib/user-keybindings.example contributed by David
 	Mediavilla <r96x6a79yki40001@sneakemail.com>. Someone should go and
-	make it up-to-date.
+	make it up-to-date.  
 
 Wed Apr  3 17:32:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, contrib/README, contrib/elinks.spec:
-	
-	RPM spec file contributed by <zimon@niksula.hut.fi>.
+
+	RPM spec file contributed by <zimon@niksula.hut.fi>.  
 
 Wed Apr  3 15:29:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/Makefile.am:
-	
-	HPUX compilation fix by sc.
+
+	HPUX compilation fix by sc.  
 
 Wed Apr  3 13:48:05 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/date.c:
-	
-	Fix in HTTP date parser by sc.
+
+	Fix in HTTP date parser by sc.  
 
 Tue Apr  2 22:29:46 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -683,51 +743,51 @@ Tue Apr  2 22:29:46 2002  Petr Baudis <pasky@ji.cz>:
 	src/bookmarks/dialogs.c, src/cookies/cookies.c,
 	src/dialogs/globhist.c, src/dialogs/info.c, src/dialogs/menu.c,
 	src/document/globhist.c, src/document/view.c:
-	
+
 	Possibility not to include globhist/bookmarks/cookies in resulting
-	executablee by specifying parameter to ./configure.
+	executablee by specifying parameter to ./configure.  
 
 Tue Apr  2 21:51:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	Todo bit by David Mediavilla.
+
+	Todo bit by David Mediavilla.  
 
 Tue Apr  2 21:50:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/: Makefile.am, menu.c, options.c, options.h:
-	
+
 	Split settings dialogs from dialogs/menu.c to dialogs/options.c.
-	Also various tidyups there.
+	Also various tidyups there.  
 
 Tue Apr  2 20:40:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/download.c:
-	
-	Cleanup of download.c, patch by Zas. Maybe expect problems..
+
+	Cleanup of download.c, patch by Zas. Maybe expect problems..  
 
 Tue Apr  2 19:55:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	Another TODO bit, now from muehlenhoff@gmx.de (Moritz Muehlenhoff).
+
+	Another TODO bit, now from muehlenhoff@gmx.de (Moritz Muehlenhoff).  
 
 Tue Apr  2 17:40:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO, src/config/default.c, src/document/html/parser.c:
-	
+
 	Some support for vlink attribute. We honour it somehow now (thanks
 	to global history), BUT frequently after RGB approximation we won't
 	see the difference, and also the document must be re-rendered (thus
 	reloaded for now - I guess we would find some use for rerender
 	action as well) in order to update the colors (I fear I won't be
-	able to do it better with current HTML support).
+	able to do it better with current HTML support).  
 
 Tue Apr  2 17:16:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/ftp.c:
-	
-	Parse LIST response only after RETR, patch by Zas.
+
+	Parse LIST response only after RETR, patch by Zas.  
 
 Tue Apr  2 17:09:32 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -742,85 +802,85 @@ Tue Apr  2 17:09:32 2002  Petr Baudis <pasky@ji.cz>:
 	intl/ukrainian.lng, src/bookmarks/dialogs.c,
 	src/dialogs/globhist.c, src/intl/lang_defs.h,
 	src/intl/language.inc:
-	
-	Nicer displaying of Delete bookmark? dialog, patch by Zas.
+
+	Nicer displaying of Delete bookmark? dialog, patch by Zas.  
 
 Tue Apr  2 17:04:38 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/french.lng, src/intl/language.inc:
-	
-	French language updates for global history by Zas.
+
+	French language updates for global history by Zas.  
 
 Tue Apr  2 16:00:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: dialogs/globhist.c, document/globhist.c,
 	document/globhist.h:
-	
-	last_searched_globhist_* -> gh_last_searched_*.
+
+	last_searched_globhist_* -> gh_last_searched_*.  
 
 Tue Apr  2 15:58:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bookmarks/dialogs.c, dialogs/globhist.c:
-	
-	Support for searching in global history, patch by Miciah.
+
+	Support for searching in global history, patch by Miciah.  
 
 Tue Apr  2 14:11:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: Makefile.am, bookmarks/dialogs.c, dialogs/Makefile.am,
 	dialogs/edit.c, dialogs/edit.h:
-	
+
 	Moved code for edit_dialog() from bookmarks/dialogs.c to
 	dialogs/edit.c - we're going to use that code in global history as
-	well.
+	well.  
 
 Tue Apr  2 13:46:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/osdep/os_dep.c:
-	
+
 	In xterm, modify window title accordingly to the URL being visited.
-	Patch by Kevin Everets and Michal Maruska.
+	Patch by Kevin Everets and Michal Maruska.  
 
 Tue Apr  2 13:36:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/: bookmarks.c, bookmarks.h, dialogs.c:
-	
+
 	And now the proper fix for the bookmarks bug. During
 	read_bookmarks(), we called add_bookmark(), which called
-	write_bookmarks() .. guess what happenned? Report and patch by Zas.
+	write_bookmarks() .. guess what happenned? Report and patch by Zas.  
 
 Tue Apr  2 13:21:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	Zas' true identity revealed!
+
+	Zas' true identity revealed! 
 
 Tue Apr  2 12:53:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
-	Long textarea weirdness
+
+	Long textarea weirdness 
 
 Tue Apr  2 10:18:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
+
 	Tmp disable bookmarks resave in add_bookmark() .. real fix will
-	follow soon.
+	follow soon.  
 
 Mon Apr  1 22:19:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: Makefile.am, bookmarks/Makefile.am, bookmarks/bookmarks.c,
 	bookmarks/bookmarks.h, bookmarks/dialogs.c, bookmarks/dialogs.h,
 	dialogs/menu.c, document/view.c:
-	
-	Bookmarks divided to bookmarks/bookmarks.c and bookmarks/dialogs.c.
+
+	Bookmarks divided to bookmarks/bookmarks.c and bookmarks/dialogs.c.  
 
 Mon Apr  1 21:47:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: dialogs/globhist.c, document/globhist.c,
 	document/globhist.h:
-	
-	Added last_searched_globhist_* - preparation for history searching.
+
+	Added last_searched_globhist_* - preparation for history searching.  
 
 Mon Apr  1 21:00:42 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -834,44 +894,44 @@ Mon Apr  1 21:00:42 2002  Petr Baudis <pasky@ji.cz>:
 	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
 	intl/ukrainian.lng, src/dialogs/globhist.c, src/intl/lang_defs.h,
 	src/intl/language.inc:
-	
-	Added Clear button to the global history manager. Patch by Miciah.
+
+	Added Clear button to the global history manager. Patch by Miciah.  
 
 Mon Apr  1 20:48:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: dialogs/globhist.c, document/globhist.c,
 	document/globhist.h, document/session.c:
-	
+
 	Added Delete button to the global history manager. Patch by Miciah.
-	Also cleaned global history API a bit.
+	Also cleaned global history API a bit.  
 
 Mon Apr  1 20:28:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
-	
-	Add action "history-manager" and appropriate keybinding ('H'/'h').
+
+	Add action "history-manager" and appropriate keybinding ('H'/'h').  
 
 Mon Apr  1 20:20:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/czech.lng, src/intl/language.inc:
-	
-	Add hotkey for Global history in czech translation.
+
+	Add hotkey for Global history in czech translation.  
 
 Mon Apr  1 20:19:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/globhist.c:
-	
+
 	Goto button in the global history dialog. Now the dialog is even
-	useful :). Patch by Miciah.
+	useful :). Patch by Miciah.  
 
 Mon Apr  1 20:10:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
+
 	Use atol() instead of atoi() for cookie expiration time - still not
 	ideal as time_t may be even something different, but still better
 	than it used to be before, I think. Thanks to Miciah for pointing
-	out that.
+	out that.  
 
 Mon Apr  1 19:59:26 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -887,48 +947,48 @@ Mon Apr  1 19:59:26 2002  Petr Baudis <pasky@ji.cz>:
 	src/dialogs/globhist.c, src/dialogs/globhist.h, src/dialogs/menu.c,
 	src/document/globhist.c, src/document/globhist.h,
 	src/intl/lang_defs.h, src/intl/language.inc:
-	
+
 	Some GUI stuff for the global history, by Miciah. Also main stuff
-	belonging to basic global history support (I forgot cvs add ;).
+	belonging to basic global history support (I forgot cvs add ;).  
 
 Mon Apr  1 15:52:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/main.c, src/config/default.c, src/config/default.h,
 	src/document/Makefile.am, src/document/session.c:
-	
-	Basic global history support by Miciah.
+
+	Basic global history support by Miciah.  
 
 Mon Apr  1 15:26:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* intl/french.lng, src/intl/language.inc:
-	
-	Fixed french translation, thanks, Zas.
+
+	Fixed french translation, thanks, Zas.  
 
 Mon Apr  1 15:25:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/terminal.c:
-	
-	Tidyup of lowlevel/terminal.c, patch by Zas.
+
+	Tidyup of lowlevel/terminal.c, patch by Zas.  
 
 Sat Mar 30 21:52:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/main.c:
-	
-	Cleanup of main.c, patch by Zas and me.
+
+	Cleanup of main.c, patch by Zas and me.  
 
 Sat Mar 30 21:31:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	Added proxy autoconfiguration bit.
+
+	Added proxy autoconfiguration bit.  
 
 Sat Mar 30 21:30:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in, src/lowlevel/select.c:
-	
+
 	Include <inttypes.h> only when system has it (cygwin doesn't).
 	Thanks to Stephane Lentz <Stephane.Lentz@ansf.alcatel.fr> for
-	report.
+	report.  
 
 Sat Mar 30 21:23:47 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -942,55 +1002,55 @@ Sat Mar 30 21:23:47 2002  Petr Baudis <pasky@ji.cz>:
 	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
 	intl/ukrainian.lng, src/document/view.c, src/intl/lang_defs.h,
 	src/intl/language.inc:
-	
-	Special label for the action 'Add link to bookmarks'
+
+	Special label for the action 'Add link to bookmarks' 
 
 Sat Mar 30 21:17:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
 	document/view.c:
-	
-	Re-enable 'Add link to bookmarks' menu field in Link menu. Tidyup
-	of link_menu(). Patch by Zas.
+
+	Re-enable 'Add link to bookmarks' menu field in Link menu. Tidyup of
+	link_menu(). Patch by Zas.  
 
 Sat Mar 30 20:50:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
+
 	Removed another one stale function noone has probably idea it was
-	meant for. Patch by Zas.
+	meant for. Patch by Zas.  
 
 Sat Mar 30 20:49:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
-	Removed one stale function noone has probably idea it was meant
-	for. Patch by Zas.
+
+	Removed one stale function noone has probably idea it was meant for.
+	Patch by Zas.  
 
 Sat Mar 30 20:48:47 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bookmarks/bookmarks.c:
-	
-	Basic bookmarks code tidyup. Patch by Zas and me.
+
+	Basic bookmarks code tidyup. Patch by Zas and me.  
 
 Sat Mar 30 09:10:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	another TODO bit
+
+	another TODO bit 
 
 Fri Mar 29 21:38:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	updated TODO list accordingly to people's wishlists
+
+	updated TODO list accordingly to people's wishlists 
 
 Fri Mar 29 10:56:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/session.c:
-	
+
 	Fixed mistake when moving history stuff around. Thanks to Zas for
-	pointing that out.
+	pointing that out.  
 
 Fri Mar 29 10:36:56 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -998,14 +1058,14 @@ Fri Mar 29 10:36:56 2002  Petr Baudis <pasky@ji.cz>:
 	document/download.c, document/download.h, document/session.c,
 	document/session.h, document/view.c, lowlevel/sched.h,
 	protocol/mailto.c:
-	
-	Moved download stuff to document/download.c
+
+	Moved download stuff to document/download.c 
 
 Thu Mar 28 22:59:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/: location.c, location.h, view.c, view.h:
-	
-	Moved copy_location to document/location.c.
+
+	Moved copy_location to document/location.c.  
 
 Thu Mar 28 22:53:35 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1013,18 +1073,17 @@ Thu Mar 28 22:53:35 2002  Petr Baudis <pasky@ji.cz>:
 	document/location.c, document/location.h, document/session.h,
 	document/view.c, document/view.h, document/vs.c, document/vs.h,
 	document/html/renderer.c, document/html/renderer.h, lua/lua.c:
-	
+
 	Moved struct view_state to document/vs.c, thus helping repairing
-	various perverted crossdeps.
+	various perverted crossdeps.  
 
 Thu Mar 28 22:26:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/: history.c, history.h:
-	
+
 	Move location per-session history to document/history.c, and made
-	some appropriate encapsulation for all history stuff. Renamed
-	struct history* to struct input_history*, as it's only inputbox'
-	history.
+	some appropriate encapsulation for all history stuff. Renamed struct
+	history* to struct input_history*, as it's only inputbox' history.  
 
 Thu Mar 28 22:25:43 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1032,51 +1091,50 @@ Thu Mar 28 22:25:43 2002  Petr Baudis <pasky@ji.cz>:
 	document/session.h, document/view.c, document/view.h,
 	document/html/renderer.c, lua/lua.c, document/location.c,
 	document/location.h:
-	
-	Move location stuff to document/location.c. This is pathetic :).
+
+	Move location stuff to document/location.c. This is pathetic :).  
 
 Thu Mar 28 21:38:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/bfu.c, bfu/bfu.h, config/default.c, dialogs/menu.c,
 	document/Makefile.am, document/session.c, document/session.h,
 	document/view.c, document/html/renderer.c, lua/lua.c:
-	
+
 	Move location per-session history to document/history.c, and made
-	some appropriate encapsulation for all history stuff. Renamed
-	struct history* to struct input_history*, as it's only inputbox'
-	history.
+	some appropriate encapsulation for all history stuff. Renamed struct
+	history* to struct input_history*, as it's only inputbox' history.  
 
 Thu Mar 28 17:35:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/sched.c, lowlevel/sched.h, protocol/ftp.c:
-	
+
 	Many minor RFC-compilance fixes, now we're a bit more strict, more
-	commends added, introduced abort_conn_with_state(). Patch by Zas.
+	commends added, introduced abort_conn_with_state(). Patch by Zas.  
 
 Thu Mar 28 02:42:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/default.c:
-	
-	keep_unhistory is now 1 by default
+
+	keep_unhistory is now 1 by default 
 
 Thu Mar 28 02:37:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/url.c:
-	
+
 	erm.. don't tell anyone ;) (from %xy encoded char only %x got into
-	encoded string)
+	encoded string) 
 
 Thu Mar 28 01:22:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
-	0.4pre5-CVS
+
+	0.4pre5-CVS 
 
 Thu Mar 28 01:21:45 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
-	0.4pre4
+
+	0.4pre4 
 
 Thu Mar 28 00:46:26 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1091,132 +1149,132 @@ Thu Mar 28 00:46:26 2002  Petr Baudis <pasky@ji.cz>:
 	intl/turkish.lng, intl/ukrainian.lng, src/intl/lang_defs.h,
 	src/intl/language.inc, src/lowlevel/sched.c, src/lowlevel/sched.h,
 	src/protocol/ftp.c:
-	
-	FTP doesn't send more commands at once - it's a bit slower, but
-	safe with MS IIS or Novell (by mikulas, from 0.97pre8). Also, it
-	fixes bugs reported by Zas, that we had problems with FTP servers
-	not supporting/requiring PASS command.
+
+	FTP doesn't send more commands at once - it's a bit slower, but safe
+	with MS IIS or Novell (by mikulas, from 0.97pre8). Also, it fixes
+	bugs reported by Zas, that we had problems with FTP servers not
+	supporting/requiring PASS command.  
 
 Wed Mar 27 23:49:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/kbdbind.c:
-	
-	ACT_COPY_CLIPBOARD is ^C, not ^B (by mikulas, from 0.97pre8).
+
+	ACT_COPY_CLIPBOARD is ^C, not ^B (by mikulas, from 0.97pre8).  
 
 Wed Mar 27 23:47:12 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/osdep/os_dep.c:
-	
-	Corrected xterm detection (by mikulas, from 0.97pre8).
+
+	Corrected xterm detection (by mikulas, from 0.97pre8).  
 
 Wed Mar 27 23:39:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: bfu/bfu.c, document/html/parser.c,
 	document/html/renderer.c, util/error.c, util/memlist.c:
-	
-	Use va_end() (by mikulas, from 0.97pre8).
+
+	Use va_end() (by mikulas, from 0.97pre8).  
 
 Wed Mar 27 23:05:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/parser.c:
-	
+
 	Do not strip spaces from URL attribute of tags (by mikulas, from
-	0.97pre8).
+	0.97pre8).  
 
 Wed Mar 27 22:45:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/http.c:
-	
+
 	When sending the URL, translate spaces to %20. This is definitively
 	not the best thing we can do, but it's sufficient solution as very
-	temporary one (by mikulas, from 0.97pre8). Minor code tidyups.
+	temporary one (by mikulas, from 0.97pre8). Minor code tidyups.  
 
 Wed Mar 27 21:52:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/: parser.c, renderer.c:
-	
+
 	Prevent double newline when rendering lists: <li><p> xxx (by
 	mikulas, from 0.97pre8). Note that I include this only in order to
 	be sure we'll act right, as we've already
 	some-own-fix-which-i-cant-remember-now-:). Also re-enabled the
-	justify code, which was effectively disabled by mistake.
+	justify code, which was effectively disabled by mistake.  
 
 Wed Mar 27 21:43:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/session.c:
-	
-	some more mem_free() stuff when we're out of memory
+
+	some more mem_free() stuff when we're out of memory 
 
 Wed Mar 27 21:30:25 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/session.c, protocol/url.c, protocol/url.h,
 	util/Makefile.am, util/conv.c, util/conv.h:
-	
+
 	Moved hx() and unhx() to util/conv.c, fixed prototypes of
-	*_url_string() so that we now even compile
+	*_url_string() so that we now even compile 
 
 Wed Mar 27 13:32:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/view.c, protocol/url.c, protocol/url.h:
-	
-	encode_string -> encode_url_string, prepare decode_url_string
+
+	encode_string -> encode_url_string, prepare decode_url_string 
 
 Tue Mar 26 22:02:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/view.c, protocol/url.c:
-	
+
 	Rewritten strip_url_password(), so now it works somehow correctly
-	once more; taken from patch by sc
+	once more; taken from patch by sc 
 
 Tue Mar 26 21:09:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/view.c, protocol/url.c:
-	
-	move encode_string() to protocol/url.c
+
+	move encode_string() to protocol/url.c 
 
 Tue Mar 26 19:47:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/session.c, protocol/url.c:
-	
-	remark near encode_url() family.. the name is 'a bit' confusing
+
+	remark near encode_url() family.. the name is 'a bit' confusing 
 
 Tue Mar 26 19:10:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/links.h:
-	
-	links.h tidyup
+
+	links.h tidyup 
 
 Tue Mar 26 18:49:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/: file.c, ftp.c:
-	
-	don't mess with use_document_colors at all and just do <font><b> :)
+
+	don't mess with use_document_colors at all and just do <font><b> :) 
 
 Tue Mar 26 18:10:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/: file.c, ftp.c:
-	
+
 	some playing with d_opt vs. dds and use_document_colours and bold
-	instead of yellow for dirs
+	instead of yellow for dirs 
 
 Tue Mar 26 17:45:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/: dns.c, select.c:
-	
+
 	yet another BSD compilation fix, take #3 (i know i hate BSD [at
-	least now])
+	least now]) 
 
 Tue Mar 26 17:43:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/select.c:
-	
-	yet another BSD compilation fix, take #2 (i think i hate BSD)
+
+	yet another BSD compilation fix, take #2 (i think i hate BSD) 
 
 Tue Mar 26 17:39:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/: dns.c, select.c:
-	
-	yet another BSD compilation fix
+
+	yet another BSD compilation fix 
 
 Tue Mar 26 17:37:31 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1226,60 +1284,60 @@ Tue Mar 26 17:37:31 2002  Petr Baudis <pasky@ji.cz>:
 	src/lowlevel/.vimrc, src/lua/.vimrc, src/osdep/.vimrc,
 	src/protocol/.vimrc, src/protocol/http/.vimrc, src/ssl/.vimrc,
 	src/util/.vimrc:
-	
+
 	all .vimrc files include elinks/.vimrc; added some more tabbing
-	settings for zas ;)
+	settings for zas ;) 
 
 Tue Mar 26 17:21:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/af_unix.c:
-	
-	another BSD compilation fix, take #3
+
+	another BSD compilation fix, take #3 
 
 Tue Mar 26 17:19:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/af_unix.c:
-	
-	another BSD compilation fix, take #2
+
+	another BSD compilation fix, take #2 
 
 Tue Mar 26 17:16:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/af_unix.c:
-	
-	another BSD compilation fix
+
+	another BSD compilation fix 
 
 Tue Mar 26 17:11:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/default.c:
-	
-	BSD compilation fix, take #2; stupid
+
+	BSD compilation fix, take #2; stupid 
 
 Tue Mar 26 17:08:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/default.c:
-	
-	BSD compilation fix
+
+	BSD compilation fix 
 
 Tue Mar 26 16:50:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, intl/italian.lng, src/intl/language.inc:
-	
+
 	updated italian translation by Cristiano Guadagnino
-	<cris@geppo.cmb2000.it>
+	<cris@geppo.cmb2000.it> 
 
 Tue Mar 26 16:45:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/cache.c:
-	
+
 	Fixed files not displayed properly when there was reload request on
-	background (by mikulas, from 0.97pre7)
+	background (by mikulas, from 0.97pre7) 
 
 Tue Mar 26 16:45:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/menu.c:
-	
+
 	don't print contents of posted data in downloads menu (by mikulas,
-	from 0.97pre7)
+	from 0.97pre7) 
 
 Tue Mar 26 16:38:51 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1291,94 +1349,94 @@ Tue Mar 26 16:38:51 2002  Petr Baudis <pasky@ji.cz>:
 	intl/romanian.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng, intl/ukrainian.lng, src/intl/lang_defs.h,
 	src/intl/language.inc:
-	
+
 	??? -> \?\?\?, so that it's not recognized as trigraph (by mikulas,
-	from 0.97pre7)
+	from 0.97pre7) 
 
 Tue Mar 26 15:57:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/TODO:
-	
-	some babbling about imagined syntactic tree
+
+	some babbling about imagined syntactic tree 
 
 Tue Mar 26 15:28:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/tables.c:
-	
-	tables.c cleanup by zas, bit 4 and last
+
+	tables.c cleanup by zas, bit 4 and last 
 
 Tue Mar 26 15:20:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/tables.c:
-	
-	tables.c cleanup by zas, bit 3 (fixed problem)
+
+	tables.c cleanup by zas, bit 3 (fixed problem) 
 
 Tue Mar 26 15:12:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/tables.c:
-	
-	tables.c cleanup by zas, bit 2
+
+	tables.c cleanup by zas, bit 2 
 
 Tue Mar 26 15:09:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/tables.c:
-	
-	tables.c cleanup by zas, bit 1
+
+	tables.c cleanup by zas, bit 1 
 
 Tue Mar 26 13:02:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autogen.sh:
-	
-	/bin/bash -> /bin/sh
+
+	/bin/bash -> /bin/sh 
 
 Mon Mar 25 22:03:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/renderer.c:
-	
-	renderer tidyup by zas
+
+	renderer tidyup by zas 
 
 Mon Mar 25 21:33:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/README.timegm:
-	
-	docs fixes by sc
+
+	docs fixes by sc 
 
 Mon Mar 25 21:32:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/ftp.c:
-	
-	tidyup of ftp.c; patch by zas
+
+	tidyup of ftp.c; patch by zas 
 
 Mon Mar 25 21:24:18 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/connect.c:
-	
-	hm, ok, and now we again work with non-SSL connections as well ;)
+
+	hm, ok, and now we again work with non-SSL connections as well ;) 
 
 Mon Mar 25 18:38:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/connect.c, ssl/connect.c:
-	
-	SSL works once again now - the API i made for SSL sockets first
-	time was completely broken
+
+	SSL works once again now - the API i made for SSL sockets first time
+	was completely broken 
 
 Mon Mar 25 17:18:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/dns.c, lowlevel/sched.c, util/error.c:
-	
-	worthless tidyups
+
+	worthless tidyups 
 
 Fri Mar 22 19:55:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/sched.c:
-	
-	cleanup of sched.c by zas
+
+	cleanup of sched.c by zas 
 
 Fri Mar 22 19:19:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, src/dialogs/info.c:
-	
-	fixed the about dialog bug
+
+	fixed the about dialog bug 
 
 Fri Mar 22 18:57:19 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1386,88 +1444,88 @@ Fri Mar 22 18:57:19 2002  Petr Baudis <pasky@ji.cz>:
 	bookmarks/bookmarks.c, dialogs/menu.c, document/session.c,
 	document/view.c, document/html/parser.c, protocol/types.c,
 	bfu/menu.c, bfu/menu.h:
-	
-	move menu system implementation to bfu/menu.c
+
+	move menu system implementation to bfu/menu.c 
 
 Fri Mar 22 18:26:47 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/sched.c, util/Makefile.am, util/base64.c,
 	util/base64.h:
-	
-	moved base64 encoder to util/base64.c
+
+	moved base64 encoder to util/base64.c 
 
 Fri Mar 22 18:12:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/hpux-pipe.diff:
-	
-	updated hpux-pipe.diff (by sc)
+
+	updated hpux-pipe.diff (by sc) 
 
 Fri Mar 22 18:08:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/connect.c:
-	
-	tidyup of connect.c by zas
+
+	tidyup of connect.c by zas 
 
 Fri Mar 22 18:05:05 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, BUGS, src/bfu/bfu.c:
-	
-	fixed the release-button-hide-menu bug ;) thanks to zas, again
+
+	fixed the release-button-hide-menu bug ;) thanks to zas, again 
 
 Fri Mar 22 15:31:25 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, src/util/error.c:
-	
-	added yet another bug
+
+	added yet another bug 
 
 Fri Mar 22 14:59:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/lowlevel/terminal.h:
-	
-	wrong enum :/ fix by zas, fixes 1-2 actual bugs
+
+	wrong enum :/ fix by zas, fixes 1-2 actual bugs 
 
 Thu Mar 21 21:31:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/Makefile.am:
-	
-	small build fix
+
+	small build fix 
 
 Thu Mar 21 21:01:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
-	0.4pre4-CVS
+
+	0.4pre4-CVS 
 
 Thu Mar 21 20:58:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:
-	
-	0.4pre3
+
+	0.4pre3 
 
 Thu Mar 21 18:39:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/: Makefile.am, README.timegm, date.c:
-	
-	explanation of my_timegm() by Stephane Chazelas
+
+	explanation of my_timegm() by Stephane Chazelas 
 
 Thu Mar 21 18:35:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/bfu.c:
-	
+
 	slightly effective wraparounding of scrolling in menus; gave zas a
-	favour
+	favour 
 
 Thu Mar 21 18:34:12 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, src/lowlevel/terminal.c:
-	
-	*FINALLY* fixed the select/imagemap bug - patch by Zas
+
+	*FINALLY* fixed the select/imagemap bug - patch by Zas 
 
 Thu Mar 21 18:05:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/document/html/parser.c:
-	
-	tidyup of get_image_map()
+
+	tidyup of get_image_map() 
 
 Tue Mar 19 20:40:03 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1476,102 +1534,102 @@ Tue Mar 19 20:40:03 2002  Petr Baudis <pasky@ji.cz>:
 	dialogs/menu.c, document/html/parser.c, document/html/parser.h,
 	document/html/renderer.c, document/html/tables.c, lua/lua.c,
 	protocol/mailto.c, protocol/types.c:
-	
-	moved align enum to bfu/align.h
+
+	moved align enum to bfu/align.h 
 
 Tue Mar 19 18:34:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
-	that empty menu bug
+
+	that empty menu bug 
 
 Tue Mar 19 18:29:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/cookies/cookies.c:
-	
-	we won't overwrite cookies file periodically on loading them
+
+	we won't overwrite cookies file periodically on loading them 
 
 Tue Mar 19 18:22:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/bfu.c:
-	
+
 	partial fix for SIGFPE for empty menu, reported by Edward Wildgoose
-	<Ed@Wildgooses.com>
+	<Ed@Wildgooses.com> 
 
 Tue Mar 19 17:52:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/protocol/http/date.c:
-	
+
 	New own convertor struct tm -> time_t; I can't say I'm excited by
-	it, but it looks as a good thing, sc convienced me ;)
+	it, but it looks as a good thing, sc convienced me ;) 
 
 Tue Mar 19 17:28:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/bfu.c:
-	
-	general code tidyup, based on patch by <zas@norz.org>
+
+	general code tidyup, based on patch by <zas@norz.org> 
 
 Tue Mar 19 15:03:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/date.c:
-	
-	FIXME
+
+	FIXME 
 
 Mon Mar 18 22:26:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/: Makefile.am, info.c, refresh.c, refresh.h:
-	
+
 	moved periodical refresh of dialogs from dialogs/info.c to
-	dialogs/refresh.c
+	dialogs/refresh.c 
 
 Mon Mar 18 22:20:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/dialogs/info.c:
-	
-	move common refresh initialization to refresh_init()
+
+	move common refresh initialization to refresh_init() 
 
 Mon Mar 18 22:12:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: dialogs/Makefile.am, dialogs/info.c, dialogs/info.h,
 	dialogs/menu.c, dialogs/menu.h, util/error.c, util/error.h:
-	
-	moved info dialogs from dialogs/menu.c to dialogs/info.c
+
+	moved info dialogs from dialogs/menu.c to dialogs/info.c 
 
 Mon Mar 18 21:03:12 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/lowlevel/kbd.c:
-	
+
 	somehow fix proccessing of incomplete escape sequences; patch by
-	Stephane CHAZELAS <Stephane.CHAZELAS@free.fr>
+	Stephane CHAZELAS <Stephane.CHAZELAS@free.fr> 
 
 Mon Mar 18 20:52:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: config/default.c, protocol/http/http.c:
-	
-	Elinks -> ELinks (by Zas ;)
+
+	Elinks -> ELinks (by Zas ;) 
 
 Mon Mar 18 20:51:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/connect.c, ssl/connect.c:
-	
+
 	Moving SSL to ssl/, attempt 2, part 3 and last (fixed the problem);
-	move completed another time ;)
+	move completed another time ;) 
 
 Mon Mar 18 20:28:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: lowlevel/connect.c, lowlevel/connect.h, lowlevel/sched.c,
 	ssl/Makefile.am:
-	
+
 	Moving SSL to ssl/, attempt 2, part 2 (only export more things from
-	lowlevel/connect.c)
+	lowlevel/connect.c) 
 
 Mon Mar 18 20:12:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in, src/Makefile.am, src/main.c,
 	src/lowlevel/connect.c, src/protocol/http/https.c,
 	src/protocol/http/https.h, src/ssl/Makefile.am:
-	
-	Moving SSL to ssl/, attempt 2, part 1
+
+	Moving SSL to ssl/, attempt 2, part 1 
 
 Mon Mar 18 15:14:53 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1579,16 +1637,16 @@ Mon Mar 18 15:14:53 2002  Petr Baudis <pasky@ji.cz>:
 	src/lowlevel/connect.c, src/lowlevel/connect.h,
 	src/lowlevel/sched.c, src/protocol/http/https.c,
 	src/protocol/http/https.h:
-	
-	XXX: the SSL move made connections not working at all :/
-	temporarily backed out
+
+	XXX: the SSL move made connections not working at all :/ temporarily
+	backed out 
 
 Mon Mar 18 13:01:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, src/protocol/http/date.c:
-	
+
 	Rewritten HTTP date parser, (slightly modified) patch by Stephane
-	CHAZELAS <Stephane_CHAZELAS@yahoo.fr>
+	CHAZELAS <Stephane_CHAZELAS@yahoo.fr> 
 
 Mon Mar 18 11:34:02 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1597,8 +1655,8 @@ Mon Mar 18 11:34:02 2002  Petr Baudis <pasky@ji.cz>:
 	document/options.h, document/session.c, document/session.h,
 	document/view.c, document/html/renderer.c,
 	document/html/renderer.h, intl/charsets.c:
-	
-	moved documet_(options|setup) to one common document/options.*
+
+	moved documet_(options|setup) to one common document/options.* 
 
 Mon Mar 18 10:55:37 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1607,9 +1665,9 @@ Mon Mar 18 10:55:37 2002  Petr Baudis <pasky@ji.cz>:
 	lowlevel/Makefile.am, lowlevel/dns.c, lowlevel/sched.c,
 	lowlevel/sched.h, lowlevel/select.c, lowlevel/select.h,
 	lowlevel/ttime.c, lowlevel/ttime.h:
-	
+
 	moved typedef ttime and get_time() from lowlevel/select.c to
-	lowlevel/ttime.c
+	lowlevel/ttime.c 
 
 Mon Mar 18 06:33:12 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1617,29 +1675,29 @@ Mon Mar 18 06:33:12 2002  Petr Baudis <pasky@ji.cz>:
 	document/html/parser.c, document/html/parser.h,
 	document/html/renderer.h, util/Makefile.am, util/error.c,
 	util/memlist.c, util/memlist.h:
-	
-	moved memory_list implementation from bfu/bfu.c to util/memlist.c
+
+	moved memory_list implementation from bfu/bfu.c to util/memlist.c 
 
 Mon Mar 18 06:19:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: document/dump.c, document/dump.h, document/view.c,
 	document/view.h, lowlevel/terminal.h:
-	
-	move dump_to_file from view.c to dump.c
+
+	move dump_to_file from view.c to dump.c 
 
 Sun Mar 17 23:21:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.am, wipe-out-ssl, wipe-out-ssl.awk,
 	contrib/wipe-out-ssl, contrib/wipe-out-ssl.awk:
-	
+
 	moves wipe-out-ssl script to contrib/ directory, added
-	ChangeLog.orig to EXTRA_DIST
+	ChangeLog.orig to EXTRA_DIST 
 
 Sun Mar 17 23:19:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* rebuild:
-	
-	removed 'rebuild' script, totally obsoleted actually ;)
+
+	removed 'rebuild' script, totally obsoleted actually ;) 
 
 Sun Mar 17 23:16:51 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1649,15 +1707,15 @@ Sun Mar 17 23:16:51 2002  Petr Baudis <pasky@ji.cz>:
 	src/protocol/http/https.h, src/ssl/.cvsignore, src/ssl/.vimrc,
 	src/ssl/Makefile.am, src/ssl/connect.c, src/ssl/connect.h,
 	src/ssl/ssl.c, src/ssl/ssl.h:
-	
-	moved some SSL stuff to ssl/ (not yet completel)
+
+	moved some SSL stuff to ssl/ (not yet completel) 
 
 Sun Mar 17 22:32:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, main.h, document/Makefile.am, document/dump.c,
 	document/dump.h:
-	
-	moved --dump implementation from main.c to document/dump.c
+
+	moved --dump implementation from main.c to document/dump.c 
 
 Sun Mar 17 22:01:38 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1666,16 +1724,16 @@ Sun Mar 17 22:01:38 2002  Petr Baudis <pasky@ji.cz>:
 	document/html/.vimrc, intl/.vimrc, lowlevel/.vimrc, lua/.vimrc,
 	osdep/.vimrc, protocol/.vimrc, protocol/http/.vimrc,
 	protocol/http/date.c, util/.vimrc:
-	
-	added .vimrc into each directory
+
+	added .vimrc into each directory 
 
 Sun Mar 17 21:53:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: cookies/cookies.c, document/session.c, document/session.h,
 	protocol/http/Makefile.am, protocol/http/date.c,
 	protocol/http/date.h:
-	
-	move parse_http_date() to protocol/http/date.c
+
+	move parse_http_date() to protocol/http/date.c 
 
 Sun Mar 17 21:41:01 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1687,14 +1745,14 @@ Sun Mar 17 21:41:01 2002  Petr Baudis <pasky@ji.cz>:
 	src/document/html/.cvsignore, src/osdep/.cvsignore,
 	src/protocol/.cvsignore, src/util/.cvsignore,
 	src/protocol/http/.cvsignore:
-	
-	added .cvsignore ignoring autogenerated stuff
+
+	added .cvsignore ignoring autogenerated stuff 
 
 Sun Mar 17 19:35:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autogen.sh:
-	
-	fixed ./autogen.sh so that it actually even works now
+
+	fixed ./autogen.sh so that it actually even works now 
 
 Sun Mar 17 18:52:38 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1707,19 +1765,19 @@ Sun Mar 17 18:52:38 2002  Petr Baudis <pasky@ji.cz>:
 	src/lua/Makefile.in, src/osdep/Makefile.in,
 	src/protocol/Makefile.in, src/protocol/http/Makefile.in,
 	src/util/Makefile.in:
-	
-	Removed files generated automatically by automake/autoconf. FROM
-	NOW ON YOU NEED TO CALL ./autogen.sh AFTER CHECKOUTcvs update!
-	Also, from now on, I'll probably do make cvs-dist when generating
-	release tarball.
+
+	Removed files generated automatically by automake/autoconf. FROM NOW
+	ON YOU NEED TO CALL ./autogen.sh AFTER CHECKOUTcvs update! Also,
+	from now on, I'll probably do make cvs-dist when generating release
+	tarball.  
 
 Sun Mar 17 18:20:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/internat/: Makefile.am, Makefile.in, charsets.c, charsets.h,
 	codepage.h, codepage.inc, entity.inc, lang_defs.h, language.c,
 	language.h, language.inc, uni_7b.inc:
-	
-	removed intrenat/'s contents
+
+	removed intrenat/'s contents 
 
 Sun Mar 17 18:15:03 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1739,8 +1797,8 @@ Sun Mar 17 18:15:03 2002  Petr Baudis <pasky@ji.cz>:
 	src/util/Makefile.in, src/document/html/Makefile.am,
 	src/document/html/Makefile.in, src/protocol/http/Makefile.am,
 	src/protocol/http/Makefile.in:
-	
-	added protocol/http/header.[ch]
+
+	added protocol/http/header.[ch] 
 
 Sun Mar 17 18:14:06 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1748,14 +1806,14 @@ Sun Mar 17 18:14:06 2002  Petr Baudis <pasky@ji.cz>:
 	document/html/renderer.c, protocol/types.c,
 	protocol/http/Makefile.am, protocol/http/header.c,
 	protocol/http/header.h, protocol/http/http.c, protocol/http/http.h:
-	
-	moved bits of http.c into header.c
+
+	moved bits of http.c into header.c 
 
 Sun Mar 17 18:02:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/protocol/http/: Makefile.am, Makefile.in, http.c:
-	
-	compilation fixes ;p
+
+	compilation fixes ;p 
 
 Sun Mar 17 17:42:55 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1763,9 +1821,9 @@ Sun Mar 17 17:42:55 2002  Petr Baudis <pasky@ji.cz>:
 	document/html/parser.c, document/html/renderer.c,
 	lowlevel/connect.c, protocol/types.c, protocol/url.c,
 	protocol/http/https.c:
-	
+
 	Move http protocol support to separate subdir protocol/http/ -
-	update #includes
+	update #includes 
 
 Sun Mar 17 17:38:33 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1790,8 +1848,8 @@ Sun Mar 17 17:38:33 2002  Petr Baudis <pasky@ji.cz>:
 	src/protocol/Makefile.am, src/protocol/Makefile.in,
 	src/protocol/http/Makefile.am, src/protocol/http/Makefile.in,
 	src/util/Makefile.am, src/util/Makefile.in:
-	
-	Move http protocol support to separate subdir protocol/http/
+
+	Move http protocol support to separate subdir protocol/http/ 
 
 Sun Mar 17 17:27:48 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1807,9 +1865,9 @@ Sun Mar 17 17:27:48 2002  Petr Baudis <pasky@ji.cz>:
 	osdep/os_dep.c, osdep/win32.c, protocol/file.c, protocol/ftp.c,
 	protocol/http.c, protocol/mailto.c, protocol/types.c,
 	protocol/url.c, util/error.c:
-	
+
 	remove trailing spaces/tabs and spaces before semicolons; simple
-	script by Zas :)
+	script by Zas :) 
 
 Sun Mar 17 14:58:52 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1828,14 +1886,14 @@ Sun Mar 17 14:58:52 2002  Petr Baudis <pasky@ji.cz>:
 	src/document/html/Makefile.in, src/protocol/Makefile.am,
 	src/protocol/Makefile.in, src/util/Makefile.am,
 	src/util/Makefile.in:
-	
-	compilation fixes
+
+	compilation fixes 
 
 Sun Mar 17 14:58:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autocommit.sh:
-	
-	commit automatically also Makefile.am
+
+	commit automatically also Makefile.am 
 
 Sun Mar 17 14:39:11 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1852,14 +1910,14 @@ Sun Mar 17 14:39:11 2002  Petr Baudis <pasky@ji.cz>:
 	src/lowlevel/Makefile.in, src/lua/Makefile.in,
 	src/osdep/Makefile.in, src/document/html/Makefile.in,
 	src/protocol/Makefile.in, src/util/Makefile.in:
-	
-	moved menu from bfu/ to dialogs/
+
+	moved menu from bfu/ to dialogs/ 
 
 Sun Mar 17 14:07:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* entity.inc:
-	
-	we somewhow forgot this to remove ;)
+
+	we somewhow forgot this to remove ;) 
 
 Sun Mar 17 14:05:24 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1884,8 +1942,8 @@ Sun Mar 17 14:05:24 2002  Petr Baudis <pasky@ji.cz>:
 	src/lua/Makefile.in, src/osdep/Makefile.in,
 	src/protocol/Makefile.in, src/util/Makefile.in,
 	src/document/html/Makefile.in:
-	
-	src/internat/ -> src/intl/
+
+	src/internat/ -> src/intl/ 
 
 Sun Mar 17 13:54:08 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1913,10 +1971,10 @@ Sun Mar 17 13:54:08 2002  Petr Baudis <pasky@ji.cz>:
 	src/protocol/https.c, src/protocol/https.h, src/protocol/mailto.c,
 	src/protocol/mailto.h, src/protocol/types.c, src/protocol/types.h,
 	src/protocol/url.c, src/protocol/url.h, src/util/error.c:
-	
+
 	Part III. of source layout change, stage 2. Changed #includes so
-	that we're now again compiling and working ok, already under the
-	new source layout. But still more to come, stay tuned ;).
+	that we're now again compiling and working ok, already under the new
+	source layout. But still more to come, stay tuned ;).  
 
 Sun Mar 17 12:24:22 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1934,8 +1992,8 @@ Sun Mar 17 12:24:22 2002  Petr Baudis <pasky@ji.cz>:
 	src/lowlevel/Makefile.am, src/lua/Makefile.am,
 	src/osdep/Makefile.am, src/protocol/Makefile.am,
 	src/util/Makefile.am:
-	
-	okay, more fun with INCLUDE ;)
+
+	okay, more fun with INCLUDE ;) 
 
 Sun Mar 17 12:04:24 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1944,8 +2002,8 @@ Sun Mar 17 12:04:24 2002  Petr Baudis <pasky@ji.cz>:
 	document/Makefile.am, document/html/Makefile.am,
 	internat/Makefile.am, lowlevel/Makefile.am, lua/Makefile.am,
 	osdep/Makefile.am, protocol/Makefile.am, util/Makefile.am:
-	
-	added INCLUDE to Makefiles.am
+
+	added INCLUDE to Makefiles.am 
 
 Sun Mar 17 11:54:41 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -1964,9 +2022,9 @@ Sun Mar 17 11:54:41 2002  Petr Baudis <pasky@ji.cz>:
 	src/lowlevel/Makefile.in, src/lua/Makefile.in,
 	src/osdep/Makefile.in, src/document/html/Makefile.in,
 	src/protocol/Makefile.in, src/util/Makefile.in:
-	
+
 	Part III. of source layout change, stage 2. Improved autofiles, so
-	that ./autogen actually works now ;)
+	that ./autogen actually works now ;) 
 
 Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2020,29 +2078,29 @@ Sun Mar 17 11:28:53 2002  Petr Baudis <pasky@ji.cz>:
 	src/util/error.c, src/util/error.h, src/config/Makefile.am,
 	src/config/default.c, src/config/default.h, src/config/kbdbind.c,
 	src/config/kbdbind.h:
-	
-	Part III. of source layout change, stage 1. Moving source files to
+
+	Part III. of source layout change, stage 1. Moving source files to 
 	subdirectories, sorted by the department they belong to. Also
 	several renaming.  Obviously not yet complete, this commit is here
 	just to record outgoing work :). And definitively not compilable
-	now.
+	now.  
 	
 	Please update by cvs update -d, so that new directories will be
-	created properly.
+	created properly.  
 
 Sat Mar 16 23:25:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c, sched.h:
-	
+
 	fixed bug introduced with one enum, that we wasn't able to connect
-	to blacklisted servers
+	to blacklisted servers 
 
 Sat Mar 16 23:05:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
 	configure, configure.in, stamp-h.in:
-	
-	oh well, added that colors.c ;)
+
+	oh well, added that colors.c ;) 
 
 Sat Mar 16 23:02:36 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2051,10 +2109,10 @@ Sat Mar 16 23:02:36 2002  Petr Baudis <pasky@ji.cz>:
 	html_tbl.c, http.c, kbdbind.h, links.h, main.c, menu.c, os_dep.c,
 	sched.c, sched.h, session.c, session.h, terminal.c, terminal.h,
 	view.h:
-	
+
 	various compilation fixes; had to fork colors parsing to
 	colors.[ch], it wasn't possible to arrange it so that it compiles
-	otherwise
+	otherwise 
 
 Sat Mar 16 22:03:08 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2067,17 +2125,17 @@ Sat Mar 16 22:03:08 2002  Petr Baudis <pasky@ji.cz>:
 	main.h, menu.c, menu.h, os_dep.c, sched.c, sched.h, select.h,
 	session.c, session.h, terminal.c, terminal.h, types.c, types.h,
 	url.h, view.c, view.h:
-	
+
 	Part II. of source layout change, stage 4. This should be the last
 	stage of this part, everything is moved into specific files
 	(there're exceptions, but we've to leave something to future,
-	haven't we?). However, compilation fixes will follow yet ;).
+	haven't we?). However, compilation fixes will follow yet ;).  
 
 Sat Mar 16 21:02:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING:
-	
-	lua scripting description, taken from mail by peter wang
+
+	lua scripting description, taken from mail by peter wang 
 
 Sat Mar 16 20:07:58 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2088,14 +2146,14 @@ Sat Mar 16 20:07:58 2002  Petr Baudis <pasky@ji.cz>:
 	mailto.c, mailto.h, main.c, main.h, menu.c, os_dep.c, sched.c,
 	select.c, select.h, session.c, session.h, terminal.c, types.c,
 	url.c, url.h, view.c, view.h, sched.h, terminal.h:
-	
-	Part II. of source layout change, stage 3. More .h files forked.
+
+	Part II. of source layout change, stage 3. More .h files forked.  
 
 Sat Mar 16 17:51:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* main.c, view.c:
-	
-	oh well.. compilation fixes ;)
+
+	oh well.. compilation fixes ;) 
 
 Sat Mar 16 17:44:40 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2103,10 +2161,10 @@ Sat Mar 16 17:44:40 2002  Petr Baudis <pasky@ji.cz>:
 	default.c, html.c, html.h, html_r.c, html_r.h, html_tbl.c,
 	html_tbl.h, http.c, language.c, links.h, lua.c, main.c, menu.c,
 	sched.c, session.c, session.h, view.c, view.h:
-	
+
 	Part II. of source layout change, stage 2. HTML hell and Session
 	oggre hopefully handled (it'll need more work, though); I wonder if
-	it's compilable ;)
+	it's compilable ;) 
 
 Sat Mar 16 15:17:22 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2118,57 +2176,57 @@ Sat Mar 16 15:17:22 2002  Petr Baudis <pasky@ji.cz>:
 	mailto.h, main.c, main.h, menu.c, os_dep.c, os_dep.h, os_depx.h,
 	sched.c, select.c, select.h, session.c, setup.h, terminal.c,
 	types.c, url.c, url.h, view.c:
-	
+
 	Part II. of source layout change, stage 1. Moving interface of the
-	'modules' to specific header files. Obviously not yet complete,
-	this commit is here just to record outgoing work :).
+	'modules' to specific header files. Obviously not yet complete, this
+	commit is here just to record outgoing work :).  
 
 Sat Mar 16 12:31:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
-	another bug added.. (old one, inherited from links ;)
+
+	another bug added.. (old one, inherited from links ;) 
 
 Sat Mar 16 11:49:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:
-	
+
 	added superambiguous feature Default, removed version of Lua patch,
-	removed the ifdef around Features line
+	removed the ifdef around Features line 
 
 Sat Mar 16 10:30:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.am, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
 	configure, configure.in, stamp-h.in:
-	
-	beautified Makefile.am ;)
+
+	beautified Makefile.am ;) 
 
 Sat Mar 16 09:55:34 2002  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING, Makefile.am, lang_defs.h, language.h, links.h,
 	intl/gen-intl, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
 	configure, configure.in, stamp-h.in:
-	
+
 	language.h -> lang_defs.h, preparation bit for next part of source
-	layout change
+	layout change 
 
 Sat Mar 16 09:51:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* .vimrc:
-	
-	hrm.. typo fix :^)
+
+	hrm.. typo fix :^) 
 
 Sat Mar 16 00:41:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* .vimrc:
-	
-	*hint* *hint* for you developers using vim ;)))
+
+	*hint* *hint* for you developers using vim ;))) 
 
 Sat Mar 16 00:37:05 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
-	removed one obsoleted bug
+
+	removed one obsoleted bug 
 
 Sat Mar 16 00:35:04 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2178,8 +2236,8 @@ Sat Mar 16 00:35:04 2002  Petr Baudis <pasky@ji.cz>:
 	language.c, links.h, lua.c, mailto.c, main.c, menu.c, os_dep.c,
 	os_dep.h, os_depx.h, sched.c, select.c, session.c, setup.h,
 	terminal.c, types.c, url.c, view.c:
-	
-	Added Id tag to source files, due to popular demand ;)
+
+	Added Id tag to source files, due to popular demand ;) 
 
 Sat Mar 16 00:23:26 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2188,88 +2246,86 @@ Sat Mar 16 00:23:26 2002  Petr Baudis <pasky@ji.cz>:
 	html_r.c, html_tbl.c, http.c, https.c, kbd.c, kbdbind.c,
 	language.c, links.h, lua.c, main.c, menu.c, os_dep.c, os_depx.h,
 	sched.c, select.c, session.c, terminal.c, types.c, url.c, view.c:
-	
-	
+
 	First part of source layout change. Moved all foreign includes to
 	specific files which use them. This is going to improve speed of
 	complication, simplify various things and break the compilation on
 	dozens of obscure OSes. But it's still far from the main fun which
-	will yet come.
+	will yet come.  
 
 Fri Mar 15 22:28:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	...and finish the removal of config2.h and Makefile.gen ;)
+
+	...and finish the removal of config2.h and Makefile.gen ;) 
 
 Fri Mar 15 22:22:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.am:
-	
-	removal of config2.h and Makefile.gen
+
+	removal of config2.h and Makefile.gen 
 
 Fri Mar 15 22:21:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* INSTALL, Makefile.gen, config2.h, links.h, wipe-out-ssl:
-	
-	removal of config2.h and Makefile.gen - sorry, too dirty; if
-	someone will start to cry, we may reincarnate it into something
-	more elegant
+
+	removal of config2.h and Makefile.gen - sorry, too dirty; if someone
+	will start to cry, we may reincarnate it into something more elegant 
 
 Fri Mar 15 22:10:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
-	Compilation fix - thanks, Stepan
+
+	Compilation fix - thanks, Stepan 
 
 Fri Mar 15 19:44:12 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/czech.lng, intl/english.lng, intl/french.lng:
-	
+
 	French translation updates by <zas@norz.org>; more links -> elinks
-	stuff
+	stuff 
 
 Fri Mar 15 19:34:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/w3m2links.gawk:
-	
-	w3m2links.gawk, script by <stephane.chazelas@free.fr>
+
+	w3m2links.gawk, script by <stephane.chazelas@free.fr> 
 
 Fri Mar 15 19:30:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
+
 	parse_http_date() cleanup (fear\!) - i didn't introduced kinda
 	twicked parser i usually like to make yet, though; incorporates
 	something based on <stephane.chazelas@free.fr>'s patch for handling
-	'Saturday'-daynames as well
+	'Saturday'-daynames as well 
 
 Fri Mar 15 19:08:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, cookies.c:
-	
+
 	fix for broken sites - parse correctly cookie values containing '='
-	- patch by Stephane Chazelas <stephane.chazelas@free.fr>
+	- patch by Stephane Chazelas <stephane.chazelas@free.fr> 
 
 Fri Mar 15 17:28:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h, url.c, view.c:
-	
-	strip password from displayed urls; i hope i didn't forget
-	anything; idea by Stephane Chazelas <stephane.chazelas@free.fr>
+
+	strip password from displayed urls; i hope i didn't forget anything;
+	idea by Stephane Chazelas <stephane.chazelas@free.fr> 
 
 Fri Mar 15 13:45:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c:
-	
-	some tidyup of move_links(), apparently ;)
+
+	some tidyup of move_links(), apparently ;) 
 
 Thu Mar 14 22:14:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c, html_tbl.c, links.h:
-	
-	xxpand -> expand
+
+	xxpand -> expand 
 
 Thu Mar 14 21:39:34 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2282,702 +2338,702 @@ Thu Mar 14 21:39:34 2002  Petr Baudis <pasky@ji.cz>:
 	intl/lithuanian.lng, intl/polish.lng, intl/romanian.lng,
 	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng:
-	
-	copyright nonsenses, more links -> elinks, removed 'lynx-like'
+
+	copyright nonsenses, more links -> elinks, removed 'lynx-like' 
 
 Thu Mar 14 21:02:27 2002  Petr Baudis <pasky@ji.cz>:
 
 	* charsets.c:
-	
+
 	removed some unused structures and functions (by mikulas, from
-	0.97pre6)
+	0.97pre6) 
 
 Thu Mar 14 21:00:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:
-	
-	spring tidyup of http_send_header()
+
+	spring tidyup of http_send_header() 
 
 Thu Mar 14 20:40:18 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
+
 	fixed stripping of last char from url when adding a bookmark -
-	thanks go to zas
+	thanks go to zas 
 
 Thu Mar 14 20:21:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, bookmarks.c, default.c, lua.c, mailto.c, menu.c,
 	session.c, types.c, view.c:
-	
-	cleanup of msg_box() and tidyup of all its usages
+
+	cleanup of msg_box() and tidyup of all its usages 
 
 Thu Mar 14 18:56:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:
-	
+
 	fixed and enabled displaying of cache info (File -> Cache info);
-	also similiar functions tidyup
+	also similiar functions tidyup 
 
 Thu Mar 14 18:55:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c:
-	
-	small fix in history duplicates checking, found && patch by zas
+
+	small fix in history duplicates checking, found && patch by zas 
 
 Thu Mar 14 18:11:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, view.c:
-	
+
 	draft of not yet working links wraparound implementation, based on
 	ff's work; commented out the option record, as it's not working
-	somewhat; please have a look at it
+	somewhat; please have a look at it 
 
 Thu Mar 14 17:38:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	one more field ;)
+
+	one more field ;) 
 
 Thu Mar 14 17:36:36 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	links and buttons work once more ;)
+
+	links and buttons work once more ;) 
 
 Thu Mar 14 17:32:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, view.c:
-	
+
 	optionally simulate pressed enter when pressed accesskey (standart
-	behaviour, by default off)
+	behaviour, by default off) 
 
 Thu Mar 14 17:17:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, view.c:
-	
+
 	optionally submit form after pressing enter on the text field (by
-	default on)
+	default on) 
 
 Wed Mar 13 22:07:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	0.4pre3-CVS
+
+	0.4pre3-CVS 
 
 Wed Mar 13 22:04:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	0.4pre2
+
+	0.4pre2 
 
 Wed Mar 13 21:42:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
+
 	add html_focusable() to html_img() as well - it looks like nice
 	extension, it makes sense and it fixes chaotic jumping around if
-	page contains images
+	page contains images 
 
 Wed Mar 13 21:13:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c:
-	
+
 	strip leading/trailing spaces from URLs which are going to be saved
 	into history => no duplicites in history with only differences in
-	this
+	this 
 
 Wed Mar 13 20:59:38 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c:
-	
+
 	off-by-one bug in justify code fixed (see diff, comment near
-	malloc()); looks like i should release pre2 soon ;)
+	malloc()); looks like i should release pre2 soon ;) 
 
 Wed Mar 13 19:03:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
-	one bug removed, one bug changed (added)
+
+	one bug removed, one bug changed (added) 
 
 Tue Mar 12 22:33:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	be more smart; if more accesskey links, rotate between them; if x
-	is letter and alt is not pressed, refuse it directly
+
+	be more smart; if more accesskey links, rotate between them; if x is
+	letter and alt is not pressed, refuse it directly 
 
 Tue Mar 12 20:09:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* kbd.c:
-	
-	Fixed the F1-F5 problem - am i not dumb?
+
+	Fixed the F1-F5 problem - am i not dumb? 
 
 Tue Mar 12 18:18:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, BUGS, HACKING, default.c, html.c, html_r.c, kbd.c,
 	kbdbind.c, links.h, view.c:
-	
+
 	accesskey support - based on patch by ff, hacked a lot by me; also
-	some HACKING file notes
+	some HACKING file notes 
 
 Mon Mar 11 16:10:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, session.c:
-	
+
 	option form_submit_confirm - optionally skip confirmation when
-	submitting forms; based on patch by ff
+	submitting forms; based on patch by ff 
 
 Mon Mar 11 13:45:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	tabindex fixes by <ff@partyticket.net>
+
+	tabindex fixes by <ff@partyticket.net> 
 
 Mon Mar 11 13:37:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
+
 	allow servers same as domains - based on patch by
-	<rono@sentuny.com.au>
+	<rono@sentuny.com.au> 
 
 Mon Mar 11 13:17:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c, default.c, links.h:
-	
-	don't require three dots for non-international domains by default
-	in check_domain_security() for cookies - reported by Christian
-	Häggström <c00chm@cs.umu.se>, he also proposed a patch on which
-	this is based ;)
+
+	don't require three dots for non-international domains by default in
+	check_domain_security() for cookies - reported by Christian
+	Häggström <c00chm@cs.umu.se>, he also proposed a patch on which this
+	is based ;) 
 
 Mon Mar 11 12:56:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c:
-	
+
 	Don't convert only default value of form item, but all possible
-	values (<select> tag) (by mikulas, from 0.97pre6)
+	values (<select> tag) (by mikulas, from 0.97pre6) 
 
 Sun Mar 10 20:42:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, html.c, html_r.c, links.h:
-	
-	tabindex support, based on patch by <ff@partyticket.net>
+
+	tabindex support, based on patch by <ff@partyticket.net> 
 
 Sun Mar 10 20:07:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	keybinding and buttonbinding
+
+	keybinding and buttonbinding 
 
 Sun Mar 10 20:06:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	proxy stuff
+
+	proxy stuff 
 
 Sun Mar 10 19:58:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	reformat bit
+
+	reformat bit 
 
 Sun Mar 10 13:11:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, default.c, links.h, session.c:
-	
-	show_(status|title)_bar - still incomplete, though, as there's
-	still a blank line even when they're turned off.. anyone wants to
-	fix it? :)
+
+	show_(status|title)_bar - still incomplete, though, as there's still
+	a blank line even when they're turned off.. anyone wants to fix it?
+	:) 
 
 Sun Mar 10 12:43:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	few random unimportant tidyups done when browsing the code bored ;)
+
+	few random unimportant tidyups done when browsing the code bored ;) 
 
 Sun Mar 10 12:37:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
-	tidyup of print_screen_status()
+
+	tidyup of print_screen_status() 
 
 Sat Mar  9 22:25:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
+
 	fix cookies handling - thanks to zas for report,
-	<ff@partyticket.net> for hint and proposed fix
+	<ff@partyticket.net> for hint and proposed fix 
 
 Sat Mar  9 22:10:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, dns.c, setup.h:
-	
+
 	one memory leak fixed in dns (not visible as it's in our child
 	thread); also some sanity checks and lint silencing; based on patch
-	by <csaba.raduly@sophos.com>
+	by <csaba.raduly@sophos.com> 
 
 Fri Mar  8 14:42:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:
-	
-	reindent referer switch, handle REFERER_NONE (silence gcc warning)
+
+	reindent referer switch, handle REFERER_NONE (silence gcc warning) 
 
 Fri Mar  8 14:41:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/french.lng:
-	
-	french translation updates by zas
+
+	french translation updates by zas 
 
 Fri Mar  8 12:17:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, menu.c:
-	
+
 	moved REFERER_* into enum.. also fixed one bug - 1 wasn't
 	REFERER_TRUE but REFERER_SAME_URL and 2 wasn't REFERER_SAME_URL but
 	REFERER_FAKE and 3 wasn't REFERER_FAKE but REFERER_TRUE ;) i hope
 	it'll still work now, please tell me if it'll break backwards
-	compatibility with old config..
+	compatibility with old config..  
 
 Fri Mar  8 10:49:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c, default.c, links.h:
-	
-	make cookies accepting settable thru runtime option
+
+	make cookies accepting settable thru runtime option 
 
 Fri Mar  8 10:18:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c, default.c, links.h, view.c:
-	
-	make cookies saving/loading/resaving turnable thru option
+
+	make cookies saving/loading/resaving turnable thru option 
 
 Thu Mar  7 22:33:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, default.c, links.h:
-	
-	don't check duplicates in history when loading it; saves huge
-	amount of cpu work; patch by zas, let's see if it'll broke
-	anything; also contains cleanup of some history managment
+
+	don't check duplicates in history when loading it; saves huge amount
+	of cpu work; patch by zas, let's see if it'll broke anything; also
+	contains cleanup of some history managment 
 
 Thu Mar  7 22:05:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c:
-	
+
 	correction to justify patch - now we handle links correctly; patch
-	by bunch, manual correction by me (i hope i did it properly ;)
+	by bunch, manual correction by me (i hope i did it properly ;) 
 
 Thu Mar  7 21:04:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c:
-	
+
 	added <term_size> near default value of user-agent to
-	documentation.. thanks, zas
+	documentation.. thanks, zas 
 
 Thu Mar  7 12:54:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* INSTALL, README, SITES:
-	
-	various updates and rewrites
+
+	various updates and rewrites 
 
 Thu Mar  7 07:50:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:
-	
-	one FIXME and two #undefs, tralala..
+
+	one FIXME and two #undefs, tralala..  
 
 Wed Mar  6 19:52:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	0.4pre2-CVS
+
+	0.4pre2-CVS 
 
 Wed Mar  6 19:51:57 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
 	configure, stamp-h.in:
-	
-	0.4pre1
+
+	0.4pre1 
 
 Wed Mar  6 17:34:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	stupid CVS - credit for <kisto@go2.pl> and his justify
+
+	stupid CVS - credit for <kisto@go2.pl> and his justify 
 
 Wed Mar  6 17:33:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c, html_tbl.c, links.h:
-	
+
 	Support for align=justify, original patch by <kisto@go2.pl>, some
-	variable names expanded by me. Minor html renderer cleanup.
+	variable names expanded by me. Minor html renderer cleanup.  
 
 Wed Mar  6 12:54:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, session.c, setup.h:
-	
+
 	add WWW_HOME_URL #define into setup.h, which can act as default
 	homepage, if non-empty (empty by default); also attempt to add
 	startup_goto_dialog option, but commented out for now as it doesn't
-	work properly yet
+	work properly yet 
 
 Wed Mar  6 10:55:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	another segfault fixes
+
+	another segfault fixes 
 
 Wed Mar  6 01:26:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	i'm stupid .. segfault fix, thank for report goes to zas
+
+	i'm stupid .. segfault fix, thank for report goes to zas 
 
 Tue Mar  5 14:54:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	undefine COOKIES_DEBUG ;)
+
+	undefine COOKIES_DEBUG ;) 
 
 Tue Mar  5 11:48:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, main.c, AUTHORS:
-	
+
 	dump-width option - based on patch by Edwin Groothuis
-	<edwin@mavetju.org>
+	<edwin@mavetju.org> 
 
 Tue Mar  5 09:57:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* lua.c, types.c:
-	
-	s/strncpy/safe_strncpy/ - patch by zas
+
+	s/strncpy/safe_strncpy/ - patch by zas 
 
 Tue Mar  5 09:42:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	oops, typo compilation fix
+
+	oops, typo compilation fix 
 
 Mon Mar  4 23:31:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	ouch, fool me - fixed tiny merge error from 0.97pre4
+
+	ouch, fool me - fixed tiny merge error from 0.97pre4 
 
 Mon Mar  4 23:29:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* os_dep.h:
-	
+
 	undefine UNIX on win32 (maybe it helps --mikulas - helps _what_?
-	--pasky) (by mikulas, from 0.97pre5)
+	--pasky) (by mikulas, from 0.97pre5) 
 
 Mon Mar  4 23:28:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
-	fixed bad loading of imgmap (by mikulas, from 0.97pre5)
+
+	fixed bad loading of imgmap (by mikulas, from 0.97pre5) 
 
 Mon Mar  4 23:26:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* finger.c:
-	
-	commented out sending /W in finger request - dunno why it was
-	there, but it broke finger://mpat7421@ss1000.ms.mff.cuni.cz/ ;))
+
+	commented out sending /W in finger request - dunno why it was there,
+	but it broke finger://mpat7421@ss1000.ms.mff.cuni.cz/ ;)) 
 
 Mon Mar  4 23:07:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
+
 	rewritten parsing of name=value, so that it's now more tolerant to
-	whitespaces (permitted around = and before ;) - so now i.e.
-	bugzilla should work properly in elinks; thanks for inspiration to
-	report by <lenbok@mailandnews.com> and proposed fix by
-	<qmax@civo.aca.nsc.ru> (from 6/7 Sep 2001)
+	whitespaces (permitted around = and before ;) - so now i.e. bugzilla
+	should work properly in elinks; thanks for inspiration to report by
+	<lenbok@mailandnews.com> and proposed fix by <qmax@civo.aca.nsc.ru>
+	(from 6/7 Sep 2001) 
 
 Mon Mar  4 22:09:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	nitpicking
+
+	nitpicking 
 
 Mon Mar  4 22:06:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	set_cookie tidyup
+
+	set_cookie tidyup 
 
 Mon Mar  4 20:35:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:
-	
-	silenced one warning
+
+	silenced one warning 
 
 Mon Mar  4 20:34:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c, http.c, url.c:
-	
+
 	removed the url spaces patch (and 'manual' stripping of
 	leeading/trailing spaces) - it didn't work well (the stripping is
 	pretty tricky and ugly to do, xlated url wasn't shown in info etc
-	etc)
+	etc) 
 
 Mon Mar  4 20:18:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
-	hopefully already obsolete bug deleted
+
+	hopefully already obsolete bug deleted 
 
 Mon Mar  4 20:11:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	remove debug things ;)
+
+	remove debug things ;) 
 
 Mon Mar  4 20:09:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	strip spaces on start and end of url - INCOMPLETE
+
+	strip spaces on start and end of url - INCOMPLETE 
 
 Mon Mar  4 15:24:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* entity.inc, Unicode/entities.lnx:
-	
-	euro and euml was swapped - fix based on patch by zas
+
+	euro and euml was swapped - fix based on patch by zas 
 
 Mon Mar  4 00:55:33 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure.in,
 	configure, stamp-h.in:
-	
-	Move dlopen check few lines up so now the output isn't messy
+
+	Move dlopen check few lines up so now the output isn't messy 
 
 Mon Mar  4 00:54:30 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	typo compilation fix
+
+	typo compilation fix 
 
 Mon Mar  4 00:49:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html_r.c, html_tbl.c, links.h:
-	
+
 	Improved performance of rendering nested tables (by mikulas, from
-	0.97pre4)
+	0.97pre4) 
 
 Mon Mar  4 00:37:38 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
+
 	Fixed one case where 0 would go to the 'save formatted document'
-	output (by mikulas, from 0.97pre4)
+	output (by mikulas, from 0.97pre4) 
 
 Mon Mar  4 00:34:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	some sanity checks
+
+	some sanity checks 
 
 Mon Mar  4 00:27:25 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
-	enlarged one static string buffer.. (from 0.97pre4)
+
+	enlarged one static string buffer.. (from 0.97pre4) 
 
 Mon Mar  4 00:20:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	Do not accept '<' without name as a tag (by mikulas, from 0.97pre4)
+
+	Do not accept '<' without name as a tag (by mikulas, from 0.97pre4) 
 
 Mon Mar  4 00:17:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	Input field is one char larger (by mikulas, from 0.97pre4)
+
+	Input field is one char larger (by mikulas, from 0.97pre4) 
 
 Mon Mar  4 00:15:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:
-	
+
 	Always trust 'Content-Length' when communicating with HTTP/1.1
 	server -- work around broken HTTP/1.1 servers that send Connection:
-	close, but keep the connection.
+	close, but keep the connection.  
 	
-	By mikulas, from 0.97pre4
+	By mikulas, from 0.97pre4 
 
 Mon Mar  4 00:12:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* http.c, links.h:
-	
-	Report terminal size in User-Agent (by mikulas, from 0.97pre4)
+
+	Report terminal size in User-Agent (by mikulas, from 0.97pre4) 
 
 Mon Mar  4 00:09:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	Test for dlopen in configure (openssl needs it???) (by mikulas,
-	from 0.97pre4)
+
+	Test for dlopen in configure (openssl needs it???) (by mikulas, from
+	0.97pre4) 
 
 Mon Mar  4 00:06:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* kbd.c:
-	
-	Fixed ESC timeout (by mikulas, from 0.97pre4)
+
+	Fixed ESC timeout (by mikulas, from 0.97pre4) 
 
 Mon Mar  4 00:04:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:
-	
+
 	Removed LONG_MIN, LONG_MAX because they were undefined on irix (by
-	mikulas, from 0.97pre4)
+	mikulas, from 0.97pre4) 
 
 Mon Mar  4 00:01:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* main.c:
-	
+
 	-dump doesn't get stuck in redir loops anymore (by mikulas, from
-	0.97pre4)
+	0.97pre4) 
 
 Sun Mar  3 23:51:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* charsets.c:
-	
-	Handle encoding to utf-8 correctly (by mikulas, from 0.97pre4)
+
+	Handle encoding to utf-8 correctly (by mikulas, from 0.97pre4) 
 
 Sun Mar  3 23:46:00 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:
-	
+
 	added #define __EXTENSION__ - hope it helps on SunOS (by mikulas,
-	from 0.97pre4)
+	from 0.97pre4) 
 
 Sun Mar  3 23:43:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, language.h, language.inc, intl/index.txt,
 	intl/indonesian.lng:
-	
-	indonesian translation by faizal@mfaizal.net (from 0.97pre4)
+
+	indonesian translation by faizal@mfaizal.net (from 0.97pre4) 
 
 Sun Mar  3 23:33:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.h, language.inc, intl/finnish.lng, intl/index.txt,
 	AUTHORS:
-	
-	finnish translation by ik@iki.fi (from 0.97pre3)
+
+	finnish translation by ik@iki.fi (from 0.97pre3) 
 
 Sun Mar  3 23:30:45 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in, AUTHORS, links.h, select.c:
-	
-	compilation fix by mikulas (from 0.97pre3)
+
+	compilation fix by mikulas (from 0.97pre3) 
 
 Sun Mar  3 23:24:34 2002  Petr Baudis <pasky@ji.cz>:
 
 	* ftp.c:
-	
-	add support for color dirs inside ftp
+
+	add support for color dirs inside ftp 
 
 Sun Mar  3 23:16:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, ftp.c, links.h:
-	
-	ftp massive cleanup - tidyup, removed some braindead stuff,
-	varnames expanding,few comments
+
+	ftp massive cleanup - tidyup, removed some braindead stuff, varnames
+	expanding,few comments 
 
 Sun Mar  3 22:55:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	blabla
+
+	blabla 
 
 Sun Mar  3 16:56:27 2002  Petr Baudis <pasky@ji.cz>:
 
 	* kbd.c, menu.c, os_dep.c:
-	
-	more compilation warning fixes
+
+	more compilation warning fixes 
 
 Sun Mar  3 16:46:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/gen-intl:
-	
-	more structures in brackets in arrays ;)
+
+	more structures in brackets in arrays ;) 
 
 Sun Mar  3 16:46:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h, Makefile.in, acconfig.h, aclocal.m4, config.h.in,
 	configure, configure.in, stamp-h.in:
-	
-	check for arpa/inet.h
+
+	check for arpa/inet.h 
 
 Sun Mar  3 16:45:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* kbd.c, menu.c, os_dep.c, sched.c, types.c:
-	
-	silenced some more compiler warnings..
+
+	silenced some more compiler warnings..  
 
 Sun Mar  3 16:30:01 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	oops - compilation fix
+
+	oops - compilation fix 
 
 Sun Mar  3 16:22:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	enabled -Wall for gcc - all compiler warnings
+
+	enabled -Wall for gcc - all compiler warnings 
 
 Sun Mar  3 16:22:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure, configure.in, intl/gen-intl:
-	
-	enabled -Wall for gcc - show all warnings
+
+	enabled -Wall for gcc - show all warnings 
 
 Sun Mar  3 16:21:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c, html.c:
-	
-	silenced compiler warnings
+
+	silenced compiler warnings 
 
 Sun Mar  3 16:16:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* codepage.inc, uni_7b.inc, Unicode/gen-7b, Unicode/gen-cp:
-	
+
 	enclose array members (structures) into {} - silencing compiler
-	warnings
+	warnings 
 
 Sun Mar  3 15:55:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:
-	
-	fixed one race condition in httpauth
+
+	fixed one race condition in httpauth 
 
 Sun Mar  3 15:48:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, bookmarks.c, charsets.c, default.c, html.c, html_r.c,
 	html_tbl.c, kbdbind.c, links.h, lua.c, os_dep.c, sched.c,
 	session.c, url.c, view.c:
-	
+
 	tidyup - blank lines, reindentations, few comments, removed unused
-	variables, silenced compiler warnings
+	variables, silenced compiler warnings 
 
 Sat Mar  2 15:09:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/czech.lng:
-	
-	added few czech translations
+
+	added few czech translations 
 
 Sat Mar  2 14:53:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c, http.c:
-	
-	handle spaces in URL correctly now (substituing them for '+' in
-	HTTP requests, leaving them as they are otherwise)
+
+	handle spaces in URL correctly now (substituing them for '+' in HTTP
+	requests, leaving them as they are otherwise) 
 
 Sat Mar  2 14:04:07 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -2991,365 +3047,365 @@ Sat Mar  2 14:04:07 2002  Petr Baudis <pasky@ji.cz>:
 	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
 	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
 	intl/ukrainian.lng:
-	
+
 	Merged HTTP-auth support by Jan Sembera (based on the original one
-	by Sergei Borushevsky)
+	by Sergei Borushevsky) 
 
 Sat Mar  2 13:09:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	Version updated to 0.4pre1-CVS
+
+	Version updated to 0.4pre1-CVS 
 
 Sat Mar  2 11:29:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c:
-	
+
 	Hacked connect() in order to get this thing working on *censored*
-	*censored* *censored* BSD *censored* *censored*
+	*censored* *censored* BSD *censored* *censored* 
 
 Tue Feb 12 12:18:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* lua.c:
-	
-	fixed crash when links_home is NULL
+
+	fixed crash when links_home is NULL 
 
 Sat Feb  9 11:12:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	take [address] as an ipv6 address only in the hostname part of URL
-	- bug reported by Stepan Roh <stepan@srnet.cz>
+
+	take [address] as an ipv6 address only in the hostname part of URL -
+	bug reported by Stepan Roh <stepan@srnet.cz> 
 
 Fri Feb  8 21:14:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS:
-	
+
 	added bug reported by Kovacs Zoltan
-	<kovacsz@pc10.radnoti-szeged.sulinet.hu>
+	<kovacsz@pc10.radnoti-szeged.sulinet.hu> 
 
 Fri Feb  8 06:24:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
-	typo fix in dns.c, by Cristiano Guadagnino <criguada@tin.it>
+
+	typo fix in dns.c, by Cristiano Guadagnino <criguada@tin.it> 
 
 Thu Feb  7 00:12:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, TODO:
-	
-	added some more items
+
+	added some more items 
 
 Thu Feb  7 00:00:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* session.c:
-	
+
 	fixed small bug in lua hooks which caused links to crash if
-	non-existent local file was specified as a frame source
+	non-existent local file was specified as a frame source 
 
 Wed Feb  6 23:37:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
+
 	disable 4to6 mapping, possibly solving the problem with the non
-	ipv6-enabled kernels but ipv6 enabled libc
+	ipv6-enabled kernels but ipv6 enabled libc 
 
 Wed Feb  6 23:10:29 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bookmarks.c:
-	
+
 	memorizing last search until escaping from the bookmarks dialog,
-	patch by Zas, lead fixed by pasky; bookmarks search should
-	hopefully be done by now
+	patch by Zas, lead fixed by pasky; bookmarks search should hopefully
+	be done by now 
 
 Mon Feb  4 14:13:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, links.1, os_dep.c, os_dep.h:
-	
-	Port to RISC OS by Peter Naulls <peter@chocky.org>
+
+	Port to RISC OS by Peter Naulls <peter@chocky.org> 
 
 Sun Feb  3 07:50:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	forgot one line in querystring patch
+
+	forgot one line in querystring patch 
 
 Fri Feb  1 21:49:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, TODO:
-	
-	changes and moves etc
+
+	changes and moves etc 
 
 Fri Feb  1 21:46:10 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, default.c, contrib/README, contrib/color_config.diff:
-	
-	Added possibility to change default colors settings - original
-	patch by Peter Wang, disabled default_bg && default_vlink for now
+
+	Added possibility to change default colors settings - original patch
+	by Peter Wang, disabled default_bg && default_vlink for now 
 
 Fri Feb  1 17:33:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, links.h, os_dep.c, session.c, url.c:
-	
-	Cleanup safe_strncpy and spread its use to more places.
+
+	Cleanup safe_strncpy and spread its use to more places.  
 
 Fri Feb  1 13:49:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:
-	
+
 	cleanups in bookmarks section, box stuff moved to bfu section;
-	original patch by Zas <zas@norz.org>
+	original patch by Zas <zas@norz.org> 
 
 Fri Feb  1 10:16:49 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, sched.c:
-	
+
 	hopefully fixed segfault when killing background connection in
-	lookup state
+	lookup state 
 
 Thu Jan 31 22:32:09 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
+
 	make UL, DIR, MENU, OL and DL _block_ elements, thus leaving a line
-	after themselves
+	after themselves 
 
 Thu Jan 31 22:24:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bookmarks.c:
-	
-	Bookmark resaving by Zas <zas@norz.org> - from now on, bookmarks
-	are saved after each change
+
+	Bookmark resaving by Zas <zas@norz.org> - from now on, bookmarks are
+	saved after each change 
 
 Thu Jan 31 16:35:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	comments change in cookies.c
+
+	comments change in cookies.c 
 
 Thu Jan 31 15:50:33 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c, session.c:
-	
+
 	Hopefully FINALLY(!) fixed the unhistory - now it should be
 	rock-stable and any rumours telling otherwise should not be trusted
 	in any rate ;-). This fix comes after three-hours research and
 	massive changes and reverts as a tiny one-liner + some comments
-	dropped around the history code accompanying it.
+	dropped around the history code accompanying it.  
 
 Wed Jan 30 22:27:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c, session.c:
-	
+
 	some unhistory experiments, history should be stable, unhistory may
-	core randomly so don't use it now :^). now sleep time, children
+	core randomly so don't use it now :^). now sleep time, children 
 
 Wed Jan 30 21:54:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, menu.c, session.c, view.c:
-	
-	certain (un)history cleanups and fixes, not yet complete
+
+	certain (un)history cleanups and fixes, not yet complete 
 
 Wed Jan 30 19:27:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c, session.c:
-	
-	small unhistory cleanups
+
+	small unhistory cleanups 
 
 Wed Jan 30 15:16:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in, AUTHORS, dns.c:
-	
-	MacOS address resolution fix (Aldy Hernandez) (from 0.97pre2)
+
+	MacOS address resolution fix (Aldy Hernandez) (from 0.97pre2) 
 
 Wed Jan 30 15:08:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* acconfig.h, aclocal.m4, config.h.in, configure.in, Makefile.in,
 	configure, stamp-h.in, os_dep.c:
-	
+
 	Fix compile error when -lgpm works but gpm.h is not there (Mikulas
-	Patocka) (from 0.97pre2)
+	Patocka) (from 0.97pre2) 
 
 Wed Jan 30 15:05:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* NEWS:
-	
-	Dummy NEWS to make automake happy
+
+	Dummy NEWS to make automake happy 
 
 Wed Jan 30 14:58:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, view.c:
-	
+
 	Fixed segfault when posting large form (Jacek Fedorynski) (from
-	0.97pre2)
+	0.97pre2) 
 
 Wed Jan 30 14:48:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, entity.inc, Unicode/entities.lnx:
-	
-	Added &euro; symbol (Cliff Cunnington) (from 0.97pre2)
+
+	Added &euro; symbol (Cliff Cunnington) (from 0.97pre2) 
 
 Wed Jan 30 14:16:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
+
 	Fixed fix of stripping query strings from form's actions (Mikulas
-	Patocka) (from 0.97pre1)
+	Patocka) (from 0.97pre1) 
 
 Wed Jan 30 14:06:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c, view.c:
-	
+
 	Fixed crash when amount of items in select box decreases after
 	reload, make it remember select item on reload (fixes www.xchat.cz)
-	(Mikulas Patocka) (from 0.97pre1)
+	(Mikulas Patocka) (from 0.97pre1) 
 
 Wed Jan 30 13:58:17 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c, html_r.c:
-	
+
 	Do not allow larger input fiels than screen size (Mikulas Patocka)
-	(from 0.97pre1)
+	(from 0.97pre1) 
 
 Wed Jan 30 13:55:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	Fix one read overrun in parser (Mikulas Patocka) (from 0.97pre1)
+
+	Fix one read overrun in parser (Mikulas Patocka) (from 0.97pre1) 
 
 Wed Jan 30 13:48:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	Fixed crash in OS/2 when user pressed Ctrl-V and clipboard was
-	empty (Mikulas Patocka) (from 0.97pre1)
+
+	Fixed crash in OS/2 when user pressed Ctrl-V and clipboard was empty
+	(Mikulas Patocka) (from 0.97pre1) 
 
 Wed Jan 30 13:47:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* select.c:
-	
+
 	Fixed leaving zombie processes when more children exited
-	simultaneously (Mikulas Patocka) (from 0.97pre1)
+	simultaneously (Mikulas Patocka) (from 0.97pre1) 
 
 Wed Jan 30 13:45:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:
-	
+
 	Fixed error when sprintf return value is defined as 'void' in
-	headers (Mikulas Patocka) (from 0.97pre1)
+	headers (Mikulas Patocka) (from 0.97pre1) 
 
 Wed Jan 30 13:44:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	work-around for Sun C bug (Mikulas Patocka) (from 0.97pre1)
+
+	work-around for Sun C bug (Mikulas Patocka) (from 0.97pre1) 
 
 Wed Jan 30 13:42:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, connect.c, html.c, view.c:
-	
+
 	compile incompatibilites, fix by Karel Kulhavy (from 0.97pre1)
-	(probably not everything, but dunno how classify the other fixes)
+	(probably not everything, but dunno how classify the other fixes) 
 
 Tue Jan 29 22:10:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, language.h, language.inc, intl/index.txt,
 	intl/dutch.lng:
-	
+
 	Dutch translation by Stefan de Groot <stefan@nllinux.nl> (from
-	0.97pre1)
+	0.97pre1) 
 
 Tue Jan 29 22:07:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/slovak.lng:
-	
-	small fix in slovak.lng
+
+	small fix in slovak.lng 
 
 Tue Jan 29 22:06:02 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:
-	
-	workaround for cygwin including getops.h (from 0.97pre1)
+
+	workaround for cygwin including getops.h (from 0.97pre1) 
 
 Tue Jan 29 22:03:15 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:
-	
-	declare parse_http_date().. hey, yes, we really use him in
-	cookies.c as well ;) (from 0.97pre1)
+
+	declare parse_http_date().. hey, yes, we really use him in cookies.c
+	as well ;) (from 0.97pre1) 
 
 Tue Jan 29 21:57:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
+
 	Do not reject cookies with insecure domain (but send them only to
 	original server, not to the whole domain) (from Mikulas Patocka)
-	(from 0.97pre1)
+	(from 0.97pre1) 
 
 Tue Jan 29 21:56:32 2002  Petr Baudis <pasky@ji.cz>:
 
 	* entity.inc:
-	
-	removed some duplicite entries (inspired by 0.97pre1)
+
+	removed some duplicite entries (inspired by 0.97pre1) 
 
 Tue Jan 29 21:51:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* SITES:
-	
-	another download mirror (from 0.97pre1)
+
+	another download mirror (from 0.97pre1) 
 
 Tue Jan 29 21:50:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Unicode/entities.lnx:
-	
-	removed some duplicite entries (inspired by 0.97pre1)
+
+	removed some duplicite entries (inspired by 0.97pre1) 
 
 Tue Jan 29 08:58:18 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/bm.lua:
-	
+
 	escaping more characters, refusing to save bookmarks if not loaded
-	properly (Peter Wang's)
+	properly (Peter Wang's) 
 
 Mon Jan 28 12:02:50 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bookmarks.c:
-	
+
 	bookmark updates by zas - swap cancel and clear, after search move
 	pointer to top, on enter to the bookmark manager reset search
-	results
+	results 
 
 Sat Jan 26 19:42:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, TODO:
-	
-	reduced a bit
+
+	reduced a bit 
 
 Sat Jan 26 19:38:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	XMP wrapped to PRE
+
+	XMP wrapped to PRE 
 
 Sat Jan 26 15:21:47 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, BUGS, HACKING, INSTALL, LUA, README, SITES, TODO:
-	
-	Added Id tags
+
+	Added Id tags 
 
 Sat Jan 26 15:21:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* LUA-WIP, NEWS:
-	
-	removed dummy files
+
+	removed dummy files 
 
 Sat Jan 26 14:41:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	more sanity checking
+
+	more sanity checking 
 
 Sat Jan 26 11:33:56 2002  Petr Baudis <pasky@ji.cz>:
 
@@ -3362,325 +3418,323 @@ Sat Jan 26 11:33:56 2002  Petr Baudis <pasky@ji.cz>:
 	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
 	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng, intl/ukrainian.lng:
-	
-	Bookmarks filtering, some minor bookmarks cleanups - patch by Zas
-	<zas@norz.org>. It still needs improvements, though.
+
+	Bookmarks filtering, some minor bookmarks cleanups - patch by Zas 
+	<zas@norz.org>. It still needs improvements, though.  
 
 Sat Jan 26 10:24:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, sched.c:
-	
+
 	Finally fixed the problem (in one time, there might be two
 	connections in the scope of one struct connection) - after all, the
-	fix was quite simple :).
+	fix was quite simple :).  
 
 Fri Jan 25 18:08:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, sched.c:
-	
-	hopefully fixed one evil crash inside connected()
+
+	hopefully fixed one evil crash inside connected() 
 
 Fri Jan 25 17:36:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c:
-	
+
 	fixed typo in default.c for allow-special-files option, thanks zas
-	:)
+	:) 
 
 Fri Jan 25 17:11:06 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, file.c, links.h:
-	
+
 	[SECURITYFIX] allow reading of special files only when explicitly
-	enabled
+	enabled 
 
 Thu Jan 24 03:10:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
+
 	quick fix of last fix (submit thing in menu) - links didn't work at
-	all ;)
+	all ;) 
 
 Thu Jan 24 01:36:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, file.c:
-	
+
 	allow reading of special non-regular files - patch by Len Lattanzi
-	<Len_Lattanzi@StanfordAlumni.org>
+	<Len_Lattanzi@StanfordAlumni.org> 
 
 Thu Jan 24 00:58:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c:
-	
-	tiny fix, just to force everything is really sane
+
+	tiny fix, just to force everything is really sane 
 
 Wed Jan 23 22:43:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, links.h:
-	
-	clear_dialog() by Zas <zas@norz.org>
+
+	clear_dialog() by Zas <zas@norz.org> 
 
 Wed Jan 23 21:57:31 2002  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c:
-	
+
 	selection by leading letter - patch by Ami Fischman
-	<usenet@fischman.org>
+	<usenet@fischman.org> 
 
 Wed Jan 23 21:30:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, bfu.c:
-	
+
 	cyclic scrolling in menus, patch by Ami Fischman
-	<usenet@fixchman.org>
+	<usenet@fixchman.org> 
 
 Wed Jan 23 16:21:03 2002  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
+
 	Add 'submit form' to link menu for each form field - patch by Ami
-	Fischman <usenet@fischman.org>
+	Fischman <usenet@fischman.org> 
 
 Mon Jan 21 22:30:39 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/hpux-pipe.diff:
-	
-	it was completely different patch ;)
+
+	it was completely different patch ;) 
 
 Mon Jan 21 17:44:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autocommit.sh:
-	
-	*plop*
+
+	*plop* 
 
 Mon Jan 21 17:44:04 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
+
 	Fix broken BSD including system ;-) sockaddr_storage and
 	sockaddr_in6 weren't detected correctly during configure Thanks to
-	Ashram for bug report
+	Ashram for bug report 
 
 Sun Jan 20 15:27:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/: README, hpux-pipe.diff:
-	
-	Fix for HPUX by Stephane Chazelas
+
+	Fix for HPUX by Stephane Chazelas 
 
 Sat Jan 19 16:57:43 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c:
-	
-	*cough*
+
+	*cough* 
 
 Fri Jan 18 08:53:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c, AUTHORS:
-	
+
 	take @ only before hostname - fix by Ami Fischman
-	<usenet@fischman.org>
+	<usenet@fischman.org> 
 
 Thu Jan 17 20:27:46 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h:
-	
-	strcasestr() stub by Zas <zas@norz.org>
+
+	strcasestr() stub by Zas <zas@norz.org> 
 
 Thu Jan 17 20:27:21 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	Added check for strcasestr()
+
+	Added check for strcasestr() 
 
 Thu Jan 17 19:14:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autocommit.sh:
-	
-	more sane passing of parameters ;)
+
+	more sane passing of parameters ;) 
 
 Thu Jan 17 19:14:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* links.h, os_dep.h:
-	
-	moved sockaddr_storage emergency stub
+
+	moved sockaddr_storage emergency stub 
 
 Thu Jan 17 19:13:18 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
+
 	Cleaned checks for unused functions, added check for timegm(), some
-	dummy comments for rest of acconfig.h
+	dummy comments for rest of acconfig.h 
 
 Thu Jan 17 18:26:48 2002  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, session.c:
-	
+
 	mktime() takes struct tm in localtime, not GMT - fix by Christian
-	Haggstrom <c00chm@cs.umu.se>
+	Haggstrom <c00chm@cs.umu.se> 
 
 Thu Jan 17 14:05:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	Skip ':' even when \!need_slashes (otherwise i.e. mailto doesn't
-	dig user correctly)
+
+	Skip ':' even when \!need_slashes (otherwise i.e. mailto doesn't dig
+	user correctly) 
 
 Thu Jan 17 09:18:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c:
-	
-	display IPv6 in features list
+
+	display IPv6 in features list 
 
 Thu Jan 17 09:17:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* os_dep.h:
-	
-	remove IPV6 defining, moved to autoconf suite
+
+	remove IPV6 defining, moved to autoconf suite 
 
 Thu Jan 17 09:15:54 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in:
-	
-	[no log message]
+
+	[no log message] 
 
 Sun Jan  6 21:28:22 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
+
 	fix of silly mistake in properly joining relative urls containing
-	query_str
+	query_str 
 
 Sun Jan  6 18:56:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c:
-	
-	remove chmod(home_links, 0700) everytime, just do it only in
-	mkdir()
+
+	remove chmod(home_links, 0700) everytime, just do it only in mkdir() 
 
 Sat Jan  5 22:12:44 2002  Petr Baudis <pasky@ji.cz>:
 
 	* error.c:
-	
-	flush stderr when whining
+
+	flush stderr when whining 
 
 Sat Jan  5 22:05:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	more cookies debug :)
+
+	more cookies debug :) 
 
 Sat Jan  5 21:53:13 2002  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	cookies debug code
+
+	cookies debug code 
 
 Sat Jan  5 21:39:41 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c:
-	
+
 	first stage of get_home() cleanup - needs to be done w/o so much
-	gotos probably
+	gotos probably 
 
 Wed Jan  2 23:01:37 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, file.c, links.h:
-	
-	Option for highlight of directories
+
+	Option for highlight of directories 
 
 Wed Jan  2 19:29:23 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autocommit.sh, autogen.sh:
-	
-	some my autoshit tools - will be probably better to have them in
-	CVS
+
+	some my autoshit tools - will be probably better to have them in CVS 
 
 Wed Jan  2 19:05:56 2002  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING:
-	
-	success testing note
+
+	success testing note 
 
 Wed Jan  2 18:20:42 2002  Petr Baudis <pasky@ji.cz>:
 
 	* mailcap.pl, contrib/mailcap.pl:
-	
-	Moved mailcap.pl to contrib/
+
+	Moved mailcap.pl to contrib/ 
 
 Wed Jan  2 18:17:28 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	Correct guessing of http:// for IPv6 address
+
+	Correct guessing of http:// for IPv6 address 
 
 Wed Jan  2 17:49:55 2002  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	Cleanup of translate_url()
+
+	Cleanup of translate_url() 
 
 Wed Jan  2 17:00:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, http.c, url.c:
-	
-	IPv6 support various fixes, support for parsing of IPv6 URL
+
+	IPv6 support various fixes, support for parsing of IPv6 URL 
 
 Wed Jan  2 13:43:35 2002  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, default.c, dns.c, sched.c:
-	
-	IPv6 connections support (not yet URL parsing fixes)
+
+	IPv6 connections support (not yet URL parsing fixes) 
 
 Tue Jan  1 17:55:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
 	configure.in, stamp-h.in, os_dep.h:
-	
-	Add test for struct sockaddr_in6
+
+	Add test for struct sockaddr_in6 
 
 Tue Jan  1 17:23:53 2002  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c, links.h, os_dep.h:
-	
-	Use sockaddr_storage instead of sockaddr, where appropriate.
+
+	Use sockaddr_storage instead of sockaddr, where appropriate.  
 
 Tue Jan  1 01:19:07 2002  Petr Baudis <pasky@ji.cz>:
 
 	* acconfig.h, config.h.in, configure, configure.in, Makefile.in,
 	acconfig.h, aclocal.m4, config.h.in, configure, configure.in,
 	stamp-h.in:
-	
+
 	grrr.. test for automated autoshit autocomit autofixing autobroken
-	autobuild; also added test for getaddrinfo()
+	autobuild; also added test for getaddrinfo() 
 
 Tue Jan  1 00:57:20 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in:
-	
-	added check for sockaddr_storage
+
+	added check for sockaddr_storage 
 
 Tue Jan  1 00:54:16 2002  Petr Baudis <pasky@ji.cz>:
 
 	* aclocal.m4, configure:
-	
-	added check for sockaddr_storage
+
+	added check for sockaddr_storage 
 
 Tue Jan  1 00:51:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* acconfig.h, config.h.in, configure, configure.in, stamp-h.in:
-	
-	added check for sockaddr_storage
+
+	added check for sockaddr_storage 
 
 Mon Dec 31 19:59:46 2001  Petr Baudis <pasky@ji.cz>:
 
 	* url.c:
-	
-	Hopefully fix for making link to ?foo at bar.cgi/baz to
-	bar.cgi/?foo rather than to bar.cgi/baz?foo.
+
+	Hopefully fix for making link to ?foo at bar.cgi/baz to bar.cgi/?foo
+	rather than to bar.cgi/baz?foo.  
 
 Mon Dec 31 18:43:24 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -3692,84 +3746,84 @@ Mon Dec 31 18:43:24 2001  Petr Baudis <pasky@ji.cz>:
 	intl/lithuanian.lng, intl/polish.lng, intl/romanian.lng,
 	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
 	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng:
-	
+
 	Pop up error message when trying to edit textarea externally from
-	slave terminal.
+	slave terminal.  
 
 Mon Dec 31 18:01:03 2001  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/md5check.lua:
-	
-	Another lua script from Peter Wang
+
+	Another lua script from Peter Wang 
 
 Sun Dec 30 01:43:50 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, links.h, sched.c:
-	
-	Even more rewrites of DNS (even random digs to connection
-	managment) so that we now finally correctly handle multiple RRs; we
-	also virtually already can use IPv6, if would gethostbyname() eever
-	return it and we would use sizeof(sockaddr_storage) ;).
+
+	Even more rewrites of DNS (even random digs to connection managment)
+	so that we now finally correctly handle multiple RRs; we also
+	virtually already can use IPv6, if would gethostbyname() eever
+	return it and we would use sizeof(sockaddr_storage) ;).  
 
 Sat Dec 29 22:53:06 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c:
-	
-	unified some duplicated SSL code
+
+	unified some duplicated SSL code 
 
 Sat Dec 29 22:33:15 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, dns.c:
-	
-	We do blocking communication with resolver thread, it shouldn't
-	hurt as it's always only local, and it is too difficult to do it
+
+	We do blocking communication with resolver thread, it shouldn't hurt
+	as it's always only local, and it is too difficult to do it
 	non-blocking properly. Now it should again work at BSD for hosts
-	with single RR.
+	with single RR.  
 
 Sat Dec 29 18:52:38 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, links.h, sched.c:
-	
+
 	a little more dns cleanup, now address list should be freed
-	correctly when an error occurs
+	correctly when an error occurs 
 
 Sat Dec 29 17:35:29 2001  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
+
 	fix async resolving under such braindead systems like bsd ;) which
-	won't acceptdata from resolver thread to a socket at once
+	won't acceptdata from resolver thread to a socket at once 
 
 Sat Dec 29 16:19:28 2001  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
-	fix segfault when host not found
+
+	fix segfault when host not found 
 
 Sat Dec 29 14:21:39 2001  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
-	more universal addr type passing :)
+
+	more universal addr type passing :) 
 
 Sat Dec 29 14:17:21 2001  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
+
 	fix async resolving under such braindead systems like bsd ;) which
-	won't burst me with data from resolver thread at once
+	won't burst me with data from resolver thread at once 
 
 Sat Dec 29 14:04:05 2001  Petr Baudis <pasky@ji.cz>:
 
 	* dns.c:
-	
-	small anti-leak when fucked up communication with resolver thread
+
+	small anti-leak when fucked up communication with resolver thread 
 
 Sat Dec 29 13:20:52 2001  Petr Baudis <pasky@ji.cz>:
 
 	* stamp-h.in:
-	
-	i hate autoshits :(
+
+	i hate autoshits :( 
 
 Sat Dec 29 12:47:33 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -3786,137 +3840,135 @@ Sat Dec 29 12:47:33 2001  Petr Baudis <pasky@ji.cz>:
 	os_depx.h, rebuild, sched.c, select.c, session.c, setup.h,
 	stamp-h.in, terminal.c, types.c, uni_7b.inc, url.c, view.c,
 	win32.c, wipe-out-ssl, wipe-out-ssl.awk:
-	
-	hopefully fix build system - changing ctimes
+
+	hopefully fix build system - changing ctimes 
 
 Fri Dec 28 17:25:34 2001  Petr Baudis <pasky@ji.cz>:
 
 	* contrib/: README, bm.lua, color_config.diff, dummy-js.diff,
 	hooks.lua, links_wps.zip, user.example:
-	
-	made contrib/ and added some interesting things there
+
+	made contrib/ and added some interesting things there 
 
 Fri Dec 28 16:20:43 2001  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING:
-	
-	html parser/renderer description
+
+	html parser/renderer description 
 
 Fri Dec 28 16:05:54 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	historical note near GNU gettext credits
+
+	historical note near GNU gettext credits 
 
 Fri Dec 28 13:04:34 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, default.c, dns.c, links.h:
-	
-	remove ip and use sockaddr(_in) instead
+
+	remove ip and use sockaddr(_in) instead 
 
 Fri Dec 28 03:29:02 2001  Petr Baudis <pasky@ji.cz>:
 
 	* README, Unicode/gen-ent, intl/intl.txt:
-	
-	back from test :)
+
+	back from test :) 
 
 Fri Dec 28 03:16:35 2001  Petr Baudis <pasky@ji.cz>:
 
 	* Unicode/gen-ent, intl/intl.txt:
-	
-	test of new cvslog.pl :)
+
+	test of new cvslog.pl :) 
 
 Fri Dec 28 03:13:03 2001  Petr Baudis <pasky@ji.cz>:
 
 	* README:
-	
-	test of new cvslog.pl :)
+
+	test of new cvslog.pl :) 
 
 Fri Dec 28 00:41:42 2001  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING, HACKING:
-	
-	*dummy*
+
+	*dummy* 
 
 Thu Dec 27 21:46:13 2001  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING:
-	
-	some more coding style issues
+
+	some more coding style issues 
 
 Thu Dec 27 05:27:43 2001  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	TODO update :)
+
+	TODO update :) 
 
 Thu Dec 27 04:41:31 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, sched.c:
-	
+
 	DNS support for more RRs per host looks done - some mem_free()s
-	moved, debug()s removed, no leaks or crashes occured to me for now
+	moved, debug()s removed, no leaks or crashes occured to me for now 
 
 Thu Dec 27 03:59:59 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, dns.c, sched.c:
-	
-	next version of my leaky multi-RR DNS beast ;p
+
+	next version of my leaky multi-RR DNS beast ;p 
 
 Thu Dec 27 02:53:59 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, default.c, dns.c, links.h, sched.c:
-	
+
 	Partially rewritten fashion of address handling in DNS 'subsystem';
 	it is maybe still a little broken and certainly leakage, but I want
-	to have some reference point - it compiles and doesn't core to me
-	;)
+	to have some reference point - it compiles and doesn't core to me ;) 
 
 Wed Dec 26 15:39:24 2001  Petr Baudis <pasky@ji.cz>:
 
 	* error.c:
-	
-	remove of some inherited LEAK_DEBUG ifdefs
+
+	remove of some inherited LEAK_DEBUG ifdefs 
 
 Wed Dec 26 00:19:15 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, session.c:
-	
+
 	Proper parsing of set-cookie expires atribute, patch by Stepan Roh
-	<stepan@srnet.cz>, blank lines by me
+	<stepan@srnet.cz>, blank lines by me 
 
 Tue Dec 25 21:55:49 2001  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c:
-	
-	bfu.c partial cleanup
+
+	bfu.c partial cleanup 
 
 Tue Dec 25 18:42:00 2001  Petr Baudis <pasky@ji.cz>:
 
 	* default.c:
-	
-	parameters handling rewrite fixes ;)
+
+	parameters handling rewrite fixes ;) 
 
 Tue Dec 25 18:41:43 2001  Petr Baudis <pasky@ji.cz>:
 
 	* af_unix.c:
-	
-	af_unix cleanup
+
+	af_unix cleanup 
 
 Tue Dec 25 17:58:32 2001  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h:
-	
-	rewritten options handling
+
+	rewritten options handling 
 
 Mon Dec 24 13:42:03 2001  Petr Baudis <pasky@ji.cz>:
 
 	* links.h, terminal.c, view.c:
-	
-	
+
 	External textarea editor support code cleanup, sanity checks,
 	comments, bugfixes and only allow it for master terminal, as it
-	doesn't work for any else really.
+	doesn't work for any else really.  
 
 Sun Dec 23 23:42:23 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -3931,75 +3983,77 @@ Sun Dec 23 23:42:23 2001  Petr Baudis <pasky@ji.cz>:
 	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
 	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng, intl/ukrainian.lng:
+
+	New release strategy - elinks-0.3pre - basically merge all the stuff
+	from UNSTABLE branch.  
 	
-	New release strategy - elinks-0.3pre - basically merge all the
-	stuff from UNSTABLE branch.
-	
-	That includes:	 * Unhistory patch by Peter Wang   * External
-	textarea editor   * Colourful cleanups
+	That includes: 
+	  * Unhistory patch by Peter Wang 
+	  * External textarea editor 
+	  * Colourful cleanups 
 
 Sun Dec 23 23:21:41 2001  Petr Baudis <pasky@ji.cz>:
 
 	* config2.h, configure, configure.in, default.c, http.c:
-	
+
 	Releasing elinks-0.2. This release is generally only sync for new
 	development model. Included some language updates and few bug fixes
-	and few code cleanups.	Main fun will come with elinks-0.3, but
-	that's another story.
+	and few code cleanups.  Main fun will come with elinks-0.3, but
+	that's another story.  
 
 Sun Dec 23 22:43:32 2001  Petr Baudis <pasky@ji.cz>:
 
 	* connect.c, default.c, dns.c, links.h, url.c:
-	
-	merge with STABLE
+
+	merge with STABLE 
 
 Sun Dec 23 15:20:00 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS, HACKING:
-	
-	merge with stable
+
+	merge with stable 
 
 Sun Dec 23 15:10:19 2001  Petr Baudis <pasky@ji.cz>:
 
 	* HACKING:
-	
-	file HACKING was initially added on branch UNSTABLE.
+
+	file HACKING was initially added on branch UNSTABLE.  
 
 Sat Dec 22 22:06:14 2001  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/french.lng:
-	
-	merge with STABLE
+
+	merge with STABLE 
 
 Sat Dec 22 12:27:09 2001  Petr Baudis <pasky@ji.cz>:
 
 	* bfu.c, html.c:
-	
-	merge with stable
+
+	merge with stable 
 
 Mon Dec 17 13:13:07 2001  Petr Baudis <pasky@ji.cz>:
 
 	* http.c:
-	
-	merge with STABLE
+
+	merge with STABLE 
 
 Sat Dec 15 21:40:56 2001  Petr Baudis <pasky@ji.cz>:
 
 	* language.inc, intl/french.lng:
-	
-	merge from STABLE
+
+	merge from STABLE 
 
 Wed Nov  7 13:51:25 2001  Petr Baudis <pasky@ji.cz>:
 
 	* view.c:
-	
-	textarea double encoding fix
+
+	textarea double encoding fix 
 
 Sun Oct 28 17:44:10 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	be more humbe :)
+
+	be more humbe :) 
 
 Sun Oct 28 17:35:28 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -4011,8 +4065,8 @@ Sun Oct 28 17:35:28 2001  Petr Baudis <pasky@ji.cz>:
 	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
 	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng, intl/ukrainian.lng:
-	
-	Show ELinks in About dialog
+
+	Show ELinks in About dialog 
 
 Sun Oct 28 16:31:39 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -4025,14 +4079,14 @@ Sun Oct 28 16:31:39 2001  Petr Baudis <pasky@ji.cz>:
 	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
 	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng, intl/ukrainian.lng:
-	
-	User-Agent modifiable string (user-agent-0.96-pb2.patch)
+
+	User-Agent modifiable string (user-agent-0.96-pb2.patch) 
 
 Sun Oct 28 14:49:02 2001  Petr Baudis <pasky@ji.cz>:
 
 	* INSTALL:
-	
-	no need to make cvs-dist
+
+	no need to make cvs-dist 
 
 Sun Oct 28 14:44:48 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -4044,187 +4098,187 @@ Sun Oct 28 14:44:48 2001  Petr Baudis <pasky@ji.cz>:
 	intl/lithuanian.lng, intl/polish.lng, intl/romanian.lng,
 	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
 	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng:
-	
-	intl and unicode stuff
+
+	intl and unicode stuff 
 
 Sun Oct 28 14:41:21 2001  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, aclocal.m4:
-	
-	generated by a little newer automake
+
+	generated by a little newer automake 
 
 Sun Oct 28 14:26:10 2001  Petr Baudis <pasky@ji.cz>:
 
 	* INSTALL:
-	
-	basic installation guidelines
+
+	basic installation guidelines 
 
 Sun Oct 28 13:57:49 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	User-Agent string changing support
+
+	User-Agent string changing support 
 
 Sun Oct 28 13:57:15 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	Romanian translation
+
+	Romanian translation 
 
 Sun Oct 28 13:56:53 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	Catalan translation
+
+	Catalan translation 
 
 Sun Oct 28 13:56:18 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	Petr Kulhavy's HTTP referer
+
+	Petr Kulhavy's HTTP referer 
 
 Sun Oct 28 13:55:30 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	Peter Wang's Lua
+
+	Peter Wang's Lua 
 
 Sun Oct 28 13:50:31 2001  Petr Baudis <pasky@ji.cz>:
 
 	* config2.h, configure, configure.in:
-	
-	going for elinks-0.1
+
+	going for elinks-0.1 
 
 Sun Oct 28 13:39:20 2001  Petr Baudis <pasky@ji.cz>:
 
 	* BUGS, config2.h, configure, configure.in:
-	
-	more RR per host, &#13;
+
+	more RR per host, &#13; 
 
 Sun Oct 28 13:37:36 2001  Petr Baudis <pasky@ji.cz>:
 
 	* SITES:
-	
-	new mailing list, elinks site
+
+	new mailing list, elinks site 
 
 Sun Oct 28 13:37:21 2001  Petr Baudis <pasky@ji.cz>:
 
 	* README:
-	
-	rewritten (grammar check required ;)
+
+	rewritten (grammar check required ;) 
 
 Sun Oct 28 13:06:17 2001  Petr Baudis <pasky@ji.cz>:
 
 	* TODO:
-	
-	sorted by importance, some additions
+
+	sorted by importance, some additions 
 
 Sun Oct 28 13:00:59 2001  Petr Baudis <pasky@ji.cz>:
 
 	* AUTHORS:
-	
-	sorted by alphabetical order, minor changes
+
+	sorted by alphabetical order, minor changes 
 
 Sun Oct 28 08:54:03 2001  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	Security fix in save_cookies() (cookies-secresave-0.96.patch)
+
+	Security fix in save_cookies() (cookies-secresave-0.96.patch) 
 
 Sun Oct 28 08:51:43 2001  Petr Baudis <pasky@ji.cz>:
 
 	* Unicode/entities.lnx, Unicode/index.txt, intl/gen-intl,
 	intl/index.txt, Unicode/8859_15.cp, Unicode/8859_16.cp,
 	intl/romanian.lng:
-	
-	Romanian translation (romanian-0.96.patch)
+
+	Romanian translation (romanian-0.96.patch) 
 
 Sun Oct 28 08:51:24 2001  Petr Baudis <pasky@ji.cz>:
 
 	* intl/: index.txt, catalan.lng:
-	
-	Catalan translation (catalan-0.96.patch)
+
+	Catalan translation (catalan-0.96.patch) 
 
 Sun Oct 28 08:50:19 2001  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	listing tag support (listing-0.96.patch)
+
+	listing tag support (listing-0.96.patch) 
 
 Sun Oct 28 08:49:59 2001  Petr Baudis <pasky@ji.cz>:
 
 	* html.c:
-	
-	img title attribute support (imgtitle-0.96.patch)
+
+	img title attribute support (imgtitle-0.96.patch) 
 
 Sun Oct 28 08:47:55 2001  Petr Baudis <pasky@ji.cz>:
 
 	* html.c, view.c:
-	
+
 	Do not strip query string from form action URLs
-	(noqstrip-0.96.patch)
+	(noqstrip-0.96.patch) 
 
 Sun Oct 28 08:46:23 2001  Petr Baudis <pasky@ji.cz>:
 
 	* links.1:
-	
+
 	Cookies saving/loading on request description
-	(cookies-resave-0.96-man.patch)
+	(cookies-resave-0.96-man.patch) 
 
 Sun Oct 28 08:46:07 2001  Petr Baudis <pasky@ji.cz>:
 
 	* links.1:
-	
-	Cookies saving description (cookies-save-0.96-man.patch)
+
+	Cookies saving description (cookies-save-0.96-man.patch) 
 
 Sun Oct 28 08:45:32 2001  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c, kbdbind.c, links.h, view.c:
-	
-	Cookies saving/loading on request (cookies-resave-0.96.patch)
+
+	Cookies saving/loading on request (cookies-resave-0.96.patch) 
 
 Sun Oct 28 08:45:10 2001  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	Cookies saving (cookies-save-0.96.patch)
+
+	Cookies saving (cookies-save-0.96.patch) 
 
 Sun Oct 28 08:44:53 2001  Petr Baudis <pasky@ji.cz>:
 
 	* cookies.c:
-	
-	Cookies expiration (cookies-expire-0.96.patch)
+
+	Cookies expiration (cookies-expire-0.96.patch) 
 
 Sun Oct 28 08:44:17 2001  Petr Baudis <pasky@ji.cz>:
 
 	* main.c:
-	
-	HTTP Moved support for -dump/-source (moved-0.96.patch)
+
+	HTTP Moved support for -dump/-source (moved-0.96.patch) 
 
 Sun Oct 28 08:43:16 2001  Petr Baudis <pasky@ji.cz>:
 
 	* links.1:
-	
-	True HTTP referer support description (true-referer-0.96-man.patch)
+
+	True HTTP referer support description (true-referer-0.96-man.patch) 
 
 Sun Oct 28 08:42:54 2001  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, http.c, links.h, main.c, menu.c, sched.c, session.c,
 	view.c, intl/czech.lng, intl/english.lng:
-	
-	True HTTP referer support (true-referer-0.96-lua.patch)
+
+	True HTTP referer support (true-referer-0.96-lua.patch) 
 
 Sun Oct 28 08:41:28 2001  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, http.c, links.h, menu.c, intl/english.lng:
-	
-	Fake HTTP referer support (referer-0.96.patch)
+
+	Fake HTTP referer support (referer-0.96.patch) 
 
 Sun Oct 28 08:40:44 2001  Petr Baudis <pasky@ji.cz>:
 
 	* links.1:
-	
-	Manual page updates (manpage-0.96.patch)
+
+	Manual page updates (manpage-0.96.patch) 
 
 Sun Oct 28 08:32:49 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -4237,8 +4291,8 @@ Sun Oct 28 08:32:49 2001  Petr Baudis <pasky@ji.cz>:
 	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
 	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng, LUA,
 	LUA-WIP, lua.c:
-	
-	lua p12-wip2
+
+	lua p12-wip2 
 
 Sat Oct 27 21:48:39 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -4252,8 +4306,8 @@ Sat Oct 27 21:48:39 2001  Petr Baudis <pasky@ji.cz>:
 	intl/lithuanian.lng, intl/polish.lng, intl/russian.lng,
 	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
 	intl/turkish.lng, intl/ukrainian.lng:
-	
-	lua-p11
+
+	lua-p11 
 
 Sat Oct 27 21:43:43 2001  Petr Baudis <pasky@ji.cz>:
 
@@ -4288,6 +4342,6 @@ Sat Oct 27 21:43:43 2001  Petr Baudis <pasky@ji.cz>:
 	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
 	intl/swedish.lng, intl/synclang, intl/synclang.awk,
 	intl/turkish.lng, intl/ukrainian.lng:
-	
-	Initial revision
+
+	Initial revision 
 

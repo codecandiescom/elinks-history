@@ -1,5 +1,5 @@
 /* Parsing of FTP `ls' directory output. */
-/* $Id: parse.c,v 1.15 2005/03/28 22:18:27 zas Exp $ */
+/* $Id: parse.c,v 1.16 2005/03/28 22:19:58 zas Exp $ */
 
 /* Parts of this file was part of GNU Wget
  * Copyright (C) 1995, 1996, 1997, 2000, 2001 Free Software Foundation, Inc. */
@@ -555,7 +555,7 @@ parse_ftp_winnt_response(struct ftp_file_info *info, unsigned char *src, int len
 	 * column 39 of the listing. This way we could also recognize
 	 * filenames that begin with a series of space characters (but who
 	 * really wants to use such filenames anyway?). */
-	if (len < 40) return NULL;
+	if (len <= 39) return NULL;
 
 	info->name.source = src + 39;
 	info->name.length = end - src - 39;

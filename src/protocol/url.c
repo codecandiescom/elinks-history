@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.72 2003/06/26 19:17:06 jonas Exp $ */
+/* $Id: url.c,v 1.73 2003/06/26 20:19:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,9 +38,6 @@ parse_url(unsigned char *url, int *prlen,
 #ifdef IPV6
 	unsigned char *lbracket, *rbracket;
 #endif
-	int free_syntax;
-	int need_slashes;
-	int need_slash_after_host;
 	int scheme;
 
 	if (prlen) *prlen = 0;
@@ -73,8 +70,6 @@ parse_url(unsigned char *url, int *prlen,
 
 	scheme = check_protocol(url, prefix_end - url);
 	if (scheme == SCHEME_UNKNOWN) return -1;
-	get_prot_url_info(scheme, &free_syntax, &need_slashes,
-			  &need_slash_after_host);
 
 	prefix_end++; /* ':' */
 
@@ -82,10 +77,10 @@ parse_url(unsigned char *url, int *prlen,
 
 	if (prefix_end[0] == '/' && prefix_end[1] == '/')
 		prefix_end += 2;
-	else if (need_slashes)
+	else if (get_protocol_need_slashes(scheme))
 		return -1;
 
-	if (free_syntax) {
+	if (get_protocol_free_syntax(scheme)) {
 		if (data) *data = prefix_end;
 		if (dalen) *dalen = strlen(prefix_end);
 		return 0;
@@ -134,7 +129,8 @@ parse_url(unsigned char *url, int *prlen,
 #endif
 		host_end = prefix_end + strcspn(prefix_end, ":/");
 
-	if (!*host_end && need_slash_after_host) return -1;
+	if (!*host_end && get_protocol_need_slash_after_host(scheme))
+		return -1;
 
 	if (host || holen) { /* Only enter if needed. */
 #ifdef IPV6
@@ -362,9 +358,6 @@ unsigned char *
 strip_url_password(unsigned char *url)
 {
 	unsigned char *str = init_str();
-	int need_slash_after_host;
-	int need_slashes;
-	int free_syntax;
 	int l = 0;
 
 	int prlen;
@@ -392,11 +385,7 @@ strip_url_password(unsigned char *url)
 
 	scheme = check_protocol(url, prlen);
 
-	if (scheme != SCHEME_UNKNOWN)
-		get_prot_url_info(scheme, &free_syntax, &need_slashes,
-				  &need_slash_after_host);
-
-	if (scheme == SCHEME_UNKNOWN || free_syntax) {
+	if (scheme == SCHEME_UNKNOWN || get_protocol_free_syntax(scheme)) {
 		/* Custom or unknown or free-syntax protocol;
 		 * keep the URL untouched. */
 		mem_free(str);
@@ -406,7 +395,7 @@ strip_url_password(unsigned char *url)
 	add_bytes_to_str(&str, &l, url, prlen);
 	add_chr_to_str(&str, &l, ':');
 
-	if (need_slashes)
+	if (get_protocol_need_slashes(scheme))
 		add_to_str(&str, &l, "//");
 
 	if (user) {
@@ -431,7 +420,7 @@ strip_url_password(unsigned char *url)
 		add_bytes_to_str(&str, &l, port, polen);
 	}
 
-	if (need_slash_after_host)
+	if (get_protocol_need_slash_after_host(scheme))
 		add_chr_to_str(&str, &l, '/');
 
 	if (dalen) {

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.5 2003/06/26 20:04:40 jonas Exp $ */
+/* $Id: protocol.c,v 1.6 2003/06/26 20:19:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,18 +122,26 @@ get_prot_info(unsigned char *prot, int *port,
 	return 0;
 }
 
-void
-get_prot_url_info(enum uri_scheme scheme, int *free_syntax, int *need_slashes,
-                  int *need_slash_after_host)
+
+int
+get_protocol_free_syntax(enum uri_scheme scheme)
 {
 	assert(scheme != SCHEME_UNKNOWN);
+	return protocol_backends[scheme]->free_syntax;
+}
 
-	if (free_syntax)
-		*free_syntax = protocol_backends[scheme]->free_syntax;
-	if (need_slashes)
-		*need_slashes = protocol_backends[scheme]->need_slashes;
-	if (need_slash_after_host)
-		*need_slash_after_host = protocol_backends[scheme]->need_slash_after_host;
+int
+get_protocol_need_slashes(enum uri_scheme scheme)
+{
+	assert(scheme != SCHEME_UNKNOWN);
+	return protocol_backends[scheme]->need_slashes;
+}
+
+int
+get_protocol_need_slash_after_host(enum uri_scheme scheme)
+{
+	assert(scheme != SCHEME_UNKNOWN);
+	return protocol_backends[scheme]->need_slash_after_host;
 }
 
 

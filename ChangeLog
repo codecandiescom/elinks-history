@@ -1,3 +1,40 @@
+Sun May 19 19:34:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.am, elinks.1, elinkskeys.5, links.1, linkskeys.5,
+	contrib/README, contrib/bm.lua, contrib/completion.tcsh,
+	contrib/elinks-remote, contrib/elinks.spec.in, contrib/hooks.lua,
+	contrib/links-remote, contrib/mailcap.pl, contrib/md5check.lua,
+	contrib/old_to_new_bookmarks.sh, contrib/remote.lua,
+	contrib/user-keybindings.example, contrib/w3m2links.gawk,
+	src/Makefile.am, src/bookmarks/bookmarks.c, src/config/conf.c,
+	src/config/options.c, src/config/options.h, src/config/urlhist.c,
+	src/cookies/cookies.c, src/document/globhist.c,
+	src/lowlevel/af_unix.c, src/lowlevel/home.c, src/lowlevel/home.h,
+	src/lua/core.c, src/osdep/os_dep.c, src/util/secsave.c:
+
+	Almost all remaing occurences of "links" changed to "elinks".
+	Produced binary is named "elinks" now, global config directory is
+	/etc/elinks/ now, local config directory is ~/.elinks/ now,
+	links.cfg is elinks.cfg now, links.his is gotohist now, history is
+	globhist now. Plenty of minor changes and updates accompanied.  
+	
+	YOU DO NOT WANT TO USE BUILD FROM NOW!!! Current configuration is
+	lost for new ELinks, as it stays in ~/.links and ELinks will look
+	for it in ~/.elinks now.  But you do NOT want to clone it! Format of
+	some config files (at least bookmarks and .cfg) is going to change
+	in next days, so you will just confuse your new ELinks with old
+	configuration files there. Whatever you will put in ~/.elinks may
+	disappear randomly in next days. I'll tell you when we'll be over
+	;).  
+	
+	*Yawn* and now I'm going to watch GitS ;).  
+
+Sun May 19 17:40:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/: README, dummy-js.diff:
+
+	Removed dummy-js - REALLY obsolete patch.  
+
 Sun May 19 17:03:34 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/config/options.c:

@@ -1,3 +1,15 @@
+Thu May 22 14:35:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/encoding.c:
+
+	Reverted Miciah' change (keep related stuff together).  
+
+Thu May 22 14:29:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/url.c:
+
+	Slightly simlified code flow.  
+
 Wed May 21 18:07:39 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* po/gen_translations_stats.sh:
@@ -78,12 +90,23 @@ Wed May 21 02:04:45 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 Wed May 21 02:02:55 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* Makefile.am, configure.in, doc/Makefile.am:
+	* Makefile.am, configure.in, doc/Makefile.am,
+	doc/book/manpages/elinks.1.xml, doc/man/.cvsignore,
+	doc/man/Makefile.am, doc/man/man1/.cvsignore,
+	doc/man/man1/Makefile.am, doc/man/man5/.cvsignore,
+	doc/man/man5/Makefile.am:
 
 	Installed manpages are now hosted in doc/man/ and maintained in
 	DocBook format (elinks.conf.5 will join later). Automake dictates
 	that we have to use separate Makefiles since path/to/manpage is not
 	supported.  
+
+Wed May 21 01:57:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	This is the file from the root dir moved to prepare installing
+	manpages from doc/man dir.  
 
 Tue May 20 22:41:46 2003  Laurent Monin <zas@norz.org>:
 
@@ -1064,6 +1087,36 @@ Fri May  9 21:59:18 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	Added man pages as EXTRA_DISTS.  
 
+Fri May  9 21:58:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinks.1.xml:
+
+	Some small corrections and updates. Added info about bugzilla.  
+
+Fri May  9 21:45:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/.cvsignore:
+
+	Added man state files when export MANPATH=doc/man:$MANPATH 
+
+Fri May  9 21:43:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/: man1/elinks.1.in, man5/elinkskeys.5:
+
+	The docbook generated man pages.  
+
+Fri May  9 21:42:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/: man1/.cvsignore, man5/.cvsignore:
+
+	Added jade wrapper state files.  
+
+Fri May  9 21:34:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinkskeys.5.xml:
+
+	Added navigation keys from elinks.1.  
+
 Fri May  9 18:18:57 2003  Laurent Monin <zas@norz.org>:
 
 	* src/dialogs/: info.c, menu.c:
@@ -1138,7 +1191,9 @@ Fri May  9 15:11:39 2003  Laurent Monin <zas@norz.org>:
 
 Fri May  9 15:11:20 2003  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/.vimrc:
+	* doc/: book/.vimrc, book/manpages/.vimrc, man/.cvsignore,
+	man/.vimrc, man/man1/.cvsignore, man/man1/.vimrc,
+	man/man5/.cvsignore, man/man5/.vimrc:
 
 	More fairies 
 
@@ -1153,8 +1208,7 @@ Fri May  9 14:23:06 2003  Jonas Fonseca <fonseca@diku.dk>:
 	* doc/book/: authors.xml, bookmarks.xml, configuration.xml,
 	fdl.xml, installation.xml, introduction.xml, mailcap.xml,
 	manual.xml, mime.xml, misc.xml, options-reference.xml, preface.xml,
-	revision.xml, sample-configfile.xml, style.css, wordlist.xml,
-	scripts/installcss, scripts/make-manual:
+	revision.xml, sample-configfile.xml, style.css, wordlist.xml:
 
 	Giving doc/book/ a facelift. It will involve restructuring documents
 	and introduce them one by one later when they are actually done.
@@ -1182,6 +1236,18 @@ Fri May  9 12:42:13 2003  Laurent Monin <zas@norz.org>:
 
 	An sprintf(foo, "%d", bar) was replaced by an ulongcat() call.  
 
+Fri May  9 10:43:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinkskeys.5.xml:
+
+	Inserted new 'default keybindings'.  
+
+Fri May  9 10:24:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinkskeys.5.xml:
+
+	Done cleaning up the last part.  
+
 Fri May  9 01:25:48 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/book/README:
@@ -1193,6 +1259,21 @@ Fri May  9 00:57:01 2003  Jonas Fonseca <fonseca@diku.dk>:
 	* doc/book/VERSION:
 
 	Version will be maintained as an entity 
+
+Fri May  9 00:43:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinkskeys.5.xml:
+
+	Still some work to be done to 'clean' it up in regards to coding
+	style.  Also maybe needs to contain info about navigation keys (from
+	elinks.1) 
+
+Fri May  9 00:41:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinks.1.xml:
+
+	Moved info about system wide conf file over from elinkskeys man
+	page.  
 
 Thu May  8 23:03:06 2003  Laurent Monin <zas@norz.org>:
 
@@ -1207,6 +1288,20 @@ Thu May  8 23:03:06 2003  Laurent Monin <zas@norz.org>:
 	viewer/text/view.c, viewer/text/view.h:
 
 	Many missing declarations + static. Big patch, sorry.  
+
+Thu May  8 22:42:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/elinks.1.xml:
+
+	First attempt at cleaning up the main elinks manpage. This means
+	moving all the keys stuff (some of which are dublicate) to the
+	elinkskeys man page.  
+
+Thu May  8 22:34:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/book/manpages/.cvsignore:
+
+	Fairy added 
 
 Thu May  8 22:24:45 2003  Petr Baudis <pasky@ucw.cz>:
 
@@ -6520,8 +6615,7 @@ Mon Dec 30 16:14:45 2002  Jonas Fonseca <fonseca@diku.dk>:
 
 Mon Dec 30 15:57:00 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* Makefile.am, configure.in, doc/Makefile.am, doc/book/Makefile.am,
-	doc/book/scripts/installcss, doc/book/scripts/make-manual:
+	* Makefile.am, configure.in, doc/Makefile.am, doc/book/Makefile.am:
 
 	Manual added to build system. Small fixes when doing html doc
 	building so css is only installed when docs where succesfully made.  
@@ -6579,13 +6673,6 @@ Mon Dec 30 03:51:43 2002  Jonas Fonseca <fonseca@diku.dk>:
 	Last files added. Made some codingstyle updates. Guidelines needs to
 	be written. CSS need to be rewritten. Use wordlist.xml for
 	references to acronym and explanations.  
-
-Mon Dec 30 03:40:51 2002  Jonas Fonseca <fonseca@diku.dk>:
-
-	* doc/book/scripts/make-manual:
-
-	Added support for more docbook tools. Changed to /bin/bash to be on
-	the save side.  
 
 Mon Dec 30 02:56:12 2002  Petr Baudis <pasky@ucw.cz>:
 
@@ -6706,8 +6793,7 @@ Sun Dec 29 11:30:34 2002  Petr Baudis <pasky@ucw.cz>:
 
 Sun Dec 29 10:57:29 2002  Jonas Fonseca <fonseca@diku.dk>:
 
-	* doc/book/: Makefile.am, sample-configuration.xml, style.css,
-	scripts/installcss, scripts/make-manual:
+	* doc/book/: Makefile.am, sample-configuration.xml, style.css:
 
 		Various manual tilities.  
 

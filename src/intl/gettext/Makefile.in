@@ -33,7 +33,6 @@ includedir = @includedir@
 datadir = @datadir@
 localedir = $(datadir)/locale
 gettextsrcdir = $(datadir)/gettext/intl
-aliaspath = $(localedir)
 subdir = src/intl/gettext
 
 INSTALL = @INSTALL@
@@ -50,7 +49,7 @@ RANLIB = @RANLIB@
 YACC = @INTLBISON@ -y -d
 YFLAGS = --name-prefix=gettext__
 
-DEFS = -DLOCALE_ALIAS_PATH=\"$(aliaspath)\" -DLIBDIR=\"$(libdir)\" @DEFS@
+DEFS = -DLIBDIR=\"$(libdir)\" @DEFS@
 CPPFLAGS = @CPPFLAGS@
 CFLAGS = @CFLAGS@
 LDFLAGS = @LDFLAGS@

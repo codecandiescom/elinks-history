@@ -90,7 +90,7 @@ static int alias_compare(const struct alias_map * map1,
 const unsigned char *
 _nl_expand_alias(const unsigned char *name)
 {
-	static const unsigned char *locale_alias_path = LOCALE_ALIAS_PATH;
+	static const unsigned char *locale_alias_path = LOCALEDIR;
 	struct alias_map *retval;
 	const unsigned char *result = NULL;
 	size_t added;

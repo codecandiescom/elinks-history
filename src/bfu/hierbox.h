@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.33 2003/11/23 17:33:03 jonas Exp $ */
+/* $Id: hierbox.h,v 1.34 2003/11/23 18:47:45 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -8,7 +8,19 @@
 #include "terminal/terminal.h"
 #include "util/lists.h"
 
+typedef int (*hierbox_button_handler)(struct dialog_data *dlg_data, struct widget_data *button);
+
+struct hierbox_browser_button {
+	unsigned char *label;
+	hierbox_button_handler handler;
+};
+
+#define END_HIERBOX_BROWSER_BUTTONS { NULL, NULL }
+
 struct hierbox_browser {
+	unsigned char *title;
+	struct hierbox_browser_button *buttons;
+
 	struct list_head boxes;
 	struct list_head *items;
 	struct list_head dialogs;
@@ -47,9 +59,7 @@ void update_hierbox_browser(struct hierbox_browser *browser);
  *	dlg->abort handler. */
 
 struct dialog_data *
-hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
-		struct hierbox_browser *browser, struct session *ses,
-		size_t buttons, ...);
+hierbox_browser(struct hierbox_browser *browser, struct session *ses, size_t add_size);
 
 int push_hierbox_info_button(struct dialog_data *dlg_data, struct widget_data *button);
 int push_hierbox_goto_button(struct dialog_data *dlg_data, struct widget_data *button);

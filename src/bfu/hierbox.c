@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.93 2003/11/23 17:33:03 jonas Exp $ */
+/* $Id: hierbox.c,v 1.94 2003/11/23 18:47:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -254,18 +254,22 @@ hierbox_dialog_event_handler(struct dialog_data *dlg_data, struct term_event *ev
 }
 
 struct dialog_data *
-hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
-		struct hierbox_browser *browser, struct session *ses,
-		size_t buttons, ...)
+hierbox_browser(struct hierbox_browser *browser, struct session *ses,
+		size_t add_size)
 {
-	struct dialog *dlg = calloc_dialog(buttons + 2, add_size);
-	va_list ap;
+	struct terminal *term = ses->tab->term;
+	struct dialog *dlg;
+	int button = 0;
 
-	assert(ses && term == ses->tab->term);
+	assert(ses);
 
+	while (browser->buttons[button].label)
+		button++;
+
+	dlg = calloc_dialog(button + 2, add_size);
 	if (!dlg) return NULL;
 
-	dlg->title = _(title, term);
+	dlg->title = _(browser->title, term);
 	dlg->layouter = generic_dialog_layouter;
 	dlg->layout.maximize_width = 1;
 	dlg->layout.padding_top = 1;
@@ -275,28 +279,15 @@ hierbox_browser(struct terminal *term, unsigned char *title, size_t add_size,
 
 	add_dlg_listbox(dlg, 12);
 
-	va_start(ap, buttons);
-
-	while (dlg->widgets_size < buttons + 1) {
-		unsigned char *label;
-		int (*handler)(struct dialog_data *, struct widget_data *);
-
-		label = va_arg(ap, unsigned char *);
-		handler = va_arg(ap, void *);
-
-		if (!label) {
-			/* Skip this button. */
-			buttons--;
-			continue;
-		}
+	for (button = 0; browser->buttons[button].label; button++) {
+		hierbox_button_handler handler = browser->buttons[button].handler;
+		unsigned char *label = browser->buttons[button].label;
 
 		add_dlg_button(dlg, B_ENTER, handler, _(label, term), NULL);
 	}
 
-	va_end(ap);
-
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
-	add_dlg_end(dlg, buttons + 2);
+	add_dlg_end(dlg, button + 2);
 
 	return do_dialog(term, dlg, getml(dlg, NULL));
 }

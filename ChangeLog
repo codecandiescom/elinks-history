@@ -1,3 +1,178 @@
+Tue Mar 29 15:25:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_cursor_move_to_string(): enlarge @code buffer by one, safer.  
+
+Tue Mar 29 10:39:15 2005  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	add_cursor_move_to_string(): use ulongcat() and drop useless @ret
+	variable.  
+
+Tue Mar 29 03:47:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	parse_date(): Use skip_time_sep() for skipping year/time separator.  
+
+Tue Mar 29 03:35:48 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: date.c, date.h, ftp/parse.c:
+
+	Export parse_day() and use for FTP ls parsing.  
+
+Tue Mar 29 03:29:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	Make parse_day() take optional end pointer.  
+
+Tue Mar 29 03:19:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	parse_date(): Cleanup skip_time_sep().  
+
+Tue Mar 29 03:07:43 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: date.c, date.h, ftp/parse.c:
+
+	Make parse_month() take optional end pointer.  
+
+Tue Mar 29 02:59:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Use generic parse_month(). It introduces some ugly casts, tho.  
+
+Tue Mar 29 02:59:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: date.c, date.h:
+
+	Bloat parse_month() and make it modify the string pointer.  
+
+Tue Mar 29 02:44:45 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Use generic parse_year(). It introduces some ugly casts, tho.  
+
+Tue Mar 29 02:44:12 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: date.c, date.h:
+
+	Make parse_year() modify the string pointer on success and make it
+	take end of string pointer. Export it.  
+
+Tue Mar 29 02:33:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	Simplify parse_year().  
+
+Tue Mar 29 01:16:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Fix spacing, part two.  
+
+Tue Mar 29 01:04:26 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Fix spacing.  
+
+Tue Mar 29 01:03:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Use generic parse_time(). It introduces some ugly casts, tho.  
+
+Tue Mar 29 01:03:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	Cleanup parse_time().  
+
+Tue Mar 29 01:02:29 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.h:
+
+	Add comments to exported functions.  
+
+Tue Mar 29 00:35:08 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	Make parse_time() modify the string pointer on success and make it
+	take end of string pointer.  
+
+Tue Mar 29 00:21:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/date.c:
+
+	Make parse_date() accept hh:mm[:ss] and hh:mm[AP]M.  
+
+Mon Mar 28 23:24:11 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_response(): minor code simplification.  
+
+Mon Mar 28 23:21:28 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_permissions(): replace C++ style comments by C style
+	comments.  
+
+Mon Mar 28 23:20:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	Drop trailing spaces.  
+
+Mon Mar 28 23:19:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_permissions(): borrow code from lftp and improve
+	things a lot regarding recognized permissions and handling of parse
+	errors.  
+
+Mon Mar 28 22:26:29 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_response(): go the safe way, test the length before
+	anything.  
+
+Mon Mar 28 22:23:01 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_unix_response(): minor simplification.  
+
+Mon Mar 28 22:19:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_winnt_response(): make that 39 more obvious.  
+
+Mon Mar 28 22:18:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_file_info(): assert parameters.  
+
+Mon Mar 28 22:17:19 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp/parse.c:
+
+	parse_ftp_file_info(): minor simplification.  
+
 Mon Mar 28 19:09:19 2005  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/ftp/parse.c:

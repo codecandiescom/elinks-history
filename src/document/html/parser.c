@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.162 2003/07/22 02:33:09 pasky Exp $ */
+/* $Id: parser.c,v 1.163 2003/07/22 02:57:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3247,7 +3247,8 @@ xse:
 xsp:
 			s++;
 		}
-		add_bytes_to_string(title, s1, s - s1);
+		if (s - s1)
+			add_bytes_to_string(title, s1, s - s1);
 		if (s >= eof) goto se;
 		if (s + 2 <= eof && (s[1] == '!' || s[1] == '?')) {
 			s = skip_comment(s, eof);

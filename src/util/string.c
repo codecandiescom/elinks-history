@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.28 2003/05/02 08:25:30 zas Exp $ */
+/* $Id: string.c,v 1.29 2003/05/07 16:29:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,6 +345,50 @@ trim_chars(unsigned char *s, unsigned char c, int *len)
 	return s;
 }
 
+
+#if 0 /* This one will perhaps be of some use soon. Don't remove. --Zas */
+/* This function appends a unsigned long number, up to a limit of width
+ * digits, to a string.
+ * Optionnaly if slen points to the current length of the string, then
+ * number will be appended starting at end of previous string. *slen is
+ * updated accordingly.
+ * Filling is starting at right.
+ * So, ulongcat(s, NULL, 12345, 4) will set s to "2345";
+ *
+ * A NUL char is always added at end of string.
+ * s should point to a sufficient memory space (size >= width + 1).
+ *
+ */
+void
+ulongcat(unsigned char *s, unsigned int *slen,
+	 unsigned long number, unsigned int width)
+{
+	unsigned int start = 0;
+	unsigned int pos = 1;
+        unsigned long q = number;
+
+	if (width < 1 || !s) return;
+
+        while (q > 9) {
+		if (pos == width) break;
+		++pos;
+                q /= 10;
+        }
+
+	if (slen) {
+		start = *slen;
+		*slen += pos;
+	}
+	pos += start;
+
+	s[pos] = '\0';
+
+        while (pos > start) {
+		s[--pos] = '0' + (number % 10);
+		number /= 10;
+        }
+}
+#endif
 
 #ifndef HAVE_STRCASECMP
 inline int

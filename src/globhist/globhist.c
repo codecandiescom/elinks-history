@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.94 2004/12/18 00:18:33 miciah Exp $ */
+/* $Id: globhist.c,v 1.95 2004/12/21 07:22:10 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -91,24 +91,24 @@ static int globhist_cache_entries = 0;
 
 
 void
-delete_global_history_item(struct global_history_item *historyitem)
+delete_global_history_item(struct global_history_item *history_item)
 {
-	del_from_history_list(&global_history, historyitem);
+	del_from_history_list(&global_history, history_item);
 
 	if (globhist_cache) {
 		struct hash_item *item;
 
-		item = get_hash_item(globhist_cache, historyitem->url, strlen(historyitem->url));
+		item = get_hash_item(globhist_cache, history_item->url, strlen(history_item->url));
 		if (item) {
 			del_hash_item(globhist_cache, item);
 			globhist_cache_entries--;
 		}
 	}
 
-	done_listbox_item(&globhist_browser, historyitem->box_item);
-	mem_free(historyitem->title);
-	mem_free(historyitem->url);
-	mem_free(historyitem);
+	done_listbox_item(&globhist_browser, history_item->box_item);
+	mem_free(history_item->title);
+	mem_free(history_item->url);
+	mem_free(history_item);
 }
 
 /* Search global history for item matching url. */
@@ -132,18 +132,18 @@ get_global_history_item(unsigned char *url)
 struct global_history_item *
 multiget_global_history_item(unsigned char *url, unsigned char *title, ttime time)
 {
-	struct global_history_item *historyitem;
+	struct global_history_item *history_item;
 
 	/* Code duplication vs performance, since this function is called most
 	 * of time for url matching only... Execution time is divided by 2. */
 	if (url && !title && !time) {
 		return get_global_history_item(url);
 	} else {
-		foreach (historyitem, global_history.items) {
-			if ((!url || !strcmp(historyitem->url, url)) &&
-			    (!title || !strcmp(historyitem->title, title)) &&
-			    (!time || historyitem->last_visit == time)) {
-				return historyitem;
+		foreach (history_item, global_history.items) {
+			if ((!url || !strcmp(history_item->url, url)) &&
+			    (!title || !strcmp(history_item->title, title)) &&
+			    (!time || history_item->last_visit == time)) {
+				return history_item;
 			}
 		}
 	}
@@ -235,7 +235,7 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 int
 globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 {
-	struct global_history_item *item;
+	struct global_history_item *history_item;
 
 	if (!search_title || !search_url)
 		return 0;
@@ -253,19 +253,21 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 
 	if (!*search_title && !*search_url) {
 		/* No search terms, make all entries visible. */
-		foreach (item, global_history.entries) {
-			item->box_item->visible = 1;
+		foreach (history_item, global_history.entries) {
+			history_item->box_item->visible = 1;
 		}
 		return 1;
 	}
 
-	foreach (item, global_history.entries) {
+	foreach (history_item, global_history.entries) {
 		/* Make matching entries visible, hide others. */
-		if ((*search_title && strcasestr(item->title, search_title))
-		    || (*search_url && strcasestr(item->url, search_url))) {
-			item->box_item->visible = 1;
+		if ((*search_title
+		     && strcasestr(history_item->title, search_title))
+		    || (*search_url
+			&& strcasestr(history_item->url, search_url))) {
+			history_item->box_item->visible = 1;
 		} else {
-			item->box_item->visible = 0;
+			history_item->box_item->visible = 0;
 		}
 	}
 	return 1;
@@ -320,7 +322,7 @@ read_global_history(void)
 static void
 write_global_history(void)
 {
-	struct global_history_item *historyitem;
+	struct global_history_item *history_item;
 	unsigned char *file_name;
 	struct secure_save_info *ssi;
 
@@ -336,11 +338,11 @@ write_global_history(void)
 	mem_free(file_name);
 	if (!ssi) return;
 
-	foreachback (historyitem, global_history.entries) {
+	foreachback (history_item, global_history.entries) {
 		if (secure_fprintf(ssi, "%s\t%s\t%ld\n",
-				   historyitem->title,
-				   historyitem->url,
-				   historyitem->last_visit) < 0) break;
+				   history_item->title,
+				   history_item->url,
+				   history_item->last_visit) < 0) break;
 	}
 
 	if (!secure_close(ssi)) global_history.dirty = 0;

@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.6 2003/11/25 01:07:31 jonas Exp $ */
+/* $Id: dialogs.c,v 1.7 2003/11/26 18:21:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -125,6 +125,13 @@ static struct hierbox_browser_button formhist_buttons[] = {
 	{ N_("Save"),		push_save_button		},
 };
 
+static struct hierbox_browser_button formhist_buttons_anon[] = {
+	{ N_("Login"),		push_hierbox_goto_button	},
+	{ N_("Info"),		push_hierbox_info_button	},
+	{ N_("Delete"),		push_hierbox_delete_button	},
+	{ N_("Clear"),		push_hierbox_clear_button	},
+};
+
 struct hierbox_browser formhist_browser = {
 	N_("Form history manager"),
 	formhist_buttons,
@@ -136,10 +143,28 @@ struct hierbox_browser formhist_browser = {
 	&formhist_listbox_ops,
 };
 
+struct hierbox_browser formhist_browser_anon = {
+	N_("Form history manager"),
+	formhist_buttons_anon,
+	HIERBOX_BROWSER_BUTTONS_SIZE(formhist_buttons),
+
+	{ D_LIST_HEAD(formhist_browser.boxes) },
+	&formhist_data_box_items,
+	{ D_LIST_HEAD(formhist_browser.dialogs) },
+	&formhist_listbox_ops,
+};
+
 void
 menu_formhist_manager(struct terminal *term, void *fcp, struct session *ses)
 {
+	struct hierbox_browser *browser;
+
+	if (get_opt_int_tree(cmdline_options, "anonymous"))
+		browser = &formhist_browser_anon;
+	else
+		browser = &formhist_browser;
+
 	load_saved_forms();
 
-	hierbox_browser(&formhist_browser, ses);
+	hierbox_browser(browser, ses);
 }

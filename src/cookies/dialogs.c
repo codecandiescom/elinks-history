@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.22 2003/11/25 01:07:30 jonas Exp $ */
+/* $Id: dialogs.c,v 1.23 2003/11/26 18:23:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,6 +133,12 @@ static struct hierbox_browser_button cookie_buttons[] = {
 	{ N_("Save"),		push_save_button		},
 };
 
+static struct hierbox_browser_button cookie_buttons_anon[] = {
+	{ N_("Info"),		push_hierbox_info_button	},
+	{ N_("Delete"),		push_hierbox_delete_button	},
+	{ N_("Clear"),		push_hierbox_clear_button	},
+};
+
 struct hierbox_browser cookie_browser = {
 	N_("Cookie manager"),
 	cookie_buttons,
@@ -144,8 +150,26 @@ struct hierbox_browser cookie_browser = {
 	&cookies_listbox_ops,
 };
 
+struct hierbox_browser cookie_browser_anon = {
+	N_("Cookie manager"),
+	cookie_buttons_anon,
+	HIERBOX_BROWSER_BUTTONS_SIZE(cookie_buttons),
+
+	{ D_LIST_HEAD(cookie_browser.boxes) },
+	&cookie_box_items,
+	{ D_LIST_HEAD(cookie_browser.dialogs) },
+	&cookies_listbox_ops,
+};
+
 void
 menu_cookie_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	hierbox_browser(&cookie_browser, ses);
+	struct hierbox_browser *browser;
+
+	if (get_opt_int_tree(cmdline_options, "anonymous"))
+		browser = &cookie_browser_anon;
+	else
+		browser = &cookie_browser;
+
+	hierbox_browser(browser, ses);
 }

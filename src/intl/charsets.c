@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.54 2003/07/25 12:56:35 zas Exp $ */
+/* $Id: charsets.c,v 1.55 2003/07/25 13:07:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -561,7 +561,7 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 	int charspos = 0;
 
 	if (!convert_table) {
-		int i;
+		register int i;
 
 		for (i = 0; i < charslen; i++)
 			if (chars[i] == '&')
@@ -578,9 +578,9 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 	/* Iterate ;-) */
 
 #define PUTC do { \
-	buffer[bufferpos++] = chars[charspos++]; \
-	e = ""; \
-	goto flush; \
+		buffer[bufferpos++] = chars[charspos++]; \
+		e = ""; \
+		goto flush; \
 	} while (0)
 
 	while (charspos < charslen) {
@@ -594,7 +594,6 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 
 			t = convert_table;
 			i = charspos;
-
 decode:
 			if (!t[chars[i]].t) {
 				e = t[chars[i]].u.str;
@@ -607,7 +606,7 @@ decode:
 
 		} else {
 			int start = charspos + 1;
-			int i = start;
+			register int i = start;
 
 			if (d_opt->plain) PUTC;
 			while (i < charslen
@@ -622,7 +621,7 @@ decode:
 			/* XXX: But this disables &nbsp&nbsp usage, which
 			 * appears to be relatively common! --pasky */
 			if (chars[i] != '&' && chars[i] != '='
-			    && !isalnum(chars[i]) && i > start) {
+			    && i > start && !isalnum(chars[i])) {
 				e = get_entity_string(&chars[start], i - start,
 						      d_opt->cp);
 				if (chars[i] != ';') {
@@ -647,17 +646,15 @@ decode:
 		}
 
 		while (*e) {
+			unsigned char *new;
+
 			buffer[bufferpos++] = *(e++);
 flush:
-			if (!(bufferpos & (ALLOC_GR - 1))) {
-				unsigned char *b;
+			if (bufferpos & (ALLOC_GR - 1)) continue;
 
-				b = mem_realloc(buffer, bufferpos + ALLOC_GR);
-				if (b)
-					buffer = b;
-				else
-					bufferpos--;
-			}
+			new = mem_realloc(buffer, bufferpos + ALLOC_GR);
+			if (!new) return NULL;
+			buffer = new;
 		}
 	}
 

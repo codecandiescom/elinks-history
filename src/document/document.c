@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.53 2004/03/22 14:35:38 jonas Exp $ */
+/* $Id: document.c,v 1.54 2004/03/31 22:00:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,8 @@ init_document(unsigned char *uristring, struct cache_entry *cache_entry,
 
 	if (!document) return NULL;
 
-	document->url = stracpy(uristring);
-	if (!document->url) {
+	document->uri = stracpy(uristring);
+	if (!document->uri) {
 		mem_free(document);
 		return NULL;
 	}
@@ -110,13 +110,13 @@ done_document(struct document *document)
 	assertm(!is_object_used(document), "Attempt to free locked formatted data.");
 	if_assert_failed return;
 
-	ce = find_in_cache(document->url);
+	ce = find_in_cache(document->uri);
 	if (!ce)
 		INTERNAL("no cache entry for document");
 	else
 		object_unlock(ce);
 
-	if (document->url) mem_free(document->url);
+	if (document->uri) mem_free(document->uri);
 	if (document->title) mem_free(document->title);
 	if (document->frame_desc) free_frameset_desc(document->frame_desc);
 	if (document->refresh) done_document_refresh(document->refresh);
@@ -184,7 +184,7 @@ get_cached_document(unsigned char *uri, struct document_options *options,
 	struct document *document;
 
 	foreach (document, format_cache) {
-		if (strcmp(document->url, uri)
+		if (strcmp(document->uri, uri)
 		    || compare_opt(&document->options, options))
 			continue;
 
@@ -238,7 +238,7 @@ shrink_format_cache(int whole)
 
 		/* Destroy obsolete renderer documents which are already
 		 * out-of-sync. */
-		ce = find_in_cache(document->url);
+		ce = find_in_cache(document->uri);
 		assertm(ce, "cached formatted document has no cache entry");
 		if (ce->id_tag == document->id_tag) continue;
 

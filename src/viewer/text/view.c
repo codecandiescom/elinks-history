@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.378 2004/03/30 23:05:25 jonas Exp $ */
+/* $Id: view.c,v 1.379 2004/03/31 22:00:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1033,7 +1033,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 			ses->dn_url = NULL;
 			return;
 		}
-		set_session_referrer(ses, doc_view->document->url);
+		set_session_referrer(ses, doc_view->document->uri);
 		query_file(ses, ses->dn_url, ses, download, NULL, 1);
 	}
 }
@@ -1164,10 +1164,10 @@ save_url(struct session *ses, unsigned char *url)
 	ses->dn_url = u;
 
 	doc_view = current_frame(ses);
-	assert(doc_view && doc_view->document && doc_view->document->url);
+	assert(doc_view && doc_view->document && doc_view->document->uri);
 	if_assert_failed return;
 
-	set_session_referrer(ses, doc_view->document->url);
+	set_session_referrer(ses, doc_view->document->uri);
 	query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
 }
 
@@ -1195,10 +1195,10 @@ save_as(struct terminal *term, void *xxx, struct session *ses)
 	if (ses->dn_url) {
 		struct document_view *doc_view = current_frame(ses);
 
-		assert(doc_view && doc_view->document && doc_view->document->url);
+		assert(doc_view && doc_view->document && doc_view->document->uri);
 		if_assert_failed return;
 
-		set_session_referrer(ses, doc_view->document->url);
+		set_session_referrer(ses, doc_view->document->uri);
 		query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
 	}
 }

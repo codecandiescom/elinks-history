@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.48 2004/03/22 14:35:38 jonas Exp $ */
+/* $Id: document.h,v 1.49 2004/03/31 22:00:51 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -105,7 +105,7 @@ struct document {
 	struct list_head nodes;
 	struct list_head css_imports;
 
-	unsigned char *url;
+	unsigned char *uri;
 	unsigned char *title;
 
 	struct frameset_desc *frame_desc;

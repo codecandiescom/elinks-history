@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.324 2004/03/31 20:31:22 jonas Exp $ */
+/* $Id: session.c,v 1.325 2004/03/31 22:00:51 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -551,7 +551,7 @@ process_file_requests(struct session *ses)
 
 			ftl->req_sent = 1;
 			if (doc_view && doc_view->document)
-				referer = doc_view->document->url;
+				referer = doc_view->document->uri;
 
 			load_url(ftl->url, referer,
 				 &ftl->stat, ftl->pri, CACHE_MODE_NORMAL, -1);
@@ -915,7 +915,7 @@ reload(struct session *ses, enum cache_mode cache_mode)
 			ftl->stat.end = (void *)file_end_load;
 
 			if (doc_view && doc_view->document)
-				referer = doc_view->document->url;
+				referer = doc_view->document->uri;
 
 			load_url(ftl->url, referer,
 				 &ftl->stat, ftl->pri, cache_mode, -1);

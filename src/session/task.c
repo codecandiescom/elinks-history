@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.30 2004/03/31 20:29:11 jonas Exp $ */
+/* $Id: task.c,v 1.31 2004/03/31 22:00:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,7 +514,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		struct document_view *doc_view = current_frame(ses);
 
 		if (doc_view && doc_view->document)
-			referrer = doc_view->document->url;
+			referrer = doc_view->document->uri;
 	}
 
 	set_session_referrer(ses, referrer);

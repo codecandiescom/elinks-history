@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.96 2003/11/07 23:51:20 jonas Exp $ */
+/* $Id: inpfield.c,v 1.97 2003/11/08 00:49:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,16 +150,18 @@ input_field_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
+	int rw = 0;
 	int y = -1;
 
-	int_upper_bound(&w, dlg_data->dlg->widgets->datalen);
-
 	dlg_format_field(NULL, dlg_data->widgets_data,
-			 0, &y, w, NULL, AL_LEFT);
+			 0, &y, w, &rw, AL_LEFT);
 
 	y++;
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, 2,
-			   0, &y, w, NULL, AL_CENTER);
+			   0, &y, w, &rw, AL_CENTER);
+
+	int_lower_bound(&rw, dlg_data->dlg->widgets->datalen);
+	int_upper_bound(&w, rw);
 
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 

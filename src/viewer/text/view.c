@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.287 2003/12/04 09:27:19 jonas Exp $ */
+/* $Id: view.c,v 1.288 2003/12/05 05:18:16 fabio Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1197,11 +1197,11 @@ quit:
 			int nb_tabs = number_of_tabs(ses->tab->term);
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 
-		    	if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
-				switch_to_next_tab(ses->tab->term);
+			if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+				switch_to_prev_tab(ses->tab->term);
 
 			} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
-				switch_to_prev_tab(ses->tab->term);
+				switch_to_next_tab(ses->tab->term);
 
 			} else if (tab != -1) {
 				switch_to_tab(ses->tab->term, tab, nb_tabs);

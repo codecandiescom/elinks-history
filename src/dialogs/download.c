@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.18 2003/12/03 15:15:59 miciah Exp $ */
+/* $Id: download.c,v 1.19 2003/12/07 21:40:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,7 +113,7 @@ download_progress_bar(struct terminal *term,
 	unsigned char percent[] = "????"; /* Reduce or enlarge at will. */
 	unsigned int percent_len = 0;
 	int progress = (int) ((longlong) 100 * current / total);
-	int barprogress = int_min(width * progress / 100, width - 1);
+	int barprogress = int_min((width - 1) * progress / 100, width - 1);
 
 	/* On error, will print '?' only, should not occur. */
 	if (!ulongcat(percent, &percent_len, progress, sizeof(percent) - 1, 0)

@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.48 2003/11/15 15:47:13 jonas Exp $ */
+/* $Id: cache.h,v 1.49 2003/11/15 16:06:47 pasky Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -96,6 +96,7 @@ void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);
 void delete_cache_entry(struct cache_entry *);
+
 /* The garbage collector trigger. If @whole is zero, remove unused cache
  * entries which are bigger than the cache size limit set by user. For @zero
  * being one, remove all unused cache entries. */

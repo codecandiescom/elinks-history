@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.27 2004/01/19 23:21:09 jonas Exp $ */
+/* $Id: scanner.c,v 1.28 2004/01/19 23:31:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,10 @@ get_css_token_(struct css_scanner *scanner)
 			      token->length, token->string);
 	}
 #endif
+
+	/* Make sure we do not return CSS_TOKEN_NONE tokens */
+	assert(!css_scanner_has_tokens(scanner)
+		|| scanner->table[scanner->current].type != CSS_TOKEN_NONE);
 
 	return css_scanner_has_tokens(scanner)
 		? &scanner->table[scanner->current] : NULL;

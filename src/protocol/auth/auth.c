@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.57 2003/07/20 15:30:20 jonas Exp $ */
+/* $Id: auth.c,v 1.58 2003/07/20 15:37:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,11 +59,9 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	return match;
 }
 
-#define min(x, y) ((x) < (y) ? (x) : (y))
-
 #define set_auth_uid(e, u) \
 	do { \
-		int uidlen = min((u)->userlen, MAX_UID_LEN - 1); \
+		int uidlen = MIN((u)->userlen, MAX_UID_LEN - 1); \
 		if (uidlen) \
 			memcpy((e)->uid, (u)->user, uidlen); \
 		(e)->uid[uidlen] = 0; \
@@ -71,7 +69,7 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_passwd(e, u) \
 	do { \
-		int passwdlen = min((u)->passwordlen, MAX_PASSWD_LEN - 1); \
+		int passwdlen = MIN((u)->passwordlen, MAX_PASSWD_LEN - 1); \
 		if (passwdlen) \
 			memcpy((e)->passwd, (u)->password, passwdlen); \
 		(e)->passwd[passwdlen] = 0; \
@@ -178,8 +176,6 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 	return entry;
 }
-
-#undef min
 
 /* Find an entry in auth list by url. If url contains user/pass information
  * and entry does not exist then entry is created.

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.218 2003/08/25 06:56:06 jonas Exp $ */
+/* $Id: renderer.c,v 1.219 2003/08/25 22:16:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,8 +99,8 @@ static int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 static int
 realloc_lines(struct document *document, int y)
 {
-	int i;
 	int newsize = ALIGN(y + 1);
+	int oldsize = ALIGN(document->y);
 	struct line *lines;
 
 	assert(document);
@@ -108,19 +108,16 @@ realloc_lines(struct document *document, int y)
 
 	lines = document->data;
 
-	if (newsize > ALIGN(document->y)) {
+	if (newsize > oldsize) {
 		lines = mem_realloc(lines, newsize * sizeof(struct line));
 		if (!lines) return -1;
 
 		document->data = lines;
+		memset(&lines[oldsize], 0,
+		       (newsize - oldsize) * sizeof(struct line));
 	}
 
-	for (i = document->y; i <= y; i++) {
-		lines[i].l = 0;
-		lines[i].d = NULL;
-	}
-
-	document->y = i;
+	document->y = y + 1;
 
 	return 0;
 }

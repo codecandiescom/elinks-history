@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.14 2003/12/01 21:50:05 jonas Exp $ */
+/* $Id: status.c,v 1.15 2003/12/02 14:36:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -109,7 +109,7 @@ get_stat_msg(struct download *stat, struct terminal *term,
 	add_time_to_string(&msg, stat->prg->elapsed);
 
 	if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
-		add_to_string(&msg, ", ");
+		add_to_string(&msg, separator);
 		add_to_string(&msg, _("estimated time", term));
 		add_char_to_string(&msg, ' ');
 		add_time_to_string(&msg, estimated_time(stat->prg));

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.41 2002/09/11 21:04:54 pasky Exp $ */
+/* $Id: sched.c,v 1.42 2002/09/12 12:37:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -651,6 +651,14 @@ abort_conn_with_state(struct connection *conn, int state)
 {
 	setcstate(conn, state);
 	abort_connection(conn);
+}
+
+/* Set certain state on a connection and then retry the connection. */
+void
+retry_conn_with_state(struct connection *conn, int state)
+{
+	setcstate(conn, state);
+	retry_connection(conn);
 }
 
 int

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.47 2005/03/25 04:42:47 miciah Exp $
+-- $Id: hooks.lua.in,v 1.48 2005/03/25 04:44:27 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -63,7 +63,7 @@ function pre_format_html_hook (url, html)
                        local new,stop = fn(url,html)
                    
                        if new then html=new changed=1 end
-                       return not stop
+                       return stop
                    end)
 
    return changed and html
@@ -78,7 +78,7 @@ function goto_url_hook (url)
                        local new,stop = fn(url)
                    
                        if new then url=new changed=1 end
-                       return not stop
+                       return stop
                    end)
 
    return changed and url
@@ -93,7 +93,7 @@ function follow_url_hook (url)
                        local new,stop = fn(url)
                    
                        if new then url=new changed=1 end
-                       return not stop
+                       return stop
                    end)
 
    return changed and url
@@ -101,7 +101,7 @@ end
 
 quit_hooks = {n=0}
 function quit_hook (url, html)
-    table.foreachi(quit_hooks, function (i, fn) return not fn() end)
+    table.foreachi(quit_hooks, function (i, fn) return fn() end)
 end
 
 ----------------------------------------------------------------------

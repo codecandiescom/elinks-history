@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.7 2002/04/28 18:03:41 pasky Exp $ */
+/* $Id: options.c,v 1.8 2002/04/29 18:40:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -554,21 +554,21 @@ unsigned char *printhelp_cmd(struct option *o, unsigned char ***argv, int *argc)
 				int l = strlen(option->desc);
 				int i;
 
-				printf("%35s", "");
+				printf("%15s", "");
 
 				for (i = 0; i < l; i++) {
 					putchar(option->desc[i]);
 
 					if (option->desc[i] == '\n')
-						printf("%35s", "");
+						printf("%15s", "");
 				}
 
 				printf("\n");
 
 				if (option->rd_cfg == num_rd)
-					printf("%35sDefault: %d\n", "", * (int *) option->ptr);
+					printf("%15sDefault: %d\n", "", * (int *) option->ptr);
 				else if (option->rd_cfg == str_rd)
-					printf("%35sDefault: %s\n", "", option->ptr ? (char *) option->ptr : "");
+					printf("%15sDefault: %s\n", "", option->ptr ? (char *) option->ptr : "");
 			}
 
 			printf("\n");

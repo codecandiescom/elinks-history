@@ -1,3 +1,10 @@
+Thu Mar 14 17:32:35 2002  Petr Baudis <pasky@ji.cz>:
+
+	* default.c, links.h, view.c:
+	
+	optionally simulate pressed enter when pressed accesskey (standart
+	behaviour, by default off)
+
 Thu Mar 14 17:17:26 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, view.c:

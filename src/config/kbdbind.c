@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.71 2003/06/08 10:49:25 zas Exp $ */
+/* $Id: kbdbind.c,v 1.72 2003/06/08 11:54:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -385,20 +385,20 @@ static struct strtonum action_table[] = {
 	{ "enter-reload", ACT_ENTER_RELOAD, N_("Follow the current link, forcing reload of the target") },
 	{ "file-menu", ACT_FILE_MENU, N_("Open the File menu") },
 	{ "find-next", ACT_FIND_NEXT, N_("Find the next occurrence of the current search text") },
-	{ "find-next-back", ACT_FIND_NEXT_BACK, N_("Find the next occurrence of the current search text, in reverse") },
+	{ "find-next-back", ACT_FIND_NEXT_BACK, N_("Find the previous occurrence of the current search text") },
 	{ "forget-credentials", ACT_FORGET_CREDENTIALS, N_("Forget authentication credentials") },
 	{ "goto-url", ACT_GOTO_URL, N_("Open \"Go to URL\" dialog box") },
 	{ "goto-url-current", ACT_GOTO_URL_CURRENT, N_("Open \"Go to URL\" dialog box containing the current URL") },
 	{ "goto-url-current-link", ACT_GOTO_URL_CURRENT_LINK, N_("Open \"Go to URL\" dialog box containing the current link URL") },
 	{ "goto-url-home", ACT_GOTO_URL_HOME, N_("Go to the homepage") },
-	{ "header-info", ACT_HEADER_INFO, N_("Show informations about the the current page HTTP headers") },
+	{ "header-info", ACT_HEADER_INFO, N_("Show informations about the current page HTTP headers") },
 	{ "history-manager", ACT_HISTORY_MANAGER, N_("Open history manager") },
 	{ "home", ACT_HOME, N_("Go to the start of the page/line") },
 	{ "kill-to-bol", ACT_KILL_TO_BOL, N_("Delete to beginning of line") },
 	{ "kill-to-eol", ACT_KILL_TO_EOL, N_("Delete to end of line") },
 	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, N_("Open keybinding manager") },
 	{ "left", ACT_LEFT, N_("Move the cursor left") },
-	{ "link-menu", ACT_LINK_MENU, N_("Activate the link context menu") },
+	{ "link-menu", ACT_LINK_MENU, N_("Open the link context menu") },
 	{ "jump-to-link", ACT_JUMP_TO_LINK, N_("Jump to link") },
 #ifdef HAVE_LUA
 	{ "lua-console", ACT_LUA_CONSOLE, N_("Open a Lua console") },

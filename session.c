@@ -564,7 +564,7 @@ time_t parse_http_date(const char *date)
 
 	/* Eat year */
 
-	tm.year = 0;
+	tm.tm_year = 0;
 	
 	if (date[3] == '0' && date[4] == '0') {
 		/* Four-digit year */

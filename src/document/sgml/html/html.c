@@ -1,5 +1,5 @@
 /* SGML node handling */
-/* $Id: html.c,v 1.2 2004/09/24 00:44:59 jonas Exp $ */
+/* $Id: html.c,v 1.3 2004/12/20 00:08:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -69,9 +69,8 @@ static struct dom_node *
 add_html_element_node(struct dom_navigator *navigator, struct dom_node *node, void *data)
 {
 	struct sgml_parser *parser = navigator->data;
-	struct sgml_parser_state *state = data;
 
-	assert(navigator && node && state);
+	assert(navigator && node);
 	assert(dom_navigator_has_parents(navigator));
 
 	/* TODO: Move to SGML parser main loop and disguise these element ends

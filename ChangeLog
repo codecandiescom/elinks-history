@@ -1,9 +1,112 @@
+Tue Dec 23 12:41:11 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc3 
+
+Tue Dec 23 12:39:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Tue Dec 23 12:28:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Only send keyboard and mouse events to the current tab. Should fix
+	strange behaviour of two tabs and one Alt-d aka bug 296. Untested
+	tho' as I cannot reproduce it anymore.  
+
+Tue Dec 23 12:08:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/cookies/cookies.c:
+
+	Use the NUL-terminated @domain string instead of the @server string
+	when checking if part of the cookie domain matches. Was introduced
+	in my struct uri introducing summer hacking. Fixes bug 308 so ELinks
+	works with yahoo groups/mail again.  
+
+Tue Dec 23 12:06:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/cookies.c:
+
+	More verbose COOKIES_DEBUG domain security violation reporting. This
+	is harmless as it is in normally-dead part of code.  
+
+Tue Dec 23 11:34:28 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Typo fix.  
+
+Tue Dec 23 11:11:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/event.c:
+
+	Revert part of patch adding ACT_REDRAW keybinding (in
+	event.c:1.20->1.21) that removed the hardcoded ^L. The user can
+	still define new keybindings but now overrule this one for now. We
+	need some universal keybinding handler to better handle this.  
+
+Tue Dec 23 11:04:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/dialogs.c:
+
+	Formhist info dialog layout was improved a bit. Fields list is now
+	separated from header by a newline, and field types are displayed in
+	a fancy manner.  
+
+Tue Dec 23 10:55:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Make witekfl's fix to not decompress files with .gz or .bz2
+	(http.c:1.220->1.221) also handle URIs with query parts, like the
+	ones at http://www.icculus.org/openbox/download.php. Reported by
+	Quazgaa.  
+
+Tue Dec 23 10:10:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Really really fix the off by one error in the progress bar. We have
+	to consider both starting and ending brackets.  
+
+Tue Dec 23 06:08:41 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Tue Dec 23 01:24:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Make CGI support depend on the presence of setenv().  
+
+Mon Dec 22 23:35:58 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Manpage date was updated.  
+
 Mon Dec 22 22:55:16 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* doc/: man/man5/elinks.conf.5, tools/help2doc:
 
 	Fix help2tool to properly handle '('s in strings so now the default
 	for http user agent should be correct.  
+
+Mon Dec 22 22:55:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/Makefile.am:
+
+	We should dump the generated manpage back to the srcdir, not
+	builddir.  
 
 Mon Dec 22 22:55:05 2003  Petr Baudis <pasky@ucw.cz>:
 

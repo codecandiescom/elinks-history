@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.359 2003/10/25 10:45:38 zas Exp $ */
+/* $Id: options.c,v 1.360 2003/10/25 11:54:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1107,6 +1107,20 @@ register_option_info(struct option_info info[], struct option *tree)
 
 		add_opt_rec(tree, info[i].path, option);
 	}
+}
+
+void
+unregister_option_info(struct option_info info[], struct option *tree)
+{
+	int i;
+
+	/* We need to remove the options in inverse order to the order how we
+	 * added them. */
+
+	while (info[i].path) i++;
+
+	for (i--; i >= 0; i--)
+		delete_option(&info[i].option);
 }
 
 static void

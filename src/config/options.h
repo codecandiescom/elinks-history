@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.82 2003/10/25 00:37:23 pasky Exp $ */
+/* $Id: options.h,v 1.83 2003/10/25 11:54:26 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -247,6 +247,7 @@ struct option_info {
 };
 
 extern void register_option_info(struct option_info info[], struct option *tree);
+extern void unregister_option_info(struct option_info info[], struct option *tree);
 
 #define NULL_OPTION_INFO \
 	{ INIT_OPTION(NULL, 0, 0, 0, 0, NULL, NULL, NULL), NULL }

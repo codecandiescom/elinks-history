@@ -443,6 +443,7 @@ Witold Filipczyk <witekfl@poczta.onet.pl>
 	Original decompression (zlib/bzlib) support
 	FTP PASV support
 	Downloads resuming support
+	Local CGI support
 	Polish translation updates
 	Random hacking
 
@@ -459,4 +460,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.144 2003/11/13 09:24:41 zas Exp $
+$Id: AUTHORS,v 1.145 2003/12/03 23:19:30 pasky Exp $

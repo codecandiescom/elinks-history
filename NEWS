@@ -6,6 +6,7 @@ ELinks-0.5.0:
 * support for background document colors
 * tabs support
 * new MIME subsystem adding mimetypes files support
+* local CGI support
 * Guile scripting extensions
 * HTML meta refresh
 * forms history

@@ -1,3 +1,53 @@
+Wed Oct 20 17:55:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* m4/: gettext.m4, iconv.m4:
+
+	Append LIBICONV to LIBS instead of INTLLIBS. It was causing
+	dependency problems when linking. Brougt up by Nelson H. F. Beebe
+	<beebe@math.utah.edu>.  
+
+Wed Oct 20 16:19:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* config.guess, config.sub:
+
+	Update with versions from cvs HEAD. Fixes configuration on even more
+	platforms. Mentioned by Nelson H. F. Beebe <beebe@math.utah.edu>.  
+
+Wed Oct 20 11:09:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, document/html/parser/table.c:
+
+	Limit max. memory used for table cells, and abort table parsing on
+	cell allocation failure. It prevents eating of all memory in case
+	where number of columns and/or rows is very high.
+	HTML_MAX_CELLS_MEMORY is set to 32Mb by default.  
+
+Wed Oct 20 08:16:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	Replace nul char if any by a space in html_option(), it prevents bad
+	things. Revealed by remangle.cgi?0x14aa2da9.  
+
+Wed Oct 20 01:27:02 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/action.c:
+
+	In do_action, return FRAME_EVENT_REFRESH when handling 
+	ACT_MAIN_MARK_GOTO or ACT_MAIN_MARK_SET so that the user will get
+	those nice 'Enter a mark to set' and 'Enter a mark to which to jump"
+	messages (see src/dialogs/status.c revision 1.80). Prior to revision 
+	src/viewer/text/view.c revision 1.612, this refresh was handled by 
+	send_to_frame, which calls frame_ev, which calls frame_kbd_ev, which
+	had handled the aforementioned key actions.  
+
+Tue Oct 19 23:38:24 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/download.c:
+
+	In tp_show_header, drop the code to open a new connection and just
+	use |type_query->cached|.  
+
 Tue Oct 19 19:23:35 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/protocol/protocol.c:

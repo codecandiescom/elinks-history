@@ -56,4 +56,7 @@
 #undef HAVE_SSL
 
 /* */
+#undef HAVE_SA_STORAGE
+
+/* */
 #undef X2

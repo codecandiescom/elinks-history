@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.103 2004/10/07 02:54:50 jonas Exp $ */
+/* $Id: cmdline.c,v 1.104 2004/11/08 22:11:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,8 +81,7 @@ parse_options_(int argc, unsigned char *argv[], struct option *opt,
 
 			if (!option) goto unknown_option;
 
-			if (!option_types[option->type].cmdline
-			    || (option->flags & OPT_HIDDEN))
+			if (!option_types[option->type].cmdline)
 				goto unknown_option;
 
 			err = option_types[option->type].cmdline(option, &argv, &argc);

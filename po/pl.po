@@ -717,7 +717,7 @@ msgstr ""
 
 #: src/config/cmdline.c:544
 msgid "Do not number links in dump output"
-msgstr "Nie numeruj odno¶ników przy zrzutach"
+msgstr "Nie numeruj odno¶ników przy -dump"
 
 #: src/config/cmdline.c:546
 msgid ""
@@ -727,7 +727,7 @@ msgid ""
 msgstr ""
 "Zapobiega numerowaniu odno¶ników (i pokazywaniu ich listy przy koñcu\n"
 "zrzucanego dokumentu) przy zrzutach (-dump); to by³o domy¶lne zachowanie\n"
-"przed 0.5pre12. Wiedz, ¿e to tylko dotyczy -dump, niczego innego."
+"przed 0.5pre12. Pamiêtaj, ¿e dotyczy to tylko -dump, niczego innego."
 
 #: src/config/cmdline.c:550
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"

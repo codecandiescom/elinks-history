@@ -1,5 +1,5 @@
 /* Locations handling */
-/* $Id: location.c,v 1.6 2003/09/12 23:37:16 zas Exp $ */
+/* $Id: location.c,v 1.7 2003/10/23 22:15:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,6 @@ destroy_location(struct location *loc)
 {
 	struct frame *frame;
 
-	del_from_list(loc);
 	foreach (frame, loc->frames) {
 		destroy_vs(&frame->vs);
 		mem_free(frame->name);

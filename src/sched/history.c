@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.30 2003/10/23 21:54:38 pasky Exp $ */
+/* $Id: history.c,v 1.31 2003/10/23 22:15:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,6 +45,7 @@ create_history(struct ses_history *history)
 {
 	init_list(history->history);
 	init_list(history->unhistory);
+	history->current = NULL;
 }
 
 void
@@ -52,6 +53,7 @@ destroy_history(struct ses_history *history)
 {
 	free_history(&history->history);
 	free_history(&history->unhistory);
+	history->current = NULL;
 }
 
 void
@@ -93,7 +95,7 @@ ses_back(struct session *ses)
 
 	/* This is the current location. */
 	loc = cur_loc(ses);
-    	del_from_list(loc);
+    	del_from_history(&ses->history, loc);
 
 	add_to_list(ses->history.unhistory, loc);
 
@@ -105,6 +107,7 @@ ses_back(struct session *ses)
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
 	/* Remake that location. */
+    	del_from_history(&ses->history, loc);
 	destroy_location(loc);
 	ses_forward(ses);
 }
@@ -122,13 +125,14 @@ ses_unback(struct session *ses)
 
 	loc = ses->history.unhistory.next;
 
-	del_from_list(loc);
+    	del_from_history(&ses->history, loc);
 	/* Save it as the current location! */
 	add_to_list(ses->history.history, loc);
 
 	if (!strcmp(loc->vs.url, ses->loading_url)) return;
 
 	/* Remake that location. */
+    	del_from_history(&ses->history, loc);
 	destroy_location(loc);
 	ses_forward(ses);
 }

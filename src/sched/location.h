@@ -1,4 +1,4 @@
-/* $Id: location.h,v 1.8 2003/07/04 01:49:03 jonas Exp $ */
+/* $Id: location.h,v 1.9 2003/10/23 22:15:17 pasky Exp $ */
 
 #ifndef EL__SCHED_LOCATION_H
 #define EL__SCHED_LOCATION_H
@@ -18,6 +18,7 @@ struct location {
 
 void copy_location(struct location *, struct location *);
 
+/* You probably want to call del_from_history() first! */
 void destroy_location(struct location *);
 
 #endif

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.179 2003/10/23 21:54:38 pasky Exp $ */
+/* $Id: session.c,v 1.180 2003/10/23 22:15:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,6 +479,7 @@ x:
 					   ses->loading_url);
 
 		if (!frm) {
+			del_from_history(&ses->history, loc);
 			destroy_location(loc);
 			ses->task_target_frame = NULL;
 			goto x;

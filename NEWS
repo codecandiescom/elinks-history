@@ -5,20 +5,17 @@ ELinks-now:
 * -ping option
 * Mozilla-compliant support for -remote option
 * cookies creation and edition
-* perl scripting extensions
-* tab moving
-* trivial CSS
+* Perl scripting extensions
+* tabs moving
+* trivial CSS support
 * multiple URIs on the command line
-* exmode
+* exmode CLI support
 * typeahead text searching (press '#/' sequence)
-* table border color
 * more complete name to color table
 * -config-dir replaces -confdir option
 * -config-file replaces -conffile option
 * -localhost option to only permit local connections
-* GPLv2 only
 * configurability through feature.h
-* simple <object> element support
 * automatic session saving/restoring support
 
 ELinks-0.9.0:

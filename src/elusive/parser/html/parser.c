@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.20 2002/12/30 02:43:51 pasky Exp $ */
+/* $Id: parser.c,v 1.21 2002/12/30 02:56:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,13 +404,8 @@ tag_name_parse(struct parser_state *state, unsigned char **str, int *len)
 				}
 
 				if (node) {
-					if (node->root) {
-						state->current = node->root;
-					} else {
-						/* The root node is special. */
-						state->current = node;
-					}
-					state->root = state->current->root;
+					state->current = node;
+					state->root = node->root;
 				}
 
 			} else {

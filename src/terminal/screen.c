@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.46 2003/08/23 01:01:07 jonas Exp $ */
+/* $Id: screen.c,v 1.47 2003/08/23 01:27:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,21 +38,21 @@ static unsigned char frame_vt100_u[48] = {
 };
 
 static unsigned char frame_koi[48] = {
-	144,145,146,129,135,178,180,167,
-	166,181,161,168,174,173,172,131,
-	132,137,136,134,128,138,175,176,
-	171,165,187,184,177,160,190,185,
-	186,182,183,170,169,162,164,189,
-	188,133,130,141,140,142,143,139,
+	144, 145, 146, 129, 135, 178, 180, 167,
+	166, 181, 161, 168, 174, 173, 172, 131,
+	132, 137, 136, 134, 128, 138, 175, 176,
+	171, 165, 187, 184, 177, 160, 190, 185,
+	186, 182, 183, 170, 169, 162, 164, 189,
+	188, 133, 130, 141, 140, 142, 143, 139,
 };
 
 static unsigned char frame_restrict[48] = {
-	0, 0, 0, 0, 0, 179, 186, 186,
-	205, 0, 0, 0, 0, 186, 205, 0,
-	0, 0, 0, 0, 0, 0, 179, 186,
-	0, 0, 0, 0, 0, 0, 0, 205,
+	  0,   0,   0,   0,   0, 179, 186, 186,
+	205,   0,   0,   0,   0, 186, 205,   0,
+	  0,   0,   0,   0,   0,   0, 179, 186,
+	  0,   0,   0,   0,   0,   0,   0, 205,
 	196, 205, 196, 186, 205, 205, 186, 186,
-	179, 0, 0, 0, 0, 0, 0, 0,
+	179,   0,   0,   0,   0,   0,   0,   0,
 };
 
 
@@ -61,7 +61,15 @@ static unsigned char frame_restrict[48] = {
 
 /* TODO: We should provide some generic mechanism for options caching. */
 struct rs_opt_cache {
-	int type, m11_hack, utf_8_io, colors, charset, restrict_852, cp437, koi8r, trans;
+	int type;
+	int charset;
+	int cp437;
+	int koi8r;
+	unsigned int m11_hack:1;
+	unsigned int utf_8_io:1;
+	unsigned int colors:1;
+	unsigned int restrict_852:1;
+	unsigned int trans:1;
 };
 
 struct screen_state {
@@ -185,7 +193,7 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
 		if (opt_cache->utf_8_io) {
-			int charset;
+			int charset = opt_cache->charset;
 
 			if (border) {
 				switch (opt_cache->type) {
@@ -197,10 +205,8 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 						charset = opt_cache->koi8r;
 						break;
 					default:
-						charset = opt_cache->charset;
+						break;
 				}
-			} else {
-				charset = opt_cache->charset;
 			}
 
 			add_to_string(screen, cp2utf_8(charset, c));
@@ -281,7 +287,7 @@ redraw_screen(struct terminal *term)
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;
-	struct screen_state state = { -1, -1, -1 };
+	struct screen_state state = { 0xFF, 0xFF, 0xFF };
 	struct terminal_screen *screen = term->screen;
  	register struct screen_char *current;
  	register struct screen_char *pos;
@@ -300,21 +306,21 @@ redraw_screen(struct terminal *term)
 
  	for (; y < term->y; y++) {
  		register int x = 0;
- 
+
  		for (; x < term->x; x++, current++, pos++) {
- 
+
 			/* No update for exact match. */
  			if (pos->data == current->data
  			    && pos->color == current->color
  			    && pos->attr == current->attr)
 				continue;
- 
+
 			/* Else if the color match and the data is ``space''. */
  			if (pos->color == current->color
 			    && (pos->data <= 1 || pos->data == ' ')
 			    && (current->data <= 1 || current->data == ' '))
 				continue;
- 
+
 			/* Move the cursor when @prev_pos is more than 10 chars
 			 * away. */
  			if (prev_y != y || prev_pos + 10 <= pos) {
@@ -350,9 +356,12 @@ redraw_screen(struct terminal *term)
 		add_cursor_move_to_string(&image, screen->cy + 1, screen->cx + 1);
 	}
 
-	if (image.length && term->master) want_draw();
-	hard_write(term->fdout, image.source, image.length);
-	if (image.length && term->master) done_draw();
+	if (image.length) {
+		if (term->master) want_draw();
+		hard_write(term->fdout, image.source, image.length);
+		if (term->master) done_draw();
+	}
+
 	done_string(&image);
 
 	memcpy(screen->last_image, screen->image, term->x * term->y * sizeof(struct screen_char));
@@ -397,20 +406,21 @@ init_screen(void)
 void
 resize_screen(struct terminal *term, int x, int y)
 {
-	int size = x * y * sizeof(struct screen_char);
+	int size = x * y;
+	int bsize = size * sizeof(struct screen_char);
 	struct terminal_screen *screen = term->screen;
 	struct screen_char *image;
 
 	assert(screen);
 
-	image = mem_realloc(screen->image, size + size);
+	image = mem_realloc(screen->image, bsize<<1);
 	if (!image) return;
 
 	screen->image = image;
-	screen->last_image = image + (x * y);
+	screen->last_image = image + size;
 
-	memset(screen->image, 0, size);
-	memset(screen->last_image, -1, size);
+	memset(screen->image, 0, bsize);
+	memset(screen->last_image, 0xFF, bsize);
 
 	term->x = x;
 	term->y = y;

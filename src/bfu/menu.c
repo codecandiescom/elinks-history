@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.178 2004/01/13 14:54:39 zas Exp $ */
+/* $Id: menu.c,v 1.179 2004/01/13 15:05:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -908,10 +908,10 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 				if (mi_text_translate(menu->items[i]))
 					text = _(text, win->term);
 
-				p += L_MAINTEXT_SPACE
+				p += L_MAINTEXT_SPACE + L_TEXT_SPACE
 				     + strlen(text)
 				     - !!menu->items[i].hotkey_pos
-				     + R_MAINTEXT_SPACE;
+				     + R_TEXT_SPACE + R_MAINTEXT_SPACE;
 			}
 
 			if (ev->x < o) {

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.9 2004/06/05 21:14:33 jonas Exp $ */
+/* $Id: link.c,v 1.10 2004/06/10 12:21:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,6 +29,7 @@
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
+#include "mime/mime.h"
 #include "protocol/uri.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -366,6 +367,36 @@ html_object(unsigned char *a)
 
 	mem_free(type);
 	mem_free(url);
+}
+
+void
+html_embed(unsigned char *a)
+{
+	unsigned char *type, *extension;
+
+	/* This is just some dirty wrapper. We emulate various things through
+	 * this, which is anyway in the spirit of <object> element, unifying
+	 * <img> and <iframe> etc. */
+
+	object_src = get_url_val(a, "src");
+	if (!object_src) return;
+
+	/* If there is no extension we want to get the default mime/type
+	 * anyway? */
+	extension = strrchr(object_src, '.');
+	if (!extension) extension = object_src;
+
+	type = get_extension_content_type(extension);
+	if (type && !strncasecmp(type, "image/", 6)) {
+		html_img(a);
+	} else {
+		/* We will just emulate <iframe>. */
+		html_iframe(a);
+	}
+
+	mem_free_if(type);
+	mem_free(object_src);
+	object_src = NULL;
 }
 
 

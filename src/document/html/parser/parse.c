@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.31 2004/05/21 11:21:02 jonas Exp $ */
+/* $Id: parse.c,v 1.32 2004/06/10 12:21:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,6 +428,7 @@ static struct element_info elements[] = {
 	{"DL",		html_dl,	2, 0},
 	{"DT",		html_dt,	1, 1},
 	{"EM",		html_italic,	0, 0},
+	{"EMBED",	html_embed,	0, 1},
 	{"FIXED",	html_fixed,	0, 0},
 	{"FONT",	html_font,	0, 0},
 	{"FORM",	html_form,	1, 0},

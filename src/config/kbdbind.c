@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.229 2004/06/23 12:29:22 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.230 2004/06/24 13:17:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1031,6 +1031,12 @@ bind_config_string(struct string *file)
 		struct keybinding *keybinding;
 
 		foreach (keybinding, keymaps[keymap]) {
+			/* Don't save default keybindings that has not been
+			 * deleted (rebound to none action) (Bug 337). */
+			if (keybinding->flags & KBDB_DEFAULT
+			    && keybinding->action != ACT_MAIN_NONE)
+				continue;
+
 			single_bind_config_string(file, keymap, keybinding);
 		}
 	}

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.41 2002/10/12 12:44:01 pasky Exp $ */
+/* $Id: listbox.c,v 1.42 2002/10/30 13:31:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ dlg_format_box(struct terminal *term, struct terminal *t2,
 	/* (*y) += item->item->gid; */
 	/* This is only weird heuristic, it could scale well I hope. */
 	item->h = (term ? term->y : t2 ? t2->y : 25) * 2 / 3 - 2 * DIALOG_TB - 8;
-	//debug("::%d(%d)::%d::%d::", term?term->y:t2->y, term?1:2, item->h, *y);
+	/* debug("::%d(%d)::%d::%d::", term?term->y:t2->y, term?1:2, item->h, *y); */
 	(*y) += item->h;
 }
 

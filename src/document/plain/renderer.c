@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.144 2004/08/19 07:53:57 miciah Exp $ */
+/* $Id: renderer.c,v 1.145 2004/08/19 08:01:10 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,9 @@ add_document_line(struct plain_renderer *renderer,
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
 
-		if (line_char == ASCII_TAB) {
+		if (line_char == ASCII_TAB
+		    && (line_pos + 1 == width
+			|| line[line_pos + 1] != ASCII_BS)) {
 			int tab_width = 7 - ((line_pos + expanded) & 7);
 
 			expanded += tab_width;

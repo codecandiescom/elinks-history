@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.26 2003/05/04 01:45:23 zas Exp $ */
+/* $Id: session.c,v 1.27 2003/05/04 16:27:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -336,7 +336,7 @@ print_screen_status(struct session *ses)
 	msg = stracpy("ELinks");
 	if (msg) {
 		int msglen;
-		int do_it = 0;
+		static void *last_ses = NULL;
 
 		if (ses->screen && ses->screen->f_data
 		    && ses->screen->f_data->title
@@ -346,18 +346,16 @@ print_screen_status(struct session *ses)
 		}
 
 		msglen = strlen(msg);
-		if (!ses->last_title ||
+		if ((last_ses != ses ) || !ses->last_title ||
 		    strlen(ses->last_title) != msglen ||
 		    memcmp(ses->last_title, msg, msglen)) {
 			if (ses->last_title) mem_free(ses->last_title);
 			ses->last_title = msg;
-			do_it = 1;
-		}
-
-		if (do_it)
 			set_terminal_title(term, msg);
-		else
+			last_ses = ses;
+		} else {
 			mem_free(msg);
+		}
 	}
 
 	redraw_from_window(ses->win);

@@ -1,4 +1,4 @@
-/* $Id: vs.h,v 1.18 2004/04/01 15:59:52 jonas Exp $ */
+/* $Id: vs.h,v 1.19 2004/04/01 16:42:43 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
@@ -23,7 +23,7 @@ struct view_state {
 	int wrap:1;
 };
 
-void init_vs(struct view_state *, unsigned char *, int);
+void init_vs(struct view_state *, struct uri *uri, int);
 void destroy_vs(struct view_state *);
 
 void copy_vs(struct view_state *, struct view_state *);

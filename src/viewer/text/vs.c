@@ -1,5 +1,5 @@
 /* View state manager */
-/* $Id: vs.c,v 1.31 2004/04/01 15:59:52 jonas Exp $ */
+/* $Id: vs.c,v 1.32 2004/04/01 16:42:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,12 +23,12 @@
 
 
 void
-init_vs(struct view_state *vs, unsigned char *url, int plain)
+init_vs(struct view_state *vs, struct uri *uri, int plain)
 {
 	memset(vs, 0, sizeof(struct view_state));
 	vs->current_link = -1;
 	vs->plain = plain;
-	vs->uri = get_uri(url);
+	vs->uri = get_uri_reference(uri);
 }
 
 void

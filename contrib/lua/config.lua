@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.5 2005/03/27 22:21:58 miciah Exp $
+-- $Id: config.lua,v 1.6 2005/03/27 22:25:04 miciah Exp $
 
 -- ** IMPORTANT **
 -- Individual functions may be disabled for security by assigning them
@@ -26,10 +26,10 @@
 
     pause = '; echo -ne "\\n\\e[1;32mPress ENTER to continue...\\e[0m"; read'
 
--- Highlightning: Set highlight_enable = 1 if you want to see highligted
--- source code.  You need to have installed code2html and set text/html
--- as mime-type for .c, .h, .pl, .py, .sh, .awk, .patch extensions in Options
--- Manager or in elinks.conf
+-- Highlighting: Set highlight_enable = 1 if you want to see highlighted
+-- source code.  You need to have code2html installed and set text/html
+-- as the MIME-type for .c, .h, .pl, .py, .sh, .awk, .patch extensions
+-- in the Options Manager or in elinks.conf
 
     highlight_enable = nil
 

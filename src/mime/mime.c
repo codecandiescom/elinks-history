@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.54 2004/06/10 11:57:06 jonas Exp $ */
+/* $Id: mime.c,v 1.55 2004/06/10 12:00:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,12 +141,12 @@ check_encoding_type(unsigned char *extension)
 #endif
 
 #ifdef DEBUG_CONTENT_TYPE
-#define debug_get_content_type_params(head__, url__) \
-	DBG("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", head__, struri(url__))
+#define debug_get_content_type_params(cached) \
+	DBG("get_content_type(head, url)\n=== head ===\n%s\n=== url ===\n%s\n", (cached)->head, struri((cached)->uri))
 #define debug_ctype(ctype__) DBG("ctype= %s", (ctype__))
 #define debug_extension(extension__) DBG("extension= %s", (extension__))
 #else
-#define debug_get_content_type_params(head__, url__)
+#define debug_get_content_type_params(cached)
 #define debug_ctype(ctype__)
 #define debug_extension(extension__)
 #endif
@@ -175,7 +175,7 @@ get_content_type(struct cache_entry *cached)
 	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
 
-	debug_get_content_type_params(head, uri);
+	debug_get_content_type_params(cached);
 
 	/* If there's one in header, it's simple.. */
 	if (cached->head) {

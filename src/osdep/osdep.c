@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.119 2003/12/28 06:11:19 miciah Exp $ */
+/* $Id: osdep.c,v 1.120 2003/12/28 06:12:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -289,7 +289,7 @@ set_window_title(unsigned char *title)
 	register int j = 0;
 
 	/* Check if we're in a xterm-like terminal. */
-	if (!is_xterm()) return;
+	if (!is_xterm() && !is_gnuscreen()) return;
 
 	/* Retrieve terminal dimensions. */
 	if (get_terminal_size(0, &xsize, &ysize)) return;

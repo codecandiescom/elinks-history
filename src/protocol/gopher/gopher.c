@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.12 2004/09/12 20:59:59 miciah Exp $ */
+/* $Id: gopher.c,v 1.13 2004/09/12 21:12:53 miciah Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -157,7 +157,7 @@ struct gopher_connection_info {
 };
 
 /* De-escape a selector into a command. */
-/* The % hex escapes are converted. Otheriwse, the string is copied. */
+/* The % hex escapes are converted. Otherwise, the string is copied. */
 static void
 add_uri_decoded(struct string *command, unsigned char *string, int length,
 	       int replace_plus)

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.133 2004/04/30 09:05:36 zas Exp $ */
+/* $Id: screen.c,v 1.134 2004/04/30 09:26:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,47 +205,41 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 
 	if (utf8_io) {
 		driver->charsets[0] = get_opt_int_tree(term_spec, "charset");
-	} else {
-		driver->charsets[0] = -1;
-	}
+		if (driver->type == TERM_LINUX) {
+			if (get_opt_bool_tree(term_spec, "restrict_852"))
+				driver->frame = frame_restrict;
 
-	if (driver->type == TERM_LINUX) {
-		if (get_opt_bool_tree(term_spec, "restrict_852")) {
-			driver->frame = frame_restrict;
-		}
-
-		if (utf8_io) {
 			driver->charsets[1] = get_cp_index("cp437");
 
-		} else if (get_opt_bool_tree(term_spec, "m11_hack")) {
-			driver->frame_seqs = m11_hack_frame_seqs;
-		}
-
-	} else if (driver->type == TERM_FREEBSD) {
-		if (utf8_io) {
+		} else if (driver->type == TERM_FREEBSD) {
 			driver->charsets[1] = get_cp_index("cp437");
 
-		} else if (get_opt_bool_tree(term_spec, "m11_hack")) {
-			driver->frame_seqs = m11_hack_frame_seqs;
-		}
-
-
-	} else if (driver->type == TERM_VT100) {
-		if (utf8_io) {
+		} else if (driver->type == TERM_VT100) {
 			driver->frame = frame_vt100_u;
 			driver->charsets[1] = get_cp_index("cp437");
-		} else {
-			driver->frame = frame_vt100;
-		}
 
-	} else if (driver->type == TERM_KOI8) {
-		if (utf8_io) {
+		} else if (driver->type == TERM_KOI8) {
 			driver->charsets[1] = get_cp_index("koi8-r");
+
+		} else {
+			driver->charsets[1] = driver->charsets[0];
 		}
 
 	} else {
-		if (utf8_io) {
-			driver->charsets[1] = driver->charsets[0];
+		driver->charsets[0] = -1;
+		if (driver->type == TERM_LINUX) {
+			if (get_opt_bool_tree(term_spec, "restrict_852"))
+				driver->frame = frame_restrict;
+
+			if (get_opt_bool_tree(term_spec, "m11_hack"))
+				driver->frame_seqs = m11_hack_frame_seqs;
+
+		} else if (driver->type == TERM_FREEBSD) {
+			if (get_opt_bool_tree(term_spec, "m11_hack"))
+				driver->frame_seqs = m11_hack_frame_seqs;
+
+		} else if (driver->type == TERM_VT100) {
+			driver->frame = frame_vt100;
 		}
 	}
 }

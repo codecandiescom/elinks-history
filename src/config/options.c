@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.117 2002/11/29 20:20:18 pasky Exp $ */
+/* $Id: options.c,v 1.118 2002/11/29 20:21:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 	}
 
 	foreach (option, *tree) {
-		if (options->name && !strcmp(option->name, name)) {
+		if (option->name && !strcmp(option->name, name)) {
 			mem_free(aname);
 			return option;
 		}

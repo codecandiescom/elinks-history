@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.395 2003/11/01 22:38:38 pasky Exp $ */
+/* $Id: options.c,v 1.396 2003/11/04 13:41:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -454,6 +454,11 @@ delete_option_do(struct option *option, int recursive)
 	if (option->flags & OPT_ALLOC) {
 		if (option->name) mem_free(option->name);
 		mem_free(option);
+	} else if (!option->capt) {
+		/* We are probably dealing with a built-in autocreated option
+		 * that will be attempted to be deleted when shutting down.
+		 * Clear it so nothing will be done later. */
+		memset(option, 0, sizeof(struct option));
 	}
 }
 

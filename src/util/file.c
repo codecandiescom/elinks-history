@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.14 2003/06/08 14:39:57 jonas Exp $ */
+/* $Id: file.c,v 1.15 2003/06/18 00:19:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,13 +105,6 @@ get_unique_name(unsigned char *fileprefix)
 
 	return file;
 }
-
-/*
- * Read a line from ``file'' into the dynamically allocated ``line'',
- * increasing ``line'' if necessary. The ending "\n" or "\r\n" is removed.
- * If a line ends with "\", this char and the linefeed is removed,
- * and the next line is read too. Thanks Mutt.
- */
 
 unsigned char *
 file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.402 2004/05/25 03:40:18 jonas Exp $ */
+/* $Id: session.c,v 1.403 2004/05/25 04:13:40 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -824,8 +824,13 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				open_url_in_new_window(ses, url, term_env);
 
 			} else {
+				struct uri *uri = get_uri(url, -1);
+
 				/* Open next ones. */
-				open_url_in_new_tab(ses, url, 1);
+				if (uri) {
+					open_url_in_new_tab(ses, uri, 1);
+					done_uri(uri);
+				}
 			}
 			mem_free(url);
 		}

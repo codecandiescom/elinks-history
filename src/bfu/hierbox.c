@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.152 2004/05/25 04:03:13 jonas Exp $ */
+/* $Id: hierbox.c,v 1.153 2004/05/25 04:13:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -526,7 +526,7 @@ recursively_goto_listbox(struct session *ses, struct terminal *term,
 		uri = get_listbox_uri(term, box, item);
 		if (!uri) continue;
 
-		open_url_in_new_tab(ses, struri(uri), 1);
+		open_url_in_new_tab(ses, uri, 1);
 		done_uri(uri);
 	}
 }
@@ -549,7 +549,7 @@ goto_marked(struct listbox_item *item, void *data_, int *offset)
 		uri = get_listbox_uri(ses->tab->term, box, item);
 		if (!uri) return 0;
 
-		open_url_in_new_tab(ses, struri(uri), 1);
+		open_url_in_new_tab(ses, uri, 1);
 		done_uri(uri);
 	}
 

@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.7 2002/12/24 00:05:23 pasky Exp $ */
+/* $Id: file.c,v 1.8 2003/01/10 17:50:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,6 +114,9 @@ file_read_line(unsigned char *line, size_t *size, FILE *file, int *lineno)
 			if (line) mem_free(line);
 			return NULL;
 		}
+
+		/* FIXME: On some systems, fgets() won't put NUL at the end of
+		 * the string. -- Mikulas */
 
 		if ((ch = strchr(line + offset, '\n')) != NULL) {
 			(*lineno)++;

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.44 2003/01/05 16:48:13 pasky Exp $ */
+/* $Id: cookies.c,v 1.45 2003/01/10 17:50:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -595,6 +595,11 @@ load_cookies() {
 		struct cookie *cookie = mem_calloc(1, sizeof(struct cookie));
 
 		if (!cookie) return;
+
+		/* XXX: On some systems, fgets() won't put NUL at the end of
+		 * the string. -- Mikulas */
+		in_buffer[6 * MAX_STR_LEN - 1] = 0;
+		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
 
 		q = in_buffer;
 		p = strchr(in_buffer, '\t');

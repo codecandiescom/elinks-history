@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.14 2002/12/18 16:25:09 zas Exp $ */
+/* $Id: urlhist.c,v 1.15 2003/01/10 17:50:29 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,7 +45,10 @@ int load_url_history()
 
 	history_nosave = 1;
 	while (fgets(url, MAX_STR_LEN, fp)) {
-		url[strlen(url) - 1] = 0;
+		/* XXX: On some systems, fgets() won't put NUL at the end of
+		 * the string. -- Mikulas */
+		url[MAX_STR_LEN - 1] = 0;
+		if (*url) url[strlen(url) - 1] = 0;
 		add_to_input_history(&goto_url_history, url, 0);
 	}
 	history_nosave = 0;

@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.18 2002/12/18 12:07:07 zas Exp $ */
+/* $Id: globhist.c,v 1.19 2003/01/10 17:50:30 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -347,6 +347,11 @@ read_global_history()
 	globhist_nosave = 1;
 
 	while (fgets(in_buffer, MAX_STR_LEN, f)) {
+		/* XXX: On some systems, fgets() won't put NUL at the end of
+		 * the string. -- Mikulas */
+		in_buffer[MAX_STR_LEN - 1] = 0;
+		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
+
 		url = strchr(in_buffer, '\t');
 		if (!url)
 			continue;

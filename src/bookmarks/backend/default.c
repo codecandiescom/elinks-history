@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.5 2002/12/20 15:26:29 zas Exp $ */
+/* $Id: default.c,v 1.6 2003/01/10 17:50:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,11 @@ read_bookmarks_default(FILE *f)
 		int depth = 0;
 		unsigned char *flags = NULL;
 		unsigned char *line_end;
+
+		/* XXX: On some systems, fgets() won't put NUL at the end of
+		 * the string. -- Mikulas */
+		in_buffer[INBUF_SIZE - 1] = 0;
+		if (*in_buffer) in_buffer[strlen(in_buffer) - 1] = 0;
 
 		/* Load URL. */
 

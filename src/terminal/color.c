@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.52 2003/10/02 23:33:19 jonas Exp $ */
+/* $Id: color.c,v 1.53 2003/10/03 11:25:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,8 +114,8 @@ static struct color_mode_info *color_modes[] = {
 #ifdef USE_256_COLORS
 	/* COLOR_MODE_256 */	&color_mode_256,
 #else
-	/* When 256 color mode is not compiled in the user can
-	 * still have terminal._template_.colors = 2. */
+	/* When 256 color mode is not compiled in the user can still have
+	 * terminal._template_.colors = 2. */
 	/* COLOR_MODE_16 */	&color_mode_16,
 #endif
 };
@@ -221,6 +221,8 @@ set_term_color16(struct screen_char *schar, enum color_type type,
 
 	schar->color[0] = (bg << 4 | fg);
 #ifdef USE_256_COLORS
+	/* With 256 color support we use memcmp() when comparing color in
+	 * terminal/screen.c:add_char*() so we need to clear this byte. */
 	schar->color[1] = 0;
 #endif
 }
@@ -243,8 +245,14 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	switch (color_mode) {
 	case COLOR_MODE_256:
 #ifdef USE_256_COLORS
+		/* Adjusts the foreground color to be more visible. */
+		/* TODO: Be smarter! Here we just choose either black or white
+		 * ANSI color to make sure the color is visible. Pasky
+		 * mentioned maybe calculating a distance and choosing some
+		 * intermediate color. */
+		/* TODO: Maybe also do something to honour the
+		 * allow_dark_on_black option. */
 		if (fg == bg) {
-			/* TODO: Be smarter!  */
 			fg = (bg == 0) ? 15 : 0;
 		}
 

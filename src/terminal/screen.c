@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.47 2003/08/23 01:27:20 jonas Exp $ */
+/* $Id: screen.c,v 1.48 2003/08/29 11:16:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,10 +129,6 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		} else if (opt_cache->type == TERM_DUMB) {
 			c = frame_dumb[c - 176];
 		}
-	}
-
-	if (!(color & 0100) && (color >> 3) == (color & 7)) {
-		color = (color & 070) | 7 * !(color & 020);
 	}
 
 	if (color != state->color) {

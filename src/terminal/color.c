@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.3 2003/08/26 23:52:45 jonas Exp $ */
+/* $Id: color.c,v 1.4 2003/08/29 11:16:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,6 +8,7 @@
 #include "elinks.h"
 
 #include "document/options.h"
+#include "terminal/draw.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
 
@@ -126,7 +127,9 @@ extern int dump_pos;
 			   ((rgb).g << 2) + \
 			    (rgb).b + (l)) & (RGB_HASH_SIZE - 1))
 
-unsigned char
+/* Locates the nearest terminal color. */
+/* Hint: @level should be 16 for foreground colors and 8 for backgrounds. */
+static inline unsigned char
 find_nearest_color(color_t color, int l)
 {
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
@@ -170,10 +173,12 @@ find_nearest_color(color_t color, int l)
 
 	return nearest_color;
 }
+
 #undef HASH_RGB
 #undef RGB_HASH_SIZE
 
-int
+/* Adjusts the foreground color to be more visible on the background. */
+static inline int
 fg_color(int fg, int bg)
 {
 	/* 0 == black       6 == cyan        12 == brightblue
@@ -263,46 +268,54 @@ fg_color(int fg, int bg)
 }
 
 unsigned char
-mix_color_pair(struct color_pair *color)
+mix_color_pair(struct color_pair *pair)
 {
-	register unsigned char fg = find_nearest_color(color->foreground, 16);
-	register unsigned char bg = find_nearest_color(color->background, 8);
+	register unsigned char fg = find_nearest_color(pair->foreground, 16);
+	register unsigned char bg = find_nearest_color(pair->background, 8);
+	register unsigned char color;
 
 	fg = fg_color(fg, bg);
 
-	return ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
+	color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
+
+	if (!(color & 0100) && bg == (fg & 7)) {
+		color = (color & 070) | 7 * !(color & 020);
+	}
+
+	return color;
 }
 
-#if 0
 unsigned char
-mix_attr_colors(color_t background, color_t foreground,
-		enum screen_char_attr attr, enum term_mode_type type)
+mix_attr_colors(struct color_pair *pair, enum screen_char_attr attr)
 {
-	register unsigned char fg = find_nearest_color(foreground, 16);
-	register unsigned char bg = find_nearest_color(background, 8);
+	register unsigned char fg = find_nearest_color(pair->foreground, 16);
+	register unsigned char bg = find_nearest_color(pair->background, 8);
+	register unsigned char color;
 
 	if (attr) {
 		if (attr & SCREEN_ATTR_ITALIC)
 			fg ^= 0x01;
 
-		/* If the term don't support underline flip som color bits. */
-		if ((attr & SCREEN_ATTR_UNDERLINE) && type != TERM_VT100)
+		if (attr & SCREEN_ATTR_UNDERLINE)
 			fg = (fg ^ 0x04) | 0x08;
 
 		if (attr & SCREEN_ATTR_BOLD)
 			fg |= 0x08;
 
 #if 0
-		/* AT_GRAPHICS is currently only used for <hr /> tags so dunno
-		 * if this (old code) makes sense?
-		 * Else add a new SCREEN_ATTR_* flag. --jonas */
+		/* AT_GRAPHICS is currently only used for <hr /> tags.
+		 * Dunno if this (old code) makes sense? --jonas */
 		if (attr & AT_GRAPHICS) bg = bg | 0x10;
 #endif
 
 	}
 
 	fg = fg_color(fg, bg);
+	color = ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
 
-	return ((fg & 0x08) << 3) | (bg << 3) | (fg & 0x07);
+	if (!(color & 0100) && (color >> 3) == (color & 7)) {
+		color = (color & 070) | 7 * !(color & 020);
+	}
+
+	return color;
 }
-#endif

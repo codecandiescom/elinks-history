@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.224 2003/08/26 23:35:02 jonas Exp $ */
+/* $Id: renderer.c,v 1.225 2003/08/29 11:16:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,6 +128,7 @@ realloc_line(struct document *document, int y, int x)
 	int i;
 	int newsize = ALIGN(x + 1);
 	struct line *line;
+	struct color_pair colors = { par_format.bgcolor, 0x0 };
 	struct screen_char schar;
 
 	assert(document);
@@ -144,7 +145,7 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	schar.color = find_nearest_color(par_format.bgcolor, 8) << 3;
+	schar.color = mix_color_pair(&colors);
 	schar.data = ' ';
 	schar.attr = 0;
 
@@ -248,9 +249,10 @@ set_hchars(struct part *part, int x, int y, int xl,
 	if_assert_failed return;
 
 	if (bgcolor) {
+		struct color_pair colors = { *bgcolor, 0x0 };
 		struct screen_char schar;
 
-		schar.color = find_nearest_color(*bgcolor, 8) << 3;
+		schar.color = mix_color_pair(&colors);
 		schar.data = data;
 		schar.attr = attr;
 
@@ -269,6 +271,8 @@ void
 xset_hchar(struct part *part, int x, int y,
 	   unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	struct color_pair colors = { bgcolor, 0x0 };
+
 	assert(part && part->document);
 	if_assert_failed return;
 
@@ -280,7 +284,7 @@ xset_hchar(struct part *part, int x, int y,
 	if_assert_failed return;
 
 	POS(x, y).data = data;
-	POS(x, y).color = find_nearest_color(bgcolor, 8) << 3;
+	POS(x, y).color = mix_color_pair(&colors);
 	POS(x, y).attr = attr;
 }
 
@@ -295,6 +299,7 @@ void
 xset_vchars(struct part *part, int x, int y, int yl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
+	struct color_pair colors = { bgcolor, 0x0 };
 	struct screen_char schar;
 
 	assert(part && part->document);
@@ -306,7 +311,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	schar.color = find_nearest_color(bgcolor, 8) << 3;
+	schar.color = mix_color_pair(&colors);
 	schar.data = data;
 	schar.attr = attr;
 
@@ -747,13 +752,13 @@ void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
-	static int bg_cache;
-	static int fg_cache;
 	static enum screen_char_attr attr_cache;
-	int bg, fg;
+	static unsigned char color_cache;
+	enum screen_char_attr attr = 0;
+	struct color_pair colors;
+	unsigned char color;
 	struct link *link;
 	struct point *pt;
-	enum screen_char_attr attr = 0;
 
 	assert(part);
 	if_assert_failed return;
@@ -781,8 +786,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 no_link:
 	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning)))
 		goto format_change;
-	bg = bg_cache;
-	fg = fg_cache;
+	color = color_cache;
 	attr = attr_cache;
 
 end_format_change:
@@ -799,8 +803,7 @@ end_format_change:
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
-	set_hline(part, part->cx, part->cy, chars, charslen,
-		  (((fg&0x08)<<3) | (bg<<3) | (fg&0x07)), attr);
+	set_hline(part, part->cx, part->cy, chars, charslen, color, attr);
 	part->cx += charslen;
 	nobreak = 0;
 
@@ -951,25 +954,21 @@ set_link:
 
 format_change:
 
-	bg = find_nearest_color(format.bg, 8);
-	fg = find_nearest_color(format.fg, 16);
-	fg = fg_color(fg, bg);
+	colors.background = format.bg;
+	colors.foreground = format.fg;
 
 	attr = 0;
 	if (format.attr) {
 		if (format.attr & AT_UNDERLINE) {
 			attr |= SCREEN_ATTR_UNDERLINE;
-			fg = (fg ^ 0x04) | 0x08;
 		}
 
 		if (format.attr & AT_BOLD) {
 			attr |= SCREEN_ATTR_BOLD;
-			fg = fg | 0x08;
 		}
 
 		if (format.attr & AT_ITALIC) {
 			attr |= SCREEN_ATTR_ITALIC;
-			fg = fg ^ 0x01;
 		}
 
 		if (format.attr & AT_GRAPHICS) {
@@ -977,12 +976,8 @@ format_change:
 		}
 	}
 
-	fg = fg_color(fg, bg);
-	if (format.attr & AT_GRAPHICS) bg = bg | 0x10;
-
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	fg_cache = fg;
-	bg_cache = bg;
+	color_cache = color = mix_attr_colors(&colors, attr);
 	attr_cache = attr;
 
 	/* FIXME:

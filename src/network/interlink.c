@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.47 2003/06/19 09:32:01 zas Exp $ */
+/* $Id: interlink.c,v 1.48 2003/06/19 22:38:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,9 @@ unlink_unix(struct sockaddr *s_addr)
 	unlink(((struct sockaddr_un *) s_addr)->sun_path);
 }
 
+#define setsock_reuse_addr(fd)
+
+
 #else /* AF_INET */
 
 /* It may not be defined in netinet/in.h on some systems. */
@@ -252,6 +255,20 @@ alloc_address(struct s_addr_info *info)
 	return 1;
 }
 
+#if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
+static void
+setsock_reuse_addr(int fd)
+{
+	int reuse_addr = 1;
+
+	setsockopt(fd, SOL_SOCKET, SO_REUSEADDR,
+		   (void *)&reuse_addr, sizeof(int));
+}
+#else
+#define setsock_reuse_addr(fd)
+#endif
+
+
 #define unlink_unix(s)
 
 #endif
@@ -293,21 +310,18 @@ elinks_usleep(unsigned long useconds)
 	select(0, &dummy, &dummy, &dummy, &delay);
 }
 
-
-/* TODO: separate to a client function and a server function. */
-int
+/* Listen on socket for internal ELinks communication.
+ * Returns -1 on error
+ * or listened file descriptor on success. */
+static int
 bind_to_af_unix(void)
 {
-	int unlinked = 0;
-	int reuse_addr = 1;
 	int attempts = 0;
-	int af;
+	int af = get_address(&s_info_listen);
 
-	af = get_address(&s_info_listen);
 	if (af == -1) goto free_and_error;
 
 again:
-
 	s_info_listen.fd = socket(af, SOCK_STREAM, 0);
 	if (s_info_listen.fd == -1) {
 		error(gettext("socket() failed: %d (%s)"),
@@ -315,9 +329,7 @@ again:
 		goto free_and_error;
 	}
 
-#if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
-	setsockopt(s_info_listen.fd, SOL_SOCKET, SO_REUSEADDR, (void *) &reuse_addr, sizeof(int));
-#endif
+	setsock_reuse_addr(s_info_listen.fd);
 
 	if (bind(s_info_listen.fd, s_info_listen.addr, s_info_listen.size) < 0) {
 		/* This error permit to determine if we're a master or
@@ -328,58 +340,14 @@ again:
 			error(gettext("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
-		close(s_info_listen.fd);
+		if (++attempts < MAX_BIND_TRIES) {
+			elinks_usleep(100000 * attempts);
+			close(s_info_listen.fd);
 
-		/* Try to connect there then */
-		if (!s_info_connect.addr) {
-			if (!alloc_address(&s_info_connect))
-				goto free_and_error;
-			/* Client and server are using same address (for now;). */
-			memcpy(s_info_connect.addr, s_info_listen.addr, s_info_listen.size);
-			s_info_connect.size = s_info_listen.size;
+			goto again;
 		}
 
-		s_info_connect.fd = socket(af, SOCK_STREAM, 0);
-		if (s_info_connect.fd == -1) {
-			error(gettext("socket() failed: %d (%s)"),
-			      errno, (unsigned char *) strerror(errno));
-			goto free_and_error;
-		}
-
-#if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
-		setsockopt(s_info_connect.fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse_addr, sizeof(int));
-#endif
-
-		if (connect(s_info_connect.fd, s_info_connect.addr, s_info_connect.size) < 0) {
-			if (errno != ECONNREFUSED)
-				error(gettext("connect() failed: %d (%s)"),
-				      errno, (unsigned char *) strerror(errno));
-
-			if (++attempts < MAX_BIND_TRIES) {
-				/* Sleep 1/10 second. */
-				/* Is this really useful ? --Zas */
-				elinks_usleep(100000);
-				close(s_info_connect.fd);
-
-				goto again;
-			}
-
-			close(s_info_connect.fd); s_info_connect.fd = -1;
-
-			/* FIXME: unlink() here seems weird. --Zas */
-			if (!unlinked) {
-				unlink_unix(s_info_connect.addr);
-				unlinked = 1;
-
-				goto again;
-			}
-
-			goto free_and_error;
-		}
-
-		mem_free(s_info_connect.addr), s_info_connect.addr = NULL;
-
-		return s_info_connect.fd;
+		goto free_and_error;
 	}
 
 	/* Listen and accept. */
@@ -388,22 +356,72 @@ again:
 
 	s_info_accept.fd = s_info_listen.fd;
 
-	if (listen(s_info_accept.fd, 100)) {
+	if (listen(s_info_listen.fd, 100)) {
 		error(gettext("listen() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
 
-	set_handlers(s_info_accept.fd, (void (*)(void *)) af_unix_connection,
+	set_handlers(s_info_listen.fd, (void (*)(void *)) af_unix_connection,
 		     NULL, NULL, &s_info_accept);
 
-	return -1;
+	return s_info_listen.fd;
 
 free_and_error:
 	af_unix_close();
 
 	return -1;
 }
+
+/* Connect to an listening socket for internal ELinks communication.
+ * Returns -1 on error
+ * or file descriptor on success. */
+static int
+connect_to_af_unix(void)
+{
+	int attempts = 0;
+	int af = get_address(&s_info_connect);
+
+	if (af == -1) goto free_and_error;
+
+again:
+	s_info_connect.fd = socket(af, SOCK_STREAM, 0);
+	if (s_info_connect.fd == -1) {
+		error(gettext("socket() failed: %d (%s)"),
+		      errno, (unsigned char *) strerror(errno));
+		goto free_and_error;
+	}
+
+	/* Is this of any use on connect socket ?? */
+	setsock_reuse_addr(s_info_connect.fd);
+
+	if (connect(s_info_connect.fd, s_info_connect.addr, s_info_connect.size) < 0) {
+		if (errno != ECONNREFUSED && errno != ENOENT)
+			error(gettext("connect() failed: %d (%s)"),
+			      errno, (unsigned char *) strerror(errno));
+
+		if (++attempts < MAX_BIND_TRIES) {
+			elinks_usleep(100000 * attempts);
+			close(s_info_connect.fd);
+
+			goto again;
+		}
+
+		close(s_info_connect.fd); s_info_connect.fd = -1;
+
+		goto free_and_error;
+	}
+
+	mem_free(s_info_connect.addr), s_info_connect.addr = NULL;
+
+	return s_info_connect.fd;
+
+free_and_error:
+	mem_free(s_info_connect.addr), s_info_connect.addr = NULL;
+
+	return -1;
+}
+
 
 /* Free all allocated memory and close all descriptors if
  * needed. */
@@ -427,7 +445,6 @@ af_unix_close(void)
 	}
 
 	if (s_info_connect.addr) {
-		unlink_unix(s_info_connect.addr);
 		mem_free(s_info_connect.addr);
 		s_info_connect.addr = NULL;
 	}
@@ -438,10 +455,25 @@ af_unix_close(void)
 	}
 
 	if (s_info_accept.addr) {
-		unlink_unix(s_info_accept.addr);
 		mem_free(s_info_accept.addr);
 		s_info_accept.addr = NULL;
 	}
+}
+
+/* Initialize sockets for internal ELinks communication.
+ * If connect succeeds it returns file descriptor,
+ * else it tries to bind and listen on a socket, and
+ * return -1
+ */
+int
+af_unix_open(void)
+{
+	int fd = connect_to_af_unix();
+
+	if (fd != -1) return fd;
+
+	bind_to_af_unix();
+	return -1;
 }
 
 #endif

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.105 2003/06/15 23:03:34 jonas Exp $ */
+/* $Id: main.c,v 1.106 2003/06/19 22:38:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,7 +79,6 @@ static int init_b = 0;
 void
 init(void)
 {
-	int uh;
 	void *info;
 	int len;
 	unsigned char *u = NULL;
@@ -127,8 +126,9 @@ init(void)
 		&& !get_opt_bool_tree(&cmdline_options, "dump")
 		&& !get_opt_bool_tree(&cmdline_options, "source")) {
 
-		uh = bind_to_af_unix();
-		if (uh < 0) break;
+		int fd = af_unix_open();
+
+		if (fd == -1) break;
 
 		close_terminal_pipes();
 
@@ -143,7 +143,7 @@ init(void)
 		}
 
 		handle_trm(get_input_handle(), get_output_handle(),
-			   uh, uh, get_ctl_handle(), info, len);
+			   fd, fd, get_ctl_handle(), info, len);
 
 		/* OK, this is race condition, but it must be so; GPM
 		 * installs it's own buggy TSTP handler. */

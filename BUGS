@@ -34,9 +34,6 @@ Document handling:
 - Term title changes to default one when viewing document source.
   It should keep html document title, perhaps with a prefix 'Source of:'
   
-- It seems that <meta http-equiv="refresh" content="5;url=http://foo.com/" />
-  tag is interpreted in that text file... Try to open it in ELinks.
-
 - You can't upload large files; it takes _lots_ of memory.
 
 Form handling:
@@ -85,4 +82,4 @@ Misc:
 
 - Call to OS Shell doesn't release mouse handler.
 
-$Id: BUGS,v 1.59 2003/05/10 02:18:15 zas Exp $
+$Id: BUGS,v 1.60 2003/05/10 12:00:17 zas Exp $

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.11 2002/08/07 02:56:58 pasky Exp $ */
+/* $Id: dialog.c,v 1.12 2002/08/07 03:00:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 
 #include "links.h"
 
-#include "bfu/colors.h"
 #include "bfu/button.h"
 #include "bfu/dialog.h"
 #include "bfu/inphist.h"

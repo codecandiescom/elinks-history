@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.53 2002/08/07 02:56:59 pasky Exp $ */
+/* $Id: session.c,v 1.54 2002/08/07 03:00:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,7 +11,6 @@
 
 #include "links.h"
 
-#include "bfu/colors.h"
 #ifdef USE_LEDS
 #include "bfu/leds.h"
 #endif

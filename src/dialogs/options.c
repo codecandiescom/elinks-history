@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.30 2002/08/07 02:56:59 pasky Exp $ */
+/* $Id: options.c,v 1.31 2002/08/07 03:00:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,6 @@
 
 #include "main.h"
 #include "bfu/align.h"
-#include "bfu/colors.h"
 #include "bfu/dialog.h"
 #include "bfu/button.h"
 #include "bfu/checkbox.h"

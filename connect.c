@@ -241,7 +241,6 @@ void dns_found(void *data, int state)
 		}
 
 		close(sock);
-		perror("brm");
 	}
 
 	if (i == c_i->addrno) {

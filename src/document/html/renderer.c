@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.307 2003/10/18 16:41:54 jonas Exp $ */
+/* $Id: renderer.c,v 1.308 2003/10/18 16:48:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,6 +213,8 @@ clear_hchars(struct part *part, int x, int y, int xl)
 /* xset_hchar() and xset_vchars() are used for rendering table frames. */
 
 /* TODO: Merge parts with get_format_screen_char(). --jonas */
+/* Allocates the required chars on the given line and returns the char at
+ * position (x, y) ready to be used as a template char.  */
 static inline struct screen_char *
 get_frame_char(struct part *part, int x, int y, unsigned char data)
 {
@@ -257,6 +259,7 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 
 	if (!template) return;
 
+	/* The template char is the last we need to draw so only decrease @xl. */
 	for (xl -= 1; xl; xl--, x++) {
 		copy_screen_chars(&POS(x, y), template, 1);
 	}
@@ -269,6 +272,8 @@ xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 
 	if (!template) return;
 
+	/* The template char is the first vertical char to be drawn. So
+	 * copy it to the rest. */
 	for (yl -= 1, y += 1; yl; yl--, y++) {
 	    	if (realloc_line(part->document, Y(y), X(x)))
 			return;

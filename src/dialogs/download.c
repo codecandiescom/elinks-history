@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.19 2003/12/07 21:40:45 jonas Exp $ */
+/* $Id: download.c,v 1.20 2003/12/10 01:45:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,6 @@ static void
 download_progress_bar(struct terminal *term,
 	     	      int x, int *y, int width,
 		      struct color_pair *text_color,
-		      struct color_pair *meter_color,
 		      longlong current, longlong total)
 {
 	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
@@ -114,6 +113,7 @@ download_progress_bar(struct terminal *term,
 	unsigned int percent_len = 0;
 	int progress = (int) ((longlong) 100 * current / total);
 	int barprogress = int_min((width - 1) * progress / 100, width - 1);
+	struct color_pair *meter_color = get_bfu_color(term, "dialog.meter");
 
 	/* On error, will print '?' only, should not occur. */
 	if (!ulongcat(percent, &percent_len, progress, sizeof(percent) - 1, 0)
@@ -202,7 +202,6 @@ download_dialog_layouter(struct dialog_data *dlg_data)
 	if (t && download->prg->size >= 0)
 		download_progress_bar(term, x, &y, w,
 				      dialog_text_color,
-			     	      get_bfu_color(term, "dialog.meter"),
 				      download->prg->pos,
 				      download->prg->size);
 
@@ -365,7 +364,6 @@ draw_file_download(struct listbox_item *item, struct listbox_context *context,
 
 	download_progress_bar(context->term, x, &temp_y, meter,
 			      get_bfu_color(context->term, "dialog.text"),
-			      get_bfu_color(context->term, "dialog.meter"),
 			      download->prg->pos,
 			      download->prg->size);
 }

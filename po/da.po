@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-25 23:50+0100\n"
-"PO-Revision-Date: 2005-01-27 18:43+0100\n"
-"Last-Translator: Morten Bo Johansen <mojo@mbjnet.dk>\n"
+"PO-Revision-Date: 2005-01-29 13:08+0100\n"
+"Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -43,7 +43,7 @@ msgstr "Tast mellemrum for at udfolde denne mappe."
 #: src/dialogs/document.c:226 src/dialogs/document.c:297 src/dialogs/edit.c:98
 #: src/dialogs/info.c:44 src/dialogs/info.c:135 src/dialogs/info.c:157
 #: src/dialogs/menu.c:97 src/dialogs/menu.c:520 src/dialogs/menu.c:571
-#: src/dialogs/options.c:174 src/dialogs/options.c:254
+#: src/dialogs/options.c:202 src/dialogs/options.c:282
 #: src/ecmascript/spidermonkey.c:371 src/ecmascript/spidermonkey.c:1937
 #: src/ecmascript/spidermonkey.c:1963 src/formhist/dialogs.c:179
 #: src/mime/dialogs.c:130 src/protocol/auth/dialogs.c:108
@@ -169,8 +169,8 @@ msgstr "Navn"
 #: src/bookmarks/dialogs.c:666 src/config/dialogs.c:408
 #: src/config/dialogs.c:495 src/config/dialogs.c:908 src/cookies/dialogs.c:357
 #: src/dialogs/edit.c:102 src/dialogs/edit.c:105 src/dialogs/menu.c:97
-#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:177
-#: src/dialogs/options.c:255 src/mime/dialogs.c:131
+#: src/dialogs/menu.c:520 src/dialogs/menu.c:571 src/dialogs/options.c:205
+#: src/dialogs/options.c:283 src/mime/dialogs.c:131
 #: src/protocol/auth/dialogs.c:109 src/sched/download.c:551
 #: src/sched/download.c:1022 src/sched/download.c:1032
 #: src/sched/download.c:1053 src/sched/download.c:1066
@@ -472,7 +472,7 @@ msgstr "Ryd"
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:455 src/config/dialogs.c:521
 #: src/config/dialogs.c:946 src/cookies/dialogs.c:426
-#: src/dialogs/options.c:176 src/formhist/dialogs.c:216
+#: src/dialogs/options.c:204 src/formhist/dialogs.c:216
 #: src/globhist/dialogs.c:235 src/sched/download.c:1019
 #: src/sched/download.c:1050
 msgid "Save"
@@ -2407,7 +2407,7 @@ msgid "Invert the fore- and background color so the link stands out."
 msgstr "Byt om på for- og baggrundsfarve så linket fremhæves."
 
 #: src/config/options.inc:288 src/config/options.inc:792
-#: src/dialogs/options.c:171
+#: src/dialogs/options.c:199
 msgid "Underline"
 msgstr "Understreg"
 
@@ -3314,7 +3314,7 @@ msgstr ""
 "3 er KOI-8\n"
 "4 er FreeBSD"
 
-#: src/config/options.inc:754 src/dialogs/options.c:167
+#: src/config/options.inc:754 src/dialogs/options.c:195
 msgid "Switch fonts for line drawing"
 msgstr "Skift skrifttype ved linjetegning"
 
@@ -3328,7 +3328,7 @@ msgstr ""
 "nationale tegn og linjetegn kan bruges samtidig. Giver\n"
 "kun mening med en terminal af typen \"linux\"."
 
-#: src/config/options.inc:760 src/dialogs/options.c:172
+#: src/config/options.inc:760 src/dialogs/options.c:200
 msgid "UTF-8 I/O"
 msgstr "UTF-8 I/O"
 
@@ -3342,7 +3342,7 @@ msgstr ""
 "svarer til de tegn der er indeholdt i terminalens\n"
 "tegnkodningstabel"
 
-#: src/config/options.inc:765 src/dialogs/options.c:168
+#: src/config/options.inc:765 src/dialogs/options.c:196
 msgid "Restrict frames in cp850/852"
 msgstr "Begræns rammer i cp850/852"
 
@@ -3354,7 +3354,7 @@ msgstr ""
 "Begræns linjetegningstegn. Giver kun mening med terminaler\n"
 "af typen \"linux\" sammen med tegnsættene cp850/852."
 
-#: src/config/options.inc:770 src/dialogs/options.c:169
+#: src/config/options.inc:770 src/dialogs/options.c:197
 msgid "Block cursor"
 msgstr "Udfyldt markør"
 
@@ -3387,7 +3387,7 @@ msgstr ""
 "1 betyder tilstanden 16-farver, som bruger de normale ANSI-farver\n"
 "2 betyder tilstanden 256-farve, som bruger XTerm RGB-farvekoder"
 
-#: src/config/options.inc:784 src/dialogs/options.c:170
+#: src/config/options.inc:784 src/dialogs/options.c:198
 msgid "Transparency"
 msgstr "Gennemsigtighed"
 
@@ -4888,59 +4888,80 @@ msgstr "Mapper:"
 msgid "Files:"
 msgstr "Filer:"
 
+# Hjælpetekst i skærmstyringsdialog
+#. 2 '\n' + 1 '\0'
 #: src/dialogs/options.c:148
+#, c-format
+msgid ""
+"The environmental variable TERM is set to '%s'.\n"
+"\n"
+"ELinks maintains separate sets of values for these options\n"
+"and chooses the appropriate set based on the value of TERM.\n"
+"This allows you to configure the settings appropriately for\n"
+"each terminal in which you run ELinks."
+msgstr ""
+"TERM-miljøvariablen er sat til \"%s\".\n"
+"\n"
+"ELinks skelner mellem forskellige sæt af værdier for\n"
+"indstillingerne nedenfor og vælger det relevante sæt\n"
+"ud fra værdien af TERM-miljøvariablen.\n"
+"Dette giver dig mulighed for at definere passende\n"
+"værdier for skærmstyring i hver terminal du anvender\n"
+"ELinks."
+
+#: src/dialogs/options.c:172
 msgid "Terminal options"
 msgstr "Skærmstyring"
 
-#: src/dialogs/options.c:153
+#: src/dialogs/options.c:181
 msgid "Frame handling:"
 msgstr "Ramme-håndtering:"
 
-#: src/dialogs/options.c:154
+#: src/dialogs/options.c:182
 msgid "No frames"
 msgstr "Ingen rammer"
 
-#: src/dialogs/options.c:155
+#: src/dialogs/options.c:183
 msgid "VT 100 frames"
 msgstr "VT100-rammer"
 
-#: src/dialogs/options.c:156
+#: src/dialogs/options.c:184
 msgid "Linux or OS/2 frames"
 msgstr "Linux eller OS/2-rammer"
 
-#: src/dialogs/options.c:157
+#: src/dialogs/options.c:185
 msgid "FreeBSD frames"
 msgstr "FreeBSD-rammer"
 
-#: src/dialogs/options.c:158
+#: src/dialogs/options.c:186
 msgid "KOI8-R frames"
 msgstr "KOI8-R-rammer"
 
-#: src/dialogs/options.c:160
+#: src/dialogs/options.c:188
 msgid "Color mode:"
 msgstr "Farvetilstand:"
 
-#: src/dialogs/options.c:161
+#: src/dialogs/options.c:189
 msgid "No colors (mono)"
 msgstr "Ingen farver (mono)"
 
-#: src/dialogs/options.c:162
+#: src/dialogs/options.c:190
 msgid "16 colors"
 msgstr "16 farver"
 
-#: src/dialogs/options.c:164
+#: src/dialogs/options.c:192
 msgid "256 colors"
 msgstr "256 farver"
 
-#: src/dialogs/options.c:248
+#: src/dialogs/options.c:276
 msgid "Resize terminal"
 msgstr "Ændr terminalstørrelse"
 
-#: src/dialogs/options.c:251
+#: src/dialogs/options.c:279
 msgid "Width="
 msgstr "Bredde="
 
-#: src/dialogs/options.c:252
+#: src/dialogs/options.c:280
 msgid "Height="
 msgstr "Højde="
 

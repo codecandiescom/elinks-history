@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.40 2004/09/21 12:26:52 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.41 2004/09/21 16:09:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 
 struct css_selector *
 find_css_selector(struct list_head *sels, enum css_selector_type type,
+                  enum css_selector_relation rel,
                   unsigned char *name, int namelen)
 {
 	struct css_selector *selector;
@@ -36,7 +37,7 @@ find_css_selector(struct list_head *sels, enum css_selector_type type,
 	foreach (selector, *sels) {
 		if (strlcasecmp(name, namelen, selector->name, -1))
 			continue;
-		if (type != selector->type)
+		if (type != selector->type || rel != selector->relation)
 			continue;
 		return selector;
 	}
@@ -79,19 +80,22 @@ init_css_selector(struct list_head *sels, enum css_selector_type type,
 
 struct css_selector *
 get_css_selector(struct list_head *sels, enum css_selector_type type,
+                 enum css_selector_relation rel,
                  unsigned char *name, int namelen)
 {
 	struct css_selector *selector = NULL;
 
 	if (sels && name && namelen) {
-		selector = find_css_selector(sels, type, name, namelen);
+		selector = find_css_selector(sels, type, rel, name, namelen);
 		if (selector)
 			return selector;
 	}
 
 	selector = init_css_selector(sels, type, name, namelen);
-	if (selector)
+	if (selector) {
+		selector->relation = rel;
 		return selector;
+	}
 
 	return NULL;
 }

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.134 2004/09/21 13:00:51 pasky Exp $ */
+/* $Id: parser.c,v 1.135 2004/09/21 16:09:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,6 +177,7 @@ reparent_selector(struct list_head *sels, struct css_selector *selector,
                   struct css_selector **watch)
 {
 	struct css_selector *twin = find_css_selector(sels, selector->type,
+	                                              selector->relation,
 	                                              selector->name, -1);
 
 	if (twin) {
@@ -329,8 +330,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		if (!pkg) {
 			selector = get_css_base_selector(
 			                last_fragment ? css : NULL, seltype,
-					last_token.string,
-					last_token.length);
+					reltype,
+					last_token.string, last_token.length);
 			if (!selector) continue;
 
 			pkg = mem_calloc(1, sizeof(struct selector_pkg));
@@ -346,7 +347,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			assert(base_sel);
 
 			selector = get_css_selector(&base_sel->leaves,
-			                            seltype,
+			                            seltype, reltype,
 						    last_token.string,
 						    last_token.length);
 			if (!selector) continue;
@@ -378,16 +379,14 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 							 &pkg->selector);
 			}
 
-			selector->relation = reltype;
-
 		} else /* CSR_PARENT || CSR_ANCESTOR */ {
 			/* We - in the perlish speak - unshift in front
 			 * of the previous selector fragment and reparent
 			 * it to the upcoming one. */
 			selector = get_css_base_selector(
 			                last_fragment ? css : NULL, seltype,
-					last_token.string,
-					last_token.length);
+					CSR_ROOT,
+					last_token.string, last_token.length);
 			if (!selector) continue;
 
 			assert(prev_element_selector);

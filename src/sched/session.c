@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.457 2004/06/10 22:11:32 jonas Exp $ */
+/* $Id: session.c,v 1.458 2004/06/10 22:21:25 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -852,6 +852,9 @@ decode_session_info(struct terminal *term, int len, const int *data)
 	}
 
 	str = (unsigned char *) data;
+
+	if (len <= 0 && !remote)
+		return init_session_info(base_session, remote, NULL);
 
 	/* Extract multiple (possible) NUL terminated URIs */
 	while (len > 0) {

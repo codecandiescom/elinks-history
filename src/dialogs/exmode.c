@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.46 2004/07/02 00:26:57 pasky Exp $ */
+/* $Id: exmode.c,v 1.47 2004/07/04 11:26:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,7 +103,7 @@ exmode_exec(struct session *ses, unsigned char buffer[INPUT_LINE_BUFFER_SIZE])
 
 	add_to_input_history(&exmode_history, command, 1);
 
-	while (*args && !isspace(*args)) args++;
+	skip_nonspace(args);
 	if (*args) *args++ = 0;
 
 	for (i = 0; exmode_handlers[i]; i++) {

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.76 2004/07/03 01:34:53 jonas Exp $ */
+/* $Id: parse.c,v 1.77 2004/07/04 11:26:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ get_attr_value(register unsigned char *e, unsigned char *name,
 	int found;
 
 next_attr:
-	while (isspace(*e)) e++;
+	skip_space(e);
 	if (end_of_tag(*e) || !atchr(*e)) goto parse_error;
 	n = name;
 	name_start = e;
@@ -152,13 +152,13 @@ next_attr:
 	if (found && (flags & HTML_ATTR_TEST)) return name_start;
 
 	while (atchr(*e)) e++;
-	while (isspace(*e)) e++;
+	skip_space(e);
 	if (*e != '=') {
 		if (found) goto found_endattr;
 		goto next_attr;
 	}
 	e++;
-	while (isspace(*e)) e++;
+	skip_space(e);
 
 	if (found) {
 		if (!IS_QUOTE(*e)) {
@@ -269,7 +269,7 @@ get_width(unsigned char *a, unsigned char *name, int limited)
 	if (!value) return -1;
 
 	/* Skip spaces at start of string if any. */
-	while (isspace(*str)) str++;
+	skip_space(str);
 
 	/* Search for end of string or ',' character (ie. in "100,200") */
 	for (len = 0; str[len] && str[len] != ','; len++);

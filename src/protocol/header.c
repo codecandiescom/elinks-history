@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.9 2004/07/04 11:04:34 jonas Exp $ */
+/* $Id: header.c,v 1.10 2004/07/04 11:26:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,7 +129,7 @@ again:
 	start = e;
 
 	if (!IS_QUOTE(*e)) {
-		while (*e && !isspace(*e)) e++;
+		skip_nonspace(e);
 	} else {
 		unsigned char uu = *e++;
 

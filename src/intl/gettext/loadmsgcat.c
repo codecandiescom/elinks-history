@@ -415,8 +415,7 @@ default:
 			struct parse_args args;
 
 			nplurals += 9;
-			while (*nplurals != '\0' && isspace(*nplurals))
-				++nplurals;
+			skip_space(nplurals);
 
 			for (endp = (unsigned char *) nplurals, n = 0;
 			    *endp >= '0' && *endp <= '9'; endp++)

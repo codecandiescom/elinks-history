@@ -194,23 +194,20 @@ read_alias_file(const unsigned char *fname, int fname_len)
 		/* A leading '#' signals a comment line.  */
 		if (cp[0] != '\0' && cp[0] != '#') {
 			alias = cp++;
-			while (cp[0] != '\0' && !isspace(cp[0]))
-				++cp;
+			skip_nonspace(cp);
 			/* Terminate alias name.  */
 			if (cp[0] != '\0')
 				*cp++ = '\0';
 
 			/* Now look for the beginning of the value.  */
-			while (isspace(cp[0]))
-				++cp;
+			skip_space(cp);
 
 			if (cp[0] != '\0') {
 				size_t alias_len;
 				size_t value_len;
 
 				value = cp++;
-				while (cp[0] != '\0' && !isspace(cp[0]))
-					++cp;
+				skip_nonspace(cp);
 				/* Terminate value.  */
 				if (cp[0] == '\n') {
 					/* This has to be done to make the following test

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.49 2003/09/03 16:03:11 zas Exp $ */
+/* $Id: string.h,v 1.50 2003/09/17 01:04:46 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -122,8 +122,7 @@ struct string {
 
 
 /* The granularity used for the struct string based utilities. */
-/* XXX Must be power of 2 */
-#define ALLOC_GR 0x100
+#define STRING_GRANULARITY 0xFF
 
 #ifdef DEBUG_STRING
 #define STRING_MAGIC 0x2E5BF271
@@ -160,8 +159,9 @@ struct string *add_format_to_string(struct string *string, unsigned char *format
 
 
 #undef realloc_string
-#define realloc_string(_string_, _newlength_)				\
-	mem_gralloc((_string_)->source, unsigned char, (_string_)->length, _newlength_, ALLOC_GR)
+#define realloc_string(str, size) \
+	mem_align_alloc(&(str)->source, (str)->length, (size) + 1, \
+			sizeof(unsigned char), STRING_GRANULARITY)
 
 static inline struct string *
 add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
@@ -176,7 +176,8 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 	if (length == 0) return string;
 
 	newlength = string->length + length;
-	realloc_string(string, newlength);
+	if (!realloc_string(string, newlength))
+		return NULL;
 
 	memcpy(string->source + string->length, bytes, length);
 	string->source[newlength] = 0;

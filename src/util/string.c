@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.82 2003/09/03 16:03:11 zas Exp $ */
+/* $Id: string.c,v 1.83 2003/09/17 01:04:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -259,7 +259,7 @@ init_string(struct string *string)
 	if_assert_failed { return NULL; }
 
 	string->length = 0;
-	string->source = mem_alloc(ALLOC_GR);
+	string->source = mem_alloc(STRING_GRANULARITY + 1);
 	if (!string->source) return NULL;
 
 	*string->source = 0;
@@ -341,7 +341,8 @@ add_char_to_string(struct string *string, unsigned char character)
 	check_string_magic(string);
 
 	newlength = string->length + 1;
-	realloc_string(string, newlength);
+	if (!realloc_string(string, newlength))
+		return NULL;
 
 	string->source[string->length] = character;
 	string->source[newlength] = 0;
@@ -363,7 +364,8 @@ add_xchar_to_string(struct string *string, unsigned char character, int times)
 	if (times == 0) return string;
 
 	newlength = string->length + times;
-	realloc_string(string, newlength);
+	if (!realloc_string(string, newlength))
+		return NULL;
 
 	memset(string->source + string->length, character, times);
 	string->source[newlength] = 0;
@@ -393,7 +395,8 @@ add_format_to_string(struct string *string, unsigned char *format, ...)
 	if (width <= 0) return NULL;
 
 	newlength = string->length + width;
-	realloc_string(string, newlength);
+	if (!realloc_string(string, newlength))
+		return NULL;
 
 	vsnprintf(&string->source[string->length], newlength, format, ap);
 

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.40 2002/12/08 20:47:33 pasky Exp $ */
+/* $Id: cookies.c,v 1.41 2002/12/18 10:52:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -467,7 +467,7 @@ is_in_domain(unsigned char *d, unsigned char *s)
 }
 
 
-static int
+static inline int
 is_path_prefix(unsigned char *d, unsigned char *s)
 {
 	int dl = strlen(d);
@@ -479,7 +479,7 @@ is_path_prefix(unsigned char *d, unsigned char *s)
 }
 
 
-static int
+static inline int
 cookie_expired(struct cookie *c)
 {
   	return (c->expires && c->expires < time(NULL));

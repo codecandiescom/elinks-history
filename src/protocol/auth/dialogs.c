@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.122 2005/03/23 16:33:12 miciah Exp $ */
+/* $Id: dialogs.c,v 1.123 2005/03/27 18:04:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,16 +75,18 @@ do_auth_dialog(struct session *ses, void *data)
 	struct terminal *term = ses->tab->term;
 	struct auth_entry *a = get_invalid_auth_entry();
 	unsigned char sticker[MAX_STR_LEN], *text;
+	int sticker_len;
 
 	if (!a || a->blocked) return;
 
 	text = get_uri_string(a->uri, URI_HTTP_AUTH);
 	if (!text) return;
 
-	snprintf(sticker, sizeof(sticker),
-		 _("Authentication required for %s at %s", term),
-		 a->realm, text);
+	sticker_len = snprintf(sticker, sizeof(sticker),
+			       _("Authentication required for %s at %s", term),
+			       a->realm, text);
 	mem_free(text);
+	if (sticker_len < 0 || sticker_len > MAX_STR_LEN) return;
 
 #define AUTH_WIDGETS_COUNT 5
 	dlg = calloc_dialog(AUTH_WIDGETS_COUNT, strlen(sticker) + 1);

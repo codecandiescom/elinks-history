@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.76 2003/06/26 23:49:00 jonas Exp $ */
+/* $Id: url.c,v 1.77 2003/07/01 00:00:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +40,8 @@ parse_url(unsigned char *url, int *prlen,
 #endif
 	int protocol;
 
+	assertm(url, "No url to parse.");
+
 	if (prlen) *prlen = 0;
 	if (user) *user = NULL;
 	if (uslen) *uslen = 0;
@@ -52,10 +54,6 @@ parse_url(unsigned char *url, int *prlen,
 	if (data) *data = NULL;
 	if (dalen) *dalen = 0;
 	if (post) *post = NULL;
-
-#ifdef DEBUG
-	if (!url) internal("No url to parse.");
-#endif
 
 	if (!*url) return -1; /* Empty url. */
 
@@ -160,7 +158,6 @@ parse_url(unsigned char *url, int *prlen,
 
 	if (*host_end == ':') { /* we have port here */
 		unsigned char *port_end = host_end + 1 + strcspn(host_end + 1, "/");
-		int idx;
 
 		host_end++;
 
@@ -169,11 +166,9 @@ parse_url(unsigned char *url, int *prlen,
 
 		/* test if port is number */
 		/* TODO: possibly lookup for the service otherwise? --pasky */
-		for (idx = 0; idx < port_end - host_end; idx++)
-			if (host_end[idx] < '0' || host_end[idx] > '9')
+		for (; host_end < port_end; host_end++)
+			if (*host_end < '0' || *host_end > '9')
 				return -1;
-
-		host_end = port_end;
 	}
 
 	if (data || dalen || post) {

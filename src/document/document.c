@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.16 2003/10/31 17:56:15 jonas Exp $ */
+/* $Id: document.c,v 1.17 2003/11/03 13:55:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,7 +61,7 @@ free_frameset_desc(struct frameset_desc *frameset_desc)
 
 	for (i = 0; i < frameset_desc->n; i++) {
 		struct frame_desc *frame_desc = &frameset_desc->frame_desc[i];
-		
+
 		if (frame_desc->subframe)
 			free_frameset_desc(frame_desc->subframe);
 		if (frame_desc->name)
@@ -148,7 +148,8 @@ release_document(struct document *document)
 /* Formatted document cache management */
 
 struct document *
-get_cached_document(unsigned char *uri, struct document_options *options, int id)
+get_cached_document(unsigned char *uri, struct document_options *options,
+		    unsigned int id)
 {
 	struct document *document;
 

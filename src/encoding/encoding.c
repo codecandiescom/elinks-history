@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.40 2005/02/28 13:10:21 zas Exp $ */
+/* $Id: encoding.c,v 1.41 2005/03/02 09:36:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,8 +288,13 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 static inline int
 is_stdin_pipe(struct stat *stt, struct string *filename)
 {
+	/* On Mac OS X, /dev/stdin has type S_IFSOCK. (bug 616) */
 	return !strlcmp(filename->source, filename->length, "/dev/stdin", 10)
-		&& S_ISFIFO(stt->st_mode);
+		&& (
+#ifdef S_ISSOCK
+			S_ISSOCK(stt->st_mode) ||
+#endif
+			S_ISFIFO(stt->st_mode));
 }
 
 enum connection_state

@@ -390,6 +390,9 @@ Olexander Kunytsa <kunia@istc.kiev.ua>
 Omar Khayam <omark@cyentec.com>
 	URL decode filename when saving
 
+<otte@duke.edu>
+	Fix stdin reading on Mac OS X
+
 Peter Gervai <grin@tolna.net>
 	Manpage updates
 	Mailcap to links.cfg convertor
@@ -539,4 +542,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.185 2005/02/02 12:58:51 jonas Exp $
+$Id: AUTHORS,v 1.186 2005/03/02 09:36:15 jonas Exp $

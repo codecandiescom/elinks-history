@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.34 2002/05/08 15:48:05 zas Exp $ */
+/* $Id: session.c,v 1.35 2002/05/11 15:20:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -823,23 +823,23 @@ end_load(struct status *stat, struct session *ses)
 
 #ifdef HAVE_SCRIPTING
 void
-maybe_pre_format_html(struct status *stat, struct session *ses)
+maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 {
 	struct fragment *fr;
 	unsigned char *s;
 	int len;
 
-	if (stat->ce && !stat->ce->done_pre_format_html_hook) {
-		defrag_entry(stat->ce);
-		fr = stat->ce->frag.next;
+	if (ce && !ce->done_pre_format_html_hook) {
+		defrag_entry(ce);
+		fr = ce->frag.next;
 		len = fr->length;
-		s = script_hook_pre_format_html(ses, stat->ce->url, fr->data, &len);
+		s = script_hook_pre_format_html(ses, ce->url, fr->data, &len);
 		if (s) {
-			add_fragment(stat->ce, 0, s, len);
-			truncate_entry(stat->ce, len, 1);
+			add_fragment(ce, 0, s, len);
+			truncate_entry(ce, len, 1);
 			mem_free(s);
 		}
-		stat->ce->done_pre_format_html_hook = 1;
+		ce->done_pre_format_html_hook = 1;
 	}
 }
 #endif
@@ -849,7 +849,7 @@ doc_end_load(struct status *stat, struct session *ses)
 {
 	if (stat->state < 0) {
 #ifdef HAVE_SCRIPTING
-		maybe_pre_format_html(stat, ses);
+		maybe_pre_format_html(stat->ce, ses);
 #endif
 		if (ses->display_timer != -1) {
 			kill_timer(ses->display_timer);

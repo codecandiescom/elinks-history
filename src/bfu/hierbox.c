@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.20 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: hierbox.c,v 1.21 2003/08/01 11:37:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,14 +83,10 @@ layout_hierbox_browser(struct dialog_data *dlg)
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	/* We ignore this now, as we don't compute with the width of the listbox
 	 * itself and we want it to have the maximal width possible. */
-	/* if (w > max) w = max; */
-	if (w < min) w = min;
-
-	if (w > term->x - 2 * DIALOG_LB)
-		w = term->x - 2 * DIALOG_LB;
-
-	if (w < 1)
-		w = 1;
+	/* int_upper_bound(&w, max); */
+	int_lower_bound(&w, min);
+	int_upper_bound(&w, dlg->win->term->x - 2 * DIALOG_LB);
+	int_lower_bound(&w, 1);
 
 	rw = w;
 

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.31 2003/07/09 01:24:47 jonas Exp $ */
+/* $Id: user.c,v 1.32 2003/07/09 01:51:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,7 +128,7 @@ static void
 user_func(struct session *ses, unsigned char *url)
 {
 	unsigned char *urldata;
-	unsigned char *proto, *host, *port, *dir, *subj = NULL;
+	unsigned char *proto, *host, *port, *dir, *subj;
 
 	/* I know this may be NULL and I don't care. --pasky */
 	proto = get_protocol_name(url);
@@ -148,13 +148,16 @@ user_func(struct session *ses, unsigned char *url)
 	port = get_port_str(url);
 	if (port && *port) check_shell_security(&port);
 
-	dir = get_url_data(url);
-	if (dir && *dir) check_shell_security(&dir);
-
 	urldata = get_url_data(url);
-	if (urldata) {
-		urldata = stracpy(urldata);
-		if (urldata) subj = strchr(urldata, '?');
+	if (urldata && *urldata) {
+		dir = stracpy(urldata);
+		if (dir) check_shell_security(&dir);
+
+		/* Some mailto specific stuff follows... */
+		subj = strchr(urldata, '?');
+	} else {
+		dir = NULL;
+		subj = NULL;
 	}
 
 	/* Some mailto specific stuff follows... */
@@ -174,13 +177,15 @@ user_func(struct session *ses, unsigned char *url)
 			unsigned char *subj_end = strchr(subj, '&');
 
 			if (subj_end) *subj_end = 0;
+			subj = stracpy(subj);
+			if (subj) check_shell_security(&subj);
 		}
 	}
 
 	prog_func(ses->tab->term, url, proto, host, port, dir, subj);
 
-	if (urldata) mem_free(urldata);
-
+	if (dir) mem_free(dir);
+	if (subj) mem_free(subj);
 	if (port) mem_free(port);
 	mem_free(host);
 	if (proto) mem_free(proto);

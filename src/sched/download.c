@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.226 2004/04/01 01:01:54 jonas Exp $ */
+/* $Id: download.c,v 1.227 2004/04/01 01:09:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -932,16 +932,16 @@ tp_display(struct tq *tq)
 	struct view_state *vs;
 	struct session *ses = tq->ses;
 	unsigned char *goto_position = ses->goto_position;
-	unsigned char *loading_url = ses->loading_url;
+	unsigned char *loading_uri = ses->loading_uri;
 	unsigned char *target_frame = ses->task.target_frame;
 
 	ses->goto_position = tq->goto_position;
-	ses->loading_url = tq->url;
+	ses->loading_uri = tq->url;
 	ses->task.target_frame = tq->target_frame;
 	vs = ses_forward(ses, tq->frame);
 	if (vs) vs->plain = 1;
 	ses->goto_position = goto_position;
-	ses->loading_url = loading_url;
+	ses->loading_uri = loading_uri;
 	ses->task.target_frame = target_frame;
 
 	if (!tq->frame) {
@@ -1086,7 +1086,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 		goto plaintext_follow;
 
 	foreach (tq, ses->tq)
-		if (!strcmp(tq->url, ses->loading_url))
+		if (!strcmp(tq->url, ses->loading_uri))
 			goto do_not_follow;
 
 	tq = mem_calloc(1, sizeof(struct tq));
@@ -1094,7 +1094,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	add_to_list(ses->tq, tq);
 	ret = 1;
 
-	tq->url = stracpy(ses->loading_url);
+	tq->url = stracpy(ses->loading_uri);
 	change_connection(loading, &tq->download, PRI_MAIN, 0);
 	loading->state = S_OK;
 

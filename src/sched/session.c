@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.329 2004/03/31 23:33:39 jonas Exp $ */
+/* $Id: session.c,v 1.330 2004/04/01 01:09:40 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -439,13 +439,13 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 	 * handle properly the "Choose action" dialog now :(. */
 	if (ftl->ce && !ftl->ce->redirect_get && stat->pri != PRI_CSS) {
 		struct session *ses = ftl->ses;
-		unsigned char *loading_url = ses->loading_url;
+		unsigned char *loading_uri = ses->loading_uri;
 		unsigned char *target_frame = ses->task.target_frame;
 
-		ses->loading_url = ftl->url;
+		ses->loading_uri = ftl->url;
 		ses->task.target_frame = ftl->target_frame;
 		ses_chktype(ses, &ftl->stat, ftl->ce, 1);
-		ses->loading_url = loading_url;
+		ses->loading_uri = loading_uri;
 		ses->task.target_frame = target_frame;
 	}
 #if 0
@@ -861,7 +861,7 @@ destroy_session(struct session *ses)
 	destroy_history(&ses->history);
 	set_session_referrer(ses, NULL);
 
-	if (ses->loading_url) mem_free(ses->loading_url);
+	if (ses->loading_uri) mem_free(ses->loading_uri);
 	if (ses->display_timer != -1) kill_timer(ses->display_timer);
 	if (ses->goto_position) mem_free(ses->goto_position);
 	if (ses->imgmap_href_base) mem_free(ses->imgmap_href_base);
@@ -930,7 +930,7 @@ ses_load_notify(struct download *stat, struct session *ses)
 	if (stat->state == S_TRANS || stat->state == S_OK) {
 		stat->end = (void (*)(struct download *, void *))end_load;
 		ses->wtd = WTD_NO;
-		mem_free(ses->loading_url);
+		mem_free(ses->loading_uri);
 		if (ses->wtd == WTD_FORWARD) {
 			ses_forward(ses);
 		} else INTERNAL("bad ses->wtd");

@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.34 2004/04/01 01:01:55 jonas Exp $ */
+/* $Id: task.c,v 1.35 2004/04/01 01:09:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,9 +44,9 @@ free_task(struct session *ses)
 		ses->goto_position = NULL;
 	}
 
-	if (ses->loading_url) {
-		mem_free(ses->loading_url);
-		ses->loading_url = NULL;
+	if (ses->loading_uri) {
+		mem_free(ses->loading_uri);
+		ses->loading_uri = NULL;
 	}
 	ses->task.type = TASK_NONE;
 }
@@ -84,12 +84,12 @@ post_yes(struct task *task)
 	ses->goto_position = null_or_stracpy(task->pos);
 	ses->loading.end = (void (*)(struct download *, void *)) task->fn;
 	ses->loading.data = task->ses;
-	ses->loading_url = stracpy(task->url);
+	ses->loading_uri = stracpy(task->url);
 	ses->task.type = task->type;
 	ses->task.target_frame = task->target_frame;
 	ses->task.target_location = task->target_location;
 
-	load_url(ses->loading_url, ses->referrer,
+	load_url(ses->loading_uri, ses->referrer,
 		 &ses->loading, task->pri, task->cache_mode, -1);
 }
 
@@ -132,7 +132,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target_frame,
 
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;
-		ses->loading_url = url;
+		ses->loading_uri = url;
 		ses->task.type = task_type;
 		ses->task.target_frame = target_frame;
 		ses->task.target_location = target_location;
@@ -193,7 +193,7 @@ x:
 		/* The new location will either be pointing to the URL
 		 * of the current location or the loading URL so make
 		 * it big enough. */
-		len = strlen(ses->loading_url);
+		len = strlen(ses->loading_uri);
 		if (have_location(ses))
 			int_lower_bound(&len, cur_loc(ses)->vs.url_len);
 
@@ -215,7 +215,7 @@ x:
 			add_to_history(&ses->history, loc);
 		}
 		frame = ses_change_frame_url(ses, ses->task.target_frame,
-					     ses->loading_url);
+					     ses->loading_uri);
 
 		if (!frame) {
 			if (!loaded_in_frame) {
@@ -229,7 +229,7 @@ x:
 		vs = &frame->vs;
 		if (!loaded_in_frame) {
 			destroy_vs(vs);
-			init_vs(vs, ses->loading_url, vs->plain);
+			init_vs(vs, ses->loading_uri, vs->plain);
 		}
 
 		if (!loaded_in_frame) {
@@ -241,13 +241,13 @@ x:
 			}
 		}
 #if 0
-		request_additional_loading_file(ses, ses->loading_url,
+		request_additional_loading_file(ses, ses->loading_uri,
 						&ses->loading, PRI_FRAME);
 #endif
 	} else {
 		init_list(loc->frames);
 		vs = &loc->vs;
-		init_vs(vs, ses->loading_url, vs->plain);
+		init_vs(vs, ses->loading_uri, vs->plain);
 		add_to_history(&ses->history, loc);
 
 		if (ses->goto_position) {
@@ -268,7 +268,7 @@ x:
 static void
 ses_imgmap(struct session *ses)
 {
-	struct cache_entry *ce = find_in_cache(ses->loading_url);
+	struct cache_entry *ce = find_in_cache(ses->loading_uri);
 	struct fragment *fr;
 	struct memory_list *ml;
 	struct menu_item *menu;
@@ -300,10 +300,10 @@ do_move(struct session *ses, struct download **stat)
 	enum protocol protocol;
 
 	assert(stat && *stat);
-	assertm(ses->loading_url, "no ses->loading_url");
+	assertm(ses->loading_uri, "no ses->loading_uri");
 	if_assert_failed return 0;
 
-	protocol = known_protocol(ses->loading_url, NULL);
+	protocol = known_protocol(ses->loading_uri, NULL);
 	if (protocol == PROTOCOL_UNKNOWN) return 0;
 
 	if (ses->task.type == TASK_IMGMAP && (*stat)->state >= 0)
@@ -319,7 +319,7 @@ do_move(struct session *ses, struct download **stat)
 		if (task == TASK_HISTORY && !have_location(ses))
 			goto b;
 
-		u = get_cache_redirect_uri(ce, ses->loading_url);
+		u = get_cache_redirect_uri(ce, ses->loading_uri);
 		if (!u) goto b;
 
 		protocol = known_protocol(u, NULL);
@@ -488,7 +488,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	pos = extract_fragment(u);
 
 	if (ses->task.type == task) {
-		if (!strcmp(ses->loading_url, u)) {
+		if (!strcmp(ses->loading_uri, u)) {
 			/* We're already loading the URL. */
 			mem_free(u);
 

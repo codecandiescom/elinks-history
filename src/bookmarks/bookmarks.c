@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.112 2004/02/18 18:56:54 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.113 2004/04/01 01:09:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,14 +342,14 @@ bookmark_terminal_tabs(struct terminal *term, unsigned char *foldername)
 		struct session *ses = tab->data;
 
 		if (!get_current_url(ses, url, MAX_STR_LEN)) {
-			if (!ses->loading_url) continue;
-			safe_strncpy(url, ses->loading_url, MAX_STR_LEN);
+			if (!ses->loading_uri) continue;
+			safe_strncpy(url, ses->loading_uri, MAX_STR_LEN);
 		}
 
 		if (!get_current_title(tab->data, title, MAX_STR_LEN)) {
-			if (!ses->loading_url) continue;
+			if (!ses->loading_uri) continue;
 			/* TODO: Check globhist. --jonas */
-			safe_strncpy(title, ses->loading_url, MAX_STR_LEN);
+			safe_strncpy(title, ses->loading_uri, MAX_STR_LEN);
 		}
 
 		add_bookmark(folder, 1, title, url);

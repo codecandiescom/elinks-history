@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.105 2004/03/31 23:32:45 jonas Exp $ */
+/* $Id: session.h,v 1.106 2004/04/01 01:09:40 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -125,7 +125,7 @@ struct session {
 	struct list_head more_files; /* -> struct file_to_load */
 
 	struct download loading;
-	unsigned char *loading_url;
+	unsigned char *loading_uri;
 
 	enum cache_mode reloadlevel;
 	int redirect_cnt;

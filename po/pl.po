@@ -122,7 +122,6 @@ msgstr ""
 "1 - XBEL uniwersalny format XML (BEZ OBS£UGI ZNAKÓW NARODOWYCH!)"
 
 #: src/bookmarks/bookmarks.c:55
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default ELinks (Links 0.9x compatible) format\n"
@@ -897,29 +896,29 @@ msgid "Template option folder"
 msgstr "Folder szablonów opcji"
 
 #: src/config/options.c:846
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %ld)"
-msgstr "domy¶lnie"
+msgstr "(domy¶lnie: %ld)"
 
 #: src/config/options.c:851 src/config/options.c:874
-#, fuzzy, c-format
+#,  c-format
 msgid "(default: \"%s\")"
-msgstr "domy¶lnie"
+msgstr "(domy¶lnie: \"%s\")"
 
 #: src/config/options.c:856
-#, fuzzy, c-format
+#, c-format
 msgid "(alias for %s)"
-msgstr "alias dla"
+msgstr "(alias dla %s)"
 
 #: src/config/options.c:861
-#, fuzzy, c-format
+#, c-format
 msgid "(default: %s)"
-msgstr "domy¶lnie"
+msgstr "(domy¶lnie: %s)"
 
 #: src/config/options.c:866
-#, fuzzy, c-format
+#,  c-format
 msgid "(default: #%06x)"
-msgstr "domy¶lnie"
+msgstr "(domy¶lnie: #%06x)"
 
 #: src/config/options.c:993
 msgid "Configuration options:\n"
@@ -4011,7 +4010,6 @@ msgid "Open new ~tab"
 msgstr "Otwórz w nowym ~tabie"
 
 #: src/dialogs/menu.c:320
-#, fuzzy
 msgid "Open new t~ab in background"
 msgstr "Otwórz nowy t~ab w tle"
 
@@ -4064,7 +4062,6 @@ msgid "~Flush all caches"
 msgstr "Wyczy¶æ ~ca³± pamiêæ podrêczn±"
 
 #: src/dialogs/menu.c:349
-#, fuzzy
 msgid "Resource i~nfo"
 msgstr "~Informacje o zasobach"
 
@@ -4113,19 +4110,16 @@ msgid "Toggle ~html/plain"
 msgstr "Prze³±cz ~html/plain"
 
 #: src/dialogs/menu.c:432
-#, fuzzy
 msgid "Toggle i~mages"
-msgstr "Krótki/d³ugi opis"
+msgstr "Prze³±cz ~obrazki"
 
 #: src/dialogs/menu.c:433
-#, fuzzy
 msgid "Toggle ~link numbering"
-msgstr "Wprowad¼ numer odno¶nika"
+msgstr "Prze³±cz n~umerowanie odno¶ników"
 
 #: src/dialogs/menu.c:434
-#, fuzzy
 msgid "Toggle ~document colors"
-msgstr "Prze³±cz sposób u¿ycia kolorów podanych w dokumencie"
+msgstr "Prze³±cz sposób u¿ycia kolorów podanych w ~dokumencie"
 
 #: src/dialogs/menu.c:435
 msgid "Document ~info"
@@ -4346,9 +4340,8 @@ msgid "Rows"
 msgstr "Wiersze"
 
 #: src/dialogs/options.c:316
-#, fuzzy
 msgid "Resize terminal"
-msgstr "Zmieñ rozmiar ~terminala"
+msgstr "Zmieñ rozmiar terminala"
 
 #: src/formhist/formhist.c:34
 msgid "Show forms history dialog"
@@ -4385,7 +4378,6 @@ msgstr ""
 
 #. name:
 #: src/formhist/formhist.c:373
-#, fuzzy
 msgid "Forms History"
 msgstr "Zapamiêtywanie formularzy"
 
@@ -4671,7 +4663,6 @@ msgstr ""
 
 #. name:
 #: src/mime/backend/default.c:227
-#, fuzzy
 msgid "Option system"
 msgstr "System konfiguracyjny"
 
@@ -5263,9 +5254,8 @@ msgstr "Wprowad¼ wyra¿enie"
 
 #. name:
 #: src/scripting/scripting.c:34
-#, fuzzy
 msgid "Scripting"
-msgstr "Opis"
+msgstr "Skryptowanie"
 
 #: src/terminal/event.c:90
 #, c-format
@@ -5505,16 +5495,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1529
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#, fuzzy
-#~ msgid ""
-#~ "Ask if a login form should be saved to file or not.\n"
-#~ "This option only disables the dialog, already saved login\n"
-#~ "forms are unaffected. (DISABLED)"
-#~ msgstr ""
-#~ "Zapytaj czy formularz logowania powinien byæ zapisany do pliku czy nie.\n"
-#~ "Opcja ta jedynie wy³±cza okno dialogowe, poprzednio zapisane\n"
-#~ "formularze logowania pozostaj± nienaruszone."
-
-#~ msgid "Resize ~terminal"
-#~ msgstr "Zmieñ rozmiar ~terminala"

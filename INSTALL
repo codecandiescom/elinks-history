@@ -66,7 +66,7 @@ OpenSSL library is not part of your base system, you are VIOLATING GPL (altough
 I believe that for this absurd case no ELinks copyright holder will sue you, and
 it's not problem for OpenSSL people as well, as they explicitly told me).  So,
 people who are making ELinks binary for system with OpenSSL not in base system
-and who decided to link OpenSSL against ELinks binary may wish NOT tp publish or
+and who decided to link OpenSSL against ELinks binary may wish NOT to publish or
 distribute such a binary, as it's breaking GPL 2(b), if they like to have
 everything legally perfect (like Debian people ;).  As a semi-solution to this
 for these people, GNUTLS support was introduced; if you want to distribute
@@ -149,5 +149,5 @@ old_to_new_bookmarks.sh.
 
 ##########
 
-$Id: INSTALL,v 1.17 2002/08/27 10:51:47 pasky Exp $
+$Id: INSTALL,v 1.18 2002/08/31 23:10:49 pasky Exp $
 vim: textwidth=80

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.132 2004/11/23 17:12:57 witekfl Exp $ */
+/* $Id: renderer.c,v 1.133 2004/11/26 17:23:45 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -475,13 +475,11 @@ sort_links(struct document *document)
 		int p, q, j;
 
 		if (!link->npoints) {
-#if 0
 			done_link_members(link);
 			memmove(link, link + 1,
 				(document->nlinks - i - 1) * sizeof(struct link));
 			document->nlinks--;
 			i--;
-#endif
 			continue;
 		}
 		p = link->points[0].y;

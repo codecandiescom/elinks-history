@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-02 16:18+0100\n"
-"PO-Revision-Date: 2005-01-02 16:26+0100\n"
+"POT-Creation-Date: 2005-01-02 23:11+0100\n"
+"PO-Revision-Date: 2005-01-02 23:13+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -838,8 +838,10 @@ msgid "Look up specified host"
 msgstr "Résolution du nom de l'hôte spécifié"
 
 #: src/config/cmdline.c:701
-msgid "Look up specified host."
-msgstr "Résolution du nom de l'hôte spécifié."
+msgid "Look up specified host and print all DNS resolved IP addresses."
+msgstr ""
+"Résoudre le nom d'hôte spécifié et imprimer toutes les adresses IP\n"
+"correspondantes."
 
 #: src/config/cmdline.c:703
 msgid "Run as separate instance"
@@ -903,21 +905,22 @@ msgstr "Contrôler une instance préexistante d'ELinks"
 
 #: src/config/cmdline.c:729
 msgid ""
-"Mozilla compliant support for controlling a remote ELinks instance.\n"
-"The command takes an additional argument containing the method which\n"
-"should be invoked and any parameters that should be passed to it.\n"
-"For ease of use the additional method argument can be omitted in which\n"
-"case any URL arguments will be opened in new tabs in the remote instance.\n"
-"Following is a list of the methods that are supported:\n"
-"\tping()                    -- check for remote instance\n"
-"\topenURL()                 -- prompt URL in current tab\n"
-"\topenURL(URL)              -- open URL in current tab\n"
-"\topenURL(URL, new-tab)     -- open URL in new tab\n"
-"\topenURL(URL, new-window)  -- open URL in new window\n"
-"\taddBookmark(URL)          -- bookmark URL\n"
-"\txfeDoCommand(openBrowser) -- open new window"
+"Control a remote ELinks instance by passing commands to it.\n"
+"The option takes an additional argument containing the method\n"
+"which should be invoked and any parameters that should be passed\n"
+"to it. For ease of use, the additional method argument can be\n"
+"omitted in which case any URL arguments will be opened in new\n"
+"tabs in the remote instance.\n"
+"Following is a list of the supported methods:\n"
+"\tping()                    : look for a remote instance\n"
+"\topenURL()                 : prompt URL in current tab\n"
+"\topenURL(URL)              : open URL in current tab\n"
+"\topenURL(URL, new-tab)     : open URL in new tab\n"
+"\topenURL(URL, new-window)  : open URL in new window\n"
+"\taddBookmark(URL)          : bookmark URL\n"
+"\txfeDoCommand(openBrowser) : open instance in new window"
 msgstr ""
-"Support compatible Mozilla pour contrôler une instance d'ELinks.\n"
+"Contrôle une instance distante d'ELinks en lui passant des commandes.\n"
 "La commande prend un argument additionnel contenant la méthode qui doit\n"
 "être invoquée et tous paramètres qui doivent lui être passés.\n"
 "Pour faciliter l'utilisation, la méthode peut être omise, dans ce cas, tous\n"
@@ -932,11 +935,11 @@ msgstr ""
 "\taddBookmark(URL)          -- ajoute un signet pour l'URL\n"
 "\txfeDoCommand(openBrowser) -- ouvre une nouvelle fenêtre"
 
-#: src/config/cmdline.c:743
+#: src/config/cmdline.c:744
 msgid "Connect to session ring with given ID"
 msgstr "Se connecter au groupe de sessions correspondant à cet ID"
 
-#: src/config/cmdline.c:745
+#: src/config/cmdline.c:746
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -967,37 +970,38 @@ msgstr ""
 "-no-connect. Dans tous les cas, les fichiers d'état ne sont pas modifiés\n"
 "sur le disque, sauf si vous utilisez conjointement l'option -touch-files."
 
-#: src/config/cmdline.c:760
+#: src/config/cmdline.c:761
 msgid "Print the source of given URLs to stdout"
 msgstr "Imprimer la source des URLs données sur la sortie standard"
 
-#: src/config/cmdline.c:762
+#: src/config/cmdline.c:763
 msgid "Print given URLs in source form to stdout."
 msgstr ""
 "Imprimer les URLs données dans leur forme source sur la sortie standard."
 
-#: src/config/cmdline.c:766
+#: src/config/cmdline.c:767
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 "Modifier les fichiers dans ~/.elinks avec les options -no-connect/-session-"
 "ring"
 
-#: src/config/cmdline.c:768
+#: src/config/cmdline.c:769
 msgid ""
 "When enabled, runtime state files (bookmarks, history, etc.) are\n"
 "written to disk, even when -no-connect or -session-ring is used.\n"
-"It has no effect if not used in connection with any of these options."
+"The option has no effect if not used in conjunction with any of\n"
+"these options."
 msgstr ""
 "Quand actif, les fichiers d'état (signets, historique, etc.) sont\n"
 "écrits sur disque, même si les options -no-connect ou -session-ring\n"
-"sont utilisées. N'a aucun effet si n'est pas utilisé en conjonction\n"
-"avec ces options."
+"sont utilisées. Cette option n'a aucun effet si elle n'est pas\n"
+"utilisée en conjonction avec ces options."
 
-#: src/config/cmdline.c:772
+#: src/config/cmdline.c:774
 msgid "Verbose level"
 msgstr "Niveau de verbosité"
 
-#: src/config/cmdline.c:774
+#: src/config/cmdline.c:776
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -1011,11 +1015,11 @@ msgstr ""
 "\t1 pour ne montrer que les erreurs sérieuses et les alertes\n"
 "\t2 pour montrer tous les messages"
 
-#: src/config/cmdline.c:780
+#: src/config/cmdline.c:782
 msgid "Print version information and exit"
 msgstr "Afficher la version et quitter"
 
-#: src/config/cmdline.c:782
+#: src/config/cmdline.c:784
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
@@ -4075,7 +4079,7 @@ msgid "Folder"
 msgstr "Dossier"
 
 #. name:
-#: src/cookies/cookies.c:81 src/cookies/cookies.c:824
+#: src/cookies/cookies.c:81 src/cookies/cookies.c:826
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -4107,22 +4111,23 @@ msgstr "Age maximal"
 msgid ""
 "Cookie maximum age (in days):\n"
 "-1 is use cookie's expiration date if any\n"
-"0  is force expiration at the end of session, ignoring cookie's expiration "
-"date\n"
-"1+ is use cookie's expiration date, but limit age to the given number of days"
+"0  is force expiration at the end of session, ignoring cookie's\n"
+"   expiration date\n"
+"1+ is use cookie's expiration date, but limit age to the given\n"
+"   number of days"
 msgstr ""
-"Age maximal pour les cookies (en jours)\n"
-"-1  utiliser si possible la date d'expiration du cookie.\n"
+"Age maximal pour les cookies (en jours):\n"
+"-1  utiliser si possible la date d'expiration du cookie\n"
 " 0  forcer l'expiration à la fin de la session courante,\n"
-"    ignorant la date d'expiration du cookie.\n"
+"    ignorant la date d'expiration du cookie\n"
 " 1+ utiliser si possible la date d'expiration du cookie,\n"
-"    mais limiter l'age à ce nombre de jours."
+"    mais limiter l'age à ce nombre de jours"
 
-#: src/cookies/cookies.c:100
+#: src/cookies/cookies.c:102
 msgid "Paranoid security"
 msgstr "Sécurité maximale (parano.)"
 
-#: src/cookies/cookies.c:102
+#: src/cookies/cookies.c:104
 msgid ""
 "When enabled, we'll require three dots in cookies domain for all\n"
 "non-international domains (instead of just two dots). Some countries\n"
@@ -4138,25 +4143,25 @@ msgstr ""
 "potentiellement être très mauvais. Notez, cette option est désactivée\n"
 "par défaut car elle empêche le bon fonctionnement de nombreux sites."
 
-#: src/cookies/cookies.c:108
+#: src/cookies/cookies.c:110
 msgid "Saving"
 msgstr "Sauvegarde"
 
-#: src/cookies/cookies.c:110
-msgid "Load/save cookies from/to disk?"
-msgstr "Charger/sauver les cookies sur disque ?"
-
 #: src/cookies/cookies.c:112
+msgid "Whether cookies should be loaded from and save to disk."
+msgstr "Charger/sauvegarder ou non les cookies sur disque."
+
+#: src/cookies/cookies.c:114
 msgid "Resaving"
 msgstr "Sauvegarde répétée"
 
-#: src/cookies/cookies.c:114
+#: src/cookies/cookies.c:116
 msgid ""
 "Save cookies after each change in cookies list? No effect when\n"
-"cookies_save is off."
+"cookie saving (cookies.save) is off."
 msgstr ""
 "Sauvegarde des cookies après chaque modification ?\n"
-"Aucun effet si la sauvegarde est désactivée."
+"Aucun effet si la sauvegarde (cookies.save) est désactivée."
 
 #: src/cookies/dialogs.c:37 src/cookies/dialogs.c:352
 msgid "Domain"
@@ -7356,3 +7361,9 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Look up specified host."
+#~ msgstr "Résolution du nom de l'hôte spécifié."
+
+#~ msgid "Load/save cookies from/to disk?"
+#~ msgstr "Charger/sauver les cookies sur disque ?"

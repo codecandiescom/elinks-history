@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.108 2003/06/08 14:42:41 zas Exp $ */
+/* $Id: parser.c,v 1.109 2003/06/08 14:48:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,10 +49,7 @@ atchr(unsigned char c)
         Subsequent characters in the name may include letters, digits,
         underscores, hyphens, and periods. They may not include white space
         or other punctuation marks. */
-	return (c >= 'A' && c <= 'Z')
-                || (c >= 'a' && c <= 'z')
-                || (c >= '0' && c <= '9')
-                || c == '_' || c == '.' || c == '-';
+	return isA(c) || c == '.';
 }
 
 /* This function eats one html element. */

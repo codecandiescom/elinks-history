@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.58 2003/09/15 20:44:48 jonas Exp $ */
+/* $Id: link.c,v 1.59 2003/09/15 20:45:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,7 +322,7 @@ in_viewx(struct document_view *view, struct link *link)
 	for (i = 0; i < link->n; i++) {
 		int x = link->pos[i].x - view->vs->view_posx;
 
-		if (x >= 0 && && x < view->xw)
+		if (x >= 0 && x < view->xw)
 			return 1;
 	}
 
@@ -330,18 +330,20 @@ in_viewx(struct document_view *view, struct link *link)
 }
 
 int
-in_viewy(struct document_view *f, struct link *l)
+in_viewy(struct document_view *view, struct link *link)
 {
 	register int i;
 
-	assert(f && l);
+	assert(view && link);
 	if_assert_failed return 0;
 
-	for (i = 0; i < l->n; i++) {
-		if (l->pos[i].y >= f->vs->view_pos
-		    && l->pos[i].y < f->vs->view_pos + f->yw)
+	for (i = 0; i < link->n; i++) {
+		int y = link->pos[i].y - view->vs->view_pos;
+
+		if (y >= 0 && y < view->yw)
 			return 1;
 	}
+
 	return 0;
 }
 

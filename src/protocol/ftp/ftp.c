@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.136 2004/05/29 17:37:30 jonas Exp $ */
+/* $Id: ftp.c,v 1.137 2004/06/12 15:43:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1143,18 +1143,22 @@ out_of_mem:
 
 	if (c_i->dir && !conn->from) {
 		struct string string;
-		unsigned char *url = struri(conn->uri);
-		int url_len = strlen(url);
+		unsigned char *uristring;
 
 		if (!conn->uri->data) {
 			abort_conn_with_state(conn, S_FTP_ERROR);
 			return;
 		}
 
-		if (!init_string(&string))
-			goto out_of_mem;
+		uristring = get_uri_string(conn->uri, URI_PUBLIC);
+		if (!uristring) goto out_of_mem;
 
-		add_html_to_string(&string, url, url_len);
+		if (!init_string(&string)) {
+			mem_free(uristring);
+			goto out_of_mem;
+		}
+
+		add_html_to_string(&string, uristring, strlen(uristring));
 
 #define ADD_CONST(str) { \
 	add_fragment(conn->cached, conn->from, str, sizeof(str) - 1); \

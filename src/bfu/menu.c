@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.115 2003/09/28 22:29:46 jonas Exp $ */
+/* $Id: menu.c,v 1.116 2003/10/22 17:23:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -398,10 +398,10 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 
 			if (ev->x < menu->x || ev->x >= menu->x + menu->xw
 			    || ev->y < menu->y || ev->y >= menu->y + menu->yw) {
-				if ((ev->b & BM_ACT) == B_DOWN)
-					delete_window_ev(win, ev);
+				if ((ev->b & BM_ACT) == B_DOWN) {
+					delete_window_ev(win, NULL);
 
-				else {
+				} else {
 					struct window *w1;
 
 					for (w1 = win;

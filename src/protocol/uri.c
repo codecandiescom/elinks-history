@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.163 2004/04/07 15:38:40 jonas Exp $ */
+/* $Id: uri.c,v 1.164 2004/04/07 15:40:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -596,8 +596,80 @@ prx:
 	return normalize_uri_reparse(&uri, n);
 }
 
+
 static inline enum protocol
-find_uri_protocol(unsigned char *newurl);
+find_uri_protocol(unsigned char *newurl)
+{
+	unsigned char *ch = newurl + strcspn(newurl, ".:/@");
+	enum protocol protocol = PROTOCOL_FILE;
+
+	if (file_exists(newurl)) goto end;
+#if 0
+	/* This (not_file thing) is a bad assumption since @prefix is
+	 * not changed which again causes any URI that is not
+	 * recognized as being some other protocol to fallback to
+	 * file:///. Changing the @prefix is also not good since it
+	 * gives the error message "Bad URI syntax".  Leaving it like
+	 * this will give a "No such file or directory" error. */
+	else {
+		not_file = 1;
+	}
+#endif
+
+	/* Yes, it would be simpler to make test for IPv6 address first,
+	 * but it would result in confusing mix of ifdefs ;-). */
+
+	if (*ch == '@' || (*ch == ':' && *newurl != '[')
+		|| !strncasecmp(newurl, "ftp.", 4)) {
+		/* Contains user/password/ftp-hostname */
+		protocol = PROTOCOL_FTP;
+
+#ifdef IPV6
+	} else if (*newurl == '[' && *ch == ':') {
+		/* Candidate for IPv6 address */
+		unsigned char *bracket2, *colon2;
+
+		ch++;
+		bracket2 = strchr(ch, ']');
+		colon2 = strchr(ch, ':');
+		if (bracket2 && colon2 && bracket2 > colon2)
+			goto http;
+#endif
+
+	} else if (*newurl != '.' && *ch == '.') {
+		/* Contains domain name? */
+		unsigned char *host_end, *domain;
+		unsigned char *ipscan;
+
+		/* Process the hostname */
+		for (domain = ch + 1;
+			*(host_end = domain + strcspn(domain, ".:/?")) == '.';
+			domain = host_end + 1);
+
+		/* It's IP? */
+		for (ipscan = ch; isdigit(*ipscan) || *ipscan == '.';
+			ipscan++);
+		if (!*ipscan || *ipscan == ':' || *ipscan == '/')
+			goto http;
+
+		/* FIXME: Following is completely braindead.
+		 * TODO: Remove it. We should rather first try file:// and
+		 * then http://, if failed. But this will require wider
+		 * modifications. :| --pasky */
+
+		/* It's two-letter TLD? */
+		if (host_end - domain == 2) {
+http:				protocol = PROTOCOL_HTTP;
+
+		} else {
+			/* See above the braindead FIXME :^). */
+			if (end_with_known_tld(domain, host_end - domain) >= 0)
+				goto http;
+		}
+	}
+end:
+	return protocol;
+}
 
 static unsigned char *
 translate_url(unsigned char *url, unsigned char *cwd)
@@ -680,79 +752,6 @@ parse_uri:
 	return NULL;
 }
 
-static inline enum protocol
-find_uri_protocol(unsigned char *newurl)
-{
-		unsigned char *ch = newurl + strcspn(newurl, ".:/@");
-		enum protocol protocol = PROTOCOL_FILE;
-
-		if (file_exists(newurl)) goto end;
-#if 0
-		/* This (not_file thing) is a bad assumption since @prefix is
-		 * not changed which again causes any URI that is not
-		 * recognized as being some other protocol to fallback to
-		 * file:///. Changing the @prefix is also not good since it
-		 * gives the error message "Bad URI syntax".  Leaving it like
-		 * this will give a "No such file or directory" error. */
-		else {
-			not_file = 1;
-		}
-#endif
-
-		/* Yes, it would be simpler to make test for IPv6 address first,
-		 * but it would result in confusing mix of ifdefs ;-). */
-
-		if (*ch == '@' || (*ch == ':' && *newurl != '[')
-		    || !strncasecmp(newurl, "ftp.", 4)) {
-			/* Contains user/password/ftp-hostname */
-			protocol = PROTOCOL_FTP;
-
-#ifdef IPV6
-		} else if (*newurl == '[' && *ch == ':') {
-			/* Candidate for IPv6 address */
-			unsigned char *bracket2, *colon2;
-
-			ch++;
-			bracket2 = strchr(ch, ']');
-			colon2 = strchr(ch, ':');
-			if (bracket2 && colon2 && bracket2 > colon2)
-				goto http;
-#endif
-
-		} else if (*newurl != '.' && *ch == '.') {
-			/* Contains domain name? */
-			unsigned char *host_end, *domain;
-			unsigned char *ipscan;
-
-			/* Process the hostname */
-			for (domain = ch + 1;
-			     *(host_end = domain + strcspn(domain, ".:/?")) == '.';
-			     domain = host_end + 1);
-
-			/* It's IP? */
-			for (ipscan = ch; isdigit(*ipscan) || *ipscan == '.';
-			     ipscan++);
-			if (!*ipscan || *ipscan == ':' || *ipscan == '/')
-				goto http;
-
-			/* FIXME: Following is completely braindead.
-			 * TODO: Remove it. We should rather first try file:// and
-			 * then http://, if failed. But this will require wider
-			 * modifications. :| --pasky */
-
-			/* It's two-letter TLD? */
-			if (host_end - domain == 2) {
-http:				protocol = PROTOCOL_HTTP;
-
-			} else {
-				/* See above the braindead FIXME :^). */
-				if (end_with_known_tld(domain, host_end - domain) >= 0)
-					goto http;
-			}
-		}
-end:
-	return protocol;
-}
 
 static inline unsigned char *
 extract_fragment(unsigned char *uri)

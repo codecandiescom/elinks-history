@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.149 2004/07/03 23:29:49 zas Exp $ */
+/* $Id: ftp.c,v 1.150 2004/07/03 23:58:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -654,12 +654,26 @@ add_file_cmd_to_str(struct connection *conn)
 	return c_i;
 }
 
+static void
+send_it_line_by_line(struct connection *conn, struct string *cmd)
+{
+	struct ftp_connection_info *c_i = conn->info;
+	unsigned char *nl = strchr(c_i->cmd_buffer, '\n');
+
+	if (!nl) {
+		add_to_string(cmd, c_i->cmd_buffer);
+		return;
+	}
+
+	nl++;
+	add_bytes_to_string(cmd, c_i->cmd_buffer, nl - c_i->cmd_buffer);
+	memmove(c_i->cmd_buffer, nl, strlen(nl) + 1);
+}
 
 /* Send commands to retrieve file or directory. */
 static void
 ftp_send_retr_req(struct connection *conn, int state)
 {
-	struct ftp_connection_info *c_i;
 	struct string cmd;
 
 	if (!init_string(&cmd)) {
@@ -673,21 +687,9 @@ ftp_send_retr_req(struct connection *conn, int state)
 		done_string(&cmd);
 		return;
 	}
-	c_i = conn->info;
 
-	{
-		/* Send it line-by-line. */
-		unsigned char *nl = strchr(c_i->cmd_buffer, '\n');
-
-		if (!nl) {
-			add_to_string(&cmd, c_i->cmd_buffer);
-		} else {
-			nl++;
-			add_bytes_to_string(&cmd, c_i->cmd_buffer,
-					 nl - c_i->cmd_buffer);
-			memmove(c_i->cmd_buffer, nl, strlen(nl) + 1);
-		}
-	}
+	/* Send it line-by-line. */
+	send_it_line_by_line(conn, &cmd);
 
 	send_cmd(conn, cmd.source, cmd.length, (void *) ftp_retr_file, state);
 }

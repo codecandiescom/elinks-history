@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: lua.c,v 1.8 2002/03/28 22:53:35 pasky Exp $ */
+/* $Id: lua.c,v 1.9 2002/04/07 07:01:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #include <setjmp.h>
 #include <signal.h>
+#include <stdio.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

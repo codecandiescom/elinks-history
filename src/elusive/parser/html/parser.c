@@ -1,5 +1,5 @@
 /* Parser HTML backend */
-/* $Id: parser.c,v 1.33 2003/06/08 10:49:26 zas Exp $ */
+/* $Id: parser.c,v 1.34 2003/07/23 02:28:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -495,7 +495,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 
 	while (html_len) {
 		if ((!WHITECHAR(*html) && *html != '>')
-		    && (!quoted || (quoted && *html != quoted))) {
+		    && (!quoted || *html != quoted)) {
 			html++, html_len--;
 			continue;
 		}

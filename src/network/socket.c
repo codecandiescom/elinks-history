@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.80 2004/07/12 10:59:24 zas Exp $ */
+/* $Id: socket.c,v 1.81 2004/07/12 13:39:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,20 +49,20 @@
 */
 
 #ifdef LOG_TRANSFER
-void
+static void
 log_data(unsigned char *data, int len)
 {
 	int fd = open(LOG_TRANSFER, O_WRONLY | O_APPEND | O_CREAT, 0622);
 
-	if (fd != -1) {
-		set_bin(fd);
-		write(fd, data, len);
-		close(fd);
-	}
+	if (fd = -1) return;
+
+	set_bin(fd);
+	write(fd, data, len);
+	close(fd);
 }
 
 #else
-#define log_data(x, y)
+#define log_data(data, len)
 #endif
 
 void dns_found(/* struct connection */ void *, int);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.59 2002/06/21 14:13:01 pasky Exp $ */
+/* $Id: options.c,v 1.60 2002/06/21 16:23:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -987,12 +987,12 @@ register_options()
 
 
 	add_opt_bool("",
-		"secure_save", 0, 1,
+		"secure_file_saving", 0, 1,
 		"First write data to 'file.tmp', rename to 'file' upon\n"
 		"successful finishing this. Note that this relates only to\n"
 		"config files, not downloaded files. You may want to disable\n"
 		"it, if you want some config file with some exotic permissions.\n"
-		"Secure save is automagically disabled if file is symlink.");
+		"Secure file saving is automagically disabled if file is symlink.");
 
 
 

@@ -2381,7 +2381,7 @@ struct translation translation_czech [] = {
   {T_MAIL_AND_TELNET_PROGRAMS, "Programy pro mail a telnet"},
   {T_NO_PROGRAM, "®ádný program"},
   {T_NO_PROGRAM_SPECIFIED_FOR, "Není zadán ¾ádný program pro"},
-  {T_BAD_USER_URL, NULL},
+  {T_BAD_USER_URL, "©patná URL u¾ivatelského protokolu"},
   {T_USERID, "U¾ivatelské jméno"},
   {T_PASSWORD, "Heslo"},
   {T_ENTER_USERNAME, "Zaloguj se pro "},

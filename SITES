@@ -1,6 +1,5 @@
 Homepage:
 	http://elinks.or.cz/
-	http://elinks.pld.org.pl/
 
 RPMs:
 	ftp://ftp.nest.pld-linux.org/pool/e/elinks/
@@ -17,7 +16,7 @@ CVS root:
 	:pserver:anoncvs@pasky.ji.cz:/home/cvs/elinks (master, DEPRECATED)
 
 Mailing list:
-	http://links.sf.net/mailing.html
+	http://elinks.or.cz/community.html#mailinglist
 	elinks-users@linuxfromscratch.org (user discussion, announcements)
 	elinks-dev@linuxfromscratch.org (weird development and sorcery talks)
 	listar@linuxfromscratch.org (Subject: subscribe elinks-users)
@@ -41,11 +40,11 @@ DEBs:
 	ftp://yikes.tolna.net/pub/linux/release/debian/
 
 RPMs:
-	http://ftp.pld.org.pl/pool/l/links/
-	http://ftp.pld.org.pl/pool/l/links2/
+	http://ftp.pld-linux.org/pool/l/links/
+	http://ftp.pld-linux.org/pool/l/links2/
 	http://www.binary.is/links.php
 	http://adis.on.ca/pub/Projects/MyRPMS/
 	ftp://ftp.scripty.com/pub/redhat/6.x/i386/links-0.95-1.i386.rpm
 	ftp://ftp.scripty.com/pub/redhat/6.x/SRPMS/links-0.95-1.src.rpm
 
-$Id: SITES,v 1.16 2003/09/26 21:18:05 pasky Exp $
+$Id: SITES,v 1.17 2003/09/30 23:34:47 jonas Exp $

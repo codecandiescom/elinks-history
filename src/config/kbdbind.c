@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.181 2004/01/24 23:33:34 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.182 2004/01/25 00:07:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ static struct strtonum (*action_table)[KM_MAX];
 static struct listbox_item *action_box_items[KM_MAX][1024];
 static struct list_head keymaps[KM_MAX];
 
-static int read_action(unsigned char *);
+static int read_action(enum keymap, unsigned char *);
 static void add_default_keybindings(void);
 static void init_action_listboxes(void);
 static void free_action_listboxes(void);
@@ -412,7 +412,7 @@ add_actions_to_string(struct string *string, int *actions,
 	for (i = 0; actions[i] != ACT_NONE; i++) {
 		struct keybinding *kb = kbd_act_lookup(map, actions[i]);
 		int keystrokelen = string->length;
-		unsigned char *desc = numtodesc(action_table[keymap], actions[i]);
+		unsigned char *desc = numtodesc(action_table[map], actions[i]);
 
 		if (!kb) continue;
 
@@ -792,9 +792,9 @@ static struct strtonum menu_action_table[] = {
 };
 
 static struct strtonum (*action_table)[KM_MAX] = {
-	main_action_table,
-	edit_action_table,
-	menu_action_table,
+	&main_action_table,
+	&edit_action_table,
+	&menu_action_table,
 };
 
 #undef DACT
@@ -893,7 +893,7 @@ toggle_display_action_listboxes(void)
 		keymap->text = toggle(keymap_table, (int) keymap->udata);
 		keymap->translated = state;
 
-		foreach (action, action->child) {
+		foreach (action, keymap->child) {
 			action->text = toggle(action_table[(int) keymap->udata],
 						(int) action->udata);
 			action->translated = state;

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.41 2003/06/16 00:40:51 jonas Exp $ */
+/* $Id: mailcap.c,v 1.42 2003/06/22 23:17:21 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -182,11 +182,11 @@ get_mailcap_field(unsigned char **next)
 
 	/* End field at the next occurence of ';' but not escaped '\;' */
 	do {
-		fieldend = strchr(fieldend, ';');
+		/* Handle both if ';' is the first char or if it's escaped */
+		if (*fieldend == ';')
+			fieldend++;
 
-		/* ';' is the first char so ignore that field */
-		if (field == fieldend)
-			field = ++fieldend;
+		fieldend = strchr(fieldend, ';');
 	} while (fieldend && *(fieldend-1) == '\\');
 
 	if (fieldend) {

@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.32 2003/10/03 16:18:23 kuser Exp $ */
+/* $Id: home.c,v 1.33 2003/10/03 16:25:41 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,8 @@ static unsigned char *
 test_confdir(unsigned char *confdir)
 {
 	struct stat st;
+
+	strip_trailing_dir_sep(confdir);
 
 	if (stat(confdir, &st)) {
 		if (!mkdir(confdir, 0700)) {
@@ -112,8 +114,6 @@ get_home(void)
 
 	if (envconfdir) {
 		add_to_strn(&home_elinks, envconfdir);
-
-		strip_trailing_dir_sep(home_elinks);
 
 		if (test_confdir(home_elinks)) {
 			goto end;

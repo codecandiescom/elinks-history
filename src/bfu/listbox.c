@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.91 2003/10/04 01:44:22 jonas Exp $ */
+/* $Id: listbox.c,v 1.92 2003/10/04 01:58:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,20 +301,18 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 	if (traverse_listbox_items_list(box->sel, dist, 1, NULL, NULL)
 	    != box->sel) {
-		struct box_context *data = mem_calloc(1, sizeof(struct box_context));
+		struct box_context data;
 
-		if (data) {
-			data->box = box;
-			data->listbox_item_data = listbox_item_data;
-			data->dist = dist;
+		memset(&data, 0, sizeof(struct box_context));
 
-			/* XXX: This is ugly, yes; but we don't want to call the
-			 * callback if we won't move on at all. */
-			box->sel = traverse_listbox_items_list(box->sel, dist, 1,
-						       	       box_sel_move_do,
-							       data);
-			mem_free(data);
-		}
+		data.box = box;
+		data.listbox_item_data = listbox_item_data;
+		data.dist = dist;
+
+		/* XXX: This is ugly, yes; but we don't want to call the
+		 * callback if we won't move on at all. */
+		box->sel = traverse_listbox_items_list(box->sel, dist, 1,
+						       box_sel_move_do, &data);
 	}
 }
 

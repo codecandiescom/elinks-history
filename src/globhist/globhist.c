@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.89 2004/12/17 23:50:27 miciah Exp $ */
+/* $Id: globhist.c,v 1.90 2004/12/17 23:53:42 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -204,7 +204,6 @@ add_global_history_item(unsigned char *url, unsigned char *title, ttime vtime)
 
 	history_item->box_item = add_listbox_leaf(&globhist_browser, NULL,
 						  history_item);
-	if (!history_item->box_item) return;
 
 	/* Hash creation if needed. */
 	if (!globhist_cache)

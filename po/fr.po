@@ -5947,7 +5947,7 @@ msgid ""
 "saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
 "for any inconvience caused."
 msgstr ""
-"L'option config.saving_style configurée à une valeur obsolète. Les "
+"L'option config.saving_style configurée a une valeur obsolète. Les "
 "algorithmes de sauvegarde de la configuration d'ELinks ont changé depuis la "
 "dernière mise à jour. Maintenant, seules les options qui ont effectivement "
 "changées sont sauvegardées. Cela simplifie grandement les choses lorsque des "
@@ -5969,7 +5969,7 @@ msgstr ""
 "Bienvenue dans ELinks !\n"
 "\n"
 "Pressez ESC pour accèder au menu.\n"
-"La documentation est accessible par le menu Aide."
+"La documentation est disponible dans le menu Aide."
 
 #: src/sched/task.c:165
 #, c-format
@@ -5984,7 +5984,7 @@ msgid ""
 "The form data you are about to post might be incomplete.\n"
 "Do you want to post to URL %s?"
 msgstr ""
-"Le formulaire que vous tenter de soumettre peut être incomplet.\n"
+"Le formulaire que vous tentez de soumettre est peut-être incomplet.\n"
 "Voulez-vous le soumettre à l'URL %s?"
 
 #: src/sched/task.c:173

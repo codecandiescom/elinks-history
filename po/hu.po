@@ -1,7 +1,10 @@
 # translation of hu.po to Hungarian
-# translation of hu.po to
 # ELinks Hungarian translation.
 # Suveg Gabor <gsuveg@sgmobil2000.hu>
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
+# Balazs Varga, 2004.
 # Balazs Varga, 2004.
 # Balazs Varga, 2004.
 # Balazs Varga, 2004.
@@ -16,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2004-04-07 23:48+0200\n"
-"PO-Revision-Date: 2004-02-20 15:23+0100\n"
+"PO-Revision-Date: 2004-03-26 00:19+0100\n"
 "Last-Translator: Balazs Varga\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -485,9 +488,8 @@ msgid "Options:\n"
 msgstr "Beállítások:\n"
 
 #: src/config/cmdline.c:432
-#, fuzzy
 msgid "Internal consistency error"
-msgstr "Belsõ hiba"
+msgstr "Belsõ kozisztencia hiba"
 
 #: src/config/cmdline.c:449
 msgid "Restrict to anonymous mode"
@@ -558,14 +560,13 @@ msgid "Name of configuration file"
 msgstr "A konfigurációs fájl neve"
 
 #: src/config/cmdline.c:484
-#, fuzzy
 msgid ""
 "Name of the file with configuration, from which and to\n"
 "which all the configuration shall be written. It should be\n"
 "relative to config-dir."
 msgstr ""
-"A konfigurációs állomány neve, relatívan megadva a konfigurációs\n"
-"könyvtárhoz képest."
+"A konfigurációs állomány neve, amely az összes beállítást tartalmazza,\n"
+"relatívan megadva a konfigurációs könyvtárhoz képest."
 
 #: src/config/cmdline.c:488
 msgid "MIME type to assume for documents"
@@ -686,8 +687,7 @@ msgstr "Ne próbálja irni/használni a fáljokat a ~/.elinks könyvtárban."
 
 #: src/config/cmdline.c:549
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:551
 msgid ""
@@ -995,8 +995,7 @@ msgstr ""
 #: src/config/dialogs.c:610
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:637 src/dialogs/info.c:138 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -1142,8 +1141,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:483
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:484
 msgid "Go to the homepage"
@@ -1266,9 +1264,8 @@ msgid "Reload the current page"
 msgstr "Az aktuális lap újratöltése"
 
 #: src/config/kbdbind.c:517
-#, fuzzy
 msgid "Re-render the current page"
-msgstr "Az aktuális lap újratöltése"
+msgstr "Az aktuális lap újrarajzolása"
 
 #: src/config/kbdbind.c:518
 msgid "Reset form items to their initial values"
@@ -1363,14 +1360,12 @@ msgid "Open the tab menu"
 msgstr ""
 
 #: src/config/kbdbind.c:542
-#, fuzzy
 msgid "Move the current tab one step ahead"
-msgstr "A kijelölt link megnyitása új fülre"
+msgstr "Az aktuális fül mozgatása elõre"
 
 #: src/config/kbdbind.c:543
-#, fuzzy
 msgid "Move the current tab one step back"
-msgstr "A kijelölt link megnyitása a háttérben, új fülre"
+msgstr "Az aktuális fül mozgatása hátra"
 
 #: src/config/kbdbind.c:544
 msgid "Next tab"
@@ -1385,9 +1380,8 @@ msgid "Toggle displaying of links to images"
 msgstr "A képekre mutató linkek megjelenítésének váltogatása"
 
 #: src/config/kbdbind.c:547
-#, fuzzy
 msgid "Toggle rendering of page using CSS"
-msgstr "A táblázatok megjelenítésének váltogatása"
+msgstr "Az CSS megjelenítésének be/kikapcsolása"
 
 #: src/config/kbdbind.c:548
 msgid "Toggle rendering of tables"
@@ -1410,9 +1404,8 @@ msgid "Toggle plain renderer compression of empty lines"
 msgstr ""
 
 #: src/config/kbdbind.c:553
-#, fuzzy
 msgid "Toggle wrapping of text"
-msgstr "A táblázatok megjelenítésének váltogatása"
+msgstr "A sortörések váltogatása"
 
 #: src/config/kbdbind.c:554
 msgid "Go forward in the unhistory"
@@ -1473,9 +1466,8 @@ msgid "Move to the next item"
 msgstr "Ugrás a következõ elemre"
 
 #: src/config/kbdbind.c:583 src/config/kbdbind.c:605
-#, fuzzy
 msgid "Move to the previous item"
-msgstr "Ugrás az elõzõ keretbe"
+msgstr "Ugrás az elõzõ elemre"
 
 #: src/config/kbdbind.c:584
 msgid "Paste text from the clipboard"
@@ -1673,8 +1665,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:99
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:105
@@ -1930,8 +1921,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:222
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:225 src/dialogs/options.c:166
 msgid "Underline"
@@ -1947,8 +1937,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:232
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:234
 msgid "Number links"
@@ -1995,8 +1984,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:265
 msgid "Searching"
@@ -2014,8 +2002,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:275 src/config/options.inc:282
 msgid "Regular expressions"
@@ -2190,8 +2177,7 @@ msgstr ""
 
 #: src/config/options.inc:370
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:372
 msgid ""
@@ -2417,9 +2403,8 @@ msgid "Header string used in dumps. %u is substituted by URL."
 msgstr ""
 
 #: src/config/options.inc:508
-#, fuzzy
 msgid "Footer"
-msgstr "Mappa"
+msgstr "Lábléc"
 
 #: src/config/options.inc:510
 #, c-format
@@ -2427,9 +2412,8 @@ msgid "Footer string used in dumps. %u is substituted by URL."
 msgstr ""
 
 #: src/config/options.inc:512
-#, fuzzy
 msgid "Separator"
-msgstr "Fül elválasztó"
+msgstr "Elválasztó"
 
 #: src/config/options.inc:514
 msgid "String which separates two dumps."
@@ -2796,7 +2780,6 @@ msgid "User-agent identification"
 msgstr "User Agent beállítása"
 
 #: src/config/options.inc:695
-#, fuzzy
 msgid ""
 "Change the User Agent ID. That means identification string, which\n"
 "is sent to HTTP server when a document is requested. The 'textmode'\n"
@@ -2812,9 +2795,13 @@ msgid ""
 msgstr ""
 "A User Agent beállítás megváltoztatása. Ez egy azonosító karaktersor,\n"
 "amit a böngészõ küld a HTTP kiszolgálónak, ha az egy oldalt kér le.\n"
+"Az azonosító textmode része az elsõ mezõben, egy próbálkozás részünkrõl\n"
+"ami arra irányul, hogy a webmesterek azonosíthassák az újabb szöveges\n"
+"módú böngészõket, és számukra egyszerûbb oldalakat készíthessenek."
 "%v a karaktersorban az ELinks verziója\n"
 "%s a karaktersorban a renszer azonosítót jelenti\n"
 "%t a terminál méretét adja vissza\n"
+"%b az Elinks által megjelenített státuszsorok, fülek, stb. számát adja vissza\n"
 "Ha nem akarsz User Agent fejlécet küldeni, irj ide \" \"-t."
 
 #: src/config/options.inc:708
@@ -2931,8 +2918,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:778
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -3627,29 +3613,30 @@ msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr "Esemény ami a megadott idõben bekövetkezik."
 
 #: src/config/options.inc:1190
-#, fuzzy
 msgid "Clock"
-msgstr "Szín"
+msgstr "Óra"
 
 #: src/config/options.inc:1191
-#, fuzzy
 msgid "Digital clock."
-msgstr "Dialógusablak címének színei."
+msgstr "Digitális óra"
 
 #: src/config/options.inc:1195
 msgid ""
 "Whether to enable displaying of digital clock. Note that,\n"
 "timer and LEDs should be enabled to make effect."
 msgstr ""
+"Megjelenjen-e a digitális óra. Megjegyzés: a LED-eknek,\n"
+"és az idõzítõnek be kell lenni kapcsolva hogy az óra megjelenhessen."
 
 #: src/config/options.inc:1198
-#, fuzzy
 msgid "Format"
-msgstr "Ürlapok"
+msgstr "Formátum"
 
 #: src/config/options.inc:1200
 msgid "Format string for digital clock. See strftime(3) man page for details."
 msgstr ""
+"A digitális óra formátuma. Lásd a strftime(3) man oldalt a pontos\n"
+"beállítások leírásához."
 
 #: src/config/options.inc:1202
 msgid "Window tabs"
@@ -3825,7 +3812,6 @@ msgid "Use secure file saving"
 msgstr "Biztonságos fájlmentés használata"
 
 #: src/config/options.inc:1285
-#, fuzzy
 msgid ""
 "First write data to unique temporary file, then rename this file\n"
 "upon successfully finishing this. Note that this relates only to\n"
@@ -3836,12 +3822,15 @@ msgid ""
 "file doesn't exist when rename() is called, breaking atomicity,\n"
 "and reducing reliability of this feature."
 msgstr ""
-"Mentéskor elõször egy 'file.tmp' írása, majd siker esetén\n"
-"átnevezés 'file' névre. Megjegyzés: ez a beállítás csak konfigurációs\n"
+"Mentéskor elõször egy egyedi átmeneti fálj írása, majd siker esetén\n"
+"átnevezés végleges névre. Megjegyzés: ez a beállítás csak konfigurációs\n"
 "állományok esetén mûködik, nem vonatkozik a letöltött állományokra.\n"
 "Amennyiben különleges engedélyekkel rendelkezõ konfigurációs\n"
 "állományokat szeretnél használni, tiltsd le. A biztonságos mentés\n"
-"automatikusan kikapcsol, ha a cél állomány szimbólikus link."
+"automatikusan kikapcsol, ha a cél állomány szimbólikus link.\n"
+"Figyelem: néhány rendszernél (pl.: OS/2, Win32) a rename() függvény\n"
+"hívásakor a célfájl nem szabad hogy létezzen, amely csökkenti ennek\n"
+"a funkciónak a megbízhatóságát."
 
 #: src/config/opttypes.c:54
 msgid "Read error"
@@ -4354,7 +4343,7 @@ msgstr "A dokumentum színeinek váltása"
 
 #: src/dialogs/menu.c:338
 msgid "~Wrap text on/off"
-msgstr ""
+msgstr "Sortörés be/ki"
 
 #: src/dialogs/menu.c:340
 msgid "Document ~info"
@@ -4365,14 +4354,12 @@ msgid "H~eader info"
 msgstr "Fejléc infó"
 
 #: src/dialogs/menu.c:342
-#, fuzzy
 msgid "Rel~oad document"
-msgstr "Nincs dokumentum"
+msgstr "Dokumentum újratöltése"
 
 #: src/dialogs/menu.c:343
-#, fuzzy
 msgid "~Rerender document"
-msgstr "Formázott dokumentum mentése"
+msgstr "Dokumentum megjelenítése"
 
 #: src/dialogs/menu.c:354
 msgid "~ELinks homepage"
@@ -4632,25 +4619,23 @@ msgstr "Nincs dokumentum"
 #. name:
 #: src/document/css/css.c:27 src/document/css/css.c:161
 msgid "Cascading Style Sheets"
-msgstr ""
+msgstr "CSS stíluslapok (Cascading Style Sheets)"
 
 #: src/document/css/css.c:29
-#, fuzzy
 msgid "Options concerning how to use CSS for styling documents."
-msgstr "Más dokumentumokra mutató linkek kezelése."
+msgstr "A CSS megjelenenítéssel kapcsolatos beállítások."
 
 #: src/document/css/css.c:31
-#, fuzzy
 msgid "Enable CSS"
-msgstr "Engedélyezés"
+msgstr "CSS engedélyezése"
 
 #: src/document/css/css.c:33
 msgid "Enable adding of CSS style info to documents."
-msgstr ""
+msgstr "A CSS stílusinformációk hozzáadása a dokumentumhoz."
 
 #: src/document/css/css.c:35
 msgid "Import external style sheets"
-msgstr ""
+msgstr "Külsõ stíluslapok importálása"
 
 #: src/document/css/css.c:37
 msgid ""
@@ -4660,9 +4645,8 @@ msgid ""
 msgstr ""
 
 #: src/document/css/css.c:41
-#, fuzzy
 msgid "Default style sheet"
-msgstr "Alapértelmezett színbeállítások"
+msgstr "Alapértelmezett stíluslap"
 
 #: src/document/css/css.c:43
 msgid ""
@@ -4943,9 +4927,8 @@ msgid "Ukrainian"
 msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
-#, fuzzy, c-format
-msgid ""
-"Commandline options -config-dir set to %s, but could not create directory %s."
+#, c-format
+msgid "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -5316,7 +5299,7 @@ msgstr "HTTP autentikáció"
 #: src/protocol/http/codes.c:106
 #, c-format
 msgid "HTTP error %03d"
-msgstr ""
+msgstr "HTTP hiba %03d"
 
 #: src/protocol/http/codes.c:129
 msgid ""
@@ -5613,16 +5596,15 @@ msgstr "Nem lehet a csatorna állapotát megállapítani"
 
 #: src/sched/error.c:55
 msgid "Only local connections are permitted"
-msgstr ""
+msgstr "Csak lokális kapcsolatok engedélyezettek"
 
 #: src/sched/error.c:56
-#, fuzzy
 msgid ""
 "This URL contains a protocol not yet known by ELinks.\n"
 "You can configure an external handler for it through\n"
 "the options system."
 msgstr ""
-"Ez az URL az Elinks számára ismeretlen protokollra hivatkozik.\n"
+"Ez az URL az Elinks számára még ismeretlen protokollra hivatkozik.\n"
 "Külsõ kezelõprogramot a program beállításai között lehet hozzárendelni."
 
 #: src/sched/error.c:60
@@ -6081,7 +6063,7 @@ msgstr "Szöveg keresése"
 
 #: src/viewer/text/textarea.c:268
 msgid "You cannot launch an external editor in the anonymous mode."
-msgstr ""
+msgstr "Nem indíthatsz külsõ programot anonymus módban."
 
 #: src/viewer/text/textarea.c:277
 msgid "You can do this only on the master terminal"
@@ -6103,23 +6085,3 @@ msgstr "Mentési hiba"
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
 
-#~ msgid "(default: #%06lx)"
-#~ msgstr "(alapértelmezett: #%06lx)"
-
-#~ msgid "Read document from stdin"
-#~ msgstr "Dokumentum olvasása stdin-rõl"
-
-#~ msgid ""
-#~ "Open stdin as an HTML document - this is fully equivalent to:\n"
-#~ " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
-#~ "Use whichever suits you more ;-). Note that reading document from\n"
-#~ "stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
-#~ "know why you would use -source -stdin, though ;-)"
-#~ msgstr ""
-#~ "Az stdin megnyitása mint HTML dokumentum. Ezzel egyenértékû:\n"
-#~ " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
-#~ "Megjegyzés: az stdinrõl való olvasás csak akkor mûködik ha -dump,\n"
-#~ "vagy -source opcióval együtt van megadva."
-
-#~ msgid "Bad user protocol URL"
-#~ msgstr "Hibás felhasználói protokoll URL"

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.144 2004/04/06 01:08:11 jonas Exp $ */
+/* $Id: uri.c,v 1.145 2004/04/06 01:13:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,7 +652,9 @@ parse_uri:
 		int not_file = 0;
 
 		if (!expanded) return NULL;
-		if (file_exists(expanded)) goto end;
+		mem_free(newurl);
+		newurl = expanded;
+		if (file_exists(newurl)) goto end;
 #if 0
 		/* This (not_file thing) is a bad assumption since @prefix is
 		 * not changed which again causes any URI that is not
@@ -721,18 +723,14 @@ http:				prefix = "http://";
 		}
 end:
 		if (!not_file) {
-			mem_free(newurl);
-			if (!dir_sep(*expanded))
-				insert_in_string(&expanded, 0, "./", 2);
-			newurl = expanded;
+			if (!dir_sep(*newurl))
+				insert_in_string(&newurl, 0, "./", 2);
 			insert_in_string(&newurl, 0, prefix, strlen(prefix));
 		} else {
-			mem_free(expanded);
 			insert_in_string(&newurl, 0, prefix, strlen(prefix));
 			if (!strchr(url, '/')) add_to_strn(&newurl, "/");
 		}
 
-		if (!newurl) return NULL;
 		goto parse_uri;
 	}
 	case URI_ERRNO_EMPTY:

@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.175 2004/07/06 11:05:03 jonas Exp $ */
+/* $Id: hierbox.c,v 1.176 2004/07/07 02:02:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -753,7 +753,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 		return 0;
 	}
 
-	text = box->ops->get_info(context->item, term);
+	text = box->ops->get_text(context->item, term);
 	if (!text) {
 		mem_free(context);
 		return 0;

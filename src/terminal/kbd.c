@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.94 2004/07/28 13:53:41 jonas Exp $ */
+/* $Id: kbd.c,v 1.95 2004/07/28 14:21:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -873,11 +873,12 @@ process_queue(struct itrm *itrm)
 					el = 1;
 				}
 				ev.x = KBD_ESC;
-				goto l2;
+
+			} else {
+				ev.x = itrm->kqueue[1];
+				ev.y = KBD_ALT;
 			}
 
-			ev.x = itrm->kqueue[1];
-			ev.y = KBD_ALT;
 			goto l2;
 		}
 

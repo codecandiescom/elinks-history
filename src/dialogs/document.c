@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.116 2005/03/23 11:28:39 zas Exp $ */
+/* $Id: document.c,v 1.117 2005/04/01 23:18:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,7 +89,7 @@ document_info_dialog(struct session *ses)
 				     _("Size", term), cached->length);
 
 		if (cached->incomplete) {
-			add_format_to_string(&msg, "(%s)", _("incomplete", term));
+			add_format_to_string(&msg, " (%s)", _("incomplete", term));
 		}
 
 		if (doc_view) {

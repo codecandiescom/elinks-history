@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.19 2003/10/18 21:21:48 pasky Exp $ */
+/* $Id: tab.c,v 1.20 2003/10/18 21:41:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,8 @@
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/lists.h"
+#include "viewer/text/link.h"
+#include "viewer/text/view.h"
 
 
 struct window *
@@ -169,7 +171,8 @@ close_tab(struct terminal *term)
 
 
 static void
-do_open_in_new_tab(struct terminal *term, unsigned char *param, int in_background)
+do_open_in_new_tab(struct terminal *term, struct session *ses,
+		   unsigned char *url, int in_background)
 {
 	struct window *tab;
 	struct initial_session_info *info;
@@ -183,34 +186,35 @@ do_open_in_new_tab(struct terminal *term, unsigned char *param, int in_backgroun
 		mem_free(tab);
 		return;
 	}
-	info->base_session = -1;
 
-	/* FIXME: This param parsing is way too ugly (and could prepare us some
-	 * nice surprises in the future) to survive in the codebase. We should
-	 * call some common creating the commandline directly in the open_in_..
-	 * function. --pasky */
-
-	if (!strncmp(param, "-base-session ", 13)) {
-		info->base_session = atoi(param + strlen("-base-session "));
-	} else {
-		info->url = decode_shell_safe_url(param);
-	}
+	info->base_session = ses->id;
+	info->url = url;
 
 	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
 }
 
 void
-open_in_new_tab(struct terminal *term, unsigned char *exe_name,
-                unsigned char *param)
+open_in_new_tab(struct terminal *term, void *xxx, struct session *ses)
 {
-	do_open_in_new_tab(term, param, 0);
+	do_open_in_new_tab(term, ses, NULL, 0);
 }
 
 void
-open_in_new_tab_in_background(struct terminal *term,
-			      unsigned char *exe_name,
-                	      unsigned char *param)
+open_in_new_tab_in_background(struct terminal *term, void *xxx,
+			      struct session *ses)
 {
-	do_open_in_new_tab(term, param, 1);
+	struct document_view *doc_view;
+
+	assert(ses);
+
+	doc_view = current_frame(ses);
+	if (doc_view) assert(doc_view->vs && doc_view->document);
+	if_assert_failed return;
+
+	do_open_in_new_tab(term, ses,
+			   doc_view && doc_view->vs->current_link != -1
+			   	? get_link_url(doc->view->document->links[doc_view->vs->current_link])
+				: NULL,
+			   1);
 }

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.98 2004/01/26 22:36:54 jonas Exp $ */
+/* $Id: scanner.c,v 1.99 2004/01/26 22:40:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,81 @@
 #include "document/css/scanner.h"
 #include "util/error.h"
 #include "util/string.h"
+
+
+/* Generic scanner stuff */
+
+struct scan_table_info {
+	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
+	union scan_table_data {
+		struct { unsigned char *source; long length; } string;
+		struct { long start, end; } range;
+	} data;
+	int bits;
+};
+
+/* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
+#define SCAN_TABLE_INFO(type, data1, data2, bits) \
+	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
+
+#define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
+#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)
+#define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
+
+static struct scan_table_info css_scan_table_info[] = {
+	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
+	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
+	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+
+	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
+	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
+	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
+	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
+	/* Unicode escape (that we do not handle yet) + other special chars */
+	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
+	/* This should contain mostly used char tokens like ':' and maybe a few
+	 * garbage chars that people might put in their CSS code */
+	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
+	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
+
+	SCAN_TABLE_END,
+};
+
+/* Initiate bitmaps */
+static void
+init_css_scan_table(void)
+{
+	struct scan_table_info *info = css_scan_table_info;
+	int i;
+
+	for (i = 0; info[i].type != SCAN_END; i++) {
+		union scan_table_data *data = &info[i].data;
+
+		if (info[i].type == SCAN_RANGE) {
+			int index = data->range.start;
+
+			assert(data->range.start > 0);
+			assert(data->range.end < SCAN_TABLE_SIZE);
+			assert(data->range.start <= data->range.end);
+
+			for (; index <= data->range.end; index++)
+				css_scan_table[index] |= info[i].bits;
+
+		} else {
+			unsigned char *string = info[i].data.string.source;
+			int pos = info[i].data.string.length - 1;
+
+			assert(info[i].type == SCAN_STRING && pos >= 0);
+
+			for (; pos >= 0; pos--)
+				css_scan_table[string[pos]] |= info[i].bits;
+		}
+	}
+}
+
 
 
 #define	SCAN_TABLE_SIZE	256
@@ -470,77 +545,6 @@ skip_css_tokens_(struct css_scanner *scanner, enum css_token_type skipto)
 
 
 /* Initializers */
-
-struct scan_table_info {
-	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
-	union scan_table_data {
-		struct { unsigned char *source; long length; } string;
-		struct { long start, end; } range;
-	} data;
-	int bits;
-};
-
-/* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
-#define SCAN_TABLE_INFO(type, data1, data2, bits) \
-	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
-
-#define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
-#define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)
-#define SCAN_TABLE_END			 SCAN_TABLE_INFO(SCAN_END, 0, 0, 0)
-
-static struct scan_table_info css_scan_table_info[] = {
-	SCAN_TABLE_RANGE('0', '9', CSS_CHAR_DIGIT | CSS_CHAR_HEX_DIGIT | CSS_CHAR_IDENT),
-	SCAN_TABLE_RANGE('A', 'F', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('A', 'Z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	SCAN_TABLE_RANGE('a', 'f', CSS_CHAR_HEX_DIGIT),
-	SCAN_TABLE_RANGE('a', 'z', CSS_CHAR_ALPHA | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	SCAN_TABLE_RANGE(161, 255, CSS_CHAR_NON_ASCII | CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-
-	SCAN_TABLE_STRING(" \f\n\r\t\v", CSS_CHAR_WHITESPACE),
-	SCAN_TABLE_STRING("\f\n\r",	 CSS_CHAR_NEWLINE),
-	SCAN_TABLE_STRING("-",		 CSS_CHAR_IDENT),
-	SCAN_TABLE_STRING(".#@!\"'<-/",	 CSS_CHAR_TOKEN_START),
-	/* Unicode escape (that we do not handle yet) + other special chars */
-	SCAN_TABLE_STRING("\\_",	 CSS_CHAR_IDENT | CSS_CHAR_IDENT_START),
-	/* This should contain mostly used char tokens like ':' and maybe a few
-	 * garbage chars that people might put in their CSS code */
-	SCAN_TABLE_STRING("({});:,*",	 CSS_CHAR_TOKEN),
-	SCAN_TABLE_STRING("<!->",	 CSS_CHAR_SGML_MARKUP),
-
-	SCAN_TABLE_END,
-};
-
-/* Initiate bitmaps */
-static void
-init_css_scan_table(void)
-{
-	struct scan_table_info *info = css_scan_table_info;
-	int i;
-
-	for (i = 0; info[i].type != SCAN_END; i++) {
-		union scan_table_data *data = &info[i].data;
-
-		if (info[i].type == SCAN_RANGE) {
-			int index = data->range.start;
-
-			assert(data->range.start > 0);
-			assert(data->range.end < SCAN_TABLE_SIZE);
-			assert(data->range.start <= data->range.end);
-
-			for (; index <= data->range.end; index++)
-				css_scan_table[index] |= info[i].bits;
-
-		} else {
-			unsigned char *string = info[i].data.string.source;
-			int pos = info[i].data.string.length - 1;
-
-			assert(info[i].type == SCAN_STRING && pos >= 0);
-
-			for (; pos >= 0; pos--)
-				css_scan_table[string[pos]] |= info[i].bits;
-		}
-	}
-}
 
 void
 init_css_scanner(struct css_scanner *scanner, unsigned char *string)

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.105 2004/04/22 18:09:31 pasky Exp $ */
+/* $Id: options.inc,v 1.106 2004/04/22 19:53:26 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -396,7 +396,8 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_CODEPAGE("document.codepage", N_("Default codepage"),
 		"assume", 0, "System",
-		N_("Default document codepage.")),
+		N_("Default document codepage. 'System' stands for\n"
+		"a codepage determined by a selected locale.")),
 
 	INIT_OPT_BOOL("document.codepage", N_("Ignore charset info from server"),
 		"force_assumed", 0, 0,
@@ -499,7 +500,8 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_CODEPAGE("document.dump", N_("Codepage"),
 		"codepage", 0, "System",
-		N_("Codepage used in dump output.")),
+		N_("Codepage used in dump output. 'System' stands for\n"
+		"a codepage determined by a selected locale.")),
 
 	INIT_OPT_STRING("document.dump", N_("Header"),
 		"header", 0, "",
@@ -898,7 +900,8 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_CODEPAGE("terminal._template_", N_("Codepage"),
 		"charset", 0, "System",
-		N_("Codepage of charset used for displaying content on terminal.")),
+		N_("Codepage of charset used for displaying content on terminal.\n"
+		"'System' stands for a codepage determined by a selected locale.")),
 
 	/* Keep options in alphabetical order. */
 
@@ -1213,7 +1216,7 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_LANGUAGE("ui", N_("Language"),
 		"language", 0,
-		N_("Language of user interface. System means that the language will\n"
+		N_("Language of user interface. 'System' means that the language will\n"
 		"be extracted from the environment dynamically.")),
 
 	INIT_OPT_BOOL("ui", N_("Display status bar"),

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.60 2004/01/02 15:35:19 pasky Exp $ */
+/* $Id: string.h,v 1.61 2004/01/02 15:38:06 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -209,15 +209,5 @@ add_bytes_to_string__(
 
 /* Allocated copy if not NULL or returns NULL. */
 #define null_or_stracpy(str) ((str) ? stracpy(str) : NULL)
-
-/* These functions compare two C strings @s1 and @s2.
- * @n1 and @n2 are number of chars that should be used for comparaison.
- * If @n1 < 0 then nul char detection is used to find end of s1, same applies to
- * the second string.
- * They return 1 if strings are equal (both are not NULL, have same length, and
- * same content (case insensitively for same_casestr()).
- * They return 0 in any other case (meaning strings are different). */
-int same_str(const unsigned char *s1, size_t n1, const unsigned char *s2, size_t n2);
-int same_casestr(const unsigned char *s1, size_t n1, const unsigned char *s2, size_t n2);
 
 #endif /* EL__UTIL_STRING_H */

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.89 2004/01/02 15:29:38 zas Exp $ */
+/* $Id: string.c,v 1.90 2004/01/02 15:38:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,39 +193,6 @@ safe_strncpy(unsigned char *dst, const unsigned char *src, size_t dst_size)
 			return t1 - t2; \
  \
 	return 0; \
-}
-
-
-int
-same_str(const unsigned char *s1, size_t n1, const unsigned char *s2, size_t n2)
-{
-	register int i;
-
-	if (n1 != n2 || !s1 || !s2) return 0;
-
-	for (i = 0;
-	     (n1 >= 0 ? i < n1 : s1[i]) && (n2 >= 0 ? i < n2 : s2[i]);
-	     i++)
-		if (s1[i] != s2[i])
-			return 0;
-
-	return 1;
-}
-
-int
-same_casestr(const unsigned char *s1, size_t n1, const unsigned char *s2, size_t n2)
-{
-	register int i;
-
-	if (n1 != n2 || !s1 || !s2) return 0;
-
-	for (i = 0;
-	     (n1 >= 0 ? i < n1 : s1[i]) && (n2 >= 0 ? i < n2 : s2[i]);
-	     i++)
-		if (upcase(s1[i]) != upcase(s2[i]))
-			return 0;
-
-	return 1;
 }
 
 int

@@ -10,6 +10,9 @@
 #define OS2
 #elif defined(_WIN32)
 #define WIN32
+#ifdef UNIX
+#undef UNIX
+#endif
 #elif defined(__BEOS__)
 #define BEOS
 #elif defined(__riscos__)

@@ -1,3 +1,39 @@
+Tue Mar 19 20:40:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/Makefile.am, bfu/align.h, bfu/bfu.c, bfu/bfu.h,
+	bookmarks/bookmarks.c, config/default.c, dialogs/info.c,
+	dialogs/menu.c, document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/tables.c, lua/lua.c,
+	protocol/mailto.c, protocol/types.c:
+	
+	moved align enum to bfu/align.h
+
+Tue Mar 19 18:34:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	that empty menu bug
+
+Tue Mar 19 18:29:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/cookies/cookies.c:
+	
+	we won't overwrite cookies file periodically on loading them
+
+Tue Mar 19 18:22:42 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bfu/bfu.c:
+	
+	partial fix for SIGFPE for empty menu, reported by Edward Wildgoose
+	<Ed@Wildgooses.com>
+
+Tue Mar 19 17:52:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/protocol/http/date.c:
+	
+	New own convertor struct tm -> time_t; I can't say I'm excited by
+	it, but it looks as a good thing, sc convienced me ;)
+
 Tue Mar 19 17:28:08 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/bfu/bfu.c:

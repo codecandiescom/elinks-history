@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.226 2004/06/15 21:22:21 zas Exp $ */
+/* $Id: link.c,v 1.227 2004/06/16 10:34:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -588,7 +588,7 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 }
 
 enum frame_event_status
-enter(struct session *ses, struct document_view *doc_view, int a)
+enter(struct session *ses, struct document_view *doc_view, int do_reload)
 {
 	struct link *link;
 
@@ -604,7 +604,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& link_is_textinput(link))) {
 
-		if (goto_current_link(ses, doc_view, a))
+		if (goto_current_link(ses, doc_view, do_reload))
 			return FRAME_EVENT_OK;
 
 	} else if (link_is_textinput(link)) {

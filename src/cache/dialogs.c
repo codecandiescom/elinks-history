@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.78 2004/08/14 05:56:23 jonas Exp $ */
+/* $Id: dialogs.c,v 1.79 2004/11/19 16:22:19 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -13,12 +13,7 @@
 
 #include "elinks.h"
 
-#include "bfu/button.h"
 #include "bfu/dialog.h"
-#include "bfu/hierbox.h"
-#include "bfu/listbox.h"
-#include "bfu/msgbox.h"
-#include "bfu/text.h"
 #include "cache/cache.h"
 #include "cache/dialogs.h"
 #include "dialogs/edit.h"

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.49 2003/10/26 13:12:06 zas Exp $ */
+/* $Id: dialog.c,v 1.50 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ redraw_dialog(struct dialog_data *dlg_data)
 	}
 
 	for (i = 0; i < dlg_data->n; i++)
-		display_dlg_item(dlg_data, &dlg_data->items[i], i == dlg_data->selected);
+		display_dlg_item(dlg_data, &dlg_data->widgets_data[i], i == dlg_data->selected);
 
 	redraw_from_window(dlg_data->win);
 }
@@ -101,11 +101,11 @@ select_dlg_item(struct dialog_data *dlg_data, int i)
 {
 	if (dlg_data->selected != i) {
 		display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-		display_dlg_item(dlg_data, &dlg_data->items[i], 1);
+		display_dlg_item(dlg_data, &dlg_data->widgets_data[i], 1);
 		dlg_data->selected = i;
 	}
-	if (dlg_data->items[i].widget->ops->select)
-		dlg_data->items[i].widget->ops->select(&dlg_data->items[i], dlg_data);
+	if (dlg_data->widgets_data[i].widget->ops->select)
+		dlg_data->widgets_data[i].widget->ops->select(&dlg_data->widgets_data[i], dlg_data);
 }
 
 static struct widget_ops *widget_type_to_ops[] = {
@@ -120,7 +120,7 @@ static struct widget_ops *widget_type_to_ops[] = {
 static inline struct widget_data *
 init_widget(struct dialog_data *dlg_data, struct term_event *ev, int i)
 {
-	struct widget_data *widget = &dlg_data->items[i];
+	struct widget_data *widget = &dlg_data->widgets_data[i];
 
 	memset(widget, 0, sizeof(struct widget_data));
 	widget->widget = &dlg_data->dlg->widgets[i];
@@ -176,8 +176,8 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 		case EV_MOUSE:
 #ifdef USE_MOUSE
 			for (i = 0; i < dlg_data->n; i++)
-				if (dlg_data->items[i].widget->ops->mouse
-				    && dlg_data->items[i].widget->ops->mouse(&dlg_data->items[i], dlg_data, ev)
+				if (dlg_data->widgets_data[i].widget->ops->mouse
+				    && dlg_data->widgets_data[i].widget->ops->mouse(&dlg_data->widgets_data[i], dlg_data, ev)
 				       == EVENT_PROCESSED)
 					break;
 #endif /* USE_MOUSE */
@@ -272,7 +272,7 @@ dialog_func(struct window *win, struct term_event *ev, int fwd)
 				dlg_data->dlg->abort(dlg_data);
 
 			for (i = 0; i < dlg_data->n; i++) {
-				struct widget_data *di = &dlg_data->items[i];
+				struct widget_data *di = &dlg_data->widgets_data[i];
 
 				if (di->cdata) mem_free(di->cdata);
 				free_list(di->history);
@@ -294,7 +294,7 @@ check_dialog(struct dialog_data *dlg_data)
 			continue;
 
 		if (dlg_data->dlg->widgets[i].fn &&
-		    dlg_data->dlg->widgets[i].fn(dlg_data, &dlg_data->items[i])) {
+		    dlg_data->dlg->widgets[i].fn(dlg_data, &dlg_data->widgets_data[i])) {
 			dlg_data->selected = i;
 			redraw_dialog(dlg_data);
 			return 1;
@@ -318,7 +318,7 @@ update_dialog_data(struct dialog_data *dlg_data, struct widget_data *di)
 
 	for (i = 0; i < dlg_data->n; i++)
 		memcpy(dlg_data->dlg->widgets[i].data,
-		       dlg_data->items[i].cdata,
+		       dlg_data->widgets_data[i].cdata,
 		       dlg_data->dlg->widgets[i].dlen);
 
 	return 0;
@@ -347,8 +347,8 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *di)
 		if (dlg_data->dlg->widgets[i].type != D_FIELD &&
 		    dlg_data->dlg->widgets[i].type != D_FIELD_PASS)
 			continue;
-		memset(dlg_data->items[i].cdata, 0, dlg_data->dlg->widgets[i].dlen);
-		dlg_data->items[i].cpos = 0;
+		memset(dlg_data->widgets_data[i].cdata, 0, dlg_data->dlg->widgets[i].dlen);
+		dlg_data->widgets_data[i].cpos = 0;
 	}
 
 	redraw_dialog(dlg_data);

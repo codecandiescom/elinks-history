@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.100 2003/10/26 13:12:07 zas Exp $ */
+/* $Id: dialogs.c,v 1.101 2003/10/26 13:25:39 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -136,7 +136,7 @@ static void
 do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 {
 	struct bookmark *bm = NULL;
-	struct widget_data *widget_data = &dlg_data->items[BM_BOX_IND];
+	struct widget_data *widget_data = &dlg_data->widgets_data[BM_BOX_IND];
 	struct listbox_data *box;
 
 	box = (struct listbox_data *) widget_data->widget->data;
@@ -533,7 +533,7 @@ push_move_button(struct dialog_data *dlg_data,
 {
 	struct bookmark *dest = NULL;
 	struct list_head *destb = NULL, *desti = NULL;
-	struct widget_data *widget_data = &dlg_data->items[BM_BOX_IND];
+	struct widget_data *widget_data = &dlg_data->widgets_data[BM_BOX_IND];
 	struct listbox_data *box = (struct listbox_data *) widget_data->widget->data;
 
 	if (!box->sel) return 0; /* nowhere to move to */
@@ -640,7 +640,7 @@ bookmark_add_add(struct dialog *dlg)
 	if (dlg->udata) {
 		struct dialog_data *dlg_data = (struct dialog_data *) dlg->udata;
 
-		widget_data = &(dlg_data->items[BM_BOX_IND]);
+		widget_data = &(dlg_data->widgets_data[BM_BOX_IND]);
 		box = (struct listbox_data *) widget_data->widget->data;
 
 		if (box->sel) {
@@ -720,7 +720,7 @@ bookmark_search_do(struct dialog *dlg)
 		internal("Bookmarks search without udata in dialog! Let's panic.");
 
 	dlg_data = (struct dialog_data *) dlg->udata;
-	widget_data = &(dlg_data->items[BM_BOX_IND]);
+	widget_data = &(dlg_data->widgets_data[BM_BOX_IND]);
 	box = (struct listbox_data *) widget_data->widget->data;
 
 	/* Memorize last searched title */

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.60 2003/10/25 12:31:05 zas Exp $ */
+/* $Id: auth.c,v 1.61 2003/10/26 13:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,7 +40,7 @@ auth_layout(struct dialog_data *dlg_data)
 
 	text_width(term, label_login, &min, &max);
 	text_width(term, label_password, &min, &max);
-	buttons_width(term, dlg_data->items + 2, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
@@ -63,7 +63,7 @@ auth_layout(struct dialog_data *dlg_data)
 			dialog_text_color, AL_LEFT);
 	y += 2;
 	dlg_format_buttons(NULL, term,
-			   dlg_data->items + 2, 2,
+			   dlg_data->widgets_data + 2, 2,
 			   0, &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg_data->xw = w + 2 * DIALOG_LB;
@@ -82,18 +82,18 @@ auth_layout(struct dialog_data *dlg_data)
 			label_login, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
-			 &dlg_data->items[0],
+			 &dlg_data->widgets_data[0],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term,
 			label_password, dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term,
-			 &dlg_data->items[1],
+			 &dlg_data->widgets_data[1],
 			 dlg_data->x + DIALOG_LB, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, term,
-			   &dlg_data->items[2], 2,
+			   &dlg_data->widgets_data[2], 2,
 			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);
 }
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.83 2003/10/26 13:12:07 zas Exp $ */
+/* $Id: dialogs.c,v 1.84 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -227,7 +227,7 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 	text_width(term, type, &min, &max);
 	text_width(term, value, &min, &max);
 	text_width(term, desc, &min, &max);
-	buttons_width(term, dlg_data->items + 1, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + 1, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
@@ -245,7 +245,7 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 	dlg_format_text(NULL, term, desc, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items + 1, 2, 0,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 1, 2, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg_data->xw = w + 2 * DIALOG_LB;
@@ -264,14 +264,14 @@ layout_edit_dialog(struct dialog_data *dlg_data)
 	dlg_format_text(term, term, value, dlg_data->x + DIALOG_LB,
 			&y, w, &rw, dialog_text_color, AL_LEFT);
 	y--;
-	dlg_format_field(NULL, term, &dlg_data->items[0], rw + dlg_data->x + DIALOG_LB,
+	dlg_format_field(NULL, term, &dlg_data->widgets_data[0], rw + dlg_data->x + DIALOG_LB,
 			 &y, w - rw, NULL, AL_LEFT);
 
 	y++;
 	dlg_format_text(term, term, desc, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg_data->items[1], 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, term, &dlg_data->widgets_data[1], 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

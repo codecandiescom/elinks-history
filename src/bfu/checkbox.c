@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.46 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: checkbox.c,v 1.47 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,18 +82,18 @@ checkbox_list_fn(struct dialog_data *dlg_data)
 	int n = dlg_data->n - 2;
 
 	checkboxes_width(term, 1, dlg_data->dlg->udata, &min, &max);
-	buttons_width(term, dlg_data->items + n, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
 	int_bounds(&w, 5, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_checkboxes(NULL, term, 1, dlg_data->items, n, 0, &y, w,
+	dlg_format_checkboxes(NULL, term, 1, dlg_data->widgets_data, n, 0, &y, w,
 			      &rw, dlg_data->dlg->udata);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items + n, 2, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + n, 2, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
@@ -104,12 +104,12 @@ checkbox_list_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, 1, dlg_data->items, n,
+	dlg_format_checkboxes(term, term, 1, dlg_data->widgets_data, n,
 			      dlg_data->x + DIALOG_LB, &y, w, NULL,
 			      dlg_data->dlg->udata);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items + n, 2,
+	dlg_format_buttons(term, term, dlg_data->widgets_data + n, 2,
 			   dlg_data->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }
@@ -160,7 +160,7 @@ mouse_checkbox(struct widget_data *di, struct dialog_data *dlg_data,
 	    || ev->y != di->y || ev->x < di->x || ev->x >= di->x + 3)
 		return EVENT_NOT_PROCESSED;
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-	dlg_data->selected = di - dlg_data->items;
+	dlg_data->selected = di - dlg_data->widgets_data;
 	display_dlg_item(dlg_data, di, 1);
 	if ((ev->b & BM_ACT) == B_UP && di->widget->ops->select)
 		di->widget->ops->select(di, dlg_data);
@@ -177,13 +177,13 @@ select_checkbox(struct widget_data *di, struct dialog_data *dlg_data)
 		int i;
 
 		for (i = 0; i < dlg_data->n; i++) {
-			if (dlg_data->items[i].widget->type != D_CHECKBOX
-			    || dlg_data->items[i].widget->gid != di->widget->gid)
+			if (dlg_data->widgets_data[i].widget->type != D_CHECKBOX
+			    || dlg_data->widgets_data[i].widget->gid != di->widget->gid)
 				continue;
 
-			*((int *) dlg_data->items[i].cdata) = di->widget->gnum;
-			dlg_data->items[i].checked = 0;
-			display_dlg_item(dlg_data, &dlg_data->items[i], 0);
+			*((int *) dlg_data->widgets_data[i].cdata) = di->widget->gnum;
+			dlg_data->widgets_data[i].checked = 0;
+			display_dlg_item(dlg_data, &dlg_data->widgets_data[i], 0);
 		}
 		di->checked = 1;
 	}

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.60 2003/10/26 13:12:06 zas Exp $ */
+/* $Id: inpfield.c,v 1.61 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ input_field_ok(struct dialog_data *dlg_data, struct widget_data *di)
 {
 	void (*fn)(void *, unsigned char *) = di->widget->udata;
 	void *data = dlg_data->dlg->udata2;
-	unsigned char *text = dlg_data->items->cdata;
+	unsigned char *text = dlg_data->widgets_data->cdata;
 
 	if (check_dialog(dlg_data)) return 1;
 
@@ -128,7 +128,7 @@ input_field_fn(struct dialog_data *dlg_data)
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, dlg_data->dlg->udata, &min, &max);
-	buttons_width(term, dlg_data->items + 1, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + 1, 2, &min, &max);
 
 	if (max < dlg_data->dlg->widgets->dlen)
 		max = dlg_data->dlg->widgets->dlen;
@@ -140,11 +140,11 @@ input_field_fn(struct dialog_data *dlg_data)
 	rw = 0; /* !!! FIXME: input field */
 	dlg_format_text(NULL, term, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
-	dlg_format_field(NULL, term, dlg_data->items, 0, &y, w, &rw,
+	dlg_format_field(NULL, term, dlg_data->widgets_data, 0, &y, w, &rw,
 			 AL_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items + 1, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 1, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -157,11 +157,11 @@ input_field_fn(struct dialog_data *dlg_data)
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, text_color, AL_LEFT);
-	dlg_format_field(term, term, dlg_data->items, dlg_data->x + DIALOG_LB,
+	dlg_format_field(term, term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items + 1, 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, term, dlg_data->widgets_data + 1, 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -322,7 +322,7 @@ mouse_field(struct widget_data *di, struct dialog_data *dlg_data,
 	int_upper_bound(&di->cpos, strlen(di->cdata));
 
 	display_dlg_item(dlg_data, selected_widget(dlg_data), 0);
-	dlg_data->selected = di - dlg_data->items;
+	dlg_data->selected = di - dlg_data->widgets_data;
 
 dsp_f:
 	display_dlg_item(dlg_data, di, 1);

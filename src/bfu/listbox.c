@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.96 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: listbox.c,v 1.97 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -487,7 +487,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 	}
 
 	if ((ev->b & BM_ACT) == B_DOWN) {
-		struct widget_data *dlg_item = &dlg_data->items[dlg_data->n - 1];
+		struct widget_data *dlg_item = &dlg_data->widgets_data[dlg_data->n - 1];
 
 		switch (ev->b & BM_BUTT) {
 			case B_WHEEL_DOWN:
@@ -539,7 +539,7 @@ kbd_listbox(struct widget_data *di, struct dialog_data *dlg_data,
 	    struct term_event *ev)
 {
 	int n = dlg_data->n - 1;
-	struct widget_data *dlg_item = &dlg_data->items[n];
+	struct widget_data *dlg_item = &dlg_data->widgets_data[n];
 
 	/* Not a pure listbox, but you're not supposed to use this outside of
 	 * the listbox browser anyway, so what.. */

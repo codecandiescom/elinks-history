@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.91 2003/10/26 13:12:07 zas Exp $ */
+/* $Id: core.c,v 1.92 2003/10/26 13:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -366,7 +366,7 @@ dialog_fn(struct dialog_data *dlg_data)
 	text_width(term, dlg_msg[0], &min, &max);
 	text_width(term, dlg_msg[1], &min, &max);
 	text_width(term, dlg_msg[2], &min, &max);
-	buttons_width(term, dlg_data->items + 3, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + 3, 2, &min, &max);
 
 	w = dlg_data->win->term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
@@ -385,7 +385,7 @@ dialog_fn(struct dialog_data *dlg_data)
 	dlg_format_text(NULL, term, dlg_msg[2], 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_buttons(NULL, term, dlg_data->items + 3, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 3, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 	w = rw;
 	dlg_data->xw = w + 2 * DIALOG_LB;
@@ -395,20 +395,20 @@ dialog_fn(struct dialog_data *dlg_data)
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg_msg[0], dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term, &dlg_data->items[0], dlg_data->x + DIALOG_LB, &y, w,
+	dlg_format_field(term, term, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term, dlg_msg[1], dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term, &dlg_data->items[1], dlg_data->x + DIALOG_LB, &y, w,
+	dlg_format_field(term, term, &dlg_data->widgets_data[1], dlg_data->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term, dlg_msg[2], dlg_data->x + DIALOG_LB, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term, &dlg_data->items[2], dlg_data->x + DIALOG_LB, &y, w,
+	dlg_format_field(term, term, &dlg_data->widgets_data[2], dlg_data->x + DIALOG_LB, &y, w,
 			 NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg_data->items[3], 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, term, &dlg_data->widgets_data[3], 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -508,10 +508,10 @@ xdialog_fn(struct dialog_data *dlg_data)
 	int nfields;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	for (nfields = 0; dlg_data->items[nfields].widget->type == D_FIELD; nfields++);
+	for (nfields = 0; dlg_data->widgets_data[nfields].widget->type == D_FIELD; nfields++);
 
 	text_width(term, dlg_msg[0], &min, &max);
-	buttons_width(term, dlg_data->items + nfields, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + nfields, 2, &min, &max);
 
 	w = dlg_data->win->term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
@@ -525,7 +525,7 @@ xdialog_fn(struct dialog_data *dlg_data)
 				dialog_text_color, AL_LEFT);
 		y += 2;
 	}
-	dlg_format_buttons(NULL, term, dlg_data->items + nfields, 2,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + nfields, 2,
 			   0, &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg_data->xw = w + 2 * DIALOG_LB;
@@ -537,12 +537,12 @@ xdialog_fn(struct dialog_data *dlg_data)
 		dlg_format_text(term, term, dlg_msg[0],
 				dlg_data->x + DIALOG_LB, &y, w, NULL,
 				dialog_text_color, AL_LEFT);
-		dlg_format_field(term, term, &dlg_data->items[i],
+		dlg_format_field(term, term, &dlg_data->widgets_data[i],
 				 dlg_data->x + DIALOG_LB, &y, w,
 				 NULL, AL_LEFT);
 		y++;
 	}
-	dlg_format_buttons(term, term, &dlg_data->items[nfields],
+	dlg_format_buttons(term, term, &dlg_data->widgets_data[nfields],
 			   2, dlg_data->x + DIALOG_LB, &y, w,
 			   NULL, AL_CENTER);
 }

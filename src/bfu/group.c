@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.27 2003/10/26 12:52:32 zas Exp $ */
+/* $Id: group.c,v 1.28 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,20 +137,20 @@ group_fn(struct dialog_data *dlg_data)
 	int y = 0;
 	int n = dlg_data->n - 2;
 
-	max_group_width(term, 1, dlg_data->dlg->udata, dlg_data->items, n, &max);
-	min_group_width(term, 1, dlg_data->dlg->udata, dlg_data->items, n, &min);
-	buttons_width(term, dlg_data->items + n, 2, &min, &max);
+	max_group_width(term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n, &max);
+	min_group_width(term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n, &min);
+	buttons_width(term, dlg_data->widgets_data + n, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
 	int_bounds(&w, 1, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_group(NULL, term, 1, dlg_data->dlg->udata, dlg_data->items, n,
+	dlg_format_group(NULL, term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n,
 			 0, &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items + n, 2, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + n, 2, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
@@ -161,10 +161,10 @@ group_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_group(term, term, 1, dlg_data->dlg->udata, dlg_data->items, n,
+	dlg_format_group(term, term, 1, dlg_data->dlg->udata, dlg_data->widgets_data, n,
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items + n, 2,
+	dlg_format_buttons(term, term, dlg_data->widgets_data + n, 2,
 			   dlg_data->x + DIALOG_LB, &y, w, &rw, AL_CENTER);
 }

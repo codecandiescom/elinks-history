@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.92 2003/10/25 12:45:08 zas Exp $ */
+/* $Id: options.c,v 1.93 2003/10/26 13:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,18 +149,18 @@ terminal_options_fn(struct dialog_data *dlg_data)
 	int y = 0;
 
 	checkboxes_width(term, 1, td_labels, &min, &max);
-	buttons_width(term, dlg_data->items + dlg_data->n - 3, 3, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + dlg_data->n - 3, 3, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
 	int_bounds(&w, 5, term->x - 2 * DIALOG_LB);
 
 	rw = 0;
-	dlg_format_checkboxes(NULL, term, 1, dlg_data->items, dlg_data->n - 3, 0, &y, w,
+	dlg_format_checkboxes(NULL, term, 1, dlg_data->widgets_data, dlg_data->n - 3, 0, &y, w,
 			      &rw, td_labels);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items + dlg_data->n - 3, 3, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + dlg_data->n - 3, 3, 0, &y, w,
 			   &rw, AL_CENTER);
 
 	w = rw;
@@ -171,12 +171,12 @@ terminal_options_fn(struct dialog_data *dlg_data)
 	draw_dlg(dlg_data);
 
 	y = dlg_data->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, 1, dlg_data->items, dlg_data->n - 3,
+	dlg_format_checkboxes(term, term, 1, dlg_data->widgets_data, dlg_data->n - 3,
 			      dlg_data->x + DIALOG_LB, &y, w, NULL,
 			      td_labels);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items + dlg_data->n - 3, 3,
+	dlg_format_buttons(term, term, dlg_data->widgets_data + dlg_data->n - 3, 3,
 			   dlg_data->x + DIALOG_LB, &y, w, &rw,
 			   AL_CENTER);
 }

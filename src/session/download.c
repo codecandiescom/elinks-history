@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.117 2003/10/25 13:01:50 jonas Exp $ */
+/* $Id: download.c,v 1.118 2003/10/26 13:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,7 +356,7 @@ download_window_function(struct dialog_data *dlg_data)
 
 	text_width(term, url, &min, &max);
 	text_width(term, msg.source, &min, &max);
-	buttons_width(term, dlg_data->items, dlg_data->n, &min, &max);
+	buttons_width(term, dlg_data->widgets_data, dlg_data->n, &min, &max);
 
 	int_bounds(&w, min, term->x - 2 * DIALOG_LB);
 	if (t && download->prg->size >= 0) {
@@ -376,7 +376,7 @@ download_window_function(struct dialog_data *dlg_data)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items, dlg_data->n, 0, &y, w,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data, dlg_data->n, 0, &y, w,
 			   NULL, AL_CENTER);
 
 	dlg_data->xw = w + 2 * DIALOG_LB;
@@ -400,7 +400,7 @@ download_window_function(struct dialog_data *dlg_data)
 			dialog_text_color, AL_LEFT);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items, dlg_data->n, x, &y, w,
+	dlg_format_buttons(term, term, dlg_data->widgets_data, dlg_data->n, x, &y, w,
 			   NULL, AL_CENTER);
 
 	mem_free(url);

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.48 2003/10/26 13:12:07 zas Exp $ */
+/* $Id: edit.c,v 1.49 2003/10/26 13:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,7 @@ layout_add_dialog(struct dialog_data *dlg_data)
 
 	text_width(term, edit_add_msg[0], &min, &max);
 	text_width(term, edit_add_msg[1], &min, &max);
-	buttons_width(term, dlg_data->items + 2, 2, &min, &max);
+	buttons_width(term, dlg_data->widgets_data + 2, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 
@@ -65,7 +65,7 @@ layout_add_dialog(struct dialog_data *dlg_data)
 	dlg_format_text(NULL, term, edit_add_msg[1], 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y += 2;
-	dlg_format_buttons(NULL, term, dlg_data->items + 2, 2, 0,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 2, 2, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
 	dlg_data->xw = w + 2 * DIALOG_LB;
@@ -75,15 +75,15 @@ layout_add_dialog(struct dialog_data *dlg_data)
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, term, edit_add_msg[0], dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_field(NULL, term, &dlg_data->items[0], dlg_data->x + DIALOG_LB,
+	dlg_format_field(NULL, term, &dlg_data->widgets_data[0], dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_text(term, term, edit_add_msg[1], dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_field(term, term, &dlg_data->items[1], dlg_data->x + DIALOG_LB,
+	dlg_format_field(term, term, &dlg_data->widgets_data[1], dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg_data->items[2], 3, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, term, &dlg_data->widgets_data[2], 3, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.49 2003/10/26 13:12:07 zas Exp $ */
+/* $Id: dialogs.c,v 1.50 2003/10/26 13:25:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ update_all_history_dialogs(void)
 
 	foreach (item, history_dialog_list) {
 		struct widget_data *widget_data =
-			&(item->dlg_data->items[HISTORY_BOX_IND]);
+			&(item->dlg_data->widgets_data[HISTORY_BOX_IND]);
 
 		display_dlg_item(item->dlg_data, widget_data, 1);
 	}
@@ -103,7 +103,7 @@ history_dialog_event_handler(struct dialog_data *dlg_data,
 	switch (ev->ev) {
 		case EV_KBD:
 		{
-			struct widget_data *widget_data = &(dlg_data->items[HISTORY_BOX_IND]);
+			struct widget_data *widget_data = &(dlg_data->widgets_data[HISTORY_BOX_IND]);
 			struct widget *widget = widget_data->widget;
 
 			if (widget->ops->kbd)

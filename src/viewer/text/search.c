@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.67 2003/10/26 13:12:08 zas Exp $ */
+/* $Id: search.c,v 1.68 2003/10/26 13:25:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -956,7 +956,7 @@ search_dlg_ok(struct dialog_data *dlg_data, struct widget_data *di)
 	void (*fn)(void *, unsigned char *) = di->widget->udata;
 	struct search_dlg_hop *hop = dlg_data->dlg->udata2;
 	void *data = hop->data;
-	unsigned char *text = dlg_data->items->cdata;
+	unsigned char *text = dlg_data->widgets_data->cdata;
 
 	update_dialog_data(dlg_data, di);
 
@@ -1002,11 +1002,11 @@ search_dlg_fn(struct dialog_data *dlg_data)
 
 	text_width(term, dlg_data->dlg->udata, &min, &max);
 	/* I'm leet! --pasky */
-	max_group_width(term, 1, regex_labels, dlg_data->items + 1, 3, &max);
-	min_group_width(term, 1, regex_labels, dlg_data->items + 1, 3, &min);
-	max_group_width(term, 1, case_labels, dlg_data->items + 4, 2, &max);
-	min_group_width(term, 1, case_labels, dlg_data->items + 4, 2, &min);
-	buttons_width(term, dlg_data->items + 6, 2, &min, &max);
+	max_group_width(term, 1, regex_labels, dlg_data->widgets_data + 1, 3, &max);
+	min_group_width(term, 1, regex_labels, dlg_data->widgets_data + 1, 3, &min);
+	max_group_width(term, 1, case_labels, dlg_data->widgets_data + 4, 2, &max);
+	min_group_width(term, 1, case_labels, dlg_data->widgets_data + 4, 2, &min);
+	buttons_width(term, dlg_data->widgets_data + 6, 2, &min, &max);
 
 	if (max < dlg_data->dlg->widgets->dlen) max = dlg_data->dlg->widgets->dlen;
 
@@ -1017,19 +1017,19 @@ search_dlg_fn(struct dialog_data *dlg_data)
 	rw = 0; /* !!! FIXME: input field */
 	dlg_format_text(NULL, term, dlg_data->dlg->udata, 0, &y, w, &rw,
 			text_color, AL_LEFT);
-	dlg_format_field(NULL, term, dlg_data->items, 0, &y, w, &rw,
+	dlg_format_field(NULL, term, dlg_data->widgets_data, 0, &y, w, &rw,
 			 AL_LEFT);
 
 	y++;
-	dlg_format_group(NULL, term, 1, regex_labels, dlg_data->items + 1, 3, 0,
+	dlg_format_group(NULL, term, 1, regex_labels, dlg_data->widgets_data + 1, 3, 0,
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_group(NULL, term, 1, case_labels, dlg_data->items + 4, 2, 0,
+	dlg_format_group(NULL, term, 1, case_labels, dlg_data->widgets_data + 4, 2, 0,
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items + 6, 2, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data + 6, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -1042,19 +1042,19 @@ search_dlg_fn(struct dialog_data *dlg_data)
 	y = dlg_data->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg_data->dlg->udata, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, text_color, AL_LEFT);
-	dlg_format_field(term, term, dlg_data->items, dlg_data->x + DIALOG_LB,
+	dlg_format_field(term, term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_group(term, term, 1, regex_labels, dlg_data->items + 1, 3,
+	dlg_format_group(term, term, 1, regex_labels, dlg_data->widgets_data + 1, 3,
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_group(term, term, 1, case_labels, dlg_data->items + 4, 2,
+	dlg_format_group(term, term, 1, case_labels, dlg_data->widgets_data + 4, 2,
 			 dlg_data->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items + 6, 2, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, term, dlg_data->widgets_data + 6, 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.59 2003/10/26 13:12:06 zas Exp $ */
+/* $Id: msgbox.c,v 1.60 2003/10/26 13:25:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ msg_box_fn(struct dialog_data *dlg_data)
 	struct color_pair *text_color = get_bfu_color(term, "dialog.text");
 
 	text_width(term, text, &min, &max);
-	buttons_width(term, dlg_data->items, dlg_data->n, &min, &max);
+	buttons_width(term, dlg_data->widgets_data, dlg_data->n, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
@@ -45,7 +45,7 @@ msg_box_fn(struct dialog_data *dlg_data)
 			dlg_data->dlg->align);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg_data->items, dlg_data->n, 0, &y, w, &rw,
+	dlg_format_buttons(NULL, term, dlg_data->widgets_data, dlg_data->n, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -59,7 +59,7 @@ msg_box_fn(struct dialog_data *dlg_data)
 			text_color, dlg_data->dlg->align);
 
 	y++;
-	dlg_format_buttons(term, term, dlg_data->items, dlg_data->n, dlg_data->x + DIALOG_LB,
+	dlg_format_buttons(term, term, dlg_data->widgets_data, dlg_data->n, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 

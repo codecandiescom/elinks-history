@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.107 2004/08/06 09:02:29 zas Exp $ */
+/* $Id: draw.c,v 1.108 2005/03/22 16:05:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,6 +275,7 @@ draw_text(struct terminal *term, int x, int y,
 	  unsigned char *text, int length,
 	  enum screen_char_attr attr, struct color_pair *color)
 {
+	int end_pos;
 	struct screen_char *pos, *end;
 
 	assert(text && length >= 0);
@@ -284,7 +285,25 @@ draw_text(struct terminal *term, int x, int y,
 	pos = get_char(term, x, y);
 	if (!pos) return;
 
-	end = &pos[int_min(length, term->width - x) - 1];
+	end_pos = int_min(length, term->width - x) - 1;
+
+#ifdef CONFIG_DEBUG
+	/* Detect attempt to set @end to a point outside @text,
+	 * it may occur in case of bad calculations. --Zas */
+	if (end_pos < 0) {
+		INTERNAL("end_pos < 0 !!");
+		end_pos = 0;
+	} else {
+		int textlen = strlen(text);
+
+		if (end_pos >= textlen) {
+			INTERNAL("end_pos (%d) >= text length (%d) !!", end_pos, textlen);
+			end_pos = textlen - 1;
+		}
+	}
+#endif
+
+	end = &pos[int_max(0, end_pos)];
 
 	if (color) {
 		/* Use the last char as template. */

@@ -1,4 +1,4 @@
-/* $Id: search.h,v 1.18 2004/02/03 18:59:45 jonas Exp $ */
+/* $Id: search.h,v 1.19 2004/02/03 20:31:35 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_SEARCH_H
 #define EL__VIEWER_TEXT_SEARCH_H
@@ -11,7 +11,6 @@ struct terminal;
 void draw_searched(struct terminal *term, struct document_view *doc_view);
 
 void find_next(struct session *, struct document_view *doc_view, int);
-void find_next_back(struct session *, struct document_view *doc_view, int);
 
 void search_dlg(struct session *ses, struct document_view *doc_view, int a);
 void search_typeahead(struct session *ses, struct document_view *doc_view, int a);

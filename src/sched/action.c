@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.52 2004/02/03 18:56:24 jonas Exp $ */
+/* $Id: action.c,v 1.53 2004/02/03 20:31:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ do_frame_action(struct session *ses, frame_action action, int magic)
 	action(ses, doc_view, magic);
 
 	/* This is hopefully only some temporary setup. --jonas */
-	if (action == find_next || action == find_next_back) {
+	if (action == find_next) {
 		draw_doc(ses->tab->term, doc_view, 1);
 		print_screen_status(ses);
 		redraw_from_window(ses->tab);
@@ -225,11 +225,11 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_FIND_NEXT:
-			do_frame_action(ses, find_next, 0);
+			do_frame_action(ses, find_next, 1);
 			break;
 
 		case ACT_MAIN_FIND_NEXT_BACK:
-			do_frame_action(ses, find_next_back, 0);
+			do_frame_action(ses, find_next, -1);
 			break;
 
 		case ACT_MAIN_FORGET_CREDENTIALS:

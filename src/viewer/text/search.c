@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.191 2004/02/03 20:12:34 jonas Exp $ */
+/* $Id: search.c,v 1.192 2004/02/03 20:31:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -737,7 +737,7 @@ search_for_do(struct session *ses, unsigned char *str, int direction)
 	}
 
 	ses->search_direction = direction;
-	find_next(ses, doc_view, 0);
+	find_next(ses, doc_view, 1);
 }
 
 
@@ -835,20 +835,21 @@ nt:
 }
 
 void
-find_next(struct session *ses, struct document_view *doc_view, int a)
+find_next(struct session *ses, struct document_view *doc_view, int direction)
 {
 	int p, min, max, c = 0;
 	int step, hit_bottom = 0, hit_top = 0;
 	int show_hit_top_bottom = get_opt_bool("document.browse.search.show_hit_top_bottom");
 
-	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs);
+	assert(ses && ses->tab && ses->tab->term && doc_view && doc_view->vs && direction);
 	if_assert_failed return;
 
+	direction *= ses->search_direction;
 	p = doc_view->vs->y;
-	step = ses->search_direction * doc_view->height;
+	step = direction * doc_view->height;
 
 	if (ses->search_word) {
-		if (!find_next_link_in_search(doc_view, ses->search_direction)) return;
+		if (!find_next_link_in_search(doc_view, direction)) return;
 		p += step;
 	}
 
@@ -872,11 +873,11 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 			doc_view->vs->y = p;
 			if (max >= min)
 				doc_view->vs->x = int_min(int_max(doc_view->vs->x,
-									  max - doc_view->width),
+								  max - doc_view->width),
 								  min);
 
 			set_link(doc_view);
-			find_next_link_in_search(doc_view, ses->search_direction * 2);
+			find_next_link_in_search(doc_view, direction * 2);
 
 			if (!show_hit_top_bottom || (!hit_top && !hit_bottom))
 				return;
@@ -909,17 +910,6 @@ find_next(struct session *ses, struct document_view *doc_view, int a)
 			ses->search_word),
 		ses, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);
-}
-
-void
-find_next_back(struct session *ses, struct document_view *doc_view, int a)
-{
-	assert(ses && doc_view);
-	if_assert_failed return;
-
-	ses->search_direction = -ses->search_direction;
-	find_next(ses, doc_view, a);
-	ses->search_direction = -ses->search_direction;
 }
 
 
@@ -1097,11 +1087,11 @@ text_typeahead_handler(struct input_line *line, int action)
 			return INPUT_LINE_CANCEL;
 
 		case ACT_EDIT_PREVIOUS_ITEM:
-			find_next_back(ses, doc_view, 0);
+			find_next(ses, doc_view, -1);
 			break;
 
 		case ACT_EDIT_NEXT_ITEM:
-			find_next(ses, doc_view, 0);
+			find_next(ses, doc_view, 1);
 			break;
 
 		default:

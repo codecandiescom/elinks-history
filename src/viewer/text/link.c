@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.232 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: link.c,v 1.233 2004/06/19 15:45:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -674,21 +674,21 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 }
 
 struct link *
-choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
+choose_mouse_link(struct document_view *doc_view, int x, int y)
 {
 	struct link *l1, *l2, *link;
 	int mouse_x, mouse_y;
 	register int i, height;
 
-	assert(doc_view && doc_view->vs && doc_view->document && ev);
+	assert(doc_view && doc_view->vs && doc_view->document);
 	if_assert_failed return NULL;
 
 	/* If no link in document, nothing to do. */
 	if (!doc_view->document->nlinks) return NULL;
 
 	/* If mouse is outside document view, no need to go further. */
-	if (ev->x < 0 || ev->x >= doc_view->box.width) return NULL;
-	if (ev->y < 0 || ev->y >= doc_view->box.height) return NULL;
+	if (x < 0 || x >= doc_view->box.width) return NULL;
+	if (y < 0 || y >= doc_view->box.height) return NULL;
 
 	/* FIXME: This does'nt work. --Zas
 	if (!is_in_box(&doc_view->box, ev->x, ev->y))
@@ -712,8 +712,8 @@ choose_mouse_link(struct document_view *doc_view, struct term_event *ev)
 	}
 
 	/* Is there a link under mouse cursor ? */
-	mouse_x = ev->x + doc_view->vs->x;
-	mouse_y = ev->y + doc_view->vs->y;
+	mouse_x = x + doc_view->vs->x;
+	mouse_y = y + doc_view->vs->y;
 
 	for (link = l1; link <= l2; link++) {
 		for (i = 0; i < link->npoints; i++)

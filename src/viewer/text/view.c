@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.488 2004/06/18 16:22:51 zas Exp $ */
+/* $Id: view.c,v 1.489 2004/06/19 15:45:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -872,7 +872,7 @@ static enum frame_event_status
 frame_ev_mouse(struct session *ses, struct document_view *doc_view, struct term_event *ev)
 {
 	enum frame_event_status status = FRAME_EVENT_REFRESH;
-	struct link *link = choose_mouse_link(doc_view, ev);
+	struct link *link = choose_mouse_link(doc_view, ev->x, ev->y);
 
 	if (check_mouse_wheel(ev)) {
 		if (!check_mouse_action(ev, B_DOWN)) {

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.179 2003/08/01 10:11:22 zas Exp $ */
+/* $Id: view.c,v 1.180 2003/08/01 13:58:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,11 +321,9 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	while (vs->view_pos >= scr->document->y) vs->view_pos -= yw;
 	if (vs->view_pos < 0) vs->view_pos = 0;
 	if (vy != vs->view_pos) vy = vs->view_pos, check_vs(scr);
-	for (y = vy <= 0 ? 0 : vy; y < int_min(scr->document->y, yw + vy); y++) {
-		int st = vx <= 0 ? 0 : vx;
-		int en = (scr->document->data[y].l - vx <= xw)
-			 ? scr->document->data[y].l
-			 : xw + vx;
+	for (y = int_max(vy, 0); y < int_min(scr->document->y, yw + vy); y++) {
+		int st = int_max(vx, 0);
+		int en = int_min(scr->document->data[y].l, xw + vx);
 
 		if (en - st <= 0) continue;
 		set_line(t, xp + st - vx, yp + y - vy, en - st, &scr->document->data[y].d[st]);
@@ -485,12 +483,12 @@ scroll(struct session *ses, struct document_view *f, int a)
 	assert(ses && f && f->vs && f->document);
 	if_assert_failed return;
 
-	if (f->vs->view_pos + f->document->opt.yw >= f->document->y && a > 0)
+	if (a > 0 && f->vs->view_pos + f->document->opt.yw >= f->document->y)
 		return;
 	f->vs->view_pos += a;
-	if (f->vs->view_pos > f->document->y - f->document->opt.yw && a > 0)
-		f->vs->view_pos = f->document->y - f->document->opt.yw;
-	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
+	if (a > 0)
+		int_upper_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
+	int_lower_bound(&f->vs->view_pos, 0);
 	if (c_in_view(f)) return;
 	find_link(f, a < 0 ? -1 : 1, 0);
 }
@@ -502,9 +500,9 @@ hscroll(struct session *ses, struct document_view *f, int a)
 	if_assert_failed return;
 
 	f->vs->view_posx += a;
-	if (f->vs->view_posx >= f->document->x)
-		f->vs->view_posx = f->document->x - 1;
-	if (f->vs->view_posx < 0) f->vs->view_posx = 0;
+	int_upper_bound(&f->vs->view_posx, f->document->x - 1);
+	int_lower_bound(&f->vs->view_posx, 0);
+
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
 	/* !!! FIXME: check right margin */
@@ -527,9 +525,9 @@ x_end(struct session *ses, struct document_view *f, int a)
 	if_assert_failed return;
 
 	f->vs->view_posx = 0;
-	if (f->vs->view_pos < f->document->y - f->document->opt.yw)
-		f->vs->view_pos = f->document->y - f->document->opt.yw;
-	if (f->vs->view_pos < 0) f->vs->view_pos = 0;
+	/* XXX: shouldn't this be int_upper_bound instead ? --Zas */
+	int_lower_bound(&f->vs->view_pos, f->document->y - f->document->opt.yw);
+	int_lower_bound(&f->vs->view_pos, 0);
 	find_link(f, -1, 0);
 }
 
@@ -612,13 +610,15 @@ frame_ev(struct session *ses, struct document_view *fd, struct event *ev)
 			    && !fd->document->opt.num_links_display))) {
 			/* Repeat count */
 
-			if (!ses->kbdprefix.rep)
+			if (!ses->kbdprefix.rep) {
 				ses->kbdprefix.rep_num = 0;
+				ses->kbdprefix.rep_num = ev->x - '0';
+			} else {
+				ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10
+							 + ev->x - '0';
+			}
 
-			ses->kbdprefix.rep_num = ses->kbdprefix.rep_num * 10
-						 + ev->x - '0';
-			if (ses->kbdprefix.rep_num > 65536)
-				ses->kbdprefix.rep_num = 65536;
+			int_upper_bound(&ses->kbdprefix.rep_num, 65536);
 
 			ses->kbdprefix.rep = 1;
 			return 2;
@@ -1142,13 +1142,10 @@ quit:
 
 		if (ev->y == ses->tab->term->y - bars && (ev->b & BM_ACT) == B_DOWN
 		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
-			int tab_width = ses->tab->term->x / nb_tabs;
-			int tab = ev->x / tab_width;
+			int tab = ev->x / (ses->tab->term->x / nb_tabs);
 
-			if (tab < 0) tab = 0;
-			if (tab >= nb_tabs)
-				tab = nb_tabs - 1;
-
+			int_lower_bound(&tab, 0);
+			int_upper_bound(&tab, nb_tabs - 1);
 			switch_to_tab(ses->tab->term, tab, nb_tabs);
 			goto x;
 		}
@@ -1159,9 +1156,7 @@ quit:
 
 x:
 	/* ses may disappear ie. in close_tab() */
-	if (ses) {
-		ses->kbdprefix.rep = 0;
-	}
+	if (ses) ses->kbdprefix.rep = 0;
 }
 
 void

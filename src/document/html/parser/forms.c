@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.54 2004/12/17 23:47:51 pasky Exp $ */
+/* $Id: forms.c,v 1.55 2004/12/17 23:49:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -143,30 +143,29 @@ find_form_for_input(unsigned char *stop_pos)
 	else
 		pos = html_context.startf;
 
-se:
-	while (pos < stop_pos && *pos != '<') {
-		pos++;
+	while (pos < stop_pos) {
+		while (pos < stop_pos && *pos != '<') {
+			pos++;
+		}
+
+		if (pos >= stop_pos)
+			break;
+
+		if (pos + 2 < stop_pos && (pos[1] == '!' || pos[1] == '?')) {
+			pos = skip_comment(pos, stop_pos);
+			continue;
+		}
+		tag_start_pos = pos;
+		if (parse_element(tag_start_pos, stop_pos, &name, &namelen, &attr, &pos)) {
+			pos++; /* Kill the opening bracket. */
+			continue;
+		}
+		if (strlcasecmp(name, namelen, "FORM", 4))
+			continue;
+		last_form_start = tag_start_pos;
+		last_form_attr = attr;
 	}
 
-	if (pos >= stop_pos)
-		goto end_parse;
-
-	if (pos + 2 < stop_pos && (pos[1] == '!' || pos[1] == '?')) {
-		pos = skip_comment(pos, stop_pos);
-		goto se;
-	}
-	tag_start_pos = pos;
-	if (parse_element(tag_start_pos, stop_pos, &name, &namelen, &attr, &pos)) {
-		pos++; /* Kill the opening bracket. */
-		goto se;
-	}
-	if (strlcasecmp(name, namelen, "FORM", 4))
-		goto se;
-	last_form_start = tag_start_pos;
-	last_form_attr = attr;
-	goto se;
-
-end_parse:
 	/* We hit start of the current tag. So take
 	 * the last <form> encountered, if any, and
 	 * be done with it. */

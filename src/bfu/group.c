@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.5 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: group.c,v 1.6 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,9 +17,9 @@
 #include "lowlevel/terminal.h"
 
 
-/* max_group_width() */
-void max_group_width(struct terminal *term, unsigned char **texts,
-		     struct widget_data *item, int n, int *w)
+void
+max_group_width(struct terminal *term, unsigned char **texts,
+		struct widget_data *item, int n, int *w)
 {
 	int ww = 0;
 
@@ -44,9 +44,9 @@ void max_group_width(struct terminal *term, unsigned char **texts,
 	if (ww > *w) *w = ww;
 }
 
-/* min_group_width() */
-void min_group_width(struct terminal *term, unsigned char **texts,
-		     struct widget_data *item, int n, int *w)
+void
+min_group_width(struct terminal *term, unsigned char **texts,
+		struct widget_data *item, int n, int *w)
 {
 	while (n--) {
 		int wx;
@@ -66,10 +66,10 @@ void min_group_width(struct terminal *term, unsigned char **texts,
 	}
 }
 
-/* dlg_format_group() */
-void dlg_format_group(struct terminal *term, struct terminal *t2,
-		      unsigned char **texts, struct widget_data *item,
-		      int n, int x, int *y, int w, int *rw)
+void
+dlg_format_group(struct terminal *term, struct terminal *t2,
+		 unsigned char **texts, struct widget_data *item,
+		 int n, int x, int *y, int w, int *rw)
 {
 	int nx = 0;
 
@@ -119,8 +119,8 @@ void dlg_format_group(struct terminal *term, struct terminal *t2,
 	(*y)++;
 }
 
-/* group_fn() */
-void group_fn(struct dialog_data *dlg)
+void
+group_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;

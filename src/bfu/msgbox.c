@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.9 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: msgbox.c,v 1.10 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,6 @@
 #include "util/string.h"
 
 
-/* msg_box_fn() */
 void
 msg_box_fn(struct dialog_data *dlg)
 {
@@ -32,6 +31,7 @@ msg_box_fn(struct dialog_data *dlg)
 	unsigned char **ptr;
 	unsigned char *text = init_str();
 	int textl = 0;
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	for (ptr = dlg->dlg->udata; *ptr; ptr++)
 		add_to_str(&text, &textl, _(*ptr, term));
@@ -48,7 +48,7 @@ msg_box_fn(struct dialog_data *dlg)
 	if (w < 1) w = 1;
 
 	rw = 0;
-	dlg_format_text(NULL, term, text, 0, &y, w, &rw, get_bfu_color(term, "dialog.text"),
+	dlg_format_text(NULL, term, text, 0, &y, w, &rw, dialog_text_color,
 			dlg->dlg->align);
 
 	y++;
@@ -64,7 +64,7 @@ msg_box_fn(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB + 1;
 	dlg_format_text(term, term, text, dlg->x + DIALOG_LB, &y, w, NULL,
-			get_bfu_color(term, "dialog.text"), dlg->dlg->align);
+			dialog_text_color, dlg->dlg->align);
 
 	y++;
 	dlg_format_buttons(term, term, dlg->items, dlg->n, dlg->x + DIALOG_LB,
@@ -73,7 +73,6 @@ msg_box_fn(struct dialog_data *dlg)
 	mem_free(text);
 }
 
-/* msg_box_button() */
 int
 msg_box_button(struct dialog_data *dlg, struct widget_data *di)
 {

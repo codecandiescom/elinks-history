@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.14 2002/08/11 18:25:48 pasky Exp $ */
+/* $Id: menu.c,v 1.15 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,9 +66,9 @@ free_menu_items(struct menu_item *items)
 	mem_free(items);
 }
 
-/* do_menu_selected() */
-void do_menu_selected(struct terminal *term, struct menu_item *items,
-		      void *data, int selected)
+void
+do_menu_selected(struct terminal *term, struct menu_item *items,
+		 void *data, int selected)
 {
 	struct menu *menu;
 
@@ -84,14 +84,14 @@ void do_menu_selected(struct terminal *term, struct menu_item *items,
 	}
 }
 
-/* do_menu() */
-void do_menu(struct terminal *term, struct menu_item *items, void *data)
+void
+do_menu(struct terminal *term, struct menu_item *items, void *data)
 {
 	do_menu_selected(term, items, data, 0);
 }
 
-/* select_menu() */
-void select_menu(struct terminal *term,	struct menu *menu)
+void
+select_menu(struct terminal *term, struct menu *menu)
 {
 	struct menu_item *it = &menu->items[menu->selected];
 	void (*func)(struct terminal *, void *, void *);
@@ -126,8 +126,8 @@ void select_menu(struct terminal *term,	struct menu *menu)
 	func(term, data1, data2);
 }
 
-/* count_menu_size() */
-void count_menu_size(struct terminal *term, struct menu *menu)
+void
+count_menu_size(struct terminal *term, struct menu *menu)
 {
 	int sx = term->x;
 	int sy = term->y;
@@ -160,8 +160,8 @@ void count_menu_size(struct terminal *term, struct menu *menu)
 	if (menu->y + my > sy) menu->y = sy - my;
 }
 
-/* scroll_menu() */
-void scroll_menu(struct menu *menu, int d)
+void
+scroll_menu(struct menu *menu, int d)
 {
 	int c = 0;
 	int w = menu->yw - 2;
@@ -207,27 +207,31 @@ void scroll_menu(struct menu *menu, int d)
 		menu->view = 0;
 }
 
-/* display_menu() */
-void display_menu(struct terminal *term, struct menu *menu)
+void
+display_menu(struct terminal *term, struct menu *menu)
 {
 	int p, s;
+	int menu_normal_color = get_bfu_color(term, "menu.normal");
+	int menu_frame_color = get_bfu_color(term, "menu.frame");
+	int menu_selected_color = get_bfu_color(term, "menu.selected");
+	int menu_hotkey_color = get_bfu_color(term, "menu.hotkey");
 
 	fill_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
-		  get_bfu_color(term, "menu.normal"));
+		  menu_normal_color);
 
 	draw_frame(term, menu->x, menu->y, menu->xw, menu->yw,
-		   get_bfu_color(term, "menu.frame"), 1);
+		   menu_frame_color, 1);
 
 	for (p = menu->view, s = menu->y + 1;
 	     p < menu->ni && p < menu->view + menu->yw - 2;
 	     p++, s++) {
 		unsigned char *tmptext = _(menu->items[p].text, term);
 		int h = 0;
-		int co = get_bfu_color(term, "menu.normal");
+		int co = menu_normal_color;
 
 		if (p == menu->selected) {
 			h = 1;
-			co = get_bfu_color(term, "menu.selected");
+			co = menu_selected_color;
 		}
 
 		if (h) {
@@ -256,29 +260,28 @@ void display_menu(struct terminal *term, struct menu *menu)
 				    && strchr(_(menu->items[p].hotkey, term),
 					      upcase(c))) {
 					h = 1;
-					ch = get_bfu_color(term, "menu.hotkey");
+					ch = menu_hotkey_color;
 				}
 
 				set_char(term, menu->x + x + 2, s, ch | c);
 			}
 
 		} else {
-			set_char(term, menu->x, s,
-				 get_bfu_color(term, "menu.frame") | ATTR_FRAME | 0xc3);
+			set_char(term, menu->x, s, menu_frame_color | ATTR_FRAME | 0xc3);
 
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1,
-				  get_bfu_color(term, "menu.frame") | ATTR_FRAME | 0xc4);
+				  menu_frame_color | ATTR_FRAME | 0xc4);
 
 			set_char(term, menu->x + menu->xw - 1, s,
-				 get_bfu_color(term, "menu.frame") | ATTR_FRAME | 0xb4);
+				 menu_frame_color | ATTR_FRAME | 0xb4);
 		}
 	}
 
 	redraw_from_window(menu->win);
 }
 
-/* menu_func() */
-void menu_func(struct window *win, struct event *ev, int fwd)
+void
+menu_func(struct window *win, struct event *ev, int fwd)
 {
 	struct window *w1;
 	struct menu *menu = win->data;
@@ -474,9 +477,9 @@ break2:
 	}
 }
 
-/* do_mainmenu() */
-void do_mainmenu(struct terminal *term,	struct menu_item *items,
-		 void *data, int sel)
+void
+do_mainmenu(struct terminal *term, struct menu_item *items,
+	    void *data, int sel)
 {
 	struct mainmenu *menu;
 
@@ -496,13 +499,16 @@ void do_mainmenu(struct terminal *term,	struct menu_item *items,
 	}
 }
 
-/* display_mainmenu() */
-void display_mainmenu(struct terminal *term, struct mainmenu *menu)
+void
+display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	int i;
 	int p = 2;
+	int mainmenu_normal_color = get_bfu_color(term, "mainmenu.normal");
+	int mainmenu_selected_color = get_bfu_color(term, "mainmenu.selected");
+	int mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey");
 
-	fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "mainmenu.normal") | ' ');
+	fill_area(term, 0, 0, term->x, 1, mainmenu_normal_color | ' ');
 	for (i = 0; menu->items[i].text; i++) {
 		int s = 0;
 		int j;
@@ -512,9 +518,9 @@ void display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		if (i == menu->selected) {
 			s = 1;
-			co = get_bfu_color(term, "mainmenu.selected");
+			co = mainmenu_selected_color;
 		} else {
-			co = get_bfu_color(term, "mainmenu.normal");
+			co = mainmenu_normal_color;
 		}
 
 		if (s) {
@@ -531,8 +537,7 @@ void display_mainmenu(struct terminal *term, struct mainmenu *menu)
 			if (!s && strchr(_(menu->items[i].hotkey, term),
 					 upcase(c))) {
 				s = 1;
-				set_char(term, p, 0,
-					 get_bfu_color(term, "mainmenu.hotkey") | c);
+				set_char(term, p, 0, mainmenu_hotkey_color | c);
 			} else {
 				set_char(term, p, 0,
 					 co | c);
@@ -546,8 +551,8 @@ void display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	redraw_from_window(menu->win);
 }
 
-/* select_mainmenu() */
-void select_mainmenu(struct terminal *term, struct mainmenu *menu)
+void
+select_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	struct menu_item *it = &menu->items[menu->selected];
 
@@ -568,8 +573,8 @@ void select_mainmenu(struct terminal *term, struct mainmenu *menu)
 	it->func(term, it->data, menu->data);
 }
 
-/* mainmenu_func() */
-void mainmenu_func(struct window *win, struct event *ev, int fwd)
+void
+mainmenu_func(struct window *win, struct event *ev, int fwd)
 {
 	int s = 0;
 	struct mainmenu *menu = win->data;
@@ -673,8 +678,8 @@ void mainmenu_func(struct window *win, struct event *ev, int fwd)
 	}
 }
 
-/* new_menu() */
-struct menu_item *new_menu(enum item_free item_free)
+struct menu_item *
+new_menu(enum item_free item_free)
 {
 	struct menu_item *mi;
 
@@ -687,11 +692,11 @@ struct menu_item *new_menu(enum item_free item_free)
 	return mi;
 }
 
-/* add_to_menu() */
-void add_to_menu(struct menu_item **mi, unsigned char *text,
-		 unsigned char *rtext, unsigned char *hotkey,
-		 void (*func)(struct terminal *, void *, void *),
-		 void *data, int in_m)
+void
+add_to_menu(struct menu_item **mi, unsigned char *text,
+	    unsigned char *rtext, unsigned char *hotkey,
+	    void (*func)(struct terminal *, void *, void *),
+	    void *data, int in_m)
 {
 	struct menu_item *mii;
 	int n;

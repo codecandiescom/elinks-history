@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.9 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: inpfield.c,v 1.10 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,8 +23,8 @@
 #include "util/memory.h"
 
 
-/* check_number() */
-int check_number(struct dialog_data *dlg, struct widget_data *di)
+int
+check_number(struct dialog_data *dlg, struct widget_data *di)
 {
 	unsigned char *end;
 	long l = strtol(di->cdata, (char **)&end, 10);
@@ -50,8 +50,8 @@ int check_number(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-/* check_nonempty() */
-int check_nonempty(struct dialog_data *dlg, struct widget_data *di)
+int
+check_nonempty(struct dialog_data *dlg, struct widget_data *di)
 {
 	unsigned char *p;
 
@@ -68,11 +68,10 @@ int check_nonempty(struct dialog_data *dlg, struct widget_data *di)
 	return 1;
 }
 
-
-/* dlg_format_field() */
-void dlg_format_field(struct terminal *term, struct terminal *t2,
-		      struct widget_data *item,
-		      int x, int *y, int w, int *rw, enum format_align align)
+void
+dlg_format_field(struct terminal *term, struct terminal *t2,
+		 struct widget_data *item,
+		 int x, int *y, int w, int *rw, enum format_align align)
 {
 	item->x = x;
 	item->y = *y;
@@ -85,9 +84,8 @@ void dlg_format_field(struct terminal *term, struct terminal *t2,
 	(*y)++;
 }
 
-
-/* input_field_cancel() */
-int input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
+int
+input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *) = di->item->udata;
 	void *data = dlg->dlg->udata2;
@@ -98,8 +96,8 @@ int input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-/* input_field_ok() */
-int input_field_ok(struct dialog_data *dlg, struct widget_data *di)
+int
+input_field_ok(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *, unsigned char *) = di->item->udata;
 	void *data = dlg->dlg->udata2;
@@ -114,13 +112,14 @@ int input_field_ok(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-/* input_field_fn() */
-void input_field_fn(struct dialog_data *dlg)
+void
+input_field_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
+	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	max_text_width(term, dlg->dlg->udata, &max);
 	min_text_width(term, dlg->dlg->udata, &min);
@@ -135,7 +134,7 @@ void input_field_fn(struct dialog_data *dlg)
 
 	rw = 0; /* !!! FIXME: input field */
 	dlg_format_text(NULL, term, dlg->dlg->udata, 0, &y, w, &rw,
-			get_bfu_color(term, "dialog.text"), AL_LEFT);
+			dialog_text_color, AL_LEFT);
 	dlg_format_field(NULL, term, dlg->items, 0, &y, w, &rw,
 			 AL_LEFT);
 
@@ -152,7 +151,7 @@ void input_field_fn(struct dialog_data *dlg)
 
 	y = dlg->y + DIALOG_TB;
 	dlg_format_text(term, term, dlg->dlg->udata, dlg->x + DIALOG_LB,
-			&y, w, NULL, get_bfu_color(term, "dialog.text"), AL_LEFT);
+			&y, w, NULL, dialog_text_color, AL_LEFT);
 	dlg_format_field(term, term, dlg->items, dlg->x + DIALOG_LB,
 			 &y, w, NULL, AL_LEFT);
 
@@ -161,17 +160,17 @@ void input_field_fn(struct dialog_data *dlg)
 			   &y, w, NULL, AL_CENTER);
 }
 
-/* input_field() */
-void input_field(struct terminal *term, struct memory_list *ml,
-		 unsigned char *title,
-		 unsigned char *text,
-		 unsigned char *okbutton,
-		 unsigned char *cancelbutton,
-		 void *data, struct input_history *history, int l,
-		 unsigned char *def, int min, int max,
-		 int (*check)(struct dialog_data *, struct widget_data *),
-		 void (*fn)(void *, unsigned char *),
-		 void (*cancelfn)(void *))
+void
+input_field(struct terminal *term, struct memory_list *ml,
+	    unsigned char *title,
+	    unsigned char *text,
+	    unsigned char *okbutton,
+	    unsigned char *cancelbutton,
+	    void *data, struct input_history *history, int l,
+	    unsigned char *def, int min, int max,
+	    int (*check)(struct dialog_data *, struct widget_data *),
+	    void (*fn)(void *, unsigned char *),
+	    void (*cancelfn)(void *))
 {
 	struct dialog *dlg;
 	unsigned char *field;
@@ -288,7 +287,7 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 			struct input_history_item *hi;
 
 			hi = mem_alloc(sizeof(struct input_history_item)
-					+ strlen(j->d) + 1);
+				       + strlen(j->d) + 1);
 			if (!hi) continue;
 
 			strcpy(hi->d, j->d);

@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.12 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: dialog.c,v 1.13 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,10 +34,10 @@
 /* Prototypes */
 void dialog_func(struct window *, struct event *, int);
 
-/* do_dialog() */
+
 struct dialog_data *
 do_dialog(struct terminal *term, struct dialog *dlg,
-	       struct memory_list *ml)
+	  struct memory_list *ml)
 {
 	struct dialog_data *dd;
 	struct widget *d;
@@ -57,13 +57,14 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	return dd;
 }
 
-/* redraw_dialog() */
-void redraw_dialog(struct dialog_data *dlg)
+void
+redraw_dialog(struct dialog_data *dlg)
 {
 	int i;
 	int x = dlg->x + DIALOG_LEFT_BORDER;
 	int y = dlg->y + DIALOG_TOP_BORDER;
 	struct terminal *term = dlg->win->term;
+	int dialog_title_color = get_bfu_color(term, "dialog.title");
 
 	draw_frame(term, x, y,
 		   dlg->xw - 2 * DIALOG_LEFT_BORDER,
@@ -72,9 +73,9 @@ void redraw_dialog(struct dialog_data *dlg)
 
 	i = strlen(_(dlg->dlg->title, term));
 	x = (dlg->xw - i) / 2 + dlg->x;
-	print_text(term, x - 1, y, 1, " ", get_bfu_color(term, "dialog.title"));
-	print_text(term, x, y, i, _(dlg->dlg->title, term), get_bfu_color(term, "dialog.title"));
-	print_text(term, x + i, y, 1, " ", get_bfu_color(term, "dialog.title"));
+	print_text(term, x - 1, y, 1, " ", dialog_title_color);
+	print_text(term, x, y, i, _(dlg->dlg->title, term), dialog_title_color);
+	print_text(term, x + i, y, 1, " ", dialog_title_color);
 
 	for (i = 0; i < dlg->n; i++)
 		display_dlg_item(dlg, &dlg->items[i], i == dlg->selected);
@@ -83,7 +84,8 @@ void redraw_dialog(struct dialog_data *dlg)
 }
 
 /* TODO: This is too long and ugly. Rewrite and split. */
-void dialog_func(struct window *win, struct event *ev, int fwd)
+void
+dialog_func(struct window *win, struct event *ev, int fwd)
 {
 	int i;
 	struct terminal *term = win->term;
@@ -361,8 +363,8 @@ sel:
 	}
 }
 
-/* check_dialog() */
-int check_dialog(struct dialog_data *dlg)
+int
+check_dialog(struct dialog_data *dlg)
 {
 	int i;
 
@@ -381,15 +383,15 @@ int check_dialog(struct dialog_data *dlg)
 	return 0;
 }
 
-/* cancel_dialog() */
-int cancel_dialog(struct dialog_data *dlg, struct widget_data *di)
+int
+cancel_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	delete_window(dlg->win);
 	return 0;
 }
 
-/* ok_dialog() */
-int ok_dialog(struct dialog_data *dlg, struct widget_data *di)
+int
+ok_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	int i;
 	void (*fn)(void *) = dlg->dlg->refresh;
@@ -409,7 +411,8 @@ int ok_dialog(struct dialog_data *dlg, struct widget_data *di)
 
 /* FIXME? Added to clear fields in bookmarks dialogs, may be broken if used
  * elsewhere. --Zas */
-int clear_dialog(struct dialog_data *dlg, struct widget_data *di)
+int
+clear_dialog(struct dialog_data *dlg, struct widget_data *di)
 {
 	int i;
 
@@ -425,16 +428,16 @@ int clear_dialog(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-/* center_dlg() */
-void center_dlg(struct dialog_data *dlg)
+void
+center_dlg(struct dialog_data *dlg)
 {
 	dlg->x = (dlg->win->term->x - dlg->xw) / 2;
 	dlg->y = (dlg->win->term->y - dlg->yw) / 2;
 }
 
-/* draw_dlg() */
-void draw_dlg(struct dialog_data *dlg)
+void
+draw_dlg(struct dialog_data *dlg)
 {
 	fill_area(dlg->win->term, dlg->x, dlg->y, dlg->xw, dlg->yw,
 		  get_bfu_color(dlg->win->term, "=dialog"));
-}
+ }

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.10 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: checkbox.c,v 1.11 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,11 +17,11 @@
 #include "lowlevel/terminal.h"
 
 
-/* dlg_format_checkbox() */
-void dlg_format_checkbox(struct terminal *term, struct terminal *t2,
-			 struct widget_data *chkb,
-			 int x, int *y, int w, int *rw,
-			 unsigned char *text)
+void
+dlg_format_checkbox(struct terminal *term, struct terminal *t2,
+		    struct widget_data *chkb,
+		    int x, int *y, int w, int *rw,
+		    unsigned char *text)
 {
 	if (term) {
 		chkb->x = x;
@@ -34,11 +34,11 @@ void dlg_format_checkbox(struct terminal *term, struct terminal *t2,
 	if (rw) *rw += 4;
 }
 
-/* dlg_format_checkboxes() */
-void dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
-			   struct widget_data *chkb, int n,
-			   int x, int *y, int w, int *rw,
-			   unsigned char **texts)
+void
+dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
+		      struct widget_data *chkb, int n,
+		      int x, int *y, int w, int *rw,
+		      unsigned char **texts)
 {
 	while (n) {
 		dlg_format_checkbox(term, t2, chkb, x, y, w, rw,
@@ -49,9 +49,9 @@ void dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
 	}
 }
 
-/* checkboxes_width() */
-void checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
-		      void (*fn)(struct terminal *, unsigned char *, int *))
+void
+checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
+		 void (*fn)(struct terminal *, unsigned char *, int *))
 {
 	while (texts[0]) {
 		*w -= 4;
@@ -61,8 +61,8 @@ void checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
 	}
 }
 
-/* checkbox_list_fn() */
-void checkbox_list_fn(struct dialog_data *dlg)
+void
+checkbox_list_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
 	int max = 0, min = 0;

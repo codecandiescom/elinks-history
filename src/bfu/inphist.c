@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.3 2002/08/11 18:25:48 pasky Exp $ */
+/* $Id: inphist.c,v 1.4 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,8 +133,9 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 
 
 /* Search duplicate entries in history list and remove older ones. */
-static void remove_duplicate_from_history(struct input_history *historylist,
-					  unsigned char *url)
+static void
+remove_duplicate_from_history(struct input_history *historylist,
+			      unsigned char *url)
 {
 	struct input_history_item *historyitem;
 
@@ -155,8 +156,9 @@ static void remove_duplicate_from_history(struct input_history *historylist,
 
 /* Add a new entry in inputbox history list, take care of duplicate if
  * check_duplicate and respect history size limit. */
-void add_to_input_history(struct input_history *historylist, unsigned char *url,
-			  int check_duplicate)
+void
+add_to_input_history(struct input_history *historylist, unsigned char *url,
+		     int check_duplicate)
 {
 	struct input_history_item *newhistoryitem;
 	int url_len;

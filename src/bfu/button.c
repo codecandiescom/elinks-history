@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.8 2002/08/07 03:00:14 pasky Exp $ */
+/* $Id: button.c,v 1.9 2002/09/10 11:13:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,9 +17,9 @@
 #include "lowlevel/terminal.h"
 
 
-/* max_buttons_width() */
-void max_buttons_width(struct terminal *term, struct widget_data *butt,
-		       int n, int *width)
+void
+max_buttons_width(struct terminal *term, struct widget_data *butt,
+		  int n, int *width)
 {
 	int w = -2;
 	int i;
@@ -29,9 +29,9 @@ void max_buttons_width(struct terminal *term, struct widget_data *butt,
 	if (w > *width) *width = w;
 }
 
-/* min_buttons_width() */
-void min_buttons_width(struct terminal *term, struct widget_data *butt,
-		       int n, int *width)
+void
+min_buttons_width(struct terminal *term, struct widget_data *butt,
+		  int n, int *width)
 {
 	int i;
 
@@ -42,10 +42,10 @@ void min_buttons_width(struct terminal *term, struct widget_data *butt,
 	}
 }
 
-/* dlg_format_buttons() */
-void dlg_format_buttons(struct terminal *term, struct terminal *t2,
-			struct widget_data *butt, int n,
-			int x, int *y, int w, int *rw, enum format_align align)
+void
+dlg_format_buttons(struct terminal *term, struct terminal *t2,
+		   struct widget_data *butt, int n,
+		   int x, int *y, int w, int *rw, enum format_align align)
 {
 	int i1 = 0;
 
@@ -129,4 +129,3 @@ struct widget_ops button_ops = {
 	NULL,
 	mouse_button,
 };
-

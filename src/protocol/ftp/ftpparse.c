@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.16 2004/07/02 22:43:55 zas Exp $ */
+/* $Id: ftpparse.c,v 1.17 2004/07/03 23:20:43 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -214,21 +214,10 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 	long hour;
 	long minute;
 
-	fp->name = 0;
-	fp->namelen = 0;
-	fp->flagtrycwd = 0;
-	fp->flagtryretr = 0;
+	memset(fp, 0, sizeof(struct ftpparse));
 	fp->sizetype = FTPPARSE_SIZE_UNKNOWN;
-	fp->size = 0;
 	fp->mtimetype = FTPPARSE_MTIME_UNKNOWN;
-	fp->mtime = 0;
 	fp->idtype = FTPPARSE_ID_UNKNOWN;
-	fp->id = 0;
-	fp->idlen = 0;
-	fp->symlink = 0;
-	fp->symlinklen = 0;
-	fp->perm = 0;
-	fp->permlen = 0;
 
 	if (len < 2)		/* an empty name in EPLF, with no info, could be 2 chars */
 		return 0;

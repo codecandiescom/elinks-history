@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.147 2004/07/03 10:28:17 zas Exp $ */
+/* $Id: ftp.c,v 1.148 2004/07/03 23:20:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -617,9 +617,9 @@ add_file_cmd_to_str(struct connection *conn)
 				add_to_string(&command, "PASV");
 			else
 				add_portcmd_to_string(&command, pc);
-		
+
 		add_crlf_to_string(&command);
-		
+
 		if (conn->from || (conn->prg.start > 0)) {
 			add_to_string(&command, "REST ");
 			add_long_to_string(&command, conn->from
@@ -1175,21 +1175,14 @@ out_of_mem:
 		if (conn->uri->datalen) {
 			struct ftpparse ftp_info;
 
+			memset(&ftp_info, 0, sizeof(struct ftpparse));
 			ftp_info.name = "..";
 			ftp_info.namelen = 2;
 			ftp_info.flagtrycwd = 1;
-			ftp_info.flagtryretr = 0;
 			ftp_info.sizetype = FTPPARSE_SIZE_UNKNOWN;
-			ftp_info.size = 0;
 			ftp_info.mtimetype = FTPPARSE_MTIME_UNKNOWN;
 			ftp_info.mtime = -1;
 			ftp_info.idtype = FTPPARSE_ID_UNKNOWN;
-			ftp_info.id = NULL;
-			ftp_info.idlen = 0;
-			ftp_info.symlink = NULL;
-			ftp_info.symlinklen = 0;
-			ftp_info.perm = 0;
-			ftp_info.permlen = 0;
 
 			display_dir_entry(conn->cached, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);

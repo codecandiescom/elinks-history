@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.395 2004/04/22 16:05:25 zas Exp $ */
+/* $Id: parser.c,v 1.396 2004/04/22 16:06:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,7 @@ parse_element(register unsigned char *e, unsigned char *eof,
 
 	if (name && namelen) *namelen = e - *name;
 
-	while ((isspace(*e) || *e == '/' || *e == ':')) next_char();
+	while (isspace(*e) || *e == '/' || *e == ':') next_char();
 
 	/* Skip bad attribute */
 	while (!atchr(*e) && !end_of_tag(*e) && !isspace(*e)) next_char();

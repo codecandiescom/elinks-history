@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.83 2003/09/29 23:32:16 jonas Exp $ */
+/* $Id: screen.c,v 1.84 2003/09/29 23:49:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,8 +102,10 @@ struct screen_driver {
 	/* The underline mode setup and teardown sequences. May be NULL. */
 	struct string *underline;
 
+	/* The color mode */
+	enum color_mode color_mode;
+
 	/* These are directly derived from the terminal options. */
-	unsigned int colors:1;
 	unsigned int trans:1;
 
 	/* The terminal._template_ name. */
@@ -117,7 +119,7 @@ static struct screen_driver dumb_screen_driver = {
 	/* frame: */		frame_dumb,
 	/* frame_seqs: */	NULL,
 	/* underline: */	underline_seqs,
-	/* colors: */		1,
+	/* color_mode: */	COLOR_MODE_16,
 	/* trans: */		1,
 };
 
@@ -128,7 +130,7 @@ static struct screen_driver vt100_screen_driver = {
 	/* frame: */		frame_vt100,	/* No UTF8 I/O */
 	/* frame_seqs: */	vt100_frame_seqs, /* No UTF8 I/O */
 	/* underline: */	underline_seqs,
-	/* colors: */		1,
+	/* color_mode: */	COLOR_MODE_16,
 	/* trans: */		1,
 };
 
@@ -139,7 +141,7 @@ static struct screen_driver linux_screen_driver = {
 	/* frame: */		NULL,		/* No restrict_852 */
 	/* frame_seqs: */	NULL,		/* No m11_hack */
 	/* underline: */	underline_seqs,
-	/* colors: */		1,
+	/* color_mode: */	COLOR_MODE_16,
 	/* trans: */		1,
 };
 
@@ -150,7 +152,7 @@ static struct screen_driver koi8_screen_driver = {
 	/* frame: */		frame_koi,
 	/* frame_seqs: */	NULL,
 	/* underline: */	underline_seqs,
-	/* colors: */		1,
+	/* color_mode: */	COLOR_MODE_16,
 	/* trans: */		1,
 };
 
@@ -169,7 +171,7 @@ update_screen_driver(struct screen_driver *driver, struct option *term_spec)
 {
 	int utf8_io = get_opt_bool_tree(term_spec, "utf_8_io");
 
-	driver->colors = get_opt_bool_tree(term_spec, "colors");
+	driver->color_mode = get_opt_int_tree(term_spec, "colors");
 	driver->trans = get_opt_bool_tree(term_spec, "transparency");
 
 	if (get_opt_bool_tree(term_spec, "underline")) {
@@ -344,7 +346,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		code[1] = '[';
 		code[2] = '0';
 
-		if (driver->colors) {
+		if (driver->color_mode) {
 			code[3] = ';';
 			code[4] = '3';
 			code[5] = '0' + TERM_COLOR_FOREGROUND(color);
@@ -484,7 +486,7 @@ redraw_screen(struct terminal *term)
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
 
-	switch (driver->colors) {
+	switch (driver->color_mode) {
 	case COLOR_MODE_MONO:
 	case COLOR_MODE_16:
 		add_chars16(&image, term, &state, driver);
@@ -496,7 +498,7 @@ redraw_screen(struct terminal *term)
 	}
 
 	if (image.length) {
-		if (driver->colors)
+		if (driver->color_mode)
 			add_bytes_to_string(&image, "\033[37;40m", 8);
 
 		add_bytes_to_string(&image, "\033[0m", 4);

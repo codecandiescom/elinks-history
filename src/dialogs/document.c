@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.53 2003/09/12 10:48:40 zas Exp $ */
+/* $Id: document.c,v 1.54 2003/09/13 21:25:08 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,13 +155,26 @@ loc_msg(struct terminal *term, struct location *location,
 #ifdef GLOBHIST
 	add_format_to_string(&msg, "\n%s: ", _("Last visit time", term));
 	historyitem = get_global_history_item(location->vs.url);
-	if (historyitem) {
-		/* Stupid ctime() adds a newline, and we don't want that, so we
-		 * use add_bytes_to_str. -- Miciah */
-		a = ctime(&historyitem->last_visit);
-		add_bytes_to_string(&msg, a, strlen(a) - 1);
-	} else {
-		add_to_string(&msg, _("Unknown", term));
+	{
+		unsigned char *last_visit = NULL;
+
+		if (historyitem) last_visit = ctime(&historyitem->last_visit);
+
+		/* GNU's documentation says that ctime() can return NULL.
+		 * The Open Group Base Specifications Issue 6 implies
+		 * otherwise, but is ambiguous. Let's be safe. -- Miciah
+		 */
+		if (last_visit) {
+			/* The string returned by ctime() includes a newline,
+			 * and we don't want that, so we use add_bytes_to_str.
+			 * The string always has exactly 25 characters, so add
+			 * 24 bytes: The length of the string, minus one for
+			 * the newline. -- Miciah
+			 */
+			add_bytes_to_string(&msg, last_visit, 24);
+		} else {
+			add_to_string(&msg, _("Unknown", term));
+		}
 	}
 #endif
 

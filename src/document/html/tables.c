@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.266 2004/06/29 02:31:58 jonas Exp $ */
+/* $Id: tables.c,v 1.267 2004/06/29 02:34:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1009,7 +1009,7 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	struct html_element *state;
 	color_t bgcolor = par_format.bgcolor;
 	int border, cellspacing, vcellpadding, cellpadding, align;
-	int frame, rules;
+	int rules;
 	int cye;
 	int x;
 	int cpd_pass, cpd_width, cpd_last;
@@ -1045,23 +1045,23 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 		cellspacing = get_num(attr, "cellspacing");
 		int_bounds(&cellspacing, 1, 2);
 
-		frame = TABLE_FRAME_BOX;
+		table->frame = TABLE_FRAME_BOX;
 		al = get_attr_val(attr, "frame");
 		if (al) {
-			if (!strcasecmp(al, "void")) frame = TABLE_FRAME_VOID;
-			else if (!strcasecmp(al, "above")) frame = TABLE_FRAME_ABOVE;
-			else if (!strcasecmp(al, "below")) frame = TABLE_FRAME_BELOW;
-			else if (!strcasecmp(al, "hsides")) frame = TABLE_FRAME_HSIDES;
-			else if (!strcasecmp(al, "vsides")) frame = TABLE_FRAME_VSIDES;
-			else if (!strcasecmp(al, "lhs")) frame = TABLE_FRAME_LHS;
-			else if (!strcasecmp(al, "rhs")) frame = TABLE_FRAME_RHS;
-			else if (!strcasecmp(al, "box")) frame = TABLE_FRAME_BOX;
-			else if (!strcasecmp(al, "border")) frame = TABLE_FRAME_BOX;
+			if (!strcasecmp(al, "void")) table->frame = TABLE_FRAME_VOID;
+			else if (!strcasecmp(al, "above")) table->frame = TABLE_FRAME_ABOVE;
+			else if (!strcasecmp(al, "below")) table->frame = TABLE_FRAME_BELOW;
+			else if (!strcasecmp(al, "hsides")) table->frame = TABLE_FRAME_HSIDES;
+			else if (!strcasecmp(al, "vsides")) table->frame = TABLE_FRAME_VSIDES;
+			else if (!strcasecmp(al, "lhs")) table->frame = TABLE_FRAME_LHS;
+			else if (!strcasecmp(al, "rhs")) table->frame = TABLE_FRAME_RHS;
+			else if (!strcasecmp(al, "box")) table->frame = TABLE_FRAME_BOX;
+			else if (!strcasecmp(al, "border")) table->frame = TABLE_FRAME_BOX;
 			mem_free(al);
 		}
 	} else {
 		cellspacing = 0;
-		frame = TABLE_FRAME_VOID;
+		table->frame = TABLE_FRAME_VOID;
 	}
 
 	cellpadding = get_num(attr, "cellpadding");
@@ -1100,7 +1100,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	table->cellpadding = cellpadding;
 	table->vcellpadding = vcellpadding;
 	table->cellspacing = cellspacing;
-	table->frame = frame;
 	table->rules = rules;
 
 	format_bad_table_html(table);

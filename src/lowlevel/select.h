@@ -1,9 +1,9 @@
-/* $Id: select.h,v 1.7 2003/06/28 10:47:53 jonas Exp $ */
+/* $Id: select.h,v 1.8 2003/12/01 14:01:26 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
 
-#include "lowlevel/ttime.h"
+#include "util/ttime.h"
 
 extern int terminate;
 extern struct list_head bottom_halves;

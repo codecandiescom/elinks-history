@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.117 2004/01/28 01:26:28 jonas Exp $ */
+/* $Id: scanner.c,v 1.118 2004/01/28 01:32:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -102,9 +102,6 @@ struct scanner_info css_scanner_info = {
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 #define	is_css_token_start(c)	check_css_table(c, CSS_CHAR_TOKEN_START)
 
-#define ident2type(ident, end, base_type) \
-	map_scanner_string(css_string_mappings, ident, end, base_type)
-
 
 #define	skip_css(s, skipto)							\
 	while (*(s) && *(s) != (skipto) && check_css_precedence(*(s), skipto)) {\
@@ -157,7 +154,8 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 			unsigned char *ident = string;
 
 			scan_css(string, CSS_CHAR_IDENT);
-			type = ident2type(ident, string, CSS_TOKEN_DIMENSION);
+			type = map_scanner_string(scanner, ident, string,
+						  CSS_TOKEN_DIMENSION);
 		}
 
 	} else if (is_css_ident_start(first_char)) {
@@ -169,8 +167,8 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 			/* Make sure that we have an ending ')' */
 			skip_css(function_end, ')');
 			if (*function_end == ')') {
-				type = ident2type(token->string, string,
-						  CSS_TOKEN_FUNCTION);
+				type = map_scanner_string(scanner, token->string,
+						string, CSS_TOKEN_FUNCTION);
 
 				/* If it is not a known function just skip the
 				 * how arg stuff so we don't end up generating
@@ -246,7 +244,8 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
-			type = ident2type(ident, string, CSS_TOKEN_AT_KEYWORD);
+			type = map_scanner_string(scanner, ident, string,
+						  CSS_TOKEN_AT_KEYWORD);
 		}
 
 	} else if (first_char == '!') {

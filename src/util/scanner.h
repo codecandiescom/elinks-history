@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.5 2004/01/28 01:26:29 jonas Exp $ */
+/* $Id: scanner.h,v 1.6 2004/01/28 01:32:42 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -65,7 +65,7 @@ struct scanner;
 
 struct scanner_info {
 	/* Table containing how to map strings to token types */
-	struct scanner_string_mapping *string_mappings;
+	struct scanner_string_mapping *mappings;
 
 	/* Information for how to initialize the scanner table */
 	struct scan_table_info *scan_table_info;
@@ -169,9 +169,10 @@ get_next_scanner_token(struct scanner *scanner)
 struct scanner_token *
 skip_scanner_tokens(struct scanner *scanner, int skipto, int precedence);
 
-/* Looks up the string from @ident to @end to in the @mappings table */
+/* Looks up the string from @ident to @end to in the scanners string mapping
+ * table */
 int
-map_scanner_string(struct scanner_string_mapping *mappings,
+map_scanner_string(struct scanner *scanner,
 		   unsigned char *ident, unsigned char *end, int base_type);
 
 #endif

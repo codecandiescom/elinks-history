@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.2 2004/01/28 01:26:29 jonas Exp $ */
+/* $Id: scanner.c,v 1.3 2004/01/28 01:32:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,9 +48,10 @@ init_scanner_info(struct scanner_info *scanner_info)
 }
 
 int
-map_scanner_string(struct scanner_string_mapping *mappings,
+map_scanner_string(struct scanner *scanner,
 		   unsigned char *ident, unsigned char *end, int base_type)
 {
+	struct scanner_string_mapping *mappings = scanner->info->mappings;
 	int length = end - ident;
 
 	for (; mappings->name; mappings++) {

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.106 2003/07/14 19:51:32 jonas Exp $ */
+/* $Id: file.c,v 1.107 2003/07/15 05:52:50 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -371,9 +371,7 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 			if (entry->d_name[1] == '\0')
 				continue;
 
-			if (!show_hidden_files
-			    && entry->d_name[1] != '.'
-			    && entry->d_name[2] != '\0')
+			if (!show_hidden_files && strcmp(entry->d_name, ".."))
 				continue;
 		}
 

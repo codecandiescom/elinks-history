@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.74 2004/09/21 09:45:40 pasky Exp $ */
+/* $Id: apply.c,v 1.75 2004/09/21 09:57:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,10 +93,15 @@ examine_element(struct css_selector *base,
 
 #ifdef CSS_DEBUG
  	DBG("examine_element(%s, %d, %d, %p, %.*s);", base->name, seltype, rel, selectors, element->namelen, element->name);
+#define dbginfo(sel, type_, base) \
+	DBG("Matched selector %s (rel %d type %d [m%d])! Children %p !!%d, props !!%d", sel->name, sel->relation, sel->type, sel->type == type_, sel->leaves, !list_empty(sel->leaves), !list_empty(sel->properties))
+#else
+#define dbginfo(sel, type, base)
 #endif
 
 #define process_found_selector(sel, type, base) \
 	if (selector) { \
+		dbginfo(sel, type, base); \
 		merge_css_selectors(base, sel); \
 		/* More specific matches? */ \
 		examine_element(sel, type + 1, CSR_SPECIFITY, \
@@ -128,6 +133,7 @@ examine_element(struct css_selector *base,
 	 * have to tell us about those. --pasky */
 
 #undef process_found_selector
+#undef dbginfo
 }
 
 void

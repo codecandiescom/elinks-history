@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.34 2004/06/19 00:13:43 pasky Exp $ */
+/* $Id: parse.c,v 1.35 2004/06/20 09:08:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,62 +252,63 @@ get_num(unsigned char *a, unsigned char *name)
 	return result;
 }
 
-
+/* Parse 'width[%],....'-like string, and return width value in chars.
+ * If @trunc is set, it will limit width value to current usable width. */
 static int
-parse_width(unsigned char *w, int trunc)
+parse_width(unsigned char *str, int trunc)
 {
 	unsigned char *end;
-	int p = 0;
-	int s;
-	int l;
-	int width;
+	int percentage = 0;
+	int value;
+	int len;
+	int maxwidth;
 
-	while (isspace(*w)) w++;
-	for (l = 0; w[l] && w[l] != ','; l++);
+	while (isspace(*str)) str++;
+	for (len = 0; str[len] && str[len] != ','; len++);
 
-	while (l && isspace(w[l - 1])) l--;
-	if (!l) return -1;
+	while (len && isspace(str[len - 1])) len--;
+	if (!len) return -1;
 
-	if (w[l - 1] == '%') l--, p = 1;
+	if (str[len - 1] == '%') len--, percentage = 1;
 
-	while (l && isspace(w[l - 1])) l--;
-	if (!l) return -1;
+	while (len && isspace(str[len - 1])) len--;
+	if (!len) return -1;
 
-	width = par_format.width - par_format.leftmargin - par_format.rightmargin;
+	maxwidth = par_format.width - par_format.leftmargin - par_format.rightmargin;
 
 	errno = 0;
-	s = strtoul((char *)w, (char **)&end, 10);
+	value = strtoul((char *)str, (char **)&end, 10);
 	if (errno) return -1;
 
-	if (p) {
+	if (percentage) {
 		if (trunc)
-			s = s * width / 100;
+			value = value * maxwidth / 100;
 		else
 			return -1;
-	} else s = (s + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
+	} else {
+		value = (value + (HTML_CHAR_WIDTH - 1) / 2) / HTML_CHAR_WIDTH;
+	}
 
-	if (trunc && s > width) s = width;
+	if (trunc && value > maxwidth) value = maxwidth;
 
-	if (s < 0) s = 0;
+	if (value < 0) value = 0;
 
-	return s;
+	return value;
 }
 
+/* Returns width value from attribute named @name. */
 int
-get_width(unsigned char *a, unsigned char *n, int trunc)
+get_width(unsigned char *a, unsigned char *name, int trunc)
 {
-	int r;
-	unsigned char *w = get_attr_val(a, n);
+	int width;
+	unsigned char *str = get_attr_val(a, name);
 
-	if (!w) return -1;
-	r = parse_width(w, trunc);
-	mem_free(w);
+	if (!str) return -1;
+	width = parse_width(str, trunc);
+	mem_free(str);
 
-	return r;
+	return width;
 }
-
-
-
 
 unsigned char *
 skip_comment(unsigned char *html, unsigned char *eof)

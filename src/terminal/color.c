@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.24 2003/09/03 23:10:32 jonas Exp $ */
+/* $Id: color.c,v 1.25 2003/09/05 00:17:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,6 +101,10 @@ find_nearest_color(color_t color, int level)
 {
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
 	struct rgb_cache_entry *rgb_cache;
+
+#if 0
+	/* No need to poison the cache since calling this function is only
+	 * meaning full when level > 0 */
 	static int cache_init = 0;
 
 	if (!cache_init) {
@@ -110,16 +114,20 @@ find_nearest_color(color_t color, int level)
 			rgb_fgcache[h].color = -1;
 		cache_init = 1;
 	}
+#endif
 
 	rgb_cache = &rgb_fgcache[HASH_RGB(color, level)];
 
-	if (rgb_cache->color == -1
+	if (rgb_cache->l == 0
 	    || rgb_cache->l != level
 	    || rgb_cache->rgb != color) {
 		struct rgb rgb = INIT_RGB(color);
 		unsigned char nearest_color = 0;
 		int min_dist = 0xffffff;
 		register int i;
+
+		/* This is a hotspot so maybe this is a bad idea. --jonas */
+		assertm(level, "find_nearest_color() called with @level = 0");
 
 		for (i = 0; i < level; i++) {
 			int dist = color_distance(&rgb, &palette[i]);

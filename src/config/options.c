@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.351 2003/10/23 23:52:07 jonas Exp $ */
+/* $Id: options.c,v 1.352 2003/10/24 00:21:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1002,8 +1002,10 @@ static struct change_hook_info change_hooks[] = {
 	{ "document.browse",		change_hook_html },
 	{ "document.cache",		change_hook_cache },
 	{ "document.colors",		change_hook_html },
+#ifdef GLOBHIST
 	{ "document.history.global.write_interval",
 					global_history_write_timer_change_hook },
+#endif
 	{ "document.html",		change_hook_html },
 	{ "terminal",			change_hook_terminal },
 	{ "ui.language",		change_hook_language },

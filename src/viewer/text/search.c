@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.269 2004/08/12 04:35:10 miciah Exp $ */
+/* $Id: search.c,v 1.270 2004/08/12 04:41:42 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -921,14 +921,14 @@ find_next_do(struct session *ses, struct document_view *doc_view, int direction)
 	return FIND_ERROR_NOT_FOUND;
 }
 
-void
-find_next(struct session *ses, struct document_view *doc_view, int direction)
+static void
+print_find_error(struct session *ses, enum find_error find_error)
 {
 	int hit_top = 0;
 	unsigned char *message = NULL;
 	enum msgbox_flags flags = 0;
 
-	switch (find_next_do(ses, doc_view, direction)) {
+	switch (find_error) {
 		case FIND_ERROR_HIT_TOP:
 			hit_top = 1;
 		case FIND_ERROR_HIT_BOTTOM:
@@ -973,6 +973,12 @@ find_next(struct session *ses, struct document_view *doc_view, int direction)
 			message,
 			NULL, 1,
 			N_("OK"), NULL, B_ENTER | B_ESC);
+}
+
+void
+find_next(struct session *ses, struct document_view *doc_view, int direction)
+{
+	print_find_error(ses, find_next_do(ses, doc_view, direction));
 }
 
 

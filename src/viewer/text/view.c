@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.541 2004/06/26 23:06:35 pasky Exp $ */
+/* $Id: view.c,v 1.542 2004/06/27 19:07:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,6 +155,12 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 	ses->navigate_mode = NAVIGATE_LINKWISE;
 
 	count = int_max(ses->kbdprefix.repeat_count, 1);
+
+	if (doc_view->document->nlinks == 0) {
+		/* There are no links, therefore the only sensible value for
+		 * wraparound_bound is -1 (no link selected). */
+		wraparound_bound = -1;
+	}
 
 	while (count--) {
 		int current_link = doc_view->vs->current_link;

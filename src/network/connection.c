@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.64 2003/07/04 15:53:23 jonas Exp $ */
+/* $Id: connection.c,v 1.65 2003/07/04 18:45:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,8 +40,8 @@
 struct host_connection {
 	LIST_HEAD(struct host_connection);
 
-	unsigned char *host;
 	int conn;
+	unsigned char host[1]; /* Keep last */
 };
 
 struct keepalive_connection {
@@ -70,7 +70,6 @@ static int keepalive_timeout = -1;
 INIT_LIST_HEAD(queue);
 static INIT_LIST_HEAD(host_connections);
 static INIT_LIST_HEAD(keepalive_connections);
-
 
 /* Prototypes */
 static void send_connection_info(struct connection *c);
@@ -139,20 +138,57 @@ connection_disappeared(struct connection *c)
 	return 1;
 }
 
+
 static struct host_connection *
 get_host_connection(struct connection *c)
 {
 	unsigned char *host = c->uri.host;
 	int hostlen = c->uri.hostlen;
-	struct host_connection *host_connection;
+	struct host_connection *connection;
 
 	if (!host) return NULL;
-	foreach (host_connection, host_connections)
-		if (!strncmp(host_connection->host, host, hostlen))
-			return host_connection;
+	foreach (connection, host_connections)
+		if (!strncmp(connection->host, host, hostlen))
+			return connection;
 
 	return NULL;
 }
+
+/* Don't add hostnameless host connections but they're valid. */
+static int
+add_host_connection(struct connection *c)
+{
+	struct host_connection *hc = get_host_connection(c);
+
+	if (hc) {
+		hc->conn++;
+
+	} else if (c->uri.host) {
+		hc = mem_alloc(sizeof(struct host_connection) + c->uri.hostlen);
+		if (!hc) return 0;
+
+		hc->conn = 1;
+		memcpy(hc->host, c->uri.host, c->uri.hostlen);
+		add_to_list(host_connections, hc);
+	}
+
+	return 1;
+}
+
+static void
+del_host_connection(struct connection *c)
+{
+	struct host_connection *h = get_host_connection(c);
+
+	if (!h) return;
+
+	h->conn--;
+	if (h->conn) return;
+
+	del_from_list(h);
+	mem_free(h);
+}
+
 
 static void stat_timer(struct connection *c);
 
@@ -277,20 +313,8 @@ free_connection_data(struct connection *c)
 	active_connections--;
 	assertm(active_connections >= 0, "active connections underflow");
 
-	if (c->state != S_WAIT) {
-		struct host_connection *h = get_host_connection(c);
-
-		assertm(h, "suspending connection that is not on the list "
-			"(state %d)", c->state);
-		if (!h) return;
-
-		h->conn--;
-		if (!h->conn) {
-			del_from_list(h);
-			if (h->host) mem_free(h->host);
-			mem_free(h);
-		}
-	}
+	if (c->state != S_WAIT)
+		del_host_connection(c);
 }
 
 void
@@ -539,7 +563,6 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 static void
 run_connection(struct connection *c)
 {
-	struct host_connection *hc;
 	protocol_handler *func;
 
 	assertm(!c->running, "connection already running");
@@ -551,24 +574,12 @@ run_connection(struct connection *c)
 		return;
 	}
 
-	hc = get_host_connection(c);
-	if (!hc) {
-		hc = mem_calloc(1, sizeof(struct host_connection));
-		if (!hc) {
-			set_connection_state(c, S_OUT_OF_MEM);
-			del_connection(c);
-			return;
-		}
-		hc->host = get_host_name(c->url);
-		if (!hc->host) {
-			set_connection_state(c, S_BAD_URL);
-			del_connection(c);
-			mem_free(hc);
-			return;
-		}
-		add_to_list(host_connections, hc);
+	if (!add_host_connection(c)) {
+		set_connection_state(c, S_OUT_OF_MEM);
+		del_connection(c);
+		return;
 	}
-	hc->conn++;
+
 	active_connections++;
 	c->running = 1;
 	func(c);

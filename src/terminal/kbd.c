@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.103 2004/07/30 16:39:44 zas Exp $ */
+/* $Id: kbd.c,v 1.104 2004/07/30 22:22:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -220,7 +220,7 @@ resize_terminal(void)
 	struct term_event ev = INIT_TERM_EVENT(EVENT_RESIZE, 0, 0, 0);
 	int width, height;
 
-	if (get_terminal_size(ditrm->std_out, &width, &height)) return;
+	get_terminal_size(ditrm->std_out, &width, &height);
 
 	ev.info.size.width = width;
 	ev.info.size.height = height;
@@ -256,18 +256,16 @@ handle_trm(int std_in, int std_out, int sock_in, int sock_out, int ctl_in,
 {
 	struct itrm *itrm;
 	struct terminal_info info;
+	struct term_event_size *size = &info.event.info.size;
 	unsigned char *ts;
 
 	memset(&info, 0, sizeof(struct terminal_info));
-	if (get_terminal_size(ctl_in,
-			      &info.event.info.size.width,
-			      &info.event.info.size.height)) {
-		ERROR(G_("Could not get terminal size"));
-		return;
-	}
+
+	get_terminal_size(ctl_in, &size->width, &size->height);
 	info.event.ev = EVENT_INIT;
 	info.system_env = get_system_env();
 	info.length = init_len;
+
 	if (remote) {
 		info.session_info = remote;
 		info.magic = INTERLINK_REMOTE_MAGIC;

@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.39 2004/07/12 10:59:24 zas Exp $ */
+/* $Id: osdep.h,v 1.40 2004/07/30 22:22:43 jonas Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -13,7 +13,7 @@ int get_system_env(void);
 int get_e(unsigned char *env);
 int is_xterm(void);
 int is_twterm(void);
-int get_terminal_size(int, int *, int *);
+void get_terminal_size(int, int *, int *);
 void handle_terminal_resize(int, void (*)(void));
 void unhandle_terminal_resize(int);
 void set_bin(int);

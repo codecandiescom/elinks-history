@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.142 2004/07/30 14:52:42 pasky Exp $ */
+/* $Id: osdep.c,v 1.143 2004/07/30 22:22:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -184,12 +184,11 @@ unhandle_terminal_resize(int fd)
 	install_signal_handler(SIGWINCH, NULL, NULL, 0);
 }
 
-int
+void
 get_terminal_size(int fd, int *x, int *y)
 {
 	struct winsize ws;
 
-	if (!x || !y) return -1;
 	if (ioctl(1, TIOCGWINSZ, &ws) != -1) {
 		*x = ws.ws_col;
 		*y = ws.ws_row;
@@ -206,8 +205,6 @@ get_terminal_size(int fd, int *x, int *y)
 		*y = get_e("LINES");
 		if (!*y) *y = DEFAULT_TERMINAL_HEIGHT;
 	}
-
-	return 0;
 }
 
 #endif
@@ -372,7 +369,7 @@ set_window_title(unsigned char *title)
 	if (!is_xterm() && !is_gnuscreen()) return;
 
 	/* Retrieve terminal dimensions. */
-	if (get_terminal_size(0, &xsize, &ysize)) return;
+	get_terminal_size(0, &xsize, &ysize);
 
 	/* Check if terminal width is reasonnable. */
 	if (xsize < 1 || xsize > 1024) return;

@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.14 2004/07/03 16:28:02 jonas Exp $ */
+/* $Id: win32.c,v 1.15 2004/07/30 22:22:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,7 +140,7 @@ unhandle_terminal_resize(int fd)
 		return;
 }
 
-int
+void
 get_terminal_size(int fd, int *x, int *y)
 {
 	CONSOLE_SCREEN_BUFFER_INFO	s;
@@ -149,11 +149,9 @@ get_terminal_size(int fd, int *x, int *y)
 	{
 		*x = s.dwSize.X - 1;
 		*y = s.dwSize.Y - 1;
-		return 0;
 	}
 	*x = DEFAULT_TERMINAL_WIDTH;
 	*y = DEFAULT_TERMINAL_HEIGHT;
-	return 0;
 }
 #endif
 

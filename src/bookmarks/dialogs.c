@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.62 2002/12/13 12:42:08 zas Exp $ */
+/* $Id: dialogs.c,v 1.63 2002/12/22 16:29:33 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -122,6 +122,20 @@ push_search_button(struct dialog_data *dlg, struct widget_data *di)
 /**** ADD FOLDER *****************************************************/
 
 static void
+focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
+		struct bookmark *bm)
+{
+	/* Infinite loop protector. Maximal safety. It will protect your system
+	 * from 100% CPU time. Buy it now. Only from Sirius Labs. */
+	struct listbox_item *sel2 = NULL;
+
+	do {
+		sel2 = box->sel;
+		box_sel_move(box_widget_data, 1);
+	} while (box->sel->udata != bm && box->sel != sel2);
+}
+
+static void
 do_add_folder(struct dialog_data *dlg, unsigned char *name)
 {
 	struct widget_data *box_widget_data;
@@ -138,7 +152,7 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 			bm = box->sel->root->udata;
 		}
 	}
-	bm = add_bookmark(bm, 0, name, "");
+	bm = add_bookmark(bm, 1, name, "");
 	bm->box_item->type = BI_FOLDER;
 
 #ifdef BOOKMARKS_RESAVE
@@ -147,14 +161,7 @@ do_add_folder(struct dialog_data *dlg, unsigned char *name)
 
 	/* We touch only the actual bookmark dialog, not all of them;
 	 * that's right, right? ;-) --pasky */
-
-	/* FIXME: No, I don't like this. But can we do better? --pasky */
-	/* FIXME: _ought_ to be better. */
-#if 0
-	box->sel = bm->box_item;
-	box->top = bm->box_item;
-	box->sel_offset = 0;
-#endif
+	focus_bookmark(box_widget_data, box, bm);
 }
 
 static int
@@ -664,8 +671,8 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 static void
 bookmark_add_add(struct dialog *d)
 {
-	struct widget_data *box_widget_data;
-	struct listbox_data *box;
+	struct widget_data *box_widget_data = NULL; /* silence stupid gcc */
+	struct listbox_data *box = NULL;
 	struct bookmark *bm = NULL;
 
 	if (d->udata) {
@@ -688,18 +695,11 @@ bookmark_add_add(struct dialog *d)
 	write_bookmarks();
 #endif
 
-	/* We touch only the actual bookmark dialog, not all of them;
-	 * that's right, right? ;-) --pasky */
-
-	/* And as the bookmark is supposed to be placed at the bottom of the
-	 * list, we just move as down as possible. This is done so that
-	 * box->top is adjusted correctly. */
-
-	/* FIXME FIXME FIXME FIXME FIXME */
-#if 0
-	box_sel_move(box_widget_data, 0);
-	/* ..and doesn't work at all for non-root adding. */
-#endif
+	if (d->udata) {
+		/* We touch only the actual bookmark dialog, not all of them;
+		 * that's right, right? ;-) --pasky */
+		focus_bookmark(box_widget_data, box, bm);
+	}
 }
 
 

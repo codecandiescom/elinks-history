@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.109 2004/09/28 23:14:47 pasky Exp $ */
+/* $Id: renderer.c,v 1.110 2004/09/29 20:01:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -70,7 +70,7 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 		 * This is the case of moving around in history - we have all
 		 * what happenned recorded in the view_state and needn't bother
 		 * again. */
-#ifdef DEBUG
+#ifdef CONFIG_DEBUG
 		/* Hopefully. */
 		struct string_list_item *iterator = queued_snippets->next;
 

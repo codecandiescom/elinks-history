@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.56 2004/02/26 16:48:05 jonas Exp $ */
+/* $Id: action.c,v 1.57 2004/02/26 17:35:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,10 +128,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 {
 	struct terminal *term = ses->tab->term;
 	struct document_view *doc_view = current_frame(ses);
+	int magic = 1;
 
 	switch (action) {
-		int magic = 1;
-
 		/* Please keep in alphabetical order for now. Later we can sort
 		 * by most used or something. */
 		case ACT_MAIN_ABORT_CONNECTION:

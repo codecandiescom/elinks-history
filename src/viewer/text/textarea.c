@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.102 2004/06/18 11:10:08 miciah Exp $ */
+/* $Id: textarea.c,v 1.103 2004/06/18 11:11:47 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,7 +479,6 @@ textarea_op_down(struct form_state *fs, struct form_control *fc)
 
 	line = format_text(fs->value, fc->cols, !!fc->wrap);
 	if (!line) return FRAME_EVENT_OK;
-
 
 	y = get_textarea_line_number(line, fs->state);
 	if (y == -1) {

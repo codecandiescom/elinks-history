@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.44 2003/07/21 22:58:00 pasky Exp $ */
+/* $Id: conv.c,v 1.45 2003/07/22 03:34:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -494,23 +494,22 @@ add_htmlesc_str(unsigned char **str, int *strl,
 unsigned char *
 encode_shell_safe_url(unsigned char *url)
 {
-	unsigned char *u = init_str();
-	int l = 0;
+	struct string u;
 
-	if (!u) return NULL;
+	if (!init_string(&u)) return NULL;
 
 	for (; *url; url++) {
 		if (is_safe_in_shell(*url))
-			add_chr_to_str(&u, &l, *url);
+			add_char_to_string(&u, *url);
 		else {
-			add_chr_to_str(&u, &l, '=');
-			add_chr_to_str(&u, &l, hx(*url >> 4));
-		       	add_chr_to_str(&u, &l, hx(*url & 0xf));
-			add_chr_to_str(&u, &l, '=');
+			add_char_to_string(&u, '=');
+			add_char_to_string(&u, hx(*url >> 4));
+		       	add_char_to_string(&u, hx(*url & 0xf));
+			add_char_to_string(&u, '=');
 		}
 	}
 
-	return u;
+	return u.source;
 }
 
 /* This is _NOT_ for what do you think it's for! We use this to recover from
@@ -518,22 +517,21 @@ encode_shell_safe_url(unsigned char *url)
 unsigned char *
 decode_shell_safe_url(unsigned char *url)
 {
-	unsigned char *u = init_str();
-	int l = 0;
 	size_t url_len = strlen(url);
+	struct string u;
 
-	if (!u) return NULL;
+	if (!init_string(&u)) return NULL;
 
 	for (; *url; url++, url_len--) {
 		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
 		    || unhx(url[2]) == -1 || url[3] != '=') {
-			add_chr_to_str(&u, &l, *url);
+			add_char_to_string(&u, *url);
 		} else {
-			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
+			add_char_to_string(&u, (unhx(url[1]) << 4) + unhx(url[2]));
 		       	url += 3;
 			url_len -= 3;
 		}
 	}
 
-	return u;
+	return u.source;
 }

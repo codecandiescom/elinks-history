@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.68 2004/04/24 00:23:12 jonas Exp $ */
+/* $Id: cmdline.c,v 1.69 2004/04/24 00:24:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -659,8 +659,8 @@ struct option_info cmdline_options_info[] = {
 		"case any URL arguments will be opened in new tabs in the remote instance.\n"
 		"Following is a list of the methods that are supported:\n"
 		"  ping()                                   -- check for remote instance\n"
-		"  openURL()                                -- open new tab\n"
-		"  openURL(http://elinks.or.cz)             -- open URL in new tab\n"
+		"  openURL(http://elinks.or.cz)             -- open URL in current tab\n"
+		"  openURL(http://elinks.or.cz, new-tab)    -- open URL in new tab\n"
 		"  openURL(http://elinks.or.cz, new-window) -- open URL in new window\n"
 		"  xfeDoCommand(openBrowser)                -- open new window")),
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.384 2004/02/13 17:52:47 zas Exp $ */
+/* $Id: parser.c,v 1.385 2004/03/13 17:57:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2177,6 +2177,34 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	special_f(f, SP_CONTROL, fc);
 }
 
+
+static void
+html_applet(unsigned char *a)
+{
+	unsigned char *code, *alt = NULL;
+
+	code = get_url_val(a, "code");
+	if (!code) return;
+
+	alt = get_attr_val(a, "alt");
+	if (!alt) alt = stracpy("");
+	if (!alt) {
+		mem_free(code);
+		return;
+	}
+
+	html_focusable(a);
+
+	if (*alt) {
+		put_link_line("Applet: ", alt, code, global_doc_opts->framename);
+	} else {
+		put_link_line("", "Applet", code, global_doc_opts->framename);
+	}
+
+	mem_free(alt);
+	mem_free(code);
+}
+
 static void
 html_iframe(unsigned char *a)
 {
@@ -2712,12 +2740,13 @@ struct element_info {
 	int nopair;
 };
 
-#define NUMBER_OF_TAGS 64
+#define NUMBER_OF_TAGS 65
 
 static struct element_info elements[] = {
 	{"A",		html_a,		0, 2},
 	{"ABBR",	html_italic,	0, 0},
 	{"ADDRESS",	html_address,	2, 0},
+	{"APPLET",	html_applet,	1, 1},
 	{"B",		html_bold,	0, 0},
 	{"BASE",	html_base,	0, 1},
 	{"BASEFONT",	html_font,	0, 1},

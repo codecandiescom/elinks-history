@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.46 2003/06/18 21:16:11 zas Exp $ */
+/* $Id: interlink.c,v 1.47 2003/06/19 09:32:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,14 +68,21 @@ af_unix_close(void)
 #endif
 
 /* FIXME: Separate client and server code. --Zas */
+struct s_addr_info {
+	struct sockaddr *addr;
+	int size;
+	int fd;
+};
 
-/* Accepted socket */
-static struct sockaddr *s_unix_accept;
+/* Accepted socket info */
+static struct s_addr_info s_info_accept;
 
-/* Listening socket */
-static struct sockaddr *s_unix;
-static int s_unix_l;
-static int s_unix_fd = -1;
+/* Listening socket info */
+static struct s_addr_info s_info_listen;
+
+/* Connect socket info */
+static struct s_addr_info s_info_connect;
+
 
 #ifdef USE_AF_UNIX
 
@@ -103,14 +110,14 @@ get_sun_path(unsigned char **sun_path, int *sun_path_len)
 }
 
 static int
-get_address(struct sockaddr **s_addr, int *s_addr_len)
+get_address(struct s_addr_info *info)
 {
 	struct sockaddr_un *addr = NULL;
 	int sun_path_freespace;
 	unsigned char *path;
 	int pathl;
 
-	assert(s_addr && s_addr_len);
+	assert(info);
 
 	if (!get_sun_path(&path, &pathl)) return -1;
 
@@ -157,13 +164,13 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 
 	addr->sun_family = AF_UNIX;
 
-	*s_addr = (struct sockaddr *) addr;
+	info->addr = (struct sockaddr *) addr;
 	/* The size of the address is the offset of the start of the filename,
 	 * plus its length, plus one for the terminating null byte (well, this
 	 * last byte may or not be needed it depends of....).
 	 * Alternatively we can use SUN_LEN() macro but this one is not always
 	 * defined nor always defined in the same way. --Zas */
-	*s_addr_len = sizeof(struct sockaddr_un) - sun_path_freespace;
+	info->size = sizeof(struct sockaddr_un) - sun_path_freespace;
 
 	return AF_UNIX;
 
@@ -175,18 +182,18 @@ free_and_error:
 }
 
 static int
-alloc_address(struct sockaddr **s_addr, int *s_addr_size)
+alloc_address(struct s_addr_info *info)
 {
 	struct sockaddr_un *sa;
 
-	assert(s_addr);
+	assert(info);
 
-	sa = mem_alloc(sizeof(struct sockaddr_un));
+	/* calloc() is safer there. */
+	sa = mem_calloc(1, sizeof(struct sockaddr_un));
 	if (!sa) return 0;
 
-	*s_addr = (struct sockaddr *) sa;
-	if (s_addr_size)
-		*s_addr_size = sizeof(struct sockaddr_un);
+	info->addr = (struct sockaddr *) sa;
+	info->size = sizeof(struct sockaddr_un);
 
 	return 1;
 }
@@ -197,15 +204,9 @@ unlink_unix(struct sockaddr *s_addr)
 	assert(s_addr);
 
 	unlink(((struct sockaddr_un *) s_addr)->sun_path);
-#if 0
-	if (unlink(((struct sockaddr_un *) s_unix)->sun_path)) {
-		perror("unlink");
-		debug("unlink: %s", ((struct sockaddr_un *)s_unix)->sun_path);
-	}
-#endif
 }
 
-#else
+#else /* AF_INET */
 
 /* It may not be defined in netinet/in.h on some systems. */
 #ifndef INADDR_LOOPBACK
@@ -215,11 +216,11 @@ unlink_unix(struct sockaddr *s_addr)
 /* FIXME: IPv6 support. */
 
 static int
-get_address(struct sockaddr **s_addr, int *s_addr_len)
+get_address(struct s_addr_info *info)
 {
 	struct sockaddr_in *sin;
 
-	assert(s_addr && s_addr_len);
+	assert(info);
 
 	sin = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sin) return -1;
@@ -228,25 +229,25 @@ get_address(struct sockaddr **s_addr, int *s_addr_len)
 	sin->sin_port = htons(ELINKS_PORT);
 	sin->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
-	*s_addr = (struct sockaddr *) sin;
-	*s_addr_len = sizeof(struct sockaddr_in);
+	info->addr = (struct sockaddr *) sin;
+	info->size = sizeof(struct sockaddr_in);
 
 	return AF_INET;
 }
 
 static int
-alloc_address(struct sockaddr **s_addr, int *s_addr_size)
+alloc_address(struct s_addr_info *info)
 {
 	struct sockaddr_in *sa;
 
-	assert(s_addr);
+	assert(info);
 
-	sa = mem_alloc(sizeof(struct sockaddr_in));
+	/* calloc() is safer there. */
+	sa = mem_calloc(1, sizeof(struct sockaddr_in));
 	if (!sa) return 0;
 
-	*s_addr = (struct sockaddr *) sa;
-	if (s_addr_size)
-		*s_addr_size = sizeof(struct sockaddr_in);
+	info->addr = (struct sockaddr *) sa;
+	info->size = sizeof(struct sockaddr_in);
 
 	return 1;
 }
@@ -255,14 +256,17 @@ alloc_address(struct sockaddr **s_addr, int *s_addr_size)
 
 #endif
 
+/* Called when we receive a connection on listening socket. */
 static void
-af_unix_connection(void *dummy)
+af_unix_connection(struct s_addr_info *info)
 {
 	int ns;
-	int l = s_unix_l;
+	int l = info->size;
 
-	memset(s_unix_accept, 0, l);
-	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);
+	assert(info);
+
+	memset(info->addr, 0, l);
+	ns = accept(info->fd, info->addr, &l);
 	if (ns < 0) {
 		error(gettext("accept() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
@@ -289,6 +293,7 @@ elinks_usleep(unsigned long useconds)
 	select(0, &dummy, &dummy, &dummy, &delay);
 }
 
+
 /* TODO: separate to a client function and a server function. */
 int
 bind_to_af_unix(void)
@@ -298,48 +303,54 @@ bind_to_af_unix(void)
 	int attempts = 0;
 	int af;
 
-	if (!alloc_address(&s_unix_accept, NULL))
-		goto free_and_error;
-
-	af = get_address(&s_unix, &s_unix_l);
+	af = get_address(&s_info_listen);
 	if (af == -1) goto free_and_error;
 
 again:
 
-	s_unix_fd = socket(af, SOCK_STREAM, 0);
-	if (s_unix_fd == -1) {
+	s_info_listen.fd = socket(af, SOCK_STREAM, 0);
+	if (s_info_listen.fd == -1) {
 		error(gettext("socket() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
-	setsockopt(s_unix_fd, SOL_SOCKET, SO_REUSEADDR, (void *) &reuse_addr, sizeof(int));
+	setsockopt(s_info_listen.fd, SOL_SOCKET, SO_REUSEADDR, (void *) &reuse_addr, sizeof(int));
 #endif
 
-	if (bind(s_unix_fd, s_unix, s_unix_l) < 0) {
+	if (bind(s_info_listen.fd, s_info_listen.addr, s_info_listen.size) < 0) {
 		/* This error permit to determine if we're a master or
-		 * slave elinks. Dirty but how to do better ?. --Zas */
+		 * slave elinks. Dirty but how to do better ?.
+		 * I think we should first try to connect to an existing
+		 * session and then try to bind as master. --Zas */
 		if (errno != EADDRINUSE) /* This will change soon --Zas */
 			error(gettext("bind() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 
-		close(s_unix_fd);
+		close(s_info_listen.fd);
 
 		/* Try to connect there then */
+		if (!s_info_connect.addr) {
+			if (!alloc_address(&s_info_connect))
+				goto free_and_error;
+			/* Client and server are using same address (for now;). */
+			memcpy(s_info_connect.addr, s_info_listen.addr, s_info_listen.size);
+			s_info_connect.size = s_info_listen.size;
+		}
 
-		s_unix_fd = socket(af, SOCK_STREAM, 0);
-		if (s_unix_fd == -1) {
+		s_info_connect.fd = socket(af, SOCK_STREAM, 0);
+		if (s_info_connect.fd == -1) {
 			error(gettext("socket() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
 			goto free_and_error;
 		}
 
 #if defined(SOL_SOCKET) && defined(SO_REUSEADDR)
-		setsockopt(s_unix_fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse_addr, sizeof(int));
+		setsockopt(s_info_connect.fd, SOL_SOCKET, SO_REUSEADDR, (void *)&reuse_addr, sizeof(int));
 #endif
 
-		if (connect(s_unix_fd, s_unix, s_unix_l) < 0) {
+		if (connect(s_info_connect.fd, s_info_connect.addr, s_info_connect.size) < 0) {
 			if (errno != ECONNREFUSED)
 				error(gettext("connect() failed: %d (%s)"),
 				      errno, (unsigned char *) strerror(errno));
@@ -348,15 +359,16 @@ again:
 				/* Sleep 1/10 second. */
 				/* Is this really useful ? --Zas */
 				elinks_usleep(100000);
-				close(s_unix_fd);
+				close(s_info_connect.fd);
 
 				goto again;
 			}
 
-			close(s_unix_fd); s_unix_fd = -1;
+			close(s_info_connect.fd); s_info_connect.fd = -1;
 
+			/* FIXME: unlink() here seems weird. --Zas */
 			if (!unlinked) {
-				unlink_unix(s_unix);
+				unlink_unix(s_info_connect.addr);
 				unlinked = 1;
 
 				goto again;
@@ -365,18 +377,25 @@ again:
 			goto free_and_error;
 		}
 
-		mem_free(s_unix); s_unix = NULL;
+		mem_free(s_info_connect.addr), s_info_connect.addr = NULL;
 
-		return s_unix_fd;
+		return s_info_connect.fd;
 	}
 
-	if (listen(s_unix_fd, 100)) {
+	/* Listen and accept. */
+	if (!alloc_address(&s_info_accept))
+		goto free_and_error;
+
+	s_info_accept.fd = s_info_listen.fd;
+
+	if (listen(s_info_accept.fd, 100)) {
 		error(gettext("listen() failed: %d (%s)"),
 		      errno, (unsigned char *) strerror(errno));
 		goto free_and_error;
 	}
 
-	set_handlers(s_unix_fd, af_unix_connection, NULL, NULL, NULL);
+	set_handlers(s_info_accept.fd, (void (*)(void *)) af_unix_connection,
+		     NULL, NULL, &s_info_accept);
 
 	return -1;
 
@@ -386,19 +405,42 @@ free_and_error:
 	return -1;
 }
 
+/* Free all allocated memory and close all descriptors if
+ * needed. */
 void
 af_unix_close(void)
 {
-	if (s_unix_fd != -1)
-		close(s_unix_fd);
-
-	if (s_unix) {
-		unlink_unix(s_unix);
-		mem_free(s_unix); s_unix = NULL;
+	if (s_info_listen.fd != -1) {
+		close(s_info_listen.fd);
+		s_info_listen.fd = -1;
 	}
 
-	if (s_unix_accept) {
-		mem_free(s_unix_accept); s_unix_accept = NULL;
+	if (s_info_listen.addr) {
+		unlink_unix(s_info_listen.addr);
+		mem_free(s_info_listen.addr);
+		s_info_listen.addr = NULL;
+	}
+
+	if (s_info_connect.fd != -1) {
+		close(s_info_connect.fd);
+		s_info_connect.fd = -1;
+	}
+
+	if (s_info_connect.addr) {
+		unlink_unix(s_info_connect.addr);
+		mem_free(s_info_connect.addr);
+		s_info_connect.addr = NULL;
+	}
+
+	if (s_info_accept.fd != -1) {
+		close(s_info_accept.fd);
+		s_info_accept.fd = -1;
+	}
+
+	if (s_info_accept.addr) {
+		unlink_unix(s_info_accept.addr);
+		mem_free(s_info_accept.addr);
+		s_info_accept.addr = NULL;
 	}
 }
 

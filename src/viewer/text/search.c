@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.180 2004/02/02 15:04:49 jonas Exp $ */
+/* $Id: search.c,v 1.181 2004/02/02 15:12:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -969,18 +969,86 @@ typeahead_error(struct session *ses, unsigned char *typeahead)
 	}
 }
 
+/* searches the @document for a link with the given @text. takes the
+ * current_link in the view, the link to start searching from @i and the
+ * direction to search (1 is forward, -1 is back). */
+static inline int
+search_link_text(struct document *document, int current_link, int i,
+		 unsigned char *text, int direction)
+{
+	int textlen = strlen(text);
+	/* The link interval in which we are currently searching */
+	int upper_link, lower_link;
+	int case_sensitive;
+
+	assert(textlen && direction);
+	assert(i >= 0 && i < document->nlinks);
+
+	/* Set up the range of links that should be search in first attempt */
+	upper_link = (direction > 0) ? document->nlinks : i + 1;
+	lower_link = (direction > 0) ? i - 1: -1;
+
+	case_sensitive = get_opt_bool("document.browse.search.case");
+
+#define case_compare_chars(c1, c2) \
+	(case_sensitive ? (c1) == (c2) : tolower(c1) == tolower(c2))
+
+	for (; i > lower_link && i < upper_link; i += direction) {
+		struct link *link = &document->links[i];
+		struct point *linkpos = link->pos;
+		int j;
+
+		if (link->type != LINK_HYPERTEXT
+		    || textlen > link->n) continue;
+
+		for (j = 0; j < textlen; j++, linkpos++) {
+			unsigned char data = get_document_char(document,
+							       linkpos->x, linkpos->y);
+
+			if (!data || !case_compare_chars(data, text[j]))
+				break;
+
+			if (textlen == j + 1) {
+				return i;
+			}
+		}
+
+		/* Check if we are at the end of the first range */
+		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
+		    && get_opt_bool("document.browse.search.wraparound")) {
+			/* Only wrap around one time. Initialize @i with
+			 * {+= direction} in mind. */
+			if (direction > 0) {
+				if (upper_link != document->nlinks
+				    || upper_link == current_link + 1)
+					break;
+
+				lower_link = i = -1;
+				upper_link = current_link + 1;
+			} else {
+				if (lower_link != -1
+				    || lower_link == current_link - 1)
+					break;
+
+				lower_link = current_link - 1;
+				upper_link = i = document->nlinks;
+			}
+		}
+	}
+
+#undef case_compare_chars
+
+	return -1;
+}
+
 /* Link typeahead */
 /* XXX: This is a bit hackish for some developers taste. */
 static enum typeahead_code
 do_typeahead(struct session *ses, struct document_view *doc_view,
 	     unsigned char *text, int action)
 {
-	struct document *document = doc_view->document;
-	int current_link = int_max(doc_view->vs->current_link, 0);
-	int textlen = strlen(text);
-	/* The link interval in which we are currently searching */
-	int upper_link, lower_link;
-	int direction, case_sensitive, i = current_link;
+	int current = int_max(doc_view->vs->current_link, 0);
+	int direction, i = current;
 
 	switch (action) {
 		case ACT_EDIT_PREVIOUS_ITEM:
@@ -1018,65 +1086,11 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = 1;
 	}
 
-	assert(textlen && direction);
-	assert(i >= 0 && i < document->nlinks);
+	i = search_link_text(doc_view->document, current, i, text, direction);
+	if (i < 0) return TYPEAHEAD_STOP;
 
-	/* Set up the range of links that should be search in first attempt */
-	upper_link = (direction > 0) ? document->nlinks : i + 1;
-	lower_link = (direction > 0) ? i - 1: -1;
-
-	case_sensitive = get_opt_bool("document.browse.search.case");
-
-#define case_compare_chars(c1, c2) \
-	(case_sensitive ? (c1) == (c2) : tolower(c1) == tolower(c2))
-
-	for (; i > lower_link && i < upper_link; i += direction) {
-		struct link *link = &document->links[i];
-		struct point *linkpos = link->pos;
-		int j;
-
-		if (link->type != LINK_HYPERTEXT
-		    || textlen > link->n) continue;
-
-		for (j = 0; j < textlen; j++, linkpos++) {
-			unsigned char data = get_document_char(document,
-							       linkpos->x, linkpos->y);
-
-			if (!data || !case_compare_chars(data, text[j]))
-				break;
-
-			if (textlen == j + 1) {
-				doc_view->vs->current_link = i;
-				return TYPEAHEAD_MATCHED;
-			}
-		}
-
-		/* Check if we are at the end of the first range */
-		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
-		    && get_opt_bool("document.browse.search.wraparound")) {
-			/* Only wrap around one time. Initialize @i with
-			 * {+= direction} in mind. */
-			if (direction > 0) {
-				if (upper_link != document->nlinks
-				    || upper_link == current_link + 1)
-					break;
-
-				lower_link = i = -1;
-				upper_link = current_link + 1;
-			} else {
-				if (lower_link != -1
-				    || lower_link == current_link - 1)
-					break;
-
-				lower_link = current_link - 1;
-				upper_link = i = document->nlinks;
-			}
-		}
-	}
-
-#undef case_compare_chars
-
-	return TYPEAHEAD_STOP;
+	doc_view->vs->current_link = i;
+	return TYPEAHEAD_MATCHED;
 }
 
 static enum input_line_code

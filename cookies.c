@@ -60,6 +60,14 @@ static int check_domain_security(unsigned char *server, unsigned char *domain)
 		return 0;
 
 	/* Match domain and server.. */
+
+	if (!strcasecmp(domain, server)) {
+		/* We should probably allow domains which are same as servers.
+		 * --<rono@sentuny.com.au> */
+		/* Mozilla does it as well ;))) and I can't figure out any
+		 * security risk. --pasky */
+		return 0;
+	}
 	
 	for (i = strlen(server) - domain_len, j = 0; server[i]; i++, j++)
 		if (upcase(server[i]) != upcase(domain[j]))

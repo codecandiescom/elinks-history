@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.61 2002/06/22 16:45:18 pasky Exp $ */
+/* $Id: options.c,v 1.62 2002/06/23 13:00:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -763,7 +763,7 @@ register_options()
 		"Handler description for this file type.");
 
 	add_opt_tree("mime.handler._template_",
-		"_template_", OPT_AUTOCREATE,
+		"_template_", 0,
 		"System-specific handler description.");
 
 	add_opt_bool("mime.handler._template_._template_",

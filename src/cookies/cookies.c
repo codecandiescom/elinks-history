@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.81 2003/10/11 13:15:37 zas Exp $ */
+/* $Id: cookies.c,v 1.82 2003/10/26 14:58:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "config/options.h"
 #include "lowlevel/home.h"
 #include "lowlevel/ttime.h"
+#include "modules/module.h"
 #include "protocol/http/date.h"
 #include "protocol/http/header.h"
 #include "protocol/uri.h"
@@ -565,6 +566,7 @@ send_cookies(struct string *header, struct uri *uri)
 		save_cookies();
 }
 
+static void done_cookies(struct module *module);
 
 void
 load_cookies(void) {
@@ -583,7 +585,7 @@ load_cookies(void) {
 	/* Do it here, as we will delete whole cookies list if the file was
 	 * removed */
 	cookies_nosave = 1;
-	cleanup_cookies();
+	done_cookies(&cookies_module);
 	cookies_nosave = 0;
 
 	fp = fopen(cookfile, "r");
@@ -685,16 +687,16 @@ save_cookies(void) {
 	if (!secure_close(ssi)) cookies_dirty = 0;
 }
 
-void
-init_cookies(void)
+static void
+init_cookies(struct module *module)
 {
 	if (get_opt_int("cookies.save"))
 		load_cookies();
 }
 
 
-void
-cleanup_cookies(void)
+static void
+done_cookies(struct module *module)
 {
 	free_list(c_domains);
 
@@ -708,5 +710,15 @@ cleanup_cookies(void)
 		free_cookie(cookie);
 	}
 }
+
+struct module cookies_module = struct_module(
+	/* name: */		"cookies",
+	/* options: */		NULL,
+	/* events: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		init_cookies,
+	/* done: */		done_cookies
+);
 
 #endif /* COOKIES */

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.137 2003/10/26 14:30:47 jonas Exp $ */
+/* $Id: main.c,v 1.138 2003/10/26 14:58:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,6 @@
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "config/urlhist.h"
-#include "cookies/cookies.h"
 #include "dialogs/auth.h"
 #include "dialogs/menu.h"
 #include "document/cache.h"
@@ -172,9 +171,6 @@ init(void)
 #endif
 	load_url_history();
 	load_search_history();
-#ifdef COOKIES
-	init_cookies();
-#endif
 	init_ssl();
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
@@ -236,9 +232,6 @@ terminate_all_subsystems(void)
 		save_search_history();
 #ifdef GLOBHIST
 		done_global_history();
-#endif
-#ifdef COOKIES
-		cleanup_cookies();
 #endif
 		done_modules();
 	}

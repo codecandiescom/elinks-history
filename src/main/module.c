@@ -1,5 +1,5 @@
 /* General module system functionality */
-/* $Id: module.c,v 1.7 2003/10/26 14:30:51 jonas Exp $ */
+/* $Id: module.c,v 1.8 2003/10/26 14:58:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 /* Dynamic area: */
 
 #include "bfu/leds.h"
+#include "cookies/cookies.h"
 #include "bookmarks/bookmarks.h"
 #include "mime/mime.h"
 #include "scripting/scripting.h"
@@ -25,6 +26,9 @@ static struct module *builtin_modules[] = {
 #endif
 #ifdef BOOKMARKS
 	&bookmarks_module,
+#endif
+#ifdef COOKIES
+	&cookies_module,
 #endif
 #ifdef HAVE_SCRIPTING
 	&scripting_module,

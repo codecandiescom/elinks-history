@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.96 2003/05/20 10:07:25 zas Exp $ */
+/* $Id: menu.c,v 1.97 2003/05/21 11:44:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,6 +28,7 @@
 #include "globhist/dialogs.h"
 #include "intl/gettext/libintl.h"
 #include "terminal/kbd.h"
+#include "terminal/tab.h"
 #include "lowlevel/select.h"
 #include "terminal/terminal.h"
 #include "lua/core.h"
@@ -42,6 +43,25 @@
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/view.h"
+
+
+static void
+menu_next_tab(struct terminal *term, void *d, struct session *ses)
+{
+	switch_to_next_tab(term);
+}
+
+static void
+menu_prev_tab(struct terminal *term, void *d, struct session *ses)
+{
+	switch_to_prev_tab(term);
+}
+
+static void
+menu_close_tab(struct terminal *term, void *d, struct session *ses)
+{
+	close_tab(term);
+}
 
 /* Helper for url items in help menu. */
 static void
@@ -492,6 +512,10 @@ static struct menu_item view_menu[] = {
 	{N_("Document ~info"), "=", MENU_FUNC menu_doc_info, NULL, 0, 0},
 	{N_("H~eader info"), "|", MENU_FUNC menu_header_info, NULL, 0, 0},
 	{N_("Frame at ~full-screen"), "f", MENU_FUNC menu_for_frame, (void *)set_frame, 0, 0},
+	{"", M_BAR, NULL, NULL, 0, 0},
+	{N_("Nex~t tab"), ">", MENU_FUNC menu_next_tab, NULL, 0, 0},
+	{N_("Pre~v tab"), "<", MENU_FUNC menu_prev_tab, NULL, 0, 0},
+	{N_("~Close tab"), "c", MENU_FUNC menu_close_tab, NULL, 0, 0},
 	{NULL, NULL, NULL, NULL, 0, 0}
 };
 

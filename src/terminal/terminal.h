@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.13 2003/05/08 21:50:08 zas Exp $ */
+/* $Id: terminal.h,v 1.14 2003/05/24 22:55:08 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -6,6 +6,7 @@
 #include "config/options.h"
 #include "intl/charsets.h"
 #include "util/lists.h"
+
 
 enum event_type {
 	EV_INIT,
@@ -16,7 +17,6 @@ enum event_type {
 	EV_ABORT,
 };
 
-
 /* XXX: do not change order of fields. --Zas */
 struct event {
 	enum event_type ev;
@@ -25,9 +25,13 @@ struct event {
 	long b;
 };
 
+
+/* Some constants for the strings inside of {struct terminal}. */
+
 #define MAX_TERM_LEN	32	/* this must be multiple of 8! (alignment problems) */
 #define MAX_CWD_LEN	256	/* this must be multiple of 8! (alignment problems) */
 
+/* The terminal type, meaningful for frames (lines) drawing. */
 enum term_mode_type {
 	TERM_DUMB,
 	TERM_VT100,
@@ -56,38 +60,98 @@ enum term_env_type {
 	ENV_WIN32 = 64,
 };
 
+/* Lives in terminal/window.h. */
 struct window;
 
+/* This is one of the axis of ELinks' user interaction. {struct terminal}
+ * defines the terminal ELinks is running on --- each ELinks instance has
+ * one. It contains the basic terminal attributes, the settings associated
+ * with this terminal, screen content (and more abstract description of what
+ * is currently displayed on it) etc. It also maintains some runtime
+ * information about the actual ELinks instance owning this terminal. */
+/* TODO: Regroup the following into logical chunks. --pasky */
 struct terminal {
-	LIST_HEAD(struct terminal);
+	LIST_HEAD(struct terminal); /* {terminals} */
 
-	struct list_head windows; /* struct window */
+	/* This is (at least partially) a stack of all the windows living in
+	 * this terminal. A window can be wide range of stuff, from a menu box
+	 * through classical dialog window to a tab. See terminal/window.h for
+	 * more on windows.
+	 *
+	 * Tabs are special windows, though, and you never want to display them
+	 * all, but only one of them. ALWAYS check {inactive_tab} during
+	 * iterations through this list (unless it is really useless or you
+	 * are sure what are you doing) to make sure that you don't distribute
+	 * events etc to inactive tabs.
+	 *
+	 * The stack is top-down, thus .next is the stack's top, the current
+	 * window. .prev is the first tab.
+	 *
+	 * FIXME: Tabs violate the stack nature of this list, they appear there
+	 * randomly but always in the order in which they were inserted there.
+	 * Eventually, they should all live at the stack bottom, with the
+	 * actual tab living on the VERY bottom. --pasky */
+	struct list_head windows; /* {struct window} */
 
+	/* The specification of terminal in terms of terminal options. */
 	struct option *spec;
 
+	/* This is the terminal's current title, as perhaps displayed somewhere
+	 * in the X window frame or so. */
 	unsigned char *title;
+
+	/* This is the queue of events as coming from the other ELinks instance
+	 * owning this terminal. */
 	unsigned char *input_queue;
 
+	/* This is the screen's image, character by character. */
 	unsigned *screen;
+
+	/* The previous screen's image, used for optimizing actual drawing. */
 	unsigned *last_screen;
 
+	/* Indicates the master terminal, that is the terminal under
+	 * supervision of the master ELinks instance (the one doing all the
+	 * work and even maintaining these structures ;-). */
 	int master;
+
+	/* These are pipes for communication with the ELinks instance owning
+	 * this terminal. */
 	int fdin, fdout;
+
 	int x, y;
 	int cx, cy;
 	int lcx, lcy;
+
+	/* We are sure that @screen and the physical screen are out of sync. */
 	int dirty;
+
+	/* Indicates whether we are currently in the process of redrawing the
+	 * stuff being displayed on the terminal. It is typically used to
+	 * prevent redrawing inside of redrawing. */
 	int redrawing;
+
+	/* This indicates that the terminal is blocked, that is nothing should
+	 * be drawn on it etc. Typically an external program is running on it
+	 * right now. */
 	int blocked;
+
 	int qlen;
 	int qfreespace;
+
+	/* The current tab number. */
 	int current_tab;
 
+	/* The type of environment this terminal lives in. */
 	enum term_env_type environment;
 
+	/* $TERM env. variable value */
 	unsigned char term[MAX_TERM_LEN];
+
+	/* The current working directory for this terminal / ELinks instance. */
 	unsigned char cwd[MAX_CWD_LEN];
 
+	/* Something weird regarding the UTF8 I/O. */
 	struct {
 		unicode_val ucs;
 		int len;
@@ -95,7 +159,9 @@ struct terminal {
 	} utf_8;
 };
 
+/* We keep track about all the terminals in this list. */
 extern struct list_head terminals;
+
 
 extern unsigned char frame_dumb[];
 

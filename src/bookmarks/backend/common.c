@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.6 2002/12/11 13:18:14 pasky Exp $ */
+/* $Id: common.c,v 1.7 2002/12/11 14:39:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,9 +46,12 @@ bookmarks_read()
 	unsigned char *file_name;
 	FILE *f;
 
-	if (!bookmarks_backends[backend]->read) return;
+	if (!bookmarks_backends[backend]->read
+	    || !bookmarks_backends[backend]->filename) return;
 
-	file_name = straconcat(elinks_home, "bookmarks", NULL);
+	file_name = bookmarks_backends[backend]->filename(0);
+	if (!file_name) return;
+	file_name = straconcat(elinks_home, file_name, NULL);
 	if (!file_name) return;
 
 	f = fopen(file_name, "r");
@@ -70,9 +73,15 @@ bookmarks_write(struct list_head *bookmarks)
 	unsigned char *file_name;
 
 	if (!bookmarks_dirty) return;
-	if (!bookmarks_backends[backend]->write) return;
+	if (!bookmarks_backends[backend]->write
+	    || !bookmarks_backends[backend]->filename) return;
 
-	file_name = straconcat(elinks_home, "bookmarks", NULL);
+	/* We do this two-passes because we want backend to possibly decide to
+	 * return NULL if it's not suitable to save the bookmarks (otherwise
+	 * they would be just truncated to zero by secure_open()). */
+	file_name = bookmarks_backends[backend]->filename(1);
+	if (!file_name) return;
+	file_name = straconcat(elinks_home, file_name, NULL);
 	if (!file_name) return;
 
 	ssi = secure_open(file_name, 0177);

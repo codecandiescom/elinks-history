@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.4 2002/12/11 13:20:58 pasky Exp $ */
+/* $Id: xbel.c,v 1.5 2002/12/11 14:39:09 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -77,6 +77,8 @@ struct tree_node {
 static struct tree_node *root_node = NULL;
 static struct tree_node *current_node = NULL;
 
+/* This is 1 so that we won't fail miserably if we read bookmarks in a
+ * different format. */
 static int readok = 1;
 
 static void
@@ -129,10 +131,8 @@ read_bookmarks_xbel(FILE *f)
 static void
 write_bookmarks_xbel(struct secure_save_info *ssi, struct list_head *bookmarks)
 {
-	/* TODO We need to check the return value from read_bookmarks_*
-		elsewhere */
-	if (!readok) return;
-	
+	/* We check for readok in filename_bookmarks_xbel(). */
+
 	secure_fprintf(ssi, 
 		"<?xml version=\"1.0\"?>\n"
 		"<!DOCTYPE xbel PUBLIC \"+//IDN python.org//DTD XML "
@@ -144,6 +144,13 @@ write_bookmarks_xbel(struct secure_save_info *ssi, struct list_head *bookmarks)
 	
 	write_bookmarks_list(ssi, bookmarks, 0);
 	secure_fprintf(ssi, "\n</xbel>\n");
+}
+
+static unsigned char *
+filename_bookmarks_xbel(int writing)
+{
+	if (writing && !readok) return NULL;
+	return "bookmarks.xbel";
 }
 
 static void
@@ -493,6 +500,7 @@ free_node(struct tree_node *node)
 
 /* Read and write functions for the XBEL backend */
 struct bookmarks_backend xbel_bookmarks_backend = {
+	filename_bookmarks_xbel,
 	read_bookmarks_xbel,
 	write_bookmarks_xbel,
 };
@@ -504,6 +512,7 @@ struct bookmarks_backend xbel_bookmarks_backend = {
 #include "bookmarks/backend/common.h"
 
 struct bookmarks_backend xbel_bookmarks_backend = {
+	NULL,
 	NULL,
 	NULL,
 };

@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.1 2002/12/01 19:02:09 pasky Exp $ */
+/* $Id: common.h,v 1.2 2002/12/11 14:39:09 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BACKEND_COMMON_H
 #define EL__BOOKMARKS_BACKEND_COMMON_H
@@ -8,6 +8,7 @@
 #include "util/secsave.h"
 
 struct bookmarks_backend {
+	unsigned char *(*filename)(int);
 	void (*read)(FILE *);
 	void (*write)(struct secure_save_info *, struct list_head *);
 };

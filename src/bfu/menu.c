@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.32 2003/04/29 17:11:07 zas Exp $ */
+/* $Id: menu.c,v 1.33 2003/04/29 17:24:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,9 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni, int hotkeys
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
 			items[i].hotkey_pos = find_tilde_pos(_(items[i].text, term));
 			items[i].ignore_hotkey = 2; /* cached */
+#if 0
 			fprintf(stderr, "%d %d %s\n", items[i].hotkey_pos, items[i].ignore_hotkey, _(items[i].text, term));
+#endif
 		}
 }
 

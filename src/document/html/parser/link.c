@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.17 2004/06/23 12:13:54 jonas Exp $ */
+/* $Id: link.c,v 1.18 2004/07/14 02:06:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,27 +284,22 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 void
 html_applet(unsigned char *a)
 {
-	unsigned char *code, *alt = NULL;
+	unsigned char *code, *alt;
 
 	code = get_url_val(a, "code");
 	if (!code) return;
 
 	alt = get_attr_val(a, "alt");
-	if (!alt) alt = stracpy("");
-	if (!alt) {
-		mem_free(code);
-		return;
-	}
 
 	html_focusable(a);
 
-	if (*alt) {
+	if (alt && *alt) {
 		put_link_line("Applet: ", alt, code, global_doc_opts->framename);
 	} else {
 		put_link_line("", "Applet", code, global_doc_opts->framename);
 	}
 
-	mem_free(alt);
+	mem_free_if(alt);
 	mem_free(code);
 }
 

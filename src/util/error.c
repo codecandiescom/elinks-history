@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.23 2002/06/16 17:16:48 pasky Exp $ */
+/* $Id: error.c,v 1.24 2002/06/16 17:24:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,10 @@
 
 
 #ifdef LEAK_DEBUG
+
+/* Eat less memory, but sacrifice speed?
+ * Default is defined. */
+#define LESS_MEMORY_SPEED
 
 /* Fill memory on alloc() ?
  * Default is defined. */
@@ -66,9 +70,14 @@ struct alloc_header {
 };
 #endif /* LEAK_DEBUG_LIST */
 
-/* Size is set to be a multiple of 8 in order to have the main ptr aligned
- * properly (faster access). */
+/* Size is set to be on boundary of 8 (a multiple of 7) in order to have the
+ * main ptr aligned properly (faster access). We hope that  */
+#ifdef LESS_MEMORY_SPEED
 #define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 7) & ~7)
+#else
+/* Especially on 128bit machines, this can be faster, but eats more memory. */
+#define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 15) & ~15)
+#endif
 
 /* These macros are used to convert pointers and sizes to or from real ones
  * when using alloc_header stuff. */
@@ -272,9 +281,7 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 		return NULL;
 	}
 
-#ifdef FILL_ON_ALLOC
-	memset(ah, FILL_ON_ALLOC_VALUE, SIZE_BASE2AH(size));
-#endif
+	/* No, we do NOT want to fill this with FILL_ON_ALLOC_VALUE ;)). */
 
 	mem_amount += size;
 

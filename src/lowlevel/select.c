@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.54 2005/03/03 15:54:54 zas Exp $ */
+/* $Id: select.c,v 1.55 2005/03/03 16:10:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,22 +165,22 @@ check_timers(void)
 }
 
 int
-install_timer(ttime t, void (*func)(void *), void *data)
+install_timer(ttime time, void (*func)(void *), void *data)
 {
-	struct timer *tm, *tt;
+	struct timer *new_timer, *timer;
 
-	tm = mem_alloc(sizeof(*tm));
-	if (!tm) return -1;
-	tm->interval = t;
-	tm->func = func;
-	tm->data = data;
-	tm->id = timer_id++;
-	foreach (tt, timers)
-		if (tt->interval >= t)
+	new_timer = mem_alloc(sizeof(*new_timer));
+	if (!new_timer) return -1;
+	new_timer->interval = time;
+	new_timer->func = func;
+	new_timer->data = data;
+	new_timer->id = timer_id++;
+	foreach (timer, timers)
+		if (timer->interval >= time)
 			break;
-	add_at_pos(tt->prev, tm);
+	add_at_pos(timer->prev, new_timer);
 
-	return tm->id;
+	return new_timer->id;
 }
 
 void

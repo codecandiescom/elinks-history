@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.87 2005/03/19 00:31:52 zas Exp $ */
+/* $Id: button.c,v 1.88 2005/03/20 17:40:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,6 @@ add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 		  done_handler_T *done, void *done_data)
 {
 	int textlen = strlen(text);
-	unsigned char *pos = NULL;
 	struct widget *widget = &dlg->widgets[dlg->number_of_widgets++];
 
 	widget->type	= WIDGET_BUTTON;
@@ -46,15 +45,21 @@ add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
 	widget->text	= text;
 	widget->data	= data;
 
-	widget->info.button.flags     = flags;
-	widget->info.button.done      = done;
-	widget->info.button.done_data = done_data;
-	widget->info.button.textlen = textlen;
-	if (textlen > 1)
-		pos = memchr(text, '~', textlen - 1);
-	widget->info.button.hotkey_pos = (pos ? pos - text: -1);
+	widget->info.button.flags       = flags;
+	widget->info.button.done        = done;
+	widget->info.button.done_data   = done_data;
+	widget->info.button.hotkey_pos  = -1;
+	widget->info.button.textlen     = textlen;
 	widget->info.button.truetextlen = textlen;
-	widget->info.button.textlen = textlen - (pos != NULL);
+
+	if (textlen > 1) {
+		unsigned char *pos = memchr(text, '~', textlen - 1);
+
+		if (pos) {
+			widget->info.button.hotkey_pos = pos - text;
+			widget->info.button.textlen--;
+		}
+	}
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.43 2004/04/02 17:17:16 jonas Exp $ */
+/* $Id: mime.c,v 1.44 2004/04/02 17:30:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -146,7 +146,7 @@ get_content_type(unsigned char *head, struct uri *uri)
 	 * want to support also things like "ps.gz" - that'd never work, as we
 	 * would always compare only to "gz". */
 	/* Guess type accordingly to the extension */
-	extension = uri ? get_extension_from_url(struri(uri)) : NULL;
+	extension = uri ? get_extension_from_uri(uri) : NULL;
 	debug_extension(extension);
 	if (extension) {
 

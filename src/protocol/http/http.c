@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.259 2004/03/31 23:47:40 jonas Exp $ */
+/* $Id: http.c,v 1.260 2004/04/02 17:30:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1408,7 +1408,7 @@ again:
 
 	d = parse_http_header(conn->cache->head, "Content-Encoding", NULL);
 	if (d) {
-		unsigned char *extension = get_extension_from_url(struri(uri));
+		unsigned char *extension = get_extension_from_uri(uri);
 		enum stream_encoding file_encoding;
 
 		file_encoding = extension ? guess_encoding(extension) : ENCODING_NONE;

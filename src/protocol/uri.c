@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.110 2004/04/02 16:58:03 zas Exp $ */
+/* $Id: uri.c,v 1.111 2004/04/02 17:30:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -865,16 +865,19 @@ add_string_uri_filename_to_string(struct string *string, unsigned char *uristrin
 }
 
 unsigned char *
-get_extension_from_url(unsigned char *url)
+get_extension_from_uri(struct uri *uri)
 {
-	int lo = !strncasecmp(url, "file://", 7); /* dsep() *hint* *hint* */
+	int lo = uri->protocol == PROTOCOL_FILE; /* dsep() *hint* *hint* */
 	unsigned char *extension = NULL;
 	int afterslash = 1;
+	unsigned char *pos = uri->data;
 
- 	for (; *url && !end_of_dir(*url); url++) {
-		if (!afterslash && !extension && *url == '.') {
-			extension = url + 1;
-		} else if (dsep(*url)) {
+	assert(pos);
+
+	for (; *pos && !end_of_dir(*pos); pos++) {
+		if (!afterslash && !extension && *pos == '.') {
+			extension = pos + 1;
+		} else if (dsep(*pos)) {
 			extension = NULL;
 			afterslash = 1;
 		} else {
@@ -882,8 +885,8 @@ get_extension_from_url(unsigned char *url)
 		}
 	}
 
-	if (extension && extension < url)
-		return memacpy(extension, url - extension);
+	if (extension && extension < pos)
+		return memacpy(extension, pos - extension);
 
 	return NULL;
 }

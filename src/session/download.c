@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.236 2004/04/02 17:17:17 jonas Exp $ */
+/* $Id: download.c,v 1.237 2004/04/02 17:30:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,7 +625,7 @@ get_temp_name(struct uri *uri)
 	add_to_string(&name, nm);
 	free(nm);
 
-	extension = get_extension_from_url(struri(uri));
+	extension = get_extension_from_uri(uri);
 	if (extension) {
 		add_char_to_string(&name, '.');
 		add_shell_safe_to_string(&name, extension, strlen(extension));

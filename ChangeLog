@@ -1,3 +1,13 @@
+Thu Jan 31 15:50:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* menu.c, session.c:
+	
+	Hopefully FINALLY(!) fixed the unhistory - now it should be
+	rock-stable and any rumours telling otherwise should not be trusted
+	in any rate ;-). This fix comes after three-hours research and
+	massive changes and reverts as a tiny one-liner + some comments
+	dropped around the history code accompanying it.
+
 Wed Jan 30 22:27:24 2002  Petr Baudis <pasky@ji.cz>:
 
 	* menu.c, session.c:

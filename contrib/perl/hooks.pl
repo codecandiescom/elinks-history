@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.49 2005/03/26 23:42:26 rrowan Exp $
+# $Id: hooks.pl,v 1.50 2005/03/26 23:53:35 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -487,6 +487,9 @@ sub follow_url_hook
 		$url = 'http://' . $beta . '/groups?' . $bork . 'group=' . $group;
 		return $url;
 	}
+
+	# strip trailing spaces
+	$url =~ s/\s*$//;
 
 	return $url;
 }

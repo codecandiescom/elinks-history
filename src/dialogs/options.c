@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.129 2003/11/27 01:05:18 jonas Exp $ */
+/* $Id: options.c,v 1.130 2003/11/27 18:43:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,18 +229,15 @@ menu_language_list(struct terminal *term, void *xxx, struct session *ses)
 static unsigned char x_str[4];
 static unsigned char y_str[4];
 
-static int
-push_resize_button(struct dialog_data *dlg_data, struct widget_data *button)
+static void
+push_resize_button(struct terminal *term)
 {
-	struct terminal *term = dlg_data->win->term;
 	unsigned char str[8];
-	int m33p = ok_dialog(dlg_data, button);
 
 	strcpy(str, x_str);
 	strcat(str, ",");
 	strcat(str, y_str);
 	do_terminal_function(term, TERM_FN_RESIZE, str);
-	return m33p;
 }
 
 void
@@ -263,7 +260,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_field(dlg, NULL, 1, 999, check_number, 4, x_str, NULL);
 	add_dlg_field(dlg, NULL, 1, 999, check_number, 4, y_str, NULL);
 
-	add_dlg_button(dlg, B_ENTER, push_resize_button, _("OK", term), NULL);
+	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), push_resize_button, term);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
 	add_dlg_end(dlg, RESIZE_WIDGETS_COUNT);

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.135 2004/09/14 19:48:59 pasky Exp $ */
+/* $Id: options.inc,v 1.136 2004/09/21 09:20:08 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -433,7 +433,19 @@ struct option_info config_options_info[] = {
 
 	INIT_OPT_INT("document.cache.format", N_("Number"),
 		"size", 0, 0, 256, 5,
-		N_("Number of cached formatted pages.")),
+		N_("Number of cached formatted pages. Do not get too generous\n"
+		"here, 'formatted' means that all the accompanying structures\n"
+		"are kept in memory so that you get the cached document\n"
+		"immediatelly, but these structures may take a lot - 2x the\n"
+		"size of the HTML source is probably not unusual, but it can\n"
+		"be even more if the document consists of a lot of short lines\n"
+		"(padded right, if possible) and links and not much other markup.\n"
+		"So if you set this to 256 and then you don't like your ELinks\n"
+		"eating 90M, don't come complaining to us. ;-)\n"
+		"Also note that the format cache itself is not counted to the\n"
+		"memory cache size, but the HTML source of the formatted documents\n"
+		"is always cached, even if it is over the memory cache size\n"
+		"threshold. (Then of course no other documents can be cached.)")),
 
 	INIT_OPT_TREE("document.cache", N_("Memory cache"),
 		"memory", 0,

@@ -1,3 +1,111 @@
+Fri Apr  9 16:42:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Add FIXME about problems reading stuff from stdin to be viewed in
+	text viewer (and not dump viewer) because of not allowing special
+	files.  
+
+Fri Apr  9 16:33:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Like if !isatty(stdin) also check if !isatty(stdout) and make -dump
+	implicit.  This should fix debian bug #231663 "-dump 0 to stdout
+	doesn't dump; -dump 0 to pager segfaults". The segfault was by Out
+	of memory error that was fixed by previous patch setting x and y
+	vars before calling get_terminal_size(). This will further fix it by
+	improving usability of elinks in UNIX environment.  
+
+Fri Apr  9 13:34:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Use STDIN_FILENO macro instead of just 0. Don't know if it is
+	something we should test for in configure.  
+
+Fri Apr  9 13:33:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	get_terminal_size() might not actually assign anything to the
+	referenced arguments but will still return 0. This is a bit safer
+	when stdout is a pipe.  
+
+Fri Apr  9 04:37:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Proper fix for the unchecked allocated variable freeing.  
+
+Fri Apr  9 03:43:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Use same procedure for sending same URI as referrer as sanding true
+	URI. It is alreay the proxied URI so why all the fuzz.  
+
+Fri Apr  9 03:40:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	The data member of URI is always set.  
+
+Fri Apr  9 03:39:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, http/http.c:
+
+	Proposed fix for bug 436 leaking auth data through true referrer.  
+
+Fri Apr  9 03:20:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Format enum members properly.  
+
+Fri Apr  9 03:19:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.h, auth/auth.c, http/http.c:
+
+	Add HTTP URI formatting classes.  
+
+Fri Apr  9 03:13:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.h, scripting/lua/core.c:
+
+	Introduce URI_ORIGINAL formatting class.  
+
+Fri Apr  9 03:10:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/dialogs.c, dialogs/document.c, dialogs/download.c,
+	dialogs/menu.c, document/renderer.c, protocol/uri.h,
+	protocol/file/cgi.c, sched/download.c, viewer/text/link.c:
+
+	Introduce URI_PUBLIC formatting class that should be used for all
+	the URIs showed in dialogs an stuff. Is that too strict or should it
+	maybe be configurable whether to show password in public URIs? It is
+	even used for CGI referrer altho' I don't if that is too strict.  
+
+Fri Apr  9 03:05:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Revert URI component strangeness. Classes will be introduced
+	shortly.  
+
+Fri Apr  9 03:03:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	Move unchecked allocated var passed to getml() to the end so it
+	won't keep the other ml args from being registered and cause a leak.  
+
+Fri Apr  9 02:19:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Decrease indentation.  
+
 Thu Apr  8 19:47:27 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/http/http.c:

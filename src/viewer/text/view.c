@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.291 2003/12/06 02:56:02 jonas Exp $ */
+/* $Id: view.c,v 1.292 2003/12/10 02:49:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1214,7 +1214,7 @@ quit:
 				if ((ev->b & BM_BUTT) == B_RIGHT) {
 					struct window *tab = get_current_tab(ses->tab->term);
 
-					set_window_ptr(tab, tab->xpos, ev->y);
+					set_window_ptr(tab, ev->x, ev->y);
 					tab_menu(ses->tab->term, tab, ses);
 				}
 			}

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.210 2003/12/07 23:34:59 pasky Exp $ */
+/* $Id: menu.c,v 1.211 2003/12/10 02:49:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,9 +94,11 @@ void
 tab_menu(struct terminal *term, void *d, struct session *ses)
 {
 	struct menu_item *menu;
+	struct window *tab = d;
 	int tabs = number_of_tabs(term);
+	int i = 0;
 
-	assert(term && ses);
+	assert(term && ses && tab);
 	if_assert_failed return;
 
 	menu = new_menu(FREE_LIST);
@@ -118,6 +120,9 @@ tab_menu(struct terminal *term, void *d, struct session *ses)
 			    (menu_func) menu_close_other_tabs, d, 0);
 	}
 #endif
+	/* Adjust the menu position taking the menu frame into account */
+	while (menu[i].text) i++;
+	set_window_ptr(tab, tab->x, int_max(tab->y - i - 1, 0));
 
 	do_menu(term, menu, ses, 1);
 }

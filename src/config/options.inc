@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.38 2003/12/18 20:34:18 fabio Exp $ */
+/* $Id: options.inc,v 1.39 2003/12/19 16:24:07 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -793,9 +793,10 @@ struct option_info config_options_info[] = {
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use the mime.mailcap.ask option instead.")),
 
-	INIT_OPT_INT("protocol.mailcap", N_("Type query string"),
-		"description", 0, 0, 2, 0,
-		N_("This option is deprecated and will be removed very soon.\n")),
+	INIT_OPT_ALIAS("protocol.mailcap", NULL,
+		"description", 0, "mime.mailcap.description",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use mime.mailcap.description option instead.")),
 
 	INIT_OPT_ALIAS("protocol.mailcap", NULL,
 		"prioritize", 0, "mime.mailcap.prioritize",

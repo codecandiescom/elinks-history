@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.125 2004/10/16 23:09:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.126 2004/10/16 23:12:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -166,6 +166,8 @@ process_snippets(struct ecmascript_interpreter *interpreter,
 			CSS documents will not disappear from the cache
 			before all referencing HTML documents has been deleted
 			from it.
+
+			Reported as bug 533.
 
 			ERROR("The script of %s was lost in too full a cache!",
 			      uristring);

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.132 2004/06/23 13:18:09 jonas Exp $ */
+/* $Id: textarea.c,v 1.133 2004/06/23 14:02:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,7 @@ load_textarea_file(unsigned char *filename, int maxlength)
 }
 
 void
-textarea_edit(int op, struct session *ses, struct form_state *fs_,
+textarea_edit(int op, struct terminal *term_, struct form_state *fs_,
 	      struct document_view *doc_view_, struct link *link_)
 {
 	static int fc_maxlength;
@@ -354,11 +354,11 @@ textarea_edit(int op, struct session *ses, struct form_state *fs_,
 
 	assert (op == 0 || op == 1);
 	if_assert_failed return;
-	assert (op == 1 || ses);
+	assert (op == 1 || term_);
 	if_assert_failed return;
 
 	if (op == 0 && get_cmd_opt_bool("anonymous")) {
-		msg_box(ses->tab->term, NULL, 0,
+		msg_box(term_, NULL, 0,
 			N_("Error"), AL_CENTER,
 			N_("You cannot launch an external editor in the anonymous mode."),
 			NULL, 1,
@@ -366,8 +366,8 @@ textarea_edit(int op, struct session *ses, struct form_state *fs_,
 		return;
 	}
 
-	if (op == 0 && !ses->tab->term->master) {
-		msg_box(ses->tab->term, NULL, 0,
+	if (op == 0 && !term_->master) {
+		msg_box(term_, NULL, 0,
 			N_("Error"), AL_CENTER,
 			N_("You can do this only on the master terminal"),
 			NULL, 1,
@@ -396,7 +396,7 @@ textarea_edit(int op, struct session *ses, struct form_state *fs_,
 			link = link_;
 			fc_maxlength = link_->form_control->maxlength;
 		}
-		if (ses) term = ses->tab->term;
+		if (term_) term = term_;
 
 		exec_on_terminal(term, ex, "", 1);
 		mem_free(ex);
@@ -450,7 +450,7 @@ menu_textarea_edit(struct terminal *term, void *xxx, struct session *ses)
 	fs = find_form_state(doc_view, link->form_control);
 	if (!fs) return;
 
-	textarea_edit(0, ses, fs, doc_view, link);
+	textarea_edit(0, term, fs, doc_view, link);
 }
 
 

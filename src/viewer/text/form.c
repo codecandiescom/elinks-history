@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.214 2004/06/23 13:18:09 jonas Exp $ */
+/* $Id: form.c,v 1.215 2004/06/23 14:02:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1160,7 +1160,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			if (form_field_is_readonly(fc))
 				status = FRAME_EVENT_IGNORED;
 			else if (fc->type == FC_TEXTAREA)
-				textarea_edit(0, ses, fs, doc_view, link);
+				textarea_edit(0, ses->tab->term, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);

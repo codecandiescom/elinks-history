@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.303 2004/06/29 15:29:59 zas Exp $ */
+/* $Id: tables.c,v 1.304 2004/06/29 15:39:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,6 +219,7 @@ get_vline_width(struct table *table, int col)
 }
 
 #define has_vline_width(table, col) (get_vline_width(table, col) >= 0)
+#define has_hline_width(table, row) (get_hline_width(table, row) >= 0)
 
 static int
 get_hline_width(struct table *table, int row)
@@ -657,7 +658,7 @@ check_table_height(struct table *table, struct table_frames *frames, int y)
 	for (row = 0; row < table->rows; row++) {
 		our_height += table->rows_heights[row] +
 		              (row < table->rows - 1 &&
-		               get_hline_width(table, row + 1) >= 0);
+		               has_hline_width(table, row + 1));
 	}
 
 	assertm(old_height == our_height, "size not matching! %d vs %d",
@@ -677,7 +678,7 @@ get_table_real_height(struct table *table)
 	height = table_frames.top + table_frames.bottom;
 	for (row = 0; row < table->rows; row++) {
 		height += table->rows_heights[row];
-		if (row && get_hline_width(table, row) >= 0)
+		if (row && has_hline_width(table, row))
 			height++;
 	}
 
@@ -727,7 +728,7 @@ get_table_heights(struct table *table)
 					int k, p = 0;
 
 					for (k = 1; k < rowspan; k++)
-						p += (get_hline_width(table, row + k) >= 0);
+						p += has_hline_width(table, row + k);
 
 					distribute_values(&table->rows_heights[row],
 							  rowspan,
@@ -767,7 +768,7 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 	for (s = 0; s < cell->rowspan; s++) {
 		height += table->rows_heights[row + s] +
 			(s < cell->rowspan - 1 &&
-			 get_hline_width(table, row + s + 1) >= 0);
+			 has_hline_width(table, row + s + 1));
 	}
 
 	if (global_doc_opts && global_doc_opts->table_expand_cols) {
@@ -839,7 +840,7 @@ draw_table_cells(struct table *table, int x, int y)
 
 		for (row = 0; row < table->rows; row++) {
 			int row_height = table->rows_heights[row] +
-				(row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
+				(row < table->rows - 1 && has_hline_width(table, row + 1));
 			int row2;
 
 			par_format.bgcolor = default_bgcolor;
@@ -853,7 +854,7 @@ draw_table_cells(struct table *table, int x, int y)
 			draw_table_cell(table, col, row, xp, yp);
 
 			yp += table->rows_heights[row] +
-			      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
+			      (row < table->rows - 1 && has_hline_width(table, row + 1));
 		}
 
 		if (col < table->cols - 1) {
@@ -1010,7 +1011,7 @@ cont2:
 	cy = y;
 	for (row = 0; row <= table->rows; row++) {
 		cx = x;
-		if ((row > 0 && row < table->rows && get_hline_width(table, row) >= 0)
+		if ((row > 0 && row < table->rows && has_hline_width(table, row))
 		    || (row == 0 && table_frames.top)
 		    || (row == table->rows && table_frames.bottom)) {
 			int w = table_frames.left ? table->border : -1;

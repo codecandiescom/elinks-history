@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.10 2003/05/02 13:00:14 pasky Exp $ */
+/* $Id: lists.h,v 1.11 2003/05/02 13:26:37 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -99,9 +99,9 @@ do { \
 	do_not_optimize_here(&l); \
 } while (0)
 
-#define INIT_LIST_HEAD(x) struct list_head x = { &x, &x }
-#define D_LIST_HEAD(x) &x, &x
 #define NULL_LIST_HEAD NULL, NULL
+#define D_LIST_HEAD(x) &x, &x
+#define INIT_LIST_HEAD(x) struct list_head x = { D_LIST_HEAD(x) }
 #define LIST_HEAD(x) x *next; x *prev
 #define LIST_SET_MAGIC(x)
 
@@ -209,9 +209,9 @@ do { \
 	do_not_optimize_here(&l); \
 } while (0)
 
-#define INIT_LIST_HEAD(x) struct list_head x = { LISTMAGIC, &x, &x, LISTMAGIC }
-#define D_LIST_HEAD(x) LISTMAGIC, &x, &x, LISTMAGIC
 #define NULL_LIST_HEAD LISTMAGIC, NULL, NULL, LISTMAGIC
+#define D_LIST_HEAD(x) LISTMAGIC, &x, &x, LISTMAGIC
+#define INIT_LIST_HEAD(x) struct list_head x = { D_LIST_HEAD(x) }
 #define LIST_HEAD(x) unsigned int magic1; x *next; x *prev; unsigned int magic2;
 #define LIST_SET_MAGIC(x) x->magic1 = x->magic2 = LISTMAGIC
 

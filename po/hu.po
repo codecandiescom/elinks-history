@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
 "POT-Creation-Date: 2003-12-24 02:23+0100\n"
-"PO-Revision-Date: 2003-12-24 20:58+0100\n"
+"PO-Revision-Date: 2003-12-24 23:04+0100\n"
 "Last-Translator: Varga Balazs <vinnui@ent.hu>\n"
 "Language-Team: Hungarian\n"
 "MIME-Version: 1.0\n"
@@ -570,6 +570,9 @@ msgid ""
 "Specify elinks.conf config options on the command-line:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
+"Elinks konfigurációs állományban érvényes opciók megadása\n"
+"parancssoron keresztül. pl: "
+"  -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
 #: src/config/cmdline.c:477
@@ -690,6 +693,10 @@ msgid ""
 "stdin WORKS ONLY WHEN YOU USE -dump OR -source!! (I would like to\n"
 "know why you would use -source -stdin, though ;-)"
 msgstr ""
+"Az stdin megnyitása mint HTML dokumentum. Ezzel egyenértékû:\n"
+" -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
+"Megjegyzés: az stdinrõl való olvasás csak akkor mûködik ha -dump,\n"
+"vagy -source opcióval együtt van megadva."
 
 #: src/config/cmdline.c:544
 msgid "Do not number links in dump output"
@@ -991,7 +998,7 @@ msgstr "A gyorsítótár kezelõ megnyitása"
 
 #: src/config/kbdbind.c:387
 msgid "Cancel current state"
-msgstr ""
+msgstr "A folyamatban lévõ mûvelet megszakítása"
 
 #: src/config/kbdbind.c:388
 msgid "Open cookie manager"
@@ -1913,6 +1920,11 @@ msgid ""
 "1 means if document.browse.links.numbering = 1\n"
 "2 means always"
 msgstr ""
+"A szám billentyûk linkeket választanak ki ahelyett hogy prefixként\n"
+"mûködnének (ismétlésszám):\n"
+"0 - soha\n"
+"1 - ha a document.browse.links.numbering = 1\n"
+"2 - mindig"
 
 #. TODO - this is somehow implemented by ff, but disabled
 #. * for now as it doesn't work.
@@ -2253,7 +2265,7 @@ msgid ""
 "Set the timestamp of each downloaded file to the timestamp\n"
 "stored on the server."
 msgstr ""
-"A szerveren lévõ dátumbélyed beállítása minden\n"
+"A szerveren lévõ dátumbélyeg beállítása minden\n"
 "letöltött fálj számára."
 
 #. Does automatic resuming make sense as an option?
@@ -3474,7 +3486,7 @@ msgstr ""
 
 #: src/config/options.inc:1604
 msgid "Dialog field colors."
-msgstr ""
+msgstr "Dialógusablak szinei."
 
 #: src/config/options.inc:1667
 msgid "Title text"
@@ -3885,7 +3897,7 @@ msgstr "Domén"
 
 #: src/cookies/dialogs.c:78
 msgid "Expires"
-msgstr ""
+msgstr "Lejár"
 
 #: src/cookies/dialogs.c:80
 msgid "Secure"
@@ -4468,7 +4480,7 @@ msgstr "Becsült hátralevõ idõ"
 
 #: src/dialogs/status.c:206 src/viewer/text/search.c:1034
 msgid "Typeahead"
-msgstr ""
+msgstr "Bevitelkiegészítés"
 
 #: src/dialogs/status.c:301
 msgid "Untitled"
@@ -4618,23 +4630,23 @@ msgstr "Rendszer"
 
 #: src/intl/gettext/libintl.c:25
 msgid "English"
-msgstr ""
+msgstr "Angol"
 
 #: src/intl/gettext/libintl.c:27
 msgid "Belarusian"
-msgstr ""
+msgstr "Belorusz"
 
 #: src/intl/gettext/libintl.c:28
 msgid "Brazilian Portuguese"
-msgstr ""
+msgstr "Brazíliai portugál"
 
 #: src/intl/gettext/libintl.c:29
 msgid "Bulgarian"
-msgstr ""
+msgstr "Bulgár"
 
 #: src/intl/gettext/libintl.c:30
 msgid "Catalan"
-msgstr ""
+msgstr "Katalán"
 
 #: src/intl/gettext/libintl.c:31
 msgid "Croatian"
@@ -4646,23 +4658,23 @@ msgstr "Cseh"
 
 #: src/intl/gettext/libintl.c:33
 msgid "Danish"
-msgstr ""
+msgstr "Dán"
 
 #: src/intl/gettext/libintl.c:34
 msgid "Dutch"
-msgstr ""
+msgstr "Holland"
 
 #: src/intl/gettext/libintl.c:35
 msgid "Estonian"
-msgstr ""
+msgstr "Észt"
 
 #: src/intl/gettext/libintl.c:36
 msgid "Finnish"
-msgstr ""
+msgstr "Finn"
 
 #: src/intl/gettext/libintl.c:37
 msgid "French"
-msgstr ""
+msgstr "Francia"
 
 #: src/intl/gettext/libintl.c:38
 msgid "Galician"
@@ -4670,27 +4682,27 @@ msgstr ""
 
 #: src/intl/gettext/libintl.c:39
 msgid "German"
-msgstr ""
+msgstr "Német"
 
 #: src/intl/gettext/libintl.c:40
 msgid "Greek"
-msgstr ""
+msgstr "Görög"
 
 #: src/intl/gettext/libintl.c:41
 msgid "Hungarian"
-msgstr ""
+msgstr "Magyar"
 
 #: src/intl/gettext/libintl.c:42
 msgid "Icelandic"
-msgstr ""
+msgstr "Izlandi"
 
 #: src/intl/gettext/libintl.c:43
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonéz"
 
 #: src/intl/gettext/libintl.c:44
 msgid "Italian"
-msgstr ""
+msgstr "Olasz"
 
 #: src/intl/gettext/libintl.c:45
 msgid "Leet"
@@ -4698,11 +4710,11 @@ msgstr "Elit"
 
 #: src/intl/gettext/libintl.c:46
 msgid "Lithuanian"
-msgstr ""
+msgstr "Litván"
 
 #: src/intl/gettext/libintl.c:47
 msgid "Norwegian"
-msgstr ""
+msgstr "Norvég"
 
 #: src/intl/gettext/libintl.c:48
 msgid "Polish"
@@ -4710,7 +4722,7 @@ msgstr "Lengyel"
 
 #: src/intl/gettext/libintl.c:49
 msgid "Portuguese"
-msgstr ""
+msgstr "Portugál"
 
 #: src/intl/gettext/libintl.c:50
 msgid "Romanian"
@@ -4718,27 +4730,27 @@ msgstr "Román"
 
 #: src/intl/gettext/libintl.c:51
 msgid "Russian"
-msgstr ""
+msgstr "Orosz"
 
 #: src/intl/gettext/libintl.c:52
 msgid "Slovak"
-msgstr ""
+msgstr "Szlovák"
 
 #: src/intl/gettext/libintl.c:53
 msgid "Spanish"
-msgstr ""
+msgstr "Spanyol"
 
 #: src/intl/gettext/libintl.c:54
 msgid "Swedish"
-msgstr ""
+msgstr "Svéd"
 
 #: src/intl/gettext/libintl.c:55
 msgid "Turkish"
-msgstr ""
+msgstr "Török"
 
 #: src/intl/gettext/libintl.c:56
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukrán"
 
 #: src/lowlevel/home.c:121
 #, c-format
@@ -4927,6 +4939,9 @@ msgid ""
 "Leave as \"\" to use MAILCAP environment variable or\n"
 "built-in defaults instead."
 msgstr ""
+"A Mailcap keresési útvonala. Kettõsponokkal elválasztott fájl lista.\n"
+"Ha a MAILCAP környezeti változó értékét szeretnéd használni,\n"
+"hagyd a beállítást így: \"\""
 
 #: src/mime/backend/mailcap.c:110
 msgid "Ask before using the handlers defined by mailcap."
@@ -5134,30 +5149,35 @@ msgid ""
 "URI abbreviations, or smart ones, making it possible to pass\n"
 "arguments to them like search engine keywords."
 msgstr ""
+"Az URI kiegészítés beállításai. Lehetõvé teszi hogy elõtagokat\n"
+"adjunk meg, amelyeket az Elinks kiegészít. Az elõtag kiegészítés\n"
+"lehetnek egyszerûek, amelyeket egy másikra cserél a program, vagy\n"
+"intelligensek, amelyek argumentumokat fogadnak el, mint pl.\n"
+"keresõoldalak kulcsszavait."
 
 #: src/protocol/rewrite/rewrite.c:50
 msgid "Enable dumb prefixes"
-msgstr ""
+msgstr "Egyszerû elõtagok engedélyezése"
 
 #: src/protocol/rewrite/rewrite.c:52
 msgid "Enable dumb prefixes."
-msgstr ""
+msgstr "Egyszerû elõtagok engedélyezése."
 
 #: src/protocol/rewrite/rewrite.c:54
 msgid "Enable smart prefixes"
-msgstr ""
+msgstr "Intelligens elõtagok engedélyezése"
 
 #: src/protocol/rewrite/rewrite.c:56
 msgid "Enable smart prefixes."
-msgstr ""
+msgstr "Intelligens elõtagok engedélyezése."
 
 #: src/protocol/rewrite/rewrite.c:58
 msgid "Dumb Prefixes"
-msgstr ""
+msgstr "Egyszerû elõtagok"
 
 #: src/protocol/rewrite/rewrite.c:60
 msgid "Dumb prefixes."
-msgstr ""
+msgstr "Egyszerû elõtagok."
 
 #: src/protocol/rewrite/rewrite.c:64
 #, c-format
@@ -5169,11 +5189,11 @@ msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:68
 msgid "Smart Prefixes"
-msgstr ""
+msgstr "Intelligens elõtagok"
 
 #: src/protocol/rewrite/rewrite.c:70
 msgid "Smart prefixes."
-msgstr ""
+msgstr "Intelligens elõtagok."
 
 #: src/protocol/rewrite/rewrite.c:76
 msgid ""
@@ -5187,7 +5207,7 @@ msgstr ""
 #. name:
 #: src/protocol/rewrite/rewrite.c:336
 msgid "URI rewrite"
-msgstr "URI újraírás"
+msgstr "URI kiegészítés"
 
 #: src/protocol/user.c:155 src/sched/error.c:51
 msgid "Bad URL syntax"

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.123 2002/11/30 01:20:19 pasky Exp $ */
+/* $Id: options.c,v 1.124 2002/11/30 02:16:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -308,6 +308,106 @@ unmark_options_tree(struct list_head *tree)
 }
 
 
+
+static int
+check_nonempty_tree(struct list_head *options)
+{
+	struct option *opt;
+
+	foreach (opt, *options) {
+		if (opt->type == OPT_TREE) {
+			if (check_nonempty_tree((struct list_head *) opt->ptr))
+				return 1;
+		} else if (!(opt->flags & OPT_WATERMARK)) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+void
+smart_config_string(unsigned char **str, int *len, int print_comment,
+		    struct list_head *options, unsigned char *path, int depth,
+		    void (*fn)(unsigned char **, int *, struct option *,
+			       unsigned char *, int, int, int))
+{
+	struct option *option;
+
+	foreachback (option, *options) {
+		int do_print_comment = 1;
+
+		if (option->flags & OPT_HIDDEN ||
+		    option->flags & OPT_WATERMARK)
+			continue;
+
+		/* Is there anything to be printed anyway? */
+		if (option->type == OPT_TREE
+		    && !check_nonempty_tree((struct list_head *) option->ptr))
+			continue;
+
+		/* We won't pop out the description when we're in autocreate
+		 * category and not template. It'd be boring flood of
+		 * repetitive comments otherwise ;). */
+
+		/* This print_comment parameter is weird. If it is negative, it
+		 * means that we shouldn't print comments at all. If it is 1,
+		 * we shouldn't print comment UNLESS the option is _template_
+		 * or not-an-autocreating-tree (it is set for the first-level
+		 * autocreation tree). When it is 2, we can print out comments
+		 * normally. */
+		/* It is still broken somehow, as it didn't work for terminal.*
+		 * (the first autocreated level) by the time I wrote this. Good
+		 * summer job for bored mad hackers with spare boolean mental
+		 * power. I have better things to think about, personally.
+		 * Maybe we should just mark autocreated options somehow ;). */
+		if (!print_comment || (print_comment == 1
+					&& (strcmp(option->name, "_template_")
+					    && (option->flags & OPT_AUTOCREATE
+					        && option->type == OPT_TREE))))
+			do_print_comment = 0;
+
+		/* Pop out the comment */
+
+		/* For config file, we ignore do_print_comment everywhere
+		 * except 1, but sometimes we want to skip the option totally.
+		 */
+		fn(str, len, option, path, depth, option->type == OPT_TREE ? print_comment : do_print_comment, 0);
+		
+		fn(str, len, option, path, depth, do_print_comment, 1);
+
+		/* And the option itself */
+
+		if (option_types[option->type].write) {
+			fn(str, len, option, path, depth, do_print_comment, 2);
+
+		} else if (option->type == OPT_TREE) {
+			unsigned char *str2 = init_str();
+			int len2 = 0;
+			int pc = print_comment;
+
+			if (pc == 2 && option->flags & OPT_AUTOCREATE)
+				pc = 1;
+			else if (pc == 1 && strcmp(option->name, "_template_"))
+				pc = 0;
+
+			fn(str, len, option, path, depth, pc, 3);
+
+			if (path) {
+				add_to_str(&str2, &len2, path);
+				add_to_str(&str2, &len2, ".");
+			}
+			add_to_str(&str2, &len2, option->name);
+			smart_config_string(str, len, pc, option->ptr,
+					    str2, depth + 1, fn);
+			mem_free(str2);
+
+			fn(str, len, option, path, depth, pc, 3);
+		}
+	}
+}
+
+
 /**********************************************************************
  Options handlers
 **********************************************************************/
@@ -381,14 +481,22 @@ unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 {
-	version_cmd(NULL, NULL, NULL);
-	printf("\n");
+	int action;
 
-	printf("Usage: elinks [OPTION]... [URL]\n\n");
-	printf("Options:\n\n");
+	if (!strcmp(option->name, "help-config"))
+		action = 1;
+	else
+		action = 0;
+
+	if (!action) {
+		version_cmd(NULL, NULL, NULL);
+		printf("\n");
+
+		printf("Usage: elinks [OPTION]... [URL]\n\n");
+		printf("Options:\n\n");
+	}
 
 	foreachback (option, *cmdline_options) {
-
 		if (1 /*option->flags & OPT_CMDLINE*/) {
 			printf("-%s ", option->name);
 
@@ -1813,6 +1921,12 @@ register_options()
 	add_opt_command_tree(cmdline_options, "",
 		"help", 0, printhelp_cmd,
 		"Print usage help and exit.");
+
+#if 0
+	add_opt_command_tree(cmdline_options, "",
+		"help-config", 0, printhelp_cmd,
+		"Print help on configuration options and exit.");
+#endif
 
 	add_opt_command_tree(cmdline_options, "",
 		"lookup", 0, lookup_cmd,

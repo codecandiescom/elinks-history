@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.54 2002/11/29 19:04:58 zas Exp $ */
+/* $Id: conf.c,v 1.55 2002/11/30 02:16:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -434,83 +434,36 @@ load_config()
 }
 
 
-int
-check_nonempty_tree(struct list_head *options)
+static void
+smart_config_output_fn(unsigned char **str, int *len, struct option *option,
+		       unsigned char *path, int depth, int do_print_comment,
+		       int action)
 {
-	struct option *opt;
+	int i, j, l;
 
-	foreach (opt, *options) {
-		if (opt->type == OPT_TREE) {
-			if (check_nonempty_tree((struct list_head *) opt->ptr))
-				return 1;
-		} else if (!(opt->flags & OPT_WATERMARK)) {
-			return 1;
-		}
-	}
+	switch (action) {
+		case 0:
+			for (i = 0; i < depth * 2; i++)
+				add_chr_to_str(str, len, ' ');
 
-	return 0;
-}
+			add_to_str(str, len, "## ");
+			if (path) {
+				add_to_str(str, len, path);
+				add_to_str(str, len, ".");
+			}
+			add_to_str(str, len, option->name);
+			add_to_str(str, len, " ");
+			add_to_str(str, len, option_types[option->type].help_str);
+			add_to_str(str, len, NEWLINE);
+			break;
 
-void
-tree_config_string(unsigned char **str, int *len, int print_comment,
-		   struct list_head *options, unsigned char *path, int depth)
-{
-	struct option *option;
-	int j;
+		case 1:
+			if (!option->desc || !do_print_comment)
+				break;
 
-	foreachback (option, *options) {
-		int do_print_comment = 1;
+			l = strlen(option->desc);
 
-		if (option->flags & OPT_HIDDEN ||
-		    option->flags & OPT_WATERMARK)
-			continue;
-
-		/* Is there anything to be printed anyway? */
-		if (option->type == OPT_TREE
-		    && !check_nonempty_tree((struct list_head *) option->ptr))
-			continue;
-
-		/* Pop out the comment */
-
-		for (j = 0; j < depth * 2; j++)
-			add_chr_to_str(str, len, ' ');
-
-		add_to_str(str, len, "## ");
-		if (path) {
-			add_to_str(str, len, path);
-			add_to_str(str, len, ".");
-		}
-		add_to_str(str, len, option->name);
-		add_to_str(str, len, " ");
-		add_to_str(str, len, option_types[option->type].help_str);
-		add_to_str(str, len, NEWLINE);
-
-		/* We won't pop out the description when we're in autocreate
-		 * category and not template. It'd be boring flood of
-		 * repetitive comments otherwise ;). */
-
-		/* This print_comment parameter is weird. If it is negative, it
-		 * means that we shouldn't print comments at all. If it is 1,
-		 * we shouldn't print comment UNLESS the option is _template_
-		 * or not-an-autocreating-tree (it is set for the first-level
-		 * autocreation tree). When it is 2, we can print out comments
-		 * normally. */
-		/* It is still broken somehow, as it didn't work for terminal.*
-		 * (the first autocreated level) by the time I wrote this. Good
-		 * summer job for bored mad hackers with spare boolean mental
-		 * power. I have better things to think about, personally.
-		 * Maybe we should just mark autocreated options somehow ;). */
-		if (!print_comment || (print_comment == 1
-					&& (strcmp(option->name, "_template_")
-					    && (option->flags & OPT_AUTOCREATE
-					        && option->type == OPT_TREE))))
-			do_print_comment = 0;
-		
-		if (option->desc && do_print_comment) {
-			int l = strlen(option->desc);
-			int i;
-
-			for (j = 0; j < depth * 2; j++)
+			for (i = 0; i < depth * 2; i++)
 				add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, "# ");
 
@@ -522,16 +475,14 @@ tree_config_string(unsigned char **str, int *len, int print_comment,
 					add_to_str(str, len, "# ");
 				} else {
 					add_chr_to_str(str, len,
-						       option->desc[i]);
+							option->desc[i]);
 				}
 			}
 
 			add_to_str(str, len, NEWLINE);
-		}
+			break;
 
-		/* And the option itself */
-
-		if (option_types[option->type].write) {
+		case 2:
 			for (j = 0; j < depth * 2; j++)
 				add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, "set ");
@@ -544,30 +495,12 @@ tree_config_string(unsigned char **str, int *len, int print_comment,
 			option_types[option->type].write(option, str, len);
 			add_to_str(str, len, NEWLINE);
 			if (do_print_comment) add_to_str(str, len, NEWLINE);
+			break;
 
-		} else if (option->type == OPT_TREE) {
-			unsigned char *str2 = init_str();
-			int len2 = 0;
-			int pc = print_comment;
-
-			if (pc == 2 && option->flags & OPT_AUTOCREATE)
-				pc = 1;
-			else if (pc == 1 && strcmp(option->name, "_template_"))
-				pc = 0;
-
-			if (pc < 2) add_to_str(str, len, NEWLINE);
-
-			if (path) {
-				add_to_str(&str2, &len2, path);
-				add_to_str(&str2, &len2, ".");
-			}
-			add_to_str(&str2, &len2, option->name);
-			tree_config_string(str, len, pc, option->ptr,
-					   str2, depth + 1);
-			mem_free(str2);
-
-			if (pc < 2) add_to_str(str, len, NEWLINE);
-		}
+		case 3:
+			if (do_print_comment < 2)
+				add_to_str(str, len, NEWLINE);
+			break;
 	}
 }
 
@@ -629,7 +562,7 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	add_to_str(&tmpstr, &tmplen, NEWLINE);
 
 	origlen = tmplen;
-	tree_config_string(&tmpstr, &tmplen, 2, options, NULL, 0);
+	smart_config_string(&tmpstr, &tmplen, 2, options, NULL, 0, smart_config_output_fn);
 	if (tmplen > origlen) add_bytes_to_str(&str, &len, tmpstr, tmplen);
 	mem_free(tmpstr);
 

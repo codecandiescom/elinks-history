@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.36 2002/08/07 00:57:22 pasky Exp $ */
+/* $Id: options.h,v 1.37 2002/11/30 02:16:58 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -74,6 +74,9 @@ extern struct list_head *init_options_tree();
 extern void free_options_tree(struct list_head *);
 extern void unmark_options_tree(struct list_head *);
 
+extern void smart_config_string(unsigned char **, int *, int, struct list_head *, unsigned char *, int,
+				void (*)(unsigned char **, int *, struct option *, unsigned char *, int, int, int));
+
 extern struct option *copy_option(struct option *);
 extern void delete_option(struct option *);
 
@@ -104,11 +107,10 @@ extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *)
 #define get_opt_ptr(name) get_opt_ptr_tree(root_options, name)
 
 
-extern void add_opt_rec(struct list_head *, unsigned char *path, struct option *);
-extern struct option *add_opt(struct list_head *, unsigned char *path, unsigned char *name,
-			      enum option_flags flags, enum option_type type,
-			      int min, int max, void *ptr,
-			      unsigned char *desc);
+extern void add_opt_rec(struct list_head *, unsigned char *, struct option *);
+extern struct option *add_opt(struct list_head *, unsigned char *, unsigned char *,
+			      enum option_flags, enum option_type, int, int, void *,
+			      unsigned char *);
 
 #define add_opt_bool_tree(tree, path, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \

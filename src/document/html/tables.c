@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.101 2003/10/30 14:28:00 zas Exp $ */
+/* $Id: tables.c,v 1.102 2003/10/30 16:32:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,7 +95,7 @@ struct table {
 	struct table_column *cols;
 	color_t bgcolor;
 	int *min_c, *max_c;
-	int *w_c;
+	int *columns_width;
 	int *xcols;
 	int *r_heights;
 	int x, y;
@@ -208,7 +208,7 @@ free_table(struct table *t)
 {
 	if (t->min_c) mem_free(t->min_c);
 	if (t->max_c) mem_free(t->max_c);
-	if (t->w_c) mem_free(t->w_c);
+	if (t->columns_width) mem_free(t->columns_width);
 	if (t->r_heights) mem_free(t->r_heights);
 	mem_free(t->cols);
 	if (t->xcols) mem_free(t->xcols);
@@ -923,9 +923,9 @@ get_column_widths(struct table *t)
 		}
 	}
 
-	if (!t->w_c) {
-		t->w_c = mem_calloc(t->x, sizeof(int));
-		if (!t->w_c) {
+	if (!t->columns_width) {
+		t->columns_width = mem_calloc(t->x, sizeof(int));
+		if (!t->columns_width) {
 			mem_free(t->min_c), t->min_c = NULL;
 			mem_free(t->max_c), t->max_c = NULL;
 			return -1;
@@ -1029,7 +1029,7 @@ distribute_widths(struct table *t, int width)
 		mmax_c = int_max(mmax_c, t->max_c[i]);
 
 	tx_size = t->x * sizeof(int);
-	memcpy(t->w_c, t->min_c, tx_size);
+	memcpy(t->columns_width, t->min_c, tx_size);
 	t->rw = width;
 
 	/* XXX: We don't need to fail if unsuccessful.  See below. --Zas */
@@ -1053,14 +1053,14 @@ distribute_widths(struct table *t, int width)
 		for (i = 0; i < t->x; i++) {
 			switch (om) {
 				case 0:
-					if (t->w_c[i] < t->xcols[i]) {
+					if (t->columns_width[i] < t->xcols[i]) {
 						w[i] = 1;
 						if (t->xcols[i] > t->max_c[i]) {
 							mx[i] = t->max_c[i];
 						} else {
 							mx[i] = t->xcols[i];
 						}
-						mx[i] -= t->w_c[i];
+						mx[i] -= t->columns_width[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 
@@ -1072,15 +1072,15 @@ distribute_widths(struct table *t, int width)
 						} else {
 							w[i] = 1;
 						}
-						mx[i] = t->max_c[i] - t->w_c[i];
+						mx[i] = t->max_c[i] - t->columns_width[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
 				case 2:
 				case 3:
-					if (t->w_c[i] < t->max_c[i]
+					if (t->columns_width[i] < t->max_c[i]
 					    && (om == 3 || t->xcols[i] == W_AUTO)) {
-						mx[i] = t->max_c[i] - t->w_c[i];
+						mx[i] = t->max_c[i] - t->columns_width[i];
 						if (mmax_c) {
 							w[i] = 5 + t->max_c[i] * 10 / mmax_c;
 						} else {
@@ -1091,7 +1091,7 @@ distribute_widths(struct table *t, int width)
 				case 4:
 					if (t->xcols[i] >= 0) {
 						w[i] = 1;
-						mx[i] = t->xcols[i] - t->w_c[i];
+						mx[i] = t->xcols[i] - t->columns_width[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 					break;
@@ -1142,16 +1142,16 @@ a:
 		}
 
 		if (mii != -1) {
-			int q = t->w_c[mii];
+			int q = t->columns_width[mii];
 
 			if (u) u[mii] = 1;
-			t->w_c[mii] += mss;
-			d -= t->w_c[mii] - q;
+			t->columns_width[mii] += mss;
+			d -= t->columns_width[mii] - q;
 			while (d < 0) {
-				t->w_c[mii]--;
+				t->columns_width[mii]--;
 				d++;
 			}
-			assertm(t->w_c[mii] >= q, "shrinking cell");
+			assertm(t->columns_width[mii] >= q, "shrinking cell");
 			wq = 1;
 			if (d) goto a;
 		} else if (!wq) om++;
@@ -1187,7 +1187,7 @@ check_table_widths(struct table *t)
 		if (!c->start) continue;
 
 		for (k = 0; k < c->colspan; k++) {
-			p += t->w_c[i + k] +
+			p += t->columns_width[i + k] +
 			     (k && get_vline_width(t, i + k) >= 0);
 		}
 
@@ -1225,7 +1225,7 @@ check_table_widths(struct table *t)
 
 	s = ns = 0;
 	for (i = 0; i < t->x; i++) {
-		s += t->w_c[i];
+		s += t->columns_width[i];
 		ns += w[i];
 	}
 
@@ -1244,8 +1244,8 @@ check_table_widths(struct table *t)
 	if (m != -1) {
 		w[mi] += s - ns;
 		if (w[mi] <= t->max_c[mi]) {
-			mem_free(t->w_c);
-			t->w_c = w;
+			mem_free(t->columns_width);
+			t->columns_width = w;
 			return;
 		}
 	}
@@ -1270,7 +1270,7 @@ get_table_heights(struct table *t)
 			if (!cell->used || cell->spanned) continue;
 
 			for (sp = 0; sp < cell->colspan; sp++) {
-				xw += t->w_c[i + sp] +
+				xw += t->columns_width[i + sp] +
 				      (sp < cell->colspan - 1 &&
 				       get_vline_width(t, i + sp + 1) >= 0);
 			}
@@ -1347,7 +1347,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				register int s;
 
 				for (s = 0; s < cell->colspan; s++) {
-					xw += t->w_c[i + s] +
+					xw += t->columns_width[i + s] +
 					      (s < cell->colspan - 1 &&
 					       get_vline_width(t, i + s + 1) >= 0);
 				}
@@ -1400,7 +1400,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 					for (yt = 0; yt < p->height; yt++) {
 						expand_lines(t->p, yp + yt);
-						expand_line(t->p, yp + yt, xp + t->w_c[i]);
+						expand_line(t->p, yp + yt, xp + t->columns_width[i]);
 					}
 					mem_free(p);
 				}
@@ -1413,7 +1413,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 		}
 
 		if (i < t->x - 1) {
-			xp += t->w_c[i] + (get_vline_width(t, j + 1) >= 0);
+			xp += t->columns_width[i] + (get_vline_width(t, j + 1) >= 0);
 		}
 	}
 
@@ -1488,9 +1488,9 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
  	assertm(pos < 3, "Horizontal table position out of bound [%d]", pos);
 	if_assert_failed return;
 
- 	if (pos < 0 || table->w_c[i] <= 0) return;
+ 	if (pos < 0 || table->columns_width[i] <= 0) return;
 
- 	draw_frame_hchars(table->p, x, y, table->w_c[i], hltable[pos]);
+ 	draw_frame_hchars(table->p, x, y, table->columns_width[i], hltable[pos]);
 }
 
 static inline void
@@ -1596,7 +1596,7 @@ cont2:
 				}
 
 				draw_frame_hline(t, frame, cx, cy, i, j);
-				cx += t->w_c[i];
+				cx += t->columns_width[i];
 			}
 
 			if (fr) {
@@ -1616,7 +1616,7 @@ cont2:
 					draw_frame_vline(t, frame, cx, cy, i, j);
 					cx++;
 				}
-				if (i < t->x) cx += t->w_c[i];
+				if (i < t->x) cx += t->columns_width[i];
 			}
 		}
 

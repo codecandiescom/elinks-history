@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.485 2004/06/11 14:56:54 jonas Exp $ */
+/* $Id: session.c,v 1.486 2004/06/11 23:05:16 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -1017,7 +1017,6 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			if (!list_empty(sessions)) update_status();
 			break;
 		case EV_INIT:
-			break;
 		case EV_RESIZE:
 			tab->resize = 1;
 			/* fall-through */

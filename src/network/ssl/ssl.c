@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.33 2003/10/27 23:14:12 pasky Exp $ */
+/* $Id: ssl.c,v 1.34 2003/10/27 23:27:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,43 +160,36 @@ struct module ssl_module = struct_module(
 int
 init_ssl_connection(struct connection *conn)
 {
-	ssl_t *state;
-
 #ifdef HAVE_OPENSSL
-	state = SSL_new(context);
-	if (!state) return S_SSL_ERROR;
+	conn->ssl = SSL_new(context);
+	if (!conn->ssl) return S_SSL_ERROR;
 #elif defined(HAVE_GNUTLS)
 	/* XXX: GNUTLS_STATE is obviously a pointer by itself, but as it is
 	 * hidden for some stupid design decision, we must not rely on that,
 	 * who knows if some future implementation won't have that as a
 	 * structure itself.. --pasky */
-	int ret;
+	ssl_t *state = mem_alloc(sizeof(GNUTLS_STATE));
 
-	state = mem_alloc(sizeof(GNUTLS_STATE));
 	if (!state) return S_SSL_ERROR;
 
-	ret = gnutls_init(state, GNUTLS_CLIENT);
-
-	if (ret < 0) {
+	if (gnutls_init(state, GNUTLS_CLIENT) < 0) {
 		/* debug("sslinit %s", gnutls_strerror(ret)); */
 		mem_free(state);
 		return S_SSL_ERROR;
 	}
 
-	ret = gnutls_cred_set(*state, GNUTLS_CRD_ANON, anon_cred);
-	if (ret < 0) {
+	if (gnutls_cred_set(*state, GNUTLS_CRD_ANON, anon_cred) < 0) {
 		/* debug("sslanoncred %s", gnutls_strerror(ret)); */
 		gnutls_deinit(*state);
 		mem_free(state);
 		return S_SSL_ERROR;
 	}
 
-	ret = gnutls_cred_set(*state, GNUTLS_CRD_CERTIFICATE, xcred);
-	if (ret < 0) {
+	if (gnutls_cred_set(*state, GNUTLS_CRD_CERTIFICATE, xcred) < 0) {
 		/* debug("sslx509cred %s", gnutls_strerror(ret)); */
 		gnutls_deinit(*state);
 		mem_free(state);
-		return NULL;
+		return S_SSL_ERROR;
 	}
 
 	gnutls_handshake_set_private_extensions(*state, 1);
@@ -207,9 +200,10 @@ init_ssl_connection(struct connection *conn)
 	gnutls_mac_set_priority(*state, mac_priority);
 	gnutls_certificate_type_set_priority(*state, cert_type_priority);
 	gnutls_set_server_name(*state, GNUTLS_NAME_DNS, "localhost", strlen("localhost"));
-#endif
 
 	conn->ssl = state;
+#endif
+
 	return S_OK;
 }
 

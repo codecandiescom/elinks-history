@@ -733,8 +733,7 @@ msgstr "Az ismeretlen dokumentumok alapértelmezett MIME típusa."
 
 #: src/config/cmdline.c:643
 msgid "Ignore user-defined keybindings"
-msgstr ""
-"A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
+msgstr "A felhasználó által definiált billentyûkombinációk figyelmen kívül hagyása"
 
 #: src/config/cmdline.c:645
 msgid ""
@@ -924,8 +923,7 @@ msgstr ""
 
 #: src/config/cmdline.c:735
 msgid "Connect to session ring with given ID"
-msgstr ""
-"Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
+msgstr "Csatlakozás az ELinks belsõ adatmegosztó hálózatához megadott azonosítóval."
 
 #: src/config/cmdline.c:737
 msgid ""
@@ -1344,8 +1342,7 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:457
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
-"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:458
 msgid "Go to the homepage"
@@ -2017,8 +2014,7 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.inc:135
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr ""
-"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:141
@@ -2303,8 +2299,7 @@ msgstr "Színek invertálása"
 
 #: src/config/options.inc:271
 msgid "Invert the fore- and background color so the link stands out."
-msgstr ""
-"Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
+msgstr "Invertálja az elõtér és a háttér színeit, hogy a linkek kiemelkedjenek."
 
 #: src/config/options.inc:274 src/dialogs/options.c:173
 msgid "Underline"
@@ -2320,8 +2315,7 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.inc:281
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr ""
-"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.inc:283
 msgid "Number links"
@@ -2333,7 +2327,7 @@ msgstr "Számok megjelenításe a linek mellett."
 
 #: src/config/options.inc:287
 msgid "Handling of target=_blank"
-msgstr ""
+msgstr "A target=_blank attribútum kezelése"
 
 #: src/config/options.inc:289
 msgid ""
@@ -2342,6 +2336,10 @@ msgid ""
 "1 means open link in new tab in foreground\n"
 "2 means open link in new tab in background"
 msgstr ""
+"Hogyan kezeljük a linkek target=_blank attribútumát:\n"
+"0 - az aktuális fülön nyíljanak meg\n"
+"1 - új fülön nyíljanak meg elõtérben\n"
+"2 - új fülön nyíljanak meg a háttérben"
 
 #: src/config/options.inc:301
 msgid "Use tabindex"
@@ -2380,8 +2378,7 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr ""
-"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.inc:321
 msgid "Scrolling"
@@ -2441,8 +2438,7 @@ msgstr "Kis/nagybetû érzékenység"
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
-msgstr ""
-"A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
+msgstr "A dokumentum szövegében való kereséskor a kis/nagybetûk figyelembe vétele."
 
 #: src/config/options.inc:351 src/config/options.inc:358
 msgid "Regular expressions"
@@ -2511,7 +2507,6 @@ msgstr ""
 "2 - ugorjon be egy üzenetablak"
 
 #: src/config/options.inc:383
-#, fuzzy
 msgid "Typeahead searching"
 msgstr "Keresés ~gépelés közben"
 
@@ -2618,8 +2613,7 @@ msgstr ""
 
 #: src/config/options.inc:446
 msgid "Ignore cache-control info from server"
-msgstr ""
-"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.inc:448
 msgid ""
@@ -3414,8 +3408,7 @@ msgid "Local CGI specific options. (DISABLED)"
 msgstr "Helyi CGI-vel kapcsolatos beállítások. (LETILTVA)"
 
 #: src/config/options.inc:877
-msgid ""
-"Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
+msgid "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "A CGI scriptek tárolására használt könyvtárak felsorolása, kettõsponttal "
 "elválasztva. (LETILTVA)"
@@ -3481,12 +3474,11 @@ msgstr ""
 
 #: src/config/options.inc:908
 msgid "SMB"
-msgstr ""
+msgstr "SMB"
 
 #: src/config/options.inc:910
-#, fuzzy
 msgid "SAMBA specific options."
-msgstr "FTP specifikus beállítások."
+msgstr "SAMBA specifikus beállítások."
 
 #: src/config/options.inc:912
 msgid "Credentials"
@@ -5354,7 +5346,7 @@ msgid "JavaScript Error"
 msgstr "JavaScript hiba"
 
 #: src/ecmascript/spidermonkey.c:911
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
 "\n"
@@ -5363,7 +5355,7 @@ msgid ""
 "%s\n"
 ".%*s^%*s."
 msgstr ""
-"Az oldalba ágyazott szkriptben a következõ hiba van:\n"
+"Az oldalba ágyazott szkriptben a következõ hiba van: %s%s%s%s: \n"
 "\n"
 "%s\n"
 "\n"
@@ -5371,13 +5363,13 @@ msgstr ""
 ".%*s^%*s."
 
 #: src/ecmascript/spidermonkey.c:923
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "A script embedded in the current document raised the following%s%s%s%s: \n"
 "\n"
 "%s"
 msgstr ""
-"Az oldalba ágyazott szkriptben a következõ hiba van:\n"
+"Az oldalba ágyazott szkriptben a következõ hiba van:  %s%s%s%s: \n"
 "\n"
 "%s"
 
@@ -5737,8 +5729,7 @@ msgstr "Ukrán"
 
 #: src/lowlevel/home.c:122
 #, c-format
-msgid ""
-"Commandline options -config-dir set to %s, but could not create directory %s."
+msgid "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
 "Parancssori opciók -konfig könyvtár %s, de nem lehet létrehozni a %s "
 "könyvtárat."
@@ -6206,9 +6197,8 @@ msgstr "Hitelesítés kezelõ"
 
 #. name:
 #: src/protocol/finger/finger.c:21
-#, fuzzy
 msgid "Finger"
-msgstr "Integer"
+msgstr "Finger"
 
 #. name:
 #: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:88
@@ -6535,9 +6525,8 @@ msgstr "Megjelenítés"
 
 #: src/sched/download.c:1017 src/sched/download.c:1027
 #: src/sched/download.c:1048 src/sched/download.c:1061
-#, fuzzy
 msgid "Show header"
-msgstr "Beállításminták megjelenítése"
+msgstr "Fejléc megjelenítése"
 
 #: src/sched/download.c:1022
 #, c-format
@@ -6988,9 +6977,8 @@ msgid "Reset form"
 msgstr "Ûrlap törlése"
 
 #: src/viewer/text/form.c:1405
-#, fuzzy
 msgid "Harmless button"
-msgstr "Kiválasztott gomb"
+msgstr "Ártalmatlan gomb"
 
 #: src/viewer/text/form.c:1413
 msgid "Submit form to"
@@ -7222,3 +7210,4 @@ msgstr "Mentési hiba"
 #: src/viewer/text/view.c:1221
 msgid "Error writing to file"
 msgstr "Hiba a fájl irása közben"
+

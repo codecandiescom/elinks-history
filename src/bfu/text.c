@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.63 2003/11/29 06:01:12 jonas Exp $ */
+/* $Id: text.c,v 1.64 2003/12/02 10:54:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,24 +205,24 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	int x = dlg_data->x + dlg_data->width - DIALOG_LEFT_BORDER - 1;
 	int y = widget_data->y;
 	int height = widget_data->h;
-	int scale;
+	int scale, current, step;
 
 	if (!text_is_scrollable(widget_data)) return;
 
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		    get_bfu_color(win->term, "dialog.scrollbar"));
 
-	if (!sel) return;
-
-	/* FIXME: This will require some more tuning to work perfect and smooth
-	 *	  but it's a start --jonas */
+	current = sel ? widget_data->info.text.current : 0;
 	scale = height * 100 / widget_data->info.text.lines;
 
 	/* Scale the offset of @current */
-	y += (1 + widget_data->info.text.current) * scale / 100;
+	step = (current + 1) * scale / 100;
+	int_bounds(&step, 0, widget_data->h - 1);
+	y += step;
 
 	/* Scale the number of visible lines */
 	height = int_max(height * scale / 100, 1);
+	int_bounds(&height, 1, int_max(widget_data->h - step, 1));
 
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		  get_bfu_color(win->term, "dialog.scrollbar-selected"));
@@ -233,12 +233,39 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	set_window_ptr(win, widget_data->x, widget_data->y);
 }
 
+static void
+format_and_display_text(struct widget_data *widget_data,
+			struct dialog_data *dlg_data,
+			int current)
+{
+	struct terminal *term = dlg_data->win->term;
+	int y = widget_data->y;
+	int height = dialog_max_height(term);
+	int lines = widget_data->info.text.lines;
+
+	int_bounds(&current, 0, lines - widget_data->h);
+
+	if (widget_data->info.text.current == current) return;
+
+	widget_data->info.text.current = current;
+
+	draw_area(term, widget_data->x, widget_data->y,
+		  widget_data->w, widget_data->h, ' ', 0,
+		  get_bfu_color(term, "dialog.generic"));
+
+	dlg_format_text(term, widget_data,
+			widget_data->x, &y, widget_data->w, NULL,
+			height);
+
+	display_text(widget_data, dlg_data, 1);
+	redraw_from_window(dlg_data->win);
+}
+
 static int
 kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	 struct term_event *ev)
 {
 	int current = widget_data->info.text.current;
-	int lines = widget_data->info.text.lines;
 
 	switch (kbd_action(KM_MAIN, ev, NULL)) {
 		case ACT_UP:
@@ -264,33 +291,14 @@ kbd_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 			break;
 
 		case ACT_END:
-			current = lines;
+			current = widget_data->info.text.lines;
 			break;
 
 		default:
 			return EVENT_NOT_PROCESSED;
 	}
 
-	int_bounds(&current, 0, lines - widget_data->h);
-
-	if (current != widget_data->info.text.current) {
-		struct terminal *term = dlg_data->win->term;
-		int y = widget_data->y;
-		int height = dialog_max_height(term);
-
-		widget_data->info.text.current = current;
-
-		draw_area(term, widget_data->x, widget_data->y,
-			  widget_data->w, widget_data->h, ' ', 0,
-			  get_bfu_color(term, "dialog.generic"));
-
-		dlg_format_text(term, widget_data,
-				widget_data->x, &y, widget_data->w, NULL,
-				height);
-
-		display_text(widget_data, dlg_data, 1);
-		redraw_from_window(dlg_data->win);
-	}
+	format_and_display_text(widget_data, dlg_data, current);
 
 	return EVENT_PROCESSED;
 }

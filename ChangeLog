@@ -1,3 +1,196 @@
+Wed Jul  2 22:07:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	An assertion failure was fixed.  
+
+Wed Jul  2 22:00:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, viewer/text/view.c:
+
+	Assertions: The End. Please report any assertion failure, false
+	alerts may occur due to strictness.  
+
+Wed Jul  2 20:47:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	back() and unback() functions were removed. go_back() and
+	go_unback() are directly used.  
+
+Wed Jul  2 20:44:49 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions.  
+
+Wed Jul  2 18:30:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added, minor cleanup and optimizations.  
+
+Wed Jul  2 18:17:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added, minor cleanup and optimizations.  
+
+Wed Jul  2 18:05:33 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added, minor cleanup and optimizations.  
+
+Wed Jul  2 17:55:41 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Oops.  
+
+Wed Jul  2 17:54:28 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added, minor cleanup and optimizations.  
+
+Wed Jul  2 17:26:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Oops, so he had _this_ in the srch_cmp() fail route ;-). Fixed
+	search highlighting bug introduced by my last cleanups, reported and
+	pointed out by zas.  
+
+Wed Jul  2 17:22:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added, minor cleanup and optimizations.  
+
+Wed Jul  2 17:17:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Minor tidyup. I wonder what so precious Mikulas had in the
+	srch_cmp() fail route ;-).  
+
+Wed Jul  2 17:13:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	is_in_range() cleanup, removal of some useless checks.  
+
+Wed Jul  2 17:02:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added, minor cleanup and optimizations.  
+
+Wed Jul  2 16:46:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added. get_search() cleanup and optimization.  
+
+Wed Jul  2 16:26:17 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	More assertions were added. Please report any issue.  
+
+Wed Jul  2 16:18:37 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Some assertions were added. Please report any issue.  
+
+Wed Jul  2 16:02:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/sched.c:
+
+	Minor cleanup. Please do not write a = b == c but a = (b == c).  
+
+Wed Jul  2 12:05:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/sched.c:
+
+	Misc. small cleanups.  
+
+Wed Jul  2 12:01:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix printing of checking message.  
+
+Wed Jul  2 10:46:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Calling xpand_lines() with part->data->data == NULL is a valid case.
+	Assertion was modified. It fixes bug 221.  
+
+Wed Jul  2 10:23:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/sched.h:
+
+	Added comment by pasky of connection->pri + fix #includes.  
+
+Wed Jul  2 02:17:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/sched.c:
+
+	Rename: h_conns -> host_connections.  
+
+Wed Jul  2 02:07:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	You do not see this commit. You never saw any commit like this. This
+	commit does not exist. Better go and have some reading on e2, and
+	forget this whole thing. (Comments update.) 
+
+Wed Jul  2 02:06:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix BACKTRACE being wrongfully defined.  
+
+Wed Jul  2 01:52:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/align.h:
+
+	term being NULL is a valid case in get_bfu_color().  
+
+Wed Jul  2 00:47:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Prefixes by involved (aka A. Valente) and Grzegorz Adam Hankiewicz
+	added.  
+
+Wed Jul  2 00:44:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, document/cache.c, document/cache.h,
+	sched/sched.c, util/types.h:
+
+	Move type declarations from elinks.h to util/types.h but pasky still
+	needs to rebuild *MUAHAHAHA* 
+
+Wed Jul  2 00:16:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: elinks.h, document/cache.h, sched/sched.h:
+
+	Minor #include cleanups and move longlong #define to elinks.h 
+
+Tue Jul  1 22:39:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/intl/charsets.c:
+
+	A bug in entities cache was fixed. &Agrave;&agrave; gave two upcased
+	chars, and &agrave;&Agrave two lowcased chars due to a case
+	insensitive comparaison. Trivial.  
+
 Tue Jul  1 22:06:34 2003  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/view.c:

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.15 2002/04/19 12:45:02 pasky Exp $ */
+/* $Id: bfu.c,v 1.16 2002/04/19 14:02:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 
 	dd = mem_alloc(sizeof(struct dialog_data) +
 		       sizeof(struct dialog_item_data) * n);
-	if (!dd) return;
+	if (!dd) return NULL;
 
 	dd->dlg = dlg;
 	dd->n = n;

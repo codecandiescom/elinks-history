@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.10 2003/11/14 02:20:11 jonas Exp $ */
+/* $Id: renderer.c,v 1.11 2003/11/14 02:29:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,6 +103,25 @@ add_document_link(struct document *document, int x, int y, int length,
 }
 
 static inline int
+get_uri_end(unsigned char *line, int length)
+{
+	int uri_end = 0;
+
+	while (uri_end < length && !isspace(line[uri_end]))
+		uri_end++;
+
+	for (; uri_end > 0; uri_end--) {
+		if (line[uri_end - 1] != '>'
+			&& line[uri_end - 1] != ')'
+			&& line[uri_end - 1] != '.'
+			&& line[uri_end - 1] != ',')
+			break;
+	}
+
+	return uri_end;
+}
+
+static inline int
 add_document_line(struct document *document, int lineno,
 		  unsigned char *line, int width, struct screen_char *template)
 {
@@ -123,27 +142,14 @@ add_document_line(struct document *document, int lineno,
 			line[line_pos] = ' ';
 			continue;
 
-		} else 	if (document->options.plain_display_links) {
-			int uri_end = line_pos;
+		} else 	if (document->options.plain_display_links
+			    && isalpha(line_char) ) {
+			int uri_end = get_uri_end(&line[line_pos], width - line_pos);
 			unsigned char keep;
 
-			if (!isalpha(line_char)) continue;
+			if (!uri_end) continue;
 
-			/* Coding style goes crasy here! :( --jonas */
-
-			while (line[uri_end] && !isspace(line[uri_end]))
-				uri_end++;
-
-			for (; uri_end > line_pos; uri_end--) {
-				if (line[uri_end - 1] != '>'
-				    && line[uri_end - 1] != ')'
-				    && line[uri_end - 1] != '.'
-				    && line[uri_end - 1] != ',')
-					break;
-			}
-
-			if (uri_end == line_pos) continue;
-
+			uri_end += line_pos;
 			keep = line[uri_end];
 			line[uri_end] = 0;
 

@@ -67,3 +67,7 @@ convenience, you have current document's URL and title pre-filled there, and
 for convenience only up-up-enter-down-down sequence is enough to have the
 playground clean. Then, just fill substring of what you are looking for, and
 the bookmarks will be filtered so that only the matching ones are shown.
+
+		... (at this point the scribe got bored and left this guide
+		incomplete, until some brave soul decides to continue with
+		the lay) ...

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.38 2004/03/09 12:24:38 jonas Exp $ */
+/* $Id: lists.h,v 1.39 2004/06/25 09:54:45 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -124,6 +124,8 @@ do { \
 
 
 #define list_empty(x) (list_magic_chkbool(x, "list_empty") && (x).next == &(x))
+#define list_has_next(l,p) \
+	(list_magic_chkbool(l, "list_has_next") && (p)->next !=  (void *) &(l))
 
 #define del_from_list(x) \
 do { \

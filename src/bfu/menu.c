@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.237 2004/06/24 18:15:47 jonas Exp $ */
+/* $Id: menu.c,v 1.238 2004/06/25 09:54:46 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -712,7 +712,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 	switch (action) {
 		case ACT_MENU_LEFT:
 		case ACT_MENU_RIGHT:
-			if ((void *) win->next != &win->term->windows
+			if (list_has_next(win->term->windows, win)
 			    && win->next->handler == mainmenu_handler) {
 				delete_window_ev(win, ev);
 				return;
@@ -757,7 +757,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			break;
 
 		case ACT_MENU_CANCEL:
-			if ((void *) win->next != &win->term->windows
+			if (list_has_next(win->term->windows, win)
 			    && win->next->handler == mainmenu_handler)
 				delete_window_ev(win, ev);
 			else

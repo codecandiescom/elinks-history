@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.160 2004/06/22 06:46:16 miciah Exp $ */
+/* $Id: cache.c,v 1.161 2004/06/25 09:54:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -293,7 +293,7 @@ remove_overlaps:
 
 	f_end_offset = f->offset + f->length;
 	/* Iterate thru all fragments we still overlap to. */
-	while ((void *) f->next != &cached->frag
+	while (list_has_next(cached->frag, f)
 		&& f_end_offset > f->next->offset) {
 
 		end_offset = f->next->offset + f->next->length;

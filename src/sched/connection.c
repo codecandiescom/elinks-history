@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.179 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: connection.c,v 1.180 2004/06/25 09:54:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -567,7 +567,7 @@ sort_queue(void)
 
 		swp = 0;
 		foreach (conn, queue) {
-			if ((void *) conn->next == &queue) break;
+			if (!list_has_next(queue, conn)) break;
 
 			if (get_priority(conn->next) < get_priority(conn)) {
 				struct connection *c = conn->next;

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.15 2004/05/14 10:24:49 jonas Exp $ */
+/* $Id: window.c,v 1.16 2004/06/25 09:54:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,11 +96,13 @@ delete_window(struct window *win)
 void
 delete_window_ev(struct window *win, struct term_event *ev)
 {
-	struct window *w = win->next;
+	struct window *w;
 
-	if ((void *) w == &win->term->windows) w = NULL;
+	w = list_has_next(win->term->windows, win) ? win->next : NULL;
+
 	delete_window(win);
-	if (ev && w && w->next != w) w->handler(w, ev, 1);
+
+	if (ev && w) w->handler(w, ev, 1);
 }
 
 void

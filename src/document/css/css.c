@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.32 2004/01/25 02:10:31 jonas Exp $ */
+/* $Id: css.c,v 1.33 2004/01/25 04:20:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,22 +48,29 @@ struct option_info css_options_info[] = {
 static void
 import_css_file(struct css_stylesheet *css, unsigned char *url)
 {
-	unsigned char *home_url = NULL;
+	unsigned char filename[MAX_STR_LEN];
 	struct string string;
+	int length = 0;
+	int urllen;
 
 	if (!*url) return;
 
 	if (*url != '/' && elinks_home) {
-		home_url = straconcat(elinks_home, url, NULL);
-		if (!home_url) return;
-		url = home_url;
+		length = strlen(elinks_home);
+		if (length > sizeof(filename)) return;
+		safe_strncpy(filename, elinks_home, length);
 	}
 
-	if (read_encoded_file(url, strlen(url), &string) == S_OK) {
+	urllen = strlen(url);
+	if (urllen + length > sizeof(filename)) return;
+
+	safe_strncpy(filename + length, url, urllen);
+	length += urllen;
+
+	if (read_encoded_file(filename, length, &string) == S_OK) {
 		css_parse_stylesheet(css, string.source);
 		done_string(&string);
 	}
-	if (home_url) mem_free(home_url);
 }
 
 static void

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.5 2002/10/16 15:16:54 pasky Exp $
+-- $Id: hooks.lua.in,v 1.6 2002/11/30 03:12:10 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -99,6 +99,7 @@ function goto_url_hook (url, current_url)
 	    return gsub(dumbprefixes[url], "%%c", current_url)
 	else
             return dumbprefixes[url]
+	end
     end
 
     if strfind(url,'%s') or strfind(url, ':') then

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.54 2003/05/03 17:17:27 pasky Exp $ */
+/* $Id: menu.c,v 1.55 2003/05/03 20:56:15 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,7 @@ struct mainmenu {
 
 /* Global variables */
 unsigned char m_submenu[] = ">";
-unsigned char m_bar = 1;
+unsigned char m_bar = 0;
 
 /* Prototypes */
 static void menu_func(struct window *, struct event *, int);

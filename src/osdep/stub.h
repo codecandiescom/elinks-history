@@ -1,4 +1,4 @@
-/* $Id: stub.h,v 1.7 2004/04/29 23:02:41 jonas Exp $ */
+/* $Id: stub.h,v 1.8 2004/06/18 14:59:54 jonas Exp $ */
 
 #ifndef EL__OSDEP_STUB_H
 #define EL__OSDEP_STUB_H
@@ -113,6 +113,13 @@ char *elinks_stpcpy(char *, const char *);
 #undef mempcpy
 #define mempcpy(dest, src, n) elinks_mempcpy(dest, src, n)
 void *elinks_mempcpy(void *, const void *, size_t);
+#endif
+
+/* memrchr() */
+#ifndef HAVE_MEMRCHR
+#undef memrchr
+#define memrchr(src, c, n) elinks_memrchr(src, c, n)
+void *elinks_memrchr(const void *s, int c, size_t n);
 #endif
 
 #endif

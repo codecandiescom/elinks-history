@@ -1,9 +1,9 @@
-/* $Id: overrides.h,v 1.1 2003/10/27 23:46:55 pasky Exp $ */
+/* $Id: overrides.h,v 1.2 2004/08/14 23:08:24 jonas Exp $ */
 
 #ifndef EL__OSDEP_BEOS_OVERRIDES_H
 #define EL__OSDEP_BEOS_OVERRIDES_H
 
-#ifdef BEOS
+#ifdef CONFIG_BEOS
 
 #include <sys/time.h>
 #include <sys/types.h>

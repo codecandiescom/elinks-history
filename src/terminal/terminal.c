@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.76 2004/08/12 08:40:38 miciah Exp $ */
+/* $Id: terminal.c,v 1.77 2004/08/14 23:08:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ exec_thread(unsigned char *path, int p)
 {
 	int plen = strlen(path + 1) + 2;
 
-#if defined(HAVE_SETPGID) && !defined(BEOS) && !defined(HAVE_BEGINTHREAD)
+#if defined(HAVE_SETPGID) && !defined(CONFIG_BEOS) && !defined(HAVE_BEGINTHREAD)
 	if (path[0] == 2) setpgid(0, 0);
 #endif
 	exe(path + 1);

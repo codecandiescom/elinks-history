@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.16 2004/04/17 02:20:49 jonas Exp $ */
+/* $Id: newwin.c,v 1.17 2004/08/14 23:08:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@ const struct open_in_new open_in_new[] = {
 #ifdef WIN32
 	{ ENV_WIN32,	"",			    N_("~Window") },
 #endif
-#ifdef BEOS
+#ifdef CONFIG_BEOS
 	{ ENV_BE,	DEFAULT_BEOS_TERM_CMD,	    N_("~BeOS terminal") },
 #endif
 	{ 0, NULL, NULL }

@@ -1,5 +1,5 @@
 /* BeOS system-specific routines. */
-/* $Id: beos.c,v 1.17 2004/06/22 07:10:19 jonas Exp $ */
+/* $Id: beos.c,v 1.18 2004/08/14 23:08:24 jonas Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -10,8 +10,6 @@
 #endif
 
 #include "osdep/system.h"
-
-#ifdef BEOS
 
 #include <errno.h>
 #include <stdio.h>
@@ -250,7 +248,5 @@ exe(unsigned char *path)
 
 	return 0;
 }
-
-#endif
 
 #endif

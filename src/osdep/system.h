@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.13 2004/08/14 23:00:07 jonas Exp $ */
+/* $Id: system.h,v 1.14 2004/08/14 23:08:22 jonas Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -16,14 +16,11 @@
 #undef UNIX
 #undef OS2
 #undef WIN32
-#undef BEOS
 
 #if defined(CONFIG_OS2)
 # define OS2
 #elif defined(CONFIG_WIN32)
 # define WIN32
-#elif defined(CONFIG_BEOS)
-# define BEOS
 #elif defined(CONFIG_UNIX)
 # define UNIX
 #endif

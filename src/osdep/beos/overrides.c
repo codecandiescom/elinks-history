@@ -1,5 +1,5 @@
 /* BeOS system-specific routines emulating POSIX. */
-/* $Id: overrides.c,v 1.3 2004/06/27 18:34:31 pasky Exp $ */
+/* $Id: overrides.c,v 1.4 2004/08/14 23:08:24 jonas Exp $ */
 
 /* Note that this file is currently unmaintained and basically dead. Noone
  * cares about BeOS support, apparently. This file may yet survive for some
@@ -12,8 +12,6 @@
 #define BEOS_SELF
 
 #include "osdep/system.h"
-
-#ifdef BEOS
 
 #include <errno.h>
 #include <stdio.h>
@@ -220,5 +218,3 @@ be_getsockopt(int s, int level, int optname, void *optval, int *optlen)
 	}
 	return -1;
 }
-
-#endif

@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: auth.c,v 1.35 2003/07/10 23:05:21 jonas Exp $ */
+/* $Id: auth.c,v 1.36 2003/07/11 04:35:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,10 @@ auth_layout(struct dialog_data *dlg)
 static int
 auth_ok(struct dialog_data *dlg, struct widget_data *di)
 {
-	((struct http_auth_basic *)dlg->dlg->udata2)->blocked = 0;
+	struct http_auth_basic *entry = dlg->dlg->udata2;
+
+	entry->blocked = 0;
+	entry->valid = 1;
 	reload(dlg->dlg->refresh_data, -1);
 	return ok_dialog(dlg, di);
 }
@@ -124,7 +127,6 @@ do_auth_dialog(struct session *ses)
 		  a = (struct http_auth_basic *) http_auth_basic_list.next;
 
 	if (!a || a->blocked) return;
-	a->valid = 1;
 	a->blocked = 1;
 
 	snprintf(sticker, MAX_STR_LEN,

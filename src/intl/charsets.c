@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.44 2003/07/20 23:16:26 pasky Exp $ */
+/* $Id: charsets.c,v 1.45 2003/07/20 23:25:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -561,6 +561,8 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 	int bp = 0;
 	int pp = 0;
 
+	/* FIXME: Code redundancy with put_chars_conv() in renderer.c. --Zas */
+
 	if (!convert_table) {
 		int i;
 
@@ -568,19 +570,20 @@ convert_string(struct conv_table *convert_table, unsigned char *chars, int chars
 			if (chars[i] == '&')
 				goto xx;
 		return memacpy(chars, charslen);
-
-xx:;
 	}
+xx:
 
-	/* FIXME: Code redundancy with put_chars_conv() in renderer.chars. --Zas
-	 */
+	/* Buffer allocation */
+
 	buffer = mem_alloc(ALLOC_GR);
 	if (!buffer) return NULL;
+
+	/* Iterate ;-) */
+
 	while (pp < charslen) {
 		unsigned char *e;
 
 		if (chars[pp] < 128 && chars[pp] != '&') {
-
 putc:
 			buffer[bp++] = chars[pp++];
 			if (!(bp & (ALLOC_GR - 1))) {
@@ -637,13 +640,14 @@ decode:
 					i--;
 				}
 				e = get_entity_string(&chars[start], i - start,
-	 					      d_opt->cp);
+						      d_opt->cp);
 				if (!e) goto putc;
 				pp = i + (i < charslen);
 			} else goto putc;
 		}
 
 		if (!e[0]) continue;
+
 		if (!e[1]) {
 			buffer[bp++] = e[0];
 			if (!(bp & (ALLOC_GR - 1))) {
@@ -667,6 +671,8 @@ decode:
 			}
 		}
 	}
+
+	/* Say bye */
 
 	buffer[bp] = 0;
 	return buffer;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.172 2003/07/20 23:12:34 pasky Exp $ */
+/* $Id: renderer.c,v 1.173 2003/07/20 23:25:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -696,6 +696,8 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	int bp = 0;
 	int pp = 0;
 
+	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
+
 	assert(part && chars);
 	if_assert_failed return;
 
@@ -704,9 +706,12 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 		return;
 	}
 
+	/* Buffer allocation */
+
 	if (!charslen) put_chars(part, NULL, 0);
 
-	/* FIXME: Code redundancy with convert_string() in charsets.c. --Zas */
+	/* Iterate ;-) */
+
 	while (pp < charslen) {
 		unsigned char *e;
 
@@ -734,6 +739,7 @@ decode:
 				goto decode;
 			}
 			pp = i + 1;
+
 		} else {
 			int start = pp + 1;
 			int i = start;
@@ -760,7 +766,7 @@ decode:
 					i--;
 				}
 				e = get_entity_string(&chars[start], i - start,
-						d_opt->cp);
+						      d_opt->cp);
 				if (!e) goto putc;
 				pp = i + (i < charslen);
 			} else goto putc;
@@ -784,6 +790,9 @@ flush1:
 			bp = 0;
 		}
 	}
+
+	/* Say bye */
+
 	if (bp) put_chars(part, buffer, bp);
 
 #undef CH_BUF

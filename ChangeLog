@@ -1,3 +1,110 @@
+Sun May 16 14:34:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Bad move was fixed.  
+
+Sun May 16 14:27:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@c -> @cell, @sc -> @span_cell.  
+
+Sun May 16 14:13:28 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@wf -> @has_width. Correspondant field in struct table was commented
+	out since it is unused.  
+
+Sun May 16 14:08:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	struct table @rh field was renamed @real_height.  
+
+Sun May 16 14:04:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	struct table @rw field was renamed @real_width.  
+
+Sun May 16 14:01:17 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@p -> @part.  
+
+Sun May 16 13:57:32 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@t -> @table.  
+
+Sun May 16 13:14:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Group @part and code using it.  
+
+Sun May 16 13:08:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	@p -> @part.  
+
+Sun May 16 13:03:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	struct table @p field was renamed @part.  
+
+Sun May 16 12:57:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	Use struct box in struct part.  
+
+Sun May 16 12:40:34 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Drop useless white lines.  
+
+Sun May 16 12:13:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.h:
+
+	Remove (now) useless declaration of struct download.  
+
+Sun May 16 12:11:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/: dump.c, dump.h:
+
+	Make dump_start() and dump_end() static and move dump_pre_start()
+	below them so they don't have to be declared.  
+
+Sun May 16 11:41:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Better initialize events before main_modules if one should ever want
+	to register hooks.  
+
+Sun May 16 10:29:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/textarea.c:
+
+	Invisible text in textarea was fixed (bug 454). This was due to
+	inverted tests introduced in rev 1.51.  
+
+Sat May 15 23:40:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/intl/: charsets.c, charsets.h:
+
+	Name clash with Samba should be fixed. Filed as bug 453, reported by
+	Derek Poon.  
+
 Sat May 15 17:20:14 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/link.c:

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.39 2003/12/26 16:18:55 jonas Exp $ */
+/* $Id: status.c,v 1.40 2003/12/27 07:41:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,7 +265,7 @@ display_status_bar(struct session *ses, struct terminal *term, int tabs_count)
 		  msg, msglen, 0, text_color);
 	mem_free(msg);
 
-	if (download_is_progressing(stat)) {
+	if (download_is_progressing(stat) && stat->prg->size > 0) {
 		int xend = term->width - 1;
 		int width;
 
@@ -349,7 +349,8 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 				color = fresh_color;
 			}
 
-			if (!download_is_progressing(stat))
+			if (!download_is_progressing(stat)
+			    || stat->prg->size <= 0)
 				stat = NULL;
 		}
 

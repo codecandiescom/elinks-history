@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.66 2002/08/26 23:40:20 pasky Exp $ */
+/* $Id: view.c,v 1.67 2002/08/27 00:06:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2552,6 +2552,7 @@ void send_event(struct session *ses, struct event *ev)
 			}
 			case ACT_FORGET_CREDENTIALS:
 				free_auth();
+				shrink_memory(1); /* flush caches */
 				goto x;
 			case ACT_SAVE_FORMATTED:
 				/* TODO: if (!anonymous) for non-HTTI ? --pasky */

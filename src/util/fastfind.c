@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.42 2003/06/17 16:47:08 zas Exp $ */
+/* $Id: fastfind.c,v 1.43 2003/06/17 23:04:52 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -462,6 +462,40 @@ fastfind_index_compress(struct fastfind_info *info)
 	fastfind_node_compress(info->root_leafset, info);
 }
 
+/* This macro searchs for the key in indexed list */
+#define FF_SEARCH(what)								\
+	register int i = 0;							\
+										\
+	for (; i < key_len; i++) {						\
+		int lidx, k = what;						\
+										\
+		iterinc(info);							\
+										\
+		accif(info) (k >= FF_MAX_CHARS) return NULL;			\
+		lidx = info->idxtab[k];						\
+										\
+		accif(info) (lidx < 0) return NULL;				\
+										\
+		accif(info) (current->c) {					\
+			/* It is a compressed leaf. */				\
+			accif(info) (((struct ff_node_c *) current)->ch != lidx)\
+				return NULL;					\
+		} else {							\
+			current = &current[lidx];				\
+		}								\
+										\
+		accif(info) (current->e						\
+			     && key_len == info->keylen_list[current->p]) {	\
+			testinc(info);						\
+			foundinc(info);						\
+			return info->pointers[current->p];			\
+		}								\
+										\
+		accif(info) (!current->l)					\
+				return NULL;					\
+		current = (struct ff_node *) info->leafsets[current->l];	\
+	}
+
 void *
 fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 {
@@ -482,84 +516,22 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 
 	current = info->root_leafset;
 
-	/* Code redundancy is here for performance. Do not try to reduce it.
-	 * Do not try to move inner code to an inlined function.
+	/* Macro and code redundancy are there to obtain maximum
+	 * performance. Do not move it to an inlined function.
 	 * Do not even think about it.
 	 * If you find a better way (same or better performance) then
-	 * propose it and be prepared to defend it.
-	 * Special note for Pasky: i said no. --Zas */
+	 * propose it and be prepared to defend it. --Zas */
 
 	accif(info) (info->case_sensitive) {
-		register int i = 0;
-
-		for (; i < key_len; i++) {
-			int lidx;
-
-			iterinc(info);
-
-			accif(info) (key[i] >= FF_MAX_CHARS) return NULL;
-			lidx = info->idxtab[key[i]];
-
-
-			accif(info) (lidx < 0) return NULL;
-
-			accif(info) (current->c) {
-				/* It is a compressed leaf. */
-				accif(info) (((struct ff_node_c *) current)->ch != lidx)
-					return NULL;
-			} else {
-				current = &current[lidx];
-			}
-
-			accif(info) (current->e
-				     && key_len == info->keylen_list[current->p]) {
-				testinc(info);
-				foundinc(info);
-				return info->pointers[current->p];
-			}
-
-			accif(info) (!current->l)
-				return NULL;
-
-			current = (struct ff_node *) info->leafsets[current->l];
-		}
+		FF_SEARCH(key[i]);
 	} else {
-		register int i = 0;
-
-		for (; i < key_len; i++) {
-			int lidx, k = upcase(key[i]);
-
-			iterinc(info);
-
-			accif(info) (k >= FF_MAX_CHARS) return NULL;
-			lidx = info->idxtab[k];
-
-			accif(info) (lidx < 0) return NULL;
-
-			accif(info) (current->c) {
-				/* It is a compressed leaf. */
-				accif(info) (((struct ff_node_c *) current)->ch != lidx)
-					return NULL;
-			} else {
-				current = &current[lidx];
-			}
-
-			accif(info) (current->e
-				     && key_len == info->keylen_list[current->p]) {
-				testinc(info);
-				foundinc(info);
-				return info->pointers[current->p];
-			}
-
-			accif(info) (!current->l)
-				return NULL;
-
-			current = (struct ff_node *) info->leafsets[current->l];
-		}
+		FF_SEARCH(upcase(key[i]));
 	}
 
 	return NULL;
 }
+
+#undef FF_SEARCH
 
 void
 fastfind_done(struct fastfind_info *info)

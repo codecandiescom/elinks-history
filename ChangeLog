@@ -1,3 +1,42 @@
+Sat Apr  2 05:41:03 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Minor cleanup to the random URL generator.  
+
+Sat Apr  2 00:52:19 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Minor cleanup to bugmenot prefix.  
+
+Fri Apr  1 23:18:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/document.c:
+
+	Add a space between size and (incomplete) in document info dialog.  
+
+Fri Apr  1 23:11:15 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	If Google Groups search string is contained in < and >, assume it's
+	a message ID.  
+
+Fri Apr  1 23:11:05 2005  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/header.c:
+
+	Fix redirection issues on newsnow.co.uk due to single quotes
+	enclosing of URL. Please review carefully.  
+
+Fri Apr  1 22:45:58 2005  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	process_head(): code simplification by dropping @saved_url, and
+	using @joined_url declared in inner block.  
+
 Fri Apr  1 17:50:52 2005  Laurent Monin <zas@norz.org>:
 
 	* src/scripting/scripting.c:

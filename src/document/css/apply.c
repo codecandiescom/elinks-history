@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.78 2004/09/21 12:42:58 pasky Exp $ */
+/* $Id: apply.c,v 1.79 2004/09/21 12:43:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,7 +153,7 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 		return;
 
 #ifdef CSS_DEBUG
-	WDBG("Applying to element %.*s...", element->namelen, element->name);
+	DBG("Applying to element %.*s...", element->namelen, element->name);
 #endif
 
 	examine_element(selector, CST_ELEMENT, CSR_ROOT,

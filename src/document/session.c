@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.65 2002/11/11 23:05:48 pasky Exp $ */
+/* $Id: session.c,v 1.66 2002/11/12 21:30:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,7 +493,7 @@ post_yes(struct wtd_data *w)
 	w->ses->wtd_target = w->target;
 
 	load_url(w->ses->loading_url, w->ses->ref_url, &w->ses->loading,
-		 w->pri, w->cache_mode, 0);
+		 w->pri, w->cache_mode, -1);
 }
 
 void
@@ -536,7 +536,7 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 		ses->wtd = wtd;
 		ses->wtd_target = target;
 
-		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, 0);
+		load_url(url, ses->ref_url, &ses->loading, pri, cache_mode, -1);
 
 		return;
 	}
@@ -1009,7 +1009,7 @@ process_file_requests(struct session *ses)
 			ftl->req_sent = 1;
 			load_url(ftl->url, (fd && fd->f_data) ? fd->f_data->url
 							      : NULL,
-				 &ftl->stat, ftl->pri, NC_CACHE, 0);
+				 &ftl->stat, ftl->pri, NC_CACHE, -1);
 			more = 1;
 		}
 	}
@@ -1285,13 +1285,13 @@ reload(struct session *ses, enum cache_mode cache_mode)
 
 		l->stat.data = ses;
 		l->stat.end = (void *)doc_end_load;
-		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, cache_mode, 0);
+		load_url(l->vs.url, ses->ref_url, &l->stat, PRI_MAIN, cache_mode, -1);
 		foreach(ftl, ses->more_files) {
 			if (ftl->req_sent && ftl->stat.state >= 0) continue;
 			ftl->stat.data = ftl;
 			ftl->stat.end = (void *)file_end_load;
 			load_url(ftl->url, fd?fd->f_data?fd->f_data->url:NULL:NULL,
-				 &ftl->stat, PRI_FRAME, cache_mode, 0);
+				 &ftl->stat, PRI_FRAME, cache_mode, -1);
 		}
 	}
 }

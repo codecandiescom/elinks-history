@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.20 2002/10/13 13:27:45 pasky Exp $ */
+/* $Id: sched.h,v 1.21 2002/11/12 21:30:07 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -39,6 +39,10 @@ struct remaining_info {
 	int size, loaded, last_loaded, cur_loaded;
 
 	/* This is offset where the download was resumed possibly */
+	/* prg->start == -1 means normal session, not download
+	 *            ==  0 means download
+	 *             >  0 means resume
+	 * --witekfl */
 	int start;
 	/* This is absolute position in the stream
 	 * (relative_position = pos - start) (maybe our fictional

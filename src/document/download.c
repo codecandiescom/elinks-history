@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.46 2002/10/13 18:20:05 pasky Exp $ */
+/* $Id: download.c,v 1.47 2002/11/12 21:30:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,8 +608,7 @@ create_download_file(struct terminal *term, unsigned char *fi, int safe, int res
 		file = get_unique_name(file);
 	}
 
-	h = open(file, O_CREAT | O_WRONLY | (resume ? O_APPEND : O_TRUNC)
-			| (sf && !resume ? O_EXCL : 0),
+	h = open(file, O_CREAT | O_WRONLY | (sf && !resume ? O_EXCL : 0),
 		 sf ? 0600 : 0666);
 	saved_errno = errno; /* Saved in case of ... --Zas */
 
@@ -745,12 +744,12 @@ common_download(struct session *ses, unsigned char *file, int resume)
 	down = mem_calloc(1, sizeof(struct download));
 	if (!down) return;
 
-	if (resume) fstat(h, &buf);
+	fstat(h, &buf);
 
 	down->url = stracpy(url);
 	down->stat.end = (void (*)(struct status *, void *)) download_data;
 	down->stat.data = down;
-	down->last_pos = (resume ? (int) buf.st_size : 0);
+	down->last_pos = (int) buf.st_size;
 	down->file = stracpy(file);
 	down->handle = h;
 	down->ses = ses;

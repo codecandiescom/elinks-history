@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.68 2002/10/29 23:18:35 pasky Exp $ */
+/* $Id: ftp.c,v 1.69 2002/11/12 21:30:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -622,7 +622,7 @@ add_file_cmd_to_str(struct connection *conn)
 			else
 				add_portcmd_to_str(&str, &strl, pc);
 
-		if (conn->from || conn->prg.start) {
+		if (conn->from || (conn->prg.start > 0)) {
 			add_to_str(&str, &strl, "REST ");
 			add_num_to_str(&str, &strl, conn->from ? conn->from
 							: conn->prg.start);
@@ -810,7 +810,7 @@ ftp_retr_file(struct connection *conn, struct read_buffer *rb)
 					if (response == 350)
 						conn->from = conn->prg.start;
 					/* Come on, don't be nervous ;-). */
-					if (conn->prg.start) {
+					if (conn->prg.start >= 0) {
 						/* I'm not really sure about
 						 * this. --pasky */
 						struct download *down =

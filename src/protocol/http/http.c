@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.60 2002/11/04 16:57:00 zas Exp $ */
+/* $Id: http.c,v 1.61 2002/11/12 21:30:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,7 +555,7 @@ http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "Cache-Control: no-cache\r\n");
 	}
 
-	if (c->from || c->prg.start) {
+	if (c->from || (c->prg.start > 0)) {
 		/* c->from takes precedence. c->prg.start is set only the first
 		 * time, then c->from gets updated and in case of any retries
 		 * etc we have everything interesting in c->from already. */
@@ -1070,7 +1070,7 @@ again:
 		mem_free(d);
 	}
 	if (cf && !c->from && !c->unrestartable) c->unrestartable = 1;
-	if ((!c->prg.start && c->from > cf) || c->from < 0) {
+	if ((c->prg.start <= 0 && c->from > cf) || c->from < 0) {
 		/* We don't want this if c->prg.start because then c->from will
 		 * be probably value of c->prg.start, while cf is 0. */
 		abort_conn_with_state(c, S_HTTP_ERROR);
@@ -1088,7 +1088,7 @@ again:
 	}
 #endif
 
-	if (c->prg.start) {
+	if (c->prg.start >= 0) {
 		/* I'm not really sure about this. --pasky */
 		struct download *down = ((struct status *) c->statuss.next)->data;
 

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.25 2003/07/28 19:33:58 jonas Exp $ */
+/* $Id: draw.c,v 1.26 2003/07/28 19:34:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,25 +114,6 @@ set_line(struct terminal *term, int x, int y, int l, chr *line)
 	}
 	screen->dirty = 1;
 }
-
-#if 0
-void
-set_line_color(struct terminal *t, int x, int y, int l, unsigned c)
-{
-	register int i = (x >= 0) ? 0 : -x;
-	int end = (x + l <= t->x) ? l : t->x - x;
-	int offset = x + t->x * y;
-
-	if (i >= end) return;
-
-	for (; i < end; i++) {
-		register int p = i + offset;
-
-		t->screen[p] = (t->screen[p] & 0x80ff) | (c & ~0x80ff);
-	}
-	t->dirty = 1;
-}
-#endif
 
 void
 fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)

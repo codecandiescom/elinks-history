@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.151 2004/01/08 18:37:45 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.152 2004/01/09 00:14:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -388,8 +388,7 @@ make_keystroke(struct string *str, long key, long meta, int escape)
 
 /* Please keep this table in alphabetical order, and in sync with
  * the ACT_* constants in kbdbind.h.  */
-static struct strtonum action_table[] = {
-	{ "none", ACT_NONE, NULL },
+static struct strtonum action_table[KEYACTS + 1] = {
 	{ "abort-connection", ACT_ABORT_CONNECTION, DACT(N_("Abort connection")) },
 	{ "add-bookmark", ACT_ADD_BOOKMARK, DACT(N_("Add a new bookmark")) },
 	{ "add-bookmark-link", ACT_ADD_BOOKMARK_LINK, DACT(N_("Add a new bookmark using current link")) },
@@ -414,11 +413,11 @@ static struct strtonum action_table[] = {
 	{ "download-image", ACT_DOWNLOAD_IMAGE, DACT(N_("Download the current image")) },
 	{ "download-manager", ACT_DOWNLOAD_MANAGER, DACT(N_("Open download manager")) },
 	{ "edit", ACT_EDIT, DACT(N_("Begin editing")) }, /* FIXME */
-	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
 	{ "end", ACT_END, DACT(N_("Go to the end of the page/line")) },
 	{ "end-of-buffer", ACT_END_OF_BUFFER, DACT(N_("Go to the last line of the buffer.")) },
 	{ "enter", ACT_ENTER, DACT(N_("Follow the current link")) },
 	{ "enter-reload", ACT_ENTER_RELOAD, DACT(N_("Follow the current link, forcing reload of the target")) },
+	{ "expand", ACT_EXPAND, DACT(N_("Expand item")) },
 	{ "file-menu", ACT_FILE_MENU, DACT(N_("Open the File menu")) },
 	{ "find-next", ACT_FIND_NEXT, DACT(N_("Find the next occurrence of the current search text")) },
 	{ "find-next-back", ACT_FIND_NEXT_BACK, DACT(N_("Find the previous occurrence of the current search text")) },
@@ -431,32 +430,31 @@ static struct strtonum action_table[] = {
 	{ "header-info", ACT_HEADER_INFO, DACT(N_("Show information about the current page HTTP headers")) },
 	{ "history-manager", ACT_HISTORY_MANAGER, DACT(N_("Open history manager")) },
 	{ "home", ACT_HOME, DACT(N_("Go to the start of the page/line")) },
+	{ "jump-to-link", ACT_JUMP_TO_LINK, DACT(N_("Jump to link")) },
+	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "kill-backgrounded-connections", ACT_KILL_BACKGROUNDED_CONNECTIONS, DACT(N_("Kill all backgrounded connections")) },
 	{ "kill-to-bol", ACT_KILL_TO_BOL, DACT(N_("Delete to beginning of line")) },
 	{ "kill-to-eol", ACT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
-	{ "keybinding-manager", ACT_KEYBINDING_MANAGER, DACT(N_("Open keybinding manager")) },
 	{ "left", ACT_LEFT,DACT( N_("Move the cursor left")) },
 	{ "link-menu", ACT_LINK_MENU, DACT(N_("Open the link context menu")) },
-	{ "jump-to-link", ACT_JUMP_TO_LINK, DACT(N_("Jump to link")) },
+	{ "none", ACT_NONE, NULL },
 #ifdef HAVE_LUA
 	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console")) },
 #else
 	{ "lua-console", ACT_LUA_CONSOLE, DACT(N_("Open a Lua console (DISABLED)")) },
 #endif
-	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
-	{ "mark-set", ACT_MARK_SET, DACT(N_("Set a mark")) },
 	{ "mark-goto", ACT_MARK_GOTO, DACT(N_("Go at a specified mark")) },
 	{ "mark-item", ACT_MARK_ITEM, DACT(N_("Mark item")) },
+	{ "mark-set", ACT_MARK_SET, DACT(N_("Set a mark")) },
 	{ "menu", ACT_MENU, DACT(N_("Activate the menu")) },
 	{ "next-frame", ACT_NEXT_FRAME, DACT(N_("Move to the next frame")) },
 	{ "next-item", ACT_NEXT_ITEM, DACT(N_("Move to the next item")) },
+	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
+	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open the current link a new tab in background")) },
+	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
 	{ "open-new-tab", ACT_OPEN_NEW_TAB, DACT(N_("Open a new tab")) },
 	{ "open-new-tab-in-background", ACT_OPEN_NEW_TAB_IN_BACKGROUND, DACT(N_("Open a new tab in background")) },
 	{ "open-new-window", ACT_OPEN_NEW_WINDOW, DACT(N_("Open a new window")) },
-	{ "open-link-in-new-tab", ACT_OPEN_LINK_IN_NEW_TAB, DACT(N_("Open the current link in a new tab")) },
-	{ "open-link-in-new-tab-in-background", ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND,
-						DACT(N_("Open the current link a new tab in background")) },
-	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW, DACT(N_("Open the current link in a new window")) },
 	{ "open-os-shell", ACT_OPEN_OS_SHELL, DACT(N_("Open an OS shell")) },
 	{ "options-manager", ACT_OPTIONS_MANAGER, DACT(N_("Open options manager")) },
 	{ "page-down", ACT_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
@@ -472,9 +470,10 @@ static struct strtonum action_table[] = {
 	{ "resume-download", ACT_RESUME_DOWNLOAD, DACT(N_("Attempt to resume download of the current link")) },
 	{ "right", ACT_RIGHT, DACT(N_("Move the cursor right")) },
 	{ "save-as", ACT_SAVE_AS, DACT(N_("Save as")) },
-	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
 	{ "save-formatted", ACT_SAVE_FORMATTED, DACT(N_("Save formatted document")) },
 	{ "save-options", ACT_SAVE_OPTIONS, DACT(N_("Save options")), },
+	{ "save-url-as", ACT_SAVE_URL_AS, DACT(N_("Save URL as")) },
+	{ " *scripting-function*", ACT_SCRIPTING_FUNCTION, NULL }, /* internal use only */
 	{ "scroll-down", ACT_SCROLL_DOWN, DACT(N_("Scroll down")) },
 	{ "scroll-left", ACT_SCROLL_LEFT, DACT(N_("Scroll left")) },
 	{ "scroll-right", ACT_SCROLL_RIGHT, DACT(N_("Scroll right")) },
@@ -502,6 +501,7 @@ static struct strtonum action_table[] = {
 	{ "up", ACT_UP, DACT(N_("Move cursor upwards")) },
 	{ "view-image", ACT_VIEW_IMAGE, DACT(N_("View the current image")) },
 	{ "zoom-frame", ACT_ZOOM_FRAME, DACT(N_("Maximize the current frame")) },
+
 	{ NULL, 0, NULL }
 };
 

@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.7 2004/09/13 15:27:18 miciah Exp $ */
+/* $Id: data.c,v 1.8 2004/11/10 11:06:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ init_data_protocol_header(struct cache_entry *cached,
 	if (!type) return NULL;
 
 	/* Set fake content type */
-	head = straconcat("\r\nContent-Type: ",  type, "\r\n", NULL);
+	head = straconcat("\r\nContent-Type: ", type, "\r\n", NULL);
 	mem_free(type);
 	if (!head) return NULL;
 

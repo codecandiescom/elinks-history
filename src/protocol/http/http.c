@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.348 2004/11/08 01:38:28 jonas Exp $ */
+/* $Id: http.c,v 1.349 2004/11/10 11:06:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1402,7 +1402,7 @@ again:
 	/* FIXME: Parse only if HTTP/1.1 or later? --Zas */
 	d = parse_header(conn->cached->head, "ETag", NULL);
 	if (d) {
-		if (conn->cached->etag)  {
+		if (conn->cached->etag) {
 			unsigned char *old_tag = conn->cached->etag;
 			unsigned char *new_tag = d;
 

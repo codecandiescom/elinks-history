@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.145 2004/11/05 03:32:19 jonas Exp $ */
+/* $Id: options.inc,v 1.146 2004/11/10 11:06:35 zas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1314,7 +1314,7 @@ static struct option_info config_options_info[] = {
 		N_("Window tabs settings.")),
 
 	INIT_OPT_INT("ui.tabs", N_("Display tabs bar"),
-		"show_bar",  0, 0, 2, 1,
+		"show_bar", 0, 0, 2, 1,
 		N_("Show tabs bar on the screen:\n"
 		   "0 means never.\n"
 		   "1 means only if two or more tabs.\n"

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.152 2004/08/12 08:40:33 miciah Exp $ */
+/* $Id: options.c,v 1.153 2004/11/10 11:06:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 
 	add_dlg_text(dlg, _("Frame handling:", term), ALIGN_LEFT, 1);
 	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, values[TERM_OPT_TYPE]);
-	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, values[TERM_OPT_TYPE]);
+	add_dlg_radio(dlg, _("VT 100 frames", term), 1, TERM_VT100, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("FreeBSD frames", term), 1, TERM_FREEBSD, values[TERM_OPT_TYPE]);
 	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, values[TERM_OPT_TYPE]);

@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.66 2004/07/31 11:01:42 miciah Exp $ */
+/* $Id: conv.c,v 1.67 2004/11/10 11:06:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,7 @@ add_xnum_to_string(struct string *string, int xnum)
 
 	/* XXX: I don't completely like the computation of d here. --pasky */
 	/* Mebi (Mi), 2^20 */
-	if (xnum >= 1024*1024)  {
+	if (xnum >= 1024*1024) {
 		suff[0] = 'M';
 		d = (xnum / (int) ((int) (1024*1024)/(int) 10)) % 10;
 		xnum /= 1024*1024;

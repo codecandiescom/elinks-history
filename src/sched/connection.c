@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.208 2004/10/08 16:57:52 zas Exp $ */
+/* $Id: connection.c,v 1.209 2004/11/10 11:06:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,7 +239,7 @@ init_connection(struct uri *uri, struct uri *proxied_uri, struct uri *referrer,
 	conn->uri = uri;
 	conn->proxied_uri = proxied_uri;
 	conn->id = connection_id++;
-	conn->pri[priority] =  1;
+	conn->pri[priority] = 1;
 	conn->cache_mode = cache_mode;
 	conn->socket.fd = conn->data_socket.fd = -1;
 	conn->content_encoding = ENCODING_NONE;

@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.11 2004/07/12 11:31:17 jonas Exp $ */
+/* $Id: http.h,v 1.12 2004/11/10 11:06:36 zas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -13,12 +13,12 @@ struct http_version {
 	int minor;
 };
 
-#define HTTP_0_9(x)  ((x).major == 0 && (x).minor == 9)
-#define PRE_HTTP_1_0(x) ((x).major < 1)
-#define HTTP_1_0(x)  ((x).major == 1 && (x).minor == 0)
+#define HTTP_0_9(x)	 ((x).major == 0 && (x).minor == 9)
+#define PRE_HTTP_1_0(x)  ((x).major < 1)
+#define HTTP_1_0(x)	 ((x).major == 1 && (x).minor == 0)
 #define POST_HTTP_1_0(x) ((x).major > 1 || ((x).major == 1 && (x).minor > 0))
-#define PRE_HTTP_1_1(x) (PRE_HTTP_1_0(x) || HTTP_1_0(x))
-#define HTTP_1_1(x)  ((x).major == 1 && (x).minor == 1)
+#define PRE_HTTP_1_1(x)  (PRE_HTTP_1_0(x) || HTTP_1_0(x))
+#define HTTP_1_1(x)	 ((x).major == 1 && (x).minor == 1)
 #define POST_HTTP_1_1(x) ((x).major > 2 || ((x).major == 1 && (x).minor > 1))
 
 

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.112 2003/12/21 17:55:32 pasky Exp $ */
+/* $Id: conf.c,v 1.113 2003/12/22 02:53:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,8 +31,6 @@
 #include "util/memory.h"
 #include "util/secsave.h"
 #include "util/string.h"
-
-#define ELINKS_CONF_FILENAME		"elinks.conf"
 
 
 /* Config file has only very simple grammar:
@@ -453,7 +451,7 @@ load_config_from(unsigned char *file, struct option *tree)
 void
 load_config(void)
 {
-	load_config_from(ELINKS_CONF_FILENAME, config_options);
+	load_config_from(get_opt_str_tree(cmdline_options, "conffile"), config_options);
 }
 
 
@@ -759,5 +757,6 @@ write_config_to(unsigned char *file, struct option *tree,
 void
 write_config(struct terminal *term)
 {
-	write_config_to(ELINKS_CONF_FILENAME, config_options, term);
+	write_config_to(get_opt_str_tree(cmdline_options, "conffile"),
+			config_options, term);
 }

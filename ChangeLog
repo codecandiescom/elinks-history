@@ -1,3 +1,21 @@
+Mon Jan 10 12:56:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	More merging of Danish translations by Morten Bo Johansen.  
+
+Mon Jan 10 12:55:07 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Update by Adam Golebiowski.  
+
+Mon Jan 10 03:30:26 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/dump/dump.c:
+
+	Use get_opt_codepage for document.dump.codepage.  
+
 Sun Jan  9 22:36:54 2005  Petr Baudis <pasky@ucw.cz>:
 
 	* THANKS:

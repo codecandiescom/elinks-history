@@ -1,6 +1,6 @@
 # French ELinks translation.
 # Fabrice Haberer-Proust <fric@gmx.li>
-# Laurent Monin <zas@norz.org>, 2001 - 2002
+# Laurent Monin <zas@norz.org>, 2001 - 2003
 #
 msgid ""
 msgstr ""
@@ -155,7 +155,7 @@ msgid "No"
 msgstr "Non"
 
 #: src/bookmarks/dialogs.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Delete content of folder \"%s\" ?"
 msgstr "Effacer le contenu du répertoire \"%s\" ?"
 
@@ -231,11 +231,9 @@ msgid "Config error"
 msgstr "Erreur de configuration"
 
 #: src/config/dialogs.c:40
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr ""
-"Impossible d'écrire le fichier de configuration\n"
-"%s: %s"
+msgstr "Impossible d'écrire dans le fichier de configuration %s: %s"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:130 src/config/dialogs.c:515
 #: src/dialogs/document.c:50 src/dialogs/document.c:205
@@ -288,7 +286,6 @@ msgid "Type"
 msgstr "Type"
 
 #: src/config/dialogs.c:207
-#, fuzzy
 msgid "Value"
 msgstr "Valeur"
 
@@ -3320,9 +3317,9 @@ msgid "Login"
 msgstr "Utilisateur"
 
 #: src/dialogs/auth.c:148
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication required for %s at %s"
-msgstr "Entrez le nom d'utilisateur pour "
+msgstr "Authentication requise pour %s à %s"
 
 #: src/dialogs/auth.c:166
 msgid "HTTP Authentication"
@@ -3447,7 +3444,7 @@ msgid "Copying"
 msgstr "Licence"
 
 #: src/dialogs/info.c:83
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -3459,7 +3456,7 @@ msgid ""
 "Software Foundation; either version 2 of the License, or (at your option) "
 "any later version."
 msgstr ""
-"\n"
+"ELinks %s\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
 "(C) 2001 - 2003 Petr Baudis\n"
@@ -3980,9 +3977,9 @@ msgid "No program"
 msgstr "Aucun programme"
 
 #: src/protocol/user.c:106
-#, fuzzy, c-format
+#, c-format
 msgid "No program specified for protocol %s."
-msgstr "Aucun programme n'est défini pour %s."
+msgstr "Aucun programme spécifié pour le protocole %s."
 
 #: src/protocol/user.c:134
 msgid "Bad URL syntax"
@@ -4162,19 +4159,19 @@ msgid "Untitled"
 msgstr "Sans titre"
 
 #: src/sched/session.c:584
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to url %s?"
-msgstr "Voulez-vous envoyer ces données à l'url redirigée"
+msgstr "Voulez-vous envoyer les données de formulaire à l'url redirigée %s ?"
 
 #: src/sched/session.c:587
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to url %s?"
-msgstr "Voulez-vous envoyer ces données à l'url"
+msgstr "Voulez-vous envoyer les données de formulaire à l'url %s ?"
 
 #: src/sched/session.c:589
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to url %s?"
-msgstr "Voulez-vous réexpedier ces données à l'url"
+msgstr "Voulez-vous réexpedier les données de formulaire à l'url %s ?" 
 
 #: src/sched/session.c:595 src/sched/session.c:1106 src/sched/session.c:1126
 msgid "Warning"
@@ -4299,11 +4296,9 @@ msgid "No previous search"
 msgstr "Aucune clef de recherche"
 
 #: src/viewer/text/view.c:2511
-#, fuzzy, c-format
+#, c-format
 msgid "Search string '%s' not found"
-msgstr ""
-"'%s'\n"
-"Texte introuvable"
+msgstr "Chaîne recherchée '%s' introuvable"
 
 #: src/viewer/text/view.c:2755
 msgid "Go to link"

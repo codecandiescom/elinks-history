@@ -1,4 +1,4 @@
-/* $Id: module.h,v 1.5 2003/10/25 21:46:19 pasky Exp $ */
+/* $Id: module.h,v 1.6 2003/10/25 22:30:23 jonas Exp $ */
 
 #ifndef EL__MODULES_MODULE_H
 #define EL__MODULES_MODULE_H
@@ -32,8 +32,8 @@ struct module {
 	void (*done)(struct module *module);
 };
 
-#define INIT_MODULE(name, options, submods, init, done) \
-	{ name, options, submods, init, done }
+#define INIT_MODULE(name, options, submods, data, init, done) \
+	{ name, options, submods, data, init, done }
 
 /* Interface for handling single modules */
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.435 2004/06/10 14:19:18 jonas Exp $ */
+/* $Id: session.c,v 1.436 2004/06/10 14:27:56 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -62,7 +62,7 @@
 /* This is used to pass along the initial session parameters. */
 struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
-	int base_session;
+	struct session *base_session;
 
 	/* Whether to open URLs in the master using -remote */
 	enum remote_session_flags remote;
@@ -95,6 +95,18 @@ static int session_id = 1;
 static struct file_to_load * request_additional_file(struct session *,
 						unsigned char *, struct uri *, int);
 
+
+static struct session *
+get_session(int id)
+{
+	struct session *ses;
+
+	foreach (ses, sessions)
+		if (ses->id == id)
+			return ses;
+
+	return NULL;
+}
 
 struct download *
 get_current_download(struct session *ses)
@@ -661,7 +673,7 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 }
 
 struct initial_session_info *
-init_session_info(int base_session, enum remote_session_flags remote,
+init_session_info(struct session *base_session, enum remote_session_flags remote,
 		  unsigned char *uri, int len)
 {
 	struct initial_session_info *info;
@@ -683,12 +695,17 @@ struct initial_session_info *
 decode_session_info(int len, const int *data)
 {
 	struct initial_session_info *info;
+	struct session *base_session;
 	unsigned char *str;
-	int magic, base_session;
+	int magic;
 
 	if (len < 2 * sizeof(int)) return NULL;
 
-	base_session = *(data++);
+	/* This is the only place where the session id comes into game - we're
+	 * comparing it to possibly supplied -base-session here, and clone the
+	 * session with id of base-session (its current document association
+	 * only, rather) to the newly created session. */
+	base_session = get_session(*(data++));
 	magic = *(data++);
 
 	switch (magic) {
@@ -767,10 +784,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 
 	if (!info) return NULL;
 
-	/* This is the only place where s->id comes into game - we're comparing
-	 * it to possibly supplied -base-session here, and clone the session
-	 * with id of base-session (its current document association only,
-	 * rather) to the newly created session. */
 	foreach (s, sessions) {
 		/* If processing session info from a -remote instance we just
 		 * want to hook up with the master. */
@@ -783,12 +796,11 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 			assert(tab);
 			ses = tab->data;
 			break;
-
-		} else if (s->id == info->base_session) {
-			copy_session(s, ses);
-			break;
 		}
 	}
+
+	if (info->base_session)
+		copy_session(info->base_session, ses);
 
 	if (!list_empty(info->url_list)) {
 		int first = !info->remote || (info->remote & SES_REMOTE_CURRENT_TAB);

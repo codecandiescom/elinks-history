@@ -236,8 +236,14 @@ void dns_found(void *data, int state)
 		addr.sin_port = htons(c_i->port);
 #endif
 		
-		if (connect(sock, (struct sockaddr *) &addr, sizeof(addr)) == 0)
-			break; /* success */
+#ifdef IPV6
+		if (addr.sin6_family == AF_INET6) {
+			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in6)) == 0)
+				break;
+		} else
+#endif
+			if (connect(sock, (struct sockaddr *) &addr, sizeof(struct sockaddr_in)) == 0)
+				break; /* success */
 
 		if (errno == EALREADY || errno == EINPROGRESS) {
 			/* It will take some more time... */

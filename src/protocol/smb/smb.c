@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.26 2003/12/24 11:07:29 zas Exp $ */
+/* $Id: smb.c,v 1.27 2003/12/31 08:14:10 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -557,10 +557,10 @@ smb_func(struct connection *conn)
 
 			} else {
 				unsigned char *s = straconcat("get \"", dir, "\" -", NULL);
-				unsigned char *ss;
+				unsigned char *ss = s;
 
 				v[n++] = "-c"; /* execute semicolon separated commands */
-				while ((ss = strchr(s, '/'))) *ss = '\\';
+				while ((ss = strchr(ss, '/'))) *ss = '\\';
 				v[n++] = s;
 			}
 		}

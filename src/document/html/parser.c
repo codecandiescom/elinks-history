@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.211 2003/10/04 12:50:36 jonas Exp $ */
+/* $Id: parser.c,v 1.212 2003/10/04 13:25:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1270,6 +1270,14 @@ html_ol(unsigned char *a)
 static void
 html_li(unsigned char *a)
 {
+	/* When handling the code <li><li> @was_li will be 1 and it means we
+	 * have to insert a line break since no list item content has done it
+	 * for us. */
+	if (was_li) {
+		line_breax = 0;
+		ln_break(1, line_break_f, ff);
+	}
+
 	/*kill_until(0, "", "UL", "OL", NULL);*/
 	if (!par_format.list_number) {
 		unsigned char x[7] = "*&nbsp;";
@@ -1315,14 +1323,8 @@ html_li(unsigned char *a)
 	}
 
 	putsp = -1;
-	/* This is related to and fixes bug #208 "Rendering of paragraphs
-	 * nested in listitems could be improved". It makes rendering of pages
-	 * like (DocBook generated) HOWTOs better. */
-	/* Side effect is that <li><li> will be rendered as "* *" however
-	 * for <li><li><li> the last and any following <li> will be rendered
-	 * correctly. TODO: Find a patter to match <li><li>. */
-	line_breax = (was_li > 0) ? 0 : 2;
-	was_li = 2;
+	line_breax = 2;
+	was_li = 1;
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.19 2003/12/09 13:42:53 pasky Exp $ */
+/* $Id: smb.c,v 1.20 2003/12/09 13:47:12 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -174,11 +174,10 @@ end_smb_connection(struct connection *conn)
 		si->text[si->textlen++] = '\n';
 	si->text[si->textlen] = '\0';
 
-	/* FIXME: what to do if conn->uri.datalen is zero ? --Zas */
 	if ((strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
 	     || strstr(si->text, "NT_STATUS_ACCESS_DENIED")
 	     || strstr(si->text, "ERRbadfile"))
-	    && *struri(conn->uri)
+	    && conn->uri.datalen
 	    && conn->uri.data[conn->uri.datalen - 1] != '/'
 	    && conn->uri.data[conn->uri.datalen - 1] != '\\') {
 		if (conn->cache->redirect) mem_free(conn->cache->redirect);

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.71 2003/12/21 21:52:52 miciah Exp $ */
+/* $Id: text.c,v 1.72 2003/12/21 22:01:43 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,9 +274,9 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	draw_area(win->term, x, y, 1, height, ' ', 0,
 		  get_bfu_color(win->term, "dialog.scrollbar-selected"));
 
-	/* Hope this is at least a bit reasonable. Set blockable cursor and
-	 * window pointer to start of the first text line. */
-	set_cursor(win->term, widget_data->x, widget_data->y, 1);
+	/* Hope this is at least a bit reasonable. Set cursor
+	 * and window pointer to start of the first text line. */
+	set_cursor(win->term, widget_data->x, widget_data->y, 0);
 	set_window_ptr(win, widget_data->x, widget_data->y);
 }
 

@@ -1353,13 +1353,15 @@ msgstr "Opzione per la ricerca."
 
 #: src/config/options.c:1168
 msgid "Case sensitivity"
-msgstr ""
+msgstr "Considera minuscole/maiuscole"
 
 #: src/config/options.c:1170
 msgid ""
 "Whether the search should match the document text while maintaining\n"
 "case sensitivity."
 msgstr ""
+"Impostare se la ricerca deve trovare corrispondenze nel testo del\n"
+"documento tenendo conto delle minuscole e delle maiuscole"
 
 #: src/config/options.c:1173
 msgid "Overlapping matches"
@@ -2548,8 +2550,8 @@ msgid ""
 "options in this tree after your system (ie. unix, unix-xwin)."
 msgstr ""
 "Gestore (programma esterno) per questo protocollo. Chiama\n"
-"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, unix-"
-"xwin)."
+"le opzioni in questo albero a seconda del tuo sistema (ad esempio unix, "
+"unix-xwin)."
 
 #: src/config/options.c:1751
 msgid ""
@@ -3234,8 +3236,9 @@ msgid ""
 "Timed action after certain interval of user inactivity. Someone can\n"
 "even find this useful, although you may not believe that."
 msgstr ""
-"Azioni temporizzate dopo un certo intervallo di inattività dell'utente."
-"Qualcuno lo può trovare persino utile, anche se puoi non crederci."
+"Azioni temporizzate dopo un certo intervallo di inattività "
+"dell'utente.Qualcuno lo può trovare persino utile, anche se puoi non "
+"crederci."
 
 #: src/config/options.c:2698
 msgid ""
@@ -3643,8 +3646,8 @@ msgid ""
 "changed even when -no-connect or -session-ring is used; has no\n"
 "effect if not used in connection with any of these options."
 msgstr ""
-"Impostare a 1 per modificare i file runtime di stato (bookmark, "
-"storico, ...)\n"
+"Impostare a 1 per modificare i file runtime di stato (bookmark, storico, "
+"...)\n"
 "anche quando si usano -no-connect o -session-ring; non ha effetto\n"
 "se non è usato in connessione con una di queste opzioni."
 
@@ -4816,9 +4819,9 @@ msgid ""
 "saved to the configuration file, instead of just all the options. This "
 "simplifies our situation greatly when we see that some option has "
 "inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
+"a subtle way. Thus, we recommend you to change the value of "
+"config.saving_style option to 3 in order to get the \"right\" behaviour. "
+"Apologies for any inconvience caused."
 msgstr ""
 "Hai l'opzione config.saving_style impostata a un valore obsoleto. Gli "
 "algoritmi di salvataggio della configurazione di ELinks sono stati cambiati "
@@ -4826,9 +4829,9 @@ msgstr ""
 "sono salvate nel file di configurazione, invece di tutte quante. Questo "
 "semplifica molto la situazione quando vediamo che delle opzioni hanno un "
 "valore predefinito inappropriato o abbiamo bisogno di cambiarne la "
-"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione config."
-"saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le mie "
-"scuse per qualsiasi inconveniente causato."
+"semantica. Quindi raccomandiamo di cambiare il valore dell'opzione "
+"config.saving_style a 3 in modo da ottenere il \"giusto\" comportamento. Le "
+"mie scuse per qualsiasi inconveniente causato."
 
 #: src/sched/session.c:1677
 msgid "Unknown event."
@@ -5087,11 +5090,11 @@ msgstr "Espressione regolare estesa"
 
 #: src/viewer/text/search.c:886
 msgid "Case sensitive"
-msgstr ""
+msgstr "Considera minuscole/maiuscole"
 
 #: src/viewer/text/search.c:887
 msgid "Case insensitive"
-msgstr ""
+msgstr "Non considerare minuscole/maiuscole"
 
 #: src/viewer/text/search.c:1136
 msgid "Search backward"

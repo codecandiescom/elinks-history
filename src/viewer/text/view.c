@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.77 2003/05/20 19:35:52 pasky Exp $ */
+/* $Id: view.c,v 1.78 2003/05/21 09:32:59 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3097,9 +3097,13 @@ quit:
 			case ACT_OPEN_NEW_WINDOW:
 				open_in_new_window(ses->tab->term, send_open_new_xterm, ses);
 				goto x;
-			case ACT_OPEN_LINK_IN_NEW_WINDOW:
+			case ACT_OPEN_LINK_IN_NEW_WINDOW: {
+				struct f_data_c *fd = current_frame(ses);
+
+				if (!fd || fd->vs->current_link == -1) goto x;
 				open_in_new_window(ses->tab->term, send_open_in_new_xterm, ses);
 				goto x;
+			}
 
 			case ACT_TAB_CLOSE:
 				close_tab(ses->tab->term);

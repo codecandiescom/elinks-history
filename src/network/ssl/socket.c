@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.68 2004/08/02 23:20:30 jonas Exp $ */
+/* $Id: socket.c,v 1.69 2004/08/02 23:22:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -295,7 +295,8 @@ ssl_write(struct connection *conn, struct connection_socket *socket,
 
 /* Return -1 on error, rd or success. */
 int
-ssl_read(struct connection *conn, struct read_buffer *rb)
+ssl_read(struct connection *conn, struct connection_socket *socket,
+	 struct read_buffer *rb)
 {
 	int rd = ssl_do_read(conn, rb);
 

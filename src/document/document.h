@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.71 2004/06/30 03:26:41 jonas Exp $ */
+/* $Id: document.h,v 1.72 2004/06/30 16:10:26 zas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -16,16 +16,6 @@ struct form_control;
 struct frameset_desc;
 struct module;
 struct screen_char;
-
-
-/* Tags are used for ``id''s or anchors in the document referenced by the
- * fragment part of the URI. */
-struct tag {
-	LIST_HEAD(struct tag);
-
-	int x, y;
-	unsigned char name[1]; /* must be last of struct. --Zas */
-};
 
 /* Nodes are used for marking areas of text on the document canvas as
  * searchable. */

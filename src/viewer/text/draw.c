@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.6 2004/06/28 11:07:11 jonas Exp $ */
+/* $Id: draw.c,v 1.7 2004/06/30 16:10:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 #include "cache/cache.h"
 #include "document/document.h"
 #include "document/html/frames.h"
+#include "document/html/renderer.h"
 #include "document/options.h"
 #include "document/renderer.h"
 #include "document/view.h"
@@ -39,18 +40,6 @@
 #include "viewer/text/view.h"		/* current_frame() */
 #include "viewer/text/vs.h"
 
-
-static inline int
-find_tag(struct document *document, unsigned char *name, int namelen)
-{
-	struct tag *tag;
-
-	foreach (tag, document->tags)
-		if (!strlcasecmp(tag->name, -1, name, namelen))
-			return tag->y;
-
-	return -1;
-}
 
 static inline int
 check_document_fragment(struct session *ses, struct document_view *doc_view)

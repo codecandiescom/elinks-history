@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.468 2004/06/30 15:35:46 zas Exp $ */
+/* $Id: renderer.c,v 1.469 2004/06/30 16:10:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,15 @@
 #include "document/html/internal.h"
 
 /* Types and structs */
+
+/* Tags are used for ``id''s or anchors in the document referenced by the
+ * fragment part of the URI. */
+struct tag {
+	LIST_HEAD(struct tag);
+
+	int x, y;
+	unsigned char name[1]; /* must be last of struct. --Zas */
+};
 
 enum link_state {
 	LINK_STATE_NONE,
@@ -1587,4 +1596,16 @@ render_html_document(struct cache_entry *cached, struct document *document)
 		fclose(f);
 	}
 #endif
+}
+
+int
+find_tag(struct document *document, unsigned char *name, int namelen)
+{
+	struct tag *tag;
+
+	foreach (tag, document->tags)
+		if (!strlcasecmp(tag->name, -1, name, namelen))
+			return tag->y;
+
+	return -1;
 }

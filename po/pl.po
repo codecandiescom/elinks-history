@@ -7,7 +7,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ELinks 0.5pre0.CVS\n"
+"Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: elinks-dev@linuxfromscratch.org\n"
 "POT-Creation-Date: 2003-10-23 02:13+0200\n"
 "PO-Revision-Date: 2003-10-22 15:00+0200\n"
@@ -851,11 +851,11 @@ msgstr "ELinks %s - Tekstowa przegl±darka WWW\n"
 
 #: src/config/options.c:656
 msgid "default"
-msgstr ""
+msgstr "domy¶lnie"
 
 #: src/config/options.c:657
 msgid "alias for"
-msgstr ""
+msgstr "alias dla"
 
 #: src/config/options.c:674
 msgid "Template option folder"
@@ -953,7 +953,7 @@ msgid ""
 "when saving the configuration."
 msgstr ""
 "Szeroko¶æ jednej tabulacji w pliku konfiguracyjnym\n"
-"Zero oznacza brak wciêæ w pliku konfiguracyjnym."
+"Zero oznacza brak wciêæ."
 
 #: src/config/options.inc:51
 msgid "Saving style"
@@ -1112,7 +1112,7 @@ msgstr "Limit czasu pobierania"
 #
 #: src/config/options.inc:132
 msgid "Receive timeout (in seconds)."
-msgstr "Limit czasu pobierania (w sekundach)"
+msgstr "Limit czasu pobierania (w sekundach)."
 
 #: src/config/options.inc:134
 msgid "Timeout for non-restartable connections"
@@ -1374,8 +1374,8 @@ msgid ""
 "Display links to images without an alt attribute. If this option\n"
 "is off, these images are completely invisible."
 msgstr ""
-"Czy wy¶wietlaæ odno¶niki do obrazków bez podanego atrybutu alt. Je¶li\n"
-"ta opcja jest wy³±czona, obrazki te bêd± niewidoczne."
+"Czy wy¶wietlaæ odno¶niki do obrazków bez podanego atrybutu alt?\n"
+"Je¶li ta opcja jest wy³±czona, obrazki te bêd± niewidoczne."
 
 #: src/config/options.inc:261
 msgid "Display links to images"
@@ -1765,7 +1765,7 @@ msgid ""
 "down is pressed and no prefix was given."
 msgstr ""
 "Liczba linii, o które przewijany jest ekran, gdy wybrano klawisz\n"
-"\"przewiñ w dó³\" albo \"przewiñ w górê\""
+"\"przewiñ w dó³\" albo \"przewiñ w górê\"."
 
 #: src/config/options.inc:394
 msgid "Tables navigation order"
@@ -1867,7 +1867,7 @@ msgstr "Pamiêæ podrêczna"
 #
 #: src/config/options.inc:442
 msgid "Memory cache options."
-msgstr "Ustawienia pamiêci podrêcznej"
+msgstr "Ustawienia pamiêci podrêcznej."
 
 #: src/config/options.inc:444 src/dialogs/document.c:104
 msgid "Size"
@@ -2003,7 +2003,7 @@ msgid ""
 "Please use the mime.default_type option instead."
 msgstr ""
 "Ta opcja jest przedawniona i wkrótce zostanie usuniêta.\n"
-"U¿yj zamiast niej mime.default_type ."
+"U¿yj zamiast niej mime.default_type."
 
 #
 #: src/config/options.inc:531
@@ -2062,11 +2062,11 @@ msgstr ""
 
 #: src/config/options.inc:556
 msgid "Dump output"
-msgstr "\"Zrzuty\""
+msgstr "Zrzuty"
 
 #: src/config/options.inc:558
 msgid "Dump output options."
-msgstr "Ustawienia dotycz±ce \"zrzutów\"."
+msgstr "Ustawienia dotycz±ce zrzutów."
 
 #: src/config/options.inc:560 src/config/options.inc:1066
 #: src/config/opttypes.c:399 src/dialogs/document.c:111
@@ -2083,7 +2083,7 @@ msgstr "Szeroko¶æ"
 
 #: src/config/options.inc:566
 msgid "Width of screen in characters when dumping a HTML document."
-msgstr "Szeroko¶æ ekranu w znakach przy zrzutach dokumentów HTML"
+msgstr "Szeroko¶æ ekranu w znakach przy zrzutach dokumentów HTML."
 
 #
 #: src/config/options.inc:570
@@ -2114,7 +2114,7 @@ msgstr "W³±cz"
 #: src/config/options.inc:582
 msgid "Enable global history (\"history of all pages visited\")."
 msgstr ""
-"W³±cz globaln± historiê (\"historiê o wszystkich odwiedzanych stronach\")."
+"W³±cz globaln± historiê (\"historiê wszystkich odwiedzanych stron\")."
 
 #: src/config/options.inc:584
 msgid "Maximum number of entries"
@@ -2149,7 +2149,7 @@ msgid ""
 "has changed (seconds; 0 to disable)"
 msgstr ""
 "Przedzia³ czasu po którym nastêpuje zapis globalnej historii na dysk,\n"
-"je¶li nast±pi³a jaka¶ zmiana (w sekundach; 0 - wy³±cza)"
+"je¶li nast±pi³a jaka¶ zmiana (w sekundach; 0 - wy³±cza)."
 
 #
 #: src/config/options.inc:602
@@ -2458,7 +2458,7 @@ msgid ""
 msgstr ""
 "Opcje do obs³ugi plików MIME.  Pliki MIME mog± byæ u¿yte\n"
 "do znalezienia typu zawarto¶ci pliku URL-a po sprawdzeniu \n"
-"rozszerzenia pliku"
+"rozszerzenia pliku."
 
 #: src/config/options.inc:763
 msgid "Enable mime.types support."
@@ -2495,7 +2495,7 @@ msgstr "Obej¶cie b³êdów serwera"
 
 #: src/config/options.inc:785
 msgid "Server-side HTTP bugs workarounds."
-msgstr "Obej¶cia b³êdów HTTP po stronie serwera"
+msgstr "Obej¶cia b³êdów HTTP po stronie serwera."
 
 #: src/config/options.inc:787
 msgid "Do not send Accept-Charset"
@@ -2527,10 +2527,9 @@ msgid ""
 "This is a problem for a lot of web discussion boards and the like.\n"
 "If they will do strange things to you, try to play with this."
 msgstr ""
-"B³êdne przekierowanie 302 (narusza RFC, ale jest kompatybilne z Netscapem).\n"
-"Jest to problem wielu webowych forum dyskusyjnych. Je¶li sprawiaj± "
-"problemy,\n"
-"spróbuj to ustawiæ."
+"B³êdne przekierowanie 302 (narusza RFC, ale jest kompatybilne\n"
+"z Netscapem). Jest to problem wielu webowych forum dyskusyjnych.\n"
+"Je¶li sprawiaj± problemy, spróbuj to ustawiæ."
 
 #: src/config/options.inc:802
 msgid "No keepalive after POST requests"
@@ -2546,7 +2545,7 @@ msgstr "U¿ywanie HTTP/1.0"
 
 #: src/config/options.inc:808
 msgid "Use HTTP/1.0 protocol instead of HTTP/1.1."
-msgstr "U¿yj protoko³u HTTP/1.0 zamiast HTTP/1.1"
+msgstr "U¿yj protoko³u HTTP/1.0 zamiast HTTP/1.1."
 
 #: src/config/options.inc:810 src/config/options.inc:885
 msgid "Proxy configuration"
@@ -2671,7 +2670,7 @@ msgid ""
 "not be enabled on all servers."
 msgstr ""
 "Gdy aktywne wszystkie zapytania HTTP s± wysy³ane przy u¿yciu metody\n"
-"TRACE.  Jest to przydatne przy debugowaniu Elinksa jak i skryptów\n"
+"TRACE.  Jest to przydatne przy debugowaniu ELinksa jak i skryptów\n"
 "po stronie serwera --- serwer odsy³a zapytanie to klienta.  Wiedz, ¿e\n"
 "nie wszystkie serwery to obs³uguj±."
 
@@ -2780,7 +2779,7 @@ msgid ""
 "to open 'filename' with some encoding extension appended\n"
 "(ie. 'filename.gz'); it depends on the supported encodings."
 msgstr ""
-"Gdy ustawione, je¶li nie mo¿na otworzyæ pliku 'plik', Elinks bêdzie\n"
+"Gdy ustawione, je¶li nie mo¿na otworzyæ pliku 'plik', ELinks bêdzie\n"
 "próbowa³ otworzyæ 'plik' + jakie¶ rozszerzenie (np.\n"
 "'plik.gz'); zale¿y to od wspieranych formatów kompresji."
 
@@ -2851,7 +2850,7 @@ msgid ""
 "Please use the mime.mailcap.enable option instead."
 msgstr ""
 "Ta opcja jest przedawniona i wkrótce zostanie usuniêta.\n"
-"U¿yj zamiast niej mime.mailcap.enable ."
+"U¿yj zamiast niej mime.mailcap.enable."
 
 #: src/config/options.inc:977
 msgid ""
@@ -2859,7 +2858,7 @@ msgid ""
 "Please use the mime.mailcap.path option instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej mime.mailcap.path ."
+"U¿yj zamiast niej mime.mailcap.path."
 
 #: src/config/options.inc:982
 msgid ""
@@ -2867,7 +2866,7 @@ msgid ""
 "Please use the mime.mailcap.ask option instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej mime.mailcap.ask ."
+"U¿yj zamiast niej mime.mailcap.ask."
 
 #: src/config/options.inc:987
 msgid "This option is deprecated and will be removed very soon.\n"
@@ -2879,7 +2878,7 @@ msgid ""
 "Please use the mime.mailcap.prioritize option instead."
 msgstr ""
 "Ta opcja jest przedawniona i zostanie wkrótce usuniêta.\n"
-"U¿yj zamiast niej mime.mailcap.prioritize ."
+"U¿yj zamiast niej mime.mailcap.prioritize."
 
 #: src/config/options.inc:995
 msgid "No-proxy domains"
@@ -3725,8 +3724,8 @@ msgid ""
 msgstr ""
 "Ogranicza ELinksa, tak ¿e mo¿e on byæ u¿ywany na anonimowym\n"
 "koncie. Bez przegl±dania lokalnych plików, bez pobierania plików.\n"
-"U¿ywanie przegl±darek jest dozwolone, ale bez mo¿liwo¶ci modyfikacji\n"
-"pozycji w tabeli skojarzeñ."
+"U¿ywanie przegl±darek jest dozwolone, ale bez mo¿liwo¶ci\n"
+"modyfikacji pozycji w tabeli skojarzeñ."
 
 #
 #: src/config/options.inc:2031
@@ -3941,7 +3940,7 @@ msgstr ""
 " -eval 'set protocol.file.allow_special_files = 1' file:///dev/stdin\n"
 "U¿ywaj tego, które bardziej Ci siê podoba. Wiedz, ¿e czytanie\n"
 "ze standardowego wej¶cia DZIA£A TYLKO RAZEM z -dump LUB -source!!\n"
-"Chcia³bym wiedzieæ po co by¶ chcia³ u¿ywaæ -source -stdin, chocia¿ ;-)"
+"Chcia³bym wiedzieæ po co by¶ chcia³(a) u¿ywaæ -source -stdin, chocia¿ ;-)"
 
 #: src/config/options.inc:2141
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
@@ -4177,7 +4176,7 @@ msgid ""
 "Software Foundation; either version 2 of the License, or (at your option) "
 "any later version."
 msgstr ""
-"Elinks %s\n"
+"ELinks %s\n"
 "\n"
 "\n"
 "(C) 1999 - 2002 Mikulas Patocka\n"
@@ -4383,7 +4382,7 @@ msgstr "~Zamknij tab"
 
 #: src/dialogs/menu.c:487
 msgid "~ELinks homepage"
-msgstr "Strona domowa ~Elinksa"
+msgstr "Strona domowa ~ELinksa"
 
 #
 #: src/dialogs/menu.c:488
@@ -4400,7 +4399,7 @@ msgstr "Informacje o ~b³êdach"
 
 #: src/dialogs/menu.c:493
 msgid "~ELinks CvsWeb"
-msgstr "~Elinks CVSWeb"
+msgstr "~ELinks CVSWeb"
 
 #: src/dialogs/menu.c:496
 msgid "~Copying"
@@ -4673,7 +4672,7 @@ msgid ""
 "$HOME variable set correctly and if you have write permission to your home "
 "directory."
 msgstr ""
-"Nie mo¿na znale¼æ ani stworzyæ katalogu konfiguracyjnego Elinksa. Sprawd¼, "
+"Nie mo¿na znale¼æ ani stworzyæ katalogu konfiguracyjnego ELinksa. Sprawd¼, "
 "czy zmienna $HOME jest ustawiona poprawnie i czy masz prawo zapisu do "
 "katalogu domowego."
 
@@ -5102,7 +5101,7 @@ msgid ""
 "\n"
 "Press ESC for menu. Documentation is available in Help menu."
 msgstr ""
-"Witaj w Elinksie!\n"
+"Witaj w ELinksie!\n"
 "\n"
 "Wci¶nij ESC aby wywo³aæ menu. Wybierz Pomoc->Podrêcznik z menu aby zapoznaæ "
 "siê z instrukcj± u¿ytkowania programu."
@@ -5139,7 +5138,7 @@ msgid ""
 msgstr ""
 "Opcja config.saving_style jest ustawiona na przestarza³± warto¶æ. Algorytm "
 "zapisu konfiguracji ELinksa zmieni³a siê od poprzedniego uaktualnienia "
-"Elinksa przez Ciebie. Teraz tylko opcje, które zosta³y zmienione s± "
+"ELinksa przez Ciebie. Teraz tylko opcje, które zosta³y zmienione s± "
 "zapisywane w pliku konfiguracyjnym zamiast wszystkich opcji. To upraszcza "
 "nasz± sytuacjê zdecydowanie, gdy zauwa¿ymy, ¿e pewne opcje maj± niepoprawne "
 "domy¶lne warto¶ci lub gdy bêdziemy zmuszeni do zmiany semantyki jaki¶ "
@@ -5451,18 +5450,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1478 src/viewer/viewer.c:1482
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "    %s%s%s %s (default: %d)"
-#~ msgstr "    %s%s%s %s (domy¶lnie: %d)"
-
-#~ msgid "    %s%s%s %s (default: \"%s\")"
-#~ msgstr "    %s%s%s %s (domy¶lnie: \"%s\")"
-
-#~ msgid "    %s%s%s %s (alias for %s)"
-#~ msgstr "    %s%s%s %s (alias dla %s)"
-
-#~ msgid "    %s%s%s %s (default: %s)"
-#~ msgstr "    %s%s%s %s (domy¶lnie: %s)"
-
-#~ msgid "    %s%s%s %s (default: #%06x)"
-#~ msgstr "    %s%s%s %s (domy¶lnie: #%06x)"

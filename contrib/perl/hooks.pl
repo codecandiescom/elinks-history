@@ -76,6 +76,42 @@ sub goto_url_hook
 		return $url;
 	}
 
+	# /. dumb prefix
+	if ($url =~ '^\/\.$')
+	{
+		$url = 'http://slashdot.org';
+		return $url;
+	}
+
+	# xiferp trams elgooG
+	if ($url =~ '^(eg|elgoog|hcraes|dnif)(| .*)$')
+	{
+		my ($hcraes) = $url =~ /^[a-z]* (.*)/;
+		if ($hcraes)
+		{
+			$url = 'http://alltooflat.com/geeky/elgoog/m/index.cgi?page=%2fsearch&cgi=get&q=' . $hcraes;
+		}
+		else
+		{
+			$url = 'http://alltooflat.com/geeky/elgoog/m/index.cgi';
+		}
+		return $url;
+	}
+
+	# the Bastard Operator from Hell
+	if ($url =~ '^bofh$')
+	{
+		$url = 'http://prime-mover.cc.waikato.ac.nz/Bastard.html';
+		return $url;
+	}
+
+	# torrent search
+	if ($url =~ '^(bittorrent|torrent|bt)( .*)$')
+	{
+		my ($torrent) = $url =~ /^[a-z]* (.*)/;
+		$url = 'http://google.com/search?q=filetype:torrent ' . $torrent . '&hl=xx-bork';
+	}
+
 	return $url;
 }
 

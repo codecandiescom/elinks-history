@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.97 2003/07/09 23:56:37 jonas Exp $ */
+/* $Id: connection.c,v 1.98 2003/07/23 12:59:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -151,7 +151,7 @@ get_host_connection(struct connection *c)
 
 	if (!host) return NULL;
 	foreach (connection, host_connections)
-		if (!strncmp(connection->host, host, hostlen))
+		if (!strncmp(connection->host, -1, host, hostlen))
 			return connection;
 
 	return NULL;
@@ -458,7 +458,7 @@ get_keepalive_connection(struct connection *c)
 	foreach (connection, keepalive_connections)
 		if (connection->protocol == handler
 		    && connection->port == port
-		    && !strncmp(connection->host, host, hostlen))
+		    && !strlcmp(connection->host, -1, host, hostlen))
 			return connection;
 
 	return NULL;
@@ -674,7 +674,7 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 		if (get_priority(d) <= priority) return -1;
 		if (d->state == S_WAIT) continue;
 		if (d->uri.post && get_priority(d) < PRI_CANCEL) continue;
-		if (ho && strncmp(c->uri.host, ho, c->uri.hostlen)) continue;
+		if (ho && strlcmp(ho, -1, c->uri.host, c->uri.hostlen)) continue;
 		suspend_connection(d);
 		return 0;
 	}

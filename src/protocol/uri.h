@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.136 2004/08/01 20:33:51 pasky Exp $ */
+/* $Id: uri.h,v 1.137 2004/08/01 20:40:04 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -84,7 +84,8 @@ enum uri_errno parse_uri(struct uri *uri, unsigned char *uristring);
 
 
 enum uri_component {
-	/* The "raw" URI components */
+	/**** The "raw" URI components */
+
 	URI_PROTOCOL		= (1 << 0),
 	URI_USER		= (1 << 1),
 	URI_PASSWORD		= (1 << 2),
@@ -95,6 +96,10 @@ enum uri_component {
 	URI_FRAGMENT		= (1 << 7),
 	URI_POST		= (1 << 8),
 	URI_POST_INFO		= (1 << 9),
+
+
+	/**** Flags affecting appearance of the components above, or special
+	 * mutations of mixups of some of the raw components. */
 
 	/* Control for ``encoding'' URIs into Internationalized Domain Names.
 	 * Hopefully only a few lowlevel places should have to use it and it
@@ -111,7 +116,8 @@ enum uri_component {
 	/* Add query part from uri->data not including the '?' */
 	URI_QUERY		= (1 << 13),
 
-	/* Some predefined classes for formatting of URIs */
+
+	/**** Some predefined classes for formatting of URIs */
 
 	/* Special flags */
 	URI_SPECIAL		= URI_DEFAULT_PORT | URI_PATH | URI_FILENAME | URI_QUERY,

@@ -1320,7 +1320,10 @@ unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form
 				pos = stracpy(pos);
 				*poss = 0;
 			}
-			strcat(go, "?");
+			if (strchr(go, '?'))
+			  strcat(go, "&");
+			else
+			  strcat(go, "?");
 			strcat(go, data);
 			if (pos) strcat(go, pos), mem_free(pos);
 		}

@@ -1040,7 +1040,7 @@ void get_html_form(unsigned char *a, struct form *form)
 	} else {
 		if ((ch = strchr(form->action = stracpy(format.href_base), POST_CHAR))) *ch = 0;
 	}
-	if ((ch = strchr(form->action, '?'))) *ch = 0;
+/*	if ((ch = strchr(form->action, '?'))) *ch = 0;*/
 	if ((al = get_target(a))) {
 		form->target = al;
 	} else {
@@ -1048,10 +1048,6 @@ void get_html_form(unsigned char *a, struct form *form)
 	}
 	form->method = FM_GET;
 	if ((al = get_attr_val(a, "method"))) {
-		if (!strcasecmp(al, "get")) {
-			form->method = FM_GET;
-			if (ch = strchr(form->action, '?')) *ch = 0;
-		}
 		if (!strcasecmp(al, "post")) {
 			char *ax;
 			form->method = FM_POST;

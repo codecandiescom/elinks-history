@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.7 2004/01/26 04:42:09 jonas Exp $ */
+/* $Id: exmode.c,v 1.8 2004/01/26 04:47:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@
 /* TODO: Backspace on empty field cancels the field. And so does <Esc>, for
  * that matter. --pasky */
 
+#define EXMODE_BUFFER_SIZE 80
 
 struct exmode_data {
 	struct widget_data *inpfield_data;
@@ -42,6 +43,7 @@ struct exmode_data {
 	struct dialog_data dlg_data;
 	struct dialog dlg;
 	struct session *ses;
+	unsigned char buffer[EXMODE_BUFFER_SIZE];
 };
 
 
@@ -138,7 +140,6 @@ exmode_func(struct window *win, struct term_event *ev, int fwd)
 			break;
 
 		case EV_ABORT:
-			mem_free(data->inpfield->data);
 			break;
 	}
 }
@@ -161,12 +162,7 @@ exmode_start(struct session *ses)
 	data->inpfield = data->dlg.widgets;
 	data->inpfield->ops = &field_ops;
 	data->inpfield->info.field.float_label = 1;
-	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, mem_alloc(81), NULL);
-	if (!data->inpfield->data) {
-		mem_free(data);
-		return;
-	}
-	*data->inpfield->data = 0;
+	add_dlg_field(&data->dlg, ":", 0, 0, NULL, 80, data->buffer, NULL);
 
 	data->inpfield_data = selected_widget(&data->dlg_data);
 	data->inpfield_data->widget = data->inpfield;

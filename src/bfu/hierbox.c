@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.198 2004/11/23 13:08:29 zas Exp $ */
+/* $Id: hierbox.c,v 1.199 2004/12/03 10:06:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,7 +248,7 @@ hierbox_ev_init(struct dialog_data *dlg_data)
 		litem->visible = 1;
 	}
 
-	return EVENT_NOT_PROCESSED;
+	return EVENT_NOT_PROCESSED;	/* FIXME: is this correct ? --Zas */
 }
 
 static t_handler_event_status
@@ -273,7 +273,7 @@ hierbox_ev_abort(struct dialog_data *dlg_data)
 		}
 	}
 
-	return EVENT_NOT_PROCESSED;
+	return EVENT_NOT_PROCESSED; /* FIXME: is this correct ? --Zas */
 }
 
 
@@ -716,12 +716,12 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	unsigned char *text;
 	enum delete_error delete;
 
-	if (!box->sel) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
 
 	assert(box->ops && box->ops->can_delete && box->ops->delete);
 
 	context = init_listbox_context(box, term, box->sel, scan_for_marks);
-	if (!context) return 0;
+	if (!context) return EVENT_PROCESSED;
 
 	context->widget_data = dlg_data->widgets_data;
 
@@ -742,7 +742,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 			context, 2,
 			N_("Yes"), push_ok_delete_button, B_ENTER,
 			N_("No"), done_listbox_context, B_ESC);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	delete = box->ops->can_delete(context->item)
@@ -751,13 +751,13 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	if (delete == DELETE_IMPOSSIBLE || box->ops->is_used(context->item)) {
 		print_delete_error(context->item, term, box->ops, delete);
 		mem_free(context);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	text = box->ops->get_text(context->item, term);
 	if (!text) {
 		mem_free(context);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	if (context->item->type == BI_FOLDER) {
@@ -803,7 +803,7 @@ push_hierbox_delete_button(struct dialog_data *dlg_data,
 	}
 	mem_free(text);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -840,12 +840,12 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 	unsigned char *title = N_("Clear all items");
 	unsigned char *message = N_("Do you really want to remove all items?");
 
-	if (!box->sel) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
 
 	assert(box->ops);
 
 	context = init_listbox_context(box, term, NULL, scan_for_used);
-	if (!context) return 0;
+	if (!context) return EVENT_PROCESSED;
 
 	if (context->item) {
 		/* FIXME: If the clear button should be used for browsers where
@@ -854,7 +854,7 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 		 * error types. */
 		print_delete_error(context->item, term, box->ops, DELETE_LOCKED);
 		mem_free(context);
-		return 0;
+		return EVENT_PROCESSED;
 	}
 
 	if (box->ops->messages) {
@@ -871,7 +871,7 @@ push_hierbox_clear_button(struct dialog_data *dlg_data,
 		N_("Yes"), do_clear_browser, B_ENTER,
 		N_("No"), NULL, B_ESC);
 
-	return 0;
+	return EVENT_PROCESSED;
 }
 
 
@@ -954,7 +954,7 @@ push_hierbox_search_button(struct dialog_data *dlg_data,
 	struct terminal *term = dlg_data->win->term;
 	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
 
-	if (!box->sel) return 0;
+	if (!box->sel) return EVENT_PROCESSED;
 
 	assert(box->ops->match);
 
@@ -963,5 +963,5 @@ push_hierbox_search_button(struct dialog_data *dlg_data,
 		MAX_STR_LEN, "", 0, 0, NULL,
 		search_hierbox_browser, NULL);
 
-	return 0;
+	return EVENT_PROCESSED;
 }

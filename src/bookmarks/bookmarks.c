@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.81 2003/10/25 00:04:28 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.82 2003/10/25 10:26:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,7 +339,7 @@ free_bookmarks(struct list_head *bookmarks_list,
 
 /* Does final cleanup and saving of bookmarks */
 void
-finalize_bookmarks(void)
+done_bookmarks(void)
 {
 	write_bookmarks();
 	free_bookmarks(&bookmarks, &bookmark_box_items);

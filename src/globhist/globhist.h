@@ -1,4 +1,4 @@
-/* $Id: globhist.h,v 1.11 2003/10/24 19:43:26 jonas Exp $ */
+/* $Id: globhist.h,v 1.12 2003/10/25 10:26:03 pasky Exp $ */
 
 #ifndef EL__GLOBHIST_GLOBHIST_H
 #define EL__GLOBHIST_GLOBHIST_H
@@ -36,7 +36,7 @@ extern unsigned char *gh_last_searched_title;
 extern unsigned char *gh_last_searched_url;
 
 void init_global_history(void);
-void finalize_global_history(void);
+void done_global_history(void);
 
 void delete_global_history_item(struct global_history_item *);
 struct global_history_item *get_global_history_item(unsigned char *);

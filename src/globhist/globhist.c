@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.35 2003/10/24 19:43:26 jonas Exp $ */
+/* $Id: globhist.c,v 1.36 2003/10/25 10:26:03 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -42,7 +42,7 @@ INIT_LIST_HEAD(gh_box_items);
 INIT_LIST_HEAD(gh_boxes);
 
 
-/* GUI stuff. Declared here because finalize_global_history() frees it. */
+/* GUI stuff. Declared here because done_global_history() frees it. */
 unsigned char *gh_last_searched_title = NULL;
 unsigned char *gh_last_searched_url = NULL;
 
@@ -482,7 +482,7 @@ init_global_history(void)
 }
 
 void
-finalize_global_history(void)
+done_global_history(void)
 {
 	if (global_history_write_timer >= 0)
 		kill_timer(global_history_write_timer);

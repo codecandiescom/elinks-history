@@ -1,4 +1,4 @@
-/* $Id: bookmarks.h,v 1.20 2003/10/24 23:46:22 pasky Exp $ */
+/* $Id: bookmarks.h,v 1.21 2003/10/25 10:26:03 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_BOOKMARKS_H
 #define EL__BOOKMARKS_BOOKMARKS_H
@@ -37,7 +37,7 @@ void write_bookmarks(void);
 
 /* Life functions */
 void init_bookmarks(void);
-void finalize_bookmarks(void);
+void done_bookmarks(void);
 
 int delete_bookmark(struct bookmark *);
 struct bookmark *add_bookmark(struct bookmark *, int, const unsigned char *, const unsigned char *);

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.132 2003/10/24 23:46:21 pasky Exp $ */
+/* $Id: main.c,v 1.133 2003/10/25 10:26:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,10 +244,10 @@ terminate_all_subsystems(void)
 		save_url_history();
 		save_search_history();
 #ifdef GLOBHIST
-		finalize_global_history();
+		done_global_history();
 #endif
 #ifdef BOOKMARKS
-		finalize_bookmarks();
+		done_bookmarks();
 #endif
 #ifdef COOKIES
 		cleanup_cookies();

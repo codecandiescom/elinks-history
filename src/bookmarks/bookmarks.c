@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.64 2002/12/08 20:33:28 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.65 2002/12/20 15:26:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,6 +67,8 @@ struct bookmark *
 add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 	     const unsigned char *url)
 {
+	unsigned char *p;
+	int i;
 	struct bookmark *bm = mem_alloc(sizeof(struct bookmark));
 
 	if (!bm) return NULL;
@@ -83,6 +85,20 @@ add_bookmark(struct bookmark *root, int place, const unsigned char *title,
 		mem_free(bm);
 		return NULL;
 	}
+
+	p = bm->title;
+	for (i = strlen(p) - 1; i >= 0; i--)
+		if (p[i] < ' ')
+			p[i] = ' ';
+
+	p = bm->url;
+	for (i = strlen(p) - 1; i >= 0; i--)
+		if (p[i] < ' ') {
+			mem_free(bm->url);
+			mem_free(bm->title);
+			mem_free(bm);
+			return NULL;
+		}
 
 	bm->root = root;
 	init_list(bm->child);

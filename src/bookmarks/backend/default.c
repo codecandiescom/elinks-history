@@ -1,5 +1,5 @@
 /* Internal bookmarks support - default file format backend */
-/* $Id: default.c,v 1.4 2002/12/13 12:42:09 zas Exp $ */
+/* $Id: default.c,v 1.5 2002/12/20 15:26:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,22 +129,6 @@ write_bookmarks_default(struct secure_save_info *ssi, struct list_head *bookmark
 	struct bookmark *bm;
 
 	foreach (bm, *bookmarks) {
-		unsigned char *p;
-		int i;
-		int bad = 0;
-
-		p = bm->title;
-		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ')
-				p[i] = ' ';
-
-		p = bm->url;
-		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ')
-				bad = 1; /* Incorrect url, skip it. */
-
-		if (bad) continue;
-
 		secure_fprintf(ssi, "%s\t%s\t%d\t", bm->title, bm->url, bm->box_item->depth);
 		if (bm->box_item->type == BI_FOLDER)
 			secure_fputc(ssi, 'F');

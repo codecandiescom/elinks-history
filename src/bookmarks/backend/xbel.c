@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.14 2002/12/17 13:48:05 pasky Exp $ */
+/* $Id: xbel.c,v 1.15 2002/12/20 15:26:29 zas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -88,6 +88,8 @@ read_bookmarks_xbel(FILE *f)
 {
 	unsigned char in_buffer[BUFSIZ];
 	XML_Parser p;
+	int done = 0;
+	int err = 0;
 
 	readok = 0;
 
@@ -95,48 +97,39 @@ read_bookmarks_xbel(FILE *f)
 	if (!p) {
 		fprintf(stderr, "read_bookmarks_xbel(): "
 				"Error in XML_ParserCreate()\n\007");
-		sleep(1);
 		return;
 	}
 
 	XML_SetElementHandler(p, on_element_open, on_element_close);
 	XML_SetCharacterDataHandler(p, on_text);
 
-	for (;;) {
-		int len;
-		int done;
+	while (!done && !err) {
+		int len = fread(in_buffer, 1, BUFSIZ, f);
 
-		len = fread(in_buffer, 1, BUFSIZ, f);
 		if (ferror(f)) {
 			fprintf(stderr, "read_bookmarks_xbel(): "
 					"Error reading %s\n\007",
 					filename_bookmarks_xbel(0));
+			err = 1;
+		} else {
 
-			free_xbeltree(root_node);
-			sleep(1);
-			return;
-		}
+			done = feof(f);
 
-		done = feof(f);
-
-		if (!XML_Parse(p, in_buffer, len, done)) {
-			fprintf(stderr, "read_bookmarks_xbel(): "
-					"Parse error in %s at line %d:\n%s\n\007",
+			if (!err && !XML_Parse(p, in_buffer, len, done)) {
+				fprintf(stderr, "read_bookmarks_xbel(): "
+					"Parse error in %s at line %d column %d:\n%s\n\007",
 					filename_bookmarks_xbel(0),
 					XML_GetCurrentLineNumber(p),
+					XML_GetCurrentColumnNumber(p),
 					XML_ErrorString(XML_GetErrorCode(p)));
-
-			free_xbeltree(root_node);
-			sleep(1);
-			return;
+				err = 1;
+			}
 		}
-
-		if (done) break;
 	}
 
-	if (xbeltree_to_bookmarks_list(root_node, NULL)) readok = 1;
+	if (!err) readok = xbeltree_to_bookmarks_list(root_node, NULL);
 
-	free_xbeltree(root_node);
+	XML_ParserFree(p);
 }
 
 static void
@@ -200,10 +193,7 @@ print_xml_entities(struct secure_save_info *ssi, const unsigned char *str)
 				secure_fprintf(ssi, "&#%i;", (int) *str);
 			}
 			else {
-				char *tmp;
-
-				tmp = u2cp(*str, cp);
-				print_xml_entities(ssi, tmp);
+				print_xml_entities(ssi, u2cp(*str, cp));
 			}
 		}
 	}
@@ -219,8 +209,9 @@ write_bookmarks_list(struct secure_save_info *ssi, struct list_head *bookmarks,
 	struct bookmark *bm;
 
 	foreach(bm, *bookmarks) {
+		indentation(ssi, n + 1);
+
 		if (bm->box_item->type == BI_FOLDER) {
-			indentation(ssi, n + 1);
 			secure_fputs(ssi, "<folder folded=\"");
 			secure_fputs(ssi, bm->box_item->expanded ? "no" : "yes");
 			secure_fputs(ssi, "\">\n");
@@ -237,7 +228,6 @@ write_bookmarks_list(struct secure_save_info *ssi, struct list_head *bookmarks,
 			secure_fputs(ssi, "</folder>\n\n");
 		} else {
 
-			indentation(ssi, n + 1);
 			secure_fputs(ssi, "<bookmark href=\"");
 			print_xml_entities(ssi, bm->url);
 			secure_fputs(ssi, "\">\n");
@@ -315,7 +305,7 @@ on_element_close(void *data, const char *name)
 }
 
 static unsigned char *
-delete_whites(char *s)
+delete_whites(unsigned char *s)
 {
 	unsigned char *r;
 	int count = 0, c = 0, i;

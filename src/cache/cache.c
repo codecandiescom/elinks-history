@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.71 2003/11/08 01:58:46 pasky Exp $ */
+/* $Id: cache.c,v 1.72 2003/11/08 01:59:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -574,7 +574,7 @@ shrinked_enough:
 		 * be enough to free the huge entry. This actually fixes that
 		 * situation. */
 
-		for (entry = ce; (void *)entry != &cache; entry = entry->next) {
+		for (entry = ce; (void *) entry != &cache; entry = entry->next) {
 			long newer_cache_size = new_cache_size + entry->data_size;
 
 			if (newer_cache_size <= gc_cache_size) {
@@ -588,7 +588,7 @@ shrinked_enough:
 	/* Scanning cache, pass #4:
 	 * Destroy the marked entries. So sad, but that's life, bro'. */
 
-	for (entry = ce; (void *)entry != &cache;) {
+	for (entry = ce; (void *) entry != &cache; ) {
 		entry = entry->next;
 		if (entry->prev->gc_target)
 			delete_cache_entry(entry->prev);

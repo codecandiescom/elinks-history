@@ -46,6 +46,12 @@ Go and submit the first form you'll stumble upon.
 ID of session (ELinks instance) which we want to clone.
 This is internal ELinks option, you don't want to use it.
 .TP
+\fB-confdir <str> (default: "") \fR
+Set the config dir to the given path. ELinks will read
+its config files and writes to it. If the path begins with
+a '/' its used as an absolute path. Else it is assumed to
+be relative to your \fBHOME\fR dir.
+.TP
 \fB-default-mime-type (alias for mime.default_type) \fR
 Default MIME type to assume for documents of unknown type.
 .TP
@@ -122,13 +128,23 @@ effect if not used in connection with any of these options.
 \fB-version \fR
 Print ELinks version information and exit.
 .SH "ENVIRONMENT VARIABLES"
+.PP
+ELinks uses the following environments variables.
+.TP
+\fB COMSPEC, SHELL \fR
+The shell used for File -> OS Shell on DOS/Windows and UNIX, respectively.
+.TP
+\fB EDITOR \fR
+The program to use for external editor (when editing textareas).
 .TP
 \fB ELINKS_CONFDIR \fR
 The location of the directory containing configuration files.
 If not set the default is \fI~/.elinks/\fR.
 .TP
-\fB WWW_HOME \fR
-Homepage location (as in \fBlynx(1)\fR)
+\fB ELINKS_TWTERM , LINKS_TWTERM \fR
+The command to run when selecting File ->
+New window and if \fBTWDISPLAY\fR
+is defined (default \fBtwterm -e\fR)
 .TP
 \fB ELINKS_XTERM , LINKS_XTERM \fR
 The command to run when selecting
@@ -136,17 +152,14 @@ File -> New window and if
 \fBDISPLAY\fR is defined (default \fBxterm
 -e\fR)
 .TP
-\fB ELINKS_TWTERM , LINKS_TWTERM \fR
-The command to run when selecting File ->
-New window and if \fBTWDISPLAY\fR
-is defined (default \fBtwterm -e\fR)
+\fB FTP_PROXY, HTTP_PROXY, HTTPS_PROXY \fR
+The host to proxy the various protocol traffic through.
 .TP
-\fB SHELL \fR
-Used for "File/OS Shell"
-menu
+\fB HOME \fR
+The path to the users home directory. Used when expanding ~/.
 .TP
-\fB COMSPEC \fR
-Used for "File/OS Shell" menu in DOS/Windows
+\fB WWW_HOME \fR
+Homepage location (as in \fBlynx(1)\fR)
 .SH "FILES"
 .TP
 \fB\fI@sysconfdir@/elinks.conf\fB\fR
@@ -161,11 +174,17 @@ Bookmarks file
 \fB\fI~/.elinks/cookies\fB\fR
 Cookies file
 .TP
+\fB\fI~/.elinks/formhist\fB\fR
+Form history file
+.TP
 \fB\fI~/.elinks/gotohist\fB\fR
 GoTo URL dialog history file
 .TP
 \fB\fI~/.elinks/globhist\fB\fR
 History file containing last 4096 URLs visited 
+.TP
+\fB\fI~/.elinks/searchhist\fB\fR
+Search history file
 .TP
 \fB\fI~/.elinks/socket\fB\fR
 Internal ELinks socket for communication between its instances.

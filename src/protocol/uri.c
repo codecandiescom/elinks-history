@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.129 2004/04/04 22:00:28 jonas Exp $ */
+/* $Id: uri.c,v 1.130 2004/04/04 22:30:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ get_protocol_length(const unsigned char *url)
 #define LOWEST_PORT 0
 #define HIGHEST_PORT 65535
 
-int
+enum uri_errno
 parse_uri(struct uri *uri, unsigned char *uristring)
 {
 	unsigned char *prefix_end, *host_end;
@@ -85,13 +85,13 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	/* Nothing to do for an empty url. */
 	if_assert_failed return 0;
-	if (!*uristring) return 0;
+	if (!*uristring) return URI_ERRNO_EMPTY;
 
 	uri->protocol_str = uristring;
 	uri->protocollen = get_protocol_length(uristring);
 
 	/* Invalid */
-	if (!uri->protocollen) return 0;
+	if (!uri->protocollen) return URI_ERRNO_INVALID_PROTOCOL;
 
 	/* Figure out whether the protocol is known */
 	uri->protocol = get_protocol(struri(uri), uri->protocollen);
@@ -104,12 +104,12 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (prefix_end[0] == '/' && prefix_end[1] == '/')
 		prefix_end += 2;
 	else if (known && get_protocol_need_slashes(uri->protocol))
-		return 0;
+		return URI_ERRNO_NO_SLASHES;
 
 	if (!known || get_protocol_free_syntax(uri->protocol)) {
 		uri->data = prefix_end;
 		uri->datalen = strlen(prefix_end);
-		return 1;
+		return URI_ERRNO_OK;
 	}
 
 	/* Isolate host */
@@ -155,7 +155,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 
 	if (known && !*host_end
 	    && get_protocol_need_slash_after_host(uri->protocol))
-		return 0;
+		return URI_ERRNO_NO_HOST_SLASH;
 
 #ifdef IPV6
 	if (rbracket) {
@@ -168,7 +168,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 			"parse_uri(): addrlen value is bad (%d) for URL '%s'. "
 			"Problems are likely to be encountered. Please report "
 			"this, it is a security bug!", addrlen, uristring);
-		if_assert_failed return 0;
+		if_assert_failed return URI_ERRNO_IPV6_SECURITY;
 
 		uri->host = lbracket + 1;
 		uri->hostlen = addrlen;
@@ -191,7 +191,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		/* TODO: possibly lookup for the service otherwise? --pasky */
 		for (; host_end < port_end; host_end++)
 			if (*host_end < '0' || *host_end > '9')
-				return 0;
+				return URI_ERRNO_INVALID_PORT;
 
 		/* Check valid port value, and let show an error message
 		 * about invalid url syntax. */
@@ -201,7 +201,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 			errno = 0;
 			n = strtol(uri->port, NULL, 10);
 			if (errno || n < LOWEST_PORT || n > HIGHEST_PORT)
-				return 0;
+				return URI_ERRNO_INVALID_PORT;
 		}
 	}
 
@@ -212,7 +212,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	uri->datalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
 	uri->post = prefix_end ? (prefix_end + 1) : NULL;
 
-	return 1;
+	return URI_ERRNO_OK;
 }
 
 int
@@ -329,7 +329,7 @@ add_string_uri_to_string(struct string *string, unsigned char *uristring,
 {
 	struct uri uri;
 
-	if (!parse_uri(&uri, uristring))
+	if (parse_uri(&uri, uristring) != URI_ERRNO_OK)
 		return NULL;
 
 	return add_uri_to_string(string, &uri, components);
@@ -344,7 +344,8 @@ translate_directories(unsigned char *uristring)
 	int lo;
 	struct uri uri;
 
-	if (!parse_uri(&uri, uristring) || !uri.data/* || *--url_data != '/'*/)
+	if (parse_uri(&uri, uristring) != URI_ERRNO_OK
+	    || !uri.data/* || *--url_data != '/'*/)
 		return;
 
 	/* dsep() *hint* *hint* */
@@ -523,7 +524,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 
 	if (!strncasecmp("proxy://", rel, 8)) goto prx;
 
-	if (parse_uri(&uri, rel)) {
+	if (parse_uri(&uri, rel) == URI_ERRNO_OK) {
 		n = stracpy(rel);
 		if (n) translate_directories(n);
 
@@ -537,7 +538,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 		while (n[0] && n[len - 1] <= ' ') n[--len] = 0;
 		add_to_strn(&n, "/");
 
-		if (parse_uri(&uri, n)) {
+		if (parse_uri(&uri, n) == URI_ERRNO_OK) {
 			translate_directories(n);
 			return n;
 		}
@@ -546,7 +547,7 @@ join_urls(unsigned char *base, unsigned char *rel)
 	}
 
 prx:
-	if (!parse_uri(&uri, base) || !uri.data) {
+	if (parse_uri(&uri, base) != URI_ERRNO_OK || !uri.data) {
 		INTERNAL("bad base url");
 		return NULL;
 	}
@@ -614,7 +615,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (!strncasecmp("proxy://", url, 8)) goto proxy;
 
 	/* Ordinary parse */
-	if (parse_uri(&uri, url)) {
+	if (parse_uri(&uri, url) == URI_ERRNO_OK) {
 		newurl = stracpy(url); /* XXX: Post data copy. */
 		if (newurl) {
 			transform_file_url(&newurl, cwd);
@@ -627,7 +628,7 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	/* Try to add slash to end */
 	if (strstr(url, "//") && (newurl = stracpy(url))) { /* XXX: Post data copy. */
 		add_to_strn(&newurl, "/");
-		if (parse_uri(&uri, newurl)) {
+		if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
 			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 
@@ -732,7 +733,7 @@ end:
 
 		if (not_file && !strchr(url, '/')) add_to_strn(&newurl, "/");
 
-		if (parse_uri(&uri, newurl)) {
+		if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
 			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 
@@ -750,7 +751,7 @@ end:
 	if (strncmp(ch + 1, "//", 2)) {
 		add_to_strn(&newurl, "//");
 		add_to_strn(&newurl, ch + 1);
-		if (parse_uri(&uri, newurl)) {
+		if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
 			transform_file_url(&newurl, cwd);
 			translate_directories(newurl);
 
@@ -760,7 +761,7 @@ end:
 
 	/* ..and with slash */
 	add_to_strn(&newurl, "/");
-	if (parse_uri(&uri, newurl)) {
+	if (parse_uri(&uri, newurl) == URI_ERRNO_OK) {
 		transform_file_url(&newurl, cwd);
 		translate_directories(newurl);
 
@@ -1001,7 +1002,7 @@ get_uri_cache_entry(unsigned char *string, int length)
 	memcpy(&entry->string, string, length);
 	string = entry->string;
 
-	if (!parse_uri(&entry->uri, string)
+	if (parse_uri(&entry->uri, string) != URI_ERRNO_OK
 	    || !add_hash_item(uri_cache.map, string, length, entry)) {
 		mem_free(entry);
 		return NULL;

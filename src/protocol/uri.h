@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.83 2004/04/04 06:15:54 jonas Exp $ */
+/* $Id: uri.h,v 1.84 2004/04/04 22:30:54 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -59,12 +59,22 @@ struct uri {
 	struct object object;
 };
 
+enum uri_errno {
+	URI_ERRNO_OK,			/* Parsing went well */
+	URI_ERRNO_EMPTY,		/* The URI string was empty */
+	URI_ERRNO_INVALID_PROTOCOL,	/* No protocol was found */
+	URI_ERRNO_NO_SLASHES,		/* Slashes after protocol missing */
+	URI_ERRNO_NO_HOST_SLASH,	/* Slash after host missing */
+	URI_ERRNO_IPV6_SECURITY,	/* IPv6 security bug detected */
+	URI_ERRNO_INVALID_PORT,		/* Port number is bad */
+	URI_ERRNO_INVALID_PORT_RANGE,	/* Port number is not within 0-65535 */
+};
 
 /* Initializes the members of the uri struct, as they are encountered.
  * If an uri component is recognized both it's length and starting point is
  * set. */
-/* Returns 1 if parsing went well or 0 if some error was found. */
-int parse_uri(struct uri *uri, unsigned char *uristring);
+/* Returns what error was encountered or URI_ERRNO_OK if parsing went well. */
+enum uri_errno parse_uri(struct uri *uri, unsigned char *uristring);
 
 
 /* Returns the raw zero-terminated URI string the (struct uri) is associated

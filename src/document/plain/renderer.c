@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.93 2004/04/03 14:13:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.94 2004/04/04 22:30:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ check_link_word(struct document *document, unsigned char *uri, int length,
 	if (mailto && mailto - uri < length) {
 		where = straconcat("mailto:", uri, NULL);
 
-	} else if (parse_uri(&test, uri)
+	} else if (parse_uri(&test, uri) == URI_ERRNO_OK
 		   && test.protocol != PROTOCOL_UNKNOWN
 		   && (test.datalen || test.hostlen)) {
 		where = memacpy(uri, length);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.251 2003/11/26 20:35:13 pasky Exp $ */
+/* $Id: session.c,v 1.252 2003/11/27 06:56:48 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -801,7 +801,7 @@ b:
 		case TASK_NONE:
 			break;
 		case TASK_FORWARD:
-			if (ses_chktype(ses, &ses->loading, stat, ce, 0)) {
+			if (ses_chktype(ses, &ses->loading, ce, 0)) {
 				free_task(ses);
 				reload(ses, CACHE_MODE_NORMAL);
 				return 2;
@@ -1125,7 +1125,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 
 		ses->loading_url = ftl->url;
 		ses->task_target_frame = ftl->target_frame;
-		ses_chktype(ses, &ftl->stat, NULL, ftl->ce, 1);
+		ses_chktype(ses, &ftl->stat, ftl->ce, 1);
 		ses->loading_url = loading_url;
 		ses->task_target_frame = target_frame;
 	}

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.6 2003/05/06 16:47:44 zas Exp $ */
+/* $Id: screen.c,v 1.7 2003/06/24 09:37:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,13 +153,15 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 void
 redraw_screen(struct terminal *term)
 {
-	int x, y, p = 0;
-	int cx = -1, cy = -1;
+	struct rs_opt_cache opt_cache;
 	unsigned char *a;
+	register int y = 0;
+	register int p = 0;
+	int cx = -1;
+	int cy = -1;
 	int attrib = -1;
 	int mode = -1;
 	int l = 0;
-	struct rs_opt_cache opt_cache;
 
 	if (!term->dirty || (term->master && is_blocked())) return;
 
@@ -194,18 +196,23 @@ redraw_screen(struct terminal *term)
 	opt_cache.koi8r = get_cp_index("koi8-r");
 #endif
 
-	for (y = 0; y < term->y; y++)
-		for (x = 0; x < term->x; x++, p++) {
-			if (y == term->y - 1 && x == term->x - 1) break;
+	for (; y < term->y; y++) {
+		register int x = 0;
+
+		for (; x < term->x; x++, p++) {
 #define TSP term->screen[p]
 #define TLSP term->last_screen[p]
 			if (TSP == TLSP) continue;
-			if ((TSP & 0x3800) == (TLSP & 0x3800)
-			    && ((TSP & 0xff) == 0 || (TSP & 0xff) == 1 ||
-				(TSP & 0xff) == ' ')
-			    && ((TLSP & 0xff) == 0 || (TLSP & 0xff) == 1 ||
-				(TLSP & 0xff) == ' '))
-				continue;
+			if ((TSP & 0x3800) == (TLSP & 0x3800)) {
+				int a = (TSP & 0xff);
+
+				if (a == 0 || a == 1 || a == ' ') {
+					a = (TLSP & 0xff);
+
+					if (a == 0 || a == 1 || a == ' ')
+						continue;
+				}
+			}
 #undef TSP
 #undef TLSP
 			if (cx == x && cy == y) {
@@ -213,9 +220,9 @@ redraw_screen(struct terminal *term)
 					   p, &mode, &attrib);
 				cx++;
 			} else if (cy == y && x - cx < 10) {
-				int i;
+				register int i = x - cx;
 
-				for (i = x - cx; i >= 0; i--) {
+				for (; i >= 0; i--) {
 					print_char(term, &opt_cache, &a, &l,
 						   p - i, &mode, &attrib);
 					cx++;
@@ -232,10 +239,11 @@ redraw_screen(struct terminal *term)
 				cx++;
 			}
 		}
+	}
 
 	if (l) {
 		if (opt_cache.colors)
-				add_to_str(&a, &l, "\033[37;40m");
+			add_to_str(&a, &l, "\033[37;40m");
 
 		add_to_str(&a, &l, "\033[0m");
 
@@ -258,9 +266,9 @@ redraw_screen(struct terminal *term)
 
 	if (l && term->master) want_draw();
 	hard_write(term->fdout, a, l);
+	mem_free(a);
 	if (l && term->master) done_draw();
 
-	mem_free(a);
 	memcpy(term->last_screen, term->screen, term->x * term->y * sizeof(int));
 	term->dirty = 0;
 }
@@ -268,8 +276,10 @@ redraw_screen(struct terminal *term)
 void
 erase_screen(struct terminal *term)
 {
-	if (term->master && is_blocked()) return;
-	if (term->master) want_draw();
+	if (term->master) {
+		if (is_blocked()) return;
+		want_draw();
+	}
 	hard_write(term->fdout, "\033[2J\033[1;1H", 10);
 	if (term->master) done_draw();
 }

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.13 2003/12/05 17:31:48 pasky Exp $ */
+/* $Id: cgi.c,v 1.14 2003/12/05 17:37:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,7 +217,7 @@ execute_cgi(struct connection *conn)
 	res = fork();
 	if (res < 0) {
 		state = -errno;
-		goto end1;
+		goto end0;
 	}
 	if (!res) { /* CGI script */
 		int i;
@@ -241,7 +241,7 @@ execute_cgi(struct connection *conn)
 		info = mem_calloc(1, sizeof(struct http_connection_info));
 		if (!info) {
 			state = S_OUT_OF_MEM;
-			goto end1;
+			goto end0;
 		}
 		mem_free(script);
 		conn->info = info;
@@ -257,6 +257,10 @@ execute_cgi(struct connection *conn)
 		send_request(conn);
 		return 0;
 	}
+
+end0:
+	close(pipe_read[0]); close(pipe_read[1]);
+	close(pipe_write[0]); close(pipe_write[1]);
 end1:
 	mem_free(script);
 end2:

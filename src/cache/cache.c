@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.65 2003/11/08 01:14:59 pasky Exp $ */
+/* $Id: cache.c,v 1.66 2003/11/08 01:33:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,17 +457,27 @@ void
 garbage_collection(int whole)
 {
 	struct cache_entry *ce, *entry;
-	long new_cache_size = cache_size;
 	/* We recompute cache_size when scanning cache entries, to ensure
 	 * consistency. */
 	long old_cache_size = 0;
+	/* The maximal cache size tolerated by user. Note that this is only
+	 * size of the "just stored" unused cache entries, used cache entries
+	 * are not counted to that. */
+	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
+	/* The low-treshold cache size. Basically, when the cache size is
+	 * higher than opt_cache_memory_size, we free the cache so that there
+	 * is no more than this value in the cache anymore. This is to make
+	 * sure we aren't cleaning cache too frequently when working with a lot
+	 * of small cache entries but rather free more and then let it grow a
+	 * little more as well. */
+	long opt_cache_gc_size = opt_cache_memory_size
+				 * MEMORY_CACHE_GC_PERCENT / 100;
+	/* The cache size we aim to reach. */
+	long new_cache_size = cache_size;
 	/* Whether we've hit an used (unfreeable) entry when collecting
 	 * garbage. */
 	int obstacle_entry = 0;
-	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
 	static long old_opt_cache_memory_size = -1;
-	long opt_cache_gc_size = opt_cache_memory_size
-				 * MEMORY_CACHE_GC_PERCENT / 100;
 
 	if (old_opt_cache_memory_size != opt_cache_memory_size) {
 		/* To force minimal cache size test in case of user changed

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.57 2003/06/11 09:59:59 miciah Exp $ */
+/* $Id: dialogs.c,v 1.58 2003/06/15 22:17:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -402,9 +402,9 @@ invalid_option:
 	}
 
 	option = box->sel->udata;
-	if (option->flags != OPT_AUTOCREATE) {
+	if (!(option->flags & OPT_AUTOCREATE)) {
 		if (box->sel->root) option = box->sel->root->udata;
-		if (!option || option->flags != OPT_AUTOCREATE)
+		if (!option || !(option->flags & OPT_AUTOCREATE))
 			goto invalid_option;
 	}
 
@@ -470,7 +470,7 @@ invalid_option:
 
 	option = box->sel->udata;
 	if (!box->sel->root ||
-	    ((struct option *) box->sel->root->udata)->flags != OPT_AUTOCREATE) {
+	    !(((struct option *) box->sel->root->udata)->flags & OPT_AUTOCREATE)) {
 		goto invalid_option;
 	}
 

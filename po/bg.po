@@ -61,19 +61,20 @@ msgstr "Не е позволен празен символен низ"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Грешка в XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:110
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Грешка четейки %s"
 
 #: src/bookmarks/backend/xbel.c:119
 #, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Синтактична грешка в %s, ред %d, колона %d:\n"
+"%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
 #, fuzzy
@@ -82,11 +83,11 @@ msgstr "Заглавие на връзката"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:641
 msgid "Add folder"
-msgstr ""
+msgstr "Добави папка"
 
 #: src/bookmarks/dialogs.c:170
 msgid "Folder name"
-msgstr ""
+msgstr "Име на папка"
 
 #: src/bookmarks/dialogs.c:171 src/config/dialogs.c:129
 #: src/config/dialogs.c:140 src/config/dialogs.c:329 src/config/dialogs.c:412
@@ -123,6 +124,8 @@ msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\""
+"\n"
+"Заглавие: \"%s\""
 msgstr "За съжаление тази отметка се използва от нещо в момента"
 
 #: src/bookmarks/dialogs.c:279
@@ -133,10 +136,13 @@ msgid ""
 "Title: \"%s\"\n"
 "URL: \"%s\""
 msgstr "За съжаление тази отметка се използва от нещо в момента"
+"\n"
+"Заглавие: \"%s\"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:413
 msgid "Delete marked bookmarks?"
-msgstr ""
+msgstr "Наистина ли желаете да изтриете маркираните отметки?"
 
 #: src/bookmarks/dialogs.c:415 src/bookmarks/dialogs.c:423
 #: src/bookmarks/dialogs.c:432 src/dialogs/menu.c:134 src/dialogs/mime.c:180
@@ -163,7 +169,6 @@ msgid ""
 "Delete bookmark \"%s\"?\n"
 "\n"
 "URL: \"%s\""
-msgstr "Изтриване на отметка"
 
 #: src/bookmarks/dialogs.c:610
 msgid "Bookmark manager"
@@ -185,7 +190,7 @@ msgstr "Изтрий"
 
 #: src/bookmarks/dialogs.c:636
 msgid "Move"
-msgstr ""
+msgstr "Премести"
 
 #: src/bookmarks/dialogs.c:646 src/config/dialogs.c:532
 #: src/config/dialogs.c:780
@@ -223,7 +228,7 @@ msgstr "Връзка(и)"
 
 #: src/config/conf.c:671
 msgid "File saving disabled by option"
-msgstr ""
+msgstr "Запазването на файл не е разрешено от настройка"
 
 #: src/config/conf.c:674 src/sched/error.c:44
 msgid "Out of memory"
@@ -246,7 +251,7 @@ msgstr "Грешка в настройките"
 #: src/config/dialogs.c:40
 #, fuzzy, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Не може да се пише във файла с настройките"
+msgstr "Не може да се пише във файла %s с настройките : %s"
 
 #: src/config/dialogs.c:119 src/config/dialogs.c:132 src/config/dialogs.c:520
 #: src/dialogs/document.c:49 src/dialogs/document.c:204
@@ -264,6 +269,12 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Име: %s\n"
+"Тип: %s\n"
+"Стойност: %s\n"
+"\n"
+"Описание:\n"
+"%s"
 
 #: src/config/dialogs.c:126 src/config/dialogs.c:138 src/config/dialogs.c:213
 msgid "N/A"
@@ -277,6 +288,10 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Име: %s\n"
+"Тип: %s\n"
+"Описание:\n"
+"%s"
 
 #: src/config/dialogs.c:189 src/protocol/url.c:64 src/sched/session.c:332
 #: src/viewer/text/view.c:2029
@@ -285,7 +300,7 @@ msgstr "Грешка"
 
 #: src/config/dialogs.c:190
 msgid "Bad option value."
-msgstr ""
+msgstr "Грешна стойност на опцията."
 
 #: src/config/dialogs.c:207 src/config/dialogs.c:411 src/dialogs/edit.c:26
 #: src/scripting/lua/core.c:304 src/scripting/lua/core.c:305
@@ -294,34 +309,36 @@ msgstr "Име"
 
 #: src/config/dialogs.c:208
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: src/config/dialogs.c:210
 #, fuzzy
 msgid "Value"
-msgstr "стойност"
+msgstr "Стойност"
 
 #: src/config/dialogs.c:211
 msgid "Description"
-msgstr ""
+msgstr "Описание"
 
 #: src/config/dialogs.c:361
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
+"Тази опция не може да се редактира. Това може да е папка, така че натиснете"
+" интервал, за да разгледате съдържанието й."
 
 #: src/config/dialogs.c:397 src/config/dialogs.c:411
 msgid "Add option"
-msgstr ""
+msgstr "Не може да се добави опция тук"
 
 #: src/config/dialogs.c:398
 msgid "Cannot add an option here."
-msgstr ""
+msgstr "Изтрий опция"
 
 #: src/config/dialogs.c:464 src/config/dialogs.c:478
 msgid "Delete option"
-msgstr ""
+msgstr "Не може да се изтрие опцията"
 
 #: src/config/dialogs.c:465
 msgid "Cannot delete this option."
@@ -334,7 +351,7 @@ msgstr "Изтрий разширение"
 
 #: src/config/dialogs.c:510
 msgid "Options manager"
-msgstr ""
+msgstr "Управление на настройките"
 
 #: src/config/dialogs.c:544 src/config/dialogs.c:798 src/dialogs/options.c:262
 #: src/sched/download.c:1192 src/sched/download.c:1232
@@ -343,11 +360,11 @@ msgstr "Запазване"
 
 #: src/config/dialogs.c:614 src/config/dialogs.c:636 src/config/dialogs.c:665
 msgid "Add keybinding"
-msgstr ""
+msgstr "Добави \"горещ\" клавиш"
 
 #: src/config/dialogs.c:615
 msgid "Invalid keystroke."
-msgstr ""
+msgstr "Невалиден клавиш"
 
 #: src/config/dialogs.c:637
 msgid "Need to select a keymap."
@@ -355,7 +372,7 @@ msgstr ""
 
 #: src/config/dialogs.c:652 src/config/options.c:2544
 msgid "Action"
-msgstr ""
+msgstr "Действие"
 
 #: src/config/dialogs.c:653
 msgid "Keymap"
@@ -367,6 +384,10 @@ msgid ""
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
+"Клавишната комбинация трябва да бъде записана в следния формат: "
+"[Префикс-]Клавиш\n"
+"Префикс: Shift, Ctrl, Alt\n"
+"Клавиш: a,b,c,...,1,2,3,...,Интервал,Up,PageDown,Tab,Enter,Insert,F5,..."
 
 #: src/config/dialogs.c:658
 msgid "Keystroke"
@@ -389,7 +410,7 @@ msgstr ""
 
 #: src/config/dialogs.c:770
 msgid "Keybinding manager"
-msgstr ""
+msgstr "Превключи екрана"
 
 #: src/config/dialogs.c:792 src/globhist/dialogs.c:485
 msgid "Toggle display"
@@ -410,28 +431,28 @@ msgstr ""
 #: src/config/kbdbind.c:366
 #, fuzzy
 msgid "Abort connection"
-msgstr "връзка(и)"
+msgstr "Прекъсни връзката"
 
 #: src/config/kbdbind.c:367
 #, fuzzy
 msgid "Add a new bookmark"
-msgstr "Добавяне на отметка"
+msgstr "Добави отметка"
 
 #: src/config/kbdbind.c:368
 msgid "Add a new bookmark using current link"
-msgstr ""
+msgstr "Добави нова отметка с текущата връзка"
 
 #: src/config/kbdbind.c:369
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Опитай автоматично да довършиш входа"
 
 #: src/config/kbdbind.c:370
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Върни се към предишния документ от историята"
 
 #: src/config/kbdbind.c:371
 msgid "Return to the previous document in history"
-msgstr ""
+msgstr "Изтрий символа пред курсора"
 
 #: src/config/kbdbind.c:372
 msgid "Delete character in front of the cursor"
@@ -444,23 +465,23 @@ msgstr "Управление на отметките"
 
 #: src/config/kbdbind.c:374
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Копирай текста в междинния буфер"
 
 #: src/config/kbdbind.c:375
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Изтрий текста от междинния буфер"
 
 #: src/config/kbdbind.c:376
 msgid "Delete text from clipboard"
-msgstr ""
+msgstr "Изтрий символа под курсора"
 
 #: src/config/kbdbind.c:377
 msgid "Delete character under cursor"
-msgstr ""
+msgstr "Покажи информация за текущата страница"
 
 #: src/config/kbdbind.c:378
 msgid "Show informations about the current page"
-msgstr ""
+msgstr "Премести курсора надолу"
 
 #: src/config/kbdbind.c:379
 msgid "Move cursor downwards"
@@ -478,33 +499,32 @@ msgstr "Свали изображение"
 
 #: src/config/kbdbind.c:382
 msgid "Begin editing"
-msgstr ""
+msgstr "Започни редактиране"
 
 #. FIXME
 #: src/config/kbdbind.c:383
 msgid "Go to the end of the page/line"
-msgstr ""
+msgstr "Отиди в края на страницата/реда"
 
 #: src/config/kbdbind.c:384
-#, fuzzy
 msgid "Follow the current link"
-msgstr "Проследи връзка"
+msgstr "Проследи връзката"
 
 #: src/config/kbdbind.c:385
 msgid "Follow the current link, forcing reload of the target"
-msgstr ""
+msgstr "Проследи връзката, презареждайки целевият документ"
 
 #: src/config/kbdbind.c:386
 msgid "Open the File menu"
-msgstr ""
+msgstr "Отвори Файл менюто"
 
 #: src/config/kbdbind.c:387
 msgid "Find the next occurrence of the current search text"
-msgstr ""
+msgstr "Намери следващото съвпадение на търсения текст"
 
 #: src/config/kbdbind.c:388
 msgid "Find the previous occurrence of the current search text"
-msgstr ""
+msgstr "Њамери предишното съвпађењие ња ћърсењия ћеќсћ"
 
 #: src/config/kbdbind.c:389
 #, fuzzy
@@ -513,41 +533,41 @@ msgstr "HTTP удостоверяване"
 
 #: src/config/kbdbind.c:390
 msgid "Open \"Go to URL\" dialog box"
-msgstr ""
+msgstr "Отвори диалогов прозорец \"Отвори нов URL\""
 
 #: src/config/kbdbind.c:391
 msgid "Open \"Go to URL\" dialog box containing the current URL"
-msgstr ""
+msgstr "Оћвори ђиаљоѓов прозореџ \"Оћвори њов URL\" с текущия URL"
 
 #: src/config/kbdbind.c:392
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr ""
+msgstr "Оћвори ђиаљоѓов прозореџ \"Оћвори њов URL\" с текущата връзка като URL"
 
 #: src/config/kbdbind.c:393
 msgid "Go to the homepage"
-msgstr ""
+msgstr "Отиди на домашната страница"
 
 #: src/config/kbdbind.c:394
 msgid "Show informations about the current page HTTP headers"
-msgstr ""
+msgstr "Покажи информация за HTTP заглавната част на текущата страница"
 
 #: src/config/kbdbind.c:395
 msgid "Open history manager"
-msgstr ""
+msgstr "Управление на историята"
 
 #: src/config/kbdbind.c:396
 msgid "Go to the start of the page/line"
-msgstr ""
+msgstr "Отиди в началото на страницата/реда"
 
 #: src/config/kbdbind.c:397
 #, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Изтрий разширение"
+msgstr "Изтрий до началото на реда"
 
 #: src/config/kbdbind.c:398
 #, fuzzy
 msgid "Delete to end of line"
-msgstr "Изтрий разширение"
+msgstr "Изтрий до края на реда"
 
 #: src/config/kbdbind.c:399
 msgid "Open keybinding manager"
@@ -560,7 +580,7 @@ msgstr "Блоков курсор"
 
 #: src/config/kbdbind.c:401
 msgid "Open the link context menu"
-msgstr ""
+msgstr "Отвори контекстното меню на връзката"
 
 #: src/config/kbdbind.c:402
 #, fuzzy
@@ -574,7 +594,7 @@ msgstr "Lua конзола"
 
 #: src/config/kbdbind.c:406
 msgid "Open a Lua console (DISABLED)"
-msgstr ""
+msgstr "Активирай меню"
 
 #. internal use only
 #: src/config/kbdbind.c:409
@@ -597,7 +617,7 @@ msgstr "Отвори в нов прозорец"
 
 #: src/config/kbdbind.c:413
 msgid "Open options manager"
-msgstr ""
+msgstr "Отвори управлението на настройките"
 
 #: src/config/kbdbind.c:414
 msgid "Move downwards by a page"
@@ -3762,6 +3782,12 @@ msgstr "Колони"
 
 #: src/dialogs/options.c:306
 msgid "Rows"
+#. Infinite loop prevention.
+#: src/lowlevel/select.c:346
+#, c-format
+msgid "%d select() failures."
+msgstr "%d select() пропада."
+
 msgstr "Редове"
 
 #: src/globhist/dialogs.c:140
@@ -3820,7 +3846,7 @@ msgstr ""
 #: src/lowlevel/af_unix.c:367 src/lowlevel/af_unix.c:426
 #, c-format
 msgid "socket() failed: %d (%s)"
-msgstr ""
+msgstr "JavaScript за сега не се поддържа."
 
 #: src/lowlevel/af_unix.c:376
 #, c-format
@@ -3913,7 +3939,7 @@ msgstr "Няма програма"
 #: src/protocol/user.c:106
 #, fuzzy, c-format
 msgid "No program specified for protocol %s."
-msgstr "Не е посочена програма за"
+msgstr "Не е посочена програма за протокол %s."
 
 #: src/protocol/user.c:134 src/sched/error.c:49
 msgid "Bad URL syntax"
@@ -3933,13 +3959,13 @@ msgstr "от"
 
 #: src/sched/download.c:241
 msgid "after resume"
-msgstr ""
+msgstr "след продължение"
 
 #: src/sched/download.c:247
 msgid "Average speed"
 msgstr "Средна скорост"
 
-#: src/sched/download.c:248
+#: src/sched/download.c:247
 msgid "Speed"
 msgstr "Скорост"
 
@@ -3974,7 +4000,7 @@ msgstr "Грешка при сваляне"
 #: src/sched/download.c:524
 #, fuzzy, c-format
 msgid "Could not create file %s: %s"
-msgstr "Не може да се пише във файл"
+msgstr "Не може да се пише във файл %s: %s"
 
 #: src/sched/download.c:558
 #, fuzzy, c-format
@@ -3989,14 +4015,14 @@ msgstr "Грешка при сваляне"
 msgid ""
 "Download complete:\n"
 "%s"
-msgstr "Свалянето привърши"
+msgstr "Свалянето привърши:\n%s"
 
 #: src/sched/download.c:710
 #, fuzzy
 msgid "File exists"
 msgstr "Файлови разширения"
 
-#: src/sched/download.c:711
+#: src/sched/download.c:710
 #, c-format
 msgid ""
 "This file already exists:\n"
@@ -4010,13 +4036,13 @@ msgstr ""
 msgid "Save under the alternative name"
 msgstr ""
 
-#: src/sched/download.c:719
+#: src/sched/download.c:718
 msgid "Overwrite the original file"
-msgstr ""
+msgstr "Запиши под друго име"
 
-#: src/sched/download.c:720
+#: src/sched/download.c:719
 msgid "Resume download of the original file"
-msgstr ""
+msgstr "Продължи тегленето на оригиналния файл"
 
 #: src/sched/download.c:804
 #, fuzzy, c-format
@@ -4034,7 +4060,9 @@ msgstr "Непознат тип"
 msgid ""
 "Content type is %s.\n"
 "Do you want to save or display this file?"
-msgstr "Желаете ли да запазите или покажете този файл на екрана?"
+msgstr
+"Типа на съдържанието е %s.\n"
+"Желаете ли да запазите или покажете този файл на екрана?"
 
 #: src/sched/download.c:1193 src/sched/download.c:1202
 #: src/sched/download.c:1233 src/sched/download.c:1245
@@ -4068,7 +4096,7 @@ msgstr "Отвори"
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
-msgstr ""
+msgstr "HTTP 100 (???)"
 
 #: src/sched/error.c:29
 msgid "Waiting in queue"
@@ -4209,16 +4237,16 @@ msgstr "текущо"
 #: src/sched/session.c:259
 #, fuzzy
 msgid "Untitled"
-msgstr "Заглавие на връзката"
+msgstr "Неозаглавен"
 
 #: src/sched/session.c:586
 #, fuzzy, c-format
 msgid "Do you want to follow redirect and post form data to url %s?"
 msgstr ""
 "Желаете ли да проследите препращането и да изпратите данните от формуляра "
-"към адрес"
+"към адрес %s?"
 
-#: src/sched/session.c:589
+#: src/sched/session.c:591
 #, fuzzy, c-format
 msgid "Do you want to post form data to url %s?"
 msgstr "Желаете да изпратите данните от формуляра към адрес"
@@ -4226,13 +4254,13 @@ msgstr "Желаете да изпратите данните от формуляра към адрес"
 #: src/sched/session.c:591
 #, fuzzy, c-format
 msgid "Do you want to repost form data to url %s?"
-msgstr "Желаете ли да препратите данните от формуляра към адрес"
+msgstr "Желаете ли да препратите данните от формуляра към адрес %s?"
 
 #: src/sched/session.c:597 src/sched/session.c:1107 src/sched/session.c:1127
 msgid "Warning"
 msgstr "Внимание"
 
-#: src/sched/session.c:1097
+#: src/sched/session.c:1098
 msgid "Welcome"
 msgstr "Здравейте"
 
@@ -4287,6 +4315,26 @@ msgstr "Потребителски диалог"
 msgid "Lua Error"
 msgstr "Грешка в Lua"
 
+#: src/scripting/lua/core.c:458
+msgid "A field"
+msgstr "Поле"
+
+#: src/scripting/lua/core.c:567
+msgid "User dialog"
+msgstr "Потребителски диалог"
+
+#: src/scripting/lua/core.c:685
+msgid "Lua Error"
+msgstr "Грешка в Lua"
+
+#: src/scripting/lua/core.c:807
+msgid "Lua Console"
+msgstr "Lua конзола"
+
+#: src/scripting/lua/core.c:807
+msgid "Enter expression"
+msgstr "Въведете израз"
+
 #: src/scripting/lua/core.c:807
 msgid "Lua Console"
 msgstr "Lua конзола"
@@ -4321,7 +4369,7 @@ msgstr ""
 #: src/terminal/terminal.c:321
 #, c-format
 msgid "Bad terminal size: %d, %d"
-msgstr ""
+msgstr "Стандартен"
 
 #: src/util/version.c:46
 msgid "Text WWW browser"
@@ -4397,7 +4445,7 @@ msgstr "Няма предишно търсене"
 #: src/viewer/text/view.c:2511
 #, fuzzy, c-format
 msgid "Search string '%s' not found"
-msgstr "Търсеният символен низ не е открит"
+msgstr "Търсеният символен низ '%s' не е открит"
 
 #: src/viewer/text/view.c:2755
 msgid "Go to link"
@@ -4435,7 +4483,7 @@ msgstr "Отвори в нов прозорец"
 msgid "~Download link"
 msgstr "Свали (дръпни, изтегли) връзка"
 
-#: src/viewer/text/view.c:3498
+#: src/viewer/text/view.c:3484
 msgid "~Add link to bookmarks"
 msgstr "Добави връзката към отметките"
 
@@ -4519,7 +4567,7 @@ msgstr "стойност"
 msgid "hit ENTER to"
 msgstr "натиснете ENTER, за да"
 
-#: src/viewer/text/view.c:3709
+#: src/viewer/text/view.c:3695
 msgid "submit to"
 msgstr "потвърдете към адрес"
 

@@ -115,6 +115,9 @@ Denis Lackovic <delacko@fly.srk.fer.hr>
 Dimitar Dimitrov <mitaka_ddd@yahoo.com>
 	Bulgarian translation updates
 
+dinux <dinux@mail.bg>
+	Bulgarian translation updates
+
 D.J. Bernstein <djb@cr.yp.to>
 	ftpparse.{c,h}
 
@@ -442,4 +445,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.127 2003/06/20 14:08:43 pasky Exp $
+$Id: AUTHORS,v 1.128 2003/06/24 17:52:34 pasky Exp $

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.141 2004/01/09 10:27:57 miciah Exp $ */
+/* $Id: file.c,v 1.142 2004/01/24 22:32:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,6 +562,52 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 	return S_OK;
 }
 
+static enum connection_state
+read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
+{
+	struct stream_encoded *stream;
+	struct stat stt;
+	enum stream_encoding encoding = ENCODING_NONE;
+	int fd = open(filename, O_RDONLY | O_NOCTTY);
+	enum connection_state state;
+	int saved_errno = errno;
+
+	if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
+		encoding = try_encoding_extensions(filename, filenamelen, &fd);
+
+	} else if (fd != -1) {
+		encoding = guess_encoding(filename);
+	}
+
+	if (fd == -1) return (enum connection_state) -saved_errno;
+
+	/* Some file was opened so let's get down to bi'ness */
+	set_bin(fd);
+
+	/* Do all the necessary checks before trying to read the file.
+	 * @state code is used to block further progress. */
+	if (fstat(fd, &stt)) {
+		state = -errno;
+
+	} else if (!S_ISREG(stt.st_mode) && encoding != ENCODING_NONE) {
+		/* We only want to open regular encoded files. */
+		state = -saved_errno;
+
+	} else if (!S_ISREG(stt.st_mode) &&
+		!get_opt_int("protocol.file.allow_special_files")) {
+		state = S_FILE_TYPE;
+
+	} else if (!(stream = open_encoded(fd, encoding))) {
+		state = S_OUT_OF_MEM;
+
+	} else {
+		state = read_file(stream, stt.st_size, page);
+		close_encoded(stream);
+	}
+
+	close(fd);
+	return state;
+}
 
 /* To reduce redundant error handling code [calls to abort_conn_with_state()]
  * most of the function is build around conditions that will assign the error
@@ -616,51 +662,8 @@ file_func(struct connection *connection)
 		closedir(directory);
 
 	} else {
-		struct stream_encoded *stream;
-		struct stat stt;
-		enum stream_encoding encoding = ENCODING_NONE;
-		int fd = open(filename, O_RDONLY | O_NOCTTY);
-		int saved_errno = errno;
-
-		if (fd == -1
-		    && get_opt_bool("protocol.file.try_encoding_extensions")) {
-			encoding = try_encoding_extensions(filename,
-							   filenamelen, &fd);
-		} else if (fd != -1) {
-			encoding = guess_encoding(filename);
-		}
-
-		if (fd == -1) {
-			abort_conn_with_state(connection, -saved_errno);
-			return;
-		}
-
-		/* Some file was opened so let's get down to bi'ness */
-		set_bin(fd);
-
-		/* Do all the necessary checks before trying to read the file.
-		 * @state code is used to block further progress. */
-		if (fstat(fd, &stt)) {
-			state = -errno;
-
-		} else if (!S_ISREG(stt.st_mode) && encoding != ENCODING_NONE) {
-			/* We only want to open regular encoded files. */
-			state = -saved_errno;
-
-		} else if (!S_ISREG(stt.st_mode) &&
-			   !get_opt_int("protocol.file.allow_special_files")) {
-			state = S_FILE_TYPE;
-
-		} else if (!(stream = open_encoded(fd, encoding))) {
-			state = S_OUT_OF_MEM;
-
-		} else {
-			state = read_file(stream, stt.st_size, &page);
-			close_encoded(stream);
-			head = "";
-		}
-
-		close(fd);
+		state = read_encoded_file(filename, filenamelen, &page);
+		if (state == S_OK) head = "";
 	}
 
 	if (state == S_OK) {

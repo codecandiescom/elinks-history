@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.186 2004/04/22 22:37:31 jonas Exp $ */
+/* $Id: uri.c,v 1.187 2004/04/22 22:51:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -820,6 +820,8 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 	/* dsep() *hint* *hint* */
 
 	while (cached && cached->head) {
+		int filenamelen;
+
 		pos = parse_http_header(cached->head, "Content-Disposition", NULL);
 		if (!pos) break;
 
@@ -838,10 +840,23 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 		}
 
 		filename += 9;
-		add_shell_safe_to_string(string, filename, strlen(filename));
+
+		/* We don't want to add any directories from the path so
+		 * make sure we only add the filename. */
+		for (filenamelen = 0; filename[filenamelen]; filenamelen++) {
+			if (dsep(filename[filenamelen])) {
+				/* Start over */
+				filename += filenamelen + 1;
+				filenamelen = -1; /* gets ++'d before use */
+			}
+		}
+
+		if (filenamelen)
+			add_shell_safe_to_string(string, filename, filenamelen);
+
 		mem_free(pos);
 
-		return string;
+		if (filenamelen) return string;
 	}
 
 	for (pos = filename = uri->data; *pos && !end_of_dir(*pos); pos++)

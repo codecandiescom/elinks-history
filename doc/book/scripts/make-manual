@@ -1,50 +1,79 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Script for multiplexing which manual generator to use.
+# Script for multiplexing between different docbook tools for
+# generating a specified format.
 #
-# $Id: make-manual,v 1.1 2002/12/29 10:57:29 jonas Exp $
+# It seems only realistic to try the various wrapper programs.
+#
+# $Id: make-manual,v 1.2 2002/12/30 03:40:51 jonas Exp $
 #
 
-format=$1
-target=$2
-processor=$3
+format=${1}
+target=${2}
+doctools=${3}
+doctool=""
+options=""
+htmldir="`basename ${target} .xml`.html"
 
-if [[ ${format} == "" ]];
-then
-	echo "Usage: `basename $0` [format] [target] [processor]"
-	echo "  format    - which format to generate (dvi, ps, html, etc.)"
-	echo "  target    - xml file to process"
-	echo "  processor - which tool to process with (xmlto, db, docbook)"
+case ${format} in
+	html)
+	options="-o ${htmldir}"
+	;;
+	ps | pdf | txt )
+	# Fall through
+	;;
+	*)
+	echo "Usage: `basename $0` [format] [target] [doctool]"
+	echo "  format	- which format to generate (dvi, ps, html, etc.)"
+	echo "  target	- xml file to process"
+	echo "  doctool	- which tool to process with (xmlto, db, docbook)"
 	exit -1
+	;;
+esac
+
+if [[ ${doctools} == "" ]];
+then
+	doctools="docbook2${format} db2${format} jw xmlto"
 fi
 
-echo "Generating ${format} format"
+echo "Checking for processing tools"
 
-docbook_utils="docbook2${format}"
-generator=`which ${docbook_utils}`
+for doctool in ${doctools};
+do
+	if [[ "`which ${doctool}`" != "" ]];
+	then
+		break
+	fi
+done
 
-if [[ ${generator} != "" ]];
+case ${doctool} in
+	xmlto)
+	options="${format} ${options}"
+	;;
+	jw)
+	options="--backend ${format} ${options}"
+	;;
+	docbook2* | db2*)
+	# Fall through
+	;;
+	*)
+	echo No docbook processing tools found
+	exit -1
+	;;
+esac
+
+echo "Using ${doctool} for generating ${format} format"
+
+${doctool} ${options} ${target}
+
+if [[ ${format} == "html" ]];
 then
-	# Using the docbook2* suite
-	options=""
-	htmldir="`basename ${target} .xml`.html"
-
-	if [[ ${format} == "html" ]];
+	tidy=`which tidy`
+	if [[ ${tidy} != "" && -e ${htmldir} ]];
 	then
-		rm -rf ${htmldir}
-		mkdir ${htmldir}
-		options="-o ${htmldir}"
+		cd ${htmldir}
+		${tidy} -latin1 -f err -im *.html
+		rm -f err
+		cd ..
 	fi
-
-	${generator} ${options} ${target}
-
-	if [[ ${format} == "html" ]];
-	then
-		tidy=`which tidy`
-		if [[ ${tidy} != "" ]];
-		then
-			cd ${htmldir} ; ${tidy} -latin1 -f err -im *.html ; rm -f err ; cd ..
-		fi
-	fi
-	exit 0
 fi

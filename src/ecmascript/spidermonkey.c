@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.15 2004/09/24 20:18:23 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.16 2004/09/24 20:23:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -176,7 +176,7 @@ static const JSPropertySpec document_props[] = {
 static JSBool
 document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
 	struct document *document = doc_view->document;
 
 	VALUE_TO_JSVAL_START;
@@ -195,7 +195,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
 	struct document *document = doc_view->document;
 
 	JSVAL_TO_VALUE_START;
@@ -232,7 +232,7 @@ static const JSPropertySpec location_props[] = {
 static JSBool
 location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
 	struct view_state *vs = &cur_loc(doc_view->session)->vs;
 
 	VALUE_TO_JSVAL_START;
@@ -250,7 +250,7 @@ location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 static JSBool
 location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct document_view *doc_view = JS_GetContextPrivate(ctx);
+	struct document_view *doc_view = JS_GetPrivate(ctx, obj);
 
 	JSVAL_TO_VALUE_START;
 
@@ -319,11 +319,13 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 				    (JSClass *) &document_class, NULL, 0,
 				    (JSPropertySpec *) document_props, NULL,
 				    NULL, NULL);
+	JS_SetPrivate(ctx, document_obj, interpreter->doc_view);
 
 	location_obj = JS_InitClass(ctx, global_obj, NULL,
 				    (JSClass *) &location_class, NULL, 0,
 				    (JSPropertySpec *) location_props, NULL,
 				    NULL, NULL);
+	JS_SetPrivate(ctx, location_obj, interpreter->doc_view);
 
 	return ctx;
 }

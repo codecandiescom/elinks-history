@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.171 2004/01/09 14:14:08 pasky Exp $ */
+/* $Id: menu.c,v 1.172 2004/01/09 14:14:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -918,7 +918,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 static void
 mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
 {
-	struct window *win = menu->data;
+	struct window *win = menu->win;
 	enum keyact action = kbd_action(KM_MENU, ev, NULL);
 	int s = 0;
 

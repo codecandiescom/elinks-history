@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.38 2002/12/07 20:05:56 pasky Exp $ */
+/* $Id: terminal.c,v 1.39 2002/12/17 12:38:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ set_cwd(unsigned char *path)
 
 struct list_head terminals = {&terminals, &terminals};
 
-void
+static void
 alloc_term_screen(struct terminal *term, int x, int y)
 {
 	unsigned *s;
@@ -137,12 +137,11 @@ alloc_term_screen(struct terminal *term, int x, int y)
 }
 
 
-void in_term(struct terminal *);
-void destroy_terminal(struct terminal *);
-void check_if_no_terminal();
+static void in_term(struct terminal *);
+static inline void check_if_no_terminal();
 
 
-void
+static inline void
 clear_terminal(struct terminal *term)
 {
 	fill_area(term, 0, 0, term->x, term->y, ' ');
@@ -182,7 +181,7 @@ redraw_terminal_all(struct terminal *term)
 }
 #endif
 
-void
+static inline void
 erase_screen(struct terminal *term)
 {
 	if (!term->master || !is_blocked()) {
@@ -208,6 +207,9 @@ cls_redraw_all_terminals()
 	foreach(term, terminals)
 		redraw_terminal_cls(term);
 }
+
+
+/* TODO: Move window stuff to a separate file ? --Zas */
 
 void
 redraw_from_window(struct window *win)
@@ -343,7 +345,7 @@ struct ewd {
 };
 
 
-void
+static void
 empty_window_handler(struct window *win, struct event *ev, int fwd)
 {
 	struct window *n;
@@ -470,7 +472,7 @@ term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 	}
 }
 
-void
+static void
 in_term(struct terminal *term)
 {
 	struct event *ev;
@@ -672,10 +674,10 @@ getcompcode(int c)
 #define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
 
 unsigned char frame_dumb[48] =	"   ||||++||++++++--|-+||++--|-+----++++++++     ";
-unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";
+static unsigned char frame_vt100[48] =	"aaaxuuukkuxkjjjkmvwtqnttmlvwtqnvvwwmmllnnjla    ";
 
 /* For UTF8 I/O */
-unsigned char frame_vt100_u[48] = {
+static unsigned char frame_vt100_u[48] = {
 	177, 177, 177, 179, 180, 180, 180, 191,
 	191, 180, 179, 191, 217, 217, 217, 191,
 	192, 193, 194, 195, 196, 197, 195, 195,
@@ -684,7 +686,7 @@ unsigned char frame_vt100_u[48] = {
 	197, 217, 218, 177,  32, 32,  32,  32
 };
 
-unsigned char frame_koi[48] = {
+static unsigned char frame_koi[48] = {
 	144,145,146,129,135,178,180,167,
 	166,181,161,168,174,173,172,131,
 	132,137,136,134,128,138,175,176,
@@ -693,7 +695,7 @@ unsigned char frame_koi[48] = {
 	188,133,130,141,140,142,143,139,
 };
 
-unsigned char frame_restrict[48] = {
+static unsigned char frame_restrict[48] = {
 	0, 0, 0, 0, 0, 179, 186, 186,
 	205, 0, 0, 0, 0, 186, 205, 0,
 	0, 0, 0, 0, 0, 0, 179, 186,
@@ -964,7 +966,7 @@ destroy_all_terminals()
 		destroy_terminal(term);
 }
 
-void
+static inline void
 check_if_no_terminal()
 {
 	if (list_empty(terminals)) {
@@ -1057,15 +1059,12 @@ fill_area(struct terminal *t, int x, int y, int xw, int yw, unsigned c)
 	}
 }
 
-
-int p1[] = { 218, 191, 192, 217, 179, 196 };
-int p2[] = { 201, 187, 200, 188, 186, 205 };
-
-
 void
 draw_frame(struct terminal *t, int x, int y, int xw, int yw,
 	   unsigned c, int w)
 {
+	static int p1[] = { 218, 191, 192, 217, 179, 196 };
+	static int p2[] = { 201, 187, 200, 188, 186, 205 };
 	int *p = w > 1 ? p2 : p1;
 
 	c |= ATTR_FRAME;
@@ -1127,7 +1126,7 @@ close_handle(void *p)
 	set_handlers(h, NULL, NULL, NULL, NULL);
 }
 
-void
+static void
 unblock_terminal(struct terminal *term)
 {
 	close_handle((void *)term->blocked);

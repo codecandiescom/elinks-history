@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.18 2002/12/30 02:27:44 pasky Exp $ */
+/* $Id: parser.c,v 1.19 2002/12/30 02:39:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,7 @@ struct html_parser_state {
 		struct {
 			unsigned char *attrname;
 			int attrlen;
-			int val_end;
+			int ate_eq;
 		} attr;
 	} data;
 };
@@ -517,7 +517,7 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		/* Shortcut. */
 		pstate = html_state_pop(state);
 	}
-	if (*html != '=') {
+	if (!pstate->data.attr.ate_eq && *html != '=') {
 		attrib_add(state,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,
 			html, 0);
@@ -525,8 +525,19 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 		return 0;
 	}
 
-	html++, html_len--; /* = */
-	if (!html_len) return -1;
+	if (!pstate->data.attr.ate_eq) {
+		html++, html_len--; /* = */
+		pstate->data.attr.ate_eq = 1;
+		if (!html_len) {
+			*str = html, *len = html_len;
+			return 0;
+		}
+		if (WHITECHAR(*html)) {
+			pstate = html_state_push(state, HPT_TAG_WHITE);
+			*str = html, *len = html_len;
+			return 0;
+		}
+	}
 
 	if (*html == '"' || *html == '\'') {
 		quoted = *html;
@@ -541,6 +552,8 @@ tag_attr_val_parse(struct parser_state *state, unsigned char **str, int *len)
 			html++, html_len--;
 			continue;
 		}
+
+		pstate = html_state_pop(state);
 
 		attrib_add(state,
 			pstate->data.attr.attrname, pstate->data.attr.attrlen,

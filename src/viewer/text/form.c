@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.159 2004/06/14 19:09:06 jonas Exp $ */
+/* $Id: form.c,v 1.160 2004/06/14 19:15:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1058,24 +1058,14 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			}
 			break;
 		case ACT_EDIT_UP:
-			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_up(fs, frm, rep)) {
-					x = 0;
-					break;
-				}
-			} else {
+			if (frm->type != FC_TEXTAREA
+			    || textarea_op_up(fs, frm, rep))
 				x = 0;
-			}
 			break;
 		case ACT_EDIT_DOWN:
-			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_down(fs, frm, rep)) {
-					x = 0;
-					break;
-				}
-			} else {
+			if (frm->type != FC_TEXTAREA
+			    || textarea_op_down(fs, frm, rep))
 				x = 0;
-			}
 			break;
 		case ACT_EDIT_END:
 			if (frm->type == FC_TEXTAREA) {
@@ -1138,14 +1128,9 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			mem_free(text);
 			break;
 		case ACT_EDIT_ENTER:
-			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_enter(fs, frm, rep)) {
-					x = 0;
-					break;
-				}
-			} else {
+			if (frm->type != FC_TEXTAREA
+			    || textarea_op_enter(fs, frm, rep))
 				x = 0;
-			}
 			break;
 		case ACT_EDIT_BACKSPACE:
 			if (frm->ro || !fs->state)
@@ -1171,9 +1156,8 @@ field_op_do(struct terminal *term, struct document_view *doc_view,
 			if (frm->ro || fs->state <= 0)
 				break;
 
-			/* TODO: Make this memrchr(), and
-			 * introduce stub for that function
-			 * into util/string.*. --pasky */
+			/* TODO: Make this memrchr(), and introduce stub for
+			 * that function into util/string.*. --pasky */
 			text = fs->value + fs->state - 1;
 			while (text > fs->value && *text != ASCII_LF)
 				text--;

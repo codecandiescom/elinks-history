@@ -1,3 +1,59 @@
+Thu May  1 17:09:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/view.c:
+
+	Cleanups.  
+
+Thu May  1 11:08:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	Some useless refresh_hotkeys() calls were removed.  
+
+Thu May  1 10:46:43 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A note about the wrong tilde expansion in goto dialog was added. A
+	patch ? Nobody ? ;) 
+
+Thu May  1 10:43:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/download.c, util/file.c:
+
+	Fix of get_unique_name()/expand_tilde() was fixed. Patch by Jonas
+	Fonseca.  
+
+Thu May  1 00:22:02 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailcap.c:
+
+	Ooops, this initialization prevents a compilation warning.  
+
+Thu May  1 00:16:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailcap.c:
+
+	Very minor cleanup.  
+
+Thu May  1 00:04:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailcap.c:
+
+	Cleanup.  
+
+Wed Apr 30 23:55:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mailcap.c:
+
+	A mailcap issue was fixed. Patch by fonseca and me.  
+
+Wed Apr 30 22:17:55 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	An errno check was added around an strtoul() call.  
+
 Wed Apr 30 21:56:52 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: setup.h, dialogs/menu.c, lowlevel/af_unix.c:

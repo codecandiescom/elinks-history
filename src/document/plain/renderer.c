@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.76 2004/01/28 02:32:43 jonas Exp $ */
+/* $Id: renderer.c,v 1.77 2004/01/28 02:37:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,9 @@ struct plain_renderer {
 
 	/* The maximum width any line can have (used for wrapping text) */
 	int max_width;
+
+	/* The current line number */
+	int lineno;
 };
 
 #define realloc_document_links(doc, size) \
@@ -150,12 +153,13 @@ get_uri_length(unsigned char *line, int length)
 }
 
 static inline int
-add_document_line(struct plain_renderer *renderer, int lineno,
+add_document_line(struct plain_renderer *renderer,
 		  unsigned char *line, int width)
 {
 	struct document *document = renderer->document;
 	struct screen_char *template = &renderer->template;
 	struct screen_char *pos;
+	int lineno = renderer->lineno;
 	int expanded = 0;
 	register int line_pos;
 
@@ -298,11 +302,10 @@ add_document_lines(struct plain_renderer *renderer)
 	struct document *document = renderer->document;
 	unsigned char *source = renderer->source;
 	int length = renderer->length;
-	int lineno;
 	int was_empty_line = 0;
 	int compress = document->options.plain_compress_empty_lines;
 
-	for (lineno = 0; length > 0; lineno++) {
+	for (; length > 0; renderer->lineno++) {
 		unsigned char *xsource;
 		int width, added, only_spaces = 1, spaces = 0, was_spaces = 0;
 		int last_space = 0;
@@ -336,7 +339,7 @@ add_document_lines(struct plain_renderer *renderer)
 				 * will appear as one. */
 				length -= step + spaces;
 				source += step + spaces;
-				lineno--;
+				renderer->lineno--;
 				continue;
 			}
 			was_empty_line = 1;
@@ -367,12 +370,12 @@ add_document_lines(struct plain_renderer *renderer)
 		xsource = memacpy(source, width);
 		if (!xsource) continue;
 
-		added = add_document_line(renderer, lineno, xsource, width);
+		added = add_document_line(renderer, xsource, width);
 		mem_free(xsource);
 
 		if (added) {
 			/* Add (search) nodes on a line by line basis */
-			add_node(renderer->document, 0, lineno, added, 1);
+			add_node(renderer->document, 0, renderer->lineno, added, 1);
 		}
 
 		/* Skip end of line chars too. */
@@ -414,6 +417,7 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	renderer.document = document;
 	renderer.source = fr->data;
 	renderer.length = fr->length;
+	renderer.lineno = 0;
 	renderer.convert_table = convert_table;
 	renderer.max_width = document->options.wrap ? document->options.width
 						    : MAXINT;

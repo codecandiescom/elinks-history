@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.133 2003/12/28 18:45:22 jonas Exp $ */
+/* $Id: link.c,v 1.134 2003/12/30 10:48:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -152,6 +152,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	int cursor_offset = 0;
 	struct screen_char *template;
 	enum color_flags color_flags;
+	enum color_mode color_mode;
 	struct document_options *doc_opts;
 	struct color_pair colors;
 
@@ -199,12 +200,17 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = SCREEN_ATTR_STANDOUT;
 
-	/* We prefer to use the global global_doc_opts since it is kept up to date by
-	 * an option change hook. However if it is not available fall back to
-	 * use the options from the viewed document. */
-	doc_opts = (global_doc_opts) ? global_doc_opts : &doc_view->document->options;
+	/* For the color mode options we use the options set for the document.
+	 * But for the active link options we prefer to use the global
+	 * global_doc_opts since it is kept up to date by an option change
+	 * hook. However if it is not available fall back to use the options
+	 * from the viewed document. */
+	doc_opts = &doc_view->document->options;
 
 	color_flags = (doc_opts->color_flags | COLOR_DECREASE_LIGHTNESS);
+	color_mode = doc_opts->color_mode;
+
+	if (global_doc_opts) doc_opts = global_doc_opts;
 
 	if (doc_opts->underline_active_link)
 		template->attr |= SCREEN_ATTR_UNDERLINE;
@@ -225,7 +231,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		colors.background = link->color.background;
 	}
 
-	set_term_color(template, &colors, color_flags, doc_opts->color_mode);
+	set_term_color(template, &colors, color_flags, color_mode);
 
 	xmax = doc_view->x + doc_view->width;
 	ymax = doc_view->y + doc_view->height;

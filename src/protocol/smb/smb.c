@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.9 2003/12/08 22:58:32 pasky Exp $ */
+/* $Id: smb.c,v 1.10 2003/12/09 08:44:21 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -61,6 +61,30 @@ static void end_smb_connection(struct connection *conn);
 
 #define READ_SIZE	4096
 
+static int
+smb_read_data(struct connection *conn, int sock, unsigned char *dst, ssize_t len)
+{
+	int r;
+	struct smb_connection_info *si = conn->info;
+
+	r = read(sock, dst, len);
+	if (r == -1) {
+		retry_conn_with_state(conn, -errno);
+		return -1;
+	}
+	if (r == 0) {
+		if (!si->closing) {
+			si->closing = 1;
+			set_handlers(conn->socket, NULL, NULL, NULL, NULL);
+			return 0;
+		}
+		end_smb_connection(conn);
+		return 0;
+	}
+
+	return r;
+}
+
 static void
 smb_read_text(struct connection *conn, int sock)
 {
@@ -75,21 +99,8 @@ smb_read_text(struct connection *conn, int sock)
 	}
 	conn->info = si;
 
-	/* FIXME: code redundancy with smb_got_data(). */
-	r = read(sock, si->text + si->textlen, READ_SIZE);
-	if (r == -1) {
-		retry_conn_with_state(conn, -errno);
-		return;
-	}
-	if (r == 0) {
-		if (!si->closing) {
-			si->closing = 1;
-			set_handlers(conn->socket, NULL, NULL, NULL, NULL);
-			return;
-		}
-		end_smb_connection(conn);
-		return;
-	}
+	r = smb_read_data(conn, sock, si->text + si->textlen, READ_SIZE);
+	if (r <= 0) return;
 
 	if (!conn->from) set_connection_state(conn, S_GETH);
 	si->textlen += r;
@@ -107,21 +118,8 @@ smb_got_data(struct connection *conn)
 		return;
 	}
 
-	/* FIXME: code redundancy with smb_read_text(). */
-	r = read(conn->data_socket, buffer, READ_SIZE);
-	if (r == -1) {
-		retry_conn_with_state(conn, -errno);
-		return;
-	}
-	if (r == 0) {
-		if (!si->closing) {
-			si->closing = 1;
-			set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
-			return;
-		}
-		end_smb_connection(conn);
-		return;
-	}
+	r = smb_read_data(conn, conn->data_socket, buffer, READ_SIZE);
+	if (r <= 0) return;
 
 	set_connection_state(conn, S_TRANS);
 
@@ -137,15 +135,15 @@ smb_got_data(struct connection *conn)
 	conn->from += r;
 }
 
+#undef READ_SIZE
+
 static void
 smb_got_text(struct connection *conn)
 {
 	smb_read_text(conn, conn->socket);
 }
 
-#undef READ_SIZE
-
-
+/* FIXME: split it. --Zas */
 static void
 end_smb_connection(struct connection *conn)
 {
@@ -167,11 +165,11 @@ end_smb_connection(struct connection *conn)
 		si->text[si->textlen++] = '\n';
 	si->text[si->textlen] = '\0';
 
-	assert(conn->uri.datalen);
 	if ((strstr(si->text, "NT_STATUS_FILE_IS_A_DIRECTORY")
 	     || strstr(si->text, "NT_STATUS_ACCESS_DENIED")
 	     || strstr(si->text, "ERRbadfile"))
 	    && *struri(conn->uri)
+	    && conn->uri.datalen
 	    && conn->uri.data[conn->uri.datalen - 1] != '/'
 	    && conn->uri.data[conn->uri.datalen - 1] != '\\') {
 		if (conn->cache->redirect) mem_free(conn->cache->redirect);

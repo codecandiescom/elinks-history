@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.22 2003/10/30 15:29:56 pasky Exp $ */
+/* $Id: options.inc,v 1.23 2003/10/30 15:32:45 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -102,7 +102,7 @@ struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("", N_("Document"),
-		"document", 0,
+		"document", OPT_SORT,
 		N_("Document options.")),
 
 	INIT_OPT_TREE("document", N_("Browsing"),
@@ -483,7 +483,7 @@ struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("document", N_("History"),
-		"history", 0,
+		"history", OPT_SORT,
 		N_("History options.")),
 
 	INIT_OPT_BOOL("document.history", N_("Keep unhistory"),
@@ -539,7 +539,7 @@ struct option_info config_options_info[] = {
 
 
 	INIT_OPT_TREE("", N_("Protocols"),
-		"protocol", 0,
+		"protocol", OPT_SORT,
 		N_("Protocol specific options.")),
 
 	INIT_OPT_TREE("protocol", N_("HTTP"),

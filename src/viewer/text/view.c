@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.494 2004/06/19 21:27:11 jonas Exp $ */
+/* $Id: view.c,v 1.495 2004/06/20 11:22:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -422,8 +422,9 @@ page_up(struct session *ses, struct document_view *doc_view)
 	move_up(ses, doc_view, 0);
 }
 
-void
-down(struct session *ses, struct document_view *doc_view)
+static inline void
+move_link(struct session *ses, struct document_view *doc_view, int direction,
+	  int wraparound_bound, int wraparound_link)
 {
 	int current_link;
 
@@ -434,9 +435,9 @@ down(struct session *ses, struct document_view *doc_view)
 
 	current_link = doc_view->vs->current_link;
 
-	if (current_link == doc_view->document->nlinks - 1) {
+	if (current_link == wraparound_bound) {
 		if (get_opt_int("document.browse.links.wraparound")) {
-			jump_to_link_number(ses, doc_view, 0);
+			jump_to_link_number(ses, doc_view, wraparound_link);
 			/* FIXME: This needs further work, we should call
 			 * page_down() and set_textarea() under some conditions
 			 * as well. --pasky */
@@ -446,46 +447,28 @@ down(struct session *ses, struct document_view *doc_view)
 	}
 
 	if (current_link == -1
-	    || !next_in_view(doc_view, current_link + 1, 1, in_viewy, set_pos_x)) {
-		move_down(ses, doc_view, 1);
+	    || !next_in_view(doc_view, current_link + direction, direction, in_viewy, set_pos_x)) {
+		if (direction > 0)
+			move_down(ses, doc_view, 1);
+		else
+			move_up(ses, doc_view, 1);
 	}
 
 	if (current_link != doc_view->vs->current_link) {
-		set_textarea(doc_view, -1);
+		set_textarea(doc_view, -direction);
 	}
+}
+
+void
+down(struct session *ses, struct document_view *doc_view)
+{
+	move_link(ses, doc_view, 1, doc_view->document->nlinks - 1, 0);
 }
 
 static void
 up(struct session *ses, struct document_view *doc_view)
 {
-	int current_link;
-
-	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
-
-	ses->navigate_mode = NAVIGATE_LINKWISE;
-
-	current_link = doc_view->vs->current_link;
-
-	if (current_link == 0) {
-		if (get_opt_int("document.browse.links.wraparound")) {
-	   		jump_to_link_number(ses, doc_view, doc_view->document->nlinks - 1);
-			/* FIXME: This needs further work, we should call
-			 * page_down() and set_textarea() under some conditions
-			 * as well. --pasky */
-			return;
-		}
-		current_link = -1;
-	}
-
-	if (current_link == -1
-	    || !next_in_view(doc_view, current_link - 1, -1, in_viewy, set_pos_x)) {
-		move_up(ses, doc_view, 1);
-	}
-
-	if (current_link != doc_view->vs->current_link) {
-		set_textarea(doc_view, 1);
-	}
+	move_link(ses, doc_view, -1, 0, doc_view->document->nlinks - 1);
 }
 
 /* @steps > 0 -> down */

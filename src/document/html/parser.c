@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.56 2002/12/09 13:49:45 pasky Exp $ */
+/* $Id: parser.c,v 1.57 2002/12/14 11:58:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2437,8 +2437,8 @@ struct element_info elements[] = {
 	{"CODE",	html_fixed,	0, 0},
 	{"DD",		html_dd,	1, 1},
 	{"DFN",		html_bold,	0, 0},
-	{"DIV",		html_linebrk,	1, 0},
 	{"DIR",		html_ul,	2, 0},
+	{"DIV",		html_linebrk,	1, 0},
 	{"DL",		html_dl,	2, 0},
 	{"DT",		html_dt,	1, 1},
 	{"EM",		html_italic,	0, 0},

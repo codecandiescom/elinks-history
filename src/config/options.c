@@ -1,5 +1,5 @@
 /* Options list and handlers */
-/* $Id: options.c,v 1.1 2002/04/27 13:15:51 pasky Exp $ */
+/* $Id: options.c,v 1.2 2002/04/27 21:43:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1000,11 +1000,6 @@ struct option links_options[] = {
 	{	NULL, "extension",
 		NULL, ext_rd, ext_wr,
 	 	0, 0, NULL,
-		NULL },
-
-	{	NULL, "mailto",
-		NULL, prog_rd, prog_wr,
-	 	0, 0, &mailto_prog,
 		NULL },
 
 	{	NULL, "mailto",

@@ -1918,6 +1918,7 @@ struct element_info elements[] = {
 	{"BLOCKQUOTE",	html_blockquote,2, 0},
 	{"ADDRESS",	html_address,	2, 0},
 	{"PRE",		html_pre,	2, 0},
+	{"LISTING",	html_pre,	2, 0},
 
 	{"UL",		html_ul,	1, 0},
 	{"DIR",		html_ul,	1, 0},

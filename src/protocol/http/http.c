@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.109 2003/05/12 20:23:58 pasky Exp $ */
+/* $Id: http.c,v 1.110 2003/05/18 11:43:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,16 +43,21 @@
 #include "util/string.h"
 
 
+struct http_version {
+	int major;
+	int minor;
+};
+
 struct http_connection_info {
 	enum blacklist_flags bl_flags;
-	int http10;
 	int close;
 
 #define LEN_CHUNKED -2 /* == we get data in unknown number of chunks */
 #define LEN_FINISHED 0
 	int length;
 
-	int version;
+	struct http_version recv_version;
+	struct http_version sent_version;
 
 	/* Either bytes coming in this chunk yet or "parser state". */
 #define CHUNK_DATA_END	-3
@@ -146,43 +151,80 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 	mem_free(eurl);
 }
 
-
+/* This function extracts code, major and minor version from string
+ * "\s*HTTP/\d+.\d+\s+\d\d\d..."
+ * It returns a negative value on error, 0 on success.
+ */
 static int
-get_http_code(unsigned char *head, int *code, int *version)
+get_http_code(unsigned char *head, int *code, int *maj_version, int *min_version)
 {
-	/* \s* */
-	while (head[0] == ' ')
-		head++;
+	unsigned char *end, *start;
+	int q;
 
-	/* HTTP */
-	if (upcase(head[0]) != 'H' || upcase(head[1]) != 'T' ||
-	    upcase(head[2]) != 'T' || upcase(head[3]) != 'P')
+	*code = 0;
+	*maj_version = 0;
+	*min_version = 0;
+
+	/* Ignore spaces. */
+	while (*head == ' ') head++;
+
+	/* HTTP/ */
+	if (upcase(*head) != 'H' || upcase(*++head) != 'T' ||
+	    upcase(*++head) != 'T' || upcase(*++head) != 'P'
+	    || *++head != '/')
 		return -1;
 
-	/* /\d\.\d\s */
-	if (head[4] == '/' && head[5] >= '0' && head[5] <= '9' &&
-	    head[6] == '.' && head[7] >= '0' && head[7] <= '9' &&
-	    head[8] <= ' ') {
-		*version = (head[5] - '0') * 10 + head[7] - '0';
-	} else {
-		*version = 0;
-	}
+	/* Version */
+	start = ++head;
+	/* Find next '.' */
+	while (*head && *head != '.') head++;
+	/* Sanity check. */
+	if (!*head || !(head - start)
+	    || (head - start) > 4
+	    || *(head + 1) < '0' || *(head + 1) > '9' )
+		return -2;
+	end = head;
 
-	/* \s+ */
-	for (head += 4; *head > ' '; head++);
-	if (*head++ != ' ')
-		return -1;
+	/* Extract major version number. */
+	q = 1;
+	do {
+		--head;
+		if (*head < '0' || *head > '9') return -3; /* NaN */
+		*maj_version += (*head - '0') * q;
+		q *= 10;
+	} while (head != start);
 
-	/* \d\d\d */
+	start = end + 1;
+	/* Find next ' '. */
+	while (*head && *head != ' ') head++;
+	/* Sanity check. */
+	if (!*head || !(head - start) || (head - start) > 4) return -4;
+	end = head;
+
+	/* Extract minor version number. */
+	q = 1;
+	do {
+		--head;
+		if (*head < '0' || *head > '9') return -5; /* NaN */
+		*min_version += (*head - '0') * q;
+		q *= 10;
+	} while (head != start);
+	head = end;
+
+	/* Ignore spaces. */
+	while (*head == ' ') head++;
+
+	/* Sanity check for code. */
 	if (head[0] < '1' || head[0] > '9' ||
 	    head[1] < '0' || head[1] > '9' ||
 	    head[2] < '0' || head[2] > '9')
-		return -1;
+		return -6; /* Invalid code. */
+
+	/* Extract code. */
 	*code = (head[0] - '0') * 100 + (head[1] - '0') * 10 + head[2] - '0';
 
 	return 0;
 }
-
 
 static int
 check_http_server_bugs(unsigned char *url,
@@ -197,7 +239,9 @@ check_http_server_bugs(unsigned char *url,
 		NULL
 	};
 
-	if (!get_opt_int("protocol.http.bugs.allow_blacklist") || info->http10)
+	if (!get_opt_int("protocol.http.bugs.allow_blacklist")
+	    || (info->sent_version.major == 1 &&
+		info->sent_version.minor == 0))
 		return 0;
 
 	server = parse_http_header(head, "Server", NULL);
@@ -285,9 +329,8 @@ http_send_header(struct connection *c)
 	static unsigned char *accept_charset = NULL;
 	unsigned char *host = GET_REAL_URL(c->url);
 	struct http_connection_info *info;
-	int http10 = get_opt_int("protocol.http.bugs.http10");
 	int trace = get_opt_bool("protocol.http.trace");
-	unsigned char *post;
+	unsigned char *post = NULL;
 
 	struct cache_entry *e = NULL;
 	unsigned char *hdr;
@@ -303,6 +346,8 @@ http_send_header(struct connection *c)
 		return;
 	}
 	c->info = info;
+	info->sent_version.major = 1;
+	info->sent_version.minor = 1;
 
 	host_data = get_host_name(host);
 	if (host_data) {
@@ -310,28 +355,35 @@ http_send_header(struct connection *c)
 		mem_free(host_data);
 	}
 
-	if (info->bl_flags & BL_HTTP10) {
-		http10 = 1;
+	if (info->bl_flags & BL_HTTP10
+	    || get_opt_int("protocol.http.bugs.http10")) {
+		info->sent_version.major = 1;
+		info->sent_version.minor = 0;
 	}
-
-	info->http10 = http10;
-
-	post = strchr(c->url, POST_CHAR);
-	if (post) post++;
 
 	hdr = init_str();
 	if (!hdr) {
 		http_end_request(c, S_OUT_OF_MEM);
 		return;
 	}
+#if 0 /* Not yet supported. */
+	if (get_opt_int("protocol.http.bugs.http09")) {
+		info->sent_version.major = 0;
+		info->sent_version.minor = 9;
+		goto get_only; /* GET is the only valid method in HTTP/0.9 */
+	}
+#endif
+
+	post = strchr(c->url, POST_CHAR);
 
 	if (trace) {
 		add_to_str(&hdr, &l, "TRACE ");
-	} else if (!post) {
-		add_to_str(&hdr, &l, "GET ");
-	} else {
+	} else if (post) {
+		post++;
 		add_to_str(&hdr, &l, "POST ");
 		c->unrestartable = 2;
+	} else {
+		add_to_str(&hdr, &l, "GET ");
 	}
 
 	if (!IS_PROXY_URL(c->url)) {
@@ -346,10 +398,15 @@ http_send_header(struct connection *c)
 
 	add_url_to_http_str(&hdr, &l, url_data, post);
 
-	if (http10) {
-		add_to_str(&hdr, &l, " HTTP/1.0\r\n");
+	if (info->sent_version.major == 0) {
+		add_to_str(&hdr, &l, "\r\n");
+		goto end;
 	} else {
-		add_to_str(&hdr, &l, " HTTP/1.1\r\n");
+		add_to_str(&hdr, &l, " HTTP/");
+		add_num_to_str(&hdr, &l, info->sent_version.major);
+		add_chr_to_str(&hdr, &l, '.');
+		add_num_to_str(&hdr, &l, info->sent_version.minor);
+		add_to_str(&hdr, &l, "\r\n");
 	}
 
 	host_data = get_host_name(host);
@@ -557,7 +614,8 @@ http_send_header(struct connection *c)
 #endif
 	}
 
-	if (!http10) {
+	if (info->sent_version.major == 1 &&
+	    info->sent_version.minor == 1) {
 		if (!IS_PROXY_URL(c->url)) {
 			add_to_str(&hdr, &l, "Connection: ");
 		} else {
@@ -650,6 +708,7 @@ http_send_header(struct connection *c)
 		}
 	}
 
+end:
 	write_to_socket(c, c->sock1, hdr, l, http_get_header);
 	mem_free(hdr);
 
@@ -946,7 +1005,7 @@ next_chunk:
 
 			if (!info->chunk_remaining && rb->len > 0) {
 				/* Eat newline succeeding each chunk. */
-				if (rb->data[0] == 10) {
+				if (rb->data[0] == ASCII_LF) {
 					kill_buffer_data(rb, 1);
 				} else {
 					if (rb->data[0] != ASCII_CR
@@ -1000,7 +1059,8 @@ http_got_header(struct connection *c, struct read_buffer *rb)
 #ifdef COOKIES
 	unsigned char *cookie, *ch;
 #endif
-	int a, h, version;
+	int a, h;
+	struct http_version version;
 	unsigned char *d;
 	struct cache_entry *e;
 	struct http_connection_info *info;
@@ -1036,7 +1096,8 @@ again:
 		setcstate(c, state);
 		return;
 	}
-	if (get_http_code(rb->data, &h, &version) || h == 101) {
+	if (get_http_code(rb->data, &h, &version.major, &version.minor)
+	    || h == 101) {
 		abort_conn_with_state(c, S_HTTP_ERROR);
 		return;
 	}
@@ -1138,12 +1199,15 @@ again:
 	c->cache = e;
 	info->close = 0;
 	info->length = -1;
-	info->version = version;
+	info->recv_version.major = version.major;
+	info->recv_version.minor = version.minor;
 	if ((d = parse_http_header(e->head, "Connection", NULL))
 	     || (d = parse_http_header(e->head, "Proxy-Connection", NULL))) {
 		if (!strcasecmp(d, "close")) info->close = 1;
 		mem_free(d);
-	} else if (version < 11) info->close = 1;
+	} else if (version.major < 1
+		   || (version.major == 1 && version.minor == 0))
+			info->close = 1;
 
 	cf = c->from;
 	c->from = 0;
@@ -1196,7 +1260,10 @@ again:
 		l = strtol(d, (char **)&ep, 10);
 
 		if (!errno && !*ep && l >= 0) {
-			if (!info->close || version >= 11) info->length = l;
+			if (!info->close ||
+			    (version.major > 1 ||
+			     (version.major == 1 && version.minor > 0)))
+				info->length = l;
 			c->est_length = c->from + l;
 		}
 		mem_free(d);
@@ -1253,7 +1320,11 @@ again:
 		else mem_free(d);
 	}
 
-	if (info->length == -1 || (version < 11 && info->close)) rb->close = 1;
+	if (info->length == -1 ||
+	    ((version.major < 1 ||
+	      (version.major == 1 && version.minor == 0))
+	     && info->close))
+		rb->close = 1;
 
 	d = parse_http_header(e->head, "Content-Type", NULL);
 	if (d) {

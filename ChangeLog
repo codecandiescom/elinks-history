@@ -1,3 +1,58 @@
+Thu Oct 21 21:18:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/main.c:
+
+	Prevent ECMAScript code execution when using -dump or -source.
+	Magically fixes bug 538.  
+
+Thu Oct 21 21:01:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/link.c:
+
+	TODO: Provide info about script event hooks too.  
+
+Thu Oct 21 20:54:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/document.c, document/document.h,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/parser/stack.c,
+	viewer/text/link.c:
+
+	Theoretical (not much tested and not always working) support for
+	onClick, onDblClick, onMouseOver, onHover, onFocus, onMouseOut and
+	onBlur ECMAScript events on focusable elements.  
+
+Thu Oct 21 20:52:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Fix a virtually possible crash if a sub-frame referenced a top frame
+	while the top frame had no ecmascript handle, since the ecmascript
+	handles are now created on-demand.  
+
+Thu Oct 21 20:50:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	window.<blahblah> now tries to resolve blahblah as frame id and
+	returns the appropriate one's reference if found. Finally fixes
+	http://www.cinema-ostertor.de/.  
+
+Thu Oct 21 17:36:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	s/port_end == host_end/uri->portlen == 0/ is more clear.  
+
+Thu Oct 21 17:03:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Remove ':' from URIs when no port number follows using
+	URI_ERRNO_NO_PORT_COLON error value. Hmm maye we should consider
+	loosing up the URI comparison on the other hand it is nice to have
+	these trivial error show up.  
+
 Wed Oct 20 17:55:07 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* m4/: gettext.m4, iconv.m4:

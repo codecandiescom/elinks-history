@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.278 2004/04/16 16:34:44 zas Exp $ */
+/* $Id: http.c,v 1.279 2004/04/19 14:39:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1149,8 +1149,7 @@ again:
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
-	mem_free_if(conn->cached->head);
-	conn->cached->head = head;
+	mem_free_set_if(conn->cached->head, head);
 
 	if (!get_opt_bool("document.cache.ignore_cache_control")) {
 		if ((d = parse_http_header(conn->cached->head, "Cache-Control", NULL))
@@ -1163,10 +1162,8 @@ again:
 	}
 
 #ifdef HAVE_SSL
-	if (conn->ssl) {
-		mem_free_if(conn->cached->ssl_info);
-		conn->cached->ssl_info = get_ssl_connection_cipher(conn);
-	}
+	if (conn->ssl)
+		mem_free_set_if(conn->cached->ssl_info, get_ssl_connection_cipher(conn));
 #endif
 
 	if (h == 301 || h == 302 || h == 303 || h == 307) {

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.154 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: tables.c,v 1.155 2004/04/19 14:39:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,8 +610,7 @@ qwe:
 		get_align(t_attr, &l_al);
 		get_valign(t_attr, &l_val);
 		get_bgcolor(t_attr, &l_col);
-		mem_free_if(l_fragment_id);
-		l_fragment_id = get_attr_val(t_attr, "id");
+		mem_free_set_if(l_fragment_id, get_attr_val(t_attr, "id"));
 		y++;
 		x = 0;
 		goto see;

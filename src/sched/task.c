@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.74 2004/04/16 16:35:20 zas Exp $ */
+/* $Id: task.c,v 1.75 2004/04/19 14:39:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,8 +130,7 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 		mem_free_if(task);
 
-		mem_free_if(ses->goto_position);
-		ses->goto_position = pos;
+		mem_free_set_if(ses->goto_position, pos);
 
 		ses->loading.end = (void (*)(struct download *, void *)) fn;
 		ses->loading.data = ses;

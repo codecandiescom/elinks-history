@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.391 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: parser.c,v 1.392 2004/04/19 14:39:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -860,18 +860,16 @@ html_a(unsigned char *a)
 	if (href) {
 		unsigned char *target;
 
-		mem_free_if(format.link);
-		format.link = join_urls(format.href_base, trim_chars(href, ' ', 0));
+		mem_free_set_if(format.link,
+				join_urls(format.href_base, trim_chars(href, ' ', 0)));
 
 		mem_free(href);
 
 		target = get_target(a);
 		if (target) {
-			mem_free_if(format.target);
-			format.target = target;
+			mem_free_set_if(format.target, target);
 		} else {
-			mem_free_if(format.target);
-			format.target = stracpy(format.target_base);
+			mem_free_set_if(format.target, stracpy(format.target_base));
 		}
 #ifdef CONFIG_GLOBHIST
 		if (get_global_history_item(format.link))
@@ -880,8 +878,7 @@ html_a(unsigned char *a)
 #endif
 			format.fg = format.clink;
 
-		mem_free_if(format.title);
-		format.title = get_attr_val(a, "title");
+		mem_free_set_if(format.title, get_attr_val(a, "title"));
 
 		html_focusable(a);
 
@@ -1339,16 +1336,13 @@ html_base(unsigned char *a)
 	unsigned char *al = get_url_val(a, "href");
 
 	if (al) {
-		mem_free_if(format.href_base);
-		format.href_base = join_urls(((struct html_element *)html_stack.prev)->attr.href_base, al);
+		mem_free_set_if(format.href_base,
+				join_urls(((struct html_element *)html_stack.prev)->attr.href_base, al));
 		mem_free(al);
 	}
 
 	al = get_target(a);
-	if (al) {
-		mem_free_if(format.target_base);
-		format.target_base = al;
-	}
+	if (al) mem_free_set_if(format.target_base, al);
 }
 
 static void

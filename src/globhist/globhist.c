@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.71 2004/04/16 16:33:55 zas Exp $ */
+/* $Id: globhist.c,v 1.72 2004/04/19 14:39:40 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -241,13 +241,11 @@ globhist_simple_search(unsigned char *search_url, unsigned char *search_title)
 		return 0;
 
 	/* Memorize last searched title */
-	mem_free_if(gh_last_searched_title);
-	gh_last_searched_title = stracpy(search_title);
+	mem_free_set_if(gh_last_searched_title, stracpy(search_title));
 	if (!gh_last_searched_title) return 0;
 
 	/* Memorize last searched url */
-	mem_free_if(gh_last_searched_url);
-	gh_last_searched_url = stracpy(search_url);
+	mem_free_set_if(gh_last_searched_url, stracpy(search_url));
 	if (!gh_last_searched_url) {
 		mem_free(gh_last_searched_title);
 		return 0;

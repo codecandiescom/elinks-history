@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.425 2004/04/17 02:39:52 jonas Exp $ */
+/* $Id: renderer.c,v 1.426 2004/04/19 14:39:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1155,10 +1155,7 @@ html_form_control(struct part *part, struct form_control *fc)
 						   fc->default_value,
 						   strlen(fc->default_value), CSM_QUERY);
 
-		if (dv) {
-			mem_free_if(fc->default_value);
-			fc->default_value = dv;
-		}
+		if (dv) mem_free_set_if(fc->default_value, dv);
 	}
 
 	add_to_list(part->document->forms, fc);

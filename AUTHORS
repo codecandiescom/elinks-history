@@ -83,10 +83,7 @@ Cliff Cunnington <cliff@ccnet.xs4all.nl>
 	User's manual at http://links.sf.net/docs/manual-0.82-en/
 	Minor fixes/improvements
 
-<criguada@libero.it>
-	OS/2 compilation fixes
-
-Cristiano Guadagnino <cris@geppo.cmb2000.it>
+Cristiano Guadagnino <cris@geppo.cmb2000.it>, <criguada@libero.it>
 	Updated italian translation
 	OS/2 compilation fixes
 
@@ -454,4 +451,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.139 2003/10/07 20:30:47 pasky Exp $
+$Id: AUTHORS,v 1.140 2003/10/09 16:12:04 fabio Exp $

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.80 2002/12/16 23:21:35 zas Exp $ */
+/* $Id: session.c,v 1.81 2002/12/18 16:30:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -874,6 +874,7 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 		if (s) {
 			add_fragment(ce, 0, s, len);
 			truncate_entry(ce, len, 1);
+			ce->incomplete = 0; /* XXX */
 			mem_free(s);
 		}
 		ce->done_pre_format_html_hook = 1;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.460 2004/06/14 09:33:39 zas Exp $ */
+/* $Id: view.c,v 1.461 2004/06/14 10:02:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -501,7 +501,7 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 	if (ses->kbdprefix.rep)
 		steps = ses->kbdprefix.rep_num;
 	else
-		steps = get_opt_int("document.browse.scroll_step");
+		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, -steps);
 }
@@ -514,7 +514,7 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 	if (ses->kbdprefix.rep)
 		steps = ses->kbdprefix.rep_num;
 	else
-		steps = get_opt_int("document.browse.scroll_step");
+		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, steps);
 }
@@ -523,13 +523,17 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 static void
 scroll_mouse_up(struct session *ses, struct document_view *doc_view)
 {
-	vertical_scroll(ses, doc_view, -2);
+	int steps = get_opt_int("document.browse.scrolling.vertical_step");
+
+	vertical_scroll(ses, doc_view, -steps);
 }
 
 static void
 scroll_mouse_down(struct session *ses, struct document_view *doc_view)
 {
-	vertical_scroll(ses, doc_view, 2);
+	int steps = get_opt_int("document.browse.scrolling.vertical_step");
+
+	vertical_scroll(ses, doc_view, steps);
 }
 #endif /* CONFIG_MOUSE */
 
@@ -560,9 +564,9 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 	int steps;
 
 	if (ses->kbdprefix.rep)
-		steps = 8;
+		steps = ses->kbdprefix.rep_num;
 	else
-		steps = 1;
+		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, -steps);
 }
@@ -573,9 +577,9 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 	int steps;
 
 	if (ses->kbdprefix.rep)
-		steps = 8;
+		steps = ses->kbdprefix.rep_num;
 	else
-		steps = 1;
+		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, steps);
 }
@@ -584,13 +588,17 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 static void
 scroll_mouse_left(struct session *ses, struct document_view *doc_view)
 {
-	horizontal_scroll(ses, doc_view, -8);
+	int steps = get_opt_int("document.browse.scrolling.horizontal_step");
+
+	horizontal_scroll(ses, doc_view, -steps);
 }
 
 static void
 scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 {
-	horizontal_scroll(ses, doc_view, 8);
+	int steps = get_opt_int("document.browse.scrolling.horizontal_step");
+
+	horizontal_scroll(ses, doc_view, steps);
 }
 #endif /* CONFIG_MOUSE */
 
@@ -878,7 +886,7 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		} else if (check_mouse_button(ev, B_LEFT)) {
 			/* Clicking the edge of screen will scroll the document. */
 
-			int scrollmargin = get_opt_int("document.browse.scroll_margin");
+			int scrollmargin = get_opt_int("document.browse.scrolling.margin");
 
 			/* XXX: This is code duplication with kbd handlers. But
 			 * repeatcount-free here. */

@@ -1,5 +1,5 @@
 /* Common widget functions. */
-/* $Id: widget.c,v 1.12 2003/08/01 11:13:44 zas Exp $ */
+/* $Id: widget.c,v 1.13 2003/08/30 11:08:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,16 +28,17 @@ display_dlg_item(struct dialog_data *dialog, struct widget_data *widget,
 void
 dlg_set_history(struct widget_data *di)
 {
-	unsigned char *s = "";
-	int len;
+	assert(di->item->dlen > 0);
 
-	if ((void *) di->cur_hist != &di->history)
-		s = di->cur_hist->d;
-	len = strlen(s);
-	int_upper_bound(&len, di->item->dlen - 1);
-	memcpy(di->cdata, s, len);
-	di->cdata[len] = 0;
-	di->cpos = len;
-	di->vpos = di->cpos - di->l;
-	if (di->vpos < 0) di->vpos = 0;
+	if ((void *) di->cur_hist != &di->history) {
+		unsigned char *s = di->cur_hist->d;
+
+		di->cpos = int_min(strlen(s), di->item->dlen - 1);
+		if (di->cpos) memcpy(di->cdata, s, di->cpos);
+	} else {
+		di->cpos = 0;
+	}
+
+	di->cdata[di->cpos] = 0;
+	di->vpos = int_max(0, di->cpos - di->l);
 }

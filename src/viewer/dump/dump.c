@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.71 2003/12/21 14:13:21 zas Exp $ */
+/* $Id: dump.c,v 1.72 2003/12/22 01:12:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,6 +297,26 @@ dump_to_file(struct document *document, int fd)
 fail:
 		mem_free(buf);
 		return -1;
+	}
+
+	if (get_opt_bool("document.browse.links.numbering")) {
+		struct link *l;
+		char *header = "\nReferences\n\n   Visible links\n";
+		int headlen = strlen(header);
+
+		if (hard_write(fd, header, headlen) != headlen)
+			goto fail;
+
+		for (x = 1; x < document->nlinks; x++) {
+			l = &document->links[x];
+			if (!l->where)
+				continue;
+
+			snprintf(buf, D_BUF, "%4d. %s\n", x, l->where);
+			bptr = strlen(buf);
+			if (hard_write(fd, buf, bptr) != bptr)
+				goto fail;
+		}
 	}
 
 	mem_free(buf);

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.461 2004/06/14 10:02:56 zas Exp $ */
+/* $Id: view.c,v 1.462 2004/06/14 10:05:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,7 +557,6 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 	/* !!! FIXME: check right margin */
 }
 
-/* TODO: "document.browse.hscroll_step" */
 static void
 scroll_left(struct session *ses, struct document_view *doc_view)
 {

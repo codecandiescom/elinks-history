@@ -1,3 +1,10 @@
+Wed Mar 13 22:07:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,
+	configure.in, stamp-h.in:
+	
+	0.4pre3-CVS
+
 Wed Mar 13 22:04:52 2002  Petr Baudis <pasky@ji.cz>:
 
 	* Makefile.in, acconfig.h, aclocal.m4, config.h.in, configure,

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.33 2002/11/29 20:39:51 pasky Exp $ */
+/* $Id: terminal.c,v 1.34 2002/11/30 00:12:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -821,6 +821,20 @@ redraw_screen(struct terminal *term)
 	a = init_str();
 	if (!a) return;
 
+#if 0
+	/* Performance testing utility */
+	/* Fill the cache */
+	opt_cache.type = 2;
+	opt_cache.m11_hack = 1;
+	opt_cache.utf_8_io = 0;
+	opt_cache.colors = 1;
+	opt_cache.charset = 3;
+	opt_cache.restrict_852 = 0;
+	/* Cache these values as they don't change and
+	 * get_cp_index() is pretty CPU-intensive. */
+	opt_cache.cp437 = 1;
+	opt_cache.koi8r = 1;
+#else
 	/* Fill the cache */
 	opt_cache.type = get_opt_int_tree(opt_tree, "type");
 	opt_cache.m11_hack = get_opt_bool_tree(opt_tree, "m11_hack");
@@ -832,6 +846,7 @@ redraw_screen(struct terminal *term)
 	 * get_cp_index() is pretty CPU-intensive. */
 	opt_cache.cp437 = get_cp_index("cp437");
 	opt_cache.koi8r = get_cp_index("koi8-r");
+#endif
 
 	for (y = 0; y < term->y; y++)
 		for (x = 0; x < term->x; x++, p++) {

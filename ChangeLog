@@ -1,3 +1,370 @@
+Sun Mar 27 22:01:28 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Clarified the language of the opening documentation.  
+
+Sun Mar 27 21:58:11 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: osdep/os2/os2.c, scripting/lua/core.c:
+
+	Use sanitize_title in Lua's l_current_title and the implementation 
+	of set_window_title for OS/2. Besides shortening the code, this also 
+	will cause the whitespace to be trimmed from the start and the end 
+	of the title.  
+
+Sun Mar 27 21:57:23 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	display_dir_entry(): Zas will probably don't like this, but remove
+	local @is_dir variable and check ftp_info->type ==
+	FTP_FILE_DIRECTORY instead.  
+
+Sun Mar 27 21:55:57 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	add_dom_link(): Use convert_string() to get the decode entities in
+	references.  
+
+Sun Mar 27 21:51:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/util/conv.c:
+
+	In sanitize_title, check explicitly for NBSP_CHAR (altho currently 
+	NBSP_CHAR is defined at 1, so it will be caught when we check < '
+	').  
+
+Sun Mar 27 21:43:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	display_dir_entry(): Remove unused @is_file variable.  
+
+Sun Mar 27 21:15:20 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Sun Mar 27 21:07:54 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Remove authors of the recently purged ftpparse code.  
+
+Sun Mar 27 19:39:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* AUTHORS:
+
+	Mention code snatching from other projects in AUTHORS. Idea by
+	Miciah.  
+
+Sun Mar 27 18:32:07 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/ftp/parse.c:
+
+	Stop including ftpparse's header file now that ftpparse is gone.  
+
+Sun Mar 27 18:14:27 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/terminal/event.c:
+
+	Use snprintf instead of strcpy and strcat in check_terminal_name.  
+
+Sun Mar 27 18:06:12 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/dialogs.c:
+
+	Use the value returned by snprintf to save recalculating the length 
+	of the string.  
+
+Sun Mar 27 18:04:38 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/dialogs.c:
+
+	Check the return value of snprintf in do_auth_dialog.  
+
+Sun Mar 27 17:39:29 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/file/file.c:
+
+	Use encode_uri_string to add the base href when generating file
+	listings. This closes bug 358.  
+
+Sun Mar 27 14:59:24 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/Makefile.am:
+
+	Purge the ftpparse code (part II).  
+
+Sun Mar 27 14:58:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/: Makefile.am, ftpparse.c, ftpparse.h:
+
+	Purge the ftpparse code. It has been replaced by Wget-based code.
+	Fixes license problem with ftpparse.{c,h} (debian bug #300889). Now
+	it needs to be ported back to 0.10. ~CCMAIL:
+	300889-forwarded@bugs.debian.org, grin@grin.hu~ 
+
+Sun Mar 27 14:53:11 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Fall-back to use the Un*x-style parser if nothing else is
+	recognized. The ftpparse code is no longer needed.  
+
+Sun Mar 27 14:51:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Add a FTP directory parser for the MSDOS/WinNT format. It is based
+	on the wget code but uses the ftpparse files method for determining
+	which parser to use.  
+
+Sun Mar 27 14:50:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Fix month mapping bug in the FTP parser for VMS-style listing.  
+
+Sun Mar 27 14:27:59 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Move the FTP permission parsers near the line response parser.  
+
+Sun Mar 27 14:25:35 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Oops, last patch was poisoned by my testing hacks. Revert.  
+
+Sun Mar 27 14:24:58 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/: ftp.c, parse.c:
+
+	Add a FTP directory parser for the VMS format. It is based on the
+	wget code but uses the ftpparse files method for determining which
+	parser to use.  
+
+Sun Mar 27 13:36:18 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Reduce indentation level in follow_url_hook().  
+
+Sun Mar 27 13:35:49 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Reindent some if conditions.  
+
+Sun Mar 27 13:33:57 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Oops, fix the Collapse XBEL Folders quit_hook() missing from the
+	pod.  
+
+Sun Mar 27 13:23:28 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	POD documentation of the mapping functions.  
+
+Sun Mar 27 13:02:39 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Sticked short Developer's usage section near each hook.  
+
+Sun Mar 27 12:44:26 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Short note about why the name->URL mapping won't be PODized.  
+
+Sun Mar 27 12:43:01 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	quit_hook() PODized.  
+
+Sun Mar 27 12:39:14 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	proxy_for_hook() PODized.  
+
+Sun Mar 27 12:29:38 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	PODize pre_format_html_hook().  
+
+Sun Mar 27 12:21:28 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Document the follor_url_hook() by POD.  
+
+Sun Mar 27 12:14:57 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	PREFIXES -> GOTO URL REWRITES and some short introduction for it.  
+
+Sun Mar 27 12:11:55 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Massive compilation fix. The stupid Perl can't handle pods inside of
+	expressions! 
+
+Sun Mar 27 11:30:52 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	Moved sub loadrc() near the CONFIG FILE section.  
+
+Sun Mar 27 11:26:23 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	NAME, DESCRIPTION, SEE ALSO, AUTORS sections. Short notice in the
+	header regarding how to squeeze the documentation from the file.
+	Changes in the CONFIGURATION FILE section.  
+
+Sun Mar 27 11:12:38 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* contrib/perl/hooks.pl:
+
+	The joy of literate programming. Make the documentation of various
+	prefixes pod-clean and nicely intertwinned with the hashes.  
+
+Sun Mar 27 07:23:30 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Add a FTP directory parser for the Un*x format. It is based on the
+	wget code but uses the ftpparse files method for determining which
+	parser to use.  
+
+Sun Mar 27 07:11:22 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Oops, forgot to include the ELinks master header.  
+
+Sun Mar 27 07:10:42 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Use a switch when determining what parser to use.  
+
+Sun Mar 27 07:09:56 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Introduce parse_ftp_number() helper.  
+
+Sun Mar 27 07:05:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/ftp.c:
+
+	Minor cleanup to use the type char from the ftp_file_info struct.  
+
+Sun Mar 27 04:12:06 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/parse.c:
+
+	Add a FTP directory parser for the EPLF format.  
+
+Sun Mar 27 04:05:20 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Further improved the documentation section for perldoc.  
+
+Sun Mar 27 02:20:34 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: Makefile.am, ftp/Makefile.am, ftp/ftp.c,
+	ftp/parse.c, ftp/parse.h:
+
+	Introduce gluecode that will ease the transition from using ftpparse
+	to using the modified wget parser.  
+
+Sun Mar 27 02:19:17 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/ftp/: ftpparse.c, ftpparse.h:
+
+	Add vms member to the ftpparse struct to make it possible to know
+	how to parse the permission string.  
+
+Sun Mar 27 01:54:30 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Lined up a whole lot of => as suggested by pasky.  
+
+Sun Mar 27 01:33:09 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	A little more brace expansion.  Also the comment over BBC referred
+	to Google.  
+
+Sun Mar 27 01:17:53 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	I forgot to list the Dialectizer at the top.  
+
+Sun Mar 27 00:51:40 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Uncompact braces in pre_format_html_hook.  
+
+Sun Mar 27 00:49:19 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Return the actual URL rather than $url.  
+
+Sun Mar 27 00:35:10 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Return the actual URL rather than $url as per Pasky's example.  
+
+Sun Mar 27 00:24:10 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Return the actual URL rather than $url as per Pasky's example.  
+
+Sat Mar 26 23:53:35 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Strip training spaces from URLs.  Useful when ELinks is launched by
+	another application.  
+
+Sat Mar 26 23:42:26 2005  Russ Rowan <rrowan@dandy.net>:
+
+	* contrib/perl/hooks.pl:
+
+	Added a new prefix: the Dialectizer.  
+
+Sat Mar 26 23:25:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Markup button shortcuts.  
+
 Sat Mar 26 23:05:51 2005  Petr Baudis <pasky@ucw.cz>:
 
 	* contrib/perl/hooks.pl:

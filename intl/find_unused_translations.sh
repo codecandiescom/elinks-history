@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: find_unused_translations.sh,v 1.2 2002/12/14 11:42:15 zas Exp $
+# $Id: find_unused_translations.sh,v 1.3 2002/12/15 00:38:10 zas Exp $
 
 # This script lists unused translations and, if given the argument 'patch',
 # generates <language>.lng.patch for each translation file to remove them.
@@ -23,7 +23,7 @@ sed -e 's/\(\<T_[0-9a-zA-Z_]\+\>\)/\
 /g' ${LIST} | grep '^T_[0-9a-zA-Z_]\+$' | sort -u > translations_used
 
 # I'd use a variable instead of a file, but newlines would not be preserved.
-< english.lng cut -d, -f1 | sort -u |
+< english.lng cut -d, -f1 | sort -u | grep -v '^#' |
 	comm -23 - translations_used > translations_unused
 
 if ! grep . translations_unused 2>&1 >/dev/null
@@ -41,5 +41,14 @@ do
 	grep -vwF "$(cat translations_unused)" ${lang} |
 		diff -u ${lang} - > ${lang}.patch
 done
+
+if [ "$1" = 'simple' ]; then
+	E=$(echo $(cat translations_unused) | sed 's/ /\\\|/g')
+	sed "s/^\($E\)/#\1/" english.lng |
+		diff -u english.lng - > english.lng.patch
+
+
+fi
+
 
 echo 'Done.'

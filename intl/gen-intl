@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: gen-intl,v 1.12 2002/12/09 10:47:49 zas Exp $
+# $Id: gen-intl,v 1.13 2002/12/15 00:38:10 zas Exp $
 
 PRE="../src/intl/lng_"
 
@@ -47,7 +47,7 @@ do
 	echo >&4
 	echo "struct translation translation_${lang}[] = {" >&4
 	echo '	{ T_NIL_, NULL },' >&4
-	sed 's/^/	{ /;s/,*$/ },/;s///g' ${lang}.lng >&4
+	sed '/^#/d;s/^/	{ /;s/,*$/ },/;s///g' ${lang}.lng >&4
 	echo '	{ T_NIL_, NULL }' >&4
 	echo '};' >&4
 	exec 4>&-

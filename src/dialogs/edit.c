@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.39 2003/09/01 13:00:10 zas Exp $ */
+/* $Id: edit.c,v 1.40 2003/09/25 14:29:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -103,26 +103,24 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	       void when_done(struct dialog *),
 	       void when_cancel(struct dialog *),
 	       void *done_data,
-	       int dialog_type /* 1 edit/add or 0 search dialog */)
+	       enum edit_dialog_type dialog_type)
 {
 	/* Number of fields in edit dialog --Zas */
-#define BM_EDIT_DIALOG_FIELDS_NB 5
+#define EDIT_DIALOG_FIELDS_NB 5
 
 	unsigned char *name, *url;
 	struct dialog *d;
 
-	if (intl) {
-		title = _(title, term);
-	}
+	if (intl) title = _(title, term);
 
 	/* Create the dialog */
 	d = mem_calloc(1, sizeof(struct dialog)
-			  + (BM_EDIT_DIALOG_FIELDS_NB + 1)
+			  + (EDIT_DIALOG_FIELDS_NB + 1)
 			    * sizeof(struct widget)
 			  + 2 * MAX_STR_LEN);
 	if (!d) return;
 
-	name = (unsigned char *) &d->items[BM_EDIT_DIALOG_FIELDS_NB + 1];
+	name = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];
 	url = name + MAX_STR_LEN;
 
 	/* Get the name */
@@ -153,12 +151,12 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
 	d->items[0].data = name;
-	if (dialog_type == 1) d->items[0].fn = check_nonempty;
+	if (dialog_type == EDIT_DLG_ADD) d->items[0].fn = check_nonempty;
 
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
 	d->items[1].data = url;
-	/* if (dialog_type == 1) d->items[1].fn = check_nonempty; */
+	/* if (dialog_type == EDIT_DLG_ADD) d->items[1].fn = check_nonempty; */
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
@@ -176,9 +174,9 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	d->items[4].data = (void *) when_cancel;
 	d->items[4].fn = when_cancel ? my_cancel_dialog : cancel_dialog;
 
-	d->items[BM_EDIT_DIALOG_FIELDS_NB].type = D_END;
+	d->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
 
 	do_dialog(term, d, getml(d, NULL));
 
-#undef BM_EDIT_DIALOG_FIELDS_NB
+#undef EDIT_DIALOG_FIELDS_NB
 }

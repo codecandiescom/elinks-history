@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.5 2004/01/25 15:28:16 jonas Exp $ */
+/* $Id: exmode.c,v 1.6 2004/01/26 04:16:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@
 
 
 struct exmode_data {
-	struct widget_data inpfield_data;
+	struct widget_data *inpfield_data;
 	struct widget inpfield;
 	struct dialog_data dlg_data;
 	struct session *ses;
@@ -88,7 +88,7 @@ exmode_exec(struct exmode_data *data)
 static void
 exmode_display(struct window *win, struct exmode_data *data)
 {
-	field_ops.display(&data->inpfield_data, &data->dlg_data, 1);
+	field_ops.display(data->inpfield_data, &data->dlg_data, 1);
 	redraw_from_window(win);
 }
 
@@ -107,8 +107,8 @@ exmode_func(struct window *win, struct term_event *ev, int fwd)
 				- ses->status.show_status_bar
 				- ses->status.show_tabs_bar;
 
-			field_ops.init(&data->inpfield_data, &data->dlg_data, NULL);
-			dlg_format_field(win->term, &data->inpfield_data, 0,
+			field_ops.init(data->inpfield_data, &data->dlg_data, NULL);
+			dlg_format_field(win->term, data->inpfield_data, 0,
 					 &y, win->term->width, NULL, AL_LEFT);
 			}
 		case EV_RESIZE:
@@ -118,12 +118,12 @@ exmode_func(struct window *win, struct term_event *ev, int fwd)
 
 		case EV_MOUSE:
 #ifdef CONFIG_MOUSE
-			field_ops.mouse(&data->inpfield_data, &data->dlg_data, ev);
+			field_ops.mouse(data->inpfield_data, &data->dlg_data, ev);
 #endif /* CONFIG_MOUSE */
 			break;
 
 		case EV_KBD:
-			field_ops.kbd(&data->inpfield_data, &data->dlg_data, ev);
+			field_ops.kbd(data->inpfield_data, &data->dlg_data, ev);
 			switch (kbd_action(KM_EDIT, ev, NULL)) {
 				case ACT_EDIT_ENTER:
 					exmode_exec(data);
@@ -168,8 +168,9 @@ exmode_start(struct session *ses)
 	}
 	*data->inpfield.data = 0;
 
-	data->inpfield_data.widget = &data->inpfield;
-	data->inpfield_data.cdata = data->inpfield.data;
+	data->inpfield_data = selected_widget(&data->dlg_data);
+	data->inpfield_data->widget = &data->inpfield;
+	data->inpfield_data->cdata = data->inpfield.data;
 
 	add_window(ses->tab->term, exmode_func, data);
 }

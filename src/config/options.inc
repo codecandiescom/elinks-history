@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.56 2003/12/28 01:45:21 jonas Exp $ */
+/* $Id: options.inc,v 1.57 2003/12/28 01:53:17 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -967,201 +967,73 @@ struct option_info config_options_info[] = {
 		N_("This option is deprecated and will be removed very soon.\n"
 		"Please use ui.colors.color.dialog.generic.background instead.")),
 
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Generic"),
-		"generic", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Generic"),
+		"generic", "white", "black",
 		N_("Generic dialog colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.generic", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.generic", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Frame"),
-		"frame", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Frame"),
+		"frame", "white", "black",
 		N_("Dialog frame colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.frame", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.frame", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Scrollbar"),
-		"scrollbar", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Scrollbar"),
+		"scrollbar", "blue", "black",
 		N_("Scrollbar colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar", N_("Background color"),
-		"background", 0, "blue",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Scrollbar selected"),
-		"scrollbar-selected", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Scrollbar selected"),
+		"scrollbar-selected", "green", "black",
 		N_("Scrollbar selected colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar-selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.scrollbar-selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Title"),
-		"title", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Title"),
+		"title", "white", "darkred",
 		N_("Dialog title colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.title", N_("Text color"),
-		"text", 0, "darkred",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.title", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Text"),
-		"text", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Text"),
+		"text", "white", "black",
 		N_("Dialog text colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.text", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.text", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Checkbox"),
-		"checkbox", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Checkbox"),
+		"checkbox", "white", "darkred",
 		N_("Dialog checkbox colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.checkbox", N_("Text color"),
-		"text", 0, "darkred",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.checkbox", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Checkbox label"),
-		"checkbox-label", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Checkbox label"),
+		"checkbox-label", "white", "black",
 		N_("Dialog checkbox label colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.checkbox-label", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.checkbox-label", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Button"),
-		"button", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Button"),
+		"button", "blue", "white",
 		N_("Dialog button colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.button", N_("Text color"),
-		"text", 0, "white",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.button", N_("Background color"),
-		"background", 0, "blue",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Selected button"),
-		"button-selected", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Selected button"),
+		"button-selected", "green", "yellow",
 		N_("Dialog selected button colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.button-selected", N_("Text color"),
-		"text", 0, "yellow",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.button-selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Text field"),
-		"field", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Text field"),
+		"field", "blue", "white",
 		N_("Dialog text field colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.field", N_("Text color"),
-		"text", 0, "white",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.field", N_("Background color"),
-		"background", 0, "blue",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Text field text"),
-		"field-text", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Text field text"),
+		"field-text", "blue", "yellow",
 		N_("Dialog field text colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.field-text", N_("Text color"),
-		"text", 0, "yellow",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.field-text", N_("Background color"),
-		"background", 0, "blue",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Meter"),
-		"meter", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Meter"),
+		"meter", "blue", "white",
 		N_("Dialog meter colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.dialog.meter", N_("Text color"),
-		"text", 0, "white",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.meter", N_("Background color"),
-		"background", 0, "blue",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.dialog", N_("Shadow"),
-		"shadow", 0,
+	INIT_OPT_COLORS("ui.colors.color.dialog", N_("Shadow"),
+		"shadow", "black", "black",
 		N_("Dialog shadow colors (see ui.shadows option).")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.shadow", N_("Background color"),
-		"background", 0, "black",
-		N_("Default background color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.dialog.shadow", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
 
 	INIT_OPT_TREE("ui.colors.color", N_("Title bar"),
 		"title", 0,
 		N_("Title bar colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.title", N_("Generic title bar"),
-		"title-bar", 0,
+	INIT_OPT_COLORS("ui.colors.color.title", N_("Generic title bar"),
+		"title-bar", "white", "black",
 		N_("Generic title bar colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.title.title-bar", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.title.title-bar", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.title", N_("Title bar text"),
-		"title-text", 0,
+	INIT_OPT_COLORS("ui.colors.color.title", N_("Title bar text"),
+		"title-text", "white", "black",
 		N_("Title bar text colors.")),
-
-	INIT_OPT_COLOR("ui.colors.color.title.title-text", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.title.title-text", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
 
 
 	INIT_OPT_TREE("ui.colors.color", N_("Status bar"),

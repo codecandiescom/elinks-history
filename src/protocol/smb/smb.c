@@ -1,5 +1,5 @@
 /* Internal SMB protocol implementation */
-/* $Id: smb.c,v 1.63 2004/11/03 18:03:57 zas Exp $ */
+/* $Id: smb.c,v 1.64 2004/11/05 03:32:19 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -30,8 +30,11 @@
 #include "elinks.h"
 
 #include "cache/cache.h"
+#include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/select.h"
+#include "modules/module.h"
 #include "osdep/osdep.h"
 #include "protocol/protocol.h"
 #include "protocol/smb/smb.h"
@@ -64,6 +67,29 @@ struct smb_connection_info {
 };
 
 static void end_smb_connection(struct connection *conn);
+
+
+struct option_info smb_options[] = {
+	INIT_OPT_TREE("protocol", N_("SMB"),
+		"smb", 0,
+		N_("SAMBA specific options.")),
+
+	INIT_OPT_STRING("protocol.smb", N_("Credentials"),
+		"credentials", 0, "",
+		N_("Credentials file passed to smbclient via -A option.")),
+
+	NULL_OPTION_INFO,
+};
+
+struct module smb_protocol_module = struct_module(
+	/* name: */		N_("SMB"),
+	/* options: */		smb_options,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
 
 
 /* Return 0 if @conn->cached was set. */

@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.83 2004/10/19 19:23:35 pasky Exp $ */
+/* $Id: protocol.c,v 1.84 2004/11/05 03:32:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -258,6 +258,9 @@ static struct module *protocol_submodules[] = {
 #endif
 #ifdef CONFIG_NNTP
 	&nntp_protocol_module,
+#endif
+#ifdef CONFIG_SMB
+	&smb_protocol_module,
 #endif
 #ifdef CONFIG_URI_REWRITE
 	&uri_rewrite_module,

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.144 2004/11/01 22:22:42 jonas Exp $ */
+/* $Id: options.inc,v 1.145 2004/11/05 03:32:19 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -903,16 +903,6 @@ static struct option_info config_options_info[] = {
 		N_("User protocols. Options in this tree specify external\n"
 		"handlers for the appropriate protocols. Ie.\n"
 		"protocol.user.mailto.unix.")),
-
-#ifdef CONFIG_SMB
-	INIT_OPT_TREE("protocol", N_("SMB"),
-		"smb", 0,
-		N_("SAMBA specific options.")),
-
-	INIT_OPT_STRING("protocol.smb", N_("Credentials"),
-		"credentials", 0, "",
-		N_("Credentials file passed to smbclient via -A option.")),
-#endif /* CONFIG_SMB */
 
 	/* FIXME: Poorly designed options structure. Ought to be able to specify
 	 * need_slashes, free_form and similar options as well :-(. --pasky */

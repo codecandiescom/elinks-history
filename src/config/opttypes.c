@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.35 2002/12/07 23:06:48 pasky Exp $ */
+/* $Id: opttypes.c,v 1.36 2002/12/08 16:55:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
  * parameters as well - probably, you don't want to be so syntactically
  * strict, and _ESPECIALLY_ you don't want to move any file pointers ahead,
  * since you will parse the commandline _TWO TIMES_! Remember! :-) */
-static int commandline = 0;
+int commandline = 0;
 
 unsigned char *
 gen_cmd(struct option *o, unsigned char ***argv, int *argc)

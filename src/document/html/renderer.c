@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.383 2003/11/18 22:14:09 pasky Exp $ */
+/* $Id: renderer.c,v 1.384 2003/11/18 22:18:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,22 +95,6 @@ void put_chars(struct part *, unsigned char *, int);
 #define SPACES_GRANULARITY	0x7F
 
 #define ALIGN_SPACES(x, o, n) mem_align_alloc(x, o, n, sizeof(unsigned char), SPACES_GRANULARITY)
-
-static struct line *
-realloc_lines(struct document *document, int y)
-{
-	assert(document);
-	if_assert_failed return NULL;
-
-	if (document->height <= y) {
-		if (!ALIGN_LINES(&document->data, document->height, y + 1))
-			return NULL;
-
-		document->height = y + 1;
-	}
-
-	return &document->data[y];
-}
 
 static int
 realloc_line(struct document *document, int y, int x)

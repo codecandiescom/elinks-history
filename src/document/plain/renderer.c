@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.34 2003/11/18 22:14:09 pasky Exp $ */
+/* $Id: renderer.c,v 1.35 2003/11/18 22:18:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,22 +29,6 @@
 
 #define realloc_points(link, size) \
 	mem_align_alloc(&(link)->pos, (link)->n, size, sizeof(struct point), 0)
-
-static struct line *
-realloc_lines(struct document *document, int y)
-{
-	assert(document);
-	if_assert_failed return NULL;
-
-	if (document->height <= y) {
-		if (!ALIGN_LINES(&document->data, document->height, y + 1))
-			return NULL;
-
-		document->height = y + 1;
-	}
-
-	return &document->data[y];
-}
 
 static struct screen_char *
 realloc_line(struct document *document, int y, int x)

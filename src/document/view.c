@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.84 2002/10/10 21:40:23 pasky Exp $ */
+/* $Id: view.c,v 1.85 2002/10/12 15:12:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3018,6 +3018,19 @@ send_download(struct terminal *term, void *xxx, struct session *ses)
 	}
 }
 
+static int
+add_session_ring_to_str(unsigned char **str, int *len)
+{
+	int ring = get_opt_int_tree(cmdline_options, "session-ring");
+
+	if (ring) {
+		add_to_str(str, len, " -session-ring ");
+		add_num_to_str(str, len, ring);
+	}
+
+	return ring;
+}
+
 /* open a link in a new xterm */
 void
 send_open_in_new_xterm(struct terminal *term,
@@ -3030,6 +3043,8 @@ send_open_in_new_xterm(struct terminal *term,
 	if (fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
+	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_str(). --pasky */
+	/* if (ses->dn_url) add_session_ring_to_str(&ses->dn_url, &l); */
 	if (ses->dn_url) {
 		unsigned char *enc_url = encode_url(ses->dn_url);
 
@@ -3044,11 +3059,13 @@ send_open_new_xterm(struct terminal *term,
 		    struct session *ses)
 {
 	int l = 0;
+	int ring;
 
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = init_str();
 	add_to_str(&ses->dn_url, &l, "-base-session ");
 	add_num_to_str(&ses->dn_url, &l, ses->id);
+	add_session_ring_to_str(&ses->dn_url, &l);
 	open_window(term, path_to_exe, ses->dn_url);
 }
 

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.71 2002/12/20 21:46:56 pasky Exp $ */
+/* $Id: conf.c,v 1.72 2003/01/01 14:01:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,7 +141,7 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 		val = option_types[opt->type].read(opt, file);
 		if (!val) {
 			return ERROR_VALUE;
-		} if (str) {
+		} else if (str) {
 			opt->flags |= OPT_WATERMARK;
 			if (option_types[opt->type].write)
 				option_types[opt->type].write(opt, str, len);

@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.5 2003/05/20 22:09:16 zas Exp $ */
+/* $Id: version.c,v 1.6 2003/05/24 09:38:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,9 @@ get_dyn_full_version(struct terminal *term, int more)
 #endif
 #ifdef FASTMEM
 		_("Fastmem", term), ", ",
+#endif
+#ifndef BACKTRACE
+		_("No backtrace", term), ", ",
 #endif
 #ifdef HAVE_SSL
 		_("SSL", term),

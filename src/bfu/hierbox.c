@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.48 2003/11/09 03:30:46 jonas Exp $ */
+/* $Id: hierbox.c,v 1.49 2003/11/09 03:39:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -142,26 +142,24 @@ hierbox_browser_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int w = dialog_max_width(term);
-	int rw = w; /* We want it to have the maximal width possible. */
-	int y = -1;
+	int y = 0, x = 0;
 	int n = dlg_data->n - 1;
 
-	/* Find dimensions of dialog */
+	/* We want it to have the maximal width possible so don't calculate
+	 * @rw. */
 
-	y += 1;	/* Blankline between top and top of box */
-	dlg_format_box(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
-		       &y, w, NULL, AL_LEFT);
-	y += 1;	/* Blankline between box and menu */
-	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, n, 0,
-			   &y, w, &rw, AL_CENTER);
-	w = rw;
+	dlg_format_box(term, dlg_data->widgets_data, x, &y, w, NULL, AL_LEFT);
+	y++;
+	dlg_format_buttons(NULL, dlg_data->widgets_data + 1, n, x,
+			   &y, w, NULL, AL_CENTER);
 
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 
-	y = dlg_data->y + DIALOG_TB;
-	y++;
-	dlg_format_box(term, dlg_data->widgets_data, dlg_data->x + DIALOG_LB,
-		       &y, w, NULL, AL_LEFT);
+	/* +1 to add blankline between top and top of box */
+	y = dlg_data->y + DIALOG_TB + 1;
+	x = dlg_data->x + DIALOG_LB;
+
+	dlg_format_box(term, dlg_data->widgets_data, x, &y, w, NULL, AL_LEFT);
 	y++;
 	dlg_format_buttons(term, dlg_data->widgets_data + 1, n,
 			   dlg_data->x + DIALOG_LB, &y, w, NULL, AL_CENTER);

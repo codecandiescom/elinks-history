@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.38 2003/07/25 01:21:52 jonas Exp $ */
+/* $Id: uri.c,v 1.39 2003/07/25 02:34:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -782,7 +782,7 @@ encode_uri_string(struct string *string, unsigned char *name)
 			/* Hex it. */
 			n[1] = hx((((int) *name) & 0xF0) >> 4);
 			n[2] = hx(((int) *name) & 0xF);
-			add_to_string(string, n);
+			add_bytes_to_string(string, n, sizeof(n) - 1);
 		}
 	}
 }

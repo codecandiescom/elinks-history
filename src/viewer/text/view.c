@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.146 2003/07/02 23:56:09 zas Exp $ */
+/* $Id: view.c,v 1.147 2003/07/02 23:58:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,12 +624,12 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	      struct f_data_c *f, struct link *l)
 {
 	struct line_info *ln, *lnx;
-	int sl, ye;
-	register int i, x, y = 0;
 	struct form_control *frm;
 	int xp, yp;
 	int xw, yw;
 	int vx, vy;
+	int sl, ye;
+	register int x, y;
 
 	assert(t && f && f->f_data && l);
 	frm = l->form;
@@ -641,7 +641,6 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	yw = f->yw;
 	vx = f->vs->view_posx;
 	vy = f->vs->view_pos;
-
 
 	if (!l->n) return;
 	area_cursor(frm, fs);
@@ -656,6 +655,8 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	ye = y + frm->rows;
 
 	for (; ln->st && y < ye; ln++, y++) {
+		register int i;
+		
 		if (y < yp || y >= yp + yw) continue;
 
 		for (i = 0; i < frm->cols; i++) {
@@ -674,6 +675,8 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	}
 
 	for (; y < ye; y++) {
+		register int i;
+
 		if (y < yp || y >= yp + yw) continue;
 
 		for (i = 0; i < frm->cols; i++) {

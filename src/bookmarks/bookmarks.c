@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.45 2002/09/15 15:32:43 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.46 2002/09/17 16:56:39 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -145,15 +145,15 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 }
 
 void
-set_bookmarks_visible(struct list_head bookmark_list,
+set_bookmarks_visible(struct list_head *bookmark_list,
 		      int (*test)(struct bookmark *, void *), void *data)
 {
 	struct bookmark *bm;
 
-	foreach (bm, bookmark_list) {
+	foreach (bm, *bookmark_list) {
 		bm->box_item->visible = test(bm, data);
 		if (!list_empty(bm->child))
-			set_bookmarks_visible(bm->child, test, data);
+			set_bookmarks_visible(&bm->child, test, data);
 	}
 }
 
@@ -204,14 +204,14 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 	bm_last_searched_url = stracpy(search_url);
 
 	if (!*search_title && !*search_url) {
-		set_bookmarks_visible(bookmarks, test_true, NULL);
+		set_bookmarks_visible(&bookmarks, test_true, NULL);
 	        return 1;
 	}
 
 	ctx.search_url = search_url;
 	ctx.search_title = search_title;
 
-	set_bookmarks_visible(bookmarks, test_search, &ctx);
+	set_bookmarks_visible(&bookmarks, test_search, &ctx);
 
 	return 1;
 }

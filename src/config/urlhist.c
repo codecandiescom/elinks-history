@@ -1,5 +1,5 @@
 /* Manipulation with file containing URL history */
-/* $Id: urlhist.c,v 1.13 2002/12/18 16:17:02 zas Exp $ */
+/* $Id: urlhist.c,v 1.14 2002/12/18 16:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 extern struct input_history goto_url_history;
 
 int history_dirty = 0;
+int history_nosave = 0;
 
 /* Load history file */
 int load_url_history()
@@ -42,10 +43,12 @@ int load_url_history()
 		return 0;
 	}
 
+	history_nosave = 1;
 	while (fgets(url, MAX_STR_LEN, fp)) {
 		url[strlen(url) - 1] = 0;
 		add_to_input_history(&goto_url_history, url, 0);
 	}
+	history_nosave = 0;
 
 	fclose(fp);
 	mem_free(history_file);

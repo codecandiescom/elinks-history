@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.10 2002/12/18 16:18:47 zas Exp $ */
+/* $Id: inphist.c,v 1.11 2002/12/18 16:25:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "bfu/dialog.h"
 #include "bfu/inphist.h"
 #include "bfu/menu.h"
+#include "config/urlhist.h"
 #include "lowlevel/terminal.h"
 #include "util/lists.h"
 #include "util/memory.h"
@@ -186,7 +187,7 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 	add_to_list(historylist->items, newhistoryitem);
 	historylist->n++;
 
-	history_dirty = 1;
+	if (!history_nosave) history_dirty = 1;
 
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */

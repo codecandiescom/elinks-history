@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.216 2003/12/06 09:52:42 pasky Exp $ */
+/* $Id: http.c,v 1.217 2003/12/06 22:37:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1114,7 +1114,7 @@ http_error:
 		return;
 	}
 
-	if ((d = parse_http_header(ch, "Status", NULL))) {
+	if ((d = parse_http_header(head, "Status", NULL))) {
 		int h2 = atoi(d);
 
 		mem_free(d);

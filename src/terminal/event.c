@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.45 2004/06/13 03:23:45 jonas Exp $ */
+/* $Id: event.c,v 1.46 2004/06/13 03:25:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -310,17 +310,17 @@ in_term(struct terminal *term)
 
 	while (term->qlen >= sizeof(struct term_event)) {
 		struct term_event *ev = (struct term_event *)iq;
+		int event_size = = handle_interlink_event(term, ev);
 
-		r = handle_interlink_event(term, ev);
-		if (!r) return;
-		/* redraw_screen(term); */
+		if (!event_size) return;
 
-		if (term->qlen == r) {
+		if (term->qlen == event_size) {
 			term->qlen = 0;
 		} else {
-			term->qlen -= r;
-			memmove(iq, iq + r, term->qlen);
+			term->qlen -= event_size;
+			memmove(iq, iq + event_size, term->qlen);
 		}
-		term->qfreespace += r;
+
+		term->qfreespace += event_size;
 	}
 }

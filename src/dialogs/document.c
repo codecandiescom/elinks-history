@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.114 2005/01/19 14:50:36 zas Exp $ */
+/* $Id: document.c,v 1.115 2005/03/03 11:39:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -44,7 +44,7 @@ nowhere_box(struct terminal *term, unsigned char *title)
 		title = N_("Info");
 
 	msg_box(term, NULL, 0,
-		title, ALIGN_LEFT,
+		title, ALIGN_CENTER,
 		N_("You are nowhere!"),
 		NULL, 1,
 		N_("OK"), NULL, B_ENTER | B_ESC);

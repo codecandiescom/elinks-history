@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.128 2003/07/02 17:22:01 zas Exp $ */
+/* $Id: view.c,v 1.129 2003/07/02 17:26:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -523,12 +523,14 @@ is_in_range(struct f_data *f, int y, int yw, unsigned char *txt,
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1->c, txt[0]))
+		if (srch_cmp(s1->c, txt[0])) {
+srch_failed:
 			continue;
+		}
 
 		for (i = 1; i < l; i++)
 			if (srch_cmp(s1[i].c, txt[i]))
-				continue;
+				goto srch_failed;
 
 		if (s1[i].y < y || s1[i].y >= y + yw)
 			continue;
@@ -581,12 +583,14 @@ get_searched(struct f_data_c *scr, struct point **pt, int *pl)
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1->c, c))
+		if (srch_cmp(s1->c, c)) {
+srch_failed:
 			continue;
+		}
 
 		for (i = 1; i < l; i++)
 			if (srch_cmp(s1[i].c, (*scr->search_word)[i]))
-				continue;
+				goto srch_failed;
 
 		for (i = 0; i < l; i++) {
 			register int j;

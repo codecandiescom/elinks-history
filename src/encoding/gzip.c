@@ -1,5 +1,5 @@
 /* Gzip encoding (ENCODING_GZIP) backend */
-/* $Id: gzip.c,v 1.4 2004/08/18 19:24:49 jonas Exp $ */
+/* $Id: gzip.c,v 1.5 2004/09/14 06:46:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -96,7 +96,7 @@ gzip_decode_buffer(unsigned char *data, int len, int *new_len)
 			stream.next_out  = buffer + stream.total_out;
 			stream.avail_out = MAX_STR_LEN;
 
-			error = inflate(&stream, Z_FINISH);
+			error = inflate(&stream, Z_NO_FLUSH);
 			if (error == Z_STREAM_END) {
 				*new_len = stream.total_out;
 				error = Z_OK;

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.227 2004/06/22 14:12:50 zas Exp $ */
+/* $Id: kbdbind.c,v 1.228 2004/06/22 14:42:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,9 +26,10 @@
 #define table table_elinks
 
 static struct strtonum *action_table[KM_MAX];
-/* XXX: 1024 is just a quick hack, we ought to allocate the sub-arrays
- * separately. --pasky */
-static struct listbox_item *action_box_items[KM_MAX][1024];
+/* XXX: ACTION_BOX_SIZE is just a quick hack, we ought to allocate
+ * the sub-arrays separately. --pasky */
+#define ACTION_BOX_SIZE 128
+static struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
 static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings(void);
@@ -86,6 +87,9 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		/* We don't want such a listbox_item, do we? */
 		return NULL; /* Or goto. */
 	}
+
+	assert(action < ACTION_BOX_SIZE);
+	if_assert_failed return NULL;
 
 	root = action_box_items[km][action];
 	if (!root) {
@@ -639,6 +643,9 @@ init_action_listboxes(void)
 
 		for (act = action_table[map->num]; act->str; act++) {
 			struct listbox_item *item;
+
+			assert(act->num < ACTION_BOX_SIZE);
+			if_assert_failed continue;
 
 			if (act->num == ACT_MAIN_SCRIPTING_FUNCTION
 			    || act->num == ACT_MAIN_NONE)

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.176 2004/06/08 19:33:51 jonas Exp $ */
+/* $Id: dialogs.c,v 1.177 2004/06/16 04:56:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -278,11 +278,11 @@ check_valid_option(struct dialog_data *dlg_data, struct widget_data *widget_data
 			 * was zero. */
 			while (current && (!current->change_hook ||
 				!current->change_hook(ses, current, option))) {
-				if (current->box_item &&
-				    current->box_item->root)
-					current = current->box_item->root->udata;
-				else
+				if (!current->box_item ||
+				    !current->box_item->root)
 					break;
+
+				current = current->box_item->root->udata;
 			}
 
 			commandline = 0;

@@ -1,14 +1,15 @@
-/* $Id: cookies.h,v 1.22 2004/05/31 02:22:37 jonas Exp $ */
+/* $Id: cookies.h,v 1.23 2004/05/31 12:39:04 jonas Exp $ */
 
 #ifndef EL__COOKIES_COOKIES_H
 #define EL__COOKIES_COOKIES_H
 
-#include "bfu/listbox.h"
 #include "modules/module.h"
 #include "protocol/uri.h"
 #include "util/object.h"
 #include "util/string.h"
 #include "util/ttime.h"
+
+struct listbox_item;
 
 enum cookies_accept {
 	COOKIES_ACCEPT_NONE,
@@ -21,19 +22,18 @@ struct c_server {
 
 	struct listbox_item *box_item;
 	struct object object;
-	int accept;
-	unsigned char server[1]; /* Must be at end of struct. */
+	unsigned char host[1]; /* Must be at end of struct. */
 };
 
 struct cookie {
 	LIST_HEAD(struct cookie);
 
 	unsigned char *name, *value;
-	struct c_server *server;
 	unsigned char *path, *domain;
-	ttime expires; /* zero means undefined */
-	int secure;
-	int id;
+
+	struct c_server *server;	/* The host the cookie originated from */
+	ttime expires;			/* Expiration time. Zero means undefined */
+	int secure;			/* Did it have 'secure' attribute */
 
 	/* This is indeed maintained by cookies.c, not dialogs.c; much easier
 	 * and simpler. */

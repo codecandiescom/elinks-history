@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.148 2004/05/31 12:19:39 jonas Exp $ */
+/* $Id: cookies.c,v 1.149 2004/05/31 12:39:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,8 +50,6 @@
 
 
 static int cookies_nosave = 0;
-
-static unsigned int cookie_id = 0;
 
 static INIT_LIST_HEAD(cookies);
 static INIT_LIST_HEAD(cookie_queries);
@@ -131,7 +129,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 	struct c_server *cs;
 
 	foreach (cs, c_servers) {
-		if (strlcasecmp(cs->server, -1, host, hostlen))
+		if (strlcasecmp(cs->host, -1, host, hostlen))
 			continue;
 
 		object_lock(cs);
@@ -141,7 +139,7 @@ get_cookie_server(unsigned char *host, int hostlen)
 	cs = mem_calloc(1, sizeof(struct c_server) + hostlen);
 	if (!cs) return NULL;
 
-	memcpy(cs->server, host, hostlen);
+	memcpy(cs->host, host, hostlen);
 	object_nolock(cs, "cookie_server");
 
 	cs->box_item = add_listbox_folder(&cookie_browser, NULL, cs);
@@ -376,7 +374,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	{
 		DBG("Got cookie %s = %s from %s, domain %s, "
 		      "expires at %d, secure %d\n", cookie->name,
-		      cookie->value, cookie->server->server, cookie->domain,
+		      cookie->value, cookie->server->host, cookie->domain,
 		      cookie->expires, cookie->secure);
 	}
 #endif
@@ -389,8 +387,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 		mem_free(cookie->domain);
 		cookie->domain = memacpy(uri->host, uri->hostlen);
 	}
-
-	cookie->id = cookie_id++;
 
 	/* We have already check COOKIES_ACCEPT_NONE */
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
@@ -446,6 +442,8 @@ accept_cookie(struct cookie *c)
 }
 
 #if 0
+static unsigned int cookie_id = 0;
+
 static void
 delete_cookie(struct cookie *c)
 {
@@ -501,25 +499,9 @@ reject_cookie(void *idp)
 static void
 cookie_default(void *idp, int a)
 {
-	struct c_server *s;
 	struct cookie *c = find_cookie_id(idp);
-	int server_len;
 
-	if (!c) return;
-
-	foreach (s, c_servers)
-		if (!strcasecmp(s->server, c->server))
-			goto found;
-
-	server_len = strlen(c->server);
-	/* One byte is reserved for server in struct c_server. */
-	s = mem_alloc(sizeof(struct c_server) + server_len);
-	if (s) {
-		memcpy(s->server, c->server, server_len + 1);
-		add_to_list(c_servers, s);
-found:
-		s->accept = a;
-	}
+	if (c) c->server->accept = a;
 }
 
 
@@ -569,7 +551,7 @@ accept_cookie_dialog(struct session *ses, void *data)
 		"Domain: %s\n"
 		"Expires: %s\n"
 		"Secure: %s\n"),
-		cookie->server->server, cookie->name, cookie->value,
+		cookie->server->host, cookie->name, cookie->value,
 		cookie->domain, string.source,
 		_(cookie->secure ? N_("yes") : N_("no"), ses->tab->term)),
 		cookie, 2,
@@ -767,8 +749,6 @@ load_cookies(void) {
 		if (*p) p[strlen(p) - 1] = '\0';
 		cookie->secure = atoi(p);
 
-		cookie->id = cookie_id++;
-
 		/* XXX: We don't want to overwrite the cookies file
 		 * periodically to our death. */
 		cookies_nosave = 1;
@@ -800,7 +780,7 @@ save_cookies(void) {
 		if (is_dead(c->expires)) continue;
 		if (secure_fprintf(ssi, "%s\t%s\t%s\t%s\t%s\t%ld\t%d\n",
 				   c->name, c->value,
-				   c->server->server,
+				   c->server->host,
 				   empty_string_or_(c->path),
 				   empty_string_or_(c->domain),
 				   c->expires, c->secure) < 0)

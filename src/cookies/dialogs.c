@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.54 2004/05/31 12:09:17 jonas Exp $ */
+/* $Id: dialogs.c,v 1.55 2004/05/31 12:39:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,15 +74,15 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
                 enum listbox_info listbox_info)
 {
 	struct cookie *cookie = item->udata;
+	struct c_server *server;
 	struct string string;
 
 	switch (listbox_info) {
 	case LISTBOX_TEXT:
 		/* Are we dealing with a folder? */
 		if (item->type == BI_FOLDER) {
-			struct c_server *server = item->udata;
-
-			return stracpy(server->server);
+			server = item->udata;
+			return stracpy(server->host);
 		}
 
 		return stracpy(cookie->name);
@@ -97,7 +97,9 @@ get_cookie_info(struct listbox_item *item, struct terminal *term,
 
 	if (!init_string(&string)) return NULL;
 
-	add_format_to_string(&string, "%s: %s", _("Server", term), cookie->server->server);
+	server = cookie->server;
+
+	add_format_to_string(&string, "%s: %s", _("Server", term), server->host);
 	add_format_to_string(&string, "\n%s: %s", _("Name", term), cookie->name);
 	add_format_to_string(&string, "\n%s: %s", _("Value", term), cookie->value);
 	add_format_to_string(&string, "\n%s: %s", _("Domain", term), cookie->domain);
@@ -249,7 +251,7 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	length = 0;
 	ulongcat(secure, &length, cookie->secure, MAX_STR_LEN, 0);
 
-	dlg_server = cookie->server->server;
+	dlg_server = cookie->server->host;
 	dlg_server = straconcat(_("Server", term), ": ", dlg_server, "\n", NULL);
 
 	if (!dlg_server) {

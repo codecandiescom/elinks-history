@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.38 2003/10/26 17:53:39 jonas Exp $ */
+/* $Id: globhist.c,v 1.39 2003/10/26 18:00:38 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -22,6 +22,7 @@
 #include "config/options.h"
 #include "globhist/dialogs.h"
 #include "globhist/globhist.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "lowlevel/ttime.h"
@@ -51,6 +52,34 @@ unsigned char *gh_last_searched_url = NULL;
 static int global_history_write_timer = -1;
 
 #ifdef GLOBHIST
+
+static struct option_info global_history_options[] = {
+	INIT_OPT_TREE("document.history", N_("Global history"),
+		"global", 0,
+		N_("Global history options.")),
+
+	/* XXX: Disable global history if -anonymous is given? */
+	INIT_OPT_BOOL("document.history.global", N_("Enable"),
+		"enable", 0, 1,
+		N_("Enable global history (\"history of all pages visited\").")),
+
+	INIT_OPT_INT("document.history.global", N_("Maximum number of entries"),
+		"max_items", 0, 1, MAXINT, 1024,
+		N_("Maximum number of entries in the global history.")),
+
+	INIT_OPT_INT("document.history.global", N_("Display style"),
+		"display_type", 0, 0, 1, 0,
+		N_("What to display in global history dialog:\n"
+		"0 is URLs\n"
+		"1 is page titles")),
+
+	INIT_OPT_INT("document.history.global", N_("Auto-save interval"),
+		"write_interval", 0, 0, MAXINT, 300,
+		N_("Interval at which to write global history to disk if it\n"
+		"has changed (seconds; 0 to disable)")),
+
+	NULL_OPTION_INFO,
+};
 
 struct globhist_cache_entry {
 	LIST_HEAD(struct globhist_cache_entry);
@@ -495,7 +524,7 @@ done_global_history(struct module *module)
 
 struct module global_history_module = struct_module(
 	/* name: */		"global history",
-	/* options: */		NULL,
+	/* options: */		global_history_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,

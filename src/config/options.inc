@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.17 2003/10/26 16:47:14 jonas Exp $ */
+/* $Id: options.inc,v 1.18 2003/10/26 18:00:35 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -557,30 +557,6 @@ struct option_info config_options_info[] = {
 	INIT_OPT_TREE("document", N_("History"),
 		"history", 0,
 		N_("History options.")),
-
-	INIT_OPT_TREE("document.history", N_("Global history"),
-		"global", 0,
-		N_("Global history options.")),
-
-	/* XXX: Disable global history if -anonymous is given? */
-	INIT_OPT_BOOL("document.history.global", N_("Enable"),
-		"enable", 0, 1,
-		N_("Enable global history (\"history of all pages visited\").")),
-
-	INIT_OPT_INT("document.history.global", N_("Maximum number of entries"),
-		"max_items", 0, 1, MAXINT, 1024,
-		N_("Maximum number of entries in the global history.")),
-
-	INIT_OPT_INT("document.history.global", N_("Display style"),
-		"display_type", 0, 0, 1, 0,
-		N_("What to display in global history dialog:\n"
-		"0 is URLs\n"
-		"1 is page titles")),
-
-	INIT_OPT_INT("document.history.global", N_("Auto-save interval"),
-		"write_interval", 0, 0, MAXINT, 300,
-		N_("Interval at which to write global history to disk if it\n"
-		"has changed (seconds; 0 to disable)")),
 
 	INIT_OPT_BOOL("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,

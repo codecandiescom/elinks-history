@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.10 2003/07/21 22:38:51 jonas Exp $ */
+/* $Id: textarea.c,v 1.11 2003/07/23 18:20:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -281,11 +281,17 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 
 	if (op == 0 && !textarea_editor) {
 		FILE *taf;
+		unsigned char *tmpdir;
 		unsigned char *ed = getenv("EDITOR");
 		unsigned char *ex;
 		int h;
 
-		fn = stracpy("linksarea-XXXXXX");
+		tmpdir = getenv("TMPDIR");
+		if (!tmpdir || !*tmpdir) tmpdir = getenv("TEMPDIR");
+		if (!tmpdir || !*tmpdir) tmpdir = getenv("TEMP");
+		if (!tmpdir || !*tmpdir) tmpdir = "/tmp";
+
+		fn = straconcat(tmpdir, "/linksarea-XXXXXX", NULL);
 		if (!fn) goto free_and_return;
 
 		h = mkstemp(fn);

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.22 2003/06/04 22:02:13 zas Exp $ */
+/* $Id: msgbox.c,v 1.23 2003/06/05 00:41:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,6 +128,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 						 * sizeof(unsigned char *));
 			if (!info) {
 				va_end(ap);
+				freeml(ml);
 				return;
 			}
 
@@ -143,6 +144,7 @@ msg_box(struct terminal *term, struct memory_list *ml,
 		info_ = mem_realloc(info, 2 * sizeof(unsigned char *));
 		if (!info_) {
 			va_end(ap);
+			freeml(ml);
 			return;
 	   	}
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-06-08 12:23+0200\n"
+"POT-Creation-Date: 2003-06-08 16:09+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -507,11 +507,11 @@ msgstr "Ouvrir le menu Fichier"
 
 #: src/config/kbdbind.c:387
 msgid "Find the next occurrence of the current search text"
-msgstr "Trouver l'occurence suivante"
+msgstr "Trouver l'occurence suivante du texte recherché"
 
 #: src/config/kbdbind.c:388
-msgid "Find the next occurrence of the current search text, in reverse"
-msgstr "Trouver l'occurence suivant (vers le haut)"
+msgid "Find the previous occurrence of the current search text"
+msgstr "Trouver l'occurence précédente du texte recherché"
 
 #: src/config/kbdbind.c:389
 msgid "Forget authentication credentials"
@@ -534,7 +534,7 @@ msgid "Go to the homepage"
 msgstr "Aller à la homepage"
 
 #: src/config/kbdbind.c:394
-msgid "Show informations about the the current page HTTP headers"
+msgid "Show informations about the current page HTTP headers"
 msgstr "Montrer les informations à propos des entêtes de la page courante"
 
 #: src/config/kbdbind.c:395
@@ -562,8 +562,8 @@ msgid "Move the cursor left"
 msgstr "Déplacer le curseur à gauche"
 
 #: src/config/kbdbind.c:401
-msgid "Activate the link context menu"
-msgstr "Activer le menu contextuel du lien"
+msgid "Open the link context menu"
+msgstr "Ouvrir le menu contextuel du lien"
 
 #: src/config/kbdbind.c:402
 msgid "Jump to link"
@@ -785,7 +785,7 @@ msgid "Options:\n"
 msgstr "Options:\n"
 
 #. TODO: The change hooks should be added more elegantly! --pasky
-#: src/config/options.c:868 src/version.c:78
+#: src/config/options.c:868 src/util/version.c:78
 msgid "Bookmarks"
 msgstr "Signets"
 
@@ -918,7 +918,7 @@ msgstr "Connexions"
 msgid "Connection options."
 msgstr "Options de connexion"
 
-#: src/config/options.c:938 src/version.c:63
+#: src/config/options.c:938 src/util/version.c:63
 msgid "SSL"
 msgstr "SSL"
 
@@ -1003,7 +1003,7 @@ msgid "Timeout for non-restartable connections (in seconds)."
 msgstr ""
 "Délai d'expiration pour les connexions non-redémarrables (en secondes)."
 
-#: src/config/options.c:986 src/version.c:81
+#: src/config/options.c:986 src/util/version.c:81
 msgid "Cookies"
 msgstr "Cookies"
 
@@ -4381,35 +4381,35 @@ msgstr ""
 "l'option config.saving_style dans le but d'obtenir un fonctionnement "
 "correct. Toutes nos excuses pour l'éventuel désagrément causé."
 
-#: src/version.c:45
+#: src/util/version.c:45
 msgid "Text WWW browser"
 msgstr "Navigateur en mode texte"
 
-#: src/version.c:47
+#: src/util/version.c:47
 msgid "Features:"
 msgstr "Fonctionnalités:"
 
-#: src/version.c:49
+#: src/util/version.c:49
 msgid "Standard"
 msgstr "Standard"
 
-#: src/version.c:51
+#: src/util/version.c:51
 msgid "Debug"
 msgstr "Debug"
 
-#: src/version.c:54
+#: src/util/version.c:54
 msgid "Fastmem"
 msgstr "Fastmem"
 
-#: src/version.c:57
+#: src/util/version.c:57
 msgid "Own_libc"
 msgstr "Own_libc"
 
-#: src/version.c:60
+#: src/util/version.c:60
 msgid "No backtrace"
 msgstr "No backtrace"
 
-#: src/version.c:84
+#: src/util/version.c:84
 msgid "GlobHist"
 msgstr "Historique global"
 
@@ -4576,6 +4576,9 @@ msgstr "Envoi à"
 #: src/viewer/text/view.c:3725
 msgid "post to"
 msgstr "Transfert à"
+
+#~ msgid "Find the next occurrence of the current search text, in reverse"
+#~ msgstr "Trouver l'occurence suivant (vers le haut)"
 
 #~ msgid " at "
 #~ msgstr " à "

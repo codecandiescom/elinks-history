@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.10 2003/05/04 20:06:51 pasky Exp $ */
+/* $Id: terminal.h,v 1.11 2003/05/05 21:55:37 zas Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -16,6 +16,8 @@ enum event_type {
 	EV_ABORT,
 };
 
+
+/* XXX: do not change order of fields. --Zas */
 struct event {
 	enum event_type ev;
 	long x;

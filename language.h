@@ -382,4 +382,6 @@
 #define T_XDIALOG_TITLE    378	
 #define T_XDIALOG_FIELD    379	
 #define T_NEED_MASTER_TERMINAL    380	
-#define T__N_TEXTS    381	
+#define T_SEARCH_BOOKMARK    381	
+#define T_CLEAR    382	
+#define T__N_TEXTS    383	

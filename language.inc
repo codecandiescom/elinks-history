@@ -382,6 +382,8 @@ struct translation translation_english [] = {
   T_XDIALOG_TITLE, "User dialog",
   T_XDIALOG_FIELD, "A field",
   T_NEED_MASTER_TERMINAL, "You can do this only on the master terminal",
+  T_SEARCH_BOOKMARK, "Search bookmarks",
+  T_CLEAR, "Clear",
   0, NULL
 };
 
@@ -767,6 +769,8 @@ struct translation translation_brazilian_portuguese [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -1152,6 +1156,8 @@ struct translation translation_bulgarian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -1537,6 +1543,8 @@ struct translation translation_catalan [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -1922,6 +1930,8 @@ struct translation translation_czech [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -2307,6 +2317,8 @@ struct translation translation_estonian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -2414,7 +2426,7 @@ struct translation translation_french [] = {
   T_SAVE_HTML_OPTIONS, "Enregistrer les options HTML",
   T_ADD, "Ajouter",
   T_MODIFY, "Modifier",
-  T_DELETE, "Effacer",
+  T_DELETE, "Supprimer",
   T_CHARACTER_SET, "Jeu de caractères",
   T_CACHE, "Cache",
   T_MAIL_AND_TELNEL, "E-mail et telnet",
@@ -2585,7 +2597,7 @@ struct translation translation_french [] = {
   T_CLOSE, "Fermer",
   T_BOOKMARK_TITLE, "Description",
   T_EDIT_BOOKMARK, "Modifier",
-  T_DELETE_BOOKMARK, "Effacer",
+  T_DELETE_BOOKMARK, "Supprimer",
   T_BOOKMARK_MANAGER, "Gestion des signets",
   T_url, "URL",
   T_NNAME, "Nom",
@@ -2692,6 +2704,8 @@ struct translation translation_french [] = {
   T_XDIALOG_TITLE, "Dialogue utilisateur",
   T_XDIALOG_FIELD, "Un champ",
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, "Rechercher des signets",
+  T_CLEAR, "Effacer",
   0, NULL
 };
 
@@ -3077,6 +3091,8 @@ struct translation translation_galician [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -3462,6 +3478,8 @@ struct translation translation_german [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -3847,6 +3865,8 @@ struct translation translation_greek [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -4232,6 +4252,8 @@ struct translation translation_hungarian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -4617,6 +4639,8 @@ struct translation translation_icelandic [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -5002,6 +5026,8 @@ struct translation translation_italian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -5387,6 +5413,8 @@ struct translation translation_lithuanian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -5772,6 +5800,8 @@ struct translation translation_polish [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -6157,6 +6187,8 @@ struct translation translation_romanian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -6542,6 +6574,8 @@ struct translation translation_russian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -6927,6 +6961,8 @@ struct translation translation_slovak [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -7312,6 +7348,8 @@ struct translation translation_spanish [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -7697,6 +7735,8 @@ struct translation translation_swedish [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -8082,6 +8122,8 @@ struct translation translation_turkish [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 
@@ -8467,6 +8509,8 @@ struct translation translation_ukrainian [] = {
   T_XDIALOG_TITLE, NULL,
   T_XDIALOG_FIELD, NULL,
   T_NEED_MASTER_TERMINAL, NULL,
+  T_SEARCH_BOOKMARK, NULL,
+  T_CLEAR, NULL,
   0, NULL
 };
 

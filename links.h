@@ -1,3 +1,5 @@
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -2124,6 +2126,7 @@ struct bookmark {
 	unsigned char *url;	/* Location of bookmarked item */
 	unsigned int type; /* The type of bookmark we're dealing with. */
 	void *type_data; /* Type-dependent data. */
+	int selected; /* Whether to display this bookmark or not. */
 };
 
 void finalize_bookmarks();

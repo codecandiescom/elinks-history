@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.353 2004/07/16 18:53:08 jonas Exp $ */
+/* $Id: menu.c,v 1.354 2004/07/18 04:01:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "util/conv.h"
+#include "util/file.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -816,4 +817,157 @@ add_uri_command_to_menu(struct menu_item **mi)
 
 	add_to_menu(mi, N_("Pass URI to e~xternal command"), NULL,
 		    ACT_MAIN_LINK_EXTERNAL_COMMAND, NULL, NULL, flags);
+}
+
+
+/* The file completion menu always has two non selectable menu item at the
+ * start. First is the 'Directory:' or 'Files:' text and then a separator. */
+#define FILE_COMPLETION_MENU_OFFSET 2
+
+static void
+complete_file_menu(struct terminal *term, int no_elevator, void *data,
+		   menu_func file_func, menu_func dir_func,
+		   unsigned char *dirname, unsigned char *filename)
+{
+	struct menu_item *menu = new_menu(FREE_LIST | NO_INTL);
+	struct directory_entry *entries = NULL;
+	int filenamelen = strlen(filename);
+	int i, direntries = 0, fileentries = 0;
+
+	if (!menu) return;
+
+	entries = get_directory_entries(dirname, 1);
+	if (!entries) {
+		mem_free(menu);
+		return;
+	}
+
+	for (i = 0; entries[i].name; i++) {
+		unsigned char *path = entries[i].name;
+		unsigned char *attrib = entries[i].attrib;
+		unsigned char *text = get_filename_position(path);
+
+		if (strncmp(filename, text, filenamelen)
+		    || (no_elevator && !strcmp("..", text))
+		    || !file_can_read(path)) {
+			mem_free(path);
+			mem_free(attrib);
+			continue;
+		}
+
+		if (*attrib == 'd') {
+			if (!direntries) {
+				add_to_menu(&menu, _("Directories:", term), NULL,
+					    ACT_MAIN_NONE, NULL, NULL, NO_SELECT);
+				add_menu_separator(&menu); 
+			}
+
+			add_to_menu(&menu, text, NULL, ACT_MAIN_NONE,
+				    dir_func, path, FREE_DATA | SUBMENU);
+
+			direntries++;
+
+		} else if (*attrib == '-') {
+			if (!fileentries) {
+				if (direntries) add_menu_separator(&menu);
+				add_to_menu(&menu, _("Files:", term), NULL,
+					    ACT_MAIN_NONE, NULL, NULL, NO_SELECT);
+				add_menu_separator(&menu);
+			}
+
+			add_to_menu(&menu, text, NULL, ACT_MAIN_NONE,
+				    file_func, path, FREE_DATA);
+
+			fileentries++;
+
+		} else {
+			mem_free(path);
+		}
+
+		mem_free(attrib);
+	}
+
+	mem_free(entries);
+	if (direntries == 0 && fileentries == 0) {
+		mem_free(menu);
+		return;
+	}
+
+	/* Only one entry */
+	if (direntries + fileentries == 1) {
+		unsigned char *text = menu[FILE_COMPLETION_MENU_OFFSET].data;
+
+		mem_free(menu);
+
+		/* Complete what is already there even for directory names */
+		file_func(term, text, data);
+
+		/* For single directory entries open the lonely subdir */
+		if (direntries)
+			dir_func(term, text, data);
+		return;
+	}
+
+	/* Start with the first directory or file entry selected */
+	do_menu_selected(term, menu, data, FILE_COMPLETION_MENU_OFFSET, 0);
+}
+
+void
+auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,
+		   menu_func file_func, menu_func dir_func, void *data)
+{
+	struct uri *uri;
+	unsigned char *dirname;
+	unsigned char *filename;
+
+	assert(term && data && file_func && dir_func && data);
+
+	if (get_cmd_opt_int("anonymous"))
+		return;
+
+	if (!*path) path = "./";
+
+	/* Use the URI translation to handle ./ and ../ and ~/ expansion */
+	uri = get_translated_uri(path, term->cwd);
+	if (!uri) return;
+
+	if (uri->protocol != PROTOCOL_FILE) {
+		path = NULL;
+	} else {
+		path = get_uri_string(uri, URI_PATH);
+	}
+
+	done_uri(uri);
+	if (!path) return;
+
+	filename = get_filename_position(path);
+
+	if (*filename && file_is_dir(path)) {
+		filename = path + strlen(path);
+
+	} else if (*filename && file_exists(path)) {
+		/* Complete any tilde expansion */
+		file_func(term, path, data);
+		return;
+	}
+
+	/* Split the path into @dirname and @filename */
+	dirname = path;
+	path = filename;
+	filename = stracpy(path);
+	*path = 0;
+
+	/* Make sure the dirname has an ending slash */
+	if (!dir_sep(path[-1])) {
+		unsigned char separator = *dirname;
+		int dirnamelen = path - dirname;
+
+		insert_in_string(&dirname, dirnamelen, &separator, 1);
+	}
+
+	complete_file_menu(term, no_elevator, data,
+			   file_func, dir_func, dirname, filename);
+
+	mem_free(dirname);
+	mem_free(filename);
 }

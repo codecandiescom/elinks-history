@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.228 2004/07/15 15:54:21 jonas Exp $ */
+/* $Id: form.c,v 1.229 2004/07/18 04:01:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "bfu/listmenu.h"
 #include "bfu/msgbox.h"
 #include "config/kbdbind.h"
+#include "dialogs/menu.h"
 #include "document/document.h"
 #include "document/html/parser.h"
 #include "document/view.h"
@@ -1080,6 +1081,41 @@ auto_submit_form(struct session *ses)
 	submit_form(ses, ses->doc_view, 0);
 }
 
+
+static void
+set_file_form_state(struct terminal *term, unsigned char *filename,
+		    struct form_state *fs)
+{
+	/* The menu code doesn't free the filename data */
+	mem_free_set(&fs->value, filename);
+	fs->state = strlen(filename);
+	redraw_terminal(term);
+}
+
+static void
+file_form_menu(struct terminal *term, unsigned char *path,
+	       struct form_state *fs)
+{
+	int valuelen = strlen(fs->value);
+	int pathlen = strlen(path);
+	int no_elevator = 0;
+
+	/* Don't add elevators for subdirs menus */
+	/* It is not perfect at all because fs->value is not updated for each
+	 * newly opened file menu. Maybe it should be dropped. */
+	for (; valuelen < pathlen; valuelen++) {
+		if (dir_sep(path[valuelen - 1])) {
+			no_elevator = 1;
+			break;
+		}
+	}
+
+	auto_complete_file(term, no_elevator, path,
+			   (menu_func) set_file_form_state,
+			   (menu_func) file_form_menu, fs);
+}
+
+
 enum frame_event_status
 field_op(struct session *ses, struct document_view *doc_view,
 	 struct link *link, struct term_event *ev)
@@ -1289,6 +1325,16 @@ field_op(struct session *ses, struct document_view *doc_view,
 				++text;
 
 			memmove(fs->value + fs->state, text, strlen(text) + 1);
+			break;
+
+		case ACT_EDIT_AUTO_COMPLETE:
+			if (fc->type != FC_FILE
+			    || form_field_is_readonly(fc)) {
+				status = FRAME_EVENT_IGNORED;
+				break;
+			}
+
+			file_form_menu(ses->tab->term, fs->value, fs);
 			break;
 
 		case ACT_EDIT_CANCEL:

@@ -1,13 +1,13 @@
-/* $Id: menu.h,v 1.46 2004/07/15 10:42:55 jonas Exp $ */
+/* $Id: menu.h,v 1.47 2004/07/18 04:01:55 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
 
 #include "terminal/terminal.h"
+#include "bfu/menu.h"
 
 struct document_view;
 struct open_in_new;
-struct menu_item;
 struct session;
 struct uri;
 
@@ -43,5 +43,9 @@ void add_new_win_to_menu(struct menu_item **mi, unsigned char *text, struct term
 
 void add_uri_command_to_menu(struct menu_item **mi);
 void pass_uri_to_command(struct session *ses, struct document_view *doc_view, int xxx);
+
+void
+auto_complete_file(struct terminal *term, int no_elevator, unsigned char *path,
+		   menu_func file_func, menu_func dir_func, void *data);
 
 #endif

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.42 2003/11/13 09:17:23 zas Exp $ */
+/* $Id: connect.c,v 1.43 2003/11/14 00:25:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,7 +178,9 @@ ssl_want_read(struct connection *conn)
 int
 ssl_connect(struct connection *conn, int sock)
 {
+#ifdef HAVE_OPENSSL
 	unsigned char *client_cert = NULL;
+#endif
 	int ret;
 
 	assertm(conn->ssl, "No ssl handle");

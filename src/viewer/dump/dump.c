@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.147 2004/10/19 08:32:54 zas Exp $ */
+/* $Id: dump.c,v 1.148 2004/11/08 14:57:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,13 +251,8 @@ dump_start(unsigned char *url)
 	struct uri *uri = get_translated_uri(url, wd);
 
 	mem_free_if(wd);
-	if (!*url) {
-		usrerror(gettext("URL expected after %s."),
-			get_cmd_opt_int("source")
-			? "-source" : "-dump");
-		goto terminate;
 
-	} else if (!uri || get_protocol_external_handler(uri->protocol)) {
+	if (!uri || get_protocol_external_handler(uri->protocol)) {
 		usrerror(gettext("URL protocol not supported (%s)."), url);
 		goto terminate;
 	}

@@ -8,8 +8,8 @@ DISTCLEANFILES = charset.alias
 
 localedir = $(datadir)/locale
 
-noinst_LIBRARIES = libgettext.a
-libgettext_a_SOURCES = \
+noinst_LIBRARIES = libintl.a
+libintl_a_SOURCES = \
  bindtextdom.c \
  dcgettext.c \
  dcigettext.c \

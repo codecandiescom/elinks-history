@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.141 2004/02/18 21:46:23 pasky Exp $ */
+/* $Id: tables.c,v 1.142 2004/02/18 21:52:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -815,9 +815,6 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
 	if (max) *max = p->max_width;
 	if (n_links) *n_links = p->link_num;
 
-	/* OS X 10.3.2/XCode 1.1/gcc3.3 compiler bug (?) prevents us to
-	 * assertm() about !(min && max && *min > *max).
-	 * -- Daniel Macks <dmacks@netspace.org> */
 	if (min && max) {
 		assertm(*min <= *max, "get_cell_width: %d > %d", *min, *max);
 	}

@@ -1,3 +1,108 @@
+Sun Apr 18 14:24:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	Compile fix.  
+
+Sun Apr 18 14:01:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Fix possible bug I encountered yesterday by caching
+	old stack_size.  
+
+Sun Apr 18 13:52:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listmenu.c:
+
+	new_menu_item(): Move menu item adding at the stack bottom case up
+	front.  
+
+Sun Apr 18 07:13:34 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Sun Apr 18 01:35:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	menu_kbd_handler(): Cleanup home/end handling.  
+
+Sun Apr 18 01:30:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	menu_kbd_handler(): Cleanup.  
+
+Sun Apr 18 01:27:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	do_menu_selected(): Use mem_calloc().  
+
+Sun Apr 18 01:24:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: menu.c, menu.h:
+
+	Unify the menu->view and menu->first_displayed members to
+	menu->first and rename menu->last_displayed to menu->last. Hope it
+	is not too short.  
+
+Sun Apr 18 01:18:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.h:
+
+	Describe members of struct menu.  
+
+Sun Apr 18 00:59:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_kbd_handler(): Handle more actions. It might be of use for
+	some people and is really not a lot of code.  
+
+Sun Apr 18 00:44:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_kbd_handler(): Cleanup usage of temp. variables. @fwd now
+	simply means select_menu() 
+
+Sun Apr 18 00:41:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_kbd_handler(): Move hotkey checking and window deletion
+	under the default switch label.  
+
+Sun Apr 18 00:31:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_kbd_handler(): Group more left and right action stuff.  
+
+Sun Apr 18 00:28:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_kbd_handler(): Handle right and left action together.  
+
+Sun Apr 18 00:22:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/menu.c:
+
+	mainmenu_kbd_handler(): Use switch statement for action.  
+
+Sun Apr 18 00:10:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: listmenu.c, menu.h:
+
+	Revert the latest listmenu patch introducing usage of FREE_* flags.
+	We only need to free the member when freeing the form control which
+	I overlooked.  
+
 Sat Apr 17 18:56:48 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/viewer/text/: form.c, form.h:

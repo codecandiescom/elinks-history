@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.17 2004/01/27 01:05:17 pasky Exp $ */
+/* $Id: stylesheet.c,v 1.18 2004/01/27 01:12:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,6 +101,22 @@ copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 	return copy;
 }
 
+void
+mirror_css_selector(struct css_stylesheet *css1, struct css_selector *css2)
+{
+	struct css_property *prop;
+
+	foreach (prop, css1->properties) {
+		struct css_property *newprop;
+
+		newprop = mem_calloc(1, sizeof(struct css_property));
+		if (!newprop)
+			continue;
+		*newprop = *prop;
+		add_to_list(css2->properties, newprop);
+	}
+}
+
 static struct css_selector *
 clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 {
@@ -112,17 +128,7 @@ clone_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 	copy = copy_css_selector(css, orig);
 	if (!copy)
 		return NULL;
-
-	foreach (prop, orig->properties) {
-		struct css_property *newprop;
-
-		newprop = mem_calloc(1, sizeof(struct css_property));
-		if (!newprop)
-			continue;
-		*newprop = *prop;
-		add_to_list(copy->properties, newprop);
-	}
-
+	mirror_css_selector(orig, new);
 	return copy;
 }
 
@@ -179,7 +185,7 @@ init_css_stylesheet(css_stylesheet_importer importer)
 }
 
 void
-mirror_css_stylesheet(struct css_stylesheet *css1,struct css_stylesheet *css2)
+mirror_css_stylesheet(struct css_stylesheet *css1, struct css_stylesheet *css2)
 {
 	struct css_selector *selector;
 

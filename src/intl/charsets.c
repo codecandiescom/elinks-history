@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.32 2003/05/28 09:59:23 zas Exp $ */
+/* $Id: charsets.c,v 1.33 2003/06/04 15:46:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,15 +81,12 @@ free_translation_table(struct conv_table *p)
 	mem_free(p);
 }
 
-unsigned char *no_str = NULL;
+static unsigned char *no_str = "*";
 
 static void
 new_translation_table(struct conv_table *p)
 {
 	int i;
-
-	if (!no_str) no_str = stracpy("*");
-	if (!no_str) return;
 
 	for (i = 0; i < 256; i++)
 		if (p[i].t)
@@ -296,10 +293,6 @@ free_conv_table()
 		first = 0;
 	}
 	new_translation_table(table);
-	if (no_str) {
-		mem_free(no_str);
-		no_str = NULL;
-	}
 }
 
 struct conv_table *

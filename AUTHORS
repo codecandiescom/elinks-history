@@ -376,6 +376,9 @@ Oleg Deribas <older@iname.com>
 Olexander Kunytsa <kunia@istc.kiev.ua>
 	Ukrainian translation update
 
+Omar Khayam <omark@cyentec.com>
+	URL decode filename when saving
+
 Peter Gervai <grin@tolna.net>
 	Manpage updates
 	Mailcap to links.cfg convertor
@@ -519,4 +522,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.173 2004/10/12 23:37:45 jonas Exp $
+$Id: AUTHORS,v 1.174 2004/11/10 16:46:30 jonas Exp $

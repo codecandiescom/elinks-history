@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.208 2004/05/29 19:09:22 jonas Exp $ */
+/* $Id: uri.c,v 1.209 2004/05/29 19:44:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,9 +31,19 @@
 
 
 static inline int
-end_of_dir(unsigned char c)
+end_of_dir(struct uri *uri, unsigned char c)
 {
-	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
+	/* Is it correct to assume file:// URIs won't have query parts? What
+	 * about CGI?
+	 *
+	 * Else the problem with handling '?' in file:// URIs is that
+	 * get_extension_from_uri() won't get it right. So maybe a cheap hack
+	 * for that function would do the trick instead.
+	 *
+	 * Reported by Grzegorz Adam Hankiewicz <gradha@titanium.sabren.com>
+	 * Thu, May 27, 2004 on elinks-users mailing list. --jonas */
+	return c == POST_CHAR || c == '#' || c == ';'
+		|| (uri->protocol != PROTOCOL_FILE && c == '?');
 }
 
 static inline int
@@ -362,7 +372,7 @@ add_uri_to_string(struct string *string, struct uri *uri,
 
 		if (!uri->datalen) return string;
 
-		while (*path_end && !end_of_dir(*path_end))
+		while (*path_end && !end_of_dir(uri, *path_end))
 			path_end++;
 
 		add_bytes_to_string(string, uri->data, path_end - uri->data);
@@ -461,7 +471,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 		/* If the following pieces are the LAST parts of URL, we remove
 		 * them as well. See RFC 1808 for details. */
 
-		if (end_of_dir(src[0])) {
+		if (end_of_dir(uri, src[0])) {
 			/* URL data contains no more path. */
 			memmove(dest, src, strlen(src) + 1);
 			break;
@@ -653,7 +663,7 @@ prx:
 		}
 
 		for (path_end = path; *path_end; path_end++) {
-			if (end_of_dir(*path_end)) break;
+			if (end_of_dir(&uri, *path_end)) break;
 			/* Modify the path pointer, so that it'll always point
 			 * above the last '/' in the URL; later, we'll copy the
 			 * URL only _TO_ this point, and anything after last
@@ -903,7 +913,7 @@ add_uri_filename_to_string(struct string *string, struct uri *uri)
 		return string;
 	}
 
-	for (pos = filename = uri->data; *pos && !end_of_dir(*pos); pos++)
+	for (pos = filename = uri->data; *pos && !end_of_dir(uri, *pos); pos++)
 		if (is_uri_dir_sep(uri, *pos))
 			filename = pos + 1;
 
@@ -919,7 +929,7 @@ get_extension_from_uri(struct uri *uri)
 
 	assert(pos);
 
-	for (; *pos && !end_of_dir(*pos); pos++) {
+	for (; *pos && !end_of_dir(uri, *pos); pos++) {
 		if (!afterslash && !extension && *pos == '.') {
 			extension = pos + 1;
 		} else if (is_uri_dir_sep(uri, *pos)) {

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.41 2003/07/31 21:55:17 zas Exp $ */
+/* $Id: draw.c,v 1.42 2003/07/31 21:59:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,7 +13,8 @@
 #include "terminal/terminal.h"
 
 
-#define out_of_range(term, x, y) ((x) < 0 || (x) >= (term)->x || (y) < 0 || (y) >= (term)->y)
+#define out_of_range(term, x, y) ((x) < 0 || (x) >= (term)->x || \
+				  (y) < 0 || (y) >= (term)->y)
 
 void
 set_char(struct terminal *term, int x, int y,

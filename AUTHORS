@@ -428,8 +428,9 @@ Radovan Stas <radoone@skmi.science.upjs.sk>
 Raúl Núñez de Arenas Coronado <raul@pleyades.net>
 	get_unique_name() fix.
 
-Russ Rowan <rrowan@dandy.net>
+Russ Rowan (Apu) <rrowan@dandy.net>
 	Patch that shorten the alt or title attribute of an image
+	Improved Perl hooks
 
 Sebastian Zagrodzki <s.zagrodzki@sith.mimuw.edu.pl>
 	Shift-G opens dialog with pre-displayed current URL
@@ -529,4 +530,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.177 2004/12/24 02:33:13 jonas Exp $
+$Id: AUTHORS,v 1.178 2004/12/24 14:07:32 pasky Exp $

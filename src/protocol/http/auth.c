@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.30 2003/07/10 13:27:17 jonas Exp $ */
+/* $Id: auth.c,v 1.31 2003/07/10 13:53:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -128,18 +128,15 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		/* If we have user/pass info then check if identical to
 		 * those in entry. */
-		if ((uri->userlen || uri->passwordlen) && entry->uid && entry->passwd) {
-			if (((!realm && !entry->realm)
-			    || (realm && entry->realm && !strcmp(realm, entry->realm)))) {
-				if (strlen(entry->uid) == uri->userlen
-				    && strlen(entry->passwd) == uri->passwordlen
-				    && !strncmp(uri->user, entry->uid, uri->userlen)
-				    && !strncmp(uri->password, entry->passwd, uri->passwordlen)) {
-				    /* Same host/realm/pass/user. */
-					mem_free(newurl);
-					return ADD_AUTH_EXIST;
-				}
-			}
+		if (((uri->userlen || uri->passwordlen) && entry->uid && entry->passwd)
+		    && ((!realm && !entry->realm) || (realm && entry->realm && !strcmp(realm, entry->realm)))
+		    && strlen(entry->uid) == uri->userlen
+		    && strlen(entry->passwd) == uri->passwordlen
+		    && !strncmp(uri->user, entry->uid, uri->userlen)
+		    && !strncmp(uri->password, entry->passwd, uri->passwordlen)) {
+			/* Same host/realm/pass/user. */
+			mem_free(newurl);
+			return ADD_AUTH_EXIST;
 		}
 
 		/* Delete entry and re-create it... */

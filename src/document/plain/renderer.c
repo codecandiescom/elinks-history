@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.14 2003/11/14 03:12:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.15 2003/11/14 03:17:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,7 +84,7 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 	if ((mailto = memchr(uri, '@', length)) && mailto - uri < length) {
 		mailto = straconcat("mailto:", uri, NULL);
 		uri[length] = keep;
-		if (!mailto) return 0;
+		if (!mailto) return length;
 
 	} else if (!parse_uri(&test_uri, uri)) {
 		uri[length] = keep;
@@ -116,7 +116,6 @@ add_document_link(struct document *document, unsigned char *uri, int length,
 		point->y = y;
 	}
 
-
 	document->nlinks++;
 
 	return length - 1;
@@ -134,6 +133,7 @@ get_uri_length(unsigned char *line, int length)
 		if (line[uri_end - 1] != '>'
 			&& line[uri_end - 1] != ')'
 			&& line[uri_end - 1] != '.'
+			&& line[uri_end - 1] != '"'
 			&& line[uri_end - 1] != ',')
 			break;
 	}

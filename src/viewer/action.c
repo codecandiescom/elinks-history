@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.103 2004/10/10 00:43:33 miciah Exp $ */
+/* $Id: action.c,v 1.104 2004/10/10 02:27:18 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -521,96 +521,88 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 		case ACT_MAIN_MOVE_PAGE_DOWN:
 			move_page_down(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_PAGE_UP:
 			move_page_up(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_NEXT:
 			move_link_next(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_PREV:
 			move_link_prev(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_UP:
 			move_link_up(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_DOWN:
 			move_link_down(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_LEFT:
 			move_link_left(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_LINK_RIGHT:
 			move_link_right(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_START:
 			move_document_start(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_DOCUMENT_END:
 			move_document_end(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_DOWN:
 			scroll_down(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_UP:
 			scroll_up(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_LEFT:
 			scroll_left(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_SCROLL_RIGHT:
 			scroll_right(ses, doc_view);
-			refresh_view(ses, doc_view, 0);
+			status = FRAME_EVENT_REFRESH;
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_UP:
-			if (move_cursor_up(ses, doc_view)
-			     == FRAME_EVENT_REFRESH)
-				refresh_view(ses, doc_view, 0);
+			status = move_cursor_up(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_DOWN:
-			if (move_cursor_down(ses, doc_view)
-			     == FRAME_EVENT_REFRESH)
-				refresh_view(ses, doc_view, 0);
+			status = move_cursor_down(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_LEFT:
-			if (move_cursor_left(ses, doc_view)
-			     == FRAME_EVENT_REFRESH)
-				refresh_view(ses, doc_view, 0);
+			status = move_cursor_left(ses, doc_view);
 			break;
 
 		case ACT_MAIN_MOVE_CURSOR_RIGHT:
-			if (move_cursor_right(ses, doc_view)
-			     == FRAME_EVENT_REFRESH)
-				refresh_view(ses, doc_view, 0);
+			status = move_cursor_right(ses, doc_view);
 			break;
 
 		case ACT_MAIN_COPY_CLIPBOARD:
@@ -629,6 +621,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 
 			status = FRAME_EVENT_IGNORED;
 	}
+
+	if (status == FRAME_EVENT_REFRESH)
+		refresh_view(ses, doc_view, 0);
 
 	return status;
 }

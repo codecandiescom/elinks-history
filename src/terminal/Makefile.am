@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2003/05/04 19:54:33 pasky Exp $
+## $Id: Makefile.am,v 1.8 2003/05/04 20:06:51 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -15,6 +15,8 @@ libterminal_a_SOURCES = \
  kbd.h \
  screen.c \
  screen.h \
+ tab.c \
+ tab.h \
  terminal.c \
  terminal.h \
  window.c \

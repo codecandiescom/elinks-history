@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.9 2003/05/04 19:54:33 pasky Exp $ */
+/* $Id: terminal.h,v 1.10 2003/05/04 20:06:51 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
@@ -103,16 +103,6 @@ void redraw_terminal_ev(struct terminal *, int);
 #define redraw_terminal_all(term) redraw_terminal_ev((term), EV_RESIZE)
 void redraw_terminal_cls(struct terminal *);
 void cls_redraw_all_terminals();
-
-#define IF_ACTIVE(win,term) if(!(win)->type || (win)==get_tab_by_number((term),(term)->current_tab))
-
-struct window *init_tab(struct terminal *);
-int number_of_tabs(struct terminal *term);
-int get_tab_number(struct window *window);
-struct window *get_tab_by_number(struct terminal *term, int num);
-void switch_to_tab(struct terminal *term, int num);
-void close_tab(struct terminal *term);
-#define get_root_window(term) get_tab_by_number((term), (term)->current_tab)
 
 void redraw_all_terminals();
 void destroy_all_terminals();

@@ -1,5 +1,5 @@
 /* Terminal windows stuff. */
-/* $Id: window.c,v 1.1 2003/05/04 19:54:33 pasky Exp $ */
+/* $Id: window.c,v 1.2 2003/05/04 20:06:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -7,6 +7,7 @@
 
 #include "elinks.h"
 
+#include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/error.h"

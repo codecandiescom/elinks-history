@@ -1,3 +1,58 @@
+Thu Jun 20 11:37:21 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/conf.c:
+
+	Write also option descrpitions to elinks.conf.  
+
+Thu Jun 20 11:08:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Removed stale TODO.  
+
+Thu Jun 20 11:05:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/menu.c, dialogs/options.c, osdep/os_dep.c,
+	osdep/os_dep.h, protocol/mailto.c, protocol/types.c,
+	protocol/types.h:
+
+	Introduced get_system_str(), when in X-Windows, we now add -x11 to
+	SYSTEM_STR (always). Totally removed possibility to do anything with
+	associations in UI now.  
+
+Thu Jun 20 10:13:07 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/terminal.c:
+
+	Never use terminal.default, always use terminal._template_ if not
+	sure.  
+
+Thu Jun 20 10:12:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/lowlevel/select.c:
+
+	tralala, alphabetical order 
+
+Thu Jun 20 10:11:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/options.c, dialogs/menu.c,
+	document/download.c, protocol/types.c, protocol/types.h:
+
+	Associations integrated to new options subsystem. Removed struct
+	assoc. Trivial tidyups.  
+
+Thu Jun 20 08:55:25 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	Minor tidy up.  
+
+Thu Jun 20 08:20:59 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	string.h is now included.  
+
 Wed Jun 19 13:26:07 2002  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/terminal.c:

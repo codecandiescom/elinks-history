@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.119 2004/01/08 16:07:48 zas Exp $ */
+/* $Id: conf.c,v 1.120 2004/01/08 16:53:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -588,6 +588,10 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 	} else {
 		touching = 0;
 	}
+
+	/* At first line, and in english, write ELinks version, may be
+	 * of some help in future. Please keep that format for it. --Zas */
+	add_to_string(&config, "## ELinks " VERSION " configuration file\n\n");
 
 	/* Scaring. */
 	if (savestyle == 2

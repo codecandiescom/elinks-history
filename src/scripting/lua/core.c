@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.157 2004/06/17 10:02:22 zas Exp $ */
+/* $Id: core.c,v 1.158 2004/06/22 05:02:37 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,8 +62,6 @@ static sigjmp_buf errjmp;
 #define L	lua_state
 #define LS	lua_State *S
 
-typedef	unsigned char uchar;
-
 static void handle_standard_lua_returns(unsigned char *from);
 
 
@@ -74,7 +72,7 @@ static void handle_standard_lua_returns(unsigned char *from);
 static int
 l_alert(LS)
 {
-	alert_lua_error((uchar *) lua_tostring(S, 1));
+	alert_lua_error((unsigned char *) lua_tostring(S, 1));
 	return 0;
 }
 
@@ -233,7 +231,7 @@ static int
 l_execute(LS)
 {
 	if (lua_isstring(S, 1)) {
-		exec_on_terminal(lua_ses->tab->term, (uchar *)lua_tostring(S, 1), "", 0);
+		exec_on_terminal(lua_ses->tab->term, (unsigned char *)lua_tostring(S, 1), "", 0);
 		lua_pushnumber(S, 0);
 		return 1;
 	}
@@ -318,8 +316,8 @@ l_bind_key(LS)
 	done_string(&event_name);
 	if (event_id == EVENT_NONE) goto lua_error;
 
-	err = bind_scripting_func((uchar *)lua_tostring(S, 1),
-			    (uchar *)lua_tostring(S, 2), event_id);
+	err = bind_scripting_func((unsigned char *)lua_tostring(S, 1),
+			    (unsigned char *)lua_tostring(S, 2), event_id);
 	if (err) {
 		lua_unref(S, ref);
 		alert_lua_error2("error in bind_key: ", err);
@@ -382,9 +380,12 @@ l_edit_bookmark_dialog(LS)
 
 	data = (struct lua_dlg_data *) get_dialog_offset(dlg, L_EDIT_BMK_WIDGETS_COUNT);
 	data->state = S;
-	safe_strncpy(data->cat, (uchar *)lua_tostring(S, 1), MAX_STR_LEN-1);
-	safe_strncpy(data->name, (uchar *)lua_tostring(S, 2), MAX_STR_LEN-1);
-	safe_strncpy(data->url, (uchar *)lua_tostring(S, 3), MAX_STR_LEN-1);
+	safe_strncpy(data->cat, (unsigned char *)lua_tostring(S, 1),
+		     MAX_STR_LEN-1);
+	safe_strncpy(data->name, (unsigned char *)lua_tostring(S, 2),
+		     MAX_STR_LEN-1);
+	safe_strncpy(data->url, (unsigned char *)lua_tostring(S, 3),
+		     MAX_STR_LEN-1);
 	lua_pushvalue(S, 4);
 	data->func_ref = lua_ref(S, 1);
 
@@ -462,7 +463,8 @@ l_xdialog(LS)
 	data->state = S;
 	data->nfields = nfields;
 	for (i = 0; i < nfields; i++)
-		safe_strncpy(data->fields[i], (uchar *)lua_tostring(S, i+1),
+		safe_strncpy(data->fields[i],
+			     (unsigned char *)lua_tostring(S, i+1),
 			     MAX_STR_LEN-1);
 	lua_pushvalue(S, nargs);
 	data->func_ref = lua_ref(S, 1);
@@ -638,7 +640,7 @@ handle_ret_eval(struct session *ses)
 static void
 handle_ret_run(struct session *ses)
 {
-	unsigned char *cmd = (uchar *)lua_tostring(L, -1);
+	unsigned char *cmd = (unsigned char *)lua_tostring(L, -1);
 
 	if (cmd) {
 		exec_on_terminal(ses->tab->term, cmd, "", 1);
@@ -651,7 +653,7 @@ handle_ret_run(struct session *ses)
 static void
 handle_ret_goto_url(struct session *ses)
 {
-	unsigned char *url = (uchar *)lua_tostring(L, -1);
+	unsigned char *url = (unsigned char *)lua_tostring(L, -1);
 
 	if (url) {
 		goto_url(ses, url);

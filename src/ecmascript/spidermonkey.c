@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.46 2004/09/26 09:56:55 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.47 2004/09/26 12:55:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,6 +548,37 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	JSVAL_TO_VALUE_END;
 }
 
+static JSBool document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval);
+
+static const JSFunctionSpec document_funcs[] = {
+	{ "write",		document_write,		1 },
+	{ NULL }
+};
+
+static JSBool
+document_write(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
+{
+	struct ecmascript_interpreter *interpreter = JS_GetContextPrivate(ctx);
+
+	VALUE_TO_JSVAL_START;
+
+	p.boolean = 0; prop_type = JSPT_BOOLEAN;
+
+	/* XXX: I don't know about you, but I have *ENOUGH* of those 'Undefined
+	 * function' errors, I want to see just the useful ones. So just
+	 * lighting a led and going away, no muss, no fuss. --pasky */
+	/* TODO: Perhaps we can introduce ecmascript.error_report_unsupported
+	 * -> "Show information about the document using some valid,
+	 *  nevertheless unsupported methods/properties." --pasky too */
+
+#ifdef CONFIG_LEDS
+	interpreter->vs->doc_view->session->status.ecmascript_led->value = 'J';
+#endif
+
+	VALUE_TO_JSVAL_END(rval);
+}
+
+
 
 static JSBool location_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
 static JSBool location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -847,7 +878,8 @@ spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 
 	document_obj = JS_InitClass(ctx, window_obj, NULL,
 				    (JSClass *) &document_class, NULL, 0,
-				    (JSPropertySpec *) document_props, NULL,
+				    (JSPropertySpec *) document_props,
+				    (JSFunctionSpec *) document_funcs,
 				    NULL, NULL);
 
 	location_obj = JS_InitClass(ctx, window_obj, NULL,

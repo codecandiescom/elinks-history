@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.508 2004/10/27 20:18:19 jonas Exp $ */
+/* $Id: parser.c,v 1.509 2004/10/29 23:07:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -457,8 +457,10 @@ not_processed:
 		unsigned char *import_url;
 		struct uri *uri;
 
-		if (!get_opt_bool("ecmascript.enable"))
+		if (!get_opt_bool("ecmascript.enable")) {
+			mem_free(src);
 			goto not_processed;
+		}
 
 		/* HTML <head> urls should already be fine but we can.t detect them. */
 		import_url = join_urls(html_context.base_href, src);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.107 2003/06/29 12:37:30 zas Exp $ */
+/* $Id: session.c,v 1.108 2003/06/29 12:52:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ print_screen_status(struct session *ses)
 				else
 					msg = _("Untitled", term);
 			} else {
-				msg = _("Loading...", term);
+				msg = _("No document", term);
 			}
 
 			msglen = strlen(msg);

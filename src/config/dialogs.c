@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.43 2003/06/07 01:45:54 jonas Exp $ */
+/* $Id: dialogs.c,v 1.44 2003/06/07 08:47:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -719,7 +719,7 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 		msg_box(term, NULL,
 			N_("Delete keybinding"), AL_CENTER,
 			N_("This item is not a keybinding. Try to press a space"
-			   " in order to get to the keybinindings themselves."),
+			   " in order to get to the keybindings themselves."),
 			NULL, 1,
 			N_("Cancel"), NULL, B_ESC | B_ENTER);
 		return 0;

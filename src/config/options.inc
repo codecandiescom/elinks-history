@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.57 2003/12/28 01:53:17 jonas Exp $ */
+/* $Id: options.inc,v 1.58 2003/12/28 01:55:50 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1040,29 +1040,13 @@ struct option_info config_options_info[] = {
 		"status", 0,
 		N_("Status bar colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.status", N_("Generic status bar"),
-		"status-bar", 0,
+	INIT_OPT_COLORS("ui.colors.color.status", N_("Generic status bar"),
+		"status-bar", "white", "black",
 		N_("Generic status bar colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.status.status-bar", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.status.status-bar", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.status", N_("Status bar text"),
-		"status-text", 0,
+	INIT_OPT_COLORS("ui.colors.color.status", N_("Status bar text"),
+		"status-text", "white", "black",
 		N_("Status bar text colors.")),
-
-	INIT_OPT_COLOR("ui.colors.color.status.status-text", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.status.status-text", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
 
 
 	INIT_OPT_TREE("ui.colors.color", N_("Tabs bar"),
@@ -1130,17 +1114,10 @@ struct option_info config_options_info[] = {
 		"background", 0, "white",
 		N_("Default background color.")),
 
-	INIT_OPT_TREE("ui.colors.color", N_("Searched strings"),
-		"searched", 0,
+
+	INIT_OPT_COLORS("ui.colors.color", N_("Searched strings"),
+		"searched", "lime", "black",
 		N_("Searched string highlight colors.")),
-
-	INIT_OPT_COLOR("ui.colors.color.searched", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.searched", N_("Background color"),
-		"background", 0, "lime",
-		N_("Default background color.")),
 
 
 

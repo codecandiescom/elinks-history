@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.163 2004/09/28 16:33:33 pasky Exp $ */
+/* $Id: session.h,v 1.164 2004/09/30 21:11:28 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -249,7 +249,10 @@ struct frame *ses_find_frame(struct session *, unsigned char *);
 void free_files(struct session *);
 void display_timer(struct session *ses);
 
+/* session_is_loading() is like !!get_current_download() but doesn't take
+ * @req_sent into account. */
 struct download *get_current_download(struct session *ses);
+int session_is_loading(struct session *ses);
 
 /* Information about the current document */
 unsigned char *get_current_url(struct session *, unsigned char *, size_t);

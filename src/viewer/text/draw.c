@@ -1,5 +1,5 @@
 /* Text mode drawing functions */
-/* $Id: draw.c,v 1.17 2004/09/28 23:57:07 jonas Exp $ */
+/* $Id: draw.c,v 1.18 2004/09/30 21:11:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,13 +299,19 @@ draw_frames(struct session *ses)
 	} while (more);
 }
 
+/* @rerender is ridiciously wound-up. */
 void
 draw_formatted(struct session *ses, int rerender)
 {
 	assert(ses && ses->tab);
 	if_assert_failed return;
 
-	if (rerender) render_document_frames(ses, rerender - 1);
+	if (rerender) {
+		rerender--; /* Mind this when analyzing @rerender. */
+		if (!(rerender & 2) && session_is_loading(ses))
+			rerender |= 2;
+		render_document_frames(ses, rerender);
+	}
 
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;

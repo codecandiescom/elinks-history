@@ -1,5 +1,9 @@
 Note that ELusive is licenced differently, see src/elusive/LICENCE.
 
+Also note that the only valid version of the GPL as far as ELinks is
+concerned is _this_ particular version of the license (ie v2, not v2.2
+or v3.x or whatever), unless explicitly otherwise stated.
+
 -----------------------------------------------------------------------
 
 		    GNU GENERAL PUBLIC LICENSE

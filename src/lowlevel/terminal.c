@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.18 2002/06/21 18:16:12 pasky Exp $ */
+/* $Id: terminal.c,v 1.19 2002/06/21 20:28:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -665,8 +665,16 @@ unsigned char frame_restrict[48] = {
 };
 
 
+/* In print_char() and redraw_screen(), we must be extremely careful about
+ * get_opt() calls, as they are CPU hog here. */
+
+/* TODO: We should provide some generic mechanism for options caching. */
+struct rs_opt_cache {
+	int type, m11_hack, utf_8_io, colors, charset, restrict_852;
+};
+
 static inline void
-print_char(struct terminal *term, struct list_head *opt_tree,
+print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	   unsigned char **a, int *l, int p, int *mode, int *attrib)
 {
 	static int cp437 = -1, koi8r = -1;
@@ -679,36 +687,36 @@ print_char(struct terminal *term, struct list_head *opt_tree,
 	if (cp437 < 0) cp437 = get_cp_index("cp437");
 	if (koi8r < 0) koi8r = get_cp_index("koi8-r");
 
-	if (get_opt_int_tree(opt_tree, "type") == TERM_LINUX) {
-		if (get_opt_bool_tree(opt_tree, "m11_hack") &&
-		    !get_opt_bool_tree(opt_tree, "utf_8_io")) {
+	if (opt_cache->type == TERM_LINUX) {
+		if (opt_cache->m11_hack &&
+		    !opt_cache->utf_8_io) {
 			if (ch >> 15 != *mode) {
 				*mode = ch >> 15;
 				if (!*mode) add_to_str(a, l, "\033[10m");
 				else add_to_str(a, l, "\033[11m");
 			}
 		}
-		if (get_opt_bool_tree(opt_tree, "restrict_852")) {
+		if (opt_cache->restrict_852) {
 			if ((ch >> 15) && c >= 176 && c < 224) {
 				if (frame_restrict[c - 176])
 					c = frame_restrict[c - 176];
 			}
 		}
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100
-		   && !get_opt_bool_tree(opt_tree, "utf_8_io")) {
+	} else if (opt_cache->type == TERM_VT100
+		   && !opt_cache->utf_8_io) {
 		if (ch >> 15 != *mode) {
 			*mode = ch >> 15;
 			if (!*mode) add_to_str(a, l, "\x0f");
 			else add_to_str(a, l, "\x0e");
 		}
 		if (*mode && c >= 176 && c < 224) c = frame_vt100[c - 176];
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100
+	} else if (opt_cache->type == TERM_VT100
 		   && (ch >> 15) && c >= 176 && c < 224) {
 		c = frame_vt100_u[c - 176];
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_KOI8
+	} else if (opt_cache->type == TERM_KOI8
 		   && (ch >> 15) && c >= 176 && c < 224) {
 		c = frame_koi[c - 176];
-	} else if (get_opt_int_tree(opt_tree, "type") == TERM_DUMB
+	} else if (opt_cache->type == TERM_DUMB
 		   && (ch >> 15) && c >= 176 && c < 224)
 		c = frame_dumb[c - 176];
 
@@ -716,7 +724,7 @@ print_char(struct terminal *term, struct list_head *opt_tree,
 	if (A != *attrib) {
 		*attrib = A;
 		add_to_str(a, l, "\033[0");
-		if (get_opt_bool_tree(opt_tree, "colors")) {
+		if (opt_cache->colors) {
 			unsigned char m[4];
 
 			m[0] = ';';
@@ -733,8 +741,8 @@ print_char(struct terminal *term, struct list_head *opt_tree,
 		add_to_str(a, l, "m");
 	}
 	if (c >= ' ' && c != 127/* && c != 155*/) {
-		int charset = get_opt_int_tree(opt_tree, "charset");
-		int type = get_opt_int_tree(opt_tree, "type");
+		int charset = opt_cache->charset;
+		int type = opt_cache->type;
 
 		if (ch >> 15) {
 			int frames_charset = (type == TERM_LINUX ||
@@ -745,7 +753,7 @@ print_char(struct terminal *term, struct list_head *opt_tree,
 							: -1;
 			if (frames_charset != -1) charset = frames_charset;
 		}
-		if (get_opt_bool_tree(opt_tree, "utf_8_io"))
+		if (opt_cache->utf_8_io)
 			add_to_str(a, l, cp2utf_8(charset, c));
 		else
 			add_chr_to_str(a, l, c);
@@ -775,11 +783,20 @@ void redraw_screen(struct terminal *term)
 	int attrib = -1;
 	int mode = -1;
 	int l = 0;
+	struct rs_opt_cache opt_cache;
 
 	if (!term->dirty || (term->master && is_blocked())) return;
 
 	a = init_str();
 	if (!a) return;
+
+	/* Fill the cache */
+	opt_cache.type = get_opt_int_tree(opt_tree, "type");
+	opt_cache.m11_hack = get_opt_bool_tree(opt_tree, "m11_hack");
+	opt_cache.utf_8_io = get_opt_bool_tree(opt_tree, "utf_8_io");
+	opt_cache.colors = get_opt_bool_tree(opt_tree, "colors");
+	opt_cache.charset = get_opt_int_tree(opt_tree, "charset");
+	opt_cache.restrict_852 = get_opt_bool_tree(opt_tree, "restrict_852");
 
 	for (y = 0; y < term->y; y++)
 		for (x = 0; x < term->x; x++, p++) {
@@ -796,14 +813,14 @@ void redraw_screen(struct terminal *term)
 #undef TSP
 #undef TLSP
 			if (cx == x && cy == y) {
-				print_char(term, opt_tree, &a, &l,
+				print_char(term, &opt_cache, &a, &l,
 					   p, &mode, &attrib);
 				cx++;
 			} else if (cy == y && x - cx < 10) {
 				int i;
 
 				for (i = x - cx; i >= 0; i--) {
-					print_char(term, opt_tree, &a, &l,
+					print_char(term, &opt_cache, &a, &l,
 						   p - i, &mode, &attrib);
 					cx++;
 				}
@@ -814,23 +831,22 @@ void redraw_screen(struct terminal *term)
 				add_num_to_str(&a, &l, x + 1);
 				add_to_str(&a, &l, "H");
 				cx = x; cy = y;
-				print_char(term, opt_tree, &a, &l,
+				print_char(term, &opt_cache, &a, &l,
 					   p, &mode, &attrib);
 				cx++;
 			}
 		}
 
 	if (l) {
-		if (get_opt_int_tree(opt_tree, "colors"))
+		if (opt_cache.colors)
 				add_to_str(&a, &l, "\033[37;40m");
 
 		add_to_str(&a, &l, "\033[0m");
 
-		if (get_opt_int_tree(opt_tree, "type") == TERM_LINUX
-		    && get_opt_bool_tree(opt_tree, "m11_hack"))
+		if (opt_cache.type == TERM_LINUX && opt_cache.m11_hack)
 			add_to_str(&a, &l, "\033[10m");
 
-		if (get_opt_int_tree(opt_tree, "type") == TERM_VT100)
+		if (opt_cache.type == TERM_VT100)
 			add_to_str(&a, &l, "\x0f");
 	}
 

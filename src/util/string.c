@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.5 2002/06/21 17:52:24 zas Exp $ */
+/* $Id: string.c,v 1.6 2002/06/21 20:28:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,31 +23,6 @@
 /* Note that, contrary to init_str() & co, these functions are NOT granular,
  * thus you can't simply reuse strings allocated by these in add_to_str()-style
  * functions. */
-
-/* Overhead is minimal when DEBUG is not defined, and we will still in fact use
- * normal functions as we have wrappers all around. */
-
-unsigned char *
-debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
-{
-	unsigned char *m = debug_mem_alloc(f, l, len + 1);
-
-	if (!m) return NULL;
-
-	memcpy(m, src, len);
-	m[len] = 0;
-
-	return m;
-}
-
-unsigned char *
-debug_stracpy(unsigned char *f, int l, unsigned char *src)
-{
-	if (!src) return NULL;
-
-	return debug_memacpy(f, l, src, (src != DUMMY) ? strlen(src) : 0);
-}
-
 
 unsigned char *
 copy_string(unsigned char **dst, unsigned char *src)

@@ -1,13 +1,40 @@
-/* $Id: string.h,v 1.4 2002/06/18 19:36:01 zas Exp $ */
+/* $Id: string.h,v 1.5 2002/06/21 20:28:25 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
 
-unsigned char *debug_memacpy(unsigned char *, int, unsigned char *, int);
+/* To these two functions, same remark applies as to copy_string() or
+ * straconcat(). */
+
+#include "util/memdebug.h"
+#include "util/memory.h"
+
+/* Overhead is minimal when DEBUG is not defined, and we will still in fact use
+ * normal functions as we have wrappers all around. */
+
+static inline unsigned char *
+debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
+{
+	unsigned char *m = debug_mem_alloc(f, l, len + 1);
+
+	if (!m) return NULL;
+
+	memcpy(m, src, len);
+	m[len] = 0;
+
+	return m;
+}
 #define memacpy(s, l) debug_memacpy(__FILE__, __LINE__, s, l)
 
-unsigned char *debug_stracpy(unsigned char *, int, unsigned char *);
+static inline unsigned char *
+debug_stracpy(unsigned char *f, int l, unsigned char *src)
+{
+	if (!src) return NULL;
+
+	return debug_memacpy(f, l, src, (src != DUMMY) ? strlen(src) : 0);
+}
 #define stracpy(s) debug_stracpy(__FILE__, __LINE__, s)
+
 
 unsigned char *copy_string(unsigned char **, unsigned char *);
 void add_to_strn(unsigned char **, unsigned char *);

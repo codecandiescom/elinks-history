@@ -1,5 +1,5 @@
 /* File utilities */ 
-/* $Id: file.c,v 1.1 2002/09/13 20:29:36 pasky Exp $ */
+/* $Id: file.c,v 1.2 2002/12/02 16:44:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,6 +68,7 @@ get_unique_name(unsigned char *fileprefix)
 	int prefixlen;
 
 	prefix = expand_tilde(fileprefix);
+	if (!prefix) return NULL;
 	prefixlen = strlen(prefix);
 	file = prefix;
 

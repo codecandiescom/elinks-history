@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.18 2002/10/12 16:28:43 pasky Exp $ */
+/* $Id: ssl.c,v 1.19 2002/12/02 16:41:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,8 +112,12 @@ get_ssl(void)
 	 * hidden for some stupid design decision, we must not rely on that,
 	 * who knows if some future implementation won't have that as a
 	 * structure itself.. --pasky */
+	int ret;
 	GNUTLS_STATE *state = mem_alloc(sizeof(GNUTLS_STATE));
-	int ret = gnutls_init(state, GNUTLS_CLIENT);
+	
+	if (!state) return NULL;
+	
+	ret = gnutls_init(state, GNUTLS_CLIENT);
 
 	if (ret < 0) {
 		/* debug("sslinit %s", gnutls_strerror(ret)); */
@@ -147,6 +151,7 @@ get_ssl(void)
 void
 free_ssl(ssl_t *ssl)
 {
+	if (!ssl) return;
 #ifdef HAVE_SSL
 #ifdef HAVE_OPENSSL
 	SSL_free(ssl);

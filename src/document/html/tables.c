@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.312 2004/06/29 22:51:38 pasky Exp $ */
+/* $Id: tables.c,v 1.313 2004/06/29 22:54:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,7 +356,7 @@ distribute_widths(struct table *table, int width)
 {
 	int col;
 	int spare_width = width - table->min_width;
-	int om = 0;
+	int stretch_method = 0;
 	char *visited_cols;
 	int *widths, *max_widths;
 	int max_cols_width = 0;
@@ -386,14 +386,14 @@ distribute_widths(struct table *table, int width)
 	while (spare_width) {
 		int max, max_index;
 		int total_width = 0;
-		int wq;
+		int did_stretch;
 		int total_spare_width;
 
 		memset(widths, 0, cols_size);
 		memset(max_widths, 0, cols_size);
 
 		for (col = 0; col < table->cols; col++) {
-			switch (om) {
+			switch (stretch_method) {
 				case 0:
 					if (table->cols_widths[col] >= table->cols_x[col])
 						break;
@@ -458,11 +458,11 @@ distribute_widths(struct table *table, int width)
 		}
 
 		if (!total_width) {
-			om++;
+			stretch_method++;
 			continue;
 		}
 
-		wq = 0;
+		did_stretch = 0;
 		if (visited_cols) memset(visited_cols, 0, table->cols);
 		total_spare_width = spare_width;
 
@@ -492,11 +492,11 @@ again:
 			table->cols_widths[max_index] += max;
 			spare_width -= max;
 
-			wq = 1;
+			did_stretch = 1;
 			if (spare_width) goto again;
 
-		} else if (!wq) {
-			om++;
+		} else if (!did_stretch) {
+			stretch_method++;
 		}
 	}
 

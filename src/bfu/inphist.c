@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.33 2003/10/01 17:16:14 zas Exp $ */
+/* $Id: inphist.c,v 1.34 2003/10/05 19:55:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,12 +13,16 @@
 #include "bfu/dialog.h"
 #include "bfu/inphist.h"
 #include "bfu/menu.h"
+#include "config/options.h"
 #include "config/urlhist.h"
+#include "lowlevel/home.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "util/conv.h"
+#include "util/file.h"
 #include "util/lists.h"
 #include "util/memory.h"
+#include "util/secsave.h"
 
 
 static void
@@ -196,4 +200,63 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 		mem_free(tmphistoryitem);
 		historylist->n--;
 	}
+}
+
+/* Load history file */
+int
+load_input_history(struct input_history *history, unsigned char *filename)
+{
+	FILE *fp;
+	unsigned char *history_file = filename;
+	unsigned char url[MAX_STR_LEN];
+
+	if (get_opt_int_tree(cmdline_options, "anonymous")) return 0;
+	if (elinks_home) {
+		history_file = straconcat(elinks_home, filename, NULL);
+		if (!history_file) return 0;
+	}
+
+	fp = fopen(history_file, "r");
+	if (elinks_home) mem_free(history_file);
+	if (!fp) return 0;
+
+	while (safe_fgets(url, MAX_STR_LEN, fp)) {
+		/* Drop '\n'. */
+		if (*url) url[strlen(url) - 1] = 0;
+		add_to_input_history(history, url, 0);
+	}
+
+	fclose(fp);
+	return 0;
+}
+
+/* Write history list to file. It returns a value different from 0 in case of
+ * failure, 0 on success. */
+int
+save_input_history(struct input_history *history, unsigned char *filename)
+{
+	struct input_history_item *historyitem;
+	struct secure_save_info *ssi;
+	unsigned char *history_file;
+	int i = 0;
+
+	if (!elinks_home
+	    || get_opt_int_tree(cmdline_options, "anonymous"))
+		return 0;
+
+	history_file = straconcat(elinks_home, filename, NULL);
+	if (!history_file) return -1;
+
+	ssi = secure_open(history_file, 0177);
+	mem_free(history_file);
+	if (!ssi) return -1;
+
+	foreachback (historyitem, history->items) {
+		if (i++ > MAX_HISTORY_ITEMS) break;
+		secure_fputs(ssi, historyitem->d);
+		secure_fputc(ssi, '\n');
+		if (ssi->err) break;
+	}
+
+	return secure_close(ssi);
 }

@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.171 2004/07/25 11:44:23 zas Exp $ */
+/* $Id: cache.c,v 1.172 2004/07/25 11:45:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -271,7 +271,7 @@ add_fragment(struct cache_entry *cached, int offset,
 {
 	struct fragment *f, *nf;
 	int trunc = 0;
-	int end_offset, f_end_offset;
+	int end_offset;
 
 	if (!length) return 0;
 
@@ -286,8 +286,7 @@ add_fragment(struct cache_entry *cached, int offset,
 	/* Possibly insert the new data in the middle of existing fragment. */
 	foreach (f, cached->frag) {
 		int ret = 0;
-
-		f_end_offset = f->offset + f->length;
+		int f_end_offset = f->offset + f->length;
 
 		/* No intersection? */
 		if (f->offset > offset) break;

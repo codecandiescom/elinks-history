@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.67 2003/11/06 09:46:00 zas Exp $ */
+/* $Id: charsets.c,v 1.68 2003/11/16 17:07:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -614,21 +614,22 @@ convert_string(struct conv_table *convert_table, unsigned char *chars,
 
 			t = convert_table;
 			i = charspos;
-decode:
-			if (!t[chars[i]].t) {
-				translit = t[chars[i]].u.str;
-			} else {
+
+			while (t[chars[i]].t) {
 				t = t[chars[i++]].u.tbl;
 				if (i >= charslen) PUTC;
-				goto decode;
 			}
+
+			translit = t[chars[i]].u.str;
 			charspos = i + 1;
+
+		} else if (global_doc_opts->plain || mode == CSM_FORM) {
+			PUTC;
 
 		} else {
 			int start = charspos + 1;
 			register int i = start;
 
-			if (global_doc_opts->plain || mode == CSM_FORM) PUTC;
 			while (i < charslen
 			       && ((chars[i] >= 'A' && chars[i] <= 'Z')
 				   || (chars[i] >= 'a' && chars[i] <= 'z')

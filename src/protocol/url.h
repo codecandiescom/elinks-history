@@ -1,4 +1,4 @@
-/* $Id: url.h,v 1.9 2002/12/07 11:39:51 zas Exp $ */
+/* $Id: url.h,v 1.10 2002/12/07 11:45:18 zas Exp $ */
 
 #ifndef EL__URL_H
 #define EL__URL_H
@@ -12,9 +12,6 @@ static inline int end_of_dir(unsigned char c)
 {
 	return c == POST_CHAR || c == '#' || c == ';' || c == '?';
 }
-
-/* FIXME: We should keep this an internal function. */
-int parse_url(unsigned char *, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **, int *, unsigned char **);
 
 unsigned char *get_protocol_name(unsigned char *);
 unsigned char *get_host_name(unsigned char *);

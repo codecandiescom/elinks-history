@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.44 2002/12/07 11:39:51 zas Exp $ */
+/* $Id: url.c,v 1.45 2002/12/07 11:45:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,7 +94,7 @@ get_prot_info(unsigned char *prot, int *port,
 }
 
 /* If url is invalid, it will return -1. */
-int
+static int
 parse_url(unsigned char *url, int *prlen,
           unsigned char **user, int *uslen,
           unsigned char **pass, int *palen,

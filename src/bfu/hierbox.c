@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.123 2003/12/19 12:03:37 pasky Exp $ */
+/* $Id: hierbox.c,v 1.124 2003/12/19 12:07:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,9 +63,9 @@ init_listbox_item(struct hierbox_browser *browser, unsigned char *text,
 }
 
 
-/* Find a box to replace @item. This is done by trying first to traverse down, then
- * up and if both traversals end up returning the box we want to replace bail
- * out using NULL. */
+/* Find a listbox item to replace @item. This is done by trying first to
+ * traverse down then up, and if both traversals end up returning the @item
+ * (that is, it is the last item in the box), return NULL. */
 static inline struct listbox_item *
 replace_listbox_item(struct listbox_item *item, struct listbox_data *data)
 {

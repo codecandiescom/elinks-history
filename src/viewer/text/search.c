@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.125 2003/11/18 20:43:42 pasky Exp $ */
+/* $Id: search.c,v 1.126 2003/11/18 20:44:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,24 +140,23 @@ get_srch(struct document *document)
 
 			for (; x < width; x++) {
 				unsigned char c = document->data[y].d[x].data;
+				int count = 0;
+				int xx;
 
 				if (c > ' ') {
 					ADD(c, 1);
-				} else {
-					int xx;
-					int count = 0;
-
-					for (xx = x + 1; xx < width; xx++) {
-						if (document->data[y].d[xx].data < ' ')
-							continue;
-						count = xx - x;
-						break;
-					}
-
-					ADD(' ', count);
-					x = xx - 1;
+					continue;
 				}
 
+				for (xx = x + 1; xx < width; xx++) {
+					if (document->data[y].d[xx].data < ' ')
+						continue;
+					count = xx - x;
+					break;
+				}
+
+				ADD(' ', count);
+				x = xx - 1;
 			}
 
 			ADD(' ', 0);

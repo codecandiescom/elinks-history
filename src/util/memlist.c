@@ -1,5 +1,5 @@
 /* These routines represent handling of struct memory_list. */
-/* $Id: memlist.c,v 1.13 2003/06/08 22:22:29 pasky Exp $ */
+/* $Id: memlist.c,v 1.14 2003/11/16 00:19:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,13 +42,7 @@ getml(void *p, ...)
 
 	/* If first element is NULL, there's no need to allocate memory, so
 	 * just return. */
-	if (!p) {
-#ifdef DEBUG_MEMLIST
-		errline = line, errfile = file;
-		elinks_error("getml(NULL, ....)");
-#endif
-		return NULL;
-	}
+	if (!p) return NULL;
 
 	/* How many elements ? */
 	va_start(ap, p);

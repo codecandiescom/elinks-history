@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.120 2003/08/23 16:33:20 jonas Exp $ */
+/* $Id: main.c,v 1.121 2003/09/03 12:20:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,14 +194,13 @@ init(void)
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
 	    get_opt_int_tree(cmdline_options, "source")) {
-		if (get_opt_bool_tree(cmdline_options, "stdin")) {
+		if (!*u || !strcmp(u, "-") || get_opt_bool_tree(cmdline_options, "stdin")) {
 			get_opt_bool("protocol.file.allow_special_files") = 1;
-			mem_free(u);
-			u = stracpy("file:///dev/stdin");
-			if (!u) goto fatal_error;
+			dump_start("file:///dev/stdin");
+		} else {
+			dump_start(u);
 		}
 
-		dump_start(u);
 		mem_free(u), u = NULL;
 		if (terminate) {
 			/* XXX? */

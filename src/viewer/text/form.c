@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.9 2003/07/17 08:56:33 zas Exp $ */
+/* $Id: form.c,v 1.10 2003/07/21 17:58:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -876,17 +876,15 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 			case ACT_KILL_TO_BOL:
 				if (!frm->ro && fs->state) {
 					unsigned char *prev;
-#if HAVE_MEMRCHR
-					/* Is this correct? -- Miciah */
-					prev = memrchr(fs->value, ASCII_LF,
-						       fs->state - 1);
-#else
+
+					/* TODO: Make this memrchr(), and
+					 * introduce stub for that function
+					 * into util/string.*. --pasky */
 					for (prev = fs->value + fs->state - 1;
 					     prev > fs->value
 						&& *prev != ASCII_LF;
 					     --prev)
 						;
-#endif
 
 					if (prev > fs->value
 					    && fs->state

@@ -1,3 +1,424 @@
+Thu Jan  8 22:15:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.9.1rc1 
+
+Thu Jan  8 22:14:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/renderer.c:
+
+	Revert extra patch made by Jonas. It has nothing to do there.  
+
+Thu Jan  8 22:14:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* NEWS:
+
+	now: feature.h and <object>.  
+
+Thu Jan  8 22:08:11 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Typo fix.  
+
+Thu Jan  8 22:03:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, da.po, de.po, el.po, es.po, et.po,
+	fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po, leet.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Thu Jan  8 22:03:08 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Jan  8 22:00:01 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Typo fix.  
+
+Thu Jan  8 21:58:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Thu Jan  8 21:54:48 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jan  8 21:54:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/options.c,
+	document/renderer.c:
+
+	Hmm or was it document.browse.forms.input_size. :-P 
+
+Thu Jan  8 21:51:12 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Jan  8 21:48:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	'Twas document.browse.forms.input_size.  
+
+Thu Jan  8 21:43:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	document.html.default_forms_input_size ->
+	document.browse.frames.input_size. It wasn't introduced that long
+	ago so I think it doesn't deserve an alias ;-).  
+
+Thu Jan  8 21:26:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	get_bgcolor() now again bails out when it smells mono color_mode.
+	Zas removed this, but he didn't mention it in the log message so I
+	believe it was just a mistake.  
+
+Thu Jan  8 21:17:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Add the ELinks VERSION header only when we are writing the file from
+	scratch.  
+
+Thu Jan  8 21:07:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Sort Document :: Cache options.  
+
+Thu Jan  8 21:00:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/view.c:
+
+	Punct. fix.  
+
+Thu Jan  8 18:37:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/info.c,
+	dialogs/info.h, dialogs/menu.c, sched/action.c:
+
+	Add resource-info action and cleanup res_info() renaming it to
+	resource_info() and trimming args.  
+
+Thu Jan  8 17:58:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/: man/man5/elinks.conf.5, tools/help2doc:
+
+	Update elinks.conf.5 copyright and sync with current option tree.  
+
+Thu Jan  8 17:53:06 2004  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Thu Jan  8 17:49:00 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Various fixes and cleanups.  
+
+Thu Jan  8 17:24:37 2004  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Hungarion translation update.  
+
+Thu Jan  8 17:17:36 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	Remove ending dots in captions.  
+
+Thu Jan  8 17:14:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Extend caption test to i18n captions.  
+
+Thu Jan  8 16:58:17 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French grammar fixes.  
+
+Thu Jan  8 16:53:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	ELinks version is now written at top of configuration file.  
+
+Thu Jan  8 16:07:48 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/conf.c:
+
+	Only add a slash to config file name when needed, it prevents double
+	slashes in filename displayed in message boxes.  
+
+Thu Jan  8 15:41:21 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jan  8 15:25:18 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Touch option when toggling, suggested by Jonas, and test for term in
+	write_config_success().  
+
+Thu Jan  8 14:59:53 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jan  8 14:57:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, sched/session.c:
+
+	Rename ui.sessions.homepage_url to ui.session.homepage, and change
+	the behaviour so that "" means use getenv(WWW_HOME) instead. Also
+	restore the fallback to WWW_HOME_URL.  
+
+Thu Jan  8 14:56:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/: conf.c, dialogs.c:
+
+	Test for ui.success_msgbox was moved to write_config_success(). A
+	new button [ Do not show anymore ] permits to toggle
+	ui.success_msgbox from the message box.  
+
+Thu Jan  8 14:25:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Do a little wrapping to make it possible to call enter() through
+	do_frame_action().  
+
+Thu Jan  8 14:19:24 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/: options.h, html/parser.c, html/renderer.c:
+
+	Use macros to wrap comparaisons of use_document_colors.  
+
+Thu Jan  8 13:47:05 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/: options.c, options.h, html/parser.c,
+	html/renderer.c:
+
+	Use "colors" instead of "colours" since it seems the first one is
+	the most used in ELinks code.  
+
+Thu Jan  8 13:37:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: document/options.c, viewer/text/marks.c:
+
+	Trailing spaces fixes.  
+
+Thu Jan  8 13:32:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Thu Jan  8 13:28:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/action.c:
+
+	Normalise exit_prog(). It now takes a @query argument inverting the
+	previous meaning.  
+
+Thu Jan  8 13:13:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, lowlevel/signals.c:
+
+	Don't call exit_prog() but queue terminal destruction directly.
+	exit_prog() is a high level ui function and should not be called
+	from a signal handler.  
+
+Thu Jan  8 10:04:05 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Jan  8 09:53:06 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.inc, sched/action.c, sched/session.c,
+	sched/session.h:
+
+	As requested by Jonas, ui.sessions.homepage_url option now controls
+	default homepage. And ui.sessions.ignore_www_home permits to force
+	use of ui.sessions.homepage_url value instead of env. var. WWW_HOME.
+	Note that WWW_HOME_URL still exists in setup.h and is used as
+	default value for ui.sessions.homepage_url 
+
+Thu Jan  8 09:09:35 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/action.c:
+
+	Typo fixes.  
+
+Thu Jan  8 03:48:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Fix action for submit-form-reload.  
+
+Thu Jan  8 03:44:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/link.c:
+
+	Introduce submit-form and submit-form-reload actions mostly to use
+	them for menus and simplify submit_form_do() [renamed to
+	submit_form()] by calling it through do_frame_action().  
+
+Thu Jan  8 03:28:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, sched/action.c,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/link.c:
+
+	Introduce reset-form action and handle it in do_action() making it
+	possible to handle form reseting entries in the link menu via the
+	action object model and frontend reset form via do_frame_action().  
+
+Thu Jan  8 03:15:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/link.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	do_action(): Handle enter and enter-reload for menu code. Nuke
+	send_enter_reload().  
+
+Thu Jan  8 02:50:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Cleanup double up on action kbd_action() call.  
+
+Thu Jan  8 02:48:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Complete merging of send_event() stuff with do_action(). Quit.  
+
+Thu Jan  8 02:34:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, sched/action.c, viewer/text/view.c:
+
+	do_action(): Handle quit and lua-console actions.  
+
+Thu Jan  8 02:23:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Woopsi, forgot to check whether !anonymous before downloading link.  
+
+Thu Jan  8 02:20:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	Another adventures simplification. Merge frm_download() goodies into 
+	download_link().  We do not need the link->type checking parts since 
+	get_link_url() will take care of those for us. Instead of passing
+	some new enum the action enum is passed to download_link(), much
+	simpler. As for the "MAP@" checking it should hopefully not harm
+	anything else we could surround it in ACT_DOWNLOAD or something.  
+
+Thu Jan  8 02:02:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/link.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Another big simplification possible by using do_frame_action() as
+	front end.  It is now used to handle download and download-image
+	actions.  send_download() is now equivalent to download_link().  
+
+Thu Jan  8 01:50:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Make it possible to pass magic numbers to the do_frame_action()
+	@func handler.  
+
+Thu Jan  8 01:34:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	Rename send_image() to view_image() and use it through
+	do_frame_action().  
+
+Thu Jan  8 01:26:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/link.c, viewer/text/view.c:
+
+	do_action(): Handle image and link menu actions. Eh patch is bloated
+	by a few cleanups.  
+
+Thu Jan  8 01:09:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Backend the goto url bi'nez using the get_current_*url() functions.  
+
+Thu Jan  8 00:57:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	do_action(): Handle the rest of the goto url actions.  
+
+Thu Jan  8 00:39:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/action.c:
+
+	Move goto home page code to separate function to keep the switch
+	noodle clean.  
+
+Thu Jan  8 00:29:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c:
+
+	Move lots of action handling from send_event() to do_action().  
+
+Wed Jan  7 23:53:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Bug when trying to get_opt_*() an alias.  
+
+Wed Jan  7 23:26:12 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Jan  7 23:24:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Debug mode helper to detect ending dot in option captions. It will
+	emit a debug message in this case.  
+
 Wed Jan  7 22:55:37 2004  Laurent Monin <zas@norz.org>:
 
 	* src/config/options.inc:

@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.30 2004/06/23 08:16:23 jonas Exp $ */
+/* $Id: codes.c,v 1.31 2004/06/28 02:27:20 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -76,7 +76,7 @@ static struct http_code http_code[] = {
 
 #define count(T) (sizeof(T)/sizeof(*(T)))
 
-unsigned char *
+static unsigned char *
 http_code_to_string(int code)
 {
 	int start = 0;

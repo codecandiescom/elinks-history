@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.462 2004/06/14 10:05:28 zas Exp $ */
+/* $Id: view.c,v 1.463 2004/06/14 10:08:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -493,6 +493,27 @@ vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 		find_link_page_down(doc_view);
 }
 
+/* @steps > 0 -> right */
+static void
+horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps)
+{
+	int x;
+
+	assert(ses && doc_view && doc_view->vs && doc_view->document);
+	if_assert_failed return;
+
+	x = doc_view->vs->x + steps;
+	int_bounds(&x, 0, doc_view->document->width - 1);
+	if (x == doc_view->vs->x) return;
+
+	doc_view->vs->x = x;
+
+	if (current_link_is_visible(doc_view)) return;
+
+	find_link_page_down(doc_view);
+	/* !!! FIXME: check right margin */
+}
+
 static void
 scroll_up(struct session *ses, struct document_view *doc_view)
 {
@@ -517,44 +538,6 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, steps);
-}
-
-#ifdef CONFIG_MOUSE
-static void
-scroll_mouse_up(struct session *ses, struct document_view *doc_view)
-{
-	int steps = get_opt_int("document.browse.scrolling.vertical_step");
-
-	vertical_scroll(ses, doc_view, -steps);
-}
-
-static void
-scroll_mouse_down(struct session *ses, struct document_view *doc_view)
-{
-	int steps = get_opt_int("document.browse.scrolling.vertical_step");
-
-	vertical_scroll(ses, doc_view, steps);
-}
-#endif /* CONFIG_MOUSE */
-
-static void
-horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps)
-{
-	int x;
-
-	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
-
-	x = doc_view->vs->x + steps;
-	int_bounds(&x, 0, doc_view->document->width - 1);
-	if (x == doc_view->vs->x) return;
-
-	doc_view->vs->x = x;
-
-	if (current_link_is_visible(doc_view)) return;
-
-	find_link_page_down(doc_view);
-	/* !!! FIXME: check right margin */
 }
 
 static void
@@ -584,6 +567,22 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 }
 
 #ifdef CONFIG_MOUSE
+static void
+scroll_mouse_up(struct session *ses, struct document_view *doc_view)
+{
+	int steps = get_opt_int("document.browse.scrolling.vertical_step");
+
+	vertical_scroll(ses, doc_view, -steps);
+}
+
+static void
+scroll_mouse_down(struct session *ses, struct document_view *doc_view)
+{
+	int steps = get_opt_int("document.browse.scrolling.vertical_step");
+
+	vertical_scroll(ses, doc_view, steps);
+}
+
 static void
 scroll_mouse_left(struct session *ses, struct document_view *doc_view)
 {

@@ -1,5 +1,5 @@
 /* The DOM tree navigation interface */
-/* $Id: navigator.c,v 1.8 2005/02/28 11:16:59 zas Exp $ */
+/* $Id: navigator.c,v 1.9 2005/03/30 20:57:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,8 +66,8 @@ done_dom_navigator(struct dom_navigator *navigator)
 {
 	assert(navigator);
 
-	if (navigator->states) mem_free(navigator->states);
-	if (navigator->state_objects) mem_free(navigator->state_objects);
+	mem_free_if(navigator->states);
+	mem_free_if(navigator->state_objects);
 
 	memset(navigator, 0, sizeof(*navigator));
 }

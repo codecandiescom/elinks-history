@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.51 2003/07/22 14:53:48 jonas Exp $ */
+/* $Id: document.c,v 1.52 2003/07/22 15:36:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,84 +95,65 @@ loc_msg(struct terminal *term, struct location *location,
 	add_char_to_string(&msg, '\n');
 
 	if (frame && frame->document->title) {
-		add_to_string(&msg, _("Title", term));
-		add_to_string(&msg, ": ");
-		add_to_string(&msg, frame->document->title);
+		add_format_to_string(&msg, "%s: %s", _("Title", term),
+				     frame->document->title);
 	}
 
 	add_char_to_string(&msg, '\n');
 
 	if (!get_cache_entry(location->vs.url, &ce)) {
-		add_char_to_string(&msg, '\n');
-		add_to_string(&msg, _("Size", term));
-		add_to_string(&msg, ": ");
-		add_long_to_string(&msg, ce->length);
+		add_format_to_string(&msg, "\n%s: %d",
+				     _("Size", term), ce->length);
 
 		if (ce->incomplete) {
-			add_to_string(&msg, " (");
-			add_to_string(&msg, _("incomplete", term));
-			add_char_to_string(&msg, ')');
-		}
+			add_format_to_string(&msg, "(%s)", _("incomplete", term));
+		}	
 
-		add_char_to_string(&msg, '\n');
-		add_to_string(&msg, _("Codepage", term));
-		add_to_string(&msg, ": ");
-		add_to_string(&msg, get_cp_name(location->vs.view->document->cp));
+		add_format_to_string(&msg, "\n%s: %s", _("Codepage", term),
+				get_cp_name(location->vs.view->document->cp));
 
 		if (location->vs.view->document->cp_status == CP_STATUS_ASSUMED) {
-			add_to_string(&msg, " (");
-			add_to_string(&msg, _("assumed", term));
-			add_char_to_string(&msg, ')');
+			add_format_to_string(&msg, "(%s)", _("assumed", term));
 		} else if (location->vs.view->document->cp_status == CP_STATUS_IGNORED) {
-			add_to_string(&msg, " (");
-			add_to_string(&msg, _("ignoring server setting", term));
-			add_char_to_string(&msg, ')');
+			add_format_to_string(&msg, "(%s)",
+					_("ignoring server setting", term));
 		}
 
 		a = parse_http_header(ce->head, "Server", NULL);
 		if (a) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("Server", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, a);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("Server", term), a);
 			mem_free(a);
 		}
 
 		if (ce->ssl_info) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("SSL Cipher", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, ce->ssl_info);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("SSL Cipher", term),
+					     ce->ssl_info);
 		}
 		if (ce->encoding_info) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("Encoding", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, ce->encoding_info);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("Encoding", term),
+					     ce->encoding_info);
 		}
 
 		a = parse_http_header(ce->head, "Date", NULL);
 		if (a) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("Date", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, a);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("Date", term), a);
 			mem_free(a);
 		}
 
 		if (ce->last_modified) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("Last modified", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, ce->last_modified);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("Last modified", term),
+					     ce->last_modified);
 		}
 
 	}
 
 #ifdef GLOBHIST
-	add_char_to_string(&msg, '\n');
-	add_to_string(&msg, _("Last visit time", term));
-	add_to_string(&msg, ": ");
+	add_format_to_string(&msg, "\n%s: ", _("Last visit time", term));
 	historyitem = get_global_history_item(location->vs.url);
 	if (historyitem) {
 		/* Stupid ctime() adds a newline, and we don't want that, so we
@@ -188,19 +169,15 @@ loc_msg(struct terminal *term, struct location *location,
 		add_char_to_string(&msg, '\n');
 		a = print_current_link_do(frame, term);
 		if (a) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("Link", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, a);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("Link", term), a);
 			mem_free(a);
 		}
 
 		a = print_current_link_title_do(frame, term);
 		if (a) {
-			add_char_to_string(&msg, '\n');
-			add_to_string(&msg, _("Link title", term));
-			add_to_string(&msg, ": ");
-			add_to_string(&msg, a);
+			add_format_to_string(&msg, "\n%s: %s",
+					     _("Link title", term), a);
 			mem_free(a);
 		}
 	}

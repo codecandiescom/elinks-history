@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.65 2004/06/16 17:21:15 jonas Exp $ */
+/* $Id: textarea.c,v 1.66 2004/06/16 19:30:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,8 @@
 /* FIXME: Add comments!! --Zas */
 
 struct line_info {
-	unsigned char *st;
-	unsigned char *en;
+	unsigned char *start;
+	unsigned char *end;
 };
 
 #define realloc_line_info(info, size) \
@@ -45,8 +45,8 @@ struct line_info {
 static struct line_info *
 format_text(unsigned char *text, int width, int wrap)
 {
-	struct line_info *ln = NULL;
-	int lnn = 0;
+	struct line_info *line = NULL;
+	int line_number = 0;
 	unsigned char *b = text;
 	int sk, ps = 0;
 
@@ -73,13 +73,13 @@ format_text(unsigned char *text, int width, int wrap)
 			}
 		}
 put:
-		if (!realloc_line_info(&ln, lnn)) {
-			mem_free_if(ln);
+		if (!realloc_line_info(&line, line_number)) {
+			mem_free_if(line);
 			return NULL;
 		}
 
-		ln[lnn].st = b;
-		ln[lnn++].en = text;
+		line[line_number].start = b;
+		line[line_number++].end = text;
 		b = text += sk;
 	}
 
@@ -88,29 +88,29 @@ put:
 		sk = 0;
 		goto put;
 	}
-	ln[lnn - 1].st = ln[lnn - 1].en = NULL;
+	line[line_number - 1].start = line[line_number - 1].end = NULL;
 
-	return ln;
+	return line;
 }
 
 int
 area_cursor(struct form_control *frm, struct form_state *fs)
 {
-	struct line_info *ln;
+	struct line_info *line;
 	int q = 0;
 	int y;
 
 	assert(frm && fs);
 	if_assert_failed return 0;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return 0;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return 0;
 
-	for (y = 0; ln[y].st; y++) {
-		int x = fs->value + fs->state - ln[y].st;
+	for (y = 0; line[y].start; y++) {
+		int x = fs->value + fs->state - line[y].start;
 
-		if (fs->value + fs->state < ln[y].st ||
-		    fs->value + fs->state >= ln[y].en + (ln[y + 1].st != ln[y].en))
+		if (fs->value + fs->state < line[y].start ||
+		    fs->value + fs->state >= line[y].end + (line[y + 1].start != line[y].end))
 			continue;
 
 		if (frm->wrap && x == frm->cols) x--;
@@ -123,7 +123,7 @@ area_cursor(struct form_control *frm, struct form_state *fs)
 		q = y * frm->cols + x;
 		break;
 	}
-	mem_free(ln);
+	mem_free(line);
 
 	return q;
 }
@@ -132,7 +132,7 @@ void
 draw_textarea(struct terminal *term, struct form_state *fs,
 	      struct document_view *doc_view, struct link *link)
 {
-	struct line_info *ln, *lnx;
+	struct line_info *line, *linex;
 	struct form_control *frm;
 	struct box *box;
 	int vx, vy;
@@ -151,17 +151,17 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 
 	if (!link->npoints) return;
 	area_cursor(frm, fs);
-	lnx = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!lnx) return;
-	ln = lnx;
+	linex = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!linex) return;
+	line = linex;
 	sl = fs->vypos;
-	while (ln->st && sl) sl--, ln++;
+	while (line->start && sl) sl--, line++;
 
 	x = link->points[0].x + box->x - vx;
 	y = link->points[0].y + box->y - vy;
 	ye = y + frm->rows;
 
-	for (; ln->st && y < ye; ln++, y++) {
+	for (; line->start && y < ye; line++, y++) {
 		register int i;
 
 		if (!row_is_in_box(box, y)) continue;
@@ -172,9 +172,9 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 			if (col_is_in_box(box, xi)) {
 				if (fs->value &&
 				    i >= -fs->vpos &&
-				    i + fs->vpos < ln->en - ln->st)
+				    i + fs->vpos < line->end - line->start)
 					draw_char_data(term, xi, y,
-						       ln->st[i + fs->vpos]);
+						       line->start[i + fs->vpos]);
 				else
 					draw_char_data(term, xi, y, '_');
 			}
@@ -194,7 +194,7 @@ draw_textarea(struct terminal *term, struct form_state *fs,
 		}
 	}
 
-	mem_free(lnx);
+	mem_free(linex);
 }
 
 
@@ -396,118 +396,118 @@ textarea_op_home(struct form_state *fs, struct form_control *frm, int rep)
 {
 	unsigned char *position = fs->value + fs->state;
 	unsigned char *prev_end = NULL;
-	struct line_info *ln;
+	struct line_info *line;
 	int y;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return FRAME_EVENT_OK;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return FRAME_EVENT_OK;
 
-	for (y = 0; ln[y].st; prev_end = ln[y].en, y++) {
-		if (position >= ln[y].st &&
-		    position < ln[y].en + (ln[y].st != prev_end)) {
-			fs->state = ln[y].st - fs->value;
+	for (y = 0; line[y].start; prev_end = line[y].end, y++) {
+		if (position >= line[y].start &&
+		    position < line[y].end + (line[y].start != prev_end)) {
+			fs->state = line[y].start - fs->value;
 			goto x;
 		}
 	}
 	fs->state = 0;
 
 x:
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
 textarea_op_up(struct form_state *fs, struct form_control *frm, int rep)
 {
-	struct line_info *ln;
+	struct line_info *line;
 	int y = 0;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return FRAME_EVENT_OK;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return FRAME_EVENT_OK;
 
-	while (ln[y].st) {
-		if (fs->value + fs->state >= ln[y].st &&
-		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+	while (line[y].start) {
+		if (fs->value + fs->state >= line[y].start &&
+		    fs->value + fs->state < line[y].end + (line[y+1].start != line[y].end)) {
 			if (!y) {
-				mem_free(ln);
+				mem_free(line);
 				return FRAME_EVENT_OK;
 			}
-			fs->state -= ln[y].st - ln[y-1].st;
-			int_upper_bound(&fs->state, ln[y-1].en - fs->value);
+			fs->state -= line[y].start - line[y-1].start;
+			int_upper_bound(&fs->state, line[y-1].end - fs->value);
 			if (!rep) goto xx;
 			y = 0;
 		} else {
 			y++;
 		}
 	}
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_OK;
 
 xx:
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
 textarea_op_down(struct form_state *fs, struct form_control *frm, int rep)
 {
-	struct line_info *ln;
+	struct line_info *line;
 	int y = 0;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return FRAME_EVENT_OK;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return FRAME_EVENT_OK;
 
-	while (ln[y].st) {
-		if (fs->value + fs->state >= ln[y].st &&
-		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-			if (!ln[y+1].st) {
-				mem_free(ln);
+	while (line[y].start) {
+		if (fs->value + fs->state >= line[y].start &&
+		    fs->value + fs->state < line[y].end + (line[y+1].start != line[y].end)) {
+			if (!line[y+1].start) {
+				mem_free(line);
 				return FRAME_EVENT_OK;
 			}
-			fs->state += ln[y+1].st - ln[y].st;
-			int_upper_bound(&fs->state, ln[y+1].en - fs->value);
+			fs->state += line[y+1].start - line[y].start;
+			int_upper_bound(&fs->state, line[y+1].end - fs->value);
 			if (!rep) goto yy;
 			y = 0;
 		} else {
 			y++;
 		}
 	}
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_OK;
 yy:
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }
 
 enum frame_event_status
 textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 {
-	struct line_info *ln;
+	struct line_info *line;
 	int y;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return FRAME_EVENT_OK;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return FRAME_EVENT_OK;
 
-	for (y = 0; ln[y].st; y++) {
-		if (fs->value + fs->state >= ln[y].st &&
-		    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-			fs->state = ln[y].en - fs->value;
+	for (y = 0; line[y].start; y++) {
+		if (fs->value + fs->state >= line[y].start &&
+		    fs->value + fs->state < line[y].end + (line[y+1].start != line[y].end)) {
+			fs->state = line[y].end - fs->value;
 
 			/* Don't jump to next line when wrapping. */
 			if (fs->state && fs->state < strlen(fs->value)
-			    && ln[y+1].st == ln[y].en)
+			    && line[y+1].start == line[y].end)
 				fs->state--;
 
 			goto yyyy;
@@ -515,7 +515,7 @@ textarea_op_end(struct form_state *fs, struct form_control *frm, int rep)
 	}
 	fs->state = strlen(fs->value);
 yyyy:
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }
 
@@ -523,22 +523,22 @@ enum frame_event_status
 textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 {
 	unsigned char *position = fs->value + fs->state;
-	struct line_info *ln;
+	struct line_info *line;
 	int y;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return FRAME_EVENT_OK;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return FRAME_EVENT_OK;
 
-	for (y = 0; ln[y].st; y++) {
-		if (position <= ln[y].en) {
-			fs->state -= ln[y].st - fs->value;
+	for (y = 0; line[y].start; y++) {
+		if (position <= line[y].end) {
+			fs->state -= line[y].start - fs->value;
 
 			position = fs->value + fs->state;
-			if (position > ln[0].en)
-				fs->state = ln[0].en - fs->value;
+			if (position > line[0].end)
+				fs->state = line[0].end - fs->value;
 
 			goto x;
 		}
@@ -546,7 +546,7 @@ textarea_op_bob(struct form_state *fs, struct form_control *frm, int rep)
 	fs->state = 0;
 
 x:
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }
 
@@ -554,24 +554,24 @@ enum frame_event_status
 textarea_op_eob(struct form_state *fs, struct form_control *frm, int rep)
 {
 	unsigned char *position = fs->value + fs->state;
-	struct line_info *ln;
+	struct line_info *line;
 	int y;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	ln = format_text(fs->value, frm->cols, !!frm->wrap);
-	if (!ln) return FRAME_EVENT_OK;
+	line = format_text(fs->value, frm->cols, !!frm->wrap);
+	if (!line) return FRAME_EVENT_OK;
 
-	for (y = 0; ln[y].st; y++) {
-		if (position <= ln[y].en) {
-			for (; ln[y].st && ln[y + 1].st; y++) {
-				fs->state += ln[y].en - ln[y].st + 1;
+	for (y = 0; line[y].start; y++) {
+		if (position <= line[y].end) {
+			for (; line[y].start && line[y + 1].start; y++) {
+				fs->state += line[y].end - line[y].start + 1;
 			}
 
 			position = fs->value + fs->state;
-			if (position > ln[y].en)
-				fs->state = ln[y].en - fs->value;
+			if (position > line[y].end)
+				fs->state = line[y].end - fs->value;
 
 			goto x;
 		}
@@ -579,7 +579,7 @@ textarea_op_eob(struct form_state *fs, struct form_control *frm, int rep)
 	fs->state = strlen(fs->value);
 
 x:
-	mem_free(ln);
+	mem_free(line);
 	return FRAME_EVENT_REFRESH;
 }
 

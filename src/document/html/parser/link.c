@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.42 2004/12/08 17:27:56 zas Exp $ */
+/* $Id: link.c,v 1.43 2004/12/08 18:23:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,6 +137,53 @@ get_image_filename_from_src(unsigned char *attr)
 	return text;
 }
 
+/* Returns an allocated string made after @label
+ * but limited to @max_len length, by truncating
+ * the middle of @label string, which is replaced
+ * by an asterisk ('*').
+ * If @max_len < 0 it returns NULL.
+ * If @max_len == 0 it returns an unmodified copy
+ * of @label string.
+ * In either case, it may return NULL if a memory
+ * allocation failure occurs.
+ * Example:
+ * truncate_label("some_string", 5) => "so*ng"
+ */
+static unsigned char *
+truncate_label(unsigned char *label, int max_len)
+{
+	unsigned char *new_label;
+	int len = strlen(label);
+	int left_part_len;
+	int right_part_len;
+
+	if (max_len < 0) return NULL;
+	if (max_len == 0 || len <= max_len)
+		return stracpy(label);
+
+	right_part_len = left_part_len = max_len / 2;
+
+	if (left_part_len + right_part_len + 1 > max_len)
+		right_part_len--;
+
+	new_label = mem_alloc(max_len + 1);
+	if (!new_label) return NULL;
+
+	if (left_part_len)
+		memcpy(new_label, label, left_part_len);
+
+	new_label[left_part_len] = '*';
+
+	if (right_part_len)
+		memcpy(new_label + left_part_len + 1,
+		       label + len - right_part_len, right_part_len);
+
+	/* For great safety! */
+	new_label[max_len] = '\0';
+
+	return new_label;
+}
+
 /* Returns possibly truncated title of image.
  * It returns IMG if no title or disabled by option.
  */
@@ -145,43 +192,14 @@ truncate_title(unsigned char *title)
 {
 	unsigned char *text;
 	int max_len = get_opt_int("document.browse.images.file_tags");
-	int len;
-
-#if 0
-	/* This should be maybe whole terminal width? */
-	max_real_len = par_format.width * max_len / 100;
-	/* It didn't work well and I'm too lazy to code that;
-	 * absolute values will have to be enough for now ;).
-	 * --pasky */
-#endif
 
 	if (max_len < 0 || !title) {
-		text = stracpy("IMG");
-		goto free_title;
+		mem_free_if(title);
+		return stracpy("IMG");
 	}
 
-	len = strlen(title);
-
-	if (!max_len || len <= max_len) {
-		text = memacpy(title, len);
-
-	} else {
-		int max_part_len = max_len / 2;
-
-		text = mem_alloc(max_part_len * 2 + 2);
-		if (!text) goto free_title;
-
-		memcpy(text, title, max_part_len);
-		text[max_part_len] = '*';
-		memcpy(text + max_part_len + 1,
-		       title + len - max_part_len, max_part_len + 1);
-
-		/* For great safety! */
-		text[max_part_len * 2 + 1] = '\0';
-	}
-
-free_title:
-	mem_free_if(title);
+	text = truncate_label(title, max_len);
+	mem_free(title);
 
 	return text;
 }

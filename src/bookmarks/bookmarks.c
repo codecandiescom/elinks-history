@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.34 2002/08/29 23:26:01 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.35 2002/08/30 09:26:16 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -27,9 +27,6 @@ struct list_head bookmarks = { &bookmarks, &bookmarks };
 struct list_head bookmark_box_items = { &bookmark_box_items,
 					&bookmark_box_items };
 
-/* The last used id of a bookmark */
-bookmark_id next_bookmark_id = 0;
-
 /* Last searched values */
 unsigned char *bm_last_searched_name = NULL;
 unsigned char *bm_last_searched_url = NULL;
@@ -41,32 +38,10 @@ unsigned char *bm_last_searched_url = NULL;
 int bookmarks_dirty = 0;
 
 
-/* Gets a bookmark by id */
-struct bookmark *
-get_bookmark_by_id(bookmark_id id)
-{
-	struct bookmark *bm;
-
-	if (id == BAD_BOOKMARK_ID)
-		return NULL;
-
-	foreach (bm, bookmarks) {
-		if (id == bm->id)
-			return bm;
-	}
-
-	return NULL;
-}
-
-/* Deletes a bookmark, given the id. Returns 0 on failure (no such bm), 1 on
- * success */
+/* Deletes a bookmark. Returns 0 on failure (no such bm), 1 on success. */
 int
-delete_bookmark_by_id(bookmark_id id)
+delete_bookmark(struct bookmark *bm)
 {
-	struct bookmark *bm = get_bookmark_by_id(id);
-
-	if (!bm) return 0;
-
 	del_from_list(bm);
 	bookmarks_dirty = 1;
 
@@ -101,8 +76,6 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 		return NULL;
 	}
 
-	bm->id = next_bookmark_id++;
-
 	/* Actually add it */
 	add_to_list(bookmarks, bm);
 	bookmarks_dirty = 1;
@@ -121,7 +94,7 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 	if (!list_empty(bookmark_box_items))
 		bm->box_item->data = ((struct listbox_item *)
 				      bookmark_box_items.next)->data;
-	bm->box_item->udata = (void *) bm->id;
+	bm->box_item->udata = (void *) bm;
 
 	strcpy(bm->box_item->text, bm->title);
 
@@ -132,20 +105,13 @@ add_bookmark(const unsigned char *title, const unsigned char *url)
 
 /* Updates an existing bookmark.
  *
- * If the requested bookmark does not exist, return 0. Otherwise, return 1.
+ * If there's any problem, return 0. Otherwise, return 1.
  *
  * If any of the fields are NULL, the value is left unchanged. */
 int
-update_bookmark(bookmark_id id, const unsigned char *title,
+update_bookmark(struct bookmark *bm, const unsigned char *title,
 		const unsigned char *url)
 {
-	struct bookmark *bm = get_bookmark_by_id(id);
-
-	if (!bm) {
-		/* Does not exist. */
-		return 0;
-	}
-
 	if (title) {
 		mem_free(bm->title);
 		bm->title = stracpy((unsigned char *) title);
@@ -330,9 +296,8 @@ finalize_bookmarks()
 void read_bookmarks() {}
 void write_bookmarks() {}
 void finalize_bookmarks() {}
-struct bookmark *get_bookmark_by_id(bookmark_id b) { return NULL; }
-int delete_bookmark_by_id(bookmark_id b) { return 0; }
+int delete_bookmark(struct bookmark *bm) { return 0; }
 void add_bookmark(const unsigned char *u, const unsigned char *t) {}
-int update_bookmark(bookmark_id b, const unsigned char *u, const unsigned char *t) { return 0; }
+int update_bookmark(struct bookmark *bm, const unsigned char *u, const unsigned char *t) { return 0; }
 int bookmark_simple_search(unsigned char *u, unsigned char *t){ return 0; }
 #endif

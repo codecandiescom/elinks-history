@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.21 2002/08/29 23:26:01 pasky Exp $ */
+/* $Id: dialogs.c,v 1.22 2002/08/30 09:26:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,8 +35,6 @@
 
 
 #ifdef BOOKMARKS
-
-/* TODO: Why we use some strange bookmark_ids and not just pointers? --pasky */
 
 
 /****************************************************************************
@@ -262,8 +260,7 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 	/* Follow the bookmark */
 	if (box->sel)
 		goto_url((struct session *) goto_btn->item->udata,
-			 get_bookmark_by_id((bookmark_id)
-					    box->sel->udata)->url);
+			 ((struct bookmark *) box->sel->udata)->url);
 
 	/* Close the bookmark dialog */
 	delete_window(dlg->win);
@@ -274,9 +271,9 @@ push_goto_button(struct dialog_data *dlg, struct widget_data *goto_btn)
 /* Called when an edit is complete. */
 void
 bookmark_edit_done(struct dialog *d) {
-	bookmark_id id = (bookmark_id) d->udata2;
+	struct bookmark *bm = (struct bookmark *) d->udata2;
 
-	update_bookmark(id, d->items[0].data, d->items[1].data);
+	update_bookmark(bm, d->items[0].data, d->items[1].data);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();
@@ -294,13 +291,13 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 
 	/* Follow the bookmark */
 	if (box->sel) {
-		bookmark_id id = (bookmark_id) box->sel->udata;
-		const unsigned char *name = get_bookmark_by_id(id)->title;
-		const unsigned char *url = get_bookmark_by_id(id)->url;
+		struct bookmark *bm = (struct bookmark *) box->sel->udata;
+		const unsigned char *name = bm->title;
+		const unsigned char *url = bm->url;
 
 		do_edit_dialog(dlg->win->term, TEXT(T_EDIT_BOOKMARK), name, url,
 			       (struct session *) edit_btn->item->udata, dlg,
-			       bookmark_edit_done, (void *) id, 1);
+			       bookmark_edit_done, (void *) bm, 1);
 	}
 
 	return 0;
@@ -312,7 +309,7 @@ push_edit_button(struct dialog_data *dlg, struct widget_data *edit_btn)
 struct push_del_button_hop_struct {
 	struct dialog *dlg;
 	struct listbox_data *box;
-	bookmark_id id;
+	struct bookmark *bm;
 };
 
 
@@ -328,10 +325,9 @@ really_del_bookmark(void *vhop)
 
 	/* Take care about move of the selected item if we're deleting it. */
 
-	if (box->sel && (bookmark_id) box->sel->udata == hop->id) {
-		struct bookmark *bm;
+	if (box->sel && box->sel->udata == hop->bm) {
+		struct bookmark *bm = (struct bookmark *) box->sel->udata;
 
-		bm = get_bookmark_by_id((bookmark_id) box->sel->udata);
 		box->sel = traverse_listbox_items_list(bm->box_item, -1,
 				1, NULL, NULL);
 		if (bm->box_item == box->sel)
@@ -341,10 +337,9 @@ really_del_bookmark(void *vhop)
 			box->sel = NULL;
 	}
 
-	if (box->top && (bookmark_id) box->top->udata == hop->id) {
-		struct bookmark *bm;
+	if (box->top && box->top->udata == hop->bm) {
+		struct bookmark *bm = (struct bookmark *) box->top->udata;
 
-		bm = get_bookmark_by_id((bookmark_id) box->top->udata);
 		box->top = traverse_listbox_items_list(bm->box_item, 1,
 				1, NULL, NULL);
 		if (bm->box_item == box->top)
@@ -354,7 +349,7 @@ really_del_bookmark(void *vhop)
 			box->top = NULL;
 	}
 
-	if (!delete_bookmark_by_id(hop->id))
+	if (!delete_bookmark(hop->bm))
 		return;
 
 #ifdef BOOKMARKS_RESAVE
@@ -379,7 +374,7 @@ push_delete_button(struct dialog_data *dlg,
 	box = (struct listbox_data *) dlg->dlg->items[BM_BOX_IND].data;
 
 	if (!box->sel) return 0;
-	bm = get_bookmark_by_id((bookmark_id) box->sel->udata);
+	bm = (struct bookmark *) box->sel->udata;
 	if (!bm) return 0;
 
 
@@ -387,7 +382,7 @@ push_delete_button(struct dialog_data *dlg,
 	hop = mem_alloc(sizeof(struct push_del_button_hop_struct));
 	if (!hop) return 0;
 
-	hop->id = bm->id;
+	hop->bm = bm;
 	hop->dlg = dlg->dlg;
 	hop->box = box;
 

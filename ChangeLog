@@ -1,3 +1,110 @@
+Sat May 18 19:29:14 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	printhelp_cmd() uses foreach_hash_item now. We lost alphabetical
+	order for now :(.  
+
+Sat May 18 19:25:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/hash.c:
+
+	Use init_list in init_hash().  
+
+Sat May 18 19:25:09 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/dialogs/menu.c:
+
+	Disabled cache info once again - we need to rewrite this in 0.5.  
+
+Sat May 18 19:23:50 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, config/conf.c, config/options.c, config/options.h,
+	dialogs/options.c, document/download.c, document/dump.c,
+	document/session.c, protocol/http/http.c:
+
+	http_bugs are now retrieved by get_opt_*(). Removed exports of
+	configuration variables (almost all). And, most importantly, all
+	variables are stored in a hash now (still being transfered from a
+	list there uppon init).  
+
+Sat May 18 19:03:54 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/: hash.c, hash.h:
+
+	Runtime fixes, moved hash_size macro to .h, added foreach_hash_item
+	macro.  
+
+Sat May 18 16:36:45 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/hash.c:
+
+	Tidy up.  
+
+Sat May 18 14:09:31 2002  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in:
+
+	CONFDIR is now defined in config.h, it can be changed using
+	--sysconfdir configure option. Not used for now.  
+
+Sat May 18 13:41:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/util/: Makefile.am, hash.c, hash.h:
+
+	First try of hashing support.  
+
+Sat May 18 12:19:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/secsave.c:
+
+	Aesthetical changes. Idea by Pasky ;) 
+
+Sat May 18 11:49:17 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/secsave.c:
+
+	When using secsave option, temporary file has now a random name and
+	is opened in a more secure way.  Some checks were added to prevent
+	double free().  Access check to file on systems that don't have
+	access() is fixed. fopen() call with "w" was breaking secsave
+	feature because it truncated the file while opening it.  
+
+Fri May 17 23:18:18 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/options.c, protocol/ftp.c:
+
+	Use get_opt() in options dialogs.  
+
+Fri May 17 22:41:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/menu.c, lowlevel/sched.c, protocol/ftp.c,
+	protocol/types.c, protocol/http/http.c:
+
+	Last wave - fake_referer .. proxy_passwd.  
+
+Fri May 17 22:31:47 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/globhist.c, document/history.c,
+	document/session.c, document/view.c, protocol/file.c,
+	protocol/ftp.c, protocol/http/http.c:
+
+	Next wave, color_dirs .. startup_goto_dialog.  
+
+Fri May 17 22:14:59 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Removed some stale variables. Added get_opt_ptr() macro.  
+
+Fri May 17 22:13:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: config/options.c, document/cache.c, document/download.c,
+	document/html/renderer.c, lowlevel/dns.c, lowlevel/sched.c:
+
+	Runtime fixes of the first wave. Second wave - async_lookup ..
+	memory_cache_size.  
+
 Fri May 17 21:59:58 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, config/urlhist.c, cookies/cookies.c,

@@ -1,3 +1,143 @@
+Thu Dec  5 22:48:54 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, document/view.c:
+
+	abort-connection action introduced (by default bound to z),
+	interrupts current foreground connection.  
+
+Thu Dec  5 22:35:07 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/download.c, document/dump.c, document/session.c,
+	lowlevel/sched.c, lowlevel/sched.h:
+
+	Let change_connection() optionally always abort a connection. And
+	use that when cancelling what_to_do_with_this_file query and when
+	cancelling the download window.  
+
+Thu Dec  5 21:46:50 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/select.c:
+
+	Make check_bottom_halves() use some sensible while() ;-).  
+
+Thu Dec  5 21:30:05 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bookmarks/: bookmarks.c, bookmarks.h, dialogs.c, dialogs.h:
+
+	Moved the bookmark searching from bookmarks/bookmarks.c to
+	bookmarks/dialogs.c, hardwired it to the dialog handling. Changed
+	the behaviour so that we don't play with visibility anymore, just
+	jump on the next matching bookmark. Fixed filtering bug reported by
+	Jose since we don't filter anymore ;-).  
+
+Thu Dec  5 21:29:09 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	Fixed infinite traverse (we ended up on the next item to the one
+	returned by fn()).  
+
+Thu Dec  5 20:43:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/listbox.c:
+
+	If offset of traverse_listbox_items_list() is zero, we traverse down
+	until the end of the list.  
+
+Thu Dec  5 20:29:39 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	document.download.default_mime_type should be
+	application/octet-stream. This way it's standart-compilant and
+	ELinks asks what to do.  
+
+Thu Dec  5 20:24:26 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/opttypes.c:
+
+	Fixed error with non-working string parser on commandline options.
+	This fixes dump-charset misparsing bug reported by zas.  
+
+Thu Dec  5 19:53:51 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/cmdline.c:
+
+	Fixed ignoring of unknown commandline options. Cleanup.  
+
+Thu Dec  5 17:41:53 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/dialog.c:
+
+	Show shadows only when they are really enabled.  
+
+Thu Dec  5 17:29:01 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/croatian.lng, intl/czech.lng,
+	intl/danish.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/norwegian.lng,
+	intl/polish.lng, intl/portuguese.lng, intl/romanian.lng,
+	intl/russian.lng, intl/slovak.lng, intl/spanish.lng,
+	intl/swedish.lng, intl/turkish.lng, intl/ukrainian.lng,
+	src/dialogs/menu.c, src/intl/lang_defs.h, src/intl/language.inc:
+
+	Show header info in a view menu.  
+
+Thu Dec  5 15:02:48 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/conf.c:
+
+	Fixed occassional config file save segfault caused by NULL alias'
+	write handler. Thanks Miciah and probably Jose for the report.  
+
+Thu Dec  5 13:39:38 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Another useless test was removed. Thanks to Miciah.  
+
+Thu Dec  5 13:34:01 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/home.c:
+
+	Another useless test was removed. Thanks to Miciah.  
+
+Thu Dec  5 13:32:50 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/home.c:
+
+	A useless test was removed. Thanks to Miciah 
+
+Thu Dec  5 13:16:34 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/select.c:
+
+	And last_time should be static.  
+
+Thu Dec  5 11:59:41 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/select.c:
+
+	A strange segfault was fixed. That part of code caused segfaults
+	with gcc-3.1, gcc-3.2. A code rearrangement seems to fix it. Thanks
+	to Miciah for reporting that bug.  
+
+Thu Dec  5 11:43:12 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lua/core.c:
+
+	Minor cleanup. Should make some gcc happy.  
+
+Thu Dec  5 11:18:32 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	A missing header was added, exit() needs stdlib.h.  
+
 Wed Dec  4 18:33:50 2002  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser.c:

@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: ELinks 0.9.CVS\n"
+"Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-29 20:45+0100\n"
-"PO-Revision-Date: 2004-12-29 20:46+0100\n"
+"POT-Creation-Date: 2004-12-29 23:09+0100\n"
+"PO-Revision-Date: 2004-12-29 23:10+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <zas@norz.org>\n"
 "MIME-Version: 1.0\n"
@@ -644,15 +644,15 @@ msgstr "Restriction au mode anonyme"
 
 #: src/config/cmdline.c:603
 msgid ""
-"Restrict ELinks so that it can run on an anonymous account.\n"
-"No local file browsing, no downloads. Execution of viewers\n"
-"is allowed, but user can't add or modify entries in\n"
-"association table."
+"Restricts ELinks so it can run on an anonymous account.\n"
+"Local file browsing, downloads, and modification of option and\n"
+"will be disabled. Execution of viewers is allowed, but entries\n"
+"in the association table can't be added or modified."
 msgstr ""
 "Restreint ELinks de manière à permettre de l'exécuter sur un\n"
 "compte anonyme.\n"
-"La navigation dans les fichiers locaux est désactivée.\n"
-"Les téléchargements de fichiers ne sont plus possibles.\n"
+"La navigation dans les fichiers locaux, les téléchargements de\n"
+"fichiers, et la modification d'options sont désactivés.\n"
 "L'utilisation de visualisateurs externes reste possible, mais\n"
 "les associations ne peuvent être modifiées."
 
@@ -671,14 +671,14 @@ msgstr "Cloner la session interne ayant l'ID donné"
 #: src/config/cmdline.c:614
 msgid ""
 "Used internally when opening ELinks instances in new windows.\n"
-"The ID maps to information used when creating the new instance\n"
-"You don't want to use it."
+"The ID maps to information that will be used when creating the\n"
+"new instance. You don't want to use it."
 msgstr ""
 "Utilisé de manière interne lors de l'ouverture d'instances d'ELinks\n"
 "dans de nouvelles fenêtres.\n"
 "L'ID correspond aux informations utilisées lors de la création de la\n"
 "nouvelle instance.\n"
-"N'utilisez pas cette option à moins de savoir ce que vous faites."
+"N'utilisez pas cette option."
 
 #: src/config/cmdline.c:620
 msgid "Name of directory with configuration file"
@@ -686,15 +686,15 @@ msgstr "Nom du répertoire contenant les fichiers de configuration"
 
 #: src/config/cmdline.c:622
 msgid ""
-"ELinks will read and write its config files to the given\n"
-"directory instead of ~/.elinks. If the path begins with\n"
-"a '/' its used as an absolute path. Else it is assumed to\n"
-"be relative to your HOME dir."
+"Path of the directory ELinks will read and write its\n"
+"config and runtime state files to instead of ~/.elinks.\n"
+"If the path does not begin with a '/' it is assumed to be\n"
+"relative to your HOME directory."
 msgstr ""
-"Elinks lire et écrira ses fichiers de configuration dans le\n"
-"répertoire donné au lieu de ~/.elinks. Si le chemin commence\n"
-"par un '/', il sera considéré comme absolu, sinon il sera\n"
-"considéré comme relatif à votre répertoire personnel (HOME)."
+"Chemin du répertoire dans lequel ELinks lira et écrira ses\n"
+"fichiers de configuration et d'état, au lieau de ~/.elinks.\n"
+"Si le chemin ne commence pas par un '/', il sera considéré\n"
+"relatif à votre répertoire HOME."
 
 #: src/config/cmdline.c:629
 msgid "Name of configuration file"
@@ -702,28 +702,31 @@ msgstr "Nom du fichier de configuration"
 
 #: src/config/cmdline.c:631
 msgid ""
-"Name of the file with configuration, from which and to\n"
-"which all the configuration shall be written. It should be\n"
+"Name of the configuration file that all configuration\n"
+"options will be read from and written to. It should be\n"
 "relative to config-dir."
 msgstr ""
-"Nom du fichier de configuration dans lequel est écrite et lue\n"
-"toute la configuration. Il doit être relatif à config-dir."
+"Nom du fichier de configuration dans lequel sont écrites\n"
+"et lues les options de configuration. Il doit être relatif\n"
+"à config-dir."
 
 #: src/config/cmdline.c:635
 msgid "Print help for configuration options"
 msgstr "Afficher l'aide pour les options de configuration"
 
 #: src/config/cmdline.c:637
-msgid "Print help on configuration options and exit."
+msgid "Print help for configuration options and exit."
 msgstr "Afficher l'aide pour les options de configuration et quitter."
 
 #: src/config/cmdline.c:639
-msgid "MIME type to assume for documents"
-msgstr "Type MIME à supposer pour les documents"
+msgid "MIME type assumed for unknown document types"
+msgstr "Type MIME à supposer pour les documents de type inconnu"
 
 #: src/config/cmdline.c:641
-msgid "Default MIME type to assume for documents of unknown type."
-msgstr "Type MIME à supposer pour les documents dont le type est inconnu."
+msgid "The default MIME type used for documents of unknown type."
+msgstr ""
+"Le type MIME par défaut à utiliser pour les documents dont\n"
+"le type est inconnu."
 
 #: src/config/cmdline.c:643
 msgid "Ignore user-defined keybindings"
@@ -731,34 +734,34 @@ msgstr "Ignorer les associations de touches utilisateur"
 
 #: src/config/cmdline.c:645
 msgid ""
-"If set, parse but don't set keybindings from configuration\n"
-"file. It forces use of default keybindings and will reset\n"
+"When set, all keybindings from configuration files will be\n"
+"ignored. It forces use of default keybindings and will reset\n"
 "user-defined ones on save."
 msgstr ""
-"Si activé, parcourt mais ne configure pas les associations\n"
-"de touches définies dans le fichier de configuration.\n"
+"Si activé, les associations de touches définies dans les fichiers\n"
+"de configuration seront ignorées.\n"
 "Cela force l'utilisation des touches par défaut et\n"
 "réinitialisera les associations de touches définies par\n"
 "l'utilisateur lors d'une nouvelle sauvegarde."
 
 #: src/config/cmdline.c:649
-msgid "Write formatted versions of given URLs to stdout"
+msgid "Print formatted versions of given URLs to stdout"
 msgstr ""
-"Exporter les versions formatées des URLs données sur la sortie standard"
+"Imprimer les versions formatées des URLs données sur la sortie standard"
 
 #: src/config/cmdline.c:651
-msgid "Write formatted plain-text versions of the given URLs to stdout."
+msgid "Print formatted plain-text versions of given URLs to stdout."
 msgstr ""
-"Exporter les versions plein texte formatées des URLs données sur la sortie "
-"standard"
+"Imprimer les versions plein texte formatées des URLs données sur la \n"
+"sortie standard"
 
 #: src/config/cmdline.c:653
 msgid "Codepage to use with -dump"
 msgstr "Jeu de caractères à utiliser avec -dump"
 
 #: src/config/cmdline.c:655
-msgid "Codepage used in dump output."
-msgstr "Jeu de caractères utilisé en sortie (dump)."
+msgid "Codepage used when formatting dump output."
+msgstr "Jeu de caractères utilisé lors du formatage de la sortie (dump)."
 
 #: src/config/cmdline.c:657
 msgid "Width of document formatted with -dump"
@@ -769,89 +772,96 @@ msgid "Width of the dump output."
 msgstr "Largeur de sortie (dump)."
 
 #: src/config/cmdline.c:661
-msgid "Evaluate given configuration option"
-msgstr "Evaluer l'option de configuration donnée"
+msgid "Evaluate configuration file directive"
+msgstr "Evalue une directive de fichier de configuration"
 
 #: src/config/cmdline.c:663
 msgid ""
-"Specify elinks.conf config options on the command-line:\n"
-"  -eval 'set protocol.file.allow_special_files = 1'"
+"Specify configuration file directives on the command-line\n"
+"which will be evaluated after all configuration files has been\n"
+"read. Example usage:\n"
+"\t-eval 'set protocol.file.allow_special_files = 1'"
 msgstr ""
-"Permet de spécifier une option elinks.conf sur la ligne de commande:\n"
+"Permet de spécifier une directive de fichier de configuation sur la\n"
+"ligne de commandes qui sera évaluée après que tous les fichiers de \n"
+"configuration aient été lus. Exemple d'utilisation:\n"
 "  -eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
-#: src/config/cmdline.c:667
-msgid "Assume the file is HTML"
-msgstr "Considérer le fichier comme HTML"
-
 #: src/config/cmdline.c:669
-msgid ""
-"This makes ELinks assume that the files it sees are HTML. This is\n"
-"equivalent to -default-mime-type text/html."
-msgstr ""
-"Cela force ELinks à considérer les fichiers qu'il voit sont au format HTML.\n"
-"Equivalent à -default-mime-type text/html."
+msgid "Interpret documents of unknown types as HTML"
+msgstr "Interprète les documents de type inconnu comme de l'HTML"
 
-#: src/config/cmdline.c:678
+#: src/config/cmdline.c:671
+msgid ""
+"Makes ELinks assume documents of unknown types are HTML.\n"
+"Useful when using ELinks as an external viewer from MUAs.\n"
+"This is equivalent to -default-mime-type text/html."
+msgstr ""
+"Cela force ELinks à considérer les documents de type inconnu\n"
+"comme étant au format HTML. Cela est utile lors de l'utilisation\n"
+"d'ELinks comme visualisateur pour les clients mail.\n"
+"C'est équivalent à -default-mime-type text/html."
+
+#: src/config/cmdline.c:681
 msgid "Print usage help and exit"
 msgstr "Afficher l'aide et quitter"
 
-#: src/config/cmdline.c:680
+#: src/config/cmdline.c:683
 msgid "Print usage help and exit."
 msgstr "Afficher l'aide et quitter."
 
-#: src/config/cmdline.c:682
+#: src/config/cmdline.c:685
 msgid "Only permit local connections"
 msgstr "Permettre seulement les connexions locales"
 
-#: src/config/cmdline.c:684
+#: src/config/cmdline.c:687
 msgid ""
-"Restrict ELinks so that it can only open connections to\n"
-"local addresses (ie. 127.0.0.1), it will prevent any connection\n"
-"to distant servers."
+"Restricts ELinks to work offline and only connect to servers\n"
+"with local addresses (ie. 127.0.0.1). No connections to remote\n"
+"servers will be permitted."
 msgstr ""
 "Restreint ELinks de manière à ce qu'il ne puisse ouvrir que des\n"
-"connexions vers des addresses locales (par exemple, 127.0.0.1),\n"
+"connexions vers des adresses locales (par exemple, 127.0.0.1),\n"
 "cela rend impossible toute connexion vers des sites distants."
 
-#: src/config/cmdline.c:688
+#: src/config/cmdline.c:691
 msgid "Print detailed usage help and exit"
 msgstr "Afficher l'aide détaillée et quitter"
 
-#: src/config/cmdline.c:690
+#: src/config/cmdline.c:693
 msgid "Print detailed usage help and exit."
 msgstr "Afficher l'aide détaillée et quitter."
 
-#: src/config/cmdline.c:692
+#: src/config/cmdline.c:695
 msgid "Look up specified host"
 msgstr "Résolution du nom de l'hôte spécifié"
 
-#: src/config/cmdline.c:694
+#: src/config/cmdline.c:697
 msgid "Look up specified host."
 msgstr "Résolution du nom de l'hôte spécifié."
 
-#: src/config/cmdline.c:696
+#: src/config/cmdline.c:699
 msgid "Run as separate instance"
 msgstr "Exécuter en tant qu'instance séparée"
 
-#: src/config/cmdline.c:698
+#: src/config/cmdline.c:701
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
-"(bookmarks, history and so on) are written to the disk when\n"
-"this option is used. See also -touch-files."
+"(bookmarks, history, etc.) are written to the disk when this\n"
+"option is used. See also -touch-files."
 msgstr ""
 "Exécuter ELinks en tant qu'instance séparée au lieu de se connecter\n"
 "à la session en cours. Notez que normalement aucun fichier d'état\n"
-"(signets, historique, ...) n'est modifié quand cette option est\n"
+"(signets, historique, etc.) n'est modifié quand cette option est\n"
 "utilisée. Voir aussi -touch-files."
 
-#: src/config/cmdline.c:703
-msgid "Don't use files in ~/.elinks"
+#: src/config/cmdline.c:706
+msgid "Disable use of files in ~/.elinks"
 msgstr "Ne pas utiliser les fichiers dans ~/.elinks"
 
-#: src/config/cmdline.c:705
+#: src/config/cmdline.c:708
 msgid ""
 "Disables creation and use of files in the user specific home\n"
 "configuration directory (~/.elinks). It forces default configuration\n"
@@ -862,37 +872,36 @@ msgstr ""
 "Cela force l'utilisation des valeurs de configuration par défaut et\n"
 "désactive la sauvegarde des fichiers d'état lors de l'exécution."
 
-#: src/config/cmdline.c:709
-msgid "Do not number links in dump output"
+#: src/config/cmdline.c:712
+msgid "Disable link numbering in dump output"
 msgstr "Ne pas numéroter les liens en sortie (dump)"
 
-#: src/config/cmdline.c:711
+#: src/config/cmdline.c:714
 msgid ""
-"Prevents numbering of links in the -dump output; this was the\n"
-"default behaviour until 0.5pre12.\n"
+"Prevents printing of link number in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
-"Supprime la numérotation des liens dans la sortie de -dump; ceci \n"
-"était le fonctionnement par défaut jusqu'à la version 0.5pre12.\n"
+"Supprime l'affichage des numéros de liens dans la sortie de -dump.\n"
 "Notez que cette option ne concerne que -dump et rien d'autre."
 
-#: src/config/cmdline.c:715
-msgid "Do not dump links references in dump output"
+#: src/config/cmdline.c:717
+msgid "Disable printing of link references in dump output"
 msgstr "Ne pas afficher les références des liens dans la sortie (dump)"
 
-#: src/config/cmdline.c:717
+#: src/config/cmdline.c:719
 msgid ""
-"Prevents dumping of links references (URIs) in the -dump output.\n"
+"Prevents printing of references (URIs) of document links\n"
+"in dump output.\n"
 "Note that this really affects only -dump, nothing else."
 msgstr ""
 "Supprime l'affichage des références des liens dans la sortie de -dump.\n"
 "Notez que cette option ne concerne que -dump et rien d'autre."
 
-#: src/config/cmdline.c:720
+#: src/config/cmdline.c:723
 msgid "Control an already running ELinks"
 msgstr "Contrôler une instance préexistante d'ELinks"
 
-#: src/config/cmdline.c:722
+#: src/config/cmdline.c:725
 msgid ""
 "Mozilla compliant support for controlling a remote ELinks instance.\n"
 "The command takes an additional argument containing the method which\n"
@@ -900,34 +909,34 @@ msgid ""
 "For ease of use the additional method argument can be omitted in which\n"
 "case any URL arguments will be opened in new tabs in the remote instance.\n"
 "Following is a list of the methods that are supported:\n"
-"  ping()                    -- check for remote instance\n"
-"  openURL()                 -- prompt URL in current tab\n"
-"  openURL(URL)              -- open URL in current tab\n"
-"  openURL(URL, new-tab)     -- open URL in new tab\n"
-"  openURL(URL, new-window)  -- open URL in new window\n"
-"  addBookmark(URL)          -- bookmark URL\n"
-"  xfeDoCommand(openBrowser) -- open new window"
+"\tping()                    -- check for remote instance\n"
+"\topenURL()                 -- prompt URL in current tab\n"
+"\topenURL(URL)              -- open URL in current tab\n"
+"\topenURL(URL, new-tab)     -- open URL in new tab\n"
+"\topenURL(URL, new-window)  -- open URL in new window\n"
+"\taddBookmark(URL)          -- bookmark URL\n"
+"\txfeDoCommand(openBrowser) -- open new window"
 msgstr ""
-"Support compatible Mozilla pour contrôler une instance ELinks distante.\n"
+"Support compatible Mozilla pour contrôler une instance d'ELinks.\n"
 "La commande prend un argument additionnel contenant la méthode qui doit\n"
 "être invoquée et tous paramètres qui doivent lui être passés.\n"
 "Pour faciliter l'utilisation, la méthode peut être omise, dans ce cas, tous\n"
 "les arguments de type URL seront ouverts dans de nouveaux onglets dans\n"
 "l'instance distante.\n"
 "Liste des méthodes supportées:\n"
-"  ping()                    -- teste l'existence d'une instance distante\n"
-"  openURL()                 -- demande l'URL dans l'onglet courant\n"
-"  openURL(URL)              -- ouvre l'URL dans l'onglet courant\n"
-"  openURL(URL, new-tab)     -- ouvre l'URL dans un nouvel onglet\n"
-"  openURL(URL, new-window)  -- ouvre l'URL dans une nouvelle fenêtre\n"
-"  addBookmark(URL)          -- ajoute un signet pour l'URL\n"
-"  xfeDoCommand(openBrowser) -- ouvre une nouvelle fenêtre"
+"\tping()                    -- teste l'existence d'une instance distante\n"
+"\topenURL()                 -- demande l'URL dans l'onglet courant\n"
+"\topenURL(URL)              -- ouvre l'URL dans l'onglet courant\n"
+"\topenURL(URL, new-tab)     -- ouvre l'URL dans un nouvel onglet\n"
+"\topenURL(URL, new-window)  -- ouvre l'URL dans une nouvelle fenêtre\n"
+"\taddBookmark(URL)          -- ajoute un signet pour l'URL\n"
+"\txfeDoCommand(openBrowser) -- ouvre une nouvelle fenêtre"
 
-#: src/config/cmdline.c:736
+#: src/config/cmdline.c:739
 msgid "Connect to session ring with given ID"
 msgstr "Se connecter au groupe de sessions correspondant à cet ID"
 
-#: src/config/cmdline.c:738
+#: src/config/cmdline.c:741
 msgid ""
 "ID of session ring this ELinks session should connect to. ELinks\n"
 "works in so-called session rings, whereby all instances of ELinks\n"
@@ -958,35 +967,37 @@ msgstr ""
 "-no-connect. Dans tous les cas, les fichiers d'état ne sont pas modifiés\n"
 "sur le disque, sauf si vous utilisez conjointement l'option -touch-files."
 
-#: src/config/cmdline.c:753
-msgid "Write the source of given URL to stdout"
-msgstr "Ecrire la source de l'URL sur la sortie standard"
+#: src/config/cmdline.c:756
+msgid "Print the source of given URLs to stdout"
+msgstr "Imprimer la source des URLs données sur la sortie standard"
 
-#: src/config/cmdline.c:755
-msgid "Write the given HTML document in source form to stdout."
-msgstr "Ecrire la source du document sur la sortie standard."
+#: src/config/cmdline.c:758
+msgid "Print given URLs in source form to stdout."
+msgstr ""
+"Imprimer les URLs données dans leur forme source sur la sortie standard."
 
-#: src/config/cmdline.c:759
+#: src/config/cmdline.c:762
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
 msgstr ""
 "Modifier les fichiers dans ~/.elinks avec les options -no-connect/-session-"
 "ring"
 
-#: src/config/cmdline.c:761
+#: src/config/cmdline.c:764
 msgid ""
-"Set to 1 to have runtime state files (bookmarks, history, ...)\n"
-"changed even when -no-connect or -session-ring is used; has no\n"
-"effect if not used in connection with any of these options."
+"When enabled, runtime state files (bookmarks, history, etc.) are\n"
+"written to disk, even when -no-connect or -session-ring is used.\n"
+"It has no effect if not used in connection with any of these options."
 msgstr ""
-"Mettre à 1 pour que les fichiers (signets, historique, ...)\n"
-"soient modifiés même si les options -no-connect ou -session-ring\n"
-"sont utilisées; aucun effet sans ces options."
+"Quand actif, les fichiers d'état (signets, historique, etc.) sont\n"
+"écrits sur disque, même si les options -no-connect ou -session-ring\n"
+"sont utilisées. N'a aucun effet si n'est pas utilisé en conjonction\n"
+"avec ces options."
 
-#: src/config/cmdline.c:765
+#: src/config/cmdline.c:768
 msgid "Verbose level"
 msgstr "Niveau de verbosité"
 
-#: src/config/cmdline.c:767
+#: src/config/cmdline.c:770
 msgid ""
 "The verbose level controls what messages are shown at\n"
 "start up and while running:\n"
@@ -1000,11 +1011,11 @@ msgstr ""
 "\t1 pour ne montrer que les erreurs sérieuses et les alertes\n"
 "\t2 pour montrer tous les messages"
 
-#: src/config/cmdline.c:773
+#: src/config/cmdline.c:776
 msgid "Print version information and exit"
 msgstr "Afficher la version et quitter"
 
-#: src/config/cmdline.c:775
+#: src/config/cmdline.c:778
 msgid "Print ELinks version information and exit."
 msgstr "Afficher la version d'ELinks et quitter."
 
@@ -7412,3 +7423,15 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
+
+#~ msgid "Assume the file is HTML"
+#~ msgstr "Considérer le fichier comme HTML"
+
+#~ msgid ""
+#~ "Prevents numbering of links in the -dump output; this was the\n"
+#~ "default behaviour until 0.5pre12.\n"
+#~ "Note that this really affects only -dump, nothing else."
+#~ msgstr ""
+#~ "Supprime la numérotation des liens dans la sortie de -dump; ceci \n"
+#~ "était le fonctionnement par défaut jusqu'à la version 0.5pre12.\n"
+#~ "Notez que cette option ne concerne que -dump et rien d'autre."

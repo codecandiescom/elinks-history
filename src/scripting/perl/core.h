@@ -1,4 +1,4 @@
-/* $Id: core.h,v 1.1 2004/03/02 17:06:15 witekfl Exp $ */
+/* $Id: core.h,v 1.2 2004/04/23 15:51:39 pasky Exp $ */
 
 #ifndef EL__SCRIPTING_PERL_CORE_H
 #define EL__SCRIPTING_PERL_CORE_H
@@ -10,8 +10,6 @@
 #include <perlapi.h>
 
 #include "modules/module.h"
-#include "sched/event.h"
-#include "sched/session.h"
 
 extern PerlInterpreter *my_perl;
 extern struct module perl_scripting_module;

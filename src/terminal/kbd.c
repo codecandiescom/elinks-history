@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.5 2003/05/04 19:09:33 zas Exp $ */
+/* $Id: kbd.c,v 1.6 2003/05/05 14:40:29 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,19 +437,16 @@ free_trm(struct itrm *itrm)
 	mem_free(itrm);
 }
 
-
+/* Resize term: text should look like 'x,y' where x and y are integer. */
 static inline void
 resize_terminal_x(unsigned char *text)
 {
-	int x, y;
-	unsigned char *p = strchr(text, ',');
+	unsigned char *ys = strchr(text, ',');
 
-	if (!p) return;
+	if (!ys) return;
 
-	*p++ = '\0';
-	x = atoi(text);
-	y = atoi(p);
-	resize_window(x, y);
+	*ys++ = '\0';
+	resize_window(atoi(text), atoi(ys));
 	resize_terminal();
 }
 
@@ -561,8 +558,8 @@ ex:
 		if (!param) goto nasty_thing;
 
 		param[0] = fg;
-		strcpy(param + 1, path);
-		strcpy(param + 1 + path_len + 1, delete);
+		memcpy(param + 1, path, path_len + 1);
+		memcpy(param + 1 + path_len + 1, delete, del_len + 1);
 
 		if (fg == 1) block_itrm(itrm->ctl_in);
 
@@ -728,7 +725,7 @@ process_queue(struct itrm *itrm)
 	if (itrm->kqueue[0] == '\033') {
 		if (itrm->qlen < 2) goto ret;
 		if (itrm->kqueue[1] == '[' || itrm->kqueue[1] == 'O') {
-			char c;
+			unsigned char c;
 			int v;
 
 			if (itrm->qlen < 3) goto ret;
@@ -794,10 +791,17 @@ process_queue(struct itrm *itrm)
 							xterm_button = 0;
 						if (itrm->qlen - el < 5)
 							goto ret;
-						ev.x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
+
+						ev.x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
+						       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
+
 						if (ev.x & (1 << 13)) ev.x = 0; /* ev.x |= ~0 << 14; */
-						ev.y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1 + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
+
+						ev.y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1
+						       + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
+
 						if (ev.y & (1 << 13)) ev.y = 0; /* ev.y |= ~0 << 14; */
+
 						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
 						    case TW_BUTT_LEFT:   ev.b = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
 						    case TW_BUTT_MIDDLE: ev.b = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;

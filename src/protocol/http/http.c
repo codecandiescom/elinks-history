@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.289 2004/05/21 11:39:54 jonas Exp $ */
+/* $Id: http.c,v 1.290 2004/05/21 12:22:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,6 @@
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/auth/auth.h"
-#include "protocol/auth/dialogs.h"
 #include "protocol/header.h"
 #include "protocol/http/codes.h"
 #include "protocol/http/http.h"
@@ -1176,12 +1175,7 @@ again:
 				unsigned char *realm = get_http_header_param(d, "realm");
 
 				if (realm) {
-					struct http_auth_basic *entry;
-
-					entry = add_auth_entry(uri, realm);
-					if (entry && !entry->valid)
-						add_questions_entry(do_auth_dialog, entry);
-
+					add_auth_entry(uri, realm);
 					mem_free(realm);
 				}
 			}

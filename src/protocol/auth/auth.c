@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.80 2004/05/09 01:18:23 jonas Exp $ */
+/* $Id: auth.c,v 1.81 2004/05/21 12:22:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,6 +179,9 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 
 		add_to_list(http_auth_basic_list, entry);
 	}
+
+	if (entry && !entry->valid)
+		add_questions_entry(do_auth_dialog, entry);
 
 	return entry;
 }

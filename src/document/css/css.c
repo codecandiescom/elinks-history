@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.45 2004/05/27 12:54:43 jonas Exp $ */
+/* $Id: css.c,v 1.46 2004/05/29 19:17:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,26 +81,20 @@ import_css(struct css_stylesheet *css, struct uri *uri)
 static void
 import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 {
-	unsigned char filename[MAX_STR_LEN];
-	struct string string;
-	int length = 0;
+	struct string string, filename;
 
 	if (!*url
-	    || css->import_level >= MAX_REDIRECTS)
+	    || css->import_level >= MAX_REDIRECTS
+	    || !init_string(&filename))
 		return;
 
 	if (*url != '/' && elinks_home) {
-		length = strlen(elinks_home);
-		if (length > sizeof(filename)) return;
-		safe_strncpy(filename, elinks_home, length + 1);
+		add_to_string(&filename, elinks_home);
 	}
 
-	if (urllen + length > sizeof(filename)) return;
+	add_bytes_to_string(&filename, url, urllen);
 
-	safe_strncpy(filename + length, url, urllen + 1);
-	length += urllen;
-
-	if (read_encoded_file(filename, length, &string) == S_OK) {
+	if (read_encoded_file(&filename, &string) == S_OK) {
 		unsigned char *end = string.source + string.length;
 
 		css->import_level++;
@@ -108,6 +102,8 @@ import_css_file(struct css_stylesheet *css, unsigned char *url, int urllen)
 		done_string(&string);
 		css->import_level--;
 	}
+
+	done_string(&filename);
 }
 
 INIT_CSS_STYLESHEET(default_stylesheet, import_css_file);

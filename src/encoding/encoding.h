@@ -1,4 +1,4 @@
-/* $Id: encoding.h,v 1.14 2004/05/28 13:02:30 jonas Exp $ */
+/* $Id: encoding.h,v 1.15 2004/05/29 19:17:02 jonas Exp $ */
 
 #ifndef EL__ENCODING_ENCODING_H
 #define EL__ENCODING_ENCODING_H
@@ -38,6 +38,6 @@ enum stream_encoding guess_encoding(unsigned char *filename);
 unsigned char *get_encoding_name(enum stream_encoding encoding);
 
 /* Reads the file with the given @filename into the string @source. */
-enum connection_state read_encoded_file(unsigned char *filename, int filenamelen, struct string *source);
+enum connection_state read_encoded_file(struct string *filename, struct string *source);
 
 #endif

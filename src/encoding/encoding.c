@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: encoding.c,v 1.32 2004/05/28 13:02:30 jonas Exp $ */
+/* $Id: encoding.c,v 1.33 2004/05/29 19:17:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -183,10 +183,9 @@ get_encoding_name(enum stream_encoding encoding)
 /* Tries to open @prefixname with each of the supported encoding extensions
  * appended. */
 static inline enum stream_encoding
-try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
+try_encoding_extensions(struct string *filename, int *fd)
 {
-	int maxlen = MAX_STR_LEN - filenamelen - 1;
-	unsigned char *filenamepos = filename + filenamelen;
+	int length = filename->length;
 	int encoding;
 
 	/* No file of that name was found, try some others names. */
@@ -194,22 +193,18 @@ try_encoding_extensions(unsigned char *filename, int filenamelen, int *fd)
 		unsigned char **ext = listext_encoded(encoding);
 
 		for (; ext && *ext; ext++) {
-			int extlen = strlen(*ext);
-
-			if (extlen > maxlen) continue;
-
-			memcpy(filenamepos, *ext, extlen + 1);
+			add_to_string(filename, *ext);
 
 			/* We try with some extensions. */
-			*fd = open(filename, O_RDONLY | O_NOCTTY);
+			*fd = open(filename->source, O_RDONLY | O_NOCTTY);
 
 			if (*fd >= 0)
 				/* Ok, found one, use it. */
 				return encoding;
+			filename->source[length] = 0;
 		}
 	}
 
-	filename[filenamelen + 1] = 0;
 	return ENCODING_NONE;
 }
 
@@ -264,26 +259,26 @@ read_file(struct stream_encoded *stream, int readsize, struct string *page)
 }
 
 static inline int
-is_stdin_pipe(struct stat *stt, unsigned char *filename, int filenamelen)
+is_stdin_pipe(struct stat *stt, struct string *filename)
 {
-	return !strlcmp(filename, filenamelen, "/dev/stdin", 10)
+	return !strlcmp(filename->source, filename->length, "/dev/stdin", 10)
 		&& S_ISFIFO(stt->st_mode);
 }
 
 enum connection_state
-read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
+read_encoded_file(struct string *filename, struct string *page)
 {
 	struct stream_encoded *stream;
 	struct stat stt;
 	enum stream_encoding encoding = ENCODING_NONE;
-	int fd = open(filename, O_RDONLY | O_NOCTTY);
+	int fd = open(filename->source, O_RDONLY | O_NOCTTY);
 	enum connection_state state = -errno;
 
 	if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
-		encoding = try_encoding_extensions(filename, filenamelen, &fd);
+		encoding = try_encoding_extensions(filename, &fd);
 
 	} else if (fd != -1) {
-		encoding = guess_encoding(filename);
+		encoding = guess_encoding(filename->source);
 	}
 
 	if (fd == -1) return state;
@@ -300,7 +295,7 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 
 	default:
 		if (S_ISREG(stt.st_mode)
-		    || is_stdin_pipe(&stt, filename, filenamelen)) {
+		    || is_stdin_pipe(&stt, filename)) {
 			/* All is well */
 
 		} else if (encoding != ENCODING_NONE) {

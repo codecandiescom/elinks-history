@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.167 2004/05/22 13:06:00 jonas Exp $ */
+/* $Id: file.c,v 1.168 2004/05/29 19:17:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,15 +470,13 @@ void
 file_protocol_handler(struct connection *connection)
 {
 	unsigned char *redirect_location = NULL;
-	unsigned char filename[MAX_STR_LEN];
-	int filenamelen = connection->uri->datalen;
 	DIR *directory;
-	struct string page;
+	struct string page, name;
 	enum connection_state state;
 	unsigned char *head = "";
 
-	if (get_opt_int_tree(cmdline_options, "anonymous")
-	    || filenamelen > MAX_STR_LEN - 1 || filenamelen <= 0) {
+	if (get_opt_int_tree(cmdline_options, "anonymous")) {
+		/* FIXME: Better connection_state ;-) */
 		abort_conn_with_state(connection, S_BAD_URL);
 		return;
 	}
@@ -493,28 +491,35 @@ file_protocol_handler(struct connection *connection)
 	 * and uri->data is just the final path to file/dir we should try to
 	 * show. */
 
-	safe_strncpy(filename, connection->uri->data, filenamelen + 1);
-	decode_uri_string(filename);
-	filenamelen = strlen(filename);
+	if (!init_string(&name)
+	    || !add_uri_to_string(&name, connection->uri, URI_PATH)) {
+		done_string(&name);
+		abort_conn_with_state(connection, S_OUT_OF_MEM);
+		return;
+	}
 
-	directory = opendir(filename);
+	decode_uri_string(name.source);
+
+	directory = opendir(name.source);
 	if (directory) {
 		/* In order for global history and directory listing to
 		 * function properly the directory url must end with a
 		 * directory separator. */
-		if (filename[0] && !dir_sep(filename[filenamelen - 1])) {
+		if (name.source[0] && !dir_sep(name.source[name.length - 1])) {
 			redirect_location = "/";
 			state = S_OK;
 		} else {
-			state = list_directory(directory, filename, &page);
+			state = list_directory(directory, name.source, &page);
 			head = "\r\nContent-Type: text/html\r\n";
 		}
 
 		closedir(directory);
 
 	} else {
-		state = read_encoded_file(filename, filenamelen, &page);
+		state = read_encoded_file(&name, &page);
 	}
+
+	done_string(&name);
 
 	if (state == S_OK) {
 		struct cache_entry *cached;

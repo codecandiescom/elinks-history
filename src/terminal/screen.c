@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.57 2003/08/31 19:14:48 jonas Exp $ */
+/* $Id: screen.c,v 1.58 2003/09/01 20:49:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ static unsigned char frame_restrict[48] = {
  * get_opt() calls, as they are CPU hog here. */
 
 /* TODO: We should provide some generic mechanism for options caching. */
-struct rs_opt_cache {
+struct screen_driver {
 	int type;
 	int charset;
 	int cp437;
@@ -90,7 +90,7 @@ struct screen_state {
 
 /* Time critical section. */
 static inline void
-print_char(struct string *screen, struct rs_opt_cache *opt_cache,
+print_char(struct string *screen, struct screen_driver *opt_cache,
 	   struct screen_char *ch, struct screen_state *state)
 {
 	unsigned char c = ch->data;
@@ -304,7 +304,7 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 #endif
 
 static inline unsigned char *
-get_frame_table(struct rs_opt_cache *opt_cache)
+get_frame_table(struct screen_driver *opt_cache)
 {
 	switch (opt_cache->type) {
 		case TERM_LINUX:
@@ -327,7 +327,7 @@ get_frame_table(struct rs_opt_cache *opt_cache)
 void
 redraw_screen(struct terminal *term)
 {
-	struct rs_opt_cache opt_cache;
+	struct screen_driver opt_cache;
 	struct string image;
 	register int y = 0;
 	int prev_y = -1;

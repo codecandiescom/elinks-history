@@ -604,6 +604,7 @@ int load_url(unsigned char *url, unsigned char *prev_url, struct status *stat, i
 	c->no_cache = no_cache;
 	c->sock1 = c->sock2 = -1;
 	c->dnsquery = NULL;
+	c->conn_info = NULL;
 	c->info = NULL;
 	c->buffer = NULL;
 	c->cache = NULL;

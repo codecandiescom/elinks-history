@@ -86,6 +86,7 @@ void make_connection(struct connection *conn, int port, int *sock,
 	c_i->sock = sock;
 	c_i->port = port;
 	c_i->triedno = -1;
+	c_i->addr = NULL;
 	conn->conn_info = c_i;
 	
 	log_data("\nCONNECTION: ", 13);

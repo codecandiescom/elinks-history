@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.32 2003/07/31 14:42:44 jonas Exp $ */
+/* $Id: draw.c,v 1.33 2003/07/31 15:04:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,8 @@ set_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 }
 
 void
-fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)
+fill_area(struct terminal *term, int x, int y, int xw, int yw,
+	  unsigned char data, unsigned c)
 {
 	struct terminal_screen *screen = term->screen;
 	int starty = (y >= 0) ? 0 : -y;
@@ -147,13 +148,10 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)
 	int endx = (xw < term->x - x) ? xw : term->x - x;
 	int offset_base = x + term->x * y;
 	register int j;
-	struct screen_char ch;
+	unsigned char attr = get_screen_char_attr(c);
 
 	assert(x >= 0 && x < term->x && y >= 0 && y < term->y);
 	if_assert_failed { return; }
-
-	ch.data = get_screen_char_data(c);
-	ch.attr = get_screen_char_attr(c);
 
 	for (j = starty; j < endy; j++) {
 		register int offset = offset_base + term->x * j;
@@ -163,8 +161,8 @@ fill_area(struct terminal *term, int x, int y, int xw, int yw, unsigned c)
 		/* TODO: Make screen two arrays actually. Enables various
 		 * optimalizations, consumes nearly same memory. --pasky */
 		for (; position < endx + offset; position++) {
-			screen->image[position].data = ch.data;
-			screen->image[position].attr = ch.attr;
+			screen->image[position].data = data;
+			screen->image[position].attr = attr;
 		}
 	}
 	screen->dirty = 1;
@@ -256,6 +254,6 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 void
 clear_terminal(struct terminal *term)
 {
-	fill_area(term, 0, 0, term->x, term->y, ' ');
+	fill_area(term, 0, 0, term->x, term->y, ' ', 0);
 	set_cursor(term, 0, 0, 0);
 }

@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.12 2003/07/31 14:42:44 jonas Exp $ */
+/* $Id: draw.h,v 1.13 2003/07/31 15:04:17 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -77,12 +77,12 @@ struct screen_char *get_char(struct terminal *, int, int);
 void set_color(struct terminal *, int, int, unsigned);
 void set_only_char(struct terminal *, int, int, unsigned);
 void set_line(struct terminal *, int, int, int, struct screen_char *);
-void fill_area(struct terminal *, int, int, int, int, unsigned);
+void fill_area(struct terminal *, int, int, int, int, unsigned char, unsigned);
 void draw_frame(struct terminal *, int, int, int, int, unsigned, int);
 void print_text(struct terminal *, int, int, int, unsigned char *, unsigned);
 
 #define fill_border_area(t, x, y, xw, yw, d, c) do { \
-		fill_area(t, x, y, xw, yw, d | ((c | SCREEN_ATTR_FRAME) << 8)); \
+		fill_area(t, x, y, xw, yw, d, (c | SCREEN_ATTR_FRAME) << 8); \
 	} while (0)
 
 /* Updates the terminals cursor position. When @blockable is set the

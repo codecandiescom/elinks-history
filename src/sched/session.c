@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.132 2003/07/28 16:18:56 zas Exp $ */
+/* $Id: session.c,v 1.133 2003/07/31 15:04:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -219,7 +219,7 @@ print_screen_status(struct session *ses)
 				msg = get_stat_msg(stat, term);
 		}
 
-		fill_area(term, 0, term->y - 1, term->x, 1,
+		fill_area(term, 0, term->y - 1, term->x, 1, ' ',
 			  get_bfu_color(term, "status.status-bar"));
 
 		if (!ses->visible_tabs_bar && tabs_count > 1) {
@@ -277,19 +277,19 @@ print_screen_status(struct session *ses)
 			if (tab_num)
 				print_text(term, xpos, ypos, 1, "|", normal_color);
 
-			fill_area(term, xpos + !!tab_num, ypos, tab_width, 1, color);
+			fill_area(term, xpos + !!tab_num, ypos, tab_width, 1, ' ', color);
 
 			print_text(term, xpos + !!tab_num, ypos, msglen, msg, color);
 		}
 
 		if (tab_total_width < term->x)
 			fill_area(term, tab_total_width, ypos,
-				  term->x - tab_total_width, 1, color);
+				  term->x - tab_total_width, 1, ' ', color);
 
 	}
 
 	if (ses_tab_is_current && ses->visible_title_bar) {
-		fill_area(term, 0, 0, term->x, 1,
+		fill_area(term, 0, 0, term->x, 1, ' ',
 			  get_bfu_color(term, "title.title-bar"));
 
 		if (current_frame(ses)) {

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.83 2003/07/31 14:42:43 jonas Exp $ */
+/* $Id: menu.c,v 1.84 2003/07/31 15:04:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,7 +251,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	int menu_selected_hotkey_color = get_bfu_color(term, "menu.hotkey.selected");
 
 	fill_area(term,	menu->x + 1, menu->y + 1, menu->xw - 2, menu->yw - 2,
-		  menu_normal_color);
+		  ' ', menu_normal_color);
 
 	draw_frame(term, menu->x, menu->y, menu->xw, menu->yw,
 		   menu_frame_color, 1);
@@ -276,7 +276,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			set_cursor(term, menu->x + 1, s, 1);
 			set_window_ptr(menu->win, menu->x + menu->xw, s);
-			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
+			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, ' ', co);
 		}
 
 		if (menu->items[p].rtext == M_BAR &&
@@ -635,7 +635,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	int mainmenu_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.normal");
 	int mainmenu_selected_hotkey_color = get_bfu_color(term, "mainmenu.hotkey.selected");
 
-	fill_area(term, 0, 0, term->x, 1, mainmenu_normal_color | ' ');
+	fill_area(term, 0, 0, term->x, 1, ' ', mainmenu_normal_color);
 
 	for (i = 0; i < menu->ni; i++) {
 		int j;
@@ -660,8 +660,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 			co = mainmenu_selected_color;
 			hkco = mainmenu_selected_hotkey_color;
 
-			fill_area(term, p, 0, 2, 1, co);
-			fill_area(term, p + tmptextlen + 2, 0, 2, 1, co);
+			fill_area(term, p, 0, 2, 1, ' ', co);
+			fill_area(term, p + tmptextlen + 2, 0, 2, 1, ' ', co);
 			menu->sp = p;
 			set_cursor(term, p, 0, 1);
 			set_window_ptr(menu->win, p, 1);

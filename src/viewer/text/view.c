@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.177 2003/07/31 14:42:44 jonas Exp $ */
+/* $Id: view.c,v 1.178 2003/07/31 15:04:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,11 +279,11 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 		set_window_ptr(get_current_tab(t), xp, yp);
 	}
 	if (!scr->vs) {
-		fill_area(t, xp, yp, xw, yw, scr->document->y ? scr->document->bg : ' ');
+		fill_area(t, xp, yp, xw, yw, ' ', scr->document->y ? scr->document->bg : 0);
 		return;
 	}
 	if (scr->document->frame) {
-	 	fill_area(t, xp, yp, xw, yw, scr->document->y ? scr->document->bg : ' ');
+	 	fill_area(t, xp, yp, xw, yw, ' ', scr->document->y ? scr->document->bg : 0);
 		draw_frame_lines(t, scr->document->frame_desc, xp, yp);
 		if (scr->vs && scr->vs->current_link == -1) scr->vs->current_link = 0;
 		return;
@@ -315,7 +315,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	free_link(scr);
 	scr->xl = vx;
 	scr->yl = vy;
-	fill_area(t, xp, yp, xw, yw, scr->document->y ? scr->document->bg : ' ');
+	fill_area(t, xp, yp, xw, yw, ' ', scr->document->y ? scr->document->bg : 0);
 	if (!scr->document->y) return;
 
 	while (vs->view_pos >= scr->document->y) vs->view_pos -= yw;
@@ -378,7 +378,7 @@ draw_formatted(struct session *ses)
 
 	if (!ses->screen || !ses->screen->document) {
 		/*internal("document not formatted");*/
-		fill_area(ses->tab->term, 0, 1, ses->tab->term->x, ses->tab->term->y - 2, ' ');
+		fill_area(ses->tab->term, 0, 1, ses->tab->term->x, ses->tab->term->y - 2, ' ', 0);
 		return;
 	}
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.53 2003/08/31 09:00:58 zas Exp $ */
+/* $Id: screen.c,v 1.54 2003/08/31 15:51:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,6 +81,12 @@ struct screen_state {
 	unsigned char underline;
 };
 
+/* When determining wether to use negative image we make the most significant
+ * be least significant. */
+#define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
+#define use_negative_image(c) \
+	(CMPCODE(TERM_COLOR_FOREGROUND(c)) < CMPCODE(TERM_COLOR_BACKGROUND(c)))
+
 /* Time critical section. */
 static inline void
 print_char(struct string *screen, struct rs_opt_cache *opt_cache,
@@ -88,7 +94,6 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 {
 	unsigned char c = ch->data;
 	unsigned char color = ch->color;
-	unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
 	unsigned char border = (ch->attr & SCREEN_ATTR_FRAME);
 
 	if (opt_cache->type == TERM_LINUX) {
@@ -137,9 +142,9 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		if (opt_cache->colors) {
 			code[3] = ';';
 			code[4] = '3';
-			code[5] = (color & 7) + '0';
+			code[5] = '0' + TERM_COLOR_FOREGROUND(color);
 
-			code[8] = (color >> 3 & 7) + '0';
+			code[8] = '0' + TERM_COLOR_BACKGROUND(color);
 			if (!opt_cache->trans || code[8] != '0') {
 				code[6] = ';';
 				code[7] = '4';
@@ -147,11 +152,9 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 			} else {
 				length = 6;
 			}
-
-#define getcompcode(c) ((int)((int)(c)<<1 | ((int)(c)&4)>>2) & 7)
-
-		} else if (getcompcode(color & 7) < getcompcode(color >> 3 & 7)) {
-			/* Render the char using ``negative image'' */
+	 	} else if (use_negative_image(color)) {
+			/* Flip the fore- and background colors for highlighing
+			 * purposes. */
 			code[3] = ';';
 			code[4] = '7';
 			length = 5;
@@ -171,6 +174,8 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 	}
 
 	if (opt_cache->type == TERM_VT100) {
+		unsigned char underline = (ch->attr & SCREEN_ATTR_UNDERLINE);
+
 		if (underline != state->underline) {
 			state->underline = underline;
 

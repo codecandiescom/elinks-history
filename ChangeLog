@@ -1,8 +1,15 @@
-Sat Dec 13 12:56:00 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+Sun Dec 14 14:46:37 2003  Laurent Monin <zas@norz.org>:
 
-	* po/pl.po:
+	* src/bfu/text.c:
 
-	Polish translation update.  
+	Use isspace() and ispunct(), and fix handling of newline char when
+	splitting: only first one should be ignored after a split.  
+
+Sun Dec 14 14:09:46 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	@dlg_width -> @width.  
 
 Sat Dec 13 10:03:52 2003  Laurent Monin <zas@norz.org>:
 

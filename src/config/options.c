@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.122 2002/11/30 01:08:51 pasky Exp $ */
+/* $Id: options.c,v 1.123 2002/11/30 01:20:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1711,12 +1711,6 @@ register_options()
 	add_opt_ptr("ui",
 		"language", 0, OPT_LANGUAGE, &current_language,
 		"Language of user interface.");
-
-	add_opt_bool("ui",
-		"menu_scroll_wraparound", 0, 0,
-		"When enabled, this will make the scrolling by menus wrapping\n"
-		"around - that is, if you will move out of the menu, the cursor\n"
-		"will appear at its other end.");
 
 	add_opt_bool("ui",
 		"shadows", 0, 0,

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.20 2002/11/29 20:28:27 pasky Exp $ */
+/* $Id: menu.c,v 1.21 2002/11/30 01:20:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ scroll_menu(struct menu *menu, int d)
 
 	menu->selected += d;
 
-	if (menu->ni && get_opt_bool("ui.menu_scroll_wraparound")) {
+	if (menu->ni) {
 		menu->selected %= menu->ni;
 		if (menu->selected < 0) menu->selected += menu->ni;
 	}
@@ -402,7 +402,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					int found = 0;
 					int step = -1;
 
-					for (;i >= 0; i--) {
+					for (; i >= 0; i--) {
 						if (menu->items[i].hotkey == M_BAR) {
 							found = 1;
 							break;
@@ -415,10 +415,10 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						step = -DIST;
 					}
 
-					if (menu->selected + step <= 0)
+					if (menu->selected + step < 0)
 						step = -menu->selected;
 					if (step < -DIST) step = DIST;
-					if (step >= 0)
+					if (step > 0)
 						step = menu->selected - menu->ni - 1;
 
 					scroll_menu(menu, step);
@@ -445,7 +445,7 @@ menu_func(struct window *win, struct event *ev, int fwd)
 					}
 
 					if (menu->selected + step >= menu->ni)
-						step = menu->ni - menu->selected;
+						step = menu->ni - menu->selected - 1;
 					if (step > DIST) step = DIST;
 					if (step >= menu->ni)
 						step = menu->ni - 1;

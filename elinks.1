@@ -1,5 +1,5 @@
 .\" Process this file with groff -man -Tascii elinks.1
-.TH ELINKS 1 "Nov, 2002"
+.TH ELINKS 1 "Dec, 2002"
 
 
 .SH NAME
@@ -51,6 +51,11 @@ ID of session (ELinks instance) which we want to clone.
 This is internal ELinks option, you don't want to use it.
 
 .TP
+\f3-config-help\f1
+Print descriptions for configuration options and exit.
+Intended mostly for generating documentation.
+
+.TP
 \f3-dump\f1
 Write a plain-text version of the given HTML document to stdout.
 
@@ -70,6 +75,10 @@ Specify elinks.conf config options on the command-line:
 .TP
 \f3-? -h -help\f1
 Print usage help and exit.
+
+.TP
+\f3-long-help\f1
+Print detailed usage help and exit.
 
 .TP
 \f3-lookup \f2<hostname>\f1
@@ -346,12 +355,12 @@ Homepage location (as in
 .B lynx
 )
 
-.IP ELINKS_XTERM, LINKS_XTERM
+.IP "ELINKS_XTERM, LINKS_XTERM"
 The command to run when selecting "File/New window" and if
 .B DISPLAY
 is defined (default "xterm -e")
 
-.IP ELINKS_TWTERM, LINKS_TWTERM
+.IP "ELINKS_TWTERM, LINKS_TWTERM"
 The command to run when selecting "File/New window" and if
 .B TWDISPLAY
 is defined (default "twterm -e")
@@ -437,6 +446,7 @@ Updated by Zas <zas at norz.org>.
 
 .SH "SEE ALSO"
 .BR elinkskeys (5),
+.BR elinks.conf (5),
 .BR links (1),
 .BR lynx (1),
 .BR w3m (1),

@@ -442,4 +442,5 @@ documentation. Updated by Zas.
 
 
 .SH "SEE ALSO"
-.BR elinks (1)
+.BR elinks (1),
+.BR elinks.conf (5)

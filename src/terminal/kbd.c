@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.79 2004/07/04 12:13:42 jonas Exp $ */
+/* $Id: kbd.c,v 1.80 2004/07/04 12:15:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,7 +597,7 @@ kbd_timeout(struct itrm *itrm)
 }
 
 
-static inline int
+static inline void
 get_esc_code(unsigned char *str, int len, unsigned char *code,
 	     int *num, int *el)
 {
@@ -610,11 +610,10 @@ get_esc_code(unsigned char *str, int len, unsigned char *code,
 		if (!isdigit(str[pos]) || pos > 7) {
 			*el = pos + 1;
 			*code = str[pos];
-			return 0;
+			return;
 		}
 		*num = *num * 10 + str[pos] - '0';
 	}
-	return -1;
 }
 
 

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.166 2004/01/24 19:53:00 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.167 2004/01/24 19:53:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -609,88 +609,6 @@ toggle_display_action_listboxes(void)
 
 
 /*
- * Config file tools.
- */
-
-/* Return 0 when ok, something strange otherwise. */
-int
-bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
-{
-	int keymap_, action_;
-	long key_, meta_;
-
-	keymap_ = read_keymap(keymap);
-	if (keymap_ < 0) return 1;
-
-	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
-
-	action_ = read_action(action);
-	if (action_ < 0) return 77 / 9 - 5;
-
-	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);
-	return 0;
-}
-
-unsigned char *
-bind_act(unsigned char *keymap, unsigned char *keystroke)
-{
-	int keymap_;
-	long key_, meta_;
-	unsigned char *action;
-	struct keybinding *kb;
-
-	keymap_ = read_keymap(keymap);
-	if (keymap_ < 0)
-		return NULL;
-
-	if (parse_keystroke(keystroke, &key_, &meta_) < 0)
-		return NULL;
-
-	kb = kbd_ev_lookup(keymap_, key_, meta_, NULL);
-	if (!kb) return NULL;
-
-	action = write_action(kb->action);
-	if (!action)
-		return NULL;
-
-	kb->flags |= KBDB_WATERMARK;
-	return straconcat("\"", action, "\"", NULL);
-}
-
-void
-bind_config_string(struct string *file)
-{
-	enum keymap keymap;
-	struct keybinding *keybinding;
-
-	for (keymap = 0; keymap < KM_MAX; keymap++)
-		foreach (keybinding, keymaps[keymap]) {
-			unsigned char *keymap_str = write_keymap(keymap);
-			unsigned char *action_str =
-				write_action(keybinding->action);
-
-			if (!keymap_str || !action_str || action_str[0] == ' ')
-				continue;
-
-			if (keybinding->flags & KBDB_WATERMARK) {
-				keybinding->flags &= ~KBDB_WATERMARK;
-				continue;
-			}
-
-			/* TODO: Maybe we should use string.write.. */
-			add_to_string(file, "bind \"");
-			add_to_string(file, keymap_str);
-			add_to_string(file, "\" \"");
-			make_keystroke(file, keybinding->key, keybinding->meta, 1);
-			add_to_string(file, "\" = \"");
-			add_to_string(file, action_str);
-			add_char_to_string(file, '\"');
-			add_char_to_string(file, '\n');
-		}
-}
-
-
-/*
  * Bind to Lua function.
  */
 
@@ -927,4 +845,86 @@ add_actions_to_string(struct string *string, enum action *actions,
 		add_xchar_to_string(string, ' ', int_max(15 - keystrokelen, 1));
 		add_to_string(string, _(desc, term));
 	}
+}
+
+
+/*
+ * Config file tools.
+ */
+
+/* Return 0 when ok, something strange otherwise. */
+int
+bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
+{
+	int keymap_, action_;
+	long key_, meta_;
+
+	keymap_ = read_keymap(keymap);
+	if (keymap_ < 0) return 1;
+
+	if (parse_keystroke(keystroke, &key_, &meta_) < 0) return 2;
+
+	action_ = read_action(action);
+	if (action_ < 0) return 77 / 9 - 5;
+
+	add_keybinding(keymap_, action_, key_, meta_, EVENT_NONE);
+	return 0;
+}
+
+unsigned char *
+bind_act(unsigned char *keymap, unsigned char *keystroke)
+{
+	int keymap_;
+	long key_, meta_;
+	unsigned char *action;
+	struct keybinding *kb;
+
+	keymap_ = read_keymap(keymap);
+	if (keymap_ < 0)
+		return NULL;
+
+	if (parse_keystroke(keystroke, &key_, &meta_) < 0)
+		return NULL;
+
+	kb = kbd_ev_lookup(keymap_, key_, meta_, NULL);
+	if (!kb) return NULL;
+
+	action = write_action(kb->action);
+	if (!action)
+		return NULL;
+
+	kb->flags |= KBDB_WATERMARK;
+	return straconcat("\"", action, "\"", NULL);
+}
+
+void
+bind_config_string(struct string *file)
+{
+	enum keymap keymap;
+	struct keybinding *keybinding;
+
+	for (keymap = 0; keymap < KM_MAX; keymap++)
+		foreach (keybinding, keymaps[keymap]) {
+			unsigned char *keymap_str = write_keymap(keymap);
+			unsigned char *action_str =
+				write_action(keybinding->action);
+
+			if (!keymap_str || !action_str || action_str[0] == ' ')
+				continue;
+
+			if (keybinding->flags & KBDB_WATERMARK) {
+				keybinding->flags &= ~KBDB_WATERMARK;
+				continue;
+			}
+
+			/* TODO: Maybe we should use string.write.. */
+			add_to_string(file, "bind \"");
+			add_to_string(file, keymap_str);
+			add_to_string(file, "\" \"");
+			make_keystroke(file, keybinding->key, keybinding->meta, 1);
+			add_to_string(file, "\" = \"");
+			add_to_string(file, action_str);
+			add_char_to_string(file, '\"');
+			add_char_to_string(file, '\n');
+		}
 }

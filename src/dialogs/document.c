@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.97 2004/07/25 10:08:07 zas Exp $ */
+/* $Id: document.c,v 1.98 2004/07/25 19:46:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -239,6 +239,7 @@ protocol_header_dialog(struct session *ses)
 
 	cached = find_in_cache(cur_loc(ses)->vs.uri);
 	if (cached && cached->head) {
+		int artificial;
 		unsigned char *headers = stracpy(cached->head);
 
 		if (!headers) return;
@@ -246,17 +247,16 @@ protocol_header_dialog(struct session *ses)
 		/* If the headers string starts by a newline, it means that it
 		 * is artificially generated, usually to make ELinks-generated
 		 * documents (ie. file:// directory listings) text/html. */
+		artificial = (*headers == '\r');
+#ifdef CONFIG_DEBUG
 		if (*headers)  {
-			int artificial = (*headers == '\r');
+#else
+		if (*headers && !artificial) {
+#endif
 			int i = 0, j = 0;
 			/* Sanitize headers string. */
 			/* XXX: Do we need to check length and limit
 			 * it to something reasonable ? */
-
-#ifndef CONFIG_DEBUG
-			/* We only display artificial headers in debug mode. */
-			if (artificial) break;
-#endif
 
 			while (cached->head[i]) {
 				/* Check for control chars. */

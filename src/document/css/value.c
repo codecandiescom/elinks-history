@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.7 2004/01/17 19:53:25 pasky Exp $ */
+/* $Id: value.c,v 1.8 2004/01/17 20:24:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,25 +104,26 @@ css_parse_font_attribute_value(union css_decl_value *value,
 
 	if (!strlcasecmp(*string, -1, "bolder", 6)) {
 		(*string) += 6;
-		value->font_attribute |= AT_BOLD;
+		value->font_attribute.add |= AT_BOLD;
 		return 1;
 	}
 
 	if (!strlcasecmp(*string, -1, "lighter", 7)) {
 		(*string) += 7;
-		value->font_attribute &= ~AT_BOLD;
+		value->font_attribute.rem |= AT_BOLD;
 		return 1;
 	}
 
 	if (!strlcasecmp(*string, -1, "bold", 4)) {
 		(*string) += 4;
-		value->font_attribute |= AT_BOLD;
+		value->font_attribute.add |= AT_BOLD;
 		return 1;
 	}
 
 	if (!strlcasecmp(*string, -1, "normal", 6)) {
 		(*string) += 6;
-		value->font_attribute &= ~AT_BOLD;
+		/* XXX: font-weight/font-style distinction */
+		value->font_attribute.rem |= AT_BOLD | AT_ITALIC;
 		return 1;
 	}
 
@@ -131,7 +132,7 @@ css_parse_font_attribute_value(union css_decl_value *value,
 	if (!strlcasecmp(*string, -1, "italic", 6) ||
 	    !strlcasecmp(*string, -1, "oblique", 7)) {
 		(*string) += 6 + (**string == 'o');
-		value->font_attribute |= AT_ITALIC;
+		value->font_attribute.add |= AT_ITALIC;
 		return 1;
 	}
 
@@ -151,7 +152,7 @@ css_parse_font_attribute_value(union css_decl_value *value,
 	 * normal -> Same as '400'.  bold Same as '700'.
 	 */
 	int_bounds(&weight, 100, 900);
-	if (weight >= 700) value->font_attribute |= AT_BOLD;
+	if (weight >= 700) value->font_attribute.add |= AT_BOLD;
 	return 1;
 }
 

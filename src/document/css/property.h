@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.2 2004/01/17 19:40:27 pasky Exp $ */
+/* $Id: property.h,v 1.3 2004/01/17 20:24:09 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -37,7 +37,9 @@ struct css_property {
 	union css_decl_value {
 		void *dummy;
 		color_t color;
-		enum format_attr font_attribute;
+		struct {
+			enum format_attr add, rem;
+		} font_attribute;
 		/* TODO:
 		 * Generic numbers
 		 * Percentages

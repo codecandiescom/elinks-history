@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.23 2004/01/17 19:40:27 pasky Exp $ */
+/* $Id: apply.c,v 1.24 2004/01/17 20:24:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,7 +47,8 @@ static void
 css_apply_font_attribute(struct html_element *element, struct css_property *prop)
 {
 	assert(prop->value_type == CSS_DV_FONT_ATTRIBUTE);
-	element->attr.attr |= prop->value.font_attribute;
+	element->attr.attr |= prop->value.font_attribute.add;
+	element->attr.attr &= ~prop->value.font_attribute.rem;
 }
 
 /* XXX: Sort like the css_decl_property */

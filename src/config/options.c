@@ -1,5 +1,5 @@
 /* Options list and handlers and interface */
-/* $Id: options.c,v 1.13 2002/05/11 16:47:55 pasky Exp $ */
+/* $Id: options.c,v 1.14 2002/05/17 15:41:59 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -997,8 +997,8 @@ struct option links_options[] = {
 		"First write data to 'file.tmp', rename to 'file' upon\n"
 		"successful finishing this. Note that this relates only to\n"
        		"config files, not downloaded files. You may want to disable\n"
-		"it, if you want some config file as a symlink or with some\n"
-		"exotic permissions." },
+		"it, if you want some config file with some exotic permissions.\n"
+		"Secure save is automagically disabled if file is symlink."},
 
 	{	"show_status_bar", OPT_CMDLINE | OPT_CFGFILE,
 		gen_cmd, num_rd, num_wr,

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.h,v 1.2 2002/05/06 11:45:11 pasky Exp $ */
+/* $Id: secsave.h,v 1.3 2002/05/17 15:42:00 pasky Exp $ */
 
 #ifndef EL__UTIL_SECFILE_H
 #define EL__UTIL_SECFILE_H
@@ -12,6 +12,7 @@ struct secure_save_info {
 	unsigned char *file_name; /* final file name */
 	unsigned char *tmp_file_name; /* temporary file name */
 	int err; /* set to non-zero value in case of error */
+	int secure_save; /* use secure save for this file */
 };
 
 struct secure_save_info *secure_open(unsigned char *, mode_t);

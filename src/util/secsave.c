@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.7 2002/05/10 16:25:07 pasky Exp $ */
+/* $Id: secsave.c,v 1.8 2002/05/17 15:42:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,17 +63,43 @@ secure_open(unsigned char *file_name, mode_t mask)
 {
 	mode_t saved_mask;
 	unsigned char *ext = NULL;
+	struct stat st;
 	struct secure_save_info *ssi = (struct secure_save_info *)
 				       mem_alloc(sizeof(struct secure_save_info));
 
 	if (!ssi) goto end;
 
+	ssi->secure_save = secure_save;
 	ssi->err = 0;
 
 	ssi->file_name = stracpy(file_name);
 	if (!ssi->file_name) goto free_f;
 
-	if (secure_save) ext = ".tmp";
+	/* Check properties of final file. */
+#ifdef FS_UNIX_SOFTLINKS
+	if (lstat(ssi->file_name, &st)) {
+#else
+	if (stat(ssi->file_name, &st)) {
+#endif
+		/* We ignore error caused by file inexistence. */
+		if (errno != ENOENT) {
+			/* lstat() error. */
+			ssi->err = errno;
+			goto free_file_name;
+		}
+	} else {
+		if (!S_ISREG(st.st_mode)) {
+			/* Not a regular file, secure_save is disabled. */
+			ssi->secure_save = 0;
+		} else {
+			if (access(ssi->file_name, R_OK | W_OK) < 0) {
+				ssi->err = errno;
+				goto free_file_name;
+			}
+		}
+	}
+	
+	if (ssi->secure_save) ext = ".tmp";
 	ssi->tmp_file_name = straconcat(ssi->file_name, ext, NULL);
 	if (!ssi->tmp_file_name) goto free_file_name;
 
@@ -112,8 +138,11 @@ secure_close(struct secure_save_info *ssi)
 		goto free;
 	}
 
-	if (secure_save) {
-		unlink(ssi->file_name); /* OS/2 needs this */
+	if (ssi->secure_save) {
+#ifdef OS2
+		/* OS/2 needs this, however it breaks atomicity on UN*X. */
+		unlink(ssi->file_name);
+#endif
 		if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
 			ret = errno;
 		} else {

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.8 2002/04/24 14:49:48 zas Exp $ */
+/* $Id: http.c,v 1.9 2002/04/24 19:20:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -636,6 +636,7 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	struct cache_entry *e;
 	struct http_connection_info *info;
 	unsigned char *host = upcase(c->url[0]) != 'P' ? c->url : get_url_data(c->url);
+
 	set_timeout(c);
 	info = c->info;
 	if (rb->close == 2) {
@@ -740,10 +741,17 @@ void http_got_header(struct connection *c, struct read_buffer *rb)
 	}
 
  	if (h == 401) {
-		if ((d = parse_http_header(e->head, "WWW-Authenticate", NULL))) {
-			if (!strncasecmp(d, "Basic", 5)
-			    && add_auth_entry(host, get_http_header_param(d, "realm")) > 0) {
-				add_questions_entry(do_auth_dialog);
+		d = parse_http_header(e->head, "WWW-Authenticate", NULL);
+		if (d) {
+			if (!strncasecmp(d, "Basic", 5)) {
+				unsigned char *realm = get_http_header_param(d, "realm");
+
+				if (realm) {
+					if (add_auth_entry(host, realm) > 0) {
+						add_questions_entry(do_auth_dialog);
+					}
+					mem_free(realm);
+				}
 			}
 			mem_free(d);
 		}

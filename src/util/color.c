@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.19 2004/07/19 12:45:16 jonas Exp $ */
+/* $Id: color.c,v 1.20 2004/07/19 12:57:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -122,6 +122,9 @@ decode_hex_color:
 			return 0;
 
 		} else if (slen == 6 || slen == 3) {
+			/* Check if the string is just the hexadecimal rgb
+			 * color notation with the leading '#' missing and
+			 * treat it as such. */
 			int len = 0;
 
 			while (len < slen && isxdigit(str[len])) len++;

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.15 2003/10/01 23:12:06 jonas Exp $ */
+/* $Id: options.h,v 1.16 2003/10/04 21:44:46 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -28,6 +28,7 @@ struct document_options {
 	unsigned int display_subs:1;
 	unsigned int display_sups:1;
 	unsigned int num_links_display:1;
+	unsigned int use_tabindex:1;
 	unsigned int plain:1;
 
 	/* XXX: Everything past this comment is specialy handled by compare_opt() */

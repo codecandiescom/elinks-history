@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.282 2003/10/04 21:40:58 kuser Exp $ */
+/* $Id: options.c,v 1.283 2003/10/04 21:44:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1132,6 +1132,10 @@ register_options(void)
 	add_opt_bool("document.browse.links", N_("Number links"),
 		"numbering", 0, 0,
 		N_("Display numbers next to the links."));
+
+	add_opt_bool("document.browse.links", N_("Use tabindex"),
+		"use_tabindex", 0, 1,
+		N_("Whether to navigate links using tabindex."));
 
 	add_opt_int("document.browse.links", N_("Number keys select links"),
 		"number_keys_select_link", 0, 0, 2, 1,

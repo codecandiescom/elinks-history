@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.25 2003/09/27 13:16:12 jonas Exp $ */
+/* $Id: options.c,v 1.26 2003/10/04 21:44:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,7 @@ init_document_options(struct document_options *doo)
 
 	/* Boolean options. */
 	doo->num_links_display = get_opt_bool("document.browse.links.numbering");
+	doo->use_tabindex = get_opt_bool("document.browse.links.use_tabindex");
 	doo->allow_dark_on_black = get_opt_bool("document.colors.allow_dark_on_black");
 	doo->table_order = get_opt_bool("document.browse.table_move_order");
 	doo->tables = get_opt_bool("document.html.display_tables");

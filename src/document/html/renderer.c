@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.290 2003/10/03 18:31:20 jonas Exp $ */
+/* $Id: renderer.c,v 1.291 2003/10/04 21:44:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -698,7 +698,8 @@ new_link(struct document *f, int link_number, unsigned char *name, int namelen)
 		return NULL;
 
 	link = &f->links[f->nlinks++];
-	link->num = format.tabindex + link_number - 1;
+	link->num = link_number - 1;
+	if (f->opt.use_tabindex) link->num += format.tabindex;
 	link->accesskey = format.accesskey;
 	link->title = format.title ? stracpy(format.title) : NULL;
 	link->where_img = format.image ? stracpy(format.image) : NULL;

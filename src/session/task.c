@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.114 2004/06/11 12:36:57 jonas Exp $ */
+/* $Id: task.c,v 1.115 2004/06/11 13:04:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -470,7 +470,7 @@ follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 {
 #ifdef CONFIG_SCRIPTING
 	static int follow_url_event_id = EVENT_NONE;
-	unsigned char *uristring = get_uri_string(uri, URI_BASE);
+	unsigned char *uristring = get_uri_string(uri, URI_BASE | URI_FRAGMENT);
 
 	if (!uristring) return;
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.141 2003/12/26 16:28:41 zas Exp $ */
+/* $Id: menu.c,v 1.142 2003/12/26 17:14:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -404,6 +404,16 @@ display_menu(struct terminal *term, struct menu *menu)
 						     menu->x, y, mwidth, color);
 			} else if (menu->items[p].action != ACT_NONE) {
 				struct string keystroke;
+
+#ifdef DEBUG
+				/* Help to detect action + right text. --Zas */
+				if (mi_has_right_text(menu->items[p])) {
+					if (color == selected_color)
+						color = normal_color;
+					else
+						color = selected_color;
+				}
+#endif /* DEBUG */
 
 				if (init_string(&keystroke)) {
 					add_keystroke_to_string(&keystroke,

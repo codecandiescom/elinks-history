@@ -1,4 +1,4 @@
-/* $Id: scripting.h,v 1.3 2003/09/23 14:06:10 pasky Exp $ */
+/* $Id: scripting.h,v 1.4 2003/09/23 18:44:54 jonas Exp $ */
 
 #ifndef EL__SCRIPTING_SCRIPTING_H
 #define EL__SCRIPTING_SCRIPTING_H
@@ -16,6 +16,9 @@ struct scripting_hook {
 /* XXX: Last entry of @hooks must have a NULL @name. */
 void register_scripting_hooks(struct scripting_hook *hooks);
 void unregister_scripting_hooks(struct scripting_hook *hooks);
+
+void init_scripting(void);
+void done_scripting(void);
 
 #endif
 

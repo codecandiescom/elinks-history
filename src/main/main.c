@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.125 2003/09/22 21:56:04 jonas Exp $ */
+/* $Id: main.c,v 1.126 2003/09/23 18:44:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,8 +60,7 @@
 #include "sched/event.h"
 #include "sched/connection.h"
 #include "sched/session.h"
-#include "scripting/guile/core.h"
-#include "scripting/lua/core.h"
+#include "scripting/scripting.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
 #include "terminal/screen.h"
@@ -186,11 +185,8 @@ init(void)
 #endif
 	init_mime();
 	init_ssl();
-#ifdef HAVE_LUA
-    	init_lua();
-#endif
-#ifdef HAVE_GUILE
-    	init_guile();
+#ifdef HAVE_SCRIPTING
+	init_scripting();
 #endif
 
 	if (get_opt_int_tree(cmdline_options, "dump") ||
@@ -259,11 +255,8 @@ terminate_all_subsystems(void)
 #ifdef COOKIES
 		cleanup_cookies();
 #endif
-#ifdef HAVE_LUA
-		cleanup_lua();
-#endif
-#ifdef HAVE_GUILE
-		done_guile();
+#ifdef HAVE_SCRIPTING
+		done_scripting();
 #endif
 	}
 

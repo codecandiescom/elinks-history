@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.58 2004/10/09 22:06:10 miciah Exp $ */
+/* $Id: view.h,v 1.59 2004/10/09 22:19:40 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -51,6 +51,15 @@ struct document_view *current_frame(struct session *);
 
 /* Used for changing between formatted and source (plain) view. */
 void toggle_plain_html(struct session *ses, struct document_view *doc_view, int xxxx);
+
+enum frame_event_status move_cursor(struct session *ses,
+				    struct document_view *doc_view,
+				    int x, int y);
+
+#define move_cursor_left(ses, view)	move_cursor(ses, view, ses->tab->x - 1, ses->tab->y)
+#define move_cursor_right(ses, view)	move_cursor(ses, view, ses->tab->x + 1, ses->tab->y)
+#define move_cursor_up(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y - 1)
+#define move_cursor_down(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y + 1)
 
 /* Used for changing wrapping of text */
 void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx);

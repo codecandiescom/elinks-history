@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.598 2004/10/09 22:06:10 miciah Exp $ */
+/* $Id: view.c,v 1.599 2004/10/09 22:19:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,10 +364,6 @@ scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 }
 #endif /* CONFIG_MOUSE */
 
-static enum frame_event_status move_cursor(struct session *ses,
-					   struct document_view *doc_view,
-					   int x, int y);
-
 void
 move_document_start(struct session *ses, struct document_view *doc_view)
 {
@@ -455,7 +451,7 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx)
 /* Move the cursor to the document coordinates provided as @x and @y,
  * scroll the document if necessary, put us in cursor-routing navigation mode
  * if that is not the current mode, and select any link under the cursor. */
-static enum frame_event_status
+enum frame_event_status
 move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 {
 	struct terminal *term = ses->tab->term;
@@ -508,11 +504,6 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 
 	return FRAME_EVENT_REFRESH;
 }
-
-#define move_cursor_left(ses, view)	move_cursor(ses, view, ses->tab->x - 1, ses->tab->y)
-#define move_cursor_right(ses, view)	move_cursor(ses, view, ses->tab->x + 1, ses->tab->y)
-#define move_cursor_up(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y - 1)
-#define move_cursor_down(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y + 1)
 
 
 int
@@ -621,19 +612,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	}
 
 	switch (kbd_action(KEYMAP_MAIN, ev, NULL)) {
-		case ACT_MAIN_MOVE_CURSOR_UP:
-			status = move_cursor_up(ses, doc_view);
-			break;
-		case ACT_MAIN_MOVE_CURSOR_DOWN:
-			status = move_cursor_down(ses, doc_view);
-			break;
-		case ACT_MAIN_MOVE_CURSOR_LEFT:
-			status = move_cursor_left(ses, doc_view);
-			break;
-		case ACT_MAIN_MOVE_CURSOR_RIGHT:
-			status = move_cursor_right(ses, doc_view);
-			break;
-
 		case ACT_MAIN_COPY_CLIPBOARD: {
 			struct link *link;
 			struct uri *uri;

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.99 2004/10/09 22:06:10 miciah Exp $ */
+/* $Id: action.c,v 1.100 2004/10/09 22:19:40 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,6 +586,31 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			scroll_right(ses, doc_view);
 			refresh_view(ses, doc_view, 0);
 			break;
+
+		case ACT_MAIN_MOVE_CURSOR_UP:
+			if (move_cursor_up(ses, doc_view)
+			     == FRAME_EVENT_REFRESH)
+				refresh_view(ses, doc_view, 0);
+			break;
+
+		case ACT_MAIN_MOVE_CURSOR_DOWN:
+			if (move_cursor_down(ses, doc_view)
+			     == FRAME_EVENT_REFRESH)
+				refresh_view(ses, doc_view, 0);
+			break;
+
+		case ACT_MAIN_MOVE_CURSOR_LEFT:
+			if (move_cursor_left(ses, doc_view)
+			     == FRAME_EVENT_REFRESH)
+				refresh_view(ses, doc_view, 0);
+			break;
+
+		case ACT_MAIN_MOVE_CURSOR_RIGHT:
+			if (move_cursor_right(ses, doc_view)
+			     == FRAME_EVENT_REFRESH)
+				refresh_view(ses, doc_view, 0);
+			break;
+
 
 		case ACT_MAIN_JUMP_TO_LINK:
 		case ACT_MAIN_MARK_SET:

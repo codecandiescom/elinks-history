@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.188 2004/04/14 05:50:10 jonas Exp $ */
+/* $Id: main.c,v 1.189 2004/04/14 05:55:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -104,7 +104,9 @@ init(void)
 	 * socket :-/. -- Mikulas */
 	if (check_terminal_pipes()) {
 		ERROR(gettext("Cannot create a pipe for internal communication."));
-		goto fatal_error;
+		retval = RET_FATAL;
+		terminate = 1;
+		return;
 	}
 
 	/* Parsing command line options */
@@ -112,7 +114,8 @@ init(void)
 	if (ret) {
 		retval = RET_SYNTAX;
 		terminate = 1;
-		goto end;
+		free_string_list(&url_list);
+		return;
 	}
 
 	/* FIXME: This is almost perfect. Only problem that remains is piping

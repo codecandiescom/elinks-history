@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.131 2005/02/27 15:50:13 jonas Exp $ */
+/* $Id: action.c,v 1.132 2005/03/05 21:18:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,11 +73,11 @@ toggle_document_option(struct session *ses, unsigned char *option_name)
 	draw_formatted(ses, 1);
 }
 
-typedef enum frame_event_status (*frame_action)(struct session *, struct document_view *, int);
+typedef enum frame_event_status (*frame_action_T)(struct session *, struct document_view *, int);
 
 static enum frame_event_status
 do_frame_action(struct session *ses, struct document_view *doc_view,
-		frame_action action, int magic, int jump_to_link_number)
+		frame_action_T action, int magic, int jump_to_link_number)
 {
 	assert(ses && action);
 	if_assert_failed return FRAME_EVENT_OK;

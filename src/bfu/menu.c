@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.114 2003/09/28 22:12:38 zas Exp $ */
+/* $Id: menu.c,v 1.115 2003/09/28 22:29:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,7 +106,7 @@ static void
 select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 {
 	/* We save these values due to delete_window() call below. */
-	void (*func)(struct terminal *, void *, void *) = it->func;
+	menu_func func = it->func;
 	void *it_data = it->data;
 
 	if (it->rtext == M_BAR) return;

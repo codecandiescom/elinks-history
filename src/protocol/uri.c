@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.50 2003/11/09 22:50:07 zas Exp $ */
+/* $Id: uri.c,v 1.51 2003/11/09 23:16:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -691,12 +691,14 @@ extract_position(unsigned char *uri)
 	if (!start) return NULL;
 
 	start++;
+	/* TODO: use get_no_post_url(). --Zas */
 	end = strchr(start, POST_CHAR);
 	if (!end) end = start + strlen(start);
 
 	fragment = memacpy(start, end - start);
 
 	/* Even though fragment wasn't allocated remove it from the @uri */
+	/* FIXME: why ??? --Zas */
 	memmove(start - 1, end, strlen(end) + 1);
 
 	return fragment;

@@ -205,17 +205,16 @@ dnl ===================================================================
 dnl Checks for a libraries, optional even if installed.
 dnl ===================================================================
 
-dnl AC_CHECK_OPTIONAL_LIBRARY(name, header, lib, function, confhelp)
-
+dnl EL_CHECK_OPTIONAL_LIBRARY(define, name, header, lib, function, confhelp)
 AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 [
-	AC_ARG_WITH($1, [$5],
-	[ if test "$withval" = no; then withval=""; disable_$1=yes; fi])
+	$1=yes
+	AC_ARG_WITH([$2], [$6],
+	[ if test "$withval" = no; then $1=no; fi])
 
-	AC_MSG_CHECKING([for $1 support])
-	if test "x$withval" = xyes; then withval=""; fi
+	AC_MSG_CHECKING([for $2 support])
 
-	if test -z "$disable_$1"; then
+	if test "[$]$1" != no; then
 		AC_MSG_RESULT(yes)
 		EL_SAVE_FLAGS
 		if test -d "$withval"; then
@@ -224,29 +223,33 @@ AC_DEFUN([EL_CHECK_OPTIONAL_LIBRARY],
 			LDFLAGS="$LDFLAGS -L$withval/lib";
 		fi
 
-		AC_CHECK_HEADERS($2, cf_result=yes, cf_result=no)
-		if test "$cf_result" = yes; then
-			AC_CHECK_LIB($3, $4)
+		AC_CHECK_HEADERS([$3], [$1=yes], [$1=no])
+		if test "[$]$1" = yes; then
+			AC_CHECK_LIB([$4], [$5], [$1=yes], [$1=no])
 		fi
 
-		if test "$cf_result" != yes; then
+		if test "[$]$1" = yes; then
+			EL_CONFIG([$1], [$2])
+			LIBS="$LIBS -l$4"
+		else
 			EL_RESTORE_FLAGS
 		fi
 	else
 		AC_MSG_RESULT(disabled)
 	fi
+	EL_LOG_CONFIG([$1], [$2], [])
 ])
 
-EL_CHECK_OPTIONAL_LIBRARY(gpm, gpm.h, gpm, Gpm_Open,
+EL_CHECK_OPTIONAL_LIBRARY(CONFIG_GPM, gpm, gpm.h, gpm, Gpm_Open,
 	[  --without-gpm           disable gpm (mouse) support])
 
-EL_CHECK_OPTIONAL_LIBRARY(zlib, zlib.h, z, gzdopen,
+EL_CHECK_OPTIONAL_LIBRARY(CONFIG_GZIP, zlib, zlib.h, z, gzdopen,
 	[  --without-zlib          disable zlib support])
 
-EL_CHECK_OPTIONAL_LIBRARY(bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
+EL_CHECK_OPTIONAL_LIBRARY(CONFIG_BZIP2, bzlib, bzlib.h, bz2, BZ2_bzReadOpen,
 	[  --without-bzlib         disable bzlib support])
 
-EL_CHECK_OPTIONAL_LIBRARY(idn, idna.h, idn, stringprep_check_version,
+EL_CHECK_OPTIONAL_LIBRARY(CONFIG_IDN, idn, idna.h, idn, stringprep_check_version,
 	[  --without-idn           disable international domain names support])
 
 dnl ===================================================================

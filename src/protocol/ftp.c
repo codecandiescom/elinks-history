@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.92 2003/07/04 13:34:47 jonas Exp $ */
+/* $Id: ftp.c,v 1.93 2003/07/04 20:25:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1061,6 +1061,11 @@ ftp_process_dirlist(struct cache_entry *c_e, int *pos,
 
 		if (ftpparse(&ftp_info, buf, bufp) == 1) {
 			int retv;
+
+			if ((ftp_info.namelen == 1 && ftp_info.name[0] == '.')
+			    || (ftp_info.namelen == 2 && ftp_info.name[0] == '.'
+				&& ftp_info.name[1] == '.'))
+				continue;
 
 			retv = display_dir_entry(c_e, pos, tries, colorize_dir,
 						dircolor, &ftp_info);

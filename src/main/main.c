@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.224 2004/11/08 01:57:33 jonas Exp $ */
+/* $Id: main.c,v 1.225 2004/11/08 15:36:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,6 +56,7 @@
 #include "terminal/terminal.h"
 #include "util/color.h"
 #include "util/error.h"
+#include "util/file.h"
 #include "util/memdebug.h"
 #include "util/memory.h"
 #include "viewer/dump/dump.h"
@@ -92,12 +93,28 @@ check_stdio(struct list_head *url_list)
 }
 
 static void
+check_cwd(void)
+{
+	unsigned char *cwd = get_cwd();
+
+	if (!cwd || !file_is_dir(cwd)) {
+		unsigned char *home = getenv("HOME");
+
+		if (home && file_is_dir(home))
+			chdir(home);
+	}
+
+	mem_free_if(cwd);
+}
+
+static void
 init(void)
 {
 	INIT_LIST_HEAD(url_list);
 	int ret, fd = -1;
 
 	init_static_version();
+	check_cwd();
 
 #ifdef HAVE_LOCALE_H
 	setlocale(LC_ALL, "");

@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.16 2003/01/03 02:23:54 pasky Exp $ */
+/* $Id: dialogs.c,v 1.17 2003/04/21 09:28:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -28,14 +28,14 @@
 static struct option *
 get_real_opt(unsigned char *base, unsigned char *id)
 {
-	struct option *opt;
+	struct option *opt = NULL;
 	unsigned char *name = straconcat(base, ".", id, NULL);
 
-	if (!name) return NULL;
+	if (name) {
+		opt = get_opt_rec_real(&root_options, name);
+		mem_free(name);
+	}
 
-	opt = get_opt_rec_real(&root_options, name);
-
-	mem_free(name);
 	return opt;
 }
 
@@ -124,12 +124,33 @@ add_ext_fn(struct dialog_data *dlg)
 static void
 really_del_ext(void *fcp)
 {
-	struct option *opt;
+	struct option *opt = get_real_opt("mime.extension",
+					  (unsigned char *) fcp);
 
-	opt = get_real_opt("mime.extension", (unsigned char *) fcp);
 	if (opt) delete_option(opt);
 }
 
+static void
+transchars(unsigned char *str)
+{
+	register unsigned char *p = str;
+
+	while (*p) {
+		if (*p == '.') *p = '*';
+		p++;
+	}
+}
+
+static void
+untranschars(unsigned char *str)
+{
+	register unsigned char *p = str;
+
+	while (*p) {
+		if (*p == '*') *p = '.';
+		p++;
+	}
+}
 
 void
 menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
@@ -138,13 +159,10 @@ menu_del_ext(struct terminal *term, void *fcp, void *xxx2)
 	struct option *opt;
 	unsigned char *str;
 	int strl;
-	int i;
 
 	if (!translated) goto end;
 
-	for (i = strlen(translated) - 1; i >= 0; i--)
-		if (translated[i] == '.')
-			translated[i] = '*';
+	transchars(translated);
 
 	opt = get_real_opt("mime.extension", translated);
 	if (!opt) goto end;
@@ -180,16 +198,13 @@ really_add_ext(void *fcp)
 	struct extension *ext = (struct extension *) fcp;
 	unsigned char *translated;
 	unsigned char *name;
-	int i;
 
 	if (!ext) return;
 
 	translated = stracpy(ext->ext);
 	if (!translated) return;
 
-	for (i = strlen(translated) - 1; i >= 0; i--)
-		if (translated[i] == '.')
-			translated[i] = '*';
+	transchars(translated);
 
 	name = straconcat("mime.extension.", translated, NULL);
 	mem_free(translated);
@@ -210,14 +225,9 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	unsigned char *ct;
 	unsigned char *ext_orig;
 	struct dialog *d;
-	int i;
 
 	if (translated) {
-
-		for (i = strlen(translated) - 1; i >= 0; i--)
-			if (translated[i] == '.')
-				translated[i] = '*';
-
+		transchars(translated);
 		opt = get_real_opt("mime.extension", translated);
 	}
 
@@ -295,17 +305,13 @@ menu_list_ext(struct terminal *term, void *fn, void *xxx)
 		unsigned char *translated;
 		unsigned char *translated2;
 		unsigned char *optptr2;
-		int i;
 
 		if (!strcmp(opt->name, "_template_")) continue;
 
 		translated = stracpy(opt->name);
 		if (!translated) continue;
 
-		for (i = strlen(translated) - 1; i >= 0; i--)
-			if (translated[i] == '*')
-				translated[i] = '.';
-
+		untranschars(translated);
 
 		if (!mi) {
 			mi = new_menu(FREE_LIST | FREE_TEXT | FREE_RTEXT | FREE_DATA);

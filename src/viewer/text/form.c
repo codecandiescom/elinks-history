@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.165 2004/06/15 01:05:09 jonas Exp $ */
+/* $Id: form.c,v 1.166 2004/06/15 01:12:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1309,13 +1309,15 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	if (link->type == LINK_FIELD
 	    && fc->action
 	    && has_form_submit(doc_view->document, fc)) {
-		add_to_string(&str, ", ");
-		add_to_string(&str, _("hit ENTER to", term));
-		add_char_to_string(&str, ' ');
+		unsigned char *msg;
+
 		if (fc->method == FM_GET)
-			add_to_string(&str, _("submit to", term));
+			msg = N_("hit ENTER to submit to");
 		else
-			add_to_string(&str, _("post to", term));
+			msg = N_("hit ENTER to post to");
+
+		add_to_string(&str, ", ");
+		add_to_string(&str, _(msg, term));
 		add_char_to_string(&str, ' ');
 
 		/* Add the uri with password and post info stripped */

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.209 2004/05/29 19:44:27 jonas Exp $ */
+/* $Id: uri.c,v 1.210 2004/05/30 00:57:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,13 +481,18 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 			/* This is to reduce indentation */
 
 		} else if (src[1] == '.') {
-			if (!src[2] || is_uri_dir_sep(uri, src[2])) {
+			if (!src[2]) {
+				/* /. - skip the dot */
+				*dest++ = *src;
+				*dest = 0;
+				break;
+
+			} else if (is_uri_dir_sep(uri, src[2])) {
 				/* /./ - strip that.. */
 				src += 2;
 				continue;
 
-			} else if (src[2] == '.'
-				   && (!src[3] || is_uri_dir_sep(uri, src[3]))) {
+			} else if (src[2] == '.' && is_uri_dir_sep(uri, src[3])) {
 				/* /../ - strip that and preceding element. */
 
 				/* First back out the last incrementation of
@@ -504,6 +509,12 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 
 				src += 3;
 				continue;
+
+			} else if (src[2] == '.' && !src[3]) {
+				/* /.. - nothing to skip */
+				*dest++ = *src;
+				*dest = 0;
+				break;
 			}
 
 		} else if (is_uri_dir_sep(uri, src[1])) {

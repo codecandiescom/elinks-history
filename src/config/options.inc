@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.93 2004/01/24 10:25:10 pasky Exp $ */
+/* $Id: options.inc,v 1.94 2004/01/24 10:25:51 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -677,6 +677,7 @@ struct option_info config_options_info[] = {
 		"request back to the client verbatim. Note that this type of request may\n"
 		"not be enabled on all servers.")),
 
+	/* OSNews.com is supposed to be relying on the textmode token, at least. */
 	INIT_OPT_STRING("protocol.http", N_("User-agent identification"),
 		"user_agent", 0, "ELinks/%v (textmode; %s; %t)",
 		N_("Change the User Agent ID. That means identification string, which\n"

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.50 2003/05/03 17:02:26 pasky Exp $ */
+/* $Id: os_dep.c,v 1.51 2003/05/03 17:05:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1937,7 +1937,7 @@ get_open_in_new(int environment)
 	for (i = 0; oinw[i].env; i++) {
 		struct open_in_new *x;
 
-		if ((environment & oinw[i].env) != oinw[i].env)
+		if (environment & oinw[i].env)
 			continue;
 
 		x = mem_realloc(oin, (noin + 2) * sizeof(struct open_in_new));

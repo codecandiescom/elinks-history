@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.67 2002/11/19 14:06:27 zas Exp $ */
+/* $Id: session.c,v 1.68 2002/11/23 12:45:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,19 +97,19 @@ get_err_msg(int state)
 		for (i = 0; msg_dsc[i].msg; i++)
 			if (msg_dsc[i].n == state)
 				return msg_dsc[i].msg;
-unknow_error:
+unknown_error:
 		return TEXT(T_UNKNOWN_ERROR);
 	}
 
 	e = strerror(-state);
-	if (!e || !*e) goto unknow_error;
+	if (!e || !*e) goto unknown_error;
 
 	foreach(s, strerror_buf)
 		if (!strcmp(s->msg, e))
 			return s->msg;
 
 	s = mem_alloc(sizeof(struct strerror_val) + strlen(e) + 1);
-	if (!s) goto unknow_error;
+	if (!s) goto unknown_error;
 
 	strcpy(s->msg, e);
 	add_to_list(strerror_buf, s);
@@ -120,19 +120,19 @@ unknow_error:
 void
 add_xnum_to_str(unsigned char **s, int *l, int n)
 {
-	unsigned char suff[3] = "\0";
+	unsigned char suff[3] = "\0i";
 	int d = -1;
 
 	/* XXX: I don't completely like the computation of d here. --pasky */
 	/* Mebi (Mi), 2^20 */
-	if (n >= 1048576)  {
-		suff[0] = 'M'; suff[1] = 'i';
-	       	d = (n / 104858) % 10;
-	       	n /= 1048576;
+	if (n >= 1024*1024)  {
+		suff[0] = 'M';
+	       	d = (n / (int)((int)(1024*1024)/(int)10)) % 10;
+	       	n /= 1024*1024;
 	/* Kibi (Ki), 2^10 */
 	} else if (n >= 1024) {
-		suff[0] = 'K'; suff[1] = 'i';
-	       	d = (n / 102) % 10;
+		suff[0] = 'K';
+	       	d = (n / (int)((int)1024/(int)10)) % 10;
 		n /= 1024;
 	}
 	add_num_to_str(s, l, n);
@@ -155,19 +155,19 @@ add_time_to_str(unsigned char **s, int *l, ttime t)
 	t /= 1000;
 	t &= 0xffffffff;
 	if (t < 0) t = 0;
-	if (t >= 86400) {
-		sprintf(q, "%dd ", (int)(t / 86400));
+	if (t >= 24*3600) {
+		snprintf(q, sizeof(q), "%dd ", (int)(t / (24*3600)));
 	       	add_to_str(s, l, q);
 	}
 	if (t >= 3600) {
-		t %= 86400;
-	       	sprintf(q, "%d:%02d", (int)(t / 3600), (int)(t / 60 % 60));
+		t %= 24*3600;
+	       	snprintf(q, sizeof(q), "%d:%02d", (int)(t / 3600), (int)(t / 60 % 60));
 		add_to_str(s, l, q);
 	} else {
-		sprintf(q, "%d", (int)(t / 60));
+		snprintf(q, sizeof(q), "%d", (int)(t / 60));
 		add_to_str(s, l, q);
 	}
-	sprintf(q, ":%02d", (int)(t % 60));
+	snprintf(q, sizeof(q), ":%02d", (int)(t % 60));
 	add_to_str(s, l, q);
 }
 
@@ -260,10 +260,11 @@ print_screen_status(struct session *ses)
 		if (show_title_bar) {
 			msg = print_current_title(ses);
 			if (msg) {
-				int pos = term->x - 1 - strlen(msg);
+				int msglen = strlen(msg);
+				int pos = term->x - 1 - msglen;
 
 				if (pos < 0) pos = 0;
-				print_text(term, pos, 0, strlen(msg),
+				print_text(term, pos, 0, msglen,
 					   msg, get_bfu_color(term, "title.title-text"));
 				mem_free(msg);
 			}
@@ -501,6 +502,7 @@ post_yes(struct wtd_data *w)
 void
 post_no(struct wtd_data *w)
 {
+	/* Ok, no test needed, see ses_goto() */
 	*strchr(w->url, POST_CHAR) = 0;
 	post_yes(w);
 }
@@ -915,7 +917,8 @@ file_end_load(struct status *stat, struct file_to_load *ftl)
 {
 	if (ftl->stat.ce) {
 		if (ftl->ce) ftl->ce->refcount--;
-		(ftl->ce = ftl->stat.ce)->refcount++;
+		ftl->ce = ftl->stat.ce;
+		ftl->ce->refcount++;
 	}
 
 	/* FIXME: We need to do content-type check here! However, we won't
@@ -1023,10 +1026,9 @@ struct session *
 create_session(struct window *win)
 {
 	struct terminal *term = win->term;
-	struct session *ses = mem_alloc(sizeof(struct session));
+	struct session *ses = mem_calloc(1, sizeof(struct session));
 
 	if (ses) {
-		memset(ses, 0, sizeof(struct session));
 		create_history(ses);
 		init_list(ses->scrn_frames);
 		init_list(ses->more_files);
@@ -1089,7 +1091,7 @@ create_session_info(int cp, unsigned char *url, int *ll)
 
 	*ll = 2 * sizeof(int) + l;
 
-	i = mem_alloc(2 * sizeof(int) + l);
+	i = mem_alloc(*ll);
 	if (!i) return NULL;
 
 	i[0] = cp;
@@ -1127,14 +1129,17 @@ unsigned char *
 decode_url(unsigned char *url)
 {
 	unsigned char *u = init_str();
-	int l = 0, r = strlen(url);
+	int l = 0;
+	size_t url_len = strlen(url);
 
-	for (; *url; url++, r--) {
-		if (r < 4 || url[0] != '=' || unhx(url[1]) == -1 || unhx(url[2]) == -1 || url[3] != '=')
+	for (; *url; url++, url_len--) {
+		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
+		    || unhx(url[2]) == -1 || url[3] != '=')
 			add_chr_to_str(&u, &l, *url);
 		else {
 			add_chr_to_str(&u, &l, (unhx(url[1]) << 4) + unhx(url[2]));
-		       	url += 3; r -= 3;
+		       	url += 3;
+			url_len -= 3;
 		}
 	}
 
@@ -1256,7 +1261,7 @@ destroy_session(struct session *ses)
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);
 	if (ses->tq_prog) mem_free(ses->tq_prog);
 	if (ses->dn_url) mem_free(ses->dn_url);
-	if (ses->ref_url) mem_free(ses->ref_url),ses->ref_url=NULL;
+	if (ses->ref_url) mem_free(ses->ref_url), ses->ref_url=NULL;
 	if (ses->search_word) mem_free(ses->search_word);
 	if (ses->last_search_word) mem_free(ses->last_search_word);
 	del_from_list(ses);
@@ -1359,7 +1364,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	abort_loading(ses);
 	if (ses->ref_url) {
 		mem_free(ses->ref_url);
-		ses->ref_url=NULL;
+		ses->ref_url = NULL;
 	}
 
 	if (fd && fd->f_data && fd->f_data->url) {
@@ -1563,9 +1568,7 @@ get_current_url(struct session *ses, unsigned char *str, size_t str_size)
 	if (url_len >= str_size)
 			url_len = str_size - 1;
 
-	safe_strncpy(str, here, url_len + 1);
-
-	return str;
+	return safe_strncpy(str, here, url_len + 1);
 }
 
 
@@ -1580,10 +1583,9 @@ get_current_title(struct session *ses, unsigned char *str, size_t str_size)
 	fd = (struct f_data_c *)current_frame(ses);
 
 	/* Ensure that the title is defined */
-	if (!fd)
-		return NULL;
+	if (fd) return safe_strncpy(str, fd->f_data->title, str_size);
 
-	return safe_strncpy(str, fd->f_data->title, str_size);
+	return NULL;
 }
 
 /*
@@ -1597,9 +1599,10 @@ get_current_link_url(struct session *ses, unsigned char *str, size_t str_size)
 
 	l = get_current_link(ses);
 
-	if (l == NULL) return NULL;
-	else return safe_strncpy(str, l->where ? l->where : l->where_img,
-				 str_size);
+	if (l) return safe_strncpy(str, l->where ? l->where : l->where_img,
+				   str_size);
+
+	return NULL;
 }
 
 /* get_current_link_name: returns the name of the current link
@@ -1612,8 +1615,9 @@ get_current_link_name(struct session *ses, unsigned char *str, size_t str_size)
 
 	l = get_current_link(ses);
 
-	if (l == NULL) return NULL;
-	else return safe_strncpy(str, l->name, str_size);
+	if (l) return safe_strncpy(str, l->name, str_size);
+		
+	return NULL;
 }
 
 struct link *
@@ -1622,18 +1626,14 @@ get_current_link(struct session *ses)
 	struct f_data_c *fd;
 	struct link *l;
 
-	fd = (struct f_data_c *)current_frame(ses);
 	/* What the hell is an 'fd'? */
-	if (!fd)
-		return NULL;
-
-	/* Nothing selected? */
-	if (fd->vs->current_link == -1)
-		return NULL;
-
-	l = &fd->f_data->links[fd->vs->current_link];
-	/* Only return a link */
-	if (l->type != L_LINK)
-		return NULL;
-	else return l;
+	fd = (struct f_data_c *)current_frame(ses);
+	
+	if (fd && fd->vs->current_link != -1) {
+		l = &fd->f_data->links[fd->vs->current_link];
+		/* Only return a link */
+		if (l->type == L_LINK) return l;
+	}
+	
+	return NULL;
 }

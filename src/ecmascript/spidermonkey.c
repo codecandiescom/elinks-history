@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.88 2004/12/17 13:19:51 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.89 2004/12/17 13:21:05 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1040,11 +1040,9 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
-	{
 		JSVAL_REQUIRE(vp, STRING);
 		location_goto(doc_view, v.string);
 		break;
-	}
 	}
 
 	JSVAL_TO_VALUE_END;

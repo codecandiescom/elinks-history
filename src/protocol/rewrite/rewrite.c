@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.5 2003/12/07 02:18:54 jonas Exp $ */
+/* $Id: rewrite.c,v 1.6 2003/12/07 02:45:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,8 @@
 #include "sched/session.h"
 #include "util/string.h"
 
+
+/* TODO: An event hook for follow-url might also feel at home here. --jonas */
 
 enum uri_rewrite_option {
 	URI_REWRITE_TREE,
@@ -67,6 +69,8 @@ static struct option_info uri_rewrite_options[] = {
 		"smart", OPT_AUTOCREATE,
 		N_("Smart prefixes.")),
 
+	/* TODO: In some rare occations current link URI and referrer might
+	 * also be useful and dare I mention some kind of proxy argument. --jonas */
 	INIT_OPT_STRING("protocol.rewrite.smart", NULL,
 		"_template_", 0, "",
 		N_("Replacement URI for this smartprefix.\n"

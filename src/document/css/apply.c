@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.70 2004/09/20 15:49:32 pasky Exp $ */
+/* $Id: apply.c,v 1.71 2004/09/20 22:24:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,16 +131,23 @@ css_apply(struct html_element *element, struct css_stylesheet *css)
 	if (!selector)
 		return;
 
+	examine_element(selector, &css->selectors, element);
+
 	code = get_attr_val(element->options, "style");
 	if (code) {
+		struct css_selector *stylesel;
 		struct scanner scanner;
 
-		init_scanner(&scanner, &css_scanner_info, code, NULL);
-		css_parse_properties(&selector->properties, &scanner);
+		stylesel = init_css_selector(NULL, CST_ELEMENT, NULL, 0);
+
+		if (stylesel) {
+			init_scanner(&scanner, &css_scanner_info, code, NULL);
+			css_parse_properties(&stylesel->properties, &scanner);
+			merge_css_selectors(selector, stylesel);
+			done_css_selector(stylesel);
+		}
 		mem_free(code);
 	}
-
-	examine_element(selector, &css->selectors, element);
 
 	foreach (property, selector->properties) {
 		assert(property->type < CSS_PT_LAST);

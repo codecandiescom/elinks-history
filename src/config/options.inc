@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.91 2004/01/23 19:27:26 jonas Exp $ */
+/* $Id: options.inc,v 1.92 2004/01/23 20:00:56 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -514,21 +514,6 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,
 		N_("Keep unhistory (\"forward history\")?")),
-
-
-	INIT_OPT_TREE("document", N_("Cascading Style Sheets"),
-		"css", 0,
-		N_("Options concerning how to use CSS for styling documents.")),
-
-	INIT_OPT_BOOL("document.css", N_("Enable CSS"),
-		"enable", 0, 1,
-		N_("Enable adding of CSS style info to documents.")),
-
-	INIT_OPT_STRING("document.css", N_("Default style sheet"),
-		"stylesheet", 0, "",
-		N_("The URI for the default Cascading Style Sheet. It can be\n"
-		"used to control the basic layout of HTML documents.\n"
-		"Leave as \"\" to use built-in document styling.")),
 
 
 	INIT_OPT_TREE("document", N_("HTML rendering"),

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.363 2004/01/18 16:44:00 zas Exp $ */
+/* $Id: parser.c,v 1.364 2004/01/18 17:00:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2361,13 +2361,13 @@ extract_rows_or_cols_values(unsigned char *str, int max_value, int pixels_per_ch
 		errno = 0;
 		number = strtoul(str, (char **)&str, 10);
 		if (errno) return 0;
-	
+
 		/* @number is an ulong, but @val is int,
 		 * so check if @number is in a reasonable
 		 * range to prevent bad things. */
 		if (number <= 0xffff) {
 			if (*str == '%')	/* Percentage */
-				val = number * max_value / 100;
+				val = int_min((int)number, 100) * max_value / 100;
 			else if (*str != '*')	/* Pixels */
 				val = (number + (pixels_per_char - 1) / 2) / pixels_per_char;
 			else if (number)	/* Fraction, marked by negative value. */

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.650 2004/11/12 17:15:29 zas Exp $ */
+/* $Id: view.c,v 1.651 2004/11/12 17:19:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,9 +313,7 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
-	vertical_scroll(ses, doc_view, -steps);
-
-	return FRAME_EVENT_REFRESH;
+	return vertical_scroll(ses, doc_view, -steps);
 }
 
 enum frame_event_status
@@ -328,9 +326,7 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
-	vertical_scroll(ses, doc_view, steps);
-
-	return FRAME_EVENT_REFRESH;
+	return vertical_scroll(ses, doc_view, steps);
 }
 
 enum frame_event_status
@@ -343,9 +339,7 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
-	horizontal_scroll(ses, doc_view, -steps);
-
-	return FRAME_EVENT_REFRESH;
+	return horizontal_scroll(ses, doc_view, -steps);
 }
 
 enum frame_event_status
@@ -358,9 +352,7 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 	if (!steps)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
-	horizontal_scroll(ses, doc_view, steps);
-
-	return FRAME_EVENT_REFRESH;
+	return horizontal_scroll(ses, doc_view, steps);
 }
 
 #ifdef CONFIG_MOUSE
@@ -369,9 +361,7 @@ scroll_mouse_up(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.vertical_step");
 
-	vertical_scroll(ses, doc_view, -steps);
-
-	return FRAME_EVENT_REFRESH;
+	return vertical_scroll(ses, doc_view, -steps);
 }
 
 static enum frame_event_status
@@ -379,9 +369,7 @@ scroll_mouse_down(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.vertical_step");
 
-	vertical_scroll(ses, doc_view, steps);
-
-	return FRAME_EVENT_REFRESH;
+	return vertical_scroll(ses, doc_view, steps);
 }
 
 static enum frame_event_status
@@ -389,9 +377,7 @@ scroll_mouse_left(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
-	horizontal_scroll(ses, doc_view, -steps);
-
-	return FRAME_EVENT_REFRESH;
+	return horizontal_scroll(ses, doc_view, -steps);
 }
 
 static enum frame_event_status
@@ -399,9 +385,7 @@ scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 {
 	int steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
-	horizontal_scroll(ses, doc_view, steps);
-
-	return FRAME_EVENT_REFRESH;
+	return horizontal_scroll(ses, doc_view, steps);
 }
 #endif /* CONFIG_MOUSE */
 
@@ -510,6 +494,7 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 		int max_height = doc_view->document->height - doc_view->vs->y;
 		int max_width = doc_view->document->width - doc_view->vs->x;
 
+		/* TODO: status = vertical_scroll() ... --Zas */
 		if (y < box->y) {
 			vertical_scroll(ses, doc_view, -1);
 

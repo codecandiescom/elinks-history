@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.142 2004/01/02 18:37:57 jonas Exp $ */
+/* $Id: dialogs.c,v 1.143 2004/01/04 15:04:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,6 +72,21 @@ is_option_used(struct listbox_item *item)
 }
 
 static unsigned char *
+get_range_string(struct option *option)
+{
+	struct string info;
+
+	if (!init_string(&info)) return NULL;
+
+	if (option->type == OPT_BOOL)
+		add_to_string(&info, "[0|1]");
+	else if (option->type == OPT_INT || option->type == OPT_LONG)
+		add_format_to_string(&info, "[%li..%li]", option->min, option->max);
+
+	return info.source;
+}
+
+static unsigned char *
 get_option_info(struct listbox_item *item, struct terminal *term,
 		  enum listbox_info listbox_info)
 {
@@ -92,6 +107,7 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 	desc = _(option->desc  ? option->desc : (unsigned char *) "N/A", term);
 
 	if (option_types[option->type].write) {
+		unsigned char *range;
 		struct string value;
 
 		if (!init_string(&value)) {
@@ -103,7 +119,16 @@ get_option_info(struct listbox_item *item, struct terminal *term,
 
 		add_format_to_string(&info, "%s: %s", _("Name", term), option->name);
 		add_format_to_string(&info, "\n%s: %s", _("Type", term), type);
+		range = get_range_string(option);
+		if (range) {
+			if (*range) {
+				add_to_string(&info, " ");
+				add_to_string(&info, range);
+			}
+			mem_free(range);
+		}
 		add_format_to_string(&info, "\n%s: %s", _("Value", term), value.source);
+
 		if (*desc)
 			add_format_to_string(&info, "\n\n%s:\n%s", _("Description", term), desc);
 		done_string(&value);
@@ -210,7 +235,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 {
 #define EDIT_WIDGETS_COUNT 5
 	struct dialog *dlg;
-	unsigned char *value, *label, *name, *desc;
+	unsigned char *value, *label, *name, *desc, *range;
 	struct string tvalue;
 
 	if (!init_string(&tvalue)) return;
@@ -238,11 +263,24 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	name = straconcat(_("Name", term), ": ", option->name, "\n",
 			  _("Type", term), ": ",
 			  _(option_types[option->type].name, term), NULL);
-	label = straconcat(_("Value", term), ": ", NULL);
+	label = straconcat("\n", _("Value", term), ": ", NULL);
 	desc = straconcat(_("Description", term), ": \n",
 			  _(option->desc ? option->desc
 				  	 : (unsigned char *) "N/A", term),
 			  NULL);
+	range = get_range_string(option);
+	if (range) {
+		if (*range) {
+			unsigned char *tmp;
+
+			tmp = straconcat(name, " ", range, NULL);
+			if (tmp) {
+				mem_free(name);
+				name = tmp;
+			}
+		}
+		mem_free(range);
+	}
 
 	if (!name || !desc || !label) {
 		if (name) mem_free(name);
@@ -254,6 +292,8 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
 	add_dlg_text(dlg, name, AL_LEFT, 1);
+	if (range)
+
 	add_dlg_field(dlg, label, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 

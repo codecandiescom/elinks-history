@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.347 2004/01/08 02:02:07 jonas Exp $ */
+/* $Id: view.c,v 1.348 2004/01/08 02:20:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -519,35 +519,6 @@ rep_ev(struct session *ses, struct document_view *doc_view,
 }
 
 
-static void
-frm_download(struct session *ses, struct document_view *doc_view, int resume)
-{
-	struct link *link;
-
-	assert(ses && doc_view && doc_view->vs && doc_view->document);
-	if_assert_failed return;
-
-	if (doc_view->vs->current_link == -1) return;
-	if (ses->dn_url) {
-		mem_free(ses->dn_url);
-		ses->dn_url = NULL;
-	}
-	link = &doc_view->document->links[doc_view->vs->current_link];
-	if (link->type != LINK_HYPERTEXT && link->type != LINK_BUTTON) return;
-
-	ses->dn_url = get_link_url(ses, doc_view, link);
-	if (ses->dn_url) {
-		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
-			mem_free(ses->dn_url);
-			ses->dn_url = NULL;
-			return;
-		}
-		set_referrer(ses, doc_view->document->url);
-		query_file(ses, ses->dn_url, ses, (resume ? resume_download : start_download), NULL, 1);
-	}
-}
-
-
 /* We return |x| at the end of the function. The value of x
  * should be one of the following:
  *
@@ -705,8 +676,6 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 			case ACT_END:  rep_ev(ses, doc_view, x_end, 0); break;
 			case ACT_ENTER: x = enter(ses, doc_view, 0); break;
 			case ACT_ENTER_RELOAD: x = enter(ses, doc_view, 1); break;
-			case ACT_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 0); break;
-			case ACT_RESUME_DOWNLOAD: if (!get_opt_int_tree(cmdline_options, "anonymous")) frm_download(ses, doc_view, 1); break;
 			case ACT_JUMP_TO_LINK: x = 2; break;
 			case ACT_MARK_SET:
 				ses->kbdprefix.mark = KP_MARK_SET;
@@ -1042,9 +1011,10 @@ send_enter_reload(struct terminal *term, void *xxx, struct session *ses)
 }
 
 void
-download_link(struct session *ses, struct document_view *doc_view, int image)
+download_link(struct session *ses, struct document_view *doc_view, int action)
 {
 	struct link *link;
+	void (*download)(void *ses, unsigned char *file) = start_download;
 
 	if (doc_view->vs->current_link == -1) return;
 
@@ -1055,15 +1025,30 @@ download_link(struct session *ses, struct document_view *doc_view, int image)
 
 	link = &doc_view->document->links[doc_view->vs->current_link];
 
-	if (!image) {
-		ses->dn_url = get_link_url(ses, doc_view, link);
-	} else if (link->where_img) {
-		ses->dn_url = stracpy(link->where_img);
+	switch (action) {
+		case ACT_RESUME_DOWNLOAD:
+			download = resume_download;
+		case ACT_DOWNLOAD:
+			ses->dn_url = get_link_url(ses, doc_view, link);
+			break;
+
+		case ACT_DOWNLOAD_IMAGE:
+			ses->dn_url = stracpy(link->where_img);
+			break;
+
+		default:
+			INTERNAL("I think you forgot to take your medication, mental boy!.");
+			return;
 	}
 
 	if (ses->dn_url) {
+		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
+			mem_free(ses->dn_url);
+			ses->dn_url = NULL;
+			return;
+		}
 		set_referrer(ses, doc_view->document->url);
-		query_file(ses, ses->dn_url, ses, start_download, NULL, 1);
+		query_file(ses, ses->dn_url, ses, download, NULL, 1);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.25 2004/01/08 02:02:07 jonas Exp $ */
+/* $Id: action.c,v 1.26 2004/01/08 02:20:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -186,12 +186,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 			break;
 
 		case ACT_DOWNLOAD:
-			do_frame_action(ses, download_link, 0);
+			do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_DOWNLOAD_IMAGE:
-			/* 1 means download link->where_img URI */
-			do_frame_action(ses, download_link, 1);
+			do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_DOWNLOAD_MANAGER:
@@ -318,6 +317,11 @@ do_action(struct session *ses, enum keyact action, int verbose)
 
 		case ACT_RELOAD:
 			reload(ses, CACHE_MODE_INCREMENT);
+			break;
+
+		case ACT_RESUME_DOWNLOAD:
+			if (!get_opt_int_tree(cmdline_options, "anonymous"))
+				do_frame_action(ses, download_link, action);
 			break;
 
 		case ACT_SAVE_AS:
@@ -448,7 +452,6 @@ do_action(struct session *ses, enum keyact action, int verbose)
 		case ACT_PAGE_UP:
 		case ACT_PASTE_CLIPBOARD:
 		case ACT_QUIT:
-		case ACT_RESUME_DOWNLOAD:
 		case ACT_RIGHT:
 		case ACT_SCRIPTING_FUNCTION:
 		case ACT_SCROLL_DOWN:

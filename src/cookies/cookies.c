@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.15 2002/04/20 11:21:01 zas Exp $ */
+/* $Id: cookies.c,v 1.16 2002/04/23 07:48:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,50 +149,48 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 }
 
 
-int
-set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
+struct cookie_str {
+	unsigned char *str;
+	unsigned char *nam_end, *val_start, *val_end;
+};
+
+/* Return cs on success, NULL on failure. */
+struct cookie_str *
+parse_cookie_str(struct cookie_str *cstr)
 {
-	struct cookie *cookie;
-	struct c_server *cs;
-	unsigned char *server, *document, *date, *secure;
 	unsigned char *pos;
-	unsigned char *nam_end = NULL;
-	unsigned char *val_start = NULL, *val_end = NULL;
 	int last_was_eq = 0;
 	int last_was_ws = 0;
 
-	if (cookies_accept == COOKIES_ACCEPT_NONE)
-		return 0;
-
-#ifdef COOKIES_DEBUG
-	debug("set_cookie -> (%s) %s", url, str);
-#endif
+	cstr->nam_end = cstr->val_start = cstr->val_end = NULL;
 
 	/* /NAME *= *VALUE *;/ */
 
-	for (pos = str; *pos != ';' && *pos; pos++) {
-		if (!last_was_ws)
-			val_end = pos + 1; /* The NEXT char is ending it! */
+	for (pos = cstr->str; *pos != ';' && *pos; pos++) {
+		if (!last_was_ws) {
+			/* The NEXT char is ending it! */
+			cstr->val_end = pos + 1;
+		}
 
 		if (*pos == '=') {
 			/* End of name reached */
-			if (!nam_end) {
-				nam_end = pos;
+			if (!cstr->nam_end) {
+				cstr->nam_end = pos;
 				/* This inside the if is protection against
 				 * broken sites sending '=' inside values. */
 				last_was_eq = 1;
 			}
 
 		} else if (WHITECHAR(*pos)) {
-			if (!nam_end) {
+			if (!cstr->nam_end) {
 				/* Just after name - end of name reached */
-				nam_end = pos;
+				cstr->nam_end = pos;
 			}
 			last_was_ws = 1;
 
 		} else if (last_was_eq) {
 			/* Start of value reached */
-			val_start = pos;
+			cstr->val_start = pos;
 			last_was_eq = 0;
 			last_was_ws = 0;
 
@@ -203,7 +201,30 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		}
 	}
 
-	if (str == nam_end || !nam_end || !val_start || !val_end) return 0;
+	if (cstr->str == cstr->nam_end
+	    || !cstr->nam_end || !cstr->val_start || !cstr->val_end)
+		return NULL;
+
+	return cstr;
+}
+
+int
+set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
+{
+	unsigned char *server, *document, *date, *secure;
+	struct cookie *cookie;
+	struct c_server *cs;
+	struct cookie_str cstr;
+
+	if (cookies_accept == COOKIES_ACCEPT_NONE)
+		return 0;
+
+#ifdef COOKIES_DEBUG
+	debug("set_cookie -> (%s) %s", url, str);
+#endif
+
+	cstr.str = str;
+	if (!parse_cookie_str(&cstr)) return 0;
 
 	cookie = mem_alloc(sizeof(struct cookie));
 	if (!cookie) return 0;
@@ -213,8 +234,8 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 
 	/* Fill main fields */
 
-	cookie->name = memacpy(str, nam_end - str);
-	cookie->value = memacpy(val_start, val_end - val_start);
+	cookie->name = memacpy(str, cstr.nam_end - str);
+	cookie->value = memacpy(cstr.val_start, cstr.val_end - cstr.val_start);
 	cookie->server = stracpy(server);
 
 	/* Get expiration date */

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.65 2003/11/26 20:35:12 pasky Exp $ */
+/* $Id: uri.c,v 1.66 2003/11/29 00:16:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,15 +428,16 @@ insert_wd(unsigned char **up, unsigned char *cwd)
 	if (!url || !cwd || !*cwd
 	    || strncasecmp(url, "file://", 7))
 		return;
-	if (!strncasecmp(url + 7, "localhost/", 10)) {
+	url += 7; /* file:// */
+	if (!strncasecmp(url, "localhost/", 10)) {
 		/* Remove localhost from the URL to make (not only) the
 		 * file:// handler happy. */
-		memmove(url + 7, url + 16, strlen(&url[16]) + 1);
+		memmove(url, url + 9, strlen(url + 9) + 1);
 	}
-	if (dir_sep(url[7]))
+	if (dir_sep(url[0]))
 		return;
 #ifdef DOS_FS
-	if (upcase(url[7]) >= 'A' && upcase(url[7]) <= 'Z' && url[8] == ':' && dir_sep(url[9])) return;
+	if (upcase(url[0]) >= 'A' && upcase(url[0]) <= 'Z' && url[1] == ':' && dir_sep(url[2])) return;
 #endif
 
 	cwdlen = strlen(cwd);

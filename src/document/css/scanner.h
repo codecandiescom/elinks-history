@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.44 2004/01/21 17:02:57 jonas Exp $ */
+/* $Id: scanner.h,v 1.45 2004/01/21 17:05:36 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -10,8 +10,10 @@
 /* The various token types and what they contain. Patterns taken from
  * the flex scanner declarations in the CSS 2 Specification. */
 enum css_token_type {
-	/* Char tokens from 1-255 have their char value as type and non string
-	 * tokens have values from 256 and up. */
+	/* Char tokens: */
+
+	/* Char tokens range from 1 to 255 and have their char value as type */
+	/* meaning non char tokens have values from 256 and up. */
 
 	/* Low level string tokens: */
 
@@ -65,7 +67,7 @@ enum css_token_type {
 
 	/* TODO: Selector stuff like "|=" and "~=" */
 
-	/* Special tokens */
+	/* Special tokens: */
 
 	/* A special token for unrecognized strings */
 	CSS_TOKEN_GARBAGE,

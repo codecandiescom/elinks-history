@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.42 2003/09/22 15:25:24 zas Exp $ */
+/* $Id: cache.c,v 1.43 2003/10/02 14:04:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,12 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 	return 0;
 }
 
-#define enlarge(e, x) (e)->data_size += (x), cache_size += (x)
+static inline void
+enlarge(struct cache_entry *e, int x)
+{
+	e->data_size += x;
+	cache_size += x;
+}
 
 #define CACHE_PAD(x) (((x) | 0x3fff) + 1)
 

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.10 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: options.h,v 1.11 2002/05/18 23:01:33 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -10,26 +10,57 @@
 
 #define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
 
+
 enum option_flags {
 	/* bitmask */
 	OPT_CMDLINE = 1,
 	OPT_CFGFILE = 2,
 };
 
+enum option_type {
+	OPT_BOOL,
+	OPT_INT,
+	OPT_LONG,
+	OPT_STRING,
+
+	OPT_CODEPAGE,
+	OPT_LANGUAGE,
+	OPT_MIME_TYPE,
+	OPT_EXTENSION,
+	OPT_PROGRAM,
+	OPT_TERM,
+	OPT_TERM2,
+	OPT_KEYBIND,
+	OPT_KEYUNBIND,
+	OPT_COLOR,
+
+	OPT_COMMAND,
+};
+
 struct option {
 	unsigned char *name;
 	enum option_flags flags;
-	unsigned char *(*rd_cmd)(struct option *, unsigned char ***, int *);
-	unsigned char *(*rd_cfg)(struct option *, unsigned char *);
-	void (*wr_cfg)(struct option *, unsigned char **, int *);
+	enum option_type type;
 	int min, max;
 	void *ptr;
 	unsigned char *desc;
 };
 
+
+struct option_type_info {
+	unsigned char *(*rd_cmd)(struct option *, unsigned char ***, int *);
+	unsigned char *(*rd_cfg)(struct option *, unsigned char *);
+	void (*wr_cfg)(struct option *, unsigned char **, int *);
+	unsigned char *help_str;
+};
+
+extern struct option_type_info option_types[];
+
+
 extern struct hash *links_options;
 extern struct hash *html_options;
 extern struct hash *all_options[];
+
 
 extern void init_options();
 extern void done_options();
@@ -48,14 +79,6 @@ extern void add_opt_rec(struct hash *, struct option *);
 extern unsigned char *cmd_name(unsigned char *);
 extern unsigned char *opt_name(unsigned char *);
 
-
-enum dump_type {
-	D_NONE,
-	D_DUMP,
-	D_SOURCE,
-};
-
-extern enum dump_type dmp;
 
 enum cookies_accept {
 	COOKIES_ACCEPT_NONE,

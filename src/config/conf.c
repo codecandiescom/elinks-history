@@ -1,5 +1,5 @@
 /* Config file and commandline proccessing */
-/* $Id: conf.c,v 1.10 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: conf.c,v 1.11 2002/05/18 23:01:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,9 +57,9 @@ unsigned char *_parse_options(int argc, unsigned char *argv[], struct hash **opt
 				if (!option)
 					continue;
 
-				if (option->rd_cmd &&
+				if (option_types[option->type].rd_cmd &&
 				    option->flags & OPT_CMDLINE) {
-					unsigned char *err = option->rd_cmd(option, &argv, &argc);
+					unsigned char *err = option_types[option->type].rd_cmd(option, &argv, &argc);
 
 					if (err) {
 						if (err[0])
@@ -185,7 +185,7 @@ void parse_config_file(unsigned char *name, unsigned char *file, struct hash **o
 
 			if (option->flags & OPT_CFGFILE) {
 				unsigned char *value = memacpy(val, val_len);
-				unsigned char *err = option->rd_cfg(option, value);
+				unsigned char *err = option_types[option->type].rd_cfg(option, value);
 
 				if (err) {
 					if (err[0])
@@ -226,8 +226,9 @@ unsigned char *create_config_string(struct hash *options)
 	foreach_hash_item (options, item, i) {
 		struct option *option = item->value;
 
-		if (option->wr_cfg) {
-			option->wr_cfg(option, &str, &len);
+		if (option_types[option->type].wr_cfg
+		    && option->flags & OPT_CFGFILE) {
+			option_types[option->type].wr_cfg(option, &str, &len);
 		}
 	}
 

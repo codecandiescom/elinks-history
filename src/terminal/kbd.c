@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.76 2004/06/22 06:46:18 miciah Exp $ */
+/* $Id: kbd.c,v 1.77 2004/07/03 16:03:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,10 +218,7 @@ void
 resize_terminal(void)
 {
 	struct term_event ev = INIT_TERM_EVENT(EV_RESIZE, 0, 0, 0);
-	/* get_terminal_size() might not actually assign anything
-	 * to these variables which can be fatal if the terminal
-	 * is a pipe. */
-	int width = 0, height = 0;
+	int width, height;
 
 	if (get_terminal_size(ditrm->std_out, &width, &height)) return;
 	ev.x = width;

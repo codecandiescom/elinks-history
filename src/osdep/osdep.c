@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.135 2004/07/03 15:56:04 jonas Exp $ */
+/* $Id: osdep.c,v 1.136 2004/07/03 16:03:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,11 @@ get_terminal_size(int fd, int *x, int *y)
 	if (ioctl(1, TIOCGWINSZ, &ws) != -1) {
 		*x = ws.ws_col;
 		*y = ws.ws_row;
+	} else {
+		*x = 0;
+		*y = 0;
 	}
+
 	if (!*x) {
 		*x = get_e("COLUMNS");
 		if (!*x) *x = 80;

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.27 2003/06/06 23:23:18 jonas Exp $ */
+/* $Id: mailcap.c,v 1.28 2003/06/07 03:55:15 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -362,6 +362,9 @@ done_mailcap(void)
 {
 	struct hash_item *item;
 	int i;
+
+	if (!mailcap_map)
+		return;
 
 	foreach_hash_item (item, *mailcap_map, i) {
 		struct mailcap_hash_item *mitem = item->value;

@@ -75,12 +75,6 @@
 /* Define to 1 if we should include global history */
 #undef GLOBHIST
 
-/* Define to 1 if we should include mailcap support */
-#undef MAILCAP
-
-/* Define to 1 if we should include mime.types support */
-#undef MIMETYPES
-
 /* Directory containing default config */
 #undef CONFDIR
 
@@ -102,9 +96,6 @@
 
 /* Define to 1 if we should support mouse */
 #undef USE_MOUSE
-
-/* Define to 1 if we should support 256 colors in xterm256 */
-#undef USE_256_COLORS
 
 /* Define to 1 to reduce binary size as far as possible. */
 #undef ELINKS_SMALL

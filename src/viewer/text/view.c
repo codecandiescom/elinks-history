@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.16 2003/02/19 17:26:44 pasky Exp $ */
+/* $Id: view.c,v 1.17 2003/04/14 15:35:18 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2093,6 +2093,15 @@ rep2:
 					for (y = 0; ln[y].st; y++) {
 						if (fs->value + fs->state >= ln[y].st &&
 						    fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
+							/* FIXME: Partial fix
+							 * https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=62368
+							 * It prevents hanging
+							 * but still need
+							 * improvment */
+							if (l->pos[0].y + y + 1 >= f->yw)
+								page_down(ses, f, 1);
+							/* End of partial fix.
+							 * */
 							if (!ln[y+1].st) {
 								mem_free(ln);
 								goto b;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.374 2004/01/24 02:05:46 jonas Exp $ */
+/* $Id: parser.c,v 1.375 2004/01/24 12:36:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -634,24 +634,28 @@ killll:
 	ln_break(l, line_break_f, ff);
 }
 
+/* Extract numerical value of attribute @name.
+ * It will return a positive integer value on success,
+ * or -1 on error. */
 int
-get_num(unsigned char *a, unsigned char *n)
+get_num(unsigned char *a, unsigned char *name)
 {
-	unsigned char *al = get_attr_val(a, n);
+	unsigned char *al = get_attr_val(a, name);
+	int result = -1;
 
 	if (al) {
 		unsigned char *end;
-		int s;
+		long num;
 
 		errno = 0;
-		s = strtoul(al, (char **)&end, 10);
-		if (errno || !*al || *end || s < 0) s = -1;
-		mem_free(al);
+		num = strtol(al, (char **)&end, 10);
+		if (!errno && !*end && num >= 0 && num <= MAXINT)
+			result = (int) num;
 
-		return s;
+		mem_free(al);
 	}
 
-	return -1;
+	return result;
 }
 
 static int

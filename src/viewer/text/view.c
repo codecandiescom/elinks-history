@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.147 2003/07/02 23:58:34 zas Exp $ */
+/* $Id: view.c,v 1.148 2003/07/03 00:02:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -631,7 +631,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 	int sl, ye;
 	register int x, y;
 
-	assert(t && f && f->f_data && l);
+	assert(t && f && f->f_data && f->vs && l);
 	frm = l->form;
 	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
 
@@ -656,7 +656,7 @@ draw_textarea(struct terminal *t, struct form_state *fs,
 
 	for (; ln->st && y < ye; ln++, y++) {
 		register int i;
-		
+
 		if (y < yp || y >= yp + yw) continue;
 
 		for (i = 0; i < frm->cols; i++) {
@@ -700,7 +700,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 	int xw, yw;
 	int vx, vy;
 
-	assert(t && f && f->f_data && l);
+	assert(t && f && f->f_data && f->vs && l);
 	frm = l->form;
 	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
 

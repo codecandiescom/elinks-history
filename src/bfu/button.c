@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.33 2003/09/25 19:12:03 zas Exp $ */
+/* $Id: button.c,v 1.34 2003/10/25 11:18:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,9 +100,9 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 
 
 static void
-display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
+display_button(struct widget_data *di, struct dialog_data *dlg_data, int sel)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct color_pair *color;
 	int len = strlen(di->item->text);
 	int x = di->x + 2;
@@ -117,29 +117,29 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 
 	if (sel) {
 		set_cursor(term, x, di->y, 0);
-		set_window_ptr(dlg->win, di->x, di->y);
+		set_window_ptr(dlg_data->win, di->x, di->y);
 	}
 }
 
 static int
-mouse_button(struct widget_data *di, struct dialog_data *dlg, struct term_event *ev)
+mouse_button(struct widget_data *di, struct dialog_data *dlg_data, struct term_event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP || ev->y != di->y || ev->x < di->x
 	    || ev->x >= di->x + strlen(di->item->text) + 4)
 		return EVENT_NOT_PROCESSED;
 
-	display_dlg_item(dlg, &dlg->items[dlg->selected], 0);
-	dlg->selected = di - dlg->items;
-	display_dlg_item(dlg, di, 1);
+	display_dlg_item(dlg_data, &dlg_data->items[dlg_data->selected], 0);
+	dlg_data->selected = di - dlg_data->items;
+	display_dlg_item(dlg_data, di, 1);
 	if ((ev->b & BM_ACT) == B_UP && di->item->ops->select)
-		di->item->ops->select(di, dlg);
+		di->item->ops->select(di, dlg_data);
 	return EVENT_PROCESSED;
 }
 
 static void
-select_button(struct widget_data *di, struct dialog_data *dlg)
+select_button(struct widget_data *di, struct dialog_data *dlg_data)
 {
-	di->item->fn(dlg, di);
+	di->item->fn(dlg_data, di);
 }
 
 struct widget_ops button_ops = {

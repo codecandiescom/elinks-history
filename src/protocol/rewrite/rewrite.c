@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.10 2003/12/21 21:28:39 pasky Exp $ */
+/* $Id: rewrite.c,v 1.11 2003/12/21 21:41:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -300,22 +300,20 @@ goto_url_hook(va_list ap, void *data)
 	struct session *ses = va_arg(ap, struct session *);
 	unsigned char *uu = NULL;
 	unsigned char *arg = "";
+	unsigned char *argstart = *url + strcspn(*url, " :");
 
-	if (get_dumb_enable())
+	if (get_smart_enable() && *argstart) {
+		unsigned char bucket = *argstart;
+
+		*argstart = '\0';
+		uu = get_prefix(URI_REWRITE_SMART_TREE, *url);
+		*argstart = bucket;
+		arg = argstart + 1;
+	}
+
+	if (get_dumb_enable() && !uu && !*argstart)
 		uu = get_prefix(URI_REWRITE_DUMB_TREE, *url);
 
-	if (!uu && get_smart_enable()) {
-		unsigned char *argstart = *url + strcspn(*url, " :");
-
-		if (*argstart) {
-			unsigned char bucket = *argstart;
-
-			*argstart = '\0';
-			uu = get_prefix(URI_REWRITE_SMART_TREE, *url);
-			*argstart = bucket;
-			arg = argstart + 1;
-		}
-	}
 
 	if (uu) {
 		uu = substitute_url(uu, cur_loc(ses)->vs.url, arg);

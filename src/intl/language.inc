@@ -10526,7 +10526,7 @@ struct translation translation_ukrainian [] = {
   {T_CLEAR, "Очистити"},
   {T_ADD_BOOKMARK_LINK, "Додати посилання до закладок"},
   {T_HK_ADD_BOOKMARK_LINK, NULL},
-  {T_ACCEPT_LANGUAGE, NULL},
+  {T_ACCEPT_LANGUAGE, "Бажана мова (список розд╕лених комою ISO-код╕в)"},
   {0, NULL}
 };
 

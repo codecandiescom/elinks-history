@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.7 2004/01/18 20:51:10 jonas Exp $ */
+/* $Id: scanner.c,v 1.8 2004/01/18 21:04:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,7 +93,7 @@ scan_css_tokens(struct css_scanner *scanner)
 {
 	struct css_token *table = scanner->table;
 	int tokens = scanner->tokens;
-	int move_to_front = tokens - scanner->current;
+	int move_to_front = int_max(tokens - scanner->current, 0);
 	int current = move_to_front ? scanner->current : 0;
 	unsigned char *string = tokens > 0
 			      ? get_css_token_end(&table[tokens - 1])
@@ -108,7 +108,6 @@ scan_css_tokens(struct css_scanner *scanner)
 		int size = move_to_front * sizeof(struct css_token);
 
 		memmove(table, &table[current], size);
-		
 	}
 
 	/* Set all unused tokens to CSS_TOKEN_NONE */

@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.24 2002/12/07 20:05:58 pasky Exp $ */
+/* $Id: secsave.c,v 1.25 2003/06/04 17:05:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,6 +63,7 @@
 /* FIXME: locking system on files about to be rewritten ? */
 /* FIXME: Low risk race conditions about ssi->file_name. */
 
+enum secsave_errno_set secsave_errno = NONE;
 
 /* Open a file for writing in a secure way. It returns a pointer to a structure
  * secure_save_info on success, or NULL on failure. */
@@ -73,20 +74,30 @@ secure_open(unsigned char *file_name, mode_t mask)
 	struct stat st;
 	struct secure_save_info *ssi;
 
+	secsave_errno = NONE;
+
 	if ((get_opt_bool_tree(&cmdline_options, "no-connect")
 	     || get_opt_int_tree(&cmdline_options, "session-ring"))
-	    && !get_opt_bool_tree(&cmdline_options, "touch-files"))
+	    && !get_opt_bool_tree(&cmdline_options, "touch-files")) {
+		secsave_errno = DISABLED;
 		return NULL;
+	}
 
 	ssi = (struct secure_save_info *)
 		mem_calloc(1, sizeof(struct secure_save_info));
 
-	if (!ssi) goto end;
+	if (!ssi) {
+		secsave_errno = OUT_OF_MEM;
+		goto end;
+	}
 
 	ssi->secure_save = get_opt_int("secure_file_saving");
 
 	ssi->file_name = stracpy(file_name);
-	if (!ssi->file_name) goto free_f;
+	if (!ssi->file_name) {
+		secsave_errno = OUT_OF_MEM;
+		goto free_f;
+	}
 
 	/* Check properties of final file. */
 #ifdef FS_UNIX_SOFTLINKS
@@ -98,6 +109,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		if (errno != ENOENT) {
 			/* lstat() error. */
 			ssi->err = errno;
+			secsave_errno = OTHER;
 			goto free_file_name;
 		}
 	} else {
@@ -109,6 +121,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 			/* XXX: access() do not work with setuid programs. */
 			if (access(ssi->file_name, R_OK | W_OK) < 0) {
 				ssi->err = errno;
+				secsave_errno = OTHER;
 				goto free_file_name;
 			}
 #else
@@ -122,6 +135,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 				fclose(f1);
 			} else {
 				ssi->err = errno;
+				secsave_errno = OTHER;
 				goto free_file_name;
 			}
 #endif
@@ -149,6 +163,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 
 		ssi->fp = fdopen(fd, "w");
 		if (!ssi->fp) {
+			secsave_errno = OTHER;
 			ssi->err = errno;
 			mem_free(randname);
 			goto free_file_name;
@@ -159,6 +174,7 @@ secure_open(unsigned char *file_name, mode_t mask)
 		/* No need to create a temporary file here. */
 		ssi->fp = fopen(ssi->file_name, "w");
 		if (!ssi->fp) {
+			secsave_errno = OTHER;
 			ssi->err = errno;
 			goto free_file_name;
 		}
@@ -193,6 +209,7 @@ secure_close(struct secure_save_info *ssi)
 
 	if (fclose(ssi->fp) == EOF) {
 		ret = errno;
+		secsave_errno = OTHER;
 		goto free;
 	}
 	if (ssi->err) {
@@ -213,6 +230,7 @@ secure_close(struct secure_save_info *ssi)
 			 * more..).  */
 			if (rename(ssi->tmp_file_name, ssi->file_name) == -1) {
 				ret = errno;
+				secsave_errno = OTHER;
 			} else {
 				/* Return 0 if file is successfully written. */
 				ret = 0;
@@ -241,7 +259,10 @@ secure_fputs(struct secure_save_info *ssi, const char *s)
 	if (!ssi || !ssi->fp || ssi->err) return EOF;
 
 	ret = fputs(s, ssi->fp);
-	if (ret == EOF) ssi->err = errno;
+	if (ret == EOF) {
+		secsave_errno = OTHER;
+		ssi->err = errno;
+	}
 
 	return ret;
 }
@@ -257,7 +278,10 @@ secure_fputc(struct secure_save_info *ssi, int c)
 	if (!ssi || !ssi->fp || ssi->err) return EOF;
 
 	ret = fputc(c, ssi->fp);
-	if (ret == EOF) ssi->err = errno;
+	if (ret == EOF) {
+		ssi->err = errno;
+		secsave_errno = OTHER;
+	}
 
 	return ret;
 }

@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.78 2003/06/04 16:27:24 zas Exp $ */
+/* $Id: conf.c,v 1.79 2003/06/04 17:05:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -643,7 +643,7 @@ static int
 write_config_file(unsigned char *prefix, unsigned char *name,
 		  struct option *options, struct terminal *term)
 {
-	int ret = 2222; /* magic */
+	int ret = 0;
 	struct secure_save_info *ssi;
 	unsigned char *config_file;
 	unsigned char *cfg_str;
@@ -656,17 +656,22 @@ write_config_file(unsigned char *prefix, unsigned char *name,
 	if (!config_file) goto free_cfg_str;
 
 	ssi = secure_open(config_file, 0177);
-	if (!ssi) goto wr_config_error;
+	if (ssi) {
+		secure_fputs(ssi, cfg_str);
+		ret = secure_close(ssi);
+	}
 
-	secure_fputs(ssi, cfg_str);
-	ret = secure_close(ssi);
+	if (term && (secsave_errno || ret)) {
+		unsigned char *strerr = _("unknown error", term);
 
-	if (ret) {
-wr_config_error:
-		write_config_error(term, config_file,
-			           (term && ret == 2222)
-				   ? _("Secure open failed", term)
-				   : (unsigned char *) strerror(ret));
+		if (secsave_errno == DISABLED)
+			strerr = _("file saving disabled by option", term);
+		else if (secsave_errno == OUT_OF_MEM)
+			strerr = _("out of memory", term);
+		else if (secsave_errno == OTHER && ret)
+			strerr = (unsigned char *) strerror(ret);
+
+		write_config_error(term, config_file, strerr);
 	}
 
 	mem_free(config_file);

@@ -1,11 +1,20 @@
 /* Secure file saving handling */
-/* $Id: secsave.h,v 1.3 2002/05/17 15:42:00 pasky Exp $ */
+/* $Id: secsave.h,v 1.4 2003/06/04 17:05:43 zas Exp $ */
 
 #ifndef EL__UTIL_SECFILE_H
 #define EL__UTIL_SECFILE_H
 
 #include <stdio.h>
 #include <sys/types.h> /* mode_t */
+
+enum secsave_errno_set {
+	NONE = 0,
+	DISABLED = 1, /* secsave is disabled. */
+	OUT_OF_MEM = 2, /* memory allocation failure */
+	OTHER = 3, /* see err field in struct secure_save_info */
+};
+
+extern enum secsave_errno_set secsave_errno; /* internal secsave error number */
 
 struct secure_save_info {
 	FILE *fp; /* file stream pointer */

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.145 2004/01/04 16:20:44 pasky Exp $ */
+/* $Id: dialogs.c,v 1.146 2004/01/04 20:54:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,8 +304,6 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
 	add_dlg_text(dlg, name, AL_LEFT, 1);
-	if (range)
-
 	add_dlg_field(dlg, label, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 	dlg->widgets[dlg->widgets_size - 1].info.field.float_label = 1;
 

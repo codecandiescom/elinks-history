@@ -47,4 +47,6 @@ OS/2 - copy file links.exe somewhere to your path or create CMD file that runs
 WARNING: EMX has nasty limit of open files. Links will work badly or won't work
 	with default settings. Set variable EMXOPT=-h100 before you run links.
 
+$Id: INSTALL,v 1.5 2002/01/26 15:21:47 pasky Exp $
+
 vim: textwidth=80

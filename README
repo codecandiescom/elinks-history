@@ -18,4 +18,6 @@ http://pasky.ji.cz/elinks/. Please see SITES file for mirrors or other
 recommended sites. If you want even to install elinks on your computer, see
 INSTALL file for instructions.
 
+$Id: README,v 1.6 2002/01/26 15:21:47 pasky Exp $
+
 vim: textwidth=80

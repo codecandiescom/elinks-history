@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.64 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: interlink.c,v 1.65 2003/07/21 21:48:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,22 +99,19 @@ enum addr_type {
  * to free anything).
  * It returns 1 on success. */
 static int
-get_sun_path(unsigned char **sun_path, int *sun_path_len)
+get_sun_path(struct string *sun_path)
 {
-	assert(sun_path && sun_path_len);
+	assert(sun_path);
 	if_assert_failed return 0;
 
 	if (!elinks_home) return 0;
 
-	*sun_path = init_str();
-	if (!*sun_path) return 0;
+	if (!init_string(sun_path)) return 0;
 
-	*sun_path_len = 0;
-
-	add_to_str(sun_path, sun_path_len, elinks_home);
-	add_to_str(sun_path, sun_path_len, ELINKS_SOCK_NAME);
-	add_num_to_str(sun_path, sun_path_len,
-		       get_opt_int_tree(cmdline_options, "session-ring"));
+	add_to_string(sun_path, elinks_home);
+	add_to_string(sun_path, ELINKS_SOCK_NAME);
+	add_long_to_string(sun_path,
+			   get_opt_int_tree(cmdline_options, "session-ring"));
 
 	return 1;
 }
@@ -125,13 +122,12 @@ get_address(struct socket_info *info, enum addr_type type)
 {
 	struct sockaddr_un *addr = NULL;
 	int sun_path_freespace;
-	unsigned char *path;
-	int pathl;
+	struct string path;
 
 	assert(info);
 	if_assert_failed return -1;
 
-	if (!get_sun_path(&path, &pathl)) return -1;
+	if (!get_sun_path(&path)) return -1;
 
 	/* Linux defines that as:
 	 * #define UNIX_PATH_MAX   108
@@ -161,18 +157,18 @@ get_address(struct socket_info *info, enum addr_type type)
 	 * --Zas
 	 */
 
-	sun_path_freespace = sizeof(addr->sun_path) - (pathl + 1);
+	sun_path_freespace = sizeof(addr->sun_path) - (path.length + 1);
 	if (sun_path_freespace < 0) {
 		internal("Socket path name '%s' is too long: %d >= %d",
-			 path, pathl, sizeof(addr->sun_path));
+			 path.source, path.length, sizeof(addr->sun_path));
 		goto free_and_error;
 	}
 
 	addr = mem_calloc(1, sizeof(struct sockaddr_un));
 	if (!addr) goto free_and_error;
 
-	memcpy(addr->sun_path, path, pathl); /* ending '\0' is done by calloc() */
-	mem_free(path);
+	memcpy(addr->sun_path, path.source, path.length); /* ending '\0' is done by calloc() */
+	done_string(&path);
 
 	addr->sun_family = AF_UNIX;
 
@@ -187,7 +183,7 @@ get_address(struct socket_info *info, enum addr_type type)
 	return AF_UNIX;
 
 free_and_error:
-	mem_free(path);
+	done_string(&path);
 	if (addr) mem_free(addr);
 
 	return -1;

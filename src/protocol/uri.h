@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.129 2004/06/12 00:12:22 jonas Exp $ */
+/* $Id: uri.h,v 1.130 2004/06/12 00:14:10 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -252,9 +252,6 @@ unsigned char *join_urls(struct uri *base, unsigned char *relative);
  * If @slen < 0, then string length will be obtained by a strlen() call,
  * else @slen is used as @s length. */
 int end_with_known_tld(unsigned char *s, int slen);
-
-/* Returns the length of url, without post data. */
-int get_no_post_url_length(unsigned char *url);
 
 
 static inline int

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.29 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: dump.c,v 1.30 2002/12/05 22:35:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,7 +54,7 @@ dump_end(struct status *stat, void *p)
 		unsigned char *u, *p;
 
 		if (stat->state >= 0)
-			change_connection(stat, NULL, PRI_CANCEL);
+			change_connection(stat, NULL, PRI_CANCEL, 0);
 
 		u = join_urls(ce->url, ce->redirect);
 		if (!u) return;

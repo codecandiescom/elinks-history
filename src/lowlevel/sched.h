@@ -1,4 +1,4 @@
-/* $Id: sched.h,v 1.22 2002/11/19 11:00:35 zas Exp $ */
+/* $Id: sched.h,v 1.23 2002/12/05 22:35:08 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_SCHED_H
 #define EL__LOWLEVEL_SCHED_H
@@ -176,7 +176,7 @@ void retry_conn_with_state(struct connection *, int);
 
 int load_url(unsigned char *, unsigned char *, struct status *, int, enum cache_mode, int start);
 
-void change_connection(struct status *, struct status *, int);
+void change_connection(struct status *, struct status *, int, int);
 void detach_connection(struct status *, int);
 void abort_all_connections();
 void abort_background_connections();

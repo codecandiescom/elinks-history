@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.57 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: sched.c,v 1.58 2002/12/05 22:35:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1007,7 +1007,7 @@ load_url(unsigned char *url, unsigned char *prev_url,
 /* FIXME: one object in more connections */
 void
 change_connection(struct status *oldstat, struct status *newstat,
-		  int newpri)
+		  int newpri, int interrupt)
 {
 	struct connection *c;
 	int oldpri;
@@ -1054,7 +1054,7 @@ change_connection(struct status *oldstat, struct status *newstat,
 		newstat->ce = c->cache;
 	}
 
-	if (c->detached && !newstat)
+	if ((c->detached || interrupt) && !newstat)
 		abort_conn_with_state(c, S_INTERRUPTED);
 
 	sort_queue();

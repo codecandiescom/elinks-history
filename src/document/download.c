@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.53 2002/12/03 19:31:44 zas Exp $ */
+/* $Id: download.c,v 1.54 2002/12/05 22:35:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,7 +91,7 @@ abort_download(struct download *down)
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
 	if (down->stat.state >= 0)
-		change_connection(&down->stat, NULL, PRI_CANCEL);
+		change_connection(&down->stat, NULL, PRI_CANCEL, 1);
 	if (down->url) mem_free(down->url);
 
 	if (down->handle != -1) {
@@ -424,7 +424,7 @@ download_data(struct status *stat, struct download *down)
 		unsigned char *u;
 
 		if (stat->state >= 0)
-			change_connection(&down->stat, NULL, PRI_CANCEL);
+			change_connection(&down->stat, NULL, PRI_CANCEL, 0);
 
 		u = stracpy(ce->redirect);
 		if (!u) return;
@@ -841,7 +841,7 @@ continue_download(struct session *ses, unsigned char *file)
 
 	down->prog_flags = ses->tq_prog_flags;
 	add_to_list(downloads, down);
-	change_connection(&ses->tq, &down->stat, PRI_DOWNLOAD);
+	change_connection(&ses->tq, &down->stat, PRI_DOWNLOAD, 0);
 	tp_free(ses);
 	display_download(ses->term, down, ses);
 
@@ -875,7 +875,8 @@ tp_free(struct session *ses)
 void
 tp_cancel(struct session *ses)
 {
-	change_connection(&ses->tq, NULL, PRI_CANCEL);
+	/* XXX: Should we really abort? (1 vs 0 as the last param) --pasky */
+	change_connection(&ses->tq, NULL, PRI_CANCEL, 1);
 	tp_free(ses);
 }
 
@@ -925,7 +926,7 @@ tp_display(struct session *ses)
 	cur_loc(ses)->stat.data = ses;
 
 	if (ses->tq.state >= 0)
-		change_connection(&ses->tq, &cur_loc(ses)->stat, PRI_MAIN);
+		change_connection(&ses->tq, &cur_loc(ses)->stat, PRI_MAIN, 0);
 	else
 		cur_loc(ses)->stat.state = ses->tq.state;
 
@@ -1050,7 +1051,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 		internal("Type query to %s already in progress.", ses->tq_url);
 
 	ses->tq_url = stracpy(ses->loading_url);
-	change_connection(&ses->loading, *stat = &ses->tq, PRI_MAIN);
+	change_connection(&ses->loading, *stat = &ses->tq, PRI_MAIN, 0);
 
 	ses->tq_ce = ce;
 	ses->tq_ce->refcount++;

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.72 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: session.c,v 1.73 2002/12/05 22:35:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -335,7 +335,7 @@ abort_files_load(struct session *ses)
 		foreach(ftl, ses->more_files) {
 			if (ftl->stat.state >= 0 && ftl->req_sent) {
 				q = 1;
-				change_connection(&ftl->stat, NULL, PRI_CANCEL);
+				change_connection(&ftl->stat, NULL, PRI_CANCEL, 0);
 			}
 		}
 	} while (q);
@@ -663,7 +663,7 @@ b:
 	if (ses->wtd == WTD_RELOAD) ses_back(ses), ses_forward(ses);
 	if ((*stat)->state >= 0) {
 		*stat = &cur_loc(ses)->stat;
-		change_connection(&ses->loading, *stat, PRI_MAIN);
+		change_connection(&ses->loading, *stat, PRI_MAIN, 0);
 	} else {
 		cur_loc(ses)->stat.state = ses->loading.state;
 	}
@@ -954,7 +954,7 @@ request_additional_file(struct session *ses, unsigned char *url, int pri)
 		if (!strcmp(ftl->url, url)) {
 			if (ftl->pri > pri) {
 				ftl->pri = pri;
-				change_connection(&ftl->stat, &ftl->stat, pri);
+				change_connection(&ftl->stat, &ftl->stat, pri, 0);
 			}
 			return NULL;
 		}
@@ -991,14 +991,14 @@ request_additional_loading_file(struct session *ses, unsigned char *url,
 
 	ftl = request_additional_file(ses, url, pri);
 	if (!ftl) {
-		change_connection(stat, NULL, PRI_CANCEL);
+		change_connection(stat, NULL, PRI_CANCEL, 0);
 		return NULL;
 	}
 
 	ftl->req_sent = 1;
 	ftl->ce = stat->ce;
 
-	change_connection(stat, &ftl->stat, pri);
+	change_connection(stat, &ftl->stat, pri, 0);
 
 	return ftl;
 }
@@ -1221,7 +1221,7 @@ void
 abort_preloading(struct session *ses)
 {
 	if (ses->wtd) {
-		change_connection(&ses->loading, NULL, PRI_CANCEL);
+		change_connection(&ses->loading, NULL, PRI_CANCEL, 0);
 		free_wtd(ses);
 	}
 }
@@ -1233,7 +1233,7 @@ abort_loading(struct session *ses)
 
 	if (have_location(ses)) {
 		if (l->stat.state >= 0)
-			change_connection(&l->stat, NULL, PRI_CANCEL);
+			change_connection(&l->stat, NULL, PRI_CANCEL, 0);
 		abort_files_load(ses);
 	}
 	abort_preloading(ses);
@@ -1267,7 +1267,7 @@ destroy_session(struct session *ses)
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 	if (ses->tq_ce) ses->tq_ce->refcount--;
 	if (ses->tq_url) {
-		change_connection(&ses->tq, NULL, PRI_CANCEL);
+		change_connection(&ses->tq, NULL, PRI_CANCEL, 0);
 		mem_free(ses->tq_url);
 	}
 	if (ses->tq_goto_position) mem_free(ses->tq_goto_position);

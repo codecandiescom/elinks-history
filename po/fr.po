@@ -1156,7 +1156,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Cette valeur a changé depuis que vous avez sauver votre configuration."
+"Cette valeur a changé depuis que vous avez sauvé votre configuration."
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:212 src/config/dialogs.c:379
 msgid "Description"
@@ -7400,18 +7400,3 @@ msgstr "Erreur lors de la sauvegarde"
 #: src/viewer/text/view.c:1267
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid ""
-#~ "Allocated      : %ld bytes\n"
-#~ "Truly allocated: %ld bytes (x%0.2f)\n"
-#~ "Cache size     : %ld bytes\n"
-#~ msgstr ""
-#~ "Alloué         : %ld octets\n"
-#~ "Vraiment alloué: %ld octets (x%0.2f)\n"
-#~ "Taille du cache: %ld octets\n"
-
-#~ msgid "Memory info"
-#~ msgstr "État de la mémoire vive"
-
-#~ msgid "~Memory info"
-#~ msgstr "État de la ~mémoire vive"

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.306 2003/10/18 16:37:30 jonas Exp $ */
+/* $Id: renderer.c,v 1.307 2003/10/18 16:41:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -253,7 +253,7 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 	struct screen_char *template = get_frame_char(part, x + xl - 1, y, data);
 
 	assert(xl > 0);
-	if_assert_failed return NULL;
+	if_assert_failed return;
 
 	if (!template) return;
 

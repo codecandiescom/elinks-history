@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.170 2003/07/09 23:56:37 jonas Exp $ */
+/* $Id: http.c,v 1.171 2003/07/10 00:35:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -615,7 +615,7 @@ http_send_header(struct connection *conn)
 		add_to_str(&hdr, &l, "-\r\n");
 	}
 
-	host_data = find_auth(uri->protocol);
+	host_data = find_auth(uri);
 	if (host_data) {
 		add_to_str(&hdr, &l, "Authorization: Basic ");
 		add_to_str(&hdr, &l, host_data);

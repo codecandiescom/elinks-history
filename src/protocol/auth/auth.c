@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.17 2003/07/01 18:26:25 jonas Exp $ */
+/* $Id: auth.c,v 1.18 2003/07/10 00:35:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "dialogs/auth.h"
 #include "intl/gettext/libintl.h"
 #include "protocol/http/auth.h"
+#include "protocol/uri.h"
 #include "protocol/url.h"
 #include "sched/session.h"
 #include "util/base64.h"
@@ -197,13 +198,13 @@ end:
  * It returns NULL on failure, or a base 64 encoded user + pass suitable to
  * use in Authorization header. */
 unsigned char *
-find_auth(unsigned char *url)
+find_auth(struct uri *uri)
 {
 	struct http_auth_basic *entry = NULL;
 	unsigned char *uid, *ret = NULL;
-	unsigned char *newurl = get_auth_url(url);
-	unsigned char *user = get_user_name(url);
-	unsigned char *pass = get_pass(url);
+	unsigned char *newurl = get_auth_url(uri->protocol);
+	unsigned char *user = memacpy(uri->user, uri->userlen);
+	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
 
 	if (!newurl || !user || !pass) goto end;
 
@@ -217,7 +218,7 @@ again:
 		if ((entry && !entry->valid && entry->uid && entry->passwd
 		    && (strcmp(user, entry->uid) || strcmp(pass, entry->passwd)))
 		   || !entry) {
-			if (add_auth_entry(url, NULL) == 0) {
+			if (add_auth_entry(uri->protocol, NULL) == 0) {
 				/* An entry was re-created, we free user/pass
 				 * before retry to prevent infinite loop. */
 				if (user) {

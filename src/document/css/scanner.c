@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.106 2004/01/27 20:05:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.107 2004/01/27 23:51:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -209,6 +209,7 @@ static struct scanner_info css_scanner_info = {
 		(s)++;								\
 	}
 
+
 static inline void
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
@@ -401,6 +402,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 
 	token->type = type;
 	token->length = real_length > 0 ? real_length : string - token->string;
+	token->precedence = get_css_precedence(type);
 	scanner->position = string;
 }
 
@@ -543,7 +545,7 @@ get_css_token_debug(struct css_scanner *scanner)
 #endif
 
 struct css_token *
-skip_css_tokens(struct css_scanner *scanner, enum css_token_type skipto)
+skip_scanner_tokens(struct css_scanner *scanner, int skipto, int precedence)
 {
 	struct css_token *token = get_css_token(scanner);
 
@@ -551,7 +553,7 @@ skip_css_tokens(struct css_scanner *scanner, enum css_token_type skipto)
 	 * so we don't skip to long. */
 	while (token) {
 		if (token->type == skipto
-		    || !check_css_precedence(token->type, skipto))
+		    || token->precedence > precedence)
 			break;
 		token = get_next_css_token(scanner);
 	}

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.54 2004/01/27 20:05:48 jonas Exp $ */
+/* $Id: scanner.h,v 1.55 2004/01/27 23:51:08 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -88,12 +88,10 @@ enum css_token_type {
 /* Define if you want a talking scanner */
 /* #define CSS_SCANNER_DEBUG */
 
-/* Check whether it is safe to skip the char @c when looking for @skipto. */
-#define check_css_precedence(c, skipto)						\
-	!(((skipto) == ':' && ((c) == ';' || (c) == '{' || (c) == '}'))		\
-	  || ((skipto) == ')' && ((c) == ';' || (c) == '{' || (c) == '}'))	\
-	  || ((skipto) == ';' && ((c) == '{' || (c) == '}'))			\
-	  || ((skipto) == '{' && (c) == '}'))
+#define get_css_precedence(token_type) \
+	((token_type) == '}' ? (1 << 10) : \
+	 (token_type) == '{' ? (1 <<  9) : \
+	 (token_type) == ';' ? (1 <<  8) : 0)
 
 /* The {struct css_token} describes one CSS scanner state. There are two kinds
  * of tokens: char and non-char tokens. Char tokens contains only one char and
@@ -105,10 +103,20 @@ struct css_token {
 	/* The type the token */
 	enum css_token_type type;
 
+	/* Some precedence value */
+	int precedence;
+
 	/* The start of the token string and the token length */
 	unsigned char *string;
 	int length;
 };
+
+/* Check whether it is safe to skip the @token when looking for @skipto. */
+static inline int
+check_css_precedence(int type, int skipto)
+{
+	return get_css_precedence(type) <= get_css_precedence(skipto);
+}
 
 /* The naming of these two macros is a bit odd .. we compare often with
  * "static" strings (I don't have a better word) so the macro name should
@@ -197,6 +205,9 @@ get_next_css_token(struct css_scanner *scanner)
 /* Removes tokens from the scanner until it meets a token of the given type.
  * This token will then also be skipped. */
 struct css_token *
-skip_css_tokens(struct css_scanner *scanner, enum css_token_type type);
+skip_scanner_tokens(struct css_scanner *scanner, int skipto, int precedence);
+
+#define skip_css_tokens(scanner, type) \
+	skip_scanner_tokens(scanner, type, get_css_precedence(type))
 
 #endif

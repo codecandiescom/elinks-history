@@ -1,3 +1,304 @@
+Thu Jun 10 21:55:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	initial_session_info->uri_list replaced by URI pointer.  
+
+Thu Jun 10 21:49:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Use init_session() to open all URIs but the
+	first one.  
+
+Thu Jun 10 21:45:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/tab.c:
+
+	Reintroduce the eye-rolling init_session().  
+
+Thu Jun 10 18:44:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Also call handle_remote_session() when there
+	are no URIs. Fixes xfeDoCommand(openBrowser) command.  
+
+Thu Jun 10 18:18:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	handle_remote_session(): Doh. Fix logics.  
+
+Thu Jun 10 18:15:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, terminal/event.c:
+
+	Remove the remote_session_flags from initial_session_info.
+	decode_session_info() now does all the fun stuff.  
+
+Thu Jun 10 17:59:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Move remote handling up so it can be used in session info decoding.  
+
+Thu Jun 10 17:57:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	handle_remote_session(): Introduced. Note -remote is currently
+	broken.  
+
+Thu Jun 10 17:19:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	A little cleanup of remote handling.  
+
+Thu Jun 10 17:02:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Revert last patch. Again.  
+
+Thu Jun 10 16:59:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	decode_session_info(): Work on local uri_list variable.  
+
+Thu Jun 10 16:49:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, util/conv.c, util/conv.h:
+
+	decode_session_info(): Unify URI string parsing.  
+
+Thu Jun 10 16:06:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/tab.c:
+
+	Revert last patch.  
+
+Thu Jun 10 16:05:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/tab.c:
+
+	init_session(): Introduced. It is mostly just open_uri_in_new_tab().  
+
+Thu Jun 10 15:40:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Damn open in new window stuff needs to decode the URI string.  
+
+Thu Jun 10 15:37:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Use initial_session_info->uri_list (part three).  
+
+Thu Jun 10 15:30:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/tab.c:
+
+	Use initial_session_info->uri_list (part one). init_session_info()
+	now takes URI struct.  
+
+Thu Jun 10 15:27:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Use initial_session_info->uri_list (part one). Call get_hooked_uri()
+	in decode_session_info().  
+
+Thu Jun 10 15:21:01 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser/forms.c:
+
+	Comment out int num field in struct form, it is unused, though this
+	is weird.  
+
+Thu Jun 10 15:15:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/event.c:
+
+	decode_session_info(): Take term arg. Unused for now.  
+
+Thu Jun 10 14:54:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, task.c, task.h:
+
+	Dejavu, get_hooked_uri() now takes the lot of args (like CWD and
+	current URI) again.  
+
+Thu Jun 10 14:27:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/tab.c:
+
+	Make initial_sesssion_info->base_session a session struct pointer.  
+
+Thu Jun 10 14:19:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h:
+
+	Move struct initial_session_info declaration to C file.  
+
+Thu Jun 10 14:12:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	process_session_info(): 'unblock' last part.  
+
+Thu Jun 10 14:10:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	create_session(): Take the initial_session_info and call
+	process_initial_session().  
+
+Thu Jun 10 13:51:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	create_session() -> setup_first_session(), create_basic_session() ->
+	create_session(). Basicly what the comment says.  
+
+Thu Jun 10 13:46:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Move create_basic_session().  
+
+Thu Jun 10 13:35:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: session.c, session.h:
+
+	create_basic_session(): Make static.  
+
+Thu Jun 10 13:23:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, terminal/tab.c:
+
+	open_uri_in_new_tab(): Use init_session_info().  
+
+Thu Jun 10 13:16:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	init_session_info(): Introduced.  
+
+Thu Jun 10 12:21:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/: link.c, link.h, parse.c:
+
+	Add support for <embed> tags. Like <object> support it just uses
+	html_img() and html_iframe(). Requested by Stephen Stocker.  
+
+Thu Jun 10 12:10:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, mime.h:
+
+	get_extension_content_type(): Make public. It will be used for
+	<embed> tag support.  
+
+Thu Jun 10 12:09:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_type(): Cleanup the debug code.  
+
+Thu Jun 10 12:00:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	Fix the ctype debuggin'.  
+
+Thu Jun 10 11:57:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_type(): Do the get_content_filename() checking in the
+	cached->head branch.  
+
+Thu Jun 10 11:55:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/mime.c:
+
+	get_content_filename(): Take optional cache entry arg to speed up
+	things.  
+
+Thu Jun 10 11:51:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: mime.c, mime.h:
+
+	get_content_filename(): Make static and move up.  
+
+Thu Jun 10 11:21:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/imgmap.html:
+
+	Link to test/ documents.  
+
+Thu Jun 10 01:26:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	init_file_download(): Add error handling for last patch.  
+
+Thu Jun 10 01:18:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	init_file_download(): The URI is passed using ses->download_uri that
+	originates from both vs->uri and link->where_img so better ensure
+	that no fragments are in it.  
+
+Thu Jun 10 01:12:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/task.c:
+
+	do_move(): Assertion about base URI should compare using URI_BASE.  
+
+Thu Jun 10 01:10:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Oops. Some missing LINK_MAP stuff. ;) 
+
+Thu Jun 10 00:02:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	parse_uri(): Fix POST_CHAR bug.  
+
+Wed Jun  9 22:54:23 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Minor tidy up, label nb -> next_boundary.  
+
+Wed Jun  9 22:42:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	@subm -> @list, @nx -> @next, @ch -> @changed.  
+
+Wed Jun  9 22:36:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/form.c:
+
+	Move code from get_succesful_controls() to new
+	sort_submitted_values().  
+
+Wed Jun  9 22:12:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.h, viewer/text/link.c, viewer/text/link.h,
+	viewer/text/view.c:
+
+	enum frame_event_status introduced as return value for frame_ev()
+	and send_to_frame().  
+
 Wed Jun  9 21:42:19 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: sched/action.c, viewer/text/form.c, viewer/text/view.c,

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.110 2004/09/29 20:01:44 pasky Exp $ */
+/* $Id: renderer.c,v 1.111 2004/09/30 21:08:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -79,6 +79,11 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 				INTERNAL("add_snippets(): doc_snippets shorter than queued_snippets!");
 				return;
 			}
+#if 0
+			DBG("Comparing snippets\n%.*s\n###### vs #####\n%.*s\n #####",
+			    iterator->string.length, iterator->string.source,
+			    doc_current->string.length, doc_current->string.source);
+#endif
 			assert(!strlcmp(iterator->string.source,
 			                iterator->string.length,
 			                doc_current->string.source,
@@ -96,6 +101,11 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 	     doc_current = doc_current->next) {
 		add_to_string_list(queued_snippets, doc_current->string.source,
 		                   doc_current->string.length);
+#if 0
+		DBG("Adding snippet\n%.*s\n #####",
+		    doc_current->string.length,
+		    doc_current->string.source);
+#endif
 	}
 }
 
@@ -174,7 +184,11 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	assert(vs && doc_view && options);
 	if_assert_failed return;
 
-	/* DBG("Rendering %s on doc_view %p [%s] while attaching it to %p", struri(vs->uri), doc_view, name, vs); */
+#if 0
+	DBG("(Re%d)Rendering %s on doc_view %p [%s] while attaching it to %p",
+	    options->gradual_rerendering, struri(vs->uri),
+	    doc_view, doc_view->name, vs);
+#endif
 
 	name = doc_view->name;
 	doc_view->name = NULL;

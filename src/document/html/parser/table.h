@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.11 2004/07/01 14:26:31 jonas Exp $ */
+/* $Id: table.h,v 1.12 2004/07/08 12:44:33 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -48,7 +48,6 @@ struct table_cell {
 	int col, row;
 	int align;
 	int valign;
-	int group;
 	int colspan;
 	int rowspan;
 	int min_width;
@@ -59,6 +58,7 @@ struct table_cell {
 	unsigned int is_used:1;
 	unsigned int is_spanned:1;
 	unsigned int is_header:1;
+	unsigned int is_group:1;
 };
 
 struct table_column {

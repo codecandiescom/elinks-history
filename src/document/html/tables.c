@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.355 2004/07/08 11:30:22 jonas Exp $ */
+/* $Id: tables.c,v 1.356 2004/07/08 12:44:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,7 @@ get_hline_width(struct table *table, int row)
 		int col;
 
 		for (col = 0; col < table->cols; col++)
-			if (CELL(table, col, row)->group) {
+			if (CELL(table, col, row)->is_group) {
 				if (table->cellspacing || table->vcellpadding)
 					return table->cellspacing;
 				return -1;
@@ -964,7 +964,7 @@ table_row_has_group(struct table *table, int row)
 	int col;
 
 	for (col = 0; col < table->cols; col++)
-		if (CELL(table, col, row)->group)
+		if (CELL(table, col, row)->is_group)
 			return 1;
 
 	return 0;

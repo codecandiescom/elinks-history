@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.20 2004/07/01 19:54:43 pasky Exp $ */
+/* $Id: table.c,v 1.21 2004/07/08 12:44:32 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -698,7 +698,7 @@ see:
 	cell->is_header = (toupper(t_name[1]) == 'H');
 	if (cell->is_header) cell->align = ALIGN_CENTER;
 
-	if (group == 1) cell->group = 1;
+	if (group == 1) cell->is_group = 1;
 
 	if (col < table->columns_count) {
 		if (table->columns[col].align != ALIGN_TR)

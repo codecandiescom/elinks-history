@@ -1,3 +1,15 @@
+Thu Sep  9 10:13:13 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/intl/charsets.c:
+
+	Fix for bug 494 - System charsets.  
+
+Thu Sep  9 10:05:55 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Translation update.  
+
 Tue Sep  7 10:47:35 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/http/http.c:

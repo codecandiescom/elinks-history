@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: error.c,v 1.18 2003/12/01 06:23:47 witekfl Exp $ */
+/* $Id: error.c,v 1.19 2004/01/31 00:28:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,6 +52,7 @@ struct s_msg_dsc {
 	{S_TIMEOUT,		N_("Receive timeout")},
 	{S_RESTART,		N_("Request must be restarted")},
 	{S_STATE,		N_("Can't get socket state")},
+	{S_LOCAL_ONLY,		N_("Only local connections are permitted")},
 
 	{S_HTTP_ERROR,		N_("Bad HTTP response")},
 	{S_HTTP_100,		N_("HTTP 100 (\?\?\?)")},

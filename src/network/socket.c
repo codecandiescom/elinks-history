@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.52 2003/12/07 11:17:41 pasky Exp $ */
+/* $Id: socket.c,v 1.53 2004/01/31 00:28:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 
 #include "elinks.h"
 
+#include "config/options.h"
 #include "lowlevel/connect.h"
 #include "lowlevel/dns.h"
 #include "lowlevel/select.h"
@@ -266,7 +267,9 @@ dns_found(void *data, int state)
 	struct conn_info *c_i = conn->conn_info;
 	int i;
 	int trno = c_i->triedno;
-
+	int not_local_count = trno;
+	int only_local = get_opt_int_tree(cmdline_options, "localhost");
+	
 	if (state < 0) {
 		abort_conn_with_state(conn, S_NO_DNS);
 		return;
@@ -283,8 +286,22 @@ dns_found(void *data, int state)
 #else
 		struct sockaddr_in addr = *((struct sockaddr_in *) &c_i->addr[i]);
 #endif
+		int local = 0;
+
+#ifdef IPV6
+		if (addr.sin6_family == AF_INET6)
+			local = IN6_IS_ADDR_LOOPBACK(&(((struct sockaddr_in6 *)&addr)->sin6_addr));
+		else
+#endif
+			local = (ntohl(((struct sockaddr_in *)&addr)->sin_addr.s_addr) >> 24) == IN_LOOPBACKNET;
 
 		c_i->triedno++;
+		
+		/* This forbids connections to anything but local, if option is set. */
+		if (only_local && !local) continue;
+		
+		/* Count external attempts. */
+		not_local_count += !local;
 
 #ifdef IPV6
 		sock = socket(addr.sin6_family, SOCK_STREAM, IPPROTO_TCP);
@@ -334,6 +351,11 @@ dns_found(void *data, int state)
 
 	if (i >= c_i->addrno) {
 		/* Tried everything, but it didn't help :(. */
+
+		if (only_local && not_local_count >= c_i->triedno - 1) {
+			abort_conn_with_state(conn, S_LOCAL_ONLY);
+			return;
+		}
 
 		/* We set new state only if we already tried something new. */
 		if (trno != c_i->triedno) set_connection_state(conn, -errno);

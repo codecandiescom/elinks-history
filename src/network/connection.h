@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.48 2004/01/25 09:33:30 jonas Exp $ */
+/* $Id: connection.h,v 1.49 2004/01/31 00:28:37 zas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -57,6 +57,7 @@ enum connection_state {
 	S_RESTART		= -10011,
 	S_STATE			= -10012,
 	S_WAIT_REDIR		= -10013,
+	S_LOCAL_ONLY		= -10014,
 
 	S_HTTP_ERROR		= -10100,
 	S_HTTP_100		= -10101,

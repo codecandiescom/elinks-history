@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.88 2004/04/07 19:34:51 jonas Exp $ */
+/* $Id: uri.h,v 1.89 2004/04/07 22:10:56 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -171,7 +171,10 @@ void decode_uri_string(unsigned char *);
 unsigned char *get_extension_from_uri(struct uri *uri);
 
 
-unsigned char *join_urls(unsigned char *, unsigned char *);
+/* Takes a @base and a @relative URI and combines them to one absolute URI.
+ * Example: if @base is http://elinks.or.cz/ and @relative is #news
+ *	    the outcome would be http://elinks.or.cz/#news */
+unsigned char *join_urls(unsigned char *base, unsigned char *relative);
 
 /* Return position if end of string @s matches a known tld or -1 if not.
  * If @slen < 0, then string length will be obtained by a strlen() call,

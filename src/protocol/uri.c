@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.174 2004/04/07 21:15:09 jonas Exp $ */
+/* $Id: uri.c,v 1.175 2004/04/07 22:10:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -63,7 +63,7 @@ get_protocol_length(const unsigned char *url)
 		|| *end == '+' || *end == '-' || *end == '.')
 		end++;
 
-	/* No need to check @end == @url */
+	/* Also return 0 if there's no protocol name (@end == @url). */
 	return (*end == ':') ? end - url : 0;
 }
 
@@ -349,7 +349,8 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	unsigned char *src, *dest, *path;
 	int lo;
 
-	/* We need to get real URI */
+	/* We need to get the real (proxied) URI but lowercase relevant URI
+	 * parts along the way. */
 	do {
 		if (parse && parse_uri(uri, parse_string) != URI_ERRNO_OK)
 			return uristring;
@@ -420,7 +421,7 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 			continue;
 		}
 
-		/* We don't want access memory past the NUL char. */
+		/* We don't want to access memory past the NUL char. */
 		*dest = *src++;
 		if (*dest) dest++;
 	}
@@ -604,6 +605,8 @@ prx:
 }
 
 
+/* Tries to figure out what protocol @newurl might be specifying by checking if
+ * it exists as a file locally or by checking parts of the host name. */
 static inline enum protocol
 find_uri_protocol(unsigned char *newurl)
 {
@@ -665,6 +668,8 @@ find_uri_protocol(unsigned char *newurl)
 	return PROTOCOL_FILE;
 }
 
+/* Returns an URI string that can be used internally. Adding protocol prefix,
+ * missing slashes etc. */
 static unsigned char *
 translate_url(unsigned char *url, unsigned char *cwd)
 {
@@ -680,6 +685,8 @@ translate_url(unsigned char *url, unsigned char *cwd)
 	if (!newurl) return NULL;
 
 parse_uri:
+	/* Yay a goto loop. If we get some URI parse error and try to
+	 * fix it we go back to here and try again. */
 	/* Ordinary parse */
 	uri_errno = parse_uri(&uri, newurl);
 
@@ -718,6 +725,7 @@ parse_uri:
 		goto parse_uri;
 
 	case URI_ERRNO_NO_HOST_SLASH:
+		assertm(uri.host, "uri.host not set after no host slash error");
 		insert_in_string(&newurl, uri.host - newurl + uri.hostlen, "/", 1);
 		goto parse_uri;
 
@@ -751,6 +759,7 @@ parse_uri:
 	case URI_ERRNO_IPV6_SECURITY:
 	case URI_ERRNO_INVALID_PORT:
 	case URI_ERRNO_INVALID_PORT_RANGE:
+		/* None of these can be handled properly. */
 		break;
 	}
 

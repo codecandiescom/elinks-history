@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.215 2005/03/30 10:09:03 zas Exp $ */
+/* $Id: dialogs.c,v 1.216 2005/03/30 10:11:32 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -221,7 +221,7 @@ focus_bookmark(struct widget_data *box_widget_data, struct listbox_data *box,
 }
 
 static void
-do_add_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char *url)
+do_add_bookmark(struct dialog_data *dlg_data, unsigned char *title, unsigned char *url)
 {
 	struct bookmark *bm = NULL;
 	struct bookmark *selected = NULL;
@@ -241,7 +241,7 @@ do_add_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char
 		}
 	}
 
-	bm = add_bookmark(bm, 1, name, url);
+	bm = add_bookmark(bm, 1, title, url);
 	if (!bm) return;
 
 	move_bookmark_after_selected(bm, selected);
@@ -263,9 +263,9 @@ do_add_bookmark(struct dialog_data *dlg_data, unsigned char *name, unsigned char
 /**** ADD FOLDER *****************************************************/
 
 static void
-do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
+do_add_folder(struct dialog_data *dlg_data, unsigned char *foldername)
 {
-	do_add_bookmark(dlg_data, name, NULL);
+	do_add_bookmark(dlg_data, foldername, NULL);
 }
 
 static widget_handler_status_T
@@ -324,12 +324,12 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 	/* Follow the bookmark */
 	if (box->sel) {
 		struct bookmark *bm = (struct bookmark *) box->sel->udata;
-		const unsigned char *name = bm->title;
+		const unsigned char *title = bm->title;
 		const unsigned char *url = bm->url;
 
 		object_lock(bm);
 		do_edit_dialog(dlg_data->win->term, 1, N_("Edit bookmark"),
-			       name, url,
+			       title, url,
 			       (struct session *) dlg_data->dlg->udata, dlg_data,
 			       bookmark_edit_done, bookmark_edit_cancel,
 			       (void *) bm, EDIT_DLG_ADD);

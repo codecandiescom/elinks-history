@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.18 2003/09/29 22:28:10 jonas Exp $ */
+/* $Id: color.h,v 1.19 2003/09/29 23:07:08 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -23,6 +23,7 @@
 enum color_type {
 	COLOR_DEFAULT = 0,
 	COLOR_LINK,
+	COLOR_TYPES,
 };
 
 enum color_mode {

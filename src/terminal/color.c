@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.40 2003/09/29 22:28:10 jonas Exp $ */
+/* $Id: color.c,v 1.41 2003/09/29 23:07:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,7 +41,7 @@ color_distance(struct rgb *c1, struct rgb *c2)
 
 /* Locates the nearest terminal color. */
 static inline unsigned char
-find_nearest_color(color_t color, int level)
+get_color(color_t color, struct rgb *palette, int level)
 {
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
 	struct rgb_cache_entry *rgb_cache;
@@ -74,7 +74,7 @@ find_nearest_color(color_t color, int level)
 		assertm(level, "find_nearest_color() called with @level = 0");
 
 		for (i = 0; i < level; i++) {
-			int dist = color_distance(&rgb, &palette16[i]);
+			int dist = color_distance(&rgb, &palette[i]);
 
 			if (dist < min_dist) {
 				min_dist = dist;
@@ -92,6 +92,35 @@ find_nearest_color(color_t color, int level)
 
 #undef HASH_RGB
 #undef RGB_HASH_SIZE
+
+struct color_mode_info {
+	struct rgb *palette;
+
+	struct {
+		int bg;
+		int fg;
+	} levels[COLOR_TYPES];
+};
+
+static struct color_mode_info color_modes[] = {
+	/* COLOR_MODE_NONE */
+	{
+		palette16,
+		{
+			/* COLOR_DEFAULT */     { 8, 16 },
+			/* COLOR_LINK */        { 8, 8 },
+		}
+	},
+
+	/* COLOR_MODE_16 */
+	{
+		palette16,
+		{
+			/* COLOR_DEFAULT */     { 8, 16 },
+			/* COLOR_LINK */        { 8,  8 },
+		}
+	},
+};
 
 /* Colors values used in the foreground color table:
  *
@@ -155,16 +184,6 @@ extern int dump_pos;
 #define CMPCODE(c) (((c) << 1 | (c) >> 2) & TERM_COLOR_MASK)
 #define use_inverse(bg, fg) CMPCODE(fg & TERM_COLOR_MASK) < CMPCODE(bg)
 
-struct color_level {
-	int bglevel;
-	int fglevel;
-};
-
-static struct color_level levels[] = {
-	/* COLOR_DEFAULT */	{ 8, 16 },
-	/* COLOR_LINK */	{ 8,  8 },
-};
-
 static inline void
 set_term_color16(struct screen_char *schar, unsigned char fg, unsigned char bg)
 {
@@ -200,19 +219,20 @@ set_term_color16(struct screen_char *schar, unsigned char fg, unsigned char bg)
 
 void
 set_term_color(struct screen_char *schar, struct color_pair *pair,
-	       enum color_type type, enum color_mode mode)
+	       enum color_type type, enum color_mode color_mode)
 {
-	register unsigned char fg;
-	register unsigned char bg;
+	struct color_mode_info *mode = &color_modes[color_mode];
+	unsigned char fg;
+	unsigned char bg;
 
-	assert(schar);
+	assert(schar && 0 <= type && type < COLOR_TYPES);
 
 	if (dump_pos) return;
 
-	fg = find_nearest_color(pair->foreground, levels[type].fglevel);
-	bg = find_nearest_color(pair->background, levels[type].bglevel);
+	fg = get_color(pair->foreground, mode->palette, mode->levels[type].fg);
+	bg = get_color(pair->background, mode->palette, mode->levels[type].bg);
 
-	switch (mode) {
+	switch (color_mode) {
 	case COLOR_MODE_MONO:
 	case COLOR_MODE_16:
 		set_term_color16(schar, fg, bg);

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.74 2003/10/23 09:09:51 pasky Exp $ */
+/* $Id: options.h,v 1.75 2003/10/23 09:18:31 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -131,7 +131,7 @@ struct change_hook_info {
 	change_hook change_hook;
 };
 
-extern void register_change_hooks(struct change_hook_info *change_hooks)
+extern void register_change_hooks(struct change_hook_info *change_hooks);
 
 
 extern struct list_head *init_options_tree(void);

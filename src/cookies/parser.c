@@ -1,11 +1,9 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.14 2004/06/27 02:26:03 jonas Exp $ */
+/* $Id: parser.c,v 1.15 2004/06/27 18:34:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_COOKIES
 
 #include <stdlib.h>
 
@@ -92,5 +90,3 @@ parse_cookie_str(struct cookie_str *cstr, unsigned char *str)
 
 	return cstr;
 }
-
-#endif /* CONFIG_COOKIES */

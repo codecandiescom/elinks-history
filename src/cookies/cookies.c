@@ -1,11 +1,9 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.154 2004/06/26 19:17:20 pasky Exp $ */
+/* $Id: cookies.c,v 1.155 2004/06/27 18:34:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#ifdef CONFIG_COOKIES
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -854,5 +852,3 @@ struct module cookies_module = struct_module(
 	/* init: */		init_cookies,
 	/* done: */		done_cookies
 );
-
-#endif /* CONFIG_COOKIES */

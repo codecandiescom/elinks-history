@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2002/03/17 17:39:17 pasky Exp $
+## $Id: Makefile.am,v 1.8 2002/03/17 18:15:10 pasky Exp $
 
 SUBDIRS = http
 

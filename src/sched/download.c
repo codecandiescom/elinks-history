@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.93 2003/09/01 13:06:22 zas Exp $ */
+/* $Id: download.c,v 1.94 2003/09/12 10:40:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,56 +423,23 @@ found:
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
-
 static void
-download_data(struct download *download, struct file_download *file_download)
+set_file_download_win_handler(struct file_download *file_download)
 {
-	struct cache_entry *ce;
-	struct fragment *frag;
+	if (file_download->win) {
+		struct event ev = { EV_REDRAW,
+				    file_download->win->term->x,
+				    file_download->win->term->y,
+				    0 };
 
-	if (download->state >= S_WAIT && download->state < S_TRANS)
-		goto end_store;
-
-	ce = download->ce;
-	if (!ce) goto end_store;
-
-	if (ce->last_modified)
-		file_download->remotetime = parse_http_date(ce->last_modified);
-
-	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
-		unsigned char *u;
-
-		if (download->state >= 0)
-			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
-
-		u = join_urls(file_download->url, ce->redirect);
-		if (!u) break;
-
-		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")
-		    && !ce->redirect_get) {
-			unsigned char *p = strchr(file_download->url, POST_CHAR);
-
-			if (p) add_to_strn(&u, p);
-		}
-
-		mem_free(file_download->url);
-
-		file_download->url = u;
-		file_download->download.state = S_WAIT_REDIR;
-
-		if (file_download->win) {
-			struct event ev = { EV_REDRAW, 0, 0, 0 };
-
-			ev.x = file_download->win->term->x;
-			ev.y = file_download->win->term->y;
-			file_download->win->handler(file_download->win, &ev, 0);
-		}
-
-		load_url(file_download->url, ce->url, &file_download->download, PRI_DOWNLOAD,
-			 NC_CACHE, download->prg ? download->prg->start : 0);
-
-		return;
+		file_download->win->handler(file_download->win, &ev, 0);
 	}
+}
+
+int
+write_cache_entry_to_file(struct cache_entry *ce, struct file_download *file_download)
+{
+	struct fragment *frag;
 
 	if (file_download->download.prg && file_download->download.prg->seek) {
 		file_download->last_pos = file_download->download.prg->seek;
@@ -484,56 +451,113 @@ download_data(struct download *download, struct file_download *file_download)
 	}
 
 	foreach (frag, ce->frag) {
-		/* TODO: Separate function? --pasky */
 		int remain = file_download->last_pos - frag->offset;
 
 		if (remain >= 0 && frag->length > remain) {
+			int *h = &file_download->handle;
 			int w;
 
 #ifdef USE_OPEN_PREALLOC
-			if (!file_download->last_pos && (!file_download->stat.prg
-						|| file_download->stat.prg->size > 0)) {
-				close(file_download->handle);
-				file_download->handle = open_prealloc(file_download->file, O_CREAT|O_WRONLY|O_TRUNC, 0666,
-							     file_download->stat.prg ? file_download->stat.prg->size : ce->length);
-				if (file_download->handle == -1)
-					goto write_error;
-				set_bin(file_download->handle);
+			if (!file_download->last_pos
+			    && (!file_download->stat.prg
+				|| file_download->stat.prg->size > 0)) {
+				close(*h);
+				*h = open_prealloc(file_download->file,
+						   O_CREAT|O_WRONLY|O_TRUNC,
+						   0666,
+						   file_download->stat.prg
+						   ? file_download->stat.prg->size
+						   : ce->length);
+				if (*h == -1) goto write_error;
+				set_bin(*h);
 			}
 #endif
 
-			w = write(file_download->handle, frag->data + remain,
-				  frag->length - remain);
-			if (w == -1) {
-				int saved_errno;
+			w = write(*h, frag->data + remain, frag->length - remain);
+			if (w == -1) goto write_error;
 
-write_error:
-				saved_errno = errno; /* Saved in case of ... --Zas */
-
-				detach_connection(download, file_download->last_pos);
-				if (!list_empty(sessions)) {
-					unsigned char *msg = stracpy(file_download->file);
-					unsigned char *emsg = stracpy((unsigned char *) strerror(saved_errno));
-
-					if (msg && emsg) {
-						struct terminal *term = get_download_ses(file_download)->tab->term;
-
-						msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
-							N_("Download error"), AL_CENTER,
-							msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
-							NULL, 1,
-							N_("Cancel"), NULL, B_ENTER | B_ESC);
-					} else {
-						if (msg) mem_free(msg);
-						if (emsg) mem_free(emsg);
-					}
-				}
-
-				abort_download(file_download, 0);
-				return;
-			}
 			file_download->last_pos += w;
 		}
+	}
+
+	return 1;
+
+write_error:
+	{
+		int saved_errno = errno; /* Saved in case of ... --Zas */
+		unsigned char *msg, *emsg;
+
+		if (list_empty(sessions)) return 0;
+
+		msg = stracpy(file_download->file);
+		emsg = stracpy((unsigned char *) strerror(saved_errno));
+
+		if (msg && emsg) {
+			struct terminal *term = get_download_ses(file_download)->tab->term;
+
+			msg_box(term, getml(msg, emsg, NULL), MSGBOX_FREE_TEXT,
+				N_("Download error"), AL_CENTER,
+				msg_text(term, N_("Could not create file %s: %s"), msg, emsg),
+				NULL, 1,
+				N_("Cancel"), NULL, B_ENTER | B_ESC);
+		} else {
+			if (msg) mem_free(msg);
+			if (emsg) mem_free(emsg);
+		}
+	}
+
+	return 0;
+}
+
+static void
+download_data(struct download *download, struct file_download *file_download)
+{
+	struct cache_entry *ce;
+	int broken_302_redirect;
+
+	if (download->state >= S_WAIT && download->state < S_TRANS)
+		goto end_store;
+
+	ce = download->ce;
+	if (!ce) goto end_store;
+
+	if (ce->last_modified)
+		file_download->remotetime = parse_http_date(ce->last_modified);
+
+	broken_302_redirect = get_opt_int("protocol.http.bugs.broken_302_redirect");
+
+	while (ce->redirect && file_download->redirect_cnt++ < MAX_REDIRECTS) {
+		unsigned char *u;
+
+		if (download->state >= 0)
+			change_connection(&file_download->download, NULL, PRI_CANCEL, 0);
+
+		u = join_urls(file_download->url, ce->redirect);
+		if (!u) break;
+
+		if (!broken_302_redirect && !ce->redirect_get) {
+			unsigned char *p = strchr(file_download->url, POST_CHAR);
+
+			if (p) add_to_strn(&u, p);
+		}
+
+		mem_free(file_download->url);
+
+		file_download->url = u;
+		file_download->download.state = S_WAIT_REDIR;
+
+		set_file_download_win_handler(file_download);
+
+		load_url(file_download->url, ce->url, &file_download->download, PRI_DOWNLOAD,
+			 NC_CACHE, download->prg ? download->prg->start : 0);
+
+		return;
+	}
+
+	if (!write_cache_entry_to_file(ce, file_download)) {
+		detach_connection(download, file_download->last_pos);
+		abort_download(file_download, 0);
+		return;
 	}
 
 	detach_connection(download, file_download->last_pos);
@@ -601,13 +625,7 @@ end_store:
 		return;
 	}
 
-	if (file_download->win) {
-		struct event ev = { EV_REDRAW, 0, 0, 0 };
-
-		ev.x = file_download->win->term->x;
-		ev.y = file_download->win->term->y;
-		file_download->win->handler(file_download->win, &ev, 0);
-	}
+	set_file_download_win_handler(file_download);
 }
 
 

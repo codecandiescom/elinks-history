@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.7 2004/01/18 16:24:45 jonas Exp $ */
+/* $Id: scanner.h,v 1.8 2004/01/18 16:25:44 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -35,9 +35,10 @@ struct css_token {
 	int length;
 };
 
-/* At best it should be big enough to contain properties with space separated
+/* The number of tokens in the scanners token table:
+ * At best it should be big enough to contain properties with space separated
  * values and function calls with up to 3 variables like rgb(). At worst it
- * should be no less than 2 so there is room for peeking at the next token in
+ * should be no less than 2 in order to be able to peek at the next token in
  * the scanner. */
 #define CSS_SCANNER_TOKENS 10
 

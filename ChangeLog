@@ -1,3 +1,98 @@
+Tue Jul 13 21:22:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	Simplify code for bookmark root checking by not going through the
+	listbox_items.  
+
+Tue Jul 13 19:53:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Move continue_download_do() before continue_download() and drop its
+	prototype.  
+
+Tue Jul 13 19:51:41 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Move common_download_do() before common_download() and drop its
+	prototype.  
+
+Tue Jul 13 19:50:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Move create_download_file_do() before create_download_file() and
+	drop its prototype.  
+
+Tue Jul 13 19:49:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Make delete_option_do() static.  
+
+Tue Jul 13 19:44:57 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/download.c:
+
+	Make write_cache_entry_to_file() static.  
+
+Tue Jul 13 16:54:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/: internal.h, parser.c, parser.h, renderer.c,
+	tables.c, tables.h, parser/forms.c, parser/forms.h, parser/parse.c,
+	parser/parse.h:
+
+	Use struct part *part instead of void *f.  
+
+Tue Jul 13 16:28:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	It should be ok to just use cached documents.  
+
+Tue Jul 13 16:24:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Compilation fix. Jonas, please verify if 1 is ok or wrong.  
+
+Tue Jul 13 15:09:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/status.c, document/renderer.c, document/renderer.h,
+	sched/action.c, viewer/text/draw.c, viewer/text/draw.h:
+
+	Make draw_formatted() and no caching support introduced in 'Make
+	render_document_frames() always rerender ...' less aggressive and by
+	tristating @rerender arg to draw_formatted(). 2 now means no caching
+	and is only used for ACT_MAIN_RERENDER action.  
+
+Tue Jul 13 14:48:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: draw.c, draw.h:
+
+	Make draw_doc() static.  
+
+Tue Jul 13 10:31:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	render_html_document(): tidy up and more comments.  
+
+Tue Jul 13 10:12:31 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Jul 13 08:42:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: protocol/http/http.c, viewer/text/form.c:
+
+	Comments about special handling of LF char by http_send_header()
+	were added. Thanks to Jonas.  
+
 Mon Jul 12 20:55:27 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/form.c:

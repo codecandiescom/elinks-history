@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.89 2003/11/11 17:26:24 pasky Exp $ */
+/* $Id: cache.c,v 1.90 2003/11/14 18:30:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,8 @@ find_in_cache(unsigned char *url, struct cache_entry **cep)
 	url = extract_proxy(url);
 
 	foreach (ce, cache) {
-		if (strcmp(ce->url, url)) continue;
+		assert(struri(ce->uri) && url);
+		if (strcmp(struri(ce->uri), url)) continue;
 
 		/* Move it on the top of the list. */
 		del_from_list(ce);
@@ -124,8 +125,9 @@ get_cache_entry(unsigned char *url, struct cache_entry **cep)
 	ce = mem_calloc(1, sizeof(struct cache_entry));
 	if (!ce) return -1;
 
-	ce->url = stracpy(url);
-	if (!ce->url) {
+	url = stracpy(url);
+	if (!url || !parse_uri(&ce->uri, url)) {
+		if (url) mem_free(url);
 		mem_free(ce);
 		return -1;
 	}
@@ -454,7 +456,7 @@ delete_cache_entry(struct cache_entry *ce)
 	delete_entry_content(ce);
 	del_from_list(ce);
 
-	if (ce->url) mem_free(ce->url);
+	if (struri(ce->uri)) mem_free(struri(ce->uri));
 	if (ce->head) mem_free(ce->head);
 	if (ce->last_modified) mem_free(ce->last_modified);
 	if (ce->redirect) mem_free(ce->redirect);

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.56 2003/11/14 12:38:08 zas Exp $ */
+/* $Id: dump.c,v 1.57 2003/11/14 18:30:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 
 	/* No need to add a byte for the \0 to the result of strlen():
 	 * struct view_state has an unsigned char url[1]. -- Miciah */
-	vs = mem_alloc(sizeof(struct view_state) + strlen(ce->url));
+	vs = mem_alloc(sizeof(struct view_state) + strlen(struri(ce->uri)));
 	if (!vs) return 1;
 
 	memset(vs, 0, sizeof(struct view_state));
@@ -121,7 +121,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.plain = 0;
 	o.frames = 0;
 
-	init_vs(vs, ce->url);
+	init_vs(vs, struri(ce->uri));
 	render_document(vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
 	detach_formatted(&formatted);
@@ -144,17 +144,17 @@ dump_end(struct download *status, void *p)
 		if (status->state >= 0)
 			change_connection(status, NULL, PRI_CANCEL, 0);
 
-		u = join_urls(ce->url, ce->redirect);
+		u = join_urls(struri(ce->uri), ce->redirect);
 		if (!u) return;
 
 		if (!ce->redirect_get
 		    && !get_opt_int("protocol.http.bugs.broken_302_redirect")) {
-			unsigned char *pc = post_data_start(ce->url);
+			unsigned char *pc = ce->uri.post;
 
 			if (pc) add_to_strn(&u, pc);
 		}
 
-		load_url(u, ce->url, status, PRI_MAIN, 0, -1);
+		load_url(u, struri(ce->uri), status, PRI_MAIN, 0, -1);
 		mem_free(u);
 		return;
 	}

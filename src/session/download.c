@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.166 2003/11/14 12:29:23 zas Exp $ */
+/* $Id: download.c,v 1.167 2003/11/14 18:30:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -619,7 +619,7 @@ download_data(struct download *download, struct file_download *file_download)
 
 		set_file_download_win_handler(file_download);
 
-		load_url(file_download->url, ce->url, &file_download->download,
+		load_url(file_download->url, struri(ce->uri), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->prg ? download->prg->start : 0);
 
@@ -1300,7 +1300,7 @@ int
 ses_chktype(struct session *ses, struct download **download, struct cache_entry *ce)
 {
 	struct mime_handler *handler;
-	unsigned char *ctype = get_content_type(ce->head, ce->url);
+	unsigned char *ctype = get_content_type(ce->head, struri(ce->uri));
 	int plaintext = 1;
 	int xwin, i;
 

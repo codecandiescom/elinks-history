@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.75 2003/11/14 11:47:00 zas Exp $ */
+/* $Id: info.c,v 1.76 2003/11/14 18:30:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 #endif
 			/* FIXME: What to do with long urls ? they wrap for now
 			 * but if one is very long then no other is displayed. */
-			add_bytes_to_string(&info, ce->url, get_no_post_url_length(ce->url));
+			add_uri_to_string(&info, &ce->uri, ~URI_POST);
 
 #ifdef DEBUG
 			/* size */

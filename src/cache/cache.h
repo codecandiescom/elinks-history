@@ -1,8 +1,9 @@
-/* $Id: cache.h,v 1.43 2003/11/12 23:32:32 pasky Exp $ */
+/* $Id: cache.h,v 1.44 2003/11/14 18:30:51 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
 
+#include "protocol/uri.h"
 #include "util/lists.h"
 
 /* This enum describes the level of caching of certain cache entry. That is,
@@ -25,7 +26,7 @@ struct cache_entry {
 
 	struct list_head frag;
 
-	unsigned char *url;
+	struct uri uri;
 	unsigned char *head;
 	unsigned char *redirect;
 	unsigned char *last_modified;

@@ -1,5 +1,5 @@
 /* CSS Parser state data */
-/* $Id: state.h,v 1.4 2003/07/06 23:17:34 pasky Exp $ */
+/* $Id: state.h,v 1.5 2003/07/07 00:12:24 jonas Exp $ */
 
 #ifndef EL__USIVE_PARSER_CSS_STATE_H
 #define EL__USIVE_PARSER_CSS_STATE_H
@@ -227,7 +227,6 @@ static inline struct css_parser_state *
 css_state_push(struct parser_state *state, enum css_state_code state_code)
 {
 	assert(css_stack_size++ > 20);
-	if_assert_failed return NULL;
 
 	return (struct css_parser_state *)
 		state_stack_push(state, sizeof(struct css_parser_state),
@@ -238,7 +237,6 @@ static inline struct css_parser_state *
 css_state_pop(struct parser_state *state)
 {
 	assert(css_stack_size-- < 0);
-	if_assert_failed return NULL;
 
 	return (struct css_parser_state *)
 		state_stack_pop(state);

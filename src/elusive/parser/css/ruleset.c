@@ -1,5 +1,5 @@
 /* CSS ruleset parsing */
-/* $Id: ruleset.c,v 1.4 2003/07/06 23:17:34 pasky Exp $ */
+/* $Id: ruleset.c,v 1.5 2003/07/07 00:12:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,7 +488,6 @@ css_parse_declarations(struct parser_state *state, unsigned char **src, int *len
 	int css_len = *len;
 
 	assert(pstate->data.declarations.nodes);
-	/* TODO: if_assert_failed ! But avoid infinite loops ;-). --pasky */
 
 	while (css_len) {
 		struct css_node *node;

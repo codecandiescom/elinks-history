@@ -1,5 +1,5 @@
 /* Parser CSS backend */
-/* $Id: parser.c,v 1.5 2003/07/06 23:17:34 pasky Exp $ */
+/* $Id: parser.c,v 1.6 2003/07/07 00:12:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,7 +167,6 @@ parse_css(struct parser_state *state, unsigned char **src, int *len)
 		print_state(state, *src, *len);
 #endif
 		assert(pstate->state < CSS_STATE_CODES);
-		if_assert_failed return;
 
 		if (css_parsers[pstate->state](state, src, len) == PSTATE_SUSPEND) {
 			return;

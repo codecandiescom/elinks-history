@@ -1,4 +1,4 @@
-/* $Id: snprintf.h,v 1.8 2003/06/17 01:16:25 jonas Exp $ */
+/* $Id: snprintf.h,v 1.9 2003/06/17 11:09:48 pasky Exp $ */
 
 #ifndef EL__UTIL_SNPRINTF_H
 #define EL__UTIL_SNPRINTF_H
@@ -35,7 +35,7 @@
 int elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args);
 #endif
 
-#if !defined(HAVE_SNPRINTF)
+#if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 #undef snprintf
 #define snprintf elinks_snprintf
 int elinks_snprintf(char *str, size_t count, const char *fmt, ...);

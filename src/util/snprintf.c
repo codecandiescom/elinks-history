@@ -1,5 +1,5 @@
 /* Own portable snprintf() implementation */
-/* $Id: snprintf.c,v 1.18 2003/06/08 10:49:29 zas Exp $ */
+/* $Id: snprintf.c,v 1.19 2003/06/17 11:09:48 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -806,7 +806,7 @@ elinks_vsnprintf(char *str, size_t count, const char *fmt, va_list args)
  *
  * Now it is elinks_snprintf() ;-). --pasky
  */
-#if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_SNPRINTF)
+#if !defined(HAVE_SNPRINTF) || !defined(HAVE_C99_VSNPRINTF)
 int
 elinks_snprintf(char *str, size_t count, const char *fmt, ...)
 {

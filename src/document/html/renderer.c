@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.304 2003/10/18 16:28:34 jonas Exp $ */
+/* $Id: renderer.c,v 1.305 2003/10/18 16:33:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,12 +212,14 @@ clear_hchars(struct part *part, int x, int y, int xl)
 
 /* xset_hchar() and xset_vchars() are used for rendering table frames. */
 
-
+/* TODO: Merge parts with get_format_screen_char(). --jonas */
 static inline struct screen_char *
 get_frame_char(struct part *part, int x, int y, unsigned char data)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
 	struct screen_char *template;
+	static enum color_flags color_flags = 0;
+	static enum color_mode color_mode;
 
 	assert(part && part->document && x >= 0 && y >= 0);
 	if_assert_failed return NULL;
@@ -232,8 +234,16 @@ get_frame_char(struct part *part, int x, int y, unsigned char data)
 	template->data = data;
 	template->attr = SCREEN_ATTR_FRAME;
 
-	/* TODO: We need to acquire color flags from the document options. */
-	set_term_color(template, &colors, 0, part->document->opt.color_mode);
+	color_mode = part->document->opt.color_mode;
+
+	if (!part->document->opt.allow_dark_on_black)
+		color_flags |= COLOR_INCREASE_CONTRAST;
+
+	if (part->document->opt.ensure_contrast)
+		color_flags |= COLOR_ENSURE_CONTRAST;
+
+	set_term_color(template, &colors, color_flags, color_mode);
+
 	return template;
 }
 

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.64 2003/10/22 19:57:32 jonas Exp $ */
+/* $Id: opttypes.c,v 1.65 2003/10/22 19:59:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -290,10 +290,7 @@ str_wr(struct option *o, struct string *s)
 static void
 str_dup(struct option *opt, struct option *template)
 {
-	unsigned char *new = mem_alloc(MAX_STR_LEN);
-
-	if (new) safe_strncpy(new, template->value.string, MAX_STR_LEN);
-	opt->value.string = new;
+	opt->value.string = memacpy(template->value.string, MAX_STR_LEN - 1);
 }
 
 

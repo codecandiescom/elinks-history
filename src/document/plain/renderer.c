@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.139 2004/08/19 07:27:09 miciah Exp $ */
+/* $Id: renderer.c,v 1.140 2004/08/19 07:29:02 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,11 +297,9 @@ add_document_line(struct plain_renderer *renderer,
 						  * swapping two
 						  * underscores */
 			{
-				unsigned char saved_char = prev_char;
-
 				/* x^H_ becomes _^Hx */
 				line[line_pos - 1] = next_char;
-				line[line_pos + 1] = saved_char;
+				line[line_pos + 1] = prev_char;
 
 				/* Go back and reparse the swapped characters */
 				line_pos -= 2;

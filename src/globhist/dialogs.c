@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.95 2003/11/26 21:39:21 jonas Exp $ */
+/* $Id: dialogs.c,v 1.96 2003/11/26 23:49:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,6 +90,7 @@ static struct listbox_ops gh_listbox_ops = {
 	get_globhist_item_info,
 	can_delete_globhist_item,
 	delete_globhist_item,
+	NULL,
 };
 
 /* Searching: */

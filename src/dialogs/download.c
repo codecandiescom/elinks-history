@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.2 2003/11/26 04:43:52 jonas Exp $ */
+/* $Id: download.c,v 1.3 2003/11/26 23:49:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -358,6 +358,31 @@ delete_file_download(struct listbox_item *item, int last)
 	abort_download(file_download, 1);
 }
 
+static void
+draw_file_download(struct listbox_item *item, struct listbox_context *context,
+		   int x, int y, int width)
+{
+	struct file_download *file_download = item->udata;
+	unsigned char *stylename;
+	struct color_pair *color;
+	unsigned char *text = file_download->url;
+	int length = strlen(text);
+	int trim = 0;
+
+	stylename = (item == context->box->sel) ? "menu.selected"
+		  : ((item->marked)	        ? "menu.marked"
+					        : "menu.normal");
+
+	color = get_bfu_color(context->term, stylename);
+
+	if (length > width) {
+		trim = 1;
+		length = width - 3;
+	}
+
+	draw_text(context->term, x, y, text, length, 0, color);
+	if (trim) draw_text(context->term, x + length, y, "...", 3, 0, color);
+}
 
 static struct listbox_ops downloads_listbox_ops = {
 	lock_file_download,
@@ -366,6 +391,7 @@ static struct listbox_ops downloads_listbox_ops = {
 	get_file_download_info,
 	can_delete_file_download,
 	delete_file_download,
+	draw_file_download,
 };
 
 

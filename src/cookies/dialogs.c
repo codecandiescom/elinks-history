@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.24 2003/11/26 21:39:21 jonas Exp $ */
+/* $Id: dialogs.c,v 1.25 2003/11/26 23:49:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,6 +115,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	get_cookie_info,
 	can_delete_cookie,
 	delete_cookie,
+	NULL,
 };
 
 static int

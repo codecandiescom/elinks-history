@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.132 2003/11/26 22:27:39 pasky Exp $ */
+/* $Id: dialogs.c,v 1.133 2003/11/26 23:49:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -141,6 +141,7 @@ static struct listbox_ops options_listbox_ops = {
 	get_option_info,
 	can_delete_option,
 	delete_option_item,
+	NULL,
 };
 
 /* Button handlers */

@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.122 2003/11/26 22:35:28 jonas Exp $ */
+/* $Id: listbox.c,v 1.123 2003/11/26 23:49:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -394,8 +394,16 @@ display_listbox_item(struct listbox_item *item, void *data_, int *offset)
 		}
 	}
 
-	draw_text(data->term, data->widget_data->x + depth * 5, y,
-		  text, len, 0, color);
+	if (data->box->ops->draw) {
+		int x = data->widget_data->x + depth * 5;
+		int width = data->widget_data->w - depth * 5;
+
+		data->box->ops->draw(item, data, x, y, width);
+	} else {
+		draw_text(data->term, data->widget_data->x + depth * 5, y,
+			  text, len, 0, color);
+	}
+
 
 	if (item == data->box->sel) {
 		int x = data->widget_data->x;

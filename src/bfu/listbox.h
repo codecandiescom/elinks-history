@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.54 2003/11/26 22:55:59 jonas Exp $ */
+/* $Id: listbox.h,v 1.55 2003/11/26 23:49:45 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -71,6 +71,12 @@ struct listbox_ops {
 	/* Delete the listbox item object and its data. @last is non zero when
 	 * either deleting only one item or when deleting the last item. */
 	void (*delete)(struct listbox_item *, int last);
+
+	/* If defined it means that the it will control all drawing of the
+	 * listbox item text and what might else be possible on the screen on
+	 * line @y from @x and @width chars onwards. */
+	void (*draw)(struct listbox_item *, struct listbox_context *,
+		     int x, int y, int width);
 };
 
 /* Stores display information about a box. Kept in cdata. */

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.587 2004/12/13 06:15:55 miciah Exp $ */
+/* $Id: session.c,v 1.588 2004/12/13 18:46:54 miciah Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -480,18 +480,19 @@ maybe_pre_format_html(struct cache_entry *cached, struct session *ses)
 static int
 check_incomplete_redirects(struct cache_entry *cached)
 {
-	struct cache_entry *old_cached = cached;
-
-	do {
+	while (cached) {
 		if (!cached->redirect) {
 			/* XXX: This is not quite true, but does that difference
 			 * matter here? */
 			return cached->incomplete;
 		}
 
-		cached = find_in_cache(cached->redirect);
+		/* Let's not loop forever when a page redirects to itself. */
+		if (compare_uri(cached->uri, cached->redirect, URI_BASE))
+			break;
 
-	} while (cached != old_cached);
+		cached = find_in_cache(cached->redirect);
+	}
 
 	return 0;
 }

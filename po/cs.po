@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2004-06-21 19:27+0200\n"
-"PO-Revision-Date: 2004-06-23 22:24+0200\n"
+"PO-Revision-Date: 2004-06-23 22:32+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3928,9 +3928,8 @@ msgstr ""
 "prázdná, pou¾ije se místo toho adresa v promìnné prostøedí $WWW_HOME."
 
 #: src/config/options.inc:1308
-#, fuzzy
 msgid "Date format"
-msgstr "Formát souboru"
+msgstr "Formát datumu"
 
 #: src/config/options.inc:1310
 msgid "Date format to use in dialogs. See strftime(3)."
@@ -4502,14 +4501,12 @@ msgid "H~eader info"
 msgstr "In~formace o hlavièce"
 
 #: src/dialogs/menu.c:373
-#, fuzzy
 msgid "Rel~oad document"
-msgstr "®ádný dokument"
+msgstr "Obnovit do~kument"
 
 #: src/dialogs/menu.c:374
-#, fuzzy
 msgid "~Rerender document"
-msgstr "Ulo¾it zformátovaný ~dokument"
+msgstr "Pø~ekreslit dokument"
 
 #: src/dialogs/menu.c:385
 msgid "~ELinks homepage"
@@ -4604,9 +4601,8 @@ msgid "~Form history"
 msgstr "~Formuláøová pamì»"
 
 #: src/dialogs/menu.c:443
-#, fuzzy
 msgid "~Authentication"
-msgstr "HTTP Autentikace"
+msgstr "HTTP ~Autentikace"
 
 #: src/dialogs/menu.c:457
 msgid "~File"
@@ -4786,14 +4782,12 @@ msgid "Cascading Style Sheets"
 msgstr ""
 
 #: src/document/css/css.c:31
-#, fuzzy
 msgid "Options concerning how to use CSS for styling documents."
-msgstr "Nastavení obsluhy odkazù na jiné dokumenty."
+msgstr "Nastavení pou¾ívání CSS pøi stylizaci dokumentù."
 
 #: src/document/css/css.c:33
-#, fuzzy
 msgid "Enable CSS"
-msgstr "Zapnout"
+msgstr "Zapnout CSS"
 
 #: src/document/css/css.c:35
 msgid "Enable adding of CSS style info to documents."
@@ -4801,7 +4795,7 @@ msgstr ""
 
 #: src/document/css/css.c:37
 msgid "Import external style sheets"
-msgstr ""
+msgstr "Importovat externí tabulky stylù"
 
 #: src/document/css/css.c:39
 msgid ""
@@ -4811,9 +4805,8 @@ msgid ""
 msgstr ""
 
 #: src/document/css/css.c:43
-#, fuzzy
 msgid "Default style sheet"
-msgstr "Výchozí nastavení barev"
+msgstr "Výchozí tabulka stylù"
 
 #: src/document/css/css.c:45
 msgid ""
@@ -5096,11 +5089,11 @@ msgid "Ukrainian"
 msgstr "Ukrajin¹tina"
 
 #: src/lowlevel/home.c:121
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Commandline options -config-dir set to %s, but could not create directory %s."
 msgstr ""
-"Parametr -confdir byl nastaven na %s, ale nemù¾u bohu¾el vytvoøit adresáø %s."
+"Parametr -config-dir byl nastaven na %s, ale nemù¾u bohu¾el vytvoøit adresáø %s."
 
 #: src/lowlevel/home.c:126
 #, c-format
@@ -5311,9 +5304,9 @@ msgid "Delete extension"
 msgstr "Smazat pøíponu"
 
 #: src/mime/dialogs.c:72
-#, fuzzy, c-format
+#, c-format
 msgid "Delete extension %s -> %s?"
-msgstr "Smazat pøíponu %s?"
+msgstr "Smazat pøíponu %s -> %s?"
 
 #: src/mime/dialogs.c:128
 msgid "Extension"
@@ -5433,19 +5426,16 @@ msgid "Realm"
 msgstr ""
 
 #: src/protocol/auth/dialogs.c:143
-#, fuzzy
 msgid "State"
-msgstr "Datum"
+msgstr "Stav"
 
 #: src/protocol/auth/dialogs.c:144
-#, fuzzy
 msgid "valid"
-msgstr "neplatný"
+msgstr "platný"
 
 #: src/protocol/auth/dialogs.c:193
-#, fuzzy
 msgid "Authentication manager"
-msgstr "HTTP Autentikace"
+msgstr "Správce HTTP Autentikace"
 
 #: src/protocol/http/codes.c:106
 #, c-format
@@ -5467,9 +5457,8 @@ msgstr ""
 
 #. name:
 #: src/protocol/protocol.c:176
-#, fuzzy
 msgid "Protocol"
-msgstr "Protokoly"
+msgstr "Protokol"
 
 #: src/protocol/rewrite/rewrite.c:45
 msgid "URI rewriting"
@@ -6175,14 +6164,13 @@ msgid "Submit form and open in new ~window"
 msgstr "Poslat formuláø a otevøít v ~novém oknì"
 
 #: src/viewer/text/link.c:887
-#, fuzzy
 msgid "Submit form and open in new ~tab"
-msgstr "Poslat formuláø a otevøít v ~novém oknì"
+msgstr "Poslat formuláø a otevøít v novém ~tabu"
 
 #: src/viewer/text/link.c:890
 #, fuzzy
 msgid "Submit form and open in new tab in ~background"
-msgstr "Poslat formuláø a otevøít v ~novém oknì"
+msgstr "Poslat formuláø a otevøít v novém tabu na ~pozadí"
 
 #: src/viewer/text/link.c:895
 msgid "Submit form and ~download"
@@ -6271,14 +6259,13 @@ msgid "You can do this only on the master terminal"
 msgstr "Tohle mù¾e¹ jen na øídícím terminálu"
 
 #: src/viewer/text/view.c:251
-#, fuzzy
 msgid "Missing fragment"
-msgstr "Rámeèek menu"
+msgstr "Chybící fragment"
 
 #: src/viewer/text/view.c:252
 #, c-format
 msgid "The requested fragment \"#%s\" doesn't exist."
-msgstr ""
+msgstr "Vy¾ádaný fragment \"#%s\" neexistuje."
 
 #: src/viewer/text/view.c:952
 msgid "Go to link"

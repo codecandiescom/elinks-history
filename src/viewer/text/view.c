@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.138 2003/07/02 22:59:38 pasky Exp $ */
+/* $Id: view.c,v 1.139 2003/07/02 23:03:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -318,7 +318,7 @@ put:
 }
 
 static int
-_area_cursor(struct form_control *frm, struct form_state *fs)
+area_cursor(struct form_control *frm, struct form_state *fs)
 {
 	struct line_info *ln;
 	int q = 0;
@@ -394,7 +394,7 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 			} else if (link->type == L_AREA) {
 				struct form_state *fs = find_form_state(scr, link->form);
 
-				if (fs) q = _area_cursor(link->form, fs);
+				if (fs) q = area_cursor(link->form, fs);
 				/*else internal("link has no form control");*/
 			}
 
@@ -679,7 +679,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			break;
 		case FC_TEXTAREA:
 			if (!l->n) break;
-			_area_cursor(frm, fs);
+			area_cursor(frm, fs);
 			lnx = format_text(fs->value, frm->cols, !!frm->wrap);
 			if (!lnx) break;
 			ln = lnx;

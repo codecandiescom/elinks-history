@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.182 2003/07/28 08:35:46 zas Exp $ */
+/* $Id: parser.c,v 1.183 2003/07/28 08:48:03 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2895,8 +2895,8 @@ process_head(unsigned char *head)
 			unsigned char *saved_url = url;
 
 			html_focusable(NULL);
-			url = join_urls(format.href_base, url);
-			put_link_line("Refresh: ", url, url, d_opt->framename);
+			url = join_urls(format.href_base, saved_url);
+			put_link_line("Refresh: ", saved_url, url, d_opt->framename);
 			mem_free(url);
 			mem_free(saved_url);
 		}

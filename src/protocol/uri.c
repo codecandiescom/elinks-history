@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.64 2003/11/15 14:43:56 pasky Exp $ */
+/* $Id: uri.c,v 1.65 2003/11/26 20:35:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -721,7 +721,7 @@ http:				prefix = "http://";
 }
 
 unsigned char *
-extract_position(unsigned char *uri)
+extract_fragment(unsigned char *uri)
 {
 	unsigned char *fragment, *frag_start, *post_start;
 	size_t frag_len;

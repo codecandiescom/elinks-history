@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.250 2003/11/24 16:35:01 fabio Exp $ */
+/* $Id: session.c,v 1.251 2003/11/26 20:35:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -876,7 +876,7 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 
 	url = stracpy(uurl);
 	if (!url) return;
-	pos = extract_position(url);
+	pos = extract_fragment(url);
 
 	/* strlen(url) without + 1 since vs have already reserved one byte. */
 	frame = mem_alloc(sizeof(struct frame) + strlen(url));
@@ -1599,7 +1599,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		return;
 	}
 
-	pos = extract_position(u);
+	pos = extract_fragment(u);
 
 	if (ses->task == task) {
 		if (!strcmp(ses->loading_url, u)) {

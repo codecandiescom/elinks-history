@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.6 2003/06/21 13:01:10 pasky Exp $ */
+/* $Id: codes.c,v 1.7 2003/06/21 13:01:36 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -93,7 +93,7 @@ unsigned char *
 http_error_document(int code)
 {
 	unsigned char *str;
-	unsigned char *codestr = http_code_to_string(info->error_code);
+	unsigned char *codestr = http_code_to_string(code);
 
 	if (!codestr) codestr = "Unknown error";
 
@@ -106,7 +106,7 @@ http_error_document(int code)
 "  <h1 align=\"left\">HTTP error %03d: %s</h1>\n"
 " </body>\n"
 "</html>\n",
-			info->error_code, info->error_code, codestr);
+			code, code, codestr);
 
 	return str;
 }

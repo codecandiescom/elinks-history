@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.534 2004/07/26 17:15:10 zas Exp $ */
+/* $Id: session.c,v 1.535 2004/07/26 17:17:31 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -300,7 +300,8 @@ request_frame(struct session *ses, unsigned char *name,
 			}
 		}
 
-		goto found;
+		request_additional_file(ses, name, frame->vs.uri, PRI_FRAME);
+		return;
 	}
 
 	frame = mem_calloc(1, sizeof(struct frame));
@@ -316,7 +317,6 @@ request_frame(struct session *ses, unsigned char *name,
 
 	add_to_list(loc->frames, frame);
 
-found:
 	request_additional_file(ses, name, frame->vs.uri, PRI_FRAME);
 }
 

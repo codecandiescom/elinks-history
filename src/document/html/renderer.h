@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.42 2003/10/11 10:49:18 jonas Exp $ */
+/* $Id: renderer.h,v 1.43 2003/10/18 16:55:52 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -131,8 +131,8 @@ struct part {
 int expand_line(struct part *, int, int);
 int expand_lines(struct part *, int);
 
-void xset_hchars(struct part *, int, int, int, unsigned char data);
-void xset_vchars(struct part *, int, int, int, unsigned char data);
+void draw_frame_hchars(struct part *, int, int, int, unsigned char data);
+void draw_frame_vchars(struct part *, int, int, int, unsigned char data);
 
 void free_table_cache(void);
 

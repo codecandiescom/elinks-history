@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.308 2003/10/18 16:48:53 jonas Exp $ */
+/* $Id: renderer.c,v 1.309 2003/10/18 16:55:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -210,8 +210,6 @@ clear_hchars(struct part *part, int x, int y, int xl)
 	}
 }
 
-/* xset_hchar() and xset_vchars() are used for rendering table frames. */
-
 /* TODO: Merge parts with get_format_screen_char(). --jonas */
 /* Allocates the required chars on the given line and returns the char at
  * position (x, y) ready to be used as a template char.  */
@@ -250,7 +248,7 @@ get_frame_char(struct part *part, int x, int y, unsigned char data)
 }
 
 void
-xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
+draw_frame_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 {
 	struct screen_char *template = get_frame_char(part, x + xl - 1, y, data);
 
@@ -266,7 +264,7 @@ xset_hchars(struct part *part, int x, int y, int xl, unsigned char data)
 }
 
 void
-xset_vchars(struct part *part, int x, int y, int yl, unsigned char data)
+draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 {
 	struct screen_char *template = get_frame_char(part, x, y, data);
 

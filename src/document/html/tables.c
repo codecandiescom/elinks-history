@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.90 2003/10/17 12:26:21 zas Exp $ */
+/* $Id: tables.c,v 1.91 2003/10/18 16:55:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1472,7 +1472,7 @@ draw_frame_point(struct table *table, signed char *frame[2], int x, int y,
 	    +  9 * int_max(left,   0)
 	    + 27 * int_max(bottom, 0);
 
-	xset_hchars(table->p, x, y, 1, border_chars[pos]);
+	draw_frame_hchars(table->p, x, y, 1, border_chars[pos]);
 }
 
 static inline void
@@ -1487,7 +1487,7 @@ draw_frame_hline(struct table *table, signed char *frame[2], int x, int y,
 
  	if (pos < 0 || table->w_c[i] <= 0) return;
 
- 	xset_hchars(table->p, x, y, table->w_c[i], hltable[pos]);
+ 	draw_frame_hchars(table->p, x, y, table->w_c[i], hltable[pos]);
 }
 
 static inline void
@@ -1502,7 +1502,7 @@ draw_frame_vline(struct table *table, signed char *frame[2], int x, int y,
 
  	if (pos < 0 || table->r_heights[j] <= 0) return;
 
- 	xset_vchars(table->p, x, y, table->r_heights[j], vltable[pos]);
+ 	draw_frame_vchars(table->p, x, y, table->r_heights[j], vltable[pos]);
 }
 
 static void

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.86 2004/01/11 18:18:42 pasky Exp $ */
+/* $Id: info.c,v 1.87 2004/01/14 17:10:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,7 +64,7 @@ push_toggle_keys_display_button(void *data)
 void
 menu_keys(struct terminal *term, void *d, struct session *ses)
 {
-	enum keyact actions[KEYACTS] = {
+	enum action actions[KEYACTS] = {
 		ACT_MENU,
 		ACT_QUIT,
 		ACT_DOWN,
@@ -102,7 +102,7 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 	info->toggle = (int) d;
 
 	if (info->toggle) {
-		enum keyact action;
+		enum action action;
 		enum keymap map;
 
 		for (action = 0; action < KEYACTS - 1; action++) {
@@ -110,12 +110,12 @@ menu_keys(struct terminal *term, void *d, struct session *ses)
 		}
 
 		for (map = 0; map < KM_MAX; map++) {
-			add_keyactions_to_string(&keys, actions, map, term);
+			add_actions_to_string(&keys, actions, map, term);
 			if (map + 1 < KM_MAX)
 				add_to_string(&keys, "\n\n");
 		}
 	} else {
-		add_keyactions_to_string(&keys, actions, KM_MAIN, term);
+		add_actions_to_string(&keys, actions, KM_MAIN, term);
 	}
 
 	msg_box(term, getml(info, NULL), MSGBOX_FREE_TEXT | MSGBOX_SCROLLABLE,

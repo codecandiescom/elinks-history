@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.179 2004/01/13 15:05:32 zas Exp $ */
+/* $Id: menu.c,v 1.180 2004/01/14 17:10:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,7 +131,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	/* We save these values due to delete_window() call below. */
 	menu_func func = it->func;
 	void *it_data = it->data;
-	enum keyact action = it->action;
+	enum action action = it->action;
 
 	if (mi_is_unselectable(*it)) return;
 
@@ -951,7 +951,7 @@ static void
 mainmenu_kbd_handler(struct mainmenu *menu, struct term_event *ev, int fwd)
 {
 	struct window *win = menu->win;
-	enum keyact action = kbd_action(KM_MENU, ev, NULL);
+	enum action action = kbd_action(KM_MENU, ev, NULL);
 	int s = 0;
 
 	if (action == ACT_ENTER
@@ -1041,7 +1041,7 @@ new_menu(enum menu_item_flags flags)
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    enum keyact action, menu_func func, void *data,
+	    enum action action, menu_func func, void *data,
 	    enum menu_item_flags flags)
 {
 	int n = count_items(*mi);

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.162 2004/01/14 16:53:06 zas Exp $ */
+/* $Id: kbdbind.c,v 1.163 2004/01/14 17:10:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -25,7 +25,7 @@
 /* Fix namespace clash on MacOS. */
 #define table table_elinks
 
-static struct listbox_item *keyact_box_items[KEYACTS];
+static struct listbox_item *action_box_items[KEYACTS];
 static struct list_head keymaps[KM_MAX];
 
 static int read_action(unsigned char *);
@@ -74,17 +74,17 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		strcpy(kb->box_item->text, keystroke.source);
 		done_string(&keystroke);
 
-		if (!keyact_box_items[action]) {
+		if (!action_box_items[action]) {
 boom:
 			mem_free(kb->box_item);
 			kb->box_item = NULL;
 			return; /* Or goto ;-). */
 		}
-		for (keymap = keyact_box_items[action]->child.next;
-		     keymap != (struct listbox_item *) &keyact_box_items[action]->child && km;
+		for (keymap = action_box_items[action]->child.next;
+		     keymap != (struct listbox_item *) &action_box_items[action]->child && km;
 		     km--)
 			keymap = keymap->next;
-		if (keymap == (struct listbox_item *) &keyact_box_items[action]->child)
+		if (keymap == (struct listbox_item *) &action_box_items[action]->child)
 			goto boom;
 
 		add_to_list(keymap->child, kb->box_item);
@@ -114,7 +114,7 @@ free_keybinding(struct keybinding *kb)
 }
 
 int
-keybinding_exists(enum keymap km, long key, long meta, enum keyact *action)
+keybinding_exists(enum keymap km, long key, long meta, enum action *action)
 {
 	struct keybinding *kb;
 
@@ -202,7 +202,7 @@ struct keybinding *
 kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 {
 	struct keybinding *kb;
-	enum keyact act = read_action(name);
+	enum action act = read_action(name);
 
 	if (act < 0) return NULL;
 
@@ -220,7 +220,7 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 }
 
 struct keybinding *
-kbd_act_lookup(enum keymap map, enum keyact action)
+kbd_act_lookup(enum keymap map, enum action action)
 {
 	struct keybinding *kb;
 
@@ -544,7 +544,7 @@ init_action_listboxes(void)
 		box_item->translated = 1;
 
 		add_to_list_end(keybinding_browser.root.child, box_item);
-		keyact_box_items[act->num] = box_item;
+		action_box_items[act->num] = box_item;
 
 		for (i = 0; i < KM_MAX; i++) {
 			struct listbox_item *keymap;
@@ -893,7 +893,7 @@ add_default_keybindings(void)
 }
 
 void
-add_keystroke_to_string(struct string *string, enum keyact action,
+add_keystroke_to_string(struct string *string, enum action action,
 			enum keymap map)
 {
 	struct keybinding *kb = kbd_act_lookup(map, action);
@@ -903,8 +903,8 @@ add_keystroke_to_string(struct string *string, enum keyact action,
 }
 
 void
-add_keyactions_to_string(struct string *string, enum keyact *actions,
-			 enum keymap map, struct terminal *term)
+add_actions_to_string(struct string *string, enum action *actions,
+		      enum keymap map, struct terminal *term)
 {
 	int i;
 

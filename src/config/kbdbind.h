@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.84 2004/01/13 14:13:15 zas Exp $ */
+/* $Id: kbdbind.h,v 1.85 2004/01/14 17:10:00 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -19,7 +19,7 @@ enum keymap {
 
 /* Note: if you add anything here, please keep it in alphabetical order,
  * and also update the table action_table[] in kbdbind.c.  */
-enum keyact {
+enum action {
 	ACT_NONE = 0,	/* KEEP IT HERE. */
 
 	ACT_ABORT_CONNECTION,
@@ -141,7 +141,7 @@ enum kbdbind_flags {
 struct keybinding {
 	LIST_HEAD(struct keybinding);
 	enum keymap keymap;
-	enum keyact action;
+	enum action action;
 	long key;
 	long meta;
 	int func_ref;
@@ -154,7 +154,7 @@ void init_keymaps(void);
 void free_keymaps(void);
 
 void add_keybinding(enum keymap km, int action, long key, long meta, int func_ref);
-int keybinding_exists(enum keymap km, long key, long meta, enum keyact *action);
+int keybinding_exists(enum keymap km, long key, long meta, enum action *action);
 void delete_keybinding(enum keymap km, long key, long meta);
 void free_keybinding(struct keybinding *);
 
@@ -179,9 +179,9 @@ void bind_config_string(struct string *);
 unsigned char *bind_scripting_func(unsigned char *, unsigned char *, int);
 #endif
 
-void add_keystroke_to_string(struct string *string, enum keyact action, enum keymap map);
+void add_keystroke_to_string(struct string *string, enum action action, enum keymap map);
 
-void add_keyactions_to_string(struct string *string, enum keyact *actions,
-			      enum keymap map, struct terminal *term);
+void add_actions_to_string(struct string *string, enum action *actions,
+			   enum keymap map, struct terminal *term);
 
 #endif

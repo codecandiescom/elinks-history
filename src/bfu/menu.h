@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.47 2004/01/13 14:54:39 zas Exp $ */
+/* $Id: menu.h,v 1.48 2004/01/14 17:10:00 jonas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -77,7 +77,7 @@ enum hotkey_state {
 struct menu_item {
 	unsigned char *text;
 	unsigned char *rtext;
-	enum keyact action;
+	enum action action;
 	menu_func func;
 	void *data;
 	enum menu_item_flags flags;
@@ -153,7 +153,7 @@ struct menu_item *new_menu(enum menu_item_flags);
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    enum keyact action, menu_func func, void *data,
+	    enum action action, menu_func func, void *data,
 	    enum menu_item_flags flags);
 
 #define add_separator_to_menu(menu) \

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.150 2004/01/09 09:42:25 miciah Exp $ */
+/* $Id: dialogs.c,v 1.151 2004/01/14 17:10:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,7 +476,7 @@ static void
 really_add_keybinding(void *data, unsigned char *keystroke)
 {
 	struct kbdbind_add_hop *hop = data;
-	enum keyact action;
+	enum action action;
 
 	/* TODO: This should maybe rather happen in a validation function? */
 	if (parse_keystroke(keystroke, &hop->key, &hop->meta) < 0) {

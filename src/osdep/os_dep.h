@@ -1,17 +1,7 @@
-/* $Id: os_dep.h,v 1.28 2003/10/27 02:55:17 pasky Exp $ */
+/* $Id: os_dep.h,v 1.29 2003/10/27 03:13:52 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
-
-
-/* Some common ascii codes. */
-#define ASCII_BS 8
-#define ASCII_TAB 9
-#define ASCII_LF 10
-#define ASCII_CR 13
-#define ASCII_ESC 27
-#define ASCII_DEL 127
-
 
 struct terminal;
 

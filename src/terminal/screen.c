@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.113 2003/10/26 16:23:24 pasky Exp $ */
+/* $Id: screen.c,v 1.114 2003/10/27 03:13:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,7 @@
 #include "elinks.h"
 
 #include "config/options.h"
+#include "osdep/ascii.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/hardio.h"

@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.51 2003/10/01 17:16:15 zas Exp $ */
+/* $Id: string.h,v 1.52 2003/10/27 03:13:53 pasky Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -8,6 +8,7 @@
 
 #include <string.h>
 
+#include "osdep/ascii.h"
 #include "util/error.h"
 #include "util/memdebug.h"
 #include "util/memory.h"

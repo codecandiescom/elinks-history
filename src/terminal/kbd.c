@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.35 2003/10/26 19:49:02 zas Exp $ */
+/* $Id: kbd.c,v 1.36 2003/10/27 03:13:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "config/options.h"
 #include "lowlevel/select.h"
 #include "intl/gettext/libintl.h"
+#include "osdep/ascii.h"
 #include "terminal/hardio.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"

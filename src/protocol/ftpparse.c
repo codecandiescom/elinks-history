@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.11 2003/09/22 14:22:35 zas Exp $ */
+/* $Id: ftpparse.c,v 1.12 2003/10/27 03:13:52 pasky Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -48,6 +48,7 @@ NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 #include "elinks.h"
 
 #include "ftpparse.h"
+#include "osdep/ascii.h"
 #include "util/conv.h"
 
 static long

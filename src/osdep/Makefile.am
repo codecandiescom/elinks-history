@@ -1,10 +1,11 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.15 2003/10/27 03:01:38 pasky Exp $
+## $Id: Makefile.am,v 1.16 2003/10/27 03:13:52 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
 noinst_LIBRARIES = libosdep.a
 libosdep_a_SOURCES = \
+ ascii.h \
  beos.c \
  beos.h \
  generic.h \

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.42 2002/09/14 21:21:39 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.43 2002/09/14 21:24:46 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -300,7 +300,7 @@ read_bookmarks()
 						last_bm = last_bm->root;
 						last_depth--;
 					}
-					root = last_bm;
+					root = last_bm->root;
 				}
 			}
 			last_bm = add_bookmark(root, title, url);

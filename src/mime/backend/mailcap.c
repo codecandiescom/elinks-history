@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.4 2003/06/03 23:20:21 jonas Exp $ */
+/* $Id: mailcap.c,v 1.5 2003/06/04 18:01:24 jonas Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -400,29 +400,11 @@ init_mailcap()
 	if (!path) path = DEFAULT_MAILCAP_PATH;
 
 	while (*path) {
-		unsigned char file[MAX_STR_LEN];
-		unsigned char *expanded;
-		int indx = 0;
+		unsigned char *filename = get_next_path_filename(&path, ':');
 
-		/* Extract file from path */
-		while (*path && *path != ':' && indx < sizeof(file) - 1) {
-			file[indx++] = *path;
-			path++;
-		}
-		if (*path) path++;
-
-		if (!indx) continue; /* No file extracted */
-
-		file[indx] = '\0';
-		expanded = expand_tilde(file);
-		if (!expanded) continue; /* Bad allocation */
-
-		if (expanded != file) {
-			safe_strncpy(file, expanded, sizeof(file));
-			mem_free(expanded);
-		}
-
-		parse_mailcap_file(file, priority++);
+		if (!filename) continue;
+		parse_mailcap_file(filename, priority++);
+		mem_free(filename);
 	}
 }
 

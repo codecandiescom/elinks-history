@@ -1,5 +1,5 @@
 /* MIME handling backends multiplexing */
-/* $Id: common.c,v 1.2 2003/06/03 23:20:21 jonas Exp $ */
+/* $Id: common.c,v 1.3 2003/06/04 18:01:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 
 #include "mime/backend/common.h"
 #include "mime/mime.h"
+#include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -95,4 +96,36 @@ get_mime_handler_backends(unsigned char *uri, int have_x)
 	}
 
 	return NULL;
+}
+
+unsigned char *
+get_next_path_filename(unsigned char **path_ptr, unsigned char separator)
+{
+	unsigned char *path = *path_ptr;
+	unsigned char *filename = path;
+	int filenamelen;
+
+	/* Extract file from path */
+	while (*path && *path != separator)
+		path++;
+
+	filenamelen = path - filename;
+
+	/* If not at end of string skip separator */
+	if (*path)
+		path++;
+
+	*path_ptr = path;
+
+	if (filenamelen >= 0) {
+		unsigned char *tmp = memacpy(filename, filenamelen);
+
+		if (!tmp) return NULL;
+		filename = expand_tilde(tmp);
+		mem_free(tmp);
+	} else {
+		filename = NULL;
+	}
+
+	return filename;
 }

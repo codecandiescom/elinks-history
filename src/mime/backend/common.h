@@ -1,4 +1,4 @@
-/* $Id: common.h,v 1.1 2003/05/06 17:24:40 jonas Exp $ */
+/* $Id: common.h,v 1.2 2003/06/04 18:01:24 jonas Exp $ */
 
 #ifndef EL__MIME_BACKEND_COMMON_H
 #define EL__MIME_BACKEND_COMMON_H
@@ -27,7 +27,12 @@ void done_mime_backends();
 
 unsigned char *get_content_type_backends(unsigned char *uri);
 
-struct mime_handler *
-get_mime_handler_backends(unsigned char *uri, int have_x);
+struct mime_handler *get_mime_handler_backends(unsigned char *uri, int have_x);
+
+/* TODO Maybe this could maybe fit in util/file.h */
+/* Extracts a filename from @path separated by @separator. Targeted for use
+ * with the general unix PATH style strings. */
+unsigned char *
+get_next_path_filename(unsigned char **path_ptr, unsigned char separator);
 
 #endif

@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.50 2004/06/20 18:22:10 pasky Exp $ */
+/* $Id: socket.c,v 1.51 2004/06/27 12:55:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -43,6 +43,11 @@
 #define	SSL_ERROR_SYSCALL2	GNUTLS_E_PULL_ERROR
 #endif
 
+#ifdef CONFIG_OPENSSL
+#define get_ssl_error(conn) SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
+#elif defined(CONFIG_GNUTLS)
+#define get_ssl_error(conn) gnutls_handshake(*((ssl_t *) conn->ssl))
+#endif
 
 static void
 ssl_set_no_tls(struct connection *conn)
@@ -141,13 +146,7 @@ ssl_want_read(struct connection *conn)
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
 
-	switch (
-#ifdef CONFIG_OPENSSL
-		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
-#elif defined(CONFIG_GNUTLS)
-		gnutls_handshake(*((ssl_t *) conn->ssl))
-#endif
-		) {
+	switch (get_ssl_error(conn)) {
 		case SSL_ERROR_NONE:
 #ifdef CONFIG_GNUTLS
 			if (get_opt_bool("connection.ssl.cert_verify")
@@ -216,11 +215,9 @@ ssl_connect(struct connection *conn, int sock)
 		SSL_CTX_use_PrivateKey_file(ctx, client_cert,
 					    SSL_FILETYPE_PEM);
 	}
-
-	ret = SSL_get_error(conn->ssl, SSL_connect(conn->ssl));
-#elif defined(CONFIG_GNUTLS)
-	ret = gnutls_handshake(*((ssl_t *) conn->ssl));
 #endif
+
+	ret = get_ssl_error(conn);
 
 	switch (ret) {
 		case SSL_ERROR_WANT_READ:

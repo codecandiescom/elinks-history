@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.43 2004/11/26 10:28:40 jonas Exp $ */
+/* $Id: lists.h,v 1.44 2004/12/24 02:33:14 jonas Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -108,7 +108,7 @@ struct xlist_head {
 #define NULL_LIST_HEAD LISTMAGIC1, NULL, NULL, LISTMAGIC2
 #define D_LIST_HEAD(x) LISTMAGIC1, &x, &x, LISTMAGIC2
 #define INIT_LIST_HEAD(x) struct list_head x = { D_LIST_HEAD(x) }
-#define LIST_HEAD(x) void *magic1; x *next; x *prev; void *magic2;
+#define LIST_HEAD(x) void *magic1; x *next; x *prev; void *magic2
 #define LIST_SET_MAGIC(x) list_magic_set(*(x))
 
 #endif /* LISTDEBUG */

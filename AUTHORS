@@ -185,6 +185,9 @@ Frédéric L. W. Meunier <0@pervalidus.tk>
 Fuzzy European King <james@place.org>
 	Fixed lua stack overflow
 
+Gisle Vanem <giva@bgnett.no>
+	Various portability fixes
+
 Grzegorz Adam Hankiewicz <gradha@terra.es>
 	Default lua hooks enhancements
 
@@ -426,8 +429,7 @@ Raúl Núñez de Arenas Coronado <raul@pleyades.net>
 	get_unique_name() fix.
 
 Russ Rowan <rrowan@dandy.net>
-	Patch that shorten the alt or title attribute
-	of an image.
+	Patch that shorten the alt or title attribute of an image
 
 Sebastian Zagrodzki <s.zagrodzki@sith.mimuw.edu.pl>
 	Shift-G opens dialog with pre-displayed current URL
@@ -527,4 +529,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.176 2004/12/15 22:25:16 pasky Exp $
+$Id: AUTHORS,v 1.177 2004/12/24 02:33:13 jonas Exp $

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.299 2004/06/29 15:19:45 zas Exp $ */
+/* $Id: tables.c,v 1.300 2004/06/29 15:23:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -466,14 +466,16 @@ again:
 		max = 0;
 		max_index = -1;
 		for (col = 0; col < table->cols; col++) if (widths[col]) {
-			int ss;
+			int max_width;
 
 			if (u && u[col]) continue;
-			ss = dd * widths[col] / p;
-			if (!ss) ss = 1;
-			if (ss > max_widths[col]) ss = max_widths[col];
-			if (ss > max) {
-				max = ss;
+			
+			max_width = dd * widths[col] / p;
+			if (!max_width) max_width = 1;
+			if (max_width > max_widths[col])
+				max_width = max_widths[col];
+			if (max_width > max) {
+				max = max_width;
 				max_index = col;
 			}
 		}

@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.2 2002/12/27 00:01:20 pasky Exp $ */
+/* $Id: parser.c,v 1.3 2002/12/27 01:19:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,7 @@ elusive_parser(enum parser_backend_type parser, struct parser_state **state,
 		if (!*state)
 			return; /* Try next time, buddy. */
 
-		(*state)->root = init_syntree_node(NULL);
+		(*state)->root = init_syntree_node();
 		(*state)->current = (*state)->root;
 	}
 

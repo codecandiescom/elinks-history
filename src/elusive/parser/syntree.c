@@ -1,5 +1,5 @@
 /* Syntax tree utility tools */
-/* $Id: syntree.c,v 1.3 2002/12/26 23:58:27 pasky Exp $ */
+/* $Id: syntree.c,v 1.4 2002/12/27 01:19:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,15 +14,12 @@
 
 
 struct syntree_node *
-init_syntree_node(struct syntree_node *root)
+init_syntree_node()
 {
 	struct syntree_node *node;
 
 	node = mem_calloc(1, sizeof(struct syntree_node));
 	if (!node) return NULL;
-
-	node->root = root;
-	if (root) add_to_list(root->leafs, node);
 
 	return node;
 }

@@ -1,4 +1,4 @@
-/* $Id: syntree.h,v 1.4 2002/12/26 23:58:27 pasky Exp $ */
+/* $Id: syntree.h,v 1.5 2002/12/27 01:19:06 pasky Exp $ */
 
 #ifndef EL__USIVE_PARSER_SYNTREE_H
 #define EL__USIVE_PARSER_SYNTREE_H
@@ -68,15 +68,17 @@ struct syntree_node {
 
 	/* Pointer to the HTML source. Srclen determines the length of the
 	 * whole element, including the opening/closing tags. */
+	/* Well, this doesn't have to be HTML source - just some already
+	 * allocated memory which we aren't going to free. */
 
 	unsigned char *src;
 	int srclen;
 };
 
 
-/* Initializes a node. Returns NULL upon allocation failure. */
+/* Initializes a node structure. Returns NULL upon allocation failure. */
 struct syntree_node *
-init_syntree_node(struct syntree_node *root);
+init_syntree_node();
 
 /* Returns value string of an attribute with this name. NULL means there's no
  * such attribute set, otherwise a pointer is returned that points to

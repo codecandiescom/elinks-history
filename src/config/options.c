@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.471 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: options.c,v 1.472 2005/02/17 10:43:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,9 @@ check_description(unsigned char *desc)
 	desc = gettext(desc);
 	len = strlen(desc);
 	if (!len) return;
+
+	if (ispunct(c) != ispunct(desc[len - 1]))
+		DBG("punctuation char possibly missing at end of i18n description [%s]", desc);
 
 	c = desc[len - 1];
 	if (isspace(c))

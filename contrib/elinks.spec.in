@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.15 2003/10/26 07:35:15 witekfl Exp $
+# $Id: elinks.spec.in,v 1.16 2003/12/10 00:24:09 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -64,7 +64,9 @@ provide good rock-solid releases inside stable branches.
 %{?debug:	--enable-debug} \
 %{!?debug:	--enable-fastmem} \
 	--enable-256-colors \
-%{?_without_x: --without-x}
+%{?_without_x: --without-x} \
+	--enable-leds \
+	--enable-local-cgi
 %{__make}
 
 cd doc
@@ -110,6 +112,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+* Wed Dec 10 2003 Witold Filipczyk <witekfl@pld-linux.org>
+- enabled leds and local-cgi
+
 * Sun 0ct 26 2003 Witold Filipczyk <witekfl@pld-linux.org>
 - revert to version from 5 October
 

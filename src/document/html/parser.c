@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.252 2003/11/06 22:45:40 zas Exp $ */
+/* $Id: parser.c,v 1.253 2003/11/07 15:04:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2441,7 +2441,6 @@ distribute:
 	}
 }
 
-/* TODO: Move this to frames.c (?) --Zas */
 static void
 html_frameset(unsigned char *a)
 {

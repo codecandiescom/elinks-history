@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.115 2003/11/06 22:02:52 jonas Exp $ */
+/* $Id: core.c,v 1.116 2003/11/07 18:40:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -360,24 +360,11 @@ static void
 dialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
-	int max = 0, min = 0;
-	int w = dialog_max_width(term);
-	int rw;
+	int w = 50; /* XXX: Hack alert */
+	int rw = w;
 	int y = -1;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 
-	text_width(term, dlg_msg[0], &min, &max);
-	text_width(term, dlg_msg[1], &min, &max);
-	text_width(term, dlg_msg[2], &min, &max);
-	buttons_width(dlg_data->widgets_data + 3, 2, &min, &max);
-
-	if (w > max) w = max;
-	if (w < min) w = min;
-	int_upper_bound(&w, dlg_data->win->term->width - 2 * DIALOG_LB);
-	if (w < 1) w = 1;
-
-	/*rw = 0;*/
-	/*HACK*/ w = rw = 50;
 	dlg_format_text(NULL, dlg_msg[0], 0, &y, w, &rw,
 			dialog_text_color, AL_LEFT);
 	y += 2;
@@ -499,8 +486,8 @@ xdialog_layouter(struct dialog_data *dlg_data)
 {
 	struct terminal *term = dlg_data->win->term;
 	int max = 0, min = 0;
-	int w = dialog_max_width(term);
-	int rw;
+	int w = 50; /* XXX: Hack alert */
+	int rw = w;
 	int y = -1;
 	int i;
 	int nfields = 0;
@@ -509,22 +496,15 @@ xdialog_layouter(struct dialog_data *dlg_data)
 	while (widget_is_textfield(&dlg_data->widgets_data[nfields]))
 		nfields++;
 
-	text_width(term, dlg_msg[0], &min, &max);
-	buttons_width(dlg_data->widgets_data + nfields, 2, &min, &max);
-
-	if (w > max) w = max;
-	if (w < min) w = min;
-	int_upper_bound(&w, dlg_data->win->term->width - 2 * DIALOG_LB);
-	if (w < 1) w = 1;
-	/*rw = 0;*/
-	/*HACK*/ w = rw = 50;
 	for (i = 0; i < nfields; i++) {
 		dlg_format_text(NULL, dlg_msg[0], 0, &y, w, &rw,
 				dialog_text_color, AL_LEFT);
 		y += 2;
 	}
+
 	dlg_format_buttons(NULL, dlg_data->widgets_data + nfields, 2,
 			   0, &y, w, &rw, AL_CENTER);
+
 	w = rw;
 	draw_dialog(dlg_data, w ,y, AL_CENTER);
 

@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.10 2003/05/13 12:27:44 zas Exp $ */
+/* $Id: common.c,v 1.11 2003/05/13 13:34:57 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,8 +51,8 @@ bookmarks_read()
 	if (!file_name) return;
 	if (elinks_home) {
 		file_name = straconcat(elinks_home, file_name, NULL);
+		if (!file_name) return;
 	}
-	if (!file_name) return;
 
 	f = fopen(file_name, "r");
 	if (elinks_home) mem_free(file_name);
@@ -74,6 +74,7 @@ bookmarks_write(struct list_head *bookmarks_list)
 
 	if (!bookmarks_dirty) return;
 	if (!bookmarks_backends[backend]->write
+	    || !elinks_home
 	    || !bookmarks_backends[backend]->filename) return;
 
 	/* We do this two-passes because we want backend to possibly decide to

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.58 2002/06/21 14:11:04 pasky Exp $ */
+/* $Id: options.c,v 1.59 2002/06/21 14:13:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -704,9 +704,13 @@ register_options()
 		"history", 0,
 		"History options.");
 
+	add_opt_tree("document.history",
+		"global", 0,
+		"Global history options.");
+
 	/* XXX: Disable global history if -anonymous is given? */
-	add_opt_bool("document.history",
-		"enable_global_history", 0, 1,
+	add_opt_bool("document.history.global",
+		"enable", 0, 1,
 		"Enable global history (\"history of all pages visited\")?");
 
 	add_opt_bool("document.history",

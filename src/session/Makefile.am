@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.7 2003/09/19 13:14:49 jonas Exp $
+## $Id: Makefile.am,v 1.8 2003/12/06 02:56:02 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -18,5 +18,7 @@ libsched_a_SOURCES = \
  location.c \
  location.h \
  session.c \
- session.h
+ session.h \
+ task.c \
+ task.h
 

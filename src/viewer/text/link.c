@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.120 2003/12/05 22:31:32 pasky Exp $ */
+/* $Id: link.c,v 1.121 2003/12/06 02:56:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 #include "osdep/newwin.h"
 #include "protocol/uri.h"
 #include "sched/session.h"
+#include "sched/task.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"

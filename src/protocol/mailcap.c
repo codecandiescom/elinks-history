@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.7 2002/12/21 18:51:22 zas Exp $ */
+/* $Id: mailcap.c,v 1.8 2003/01/05 16:48:16 pasky Exp $ */
 
 /*
  * This file contains various functions for implementing a fair subset of
@@ -30,8 +30,8 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "document/download.h"
 #include "protocol/mailcap.h"
+#include "sched/download.h"
 #include "util/file.h"
 #include "util/hash.h"
 #include "util/lists.h"

@@ -1,7 +1,7 @@
-/* $Id: session.h,v 1.18 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: session.h,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_SESSION_H
-#define EL__DOCUMENT_SESSION_H
+#ifndef EL__SCHED_SESSION_H
+#define EL__SCHED_SESSION_H
 
 /* We need to declare these first :/. Damn cross-dependencies. */
 struct session;

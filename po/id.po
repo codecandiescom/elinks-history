@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-04 23:24+0100\n"
+"POT-Creation-Date: 2003-01-05 17:22+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Muhamad Faizal <faizal@mfaizal.net>\n"
 "Language-Team: Indonesian <translation-team-id@lists.sourceforge.net>\n"
@@ -22,8 +22,8 @@ msgid "Number expected in field"
 msgstr "Jumlah angka yang harus diisi"
 
 #: src/bfu/inpfield.c:43 src/bfu/inpfield.c:52 src/bfu/inpfield.c:72
-#: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:273
-#: src/bookmarks/dialogs.c:281 src/config/dialogs.c:42
+#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:272
+#: src/bookmarks/dialogs.c:280 src/config/dialogs.c:42
 #: src/config/dialogs.c:184 src/config/dialogs.c:323 src/config/dialogs.c:355
 #: src/config/dialogs.c:390 src/config/dialogs.c:402 src/config/dialogs.c:457
 #: src/config/dialogs.c:472 src/config/dialogs.c:606 src/config/dialogs.c:628
@@ -31,17 +31,15 @@ msgstr "Jumlah angka yang harus diisi"
 #: src/dialogs/auth.c:191 src/dialogs/edit.c:173 src/dialogs/menu.c:605
 #: src/dialogs/menu.c:615 src/dialogs/menu.c:644 src/dialogs/menu.c:662
 #: src/dialogs/menu.c:672 src/dialogs/mime.c:269 src/dialogs/options.c:267
-#: src/dialogs/options.c:360 src/document/download.c:505
-#: src/document/download.c:538 src/document/download.c:640
-#: src/document/download.c:979 src/document/download.c:987
-#: src/document/download.c:1022 src/document/download.c:1032
-#: src/document/session.c:313 src/document/session.c:585
-#: src/globhist/dialogs.c:285 src/lua/core.c:428 src/lua/core.c:572
-#: src/lua/core.c:797 src/protocol/url.c:67 src/protocol/user.c:103
-#: src/protocol/user.c:131 src/viewer/text/view.c:1580
-#: src/viewer/text/view.c:1914 src/viewer/text/view.c:2343
-#: src/viewer/text/view.c:2389 src/viewer/text/view.c:2626
-#: src/viewer/text/view.c:3290
+#: src/dialogs/options.c:360 src/globhist/dialogs.c:285 src/lua/core.c:428
+#: src/lua/core.c:572 src/lua/core.c:797 src/protocol/url.c:67
+#: src/protocol/user.c:103 src/protocol/user.c:131 src/sched/download.c:505
+#: src/sched/download.c:538 src/sched/download.c:640 src/sched/download.c:979
+#: src/sched/download.c:987 src/sched/download.c:1022
+#: src/sched/download.c:1032 src/sched/session.c:313 src/sched/session.c:585
+#: src/viewer/text/view.c:1580 src/viewer/text/view.c:1914
+#: src/viewer/text/view.c:2343 src/viewer/text/view.c:2389
+#: src/viewer/text/view.c:2626 src/viewer/text/view.c:3290
 msgid "Cancel"
 msgstr "Batal"
 
@@ -80,15 +78,15 @@ msgstr ""
 msgid "No title"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
+#: src/bookmarks/dialogs.c:169 src/bookmarks/dialogs.c:638
 msgid "Add folder"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:170
+#: src/bookmarks/dialogs.c:169
 msgid "Folder name"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:171 src/config/dialogs.c:124
+#: src/bookmarks/dialogs.c:170 src/config/dialogs.c:124
 #: src/config/dialogs.c:132 src/config/dialogs.c:319 src/config/dialogs.c:402
 #: src/config/dialogs.c:471 src/config/dialogs.c:654 src/config/dialogs.c:730
 #: src/dialogs/auth.c:187 src/dialogs/document.c:52 src/dialogs/document.c:207
@@ -98,106 +96,106 @@ msgstr ""
 #: src/dialogs/info.c:247 src/dialogs/info.c:276 src/dialogs/menu.c:605
 #: src/dialogs/menu.c:615 src/dialogs/menu.c:643 src/dialogs/menu.c:662
 #: src/dialogs/menu.c:672 src/dialogs/mime.c:265 src/dialogs/options.c:257
-#: src/dialogs/options.c:355 src/document/download.c:563
-#: src/document/session.c:1075 src/document/session.c:1092
-#: src/document/session.c:1116 src/globhist/dialogs.c:396 src/lua/core.c:424
+#: src/dialogs/options.c:355 src/globhist/dialogs.c:396 src/lua/core.c:424
 #: src/lua/core.c:567 src/lua/core.c:676 src/lua/core.c:796
-#: src/sched/sched.c:70 src/viewer/text/view.c:2625
+#: src/sched/download.c:563 src/sched/sched.c:70 src/sched/session.c:1075
+#: src/sched/session.c:1092 src/sched/session.c:1116
+#: src/viewer/text/view.c:2625
 msgid "OK"
 msgstr "OK"
 
-#: src/bookmarks/dialogs.c:241 src/lua/core.c:408
+#: src/bookmarks/dialogs.c:240 src/lua/core.c:408
 msgid "Edit bookmark"
 msgstr "Ubah bookmark"
 
-#: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:276
-#: src/bookmarks/dialogs.c:406 src/bookmarks/dialogs.c:413
-#: src/bookmarks/dialogs.c:420 src/bookmarks/dialogs.c:421
+#: src/bookmarks/dialogs.c:268 src/bookmarks/dialogs.c:275
+#: src/bookmarks/dialogs.c:405 src/bookmarks/dialogs.c:412
+#: src/bookmarks/dialogs.c:419 src/bookmarks/dialogs.c:420
 msgid "Delete bookmark"
 msgstr "Hapus bookmark"
 
-#: src/bookmarks/dialogs.c:270 src/bookmarks/dialogs.c:277
+#: src/bookmarks/dialogs.c:269 src/bookmarks/dialogs.c:276
 #: src/globhist/dialogs.c:283
 msgid "Sorry, but this bookmark is already being used by something right now."
 msgstr ""
 
-#: src/bookmarks/dialogs.c:271 src/bookmarks/dialogs.c:278
+#: src/bookmarks/dialogs.c:270 src/bookmarks/dialogs.c:277
 #: src/config/options.c:1746 src/config/options.c:2040
 #: src/dialogs/document.c:91 src/globhist/dialogs.c:392
 msgid "Title"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:279 src/bookmarks/dialogs.c:422
+#: src/bookmarks/dialogs.c:278 src/bookmarks/dialogs.c:421
 #: src/dialogs/document.c:60 src/dialogs/edit.c:27 src/globhist/dialogs.c:324
 #: src/globhist/dialogs.c:393 src/lua/core.c:294
 msgid "URL"
 msgstr "URL"
 
-#: src/bookmarks/dialogs.c:407
+#: src/bookmarks/dialogs.c:406
 msgid "Delete marked bookmarks?"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:409 src/bookmarks/dialogs.c:416
-#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:124 src/dialogs/mime.c:163
-#: src/document/session.c:583 src/globhist/dialogs.c:326
-#: src/globhist/dialogs.c:358
+#: src/bookmarks/dialogs.c:408 src/bookmarks/dialogs.c:415
+#: src/bookmarks/dialogs.c:423 src/dialogs/menu.c:124 src/dialogs/mime.c:163
+#: src/globhist/dialogs.c:326 src/globhist/dialogs.c:358
+#: src/sched/session.c:583
 msgid "Yes"
 msgstr "Ya"
 
-#: src/bookmarks/dialogs.c:410 src/bookmarks/dialogs.c:417
-#: src/bookmarks/dialogs.c:425 src/dialogs/menu.c:125 src/dialogs/mime.c:164
-#: src/document/session.c:584 src/globhist/dialogs.c:327
-#: src/globhist/dialogs.c:359
+#: src/bookmarks/dialogs.c:409 src/bookmarks/dialogs.c:416
+#: src/bookmarks/dialogs.c:424 src/dialogs/menu.c:125 src/dialogs/mime.c:164
+#: src/globhist/dialogs.c:327 src/globhist/dialogs.c:359
+#: src/sched/session.c:584
 msgid "No"
 msgstr "Ngga"
 
-#: src/bookmarks/dialogs.c:414
+#: src/bookmarks/dialogs.c:413
 msgid "Delete folder content"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:608
+#: src/bookmarks/dialogs.c:607
 msgid "Bookmark manager"
 msgstr "Ngatur bookmark"
 
-#: src/bookmarks/dialogs.c:618 src/globhist/dialogs.c:443
+#: src/bookmarks/dialogs.c:617 src/globhist/dialogs.c:443
 msgid "Goto"
 msgstr "Pilih"
 
-#: src/bookmarks/dialogs.c:624 src/config/dialogs.c:301
+#: src/bookmarks/dialogs.c:623 src/config/dialogs.c:301
 #: src/config/dialogs.c:350 src/config/dialogs.c:515
 msgid "Edit"
 msgstr "Ubah"
 
-#: src/bookmarks/dialogs.c:629 src/config/dialogs.c:527
+#: src/bookmarks/dialogs.c:628 src/config/dialogs.c:527
 #: src/config/dialogs.c:773 src/globhist/dialogs.c:453
 msgid "Delete"
 msgstr "Hapus"
 
-#: src/bookmarks/dialogs.c:634
+#: src/bookmarks/dialogs.c:633
 msgid "Move"
 msgstr ""
 
-#: src/bookmarks/dialogs.c:644 src/config/dialogs.c:521
+#: src/bookmarks/dialogs.c:643 src/config/dialogs.c:521
 #: src/config/dialogs.c:767
 msgid "Add"
 msgstr "Tambah"
 
-#: src/bookmarks/dialogs.c:649 src/dialogs/menu.c:671
+#: src/bookmarks/dialogs.c:648 src/dialogs/menu.c:671
 #: src/globhist/dialogs.c:458 src/viewer/text/view.c:2340
 #: src/viewer/text/view.c:2386
 msgid "Search"
 msgstr "Cari"
 
-#: src/bookmarks/dialogs.c:654 src/config/dialogs.c:538
+#: src/bookmarks/dialogs.c:653 src/config/dialogs.c:538
 #: src/config/dialogs.c:790 src/globhist/dialogs.c:473
 msgid "Close"
 msgstr "Selesai"
 
-#: src/bookmarks/dialogs.c:788 src/bookmarks/dialogs.c:813
+#: src/bookmarks/dialogs.c:787 src/bookmarks/dialogs.c:812
 msgid "Add bookmark"
 msgstr "Tambah bookmark"
 
-#: src/bookmarks/dialogs.c:799
+#: src/bookmarks/dialogs.c:798
 msgid "Search bookmarks"
 msgstr ""
 
@@ -234,10 +232,9 @@ msgstr "isi"
 msgid "Description"
 msgstr ""
 
-#: src/config/dialogs.c:181 src/document/session.c:856
-#: src/document/session.c:917 src/document/session.c:1395
-#: src/protocol/url.c:64 src/viewer/text/view.c:1911
-#: src/viewer/text/view.c:3232
+#: src/config/dialogs.c:181 src/protocol/url.c:64 src/sched/session.c:856
+#: src/sched/session.c:917 src/sched/session.c:1395
+#: src/viewer/text/view.c:1911 src/viewer/text/view.c:3232
 msgid "Error"
 msgstr "Error"
 
@@ -276,7 +273,7 @@ msgid "Options manager"
 msgstr ""
 
 #: src/config/dialogs.c:533 src/config/dialogs.c:785 src/dialogs/options.c:262
-#: src/document/download.c:977 src/document/download.c:1020
+#: src/sched/download.c:977 src/sched/download.c:1020
 msgid "Save"
 msgstr "Simpan"
 
@@ -2972,8 +2969,7 @@ msgstr "Masukin URL"
 msgid "Save URL"
 msgstr "Simpan URL"
 
-#: src/dialogs/menu.c:643 src/document/download.c:388
-#: src/document/download.c:560
+#: src/dialogs/menu.c:643 src/sched/download.c:388 src/sched/download.c:560
 msgid "Download"
 msgstr "Download"
 
@@ -3057,167 +3053,6 @@ msgstr "Kolom"
 msgid "Rows"
 msgstr "Baris"
 
-#: src/document/download.c:222 src/document/session.c:177
-msgid "Received"
-msgstr "Diterima"
-
-#: src/document/download.c:228 src/document/session.c:182
-msgid "of"
-msgstr "dari"
-
-#: src/document/download.c:238
-msgid "after resume"
-msgstr ""
-
-#: src/document/download.c:244
-msgid "Average speed"
-msgstr "Kecepatan rata-rata"
-
-#: src/document/download.c:245
-msgid "Speed"
-msgstr "Kecepatan"
-
-#: src/document/download.c:254
-msgid "current speed"
-msgstr "kecepatan saat ini"
-
-#: src/document/download.c:263
-msgid "Elapsed time"
-msgstr "Waktu terpakai"
-
-#: src/document/download.c:269
-msgid "estimated time"
-msgstr "perkiraan selesai"
-
-#: src/document/download.c:397
-msgid "Background"
-msgstr "Background"
-
-#: src/document/download.c:402
-msgid "Background with notify"
-msgstr ""
-
-#: src/document/download.c:407
-msgid "Abort"
-msgstr "Batalin"
-
-#: src/document/download.c:501 src/document/download.c:534
-#: src/document/download.c:636
-msgid "Download error"
-msgstr "Download gagal"
-
-#: src/document/download.c:502 src/document/download.c:637
-msgid "Could not create file"
-msgstr "Ngga bisa buat file"
-
-#: src/document/download.c:535
-msgid "Error downloading"
-msgstr "Ngga bisa download"
-
-#: src/document/download.c:561
-msgid "Download complete"
-msgstr ""
-
-#: src/document/download.c:973 src/document/download.c:982
-msgid "Unknown type"
-msgstr "Tipe ngga dikenal"
-
-#: src/document/download.c:974 src/document/download.c:983
-#: src/document/download.c:1015 src/document/download.c:1026
-msgid "Content type is"
-msgstr "Content type "
-
-#: src/document/download.c:975 src/document/download.c:984
-msgid "Do you want to save or display this file?"
-msgstr "File ini mau disimpan atau ditampilkan?"
-
-#: src/document/download.c:978 src/document/download.c:986
-#: src/document/download.c:1021 src/document/download.c:1031
-msgid "Display"
-msgstr "Tampilkan"
-
-#: src/document/download.c:1014 src/document/download.c:1025
-msgid "What to do?"
-msgstr "Apa yang harus dilakukan?"
-
-#: src/document/download.c:1016 src/document/download.c:1027
-msgid "Do you want to open file with"
-msgstr "Apakah kamu mau ngebuka file dengan"
-
-#: src/document/download.c:1017 src/document/download.c:1028
-msgid "save it or display it?"
-msgstr "simpan atau tampilkan?"
-
-#: src/document/download.c:1019 src/document/download.c:1030
-msgid "Open"
-msgstr "Buka"
-
-#: src/document/session.c:97
-msgid "Unknown error"
-msgstr "Kesalahan ngga dikenal"
-
-#: src/document/session.c:188
-msgid "avg"
-msgstr "rata-rata"
-
-#: src/document/session.c:196
-msgid "cur"
-msgstr "skrg"
-
-#: src/document/session.c:569
-msgid "Do you want to follow redirect and post form data to url"
-msgstr "Apakah kamu mau mengirim data dan ikutin redirect"
-
-#: src/document/session.c:572
-msgid "Do you want to post form data to url"
-msgstr "Apakah kamu mau mengirim data"
-
-#: src/document/session.c:574
-msgid "Do you want to repost form data to url"
-msgstr "Apakah kamu mau mengirim ulang data"
-
-#: src/document/session.c:580 src/document/session.c:1080
-#: src/document/session.c:1100
-msgid "Warning"
-msgstr "Awas"
-
-#: src/document/session.c:1070
-msgid "Welcome"
-msgstr "Selamat datang"
-
-#: src/document/session.c:1071
-msgid "Welcome to ELinks!"
-msgstr "Selamat, Anda telah menggunakan ELinks!"
-
-#: src/document/session.c:1072
-msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr ""
-"Tekan ESC untuk menu. Pilih Help->Manual di menu untuk manual penggunaan."
-
-#: src/document/session.c:1081
-msgid ""
-"You have empty string in protocol.http.user_agent - this was a default value "
-"in the past, substituted by default ELinks User-Agent string. However, "
-"currently this means that NO User-Agent HEADER WILL BE SENT AT ALL - if this "
-"is really what you want, set its value to \" \", otherwise please delete "
-"line with this settings from your configuration file (if you have no idea "
-"what I'm talking about, just do this), so that correct default setting will "
-"be used. Apologies for any inconvience caused."
-msgstr ""
-
-#: src/document/session.c:1101
-msgid ""
-"You have option config.saving_style set to a de facto obsolete value. The "
-"configuration saving algorithms of ELinks were changed from the last time "
-"you upgraded ELinks. Now, only those options which you actually changed are "
-"saved to the configuration file, instead of just all the options. This "
-"simplifies our situation greatly when we see that some option has "
-"inappropriate default value or we need to change semantic of some option in "
-"a subtle way. Thus, we recommend you to change the value of config."
-"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
-"for any inconvience caused."
-msgstr ""
-
 #: src/globhist/dialogs.c:187
 msgid "Search history"
 msgstr ""
@@ -3294,6 +3129,100 @@ msgstr "Sintaks URL salah"
 #: src/protocol/user.c:129
 msgid "Bad user protocol URL"
 msgstr ""
+
+#: src/sched/download.c:222 src/sched/session.c:177
+msgid "Received"
+msgstr "Diterima"
+
+#: src/sched/download.c:228 src/sched/session.c:182
+msgid "of"
+msgstr "dari"
+
+#: src/sched/download.c:238
+msgid "after resume"
+msgstr ""
+
+#: src/sched/download.c:244
+msgid "Average speed"
+msgstr "Kecepatan rata-rata"
+
+#: src/sched/download.c:245
+msgid "Speed"
+msgstr "Kecepatan"
+
+#: src/sched/download.c:254
+msgid "current speed"
+msgstr "kecepatan saat ini"
+
+#: src/sched/download.c:263
+msgid "Elapsed time"
+msgstr "Waktu terpakai"
+
+#: src/sched/download.c:269
+msgid "estimated time"
+msgstr "perkiraan selesai"
+
+#: src/sched/download.c:397
+msgid "Background"
+msgstr "Background"
+
+#: src/sched/download.c:402
+msgid "Background with notify"
+msgstr ""
+
+#: src/sched/download.c:407
+msgid "Abort"
+msgstr "Batalin"
+
+#: src/sched/download.c:501 src/sched/download.c:534 src/sched/download.c:636
+msgid "Download error"
+msgstr "Download gagal"
+
+#: src/sched/download.c:502 src/sched/download.c:637
+msgid "Could not create file"
+msgstr "Ngga bisa buat file"
+
+#: src/sched/download.c:535
+msgid "Error downloading"
+msgstr "Ngga bisa download"
+
+#: src/sched/download.c:561
+msgid "Download complete"
+msgstr ""
+
+#: src/sched/download.c:973 src/sched/download.c:982
+msgid "Unknown type"
+msgstr "Tipe ngga dikenal"
+
+#: src/sched/download.c:974 src/sched/download.c:983 src/sched/download.c:1015
+#: src/sched/download.c:1026
+msgid "Content type is"
+msgstr "Content type "
+
+#: src/sched/download.c:975 src/sched/download.c:984
+msgid "Do you want to save or display this file?"
+msgstr "File ini mau disimpan atau ditampilkan?"
+
+#: src/sched/download.c:978 src/sched/download.c:986 src/sched/download.c:1021
+#: src/sched/download.c:1031
+msgid "Display"
+msgstr "Tampilkan"
+
+#: src/sched/download.c:1014 src/sched/download.c:1025
+msgid "What to do?"
+msgstr "Apa yang harus dilakukan?"
+
+#: src/sched/download.c:1016 src/sched/download.c:1027
+msgid "Do you want to open file with"
+msgstr "Apakah kamu mau ngebuka file dengan"
+
+#: src/sched/download.c:1017 src/sched/download.c:1028
+msgid "save it or display it?"
+msgstr "simpan atau tampilkan?"
+
+#: src/sched/download.c:1019 src/sched/download.c:1030
+msgid "Open"
+msgstr "Buka"
 
 #: src/sched/sched.c:59
 msgid "Waiting in queue"
@@ -3426,6 +3355,71 @@ msgstr "Kesalahan SSL"
 #: src/sched/sched.c:100
 msgid "This version of ELinks does not contain SSL/TSL support"
 msgstr "Versi ELinks ini tidak mendukung SSL"
+
+#: src/sched/session.c:97
+msgid "Unknown error"
+msgstr "Kesalahan ngga dikenal"
+
+#: src/sched/session.c:188
+msgid "avg"
+msgstr "rata-rata"
+
+#: src/sched/session.c:196
+msgid "cur"
+msgstr "skrg"
+
+#: src/sched/session.c:569
+msgid "Do you want to follow redirect and post form data to url"
+msgstr "Apakah kamu mau mengirim data dan ikutin redirect"
+
+#: src/sched/session.c:572
+msgid "Do you want to post form data to url"
+msgstr "Apakah kamu mau mengirim data"
+
+#: src/sched/session.c:574
+msgid "Do you want to repost form data to url"
+msgstr "Apakah kamu mau mengirim ulang data"
+
+#: src/sched/session.c:580 src/sched/session.c:1080 src/sched/session.c:1100
+msgid "Warning"
+msgstr "Awas"
+
+#: src/sched/session.c:1070
+msgid "Welcome"
+msgstr "Selamat datang"
+
+#: src/sched/session.c:1071
+msgid "Welcome to ELinks!"
+msgstr "Selamat, Anda telah menggunakan ELinks!"
+
+#: src/sched/session.c:1072
+msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
+msgstr ""
+"Tekan ESC untuk menu. Pilih Help->Manual di menu untuk manual penggunaan."
+
+#: src/sched/session.c:1081
+msgid ""
+"You have empty string in protocol.http.user_agent - this was a default value "
+"in the past, substituted by default ELinks User-Agent string. However, "
+"currently this means that NO User-Agent HEADER WILL BE SENT AT ALL - if this "
+"is really what you want, set its value to \" \", otherwise please delete "
+"line with this settings from your configuration file (if you have no idea "
+"what I'm talking about, just do this), so that correct default setting will "
+"be used. Apologies for any inconvience caused."
+msgstr ""
+
+#: src/sched/session.c:1101
+msgid ""
+"You have option config.saving_style set to a de facto obsolete value. The "
+"configuration saving algorithms of ELinks were changed from the last time "
+"you upgraded ELinks. Now, only those options which you actually changed are "
+"saved to the configuration file, instead of just all the options. This "
+"simplifies our situation greatly when we see that some option has "
+"inappropriate default value or we need to change semantic of some option in "
+"a subtle way. Thus, we recommend you to change the value of config."
+"saving_style option to 3 in order to get the \"right\" behaviour. Apologies "
+"for any inconvience caused."
+msgstr ""
 
 #: src/viewer/text/view.c:1577
 msgid "Error while posting form"

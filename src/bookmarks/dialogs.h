@@ -1,11 +1,11 @@
-/* $Id: dialogs.h,v 1.4 2002/12/05 21:30:05 pasky Exp $ */
+/* $Id: dialogs.h,v 1.5 2003/01/05 16:48:13 pasky Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
 
 #include "bfu/dialog.h"
-#include "document/session.h"
 #include "lowlevel/terminal.h"
+#include "sched/session.h"
 
 /* Search memorization */
 extern unsigned char *bm_last_searched_name;

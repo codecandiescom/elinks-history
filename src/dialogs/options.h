@@ -1,10 +1,10 @@
-/* $Id: options.h,v 1.3 2002/12/11 15:21:08 pasky Exp $ */
+/* $Id: options.h,v 1.4 2003/01/05 16:48:13 pasky Exp $ */
 
 #ifndef EL__DIALOGS_OPTIONS_H
 #define EL__DIALOGS_OPTIONS_H
 
-#include "document/session.h"
 #include "lowlevel/terminal.h"
+#include "sched/session.h"
 
 void charset_list(struct terminal *, void *, struct session *);
 void terminal_options(struct terminal *, void *, struct session *);

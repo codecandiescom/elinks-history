@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.75 2003/01/03 02:22:15 pasky Exp $ */
+/* $Id: main.c,v 1.76 2003/01/05 16:48:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,8 +40,6 @@
 #include "dialogs/menu.h"
 #include "dialogs/auth.h"
 #include "document/cache.h"
-#include "document/download.h"
-#include "document/session.h"
 #include "document/html/colors.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
@@ -60,7 +58,9 @@
 #include "protocol/mailcap.h"
 #include "protocol/mime.h"
 #include "protocol/http/auth.h"
+#include "sched/download.h"
 #include "sched/sched.h"
+#include "sched/session.h"
 #include "ssl/ssl.h"
 #include "util/blacklist.h"
 #include "util/error.h"

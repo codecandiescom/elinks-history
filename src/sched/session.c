@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.92 2003/01/04 12:35:04 pasky Exp $ */
+/* $Id: session.c,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,11 +19,7 @@
 #include "config/options.h"
 #include "dialogs/menu.h"
 #include "document/cache.h"
-#include "document/download.h"
-#include "document/history.h"
-#include "document/location.h"
 #include "document/options.h"
-#include "document/session.h"
 #include "document/html/parser.h"
 #include "document/html/renderer.h"
 #include "globhist/globhist.h"
@@ -35,7 +31,11 @@
 #include "lua/hooks.h"
 #include "protocol/mime.h"
 #include "protocol/url.h"
+#include "sched/download.h"
+#include "sched/history.h"
+#include "sched/location.h"
 #include "sched/sched.h"
+#include "sched/session.h"
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/memlist.h"

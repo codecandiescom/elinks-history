@@ -1,11 +1,11 @@
-/* $Id: history.h,v 1.3 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: history.h,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
 
-#ifndef EL__DOCUMENT_HISTORY_H
-#define EL__DOCUMENT_HISTORY_H
+#ifndef EL__SCHED_HISTORY_H
+#define EL__SCHED_HISTORY_H
 
+#include "sched/location.h"
+#include "sched/session.h"
 #include "util/lists.h"
-#include "document/location.h"
-#include "document/session.h"
 
 void go_back(struct session *);
 void go_unback(struct session *);

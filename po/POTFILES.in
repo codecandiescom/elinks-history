@@ -18,13 +18,13 @@ src/dialogs/info.c
 src/dialogs/menu.c
 src/dialogs/mime.c
 src/dialogs/options.c
-src/document/download.c
-src/document/session.c
 src/globhist/dialogs.c
 src/lua/core.c
 src/osdep/os_dep.c
 src/protocol/url.c
 src/protocol/user.c
+src/sched/download.c
 src/sched/sched.c
+src/sched/session.c
 src/viewer/dump/dump.c
 src/viewer/text/view.c

@@ -1,10 +1,10 @@
-/* $Id: dialogs.h,v 1.1 2002/08/29 23:58:23 pasky Exp $ */
+/* $Id: dialogs.h,v 1.2 2003/01/05 16:48:15 pasky Exp $ */
 
 #ifndef EL__GLOBHIST_DIALOGS_H
 #define EL__GLOBHIST_DIALOGS_H
 
-#include "document/session.h"
 #include "lowlevel/terminal.h"
+#include "sched/session.h"
 
 void menu_history_manager(struct terminal *, void *, struct session *);
 

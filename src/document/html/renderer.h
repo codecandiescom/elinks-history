@@ -1,14 +1,14 @@
-/* $Id: renderer.h,v 1.14 2003/01/01 18:19:52 pasky Exp $ */
+/* $Id: renderer.h,v 1.15 2003/01/05 16:48:15 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
 #include "intl/charsets.h"
 #include "document/options.h"
-#include "document/session.h"
 #include "document/html/parser.h"
 #include "lowlevel/terminal.h"
 #include "lowlevel/ttime.h"
+#include "sched/session.h"
 #include "util/lists.h"
 /* We need this included later, otherwise it will miss some our
  * declarations. */

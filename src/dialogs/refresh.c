@@ -1,5 +1,5 @@
 /* Periodic refresh of dialogs */
-/* $Id: refresh.c,v 1.8 2002/12/08 21:01:20 pasky Exp $ */
+/* $Id: refresh.c,v 1.9 2003/01/05 16:48:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,9 +16,9 @@
 
 #include "bfu/dialog.h"
 #include "dialogs/refresh.h"
-#include "document/session.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
+#include "sched/session.h"
 #include "util/memory.h"
 
 

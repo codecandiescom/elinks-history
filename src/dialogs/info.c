@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.31 2003/01/04 12:30:17 pasky Exp $ */
+/* $Id: info.c,v 1.32 2003/01/05 16:48:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,12 +19,12 @@
 #include "dialogs/refresh.h"
 #include "config/options.h"
 #include "document/cache.h"
-#include "document/session.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "sched/sched.h"
+#include "sched/session.h"
 #include "util/conv.h"
 #ifdef LEAK_DEBUG
 #include "util/memdebug.h"

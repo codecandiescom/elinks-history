@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.28 2003/01/03 02:23:55 pasky Exp $ */
+/* $Id: core.c,v 1.29 2003/01/05 16:48:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,15 +29,15 @@
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "document/cache.h"
-#include "document/history.h"
-#include "document/location.h"
-#include "document/session.h"
 #include "document/html/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "lua/core.h"
+#include "sched/history.h"
+#include "sched/location.h"
+#include "sched/session.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/view.h"

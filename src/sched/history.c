@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.18 2003/01/01 20:30:34 pasky Exp $ */
+/* $Id: history.c,v 1.1 2003/01/05 16:48:16 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,10 +10,10 @@
 #include "elinks.h"
 
 #include "config/options.h"
-#include "document/session.h"
-#include "document/history.h"
-#include "document/location.h"
+#include "sched/history.h"
+#include "sched/location.h"
 #include "sched/sched.h"
+#include "sched/session.h"
 #include "util/memory.h"
 #include "util/string.h"
 #include "viewer/text/view.h"

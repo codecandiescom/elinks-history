@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.55 2003/12/28 01:34:54 jonas Exp $ */
+/* $Id: options.inc,v 1.56 2003/12/28 01:45:21 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -928,81 +928,33 @@ struct option_info config_options_info[] = {
 		"menu", 0,
 		N_("Menu bar colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.menu", N_("Unselected menu item"),
-		"normal", 0,
+	INIT_OPT_COLORS("ui.colors.color.menu", N_("Unselected menu item"),
+		"normal", "white", "black",
 		N_("Unselected menu item colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.menu.normal", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.menu", N_("Selected menu item"),
-		"selected", 0,
+	INIT_OPT_COLORS("ui.colors.color.menu", N_("Selected menu item"),
+		"selected", "green", "black",
 		N_("Selected menu item colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.menu.selected", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Default background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.menu", N_("Marked menu item"),
-		"marked", 0,
+	INIT_OPT_COLORS("ui.colors.color.menu", N_("Marked menu item"),
+		"marked", "white", "red",
 		N_("Marked menu item colors.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.marked", N_("Text color"),
-		"text", 0, "red",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.marked", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
 
 	INIT_OPT_TREE("ui.colors.color.menu", N_("Hotkey"),
 		"hotkey", 0,
 		N_("Menu item hotkey colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.menu.hotkey", N_("Unselected hotkey"),
-		"normal", 0,
+	INIT_OPT_COLORS("ui.colors.color.menu.hotkey", N_("Unselected hotkey"),
+		"normal", "white", "darkred",
 		N_("Menu item unselected hotkey colors.")),
 
-	INIT_OPT_TREE("ui.colors.color.menu.hotkey", N_("Selected hotkey"),
-		"selected", 0,
+	INIT_OPT_COLORS("ui.colors.color.menu.hotkey", N_("Selected hotkey"),
+		"selected", "green", "darkred",
 		N_("Menu item selected hotkey colors.")),
 
-	INIT_OPT_COLOR("ui.colors.color.menu.hotkey.normal", N_("Text color"),
-		"text", 0, "darkred",
-		N_("Menu item unselected hotkey default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.hotkey.normal", N_("Background color"),
-		"background", 0, "white",
-		N_("Menu item unselected hotkey default background color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.hotkey.selected", N_("Text color"),
-		"text", 0, "darkred",
-		N_("Menu item selected hotkey default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.hotkey.selected", N_("Background color"),
-		"background", 0, "green",
-		N_("Menu item selected hotkey background color.")),
-
-	INIT_OPT_TREE("ui.colors.color.menu", N_("Menu frame"),
-		"frame", 0,
+	INIT_OPT_COLORS("ui.colors.color.menu", N_("Menu frame"),
+		"frame", "white", "black",
 		N_("Menu frame colors.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.frame", N_("Text color"),
-		"text", 0, "black",
-		N_("Default text color.")),
-
-	INIT_OPT_COLOR("ui.colors.color.menu.frame", N_("Background color"),
-		"background", 0, "white",
-		N_("Default background color.")),
 
 
 	INIT_OPT_TREE("ui.colors.color", N_("Dialog"),

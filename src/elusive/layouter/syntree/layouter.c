@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.11 2003/01/18 02:12:38 pasky Exp $ */
+/* $Id: layouter.c,v 1.12 2003/01/24 11:54:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,9 @@
 #include "util/memory.h"
 
 
-/* TODO: Support for incremental layouting! --pasky */
+struct syntree_layouter_state {
+	struct syntree_node *last_node;
+};
 
 
 static struct layout_box *
@@ -37,13 +39,13 @@ spawn_box(struct layouter_state *state)
 	return box;
 }
 
+
 static void
-layout_node(struct layouter_state *state, struct syntree_node *node)
+format_node(struct layouter_state *state, struct syntree_node *node)
 {
 	struct layout_box_text *text;
 	struct layout_box *box;
 	struct property *property;
-	struct syntree_node *leaf;
 
 	/* TODO: Dream out some properties. --pasky */
 	/* TODO: Then make it possible to tie the syntree output with some user
@@ -113,18 +115,66 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 		text->str = "\"";
 		text->len = 1;
 	}
+}
 
-	foreach (leaf, node->leafs) {
-		struct layout_box *root_box = state->root;
+static void
+layout_node(struct layouter_state *state, struct syntree_node *orig_node)
+{
+	struct syntree_layouter_state *pdata = state->data;
+	struct syntree_node *node = orig_node;
+	struct list_head *leafs = node->root ? &node->root->leafs : NULL;
+
+	/* XXX: We unfortunately cannot do this by an elegant recursion since
+	 * it would be then *very* hard to implement resuming of layouting in
+	 * the middle of tree :/. --pasky */
+
+	do {
+		struct layout_box *box;
+
+		/* Mark the last node we processed, so that we can resume from
+		 * here when we'll layout the next fragment. */
+		pdata->last_node = node;
 
 		box = spawn_box(state);
 		add_property(&box->properties, "display", 7, "block", 5);
 		add_property(&box->properties, "padding-left", 12, "2", 1);
 		state->root = box;
-		layout_node(state, leaf);
-		state->root = root_box;
-		state->current = box;
-	}
+
+		format_node(state, node);
+
+		if (!list_empty(node->leafs)) {
+			/* Descend to a lower level; keep root */
+			leafs = &node->leafs;
+			node = node->leafs.next;
+			continue;
+		}
+
+		state->root = box->root;
+
+go_on:
+
+		if ((struct list_head *) node->next == leafs) {
+			/* Last item in the list, travel upwards and further */
+
+			/* XXX: assumes 1:1 box<->node hiearchy */
+			state->current = state->root;
+			state->root = state->root ? state->root->root : NULL;
+
+			node = node->root;
+			if (node) {
+				if (node->root)
+					leafs = &node->root->leafs;
+				else
+					leafs = NULL;
+				pdata->last_node = node;
+				goto go_on;
+			}
+			continue;
+		}
+
+		/* Next item in the list (or the root item!) */
+		node = node->next;
+	} while (node);
 }
 
 
@@ -132,23 +182,29 @@ static void
 syntree_init(struct layouter_state *state)
 {
 	state->parser_state = elusive_parser_init(state->parser);
+	state->data = mem_calloc(1, sizeof(struct syntree_layouter_state));
 }
 
 static void
 syntree_layout(struct layouter_state *state, unsigned char **str, int *len)
 {
-	struct syntree_node *node;
+	struct syntree_layouter_state *pdata = state->data;
 
 	elusive_parser_parse(state->parser_state, str, len);
 
-	node = state->parser_state->real_root;
-	add_property(&state->current->properties, "display", 7, "block", 5);
-	layout_node(state, node);
+	if (pdata->last_node) {
+		/* Resume layouting */
+		layout_node(state, pdata->last_node);
+	} else {
+		/* The first layout fragment */
+		layout_node(state, state->parser_state->real_root);
+	}
 }
 
 static void
 syntree_done(struct layouter_state *state)
 {
+	mem_free(state->data);
 	elusive_parser_done(state->parser_state);
 }
 

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.5 2002/08/16 17:32:35 pasky Exp $ */
+/* $Id: user.c,v 1.6 2002/11/25 13:56:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,10 +173,10 @@ tn_func(struct session *ses, unsigned char *url, unsigned char *prog,
 
 	host = get_host_name(url);
 	if (!host) goto fail;
-	check_shell_security(&host);
+	if (*host) check_shell_security(&host);
 
 	port = get_port_str(url);
-	if (port) check_shell_security(&port);
+	if (port && *port) check_shell_security(&port);
 
 	prog_func(ses->term, prog, url, host, port, NULL, t1);
 

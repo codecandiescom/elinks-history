@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.66 2002/11/25 13:21:22 zas Exp $ */
+/* $Id: http.c,v 1.67 2002/11/25 13:56:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,8 +441,10 @@ http_send_header(struct connection *c)
 
 				host_data = get_port_str(extract_proxy(host));
 				if (host_data) {
-					add_to_str(&hdr, &l, ":");
-					add_to_str(&hdr, &l, host_data);
+					if (*host_data) {
+						add_to_str(&hdr, &l, ":");
+						add_to_str(&hdr, &l, host_data);
+					}
 					mem_free(host_data);
 				}
 			}

@@ -1,3 +1,165 @@
+Sun May  2 13:49:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/Makefile.am:
+
+	Only conditionally build memdebug and fastfind objects.  
+
+Sun May  2 13:30:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, modules/module.c, protocol/Makefile.am,
+	protocol/protocol.c, protocol/protocol.h:
+
+	A little kludgy. Introduce protocol module (which I think we should
+	have anyway) because it removes a bit of the symbol resolving mess
+	in the top level Makefile and make URI rewriting a submodule.
+	Finally only conditionally build URI rewriting.  
+
+Sun May  2 13:08:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/: Makefile.am, backend/Makefile.am:
+
+	Only conditionally build mailcap and mimetypes backends.  
+
+Sun May  2 13:07:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/backend/: common.c, xbel.c:
+
+	Fix building without xbel.  
+
+Sun May  2 13:01:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: msgbox.c, msgbox.h:
+
+	msg_text_ni() is not used at all, so it was removed.  
+
+Sun May  2 12:59:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/: Makefile.am, backend/Makefile.am:
+
+	Only conditionally build xbel.  
+
+Sun May  2 12:59:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/Makefile.am:
+
+	Cleanup 
+
+Sun May  2 12:58:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Dejavu: $withval -> $enableval.  
+
+Sun May  2 12:53:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	$srcdir should be initialized by autoconf for us so clean it up.  
+
+Sun May  2 12:52:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/Makefile.am:
+
+	Only conditionally build exmode.  
+
+Sun May  2 12:52:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, protocol/Makefile.am:
+
+	Only conditionally build smb.  
+
+Sun May  2 12:51:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/Makefile.am:
+
+	Cleanup.  
+
+Sun May  2 12:45:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	Label dsp_f was renamed display_field.  
+
+Sun May  2 11:55:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Remove usage of changequote() since it is discouraged.  
+
+Sun May  2 10:53:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	Explode dialog_func() switch: smaller functions were introduced.  
+
+Sun May  2 10:29:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Explode hierbox_dialog_event_handler() big switch in smaller
+	functions: hierbox_ev_kbd(), hierbox_ev_init(), hierbox_ev_abort().  
+
+Sun May  2 09:56:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	hierbox_browser(): minor code simplification.  
+
+Sun May  2 03:05:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Fix XBEL dependency.  
+
+Sun May  2 00:49:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Doh. Revert last patch.  
+
+Sun May  2 00:28:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Rename variables used by the new configuration scheme to have
+	CONFIG_ prefix.  
+
+Sun May  2 00:13:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	We have to figure out a way to autogenerate this crap. Explicitly
+	define AM_CONDITIONAL()s.  
+
+Sat May  1 23:31:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/Makefile.am:
+
+	Only conditionally build LEDs code.  
+
+Sat May  1 23:16:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: Makefile.am, scripting/Makefile.am:
+
+	Use conditionals for scripting/ stuff.  
+
+Sat May  1 22:59:46 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/Makefile.am:
+
+	Yes mamma. Introducing autobreak conditionals. <rant> for no good
+	reason (well ok who wants to run a m4 macro processor from a perl
+	script) automake reports that 'CONFIG_FOO does not appear in
+	AM_CONDITIONAL' but this is a lie and it works perfect so it just
+	seems that automake make a few lazy and false checks </rant> 
+
+Sat May  1 22:26:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	Ahh yes there is this distinction between --with and --enable args.
+	;-) 
+
 Sat May  1 19:29:58 2004  Laurent Monin <zas@norz.org>:
 
 	* src/document/html/parser/forms.c:

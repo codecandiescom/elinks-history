@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.141 2004/06/12 17:28:43 zas Exp $ */
+/* $Id: form.c,v 1.142 2004/06/12 17:55:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,9 +95,9 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	link = get_current_link(doc_view);
 	if (!link || link->type != LINK_SELECT) return;
 
-	fs = find_form_state(doc_view, link->form);
+	fs = find_form_state(doc_view, link->form_control);
 	if (fs) {
-		struct form_control *frm = link->form;
+		struct form_control *frm = link->form_control;
 
 		if (item >= 0 && item < frm->nvalues) {
 			fs->state = item;
@@ -229,7 +229,7 @@ draw_form_entry(struct terminal *term, struct document_view *doc_view,
 	assert(term && doc_view && doc_view->document && doc_view->vs && link);
 	if_assert_failed return;
 
-	frm = link->form;
+	frm = link->form_control;
 	assertm(frm, "link %d has no form", (int)(link - doc_view->document->links));
 	if_assert_failed return;
 
@@ -320,15 +320,16 @@ draw_forms(struct terminal *t, struct document_view *doc_view)
 	do {
 		if (!link_is_form(l1)) continue;
 #ifdef CONFIG_FORMHIST
-		if (l1->form->type == FC_TEXT
-		    || l1->form->type == FC_PASSWORD) {
+		if (l1->form_control->type == FC_TEXT
+		    || l1->form_control->type == FC_PASSWORD) {
 			unsigned char *value;
 
-			value = get_form_history_value(l1->form->action,
-						       l1->form->name);
+			value = get_form_history_value(l1->form_control->action,
+						       l1->form_control->name);
 
 			if (value)
-				mem_free_set(&l1->form->default_value, stracpy(value));
+				mem_free_set(&l1->form_control->default_value,
+					     stracpy(value));
 		}
 #endif /* CONFIG_FORMHIST */
 		draw_form_entry(t, doc_view, l1);
@@ -854,7 +855,7 @@ reset_form(struct session *ses, struct document_view *doc_view, int a)
 
 	if (!link) return;
 
-	do_reset_form(doc_view, link->form->form_num);
+	do_reset_form(doc_view, link->form_control->form_num);
 	draw_forms(ses->tab->term, doc_view);
 }
 
@@ -999,7 +1000,7 @@ auto_submit_form(struct session *ses)
 	int link;
 
 	for (link = 0; link < document->nlinks; link++)
-		if (document->links[link].form == form)
+		if (document->links[link].form_control == form)
 			break;
 
 	if (link >= document->nlinks) return;
@@ -1220,7 +1221,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 	assert(ses && doc_view && link && ev);
 	if_assert_failed return 0;
 
-	fc = link->form;
+	fc = link->form_control;
 	assertm(fc, "link has no form control");
 	if_assert_failed return 0;
 

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.191 2004/06/12 17:28:43 zas Exp $ */
+/* $Id: link.c,v 1.192 2004/06/12 17:55:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,13 +97,13 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 			break;
 
 		case LINK_FIELD:
-			fs = find_form_state(doc_view, link->form);
+			fs = find_form_state(doc_view, link->form_control);
 			if (fs) cursor_offset = fs->state - fs->vpos;
 			break;
 
 		case LINK_AREA:
-			fs = find_form_state(doc_view, link->form);
-			if (fs) cursor_offset = area_cursor(link->form, fs);
+			fs = find_form_state(doc_view, link->form_control);
+			if (fs) cursor_offset = area_cursor(link->form_control, fs);
 			break;
 	}
 
@@ -486,7 +486,7 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 
 		case LINK_BUTTON:
 		case LINK_FIELD:
-			return get_form_uri(ses, doc_view, link->form);
+			return get_form_uri(ses, doc_view, link->form_control);
 
 		default:
 			return NULL;
@@ -507,7 +507,7 @@ goto_current_link(struct session *ses, struct document_view *doc_view, int do_re
 	if (!link) return NULL;
 
 	if (link_is_form(link))
-		uri = get_form_uri(ses, doc_view, link->form);
+		uri = get_form_uri(ses, doc_view, link->form_control);
 	else
 		uri = get_link_uri(ses, doc_view, link);
 
@@ -542,7 +542,7 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 
 	if (!link_is_form(link)
 	    || link->type == LINK_BUTTON
-	    || ((has_form_submit(doc_view->document, link->form)
+	    || ((has_form_submit(doc_view->document, link->form_control)
 		 || get_opt_int("document.browse.forms.auto_submit"))
 		&& (link_is_textinput(link)))) {
 
@@ -555,20 +555,20 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		down(ses, doc_view, 0);
 
 	} else if (link->type == LINK_CHECKBOX) {
-		struct form_state *fs = find_form_state(doc_view, link->form);
+		struct form_state *fs = find_form_state(doc_view, link->form_control);
 
-		if (link->form->ro) return FRAME_EVENT_REFRESH;
+		if (link->form_control->ro) return FRAME_EVENT_REFRESH;
 
-		if (link->form->type == FC_CHECKBOX) {
+		if (link->form_control->type == FC_CHECKBOX) {
 			fs->state = !fs->state;
 
 		} else {
 			struct form_control *fc;
 
 			foreach (fc, doc_view->document->forms) {
-				if (fc->form_num == link->form->form_num
+				if (fc->form_num == link->form_control->form_num
 				    && fc->type == FC_RADIO
-				    && !xstrcmp(fc->name, link->form->name)) {
+				    && !xstrcmp(fc->name, link->form_control->name)) {
 					struct form_state *frm_st;
 
 					frm_st = find_form_state(doc_view, fc);
@@ -579,14 +579,14 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		}
 
 	} else if (link->type == LINK_SELECT) {
-		if (link->form->ro)
+		if (link->form_control->ro)
 			return FRAME_EVENT_REFRESH;
 
 		object_lock(doc_view->document);
 		add_empty_window(ses->tab->term,
 				 (void (*)(void *)) release_document,
 				 doc_view->document);
-		do_select_submenu(ses->tab->term, link->form->menu, ses);
+		do_select_submenu(ses->tab->term, link->form_control->menu, ses);
 
 	} else {
 		INTERNAL("bad link type %d", link->type);
@@ -612,7 +612,7 @@ get_current_state(struct session *ses)
 	l = get_current_link(doc_view);
 	if (!l || l->type != LINK_SELECT) return -1;
 
-	fs = find_form_state(doc_view, l->form);
+	fs = find_form_state(doc_view, l->form_control);
 	if (fs) return fs->state;
 	return -1;
 }
@@ -812,11 +812,12 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		}
 	}
 
-	if (link->form) {
-		if (link->form->type == FC_RESET) {
+	if (link->form_control) {
+		if (link->form_control->type == FC_RESET) {
 			add_menu_action(&mi, N_("~Reset form"), ACT_MAIN_RESET_FORM);
 		} else {
-			if (link->form->type == FC_TEXTAREA && !link->form->ro) {
+			if (link->form_control->type == FC_TEXTAREA
+			    && !link->form_control->ro) {
 				add_to_menu(&mi, N_("Open in ~external editor"), NULL, ACT_MAIN_EDIT,
 					    (menu_func) menu_textarea_edit, NULL, 0);
 			}
@@ -824,7 +825,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
 			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 
-			if (link->form->method == FM_GET)
+			if (link->form_control->method == FM_GET)
 				add_new_win_to_menu(&mi, N_("Submit form and open in new ~window"),
 						    ACT_MAIN_NONE, term);
 
@@ -905,26 +906,26 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 		return str.source;
 	}
 
-	if (!link->form) return NULL;
+	if (!link->form_control) return NULL;
 
 	if (link->type == LINK_BUTTON) {
 		struct string str;
 
-		if (link->form->type == FC_RESET)
+		if (link->form_control->type == FC_RESET)
 			return stracpy(_("Reset form", term));
 
-		if (!link->form->action) return NULL;
+		if (!link->form_control->action) return NULL;
 
 		if (!init_string(&str)) return NULL;
 
-		if (link->form->method == FM_GET)
+		if (link->form_control->method == FM_GET)
 			add_to_string(&str, _("Submit form to", term));
 		else
 			add_to_string(&str, _("Post form to", term));
 		add_char_to_string(&str, ' ');
 
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, link->form->action, URI_PUBLIC);
+		add_string_uri_to_string(&str, link->form_control->action, URI_PUBLIC);
 		return str.source;
 	}
 
@@ -934,25 +935,25 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 
 		if (!init_string(&str)) return NULL;
 
-		if (link->form->type == FC_RADIO)
+		if (link->form_control->type == FC_RADIO)
 			add_to_string(&str, _("Radio button", term));
 
-		else if (link->form->type == FC_CHECKBOX)
+		else if (link->form_control->type == FC_CHECKBOX)
 			add_to_string(&str, _("Checkbox", term));
 
-		else if (link->form->type == FC_SELECT)
+		else if (link->form_control->type == FC_SELECT)
 			add_to_string(&str, _("Select field", term));
 
-		else if (link->form->type == FC_TEXT)
+		else if (link->form_control->type == FC_TEXT)
 			add_to_string(&str, _("Text field", term));
 
-		else if (link->form->type == FC_TEXTAREA)
+		else if (link->form_control->type == FC_TEXTAREA)
 			add_to_string(&str, _("Text area", term));
 
-		else if (link->form->type == FC_FILE)
+		else if (link->form_control->type == FC_FILE)
 			add_to_string(&str, _("File upload", term));
 
-		else if (link->form->type == FC_PASSWORD)
+		else if (link->form_control->type == FC_PASSWORD)
 			add_to_string(&str, _("Password field", term));
 
 		else {
@@ -960,37 +961,38 @@ print_current_link_do(struct document_view *doc_view, struct terminal *term)
 			return NULL;
 		}
 
-		if (link->form->name && link->form->name[0]) {
+		if (link->form_control->name
+		    && link->form_control->name[0]) {
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("name", term));
 			add_char_to_string(&str, ' ');
-			add_to_string(&str, link->form->name);
+			add_to_string(&str, link->form_control->name);
 		}
 
-		if ((link->form->type == FC_CHECKBOX ||
-		     link->form->type == FC_RADIO)
-		    && link->form->default_value
-		    && link->form->default_value[0]) {
+		if ((link->form_control->type == FC_CHECKBOX ||
+		     link->form_control->type == FC_RADIO)
+		    && link->form_control->default_value
+		    && link->form_control->default_value[0]) {
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("value", term));
 			add_char_to_string(&str, ' ');
-			add_to_string(&str, link->form->default_value);
+			add_to_string(&str, link->form_control->default_value);
 		}
 
 		if (link->type == LINK_FIELD
-		    && !has_form_submit(doc_view->document, link->form)
-		    && link->form->action) {
+		    && !has_form_submit(doc_view->document, link->form_control)
+		    && link->form_control->action) {
 			add_to_string(&str, ", ");
 			add_to_string(&str, _("hit ENTER to", term));
 			add_char_to_string(&str, ' ');
-			if (link->form->method == FM_GET)
+			if (link->form_control->method == FM_GET)
 				add_to_string(&str, _("submit to", term));
 			else
 				add_to_string(&str, _("post to", term));
 			add_char_to_string(&str, ' ');
 
 			/* Add the uri with password and post info stripped */
-			add_string_uri_to_string(&str, link->form->action, URI_PUBLIC);
+			add_string_uri_to_string(&str, link->form_control->action, URI_PUBLIC);
 		}
 
 		return str.source;

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.447 2004/06/12 17:39:56 zas Exp $ */
+/* $Id: renderer.c,v 1.448 2004/06/12 17:55:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -816,7 +816,7 @@ new_link(struct document *document, int link_number,
 		case FC_HIDDEN:
 			link->type = LINK_BUTTON;
 		}
-		link->form = form;
+		link->form_control = form;
 		link->target = null_or_stracpy(form->target);
 	}
 

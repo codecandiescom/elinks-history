@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.265 2004/06/26 23:09:09 pasky Exp $ */
+/* $Id: link.c,v 1.266 2004/06/26 23:09:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -551,14 +551,12 @@ next_link_in_dir(struct document_view *doc_view, int current, int dir_x, int dir
 				 * get_link_x_intersect(), but my mind is too
 				 * twisted to do that now. --pasky */
 
-				if (get_link_x_intersect(link, y,
-				                         min_x, max_x))
+				if (get_link_x_intersect(link, y, min_x, max_x))
 					goto chose_link;
 
 				/* Consider taking a backup? */
 
-				get_link_x_bounds(link, y, NULL,
-				                  &l_max_x);
+				get_link_x_bounds(link, y, NULL, &l_max_x);
 				take_backup = l_max_x < min_x;
 				if (take_backup || !backup)
 					backup = link;

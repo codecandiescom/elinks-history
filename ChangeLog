@@ -1,3 +1,279 @@
+Wed Oct 29 23:00:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Fix some #includes.  
+
+Wed Oct 29 22:58:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: frames.h, renderer.h:
+
+	Move link_bg declaration nearer to document_view.  
+
+Wed Oct 29 22:35:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Reorder the parser header and give the special function a proper
+	type.  
+
+Wed Oct 29 22:18:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h:
+
+	Don't export scan_http_equiv().  
+
+Wed Oct 29 22:11:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser.c, document/html/parser.h,
+	viewer/text/form.h:
+
+	Move form_control and friends to the viewer.  
+
+Wed Oct 29 21:58:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	init_html_parser(): Move to the parser. Note g_ctrl_num
+	initialization was moved back to format_html().  
+
+Wed Oct 29 21:51:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	init_html_parser(): Initialize the document title string and startf
+	/ eoff variables.  
+
+Wed Oct 29 21:40:33 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Rename push_base_format() to init_html_parser() + move some parser
+	variables initialization to it.  
+
+Wed Oct 29 21:27:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Introduce *_html_parser_state() to encapsulate various parser
+	variables.  
+
+Wed Oct 29 20:53:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, renderer.c:
+
+	Also move empty stack assertion to done_html_parser().  
+
+Wed Oct 29 20:30:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Encapsulate struct form global variable in the html parser.  
+
+Wed Oct 29 20:18:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/dialogs.h, config/options.c, document/html/frames.c,
+	document/html/parser.h, viewer/text/form.h, viewer/text/vs.c,
+	viewer/text/vs.h:
+
+	Move form_state to viewer (the only user) and cleanup a few
+	dependency hacks.  
+
+Wed Oct 29 19:59:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	viewer/text/link.c:
+
+	Introduce link_is_textinput() macro.  
+
+Wed Oct 29 19:43:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.c, document/document.h,
+	document/html/renderer.c, sched/session.c, viewer/text/link.c,
+	viewer/text/view.c:
+
+	Rename document opt to options.  
+
+Wed Oct 29 19:30:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Rename node variables to node + simplify the get_srch() loop.  
+
+Wed Oct 29 19:29:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, tables.c:
+
+	Rename node variables to node.  
+
+Wed Oct 29 19:17:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, document/html/renderer.c,
+	document/html/tables.c, viewer/text/search.c:
+
+	Rename struct node xw and yw fields to width and height.  
+
+Wed Oct 29 17:51:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/document.c, document/document.h,
+	document/html/renderer.c, viewer/dump/dump.c, viewer/text/link.c,
+	viewer/text/search.c, viewer/text/view.c:
+
+	Fields x and y of struct document were renamed width and height.
+	Please use x and y for horizontal and vertical position not for
+	height and width.  
+
+Wed Oct 29 17:47:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/scripting/lua/core.c:
+
+	Compilation fix. add_dlg_end() is no more used.  
+
+Wed Oct 29 17:17:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/inpfield.c, bfu/msgbox.c,
+	bfu/widget.h, bookmarks/dialogs.c, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, viewer/text/search.c:
+
+	Maintain the number of widgets in a dialog, and don't recount each
+	time. Now we only allocate n - 1 widgets.  
+
+Wed Oct 29 16:29:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.h, html/renderer.h:
+
+	Even move the node and tag structs.  
+
+Wed Oct 29 16:27:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	#include memory as well.  
+
+Wed Oct 29 16:24:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/Makefile.am, document/document.c,
+	document/document.h, document/html/renderer.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	Move lifecycle functions and add new document files to build system.  
+
+Wed Oct 29 16:14:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.h, html/renderer.h:
+
+	Move link and search structs + friends.  
+
+Wed Oct 29 16:10:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.h, html/frames.h, html/parser.h:
+
+	Move struct document to own file.  
+
+Wed Oct 29 15:55:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/main.c:
+
+	Remove useless #includes.  
+
+Wed Oct 29 15:38:44 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: setup.h, bfu/inphist.c:
+
+	MAX_HISTORY_ITEMS was renamed MAX_INPUT_HISTORY_ENTRIES.  
+
+Wed Oct 29 15:25:38 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: document/html/frames.c, sched/location.c, sched/session.c:
+
+	Use frame variable name for struct frame. Fix a one-byte leak in a
+	frame allocation.  
+
+Wed Oct 29 15:01:32 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, inphist.c, inphist.h, widget.c:
+
+	Field d of struct input_history_entry was renamed data.  
+
+Wed Oct 29 14:56:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: dialog.c, inpfield.c, inphist.c, inphist.h, widget.h:
+
+	struct input_history_item was renamed struct input_history_entry.  
+
+Wed Oct 29 14:47:13 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, bfu/inphist.c, bfu/inphist.h,
+	config/urlhist.c, dialogs/menu.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Field items of struct input_history was renamed entries.  
+
+Wed Oct 29 14:31:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/inpfield.c:
+
+	An one-byte leak was fixed. A useless initialization to zero was
+	removed.  
+
+Wed Oct 29 14:27:40 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.h, dialogs/options.c, viewer/text/search.c:
+
+	add_dlg_radio() was introduced, and add_dlg_checkbox() was
+	simplified.  
+
+Wed Oct 29 14:09:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/inphist.c, bfu/inphist.h, bfu/listbox.h,
+	bfu/widget.c, bfu/widget.h, dialogs/options.c,
+	viewer/text/search.c:
+
+	Reverted zas' overloaded cummulative patch introducing
+	add_dlg_radio() etc.  
+
+Wed Oct 29 13:38:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, modules/version.c, sched/connection.c:
+
+	Whitespaces fix.  
+
+Wed Oct 29 13:26:45 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: intl/charsets.c, intl/charsets.h, viewer/text/form.c:
+
+	This patch fixes a segfault when pressing login button on
+	freshmeat.net however I don't know if it breaks form data posting. A
+	far as I can see encode_multipart() and encode_controls() sets d_opt
+	with the sole purpose of having d_opt->plain available in
+	convert_string(). What an ugly way to do it. Instead I've add a new
+	CSM_FORM convert mode so we can test if CSM_FORM was passed in
+	convert_string().  Patch by Jonas.  
+
+Wed Oct 29 11:12:03 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/inpfield.c, bookmarks/dialogs.c, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c, dialogs/options.c,
+	globhist/dialogs.c, sched/download.c, scripting/lua/core.c,
+	viewer/text/search.c:
+
+	Uniformize number of widgets per dialog macro name:
+	something_WIDGETS_COUNT.  
+
+Wed Oct 29 10:51:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, bfu/inpfield.c,
+	bfu/inpfield.h, bfu/inphist.c, bfu/inphist.h, bfu/listbox.h,
+	bfu/widget.c, bfu/widget.h, dialogs/options.c,
+	viewer/text/search.c:
+
+	add_dlg_radio() was introduced and add_dlg_checkbox() loose two
+	paremeters. Comments about checkbox/radios were added. struct
+	input_history_item field d was renamed data, a one-byte leak was
+	fixed. Minor tidyup.  
+
 Tue Oct 28 21:28:20 2003  Fabio Bonelli <fabiobonelli@libero.it>:
 
 	* po/it.po:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.614 2004/10/10 03:51:04 miciah Exp $ */
+/* $Id: view.c,v 1.615 2004/10/10 03:56:21 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -717,13 +717,11 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 	    && try_document_key(ses, doc_view, ev)) {
 		/* The document ate the key! */
 		status = FRAME_EVENT_REFRESH;
+		ses->kbdprefix.repeat_count = 0;
 
 	} else {
 		status = FRAME_EVENT_IGNORED;
 	}
-
-	if (status != FRAME_EVENT_IGNORED)
-		ses->kbdprefix.repeat_count = 0;
 
 	return status;
 }

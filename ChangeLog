@@ -1,3 +1,116 @@
+Tue Apr  6 12:29:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix bug triggered on FreeBSD. Safeguarding against passing the wrong
+	URI string to normalize_uri() by simplifying noparse macro.  
+
+Tue Apr  6 11:13:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/refresh.c:
+
+	This should fix bug 434 another sf download using document
+	refreshing related thing. At least downloading w3m no longer spawns
+	an extra type query box.  
+
+Tue Apr  6 10:35:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c:
+
+	Revert buggy insert_in_string() usage in form fields and areas.  
+
+Tue Apr  6 09:50:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	Assert add_to_string_list() and free_string_list() parameters.  
+
+Tue Apr  6 09:36:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	Redundant test was removed: free_string_list() checks for empty
+	list.  
+
+Tue Apr  6 07:59:48 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/viewer/dump/dump.c:
+
+	elinks -dump did not finish.  
+
+Tue Apr  6 07:46:30 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/viewer/dump/dump.c:
+
+	Fix for bug 433 (unknown protocol or bad uri with -dump).  
+
+Tue Apr  6 07:07:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix directory normalization bug by handling // used by
+	translate_file_url().  
+
+Tue Apr  6 07:04:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	First part of directory normalization loop sanification.  
+
+Tue Apr  6 01:35:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	translate_url(): Fix leak.  
+
+Tue Apr  6 01:34:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Rename translate_directories() to normalize_uri() since it now does
+	more work. Macros are used for controlling whether to reparse or
+	not. I am aware that directory translation is currently broken and
+	intent to rewrite it in a sane way ASAP.  
+
+Tue Apr  6 01:20:57 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	m33p.  
+
+Tue Apr  6 01:20:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c:
+
+	Use insert_in_string() for text fields and areas.  
+
+Tue Apr  6 01:13:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	translate_url(): Make @expanded the new URI string as soon as
+	possible to simplyfy.  
+
+Tue Apr  6 01:08:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix some strange double free error.  
+
+Tue Apr  6 00:30:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/uri.c, util/string.c, util/string.h:
+
+	Rename insert_in_uri()  to insert_in_string() and move to string
+	utils.  
+
+Tue Apr  6 00:08:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	translate_directories(): Always pass URI struct as argument and
+	instead use uristring arg to signal whether to reparse.  
+
 Mon Apr  5 17:41:47 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/http/http.c:

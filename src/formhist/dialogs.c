@@ -1,5 +1,5 @@
 /* Form history related dialogs */
-/* $Id: dialogs.c,v 1.22 2004/01/02 18:37:57 jonas Exp $ */
+/* $Id: dialogs.c,v 1.23 2004/01/07 03:18:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,7 +177,7 @@ struct_hierbox_browser(
 );
 
 void
-menu_formhist_manager(struct terminal *term, void *fcp, struct session *ses)
+formhist_manager(struct session *ses)
 {
 	load_forms_from_file();
 	hierbox_browser(&formhist_browser, ses);

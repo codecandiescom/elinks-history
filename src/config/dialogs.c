@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.146 2004/01/04 20:54:09 pasky Exp $ */
+/* $Id: dialogs.c,v 1.147 2004/01/07 03:18:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -421,7 +421,7 @@ struct_hierbox_browser(
 
 /* Builds the "Options manager" dialog */
 void
-menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
+options_manager(struct session *ses)
 {
 	hierbox_browser(&option_browser, ses);
 }
@@ -629,7 +629,7 @@ struct_hierbox_browser(
 
 /* Builds the "Keybinding manager" dialog */
 void
-menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
+keybinding_manager(struct session *ses)
 {
 	hierbox_browser(&keybinding_browser, ses);
 }

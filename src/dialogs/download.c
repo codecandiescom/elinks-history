@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.34 2004/01/05 16:55:30 pasky Exp $ */
+/* $Id: download.c,v 1.35 2004/01/07 03:18:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -432,7 +432,7 @@ struct_hierbox_browser(
 );
 
 void
-menu_download_manager(struct terminal *term, void *fcp, struct session *ses)
+download_manager(struct session *ses)
 {
 	hierbox_browser(&download_browser, ses);
 }

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.44 2004/01/02 18:37:56 jonas Exp $ */
+/* $Id: dialogs.c,v 1.45 2004/01/07 03:18:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,7 +155,7 @@ struct_hierbox_browser(
 );
 
 void
-menu_cache_manager(struct terminal *term, void *fcp, struct session *ses)
+cache_manager(struct session *ses)
 {
 	hierbox_browser(&cache_browser, ses);
 }

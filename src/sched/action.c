@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.4 2004/01/07 02:50:10 jonas Exp $ */
+/* $Id: action.c,v 1.5 2004/01/07 03:18:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,12 +77,12 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 
 		case ACT_BOOKMARK_MANAGER:
 #ifdef CONFIG_BOOKMARKS
-			menu_bookmark_manager(ses->tab->term, NULL, ses);
+			bookmark_manager(ses);
 #endif
 			break;
 
 		case ACT_CACHE_MANAGER:
-			menu_cache_manager(ses->tab->term, NULL, ses);
+			cache_manager(ses);
 			break;
 
 		case ACT_CACHE_MINIMIZE:
@@ -91,7 +91,7 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 
 		case ACT_COOKIE_MANAGER:
 #ifdef CONFIG_COOKIES
-			menu_cookie_manager(ses->tab->term, NULL, ses);
+			cookie_manager(ses);
 #endif
 			break;
 
@@ -100,12 +100,12 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			break;
 
 		case ACT_DOWNLOAD_MANAGER:
-			menu_download_manager(ses->tab->term, NULL, ses);
+			download_manager(ses);
 			break;
 
 		case ACT_FORMHIST_MANAGER:
 #ifdef CONFIG_FORMHIST
-			menu_formhist_manager(ses->tab->term, NULL, ses);
+			formhist_manager(ses);
 #endif
 			break;
 
@@ -119,12 +119,12 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 
 		case ACT_HISTORY_MANAGER:
 #ifdef CONFIG_GLOBHIST
-			menu_history_manager(ses->tab->term, NULL, ses);
+			history_manager(ses);
 #endif
 			break;
 
 		case ACT_KEYBINDING_MANAGER:
-			menu_keybinding_manager(ses->tab->term, NULL, ses);
+			keybinding_manager(ses);
 			break;
 
 		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
@@ -132,7 +132,7 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			break;
 
 		case ACT_OPTIONS_MANAGER:
-			menu_options_manager(ses->tab->term, NULL, ses);
+			options_manager(ses);
 			break;
 
 		case ACT_RELOAD:

@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.11 2004/01/01 14:24:08 jonas Exp $ */
+/* $Id: dialogs.h,v 1.12 2004/01/07 03:18:19 jonas Exp $ */
 
 #ifndef EL__BOOKMARKS_DIALOGS_H
 #define EL__BOOKMARKS_DIALOGS_H
@@ -16,8 +16,7 @@ extern unsigned char *bm_last_searched_url;
 extern struct hierbox_browser bookmark_browser;
 
 /* Launch the bookmark manager */
-void menu_bookmark_manager(struct terminal *term, void *fcp,
-			   struct session *ses);
+void bookmark_manager(struct session *ses);
 
 /* Launch 'Add bookmark' dialog... */
 

@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.105 2004/01/07 02:50:10 jonas Exp $ */
+/* $Id: dialogs.c,v 1.106 2004/01/07 03:18:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,7 +201,7 @@ struct_hierbox_browser(
 );
 
 void
-menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
+history_manager(struct session *ses)
 {
 	if (gh_last_searched_title) {
 		mem_free(gh_last_searched_title);

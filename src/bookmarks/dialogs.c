@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.150 2004/01/02 18:37:56 jonas Exp $ */
+/* $Id: dialogs.c,v 1.151 2004/01/07 03:18:18 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -393,7 +393,7 @@ struct_hierbox_browser(
 
 /* Builds the "Bookmark manager" dialog */
 void
-menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
+bookmark_manager(struct session *ses)
 {
 	/* Reset momorized search criterias */
 	if (bm_last_searched_name) {

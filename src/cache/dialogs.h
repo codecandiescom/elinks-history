@@ -1,4 +1,4 @@
-/* $Id: dialogs.h,v 1.5 2003/12/01 15:04:15 pasky Exp $ */
+/* $Id: dialogs.h,v 1.6 2004/01/07 03:18:19 jonas Exp $ */
 
 #ifndef EL__CACHE_DIALOGS_H
 #define EL__CACHE_DIALOGS_H
@@ -9,6 +9,6 @@ struct session;
 struct terminal;
 
 extern struct hierbox_browser cache_browser;
-void menu_cache_manager(struct terminal *, void *, struct session *);
+void cache_manager(struct session *);
 
 #endif

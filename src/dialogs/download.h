@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.3 2003/12/26 10:10:09 jonas Exp $ */
+/* $Id: download.h,v 1.4 2004/01/07 03:18:19 jonas Exp $ */
 
 #ifndef EL__DIALOGS_DOWNLOAD_H
 #define EL__DIALOGS_DOWNLOAD_H
@@ -9,7 +9,7 @@
 #include "terminal/terminal.h"
 
 void display_download(struct terminal *, struct file_download *, struct session *);
-void menu_download_manager(struct terminal *term, void *fcp, struct session *ses);
+void download_manager(struct session *ses);
 extern struct hierbox_browser download_browser;
 
 /* Draws a progress bar meter or progress coloured text depending on whether

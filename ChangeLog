@@ -1,3 +1,74 @@
+Tue Aug 27 03:22:27 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: cookies/cookies.c, protocol/http/date.c:
+
+	Enhanced cookies debug, fix in HTTP date parser (first digit of day
+	was eaten sometimes), somehow implemented secure cookies.  
+
+Tue Aug 27 03:00:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: intl/charsets.c, intl/charsets.h, intl/codepage.inc,
+	intl/entity.inc, intl/uni_7b.inc, lowlevel/terminal.c,
+	lowlevel/terminal.h, ssl/connect.c:
+
+	Strictly use 32bit-safe type for unicode values. And tiny SSL
+	improvement.  
+
+Tue Aug 27 02:13:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* acconfig.h, configure.in, src/util/Makefile.am, src/util/types.h:
+
+	Introduced support for int32_t and uint32_t types - detection of
+	them + wrapping them around when they're not defined by the system.
+	Uff ;-).  
+
+Tue Aug 27 01:33:05 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Unicode/tr7bit.awk, src/intl/uni_7b.inc:
+
+	Now, we're even more ready for the hammer of UTF32 - fixed problem
+	with values >= 0x10000 in 7-bit translations.  
+
+Tue Aug 27 00:48:25 2002  Petr Baudis <pasky@ji.cz>:
+
+	* Unicode/gen-7b, Unicode/gen-ent, src/intl/entity.inc,
+	src/intl/uni_7b.inc:
+
+	Use unsigned stuff for unicode table.s 
+
+Tue Aug 27 00:43:34 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/intl/charsets.c:
+
+	In binary search, some stuff may be negative, but was unsigned -
+	fixed. Thanks, Dmitry.  
+
+Tue Aug 27 00:34:41 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/config/options.c:
+
+	Swapped VT100 and Linux terminal type number in description of
+	terminal._template_.type. Thanks, Dmitry.  
+
+Tue Aug 27 00:31:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/ukrainian.lng, src/intl/language.inc:
+
+	Ukrainian translation update by Dmitry.  
+
+Tue Aug 27 00:17:23 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, document/download.c,
+	document/view.c:
+
+	There's no file query when save-formatted action is emitted.  
+
+Tue Aug 27 00:06:52 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/document/view.c:
+
+	Flush cache when forget-credentials.  
+
 Mon Aug 26 23:40:19 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: config/options.c, document/session.c, document/view.c:

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.59 2004/06/22 22:56:52 zas Exp $ */
+/* $Id: parse.c,v 1.60 2004/06/22 23:08:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -602,7 +602,7 @@ main_loop:
 				h++;
 			if (h + 1 < eof && h[0] == '<' && h[1] == '/') {
 				if (!parse_element(h, eof, &name, &namelen, &attr, &end)) {
-					put_chrs(base_pos, html - base_pos, put_chars_f, f);
+					put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 					base_pos = html = h;
 					html_context.putsp = 1;
 					goto element;
@@ -617,10 +617,10 @@ main_loop:
 					noupdate = 1;
 					continue;
 				}
-				put_chrs(base_pos, html - base_pos, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 			} else {
-				put_chrs(base_pos, html - base_pos - 1, put_chars_f, f);
-				put_chrs(" ", 1, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos - 1, html_context.put_chars_f, f);
+				put_chrs(" ", 1, html_context.put_chars_f, f);
 			}
 
 skip_w:
@@ -629,20 +629,20 @@ skip_w:
 			continue;
 
 put_sp:
-			put_chrs(" ", 1, put_chars_f, f);
+			put_chrs(" ", 1, html_context.put_chars_f, f);
 		}
 
 		if (par_format.align == AL_NONE) {
 			html_context.putsp = 0;
 			if (*html == ASCII_TAB) {
-				put_chrs(base_pos, html - base_pos, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 				put_chrs("        ", 8 - (html_context.position % 8),
-					 put_chars_f, f);
+					 html_context.put_chars_f, f);
 				html++;
 				continue;
 
 			} else if (*html == ASCII_CR || *html == ASCII_LF) {
-				put_chrs(base_pos, html - base_pos, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 
 next_break:
 				if (*html == ASCII_CR && html < eof - 1
@@ -660,7 +660,7 @@ next_break:
 
 		while (*html < ' ') {
 			if (html - base_pos)
-				put_chrs(base_pos, html - base_pos, put_chars_f, f);
+				put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 
 			dotcounter++;
 			base_pos = ++html;
@@ -669,7 +669,7 @@ next_break:
 
 				if (dots) {
 					memset(dots, '.', dotcounter);
-					put_chrs(dots, dotcounter, put_chars_f, f);
+					put_chrs(dots, dotcounter, html_context.put_chars_f, f);
 					fmem_free(dots);
 				}
 				goto main_loop;
@@ -678,7 +678,7 @@ next_break:
 
 		if (html + 2 <= eof && html[0] == '<' && (html[1] == '!' || html[1] == '?')
 		    && !html_context.was_xmp) {
-			put_chrs(base_pos, html - base_pos, put_chars_f, f);
+			put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 			html = skip_comment(html, eof);
 			continue;
 		}
@@ -693,7 +693,7 @@ element:
 		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
 		if (!endingtag && html_context.putsp == 1 && !html_top.invisible)
 			goto put_sp;
-		put_chrs(base_pos, html - base_pos, put_chars_f, f);
+		put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 		if (par_format.align != AL_NONE && !endingtag && !html_context.putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
@@ -702,7 +702,7 @@ element:
 				if (*nm == '/')
 					goto ng;
 			if (ee < eof && isspace(*ee)) {
-				put_chrs(" ", 1, put_chars_f, f);
+				put_chrs(" ", 1, html_context.put_chars_f, f);
 			}
 ng:;
 		}
@@ -713,7 +713,7 @@ ng:;
 		html = process_element(name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
 
-	if (noupdate) put_chrs(base_pos, html - base_pos, put_chars_f, f);
+	if (noupdate) put_chrs(base_pos, html - base_pos, html_context.put_chars_f, f);
 	ln_break(1, line_break_f, f);
 	html_context.putsp = -1;
 	html_context.position = 0;
@@ -731,7 +731,7 @@ start_element(struct element_info *ei,
 	int restore_format;
 
 	if (html_context.was_xmp) {
-		put_chrs("<", 1, put_chars_f, f);
+		put_chrs("<", 1, html_context.put_chars_f, f);
 		html = prev_html + 1;
 		return html;
 	}

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.456 2004/06/22 22:56:52 zas Exp $ */
+/* $Id: parser.c,v 1.457 2004/06/22 23:08:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,7 +148,6 @@ get_target(unsigned char *a)
 	return v;
 }
 
-void (*put_chars_f)(void *, unsigned char *, int);
 void (*line_break_f)(void *);
 void *(*special_f)(void *, enum html_special_type, ...);
 
@@ -570,7 +569,9 @@ html_hr(unsigned char *a)
 	if (i == -1) i = par_format.width - (margin - 2) * 2;
 	format.attr = AT_GRAPHICS;
 	special_f(html_context.ff, SP_NOWRAP, 1);
-	while (i-- > 0) put_chrs(&r, 1, put_chars_f, html_context.ff);
+	while (i-- > 0) {
+		put_chrs(&r, 1, html_context.put_chars_f, html_context.ff);
+	}
 	special_f(html_context.ff, SP_NOWRAP, 0);
 	ln_break(2, line_break_f, html_context.ff);
 	kill_html_stack_item(&html_top);
@@ -597,7 +598,7 @@ html_th(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr |= AT_BOLD;
-	put_chrs(" ", 1, put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 }
 
 void
@@ -606,7 +607,7 @@ html_td(unsigned char *a)
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
 	format.attr &= ~AT_BOLD;
-	put_chrs(" ", 1, put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 }
 
 void
@@ -718,7 +719,7 @@ html_li(unsigned char *a)
 
 		if (t == P_O) x[0] = 'o';
 		if (t == P_PLUS) x[0] = '+';
-		put_chrs(x, 7, put_chars_f, html_context.ff);
+		put_chrs(x, 7, html_context.put_chars_f, html_context.ff);
 		par_format.leftmargin += 2;
 		par_format.align = AL_LEFT;
 
@@ -732,7 +733,7 @@ html_li(unsigned char *a)
 		if (s != -1) par_format.list_number = s;
 
 		if (t == P_ALPHA || t == P_alpha) {
-			put_chrs("&nbsp;", 6, put_chars_f, html_context.ff);
+			put_chrs("&nbsp;", 6, html_context.put_chars_f, html_context.ff);
 			c = 1;
 			n[0] = par_format.list_number
 			       ? (par_format.list_number - 1) % 26
@@ -750,7 +751,7 @@ html_li(unsigned char *a)
 
 		} else {
 			if (par_format.list_number < 10) {
-				put_chrs("&nbsp;", 6, put_chars_f, html_context.ff);
+				put_chrs("&nbsp;", 6, html_context.put_chars_f, html_context.ff);
 				c = 1;
 			}
 
@@ -758,8 +759,8 @@ html_li(unsigned char *a)
 		}
 
 		nlen = strlen(n);
-		put_chrs(n, nlen, put_chars_f, html_context.ff);
-		put_chrs(".&nbsp;", 7, put_chars_f, html_context.ff);
+		put_chrs(n, nlen, html_context.put_chars_f, html_context.ff);
+		put_chrs(".&nbsp;", 7, html_context.put_chars_f, html_context.ff);
 		par_format.leftmargin += nlen + c + 2;
 		par_format.align = AL_LEFT;
 		html_top.next->parattr.list_number = par_format.list_number + 1;
@@ -1293,7 +1294,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	html_context.startf = start;
 	html_context.eofff = end;
-	put_chars_f = put_chars;
+	html_context.put_chars_f = put_chars;
 	line_break_f = line_break;
 	special_f = special;
 	scan_http_equiv(start, end, head, title);

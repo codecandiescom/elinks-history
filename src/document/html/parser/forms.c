@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.29 2004/06/22 22:56:52 zas Exp $ */
+/* $Id: forms.c,v 1.30 2004/06/22 23:08:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,18 +173,18 @@ put_button(unsigned char *a)
 {
 	unsigned char *al;
 
-	put_chrs(" [&nbsp;", 8, put_chars_f, html_context.ff);
+	put_chrs(" [&nbsp;", 8, html_context.put_chars_f, html_context.ff);
 
 	al = get_attr_val(a, "value");
 	if (al) {
-		put_chrs(al, strlen(al), put_chars_f, html_context.ff);
+		put_chrs(al, strlen(al), html_context.put_chars_f, html_context.ff);
 		mem_free(al);
 	} else {
 		/* no value */
-		put_chrs("BUTTON", 6, put_chars_f, html_context.ff);
+		put_chrs("BUTTON", 6, html_context.put_chars_f, html_context.ff);
 	}
 
-	put_chrs("&nbsp;] ", 8, put_chars_f, html_context.ff);
+	put_chrs("&nbsp;] ", 8, html_context.put_chars_f, html_context.ff);
 }
 
 int
@@ -309,7 +309,7 @@ no_type_attr:
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	if (fc->type == FC_HIDDEN) goto hid;
 
-	put_chrs(" ", 1, put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	if (format.title) mem_free(format.title);
@@ -320,15 +320,15 @@ no_type_attr:
 		case FC_FILE:
 			format.attr |= AT_BOLD;
 			for (i = 0; i < fc->size; i++)
-				put_chrs("_", 1, put_chars_f, html_context.ff);
+				put_chrs("_", 1, html_context.put_chars_f, html_context.ff);
 			break;
 		case FC_CHECKBOX:
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;]", 8, put_chars_f, html_context.ff);
+			put_chrs("[&nbsp;]", 8, html_context.put_chars_f, html_context.ff);
 			break;
 		case FC_RADIO:
 			format.attr |= AT_BOLD;
-			put_chrs("(&nbsp;)", 8, put_chars_f, html_context.ff);
+			put_chrs("(&nbsp;)", 8, html_context.put_chars_f, html_context.ff);
 			break;
 		case FC_IMAGE:
 			mem_free_set(&format.image, NULL);
@@ -339,23 +339,23 @@ no_type_attr:
 				mem_free(al);
 			}
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, put_chars_f, html_context.ff);
+			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.ff);
 			if (fc->alt)
-				put_chrs(fc->alt, strlen(fc->alt), put_chars_f, html_context.ff);
+				put_chrs(fc->alt, strlen(fc->alt), html_context.put_chars_f, html_context.ff);
 			else if (fc->name)
-				put_chrs(fc->name, strlen(fc->name), put_chars_f, html_context.ff);
+				put_chrs(fc->name, strlen(fc->name), html_context.put_chars_f, html_context.ff);
 			else
-				put_chrs("Submit", 6, put_chars_f, html_context.ff);
+				put_chrs("Submit", 6, html_context.put_chars_f, html_context.ff);
 
-			put_chrs("&nbsp;]", 7, put_chars_f, html_context.ff);
+			put_chrs("&nbsp;]", 7, html_context.put_chars_f, html_context.ff);
 			break;
 		case FC_SUBMIT:
 		case FC_RESET:
 			format.attr |= AT_BOLD;
-			put_chrs("[&nbsp;", 7, put_chars_f, html_context.ff);
+			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.ff);
 			if (fc->default_value)
-				put_chrs(fc->default_value, strlen(fc->default_value), put_chars_f, html_context.ff);
-			put_chrs("&nbsp;]", 7, put_chars_f, html_context.ff);
+				put_chrs(fc->default_value, strlen(fc->default_value), html_context.put_chars_f, html_context.ff);
+			put_chrs("&nbsp;]", 7, html_context.put_chars_f, html_context.ff);
 			break;
 		case FC_TEXTAREA:
 		case FC_SELECT:
@@ -363,7 +363,7 @@ no_type_attr:
 			INTERNAL("bad control type");
 	}
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 
 hid:
 	special_f(html_context.ff, SP_CONTROL, fc);
@@ -450,13 +450,13 @@ end_parse:
 	fc->default_value = val;
 	fc->default_state = has_attr(a, "selected");
 	fc->mode = has_attr(a, "disabled") ? FORM_MODE_DISABLED : format.select_disabled;
-	put_chrs(" ", 1, put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
-	put_chrs("[ ]", 3, put_chars_f, html_context.ff);
+	put_chrs("[ ]", 3, html_context.put_chars_f, html_context.ff);
 	kill_html_stack_item(&html_top);
-	put_chrs(" ", 1, put_chars_f, html_context.ff);
+	put_chrs(" ", 1, html_context.put_chars_f, html_context.ff);
 	special_f(html_context.ff, SP_CONTROL, fc);
 }
 
@@ -609,7 +609,7 @@ end_parse:
 	fc->labels = labels;
 
 	menu_labels(fc->menu, "", labels);
-	put_chrs("[", 1, put_chars_f, f);
+	put_chrs("[", 1, html_context.put_chars_f, f);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
 	format.attr |= AT_BOLD;
@@ -621,10 +621,10 @@ end_parse:
 	}
 
 	for (i = 0; i < max_width; i++)
-		put_chrs("_", 1, put_chars_f, f);
+		put_chrs("_", 1, html_context.put_chars_f, f);
 
 	kill_html_stack_item(&html_top);
-	put_chrs("]", 1, put_chars_f, f);
+	put_chrs("]", 1, html_context.put_chars_f, f);
 	special_f(html_context.ff, SP_CONTROL, fc);
 
 	return 0;
@@ -725,7 +725,7 @@ pp:
 	if (fc->maxlength == -1) fc->maxlength = MAXINT;
 
 	if (rows > 1) ln_break(1, line_break_f, f);
-	else put_chrs(" ", 1, put_chars_f, f);
+	else put_chrs(" ", 1, html_context.put_chars_f, f);
 
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
@@ -735,13 +735,13 @@ pp:
 		int j;
 
 		for (j = 0; j < cols; j++)
-			put_chrs("_", 1, put_chars_f, f);
+			put_chrs("_", 1, html_context.put_chars_f, f);
 		if (i < rows - 1)
 			ln_break(1, line_break_f, f);
 	}
 
 	kill_html_stack_item(&html_top);
 	if (rows > 1) ln_break(1, line_break_f, f);
-	else put_chrs(" ", 1, put_chars_f, f);
+	else put_chrs(" ", 1, html_context.put_chars_f, f);
 	special_f(f, SP_CONTROL, fc);
 }

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.176 2004/05/16 14:13:28 zas Exp $ */
+/* $Id: tables.c,v 1.177 2004/05/16 14:27:15 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -728,33 +728,32 @@ nc:
 	qqq = table->x;
 
 	for (i = 1; colspan != -1 ? i < colspan : i < qqq; i++) {
-		struct table_cell *sc = new_cell(table, x + i, y);
+		struct table_cell *span_cell = new_cell(table, x + i, y);
 
-		if (!sc || sc->is_used) {
+		if (!span_cell || span_cell->is_used) {
 			colspan = i;
 			for (k = 0; k < i; k++)
 				CELL(table, x + k, y)->colspan = colspan;
 			break;
 		}
 
-		sc->is_used = sc->is_spanned = 1;
-		sc->rowspan = rowspan;
-		sc->colspan = colspan;
-		sc->mx = x;
-		sc->my = y;
+		span_cell->is_used = span_cell->is_spanned = 1;
+		span_cell->rowspan = rowspan;
+		span_cell->colspan = colspan;
+		span_cell->mx = x;
+		span_cell->my = y;
 	}
 
 	qqq = table->y;
 	for (j = 1; rowspan != -1 ? j < rowspan : j < qqq; j++) {
 		for (k = 0; k < i; k++) {
-			struct table_cell *sc = new_cell(table, x + k, y + j);
+			struct table_cell *span_cell = new_cell(table, x + k, y + j);
 
-			if (!sc || sc->is_used) {
+			if (!span_cell || span_cell->is_used) {
 				int l, m;
 
-				if (sc->mx == x && sc->my == y) continue;
-
-				/* INTERNAL("boo"); */
+				if (span_cell->mx == x && span_cell->my == y)
+					continue;
 
 				for (l = 0; l < k; l++)
 					memset(CELL(table, x + l, y + j), 0,
@@ -768,11 +767,11 @@ nc:
 				goto see;
 			}
 
-			sc->is_used = sc->is_spanned = 1;
-			sc->rowspan = rowspan;
-			sc->colspan = colspan;
-			sc->mx = x;
-			sc->my = y;
+			span_cell->is_used = span_cell->is_spanned = 1;
+			span_cell->rowspan = rowspan;
+			span_cell->colspan = colspan;
+			span_cell->mx = x;
+			span_cell->my = y;
 		}
 	}
 
@@ -784,11 +783,11 @@ scan_done:
 	mem_free_if(l_fragment_id);
 
 	for (x = 0; x < table->x; x++) for (y = 0; y < table->y; y++) {
-		struct table_cell *c = CELL(table, x, y);
+		struct table_cell *cell = CELL(table, x, y);
 
-		if (!c->is_spanned) {
-			if (c->colspan == -1) c->colspan = table->x - x;
-			if (c->rowspan == -1) c->rowspan = table->y - y;
+		if (!cell->is_spanned) {
+			if (cell->colspan == -1) cell->colspan = table->x - x;
+			if (cell->rowspan == -1) cell->rowspan = table->y - y;
 		}
 	}
 
@@ -856,14 +855,14 @@ check_cell_widths(struct table *table)
 
 	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
 		int min, max;
-		struct table_cell *c = CELL(table, i, j);
+		struct table_cell *cell = CELL(table, i, j);
 
-		if (!c->start) continue;
+		if (!cell->start) continue;
 
-		get_cell_width(c->start, c->end, table->cellpadding, 0, 0,
-			       &min, &max, c->link_num, NULL);
+		get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
+			       &min, &max, cell->link_num, NULL);
 
-		assertm(!(min != c->min_width || max < c->max_width),
+		assertm(!(min != cell->min_width || max < cell->max_width),
 			"check_cell_widths failed");
 	}
 }
@@ -877,22 +876,22 @@ get_cell_widths(struct table *table)
 	if (!global_doc_opts->table_order)
 		for (j = 0; j < table->y; j++)
 			for (i = 0; i < table->x; i++) {
-				struct table_cell *c = CELL(table, i, j);
+				struct table_cell *cell = CELL(table, i, j);
 
-				if (!c->start) continue;
-				c->link_num = nl;
-				get_cell_width(c->start, c->end, table->cellpadding, 0, 0,
-					       &c->min_width, &c->max_width, nl, &nl);
+				if (!cell->start) continue;
+				cell->link_num = nl;
+				get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
+					       &cell->min_width, &cell->max_width, nl, &nl);
 			}
 	else
 		for (i = 0; i < table->x; i++)
 			for (j = 0; j < table->y; j++) {
-				struct table_cell *c = CELL(table, i, j);
+				struct table_cell *cell = CELL(table, i, j);
 
-				if (!c->start) continue;
-				c->link_num = nl;
-				get_cell_width(c->start, c->end, table->cellpadding, 0, 0,
-					       &c->min_width, &c->max_width, nl, &nl);
+				if (!cell->start) continue;
+				cell->link_num = nl;
+				get_cell_width(cell->start, cell->end, table->cellpadding, 0, 0,
+					       &cell->min_width, &cell->max_width, nl, &nl);
 			}
 
 	table->link_num = nl;
@@ -1012,25 +1011,25 @@ get_column_widths(struct table *table)
 		int ns = MAXINT;
 
 		for (; i < table->x; i++) for (j = 0; j < table->y; j++) {
-			struct table_cell *c = CELL(table, i, j);
+			struct table_cell *cell = CELL(table, i, j);
 
-			if (c->is_spanned || !c->is_used) continue;
+			if (cell->is_spanned || !cell->is_used) continue;
 
-			assertm(c->colspan + i <= table->x, "colspan out of table");
+			assertm(cell->colspan + i <= table->x, "colspan out of table");
 			if_assert_failed return -1;
 
-			if (c->colspan == s) {
+			if (cell->colspan == s) {
 				register int k, p = 0;
 
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
 				dst_width(table->min_c + i, s,
-				  	  c->min_width - p,
+				  	  cell->min_width - p,
 					  table->max_c + i);
 
 				dst_width(table->max_c + i, s,
-				  	  c->max_width - p,
+				  	  cell->max_width - p,
 					  NULL);
 
 				for (k = 0; k < s; k++) {
@@ -1039,8 +1038,8 @@ get_column_widths(struct table *table)
 					int_lower_bound(&table->max_c[tmp], table->min_c[tmp]);
 				}
 
-			} else if (c->colspan > s && c->colspan < ns) {
-				ns = c->colspan;
+			} else if (cell->colspan > s && cell->colspan < ns) {
+				ns = cell->colspan;
 			}
 		}
 		s = ns;
@@ -1243,43 +1242,43 @@ check_table_widths(struct table *table)
 	if (!w) return;
 
 	for (j = 0; j < table->y; j++) for (i = 0; i < table->x; i++) {
-		struct table_cell *c = CELL(table, i, j);
+		struct table_cell *cell = CELL(table, i, j);
 		register int k, p = 0;
 
-		if (!c->start) continue;
+		if (!cell->start) continue;
 
-		for (k = 0; k < c->colspan; k++) {
+		for (k = 0; k < cell->colspan; k++) {
 			p += table->columns_width[i + k] +
 			     (k && get_vline_width(table, i + k) >= 0);
 		}
 
-		get_cell_width(c->start, c->end, table->cellpadding, p, 1, &c->width,
-			       NULL, c->link_num, NULL);
+		get_cell_width(cell->start, cell->end, table->cellpadding, p, 1, &cell->width,
+			       NULL, cell->link_num, NULL);
 
-		int_upper_bound(&c->width, p);
+		int_upper_bound(&cell->width, p);
 	}
 
 	s = 1;
 	do {
 		ns = MAXINT;
 		for (i = 0; i < table->x; i++) for (j = 0; j < table->y; j++) {
-			struct table_cell *c = CELL(table, i, j);
+			struct table_cell *cell = CELL(table, i, j);
 
-			if (!c->start) continue;
+			if (!cell->start) continue;
 
-			assertm(c->colspan + i <= table->x, "colspan out of table");
+			assertm(cell->colspan + i <= table->x, "colspan out of table");
 			if_assert_failed goto end;
 
-			if (c->colspan == s) {
+			if (cell->colspan == s) {
 				int k, p = 0;
 
 				for (k = 1; k < s; k++)
 					p += (get_vline_width(table, i + k) >= 0);
 
-				dst_width(w + i, s, c->width - p, table->max_c + i);
+				dst_width(w + i, s, cell->width - p, table->max_c + i);
 
-			} else if (c->colspan > s && c->colspan < ns) {
-				ns = c->colspan;
+			} else if (cell->colspan > s && cell->colspan < ns) {
+				ns = cell->colspan;
 			}
 		}
 		s = ns;

@@ -1,13 +1,10 @@
-/* $Id: frames.h,v 1.34 2003/12/01 14:15:32 pasky Exp $ */
+/* $Id: frames.h,v 1.35 2003/12/01 14:40:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
 
-#include "document/document.h"
-#include "document/options.h"
-#include "document/view.h"
-#include "terminal/draw.h"
-#include "util/ttime.h"
+struct document_options;
+struct session;
 
 struct frameset_desc;
 

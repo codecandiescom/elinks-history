@@ -1,15 +1,21 @@
-/* $Id: parser.h,v 1.52 2003/11/17 13:18:27 jonas Exp $ */
+/* $Id: parser.h,v 1.53 2003/12/01 14:40:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
 
-#include "bfu/dialog.h"
 #include "bfu/style.h"
-#include "document/options.h"
 #include "util/color.h"
 #include "util/lists.h"
-#include "util/memlist.h"
-#include "util/string.h"
+
+struct document_options;
+struct form_control;
+struct frameset_desc;
+struct memory_list;
+struct menu_item;
+struct session;
+struct string;
+struct terminal;
+
 
 /* XXX: This is just terible - this interface is from 75% only for other HTML
  * files - there's lack of any well defined interface and it's all randomly

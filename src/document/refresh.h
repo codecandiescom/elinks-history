@@ -1,9 +1,9 @@
-/* $Id: refresh.h,v 1.1 2003/10/31 02:08:37 jonas Exp $ */
+/* $Id: refresh.h,v 1.2 2003/12/01 14:33:20 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_REFRESH_H
 #define EL__DOCUMENT_REFRESH_H
 
-#include "sched/session.h"
+struct session;
 
 struct document_refresh {
 	int timer;

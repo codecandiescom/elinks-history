@@ -1,16 +1,12 @@
-/* $Id: renderer.h,v 1.56 2003/12/01 14:15:32 pasky Exp $ */
+/* $Id: renderer.h,v 1.57 2003/12/01 14:40:08 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
 
-#include "intl/charsets.h"
-#include "cache/cache.h"
-#include "document/document.h"
-#include "document/html/frames.h"
-#include "terminal/draw.h"
-#include "util/color.h"
-#include "util/lists.h"
-#include "util/ttime.h"
+struct cache_entry;
+struct cp_status;
+struct document;
+struct part;
 
 
 void render_html_document(struct cache_entry *ce, struct document *document);

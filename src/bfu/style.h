@@ -1,10 +1,10 @@
-/* $Id: style.h,v 1.2 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: style.h,v 1.3 2003/12/01 14:36:52 pasky Exp $ */
 
 #ifndef EL__BFU_STYLE_H
 #define EL__BFU_STYLE_H
 
-#include "terminal/terminal.h"
-#include "util/color.h"
+struct color_pair;
+struct terminal;
 
 enum format_align {
 	AL_LEFT,

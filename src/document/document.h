@@ -1,9 +1,8 @@
-/* $Id: document.h,v 1.16 2003/10/31 01:11:44 jonas Exp $ */
+/* $Id: document.h,v 1.17 2003/10/31 01:38:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
 
-#include "document/html/frames.h"
 #include "document/options.h"
 #include "terminal/draw.h"
 #include "util/color.h"
@@ -100,6 +99,9 @@ struct search {
 	signed int n:24;	/* This structure is size-critical */
 	unsigned char c;
 };
+
+/* TODO: Move here? --jonas */
+struct frameset_desc;
 
 struct document {
 	LIST_HEAD(struct document);

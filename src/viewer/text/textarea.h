@@ -1,9 +1,9 @@
-/* $Id: textarea.h,v 1.8 2003/10/30 01:25:15 jonas Exp $ */
+/* $Id: textarea.h,v 1.9 2003/10/31 01:38:13 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_TEXTAREA_H
 #define EL__VIEWER_TEXT_TEXTAREA_H
 
-#include "document/html/frames.h"
+#include "document/view.h"
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "viewer/text/form.h"

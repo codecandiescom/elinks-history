@@ -1,10 +1,11 @@
-/* $Id: frames.h,v 1.26 2003/10/30 13:12:58 zas Exp $ */
+/* $Id: frames.h,v 1.27 2003/10/31 01:38:12 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
 
 #include "document/document.h"
 #include "document/options.h"
+#include "document/view.h"
 #include "lowlevel/ttime.h"
 #include "terminal/draw.h"
 
@@ -26,31 +27,6 @@ struct frameset_desc {
 	int width, height;
 
 	struct frame_desc frame_desc[1]; /* must be last of struct. --Zas */
-};
-
-struct view_state;
-
-struct link_bg {
-	int x, y;
-	struct screen_char c;
-};
-
-struct document_view {
-	LIST_HEAD(struct document_view);
-
-	unsigned char *name;
-	unsigned char **search_word;
-
-	struct document *document;
-	struct view_state *vs;
-	struct link_bg *link_bg;
-
-	int link_bg_n;
-	int x, y; /* pos of window */
-	int width, height; /* size of window */
-	int last_x, last_y; /* last pos of window */
-	int depth;
-	int used;
 };
 
 struct frameset_param {

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.268 2003/08/31 22:14:10 jonas Exp $ */
+/* $Id: options.c,v 1.269 2003/09/03 22:34:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1081,7 +1081,13 @@ register_options(void)
 	add_opt_bool("document.browse.forms", N_("Confirm submission"),
 		"confirm_submit", 0, 1,
 		N_("Ask for confirmation when submitting a form."));
-
+#ifdef FORMS_MEMORY
+	add_opt_bool("document.browse.forms", N_("Show forms history dialog"),
+		"show_formhist", 0, 1,
+		N_("Ask if a login form should be saved to file or not.\n"
+		"This option only disables the dialog, already saved login\n"
+		"forms are unaffected."));
+#endif
 
 	add_opt_tree("document.browse", N_("Images"),
 		"images", 0,

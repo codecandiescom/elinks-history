@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.35 2003/09/02 13:37:09 zas Exp $ */
+/* $Id: form.c,v 1.36 2003/09/03 22:34:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -719,7 +719,8 @@ get_form_url(struct session *ses, struct document_view *f,
 	}
 
 #ifdef FORMS_MEMORY
-	memorize_form(ses, &submit, frm);
+	if (get_opt_bool("document.browse.forms.show_formhist"))
+		memorize_form(ses, &submit, frm);
 #endif
 
 	if (!init_string(&go)) return NULL;

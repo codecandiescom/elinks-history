@@ -1,3 +1,89 @@
+Tue Dec 28 23:04:47 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	document.browse.accesskey.auto_follow is a boolean option.  
+
+Tue Dec 28 16:57:41 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Dec 28 16:53:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/osdep/osdep.c:
+
+	resize_window(): use double while calculating new width and heigth
+	to increase precision, it prevents that multiple resize terminal
+	without changing original values to resize the terminal to a smaller
+	size. Not totally perfect since we calculate terminal size in
+	characters and window size in pixels.  
+
+Tue Dec 28 13:24:13 2004  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/options.c:
+
+	x,y -> width,height. Use ulongcat() instead of sprintf(), and add
+	labels to input fields.  
+
+Tue Dec 28 13:10:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/group.c:
+
+	group_layouter(): set minimal width of dialog to at least the length
+	of title.  
+
+Tue Dec 28 12:26:30 2004  Laurent Monin <zas@norz.org>:
+
+	* README:
+
+	Update README, please improve. ELinks is now more that an
+	experimental Links imho.  
+
+Tue Dec 28 10:03:20 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Dec 28 07:02:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update translation. Many fixes pointed out by Miciah.  
+
+Tue Dec 28 01:43:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Some more updates mostly deleting the fuzziness in the end.  
+
+Tue Dec 28 01:30:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	Inspired by Zas' translations, these command line option
+	descriptions needed improvements.  
+
+Tue Dec 28 00:07:33 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Mon Dec 27 23:39:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Mon Dec 27 23:13:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bookmarks/dialogs.c:
+
+	Fix internationalized strings.  
+
 Mon Dec 27 21:59:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/leds.c:

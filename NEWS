@@ -15,7 +15,7 @@ ELinks-now:
 * Perl scripting extensions (experimental)
 * configurability and feature documentation through features.conf
 * Mozilla-compliant -remote option (http://www.mozilla.org/unix/remote.html)
-* internationalized domain name support (RFC 3490)
+* internationalized domain name support via libidn (RFC 3490)
 * data protocol support (RFC 2397)
 * gopher protocol support (RFC 1436)
 * NNTP protocol support (RFC 977 and 2980) (experimental)

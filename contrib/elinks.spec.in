@@ -20,7 +20,7 @@
 #
 # Spec file format from < http://www.rpm.org/RPM-HOWTO/build.html >
 #
-# $Id: elinks.spec.in,v 1.12 2003/10/05 05:26:53 witekfl Exp $
+# $Id: elinks.spec.in,v 1.13 2003/10/09 05:51:21 witekfl Exp $
 
 Summary:	Enhanced version of Links (Lynx-like text WWW browser)
 Name:		elinks
@@ -63,6 +63,7 @@ provide good rock-solid releases inside stable branches.
 %configure \
 %{?debug:	--enable-debug} \
 %{!?debug:	--enable-fastmem} \
+	--enable-256-colors \
 %{?_without_x: --without-x}
 %{__make}
 
@@ -109,6 +110,9 @@ rm -rf $RPM_BUILD_ROOT
 
 # date +"%a %b %d %Y"
 %changelog
+* Sun Oct 05 2003 Witold Filipczyk <witekfl@pld-linux.org>
+- enabled 256 colors
+
 * Thu Oct 02 2003 Witold Filipczyk <witekfl@pld-linux.org>
 - polished
 - no sanity checks

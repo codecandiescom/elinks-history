@@ -1,10 +1,11 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.26 2003/04/16 21:16:27 pasky Exp $ */
+/* $Id: dns.c,v 1.27 2003/04/17 17:44:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <netdb.h> /* OS/2 needs this after sys/types.h */

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.60 2003/05/06 10:03:55 zas Exp $ */
+/* $Id: view.c,v 1.61 2003/05/06 10:10:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -178,8 +178,7 @@ detach_formatted(struct f_data_c *scr)
 static inline void
 set_link(struct f_data_c *f)
 {
-	if (c_in_view(f)) return;
-	find_link(f, 1, 0);
+	if (!c_in_view(f)) find_link(f, 1, 0);
 }
 
 static inline int
@@ -197,7 +196,7 @@ find_tag(struct f_data *f, unsigned char *name)
 static int
 comp_links(struct link *l1, struct link *l2)
 {
-	return l1->num - l2->num;
+	return (l1->num - l2->num);
 }
 
 void
@@ -317,29 +316,30 @@ _area_cursor(struct form_control *frm, struct form_state *fs)
 {
 	struct line_info *ln;
 	int q = 0;
-	int x, y;
 
 	ln = format_text(fs->value, frm->cols, frm->wrap);
-	if (!ln)
-		return 0;
+	if (ln) {
+		int y;
 
-	for (y = 0; ln[y].st; y++) {
-		if (fs->value + fs->state >= ln[y].st
-		    && fs->value + fs->state < ln[y].en + (ln[y+1].st != ln[y].en)) {
-			x = fs->value + fs->state - ln[y].st;
-			if (frm->wrap && x == frm->cols) x--;
-			if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
-			if (x < fs->vpos) fs->vpos = x;
-			if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
-			if (y < fs->vypos) fs->vypos = y;
-			x -= fs->vpos;
-			y -= fs->vypos;
-			q = y * frm->cols + x;
-			break;
+		for (y = 0; ln[y].st; y++) {
+			if (fs->value + fs->state >= ln[y].st &&
+			    fs->value + fs->state < ln[y].en + (ln[y + 1].st != ln[y].en)) {
+				int x = fs->value + fs->state - ln[y].st;
+
+				if (frm->wrap && x == frm->cols) x--;
+				if (x >= frm->cols + fs->vpos) fs->vpos = x - frm->cols + 1;
+				if (x < fs->vpos) fs->vpos = x;
+				if (y >= frm->rows + fs->vypos) fs->vypos = y - frm->rows + 1;
+				if (y < fs->vypos) fs->vypos = y;
+				x -= fs->vpos;
+				y -= fs->vypos;
+				q = y * frm->cols + x;
+				break;
+			}
 		}
+		mem_free(ln);
 	}
 
-	mem_free(ln);
 	return q;
 }
 

@@ -1,3 +1,12 @@
+Thu Nov 21 11:15:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, protocol/file.c, util/encoding.c,
+	util/encoding.h:
+
+	Support for fallback to filename.gz if filename doesn't exist was
+	added.  A new option named protocol.file.try_encoding_extensions can
+	disabled that behavior.  Ideas by witekfl and pasky. Patch by Zas.  
+
 Wed Nov 20 12:42:41 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* intl/ukrainian.lng, src/intl/language.inc:

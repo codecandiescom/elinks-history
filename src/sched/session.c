@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.47 2003/05/07 09:22:55 zas Exp $ */
+/* $Id: session.c,v 1.48 2003/05/07 13:56:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,32 +379,32 @@ print_screen_status(struct session *ses)
 		}
 	}
 
-	if (ses_tab_is_current) {
-		msg = stracpy("ELinks");
-		if (msg) {
-			int msglen;
-			static void *last_ses = NULL;
+	if (!ses_tab_is_current) goto title_set;
+	msg = stracpy("ELinks");
+	if (msg) {
+		int msglen;
+		static void *last_ses = NULL;
 
-			if (ses->screen && ses->screen->f_data
-			    && ses->screen->f_data->title
-			    && ses->screen->f_data->title[0]) {
-				add_to_strn(&msg, " - ");
-				add_to_strn(&msg, ses->screen->f_data->title);
-			}
+		if (ses->screen && ses->screen->f_data
+		    && ses->screen->f_data->title
+		    && ses->screen->f_data->title[0]) {
+			add_to_strn(&msg, " - ");
+			add_to_strn(&msg, ses->screen->f_data->title);
+		}
 
-			msglen = strlen(msg);
-			if ((last_ses != ses ) || !ses->last_title ||
-			    strlen(ses->last_title) != msglen ||
-			    memcmp(ses->last_title, msg, msglen)) {
-				if (ses->last_title) mem_free(ses->last_title);
-				ses->last_title = msg;
-				set_terminal_title(term, msg);
-				last_ses = ses;
-			} else {
-				mem_free(msg);
-			}
+		msglen = strlen(msg);
+		if ((last_ses != ses ) || !ses->last_title ||
+		    strlen(ses->last_title) != msglen ||
+		    memcmp(ses->last_title, msg, msglen)) {
+			if (ses->last_title) mem_free(ses->last_title);
+			ses->last_title = msg;
+			set_terminal_title(term, msg);
+			last_ses = ses;
+		} else {
+			mem_free(msg);
 		}
 	}
+title_set:
 
 	redraw_from_window(ses->tab);
 #ifdef USE_LEDS

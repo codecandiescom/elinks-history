@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.58 2003/10/29 11:12:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.59 2003/10/29 17:17:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,7 +242,7 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
+	dlg->widgets_size = n;
 
 	assert(n == MIME_WIDGETS_COUNT);
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.87 2003/10/29 11:12:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.88 2003/10/29 17:17:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -313,7 +313,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
+	dlg->widgets_size = n;
 
 	assert(n == EDIT_WIDGETS_COUNT);
 
@@ -508,7 +508,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
 
-	add_dlg_end(dlg, n);
+	dlg->widgets_size = n;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
@@ -741,7 +741,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	add_dlg_listbox(dlg, n, 12, kbdbind_dlg_box_build());
 
-	add_dlg_end(dlg, n);
+	dlg->widgets_size = n;
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.29 2003/10/29 14:56:27 zas Exp $ */
+/* $Id: widget.h,v 1.30 2003/10/29 17:17:34 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -12,18 +12,12 @@ struct widget_data;
 struct dialog_data; /* XXX */
 
 enum widget_type {
-	WIDGET_END,
 	WIDGET_CHECKBOX,
 	WIDGET_FIELD,
 	WIDGET_FIELD_PASS,
 	WIDGET_BUTTON,
 	WIDGET_LISTBOX,
 };
-
-#define add_dlg_end(dlg, n)						\
-	do {								\
-		(dlg)->widgets[n].type = WIDGET_END;			\
-	} while (0)
 
 struct widget_ops {
 	/* XXX: Order matters here. --Zas */

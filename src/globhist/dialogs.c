@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.52 2003/10/29 11:12:04 zas Exp $ */
+/* $Id: dialogs.c,v 1.53 2003/10/29 17:17:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -477,7 +477,7 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	add_dlg_listbox(dlg, n, 12, history_dialog_box_build());
 
-	add_dlg_end(dlg, n);
+	dlg->widgets_size = n;
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 

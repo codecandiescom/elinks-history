@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.80 2003/10/29 14:47:14 zas Exp $ */
+/* $Id: search.c,v 1.81 2003/10/29 17:17:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1128,7 +1128,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	add_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
 	add_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
 
-	add_dlg_end(dlg, n);
+	dlg->widgets_size = n;
 
 	assert(n == SEARCH_WIDGETS_COUNT);
 

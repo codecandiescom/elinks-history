@@ -1,3 +1,168 @@
+Tue Dec  9 23:08:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/rewrite/rewrite.c, scripting/guile/hooks.c,
+	scripting/lua/hooks.c:
+
+	Fix leak in relation to goto-url event.  
+
+Tue Dec  9 22:59:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/kbd.c:
+
+	Hopefully fix the resetting to original title regression.  
+
+Tue Dec  9 22:13:30 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/formhist/dialogs.c:
+
+	Fixed internationalization and a trivial cleanup of
+	push_login_button().  
+
+Tue Dec  9 21:09:40 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	Translation update + menu hotkey binding fixes.  
+
+Tue Dec  9 20:18:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, inpfield.c:
+
+	Move DIALOG_MIN_WIDTH usage to the cause of the problem - the input
+	field formatter.  
+
+Tue Dec  9 17:33:57 2003  Varga Balázs <vinnui@ent.hu>:
+
+	* po/hu.po:
+
+	translation update.  
+
+Tue Dec  9 16:37:00 2003  Peter Samek <samek@upc.uniba.sk>:
+
+	* po/sk.po:
+
+	Slovak translation update.  
+
+Tue Dec  9 13:59:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Moved smb_get_cache() to _even_ better spot.  
+
+Tue Dec  9 13:58:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Whoops, moved READ_SIZE undef back where it was.  
+
+Tue Dec  9 13:58:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	smb_read_data() now just uses READ_SIZE instead of taking ssize_t
+	long. Besides, I have my doubts about ssize_t portability. (Dunno.) 
+
+Tue Dec  9 13:51:20 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Moved smb_get_cache() to a better spot.  
+
+Tue Dec  9 13:47:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Test for datalen instead of struri(conn->uri) in end_smb_func().
+	This was porting error.  
+
+Tue Dec  9 13:42:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	+-----------------------------+ | Do NOT remove blanklines!!! | 
+	+-----------------------------+ 
+	               | 
+	               | 
+	               | 
+	               | 
+	               | 
+	               | 
+
+Tue Dec  9 13:40:18 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Undef MAX_SMBCLIENT_ARGS.  
+
+Tue Dec  9 13:39:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	smb port is now again 139. It doesn't break anything and looks nice.  
+
+Tue Dec  9 13:38:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	Overflow risk was handled by zas' in previous patch so shortened the
+	FIXME.  
+
+Tue Dec  9 13:38:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/smb/smb.c:
+
+	error() introduced by zas was reverted back to fprintf(). stderr is
+	standard error reporting channel.  
+
+Tue Dec  9 11:37:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/smb/smb.c:
+
+	Add #includes needed by FreeBSD.  
+
+Tue Dec  9 09:34:06 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	An assertion to detect possible overflow was added. error() is used
+	instead of fprintf().  
+
+Tue Dec  9 09:21:25 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Protocol port is now zero, 139 is a non sense here. smbclient
+	options were commented, and debug level was set to zero to preserve
+	display even if we have a global smb.conf debug level set.  
+
+Tue Dec  9 08:56:18 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Code redundancy reduction by introducing smb_get_cache(). Previous
+	change about assertion was changed again since i am not sure about
+	what to do in uri.datalen == 0 case.  
+
+Tue Dec  9 08:44:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/smb/smb.c:
+
+	Reduce code redundancy by introducing smb_read_data(). A wrong
+	assertion was replaced by a test.  
+
+Tue Dec  9 07:15:19 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update and fix.  
+
+Tue Dec  9 03:38:47 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/dialogs.c:
+
+	Do not allow Login for dontsave pages in Form history manager (fix
+	for bug #306). Implemented with a dialog that informs the user.  
+
 Mon Dec  8 23:08:27 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/protocol/rewrite/rewrite.c:

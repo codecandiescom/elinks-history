@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.480 2004/06/17 06:35:49 miciah Exp $ */
+/* $Id: view.c,v 1.481 2004/06/17 08:36:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -483,11 +483,11 @@ vertical_scroll(struct session *ses, struct document_view *doc_view, int steps)
 		/* DOWN */
 		int max_height = doc_view->document->height - doc_view->box.height;
 
-		int_upper_bound(&y, int_max(0, max_height));
-	} else {
-		/* UP */
-		int_lower_bound(&y, 0);
+		if (doc_view->vs->y >= max_height) return;
+		int_upper_bound(&y, max_height);
 	}
+
+	int_lower_bound(&y, 0);
 
 	if (doc_view->vs->y == y) return;
 

@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.10 2004/11/14 19:57:39 jonas Exp $ */
+/* $Id: digest.c,v 1.11 2004/11/14 22:17:49 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -57,15 +57,12 @@ unsigned char *
 random_cnonce(void)
 {
 	unsigned char md5[MD5_DIGEST_LENGTH + 1];
-	unsigned char *cnonce_digest;
 	int random;
 
 	srand(time(0));
 
 	random = rand();
-	cnonce_digest = MD5((const unsigned char *) &random, sizeof(int), md5);
-
-	assert(cnonce_digest == md5);
+	MD5((const unsigned char *) &random, sizeof(int), md5);
 
 	return convert_hex(md5);
 }

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.157 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: file.c,v 1.158 2004/04/13 18:11:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -572,8 +572,7 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 	struct stat stt;
 	enum stream_encoding encoding = ENCODING_NONE;
 	int fd = open(filename, O_RDONLY | O_NOCTTY);
-	enum connection_state state;
-	int saved_errno = errno;
+	enum connection_state state = -errno;
 
 	if (fd == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
 		encoding = try_encoding_extensions(filename, filenamelen, &fd);
@@ -582,7 +581,7 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 		encoding = guess_encoding(filename);
 	}
 
-	if (fd == -1) return (enum connection_state) -saved_errno;
+	if (fd == -1) return state;
 
 	/* Some file was opened so let's get down to bi'ness */
 	set_bin(fd);
@@ -594,7 +593,7 @@ read_encoded_file(unsigned char *filename, int filenamelen, struct string *page)
 
 	} else if (!S_ISREG(stt.st_mode) && encoding != ENCODING_NONE) {
 		/* We only want to open regular encoded files. */
-		state = -saved_errno;
+		/* Leave @state being the saved errno */
 
 	} else if (!S_ISREG(stt.st_mode) &&
 		!get_opt_int("protocol.file.allow_special_files")) {

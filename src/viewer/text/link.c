@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.22 2003/07/27 23:04:39 jonas Exp $ */
+/* $Id: link.c,v 1.23 2003/07/27 23:14:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,7 +123,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 	int xw, yw;
 	int vx, vy;
 	int i;
-	int cursor_offset = -1;
+	int cursor_offset = 0;
 
 	assert(t && scr && scr->vs);
 	if_assert_failed return;

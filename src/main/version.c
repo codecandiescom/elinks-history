@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.23 2003/10/29 13:38:04 zas Exp $ */
+/* $Id: version.c,v 1.24 2003/10/30 02:15:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,10 +75,10 @@ get_dyn_full_version(struct terminal *term, int more)
  #endif
 		add_to_string(&string, "\n\n");
 		add_to_string(&string, _("Text WWW browser", term));
-		add_to_string(&string, "\n\n");
 	}
 
 	string_concat(&string,
+		"\n\n",
 		_("Features:", term), " ",
 #ifndef DEBUG
 		_("Standard", term),

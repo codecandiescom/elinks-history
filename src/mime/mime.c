@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.32 2003/10/26 16:53:03 jonas Exp $ */
+/* $Id: mime.c,v 1.33 2003/10/26 16:56:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ static struct option_info mime_options[] = {
 		N_("MIME-related options (handlers of various MIME types).")),
 
 	INIT_OPT_STRING("mime", N_("Default MIME-type"),
-		"default_type", 0, "application/octet-stream",
+		"default_type", 0, DEFAULT_MIME_TYPE,
 		N_("Document MIME-type to assume by default (when we are unable to\n"
 		"guess it properly from known information about the document).")),
 

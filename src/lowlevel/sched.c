@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.4 2002/03/17 17:27:51 pasky Exp $ */
+/* $Id: sched.c,v 1.5 2002/03/17 23:16:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,8 +221,8 @@ void free_connection_data(struct connection *c)
 		kill_dns_request(&c->dnsquery);
 	}
 	if (c->conn_info) {
-		if (*((void **) c->conn_info))
-			mem_free(*((void **) c->conn_info)); /* XXX */
+		if (((struct conn_info *) c->conn_info)->addr)
+			mem_free(((struct conn_info *) c->conn_info)->addr);
 		mem_free(c->conn_info);
 		c->conn_info = NULL;
 	}

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.92 2004/05/11 19:45:23 zas Exp $ */
+/* $Id: text.c,v 1.93 2004/05/13 09:15:38 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -241,43 +241,47 @@ static void
 display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int sel)
 {
 	struct window *win = dlg_data->win;
-	int x = dlg_data->dimensions.x + dlg_data->dimensions.width - DIALOG_LEFT_BORDER - 1;
-	int y = widget_data->dimensions.y;
-	int height = widget_data->dimensions.height;
+	struct rect box;
 	int scale, current, step;
 	int lines = widget_data->info.text.lines;
 
-	if (!text_is_scrollable(widget_data) || height <= 0) return;
+	set_rect(&box,
+		 dlg_data->dimensions.x + dlg_data->dimensions.width - DIALOG_LEFT_BORDER - 1,
+		 widget_data->dimensions.y,
+		 1,
+		 widget_data->dimensions.height);
 
-	draw_area(win->term, x, y, 1, height, ' ', 0,
-		    get_bfu_color(win->term, "dialog.scrollbar"));
+	if (!text_is_scrollable(widget_data) || box.height <= 0) return;
+
+	draw_box(win->term, &box, ' ', 0,
+		 get_bfu_color(win->term, "dialog.scrollbar"));
 
 	current = widget_data->info.text.current;
-	scale = (height + 1) * 100 / lines;
+	scale = (box.height + 1) * 100 / lines;
 
 	/* Scale the offset of @current */
 	step = (current + 1) * scale / 100;
 	int_bounds(&step, 0, widget_data->dimensions.height - 1);
 
 	/* Scale the number of visible lines */
-	height = (height + 1) * scale / 100;
-	int_bounds(&height, 1, int_max(widget_data->dimensions.height - step, 1));
+	box.height = (box.height + 1) * scale / 100;
+	int_bounds(&box.height, 1, int_max(widget_data->dimensions.height - step, 1));
 
 	/* Ensure we always step to the last position too */
 	if (lines - widget_data->dimensions.height == current) {
-		step = widget_data->dimensions.height - height;
+		step = widget_data->dimensions.height - box.height;
 	}
-	y += step;
+	box.y += step;
 
 #ifdef CONFIG_MOUSE
 	/* Save infos about selected scrollbar position and size.
 	 * We'll use it when handling mouse. */
-	widget_data->info.text.scroller_height = height;
-	widget_data->info.text.scroller_y = y;
+	widget_data->info.text.scroller_height = box.height;
+	widget_data->info.text.scroller_y = box.y;
 #endif
 
-	draw_area(win->term, x, y, 1, height, ' ', 0,
-		  get_bfu_color(win->term, "dialog.scrollbar-selected"));
+	draw_box(win->term, &box, ' ', 0,
+		 get_bfu_color(win->term, "dialog.scrollbar-selected"));
 
 	/* Hope this is at least a bit reasonable. Set cursor
 	 * and window pointer to start of the first text line. */
@@ -304,9 +308,8 @@ format_and_display_text(struct widget_data *widget_data,
 
 	widget_data->info.text.current = current;
 
-	draw_area(term, widget_data->dimensions.x, widget_data->dimensions.y,
-		  widget_data->dimensions.width, widget_data->dimensions.height, ' ', 0,
-		  get_bfu_color(term, "dialog.generic"));
+	draw_box(term, &widget_data->dimensions, ' ', 0,
+		 get_bfu_color(term, "dialog.generic"));
 
 	dlg_format_text(term, widget_data,
 			widget_data->dimensions.x, &y, widget_data->dimensions.width, NULL,

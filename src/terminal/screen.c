@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.9 2003/07/22 00:07:57 jonas Exp $ */
+/* $Id: screen.c,v 1.10 2003/07/22 00:14:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,7 +68,7 @@ struct rs_opt_cache {
 /* Time critical section. */
 static inline void
 print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
-	   unsigned char **a, int *l, int p, int *mode, int *attrib)
+	   struct string *screen, int p, int *mode, int *attrib)
 {
 	unsigned ch = term->screen[p];
 	unsigned char c = ch & 0xff;
@@ -80,8 +80,8 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 		    !opt_cache->utf_8_io) {
 			if (B != *mode) {
 				*mode = B;
-				if (!*mode) add_to_str(a, l, "\033[10m");
-				else add_to_str(a, l, "\033[11m");
+				if (!*mode) add_to_string(screen, "\033[10m");
+				else add_to_string(screen, "\033[11m");
 			}
 		}
 		if (opt_cache->restrict_852
@@ -92,8 +92,8 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 		   && !opt_cache->utf_8_io) {
 		if (B != *mode) {
 			*mode = B;
-			if (!*mode) add_chr_to_str(a, l, '\x0f');
-			else add_chr_to_str(a, l, '\x0e');
+			if (!*mode) add_char_to_string(screen, '\x0f');
+			else add_char_to_string(screen, '\x0e');
 		}
 		if (*mode && c >= 176 && c < 224) c = frame_vt100[c - 176];
 	} else if (B && c >= 176 && c < 224) {
@@ -110,7 +110,7 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 
 	if (A != *attrib) {
 		*attrib = A;
-		add_to_str(a, l, "\033[0");
+		add_to_string(screen, "\033[0");
 		if (opt_cache->colors) {
 			unsigned char m[4];
 
@@ -118,15 +118,15 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 		       	m[1] = '3';
 			m[2] = (*attrib & 7) + '0';
 		       	m[3] = 0;
-			add_to_str(a, l, m);
+			add_to_string(screen, m);
 			m[1] = '4';
 			m[2] = (*attrib >> 3 & 7) + '0';
 			if (!opt_cache->trans || m[2] != '0')
-				add_to_str(a, l, m);
+				add_to_string(screen, m);
 		} else if (getcompcode(*attrib & 7) < getcompcode(*attrib >> 3 & 7))
-			add_to_str(a, l, ";7");
-		if (*attrib & 0100) add_to_str(a, l, ";1");
-		add_chr_to_str(a, l, 'm');
+			add_to_string(screen, ";7");
+		if (*attrib & 0100) add_to_string(screen, ";1");
+		add_char_to_string(screen, 'm');
 	}
 	if (c >= ' ' && c != ASCII_DEL /* && c != 155*/) {
 		int charset = opt_cache->charset;
@@ -142,12 +142,12 @@ print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 			if (frames_charset != -1) charset = frames_charset;
 		}
 		if (opt_cache->utf_8_io)
-			add_to_str(a, l, cp2utf_8(charset, c));
+			add_to_string(screen, cp2utf_8(charset, c));
 		else
-			add_chr_to_str(a, l, c);
+			add_char_to_string(screen, c);
 	}
-	else if (!c || c == 1) add_chr_to_str(a, l, ' ');
-	else add_chr_to_str(a, l, '.');
+	else if (!c || c == 1) add_char_to_string(screen, ' ');
+	else add_char_to_string(screen, '.');
 }
 
 /* TODO An optimized add_term_escape_to_string() would be nice. --jonas */
@@ -216,14 +216,14 @@ redraw_screen(struct terminal *term)
 #undef TSP
 #undef TLSP
 			if (cx == x && cy == y) {
-				print_char(term, &opt_cache, &screen.source, &screen.length,
+				print_char(term, &opt_cache, &screen,
 					   p, &mode, &attrib);
 				cx++;
 			} else if (cy == y && x - cx < 10) {
 				register int i = x - cx;
 
 				for (; i >= 0; i--) {
-					print_char(term, &opt_cache, &screen.source, &screen.length,
+					print_char(term, &opt_cache, &screen,
 						   p - i, &mode, &attrib);
 					cx++;
 				}
@@ -234,7 +234,7 @@ redraw_screen(struct terminal *term)
 				add_long_to_string(&screen, x + 1);
 				add_char_to_string(&screen, 'H');
 				cx = x; cy = y;
-				print_char(term, &opt_cache, &screen.source, &screen.length,
+				print_char(term, &opt_cache, &screen,
 					   p, &mode, &attrib);
 				cx++;
 			}

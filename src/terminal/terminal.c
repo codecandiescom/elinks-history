@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.68 2004/06/11 14:00:24 jonas Exp $ */
+/* $Id: terminal.c,v 1.69 2004/06/13 13:25:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -148,10 +148,8 @@ destroy_terminal(struct terminal *term)
 void
 destroy_all_terminals(void)
 {
-	struct terminal *term;
-
-	while ((void *) (term = terminals.next) != &terminals)
-		destroy_terminal(term);
+	while (!list_empty(terminals))
+		destroy_terminal(terminals.next);
 }
 
 static void

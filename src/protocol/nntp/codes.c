@@ -1,5 +1,5 @@
 /* NNTP response codes */
-/* $Id: codes.c,v 1.2 2004/11/19 16:42:35 zas Exp $ */
+/* $Id: codes.c,v 1.3 2004/12/29 18:23:08 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -129,7 +129,7 @@ nntp_error_code_dialog(struct terminal *term, struct uri *uri, enum nntp_code co
 			"The error message is: %s"),
 			struri(uri), codestr),
 		NULL, 1,
-		N_("Ok"), NULL, B_ENTER);
+		N_("OK"), NULL, B_ENTER);
 }
 
 struct nntp_error_info {

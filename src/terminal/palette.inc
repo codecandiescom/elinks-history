@@ -1,5 +1,5 @@
 /* Terminal color palettes. */
-/* $Id: palette.inc,v 1.3 2003/09/06 22:50:56 jonas Exp $ */
+/* $Id: palette.inc,v 1.4 2004/01/03 13:08:46 pasky Exp $ */
 /* TODO: We should probably autogenerate this using xterm's perl script. */
 
 /* The 16 ANSI colors. */
@@ -160,7 +160,7 @@ static struct rgb palette88[] = {
 };
 #endif
 
-#ifdef USE_256_COLORS
+#ifdef CONFIG_256_COLORS
 /* Regexp'd from Dickey's xterm 256colres.h file. */
 /* Colors   0- 16 are the ANSI colors (and the same as palette16[]).
  * Colors  16-231 are a 6x6x6 color cube

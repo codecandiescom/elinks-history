@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.7 2003/12/01 12:30:31 pasky Exp $ */
+/* $Id: cgi.c,v 1.8 2003/12/01 13:50:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,7 @@ close_pipe_and_read(struct connection *conn)
 	rb->freespace -= 17;
 	rb->close = 1;
 	conn->unrestartable = 1;
-	close(conn->cgi_input[1]);
-	conn->cgi_input[1] = -1;
+	close(conn->cgi_pipes[1]), conn->cgi_pipes[1] = -1;
 	set_connection_timeout(conn);
 	read_from_socket(conn, conn->socket, rb, http_got_header);
 }
@@ -88,7 +87,7 @@ send_post_data(struct connection *conn)
 		add_bytes_to_string(&data, buffer, n);
 
 	set_connection_timeout(conn);
-	write_to_socket(conn, conn->cgi_input[1], data.source, data.length, close_pipe_and_read);
+	write_to_socket(conn, conn->cgi_pipes[1], data.source, data.length, close_pipe_and_read);
 	done_string(&data);
 	set_connection_state(conn, S_SENT);
 #undef POST_BUFFER_SIZE
@@ -163,6 +162,7 @@ execute_cgi(struct connection *conn)
 	struct stat buf;
 	int res;
 	enum connection_state state = S_OK;
+	int pipe_read[2], pipe_write[2];
 
 	if (!get_opt_bool("protocol.file.cgi.policy")) return 1;
 
@@ -201,7 +201,7 @@ execute_cgi(struct connection *conn)
 		goto end1;
 	}
 
-	if (c_pipe(conn->cgi_input) || c_pipe(conn->cgi_output)) {
+	if (c_pipe(pipe_read) || c_pipe(pipe_write)) {
 		mem_free(script);
 		retry_conn_with_state(conn, -errno);
 		return 0;
@@ -218,8 +218,8 @@ execute_cgi(struct connection *conn)
 		if (set_vars(conn, script)) {
 			_exit(1);
 		}
-		if ((dup2(conn->cgi_input[0], STDIN_FILENO) < 0)
-			|| (dup2(conn->cgi_output[1], STDOUT_FILENO) < 0)) {
+		if ((dup2(pipe_write[0], STDIN_FILENO) < 0)
+			|| (dup2(pipe_read[1], STDOUT_FILENO) < 0)) {
 			_exit(2);
 		}
 		for (i = 2; i < 1024; i++) {
@@ -241,7 +241,9 @@ execute_cgi(struct connection *conn)
 		info->sent_version.major = 1;
 		info->sent_version.minor = 0;
 		info->close = 1;
-		conn->socket = conn->cgi_output[0];
+		conn->cgi_pipes[0] = pipe_read[0];
+		conn->cgi_pipes[1] = pipe_write[1];
+		conn->socket = conn->cgi_pipes[0];
 		send_request(conn);
 		return 0;
 	}

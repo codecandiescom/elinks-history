@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.129 2003/12/01 06:23:46 witekfl Exp $ */
+/* $Id: connection.c,v 1.130 2003/12/01 13:50:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -242,8 +242,7 @@ init_connection(unsigned char *url, unsigned char *ref_url, int start,
 	conn->socket = conn->data_socket = -1;
 	conn->content_encoding = ENCODING_NONE;
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
-	conn->cgi_input[0] = conn->cgi_input[1] = -1;
-	conn->cgi_output[0] = conn->cgi_output[1] = -1;
+	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 	init_list(conn->downloads);
 	conn->est_length = -1;
 	conn->prg.start = start;
@@ -353,12 +352,11 @@ free_connection_data(struct connection *conn)
 		close(conn->stream_pipes[1]);
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 
-	if (conn->cgi_output[0] >= 0)
-		close(conn->cgi_output[0]);
-	if (conn->cgi_input[1] >= 0)
-		close(conn->cgi_input[1]);
-	conn->cgi_input[0] = conn->cgi_input[1] = -1;
-	conn->cgi_output[0] = conn->cgi_output[1] = -1;
+	if (conn->cgi_pipes[0] >= 0)
+		close(conn->cgi_pipes[0]);
+	if (conn->cgi_pipes[1] >= 0)
+		close(conn->cgi_pipes[1]);
+	conn->cgi_pipes[0] = conn->cgi_pipes[1] = -1;
 
 	if (conn->dnsquery) {
 		kill_dns_request(&conn->dnsquery);

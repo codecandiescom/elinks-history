@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.43 2003/12/01 06:23:46 witekfl Exp $ */
+/* $Id: connection.h,v 1.44 2003/12/01 13:50:42 pasky Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -148,8 +148,7 @@ struct connection {
 	int received;
 	int est_length;
 	int timer;
-	int cgi_input[2];
-	int cgi_output[2];
+	int cgi_pipes[2];
 	int stream_pipes[2];
 
 	unsigned int running:1;

@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.9 2004/04/24 01:23:38 pasky Exp $ */
+/* $Id: parse.c,v 1.10 2004/04/24 01:25:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -562,7 +562,7 @@ free_tags_lookup(void)
 }
 
 
-static void process_element(unsigned char *name, int namelen, int inv,
+static void process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
                 unsigned char *eof, unsigned char *attr, void *f);
 
@@ -585,7 +585,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 main_loop:
 	while (html < eof) {
 		unsigned char *name, *attr, *end, *prev_html;
-		int namelen, inv;
+		int namelen, endingtag;
 		int dotcounter = 0;
 
 		if (!noupdate) {
@@ -687,11 +687,11 @@ next_break:
 		}
 
 element:
-		inv = *name == '/'; name += inv; namelen -= inv;
-		if (!inv && putsp == 1 && !html_top.invisible)
+		endingtag = *name == '/'; name += endingtag; namelen -= endingtag;
+		if (!endingtag && putsp == 1 && !html_top.invisible)
 			goto put_sp;
 		put_chrs(base_pos, html - base_pos, put_chars_f, f);
-		if (par_format.align != AL_NONE && !inv && !putsp) {
+		if (par_format.align != AL_NONE && !endingtag && !putsp) {
 			unsigned char *ee = end;
 			unsigned char *nm;
 
@@ -707,7 +707,7 @@ ng:;
 		prev_html = html;
 		html = end;
 
-		process_element(name, namelen, inv, html, prev_html, eof, attr, f);
+		process_element(name, namelen, endingtag, html, prev_html, eof, attr, f);
 	}
 
 	put_chrs(base_pos, html - base_pos, put_chars_f, f);
@@ -718,7 +718,7 @@ ng:;
 }
 
 static void
-process_element(unsigned char *name, int namelen, int inv,
+process_element(unsigned char *name, int namelen, int endingtag,
                 unsigned char *html, unsigned char *prev_html,
                 unsigned char *eof, unsigned char *attr, void *f)
 
@@ -747,7 +747,7 @@ process_element(unsigned char *name, int namelen, int inv,
 #endif
 	if (!ei) return;
 
-	if (!inv) {
+	if (!endingtag) {
 		unsigned char *a;
 
 		if (was_xmp) {

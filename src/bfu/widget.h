@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.33 2003/11/08 19:07:21 jonas Exp $ */
+/* $Id: widget.h,v 1.34 2003/11/09 03:13:15 jonas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -17,6 +17,7 @@ enum widget_type {
 	WIDGET_FIELD_PASS,
 	WIDGET_BUTTON,
 	WIDGET_LISTBOX,
+	WIDGET_TEXT,
 };
 
 #define add_dlg_end(dlg, n)						\
@@ -98,6 +99,7 @@ void dlg_set_history(struct widget_data *);
 #define widget_is_textfield(widget_data) ((widget_data)->widget->type == WIDGET_FIELD \
 					  || (widget_data)->widget->type == WIDGET_FIELD_PASS)
 
-#define widget_is_focusable(widget_data) ((widget_data)->widget->type != WIDGET_LISTBOX)
+#define widget_is_focusable(widget_data) ((widget_data)->widget->type != WIDGET_LISTBOX \
+					  && (widget_data)->widget->type != WIDGET_TEXT)
 
 #endif

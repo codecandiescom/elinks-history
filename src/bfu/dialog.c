@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.76 2003/11/09 02:49:23 jonas Exp $ */
+/* $Id: dialog.c,v 1.77 2003/11/09 03:13:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,7 @@
 #include "bfu/checkbox.h"
 #include "bfu/inpfield.h"
 #include "bfu/listbox.h"
+#include "bfu/text.h"
 
 
 /* Prototypes */
@@ -112,6 +113,7 @@ static struct widget_ops *widget_type_to_ops[] = {
 	&field_pass_ops,
 	&button_ops,
 	&listbox_ops,
+	&text_ops,
 };
 
 static inline struct widget_data *

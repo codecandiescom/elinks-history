@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.48 2003/11/07 22:27:16 jonas Exp $ */
+/* $Id: text.c,v 1.49 2003/11/09 03:13:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,3 +74,11 @@ dlg_format_text(struct terminal *term, unsigned char *text,
 		draw_text(term, x + shift, *y, text, line_width, 0, color);
 	}
 }
+
+struct widget_ops text_ops = {
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+};

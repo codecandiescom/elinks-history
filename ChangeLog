@@ -1,3 +1,155 @@
+Tue Jul 27 22:05:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	dialogs/menu.h, sched/action.c, viewer/text/link.c:
+
+	Add possibility to pass URI of the current frame to external
+	command. Idea by miernik.  
+
+Tue Jul 27 22:01:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Sort frame-* actions.  
+
+Tue Jul 27 21:32:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, event.h, kbd.c:
+
+	Make the terminal_info->data member have size of one for
+	portability. Define TERMINAL_INFO_SIZE macro using offsetof() to
+	ignore the extra byte and padding.  
+
+Tue Jul 27 21:28:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/options.c, osdep/generic.h:
+
+	Move offsetof() macro.  
+
+Tue Jul 27 17:54:09 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	For crying out load we always use unsigned char _not_ char,
+	especially when using <ctype.h>'s is<chargroup>() functions.  
+
+Tue Jul 27 17:48:07 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	init_connection(): Improve referrer setup comment. Revisited.  
+
+Tue Jul 27 17:45:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Always set the referrer when loading file: URIs, so that CGI scripts
+	can use it.  
+
+Tue Jul 27 17:34:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/menu.c, terminal/event.h:
+
+	Introduce check_kbd_label_key() macro. Fix off by two error in
+	terminal/event.h (1.12 -> 1.13) 
+
+Tue Jul 27 17:30:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	init_connection(): Improve referrer setup comment.  
+
+Tue Jul 27 16:36:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	kbd_field(): Rewrite char inserting in the default label.  
+
+Tue Jul 27 16:26:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, terminal/event.h, viewer/text/form.c:
+
+	Introduce check_kbd_textinput_key() macro.  
+
+Tue Jul 27 16:11:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/inpfield.c,
+	bfu/listbox.c, bfu/menu.c, terminal/mouse.h, viewer/text/link.c:
+
+	Introduce check_mouse_position() macro.  
+
+Tue Jul 27 03:10:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	load_file_from_doc_view() -> load_additional_file() .. more in the
+	spirit of request_additional_file().  
+
+Tue Jul 27 03:07:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: connection.c, session.c, session.h:
+
+	Move the referrer weeding to init_connection(). It means that CGI
+	can now have referrer if it is desirable.  
+
+Tue Jul 27 02:44:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/ssl/connect.c:
+
+	Make ssl_want_read() static.  
+
+Mon Jul 26 23:01:04 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	load_file_from_doc_view(): we dont want to set referrer for file
+	protocol.  
+
+Mon Jul 26 22:53:12 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Revert last patch for now, it breaks the patch Miciah submitted on
+	ml. So just let him do the thing.  
+
+Mon Jul 26 22:40:58 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	tabwin_func(): unused @fw -> @xxx.  
+
+Mon Jul 26 22:38:20 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	reload(): @l ->@loc.  
+
+Mon Jul 26 22:34:33 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	load_file_from_doc_view(): referer -> referrer.  
+
+Mon Jul 26 22:31:52 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	abort_loading(): @l -> @loc.  
+
+Mon Jul 26 22:25:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	get_current_url(), get_current_title(), get_current_link_url(),
+	get_current_link_name(): assert(str && str_size > 0), not strictly
+	needed but may prevent bad things in future.  
+
+Mon Jul 26 22:15:55 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	abort_files_load(): @q -> @more.  
+
 Mon Jul 26 22:09:43 2004  Laurent Monin <zas@norz.org>:
 
 	* src/sched/session.c:

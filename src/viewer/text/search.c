@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.139 2003/12/21 19:18:10 jonas Exp $ */
+/* $Id: search.c,v 1.140 2003/12/21 19:29:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -963,6 +963,14 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			i++;
 			break;
 
+		case ACT_KILL_TO_BOL:
+			memset(typeahead, 0, charpos);
+			return TYPEAHEAD_MATCHED;
+
+		case ACT_REDRAW:
+			redraw_terminal_cls(ses->tab->term);
+			return TYPEAHEAD_MATCHED;
+
 		default:
 			if (!isprint(event->x) || charpos >= MAX_STR_LEN - 1)
 				return TYPEAHEAD_ESCAPE;
@@ -971,10 +979,10 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = 1;
 	}
 
-	assert(direction);
-
 	/* If there is nothing to match with don't start searching */
 	if (!charpos) return TYPEAHEAD_MATCHED;
+
+	assert(direction);
 
 	int_bounds(&i, 0, doc_view->document->nlinks - 1);
 	upper_link = (direction > 0) ? doc_view->document->nlinks : i + 1;

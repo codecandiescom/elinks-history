@@ -1,10 +1,11 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.15 2003/08/23 16:44:43 jonas Exp $ */
+/* $Id: search.c,v 1.16 2003/08/28 18:17:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h> /* tolower() */
 #include <stdlib.h>
 #include <string.h>
 
@@ -212,16 +213,6 @@ get_search_data(struct document *f)
 	sort_srch(f);
 }
 
-static
-#ifdef __GNUCC__
-inline			/* solaris CC bug */
-#endif
-int
-srch_cmp(unsigned char c1, unsigned char c2)
-{
-	return strncasecmp(&c1, &c2, 1);
-}
-
 static int
 get_range(struct document *f, int y, int yw, int l,
 	  struct search **s1, struct search **s2)
@@ -254,22 +245,51 @@ get_range(struct document *f, int y, int yw, int l,
 	return 0;
 }
 
+static unsigned char *
+lowered_string(unsigned char *s, int l)
+{
+	unsigned char *ret;
+	int len = l;
+
+	if (len < 0) len = strlen(s);
+
+	ret = mem_calloc(1, len + 1);
+	if (ret && len) {
+		register int i = len;
+
+		do {
+			ret[i] = tolower(s[i]);
+		} while (i--);
+	}
+
+	return ret;
+}
+
+#define srch_cmp(c1, c2) (tolower(c1) != c2)
+
 static int
-is_in_range(struct document *f, int y, int yw, unsigned char *txt,
+is_in_range(struct document *f, int y, int yw, unsigned char *text,
 	    int *min, int *max)
 {
+	unsigned char *txt;
 	struct search *s1, *s2;
 	int found = 0;
 	int l;
+	int yy;
 
-	assert(f && txt && min && max);
+	assert(f && text && min && max);
 	if_assert_failed return 0;
 
 	*min = MAXINT, *max = 0;
-	l = strlen(txt);
+	l = strlen(text);
 
 	if (get_range(f, y, yw, l, &s1, &s2))
 		return 0;
+
+	txt = lowered_string(text, l);
+	if (!txt) return 0;
+
+	yy = y + yw;
 
 	for (; s1 <= s2; s1++) {
 		register int i;
@@ -283,7 +303,7 @@ srch_failed:
 			if (srch_cmp(s1[i].c, txt[i]))
 				goto srch_failed;
 
-		if (s1[i].y < y || s1[i].y >= y + yw)
+		if (s1[i].y < y || s1[i].y >= yy)
 			continue;
 
 		found = 1;
@@ -295,20 +315,25 @@ srch_failed:
 			*max = int_max(*max, s1[i].x + s1[i].n);
 		}
 	}
+
+	mem_free(txt);
+
 	return found;
 }
 
 static void
 get_searched(struct document_view *scr, struct point **pt, int *pl)
 {
+	unsigned char *txt;
 	struct point *points = NULL;
 	struct search *s1, *s2;
 	int xp, yp;
 	int xw, yw;
 	int vx, vy;
+	int xx, yy;
+	int xpv, ypv;
 	int l;
 	int len = 0;
-	unsigned char c;
 
 	assert(scr && scr->vs && pt && pl);
 	if_assert_failed return;
@@ -316,43 +341,49 @@ get_searched(struct document_view *scr, struct point **pt, int *pl)
 	if (!scr->search_word || !*scr->search_word || !(*scr->search_word)[0])
 		return;
 
+	get_search_data(scr->document);
+	l = strlen(*scr->search_word);
+	if (get_range(scr->document, scr->vs->view_pos, scr->yw, l, &s1, &s2))
+		goto ret;
+
+	txt = lowered_string(*scr->search_word, l);
+	if (!txt) return;
+
 	xp = scr->xp;
 	yp = scr->yp;
 	xw = scr->xw;
 	yw = scr->yw;
 	vx = scr->vs->view_posx;
 	vy = scr->vs->view_pos;
-
-	get_search_data(scr->document);
-	l = strlen(*scr->search_word);
-	if (get_range(scr->document, scr->vs->view_pos, scr->yw, l, &s1, &s2))
-		goto ret;
-
-	c = (*scr->search_word)[0];
+	xx = xp + xw;
+	yy = yp + yw;
+	xpv= xp - vx;
+	ypv= yp - vy;
 
 	for (; s1 <= s2; s1++) {
 		register int i;
 
-		if (srch_cmp(s1->c, c)) {
+		if (srch_cmp(s1[0].c, txt[0])) {
 srch_failed:
 			continue;
 		}
 
 		for (i = 1; i < l; i++)
-			if (srch_cmp(s1[i].c, (*scr->search_word)[i]))
+			if (srch_cmp(s1[i].c, txt[i]))
 				goto srch_failed;
 
 		for (i = 0; i < l; i++) {
 			register int j;
-			int y = s1[i].y + yp - vy;
+			int y = s1[i].y + ypv;
 
-			if (y < yp || y >= yp + yw)
+			if (y < yp || y >= yy)
 				continue;
 
 			for (j = 0; j < s1[i].n; j++) {
-				int x = s1[i].x + j + xp - vx;
+				int sx = s1[i].x + j;
+				int x = sx + xpv;
 
-				if (x < xp || x >= xp + xw)
+				if (x < xp || x >= xx)
 					continue;
 
 				if (!(len % ALLOC_GR)) {
@@ -365,12 +396,13 @@ srch_failed:
 					if (!npt) continue;
 					points = npt;
 				}
-				points[len].x = s1[i].x + j;
+				points[len].x = sx;
 				points[len++].y = s1[i].y;
 			}
 		}
 	}
 
+	mem_free(txt);
 ret:
 	*pt = points;
 	*pl = len;

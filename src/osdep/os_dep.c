@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.28 2002/09/09 15:44:06 zas Exp $ */
+/* $Id: os_dep.c,v 1.29 2002/09/18 15:59:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #ifdef HAVE_FCNTL_H
 #include <fcntl.h> /* OS/2 needs this after sys/types.h */
 #endif
+#include <termios.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif

@@ -1,3 +1,10 @@
+Sun Oct  3 18:01:54 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/http/http.c:
+
+	Commented out code related to bzip2 encoding. This code didn't work
+	as it should.  
+
 Fri Oct  1 16:03:47 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: bfu/menu.c, protocol/proxy.c, util/memory.c,

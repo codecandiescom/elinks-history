@@ -875,7 +875,7 @@ dnl gcc specific options (continue)
 if test "x$ac_cv_prog_gcc" = "xyes"; then
   if test "x$hm_enabled_debug" = "xyes"; then
     dnl We want to see all warnings and live with none (in debug mode).
-    CFLAGS="$CFLAGS -Werror -fno-inline"
+    CFLAGS="$CFLAGS -Werror"
   fi
 
   case "`gcc -dumpversion`" in

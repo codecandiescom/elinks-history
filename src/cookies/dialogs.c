@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.62 2004/07/02 16:17:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.63 2004/07/02 17:03:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -150,9 +150,9 @@ static struct listbox_ops_messages cookies_messages = {
 	/* delete_marked_items */
 	N_("Delete marked cookies?"),
 	/* delete_folder_title */
-	N_("Delete cookie's folder"),
+	N_("Delete domain's cookies"),
 	/* delete_folder */
-	N_("Delete this folder and all cookies in it?"),
+	N_("Delete all cookies from domain \"%s\"?"),
 	/* delete_item_title */
 	N_("Delete cookie"),
 	/* delete_item */

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.114 2004/11/14 02:53:40 jonas Exp $ */
+/* $Id: info.c,v 1.115 2004/11/14 03:10:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -160,9 +160,20 @@ static unsigned char *
 get_resource_info(struct terminal *term, void *data)
 {
 	struct string info;
+	int terminal_count = 0, session_count = 0;
+	struct terminal *terminal;
+	struct session *ses;
+	unsigned char *terminal_status = term->master
+				       ? N_("master") : N_("slave");
 
 	if (!init_string(&info))
 		return NULL;
+
+	foreach (terminal, terminals)
+		terminal_count++;
+
+	foreach (ses, sessions)
+		session_count++;
 
 	add_format_to_string(&info,
 		_("Resources: %d handles, %d timers.\n"
@@ -170,13 +181,15 @@ get_resource_info(struct terminal *term, void *data)
 		"transferring, %d keepalive.\n"
 		"Memory cache: %d bytes, %d files, %d locked, %d "
 		"loading.\n"
-		"Formatted document cache: %d documents, %d locked.", term),
+		"Formatted document cache: %d documents, %d locked.\n"
+		"Interlinking: %s terminal, %d terminals, %d sessions.", term),
 		select_info(INFO_FILES), select_info(INFO_TIMERS),
 		connect_info(INFO_FILES), connect_info(INFO_CONNECTING),
 		connect_info(INFO_TRANSFER), connect_info(INFO_KEEP),
 		cache_info(INFO_BYTES), cache_info(INFO_FILES),
 		cache_info(INFO_LOCKED), cache_info(INFO_LOADING),
-		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED));
+		formatted_info(INFO_FILES), formatted_info(INFO_LOCKED),
+		_(terminal_status, term), terminal_count, session_count);
 
 #ifdef DEBUG_MEMLEAK
 	add_to_string(&info, "\n");

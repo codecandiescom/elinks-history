@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-07-26 11:51+0200\n"
-"PO-Revision-Date: 2003-01-04 23:39+0100\n"
+"PO-Revision-Date: 2003-07-26 23:12+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: src/bfu/inpfield.c:42 src/bfu/inpfield.c:51
 msgid "Bad number"
-msgstr "Chybné èíslo"
+msgstr "©patné èíslo"
 
 #: src/bfu/inpfield.c:43
 msgid "Number expected in field"
-msgstr "V rámeèku musí být èíslo"
+msgstr "V políèku musí být èíslo"
 
 #: src/bfu/inpfield.c:45 src/bfu/inpfield.c:54 src/bfu/inpfield.c:74
 #: src/bookmarks/dialogs.c:171 src/bookmarks/dialogs.c:275
@@ -55,33 +55,31 @@ msgstr "Vadný øetìzec"
 
 #: src/bfu/inpfield.c:72
 msgid "Empty string not allowed"
-msgstr "Napi¹ øetìzec, vole!"
+msgstr "Napi¹ tam nìco"
 
 #: src/bookmarks/backend/xbel.c:98
-#, fuzzy
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr "read_bookmarks_xbel(): Chyba v XML_ParserCreate()%c\n"
+msgstr "read_bookmarks_xbel(): Chyba v XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:110
-#, fuzzy, c-format
+#, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s%c\n"
+msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s"
 
 #  This translation was based on idea by Jakub Suchy.
 #: src/bookmarks/backend/xbel.c:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci %"
-"d:\n"
-"%s%c\n"
+"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci "
+"%d:\n"
+"%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
-#, fuzzy
 msgid "No title"
-msgstr "Popiska linku"
+msgstr "Bez názvu"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:641
 msgid "Add folder"
@@ -120,12 +118,15 @@ msgid "Delete bookmark"
 msgstr "Smazat bookmark"
 
 #: src/bookmarks/dialogs.c:270
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this bookmark is already being used by something right now.\n"
 "\n"
 "Title: \"%s\""
-msgstr "Sorry, ale s tímto bookmarkem právì pracuje nìco jiného."
+msgstr ""
+"Bohu¾el s tímto bookmarkem právì pracuje nìco jiného.\n"
+"\n"
+"Název: \"%s\""
 
 #: src/bookmarks/dialogs.c:279
 #, fuzzy, c-format
@@ -134,7 +135,11 @@ msgid ""
 "\n"
 "Title: \"%s\"\n"
 "URL: \"%s\""
-msgstr "Sorry, ale s tímto bookmarkem právì pracuje nìco jiného."
+msgstr ""
+"Bohu¾el s tímto bookmarkem právì pracuje nìco jiného.\n"
+"\n"
+"Název: \"%s\"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:413
 msgid "Delete marked bookmarks?"
@@ -155,17 +160,20 @@ msgid "No"
 msgstr "Ne"
 
 #: src/bookmarks/dialogs.c:420
-#, fuzzy, c-format
+#, c-format
 msgid "Delete content of folder \"%s\"?"
-msgstr "Smazat obsah slo¾ky"
+msgstr "Smazat obsah slo¾ky \"%s\"?"
 
 #: src/bookmarks/dialogs.c:428
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete bookmark \"%s\"?\n"
 "\n"
 "URL: \"%s\""
-msgstr "Smazat bookmark"
+msgstr ""
+"Smazat bookmark \"%s\"?\n"
+"\n"
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:610
 msgid "Bookmark manager"
@@ -214,41 +222,39 @@ msgid "Search bookmarks"
 msgstr "Hledat v bookmarcích"
 
 #: src/config/cmdline.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "Chyba pøi zapisování do socketu"
+msgstr "Nemohu naèíst volbu %s: %s"
 
 #: src/config/cmdline.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown option %s"
-msgstr "Nastavení spojení."
+msgstr "Neznámá volba %s"
 
 #: src/config/conf.c:673
 msgid "File saving disabled by option"
-msgstr ""
+msgstr "Ukládání souborù potlaèeno u¾ivatelem"
 
 #: src/config/conf.c:676 src/sched/error.c:44
 msgid "Out of memory"
 msgstr "Do¹la pamì», bobánku"
 
 #: src/config/conf.c:679
-#, fuzzy
 msgid "Cannot write the file"
 msgstr "Chyba pøi zápisu do souboru"
 
 #: src/config/conf.c:682
-#, fuzzy
 msgid "Secure open failed"
-msgstr "Chybièka pøi ètení souboru"
+msgstr "Bezpeèné otevírání souboru selhalo"
 
 #: src/config/dialogs.c:39
 msgid "Config error"
 msgstr "Chyba v konfiguraci"
 
 #: src/config/dialogs.c:40
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Nemù¾u zapisovat do konfiguráku"
+msgstr "Nemù¾u zapisovat do konfiguráku %s: %s"
 
 #: src/config/dialogs.c:118 src/config/dialogs.c:131 src/config/dialogs.c:514
 #: src/dialogs/document.c:41 src/dialogs/document.c:186
@@ -266,10 +272,16 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Jméno: %s\n"
+"Typ: %s\n"
+"Hodnota: %s\n"
+"\n"
+"Popis:\n"
+"%s"
 
 #: src/config/dialogs.c:125 src/config/dialogs.c:137 src/config/dialogs.c:212
 msgid "N/A"
-msgstr ""
+msgstr "nic"
 
 #: src/config/dialogs.c:132
 #, c-format
@@ -279,6 +291,10 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Jméno: %s\n"
+"Typ: %s\n"
+"Popis:\n"
+"%s"
 
 #: src/config/dialogs.c:188 src/protocol/protocol.c:57 src/sched/session.c:348
 #: src/viewer/text/textarea.c:269
@@ -287,7 +303,7 @@ msgstr "Chyba"
 
 #: src/config/dialogs.c:189
 msgid "Bad option value."
-msgstr "Zadána ¹patná hodnota volby."
+msgstr "©patná hodnota volby."
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:405 src/dialogs/edit.c:26
 #: src/scripting/lua/core.c:304 src/scripting/lua/core.c:305
@@ -299,9 +315,8 @@ msgid "Type"
 msgstr "Typ"
 
 #: src/config/dialogs.c:209
-#, fuzzy
 msgid "Value"
-msgstr "hodnota"
+msgstr "Hodnota"
 
 #: src/config/dialogs.c:210
 msgid "Description"
@@ -332,9 +347,9 @@ msgid "Cannot delete this option."
 msgstr "Tuto volbu nemù¾u smazat."
 
 #: src/config/dialogs.c:473
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the option \"%s\"?"
-msgstr "Opravdu smazat volbu"
+msgstr "Opravdu smazat volbu \"%s\"?"
 
 #: src/config/dialogs.c:504
 msgid "Options manager"
@@ -384,18 +399,17 @@ msgid "Delete keybinding"
 msgstr "Smazat pøiøazení klávesy"
 
 #: src/config/dialogs.c:721
-#, fuzzy
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
 "Tato polo¾ka není kombinace kláves. Zkus zmáèknout mezeru, dostane¹ se tak "
-"mo¾ná èasem k samotným kombinacím kláves."
+"mo¾ná èasem k samotným onìm kombinacím kláves."
 
 #: src/config/dialogs.c:732
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Opravdu smazat kombinaci"
+msgstr "Opravdu smazat kombinaci \"%s\" (akce \"%s\", mapa kláves \"%s\")?"
 
 #: src/config/dialogs.c:764
 msgid "Keybinding manager"
@@ -407,33 +421,31 @@ msgstr "Pøepnout URL/název"
 
 #: src/config/kbdbind.c:260
 msgid "Main mapping"
-msgstr ""
+msgstr "Hlavní mapa"
 
 #: src/config/kbdbind.c:261
 msgid "Edit mapping"
-msgstr ""
+msgstr "Editaèní mapa"
 
 #: src/config/kbdbind.c:262
 msgid "Menu mapping"
-msgstr ""
+msgstr "Meòátka"
 
 #: src/config/kbdbind.c:370
-#, fuzzy
 msgid "Abort connection"
-msgstr "spojení"
+msgstr "Pøeru¹ení spojení"
 
 #: src/config/kbdbind.c:371
-#, fuzzy
 msgid "Add a new bookmark"
-msgstr "Pøidej bookmark"
+msgstr "Pøidání nového bookmarku"
 
 #: src/config/kbdbind.c:372
 msgid "Add a new bookmark using current link"
-msgstr ""
+msgstr "Bookmarknutí aktuálního odkazu"
 
 #: src/config/kbdbind.c:373
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Pokus o automatické doplnìní vstupu"
 
 #: src/config/kbdbind.c:374
 msgid "Attempt to unambiguously auto-complete the input"
@@ -448,7 +460,6 @@ msgid "Delete character in front of the cursor"
 msgstr ""
 
 #: src/config/kbdbind.c:377
-#, fuzzy
 msgid "Open bookmark manager"
 msgstr "Správce bookmarkù"
 
@@ -477,18 +488,16 @@ msgid "Move cursor downwards"
 msgstr ""
 
 #: src/config/kbdbind.c:384
-#, fuzzy
 msgid "Download the current link"
-msgstr "~Stáhnout link"
+msgstr "Stáhnout cíl odkazu"
 
 #: src/config/kbdbind.c:385
-#, fuzzy
 msgid "Download the current image"
-msgstr "Stáhnout o~brázek"
+msgstr "Stáhnout obrázek"
 
 #: src/config/kbdbind.c:386
 msgid "Begin editing"
-msgstr ""
+msgstr "Zaèít editovat"
 
 #. FIXME
 #: src/config/kbdbind.c:387
@@ -496,9 +505,8 @@ msgid "Go to the end of the page/line"
 msgstr ""
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Follow the current link"
-msgstr "~Otevøít link"
+msgstr "Otevøít link"
 
 #: src/config/kbdbind.c:389
 msgid "Follow the current link, forcing reload of the target"
@@ -541,47 +549,40 @@ msgid "Show informations about the current page HTTP headers"
 msgstr ""
 
 #: src/config/kbdbind.c:399
-#, fuzzy
 msgid "Open history manager"
-msgstr "Správce nastavení"
+msgstr "Správce historie"
 
 #: src/config/kbdbind.c:400
 msgid "Go to the start of the page/line"
 msgstr ""
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Delete to beginning of line"
-msgstr "Smazat pøíponu"
+msgstr "Smazat po zaèátek øádky"
 
 #: src/config/kbdbind.c:402
-#, fuzzy
 msgid "Delete to end of line"
-msgstr "Smazat pøíponu"
+msgstr "Smazat do konce øádky"
 
 #: src/config/kbdbind.c:403
-#, fuzzy
 msgid "Open keybinding manager"
 msgstr "Správce kláves"
 
 #: src/config/kbdbind.c:404
-#, fuzzy
 msgid "Move the cursor left"
-msgstr "Blokovat kurzor"
+msgstr "Posunout kurzor doleva"
 
 #: src/config/kbdbind.c:405
 msgid "Open the link context menu"
 msgstr ""
 
 #: src/config/kbdbind.c:406
-#, fuzzy
 msgid "Jump to link"
-msgstr "Bì¾ na link"
+msgstr "Bì¾ na odkaz"
 
 #: src/config/kbdbind.c:408
-#, fuzzy
 msgid "Open a Lua console"
-msgstr "Lua Konzole"
+msgstr "Lua konzole"
 
 #: src/config/kbdbind.c:410
 msgid "Open a Lua console (DISABLED)"
@@ -597,17 +598,14 @@ msgid "Move to the next frame"
 msgstr ""
 
 #: src/config/kbdbind.c:415
-#, fuzzy
 msgid "Open a new window"
-msgstr "Otevøít v ~novém oknì"
+msgstr "Otevøít nové okno"
 
 #: src/config/kbdbind.c:416
-#, fuzzy
 msgid "Open the current link in a new window"
-msgstr "Otevøít v ~novém oknì"
+msgstr "Otevøít odkaz v novém oknì"
 
 #: src/config/kbdbind.c:417
-#, fuzzy
 msgid "Open options manager"
 msgstr "Správce nastavení"
 
@@ -632,71 +630,60 @@ msgid "Open a quit confirmation dialog box"
 msgstr ""
 
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Quit without confirmation"
-msgstr "Èekám na potvrzení pøesmìrování"
+msgstr "Skonèit bez ptaní"
 
 #: src/config/kbdbind.c:424
 msgid "Reload the current page"
 msgstr ""
 
 #: src/config/kbdbind.c:425
-#, fuzzy
 msgid "Attempt to resume download of the current link"
-msgstr "Obnovit stahování pùvodního souboru"
+msgstr "Obnovit stahování cíle odkazu"
 
 #: src/config/kbdbind.c:426
-#, fuzzy
 msgid "Move the cursor right"
-msgstr "Blokovat kurzor"
+msgstr "Posunout kurzot doprava"
 
 #: src/config/kbdbind.c:427
-#, fuzzy
 msgid "Save formatted document"
-msgstr "Ulo¾ zformátovaný ~dokument"
+msgstr "Ulo¾it zformátovaný dokument"
 
 #: src/config/kbdbind.c:428
-#, fuzzy
 msgid "Scroll down"
-msgstr "Okraj textu citlivý na scrollování"
+msgstr "Posun v textu dolù"
 
 #: src/config/kbdbind.c:429
 msgid "Scroll left"
-msgstr ""
+msgstr "Posun v textu doleva"
 
 #: src/config/kbdbind.c:430
-#, fuzzy
 msgid "Scroll right"
-msgstr "Okraj textu citlivý na scrollování"
+msgstr "Posun v textu doprava"
 
 #: src/config/kbdbind.c:431
-#, fuzzy
 msgid "Scroll up"
-msgstr "Okraj textu citlivý na scrollování"
+msgstr "Posun v textu nahoru"
 
 #: src/config/kbdbind.c:432
-#, fuzzy
 msgid "Search for a text pattern"
 msgstr "Hledání textu"
 
 #: src/config/kbdbind.c:433
-#, fuzzy
 msgid "Search backwards for a text pattern"
-msgstr "Hledání textu"
+msgstr "Zpìtné hledání textu"
 
 #: src/config/kbdbind.c:434
-#, fuzzy
 msgid "Close tab"
-msgstr "Zavøi"
+msgstr "Zavøít tab"
 
 #: src/config/kbdbind.c:435
 msgid "Next tab"
-msgstr ""
+msgstr "Dal¹í tab"
 
 #: src/config/kbdbind.c:436
-#, fuzzy
 msgid "Previous tab"
-msgstr "®ádné pøedchozí hledání"
+msgstr "Pøedchozí tab"
 
 #: src/config/kbdbind.c:437
 msgid "Toggle displaying of links to images"
@@ -723,9 +710,8 @@ msgid "Move cursor upwards"
 msgstr ""
 
 #: src/config/kbdbind.c:443
-#, fuzzy
 msgid "View the current image"
-msgstr "Zobraz~it obrázek"
+msgstr "Zobrazit obrázek"
 
 #: src/config/kbdbind.c:444
 msgid "Maximize the current frame"
@@ -736,9 +722,8 @@ msgid "Unrecognised keymap"
 msgstr ""
 
 #: src/config/kbdbind.c:640
-#, fuzzy
 msgid "Error parsing keystroke"
-msgstr "Chyba pøi zapisování do socketu"
+msgstr "Chyba pøi ètení kombinace kláves"
 
 #: src/config/kbdbind.c:642
 msgid "Unrecognised action (internal error)"
@@ -753,16 +738,14 @@ msgid "Too many parameters"
 msgstr "Pøíli¹ mnoho parametrù"
 
 #: src/config/options.c:550
-#, fuzzy
 msgid "error"
-msgstr "Chyba"
+msgstr "chyba"
 
 #: src/config/options.c:552 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Nena¹el jsem server"
 
 #: src/config/options.c:566
-#, fuzzy
 msgid "Resolver error"
 msgstr "Chyba pøi zji¹»ování IP adresy."
 
@@ -772,34 +755,33 @@ msgid "ELinks %s - Text WWW browser\n"
 msgstr "ELinks %s - Textový WWW browser\n"
 
 #: src/config/options.c:630
-#, fuzzy
 msgid "Template option folder"
-msgstr "Smazat volbu"
+msgstr "©ablonová slo¾ka"
 
 #: src/config/options.c:646
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: %d)"
-msgstr " (výchozí: %d)\n"
+msgstr "    %s%s%s %s (výchozí: %d)\n"
 
 #: src/config/options.c:651 src/config/options.c:676
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: \"%s\")"
-msgstr " (výchozí: \"%s\")\n"
+msgstr "    %s%s%s %s (výchozí: \"%s\")\n"
 
 #: src/config/options.c:656
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (alias for %s)"
-msgstr "(alias pro %s)\n"
+msgstr "    %s%s%s %s (alias pro %s)\n"
 
 #: src/config/options.c:661
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: %s)"
-msgstr " (výchozí: %s)\n"
+msgstr "    %s%s%s %s (výchozí: %s)\n"
 
 #: src/config/options.c:668
-#, fuzzy, c-format
+#, c-format
 msgid "    %s%s%s %s (default: #%02x%02x%02x)"
-msgstr " (výchozí: #%02x%02x%02x)\n"
+msgstr "    %s%s%s %s (výchozí: #%02x%02x%02x)"
 
 #: src/config/options.c:782
 msgid "Configuration options:\n"
@@ -960,9 +942,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:966
-#, fuzzy
 msgid "Verify the peer's SSL certificate."
-msgstr "Kontrolovat certifikáty"
+msgstr "Kontrolovat SSL certifikát druhé strany."
 
 #: src/config/options.c:970
 msgid "Asynchronous DNS"
@@ -1913,9 +1894,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:1474
-#, fuzzy
 msgid "Mimetypes files"
-msgstr "Ovladaèe typù souborù"
+msgstr "Soubory obsahující asociace pøípon a MIME typù"
 
 #: src/config/options.c:1476
 msgid ""
@@ -2449,18 +2429,16 @@ msgid "Main menu unselected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:1840 src/config/options.c:2208
-#, fuzzy
 msgid "Main menu unselected hotkey default background color."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:1844
 msgid "Main menu selected hotkey text color."
 msgstr ""
 
 #: src/config/options.c:1848 src/config/options.c:2216
-#, fuzzy
 msgid "Main menu selected hotkey default background color."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:1851 src/config/options.c:2219
 msgid "Menu bar"
@@ -2503,18 +2481,16 @@ msgid "Menu item unselected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:1897
-#, fuzzy
 msgid "Menu item unselected hotkey default background color."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:1901
 msgid "Menu item selected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:1905
-#, fuzzy
 msgid "Menu item selected hotkey background color."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:1907 src/config/options.c:2275
 msgid "Menu frame"
@@ -2684,39 +2660,32 @@ msgid "Tabs bar"
 msgstr ""
 
 #: src/config/options.c:2117 src/config/options.c:2485
-#, fuzzy
 msgid "Tabs bar colors."
-msgstr "Pou¾ívat barvièky"
+msgstr ""
 
 #: src/config/options.c:2119 src/config/options.c:2487
-#, fuzzy
 msgid "Unselected tab"
-msgstr "®ádný link"
+msgstr ""
 
 #: src/config/options.c:2121 src/config/options.c:2489
-#, fuzzy
 msgid "Unselected tab colors."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:2131 src/config/options.c:2499
-#, fuzzy
 msgid "Selected tab"
-msgstr "Vybírací políèko"
+msgstr ""
 
 #: src/config/options.c:2133 src/config/options.c:2501
-#, fuzzy
 msgid "Selected tab colors."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:2143 src/config/options.c:2511
-#, fuzzy
 msgid "Searched strings"
-msgstr "Vadný øetìzec"
+msgstr ""
 
 #: src/config/options.c:2145 src/config/options.c:2513
-#, fuzzy
 msgid "Searched string highlight colors."
-msgstr "Nena¹el sem to"
+msgstr ""
 
 #: src/config/options.c:2157
 msgid "Non-color terminals"
@@ -2759,18 +2728,16 @@ msgid "Menu unselected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:2265
-#, fuzzy
 msgid "Menu unselected hotkey default background color."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:2269
 msgid "Menu selected hotkey default text color."
 msgstr ""
 
 #: src/config/options.c:2273
-#, fuzzy
 msgid "Menu selected hotkey default background color."
-msgstr "Výchozí barva pozadí."
+msgstr ""
 
 #: src/config/options.c:2292
 msgid "Dialog generic background color"
@@ -2856,19 +2823,16 @@ msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
 
 #: src/config/options.c:2575
-#, fuzzy
 msgid "Window tabs"
-msgstr "~Okno"
+msgstr "Taby"
 
 #: src/config/options.c:2577
-#, fuzzy
 msgid "Window tabs settings."
-msgstr "Dialogová okna"
+msgstr "Nastavení tabù."
 
 #: src/config/options.c:2579
-#, fuzzy
 msgid "Display tabs bar"
-msgstr "Zobrazit stavový øádek"
+msgstr "Zobrazit øádek s taby"
 
 #: src/config/options.c:2581
 msgid ""
@@ -2990,9 +2954,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:2662
-#, fuzzy
 msgid "MIME type to assume for documents"
-msgstr "Asociace MIME typù"
+msgstr "Pøedpokládaný MIME typ dokumentù"
 
 #: src/config/options.c:2664
 msgid "Default MIME type to assume for documents of unknown type."
@@ -3156,9 +3119,8 @@ msgid "Print ELinks version information and exit."
 msgstr ""
 
 #: src/config/opttypes.c:54
-#, fuzzy
 msgid "Read error"
-msgstr "Chyba pøi ukládání"
+msgstr "Chyba pøi ètení"
 
 #: src/config/opttypes.c:440
 msgid "Boolean"
@@ -3222,9 +3184,9 @@ msgid "Login"
 msgstr "U¾ivatelské jméno"
 
 #: src/dialogs/auth.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication required for %s at %s"
-msgstr "Zaloguj se do "
+msgstr "Zaloguj se do %s na %s"
 
 #: src/dialogs/auth.c:134
 msgid "HTTP Authentication"
@@ -3280,9 +3242,8 @@ msgid "Unknown"
 msgstr "neznámý"
 
 #: src/dialogs/document.c:173
-#, fuzzy
 msgid "Link"
-msgstr "~Link"
+msgstr "Odkaz"
 
 #: src/dialogs/document.c:180
 msgid "Link title"
@@ -3351,7 +3312,7 @@ msgid "Copying"
 msgstr "Kopírování"
 
 #: src/dialogs/info.c:83
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -3363,6 +3324,7 @@ msgid ""
 "Software Foundation; either version 2 of the License, or (at your option) "
 "any later version."
 msgstr ""
+"ELinks %s\n"
 "\n"
 "\n"
 "(C) 1999 - 2002 Mikulá¹ Patoèka\n"
@@ -3384,34 +3346,37 @@ msgid ""
 "Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
 "Formatted document cache: %d documents, %d locked."
 msgstr ""
+"Zdroje: %d handlù, %d èasovaèù.\n"
+"Spojení: %d spojení, %d se pøipojuje, %d pøená¹í data, %d jen tak pøe¾ívá.\n"
+"Datová cache: %d bytù, %d souborù, %d se pou¾ívá, %d se naèítá.\n"
+"Cache zformátoaných dokumentù: %d dokumentù, %d se pou¾ívá."
 
 #: src/dialogs/info.c:169
-#, fuzzy
 msgid "No entry."
-msgstr "®ádnej obsah"
+msgstr "®ádná polo¾ka."
 
 #: src/dialogs/info.c:175
 #, c-format
 msgid "%ld more entries."
-msgstr ""
+msgstr "%ld dal¹ích polo¾ek."
 
 #: src/dialogs/info.c:181
 msgid "Cache info"
 msgstr "Info o cachi"
 
 #: src/dialogs/info.c:182
-#, fuzzy, c-format
+#, c-format
 msgid "Cache content: %s"
-msgstr "Obsah cache"
+msgstr "Obsah cache: %s"
 
 #: src/dialogs/info.c:200
 msgid "Memory info"
 msgstr "Informace o pa~mìti"
 
 #: src/dialogs/info.c:201
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated."
-msgstr "bytù zafláknutý pamìti"
+msgstr "%ld bytù zafláknutý pamìti"
 
 #: src/dialogs/menu.c:132
 msgid "Exit ELinks"
@@ -3546,23 +3511,20 @@ msgid "Nex~t tab"
 msgstr ""
 
 #: src/dialogs/menu.c:499
-#, fuzzy
 msgid "Pre~v tab"
-msgstr "®ádné pøedchozí hledání"
+msgstr "Pøedchozí tab"
 
 #: src/dialogs/menu.c:500
-#, fuzzy
 msgid "~Close tab"
-msgstr "Zavøi"
+msgstr "Zavøít tab"
 
 #: src/dialogs/menu.c:521
 msgid "~ELinks homepage"
 msgstr "Homepage ELinksu"
 
 #: src/dialogs/menu.c:522
-#, fuzzy
 msgid "~Documentation"
-msgstr "Mo¾nosti zpracování a práce s dokumentem."
+msgstr "~Dokumentace"
 
 #: src/dialogs/menu.c:523
 msgid "~Keys"
@@ -3573,9 +3535,8 @@ msgid "~Bugs information"
 msgstr ""
 
 #: src/dialogs/menu.c:527
-#, fuzzy
 msgid "~ELinks CvsWeb"
-msgstr "Homepage ELinksu"
+msgstr "Cvs~Web ELinksu"
 
 #: src/dialogs/menu.c:530
 msgid "~Copying"
@@ -3691,9 +3652,9 @@ msgid "Delete extension"
 msgstr "Smazat pøíponu"
 
 #: src/dialogs/mime.c:161
-#, fuzzy, c-format
+#, c-format
 msgid "Delete extension %s?"
-msgstr "Smazat pøíponu"
+msgstr "Smazat pøíponu %s?"
 
 #: src/dialogs/mime.c:234
 msgid "Extension"
@@ -3761,35 +3722,40 @@ msgid "Delete history item"
 msgstr "Smazat polo¾ku"
 
 #: src/globhist/dialogs.c:235
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but this history entry is already being used by something right now.\n"
 "\n"
 "Title: \"%s\"\n"
 "URL: \"%s\"\n"
-msgstr "Sorry, ale s tímto bookmarkem právì pracuje nìco jiného."
+msgstr ""
+"Bohu¾el s touto polo¾kou historie právì pracuje nìco jiného.\n"
+"\n"
+"Název: \"%s\"\n"
+"URL: \"%s\"\n"
 
 #: src/globhist/dialogs.c:321
-#, fuzzy
 msgid "Delete marked history items?"
-msgstr "Smazat polo¾ku"
+msgstr "Smazat oznaèené polo¾ky?"
 
 #: src/globhist/dialogs.c:330
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete history item \"%s\"?\n"
 "\n"
 "URL: \"%s\""
-msgstr "Smazat polo¾ku"
+msgstr ""
+"Smazat polo¾ku \"%s\"?\n"
+"\n"
+"URL: \"%s\""
 
 #: src/globhist/dialogs.c:376
 msgid "Clear global history"
 msgstr "Smazat globální historii"
 
 #: src/globhist/dialogs.c:377
-#, fuzzy
 msgid "Clear global history?"
-msgstr "Smazat globální historii"
+msgstr "Smazat globální historii?"
 
 #: src/globhist/dialogs.c:413
 #, c-format
@@ -3848,9 +3814,9 @@ msgid "%d select() failures."
 msgstr ""
 
 #: src/lowlevel/signals.c:235
-#, fuzzy, c-format
+#, c-format
 msgid "Bad signal number: %d"
-msgstr "Chybné èíslo"
+msgstr "Chybné èíslo signálu: %d"
 
 #: src/main.c:113
 msgid "Cannot create a pipe for internal communication."
@@ -3858,21 +3824,19 @@ msgstr ""
 
 #: src/osdep/os_dep.c:1896
 msgid "~Tab"
-msgstr ""
+msgstr "~Tab"
 
 #: src/osdep/os_dep.c:1897
-#, fuzzy
 msgid "T~ab in background"
-msgstr "Na pozadí"
+msgstr "Tab na pozadí"
 
 #: src/osdep/os_dep.c:1898
 msgid "~Xterm"
 msgstr "~Xterm"
 
 #: src/osdep/os_dep.c:1899
-#, fuzzy
 msgid "T~wterm"
-msgstr "~Twterm"
+msgstr "T~wterm"
 
 #: src/osdep/os_dep.c:1900
 msgid "~Screen"
@@ -3907,9 +3871,9 @@ msgid "No program"
 msgstr "®ádný program"
 
 #: src/protocol/user.c:169
-#, fuzzy, c-format
+#, c-format
 msgid "No program specified for protocol %s."
-msgstr "Není zadán ¾ádný program pro"
+msgstr "Není zadán ¾ádný program pro protokol %s."
 
 #: src/sched/download.c:227 src/sched/session.c:87
 msgid "Received"
@@ -3960,38 +3924,48 @@ msgid "Download error"
 msgstr "Chyba pøi downloadu"
 
 #: src/sched/download.c:524
-#, fuzzy, c-format
+#, c-format
 msgid "Could not create file %s: %s"
-msgstr "U¾ zase nemù¾u vytvoøit soubor"
+msgstr "U¾ zase nemù¾u vytvoøit soubor %s: %s"
 
 #: src/sched/download.c:558
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error downloading %s:\n"
 "\n"
 "%s"
-msgstr "Chyba pøi downloadování"
+msgstr ""
+"Chyba pøi downloadu %s:\n"
+"\n"
+"%s"
 
 #: src/sched/download.c:583
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Download complete:\n"
 "%s"
-msgstr "Stahování dokonèeno"
+msgstr ""
+"Stahování dokonèeno\n"
+"%s"
 
 #: src/sched/download.c:710
 msgid "File exists"
 msgstr "Soubor existuje"
 
 #: src/sched/download.c:711
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This file already exists:\n"
 "%s\n"
 "\n"
 "The alternative filename is:\n"
 "%s"
-msgstr "Náhradní jméno souboru je:\n"
+msgstr ""
+"Tento soubor ji¾ existuje:\n"
+"%s\n"
+"\n"
+"Náhradní jméno souboru je:\n"
+"%s"
 
 #: src/sched/download.c:718
 msgid "Save under the alternative name"
@@ -4006,11 +3980,13 @@ msgid "Resume download of the original file"
 msgstr "Obnovit stahování pùvodního souboru"
 
 #: src/sched/download.c:804
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Could not create file '%s':\n"
 "%s"
-msgstr "U¾ zase nemù¾u vytvoøit soubor"
+msgstr ""
+"U¾ zase nemù¾u vytvoøit soubor '%s':\n"
+"%s"
 
 #: src/sched/download.c:1183 src/sched/download.c:1194
 msgid "Unknown type"
@@ -4019,7 +3995,7 @@ msgstr "Neznámý typ"
 #: src/sched/download.c:1184
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
-msgstr ""
+msgstr "Chtìl bys soubor '%s' (typ: %s) ulo¾it èi zobrazit?"
 
 #: src/sched/download.c:1190 src/sched/download.c:1199
 #: src/sched/download.c:1226 src/sched/download.c:1238
@@ -4029,7 +4005,7 @@ msgstr "Zobrazit"
 #: src/sched/download.c:1195
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
-msgstr ""
+msgstr "Chtìl bys zobrazit soubor '%s' (typ: %s)?"
 
 #: src/sched/download.c:1217 src/sched/download.c:1230
 msgid "What to do?"
@@ -4041,6 +4017,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
+"Chtìl bys soubor '%s' (typ: %s%s%s)\n"
+"otevøít s '%s', ulo¾it ho nebo zobrazit?"
 
 #: src/sched/download.c:1224 src/sched/download.c:1237
 msgid "Open"
@@ -4052,6 +4030,8 @@ msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', or display it?"
 msgstr ""
+"Chtìl bys soubor '%s' (typ: %s%s%s)\n"
+"otevøít s '%s' nebo ho zobrazit?"
 
 #: src/sched/error.c:29
 msgid "Waiting in queue"
@@ -4190,29 +4170,27 @@ msgid "cur"
 msgstr "momentálnì"
 
 #: src/sched/session.c:267
-#, fuzzy
 msgid "Untitled"
-msgstr "Popiska linku"
+msgstr "Bez názvu"
 
 #: src/sched/session.c:269
-#, fuzzy
 msgid "No document"
-msgstr "dokumentù"
+msgstr "®ádný dokument"
 
 #: src/sched/session.c:602
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow redirect and post form data to url %s?"
-msgstr "Chce¹ následovat redirekt a poslat data na adresu"
+msgstr "Chce¹ následovat pøesmìrování a odeslat formuláø na adresu %s?"
 
 #: src/sched/session.c:605
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to post form data to url %s?"
-msgstr "Chce¹ poslat data z formuláøe na adresu"
+msgstr "Chce¹ odeslat formuláø na adresu %s?"
 
 #: src/sched/session.c:607
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to repost form data to url %s?"
-msgstr "Chce¹ poslat data z formuláøe znova na adresu"
+msgstr "Chce¹ je¹tì jednou odeslat formuláø na adresu %s?"
 
 #: src/sched/session.c:613 src/sched/session.c:1135 src/sched/session.c:1155
 msgid "Warning"
@@ -4223,12 +4201,13 @@ msgid "Welcome"
 msgstr "Vítej"
 
 #: src/sched/session.c:1126
-#, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
 "Press ESC for menu. Documentation is available in Help menu."
 msgstr ""
+"Vítej v ELinksu!\n"
+"\n"
 "Klávesou ESC se dostane¹ do menu. Pokud chce¹ vidìt manuál, zvol v menu "
 "Pomoc->Manuál."
 
@@ -4274,9 +4253,8 @@ msgstr ""
 "nepøíjemnosti."
 
 #: src/sched/session.c:1639
-#, fuzzy
 msgid "Unknown event."
-msgstr "Neznámý typ"
+msgstr "Neznámá událost."
 
 #: src/scripting/lua/core.c:455
 msgid "A field"
@@ -4299,9 +4277,9 @@ msgid "Enter expression"
 msgstr "Zadej výraz"
 
 #: src/terminal/event.c:86
-#, fuzzy, c-format
+#, c-format
 msgid "Could not read event: %d (%s)"
-msgstr "U¾ zase nemù¾u vytvoøit soubor"
+msgstr "Nemù¾u pøeèíst událost: %d (%s)"
 
 #: src/terminal/event.c:105
 #, c-format
@@ -4318,9 +4296,8 @@ msgid "Bad terminal size: %d, %d"
 msgstr ""
 
 #: src/terminal/kbd.c:275
-#, fuzzy
 msgid "Could not get terminal size"
-msgstr "Nemù¾u dostat soubor"
+msgstr "Nemù¾u získat velikost terminálu"
 
 #: src/terminal/kbd.c:959
 msgid "Too many bytes read from the itrm!"
@@ -4331,50 +4308,46 @@ msgid "Text WWW browser"
 msgstr "Textový WWW browser"
 
 #: src/util/version.c:48
-#, fuzzy
 msgid "Features:"
-msgstr "Podporuje: "
+msgstr "Podporuje:"
 
 #  XXX: Tohle se mi ani trosku nelibi, ale jak to udelat lepe? ;-)
 #: src/util/version.c:50
-#, fuzzy
 msgid "Standard"
-msgstr " Prohlí¾eè"
+msgstr "Prohlí¾eè"
 
 #: src/util/version.c:52
 msgid "Debug"
-msgstr ""
+msgstr "Ladìní"
 
 #: src/util/version.c:55
 msgid "Fastmem"
-msgstr ""
+msgstr "Rychlá pamì»"
 
 #: src/util/version.c:58
 msgid "Own Libc Routines"
-msgstr ""
+msgstr "Vlastní malá libc"
 
 #: src/util/version.c:61
-#, fuzzy
 msgid "No Backtrace"
-msgstr "~Zpátky"
+msgstr "Bez Backtrace"
 
 #: src/util/version.c:85
-#, fuzzy
 msgid "Global History"
 msgstr "Globální historie"
 
 #: src/util/version.c:88
 msgid "LED indicators"
-msgstr ""
+msgstr "LED indikátory"
 
 #: src/viewer/dump/dump.c:75
-#, fuzzy, c-format
+#, c-format
 msgid "Can't write to stdout: %s"
-msgstr "Chyba pøi zapisování do socketu"
+msgstr "Chyba pøi zápisu na standardní výstup: %s"
 
 #: src/viewer/dump/dump.c:78
 msgid "Can't write to stdout."
-msgstr ""
+msgstr "Chyba pøi zápisu na sandardní výstup."
 
 #: src/viewer/dump/dump.c:198
 #, c-format
@@ -4386,9 +4359,9 @@ msgid "Error while posting form"
 msgstr "Chyba pøi vypisování formuláøe"
 
 #: src/viewer/text/form.c:625
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get file %s: %s"
-msgstr "Nemù¾u dostat soubor"
+msgstr "Nemù¾u dostat soubor %s: %s"
 
 #: src/viewer/text/link.c:804
 msgid "Display ~usemap"
@@ -4455,9 +4428,8 @@ msgid "Usemap"
 msgstr "Mapa obrázkù"
 
 #: src/viewer/text/link.c:949
-#, fuzzy
 msgid "Reset form"
-msgstr "~Vygumovat formuláø"
+msgstr "Vygumovat formuláø"
 
 #: src/viewer/text/link.c:956
 msgid "Submit form to"
@@ -4512,9 +4484,9 @@ msgid "No previous search"
 msgstr "®ádné pøedchozí hledání"
 
 #: src/viewer/text/search.c:585
-#, fuzzy, c-format
+#, c-format
 msgid "Search string '%s' not found"
-msgstr "Nena¹el sem to"
+msgstr "Nena¹el jsem øetìzec '%s'"
 
 #: src/viewer/text/textarea.c:270
 msgid "You can do this only on the master terminal"
@@ -4535,98 +4507,3 @@ msgstr "Chyba pøi ukládání"
 #: src/viewer/text/view.c:1486
 msgid "Error writing to file"
 msgstr "Chyba pøi zápisu do souboru"
-
-#, fuzzy
-#~ msgid ""
-#~ "Content type is %s.\n"
-#~ "Do you want to save or display this file?"
-#~ msgstr "Tenhle soubor chce¹ ulo¾it nebo zobrazit?"
-
-#, fuzzy
-#~ msgid ""
-#~ "Content type is %s.\n"
-#~ "Do you want to display this file?"
-#~ msgstr "Tenhle soubor chce¹ ulo¾it nebo zobrazit?"
-
-#, fuzzy
-#~ msgid "GlobHist"
-#~ msgstr " Globální Historie"
-
-#, fuzzy
-#~ msgid "error: host not found"
-#~ msgstr "chyba: nena¹el jsem server\n"
-
-#, fuzzy
-#~ msgid "Lua Error: %s"
-#~ msgstr "Chyba Lua"
-
-#~ msgid " at "
-#~ msgstr " na adrese "
-
-#~ msgid "action"
-#~ msgstr "akce"
-
-#~ msgid "keymap"
-#~ msgstr "mapa kláves"
-
-#~ msgid "handles"
-#~ msgstr "handlù"
-
-#~ msgid "timers"
-#~ msgstr "èasovaèù"
-
-#~ msgid "connections"
-#~ msgstr "spojení"
-
-#~ msgid "connecting"
-#~ msgstr "pøipojuji"
-
-#~ msgid "transferring"
-#~ msgstr "pøená¹ím"
-
-#~ msgid "keepalive"
-#~ msgstr "¾ivých"
-
-#~ msgid "bytes"
-#~ msgstr "bytù"
-
-#~ msgid "files"
-#~ msgstr "souborù"
-
-#~ msgid "locked"
-#~ msgstr "zamèených"
-
-#~ msgid "loading"
-#~ msgstr "nahrávám"
-
-#~ msgid "Formatted document cache"
-#~ msgstr "Zformátované dokumenty v cachi"
-
-#~ msgid "This file already exists:\n"
-#~ msgstr "Tento soubor ji¾ existuje:\n"
-
-#~ msgid "Content type is"
-#~ msgstr "Obsah je"
-
-#~ msgid "Do you want to open file with"
-#~ msgstr "Chce¹ otevøít soubor pomocí"
-
-#~ msgid "save it or display it?"
-#~ msgstr "ulo¾it nebo zobrazit?"
-
-#, fuzzy
-#~ msgid "or display it?"
-#~ msgstr "ulo¾it nebo zobrazit?"
-
-#~ msgid "Welcome to ELinks!"
-#~ msgstr "Vítej v programu ELinks!"
-
-#~ msgid " Bookmarks"
-#~ msgstr " Bookmarky"
-
-#~ msgid "User's ~manual"
-#~ msgstr "~Manuál"
-
-#, fuzzy
-#~ msgid "Cache redirect information"
-#~ msgstr "Èekám na potvrzení pøesmìrování"

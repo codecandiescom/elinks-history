@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.94 2003/09/12 10:40:21 zas Exp $ */
+/* $Id: download.c,v 1.95 2003/09/12 21:14:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1158,7 +1158,14 @@ tp_display(struct session *ses)
 	else
 		cur_loc(ses)->download.state = ses->tq.state;
 
-	do_not_optimize_here_gcc_3_3(ses);
+	/* This fixes a crash with GCC 3.2.3-6 on Debian
+	 * when displaying a file of an unknown type.
+	 *
+	 * We used ...gcc_3_3 before I changed it to ...gcc_3_x,
+	 * so presumably this fixes a crash with that, too.
+	 *  -- Miciah
+	 */
+	do_not_optimize_here_gcc_3_x(ses);
 	cur_loc(ses)->vs.plain = 1;
 	display_timer(ses);
 	tp_free(ses);

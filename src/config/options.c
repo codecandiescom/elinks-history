@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.165 2002/12/21 02:56:32 pasky Exp $ */
+/* $Id: options.c,v 1.166 2002/12/21 13:23:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -580,103 +580,172 @@ version_cmd(struct option *o, unsigned char ***argv, int *argc)
 	return "";
 }
 
+
+/* -= Welcome to the help usage printing monster method =-
+ *
+ * We're trying to achieve several goals here:
+ * - Genericly define a function to print option trees iteratively.
+ * - Do some non generic fancy stuff like printing semi-aliased'
+ *   options (like: -?, -h and -help) on one line when doing
+ *   caption oriented usage printing.
+ *
+ * The caption define wether only the captions should be printed.
+ * The level means the level of indentation.
+ */
+static void
+printhelp_descend(struct option *tree, unsigned char *path,
+		  int level, int captions)
+{
+#define MAX_INDENTATION		80
+#define CMDLINE_WIDTH		20
+	struct option *option;
+	unsigned char indent[MAX_INDENTATION + 1];
+	int indentation = -1;
+
+	while (indentation++ < MAX_INDENTATION)
+		indent[indentation] = ' ';
+	indent[MAX_INDENTATION - 1] = '\0';
+
+	indentation = level << 1;
+	if (indentation > MAX_INDENTATION) indentation = MAX_INDENTATION;
+	indent[indentation] = '\0';
+
+	foreach (option, *((struct list_head *) tree->ptr)) {
+		/* Don't print autocreated options and deprecated aliases */
+		if (option->flags == OPT_AUTOCREATE ||
+		    (option->type == OPT_ALIAS && tree != &cmdline_options)) {
+			continue;
+		} else if (option->type == OPT_TREE) {
+			unsigned char *newpath;
+			unsigned char *description;
+
+			/* Append option name to path */
+			newpath = init_str();
+			if (!newpath) continue;
+
+			add_to_strn(&newpath, path);
+			add_to_strn(&newpath, option->name);
+
+			if (option->capt)
+				description = option->capt;
+			else
+				description = option->desc;
+
+			printf("%s%s: (%s)\n\n", indent, description, newpath);
+
+			add_to_strn(&newpath, ".");
+			printhelp_descend(option, newpath, level + 1, captions);
+			mem_free(newpath);
+			continue;
+		}
+		/* XXX: To minimize indentation the first to if's 'continue' so
+		 * we are here if option type is neither autocreate nor tree */
+		printf("%s%s%s", indent, path, option->name);
+		if (captions) {
+			int spaces;
+
+			if (!option->capt) {
+				/* Prepare to make comma separated option list
+				 * 'indentation' is used to sum the number of
+				 * printed characters. The sum is negative. */
+				if (indentation > 0) {
+					indent[indentation] = ' ';
+					indent[0] = ',';
+					indent[2] = '\0';
+					indentation = 0;
+				}
+				/* '-' and ' ' and ',' equals 3 */
+				indentation -= strlen(option->name) + 3;
+				continue;
+			} else if (indentation < 0) {
+				/* End the commaseparated list 'mode' and
+				 * reset to use original indentation. */
+				spaces =  CMDLINE_WIDTH + indentation + 1;
+				indentation = level << 1;
+				if (indentation > MAX_INDENTATION)
+					indentation = MAX_INDENTATION;
+
+				indent[0] = ' ';
+				indent[indentation] = '\0';
+			} else {
+				/* Column width between '-' & caption start. */
+				spaces = CMDLINE_WIDTH;
+				printf(" %s", option_types[option->type].help_str);
+			}
+			/* Find spaces to print between option to caption */
+			spaces -= strlen(option->name);
+			spaces -= strlen(option_types[option->type].help_str);
+
+			if (spaces < 1) spaces = 1; /* Minimum one space */
+			while (spaces-- > 0) printf(" ");
+
+			printf("%s\n", option->capt);
+		} else if (option->desc) {
+			int l = strlen(option->desc);
+			int i;
+
+			printf(" %s", option_types[option->type].help_str);
+
+			if (option->type == OPT_INT
+				|| option->type == OPT_BOOL
+				|| option->type == OPT_LONG) {
+				printf(" (default: %d)\n", * (int *) option->ptr);
+			} else if (option->type == OPT_STRING && option->ptr) {
+				printf(" (default: \"%s\")\n", (char *) option->ptr);
+			} else if (option->type == OPT_ALIAS) {
+				printf("(alias for %s)\n", (char *) option->ptr);
+			} else if (option->type == OPT_CODEPAGE) {
+				printf(" (default: %s)\n",
+					get_cp_name(* (int *) option->ptr));
+			} else if (option->type == OPT_COLOR) {
+				struct rgb *color = (struct rgb *) option->ptr;
+				printf(" (default: #%02x%02x%02x)\n",
+					color->r, color->g, color->b);
+			} else {
+				printf("\n");
+			}
+
+			printf("%s%15s", indent, "");
+
+			for (i = 0; i < l; i++) {
+				putchar(option->desc[i]);
+
+				if (option->desc[i] == '\n')
+					printf("%s%15s", indent, "");
+			}
+			printf("\n\n");
+		} else {
+			/* Another little specialty mostly for -?, -h and -help
+			 * when doing -long-help. We print options with NULL
+			 * descriptions as a comma seperated list on one line.
+			 * This way they will share the description with the
+			 * next option that defines one. */
+			printf(",");
+		}
+	}
+#undef MAX_INDENTATION
+#undef CMDLINE_WIDTH
+}
+
+
 static unsigned char *
 printhelp_cmd(struct option *option, unsigned char ***argv, int *argc)
 {
 	version_cmd(NULL, NULL, NULL);
 	printf("\n");
-	printf("Usage: elinks [options] [url]\n\n");
-	printf("Options:\n");
 
-	foreach (option, *((struct list_head *) cmdline_options.ptr)) {
-		int spaces;
-
-		if (!option->capt) continue;
-
-		spaces = 20 - strlen(option->name);
-		spaces -= strlen(option_types[option->type].help_str);
-
-		printf("  -%s", option->name);
-		printf(" %s", option_types[option->type].help_str);
-
-		if (spaces < 1) spaces = 1;
-		while (spaces-- > 0) printf(" ");
-
-		printf("%s\n", option->capt);
-	}
-	fflush(stdout);
-	return "";
-}
-
-static unsigned char *
-printlonghelp_cmd(struct option *option, unsigned char ***argv, int *argc)
-{
-	int action;
-
-	if (!strcmp(option->name, "help-config"))
-		action = 1;
-	else
-		action = 0;
-
-	if (!action) {
-		version_cmd(NULL, NULL, NULL);
-		printf("\n");
-
+	if (!strcmp(option->name, "config-help")) {
+		printf("Configuration options:\n");
+		printhelp_descend(&root_options, "", 1, 0);
+	} else {
 		printf("Usage: elinks [options] [url]\n\n");
-		printf("Options:\n\n");
-	}
-
-	foreach (option, *((struct list_head *) cmdline_options.ptr)) {
-		if (1 /*option->flags & OPT_CMDLINE*/) {
-			printf("-%s ", option->name);
-
-			printf("%s\n", option_types[option->type].help_str);
-
-			if (option->desc) {
-				int l = strlen(option->desc);
-				int i;
-
-				printf("%15s", "");
-
-				for (i = 0; i < l; i++) {
-					putchar(option->desc[i]);
-
-					if (option->desc[i] == '\n')
-						printf("%15s", "");
-				}
-
-				printf("\n");
-
-				if (option->type == OPT_INT ||
-				    option->type == OPT_BOOL ||
-				    option->type == OPT_LONG)
-					printf("%15sDefault: %d\n", "", * (int *) option->ptr);
-				else if (option->type == OPT_STRING)
-					printf("%15sDefault: %s\n", "", option->ptr ? (char *) option->ptr : "");
-			}
-
-			printf("\n");
+		printf("Options:\n");
+		if (!strcmp(option->name, "long-help")) {
+			printhelp_descend(&cmdline_options, "-", 1, 0);
+		} else {
+			printhelp_descend(&cmdline_options, "-", 1, 1);
 		}
 	}
-
-/*printf("Keys:\n\
- 	ESC	 display menu\n\
-	^C	 quit\n\
-	^P, ^N	 scroll up, down\n\
-	[, ]	 scroll left, right\n\
-	up, down select link\n\
-	->	 follow link\n\
-	<-	 go back\n\
-	g	 go to url\n\
-	G	 go to url based on current url\n\
-	/	 search\n\
-	?	 search back\n\
-	n	 find next\n\
-	N	 find previous\n\
-	=	 document info\n\
-	\\	 document source\n\
-	d	 download\n\
-	q	 quit\n");*/
 
 	fflush(stdout);
 	return "";
@@ -861,7 +930,7 @@ register_options()
 		"receive_timeout", 0, 1, 1800, 120,
 		"Receive timeout (in seconds).");
 
-	add_opt_int("connection", "Timeout on non-restartable connections",
+	add_opt_int("connection", "Timeout for non-restartable connections",
 		"unrestartable_receive_timeout", 0, 1, 1800, 600,
 		"Timeout for non-restartable connections (in seconds).");
 
@@ -2168,9 +2237,8 @@ register_options()
 	 * Estimated due time: 2003-02-01 */
 	add_opt_alias("ui", NULL,
 		"shadows", 0, "ui.dialogs.shadows",
-		"Make dialogs drop shadows (the shadows are solid, you can\n"
-		"adjust their color by ui.colors.*.dialog.shadow). You may\n"
-		"also want to eliminate the wide borders by adjusting setup.h.");
+		"This option is deprecated and will be removed very soon.\n"
+		"Please use the ui.dialog.shadows option instead.");
 
 	add_opt_bool("ui", "Display status bar",
 		"show_status_bar", 0, 1,
@@ -2195,11 +2263,8 @@ register_options()
 	 * Estimated due time: 2003-02-10 */
 	add_opt_alias("", NULL,
 		"config_saving_style", 0, "config.saving_style",
-		"Determines what happens when you tell ELinks to save options:\n"
-		"0 is only values of current options are altered\n"
-		"1 is values of current options are altered and missing options\n"
-		"     are added at the end of the file\n"
-		"2 is the configuration file is rewritten from scratch");
+		"This option is deprecated and will be removed very soon.\n"
+		"Please use the config.saving_style option instead.");
 
 	add_opt_bool("", "Use secure file saving",
 		"secure_file_saving", 0, 1,
@@ -2212,8 +2277,6 @@ register_options()
 
 
 	/* Commandline options */
-
-	/* Commandline-only options */
 
 	add_opt_bool_tree(&cmdline_options, "", "Restrict to anonymous mode",
 		"anonymous", 0, 0,
@@ -2249,11 +2312,13 @@ register_options()
 		"Specify elinks.conf config options on the command-line:\n"
 		"  -eval 'set protocol.file.allow_special_files = 1'");
 
+	/* XXX: -?, -h and -help share the same caption and should be kept in
+	 * the current order for usage help printing to be ok */
 	add_opt_command_tree(&cmdline_options, "", NULL,
 		"?", 0, printhelp_cmd,
 		NULL);
 
-	add_opt_command_tree(&cmdline_options, "", "Print usage help and exit",
+	add_opt_command_tree(&cmdline_options, "", NULL,
 		"h", 0, printhelp_cmd,
 		NULL);
 
@@ -2262,14 +2327,12 @@ register_options()
 		"Print usage help and exit.");
 
 	add_opt_command_tree(&cmdline_options, "", "Print detailed usage help and exit",
-		"long-help", 0, printlonghelp_cmd,
+		"long-help", 0, printhelp_cmd,
 		"Print detailed usage help and exit.");
 
-#if 0
-	add_opt_command_tree(&cmdline_options, "",
-		"help-config", 0, printhelp_cmd,
+	add_opt_command_tree(&cmdline_options, "", "Print help for configuration options",
+		"config-help", 0, printhelp_cmd,
 		"Print help on configuration options and exit.");
-#endif
 
 	add_opt_command_tree(&cmdline_options, "", "Look up specified host",
 		"lookup", 0, lookup_cmd,
@@ -2301,7 +2364,7 @@ register_options()
 		"ELinks instances each running standalone, rather use the -no-connect\n"
 		"command-line option. Also note that normally no runtime state files\n"
 		"are written to the disk when this option is used. See also\n"
-		"-touch-files.\n");
+		"-touch-files.");
 
 	add_opt_bool_tree(&cmdline_options, "", "Write the source of given URL to stdout",
 		"source", 0, 0,

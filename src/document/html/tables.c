@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.128 2003/11/17 17:18:55 jonas Exp $ */
+/* $Id: tables.c,v 1.129 2003/11/18 19:59:10 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1082,12 +1082,8 @@ distribute_widths(struct table *t, int width)
 				case 0:
 					if (t->columns_width[i] < t->xcols[i]) {
 						w[i] = 1;
-						if (t->xcols[i] > t->max_c[i]) {
-							mx[i] = t->max_c[i];
-						} else {
-							mx[i] = t->xcols[i];
-						}
-						mx[i] -= t->columns_width[i];
+						mx[i] = int_min(t->xcols[i], t->max_c[i])
+							- t->columns_width[i];
 						if (mx[i] <= 0) w[i] = 0;
 					}
 

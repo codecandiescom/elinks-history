@@ -1,3 +1,16 @@
+Wed Jan 23 16:21:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* view.c:
+	
+	Add 'submit form' to link menu for each form field - patch by Ami
+	Fischman <usenet@fischman.org>
+
+Mon Jan 21 22:30:39 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/hpux-pipe.diff:
+	
+	it was completely different patch ;)
+
 Mon Jan 21 17:44:14 2002  Petr Baudis <pasky@ji.cz>:
 
 	* autocommit.sh:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.57 2003/06/15 14:39:09 pasky Exp $ */
+/* $Id: download.c,v 1.58 2003/06/15 17:11:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1161,8 +1161,7 @@ tp_display(struct session *ses)
 
 
 static void
-type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
-	   struct option *assoc, int mailcap)
+type_query(struct session *ses, unsigned char *ct, struct option *assoc, int mailcap)
 {
 	unsigned char *content_type;
 
@@ -1307,9 +1306,9 @@ ses_chktype(struct session *ses, struct status **status, struct cache_entry *ce)
 
 	ses->tq_goto_position = ses->goto_position ? stracpy(ses->goto_position) : NULL;
 #ifdef MAILCAP
-	type_query(ses, ce, ct, assoc, !!mailcap);
+	type_query(ses, ct, assoc, !!mailcap);
 #else
-	type_query(ses, ce, ct, assoc, 0);
+	type_query(ses, ct, assoc, 0);
 #endif
 	mem_free(ct);
 #ifdef MAILCAP

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.131 2004/07/14 00:44:04 jonas Exp $ */
+/* $Id: bookmarks.c,v 1.132 2004/07/14 00:45:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,8 +413,7 @@ bookmark_auto_save_tabs(struct terminal *term)
 	 * restore the (correct) session when starting up. */
 	foreachsafe (bookmark, next, bookmarks) {
 		if (strcmp(bookmark->title, foldername)
-		    || !bookmark->url
-		    || !*bookmark->url)
+		    || (bookmark->url && *bookmark->url))
 			continue;
 
 		delete_bookmark(bookmark);

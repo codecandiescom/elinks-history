@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.22 2003/06/06 19:37:17 jonas Exp $ */
+/* $Id: mailcap.c,v 1.23 2003/06/06 20:07:48 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -37,6 +37,7 @@
 #include "util/hash.h"
 #include "util/lists.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 #define BACKEND_NAME	"mailcap"
 
@@ -412,14 +413,15 @@ format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 		if (*command == '%') {
 			command++;
 
-			if (*command == 's')
+			if (*command == 's') {
 				add_chr_to_str(&cmd, &cmdlen, '%');
-			else if (*command == 't')
+			} else if (*command == 't') {
 				if (!type) {
 					mem_free(cmd);
 					return NULL;
 				}
 				add_to_str(&cmd, &cmdlen, type);
+			}
 
 			command++;
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.395 2004/04/11 12:43:50 jonas Exp $ */
+/* $Id: view.c,v 1.396 2004/04/15 15:25:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1117,7 +1117,7 @@ open_in_new_window(struct terminal *term,
 	assert(term && ses && xxx);
 	if_assert_failed return;
 
-	oin = get_open_in_new(term->environment);
+	oin = get_open_in_new(term);
 	if (!oin) return;
 	if (!oin[1].text) {
 		xxx(term, oin[0].fn, ses);

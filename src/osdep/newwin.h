@@ -1,4 +1,4 @@
-/* $Id: newwin.h,v 1.2 2003/10/28 00:00:36 pasky Exp $ */
+/* $Id: newwin.h,v 1.3 2004/04/15 15:25:39 jonas Exp $ */
 
 #ifndef EL__DIALOG_SYSTEM_H
 #define EL__DIALOG_SYSTEM_H
@@ -10,7 +10,7 @@ struct open_in_new {
 	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
 };
 
-struct open_in_new *get_open_in_new(int);
+struct open_in_new *get_open_in_new(struct terminal * term);
 int can_open_in_new(struct terminal *);
 
 #endif

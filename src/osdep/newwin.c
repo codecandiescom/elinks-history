@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.4 2004/04/15 14:58:52 jonas Exp $ */
+/* $Id: newwin.c,v 1.5 2004/04/15 15:25:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,27 +80,21 @@ struct {
 };
 
 struct open_in_new *
-get_open_in_new(int environment)
+get_open_in_new(struct terminal *term)
 {
-	int i;
-	struct open_in_new *oin = NULL;
+	int i = can_open_in_new(term);
+	size_t size = i ? (i + 1) * sizeof(struct open_in_new) : 0;
+	struct open_in_new *oin = mem_calloc(1, size);
 	int noin = 0;
 
-	for (i = 0; oinw[i].env; i++) {
-		struct open_in_new *x;
+	if (!oin) return NULL;
 
-		if (!(environment & oinw[i].env))
+	for (i = 0; oinw[i].env; i++) {
+		if (!(term->environment & oinw[i].env))
 			continue;
 
-		x = mem_realloc(oin, (noin + 2) * sizeof(struct open_in_new));
-		if (!x) continue;
-
-		oin = x;
 		oin[noin].text = oinw[i].text;
-		oin[noin].fn = oinw[i].fn;
-		noin++;
-		oin[noin].text = NULL;
-		oin[noin].fn = NULL;
+		oin[noin++].fn = oinw[i].fn;
 	}
 
 	return oin;

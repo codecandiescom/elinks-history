@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.120 2004/04/22 16:00:53 jonas Exp $ */
+/* $Id: session.h,v 1.121 2004/04/22 16:13:08 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -155,8 +155,8 @@ struct session {
 	unsigned char *last_search_word;
 
 
-	/* The possibly running type query (what-to-do-with-that-file?) */
-	struct list_head tq; /* -> struct tq */
+	/* The possibly running type queries (what-to-do-with-that-file?) */
+	struct list_head type_queries; /* -> struct type_query */
 
 	/* The info for status displaying */
 	struct session_status status;

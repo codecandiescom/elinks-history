@@ -1,5 +1,5 @@
 /* Document (meta) refresh. */
-/* $Id: refresh.c,v 1.27 2004/04/22 16:10:17 jonas Exp $ */
+/* $Id: refresh.c,v 1.28 2004/04/22 16:13:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,7 +77,7 @@ do_document_refresh(void *data)
 	/* When refreshing documents that will trigger a download (like
 	 * sourceforge's download pages) make sure that we do not endlessly
 	 * trigger the download (bug 289). */
-	foreach (type_query, ses->tq)
+	foreach (type_query, ses->type_queries)
 		if (refresh->uri == type_query->uri)
 			return;
 
@@ -100,7 +100,7 @@ start_document_refresh(struct document_refresh *refresh, struct session *ses)
 	/* Like bug 289 another sourceforge download thingy this time with
 	 * number 434. It should take care when refreshing to the same URI or
 	 * what ever the cause is. */
-	foreach (type_query, ses->tq)
+	foreach (type_query, ses->type_queries)
 		if (refresh->uri == type_query->uri)
 			return;
 

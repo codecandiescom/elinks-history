@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.379 2004/04/22 16:10:17 jonas Exp $ */
+/* $Id: session.c,v 1.380 2004/04/22 16:13:08 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -538,7 +538,7 @@ create_basic_session(struct window *tab)
 	create_history(&ses->history);
 	init_list(ses->scrn_frames);
 	init_list(ses->more_files);
-	init_list(ses->tq);
+	init_list(ses->type_queries);
 	ses->tab = tab;
 	ses->id = session_id++;
 	ses->task.type = TASK_NONE;
@@ -923,8 +923,8 @@ destroy_session(struct session *ses)
 	mem_free_if(ses->imgmap_href_base);
 	mem_free_if(ses->imgmap_target_base);
 
-	while (!list_empty(ses->tq))
-		done_type_query(ses->tq.next);
+	while (!list_empty(ses->type_queries))
+		done_type_query(ses->type_queries.next);
 
 	if (ses->download_uri) done_uri(ses->download_uri);
 	mem_free_if(ses->search_word);

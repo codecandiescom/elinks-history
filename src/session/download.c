@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.277 2004/04/22 16:10:17 jonas Exp $ */
+/* $Id: download.c,v 1.278 2004/04/22 16:13:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -863,7 +863,7 @@ init_type_query(struct session *ses, struct download *download,
 	struct type_query *type_query;
 
 	/* There can be only one ... */
-	foreach (type_query, ses->tq)
+	foreach (type_query, ses->type_queries)
 		if (type_query->uri == ses->loading_uri)
 			return NULL;
 
@@ -881,7 +881,7 @@ init_type_query(struct session *ses, struct download *download,
 	change_connection(download, &type_query->download, PRI_MAIN, 0);
 	download->state = S_OK;
 
-	add_to_list(ses->tq, type_query);
+	add_to_list(ses->type_queries, type_query);
 
 	return type_query;
 }

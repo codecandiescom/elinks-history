@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.197 2005/03/11 15:05:25 zas Exp $ */
+/* $Id: ftp.c,v 1.198 2005/03/11 15:08:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -614,8 +614,6 @@ add_file_cmd_to_str(struct connection *conn)
 
 	conn->info = c_i;
 
-	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
-
 #ifdef CONFIG_IPV6
 	c_i->use_epsv = get_opt_bool("protocol.ftp.use_epsv");
 
@@ -624,16 +622,18 @@ add_file_cmd_to_str(struct connection *conn)
 		data_sock = get_pasv6_socket(conn, conn->socket.fd,
 		 	    (struct sockaddr_storage *) &data_addr);
 		if (data_sock < 0)
-			return NULL;
+			return NULL;	/* FIXME: free!! */
 		conn->data_socket.fd = data_sock;
 	}
 #endif
+
+	c_i->use_pasv = get_opt_bool("protocol.ftp.use_pasv");
 
 	if (!c_i->use_pasv && conn->protocol_family != 1) {
 		memset(pc, 0, sizeof(pc));
 		data_sock = get_pasv_socket(conn, conn->socket.fd, pc);
 		if (data_sock < 0)
-			return NULL;
+			return NULL;	/* FIXME: free!! */
 		conn->data_socket.fd = data_sock;
 	}
 

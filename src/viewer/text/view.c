@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.340 2004/01/07 17:02:10 jonas Exp $ */
+/* $Id: view.c,v 1.341 2004/01/07 18:52:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,10 +16,6 @@
 #include "bfu/inpfield.h"
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
-#include "bookmarks/dialogs.h"
-#include "cache/cache.h"
-#include "config/conf.h"
-#include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "cookies/cookies.h"

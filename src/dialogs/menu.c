@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.331 2004/06/14 22:15:36 jonas Exp $ */
+/* $Id: menu.c,v 1.332 2004/06/14 22:29:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -548,6 +548,14 @@ free_history_lists(void)
 }
 
 
+static void
+add_cmdline_bool_option(struct string *string, unsigned char *name)
+{
+	if (!get_opt_bool_tree(cmdline_options, name)) return;
+	add_to_string(string, " -");
+	add_to_string(string, name);	
+}
+
 void
 open_uri_in_new_window(struct session *ses, struct uri *uri,
 		       enum term_env_type env)
@@ -564,8 +572,18 @@ open_uri_in_new_window(struct session *ses, struct uri *uri,
 
 	if (!init_string(&parameters)) return;
 
-	add_format_to_string(&parameters, "-base-session %d ", id);
-	if (ring) add_format_to_string(&parameters, " -session-ring %d ", ring);
+	add_format_to_string(&parameters, "-base-session %d", id);
+	if (ring) add_format_to_string(&parameters, " -session-ring %d", ring);
+
+	/* No URI means open new (clean) window possibly without connecting to
+	 * the current master so add command line options to properly clone the
+	 * current master */
+	if (!uri) {
+		/* Adding -touch-files will only lead to problems */
+		add_cmdline_bool_option(&parameters, "localhost");
+		add_cmdline_bool_option(&parameters, "no-home");
+		add_cmdline_bool_option(&parameters, "no-connect");
+	}
 
 	open_new_window(ses->tab->term, path_to_exe, env, parameters.source);
 	done_string(&parameters);

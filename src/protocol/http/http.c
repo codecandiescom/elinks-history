@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.131 2003/06/21 11:06:10 zas Exp $ */
+/* $Id: http.c,v 1.132 2003/06/21 11:52:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,17 +250,17 @@ check_http_server_bugs(unsigned char *url,
 	if (!server)
 		return 0;
 
-	for (s = buggy_servers; *s; s++)
-		if (strstr(server, *s)) {
+	for (s = buggy_servers; *s; s++) {
+		if (!strstr(server, *s)) continue;
+		mem_free(server);
+		server = get_host_name(url);
+		if (server) {
+			add_blacklist_entry(server, BL_HTTP10);
 			mem_free(server);
-			server = get_host_name(url);
-			if (server) {
-				add_blacklist_entry(server, BL_HTTP10);
-				mem_free(server);
-				return 1;
-			}
-			return 0;
+			return 1;
 		}
+		return 0;
+	}
 
 	mem_free(server);
 	return 0;
@@ -477,16 +477,16 @@ http_send_header(struct connection *conn)
 
 		case REFERER_FAKE:
 			optstr = get_opt_str("protocol.http.referer.fake");
-			if (optstr[0]) {
-				add_to_str(&hdr, &l, "Referer: ");
-				add_to_str(&hdr, &l, optstr);
-				add_to_str(&hdr, &l, "\r\n");
-			}
+			if (!optstr[0]) break;
+			add_to_str(&hdr, &l, "Referer: ");
+			add_to_str(&hdr, &l, optstr);
+			add_to_str(&hdr, &l, "\r\n");
 			break;
 
 		case REFERER_TRUE:
 			if (conn->ref_url && conn->ref_url[0]) {
-				unsigned char *tmp_post = strchr(conn->ref_url, POST_CHAR);
+				unsigned char *tmp_post = strchr(conn->ref_url,
+								 POST_CHAR);
 
 				if (tmp_post) tmp_post++;
 				add_to_str(&hdr, &l, "Referer: ");
@@ -668,31 +668,29 @@ http_send_header(struct connection *conn)
 
 	add_to_str(&hdr, &l, "\r\n");
 
-	if (post) {
-		while (post[0] && post[1]) {
-			int h1, h2;
+	while (post && post[0] && post[1]) {
+		int h1, h2;
 
-			h1 = post[0] <= '9' ? post[0] - '0'
-					    : post[0] >= 'A' ? upcase(post[0])
-					    		       - 'A' + 10
-							     : 0;
+		h1 = post[0] <= '9' ? post[0] - '0'
+				    : post[0] >= 'A' ? upcase(post[0])
+				    		       - 'A' + 10
+						     : 0;
 
-			if (h1 < 0 || h1 >= 16) {
-				h1 = 0;
-			}
-
-			h2 = post[1] <= '9' ? post[1] - '0'
-					    : post[1] >= 'A' ? upcase(post[1])
-					    		       - 'A' + 10
-							     : 0;
-
-			if (h2 < 0 || h2 >= 16) {
-				h2 = 0;
-			}
-
-			add_chr_to_str(&hdr, &l, h1 * 16 + h2);
-			post += 2;
+		if (h1 < 0 || h1 >= 16) {
+			h1 = 0;
 		}
+
+		h2 = post[1] <= '9' ? post[1] - '0'
+				    : post[1] >= 'A' ? upcase(post[1])
+				    		       - 'A' + 10
+						     : 0;
+
+		if (h2 < 0 || h2 >= 16) {
+			h2 = 0;
+		}
+
+		add_chr_to_str(&hdr, &l, h1 * 16 + h2);
+		post += 2;
 	}
 
 	write_to_socket(conn, conn->sock1, hdr, l, http_get_header);
@@ -838,12 +836,15 @@ is_line_in_buffer(struct read_buffer *rb)
 	int l;
 
 	for (l = 0; l < rb->len; l++) {
-		if (rb->data[l] == ASCII_LF) return l + 1;
+		if (rb->data[l] == ASCII_LF)
+			return l + 1;
 		if (l < rb->len - 1 && rb->data[l] == ASCII_CR
 		    && rb->data[l + 1] == ASCII_LF)
 			return l + 2;
-		if (l == rb->len - 1 && rb->data[l] == ASCII_CR) return 0;
-		if (rb->data[l] < ' ') return -1;
+		if (l == rb->len - 1 && rb->data[l] == ASCII_CR)
+			return 0;
+		if (rb->data[l] < ' ')
+			return -1;
 	}
 	return 0;
 }
@@ -862,7 +863,6 @@ read_http_data(struct connection *conn, struct read_buffer *rb)
 		} else {
 
 thats_all_folks:
-
 			/* There's no content but an error so just print
 			 * that instead of nothing. */
 			if (!conn->from && info->error_code) {
@@ -1049,7 +1049,9 @@ get_header(struct read_buffer *rb)
 		unsigned char a = rb->data[i];
 
 		if (!a) return -1;
-		if (i < rb->len - 1 && a == ASCII_LF && rb->data[i + 1] == ASCII_LF) return i + 2;
+		if (i < rb->len - 1 && a == ASCII_LF
+		    && rb->data[i + 1] == ASCII_LF)
+			return i + 2;
 		if (i < rb->len - 3 && a == ASCII_CR) {
 			if (rb->data[i + 1] == ASCII_CR) continue;
 			if (rb->data[i + 1] != ASCII_LF) return -1;

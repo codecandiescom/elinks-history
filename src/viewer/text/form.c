@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.36 2003/09/03 22:34:56 zas Exp $ */
+/* $Id: form.c,v 1.37 2003/09/16 23:54:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -524,6 +524,8 @@ encode_controls(struct list_head *l, struct string *data,
 
 
 #define BL	32
+#define realloc_bound_ptrs(bptrs, bptrs_size) \
+	mem_align_alloc(bptrs, bptrs_size, bptrs_size + 1, sizeof(int), 0xFF)
 
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void
@@ -532,7 +534,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 {
 	struct conv_table *convert_table = NULL;
 	struct submitted_value *sv;
-	int *nbp, *bound_ptrs = NULL;
+	int *bound_ptrs = NULL;
 	int nbound_ptrs = 0;
 	int flg = 0;
 	register int i;
@@ -548,11 +550,9 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 bnd:
 		add_to_string(data, "--");
-		if (!(nbound_ptrs & (ALLOC_GR-1))) {
-			nbp = mem_realloc(bound_ptrs, (nbound_ptrs + ALLOC_GR) * sizeof(int));
-			if (!nbp) goto xx;
-			bound_ptrs = nbp;
-		}
+		if (!realloc_bound_ptrs(&bound_ptrs, nbound_ptrs))
+			goto xx;
+
 		bound_ptrs[nbound_ptrs++] = data->length;
 
 xx:

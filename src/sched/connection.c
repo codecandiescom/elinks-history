@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.209 2004/11/10 11:06:36 zas Exp $ */
+/* $Id: connection.c,v 1.210 2004/11/19 05:07:45 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -357,7 +357,7 @@ free_connection_data(struct connection *conn)
 		set_handlers(conn->data_socket.fd, NULL, NULL, NULL, NULL);
 	close_socket(NULL, &conn->data_socket);
 
-	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
+	/* XXX: See also protocol/http/http.c:decompress_shutdown(). */
 	if (conn->stream) {
 		close_encoded(conn->stream);
 		conn->stream = NULL;

@@ -1,3 +1,17 @@
+Tue Mar 12 20:09:29 2002  Petr Baudis <pasky@ji.cz>:
+
+	* kbd.c:
+	
+	Fixed the F1-F5 problem - am i not dumb?
+
+Tue Mar 12 18:18:03 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, BUGS, HACKING, default.c, html.c, html_r.c, kbd.c,
+	kbdbind.c, links.h, view.c:
+	
+	accesskey support - based on patch by ff, hacked a lot by me; also
+	some HACKING file notes
+
 Mon Mar 11 16:10:40 2002  Petr Baudis <pasky@ji.cz>:
 
 	* default.c, links.h, session.c:

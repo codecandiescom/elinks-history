@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.9 2003/10/27 23:40:24 pasky Exp $ */
+/* $Id: system.h,v 1.10 2003/10/27 23:46:55 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -28,6 +28,8 @@
 #else
 # define UNIX
 #endif
+
+#include "osdep/beos/overrides.h"
 
 #include "osdep/sysinfo/unix.h"
 #include "osdep/sysinfo/os2.h"

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.368 2004/11/19 23:40:05 jonas Exp $ */
+/* $Id: http.c,v 1.369 2004/11/19 23:45:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,7 +401,7 @@ http_send_header(struct connection *conn)
 		unsigned char *passwd = get_opt_str("protocol.http.proxy.passwd");
 
 		if (proxy_auth.digest) {
-			unsigned char *challenge;
+			unsigned char *response;
 			int userlen = int_min(strlen(user), HTTP_AUTH_USER_MAXLEN - 1);
 			int passwordlen = int_min(strlen(passwd), HTTP_AUTH_PASSWORD_MAXLEN - 1);
 
@@ -414,13 +414,13 @@ http_send_header(struct connection *conn)
 
 			/* FIXME: @uri is the proxied URI. Maybe the passed URI
 			 * should be the proxy URI aka conn->uri. --jonas */
-			challenge = get_http_auth_digest_challenge(&proxy_auth, uri);
-			if (challenge) {
+			response = get_http_auth_digest_response(&proxy_auth, uri);
+			if (response) {
 				add_to_string(&header, "Proxy-Authorization: Digest ");
-				add_to_string(&header, challenge);
+				add_to_string(&header, response);
 				add_crlf_to_string(&header);
 
-				mem_free(challenge);
+				mem_free(response);
 			}
 
 		} else {
@@ -624,15 +624,15 @@ http_send_header(struct connection *conn)
 	if (entry) {
 #ifdef CONFIG_SSL_DIGEST
 		if (entry->digest) {
-			unsigned char *challenge;
+			unsigned char *response;
 
-			challenge = get_http_auth_digest_challenge(entry, uri);
-			if (challenge) {
+			response = get_http_auth_digest_response(entry, uri);
+			if (response) {
 				add_to_string(&header, "Authorization: Digest ");
-				add_to_string(&header, challenge);
+				add_to_string(&header, response);
 				add_crlf_to_string(&header);
 
-				mem_free(challenge);
+				mem_free(response);
 			}
 		} else
 #endif

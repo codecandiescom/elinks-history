@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.15 2004/11/19 23:40:05 jonas Exp $ */
+/* $Id: digest.c,v 1.16 2004/11/19 23:45:42 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ digest_calc_response(struct auth_entry *entry, struct uri *uri,
 
 
 unsigned char *
-get_http_auth_digest_challenge(struct auth_entry *entry, struct uri *uri)
+get_http_auth_digest_response(struct auth_entry *entry, struct uri *uri)
 {
 	struct string string;
 	unsigned char *cnonce;

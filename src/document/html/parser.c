@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.352 2004/01/18 15:32:13 zas Exp $ */
+/* $Id: parser.c,v 1.353 2004/01/18 15:34:54 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2363,12 +2363,13 @@ distribute:
 		for (i = 0; i < values_count; i++) if (values[i] < 0) neg = 1;
 		if (!neg) goto distribute;
 
-		tmp_values = mem_alloc(values_count * sizeof(int));
+		tmp_values = fmem_alloc(values_count * sizeof(int));
 		if (!tmp_values) {
 			*new_values_count = 0;
 			return;
 		}
 		memcpy(tmp_values, values, values_count * sizeof(int));
+		
 		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
 		val = max_value - val;
 	
@@ -2384,12 +2385,14 @@ distribute:
 		}
 		assertm(val >= 0, "parse_frame_widths: val < 0");
 		if_assert_failed val = 0;
+		
 		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
 			if (val) values[i]++, val--;
 		}
 		assertm(val <= 0, "parse_frame_widths: val > 0");
 		if_assert_failed val = 0;
-		mem_free(tmp_values);
+		
+		fmem_free(tmp_values);
 	}
 
 	for (i = 0; i < values_count; i++) if (!values[i]) {

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.25 2003/09/05 00:17:18 jonas Exp $ */
+/* $Id: color.c,v 1.26 2003/09/05 00:29:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,7 +10,6 @@
 #include "document/options.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
-#include "terminal/terminal.h"
 #include "util/color.h"
 
 
@@ -72,7 +71,7 @@ static struct rgb palette[] = {
 
 struct rgb_cache_entry {
 	int color;
-	int l;
+	int level;
 	color_t rgb;
 };
 
@@ -104,7 +103,7 @@ find_nearest_color(color_t color, int level)
 
 #if 0
 	/* No need to poison the cache since calling this function is only
-	 * meaning full when level > 0 */
+	 * meaningfull when level > 0 */
 	static int cache_init = 0;
 
 	if (!cache_init) {
@@ -118,8 +117,8 @@ find_nearest_color(color_t color, int level)
 
 	rgb_cache = &rgb_fgcache[HASH_RGB(color, level)];
 
-	if (rgb_cache->l == 0
-	    || rgb_cache->l != level
+	if (rgb_cache->level == 0
+	    || rgb_cache->level != level
 	    || rgb_cache->rgb != color) {
 		struct rgb rgb = INIT_RGB(color);
 		unsigned char nearest_color = 0;
@@ -139,7 +138,7 @@ find_nearest_color(color_t color, int level)
 		}
 
 		rgb_cache->color = nearest_color;
-		rgb_cache->l = level;
+		rgb_cache->level = level;
 		rgb_cache->rgb = color;
 	}
 

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.182 2004/12/16 21:06:26 pasky Exp $ */
+/* $Id: file.c,v 1.183 2004/12/19 12:04:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,8 @@
 #include "config/options.h"
 #include "cache/cache.h"
 #include "encoding/encoding.h"
+#include "intl/gettext/libintl.h"
+#include "modules/module.h"
 #include "protocol/file/cgi.h"
 #include "protocol/file/file.h"
 #include "protocol/uri.h"
@@ -30,6 +32,17 @@
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
+
+
+struct module file_protocol_module = struct_module(
+	/* name: */		N_("File"),
+	/* options: */		NULL,
+	/* hooks: */		NULL,
+	/* submodules: */	NULL,
+	/* data: */		NULL,
+	/* init: */		NULL,
+	/* done: */		NULL
+);
 
 
 /* Directory listing */

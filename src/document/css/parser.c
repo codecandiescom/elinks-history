@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.81 2004/01/29 12:47:13 jonas Exp $ */
+/* $Id: parser.c,v 1.82 2004/01/29 12:58:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,6 +194,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		struct selector_pkg *pkg = NULL;
 		struct css_selector *selector;
 
+		assert(token);
+
 		/* This is basicly check_css_precedence(token->type, ','))
 		 * meaning check if the token precedence is less than or equal
 		 * some ordinary token. But that would be too corny to write at
@@ -213,6 +215,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		/* Save it */
 		memcpy(&element, token, sizeof(struct scanner_token));
 		token = get_next_scanner_token(scanner);
+		if (!token) return;
 
 		/* Let's see if we will get anything else of this. */
 
@@ -220,18 +223,14 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			/* id */
 			case CSS_TOKEN_HASH:
 			case CSS_TOKEN_HEX_COLOR:
-				if (!skip_css_tokens(scanner, ','))
-					return;
+				skip_css_tokens(scanner, ',');
 				continue;
 
 			/* class */
 			case '.':
 			/* pseudo */
 			case ':':
-				token = get_next_scanner_token(scanner);
-				if (token->type != CSS_TOKEN_IDENT
-				    || !skip_css_tokens(scanner, ','))
-					return;
+				skip_css_tokens(scanner, ',');
 				continue;
 
 			case ',':
@@ -241,8 +240,7 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 				break;
 
 			default:
-				if (!skip_css_tokens(scanner, ','))
-					return;
+				skip_css_tokens(scanner, ',');
 				continue;
 		}
 

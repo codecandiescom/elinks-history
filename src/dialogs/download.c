@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.1 2003/11/26 01:29:20 jonas Exp $ */
+/* $Id: download.c,v 1.2 2003/11/26 04:43:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,8 @@
 
 #include "bfu/button.h"
 #include "bfu/dialog.h"
+#include "bfu/hierbox.h"
+#include "bfu/listbox.h"
 #include "bfu/msgbox.h"
 #include "bfu/style.h"
 #include "bfu/text.h"
@@ -59,6 +61,9 @@ dlg_set_notify(struct dialog_data *dlg_data, struct widget_data *widget_data)
 static int
 dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
+	struct file_download *file_download = dlg_data->dlg->udata;
+
+	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) do_abort_download,
 			     dlg_data->dlg->udata);
 	return 0;
@@ -68,6 +73,9 @@ dlg_abort_download(struct dialog_data *dlg_data, struct widget_data *widget_data
 static int
 dlg_undisplay_download(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
+	struct file_download *file_download = dlg_data->dlg->udata;
+
+	object_unlock(file_download);
 	register_bottom_half((void (*)(void *)) undisplay_download,
 			     dlg_data->dlg->udata);
 	return 0;
@@ -292,6 +300,8 @@ found:
 	dlg->abort = download_abort_function;
 	dlg->udata = down;
 
+	object_lock(down);
+
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
 	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
 	add_dlg_button(dlg, 0, dlg_abort_download, _("Abort", term), NULL);
@@ -299,4 +309,116 @@ found:
 	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
+}
+
+
+/* The download manager */
+
+static void
+lock_file_download(struct listbox_item *item)
+{
+	object_lock((struct file_download *)item->udata);
+}
+
+static void
+unlock_file_download(struct listbox_item *item)
+{
+	object_unlock((struct file_download *)item->udata);
+}
+
+static int
+is_file_download_used(struct listbox_item *item)
+{
+	return is_object_used((struct file_download *)item->udata);
+}
+
+static unsigned char *
+get_file_download_info(struct listbox_item *item, struct terminal *term,
+		enum listbox_info listbox_info)
+{
+	struct file_download *file_download = item->udata;
+
+	return (listbox_info == LISTBOX_URI)
+		? stracpy(file_download->url) : NULL;
+}
+
+static int
+can_delete_file_download(struct listbox_item *item)
+{
+	return 1;
+}
+
+static void
+delete_file_download(struct listbox_item *item, int last)
+{
+	struct file_download *file_download = item->udata;
+
+	assert(!is_object_used(file_download));
+
+	abort_download(file_download, 1);
+}
+
+
+static struct listbox_ops downloads_listbox_ops = {
+	lock_file_download,
+	unlock_file_download,
+	is_file_download_used,
+	get_file_download_info,
+	can_delete_file_download,
+	delete_file_download,
+};
+
+
+static int
+push_info_button(struct dialog_data *dlg_data, struct widget_data *button)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+	struct terminal *term = dlg_data->win->term;
+	struct session *ses = dlg_data->dlg->udata;
+	struct file_download *file_download = box->sel ? box->sel->udata : NULL;
+
+	assert(ses);
+
+	if (!file_download) return 0;
+
+	/* Don't layer on top of the download manager */
+	delete_window(dlg_data->win);
+
+	display_download(term, file_download, ses);
+	return 0;
+}
+
+
+static INIT_LIST_HEAD(download_box_items);
+
+/* TODO: Ideas for buttons .. should be pretty trivial most of it
+ *
+ * - Resume or something that will use some goto like handler
+ * - Suspend / stop buttons .. the last one should delete the file
+ * - Open button that can be used to set file_download->prog.
+ * - Toggle notify button
+ * - Introduce listbox_ops->draw() so we can get a meter in the manager
+ *   dialog ;)
+ */
+static struct hierbox_browser_button download_buttons[] = {
+	{ N_("Info"),		push_info_button		},
+	{ N_("Stop"),		push_hierbox_delete_button	},
+	{ N_("Clear"),		push_hierbox_clear_button	},
+};
+
+struct hierbox_browser download_browser = {
+	N_("Download manager"),
+	download_buttons,
+	HIERBOX_BROWSER_BUTTONS_SIZE(download_buttons),
+
+	{ D_LIST_HEAD(download_browser.boxes) },
+	&download_box_items,
+	{ D_LIST_HEAD(download_browser.dialogs) },
+	&downloads_listbox_ops,
+};
+
+void
+menu_download_manager(struct terminal *term, void *fcp, struct session *ses)
+{
+	hierbox_browser(&download_browser, ses);
 }

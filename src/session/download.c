@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.184 2003/11/26 01:29:20 jonas Exp $ */
+/* $Id: download.c,v 1.185 2003/11/26 04:43:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 
 #include "elinks.h"
 
+#include "bfu/hierbox.h"
 #include "bfu/msgbox.h"
 #include "config/options.h"
 #include "dialogs/download.h"
@@ -92,6 +93,8 @@ get_download_ses(struct file_download *down)
 void
 abort_download(struct file_download *down, int stop)
 {
+	if (down->box_item)
+		done_browser_box(&download_browser, down->box_item);
 	if (down->win) delete_window(down->win);
 	if (down->ask) delete_window(down->ask);
 	if (down->download.state >= 0)
@@ -712,6 +715,8 @@ common_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download->handle = fd;
 	file_download->ses = cmdw_hop->ses;
 	file_download->remotetime = 0;
+	file_download->box_item = init_browser_box(&download_browser,
+					file_download->url, file_download);
 
 	add_to_list(downloads, file_download);
 	load_url(url, cmdw_hop->ses->ref_url, &file_download->download, PRI_DOWNLOAD, CACHE_MODE_NORMAL,
@@ -807,6 +812,8 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	file_download = mem_calloc(1, sizeof(struct file_download));
 	if (!file_download) goto cancel;
 
+	object_nolock(file_download); /* Debugging purpose. */
+
 	file_download->url = stracpy(url);
 	if (!file_download->url) goto cancel;
 
@@ -826,6 +833,10 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 	}
 
 	file_download->prog_flags = codw_hop->tq->prog_flags;
+
+	file_download->box_item = init_browser_box(&download_browser,
+					file_download->url, file_download);
+
 	add_to_list(downloads, file_download);
 	change_connection(&codw_hop->tq->download, &file_download->download, PRI_DOWNLOAD, 0);
 	tp_free(codw_hop->tq);

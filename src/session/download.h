@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.19 2003/11/26 01:29:20 jonas Exp $ */
+/* $Id: download.h,v 1.20 2003/11/26 04:43:52 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -29,6 +29,9 @@ struct file_download {
 	int notify;
 	int prog_flags;
 	struct download download;
+
+	struct listbox_item *box_item;
+	int refcount;
 };
 
 /* Stack of all running downloads */

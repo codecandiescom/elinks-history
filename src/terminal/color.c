@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.78 2004/12/24 02:34:48 jonas Exp $ */
+/* $Id: color.c,v 1.79 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 struct rgb_cache_entry {
 	int color;
 	int level;
-	color_t rgb;
+	color_T rgb;
 };
 
 static inline int
@@ -44,7 +44,7 @@ color_distance(struct rgb *c1, struct rgb *c2)
 
 /* Locates the nearest terminal color. */
 static inline unsigned char
-get_color(color_t color, struct rgb *palette, int level)
+get_color(color_T color, struct rgb *palette, int level)
 {
 	static struct rgb_cache_entry cache[RGB_HASH_SIZE];
 	struct rgb_cache_entry *rgb_cache = &cache[HASH_RGB(color, level)];

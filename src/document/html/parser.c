@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.528 2005/03/05 01:20:31 zas Exp $ */
+/* $Id: parser.c,v 1.529 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,7 @@ roman(unsigned char *p, unsigned n)
 }
 
 static int
-get_color(unsigned char *a, unsigned char *c, color_t *rgb)
+get_color(unsigned char *a, unsigned char *c, color_T *rgb)
 {
 	unsigned char *at;
 	int r;
@@ -123,7 +123,7 @@ get_color(unsigned char *a, unsigned char *c, color_t *rgb)
 }
 
 int
-get_bgcolor(unsigned char *a, color_t *rgb)
+get_bgcolor(unsigned char *a, color_T *rgb)
 {
 	if (!use_document_bg_colors(global_doc_opts))
 		return -1;

@@ -1,11 +1,11 @@
-/* $Id: color.h,v 1.6 2004/02/06 13:03:09 jonas Exp $ */
+/* $Id: color.h,v 1.7 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
 
 #include "util/types.h"
 
-typedef uint32_t color_t;
+typedef uint32_t color_T;
 
 #define ALPHA_COLOR_MASK	0xFF000000
 #define RED_COLOR_MASK		0x00FF0000
@@ -21,7 +21,7 @@ struct rgb {
 	unsigned char pad;
 };
 
-/* Initialize a rgb strubt from a color_t */
+/* Initialize a rgb strubt from a color_T */
 #define INIT_RGB(color) \
 	{ RED_COLOR(color), GREEN_COLOR(color), BLUE_COLOR(color) }
 
@@ -33,8 +33,8 @@ struct rgb {
 	} while (0)
 
 struct color_pair {
-	color_t background;
-	color_t foreground;
+	color_T background;
+	color_T foreground;
 };
 
 #define INIT_COLOR_PAIR(bg, fg) { bg, fg }
@@ -42,15 +42,15 @@ struct color_pair {
 /* Decode the color string. */
 /* The color string can either contain '#FF0044' style declarations or
  * color names. */
-int decode_color(unsigned char *str, int slen, color_t *color);
+int decode_color(unsigned char *str, int slen, color_T *color);
 
 /* Returns a string containing the color info. If no ``English'' name can be
  * found the hex color (#rrggbb) is returned in the given buffer. */
-unsigned char *get_color_string(color_t color, unsigned char hexcolor[8]);
+unsigned char *get_color_string(color_T color, unsigned char hexcolor[8]);
 
 /* Translate rgb color to string in #rrggbb format. str should be a pointer to
  * a 8 bytes memory space. */
-void color_to_string(color_t color, unsigned char str[]);
+void color_to_string(color_T color, unsigned char str[]);
 
 /* Fastfind lookup management. */
 void init_colors_lookup(void);

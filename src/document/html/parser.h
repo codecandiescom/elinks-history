@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.77 2004/12/29 15:43:31 zas Exp $ */
+/* $Id: parser.h,v 1.78 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -36,8 +36,8 @@ enum format_attr {
 
 struct text_attrib_style {
 	enum format_attr attr;
-	color_t fg;
-	color_t bg;
+	color_T fg;
+	color_T bg;
 };
 
 struct text_attrib {
@@ -49,12 +49,12 @@ struct text_attrib {
 	unsigned char *image;
 	unsigned char *title;
 	struct form_control *form;
-	color_t clink;
-	color_t vlink;
+	color_T clink;
+	color_T vlink;
 #ifdef CONFIG_BOOKMARKS
-	color_t bookmark_link;
+	color_T bookmark_link;
 #endif
-	color_t image_link;
+	color_T image_link;
 
 	unsigned char *select;
 	int select_disabled;
@@ -98,7 +98,7 @@ struct par_attrib {
 	unsigned list_number;
 	int dd_margin;
 	enum format_list_flag flags;
-	color_t bgcolor;
+	color_T bgcolor;
 };
 
 /* HTML parser stack mortality info */
@@ -171,7 +171,7 @@ void done_html_parser_state(struct html_element *element);
 
 /* Interface for the table handling */
 
-int get_bgcolor(unsigned char *, color_t *);
+int get_bgcolor(unsigned char *, color_T *);
 void set_fragment_identifier(unsigned char *attr_name, unsigned char *attr);
 void add_fragment_identifier(struct part *, unsigned char *attr);
 

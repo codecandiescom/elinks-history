@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.77 2005/02/28 11:19:41 zas Exp $ */
+/* $Id: link.c,v 1.78 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,7 +194,7 @@ get_image_label(unsigned char *label)
 static void
 put_image_label(unsigned char *a, unsigned char *label)
 {
-	color_t fg;
+	color_T fg;
 
 	/* This is not 100% appropriate for <img>, but well, accepting
 	 * accesskey and tabindex near <img> is just our little

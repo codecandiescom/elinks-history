@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.54 2004/12/20 11:22:11 miciah Exp $ */
+/* $Id: options.h,v 1.55 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -20,14 +20,14 @@ struct document_options {
 	int default_form_input_size;
 
 	/* The default (fallback) colors. */
-	color_t default_fg;
-	color_t default_bg;
-	color_t default_link;
-	color_t default_vlink;
+	color_T default_fg;
+	color_T default_bg;
+	color_T default_link;
+	color_T default_vlink;
 #ifdef CONFIG_BOOKMARKS
-	color_t default_bookmark_link;
+	color_T default_bookmark_link;
 #endif
-	color_t default_image_link;
+	color_T default_image_link;
 
 	/* Color model/optimizations */
 	enum color_flags color_flags;
@@ -98,8 +98,8 @@ struct document_options {
 	unsigned int underline_active_link:1;
 	unsigned int bold_active_link:1;
 	unsigned int invert_active_link:1;
-	color_t active_link_fg;
-	color_t active_link_bg;
+	color_T active_link_fg;
+	color_T active_link_bg;
 };
 
 extern struct document_options *global_doc_opts;

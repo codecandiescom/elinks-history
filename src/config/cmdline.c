@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.115 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: cmdline.c,v 1.116 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -401,7 +401,7 @@ print_full_help(struct option *tree, unsigned char *path)
 
 			case OPT_COLOR:
 			{
-				color_t color = option->value.color;
+				color_T color = option->value.color;
 				unsigned char hexcolor[8];
 
 				printf(gettext("(default: %s)"),

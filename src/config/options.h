@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.109 2005/03/05 20:59:13 zas Exp $ */
+/* $Id: options.h,v 1.110 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -93,7 +93,7 @@ union option_value {
 	long big_number;
 
 	/* The OPT_COLOR value */
-	color_t color;
+	color_T color;
 
 	/* The OPT_COMMAND value */
 	unsigned char *(*command)(struct option *, unsigned char ***, int *);

@@ -1,4 +1,4 @@
-/* $Id: property.h,v 1.19 2005/03/05 21:06:35 zas Exp $ */
+/* $Id: property.h,v 1.20 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PROPERTY_H
 #define EL__DOCUMENT_CSS_PROPERTY_H
@@ -42,7 +42,7 @@ struct css_property {
 	} value_type;
 	union css_property_value {
 		void *none;
-		color_t color;
+		color_T color;
 		struct {
 			enum format_attr add, rem;
 		} font_attribute;

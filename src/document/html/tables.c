@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.375 2005/02/28 11:19:02 zas Exp $ */
+/* $Id: tables.c,v 1.376 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -867,7 +867,7 @@ draw_table_cells(struct table *table, int x, int y)
 {
 	int col, row;
 	int xp;
-	color_t bgcolor = par_format.bgcolor;
+	color_T bgcolor = par_format.bgcolor;
 	struct table_frames table_frames;
 
 	get_table_frames(table, &table_frames);

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.83 2004/12/20 12:12:39 miciah Exp $ */
+/* $Id: document.h,v 1.84 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -184,7 +184,7 @@ struct document {
 	int width, height; /* size of document */
 	int nlinks;
 	int nsearch;
-	color_t bgcolor;
+	color_T bgcolor;
 
 	enum cp_status cp_status;
 };

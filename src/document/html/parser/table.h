@@ -1,4 +1,4 @@
-/* $Id: table.h,v 1.14 2004/12/18 16:17:55 jonas Exp $ */
+/* $Id: table.h,v 1.15 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_TABLE_H
 #define EL__DOCUMENT_HTML_PARSER_TABLE_H
@@ -44,7 +44,7 @@ struct table_cell {
 	unsigned char *start;
 	unsigned char *end;
 	unsigned char *fragment_id;
-	color_t bgcolor;
+	color_T bgcolor;
 	int col, row;
 	int align;
 	int valign;
@@ -72,8 +72,8 @@ struct table {
 	struct part *part;
 	struct table_cell *cells;
 	unsigned char *fragment_id;
-	color_t bgcolor;
-	color_t bordercolor;
+	color_T bgcolor;
+	color_T bordercolor;
 	int align;
 
 	struct table_column *columns;

@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.18 2005/02/28 11:17:36 zas Exp $ */
+/* $Id: renderer.c,v 1.19 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -52,7 +52,7 @@ struct dom_renderer {
 
 
 static void
-init_template(struct screen_char *template, color_t background, color_t foreground)
+init_template(struct screen_char *template, color_T background, color_T foreground)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(background, foreground);
 
@@ -96,8 +96,8 @@ init_dom_renderer(struct dom_renderer *renderer, struct document *document,
 
 	for (type = 0; type < DOM_NODES; type++) {
 		struct screen_char *template = &renderer->styles[type];
-		color_t background = global_doc_opts->default_bg;
-		color_t foreground = global_doc_opts->default_fg;
+		color_T background = global_doc_opts->default_bg;
+		color_T foreground = global_doc_opts->default_fg;
 		static int i_want_struct_module_for_dom;
 
 		unsigned char *name = get_dom_node_type_name(type);
@@ -329,7 +329,7 @@ add_dom_link(struct dom_renderer *renderer, unsigned char *string, int length)
 	struct point *point;
 	struct screen_char template;
 	unsigned char *uristring;
-	color_t fgcolor;
+	color_T fgcolor;
 
 	if (!realloc_document_links(document, document->nlinks + 1))
 		return NULL;

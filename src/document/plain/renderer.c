@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.174 2005/02/28 11:20:56 zas Exp $ */
+/* $Id: renderer.c,v 1.175 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -405,7 +405,7 @@ add_document_line(struct plain_renderer *renderer,
 }
 
 static void
-init_template(struct screen_char *template, color_t background, color_t foreground)
+init_template(struct screen_char *template, color_T background, color_T foreground)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(background, foreground);
 

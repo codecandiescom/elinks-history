@@ -1,5 +1,5 @@
 /* BFU display helpers. */
-/* $Id: style.c,v 1.14 2005/02/28 10:11:22 zas Exp $ */
+/* $Id: style.c,v 1.15 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,8 +18,8 @@
 
 struct bfu_color_entry {
 	/* Pointers to the options tree values. */
-	color_t *background;
-	color_t *foreground;
+	color_T *background;
+	color_T *foreground;
 
 	/* The copy of "text" and "background" colors. */
 	struct color_pair colors;

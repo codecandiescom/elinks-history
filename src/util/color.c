@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.24 2004/11/08 03:36:35 jonas Exp $ */
+/* $Id: color.c,v 1.25 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@
 
 struct color_spec {
 	char *name;
-	color_t rgb;
+	color_T rgb;
 };
 
 static struct color_spec color_specs[] = {
@@ -81,12 +81,12 @@ free_colors_lookup(void)
 }
 
 int
-decode_color(unsigned char *str, int slen, color_t *color)
+decode_color(unsigned char *str, int slen, color_T *color)
 {
 	if (*str == '#' && (slen == 7 || slen == 4)) {
 		unsigned char buffer[7];
 		unsigned char *end;
-		color_t string_color;
+		color_T string_color;
 
 		str++;
 
@@ -136,7 +136,7 @@ decode_hex_color:
 }
 
 unsigned char *
-get_color_string(color_t color, unsigned char hexcolor[8])
+get_color_string(color_T color, unsigned char hexcolor[8])
 {
 	struct color_spec *cs;
 
@@ -149,7 +149,7 @@ get_color_string(color_t color, unsigned char hexcolor[8])
 }
 
 void
-color_to_string(color_t color, unsigned char str[])
+color_to_string(color_T color, unsigned char str[])
 {
 	snprintf(str, 8, "#%06lx", (unsigned long) color);
 }

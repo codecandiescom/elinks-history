@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.527 2005/02/28 11:18:39 zas Exp $ */
+/* $Id: renderer.c,v 1.528 2005/03/05 21:34:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,7 +169,7 @@ realloc_line(struct document *document, int y, int length)
 }
 
 void
-expand_lines(struct part *part, int x, int y, int lines, color_t bgcolor)
+expand_lines(struct part *part, int x, int y, int lines, color_T bgcolor)
 {
 	int line;
 
@@ -239,7 +239,7 @@ clear_hchars(struct part *part, int x, int y, int width)
  * position (x, y) ready to be used as a template char.  */
 static inline struct screen_char *
 get_frame_char(struct part *part, int x, int y, unsigned char data,
-	       color_t bgcolor, color_t fgcolor)
+	       color_T bgcolor, color_T fgcolor)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, fgcolor);
 	struct screen_char *template;
@@ -269,7 +269,7 @@ get_frame_char(struct part *part, int x, int y, unsigned char data,
 
 void
 draw_frame_hchars(struct part *part, int x, int y, int width,
-		  unsigned char data, color_t bgcolor, color_t fgcolor)
+		  unsigned char data, color_T bgcolor, color_T fgcolor)
 {
 	struct screen_char *template;
 
@@ -287,7 +287,7 @@ draw_frame_hchars(struct part *part, int x, int y, int width,
 
 void
 draw_frame_vchars(struct part *part, int x, int y, int height,
-		  unsigned char data, color_t bgcolor, color_t fgcolor)
+		  unsigned char data, color_T bgcolor, color_T fgcolor)
 {
 	struct screen_char *template = get_frame_char(part, x, y, data,
 						      bgcolor, fgcolor);

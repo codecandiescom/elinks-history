@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.70 2002/11/27 17:46:56 pasky Exp $ */
+/* $Id: session.c,v 1.71 2002/12/01 19:53:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,8 +317,10 @@ free_wtd(struct session *ses)
 		ses->goto_position = NULL;
 	}
 
-	mem_free(ses->loading_url);
-	ses->loading_url = NULL;
+	if (ses->loading_url) {
+		mem_free(ses->loading_url);
+		ses->loading_url = NULL;
+	}
 	ses->wtd = WTD_NO;
 }
 
@@ -347,7 +349,7 @@ free_files(struct session *ses)
 	abort_files_load(ses);
 	foreach(ftl, ses->more_files) {
 		if (ftl->ce) ftl->ce->refcount--;
-		mem_free(ftl->url);
+		if (ftl->url) mem_free(ftl->url);
 	}
 	free_list(ses->more_files);
 }
@@ -690,8 +692,9 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			continue;
 
 		url = stracpy(frm->vs.url);
-		if (frm->vs.f && frm->vs.f->f_data
-		    && frm->vs.f->f_data->frame) {
+		if (!url
+		    || (frm->vs.f && frm->vs.f->f_data
+		    && frm->vs.f->f_data->frame)) {
 			/* del_from_list(frm); */
 			request_frameset(ses, frm->vs.f->f_data->frame_desc);
 #if 0
@@ -699,13 +702,14 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 			mem_free(frm->name);
 			mem_free(frm);
 #endif
-			mem_free(url);
+			if (url) mem_free(url);
 			return;
 		}
 		goto found;
 	}
 
 	url = stracpy(uurl);
+	if (!url) return;
 	pos = extract_position(url);
 
 	frm = mem_alloc(sizeof(struct frame) + strlen(url) + 1);
@@ -730,11 +734,13 @@ request_frame(struct session *ses, unsigned char *name, unsigned char *uurl)
 	add_to_list(loc->frames, frm);
 
 found:
-	if (*url) {
-		request_additional_file(ses, url, PRI_FRAME);
-	}
+	if (url) {
+		if (*url) {
+			request_additional_file(ses, url, PRI_FRAME);
+		}
 
-	mem_free(url);
+		mem_free(url);
+	}
 }
 
 void
@@ -1111,6 +1117,8 @@ encode_url(unsigned char *url)
 	unsigned char *u = init_str();
 	int l = 0;
 
+	if (!u) return NULL;
+	
 	for (; *url; url++) {
 		if (is_safe_in_shell(*url))
 			add_chr_to_str(&u, &l, *url);
@@ -1134,6 +1142,8 @@ decode_url(unsigned char *url)
 	int l = 0;
 	size_t url_len = strlen(url);
 
+	if (!u) return NULL;
+	
 	for (; *url; url++, url_len--) {
 		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
 		    || unhx(url[2]) == -1 || url[3] != '=')

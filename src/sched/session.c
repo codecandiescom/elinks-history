@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.345 2004/04/02 18:15:11 jonas Exp $ */
+/* $Id: session.c,v 1.346 2004/04/02 22:31:36 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -78,11 +78,6 @@ static int session_id = 1;
 
 struct file_to_load * request_additional_file(struct session *,
 					      unsigned char *, unsigned char *, int);
-#if 0
-struct file_to_load *request_additional_loading_file(struct session *,
-						     unsigned char *,
-						     struct download *, int);
-#endif
 
 
 struct download *
@@ -449,12 +444,6 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 		ses->loading_uri = loading_uri;
 		ses->task.target_frame = target_frame;
 	}
-#if 0
-		free_wtd(ftl->ses);
-		reload(ses, CACHE_MODE_NORMAL);
-		return;
-	}
-#endif
 
 	doc_end_load(stat, ftl->ses);
 }
@@ -509,27 +498,6 @@ request_additional_file(struct session *ses, unsigned char *name, unsigned char 
 	return ftl;
 }
 
-#if 0
-struct file_to_load *
-request_additional_loading_file(struct session *ses, unsigned char *url,
-				struct download *stat, int pri)
-{
-	struct file_to_load *ftl;
-
-	ftl = request_additional_file(ses, url, pri);
-	if (!ftl) {
-		change_connection(stat, NULL, PRI_CANCEL, 0);
-		return NULL;
-	}
-
-	ftl->req_sent = 1;
-	ftl->ce = stat->ce;
-
-	change_connection(stat, &ftl->stat, pri, 0);
-
-	return ftl;
-}
-#endif
 
 void
 process_file_requests(struct session *ses)
@@ -924,23 +892,6 @@ reload(struct session *ses, enum cache_mode cache_mode)
 	}
 }
 
-#if 0
-void
-ses_load_notify(struct download *stat, struct session *ses)
-{
-	if (stat->state == S_TRANS || stat->state == S_OK) {
-		stat->end = (void (*)(struct download *, void *))end_load;
-		ses->wtd = WTD_NO;
-		done_uri(ses->loading_uri);
-		if (ses->wtd == WTD_FORWARD) {
-			ses_forward(ses);
-		} else INTERNAL("bad ses->wtd");
-		return;
-	}
-	if (stat->state >= 0) print_screen_status(ses);
-	if (stat->state < 0) print_error_dlg(ses, stat);
-}
-#endif
 
 void
 print_unknown_protocol_dialog(struct session *ses)

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.80 2003/07/06 23:24:07 pasky Exp $ */
+/* $Id: url.c,v 1.81 2003/07/07 01:29:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,47 +181,6 @@ get_port_str(unsigned char *url)
 		      NULL)) return NULL;
 
 	return memacpy(p, pl);
-}
-
-
-/* XXX: Warning! We modify the p string here (altough it is reconstructed to
- * its original state at all exit points of the functions), which is somehow
- * controversial and it makes it impossible to pass constant strings to this
- * function. If this will be *that* painful, I'll make it allocate a working
- * tmp. copy, but for now I rather changed check_protocol() usage, which
- * obviously may not be the best thing :/. --pasky */
-int
-get_port(unsigned char *url)
-{
-	unsigned char *h;
-	int hl;
-
-	if (parse_url(url, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      NULL, NULL,
-		      &h, &hl,
-		      NULL, NULL,
-		      NULL)) return -1;
-
-	if (h) {
-		int n;
-
-		errno = 0;
-		n = strtol(h, NULL, 10);
-		if (!errno && n > 0) return n;
-	}
-
-	h = get_protocol_name(url);
-	if (h) {
-		enum protocol protocol = check_protocol(h, strlen(h));
-
-		mem_free(h);
-		if (protocol != PROTOCOL_UNKNOWN)
-			return get_protocol_port(protocol);
-	}
-
-	return -1;
 }
 
 
@@ -821,41 +780,6 @@ get_extension_from_url(unsigned char *url)
 }
 
 #undef dsep
-
-/* Returns path+filename part (as is) from url as a dynamically allocated
- * string in name and length in namelen. */
-void
-get_filenamepart_from_url(unsigned char *url, unsigned char **name,
-			  int *namelen)
-{
-	unsigned char *start, *end, *filename;
-	int len;
-
-	*name = NULL;
-	*namelen = 0;
-
-	for (start = url;
-	     *start && *start != POST_CHAR && *start != ':';
-	     start++);
-
-	if (*start != ':' || *++start != '/' || *++start != '/') return;
-
-	start++;
-
-	for (end = start; *end && *end != POST_CHAR; end++);
-
-	len = end - start;
-	filename = mem_alloc(len + 1);
-
-	if (!filename) return;
-
-	if (len) memcpy(filename, start, len);
-	filename[len] = '\0';
-
-	*name = filename;
-	*namelen = len;
-}
-
 
 
 /* URL encoding, escaping unallowed characters. */

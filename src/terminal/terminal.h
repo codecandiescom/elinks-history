@@ -1,13 +1,12 @@
-/* $Id: terminal.h,v 1.27 2003/12/01 14:24:21 pasky Exp $ */
+/* $Id: terminal.h,v 1.28 2003/12/01 14:31:30 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
 
+#include "config/option.h"
 #include "intl/charsets.h"
 #include "terminal/event.h"
 #include "util/lists.h"
-
-struct option;
 
 
 /* Some constants for the strings inside of {struct terminal}. */

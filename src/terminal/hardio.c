@@ -1,5 +1,5 @@
 /* Low-level terminal-suitable I/O routines */
-/* $Id: hardio.c,v 1.12 2004/07/14 21:32:08 zas Exp $ */
+/* $Id: hardio.c,v 1.13 2004/07/14 21:37:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,6 +15,7 @@
 #include "elinks.h"
 
 #include "terminal/hardio.h"
+#include "util/error.h"
 
 /* Define it to have data written to stderr */
 /* #define HW_DEBUG */
@@ -90,6 +91,9 @@ hard_write(int fd, unsigned char *p, int l)
 {
 	int t = l;
 
+	assert(p && l >= 0);
+	if_assert_failed return -1;
+
 	debug_open("hard_write", fd, p, l);
 
 	while (l > 0) {
@@ -116,6 +120,9 @@ int
 hard_read(int fd, unsigned char *p, int l)
 {
 	int t = l;
+
+	assert(p && l >= 0);
+	if_assert_failed return -1;
 
 	debug_open("hard_read", fd, p, l);
 

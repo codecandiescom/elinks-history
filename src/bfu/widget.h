@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.88 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: widget.h,v 1.89 2004/11/22 11:31:09 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -37,9 +37,9 @@ struct widget {
 	struct widget_ops *ops;
 
 	unsigned char *text;
-	
+
 	t_widget_handler *handler;
-	
+
 	void *data;
 	int datalen;	/* 0 = no alloc/copy to cdata. */
 

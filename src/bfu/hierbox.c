@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.196 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: hierbox.c,v 1.197 2004/11/22 11:31:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,7 +154,7 @@ hierbox_ev_kbd(struct dialog_data *dlg_data)
 	struct listbox_item *selected;
 	enum menu_action action;
 	struct term_event *ev = dlg_data->term_event;
-	
+
 	/* Check if listbox has something to say to this */
 	if (widget->ops->kbd
 	    && widget->ops->kbd(dlg_data, widget_data)

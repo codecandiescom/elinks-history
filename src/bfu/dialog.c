@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.186 2004/11/22 11:29:09 zas Exp $ */
+/* $Id: dialog.c,v 1.187 2004/11/22 11:31:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ void
 select_widget(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {
 	struct widget_data *previously_selected_widget;
-	
+
 	previously_selected_widget = selected_widget(dlg_data);
 
 	dlg_data->selected_widget_id = widget_data - dlg_data->widgets_data;
@@ -189,7 +189,7 @@ cycle_widget_focus(struct dialog_data *dlg_data, int direction)
 {
 	int prev_selected = dlg_data->selected_widget_id;
 	struct widget_data *previously_selected_widget;
-	
+
 	previously_selected_widget = selected_widget(dlg_data);
 
 	do {

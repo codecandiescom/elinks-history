@@ -1,5 +1,5 @@
 /* Input field widget ismplementation. */
-/* $Id: inpfield.c,v 1.186 2004/11/22 07:28:49 miciah Exp $ */
+/* $Id: inpfield.c,v 1.187 2004/11/22 11:31:09 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,7 +508,7 @@ display_field:
 	return EVENT_PROCESSED;
 }
 
-		
+
 static t_handler_event_status
 clear_field(struct dialog_data *dlg_data, struct widget_data *widget_data)
 {

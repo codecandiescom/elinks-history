@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.46 2003/05/03 01:07:46 pasky Exp $ */
+/* $Id: menu.c,v 1.47 2003/05/03 01:11:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,8 +87,8 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 
 	for (i = 0; i < ni; i++)
 		if (!hotkeys) {
-		       items[i].hotkey_pos = 0;
-		       items[i].ignore_hotkey = 1;
+			items[i].hotkey_pos = 0;
+			items[i].ignore_hotkey = 1;
 		} else if (items[i].ignore_hotkey != 2 && !items[i].hotkey_pos) {
 			items[i].hotkey_pos = find_hotkey_pos(_(items[i].text, term));
 			items[i].ignore_hotkey = 2; /* cached */
@@ -205,8 +205,8 @@ select_menu(struct terminal *term, struct menu *menu)
 		win = term->windows.next;
 
 		while ((void *) win != &term->windows &&
-		       (win->handler == menu_func ||
-			win->handler == mainmenu_func)) {
+			(win->handler == menu_func ||
+			 win->handler == mainmenu_func)) {
 
 			win1 = win->next;
 			delete_window(win);
@@ -367,7 +367,7 @@ display_menu(struct terminal *term, struct menu *menu)
 
 			} else {
 				for (x = 0;
-			             x < menu->xw - 4
+				     x < menu->xw - 4
 				     && (c = _(menu->items[p].text, term)[x]);
 				     x++)
 					set_char(term, menu->x + x + 2, s, c | co);
@@ -699,7 +699,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		if (i == menu->selected) {
 			int tmptextlen = strlen(tmptext)
-			         	 - (menu->items[i].hotkey_pos ? 1 : 0);
+					 - (menu->items[i].hotkey_pos ? 1 : 0);
 
 			co = mainmenu_selected_color;
 			hkco = mainmenu_selected_hotkey_color;
@@ -849,8 +849,8 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 					}
 
 			} else if (!s) {
-				delete_window_ev(win, ev->x != KBD_ESC ? ev
-								       : NULL);
+				delete_window_ev(win, ev->x != KBD_ESC  ? ev
+									: NULL);
 				break;
 			}
 

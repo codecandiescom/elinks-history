@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.285 2004/06/29 08:10:46 pasky Exp $ */
+/* $Id: tables.c,v 1.286 2004/06/29 08:12:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -853,7 +853,7 @@ display_complicated_table(struct table *table, int x, int y)
 	{
 		/* XXX: Cannot we simply use the @yp value we just calculated
 		 * above? --pasky */
-		int yp = table_frames.top + y + table_frames.bottom;
+		int our_height = table_frames.top + y + table_frames.bottom;
 
 		/* XXX: We cannot use get_table_real_height() because we are
 		 * looking one row ahead - which is completely arcane to me.
@@ -861,13 +861,14 @@ display_complicated_table(struct table *table, int x, int y)
 		 * and has non-zero cellspacing or vcellpadding. --pasky */
 
 		for (row = 0; row < table->rows; row++) {
-			yp += table->rows_heights[row] +
-			      (row < table->rows - 1 && get_hline_width(table, row + 1) >= 0);
+			our_height += table->rows_heights[row] +
+			              (row < table->rows - 1 &&
+			               get_hline_width(table, row + 1) >= 0);
 		}
 
-		assertm(table->part->cy + table->real_height == yp,
+		assertm(table->part->cy + table->real_height == our_height,
 			"size does not match; 1:%d, 2:%d",
-			table->part->cy + table->real_height, yp);
+			table->part->cy + table->real_height, our_height);
 	}
 #endif
 }

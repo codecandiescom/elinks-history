@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.269 2004/08/03 09:37:25 jonas Exp $ */
+/* $Id: uri.c,v 1.270 2004/08/20 04:02:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1255,7 +1255,7 @@ check_uri_sanity(struct uri *uri)
 			if (isupper(uri->host[pos])) goto error;
 	return;
 error:
-	INTERNAL("Uppercase letters detected in protocol or host part.");
+	INTERNAL("Uppercase letters detected in protocol or host part (%s).", struri(uri));
 }
 #else
 #define check_uri_sanity(uri)

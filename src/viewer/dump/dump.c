@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.81 2004/01/16 20:26:22 jonas Exp $ */
+/* $Id: dump.c,v 1.82 2004/01/16 20:30:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -304,7 +304,6 @@ fail:
 
 	if (get_opt_bool("document.browse.links.numbering")
 	    && document->nlinks) {
-		struct link *l;
 		char *header = "\nReferences\n\n   Visible links\n";
 		int headlen = strlen(header);
 
@@ -312,16 +311,19 @@ fail:
 			goto fail;
 
 		for (x = 0; x < document->nlinks; x++) {
-			l = &document->links[x];
-			if (!l->where)
-				continue;
+			struct link *l = &document->links[x];
+			unsigned char *where = l->where;
+
+			if (!where) continue;
+			if (strlen(where) > 4 && !memcmp(where, "MAP@", 4))
+				where += 4;
 
 			if (l->title && *l->title)
 				snprintf(buf, D_BUF, "%4d. %s\n\t%s\n",
-					 x + 1, l->title, l->where);
+					 x + 1, l->title, where);
 			else
 				snprintf(buf, D_BUF, "%4d. %s\n",
-					 x + 1, l->where);
+					 x + 1, where);
 			bptr = strlen(buf);
 			if (hard_write(fd, buf, bptr) != bptr)
 				goto fail;

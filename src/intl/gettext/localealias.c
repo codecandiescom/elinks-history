@@ -35,6 +35,7 @@
 #include "elinks.h"
 
 #include "intl/gettext/gettextP.h"
+#include "util/memory.h"
 #include "util/string.h"
 
 #ifdef HAVE_FGETS_UNLOCKED

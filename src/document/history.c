@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.14 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: history.c,v 1.15 2002/12/16 22:56:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
  * unhistory. */
 
 
-void
+static inline void
 free_history(struct list_head *history)
 {
 	struct location *loc = history->next;
@@ -42,21 +42,21 @@ free_history(struct list_head *history)
 }
 
 
-void
+inline void
 create_history(struct session *ses)
 {
 	init_list(ses->history);
 	init_list(ses->unhistory);
 }
 
-void
+inline void
 destroy_history(struct session *ses)
 {
 	free_history(&ses->history);
 	free_history(&ses->unhistory);
 }
 
-void
+inline void
 clean_unhistory(struct session *ses)
 {
 	if (get_opt_int("document.history.keep_unhistory")) return;
@@ -142,7 +142,7 @@ go_back(struct session *ses)
 
 	if (ses->ref_url) {
 		mem_free(ses->ref_url);
-		ses->ref_url=NULL;
+		ses->ref_url = NULL;
 	}
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();
@@ -172,7 +172,7 @@ go_unback(struct session *ses)
 
 	if (ses->ref_url) {
 		mem_free(ses->ref_url);
-		ses->ref_url=NULL;
+		ses->ref_url = NULL;
 	}
 	if (fd && fd->f_data && fd->f_data->url) {
 		ses->ref_url = init_str();

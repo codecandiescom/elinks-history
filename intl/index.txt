@@ -1,5 +1,4 @@
 english
-catalan
 croatian
 estonian
 finnish

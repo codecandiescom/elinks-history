@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.64 2003/08/23 16:33:21 jonas Exp $ */
+/* $Id: tables.c,v 1.65 2003/08/27 16:03:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -72,7 +72,6 @@ struct table_cell {
 	int max_width;
 	int x_width;
 	int height;
-	int xpos, ypos, xw, yw;
 	int link_num;
 };
 
@@ -1396,11 +1395,6 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 							     cell->link_num);
 				}
 
-				cell->xpos = xp;
-				cell->ypos = yp;
-				cell->xw = xw;
-				cell->yw = yw;
-
 				if (p) {
 					int yt;
 
@@ -1413,10 +1407,6 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 
 				kill_html_stack_item(&html_top);
 			}
-
-			cell->xpos = xp;
-			cell->ypos = yp;
-			cell->xw = t->w_c[i];
 
 			yp += t->r_heights[j] +
 			      (j < t->y - 1 && get_hline_width(t, j + 1) >= 0);

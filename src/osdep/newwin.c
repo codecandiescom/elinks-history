@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.15 2004/04/17 02:09:15 jonas Exp $ */
+/* $Id: newwin.c,v 1.16 2004/04/17 02:20:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,11 +35,6 @@ const struct open_in_new open_in_new[] = {
 	{ 0, NULL, NULL }
 };
 
-/* Returns:
- * 0 if it is impossible to open anything in anything new
- * 1 if there is one possible object capable of being spawn
- * >1 if there is >1 such available objects (it may not be the actual number of
- *    them, though) */
 int
 can_open_in_new(struct terminal *term)
 {

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.37 2004/03/11 13:54:09 zas Exp $ */
+/* $Id: dialogs.c,v 1.38 2004/03/14 06:22:01 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -137,32 +137,6 @@ delete_cookie(struct listbox_item *item, int last)
 		save_cookies();
 }
 
-static void
-draw_cookie(struct listbox_item *item, struct listbox_context *data,
-		int x, int y, int width)
-{
-	int depth = item->depth + 1;
-	int len;
-	unsigned char *text;
-	unsigned char *stylename = (item == data->box->sel)
-				   ? "menu.selected"
-				   : (item->marked ? "menu.marked"
-						   : "menu.normal");
-	struct color_pair *color = get_bfu_color(data->term, stylename);
-
-	if (item->type == BI_FOLDER) {
-		text = item->text;
-	} else {
-		struct cookie *cookie = item->udata;
-
-		text = cookie ? cookie->name : (unsigned char *)"";
-	}
-	len = strlen(text);
-	int_upper_bound(&len, int_max(0, data->widget_data->w - depth * 5));
-	draw_text(data->term, data->widget_data->x + depth * 5, y,
-		text, len, 0, color);
-}
-
 static struct listbox_ops cookies_listbox_ops = {
 	lock_cookie,
 	unlock_cookie,
@@ -170,7 +144,7 @@ static struct listbox_ops cookies_listbox_ops = {
 	get_cookie_info,
 	can_delete_cookie,
 	delete_cookie,
-	draw_cookie,
+	NULL
 };
 
 static int
@@ -182,6 +156,9 @@ set_cookie_name(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	if (!value || !cookie) return 1;
 	if (cookie->name) mem_free(cookie->name);
 	cookie->name = stracpy(value);
+
+	assert(cookie->box_item);
+	cookie->box_item->text = cookie->name;
 	return 0;
 }
 

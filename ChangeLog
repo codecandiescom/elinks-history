@@ -1,3 +1,304 @@
+Thu Oct 23 22:05:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/history.h:
+
+	Removed useless historical note.  
+
+Thu Oct 23 21:54:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: dialogs/menu.c, sched/download.c, sched/history.c,
+	sched/history.h, sched/session.c, sched/session.h:
+
+	Session history was moved from sched/session.h to sched/history.h,
+	history functions calling convention was changed to take just
+	{struct ses_history}. Corrected a little the session.location (part
+	of the move) hype advertised in the associated comment.  
+
+Thu Oct 23 21:46:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Oct 23 21:43:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/html/frames.c, document/html/frames.h,
+	document/html/parser.h, document/html/renderer.h, sched/session.h:
+
+	Remove tons of useless cross-including, hopefully finding some way
+	from this terrible maze and nest of overhead.  
+
+Thu Oct 23 21:40:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.inc:
+
+	Indent options.  
+
+Thu Oct 23 21:29:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h, options.inc:
+
+	Store options in tables. One for config options and one for command
+	line options.  This means a new flag (OPT_ALLOC) is introduced to
+	mark which options (and option names) to free when an option is
+	released. Major cleanups ahead.  
+
+Thu Oct 23 16:41:19 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Translation updated.  
+
+Thu Oct 23 16:01:47 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Thu Oct 23 15:18:53 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c, viewer/text/view.h:
+
+	A new menu entry was added to toggle link numbering. It is not yet a
+	per-document action, but it will help newbies to know about "."
+	shortcut existence.  
+
+Thu Oct 23 15:03:30 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Introduce INIT_OPTION() macro.  
+
+Thu Oct 23 14:51:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c, viewer/text/view.h:
+
+	A new menu entry was added to toggle images rendering. It is not yet
+	a per-document action, but it will help newbies to know about "*"
+	shortcut existence.  
+
+Thu Oct 23 14:47:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.inc:
+
+	Move autocreated function to their own function.  
+
+Thu Oct 23 13:44:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Some comment updates regarding (un)history.  
+
+Thu Oct 23 13:21:12 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Tidyup.  
+
+Thu Oct 23 10:21:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation updated.  
+
+Thu Oct 23 10:11:25 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Thu Oct 23 09:48:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.h:
+
+	Don't allocate alias full path strings.  
+
+Thu Oct 23 09:18:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.h:
+
+	Whoops. Tiny typo fix.  
+
+Thu Oct 23 09:11:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Moved over register_change_hooks() to a more honorable place.  
+
+Thu Oct 23 09:09:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: options.c, options.h:
+
+	Export register_change_hooks().  
+
+Thu Oct 23 08:59:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	...and reindent of the opttype info switch.  
+
+Thu Oct 23 08:59:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Tiny cleanup...  
+
+Thu Oct 23 08:57:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Moved the common opttype info prefix (path,saved,option->name,help)
+	before the switch. This also reduces the translation strings to the
+	interesting part.  
+
+Thu Oct 23 08:50:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Converted the opttype info printing to a switch.  
+
+Thu Oct 23 08:49:35 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Use stricter checks while parsing attributes. It prevents infinite
+	loop triggered by garbage.html test file.  
+
+Thu Oct 23 08:43:54 2003  Laurent Monin <zas@norz.org>:
+
+	* test/garbage.html:
+
+	Special garbage file ;) test it and see. Be prepared to bad things
+	[tm]. A fix is on the road.  
+
+Thu Oct 23 08:43:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Thu Oct 23 08:42:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	As long as we assert right things.  
+
+Thu Oct 23 08:39:05 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, gl.po, hr.po, hu.po, id.po, is.po, it.po, leet.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Thu Oct 23 08:32:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	I assert, you assert, everyone asserts. We are one happy asserting
+	family.  
+
+Thu Oct 23 08:26:15 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Oct 23 08:20:27 2003  Laurent Monin <zas@norz.org>:
+
+	* po/Makefile.in:
+
+	Specify which language (C) we use. It prevents some warnings about
+	.inc files when doing make update-po.  
+
+Thu Oct 23 08:11:45 2003  Laurent Monin <zas@norz.org>:
+
+	* po/Makefile.in:
+
+	msgid-bugs-address xgettext option is not supported on all xgettext
+	versions, so it prevents this stuff to work on some platforms.  
+
+Thu Oct 23 07:58:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Reverted patch by Jonas ("sanitization" of translation strings)
+	[1.332]. This kind of changes break languages with different order
+	of words than English. It needs to be done less agressively.  
+
+Thu Oct 23 01:45:01 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Cosmetic changes.  
+
+Thu Oct 23 00:59:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.c, options.inc:
+
+	Centralize change hook registration. I hope this is elegant enough!
+	;) 
+
+Thu Oct 23 00:39:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: options.h, options.inc:
+
+	add_opt_codepage(): Call get_cp_index() in the macro.  
+
+Thu Oct 23 00:26:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	get_opt_(): Do better sanity checking.  
+
+Thu Oct 23 00:17:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Sync.  
+
+Thu Oct 23 00:12:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Try to make help printing format strings a little saner from a
+	translation standpoint.  
+
+Wed Oct 22 23:57:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	Cleanup.  
+
+Wed Oct 22 23:53:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in:
+
+	Add flag to xgettext to set "Report-Msgid-Bugs-To:
+	elinks-dev@linuxfromscratch.org" 
+
+Wed Oct 22 23:44:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/Makefile.in, src/config/options.inc:
+
+	A few hacks and po file updating should work again.  
+
+Wed Oct 22 22:50:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: Makefile.am, options.c, options.inc:
+
+	Move option adding to separate file to make po files more stable.  
+
 Wed Oct 22 21:59:40 2003  Laurent Monin <zas@norz.org>:
 
 	* src/sched/download.c:

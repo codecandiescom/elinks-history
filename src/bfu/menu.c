@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.243 2004/07/19 13:29:29 zas Exp $ */
+/* $Id: menu.c,v 1.244 2004/07/19 13:33:35 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -249,7 +249,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 }
 
 static void
-scroll_menu(struct menu *menu, int steps)
+scroll_menu(struct menu *menu, int steps, int wrap)
 {
 	int w = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 	int scr_i = int_min((w - 1) / 2, SCROLL_ITEMS);
@@ -514,13 +514,13 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 		 * return with goto here. --pasky */
 		case B_WHEEL_UP:
 			if (check_mouse_action(ev, B_DOWN)) {
-				scroll_menu(menu, -1);
+				scroll_menu(menu, -1, 1);
 				display_menu(win->term, menu);
 			}
 			return;
 		case B_WHEEL_DOWN:
 			if (check_mouse_action(ev, B_DOWN)) {
-				scroll_menu(menu, 1);
+				scroll_menu(menu, 1, 1);
 				display_menu(win->term, menu);
 			}
 			return;
@@ -561,7 +561,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 			if (sel >= 0 && sel < menu->size
 			    && mi_is_selectable(menu->items[sel])) {
 				menu->selected = sel;
-				scroll_menu(menu, 0);
+				scroll_menu(menu, 0, 1);
 				display_menu(win->term, menu);
 
 				if (check_mouse_action(ev, B_UP) ||
@@ -592,7 +592,7 @@ menu_page_up(struct menu *menu)
 	step = current - next_sep + 1;
 	int_bounds(&step, 0, int_min(current, DIST));
 
-	scroll_menu(menu, -step);
+	scroll_menu(menu, -step, 0);
 }
 
 static void
@@ -612,7 +612,7 @@ menu_page_down(struct menu *menu)
 	step = next_sep - current + 1;
 	int_bounds(&step, 0, int_min(menu->size - 1 - current, DIST));
 
-	scroll_menu(menu, step);
+	scroll_menu(menu, step, 0);
 }
 
 #undef DIST
@@ -730,19 +730,19 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			return;
 
 		case ACT_MENU_UP:
-			scroll_menu(menu, -1);
+			scroll_menu(menu, -1, 1);
 			break;
 
 		case ACT_MENU_DOWN:
-			scroll_menu(menu, 1);
+			scroll_menu(menu, 1, 1);
 			break;
 
 		case ACT_MENU_HOME:
-			scroll_menu(menu, -menu->selected);
+			scroll_menu(menu, -menu->selected, 0);
 			break;
 
 		case ACT_MENU_END:
-			scroll_menu(menu, menu->size - menu->selected - 1);
+			scroll_menu(menu, menu->size - menu->selected - 1, 0);
 			break;
 
 		case ACT_MENU_PAGE_UP:
@@ -783,7 +783,7 @@ menu_kbd_handler(struct menu *menu, struct term_event *ev)
 			s = check_hotkeys(menu, ev->x, win->term);
 
 			if (s || check_not_so_hot_keys(menu, ev->x, win->term))
-				scroll_menu(menu, 0);
+				scroll_menu(menu, 0, 1);
 	}
 
 	display_menu(win->term, menu);
@@ -807,7 +807,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 			get_parent_ptr(win, &menu->parent_x, &menu->parent_y);
 			count_menu_size(win->term, menu);
 			menu->selected--;
-			scroll_menu(menu, 1);
+			scroll_menu(menu, 1, 1);
 			display_menu(win->term, menu);
 			break;
 
@@ -1008,7 +1008,7 @@ mainmenu_mouse_handler(struct menu *menu, struct term_event *ev)
 	}
 
 	if (scroll) {
-		scroll_menu(menu, scroll);
+		scroll_menu(menu, scroll, 1);
 		display_mainmenu(win->term, menu);
 	}
 
@@ -1039,11 +1039,11 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 		return;
 
 	case ACT_MENU_HOME:
-		scroll_menu(menu, -menu->selected);
+		scroll_menu(menu, -menu->selected, 0);
 		break;
 
 	case ACT_MENU_END:
-		scroll_menu(menu, menu->size - menu->selected - 1);
+		scroll_menu(menu, menu->size - menu->selected - 1, 0);
 		break;
 
 	case ACT_MENU_NEXT_ITEM:
@@ -1056,7 +1056,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 
 	case ACT_MENU_LEFT:
 	case ACT_MENU_RIGHT:
-		scroll_menu(menu, action == ACT_MENU_LEFT ? -1 : 1);
+		scroll_menu(menu, action == ACT_MENU_LEFT ? -1 : 1, 1);
 		break;
 
 	case ACT_MENU_REDRAW:

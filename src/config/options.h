@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.58 2003/07/22 23:50:54 jonas Exp $ */
+/* $Id: options.h,v 1.59 2003/07/23 00:55:53 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -67,6 +67,9 @@ enum option_type {
 struct session;
 struct option;
 
+#if 0
+/* TODO: Sometime in the distant future somene will use this or similar
+ * approach to store option values. It could be you? --jonas */
 union option_value {
 	/* Keep first to makes options_root initialization possible. */
 	struct list_head *tree;
@@ -84,6 +87,7 @@ union option_value {
 	 * OPT_STRING and OPT_ALIAS. */
 	unsigned char *string;
 };
+#endif
 
 struct option {
 	LIST_HEAD(struct option);
@@ -92,10 +96,7 @@ struct option {
 	enum option_flags flags;
 	enum option_type type;
 	int min, max;
-
-	union option_value value;
 	void *ptr;
-
 	unsigned char *desc;
 	unsigned char *capt;
 
@@ -164,63 +165,61 @@ extern struct option *get_opt_(struct option *, unsigned char *);
 
 extern struct option *add_opt(struct option *, unsigned char *, unsigned char *,
 			      unsigned char *, enum option_flags, enum option_type,
-			      int, int, void *, union option_value, unsigned char *);
-
-union option_value dummy_opt_val;
+			      int, int, void *, unsigned char *);
 
 #define add_opt_bool_tree(tree, path, capt, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_BOOL, 0, 1, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_BOOL, 0, 1, ptr, desc); \
 	*ptr = def; } while (0)
 
 #define add_opt_int_tree(tree, path, capt, name, flags, min, max, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_INT, min, max, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_INT, min, max, ptr, desc); \
 	*ptr = def; } while (0)
 
 #define add_opt_long_tree(tree, path, capt, name, flags, min, max, def, desc) do { \
 	long *ptr = mem_alloc(sizeof(long)); \
-	add_opt(tree, path, capt, name, flags, OPT_LONG, min, max, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_LONG, min, max, ptr, desc); \
 	*ptr = def; } while (0)
 
 #define add_opt_str_tree(tree, path, capt, name, flags, def, desc) do { \
 	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
-	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_STRING, 0, MAX_STR_LEN, ptr, desc); \
 	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
 
 #define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, desc); \
 	*ptr = def; } while (0)
 
 #define add_opt_codepage_tree(tree, path, capt, name, flags, def, desc) do { \
 	int *ptr = mem_alloc(sizeof(int)); \
-	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_CODEPAGE, 0, 0, ptr, desc); \
 	*ptr = def; } while (0)
 
 extern int color_set(struct option *, unsigned char *); /* XXX */
 
 #define add_opt_color_tree(tree, path, capt, name, flags, def, desc) do { \
 	struct rgb *ptr = mem_alloc(sizeof(struct rgb)); \
-	color_set(add_opt(tree, path, capt, name, flags, OPT_COLOR, 0, 0, ptr, dummy_opt_val, desc), def); \
+	color_set(add_opt(tree, path, capt, name, flags, OPT_COLOR, 0, 0, ptr, desc), def); \
 	} while (0)
 
 #define add_opt_ptr_tree(tree, path, capt, name, flags, type, def, desc) \
-	add_opt(tree, path, capt, name, flags, type, 0, 0, def, dummy_opt_val, desc);
+	add_opt(tree, path, capt, name, flags, type, 0, 0, def, desc);
 
 #define add_opt_void_tree(tree, path, capt, name, flags, type, desc) \
-	add_opt(tree, path, capt, name, flags, type, 0, 0, NULL, dummy_opt_val, desc);
+	add_opt(tree, path, capt, name, flags, type, 0, 0, NULL, desc);
 
 #define add_opt_command_tree(tree, path, capt, name, flags, cmd, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_COMMAND, 0, 0, cmd, dummy_opt_val, desc);
+	add_opt(tree, path, capt, name, flags, OPT_COMMAND, 0, 0, cmd, desc);
 
 #define add_opt_alias_tree(tree, path, capt, name, flags, def, desc) do { \
 	unsigned char *ptr = mem_alloc(MAX_STR_LEN); \
-	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, MAX_STR_LEN, ptr, dummy_opt_val, desc); \
+	add_opt(tree, path, capt, name, flags, OPT_ALIAS, 0, MAX_STR_LEN, ptr, desc); \
 	safe_strncpy(ptr, def, MAX_STR_LEN); } while (0)
 
 #define add_opt_tree_tree(tree, path, capt, name, flags, desc) \
-	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), dummy_opt_val, desc);
+	add_opt(tree, path, capt, name, flags, OPT_TREE, 0, 0, init_options_tree(), desc);
 
 #define add_opt_bool(path, capt, name, flags, def, desc) \
 	add_opt_bool_tree(config_options, path, capt, name, flags, def, desc)

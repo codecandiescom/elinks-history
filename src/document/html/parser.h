@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.10 2002/07/04 21:19:45 pasky Exp $ */
+/* $Id: parser.h,v 1.11 2002/08/08 18:54:45 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -92,6 +92,8 @@ enum format_attr {
 	AT_UNDERLINE = 4,
 	AT_FIXED = 8,
 	AT_GRAPHICS = 16,
+	AT_SUBSCRIPT = 32,
+	AT_SUPERSCRIPT = 64,
 };
 
 struct text_attrib_beginning {

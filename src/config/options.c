@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.82 2002/08/08 18:01:45 pasky Exp $ */
+/* $Id: options.c,v 1.83 2002/08/08 18:54:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -714,6 +714,14 @@ register_options()
 	add_opt_bool("document.html",
 		"display_tables", 0, 1,
 		"Display tables.");
+
+	add_opt_bool("document.html",
+		"display_subs", 0, 1,
+		"Display subscripts (as [thing]).");
+
+	add_opt_bool("document.html",
+		"display_sups", 0, 1,
+		"Display superscripts (as ^thing).");
 
 
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.35 2002/07/03 23:10:37 pasky Exp $ */
+/* $Id: parser.c,v 1.36 2002/08/08 18:54:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -645,6 +645,18 @@ void
 html_fixed(unsigned char *a)
 {
        format.attr |= AT_FIXED;
+}
+
+void
+html_subscript(unsigned char *a)
+{
+       format.attr |= AT_SUBSCRIPT;
+}
+
+void
+html_superscript(unsigned char *a)
+{
+       format.attr |= AT_SUPERSCRIPT;
 }
 
 /* Extract the extra information that is available for elements which can
@@ -2388,6 +2400,8 @@ struct element_info elements[] = {
 	{"STRIKE",	html_underline,	0, 0},
 	{"FIXED",	html_fixed,	0, 0},
 	{"CODE",	html_fixed,	0, 0},
+	{"SUB",		html_subscript, 0, 0},
+	{"SUP",		html_superscript,0,0},
 	{"FONT",	html_font,	0, 0},
 	{"A",		html_a,		0, 2},
 	{"IMG",		html_img,	0, 1},

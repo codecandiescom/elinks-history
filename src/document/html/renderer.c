@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.38 2002/08/07 02:56:59 pasky Exp $ */
+/* $Id: renderer.c,v 1.39 2002/08/08 18:54:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,6 +90,8 @@ void put_chars(struct part *, unsigned char *, int);
 #define ALIGN(x) (((x)+0x7f)&~0x7f)
 
 int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
+int sub = 0; /* Activated/deactivated by AT_SUBSCRIPT */
+int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 
 
 /* realloc_lines() */
@@ -866,6 +868,7 @@ set_link:
 	goto no_l;
 
 format_change:
+
 	bg = find_nearest_color(&format.bg, 8);
 	fg = find_nearest_color(&format.fg, 16);
 	fg = fg_color(fg, bg);
@@ -880,6 +883,34 @@ format_change:
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
 	fg_cache = fg;
 	bg_cache = bg;
+
+	if (get_opt_bool("document.html.display_subs")) {
+		if (format.attr & AT_SUBSCRIPT) {
+			if (!sub) {
+				sub = 1;
+				put_chars(part, "[", 1);
+			}
+		} else {
+			if (sub) {
+				put_chars(part, "]", 1);
+				sub = 0;
+			}
+		}
+	}
+
+	if (get_opt_bool("document.html.display_sups")) {
+		if (format.attr & AT_SUPERSCRIPT) {
+			if (!super) {
+				super = 1;
+				put_chars(part, "^", 1);
+			}
+		} else {
+			if (super) {
+				super = 0;
+			}
+		}
+	}
+
 	goto end_format_change;
 }
 

@@ -385,10 +385,13 @@ Peter Wang <tjaden@alphalink.com.au>
 
 Petr Baudis <pasky@ucw.cz>
 	Original ELinks maintainer
+	Initial cleanups
 	Options system
 	DNS hacking
-	Random hacking
+	Initial CSS support
+	Random hacking all over the map
 	Feature of the Day implementation
+	LEDs, exmode and other worthless toys
 	http://elinks.or.cz/
 
 Petr Cech <cech@atrey.karlin.mff.cuni.cz>
@@ -503,4 +506,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.165 2004/09/03 02:31:53 jonas Exp $
+$Id: AUTHORS,v 1.166 2004/09/19 09:56:02 pasky Exp $

@@ -4605,7 +4605,7 @@ struct translation translation_french [] = {
   {T_FOLDER_NAME, "Nom du dossier"},
   {T_MOVE, "Déplacer"},
   {T_AFTER_RESUME, "après reprise"},
-  {T_TOGGLE_DISPLAY, NULL},
+  {T_TOGGLE_DISPLAY, "Commuter affich."},
   {0, NULL}
 };
 

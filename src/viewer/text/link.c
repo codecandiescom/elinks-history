@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.3 2003/07/03 02:18:54 jonas Exp $ */
+/* $Id: link.c,v 1.4 2003/07/03 08:24:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,6 +42,7 @@
 void
 set_link(struct f_data_c *f)
 {
+	assert(f);
 	if (c_in_view(f)) return;
 	find_link(f, 1, 0);
 }
@@ -50,6 +51,7 @@ set_link(struct f_data_c *f)
 static int
 comp_links(struct link *l1, struct link *l2)
 {
+	assert(l1 && l2);
 	return (l1->num - l2->num);
 }
 
@@ -77,8 +79,8 @@ sort_links(struct f_data *f)
 	}
 
 	for (i = 0; i < f->nlinks; i++) {
-		int p, q, j;
 		struct link *link = &f->links[i];
+		register int p, q, j;
 
 		if (!link->n) {
 			if (link->where) mem_free(link->where);

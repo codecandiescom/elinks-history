@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.195 2004/01/25 14:24:14 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.196 2004/01/25 15:28:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,7 +31,6 @@ static struct strtonum *action_table[KM_MAX];
 static struct listbox_item *action_box_items[KM_MAX][1024];
 static struct list_head keymaps[KM_MAX];
 
-static int read_action(enum keymap, unsigned char *);
 static void add_default_keybindings(void);
 static void init_action_listboxes(void);
 static void free_action_listboxes(void);
@@ -615,7 +614,7 @@ static struct strtonum *action_table[KM_MAX] = {
 
 #undef DACT
 
-static int
+int
 read_action(enum keymap keymap, unsigned char *action)
 {
 	assert(keymap >= 0 && keymap < KM_MAX);

@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.103 2004/01/25 14:24:16 jonas Exp $ */
+/* $Id: kbdbind.h,v 1.104 2004/01/25 15:28:15 jonas Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -206,6 +206,7 @@ int keybinding_exists(enum keymap km, long key, long meta, int *action);
 void free_keybinding(struct keybinding *);
 
 long read_key(unsigned char *);
+int read_action(enum keymap keymap, unsigned char *action);
 unsigned char *write_action(enum keymap, int);
 unsigned char *write_keymap(enum keymap);
 

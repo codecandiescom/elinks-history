@@ -1,10 +1,11 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.4 2004/01/25 13:57:42 jonas Exp $ */
+/* $Id: exmode.c,v 1.5 2004/01/25 15:28:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <string.h>
 
 #include "elinks.h"
@@ -16,7 +17,9 @@
 #include "config/kbdbind.h"
 #include "dialogs/exmode.h"
 #include "intl/gettext/libintl.h"
+#include "sched/action.h"
 #include "sched/session.h"
+#include "sched/task.h"
 #include "terminal/terminal.h"
 #include "util/error.h"
 #include "util/memory.h"
@@ -48,9 +51,38 @@ exmode_exec(struct exmode_data *data)
 	 * part should be thought out somehow yet, I s'pose... let's leave it
 	 * off for now). Then try to evaluate it as configfile command. Then at
 	 * least pop up an error. */
+	enum main_action action;
+	unsigned char *command = data->inpfield.data;
+	unsigned char *end = command;
+	unsigned char end_char = 0;
 
-	WDBG("Hi! You typed: :%s:", data->inpfield.data);
-	/* TODO: Do something actually useful. --pasky */
+	while (*end && !isspace(*end)) end++;
+	if (*end) {
+		end_char = *end;
+		*end = 0;
+	}
+
+	action = read_action(KM_MAIN, command);
+	if (end_char) *end = end_char;
+
+	if (action == ACT_MAIN_NONE) {
+		/* TODO; A timed error message */
+		return;
+
+	} else if (!*end) {
+		if (do_action(data->ses, action, 0) != action) {
+			/* TODO; A timed error message */
+		}
+		return;
+	}
+
+	switch (action) {
+		case ACT_MAIN_GOTO_URL:
+			goto_url_with_hook(data->ses, end + 1);
+			break;
+		default:
+			break;
+	}
 }
 
 static void

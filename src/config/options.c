@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.335 2003/10/23 07:58:41 pasky Exp $ */
+/* $Id: options.c,v 1.336 2003/10/23 08:32:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,10 +130,10 @@ get_opt_rec(struct option *tree, unsigned char *name_)
 	if (tree && tree->flags & OPT_AUTOCREATE && !no_autocreate) {
 		struct option *template = get_opt_rec(tree, "_template_");
 
-		if (!template) {
-			internal("Requested %s should be autocreated but "
-				 "%.*s._template_ is missing!",
-				 name_, sep - name_, name_);
+		assertm(!template, "Requested %s should be autocreated but "
+			"%.*s._template_ is missing!", name_, sep - name_,
+			name_);
+		if_assert_failed {
 			mem_free(aname);
 			return NULL;
 		}

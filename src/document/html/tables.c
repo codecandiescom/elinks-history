@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.134 2004/01/01 22:02:12 zas Exp $ */
+/* $Id: tables.c,v 1.135 2004/01/01 23:36:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -412,8 +412,8 @@ skip_table(unsigned char *html, unsigned char *eof)
 			html++;
 
 		if (html >= eof) return eof;
-		if (is_same_str(name, namelen, "TABLE", 5)) level++;
-		if (is_same_str(name, namelen, "/TABLE", 6)) {
+		if (!strlcasecmp(name, namelen, "TABLE", 5)) level++;
+		if (!strlcasecmp(name, namelen, "/TABLE", 6)) {
 			level--;
 			if (!level) return html;
 		}
@@ -484,19 +484,19 @@ qwe:
 		goto se;
 	}
 
-	if (is_same_str(t_name, t_namelen, "TABLE", 5)) {
+	if (!strlcasecmp(t_name, t_namelen, "TABLE", 5)) {
 		en = skip_table(en, eof);
 		goto see;
 	}
 
-	if (is_same_str(t_name, t_namelen, "/TABLE", 6)) {
+	if (!strlcasecmp(t_name, t_namelen, "/TABLE", 6)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (p) CELL(t, x, y)->end = html;
 		if (lbhp) (*bad_html)[*bhp-1].end = html;
 		goto scan_done;
 	}
 
-	if (is_same_str(t_name, t_namelen, "COLGROUP", 8)) {
+	if (!strlcasecmp(t_name, t_namelen, "COLGROUP", 8)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (lbhp) {
 			(*bad_html)[*bhp-1].end = html;
@@ -513,7 +513,7 @@ qwe:
 		goto see;
 	}
 
-	if (is_same_str(t_name, t_namelen, "/COLGROUP", 9)) {
+	if (!strlcasecmp(t_name, t_namelen, "/COLGROUP", 9)) {
 		if (c_span) new_columns(t, c_span, c_width, c_al, c_val, 1);
 		if (lbhp) {
 			(*bad_html)[*bhp-1].end = html;
@@ -526,7 +526,7 @@ qwe:
 		goto see;
 	}
 
-	if (is_same_str(t_name, t_namelen, "COL", 3)) {
+	if (!strlcasecmp(t_name, t_namelen, "COL", 3)) {
 		int sp, width, al, val;
 
 		if (lbhp) {

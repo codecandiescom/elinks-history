@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.56 2004/01/01 22:02:13 zas Exp $ */
+/* $Id: string.h,v 1.57 2004/01/01 23:36:44 zas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -202,9 +202,5 @@ add_bytes_to_string__(
 
 	return string;
 }
-
-/* Returns 1 if strings have same length and are case-insensitively identical, 0 if not. */
-#define is_same_str(name, namelen, what, whatlen) \
-	((namelen) == (whatlen) && !strncasecmp((name), (what), (whatlen)))
 
 #endif /* EL__UTIL_STRING_H */

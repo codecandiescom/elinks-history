@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.305 2004/06/29 22:41:11 pasky Exp $ */
+/* $Id: tables.c,v 1.306 2004/06/29 22:44:17 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,13 +484,13 @@ again:
 			int q = table->cols_widths[max_index];
 
 			if (u) u[max_index] = 1;
-			table->cols_widths[max_index] += max;
+
+			if (max > d) max = d;
 			d -= max;
-			while (d < 0) {
-				table->cols_widths[max_index]--;
-				d++;
-			}
+
+			table->cols_widths[max_index] += max;
 			assertm(table->cols_widths[max_index] >= q, "shrinking cell");
+
 			wq = 1;
 			if (d) goto again;
 		} else if (!wq) om++;

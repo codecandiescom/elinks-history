@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.4 2003/05/04 18:11:45 zas Exp $ */
+/* $Id: kbd.c,v 1.5 2003/05/04 19:09:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -154,22 +154,25 @@ unsigned char *init_seq = "\033[?1000h\033[?47h\0337";
 unsigned char *term_seq = "\033[2J\033[?1000l\033[?47l\0338\b \b";
 */
 
-static unsigned char *init_seq = "\033)0\0337";
-static unsigned char *init_seq_x_mouse = "\033[?1000h";
-static unsigned char *init_seq_tw_mouse = "\033[?9h";
+static unsigned char init_seq[] = "\033)0\0337";
+static unsigned char init_seq_x_mouse[] = "\033[?1000h";
+static unsigned char init_seq_tw_mouse[] = "\033[?9h";
 
-static int init_seq_len = sizeof(init_seq) / sizeof(unsigned char) - 1;
-static int init_seq_x_mouse_len = sizeof(init_seq_x_mouse) / sizeof(unsigned char) - 1;
-static int init_seq_tw_mouse_len = sizeof(init_seq_tw_mouse) / sizeof(unsigned char) - 1;
+#define seq_len(x) sizeof((x)) / sizeof(unsigned char) - 1
 
-static unsigned char *term_seq = "\033[2J\0338\r \b";
-static unsigned char *term_seq_x_mouse = "\033[?1000l";
-static unsigned char *term_seq_tw_mouse = "\033[?9l";
+static int init_seq_len = seq_len(init_seq);
+static int init_seq_x_mouse_len = seq_len(init_seq_x_mouse);
+static int init_seq_tw_mouse_len = seq_len(init_seq_tw_mouse);
 
-static int term_seq_len = sizeof(term_seq) / sizeof(unsigned char) - 1;
-static int term_seq_x_mouse_len = sizeof(term_seq_x_mouse) / sizeof(unsigned char) - 1;
-static int term_seq_tw_mouse_len = sizeof(term_seq_tw_mouse) / sizeof(unsigned char) - 1;
+static unsigned char term_seq[] = "\033[2J\0338\r \b";
+static unsigned char term_seq_x_mouse[] = "\033[?1000l";
+static unsigned char term_seq_tw_mouse[]= "\033[?9l";
 
+static int term_seq_len = seq_len(term_seq);
+static int term_seq_x_mouse_len = seq_len(term_seq_x_mouse);
+static int term_seq_tw_mouse_len = seq_len(term_seq_tw_mouse);
+
+#undef seq_len
 
 /*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
 

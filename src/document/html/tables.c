@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.17 2002/09/17 10:20:15 zas Exp $ */
+/* $Id: tables.c,v 1.18 2002/09/17 14:53:21 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -877,17 +877,16 @@ int
 get_column_widths(struct table *t)
 {
 	int i, j, s, ns;
-	int tx_size = t->x * sizeof(int);
 
 	if (!t->min_c) {
-		t->min_c = mem_alloc(tx_size);
+		t->min_c = mem_calloc(t->x, sizeof(int));
 		if (!t->min_c) {
 			return -1;
 		}
 	}
 
 	if (!t->max_c) {
-		t->max_c = mem_alloc(tx_size);
+		t->max_c = mem_calloc(t->x, sizeof(int));
 	   	if (!t->max_c) {
 			mem_free(t->min_c);
 			t->min_c = NULL;
@@ -896,7 +895,7 @@ get_column_widths(struct table *t)
 	}
 
 	if (!t->w_c) {
-		t->w_c = mem_alloc(tx_size);
+		t->w_c = mem_calloc(t->x, sizeof(int));
 		if (!t->w_c) {
 			mem_free(t->min_c);
 			t->min_c = NULL;
@@ -906,8 +905,6 @@ get_column_widths(struct table *t)
 		}
 	}
 
-	memset(t->min_c, 0, tx_size);
-	memset(t->max_c, 0, tx_size);
 	s = 1;
 
 	do {

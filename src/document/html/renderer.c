@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.41 2002/09/10 15:12:14 zas Exp $ */
+/* $Id: renderer.c,v 1.42 2002/09/17 14:49:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1039,11 +1039,9 @@ create_frameset(struct f_data *fda, struct frameset_param *fp)
 		return NULL;
 	}
 
-#define TMP sizeof(struct frameset_desc) + fp->x * fp->y * sizeof(struct frame_desc)
-	fd = mem_alloc(TMP);
+	fd = mem_calloc(1, sizeof(struct frameset_desc)
+			   + fp->x * fp->y * sizeof(struct frame_desc));
 	if (!fd) return NULL;
-	memset(fd, 0, TMP);
-#undef TMP
 
 	fd->n = fp->x * fp->y;
 	fd->x = fp->x;
@@ -1346,9 +1344,8 @@ push_base_format(unsigned char *url, struct document_options *opt)
 		init_list(html_stack);
 	}
 
-	e = mem_alloc(sizeof(struct html_element));
+	e = mem_calloc(1, sizeof(struct html_element));
 	if (!e) return;
-	memset(e, 0, sizeof(struct html_element));
 
 	add_to_list(html_stack, e);
 
@@ -1740,9 +1737,8 @@ find_fd(struct session *ses, unsigned char *name,
 		}
 	}
 
-	fd = mem_alloc(sizeof(struct f_data_c));
+	fd = mem_calloc(1, sizeof(struct f_data_c));
 	if (!fd) return NULL;
-	memset(fd, 0, sizeof(struct f_data_c));
 
 	fd->used = 1;
 	fd->name = stracpy(name);
@@ -1849,9 +1845,8 @@ html_interpret(struct session *ses)
 	struct view_state *l = NULL;
 
 	if (!ses->screen) {
-		ses->screen = mem_alloc(sizeof(struct f_data_c));
+		ses->screen = mem_calloc(1, sizeof(struct f_data_c));
 		if (!ses->screen) return;
-		memset(ses->screen, 0, sizeof(struct f_data_c));
 		ses->screen->search_word = &ses->search_word;
 	}
 
@@ -1946,34 +1941,30 @@ sort_srch(struct f_data *f)
 {
 	int i;
 	int *min, *max;
-	int size = f->y * sizeof(struct search *);
 
-	f->slines1 = mem_alloc(size);
+	f->slines1 = mem_calloc(f->y, sizeof(struct search *));
 	if (!f->slines1) return;
 
-	f->slines2 = mem_alloc(size);
+	f->slines2 = mem_calloc(f->y, sizeof(struct search *));
 	if (!f->slines2) {
 		mem_free(f->slines1);
 		return;
 	}
 
-	min = mem_alloc(f->y * sizeof(int));
+	min = mem_calloc(f->y, sizeof(int));
 	if (!min) {
 		mem_free(f->slines1);
 		mem_free(f->slines2);
 		return;
 	}
 
-	max = mem_alloc(f->y * sizeof(int));
+	max = mem_calloc(f->y, sizeof(int));
 	if (!max) {
 		mem_free(f->slines1);
 		mem_free(f->slines2);
 		mem_free(min);
 		return;
 	}
-
-	memset(f->slines1, 0, size);
-	memset(f->slines2, 0, size);
 
 	for (i = 0; i < f->y; i++) {
 		min[i] = MAXINT;

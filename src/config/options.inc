@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.45 2003/12/22 04:14:11 miciah Exp $ */
+/* $Id: options.inc,v 1.46 2003/12/22 12:15:31 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -655,7 +655,7 @@ struct option_info config_options_info[] = {
 		"not be enabled on all servers.")),
 
 	INIT_OPT_STRING("protocol.http", N_("User-agent identification"),
-		"user_agent", 0, "ELinks (%v; %s; %t)",
+		"user_agent", 0, "ELinks/%v (textmode; %s; %t)",
 		N_("Change the User Agent ID. That means identification string, which\n"
 		"is sent to HTTP server when a document is requested.\n"
 		"%v in the string means ELinks version\n"

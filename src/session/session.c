@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.545 2004/07/26 22:38:20 zas Exp $ */
+/* $Id: session.c,v 1.546 2004/07/26 22:40:58 zas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -97,7 +97,7 @@ enum remote_session_flags remote_session_flags;
 static struct file_to_load * request_additional_file(struct session *,
 						unsigned char *, struct uri *, int);
 
-static void tabwin_func(struct window *tab, struct term_event *ev, int fw);
+static void tabwin_func(struct window *tab, struct term_event *ev, int xxx);
 
 
 static INIT_LIST_HEAD(session_info);
@@ -1071,7 +1071,7 @@ set_session_referrer(struct session *ses, struct uri *referrer)
 }
 
 static void
-tabwin_func(struct window *tab, struct term_event *ev, int fw)
+tabwin_func(struct window *tab, struct term_event *ev, int xxx)
 {
 	struct session *ses = tab->data;
 

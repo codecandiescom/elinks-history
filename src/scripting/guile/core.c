@@ -1,5 +1,5 @@
 /* Guile interface (scripting engine) */
-/* $Id: core.c,v 1.12 2003/12/21 06:55:16 miciah Exp $ */
+/* $Id: core.c,v 1.13 2004/04/01 14:35:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 /* 	struct view_state *vs; */
 
 /* 	if (have_location(ses) && (vs = ses ? &cur_loc(ses)->vs : 0)) */
-/* 		return scm_makfrom0str(vs->url); */
+/* 		return scm_makfrom0str(struri(vs->uri)); */
 /* 	else */
 /* 		return SCM_BOOL_F; */
 /* } */

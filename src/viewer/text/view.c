@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.380 2004/04/01 05:02:46 jonas Exp $ */
+/* $Id: view.c,v 1.381 2004/04/01 14:35:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -481,7 +481,7 @@ set_frame(struct session *ses, struct document_view *doc_view, int a)
 	if_assert_failed return;
 
 	if (doc_view == ses->doc_view) return;
-	goto_url(ses, doc_view->vs->url);
+	goto_url(ses, struri(doc_view->vs->uri));
 }
 
 
@@ -1241,5 +1241,5 @@ save_formatted(void *data, unsigned char *file)
 void
 save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a)
 {
-	query_file(ses, doc_view->vs->url, ses, save_formatted, NULL, 1);
+	query_file(ses, struri(doc_view->vs->uri), ses, save_formatted, NULL, 1);
 }

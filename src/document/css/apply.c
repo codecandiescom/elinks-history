@@ -1,10 +1,11 @@
 /* CSS micro-engine */
-/* $Id: apply.c,v 1.1 2004/01/17 01:26:58 pasky Exp $ */
+/* $Id: apply.c,v 1.2 2004/01/17 02:09:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -83,8 +84,7 @@ css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
 	assert(string && valtype != CSS_DV_NONE && valtype < CSS_DV_LAST);
 
 	/* Skip the leading whitespaces. */
-	while (WHITECHAR(**string))
-		(*string)++;
+	skip_whitespace(*string);
 
 	if (valtype == CSS_DV_COLOR) {
 		int pos;
@@ -104,67 +104,58 @@ css_parse_value(enum css_decl_valtype valtype, union css_decl_value *value,
 			/* FIXME: We should handle the % values as floats. */
 
 			(*string) += 4;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			part = strtol(*string, (char **) &nstring, 10);
 			if (*string == nstring) {
 				return 0;
 			}
 			*string = nstring;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			if (**string == '%') {
 				part *= 255; part /= 100;
 				(*string)++;
 			}
 			if (part > 255) part = 255;
 			value->color |= part << 16;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			if (**string != ',') {
 				return 0;
 			}
 			(*string)++;
 
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			part = strtol(*string, (char **) &nstring, 10);
 			if (*string == nstring) {
 				return 0;
 			}
 			*string = nstring;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			if (**string == '%') {
 				part *= 255; part /= 100;
 				(*string)++;
 			}
 			if (part > 255) part = 255;
 			value->color |= part << 8;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			if (**string != ',') {
 				return 0;
 			}
 			(*string)++;
 
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			part = strtol(*string, (char **) &nstring, 10);
 			if (*string == nstring) {
 				return 0;
 			}
 			*string = nstring;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			if (**string == '%') {
 				part *= 255; part /= 100;
 				(*string)++;
 			}
 			if (part > 255) part = 255;
 			value->color |= part;
-			while (WHITECHAR(**string))
-				(*string)++;
+			skip_whitespace(*string);
 			if (**string != ')') {
 				return 0;
 			}

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.152 2004/01/02 16:19:52 jonas Exp $ */
+/* $Id: search.c,v 1.153 2004/01/07 21:24:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -936,7 +936,7 @@ get_document_char(struct document *document, int x, int y)
 static enum typeahead_code
 typeahead_error(struct session *ses, unsigned char *typeahead)
 {
-	switch (get_opt_int("document.browse.links.typeahead_error")) {
+	switch (get_opt_int("document.browse.search.show_not_found")) {
 		case 2:
 			msg_box(ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Typeahead"), AL_CENTER,
@@ -983,7 +983,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = -1;
 			i--;
 			if (i < 0) {
-				if (!get_opt_bool("document.browse.links.typeahead_wraparound"))
+				if (!get_opt_bool("document.browse.search.wraparound"))
 					return typeahead_error(ses, typeahead);
 
 				i = doc_view->document->nlinks - 1;
@@ -995,7 +995,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 			direction = 1;
 			i++;
 			if (i >= doc_view->document->nlinks) {
-				if (!get_opt_bool("document.browse.links.typeahead_wraparound"))
+				if (!get_opt_bool("document.browse.search.wraparound"))
 					return typeahead_error(ses, typeahead);
 
 				i = 0;
@@ -1053,7 +1053,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 		}
 
 		if (i == (direction > 0 ? upper_link - 1: lower_link + 1)
-		    && get_opt_bool("document.browse.links.typeahead_wraparound")) {
+		    && get_opt_bool("document.browse.search.wraparound")) {
 			/* Only wrap around one time. Initialize @i with
 			 * {+= direction} in mind. */
 			if (direction > 0) {

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.77 2004/01/04 16:22:24 pasky Exp $ */
+/* $Id: options.inc,v 1.78 2004/01/07 21:24:55 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -231,16 +231,16 @@ struct option_info config_options_info[] = {
 		"numbering", 0, 0,
 		N_("Display numbers next to the links.")),
 
-	INIT_OPT_BOOL("document.browse.links", N_("Wraparound typeahead"),
-		"typeahead_wraparound", 0, 1,
-		N_("Wrap around when searching for the next link matching a typeahead.")),
+	/* Compatibility aliases. Added: 2004-01-07, 0.9.0.CVS. */
+	INIT_OPT_ALIAS("document.browse.links", NULL,
+		"typeahead_wraparound", 0, "document.browse.search.wraparound",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the document.browse.search._wraparound option instead.")),
 
-	INIT_OPT_INT("document.browse.links", N_("Typeahead error handling"),
-		"typeahead_error", 0, 0, 2, 2,
-		N_("How to handle errors when typeahead doesn't match any links:\n"
-		"0 means do nothing\n"
-		"1 means beep the terminal\n"
-		"2 means pop up message box")),
+	INIT_OPT_ALIAS("document.browse.links", NULL,
+		"typeahead_error", 0, "document.browse.search.show_not_found",
+		N_("This option is deprecated and will be removed very soon.\n"
+		"Please use the document.browse.search.show_not_found option instead.")),
 
 	INIT_OPT_BOOL("document.browse.links", N_("Use tabindex"),
 		"use_tabindex", 0, 1,
@@ -291,6 +291,18 @@ struct option_info config_options_info[] = {
 		"show_hit_top_bottom", 0, 1,
 		N_("Whether to show a dialog when the search hits top or bottom of the\n"
 		"document.")),
+
+	INIT_OPT_BOOL("document.browse.search", N_("Wraparound"),
+		"wraparound", 0, 1,
+		N_("Wrap around when searching. Currently only used for typeahead.")),
+
+	INIT_OPT_INT("document.browse.search", N_("Show not found"),
+		"show_not_found", 0, 0, 2, 2,
+		N_("How to handle errors when nothing is matched.\n"
+		"Currently only used for typeahead:\n"
+		"0 means do nothing\n"
+		"1 means beep the terminal\n"
+		"2 means pop up message box")),
 
 
 	INIT_OPT_INT("document.browse", N_("Horizontal text margin"),

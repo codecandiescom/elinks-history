@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.251 2004/01/06 22:47:52 jonas Exp $ */
+/* $Id: menu.c,v 1.252 2004/01/06 22:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,12 +82,6 @@ menu_for_frame(struct terminal *term,
 	if_assert_failed return;
 
 	f(ses, doc_view, 0);
-}
-
-static inline void
-menu_goto_url(struct terminal *term, void *d, struct session *ses)
-{
-	dialog_goto_url(ses, "");
 }
 
 void
@@ -329,7 +323,7 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Open new ~tab"), NULL, ACT_OPEN_NEW_TAB, open_in_new_tab, (void *) 0, 0),
 	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), NULL, ACT_OPEN_NEW_TAB_IN_BACKGROUND,
 			open_in_new_tab_in_background,(void *) 0, 0),
-	INIT_MENU_ITEM(N_("~Go to URL"), NULL, ACT_GOTO_URL, menu_goto_url, NULL, 0),
+	INIT_MENU_ITEM(N_("~Go to URL"), NULL, ACT_GOTO_URL, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~back"), NULL, ACT_BACK, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("Go ~forward"), NULL, ACT_UNBACK, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("~Reload"), NULL, ACT_RELOAD, menu_reload, NULL, 0),
@@ -630,20 +624,26 @@ do_action(struct session *ses, enum keyact action, void *data)
 	struct terminal *term = ses->tab->term;
 
 	switch (action) {
-		case ACT_TAB_PREV:
-			switch_to_prev_tab(term);
+		/* Please keep in alphabetical order for now. Later we can sort
+		 * by most used or something. */
+		case ACT_BACK:
+			go_back(ses);
+			break;
+
+		case ACT_GOTO_URL:
+			dialog_goto_url(ses, "");
 			break;
 
 		case ACT_TAB_NEXT:
 			switch_to_next_tab(term);
 			break;
 
-		case ACT_TAB_CLOSE:
-			close_tab(term, ses);
+		case ACT_TAB_PREV:
+			switch_to_prev_tab(term);
 			break;
 
-		case ACT_BACK:
-			go_back(ses);
+		case ACT_TAB_CLOSE:
+			close_tab(term, ses);
 			break;
 
 		case ACT_UNBACK:

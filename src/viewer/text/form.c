@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.175 2004/06/15 22:12:48 jonas Exp $ */
+/* $Id: form.c,v 1.176 2004/06/15 22:18:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1248,46 +1248,52 @@ field_op(struct session *ses, struct document_view *doc_view,
 }
 
 unsigned char *
-get_form_info(struct session *ses, struct document_view *doc_view)
+get_form_label(struct form_control *fc)
 {
-	struct terminal *term = ses->tab->term;
-	struct link *link = get_current_link(doc_view);
-	struct form_control *fc;
-	unsigned char *label = NULL, *key;
-	struct string str;
-
-	assert(link);
-
-	fc = link->form_control;
-
 	switch (fc->type) {
 	case FC_RESET:
-		label = N_("Reset form"); break;
+		return N_("Reset form");
 	case FC_SUBMIT:
 	case FC_IMAGE:
 	case FC_HIDDEN:
 		if (!fc->action) return NULL;
 
 		if (fc->method == FM_GET)
-			label = N_("Submit form to");
-		else
-			label = N_("Post form to");
-		break;
+			return N_("Submit form to");
+		return N_("Post form to");
 	case FC_RADIO:
-		label = N_("Radio button"); break;
+		return N_("Radio button");
 	case FC_CHECKBOX:
-		label = N_("Checkbox"); break;
+		return N_("Checkbox");
 	case FC_SELECT:
-		label = N_("Select field"); break;
+		return N_("Select field");
 	case FC_TEXT:
-		label = N_("Text field"); break;
+		return N_("Text field");
 	case FC_TEXTAREA:
-		label = N_("Text area"); break;
+		return N_("Text area");
 	case FC_FILE:
-		label = N_("File upload"); break;
+		return N_("File upload");
 	case FC_PASSWORD:
-		label = N_("Password field"); break;
+		return N_("Password field");
 	}
+
+	return NULL;
+}
+
+unsigned char *
+get_form_info(struct session *ses, struct document_view *doc_view)
+{
+	struct terminal *term = ses->tab->term;
+	struct link *link = get_current_link(doc_view);
+	struct form_control *fc;
+	unsigned char *label, *key;
+	struct string str;
+
+	assert(link);
+
+	fc = link->form_control;
+	label = get_form_label(fc);
+	if (!label) return NULL;
 
 	if (!init_string(&str)) return NULL;
 

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.41 2005/03/24 21:31:06 miciah Exp $
+-- $Id: hooks.lua.in,v 1.42 2005/03/24 21:33:14 miciah Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -465,6 +465,17 @@ end
 table.insert(pre_format_html_hooks, mangle_unclosed_input_tags)
 
 
+-- Fix unclosed A tags.
+function mangle_unclosed_a_tags (url, html)
+    local n
+
+    html, n = gisub (html, '(<a[^>]-[^=]")<', '%1><')
+
+    return ((n > 0) and html), nil
+end
+table.insert(pre_format_html_hooks, mangle_unclosed_a_tags)
+
+
 function pre_format_html_hook_ (url, html)
     local ret = nil
 
@@ -480,13 +491,6 @@ function pre_format_html_hook_ (url, html)
 --        os.remove (tmp)
 --        ret = 1
 --    end
-
-    -- Fix unclosed A tags.
-    if 1 then
-        local n
-	html, n = gisub (html, '(<a[^>]-[^=]")<', '%1><')
-	ret = ret or (n > 0)
-    end
 
     -- These quick 'n dirty patterns don't maintain proper HTML.
 

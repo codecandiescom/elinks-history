@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.53 2003/07/30 16:06:45 jonas Exp $ */
+/* $Id: tables.c,v 1.54 2003/07/30 16:14:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1434,8 +1434,8 @@ if (H_LINE_X((ii-1), (jj)) >= 0 || H_LINE_X((ii), (jj)) >= 0 || \
 #define draw_frame_hline(xx, yy, ll, ii, jj) \
 if (H_LINE_X((ii), (jj)) >= 0) \
 	xset_hchars(t->p, (xx), (yy), (ll),\
-		    hline_table[H_LINE((ii), (jj))] | ATTR_FRAME \
-		    | find_nearest_color(&par_format.bgcolor, 8) << 11)
+		    hline_table[H_LINE((ii), (jj))], SCREEN_ATTR_FRAME \
+		    | find_nearest_color(&par_format.bgcolor, 8) << 3)
 
 
 #define draw_frame_vline(xx, yy, ll, ii, jj) \

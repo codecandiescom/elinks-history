@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.189 2003/07/30 16:06:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.190 2003/07/30 16:14:36 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,7 +268,8 @@ set_hchar(struct part *part, int x, int y, unsigned char data, unsigned char att
 }
 
 static inline void
-set_hchars(struct part *part, int x, int y, int xl, unsigned c)
+set_hchars(struct part *part, int x, int y, int xl,
+	   unsigned char data, unsigned char attr)
 {
 	assert(part && part->document);
 	if_assert_failed return;
@@ -280,7 +281,10 @@ set_hchars(struct part *part, int x, int y, int xl, unsigned c)
 	assert(part->document->data);
 	if_assert_failed return;
 
-	for (; xl; xl--, x++) set_position(x, y, c);
+	for (; xl; xl--, x++) {
+		POS(x, y).attr = attr;
+		POS(x, y).data = data;
+	}
 }
 
 void
@@ -290,9 +294,10 @@ xset_hchar(struct part *part, int x, int y, unsigned char data, unsigned char at
 }
 
 void
-xset_hchars(struct part *part, int x, int y, int xl, unsigned c)
+xset_hchars(struct part *part, int x, int y, int xl,
+	    unsigned char data, unsigned char attr)
 {
-	set_hchars(part, x, y, xl, c);
+	set_hchars(part, x, y, xl, data, attr);
 }
 
 static inline void
@@ -430,7 +435,7 @@ shift_chars(struct part *part, int y, int shift)
 	 * already got that idea; results in even more stains since we probably
 	 * shift chars even on surrounding lines when realigning tables
 	 * maniacally. --pasky */
-	set_hchars(part, 0, y, shift, (part->document->data[y].color << 11) | ' ');
+	set_hchars(part, 0, y, shift, ' ', part->document->data[y].color << 3);
 	copy_chars(part, shift, y, len, a);
 	fmem_free(a);
 
@@ -600,8 +605,8 @@ justify_line(struct part *part, int y)
 		int word;
 
 		/* See shift_chars() about why this is broken. */
-		set_hchars(part, 0, y, overlap(par_format),
-			   (part->document->data[y].color << 11) | ' ');
+		set_hchars(part, 0, y, overlap(par_format), ' ',
+			   part->document->data[y].color << 3);
 
 		for (word = 0; word < spaces; word++) {
 			/* We have to increase line length by 'insert' num. of

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.11 2002/06/17 08:00:16 pasky Exp $ */
+/* $Id: terminal.h,v 1.12 2002/07/03 23:03:33 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
@@ -24,9 +24,8 @@ struct event {
 	long b;
 };
 
-#define MAX_TERM_LEN	16	/* this must be multiple of 8! (alignment problems) */
-
-#define MAX_CWD_LEN	8192	/* this must be multiple of 8! (alignment problems) */
+#define MAX_TERM_LEN	32	/* this must be multiple of 8! (alignment problems) */
+#define MAX_CWD_LEN	256	/* this must be multiple of 8! (alignment problems) */
 
 #define ATTR_FRAME	0x8000
 

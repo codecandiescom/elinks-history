@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.471 2004/06/11 00:42:13 jonas Exp $ */
+/* $Id: session.c,v 1.472 2004/06/11 00:44:58 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -723,48 +723,9 @@ init_session(struct session *ses, struct terminal *term,
 	tab->handler(tab, &ev, 0);
 }
 
-
-/* The session info encoder and decoder:
- *
- * This is responsible for handling the initial connection between a dumb and
- * master terminal. We might be connecting to an older or newer version of
- * ELinks and has to be able to keep some kind of compatibility so that
- * everything will work as expected while being able to change the format
- * of the decoded session info. In order to avoid sending too much information
- * we use magic numbers to signal the identity of the dump client terminal.
- *
- * Magic numbers are composed by the SESSION_MAGIC() macro. It is a negative
- * magic to be able to distinguish the oldest format from the newer ones. */
-
-#define SESSION_MAGIC(major, minor) -(((major) << 8) + (minor))
-
-struct string *
-create_session_info(struct string *info, int cp, struct list_head *url_list)
-{
-	int numbers[3] = { cp, SESSION_MAGIC(1, 0), remote_session_flags };
-	unsigned char *number_chars = (unsigned char *) numbers;
-
-	if (init_string(info)
-	    && add_bytes_to_string(info, number_chars, sizeof(numbers))) {
-		struct string_list_item *url;
-
-		foreach (url, *url_list) {
-			struct string *str = &url->string;
-
-			add_bytes_to_string(info, str->source, str->length + 1);
-		}
-
-		return info;
-	}
-
-	done_string(info);
-	return NULL;
-}
-
-
 static enum remote_session_flags
-handle_remote_session(struct session *ses, enum remote_session_flags remote,
-		      struct uri *uri)
+init_remote_session(struct session *ses, enum remote_session_flags remote,
+		    struct uri *uri)
 {
 	if (remote & SES_REMOTE_CURRENT_TAB) {
 		goto_uri(ses, uri);
@@ -807,6 +768,44 @@ handle_remote_session(struct session *ses, enum remote_session_flags remote,
 	return remote;
 }
 
+
+
+/* The session info encoder and decoder:
+ *
+ * This is responsible for handling the initial connection between a dumb and
+ * master terminal. We might be connecting to an older or newer version of
+ * ELinks and has to be able to keep some kind of compatibility so that
+ * everything will work as expected while being able to change the format
+ * of the decoded session info. In order to avoid sending too much information
+ * we use magic numbers to signal the identity of the dump client terminal.
+ *
+ * Magic numbers are composed by the SESSION_MAGIC() macro. It is a negative
+ * magic to be able to distinguish the oldest format from the newer ones. */
+
+#define SESSION_MAGIC(major, minor) -(((major) << 8) + (minor))
+
+struct string *
+create_session_info(struct string *info, int cp, struct list_head *url_list)
+{
+	int numbers[3] = { cp, SESSION_MAGIC(1, 0), remote_session_flags };
+	unsigned char *number_chars = (unsigned char *) numbers;
+
+	if (init_string(info)
+	    && add_bytes_to_string(info, number_chars, sizeof(numbers))) {
+		struct string_list_item *url;
+
+		foreach (url, *url_list) {
+			struct string *str = &url->string;
+
+			add_bytes_to_string(info, str->source, str->length + 1);
+		}
+
+		return info;
+	}
+
+	done_string(info);
+	return NULL;
+}
 
 struct initial_session_info *
 decode_session_info(struct terminal *term, int len, const int *data)
@@ -879,7 +878,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 
 		/* Even though there are no URIs we still have to
 		 * handle remote stuff. */
-		handle_remote_session(base_session, remote, NULL);
+		init_remote_session(base_session, remote, NULL);
 		return NULL;
 	}
 
@@ -906,7 +905,7 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		 * ASAP. */
 		if (uri) {
 			if (remote) {
-				remote = handle_remote_session(base_session, remote, uri);
+				remote = init_remote_session(base_session, remote, uri);
 
 			} else if (!info) {
 				info = init_session_info(base_session, uri);

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.23 2003/06/07 12:05:11 pasky Exp $ */
+/* $Id: checkbox.c,v 1.24 2003/06/07 16:21:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,13 +36,16 @@ dlg_format_checkbox(struct terminal *term, struct terminal *t2,
 }
 
 void
-dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
+dlg_format_checkboxes(struct terminal *term, struct terminal *t2, int intl,
 		      struct widget_data *chkb, int n,
 		      int x, int *y, int w, int *rw,
 		      unsigned char **texts)
 {
 	while (n) {
-		dlg_format_checkbox(term, t2, chkb, x, y, w, rw, texts[0]);
+		unsigned char *text = texts[0];
+
+		if (intl) text = _(text, t2);
+		dlg_format_checkbox(term, t2, chkb, x, y, w, rw, text);
 		texts++;
 		chkb++;
 		n--;
@@ -50,12 +53,15 @@ dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
 }
 
 void
-checkboxes_width(struct terminal *term, unsigned char **texts, int *w,
+checkboxes_width(struct terminal *term, int intl, unsigned char **texts, int *w,
 		 void (*fn)(struct terminal *, unsigned char *, int *))
 {
 	while (texts[0]) {
+		unsigned char *text = texts[0];
+
+		if (intl) text = _(text, t2);
 		*w -= 4;
-		fn(term, texts[0], w);
+		fn(term, text, w);
 		*w += 4;
 		texts++;
 	}
@@ -69,8 +75,8 @@ checkbox_list_fn(struct dialog_data *dlg)
 	int w, rw;
 	int y = 0;
 
-	checkboxes_width(term, dlg->dlg->udata, &max, max_text_width);
-	checkboxes_width(term, dlg->dlg->udata, &min, min_text_width);
+	checkboxes_width(term, 1, dlg->dlg->udata, &max, max_text_width);
+	checkboxes_width(term, 1, dlg->dlg->udata, &min, min_text_width);
 	max_buttons_width(term, dlg->items + dlg->n - 2, 2, &max);
 	min_buttons_width(term, dlg->items + dlg->n - 2, 2, &min);
 
@@ -81,7 +87,7 @@ checkbox_list_fn(struct dialog_data *dlg)
 	if (w < 5) w = 5;
 
 	rw = 0;
-	dlg_format_checkboxes(NULL, term, dlg->items, dlg->n - 2, 0, &y, w,
+	dlg_format_checkboxes(NULL, term, 1, dlg->items, dlg->n - 2, 0, &y, w,
 			      &rw, dlg->dlg->udata);
 
 	y++;
@@ -96,7 +102,7 @@ checkbox_list_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 
 	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 2,
+	dlg_format_checkboxes(term, term, 1, dlg->items, dlg->n - 2,
 			      dlg->x + DIALOG_LB, &y, w, NULL,
 			      dlg->dlg->udata);
 

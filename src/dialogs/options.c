@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.61 2003/06/07 15:25:37 pasky Exp $ */
+/* $Id: options.c,v 1.62 2003/06/07 16:21:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,8 +130,8 @@ terminal_options_fn(struct dialog_data *dlg)
 	int w, rw;
 	int y = 0;
 
-	checkboxes_width(term, td_labels, &max, max_text_width);
-	checkboxes_width(term, td_labels, &min, min_text_width);
+	checkboxes_width(term, 1, td_labels, &max, max_text_width);
+	checkboxes_width(term, 1, td_labels, &min, min_text_width);
 	max_buttons_width(term, dlg->items + dlg->n - 3, 3, &max);
 	min_buttons_width(term, dlg->items + dlg->n - 3, 3, &min);
 
@@ -142,7 +142,7 @@ terminal_options_fn(struct dialog_data *dlg)
 	if (w < 5) w = 5;
 
 	rw = 0;
-	dlg_format_checkboxes(NULL, term, dlg->items, dlg->n - 3, 0, &y, w,
+	dlg_format_checkboxes(NULL, term, 1, dlg->items, dlg->n - 3, 0, &y, w,
 			&rw, td_labels);
 
 	y++;
@@ -157,7 +157,7 @@ terminal_options_fn(struct dialog_data *dlg)
 	draw_dlg(dlg);
 
 	y = dlg->y + DIALOG_TB + 1;
-	dlg_format_checkboxes(term, term, dlg->items, dlg->n - 3,
+	dlg_format_checkboxes(term, term, 1, dlg->items, dlg->n - 3,
 			dlg->x + DIALOG_LB, &y, w, NULL,
 			td_labels);
 
@@ -336,7 +336,7 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	d->title = _("Resize ~terminal", term);
 	d->fn = group_fn;
 	d->udata = resize_texts;
-	d->refresh = (void (*)(void *))do_resize_terminal;
+	d->refresh = (void (*)(void *)) do_resize_terminal;
 	d->refresh_data = term;
 
 	d->items[0].type = D_FIELD;

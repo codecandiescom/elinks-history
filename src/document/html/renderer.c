@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.51 2002/12/07 20:05:54 pasky Exp $ */
+/* $Id: renderer.c,v 1.52 2002/12/14 18:11:10 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,23 +59,24 @@ struct table_cache_entry {
 #define MAX_TABLE_CACHE_ENTRIES 16384
 
 /* Global variables */
-int table_cache_entries = 0;
-int last_link_to_move;
-struct tag *last_tag_to_move;
-struct tag *last_tag_for_newline;
-unsigned char *last_link;
-unsigned char *last_target;
-unsigned char *last_image;
-struct form_control *last_form;
-int nobreak;
-struct conv_table *convert_table;
-int g_ctrl_num;
 int margin;
-int empty_format;
 int format_cache_entries = 0;
 
-struct hash *table_cache = NULL;
-struct list_head format_cache = {&format_cache, &format_cache};
+static int table_cache_entries = 0;
+static int last_link_to_move;
+static struct tag *last_tag_to_move;
+static struct tag *last_tag_for_newline;
+static unsigned char *last_link;
+static unsigned char *last_target;
+static unsigned char *last_image;
+static struct form_control *last_form;
+static int nobreak;
+static struct conv_table *convert_table;
+static int g_ctrl_num;
+static int empty_format;
+
+static struct hash *table_cache = NULL;
+static struct list_head format_cache = {&format_cache, &format_cache};
 
 
 /* Prototypes */
@@ -89,9 +90,9 @@ void put_chars(struct part *, unsigned char *, int);
 
 #define ALIGN(x) (((x)+0x7f)&~0x7f)
 
-int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
-int sub = 0; /* Activated/deactivated by AT_SUBSCRIPT */
-int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
+static int nowrap = 0; /* Activated/deactivated by SP_NOWRAP. */
+static int sub = 0; /* Activated/deactivated by AT_SUBSCRIPT */
+static int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 
 
 static int
@@ -190,7 +191,7 @@ expand_line(struct part *part, int y, int x)
 	return xpand_line(part, y, x);
 }
 
-int
+static inline int
 realloc_spaces(struct part *p, int l)
 {
 	unsigned char *c;
@@ -520,7 +521,7 @@ justify_line(struct part *part, int y)
 	mem_free(line);
 }
 
-void
+static void
 align_line(struct part *part, int y, int last)
 {
 	int shift;
@@ -548,7 +549,7 @@ align_line(struct part *part, int y, int last)
 		shift_chars(part, y, shift);
 }
 
-struct link *
+static struct link *
 new_link(struct f_data *f)
 {
 	if (!f) return NULL;
@@ -567,7 +568,7 @@ new_link(struct f_data *f)
 	return &f->links[f->nlinks++];
 }
 
-void
+static void
 html_tag(struct f_data *f, unsigned char *t, int x, int y)
 {
 	struct tag *tag;
@@ -588,7 +589,7 @@ html_tag(struct f_data *f, unsigned char *t, int x, int y)
 
 #define CH_BUF	256
 
-void
+static void
 put_chars_conv(struct part *part, unsigned char *c, int l)
 {
 	static char buffer[CH_BUF];
@@ -952,7 +953,7 @@ end:
 	memset(part->spaces, 0, part->spl);
 }
 
-void
+static inline void
 html_init(struct part *part)
 {
 	/* !!! FIXME: background */
@@ -979,7 +980,7 @@ destroy_fc(struct form_control *fc)
 	if (fc->menu) free_menu(fc->menu);
 }
 
-void
+static void
 html_form_control(struct part *part, struct form_control *fc)
 {
 	if (!part->data) {
@@ -1022,7 +1023,7 @@ html_form_control(struct part *part, struct form_control *fc)
 	add_to_list(part->data->forms, fc);
 }
 
-void
+static void
 add_frameset_entry(struct frameset_desc *fsd,
 		   struct frameset_desc *subframe,
 		   unsigned char *name, unsigned char *url)
@@ -1040,7 +1041,7 @@ add_frameset_entry(struct frameset_desc *fsd,
 	}
 }
 
-struct frameset_desc *
+static struct frameset_desc *
 create_frameset(struct f_data *fda, struct frameset_param *fp)
 {
 	int i;
@@ -1071,13 +1072,13 @@ create_frameset(struct f_data *fda, struct frameset_param *fp)
 	return fd;
 }
 
-void
+static inline void
 create_frame(struct frame_param *fp)
 {
 	add_frameset_entry(fp->parent, NULL, fp->name, fp->url);
 }
 
-void *
+static void *
 html_special(struct part *part, enum html_special_type c, ...)
 {
 	va_list l;
@@ -1125,7 +1126,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 	return NULL;
 }
 
-void
+static inline void
 do_format(char *start, char *end, struct part *part, unsigned char *head)
 {
 	parse_html(start, end,
@@ -1347,7 +1348,7 @@ end:
 	return part;
 }
 
-void
+static void
 push_base_format(unsigned char *url, struct document_options *opt)
 {
 	struct html_element *e;
@@ -1441,7 +1442,7 @@ get_convert_table(unsigned char *head, int to,
 	return get_translation_table(from, to);
 }
 
-void
+static void
 format_html(struct cache_entry *ce, struct f_data *screen)
 {
 	unsigned char *url = ce->url;
@@ -1721,7 +1722,7 @@ formatted_info(int type)
 	return 0;
 }
 
-void
+static void
 add_frame_to_list(struct session *ses, struct f_data_c *fd)
 {
 	struct f_data_c *f;
@@ -1736,7 +1737,7 @@ add_frame_to_list(struct session *ses, struct f_data_c *fd)
 	add_at_pos((struct f_data_c *)ses->scrn_frames.prev, fd);
 }
 
-struct f_data_c *
+static struct f_data_c *
 find_fd(struct session *ses, unsigned char *name,
 	int depth, int x, int y)
 {
@@ -1769,7 +1770,7 @@ find_fd(struct session *ses, unsigned char *name,
 	return fd;
 }
 
-struct f_data_c *
+static struct f_data_c *
 format_frame(struct session *ses, unsigned char *name,
 	     unsigned char *url, struct document_options *o,
 	     int depth)
@@ -1804,7 +1805,7 @@ repeat:
 	return fd;
 }
 
-void
+static void
 format_frames(struct session *ses, struct frameset_desc *fsd,
 	      struct document_options *op, int depth)
 {
@@ -1923,7 +1924,7 @@ html_interpret(struct session *ses)
 
 #define SRCH_ALLOC_GR	0x10000
 
-void
+static inline void
 add_srch_chr(struct f_data *f, unsigned char c, int x, int y, int nn)
 {
 	int n = f->nsearch;
@@ -1952,7 +1953,7 @@ sdbg(struct f_data *f)
 #endif
 
 
-void
+static void
 sort_srch(struct f_data *f)
 {
 	int i;
@@ -2004,7 +2005,7 @@ sort_srch(struct f_data *f)
 	mem_free(max);
 }
 
-int
+static int
 get_srch(struct f_data *f)
 {
 	struct node *n;

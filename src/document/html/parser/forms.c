@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.26 2004/06/22 22:28:24 zas Exp $ */
+/* $Id: forms.c,v 1.27 2004/06/22 22:30:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,7 +130,7 @@ find_form_for_input(unsigned char *i)
 
 	if (last_input_tag && i <= last_input_tag
 	    && i > html_context.last_form_tag) {
-		get_html_form(last_form_attr, &form);
+		get_html_form(html_context.last_form_attr, &form);
 		return;
 	}
 	if (last_input_tag && i > last_input_tag)
@@ -160,7 +160,7 @@ sp:
 end_parse:
 	if (lf && la) {
 		html_context.last_form_tag = lf;
-		last_form_attr = la;
+		html_context.last_form_attr = la;
 		last_input_tag = i;
 		get_html_form(la, &form);
 	} else {

@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.28 2003/11/18 10:59:50 kuser Exp $ */
+/* $Id: textarea.c,v 1.29 2003/11/18 11:07:44 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -407,7 +407,7 @@ rep:
 				return 1;
 			}
 			fs->state -= ln[y].st - ln[y-1].st;
-			int_lower_bound(&fs->state, ln[y-1].en - fs->value);
+			int_upper_bound(&fs->state, ln[y-1].en - fs->value);
 			goto xx;
 		}
 	}
@@ -441,8 +441,7 @@ rep:
 				return 1;
 			}
 			fs->state += ln[y+1].st - ln[y].st;
-			if (fs->value + fs->state > ln[y+1].en)
-				fs->state = ln[y+1].en - fs->value;
+			int_upper_bound(&fs->state, ln[y+1].en - fs->value);
 			goto yy;
 		}
 	}

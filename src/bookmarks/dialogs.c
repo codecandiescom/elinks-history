@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.83 2003/06/08 10:49:25 zas Exp $ */
+/* $Id: dialogs.c,v 1.84 2003/06/11 09:30:38 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -417,7 +417,7 @@ listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
 	else if (bm->box_item->type == BI_FOLDER)
 	msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
 		N_("Delete bookmark"), AL_CENTER,
-		msg_text(term, N_("Delete content of folder \"%s\" ?"),
+		msg_text(term, N_("Delete content of folder \"%s\"?"),
 			bm->title),
 		hop, 2,
 		N_("Yes"), really_del_bookmark, B_ENTER,

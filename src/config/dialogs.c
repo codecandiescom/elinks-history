@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.55 2003/06/08 14:54:42 pasky Exp $ */
+/* $Id: dialogs.c,v 1.56 2003/06/11 09:30:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -476,7 +476,7 @@ invalid_option:
 
 	msg_box(term, NULL, MSGBOX_FREE_TEXT,
 		N_("Delete option"), AL_CENTER,
-		msg_text(term, N_("Really delete the option \"%s\" ?"),
+		msg_text(term, N_("Really delete the option \"%s\"?"),
 			option->name),
 		option, 2,
 		N_("OK"), really_delete_option, B_ENTER,

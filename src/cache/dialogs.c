@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.59 2004/05/03 22:57:42 zas Exp $ */
+/* $Id: dialogs.c,v 1.60 2004/05/03 23:04:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,11 +162,11 @@ draw_cache_entry_item(struct listbox_item *item, struct listbox_context *context
 					        : "menu.normal");
 
 	color = get_bfu_color(context->term, stylename);
-	trimmedlen = int_min(msg.length, width - 3);
+	trimmedlen = int_min(msg.length, width - 4);
 
 	draw_text(context->term, x, y, msg.source, trimmedlen, 0, color);
 	if (trimmedlen < msg.length)
-		draw_text(context->term, x + trimmedlen, y, "...", 3, 0, color);
+		draw_text(context->term, x + trimmedlen, y, " ...", 4, 0, color);
 
 	done_string(&msg);
 }

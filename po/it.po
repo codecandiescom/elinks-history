@@ -2401,10 +2401,10 @@ msgid ""
 "request back to the client verbatim. Note that this type of request may\n"
 "not be enabled on all servers."
 msgstr ""
-"Se attivo, tutte le richiesta HTTP sono inviate con TRACE come loro metodo\n"
+"Se attivo, tutte le richieste HTTP sono inviate con TRACE come loro metodo\n"
 "invece che GET o POST. Questo è utile per il debugging sia di ELinks\n"
 "che di vari script lato server -- il server ritorna solo la richiesta\n"
-"del client. Notare che quessto tipo di richiesta può non essere abilitata\n"
+"del client. Notare che questo tipo di richiesta può non essere abilitata\n"
 "su tutti i server."
 
 #: src/config/options.c:1667
@@ -2449,7 +2449,7 @@ msgstr ""
 
 #: src/config/options.c:1691
 msgid "Anonymous password"
-msgstr "Password anonima"
+msgstr "Password FTP anonimo"
 
 #: src/config/options.c:1693
 msgid "FTP anonymous password to be sent."

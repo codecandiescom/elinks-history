@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.61 2003/07/04 14:11:24 jonas Exp $ */
+/* $Id: connection.c,v 1.62 2003/07/04 14:50:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,6 +331,34 @@ done_keepalive_connection(struct keepalive_connection *kc)
 }
 
 static struct keepalive_connection *
+init_keepalive_connection(struct connection *c, ttime timeout)
+{
+	struct keepalive_connection *k;
+	protocol_handler *handler = get_protocol_handler(c->url);
+	int port = get_port(c->url);
+
+	if (port == -1 || !handler) return NULL;
+
+	k = mem_calloc(1, sizeof(struct keepalive_connection));
+	if (!k) return NULL;
+
+	k->host = get_host_and_pass(c->url, 1);
+	if (!k->host) {
+		mem_free(k);
+		return NULL;
+	}
+
+	k->port = port;
+	k->protocol = handler;
+	k->pf = c->pf;
+	k->conn = c->sock1;
+	k->timeout = timeout;
+	k->add_time = get_time();
+
+	return k;
+}
+
+static struct keepalive_connection *
 get_keepalive_connection(struct connection *c)
 {
 	unsigned char *host;
@@ -383,39 +411,13 @@ add_keepalive_socket(struct connection *c, ttime timeout)
 	free_connection_data(c);
 	assertm(c->sock1 != -1, "keepalive connection not connected");
 
-	k = mem_calloc(1, sizeof(struct keepalive_connection));
-	if (!k) goto close;
-
-	k->port = get_port(c->url);
-	if (k->port == -1) goto free_and_close;
-
-	k->protocol = get_protocol_handler(c->url);
-	if (!k->protocol) goto free_and_close;
-
-	k->host = get_host_and_pass(c->url, 1);
-	if (!k->host) {
-
-free_and_close:
-		mem_free(k);
-		del_connection(c);
-		goto close;
-	}
-
-	k->pf = c->pf;
-	k->conn = c->sock1;
-	k->timeout = timeout;
-	k->add_time = get_time();
-	add_to_list(keepalive_connections, k);
+	k = init_keepalive_connection(c, timeout);
+	if (k)
+		add_to_list(keepalive_connections, k);
+	else
+		close(c->sock1);
 
 	del_connection(c);
-	register_bottom_half((void (*)(void *))check_queue, NULL);
-	return;
-
-close:
-	close(c->sock1);
-#ifdef DEBUG
-	check_queue_bugs();
-#endif
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 

@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.10 2004/01/18 02:33:29 jonas Exp $ */
+/* $Id: parser.c,v 1.11 2004/01/18 02:36:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,11 +59,10 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 		/* Extract property name. */
 
 		pos = strcspn(string, ":;");
-		if (string[pos] == ';') {
-			string += pos + 1;
+		if (string[pos] != ':') {
+			string += (string[pos] == ';') + pos;
 			continue;
 		}
-		if (string[pos] == 0) return;
 
 		for (i = 0; css_property_info[i].namelen; i++) {
 			struct css_property_info *info = &css_property_info[i];
@@ -99,7 +98,6 @@ css_parse_decl(struct list_head *props, unsigned char *string)
 
 ride_on:
 		pos = strcspn(string, ";");
-		i = (string[pos] == ';');
-		string += pos + i;
+		string += (string[pos] == ';') + pos;
 	}
 }

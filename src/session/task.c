@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.18 2004/01/01 18:21:56 zas Exp $ */
+/* $Id: task.c,v 1.19 2004/01/11 05:41:31 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,6 +251,8 @@ x:
 			ses->goto_position = NULL;
 		}
 	}
+
+	ses->status.visited = 0;
 
 	/* This is another "branch" in the browsing, so throw away the current
 	 * unhistory, we are venturing in another direction! */

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.48 2004/01/06 06:28:15 witekfl Exp $ */
+/* $Id: status.c,v 1.49 2004/01/11 05:41:30 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,10 +341,6 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 			if (stat && stat->state != S_OK) {
 				color = loading_color;
-				/* Set incomplete download to unvisited */
-				if (tab_ses && tab_ses->status.visited)
-					tab_ses->status.visited = 0;
-
 			} else if (!tab_ses || !tab_ses->status.visited) {
 				color = fresh_color;
 			}

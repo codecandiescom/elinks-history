@@ -39,6 +39,8 @@ ELinks-0.9.1:
 * add-bookmark-tabs (bookmark all tabs) option and menu item
 * fold successive blank lines when displaying a plain-text document
   (disabled by default; use the option document.plain.compress_empty_lines)
+* 'fresh' color for any tab that has not been selected
+  since its document was loaded
 
 ELinks-0.9.0:
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.150 2004/12/24 23:21:04 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.151 2004/12/24 23:24:42 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -653,27 +653,25 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	struct link *link = NULL;
 	struct jsval_property prop;
 
-	set_prop_undef(&prop);
-
 	assert(fc);
 	assert(fc->form && fs);
+
+	if (!JSVAL_IS_INT(id))
+		return JS_TRUE;
 
 	linknum = get_form_control_link(document, fc);
 	/* Hiddens have no link. */
 	if (linknum >= 0) link = &document->links[linknum];
 
-	if (!JSVAL_IS_INT(id))
-		return JS_TRUE;
+	set_prop_undef(&prop);
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_INPUT_ACCESSKEY:
 	{
 		struct string keystr;
 
-		if (!link) {
-			set_prop_undef(&prop);
-			break;
-		}
+		if (!link) break;
+
 		init_string(&keystr);
 		make_keystroke(&keystr, link->accesskey, 0, 0);
 		set_prop_string(&prop, keystr.source);
@@ -715,15 +713,11 @@ input_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_INPUT_SRC:
 		if (link && link->where_img)
 			set_prop_string(&prop, link->where_img);
-		else
-			set_prop_undef(&prop);
 		break;
 	case JSP_INPUT_TABINDEX:
 		if (link)
 			/* FIXME: This is WRONG. --pasky */
 			set_prop_int(&prop, link->number);
-		else
-			set_prop_undef(&prop);
 		break;
 	case JSP_INPUT_TYPE:
 		switch (fc->type) {

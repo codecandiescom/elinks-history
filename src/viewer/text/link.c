@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.177 2004/05/25 00:26:32 jonas Exp $ */
+/* $Id: link.c,v 1.178 2004/05/25 00:28:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -494,12 +494,12 @@ get_link_uri(struct session *ses, struct document_view *doc_view,
 }
 
 /* This is common backend for submit_form_do() and enter(). */
-int
+void
 goto_link(struct uri *uri, unsigned char *target, struct session *ses,
 	  int do_reload, int is_map)
 {
 	assert(uri && ses);
-	if_assert_failed return 1;
+	if_assert_failed return;
 
 	if (is_map) {
 		/* TODO: Test reload? */
@@ -512,8 +512,6 @@ goto_link(struct uri *uri, unsigned char *target, struct session *ses,
 			goto_url_frame(ses, struri(uri), target);
 		}
 	}
-
-	return 2;
 }
 
 
@@ -538,10 +536,9 @@ enter(struct session *ses, struct document_view *doc_view, int a)
 		int is_map = link->type == LINK_MAP;
 
 		if (uri) {
-			int retval = goto_link(uri, link->target, ses, a, is_map);
-
+			goto_link(uri, link->target, ses, a, is_map);
 			done_uri(uri);
-			return retval;
+			return 2;
 		}
 
 	} else if (link_is_textinput(link)) {

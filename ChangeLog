@@ -1,3 +1,154 @@
+Wed Dec  3 18:32:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Increase padding so also Ctrl-Insert is within the limit.  
+
+Wed Dec  3 18:31:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/status.c:
+
+	Compile fix for FreeBSD.  
+
+Wed Dec  3 17:16:08 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/text.c:
+
+	Do not attempt to display text widget if there is no room for it in
+	dialog.  
+
+Wed Dec  3 17:10:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Make it possible to cycle tabs by mouse wheeling in the tab area.  
+
+Wed Dec  3 17:07:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, viewer/text/view.c:
+
+	Add small (right clickable) tab menu.  
+
+Wed Dec  3 16:40:16 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/connection.c:
+
+	Previous patch was breaking loading of file URIs (ie .), reported by
+	Jonas. Now we check if protocol needs a slash after host or not and
+	fail if there is no host part for concerned protocols.  
+
+Wed Dec  3 15:30:20 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/link.c:
+
+	Fix the hotkey listed for the menu item 'Open in external editor':
+	s/Ctrl-E/Ctrl-T/.  
+
+Wed Dec  3 15:15:59 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/download.c:
+
+	In dlg_abort_download and dlg_undisplay_download, use @file_download
+	instead of dlg_data->dlg->udata as we've assigned the latter to the
+	former.  
+
+Wed Dec  3 14:08:15 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/dialog.c:
+
+	Give do_refresh_dialog() the static keyword.  
+
+Wed Dec  3 13:58:06 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/download.c:
+
+	In push_delete_button, use @file_download instead of
+	dlg_data->dlg->udata as we've assigned the latter to the former.  
+
+Wed Dec  3 13:03:51 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/connection.c:
+
+	When there's no host part in url, we should just emit a bad url
+	syntax error instead of attempting to create a connection to an
+	obviously invalid host. This patch does that and should fix bug 280.  
+
+Wed Dec  3 13:02:43 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/view.c:
+
+	Clean up draw_frames: Remove an unused variable, add a blank line,
+	and simplify the bounding of current_link.  
+
+Wed Dec  3 12:37:39 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/globhist/globhist.c:
+
+	Remove a TODO that was done by pasky in
+	src/globhist/globhist.c:1.53->1.54: Do not read/write globhist when
+	anonymous.  
+
+Wed Dec  3 11:27:37 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/session.c:
+
+	Give request_frameset() the static keyword.  
+
+Wed Dec  3 07:29:55 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/dialog.c:
+
+	Remove an unnecessary |if (ml)|: freeml() checks that its argument
+	is not NULL before dereferencing it.  
+
+Wed Dec  3 07:23:28 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/form.c:
+
+	In get_form_url, improve upon (i.e., fix) my previous fix for a
+	memory leak that could occur when malloc fails
+	(src/viewer/text/form.c:1.60->1.61).  
+
+Wed Dec  3 01:19:15 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Wed Dec  3 01:16:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/file/cgi.c:
+
+	Hopefully restore test_path() handling to original one.  
+
+Wed Dec  3 01:06:05 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Wed Dec  3 00:49:52 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/bfu/hierbox.c:
+
+	s/can not/cannot/ 
+
+Wed Dec  3 00:46:29 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Remove an #include for document/document.h, which was made
+	unnecessary in src/config/options.c:1.410->1.411.  
+
+Tue Dec  2 23:48:31 2003  Laurent Monin <zas@norz.org>:
+
+	* src/sched/session.c:
+
+	Revert attempt to fix bug 304.  
+
 Tue Dec  2 20:53:17 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: dialogs/status.c, dialogs/status.h, document/renderer.c,

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.18 2002/08/27 12:52:20 pasky Exp $ */
+/* $Id: info.c,v 1.19 2002/12/07 09:34:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,6 +38,7 @@ void menu_about(struct terminal *term, void *d, struct session *ses)
 {
 	unsigned char *s = stracpy(_(TEXT(T_LINKS__LYNX_LIKE), term));
 
+	if (!s) return;
 	add_to_strn(&s, "\n\n");
 	add_to_strn(&s, _(TEXT(T_FEATURES), term));
 	add_to_strn(&s, ":"
@@ -112,6 +113,7 @@ void res_inf(struct terminal *term, void *d, struct session *ses)
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r)	return;
 
+	/* FIXME: allocation failures are not handled here. */
 #define create_str(x, s1, num)	l = 0; (x) = init_str(); \
 				add_to_str(&(x), &l, (s1)); \
 				add_num_to_str(&(x), &l, (num)); \
@@ -174,6 +176,10 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 	if (!r)	return;
 
 	a = init_str();
+	if (!a) {
+		mem_free(r);
+		return;
+	}
 
 	cache = (struct cache_entry *) cache_info(CI_LIST);
 	add_to_str(&a, &l, ":");
@@ -193,24 +199,17 @@ void cache_inf(struct terminal *term, void *d, struct session *ses)
 
 #ifdef LEAK_DEBUG
 
-#define MSG_BUF	2000
-#define MSG_W	100
-
 void memory_inf(struct terminal *term, void *d, struct session *ses)
 {
-	char message[MSG_BUF];
+	char message[2048];
 	char *p;
 	struct refresh *r;
 
 	r = mem_alloc(sizeof(struct refresh));
 	if (!r) return;
 
-	p = message;
-	sprintf(p, "%ld %s", mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
-	p += strlen(p);
-
-	sprintf(p, ".");
-	p += strlen(p);
+	snprintf(message, sizeof(message), "%ld %s.",
+		 mem_amount, _(TEXT(T_MEMORY_ALLOCATED), term));
 
 	p = stracpy(message);
 	if (!p) {
@@ -226,8 +225,5 @@ void memory_inf(struct terminal *term, void *d, struct session *ses)
 
 	refresh_init(r, term, ses, d, memory_inf);
 }
-
-#undef MSG_W
-#undef MSG_BUF
 
 #endif

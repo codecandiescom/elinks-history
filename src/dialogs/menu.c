@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.357 2004/07/19 00:56:02 jonas Exp $ */
+/* $Id: menu.c,v 1.358 2004/07/20 00:35:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -788,8 +788,9 @@ pass_uri_to_command(struct session *ses, struct document_view *doc_view, int xxx
 	} else {
 		if (commands == 1)
 			do_pass_uri_to_command(ses->tab->term, items->data, ses);
+		else
+			mem_free(items->data);
 		mem_free(items->text);
-		mem_free(items->data);
 		mem_free(items);
 	}
 }

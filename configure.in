@@ -560,7 +560,7 @@ AC_ARG_WITH(gnutls, [  --with-gnutls[=prefix]  enable GNUTLS SSL support],
 	    [enable_gnutls=yes;])
 gnutls_withval="$withval"
 
-if test "$enable_gnutls"; then
+if test "$enable_gnutls" = yes; then
 	disable_openssl=yes;
 fi
 

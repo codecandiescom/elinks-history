@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.434 2004/06/10 14:12:05 jonas Exp $ */
+/* $Id: session.c,v 1.435 2004/06/10 14:19:18 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -58,6 +58,18 @@
 #include "viewer/text/link.h"
 #include "viewer/text/view.h"
 
+
+/* This is used to pass along the initial session parameters. */
+struct initial_session_info {
+	/* The session whose state to copy, -1 is none. */
+	int base_session;
+
+	/* Whether to open URLs in the master using -remote */
+	enum remote_session_flags remote;
+
+	/* The URL we should load immediatelly. */
+	struct list_head url_list;
+};
 
 struct file_to_load {
 	LIST_HEAD(struct file_to_load);

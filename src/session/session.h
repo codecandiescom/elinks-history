@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.136 2004/06/10 13:35:40 jonas Exp $ */
+/* $Id: session.h,v 1.137 2004/06/10 14:19:18 jonas Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -19,23 +19,13 @@ struct terminal;
 struct uri;
 struct window;
 
-/* This is used to pass along the initial session parameters. */
-struct initial_session_info {
-	/* The session whose state to copy, -1 is none. */
-	int base_session;
-
-	/* Whether to open URLs in the master using -remote */
-	enum remote_session_flags {
-		SES_REMOTE_NEW_TAB = 1,
-		SES_REMOTE_NEW_WINDOW = 2,
-		SES_REMOTE_CURRENT_TAB = 4,
-		SES_REMOTE_PROMPT_URL = 8,
-		SES_REMOTE_PING = 16,
-		SES_REMOTE_ADD_BOOKMARK = 32,
-	} remote;
-
-	/* The URL we should load immediatelly. */
-	struct list_head url_list;
+enum remote_session_flags {
+	SES_REMOTE_NEW_TAB = 1,
+	SES_REMOTE_NEW_WINDOW = 2,
+	SES_REMOTE_CURRENT_TAB = 4,
+	SES_REMOTE_PROMPT_URL = 8,
+	SES_REMOTE_PING = 16,
+	SES_REMOTE_ADD_BOOKMARK = 32,
 };
 
 /* This is generic frame descriptor, meaningful mainly for ses_*_frame*(). */
@@ -61,6 +51,7 @@ struct kbdprefix {
 };
 
 struct session;
+struct initial_session_info;
 
 /* This describes, what are we trying to do right now. We pass this around so
  * that we can use generic scheduler routines and when the control will get

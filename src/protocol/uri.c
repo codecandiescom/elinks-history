@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.60 2003/11/14 12:38:08 zas Exp $ */
+/* $Id: uri.c,v 1.61 2003/11/14 12:39:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -876,19 +876,13 @@ decode_uri_string(unsigned char *src) {
 	} while (c != '\0');
 }
 
-static inline int
-get_no_post_url_length_(unsigned char *url, int length)
-{
-	unsigned char *postchar = strchr(url, POST_CHAR);
-	int len = postchar ? postchar - url : length;
-
-	return len;
-}
-
 int
 get_no_post_url_length(unsigned char *url)
 {
-	return get_no_post_url_length_(url, strlen(url));
+	unsigned char *postchar = strchr(url, POST_CHAR);
+	int len = postchar ? postchar - url : strlen(url);
+
+	return len;
 }
 
 unsigned char *

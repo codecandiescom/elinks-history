@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-11-27 09:04+0100\n"
+"POT-Creation-Date: 2003-11-27 13:00+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -188,7 +188,8 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Erreur de parcours dans %s à la ligne %d colonne %d:\n"
+"read_bookmarks_xbel(): Erreur d'interprétation de %s à la ligne %d colonne %"
+"d:\n"
 "%s"
 
 #: src/bookmarks/backend/xbel.c:383 src/bookmarks/backend/xbel.c:400
@@ -370,7 +371,7 @@ msgstr "Gestionnaire de cache"
 #: src/config/cmdline.c:57
 #, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "Erreur parcours option %s: %s"
+msgstr "Ne peut interpréter l'option %s: %s"
 
 #: src/config/cmdline.c:70
 #, c-format
@@ -575,7 +576,7 @@ msgstr "Touche invalide."
 
 #: src/config/dialogs.c:417
 msgid "Need to select a keymap."
-msgstr "Vous devez sélectionner une table"
+msgstr "Vous devez sélectionner une table."
 
 #: src/config/dialogs.c:432 src/config/options.inc:1744
 msgid "Action"
@@ -601,7 +602,7 @@ msgstr "Touches"
 
 #: src/config/dialogs.c:483 src/config/dialogs.c:494
 msgid "Delete keybinding"
-msgstr "Effacer association de touches"
+msgstr "Supprimer l'association de touches"
 
 #: src/config/dialogs.c:484
 msgid ""
@@ -613,8 +614,7 @@ msgstr "Cet objet n'est pas une association de touches."
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
-"Réellement effacer l'association de touches \"%s\" (action \"%s\", keymap \"%"
-"s\")?"
+"Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
 #: src/config/dialogs.c:522 src/globhist/dialogs.c:188
 msgid "Toggle display"
@@ -626,7 +626,7 @@ msgstr "Gestion des associations de touches"
 
 #: src/config/kbdbind.c:271
 msgid "Main mapping"
-msgstr "Général"
+msgstr "Principal"
 
 #: src/config/kbdbind.c:272
 msgid "Edit mapping"
@@ -638,7 +638,7 @@ msgstr "Menu"
 
 #: src/config/kbdbind.c:378
 msgid "Abort connection"
-msgstr "Annuler la connexion"
+msgstr "Interrompre la connexion"
 
 #: src/config/kbdbind.c:379
 msgid "Add a new bookmark"
@@ -650,11 +650,11 @@ msgstr "Ajouter un nouveau signet pour le lien courant"
 
 #: src/config/kbdbind.c:381
 msgid "Attempt to auto-complete the input"
-msgstr "Essayer de compléter l'entrée"
+msgstr "Compléter automatiquement l'entrée si possible"
 
 #: src/config/kbdbind.c:382
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr "Essayer de compléter l'entrée (sans ambiguité)"
+msgstr "Compléter automatiquement et sans ambiguité l'entrée si possible"
 
 #: src/config/kbdbind.c:383
 msgid "Return to the previous document in history"
@@ -662,7 +662,7 @@ msgstr "Retourner au document précédent de l'historique"
 
 #: src/config/kbdbind.c:384
 msgid "Delete character in front of the cursor"
-msgstr "Effacer le caractère devant le curseur"
+msgstr "Supprimer le caractère devant le curseur"
 
 #: src/config/kbdbind.c:385
 msgid "Open bookmark manager"
@@ -682,23 +682,23 @@ msgstr "Recharger le fichier de cookies"
 
 #: src/config/kbdbind.c:389
 msgid "Copy text to clipboard"
-msgstr "Copier le texte vers le clipboard"
+msgstr "Copier le texte vers le tampon"
 
 #: src/config/kbdbind.c:390
 msgid "Delete text from clipboard"
-msgstr "Effacer le texte du clipboard"
+msgstr "Effacer le texte du tampon"
 
 #: src/config/kbdbind.c:391
 msgid "Delete character under cursor"
-msgstr "Effacer le caractère sous le curseur"
+msgstr "Supprimer le caractère sous le curseur"
 
 #: src/config/kbdbind.c:392
 msgid "Show information about the current page"
-msgstr "Montrer les informations à propos de la page courante"
+msgstr "Informations concernant la page courante"
 
 #: src/config/kbdbind.c:393
 msgid "Move cursor downwards"
-msgstr "Descendre le curseur"
+msgstr "Déplacer le curseur vers le bas"
 
 #: src/config/kbdbind.c:394
 msgid "Download the current link"
@@ -715,15 +715,15 @@ msgstr "Débuter l'édition"
 #. FIXME
 #: src/config/kbdbind.c:397
 msgid "Go to the end of the page/line"
-msgstr "Aller à la fin de la page"
+msgstr "Aller à la fin de la page/ligne"
 
 #: src/config/kbdbind.c:398
 msgid "Follow the current link"
-msgstr "Suivre le lien"
+msgstr "Suivre le lien courant"
 
 #: src/config/kbdbind.c:399
 msgid "Follow the current link, forcing reload of the target"
-msgstr "Suivre le lien, et forcer le rafraîchissement de la cible"
+msgstr "Suivre le lien courant et rafraîchir la cible"
 
 #: src/config/kbdbind.c:400
 msgid "Open the File menu"
@@ -731,11 +731,11 @@ msgstr "Ouvrir le menu Fichier"
 
 #: src/config/kbdbind.c:401
 msgid "Find the next occurrence of the current search text"
-msgstr "Trouver l'occurence suivante du texte recherché"
+msgstr "Occurence suivante du texte recherché"
 
 #: src/config/kbdbind.c:402
 msgid "Find the previous occurrence of the current search text"
-msgstr "Trouver l'occurence précédente du texte recherché"
+msgstr "Occurence précédente du texte recherché"
 
 #: src/config/kbdbind.c:403
 msgid "Forget authentication credentials"
@@ -755,19 +755,19 @@ msgstr "Ouvrir le dialogue \"Aller à l'URL\" avec l'URL du lien courant"
 
 #: src/config/kbdbind.c:407
 msgid "Go to the homepage"
-msgstr "Aller à la homepage"
+msgstr "Aller à la page d'accueil"
 
 #: src/config/kbdbind.c:408
 msgid "Show information about the current page HTTP headers"
-msgstr "Montrer les informations à propos des entêtes HTTP de la page courante"
+msgstr "Informations sur les entêtes HTTP"
 
 #: src/config/kbdbind.c:409
 msgid "Open history manager"
-msgstr "Ouvrir le gestionnaire de l'historique"
+msgstr "Gestionnaire de l'historique"
 
 #: src/config/kbdbind.c:410
 msgid "Go to the start of the page/line"
-msgstr "Aller au début de la page"
+msgstr "Aller au début de la page/ligne"
 
 #: src/config/kbdbind.c:411
 msgid "Delete to beginning of line"
@@ -779,11 +779,11 @@ msgstr "Supprimer jusqu'à la fin de la ligne"
 
 #: src/config/kbdbind.c:413
 msgid "Open keybinding manager"
-msgstr "Ouvrir le gestionnaire des associations de touches"
+msgstr "Gestionnaire des associations de touches"
 
 #: src/config/kbdbind.c:414
 msgid "Move the cursor left"
-msgstr "Déplacer le curseur à gauche"
+msgstr "Déplacer le curseur vers la gauche"
 
 #: src/config/kbdbind.c:415
 msgid "Open the link context menu"
@@ -856,7 +856,7 @@ msgstr "Monter d'une page"
 
 #: src/config/kbdbind.c:437
 msgid "Paste text from the clipboard"
-msgstr "Coller le texte du clipboard"
+msgstr "Coller le texte du tampon"
 
 #: src/config/kbdbind.c:438
 msgid "Move to the previous frame"
@@ -876,11 +876,11 @@ msgstr "Recharger la page courante"
 
 #: src/config/kbdbind.c:442
 msgid "Attempt to resume download of the current link"
-msgstr "Essayer de reprendre le téléchargement du lien courant"
+msgstr "Reprendre le téléchargement du lien courant"
 
 #: src/config/kbdbind.c:443
 msgid "Move the cursor right"
-msgstr "Déplacer le curseur à droite"
+msgstr "Déplacer le curseur vers la droite"
 
 #: src/config/kbdbind.c:444
 msgid "Save formatted document"
@@ -980,7 +980,7 @@ msgstr "Trop de paramètres"
 
 #: src/config/options.c:747
 msgid "error"
-msgstr "Erreur"
+msgstr "erreur"
 
 #: src/config/options.c:749 src/sched/error.c:46
 msgid "Host not found"
@@ -993,11 +993,11 @@ msgstr "Erreur du résolveur de noms"
 #: src/config/options.c:785
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
-msgstr "ELinks %s - Navigateur Web en mode texte\n"
+msgstr "ELinks %s - Navigateur web en mode texte\n"
 
 #: src/config/options.c:825
 msgid "Template option folder"
-msgstr "Modèles d'option"
+msgstr "Dossier des modèles d'option"
 
 #: src/config/options.c:848
 #, c-format
@@ -1061,10 +1061,10 @@ msgid ""
 "3 is full comments are written"
 msgstr ""
 "Quantité de commentaires écrit dans le fichier de configuration:\n"
-"0 Aucun commentaire\n"
-"1 Le nom et le type seulement\n"
-"2 Seulement la description\n"
-"3 Commentaires complets"
+"0 aucun commentaire n'est écrit\n"
+"1 seuls le nom et le type sont écrits\n"
+"2 seule la description est écrite\n"
+"3 les commentaires complets sont écrits"
 
 #: src/config/options.inc:30
 msgid "Indentation"
@@ -1077,7 +1077,7 @@ msgid ""
 "when saving the configuration."
 msgstr ""
 "Largeur d'un niveau d'indentation dans le fichier de configuration\n"
-"Zero signifie qu'aucune indentation ne sera effectuée lors de la \n"
+"Zero signifie qu'aucune indentation ne sera effectuée lors de la\n"
 "sauvegarde de la configuration."
 
 #: src/config/options.inc:36
@@ -1097,11 +1097,11 @@ msgid ""
 msgstr ""
 "Détermine ce qu'il se passe lorsque vous demandez à ELinks de sauvegarder "
 "les options:\n"
-"0 Seules les valeurs des options courantes sont modifiées\n"
-"1 Les valeurs des options courantes sont modifiées et les\n"
+"0 seules les valeurs des options courantes sont modifiées\n"
+"1 les valeurs des options courantes sont modifiées et les\n"
 "  options manquantes sont ajoutées à la fin du fichier\n"
-"2 Le fichier de configuration est totalement réécrit\n"
-"3 Les valeurs des options courantes sont modifiées et les\n"
+"2 le fichier de configuration est totalement réécrit\n"
+"3 les valeurs des options courantes sont modifiées et les\n"
 "  options manquantes MODIFIEES durant cette session d'ELinks\n"
 "  sont ajoutées à la fin du fichier"
 
@@ -1157,7 +1157,7 @@ msgstr "Connexions"
 
 #: src/config/options.inc:72
 msgid "Connection options."
-msgstr "Options de connexion"
+msgstr "Options de connexion."
 
 #: src/config/options.inc:75
 msgid "Asynchronous DNS"
@@ -1165,7 +1165,7 @@ msgstr "Résolution DNS asynchrone"
 
 #: src/config/options.inc:77
 msgid "Use asynchronous DNS resolver?"
-msgstr "Utiliser la résolution DNS asynchrone ?"
+msgstr "Utiliser la résolution DNS asynchrone?"
 
 #: src/config/options.inc:79
 msgid "Maximum connections"
@@ -1266,11 +1266,11 @@ msgid ""
 "2 is first check accesskey (this can be dangerous)"
 msgstr ""
 "Priorité de l'attribut HTML 'accesskey':\n"
-"0 Essayer les associations de touches normales, puis 'accesskey'\n"
+"0 essayer les associations de touches normales, puis 'accesskey'\n"
 "  en cas d'échec\n"
-"1 Essayer les associations concernant le cadre, puis 'accesskey'\n"
+"1 essayer les associations concernant le cadre, puis 'accesskey'\n"
 "  en cas d'échec\n"
-"2 Essayer 'accesskey' en premier (dangereux)"
+"2 essayer 'accesskey' en premier (dangereux)"
 
 #: src/config/options.inc:132
 msgid "Forms"
@@ -1298,7 +1298,7 @@ msgstr "Confirmation de l'envoi"
 
 #: src/config/options.inc:143
 msgid "Ask for confirmation when submitting a form."
-msgstr "Demander confirmation avant l'envoi d'un formulaire"
+msgstr "Demander confirmation avant l'envoi d'un formulaire."
 
 #: src/config/options.inc:146
 msgid "Images"
@@ -1322,9 +1322,9 @@ msgid ""
 msgstr ""
 "Afficher [nom du fichier cible] au lieu de [IMG] pour les tags\n"
 "images visibles:\n"
-"-1    Toujours afficher [IMG]\n"
-"0     Toujours afficher le nom de fichier complet\n"
-"1-500 Afficher le nom de fichier de cette taille maximale;\n"
+"-1    toujours afficher [IMG]\n"
+"0     toujours afficher le nom de fichier complet\n"
+"1-500 afficher le nom de fichier de cette taille maximale;\n"
 "      si plus long, le milieu est remplacé par un astérisque"
 
 #: src/config/options.inc:158
@@ -2713,8 +2713,7 @@ msgstr "Si nous devons utiliser le souligné ou modifier la couleur."
 
 #: src/config/options.inc:842
 msgid "Codepage of charset used for displaying content on terminal."
-msgstr ""
-"Jeu de caractères à utiliser pour afficher les contenus dans le terminal."
+msgstr "Jeu de caractères utilisé pour afficher les contenus dans le terminal."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:848
@@ -4603,7 +4602,13 @@ msgid ""
 "handler will reside at mime.type.image.gif). Each MIME type option\n"
 "should contain (case-sensitive) name of the MIME handler (its\n"
 "properties are stored at mime.handler.<name>)."
-msgstr "Association gestionnaire <-> type MIME."
+msgstr ""
+"Association gestionnaire <-> type MIME. Le premier sous-arbre\n"
+"est la classe MIME tandis que le second sous-arbre est le type MIME\n"
+"(par exemple, le gestionnaire pour image/gif résidera à mime.type.image."
+"gif).\n"
+"Chaque option type MIME doit contenir le nom du gestionnaire MIME\n"
+"(sensible à la casse, ses propriétés sont stockées dans mime.handler.<name>)."
 
 #: src/mime/backend/default.c:35
 msgid ""
@@ -4658,7 +4663,7 @@ msgstr "Bloquer le terminal"
 
 #: src/mime/backend/default.c:63
 msgid "Block the terminal when the handler is running."
-msgstr "Bloquer le terminal lorsque le programme externe est executé."
+msgstr "Bloquer le terminal lorsque le programme externe est exécuté."
 
 #: src/mime/backend/default.c:65
 msgid "Program"
@@ -4671,7 +4676,7 @@ msgid ""
 "substituted by a file name."
 msgstr ""
 "Visualisateur externe pour ce type de fichier. '%' dans la chaîne sera\n"
-"remplacé par le nom du fichier"
+"remplacé par le nom du fichier."
 
 #: src/mime/backend/default.c:71
 msgid "File extension associations"
@@ -4696,7 +4701,7 @@ msgstr "Système de configuration"
 
 #: src/mime/backend/mailcap.c:96
 msgid "Options for mailcap support."
-msgstr "Options pour le support mailcap"
+msgstr "Options concernant le support mailcap"
 
 #: src/mime/backend/mailcap.c:100
 msgid "Enable mailcap support."
@@ -4766,7 +4771,7 @@ msgstr ""
 
 #: src/mime/backend/mimetypes.c:57
 msgid "Enable mime.types support."
-msgstr "Activer le support de mime.types"
+msgstr "Activer le support des fichiers mime.types"
 
 #: src/mime/backend/mimetypes.c:61
 msgid ""
@@ -4795,11 +4800,13 @@ msgstr "Type MIME par défaut"
 msgid ""
 "Document MIME-type to assume by default (when we are unable to\n"
 "guess it properly from known information about the document)."
-msgstr "Type MIME du document par défaut (quand nous ne pouvons le deviner)."
+msgstr ""
+"Type MIME du document par défaut (quand il ne peut être\n"
+"deviner grâce aux informations connues concernant le document)."
 
 #: src/modules/version.c:77
 msgid "Text WWW browser"
-msgstr "Navigateur en mode texte"
+msgstr "Navigateur web en mode texte"
 
 #: src/modules/version.c:82
 msgid "Features:"
@@ -4839,15 +4846,15 @@ msgstr "T~wTerm"
 
 #: src/osdep/newwin.c:68
 msgid "~Screen"
-msgstr "Écran"
+msgstr "~Screen"
 
 #: src/osdep/newwin.c:70 src/osdep/newwin.c:74
 msgid "~Window"
-msgstr "Fenêtre"
+msgstr "~Fenêtre"
 
 #: src/osdep/newwin.c:71
 msgid "~Full screen"
-msgstr "Plein écran"
+msgstr "~Plein écran"
 
 #: src/osdep/newwin.c:77
 msgid "~BeOS terminal"
@@ -4924,7 +4931,7 @@ msgstr ""
 
 #: src/sched/download.c:479
 msgid "Save under the alternative name"
-msgstr "Sauver sous un nom différent"
+msgstr "Sauver sous un autre nom"
 
 #: src/sched/download.c:480
 msgid "Overwrite the original file"
@@ -5022,7 +5029,7 @@ msgstr "Le serveur traîte la requête"
 
 #: src/sched/error.c:38
 msgid "Transferring"
-msgstr "Transfert"
+msgstr "Transfert en cours"
 
 #: src/sched/error.c:40
 msgid "Waiting for redirect confirmation"
@@ -5090,7 +5097,7 @@ msgstr "Service FTP indisponible"
 
 #: src/sched/error.c:64
 msgid "Bad FTP login"
-msgstr "Echec de la connexion FTP"
+msgstr "Echec de l'authentification FTP"
 
 #: src/sched/error.c:65
 msgid "FTP PORT command failed"
@@ -5135,17 +5142,19 @@ msgstr "Aucun document"
 #: src/sched/session.c:687
 #, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
-msgstr "Voulez-vous envoyer les données de formulaire à l'URL redirigée %s ?"
+msgstr ""
+"Voulez-vous suivre la redirection et poster les données de formulaire à "
+"l'URL %s ?"
 
 #: src/sched/session.c:690
 #, c-format
 msgid "Do you want to post form data to URL %s?"
-msgstr "Voulez-vous envoyer les données de formulaire à l'URL %s ?"
+msgstr "Voulez-vous poster les données de formulaire à l'URL %s ?"
 
 #: src/sched/session.c:692
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
-msgstr "Voulez-vous renvoyer les données de formulaire à l'URL %s ?"
+msgstr "Voulez-vous poster à nouveau les données de formulaire à l'URL %s ?"
 
 #: src/sched/session.c:698 src/sched/session.c:1275 src/sched/session.c:1295
 msgid "Warning"
@@ -5238,7 +5247,7 @@ msgstr "Scripting"
 
 #: src/ssl/ssl.c:73 src/ssl/ssl.c:158
 msgid "Verify certificates"
-msgstr "Vérifier les certificats"
+msgstr "Vérification des certificats"
 
 #: src/ssl/ssl.c:75
 msgid ""
@@ -5246,27 +5255,27 @@ msgid ""
 "needs extensive configuration of OpenSSL by the user."
 msgstr ""
 "Vérifier le certificat SSL du serveur. Notez que cela nécessite\n"
-"une configuration de OpenSSL par l'utilisateur."
+"une configuration particulière de OpenSSL par l'utilisateur."
 
 #: src/ssl/ssl.c:78
 msgid "Client Certificates"
-msgstr "Certificats client"
+msgstr "Certificats du client"
 
 #: src/ssl/ssl.c:80
 msgid "X509 client certificate options."
-msgstr "Options concernant les certificats client X509."
+msgstr "Options concernant les certificats X509 du client."
 
 #: src/ssl/ssl.c:84
 msgid ""
 "Enable or not the sending of X509 client certificates\n"
 "to servers which request them."
 msgstr ""
-"Active ou non l'envoi des certificats client X509 aux\n"
-"serveurs qui les demandent."
+"Activer ou non l'envoi des certificats X509 du client aux\n"
+"serveurs qui le demandent."
 
 #: src/ssl/ssl.c:87
 msgid "Certificate File"
-msgstr "Fichier certificat"
+msgstr "Fichier contenant le certificat"
 
 #: src/ssl/ssl.c:89
 msgid ""
@@ -5275,7 +5284,7 @@ msgid ""
 "file pointed to by the X509_CLIENT_CERT variable is used\n"
 "instead."
 msgstr ""
-"Le chemin du fichier contenant le certificat client et la\n"
+"Le chemin du fichier contenant le certificat du client et la\n"
 "clé privée non encryptée au format PEM. Si vide, le fichier\n"
 "indiqué par la variable d'environnement X509_CLIENT_CERT sera\n"
 "utilisé."
@@ -5286,7 +5295,7 @@ msgid ""
 "probably doesn't work properly at all with GnuTLS."
 msgstr ""
 "Vérifier le certificat SSL du serveur. Notez que cela ne marchera\n"
-"correctement avec GnuTLS."
+"probablement pas correctement avec GnuTLS."
 
 #. name:
 #: src/ssl/ssl.c:179 src/ssl/ssl.c:196
@@ -5309,7 +5318,7 @@ msgstr "Mauvais évenement %d"
 
 #: src/terminal/event.c:146
 msgid "Warning: terminal name contains illicit chars."
-msgstr "Attention: le nom du terminal contient des caractètes illicites."
+msgstr "Attention: le nom du terminal contient des caractères illicites."
 
 #: src/terminal/event.c:168
 #, c-format
@@ -5326,7 +5335,7 @@ msgstr "Trop d'octets lus en provenance de l'itrm!"
 
 #: src/terminal/tab.c:193
 msgid "Do you really want to close the current tab?"
-msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant ?"
+msgstr "Êtes-vous sûr de vouloir fermer l'onglet courant?"
 
 #: src/viewer/dump/dump.c:77
 #, c-format
@@ -5494,15 +5503,15 @@ msgstr "Chaîne recherchée '%s' introuvable"
 
 #: src/viewer/text/search.c:1053
 msgid "Normal search"
-msgstr "Recherche plein texte"
+msgstr "Plein texte"
 
 #: src/viewer/text/search.c:1054
 msgid "Regexp search"
-msgstr "Recherche par expression régulière"
+msgstr "Expression régulière"
 
 #: src/viewer/text/search.c:1055
 msgid "Extended regexp search"
-msgstr "Recherche par expression régulière étendue"
+msgstr "Expression régulière étendue"
 
 #: src/viewer/text/search.c:1056
 msgid "Case sensitive"
@@ -5530,36 +5539,12 @@ msgstr "Aller au lien"
 
 #: src/viewer/text/view.c:779
 msgid "Enter link number"
-msgstr "Entrez le numéro du lien"
+msgstr "Entrez un numéro de lien"
 
 #: src/viewer/text/view.c:1465
 msgid "Save error"
-msgstr "Erreur d'enregistrement"
+msgstr "Erreur lors de la sauvegarde"
 
 #: src/viewer/text/view.c:1466
 msgid "Error writing to file"
 msgstr "Erreur lors de l'écriture du fichier"
-
-#~ msgid "Cannot delete \"%s\""
-#~ msgstr "Impossible de supprimer \"%s\""
-
-#~ msgid "Deleting used folder"
-#~ msgstr "Suppression d'un dossier utilisé"
-
-#~ msgid "Deleting used item"
-#~ msgstr "Suppression d'un item utilisé"
-
-#~ msgid "No downloads"
-#~ msgstr "Aucun téléchargement"
-
-#~ msgid "Global histor~y"
-#~ msgstr "Historique ~global"
-
-#~ msgid "Bookmark~s"
-#~ msgstr "~Signets"
-
-#~ msgid "Delete option"
-#~ msgstr "Supprimer option"
-
-#~ msgid "Really delete the option \"%s\"?"
-#~ msgstr "Réellement supprimer l'option \"%s\" ?"

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.5pre7.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-07 00:17+0100\n"
-"PO-Revision-Date: 2003-10-22 15:00+0200\n"
+"PO-Revision-Date: 2003-11-08 01:00+0200\n"
 "Last-Translator: Witold Filipczyk <witekfl@pld-linux.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -3051,12 +3051,11 @@ msgstr "Kolory wybranego taba."
 
 #: src/config/options.inc:1253 src/config/options.inc:1663
 msgid "Tab separator"
-msgstr ""
+msgstr "Separator tabów"
 
 #: src/config/options.inc:1255 src/config/options.inc:1665
-#, fuzzy
 msgid "Tab separator colors."
-msgstr "Kolory paska tabów."
+msgstr "Kolory separatora tabów."
 
 #: src/config/options.inc:1265 src/config/options.inc:1675
 msgid "Searched strings"
@@ -3959,7 +3958,7 @@ msgid "Memory info"
 msgstr "Informacje o pamiêci"
 
 #: src/dialogs/info.c:201
-#, fuzzy, c-format
+#, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld bajtów przydzielonej pamiêci."
 
@@ -5499,12 +5498,3 @@ msgstr "B³±d zapisu"
 #: src/viewer/text/view.c:1405
 msgid "Error writing to file"
 msgstr "B³±d zapisu do pliku"
-
-#~ msgid "Verify the peer's SSL certificate."
-#~ msgstr "Sprawd¼ certyfikat SSL sieci."
-
-#~ msgid "Columns"
-#~ msgstr "Kolumny"
-
-#~ msgid "Rows"
-#~ msgstr "Wiersze"

@@ -1,4 +1,4 @@
-/* $Id: hierbox.h,v 1.52 2004/05/31 02:22:37 jonas Exp $ */
+/* $Id: hierbox.h,v 1.53 2004/05/31 02:24:09 jonas Exp $ */
 
 #ifndef EL__BFU_HIERBOX_H
 #define EL__BFU_HIERBOX_H
@@ -79,10 +79,6 @@ add_listbox_folder(struct hierbox_browser *browser, struct listbox_item *root, u
 
 struct listbox_item *
 add_listbox_item_at_pos(struct hierbox_browser *browser, struct listbox_item *root, unsigned char *text, void *data);
-
-struct listbox_item *
-add_listbox_items(struct hierbox_browser *browser, void *data, int noempty,
-		  unsigned char *text, ...);
 
 /* We use hierarchic listbox browsers for the various managers. They consist
  * of a listbox widget and some buttons.

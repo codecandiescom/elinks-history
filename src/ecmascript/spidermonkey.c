@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.87 2004/12/17 11:09:34 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.88 2004/12/17 13:19:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -945,7 +945,6 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		document->title = stracpy(v.string);
 		break;
 	case JSP_DOC_URL:
-	{
 		/* According to the specs this should be readonly but some
 		 * broken sites still assign to it (i.e.
 		 * http://www.e-handelsfonden.dk/validering.asp?URL=www.polyteknisk.dk).
@@ -953,7 +952,6 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		JSVAL_REQUIRE(vp, STRING);
 		location_goto(doc_view, v.string);
 		break;
-	}
 	}
 
 	JSVAL_TO_VALUE_END;

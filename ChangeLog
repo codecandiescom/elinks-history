@@ -1,3 +1,74 @@
+Tue Nov 19 22:41:58 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/mime.c:
+
+	An unused variable was removed.  
+
+Tue Nov 19 22:25:44 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/conv.c:
+
+	Minor cleanup.  
+
+Tue Nov 19 22:22:26 2002  Laurent Monin <zas@norz.org>:
+
+	* src/util/error.c:
+
+	Some lowrisk potential buffer overflows were fixed.  
+
+Tue Nov 19 22:08:43 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sched.c:
+
+	An erroneous error message was fixed.  
+
+Tue Nov 19 22:06:19 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/file.c:
+
+	Minor cleanup.  
+
+Tue Nov 19 22:00:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	Removed some redundant code.  
+
+Tue Nov 19 21:53:23 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, protocol/http/http.c:
+
+	A new option document.cache.ignorecachecontrol was added. When set,
+	cache control server headers are ignored, so a document may be
+	cached even if server sent Cache-Control: no-cache header.  
+
+Tue Nov 19 21:43:09 2002  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	Part of ftp download resuming code was causing segfaults, partially
+	fixed.  
+
+Tue Nov 19 14:06:27 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/session.c:
+
+	Minor optimization.  
+
+Tue Nov 19 13:43:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/ftp.c:
+
+	We love 80th column! ;-) 
+
+Tue Nov 19 11:00:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/: document/cache.h, lowlevel/sched.c, lowlevel/sched.h,
+	protocol/http/http.c:
+
+	The -1 bug in download info was fixed. We now handle Cache-Control:
+	no-cache server header. Patch by Witold Filipczyk and me.  
+
 Mon Nov 18 22:31:15 2002  Laurent Monin <zas@norz.org>:
 
 	* src/lowlevel/connect.c:

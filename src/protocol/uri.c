@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.79 2003/12/21 20:50:03 jonas Exp $ */
+/* $Id: uri.c,v 1.80 2003/12/21 20:56:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -718,7 +718,7 @@ http:				prefix = "http://";
 		if (!not_file) {
 			unsigned char *expanded = expand_tilde(url);
 
-			if (!expanded) return NULL;
+			if (!expanded) goto dammit_something_didnt_work_out;
 
 			if (!dir_sep(*expanded)) add_to_strn(&newurl, "./");
 			add_to_strn(&newurl, expanded);
@@ -736,6 +736,7 @@ http:				prefix = "http://";
 			return newurl;
 		}
 
+dammit_something_didnt_work_out:
 		mem_free(newurl);
 		return NULL;
 	}

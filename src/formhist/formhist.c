@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.73 2003/12/19 12:03:39 pasky Exp $ */
+/* $Id: formhist.c,v 1.74 2003/12/21 21:14:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 
 static struct option_info forms_history_options[] = {
 	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
-		"show_formhist", 0, 1,
+		"show_formhist", 0, 0,
 		N_("Ask if a login form should be saved to file or not.\n"
 		"This option only disables the dialog, already saved login\n"
 		"forms are unaffected.")),

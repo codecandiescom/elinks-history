@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.88 2004/12/19 12:04:43 jonas Exp $ */
+/* $Id: protocol.c,v 1.89 2004/12/19 12:25:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -268,6 +268,7 @@ static struct module *protocol_submodules[] = {
 #ifdef CONFIG_URI_REWRITE
 	&uri_rewrite_module,
 #endif
+	&user_protocol_module,
 	NULL,
 };
 

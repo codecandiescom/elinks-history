@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.165 2004/12/19 12:08:10 jonas Exp $ */
+/* $Id: options.inc,v 1.166 2004/12/19 12:25:58 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -744,52 +744,6 @@ static struct option_info config_options_info[] = {
 	INIT_OPT_TREE("", N_("Protocols"),
 		"protocol", OPT_SORT,
 		N_("Protocol specific options.")),
-
-	INIT_OPT_TREE("protocol", N_("User protocols"),
-		"user", OPT_AUTOCREATE,
-		N_("User protocols. Options in this tree specify external\n"
-		"handlers for the appropriate protocols. Ie.\n"
-		"protocol.user.mailto.unix.")),
-
-	/* FIXME: Poorly designed options structure. Ought to be able to specify
-	 * need_slashes, free_form and similar options as well :-(. --pasky */
-
-	/* Basically, it looks like protocol.user.mailto.win32 = "blah" */
-
-	INIT_OPT_TREE("protocol.user", NULL,
-		"_template_", OPT_AUTOCREATE,
-		N_("Handler (external program) for this protocol. Name the\n"
-		"options in this tree after your system (ie. unix, unix-xwin).")),
-
-	INIT_OPT_STRING("protocol.user._template_", NULL,
-		"_template_", 0, "",
-		N_("Handler (external program) for this protocol and system.\n"
-		"%f in the string means file name to include form data from\n"
-		"%h in the string means hostname (or email address)\n"
-		"%p in the string means port\n"
-		"%d in the string means path (everything after the port)\n"
-		"%s in the string means subject (?subject=<this>)\n"
-		"%u in the string means the whole URL")),
-
-#define INIT_OPT_USER_PROTOCOL(scheme, system, cmd) \
-	INIT_OPT_STRING("protocol.user." scheme, NULL, system, 0, cmd, NULL)
-
-#ifndef CONFIG_GOPHER
-	INIT_OPT_USER_PROTOCOL("gopher", "unix",	DEFAULT_AC_OPT_GOPHER),
-	INIT_OPT_USER_PROTOCOL("gopher", "unix-xwin",	DEFAULT_AC_OPT_GOPHER),
-#endif
-	INIT_OPT_USER_PROTOCOL("irc",	 "unix",	DEFAULT_AC_OPT_IRC),
-	INIT_OPT_USER_PROTOCOL("irc",	 "unix-xwin",	DEFAULT_AC_OPT_IRC),
-	INIT_OPT_USER_PROTOCOL("mailto", "unix",	DEFAULT_AC_OPT_MAILTO),
-	INIT_OPT_USER_PROTOCOL("mailto", "unix-xwin",	DEFAULT_AC_OPT_MAILTO),
-#ifndef CONFIG_NNTP
-	INIT_OPT_USER_PROTOCOL("news",	 "unix",	DEFAULT_AC_OPT_NEWS),
-	INIT_OPT_USER_PROTOCOL("news",	 "unix-xwin",	DEFAULT_AC_OPT_NEWS),
-#endif
-	INIT_OPT_USER_PROTOCOL("telnet", "unix",	DEFAULT_AC_OPT_TELNET),
-	INIT_OPT_USER_PROTOCOL("telnet", "unix-xwin",	DEFAULT_AC_OPT_TELNET),
-	INIT_OPT_USER_PROTOCOL("tn3270", "unix",	DEFAULT_AC_OPT_TN3270),
-	INIT_OPT_USER_PROTOCOL("tn3270", "unix-xwin",	DEFAULT_AC_OPT_TN3270),
 
 	INIT_OPT_STRING("protocol", N_("No-proxy domains"),
 		"no_proxy", 0, "",

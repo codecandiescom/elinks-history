@@ -30,7 +30,7 @@
 #endif
 
 #include <stdlib.h>
-#include "gettextP.h"
+#include "intl/gettext/gettextP.h"
 
 #define YYLEX_PARAM	&((struct parse_args *) arg)->cp
 #define YYPARSE_PARAM	arg

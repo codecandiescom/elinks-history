@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.422 2004/05/21 11:39:54 jonas Exp $ */
+/* $Id: parser.c,v 1.423 2004/05/23 14:51:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -616,11 +616,23 @@ html_base(unsigned char *a)
 	unsigned char *al = get_url_val(a, "href");
 
 	if (al) {
-		struct html_element *prev = html_stack.prev;
-		unsigned char *base = join_urls(prev->attr.href_base, al);
+		struct html_element *element = html_stack.prev;
+		unsigned char *base = join_urls(element->attr.href_base, al);
 
-		mem_free_set(&format.href_base, base);
 		mem_free(al);
+
+		if (!base) return;
+		mem_free_set(&element->attr.href_base, base);
+
+		/* Now distribute the base URL */
+		foreach (element, html_stack) {
+			if (format.href_base != base) {
+				unsigned char *url = stracpy(base);
+
+				if (!url) continue;
+				mem_free_set(&element->attr.href_base, url);
+			}
+		}
 	}
 
 	al = get_target(a);

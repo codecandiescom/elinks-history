@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.77 2004/07/04 11:26:40 jonas Exp $ */
+/* $Id: parse.c,v 1.78 2004/07/04 13:06:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ next_attr:
 
 	while (isspace(*e)) next_char();
 
-	if (IS_QUOTE(*e)) {
+	if (isquote(*e)) {
 		unsigned char quote = *e;
 
 quoted_value:
@@ -161,7 +161,7 @@ next_attr:
 	skip_space(e);
 
 	if (found) {
-		if (!IS_QUOTE(*e)) {
+		if (!isquote(*e)) {
 			while (!isspace(*e) && !end_of_tag(*e)) {
 				if (!*e) goto parse_error;
 				add_chr(attr, attrlen, *e);
@@ -202,7 +202,7 @@ found_endattr:
 		return attr;
 
 	} else {
-		if (!IS_QUOTE(*e)) {
+		if (!isquote(*e)) {
 			while (!isspace(*e) && !end_of_tag(*e)) {
 				if (!*e) goto parse_error;
 				e++;

@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.126 2004/05/21 13:44:34 jonas Exp $ */
+/* $Id: scanner.c,v 1.127 2004/07/04 13:06:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -112,7 +112,7 @@ struct scanner_info css_scanner_info = {
 	while (s < (scanner)->end					\
 	       && *(s) != (skipto)					\
 	       && check_css_precedence(*(s), skipto)) {			\
-		if (*(s) == '"' || *(s) == '\'') {			\
+		if (isquote(*(s))) {					\
 			int size = (scanner)->end - (s);		\
 			unsigned char *end = memchr(s + 1, *(s), size);	\
 									\
@@ -200,8 +200,8 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 					scan_css(scanner, from, CSS_CHAR_WHITESPACE);
 					scan_back_css(scanner, to, CSS_CHAR_WHITESPACE);
 
-					if (*from == '"' || *from == '\'') from++;
-					if (*to == '"' || *to == '\'') to--;
+					if (isquote(*from)) from++;
+					if (isquote(*to)) to--;
 
 					token->string = from;
 					real_length = to - from + 1;
@@ -263,7 +263,7 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 			string += 9;
 		}
 
-	} else if (first_char == '"' || first_char == '\'') {
+	} else if (isquote(first_char)) {
 		/* TODO: Escaped delimiters --jonas */
 		int size = scanner->end - string;
 		unsigned char *string_end = memchr(string, first_char, size);

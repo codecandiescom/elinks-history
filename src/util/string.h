@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.78 2004/07/04 11:29:44 jonas Exp $ */
+/* $Id: string.h,v 1.79 2004/07/04 13:06:05 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -104,7 +104,8 @@ int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 #define skip_nonspace(S) \
 	do { while (*(S) && !isspace(*(S))) (S)++; } while (0)
 
-#define IS_QUOTE(x) ((x) == '"' || (x) == '\'')
+#define isquote(x) ((x) == '"' || (x) == '\'')
+
 #define isA(c) ((c >= 'A' && c <= 'Z') \
 		|| (c >= 'a' && c <= 'z') \
 		|| (c >= '0' && c <= '9') \

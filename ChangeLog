@@ -1,3 +1,74 @@
+Wed Jul 30 21:38:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	set_xchar(): Remove useless bit operation.  
+
+Wed Jul 30 21:17:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/download.c, terminal/draw.h, terminal/screen.c,
+	terminal/screen.h, viewer/text/link.c:
+
+	Move screen_char macros.  
+
+Wed Jul 30 20:58:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: screen.c, screen.h:
+
+	Move and add function descriptions to the header file.  
+
+Wed Jul 30 16:14:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	(x)set_hchars(): Take screen data and attr value separately.  
+
+Wed Jul 30 16:06:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h, tables.c:
+
+	(x)set_hchar(): Take screen data and attr value separately.  
+
+Wed Jul 30 15:18:13 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	realloc_lines(): Cleanup.  
+
+Wed Jul 30 00:22:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.h, document/html/renderer.c,
+	elusive/renderer/text/renderer.c, scripting/lua/core.c,
+	terminal/draw.c, terminal/draw.h, viewer/dump/dump.c,
+	viewer/text/search.c:
+
+	Replace chr type with struct screen_char.  
+
+Tue Jul 29 23:27:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.h, document/html/renderer.c,
+	elusive/renderer/text/renderer.c:
+
+	struct line: Rename @c to @color with type unsigned char.  
+
+Tue Jul 29 23:09:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	set_position(): Introduced to wrap POS(x, y) = c.  
+
+Tue Jul 29 22:55:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	realloc_line(): Cleanup.  
+
+Tue Jul 29 22:43:52 2003  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/connect.c:
+
+	Cleanup and assertions.  
+
 Tue Jul 29 17:53:50 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/scripting/lua/core.c:

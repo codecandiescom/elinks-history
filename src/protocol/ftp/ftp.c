@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.134 2004/05/07 17:27:46 jonas Exp $ */
+/* $Id: ftp.c,v 1.135 2004/05/29 17:29:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,8 +510,6 @@ add_file_cmd_to_str(struct connection *conn)
 	struct sockaddr_in6 data_addr;
 #endif
 	struct ftp_connection_info *c_i;
-	unsigned char *data;
-	unsigned char *data_end;
 	struct string command;
 	int data_sock;
 	unsigned char pc[6];
@@ -556,18 +554,14 @@ add_file_cmd_to_str(struct connection *conn)
 		conn->data_socket = data_sock;
 	}
 
-	data = conn->uri->data;
-	if (!data) {
+	if (!conn->uri->data) {
 		INTERNAL("conn->uri->data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
 		return NULL;
 	}
 
-	data_end = conn->uri->post;
-	if (!data_end)
-		data_end = data + conn->uri->datalen;
-
-	if (data == data_end || data_end[-1] == '/') {
+	if (!conn->uri->datalen
+	    || conn->uri->data[conn->uri->datalen - 1] == '/') {
 		/* Commands to get directory listing. */
 
 		c_i->dir = 1;
@@ -589,9 +583,8 @@ add_file_cmd_to_str(struct connection *conn)
 			else
 				add_portcmd_to_string(&command, pc);
 
-		add_to_string(&command, "CWD /");
-		if (data != data_end)
-			add_bytes_to_string(&command, data, data_end - data);
+		add_to_string(&command, "CWD ");
+		add_uri_to_string(&command, conn->uri, URI_PATH);
 		add_to_string(&command, "\r\n");
 
 		add_to_string(&command, "LIST\r\n");
@@ -631,8 +624,8 @@ add_file_cmd_to_str(struct connection *conn)
 			c_i->pending_commands++;
 		}
 
-		add_to_string(&command, "RETR /");
-		add_bytes_to_string(&command, data, data_end - data);
+		add_to_string(&command, "RETR ");
+		add_uri_to_string(&command, conn->uri, URI_PATH);
 		add_to_string(&command, "\r\n");
 	}
 

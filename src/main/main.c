@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.78 2003/04/14 15:05:47 zas Exp $ */
+/* $Id: main.c,v 1.79 2003/05/03 19:44:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,32 +299,35 @@ init()
 
 	/* If there's no -no-connect option, check if there's no other ELinks
 	 * running. If we found any, open socket and act as a slave for it. */
-	if (!get_opt_bool_tree(&cmdline_options, "no-connect") &&
-	    !get_opt_bool_tree(&cmdline_options, "dump") &&
-	    !get_opt_bool_tree(&cmdline_options, "source")) {
+	while (!get_opt_bool_tree(&cmdline_options, "no-connect") &&
+		&& !get_opt_bool_tree(&cmdline_options, "dump") &&
+		&& !get_opt_bool_tree(&cmdline_options, "source")) {
+
 		uh = bind_to_af_unix();
-		if (uh != -1) {
-			close(terminal_pipe[0]);
-			close(terminal_pipe[1]);
+		if (uh < 0) break;
 
-			info = create_session_info(get_opt_int_tree(&cmdline_options, "base-session"), u, &len);
-			mem_free(u), u = NULL;
-			if (!info) {
-				retval = RET_FATAL;
-				terminate = 1;
-				return;
-			}
+		close(terminal_pipe[0]);
+		close(terminal_pipe[1]);
 
-			handle_trm(get_input_handle(), get_output_handle(),
-				   uh, uh, get_ctl_handle(), info, len);
-
-			/* OK, this is race condition, but it must be so; GPM
-			 * installs it's own buggy TSTP handler. */
-			handle_basic_signals(NULL);
-			mem_free(info);
-
+		info = create_session_info(get_opt_int_tree(&cmdline_options,
+							    "base-session"),
+					   u, &len);
+		mem_free(u), u = NULL;
+		if (!info) {
+			retval = RET_FATAL;
+			terminate = 1;
 			return;
 		}
+
+		handle_trm(get_input_handle(), get_output_handle(),
+			   uh, uh, get_ctl_handle(), info, len);
+
+		/* OK, this is race condition, but it must be so; GPM
+		 * installs it's own buggy TSTP handler. */
+		handle_basic_signals(NULL);
+		mem_free(info);
+
+		return;
 	}
 
 	load_config();

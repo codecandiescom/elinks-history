@@ -1,5 +1,5 @@
 /* Perl scripting hooks */
-/* $Id: hooks.c,v 1.4 2004/04/16 09:23:40 zas Exp $ */
+/* $Id: hooks.c,v 1.5 2004/04/24 14:36:13 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,10 +30,10 @@ script_hook_goto_url(va_list ap, void *data)
 	unsigned char *new_url = NULL;
 	STRLEN n_a;
 	int err;
-	dSP;
 
 	if (*url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
+	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
@@ -74,11 +74,11 @@ script_hook_follow_url(va_list ap, void *data)
 	unsigned char *new_url = NULL;
 	STRLEN n_a;
 	int err;
-	dSP;
 
 	if (*url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 
+	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
@@ -114,7 +114,6 @@ script_hook_pre_format_html(va_list ap, void *data)
 	struct session *ses;
 	STRLEN n_a;
 	int err;
-	dSP;
 
 	ses = va_arg(ap, struct session *);
 	url = va_arg(ap, unsigned char *);
@@ -122,6 +121,7 @@ script_hook_pre_format_html(va_list ap, void *data)
 	if (*html == NULL || *html_len == 0) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 
+	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);
@@ -156,11 +156,11 @@ script_hook_get_proxy(va_list ap, void *data)
 	unsigned char *new_url = NULL;
 	STRLEN n_a;
 	int err;
-	dSP;
 
 	if (*new_proxy_url == NULL) return EHS_NEXT;
 	if (!my_perl) return EHS_NEXT;
 
+	dSP;
 	ENTER;
 	SAVETMPS;
 	PUSHMARK(SP);

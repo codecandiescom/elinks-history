@@ -1,4 +1,4 @@
-/* $Id: system.h,v 1.1 2003/10/27 02:28:31 pasky Exp $ */
+/* $Id: system.h,v 1.2 2003/10/27 02:29:07 pasky Exp $ */
 
 #ifndef EL__OSDEP_SYSTEM_H
 #define EL__OSDEP_SYSTEM_H
@@ -27,22 +27,6 @@
 # define RISCOS
 #else
 # define UNIX
-#endif
-
-#ifdef __EMX__
-#define strcasecmp stricmp
-#define strncasecmp strnicmp
-#ifndef HAVE_STRCASECMP
-#define HAVE_STRCASECMP
-#endif
-#ifndef HAVE_STRNCASECMP
-#define HAVE_STRNCASECMP
-#endif
-#define read _read
-#define write _write
-#ifdef O_SIZE
-#define USE_OPEN_PREALLOC
-#endif
 #endif
 
 #if defined(UNIX)
@@ -81,6 +65,22 @@ static inline int dir_sep(char x) { return x == '/' || x == '\\'; }
 #define NO_FILE_SECURITY
 #define NO_FORK_ON_EXIT
 #define ASSOC_CONS_XWIN
+
+#ifdef __EMX__
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#ifndef HAVE_STRCASECMP
+#define HAVE_STRCASECMP
+#endif
+#ifndef HAVE_STRNCASECMP
+#define HAVE_STRNCASECMP
+#endif
+#define read _read
+#define write _write
+#ifdef O_SIZE
+#define USE_OPEN_PREALLOC
+#endif
+#endif
 
 #elif defined(WIN32)
 

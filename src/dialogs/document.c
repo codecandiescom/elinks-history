@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.104 2004/10/19 05:34:38 miciah Exp $ */
+/* $Id: document.c,v 1.105 2004/10/19 05:40:04 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -230,7 +230,6 @@ void
 cached_header_dialog(struct session *ses, struct cache_entry *cached)
 {
 	int artificial;
-	unsigned char *headers;
 
 	if (!cached || !cached->head) {
 no_header_info:
@@ -242,9 +241,6 @@ no_header_info:
 		return;
 	}
 
-	headers = mem_alloc(strlen(cached->head) + 1);
-	if (!headers) return;
-
 	/* If |cached->head| starts by a newline, it means that it
 	 * is artificially generated, usually to make ELinks-generated
 	 * documents (ie. file:// directory listings) text/html. */
@@ -254,6 +250,10 @@ no_header_info:
 #else
 	if (*cached->head && !artificial) {
 #endif
+		unsigned char *headers = mem_alloc(strlen(cached->head) + 1);
+
+		if (!headers) return;
+
 		int i = 0, j = 0;
 		/* Sanitize headers string. */
 		/* XXX: Do we need to check length and limit
@@ -295,8 +295,6 @@ no_header_info:
 
 		return;
 	}
-
-	mem_free(headers);
 
 	goto no_header_info;
 }

@@ -821,7 +821,6 @@ struct read_buffer {
 	unsigned char data[1];
 };
 
-void exception(struct connection *);
 void close_socket(int *);
 void make_connection(struct connection *, int, int *, void (*)(struct connection *));
 int get_pasv_socket(struct connection *, int, int *, unsigned char *);

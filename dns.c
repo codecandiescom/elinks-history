@@ -29,75 +29,93 @@ struct dnsquery {
 
 struct list_head dns_cache = {&dns_cache, &dns_cache};
 
-int do_real_lookup(unsigned char *name, ip *host)
+int do_real_lookup(unsigned char *name, ip *host_ip)
 {
-	struct hostent *hst;
-	if (!(hst = gethostbyname(name))) return -1;
-	memcpy(host, hst->h_addr_list[0], sizeof(ip));
+	struct hostent *host;
+	
+	host = gethostbyname(name);
+	if (!host) return -1;
+	
+	memcpy(host_ip, host->h_addr_list[0], sizeof(ip));
+	
 	return 0;
 }
 
-void lookup_fn(unsigned char *name, int h)
+void lookup_fn(void *data, int h)
 {
-	ip host;
-	if (do_real_lookup(name, &host)) return;
-	write(h, &host, sizeof(ip));
+	unsigned char *name = (unsigned char *) data;
+	ip host_ip;
+	
+	if (do_real_lookup(name, &host_ip)) return;
+	
+	write(h, &host_ip, sizeof(ip));
 }
 
-void end_real_lookup(struct dnsquery *q)
+void end_real_lookup(void *data)
 {
-	int r = 1;
-	if (!q->addr || read(q->h, q->addr, sizeof(ip)) != sizeof(ip)) goto end;
-	r = 0;
+	struct dnsquery *query = (struct dnsquery *) data;
+	int res = 0;
+	
+	if (!query->addr || read(query->h, query->addr, sizeof(ip)) != sizeof(ip))
+		res = 1;
 
-	end:
-	set_handlers(q->h, NULL, NULL, NULL, NULL);
-	close(q->h);
-	q->xfn(q, r);
+	set_handlers(query->h, NULL, NULL, NULL, NULL);
+	close(query->h);
+	query->xfn(query, res);
 }
 
-void failed_real_lookup(struct dnsquery *q)
+void failed_real_lookup(void *data)
 {
-	set_handlers(q->h, NULL, NULL, NULL, NULL);
-	close(q->h);
-	q->xfn(q, -1);
+	struct dnsquery *query = (struct dnsquery *) data;
+	
+	set_handlers(query->h, NULL, NULL, NULL, NULL);
+	close(query->h);
+	query->xfn(query, -1);
 }
 
-int do_lookup(struct dnsquery *q, int force_async)
+int do_lookup(struct dnsquery *query, int force_async)
 {
-	/*debug("starting lookup for %s", q->name);*/
+	/* debug("starting lookup for %s", q->name); */
 #ifndef NO_ASYNC_LOOKUP
 	if (!async_lookup && !force_async) {
 #endif
-		int r;
+		int res;
+		
 		sync_lookup:
-		r = do_real_lookup(q->name, q->addr);
-		q->xfn(q, r);
+		res = do_real_lookup(query->name, query->addr);
+		query->xfn(query, res);
+		
 		return 0;
+		
 #ifndef NO_ASYNC_LOOKUP
 	} else {
-		if ((q->h = start_thread((void (*)(void *, int))lookup_fn, q->name, strlen(q->name) + 1)) == -1) goto sync_lookup;
-		set_handlers(q->h, (void (*)(void *))end_real_lookup, NULL, (void (*)(void *))failed_real_lookup, q);
+		query->h = start_thread(lookup_fn, query->name, strlen(query->name) + 1);
+		if (query->h == -1) goto sync_lookup;
+		set_handlers(query->h, end_real_lookup, NULL, failed_real_lookup, query);
+		
 		return 1;
 	}
 #endif
 }
 
-int do_queued_lookup(struct dnsquery *q)
+int do_queued_lookup(struct dnsquery *query)
 {
 #ifndef THREAD_SAFE_LOOKUP
 	q->next_in_queue = NULL;
+	
 	if (!dns_queue) {
-		dns_queue = q;
-		/*debug("direct lookup");*/
+		dns_queue = query;
+		/* debug("direct lookup"); */
 #endif
-		return do_lookup(q, 0);
+		
+		return do_lookup(query, 0);
+		
 #ifndef THREAD_SAFE_LOOKUP
 	} else {
-		/*debug("queuing lookup for %s", q->name);*/
+		/* debug("queuing lookup for %s", q->name); */
 		if (dns_queue->next_in_queue) internal("DNS queue corrupted");
-		dns_queue->next_in_queue = q;
-		dns_queue = q;
+		dns_queue->next_in_queue = query;
+		dns_queue = query;
 		return 1;
 	}
 #endif
@@ -156,35 +174,47 @@ void end_dns_lookup(struct dnsquery *q, int a)
 	fn(data, a);
 }
 
-int find_host_no_cache(unsigned char *name, ip *addr, void **qp, void (*fn)(void *, int), void *data)
+int find_host_no_cache(unsigned char *name, ip *addr, void **query_p,
+		       void (*fn)(void *, int), void *data)
 {
-	struct dnsquery *q;
-	if (!(q = malloc(sizeof(struct dnsquery) + strlen(name) + 1))) {
+	struct dnsquery *query;
+	
+	query = malloc(sizeof(struct dnsquery) + strlen(name) + 1);
+	if (!query) {
 		fn(data, -1);
 		return 0;
 	}
-	q->fn = fn;
-	q->data = data;
-	q->s = (struct dnsquery **)qp;
-	q->addr = addr;
-	strcpy(q->name, name);
-	if (qp) *(struct dnsquery **) qp = q;
-	q->xfn = end_dns_lookup;
-	return do_queued_lookup(q);
+	
+	query->fn = fn;
+	query->data = data;
+	query->s = (struct dnsquery **) query_p;
+	query->addr = addr;
+
+	strcpy(query->name, name);
+	if (query_p) *(struct dnsquery **) query_p = query;
+	query->xfn = end_dns_lookup;
+	
+	return do_queued_lookup(query);
 }
 
-int find_host(unsigned char *name, ip *addr, void **qp, void (*fn)(void *, int), void *data)
+int find_host(unsigned char *name, ip *addr, void **query_p,
+	      void (*fn)(void *, int), void *data)
 {
 	struct dnsentry *dnsentry;
-	if (qp) *qp = NULL;
+	
+	if (query_p) *query_p = NULL;
+	
 	if (!find_in_dns_cache(name, &dnsentry)) {
-		if (dnsentry->get_time + DNS_TIMEOUT < get_time()) goto timeout;
+		if (dnsentry->get_time + DNS_TIMEOUT < get_time())
+			goto timeout;
+		
 		memcpy(addr, &dnsentry->addr, sizeof(ip));
 		fn(data, 0);
 		return 0;
 	}
+	
 	timeout:
-	return find_host_no_cache(name, addr, qp, fn, data);
+	return find_host_no_cache(name, addr, query_p, fn, data);
 }
 
 void kill_dns_request(void **qp)

@@ -45,11 +45,17 @@ int get_prot_info(unsigned char *prot, int *port, void (**func)(struct connectio
 	return -1;
 }
 
-int parse_url(unsigned char *url, int *prlen, unsigned char **user, int *uslen, unsigned char **pass, int *palen, unsigned char **host, int *holen, unsigned char **port, int *polen, unsigned char **data, int *dalen, unsigned char **post)
+int parse_url(unsigned char *url, int *prlen,
+	      unsigned char **user, int *uslen,
+	      unsigned char **pass, int *palen,
+	      unsigned char **host, int *holen,
+	      unsigned char **port, int *polen,
+	      unsigned char **data, int *dalen,
+	      unsigned char **post)
 {
-	unsigned char *p, *q;
-	unsigned char p_c[2];
-	int a;
+	unsigned char *prefix_end, *host_end;
+	int protocol;
+	
 	if (prlen) *prlen = 0;
 	if (user) *user = NULL;
 	if (uslen) *uslen = 0;
@@ -62,54 +68,81 @@ int parse_url(unsigned char *url, int *prlen, unsigned char **user, int *uslen, 
 	if (data) *data = NULL;
 	if (dalen) *dalen = 0;
 	if (post) *post = NULL;
-	if (!url || !(p = strchr(url, ':'))) return -1;
-	if (prlen) *prlen = p - url;
-	if ((a = check_protocol(url, p - url)) == -1) return -1;
-	if (p[1] != '/' || p[2] != '/') {
-		if (protocols[a].need_slashes) return -1;
-		p -= 2;
+	
+	if (!url) return -1;
+	
+	/* Isolate prefix */
+	
+	prefix_end = strchr(url, ':');
+	if (!prefix_end) return -1;
+	
+	if (prlen) *prlen = prefix_end - url;
+
+	/* Get protocol */
+	
+	protocol = check_protocol(url, prefix_end - url);
+	if (protocol == -1) return -1;
+
+	/* Skip slashes */
+	
+	if (prefix_end[1] == '/' && prefix_end[2] == '/') {
+		prefix_end += 3;
+	} else {
+		if (protocols[protocol].need_slashes) return -1;
 	}
-	if (protocols[a].free_syntax) {
-		if (data) *data = p + 3;
-		if (dalen) *dalen = strlen(p + 3);
+	
+	if (protocols[protocol].free_syntax) {
+		if (data) *data = prefix_end;
+		if (dalen) *dalen = strlen(prefix_end);
 		return 0;
 	}
-	p += 3;
-	q = p + strcspn(p, "@/");
-	if (!*q && protocols[a].need_slash_after_host) return -1;
-	if (*q == '@') {
-		unsigned char *pp = strchr(p, ':');
-		if (!pp || pp > q) {
-			if (user) *user = p;
-			if (uslen) *uslen = q - p;
+
+	/* Isolate host */
+	
+	host_end = prefix_end + strcspn(prefix_end, "@");
+	if (*host_end) { /* we have auth info here */
+		unsigned char *user_end = strchr(prefix_end, ':');
+		
+		if (!user_end || user_end > host_end) {
+			if (user) *user = prefix_end;
+			if (uslen) *uslen = host_end - prefix_end;
 		} else {
-			if (user) *user = p;
-			if (uslen) *uslen = pp - p;
-			if (pass) *pass = pp + 1;
-			if (palen) *palen = q - pp - 1;
+			if (user) *user = prefix_end;
+			if (uslen) *uslen = user_end - prefix_end;
+			if (pass) *pass = user_end + 1;
+			if (palen) *palen = host_end - user_end - 1;
 		}
-		p = q + 1;
-	} 
-	q = p + strcspn(p, ":/");
-	if (!*q && protocols[a].need_slash_after_host) return -1;
-	if (host) *host = p;
-	if (holen) *holen = q - p;
-	if (*q == ':') {
-		unsigned char *pp = q + strcspn(q, "/");
-		int cc;
-		if (port) *port = q + 1;
-		if (polen) *polen = pp - q - 1;
-		for (cc = 0; cc < pp - q - 1; cc++) if (q[cc+1] < '0' || q[cc+1] > '9') return -1;
-		q = pp;
+		prefix_end = host_end + 1;
 	}
-	if (*q) q++;
-	p = q;
-	p_c[0] = POST_CHAR;
-	p_c[1] = 0;
-	q = p + strcspn(p, p_c);
-	if (data) *data = p;
-	if (dalen) *dalen = q - p;
-	if (post) *post = *q ? q + 1 : NULL;
+	
+	host_end = prefix_end + strcspn(prefix_end, ":/");
+	if (!*host_end && protocols[protocol].need_slash_after_host) return -1;
+	
+	if (host) *host = prefix_end;
+	if (holen) *holen = host_end - prefix_end;
+	
+	if (*host_end == ':') { /* we have port here */
+		unsigned char *port_end = host_end + strcspn(host_end, "/");
+		int idx;
+		
+		if (port) *port = host_end + 1;
+		if (polen) *polen = port_end - host_end - 1;
+		
+		/* test if port is number */
+		for (idx = 1; idx < port_end - host_end; idx++)
+			if (host_end[idx] < '0' || host_end[idx] > '9')
+				return -1;
+		
+		host_end = port_end;
+	}
+	
+	if (*host_end) host_end++;
+	
+	prefix_end = strchr(host_end, POST_CHAR);
+	if (data) *data = host_end;
+	if (dalen) *dalen = prefix_end ? (prefix_end - host_end) : strlen(host_end);
+	if (post) *post = prefix_end ? (prefix_end + 1) : NULL;
+	
 	return 0;
 }
 

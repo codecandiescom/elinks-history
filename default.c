@@ -662,9 +662,11 @@ unsigned char *gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
 	ip addr;
-	unsigned char *p = (unsigned char *)&addr;
+	unsigned char *addrc = (unsigned char *) &addr;
+	
 	if (!*argc) return "Parameter expected";
-	if (*argc >= 2) return "Too many parameters";
+	if (*argc > 1) return "Too many parameters";
+	
 	(*argv)++; (*argc)--;
 	if (do_real_lookup(*(*argv - 1), &addr)) {
 #ifdef HAVE_HERROR
@@ -674,8 +676,11 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 #endif
 		return "";
 	}
-	printf("%d.%d.%d.%d\n", (int)p[0], (int)p[1], (int)p[2], (int)p[3]);
+	
+	printf("%d.%d.%d.%d\n", (int) addrc[0], (int) addrc[1],
+			        (int) addrc[2], (int) addrc[3]);
 	fflush(stdout);
+	
 	return "";
 }
 

@@ -19,8 +19,10 @@ void log_data(unsigned char *data, int len)
 #define log_data(x, y)
 #endif
 
-void exception(struct connection *c)
+void exception(void *data)
 {
+        struct connection *c = (struct connection *) data;
+	
 	setcstate(c, S_EXCEPT);
 	retry_connection(c);
 }
@@ -33,7 +35,7 @@ void close_socket(int *s)
 	*s = -1;
 }
 
-void connected(struct connection *);
+void connected(/* struct connection */ void *);
 
 struct conn_info {
 	void (*func)(struct connection *);
@@ -43,35 +45,49 @@ struct conn_info {
 	int *sock;
 };
 
-void dns_found(struct connection *, int);
+void dns_found(/* struct connection */ void *, int);
 
-void make_connection(struct connection *c, int port, int *sock, void (*func)(struct connection *))
+void make_connection(struct connection *conn, int port, int *sock,
+		     void (*func)(struct connection *))
 {
-	int as;
 	unsigned char *host;
-	struct conn_info *b;
-	if (!(host = get_host_name(c->url))) {
-		setcstate(c, S_INTERNAL);
-		abort_connection(c);
+	struct conn_info *c_i;
+	int async;
+	
+	host = get_host_name(conn->url);
+	if (!host) {
+		setcstate(conn, S_INTERNAL);
+		abort_connection(conn);
 		return;
 	}
-	if (!(b = mem_alloc(sizeof(struct conn_info)))) {
+	
+	c_i = mem_alloc(sizeof(struct conn_info));
+	if (!c_i) {
 		mem_free(host);
-		setcstate(c, S_OUT_OF_MEM);
-		retry_connection(c);
+		setcstate(conn, S_OUT_OF_MEM);
+		retry_connection(conn);
 		return;
 	}
-	b->func = func;
-	b->sock = sock;
-	b->port = port;
-	c->buffer = b;
+	
+	c_i->func = func;
+	c_i->sock = sock;
+	c_i->port = port;
+	conn->buffer = c_i;
+	
 	log_data("\nCONNECTION: ", 13);
 	log_data(host, strlen(host));
 	log_data("\n", 1);
-	if (c->no_cache >= NC_RELOAD) as = find_host_no_cache(host, &b->addr, &c->dnsquery, (void(*)(void *, int))dns_found, c);
-	else as = find_host(host, &b->addr, &c->dnsquery, (void(*)(void *, int))dns_found, c);
+	
+	if (conn->no_cache >= NC_RELOAD)
+		async = find_host_no_cache(host, &c_i->addr, &conn->dnsquery,
+				           dns_found, conn);
+	else
+		async = find_host(host, &c_i->addr, &conn->dnsquery,
+				  dns_found, conn);
+	
 	mem_free(host);
-	if (as) setcstate(c, S_DNS);
+	
+	if (async) setcstate(conn, S_DNS);
 }
 
 int get_pasv_socket(struct connection *c, int cc, int *sock, unsigned char *port)
@@ -127,63 +143,77 @@ void ssl_want_read(struct connection *c)
 }
 #endif
 
-void dns_found(struct connection *c, int state)
+void dns_found(void *data, int state)
 {
-	int s;
-	struct conn_info *b = c->buffer;
+	int sock;
+	struct connection *conn = (struct connection *) data;
+	struct conn_info *c_i = conn->buffer;
+	
 	if (state) {
-		setcstate(c, S_NO_DNS);
-		retry_connection(c);
+		setcstate(conn, S_NO_DNS);
+		retry_connection(conn);
 		return;
 	}
-	if ((s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == -1) {
-		setcstate(c, -errno);
-		retry_connection(c);
+	
+	sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	if (sock == -1) {
+		setcstate(conn, -errno);
+		retry_connection(conn);
 		return;
 	}
-	*b->sock = s;
-	fcntl(s, F_SETFL, O_NONBLOCK);
-	memset(&b->sa, 0, sizeof(struct sockaddr_in));
-	b->sa.sin_family = PF_INET;
-	b->sa.sin_addr.s_addr = b->addr;
-	b->sa.sin_port = htons(b->port);
-	if (connect(s, (struct sockaddr *)&b->sa, sizeof b->sa)) {
+	
+	*c_i->sock = sock;
+	fcntl(sock, F_SETFL, O_NONBLOCK);
+	
+	memset(&c_i->sa, 0, sizeof(struct sockaddr_in));
+	c_i->sa.sin_family = PF_INET;
+	c_i->sa.sin_addr.s_addr = c_i->addr;
+	c_i->sa.sin_port = htons(c_i->port);
+	
+	if (connect(sock, (struct sockaddr *) &c_i->sa, sizeof(c_i->sa))) {
 		if (errno != EALREADY && errno != EINPROGRESS) {
-			setcstate(c, -errno);
-			retry_connection(c);
+			setcstate(conn, -errno);
+			retry_connection(conn);
 			return;
 		}
-		set_handlers(s, NULL, (void(*)(void *))connected, (void(*)(void *))exception, c);
-		setcstate(c, S_CONN);
+		
+		set_handlers(sock, NULL, connected, exception, conn);
+		setcstate(conn, S_CONN);
+		
 	} else {
 #ifdef HAVE_SSL
-		if(c->ssl) {
-			c->ssl = getSSL();
-			SSL_set_fd(c->ssl,s);
-			if (c->no_tsl) c->ssl->options |= SSL_OP_NO_TLSv1;
-			switch (SSL_get_error(c->ssl, SSL_connect(c->ssl))) {
+		if (conn->ssl) {
+			conn->ssl = getSSL();
+			SSL_set_fd(conn->ssl, sock);
+			if (conn->no_tsl) conn->ssl->options |= SSL_OP_NO_TLSv1;
+			
+			switch (SSL_get_error(conn->ssl, SSL_connect(conn->ssl))) {
 				case SSL_ERROR_WANT_READ:
-					setcstate(c, S_SSL_NEG);
-					set_handlers(s, (void(*)(void *))ssl_want_read, NULL, (void(*)(void *))exception, c);
+					setcstate(conn, S_SSL_NEG);
+					set_handlers(sock, (void (*)(void *)) ssl_want_read,
+						     NULL, exception, conn);
 					return;
+					
 				case SSL_ERROR_NONE:
 					break;
+					
 				default:
-					c->no_tsl++;
-					setcstate(c, S_SSL_ERROR);
-					retry_connection(c);
+					conn->no_tsl++;
+					setcstate(conn, S_SSL_ERROR);
+					retry_connection(conn);
 					return;
 			}
 		}
 #endif
-		c->buffer = NULL;
-		b->func(c);
-		mem_free(b);
+		conn->buffer = NULL;
+		c_i->func(conn);
+		mem_free(c_i);
 	}
 }
 
-void connected(struct connection *c)
+void connected(void *data)
 {
+        struct connection *c = (struct connection *) data;
 	struct conn_info *b = c->buffer;
 	void (*func)(struct connection *) = b->func;
 	int err = 0;

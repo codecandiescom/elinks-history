@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.67 2004/01/21 04:29:42 jonas Exp $ */
+/* $Id: scanner.c,v 1.68 2004/01/21 04:44:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,15 +45,15 @@ enum css_char_group {
 #define	is_css_hexdigit(c)	check_css_table(c, CSS_CHAR_HEX_DIGIT)
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 
-struct css_number_identifier {
+struct css_identifier {
 	unsigned char *name;
 	enum css_token_type type;
 };
 
 static inline enum css_token_type
-get_number_identifier(unsigned char *ident, int length)
+get_css_identifier_type(unsigned char *ident, int length)
 {
-	static struct css_number_identifier number_identifiers[] = {
+	static struct css_identifier identifiers2type[] = {
 		{ "Hz",   CSS_TOKEN_FREQUENCY },
 		{ "cm",	  CSS_TOKEN_LENGTH },
 		{ "deg",  CSS_TOKEN_ANGLE },
@@ -71,15 +71,21 @@ get_number_identifier(unsigned char *ident, int length)
 		{ "rad",  CSS_TOKEN_ANGLE },
 		{ "s",    CSS_TOKEN_TIME },
 
+		{ "charset",	CSS_TOKEN_CHARSET },
+		{ "font-face",	CSS_TOKEN_FONT_FACE },
+		{ "import",	CSS_TOKEN_IMPORT },
+		{ "media",	CSS_TOKEN_MEDIA },
+		{ "page",	CSS_TOKEN_PAGE },
+
 		{ NULL, CSS_TOKEN_NONE },
 	};
 	int i;
 
-	for (i = 0; number_identifiers[i].name; i++) {
-		unsigned char *name = number_identifiers[i].name;
+	for (i = 0; identifiers2type[i].name; i++) {
+		unsigned char *name = identifiers2type[i].name;
 
 		if (!strncasecmp(name, ident, length))
-			return number_identifiers[i].type;
+			return identifiers2type[i].type;
 	}
 
 	return CSS_TOKEN_DIMENSION;
@@ -148,7 +154,7 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 			unsigned char *ident = string;
 
 			scan_css(string, CSS_CHAR_IDENT);
-			type = get_number_identifier(ident, string - ident);
+			type = get_css_identifier_type(ident, string - ident);
 		}
 
 	} else if (first_char == '#') {
@@ -175,9 +181,11 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	} else if (first_char == '@') {
 		/* Compose token containing @<ident> */
 		if (is_css_ident_start(*string)) {
+			unsigned char *ident = string;
+
 			/* Scan both ident start and ident */
 			scan_css(string, CSS_CHAR_IDENT);
-			type = CSS_TOKEN_AT_KEYWORD;
+			type = get_css_identifier_type(ident, string - ident);
 		}
 
 	} else if (first_char == '!') {

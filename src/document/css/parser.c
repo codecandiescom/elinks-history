@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.33 2004/01/21 04:25:34 jonas Exp $ */
+/* $Id: parser.c,v 1.34 2004/01/21 04:44:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,31 +95,34 @@ css_parse_atrule(struct css_stylesheet *css, struct css_scanner *scanner)
 	struct css_token *token = get_css_token(scanner);
 
 	/* Skip skip skip that code */
+	switch (token->type) {
+		case CSS_TOKEN_CHARSET:
+		case CSS_TOKEN_IMPORT:
+			skip_css_tokens(scanner, ';');
+			break;
 
-	if (css_token_contains(token, "@charset")
-	    || css_token_contains(token, "@import")) {
-		skip_css_tokens(scanner, ';');
+		case CSS_TOKEN_FONT_FACE:
+		case CSS_TOKEN_MEDIA:
+		case CSS_TOKEN_PAGE:
+			skip_css_block(scanner);
+			break;
 
-	} else if (css_token_contains(token, "@media")
-		   || css_token_contains(token, "@font")
-		   || css_token_contains(token, "@page")
-		   || css_token_contains(token, "@font-face")) {
-		skip_css_block(scanner);
+		case CSS_TOKEN_AT_KEYWORD:
+			/* TODO: Unkown @-rule so either skip til ';' or next block. */
+			while (css_scanner_has_tokens(scanner)) {
+				token = get_next_css_token(scanner);
 
-	} else {
-		/* TODO: Unkown @-rule so either skip til ';' or next block. */
-		while (css_scanner_has_tokens(scanner)) {
-			token = get_next_css_token(scanner);
+				if (token->type == ';') {
+					skip_css_tokens(scanner, ';');
+					break;
 
-			if (token->type == ';') {
-				skip_css_tokens(scanner, ';');
-				break;
-
-			} else if (token->type == '{') {
-				skip_css_block(scanner);
-				break;
+				} else if (token->type == '{') {
+					skip_css_block(scanner);
+					break;
+				}
 			}
-		}
+		default:
+			INTERNAL("@-rule parser called without atrule.");
 	}
 }
 

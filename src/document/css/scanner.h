@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.41 2004/01/21 04:25:34 jonas Exp $ */
+/* $Id: scanner.h,v 1.42 2004/01/21 04:44:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -55,8 +55,14 @@ enum css_token_type {
 	CSS_TOKEN_FUNCTION,	/* <ident>(<args>) */
 	CSS_TOKEN_RGB,		/* rgb( */
 
-	/* TODO: @-rules; CSS_TOKEN_IMPORT etc. */
+	/* @-rule symbols */
 	CSS_TOKEN_AT_KEYWORD,	/* @<ident> */
+	CSS_TOKEN_CHARSET,	/* @charset */
+	CSS_TOKEN_FONT_FACE,	/* @font-face */
+	CSS_TOKEN_IMPORT,	/* @import */
+	CSS_TOKEN_MEDIA,	/* @media */
+	CSS_TOKEN_PAGE,		/* @page */
+
 	CSS_TOKEN_IMPORTANT,	/* !<whitespace>important */
 
 	/* TODO: Selector stuff like "|=" and "~=" */

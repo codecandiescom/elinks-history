@@ -527,9 +527,25 @@ struct link *get_last_link(struct f_data_c *f)
 	return l;
 }
 
+void fixup_select_state(struct form_control *fc, struct form_state *fs)
+{
+	int i;
+	if (fs->state >= 0 && fs->state < fc->nvalues && !strcmp(fc->values[fs->state], fs->value)) return;
+	for (i = 0; i < fc->nvalues; i++) {
+		if (!strcmp(fc->values[i], fs->value)) {
+			fs->state = i;
+			return;
+		}
+	}
+	fs->state = 0;
+	if (fs->value) mem_free(fs->value);
+	if (fc->nvalues) fs->value = stracpy(fc->values[0]);
+	else fs->value = stracpy("");
+}
+
 void init_ctrl(struct form_control *form, struct form_state *fs)
 {
-	if (fs->value) mem_free(fs->value);
+	if (fs->value) mem_free(fs->value), fs->value = NULL;
 	switch (form->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
@@ -545,8 +561,12 @@ void init_ctrl(struct form_control *form, struct form_state *fs)
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:
-		case FC_SELECT:
 			fs->state = form->default_state;
+			break;
+		case FC_SELECT:
+			fs->value = stracpy(form->default_value);
+			fs->state = form->default_state;
+			fixup_select_state(form, fs);
 			break;
 	}
 }
@@ -645,6 +665,7 @@ void draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 				set_only_char(t, x, y, fs->state ? 'X' : ' ');
 			break;
 		case FC_SELECT:
+			fixup_select_state(form, fs);
 			s = form->labels[fs->state];
 			sl = s ? strlen(s) : 0;
 			for (i = 0; i < l->n; i++) {
@@ -1097,8 +1118,8 @@ void get_succesful_controls(struct f_data_c *f, struct form_control *fc, struct 
 					sub->value = stracpy(form->default_value);
 					break;
 				case FC_SELECT:
-					if (fs->state >= form->nvalues) fs->state = 0;
-					sub->value = stracpy(form->values[fs->state]);
+					fixup_select_state(form, fs);
+					sub->value = stracpy(fs->value);
 					break;
 				case FC_IMAGE:
 					add_to_strn(&sub->name, !fi ? ".x" : ".y");
@@ -1464,7 +1485,15 @@ void selected_item(struct terminal *term, void *pitem, struct session *ses)
 	if (f->vs->current_link == -1) return;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return;
-	if ((fs = find_form_state(f, l->form))) fs->state = item;
+	if ((fs = find_form_state(f, l->form))) {
+		struct form_control *form= l->form;
+		if (item >= 0 && item < form->nvalues) {
+			fs->state = item;
+			if (fs->value) mem_free(fs->value);
+			fs->value = stracpy(form->values[item]);
+		}
+		fixup_select_state(form, fs);
+	}
 	draw_doc(ses->term, f, 1);
 	print_screen_status(ses);
 	redraw_from_window(ses->win);

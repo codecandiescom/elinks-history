@@ -1579,6 +1579,7 @@ int do_html_select(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	fc->name = get_attr_val(attr, "name");
 	fc->type = FC_SELECT;
 	fc->default_state = preselect < 0 ? 0 : preselect;
+	fc->default_value = order ? stracpy(val[fc->default_state]) : stracpy("");
 	fc->ro = has_attr(attr, "disabled") ? 2 : has_attr(attr, "readonly") ? 1 : 0;
 	fc->nvalues = order;
 	fc->values = val;

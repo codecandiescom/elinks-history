@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.51 2005/03/27 00:24:10 rrowan Exp $
+# $Id: hooks.pl,v 1.52 2005/03/27 00:35:10 rrowan Exp $
 #
 # This file is (c) Russ Rowan and GPL'd.
 
@@ -274,13 +274,12 @@ sub goto_url_hook
 				$locator_weather   =~ s/!query!/$thingy/;
 			$locator_whatis        = 'http://uptime.netcraft.com/up/graph/?host=' . $thingy;
 		}
-		$url = $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');
-		$url = $locator_ip          if ($url =~ '^ip(| .*)$');
-		$url = $locator_whois       if ($url =~ '^whois(| .*)$');
-		$url = $locator_rfc         if ($url =~ '^rfc(| .*)$');
-		$url = $locator_weather     if ($url =~ '^(weather|w)(| .*)$');
-		$url = $locator_whatis      if ($url =~ '^(whatis|uptime)(| .*)$');
-		return $url;
+		return $locator_zip         if ($url =~ '^(zip|usps)(| .*)$');
+		return $locator_ip          if ($url =~ '^ip(| .*)$');
+		return $locator_whois       if ($url =~ '^whois(| .*)$');
+		return $locator_rfc         if ($url =~ '^rfc(| .*)$');
+		return $locator_weather     if ($url =~ '^(weather|w)(| .*)$');
+		return $locator_whatis      if ($url =~ '^(whatis|uptime)(| .*)$');
 	}
 
 	# Google Groups (DejaNews)
@@ -375,15 +374,13 @@ sub goto_url_hook
 		$yzzyx = 4   if ($xyzzy == 3); # Zork II: The Wizard of Frobozz
 		$yzzyx = 5   if ($xyzzy == 4); # Zork III: The Dungeon Master
 		$yzzyx = 6   if ($xyzzy == 5); # Zork: The Undiscovered Underground
-		$url = 'http://ifiction.org/games/play.php?game=' . $yzzyx;
-		return $url;
+		return 'http://ifiction.org/games/play.php?game=' . $yzzyx;
 	}
 
 	# ...and now, Deep Thoughts.  by Jack Handey
 	if ($url =~ '^(jack|handey)$')
 	{
-		$url = 'http://glug.com/handey';
-		return $url;
+		return 'http://glug.com/handey';
 	}
 
 	# Page validators [<URL>]
@@ -391,9 +388,8 @@ sub goto_url_hook
 	{
 		my ($page) = $url =~ /^.* (.*)/;
 		$page = $current_url unless $page;
-		$url = 'http://validator.w3.org/check?uri=' . $page if $url =~ 'html';
-		$url = 'http://jigsaw.w3.org/css-validator/validator?uri=' . $page if $url =~ 'css';
-		return $url;
+		return 'http://validator.w3.org/check?uri=' . $page if $url =~ 'html';
+		return 'http://jigsaw.w3.org/css-validator/validator?uri=' . $page if $url =~ 'css';
 	}
 
 	# There's no place like home

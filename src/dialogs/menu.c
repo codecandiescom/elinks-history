@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.105 2003/06/07 21:31:46 jonas Exp $ */
+/* $Id: menu.c,v 1.106 2003/06/07 21:39:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,7 +260,7 @@ history_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", MENU_FUNC go_backwards,
-			    	    (void *) n, 0);
+			    	    (void *) n, 0, 1);
 		}
 		n++;
 	}
@@ -292,7 +292,7 @@ unhistory_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", MENU_FUNC go_unbackwards,
-			    	    (void *) n, 0);
+			    	    (void *) n, 0, 1);
 		}
 		n++;
 	}
@@ -330,7 +330,7 @@ downloads_menu(struct terminal *term, void *ddd, struct session *ses)
 			if (pc) *pc = '\0';
 
 			add_to_menu(&mi, url, "", MENU_FUNC display_download,
-			    	    d, 0);
+			    	    d, 0, 1);
 			n++;
 		}
 	}
@@ -441,8 +441,9 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = o - 1 ? M_SUBMENU : (unsigned char *) "";
 		e->func = MENU_FUNC open_in_new_window;
 		e->data = send_open_new_xterm;
-		e->submenu = !!(o - 1);
 		e->item_free = FREE_NOTHING;
+		e->submenu = !!(o - 1);
+		e->no_intl = 0;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;
 		e++;
@@ -471,8 +472,9 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = "";
 		e->func = MENU_FUNC menu_shell;
 		e->data = NULL;
-		e->submenu = 0;
 		e->item_free = FREE_NOTHING;
+		e->submenu = 0;
+		e->no_intl = 0;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;
 		e++;
@@ -484,8 +486,9 @@ do_file_menu(struct terminal *term, void *xxx, struct session *ses)
 		e->rtext = "";
 		e->func = MENU_FUNC dlg_resize_terminal;
 		e->data = NULL;
-		e->submenu = 0;
 		e->item_free = FREE_NOTHING;
+		e->submenu = 0;
+		e->no_intl = 0;
 		e->hotkey_pos = 0;
 		e->ignore_hotkey = 0;
 		e++;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.95 2003/06/07 20:00:38 pasky Exp $ */
+/* $Id: view.c,v 1.96 2003/06/07 21:39:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3374,7 +3374,7 @@ open_in_new_window(struct terminal *term,
 		return;
 	}
 	for (oi = oin; oi->text; oi++)
-		add_to_menu(&mi, oi->text, "", MENU_FUNC xxx, oi->fn, 0);
+		add_to_menu(&mi, oi->text, "", MENU_FUNC xxx, oi->fn, 0, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses, 1);
 }
@@ -3488,7 +3488,7 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		if (strlen(link->where) >= 4
 		    && !strncasecmp(link->where, "MAP@", 4))
 			add_to_menu(&mi, N_("Display ~usemap"), M_SUBMENU,
-				    MENU_FUNC send_enter, NULL, 1);
+				    MENU_FUNC send_enter, NULL, 1, 0);
 		else {
 			int c = can_open_in_new(term);
 
@@ -3496,22 +3496,22 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 				    MENU_FUNC send_enter, NULL, 0);
 
 			add_to_menu(&mi, N_("Follow link and r~eload"), "",
-				    MENU_FUNC send_enter_reload, NULL, 0);
+				    MENU_FUNC send_enter_reload, NULL, 0, 0);
 
 			if (c)
 				add_to_menu(&mi, N_("Open in new ~window"),
 					     c - 1 ? M_SUBMENU : (unsigned char *) "",
 					     MENU_FUNC open_in_new_window,
-					     send_open_in_new_xterm, c - 1);
+					     send_open_in_new_xterm, c - 1, 0);
 
 			if (!get_opt_int_tree(&cmdline_options, "anonymous")) {
 				add_to_menu(&mi, N_("~Download link"), "d",
-					    MENU_FUNC send_download, NULL, 0);
+					    MENU_FUNC send_download, NULL, 0, 0);
 
 #ifdef BOOKMARKS
 				add_to_menu(&mi, N_("~Add link to bookmarks"), "A",
 					    MENU_FUNC launch_bm_add_link_dialog,
-					    NULL, 0);
+					    NULL, 0, 0);
 #endif
 			}
 
@@ -3522,41 +3522,41 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 		l = 1;
 		if (link->form->type == FC_RESET) {
 			add_to_menu(&mi, N_("~Reset form"), "",
-				    MENU_FUNC send_enter, NULL, 0);
+				    MENU_FUNC send_enter, NULL, 0, 0);
 		} else {
 			int c = can_open_in_new(term);
 
 			add_to_menu(&mi, N_("~Submit form"), "",
-				    MENU_FUNC submit_form, NULL, 0);
+				    MENU_FUNC submit_form, NULL, 0, 0);
 
 			add_to_menu(&mi, N_("Submit form and rel~oad"), "",
-				    MENU_FUNC submit_form_reload, NULL, 0);
+				    MENU_FUNC submit_form_reload, NULL, 0, 0);
 
 			if (c && link->form->method == FM_GET)
 				add_to_menu(&mi, N_("Submit form and open in new ~window"),
 					    c - 1 ? M_SUBMENU : (unsigned char *) "",
 					    MENU_FUNC open_in_new_window,
-					    send_open_in_new_xterm, c - 1);
+					    send_open_in_new_xterm, c - 1, 0);
 
 			if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 				add_to_menu(&mi, N_("Submit form and ~download"), "d",
-					    MENU_FUNC send_download, NULL, 0);
+					    MENU_FUNC send_download, NULL, 0, 0);
 		}
 	}
 
 	if (link->where_img) {
 		l = 1;
 		add_to_menu(&mi, N_("V~iew image"), "",
-			    MENU_FUNC send_image, NULL, 0);
+			    MENU_FUNC send_image, NULL, 0, 0);
 		if (!get_opt_int_tree(&cmdline_options, "anonymous"))
 			add_to_menu(&mi, N_("Download ima~ge"), "",
-				    MENU_FUNC send_download_image, NULL, 0);
+				    MENU_FUNC send_download_image, NULL, 0, 0);
 	}
 
 end:
 	if (!l) {
 		add_to_menu(&mi, N_("No link selected"), M_BAR,
-			    NULL, NULL, 0);
+			    NULL, NULL, 0, 0);
 	}
 	do_menu(term, mi, ses, 1);
 }

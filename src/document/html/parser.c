@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.100 2003/06/07 20:05:18 pasky Exp $ */
+/* $Id: parser.c,v 1.101 2003/06/07 21:39:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1774,6 +1774,7 @@ new_menu_item(unsigned char *name, int data, int fullname)
 			item->submenu = 0;
 		}
 		item->item_free = FREE_NOTHING | (fullname << 8); /* XXX: DIRTY! */
+		item->no_intl = 1;
 		item++;
 		memset(item, 0, sizeof(struct menu_item));
 		/*item->text = "";*/
@@ -3112,6 +3113,7 @@ look_for_tag:
 		nm[nmenu].rtext = "";
 		nm[nmenu].func = MENU_FUNC map_selected;
 		nm[nmenu].data = ld;
+		nm[nmenu].no_intl = 1;
 		nm[++nmenu].text = NULL;
 	}
 

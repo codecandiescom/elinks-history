@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.87 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: document.c,v 1.88 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,7 @@ void
 done_document(struct document *document)
 {
 	struct cache_entry *cached;
-	struct form_control *fc;
+	struct form *form;
 	int pos;
 
 	assert(document);
@@ -145,8 +145,8 @@ done_document(struct document *document)
 	mem_free_if(document->lines2);
 	mem_free_if(document->options.framename);
 
-	foreach (fc, document->forms) {
-		done_form_control(fc);
+	foreach (form, document->forms) {
+		done_form(form);
 	}
 
 #ifdef CONFIG_CSS

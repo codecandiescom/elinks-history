@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.510 2004/11/22 13:27:41 zas Exp $ */
+/* $Id: parser.c,v 1.511 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,7 +20,6 @@
 #include "document/css/css.h"
 #include "document/css/stylesheet.h"
 #include "document/html/frames.h"
-#include "document/html/parser/forms.h"
 #include "document/html/parser/link.h"
 #include "document/html/parser/stack.h"
 #include "document/html/parser/parse.h"
@@ -1528,9 +1527,6 @@ init_html_parser(struct uri *uri, struct document_options *options,
 
 	html_context.has_link_lines = 0;
 	html_context.table_level = 0;
-	html_context.last_form_tag = NULL;
-	html_context.last_form_attr = NULL;
-	html_context.last_input_tag = NULL;
 
 #ifdef CONFIG_CSS
 	mirror_css_stylesheet(&html_context.css_styles, &default_stylesheet);
@@ -1544,8 +1540,6 @@ done_html_parser(void)
 	if (global_doc_opts->css_enable)
 		done_css_stylesheet(&html_context.css_styles);
 #endif
-
-	done_form();
 
 	mem_free(html_context.base_target);
 	done_uri(html_context.base_href);

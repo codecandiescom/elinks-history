@@ -1,4 +1,4 @@
-/* $Id: internal.h,v 1.38 2004/09/21 17:34:02 jonas Exp $ */
+/* $Id: internal.h,v 1.39 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_INTERNAL_H
 #define EL__DOCUMENT_HTML_INTERNAL_H
@@ -66,9 +66,6 @@ struct html_context {
 
 	/* For parser/forms.c: */
 	unsigned char *startf;
-	unsigned char *last_form_tag;
-	unsigned char *last_form_attr;
-	unsigned char *last_input_tag;
 
 	/* For:
 	 * html/parser/parse.c

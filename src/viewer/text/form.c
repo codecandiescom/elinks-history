@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.258 2004/12/18 00:45:29 pasky Exp $ */
+/* $Id: form.c,v 1.259 2004/12/18 01:42:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -214,7 +214,7 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 	}
 	fs = &vs->form_info[n];
 
-	if (fs->form_num == fc->form_num
+	if (fs->form == fc->form
 	    && fs->g_ctrl_num == fc->g_ctrl_num
 	    && fs->position == fc->position
 	    && fs->type == fc->type)
@@ -222,7 +222,7 @@ find_form_state(struct document_view *doc_view, struct form_control *fc)
 
 	mem_free_if(fs->value);
 	memset(fs, 0, sizeof(struct form_state));
-	fs->form_num = fc->form_num;
+	fs->form = fc->form;
 	fs->g_ctrl_num = fc->g_ctrl_num;
 	fs->position = fc->position;
 	fs->type = fc->type;
@@ -368,7 +368,8 @@ draw_forms(struct terminal *term, struct document_view *doc_view)
 		if (fc->type == FC_TEXT || fc->type == FC_PASSWORD) {
 			unsigned char *value;
 
-			value = get_form_history_value(fc->action, fc->name);
+			assert(fc->form);
+			value = get_form_history_value(fc->form->action, fc->name);
 
 			if (value)
 				mem_free_set(&fc->default_value,
@@ -495,12 +496,11 @@ get_successful_controls(struct document_view *doc_view,
 {
 	struct form_control *fc2;
 
-	assert(doc_view && doc_view->document && fc && list);
+	assert(doc_view && fc && fc->form && list);
 	if_assert_failed return;
 
-	foreach (fc2, doc_view->document->forms) {
-		if (fc2->form_num == fc->form_num
-		    && ((fc2->type != FC_SUBMIT &&
+	foreach (fc2, fc->form->items) {
+		if (((fc2->type != FC_SUBMIT &&
 			 fc2->type != FC_IMAGE &&
 			 fc2->type != FC_RESET &&
 			 fc2->type != FC_BUTTON) || fc2 == fc)
@@ -870,19 +870,18 @@ encode_text_plain(struct list_head *l, struct string *data,
 }
 
 void
-do_reset_form(struct document_view *doc_view, int form_num)
+do_reset_form(struct document_view *doc_view, struct form *form)
 {
 	struct form_control *fc;
 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return;
 
-	foreach (fc, doc_view->document->forms)
-		if (fc->form_num == form_num) {
-			struct form_state *fs = find_form_state(doc_view, fc);
+	foreach (fc, form->items) {
+		struct form_state *fs = find_form_state(doc_view, fc);
 
-			if (fs) init_form_state(fc, fs);
-		}
+		if (fs) init_form_state(fc, fs);
+	}
 }
 
 enum frame_event_status
@@ -892,7 +891,7 @@ reset_form(struct session *ses, struct document_view *doc_view, int a)
 
 	if (!link) return FRAME_EVENT_OK;
 
-	do_reset_form(doc_view, get_link_form_control(link)->form_num);
+	do_reset_form(doc_view, get_link_form_control(link)->form);
 	draw_forms(ses->tab->term, doc_view);
 
 	/* Could be the refresh return value and then ditch the draw_forms()
@@ -910,20 +909,23 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	struct string go;
 	int cp_from, cp_to;
 	struct uri *uri;
+	struct form *form;
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
-	assert(doc_view && doc_view->document && fc);
+	assert(doc_view && doc_view->document && fc && fc->form);
 	if_assert_failed return NULL;
 
+	form = fc->form;
+
 	if (fc->type == FC_RESET) {
-		do_reset_form(doc_view, fc->form_num);
+		do_reset_form(doc_view, form);
 		return NULL;
 	} else if (fc->type == FC_BUTTON) {
 		return NULL;
 	}
 
-	if (!fc->action
+	if (!form->action
 	    || !init_string(&data))
 		return NULL;
 
@@ -931,7 +933,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 
 	cp_from = get_opt_codepage_tree(ses->tab->term->spec, "charset");
 	cp_to = doc_view->document->cp;
-	switch (fc->method) {
+	switch (form->method) {
 	case FORM_METHOD_GET:
 	case FORM_METHOD_POST:
 		encode_controls(&submit, &data, cp_from, cp_to);
@@ -952,7 +954,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 	 * these two classes of errors (is it worth it?). -- Miciah */
 	if (data.source
 	    && get_opt_bool("document.browse.forms.show_formhist"))
-		memorize_form(ses, &submit, fc);
+		memorize_form(ses, &submit, form);
 #endif
 
 	done_submitted_value_list(&submit);
@@ -963,15 +965,15 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		return NULL;
 	}
 
-	switch (fc->method) {
+	switch (form->method) {
 	case FORM_METHOD_GET:
 	{
-		unsigned char *pos = strchr(fc->action, '#');
+		unsigned char *pos = strchr(form->action, '#');
 
 		if (pos) {
-			add_bytes_to_string(&go, fc->action, pos - fc->action);
+			add_bytes_to_string(&go, form->action, pos - form->action);
 		} else {
-			add_to_string(&go, fc->action);
+			add_to_string(&go, form->action);
 		}
 
 		if (strchr(go.source, '?'))
@@ -992,12 +994,12 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		 * replaced later by correct '\r\n' in http_send_header(). */
 		int i;
 
-		add_to_string(&go, fc->action);
+		add_to_string(&go, form->action);
 		add_char_to_string(&go, POST_CHAR);
-		if (fc->method == FORM_METHOD_POST) {
+		if (form->method == FORM_METHOD_POST) {
 			add_to_string(&go, "application/x-www-form-urlencoded\n");
 
-		} else if (fc->method == FORM_METHOD_POST_TEXT_PLAIN) {
+		} else if (form->method == FORM_METHOD_POST_TEXT_PLAIN) {
 			/* Dunno about this one but we don't want the full
 			 * hextcat thingy. --jonas */
 			add_to_string(&go, "text/plain\n");
@@ -1042,12 +1044,15 @@ void
 auto_submit_form(struct session *ses)
 {
 	struct document *document = ses->doc_view->document;
-	struct form_control *form = document->forms.next;
+	struct form *form = document->forms.next;
 	int link;
 
-	for (link = 0; link < document->nlinks; link++)
-		if (get_link_form_control(&document->links[link]) == form)
+	for (link = 0; link < document->nlinks; link++) {
+		struct form_control *fc = get_link_form_control(&document->links[link]);
+
+		if (fc && fc->form == form)
 			break;
+	}
 
 	if (link >= document->nlinks) return;
 
@@ -1223,7 +1228,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			/* Set status to ok if either it is not possible to
 			 * submit the form or the posting fails. */
 			/* FIXME: We should maybe have ACT_EDIT_ENTER_RELOAD */
-			if ((has_form_submit(doc_view->document, fc)
+			if ((has_form_submit(fc->form)
 			      && !get_opt_bool("document.browse.forms.auto_submit"))
 			    || goto_current_link(ses, doc_view, 0)) {
 				if (ses->insert_mode == INSERT_MODE_ON)
@@ -1358,6 +1363,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 unsigned char *
 get_form_label(struct form_control *fc)
 {
+	assert(fc->form);
 	switch (fc->type) {
 	case FC_RESET:
 		return N_("Reset form");
@@ -1367,9 +1373,9 @@ get_form_label(struct form_control *fc)
 		return NULL;
 	case FC_SUBMIT:
 	case FC_IMAGE:
-		if (!fc->action) return NULL;
+		if (!fc->form->action) return NULL;
 
-		if (fc->method == FORM_METHOD_GET)
+		if (fc->form->method == FORM_METHOD_GET)
 			return N_("Submit form to");
 		return N_("Post form to");
 	case FC_RADIO:
@@ -1466,15 +1472,17 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		if (fc->type == FC_TEXTAREA)
 			break;
 
-		if (!fc->action
-		    || (has_form_submit(doc_view->document, fc)
+		assert(fc->form);
+
+		if (!fc->form->action
+		    || (has_form_submit(fc->form)
 		        && !get_opt_bool("document.browse.forms.auto_submit")))
 			break;
 
 		key = get_keystroke(ACT_EDIT_ENTER, KEYMAP_EDIT);
 		if (!key) break;
 
-		if (fc->method == FORM_METHOD_GET)
+		if (fc->form->method == FORM_METHOD_GET)
 			label = N_("press %s to submit to");
 		else
 			label = N_("press %s to post to");
@@ -1485,7 +1493,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 		mem_free(key);
 
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
+		add_string_uri_to_string(&str, fc->form->action, URI_PUBLIC);
 		add_char_to_string(&str, ')');
 		break;
 
@@ -1493,8 +1501,9 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_IMAGE:
 		add_char_to_string(&str, ' ');
 
+		assert(fc->form);
 		/* Add the uri with password and post info stripped */
-		add_string_uri_to_string(&str, fc->action, URI_PUBLIC);
+		add_string_uri_to_string(&str, fc->form->action, URI_PUBLIC);
 		break;
 
 	case FC_HIDDEN:

@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.59 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: forms.c,v 1.60 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,35 +35,17 @@
 #include "document/html/internal.h"
 
 
-struct form {
-	unsigned char *action;
-	unsigned char *name;
-	unsigned char *target;
-	enum form_method method;
-};
-
-static struct form form;
-
-
-void
-done_form(void)
-{
-	mem_free_if(form.action);
-	mem_free_if(form.name);
-	mem_free_if(form.target);
-	memset(&form, 0, sizeof(form));
-}
 
 void
 html_form(unsigned char *a)
 {
-	html_context.was_br = 1;
-}
-
-static void
-get_html_form(unsigned char *a, struct form *form)
-{
 	unsigned char *al;
+	struct form *form;
+
+	html_context.was_br = 1;
+
+	form = init_form();
+	if (!form) return;
 
 	form->method = FORM_METHOD_GET;
 
@@ -111,79 +93,10 @@ get_html_form(unsigned char *a, struct form *form)
 
 	al = get_target(a);
 	form->target = al ? al : stracpy(html_context.base_target);
+
+	html_context.special_f(html_context.part, SP_FORM, form);
 }
 
-/* This function will look for the last <form> tag preceding @stop_pos and
- * save its details to @form. */
-static void
-find_form_for_input(unsigned char *stop_pos)
-{
-	unsigned char *pos, *tag_start_pos, *name, *attr;
-	unsigned char *last_form_start = NULL;
-	unsigned char *last_form_attr = NULL;
-	int namelen;
-
-	done_form();
-
-	if (!html_context.special_f(html_context.part, SP_USED, NULL))
-		return;
-
-	if (html_context.last_input_tag
-	    && stop_pos <= html_context.last_input_tag
-	    && stop_pos > html_context.last_form_tag) {
-		get_html_form(html_context.last_form_attr, &form);
-		return;
-	}
-	if (html_context.last_input_tag
-	    && stop_pos > html_context.last_input_tag)
-		pos = html_context.last_form_tag;
-	else
-		pos = html_context.startf;
-
-	while (pos < stop_pos) {
-		while (pos < stop_pos && *pos != '<') {
-			pos++;
-		}
-		if (pos >= stop_pos)
-			break;
-
-		/* Start of a tag. */
-
-		if (pos + 2 < stop_pos && (pos[1] == '!' || pos[1] == '?')) {
-			/* Suspicious. */
-			pos = skip_comment(pos, stop_pos);
-			continue;
-		}
-
-		tag_start_pos = pos;
-
-		if (parse_element(tag_start_pos, stop_pos, &name, &namelen, &attr, &pos)) {
-			/* Not really a tag. */
-			pos++; /* Kill the opening bracket. */
-			continue;
-		}
-		if (strlcasecmp(name, namelen, "FORM", 4)) {
-			/* A different tag. */
-			continue;
-		}
-
-		/* A <form> tag. */
-		last_form_start = tag_start_pos;
-		last_form_attr = attr;
-	}
-
-	/* We hit start of the current tag. So take
-	 * the last <form> encountered, if any, and
-	 * be done with it. */
-	if (last_form_start && last_form_attr) {
-		html_context.last_form_tag = last_form_start;
-		html_context.last_form_attr = last_form_attr;
-		html_context.last_input_tag = stop_pos;
-		get_html_form(last_form_attr, &form);
-	} else {
-		memset(&form, 0, sizeof(struct form));
-	}
-}
 
 int
 get_form_mode(unsigned char *attr)
@@ -202,12 +115,7 @@ init_form_control(enum form_type type, unsigned char *attr)
 	if (!fc) return NULL;
 
 	fc->type = type;
-	fc->form_num = html_context.last_form_tag - html_context.startf;
-	fc->ctrl_num = attr - html_context.last_form_tag;
 	fc->position = attr - html_context.startf;
-	fc->method = form.method;
-	fc->action = null_or_stracpy(form.action);
-	fc->formname = null_or_stracpy(form.name);
 	fc->mode = get_form_mode(attr);
 
 	return fc;
@@ -220,7 +128,6 @@ html_button(unsigned char *a)
 	struct form_control *fc;
 	enum form_type type = FC_SUBMIT;
 
-	find_form_for_input(a);
 	html_focusable(a);
 
 	al = get_attr_val(a, "type");
@@ -263,8 +170,6 @@ html_input(unsigned char *a)
 	struct form_control *fc;
 	enum form_type type = FC_TEXT;
 
-	find_form_for_input(a);
-
 	al = get_attr_val(a, "type");
 	if (!al) goto no_type_attr;
 
@@ -285,7 +190,6 @@ no_type_attr:
 	fc = init_form_control(type, a);
 	if (!fc) return;
 
-	fc->target = null_or_stracpy(form.target);
 	fc->name = get_attr_val(a, "name");
 	if (fc->type != FC_FILE) fc->default_value = get_attr_val(a, "value");
 	if (!fc->default_value && fc->type == FC_CHECKBOX) fc->default_value = stracpy("on");
@@ -395,7 +299,6 @@ html_option(unsigned char *a)
 	struct form_control *fc;
 	unsigned char *val;
 
-	find_form_for_input(a);
 	if (!format.select) return;
 
 	val = get_attr_val(a, "value");
@@ -483,7 +386,6 @@ do_html_select(unsigned char *attr, unsigned char *html,
 	int i, max_width;
 
 	if (has_attr(attr, "multiple")) return 1;
-	find_form_for_input(attr);
 	html_focusable(attr);
 	init_menu(&lnk_menu);
 
@@ -645,7 +547,6 @@ do_html_textarea(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	int cols, rows;
 	int i;
 
-	find_form_for_input(attr);
 	html_focusable(attr);
 	while (html < eof && (*html == '\n' || *html == '\r')) html++;
 	p = html;

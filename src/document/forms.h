@@ -1,4 +1,4 @@
-/* $Id: forms.h,v 1.1 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: forms.h,v 1.2 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_FORMS_H
 #define EL__DOCUMENT_FORMS_H
@@ -8,12 +8,27 @@
 struct document;
 struct menu_item;
 
+
+
 enum form_method {
 	FORM_METHOD_GET,
 	FORM_METHOD_POST,
 	FORM_METHOD_POST_MP,
 	FORM_METHOD_POST_TEXT_PLAIN,
 };
+
+struct form {
+	LIST_HEAD(struct form);
+
+	unsigned char *action;
+	unsigned char *name;
+	unsigned char *target;
+	enum form_method method;
+
+	struct list_head items; /* -> struct form_control */
+};
+
+
 
 enum form_type {
 	FC_TEXT,
@@ -47,17 +62,12 @@ enum form_wrap {
 struct form_control {
 	LIST_HEAD(struct form_control);
 
-	int form_num;
-	int ctrl_num;
+	struct form *form;
 	int g_ctrl_num;
 	int position;
 	enum form_type type;
 	enum form_mode mode;
 
-	enum form_method method;
-	unsigned char *formname;
-	unsigned char *action;
-	unsigned char *target;
 	unsigned char *name;
 	unsigned char *alt;
 	unsigned char *default_value;
@@ -72,7 +82,9 @@ struct form_control {
 	struct menu_item *menu;
 };
 
-int has_form_submit(struct document *document, struct form_control *fc);
+struct form *init_form(void);
+void done_form(struct form *form);
+int has_form_submit(struct form *form);
 
 void done_form_control(struct form_control *fc);
 

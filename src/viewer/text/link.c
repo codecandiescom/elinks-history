@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.303 2004/12/18 00:27:54 pasky Exp $ */
+/* $Id: link.c,v 1.304 2004/12/18 01:42:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -920,16 +920,22 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 			fs->state = !fs->state;
 
 		} else {
-			struct form_control *fc;
+			struct form *form;
 
-			foreach (fc, doc_view->document->forms) {
-				if (fc->form_num == link_fc->form_num
-				    && fc->type == FC_RADIO
-				    && !xstrcmp(fc->name, link_fc->name)) {
-					struct form_state *frm_st;
+			foreach (form, doc_view->document->forms) {
+				struct form_control *fc;
 
-					frm_st = find_form_state(doc_view, fc);
-					if (frm_st) frm_st->state = 0;
+				if (form != link_fc->form)
+					continue;
+
+				foreach (fc, form->items) {
+					if (fc->type == FC_RADIO
+				            && !xstrcmp(fc->name, link_fc->name)) {
+						struct form_state *frm_st;
+
+						frm_st = find_form_state(doc_view, fc);
+						if (frm_st) frm_st->state = 0;
+					}
 				}
 			}
 			fs->state = 1;
@@ -1170,7 +1176,8 @@ link_menu(struct terminal *term, void *xxx, void *ses_)
 			add_menu_action(&mi, N_("~Submit form"), ACT_MAIN_SUBMIT_FORM);
 			add_menu_action(&mi, N_("Submit form and rel~oad"), ACT_MAIN_SUBMIT_FORM_RELOAD);
 
-			if (fc->method == FORM_METHOD_GET) {
+			assert(fc->form);
+			if (fc->form->method == FORM_METHOD_GET) {
 				add_new_win_to_menu(&mi, N_("Submit form and open in new ~window"), term);
 
 				add_menu_action(&mi, N_("Submit form and open in new ~tab"),

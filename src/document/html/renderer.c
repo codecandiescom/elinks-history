@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.507 2004/12/17 03:21:17 miciah Exp $ */
+/* $Id: renderer.c,v 1.508 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -875,9 +875,9 @@ new_link(struct document *document, int link_number,
 		}
 
 	} else {
-		struct form_control *form = format.form;
+		struct form_control *fc = format.form;
 
-		switch (form->type) {
+		switch (fc->type) {
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
@@ -900,8 +900,9 @@ new_link(struct document *document, int link_number,
 		case FC_HIDDEN:
 			link->type = LINK_BUTTON;
 		}
-		link->data.form_control = form;
-		link->target = null_or_stracpy(form->target);
+		link->data.form_control = fc;
+		assert(fc->form);
+		link->target = null_or_stracpy(fc->form->target);
 	}
 
 	link->color.background = format.bg;
@@ -1316,8 +1317,25 @@ end:
 }
 
 static void
+html_form(struct part *part, struct form *form)
+{
+	assert(part && form);
+	if_assert_failed return;
+
+	if (!part->document) {
+		done_form(form);
+		mem_free(form);
+		return;
+	}
+
+	add_to_list(part->document->forms, form);
+}
+
+static void
 html_form_control(struct part *part, struct form_control *fc)
 {
+	struct form *form;
+
 	assert(part && fc);
 	if_assert_failed return;
 
@@ -1340,7 +1358,15 @@ html_form_control(struct part *part, struct form_control *fc)
 		if (dv) mem_free_set(&fc->default_value, dv);
 	}
 
-	add_to_list(part->document->forms, fc);
+	if (list_empty(part->document->forms)) {
+		/* No forms encountered yet, that means a homeless form
+		 * control. Generate a dummy form for those Flying
+		 * Dutchmans. */
+		add_to_list(part->document->forms, init_form());
+	}
+	/* Attach this form control to the last form encountered. */
+	form = part->document->forms.next;
+	add_to_list(form->items, fc);
 }
 
 static inline void
@@ -1376,6 +1402,7 @@ html_special(struct part *part, enum html_special_type c, ...)
 	unsigned char *t;
 	struct document *document = part->document;
 	unsigned long seconds;
+	struct form *form;
 	struct form_control *fc;
 
 	assert(part);
@@ -1387,6 +1414,11 @@ html_special(struct part *part, enum html_special_type c, ...)
 			t = va_arg(l, unsigned char *);
 			if (document)
 				html_tag(document, t, X(part->cx), Y(part->cy));
+			va_end(l);
+			break;
+		case SP_FORM:
+			form = va_arg(l, struct form *);
+			html_form(part, form);
 			va_end(l);
 			break;
 		case SP_CONTROL:

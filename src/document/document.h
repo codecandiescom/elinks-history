@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.81 2004/12/17 23:20:00 pasky Exp $ */
+/* $Id: document.h,v 1.82 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -130,7 +130,7 @@ struct document {
 
 	struct document_options options;
 
-	struct list_head forms; /* -> struct form_control */
+	struct list_head forms; /* -> struct form */
 	struct list_head tags; /* -> struct tag */
 	struct list_head nodes; /* -> struct node */
 

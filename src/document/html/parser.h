@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.73 2004/11/19 17:46:05 zas Exp $ */
+/* $Id: parser.h,v 1.74 2004/12/18 01:42:18 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -142,6 +142,7 @@ struct html_element {
 
 enum html_special_type {
 	SP_TAG,
+	SP_FORM,
 	SP_CONTROL,
 	SP_TABLE,
 	SP_USED,

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.110 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.111 2004/12/18 01:42:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -553,21 +553,21 @@ static const JSFunctionSpec form_funcs[] = {
 static JSBool
 form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form *form = JS_GetPrivate(ctx, obj);
 	VALUE_TO_JSVAL_START;
 
-	assert(fc);
+	assert(form);
 
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ACTION:
-		P_STRING(fc->action);
+		P_STRING(form->action);
 		break;
 
 	case JSP_FORM_ENCODING:
-		switch (fc->method) {
+		switch (form->method) {
 		case FORM_METHOD_GET:
 		case FORM_METHOD_POST:
 			P_STRING("application/x-www-form-urlencoded");
@@ -582,7 +582,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 
 	case JSP_FORM_METHOD:
-		switch (fc->method) {
+		switch (form->method) {
 		case FORM_METHOD_GET:
 			P_STRING("GET");
 			goto end;
@@ -596,11 +596,11 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 
 	case JSP_FORM_NAME:
-		P_STRING(fc->name);
+		P_STRING(form->name);
 		break;
 
 	case JSP_FORM_TARGET:
-		P_STRING(fc->target);
+		P_STRING(form->target);
 		break;
 
 	default:
@@ -615,10 +615,10 @@ end:
 static JSBool
 form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form *form = JS_GetPrivate(ctx, obj);
 	JSVAL_TO_VALUE_START;
 
-	assert(fc);
+	assert(form);
 
 	if (!JSVAL_IS_INT(id))
 		goto bye;
@@ -626,38 +626,38 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ACTION:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->action, stracpy(v.string));
+		mem_free_set(form->action, stracpy(v.string));
 		break;
 
 	case JSP_FORM_ENCODING:
 		JSVAL_REQUIRE(vp, STRING);
 		if (!strcasecmp(v.string, "application/x-www-form-urlencoded")) {
-			fc->method = fc->method == FORM_METHOD_GET ? FORM_METHOD_GET
-			                                           : FORM_METHOD_POST;
+			form->method = form->method == FORM_METHOD_GET ? FORM_METHOD_GET
+			                                               : FORM_METHOD_POST;
 		} else if (!strcasecmp(v.string, "multipart/form-data")) {
-			fc->method = FORM_METHOD_POST_MP;
+			form->method = FORM_METHOD_POST_MP;
 		} else if (!strcasecmp(v.string, "text/plain")) {
-			fc->method = FORM_METHOD_POST_TEXT_PLAIN;
+			form->method = FORM_METHOD_POST_TEXT_PLAIN;
 		}
 		break;
 
 	case JSP_FORM_METHOD:
 		JSVAL_REQUIRE(vp, STRING);
 		if (!strcasecmp(v.string, "GET")) {
-			fc->method = FORM_METHOD_GET;
+			form->method = FORM_METHOD_GET;
 		} else if (!strcasecmp(v.string, "POST")) {
-			fc->method = FORM_METHOD_POST;
+			form->method = FORM_METHOD_POST;
 		}
 		break;
 
 	case JSP_FORM_NAME:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->name, stracpy(v.string));
+		mem_free_set(form->name, stracpy(v.string));
 		break;
 
 	case JSP_FORM_TARGET:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->target, stracpy(v.string));
+		mem_free_set(form->target, stracpy(v.string));
 		break;
 
 	default:
@@ -673,15 +673,15 @@ form_reset(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 {
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
 	struct document_view *doc_view = vs->doc_view;
+	struct form *form = JS_GetPrivate(ctx, obj);
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
 
-	assert(fc);
+	assert(form);
 
-	do_reset_form(doc_view, fc->form_num);
+	do_reset_form(doc_view, form);
 	draw_forms(doc_view->session->tab->term, doc_view);
 
 	VALUE_TO_JSVAL_END(rval);
@@ -694,15 +694,17 @@ form_submit(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-	struct form_control *fc = JS_GetPrivate(ctx, obj);
+	struct form *form = JS_GetPrivate(ctx, obj);
 	int link;
 	VALUE_TO_JSVAL_START;
 
 	P_BOOLEAN(0);
 
-	assert(fc);
+	assert(form);
 	for (link = 0; link < document->nlinks; link++) {
-		if (get_link_form_control(&document->links[link]) == fc) {
+		struct form_control *fc = get_link_form_control(&document->links[link]);
+
+		if (fc && fc->form == form) {
 			doc_view->vs->current_link = link;
 			submit_form(doc_view->session, doc_view, 0);
 
@@ -741,13 +743,13 @@ static const JSPropertySpec forms_props[] = {
 };
 
 static JSObject *
-get_form_object(JSContext *ctx, JSObject *parent, struct form_control *fc)
+get_form_object(JSContext *ctx, JSObject *parent, struct form *form)
 {
-	JSObject *form = JS_NewObject(ctx, (JSClass *) &form_class, NULL, parent);
+	JSObject *jsform = JS_NewObject(ctx, (JSClass *) &form_class, NULL, parent);
 
-	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_funcs);
-	JS_SetPrivate(ctx, form, fc);
-	return form;
+	JS_DefineFunctions(ctx, jsform, (JSFunctionSpec *)&form_funcs);
+	JS_SetPrivate(ctx, jsform, form);
+	return jsform;
 }
 
 static JSBool
@@ -766,10 +768,10 @@ forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORMS_LENGTH:
 	{
-		struct form_control *fc;
+		struct form *form;
 		int counter = 0;
 
-		foreach (fc, document->forms)
+		foreach (form, document->forms)
 			counter++;
 
 		P_INT(counter);
@@ -790,7 +792,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-	struct form_control *fc;
+	struct form *form;
 	union jsval_union v;
 	int counter = 0;
 	int index;
@@ -802,10 +804,10 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	JSVAL_REQUIRE(&argv[0], NUMBER);
 	index = DOUBLE_TO_JSVAL(v.number);
 
-	foreach (fc, document->forms) {
+	foreach (form, document->forms) {
 		counter++;
 		if (counter == index) {
-			P_OBJECT(get_form_object(ctx, obj, fc));
+			P_OBJECT(get_form_object(ctx, obj, form));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -822,7 +824,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	struct view_state *vs = JS_GetPrivate(ctx, parent);
 	struct document_view *doc_view = vs->doc_view;
 	struct document *document = doc_view->document;
-	struct form_control *fc;
+	struct form *form;
 	union jsval_union v;
 	VALUE_TO_JSVAL_START;
 
@@ -833,9 +835,9 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	if (!v.string || !*v.string)
 		goto bye;
 
-	foreach (fc, document->forms) {
-		if (fc->formname && !strcasecmp(v.string, fc->formname)) {
-			P_OBJECT(get_form_object(ctx, obj, fc));
+	foreach (form, document->forms) {
+		if (form->name && !strcasecmp(v.string, form->name)) {
+			P_OBJECT(get_form_object(ctx, obj, form));
 
 			VALUE_TO_JSVAL_END(rval);
 			/* This returns. */
@@ -879,7 +881,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	VALUE_TO_JSVAL_START;
 
 	if (JSVAL_IS_STRING(id)) {
-		struct form_control *fc;
+		struct form *form;
 		JSVAL_TO_VALUE_START;
 
 		JSVAL_REQUIRE(&id, STRING);
@@ -893,17 +895,17 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 			}
 		}
 #endif
-		foreach (fc, document->forms) {
+		foreach (form, document->forms) {
 			jsval forms;
 			JSBool success;
 
-			if (!fc->formname || strcasecmp(v.string, fc->formname))
+			if (!form->name || strcasecmp(v.string, form->name))
 				continue;
 
 			success = JS_GetProperty(ctx, obj, "forms", &forms);
 			assert(success == JS_TRUE);
 
-			P_OBJECT(get_form_object(ctx, JSVAL_TO_OBJECT(forms), fc));
+			P_OBJECT(get_form_object(ctx, JSVAL_TO_OBJECT(forms), form));
 			goto convert;
 		}
 		goto bye;

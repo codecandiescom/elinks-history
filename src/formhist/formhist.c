@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.94 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: formhist.c,v 1.95 2004/12/18 01:42:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -413,7 +413,7 @@ get_form_history_value(unsigned char *url, unsigned char *name)
 
 void
 memorize_form(struct session *ses, struct list_head *submit,
-	      struct form_control *frm)
+	      struct form *forminfo)
 {
 	struct formhist_data *form;
 	struct submitted_value *sv;
@@ -430,7 +430,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	if (!save) return;
 
 	/* Create a temporary form. */
-	form = new_form(frm->action);
+	form = new_form(forminfo->action);
 	if (!form) return;
 
 	foreach (sv, *submit) {

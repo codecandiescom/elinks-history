@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.43 2004/12/18 00:45:29 pasky Exp $ */
+/* $Id: form.h,v 1.44 2004/12/18 01:42:19 pasky Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -14,7 +14,7 @@ struct term_event;
 struct terminal;
 
 struct form_state {
-	int form_num;
+	struct form *form;
 	int g_ctrl_num;
 	int position;
 	enum form_type type;
@@ -57,6 +57,6 @@ void draw_forms(struct terminal *term, struct document_view *doc_view);
 enum frame_event_status reset_form(struct session *ses, struct document_view *doc_view, int a);
 enum frame_event_status submit_form(struct session *ses, struct document_view *doc_view, int do_reload);
 void auto_submit_form(struct session *ses);
-void do_reset_form(struct document_view *doc_view, int form_num);
+void do_reset_form(struct document_view *doc_view, struct form *form);
 
 #endif

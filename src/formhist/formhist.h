@@ -1,4 +1,4 @@
-/* $Id: formhist.h,v 1.27 2004/12/18 00:27:53 pasky Exp $ */
+/* $Id: formhist.h,v 1.28 2004/12/18 01:42:19 pasky Exp $ */
 
 #ifndef EL__FORMHIST_FORMHIST_H
 #define EL__FORMHIST_FORMHIST_H
@@ -35,7 +35,7 @@ unsigned char *form_type2str(enum form_type num);
  * value if present, NULL upon an error. */
 unsigned char *get_form_history_value(unsigned char *url, unsigned char *name);
 
-void memorize_form(struct session *ses, struct list_head *submit, struct form_control *frm);
+void memorize_form(struct session *ses, struct list_head *submit, struct form *forminfo);
 
 int save_forms_to_file(void);
 void free_form(struct formhist_data *form);

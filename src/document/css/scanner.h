@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.13 2004/01/18 18:21:08 jonas Exp $ */
+/* $Id: scanner.h,v 1.14 2004/01/18 21:29:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -58,8 +58,9 @@ struct css_token {
 
 /* The {struct css_scanner} describes the current state of the CSS scanner. */
 struct css_scanner {
-	/* The very start of the scanned string */
-	unsigned char *string;
+	/* The very start of the scanned string and the position in the string
+	 * where to scan next. */
+	unsigned char *string, *position;
 
 	/* The current token and number of scanned tokens in the table.
 	 * If the number of scanned tokens is less than CSS_SCANNER_TOKENS

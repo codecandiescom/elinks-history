@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.8 2004/01/18 21:04:23 jonas Exp $ */
+/* $Id: scanner.c,v 1.9 2004/01/18 21:29:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,8 +46,9 @@ enum css_char_group {
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
 
 static inline int
-scan_css_token(struct css_token *token, unsigned char *string)
+scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
+	unsigned char *string = scanner->position;
 	unsigned char first_char = *string;
 
 	token->string = string++;
@@ -84,6 +85,7 @@ scan_css_token(struct css_token *token, unsigned char *string)
 	}
 
 	token->length = string - token->string;
+	scanner->position = string;
 
 	return token->length;
 }
@@ -95,9 +97,6 @@ scan_css_tokens(struct css_scanner *scanner)
 	int tokens = scanner->tokens;
 	int move_to_front = int_max(tokens - scanner->current, 0);
 	int current = move_to_front ? scanner->current : 0;
-	unsigned char *string = tokens > 0
-			      ? get_css_token_end(&table[tokens - 1])
-			      : scanner->string;
 
 #ifdef CSS_SCANNER_DEBUG
 	if (tokens > 0) WDBG("Rescanning");
@@ -113,21 +112,21 @@ scan_css_tokens(struct css_scanner *scanner)
 	/* Set all unused tokens to CSS_TOKEN_NONE */
 	memset(&table[move_to_front], 0, sizeof(struct css_token) * (CSS_SCANNER_TOKENS - move_to_front));
 
-	if (tokens && tokens < CSS_SCANNER_TOKENS) {
-		scanner->tokens = -1;
+	if (!*scanner->position) {
+		scanner->tokens = move_to_front ? move_to_front : -1;
 		scanner->current = 0;
 		return;
 	}
 
 	/* Scan tokens til we have filled the table */
-	for (current = move_to_front; current < CSS_SCANNER_TOKENS && *string; current++) {
+	for (current = move_to_front;
+	     current < CSS_SCANNER_TOKENS && *scanner->position;
+	     current++) {
 		struct css_token *token = &table[current];
 
-		scan_css(string, CSS_CHAR_WHITESPACE);
+		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
 
-		if (!scan_css_token(token, string)) break;
-
-		string += token->length;
+		if (!scan_css_token(scanner, token)) break;
 	}
 
 	scanner->tokens = current;
@@ -253,5 +252,6 @@ init_css_scanner(struct css_scanner *scanner, unsigned char *string)
 	memset(scanner, 0, sizeof(struct css_scanner));
 
 	scanner->string = string;
+	scanner->position = string;
 	scan_css_tokens(scanner);
 }

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.127 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: download.c,v 1.128 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -414,7 +414,6 @@ display_download(struct terminal *term, struct file_download *down,
 {
 	struct dialog *dlg;
 	struct file_download *file_download;
-	int n = 0;
 
 	foreach (file_download, downloads)
 		if (file_download == down)
@@ -434,13 +433,11 @@ found:
 	dlg->udata = down;
 	dlg->align = AL_CENTER;
 
-	add_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
-	add_dlg_button(dlg, n, 0, dlg_abort_download, _("Abort", term), NULL);
+	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
+	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
+	add_dlg_button(dlg, 0, dlg_abort_download, _("Abort", term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == DOWNLOAD_WIDGETS_COUNT);
+	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

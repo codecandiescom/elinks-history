@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.54 2003/10/31 21:33:42 pasky Exp $ */
+/* $Id: dialogs.c,v 1.55 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,7 +438,6 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	struct dialog_data *dlg_data;
 	struct history_dialog_list_item *item;
 	struct global_history_item *litem;
-	int n = 0;
 
 	foreach (litem, global_history.items) {
 		litem->box_item->visible = 1;
@@ -465,19 +464,18 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = history_dialog_abort_handler;
 	dlg->udata = ses;
 
-	add_dlg_button(dlg, n, B_ENTER, push_goto_button, _("Goto", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_delete_button, _("Delete", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_clear_button, _("Clear", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_goto_button, _("Goto", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_delete_button, _("Delete", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_search_button, _("Search", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_toggle_display_button, _("Toggle display", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_clear_button, _("Clear", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == HISTORY_WIDGETS_COUNT);
+	add_dlg_listbox(dlg, 12, history_dialog_box_build());
 
-	add_dlg_listbox(dlg, n, 12, history_dialog_box_build());
+	add_dlg_end(dlg, HISTORY_WIDGETS_COUNT + 1);
 
-	add_dlg_end(dlg, n);
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.107 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: options.c,v 1.108 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,7 +174,6 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct termopt_hop *termopt_hop;
 	struct dialog *dlg;
-	int n = 0;
 
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
@@ -201,31 +200,29 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) terminal_options_ok;
 	dlg->refresh_data = termopt_hop;
 
-	add_dlg_radio(dlg, n, _("No frames", term), 1, TERM_DUMB, termopt_hop->type);
-	add_dlg_radio(dlg, n, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->type);
-	add_dlg_radio(dlg, n, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->type);
-	add_dlg_radio(dlg, n, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->type);
+	add_dlg_radio(dlg, _("No frames", term), 1, TERM_DUMB, termopt_hop->type);
+	add_dlg_radio(dlg, _("VT 100 frames", term), 1,  TERM_VT100, termopt_hop->type);
+	add_dlg_radio(dlg, _("Linux or OS/2 frames", term), 1, TERM_LINUX, termopt_hop->type);
+	add_dlg_radio(dlg, _("KOI8-R frames", term), 1, TERM_KOI8, termopt_hop->type);
 
-	add_dlg_radio(dlg, n, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->colors);
-	add_dlg_radio(dlg, n, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->colors);
+	add_dlg_radio(dlg, _("No colors (mono)", term), 2, COLOR_MODE_MONO, termopt_hop->colors);
+	add_dlg_radio(dlg, _("16 colors", term), 2, COLOR_MODE_16, termopt_hop->colors);
 #ifdef USE_256_COLORS
-	add_dlg_radio(dlg, n, _("256 colors", term), 2, COLOR_MODE_256, termopt_hop->colors);
+	add_dlg_radio(dlg, _("256 colors", term), 2, COLOR_MODE_256, termopt_hop->colors);
 #endif
 
-	add_dlg_checkbox(dlg, n, _("Use ^[[11m", term), termopt_hop->m11_hack);
-	add_dlg_checkbox(dlg, n, _("Restrict frames in cp850/852", term), termopt_hop->restrict_852);
-	add_dlg_checkbox(dlg, n, _("Block the cursor", term), termopt_hop->block_cursor);
-	add_dlg_checkbox(dlg, n, _("Transparency", term), termopt_hop->trans);
-	add_dlg_checkbox(dlg, n, _("Underline", term), termopt_hop->underline);
-	add_dlg_checkbox(dlg, n, _("UTF-8 I/O", term), termopt_hop->utf_8_io);
+	add_dlg_checkbox(dlg, _("Use ^[[11m", term), termopt_hop->m11_hack);
+	add_dlg_checkbox(dlg, _("Restrict frames in cp850/852", term), termopt_hop->restrict_852);
+	add_dlg_checkbox(dlg, _("Block the cursor", term), termopt_hop->block_cursor);
+	add_dlg_checkbox(dlg, _("Transparency", term), termopt_hop->trans);
+	add_dlg_checkbox(dlg, _("Underline", term), termopt_hop->underline);
+	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), termopt_hop->utf_8_io);
 
-	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, terminal_options_save, _("Save", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ENTER, terminal_options_save, _("Save", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == TERMOPT_WIDGETS_COUNT);
+	add_dlg_end(dlg, TERMOPT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, termopt_hop, NULL));
 }
@@ -280,7 +277,6 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	struct dialog *dlg;
 	int x = int_min(term->width, 999);
 	int y = int_min(term->height, 999);
-	int n = 0;
 
 	sprintf(x_str, "%d", x);
 	sprintf(y_str, "%d", y);
@@ -294,15 +290,13 @@ dlg_resize_terminal(struct terminal *term, void *xxx, struct session *ses)
 	dlg->refresh = (void (*)(void *)) do_resize_terminal;
 	dlg->refresh_data = term;
 
-	add_dlg_field(dlg, n, 1, 999, check_number, 4, x_str, NULL);
-	add_dlg_field(dlg, n, 1, 999, check_number, 4, y_str, NULL);
+	add_dlg_field(dlg, 1, 999, check_number, 4, x_str, NULL);
+	add_dlg_field(dlg, 1, 999, check_number, 4, y_str, NULL);
 
-	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == RESIZE_WIDGETS_COUNT);
+	add_dlg_end(dlg, RESIZE_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

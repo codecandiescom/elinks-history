@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.37 2003/10/29 14:09:50 pasky Exp $ */
+/* $Id: listbox.h,v 1.38 2003/11/05 14:23:13 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -11,12 +11,13 @@
 #include "util/lists.h"
 
 
-#define add_dlg_listbox(dlg, n, height_, content)			\
+#define add_dlg_listbox(dlg, height_, content)				\
 	do {								\
+		int n = (dlg)->widgets_size;				\
 		(dlg)->widgets[n].type = WIDGET_LISTBOX;		\
 		(dlg)->widgets[n].info.box.height = (height_);		\
 		(dlg)->widgets[n].data = (void *) (content);		\
-		(n)++;							\
+		(dlg)->widgets_size++;					\
 	} while (0)
 
 

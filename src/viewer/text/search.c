@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.94 2003/11/05 10:56:15 zas Exp $ */
+/* $Id: search.c,v 1.95 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1044,7 +1044,6 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	struct dialog *dlg;
 	unsigned char *field;
 	struct search_dlg_hop *hop;
-	int n = 0;
 
 	if (intl) {
 		title = _(title, term);
@@ -1082,20 +1081,18 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_to_ml(&ml, hop, NULL);
 
-	add_dlg_field(dlg, n, min, max, check, l, field, history);
+	add_dlg_field(dlg, min, max, check, l, field, history);
 
-	add_dlg_radio(dlg, n, _("Normal search", term), 1, 0, hop->whether_regex);
-	add_dlg_radio(dlg, n, _("Regexp search", term), 1, 1, hop->whether_regex);
-	add_dlg_radio(dlg, n, _("Extended regexp search", term), 1, 2, hop->whether_regex);
-	add_dlg_radio(dlg, n, _("Case sensitive", term), 2, 1, hop->cases);
-	add_dlg_radio(dlg, n, _("Case insensitive", term), 2, 0, hop->cases);
+	add_dlg_radio(dlg, _("Normal search", term), 1, 0, hop->whether_regex);
+	add_dlg_radio(dlg, _("Regexp search", term), 1, 1, hop->whether_regex);
+	add_dlg_radio(dlg, _("Extended regexp search", term), 1, 2, hop->whether_regex);
+	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, hop->cases);
+	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->cases);
 
-	add_dlg_button(dlg, n, B_ENTER, search_dlg_ok, okbutton, fn);
-	add_dlg_button(dlg, n, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
+	add_dlg_button(dlg, B_ENTER, search_dlg_ok, okbutton, fn);
+	add_dlg_button(dlg, B_ESC, search_dlg_cancel, cancelbutton, cancelfn);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == SEARCH_WIDGETS_COUNT);
+	add_dlg_end(dlg, SEARCH_WIDGETS_COUNT);
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);

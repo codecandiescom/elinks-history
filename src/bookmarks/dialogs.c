@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.105 2003/10/31 21:33:40 pasky Exp $ */
+/* $Id: dialogs.c,v 1.106 2003/11/05 14:23:14 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -577,7 +577,6 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct bookmark *new_bm;
 	struct dialog *dlg;
-	int n = 0;
 
 	/* Show all bookmarks */
 	foreach (new_bm, bookmarks) {
@@ -605,20 +604,18 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = bookmark_dialog_abort_handler;
 	dlg->udata = ses;
 
-	add_dlg_button(dlg, n, B_ENTER, push_goto_button, _("Goto", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_delete_button, _("Delete", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_move_button, _("Move", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_add_folder_button, _("Add folder", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), NULL);
-	add_dlg_button(dlg, n, B_ENTER, push_search_button, _("Search", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_goto_button, _("Goto", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_edit_button, _("Edit", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_delete_button, _("Delete", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_move_button, _("Move", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_add_folder_button, _("Add folder", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_add_button, _("Add", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_search_button, _("Search", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == BM_WIDGETS_COUNT);
+	add_dlg_listbox(dlg, 12, bookmark_dlg_box_build());
 
-	add_dlg_listbox(dlg, n, 12, bookmark_dlg_box_build());
-
-	add_dlg_end(dlg, n);
+	add_dlg_end(dlg, BM_WIDGETS_COUNT + 1);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

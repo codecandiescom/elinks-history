@@ -1,5 +1,5 @@
 /* HTTP Auth dialog stuff */
-/* $Id: dialogs.c,v 1.69 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.70 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -126,7 +126,6 @@ do_auth_dialog(struct session *ses)
 	struct terminal *term = ses->tab->term;
 	struct http_auth_basic *a = get_invalid_auth_entry();
 	unsigned char sticker[MAX_STR_LEN];
-	int n = 0;
 
 	if (!a || a->blocked) return;
 	a->blocked = 1;
@@ -148,15 +147,13 @@ do_auth_dialog(struct session *ses)
 	dlg->udata2 = a;
 	dlg->refresh_data = ses;
 
-	add_dlg_field(dlg, n, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
-	add_dlg_field_pass(dlg, n, 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
+	add_dlg_field(dlg, 0, 0, NULL, HTTP_AUTH_USER_MAXLEN, a->user, NULL);
+	add_dlg_field_pass(dlg, 0, 0, NULL, HTTP_AUTH_PASSWORD_MAXLEN, a->password);
 
-	add_dlg_button(dlg, n, B_ENTER, auth_ok, _("OK", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, auth_cancel, _("Cancel", term), NULL);
+	add_dlg_button(dlg, B_ENTER, auth_ok, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ESC, auth_cancel, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == AUTH_WIDGETS_COUNT);
+	add_dlg_end(dlg, AUTH_WIDGETS_COUNT);
 
 	dlg_data = do_dialog(term, dlg, getml(dlg, NULL));
 	/* When there's some username, but no password, automagically jump at

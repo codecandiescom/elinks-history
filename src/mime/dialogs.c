@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.62 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.63 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,6 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	unsigned char *ext_orig;
 	struct dialog *dlg;
 	struct string translated;
-	int n = 0;
 
 	if (fcp && init_string(&translated)
 	    && add_optname_to_string(&translated, fcp, strlen(fcp))) {
@@ -236,15 +235,13 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	dlg->refresh = (void (*)(void *)) really_add_ext;
 	dlg->refresh_data = new;
 
-	add_dlg_field(dlg, n, 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
-	add_dlg_field(dlg, n, 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
+	add_dlg_field(dlg, 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
+	add_dlg_field(dlg, 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
 
-	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == MIME_WIDGETS_COUNT);
+	add_dlg_end(dlg, MIME_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 

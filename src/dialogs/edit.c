@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.57 2003/11/05 09:23:19 zas Exp $ */
+/* $Id: edit.c,v 1.58 2003/11/05 14:23:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,7 +108,6 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 {
 	unsigned char *name, *url;
 	struct dialog *dlg;
-	int n = 0;
 
 	if (intl) title = _(title, term);
 
@@ -147,22 +146,21 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg->udata = parent;
 	dlg->udata2 = done_data;
 
-	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, name, NULL);
-	if (dialog_type == EDIT_DLG_ADD) dlg->widgets[n - 1].fn = check_nonempty;
+	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, name, NULL);
+	if (dialog_type == EDIT_DLG_ADD)
+		dlg->widgets[dlg->widgets_size - 1].fn = check_nonempty;
 
-	add_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, url, NULL);
+	add_dlg_field(dlg, 0, 0, NULL, MAX_STR_LEN, url, NULL);
 	/* if (dialog_type == EDIT_DLG_ADD) d->widgets[n - 1].fn = check_nonempty; */
 
-	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, n, 0, clear_dialog, _("Clear", term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, 0, clear_dialog, _("Clear", term), NULL);
 
-	add_dlg_button(dlg, n, B_ESC, when_cancel ? my_cancel_dialog : cancel_dialog,
+	add_dlg_button(dlg, B_ESC, when_cancel ? my_cancel_dialog : cancel_dialog,
 			_("Cancel", term), NULL);
-	dlg->widgets[n - 1].data = (void *) when_cancel;
+	dlg->widgets[dlg->widgets_size - 1].data = (void *) when_cancel;
 
-	add_dlg_end(dlg, n);
-
-	assert(n == EDIT_WIDGETS_COUNT);
+	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 

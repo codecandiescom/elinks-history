@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.93 2003/11/05 09:23:18 zas Exp $ */
+/* $Id: dialogs.c,v 1.94 2003/11/05 14:23:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -285,7 +285,6 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	struct dialog *dlg;
 	unsigned char *value;
 	struct string tvalue;
-	int n = 0;
 
 	if (!init_string(&tvalue)) return;
 
@@ -310,14 +309,12 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	done_string(&tvalue);
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	add_dlg_field(dlg, n, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
+	add_dlg_field(dlg, 0, 0, check_valid_option, MAX_STR_LEN, value, NULL);
 
-	add_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, n);
-
-	assert(n == EDIT_WIDGETS_COUNT);
+	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 #undef EDIT_WIDGETS_COUNT
@@ -486,7 +483,6 @@ void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *dlg;
-	int n = 0;
 
 	/* Create the dialog */
 	dlg = calloc_dialog(OP_WIDGETS_COUNT + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
@@ -498,18 +494,16 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = option_dialog_abort_handler;
 	dlg->udata = ses;
 
-	add_dlg_button(dlg, n, B_ENTER, push_info_button, _("Info", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_edit_button, _("Edit", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_add_button, _("Add", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_del_button, _("Delete", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_save_button, _("Save", term), ses);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_info_button, _("Info", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_edit_button, _("Edit", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_add_button, _("Add", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_del_button, _("Delete", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), ses);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == OP_WIDGETS_COUNT);
+	add_dlg_listbox(dlg, 12, option_dlg_box_build());
 
-	add_dlg_listbox(dlg, n, 12, option_dlg_box_build());
-
-	add_dlg_end(dlg, n);
+	add_dlg_end(dlg, OP_WIDGETS_COUNT + 1);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }
@@ -720,7 +714,6 @@ void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *dlg;
-	int n = 0;
 
 	/* Create the dialog */
 	dlg = calloc_dialog(KB_WIDGETS_COUNT + 1, sizeof(struct option) + 2 * MAX_STR_LEN);
@@ -732,17 +725,15 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->abort = kbdbind_dialog_abort_handler;
 	dlg->udata = ses;
 
-	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
-	add_dlg_button(dlg, n, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
-	add_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, B_ENTER, push_kbdbind_add_button, _("Add", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_kbdbind_del_button, _("Delete", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_kbdbind_toggle_display_button, _("Toggle display", term), ses);
+	add_dlg_button(dlg, B_ENTER, push_kbdbind_save_button, _("Save", term), ses);
+	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
 
-	assert(n == KB_WIDGETS_COUNT);
+	add_dlg_listbox(dlg, 12, kbdbind_dlg_box_build());
 
-	add_dlg_listbox(dlg, n, 12, kbdbind_dlg_box_build());
-
-	add_dlg_end(dlg, n);
+	add_dlg_end(dlg, KB_WIDGETS_COUNT + 1);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

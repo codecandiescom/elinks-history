@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.81 2003/06/07 10:56:18 pasky Exp $ */
+/* $Id: session.c,v 1.82 2003/06/07 10:58:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -625,18 +625,18 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 
 	if (redir) {
 		m1 = N_("Do you want to follow redirect and post form data "
-			"to url");
+			"to url %s?");
 	} else if (wtd == WTD_FORWARD) {
-		m1 = N_("Do you want to post form data to url");
+		m1 = N_("Do you want to post form data to url %s?");
 	} else {
-		m1 = N_("Do you want to repost form data to url");
+		m1 = N_("Do you want to repost form data to url %s?");
 	}
 
 	m2 = memacpy(url, (unsigned char *) strchr(url, POST_CHAR) - url);
 	msg_box(ses->tab->term, getml(m2, wtd_data, wtd_data->url, wtd_data->pos,
 				 NULL),
 		N_("Warning"), AL_CENTER | AL_EXTD_TEXT,
-		msg_text("%s %s?", m1, m2),
+		msg_text(m1, m2),
 		wtd_data, 2,
 		N_("Yes"), post_yes, B_ENTER,
 		N_("No"), post_no, B_ESC);

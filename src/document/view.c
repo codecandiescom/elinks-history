@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.56 2002/06/30 21:11:45 pasky Exp $ */
+/* $Id: view.c,v 1.57 2002/07/04 00:28:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2541,6 +2541,10 @@ void send_event(struct session *ses, struct event *ev)
 				dialog_goto_url(ses, url);
 				goto x;
 			}
+			case ACT_SAVE_FORMATTED:
+				/* TODO: if (!anonymous) for non-HTTI ? --pasky */
+				menu_save_formatted(ses->term, NULL, ses);
+				goto x;
 			case ACT_ADD_BOOKMARK:
 				if (!get_opt_int_tree(cmdline_options, "anonymous")) launch_bm_add_doc_dialog(ses->term, NULL, ses);
 				goto x;

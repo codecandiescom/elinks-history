@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.29 2002/07/02 16:00:53 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.30 2002/07/04 00:28:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,6 +320,7 @@ static struct strtonum action_table[] = {
 	{ "really-quit", ACT_REALLY_QUIT },
 	{ "reload", ACT_RELOAD },
 	{ "right", ACT_RIGHT },
+	{ "save-formatted", ACT_SAVE_FORMATTED },
 	{ "scroll-down", ACT_SCROLL_DOWN },
 	{ "scroll-left", ACT_SCROLL_LEFT },
 	{ "scroll-right", ACT_SCROLL_RIGHT },

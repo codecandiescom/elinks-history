@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.170 2003/07/22 10:31:30 zas Exp $ */
+/* $Id: parser.c,v 1.171 2003/07/22 10:57:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2744,6 +2744,12 @@ html_link(unsigned char *a)
 			add_to_string(&text, ", ");
 			add_to_string(&text, link.content_type);
 		}
+
+		if (link.type == LT_ALTERNATE_LANG && link.lang) {
+			add_to_string(&text, ", ");
+			add_to_string(&text, link.lang);
+		}
+
 		add_char_to_string(&text, ')');
 
 only_title:

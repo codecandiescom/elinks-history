@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.140 2004/05/31 01:19:38 jonas Exp $ */
+/* $Id: cookies.c,v 1.141 2004/05/31 01:21:20 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -64,8 +64,6 @@ struct c_domain {
 
 static INIT_LIST_HEAD(c_domains);
 
-#if 0
-/* Apparently not used so ... --jonas */
 struct c_server {
 	LIST_HEAD(struct c_server);
 
@@ -74,7 +72,6 @@ struct c_server {
 };
 
 static INIT_LIST_HEAD(c_servers);
-#endif
 
 static int cookies_dirty = 0;
 
@@ -219,6 +216,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 {
 	unsigned char *date, *secure;
 	struct cookie *cookie;
+	struct c_server *cs;
 	struct cookie_str cstr;
 
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_NONE)
@@ -354,17 +352,11 @@ set_cookie(struct uri *uri, unsigned char *str)
 
 	cookie->id = cookie_id++;
 
-#if 0
-	struct c_server *cs;
-	/* Nothing is ever entered into c_servers so why bother ;-) --jonas */
 	foreach (cs, c_servers) {
 		if (strlcasecmp(cs->server, -1, uri->host, uri->hostlen))
 			continue;
 
-		if (cs->accept) {
-			accept_cookie(cookie);
-			return;
-		}
+		if (cs->accept)	goto ok;
 
 #ifdef COOKIES_DEBUG
 		DBG("Dropped.");
@@ -372,7 +364,6 @@ set_cookie(struct uri *uri, unsigned char *str)
 		free_cookie(cookie);
 		return;
 	}
-#endif
 
 	/* We have already check COOKIES_ACCEPT_NONE */
 	if (get_cookies_accept_policy() == COOKIES_ACCEPT_ASK) {
@@ -381,6 +372,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 		return;
 	}
 
+ok:
 	accept_cookie(cookie);
 
 	return;

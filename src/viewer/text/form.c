@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.124 2004/06/09 22:54:23 zas Exp $ */
+/* $Id: form.c,v 1.125 2004/06/11 17:35:01 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 #include "document/view.h"
 #include "intl/gettext/libintl.h"
 #include "formhist/formhist.h"
+#include "mime/mime.h"
 #include "osdep/ascii.h"
 #include "osdep/osdep.h"
 #include "protocol/uri.h"
@@ -593,6 +594,7 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 #define F_BUFLEN 1024
 			int fh, rd;
 			unsigned char buffer[F_BUFLEN];
+			unsigned char *extension;
 
 			add_to_string(data, "\"; filename=\"");
 			add_to_string(data, get_filename_position(sv->value));
@@ -601,7 +603,21 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 			/* FIXME: We should follow RFCs 1522, 1867,
 			 * 2047 (updated by rfc 2231), to provide correct support
 			 * for non-ASCII and special characters in values. --Zas */
-			add_to_string(data, "\"\r\n\r\n");
+			add_to_string(data, "\"");
+
+			/* Add a Content-Type header if the type is configured */
+			extension = strrchr(sv->value, '.');
+			if (extension) {
+				unsigned char *type = get_extension_content_type(extension);
+
+				if (type) {
+					add_to_string(data, "\r\nContent-Type: ");
+					add_to_string(data, type);
+					mem_free(type);
+				}
+			}
+
+			add_to_string(data, "\r\n\r\n");
 
 			if (*sv->value) {
 				unsigned char *filename;

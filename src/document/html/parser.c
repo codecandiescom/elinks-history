@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.229 2003/10/29 20:30:34 jonas Exp $ */
+/* $Id: parser.c,v 1.230 2003/10/29 20:53:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3664,8 +3664,12 @@ xsp:
 void
 done_html_parser(void)
 {
-	kill_html_stack_item(html_stack.next);
 	if (form.action) mem_free(form.action), form.action = NULL;
 	if (form.target) mem_free(form.target), form.target = NULL;
-}
 
+	kill_html_stack_item(html_stack.next);
+
+	assertm(list_empty(html_stack),
+		"html stack not empty after operation");
+	if_assert_failed init_list(html_stack);
+}

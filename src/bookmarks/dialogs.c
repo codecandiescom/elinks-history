@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.125 2003/11/22 02:40:02 jonas Exp $ */
+/* $Id: dialogs.c,v 1.126 2003/11/22 11:55:21 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -45,8 +45,43 @@ unsigned char *bm_last_searched_url = NULL;
 
 static void listbox_delete_bookmark(struct terminal *, struct listbox_data *);
 
+static void
+lock_bookmark(struct listbox_item *item)
+{
+	object_lock((struct bookmark *)item->udata);
+}
+
+static void
+unlock_bookmark(struct listbox_item *item)
+{
+	object_unlock((struct bookmark *)item->udata);
+}
+
+static int
+is_bookmark_used(struct listbox_item *item)
+{
+	return is_object_used((struct bookmark *)item->udata);
+}
+
+static unsigned char *
+get_bookmark_info(struct listbox_item *item, struct terminal *term)
+{
+	struct bookmark *bookmark = item->udata;
+	struct string info;
+
+	if (!init_string(&info)) return NULL;
+
+	add_format_to_string(&info, _("URL: \"%s\"", term), bookmark->url);
+
+	return info.source;
+}
+
 static struct listbox_ops bookmarks_listbox_ops = {
 	listbox_delete_bookmark,
+	lock_bookmark,
+	unlock_bookmark,
+	is_bookmark_used,
+	get_bookmark_info,
 };
 
 struct hierbox_browser bookmark_browser = {

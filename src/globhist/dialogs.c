@@ -1,5 +1,5 @@
 /* Global history dialogs */
-/* $Id: dialogs.c,v 1.78 2003/11/22 02:40:02 jonas Exp $ */
+/* $Id: dialogs.c,v 1.79 2003/11/22 11:55:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,8 +32,45 @@
 static void listbox_delete_historyitem(struct terminal *,
 				       struct listbox_data *);
 
+static void lock_globhist_item(struct listbox_item *item)
+{
+	object_lock((struct global_history_item *)item->udata);
+}
+
+static void unlock_globhist_item(struct listbox_item *item)
+{
+	object_unlock((struct global_history_item *)item->udata);
+}
+
+static int is_globhist_item_used(struct listbox_item *item)
+{
+	return is_object_used((struct global_history_item *)item->udata);
+}
+
+static unsigned char *
+get_globhist_item_info(struct listbox_item *box_item, struct terminal *term)
+{
+	struct global_history_item *item = box_item->udata;
+	struct string info;
+
+	if (!init_string(&info)) return NULL;
+
+	/* If the text has not been toggled */
+	if (box_item->text == item->title) {
+		add_format_to_string(&info, _("URL: \"%s\"", term), item->url);
+	} else {
+		add_format_to_string(&info, _("Title: \"%s\"", term), item->title);
+	}
+
+	return info.source;
+}
+
 static struct listbox_ops gh_listbox_ops = {
 	listbox_delete_historyitem,
+	lock_globhist_item,
+	unlock_globhist_item,
+	is_globhist_item_used,
+	get_globhist_item_info,
 };
 
 struct hierbox_browser globhist_browser = {

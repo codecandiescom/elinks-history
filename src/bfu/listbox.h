@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.44 2003/11/21 21:27:03 jonas Exp $ */
+/* $Id: listbox.h,v 1.45 2003/11/22 11:55:20 jonas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -25,6 +25,15 @@ struct listbox_item;
 
 struct listbox_ops {
 	void (*del)(struct terminal *, struct listbox_data *);
+
+	/* Some basic util/object.h wrappers */
+	void (*lock)(struct listbox_item *);
+	void (*unlock)(struct listbox_item *);
+	int (*is_used)(struct listbox_item *);
+
+	/* TODO: We might need to pass some enum to signal what kind of info we
+	 * want to get. --jonas */
+	unsigned char *(*get_info)(struct listbox_item *, struct terminal *);
 };
 
 /* Stores display information about a box. Kept in cdata. */

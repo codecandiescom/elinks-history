@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.19 2003/04/20 08:27:28 zas Exp $ */
+/* $Id: view.c,v 1.20 2003/04/20 10:35:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -852,6 +852,26 @@ draw_forms(struct terminal *t, struct f_data_c *f)
 	} while (l1++ < l2);
 }
 
+/* 0 -> 1 <- 2 v 3 ^ */
+
+unsigned char fr_trans[2][4] = {{0xb3, 0xc3, 0xb4, 0xc5}, {0xc4, 0xc2, 0xc1, 0xc5}};
+
+static void
+set_xchar(struct terminal *t, int x, int y, unsigned dir)
+{
+       unsigned int c;
+
+       if (x < 0 || x >= t->x || y < 0 || y >= t->y) return;
+       c = get_char(t, x, y);
+       if (!(c & ATTR_FRAME)) return;
+       c &= 0xff;
+       if (c == fr_trans[dir / 2][0])
+	       set_only_char(t, x, y, fr_trans[dir / 2][1 + (dir & 1)] | ATTR_FRAME);
+       else
+	       if (c == fr_trans[dir / 2][2 - (dir & 1)])
+		       set_only_char(t, x, y, fr_trans[dir / 2][3] | ATTR_FRAME);
+}
+
 static void
 draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 {
@@ -859,6 +879,7 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 	int x, y;
 
 	if (!fsd) return;
+
 	y = yp - 1;
 	for (j = 0; j < fsd->y; j++) {
 		int wwy = fsd->f[j * fsd->x].yw;
@@ -867,10 +888,36 @@ draw_frame_lines(struct terminal *t, struct frameset_desc *fsd, int xp, int yp)
 		for (i = 0; i < fsd->x; i++) {
 			int wwx = fsd->f[i].xw;
 
-			if (i) fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE);
-			if (j) fill_area(t, x + 1, y, wwx, 1, FRAMES_HLINE);
 			if (i && j) set_char(t, x, y, FRAMES_CROSS);
+
+			if (i) {
+				fill_area(t, x, y + 1, 1, wwy, FRAMES_VLINE);
+				if (j == fsd->y - 1) set_xchar(t, x, y + wwy + 1, 3);
+			} else if (j) {
+				set_xchar(t, x, y, 0);
+			}
+
+			if (j) {
+				fill_area(t, x + 1, y, wwx, 1, FRAMES_HLINE);
+				if (i == fsd->x - 1) set_xchar(t, x + wwx + 1, y, 1);
+			} else if (i) {
+				set_xchar(t, x, y, 2);
+			}
+
 			if (fsd->f[j * fsd->x + i].subframe) {
+			x += wwx + 1;
+		}
+		y += wwy + 1;
+	}
+
+	y = yp - 1;
+	for (j = 0; j < fsd->y; j++) {
+		int wwy = fsd->f[j * fsd->x].yw;
+
+		x = xp - 1;
+		for (i = 0; i < fsd->x; i++) {
+			int wwx = fsd->f[i].xw;
+
 				draw_frame_lines(t, fsd->f[j * fsd->x + i].subframe, x + 1, y + 1);
 			}
 			x += wwx + 1;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.674 2005/01/08 04:08:08 miciah Exp $ */
+/* $Id: view.c,v 1.675 2005/01/08 21:39:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,9 +508,9 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx)
 	draw_formatted(ses, 1);
 }
 
-/* Move the cursor to the document coordinates provided as @x and @y,
- * scroll the document if necessary, put us in cursor-routing navigation mode
- * if that is not the current mode, and select any link under the cursor. */
+/* Move the cursor to the document view co-ordinates provided as @x and @y,
+ * scroll the document if necessary, put us in cursor-routing navigation mode if
+ * that is not the current mode, and select any link under the cursor. */
 enum frame_event_status
 move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 {

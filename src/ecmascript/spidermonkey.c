@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.137 2004/12/19 14:13:45 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.138 2004/12/19 14:24:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -743,7 +743,7 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 	case JSP_INPUT_ALT:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->alt, stracpy(v.string));
+		mem_free_set(&fc->alt, stracpy(v.string));
 		break;
 	case JSP_INPUT_CHECKED:
 		JSVAL_REQUIRE(vp, BOOLEAN);
@@ -762,7 +762,7 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 	case JSP_INPUT_NAME:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fc->name, stracpy(v.string));
+		mem_free_set(&fc->name, stracpy(v.string));
 		break;
 	case JSP_INPUT_READONLY:
 		/* FIXME: <input readonly disabled> --pasky */
@@ -774,12 +774,12 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	case JSP_INPUT_SRC:
 		if (link) {
 			JSVAL_REQUIRE(vp, STRING);
-			mem_free_set(link->where_img, stracpy(v.string));
+			mem_free_set(&link->where_img, stracpy(v.string));
 		}
 		break;
 	case JSP_INPUT_VALUE:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(fs->value, stracpy(v.string));
+		mem_free_set(&fs->value, stracpy(v.string));
 		break;
 
 	default:
@@ -1243,7 +1243,7 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ACTION:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(form->action, stracpy(v.string));
+		mem_free_set(&form->action, stracpy(v.string));
 		break;
 
 	case JSP_FORM_ENCODING:
@@ -1269,12 +1269,12 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	case JSP_FORM_NAME:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(form->name, stracpy(v.string));
+		mem_free_set(&form->name, stracpy(v.string));
 		break;
 
 	case JSP_FORM_TARGET:
 		JSVAL_REQUIRE(vp, STRING);
-		mem_free_set(form->target, stracpy(v.string));
+		mem_free_set(&form->target, stracpy(v.string));
 		break;
 
 	default:

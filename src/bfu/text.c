@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.76 2003/12/28 19:27:49 jonas Exp $ */
+/* $Id: text.c,v 1.77 2003/12/28 20:01:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -236,7 +236,6 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 		widget_data->widget->info.text.align);
 
 	if (widget_data->widget->info.text.is_label) (*y)--;
-	widget_data->h = (*y) - widget_data->y;
 
 	/* If we scrolled and something was trimmed restore it */
 	if (saved && saved_pos) *saved_pos = saved;
@@ -250,6 +249,7 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 	int y = widget_data->y;
 	int height = widget_data->h;
 	int scale, current, step;
+	int lines = widget_data->info.text.lines;
 
 	if (!text_is_scrollable(widget_data) || height <= 0) return;
 
@@ -257,15 +257,20 @@ display_text(struct widget_data *widget_data, struct dialog_data *dlg_data, int 
 		    get_bfu_color(win->term, "dialog.scrollbar"));
 
 	current = widget_data->info.text.current;
-	scale = height * 100 / widget_data->info.text.lines;
-
-	/* Scale the offset of @current */
-	step = (current + 1) * scale / 100;
-	int_bounds(&step, 0, widget_data->h - 1);
-	y += step;
+	scale = (height + 1) * 100 / lines;
 
 	/* Scale the number of visible lines */
-	height = height * scale / 100;
+	height = (height + 1) * scale / 100;
+
+	/* Scale the offset of @current */
+	if (lines - widget_data->h <= current) {
+		step = widget_data->h - height;
+	} else {
+		step = (current + 1) * scale / 100;
+	}
+	y += step;
+
+	int_bounds(&step, 0, widget_data->h - 1);
 	int_bounds(&height, 1, int_max(widget_data->h - step, 1));
 
 	draw_area(win->term, x, y, 1, height, ' ', 0,

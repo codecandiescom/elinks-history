@@ -157,7 +157,8 @@ Mike Swieton <pyromage@pyromage.net>
 	Fixed bug: Form is not posted when jumping to field by number
 
 Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-	Original links author, maintains and makes official releases.
+	Original links author
+	Maintains and makes official releases.
 	http://artax.karlin.mff.cuni.cz/~mikulas/vyplody/links/
 
 Nalin Dahyabhai <nalin@redhat.com>
@@ -250,4 +251,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.27 2002/03/02 14:04:07 pasky Exp $
+$Id: AUTHORS,v 1.28 2002/03/03 22:55:28 pasky Exp $

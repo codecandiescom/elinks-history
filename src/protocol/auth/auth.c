@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.27 2003/07/10 12:50:04 jonas Exp $ */
+/* $Id: auth.c,v 1.28 2003/07/10 13:02:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -95,6 +95,49 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 	return match;
 }
 
+static struct http_auth_basic *
+init_auth_entry(unsigned char *auth_url, unsigned char *realm, struct uri *uri)
+{
+	struct http_auth_basic *entry;
+
+	entry = mem_calloc(1, sizeof(struct http_auth_basic));
+	if (!entry) return NULL;
+
+	entry->url = auth_url;
+	entry->url_len = strlen(entry->url); /* FIXME: Not really needed. */
+
+	if (realm) {
+		/* Copy realm value. */
+		entry->realm = stracpy(realm);
+		if (!entry->realm) {
+			mem_free(entry);
+			return NULL;
+		}
+	}
+
+	if (uri->userlen || uri->passwordlen) {
+		/* Copy user and pass info if any in passed url. */
+		entry->uid = mem_alloc(MAX_UID_LEN);
+		if (!entry->uid) {
+			if (entry->realm) mem_free(entry->realm);
+			mem_free(entry);
+			return NULL;
+		}
+		safe_strncpy(entry->uid, uri->user, MAX_UID_LEN);
+
+		entry->passwd = mem_alloc(MAX_PASSWD_LEN);
+		if (!entry->passwd) {
+			if (entry->realm) mem_free(entry->realm);
+			if (entry->uid) mem_free(entry->uid);
+			mem_free(entry);
+			return NULL;
+		}
+		safe_strncpy(entry->passwd, uri->password, MAX_PASSWD_LEN);
+	}
+
+	return entry;
+}
+
 /* Add a Basic Auth entry if needed. */
 /* Returns:
  *	ADD_AUTH_NONE	if entry do not exists and user/pass are in url
@@ -141,51 +184,13 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 	}
 
 	/* Create a new entry. */
-	entry = mem_calloc(1, sizeof(struct http_auth_basic));
-	if (!entry) goto end;
-
-	entry->url = newurl;
-	entry->url_len = strlen(entry->url); /* FIXME: Not really needed. */
-
-        if (realm) {
-		/* Copy realm value. */
-		entry->realm = stracpy(realm);
-		if (!entry->realm) {
-			mem_free(entry);
-			entry = NULL;
-			goto end;
-		}
-	}
-
-	if (uri->userlen || uri->passwordlen) {
-		/* Copy user and pass info if any in passed url. */
-		entry->uid = mem_alloc(MAX_UID_LEN);
-		if (!entry->uid) {
-			if (entry->realm) mem_free(entry->realm);
-			mem_free(entry);
-			entry = NULL;
-			goto end;
-		}
-		safe_strncpy(entry->uid, uri->user, MAX_UID_LEN);
-
-		entry->passwd = mem_alloc(MAX_PASSWD_LEN);
-		if (!entry->passwd) {
-			if (entry->realm) mem_free(entry->realm);
-			if (entry->uid) mem_free(entry->uid);
-			mem_free(entry);
-			entry = NULL;
-			goto end;
-		}
-		safe_strncpy(entry->passwd, uri->password, MAX_PASSWD_LEN);
-	}
-
-	add_to_list(http_auth_basic_list, entry);
-
-end:
+	entry = init_auth_entry(newurl, realm, uri);
 	if (!entry) {
 		mem_free(newurl);
 		return ADD_AUTH_ERROR;
 	}
+
+	add_to_list(http_auth_basic_list, entry);
 
 	/* Return whether entry was added with user/pass from url. */
 	return (entry->uid || entry->passwd) ? ADD_AUTH_NONE : ADD_AUTH_NEW;

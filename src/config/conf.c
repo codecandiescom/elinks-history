@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.88 2003/07/21 14:18:57 zas Exp $ */
+/* $Id: conf.c,v 1.89 2003/07/24 00:52:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,7 +97,7 @@ static enum parse_error
 parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	  struct string *mirror)
 {
-	unsigned char *orig_pos = *file;
+	unsigned char *orig_pos = *file, *mirror_pos;
 	unsigned char *optname;
 	unsigned char bin;
 
@@ -122,8 +122,8 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 	*file = skip_white(*file, line);
 	if (!**file) { mem_free(optname); return ERROR_VALUE; }
 
-	/* Mirror what we already have */
-	if (mirror) add_bytes_to_string(mirror, orig_pos, *file - orig_pos);
+	/* (Virtually) mirror what we already have */
+	mirror_pos = *file;
 
 	/* Option value */
 	{
@@ -144,8 +144,14 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 			return ERROR_VALUE;
 		} else if (mirror) {
 			opt->flags |= OPT_WATERMARK;
-			if (option_types[opt->type].write)
+			if (option_types[opt->type].write) {
+				/* XXX: Otherwise we get garbaged config
+				 * files for alias'd options (see bug 216).
+				 * --pasky */
+				add_bytes_to_string(mirror, orig_pos,
+						    mirror_pos - orig_pos);
 				option_types[opt->type].write(opt, mirror);
+			}
 		} else if (!val || !option_types[opt->type].set
 			   || !option_types[opt->type].set(opt, val)) {
 			mem_free(val);

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.88 2003/10/25 19:47:38 pasky Exp $ */
+/* $Id: options.h,v 1.89 2003/10/25 19:48:40 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -16,14 +16,13 @@
 
 enum option_flags {
 	/* bitmask */
-	/* The option is hidden - it serves for internal purposes, never
-	 * is read, never is written, never is displayed, never is crawled
-	 * through etc. */
+	/* The option is hidden - it serves for internal purposes, never is
+	 * read, never is written, never is displayed, never is crawled through
+	 * etc. */
 	OPT_HIDDEN = 1,
-	/* For OPT_TREE, automatically create missing hiearchy piece just
-	 * under this category when adding an option. The 'template' for
-	 * the added hiearchy piece (category) is stored as "_template_"
-	 * category. */
+	/* For OPT_TREE, automatically create missing hiearchy piece just under
+	 * this category when adding an option. The 'template' for the added
+	 * hiearchy piece (category) is stored as "_template_" category. */
 	OPT_AUTOCREATE = 2,
 	/* This is used just for marking various options for some very dark,
 	 * nasty and dirty purposes. This watermarking should be kept inside

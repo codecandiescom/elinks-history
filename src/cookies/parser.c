@@ -1,5 +1,5 @@
 /* Cookies name-value pairs parser  */
-/* $Id: parser.c,v 1.10 2004/06/26 11:53:03 jonas Exp $ */
+/* $Id: parser.c,v 1.11 2004/06/26 14:25:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ parse_cookie_str(struct cookie_str *cstr)
 		} else if (last_was_ws) {
 			/* Non-whitespace after whitespace and not just after
 			 * '=' - error */
-			return 0;
+			return NULL;
 		}
 
 		if (!last_was_ws) {

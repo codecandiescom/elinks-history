@@ -67,8 +67,8 @@ dnl ===================================================================
 dnl EL_DEFINE(define, what)
 AC_DEFUN([EL_DEFINE], [AC_DEFINE($1, 1, [Define if you have $2])])
 
-dnl EL_CHECK_TYPE(type, define, includes, code)
-AC_DEFUN([EL_CHECK_TYPE],
+dnl EL_CHECK_CODE(type, define, includes, code)
+AC_DEFUN([EL_CHECK_CODE],
 [
 	$2=yes
 	AC_MSG_CHECKING([for $1])
@@ -79,7 +79,7 @@ AC_DEFUN([EL_CHECK_TYPE],
 dnl EL_CHECK_SYS_TYPE(type, define, includes)
 AC_DEFUN([EL_CHECK_SYS_TYPE],
 [
-	EL_CHECK_TYPE([$1], [$2], [
+	EL_CHECK_CODE([$1], [$2], [
 #include <sys/types.h>
 $3
 	], [int a = sizeof($1);])
@@ -136,7 +136,7 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 AC_STRUCT_TM
 
-EL_CHECK_TYPE(typeof, HAVE_TYPEOF, [], [int a; typeof(a) b;])
+EL_CHECK_CODE(typeof, HAVE_TYPEOF, [], [int a; typeof(a) b;])
 EL_CHECK_SYS_TYPE(long long, HAVE_LONG_LONG, [])
 EL_CHECK_INT_TYPE(int32_t, HAVE_INT32_T)
 EL_CHECK_INT_TYPE(uint32_t, HAVE_UINT32_T)
@@ -148,18 +148,10 @@ AC_CHECK_SIZEOF(long, 4)
 test "$HAVE_LONG_LONG" = yes && AC_CHECK_SIZEOF(long long, 8)
 
 dnl Check for variadic macros
-AC_CACHE_CHECK([for variadic cpp macros],
-	[ac_cv_cpp_variadic_macros],
-	[AC_TRY_COMPILE(
+EL_CHECK_CODE([variadic macros], HAVE_VARIADIC_MACROS,
 		[#include <stdio.h>
 		 #define a(b,c...) printf(b,##c)],
-                [a("foo");a("%s","bar");a("%s%s","baz","quux");],
-                ac_cv_cpp_variadic_macros=yes,
-                ac_cv_cpp_variadic_macros=no)])
-
-if test "x${ac_cv_cpp_variadic_macros}" != "xno"; then
-	EL_DEFINE(HAVE_VARIADIC_MACROS, [variadic macros])
-fi
+                [a("foo");a("%s","bar");a("%s%s","baz","quux");])
 
 dnl Check for -rdynamic
 AC_MSG_CHECKING([for -rdynamic])

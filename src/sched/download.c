@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.77 2003/07/17 08:56:32 zas Exp $ */
+/* $Id: download.c,v 1.78 2003/07/21 23:34:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,88 +208,87 @@ download_window_function(struct dialog_data *dlg)
 	int max = 0, min = 0;
 	int w, x, y;
 	int t = 0;
-	unsigned char *m, *u;
+	unsigned char *u;
+	struct string msg;
 	struct download *download = &file_download->download;
 	int dialog_text_color = get_bfu_color(term, "dialog.text");
 
 	redraw_below_window(dlg->win);
 	file_download->win = dlg->win;
 
+	if (!init_string(&msg)) return;
+
 	if (download->state == S_TRANS && download->prg->elapsed / 100) {
-		int l = 0;
-
-		m = init_str();
-		if (!m) return;
-
 		t = 1;
-		add_to_str(&m, &l, _("Received", term));
-		add_chr_to_str(&m, &l, ' ');
-		add_xnum_to_str(&m, &l, download->prg->pos);
+		add_to_string(&msg, _("Received", term));
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, download->prg->pos);
 
 		if (download->prg->size >= 0) {
-			add_chr_to_str(&m, &l, ' ');
-			add_to_str(&m, &l, _("of",term));
-			add_chr_to_str(&m, &l, ' ');
-			add_xnum_to_str(&m, &l, download->prg->size);
-			add_chr_to_str(&m, &l, ' ');
+			add_char_to_string(&msg, ' ');
+			add_to_string(&msg, _("of",term));
+			add_char_to_string(&msg, ' ');
+			add_xnum_to_string(&msg, download->prg->size);
+			add_char_to_string(&msg, ' ');
 		}
 		if (download->prg->start > 0) {
-			add_chr_to_str(&m, &l, '(');
-			add_xnum_to_str(&m, &l, download->prg->pos
+			add_char_to_string(&msg, '(');
+			add_xnum_to_string(&msg, download->prg->pos
 						- download->prg->start);
-			add_chr_to_str(&m, &l, ' ');
-			add_to_str(&m, &l, _("after resume", term));
-			add_chr_to_str(&m, &l, ')');
+			add_char_to_string(&msg, ' ');
+			add_to_string(&msg, _("after resume", term));
+			add_char_to_string(&msg, ')');
 		}
-		add_chr_to_str(&m, &l, '\n');
+		add_char_to_string(&msg, '\n');
 
 		if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME)
-			add_to_str(&m, &l, _("Average speed", term));
-		else add_to_str(&m, &l, _("Speed", term));
+			add_to_string(&msg, _("Average speed", term));
+		else
+			add_to_string(&msg, _("Speed", term));
 
-		add_chr_to_str(&m, &l, ' ');
-		add_xnum_to_str(&m, &l, (longlong) download->prg->loaded * 10
-					/ (download->prg->elapsed / 100));
-		add_to_str(&m, &l, "/s");
+		add_char_to_string(&msg, ' ');
+		add_xnum_to_string(&msg, (longlong) download->prg->loaded * 10
+					  / (download->prg->elapsed / 100));
+		add_to_string(&msg, "/s");
 
 		if (download->prg->elapsed >= CURRENT_SPD_AFTER * SPD_DISP_TIME) {
-			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _("current speed", term));
-			add_chr_to_str(&m, &l, ' ');
-			add_xnum_to_str(&m, &l, download->prg->cur_loaded
+			add_to_string(&msg, ", ");
+			add_to_string(&msg, _("current speed", term));
+			add_char_to_string(&msg, ' ');
+			add_xnum_to_string(&msg, download->prg->cur_loaded
 						/ (CURRENT_SPD_SEC *
 						   SPD_DISP_TIME / 1000));
-			add_to_str(&m, &l, "/s");
+			add_to_string(&msg, "/s");
 		}
 
-		add_chr_to_str(&m, &l, '\n');
-		add_to_str(&m, &l, _("Elapsed time", term));
-		add_chr_to_str(&m, &l, ' ');
-		add_time_to_str(&m, &l, download->prg->elapsed);
+		add_char_to_string(&msg, '\n');
+		add_to_string(&msg, _("Elapsed time", term));
+		add_char_to_string(&msg, ' ');
+		add_time_to_string(&msg, download->prg->elapsed);
 
 		if (download->prg->size >= 0 && download->prg->loaded > 0) {
-			add_to_str(&m, &l, ", ");
-			add_to_str(&m, &l, _("estimated time", term));
-			add_chr_to_str(&m, &l, ' ');
+			add_to_string(&msg, ", ");
+			add_to_string(&msg, _("estimated time", term));
+			add_char_to_string(&msg, ' ');
 #if 0
-			add_time_to_str(&m, &l, stat->prg->elapsed
+			add_time_to_string(&msg, stat->prg->elapsed
 						/ 1000 * stat->prg->size
 						/ 1000 * stat->prg->loaded
 						- stat->prg->elapsed);
 #endif
-			add_time_to_str(&m, &l, (download->prg->size - download->prg->pos)
+			add_time_to_string(&msg, (download->prg->size - download->prg->pos)
 						/ ((longlong) download->prg->loaded * 10
 						   / (download->prg->elapsed / 100))
 						* 1000);
 		}
 
-	} else m = stracpy(get_err_msg(download->state, term));
-
-	if (!m) return;
+	} else {
+		add_to_string(&msg, get_err_msg(download->state, term));
+	}
 
 	u = stracpy(file_download->url);
 	if (!u) {
-		mem_free(m);
+		done_string(&msg);
 		return;
 	} else {
 		unsigned char *p = strchr(u, POST_CHAR);
@@ -298,7 +297,7 @@ download_window_function(struct dialog_data *dlg)
 	}
 
 	text_width(term, u, &min, &max);
-	text_width(term, m, &min, &max);
+	text_width(term, msg.source, &min, &max);
 	buttons_width(term, dlg->items, dlg->n, &min, &max);
 
 	w = dlg->win->term->x * 9 / 10 - 2 * DIALOG_LB;
@@ -318,7 +317,7 @@ download_window_function(struct dialog_data *dlg)
 
 	y++;
 	if (t && download->prg->size >= 0) y += 2;
-	dlg_format_text(NULL, term, m, 0, &y, w, NULL,
+	dlg_format_text(NULL, term, msg.source, 0, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;
@@ -365,7 +364,7 @@ download_window_function(struct dialog_data *dlg)
 	}
 
 	y++;
-	dlg_format_text(term, term, m, x, &y, w, NULL,
+	dlg_format_text(term, term, msg.source, x, &y, w, NULL,
 			dialog_text_color, AL_LEFT);
 
 	y++;
@@ -373,7 +372,7 @@ download_window_function(struct dialog_data *dlg)
 			   NULL, AL_CENTER);
 
 	mem_free(u);
-	mem_free(m);
+	done_string(&msg);
 }
 
 

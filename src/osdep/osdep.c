@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.140 2004/07/12 10:59:24 zas Exp $ */
+/* $Id: osdep.c,v 1.141 2004/07/20 09:18:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ set_cwd(unsigned char *path)
 
 /* Terminal size */
 
-#if defined(UNIX) || defined(BEOS) || defined(RISCOS) || defined(WIN32)
+#ifndef OS2
 
 static void
 sigwinch(void *s)
@@ -314,13 +314,9 @@ is_xterm(void)
 
 unsigned int resize_count = 0;
 
-#if defined(UNIX) || defined(WIN32) || defined(BEOS) || defined(RISCOS)
+#ifndef OS2
 
-#if defined(BEOS) && defined(HAVE_SETPGID)
-
-#elif defined(WIN32)
-
-#else
+#if !(defined(BEOS) && defined(HAVE_SETPGID)) && !defined(WIN32)
 
 int
 exe(unsigned char *path)
@@ -510,6 +506,7 @@ resize_window(int x, int y)
 
 #endif
 
+
 /* Threads */
 
 #if defined(HAVE_BEGINTHREAD) || defined(BEOS)
@@ -530,36 +527,7 @@ bgt(struct tdata *t)
 	free(t);
 }
 
-#endif
-
-#if defined(UNIX) || defined(OS2) || defined(RISCOS)
-
-void
-terminate_osdep(void)
-{
-}
-
-#endif
-
-#ifndef BEOS
-
-void
-block_stdin(void)
-{
-}
-
-void
-unblock_stdin(void)
-{
-}
-
-#endif
-
-#if defined(BEOS)
-
-#elif defined(HAVE_BEGINTHREAD)
-
-#else /* HAVE_BEGINTHREAD */
+#else
 
 int
 start_thread(void (*fn)(void *, int), void *ptr, int l)
@@ -607,6 +575,7 @@ start_thread(void (*fn)(void *, int), void *ptr, int l)
 
 #endif
 
+
 #ifndef OS2_MOUSE
 void
 want_draw(void)
@@ -618,6 +587,7 @@ done_draw(void)
 {
 }
 #endif
+
 
 int
 get_output_handle(void)
@@ -635,13 +605,9 @@ get_ctl_handle()
 	return fd;
 }
 
-#if defined(BEOS)
 
-#elif defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD)
-
-#elif defined(WIN32)
-
-#else
+#if !defined(BEOS) && !(defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD)) \
+	&& !defined(WIN32)
 
 int
 get_input_handle(void)
@@ -649,7 +615,31 @@ get_input_handle(void)
 	return get_ctl_handle();
 }
 
-#endif /* defined(HAVE_BEGINTHREAD) && defined(HAVE_READ_KBD) */
+#endif
+
+
+#if defined(UNIX) || defined(OS2) || defined(RISCOS)
+
+void
+terminate_osdep(void)
+{
+}
+
+#endif
+
+#ifndef BEOS
+
+void
+block_stdin(void)
+{
+}
+
+void
+unblock_stdin(void)
+{
+}
+
+#endif
 
 
 void
@@ -671,10 +661,8 @@ elinks_cfmakeraw(struct termios *t)
 #endif
 }
 
-#if defined(CONFIG_GPM) && defined(CONFIG_MOUSE)
 
-
-#elif !defined(OS2_MOUSE)
+#if !defined(CONFIG_GPM) || !defined(OS2_MOUSE)
 
 void *
 handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
@@ -698,7 +686,8 @@ resume_mouse(void *data)
 {
 }
 
-#endif /* #ifdef CONFIG_GPM && CONFIG_MOUSE */
+#endif
+
 
 /* Create a bitmask consisting from system-independent envirnoment modifiers.
  * This is then complemented by system-specific modifiers in an appropriate
@@ -723,21 +712,14 @@ get_common_env(void)
 	return env;
 }
 
-#if defined(OS2)
-
-#elif defined(BEOS)
-
-#elif defined(WIN32)
-
-#else
-
+#if defined(UNIX) || defined(RISCOS)
 int
 get_system_env(void)
 {
 	return get_common_env();
 }
-
 #endif
+
 
 int
 can_resize_window(int environment)
@@ -758,6 +740,7 @@ set_highpri(void)
 {
 }
 #endif
+
 
 unsigned char *
 get_system_str(int xwin)

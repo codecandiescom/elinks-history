@@ -1,3 +1,37 @@
+Thu Mar 17 10:45:05 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	init_dom_renderer(): Always use the decoded buffer. This was causing
+	a garbage cache entry fragment to be used when no fragments was
+	available in the cache entry.  
+
+Thu Mar 17 09:55:21 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/perl/hooks.pl:
+
+	Added five more search engines.  
+	
+	BORKing is now optional and defaults to off.  
+	
+	It reads a config file now, if it exists.  ~/.elinks/config.pl (just 
+	like hooks.lua).  Mine looks like: bork:       yep googlebeta: hell
+	no weather:    google 
+	
+	You can search BBC News, Reuters, MSNBC, CNN, FOXNews, Google news,
+	and Yahoo! News now.  
+	
+	Remember Deep Thoughts by Jack Handey?  Type "jack" or "handey" into
+	the goto box.  
+	
+	Added a few other searchy things: IMDB, US ZIP codes, IP address -> 
+	location, WHOIS, Google or Yahoo! weather, RFC, stock ticker search,
+	and urban legends.  
+	
+	A few other strange things were added/changed too.  
+	
+	Patch by Russ Rowan.  
+
 Wed Mar 16 20:39:52 2005  Varga Balázs <vinnui@ent.hu>:
 
 	* po/hu.po:

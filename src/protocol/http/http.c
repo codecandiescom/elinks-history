@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.85 2002/12/26 18:04:21 pasky Exp $ */
+/* $Id: http.c,v 1.86 2002/12/26 21:26:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -662,19 +662,28 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		int *new_len)
 {
 	struct http_connection_info *info = conn->info;
-	/* Number of uncompressed bytes that could be safely get from
-	 * read_encoded().  We can't want to read too much, because if gzread
-	 * "clears" the buffer next time it will return -1. */
-	int ret = 0;
-	int r = 0, *length_of_block;
-	/* If true, all stuff was written to pipe and only uncompression is
-	 * wanted now. */
-	int finishing = 0;
+	/* to_read is number of bytes to be read from the decoder. It is 65536
+	 * (then we are just emptying the decoder buffer as we finished the walk
+	 * through the incoming stream already) or PIPE_BUF / 2 (when we are
+	 * still walking through the stream - then we write PIPE_BUF / 2 to the
+	 * pipe and read it back to the decoder ASAP; the point is that we can't
+	 * write more than PIPE_BUF to the pipe at once, but we also have to
+	 * never let read_encoded() (gzread(), in fact) to empty the pipe - that
+	 * causes further malfunction of zlib :[ ... so we will make sure that
+	 * we will always have at least PIPE_BUF / 2 + 1 in the pipe (returning
+	 * early otherwise)). */
+	int to_read = PIPE_BUF / 2, did_read = 0;
+	int *length_of_block;
 	unsigned char *output = NULL;
 
 	length_of_block = (info->length == LEN_CHUNKED ? &info->chunk_remaining
 						       : &info->length);
-	if (!*length_of_block) finishing = 1;
+	if (!*length_of_block) {
+		/* Going to finish this decoding bussiness. */
+		/* Some nicely big value - empty encoded output queue by reading
+		 * big chunks from it. */
+		to_read = 65536;
+	}
 
 	if (conn->content_encoding == ENCODING_NONE) {
 		*new_len = len;
@@ -691,47 +700,34 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 		return NULL;
 	}
 
-	while (r == ret) {
-		if (!finishing) {
-			int written = write(conn->stream_pipes[1], data, len);
+	do {
+		if (to_read == PIPE_BUF / 2) {
+			/* ... we aren't finishing yet. */
+			int written = write(conn->stream_pipes[1], data,
+						len > to_read ? to_read : len);
 
-			/* When we're writing zero bytes already, we want to
-			 * zero ret properly for now, so that we'll go out for
-			 * some more data. Otherwise, read_encoded() will yield
-			 * zero bytes, but ret will be on its original value,
-			 * causing us to close the stream, and that's disaster
-			 * when more data are about to come yet. */
-			if (written > 0 || (!written && !len)) {
-				ret = written;
-				data += ret;
-				len -= ret;
+			if (written > 0) {
+				data += written;
+				len -= written;
+
+				/* if info->length == LEN_CHUNKED, info->length < 0 */
 				if (*length_of_block > 0)
-					*length_of_block -= ret;
-				if (!info->length)
-					finishing = 1;
+					*length_of_block -= written;
+				if (!info->length) {
+					/* That's all, folks - let's finish this. */
+					to_read = 65536;
+				} else if (!len) {
+					/* We've done for this round (but not done
+					 * completely). Thus we will get out with
+					 * what we have and leave what we wrote to
+					 * the next round - we have to do that since
+					 * we MUST NOT ever empty the pipe completely
+					 * - this would cause a disaster for
+					 * read_encoded(), which would simply not
+					 * work right then. */
+					return output;
+				}
 			}
-
-			if (len) {
-				/* We assume that this is because full pipe. */
-				/* FIXME: We should probably handle errors as
-				 * well. --pasky */
-				ret = PIPE_BUF;
-			}
-		}
-		/* finishing could be changed above ;) */
-		if (finishing) {
-			/* Granularity of the final decompression. When we were
-			 * taking the decompressed content, we only took the
-			 * amount which we inserted there. When finishing, we
-			 * have to drain the rest from the beast. */
-			/* TODO: We should probably double the ret before trying
-			 * to read as well..? Would maybe make the progressive
-			 * displaying feeling better? --pasky */
-			ret = 65536;
-		}
-		if (ret < PIPE_BUF) {
-			/* Not enough data, try in next round. */
-			return output;
 		}
 
 		if (!conn->stream) {
@@ -740,14 +736,14 @@ uncompress_data(struct connection *conn, unsigned char *data, int len,
 			if (!conn->stream) return NULL;
 		}
 
-		output = (unsigned char *) mem_realloc(output, *new_len + ret);
+		output = (unsigned char *) mem_realloc(output, *new_len + to_read);
 		if (!output) break;
 
-		r = read_encoded(conn->stream, output + *new_len, ret);
-		if (r > 0) *new_len += r;
-	}
+		did_read = read_encoded(conn->stream, output + *new_len, to_read);
+		if (did_read > 0) *new_len += did_read;
+	} while (!(!len && did_read != to_read));
 
-	if (r < 0 && output) {
+	if (did_read < 0 && output) {
 		mem_free(output);
 		output = NULL;
 	}

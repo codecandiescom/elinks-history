@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.158 2004/05/31 02:29:50 jonas Exp $ */
+/* $Id: hierbox.c,v 1.159 2004/05/31 02:33:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,7 +48,7 @@ update_hierbox_browser(struct hierbox_browser *browser)
 /* Common backend for listbox adding */
 static struct listbox_item *
 do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
-		    int no_empty, enum listbox_item_type type)
+		    enum listbox_item_type type)
 {
 	struct listbox_item *item;
 
@@ -70,7 +70,6 @@ do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
 	item->udata = data;
 	item->type = type;
 	item->depth = root->depth + 1;
-	item->free_empty_folder = no_empty;
 	if (item->depth > 0) item->root = root;
 
 	/* TODO: Sort? */
@@ -86,7 +85,7 @@ add_listbox_folder(struct hierbox_browser *browser, struct listbox_item *root, u
 
 	if (!root) root = &browser->root;
 
-	item = do_add_listbox_item(root, text, data, 0, BI_FOLDER);
+	item = do_add_listbox_item(root, text, data, BI_FOLDER);
 	update_hierbox_browser(browser);
 	return item;
 }
@@ -98,7 +97,7 @@ add_listbox_leaf(struct hierbox_browser *browser,  struct listbox_item *root, un
 
 	if (!root) root = &browser->root;
 
-	item = do_add_listbox_item(root, text, data, 0, BI_LEAF);
+	item = do_add_listbox_item(root, text, data, BI_LEAF);
 	update_hierbox_browser(browser);
 	return item;
 }
@@ -139,12 +138,6 @@ done_listbox_item(struct hierbox_browser *browser, struct listbox_item *box_item
 
 	/* The option dialog needs this test */
 	if (box_item->next) del_from_list(box_item);
-
-	if (box_item->root
-	    && box_item->root->free_empty_folder
-	    && box_item->root->type == BI_FOLDER
-	    && list_empty(box_item->root->child))
-		done_listbox_item(browser, box_item->root);
 
 	mem_free(box_item);
 	update_hierbox_browser(browser);

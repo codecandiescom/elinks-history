@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.41 2003/10/26 15:47:24 zas Exp $ */
+/* $Id: inphist.c,v 1.42 2003/10/27 15:33:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,7 +14,6 @@
 #include "bfu/inphist.h"
 #include "bfu/menu.h"
 #include "config/options.h"
-#include "config/urlhist.h"
 #include "lowlevel/home.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -183,7 +182,7 @@ add_to_input_history(struct input_history *historylist, unsigned char *url,
 	add_to_list(historylist->items, newhistoryitem);
 	historylist->n++;
 
-	if (!history_nosave) history_dirty = 1;
+	if (!historylist->nosave) historylist->dirty = 1;
 
 	/* limit size of history to MAX_HISTORY_ITEMS
 	 * removing first entries if needed */
@@ -216,6 +215,8 @@ load_input_history(struct input_history *history, unsigned char *filename)
 		if (!history_file) return 0;
 	}
 
+	history->nosave = 1;
+
 	file = fopen(history_file, "r");
 	if (elinks_home) mem_free(history_file);
 	if (!file) return 0;
@@ -227,6 +228,8 @@ load_input_history(struct input_history *history, unsigned char *filename)
 	}
 
 	fclose(file);
+	history->nosave = 0;
+
 	return 0;
 }
 
@@ -240,7 +243,8 @@ save_input_history(struct input_history *history, unsigned char *filename)
 	unsigned char *history_file;
 	int i = 0;
 
-	if (!elinks_home
+	if (!history->dirty
+	    || !elinks_home
 	    || get_opt_int_tree(cmdline_options, "anonymous"))
 		return 0;
 
@@ -257,6 +261,8 @@ save_input_history(struct input_history *history, unsigned char *filename)
 		secure_fputc(ssi, '\n');
 		if (ssi->err) break;
 	}
+
+	if (!ssi->err) history->dirty = 0;
 
 	return secure_close(ssi);
 }

@@ -1,4 +1,4 @@
-/* $Id: inphist.h,v 1.6 2003/10/05 19:55:18 jonas Exp $ */
+/* $Id: inphist.h,v 1.7 2003/10/27 15:33:23 jonas Exp $ */
 
 #ifndef EL__BFU_INPHIST_H
 #define EL__BFU_INPHIST_H
@@ -16,6 +16,8 @@ struct input_history_item {
 struct input_history {
 	int n;
 	struct list_head items;
+	unsigned int dirty:1;
+	unsigned int nosave:1;
 };
 
 void add_to_input_history(struct input_history *, unsigned char *, int);

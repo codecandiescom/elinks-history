@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.72 2003/10/27 10:35:27 jonas Exp $ */
+/* $Id: search.c,v 1.73 2003/10/27 15:33:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -911,7 +911,12 @@ find_next_back(struct session *ses, struct document_view *doc_view, int a)
 
 
 
-struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} };
+struct input_history search_history = {
+	/* n: */	0,
+	/* items: */	{ D_LIST_HEAD(search_history.items) },
+	/* dirty: */	0,
+	/* nosave: */	0,
+};
 
 /* The dialog functions are clones of input_field() ones. Gross code
  * duplication. */
@@ -1160,7 +1165,6 @@ load_search_history(void)
 	load_input_history(&search_history, "searchhist");
 }
 
-/* TODO: Keep dirty state of the search history. */
 void
 save_search_history(void)
 {

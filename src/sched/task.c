@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.63 2004/04/04 04:28:01 jonas Exp $ */
+/* $Id: task.c,v 1.64 2004/04/04 05:55:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -443,22 +443,15 @@ static void
 do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
-	unsigned char *u = translate_url(url, ses->tab->term->cwd);
-	unsigned char *pos = u ? extract_fragment(u) : NULL;
 	struct uri *referrer = NULL;
-	struct uri *uri = u ? get_uri(u, -1) : NULL;
+	unsigned char *pos = NULL;
+	struct uri *uri = get_translated_uri(url, ses->tab->term->cwd, &pos);
 	protocol_external_handler *external_handler;
 
-	if (u) mem_free(u);
+	if (!uri || uri->protocol == PROTOCOL_UNKNOWN) {
+		int state = (uri == NULL ? S_BAD_URL : S_UNKNOWN_PROTOCOL);
 
-	if (!u || !uri || uri->protocol == PROTOCOL_UNKNOWN) {
-		int state = (u == NULL ? S_BAD_URL : S_OUT_OF_MEM);
-
-		if (uri) {
-			state = S_UNKNOWN_PROTOCOL;
-			done_uri(uri);
-		}
-
+		if (uri) done_uri(uri);
 		if (pos) mem_free(pos);
 		print_error_dialog(ses, state, PRI_CANCEL);
 		return;

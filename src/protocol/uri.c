@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.119 2004/04/04 04:24:31 jonas Exp $ */
+/* $Id: uri.c,v 1.120 2004/04/04 05:55:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -615,7 +615,7 @@ prx:
 	return n;
 }
 
-unsigned char *
+static unsigned char *
 translate_url(unsigned char *url, unsigned char *cwd)
 {
 	unsigned char *ch;
@@ -784,6 +784,22 @@ end:
 
 	mem_free(newurl);
 	return NULL;
+}
+
+struct uri *
+get_translated_uri(unsigned char *uristring, unsigned char *cwd,
+		   unsigned char **fragment)
+{
+	struct uri *uri;
+
+	uristring = translate_url(uristring, cwd);
+	if (!uristring) return NULL;
+
+	if (fragment) *fragment = extract_fragment(uristring);
+	uri = get_uri(uristring, -1);
+	mem_free(uristring);
+
+	return uri;
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.393 2004/04/04 03:41:32 jonas Exp $ */
+/* $Id: view.c,v 1.394 2004/04/04 05:55:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1140,20 +1140,16 @@ void
 save_url(struct session *ses, unsigned char *url)
 {
 	struct document_view *doc_view;
-	struct uri *uri = NULL;
-	unsigned char *u;
+	struct uri *uri;
 
 	assert(ses && ses->tab && ses->tab->term && url);
 	if_assert_failed return;
+
 	if (!*url) return;
-	u = translate_url(url, ses->tab->term->cwd);
-	uri = (u ? get_uri(u, -1) : NULL);
-	if (u) mem_free(u);
 
-	if (!u || !uri) {
-		int state = (uri == NULL) ? S_OUT_OF_MEM : S_BAD_URL;
-
-		print_error_dialog(ses, state, PRI_CANCEL);
+	uri = get_translated_uri(url, ses->tab->term->cwd, NULL);
+	if (!uri) {
+		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);
 		return;
 	}
 

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.80 2004/04/04 04:15:02 jonas Exp $ */
+/* $Id: uri.h,v 1.81 2004/04/04 05:55:16 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -105,6 +105,11 @@ get_uri_reference(struct uri *uri)
 	((uri)->protocol == PROTOCOL_PROXY) \
 	? get_uri((uri)->data, -1) : get_uri_reference(uri)
 
+/* Resolves the @uristring according to the current working directory (@cwd)
+ * and returns a registered URI. If @fragment is non NULL fragment is extracted
+ * and allocated to the @fragment pointer. */
+struct uri *get_translated_uri(unsigned char *uristring, unsigned char *cwd,
+				unsigned char **fragment);
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for
@@ -140,7 +145,6 @@ unsigned char *get_extension_from_uri(struct uri *uri);
 
 
 unsigned char *join_urls(unsigned char *, unsigned char *);
-unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_fragment(unsigned char *);
 
 /* Return position if end of string @s matches a known tld or -1 if not.

@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.109 2004/04/03 14:32:15 jonas Exp $ */
+/* $Id: dump.c,v 1.110 2004/04/04 05:55:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -279,9 +279,8 @@ terminate:
 void
 dump_start(unsigned char *url)
 {
-	unsigned char *real_url = NULL;
-	unsigned char *wd;
-	struct uri *uri = NULL;
+	unsigned char *wd = get_cwd();
+	struct uri *uri = get_translated_uri(url, wd, NULL);
 
 	if (!*url) {
 		ERROR(gettext("URL expected after %s."),
@@ -293,13 +292,6 @@ dump_start(unsigned char *url)
 	dump_download.end = dump_end;
 	dump_pos = 0;
 
-	wd = get_cwd();
-	real_url = translate_url(url, wd);
-	if (wd) mem_free(wd);
-
-	uri = get_uri(real_url ? real_url : url, -1);
-	mem_free(real_url);
-
 	if (!uri
 	    || uri->protocol == PROTOCOL_UNKNOWN
 	    || load_uri(uri, NULL, &dump_download, PRI_MAIN, 0, -1)) {
@@ -308,6 +300,7 @@ terminate:
 		retval = RET_SYNTAX;
 	}
 
+	if (wd) mem_free(wd);
 	if (uri) done_uri(uri);
 }
 

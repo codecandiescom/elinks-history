@@ -1,3 +1,30 @@
+Sat Apr 27 21:21:20 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: protocol/file.c, protocol/ftp.c, util/conv.c, util/conv.h:
+
+	add_conv_str() -> add_htmlesc_str() and moved from protocol/ftp.c to
+	util/conv.*; also spreading its usage in protocol/file.c; thanks to
+	zas for suggestion.  
+
+Sat Apr 27 20:56:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: links.h, setup.h, config/conf.c, dialogs/menu.c:
+
+	Removed MAX_INPUT_(URL,LUA)_LEN, now we use MAX_STR_LEN instead. It
+	was very dangerous before, as sometimes we used MAX_INPUT_URL_LEN
+	(4096), but sometimes MAX_STR_LEN (which is 1024), thus overflows
+	were possible. Also moved MAX_STR_LEN from links.h to setup.h.  
+
+Sat Apr 27 20:47:26 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/types.c:
+
+	Tidyup of is_in_list() and split to several smaller functions. Added
+	possibility to compare only the ends of the strings, good for
+	extension checking. Now we allow extensions even with dots inside to
+	be associated with a MIME type by user. Thanks to mmc for
+	suggestion.  
+
 Sat Apr 27 13:15:51 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: main.c, bookmarks/bookmarks.c, config/Makefile.am,

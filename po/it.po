@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-12-24 00:52+0100\n"
+"POT-Creation-Date: 2003-12-24 02:23+0100\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -46,7 +46,7 @@ msgstr "Info"
 #: src/sched/session.c:590 src/sched/session.c:607 src/sched/session.c:631
 #: src/sched/session.c:877 src/scripting/lua/core.c:401
 #: src/scripting/lua/core.c:482 src/scripting/lua/core.c:591
-#: src/scripting/lua/core.c:720 src/viewer/text/form.c:657
+#: src/scripting/lua/core.c:720 src/viewer/text/form.c:665
 #: src/viewer/text/search.c:858 src/viewer/text/search.c:884
 #: src/viewer/text/search.c:890 src/viewer/text/search.c:912
 #: src/viewer/text/search.c:1039 src/viewer/text/search.c:1203
@@ -5804,11 +5804,11 @@ msgstr "Impossibile scrivere sullo stdout."
 msgid "URL expected after %s."
 msgstr "Atteso URL dopo %s."
 
-#: src/viewer/text/form.c:653
+#: src/viewer/text/form.c:661
 msgid "Error while posting form"
 msgstr "Errore durante l'invio dei dati"
 
-#: src/viewer/text/form.c:654
+#: src/viewer/text/form.c:662
 #, c-format
 msgid "Could not get file %s: %s"
 msgstr "Impossibile ottenere il file %s: %s"

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.209 2005/03/05 20:46:47 zas Exp $ */
+/* $Id: dialogs.c,v 1.210 2005/03/18 14:41:12 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -510,7 +510,6 @@ push_save_button(struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
-#define	OPTION_MANAGER_BUTTONS	5
 
 static struct hierbox_browser_button option_buttons[] = {
 	{ N_("Info"),		push_hierbox_info_button,	1 },
@@ -934,7 +933,6 @@ push_kbdbind_save_button(struct dialog_data *dlg_data,
 	return EVENT_PROCESSED;
 }
 
-#define	KEYBINDING_MANAGER_BUTTONS	4
 
 static INIT_LIST_HEAD(keybinding_dialog_list);
 

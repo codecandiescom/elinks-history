@@ -1,13 +1,12 @@
-/* $Id: cache.h,v 1.65 2004/03/22 14:35:37 jonas Exp $ */
+/* $Id: cache.h,v 1.66 2004/03/31 16:47:18 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
 
-/* #include "bfu/listbox.h" */
-struct listbox_item;
-
-#include "protocol/uri.h"
 #include "util/lists.h"
+
+struct listbox_item;
+struct uri;
 
 /* This enum describes the level of caching of certain cache entry. That is,
  * under what conditions shall it be reloaded, if ever. The one with lowest
@@ -33,7 +32,7 @@ struct cache_entry {
 
 	struct list_head frag;
 
-	struct uri uri;
+	struct uri *uri;
 	unsigned char *head;
 	unsigned char *redirect;
 	unsigned char *last_modified;
@@ -65,7 +64,7 @@ struct cache_entry {
 /* Cache entries lists */
 
 #define get_cache_uri(cache_entry) \
-	((cache_entry)->valid ? struri((cache_entry)->uri) : (unsigned char *) "")
+	((cache_entry)->valid ? struri(*(cache_entry)->uri) : (unsigned char *) "")
 
 struct fragment {
 	LIST_HEAD(struct fragment);

@@ -1,5 +1,5 @@
 /* Cache-related dialogs */
-/* $Id: dialogs.c,v 1.49 2004/03/22 14:35:37 jonas Exp $ */
+/* $Id: dialogs.c,v 1.50 2004/03/31 16:47:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,13 +53,13 @@ get_cache_entry_info(struct listbox_item *item, struct terminal *term,
 	struct string msg;
 
 	if (listbox_info == LISTBOX_URI)
-		return stracpy(struri(ce->uri));
+		return stracpy(struri(*ce->uri));
 
 	if (!init_string(&msg)) return NULL;
 
 	add_to_string(&msg, _("URL", term));
 	add_to_string(&msg, ": ");
-	add_uri_to_string(&msg, &ce->uri, ~(URI_PASSWORD | URI_POST));
+	add_uri_to_string(&msg, ce->uri, ~(URI_PASSWORD | URI_POST));
 
 	if (ce->redirect) {
 		add_format_to_string(&msg, "\n%s: %s", _("Redirect", term),

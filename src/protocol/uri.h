@@ -1,7 +1,9 @@
-/* $Id: uri.h,v 1.65 2004/03/22 14:35:39 jonas Exp $ */
+/* $Id: uri.h,v 1.66 2004/03/31 16:47:18 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
+
+#include "util/object.h"
 
 struct string;
 
@@ -52,6 +54,9 @@ struct uri {
 	 * to make form data handling more efficient. The data is marked by
 	 * POST_CHAR in the uri string. */
 	unsigned char *post;
+
+	/* User count. Maintained by the URI cache. */
+	unsigned int refcount;
 };
 
 
@@ -84,6 +89,12 @@ enum uri_component {
 	URI_DATA	= (1 << 5),
 	URI_POST	= (1 << 6),
 };
+
+
+/* A small URI struct cache to increase reusability. */
+struct uri *get_uri(unsigned char *string);
+void done_uri(struct uri *uri);
+#define get_uri_reference(uri) object_lock(uri)
 
 /* These functions recreate the URI string part by part. */
 /* The @components bitmask describes the set of URI components used for

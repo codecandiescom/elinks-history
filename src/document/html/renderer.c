@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.220 2003/08/26 23:04:43 jonas Exp $ */
+/* $Id: renderer.c,v 1.221 2003/08/26 23:10:05 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -317,26 +317,28 @@ xset_vchars(struct part *part, int x, int y, int yl,
 
 static inline void
 set_hline(struct part *part, int x, int y, unsigned char *chars,
-	  int charslen, unsigned char color, unsigned char attr)
+	  int charslen, unsigned char color, enum screen_char_attr attr)
 {
 	assert(part);
 	if_assert_failed return;
+
+	if (xpand_spaces(part, x + charslen - 1))
+		return;
 
 	if (part->document) {
 		if (xpand_lines(part, y)
 		    || xpand_line(part, y, x + charslen - 1))
 			return;
-	}
 
-	if (xpand_spaces(part, x + charslen - 1))
-		return;
-
-	for (; charslen > 0; charslen--, x++, chars++) {
-		part->spaces[x] = (*chars == ' ');
-		if (part->document && part->document->data) {
+		for (; charslen > 0; charslen--, x++, chars++) {
+			part->spaces[x] = (*chars == ' ');
 			POS(x, y).color = color;
 			POS(x, y).attr = attr;
 			POS(x, y).data = *chars;
+		}
+	} else {
+		for (; charslen > 0; charslen--, x++, chars++) {
+			part->spaces[x] = (*chars == ' ');
 		}
 	}
 }

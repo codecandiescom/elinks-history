@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.48 2004/06/21 17:08:16 pasky Exp $ */
+/* $Id: parse.c,v 1.49 2004/06/21 17:11:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -252,12 +252,10 @@ get_num(unsigned char *a, unsigned char *name)
 	return result;
 }
 
-/* Returns width value from attribute named @name.
- * Parse 'width[%],....'-like string, and return width value in chars.
- * If @limited is set, it will limit width value to the current usable width,
- * note that @limited must be set to be able to parse width expressed in
- * percentage.
- * It returns -1 in case of error. */
+/* Parse 'width[%],....'-like attribute @name of element @a.  If @limited is
+ * set, it will limit the width value to the current usable width. Note that
+ * @limited must be set to be able to parse percentage widths. */
+/* The function returns width in characters or -1 in case of error. */
 int
 get_width(unsigned char *a, unsigned char *name, int limited)
 {

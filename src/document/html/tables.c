@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.114 2003/10/30 22:57:41 jonas Exp $ */
+/* $Id: tables.c,v 1.115 2003/11/02 21:37:56 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1071,9 +1071,10 @@ distribute_widths(struct table *t, int width)
 
 					break;
 				case 1:
-					if (t->xcols[i] < -1 && t->xcols[i] != -2) {
-						if (t->xcols[i] <= -2) {
-							w[i] = -2 - t->xcols[i];
+					/* TODO: Weird test. Rewrite. --Zas */
+					if (t->xcols[i] < WIDTH_AUTO && t->xcols[i] != WIDTH_RELATIVE) {
+						if (t->xcols[i] <= WIDTH_RELATIVE) {
+							w[i] = WIDTH_RELATIVE - t->xcols[i];
 						} else {
 							w[i] = 1;
 						}
@@ -1102,8 +1103,8 @@ distribute_widths(struct table *t, int width)
 					break;
 				case 5:
 					if (t->xcols[i] < 0) {
-						if (t->xcols[i] <= -2) {
-							w[i] =  -2 - t->xcols[i];
+						if (t->xcols[i] <= WIDTH_RELATIVE) {
+							w[i] =  WIDTH_RELATIVE - t->xcols[i];
 						} else {
 							w[i] = 1;
 						}

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.50 2003/08/29 11:39:30 jonas Exp $ */
+/* $Id: screen.c,v 1.51 2003/08/29 11:50:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,10 +201,8 @@ print_char(struct string *screen, struct rs_opt_cache *opt_cache,
 		} else {
 			add_char_to_string(screen, c);
 		}
-	} else if (c <= 1) {
-		add_char_to_string(screen, ' ');
 	} else {
-		add_char_to_string(screen, '.');
+		add_char_to_string(screen, ' ');
 	}
 }
 

@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.34 2004/04/29 23:11:43 jonas Exp $ */
+/* $Id: version.c,v 1.35 2004/05/03 13:11:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,10 +49,18 @@ static void
 add_modules_to_string(struct string *string, struct terminal *term)
 {
 	struct module *module;
-	int i;
+	int i, last_split = 0;
+	unsigned char *last_newline = strrchr(string->source, '\n');
+
+	if (last_newline)
+		last_split = last_newline - string->source;
 
 	foreach_module (module, builtin_modules, i) {
 		if (i > 0) add_to_string(string, ", ");
+		if (string->length - last_split > 70) {
+			add_char_to_string(string, '\n');
+			last_split = string->length;
+		}
 		add_module_to_string(string, module, term);
 	}
 }
@@ -84,7 +92,7 @@ get_dyn_full_version(struct terminal *term, int more)
 
 	string_concat(&string,
 		"\n\n",
-		_("Features:", term), " ",
+		_("Features:", term), "\n",
 #ifndef CONFIG_DEBUG
 		_("Standard", term),
 #else

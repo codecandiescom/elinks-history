@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.51 2002/11/19 22:08:43 zas Exp $ */
+/* $Id: sched.c,v 1.52 2002/11/23 19:25:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,13 +265,17 @@ setcstate(struct connection *c, int state)
 struct k_conn *
 is_host_on_keepalive_list(struct connection *c)
 {
-	unsigned char *ho = get_host_and_pass(c->url);
+	unsigned char *ho;
 	void (*ph)(struct connection *) = get_protocol_handle(c->url);
-	int po = get_port(c->url);
+	int po;
 	struct k_conn *h;
 
-	if (po == -1) return NULL;
 	if (!ph) return NULL;
+	
+	po = get_port(c->url);
+	if (po == -1) return NULL;
+	
+	ho = get_host_and_pass(c->url);
 	if (!ho) return NULL;
 
 	foreach(h, keepalive_connections)

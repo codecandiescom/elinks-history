@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.203 2004/05/29 17:12:57 jonas Exp $ */
+/* $Id: uri.c,v 1.204 2004/05/29 17:23:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,7 +344,12 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		while (*path_end && !end_of_dir(*path_end))
 			path_end++;
 
-		add_char_to_string(string, '/');
+		if ((uri->protocol == PROTOCOL_FILE && !dir_sep(*uri->data))
+		    || *uri->data != '/') {
+			/* FIXME: Add correct separator */
+			add_char_to_string(string, '/');
+		}
+
 		add_bytes_to_string(string, uri->data, path_end - uri->data);
 	}
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.211 2003/10/02 12:54:35 kuser Exp $ */
+/* $Id: view.c,v 1.212 2003/10/02 14:05:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1064,7 +1064,7 @@ quak:
 				goto x;
 			case ACT_LUA_CONSOLE:
 #ifdef HAVE_LUA
-				trigger_event(get_event_id("dialog-lua-console"), ses);
+				trigger_event_name("dialog-lua-console", ses);
 #endif
 				goto x;
 			case ACT_SCRIPTING_FUNCTION:

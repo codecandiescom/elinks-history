@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.213 2004/04/18 00:44:34 jonas Exp $ */
+/* $Id: menu.c,v 1.214 2004/04/18 00:59:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -941,8 +941,25 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 	case ACT_MENU_UP:
 	case ACT_MENU_PAGE_UP:
 	case ACT_MENU_PAGE_DOWN:
+	case ACT_MENU_SELECT:
 		select_menu(win->term, menu);
 		return;
+
+	case ACT_MENU_HOME:
+		menu->selected = 0;
+		break;
+
+	case ACT_MENU_END:
+		menu->selected = menu->size - 1;
+		break;
+
+	case ACT_MENU_NEXT_ITEM:
+	case ACT_MENU_PREVIOUS_ITEM:
+		/* This is pretty western centric since `what is next'?
+		 * Anyway we cycle clockwise by resetting the action ... */
+		action = (action == ACT_MENU_NEXT_ITEM)
+		       ? ACT_MENU_RIGHT : ACT_MENU_LEFT;
+		/* ... and then letting left/right handling take over. */
 
 	case ACT_MENU_LEFT:
 	case ACT_MENU_RIGHT:
@@ -953,7 +970,10 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 			menu->selected = menu->size - 1;
 		else if (menu->selected >= menu->size)
 			menu->selected = 0;
+		break;
 
+	case ACT_MENU_REDRAW:
+		/* Just call display_mainmenu() */
 		break;
 
 	default:
@@ -964,6 +984,7 @@ mainmenu_kbd_handler(struct menu *menu, struct term_event *ev, int fwd)
 			break;
 		}
 
+	case ACT_MENU_CANCEL:
 		delete_window_ev(win, action != ACT_MENU_CANCEL ? ev : NULL);
 		return;
 	}

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.273 2004/07/12 14:31:37 jonas Exp $ */
+/* $Id: link.c,v 1.274 2004/07/12 15:07:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -826,7 +826,9 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 	link = get_current_link(doc_view);
 	if (!link) return FRAME_EVENT_REFRESH;
 
-	if (!link_is_form(link) || link->type == LINK_BUTTON) {
+	if (!link_is_form(link)
+	    || link_is_textinput(link)
+	    || link->type == LINK_BUTTON) {
 		if (goto_current_link(ses, doc_view, do_reload))
 			return FRAME_EVENT_OK;
 

@@ -840,11 +840,11 @@ msgstr "Przesuñ do nastêpnej ramki"
 
 #: src/config/kbdbind.c:428
 msgid "Open a new tab"
-msgstr "Otwórz nowy tab"
+msgstr "Otwórz now± kartê"
 
 #: src/config/kbdbind.c:429
 msgid "Open a new tab in background"
-msgstr "Otwórz nowy tab w tle"
+msgstr "Otwórz now± kartê w tle"
 
 #: src/config/kbdbind.c:430
 msgid "Open a new window"
@@ -852,11 +852,11 @@ msgstr "Otwórz nowe okno"
 
 #: src/config/kbdbind.c:431
 msgid "Open the current link in a new tab"
-msgstr "Otwórz bie¿±cy odno¶nik w nowym tabie"
+msgstr "Otwórz bie¿±cy odno¶nik w nowej karcie"
 
 #: src/config/kbdbind.c:433
 msgid "Open the current link a new tab in background"
-msgstr "Otwórz bie¿±cy odno¶nik w nowym tabie w tle"
+msgstr "Otwórz bie¿±cy odno¶nik w nowej karcie w tle"
 
 #: src/config/kbdbind.c:434
 msgid "Open the current link in a new window"
@@ -932,15 +932,15 @@ msgstr "Szukaj tekstu wstecz"
 
 #: src/config/kbdbind.c:452 src/terminal/tab.c:187
 msgid "Close tab"
-msgstr "Zamknij tab"
+msgstr "Zamknij kartê"
 
 #: src/config/kbdbind.c:453
 msgid "Next tab"
-msgstr "Nastêpny tab"
+msgstr "Nastêpna karta"
 
 #: src/config/kbdbind.c:454
 msgid "Previous tab"
-msgstr "Poprzedni tab"
+msgstr "Poprzednia karta"
 
 #: src/config/kbdbind.c:455
 msgid "Toggle displaying of links to images"
@@ -3220,44 +3220,44 @@ msgstr "Kolory tekstu na pasku statusu."
 
 #: src/config/options.inc:1270 src/config/options.inc:1716
 msgid "Tabs bar"
-msgstr "Pasek tabów"
+msgstr "Pasek kart"
 
 #: src/config/options.inc:1272 src/config/options.inc:1718
 msgid "Tabs bar colors."
-msgstr "Kolory paska tabów."
+msgstr "Kolory paska kart."
 
 #: src/config/options.inc:1274 src/config/options.inc:1720
 msgid "Unselected tab"
-msgstr "Niewybrany tab"
+msgstr "Niewybrana karta"
 
 #: src/config/options.inc:1276 src/config/options.inc:1722
 msgid "Unselected tab colors."
-msgstr "Kolory niewybranego taba."
+msgstr "Kolory niewybranych kart."
 
 #: src/config/options.inc:1286
 msgid "Loading tab"
-msgstr "Tab, do którego wczytywany jest dokument"
+msgstr "Karta, do której wczytywany jest dokument"
 
 #: src/config/options.inc:1288
 msgid "Tab colors for tabs that are loading in the background."
-msgstr "Kolory tabów dla tabów, do których wczytywany jest dokument w tle."
+msgstr "Kolory kart dla kart, do których wczytywany jest dokument w tle."
 
 #
 #: src/config/options.inc:1298 src/config/options.inc:1732
 msgid "Selected tab"
-msgstr "Wybrany tab"
+msgstr "Wybrana karta"
 
 #: src/config/options.inc:1300 src/config/options.inc:1734
 msgid "Selected tab colors."
-msgstr "Kolory wybranego taba."
+msgstr "Kolory wybranej karty."
 
 #: src/config/options.inc:1310 src/config/options.inc:1744
 msgid "Tab separator"
-msgstr "Separator tabów"
+msgstr "Separator kart"
 
 #: src/config/options.inc:1312 src/config/options.inc:1746
 msgid "Tab separator colors."
-msgstr "Kolory separatora tabów."
+msgstr "Kolory separatora kart."
 
 #: src/config/options.inc:1322 src/config/options.inc:1756
 msgid "Searched strings"
@@ -3432,16 +3432,16 @@ msgstr ""
 
 #: src/config/options.inc:1822
 msgid "Window tabs"
-msgstr "Taby"
+msgstr "Karty"
 
 #: src/config/options.inc:1824
 msgid "Window tabs settings."
-msgstr "Ustawienia tabów."
+msgstr "Ustawienia kart."
 
 #
 #: src/config/options.inc:1826
 msgid "Display tabs bar"
-msgstr "Wy¶wietl pasek tabów"
+msgstr "Wy¶wietl pasek kart"
 
 #: src/config/options.inc:1828
 msgid ""
@@ -3450,28 +3450,28 @@ msgid ""
 "1 means only if two or more tabs.\n"
 "2 means always."
 msgstr ""
-"Pokazuj pasek tabów na ekranie:\n"
+"Pokazuj pasek kart na ekranie:\n"
 "0 - nigdy.\n"
 "1 - tylko gdy wiêcej ni¿ jeden tab.\n"
 "2 - zawsze."
 
 #: src/config/options.inc:1833
 msgid "Wrap-around tabs cycling"
-msgstr "Cykliczno¶æ tabów"
+msgstr "Cykliczno¶æ kart"
 
 #: src/config/options.inc:1835
 msgid ""
 "When moving right from the last tab, jump at the first one, and\n"
 "vice versa."
-msgstr "Przeskakiwanie z ostatniego taba na pierwszego i na odwrót."
+msgstr "Przeskakiwanie z ostatniej karty do pierwszej i na odwrót."
 
 #: src/config/options.inc:1838
 msgid "Confirm tab closing"
-msgstr "Potwierdzenie zamkniêcia taba"
+msgstr "Potwierdzenie zamkniêcia karty"
 
 #: src/config/options.inc:1840
 msgid "When closing a tab show confirmation dialog."
-msgstr "Przy zamykaniu taba pokazuj okienko dialogowe potwierdzania."
+msgstr "Przy zamykaniu karty pokazuj okienko dialogowe potwierdzania."
 
 #: src/config/options.inc:1844 src/config/opttypes.c:369
 msgid "Language"
@@ -4227,15 +4227,15 @@ msgstr "Ramka na ca³~ym ekranie"
 
 #: src/dialogs/menu.c:346 src/dialogs/menu.c:478
 msgid "Nex~t tab"
-msgstr "Nas~têpny tab"
+msgstr "Nas~têpna karta"
 
 #: src/dialogs/menu.c:349 src/dialogs/menu.c:479
 msgid "Pre~v tab"
-msgstr "~Poprzedni tab"
+msgstr "~Poprzednia karta"
 
 #: src/dialogs/menu.c:353 src/dialogs/menu.c:480
 msgid "~Close tab"
-msgstr "~Zamknij tab"
+msgstr "~Zamknij kartê"
 
 #: src/dialogs/menu.c:357
 msgid "Close ~all but this"
@@ -4243,11 +4243,11 @@ msgstr "Z~amknij wszystkie za wyj±tekiem tego"
 
 #: src/dialogs/menu.c:370
 msgid "Open new ~tab"
-msgstr "Otwórz w nowym ~tabie"
+msgstr "Otwórz w nowej ~karcie"
 
 #: src/dialogs/menu.c:371
 msgid "Open new tab in backgroun~d"
-msgstr "Otwórz nowy tab w t~le"
+msgstr "Otwórz now± kartê w t~le"
 
 #: src/dialogs/menu.c:373
 msgid "~Go to URL"
@@ -5650,7 +5650,7 @@ msgstr "Zbyt du¿o bajtów przeczytanych z itrm!"
 
 #: src/terminal/tab.c:188
 msgid "Do you really want to close the current tab?"
-msgstr "Czy na pewno chcesz zamkn±æ bie¿±cy tab?"
+msgstr "Czy na pewno chcesz zamkn±æ bie¿±c± kartê?"
 
 #: src/viewer/dump/dump.c:79
 #, c-format
@@ -5693,11 +5693,11 @@ msgstr "~Otwórz w nowym oknie"
 
 #: src/viewer/text/link.c:922
 msgid "Open in new ~tab"
-msgstr "Otwórz w nowym ~tabie"
+msgstr "Otwórz w nowej ~karcie"
 
 #: src/viewer/text/link.c:925
 msgid "Open in new tab in ~background"
-msgstr "Otwórz w nowym t~abie w tle"
+msgstr "Otwórz w nowej k~arcie w tle"
 
 #: src/viewer/text/link.c:930
 msgid "~Download link"

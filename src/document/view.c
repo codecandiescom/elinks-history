@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.31 2002/05/04 08:14:44 pasky Exp $ */
+/* $Id: view.c,v 1.32 2002/05/04 08:42:55 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1460,7 +1460,7 @@ static int submit_form_do(unsigned char *url, struct link *link,
 		goto_imgmap(ses, url + 4, stracpy(url + 4),
 			    stracpy(link->target));
 	} else {
-		goto_url_f(ses, url, link->target);
+		goto_url_frame(ses, url, link->target);
 	}
 
 	mem_free(url);

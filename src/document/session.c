@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.27 2002/05/04 08:30:19 pasky Exp $ */
+/* $Id: session.c,v 1.28 2002/05/04 08:42:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,7 +342,7 @@ void ses_imgmap(struct session *ses)
 
 void map_selected(struct terminal *term, struct link_def *ld, struct session *ses)
 {
-	goto_url_f(ses, ld->link, ld->target);
+	goto_url_frame(ses, ld->link, ld->target);
 }
 
 void file_end_load(struct status *, struct file_to_load *);
@@ -1008,7 +1008,7 @@ unsigned char *follow_url_hook(struct session *ses, unsigned char *url)
 
 void
 goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
-	   enum session_wtd wtd)
+	   enum session_wtd wtd, enum cache_mode cache_mode)
 {
 	unsigned char *u;
 	unsigned char *pos;
@@ -1029,7 +1029,7 @@ goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 		goto end;
 	}
 
-	ses->reloadlevel = NC_CACHE;
+	ses->reloadlevel = cache_mode;
 
 	u = translate_url(url, ses->term->cwd);
 	if (!u) {
@@ -1062,7 +1062,7 @@ goto_url_w(struct session *ses, unsigned char *url, unsigned char *target,
 		add_to_str(&ses->ref_url, &l, fd->f_data->url);
 	}
 
-	ses_goto(ses, u, target, PRI_MAIN, NC_CACHE, wtd, pos, end_load, 0);
+	ses_goto(ses, u, target, PRI_MAIN, cache_mode, wtd, pos, end_load, 0);
 
 	/* abort_loading(ses); */
 
@@ -1073,14 +1073,23 @@ end:
 #endif
 }
 
-void goto_url_f(struct session *ses, unsigned char *url, unsigned char *target)
+void
+goto_url_frame_reload(struct session *ses, unsigned char *url,
+		      unsigned char *target)
 {
-	goto_url_w(ses, url, target, WTD_FORWARD);
+	goto_url_w(ses, url, target, WTD_FORWARD, NC_RELOAD);
+}
+
+void
+goto_url_frame(struct session *ses, unsigned char *url,
+	       unsigned char *target)
+{
+	goto_url_w(ses, url, target, WTD_FORWARD, NC_CACHE);
 }
 
 void goto_url(struct session *ses, unsigned char *url)
 {
-	goto_url_w(ses, url, NULL, WTD_FORWARD);
+	goto_url_w(ses, url, NULL, WTD_FORWARD, NC_CACHE);
 }
 
 void goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href, unsigned char *target)
@@ -1089,7 +1098,7 @@ void goto_imgmap(struct session *ses, unsigned char *url, unsigned char *href, u
 	ses->imgmap_href_base = href;
 	if (ses->imgmap_target_base) mem_free(ses->imgmap_target_base);
 	ses->imgmap_target_base = target;
-	goto_url_w(ses, url, target, WTD_IMGMAP);
+	goto_url_w(ses, url, target, WTD_IMGMAP, NC_CACHE);
 }
 
 struct frame *ses_find_frame(struct session *ses, unsigned char *name)

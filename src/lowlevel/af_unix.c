@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.37 2003/06/18 10:49:45 zas Exp $ */
+/* $Id: af_unix.c,v 1.38 2003/06/18 12:10:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,6 +78,13 @@ static int s_unix_fd = -1;
 
 #ifdef USE_AF_UNIX
 
+#ifndef SUN_LEN
+/* Evaluate to actual length of the `sockaddr_un' structure.
+ * Borrowed from sys/un.h  */
+#define SUN_LEN(ptr) ((size_t) (((struct sockaddr_un *) 0)->sun_path)        \
+                      + strlen ((ptr)->sun_path))
+#endif
+
 static int
 get_address(void)
 {
@@ -122,7 +129,7 @@ get_address(void)
 	addr->sun_family = AF_UNIX;
 
 	s_unix = (struct sockaddr *) addr;
-	s_unix_l = (char *) &addr->sun_path - (char *) addr + strlen(addr->sun_path);
+	s_unix_l = SUN_LEN(addr);
 
 	return AF_UNIX;
 

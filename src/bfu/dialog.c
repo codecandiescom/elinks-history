@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.59 2003/10/28 09:29:02 zas Exp $ */
+/* $Id: dialog.c,v 1.60 2003/10/28 17:02:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -343,7 +343,7 @@ ok_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 	return cancel_dialog(dlg_data, widget_data);
 }
 
-/* FIXME: rename it. --Zas */
+/* Clear text fields in dialog. */
 int
 clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 {

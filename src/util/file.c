@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.29 2004/07/02 04:16:40 jonas Exp $ */
+/* $Id: file.c,v 1.30 2004/07/02 07:36:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,10 +66,9 @@ file_is_dir(const unsigned char *filename)
 {
 	struct stat st;
 
-	if (stat(fd, &st) || !S_ISDIR(st.st_mode))
-		return 0;
+	if (stat(filename, &st)) return 0;
 
-	return 1;
+	return !!S_ISDIR(st.st_mode);
 }
 
 unsigned char *

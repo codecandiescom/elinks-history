@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.89 2004/07/28 13:19:10 jonas Exp $ */
+/* $Id: kbd.c,v 1.90 2004/07/28 13:21:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -638,171 +638,171 @@ static struct key os2xtd[256] = {
 static int
 decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 {
-			unsigned char c;
-			int v;
-			int el;
+	unsigned char c;
+	int v;
+	int el;
 
-			if (itrm->qlen < 3) return -1;
+	if (itrm->qlen < 3) return -1;
 
-			get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
+	get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
 #ifdef DEBUG_ITRM_QUEUE
-			fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
-			fflush(stderr);
+	fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
+	fflush(stderr);
 #endif
-			if (itrm->kqueue[2] == '[') {
-				if (itrm->qlen >= 4
-				    && itrm->kqueue[3] >= 'A'
-				    && itrm->kqueue[3] <= 'L') {
-					ev->x = KBD_F1 + itrm->kqueue[3] - 'A';
-					return 4;
-				}
+	if (itrm->kqueue[2] == '[') {
+		if (itrm->qlen >= 4
+		    && itrm->kqueue[3] >= 'A'
+		    && itrm->kqueue[3] <= 'L') {
+			ev->x = KBD_F1 + itrm->kqueue[3] - 'A';
+			return 4;
+		}
 
-				return -1;
-			}
+		return -1;
+	}
 
-			switch (c) {
-				case 0: return -1;
-				case 'A': ev->x = KBD_UP; break;
-				case 'B': ev->x = KBD_DOWN; break;
-				case 'C': ev->x = KBD_RIGHT; break;
-				case 'D': ev->x = KBD_LEFT; break;
-				case 'F':
-				case 'e': ev->x = KBD_END; break;
-				case 'H': ev->x = KBD_HOME; break;
-				case 'I': ev->x = KBD_PAGE_UP; break;
-				case 'G': ev->x = KBD_PAGE_DOWN; break;
+	switch (c) {
+	case 0: return -1;
+	case 'A': ev->x = KBD_UP; break;
+	case 'B': ev->x = KBD_DOWN; break;
+	case 'C': ev->x = KBD_RIGHT; break;
+	case 'D': ev->x = KBD_LEFT; break;
+	case 'F':
+	case 'e': ev->x = KBD_END; break;
+	case 'H': ev->x = KBD_HOME; break;
+	case 'I': ev->x = KBD_PAGE_UP; break;
+	case 'G': ev->x = KBD_PAGE_DOWN; break;
 
-				case 'z': switch (v) {
-					case 247: ev->x = KBD_INS; break;
-					case 214: ev->x = KBD_HOME; break;
-					case 220: ev->x = KBD_END; break;
-					case 216: ev->x = KBD_PAGE_UP; break;
-					case 222: ev->x = KBD_PAGE_DOWN; break;
-					case 249: ev->x = KBD_DEL; break;
-					} break;
+	case 'z': switch (v) {
+		case 247: ev->x = KBD_INS; break;
+		case 214: ev->x = KBD_HOME; break;
+		case 220: ev->x = KBD_END; break;
+		case 216: ev->x = KBD_PAGE_UP; break;
+		case 222: ev->x = KBD_PAGE_DOWN; break;
+		case 249: ev->x = KBD_DEL; break;
+		} break;
 
-				case '~': switch (v) {
-					case 1: ev->x = KBD_HOME; break;
-					case 2: ev->x = KBD_INS; break;
-					case 3: ev->x = KBD_DEL; break;
-					case 4: ev->x = KBD_END; break;
-					case 5: ev->x = KBD_PAGE_UP; break;
-					case 6: ev->x = KBD_PAGE_DOWN; break;
-					case 7: ev->x = KBD_HOME; break;
-					case 8: ev->x = KBD_END; break;
+	case '~': switch (v) {
+		case 1: ev->x = KBD_HOME; break;
+		case 2: ev->x = KBD_INS; break;
+		case 3: ev->x = KBD_DEL; break;
+		case 4: ev->x = KBD_END; break;
+		case 5: ev->x = KBD_PAGE_UP; break;
+		case 6: ev->x = KBD_PAGE_DOWN; break;
+		case 7: ev->x = KBD_HOME; break;
+		case 8: ev->x = KBD_END; break;
 
-					case 11: ev->x = KBD_F1; break;
-					case 12: ev->x = KBD_F2; break;
-					case 13: ev->x = KBD_F3; break;
-					case 14: ev->x = KBD_F4; break;
-					case 15: ev->x = KBD_F5; break;
+		case 11: ev->x = KBD_F1; break;
+		case 12: ev->x = KBD_F2; break;
+		case 13: ev->x = KBD_F3; break;
+		case 14: ev->x = KBD_F4; break;
+		case 15: ev->x = KBD_F5; break;
 
-					case 17: ev->x = KBD_F6; break;
-					case 18: ev->x = KBD_F7; break;
-					case 19: ev->x = KBD_F8; break;
-					case 20: ev->x = KBD_F9; break;
-					case 21: ev->x = KBD_F10; break;
+		case 17: ev->x = KBD_F6; break;
+		case 18: ev->x = KBD_F7; break;
+		case 19: ev->x = KBD_F8; break;
+		case 20: ev->x = KBD_F9; break;
+		case 21: ev->x = KBD_F10; break;
 
-					case 23: ev->x = KBD_F11; break;
-					case 24: ev->x = KBD_F12; break;
+		case 23: ev->x = KBD_F11; break;
+		case 24: ev->x = KBD_F12; break;
 
-					/* Give preference to F11 and F12 over shifted F1 and F2. */
-					/*
-					case 23: ev->x = KBD_F1; ev->y = KBD_SHIFT; break;
-					case 24: ev->x = KBD_F2; ev->y = KBD_SHIFT; break;
-	 				*/
+		/* Give preference to F11 and F12 over shifted F1 and F2. */
+		/*
+		case 23: ev->x = KBD_F1; ev->y = KBD_SHIFT; break;
+		case 24: ev->x = KBD_F2; ev->y = KBD_SHIFT; break;
+		*/
 
-					case 25: ev->x = KBD_F3; ev->y = KBD_SHIFT; break;
-					case 26: ev->x = KBD_F4; ev->y = KBD_SHIFT; break;
+		case 25: ev->x = KBD_F3; ev->y = KBD_SHIFT; break;
+		case 26: ev->x = KBD_F4; ev->y = KBD_SHIFT; break;
 
-					case 28: ev->x = KBD_F5; ev->y = KBD_SHIFT; break;
-					case 29: ev->x = KBD_F6; ev->y = KBD_SHIFT; break;
+		case 28: ev->x = KBD_F5; ev->y = KBD_SHIFT; break;
+		case 29: ev->x = KBD_F6; ev->y = KBD_SHIFT; break;
 
-					case 31: ev->x = KBD_F7; ev->y = KBD_SHIFT; break;
-					case 32: ev->x = KBD_F8; ev->y = KBD_SHIFT; break;
-	 				case 33: ev->x = KBD_F9; ev->y = KBD_SHIFT; break;
-					case 34: ev->x = KBD_F10; ev->y = KBD_SHIFT; break;
+		case 31: ev->x = KBD_F7; ev->y = KBD_SHIFT; break;
+		case 32: ev->x = KBD_F8; ev->y = KBD_SHIFT; break;
+		case 33: ev->x = KBD_F9; ev->y = KBD_SHIFT; break;
+		case 34: ev->x = KBD_F10; ev->y = KBD_SHIFT; break;
 
-					} break;
+		} break;
 
-				case 'R': resize_terminal(); break;
-				case 'M':
+	case 'R': resize_terminal(); break;
+	case 'M':
 #ifdef CONFIG_MOUSE
-				{
-					static int xterm_button = -1;
-					struct term_event_mouse *mouse = &ev->info.mouse;
+	{
+		static int xterm_button = -1;
+		struct term_event_mouse *mouse = &ev->info.mouse;
 
-					if (itrm->qlen - el < 3)
-						return -1;
+		if (itrm->qlen - el < 3)
+			return -1;
 
-					if (v == 5) {
-						if (xterm_button == -1)
-							xterm_button = 0;
-						if (itrm->qlen - el < 5)
-							return -1;
+		if (v == 5) {
+			if (xterm_button == -1)
+				xterm_button = 0;
+			if (itrm->qlen - el < 5)
+				return -1;
 
-						ev->x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
-						       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
+			ev->x = (unsigned char)(itrm->kqueue[el+1]) - ' ' - 1
+			       + ((int)((unsigned char)(itrm->kqueue[el+2]) - ' ' - 1) << 7);
 
-						if (ev->x & (1 << 13)) ev->x = 0; /* ev->x |= ~0 << 14; */
+			if (ev->x & (1 << 13)) ev->x = 0; /* ev->x |= ~0 << 14; */
 
-						ev->y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1
-						       + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
+			ev->y = (unsigned char)(itrm->kqueue[el+3]) - ' ' - 1
+			       + ((int)((unsigned char)(itrm->kqueue[el+4]) - ' ' - 1) << 7);
 
-						if (ev->y & (1 << 13)) ev->y = 0; /* ev->y |= ~0 << 14; */
+			if (ev->y & (1 << 13)) ev->y = 0; /* ev->y |= ~0 << 14; */
 
-						switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
-						    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
-						    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
-						    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
-						    case 0: ev->info.mouse.button = B_DRAG;
-						    /* default : Twin protocol error */
-						}
-						xterm_button = itrm->kqueue[el] - ' ';
-						el += 5;
-					} else {
-						/* See terminal/mouse.h about details of the mouse reporting
-						 * protocol and {struct term_event_mouse->button} bitmask
-						 * structure. */
-						ev->x = itrm->kqueue[el+1] - ' ' - 1;
-						ev->y = itrm->kqueue[el+2] - ' ' - 1;
-
-						/* There are rumours arising from remnants of code dating to
-						 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
-						 * However, I didn't find on what terminal it should be ever
-						 * supposed to work and it conflicts with wheels. So I removed
-						 * the last remnants of the code as well. --pasky */
-
-						mouse->button = (itrm->kqueue[el] & 7) | B_DOWN;
-						/* smartglasses1 - rxvt wheel: */
-						if (mouse->button == 3 && xterm_button != -1) {
-							mouse->button = xterm_button | B_UP;
-						}
-						/* xterm wheel: */
-						if ((itrm->kqueue[el] & 96) == 96) {
-							mouse->button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
-						}
-
-						xterm_button = -1;
-						/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
-						 * release sequence for wheel. rxvt itself sends only press
-						 * sequence. Since we can't reliably guess what we're talking
-						 * with from $TERM, we will rather support Eterm/aterm, as in
-						 * rxvt, at least each second wheel up move will work. */
-						if (check_mouse_action(ev, B_DOWN))
-#if 0
-						    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
-							 && (ev->b & BM_BUTT) >= B_WHEEL_UP))
-#endif
-							xterm_button = get_mouse_button(ev);
-
-						el += 3;
-					}
-					ev->ev = EVENT_MOUSE;
-				}
-#endif /* CONFIG_MOUSE */
-				break;
+			switch ((itrm->kqueue[el] - ' ') ^ xterm_button) { /* Every event changes only one bit */
+			    case TW_BUTT_LEFT:   mouse->button = B_LEFT | ( (xterm_button & TW_BUTT_LEFT) ? B_UP : B_DOWN ); break;
+			    case TW_BUTT_MIDDLE: mouse->button = B_MIDDLE | ( (xterm_button & TW_BUTT_MIDDLE) ? B_UP :  B_DOWN ); break;
+			    case TW_BUTT_RIGHT:  mouse->button = B_RIGHT | ( (xterm_button & TW_BUTT_RIGHT) ? B_UP : B_DOWN ); break;
+			    case 0: ev->info.mouse.button = B_DRAG;
+			    /* default : Twin protocol error */
 			}
+			xterm_button = itrm->kqueue[el] - ' ';
+			el += 5;
+		} else {
+			/* See terminal/mouse.h about details of the mouse reporting
+			 * protocol and {struct term_event_mouse->button} bitmask
+			 * structure. */
+			ev->x = itrm->kqueue[el+1] - ' ' - 1;
+			ev->y = itrm->kqueue[el+2] - ' ' - 1;
+
+			/* There are rumours arising from remnants of code dating to
+			 * the ancient Mikulas' times that bit 4 indicated B_DRAG.
+			 * However, I didn't find on what terminal it should be ever
+			 * supposed to work and it conflicts with wheels. So I removed
+			 * the last remnants of the code as well. --pasky */
+
+			mouse->button = (itrm->kqueue[el] & 7) | B_DOWN;
+			/* smartglasses1 - rxvt wheel: */
+			if (mouse->button == 3 && xterm_button != -1) {
+				mouse->button = xterm_button | B_UP;
+			}
+			/* xterm wheel: */
+			if ((itrm->kqueue[el] & 96) == 96) {
+				mouse->button = (itrm->kqueue[el] & 1) ? B_WHEEL_DOWN : B_WHEEL_UP;
+			}
+
+			xterm_button = -1;
+			/* XXX: Eterm/aterm uses rxvt-like reporting, but sends the
+			 * release sequence for wheel. rxvt itself sends only press
+			 * sequence. Since we can't reliably guess what we're talking
+			 * with from $TERM, we will rather support Eterm/aterm, as in
+			 * rxvt, at least each second wheel up move will work. */
+			if (check_mouse_action(ev, B_DOWN))
+#if 0
+				    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
+					 && (ev->b & BM_BUTT) >= B_WHEEL_UP))
+#endif
+				xterm_button = get_mouse_button(ev);
+
+			el += 3;
+		}
+		ev->ev = EVENT_MOUSE;
+	}
+#endif /* CONFIG_MOUSE */
+	break;
+	}
 
 	return el;
 }

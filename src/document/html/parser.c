@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.349 2004/01/18 15:19:40 zas Exp $ */
+/* $Id: parser.c,v 1.350 2004/01/18 15:25:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2269,49 +2269,50 @@ static void
 parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
 {
 	unsigned char *tmp_str;
-	unsigned long number;
 	int val, tmp_val, divisor;
-	int *tmp_values;
 	int *values = NULL;
 	int values_count = 0;
 	register int i;
 
-new_ch:
-	while (isspace(*str)) str++;
+	while (1) {
+		int *tmp_values;
+		unsigned long number;
 
-	/* Extract number. */
-	errno = 0;
-	number = strtoul(str, (char **)&str, 10);
-	if (errno) {
-		*new_values_count = 0;
-		return;
-	}
+		while (isspace(*str)) str++;
 
-	val = number;
-	if (*str == '%')	/* Percentage */
-		val = val * max_value / 100;
-	else if (*str != '*')	/* Pixels */
-		val = (val + (pixels_per_char - 1) / 2) / pixels_per_char;
-	else if (!val)		/* wildcard */
-		val = -1;
-	else			/* Fraction, marked by negative value. */
-		val = -val;
+		/* Extract number. */
+		errno = 0;
+		number = strtoul(str, (char **)&str, 10);
+		if (errno) {
+			*new_values_count = 0;
+			return;
+		}
 
-	/* Save value. */
-	tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
-	if (tmp_values) (values = tmp_values)[values_count++] = val;
-	else {
-		*new_values_count = 0;
-		return;
-	}
+		val = number;
+		if (*str == '%')	/* Percentage */
+			val = val * max_value / 100;
+		else if (*str != '*')	/* Pixels */
+			val = (val + (pixels_per_char - 1) / 2) / pixels_per_char;
+		else if (!val)		/* wildcard */
+			val = -1;
+		else			/* Fraction, marked by negative value. */
+			val = -val;
 
-	/* Check for next field if any. */
-	tmp_str = strchr(str, ',');
-	if (tmp_str) {
+		/* Save value. */
+		tmp_values = mem_realloc(values, (values_count + 1) * sizeof(int));
+		if (tmp_values) (values = tmp_values)[values_count++] = val;
+		else {
+			*new_values_count = 0;
+			return;
+		}
+
+		/* Check for next field if any. */
+		tmp_str = strchr(str, ',');
+		if (!tmp_str) break;	/* It was the last field. */
+		
 		str = tmp_str + 1;
-		goto new_ch;
 	}
-
+	
 	*new_values = values;
 	*new_values_count = values_count;
 	
@@ -2349,6 +2350,7 @@ distribute:
 			if (!flag) break;
 		}
 	} else {
+		int *tmp_values;
 		int neg = 0;
 
 		for (i = 0; i < values_count; i++) if (values[i] < 0) neg = 1;

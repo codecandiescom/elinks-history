@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.98 2003/09/12 22:22:24 zas Exp $ */
+/* $Id: download.c,v 1.99 2003/09/22 16:21:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1285,23 +1285,31 @@ type_query(struct session *ses, unsigned char *ct, struct mime_handler *handler)
 	}
 }
 
+struct {
+	unsigned char *type;
+	unsigned int plain:1;
+} static known_types[] = {
+	{ "text/html",			0 },
+	{ "application/xhtml+xml",	0 }, /* RFC 3236 */
+	{ "text/plain",			1 },
+	{ NULL,				1 },
+};
 
 int
 ses_chktype(struct session *ses, struct download **download, struct cache_entry *ce)
 {
 	struct mime_handler *handler;
 	unsigned char *ctype = get_content_type(ce->head, ce->url);
-	int plaintext = 0;
+	int plaintext = 1;
 	int xwin;
 
 	if (!ctype) goto end;
 
-	if (!strcasecmp(ctype, "text/html")) goto free_ct;
-	/* RFC 3236 */
-	if (!strcasecmp(ctype, "application/xhtml+xml")) goto free_ct;
-
-	plaintext = 1;
-	if (!strcasecmp(ctype, "text/plain")) goto free_ct;
+	for (i = 0; known_types[i].type; i++)
+		if (!strcasecmp(ctype, known_types[i].type)) {
+			plaintext = known_types[i].plain;
+			goto free_ct;
+		}
 
 	xwin = ses->tab->term->environment & ENV_XWIN;
 	handler = get_mime_type_handler(ctype, xwin);
@@ -1309,8 +1317,9 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto free_ct;
 
-	if (ses->tq_url)
-		internal("Type query to %s already in progress.", ses->tq_url);
+	assertm(!ses->tq_url,
+		"Type query to %s already in progress.", ses->tq_url);
+	if_assert_failed mem_free(ses->tq_url);
 
 	ses->tq_url = stracpy(ses->loading_url);
 	*download = &ses->tq;

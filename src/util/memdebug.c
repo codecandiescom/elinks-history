@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.3 2002/06/17 21:10:01 pasky Exp $ */
+/* $Id: memdebug.c,v 1.4 2002/06/17 21:41:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,6 +62,11 @@
  * Default is undef. */
 #undef CHECK_INVALID_FREE
 
+/* Check for overflows and underflows ?
+ * Default is defined. */
+#define CHECK_XFLOWS
+#define XFLOW_MAGIC (char) 0xFA
+
 
 /* --------- end of debugger configuration section */
 
@@ -87,22 +92,34 @@ struct alloc_header {
 #define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 15) & ~15)
 #endif
 
+#ifdef CHECK_XFLOWS
+#define XFLOW_INC 1
+#else
+#define XFLOW_INC 0
+#endif
+
 /* These macros are used to convert pointers and sizes to or from real ones
  * when using alloc_header stuff. */
-#define PTR_AH2BASE(ah) (void *) ((char *) (ah) + SIZE_AH_ALIGNED)
+#define PTR_AH2BASE(ah) (void *) ((char *) (ah) + SIZE_AH_ALIGNED + XFLOW_INC)
 #define PTR_BASE2AH(ptr) (struct alloc_header *) \
-				((char *) (ptr) - SIZE_AH_ALIGNED)
+				((char *) (ptr) - SIZE_AH_ALIGNED - XFLOW_INC)
 
-#define SIZE_BASE2AH(size) ((size) + SIZE_AH_ALIGNED)
-#define SIZE_AH2BASE(size) ((size) - SIZE_AH_ALIGNED)
+#define SIZE_BASE2AH(size) ((size) + SIZE_AH_ALIGNED + XFLOW_INC * 2)
+#define SIZE_AH2BASE(size) ((size) - SIZE_AH_ALIGNED - XFLOW_INC * 2)
 
+#ifdef CHECK_XFLOWS
+#define PTR_OVERFLOW_MAGIC(ah) ((char *) PTR_AH2BASE(ah) + (ah)->size)
+#define PTR_UNDERFLOW_MAGIC(ah) ((char *) PTR_AH2BASE(ah) - 1)
+#define SET_OVERFLOW_MAGIC(ah) (*PTR_OVERFLOW_MAGIC(ah) = XFLOW_MAGIC)
+#define SET_UNDERFLOW_MAGIC(ah) (*PTR_UNDERFLOW_MAGIC(ah) = XFLOW_MAGIC)
+#define SET_XFLOW_MAGIC(ah) SET_OVERFLOW_MAGIC(ah), SET_UNDERFLOW_MAGIC(ah)
+#endif
 
 long mem_amount = 0;
 
 struct list_head memory_list = { &memory_list, &memory_list };
 
 
-#if defined(CHECK_AH_SANITY)
 static void
 dump_info(struct alloc_header *ah, unsigned char *info,
 	  unsigned char *file, int line, unsigned char *type)
@@ -126,7 +143,6 @@ dump_info(struct alloc_header *ah, unsigned char *info,
 
 	fprintf(stderr, "\n");
 }
-#endif
 
 #ifdef CHECK_AH_SANITY
 static int
@@ -142,6 +158,28 @@ bad_ah_sanity(struct alloc_header *ah, unsigned char *info,
 	return 0;
 }
 #endif /* CHECK_AH_SANITY */
+
+#ifdef CHECK_XFLOWS
+static int
+bad_xflow_magic(struct alloc_header *ah, unsigned char *info,
+		unsigned char *file, int line)
+{
+	if (!ah) return 1;
+
+	if (*PTR_OVERFLOW_MAGIC(ah) != XFLOW_MAGIC) {
+		dump_info(ah, info, file, line, "overflow detected");
+		return 1;
+	}
+
+	if (*PTR_UNDERFLOW_MAGIC(ah) != XFLOW_MAGIC) {
+		dump_info(ah, info, file, line, "underflow detected");
+		return 1;
+	}
+
+	return 0;
+}
+#endif /* CHECK_XFLOWS */
+
 
 void
 check_memory_leaks()
@@ -160,6 +198,9 @@ check_memory_leaks()
 	foreach (ah, memory_list) {
 #ifdef CHECK_AH_SANITY
 		if (bad_ah_sanity(ah, "Skipped", NULL, 0)) continue;
+#endif
+#ifdef CHECK_XFLOWS
+		if (bad_xflow_magic(ah, NULL, NULL, 0)) continue;
 #endif
 		dump_info(ah, NULL, NULL, 0, NULL);
 	}
@@ -194,6 +235,9 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	ah->file = file;
 	ah->line = line;
 	ah->comment = NULL;
+#ifdef CHECK_XFLOWS
+	SET_XFLOW_MAGIC(ah);
+#endif
 
 	add_to_list(memory_list, ah);
 
@@ -233,6 +277,9 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	ah->file = file;
 	ah->line = line;
 	ah->comment = NULL;
+#ifdef CHECK_XFLOWS
+	SET_XFLOW_MAGIC(ah);
+#endif
 
 	add_to_list(memory_list, ah);
 
@@ -273,6 +320,9 @@ debug_mem_free(unsigned char *file, int line, void *ptr)
 
 #ifdef CHECK_AH_SANITY
 	if (bad_ah_sanity(ah, "free()", file, line)) force_dump();
+#endif
+#ifdef CHECK_XFLOWS
+	if (bad_xflow_magic(ah, "free()", file, line)) force_dump();
 #endif
 
 	if (ah->comment)
@@ -315,6 +365,9 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 #ifdef CHECK_AH_SANITY
 	if (bad_ah_sanity(ah, "realloc()", file, line)) force_dump();
 #endif
+#ifdef CHECK_XFLOWS
+	if (bad_xflow_magic(ah, "realloc()", file, line)) force_dump();
+#endif
 
 	/* We compare oldsize to new size, and if equal we just return ptr
 	 * and change nothing, this conforms to usual realloc() behavior. */
@@ -340,6 +393,9 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 #endif
 	ah->file = file;
 	ah->line = line;
+#ifdef CHECK_XFLOWS
+	SET_XFLOW_MAGIC(ah);
+#endif
 
 	ah->prev->next = ah;
 	ah->next->prev = ah;
@@ -361,27 +417,5 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 	if (ah->comment)
 		safe_strncpy(ah->comment, str, len + 1);
 }
-
-/* Remember, we undef stuff in the separate order that we define it. */
-
-#undef SIZE_BASE2AH
-#undef SIZE_AH2BASE
-
-#undef PTR_AH2BASE
-#undef PTR_BASE2AH
-
-#undef CHECK_AH_SANITY
-#undef AH_SANITY_MAGIC
-
-#undef CHECK_REALLOC_NULL
-
-#undef FILL_ON_FREE
-#undef FILL_ON_FREE_VALUE
-
-#undef FILL_ON_REALLOC
-#undef FILL_ON_REALLOC_VALUE
-
-#undef FILL_ON_ALLOC
-#undef FILL_ON_ALLOC_VALUE
 
 #endif /* LEAK_DEBUG */

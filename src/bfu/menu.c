@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.159 2004/01/09 10:25:54 zas Exp $ */
+/* $Id: menu.c,v 1.160 2004/01/09 10:36:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,7 +305,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 	     x < width - 2 + !!hk
 	     && (c = text[x]);
 	     x++) {
-		if (!hk && len && x == len - 1) {
+		if (!hk && x == len - 1) {
 			hk = 1;
 			continue;
 		}

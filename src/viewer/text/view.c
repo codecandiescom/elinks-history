@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.595 2004/10/08 13:06:14 zas Exp $ */
+/* $Id: view.c,v 1.596 2004/10/09 21:08:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -745,7 +745,9 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			}
 	}
 
-	ses->kbdprefix.repeat_count = 0;
+	if (status != FRAME_EVENT_IGNORED)
+		ses->kbdprefix.repeat_count = 0;
+
 	return status;
 }
 

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.3 2004/01/07 02:01:45 jonas Exp $ */
+/* $Id: action.c,v 1.4 2004/01/07 02:50:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,14 +8,20 @@
 #include "elinks.h"
 #include "main.h"
 
-#include "cache/cache.h"
+#include "bookmarks/dialogs.h"
+#include "cache/dialogs.h"
 #include "config/kbdbind.h"
+#include "config/dialogs.h"
 #include "config/options.h"
+#include "cookies/dialogs.h"
 #include "dialogs/document.h"
+#include "dialogs/download.h"
 #include "dialogs/menu.h"
 #include "dialogs/status.h"
 #include "document/document.h"
 #include "document/view.h"
+#include "formhist/dialogs.h"
+#include "globhist/dialogs.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
 #include "terminal/window.h"
@@ -69,12 +75,38 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			go_back(ses);
 			break;
 
+		case ACT_BOOKMARK_MANAGER:
+#ifdef CONFIG_BOOKMARKS
+			menu_bookmark_manager(ses->tab->term, NULL, ses);
+#endif
+			break;
+
+		case ACT_CACHE_MANAGER:
+			menu_cache_manager(ses->tab->term, NULL, ses);
+			break;
+
 		case ACT_CACHE_MINIMIZE:
 			shrink_memory(1);
 			break;
 
+		case ACT_COOKIE_MANAGER:
+#ifdef CONFIG_COOKIES
+			menu_cookie_manager(ses->tab->term, NULL, ses);
+#endif
+			break;
+
 		case ACT_DOCUMENT_INFO:
 			state_msg(ses);
+			break;
+
+		case ACT_DOWNLOAD_MANAGER:
+			menu_download_manager(ses->tab->term, NULL, ses);
+			break;
+
+		case ACT_FORMHIST_MANAGER:
+#ifdef CONFIG_FORMHIST
+			menu_formhist_manager(ses->tab->term, NULL, ses);
+#endif
 			break;
 
 		case ACT_GOTO_URL:
@@ -85,8 +117,22 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 			head_msg(ses);
 			break;
 
+		case ACT_HISTORY_MANAGER:
+#ifdef CONFIG_GLOBHIST
+			menu_history_manager(ses->tab->term, NULL, ses);
+#endif
+			break;
+
+		case ACT_KEYBINDING_MANAGER:
+			menu_keybinding_manager(ses->tab->term, NULL, ses);
+			break;
+
 		case ACT_KILL_BACKGROUNDED_CONNECTIONS:
 			abort_background_connections();
+			break;
+
+		case ACT_OPTIONS_MANAGER:
+			menu_options_manager(ses->tab->term, NULL, ses);
 			break;
 
 		case ACT_RELOAD:
@@ -145,10 +191,7 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 		case ACT_AUTO_COMPLETE_UNAMBIGUOUS:
 		case ACT_BACKSPACE:
 		case ACT_BEGINNING_OF_BUFFER:
-		case ACT_BOOKMARK_MANAGER:
-		case ACT_CACHE_MANAGER:
 		case ACT_CANCEL:
-		case ACT_COOKIE_MANAGER:
 		case ACT_COOKIES_LOAD:
 		case ACT_COPY_CLIPBOARD:
 		case ACT_CUT_CLIPBOARD:
@@ -156,7 +199,6 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 		case ACT_DOWN:
 		case ACT_DOWNLOAD:
 		case ACT_DOWNLOAD_IMAGE:
-		case ACT_DOWNLOAD_MANAGER:
 		case ACT_EDIT:
 		case ACT_END:
 		case ACT_END_OF_BUFFER:
@@ -167,15 +209,12 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 		case ACT_FIND_NEXT:
 		case ACT_FIND_NEXT_BACK:
 		case ACT_FORGET_CREDENTIALS:
-		case ACT_FORMHIST_MANAGER:
 		case ACT_GOTO_URL_CURRENT:
 		case ACT_GOTO_URL_CURRENT_LINK:
 		case ACT_GOTO_URL_HOME:
-		case ACT_HISTORY_MANAGER:
 		case ACT_HOME:
 		case ACT_KILL_TO_BOL:
 		case ACT_KILL_TO_EOL:
-		case ACT_KEYBINDING_MANAGER:
 		case ACT_LEFT:
 		case ACT_LINK_MENU:
 		case ACT_JUMP_TO_LINK:
@@ -193,7 +232,6 @@ do_action(struct session *ses, enum keyact action, void *data, int verbose)
 		case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
 		case ACT_OPEN_LINK_IN_NEW_WINDOW:
 		case ACT_OPEN_OS_SHELL:
-		case ACT_OPTIONS_MANAGER:
 		case ACT_PAGE_DOWN:
 		case ACT_PAGE_UP:
 		case ACT_PASTE_CLIPBOARD:

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.333 2004/01/07 02:01:46 jonas Exp $ */
+/* $Id: view.c,v 1.334 2004/01/07 02:50:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,15 +18,12 @@
 #include "bfu/msgbox.h"
 #include "bookmarks/dialogs.h"
 #include "cache/cache.h"
-#include "cache/dialogs.h"
 #include "config/conf.h"
 #include "config/dialogs.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
 #include "cookies/cookies.h"
-#include "cookies/dialogs.h"
 #include "dialogs/document.h"
-#include "dialogs/download.h"
 #include "dialogs/menu.h"
 #include "dialogs/options.h"
 #include "dialogs/status.h"
@@ -34,8 +31,6 @@
 #include "document/html/frames.h"
 #include "document/options.h"
 #include "document/renderer.h"
-#include "formhist/dialogs.h"
-#include "globhist/dialogs.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "main.h"
@@ -1034,41 +1029,6 @@ quak:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					launch_bm_add_link_dialog(ses->tab->term, NULL, ses);
 #endif
-				goto x;
-			case ACT_BOOKMARK_MANAGER:
-#ifdef CONFIG_BOOKMARKS
-				menu_bookmark_manager(ses->tab->term, NULL, ses);
-#endif
-				goto x;
-			case ACT_CACHE_MANAGER:
-				menu_cache_manager(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_COOKIE_MANAGER:
-#ifdef CONFIG_COOKIES
-				menu_cookie_manager(ses->tab->term, NULL, ses);
-#endif
-				goto x;
-			case ACT_DOWNLOAD_MANAGER:
-				menu_download_manager(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_FORMHIST_MANAGER:
-#ifdef CONFIG_FORMHIST
-				menu_formhist_manager(ses->tab->term, NULL, ses);
-#endif
-				goto x;
-			case ACT_HISTORY_MANAGER:
-#ifdef CONFIG_GLOBHIST
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_history_manager(ses->tab->term, NULL, ses);
-#endif
-				goto x;
-			case ACT_OPTIONS_MANAGER:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_options_manager(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_KEYBINDING_MANAGER:
-				if (!get_opt_int_tree(cmdline_options, "anonymous"))
-					menu_keybinding_manager(ses->tab->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef CONFIG_COOKIES

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.229 2004/06/16 18:33:20 jonas Exp $ */
+/* $Id: link.c,v 1.230 2004/06/16 19:19:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -943,7 +943,11 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 	link = get_current_link(doc_view);
 	if (!link) return NULL;
 
-	if (!link_is_form(link)) {
+	if (link_is_form(link)) {
+		if (!link->form_control) return NULL;
+
+		return get_form_info(ses, doc_view);
+	} else {
 		struct terminal *term = ses->tab->term;
 		struct string str;
 		unsigned char *uristring = link->where;
@@ -965,8 +969,4 @@ get_current_link_info(struct session *ses, struct document_view *doc_view)
 		decode_uri_string(str.source);
 		return str.source;
 	}
-
-	if (!link->form_control) return NULL;
-
-	return get_form_info(ses, doc_view);
 }

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: interlink.c,v 1.6 2002/03/26 17:21:14 pasky Exp $ */
+/* $Id: interlink.c,v 1.7 2002/04/06 16:51:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -234,6 +234,8 @@ void af_unix_connection(void *dummy)
 	ns = accept(s_unix_fd, (struct sockaddr *) s_unix_accept, &l);
 
 	init_term(ns, ns, win_func);
+
+	set_highpri();
 }
 
 void af_unix_close()

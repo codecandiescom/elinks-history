@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.6 2002/04/02 13:46:06 pasky Exp $ */
+/* $Id: os_dep.c,v 1.7 2002/04/06 16:51:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1363,3 +1363,14 @@ int can_open_os_shell(int environment)
 #endif
 	return 1;
 }
+
+#ifndef OS2
+void set_highpri()
+{
+}
+#else
+void set_highpri()
+{
+	DosSetPriority(PRTYS_PROCESS, PRTYC_FOREGROUNDSERVER, 0, 0);
+}
+#endif

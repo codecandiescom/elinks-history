@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.71 2003/12/30 18:44:55 jonas Exp $ */
+/* $Id: options.inc,v 1.72 2003/12/30 21:28:20 pasky Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1086,7 +1086,7 @@ struct option_info config_options_info[] = {
 		N_("Tabs bar colors.")),
 
 	INIT_OPT_COLORS(".tabs", N_("Unvisited tab"),
-		"unvisited", "white", "green", "white", "gray",
+		"unvisited", "white", "darkblue", "white", "gray",
 		N_("Tab colors for tabs that have not completed or has not been\n"
 		   "selected since they completed loading.")),
 

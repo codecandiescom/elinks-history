@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.51 2004/06/27 12:55:20 jonas Exp $ */
+/* $Id: socket.c,v 1.52 2004/06/27 12:59:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -197,12 +197,6 @@ ssl_connect(struct connection *conn, int sock)
 		}
 	}
 
-
-#elif defined(CONFIG_GNUTLS)
-	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
-#endif
-
-#ifdef CONFIG_OPENSSL
 	if (get_opt_bool("connection.ssl.cert_verify"))
 		SSL_set_verify(conn->ssl, SSL_VERIFY_PEER
 					  | SSL_VERIFY_FAIL_IF_NO_PEER_CERT,
@@ -215,6 +209,9 @@ ssl_connect(struct connection *conn, int sock)
 		SSL_CTX_use_PrivateKey_file(ctx, client_cert,
 					    SSL_FILETYPE_PEM);
 	}
+
+#elif defined(CONFIG_GNUTLS)
+	gnutls_transport_set_ptr(*((ssl_t *) conn->ssl), (gnutls_transport_ptr) sock);
 #endif
 
 	ret = get_ssl_error(conn);

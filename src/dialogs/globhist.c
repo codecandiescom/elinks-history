@@ -1,5 +1,9 @@
 /* Global history dialogs */
-/* $Id: globhist.c,v 1.5 2002/04/01 21:47:29 pasky Exp $ */
+/* $Id: globhist.c,v 1.6 2002/04/02 15:58:33 pasky Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -8,13 +12,14 @@
 #include <string.h>
 
 #include <bfu/bfu.h>
+#include <dialogs/edit.h>
 #include <dialogs/globhist.h>
 #include <document/globhist.h>
 #include <intl/language.h>
 #include <lowlevel/kbd.h>
 
 
-#define HISTORY_BOX_IND 4
+#define HISTORY_BOX_IND 5
 
 static inline void
 history_dialog_list_clear(struct list_head *list)
@@ -41,6 +46,12 @@ history_dialog_list_update(struct list_head *list)
 	history_dialog_list_clear(list);
 
 	foreach (historyitem, global_history.items) {
+		if ((last_searched_globhist_title && *last_searched_globhist_title
+		     && !strcasestr(historyitem->title, last_searched_globhist_title))
+		    || (last_searched_globhist_url && *last_searched_globhist_url
+			&& !strcasestr(historyitem->url, last_searched_globhist_url)))
+			continue;
+
 		/* Deleted in history_dialog_clear_list() */
 		item = mem_alloc(sizeof(struct box_item)
 				 + strlen(historyitem->url) + 1);
@@ -89,7 +100,7 @@ history_dialog_box_build(struct dlg_data_item_data_box **box)
 
 /* Get the id of the currently selected history */
 static struct global_history_item *
-history_dialogue_get_selected_history_item(struct dlg_data_item_data_box *box)
+history_dialog_get_selected_history_item(struct dlg_data_item_data_box *box)
 {
 	struct box_item *citem;
 	int sel = box->sel;
@@ -220,10 +231,8 @@ layout_history_manager(struct dialog_data *dlg)
 	/* Find dimensions of dialog */
 	max_text_width(term, history_dialog_msg[0], &max);
 	min_text_width(term, history_dialog_msg[0], &min);
-#if 0
 	max_buttons_width(term, dlg->items + 2, 2, &max);
 	min_buttons_width(term, dlg->items + 2, 2, &min);
-#endif
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	if (w > max) w = max;
@@ -255,6 +264,49 @@ layout_history_manager(struct dialog_data *dlg)
 }
 
 
+static void
+history_search_do(struct dialog *d)
+{
+	struct dlg_data_item_data_box *box;
+	struct dialog_data *parent;
+
+	if (!d->items[0].data && !d->items[1].data)
+		return;
+
+	if (last_searched_globhist_title) mem_free(last_searched_globhist_title);
+	last_searched_globhist_title = stracpy(d->items[0].data);
+
+	if (last_searched_globhist_url) mem_free(last_searched_globhist_url);
+	last_searched_globhist_url = stracpy(d->items[1].data);
+
+	parent = d->udata;
+	if (!parent) return;
+
+	box = (struct dlg_data_item_data_box *)
+	      parent->dlg->items[HISTORY_BOX_IND].data;
+	box->box_top = 0;
+	box->sel = 0;
+	history_dialog_list_update(&box->items);
+}
+
+static void
+launch_search_dialog(struct terminal *term, struct dialog_data *parent,
+		     struct session *ses)
+{
+	do_edit_dialog(term, TEXT(T_SEARCH_HISTORY), last_searched_globhist_title,
+		       last_searched_globhist_url, ses, parent, history_search_do,
+		       NULL, 0);
+}
+
+static int
+push_search_button(struct dialog_data *dlg, struct dialog_item_data *di)
+{
+	launch_search_dialog(dlg->win->term, dlg,
+			     (struct session *) dlg->dlg->udata);
+	return 0;
+}
+
+
 static int
 push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 {
@@ -265,15 +317,16 @@ push_goto_button(struct dialog_data *dlg, struct dialog_item_data *goto_btn)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
 	/* Follow the history item */
-	historyitem = history_dialogue_get_selected_history_item(box);
+	historyitem = history_dialog_get_selected_history_item(box);
 	if (historyitem)
 		goto_url((struct session *) goto_btn->item->udata,
 			 historyitem->url);
 
-	/* Close the history dialogue */
+	/* Close the history dialog */
 	delete_window(dlg->win);
 	return 0;
 }
+
 
 /* Used to carry extra info between push_delete_button() and 
  * really_del_history() */
@@ -319,7 +372,7 @@ push_delete_button(struct dialog_data *dlg,
 	box = (struct dlg_data_item_data_box *)
 	      dlg->dlg->items[HISTORY_BOX_IND].data;
 
-	historyitem = history_dialogue_get_selected_history_item(box);
+	historyitem = history_dialog_get_selected_history_item(box);
 	if (!historyitem)
 		return 0;
 
@@ -390,6 +443,16 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 {
 	struct dialog *d;
 
+	if (last_searched_globhist_title) {
+		mem_free(last_searched_globhist_title);
+		last_searched_globhist_title = NULL;
+	}
+
+	if (last_searched_globhist_url) {
+		mem_free(last_searched_globhist_url);
+		last_searched_globhist_url = NULL;
+	}
+
 #define DIALOG_MEMSIZE (sizeof(struct dialog) \
 		       + (HISTORY_BOX_IND + 2) * sizeof(struct dialog_item) \
 		       + sizeof(struct global_history_item) + 2 * MAX_STR_LEN)
@@ -420,13 +483,18 @@ menu_history_manager(struct terminal *term, void *fcp, struct session *ses)
 
 	d->items[2].type = D_BUTTON;
 	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_clear_button;
-	d->items[2].text = TEXT(T_CLEAR);
+	d->items[2].fn = push_search_button;
+	d->items[2].text = TEXT(T_SEARCH);
 
 	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ESC;
-	d->items[3].fn = cancel_dialog;
-	d->items[3].text = TEXT(T_CLOSE);
+	d->items[3].gid = B_ENTER;
+	d->items[3].fn = push_clear_button;
+	d->items[3].text = TEXT(T_CLEAR);
+
+	d->items[4].type = D_BUTTON;
+	d->items[4].gid = B_ESC;
+	d->items[4].fn = cancel_dialog;
+	d->items[4].text = TEXT(T_CLOSE);
 
 	d->items[HISTORY_BOX_IND].type = D_BOX;
 	d->items[HISTORY_BOX_IND].gid = 12;

@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.3 2002/04/02 14:11:57 pasky Exp $ */
+/* $Id: dialogs.c,v 1.4 2002/04/02 15:58:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -468,12 +468,16 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 		new_bm->selected = 1;
 	}
 
-	/* reset momorized search criterias */
-	if (bm_last_searched_name) mem_free(bm_last_searched_name);
-	bm_last_searched_name = NULL;
+	/* Reset momorized search criterias */
+	if (bm_last_searched_name) {
+		mem_free(bm_last_searched_name);
+		bm_last_searched_name = NULL;
+	}
 
-	if (bm_last_searched_url) mem_free(bm_last_searched_url);
-	bm_last_searched_url = NULL;
+	if (bm_last_searched_url) {
+		mem_free(bm_last_searched_url);
+		bm_last_searched_url = NULL;
+	}
 
 	/* Create the dialog */
 	d = mem_alloc(BM_DIALOG_MEMSIZE);

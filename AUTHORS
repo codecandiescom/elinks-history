@@ -347,8 +347,7 @@ Peter Wang <tjaden@alphalink.com.au>
 Petr Baudis <pasky@ucw.cz>
 	Maintains elinks tree (CVS), integrates all reasonable patches
 	and bugfixes. Produces an elinks-current tarball for user testing.
-	New options system
-	BFU colorization
+	Options system
 	DNS hacking
 	Random hacking
 	Feature of the Day implementation
@@ -460,4 +459,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.145 2003/12/03 23:19:30 pasky Exp $
+$Id: AUTHORS,v 1.146 2003/12/03 23:20:42 pasky Exp $

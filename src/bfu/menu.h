@@ -1,7 +1,9 @@
-/* $Id: menu.h,v 1.38 2003/12/26 12:01:16 zas Exp $ */
+/* $Id: menu.h,v 1.39 2003/12/26 12:08:17 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
+
+#include "config/kbdbind.h"
 
 struct terminal;
 
@@ -72,6 +74,7 @@ enum hotkey_state {
 struct menu_item {
 	unsigned char *text;
 	unsigned char *rtext; /* FIXME: Use real keybindings. */
+	enum keyact keyact;
 	menu_func func;
 	void *data;
 	enum menu_item_flags flags;
@@ -86,6 +89,7 @@ struct menu_item {
 {									\
 	(unsigned char *) (text),					\
 	(unsigned char *) (rtext),					\
+	ACT_NONE,							\
 	(menu_func) (func),						\
 	(void *) (data),						\
 	(flags),							\
@@ -104,6 +108,7 @@ struct menu_item {
 do {									\
 	(e_)->text = (unsigned char *) (text_);				\
 	(e_)->rtext = (unsigned char *) (rtext_);			\
+	(e_)->keyact = ACT_NONE;					\
 	(e_)->func = (menu_func) (func_);				\
 	(e_)->data = (void *) (data_);					\
 	(e_)->flags = (flags_);						\

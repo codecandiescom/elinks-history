@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.12 2002/03/28 00:46:27 pasky Exp $ */
+/* $Id: sched.c,v 1.13 2002/03/28 17:35:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -653,12 +653,19 @@ void retry_connection(struct connection *c)
 void abort_connection(struct connection *c)
 {
 	if (c->running) interrupt_connection(c);
-	/*send_connection_info(c);*/
+	/* send_connection_info(c); */
 	del_connection(c);
 #ifdef DEBUG
 	check_queue_bugs();
 #endif
 	register_bottom_half((void (*)(void *))check_queue, NULL);
+}
+
+/* Set certain state on a connection and then abort the connection. */
+void abort_conn_with_state(struct connection *conn, int state)
+{
+	setcstate(conn, state);
+	abort_connection(conn);
 }
 
 

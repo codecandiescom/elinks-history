@@ -1,7 +1,7 @@
-/* $Id: sched.h,v 1.4 2002/03/28 00:46:27 pasky Exp $ */
+/* $Id: sched.h,v 1.5 2002/03/28 17:35:57 pasky Exp $ */
 
-#ifndef EL__SCHED_H
-#define EL__SCHED_H
+#ifndef EL__LOWLEVEL_SCHED_H
+#define EL__LOWLEVEL_SCHED_H
 
 #include <links.h> /* tcount, list_head */
 #include <document/cache.h>
@@ -144,15 +144,17 @@ struct http_auth_basic {
 void check_queue();
 long connect_info(int);
 /* void send_connection_info(struct connection *c); */
-void setcstate(struct connection *c, int);
+void setcstate(struct connection *, int);
 
-int get_keepalive_socket(struct connection *c);
-void add_keepalive_socket(struct connection *c, ttime);
+int get_keepalive_socket(struct connection *);
+void add_keepalive_socket(struct connection *, ttime);
 
-/* void run_connection(struct connection *c); */
-void retry_connection(struct connection *c);
-void abort_connection(struct connection *c);
-/* void end_connection(struct connection *c); */
+/* void run_connection(struct connection *); */
+void retry_connection(struct connection *);
+void abort_connection(struct connection *);
+/* void end_connection(struct connection *); */
+
+void abort_conn_with_state(struct connection *, int);
 
 int load_url(unsigned char *, unsigned char *, struct status *, int, int);
 

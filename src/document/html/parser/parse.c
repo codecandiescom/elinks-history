@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.28 2004/05/07 08:49:31 zas Exp $ */
+/* $Id: parse.c,v 1.29 2004/05/07 08:55:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -226,25 +226,6 @@ parse_error:
 }
 
 #undef add_chr
-
-unsigned char *
-get_attr_val(register unsigned char *e, unsigned char *name)
-{
-	return get_attr_value(e, name, HTML_ATTR_NONE);
-}
-
-unsigned char *
-get_url_val(unsigned char *e, unsigned char *name)
-{
-	return get_attr_value(e, name, HTML_ATTR_EAT_NL);
-}
-
-int
-has_attr(unsigned char *e, unsigned char *name)
-{
-	return !!get_attr_value(e, name, HTML_ATTR_TEST);
-}
-
 
 
 /* Extract numerical value of attribute @name.

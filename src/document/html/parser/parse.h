@@ -1,11 +1,9 @@
-/* $Id: parse.h,v 1.6 2004/05/07 08:49:31 zas Exp $ */
+/* $Id: parse.h,v 1.7 2004/05/07 08:55:31 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_PARSE_H
 #define EL__DOCUMENT_HTML_PARSER_PARSE_H
 
 struct string;
-
-/* Interface for both the renderer and the table handling */
 
 /* Flags for get_attr_value(). */
 enum html_attr_flags {
@@ -35,6 +33,14 @@ enum html_attr_flags {
  * Returns allocated string containing the attribute, or NULL on unsuccess. */
 unsigned char *get_attr_value(register unsigned char *e, unsigned char *name, enum html_attr_flags flags);
 
+/* Wrappers for get_attr_value(). */
+#define get_attr_val(e, name) get_attr_value(e, name, HTML_ATTR_NONE)
+#define get_url_val(e, name) get_attr_value(e, name, HTML_ATTR_EAT_NL)
+#define has_attr(e, name) (!!get_attr_value(e, name, HTML_ATTR_TEST))
+
+
+/* Interface for both the renderer and the table handling */
+
 void parse_html(unsigned char *html, unsigned char *eof, void *f, unsigned char *head);
 
 
@@ -42,9 +48,6 @@ void parse_html(unsigned char *html, unsigned char *eof, void *f, unsigned char 
 
 int parse_element(unsigned char *, unsigned char *, unsigned char **, int *, unsigned char **, unsigned char **);
 
-unsigned char *get_attr_val(unsigned char *e, unsigned char *name);
-unsigned char *get_url_val(unsigned char *e, unsigned char *name);
-int has_attr(unsigned char *, unsigned char *);
 int get_num(unsigned char *, unsigned char *);
 int get_width(unsigned char *, unsigned char *, int);
 

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.90 2004/04/19 15:56:51 zas Exp $ */
+/* $Id: form.c,v 1.91 2004/04/23 18:40:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -446,16 +446,17 @@ fi_rep:
 }
 
 static inline unsigned char *
-strip_file_name(unsigned char *f)
+strip_file_name(unsigned char *filename)
 {
-	unsigned char *n, *l;
+	unsigned char *pos;
 
-	assert(f);
+	assert(filename);
 	if_assert_failed return NULL;
 
-	l = f - 1;
-	for (n = f; *n; n++) if (dir_sep(*n)) l = n;
-	return l + 1;
+	for (pos = filename; *pos; pos++)
+		if (dir_sep(*pos)) filename = pos + 1;
+
+	return filename;
 }
 
 static void

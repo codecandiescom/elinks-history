@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.73 2003/10/21 15:22:59 zas Exp $ */
+/* $Id: dialogs.c,v 1.74 2003/10/24 15:54:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -73,11 +73,11 @@ option_dlg_box_build(void)
 
 /* Cleans up after the option dialog */
 static void
-option_dialog_abort_handler(struct dialog_data *dlg)
+option_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg->dlg->items[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -95,14 +95,14 @@ done_info_button(void *vhop)
 }
 
 static int
-push_info_button(struct dialog_data *dlg,
+push_info_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct option *option;
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg->dlg->items[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -145,11 +145,11 @@ push_info_button(struct dialog_data *dlg,
 
 
 static int
-check_valid_option(struct dialog_data *dlg, struct widget_data *di)
+check_valid_option(struct dialog_data *dlg_data, struct widget_data *di)
 {
-	struct terminal *term = dlg->win->term;
-	struct option *option = dlg->dlg->udata;
-	struct session *ses = dlg->dlg->udata2;
+	struct terminal *term = dlg_data->win->term;
+	struct option *option = dlg_data->dlg->udata;
+	struct session *ses = dlg_data->dlg->udata2;
 	unsigned char *value = di->cdata;
 	unsigned char *chinon;
 
@@ -194,14 +194,14 @@ check_valid_option(struct dialog_data *dlg, struct widget_data *di)
 }
 
 static void
-layout_edit_dialog(struct dialog_data *dlg)
+layout_edit_dialog(struct dialog_data *dlg_data)
 {
 	int max = 0, min = 0;
 	int w, rw;
 	int y = -1;
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
-	struct option *option = dlg->dlg->udata;
+	struct option *option = dlg_data->dlg->udata;
 	unsigned char *name, *type, *value, *desc;
 
 	name = straconcat(_("Name", term), ": ", option->name, NULL);
@@ -214,7 +214,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 			  NULL);
 
 	if (name && type && value && desc)
-		add_to_ml(&dlg->ml, name, type, value, desc, NULL);
+		add_to_ml(&dlg_data->ml, name, type, value, desc, NULL);
 	else {
 		if (name) mem_free(name);
 		if (type) mem_free(type);
@@ -227,7 +227,7 @@ layout_edit_dialog(struct dialog_data *dlg)
 	text_width(term, type, &min, &max);
 	text_width(term, value, &min, &max);
 	text_width(term, desc, &min, &max);
-	buttons_width(term, dlg->items + 1, 2, &min, &max);
+	buttons_width(term, dlg_data->items + 1, 2, &min, &max);
 
 	w = term->x * 9 / 10 - 2 * DIALOG_LB;
 	int_bounds(&w, min, max);
@@ -245,33 +245,33 @@ layout_edit_dialog(struct dialog_data *dlg)
 	dlg_format_text(NULL, term, desc, 0, &y,
 			w, &rw, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + 1, 2, 0,
+	dlg_format_buttons(NULL, term, dlg_data->items + 1, 2, 0,
 			   &y, w, &rw, AL_CENTER);
 	w = rw;
-	dlg->xw = w + 2 * DIALOG_LB;
-	dlg->yw = y + 2 * DIALOG_TB;
-	center_dlg(dlg);
-	draw_dlg(dlg);
-	y = dlg->y + DIALOG_TB;
-	dlg_format_text(term, term, name, dlg->x + DIALOG_LB,
+	dlg_data->xw = w + 2 * DIALOG_LB;
+	dlg_data->yw = y + 2 * DIALOG_TB;
+	center_dlg(dlg_data);
+	draw_dlg(dlg_data);
+	y = dlg_data->y + DIALOG_TB;
+	dlg_format_text(term, term, name, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
-	dlg_format_text(term, term, type, dlg->x + DIALOG_LB,
+	dlg_format_text(term, term, type, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 
 	/* XXX: We want the field on the same line. Could this be a problem
 	 * with extremely thin terminals? --pasky */
 	rw = 0;
-	dlg_format_text(term, term, value, dlg->x + DIALOG_LB,
+	dlg_format_text(term, term, value, dlg_data->x + DIALOG_LB,
 			&y, w, &rw, dialog_text_color, AL_LEFT);
 	y--;
-	dlg_format_field(NULL, term, &dlg->items[0], rw + dlg->x + DIALOG_LB,
+	dlg_format_field(NULL, term, &dlg_data->items[0], rw + dlg_data->x + DIALOG_LB,
 			 &y, w - rw, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_text(term, term, desc, dlg->x + DIALOG_LB,
+	dlg_format_text(term, term, desc, dlg_data->x + DIALOG_LB,
 			&y, w, NULL, dialog_text_color, AL_LEFT);
 	y++;
-	dlg_format_buttons(term, term, &dlg->items[1], 2, dlg->x + DIALOG_LB,
+	dlg_format_buttons(term, term, &dlg_data->items[1], 2, dlg_data->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -280,7 +280,7 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 		  struct option *option)
 {
 #define EDIT_DIALOG_FIELDS_NB 3
-	struct dialog *d;
+	struct dialog *dlg;
 	unsigned char *value;
 	struct string tvalue;
 
@@ -291,55 +291,55 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 	commandline = 0;
 
 	/* Create the dialog */
-	d = mem_calloc(1, sizeof(struct dialog)
-			  + (EDIT_DIALOG_FIELDS_NB + 1)
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (EDIT_DIALOG_FIELDS_NB + 1)
 			    * sizeof(struct widget)
-			  + MAX_STR_LEN);
-	if (!d) {
+			    + MAX_STR_LEN);
+	if (!dlg) {
 		done_string(&tvalue);
 		return;
 	}
 
-	d->title = _("Edit", term);
-	d->fn = layout_edit_dialog;
-	d->udata = option;
-	d->udata2 = ses;
+	dlg->title = _("Edit", term);
+	dlg->fn = layout_edit_dialog;
+	dlg->udata = option;
+	dlg->udata2 = ses;
 
-	value = (unsigned char *) &d->items[EDIT_DIALOG_FIELDS_NB + 1];
+	value = (unsigned char *) &dlg->items[EDIT_DIALOG_FIELDS_NB + 1];
 	safe_strncpy(value, tvalue.source, MAX_STR_LEN);
 	done_string(&tvalue);
 
 	/* FIXME: Compute some meaningful maximal width. --pasky */
-	d->items[0].type = D_FIELD;
-	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = value;
-	d->items[0].fn = check_valid_option;
+	dlg->items[0].type = D_FIELD;
+	dlg->items[0].dlen = MAX_STR_LEN;
+	dlg->items[0].data = value;
+	dlg->items[0].fn = check_valid_option;
 
-	d->items[1].type = D_BUTTON;
-	d->items[1].gid = B_ENTER;
-	d->items[1].fn = ok_dialog;
-	d->items[1].text = _("OK", term);
+	dlg->items[1].type = D_BUTTON;
+	dlg->items[1].gid = B_ENTER;
+	dlg->items[1].fn = ok_dialog;
+	dlg->items[1].text = _("OK", term);
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ESC;
-	d->items[2].text = _("Cancel", term);
-	d->items[2].fn = cancel_dialog;
+	dlg->items[2].type = D_BUTTON;
+	dlg->items[2].gid = B_ESC;
+	dlg->items[2].text = _("Cancel", term);
+	dlg->items[2].fn = cancel_dialog;
 
-	d->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
+	dlg->items[EDIT_DIALOG_FIELDS_NB].type = D_END;
 
-	do_dialog(term, d, getml(d, NULL));
+	do_dialog(term, dlg, getml(dlg, NULL));
 #undef EDIT_DIALOG_FIELDS_NB
 }
 
 static int
-push_edit_button(struct dialog_data *dlg,
+push_edit_button(struct dialog_data *dlg_data,
 		 struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
+	struct terminal *term = dlg_data->win->term;
 	struct option *option;
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg->dlg->items[OP_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
 
 	/* Show history item info */
 	if (!box->sel || !box->sel->udata) return 0;
@@ -358,7 +358,7 @@ push_edit_button(struct dialog_data *dlg,
 		return 0;
 	}
 
-	build_edit_dialog(term, dlg->dlg->udata, option);
+	build_edit_dialog(term, dlg_data->dlg->udata, option);
 
 	return 0;
 }
@@ -375,11 +375,12 @@ add_option_to_tree(void *data, unsigned char *name)
 }
 
 static int
-push_add_button(struct dialog_data *dlg,
+push_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
-	struct listbox_data *box = (void *) dlg->dlg->items[OP_BOX_IND].data;
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box =
+		(struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -442,11 +443,12 @@ really_delete_option(void *data)
 }
 
 static int
-push_del_button(struct dialog_data *dlg,
+push_del_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
-	struct listbox_data *box = (void *) dlg->dlg->items[OP_BOX_IND].data;
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box =
+		(struct listbox_data *) dlg_data->dlg->items[OP_BOX_IND].data;
 	struct option *option;
 
 	if (!box->sel || !box->sel->udata) {
@@ -479,10 +481,10 @@ invalid_option:
 
 
 static int
-push_save_button(struct dialog_data *dlg,
+push_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	write_config(dlg->win->term);
+	write_config(dlg_data->win->term);
 	return 0;
 }
 
@@ -491,61 +493,61 @@ push_save_button(struct dialog_data *dlg,
 void
 menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog *d;
+	struct dialog *dlg;
 
 	/* Create the dialog */
-	d = mem_calloc(1, sizeof(struct dialog)
-			  + (OP_BOX_IND + 2) * sizeof(struct widget)
-			  + sizeof(struct option) + 2 * MAX_STR_LEN);
-	if (!d) return;
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (OP_BOX_IND + 2) * sizeof(struct widget)
+			    + sizeof(struct option) + 2 * MAX_STR_LEN);
+	if (!dlg) return;
 
-	d->title = _("Options manager", term);
-	d->fn = layout_hierbox_browser;
-	d->handle_event = hierbox_dialog_event_handler;
-	d->abort = option_dialog_abort_handler;
-	d->udata = ses;
+	dlg->title = _("Options manager", term);
+	dlg->fn = layout_hierbox_browser;
+	dlg->handle_event = hierbox_dialog_event_handler;
+	dlg->abort = option_dialog_abort_handler;
+	dlg->udata = ses;
 
-	d->items[0].type = D_BUTTON;
-	d->items[0].gid = B_ENTER;
-	d->items[0].fn = push_info_button;
-	d->items[0].udata = ses;
-	d->items[0].text = _("Info", term);
+	dlg->items[0].type = D_BUTTON;
+	dlg->items[0].gid = B_ENTER;
+	dlg->items[0].fn = push_info_button;
+	dlg->items[0].udata = ses;
+	dlg->items[0].text = _("Info", term);
 
-	d->items[1].type = D_BUTTON;
-	d->items[1].gid = B_ENTER;
-	d->items[1].fn = push_edit_button;
-	d->items[1].udata = ses;
-	d->items[1].text = _("Edit", term);
+	dlg->items[1].type = D_BUTTON;
+	dlg->items[1].gid = B_ENTER;
+	dlg->items[1].fn = push_edit_button;
+	dlg->items[1].udata = ses;
+	dlg->items[1].text = _("Edit", term);
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_add_button;
-	d->items[2].udata = ses;
-	d->items[2].text = _("Add", term);
+	dlg->items[2].type = D_BUTTON;
+	dlg->items[2].gid = B_ENTER;
+	dlg->items[2].fn = push_add_button;
+	dlg->items[2].udata = ses;
+	dlg->items[2].text = _("Add", term);
 
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_del_button;
-	d->items[3].udata = ses;
-	d->items[3].text = _("Delete", term);
+	dlg->items[3].type = D_BUTTON;
+	dlg->items[3].gid = B_ENTER;
+	dlg->items[3].fn = push_del_button;
+	dlg->items[3].udata = ses;
+	dlg->items[3].text = _("Delete", term);
 
-	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ENTER;
-	d->items[4].fn = push_save_button;
-	d->items[4].udata = ses;
-	d->items[4].text = _("Save", term);
+	dlg->items[4].type = D_BUTTON;
+	dlg->items[4].gid = B_ENTER;
+	dlg->items[4].fn = push_save_button;
+	dlg->items[4].udata = ses;
+	dlg->items[4].text = _("Save", term);
 
-	d->items[5].type = D_BUTTON;
-	d->items[5].gid = B_ESC;
-	d->items[5].fn = cancel_dialog;
-	d->items[5].text = _("Close", term);
+	dlg->items[5].type = D_BUTTON;
+	dlg->items[5].gid = B_ESC;
+	dlg->items[5].fn = cancel_dialog;
+	dlg->items[5].text = _("Close", term);
 
-	d->items[OP_BOX_IND].type = D_BOX;
-	d->items[OP_BOX_IND].gid = 12;
-	d->items[OP_BOX_IND].data = (void *) option_dlg_box_build();
+	dlg->items[OP_BOX_IND].type = D_BOX;
+	dlg->items[OP_BOX_IND].gid = 12;
+	dlg->items[OP_BOX_IND].data = (void *) option_dlg_box_build();
 
-	d->items[OP_BOX_IND + 1].type = D_END;
-	do_dialog(term, d, getml(d, NULL));
+	dlg->items[OP_BOX_IND + 1].type = D_END;
+	do_dialog(term, dlg, getml(dlg, NULL));
 }
 
 
@@ -577,11 +579,11 @@ kbdbind_dlg_box_build(void)
 
 /* Cleans up after the keybinding dialog */
 static void
-kbdbind_dialog_abort_handler(struct dialog_data *dlg)
+kbdbind_dialog_abort_handler(struct dialog_data *dlg_data)
 {
 	struct listbox_data *box;
 
-	box = (struct listbox_data *) dlg->dlg->items[KB_BOX_IND].data;
+	box = (struct listbox_data *) dlg_data->dlg->items[KB_BOX_IND].data;
 
 	del_from_list(box);
 	/* Delete the box structure */
@@ -614,11 +616,12 @@ really_add_keybinding(void *data, unsigned char *keystroke)
 }
 
 static int
-push_kbdbind_add_button(struct dialog_data *dlg,
+push_kbdbind_add_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
-	struct listbox_data *box = (void *) dlg->dlg->items[KB_BOX_IND].data;
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box
+		= (struct listbox_data *) dlg_data->dlg->items[KB_BOX_IND].data;
 	struct listbox_item *item = box->sel;
 	struct kbdbind_add_hop *hop;
 	unsigned char *text;
@@ -663,11 +666,11 @@ push_kbdbind_add_button(struct dialog_data *dlg,
 
 
 static int
-push_kbdbind_toggle_display_button(struct dialog_data *dlg,
+push_kbdbind_toggle_display_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
 	toggle_display_action_listboxes();
-	clear_dialog(dlg, some_useless_info_button);
+	clear_dialog(dlg_data, some_useless_info_button);
 	return 0;
 }
 
@@ -706,11 +709,12 @@ really_delete_keybinding(void *data)
 }
 
 static int
-push_kbdbind_del_button(struct dialog_data *dlg,
+push_kbdbind_del_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	struct terminal *term = dlg->win->term;
-	struct listbox_data *box = (void *) dlg->dlg->items[KB_BOX_IND].data;
+	struct terminal *term = dlg_data->win->term;
+	struct listbox_data *box =
+		(struct listbox_data *) dlg_data->dlg->items[KB_BOX_IND].data;
 	struct keybinding *keybinding;
 
 	if (!box->sel || box->sel->depth < 2) {
@@ -740,10 +744,10 @@ push_kbdbind_del_button(struct dialog_data *dlg,
 
 
 static int
-push_kbdbind_save_button(struct dialog_data *dlg,
+push_kbdbind_save_button(struct dialog_data *dlg_data,
 		struct widget_data *some_useless_info_button)
 {
-	write_config(dlg->win->term);
+	write_config(dlg_data->win->term);
 	return 0;
 }
 
@@ -751,53 +755,53 @@ push_kbdbind_save_button(struct dialog_data *dlg,
 void
 menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-	struct dialog *d;
+	struct dialog *dlg;
 
 	/* Create the dialog */
-	d = mem_calloc(1, sizeof(struct dialog)
-			  + (KB_BOX_IND + 2) * sizeof(struct widget)
-			  + sizeof(struct option) + 2 * MAX_STR_LEN);
-	if (!d) return;
+	dlg = mem_calloc(1, sizeof(struct dialog)
+			    + (KB_BOX_IND + 2) * sizeof(struct widget)
+			    + sizeof(struct option) + 2 * MAX_STR_LEN);
+	if (!dlg) return;
 
-	d->title = _("Keybinding manager", term);
-	d->fn = layout_hierbox_browser;
-	d->handle_event = hierbox_dialog_event_handler;
-	d->abort = kbdbind_dialog_abort_handler;
-	d->udata = ses;
+	dlg->title = _("Keybinding manager", term);
+	dlg->fn = layout_hierbox_browser;
+	dlg->handle_event = hierbox_dialog_event_handler;
+	dlg->abort = kbdbind_dialog_abort_handler;
+	dlg->udata = ses;
 
-	d->items[0].type = D_BUTTON;
-	d->items[0].gid = B_ENTER;
-	d->items[0].fn = push_kbdbind_add_button;
-	d->items[0].udata = ses;
-	d->items[0].text = _("Add", term);
+	dlg->items[0].type = D_BUTTON;
+	dlg->items[0].gid = B_ENTER;
+	dlg->items[0].fn = push_kbdbind_add_button;
+	dlg->items[0].udata = ses;
+	dlg->items[0].text = _("Add", term);
 
-	d->items[1].type = D_BUTTON;
-	d->items[1].gid = B_ENTER;
-	d->items[1].fn = push_kbdbind_del_button;
-	d->items[1].udata = ses;
-	d->items[1].text = _("Delete", term);
+	dlg->items[1].type = D_BUTTON;
+	dlg->items[1].gid = B_ENTER;
+	dlg->items[1].fn = push_kbdbind_del_button;
+	dlg->items[1].udata = ses;
+	dlg->items[1].text = _("Delete", term);
 
-	d->items[2].type = D_BUTTON;
-	d->items[2].gid = B_ENTER;
-	d->items[2].fn = push_kbdbind_toggle_display_button;
-	d->items[2].udata = ses;
-	d->items[2].text = _("Toggle display", term);
+	dlg->items[2].type = D_BUTTON;
+	dlg->items[2].gid = B_ENTER;
+	dlg->items[2].fn = push_kbdbind_toggle_display_button;
+	dlg->items[2].udata = ses;
+	dlg->items[2].text = _("Toggle display", term);
 
-	d->items[3].type = D_BUTTON;
-	d->items[3].gid = B_ENTER;
-	d->items[3].fn = push_kbdbind_save_button;
-	d->items[3].udata = ses;
-	d->items[3].text = _("Save", term);
+	dlg->items[3].type = D_BUTTON;
+	dlg->items[3].gid = B_ENTER;
+	dlg->items[3].fn = push_kbdbind_save_button;
+	dlg->items[3].udata = ses;
+	dlg->items[3].text = _("Save", term);
 
-	d->items[4].type = D_BUTTON;
-	d->items[4].gid = B_ESC;
-	d->items[4].fn = cancel_dialog;
-	d->items[4].text = _("Close", term);
+	dlg->items[4].type = D_BUTTON;
+	dlg->items[4].gid = B_ESC;
+	dlg->items[4].fn = cancel_dialog;
+	dlg->items[4].text = _("Close", term);
 
-	d->items[KB_BOX_IND].type = D_BOX;
-	d->items[KB_BOX_IND].gid = 12;
-	d->items[KB_BOX_IND].data = (void *) kbdbind_dlg_box_build();
+	dlg->items[KB_BOX_IND].type = D_BOX;
+	dlg->items[KB_BOX_IND].gid = 12;
+	dlg->items[KB_BOX_IND].data = (void *) kbdbind_dlg_box_build();
 
-	d->items[KB_BOX_IND + 1].type = D_END;
-	do_dialog(term, d, getml(d, NULL));
+	dlg->items[KB_BOX_IND + 1].type = D_END;
+	do_dialog(term, dlg, getml(dlg, NULL));
 }

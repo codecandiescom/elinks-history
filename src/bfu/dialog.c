@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.80 2003/11/09 13:04:22 zas Exp $ */
+/* $Id: dialog.c,v 1.81 2003/11/09 13:40:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,6 +377,7 @@ clear_dialog(struct dialog_data *dlg_data, struct widget_data *unused)
 	return 0;
 }
 
+
 static inline void
 layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
 	       int x, int *y, int w, int h, int *rw)
@@ -407,7 +408,6 @@ layout_widgets(struct terminal *term, struct widget_data *wdata, int widgets,
 	}
 }
 
-
 void
 generic_dialog_layouter(struct dialog_data *dlg_data)
 {
@@ -431,6 +431,7 @@ generic_dialog_layouter(struct dialog_data *dlg_data)
 	layout_widgets(term, dlg_data->widgets_data, dlg_data->n,
 		       x, &y, w, height, NULL);
 }
+
 
 void
 draw_dialog(struct dialog_data *dlg_data, int width, int height,

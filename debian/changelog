@@ -6,8 +6,11 @@ elinks (0.11.0-0) unstable; urgency=low
   * Remove more unrelevant files from contrib/
   * List docs in elinks.docs file
   * Support for DEB_BUILD_OPTIONS
+  * Update and cleanup debian/rules
+  * Pass -force-html in the debian/mime mailcap entries so problems
+    with viewing files without an extension is fixed
 
- -- Jonas Fonseca <fonseca@diku.dk>  Sun, 11 Jan 2005 01:42:45 +0100
+ -- Jonas Fonseca <fonseca@diku.dk>  Tue, 11 Jan 2005 16:36:46 +0100
 
 elinks (0.9.3-1) unstable; urgency=low
 
@@ -37,7 +40,7 @@ elinks (0.9.1+0.9.2pre3-1) unstable; urgency=low
   * Don't read nonexistant hooks.lua (closes: #231760)
   * README.Debian updated by "I forgot to read the docs" 
     questions (closes: #209046, #234589)
-  * fix accept-charset problem (closes: #242524)
+  * Fix accept-charset problem (closes: #242524)
   * Updated build-deps based on buildd's hints, removed xlib-dev
     (closes: #231646)
   * Changed 'make prefix=' to 'make DESTDIR=' in rules (closes: #234991)
@@ -94,7 +97,7 @@ elinks (0.3.20021004-1) unstable; urgency=low
 
 elinks (0.3.20020825-2) unstable; urgency=low
 
-  * spanish debconf translation (closes: #158576)
+  * Spanish debconf translation (closes: #158576)
 
  -- Peter Gervai <grin@tolna.net>  Wed, 28 Aug 2002 12:04:19 +0200
 
@@ -180,7 +183,7 @@ links-ssl (0.96.20020319-2) unstable; urgency=low
 links-ssl (0.96.20020319-1) unstable; urgency=low
 
   * New upstream version (eLinks 0.4pre2)
-  * plenty of patches included now in eLinks, most of them
+  * Plenty of patches included now in eLinks, most of them
     provide new features, some fixes bugs (some creates them :-))
     (many features hidden unless you check the docs)
   * HTTP authentication (password) support (closes: #107480)
@@ -223,7 +226,7 @@ links-ssl (0.96-1) unstable; urgency=low
 
 links-ssl (0.95.1-3) unstable; urgency=low
 
-  * changed links.desktop to links-ssl.desktop
+  * Changed links.desktop to links-ssl.desktop
   * links-ssl now provides links (closes: #102600)
 
  -- Peter Gervai <grin@Tolna.net>  Wed, 27 Jun 2001 21:10:41 +0200
@@ -237,9 +240,9 @@ links-ssl (0.95.1-2) unstable; urgency=high
 
 links-ssl (0.95.1-1) unstable; urgency=low
 
-  * new upstream version 0.96pre7
-  * build depends libgpmg1-dev [!hurd-i386] (closes: #99961, #95977)
-  * install KDE menu (closes: #96494)
+  * New upstream version 0.96pre7
+  * Build depends libgpmg1-dev [!hurd-i386] (closes: #99961, #95977)
+  * Install KDE menu (closes: #96494)
 
  -- Peter Gervai <grin@Tolna.net>  Fri,  8 Jun 2001 00:25:45 +0200
 

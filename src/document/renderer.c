@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.9 2003/12/01 16:05:47 jonas Exp $ */
+/* $Id: renderer.c,v 1.10 2003/12/01 18:13:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,7 +16,6 @@
 #include "config/options.h"
 #include "dialogs/status.h"
 #include "document/document.h"
-#include "document/options.h"
 #include "document/html/frames.h"
 #include "document/html/renderer.h"
 #include "document/plain/renderer.h"
@@ -64,17 +63,11 @@ render_document(struct view_state *vs, struct document_view *document_view,
 
 	document = get_cached_document(vs->url, options, cache_entry->id_tag);
 	if (!document) {
-		object_lock(cache_entry);
 		shrink_memory(0);
 
-		document = init_document(vs->url, options);
-		if (!document) {
-			object_unlock(cache_entry);
-			return;
-		}
+		document = init_document(vs->url, cache_entry, options);
+		if (!document) return;
 
-		global_doc_opts = &document->options;
-		document->id_tag = cache_entry->id_tag;
 		defrag_entry(cache_entry);
 
 		if (document->options.plain) {

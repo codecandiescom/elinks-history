@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.35 2003/12/01 16:05:47 jonas Exp $ */
+/* $Id: document.c,v 1.36 2003/12/01 18:13:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,7 +36,8 @@ static INIT_LIST_HEAD(format_cache);
 static int format_cache_entries = 0;
 
 struct document *
-init_document(unsigned char *uristring, struct document_options *options)
+init_document(unsigned char *uristring, struct cache_entry *cache_entry,
+	      struct document_options *options)
 {
 	struct document *document = mem_calloc(1, sizeof(struct document));
 
@@ -48,6 +49,9 @@ init_document(unsigned char *uristring, struct document_options *options)
 		return NULL;
 	}
 
+	object_lock(cache_entry);
+	document->id_tag = cache_entry->id_tag;
+
 	init_list(document->forms);
 	init_list(document->tags);
 	init_list(document->nodes);
@@ -56,6 +60,7 @@ init_document(unsigned char *uristring, struct document_options *options)
 	object_lock(document);
 
 	copy_opt(&document->options, options);
+	global_doc_opts = &document->options;
 
 	add_to_list(format_cache, document);
 

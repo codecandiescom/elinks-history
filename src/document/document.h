@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.38 2003/12/01 14:17:29 pasky Exp $ */
+/* $Id: document.h,v 1.39 2003/12/01 18:13:21 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -8,6 +8,7 @@
 #include "util/lists.h"
 
 struct screen_char;
+struct cache_entry;
 
 
 struct tag {
@@ -125,11 +126,11 @@ struct document {
 
 #define document_has_frames(document_) ((document_) && (document_)->frame_desc)
 
-/* Initializes a document and its canvas. The @uristring should match a
- * cache_entry. */
+/* Initializes a document and its canvas. */
 /* Return NULL on allocation failure. */
 struct document *
-init_document(unsigned char *uristring, struct document_options *options);
+init_document(unsigned char *uri, struct cache_entry *cache_entry,
+	      struct document_options *options);
 
 /* Releases the document and all its resources. */
 void done_document(struct document *document);

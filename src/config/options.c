@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.176 2003/01/04 20:42:45 pasky Exp $ */
+/* $Id: options.c,v 1.177 2003/01/04 21:27:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -932,9 +932,9 @@ register_options()
 		N_("Verify the peer's SSL certificate. Note that this\n"
 		"probably doesn't work properly at all with GnuTLS."));
 #else
-	add_opt_bool("connection.ssl", N_("Certificate verification"),
-		N_("cert_verify", 0, 0,
-		"Verify the peer's SSL certificate."));
+	add_opt_bool("connection.ssl", N_("Verify certificates"),
+		"cert_verify", 0, 0,
+		N_("Verify the peer's SSL certificate."));
 #endif
 
 

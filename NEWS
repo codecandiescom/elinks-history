@@ -15,7 +15,7 @@ ELinks-now:
 * configurability through features.conf
 * Mozilla-compliant support for -remote option
 * internationalized domain name support
-* Data protocol support (RFC 2397)
+* data protocol support (RFC 2397)
 * -localhost option to only permit local connections
 * -config-dir replaces -confdir option
 * -config-file replaces -conffile option

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.61 2003/07/22 15:59:19 jonas Exp $ */
+/* $Id: string.c,v 1.62 2003/07/23 02:53:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,12 +34,18 @@
  * functions. */
 
 #ifdef LEAK_DEBUG
+
+#define string_assertm(f, l, x, m) \
+	if ((assert_failed = !(x))) { \
+		errfile = f, errline = l, elinks_internal(m); \
+	}
+
 inline unsigned char *
 debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 {
 	unsigned char *m;
 
-	assert(len >= 0);
+	string_assertm(f, l, len >= 0, "len < 0");
 	if_assert_failed len = 0;
 
 	m = debug_mem_alloc(f, l, len + 1);
@@ -54,7 +60,7 @@ debug_memacpy(unsigned char *f, int l, unsigned char *src, int len)
 inline unsigned char *
 debug_stracpy(unsigned char *f, int l, unsigned char *src)
 {
-	assert(src);
+	string_assertm(f, l, src, "src == NULL");
 	if_assert_failed return NULL;
 
 	return debug_memacpy(f, l, src, strlen(src));
@@ -64,7 +70,7 @@ unsigned char *
 debug_copy_string(unsigned char *f, int l, unsigned char **dst,
 		  unsigned char *src)
 {
-	assert(src);
+	string_assertm(f, l, src, "src == NULL");
 	if_assert_failed { *dst = NULL; return NULL; }
 
 	*dst = debug_mem_alloc(f, l, strlen(src) + 1);

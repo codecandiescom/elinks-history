@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.46 2003/06/21 13:43:43 jonas Exp $ */
+/* $Id: file.c,v 1.47 2003/06/21 14:07:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,8 +42,8 @@
 #include "protocol/file.h"
 #include "protocol/url.h"
 #include "sched/sched.h"
-#include "util/encoding.h"
 #include "util/conv.h"
+#include "util/encoding.h"
 #include "util/memory.h"
 #include "util/string.h"
 
@@ -290,8 +290,6 @@ file_func(struct connection *c)
 	int saved_errno;
 	unsigned char dircolor[8];
 	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
-	unsigned char **ext;
-	int enc;
 	enum stream_encoding encoding = ENCODING_NONE;
 
 	if (colorize_dir) {
@@ -314,9 +312,12 @@ file_func(struct connection *c)
 	h = open(name, O_RDONLY | O_NOCTTY);
 	saved_errno = errno;
 	if (h == -1 && get_opt_bool("protocol.file.try_encoding_extensions")) {
+		int enc;
+
 		/* No file of that name was found, try some others names. */
 		for (enc = 1; enc < ENCODINGS_KNOWN; enc++) {
-			ext = listext_encoded(enc);
+			unsigned char **ext = listext_encoded(enc);
+
 			while (ext && *ext) {
 				unsigned char *tname = init_str();
 				int tname_len = 0;

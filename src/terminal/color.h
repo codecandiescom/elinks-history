@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.21 2003/10/01 23:12:07 jonas Exp $ */
+/* $Id: color.h,v 1.22 2003/10/03 11:31:09 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -35,7 +35,7 @@ enum color_mode {
 
 	COLOR_MODES, /* XXX: Keep last */
 };
-	
+
 /* Mixes the color pair and attributes to a terminal text color. */
 /* If @allow_dark_on_black is non zero the foreground color will be adjusted.
  * XXX: @schar may not be NULL and is modified adding stuff like boldness. */

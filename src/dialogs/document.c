@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.62 2003/10/31 22:18:15 pasky Exp $ */
+/* $Id: document.c,v 1.63 2003/11/12 08:42:35 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,6 +199,42 @@ loc_msg(struct terminal *term, struct location *location,
 					     _("Link title", term), a);
 			mem_free(a);
 		}
+
+#ifdef GLOBHIST
+		{
+			struct global_history_item *historyitem = NULL;
+			int cur_link = doc_view->vs->current_link;
+
+			if (cur_link != -1) {
+				struct link *link =
+					&doc_view->document->links[cur_link];
+
+				if (link->type == LINK_HYPERTEXT)
+					historyitem =
+						get_global_history_item(
+								link->where);
+			}
+
+			if (historyitem) {
+				unsigned char *last_visit;
+
+				last_visit = ctime(&historyitem->last_visit);
+
+				if (last_visit)
+					add_format_to_string(&msg,
+						"\n%s: %.24s",
+						_("Link last visit time",
+						  term),
+						last_visit);
+
+				if (*historyitem->title)
+					add_format_to_string(&msg, "\n%s: %s",
+						_("Link title (from history)",
+						  term),
+						historyitem->title);
+			}
+		}
+#endif
 	}
 
 	msg_box(term, getml(msg.source, NULL), 0,

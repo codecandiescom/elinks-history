@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.64 2003/08/23 16:44:42 jonas Exp $ */
+/* $Id: core.c,v 1.65 2003/09/15 13:54:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -78,7 +78,7 @@ l_current_url(LS)
 		unsigned char *postchar = strchr(vs->url, POST_CHAR);
 		unsigned char *url =
 			memacpy(vs->url, postchar ? postchar - vs->url
-						  : strlen(vs->url));
+						  : vs->url_len);
 
 		if (url) {
 			lua_pushstring(S, url);

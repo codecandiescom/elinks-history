@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.7 2002/06/29 21:50:48 pasky Exp $ */
+/* $Id: memdebug.c,v 1.8 2002/11/23 19:36:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,7 +223,9 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 
 	ah = malloc(SIZE_BASE2AH(size));
 	if (!ah) {
-		error("ERROR: out of memory (malloc returned NULL)\n");
+		errfile = file;
+		errline = line;
+		int_error("out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
 
@@ -267,7 +269,9 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 
 	ah = calloc(1, SIZE_BASE2AH(size));
 	if (!ah) {
-		error("ERROR: out of memory (calloc returned NULL)\n");
+		errfile = file;
+		errline = line;
+		int_error("out of memory (calloc returned NULL)\n");
 		return NULL;
 	}
 
@@ -380,7 +384,9 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 
 	ah = realloc(ah, SIZE_BASE2AH(size));
 	if (!ah) {
-		error("ERROR: out of memory (realloc returned NULL)\n");
+		errfile = file;
+		errline = line;
+		int_error("out of memory (realloc returned NULL)\n");
 		return NULL;
 	}
 
@@ -421,6 +427,7 @@ set_mem_comment(void *ptr, unsigned char *str, int len)
 	ah->comment = malloc(len + 1);
 	if (ah->comment)
 		safe_strncpy(ah->comment, str, len + 1);
+	else internal("out of memory (alloc returned NULL)");
 }
 
 #endif /* LEAK_DEBUG */

@@ -1052,9 +1052,9 @@ AC_OUTPUT([ \
  src/document/dom/Makefile \
  src/document/html/Makefile \
  src/document/html/parser/Makefile \
+ src/document/plain/Makefile \
  src/document/sgml/Makefile \
  src/document/sgml/html/Makefile \
- src/document/plain/Makefile \
  src/ecmascript/Makefile \
  src/encoding/Makefile \
  src/formhist/Makefile \
@@ -1077,8 +1077,8 @@ AC_OUTPUT([ \
  src/protocol/auth/Makefile \
  src/protocol/file/Makefile \
  src/protocol/finger/Makefile \
- src/protocol/gopher/Makefile \
  src/protocol/ftp/Makefile \
+ src/protocol/gopher/Makefile \
  src/protocol/http/Makefile \
  src/protocol/nntp/Makefile \
  src/protocol/rewrite/Makefile \

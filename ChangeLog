@@ -1,3 +1,97 @@
+Sat Jan  3 16:04:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/listmenu.h, document/html/parser.h, viewer/text/form.c:
+
+	Now useless header declarations were removed. bfu/listmenu.h is now
+	included in viewer/text/form.c.  
+
+Sat Jan  3 15:10:26 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/link.c:
+
+	Include listmenu.h.  
+
+Sat Jan  3 15:10:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Last bits of list menus changes.  
+
+Sat Jan  3 15:08:46 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: Makefile.am, listmenu.c, listmenu.h:
+
+	List menu functions were moved from parser.c to separate files.  
+
+Sat Jan  3 15:07:43 2004  Laurent Monin <zas@norz.org>:
+
+	* src/util/: conv.c, conv.h:
+
+	clr_spaces() was moved from document/html/parser.c to conv.c. It is
+	needed since next patch will move list menu functions to
+	bfu/listmenu.{c,h}.  
+
+Sat Jan  3 13:59:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, cookies/dialogs.c:
+
+	Make it possible to remove cookie folders.  
+
+Sat Jan  3 13:12:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, cookies/cookies.c,
+	cookies/dialogs.c:
+
+	Cookies are now grouped by server. Patch contains some changes to
+	make clearing work. It is still not possible to delete a server
+	folder.  
+
+Sat Jan  3 13:08:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/terminal/palette.inc:
+
+	Compilation fix for CONFIG_256_COLORS.  
+
+Sat Jan  3 11:56:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h:
+
+	Backend add_listbox_item().  
+
+Sat Jan  3 11:07:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, listbox.h:
+
+	Add free_empty_folder member to listbox_item.  
+
+Sat Jan  3 10:58:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.h, listbox.h:
+
+	Move up the listbox_item depth member and define it to -1 for
+	hierbox_browser root boxes.  
+
+Sat Jan  3 06:53:19 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/protocol/file/cgi.c:
+
+	Now executables (when not in CGI path) are displayed as normal
+	files.  Displaying of error dialog box was annoying.  
+
+Sat Jan  3 01:11:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/Makefile.am:
+
+	Fixed linking parsetst when having separate srcdir and builddir,
+	patch by Harold L Hunt II <huntharo@msu.edu>.  
+
+Sat Jan  3 01:11:31 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, Makefile.base:
+
+	Fixed make testutils when having separate srcdir and builddir, patch
+	by Harold L Hunt II <huntharo@msu.edu>.  
+
 Fri Jan  2 22:06:25 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bookmarks/bookmarks.c:

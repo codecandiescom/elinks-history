@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.447 2004/06/15 01:48:09 jonas Exp $ */
+/* $Id: options.c,v 1.448 2004/06/16 05:23:16 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -808,9 +808,14 @@ change_hook_html(struct session *ses, struct option *current, struct option *cha
 	draw_formatted(ses, 1);
 	load_frames(ses, ses->doc_view);
 	process_file_requests(ses);
-	/* Solely for the document.browse.forms.insert_mode option */
-	update_status();
 	print_screen_status(ses);
+	return 0;
+}
+
+static int
+change_hook_insert_mode(struct session *ses, struct option *current, struct option *changed)
+{
+	update_status();
 	return 0;
 }
 
@@ -887,6 +892,8 @@ static struct change_hook_info change_hooks[] = {
 	{ "config.show_template",	change_hook_stemplate },
 	{ "connection",			change_hook_connection },
 	{ "document.browse",		change_hook_html },
+	{ "document.browse.forms.insert_mode",
+					change_hook_insert_mode },
 	{ "document.browse.links.active_link",
 					change_hook_active_link },
 	{ "document.cache",		change_hook_cache },

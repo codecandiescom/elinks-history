@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.232 2003/11/15 00:19:55 zas Exp $ */
+/* $Id: session.c,v 1.233 2003/11/15 15:38:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -709,7 +709,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		set_referrer(ses, struri(ce->uri));
+		set_referrer(ses, get_cache_uri(ce));
 
 		switch (task) {
 		case TASK_NONE:
@@ -999,7 +999,7 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 	len = fr->length;
 
 	set_event_id(pre_format_html_event, "pre-format-html");
-	trigger_event(pre_format_html_event, &src, &len, ses, struri(ce->uri));
+	trigger_event(pre_format_html_event, &src, &len, ses, get_cache_uri(ce));
 
 	if (src && src != fr->data) {
 		add_fragment(ce, 0, src, len);

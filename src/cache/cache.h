@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.46 2003/11/14 19:22:22 zas Exp $ */
+/* $Id: cache.h,v 1.47 2003/11/15 15:38:12 jonas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -74,6 +74,8 @@ struct cache_entry {
 /* Please keep this one. It serves for debugging. --Zas */
 #define cache_entry_nolock(ce) do { ce_sanity_check(ce); ce_lock_debug(ce, "0"); } while (0)
 
+#define get_cache_uri(cache_entry) struri((cache_entry)->uri)
+
 struct fragment {
 	LIST_HEAD(struct fragment);
 
@@ -92,7 +94,6 @@ void truncate_entry(struct cache_entry *, int, int);
 void free_entry_to(struct cache_entry *, int);
 void delete_entry_content(struct cache_entry *);
 void delete_cache_entry(struct cache_entry *);
-
 /* The garbage collector trigger. If @whole is zero, remove unused cache
  * entries which are bigger than the cache size limit set by user. For @zero
  * being one, remove all unused cache entries. */

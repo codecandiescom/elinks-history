@@ -1,14 +1,7 @@
-/* $Id: os_dep.h,v 1.30 2003/10/27 03:18:56 pasky Exp $ */
+/* $Id: os_dep.h,v 1.31 2003/10/27 23:22:11 pasky Exp $ */
 
 #ifndef EL__OSDEP_OS_DEP_H
 #define EL__OSDEP_OS_DEP_H
-
-struct terminal;
-
-struct open_in_new {
-	unsigned char *text;
-	void (*fn)(struct terminal *term, unsigned char *, unsigned char *);
-};
 
 int get_system_env(void);
 int get_e(unsigned char *env);
@@ -39,8 +32,6 @@ int exe(unsigned char *);
 int resize_window(int, int);
 int can_resize_window(int);
 int can_open_os_shell(int);
-struct open_in_new *get_open_in_new(int);
-int can_open_in_new(struct terminal *);
 void set_highpri(void);
 
 #ifdef USE_OPEN_PREALLOC

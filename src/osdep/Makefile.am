@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.17 2003/10/27 03:18:56 pasky Exp $
+## $Id: Makefile.am,v 1.18 2003/10/27 23:22:11 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,8 @@ libosdep_a_SOURCES = \
  beos.c \
  beos.h \
  generic.h \
+ newwin.c \
+ newwin.h \
  os2.c \
  os2.h \
  os_dep.c \

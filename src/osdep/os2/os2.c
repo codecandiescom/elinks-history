@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.32 2005/02/28 15:52:24 zas Exp $ */
+/* $Id: os2.c,v 1.33 2005/03/27 21:58:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,6 +23,7 @@
 #include "osdep/osdep.h"
 #include "terminal/mouse.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 
 
 #define INCL_MOU
@@ -324,7 +325,7 @@ set_window_title(unsigned char *title)
 		unsigned char *p;
 
 		safe_strncpy(new_title, title, MAXNAMEL - 1);
-		while ((p = strchr(new_title, 1))) *p = ' ';
+		sanitize_title(new_title);
 		safe_strncpy(swData.szSwtitle, new_title, MAXNAMEL - 1);
 		WinChangeSwitchEntry(hSw, &swData);
 		/* Go to PM */

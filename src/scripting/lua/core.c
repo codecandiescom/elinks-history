@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.185 2005/03/25 19:25:06 miciah Exp $ */
+/* $Id: core.c,v 1.186 2005/03/27 21:58:11 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,6 +37,7 @@
 #include "scripting/scripting.h"
 #include "terminal/terminal.h"
 #include "util/color.h"
+#include "util/conv.h"
 #include "util/file.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -111,14 +112,7 @@ l_current_title(LS)
 		unsigned char *clean_title = stracpy(doc_view->document->title);
 
 		if (clean_title) {
-			int i = 0;
-
-			while (clean_title[i]) {
-				if (clean_title[i] < ' '
-				    || clean_title[i] == NBSP_CHAR)
-					clean_title[i] = ' ';
-				i++;
-			}
+			sanitize_title(clean_title);
 
 			lua_pushstring(S, clean_title);
 			mem_free(clean_title);

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.30 2003/12/05 18:17:18 pasky Exp $ */
+/* $Id: cgi.c,v 1.31 2003/12/05 18:18:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,6 +212,12 @@ set_vars(struct connection *conn, unsigned char *script)
 			language_to_iso639(current_language), 1);
 	}
 #endif
+
+	if (conn->cache && !conn->cache->incomplete && conn->cache->head
+	    && conn->cache->last_modified
+	    && conn->cache_mode <= CACHE_MODE_CHECK_IF_MODIFIED) {
+		setenv("HTTP_IF_MODIFIED_SINCE", conn->cache->last_modified, 1);
+	}
 
 	return 0;
 }

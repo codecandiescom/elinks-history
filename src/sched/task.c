@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.144 2004/12/18 21:37:13 pasky Exp $ */
+/* $Id: task.c,v 1.145 2004/12/18 21:38:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,9 +232,9 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 
 		message = msg_text(ses->tab->term,
 			N_("The URL you are about to follow might be maliciously "
-			"crafted to confuse you. By following the URL you will "
-			"be connecting to host \"%s\" as user \"%s\".\n\n"
-			"Do you want to go to URL %s"), host, user, uristring);
+			"crafted in order to confuse you. By following the URL "
+			"you will be connecting to host \"%s\" as user \"%s\".\n\n"
+			"Do you want to go to URL %s?"), host, user, uristring);
 
 		mem_free_if(host);
 		mem_free_if(user);

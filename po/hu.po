@@ -209,7 +209,7 @@ msgstr "Nincs URL"
 #. name:
 #: src/bookmarks/bookmarks.c:42 src/bookmarks/bookmarks.c:99
 msgid "Bookmarks"
-msgstr "~Könyvjelzõk"
+msgstr "Könyvjelzõk"
 
 #: src/bookmarks/bookmarks.c:44
 msgid "Bookmark options."
@@ -3494,13 +3494,15 @@ msgstr "Az elsõnek megtalált ûrlap automatikus küldése."
 
 #: src/config/options.inc:1921
 msgid "Clone session with given ID"
-msgstr ""
+msgstr "Klónozza a megadott azonosítóval futó példányt"
 
 #: src/config/options.inc:1923
 msgid ""
 "ID of session (ELinks instance) which we want to clone.\n"
 "This is internal ELinks option, you don't want to use it."
 msgstr ""
+"Annak az ELinks példánynak az azonosító száma, amelyet klónozni szeretnénk.\n"
+"Ez egy belsõ ELinks opció, nem érdemes állítani."
 
 #: src/config/options.inc:1926
 msgid "Set config dir to given string"
@@ -3966,7 +3968,7 @@ msgstr "A link utolsó látogatás ideje"
 
 #: src/dialogs/document.c:223
 msgid "Link title (from history)"
-msgstr ""
+msgstr "A link címe (a látogatott lapok listájából)"
 
 #: src/dialogs/document.c:254 src/dialogs/document.c:302
 #: src/dialogs/document.c:314

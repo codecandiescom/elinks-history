@@ -1,13 +1,12 @@
-/* $Id: vs.h,v 1.5 2003/10/05 14:05:08 pasky Exp $ */
-
-/* Placing this before the #ifndef, we'll fix some crossdep problems. */
-#include "document/html/parser.h"
-#include "document/html/renderer.h"
+/* $Id: vs.h,v 1.6 2003/10/29 20:18:29 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VS_H
 #define EL__VIEWER_TEXT_VS_H
 
-struct document_view; /* Crossdeps are evil. */
+/* Crossdeps are evil. */
+struct document_view;
+struct session;
+struct form_state;
 
 struct view_state {
 	unsigned char *goto_position;

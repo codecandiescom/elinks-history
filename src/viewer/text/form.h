@@ -1,4 +1,4 @@
-/* $Id: form.h,v 1.7 2003/10/17 14:02:51 jonas Exp $ */
+/* $Id: form.h,v 1.8 2003/10/29 20:18:29 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_FORM_H
 #define EL__VIEWER_TEXT_FORM_H
@@ -8,6 +8,18 @@
 #include "sched/session.h"
 #include "terminal/terminal.h"
 #include "util/lists.h" /* LIST_HEAD */
+
+struct form_state {
+	int form_num;
+	int ctrl_num;
+	int g_ctrl_num;
+	int position;
+	int type;
+	unsigned char *value;
+	int state;
+	int vpos;
+	int vypos;
+};
 
 struct submitted_value {
 	LIST_HEAD(struct submitted_value);

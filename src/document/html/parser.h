@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.35 2003/10/29 16:10:29 jonas Exp $ */
+/* $Id: parser.h,v 1.36 2003/10/29 20:18:28 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -69,18 +69,6 @@ struct form_control {
 	unsigned char **values;
 	unsigned char **labels;
 	struct menu_item *menu;
-};
-
-struct form_state {
-	int form_num;
-	int ctrl_num;
-	int g_ctrl_num;
-	int position;
-	int type;
-	unsigned char *value;
-	int state;
-	int vpos;
-	int vypos;
 };
 
 enum format_attr {

@@ -1,5 +1,5 @@
 /* This routines are the bones of user interface. */
-/* $Id: bfu.c,v 1.17 2002/05/08 13:55:00 pasky Exp $ */
+/* $Id: bfu.c,v 1.18 2002/05/10 17:14:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -513,11 +513,13 @@ void dialog_func(struct window *win, struct event *ev, int fwd)
 
 					case ACT_PASTE_CLIPBOARD: {
 						/* Paste from clipboard */
-						unsigned char * clipboard = get_clipboard_text();
+						unsigned char *clipboard = get_clipboard_text();
 
-						safe_strncpy(di->cdata, clipboard, di->item->dlen);
-						di->cpos = strlen(di->cdata);
-						mem_free(clipboard);
+						if (clipboard) {
+							safe_strncpy(di->cdata, clipboard, di->item->dlen);
+							di->cpos = strlen(di->cdata);
+							mem_free(clipboard);
+						}
 						goto dsp_f;
 					}
 

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.389 2004/04/04 03:09:19 jonas Exp $ */
+/* $Id: view.c,v 1.390 2004/04/04 03:15:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1003,6 +1003,7 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 {
 	struct link *link = get_current_link(doc_view);
 	void (*download)(void *ses, unsigned char *file) = start_download;
+	unsigned char *url;
 
 	if (!link) return;
 
@@ -1015,11 +1016,11 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 		case ACT_MAIN_RESUME_DOWNLOAD:
 			download = resume_download;
 		case ACT_MAIN_DOWNLOAD:
-			ses->dn_url = get_link_url(ses, doc_view, link);
+			url = get_link_url(ses, doc_view, link);
 			break;
 
 		case ACT_MAIN_DOWNLOAD_IMAGE:
-			ses->dn_url = stracpy(link->where_img);
+			url = stracpy(link->where_img);
 			break;
 
 		default:
@@ -1027,15 +1028,13 @@ download_link(struct session *ses, struct document_view *doc_view, int action)
 			return;
 	}
 
-	if (ses->dn_url) {
-		if (!strncasecmp(ses->dn_url, "MAP@", 4)) {
-			mem_free(ses->dn_url);
-			ses->dn_url = NULL;
-			return;
-		}
-		set_session_referrer(ses, doc_view->document->uri);
-		query_file(ses, ses->dn_url, ses, download, NULL, 1);
+	if (!url || !strncasecmp(url, "MAP@", 4)) {
+		if (url) mem_free(url);
+		return;
 	}
+
+	set_session_referrer(ses, doc_view->document->uri);
+	query_file(ses, ses->dn_url, ses, download, NULL, 1);
 }
 
 static struct string *

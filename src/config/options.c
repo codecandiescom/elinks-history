@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.352 2003/10/24 00:21:05 jonas Exp $ */
+/* $Id: options.c,v 1.353 2003/10/24 16:34:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -995,7 +995,36 @@ change_hook_language(struct session *ses, struct option *current, struct option 
 	return 0;
 }
 
-/* TODO: Move over the mailcap/mimetypes change hooks. --jonas,pasky */
+#ifdef MAILCAP
+#include "mime/backend/mailcap.h"
+static int
+change_hook_mailcap(struct session *ses, struct option *current, struct option *changed)
+{
+	if (!strlcmp(changed->name, -1, "path", 4)
+	    || (!strlcmp(changed->name, -1, "enable", 6)
+		&& !changed->value.number)) {
+		mailcap_mime_backend.done();
+	}
+
+	return 0;
+}
+#endif
+
+#ifdef MIMETYPES
+#include "mime/backend/mimetypes.h"
+static int
+change_hook_mimetypes(struct session *ses, struct option *current, struct option *changed)
+{
+	if (!strlcmp(changed->name, -1, "path", 4)
+	    || (!strlcmp(changed->name, -1, "enable", 6)
+		&& !changed->value.number)) {
+		mimetypes_mime_backend.done();
+	}
+
+	return 0;
+}
+#endif
+
 static struct change_hook_info change_hooks[] = {
 	{ "config.show_template",	change_hook_stemplate },
 	{ "connection",			change_hook_connection },
@@ -1007,6 +1036,12 @@ static struct change_hook_info change_hooks[] = {
 					global_history_write_timer_change_hook },
 #endif
 	{ "document.html",		change_hook_html },
+#ifdef MAILCAP
+	{ "mime.mailcap",		change_hook_mailcap },
+#endif
+#ifdef MIMETYPES
+	{ "mime.mimetypes",		change_hook_mimetypes },
+#endif
 	{ "terminal",			change_hook_terminal },
 	{ "ui.language",		change_hook_language },
 	{ NULL,				NULL },

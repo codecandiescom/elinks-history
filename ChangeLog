@@ -1,3 +1,17 @@
+Tue Feb 17 19:17:36 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/http.c:
+
+	ETag comparaison was fixed. We now take in account weakness or
+	strongness of ETags, and compare them case-sensitively, compliance
+	with RFC2616 section 3.11 and 13.3.3 was improved.  
+
+Tue Feb 17 06:03:08 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/dialogs/menu.c:
+
+	Added "Wrap text" menu entry.  
+
 Mon Feb 16 06:33:19 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* po/pl.po:

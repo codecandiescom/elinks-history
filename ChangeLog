@@ -1,3 +1,78 @@
+Tue Feb  3 20:37:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Fix leak when viewing empty files.  
+
+Tue Feb  3 20:31:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/search.c, viewer/text/search.h:
+
+	Make the third arg of find_next() mean the direction. Thus making it
+	possible to remove find_next_back().  
+
+Tue Feb  3 20:12:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Try to make the @a arg to find_next() a bit more clear and remove
+	the use for it.  
+
+Tue Feb  3 20:04:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Cleanup.  
+
+Tue Feb  3 19:28:04 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Feb  3 19:20:01 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/config/cmdline.c, src/lowlevel/connect.c,
+	src/osdep/Makefile.am, src/osdep/getifaddrs.c,
+	src/osdep/getifaddrs.h:
+
+	Option -localhost now matches against all local addresses, gathered
+	by getifaddrs() function, either from system or if not available
+	from the new osdep/getifaddrs.{c,h} files. Please test heavily for
+	cross platforms issues.  
+
+Tue Feb  3 18:59:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: search.c, search.h:
+
+	Make search_for and search_for_back static.  
+
+Tue Feb  3 18:56:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/search.c, viewer/text/search.h:
+
+	search_dlg(): Now both initiates forward and backward search dialogs
+	depending on @a.  
+
+Tue Feb  3 18:38:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Use document->nsearch as counter to get rid of disturbing macro.  
+
+Tue Feb  3 16:00:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/parser.c:
+
+	Fix leak of selector list when the syntax is all wrong.  
+
+Tue Feb  3 10:12:47 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/viewer/text/search.c:
+
+	Fix some swappage that led to an internal error when one selected
+	extended regexes in the search box and searched.  
+
 Mon Feb  2 16:20:32 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/renderer.c:

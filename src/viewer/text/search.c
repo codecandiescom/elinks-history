@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.109 2003/11/10 15:08:26 jonas Exp $ */
+/* $Id: search.c,v 1.110 2003/11/15 18:44:38 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -272,7 +272,6 @@ is_in_range_regex(struct document *document, int y, int yy,
 	unsigned char *doctmp;
 	int doclen;
 	int found = 0;
-	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
 	register int i;
@@ -327,13 +326,8 @@ is_in_range_regex(struct document *document, int y, int yy,
 		}
 
 next:
-		if (matches_may_overlap) {
-			doctmp++;
-			s1++;
-		} else {
-			doctmp += int_max(l, 1);
-			s1 += int_max(l, 1);
-		}
+		doctmp += int_max(l, 1);
+		s1 += int_max(l, 1);
 	}
 
 	regfree(&regex);
@@ -501,7 +495,6 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 	int xx, yy;
 	int xpv, ypv;
 	int len = 0;
-	int matches_may_overlap = get_opt_bool("document.browse.search.overlap");
 	int regex_flags = REG_NEWLINE;
 	int regexec_flags = 0;
 	int reg_err;
@@ -578,13 +571,8 @@ get_searched_regex(struct document_view *doc_view, struct point **pt, int *pl,
 			}
 		}
 
-		if (matches_may_overlap) {
-			doctmp++;
-			s1++;
-		} else {
-			doctmp += int_max(l, 1);
-			s1 += int_max(l, 1);
-		}
+		doctmp += int_max(l, 1);
+		s1 += int_max(l, 1);
 	}
 
 	regfree(&regex);

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.30 2003/11/14 13:59:39 zas Exp $ */
+/* $Id: options.inc,v 1.31 2003/11/15 18:44:37 kuser Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -258,13 +258,6 @@ struct option_info config_options_info[] = {
 		"case", 0, 0,
 		N_("Whether the search should match the document text while maintaining\n"
 		"case sensitivity.")),
-
-	INIT_OPT_BOOL("document.browse.search", N_("Overlapping matches"),
-		"overlap", 0, 0,
-		N_("Let matches overlap (only relevant to regex search).\n"
-		"0 means matches should not overlap.\n"
-		"1 means matches can overlap (CAUTION: can be cpu intensive with\n"
-		"  some expressions!)")),
 
 #ifdef HAVE_REGEX_H
 	INIT_OPT_INT("document.browse.search", N_("Regular expressions"),

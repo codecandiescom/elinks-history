@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.212 2003/10/04 13:25:34 jonas Exp $ */
+/* $Id: parser.c,v 1.213 2003/10/05 13:37:08 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3271,6 +3271,45 @@ ng:;
 	was_br = 0;
 }
 
+static int
+look_for_map(unsigned char **pos, unsigned char *eof, unsigned char *tag)
+{
+	unsigned char *al, *attr, *name;
+	int namelen;
+
+	while (*pos < eof && **pos != '<') {
+		(*pos)++;
+	}
+
+	if (*pos >= eof) return 0;
+
+	if (*pos + 2 <= eof && ((*pos)[1] == '!' || (*pos)[1] == '?')) {
+		*pos = skip_comment(*pos, eof);
+		return 1;
+	}
+
+	if (parse_element(*pos, eof, &name, &namelen, &attr, pos)) {
+		(*pos)++;
+		return 1;
+	}
+
+	if (namelen != 3 || strncasecmp(name, "MAP", 3)) return 1;
+
+	if (tag && *tag) {
+		al = get_attr_val(attr, "name");
+		if (!al) return 1;
+
+		if (strcasecmp(al, tag)) {
+			mem_free(al);
+			return 1;
+		}
+
+		mem_free(al);
+	}
+
+	return 0;
+}
+
 /* TODO: Split this function so that we can get rid of that gotos. */
 int
 get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
@@ -3278,7 +3317,7 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	      struct memory_list **ml, unsigned char *href_base,
 	      unsigned char *target_base, int to, int def, int hdef)
 {
-	unsigned char *name, *attr, *al, *label, *href, *target;
+	unsigned char *name, *attr, *label, *href, *target;
 	struct link_def *ld;
 	struct menu_item *nm;
 	struct conv_table *ct;
@@ -3297,40 +3336,11 @@ get_image_map(unsigned char *head, unsigned char *pos, unsigned char *eof,
 	*menu = mem_calloc(1, sizeof(struct menu_item));
 	if (!*menu) return -1;
 
-look_for_map:
-	while (pos < eof && *pos != '<') {
-		pos++;
-	}
+	while (look_for_map(&pos, eof, tag));
 
 	if (pos >= eof) {
 		mem_free(*menu);
 		return -1;
-	}
-
-	if (pos + 2 <= eof && (pos[1] == '!' || pos[1] == '?')) {
-		pos = skip_comment(pos, eof);
-		goto look_for_map;
-	}
-
-	if (parse_element(pos, eof, &name, &namelen, &attr, &pos)) {
-		pos++;
-		goto look_for_map;
-	}
-
-	if (namelen != 3 || strncasecmp(name, "MAP", 3)) {
-		goto look_for_map;
-	}
-
-	if (tag && *tag) {
-		al = get_attr_val(attr, "name");
-		if (!al) goto look_for_map;
-
-		if (strcasecmp(al, tag)) {
-			mem_free(al);
-			goto look_for_map;
-		}
-
-		mem_free(al);
 	}
 
 	*ml = NULL;

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.137 2003/12/06 21:57:37 pasky Exp $ */
+/* $Id: core.c,v 1.138 2003/12/20 21:57:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -536,10 +536,12 @@ init_lua(struct module *module)
 	if (elinks_home) do_hooks_file(L, elinks_home, LUA_HOOKS_FILENAME);
 }
 
+static void free_lua_console_history_entries(void);
+
 static void
 cleanup_lua(struct module *module)
 {
-	free_lua_console_history(NULL, NULL);
+	free_lua_console_history_entries();
 	lua_close(L);
 }
 
@@ -721,10 +723,16 @@ dialog_lua_console(va_list ap, void *data)
 	return EHS_NEXT;
 }
 
+static void
+free_lua_console_history_entries(void)
+{
+	free_list(lua_console_history.entries);
+}
+
 enum evhook_status
 free_lua_console_history(va_list ap, void *data)
 {
-	free_list(lua_console_history.entries);
+	free_lua_console_history_entries();
 	return EHS_NEXT;
 }
 

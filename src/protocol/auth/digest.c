@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.12 2004/11/14 22:19:35 jonas Exp $ */
+/* $Id: digest.c,v 1.13 2004/11/14 22:39:49 zas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
 
 #include "protocol/auth/auth.h"
 #include "protocol/auth/digest.h"
+#include "util/conv.h"
 #include "util/memory.h"
 
 /* GNU TLS doesn't define this */
@@ -32,23 +33,17 @@ static unsigned char *
 convert_hex(unsigned char bin[MD5_DIGEST_LENGTH + 1])
 {
 	int i;
-	unsigned char *hex = mem_calloc(1, MD5_DIGEST_LENGTH * 2 + 1);
+	unsigned char *hex = mem_alloc(MD5_DIGEST_LENGTH * 2 + 1);
 
 	if (!hex) return NULL;
 
 	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
-		unsigned char j = bin[i] >> 4 & 0xf;
+		int j = i * 2;
 
-		if (j <= 9)
-			hex[i * 2] = j + '0';
-		else
-			hex[i * 2] = j + 'a' - 10;
-		j = bin[i] & 0xf;
-		if (j <= 9)
-			hex[i * 2 + 1] = j + '0';
-		else
-			hex[i * 2 + 1] = j + 'a' - 10;
+		hex[j]   = hx(bin[i] >> 4 & 0xf);
+		hex[++j] = hx(bin[i] & 0xf);
 	}
+	
 	hex[MD5_DIGEST_LENGTH * 2] = '\0';
 	return hex;
 }

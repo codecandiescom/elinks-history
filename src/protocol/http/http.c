@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.268 2004/04/05 17:41:47 jonas Exp $ */
+/* $Id: http.c,v 1.269 2004/04/07 16:11:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -488,11 +488,10 @@ http_send_header(struct connection *conn)
 
 		if (init_string(&ac)) {
 			unsigned char *cs;
-			int aclen = 0;
 			int i;
 
 			for (i = 0; (cs = get_cp_mime_name(i)); i++) {
-				if (aclen) {
+				if (ac.length) {
 					add_to_string(&ac, ", ");
 				} else {
 					add_to_string(&ac, "Accept-Charset: ");

@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.80 2003/06/23 23:36:47 jonas Exp $ */
+/* $Id: file.c,v 1.81 2003/06/24 00:07:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -47,6 +47,16 @@
 #include "util/memory.h"
 #include "util/string.h"
 
+
+/* Structure used to pass around the data that will end up being added to the
+ * cache entry. */
+struct file_data {
+	unsigned char *head;
+	unsigned char *fragment;
+	int fragmentlen;
+};
+
+/* Directory listing */
 
 #ifdef FS_UNIX_RIGHTS
 static inline void
@@ -276,12 +286,9 @@ comp_de(struct directory_entry *d1, struct directory_entry *d2)
 	return strcmp(d1->name, d2->name);
 }
 
-struct file_data {
-	unsigned char *head;
-	unsigned char *fragment;
-	int fragmentlen;
-};
 
+/* Based on the @entry attributes and file-/dir-/linkname is added to the @data
+ * fragment. */
 static void
 add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	      unsigned char *path, unsigned char *dircolor)
@@ -384,12 +391,12 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 	int i;
 	struct dirent *entry;
 	unsigned char dircolor[8];
-	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
 
-	if (colorize_dir) {
+	/* Setup @dircolor so it's easy to check if we should color dirs. */
+	if (get_opt_int("document.browse.links.color_dirs")) {
 		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
-			(unsigned char *) &dircolor);
+				(unsigned char *) &dircolor);
 	} else {
 		dircolor[0] = 0;
 	}
@@ -506,6 +513,8 @@ list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 }
 
 
+/* File reading */
+
 /* Tries to open @prefixname with each of the supported encoding extensions
  * appended. */
 static enum stream_encoding
@@ -599,6 +608,7 @@ read_file(struct stream_encoded *stream, int readsize, struct file_data *data)
 	data->head = stracpy("");
 	return S_OK;
 }
+
 
 /* To reduce redundant error handling code [calls to abort_conn_with_state()]
  * most of the function is build around conditions that will assign the error

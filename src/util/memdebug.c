@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.6 2002/06/22 21:20:53 pasky Exp $ */
+/* $Id: memdebug.c,v 1.7 2002/06/29 21:50:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,10 +136,14 @@ dump_info(struct alloc_header *ah, unsigned char *info,
 
 	fprintf(stderr, " @ ");
 
-	if (file && (strcmp(file, ah->file) || line != ah->line))
-		fprintf(stderr, "%s:%d, ", file, line);
+	/* Following is commented out, as we want to print this out even when
+	 * there're lions in ah, pointing us to evil places in memory, leading
+	 * to segfaults and stuff like that. --pasky */
+	/* if (file && (strcmp(file, ah->file) || line != ah->line)) */
+		fprintf(stderr, "%s:%d, ", file, line), fflush(stdout);
 
 	fprintf(stderr, "alloc'd at %s:%d", ah->file, ah->line);
+
 	if (ah->comment) fprintf(stderr, " [%s]", ah->comment);
 
 	fprintf(stderr, "\n");

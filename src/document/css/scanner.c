@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.16 2004/01/19 05:49:37 jonas Exp $ */
+/* $Id: scanner.c,v 1.17 2004/01/19 06:03:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,9 +12,6 @@
 #include "document/css/scanner.h"
 #include "util/error.h"
 
-
-/* Define if you want a talking scanner */
-/* #define CSS_SCANNER_DEBUG */
 
 #define	SCAN_TABLE_SIZE	256
 
@@ -162,7 +159,7 @@ scan_css_tokens(struct css_scanner *scanner)
 /* Scanner table accessors and mutators */
 
 struct css_token *
-get_css_token_(struct css_scanner *scanner, unsigned char *file, int line)
+get_css_token_(struct css_scanner *scanner)
 {
 	assert(scanner);
 
@@ -170,8 +167,9 @@ get_css_token_(struct css_scanner *scanner, unsigned char *file, int line)
 	if (scanner->tokens) {
 		struct css_token *token = &scanner->table[scanner->current];
 
-		errfile = file, errline = line;
-		elinks_wdebug("%d %d [%s]", token->type, token->length, token->string);
+		errfile = scanner->file, errline = scanner->line;
+		elinks_wdebug("<%s> %d %d [%s]", scanner->function, token->type,
+			      token->length, token->string);
 	}
 #endif
 
@@ -179,28 +177,27 @@ get_css_token_(struct css_scanner *scanner, unsigned char *file, int line)
 }
 
 struct css_token *
-get_next_css_token_(struct css_scanner *scanner, unsigned char *file, int line)
+get_next_css_token_(struct css_scanner *scanner)
 {
 	scanner->current++;
 	if (scanner->current >= scanner->tokens) {
 		scan_css_tokens(scanner);
 	}
-	return get_css_token_(scanner, file, line);
+	return get_css_token_(scanner);
 }
 
 struct css_token *
-skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type,
-		 unsigned char *file, int line)
+skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type)
 {
-	struct css_token *token = get_css_token_(scanner, file, line);
+	struct css_token *token = get_css_token_(scanner);
 
 	/* TODO: Precedens handling. Stop if ';' is encountered while skipping
 	 * for ':' and if '{' or '}' while skipping for ';' */
 	while (token && token->type != type)
-		token = get_next_css_token_(scanner, file, line);
+		token = get_next_css_token_(scanner);
 
 	return (token && token->type == type)
-		? get_next_css_token_(scanner, file, line) : NULL;
+		? get_next_css_token_(scanner) : NULL;
 }
 
 int

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.18 2004/01/19 05:52:03 jonas Exp $ */
+/* $Id: scanner.h,v 1.19 2004/01/19 06:03:39 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -6,6 +6,9 @@
 #include "document/css/property.h"
 #include "util/error.h"
 
+
+/* Define if you want a talking scanner */
+/* #define CSS_SCANNER_DEBUG */
 
 /* The {struct css_token} describes one CSS scanner state. There are two kinds
  * of tokens: char and non-char tokens. Char tokens contains only one char and
@@ -67,6 +70,13 @@ struct css_scanner {
 	 * it is because there are no more tokens in the string. */
 	int current, tokens;
 
+#ifdef CSS_SCANNER_DEBUG
+	/* Info about the caller. Entry point and position in the source tree */
+	unsigned char *function;
+	unsigned char *file;
+	int line;
+#endif
+
 	/* The table continain already scanned tokens. It is maintained in
 	 * order to optimize the scanning a bit and make it possible to look
 	 * ahead at the next token. You should always use the accessors
@@ -95,16 +105,22 @@ int check_next_css_token(struct css_scanner *scanner, enum css_token_type type);
 /* Access current and next token. Getting the next token might cause
  * a rescan so any token pointers that has been stored in a local variable
  * might not be valid after the call. */
-struct css_token *get_css_token_(struct css_scanner *scanner, unsigned char *file, int line);
-#define get_css_token(scanner)  get_css_token_(scanner, __FILE__, __LINE__)
-
-struct css_token *get_next_css_token_(struct css_scanner *scanner, unsigned char *file, int line);
-#define get_next_css_token(scanner)  get_next_css_token_(scanner, __FILE__, __LINE__)
+struct css_token *get_css_token_(struct css_scanner *scanner);
+struct css_token *get_next_css_token_(struct css_scanner *scanner);
 
 /* Removes tokens from the scanner until it meets a token of the given type.
  * This token will then also be skipped. */
-struct css_token *skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type,
-		 unsigned char *file, int line);
-#define skip_css_tokens(scanner, type)  skip_css_tokens_(scanner, type, __FILE__, __LINE__)
+struct css_token *
+skip_css_tokens_(struct css_scanner *scanner, enum css_token_type type);
+
+#ifndef CSS_SCANNER_DEBUG
+#define get_css_token(scanner)		get_css_token_(scanner)
+#define get_next_css_token(scanner)	get_next_css_token_(scanner)
+#define skip_css_tokens(scanner, token)	skip_css_tokens_(scanner, token)
+#else
+#define get_css_token(s) ((s)->file = __FILE__, (s)->line = __LINE__, (s)->function = "get_css_token", get_css_token_(s))
+#define get_next_css_token(s) ((s)->file = __FILE__, (s)->line = __LINE__, (s)->function = "get_next_css_token", get_next_css_token_(s))
+#define skip_css_tokens(s, t) ((s)->file = __FILE__, (s)->line = __LINE__, (s)->function = "skip_css_tokens", skip_css_tokens_(s, t))
+#endif /* CSS_SCANNER_DEBUG */
 
 #endif

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.266 2005/03/31 09:44:50 zas Exp $ */
+/* $Id: kbdbind.c,v 1.267 2005/04/06 15:08:14 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -164,7 +164,7 @@ kbd_ev_lookup(enum keymap kmap, long key, long meta, int *func_ref)
 }
 
 struct keybinding *
-kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
+kbd_nm_lookup(enum keymap kmap, unsigned char *name)
 {
 	struct keybinding *kb;
 	int act = read_action(kmap, name);
@@ -174,9 +174,6 @@ kbd_nm_lookup(enum keymap kmap, unsigned char *name, int *func_ref)
 	foreach (kb, keymaps[kmap]) {
 		if (act != kb->action)
 			continue;
-
-		if (kb->action == ACT_MAIN_SCRIPTING_FUNCTION && func_ref)
-			*func_ref = kb->func_ref;
 
 		return kb;
 	}

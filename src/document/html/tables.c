@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.38 2003/06/29 22:32:04 zas Exp $ */
+/* $Id: tables.c,v 1.39 2003/06/30 17:50:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -887,22 +887,19 @@ x:
 static int
 get_column_widths(struct table *t)
 {
-	int i, j, s, ns;
+	int s = 1;
 
 	if (!t->x) return -1; /* prevents calloc(0, sizeof(int)) calls */
 
 	if (!t->min_c) {
 		t->min_c = mem_calloc(t->x, sizeof(int));
-		if (!t->min_c) {
-			return -1;
-		}
+		if (!t->min_c) return -1;
 	}
 
 	if (!t->max_c) {
 		t->max_c = mem_calloc(t->x, sizeof(int));
 	   	if (!t->max_c) {
-			mem_free(t->min_c);
-			t->min_c = NULL;
+			mem_free(t->min_c), t->min_c = NULL;
 			return -1;
 		}
 	}
@@ -910,19 +907,17 @@ get_column_widths(struct table *t)
 	if (!t->w_c) {
 		t->w_c = mem_calloc(t->x, sizeof(int));
 		if (!t->w_c) {
-			mem_free(t->min_c);
-			t->min_c = NULL;
-			mem_free(t->max_c);
-			t->max_c = NULL;
+			mem_free(t->min_c), t->min_c = NULL;
+			mem_free(t->max_c), t->max_c = NULL;
 			return -1;
 		}
 	}
 
-	s = 1;
-
 	do {
-		ns = MAXINT;
-		for (i = 0; i < t->x; i++) for (j = 0; j < t->y; j++) {
+		register int i = 0, j;
+		int ns = MAXINT;
+
+		for (; i < t->x; i++) for (j = 0; j < t->y; j++) {
 			struct table_cell *c = CELL(t, i, j);
 
 			if (c->spanned || !c->used) continue;
@@ -933,38 +928,33 @@ get_column_widths(struct table *t)
 			}
 
 			if (c->colspan == s) {
-				int k;
+				register int k;
 				int p = 0;
-				int m = 0;
-				/* int pp = t->max_c[i]; */
 
-				for (k = 1; k < s; k++) {
-					p += get_vline_width(t, i + k) >= 0;
-					/* pp += t->max_c[i + k]; */
-				}
-#if 0
-				if (0 && s > 1 && (t->p->data || t->p->xp)) {
-					int d, cc = (!!(t->frame & F_LHS) + !!(t->frame & F_RHS)) * !!t->border;
-					for (d = 0; d < t->c; c++) {
-						cc += t->max_c[d];
-						if (d > 0) d += get_vline_width(t, d) >= 0;
-					}
-					if (cc >= t->width) goto nd;
-					if (cc + c->max_width - p - pp >= t->width) {
-						m = cc + c->max_width - p - pp - t->width;
-					}
-				}
-#endif
+				for (k = 1; k < s; k++)
+					p += (get_vline_width(t, i + k) >= 0);
+
 				dst_width(t->min_c + i, s,
-					  c->min_width - p, t->max_c + i);
+				  	  c->min_width - p,
+					  t->max_c + i);
+
 				dst_width(t->max_c + i, s,
-					  c->max_width - p - m, NULL);
-				for (k = 0; k < s; k++)
-					if (t->min_c[i + k] > t->max_c[i + k])
-						t->max_c[i + k] = t->min_c[i + k];
-			} else if (c->colspan > s && c->colspan < ns) ns = c->colspan;
+				  	  c->max_width - p,
+					  NULL);
+
+				for (k = 0; k < s; k++) {
+					int tmp = i + k;
+
+					if (t->min_c[tmp] > t->max_c[tmp])
+						t->max_c[tmp] = t->min_c[tmp];
+				}
+
+			} else if (c->colspan > s && c->colspan < ns) {
+				ns = c->colspan;
+			}
 		}
-	} while ((s = ns) != MAXINT);
+		s = ns;
+	} while (s != MAXINT);
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.293 2004/10/18 04:12:42 miciah Exp $ */
+/* $Id: search.c,v 1.294 2004/10/18 04:18:24 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1240,6 +1240,10 @@ search_hit_boundary:
 	}
 
 	match = search_link_text(document, current, i, text, direction, offset);
+
+	if (match == current && i != current)
+		return TYPEAHEAD_ERROR_NO_FURTHER;
+
 	if (match < 0) {
 		if (i != current)
 			return TYPEAHEAD_ERROR_NO_FURTHER;

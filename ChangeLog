@@ -1,3 +1,21 @@
+Mon May 26 08:51:00 2003  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/kbd.c:
+
+	Copy TERM env variable before usage, code redundancy was reduced. It
+	fixes bug 180. Issue reported by Pasky, partially fixed by Karsten,
+	patch by me.  
+
+Mon May 26 08:25:29 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: POTFILES.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,
+	el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po,
+	is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po,
+	ru.po, sk.po, sv.po, tr.po, uk.po:
+
+	POTFILES.in was updated, .po files resynced and french translation
+	updated.  
+
 Sun May 25 11:29:31 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/: setup.h, sched/session.c:

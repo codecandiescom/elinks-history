@@ -1,7 +1,7 @@
-/* $Id: menu.h,v 1.49 2004/07/27 22:41:00 jonas Exp $ */
+/* $Id: menu.h,v 1.50 2004/07/28 02:20:01 jonas Exp $ */
 
-#ifndef EL__DIALOG_MENU_H
-#define EL__DIALOG_MENU_H
+#ifndef EL__DIALOGS_MENU_H
+#define EL__DIALOGS_MENU_H
 
 #include "terminal/terminal.h"
 #include "bfu/menu.h"

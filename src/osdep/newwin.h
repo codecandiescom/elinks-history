@@ -1,7 +1,7 @@
-/* $Id: newwin.h,v 1.8 2004/04/17 02:20:49 jonas Exp $ */
+/* $Id: newwin.h,v 1.9 2004/07/28 02:20:01 jonas Exp $ */
 
-#ifndef EL__DIALOG_SYSTEM_H
-#define EL__DIALOG_SYSTEM_H
+#ifndef EL__OSDEP_NEWWIN_H
+#define EL__OSDEP_NEWWIN_H
 
 #include "terminal/terminal.h"
 

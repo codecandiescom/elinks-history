@@ -1,8 +1,8 @@
 /* Secure file saving handling */
-/* $Id: secsave.h,v 1.7 2003/06/04 20:05:55 zas Exp $ */
+/* $Id: secsave.h,v 1.8 2004/07/28 02:20:01 jonas Exp $ */
 
-#ifndef EL__UTIL_SECFILE_H
-#define EL__UTIL_SECFILE_H
+#ifndef EL__UTIL_SECSAVE_H
+#define EL__UTIL_SECSAVE_H
 
 #include <stdio.h>
 #include <sys/types.h> /* mode_t */

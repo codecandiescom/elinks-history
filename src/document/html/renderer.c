@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.143 2003/06/17 15:02:34 pasky Exp $ */
+/* $Id: renderer.c,v 1.144 2003/06/17 15:07:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -646,11 +646,11 @@ html_tag(struct f_data *f, unsigned char *t, int x, int y)
 }
 
 
-#define CH_BUF	256
-
 static void
 put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 {
+#define CH_BUF	256
+
 	static char buffer[CH_BUF];
 	int bp = 0;
 	int pp = 0;
@@ -732,9 +732,9 @@ flush1:
 		}
 	}
 	if (bp) put_chars(part, buffer, bp);
-}
 
 #undef CH_BUF
+}
 
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)

@@ -27,6 +27,8 @@ Anton Voloshin <vav@isv.ru>
 
 Arkadiusz Miskiewicz <misiek@pld.org.pl>
 	Internationalization (GNU gettext)
+		(it's replaced by Mikulas' own code with support for
+		different charsets, but anyway ;)
 
 Arkadiusz Sochala <jojoro@priv2.onet.pl>
 	Polish translation

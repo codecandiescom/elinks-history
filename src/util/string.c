@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.17 2002/12/04 12:14:04 zas Exp $ */
+/* $Id: string.c,v 1.18 2002/12/04 12:21:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -435,7 +435,7 @@ inline unsigned char *trim_chars(unsigned char *s, unsigned char c, int *len)
 	int l = strlen(s);
 
 	while (*s == c) s++, l--;
-	while (l && s[l - 1] == ' ') s[--l] = '\0';
+	while (l && s[l - 1] == c) s[--l] = '\0';
 
 	if (len) *len = l;
 	return s;

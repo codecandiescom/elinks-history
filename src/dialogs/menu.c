@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.157 2003/10/23 23:48:00 pasky Exp $ */
+/* $Id: menu.c,v 1.158 2003/10/24 00:00:11 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -175,19 +175,19 @@ go_backwards(struct terminal *term, void *psteps, struct session *ses)
 {
 	int steps = (int) psteps;
 
-	/* FIXME: The naive thing would be to call go_back() n times, but the
-	 * problem is that the main going back is done in a bottom-half
-	 * handler, so there will be effectively only one go_back() executed.
-	 * (The same applies to unhistory as well.) --pasky */
-
 	abort_loading(ses, 0);
 
 	/* Move all intermediate items to unhistory. */
 
-	while (steps > 0 && cur_loc(ses) != &ses->history.history->next) {
-		go_back(ses);
+	while (steps > 1 && cur_loc(ses) != &ses->history.history->next) {
+		ses->history.current = ses->history.current->prev;
 		steps--;
 	}
+
+	/* FIXME: If we've stop because of the sanity check for not hitting the
+	 * history begin, go_back() will do nothing. But this situation should
+	 * never happen anyway ;-). Same applies to unhistory. --pasky */
+	go_back(ses);
 }
 
 static void
@@ -199,10 +199,12 @@ go_unbackwards(struct terminal *term, void *psteps, struct session *ses)
 
 	/* Move all intermediate items to history. */
 
-	while (steps > 0 && cur_loc(ses) != &ses->history.history->prev) {
-		go_unback(ses);
+	while (steps > 1 && cur_loc(ses) != &ses->history.history->prev) {
+		ses->history.current = ses->history.current->next;
 		steps--;
 	}
+
+	go_unback(ses);
 }
 
 static struct menu_item no_hist_menu[] = {

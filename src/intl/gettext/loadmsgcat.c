@@ -72,6 +72,7 @@ unsigned char *alloca();
 #ifdef HAVE_ALLOCA
 #define freea(p)		/* nothing */
 #else
+#undef alloca	/* workaround for systems including alloca() from non-standard headers. */
 #define alloca(n) malloc (n)
 #define freea(p) free (p)
 #endif

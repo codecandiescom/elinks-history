@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.17 2003/08/02 18:20:40 jonas Exp $ */
+/* $Id: formhist.c,v 1.18 2003/08/02 18:58:58 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -67,15 +67,16 @@ write_form_history(void)
 {
 	struct form_history_item *item;
 	struct secure_save_info *ssi;
-	unsigned char *file;
+	unsigned char *filename = "formhist";
 
-	if (!form_history_dirty) return;
+	if (!form_history_dirty
+	    || !elinks_home) return;
 
-	file = straconcat(elinks_home, "formhist", NULL);
-	if (!file) return;
+	filename = straconcat(elinks_home, filename, NULL);
+	if (!filename) return;
 
-	ssi = secure_open(file, 0177);
-	mem_free(file);
+	ssi = secure_open(filename, 0177);
+	mem_free(filename);
 	if (!ssi) return;
 
 	/* Write the list to formhist file */
@@ -157,15 +158,17 @@ static int
 init_form_history(void)
 {
 	struct form_history_item *form;
-	unsigned char tmp[MAX_STR_LEN], *file;
+	unsigned char tmp[MAX_STR_LEN], *filename = "formhist";
 	FILE *f;
 	int ret = 1;
 
-	file = straconcat(elinks_home, "formhist", NULL);
-	if (!file) return 0;
-	
-	f = fopen(file, "a+");
-	mem_free(file);
+	if (elinks_home) {
+		filename = straconcat(elinks_home, filename, NULL);
+		if (!filename) return 0;
+	}
+
+	f = fopen(filename, "r");
+	if (elinks_home) mem_free(filename);
 	if (!f) return 0;
 
 	while (safe_fgets(tmp, MAX_STR_LEN, f)) {

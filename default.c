@@ -821,7 +821,7 @@ unsigned char *lookup_cmd(struct option *o, unsigned char ***argv, int *argc)
 
 unsigned char *version_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	printf("Elinks " VERSION_STRING " - Lynx-like text WWW browser\n");
+	printf("Elinks " VERSION_STRING " - Text WWW browser\n");
 	fflush(stdout);
 	return "";
 }

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.109 2003/06/29 15:51:15 zas Exp $ */
+/* $Id: session.c,v 1.110 2003/06/29 15:55:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -791,10 +791,11 @@ void
 request_frameset(struct session *ses, struct frameset_desc *fd)
 {
 	static int depth = 0; /* Inheritation counter (recursion brake ;) */
-	int i;
 
 	if (++depth <= HTML_MAX_FRAME_DEPTH) {
-		for (i = 0; i < fd->n; i++) {
+		int i = 0;
+
+		for (; i < fd->n; i++) {
 			if (fd->f[i].subframe) {
 				request_frameset(ses, fd->f[i].subframe);
 			} else if (fd->f[i].name) {

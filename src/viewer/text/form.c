@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.125 2004/06/11 17:35:01 jonas Exp $ */
+/* $Id: form.c,v 1.126 2004/06/11 18:54:07 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -559,6 +559,37 @@ add_boundary(struct string *data, unsigned char *bound,
 	add_bytes_to_string(data, bound, BL);
 }
 
+static inline void
+check_boundary(struct string *data, unsigned char *bound,
+	       int *bound_ptrs, int nbound_ptrs)
+{
+	register int i;
+
+	memset(bound, '0', BL);
+
+again:
+	for (i = 0; i <= data->length - BL; i++) {
+		register int j;
+
+		for (j = 0; j < BL; j++)
+			if ((data->source)[i + j] != bound[j])
+				goto next_boundary;
+
+		for (j = BL - 1; j >= 0; j--)
+			if (bound[j]++ >= '9')
+				bound[j] = '0';
+			else
+				goto again;
+
+		INTERNAL("Could not assing boundary");
+
+next_boundary:;
+	}
+
+	for (i = 0; i < nbound_ptrs; i++)
+		memcpy(data->source + bound_ptrs[i], bound, BL);
+}
+
 /* FIXME: shouldn't we encode data at send time (in http.c) ? --Zas */
 static void
 encode_multipart(struct session *ses, struct list_head *l, struct string *data,
@@ -568,7 +599,6 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 	struct submitted_value *sv;
 	int *bound_ptrs = NULL;
 	int nbound_ptrs = 0;
-	register int i;
 
 	assert(ses && l && data && bound);
 	if_assert_failed return;
@@ -671,29 +701,8 @@ encode_multipart(struct session *ses, struct list_head *l, struct string *data,
 
 	add_boundary(data, bound, &bound_ptrs, &nbound_ptrs);
 	add_to_string(data, "--\r\n");
-	memset(bound, '0', BL);
 
-again:
-	for (i = 0; i <= data->length - BL; i++) {
-		register int j;
-
-		for (j = 0; j < BL; j++)
-			if ((data->source)[i + j] != bound[j])
-				goto next_boundary;
-
-		for (j = BL - 1; j >= 0; j--)
-			if (bound[j]++ >= '9')
-				bound[j] = '0';
-			else
-				goto again;
-
-		INTERNAL("Could not assing boundary");
-
-next_boundary:;
-	}
-
-	for (i = 0; i < nbound_ptrs; i++)
-		memcpy(data->source + bound_ptrs[i], bound, BL);
+	check_boundary(data, bound, bound_ptrs, nbound_ptrs);
 
 	mem_free(bound_ptrs);
 	return;

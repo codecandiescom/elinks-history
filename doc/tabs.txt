@@ -98,9 +98,8 @@ to rebind them.
 Saving and restoring tabs
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This feature uses bookmarks to store tab information. Multiple tabs can be
-bookmarked together. This will create a bookmark folder where the bookmarked
-tabs will be added. There are various ways to do this:
+Several features use bookmarks to save tabs; they will create a folder
+and bookmark therein the currently displayed document of each tab:
 
  - You can explicitly command all tabs to be bookmarked. This will ask you
    for a folder name in which the tabs will be bookmarked.
@@ -115,4 +114,4 @@ tabs will be added. There are various ways to do this:
    periodically saved tabs will be removed.
 
 
-$Id: tabs.txt,v 1.3 2005/01/03 08:12:57 miciah Exp $
+$Id: tabs.txt,v 1.4 2005/01/03 21:03:43 miciah Exp $

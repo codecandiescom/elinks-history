@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.123 2004/03/21 01:56:04 jonas Exp $ */
+/* $Id: cookies.c,v 1.124 2004/03/21 02:04:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ set_cookie(struct uri *uri, unsigned char *str)
 	if (!check_domain_security(cookie->domain, &uri->host)) {
 #ifdef COOKIES_DEBUG
 		DBG("Domain security violated: %s vs %*s", cookie->domain,
-				uri->hoststr, uri->hostlen);
+				uri->host.source, uri->host.length);
 #endif
 		mem_free(cookie->domain);
 		cookie->domain = memacpy(uri->hoststr, uri->hostlen);
@@ -565,15 +565,17 @@ accept_cookie_dialog(struct session *ses, void *data)
 
 
 static int
-is_in_domain(unsigned char *d, unsigned char *s, int sl)
+is_in_domain(unsigned char *d, struct string *server)
 {
 	int dl = strlen(d);
 
-	if (dl > sl) return 0;
-	if (dl == sl) return !strncasecmp(d, s, sl);
-	if (s[sl - dl - 1] != '.') return 0;
+	if (dl > server->length) return 0;
+	if (dl == server->length)
+		return !string_strcasecmp(server, d);
 
-	return !strncasecmp(d, s + sl - dl, dl);
+	if (server->source[server->length - dl - 1] != '.') return 0;
+
+	return !strncasecmp(d, server->source + server->length - dl, dl);
 }
 
 
@@ -606,7 +608,7 @@ send_cookies(struct uri *uri)
 		return NULL;
 
 	foreach (cd, c_domains)
-		if (is_in_domain(cd->domain, uri->hoststr, uri->hostlen)) {
+		if (is_in_domain(cd->domain, &uri->host)) {
 			data = uri->data - 1;
 			break;
 		}
@@ -616,7 +618,7 @@ send_cookies(struct uri *uri)
 	init_string(&header);
 
 	foreach (c, cookies) {
-		if (!is_in_domain(c->domain, uri->hoststr, uri->hostlen)
+		if (!is_in_domain(c->domain, &uri->host)
 		    || !is_path_prefix(c->path, data, datalen))
 			continue;
 

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.31 2004/01/25 01:33:43 jonas Exp $ */
+/* $Id: css.c,v 1.32 2004/01/25 02:10:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,14 +46,10 @@ struct option_info css_options_info[] = {
 
 
 static void
-import_default_css(void)
+import_css_file(struct css_stylesheet *css, unsigned char *url)
 {
-	unsigned char *url = get_opt_str("document.css.stylesheet");
 	unsigned char *home_url = NULL;
 	struct string string;
-
-	if (!list_empty(default_stylesheet.selectors))
-		done_css_stylesheet(&default_stylesheet);
 
 	if (!*url) return;
 
@@ -64,10 +60,42 @@ import_default_css(void)
 	}
 
 	if (read_encoded_file(url, strlen(url), &string) == S_OK) {
-		css_parse_stylesheet(&default_stylesheet, string.source);
+		css_parse_stylesheet(css, string.source);
 		done_string(&string);
 	}
 	if (home_url) mem_free(home_url);
+}
+
+static void
+import_default_css(void)
+{
+	unsigned char *url = get_opt_str("document.css.stylesheet");
+	struct string_list_item *import;
+
+	if (!list_empty(default_stylesheet.selectors))
+		done_css_stylesheet(&default_stylesheet);
+
+	if (!*url) return;
+
+	import_css_file(&default_stylesheet, url);
+
+	if (list_empty(default_stylesheet.imports)) return;
+
+	/* Hmm .. ok we start over */
+	while (!list_empty(default_stylesheet.selectors)) {
+		struct css_selector *selector = default_stylesheet.selectors.next;
+
+		del_from_list(selector);
+		free_list(selector->properties);
+		mem_free(selector->element);
+		mem_free(selector);
+	}
+
+	foreach (import, default_stylesheet.imports) {
+		import_css_file(&default_stylesheet, import->string.source);
+	}
+
+	import_css_file(&default_stylesheet, url);
 }
 
 static int

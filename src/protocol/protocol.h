@@ -1,8 +1,9 @@
-/* $Id: protocol.h,v 1.15 2003/07/04 15:01:29 jonas Exp $ */
+/* $Id: protocol.h,v 1.16 2003/07/25 16:01:18 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
 
+#include "protocol/uri.h"
 #include "sched/connection.h"
 #include "sched/session.h"
 

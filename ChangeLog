@@ -1,3 +1,67 @@
+Mon Apr 21 21:12:00 2003  Laurent Monin <zas@norz.org>:
+
+	* BUGS:
+
+	A note about a bug concerning moving bookmarks was added.  
+
+Mon Apr 21 20:38:21 2003  Laurent Monin <zas@norz.org>:
+
+	* src/util/string.c:
+
+	strdup() stub was improved.  
+
+Mon Apr 21 20:16:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	An unused variable was removed.  
+
+Mon Apr 21 20:04:04 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/renderer.c:
+
+	Minor code cleanup.  
+
+Mon Apr 21 19:31:11 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Some hardcoded chars were replaced by FRAME* chars, minor
+	optimization in html_ol().  
+
+Mon Apr 21 11:52:56 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: POTFILES.in, be.po, bg.po, ca.po, cs.po, da.po, de.po,
+	el.po, es.po, et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po,
+	is.po, it.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po,
+	ru.po, sk.po, sv.po, tr.po, uk.po:
+
+	Keybinding descriptions were added to translations stuff. French
+	translation was updated. Translators please think about updating
+	your translations...  
+
+Mon Apr 21 09:44:33 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po, sk.po,
+	sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Mon Apr 21 09:30:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/auth.c:
+
+	Minor optimization.  
+
+Mon Apr 21 09:28:23 2003  Laurent Monin <zas@norz.org>:
+
+	* src/dialogs/mime.c:
+
+	Cleanup and code redundancy was reduced: transchars() and
+	untranschars() functions were introduced.  
+
 Sun Apr 20 15:05:49 2003  Laurent Monin <zas@norz.org>:
 
 	* src/: util/string.c, bfu/inphist.c, document/html/parser.c:

@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.97 2005/03/21 11:26:16 zas Exp $ */
+/* $Id: checkbox.c,v 1.98 2005/03/22 14:56:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,6 @@ add_dlg_radio_do(struct dialog *dlg, unsigned char *text,
 
 	widget->info.checkbox.gid  = groupid;
 	widget->info.checkbox.gnum = groupnum;
-
-	widget->width	= CHECKBOX_LEN;
-	widget->height  = 1;
 }
 
 void

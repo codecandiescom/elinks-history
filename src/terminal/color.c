@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.30 2003/09/06 15:57:33 jonas Exp $ */
+/* $Id: color.c,v 1.31 2003/09/06 20:33:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -11,6 +11,75 @@
 #include "terminal/color.h"
 #include "terminal/draw.h"
 #include "util/color.h"
+
+
+/* Thanks to deltab for this precious document! This is the only reference
+ * found by google regarding passing RGB color triplets to xterm. It was found
+ * indirectly when looking for details regarding xterm256, it was the only
+ * other match for our query and it comes from some postscript on a Russian
+ * server. Deltab was reportedly looking for this for years ;-).
+ *
+ * I T U - T T.416 TELECOMMUNICATION (03/93) STANDARDIZATION SECTOR OF ITU
+ * TELEMATIC SERVICES TERMINAL EQUIPMENTS AND PROTOCOLS FOR TELEMATIC SERVICES
+ * CHARACTER CONTENT ARCHITECTURES ITU-T Recommendation T.416 (Previously "CCITT Recommendation")
+ *
+ * ...
+ *
+ * 40 ITU-T Rec. T.416 (1993 E)
+ *
+ * ISO/IEC 8613-6 : 1994 (E) These values are included in this Specification only
+ * for compatibility with some existing applications such as those based upon
+ * Recommendation T.61 (1984).
+ *
+ * ...
+ *
+ * The parameter values 38 and 48 are followed by a parameter substring used to
+ * select either the character foreground "colour value" or the character
+ * background "colour value".
+ *
+ * A parameter substring for values 38 or 48 may be divided by one or more
+ * separators (03/10) into parameter elements, denoted as Pe. The format of such a
+ * parameter sub-string is indicated as:
+ *
+ * Pe : P ... Each parameter element consists of zero, one or more bit
+ * combinations from 03/00 to 03/09, representing the digits 0 to 9. An empty
+ * parameter element represents a default value for this parameter element. Empty
+ * parameter elements at the end of the parameter substring need not be included.
+ * The first parameter element indicates a choice between:
+ *
+ * 0 implementation defined (only applicable for the character foreground colour)
+ * 1 transparent; 2 direct colour in RGB space; 3 direct colour in CMY space; 4
+ * direct colour in CMYK space; 5 indexed colour.
+ *
+ * If the first parameter has the value 0 or 1, there are no additional parameter
+ * elements. If the first parameter element has the value 5, then there is a
+ * second parameter element specifying the index into the colourtable given by the
+ * attribute "content colour table" applying to the object with which the content
+ * is associated.
+ *
+ * If the first parameter element has the value 2, 3, or 4, the second parameter
+ * element specifies a colour space identifier referring to a colour space
+ * definition in the document profile. If the first parameter element has the
+ * value 2, the parameter elements 3, 4, and 5, are three integers for red, green,
+ * and blue colour components. Parameter 6 has no meaning. If the first parameter
+ * has the value 3, the parameter elements 3, 4, and 5 and three integers for
+ * cyan, magenta, and yellowcolour components. Parameter 6 has no meaning. If the
+ * first parameter has the value 4, the parameter elements 3, 4, 5, and 6, are
+ * four integers for cyan, magenta, yellow, and black colour components. If the
+ * first parameter element has the value 2, 3, or 4, the parameter element 7 may
+ * be used to specify a tolerance value (an integer) and the parameter element 8
+ * first parameter element has the value 2, 3, or 4, the parameter element 7 may
+ * be used to specify a tolerance value (an integer) and the parameter element 8
+ * may be used to specify a colour space associated with the tolerance (0 for
+ * CIELUV, 1 for CIELAB).
+ *
+ * NOTE 3 - The "colour space id" component will refer to the applicable colour
+ * space description in the document profile which may contain colour scaling data
+ * that describe the scale and offset to be applied to the specified colour
+ * components in the character content. Appropriate use of scaling and offsets may
+ * be required to map all colour values required into the integer encodingspace
+ * provided. This may be particularly important if concatenated content requires
+ * the insertion of such SGR sequences by the content layout process. */
 
 
 static struct rgb palette[] = {

@@ -1,3 +1,55 @@
+Sun Apr 25 17:32:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: bookmarks/backend/xbel.c, document/document.c,
+	document/html/parser.c, document/html/parser/forms.c,
+	document/html/parser/link.c, document/html/parser/parse.c,
+	sched/action.c, sched/connection.c, sched/download.c,
+	sched/history.c, sched/task.c, viewer/text/search.c:
+
+	Miscelleanous trivial tidyups: indentation, whitespaces fixes,
+	hacking document conformance.  
+
+Sun Apr 25 16:28:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/dialogs.c:
+
+	Microscopic tidyup.  
+
+Sun Apr 25 09:52:34 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Apr 25 09:49:44 2004  Laurent Monin <zas@norz.org>:
+
+	* src/sched/error.c:
+
+	Typo fix: external -> external programs.  
+
+Sun Apr 25 05:58:17 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/scripting/perl/hooks.c:
+
+	Maybe we should C++. Use dSP only when Perl is initialized.  
+
+Sat Apr 24 23:48:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	parse_html(): Commit unput data to the document upon reaching @eof
+	only if we really want to commit them (therefore cycle with
+	@noupdate set). This fixes random tags shown inside of <table>s and
+	possibly other weirdness. Introduced by me, pinpointed by Jonas,
+	fixed it together :).  
+
+Sat Apr 24 22:22:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/scripting/perl/hooks.c:
+
+	Reverted witekfl's 1.5 (movind dSP). This breaks compilation
+	(declaration not at the start of block).  
+
 Sat Apr 24 16:15:13 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/mime/mime.c:

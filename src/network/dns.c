@@ -1,5 +1,5 @@
 /* Domain Name System Resolver Department */
-/* $Id: dns.c,v 1.40 2003/12/21 14:51:20 zas Exp $ */
+/* $Id: dns.c,v 1.41 2004/02/19 17:48:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,6 +169,7 @@ lookup_fn(void *data, int h)
 			if (w < 0) return;
 			done += w;
 		} while (done < sizeof(struct sockaddr_storage));
+		assert(done == sizeof(struct sockaddr_storage));
 	}
 
 	/* We're in thread, thus we must do plain free(). */
@@ -208,6 +209,7 @@ end_real_lookup(void *data)
 			if (r <= 0) goto done;
 			done += r;
 		} while (done < sizeof(struct sockaddr_storage));
+		assert(done == sizeof(struct sockaddr_storage));
 	}
 
 	res = 0;

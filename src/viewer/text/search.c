@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.186 2004/02/03 10:12:47 miciah Exp $ */
+/* $Id: search.c,v 1.187 2004/02/03 18:38:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,18 +55,23 @@ static struct input_history search_history = {
 static inline void
 add_srch_chr(struct document *document, unsigned char c, int x, int y, int nn)
 {
-	int n;
-
 	assert(document);
 	if_assert_failed return;
 
-	n = document->nsearch;
+	if (c == ' ' && !document->nsearch) return;
 
-	if (c == ' ' && (!n || document->search[n - 1].c == ' ')) return;
-	document->search[n].c = c;
-	document->search[n].x = x;
-	document->search[n].y = y;
-	document->search[n].n = nn;
+	if (document->search) {
+		int n = document->nsearch;
+
+		if (c == ' ' && document->search[n - 1].c == ' ')
+			return;
+
+		document->search[n].c = c;
+		document->search[n].x = x;
+		document->search[n].y = y;
+		document->search[n].n = nn;
+	}
+
 	document->nsearch++;
 }
 
@@ -130,22 +135,14 @@ static int
 get_srch(struct document *document)
 {
 	struct node *node;
-	int cnt = 0;
-	int cc;
 
-	assert(document);
+	assert(document && document->nsearch == 0);
+
 	if_assert_failed return 0;
-
-	cc = !document->search;
 
 	foreachback (node, document->nodes) {
 		register int x, y;
 		int height = int_min(node->y + node->height, document->height);
-
-#define ADD(cr, nn) do { \
-	if (!cc) add_srch_chr(document, (cr), x, y, (nn)); \
-	else cnt++; \
-} while (0)
 
 		for (y = node->y; y < height; y++) {
 			int width = int_min(node->x + node->width,
@@ -164,7 +161,7 @@ get_srch(struct document *document)
 					continue;
 
 				if (c > ' ') {
-					ADD(c, 1);
+					add_srch_chr(document, c, x, y, 1);
 					continue;
 				}
 
@@ -175,18 +172,15 @@ get_srch(struct document *document)
 					break;
 				}
 
-				ADD(' ', count);
+				add_srch_chr(document, ' ', x, y, count);
 				x = xx - 1;
 			}
 
-			ADD(' ', 0);
+			add_srch_chr(document, ' ', x, y, 0);
 		}
-#undef ADD
-
 	}
 
-
-	return cnt;
+	return document->nsearch;
 }
 
 static void

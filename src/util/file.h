@@ -1,9 +1,27 @@
-/* $Id: file.h,v 1.13 2004/06/02 10:34:58 zas Exp $ */
+/* $Id: file.h,v 1.14 2004/07/18 01:50:02 jonas Exp $ */
 
 #ifndef EL__UTIL_FILE_H
 #define EL__UTIL_FILE_H
 
 #include <stdio.h>
+#include <sys/types.h>
+#ifdef HAVE_DIRENT_H
+#include <dirent.h> /* OS/2 needs this after sys/types.h */
+#endif
+
+struct directory_entry {
+	/* The various attribute info collected with the stat_* functions. */
+	unsigned char *attrib;
+
+	/* The full path of the dir entry. */
+	unsigned char *name;
+};
+
+/* First information such as permissions is gathered for each directory entry.
+ * All entries are then sorted. */
+struct directory_entry *
+get_directory_entries(DIR *directory, unsigned char *dirname,
+		      int get_hidden_files);
 
 int file_exists(const unsigned char *filename);
 int file_can_read(const unsigned char *filename);

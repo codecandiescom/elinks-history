@@ -1865,10 +1865,10 @@ unsigned char *get_current_url(struct session *ses, unsigned char *str, size_t s
 	/* Ensure that the url size is not greater than str_size. We can't just
 	 * happily strncpy(str, here, str_size) because we have to stop at
 	 * POST_CHAR, not only at NULL. */
-	if (url_len > str_size)
+	if (url_len >= str_size)
 			url_len = str_size - 1;
 
-	safe_strncpy(str, here, url_len);
+	safe_strncpy(str, here, url_len + 1);
 	
 	return str;
 }

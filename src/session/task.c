@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.129 2004/09/28 16:46:51 pasky Exp $ */
+/* $Id: task.c,v 1.130 2004/09/28 16:55:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -187,6 +187,13 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 }
 
 
+/* If @loaded_in_frame is set, this was called just to indicate a move inside a
+ * frameset, and we basically just reset the appropriate frame's view_state in
+ * that case. When clicking on a link inside a frame, the frame URI is somehow
+ * updated and added to the files-to-load queue, then ses_forward() is called
+ * with @loaded_in_frame unset, duplicating the whole frameset's location, then
+ * later the file-to-load callback calls it for the particular frame with
+ * @loaded_in_frame set. */
 struct view_state *
 ses_forward(struct session *ses, int loaded_in_frame)
 {

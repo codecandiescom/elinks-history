@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.11 2002/06/16 23:38:23 pasky Exp $
+## $Id: Makefile.am,v 1.12 2003/06/21 12:10:48 zas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -9,6 +9,8 @@ noinst_LIBRARIES = libhttp.a
 libhttp_a_SOURCES = \
  auth.h \
  auth.c \
+ codes.c \
+ codes.h \
  date.c \
  date.h \
  header.c \

@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.137 2003/06/21 12:03:36 pasky Exp $ */
+/* $Id: http.c,v 1.138 2003/06/21 12:10:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "lowlevel/sysname.h"
 #include "terminal/terminal.h"
 #include "protocol/http/auth.h"
+#include "protocol/http/codes.h"
 #include "protocol/http/header.h"
 #include "protocol/http/http.h"
 #include "protocol/url.h"
@@ -1017,12 +1018,18 @@ thats_all_folks:
 	if (!conn->from && info->error_code) {
 		unsigned char errs[] = "xxx";
 		unsigned char *str;
+		unsigned char *codestr = 
+			       http_code_to_string(info->error_code);
 
+		if (!codestr) codestr = "Unknown error";
+				
 		ulongcat(errs, NULL, info->error_code, 3, '0');
 
 		str = straconcat("<html><head><title>HTTP error ", errs,
 				 "</title></head><body>HTTP error ", errs,
+				 " : <b>", codestr, "</b>"
 				 "</body></html>", NULL);
+
 		if (str) {
 			int strl = strlen(str);
 
@@ -1158,7 +1165,7 @@ out_of_mem:
 		mem_free(cookie);
 	}
 #endif
-	info->error_code = (h < 200 || h >= 400) ? h : 0;
+	info->error_code = (h >= 300) ? h : 0;
 
 	if (h == 100) {
 		mem_free(head);

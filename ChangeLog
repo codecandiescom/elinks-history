@@ -1,3 +1,83 @@
+Fri Jan  3 22:58:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/spanish.lng, po/es.po:
+
+	Gettextized Spanish translation.  
+
+Fri Jan  3 22:53:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/brazilian_portuguese.lng, intl/index.txt,
+	po/pt_BR.po:
+
+	Gettextized Brazilian Portuguese translation.  
+
+Fri Jan  3 22:48:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/portuguese.lng, po/pt.po:
+
+	Gettextized Portuguese translation.  
+
+Fri Jan  3 22:41:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/indonesian.lng, po/id.po:
+
+	Gettextized Indonesian translation.  
+
+Fri Jan  3 22:34:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/german.lng, intl/index.txt, po/de.po:
+
+	Gettextized german translation.  
+
+Fri Jan  3 22:27:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/french.lng, intl/index.txt, po/fr.po:
+
+	Gettextized french translation.  
+
+Fri Jan  3 22:03:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/danish.lng, intl/index.txt, po/da.po:
+
+	Gettextized danish translation.  
+
+Fri Jan  3 21:57:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/pl.po:
+
+	Wrong translation for cannot edit option string fixed.  
+
+Fri Jan  3 21:53:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Removed duplicate entry for David Mediavilla.  
+
+Fri Jan  3 21:51:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/polish.lng, po/pl.po:
+
+	Gettextized polish translation.  
+
+Fri Jan  3 21:40:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in, intl/index.txt, intl/italian.lng, po/it.po:
+
+	Gettextized italian translation. Some changes in the translation
+	based on Fabio's patch.  
+
+Fri Jan  3 21:38:56 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* intl/: czech.lng, index.txt:
+
+	Removed czech translation from the old translation system.  
+
+Fri Jan  3 21:24:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Fixed Project-Id-Version.  
+
 Fri Jan  3 04:26:29 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* configure.in, po/cs.po:

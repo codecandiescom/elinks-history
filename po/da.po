@@ -671,15 +671,15 @@ msgstr "Søg bagud efter tekststreng"
 
 #: src/config/kbdbind.c:430
 msgid "Close tab"
-msgstr "Luk tab"
+msgstr "Luk faneblad"
 
 #: src/config/kbdbind.c:431
 msgid "Next tab"
-msgstr "Næste tab"
+msgstr "Næste faneblad"
 
 #: src/config/kbdbind.c:432
 msgid "Previous tab"
-msgstr "Forrige tab"
+msgstr "Forrige faneblad"
 
 #: src/config/kbdbind.c:433
 msgid "Toggle displaying of links to images"
@@ -2639,40 +2639,35 @@ msgstr "Søg efter tekst"
 
 #: src/config/options.c:2082 src/config/options.c:2450
 msgid "Status bar text colors."
-msgstr ""
+msgstr "Tekstfarver for statusbjælke."
 
 #: src/config/options.c:2093 src/config/options.c:2461
 msgid "Tabs bar"
-msgstr ""
+msgstr "Fanebladsbjælke"
 
 #: src/config/options.c:2095 src/config/options.c:2463
 msgid "Tabs bar colors."
-msgstr ""
+msgstr "Farver for fanebladsbjælke."
 
 #: src/config/options.c:2097 src/config/options.c:2465
-#, fuzzy
 msgid "Unselected tab"
-msgstr "Slet indstilling"
+msgstr "Inaktiv faneblad"
 
 #: src/config/options.c:2099 src/config/options.c:2467
-#, fuzzy
 msgid "Unselected tab colors."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Farver for inaktiv faneblad."
 
 #: src/config/options.c:2109 src/config/options.c:2477
-#, fuzzy
 msgid "Selected tab"
-msgstr "Slet indstilling"
+msgstr "Aktiv faneblad"
 
 #: src/config/options.c:2111 src/config/options.c:2479
-#, fuzzy
 msgid "Selected tab colors."
-msgstr "Dræb baggrundsforbindelse"
+msgstr "Farver for aktiv faneblad."
 
 #: src/config/options.c:2121 src/config/options.c:2489
-#, fuzzy
 msgid "Searched strings"
-msgstr "Ugyldig tekststreng"
+msgstr "Søgetekststrenge"
 
 #: src/config/options.c:2123 src/config/options.c:2491
 #, fuzzy
@@ -2820,18 +2815,16 @@ msgid "Key-binding action to be triggered when timer reaches zero."
 msgstr ""
 
 #: src/config/options.c:2553
-#, fuzzy
 msgid "Window tabs"
-msgstr "Vindue"
+msgstr "Vinduesfaneblade"
 
 #: src/config/options.c:2555
 msgid "Window tabs settings."
-msgstr ""
+msgstr "Indstillinger for vinduesfaneblade."
 
 #: src/config/options.c:2557
-#, fuzzy
 msgid "Display tabs bar"
-msgstr "Vis ~usemap"
+msgstr "Vis fanebladsbjælke"
 
 #: src/config/options.c:2559
 msgid ""

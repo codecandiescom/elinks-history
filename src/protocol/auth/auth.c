@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.41 2003/07/11 19:22:25 jonas Exp $ */
+/* $Id: auth.c,v 1.42 2003/07/11 19:40:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,10 +206,8 @@ find_auth(struct uri *uri)
 	struct http_auth_basic *entry = NULL;
 	unsigned char *uid, *ret = NULL;
 	unsigned char *newurl = get_uri_string(uri);
-	unsigned char *user = memacpy(uri->user, uri->userlen);
-	unsigned char *pass = memacpy(uri->password, uri->passwordlen);
 
-	if (!newurl || !user || !pass) goto end;
+	if (!newurl) goto end;
 
 	/* FIXME Somehow this seems over complicated. If add_auth_entry()
 	 * returned the added entry it would be a lot easier as in no need
@@ -233,16 +231,17 @@ find_auth(struct uri *uri)
 	entry = find_auth_entry(newurl, NULL);
 
 	/* Check is user/pass info is in url. */
-	if ((user && *user) || (pass && *pass)) {
-		/* If we've got an entry, but with different user/pass or no
-		 * entry, then we try to create or modify it and retry. */
-		if ((entry && !entry->valid && entry->uid && entry->passwd
-		    && (strcmp(user, entry->uid) || strcmp(pass, entry->passwd)))
-		   || !entry) {
-			/* The entry does not correspond to any existing one which
-			 * means that the current @entry will be updated
-			 * with the user and password from the uri when it is
-			 * readding. */
+	if (uri->userlen || uri->passwordlen) {
+		/* If there's no entry a new one is added else if the entry
+		 * does not correspond to any existing one update it with the
+		 * user and password from the uri. */
+		/* XXX BOOLEAN OVERLOAD! */
+		if (!entry
+		    || !entry->valid
+		    || strlen(entry->passwd) != uri->passwordlen
+		    || strlen(entry->uid) != uri->userlen
+		    || strncmp(entry->passwd, uri->password, uri->passwordlen)
+		    || strncmp(entry->uid, uri->user, uri->userlen)) {
 			entry = add_auth_entry(uri, NULL);
 
 			if (entry && !entry->valid) {
@@ -274,8 +273,6 @@ find_auth(struct uri *uri)
 
 end:
 	if (newurl) mem_free(newurl);
-	if (user) mem_free(user);
-	if (pass) mem_free(pass);
 
 	return ret;
 }

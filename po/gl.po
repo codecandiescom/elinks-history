@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Alberto García <berto@gpul.org>\n"
 "Language-Team: Galician <gpul-traduccion@ceu.fi.udc.es>\n"
@@ -56,6 +56,29 @@ msgstr "Cadea non válida"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Non se permite unha cadea baleira"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+msgid "No title"
+msgstr ""
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -528,7 +551,10 @@ msgstr ""
 "(C) 1999 - 2002 Mikulas Patocka\n"
 "(C) 2001 - 2003 Petr Baudis\n"
 "\n"
-"Este programa é software libre; pode redistribuílo e/ou modificalo baixo os termos da Licencia Xeral Pública GNU publicada pola Free Software Foundation; tanto a versión 2 da Licencia, ou (á súa elección) calqueira versión posterior."
+"Este programa é software libre; pode redistribuílo e/ou modificalo baixo os "
+"termos da Licencia Xeral Pública GNU publicada pola Free Software "
+"Foundation; tanto a versión 2 da Licencia, ou (á súa elección) calqueira "
+"versión posterior."
 
 #: src/dialogs/info.c:189 src/dialogs/info.c:190
 msgid "Resources"
@@ -1048,7 +1074,9 @@ msgstr "Benvido a links!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Pulse ESC para o menú. Escolla Axuda->Manual no menú para o manual de usuario."
+msgstr ""
+"Pulse ESC para o menú. Escolla Axuda->Manual no menú para o manual de "
+"usuario."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

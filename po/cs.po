@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
@@ -57,6 +57,30 @@ msgstr "Vadný øetìzec"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Napi¹ øetìzec, vole!"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Popiska linku"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -1057,7 +1081,8 @@ msgstr "Vítej v programu ELinks!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Stiskni ESC pro menu. Pokud chce¹ vidìt manuál, zvol v menu Pomoc->Manuál."
+msgstr ""
+"Stiskni ESC pro menu. Pokud chce¹ vidìt manuál, zvol v menu Pomoc->Manuál."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Andre Valente <a.valente@netcabo.pt>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -57,6 +57,30 @@ msgstr "Sequência de caracteres inválida"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Não é permitido sequência de caracteres vazia"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Titulo do link"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -528,9 +552,9 @@ msgstr ""
 "(C) 1999 - 2002 Mikulas Patocka\n"
 "(C) 2001 - 2003 Petr Baudis\n"
 "\n"
-"Este programa é um software livre; você pode redistribuí-lo e/ou "
-"modificá-lo sob os termos da Licensa Pública Geral GNU, como publicada pela "
-"Free Software Foundation; ou pela versão 2 da Licensa, ou (por sua opção) "
+"Este programa é um software livre; você pode redistribuí-lo e/ou modificá-lo "
+"sob os termos da Licensa Pública Geral GNU, como publicada pela Free "
+"Software Foundation; ou pela versão 2 da Licensa, ou (por sua opção) "
 "qualquer versão posterior."
 
 #: src/dialogs/info.c:189 src/dialogs/info.c:190
@@ -615,7 +639,8 @@ msgstr "Encerrar o Links"
 
 #: src/dialogs/menu.c:120
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Você realmente deseja encerrar o Links (e terminar com todos os downloads)?"
+msgstr ""
+"Você realmente deseja encerrar o Links (e terminar com todos os downloads)?"
 
 #: src/dialogs/menu.c:122
 msgid "Do you really want to exit ELinks?"
@@ -1026,7 +1051,8 @@ msgstr "atual"
 
 #: src/document/session.c:569
 msgid "Do you want to follow redirect and post form data to url"
-msgstr "Deseja continuar com o redirecionamento e enviar os dados do formulário"
+msgstr ""
+"Deseja continuar com o redirecionamento e enviar os dados do formulário"
 
 #: src/document/session.c:572
 msgid "Do you want to post form data to url"
@@ -1051,7 +1077,9 @@ msgstr "Bem-vindo ao links!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Pressione ESC para ativar o menu. Selecione Ajuda->Manual no menu para o Manual do Usuário."
+msgstr ""
+"Pressione ESC para ativar o menu. Selecione Ajuda->Manual no menu para o "
+"Manual do Usuário."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

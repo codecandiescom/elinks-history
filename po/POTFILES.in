@@ -6,6 +6,7 @@ src/bfu/inpfield.c
 src/bfu/menu.c
 src/bfu/msgbox.c
 src/bfu/text.c
+src/bookmarks/backend/xbel.c
 src/bookmarks/dialogs.c
 src/config/dialogs.c
 src/config/options.c

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -58,6 +58,30 @@ msgstr "Zlý re»azec"
 msgid "Empty string not allowed"
 msgstr "Prázdny re»azec je neprípustný!"
 
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Titulok linku"
+
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
 msgstr "Prida» zlo¾ku"
@@ -97,7 +121,8 @@ msgstr "Zma¾ zálo¾ku"
 #: src/bookmarks/dialogs.c:270 src/bookmarks/dialogs.c:277
 #: src/globhist/dialogs.c:283
 msgid "Sorry, but this bookmark is already being used by something right now."
-msgstr "Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program."
+msgstr ""
+"Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program."
 
 #: src/bookmarks/dialogs.c:271 src/bookmarks/dialogs.c:278
 #: src/dialogs/document.c:91 src/globhist/dialogs.c:392
@@ -1050,7 +1075,8 @@ msgstr "Vitaj v programe ELinks!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Stlaè ESC pre menu. Keï chce¹ vidie» manuál, zvoµ v menu Pomoc->Manuál."
+msgstr ""
+"Stlaè ESC pre menu. Keï chce¹ vidie» manuál, zvoµ v menu Pomoc->Manuál."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

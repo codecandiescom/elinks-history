@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Varga Balázs <vinnui@broadband.hu>\n"
 "Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
@@ -57,6 +57,30 @@ msgstr "Hibás szöveg"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Üres szöveg nem engedélyezett"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Link címe"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -614,7 +638,8 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:120
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr ""
+"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:122
 msgid "Do you really want to exit ELinks?"
@@ -1050,7 +1075,8 @@ msgstr "Üdvözlünk a Linksben!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Nyomj ESC-t menuhoz. Válaszd ki a Súgó/Kézikönyv-et a bövebb segítséghez."
+msgstr ""
+"Nyomj ESC-t menuhoz. Válaszd ki a Súgó/Kézikönyv-et a bövebb segítséghez."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

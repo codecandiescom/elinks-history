@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -57,6 +57,30 @@ msgstr "Stringa sbagliata"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Stringa vuota non consentita"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Titolo del link"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -227,8 +251,7 @@ msgstr "Valore errato per l'opzione."
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
-msgstr ""
-"Questa opzione non può essere modificata."
+msgstr "Questa opzione non può essere modificata."
 
 #: src/config/dialogs.c:387 src/config/dialogs.c:401
 msgid "Add option"
@@ -299,8 +322,7 @@ msgstr "Cancella associazione di tasti"
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybinindings themselves."
-msgstr ""
-"L'oggetto non è un'associazione di tasti."
+msgstr "L'oggetto non è un'associazione di tasti."
 
 #: src/config/dialogs.c:726
 msgid "Really delete the keybinding"
@@ -1055,7 +1077,9 @@ msgstr "Benvenuto in ELinks!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Premi ESC per il menu. Seleziona Help->Manuale nel menu per il manuale utente."
+msgstr ""
+"Premi ESC per il menu. Seleziona Help->Manuale nel menu per il manuale "
+"utente."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: David Mediavilla <r96x6a79yki40001@sneakemail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -57,6 +57,30 @@ msgstr "Cadena no válida"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "No se permite dejar el campo vacío"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Título del enlace"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -383,7 +407,9 @@ msgstr "Identificación HTTP"
 
 #: src/dialogs/document.c:50 src/dialogs/document.c:228
 msgid "You are nowhere!"
-msgstr "Usted no está en ningún sitio.\nEn esta ventana no hay cargado ningún documento."
+msgstr ""
+"Usted no está en ningún sitio.\n"
+"En esta ventana no hay cargado ningún documento."
 
 #: src/dialogs/document.c:100
 msgid "Size"
@@ -530,9 +556,9 @@ msgstr ""
 "(C) 2001 - 2003 Petr Baudis\n"
 "\n"
 "Este programa es software libre; puede redistribuirlo o modificarlo según "
-"los términos de la GNU General Public License como ha sido publicada por "
-"la Free Software Foundation; también bajo la versión 2 de la licencia, o "
-"(si lo prefiere) cualquier otra versión posterior."
+"los términos de la GNU General Public License como ha sido publicada por la "
+"Free Software Foundation; también bajo la versión 2 de la licencia, o (si lo "
+"prefiere) cualquier otra versión posterior."
 
 #: src/dialogs/info.c:189 src/dialogs/info.c:190
 msgid "Resources"
@@ -1052,7 +1078,9 @@ msgstr "¡Bienvenido a ELinks!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Pulse ESC para menú. Seleccione Ayuda->Manual en el menú para el manual de usuario."
+msgstr ""
+"Pulse ESC para menú. Seleccione Ayuda->Manual en el menú para el manual de "
+"usuario."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

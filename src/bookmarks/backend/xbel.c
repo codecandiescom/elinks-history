@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.16 2002/12/20 16:09:15 zas Exp $ */
+/* $Id: xbel.c,v 1.17 2003/01/04 11:39:25 pasky Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -28,6 +28,7 @@
 #include "bookmarks/backend/common.h"
 #include "bookmarks/backend/xbel.h"
 #include "intl/charsets.h"
+#include "intl/gettext/libintl.h"
 #include "util/conv.h"
 #include "util/lists.h"
 #include "util/string.h"
@@ -95,8 +96,9 @@ read_bookmarks_xbel(FILE *f)
 
 	p = XML_ParserCreate(NULL);
 	if (!p) {
-		fprintf(stderr, "read_bookmarks_xbel(): "
-				"Error in XML_ParserCreate()\n\007");
+		/* %c is BELL (\a) */
+		fprintf(stderr, gettext("read_bookmarks_xbel(): "
+					"Error in XML_ParserCreate()%c\n"), '\a');
 		return;
 	}
 
@@ -107,21 +109,26 @@ read_bookmarks_xbel(FILE *f)
 		int len = fread(in_buffer, 1, BUFSIZ, f);
 
 		if (ferror(f)) {
-			fprintf(stderr, "read_bookmarks_xbel(): "
-					"Error reading %s\n\007",
-					filename_bookmarks_xbel(0));
+			/* %c is BELL (\a) */
+			fprintf(stderr, gettext("read_bookmarks_xbel(): "
+						"Error reading %s%c\n"),
+					filename_bookmarks_xbel(0), '\a');
 			err = 1;
 		} else {
 
 			done = feof(f);
 
 			if (!err && !XML_Parse(p, in_buffer, len, done)) {
-				fprintf(stderr, "read_bookmarks_xbel(): "
-					"Parse error in %s at line %d column %d:\n%s\n\007",
+				/* %c is BELL (\a) */
+				fprintf(stderr,
+					gettext("read_bookmarks_xbel(): "
+						"Parse error in %s at line %d "
+						"column %d:\n%s%c\n"),
 					filename_bookmarks_xbel(0),
 					XML_GetCurrentLineNumber(p),
 					XML_GetCurrentColumnNumber(p),
-					XML_ErrorString(XML_GetErrorCode(p)));
+					XML_ErrorString(XML_GetErrorCode(p)),
+					'\a');
 				err = 1;
 			}
 		}
@@ -375,7 +382,8 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 
 			tmp = add_bookmark(current_parent, 0,
 					   /* The <title> element is optional */
-					   title ? title->text : (unsigned char *) "No title",
+					   title ? title->text
+						 : (unsigned char *) gettext("No title"),
 					   /* The href attribute isn't optional */
 					   get_attribute_value(node->attrs, "href"));
 
@@ -391,7 +399,8 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 			title = get_child(node, "title");
 
 			tmp = add_bookmark(current_parent, 0,
-					   title ? title->text : (unsigned char *) "No title",
+					   title ? title->text
+						 : (unsigned char *) gettext("No title"),
 					   "");
 
 			/* Out of memory */

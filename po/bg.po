@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Dimitar Dimitrov <mitaka_ddd@yahoo.com>\n"
 "Language-Team: Bulgarian <bg-team@bash.info>\n"
@@ -59,6 +59,30 @@ msgstr "Невалиден символен низ"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Не е позволен празен символен низ"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Заглавие на връзката"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -618,7 +642,9 @@ msgstr "Изход от Links"
 
 #: src/dialogs/menu.c:120
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Наистина ли желаете да излезете от Links и да прекратите всичко, което сваляте?"
+msgstr ""
+"Наистина ли желаете да излезете от Links и да прекратите всичко, което "
+"сваляте?"
 
 #: src/dialogs/menu.c:122
 msgid "Do you really want to exit ELinks?"
@@ -1029,7 +1055,9 @@ msgstr "текущо"
 
 #: src/document/session.c:569
 msgid "Do you want to follow redirect and post form data to url"
-msgstr "Желаете ли да проследите препращането и да изпратите данните от формуляра към адрес"
+msgstr ""
+"Желаете ли да проследите препращането и да изпратите данните от формуляра "
+"към адрес"
 
 #: src/document/session.c:572
 msgid "Do you want to post form data to url"
@@ -1054,7 +1082,9 @@ msgstr "Добре дошли в Links!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Натиснете ESC за да извикате менюто. Изберете 'Помощ->Ръководство', за да прочетете ръководството за потребителя."
+msgstr ""
+"Натиснете ESC за да извикате менюто. Изберете 'Помощ->Ръководство', за да "
+"прочетете ръководството за потребителя."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Yevgeny Gromov <yevgeny@tut.by>\n"
 "Language-Team: Belarusian <i18n@tut.by>\n"
@@ -56,6 +56,30 @@ msgstr "Няправ╕льны радок"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Пустыя радк╕ не дазваляюцца"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+#, fuzzy
+msgid "No title"
+msgstr "Загаловак спасылк╕"
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -226,8 +250,7 @@ msgstr "Няправ╕льнае значэнне параметра"
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
-msgstr ""
-"Гэты параметр змян╕ць немагчыма"
+msgstr "Гэты параметр змян╕ць немагчыма"
 
 #: src/config/dialogs.c:387 src/config/dialogs.c:401
 msgid "Add option"
@@ -301,8 +324,7 @@ msgstr "Выдал╕ць камб╕нацыю клав╕ш"
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybinindings themselves."
-msgstr ""
-"Гэты элемент не камб╕нацыя клав╕ш"
+msgstr "Гэты элемент не камб╕нацыя клав╕ш"
 
 #: src/config/dialogs.c:726
 msgid "Really delete the keybinding"
@@ -531,10 +553,7 @@ msgid ""
 "any later version."
 msgstr ""
 "\n"
-"Гэта программа з'я╝ляецца свабодным ПЗ; вы можаце распа╝сюджваць ╕/ц╕ "
-"мадыф╕каваць яе згодна з л╕цэнз╕яй GNU, якая апубл╕кавана \"Фондам "
-"свабоднага праграмнага забеспячэння\" (FSF); верс╕╕ 2 Л╕цэнз╕╕, ц╕ (па вашым "
-"жаданн╕) больш позняй верс╕╕"
+"Гэта программа з'я╝ляецца свабодным ПЗ; вы можаце распа╝сюджваць ╕/ц╕ мадыф╕каваць яе згодна з л╕цэнз╕яй GNU, якая апубл╕кавана \"Фондам свабоднага праграмнага забеспячэння\" (FSF); верс╕╕ 2 Л╕цэнз╕╕, ц╕ (па вашым жаданн╕) больш позняй верс╕╕"
 
 #: src/dialogs/info.c:189 src/dialogs/info.c:190
 msgid "Resources"

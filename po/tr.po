@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-01-03 03:41+0100\n"
+"POT-Creation-Date: 2003-01-04 12:38+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Baris Metin <baris@gelecek.com.tr>\n"
 "Language-Team: Turkish <gnu-tr-u12a@lists.sourceforge.net>\n"
@@ -56,6 +56,29 @@ msgstr "Hatalý söz dizimi"
 #: src/bfu/inpfield.c:70
 msgid "Empty string not allowed"
 msgstr "Boþ söz dizimine izin verilmiyor"
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:100
+#, c-format
+msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()%c\n"
+msgstr ""
+
+#. %c is BELL (\a)
+#: src/bookmarks/backend/xbel.c:113
+#, c-format
+msgid "read_bookmarks_xbel(): Error reading %s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:124
+#, c-format
+msgid ""
+"read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
+"%s%c\n"
+msgstr ""
+
+#: src/bookmarks/backend/xbel.c:386 src/bookmarks/backend/xbel.c:403
+msgid "No title"
+msgstr ""
 
 #: src/bookmarks/dialogs.c:170 src/bookmarks/dialogs.c:639
 msgid "Add folder"
@@ -527,8 +550,8 @@ msgstr ""
 "(C) 1999 - 2002 Mikulas Patocka\n"
 "(C) 2001 - 2003 Petr Baudis\n"
 "\n"
-"Bu özgür bir yazýlýmdýr; GNU Genel Kamu Lisansý altýnda daðýtýlabilir "
-"ve/veya geliþtirilebilir."
+"Bu özgür bir yazýlýmdýr; GNU Genel Kamu Lisansý altýnda daðýtýlabilir ve/"
+"veya geliþtirilebilir."
 
 #: src/dialogs/info.c:189 src/dialogs/info.c:190
 msgid "Resources"
@@ -612,7 +635,8 @@ msgstr "Links'den çýk"
 
 #: src/dialogs/menu.c:120
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Gerçekten Links'den çýkmak (ve tüm indirilenleri durdurmak) istiyor musunuz?"
+msgstr ""
+"Gerçekten Links'den çýkmak (ve tüm indirilenleri durdurmak) istiyor musunuz?"
 
 #: src/dialogs/menu.c:122
 msgid "Do you really want to exit ELinks?"
@@ -1023,7 +1047,8 @@ msgstr "þimdiki"
 
 #: src/document/session.c:569
 msgid "Do you want to follow redirect and post form data to url"
-msgstr "Yönlendirmeyi izlemek ve form bilgisini adrese göndermek istiyor musunuz"
+msgstr ""
+"Yönlendirmeyi izlemek ve form bilgisini adrese göndermek istiyor musunuz"
 
 #: src/document/session.c:572
 msgid "Do you want to post form data to url"
@@ -1048,7 +1073,8 @@ msgstr "Links'e hoþgeldiniz!"
 
 #: src/document/session.c:1072
 msgid "Press ESC for menu. Select Help->Manual in menu for user's manual."
-msgstr "Menü için ESC ye basýn. Kullanýcý klavuzu için Yardým->Kýlavuz 'u seçin."
+msgstr ""
+"Menü için ESC ye basýn. Kullanýcý klavuzu için Yardým->Kýlavuz 'u seçin."
 
 #: src/globhist/dialogs.c:118 src/globhist/dialogs.c:433
 msgid "Global history"

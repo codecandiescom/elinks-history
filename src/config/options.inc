@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.106 2004/04/22 19:53:26 pasky Exp $ */
+/* $Id: options.inc,v 1.107 2004/05/22 13:18:33 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -1264,6 +1264,11 @@ struct option_info config_options_info[] = {
 		"Set to \"\" if the environment variable WWW_HOME should be used\n"
 		"used as homepage URI instead.")),
 
+#ifdef HAVE_STRFTIME
+	INIT_OPT_STRING("ui", N_("Date format"),
+		"date_format", 0, "%b %e %H:%M",
+		N_("Date format to use in dialogs. See strftime(3).")),
+#endif
 
 	INIT_OPT_BOOL("ui", N_("Set window title"),
 		"window_title", 0, 1,

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.158 2004/05/22 13:06:00 jonas Exp $ */
+/* $Id: dialogs.c,v 1.159 2004/05/22 13:18:32 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -577,7 +577,7 @@ bookmark_terminal_tabs_dialog(struct terminal *term)
 
 #ifdef HAVE_STRFTIME
 	add_to_string(&string, " - ");
-	add_date_to_string(&string, "%b %e %H:%M", NULL);
+	add_date_to_string(&string, get_opt_str("ui.date_format"), NULL);
 #endif
 
 	input_field(term, NULL, 1,

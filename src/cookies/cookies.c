@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.134 2004/05/22 13:06:00 jonas Exp $ */
+/* $Id: cookies.c,v 1.135 2004/05/22 13:18:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -538,7 +538,7 @@ accept_cookie_dialog(struct session *ses, void *data)
 
 #ifdef HAVE_STRFTIME
 	if (cookie->expires) {
-		add_date_to_string(&string, "%b %e %H:%M", &cookie->expires);
+		add_date_to_string(&string, get_opt_str("ui.date_format"), &cookie->expires);
 	} else
 #endif
 		add_to_string(&string, _("at quit time",  ses->tab->term));

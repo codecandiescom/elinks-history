@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.18 2003/10/26 18:00:35 jonas Exp $ */
+/* $Id: options.inc,v 1.19 2003/10/26 18:13:18 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -117,44 +117,6 @@ struct option_info config_options_info[] = {
 	INIT_OPT_INT("connection", N_("Timeout for non-restartable connections"),
 		"unrestartable_receive_timeout", 0, 1, 1800, 600,
 		N_("Timeout for non-restartable connections (in seconds).")),
-
-	/* Keep options in alphabetical order. */
-
-
-
-	INIT_OPT_TREE("", N_("Cookies"),
-		"cookies", 0,
-		N_("Cookies options.")),
-
-	INIT_OPT_INT("cookies", N_("Accept policy"),
-		"accept_policy", 0,
-		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
-		N_("Cookies accepting policy:\n"
-		"0 is accept no cookies\n"
-		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
-		"2 is accept all cookies")),
-
-	INIT_OPT_INT("cookies", N_("Maximum age"),
-		"max_age", 0, -1, 10000, -1,
-		N_("Cookie maximum age (in days):\n"
-		"-1 is use cookie's expiration date if any\n"
-		"0  is force expiration at the end of session, ignoring cookie's expiration date\n"
-		"1+ is use cookie's expiration date, but limit age to the given number of days")),
-
-	INIT_OPT_BOOL("cookies", N_("Paranoid security"),
-		"paranoid_security", 0, 0,
-		N_("When enabled, we'll require three dots in cookies domain for all\n"
-		"non-international domains (instead of just two dots). Please see\n"
-		"code (cookies.c:check_domain_security()) for explanation.")),
-
-	INIT_OPT_BOOL("cookies", N_("Saving"),
-		"save", 0, 1,
-		N_("Load/save cookies from/to disk?")),
-
-	INIT_OPT_BOOL("cookies", N_("Resaving"),
-		"resave", 0, 1,
-		N_("Save cookies after each change in cookies list? No effect when\n"
-		"cookies_save is off.")),
 
 	/* Keep options in alphabetical order. */
 

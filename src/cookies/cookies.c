@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.82 2003/10/26 14:58:55 jonas Exp $ */
+/* $Id: cookies.c,v 1.83 2003/10/26 18:13:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -22,6 +22,7 @@
 #include "cookies/parser.h"
 #include "config/kbdbind.h"
 #include "config/options.h"
+#include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/ttime.h"
 #include "modules/module.h"
@@ -78,6 +79,44 @@ static INIT_LIST_HEAD(c_servers);
 static int cookies_dirty = 0;
 
 #ifdef COOKIES
+
+struct option_info cookies_options[] = {
+	INIT_OPT_TREE("", N_("Cookies"),
+		"cookies", 0,
+		N_("Cookies options.")),
+
+	INIT_OPT_INT("cookies", N_("Accept policy"),
+		"accept_policy", 0,
+		COOKIES_ACCEPT_NONE, COOKIES_ACCEPT_ALL, COOKIES_ACCEPT_ALL,
+		N_("Cookies accepting policy:\n"
+		"0 is accept no cookies\n"
+		"1 is ask for confirmation before accepting cookie (UNIMPLEMENTED)\n"
+		"2 is accept all cookies")),
+
+	INIT_OPT_INT("cookies", N_("Maximum age"),
+		"max_age", 0, -1, 10000, -1,
+		N_("Cookie maximum age (in days):\n"
+		"-1 is use cookie's expiration date if any\n"
+		"0  is force expiration at the end of session, ignoring cookie's expiration date\n"
+		"1+ is use cookie's expiration date, but limit age to the given number of days")),
+
+	INIT_OPT_BOOL("cookies", N_("Paranoid security"),
+		"paranoid_security", 0, 0,
+		N_("When enabled, we'll require three dots in cookies domain for all\n"
+		"non-international domains (instead of just two dots). Please see\n"
+		"code (cookies.c:check_domain_security()) for explanation.")),
+
+	INIT_OPT_BOOL("cookies", N_("Saving"),
+		"save", 0, 1,
+		N_("Load/save cookies from/to disk?")),
+
+	INIT_OPT_BOOL("cookies", N_("Resaving"),
+		"resave", 0, 1,
+		N_("Save cookies after each change in cookies list? No effect when\n"
+		"cookies_save is off.")),
+
+	NULL_OPTION_INFO,
+};
 
 static void accept_cookie(struct cookie *);
 static void save_cookies(void);
@@ -713,7 +752,7 @@ done_cookies(struct module *module)
 
 struct module cookies_module = struct_module(
 	/* name: */		"cookies",
-	/* options: */		NULL,
+	/* options: */		cookies_options,
 	/* events: */		NULL,
 	/* submodules: */	NULL,
 	/* data: */		NULL,

@@ -1,5 +1,5 @@
 /* Info dialogs */
-/* $Id: info.c,v 1.74 2003/11/14 11:38:15 zas Exp $ */
+/* $Id: info.c,v 1.75 2003/11/14 11:47:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,8 +159,6 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 	cache = (struct cache_entry *) cache_info(INFO_LIST);
 	foreach (ce, *cache) {
 		if (count++ < term->height - 10) { /* 10 seems a kool value. --Zas */
-			int url_len;
-
 			add_char_to_string(&info, '\n');
 #ifdef DEBUG
 			if (ce->incomplete)
@@ -171,8 +169,7 @@ cache_inf(struct terminal *term, void *d, struct session *ses)
 #endif
 			/* FIXME: What to do with long urls ? they wrap for now
 			 * but if one is very long then no other is displayed. */
-			get_post_start(ce->url, &url_len);
-			add_bytes_to_string(&info, ce->url, url_len);
+			add_bytes_to_string(&info, ce->url, get_no_post_url_length(ce->url));
 
 #ifdef DEBUG
 			/* size */

@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.43 2003/11/14 11:31:52 zas Exp $ */
+/* $Id: uri.h,v 1.44 2003/11/14 11:47:00 zas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -120,10 +120,8 @@ unsigned char *extract_proxy(unsigned char *);
  * else @slen is used as @s length. */
 int end_with_known_tld(unsigned char *s, int slen);
 
-/* Returns a pointer to start of post data in @url,
- * if @url_len is not NULL, pointed value is set to left of url
- * without post data. */
-unsigned char *get_post_start(unsigned char *url, int *url_len);
+/* Returns the length of url, without post data. */
+int get_no_post_url_length(unsigned char *url);
 
 /* Return an allocated string containing url without postdata.
  * If @url_len is non-NULL, then *url_len is set to length of new string. */

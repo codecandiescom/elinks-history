@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.34 2003/12/26 09:26:14 zas Exp $ */
+/* $Id: menu.h,v 1.35 2003/12/26 09:34:43 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -46,6 +46,11 @@ enum menu_item_flags {
  * Horizontal bar
  */
 #define mi_is_horizontal_bar(mi) (mi_is_unselectable(mi) && (mi).text && !(mi).text[0])
+
+/*
+ * Submenu item
+ */
+#define mi_is_submenu(mi) ((mi).flags & SUBMENU)
 
 /*
  * End of menu items list

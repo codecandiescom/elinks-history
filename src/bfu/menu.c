@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.129 2003/12/26 09:26:14 zas Exp $ */
+/* $Id: menu.c,v 1.130 2003/12/26 09:34:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,7 +110,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 
 	if (mi_is_unselectable(*it)) return;
 
-	if (!(it->flags & SUBMENU)) {
+	if (!mi_is_submenu(*it)) {
 		/* Don't free data! */
 		it->flags &= ~FREE_DATA;
 
@@ -443,7 +443,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 						display_menu(win->term, menu);
 
 						if ((ev->b & BM_ACT) == B_UP ||
-						    menu->items[sel].flags & SUBMENU)
+						    mi_is_submenu(menu->items[sel]))
 							select_menu(win->term, menu);
 					}
 				}
@@ -742,7 +742,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 					menu->selected = i;
 					display_mainmenu(win->term, menu);
 					if ((ev->b & BM_ACT) == B_UP
-					    || menu->items[s].flags & SUBMENU) {
+					    || mi_is_submenu(menu->items[s])) {
 						select_mainmenu(win->term,
 								menu);
 					}

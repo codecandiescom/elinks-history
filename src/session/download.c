@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.276 2004/04/22 15:03:31 jonas Exp $ */
+/* $Id: download.c,v 1.277 2004/04/22 16:10:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -779,7 +779,7 @@ static void tp_cancel(void *);
 static void continue_download_do(struct terminal *, int, void *, int);
 
 struct codw_hop {
-	struct tq *tq;
+	struct type_query *type_query;
 	unsigned char *real_file;
 	unsigned char *file;
 };
@@ -787,31 +787,31 @@ struct codw_hop {
 static void
 continue_download(void *data, unsigned char *file)
 {
-	struct tq *tq = data;
+	struct type_query *type_query = data;
 	struct codw_hop *codw_hop = mem_calloc(1, sizeof(struct codw_hop));
 
 	if (!codw_hop) {
-		tp_cancel(tq);
+		tp_cancel(type_query);
 		return;
 	}
 
-	if (tq->prog) {
+	if (type_query->prog) {
 		/* FIXME: get_temp_name() calls tempnam(). --Zas */
-		file = get_temp_name(tq->uri);
+		file = get_temp_name(type_query->uri);
 		if (!file) {
 			mem_free(codw_hop);
-			tp_cancel(tq);
+			tp_cancel(type_query);
 			return;
 		}
 	}
 
-	codw_hop->tq = tq;
+	codw_hop->type_query = type_query;
 	codw_hop->file = file;
 
 	kill_downloads_to_file(file);
 
-	create_download_file(tq->ses->tab->term, file, &codw_hop->real_file,
-			     !!tq->prog, 0, continue_download_do, codw_hop);
+	create_download_file(type_query->ses->tab->term, file, &codw_hop->real_file,
+			     !!type_query->prog, 0, continue_download_do, codw_hop);
 }
 
 static void
@@ -819,112 +819,112 @@ continue_download_do(struct terminal *term, int fd, void *data, int resume)
 {
 	struct codw_hop *codw_hop = data;
 	struct file_download *file_download = NULL;
-	struct tq *tq;
+	struct type_query *type_query;
 
 	assert(codw_hop);
-	assert(codw_hop->tq);
-	assert(codw_hop->tq->uri);
-	assert(codw_hop->tq->ses);
+	assert(codw_hop->type_query);
+	assert(codw_hop->type_query->uri);
+	assert(codw_hop->type_query->ses);
 
-	tq = codw_hop->tq;
+	type_query = codw_hop->type_query;
 	if (!codw_hop->real_file) goto cancel;
 
-	file_download = init_file_download(tq->uri, tq->ses,
+	file_download = init_file_download(type_query->uri, type_query->ses,
 					   codw_hop->real_file, fd);
 	if (!file_download) goto cancel;
 
-	if (tq->prog) {
-		file_download->prog = subst_file(tq->prog, codw_hop->file);
+	if (type_query->prog) {
+		file_download->prog = subst_file(type_query->prog, codw_hop->file);
 		file_download->delete = 1;
 		mem_free(codw_hop->file);
-		mem_free(tq->prog);
-		tq->prog = NULL;
+		mem_free(type_query->prog);
+		type_query->prog = NULL;
 	}
 
-	file_download->prog_flags = tq->prog_flags;
+	file_download->prog_flags = type_query->prog_flags;
 
-	change_connection(&tq->download, &file_download->download, PRI_DOWNLOAD, 0);
-	done_tq(tq);
+	change_connection(&type_query->download, &file_download->download, PRI_DOWNLOAD, 0);
+	done_type_query(type_query);
 
 	mem_free(codw_hop);
 	return;
 
 cancel:
-	if (tq->prog) mem_free_if(codw_hop->file);
-	tp_cancel(tq);
+	if (type_query->prog) mem_free_if(codw_hop->file);
+	tp_cancel(type_query);
 	mem_free(codw_hop);
 }
 
 
-static struct tq *
-init_tq(struct session *ses, struct download *download,
+static struct type_query *
+init_type_query(struct session *ses, struct download *download,
 	struct cache_entry *cached)
 {
-	struct tq *tq;
+	struct type_query *type_query;
 
 	/* There can be only one ... */
-	foreach (tq, ses->tq)
-		if (tq->uri == ses->loading_uri)
+	foreach (type_query, ses->tq)
+		if (type_query->uri == ses->loading_uri)
 			return NULL;
 
-	tq = mem_calloc(1, sizeof(struct tq));
-	if (!tq) return NULL;
+	type_query = mem_calloc(1, sizeof(struct type_query));
+	if (!type_query) return NULL;
 
-	tq->uri = get_uri_reference(ses->loading_uri);
-	tq->ses = ses;
-	tq->goto_position = null_or_stracpy(ses->goto_position);
-	tq->target_frame = null_or_stracpy(ses->task.target_frame);
+	type_query->uri = get_uri_reference(ses->loading_uri);
+	type_query->ses = ses;
+	type_query->goto_position = null_or_stracpy(ses->goto_position);
+	type_query->target_frame = null_or_stracpy(ses->task.target_frame);
 
-	tq->cached = cached;
-	object_lock(tq->cached);
+	type_query->cached = cached;
+	object_lock(type_query->cached);
 
-	change_connection(download, &tq->download, PRI_MAIN, 0);
+	change_connection(download, &type_query->download, PRI_MAIN, 0);
 	download->state = S_OK;
 
-	add_to_list(ses->tq, tq);
+	add_to_list(ses->tq, type_query);
 
-	return tq;
+	return type_query;
 }
 
 void
-done_tq(struct tq *tq)
+done_type_query(struct type_query *type_query)
 {
 	/* Unregister any active download */
-	if (is_in_progress_state(tq->download.state))
-		change_connection(&tq->download, NULL, PRI_CANCEL, 0);
+	if (is_in_progress_state(type_query->download.state))
+		change_connection(&type_query->download, NULL, PRI_CANCEL, 0);
 
-	object_unlock(tq->cached);
-	done_uri(tq->uri);
-	mem_free_if(tq->goto_position);
-	mem_free_if(tq->prog);
-	mem_free_if(tq->target_frame);
-	del_from_list(tq);
-	mem_free(tq);
+	object_unlock(type_query->cached);
+	done_uri(type_query->uri);
+	mem_free_if(type_query->goto_position);
+	mem_free_if(type_query->prog);
+	mem_free_if(type_query->target_frame);
+	del_from_list(type_query);
+	mem_free(type_query);
 }
 
 
 static void
 tp_cancel(void *data)
 {
-	struct tq *tq = data;
+	struct type_query *type_query = data;
 	/* XXX: Should we really abort? (1 vs 0 as the last param) --pasky */
-	change_connection(&tq->download, NULL, PRI_CANCEL, 1);
-	done_tq(tq);
+	change_connection(&type_query->download, NULL, PRI_CANCEL, 1);
+	done_type_query(type_query);
 }
 
 
 static void
-tp_save(struct tq *tq)
+tp_save(struct type_query *type_query)
 {
-	mem_free_set(&tq->prog, NULL);
-	query_file(tq->ses, tq->uri, tq, continue_download, tp_cancel, 1);
+	mem_free_set(&type_query->prog, NULL);
+	query_file(type_query->ses, type_query->uri, type_query, continue_download, tp_cancel, 1);
 }
 
 
 static void
-tp_open(struct tq *tq)
+tp_open(struct type_query *type_query)
 {
-	continue_download(tq, "");
+	continue_download(type_query, "");
 }
 
 
@@ -932,78 +932,78 @@ tp_open(struct tq *tq)
  * want to use this function for frames as well (now, when frame has content
  * type text/plain, it is ignored and displayed as HTML). */
 static void
-tp_display(struct tq *tq)
+tp_display(struct type_query *type_query)
 {
 	struct view_state *vs;
-	struct session *ses = tq->ses;
+	struct session *ses = type_query->ses;
 	unsigned char *goto_position = ses->goto_position;
 	struct uri *loading_uri = ses->loading_uri;
 	unsigned char *target_frame = ses->task.target_frame;
 
-	ses->goto_position = tq->goto_position;
-	ses->loading_uri = tq->uri;
-	ses->task.target_frame = tq->target_frame;
-	vs = ses_forward(ses, tq->frame);
+	ses->goto_position = type_query->goto_position;
+	ses->loading_uri = type_query->uri;
+	ses->task.target_frame = type_query->target_frame;
+	vs = ses_forward(ses, type_query->frame);
 	if (vs) vs->plain = 1;
 	ses->goto_position = goto_position;
 	ses->loading_uri = loading_uri;
 	ses->task.target_frame = target_frame;
 
-	if (!tq->frame) {
-		tq->goto_position = NULL;
+	if (!type_query->frame) {
+		type_query->goto_position = NULL;
 		cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				     doc_end_load;
 		cur_loc(ses)->download.data = ses;
 
-		if (tq->download.state >= 0)
-			change_connection(&tq->download, &cur_loc(ses)->download, PRI_MAIN, 0);
+		if (type_query->download.state >= 0)
+			change_connection(&type_query->download, &cur_loc(ses)->download, PRI_MAIN, 0);
 		else
-			cur_loc(ses)->download.state = tq->download.state;
+			cur_loc(ses)->download.state = type_query->download.state;
 	}
 
 	display_timer(ses);
-	done_tq(tq);
+	done_type_query(type_query);
 }
 
 
 static void
-type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
+do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_handler *handler)
 {
 	struct string filename;
 
-	mem_free_set(&tq->prog, NULL);
+	mem_free_set(&type_query->prog, NULL);
 	
 	if (handler) {
-		tq->prog = stracpy(handler->program);
-		tq->prog_flags = handler->block;
+		type_query->prog = stracpy(handler->program);
+		type_query->prog_flags = handler->block;
 		if (!handler->ask) {
-			tp_open(tq);
+			tp_open(type_query);
 			return;
 		}
 	}
 
 	if (init_string(&filename))
-		add_uri_filename_to_string(&filename, tq->uri);
+		add_uri_filename_to_string(&filename, type_query->uri);
 
 	if (!handler) {
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
-			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(tq->ses->tab->term, N_("Would you like to "
+				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "save the file '%s' (type: %s) "
 					 "or display it?"),
 					 filename.source, ct),
-				tq, 3,
+				type_query, 3,
 				N_("Save"), tp_save, B_ENTER,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("Unknown type"), AL_CENTER,
-				msg_text(tq->ses->tab->term, N_("Would you like to "
+				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "display the file '%s' (type: %s)?"),
 					 filename.source, ct),
-				tq, 2,
+				type_query, 2,
 				N_("Display"), tp_display, B_ENTER,
 				N_("Cancel"), tp_cancel, B_ESC);
 		}
@@ -1014,27 +1014,27 @@ type_query(struct tq *tq, unsigned char *ct, struct mime_handler *handler)
 		if (!get_opt_int_tree(cmdline_options, "anonymous")) {
 			/* TODO: Improve the dialog to let the user correct the
 			 * used program. */
-			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(tq->ses->tab->term, N_("Would you like to "
+				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', save it or display it?"),
 					 filename.source, ct, desc_sep,
 					 description, handler->program),
-				tq, 4,
+				type_query, 4,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Save"), tp_save, 0,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
 		} else {
-			msg_box(tq->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
+			msg_box(type_query->ses->tab->term, NULL, MSGBOX_FREE_TEXT,
 				N_("What to do?"), AL_CENTER,
-				msg_text(tq->ses->tab->term, N_("Would you like to "
+				msg_text(type_query->ses->tab->term, N_("Would you like to "
 					 "open the file '%s' (type: %s%s%s)\n"
 					 "with '%s', or display it?"),
 					 filename.source, ct, desc_sep,
 					 description, handler->program),
-				tq, 3,
+				type_query, 3,
 				N_("Open"), tp_open, B_ENTER,
 				N_("Display"), tp_display, 0,
 				N_("Cancel"), tp_cancel, B_ESC);
@@ -1059,7 +1059,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 {
 	struct mime_handler *handler;
 	struct view_state *vs;
-	struct tq *tq;
+	struct type_query *type_query;
 	unsigned char *ctype = get_content_type(cached->head, get_cache_uri(cached));
 	int plaintext = 1;
 	int ret = 0;
@@ -1082,10 +1082,10 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	if (!handler && strlen(ctype) >= 4 && !strncasecmp(ctype, "text", 4))
 		goto plaintext_follow;
 
-	tq = init_tq(ses, loading, cached);
-	if (tq) {
+	type_query = init_type_query(ses, loading, cached);
+	if (type_query) {
 		ret = 1;
-		type_query(tq, ctype, handler);
+		do_type_query(type_query, ctype, handler);
 	}
 
 	mem_free(ctype);

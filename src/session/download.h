@@ -1,4 +1,4 @@
-/* $Id: download.h,v 1.39 2004/04/22 16:00:53 jonas Exp $ */
+/* $Id: download.h,v 1.40 2004/04/22 16:10:17 jonas Exp $ */
 
 #ifndef EL__SCHED_DOWNLOAD_H
 #define EL__SCHED_DOWNLOAD_H
@@ -18,8 +18,8 @@ struct session;
 struct uri;
 
 
-struct tq {
-	LIST_HEAD(struct tq);
+struct type_query {
+	LIST_HEAD(struct type_query);
 	struct download download;
 	struct cache_entry *cached;
 	struct session *ses;
@@ -89,6 +89,6 @@ void destroy_downloads(struct session *);
 int ses_chktype(struct session *, struct download *, struct cache_entry *, int);
 
 void abort_download(struct file_download *file_download);
-void done_tq(struct tq *tq);
+void done_type_query(struct type_query *type_query);
 
 #endif

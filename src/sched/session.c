@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.378 2004/04/21 22:43:04 jonas Exp $ */
+/* $Id: session.c,v 1.379 2004/04/22 16:10:17 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -924,7 +924,7 @@ destroy_session(struct session *ses)
 	mem_free_if(ses->imgmap_target_base);
 
 	while (!list_empty(ses->tq))
-		done_tq(ses->tq.next);
+		done_type_query(ses->tq.next);
 
 	if (ses->download_uri) done_uri(ses->download_uri);
 	mem_free_if(ses->search_word);

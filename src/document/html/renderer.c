@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.128 2003/06/17 12:51:44 zas Exp $ */
+/* $Id: renderer.c,v 1.129 2003/06/17 13:04:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -423,7 +423,8 @@ split_line_at(struct part *part, register int x)
 	if (new_x > part->x)
 		part->x = new_x;
 
-	if (part->data && part->data->data) {
+	if (part->data) {
+		assert(part->data->data);
 		assertm((POS(x, part->cy) & 0xff) == ' ',
 			"bad split: %c", (char) POS(x, part->cy));
 		move_chars(part, x + 1, part->cy, par_format.leftmargin, part->cy + 1);
@@ -654,6 +655,8 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	int bp = 0;
 	int pp = 0;
 
+	assert(part && chars);
+
 	if (format.attr & AT_GRAPHICS) {
 		put_chars(part, chars, charslen);
 		return;
@@ -746,6 +749,8 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	struct point *pt;
 	int tmp; /* used for temporary results. */
 
+	assert(part);
+
 	while (par_format.align != AL_NONE && part->cx == -1
 	       && charslen && *chars == ' ') {
 		chars++;
@@ -753,6 +758,8 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	}
 
 	if (!charslen) return;
+
+	assert(chars);
 
 	if (chars[0] != ' ' || (chars[1] && chars[1] != ' ')) {
 		last_tag_for_newline = (void *)&part->data->tags;

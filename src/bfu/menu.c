@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.142 2003/12/26 17:14:27 zas Exp $ */
+/* $Id: menu.c,v 1.143 2003/12/27 00:56:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,7 +161,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				text = _(text, term);
 
 			if (text[0])
-				s += strlen(text) + 1
+				s += strlen(text)
 				     - !!menu->items[my].hotkey_pos;
 		}
 
@@ -290,7 +290,7 @@ draw_menu_left_text_hk(struct terminal *term, unsigned char *text, int len,
 	}
 
 	for (x = 0;
-	     x < width - 2
+	     x < width - 2 + !!hk
 	     && (c = text[x]);
 	     x++) {
 		if (!hk && len && x == len - 1) {
@@ -325,10 +325,13 @@ draw_menu_right_text(struct terminal *term, unsigned char *text, int len,
 	xbase = x + width - len;
 
 	for (x = len - 1;
-	     (x >= 0) && (width - 2 >= len - x)
+	     (x >= 0) && (width - 2 >= len + MENU_HOTKEY_SPACE - x)
 	     && (c = text[x]);
 	     x--)
 		draw_char(term, xbase + x, y, c, 0, color);
+
+	for (len = 0; len < MENU_HOTKEY_SPACE; len++)
+		draw_char(term, xbase + x - len, y, ' ', 0, color);
 }
 
 static void
@@ -742,7 +745,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 
 		textlen = strlen(text) - !!l;
 
-		if (p + textlen + 4 >= term->width)
+		if (p + textlen + 4 >= term->width - 1)
 			break;
 
 		p += 2;

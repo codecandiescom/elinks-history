@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.6 2002/09/05 16:21:39 zas Exp $ */
+/* $Id: globhist.c,v 1.7 2002/09/07 10:01:54 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -336,15 +336,4 @@ finalize_global_history()
 	if (gh_last_searched_url) mem_free(gh_last_searched_url);
 }
 
-#else /* GLOBHIST */
-
-void read_global_history() {}
-void write_global_history() {}
-void finalize_global_history() {}
-
-void free_global_history_item(struct global_history_item *i) {}
-void delete_global_history_item(struct global_history_item *historyitem) {}
-struct global_history_item *get_global_history_item(unsigned char *url, unsigned char *title, ttime time) {}
-void add_global_history_item(unsigned char *ur, unsigned char *ti, ttime t) {}
-
-#endif
+#endif /* GLOBHIST */

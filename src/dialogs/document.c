@@ -1,5 +1,5 @@
 /* Information about current document and current link */
-/* $Id: document.c,v 1.13 2002/08/29 23:58:22 pasky Exp $ */
+/* $Id: document.c,v 1.14 2002/09/07 10:01:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,9 @@ void
 loc_msg(struct terminal *term, struct location *location,
 	struct f_data_c *frame)
 {
+#ifdef GLOBHIST	
 	struct global_history_item *historyitem;
+#endif
 	struct cache_entry *ce;
 	unsigned char *a;
 	unsigned char *url;
@@ -88,6 +90,7 @@ loc_msg(struct terminal *term, struct location *location,
 	add_to_str(&str, &strl, frame->f_data->title);
 	add_to_str(&str, &strl, "\n");
 
+#ifdef GLOBHIST
 	add_to_str(&str, &strl, _(TEXT(T_LAST_VISIT_TIME), term));
 	add_to_str(&str, &strl, ": ");
 	historyitem = get_global_history_item(location->vs.url, NULL, 0);
@@ -99,7 +102,8 @@ loc_msg(struct terminal *term, struct location *location,
 	} else {
 		add_to_str(&str, &strl, _(TEXT(T_UNKNOWN), term));
 	}
-
+#endif
+	
 	if (!get_cache_entry(location->vs.url, &ce)) {
 		add_to_str(&str, &strl, "\n");
 		add_to_str(&str, &strl, _(TEXT(T_SIZE), term));

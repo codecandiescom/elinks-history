@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.52 2002/09/07 09:40:13 zas Exp $ */
+/* $Id: main.c,v 1.53 2002/09/07 10:01:53 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -319,7 +319,9 @@ init()
 #ifdef BOOKMARKS
 	read_bookmarks();
 #endif
+#ifdef GLOBHIST
 	read_global_history();
+#endif
 	load_url_history();
 #ifdef COOKIES
 	init_cookies();
@@ -388,7 +390,9 @@ terminate_all_subsystems()
 	if (init_b) save_url_history();
 	free_table_cache();
 	free_history_lists();
+#ifdef GLOBHIST
 	finalize_global_history();
+#endif
 	free_auth();
 #ifdef BOOKMARKS
 	if (init_b) finalize_bookmarks();

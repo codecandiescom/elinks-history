@@ -1,4 +1,4 @@
-/* $Id: conv.h,v 1.11 2003/06/08 15:20:29 jonas Exp $ */
+/* $Id: conv.h,v 1.12 2003/06/18 01:55:24 jonas Exp $ */
 
 #ifndef EL__UTIL_CONV_H
 #define EL__UTIL_CONV_H
@@ -81,5 +81,5 @@ int elinks_longcat(unsigned char *s, unsigned int *slen, long number,
 
 unsigned char *encode_shell_safe_url(unsigned char *);
 unsigned char *decode_shell_safe_url(unsigned char *);
-	
+
 #endif

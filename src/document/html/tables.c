@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.284 2004/06/29 07:50:59 pasky Exp $ */
+/* $Id: tables.c,v 1.285 2004/06/29 08:10:46 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -657,6 +657,25 @@ end:
 }
 #endif
 
+static int
+get_table_real_height(struct table *table)
+{
+	struct table_frames table_frames;
+	int height;
+	int row;
+
+	get_table_frames(table, &table_frames);
+
+	height = table_frames.top + table_frames.bottom;
+	for (row = 0; row < table->rows; row++) {
+		height += table->rows_heights[row];
+		if (row && get_hline_width(table, row) >= 0)
+			height++;
+	}
+
+	return height;
+}
+
 static void
 get_table_heights(struct table *table)
 {
@@ -717,16 +736,7 @@ get_table_heights(struct table *table)
 		rowspan = new_rowspan;
 	} while (rowspan != INT_MAX);
 
-	{
-		struct table_frames table_frames;
-
-		get_table_frames(table, &table_frames);
-		table->real_height = table_frames.top + table_frames.bottom;
-		for (row = 0; row < table->rows; row++) {
-			table->real_height += table->rows_heights[row] +
-				 (row && get_hline_width(table, row) >= 0);
-		}
-	}
+	table->real_height = get_table_real_height(table);
 }
 
 /* FIXME: too long, split it. */
@@ -841,9 +851,14 @@ display_complicated_table(struct table *table, int x, int y)
 #ifndef CONFIG_FASTMEM
 	/* This is just a big sanity check */
 	{
-		/* XXX: Cannot we simply use the @yp value we just calculated?
-		 * --pasky */
+		/* XXX: Cannot we simply use the @yp value we just calculated
+		 * above? --pasky */
 		int yp = table_frames.top + y + table_frames.bottom;
+
+		/* XXX: We cannot use get_table_real_height() because we are
+		 * looking one row ahead - which is completely arcane to me.
+		 * It makes a difference only when a table uses ruler="groups"
+		 * and has non-zero cellspacing or vcellpadding. --pasky */
 
 		for (row = 0; row < table->rows; row++) {
 			yp += table->rows_heights[row] +

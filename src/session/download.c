@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.154 2003/11/11 21:57:31 pasky Exp $ */
+/* $Id: download.c,v 1.155 2003/11/12 06:03:16 witekfl Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1143,23 +1143,10 @@ tp_open(struct session *ses)
 static void
 tp_display(struct session *ses)
 {
-	struct location *l;
+	struct view_state *vs;
+	unsigned char *goto_position;
+	unsigned char *loading_url;
 
-	/* strlen() is ok here, NUL char is in struct view_state */
-	l = mem_alloc(sizeof(struct location) + strlen(ses->tq_url));
-	if (!l) return;
-	memset(l, 0, sizeof(struct location));
-
-	init_list(l->frames);
-	memcpy(&l->download, &ses->tq, sizeof(struct download));
-
-	init_vs(&l->vs, ses->tq_url);
-	if (ses->tq_goto_position) {
-		l->vs.goto_position = ses->tq_goto_position;
-		ses->tq_goto_position = NULL;
-	}
-
-	add_to_history(&ses->history, l);
 	cur_loc(ses)->download.end = (void (*)(struct download *, void *))
 				     doc_end_load;
 	cur_loc(ses)->download.data = ses;
@@ -1177,7 +1164,15 @@ tp_display(struct session *ses)
 	 *  -- Miciah
 	 */
 	do_not_optimize_here_gcc_3_x(ses);
-	cur_loc(ses)->vs.plain = 1;
+
+	goto_position = ses->goto_position;
+	loading_url = ses->loading_url;
+	ses->loading_url = ses->tq_url;
+	ses->goto_position = ses->tq_goto_position;
+	ses_forward(ses, &vs);
+	ses->loading_url = loading_url;
+	ses->goto_position = goto_position;
+	vs->plain = 1;
 	display_timer(ses);
 	tp_free(ses);
 }
@@ -1293,6 +1288,7 @@ ses_chktype(struct session *ses, struct download **download, struct cache_entry 
 	unsigned char *ctype = get_content_type(ce->head, ce->url);
 	int plaintext = 1;
 	int xwin, i;
+	struct view_state *vs;
 
 	if (!ctype) goto end;
 
@@ -1335,8 +1331,7 @@ free_ct:
 	mem_free(ctype);
 
 end:
-	if (plaintext && ses->task_target_frame) *ses->task_target_frame = 0;
-	ses_forward(ses);
-	cur_loc(ses)->vs.plain = plaintext;
+	ses_forward(ses, &vs);
+	vs->plain = plaintext;
 	return 0;
 }

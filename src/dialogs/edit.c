@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.15 2002/09/07 08:48:03 zas Exp $ */
+/* $Id: edit.c,v 1.16 2002/09/17 13:50:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -110,21 +110,15 @@ do_edit_dialog(struct terminal *term, unsigned char *title,
 	/* Number of fields in edit dialog --Zas */
 #define BM_EDIT_DIALOG_FIELDS_NB 5
 
-	/* Memory needed by edit dialog --Zas */
-#define BM_EDIT_DIALOG_MEMSIZE (sizeof(struct dialog) + \
-		                + (BM_EDIT_DIALOG_FIELDS_NB + 1) \
-				* sizeof(struct widget) \
-				+ 2 * MAX_STR_LEN )
-
 	unsigned char *name, *url;
 	struct dialog *d;
 
 	/* Create the dialog */
-	d = mem_alloc(BM_EDIT_DIALOG_MEMSIZE);
+	d = mem_calloc(1, sizeof(struct dialog)
+			  + (BM_EDIT_DIALOG_FIELDS_NB + 1)
+			    * sizeof(struct widget)
+			  + 2 * MAX_STR_LEN);
 	if (!d) return;
-	memset(d, 0, BM_EDIT_DIALOG_MEMSIZE);
-
-#undef BM_EDIT_DIALOG_MEMSIZE
 
 	name = (unsigned char *) &d->items[BM_EDIT_DIALOG_FIELDS_NB + 1];
 	url = name + MAX_STR_LEN;

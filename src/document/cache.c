@@ -1,5 +1,5 @@
 /* Cache subsystem */
-/* $Id: cache.c,v 1.21 2002/09/09 14:35:43 zas Exp $ */
+/* $Id: cache.c,v 1.22 2002/09/17 13:57:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,9 +83,8 @@ get_cache_entry(unsigned char *url, struct cache_entry **f)
 	shrink_memory(0);
 	url = extract_proxy(url);
 
-	e = mem_alloc(sizeof(struct cache_entry));
+	e = mem_calloc(1, sizeof(struct cache_entry));
 	if (!e) return -1;
-	memset(e, 0, sizeof(struct cache_entry));
 
 	e->url = stracpy(url);
 	if (!e->url) {
@@ -433,7 +432,7 @@ garbage_collection(int u)
 	long ccs = 0;
 	int no = 0;
 	long opt_cache_memory_size = get_opt_long("document.cache.memory.size");
-	
+
 	if (!u && cache_size <= opt_cache_memory_size) return;
 
 	foreach(e, cache) {

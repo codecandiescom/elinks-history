@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.34 2002/09/08 19:12:22 pasky Exp $ */
+/* $Id: cookies.c,v 1.35 2002/09/17 13:47:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -555,10 +555,9 @@ load_cookies() {
 	if (!fp) return;
 
 	while (fgets(in_buffer, 6 * MAX_STR_LEN, fp)) {
-		struct cookie *cookie = mem_alloc(sizeof(struct cookie));
+		struct cookie *cookie = mem_calloc(1, sizeof(struct cookie));
 
 		if (!cookie) return;
-		memset(cookie, 0, sizeof(struct cookie));
 
 		q = in_buffer;
 		p = strchr(in_buffer, '\t');

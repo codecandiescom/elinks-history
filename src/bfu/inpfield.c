@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.10 2002/09/10 11:13:32 zas Exp $ */
+/* $Id: inpfield.c,v 1.11 2002/09/17 13:38:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,10 +177,9 @@ input_field(struct terminal *term, struct memory_list *ml,
 
 #define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct widget))
 
-	dlg = mem_alloc(SIZEOF_DIALOG + l);
+	dlg = mem_calloc(1, SIZEOF_DIALOG + l);
 	if (!dlg) return;
 
-	memset(dlg, 0, SIZEOF_DIALOG + l);
 	field = (unsigned char *) dlg + SIZEOF_DIALOG;
 	*field = 0;
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.15 2002/09/10 11:13:32 zas Exp $ */
+/* $Id: menu.c,v 1.16 2002/09/17 13:38:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,10 +683,9 @@ new_menu(enum item_free item_free)
 {
 	struct menu_item *mi;
 
-	mi = mem_alloc(sizeof(struct menu_item));
+	mi = mem_calloc(1, sizeof(struct menu_item));
 	if (!mi) return NULL;
 
-	memset(mi, 0, sizeof(struct menu_item));
 	mi->item_free = item_free;
 
 	return mi;

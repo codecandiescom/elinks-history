@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.36 2002/09/15 15:32:43 pasky Exp $ */
+/* $Id: dialogs.c,v 1.37 2002/09/17 13:45:46 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,10 +49,9 @@ bookmark_dlg_box_build()
 	struct listbox_data *box;
 
 	/* Deleted in abort */
-	box = mem_alloc(sizeof(struct listbox_data));
+	box = mem_calloc(1, sizeof(struct listbox_data));
 	if (!box) return NULL;
 
-	memset(box, 0, sizeof(struct listbox_data));
 	box->items = &bookmark_box_items;
 	add_to_list(bookmark_boxes, box);
 
@@ -142,7 +141,7 @@ bookmark_dialog_event_handler(struct dialog_data *dlg, struct event *ev)
 
 			if (ev->x == ' ') {
 				struct listbox_data *box;
-			
+
 				box = (struct listbox_data *) dlg->items[BM_BOX_IND].item->data;
 				if (box->sel) {
 					box->sel->expanded = !box->sel->expanded;
@@ -450,10 +449,6 @@ push_delete_button(struct dialog_data *dlg,
 void
 menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 {
-#define BM_DIALOG_MEMSIZE (sizeof(struct dialog) \
-		           + (BM_BOX_IND + 2) * sizeof(struct widget) \
-			   + sizeof(struct bookmark) + 2 * MAX_STR_LEN)
-
 	struct bookmark *new_bm;
 	struct dialog *d;
 
@@ -474,12 +469,10 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	}
 
 	/* Create the dialog */
-	d = mem_alloc(BM_DIALOG_MEMSIZE);
+	d = mem_calloc(1, sizeof(struct dialog)
+			  + (BM_BOX_IND + 2) * sizeof(struct widget)
+			  + sizeof(struct bookmark) + 2 * MAX_STR_LEN);
 	if (!d) return;
-
-	memset(d, 0, BM_DIALOG_MEMSIZE);
-
-#undef BM_DIALOG_MEMSIZE
 
 	d->title = TEXT(T_BOOKMARK_MANAGER);
 	d->fn = layout_bookmark_manager;

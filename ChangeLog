@@ -1,3 +1,259 @@
+Sun Oct 19 20:42:34 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/small.txt:
+
+	Fix typos.  
+
+Sun Oct 19 19:07:48 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* po/de.po:
+
+	German translation update.  
+
+Sun Oct 19 18:12:24 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Sun Oct 19 18:12:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	add_char16(): Checking of the bold attribute is also needed for 16
+	mode even though we still have the bold bit in the color byte. Hmm
+	fixes "links on freshmeat.net are sometimes bold sometimes not"
+	reported by zas.  
+
+Sun Oct 19 18:00:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.h:
+
+	Explain what struct connection's @socket and @data_socket is.  
+
+Sun Oct 19 17:57:48 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/ftp.c, sched/connection.c, sched/connection.h:
+
+	connection.sock2 -> connection.data_socket 
+
+Sun Oct 19 17:51:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: protocol/finger.c, protocol/ftp.c, protocol/http/http.c,
+	sched/connection.c, sched/connection.h:
+
+	connection.sock1 -> connection.socket 
+
+Sun Oct 19 15:23:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* test/align.html:
+
+	Add right align test case from
+	http://www.czech-tv.cz/program/1063623931-17.10.2003-22:00-1.html
+	that is currently broken.  
+
+Sun Oct 19 14:59:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync "Mention expand_table_columns to break overall layout"
+	description improvement.  
+
+Sun Oct 19 13:58:53 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* .vimrc:
+
+	*.inc files are C files in the ELinks tree.  
+
+Sun Oct 19 13:45:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update. Done. 100%.  
+
+Sun Oct 19 13:31:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Compilation fix, reported by fissie. Three people continued happily
+	committing even to uncompilable tree. Looks like noone here bothers
+	actually compiling the beast anymore. See the bad example I give.  
+
+Sun Oct 19 12:56:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sun Oct 19 12:50:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.h:
+
+	Moved now-useless struct option; prototype to #if 0 innards.  
+
+Sun Oct 19 12:41:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/http/codes.c:
+
+	Enlarged non-ELINKS_SMALL span by the <hr />.  
+
+Sun Oct 19 12:20:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	No need to check part->cx we do that already in put_chars().  Use
+	int_lower_bound() to ease formatting and possibly save an asignment.  
+
+Sun Oct 19 11:31:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/: config/options.c, dialogs/hierbox.c, lowlevel/home.c,
+	scripting/lua/core.c, terminal/color.c, viewer/text/form.c,
+	viewer/text/link.c:
+
+	Ending spaces removal.  
+
+Sun Oct 19 11:23:27 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/codes.c:
+
+	Shorter message if ELINKS_SMALL is defined, save more bytes.  
+
+Sun Oct 19 11:19:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	Remove useless thing.  
+
+Sun Oct 19 11:12:50 2003  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.c:
+
+	enable-small configure option was added, it helps to get a very
+	small static binary suitable for mini-distributions. Useless
+	intermediate variable was removed.  
+
+Sun Oct 19 11:10:23 2003  Laurent Monin <zas@norz.org>:
+
+	* acconfig.h, configure.in, src/config/kbdbind.c,
+	src/config/options.h:
+
+	enable-small configure option was added, it helps to get a very
+	small static binary suitable for mini-distributions.  
+
+Sun Oct 19 11:08:54 2003  Laurent Monin <zas@norz.org>:
+
+	* doc/small.txt:
+
+	Small ELinks howto.  
+
+Sun Oct 19 09:41:22 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Oct 19 07:12:06 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Mention expand_table_columns to break overall layout (some lines
+	overflowing from the defined boxes etc), reformat and small typo fix
+	(vertical -> vertically).  
+
+Sun Oct 19 00:44:21 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Oct 19 00:28:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	New option .. new version.  
+
+Sat Oct 18 23:48:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/options.c:
+
+	Improve the document.html.expand_table_columns option description.  
+
+Sat Oct 18 23:42:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/options.c, document/options.h,
+	document/html/tables.c:
+
+	Introduce document.html.expand_table_columns. Maybe it can help to
+	pin point what sort of pages are better or worse. Off by default.  
+
+Sat Oct 18 23:14:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	File menu hotkey fixes. Grm.  
+
+Sat Oct 18 23:12:19 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Mention the default keybinding for the opening new tab action in
+	file menu.  
+
+Sat Oct 18 23:07:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/tools/help2doc:
+
+	Fix the --elinks=* option eating an argument.  
+
+Sat Oct 18 23:06:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync to include typo fixes and some new options.  
+
+Sat Oct 18 22:39:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Sat Oct 18 22:32:38 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	document.browse.links.active_link.bold description typo fix: test ->
+	text.  
+
+Sat Oct 18 22:31:57 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.c:
+
+	Normalize document.browse.images.image_link_tagging description.  
+
+Sat Oct 18 22:30:44 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced. Czech translation update.  
+
+Sat Oct 18 22:15:33 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	ACT_OPEN_NEW_TAB bound to 't' by default, _IN_BACKGROUND to 'T'.  
+
+Sat Oct 18 22:13:09 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, viewer/text/view.c:
+
+	Introduced all the four actions relevant to tab opening.  
+
 Sat Oct 18 22:01:58 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/dialogs/menu.c:

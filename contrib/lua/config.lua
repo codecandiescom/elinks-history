@@ -1,5 +1,5 @@
 -- Configuration for hooks.lua file, put in ~/.elinks/ as config.lua.
--- $Id: config.lua,v 1.1 2002/06/30 22:33:22 pasky Exp $
+-- $Id: config.lua,v 1.2 2002/10/16 15:16:54 pasky Exp $
 
 -- ** IMPORTANT **
 -- For security reasons, systems functions are not enabled by default.
@@ -22,7 +22,7 @@
 -- Home directory: If you do not enable system functions, you will
 -- need to set the following to your home directory.
 
-    home_dir = (getenv and getenv ("HOME")) or "/home/MYSELF"
+    home_dir = home_dir or (getenv and getenv ("HOME")) or "/home/MYSELF"
     hooks_file = home_dir.."/.elinks/hooks.lua"
 
 -- Pausing: When external programs are run, sometimes we need to pause

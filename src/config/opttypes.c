@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.74 2003/11/25 21:58:21 pasky Exp $ */
+/* $Id: opttypes.c,v 1.75 2003/12/26 08:33:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -298,11 +298,15 @@ lang_set(struct option *opt, unsigned char *str)
 static void
 lang_wr(struct option *o, struct string *s)
 {
+	unsigned char *lang;
+
 #ifdef ENABLE_NLS
-	unsigned char *lang = language_to_name(current_language);
+	lang = language_to_name(current_language);
+#else
+	lang = "System";
+#endif
 
 	add_optstring_to_string(s, lang, strlen(lang));
-#endif
 }
 
 

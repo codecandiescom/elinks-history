@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.187 2004/08/15 11:56:45 miciah Exp $ */
+/* $Id: hierbox.c,v 1.188 2004/09/11 16:50:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -39,10 +39,7 @@ update_hierbox_browser(struct hierbox_browser *browser)
 	struct hierbox_dialog_list_item *item;
 
 	foreach (item, browser->dialogs) {
-		struct widget_data *widget_data =
-			item->dlg_data->widgets_data;
-
-		display_dlg_item(item->dlg_data, widget_data, 1);
+		redraw_from_window(item->dlg_data->win);
 	}
 }
 

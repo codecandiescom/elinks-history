@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.78 2004/02/06 12:49:54 jonas Exp $ */
+/* $Id: opttypes.c,v 1.79 2004/02/06 13:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,13 +320,8 @@ static void
 color_wr(struct option *opt, struct string *str)
 {
 	color_t color = opt->value.color;
-	unsigned char *strcolor = get_color_name(color);
 	unsigned char hexcolor[8];
-
-	if (!strcolor) {
-		color_to_string(color, hexcolor);
-		strcolor = hexcolor;
-	}
+	unsigned char *strcolor = get_color_string(color, hexcolor);
 
 	add_optstring_to_string(str, strcolor, strlen(strcolor));
 }

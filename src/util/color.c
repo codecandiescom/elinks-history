@@ -1,5 +1,5 @@
 /* Color parser */
-/* $Id: color.c,v 1.11 2004/02/06 12:49:55 jonas Exp $ */
+/* $Id: color.c,v 1.12 2004/02/06 13:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,7 +262,7 @@ decode_color(unsigned char *str, int slen, color_t *color)
 }
 
 unsigned char *
-get_color_name(color_t color)
+get_color_string(color_t color, unsigned char hexcolor[8])
 {
 	register struct color_spec *cs;
 
@@ -270,7 +270,8 @@ get_color_name(color_t color)
 		if (cs->rgb == color)
 			return cs->name;
 
-	return NULL;
+	color_to_string(color, hexcolor);
+	return hexcolor;
 }
 
 void

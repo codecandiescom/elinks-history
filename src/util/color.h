@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.5 2004/02/06 12:49:55 jonas Exp $ */
+/* $Id: color.h,v 1.6 2004/02/06 13:03:09 jonas Exp $ */
 
 #ifndef EL__UTIL_COLOR_H
 #define EL__UTIL_COLOR_H
@@ -44,9 +44,9 @@ struct color_pair {
  * color names. */
 int decode_color(unsigned char *str, int slen, color_t *color);
 
-/* Returns a string containing name of the @color or NULL if there's
- * no name for that color. */
-unsigned char *get_color_name(color_t color);
+/* Returns a string containing the color info. If no ``English'' name can be
+ * found the hex color (#rrggbb) is returned in the given buffer. */
+unsigned char *get_color_string(color_t color, unsigned char hexcolor[8]);
 
 /* Translate rgb color to string in #rrggbb format. str should be a pointer to
  * a 8 bytes memory space. */

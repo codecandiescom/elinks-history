@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.44 2004/02/06 12:49:54 jonas Exp $ */
+/* $Id: cmdline.c,v 1.45 2004/02/06 13:03:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -267,17 +267,13 @@ print_full_help(struct option *tree, unsigned char *path)
 
 			case OPT_COLOR:
 			{
-				unsigned char *name;
+				color_t color = option->value.color;
+				unsigned char hexcolor[8];
 
-				name = get_color_name(option->value.color);
-				if (name) {
-					printf(gettext("(default: %s)"), name);
-					break;
-				}
-				printf(gettext("(default: #%06lx)"),
-					(unsigned long) option->value.color);
-			}
+				printf(gettext("(default: %s)"),
+				       get_color_string(color, hexcolor));
 				break;
+			}
 
 			case OPT_COMMAND:
 				break;

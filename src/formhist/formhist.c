@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.95 2004/12/18 01:42:19 pasky Exp $ */
+/* $Id: formhist.c,v 1.96 2004/12/29 16:49:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@
 
 
 static struct option_info forms_history_options[] = {
-	INIT_OPT_BOOL("document.browse.forms", N_("Show forms history dialog"),
+	INIT_OPT_BOOL("document.browse.forms", N_("Show form history dialog"),
 		"show_formhist", 0, 0,
 		N_("Ask if a login form should be saved to file or not.\n"
 		"This option only disables the dialog, already saved login\n"
@@ -448,7 +448,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 	if (form_exists(form)) goto fail;
 
 	msg_box(ses->tab->term, NULL, 0,
-		N_("Forms memory"), ALIGN_CENTER,
+		N_("Form history"), ALIGN_CENTER,
 		N_("Should I remember this login?\n\n"
 		"Please note that the password will be stored "
 		"obscured (but unencrypted) in a file on your disk.\n\n"

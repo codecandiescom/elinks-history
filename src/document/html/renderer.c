@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.265 2003/09/10 19:23:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.266 2003/09/15 16:59:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -824,17 +824,20 @@ put_link_number(struct part *part)
 	format.form = ff;
 }
 
+enum link_state {
+	LINK_STATE_NONE,
+	LINK_STATE_NEW,
+	LINK_STATE_SAME,
+};
+
 static inline void
-process_link(struct part *part, unsigned char *chars, int charslen)
+process_link(struct part *part, enum link_state link_state,
+	     unsigned char *chars, int charslen)
 {
 	struct link *link;
 	struct point *pt;
 
-	if ((last_link || last_image || last_form)
-	    && !xstrcmp(format.link, last_link)
-	    && !xstrcmp(format.target, last_target)
-	    && !xstrcmp(format.image, last_image)
-	    && format.form == last_form) {
+	if (link_state == LINK_STATE_SAME) {
 		if (!part->document) return;
 
 		assertm(part->document->nlinks > 0, "no link");
@@ -843,31 +846,10 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 		link = &part->document->links[part->document->nlinks - 1];
 
 	} else {
-		/* TODO: A possible way to avoid allocating and freeing these
-		 * three variables is to make last_link type struct link *
-		 * and point into document->links[]. We can then use
-		 *
-		 *	last_link->where instead of last_link (the current one)
-		 *	last_link->target instead of last_target
-		 *	last_link->where_img instead of last_image
-		 *
-		 * Maybe we could even avoid last_form also since that is just
-		 * last_link->form. Checking validity of last_link, that:
-		 *	document->links =< last_link
-		 *	&& last_link < &document->links[document->nlinks]
-		 *
-		 * would probably be required. I had it sort of working but the
-		 * patch got too big and now it is too late ;) --jonas */
-		if (last_link) mem_free(last_link);
-		if (last_target) mem_free(last_target);
-		if (last_image) mem_free(last_image);
-
-		last_link = last_target = last_image = NULL;
-		last_form = NULL;
-
-		if (!(format.link || format.image || format.form)) return;
+		assert(link_state == LINK_STATE_NEW);
 
 		part->link_num++;
+
 		last_link = format.link ? stracpy(format.link) : NULL;
 		last_target = format.target ? stracpy(format.target) : NULL;
 		last_image = format.image ? stracpy(format.image) : NULL;
@@ -893,10 +875,40 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 	}
 }
 
+static inline enum link_state
+get_link_state(void)
+{
+	enum link_state state;
+
+	if (!(format.link || format.image || format.form)) {
+		state = LINK_STATE_NONE;
+
+	} else if ((last_link || last_image || last_form)
+		   && !xstrcmp(format.link, last_link)
+		   && !xstrcmp(format.target, last_target)
+		   && !xstrcmp(format.image, last_image)
+		   && format.form == last_form) {
+
+		return LINK_STATE_SAME;
+
+	} else {
+		state = LINK_STATE_NEW;
+	}
+
+	if (last_link) mem_free(last_link);
+	if (last_target) mem_free(last_target);
+	if (last_image) mem_free(last_image);
+
+	last_link = last_target = last_image = NULL;
+	last_form = NULL;
+
+	return state;
+}
+
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
-	int is_link;
+	enum link_state link_state;
 
 	assert(part);
 	if_assert_failed return;
@@ -926,18 +938,16 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	int_lower_bound(&part->y, part->cy + 1);
 
-	is_link = (format.link || format.image || format.form);
+	link_state = get_link_state();
 
-	/* Put the link number when the link is new. */
-	if (d_opt->num_links_display
-	    && is_link && !last_link && !last_image && !last_form) {
+	if (d_opt->num_links_display && link_state == LINK_STATE_NEW) {
 		put_link_number(part);
 	}
 
 	set_hline(part, chars, charslen);
 
-	if (is_link || last_link || last_image || last_form) {
-		process_link(part, chars, charslen);
+	if (link_state != LINK_STATE_NONE) {
+		process_link(part, link_state, chars, charslen);
 	}
 
 	if (nowrap && part->cx + charslen > overlap(par_format))

@@ -1,3 +1,294 @@
+Sat Aug 23 18:24:44 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.c, document/html/frames.h,
+	document/html/renderer.c, sched/session.c, viewer/text/link.c,
+	viewer/text/view.c, viewer/text/vs.c:
+
+	struct document: Remove @frame and just test @frame_desc instead.  
+
+Sat Aug 23 18:18:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: frames.h, renderer.c:
+
+	struct document: Remove unused @time_to_get.  
+
+Sat Aug 23 18:17:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c, viewer/text/view.h:
+
+	Merge do_for_frame() and menu_for_frame().  
+
+Sat Aug 23 18:16:46 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	frm_download(): Move and make static.  
+
+Sat Aug 23 18:15:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, view.c, view.h:
+
+	decrement_fc_refcount(): Move and rename s/fc/document/.  
+
+Sat Aug 23 18:14:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.h:
+
+	Regroup and comment prototypes + correct #includes.  
+
+Sat Aug 23 18:11:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Cleanup and merge print_current_title() and print_current_titlex().  
+
+Sat Aug 23 18:01:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	clear_formatted() + destroy_formatted(): Merged to done_document().  
+
+Sat Aug 23 17:54:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, elusive/renderer/text/renderer.c,
+	viewer/text/view.c, viewer/text/view.h:
+
+	init_document(): Introduced.  
+
+Sat Aug 23 17:48:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/elusive/renderer/text/renderer.c:
+
+	Renames to better fit the structs.  
+
+Sat Aug 23 17:45:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	cached_format_html(): Lots of renames.  
+
+Sat Aug 23 17:34:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.h, document/html/renderer.c,
+	elusive/renderer/text/renderer.c:
+
+	realloc_line[s](): Cleanup and remove unneeded variables from struct
+	line.  
+
+Sat Aug 23 16:53:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, document/html/renderer.h:
+
+	Tidyups.  
+
+Sat Aug 23 16:44:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/checkbox.c, bfu/dialog.c, bfu/group.c,
+	bfu/inpfield.c, bfu/listbox.c, bfu/menu.c, bfu/msgbox.c,
+	bfu/style.c, bfu/style.h, bfu/text.c, bfu/text.h, config/dialogs.c,
+	dialogs/auth.c, dialogs/edit.c, dialogs/mime.c, sched/download.c,
+	sched/session.c, scripting/lua/core.c, terminal/draw.c,
+	terminal/draw.h, viewer/text/search.c, viewer/text/view.c:
+
+	struct screen_color: Replace with color_pair.  
+
+Sat Aug 23 16:33:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, bfu/style.c, config/options.c, config/options.h,
+	config/opttypes.c, document/options.c, document/options.h,
+	document/html/Makefile.am, document/html/colors.c,
+	document/html/colors.h, document/html/frames.c,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/tables.c,
+	terminal/Makefile.am, terminal/color.c, terminal/color.h,
+	terminal/draw.c, terminal/draw.h, util/Makefile.am, util/color.c,
+	util/color.h, viewer/text/link.c:
+
+	Split color handling.  
+
+Sat Aug 23 16:03:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	put_chars(): Handle @attr the same way as colors; Cache it.  
+
+Sat Aug 23 15:52:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Cleanup draw_frame_*() macros.  
+
+Sat Aug 23 15:18:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	set_hchars(): Make @bgcolor argument a color_t pointer. When
+	shifting and aligning NULL can now be used to signal that the
+	original bgcolor should used which means no stains when
+	use_document_colors = 2.  
+
+Sat Aug 23 15:08:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	xset_hchar(): Cleanup.  
+
+Sat Aug 23 15:07:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	set_hchar(): Only used by xset_hchar() so they were merged.  
+
+Sat Aug 23 15:06:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Propagate @bgcolor to set_hchar*.  
+
+Sat Aug 23 10:59:36 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Limit expiration date to one year from now, in set_cookie(). Is this
+	ok ?.  
+
+Sat Aug 23 10:41:58 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cookies/cookies.c:
+
+	Loading/saving of expired cookies was disabled, especially whose
+	that should expire with the session, please review, i am still
+	unsure about the good behavior...  
+
+Sat Aug 23 06:37:53 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	html_form_control(): Fix big leak from prev patch. (merge ;) 
+
+Sat Aug 23 06:19:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: renderer.c, renderer.h:
+
+	struct part: Remvoe the @uf member. It was used to trash form
+	controls and we migth as well free the controls if there's no
+	document.  
+
+Sat Aug 23 06:18:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, document/html/renderer.h,
+	viewer/text/form.c, viewer/text/form.h, viewer/text/view.c:
+
+	destroy_fc(): Move and rename to done_form_control().  
+
+Sat Aug 23 06:15:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Cleanup macros.  
+
+Sat Aug 23 05:57:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.c:
+
+	init_term(): Cleanup and fix a possible leak. (merge) 
+
+Sat Aug 23 05:43:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Revert some bogus patches. Somebody must've been sleeping ... :( 
+
+Sat Aug 23 04:54:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/align.h:
+
+	Moved things to style.* 
+
+Sat Aug 23 04:46:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/link.c:
+
+	Merge small optimization in link drawing from ELUSION.  
+
+Sat Aug 23 04:44:57 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.h, config/opttypes.c,
+	document/options.c, document/options.h, document/html/colors.c,
+	document/html/colors.h, document/html/frames.h,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, document/html/renderer.h,
+	document/html/tables.c, elusive/renderer/text/renderer.c,
+	protocol/file.c, protocol/ftp.c, terminal/draw.c, terminal/draw.h,
+	viewer/dump/dump.c, viewer/text/link.c, viewer/text/view.c:
+
+	Merge color_t introduction from ELUSION. Contains patches from 6th
+	to 8th of August.  
+
+Sat Aug 23 04:42:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/style.c:
+
+	Compilation fix.  
+
+Sat Aug 23 04:33:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: style.c, style.h:
+
+	The missing link in the bfu color handling.  
+
+Sat Aug 23 03:31:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: main.c, bfu/Makefile.am, bfu/button.c, bfu/button.h,
+	bfu/checkbox.c, bfu/dialog.c, bfu/dialog.h, bfu/group.c,
+	bfu/hotkey.c, bfu/inpfield.c, bfu/inpfield.h, bfu/listbox.c,
+	bfu/listbox.h, bfu/menu.c, bfu/msgbox.c, bfu/msgbox.h, bfu/text.c,
+	bfu/text.h, bookmarks/dialogs.c, config/dialogs.c, dialogs/auth.c,
+	dialogs/edit.c, dialogs/hierbox.c, dialogs/mime.c,
+	dialogs/options.c, document/html/frames.h, document/html/parser.c,
+	document/html/parser.h, document/html/renderer.c,
+	document/html/tables.c, sched/download.c, sched/session.c,
+	scripting/lua/core.c, terminal/draw.c, terminal/draw.h,
+	viewer/text/form.c, viewer/text/link.c, viewer/text/search.c,
+	viewer/text/textarea.c, viewer/text/view.c:
+
+	Merge bfu color handling from ELUSION. This is a patchset of ELUSION
+	patches applied between 3rd and 6th of August.  
+
+Sat Aug 23 03:05:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Fix useless adjustments of the view positions when searching. Thanks
+	ElectricElf ;) 
+
+Sat Aug 23 01:27:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/screen.c:
+
+	Merge misc. cleanups from ELUSION.  
+
+Sat Aug 23 01:01:07 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/renderer.c, terminal/draw.h,
+	terminal/screen.c:
+
+	Merge underline support in the lowest terminal layer from ELUSION.  
+
+Sat Aug 23 00:01:39 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/codepage.inc:
+
+	The fixed thingy from last patch.  
+
+Fri Aug 22 23:46:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* Unicode/gen-cp:
+
+	Fix tr usage (part II ;) .. though there still a bug I think because
+	spaces are removed from strings? 
+
 Fri Aug 22 21:43:50 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* Unicode/gen-cp:

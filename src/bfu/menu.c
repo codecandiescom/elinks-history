@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.262 2004/08/09 05:18:09 miciah Exp $ */
+/* $Id: menu.c,v 1.263 2004/08/12 01:17:21 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -903,10 +903,7 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	add_window(term, mainmenu_handler, menu);
 
 	if (sel != -1) {
-		struct term_event ev =
-			INIT_TERM_EVENT(EVENT_KBD, KBD_ENTER, 0, 0);
-
-		term_send_event(term, &ev);
+		select_menu(term, menu);
 	}
 }
 

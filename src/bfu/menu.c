@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.128 2003/12/21 23:56:12 jonas Exp $ */
+/* $Id: menu.c,v 1.129 2003/12/26 09:26:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,6 @@ struct mainmenu {
 
 /* Global variables */
 unsigned char m_submenu[] = ">>";
-unsigned char m_bar = 0;
 
 /* Prototypes */
 static void menu_handler(struct window *, struct term_event *, int);
@@ -46,7 +45,7 @@ count_items(struct menu_item *items)
 	register int i = 0;
 
 	if (items)
-		for (; items[i].text; i++);
+		for (; !mi_is_end_of_menu(items[i]); i++);
 
 	return i;
 }
@@ -61,7 +60,7 @@ free_menu_items(struct menu_item *items)
 	/* Note that item_free & FREE_DATA applies only when menu is aborted;
 	 * it is zeroed when some menu field is selected. */
 
-	for (i = 0; items[i].text; i++) {
+	for (i = 0; !mi_is_end_of_menu(items[i]); i++) {
 		if (items[i].flags & FREE_TEXT && items[i].text)
 			mem_free(items[i].text);
 		if (items[i].flags & FREE_RTEXT && items[i].rtext)
@@ -109,7 +108,7 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 	menu_func func = it->func;
 	void *it_data = it->data;
 
-	if (it->rtext == M_BAR) return;
+	if (mi_is_unselectable(*it)) return;
 
 	if (!(it->flags & SUBMENU)) {
 		/* Don't free data! */
@@ -150,11 +149,11 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int my;
 
 	for (my = 0; my < menu->ni; my++) {
-		unsigned char *text = menu->items[my].text;
-		unsigned char *rtext = menu->items[my].rtext;
 		int s = 4;
 
-		if (text && *text) {
+		if (mi_has_left_text(menu->items[my])) {
+			unsigned char *text = menu->items[my].text;
+
 			if (!(menu->items[my].flags & NO_INTL)) text = _(text, term);
 
 			if (text[0])
@@ -162,7 +161,9 @@ count_menu_size(struct terminal *term, struct menu *menu)
 				     - !!menu->items[my].hotkey_pos;
 		}
 
-		if (rtext && *rtext) {
+		if (mi_has_right_text(menu->items[my])) {
+			unsigned char *rtext = menu->items[my].rtext;
+
 			if (!(menu->items[my].flags & NO_INTL)) rtext = _(rtext, term);
 
 			if (rtext[0])
@@ -214,7 +215,8 @@ scroll_menu(struct menu *menu, int d)
 
 		int_bounds(&menu->selected, 0, menu->ni - 1);
 
-		if (menu->ni && menu->items[menu->selected].rtext != M_BAR)
+		if (menu->ni
+		    && mi_is_selectable(menu->items[menu->selected]))
 			break;
 
 		menu->selected += d;
@@ -248,9 +250,8 @@ display_menu(struct terminal *term, struct menu *menu)
 		struct color_pair *hkcolor = hotkey_color;
 #ifdef DEBUG
 		/* Sanity check. */
-		if (!menu->items[p].text)
-			INTERNAL("[%p] menu->items[%d].text == NULL", menu->items[p],
-				 menu->items[p].text);
+		if (mi_is_end_of_menu(menu->items[p]))
+			INTERNAL("Unexpected end of menu [%p:%d]", menu->items[p], p);
 #endif
 
 		if (p == menu->selected) {
@@ -263,9 +264,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			draw_area(term, mx, s, mxw, 1, ' ', 0, color);
 		}
 
-		if (menu->items[p].rtext == M_BAR
-		    && menu->items[p].text && !*menu->items[p].text) {
-
+		if (mi_is_horizontal_bar(menu->items[p])) {
 			/* Horizontal separator */
 			draw_border_char(term, menu->x, s,
 					 BORDER_SRTEE, frame_color);
@@ -280,11 +279,12 @@ display_menu(struct terminal *term, struct menu *menu)
 			unsigned char c;
 			int x;
 
-			if (menu->items[p].text && *menu->items[p].text) {
+			if (mi_has_left_text(menu->items[p])) {
 				int l = menu->items[p].hotkey_pos;
 				unsigned char *text = menu->items[p].text;
 
 				if (!(menu->items[p].flags & NO_INTL)) text = _(text, term);
+				if (mi_is_unselectable(menu->items[p])) l = 0;
 
 				if (l) {
 					int xbase = mx + 1;
@@ -331,7 +331,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				}
 			}
 
-			if (menu->items[p].rtext && *menu->items[p].rtext) {
+			if (mi_has_right_text(menu->items[p])) {
 				unsigned char *rtext = menu->items[p].rtext;
 
 				if (!(menu->items[p].flags & NO_INTL)) rtext = _(rtext, term);
@@ -437,7 +437,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					int sel = ev->y - menu->y - 1 + menu->view;
 
 					if (sel >= 0 && sel < menu->ni
-					    && menu->items[sel].rtext != M_BAR) {
+					    && mi_is_selectable(menu->items[sel])) {
 						menu->selected = sel;
 						scroll_menu(menu, 0);
 						display_menu(win->term, menu);
@@ -493,7 +493,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					int step = -1;
 
 					for (; i >= 0; i--) {
-						if (menu->items[i].rtext == M_BAR) {
+						if (mi_is_horizontal_bar(menu->items[i])) {
 							found = 1;
 							break;
 						}
@@ -522,7 +522,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 					int step = 1;
 
 					for (; i < menu->ni; i++) {
-						if (menu->items[i].rtext == M_BAR) {
+						if (mi_is_horizontal_bar(menu->items[i])) {
 							found = 1;
 							break;
 						}
@@ -639,6 +639,8 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		int j;
 		unsigned char c;
 
+		/* FIXME: merge all menus code. --Zas */
+
 #ifdef DEBUG
 		int double_hk = 0;
 		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
@@ -722,15 +724,17 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 				int i;
 
 				for (i = 0; i < menu->ni; i++) {
-					unsigned char *text = menu->items[i].text;
 					int o = p;
 
-					if (!(menu->items[i].flags & NO_INTL))
-						text = _(text, win->term);
+					if (mi_has_left_text(menu->items[i])) {
+						unsigned char *text = menu->items[i].text;
 
-					if (text && text[0])
+						if (!(menu->items[i].flags & NO_INTL))
+							text = _(text, win->term);
+
 						p += strlen(text) + 4
 						     - !!menu->items[i].hotkey_pos;
+					}
 
 					if (ev->x < o || ev->x >= p)
 						continue;

@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.126 2003/12/21 19:09:19 jonas Exp $ */
+/* $Id: link.c,v 1.127 2003/12/26 09:26:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -981,8 +981,8 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 
 end:
 	if (!mi->text) {
-		add_to_menu(&mi, N_("No link selected"), M_BAR,
-			    NULL, NULL, 0);
+		add_to_menu(&mi, N_("No link selected"), NULL,
+			    NULL, NULL, NO_SELECT);
 	}
 
 	do_menu(term, mi, ses, 1);

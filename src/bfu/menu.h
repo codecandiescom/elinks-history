@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.33 2003/12/10 17:05:17 jonas Exp $ */
+/* $Id: menu.h,v 1.34 2003/12/26 09:26:14 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -9,9 +9,6 @@ typedef void (*menu_func)(struct terminal *, void *, void *);
 
 extern unsigned char m_submenu[];
 #define M_SUBMENU ((unsigned char *) m_submenu)
-
-extern unsigned char m_bar;
-#define M_BAR ((unsigned char *) &m_bar)
 
 
 /* Which fields to free when zapping a list item - bitwise. */
@@ -26,24 +23,35 @@ enum menu_item_flags {
 	MENU_FULLNAME = 16,
 	SUBMENU = 32,
 	NO_INTL = 64,
+	NO_SELECT = 128,	/* Mark unselectable item */
 };
 
-/* menu item with no right part :
- * text != NULL and text[0] and rtext != NULL and !rtext[0]
- *
- * menu item with right part:
- * text != NULL and text[0] and rtext != NULL and rtext[0]
- *
- * unselectable menu item:
- * text != NULL and text[0] and rtext == M_BAR
- *
- * horizontal bar
- * text != NULL and !text[0] and rtext == M_BAR
- *
- * end of menu items list
- * text == NULL
- *
+/*
+ * Unselectable menu item
  */
+#define mi_is_unselectable(mi) ((mi).flags & NO_SELECT)
+#define mi_is_selectable(mi) (!mi_is_unselectable(mi))
+
+/*
+ * Menu item has left text.
+ */
+#define mi_has_left_text(mi) ((mi).text && *(mi).text)
+
+/*
+ * Menu item has right text.
+ */
+#define mi_has_right_text(mi) ((mi).rtext && *(mi).rtext)
+
+/*
+ * Horizontal bar
+ */
+#define mi_is_horizontal_bar(mi) (mi_is_unselectable(mi) && (mi).text && !(mi).text[0])
+
+/*
+ * End of menu items list
+ */
+#define mi_is_end_of_menu(mi) (!(mi).text)
+
 
 enum hotkey_state {
 	HKS_SHOW = 0,
@@ -81,7 +89,7 @@ struct menu_item {
 	INIT_MENU_ITEM(NULL, NULL, NULL, NULL, 0)
 
 #define BAR_MENU_ITEM							\
-	INIT_MENU_ITEM("", M_BAR, NULL, NULL, 0)
+	INIT_MENU_ITEM("", NULL, NULL, NULL, NO_SELECT)
 
 #define SET_MENU_ITEM(e_, text_, rtext_, func_, data_, flags_,		\
 		      hotkey_state_, hotkey_pos_)			\
@@ -124,7 +132,7 @@ struct menu {
 
 struct menu_item *new_menu(enum menu_item_flags);
 void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, menu_func, void *, enum menu_item_flags flags);
-#define add_separator_to_menu(menu) add_to_menu(menu, "", M_BAR, NULL, NULL, 0)
+#define add_separator_to_menu(menu) add_to_menu(menu, "", NULL, NULL, NULL, NO_SELECT)
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

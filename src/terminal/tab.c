@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.15 2003/09/18 13:07:11 zas Exp $ */
+/* $Id: tab.c,v 1.16 2003/09/21 14:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ get_tab_number(struct window *window)
 {
 	struct terminal *term = window->term;
 	struct window *win;
-        int current = 0;
+	int current = 0;
 	int num = 0;
 
 	foreachback (win, term->windows) {

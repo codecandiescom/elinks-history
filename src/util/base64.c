@@ -1,5 +1,5 @@
 /* Base64 encode/decode implementation. */
-/* $Id: base64.c,v 1.14 2003/08/21 07:37:31 zas Exp $ */
+/* $Id: base64.c,v 1.15 2003/09/21 14:47:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ base64_encode(register unsigned char *in)
 #ifdef FORMS_MEMORY
 
 /* base64_decode:  @in string to decode
- *                 returns the string decoded (must be freed by the caller) */
+ *		   returns the string decoded (must be freed by the caller) */
 unsigned char *
 base64_decode(register unsigned char *in)
 {
@@ -88,20 +88,20 @@ base64_decode(register unsigned char *in)
 
 	while (*in) {
 		if (*in == '=') break;
-        	if (!is_base64_char[*in])
+		if (!is_base64_char[*in])
 			goto decode_error;
 
-        	bits += decode[*in];
-        	count++;
+		bits += decode[*in];
+		count++;
 		if (count == 4) {
 			*out++ = bits >> 16;
 			*out++ = (bits >> 8) & 0xff;
 			*out++ = bits & 0xff;
-          	        bits = 0;
-           	 	count = 0;
-        	} else {
-            		bits <<= 6;
-        	}
+			bits = 0;
+			count = 0;
+		} else {
+			bits <<= 6;
+		}
 
 		++in;
 	}
@@ -112,9 +112,9 @@ base64_decode(register unsigned char *in)
 		switch (count) {
 			case 1:
 				goto decode_error;
-            			break;
+				break;
 			case 2:
-            			*out++ = bits >> 10;
+				*out++ = bits >> 10;
 				break;
 			case 3:
 				*out++ = bits >> 16;

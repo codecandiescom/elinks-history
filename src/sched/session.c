@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.149 2003/09/18 13:07:11 zas Exp $ */
+/* $Id: session.c,v 1.150 2003/09/21 14:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,7 +139,7 @@ init_bars_status(struct session *ses, int *tabs_count, struct document_options *
 
 	if (tabs_count) *tabs_count = tabs_cnt;
 	ses->visible_tabs_bar = (show_tabs_bar > 0) &&
-		 	       !(show_tabs_bar == 1 && tabs_cnt < 2);
+				!(show_tabs_bar == 1 && tabs_cnt < 2);
 	ses->visible_status_bar = show_status_bar;
 	ses->visible_title_bar = show_title_bar;
 
@@ -219,7 +219,7 @@ print_screen_status(struct session *ses)
 				int ncl = current_frame(ses)->vs->current_link;
 
 				if (stat->state == S_INTERRUPTED
-			    	    && ncl != last_current_link)
+				    && ncl != last_current_link)
 					stat->state = S_OK;
 				last_current_link = ncl;
 
@@ -461,7 +461,7 @@ ses_forward(struct session *ses)
 
 	if (ses->search_word) {
 		mem_free(ses->search_word);
-	       	ses->search_word = NULL;
+		ses->search_word = NULL;
 	}
 
 x:
@@ -1133,7 +1133,7 @@ process_file_requests(struct session *ses)
 struct session *
 create_basic_session(struct window *tab)
 {
-        struct session *ses = mem_calloc(1, sizeof(struct session));
+	struct session *ses = mem_calloc(1, sizeof(struct session));
 
 	if (!ses) return NULL;
 
@@ -1462,8 +1462,8 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	u = translate_url(url, ses->tab->term->cwd);
 	if (!u) {
 		struct download stat = { NULL_LIST_HEAD, NULL, NULL,
-				         NULL, NULL, NULL,
-				         S_BAD_URL, PRI_CANCEL, 0 };
+					 NULL, NULL, NULL,
+					 S_BAD_URL, PRI_CANCEL, 0 };
 
 		print_error_dialog(ses, &stat);
 		goto end;
@@ -1492,7 +1492,7 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 
 	fd = current_frame(ses);
 	if (fd && fd->document && fd->document->url)
- 		ses->ref_url = stracpy(fd->document->url);
+		ses->ref_url = stracpy(fd->document->url);
 
 	ses_goto(ses, u, target, PRI_MAIN, cache_mode, task, pos, end_load, 0);
 

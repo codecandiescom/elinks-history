@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.83 2003/09/20 12:05:30 zas Exp $ */
+/* $Id: osdep.c,v 1.84 2003/09/21 14:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,7 +235,7 @@ winch_thread(void)
 			old_ysize = cur_ysize;
 			write(winch_pipe[1], "x", 1);
 			/* Resizing may take some time. So don't send a flood
-                     of requests?! */
+			 * of requests?! */
 			_sleep2(2 * WINCH_SLEEPTIME);
 		} else {
 			_sleep2(WINCH_SLEEPTIME);
@@ -1130,14 +1130,14 @@ input_thread(void *p)
 			printf("4");fflush(stdout);
 		}
 #endif
-            /* for the records:
-                 _read_kbd(0, 1, 1) will
-                 read a char, don't echo it, wait for one available and
-                 accept CTRL-C.
-                 Knowing that, I suggest we replace this call completly!
-            */
-                *c = _read_kbd(0, 1, 1);
-                write(h, c, 1);
+		/* for the records:
+		 * _read_kbd(0, 1, 1) will
+		 * read a char, don't echo it, wait for one available and
+		 * accept CTRL-C.
+		 * Knowing that, I suggest we replace this call completly!
+		 */
+		*c = _read_kbd(0, 1, 1);
+		write(h, c, 1);
 	}
 	close(h);
 }

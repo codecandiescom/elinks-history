@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.37 2003/09/16 23:54:26 jonas Exp $ */
+/* $Id: form.c,v 1.38 2003/09/21 14:47:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -604,7 +604,7 @@ xx:
 				unsigned char *p;
 
 				if (!convert_table)
-				       	convert_table = get_translation_table(cp_from,
+					convert_table = get_translation_table(cp_from,
 									      cp_to);
 
 				p = convert_string(convert_table, sv->value,
@@ -940,7 +940,7 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 					fs->state = (int) (prev - fs->value);
 				}
 				break;
-		    	case ACT_KILL_TO_EOL:
+			case ACT_KILL_TO_EOL:
 				if (!frm->ro && fs->value[fs->state]) {
 					unsigned char *rest;
 
@@ -958,7 +958,7 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 					memmove(fs->value + fs->state, rest,
 						strlen(rest) + 1);
 				}
- 				break;
+				break;
 			default:
 				if (!ev->y && (ev->x >= 32 && ev->x < 256)) {
 					int value_len = strlen(fs->value);

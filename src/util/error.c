@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.73 2003/07/23 01:25:39 jonas Exp $ */
+/* $Id: error.c,v 1.74 2003/09/21 14:47:28 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -119,7 +119,7 @@ force_dump(void)
 {
 	fprintf(stderr,
 		"\n\033[1m%s\033[0m %s\n", "Forcing core dump!",
-	        "Man the Lifeboats! Women and children first!\n");
+		"Man the Lifeboats! Women and children first!\n");
 	fputs(full_static_version, stderr);
 	fputc('\n', stderr);
 	fflush(stderr);

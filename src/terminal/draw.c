@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.72 2003/09/16 00:04:56 jonas Exp $ */
+/* $Id: draw.c,v 1.73 2003/09/21 14:47:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -56,7 +56,7 @@ draw_border_cross(struct terminal *term, int x, int y,
 
 void
 draw_border_char(struct terminal *term, int x, int y,
-	         enum border_char border, struct color_pair *color)
+		 enum border_char border, struct color_pair *color)
 {
 	int position;
 

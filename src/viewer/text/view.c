@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.204 2003/09/18 13:07:12 zas Exp $ */
+/* $Id: view.c,v 1.205 2003/09/21 14:47:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -314,7 +314,7 @@ draw_doc(struct terminal *t, struct document_view *scr, int active)
 	vs = scr->vs;
 	if (vs->goto_position) {
 		vy = find_tag(scr->document, vs->goto_position);
-	       	if (vy != -1) {
+		if (vy != -1) {
 			if (vy > scr->document->y) vy = scr->document->y - 1;
 			if (vy < 0) vy = 0;
 			vs->view_pos = vy;

@@ -1,5 +1,5 @@
 /* Hashing infrastructure */
-/* $Id: hash.c,v 1.22 2003/09/18 19:04:41 pasky Exp $ */
+/* $Id: hash.c,v 1.23 2003/09/21 14:47:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,7 +100,7 @@ get_hash_item(struct hash *hash, unsigned char *key, unsigned int keylen)
 
 	foreach (item, *list) {
 		if (keylen != item->keylen) continue;
-	        if (memcmp(key, item->key, keylen)) continue;
+		if (memcmp(key, item->key, keylen)) continue;
 
 		/* Watch the MFR (Move Front Rule)! Basically, it self-orders
 		 * the list by popularity of its items. Inspired from Links,

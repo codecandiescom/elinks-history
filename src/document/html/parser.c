@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.184 2003/07/28 08:57:15 zas Exp $ */
+/* $Id: parser.c,v 1.185 2003/07/28 09:00:26 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2894,7 +2894,7 @@ process_head(unsigned char *head)
 		if (url) {
 			unsigned char *saved_url = url;
 #if 0 /* Future usage, please do not remove. --Zas */
-			/* Extraction of refresh time.
+			/* Extraction of refresh time. */
 			unsigned long seconds;
 
 			errno = 0;

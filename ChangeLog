@@ -1,3 +1,23 @@
+Sun Dec 23 23:42:23 2001  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, BUGS, TODO, config2.h, configure, configure.in,
+	default.c, html.c, html_r.c, kbdbind.c, language.h, language.inc,
+	links.1, links.h, menu.c, session.c, terminal.c, view.c,
+	intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/english.lng,
+	intl/estonian.lng, intl/french.lng, intl/galician.lng,
+	intl/german.lng, intl/greek.lng, intl/hungarian.lng,
+	intl/icelandic.lng, intl/italian.lng, intl/lithuanian.lng,
+	intl/polish.lng, intl/romanian.lng, intl/russian.lng,
+	intl/slovak.lng, intl/spanish.lng, intl/swedish.lng,
+	intl/turkish.lng, intl/ukrainian.lng:
+	
+	New release strategy - elinks-0.3pre - basically merge all the
+	stuff from UNSTABLE branch.
+	
+	That includes:	 * Unhistory patch by Peter Wang   * External
+	textarea editor   * Colourful cleanups
+
 Sun Dec 23 23:21:41 2001  Petr Baudis <pasky@ji.cz>:
 
 	* config2.h, configure, configure.in, default.c, http.c:

@@ -1,4 +1,4 @@
-/* $Id: color.h,v 1.6 2003/08/31 17:20:15 jonas Exp $ */
+/* $Id: color.h,v 1.7 2003/09/01 20:16:38 jonas Exp $ */
 
 #ifndef EL__TERMINAL_COLOR_H
 #define EL__TERMINAL_COLOR_H
@@ -16,6 +16,7 @@
 unsigned char mix_color_pair(struct color_pair *colors);
 
 /* Mixes the two colors and adds attribute enhancements to the color. */
-unsigned char mix_attr_colors(struct color_pair *colors, enum screen_char_attr attr);
+unsigned char mix_attr_colors(struct color_pair *colors, enum screen_char_attr attr,
+		int bglevel, int fglevel);
 
 #endif

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.226 2003/08/29 18:18:21 jonas Exp $ */
+/* $Id: renderer.c,v 1.227 2003/09/01 20:16:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -977,7 +977,7 @@ format_change:
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	color_cache = color = mix_attr_colors(&colors, attr);
+	color_cache = color = mix_attr_colors(&colors, attr, 8, 16);
 	attr_cache = attr;
 
 	/* FIXME:

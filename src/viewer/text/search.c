@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.17 2003/08/29 09:47:05 zas Exp $ */
+/* $Id: search.c,v 1.18 2003/09/16 23:57:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,6 +324,9 @@ srch_failed:
 	return found;
 }
 
+#define realloc_points(pts, size) \
+	mem_align_alloc(pts, size, (size) + 1, sizeof(struct point), 0xFF)
+
 static void
 get_searched(struct document_view *scr, struct point **pt, int *pl)
 {
@@ -389,16 +392,9 @@ srch_failed:
 				if (x < xp || x >= xx)
 					continue;
 
-				if (!(len % ALLOC_GR)) {
-					struct point *npt;
+				if (!realloc_points(&points, len))
+					continue;
 
-					npt = mem_realloc(points,
-							  sizeof(struct point)
-							  * (len + ALLOC_GR));
-
-					if (!npt) continue;
-					points = npt;
-				}
 				points[len].x = sx;
 				points[len++].y = s1[i].y;
 			}

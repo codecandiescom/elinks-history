@@ -434,6 +434,21 @@ void menu_func(struct window *win, struct event *ev, int fwd)
 								s = 1;
 							}
 						}
+						
+						if (s == 0) {
+							for (i = 0; i < menu->ni; i++) {
+								if (menu->items[i].text &&
+								    (upcase(menu->items[i].text[0])
+								     == upcase(ev->x))) {
+									if (upcase(menu->items[menu->selected].text[0]) ==
+									    upcase(ev->x) &&
+									    menu->selected >= i) continue;
+									menu->selected = i;
+ 									scroll_menu(menu, 0);
+ 									break;
+								}
+							}
+ 						}
 					}
 					
 					break;

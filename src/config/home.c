@@ -1,5 +1,5 @@
 /* Get home directory */
-/* $Id: home.c,v 1.38 2003/10/03 17:10:38 kuser Exp $ */
+/* $Id: home.c,v 1.39 2003/10/03 17:12:59 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,7 +107,6 @@ get_home(void)
 	unsigned char *envhome = getenv("HOME");
 	unsigned char *home = envhome ? stracpy(envhome)
 				      : elinks_dirname(path_to_exe);
-	unsigned char *envconfdir = getenv("ELINKS_CONFDIR");
 
 	/* TODO: We want to use commandline option instead of environment
 	 * variable, especially one with so common name. */
@@ -116,7 +115,7 @@ get_home(void)
 
 	strip_trailing_dir_sep(home);
 
-	home_elinks = test_confdir(home, envconfdir,
+	home_elinks = test_confdir(home, getenv("ELINKS_CONFDIR"),
 				   gettext("ELINKS_CONFDIR set to %s, but "
 					   "could not create directory %s."));
 	if (home_elinks) goto end;

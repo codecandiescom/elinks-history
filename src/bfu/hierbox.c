@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.159 2004/05/31 02:33:03 jonas Exp $ */
+/* $Id: hierbox.c,v 1.160 2004/05/31 02:38:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -46,19 +46,14 @@ update_hierbox_browser(struct hierbox_browser *browser)
 
 
 /* Common backend for listbox adding */
-static struct listbox_item *
-do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
-		    enum listbox_item_type type)
+struct listbox_item *
+add_listbox_item_at_pos(struct hierbox_browser *browser,
+			struct listbox_item *root, enum listbox_item_type type,
+			unsigned char *text, void *data)
 {
 	struct listbox_item *item;
 
-	if (type == BI_FOLDER) {
-		/* Check if we have the folder already. Could be optional if
-		 * we are gonna use this for bookmarks and stuff. --jonas */
-		foreach (item, root->child)
-			if (!strcmp(item->text, text))
-				return item;
-	}
+	if (!root) root = &browser->root;
 
 	item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!item) return NULL;
@@ -74,31 +69,8 @@ do_add_listbox_item(struct listbox_item *root, unsigned char *text, void *data,
 
 	/* TODO: Sort? */
 	add_to_list(root->child, item);
-
-	return item;
-}
-
-struct listbox_item *
-add_listbox_folder(struct hierbox_browser *browser, struct listbox_item *root, unsigned char *text, void *data)
-{
-	struct listbox_item *item;
-
-	if (!root) root = &browser->root;
-
-	item = do_add_listbox_item(root, text, data, BI_FOLDER);
 	update_hierbox_browser(browser);
-	return item;
-}
 
-struct listbox_item *
-add_listbox_leaf(struct hierbox_browser *browser,  struct listbox_item *root, unsigned char *text, void *data)
-{
-	struct listbox_item *item;
-
-	if (!root) root = &browser->root;
-
-	item = do_add_listbox_item(root, text, data, BI_LEAF);
-	update_hierbox_browser(browser);
 	return item;
 }
 

@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.17 2003/08/31 19:14:48 jonas Exp $ */
+/* $Id: color.c,v 1.18 2003/09/01 19:38:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -217,6 +217,9 @@ encode_color(struct color_pair *pair, enum screen_char_attr attr)
 
 		if (attr & SCREEN_ATTR_BOLD) {
 			bold = SCREEN_ATTR_BOLD;
+			/* This will be undoed few lines below but it is needed
+			 * for the @fg_color lookup. */
+			fg |= 0x08;
 		}
 	}
 

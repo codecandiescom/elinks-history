@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.412 2004/01/21 16:05:59 jonas Exp $ */
+/* $Id: renderer.c,v 1.413 2004/01/22 18:09:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,7 +50,6 @@ enum link_state {
 };
 
 struct link_state_info {
-	enum link_state state;
 	unsigned char *link;
 	unsigned char *target;
 	unsigned char *image;
@@ -265,8 +264,6 @@ draw_frame_vchars(struct part *part, int x, int y, int yl, unsigned char data)
 	}
 }
 
-static inline void update_link_state(void);
-
 static inline struct screen_char *
 get_format_screen_char(struct part *part, enum link_state link_state)
 {
@@ -310,22 +307,15 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
 		set_term_color(&schar_cache, &colors, color_flags, color_mode);
 
-		/* We need to update the current link state because <sub> and
-		 * <sup> tags will output to the canvas using an inner
-		 * put_chars() call which results in their process_link() call
-		 * will ``update'' the link_state. */
-
 		if (global_doc_opts->display_subs) {
 			if (format.attr & AT_SUBSCRIPT) {
 				if (!did_subscript) {
 					did_subscript = 1;
 					put_chars(part, "[", 1);
-					update_link_state();
 				}
 			} else {
 				if (did_subscript) {
 					put_chars(part, "]", 1);
-					update_link_state();
 					did_subscript = 0;
 				}
 			}
@@ -338,7 +328,6 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 				if (!super) {
 					super = 1;
 					put_chars(part, "^", 1);
-					update_link_state();
 				}
 			} else {
 				if (super) {
@@ -976,8 +965,8 @@ process_link(struct part *part, enum link_state link_state,
 	}
 }
 
-static inline void
-update_link_state(void)
+static inline enum link_state
+get_link_state(void)
 {
 	enum link_state state;
 
@@ -990,15 +979,15 @@ update_link_state(void)
 		   && !xstrcmp(format.image, link_state_info.image)
 		   && format.form == link_state_info.form) {
 
-		link_state_info.state = LINK_STATE_SAME;
-		return;
+		return LINK_STATE_SAME;
 
 	} else {
 		state = LINK_STATE_NEW;
 	}
 
 	done_link_state_info();
-	link_state_info.state = state;
+
+	return state;
 }
 
 #define is_drawing_subs_or_sups() \
@@ -1008,6 +997,9 @@ update_link_state(void)
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
+	enum link_state link_state;
+	int update_after_subscript = did_subscript;
+
 	assert(part);
 	if_assert_failed return;
 
@@ -1036,17 +1028,25 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	int_lower_bound(&part->height, part->cy + 1);
 
-	update_link_state();
+	link_state = get_link_state();
 
-	if (global_doc_opts->num_links_display
-	    && link_state_info.state == LINK_STATE_NEW) {
+	if (global_doc_opts->num_links_display && link_state == LINK_STATE_NEW) {
 		put_link_number(part);
 	}
 
-	set_hline(part, chars, charslen, link_state_info.state);
+	set_hline(part, chars, charslen, link_state);
 
-	if (link_state_info.state != LINK_STATE_NONE) {
-		process_link(part, link_state_info.state, chars, charslen);
+	if (link_state != LINK_STATE_NONE) {
+		/* We need to update the current @link_state because <sub> and
+		 * <sup> tags will output to the canvas using an inner
+		 * put_chars() call which results in their process_link() call
+		 * will ``update'' the @link_state. */
+		if (link_state == LINK_STATE_NEW
+		    && (is_drawing_subs_or_sups() || update_after_subscript != did_subscript)) {
+			link_state = get_link_state();
+		}
+
+		process_link(part, link_state, chars, charslen);
 	}
 
 	if (nowrap && part->cx + charslen > overlap(par_format))

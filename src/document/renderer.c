@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.94 2004/09/27 09:32:12 pasky Exp $ */
+/* $Id: renderer.c,v 1.95 2004/09/27 09:35:43 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -91,6 +91,14 @@ add_snippets(struct ecmascript_interpreter *interpreter,
 	     doc_current = doc_current->next) {
 		add_to_string_list(queued_snippets, doc_current->string.source,
 		                   doc_current->string.length);
+	}
+}
+
+static void
+process_snippets(struct ecmascript_interpreter *interpreter,
+                 struct list_head *snippets, struct string_list_item **current)
+{
+	for (; *current != snippets; (*current) = (*current)->next) {
 		/* TODO: Support for external references. --pasky */
 		ecmascript_eval(interpreter, &doc_current->string);
 	}
@@ -212,13 +220,15 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 	}
 #ifdef CONFIG_ECMASCRIPT
 	assert(vs->ecmascript);
-	/* Passing of the onload_snippets pointers gives add_snippets()
+	/* Passing of the onload_snippets pointers gives *_snippets()
 	 * some feeling of universality, shall we ever get any other snippets
 	 * (?). */
 	add_snippets(vs->ecmascript,
 	             &document->onload_snippets,
 	             &vs->ecmascript->onload_snippets,
 	             &vs->ecmascript->current_onload_snippet);
+	process_snippets(vs->ecmascript, &vs->ecmascript->onload_snippets,
+	                 &vs->ecmascript->current_onload_snippet);
 #endif
 
 	/* If we do not care about the height and width of the document

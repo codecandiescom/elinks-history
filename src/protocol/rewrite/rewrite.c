@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.6 2003/12/07 02:45:30 jonas Exp $ */
+/* $Id: rewrite.c,v 1.7 2003/12/08 23:08:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -215,12 +215,14 @@ goto_url_hook(va_list ap, void *data)
 		uu = get_prefix(URI_REWRITE_DUMB_TREE, *url);
 
 	if (!uu && get_smart_enable()) {
-		unsigned char *argstart = strchr(*url, ' ');
+		unsigned char *argstart = *url + strcspn(*url, " :");
 
-		if (argstart) {
+		if (*argstart) {
+			unsigned char bucket = *argstart;
+
 			*argstart = '\0';
 			uu = get_prefix(URI_REWRITE_SMART_TREE, *url);
-			*argstart = ' ';
+			*argstart = bucket;
 			arg = argstart + 1;
 		}
 	}

@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.1 2004/08/14 03:32:32 jonas Exp $ */
+/* $Id: data.c,v 1.2 2004/08/22 14:31:06 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -75,7 +75,7 @@ parse_data_uri_type(struct connection *conn, int *base64)
 {
 	struct uri *uri = conn->uri;
 	unsigned char *end = memchr(uri->data, ',', uri->datalen);
-	unsigned char *type;
+	unsigned char *type = NULL;
 	int typelen = 0;
 
 	if (end) {
@@ -94,7 +94,7 @@ parse_data_uri_type(struct connection *conn, int *base64)
 		typelen	= strlen(type);
 	}
 
-	if (!init_data_protocol_header(conn->cached, type, typelen))
+	if (!type || !init_data_protocol_header(conn->cached, type, typelen))
 		return NULL;
 
 	/* Return char after ',' or complete data part */

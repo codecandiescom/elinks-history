@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.15 2003/08/02 17:50:10 jonas Exp $ */
+/* $Id: formhist.c,v 1.16 2003/08/02 18:10:32 jonas Exp $ */
 
 /* TODO: Remember multiple login for the same form
  * TODO: Password manager GUI (here?) */
@@ -206,15 +206,12 @@ form_already_saved(unsigned char *url, struct list_head *submit)
  * returns 1 on success
  *         0 on failure */
 static int
-remember_form(struct form_history_item *fmem_data)
+add_form_history_item(struct form_history_item *item)
 {
-	struct form_history_item *form, *tmpform;
+	struct form_history_item *tmpform;
 	struct submitted_value *sv;
 	struct secure_save_info *ssi;
 	unsigned char *file;
-
-	form = init_form_history_item(fmem_data->url);
-	if (!form) return 0;
 
 	file = straconcat(elinks_home, "formhist", NULL);
 	if (!file) goto fail;
@@ -224,31 +221,20 @@ remember_form(struct form_history_item *fmem_data)
 	if (!ssi) goto fail;
 
 	/* We're going to save just <INPUT TYPE="text"> and
-	 * <INPUT TYPE="password"> */
-	foreach (sv, fmem_data->submit)
-		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
-			struct submitted_value *sv2;
+	 * <INPUT TYPE="password"> so purge anything else from @item->submit. */
+	foreach (sv, item->submit) {
+		if (sv->type != FC_TEXT || sv->type != FC_PASSWORD) {
+			struct submitted_value *garbage = sv;
 
-			sv2 = mem_alloc(sizeof(struct submitted_value));
-			if (!sv2) goto fail;
-
-			sv2->value = stracpy(sv->value);
-			if (!sv2->value) {
-				mem_free(sv2);
-				goto fail;
-			}
-
-			sv2->name = stracpy(sv->name);
-			if (!sv2->name) {
-				mem_free(sv2->name);
-				mem_free(sv2);
-				goto fail;
-			}
-
-			add_to_list_bottom(form->submit, sv2);
+			sv = sv->prev;
+			del_from_list(garbage);
+			if (garbage->name) mem_free(garbage->name);
+			if (garbage->value) mem_free(garbage->value);
+			mem_free(garbage);
 		}
+	}
 
-	add_to_list(form_history, form);
+	add_to_list(form_history, item);
 
 	/* Write the list to formhist file */
 	foreach (tmpform, form_history) {
@@ -271,12 +257,10 @@ remember_form(struct form_history_item *fmem_data)
 	}
 
 	secure_close(ssi);
-
-	done_form_history_item(fmem_data);
 	return 1;
 
 fail:
-	done_form_history_item(form);
+	done_form_history_item(item);
 	return 0;
 }
 
@@ -316,7 +300,7 @@ memorize_form(struct session *ses, struct list_head *submit,
 		   "obscured (i.e. unencrypted) in a file on your disk.\n\n"
 		   "If you are using a valuable password answer NO."),
 		fm_data, 2,
-		N_("Yes"), remember_form, B_ENTER,
+		N_("Yes"), add_form_history_item, B_ENTER,
 		N_("No"), done_form_history_item, NULL);
 
 	return sb;

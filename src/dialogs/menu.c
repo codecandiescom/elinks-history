@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.192 2003/11/18 20:54:17 pasky Exp $ */
+/* $Id: menu.c,v 1.193 2003/11/19 01:39:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -330,7 +330,9 @@ static struct menu_item file_menu12[] = {
 	INIT_MENU_ITEM(N_("Bookmark~s"), "s", menu_bookmark_manager, NULL, 0),
 #endif
 	INIT_MENU_ITEM(N_("~Cache"), "C", menu_cache_manager, NULL, 0),
+#ifdef COOKIES
 	INIT_MENU_ITEM(N_("Coo~kies"), "K", menu_cookie_manager, NULL, 0),
+#endif
 };
 
 static struct menu_item file_menu21[] = {
@@ -342,7 +344,7 @@ static struct menu_item file_menu21[] = {
 
 static struct menu_item file_menu22[] = {
 	BAR_MENU_ITEM,
-	INIT_MENU_ITEM(N_("~Kill background connections"), "", menu_kill_background_connections, NULL, 0),
+	INIT_MENU_ITEM(N_("K~ill background connections"), "", menu_kill_background_connections, NULL, 0),
 	INIT_MENU_ITEM(N_("~Flush all caches"), "", flush_caches, NULL, 0),
 	INIT_MENU_ITEM(N_("Resource i~nfo"), "", res_inf, NULL, 0),
 #ifdef LEAK_DEBUG

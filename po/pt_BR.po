@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-12 22:33+0200\n"
+"POT-Creation-Date: 2003-10-15 14:13+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Andre Valente <a.valente@netcabo.pt>\n"
 "Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
@@ -1451,8 +1451,9 @@ msgid "Size"
 msgstr "Tamanho"
 
 #: src/config/options.c:1269
-msgid "Memory cache size (in kilobytes)."
-msgstr ""
+#, fuzzy
+msgid "Memory cache size (in bytes)."
+msgstr "Cache de memória"
 
 #: src/config/options.c:1273
 #, fuzzy
@@ -1994,7 +1995,7 @@ msgstr ""
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/config/options.c:1524 src/config/options.c:1762
+#: src/config/options.c:1524 src/config/options.c:1762 src/util/version.c:101
 msgid "Mailcap"
 msgstr ""
 
@@ -2045,7 +2046,7 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 
-#: src/config/options.c:1557
+#: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
 msgstr ""
 
@@ -4596,12 +4597,12 @@ msgstr "Gerenciador de Histórico"
 msgid "LED indicators"
 msgstr ""
 
-#: src/util/version.c:101
+#: src/util/version.c:107
 #, fuzzy
 msgid "Forms memory"
 msgstr "Sem memória"
 
-#: src/util/version.c:104
+#: src/util/version.c:110
 #, fuzzy
 msgid "No mouse"
 msgstr "documentos"

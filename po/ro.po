@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-12 22:33+0200\n"
+"POT-Creation-Date: 2003-10-15 14:13+0200\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Ionel Mugurel Ciobica <I.M.Ciobica@TUe.nl>\n"
 "Language-Team: Romanian <translation-team-ro@lists.sourceforge.net>\n"
@@ -1447,8 +1447,9 @@ msgid "Size"
 msgstr "Dimensiune"
 
 #: src/config/options.c:1269
-msgid "Memory cache size (in kilobytes)."
-msgstr ""
+#, fuzzy
+msgid "Memory cache size (in bytes)."
+msgstr "Memorie cache"
 
 #: src/config/options.c:1273
 #, fuzzy
@@ -1987,7 +1988,7 @@ msgstr ""
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/config/options.c:1524 src/config/options.c:1762
+#: src/config/options.c:1524 src/config/options.c:1762 src/util/version.c:101
 msgid "Mailcap"
 msgstr ""
 
@@ -2038,7 +2039,7 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 
-#: src/config/options.c:1557
+#: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
 msgstr ""
 
@@ -3571,10 +3572,7 @@ msgstr ""
 "(C) 1999 - 2002 Mikulas Patocka\n"
 "(C) 2001 - 2003 Petr Baudis\n"
 "\n"
-"Acest program este liber (free), poate fi publicat, modificat ºi difuzat "
-"numai în termenii licenþei publice generale de la GNU de la Fundaþia de "
-"Programe cu Liber Acces, sau de la versiunea a doua a GPL, sau (alegerea "
-"este a dumneavoastrã) dupã toate versiunile anterioare."
+"Acest program este liber (free), poate fi publicat, modificat ºi difuzat numai în termenii licenþei publice generale de la GNU de la Fundaþia de Programe cu Liber Acces, sau de la versiunea a doua a GPL, sau (alegerea este a dumneavoastrã) dupã toate versiunile anterioare."
 
 #: src/dialogs/info.c:108
 msgid "Resources"
@@ -4459,9 +4457,7 @@ msgid ""
 "Welcome to ELinks!\n"
 "\n"
 "Press ESC for menu. Documentation is available in Help menu."
-msgstr ""
-"Apãsaþi ESC pentru meniu. Selectaþi Ajutor->Manual în meniu pentru manualul "
-"utlizatorului."
+msgstr "Apãsaþi ESC pentru meniu. Selectaþi Ajutor->Manual în meniu pentru manualul utlizatorului."
 
 #: src/sched/session.c:1178
 msgid ""
@@ -4579,12 +4575,12 @@ msgstr "Fãrã istoric"
 msgid "LED indicators"
 msgstr ""
 
-#: src/util/version.c:101
+#: src/util/version.c:107
 #, fuzzy
 msgid "Forms memory"
 msgstr "Memorie insuficientã"
 
-#: src/util/version.c:104
+#: src/util/version.c:110
 #, fuzzy
 msgid "No mouse"
 msgstr "Documente"

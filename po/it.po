@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"POT-Creation-Date: 2003-10-12 22:33+0200\n"
+"POT-Creation-Date: 2003-10-15 14:13+0200\n"
 "PO-Revision-Date: 2003-07-21 00:32+0200\n"
 "Last-Translator: Fabio Bonelli <fabiobonelli@libero.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -1556,7 +1556,8 @@ msgid "Size"
 msgstr "Dimensione"
 
 #: src/config/options.c:1269
-msgid "Memory cache size (in kilobytes)."
+#, fuzzy
+msgid "Memory cache size (in bytes)."
 msgstr "Dimensione memoria cache (in kilobyte)."
 
 #: src/config/options.c:1273
@@ -2131,7 +2132,7 @@ msgstr ""
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/config/options.c:1524 src/config/options.c:1762
+#: src/config/options.c:1524 src/config/options.c:1762 src/util/version.c:101
 msgid "Mailcap"
 msgstr "Mailcap"
 
@@ -2194,7 +2195,7 @@ msgstr ""
 "mailcap. Questo significa che anche le voci con wildcard (come image/*)\n"
 "saranno controllate prima di decidere il gestore."
 
-#: src/config/options.c:1557
+#: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
 msgstr "File tipo mime"
 
@@ -4919,11 +4920,11 @@ msgstr "Storico"
 msgid "LED indicators"
 msgstr "Indicatori LED"
 
-#: src/util/version.c:101
+#: src/util/version.c:107
 msgid "Forms memory"
 msgstr "Storico Form"
 
-#: src/util/version.c:104
+#: src/util/version.c:110
 msgid "No mouse"
 msgstr "Senza mouse"
 

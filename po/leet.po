@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"POT-Creation-Date: 2003-10-12 22:33+0200\n"
+"POT-Creation-Date: 2003-10-15 14:13+0200\n"
 "PO-Revision-Date: 2003-06-20 16:45+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
@@ -1517,7 +1517,8 @@ msgid "Size"
 msgstr "Size"
 
 #: src/config/options.c:1269
-msgid "Memory cache size (in kilobytes)."
+#, fuzzy
+msgid "Memory cache size (in bytes)."
 msgstr "/\\/\\3|V|0R`/ cache size (in kilobytes)."
 
 #: src/config/options.c:1273
@@ -2080,7 +2081,7 @@ msgstr ""
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/config/options.c:1524 src/config/options.c:1762
+#: src/config/options.c:1524 src/config/options.c:1762 src/util/version.c:101
 msgid "Mailcap"
 msgstr "Mailcap"
 
@@ -2142,7 +2143,7 @@ msgstr ""
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 
-#: src/config/options.c:1557
+#: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
 msgstr "Mime7`/P3s f1|3s"
 
@@ -4846,12 +4847,12 @@ msgstr "Global |-|1570r`/"
 msgid "LED indicators"
 msgstr ""
 
-#: src/util/version.c:101
+#: src/util/version.c:107
 #, fuzzy
 msgid "Forms memory"
 msgstr "Out of /\\/\\3|V|0R`/"
 
-#: src/util/version.c:104
+#: src/util/version.c:110
 #, fuzzy
 msgid "No mouse"
 msgstr "|)0(U|V|3N7"

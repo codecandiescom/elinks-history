@@ -14,7 +14,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: hu\n"
-"POT-Creation-Date: 2003-10-12 22:33+0200\n"
+"POT-Creation-Date: 2003-10-15 14:13+0200\n"
 "PO-Revision-Date: 2003-10-14 21:57+0200\n"
 "Last-Translator: \n"
 "Language-Team:  <@li.org>\n"
@@ -424,7 +424,8 @@ msgstr ""
 #: src/config/dialogs.c:730
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr "Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
+msgstr ""
+"Töröljük ezt a billentyûparancsot: \"%s\" (esemény \"%s\", kiosztás \"%s\")?"
 
 #: src/config/dialogs.c:762
 msgid "Keybinding manager"
@@ -553,7 +554,8 @@ msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása az aktuális URL-el"
 
 #: src/config/kbdbind.c:393
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
-msgstr "Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
+msgstr ""
+"Az \"URL-re ugrás\" dialógusablak megnyitása a kiválasztott link URL-jével"
 
 #: src/config/kbdbind.c:394
 msgid "Go to the homepage"
@@ -1031,7 +1033,8 @@ msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál"
 
 #: src/config/options.c:1007
 msgid "Timeout for non-restartable connections (in seconds)."
-msgstr "Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
+msgstr ""
+"Idötúllépési érték nem újraindítható kapcsolattípusoknál (másodpercben)"
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1013 src/util/version.c:86
@@ -1279,7 +1282,8 @@ msgstr "Alkönyvtárak kiemelése"
 
 #: src/config/options.c:1138
 msgid "Highlight links to directories in FTP and local directory listing."
-msgstr "Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
+msgstr ""
+"Emelje ki a könyvtárakat az FTP, és a helyi könyvtárak böngészés esetén."
 
 #: src/config/options.c:1140
 msgid "Number links"
@@ -1321,7 +1325,8 @@ msgstr "Linkek kiválasztása"
 msgid ""
 "When pressing 'down' on the last link, jump at the first one, and\n"
 "vice versa."
-msgstr "Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
+msgstr ""
+"Ha az utolsó linken lefelé nyilat nyomsz, ugorjon az elsõre, és fordítva."
 
 #: src/config/options.c:1164
 msgid "Searching"
@@ -1458,7 +1463,8 @@ msgstr ""
 
 #: src/config/options.c:1250
 msgid "Ignore cache-control info from server"
-msgstr "A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
+msgstr ""
+"A szervertõl kapott gyorsítótárvezérlési utasítások figyelmen kívül hagyása"
 
 #: src/config/options.c:1252
 msgid ""
@@ -1495,7 +1501,8 @@ msgid "Size"
 msgstr "Méret"
 
 #: src/config/options.c:1269
-msgid "Memory cache size (in kilobytes)."
+#, fuzzy
+msgid "Memory cache size (in bytes)."
 msgstr "Gyorsítómemória mérete (kilobyte-ban)"
 
 #: src/config/options.c:1273
@@ -2067,7 +2074,7 @@ msgstr ""
 #. Start of mailcap compatibility aliases:
 #. * Added: 2003-05-07, 0.5pre0.CVS.
 #. * Estimated due time: ?
-#: src/config/options.c:1524 src/config/options.c:1762
+#: src/config/options.c:1524 src/config/options.c:1762 src/util/version.c:101
 msgid "Mailcap"
 msgstr "Mailcap"
 
@@ -2118,7 +2125,7 @@ msgid ""
 "also be checked before deciding the handler."
 msgstr ""
 
-#: src/config/options.c:1557
+#: src/config/options.c:1557 src/util/version.c:104
 msgid "Mimetypes files"
 msgstr ""
 
@@ -3751,7 +3758,8 @@ msgstr "Kilépés"
 
 #: src/dialogs/menu.c:143
 msgid "Do you really want to exit ELinks (and terminate all downloads)?"
-msgstr "Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
+msgstr ""
+"Biztos, hogy kilépsz a Links-böl, (és megszakítod az aktiv letöltéseket)?"
 
 #: src/dialogs/menu.c:145
 msgid "Do you really want to exit ELinks?"
@@ -4159,7 +4167,8 @@ msgstr ""
 
 #: src/lowlevel/home.c:121
 #, c-format
-msgid "Commandline options -confdir set to %s, but could not create directory %s."
+msgid ""
+"Commandline options -confdir set to %s, but could not create directory %s."
 msgstr ""
 
 #: src/lowlevel/home.c:126
@@ -4724,11 +4733,11 @@ msgstr "Látogatott lapok"
 msgid "LED indicators"
 msgstr "LED állapotjelzõk"
 
-#: src/util/version.c:101
+#: src/util/version.c:107
 msgid "Forms memory"
 msgstr "Ûrlap memória"
 
-#: src/util/version.c:104
+#: src/util/version.c:110
 msgid "No mouse"
 msgstr "Nincs egér"
 
@@ -5022,4 +5031,3 @@ msgstr "Hiba a fájl irása közben"
 #, fuzzy
 #~ msgid "Cache redirect information"
 #~ msgstr "Várakozás az átirányítás elfogadására"
-

@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.12 2003/10/27 22:51:12 pasky Exp $ */
+/* $Id: os2.c,v 1.13 2003/10/28 00:17:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,8 @@
 
 #include "elinks.h"
 
+#include "osdep/os2/os2.h"
+#include "osdep/osdep.h"
 #include "terminal/terminal.h"
 
 

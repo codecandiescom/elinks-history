@@ -1,13 +1,13 @@
-/* $Id: osdep.h,v 1.35 2003/10/27 23:53:38 pasky Exp $ */
+/* $Id: osdep.h,v 1.36 2003/10/28 00:17:48 pasky Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
 
 #include "osdep/beos/beos.h"
-#include "osdep/os2.h"
-#include "osdep/riscos.h"
-#include "osdep/unix.h"
-#include "osdep/win32.h"
+#include "osdep/os2/os2.h"
+#include "osdep/riscos/riscos.h"
+#include "osdep/unix/unix.h"
+#include "osdep/win32/win32.h"
 
 int get_system_env(void);
 int get_e(unsigned char *env);

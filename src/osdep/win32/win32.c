@@ -1,5 +1,5 @@
 /* Win32 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: win32.c,v 1.11 2003/10/27 02:44:45 pasky Exp $ */
+/* $Id: win32.c,v 1.12 2003/10/28 00:17:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,8 @@
 
 #include "elinks.h"
 
+#include "osdep/win32/win32.h"
+#include "osdep/osdep.h"
 #include "terminal/terminal.h"
 
 

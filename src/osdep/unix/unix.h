@@ -1,7 +1,7 @@
-/* $Id: unix.h,v 1.4 2003/10/27 23:40:24 pasky Exp $ */
+/* $Id: unix.h,v 1.5 2003/10/28 00:17:50 pasky Exp $ */
 
-#ifndef EL__OSDEP_UNIX_H
-#define EL__OSDEP_UNIX_H
+#ifndef EL__OSDEP_UNIX_UNIX_H
+#define EL__OSDEP_UNIX_UNIX_H
 
 #ifdef UNIX
 

@@ -4456,9 +4456,9 @@ struct translation translation_french [] = {
   {T_NO_KEEPALIVE_AFTER_POST_REQUEST, "Ne pas maintenir la connexion après une requête POST ?"},
   {T_PASSWORD_FOR_ANONYMOUS_LOGIN, "Mot de passe pour les connexions anonymes"},
   {T_MANUAL, "Manuel"},
-  {T_MAILTO_PROG, "Programme E-Mail (% = adresse)"},
-  {T_TELNET_PROG, "Programme Telnet (% = hôte port)", },
-  {T_TN3270_PROG, "Programme TN3270 (% = hôte port)"},
+  {T_MAILTO_PROG, "Programme E-Mail (%u = adresse)"},
+  {T_TELNET_PROG, "Programme Telnet (%h = hôte %p = port)", },
+  {T_TN3270_PROG, "Programme TN3270 (%h = hôte %p = port)"},
   {T_MAIL_AND_TELNET_PROGRAMS, "Clients e-mail/telnet"},
   {T_NO_PROGRAM, "Aucun programme"},
   {T_NO_PROGRAM_SPECIFIED_FOR, "Aucun programme n'est défini pour "},
@@ -4560,8 +4560,8 @@ struct translation translation_french [] = {
   {T_SSL_CIPHER, "Chiffrement SSL"},
   {T_ENCODING, "Encodage"},
   {T_BOOKMARK_USED, "Désolé, mais ce signet est déjà utilisé par quelque chose."},
-  {T_ELINKS_HOME, NULL},
-  {T_HK_ELINKS_HOME, NULL},
+  {T_ELINKS_HOME, "Site web ELinks"},
+  {T_HK_ELINKS_HOME, "S"},
   {0, NULL}
 };
 

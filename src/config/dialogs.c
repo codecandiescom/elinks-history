@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.190 2004/07/14 15:12:50 jonas Exp $ */
+/* $Id: dialogs.c,v 1.191 2004/07/15 07:13:04 miciah Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -285,6 +285,7 @@ static struct listbox_ops options_listbox_ops = {
 	match_option,
 	can_delete_option,
 	delete_option_item,
+	NULL,
 	NULL,
 };
 
@@ -751,6 +752,7 @@ static struct listbox_ops keybinding_listbox_ops = {
 	match_keybinding,
 	can_delete_keybinding,
 	delete_keybinding_item,
+	NULL,
 	NULL,
 };
 

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.202 2004/06/25 10:04:43 zas Exp $ */
+/* $Id: tables.c,v 1.203 2004/06/25 10:06:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -917,9 +917,13 @@ again:
 
 	if (limits) {
 		for (i = 0; i < n; i++) {
+			int delta;
+
 			values[i] += d + (i < r);
-			if (values[i] > limits[i]) {
-				w += values[i] - limits[i];
+
+			delta = values[i] - limits[i];
+			if (delta > 0) {
+				w += delta;
 				values[i] = limits[i];
 			}
 		}

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.23 2004/01/23 20:08:32 jonas Exp $ */
+/* $Id: css.c,v 1.24 2004/01/23 20:26:13 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,6 +86,11 @@ import_css_end(struct download *download, void *css_import)
 	if (download->state >= 0 && download->state < S_TRANS)
 		return;
 
+	if (!cache_entry) {
+		mem_free(import);
+		return;
+	}
+
 	defrag_entry(cache_entry);
 	fragment= cache_entry->frag.next;
 	if (fragment != (void *) &cache_entry->frag
@@ -136,11 +141,10 @@ import_default_css(void)
 	unsigned char *url = get_opt_str("document.css.stylesheet");
 	unsigned char *home_url = NULL;
 
-	if (!*url) {
-		if (!list_empty(default_stylesheet.selectors))
-			done_css_stylesheet(&default_stylesheet);
-		return;
-	}
+	if (!list_empty(default_stylesheet.selectors))
+		done_css_stylesheet(&default_stylesheet);
+
+	if (!*url) return;
 
 	if (*url != '/' && elinks_home) {
 		home_url = straconcat(elinks_home, url, NULL);

@@ -1,3 +1,9 @@
+Fri Dec 24 17:20:33 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	0.11.CVS 
+
 Fri Dec 24 17:01:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* configure.in:
@@ -9654,7 +9660,7 @@ Sun Sep 19 17:38:19 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/css/README:
 
-	$Id: ChangeLog,v 1.939 2004/12/23 23:11:46 jonas Exp $ tag.  
+	$Id$ tag.  
 
 Sun Sep 19 17:35:23 2004  Petr Baudis <pasky@ucw.cz>:
 

@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.207 2004/02/11 09:53:31 zas Exp $ */
+/* $Id: search.c,v 1.208 2004/02/12 17:11:28 jonas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -1023,12 +1023,8 @@ fixup_typeahead_match(struct session *ses, struct document_view *doc_view)
 	struct link *link = &doc_view->document->links[current_link];
 
 	doc_view->height -= 1;
-	if (!in_viewy(doc_view, link)) {
-		scroll(ses, doc_view, 1);
-		/* Scrolling might update the current link but we don't want
-		 * that so reset it to the matched one. */
-		doc_view->vs->current_link = current_link;
-	}
+	set_pos_x(doc_view, link);
+	set_pos_y(doc_view, link);
 	doc_view->height += 1;
 }
 

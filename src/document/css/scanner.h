@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.49 2004/01/22 21:06:57 pasky Exp $ */
+/* $Id: scanner.h,v 1.50 2004/01/22 23:48:48 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_SCANNER_H
 #define EL__DOCUMENT_CSS_SCANNER_H
@@ -69,9 +69,8 @@ enum css_token_type {
 	CSS_TOKEN_GARBAGE,
 
 	/* Token type used internally when scanning to signal that the token
-	 * should not be recorded in the scanners token table. Put here so we
-	 * can more easily check <= CSS_TOKEN_NONE. */
-	CSS_TOKEN_SKIP = -1,
+	 * should not be recorded in the scanners token table. */
+	CSS_TOKEN_SKIP,
 
 	/* Another internal token type used both to mark unused tokens in the
 	 * scanner table as invalid or when scanning to signal that the

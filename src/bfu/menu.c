@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.247 2004/07/19 16:25:04 zas Exp $ */
+/* $Id: menu.c,v 1.248 2004/07/19 16:43:00 zas Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -248,10 +248,28 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	int_bounds(&menu->box.y, 0, height - my);
 }
 
+static int
+search_selectable(struct menu *menu, int pos, int dir)
+{
+	assert(pos >= 0 && pos < menu->size && (dir == 1 || dir == -1));
+	if_assert_failed return -1;
+
+	while (!mi_is_selectable(menu->items[pos])) {
+		if (dir > 0 && pos == menu->size - 1)
+			return -1;
+		else if (dir < 0 && pos == 0)
+			return -1;
+
+		pos += dir;
+	}
+
+	return pos;
+}
+
 static void
 scroll_menu(struct menu *menu, int steps, int wrap)
 {
-	int height, scr_i;
+	int height, scr_i, pos;
 	int s = steps ? steps/abs(steps) : 1; /* Selectable item search direction. */
 
 	if (menu->size <= 0) {
@@ -293,31 +311,19 @@ scroll_menu(struct menu *menu, int steps, int wrap)
 	 * @s = -1: descending search. */
 
 	/* Search first selectable item in one direction. */
-	while (!mi_is_selectable(menu->items[menu->selected])) {
-		if (s > 0 && menu->selected == menu->size - 1)
-			break;
-		else if (s < 0 && menu->selected == 0)
-			break;
-
-		menu->selected += s;
-	}
-
-	/* If not found, invert the search direction and try again. */
-	s = -s;
-	while (!mi_is_selectable(menu->items[menu->selected])) {
-		if (s > 0 && menu->selected == menu->size - 1)
-			break;
-		else if (s < 0 && menu->selected == 0)
-			break;
-
-		menu->selected += s;
+	pos = search_selectable(menu, menu->selected, s);
+	if (pos == -1) {
+		/* If not found, invert the search direction and try again. */
+		pos = search_selectable(menu, menu->selected, -s);
 	}
 
 	/* No selectable item found, just return. */
-	if (!mi_is_selectable(menu->items[menu->selected])) {
+	if (pos == -1) {
 		menu->selected = -1;
 		menu->first = 0;
 	}
+
+	menu->selected = pos;
 
 	height = int_max(1, menu->box.height - MENU_BORDER_SIZE * 2);
 

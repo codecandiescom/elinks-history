@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.27 2002/10/13 19:01:16 zas Exp $ */
+/* $Id: file.c,v 1.28 2002/11/19 22:06:19 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -199,12 +199,12 @@ end:
 void
 stat_size(unsigned char **p, int *l, struct stat *stp)
 {
-	unsigned char size[64];
-
 	if (!stp) {
 		add_to_str(p, l, "         ");
 	} else {
-		sprintf(size, "%8ld ", (long)stp->st_size);
+		unsigned char size[32];
+
+		snprintf(size, sizeof(size), "%8ld ", (long)stp->st_size);
 		add_to_str(p, l, size);
 	}
 }
@@ -235,13 +235,13 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 		fmt = "%b %e %H:%M";
 
 #ifdef HAVE_STRFTIME
-	wr = strftime(str, 13, fmt, when_local);
+	wr = strftime(str, sizeof(str), fmt, when_local);
 #else
 	wr = 0;
 #endif
 
-	while (wr < 12) str[wr++] = ' ';
-	str[12] = '\0';
+	while (wr < sizeof(str) - 1) str[wr++] = ' ';
+	str[sizeof(str) - 1] = '\0';
 	add_to_str(p, l, str);
 	add_chr_to_str(p, l, ' ');
 }

@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.29 2003/12/21 14:13:19 zas Exp $ */
+/* $Id: xbel.c,v 1.30 2003/12/27 12:44:13 jonas Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -405,7 +405,7 @@ xbeltree_to_bookmarks_list(struct tree_node *node,
 			tmp = add_bookmark(current_parent, 0,
 					   title ? title->text
 						 : (unsigned char *) gettext("No title"),
-					   "");
+					   NULL);
 
 			/* Out of memory */
 			if (!tmp) return 0;

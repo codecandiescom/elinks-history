@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.100 2003/12/19 12:03:37 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.101 2003/12/27 12:44:12 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -193,14 +193,14 @@ sanitize_url(unsigned char *url)
 }
 
 /* Adds a bookmark to the bookmark list. Place 0 means top, place 1 means
- * bottom. */
+ * bottom. NULL or "" @url means it is a bookmark folder. */
 struct bookmark *
 add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	     unsigned char *url)
 {
 	struct bookmark *bm;
 
-	if (!sanitize_url(url)) return NULL;
+	if (url && !sanitize_url(url)) return NULL;
 
 	bm = mem_calloc(1, sizeof(struct bookmark));
 	if (!bm) return NULL;
@@ -212,7 +212,7 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 	}
 	sanitize_title(bm->title);
 
-	bm->url = stracpy(url);
+	bm->url = stracpy(empty_string_or_(url));
 	if (!bm->url) {
 		mem_free(bm->title);
 		mem_free(bm);
@@ -253,6 +253,7 @@ add_bookmark(struct bookmark *root, int place, unsigned char *title,
 
 	bm->box_item->text = bm->title;
 	bm->box_item->udata = (void *) bm;
+	bm->box_item->type = (url && *url ? BI_LEAF : BI_FOLDER);
 
 	if (place) {
 		if (root)

@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.145 2003/12/21 14:39:03 pasky Exp $ */
+/* $Id: dialogs.c,v 1.146 2003/12/27 12:44:13 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -172,8 +172,7 @@ do_add_folder(struct dialog_data *dlg_data, unsigned char *name)
 			bm = box->sel->root->udata;
 		}
 	}
-	bm = add_bookmark(bm, 1, name, "");
-	bm->box_item->type = BI_FOLDER;
+	bm = add_bookmark(bm, 1, name, NULL);
 
 #ifdef BOOKMARKS_RESAVE
 	write_bookmarks();

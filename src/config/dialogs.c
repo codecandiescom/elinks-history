@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.147 2004/01/07 03:18:19 jonas Exp $ */
+/* $Id: dialogs.c,v 1.148 2004/01/08 14:56:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,16 +45,28 @@ write_config_error(struct terminal *term, struct memory_list *ml,
 		N_("OK"), NULL, B_ENTER | B_ESC);
 }
 
+static void
+toggle_success_msgbox(void *dummy)
+{
+	get_opt_bool("ui.success_msgbox") = !get_opt_bool("ui.success_msgbox");
+}
+
 void
 write_config_success(struct terminal *term, struct memory_list *ml,
 		     unsigned char *config_file)
 {
+	if (!get_opt_bool("ui.success_msgbox")) {
+		freeml(ml);
+		return;
+	}
+
 	msg_box(term, ml, MSGBOX_FREE_TEXT,
 		N_("Write config success"), AL_CENTER,
 		msg_text(term, N_("Options were saved successfully to config file %s."),
 			config_file),
-		NULL, 1,
-		N_("OK"), NULL, B_ENTER | B_ESC);
+		NULL, 2,
+		N_("OK"), NULL, B_ENTER | B_ESC,
+		N_("Do not show anymore"), toggle_success_msgbox, B_ENTER);
 }
 
 

@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.43 2003/12/27 12:50:06 pasky Exp $ */
+/* $Id: status.c,v 1.44 2003/12/27 17:18:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -108,22 +108,21 @@ get_stat_msg(struct download *stat, struct terminal *term,
 		add_to_string(&msg, "/s");
 	}
 
-	if (!wide) goto estimated;
+	if (wide) {
+		/* Do the following only if there is room */
 
-	/* Do the following only if there is room */
+		add_to_string(&msg, separator);
 
-	add_to_string(&msg, separator);
-
-	add_to_string(&msg, _(full ? (newlines ? N_("Elapsed time")
-					       : N_("elapsed time"))
-				   : N_("ETT"),
-			      term));
-	add_char_to_string(&msg, ' ');
-	add_time_to_string(&msg, stat->prg->elapsed);
+		add_to_string(&msg, _(full ? (newlines ? N_("Elapsed time")
+						       : N_("elapsed time"))
+					   : N_("ETT"),
+				   term));
+		add_char_to_string(&msg, ' ');
+		add_time_to_string(&msg, stat->prg->elapsed);
+	}
 
 	if (stat->prg->size >= 0 && stat->prg->loaded > 0) {
-		add_to_string(&msg, ", ");
-estimated:
+		if (wide) add_to_string(&msg, ", ");
 		add_to_string(&msg, _(full ? N_("estimated time")
 					   : N_("ETA"),
 				      term));

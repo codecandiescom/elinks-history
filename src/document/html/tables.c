@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.129 2003/11/18 19:59:10 kuser Exp $ */
+/* $Id: tables.c,v 1.130 2003/11/27 16:02:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -777,6 +777,22 @@ scan_done:
 	return t;
 }
 
+static inline struct part *
+format_cell(struct table *table, int column, int row,
+	    struct document *document, int x, int y, int width)
+{
+	struct table_cell *cell = CELL(table, column, row);
+
+	if (document) {
+		x += table->p->x;
+		y += table->p->y;
+	}
+
+	return format_html_part(cell->start, cell->end, cell->align,
+				table->cellpadding, width, document, x, y,
+				NULL, cell->link_num);
+}
+
 static inline void
 get_cell_width(unsigned char *start, unsigned char *end, int cellpadding, int w,
 	       int a, int *min, int *max, int n_link, int *n_links)
@@ -1296,9 +1312,7 @@ get_table_heights(struct table *t)
 				       get_vline_width(t, i + sp + 1) >= 0);
 			}
 
-			p = format_html_part(cell->start, cell->end,
-					     cell->align, t->cellpadding, xw, NULL,
-					     2, 2, NULL, cell->link_num);
+			p = format_cell(t, i, j, NULL, 2, 2, xw);
 			if (!p) return;
 
 			cell->height = p->height;
@@ -1403,21 +1417,14 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				format.bg = cell->bgcolor;
 				par_format.bgcolor = cell->bgcolor;
  				{
-					int tmpy = t->p->y + yp;
+					int tmpy = yp;
 
 					if (cell->valign == VALIGN_MIDDLE)
 						tmpy += (yw - cell->height)>>1;
 					else if (cell->valign == VALIGN_BOTTOM)
 						tmpy += (yw - cell->height);
 
-				   	p = format_html_part(cell->start,
-							     cell->end,
-							     cell->align,
-							     t->cellpadding, xw,
-							     document,
-							     t->p->x + xp,
-							     tmpy, NULL,
-							     cell->link_num);
+				   	p = format_cell(t, i, j, document, xp, tmpy, xw);
 				}
 
 				if (p) {

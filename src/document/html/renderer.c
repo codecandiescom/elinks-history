@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.427 2004/04/19 15:56:47 zas Exp $ */
+/* $Id: renderer.c,v 1.428 2004/04/20 17:02:49 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -508,7 +508,7 @@ del_chars(struct part *part, int x, int y)
 	move_links(part, x, y, -1, -1);
 }
 
-#define overlap(x) ((x).width - (x).rightmargin > 0 ? (x).width - (x).rightmargin : 0)
+#define overlap(x) int_max((x).width - (x).rightmargin, 0)
 
 static int inline
 split_line_at(struct part *part, register int width)

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.32 2003/07/09 01:51:27 jonas Exp $ */
+/* $Id: user.c,v 1.33 2003/07/09 14:31:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -123,6 +123,26 @@ prog_func(struct terminal *term, unsigned char *url, unsigned char *proto,
 	}
 }
 
+/* Stay silent about complete RFC 2368 support or do it yourself! ;-).
+ * --pasky */
+static unsigned char *
+get_subject_from_query(unsigned char *query)
+{
+	unsigned char *subject;
+	unsigned char *subject_end;
+
+	if (strncmp(query, "subject=", 8)) {
+		subject = strstr(query, "&subject=");
+		if (!subject) return NULL;
+		subject += 9;
+	} else {
+		subject = query + 8;
+	}
+
+	subject_end = strchr(subject, '&');
+	return memacpy(subject,
+		       subject_end ? subject_end - subject : strlen(subject));
+}
 
 static void
 user_func(struct session *ses, unsigned char *url)
@@ -155,31 +175,14 @@ user_func(struct session *ses, unsigned char *url)
 
 		/* Some mailto specific stuff follows... */
 		subj = strchr(urldata, '?');
+		if (subj) {
+			subj++;
+			subj = get_subject_from_query(subj);
+			if (subj) check_shell_security(&subj);
+		}
 	} else {
 		dir = NULL;
 		subj = NULL;
-	}
-
-	/* Some mailto specific stuff follows... */
-	/* Stay silent about complete RFC 2368 support or do it yourself! ;-).
-	 * --pasky */
-
-	if (subj && *subj) {
-		subj++;
-		if (strncmp(subj, "subject=", 8)) {
-			subj = strstr(subj, "&subject=");
-			if (subj) subj += 9;
-		} else {
-			subj += 8;
-		}
-
-		if (subj) {
-			unsigned char *subj_end = strchr(subj, '&');
-
-			if (subj_end) *subj_end = 0;
-			subj = stracpy(subj);
-			if (subj) check_shell_security(&subj);
-		}
 	}
 
 	prog_func(ses->tab->term, url, proto, host, port, dir, subj);

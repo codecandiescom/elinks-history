@@ -1,5 +1,5 @@
 /* Secure file saving handling */
-/* $Id: secsave.c,v 1.8 2002/05/17 15:42:00 pasky Exp $ */
+/* $Id: secsave.c,v 1.9 2002/05/17 20:08:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,10 +92,26 @@ secure_open(unsigned char *file_name, mode_t mask)
 			/* Not a regular file, secure_save is disabled. */
 			ssi->secure_save = 0;
 		} else {
+#ifdef HAVE_ACCESS
 			if (access(ssi->file_name, R_OK | W_OK) < 0) {
 				ssi->err = errno;
 				goto free_file_name;
 			}
+#else
+			FILE *f1, *f2;
+
+			/* I hope this works :). --pasky */
+			
+			f1 = fopen(ssi->file_name, "r");
+			f2 = fopen(ssi->file_name, "w");
+			if (f1) fclose(f1);
+			if (f2) fclose(f2);
+
+			if (!f1 || !f2) {
+				ssi->err = errno;
+				goto free_file_name;
+			}
+#endif
 		}
 	}
 	

@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.5 2003/05/04 20:35:13 pasky Exp $ */
+/* $Id: tab.c,v 1.6 2003/05/04 20:37:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ init_tab(struct terminal *term)
 	return win;
 }
 
-/* Number of tabs - just number of root windows in term->windows */
+/* Number of tabs at the terminal (in term->windows) */
 inline int
 number_of_tabs(struct terminal *term)
 {
@@ -68,7 +68,7 @@ get_tab_number(struct window *window)
 	return num;
 }
 
-/* Get root window of a given tab */
+/* Get tab of an according index */
 struct window *
 get_tab_by_number(struct terminal *term, int num)
 {

@@ -1,4 +1,4 @@
-/* $Id: url.h,v 1.8 2002/12/01 17:42:59 pasky Exp $ */
+/* $Id: url.h,v 1.9 2002/12/07 11:39:51 zas Exp $ */
 
 #ifndef EL__URL_H
 #define EL__URL_H
@@ -32,6 +32,7 @@ unsigned char *translate_url(unsigned char *, unsigned char *);
 unsigned char *extract_position(unsigned char *);
 unsigned char *extract_proxy(unsigned char *);
 void get_filename_from_url(unsigned char *, unsigned char **, int *);
+void get_filenamepart_from_url(unsigned char *, unsigned char **, int *);
 
 void encode_url_string(unsigned char *, unsigned char **, int *);
 void decode_url_string(unsigned char *);

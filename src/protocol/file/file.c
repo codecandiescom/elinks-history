@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.32 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: file.c,v 1.33 2002/12/07 11:39:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,6 +41,7 @@
 #include "document/cache.h"
 #include "lowlevel/sched.h"
 #include "protocol/file.h"
+#include "protocol/url.h"
 #include "util/encoding.h"
 #include "util/conv.h"
 #include "util/memory.h"
@@ -244,39 +245,6 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 	str[sizeof(str) - 1] = '\0';
 	add_to_str(p, l, str);
 	add_chr_to_str(p, l, ' ');
-}
-
-/* TODO: Move this to url.c (redundant with get_filename_from_url() but
- * speeder, imho. 1 should be replaced by POSTCHAR. --Zas */
-/* Returns path+filename part (as is) from url as a dynamically allocated
- * string in name and length in namelen or NULL on error. */
-void
-get_filenamepart_from_url(unsigned char *url, unsigned char **name,
-			  int *namelen)
-{
-	unsigned char *start, *end, *filename;
-	int len;
-
-	for (start = url;
-	     *start && *start != 1 && *start != ':';
-	     start++);
-
-	if (*start != ':' || *++start != '/' || *++start != '/') return;
-
-	start++;
-
-	for (end = start; *end && *end != 1; end++);
-
-	len = end - start;
-	filename = mem_alloc(len + 1);
-
-	if (!filename) return;
-
-	if (len) memcpy(filename, start, len);
-	filename[len] = '\0';
-
-	*name = filename;
-	*namelen = len;
 }
 
 static enum stream_encoding

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.43 2002/12/03 19:31:45 zas Exp $ */
+/* $Id: url.c,v 1.44 2002/12/07 11:39:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1007,6 +1007,41 @@ get_filename_from_url(unsigned char *url, unsigned char **s, int *l)
 }
 
 #undef dsep
+
+/* Returns path+filename part (as is) from url as a dynamically allocated
+ * string in name and length in namelen. */
+void
+get_filenamepart_from_url(unsigned char *url, unsigned char **name,
+			  int *namelen)
+{
+	unsigned char *start, *end, *filename;
+	int len;
+
+	*name = NULL;
+	*namelen = 0;
+
+	for (start = url;
+	     *start && *start != POST_CHAR && *start != ':';
+	     start++);
+
+	if (*start != ':' || *++start != '/' || *++start != '/') return;
+
+	start++;
+
+	for (end = start; *end && *end != POST_CHAR; end++);
+
+	len = end - start;
+	filename = mem_alloc(len + 1);
+
+	if (!filename) return;
+
+	if (len) memcpy(filename, start, len);
+	filename[len] = '\0';
+
+	*name = filename;
+	*namelen = len;
+}
+
 
 
 /* URL encoding, escaping unallowed characters. */

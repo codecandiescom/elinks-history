@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.6 2003/09/23 14:06:10 pasky Exp $ */
+/* $Id: event.h,v 1.7 2003/09/26 19:05:38 pasky Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -11,6 +11,30 @@
 /* This enum is returned by each event hook and determines whether we should
  * go on in the chain or finish the event processing. You want to always
  * return EHS_NEXT. */
+/* More about EHS_LAST - it means the event will get stuck on YOU and won't
+ * ever get to any other hooks queued behind you. This is usually not what you
+ * want. When I have plugin doing X with some document being loaded, and then
+ * script doing Y with it and finally some internal gadget doing some final
+ * touching of the document (say, colors normalization or so, I'm pulling this
+ * off my head), you definitively want all of them to happen, no matter if they
+ * are all successful or all unsuccessful or part of them successful. The only
+ * exceptions I can think of are:
+ *
+ * * I really messed something up. Ie. I somehow managed to destroy the
+ * document I got on input, but at least I know I did. Others don't and they
+ * will crash, and the document is of no use anyway. So let me be the last one.
+ *
+ * * I discarded the event. Say I'm children-protection plugin and the innocent
+ * kid drove me (unintentionally, of course) to some adult site. So I catch
+ * the appropriate event as long as I know it is bad, and discard it. No luck,
+ * Jonny. Oh, wait, you are going to write *own* plugin...?!
+ *
+ * * I transformed the even to another one. Say user pressed a key and I'm the
+ * keybinding hook. So I've found the key in my keybinding table, thus I catch
+ * it, lazy_trigger (TODO) the appropriate specific event (ie. "quit") and of
+ * course discard the original one.
+ *
+ * --pasky */
 enum evhook_status {
 	EHS_NEXT,
 	EHS_LAST,

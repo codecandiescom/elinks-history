@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.132 2003/11/24 12:00:34 zas Exp $ */
+/* $Id: core.c,v 1.133 2003/11/24 13:15:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,7 +244,7 @@ l_execute(LS)
 static int
 l_tmpname(LS)
 {
-	char *fn = tempnam(NULL, "links");
+	unsigned char *fn = tempnam(NULL, "elinks");
 
 	if (fn) {
 		lua_pushstring(S, fn);

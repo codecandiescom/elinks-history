@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.12 2002/08/11 18:25:48 pasky Exp $ */
+/* $Id: listbox.c,v 1.13 2002/08/11 18:54:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,7 +57,7 @@ void box_sel_set_visible(struct widget_data *listbox_item_data, int offset)
  * range, the selected item is moved to the extreme (ie, the top or bottom) */
 void box_sel_move(struct widget_data *listbox_item_data, int dist)
 {
-    struct listbox_data *box;
+	struct listbox_data *box;
 	int new_sel;
 	int new_top;
 

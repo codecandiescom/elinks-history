@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.5 2002/08/11 18:25:48 pasky Exp $ */
+/* $Id: listbox.h,v 1.6 2002/08/11 18:54:23 pasky Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -24,6 +24,11 @@ struct listbox_data {
 struct listbox_item {
 	struct listbox_item *next;
 	struct listbox_item *prev;
+
+	/* These may be NULL for root/leaf nodes or non-hiearchic listboxes. */
+	struct listbox_item *child;
+	struct listbox_item *parent;
+
 	/* Text to display */
 	unsigned char *text;
 	/* Run when this item is hilighted */

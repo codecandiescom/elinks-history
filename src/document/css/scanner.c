@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.127 2004/07/04 13:06:04 jonas Exp $ */
+/* $Id: scanner.c,v 1.128 2004/09/20 22:11:53 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -231,11 +231,15 @@ scan_css_token(struct scanner *scanner, struct scanner_token *token)
 
 			scan_css(scanner, string, CSS_CHAR_HEX_DIGIT);
 
-			/* Check that the hexdigit sequence is either 3 or 6 chars */
+			/* Check that the hexdigit sequence is either 3 or 6
+			 * chars and it isn't just start of some non-hex ident
+			 * string. */
 			hexdigits = string - token->string - 1;
-			if (hexdigits == 3 || hexdigits == 6) {
+			if ((hexdigits == 3 || hexdigits == 6)
+			    && !is_css_ident(*string)) {
 				type = CSS_TOKEN_HEX_COLOR;
 			} else {
+				scan_css(scanner, string, CSS_CHAR_IDENT);
 				type = CSS_TOKEN_HASH;
 			}
 

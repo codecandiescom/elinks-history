@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.65 2003/10/28 14:34:19 jonas Exp $ */
+/* $Id: msgbox.c,v 1.66 2003/10/28 14:36:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,11 +118,11 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 	while (button < buttons) {
 		unsigned char *label;
 		void (*fn)(void *);
-		int flags;
+		int bflags;
 
 		label = va_arg(ap, unsigned char *);
 		fn = va_arg(ap, void *);
-		flags = va_arg(ap, int);
+		bflags = va_arg(ap, int);
 
 		if (!label) {
 			/* Skip this button. */
@@ -134,7 +134,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 		if (!(flags & MSGBOX_NO_INTL))
 			label = _(label, term);
 
-		add_dlg_button(dlg, button, flags, msg_box_button, label, fn);
+		add_dlg_button(dlg, button, bflags, msg_box_button, label, fn);
 	}
 
 	va_end(ap);

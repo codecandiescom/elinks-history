@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.190 2004/06/16 17:07:01 jonas Exp $ */
+/* $Id: form.c,v 1.191 2004/06/16 17:11:00 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1152,10 +1152,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			break;
 		case ACT_EDIT_END_OF_BUFFER:
 			if (frm->type == FC_TEXTAREA) {
-				if (textarea_op_eob(fs, frm, rep)) {
-					status = FRAME_EVENT_OK;
-					break;
-				}
+				status = textarea_op_eob(fs, frm, rep);
 			} else {
 				fs->state = strlen(fs->value);
 			}
@@ -1164,7 +1161,7 @@ field_op(struct session *ses, struct document_view *doc_view,
 			if (frm->ro)
 				status = FRAME_EVENT_IGNORED;
 			else if (frm->type == FC_TEXTAREA && !frm->ro)
-			  	textarea_edit(0, ses->tab->term, frm, fs, doc_view, link);
+				textarea_edit(0, ses->tab->term, frm, fs, doc_view, link);
 			break;
 		case ACT_EDIT_COPY_CLIPBOARD:
 			set_clipboard_text(fs->value);

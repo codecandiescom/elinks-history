@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.7 2004/04/17 02:48:48 jonas Exp $ */
+/* $Id: listmenu.c,v 1.8 2004/04/17 11:19:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,12 +59,19 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 {
 	struct menu_item *new_menu_item = NULL; /* no uninitialized warnings */
 
-	if (name) {
-		clr_spaces(name);
-		if (!name[0]) mem_free(name), name = stracpy(" ");
+	if (!name) {
+		menu->stack_size--;
+		return;
 	}
 
-	if (name && data == -1) {
+	clr_spaces(name);
+	if (!name[0]) {
+		mem_free(name);
+		name = stracpy(" ");
+		if (!name) return;
+	}
+
+	if (data == -1) {
 		new_menu_item = mem_calloc(1, sizeof(struct menu_item));
 		if (!new_menu_item) {
 			mem_free(name);
@@ -72,7 +79,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		}
 	}
 
-	if (name && menu->stack_size) {
+	if (menu->stack_size) {
 		struct menu_item *top, *item;
 
 		top = item = menu->stack[menu->stack_size - 1];
@@ -109,7 +116,7 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 	} else mem_free(name);
 
-	if (name && data == -1) {
+	if (data == -1) {
 		int size = (menu->stack_size + 1) * sizeof(struct menu_item *);
 		struct menu_item **ms = mem_realloc(menu->stack, size);
 
@@ -117,8 +124,6 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		menu->stack = ms;
 		menu->stack[menu->stack_size++] = new_menu_item;
 	}
-
-	if (!name) menu->stack_size--;
 }
 
 void

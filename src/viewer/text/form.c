@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.115 2004/05/30 18:25:51 zas Exp $ */
+/* $Id: form.c,v 1.116 2004/05/30 18:50:23 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,6 +344,66 @@ free_succesful_controls(struct list_head *submit)
 }
 
 static void
+add_submitted_value_to_list(struct form_control *frm,
+		            struct form_state *fs,
+		            struct list_head *list)
+{
+	struct submitted_value *sub;
+	int fi = 0;
+
+	assert(frm && fs && list);
+
+	if ((frm->type == FC_CHECKBOX
+	     || frm->type == FC_RADIO)
+	    && !fs->state)
+		return;
+
+	if (frm->type == FC_SELECT && !frm->nvalues)
+		return;
+
+fi_rep:
+	sub = mem_calloc(1, sizeof(struct submitted_value));
+	if (!sub) return;
+
+	sub->type = frm->type;
+	sub->name = stracpy(frm->name);
+
+	switch (frm->type) {
+	case FC_TEXT:
+	case FC_PASSWORD:
+	case FC_FILE:
+	case FC_TEXTAREA:
+		sub->value = stracpy(fs->value);
+		break;
+	case FC_CHECKBOX:
+	case FC_RADIO:
+	case FC_SUBMIT:
+	case FC_HIDDEN:
+	case FC_RESET:
+		sub->value = stracpy(frm->default_value);
+		break;
+	case FC_SELECT:
+		fixup_select_state(frm, fs);
+		sub->value = stracpy(fs->value);
+		break;
+	case FC_IMAGE:
+		add_to_strn(&sub->name, fi ? ".x" : ".y");
+		sub->value = stracpy("0");
+		break;
+	}
+
+	sub->frm = frm;
+	sub->position = frm->form_num + frm->ctrl_num;
+
+	add_to_list(*list, sub);
+
+	if (frm->type == FC_IMAGE && !fi) {
+		fi = 1;
+		goto fi_rep;
+	}
+}
+
+static void
 get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 		       struct list_head *subm)
 {
@@ -359,57 +419,11 @@ get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 			 frm->type != FC_IMAGE &&
 			 frm->type != FC_RESET) || frm == fc)
 		    && frm->name && frm->name[0]) {
-			struct submitted_value *sub;
-			int fi = 0;
 			struct form_state *fs = find_form_state(doc_view, frm);
 
 			if (!fs) continue;
-			if ((frm->type == FC_CHECKBOX
-			     || frm->type == FC_RADIO)
-			    && !fs->state)
-				continue;
-			if (frm->type == FC_SELECT && !frm->nvalues)
-				continue;
-fi_rep:
-			sub = mem_calloc(1, sizeof(struct submitted_value));
-			if (!sub) continue;
 
-			sub->type = frm->type;
-			sub->name = stracpy(frm->name);
-
-			switch (frm->type) {
-				case FC_TEXT:
-				case FC_PASSWORD:
-				case FC_FILE:
-				case FC_TEXTAREA:
-					sub->value = stracpy(fs->value);
-					break;
-				case FC_CHECKBOX:
-				case FC_RADIO:
-				case FC_SUBMIT:
-				case FC_HIDDEN:
-				case FC_RESET:
-					sub->value = stracpy(frm->default_value);
-					break;
-				case FC_SELECT:
-					fixup_select_state(frm, fs);
-					sub->value = stracpy(fs->value);
-					break;
-				case FC_IMAGE:
-					add_to_strn(&sub->name, fi ? ".x" : ".y");
-					sub->value = stracpy("0");
-					break;
-			}
-
-			sub->frm = frm;
-			sub->position = frm->form_num + frm->ctrl_num;
-
-			add_to_list(*subm, sub);
-
-			if (frm->type == FC_IMAGE && !fi) {
-				fi = 1;
-				goto fi_rep;
-			}
+			add_submitted_value_to_list(frm, fs, subm);
 		}
 	}
 

@@ -1,9 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.59 2002/12/01 19:02:08 pasky Exp $ */
-
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
-#endif
+/* $Id: bookmarks.c,v 1.60 2002/12/05 21:30:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +13,7 @@
 
 #include "bfu/listbox.h"
 #include "bookmarks/bookmarks.h"
+#include "bookmarks/dialogs.h"
 #include "bookmarks/backend/common.h"
 #include "lowlevel/home.h"
 #include "util/memory.h"
@@ -28,10 +25,6 @@ struct list_head bookmarks = { &bookmarks, &bookmarks };
 struct list_head bookmark_box_items = { &bookmark_box_items,
 					&bookmark_box_items };
 struct list_head bookmark_boxes = { &bookmark_boxes, &bookmark_boxes };
-
-/* Last searched values */
-unsigned char *bm_last_searched_name = NULL;
-unsigned char *bm_last_searched_url = NULL;
 
 
 #ifdef BOOKMARKS
@@ -172,85 +165,6 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 		}
 	}
 	bookmarks_dirty = 1;
-
-	return 1;
-}
-
-void
-set_bookmarks_visible(struct list_head *bookmark_list,
-		      int (*test)(struct bookmark *, void *), void *data)
-{
-	struct bookmark *bm;
-
-	foreach (bm, *bookmark_list) {
-		bm->box_item->visible = test(bm, data);
-		if (!list_empty(bm->child))
-			set_bookmarks_visible(&bm->child, test, data);
-	}
-}
-
-int
-test_true(struct bookmark *bm, void *d) {
-	return 1;
-}
-
-/* Searchs a substring either in title or url fields (ignoring
- * case).  If search_title and search_url are not empty, it selects bookmarks
- * matching the first OR the second.
- *
- * Perhaps another behavior could be to search bookmarks matching both
- * (replacing OR by AND), but it would break a cool feature: when on a page,
- * opening search dialog will have fields corresponding to that page, so
- * pressing ok will find any bookmark with that title or url, permitting a
- * rapid search of an already existing bookmark. --Zas */
-
-struct bookmark_search_ctx {
-	unsigned char *search_url;
-	unsigned char *search_title;
-};
-
-int
-test_search(struct bookmark *bm, void *d) {
-	struct bookmark_search_ctx *ctx = d;
-
-	if (bm->box_item->type == BI_FOLDER) return 1;
-
-	return ((ctx->search_title && *ctx->search_title
-		 && strcasestr(bm->title, ctx->search_title)) ||
-		(ctx->search_url && *ctx->search_url
-		 && strcasestr(bm->url, ctx->search_url)));
-}
-
-int
-bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
-{
-	struct bookmark_search_ctx ctx;
-
-	if (!search_title || !search_url)
-		return 0;
-
-	/* Memorize last searched title */
-	if (bm_last_searched_name) mem_free(bm_last_searched_name);
-	bm_last_searched_name = stracpy(search_title);
-	if (!bm_last_searched_name) return 0;
-
-	/* Memorize last searched url */
-	if (bm_last_searched_url) mem_free(bm_last_searched_url);
-	bm_last_searched_url = stracpy(search_url);
-	if (!bm_last_searched_url) {
-		mem_free(bm_last_searched_name);
-		return 0;
-	}
-
-	if (!*search_title && !*search_url) {
-		set_bookmarks_visible(&bookmarks, test_true, NULL);
-	        return 1;
-	}
-
-	ctx.search_url = search_url;
-	ctx.search_title = search_title;
-
-	set_bookmarks_visible(&bookmarks, test_search, &ctx);
 
 	return 1;
 }

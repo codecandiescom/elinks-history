@@ -1,5 +1,9 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.52 2002/11/11 23:05:48 pasky Exp $ */
+/* $Id: dialogs.c,v 1.53 2002/12/05 21:30:05 pasky Exp $ */
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
+#endif
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -40,6 +44,9 @@
 
 #ifdef BOOKMARKS
 
+/* Last searched values */
+unsigned char *bm_last_searched_name = NULL;
+unsigned char *bm_last_searched_url = NULL;
 
 /****************************************************************************
   Bookmark manager stuff.
@@ -609,26 +616,84 @@ bookmark_add_add(struct dialog *d)
 
 	/* FIXME FIXME FIXME FIXME FIXME */
 #if 0
-	box_sel_move(box_widget_data, 32000); /* That is stuuupid. */
+	box_sel_move(box_widget_data, 0);
 	/* ..and doesn't work at all for non-root adding. */
 #endif
 }
 
 
+/* Searchs a substring either in title or url fields (ignoring
+ * case).  If search_title and search_url are not empty, it selects bookmarks
+ * matching the first OR the second.
+ *
+ * Perhaps another behavior could be to search bookmarks matching both
+ * (replacing OR by AND), but it would break a cool feature: when on a page,
+ * opening search dialog will have fields corresponding to that page, so
+ * pressing ok will find any bookmark with that title or url, permitting a
+ * rapid search of an already existing bookmark. --Zas */
+
+struct bookmark_search_ctx {
+	unsigned char *search_url;
+	unsigned char *search_title;
+	int found;
+	int ofs;
+};
+
+int
+test_search(struct listbox_item *item, void *data_, int offset) {
+	struct bookmark_search_ctx *ctx = data_;
+	struct bookmark *bm = item->udata;
+	int m= ((ctx->search_title && *ctx->search_title
+		 && strcasestr(bm->title, ctx->search_title)) ||
+		(ctx->search_url && *ctx->search_url
+		 && strcasestr(bm->url, ctx->search_url)));
+
+	if (!ctx->ofs) m = 0; /* ignore possible match on first item */
+	ctx->found = m;
+	ctx->ofs++;
+
+	return m ? 0 : offset;
+}
+
 /* Search bookmarks */
 static void
 bookmark_search_do(struct dialog *d)
 {
-	struct listbox_item *item = bookmark_box_items.next;
-	struct listbox_data *box;
+	unsigned char *search_title = d->items[0].data;
+	unsigned char *search_url = d->items[1].data;
+	struct bookmark_search_ctx ctx = { NULL, NULL, 0, 0 };
+	struct widget_data *box_widget_data = NULL;
+	struct listbox_data *box = NULL;
 
-	if (!bookmark_simple_search(d->items[1].data, d->items[0].data)) return;
-	if (list_empty(bookmark_box_items)) return;
+	if (!search_title || !search_url)
+		return;
 
-	foreach (box, *item->box) {
-		box->top = item;
-		box->sel = box->top;
+	if (!d->udata)
+		internal("Bookmarks search without udata in dialog! Let's panic.");
+	box_widget_data =
+		&((struct dialog_data *) d->udata)->items[BM_BOX_IND];
+	box = (struct listbox_data *) box_widget_data->item->data;
+
+	/* Memorize last searched title */
+	if (bm_last_searched_name) mem_free(bm_last_searched_name);
+	bm_last_searched_name = stracpy(search_title);
+	if (!bm_last_searched_name) return;
+
+	/* Memorize last searched url */
+	if (bm_last_searched_url) mem_free(bm_last_searched_url);
+	bm_last_searched_url = stracpy(search_url);
+	if (!bm_last_searched_url) {
+		mem_free(bm_last_searched_name);
+		return;
 	}
+
+	ctx.search_url = search_url;
+	ctx.search_title = search_title;
+
+	traverse_listbox_items_list(box->sel, 0, 0, test_search, &ctx);
+	if (!ctx.found) return;
+
+	box_sel_move(box_widget_data, ctx.ofs - 1);
 }
 
 

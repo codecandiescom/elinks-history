@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.30 2004/01/18 18:01:43 jonas Exp $ */
+/* $Id: value.c,v 1.31 2004/01/18 18:06:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -161,8 +161,6 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 			    struct css_scanner *scanner)
 {
 	struct css_token *token = get_css_token(scanner);
-	unsigned char *tok_string = token->string;
-	unsigned char **string = &tok_string;
 	unsigned char *nstring;
 	int weight;
 
@@ -192,12 +190,10 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 	if (token->type != CSS_TOKEN_DIGIT) return 0;
 
 	/* TODO: Comma separated list of weights?! */
-	weight = strtol(*string, (char **) &nstring, 10);
-	if (*string == nstring) {
-		return 0;
-	}
+	weight = strtol(token->string, (char **) &nstring, 10);
+	if (token->string == nstring) return 0;
 
-	*string = nstring;
+	skip_css_tokens(scanner, CSS_TOKEN_DIGIT);
 	/* The font weight(s) have values between 100 to 900.  These
 	 * values form an ordered sequence, where each number indicates
 	 * a weight that is at least as dark as its predecessor.

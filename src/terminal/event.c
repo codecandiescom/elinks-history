@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.35 2004/04/23 19:20:18 pasky Exp $ */
+/* $Id: event.c,v 1.36 2004/05/24 18:06:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -155,18 +155,17 @@ test_queue:
 	switch (ev->ev) {
 	case EV_INIT:
 	{
-		int init_len;
-		int evterm_len = sizeof(struct term_event) + MAX_TERM_LEN;
-		int evtermcwd_len = evterm_len + MAX_CWD_LEN;
-		int evtermcwd1int_len = evtermcwd_len + sizeof(int);
-		int evtermcwd2int_len = evtermcwd1int_len + sizeof(int);
+		struct terminal_info *info;
 
-		if (term->qlen < evtermcwd2int_len) return;
-		init_len = *(int *)(iq + evtermcwd1int_len);
+		if (term->qlen < sizeof(struct terminal_info))
+			return;
 
-		if (term->qlen < evtermcwd2int_len + init_len) return;
+		info = (struct terminal_info *) iq;
 
-		memcpy(term->term, iq + sizeof(struct term_event), MAX_TERM_LEN);
+		if (term->qlen < sizeof(struct terminal_info) + info->length)
+			return;
+
+		memcpy(term->term, info->term, MAX_TERM_LEN);
 		term->term[MAX_TERM_LEN - 1] = 0;
 
 		{
@@ -200,12 +199,12 @@ test_queue:
 			}
 		}
 
-		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);
+		memcpy(term->cwd, info->cwd, MAX_CWD_LEN);
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
-		term->environment = *(int *)(iq + evtermcwd_len);
-		ev->b = (long) decode_session_info(iq + evtermcwd1int_len);
-		r = evtermcwd2int_len + init_len;
+		term->environment = info->system_env;
+		ev->b = (long) decode_session_info(info->length, (int *) info->data);
+		r = sizeof(struct terminal_info) + info->length;
 		/* Fall through */
 	}
 	case EV_REDRAW:

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.398 2004/05/24 02:30:03 jonas Exp $ */
+/* $Id: session.c,v 1.399 2004/05/24 18:06:50 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -672,10 +672,8 @@ create_session_info(struct string *info, int cp, struct list_head *url_list)
 }
 
 struct initial_session_info *
-decode_session_info(const void *pdata)
+decode_session_info(int len, const int *data)
 {
-	int *data = (int *) pdata;
-	int len = *(data++);
 	struct initial_session_info *info;
 	unsigned char *str;
 	int magic;

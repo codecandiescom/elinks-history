@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.271 2003/11/16 01:03:23 jonas Exp $ */
+/* $Id: parser.c,v 1.272 2003/11/16 14:34:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1822,8 +1822,6 @@ struct list_menu {
 
 static struct list_menu lnk_menu;
 
-#define MENU_FULLNAME (1 << 8)
-
 static void
 new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullname)
 	/* name == NULL - up;	data == -1 - down */
@@ -1866,12 +1864,12 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 
 		if (data == -1) {
 			SET_MENU_ITEM(item, name, M_SUBMENU, do_select_submenu,
-				      data, FREE_NOTHING | (fullname ? MENU_FULLNAME : 0),
-				      1, 1, 0, 0);
+				      data, SUBMENU | (fullname ? MENU_FULLNAME : 0) | NO_INTL,
+				      0, 0);
 		} else {
 			SET_MENU_ITEM(item, name, "", selected_item,
-				      data, FREE_NOTHING | (fullname ? MENU_FULLNAME : 0),
-				      0, 1, 0, 0);
+				      data, (fullname ? MENU_FULLNAME : 0) | NO_INTL,
+				      0, 0);
 		}
 
 		item++;
@@ -1949,7 +1947,7 @@ menu_labels(struct menu_item *m, unsigned char *base, unsigned char **lbls)
 			}
 		} else {
 			assert(m->func == (menu_func) selected_item);
-			bs = stracpy((m->item_free & MENU_FULLNAME)
+			bs = stracpy((m->flags & MENU_FULLNAME)
 				     ? (unsigned char *)"" : base);
 			if (bs) add_to_strn(&bs, m->text);
 			lbls[(int)m->data] = bs;
@@ -3556,7 +3554,7 @@ look_for_link(unsigned char **pos, unsigned char *eof,
 		nm[nmenu].rtext = "";
 		nm[nmenu].func = (menu_func) map_selected;
 		nm[nmenu].data = ld;
-		nm[nmenu].no_intl = 1;
+		nm[nmenu].flags = NO_INTL;
 		nm[++nmenu].text = NULL;
 	}
 

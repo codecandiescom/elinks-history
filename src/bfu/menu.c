@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.119 2003/11/05 10:40:20 zas Exp $ */
+/* $Id: menu.c,v 1.120 2003/11/16 14:34:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,11 +62,11 @@ free_menu_items(struct menu_item *items)
 	 * it is zeroed when some menu field is selected. */
 
 	for (i = 0; items[i].text; i++) {
-		if (items[i].item_free & FREE_TEXT && items[i].text)
+		if (items[i].flags & FREE_TEXT && items[i].text)
 			mem_free(items[i].text);
-		if (items[i].item_free & FREE_RTEXT && items[i].rtext)
+		if (items[i].flags & FREE_RTEXT && items[i].rtext)
 			mem_free(items[i].rtext);
-		if (items[i].item_free & FREE_DATA && items[i].data)
+		if (items[i].flags & FREE_DATA && items[i].data)
 			mem_free(items[i].data);
 	}
 
@@ -91,7 +91,7 @@ do_menu_selected(struct terminal *term, struct menu_item *items,
 #endif
 		refresh_hotkeys(term, menu);
 		add_window(term, menu_handler, menu);
-	} else if (items->item_free & ~(1<<8)) {
+	} else if (items->flags & (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA)) {
 		free_menu_items(items);
 	}
 }
@@ -111,9 +111,9 @@ select_menu_item(struct terminal *term, struct menu_item *it, void *data)
 
 	if (it->rtext == M_BAR) return;
 
-	if (!it->submenu) {
+	if (!(it->flags & SUBMENU)) {
 		/* Don't free data! */
-		it->item_free &= ~FREE_DATA;
+		it->flags &= ~FREE_DATA;
 
 		while (!list_empty(term->windows)) {
 			struct window *win = term->windows.next;
@@ -155,7 +155,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		int s = 4;
 
 		if (text && *text) {
-			if (!menu->items[my].no_intl) text = _(text, term);
+			if (!(menu->items[my].flags & NO_INTL)) text = _(text, term);
 
 			if (text[0])
 				s += strlen(text) + 1
@@ -163,7 +163,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 		}
 
 		if (rtext && *rtext) {
-			if (!menu->items[my].no_intl) rtext = _(rtext, term);
+			if (!(menu->items[my].flags & NO_INTL)) rtext = _(rtext, term);
 
 			if (rtext[0])
 				s += MENU_HOTKEY_SPACE + strlen(rtext);
@@ -284,7 +284,7 @@ display_menu(struct terminal *term, struct menu *menu)
 				int l = menu->items[p].hotkey_pos;
 				unsigned char *text = menu->items[p].text;
 
-				if (!menu->items[p].no_intl) text = _(text, term);
+				if (!(menu->items[p].flags & NO_INTL)) text = _(text, term);
 
 				if (l) {
 					int xbase = mx + 1;
@@ -334,7 +334,7 @@ display_menu(struct terminal *term, struct menu *menu)
 			if (menu->items[p].rtext && *menu->items[p].rtext) {
 				unsigned char *rtext = menu->items[p].rtext;
 
-				if (!menu->items[p].no_intl) rtext = _(rtext, term);
+				if (!(menu->items[p].flags & NO_INTL)) rtext = _(rtext, term);
 
 				if (*rtext) {
 					/* There's a right text, so print it */
@@ -443,7 +443,7 @@ menu_handler(struct window *win, struct term_event *ev, int fwd)
 						display_menu(win->term, menu);
 
 						if ((ev->b & BM_ACT) == B_UP ||
-						    menu->items[sel].submenu)
+						    menu->items[sel].flags & SUBMENU)
 							select_menu(win->term, menu);
 					}
 				}
@@ -582,7 +582,7 @@ break2:
 			break;
 
 		case EV_ABORT:
-			if (menu->items->item_free & ~(1<<8))
+			if (menu->items->flags & (FREE_LIST|FREE_TEXT|FREE_RTEXT|FREE_DATA))
 				free_menu_items(menu->items);
 
 			break;
@@ -641,7 +641,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 		if (key_pos < 0) key_pos = -key_pos, double_hk = 1;
 #endif
 
-		if (!menu->items[i].no_intl) tmptext = _(tmptext, term);
+		if (!(menu->items[i].flags & NO_INTL)) tmptext = _(tmptext, term);
 
 		if (i == menu->selected) {
 			int tmptextlen = strlen(tmptext) - !!key_pos;
@@ -722,7 +722,8 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 					unsigned char *text = menu->items[i].text;
 					int o = p;
 
-					if (!menu->items[i].no_intl) text = _(text, win->term);
+					if (!(menu->items[i].flags & NO_INTL))
+						text = _(text, win->term);
 
 					if (text && text[0])
 						p += strlen(text) + 4
@@ -734,7 +735,7 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 					menu->selected = i;
 					display_mainmenu(win->term, menu);
 					if ((ev->b & BM_ACT) == B_UP
-					    || menu->items[s].submenu) {
+					    || menu->items[s].flags & SUBMENU) {
 						select_mainmenu(win->term,
 								menu);
 					}
@@ -798,18 +799,18 @@ mainmenu_handler(struct window *win, struct term_event *ev, int fwd)
 	mem_align_alloc(mi_, size, (size) + 2, sizeof(struct menu_item), 0xF)
 
 struct menu_item *
-new_menu(enum item_free item_free)
+new_menu(enum menu_item_flags flags)
 {
 	struct menu_item *mi = NULL;
 
-	if (realloc_menu_items(&mi, 0)) mi->item_free = item_free;
+	if (realloc_menu_items(&mi, 0)) mi->flags = flags;
 
 	return mi;
 }
 
 void
 add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
-	    menu_func func, void *data, int submenu, int no_intl)
+	    menu_func func, void *data, enum menu_item_flags flags)
 {
 	int n = count_items(*mi);
 	/* XXX: Don't clear the last and special item. */
@@ -823,6 +824,5 @@ add_to_menu(struct menu_item **mi, unsigned char *text, unsigned char *rtext,
 	memcpy(item + 1, item, sizeof(struct menu_item));
 
 	/* Setup the new item. All menu items share the item_free value. */
-	SET_MENU_ITEM(item, text, rtext, func, data, item->item_free,
-		      submenu, no_intl, HKS_SHOW, 0);
+	SET_MENU_ITEM(item, text, rtext, func, data, item->flags | flags, HKS_SHOW, 0);
 }

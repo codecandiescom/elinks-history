@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.10 2003/09/25 16:43:50 zas Exp $ */
+/* $Id: hotkey.c,v 1.11 2003/11/16 14:34:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -51,7 +51,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			unsigned char *text = items[i].text;
 
 			if (!*text) continue;
-			if (!items[i].no_intl) text = _(text, term);
+			if (!(items[i].flags & NO_INTL)) text = _(text, term);
 			if (!*text) continue;
 
 			if (items[i].hotkey_state != HKS_CACHED && !items[i].hotkey_pos)
@@ -85,7 +85,7 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			unsigned char *text = items[i].text;
 
 			if (!*text) continue;
-			if (!items[i].no_intl) text = _(text, term);
+			if (!(items[i].flags & NO_INTL)) text = _(text, term);
 			if (!*text) continue;
 
 			items[i].hotkey_pos = find_hotkey_pos(text);
@@ -134,7 +134,7 @@ is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 	text = item->text;
 
 	if (!text || !*text) return 0;
-	if (!item->no_intl) text = _(text, term);
+	if (!(item->flags & NO_INTL)) text = _(text, term);
 	if (!*text) return 0;
 
 #ifdef DEBUG

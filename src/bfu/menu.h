@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.29 2003/11/05 10:40:20 zas Exp $ */
+/* $Id: menu.h,v 1.30 2003/11/16 14:34:32 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -15,12 +15,17 @@ extern unsigned char m_bar;
 
 
 /* Which fields to free when zapping a list item - bitwise. */
-enum item_free {
-	FREE_NOTHING = 0,
+enum menu_item_flags {
+	NO_FLAG = 0,
+
 	FREE_LIST = 1,
 	FREE_TEXT = 2,
 	FREE_RTEXT = 4, /* only for menu_item */
 	FREE_DATA = 8, /* for menu_item, see menu.c for remarks */
+
+	MENU_FULLNAME = 16,
+	SUBMENU = 32,
+	NO_INTL = 64,
 };
 
 /* menu item with no right part :
@@ -53,46 +58,39 @@ struct menu_item {
 	unsigned char *rtext; /* FIXME: Use real keybindings. */
 	menu_func func;
 	void *data;
-	enum item_free item_free;
-
-	unsigned int submenu:1;
+	enum menu_item_flags flags;
 
 	/* If true, don't try to translate text/rtext inside of the menu
 	 * routines. */
-	unsigned int no_intl:1;
 	enum hotkey_state hotkey_state;
 	int hotkey_pos;
 };
 
-#define INIT_MENU_ITEM(text, rtext, func, data, item_free, submenu)	\
+#define INIT_MENU_ITEM(text, rtext, func, data, flags)			\
 {									\
 	(unsigned char *) (text),					\
 	(unsigned char *) (rtext),					\
 	(menu_func) (func),						\
 	(void *) (data),						\
-	(item_free),							\
-	(submenu),							\
-	0,								\
+	(flags),							\
 	HKS_SHOW,							\
 	0								\
 }
 
 #define NULL_MENU_ITEM							\
-	INIT_MENU_ITEM(NULL, NULL, NULL, NULL, FREE_NOTHING, 0)
+	INIT_MENU_ITEM(NULL, NULL, NULL, NULL, 0)
 
 #define BAR_MENU_ITEM							\
-	INIT_MENU_ITEM("", M_BAR, NULL, NULL, FREE_NOTHING, 0)
+	INIT_MENU_ITEM("", M_BAR, NULL, NULL, 0)
 
-#define SET_MENU_ITEM(e_, text_, rtext_, func_, data_, item_free_,	\
-		      submenu_, no_intl_, hotkey_state_, hotkey_pos_)	\
+#define SET_MENU_ITEM(e_, text_, rtext_, func_, data_, flags_,		\
+		      hotkey_state_, hotkey_pos_)			\
 do {									\
 	(e_)->text = (unsigned char *) (text_);				\
 	(e_)->rtext = (unsigned char *) (rtext_);			\
 	(e_)->func = (menu_func) (func_);				\
 	(e_)->data = (void *) (data_);					\
-	(e_)->item_free = (item_free_);					\
-	(e_)->submenu = (submenu_);					\
-	(e_)->no_intl = (no_intl_);					\
+	(e_)->flags = (flags_);						\
 	(e_)->hotkey_state = (hotkey_state_);				\
 	(e_)->hotkey_pos = (hotkey_pos_);				\
 } while (0)
@@ -124,8 +122,8 @@ struct menu {
 };
 
 
-struct menu_item *new_menu(enum item_free);
-void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, menu_func, void *, int, int);
+struct menu_item *new_menu(enum menu_item_flags);
+void add_to_menu(struct menu_item **, unsigned char *, unsigned char *, menu_func, void *, enum menu_item_flags flags);
 void do_menu(struct terminal *, struct menu_item *, void *, int);
 void do_menu_selected(struct terminal *, struct menu_item *, void *, int, int);
 void do_mainmenu(struct terminal *, struct menu_item *, void *, int);

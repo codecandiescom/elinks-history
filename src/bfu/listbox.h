@@ -1,4 +1,4 @@
-/* $Id: listbox.h,v 1.41 2003/11/09 11:40:14 jonas Exp $ */
+/* $Id: listbox.h,v 1.42 2003/11/16 14:34:32 zas Exp $ */
 
 #ifndef EL__BFU_LISTBOX_H
 #define EL__BFU_LISTBOX_H
@@ -68,7 +68,7 @@ struct listbox_item {
 
 	void *udata;
 
-	enum item_free item_free;
+	enum menu_item_flags flags;
 
 	/* Text to display (must be last) */
 	unsigned char *text;

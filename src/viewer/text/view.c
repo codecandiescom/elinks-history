@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.263 2003/11/13 18:44:16 jonas Exp $ */
+/* $Id: view.c,v 1.264 2003/11/16 14:34:33 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1314,7 +1314,7 @@ open_in_new_window(struct terminal *term,
 		return;
 	}
 	for (oi = oin; oi->text; oi++)
-		add_to_menu(&mi, oi->text, "", (menu_func) xxx, oi->fn, 0, 0);
+		add_to_menu(&mi, oi->text, "", (menu_func) xxx, oi->fn, 0);
 	mem_free(oin);
 	do_menu(term, mi, ses, 1);
 }

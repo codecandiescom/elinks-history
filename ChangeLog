@@ -1,3 +1,38 @@
+Wed Apr 17 08:33:19 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, intl/german.lng, src/intl/language.inc:
+	
+	German translation updates by Ingo Blechschmidt <iblech@web.de>,
+	with corrections by Eduard Werner <edi.werner@gmx.de>.
+
+Wed Apr 17 08:26:45 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, linkskeys.5:
+	
+	Typo fixes in linkskeys.5 by Doug Kearns
+	<djkea2@mugca.its.monash.edu.au>.
+
+Wed Apr 17 08:24:02 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bfu/menu.h, dialogs/menu.c:
+	
+	Show 'h' as a global hotkey for global history, not 'y'; reported
+	by José Luis González González and many others. Also tiny TODO rel.
+	to keybindings near hotkey field in struct menu_field. Also log
+	message almost longer than the patch himself.
+
+Wed Apr 17 08:13:08 2002  Petr Baudis <pasky@ji.cz>:
+
+	* contrib/hooks.lua:
+	
+	Fixed error in Lua syntax, reported by Peter Gervai.
+
+Tue Apr 16 21:25:42 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bookmarks/dialogs.c:
+	
+	last added bookmark is now selected when exiting add dialog
+
 Tue Apr 16 21:06:12 2002  Laurent Monin <zas@norz.org>:
 
 	* contrib/old_to_new_bookmarks.sh:

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.29 2003/07/02 12:05:14 jonas Exp $ */
+/* $Id: connection.c,v 1.30 2003/07/02 16:02:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -107,10 +107,10 @@ connect_info(int type)
 			break;
 		case CI_CONNECTING:
 			foreach (ce, queue)
-				info += ce->state > S_WAIT && ce->state < S_TRANS;
+				info += (ce->state > S_WAIT && ce->state < S_TRANS);
 			break;
 		case CI_TRANSFER:
-			foreach (ce, queue) info += ce->state == S_TRANS;
+			foreach (ce, queue) info += (ce->state == S_TRANS);
 			break;
 		case CI_KEEP:
 			foreach (cee, keepalive_connections) info++;
@@ -164,7 +164,8 @@ stat_timer(struct connection *c)
 	prg->pos = c->from;
 	if (prg->size < prg->pos && prg->size != -1)
 		prg->size = c->from;
-	prg->dis_b += a = get_time() - prg->last_time;
+	a = get_time() - prg->last_time;
+	prg->dis_b += a;
 
 	while (prg->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
 		prg->cur_loaded -= prg->data_in_secs[0];
@@ -198,7 +199,8 @@ setcstate(struct connection *c, int state)
 			tcount count = c->count;
 
 			if (!prg->valid) {
-				int tmp = prg->start, tmp2 = prg->seek;
+				int tmp = prg->start;
+				int tmp2 = prg->seek;
 
 				memset(prg, 0, sizeof(struct remaining_info));
 				prg->start = tmp;

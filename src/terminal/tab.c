@@ -1,5 +1,5 @@
 /* Tab-style (those containing real documents) windows infrastructure. */
-/* $Id: tab.c,v 1.75 2004/10/16 19:59:38 jonas Exp $ */
+/* $Id: tab.c,v 1.76 2004/10/16 20:20:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -261,11 +261,18 @@ move_current_tab(struct session *ses, int direction)
 {
 	struct terminal *term = ses->tab->term;
 	int tabs = number_of_tabs(term);
-	int new_pos = term->current_tab + direction;
 	struct window *current_tab = get_current_tab(term);
 	struct window *tab;
+	int new_pos;
 
 	assert(ses && direction);
+
+	if (ses->kbdprefix.repeat_count) {
+		direction *= ses->kbdprefix.repeat_count;
+		ses->kbdprefix.repeat_count = 0;
+	}
+
+	new_pos = term->current_tab + direction;
 
 	while (new_pos < 1 || new_pos > tabs)
 		new_pos += new_pos < 1 ? tabs : -tabs;

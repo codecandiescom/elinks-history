@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.39 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: cookies.c,v 1.40 2002/12/08 20:47:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,9 +37,9 @@
 #include "util/secsave.h"
 #include "util/string.h"
 
-int cookies_nosave = 0;
+static int cookies_nosave = 0;
 
-tcount cookie_id = 0;
+static tcount cookie_id = 0;
 
 struct cookie {
 	struct cookie *next;
@@ -52,7 +52,7 @@ struct cookie {
 	int id;
 };
 
-struct list_head cookies = { &cookies, &cookies };
+static struct list_head cookies = { &cookies, &cookies };
 
 struct c_domain {
 	struct c_domain *next;
@@ -60,7 +60,7 @@ struct c_domain {
 	unsigned char domain[1];
 };
 
-struct list_head c_domains = { &c_domains, &c_domains };
+static struct list_head c_domains = { &c_domains, &c_domains };
 
 struct c_server {
 	struct c_server *next;
@@ -69,19 +69,18 @@ struct c_server {
 	unsigned char server[1];
 };
 
-struct list_head c_servers = { &c_servers, &c_servers };
+static struct list_head c_servers = { &c_servers, &c_servers };
 
 
 #ifdef COOKIES
 
-void accept_cookie(struct cookie *);
-void delete_cookie(struct cookie *);
+static void accept_cookie(struct cookie *);
 
 void load_cookies();
-void save_cookies();
+static void save_cookies();
 
 
-void
+static void
 free_cookie(struct cookie *c)
 {
 	if (c->name) mem_free(c->name);
@@ -329,7 +328,7 @@ ok:
 }
 
 
-void
+static void
 accept_cookie(struct cookie *c)
 {
 	struct c_domain *cd;
@@ -362,7 +361,9 @@ accept_cookie(struct cookie *c)
 		save_cookies();
 }
 
-void delete_cookie(struct cookie *c)
+#if 0
+static void
+delete_cookie(struct cookie *c)
 {
 	struct c_domain *cd;
 	struct cookie *d;
@@ -389,7 +390,7 @@ end:
 }
 
 
-struct
+static struct
 cookie *find_cookie_id(void *idp)
 {
 	int id = (int)idp;
@@ -403,7 +404,7 @@ cookie *find_cookie_id(void *idp)
 }
 
 
-void
+static void
 reject_cookie(void *idp)
 {
 	struct cookie *c = find_cookie_id(idp);
@@ -414,7 +415,7 @@ reject_cookie(void *idp)
 }
 
 
-void
+static void
 cookie_default(void *idp, int a)
 {
 	struct c_server *s;
@@ -436,22 +437,23 @@ found:
 }
 
 
-void
+static void
 accept_cookie_always(void *idp)
 {
 	cookie_default(idp, 1);
 }
 
 
-void
+static void
 accept_cookie_never(void *idp)
 {
 	cookie_default(idp, 0);
 	reject_cookie(idp);
 }
+#endif
 
 
-int
+static int
 is_in_domain(unsigned char *d, unsigned char *s)
 {
 	int dl = strlen(d);
@@ -465,7 +467,7 @@ is_in_domain(unsigned char *d, unsigned char *s)
 }
 
 
-int
+static int
 is_path_prefix(unsigned char *d, unsigned char *s)
 {
 	int dl = strlen(d);
@@ -477,7 +479,7 @@ is_path_prefix(unsigned char *d, unsigned char *s)
 }
 
 
-int
+static int
 cookie_expired(struct cookie *c)
 {
   	return (c->expires && c->expires < time(NULL));
@@ -647,7 +649,7 @@ inv:
 }
 
 
-void
+static void
 save_cookies() {
 	struct cookie *c;
 	unsigned char *cookfile;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.446 2004/06/22 22:05:29 zas Exp $ */
+/* $Id: parser.c,v 1.447 2004/06/22 22:11:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -158,7 +158,6 @@ struct html_context html_context;
 unsigned char *eofff;
 unsigned char *startf;
 
-int was_li;
 int was_xmp;
 int has_link_lines;
 
@@ -200,7 +199,8 @@ put_chrs(unsigned char *start, int len,
 	put_chars(f, start, len);
 	html_context.position += len;
 	html_context.line_breax = 0;
-	if (was_li > 0) was_li--;
+	if (html_context.was_li > 0)
+		html_context.was_li--;
 }
 
 void
@@ -716,7 +716,7 @@ html_li(unsigned char *a)
 	/* When handling the code <li><li> @was_li will be 1 and it means we
 	 * have to insert a line break since no list item content has done it
 	 * for us. */
-	if (was_li) {
+	if (html_context.was_li) {
 		html_context.line_breax = 0;
 		ln_break(1, line_break_f, ff);
 	}
@@ -775,7 +775,7 @@ html_li(unsigned char *a)
 
 	html_context.putsp = -1;
 	html_context.line_breax = 2;
-	was_li = 1;
+	html_context.was_li = 1;
 }
 
 void

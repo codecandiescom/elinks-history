@@ -1,5 +1,5 @@
 /* HTML core parser routines */
-/* $Id: parse.c,v 1.55 2004/06/22 22:05:29 zas Exp $ */
+/* $Id: parse.c,v 1.56 2004/06/22 22:11:04 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -576,7 +576,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	html_context.line_breax = table_level ? 2 : 1;
 	html_context.position = 0;
 	html_context.was_br = 0;
-	was_li = 0;
+	html_context.was_li = 0;
 	ff = f;
 	html_context.eoff = eof;
 	if (head) process_head(head);

@@ -1,5 +1,5 @@
 /* SGML node handling */
-/* $Id: parser.c,v 1.5 2004/09/26 01:53:32 jonas Exp $ */
+/* $Id: parser.c,v 1.6 2004/09/26 10:40:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -179,23 +179,26 @@ parse_sgml_attributes(struct dom_navigator *navigator, struct scanner *scanner)
 		case SGML_TOKEN_IDENT:
 			memcpy(&name, token, sizeof(struct scanner_token));
 
-			if (check_next_scanner_token(scanner, '=')) {
-				skip_sgml_tokens(scanner, '=');
-
-				token = get_scanner_token(scanner);
-				if (!token) break;
-
-				if (token->type != SGML_TOKEN_IDENT
+			/* Skip the attribute name token */
+			token = get_next_scanner_token(scanner);
+			if (token && token->type == '=') {
+				/* If the token is not a valid value token
+				 * ignore it. */
+				token = get_next_scanner_token(scanner);
+				if (token
+				    && token->type != SGML_TOKEN_IDENT
 				    && token->type != SGML_TOKEN_ATTRIBUTE
 				    && token->type != SGML_TOKEN_STRING)
-					break;
+					token = NULL;
 			} else {
 				token = NULL;
 			}
 
 			add_sgml_attribute(navigator, &name, token);
 
-			skip_scanner_token(scanner);
+			/* Skip the value token */
+			if (token)
+				skip_scanner_token(scanner);
 			break;
 
 		default:

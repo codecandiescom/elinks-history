@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.15 2004/01/01 03:09:13 pasky Exp $ */
+/* $Id: feature.h,v 1.16 2004/01/01 03:16:53 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -290,6 +290,29 @@
  * Default: enabled */
 
 #define USE_MOUSE
+
+
+/*** Local CGI Support
+ *
+ * ELinks can (like w3m or lynx) execute certain executable files stored on the
+ * local disks as CGIs, when you target it on them (through a URI of the 'file'
+ * scheme). ELinks emulates the complete CGI environment, like the program
+ * would be executed by a web server. See the protocol.file.cgi options tree
+ * for detailed runtime configuration.
+ *
+ * Some people just write their bookmark managment application as perl CGI
+ * script and then access it from the web browser using this feature, not
+ * needing any web server or so. Therefore, this is a great possible way to
+ * extended the browser capabilities.
+ *
+ * Even when you compile this in, you need to enable this yet in the
+ * configuration, and even then only CGI files passing certain user-defined
+ * filters (path-based) will be allowed to be executed (and there are certain
+ * other security barriers in place).
+ *
+ * Default: disabled */
+
+/* #define ELINKS_LOCAL_CGI */
 
 
 #endif

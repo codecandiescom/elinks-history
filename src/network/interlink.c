@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.61 2003/07/09 23:03:09 jonas Exp $ */
+/* $Id: interlink.c,v 1.62 2003/07/10 00:59:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -324,10 +324,12 @@ static void
 af_unix_connection(struct socket_info *info)
 {
 	int ns;
-	int l = info->size;
+	int l;
 
 	assert(info);
 	if_assert_failed return;
+
+	l = info->size;
 
 	memset(info->addr, 0, l);
 	ns = accept(info->fd, info->addr, &l);

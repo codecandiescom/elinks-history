@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.126 2004/06/08 14:26:53 jonas Exp $ */
+/* $Id: uri.h,v 1.127 2004/06/11 01:06:34 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -256,7 +256,7 @@ int get_no_post_url_length(unsigned char *url);
 static inline int
 get_real_uri_length(struct uri *uri)
 {
-	return uri->post ? uri->post - struri(uri) : strlen(struri(uri));
+	return uri->post ? uri->post - struri(uri) - 1 : strlen(struri(uri));
 }
 
 #endif

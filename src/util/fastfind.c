@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.31 2003/06/15 11:18:13 pasky Exp $ */
+/* $Id: fastfind.c,v 1.32 2003/06/15 11:25:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -359,11 +359,11 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 	info->root_leafset = info->leafsets[info->leafsets_count];
 
-	/* Do it */
+	/* Build the tree */
 	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
-		struct ff_node *current = info->root_leafset;
+		struct ff_node *leafset = info->root_leafset;
 		register int i;
 
 #if 0
@@ -373,23 +373,23 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			/* Convert char to its index value */
 			int idx = info->idxtab[ifcase(p->key[i])];
 
-			if (current[idx].l == 0) {
+			if (leafset[idx].l == 0) {
 				/* There's no leaf leafset yet */
 				if (!alloc_leafset(info)) goto alloc_error;
-				current[idx].l = info->leafsets_count;
+				leafset[idx].l = info->leafsets_count;
 			}
 
 			/* Descend to leaf leafset */
-			current = info->leafsets[current[idx].l];
+			leafset = info->leafsets[leafset[idx].l];
 		}
 
 		/* Index final leaf */
 		i = info->idxtab[ifcase(p->key[i])];
 
-		current[i].e = 1;
+		leafset[i].e = 1;
 
 		/* Memorize pointer to data */
-		current[i].p = info->pointers_count;
+		leafset[i].p = info->pointers_count;
 		if (!add_to_pointers(p->data, key_len, info))
 			goto alloc_error;
 	}
@@ -402,7 +402,7 @@ alloc_error:
 }
 
 void
-fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
+fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
 	int cnt = 0;
 	int pos = -1;
@@ -411,25 +411,25 @@ fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
 	assert(info);
 
 	for (; i < info->uniq_chars_count; i++) {
-		if (current[i].c) continue;
+		if (leafset[i].c) continue;
 
-		if (current[i].l) {
+		if (leafset[i].l) {
 			/* There's a leaf leafset, descend to it, and recurse */
-			fastfind_node_compress(info->leafsets[current[i].l],
+			fastfind_node_compress(info->leafsets[leafset[i].l],
 						info);
 		}
 
-		if (current[i].l || current[i].e) {
+		if (leafset[i].l || leafset[i].e) {
 			cnt++;
 			pos = i;
 		}
 	}
 
-	if (pos == -1 || cnt >= 2 || current[pos].c) return;
+	if (pos == -1 || cnt >= 2 || leafset[pos].c) return;
 
 	/* Compress if possible ;) */
 	for (i = 1; i < info->leafsets_count; i++)
-		if (info->leafsets[i] == current)
+		if (info->leafsets[i] == leafset)
 			break;
 
 	if (i < info->leafsets_count) {
@@ -438,9 +438,9 @@ fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
 		if (!new) return;
 
 		new->c = 1;
-		new->e = current[pos].e;
-		new->p = current[pos].p;
-		new->l = current[pos].l;
+		new->e = leafset[pos].e;
+		new->p = leafset[pos].p;
+		new->l = leafset[pos].l;
 		new->ch = pos;
 
 		mem_free(info->leafsets[i]);

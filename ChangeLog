@@ -1,3 +1,252 @@
+Sun Jan  4 20:57:41 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Fix the is-that-a-folder check introduced by zas.  
+
+Sun Jan  4 20:54:09 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Removed some seemingly forgotten condition if (range) in the middle
+	of source.  
+
+Sun Jan  4 20:36:26 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* SITES:
+
+	pasky.ji.cz -> pasky.or.cz 
+
+Sun Jan  4 20:18:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: hierbox.c, hierbox.h, listbox.h:
+
+	Name the listbox item type enum so we can use exact type in
+	functions.  
+
+Sun Jan  4 20:02:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced.  
+
+Sun Jan  4 18:56:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: download.c, status.c, status.h:
+
+	Move download_is_progressing() to header (that is now included in
+	the .c file) so it can be used by the download dialog code.  
+
+Sun Jan  4 18:13:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.h:
+
+	Declare input_history now used for global_history.  
+
+Sun Jan  4 17:53:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mimetypes.c:
+
+	Update copyright.  
+
+Sun Jan  4 17:42:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Sun Jan  4 16:54:03 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/refresh.c:
+
+	Removed some funny semicolons.  
+
+Sun Jan  4 16:47:32 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan  4 16:22:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: conf.c, options.inc:
+
+	Introduced ui.success_msgbox which controls displaying of the
+	file-was-saved-successfully msgbox. Like it would be so difficult,
+	Jonas and Zas.  
+
+Sun Jan  4 16:20:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/conf.c, config/dialogs.c, config/dialogs.h,
+	dialogs/options.c:
+
+	Moved options saving success reporting from individual save button
+	handlers to write_config_file().  
+
+Sun Jan  4 15:56:43 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan  4 15:41:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/: config/conf.c, config/conf.h, config/dialogs.c,
+	dialogs/options.c:
+
+	A success message is now displayed when options and terminal options
+	are sucessfully saved through UI.  
+
+Sun Jan  4 15:40:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	display_timer() tidyup.  
+
+Sun Jan  4 15:05:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inphist.c, bfu/inphist.h, globhist/globhist.c:
+
+	Use macros to add to and delete from input_history.  
+
+Sun Jan  4 15:04:40 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Option modify/info dialogs now shows valid range for boolean,
+	integer, and long types.  
+
+Sun Jan  4 15:03:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/config/options.h:
+
+	Use long type for struct option min and max fields since value may
+	be long.  
+
+Sun Jan  4 14:53:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Cleanup and unify finalizers.  
+
+Sun Jan  4 14:40:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Cleanup.  
+
+Sun Jan  4 14:11:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Show a simple message when pressing Info on a folder in an hierbox
+	browser. "Press space to expand this folder." is now displayed in
+	this case. It works in Cookies manager. Jonas please check if it is
+	done as it should or not.  
+
+Sun Jan  4 11:57:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/: dialogs.c, globhist.c, globhist.h:
+
+	Replace global_history_list with input_history. 'One struct to rule
+	them all ..' Well maybe we should s/input_history/history_list/ but
+	it makes good sense .. also in the perspective of history modules.  
+
+Sun Jan  4 11:42:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/globhist.c:
+
+	Remove usage of struct globhist_cache_entry that only takes up extra
+	memory since struct hash_item does all the work.  
+
+Sun Jan  4 06:21:29 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Sun Jan  4 01:47:56 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sun Jan  4 01:42:29 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/sched/: history.c, history.h:
+
+	Comment out the definition and use of compress_history (introduced
+	in src/sched/history.c:1.59->1.60 and src/sched/history.h:1.23->1.24
+	to fix bug 309) as they were preventing session items from beïng
+	added when one follows a link in a frame or a link to a fragment
+	identifier on the current page.  
+
+Sun Jan  4 01:40:36 2004  Laurent Monin <zas@norz.org>:
+
+	* configure.in:
+
+	Add -fno-inline to CFLAGS when gcc and --enable-debug are used. It
+	permits to get more meaningfull backtrace.  
+
+Sun Jan  4 00:56:29 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listmenu.c:
+
+	Some TODO were added.  
+
+Sun Jan  4 00:44:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Test was simplified.  
+
+Sun Jan  4 00:40:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Testing against NULL is done in strlcasecmp(), extra test was
+	removed.  
+
+Sun Jan  4 00:38:08 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Prevent useless computation of constant string length by caching its
+	value. Test with strlcasecmp() were simplified since now NULL string
+	is correctly handled. An assertion was added to check name and
+	*name.  
+
+Sun Jan  4 00:20:31 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/draw.c:
+
+	draw_text() will now simply return on negative length case, when
+	assertions are disabled.  
+
+Sun Jan  4 00:17:42 2004  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/dialog.c:
+
+	An assertion failure was fixed. It was triggered by resizing
+	download dialog in progress to a very low width: negative length for
+	text, badly accepted by draw_text().  
+
+Sun Jan  4 00:07:50 2004  Laurent Monin <zas@norz.org>:
+
+	* src/terminal/screen.c:
+
+	Some assertions were added to resize_screen(). Use size_t type
+	instead of int for size and bsize variables.  
+
+Sat Jan  3 23:43:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.c:
+
+	Remove functions that are now macros.  
+
 Sat Jan  3 16:04:42 2004  Laurent Monin <zas@norz.org>:
 
 	* src/: bfu/listmenu.h, document/html/parser.h, viewer/text/form.c:

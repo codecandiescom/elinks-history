@@ -1,5 +1,5 @@
 /* Proxy handling */
-/* $Id: proxy.c,v 1.42 2004/07/22 06:09:35 miciah Exp $ */
+/* $Id: proxy.c,v 1.43 2004/07/22 07:45:32 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -114,9 +114,20 @@ get_proxy_worker(struct uri *uri, unsigned char *proxy)
 		break;
 
 	case PROTOCOL_HTTPS:
+		/* As Timo Lindfors explains, the connection between ELinks
+		 * and the proxy server is never encrypted (if there is some
+		 * proxy server with which the Web client communicates using
+		 * encryption, ELinks does not support it). */
+		/* So, don't check whether the URI for the proxy begins
+		 * with "https://" but rather check for "http://".
+		 * Maybe we should allow either -- ELinks uses HTTP
+		 * to communicate with the proxy when we use it for FTP, but we
+		 * check for "ftp://" below; and what about 'be liberal in what
+		 * you accept' (altho that is usually applied to data received
+		 * from remote systems, not to user input)?  -- Miciah */
 		protocol_proxy = get_protocol_proxy("protocol.https.proxy.host",
 						    "HTTPS_PROXY", "https_proxy",
-						    "https://", NULL);
+						    "http://", NULL);
 		break;
 
 	case PROTOCOL_FTP:

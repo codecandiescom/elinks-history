@@ -1,8 +1,9 @@
 /* Long list of color names and their rgb values, used by UI, and html stuff.
- * This is used by src/util/color.c
+ * This and color_s.inc are both included by src/util/color.c when ELINKS_SMALL
+ * is not defined; otherwise, only color_s.inc is included.
  * This list is mostly from X11 rgb.txt with some additions from various
  * sources and from original ELinks color.c file. */
-/* $Id: color.inc,v 1.4 2004/04/29 16:01:25 zas Exp $ */
+/* $Id: color.inc,v 1.5 2004/08/14 21:42:49 miciah Exp $ */
 
 	{ "alice blue",			0xF0F8FF },
 	{ "antique white",		0xFAEBD7 },

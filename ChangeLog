@@ -1,3 +1,42 @@
+Sun Jan 11 22:16:17 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Sun Jan 11 18:18:42 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	GPLv2 only. Reminded by Jonas.  
+
+Sun Jan 11 18:13:57 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* COPYING:
+
+	Removed ELusive part for the foreseeable future.  
+
+Sun Jan 11 17:48:25 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* COPYING:
+
+	GPLv2, not any future version.  
+
+Sun Jan 11 05:41:30 2004  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: dialogs/status.c, sched/task.c:
+
+	Instead of zeroing the session's 'visited' flag in display_tab_bar, 
+	zero it in ses_forward.  
+	
+	This is more logical and efficient, as we now zero the flag once, 
+	when we finish loading the page, instead of repeatedly, once every
+	time we update the tab bar, from when we first start trying to load
+	the page to when we finish or fail.  
+	
+	More importantly, it fixes a bug whereby we would leave the tab
+	highlighted as freshly loaded even if the page failed to load.  
+
 Sat Jan 10 11:16:27 2004  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.182 2005/01/07 21:51:46 jonas Exp $ */
+/* $Id: options.inc,v 1.183 2005/01/13 13:24:30 jonas Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -62,7 +62,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("config", N_("Show template"),
 		"show_template", 0, 0,
-		N_("Show _template_ options in autocreated trees in the options\n"
+		N_("Show template options in autocreated trees in the options\n"
 		"manager and save them to the configuration file.")),
 
 	/* Keep options in alphabetical order. */
@@ -75,7 +75,7 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("connection", N_("Asynchronous DNS"),
 		"async_dns", 0, 1,
-		N_("Use asynchronous DNS resolver?")),
+		N_("Whether to use asynchronous DNS resolving.")),
 
 	INIT_OPT_INT("connection", N_("Maximum connections"),
 		"max_connections", 0, 1, 16, 10,
@@ -140,10 +140,12 @@ static struct option_info config_options_info[] = {
 		N_("Document browsing options (mainly interactivity).")),
 
 
-	INIT_OPT_TREE("document.browse", N_("Accesskeys"),
+	INIT_OPT_TREE("document.browse", N_("Access keys"),
 		"accesskey", 0,
-		N_("Options for handling of the accesskey attribute of the active\n"
-		"HTML elements.")),
+		N_("Options for handling of the access keys for active links.\n"
+		"Access keys can be assigned using the ACCESSKEY attribute in\n"
+		"HTML elements and can be used to give focus to the link when\n"
+		"the assigned access key is pressed.")),
 
 	INIT_OPT_BOOL("document.browse.accesskey", N_("Automatic links following"),
 		"auto_follow", 0, 0,
@@ -312,7 +314,10 @@ static struct option_info config_options_info[] = {
 
 	INIT_OPT_BOOL("document.browse.links", N_("Use tabindex"),
 		"use_tabindex", 0, 1,
-		N_("Whether to navigate links using tabindex.")),
+		N_("Whether to navigate links using tabindex specified ordering.\n"
+		"The TABINDEX attribute in HTML elements specifies the order\n"
+		"in which links should receive focus when using the keyboard\n"
+		"to navigating the document.")),
 
 	INIT_OPT_INT("document.browse.links", N_("Number keys select links"),
 		"number_keys_select_link", 0, 0, 2, 1,
@@ -418,7 +423,7 @@ static struct option_info config_options_info[] = {
 		"to reload a document at a given interval or to load another page.\n"
 		"Regardless of the value the refresh URI is accessible as a link.\n"
 		"Use the document.browse.minimum_refresh_time to control the minimum\n"
-		"number of seconds a refresh will take.")),
+		"number of seconds a refresh will wait.")),
 
 	INIT_OPT_INT("document.browse", N_("Document meta refresh minimum time"),
 		"minimum_refresh_time", 0, 0, INT_MAX, 1000,

@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.88 2004/12/31 11:22:46 jonas Exp $ */
+/* $Id: mailcap.c,v 1.89 2005/01/13 13:24:31 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -106,7 +106,7 @@ static struct option_info mailcap_options[] = {
 
 	INIT_OPT_INT("mime.mailcap", N_("Type query string"),
 		"description", 0, 0, 2, 0,
-		N_("Type of description to show in \"what shall I do with this file\"\n"
+		N_("Type of description to show in \"what to do with this file\"\n"
 		"query dialog:\n"
 		"0 is show \"mailcap\"\n"
 		"1 is show program to be run\n"

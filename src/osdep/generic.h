@@ -1,4 +1,4 @@
-/* $Id: generic.h,v 1.12 2003/10/27 03:01:38 pasky Exp $ */
+/* $Id: generic.h,v 1.13 2004/04/16 09:20:52 zas Exp $ */
 
 #ifndef EL__OSDEP_GENERIC_H
 #define EL__OSDEP_GENERIC_H
@@ -6,6 +6,11 @@
 #ifdef HAVE_LIMITS_H
 #include <limits.h> /* may contain PIPE_BUF definition on some systems */
 #endif
+
+#ifdef HAVE_SYS_SIGNAL_H
+#include <sys/signal.h> /* may contain SA_RESTART */
+#endif
+
 
 #ifndef MAXINT
 #ifdef INT_MAX

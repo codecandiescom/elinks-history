@@ -1,5 +1,5 @@
 /* List menus functions */
-/* $Id: listmenu.c,v 1.23 2004/04/18 13:52:10 jonas Exp $ */
+/* $Id: listmenu.c,v 1.24 2004/04/18 14:01:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -86,7 +86,6 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 		if (stack) {
 			menu->stack = stack;
 			new_menu_item = new_menu(NO_INTL);
-			menu->stack[menu->stack_size] = new_menu_item;
 		}
 
 		if (!stack || !new_menu_item) {
@@ -95,27 +94,28 @@ new_menu_item(struct list_menu *menu, unsigned char *name, int data, int fullnam
 			return;
 		}
 
-		if (!menu->stack_size) {
-			menu->stack_size++;
+		/* Since we increment @stack_size use cached value */
+		menu->stack[menu->stack_size++] = new_menu_item;
+
+		if (menu->stack_size == 1) {
 			mem_free(name);
 			return;
 		}
 	}
 
-	items = &menu->stack[menu->stack_size - 1];
+	items = &menu->stack[stack_size - 1];
 
 	if (data == -1) {
 		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
 			    (menu_func) do_select_submenu,
 			    new_menu_item, SUBMENU);
-		menu->stack_size++;
 	} else {
 		add_to_menu(items, name, NULL, ACT_MAIN_NONE,
 			    (menu_func) selected_item,
 			    (void *) data, (fullname ? MENU_FULLNAME : 0));
 	}
 
-	if (menu->stack_size >= 2) {
+	if (stack_size >= 2) {
 		struct menu_item *below = menu->stack[menu->stack_size - 2];
 
 		while (below->text) below++;

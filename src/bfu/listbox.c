@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.16 2002/08/29 11:48:30 pasky Exp $ */
+/* $Id: listbox.c,v 1.17 2002/08/29 15:22:25 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -171,6 +171,10 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 	struct box_context *data;
 
 	box = (struct listbox_data *) listbox_item_data->item->data;
+	if (!list_empty(*box->items)) {
+		if (!box->top) box->top = box->items->next;
+		if (!box->sel) box->sel = box->top;
+	}
 
 	data = mem_alloc(sizeof(struct box_context));
 	data->new_top = box->top;
@@ -222,6 +226,10 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	struct box_context *data;
 
 	box = (struct listbox_data *) listbox_item_data->item->data;
+	if (!list_empty(*box->items)) {
+		if (!box->top) box->top = box->items->next;
+		if (!box->sel) box->sel = box->top;
+	}
 
 	fill_area(term, listbox_item_data->x, listbox_item_data->y,
 		  listbox_item_data->l, listbox_item_data->item->gid,
@@ -265,6 +273,10 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	struct listbox_data *box;
 
 	box = (struct listbox_data *) di->item->data;
+	if (!list_empty(*box->items)) {
+		if (!box->top) box->top = box->items->next;
+		if (!box->sel) box->sel = box->top;
+	}
 
 	if ((ev->b & BM_ACT) == B_UP) {
 		if ((ev->y >= di->y) && (ev->x >= di->x &&

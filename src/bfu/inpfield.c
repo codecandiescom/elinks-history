@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.106 2004/01/25 12:38:40 jonas Exp $ */
+/* $Id: inpfield.c,v 1.107 2004/01/28 05:44:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "config/kbdbind.h"
 #include "intl/gettext/libintl.h"
 #include "osdep/osdep.h"
+#include "sched/session.h"
 #include "terminal/draw.h"
 #include "terminal/kbd.h"
 #include "terminal/terminal.h"
@@ -473,3 +474,47 @@ struct widget_ops field_pass_ops = {
 	kbd_field,
 	NULL,
 };
+
+
+/* Input lines */
+
+static void
+input_line_layouter(struct dialog_data *dlg_data)
+{
+	struct window *win = dlg_data->win;
+	struct session *ses = dlg_data->dlg->udata2;
+	int y = win->term->height - 1
+		- ses->status.show_status_bar
+		- ses->status.show_tabs_bar;
+
+	dlg_format_field(win->term, dlg_data->widgets_data, 0,
+			 &y, win->term->width, NULL, AL_LEFT);
+}
+
+void
+input_field_line(struct session *ses, unsigned char *prompt,
+		 struct input_history *history,
+		 int (*handle_event)(struct dialog_data *, struct term_event *))
+{
+	struct dialog *dlg;
+	unsigned char *buffer;
+
+	assert(ses);
+
+	dlg = calloc_dialog(INPUT_LINE_WIDGETS, INPUT_LINE_BUFFER_SIZE);
+	if (!dlg) return;
+
+	buffer = get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
+
+	dlg->handle_event = handle_event;
+	dlg->layouter = input_line_layouter;
+	dlg->layout.only_widgets = 1;
+	dlg->udata = buffer;
+	dlg->udata2 = ses;
+	dlg->widgets->info.field.float_label = 1;
+
+	add_dlg_field(dlg, prompt, 0, 0, NULL, INPUT_LINE_BUFFER_SIZE,
+		      buffer, history);
+
+	do_dialog(ses->tab->term, dlg, getml(dlg, NULL));
+}

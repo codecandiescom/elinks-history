@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.25 2003/12/01 15:19:53 pasky Exp $ */
+/* $Id: inpfield.h,v 1.26 2004/01/28 05:44:52 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -45,5 +45,16 @@ void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 		 int (*)(struct dialog_data *, struct widget_data *),
 		 void (*)(void *, unsigned char *),
 		 void (*)(void *));
+
+
+/* Input lines */
+
+#define INPUT_LINE_BUFFER_SIZE	80
+#define INPUT_LINE_WIDGETS	1
+
+void
+input_field_line(struct session *ses, unsigned char *prompt,
+		 struct input_history *history,
+		 int (*handle_event)(struct dialog_data *, struct term_event *));
 
 #endif

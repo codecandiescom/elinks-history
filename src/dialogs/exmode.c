@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.27 2004/01/28 05:40:28 jonas Exp $ */
+/* $Id: exmode.c,v 1.28 2004/01/28 05:44:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,9 +34,6 @@
  * bottom of the screen when you press ':' and lets you enter various commands
  * (just like in vi), especially actions, events (where they make sense) and
  * config-file commands. */
-
-#define INPUT_LINE_BUFFER_SIZE	80
-#define INPUT_LINE_WIDGETS	1
 
 struct input_history exmode_history = {
 	/* items: */	{ D_LIST_HEAD(exmode_history.entries) },
@@ -169,19 +166,6 @@ exmode_exec(struct session *ses, unsigned char buffer[INPUT_LINE_BUFFER_SIZE])
 }
 
 
-static void
-input_line_layouter(struct dialog_data *dlg_data)
-{
-	struct window *win = dlg_data->win;
-	struct session *ses = dlg_data->dlg->udata2;
-	int y = win->term->height - 1
-		- ses->status.show_status_bar
-		- ses->status.show_tabs_bar;
-
-	dlg_format_field(win->term, dlg_data->widgets_data, 0,
-			 &y, win->term->width, NULL, AL_LEFT);
-}
-
 static int
 exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 {
@@ -224,34 +208,6 @@ exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
 	}
 
 	return EVENT_NOT_PROCESSED;
-}
-
-static void
-input_field_line(struct session *ses, unsigned char *prompt,
-		 struct input_history *history,
-		 int (*handle_event)(struct dialog_data *, struct term_event *))
-{
-	struct dialog *dlg;
-	unsigned char *buffer;
-
-	assert(ses);
-
-	dlg = calloc_dialog(INPUT_LINE_WIDGETS, INPUT_LINE_BUFFER_SIZE);
-	if (!dlg) return;
-
-	buffer = get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
-
-	dlg->handle_event = handle_event;
-	dlg->layouter = input_line_layouter;
-	dlg->layout.only_widgets = 1;
-	dlg->udata = buffer;
-	dlg->udata2 = ses;
-	dlg->widgets->info.field.float_label = 1;
-
-	add_dlg_field(dlg, prompt, 0, 0, NULL, INPUT_LINE_BUFFER_SIZE,
-		      buffer, history);
-
-	do_dialog(ses->tab->term, dlg, getml(dlg, NULL));
 }
 
 void

@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.69 2004/09/20 15:49:07 pasky Exp $ */
+/* $Id: apply.c,v 1.70 2004/09/20 15:49:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,27 +87,27 @@ static void
 examine_element(struct css_selector *base, struct list_head *selectors,
                 struct html_element *element)
 {
-	struct css_selector *altsel;
+	struct css_selector *selector;
 	unsigned char *code;
 
 #define process_found_selector(sel, base) \
-	if (altsel) merge_css_selectors(base, sel);
+	if (selector) merge_css_selectors(base, sel);
 
-	altsel = find_css_selector(selectors, CST_ELEMENT,
+	selector = find_css_selector(selectors, CST_ELEMENT,
 	                           element->name, element->namelen);
-	process_found_selector(altsel, base);
+	process_found_selector(selector, base);
 
 	code = get_attr_val(element->options, "id");
 	if (code) {
-		altsel = find_css_selector(selectors, CST_ID, code, -1);
-		process_found_selector(altsel, base);
+		selector = find_css_selector(selectors, CST_ID, code, -1);
+		process_found_selector(selector, base);
 		mem_free(code);
 	}
 
 	code = get_attr_val(element->options, "class");
 	if (code) {
-		altsel = find_css_selector(selectors, CST_CLASS, code, -1);
-		process_found_selector(altsel, base);
+		selector = find_css_selector(selectors, CST_CLASS, code, -1);
+		process_found_selector(selector, base);
 		mem_free(code);
 	}
 

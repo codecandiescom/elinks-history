@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.10 2003/12/01 20:55:13 jonas Exp $ */
+/* $Id: status.c,v 1.11 2003/12/01 21:06:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -293,7 +293,6 @@ display_title_bar(struct session *ses, struct terminal *term)
 	struct string title;
 	unsigned char buf[80];
 	int buflen = 0;
-	int width;
 
 	/* Clear the old title */
 	draw_area(term, 0, 0, term->width, 1, ' ', 0,
@@ -305,7 +304,6 @@ display_title_bar(struct session *ses, struct terminal *term)
 	if (!init_string(&title)) return;
 
 	document = doc_view->document;
-	width = ses->tab->term->width;
 
 	/* Set up the document page info string: '(' %page '/' %pages ')' */
 	if (doc_view->height < document->height) {
@@ -327,13 +325,14 @@ display_title_bar(struct session *ses, struct terminal *term)
 		if (buflen < 0) buflen = 0;
 	}
 
-	if (doc_view->document->title) {
-		add_to_string(&title, doc_view->document->title);
+	if (document->title) {
+		int maxlen = int_max(term->width - 4 - buflen, 0);
+		int titlelen = int_min(strlen(document->title), maxlen);
 
-		if (title.length + buflen > width - 4) {
-			title.length = int_max(width - 4 - buflen, 0);
-			add_to_string(&title, "...");
-		}
+		add_bytes_to_string(&title, document->title, titlelen);
+
+		if (titlelen == maxlen)
+			add_bytes_to_string(&title, "...", 3);
 	}
 
 	if (buflen > 0)

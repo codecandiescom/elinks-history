@@ -1,3 +1,127 @@
+Sun Jul  6 22:04:03 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.h:
+
+	Introduced if_assert_failed to exclude assert_failed tests and the
+	(dead) recovery code from FASTMEM.  
+
+Sun Jul  6 21:51:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/http.c:
+
+	Whitespace fixes.  
+
+Sun Jul  6 21:49:34 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/error.c:
+
+	Make sure assert_failed is initialized to zero. (I heard that global
+	variables are automatically zeroed but didn't check that, so I'm
+	taking the safe path.  
+
+Sun Jul  6 21:25:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: elinks.h, main.c, protocol/http/http.c,
+	protocol/http/https.c, sched/connection.c, ssl/connect.c,
+	ssl/ssl.c, ssl/ssl.h:
+
+	Removed SSL includes from elinks.h, this introduces not quite nice
+	hack, but a great opportunity for certain thing (you'll see when you
+	look at the diff >:) and mainly it speeds the compilation up by cca
+	0.7s - 0.8s per file on my machine (which is about half of the whole
+	compilation time for the smaller files). Violence, in the proper
+	context, is good. Will you hit me? 
+
+Sun Jul  6 20:59:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/https.c:
+
+	Add missing ssl/ssl.h  #include.  
+
+Sun Jul  6 20:44:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: sched/connection.h, ssl/connect.c, protocol/http/http.c:
+
+	ssl_t *ssl -> void *ssl in struct connection. And we don't need to
+	include ssl/ssl.h anymore in sched/connection.h as a nice
+	side-effect.  
+
+Sun Jul  6 20:28:43 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/: error.c, error.h:
+
+	Introduced assert_failed, which is set to 1 if the last assert(m)()
+	failed, zero otherwise. Recovery paths made possible! ;-) Now who
+	will reintroduce them...? ;) 
+
+Sun Jul  6 17:53:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/connection.h:
+
+	Removed some boring useless explicit values enumeration. If things
+	will stop working now, blame this.  
+
+Sun Jul  6 17:51:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/textarea.c:
+
+	Assert sanity.  
+
+Sun Jul  6 11:53:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Move check_queue_bugs() and add #else branch so it don't have to be
+	wrapped in macros.  
+
+Sun Jul  6 11:11:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/ftp.c, sched/connection.h:
+
+	Move read_func back to struct connection. No ftp_c.._info is valid.
+	Reported by zas.  
+
+Sun Jul  6 08:48:15 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/ftp.c:
+
+	cmd_buffer must be last field in struct ftp_connection_info ! 
+
+Sun Jul  6 03:42:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/proxy.c, sched/connection.c:
+
+	Oops move scripting hook #include.  
+
+Sun Jul  6 03:18:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Hopefully the keepalive connection host should be finally correct.
+	Added assertion to back it up.  
+
+Sun Jul  6 02:45:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, protocol/file.c, protocol/finger.c,
+	protocol/ftp.c, protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
+
+	Finally knock out connection->url and users meaning lots of small
+	optimizations.  
+
+Sun Jul  6 01:31:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/connection.c:
+
+	Split out basic connection initialization.  
+
+Sun Jul  6 00:26:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/Makefile.am, protocol/proxy.c, protocol/proxy.h,
+	sched/connection.c:
+
+	Move out proxy handling.  
+
 Sat Jul  5 19:09:32 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/ssl/connect.c:

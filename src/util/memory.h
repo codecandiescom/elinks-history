@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.8 2003/04/22 10:09:24 zas Exp $ */
+/* $Id: memory.h,v 1.9 2003/04/22 14:17:16 zas Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -10,6 +10,9 @@
 #define ALLOC_MAXTRIES 3
 /* Delay in seconds between each alloc try. */
 #define ALLOC_DELAY 1
+
+#define fmem_alloc(x) mem_alloc(x)
+#define fmem_free(x) mem_free(x)
 
 
 #ifdef LEAK_DEBUG
@@ -59,11 +62,10 @@ void *mem_realloc(void *, size_t);
 #if defined HAVE_ALLOCA_H
 #include <alloca.h>
 #endif
+#undef fmem_alloc
 #define fmem_alloc(x) alloca(x)
+#undef fmem_free
 #define fmem_free(x)
-#else
-#define fmem_alloc(x) mem_alloc(x)
-#define fmem_free(x) mem_free(x)
 #endif
 
 #endif /* FASTMEM */

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.152 2004/12/24 23:28:13 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.153 2004/12/25 14:00:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -81,18 +81,34 @@ struct jsval_property {
 		JSObject *object;
 		unsigned char *string;
 	} value;
+#ifdef CONFIG_DEBUG
+	unsigned int magic;
+#endif
 };
+
+/* Sanity macros for struct jsval_property */
+#ifdef CONFIG_DEBUG
+#define JSVAL_PROP_MAGIC ((unsigned int) 0xf1de1c0d)
+#define set_prop_magic(prop) do { (prop)->magic = JSVAL_PROP_MAGIC; } while (0)
+#define check_prop_magic(prop) assertm((prop)->magic == JSVAL_PROP_MAGIC, "jsval_property magic check failed.")
+#else
+#define set_prop_magic(prop)
+#define check_prop_magic(prop)
+#endif
+
 
 static void
 set_prop_undef(struct jsval_property *prop)
 {
 	memset(prop, 'J', sizeof(struct jsval_property)); /* Active security ;) */
+	set_prop_magic(prop);
 	prop->type = JSPT_UNDEF;
 }
 
 static void
 set_prop_object(struct jsval_property *prop, JSObject *object)
 {
+	set_prop_magic(prop);
 	prop->value.object = object;
 	prop->type = JSPT_OBJECT;
 }
@@ -100,6 +116,7 @@ set_prop_object(struct jsval_property *prop, JSObject *object)
 static void
 set_prop_boolean(struct jsval_property *prop, int boolean)
 {
+	set_prop_magic(prop);
 	prop->value.boolean = boolean;
 	prop->type = JSPT_BOOLEAN;
 }
@@ -107,6 +124,7 @@ set_prop_boolean(struct jsval_property *prop, int boolean)
 static void
 set_prop_string(struct jsval_property *prop, unsigned char *string)
 {
+	set_prop_magic(prop);
 	prop->value.string = string;
 	prop->type = JSPT_STRING;
 }
@@ -114,6 +132,7 @@ set_prop_string(struct jsval_property *prop, unsigned char *string)
 static void
 set_prop_astring(struct jsval_property *prop, unsigned char *string)
 {
+	set_prop_magic(prop);
 	prop->value.string = string;
 	prop->type = JSPT_ASTRING;
 }
@@ -121,6 +140,7 @@ set_prop_astring(struct jsval_property *prop, unsigned char *string)
 static void
 set_prop_int(struct jsval_property *prop, int number)
 {
+	set_prop_magic(prop);
 	prop->value.number = number;
 	prop->type = JSPT_INT;
 }
@@ -129,6 +149,7 @@ set_prop_int(struct jsval_property *prop, int number)
 static void
 set_prop_double(struct jsval_property *prop, jsdouble floatnum)
 {
+	set_prop_magic(prop);
 	prop->value.floatnum = floatnum;
 	prop->type = JSPT_DOUBLE;
 }
@@ -137,6 +158,8 @@ set_prop_double(struct jsval_property *prop, jsdouble floatnum)
 static void
 value_to_jsval(JSContext *ctx, jsval *vp, struct jsval_property *prop)
 {
+	check_prop_magic(prop);
+
 	switch (prop->type) {
 	case JSPT_STRING:
 	case JSPT_ASTRING:

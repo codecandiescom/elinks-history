@@ -1,5 +1,5 @@
 /* The "data" URI protocol implementation (RFC 2397) */
-/* $Id: data.c,v 1.2 2004/08/22 14:31:06 zas Exp $ */
+/* $Id: data.c,v 1.3 2004/08/23 02:37:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -71,7 +71,7 @@ init_data_protocol_header(struct cache_entry *cached,
 }
 
 static unsigned char *
-parse_data_uri_type(struct connection *conn, int *base64)
+parse_data_protocol_header(struct connection *conn, int *base64)
 {
 	struct uri *uri = conn->uri;
 	unsigned char *end = memchr(uri->data, ',', uri->datalen);
@@ -116,7 +116,7 @@ data_protocol_handler(struct connection *conn)
 
 	conn->cached = cached;
 
-	data_start = parse_data_uri_type(conn, &base64);
+	data_start = parse_data_protocol_header(conn, &base64);
 	if (!data_start) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;

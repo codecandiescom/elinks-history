@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.64 2004/07/14 17:44:40 zas Exp $ */
+/* $Id: conv.c,v 1.65 2004/07/22 02:26:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,7 @@
 
 #include "elinks.h"
 
-#include "intl/charsets.h"
+#include "intl/charsets.h" /* NBSP_CHAR */
 #include "util/conv.h"
 #include "util/error.h"
 #include "util/string.h"

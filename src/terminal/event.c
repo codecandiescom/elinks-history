@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.6 2003/07/26 10:58:41 zas Exp $ */
+/* $Id: event.c,v 1.7 2003/07/26 11:16:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,20 +174,25 @@ send_redraw:
 		clear_terminal(term);
 		erase_screen(term);
 		term->redrawing = 1;
-		foreachback (win, term->windows) {
-			/* Note that you do NOT want to ever go and create new
-			 * window inside EV_INIT handler (it'll get second
-			 * EV_INIT here). Perhaps the best thing you could do
-			 * is registering a bottom-half handler which will open
-			 * additional windows.
-			 * --pasky */
+		/* Note that you do NOT want to ever go and create new
+		 * window inside EV_INIT handler (it'll get second
+		 * EV_INIT here). Perhaps the best thing you could do
+		 * is registering a bottom-half handler which will open
+		 * additional windows.
+		 * --pasky */
+		if (ev->ev == EV_RESIZE) {
 			/* We want to propagate EV_RESIZE even to inactive
 			 * tabs! Nothing wrong will get drawn (in the final
 			 * result) as the active tab is always the first one,
 			 * thus will be drawn last here. Thanks, Witek!
 			 * --pasky */
-			if (!inactive_tab(win) || ev->ev == EV_RESIZE)
+			foreachback (win, term->windows)
 				win->handler(win, ev, 0);
+
+		} else {
+			foreachback (win, term->windows)
+				if (!inactive_tab(win))
+					win->handler(win, ev, 0);
 		}
 		term->redrawing = 0;
 	}

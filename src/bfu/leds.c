@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.47 2004/04/22 18:09:31 pasky Exp $ */
+/* $Id: leds.c,v 1.48 2004/04/26 03:37:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -60,9 +60,13 @@ static int drawing = 0;
 static void redraw_leds(void *);
 
 enum led_option {
-	LED_TREE,
+	LEDS_CLOCK_TREE,
+	LEDS_CLOCK_ENABLE,
+	LEDS_CLOCK_FORMAT,
+	LEDS_CLOCK_ALIAS,
 
-	LEDS_ENABLE,
+	LEDS_PANEL_TREE,
+	LEDS_PANEL_ENABLE,
 
 	LEDS_OPTIONS,
 };
@@ -92,8 +96,7 @@ static struct option_info led_options[] = {
 		"manpage for details.")),
 
 	/* Compatibility alias. Added: 2004-04-22, 0.9.CVS. */
-	INIT_OPT_ALIAS("ui.timer", "clock",
-		"ui.clock"),
+	INIT_OPT_ALIAS("ui.timer", "clock", "ui.clock"),
 
 
 	INIT_OPT_TREE("ui", N_("LEDs"),
@@ -109,7 +112,9 @@ static struct option_info led_options[] = {
 };
 
 #define get_opt_leds(which)		led_options[(which)].option.value
-#define get_leds_enable()		get_opt_leds(LEDS_ENABLE).number
+#define get_leds_clock_enable()		get_opt_leds(LEDS_CLOCK_ENABLE).number
+#define get_leds_clock_format()		get_opt_leds(LEDS_CLOCK_ENABLE).string
+#define get_leds_panel_enable()		get_opt_leds(LEDS_PANEL_ENABLE).number
 
 void
 init_leds(struct module *module)
@@ -164,7 +169,7 @@ draw_leds(struct session *ses)
 			draw_char(term, xpos - (timerlen - i), ypos, s[i], 0, led_color);
 	}
 
-	if (!get_leds_enable()) return;
+	if (!get_leds_panel_enable()) return;
 
 	if (!led_color) {
 		led_color = get_bfu_color(term, "status.status-text");
@@ -172,14 +177,14 @@ draw_leds(struct session *ses)
 	}
 
 #ifdef HAVE_STRFTIME
-	if (get_opt_bool("ui.clock.enable")) {
+	if (get_leds_clock_enable()) {
 		char s[30];
 		time_t curtime = time(NULL);
 		struct tm *loctime = localtime(&curtime);
 		int i, length;
 		int basepos = xpos - timerlen - 1;
 
-		length = strftime(s, 30, get_opt_str("ui.clock.format"), loctime);
+		length = strftime(s, 30, get_leds_clock_format(), loctime);
 		s[length] = '\0';
 		for (i = length - 1; i >= 0; i--)
 			draw_char(term, basepos - (length - i), ypos, s[i], 0, led_color);
@@ -235,7 +240,7 @@ redraw_leds(void *xxx)
 {
 	struct session *ses;
 
-	if (!get_leds_enable()
+	if (!get_leds_panel_enable()
 	    && get_opt_int("ui.timer.enable") != 2) {
 		redraw_timer = -1;
 		return;

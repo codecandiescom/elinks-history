@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.49 2004/08/02 22:13:24 jonas Exp $ */
+/* $Id: ssl.c,v 1.50 2004/08/02 23:37:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -250,9 +250,9 @@ init_ssl_connection(struct connection *conn)
 }
 
 void
-done_ssl_connection(struct connection *conn)
+done_ssl_connection(struct connection_socket *socket)
 {
-	ssl_t *ssl = conn->socket.ssl /* FIXME: Assuming ssl handle */;
+	ssl_t *ssl = socket->ssl;
 
 	if (!ssl) return;
 #ifdef CONFIG_OPENSSL
@@ -261,7 +261,7 @@ done_ssl_connection(struct connection *conn)
 	gnutls_deinit(*ssl);
 	mem_free(ssl);
 #endif
-	conn->socket.ssl /* FIXME: Assuming ssl handle */ = NULL;
+	socket->ssl = NULL;
 }
 
 unsigned char *

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2005-01-03 23:18+0100\n"
-"PO-Revision-Date: 2004-07-18 15:57+0200\n"
+"PO-Revision-Date: 2005-01-04 00:42+0100\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -216,9 +216,8 @@ msgid "Enable"
 msgstr "Zapnout"
 
 #: src/bfu/leds.c:78
-#, fuzzy
 msgid "Whether to display a digital clock in the status bar."
-msgstr "Digitální hodiny na stavové li¹tì."
+msgstr "Zdalipak zobrazovat na stavové li¹tì digitální hodiny."
 
 #: src/bfu/leds.c:80
 msgid "Format"
@@ -252,9 +251,8 @@ msgid "LED indicators"
 msgstr "LED indikátory"
 
 #: src/bfu/menu.c:746
-#, fuzzy
 msgid "Search menu/"
-msgstr "Vyhledávání"
+msgstr "Vyhledávání v menu/"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -267,13 +265,12 @@ msgstr "read_bookmarks_xbel(): Chyba pøi naèítání %s"
 
 #  This translation was based on idea by Jakub Suchy.
 #: src/bookmarks/backend/xbel.c:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Parse error while processing XBEL bookmarks in %s at line %d column %d:\n"
 "%s"
 msgstr ""
-"read_bookmarks_xbel(): Chyba syntaxe v souboru %s na øádku %d ve sloupci %"
-"d:\n"
+"Chyba syntaxe v souboru XBEL zálo¾ek %s na øádku %d ve sloupci %d:\n"
 "%s"
 
 #: src/bookmarks/backend/xbel.c:384 src/bookmarks/backend/xbel.c:405
@@ -298,18 +295,16 @@ msgid "File format"
 msgstr "Formát souboru"
 
 #: src/bookmarks/bookmarks.c:55
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default native ELinks format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
 "Formát souboru s bookmarky (ovlivòuje naèítání i ukládání):\n"
-"0 je defaultní ELinksový formát (kompatibilní s Linksem 0.9x)\n"
+"0 je defaultní ELinksový formát\n"
 "1 is univerzální formát zalo¾ený na XML, XBEL (BEZ PODPORY DIAKRITIKY!)"
 
 #: src/bookmarks/bookmarks.c:61
-#, fuzzy
 msgid ""
 "File format for bookmarks (affects both reading and saving):\n"
 "0 is the default native ELinks format\n"
@@ -317,7 +312,7 @@ msgid ""
 "(DISABLED)"
 msgstr ""
 "Formát souboru s bookmarky (ovlivòuje naèítání i ukládání):\n"
-"0 znamená defaultní ELinksový formát (kompatibilní s Linksem 0.9x)\n"
+"0 znamená defaultní ELinksový formát\n"
 "1 znamená univerzální formát zalo¾ený na XML, XBEL (BEZ PODPORY DIAKRITIKY!) "
 "(MIMO PROVOZ)"
 
@@ -348,13 +343,13 @@ msgstr "URL"
 
 #. cant_delete_item
 #: src/bookmarks/dialogs.c:120
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the bookmark \"%s\" cannot be deleted."
 msgstr "Bohu¾el bookmark \"%s\" nelze smazat."
 
 #. cant_delete_used_item
 #: src/bookmarks/dialogs.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the bookmark \"%s\" is being used by something else."
 msgstr "Bohu¾el s bookmarkem \"%s\" právì pracuje nìco jiného."
 
@@ -370,9 +365,9 @@ msgstr "Smazat oznaèené bookmarky?"
 
 #. delete_folder
 #: src/bookmarks/dialogs.c:134
-#, fuzzy, c-format
+#, c-format
 msgid "Delete the folder \"%s\" and all bookmarks in it?"
-msgstr "Smazat slo¾ku \"%s\" vèetnì obsahu?"
+msgstr "Smazat slo¾ku \"%s\" vèetnì v¹ech bookmarkù uvnitø?"
 
 #. delete_item_title
 #: src/bookmarks/dialogs.c:136
@@ -489,9 +484,8 @@ msgid "Loaded size"
 msgstr "Souèasná velikost"
 
 #: src/cache/dialogs.c:89
-#, fuzzy
 msgid "Content type"
-msgstr "Typ"
+msgstr "Typ obsahu"
 
 #: src/cache/dialogs.c:93 src/dialogs/document.c:137
 msgid "Last modified"
@@ -621,21 +615,16 @@ msgid "(default: %s)"
 msgstr "(výchozí: %s)"
 
 #: src/config/cmdline.c:541
-#, fuzzy
 msgid "Configuration options"
-msgstr "Konfiguraèní volby:\n"
+msgstr "Konfiguraèní volby"
 
 #: src/config/cmdline.c:545
-#, fuzzy
 msgid "Usage: elinks [OPTION]... [URL]"
-msgstr ""
-"Pou¾ití: elinks [PØEPÍNAÈ]... [URL]\n"
-"\n"
+msgstr "Pou¾ití: elinks [PØEPÍNAÈ]... [URL]"
 
 #: src/config/cmdline.c:546
-#, fuzzy
 msgid "Options"
-msgstr "Nastavení:\n"
+msgstr "Nastavení"
 
 #: src/config/cmdline.c:588
 msgid "Internal consistency error"
@@ -663,14 +652,12 @@ msgid "Autosubmit first form"
 msgstr "Automatické odeslání prvního formuláøe"
 
 #: src/config/cmdline.c:614
-#, fuzzy
 msgid "Automatically submit the first form in the given URLs."
-msgstr "Jdi a ode¹li první formuláø, na který narazí¹."
+msgstr "Jdi a ode¹li první formuláø, na který narazí¹ na daných URL."
 
 #: src/config/cmdline.c:616
-#, fuzzy
 msgid "Clone internal session with given ID"
-msgstr "Naklonování sezení s daným ID"
+msgstr "Naklonování interních sezení s daným ID"
 
 #: src/config/cmdline.c:618
 msgid ""
@@ -684,7 +671,6 @@ msgid "Name of directory with configuration file"
 msgstr "Jméno adresáøe s konfiguraèním souborem"
 
 #: src/config/cmdline.c:626
-#, fuzzy
 msgid ""
 "Path of the directory ELinks will read and write its\n"
 "config and runtime state files to instead of ~/.elinks.\n"
@@ -701,7 +687,6 @@ msgid "Name of configuration file"
 msgstr "Jméno konfiguraèního souboru"
 
 #: src/config/cmdline.c:635
-#, fuzzy
 msgid ""
 "Name of the configuration file that all configuration\n"
 "options will be read from and written to. It should be\n"
@@ -709,24 +694,21 @@ msgid ""
 msgstr ""
 "Jméno konfiguraèního souboru, tedy souboru, odkud se bude naèítat ve¹keré\n"
 "nastavení a bude se tam i zpìt zapisovat. Jméno by mìlo být relativní k\n"
-"parametru confdir."
+"parametru config-dir."
 
 #: src/config/cmdline.c:639
 msgid "Print help for configuration options"
 msgstr "Zobrazení nápovìdy pro konfiguraèní volby"
 
 #: src/config/cmdline.c:641
-#, fuzzy
 msgid "Print help for configuration options and exit."
 msgstr "Zobrazení nápovìdy pro konfiguraèní volby a ukonèení progrmau."
 
 #: src/config/cmdline.c:643
-#, fuzzy
 msgid "MIME type assumed for unknown document types"
-msgstr "Pøedpokládaný MIME typ dokumentù"
+msgstr "Pøedpokládaný MIME typ pro neznámé dokumenty"
 
 #: src/config/cmdline.c:645
-#, fuzzy
 msgid "The default MIME type used for documents of unknown type."
 msgstr "Výchozí MIME typ, který bych mìl pøedpokládat u neznámých dokumentù."
 
@@ -742,23 +724,20 @@ msgid ""
 msgstr ""
 
 #: src/config/cmdline.c:653
-#, fuzzy
 msgid "Print formatted versions of given URLs to stdout"
-msgstr "Vypsání zformátované verze dané URL na standardní výstup"
+msgstr "Vypsání zformátované verze daného URL na standardní výstup"
 
 #: src/config/cmdline.c:655
-#, fuzzy
 msgid "Print formatted plain-text versions of given URLs to stdout."
-msgstr "Vypsání zformátované verze dané URL na standardní výstup"
+msgstr "Vypsání zformátované verze daného URL na standardní výstup"
 
 #: src/config/cmdline.c:657
 msgid "Codepage to use with -dump"
 msgstr "Kódová stránka, ve které by mìl být prezentován výstup -dump"
 
 #: src/config/cmdline.c:659
-#, fuzzy
 msgid "Codepage used when formatting dump output."
-msgstr "Kódová stránka pou¾itá v dump výstupu."
+msgstr "Kódová stránka pou¾itá pøi formátování dump výstupu."
 
 #: src/config/cmdline.c:661
 msgid "Width of document formatted with -dump"
@@ -769,12 +748,10 @@ msgid "Width of the dump output."
 msgstr "©íøka výstupu parametru -dump."
 
 #: src/config/cmdline.c:665
-#, fuzzy
 msgid "Evaluate configuration file directive"
 msgstr "Vyhodnocení daného konfiguraèního pøíkazu"
 
 #: src/config/cmdline.c:667
-#, fuzzy
 msgid ""
 "Specify configuration file directives on the command-line\n"
 "which will be evaluated after all configuration files has been\n"
@@ -783,13 +760,12 @@ msgid ""
 msgstr ""
 "Tato volba umo¾òuje na pøíkazové øádce uvádìt pøíkazy, které se pí¹ou do\n"
 "elinks.conf, napøíklad:\n"
-"  -eval 'set protocol.file.allow_special_files = 1'"
+"\t-eval 'set protocol.file.allow_special_files = 1'"
 
 #. lynx compatibility
 #: src/config/cmdline.c:673
-#, fuzzy
 msgid "Interpret documents of unknown types as HTML"
-msgstr "Výchozí MIME typ, který bych mìl pøedpokládat u neznámých dokumentù."
+msgstr "Interpretuj dokumenty neznámých typù jako HTML"
 
 #: src/config/cmdline.c:675
 #, fuzzy
@@ -834,14 +810,13 @@ msgstr "Vyhledání specifikovaného hostitele"
 
 #: src/config/cmdline.c:701
 msgid "Look up specified host and print all DNS resolved IP addresses."
-msgstr ""
+msgstr "Vyhledá daného hostitele a vypí¹e v¹echny IP adresy zji¹tìné pøes DNS."
 
 #: src/config/cmdline.c:703
 msgid "Run as separate instance"
 msgstr "Spu¹tìní oddìlené instance programu"
 
 #: src/config/cmdline.c:705
-#, fuzzy
 msgid ""
 "Run ELinks as a separate instance instead of connecting to an\n"
 "existing instance. Note that normally no runtime state files\n"
@@ -850,12 +825,10 @@ msgid ""
 msgstr ""
 "Spustit ELinks jako oddìlenou instanci místo toho, abych se zkusil pøipojit\n"
 "k nìjaké ji¾ existující instanci. V tomto pøípadì normálnì nebudu na disk\n"
-"zapisovat ¾ádné konfiguraèní soubory (ani bookmarky, historii apod.). Viz "
-"také\n"
-"parametr -touch-files."
+"zapisovat ¾ádné konfiguraèní soubory (ani bookmarky, historii apod.).\n"
+"Viz také parametr -touch-files."
 
 #: src/config/cmdline.c:710
-#, fuzzy
 msgid "Disable use of files in ~/.elinks"
 msgstr "Nepou¾ívat soubory v ~/.elinks"
 
@@ -867,7 +840,6 @@ msgid ""
 msgstr ""
 
 #: src/config/cmdline.c:716
-#, fuzzy
 msgid "Disable link numbering in dump output"
 msgstr "Neèíslovat odkazy v dump výstupu"
 
@@ -882,9 +854,8 @@ msgstr ""
 "¾e se tento parametr týká jen a pouze --dump."
 
 #: src/config/cmdline.c:721
-#, fuzzy
 msgid "Disable printing of link references in dump output"
-msgstr "Neèíslovat odkazy v dump výstupu"
+msgstr "Nezobrazovat seznam odkazù v dump výstupu"
 
 #: src/config/cmdline.c:723
 #, fuzzy
@@ -955,14 +926,12 @@ msgstr ""
 "-touch-files."
 
 #: src/config/cmdline.c:761
-#, fuzzy
 msgid "Print the source of given URLs to stdout"
 msgstr "Vypsat danou URL ve zdrojové podobì na standardní výstup"
 
 #: src/config/cmdline.c:763
-#, fuzzy
 msgid "Print given URLs in source form to stdout."
-msgstr "Vypsat daný HTML dokument ve zdrojové podobì na standardní výstup."
+msgstr "Vypsat daný dokument ve zdrojové podobì na standardní výstup."
 
 #: src/config/cmdline.c:767
 msgid "Touch files in ~/.elinks when running with -no-connect/-session-ring"
@@ -970,7 +939,6 @@ msgstr ""
 "Pou¾ívat soubory v ~/.elinks i pøi spu¹tìní s -no-connect/-session-ring"
 
 #: src/config/cmdline.c:769
-#, fuzzy
 msgid ""
 "When enabled, runtime state files (bookmarks, history, etc.) are\n"
 "written to disk, even when -no-connect or -session-ring is used.\n"
@@ -983,7 +951,7 @@ msgstr ""
 
 #: src/config/cmdline.c:774
 msgid "Verbose level"
-msgstr ""
+msgstr "Vypisování dodateèných informací"
 
 #: src/config/cmdline.c:776
 msgid ""
@@ -1126,9 +1094,8 @@ msgstr ""
 "%s"
 
 #: src/config/dialogs.c:155
-#, fuzzy
 msgid "modified"
-msgstr "Data zmìnìna"
+msgstr "zmìnìno"
 
 #: src/config/dialogs.c:172
 msgid "(expand by pressing space)"
@@ -1154,6 +1121,9 @@ msgid ""
 "\n"
 "This value has been changed since you last saved your configuration."
 msgstr ""
+"\n"
+"\n"
+"Tato hodnota byla od posledního ulo¾ení konfigurace zmìnìna."
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:212 src/config/dialogs.c:379
 msgid "Description"
@@ -1339,9 +1309,8 @@ msgid "Open form history manager"
 msgstr "Správce formuláøové historie"
 
 #: src/config/kbdbind.c:451
-#, fuzzy
 msgid "Pass URI of current frame to external command"
-msgstr "Pøedat URI odkazu externímu pøíkazu"
+msgstr "Pøedat URI aktuálního rámce externímu pøíkazu"
 
 #: src/config/kbdbind.c:452
 msgid "Maximize the current frame"
@@ -1565,13 +1534,12 @@ msgid "Show information about the currently used resources"
 msgstr "Zobrazení informací o pou¾itých zdrojích"
 
 #: src/config/kbdbind.c:510
-#, fuzzy
 msgid "Save the current document in source form"
-msgstr "Vypsat daný HTML dokument ve zdrojové podobì na standardní výstup."
+msgstr "Vypsat aktuální dokument ve zdrojové podobì"
 
 #: src/config/kbdbind.c:511
 msgid "Save the current document in formatted form"
-msgstr ""
+msgstr "Ulo¾it aktuální dokument ve zformátované podobì"
 
 #: src/config/kbdbind.c:512
 msgid "Save options"
@@ -1638,9 +1606,8 @@ msgid "Close all tabs but the current one"
 msgstr "Zavøít v¹echny kromì tohohle"
 
 #: src/config/kbdbind.c:529
-#, fuzzy
 msgid "Pass URI of current tab to external command"
-msgstr "Pøedat URI odkazu externímu pøíkazu"
+msgstr "Pøedat URI aktuálního tabu externímu pøíkazu"
 
 #: src/config/kbdbind.c:530
 msgid "Open the tab menu"
@@ -1663,9 +1630,8 @@ msgid "Previous tab"
 msgstr "Pøedchozí tab"
 
 #: src/config/kbdbind.c:535
-#, fuzzy
 msgid "Open the terminal resize dialog"
-msgstr "Nastavení terminálu"
+msgstr "Otevøít okno zmìny velikosti terminálu"
 
 #: src/config/kbdbind.c:536
 msgid "Toggle rendering of page using CSS"
@@ -1766,9 +1732,8 @@ msgid "Move to the next item"
 msgstr "Pøesunout se na následující polo¾ku"
 
 #: src/config/kbdbind.c:569
-#, fuzzy
 msgid "Open in external editor"
-msgstr "Otevøít v ~externím editoru"
+msgstr "Otevøít v externím editoru"
 
 #: src/config/kbdbind.c:570
 msgid "Paste text from the clipboard"
@@ -1784,7 +1749,7 @@ msgstr "Posunout kurzot doprava"
 
 #: src/config/kbdbind.c:574
 msgid "Toggle regex matching (type-ahead searching)"
-msgstr ""
+msgstr "Pøepnout hledání podle regexù (interaktivní vyhledávání)"
 
 #: src/config/kbdbind.c:575 src/config/kbdbind.c:601
 msgid "Move cursor upwards"
@@ -1981,7 +1946,7 @@ msgstr "Èasový limit pro vypr¹ení spojení (v sekundách)."
 
 #: src/config/options.inc:98 src/config/options.inc:108
 msgid "Try IPv4 when connecting"
-msgstr ""
+msgstr "Pøi spojování pou¾ij IPv4"
 
 #: src/config/options.inc:100
 msgid ""
@@ -2005,7 +1970,7 @@ msgstr ""
 
 #: src/config/options.inc:118
 msgid "Try IPv6 when connecting"
-msgstr ""
+msgstr "Pøi spojování pou¾ij IPv6"
 
 #: src/config/options.inc:120
 msgid ""
@@ -2065,13 +2030,12 @@ msgstr ""
 "je pova¾ováno za zneu¾itelné autorem dokumentu."
 
 #: src/config/options.inc:154
-#, fuzzy
 msgid "Display access key in link info"
-msgstr "Zobrazovat odkazy na obrázky"
+msgstr "Zobrazovat pøístupovou klávesu v informacích o odkazu"
 
 #: src/config/options.inc:156
 msgid "Display access key in link info."
-msgstr ""
+msgstr "Zobrazovat pøístupovou klávesu v informacích o odkazu."
 
 #: src/config/options.inc:158
 msgid "Accesskey priority"
@@ -2130,7 +2094,7 @@ msgstr ""
 
 #: src/config/options.inc:183
 msgid "Insert mode"
-msgstr ""
+msgstr "Vkládací re¾im"
 
 #: src/config/options.inc:185
 msgid ""
@@ -2151,7 +2115,6 @@ msgid "Options for handling of images."
 msgstr "Nastavení obsluhy obrázkù."
 
 #: src/config/options.inc:197
-#, fuzzy
 msgid "Display style for image tags"
 msgstr "Zpùsob zobrazování odkazù na obrázky"
 
@@ -2166,18 +2129,16 @@ msgstr ""
 
 #: src/config/options.inc:205
 msgid "Maximum length for image filename"
-msgstr ""
+msgstr "Maximální délka jména souboru s obrázkem"
 
 #: src/config/options.inc:207
-#, fuzzy
 msgid ""
 "Maximum length of image filename when displayed:\n"
 "0     means always display full filename\n"
 "1-500 means display filename with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
-"Zobrazovat jako výchozí popisku obrázkù [cílové jméno souboru] místo [IMG]:\n"
-"-1    znamená v¾dycky ukazovat prostì [IMG]\n"
+"Maximální délka zobrazeného jména souboru s obrázkem:\n"
 "0     znamená v¾dycky ukazovat celé jméno cílového souboru\n"
 "1-500 znamená ukazovat cílové jméno souboru s touto maximální délkou;\n"
 "      pokud je del¹í, prostøedek je nahrazen hvìzdièkou"
@@ -2195,7 +2156,7 @@ msgid ""
 msgstr ""
 "Kdy uzavírat odkazy na obrázky do závorek:\n"
 "0 znamená nikdy\n"
-"1 znamená pouze pokud obrázku chybí popiska (alt) nebo titulek\n"
+"1 znamená pouze pokud obrázku chybí popiska (alt) nebo titulek (pùvodní chování)\n"
 "2 znamená v¾dy"
 
 #: src/config/options.inc:224
@@ -2216,18 +2177,16 @@ msgstr "Øetìzec, který se má vlo¾it za odkaz na obrázek."
 
 #: src/config/options.inc:232
 msgid "Maximum length for image label"
-msgstr ""
+msgstr "Maximální délka popisky obrázku"
 
 #: src/config/options.inc:234
-#, fuzzy
 msgid ""
 "Maximum length of image label (alt/title):\n"
 "0     means always display full label\n"
 "1-500 means display label with this maximal length;\n"
 "      if it is longer, the middle is substituted by an asterisk"
 msgstr ""
-"Zobrazovat jako výchozí popisku obrázkù [cílové jméno souboru] místo [IMG]:\n"
-"-1    znamená v¾dycky ukazovat prostì [IMG]\n"
+"Maximální délka zobrazené popisky obrázku (alt/title):\n"
 "0     znamená v¾dycky ukazovat celé jméno cílového souboru\n"
 "1-500 znamená ukazovat cílové jméno souboru s touto maximální délkou;\n"
 "      pokud je del¹í, prostøedek je nahrazen hvìzdièkou"
@@ -2368,7 +2327,7 @@ msgstr "Zobrazovat u odkazù jejich èísla."
 
 #: src/config/options.inc:299
 msgid "Handling of target=_blank"
-msgstr ""
+msgstr "Obsluha target=_blank"
 
 #: src/config/options.inc:301
 msgid ""
@@ -2408,7 +2367,7 @@ msgstr ""
 
 #: src/config/options.inc:325
 msgid "Warn about maliciously crafted URIs"
-msgstr ""
+msgstr "Varování pøed zlomyslnì vytvoøenými adresami"
 
 #: src/config/options.inc:327
 msgid ""
@@ -2503,17 +2462,16 @@ msgid "Regular expressions"
 msgstr "Regulární výrazy"
 
 #: src/config/options.inc:371
-#, fuzzy
 msgid ""
 "Enable searching with regular expressions:\n"
 "0 for plain text searching\n"
 "1 for basic regular expression searches\n"
 "2 for extended regular expression searches"
 msgstr ""
-"Zapíná vyhledávání pomocí regulárních výrazù.\n"
-"0 znamená vyhledávání èistého textu.\n"
-"1 znamená vyhledávání základních regulárních výrazù.\n"
-"2 znamená vyhledávání roz¹íøených regulárních výrazù."
+"Zapíná vyhledávání pomocí regulárních výrazù:\n"
+"0 znamená vyhledávání èistého textu\n"
+"1 znamená vyhledávání základních regulárních výrazù\n"
+"2 znamená vyhledávání roz¹íøených regulárních výrazù"
 
 #: src/config/options.inc:377
 msgid "Show search hit top or bottom dialogs"
@@ -2542,23 +2500,20 @@ msgid "Show not found"
 msgstr "Akce pøi nenalezení výskytu"
 
 #: src/config/options.inc:388
-#, fuzzy
 msgid ""
 "How to inform the user when nothing is matched:\n"
 "0 means do nothing\n"
 "1 means beep the terminal\n"
 "2 means pop up message box"
 msgstr ""
-"Co dìlat, kdy¾ není nalezen ¾ádný výskyt. Zatím pouze pro interaktivní\n"
-"vyhledávání:\n"
+"Co dìlat, kdy¾ není nalezen ¾ádný výskyt:\n"
 "0 znamená nedìlat nic\n"
 "1 znamená pípnout\n"
 "2 znamená ukázat chybovou zprávu"
 
 #: src/config/options.inc:393
-#, fuzzy
 msgid "Typeahead searching"
-msgstr "Inter~aktivní vyhledávání"
+msgstr "Interaktivní vyhledávání"
 
 #: src/config/options.inc:395
 msgid ""
@@ -2741,11 +2696,11 @@ msgid "Default codepage"
 msgstr "Výchozí kódová stránka"
 
 #: src/config/options.inc:497
-#, fuzzy
 msgid ""
 "Default document codepage. 'System' stands for\n"
 "a codepage determined by a selected locale."
-msgstr "Východí kódová stránka dokumentu."
+msgstr "Východí kódová stránka dokumentu. 'System' znamená kódovou stránku\n"
+"zvolenou dle nastavené systémové lokalizace (locale)."
 
 #: src/config/options.inc:500
 msgid "Ignore charset info from server"
@@ -2886,7 +2841,6 @@ msgid "Prevent overwriting"
 msgstr "Pøedcházet pøepisování"
 
 #: src/config/options.inc:582
-#, fuzzy
 msgid ""
 "Prevent overwriting the local files:\n"
 "0 is files will silently be overwritten\n"
@@ -2895,8 +2849,7 @@ msgid ""
 msgstr ""
 "Zabrání pøepisování lokálních souborù:\n"
 "0 znamená, ¾e soubory budou ti¹e pøepisovány\n"
-"1 znamená, ¾e k souboru bude pøidána pøípona .<èíslo>, pokud soubor\n"
-"  s takovým jménem ji¾ existuje.\n"
+"1 znamená, ¾e k souboru bude pøidána pøípona .<èíslo> (napø. .1)\n"
 "2 znamená dotázat se u¾ivatele."
 
 #: src/config/options.inc:587
@@ -2904,7 +2857,6 @@ msgid "Notify download completion by bell"
 msgstr "Upozornit na ukonèení stahování pípnutím"
 
 #: src/config/options.inc:589
-#, fuzzy
 msgid ""
 "Audio notification when download is completed:\n"
 "0 is never\n"
@@ -2912,9 +2864,9 @@ msgid ""
 "2 is always"
 msgstr ""
 "Zvukové upozornìní ve chvíli dokonèení stahování:\n"
-"0 znamená nikdy.\n"
-"1 znamená upozornit, pokud je nastaveno upozornìní na ukonèení stahování.\n"
-"2 znamená v¾dy."
+"0 znamená nikdy\n"
+"1 znamená upozornit, pokud je nastaveno upozornìní na ukonèení stahování\n"
+"2 znamená v¾dy"
 
 #: src/config/options.inc:595
 msgid "Dump output"
@@ -2930,11 +2882,11 @@ msgid "Codepage"
 msgstr "Kódová stránka"
 
 #: src/config/options.inc:601
-#, fuzzy
 msgid ""
 "Codepage used in dump output. 'System' stands for\n"
 "a codepage determined by a selected locale."
-msgstr "Kódová stránka pro dump výstup."
+msgstr "Východí kódová stránka pro dump výstup. 'System' znamená kódovou stránku\n"
+"zvolenou dle nastavené systémové lokalizace (locale)."
 
 #: src/config/options.inc:606
 #, c-format
@@ -2963,9 +2915,8 @@ msgid "Width"
 msgstr "©íøka"
 
 #: src/config/options.inc:618
-#, fuzzy
 msgid "Width of screen in characters when dumping documents."
-msgstr "©íøka virtuální obrazovky (ve znacích) pøi renderování HTML dokumentu."
+msgstr "©íøka pomyslné obrazovky (ve znacích) pøi dump výstupu."
 
 #: src/config/options.inc:622
 msgid "History"
@@ -2980,9 +2931,8 @@ msgid "Keep unhistory"
 msgstr "Údr¾ba antihistorie"
 
 #: src/config/options.inc:628
-#, fuzzy
 msgid "Keep unhistory (\"forward history\")."
-msgstr "Udr¾ovat antihistorii (\"dopøednou historii\")?"
+msgstr "Udr¾ovat antihistorii (\"dopøednou historii\")."
 
 #: src/config/options.inc:631
 msgid "HTML rendering"
@@ -3029,7 +2979,6 @@ msgid "Rendering of html link element"
 msgstr "Zobrazování HTML elementu \"link\" (speciálních odkazù)"
 
 #: src/config/options.inc:653
-#, fuzzy
 msgid ""
 "How to render <link> tags from the HTML header:\n"
 "0 is nothing\n"
@@ -3039,7 +2988,7 @@ msgid ""
 "4 is type in addition\n"
 "5 is everything"
 msgstr ""
-"Co v¹echno zobrazovat u HTML elementu \"link\" (speciálních odkazù):\n"
+"Co v¹echno zobrazovat u HTML elementu <link> (speciálních odkazù):\n"
 "0 znamená neukazovat nic\n"
 "1 znamená zobrazit titulek\n"
 "2 znamená je¹tì zobrazit jméno\n"
@@ -3103,7 +3052,6 @@ msgid "Rules for passing URIs to external commands."
 msgstr "Pravidla pro pøedávání URI externím pøíkazùm."
 
 #: src/config/options.inc:691
-#, fuzzy
 msgid ""
 "A rule for passing URI to an external command.\n"
 "The format is:\n"
@@ -3113,34 +3061,33 @@ msgid ""
 "Do _not_ put single- or double-quotes around %c."
 msgstr ""
 "URI, které se má pou¾ít pøi pøedávání adresy externímu pøíkazu.\n"
+"Formát je:\n"
 "%c v øetìzci znamená aktuální adresu\n"
-"%% v øetìzci znamená '%'"
+"%% v øetìzci znamená '%'\n"
+"\n"
+"Nepi¹te kolem %c ¾ádné uvozovky ani apostrofy."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:701
-#, fuzzy
 msgid "Information files"
-msgstr "Jméno konfiguraèního souboru"
+msgstr "Informaèní soubory"
 
 #: src/config/options.inc:703
-#, fuzzy
 msgid "Options for information files in ~/.elinks."
-msgstr "Nastavení aktivního odkazu."
+msgstr "Nastavení informaèních souborù v ~/.elinks."
 
 #: src/config/options.inc:705
-#, fuzzy
 msgid "Save interval"
 msgstr "Interval automatického ukládání"
 
 #: src/config/options.inc:707
-#, fuzzy
 msgid ""
 "Interval at which to trigger information files in ~/.elinks\n"
 "to be saved to disk if they has changed (seconds; 0 to disable)"
 msgstr ""
-"Interval, ve kterém bude zapisována globální historie na disk,\n"
-"pokud se od posledního zapsání na disk nìjak zmìnila (v sekundách;\n"
-"0 toto chování potlaèuje)."
+"Interval, ve kterém budou na disk zapisovány informaèní soubory\n"
+"v ~/.elinks, pokud se od posledního zapsání na disk nìjak zmìnila\n"
+"(v sekundách; 0 toto chování potlaèuje)."
 
 #: src/config/options.inc:710
 msgid "Use secure file saving"
@@ -3212,7 +3159,6 @@ msgstr ""
 "terminál."
 
 #: src/config/options.inc:749
-#, fuzzy
 msgid "UTF-8 I/0"
 msgstr "UTF-8 I/O"
 
@@ -3257,7 +3203,6 @@ msgid "Color mode"
 msgstr "Barevný re¾im"
 
 #: src/config/options.inc:767
-#, fuzzy
 msgid ""
 "The color mode controls what colors are used and how they are\n"
 "output to the terminal. The color modes are:\n"
@@ -3269,7 +3214,7 @@ msgstr ""
 "va¹em terminálu. Barevné re¾imy jsou:\n"
 "0, to jest monochromatický re¾im; jsou pou¾ity pouze dvì barvy\n"
 "1, to jest 16 barev; pou¾ívá barvy podle specifikace ANSI\n"
-"2, to jest 256 barev; vy¾aduje terminál xterm-256color\n"
+"2, to jest 256 barev; pou¾ívá RGB kódy XTermu"
 
 #: src/config/options.inc:773 src/dialogs/options.c:170
 msgid "Transparency"
@@ -3296,11 +3241,12 @@ msgstr ""
 "barvu."
 
 #: src/config/options.inc:787
-#, fuzzy
 msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
-msgstr "Kódová stránka znakové sady pou¾ité pro zobrazování na terminálu."
+msgstr "Kódová stránka znakové sady pou¾ité pro zobrazování na terminálu.\n"
+"System' znamená kódovou stránku zvolenou dle nastavené systémové lokalizace\n"
+"(locale)."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:794
@@ -3522,12 +3468,11 @@ msgstr "Barvy vybraného tlaèítka."
 
 #: src/config/options.inc:948
 msgid "Button shortcut"
-msgstr ""
+msgstr "Klávesová zkratka tlaèítka"
 
 #: src/config/options.inc:952
-#, fuzzy
 msgid "Selected button shortcut"
-msgstr "Vybrané tlaèítko"
+msgstr "Vybraná klávesová zkratka tlaèítka"
 
 #: src/config/options.inc:956 src/viewer/text/form.c:1446
 msgid "Text field"
@@ -3706,31 +3651,28 @@ msgstr ""
 "budete také v setup.h chtít zú¾it okraje dialogových oken."
 
 #: src/config/options.inc:1051
-#, fuzzy
 msgid "Underline menu hotkeys"
-msgstr "Podtrhávat horké klávesy"
+msgstr "Podtrhávat horké klávesy v menu"
 
 #: src/config/options.inc:1053
 msgid ""
 "Whether to underline hotkeys in menus to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
-"Urèuje, zdalipak podtrhávat v meòátkách horké klávesy, aby byly\n"
-"lépe vidìt. To ov¹em funguje pouze, pokud terminál podporuje podtrhávání."
+"Urèuje, zdalipak podtrhávat v meòátkách horké klávesy, abychom je lépe\n"
+"vidìli. To ov¹em funguje pouze, pokud terminál podporuje podtrhávání."
 
 #: src/config/options.inc:1056
-#, fuzzy
 msgid "Underline button shortcuts"
-msgstr "Podtrhávat horké klávesy"
+msgstr "Podtrhávat horké klávesy tlaèítek"
 
 #: src/config/options.inc:1058
-#, fuzzy
 msgid ""
 "Whether to underline button shortcuts to make them more\n"
 "visible. Requires the underlining is enabled for the terminal."
 msgstr ""
-"Urèuje, zdalipak podtrhávat v meòátkách horké klávesy, aby byly\n"
-"lépe vidìt. To ov¹em funguje pouze, pokud terminál podporuje podtrhávání."
+"Urèuje, zdalipak podtrhávat na tlaèítkách horké klávesy, abychom je lépe\n"
+"vidìli. To ov¹em funguje pouze, pokud terminál podporuje podtrhávání."
 
 #: src/config/options.inc:1062
 msgid "Timer options"
@@ -3773,14 +3715,12 @@ msgid "Duration"
 msgstr "Délka trvání"
 
 #: src/config/options.inc:1085
-#, fuzzy
 msgid ""
 "Inactivity timeout in seconds. The maximum of one day\n"
 "should be enough for just everyone (TM)."
 msgstr "Èas neèinnosti u¾ivatele. Jeden den by mìl ka¾dému staèit."
 
 #: src/config/options.inc:1090
-#, fuzzy
 msgid "Keybinding action to be triggered when timer reaches zero."
 msgstr ""
 "Akce (stejná jako ve správci kláves), která bude vyvolána po vypr¹ení\n"
@@ -3799,7 +3739,6 @@ msgid "Display tabs bar"
 msgstr "Zobrazit li¹tu s taby"
 
 #: src/config/options.inc:1099
-#, fuzzy
 msgid ""
 "Show tabs bar on the screen:\n"
 "0 means never\n"
@@ -3807,9 +3746,9 @@ msgid ""
 "2 means always"
 msgstr ""
 "Kdy zobrazovat na obrazovce li¹tu s taby:\n"
-"0 znamená nikdy.\n"
-"1 znamená pouze, pokud je otevøeno dva a více tabù.\n"
-"2 znamená v¾dy."
+"0 znamená nikdy\n"
+"1 znamená pouze, pokud je otevøeno dva a více tabù\n"
+"2 znamená v¾dy"
 
 #: src/config/options.inc:1104
 msgid "Wrap-around tabs cycling"
@@ -3932,7 +3871,6 @@ msgid "Homepage URI"
 msgstr "Domovská stránka"
 
 #: src/config/options.inc:1162
-#, fuzzy
 msgid ""
 "The URI to load either at startup time when no URI was given\n"
 "on the command line or when requested by the goto-url-home action.\n"
@@ -3941,7 +3879,7 @@ msgid ""
 msgstr ""
 "Adresa stránky, která by se mìla nahrát automaticky po spu¹tìní\n"
 "ELinksu èi pøi vyvolání akce goto-url-home. Pokud je tato volba\n"
-"prázdná, pou¾ije se místo toho adresa v promìnné prostøedí $WWW_HOME."
+"prázdná (\"\"), pou¾ije se místo toho adresa v promìnné prostøedí $WWW_HOME."
 
 #: src/config/options.inc:1168
 msgid "Date format"
@@ -3949,7 +3887,8 @@ msgstr "Formát datumu"
 
 #: src/config/options.inc:1170
 msgid "Date format to use in dialogs. See strftime(3)."
-msgstr ""
+msgstr "Formát datumu, který se má pou¾ít v dialozích.\n"
+"Viz dokumentaci k strftime(3)."
 
 #: src/config/options.inc:1173
 msgid "Set window title"
@@ -4056,7 +3995,6 @@ msgid "Maximum age"
 msgstr "Maximální stáøí"
 
 #: src/cookies/cookies.c:95
-#, fuzzy
 msgid ""
 "Cookie maximum age (in days):\n"
 "-1 is use cookie's expiration date if any\n"
@@ -4067,10 +4005,10 @@ msgid ""
 msgstr ""
 "Maximální vìk cookie (ve dnech):\n"
 "-1 znamená pou¾ít datum vypr¹ení dané cookie (pokud je nastaveno)\n"
-"0  znamená donutit vypr¹ení v¹ech cookies na konci sezení, bez ohledu na "
-"datum vypr¹ení dané cookie\n"
-"1+ znamená pou¾ít datum vypr¹ení cookie, leè limitovat délku uchování cookie "
-"daným poètem dní"
+"0  znamená donutit vypr¹ení v¹ech cookies na konci sezení, bez ohledu\n"
+"   na datum vypr¹ení dané cookie\n"
+"1+ znamená pou¾ít datum vypr¹ení cookie, leè limitovat délku uchování\n"
+"   cookie daným poètem dní"
 
 #: src/cookies/cookies.c:102
 msgid "Paranoid security"
@@ -4097,7 +4035,7 @@ msgstr "Ukládání"
 
 #: src/cookies/cookies.c:112
 msgid "Whether cookies should be loaded from and save to disk."
-msgstr ""
+msgstr "Zdalipak by se mìly cookies nahrávat a ukládat na disk."
 
 #: src/cookies/cookies.c:114
 msgid "Resaving"
@@ -4142,9 +4080,9 @@ msgid "no"
 msgstr "ne"
 
 #: src/cookies/dialogs.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to accept a cookie from %s?"
-msgstr "Chce¹ opravdu odstranit v¹echny cookies?"
+msgstr "Chce¹ opravdu odstranit v¹echny cookies z %s?"
 
 #: src/cookies/dialogs.c:78
 msgid "Accept cookie?"
@@ -4366,7 +4304,7 @@ msgid "Copying"
 msgstr "Kopírování"
 
 #: src/dialogs/info.c:144
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "ELinks %s\n"
 "\n"
@@ -4384,6 +4322,7 @@ msgstr ""
 "\n"
 "(C) 1999 - 2002 Mikulá¹ Patoèka\n"
 "(C) 2001 - 2004 Petr Baudi¹\n"
+"(C) 2002 - 2005 Jonas Fonseca\n"
 "\n"
 "Tento program je volné programové vybavení; mù¾ete jej ¹íøit a modifikovat "
 "podle ustanovení Obecné veøejné licence GNU, vydávané Free Software "
@@ -4400,7 +4339,7 @@ msgid "slave"
 msgstr "Ulo¾it"
 
 #: src/dialogs/info.c:181
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
 "Connections: %d connections, %d connecting, %d transferring, %d keepalive.\n"
@@ -4411,14 +4350,13 @@ msgstr ""
 "Zdroje: %d handlù, %d èasovaèù.\n"
 "Spojení: %d spojení, %d se pøipojuje, %d pøená¹í data, %d jen tak pøe¾ívá.\n"
 "Datová cache: %d bytù, %d souborù, %d se pou¾ívá, %d se naèítá.\n"
-"Cache zformátovaných dokumentù: %d dokumentù, %d se pou¾ívá."
+"Cache zformátovaných dokumentù: %d dokumentù, %d se pou¾ívá.\n"
+"Interlink: terminál %s, %d terminálù, %d sezení."
 
 #: src/dialogs/info.c:200
-#, fuzzy, c-format
+#, c-format
 msgid "Memory allocated: %ld bytes, %ld bytes overhead (%0.2f%%)."
-msgstr ""
-"Alokováno         : %ld bytù\n"
-"Skuteènì alokováno: %ld bytù (x%0.2f)"
+msgstr "Alokovaná pamì»: %ld bytù, %ld bytù navíc (%0.2f%%)."
 
 #: src/dialogs/info.c:211
 msgid "Resources"
@@ -4763,16 +4701,15 @@ msgstr "Pøedat URI odkazu externímu pøíkazu"
 
 #: src/dialogs/menu.c:898
 msgid "Empty directory"
-msgstr ""
+msgstr "Prázdný adresáø"
 
 #: src/dialogs/menu.c:942
 msgid "Directories:"
-msgstr ""
+msgstr "Adresáøe:"
 
 #: src/dialogs/menu.c:955
-#, fuzzy
 msgid "Files:"
-msgstr "~Soubor"
+msgstr "Soubory:"
 
 #: src/dialogs/options.c:148
 msgid "Terminal options"
@@ -4827,13 +4764,12 @@ msgid "Resize terminal"
 msgstr "Zmìò velikost terminálu"
 
 #: src/dialogs/options.c:251
-#, fuzzy
 msgid "Width="
-msgstr "©íøka"
+msgstr "©íøka="
 
 #: src/dialogs/options.c:252
 msgid "Height="
-msgstr ""
+msgstr "Vý¹ka="
 
 #. FIXME: The following is a PITA from the l10n standpoint. A *big*
 #. * one, _("of")-like pearls are a nightmare. Format strings need to
@@ -4896,11 +4832,11 @@ msgstr "ETA"
 
 #: src/dialogs/status.c:247
 msgid "Enter a mark to set"
-msgstr ""
+msgstr "Zmáèkni klávesu znaèky, která se má nastavit"
 
 #: src/dialogs/status.c:251
 msgid "Enter a mark to which to jump"
-msgstr ""
+msgstr "Zmáèkni klávesu znaèky, na kterou se má skoèit"
 
 #: src/dialogs/status.c:258
 #, c-format
@@ -4935,7 +4871,7 @@ msgstr "Zapnout CSS"
 
 #: src/document/css/css.c:35
 msgid "Enable adding of CSS style info to documents."
-msgstr ""
+msgstr "Zapnout aplikaci CSS stylù na dokumenty."
 
 #: src/document/css/css.c:37
 msgid "Import external style sheets"
@@ -4963,52 +4899,49 @@ msgstr ""
 
 #. name:
 #: src/ecmascript/ecmascript.c:37 src/ecmascript/ecmascript.c:193
-#, fuzzy
 msgid "ECMAScript"
-msgstr "Skriptování"
+msgstr "ECMAScript (JavaScript)"
 
 #: src/ecmascript/ecmascript.c:39
-#, fuzzy
 msgid "ECMAScript options."
-msgstr "Nastavení týkající se posouvání textu v¹emo¾nými smìry."
+msgstr "Nastavení ECMAScriptu (JavaScriptu)."
 
 #: src/ecmascript/ecmascript.c:43
 msgid "Whether to run those scripts inside of documents."
-msgstr ""
+msgstr "Zdalipka spou¹tìt v dokumentech tyto skripty."
 
 #: src/ecmascript/ecmascript.c:45
 msgid "Script error reporting"
-msgstr ""
+msgstr "Informace o chybách ve skriptech"
 
 #: src/ecmascript/ecmascript.c:47
 msgid "Open a message box when a script reports an error."
-msgstr ""
+msgstr "Zobraz hlá¹ení, kdy¾ skript zpùsobí chybu."
 
 #: src/ecmascript/ecmascript.c:49
-#, fuzzy
 msgid "Maximum execution time"
-msgstr "Maximální poèet spojení"
+msgstr "Maximální doba bìhu"
 
 #: src/ecmascript/ecmascript.c:51
 msgid "Maximum execution time in seconds for a script."
-msgstr ""
+msgstr "Maximální doba bìhu skriptu v sekundách."
 
 #: src/ecmascript/spidermonkey.c:368
 msgid "JavaScript Alert"
-msgstr ""
+msgstr "Varování JavaScriptu"
 
 #: src/ecmascript/spidermonkey.c:1911
 #, c-format
 msgid "A script embedded in the current document raised the following%s%s%s%s"
-msgstr ""
+msgstr "Skript obsa¾ený v aktuálním dokumentu zpùsobil tuto%s%s%s%s"
 
 #: src/ecmascript/spidermonkey.c:1928
 msgid "JavaScript Error"
-msgstr ""
+msgstr "chybu JavaScriptu"
 
 #: src/ecmascript/spidermonkey.c:1948
 msgid "JavaScript Emergency"
-msgstr ""
+msgstr "vá¾nou chybu JavaScriptu"
 
 #: src/ecmascript/spidermonkey.c:1950
 #, c-format
@@ -5018,6 +4951,7 @@ msgid ""
 "a bug in the script and it could have halted the whole\n"
 "ELinks, so the script execution was interrupted."
 msgstr ""
+
 
 #: src/formhist/dialogs.c:67
 msgid "Forms are never saved for this URL."
@@ -5074,7 +5008,6 @@ msgid "Form not saved"
 msgstr "Formuláø nebyl ulo¾en."
 
 #: src/formhist/dialogs.c:175
-#, fuzzy
 msgid ""
 "No saved information for this URL.\n"
 "If you want to save passwords for this URL, enable it by pressing the "
@@ -5082,7 +5015,7 @@ msgid ""
 msgstr ""
 "Pro tuto URL nemám nic ulo¾eného.\n"
 "Pokud chcete povolit ukládání hesel pro tuto URL, mù¾ete to povolit "
-"stiskemtlaèítka \"Pøepnout ukládání\"."
+"stiskem tlaèítka \"Pøepnout ukládání\"."
 
 #: src/formhist/dialogs.c:211 src/protocol/auth/dialogs.c:105
 msgid "Login"
@@ -5099,7 +5032,6 @@ msgstr "Správce formuláøové historie"
 #. TODO: Remember multiple login for the same form.
 #. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
-#, fuzzy
 msgid "Show form history dialog"
 msgstr "Zobrazování dialogu pro zapamatování formuláøe"
 
@@ -5119,7 +5051,6 @@ msgid "Form history"
 msgstr "~Formuláøová pamì»"
 
 #: src/formhist/formhist.c:452
-#, fuzzy
 msgid ""
 "Should this login be remembered?\n"
 "\n"
@@ -5133,7 +5064,7 @@ msgstr ""
 "Uvìdomte si prosím, ¾e heslo bude ulo¾eno zakódované, av¹ak NEZA©IFROVANÉ v "
 "souboru na va¹em disku.\n"
 "\n"
-"Pokud se jedná o dùle¾ité heslo, odpovìzte ne."
+"Pokud se jedná o dùle¾ité heslo, odpovìzte NE."
 
 #: src/formhist/formhist.c:459
 msgid "Never for this site"
@@ -5141,7 +5072,6 @@ msgstr "Nikdy pro tento server"
 
 #. name:
 #: src/formhist/formhist.c:484
-#, fuzzy
 msgid "Form History"
 msgstr "Formuláøová pamì»"
 
@@ -5387,9 +5317,9 @@ msgstr ""
 "povolení k zápisu do va¹eho domovského adresáøe."
 
 #: src/lowlevel/interlink.c:327 src/lowlevel/select.c:339
-#, fuzzy, c-format
+#, c-format
 msgid "The call to %s failed: %d (%s)"
-msgstr "select() selhal: %d (%s)"
+msgstr "Volání selhalo: %d (%s)"
 
 #. Infinite loop prevention.
 #: src/lowlevel/select.c:342
@@ -5402,26 +5332,26 @@ msgid "Cannot create a pipe for internal communication."
 msgstr "Nemohu vytvoøit rouru pro interní komunikaci."
 
 #: src/main.c:203
-#, fuzzy, c-format
+#, c-format
 msgid "URL expected after -%s"
-msgstr "Po %s oèekáváno URL."
+msgstr "Po -%s oèekáváno URL."
 
 #: src/main.c:211
 msgid "No running ELinks found."
-msgstr ""
+msgstr "Nebyl nalezen ¾ádný spu¹tìný ELinks."
 
 #. The remote session(s) can not be created
 #: src/main.c:218
 msgid "No remote session to connect to."
-msgstr ""
+msgstr "Není k jakému vzdálenému sezení se pøipojit."
 
 #: src/main.c:227
 msgid "Unable to encode session info."
-msgstr ""
+msgstr "Nemù¾u zakódovat informaci o sezení."
 
 #: src/main.c:244
 msgid "Unable to attach_terminal()."
-msgstr ""
+msgstr "Nelze pøipojit terminál."
 
 #: src/mime/backend/default.c:26
 msgid "MIME type associations"
@@ -5539,7 +5469,6 @@ msgid "Enable mailcap support."
 msgstr "Povolí podporu mailcap souborù."
 
 #: src/mime/backend/mailcap.c:100
-#, fuzzy
 msgid ""
 "Mailcap search path. Colon-separated list of files.\n"
 "Leave as \"\" to use MAILCAP environment variable instead."
@@ -5559,7 +5488,6 @@ msgid "Type query string"
 msgstr "Øetìzec pou¾itý ve stahovacím dialogu"
 
 #: src/mime/backend/mailcap.c:109
-#, fuzzy
 msgid ""
 "Type of description to show in \"what shall I do with this file\"\n"
 "query dialog:\n"
@@ -5569,10 +5497,10 @@ msgid ""
 msgstr ""
 "Typ popisu, který by se mìl zobrazit v dialogu \"copak udìlat s tímto\n"
 "souborem?\":\n"
-"0 znamená ukázat \"mailcap\".\n"
-"1 znamená ukázat program, který by se mìl spustit.\n"
+"0 znamená ukázat \"mailcap\"\n"
+"1 znamená ukázat program, který by se mìl spustit\n"
 "2 znamená ukázat popisek polo¾ky v mailcapu, pøípadnì \"mailcap\", pokud\n"
-"  není k dispozici."
+"  není k dispozici"
 
 #: src/mime/backend/mailcap.c:115
 msgid "Prioritize entries by file"
@@ -5591,7 +5519,7 @@ msgstr ""
 #: src/mime/backend/mailcap.c:352
 #, c-format
 msgid "Badly formated mailcap entry for type %s in \"%s\" line %d"
-msgstr ""
+msgstr "©patnì zformátovaná polo¾ka mailcapu pro typ %s v \"%s\" na øádce %d"
 
 #. name:
 #: src/mime/backend/mimetypes.c:47 src/mime/backend/mimetypes.c:286
@@ -5614,7 +5542,7 @@ msgstr "Povolit podporu souboru mime.types."
 
 #: src/mime/backend/mimetypes.c:59
 msgid "The search path for mime.types files. Colon-separated list of files."
-msgstr ""
+msgstr "Vyhledávací cesta pro soubory mime.types. Seznam souborù oddìlených èárkou."
 
 #: src/mime/dialogs.c:66
 msgid "Delete extension"
@@ -5747,9 +5675,8 @@ msgid "Realm"
 msgstr "Oblast"
 
 #: src/protocol/auth/dialogs.c:171
-#, fuzzy
 msgid "none"
-msgstr "ne"
+msgstr "¾ádná"
 
 #: src/protocol/auth/dialogs.c:174
 msgid "State"
@@ -5838,7 +5765,6 @@ msgid "Allow reading special files"
 msgstr "Povolit naèítání speciálních souborù"
 
 #: src/protocol/file/file.c:58
-#, fuzzy
 msgid ""
 "Whether to allow reading from non-regular files.\n"
 "Note this can be dangerous; reading /dev/urandom or\n"
@@ -5852,15 +5778,12 @@ msgid "Show hidden files in directory listing"
 msgstr "Zobrazovat ve výpisech adresáøù skryté soubory"
 
 #: src/protocol/file/file.c:64
-#, fuzzy
 msgid ""
 "When set to false, files with name starting with a dot will be\n"
 "hidden in local directories listing."
 msgstr ""
-"Tato volba rozhoduje o zobrazování skrytých souborù ve výpisech adresáøù.\n"
-"Pokud je tato volba vypnuta, soubory, zaèínající teèkou, nebudou ve "
-"výpisech\n"
-"lokálních adresáøù uvedeny."
+"Pokud je tato volba vypnuta, soubory, zaèínající teèkou,\n"
+"nebudou ve výpisech lokálních adresáøù uvedeny."
 
 #: src/protocol/file/file.c:67
 msgid "Try encoding extensions"
@@ -5879,15 +5802,13 @@ msgstr ""
 
 #. name:
 #: src/protocol/file/file.c:77
-#, fuzzy
 msgid "File"
-msgstr "~Soubor"
+msgstr "Soubor"
 
 #. name:
 #: src/protocol/finger/finger.c:22
-#, fuzzy
 msgid "Finger"
-msgstr "Èíslo"
+msgstr "Finger"
 
 #. name:
 #: src/protocol/ftp/ftp.c:53 src/protocol/ftp/ftp.c:83
@@ -5948,7 +5869,7 @@ msgstr "Pou¾ít místo pøíkazu EPRT pøíkaz EPSV (pasivní re¾im, pouze IPv6)."
 #. name:
 #: src/protocol/gopher/gopher.c:47
 msgid "Gopher"
-msgstr ""
+msgstr "Gopher"
 
 #: src/protocol/http/codes.c:107
 #, c-format
@@ -6085,7 +6006,6 @@ msgid "Policy"
 msgstr "Politika"
 
 #: src/protocol/http/http.c:120
-#, fuzzy
 msgid ""
 "Mode of sending HTTP referer:\n"
 "0 is send no referer\n"
@@ -6098,7 +6018,7 @@ msgstr ""
 "1 znamená posílat souèasnou URL jako referer\n"
 "2 znamená posílat stálý fale¹ný referer\n"
 "3 znamená posílat jako referer pøedchozí URL (správné, av¹ak nepøíli¹\n"
-"bezpeèné chování)\n"
+"bezpeèné chování)"
 
 #: src/protocol/http/http.c:126
 msgid "Fake referer URL"
@@ -6207,9 +6127,8 @@ msgstr ""
 "se je¹tì pokusí pou¾ít hodnotu ulo¾enou v promìnné prostøedí HTTPS_PROXY."
 
 #: src/protocol/nntp/codes.c:124
-#, fuzzy
 msgid "NNTP error"
-msgstr "chyba"
+msgstr "Chyba NNTP"
 
 #: src/protocol/nntp/codes.c:126
 #, c-format
@@ -6223,17 +6142,15 @@ msgstr ""
 #. name:
 #: src/protocol/nntp/nntp.c:33 src/protocol/nntp/nntp.c:66
 msgid "NNTP"
-msgstr ""
+msgstr "NNTP (noviny sítì Internet)"
 
 #: src/protocol/nntp/nntp.c:35
-#, fuzzy
 msgid "NNTP and news specific options."
-msgstr "Nastavení FTP."
+msgstr "Nastavení NNTP a novin sítì Internet."
 
 #: src/protocol/nntp/nntp.c:37
-#, fuzzy
 msgid "Default news server"
-msgstr "Výchozí tabulka stylù"
+msgstr "Výchozí novinový server"
 
 #: src/protocol/nntp/nntp.c:39
 msgid ""
@@ -6243,7 +6160,7 @@ msgstr ""
 
 #: src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
-msgstr ""
+msgstr "Zobrazovat tyto hlavièky zpráv"
 
 #: src/protocol/nntp/nntp.c:44
 msgid ""
@@ -6253,9 +6170,9 @@ msgid ""
 msgstr ""
 
 #: src/protocol/protocol.c:223
-#, fuzzy, c-format
+#, c-format
 msgid "This version of ELinks does not contain %s protocol support"
-msgstr "Tato verze ELinksu nepodporuje protokol SMB"
+msgstr "Tato verze ELinksu nepodporuje protokol %s"
 
 #: src/protocol/protocol.c:251
 msgid "Protocols"
@@ -6340,13 +6257,13 @@ msgid "Dumb prefixes, see enable-dumb description for details."
 msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:75
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Replacement URI for this dumbprefix:\n"
 "%c in the string means the current URL\n"
 "%% in the string means '%'"
 msgstr ""
-"URI, které se má pou¾ít místo tohoto prefixu.\n"
+"URI, které se má pou¾ít místo tohoto krátkého prefixu.\n"
 "%c v øetìzci znamená aktuální adresu\n"
 "%% v øetìzci znamená '%'"
 
@@ -6359,7 +6276,7 @@ msgid "Smart prefixes, see enable-smart description for details."
 msgstr ""
 
 #: src/protocol/rewrite/rewrite.c:88
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Replacement URI for this smartprefix:\n"
 "%c in the string means the current URL\n"
@@ -6367,7 +6284,7 @@ msgid ""
 "%0,%1,...,%9 means argument 0, 1, ..., 9\n"
 "%% in the string means '%'"
 msgstr ""
-"URI, které se má pou¾ít místo tohoto prefixu.\n"
+"URI, které se má pou¾ít místo tohoto chytrého prefixu.\n"
 "%c v øetìzci znamená aktuální adresu\n"
 "%s v øetìzci znamená celý øetìzec za dvojteèkou\n"
 "%0,%1,...,%9 znamená parametr 0, 1, ..., 9\n"
@@ -6381,20 +6298,19 @@ msgstr "Pøepisování URI"
 #. name:
 #: src/protocol/smb/smb.c:73 src/protocol/smb/smb.c:85
 msgid "SMB"
-msgstr ""
+msgstr "SMB"
 
 #: src/protocol/smb/smb.c:75
-#, fuzzy
 msgid "SAMBA specific options."
-msgstr "Nastavení FTP."
+msgstr "Nastavení Samby."
 
 #: src/protocol/smb/smb.c:77
 msgid "Credentials"
-msgstr ""
+msgstr "Hesla"
 
 #: src/protocol/smb/smb.c:79
 msgid "Credentials file passed to smbclient via -A option."
-msgstr ""
+msgstr "Soubor s hesly pøedaný smbclientu pøes parametr -A."
 
 #. name:
 #: src/protocol/user.c:35 src/protocol/user.c:85
@@ -6531,9 +6447,8 @@ msgstr "Zobrazit"
 
 #: src/sched/download.c:1021 src/sched/download.c:1031
 #: src/sched/download.c:1052 src/sched/download.c:1065
-#, fuzzy
 msgid "Show header"
-msgstr "Zobrazovat ¹ablony"
+msgstr "Zobrazit hlavièku"
 
 #: src/sched/download.c:1026
 #, c-format
@@ -6726,14 +6641,12 @@ msgid "This version of ELinks does not contain SSL/TLS support"
 msgstr "Tato verze ELinksu nepodporuje SSL/TSL"
 
 #: src/sched/error.c:92
-#, fuzzy
 msgid "JavaScript support is not enabled."
-msgstr "JavaScript v souèasnosti není podporován."
+msgstr "Podpora JavaScriptu není zapnuta."
 
 #: src/sched/error.c:95
-#, fuzzy
 msgid "Bad NNTP response"
-msgstr "©patná odpovìï na FTP"
+msgstr "©patná odpovìï NNTP"
 
 #: src/sched/error.c:96
 msgid ""
@@ -6744,7 +6657,7 @@ msgstr ""
 
 #: src/sched/error.c:102
 msgid "The CSO phone-book protocol is not supported."
-msgstr ""
+msgstr "Protokol pro telefonní seznamy CSO není podporován."
 
 #: src/sched/error.c:126
 msgid "Unknown error"
@@ -6821,7 +6734,7 @@ msgid ""
 msgstr ""
 
 #: src/sched/task.c:249
-#, fuzzy, c-format
+#, c-format
 msgid "Do you want to follow the redirect and post form data to URL %s?"
 msgstr "Chce¹ následovat pøesmìrování a odeslat formuláø na adresu %s?"
 
@@ -6935,9 +6848,8 @@ msgid "Warning: terminal name contains illicit chars."
 msgstr "Varování: jméno terminálu obsahuje o¹klivé znaky."
 
 #: src/terminal/event.c:226
-#, fuzzy
 msgid "Failed to create session."
-msgstr "Autmaticky obnovovat sezení"
+msgstr "Nelze vytvoøit sezení."
 
 #: src/terminal/event.c:316
 #, c-format
@@ -6971,9 +6883,9 @@ msgid "Can't write to stdout."
 msgstr "Chyba pøi zápisu na sandardní výstup."
 
 #: src/viewer/dump/dump.c:256
-#, fuzzy, c-format
+#, c-format
 msgid "URL protocol not supported (%s)."
-msgstr "Metoda v uvedeném -remote pøíkazu není podporována"
+msgstr "URL protokol %s není podporován."
 
 #: src/viewer/text/draw.c:62
 msgid "Missing fragment"
@@ -6998,9 +6910,8 @@ msgid "Reset form"
 msgstr "Vygumovat formuláø"
 
 #: src/viewer/text/form.c:1429
-#, fuzzy
 msgid "Harmless button"
-msgstr "Vybrané tlaèítko"
+msgstr "Ne¹kodné tlaèítko"
 
 #: src/viewer/text/form.c:1437
 msgid "Submit form to"
@@ -7045,22 +6956,22 @@ msgstr "pouze pro ètení"
 #: src/viewer/text/form.c:1526
 #, c-format
 msgid "press %s to navigate"
-msgstr ""
+msgstr "zmáèkni %s pro navigaci"
 
 #: src/viewer/text/form.c:1528
 #, c-format
 msgid "press %s to edit"
-msgstr ""
+msgstr "zmáèkni %s pro editaci"
 
 #: src/viewer/text/form.c:1564
-#, fuzzy, c-format
+#, c-format
 msgid "press %s to submit to %s"
-msgstr "bylo posláno na"
+msgstr "zmáèkni %s pro odeslání na %s"
 
 #: src/viewer/text/form.c:1566
-#, fuzzy, c-format
+#, c-format
 msgid "press %s to post to %s"
-msgstr "bylo posláno na"
+msgstr "zmáèkni %s pro odeslání na %s"
 
 #: src/viewer/text/link.c:1127
 msgid "Display ~usemap"
@@ -7159,14 +7070,14 @@ msgid "No previous search"
 msgstr "®ádné pøedchozí hledání"
 
 #: src/viewer/text/search.c:995
-#, fuzzy, c-format
+#, c-format
 msgid "Could not compile regular expression '%s'"
-msgstr "Regulární výrazy"
+msgstr "Nelze zkompilovat regulární výraz '%s'"
 
 #: src/viewer/text/search.c:1042
 #, c-format
 msgid "No further matches for '%s'."
-msgstr ""
+msgstr "®ádné dal¹í výskyty '%s'."
 
 #: src/viewer/text/search.c:1044
 #, c-format

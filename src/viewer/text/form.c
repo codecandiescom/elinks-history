@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.16 2003/07/22 02:28:11 jonas Exp $ */
+/* $Id: form.c,v 1.17 2003/07/29 09:48:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -659,8 +659,6 @@ get_form_url(struct session *ses, struct document_view *f,
 	assert(f && f->document && frm);
 	if_assert_failed return NULL;
 
-	if (!init_string(&go)) return NULL;
-
 	if (frm->type == FC_RESET) {
 		reset_form(f, frm->form_num);
 		return NULL;
@@ -681,6 +679,8 @@ get_form_url(struct session *ses, struct document_view *f,
 		return NULL;
 	}
 
+	if (!init_string(&go)) return NULL;
+
 	if (frm->method == FM_GET) {
 		unsigned char *pos = strchr(frm->action, '#');
 
@@ -699,7 +699,7 @@ get_form_url(struct session *ses, struct document_view *f,
 
 		if (pos) add_to_string(&go, pos);
 	} else {
-		int i;
+		register int i;
 
 		add_to_string(&go, frm->action);
 		add_char_to_string(&go, POST_CHAR);

@@ -1,18 +1,13 @@
 /* Parses and converts NNTP responses to enum values and cache entry HTML */
-/* $Id: response.c,v 1.2 2004/11/09 13:59:46 jonas Exp $ */
+/* $Id: response.c,v 1.3 2004/11/10 21:08:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <errno.h>
-#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
 #include "elinks.h"
 

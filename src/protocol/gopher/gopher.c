@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.27 2004/11/09 13:56:37 jonas Exp $ */
+/* $Id: gopher.c,v 1.28 2004/11/10 21:08:10 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -26,13 +26,8 @@
 #endif
 
 #include <errno.h>
-#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
 #include "elinks.h"
 

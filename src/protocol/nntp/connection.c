@@ -1,18 +1,13 @@
 /* Connection and data transport handling */
-/* $Id: connection.c,v 1.2 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: connection.c,v 1.3 2004/11/10 21:08:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
 
 #include <errno.h>
-#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
 
 #include "elinks.h"
 

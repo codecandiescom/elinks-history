@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.170 2003/01/03 02:23:53 pasky Exp $ */
+/* $Id: options.c,v 1.171 2003/01/03 03:36:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -280,6 +280,7 @@ free_option_value(struct option *option)
 			option->type == OPT_INT ||
 			option->type == OPT_LONG ||
 			option->type == OPT_STRING ||
+			option->type == OPT_LANGUAGE ||
 			option->type == OPT_CODEPAGE ||
 			option->type == OPT_COLOR ||
 			option->type == OPT_ALIAS ||
@@ -819,6 +820,13 @@ static int
 change_hook_stemplate(struct session *ses, struct option *current, struct option *changed)
 {
 	update_visibility(root_options.ptr, *((int *) changed->ptr));
+	return 0;
+}
+
+static int
+change_hook_language(struct session *ses, struct option *current, struct option *changed)
+{
+	set_language(*((int *) changed->ptr));
 	return 0;
 }
 
@@ -2247,8 +2255,10 @@ register_options()
 
 
 	add_opt_ptr("ui", "Language",
-		"language", 0, OPT_LANGUAGE, &current_language,
-		"Language of user interface.");
+		"language", 0, OPT_LANGUAGE, mem_calloc(1, sizeof(int)),
+		"Language of user interface. System means that the language will "
+		"be extracted from the environment dynamically.");
+	get_opt_rec(&root_options, "ui.language")->change_hook = change_hook_language;
 
 	/* Compatibility alias: added by pasky at 2002-12-01, 0.4pre20.CVS.
 	 * Estimated due time: 2003-02-01 */

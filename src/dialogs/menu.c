@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.250 2004/01/06 21:00:56 jonas Exp $ */
+/* $Id: menu.c,v 1.251 2004/01/06 22:47:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,18 +99,6 @@ menu_save_url_as(struct terminal *term, void *d, struct session *ses)
 		    MAX_STR_LEN, "", 0, 0, NULL,
 		    (void (*)(void *, unsigned char *)) save_url,
 		    NULL);
-}
-
-static inline void
-menu_go_back(struct terminal *term, void *d, struct session *ses)
-{
-	go_back(ses);
-}
-
-static inline void
-menu_go_unback(struct terminal *term, void *d, struct session *ses)
-{
-	go_unback(ses);
 }
 
 static inline void
@@ -342,8 +330,8 @@ static struct menu_item file_menu11[] = {
 	INIT_MENU_ITEM(N_("Open new tab in backgroun~d"), NULL, ACT_OPEN_NEW_TAB_IN_BACKGROUND,
 			open_in_new_tab_in_background,(void *) 0, 0),
 	INIT_MENU_ITEM(N_("~Go to URL"), NULL, ACT_GOTO_URL, menu_goto_url, NULL, 0),
-	INIT_MENU_ITEM(N_("Go ~back"), NULL, ACT_BACK, menu_go_back, NULL, 0),
-	INIT_MENU_ITEM(N_("Go ~forward"), NULL, ACT_UNBACK, menu_go_unback, NULL, 0),
+	INIT_MENU_ITEM(N_("Go ~back"), NULL, ACT_BACK, NULL, NULL, 0),
+	INIT_MENU_ITEM(N_("Go ~forward"), NULL, ACT_UNBACK, NULL, NULL, 0),
 	INIT_MENU_ITEM(N_("~Reload"), NULL, ACT_RELOAD, menu_reload, NULL, 0),
 	INIT_MENU_ITEM(N_("~History"), NULL, ACT_NONE, history_menu, NULL, SUBMENU),
 	INIT_MENU_ITEM(N_("~Unhistory"), NULL, ACT_NONE, unhistory_menu, NULL, SUBMENU),

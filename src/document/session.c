@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.66 2002/11/12 21:30:02 pasky Exp $ */
+/* $Id: session.c,v 1.67 2002/11/19 14:06:27 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -218,12 +218,14 @@ print_screen_status(struct session *ses)
 	struct terminal *term = ses->term;
 	struct status *stat = NULL;
 	unsigned char *msg = NULL;
+	int show_title_bar = get_opt_int("ui.show_title_bar");
+	int show_status_bar = get_opt_int("ui.show_status_bar");
 
 	/* TODO: Make this optionally switchable off. */
 
-	if (get_opt_int("ui.show_title_bar"))
+	if (show_title_bar)
 		fill_area(term, 0, 0, term->x, 1, get_bfu_color(term, "title.title-bar"));
-	if (get_opt_int("ui.show_status_bar"))
+	if (show_status_bar)
 		fill_area(term, 0, term->y - 1, term->x, 1, get_bfu_color(term, "status.status-bar"));
 
 	if (ses->wtd)
@@ -243,7 +245,7 @@ print_screen_status(struct session *ses)
 	}
 
 	if (stat) {
-		if (get_opt_int("ui.show_status_bar")) {
+		if (show_status_bar) {
 			if (stat->state == S_OK)
 				msg = print_current_link(ses);
 			if (!msg)
@@ -255,7 +257,7 @@ print_screen_status(struct session *ses)
 			}
 		}
 
-		if (get_opt_int("ui.show_title_bar")) {
+		if (show_title_bar) {
 			msg = print_current_title(ses);
 			if (msg) {
 				int pos = term->x - 1 - strlen(msg);
@@ -1456,7 +1458,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 	struct location *l = cur_loc(ses);
 	struct frame *frm;
 	size_t url_len;
-	
+
 	if (!have_location(ses)) {
 		internal("ses_change_frame_url: no location yet");
 		return NULL;

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.72 2003/08/23 03:31:41 jonas Exp $ */
+/* $Id: options.c,v 1.73 2003/08/31 17:03:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,7 +67,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 
 struct termopt_hop {
 	struct terminal *term;
-	int type, m11_hack, restrict_852, block_cursor, colors, utf_8_io, trans;
+	int type, m11_hack, restrict_852, block_cursor, colors, utf_8_io, trans, underline;
 };
 
 static void
@@ -90,6 +90,7 @@ terminal_options_ok(void *p)
 	maybe_update(termopt_hop->colors, "colors");
 	maybe_update(termopt_hop->trans, "transparency");
 	maybe_update(termopt_hop->utf_8_io, "utf_8_io");
+	maybe_update(termopt_hop->underline, "underline");
 #undef maybe_update
 
 	cls_redraw_all_terminals();
@@ -116,6 +117,7 @@ static unsigned char *td_labels[] = {
 	N_("Block the cursor"),
 	N_("Color"),
 	N_("Transparency"),
+	N_("Underline"),
 	N_("UTF-8 I/O"),
 	NULL
 };
@@ -173,7 +175,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop = mem_calloc(1, sizeof(struct termopt_hop));
 	if (!termopt_hop) return;
 
-	d = mem_calloc(1, sizeof(struct dialog) + 14 * sizeof(struct widget));
+	d = mem_calloc(1, sizeof(struct dialog) + 15 * sizeof(struct widget));
 	if (!d) {
 		mem_free(termopt_hop);
 		return;
@@ -186,6 +188,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	termopt_hop->block_cursor = get_opt_int_tree(term->spec, "block_cursor");
 	termopt_hop->colors = get_opt_int_tree(term->spec, "colors");
 	termopt_hop->trans = get_opt_int_tree(term->spec, "transparency");
+	termopt_hop->underline = get_opt_int_tree(term->spec, "underline");
 	termopt_hop->utf_8_io = get_opt_int_tree(term->spec, "utf_8_io");
 
 	d->title = _("Terminal options", term);
@@ -246,24 +249,29 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[9].type = D_CHECKBOX;
 	d->items[9].gid = 0;
 	d->items[9].dlen = sizeof(int);
-	d->items[9].data = (unsigned char *) &termopt_hop->utf_8_io;
+	d->items[9].data = (unsigned char *) &termopt_hop->underline;
 
-	d->items[10].type = D_BUTTON;
-	d->items[10].gid = B_ENTER;
-	d->items[10].fn = ok_dialog;
-	d->items[10].text = _("OK", term);
+	d->items[10].type = D_CHECKBOX;
+	d->items[10].gid = 0;
+	d->items[10].dlen = sizeof(int);
+	d->items[10].data = (unsigned char *) &termopt_hop->utf_8_io;
 
 	d->items[11].type = D_BUTTON;
 	d->items[11].gid = B_ENTER;
-	d->items[11].fn = terminal_options_save;
-	d->items[11].text = _("Save", term);
+	d->items[11].fn = ok_dialog;
+	d->items[11].text = _("OK", term);
 
 	d->items[12].type = D_BUTTON;
-	d->items[12].gid = B_ESC;
-	d->items[12].fn = cancel_dialog;
-	d->items[12].text = _("Cancel", term);
+	d->items[12].gid = B_ENTER;
+	d->items[12].fn = terminal_options_save;
+	d->items[12].text = _("Save", term);
 
-	d->items[13].type = D_END;
+	d->items[13].type = D_BUTTON;
+	d->items[13].gid = B_ESC;
+	d->items[13].fn = cancel_dialog;
+	d->items[13].text = _("Cancel", term);
+
+	d->items[14].type = D_END;
 
 	do_dialog(term, d, getml(d, termopt_hop, NULL));
 }

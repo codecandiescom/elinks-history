@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.215 2004/05/31 17:16:51 jonas Exp $ */
+/* $Id: uri.c,v 1.216 2004/05/31 23:49:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,21 +265,52 @@ get_uri_port(struct uri *uri)
 	return get_protocol_port(uri->protocol);
 }
 
+#define can_compare_uri_components(comp) \
+	((comp) == ((comp) & (URI_PROTOCOL | URI_USER | URI_PASSWORD | URI_HOST)))
+
+static inline int
+compare_component(unsigned char *a, int alen, unsigned char *b, int blen)
+{
+	/* Check that the length and the strings are both set or unset */
+	if (alen != blen || !!a != !!b) return 0;
+
+	/* Both are unset so that will make a perfect match */
+	if (!a || !alen) return 1;
+
+	/* Let the higher forces decide */
+	return !memcmp(a, b, blen);
+}
+
+#define wants(x) (components & (x))
+
 int
 compare_uri(struct uri *a, struct uri *b, enum uri_component components)
 {
 	if (a == b) return 1;
 	if (!components) return 0;
 
-	assertm((components & URI_HOST) == components,
+	assertm(can_compare_uri_components(components),
 		"compare_uri() is a work in progress. Component unsupported");
 
-	if (components & URI_HOST
-	    && strlcmp(a->host, a->hostlen, b->host, b->hostlen))
+	if (wants(URI_PROTOCOL)
+	    && a->protocol != b->protocol)
+		return 0;
+
+	if (wants(URI_USER)
+	    && !compare_component(a->user, a->userlen, b->user, b->userlen))
+		return 0;
+
+	if (wants(URI_PASSWORD)
+	    && !compare_component(a->password, a->passwordlen, b->password, b->passwordlen))
+		return 0;
+
+	if (wants(URI_HOST)
+	    && !compare_component(a->host, a->hostlen, b->host, b->hostlen))
 		return 0;
 
 	return 1;
 }
+
 
 /* We might need something more intelligent than this Swiss army knife. */
 struct string *
@@ -289,8 +320,6 @@ add_uri_to_string(struct string *string, struct uri *uri,
 	/* Custom or unknown keep the URI untouched. */
 	if (uri->protocol == PROTOCOL_UNKNOWN)
 		return add_to_string(string, struri(uri));
-
-#define wants(x) (components & (x))
 
  	if (wants(URI_PROTOCOL)) {
 		add_bytes_to_string(string, uri->string, uri->protocollen);
@@ -415,10 +444,10 @@ add_uri_to_string(struct string *string, struct uri *uri,
 		add_to_string(string, uri->post);
 	}
 
-#undef wants
-
 	return string;
 }
+
+#undef wants
 
 unsigned char *
 get_uri_string(struct uri *uri, enum uri_component components)

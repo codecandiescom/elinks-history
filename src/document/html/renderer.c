@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.127 2003/06/17 12:47:31 zas Exp $ */
+/* $Id: renderer.c,v 1.128 2003/06/17 12:51:44 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -608,7 +608,7 @@ align_line(struct part *part, int y, int last)
 static struct link *
 new_link(struct f_data *f)
 {
-	if (!f) return NULL;
+	assert(f);
 
 	if (!(f->nlinks & (ALLOC_GR - 1))) {
 		struct link *l = mem_realloc(f->links,
@@ -630,7 +630,7 @@ html_tag(struct f_data *f, unsigned char *t, int x, int y)
 	struct tag *tag;
 	int tsize;
 
-	if (!f) return;
+	assert(f);
 
 	tsize = strlen(t) + 1;
 	tag = mem_alloc(sizeof(struct tag) + tsize);
@@ -1183,7 +1183,8 @@ html_special(struct part *part, enum html_special_type c, ...)
 	switch (c) {
 		case SP_TAG:
 			t = va_arg(l, unsigned char *);
-			html_tag(part->data, t, X(part->cx), Y(part->cy));
+			if (part->data)
+				html_tag(part->data, t, X(part->cx), Y(part->cy));
 			va_end(l);
 			break;
 		case SP_CONTROL:

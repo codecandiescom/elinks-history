@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.349 2004/01/08 02:34:47 jonas Exp $ */
+/* $Id: view.c,v 1.350 2004/01/08 02:48:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -886,6 +886,12 @@ send_event(struct session *ses, struct term_event *ev)
 
 		action = kbd_action(KM_MAIN, ev, &func_ref);
 
+		if (action == ACT_QUIT) {
+quit:
+			if (ev->x == KBD_CTRL_C)
+				action = ACT_REALLY_QUIT;
+		}
+
 		if (do_action(ses, action, 0) == action) {
 			/* Did the session disappear in some EV_ABORT handler? */
 			if (action == ACT_TAB_CLOSE
@@ -894,18 +900,12 @@ send_event(struct session *ses, struct term_event *ev)
 			goto x;
 		}
 
-		/* TODO: Merge with do_action() */
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
 			case ACT_SCRIPTING_FUNCTION:
 #ifdef HAVE_SCRIPTING
 				trigger_event(func_ref, ses);
 #endif
 				break;
-			case ACT_QUIT:
-
-quit:
-				exit_prog(ses->tab->term, (void *)(ev->x == KBD_CTRL_C), ses);
-				goto x;
 
 			default:
 				if (ev->x == KBD_CTRL_C) goto quit;

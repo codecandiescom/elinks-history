@@ -1,5 +1,5 @@
 /* Stream reading and decoding (mostly decompression) */
-/* $Id: compress.c,v 1.2 2002/05/09 21:16:38 pasky Exp $ */
+/* $Id: compress.c,v 1.3 2002/05/11 18:05:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,8 +322,16 @@ struct decoding_handlers bzip2_handlers = {
 
 struct decoding_handlers *handlers[] = {
 	&dummy_handlers,
+#ifdef HAVE_ZLIB_H
 	&gzip_handlers,
+#else
+	&dummy_handlers,
+#endif
+#ifdef HAVE_BZLIB_H
 	&bzip2_handlers,
+#else
+	&dummy_handlers,
+#endif
 };
 
 

@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.46 2004/12/29 14:39:03 jonas Exp $ */
+/* $Id: stylesheet.c,v 1.47 2004/12/30 11:35:00 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,6 +115,17 @@ copy_css_selector(struct css_stylesheet *css, struct css_selector *orig)
 	return copy;
 }
 
+static void
+add_selector_property(struct css_selector *selector, struct css_property *prop)
+{
+	struct css_property *newprop = mem_alloc(sizeof(struct css_property));
+
+	if (newprop) {
+		copy_struct(newprop, prop);
+		add_to_list(selector->properties, newprop);
+	}
+}
+
 void
 add_selector_properties(struct css_selector *selector,
                         struct list_head *properties)
@@ -122,13 +133,7 @@ add_selector_properties(struct css_selector *selector,
 	struct css_property *prop;
 
 	foreach (prop, *properties) {
-		struct css_property *newprop;
-
-		newprop = mem_calloc(1, sizeof(struct css_property));
-		if (!newprop)
-			continue;
-		copy_struct(newprop, prop);
-		add_to_list(selector->properties, newprop);
+		add_selector_property(selector, prop);
 	}
 }
 
@@ -162,11 +167,7 @@ merge_css_selectors(struct css_selector *sel1, struct css_selector *sel2)
 			}
 
 		/* Not there yet, let's add it. */
-		origprop = mem_calloc(1, sizeof(struct css_property));
-		if (!origprop)
-			continue;
-		copy_struct(origprop, prop);
-		add_to_list(sel1->properties, origprop);
+		add_selector_property(sel1, prop);
 	}
 }
 

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.47 2002/11/29 16:26:13 zas Exp $ */
+/* $Id: renderer.c,v 1.48 2002/11/29 17:52:20 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,14 +98,17 @@ static int
 realloc_lines(struct part *p, int y)
 {
 	int i;
+	int newsize = ALIGN(y + 1);
 
-	if (ALIGN(y + 1) >= ALIGN(p->data->y)) {
+	if (newsize >= ALIGN(p->data->y)
+	    && (!p->data->data || p->data->data->size < newsize)) {
 		struct line *l;
 
-		l = mem_realloc(p->data->data, ALIGN(y+1)*sizeof(struct line));
+		l = mem_realloc(p->data->data, newsize * sizeof(struct line));
 		if (!l)	return -1;
 
 		p->data->data = l;
+		p->data->data->size = newsize;
 	}
 
 	for (i = p->data->y; i <= y; i++) {
@@ -123,14 +126,17 @@ static int
 realloc_line(struct part *p, int y, int x)
 {
 	int i;
+	int newsize = ALIGN(x + 1);
 
-	if (ALIGN(x + 1) >= ALIGN(p->data->data[y].l)) {
+	if (newsize >= ALIGN(p->data->data[y].l)
+	    && (!p->data->data[y].d || p->data->data[y].dsize < newsize)) {
 		chr *l;
 
-		l = mem_realloc(p->data->data[y].d, ALIGN(x+1)*sizeof(chr));
+		l = mem_realloc(p->data->data[y].d, newsize * sizeof(chr));
 		if (!l)	return -1;
 
 		p->data->data[y].d = l;
+		p->data->data[y].dsize = newsize;
 	}
 
 	for (i = p->data->data[y].l; i <= x; i++) {

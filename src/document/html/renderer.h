@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.11 2002/11/11 23:05:49 pasky Exp $ */
+/* $Id: renderer.h,v 1.12 2002/11/29 17:52:21 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -49,6 +49,8 @@ struct frameset_desc {
 /* For struct f_data */
 struct line {
 	int l;
+	int size;
+	int dsize;
 	chr c;
 	chr *d;
 };

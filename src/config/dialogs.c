@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.186 2004/07/14 14:20:57 jonas Exp $ */
+/* $Id: dialogs.c,v 1.187 2004/07/14 14:33:46 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -531,6 +531,73 @@ options_manager(struct session *ses)
 ****************************************************************************/
 
 static int keybinding_text_toggle;
+
+/* XXX: ACTION_BOX_SIZE is just a quick hack, we ought to allocate
+ * the sub-arrays separately. --pasky */
+#define ACTION_BOX_SIZE 128
+static struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
+
+struct listbox_item *
+get_keybinding_action_box_item(enum keymap km, int action)
+{
+	assert(action < ACTION_BOX_SIZE);
+	if_assert_failed return NULL;
+
+	return action_box_items[km][action];
+}
+
+void
+init_keybinding_listboxes(struct strtonum *keymaps, struct strtonum *actions[])
+{
+	struct listbox_item *root = &keybinding_browser.root;
+	struct strtonum *act, *map;
+
+	/* Do it backwards because add_listbox_item() add to front
+	 * of list. */
+	for (map = keymaps; map->str; map++) {
+		struct listbox_item *keymap;
+
+		keymap = add_listbox_item(NULL, root, BI_FOLDER, map, -1);
+		if (!keymap) continue;
+
+		for (act = actions[map->num]; act->str; act++) {
+			struct listbox_item *item;
+
+			assert(act->num < ACTION_BOX_SIZE);
+			if_assert_failed continue;
+
+			if (act->num == ACT_MAIN_SCRIPTING_FUNCTION
+			    || act->num == ACT_MAIN_NONE)
+				continue;
+
+			assert(act->desc);
+
+			item = add_listbox_item(NULL, keymap, BI_FOLDER, act, -1);
+			if (!item) continue;
+
+			item->expanded = 1;
+
+			action_box_items[map->num][act->num] = item;
+		}
+	}
+}
+
+void
+done_keybinding_listboxes(void)
+{
+	struct listbox_item *action;
+
+	foreach (action, keybinding_browser.root.child) {
+		struct listbox_item *keymap;
+
+		foreach (keymap, action->child) {
+			free_list(keymap->child);
+		}
+		free_list(action->child);
+	}
+	free_list(keybinding_browser.root.child);
+}
+
 
 /* Implementation of the listbox operations */
 

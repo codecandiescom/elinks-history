@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.243 2004/07/14 14:20:57 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.244 2004/07/14 14:33:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,24 +26,9 @@
 #define table table_elinks
 
 static struct strtonum *action_table[KM_MAX];
-/* XXX: ACTION_BOX_SIZE is just a quick hack, we ought to allocate
- * the sub-arrays separately. --pasky */
-#define ACTION_BOX_SIZE 128
-static struct listbox_item *action_box_items[KM_MAX][ACTION_BOX_SIZE];
 static struct list_head keymaps[KM_MAX];
 
 static void add_default_keybindings(void);
-static void init_keybinding_listboxes(void);
-static void done_keybinding_listboxes(void);
-
-static struct listbox_item *
-get_keybinding_action_box_item(enum keymap km, int action)
-{
-	assert(action < ACTION_BOX_SIZE);
-	if_assert_failed return NULL;
-
-	return action_box_items[km][action];
-}
 
 static int
 delete_keybinding(enum keymap km, long key, long meta)
@@ -146,30 +131,6 @@ keybinding_exists(enum keymap km, long key, long meta, int *action)
 	}
 
 	return 0;
-}
-
-
-void
-init_keymaps(void)
-{
-	enum keymap i;
-
-	for (i = 0; i < KM_MAX; i++)
-		init_list(keymaps[i]);
-
-	init_keybinding_listboxes();
-	add_default_keybindings();
-}
-
-void
-free_keymaps(void)
-{
-	enum keymap i;
-
-	done_keybinding_listboxes();
-
-	for (i = 0; i < KM_MAX; i++)
-		free_list(keymaps[i]);
 }
 
 
@@ -660,56 +621,28 @@ write_action(enum keymap keymap, int action)
 	return numtostr(action_table[keymap], action);
 }
 
-static void
-init_keybinding_listboxes(void)
+
+void
+init_keymaps(void)
 {
-	struct listbox_item *root = &keybinding_browser.root;
-	struct strtonum *act, *map;
+	enum keymap i;
 
-	/* Do it backwards because add_listbox_item() add to front
-	 * of list. */
-	for (map = keymap_table; map->str; map++) {
-		struct listbox_item *keymap;
+	for (i = 0; i < KM_MAX; i++)
+		init_list(keymaps[i]);
 
-		keymap = add_listbox_item(NULL, root, BI_FOLDER, map, -1);
-		if (!keymap) continue;
-
-		for (act = action_table[map->num]; act->str; act++) {
-			struct listbox_item *item;
-
-			assert(act->num < ACTION_BOX_SIZE);
-			if_assert_failed continue;
-
-			if (act->num == ACT_MAIN_SCRIPTING_FUNCTION
-			    || act->num == ACT_MAIN_NONE)
-				continue;
-
-			assert(act->desc);
-
-			item = add_listbox_item(NULL, keymap, BI_FOLDER, act, -1);
-			if (!item) continue;
-
-			item->expanded = 1;
-
-			action_box_items[map->num][act->num] = item;
-		}
-	}
+	init_keybinding_listboxes(keymap_table, action_table);
+	add_default_keybindings();
 }
 
-static void
-done_keybinding_listboxes(void)
+void
+free_keymaps(void)
 {
-	struct listbox_item *action;
+	enum keymap i;
 
-	foreach (action, keybinding_browser.root.child) {
-		struct listbox_item *keymap;
+	done_keybinding_listboxes();
 
-		foreach (keymap, action->child) {
-			free_list(keymap->child);
-		}
-		free_list(action->child);
-	}
-	free_list(keybinding_browser.root.child);
+	for (i = 0; i < KM_MAX; i++)
+		free_list(keymaps[i]);
 }
 
 

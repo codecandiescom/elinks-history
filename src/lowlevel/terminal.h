@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.26 2003/05/03 16:33:13 pasky Exp $ */
+/* $Id: terminal.h,v 1.27 2003/05/03 17:00:52 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -37,13 +37,24 @@ enum term_mode_type {
 	TERM_KOI8,
 };
 
+/* This is a bitmask describing the environment we are living in,
+ * terminal-wise. We can then conditionally use various features available
+ * in such an environment. */
 enum term_env_type {
+	/* This basically means that we can use the text i/o :). Always set. */
 	ENV_CONSOLE = 1,
+	/* We are running in a xterm-compatible box in some windowing
+	 * environment. */
 	ENV_XWIN = 2,
+	/* We are running under a screen. */
 	ENV_SCREEN = 4,
+	/* We are running in a OS/2 VIO terminal. */
 	ENV_OS2VIO = 8,
+	/* BeOS text terminal. */
 	ENV_BE = 16,
+	/* We live in a TWIN text-mode windowing environment. */
 	ENV_TWIN = 32,
+	/* Microsoft Windows cmdline thing. */
 	ENV_WIN32 = 64,
 };
 

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.505 2004/06/13 18:39:07 jonas Exp $ */
+/* $Id: session.c,v 1.506 2004/06/13 18:43:31 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -866,13 +866,6 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 	unsigned char *str;
 	int magic;
 
-	/* This is the only place where the session id comes into game - we're
-	 * comparing it to possibly supplied -base-session here, and clone the
-	 * session with id of base-session (its current document association
-	 * only, rather) to the newly created session. */
-	if (init_saved_session(term, info->base_session))
-		return 1;
-
 	magic = info->magic;
 
 	switch (magic) {
@@ -885,6 +878,19 @@ decode_session_info(struct terminal *term, struct terminal_info *info)
 		 *	2: Remote <int>
 		 *	3: NUL terminated URIs <unsigned char>+
 		 */
+
+		/* This is the only place where the session id comes into game.
+		 * We're comparing it to possibly supplied -base-session here,
+		 * and initialize from an already saved session with id of
+		 * base-session. At the moment only opening instances in new
+		 * window uses it to know how to initialize it when the new
+		 * instance connects to the master. This is also the reason why
+		 * we don't need to handle it for the old format. New instances
+		 * will always be of the same origin as the master. */
+		if (init_saved_session(term, info->base_session))
+			return 1;
+
+		
 		if (len < sizeof(int))
 			return 0;
 

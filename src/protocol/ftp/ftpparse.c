@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.8 2003/05/06 16:47:44 zas Exp $ */
+/* $Id: ftpparse.c,v 1.9 2003/09/21 13:00:13 zas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -48,6 +48,7 @@ NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 #include "elinks.h"
 
 #include "ftpparse.h"
+#include "util/conv.h"
 
 static long
 totai(long year, long month, long mday)
@@ -175,29 +176,16 @@ guesstai(long month, long mday)
 }
 
 static int
-check(unsigned char *buf, unsigned char *monthname)
+getmonth(const unsigned char *buf, int len)
 {
-	if ((buf[0]|32) != (monthname[0]|32)
-	     || (buf[1]|32) != (monthname[1]|32)
-	     || (buf[2]|32) != (monthname[2]|32))
-		return 0;
+	unsigned char month[3];
 
-	return 1;
-}
+	if (len != 3) return -1;
+	month[0] = buf[0]|32;
+	month[1] = buf[1]|32;
+	month[2] = buf[2]|32;
 
-static unsigned char *months[12] = { "jan", "feb", "mar", "apr", "may", "jun",
-			    "jul", "aug", "sep", "oct", "nov", "dec" };
-
-static int
-getmonth(unsigned char *buf, int len)
-{
-	int i;
-
-	if (len == 3)
-		for (i = 0; i < 12; ++i)
-			if (check(buf, months[i]))
-				return i;
-	return -1;
+	return month2num(buf);
 }
 
 static long

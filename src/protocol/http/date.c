@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.17 2003/09/21 12:35:25 zas Exp $ */
+/* $Id: date.c,v 1.18 2003/09/21 13:00:12 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,7 @@
 #include "elinks.h"
 
 #include "protocol/http/date.h"
-
+#include "util/conv.h"
 
 /*
  * Sun, 06 Nov 1994 08:49:37 GMT  ; RFC 822, updated by RFC 1123
@@ -75,62 +75,17 @@ parse_year(const unsigned char **date_p)
 
 /* Return 0 for January, 11 for december, -1 for failure. */
 static int
-parse_month(const unsigned char *date)
+parse_month(const unsigned char *buf)
 {
-#if 0
-	const unsigned char *months[12] =
-		{"Jan", "Feb", "Mar", "Apr", "May", "Jun",
-		 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-	int i;
+	unsigned char month[3];
 
-	for (i = 0; i < 12; i++)
-		if (!strncmp(date, months[i], 3))
-			return i;
-#endif
+	month[0] = buf[0]|32;
+	month[1] = buf[1]|32;
+	month[2] = buf[2]|32;
 
-	switch (date[0]) {
-	case 'J': /* Jan, Jun, Jul */
-		if (date[1] == 'a') {
-			if (date[2] == 'n') return 0; /* Jan */
-			return -1;
-		}
-		if (date[1] == 'u') {
-			if (date[2] == 'n') return 5; /* Jun */
-			if (date[2] == 'l') return 6; /* Jul */
-		}
-		return -1;
-	case 'M': /* Mar, May */
-		if (date[1] == 'a') {
-			if (date[2] == 'r') return 2; /* Mar */
-			if (date[2] == 'y') return 4; /* May */
-		}
-		return -1;
-	case 'A': /* Apr, Aug */
-		if (date[1] == 'p') {
-			if (date[2] == 'r') return 3; /* Apr */
-			return -1;
-		}
-		if (date[1] == 'u' && date[2] == 'g') return 7; /* Aug */
-		return -1;
-	case 'S':
-		if (date[1] == 'e' && date[2] == 'p') return 8; /* Sep */
-		return -1;
-	case 'O':
-		if (date[1] == 'c' && date[2] == 't') return 9; /* Oct */
-		return -1;
-	case 'N':
-		if (date[1] == 'o' && date[2] == 'v') return 10; /* Nov */
-		return -1;
-	case 'D':
-		if (date[1] == 'e' && date[2] == 'c') return 11; /* Dec */
-		return -1;
-	case 'F':
-		if (date[1] == 'e' && date[2] == 'b') return 1; /* Feb */
-		return -1;
-	default:
-		return -1;
-	}
+	return month2num(buf);
 }
+
 
 /* Return day number. */
 static int

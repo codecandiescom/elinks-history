@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.47 2003/07/24 14:36:00 zas Exp $ */
+/* $Id: conv.c,v 1.48 2003/09/21 13:00:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -380,3 +380,51 @@ decode_shell_safe_url(unsigned char *url)
 
 	return u.source;
 }
+
+int
+month2num(const unsigned char *month)
+{
+	switch (month[0]) {
+	case 'j': /* jan, jun, jul */
+		if (month[1] == 'a') {
+			if (month[2] == 'n') return 0; /* jan */
+			return -1;
+		}
+		if (month[1] == 'u') {
+			if (month[2] == 'n') return 5; /* jun */
+			if (month[2] == 'l') return 6; /* jul */
+		}
+		return -1;
+	case 'm': /* mar, may */
+		if (month[1] == 'a') {
+			if (month[2] == 'r') return 2; /* mar */
+			if (month[2] == 'y') return 4; /* may */
+		}
+		return -1;
+	case 'a': /* apr, aug */
+		if (month[1] == 'p') {
+			if (month[2] == 'r') return 3; /* apr */
+			return -1;
+		}
+		if (month[1] == 'u' && month[2] == 'g') return 7; /* aug */
+		return -1;
+	case 's':
+		if (month[1] == 'e' && month[2] == 'p') return 8; /* sep */
+		return -1;
+	case 'o':
+		if (month[1] == 'c' && month[2] == 't') return 9; /* oct */
+		return -1;
+	case 'n':
+		if (month[1] == 'o' && month[2] == 'v') return 10; /* nov */
+		return -1;
+	case 'd':
+		if (month[1] == 'e' && month[2] == 'c') return 11; /* dec */
+		return -1;
+	case 'f':
+		if (month[1] == 'e' && month[2] == 'b') return 1; /* feb */
+		return -1;
+	default:
+		return -1;
+	}
+}
+

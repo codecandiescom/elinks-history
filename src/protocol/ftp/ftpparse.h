@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.h,v 1.8 2004/07/03 23:37:20 zas Exp $ */
+/* $Id: ftpparse.h,v 1.9 2005/03/27 02:19:17 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FTP_FTPPARSE_H
 #define EL__PROTOCOL_FTP_FTPPARSE_H
@@ -20,6 +20,7 @@ struct ftpparse {
 	int symlinklen;
 	unsigned char *perm;
 	int permlen;
+	int vms;
 };
 
 #define FTPPARSE_SIZE_UNKNOWN 0	/* Must be zero to permit memset() on struct ftpparse. */

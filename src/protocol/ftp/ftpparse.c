@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.21 2005/02/28 14:17:51 zas Exp $ */
+/* $Id: ftpparse.c,v 1.22 2005/03/27 02:19:17 jonas Exp $ */
 
 /* These sources aren't the officially distributed version, they are modified
  * by us (ELinks coders) and some other third-party hackers. See ELinks
@@ -482,6 +482,7 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 		fp->mtime = base + totai(year, month, mday)
 			    + hour * 3600 + minute * 60;
 
+		fp->vms = 1;
 		return 1;
 	}
 

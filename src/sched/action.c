@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.31 2004/01/08 03:44:01 jonas Exp $ */
+/* $Id: action.c,v 1.32 2004/01/08 09:09:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -114,14 +114,14 @@ goto_url_action(struct session *ses,
 	dialog_goto_url(ses, url);
 }
 
-/* This could gradually become some mulitplexor / switch noodle containing
+/* This could gradually become some multiplexor / switch noodle containing
  * most if not all default handling of actions (for the main mapping) that
  * frame_ev() and/or send_event() could use as a backend. */
 enum keyact
 do_action(struct session *ses, enum keyact action, int verbose)
 {
 	struct terminal *term = ses->tab->term;
-	struct document_view *doc_view = doc_view = current_frame(ses);
+	struct document_view *doc_view = current_frame(ses);
 
 	switch (action) {
 		/* Please keep in alphabetical order for now. Later we can sort

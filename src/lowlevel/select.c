@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.39 2003/12/21 14:56:55 zas Exp $ */
+/* $Id: select.c,v 1.40 2004/04/03 13:25:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -80,7 +80,7 @@ long
 select_info(int type)
 {
 	int i = 0, j;
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 
 	switch (type) {
 		case INFO_FILES:
@@ -91,7 +91,7 @@ select_info(int type)
 					i++;
 			return i;
 		case INFO_TIMERS:
-			foreach (ce, timers) i++;
+			foreach (cache, timers) i++;
 			return i;
 	}
 

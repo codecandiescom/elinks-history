@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.350 2004/04/03 12:34:03 jonas Exp $ */
+/* $Id: session.c,v 1.351 2004/04/03 13:32:42 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -64,7 +64,7 @@ struct file_to_load {
 	struct session *ses;
 	int req_sent;
 	int pri;
-	struct cache_entry *ce;
+	struct cache_entry *cache;
 	unsigned char *target_frame;
 	struct uri *uri;
 	struct download stat;
@@ -144,7 +144,7 @@ free_files(struct session *ses)
 
 	abort_files_load(ses, 0);
 	foreach (ftl, ses->more_files) {
-		if (ftl->ce) object_unlock(ftl->ce);
+		if (ftl->cache) object_unlock(ftl->cache);
 		if (ftl->uri) done_uri(ftl->uri);
 		if (ftl->target_frame) mem_free(ftl->target_frame);
 	}
@@ -332,7 +332,7 @@ add_questions_entry(void (*callback)(struct session *, void *), void *data)
 
 #ifdef HAVE_SCRIPTING
 static void
-maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
+maybe_pre_format_html(struct cache_entry *cache, struct session *ses)
 {
 	struct fragment *fr;
 	unsigned char *src;
@@ -340,26 +340,26 @@ maybe_pre_format_html(struct cache_entry *ce, struct session *ses)
 	int len;
 	static int pre_format_html_event = EVENT_NONE;
 
-	if (!ce || ce->done_pre_format_html_hook || list_empty(ce->frag))
+	if (!cache || cache->done_pre_format_html_hook || list_empty(cache->frag))
 		return;
 
-	defrag_entry(ce);
-	fr = ce->frag.next;
+	defrag_entry(cache);
+	fr = cache->frag.next;
 	src = fr->data;
 	len = fr->length;
-	uri = get_cache_uri_string(ce);
+	uri = get_cache_uri_string(cache);
 
 	set_event_id(pre_format_html_event, "pre-format-html");
 	trigger_event(pre_format_html_event, &src, &len, ses, url);
 
 	if (src && src != fr->data) {
-		add_fragment(ce, 0, src, len);
-		truncate_entry(ce, len, 1);
-		ce->incomplete = 0; /* XXX */
+		add_fragment(cache, 0, src, len);
+		truncate_entry(cache, len, 1);
+		cache->incomplete = 0; /* XXX */
 		mem_free(src);
 	}
 
-	ce->done_pre_format_html_hook = 1;
+	cache->done_pre_format_html_hook = 1;
 }
 #endif
 
@@ -430,21 +430,21 @@ void
 file_end_load(struct download *stat, struct file_to_load *ftl)
 {
 	if (ftl->stat.ce) {
-		if (ftl->ce) object_unlock(ftl->ce);
-		ftl->ce = ftl->stat.ce;
-		object_lock(ftl->ce);
+		if (ftl->cache) object_unlock(ftl->cache);
+		ftl->cache = ftl->stat.ce;
+		object_lock(ftl->cache);
 	}
 
 	/* FIXME: We need to do content-type check here! However, we won't
 	 * handle properly the "Choose action" dialog now :(. */
-	if (ftl->ce && !ftl->ce->redirect_get && stat->pri != PRI_CSS) {
+	if (ftl->cache && !ftl->cache->redirect_get && stat->pri != PRI_CSS) {
 		struct session *ses = ftl->ses;
 		struct uri *loading_uri = ses->loading_uri;
 		unsigned char *target_frame = ses->task.target_frame;
 
 		ses->loading_uri = ftl->uri;
 		ses->task.target_frame = ftl->target_frame;
-		ses_chktype(ses, &ftl->stat, ftl->ce, 1);
+		ses_chktype(ses, &ftl->stat, ftl->cache, 1);
 		ses->loading_uri = loading_uri;
 		ses->task.target_frame = target_frame;
 	}

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.153 2004/04/02 21:22:00 jonas Exp $ */
+/* $Id: connection.c,v 1.154 2004/04/03 13:26:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -757,7 +757,7 @@ int
 load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
-	struct cache_entry *ce = NULL;
+	struct cache_entry *cache = NULL;
 	struct connection *conn;
 	struct uri *proxy_uri;
 
@@ -786,16 +786,16 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 #endif
 
 	if (cache_mode <= CACHE_MODE_NORMAL
-	    && (ce = find_in_cache(uri))
-	    && !ce->incomplete) {
-		if (!is_object_used(ce) &&
-		    ((ce->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
-		     || (ce->redirect && !get_opt_int("document.cache.cache_redirects")))) {
-			delete_cache_entry(ce);
-			ce = NULL;
+	    && (cache = find_in_cache(uri))
+	    && !cache->incomplete) {
+		if (!is_object_used(cache) &&
+		    ((cache->cache_mode == CACHE_MODE_NEVER && cache_mode != CACHE_MODE_ALWAYS)
+		     || (cache->redirect && !get_opt_int("document.cache.cache_redirects")))) {
+			delete_cache_entry(cache);
+			cache = NULL;
 		} else {
 			if (download) {
-				download->ce = ce;
+				download->ce = cache;
 				download->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
@@ -861,9 +861,9 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 		return -1;
 	}
 
-	if (cache_mode < CACHE_MODE_FORCE_RELOAD && ce && !list_empty(ce->frag)
-	    && !((struct fragment *) ce->frag.next)->offset)
-		conn->from = ((struct fragment *) ce->frag.next)->length;
+	if (cache_mode < CACHE_MODE_FORCE_RELOAD && cache && !list_empty(cache->frag)
+	    && !((struct fragment *) cache->frag.next)->offset)
+		conn->from = ((struct fragment *) cache->frag.next)->length;
 
 	if (download) {
 		download->prg = &conn->prg;

@@ -1032,6 +1032,7 @@ AC_OUTPUT([ \
  contrib/Makefile \
  contrib/elinks.spec \
  contrib/lua/hooks.lua \
+ debian/Makefile \
  doc/Makefile \
  doc/man/Makefile \
  doc/man/man1/Makefile \

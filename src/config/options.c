@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.388 2003/10/26 23:43:55 jonas Exp $ */
+/* $Id: options.c,v 1.389 2003/10/28 02:44:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -260,8 +260,15 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 			    || ((struct option *) cat->prev)->type == OPT_TREE)
 			   && strcmp(((struct option *) cat->prev)->name,
 				     option->name) <= 0) {
+append:
 			add_to_list_end(*cat, option);
 			if (abi) add_to_list_end(*bcat, option->box_item);
+
+		/* At the end of the list is tree and we are ordinary. That's
+		 * clear case then. */
+		} else if (option->type != OPT_TREE
+			   && ((struct option *) cat->prev)->type == OPT_TREE) {
+			goto append;
 
 		/* Scan the list linearly. This could be probably optimized ie.
 		 * to choose direction based on the first letter or so. */
@@ -274,10 +281,16 @@ add_opt_rec(struct option *tree, unsigned char *path, struct option *option)
 				if ((option->type != OPT_TREE
 				     || pos->type == OPT_TREE)
 				    && strcmp(pos->name, option->name) <= 0) {
+next:
 					bpos = bpos->next;
 					assert(bpos != (struct listbox_item *) bcat);
 					continue;
 				}
+
+				/* Ordinary options always sort behind trees. */
+				if (option->type != OPT_TREE
+				    && pos->type == OPT_TREE)
+					goto next;
 
 				/* The (struct option) add_at_pos() can mess
 				 * up the order so that we add the box_item

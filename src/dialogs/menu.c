@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.133 2003/09/27 13:56:19 zas Exp $ */
+/* $Id: menu.c,v 1.134 2003/09/27 15:26:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -513,7 +513,7 @@ static struct menu_item setup_menu[] = {
 #ifdef ENABLE_NLS
 	INIT_MENU_ITEM(N_("~Language"), M_SUBMENU, menu_language_list, NULL, FREE_NOTHING, 1),
 #endif
-	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, (void *)1, FREE_NOTHING, 1), /* FIXME: (void *)1 !! */
+	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, NULL, FREE_NOTHING, 1),
 	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, FREE_NOTHING, 0),
 	INIT_MENU_ITEM(N_("File ~extensions"), M_SUBMENU, do_ext_menu, NULL, FREE_NOTHING, 1),
 	BAR_MENU_ITEM,
@@ -525,7 +525,7 @@ static struct menu_item setup_menu[] = {
 
 static struct menu_item setup_menu_anon[] = {
 	INIT_MENU_ITEM(N_("~Language"), M_SUBMENU, menu_language_list, NULL, FREE_NOTHING, 1),
-	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, (void *)1, FREE_NOTHING, 1),
+	INIT_MENU_ITEM(N_("C~haracter set"), M_SUBMENU, charset_list, NULL, FREE_NOTHING, 1),
 	INIT_MENU_ITEM(N_("~Terminal options"), "", terminal_options, NULL, FREE_NOTHING, 0),
 	NULL_MENU_ITEM
 };

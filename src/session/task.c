@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.55 2004/04/03 03:04:26 jonas Exp $ */
+/* $Id: task.c,v 1.56 2004/04/03 12:34:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -321,7 +321,7 @@ do_move(struct session *ses, struct download **stat)
 		else
 			*stat = NULL;
 
-		set_session_referrer(ses, get_cache_uri_struct(ce));
+		set_session_referrer(ses, get_cache_uri(ce));
 
 		switch (task) {
 		case TASK_NONE:

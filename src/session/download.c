@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.240 2004/04/03 02:21:51 jonas Exp $ */
+/* $Id: download.c,v 1.241 2004/04/03 12:33:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,7 +356,7 @@ download_data(struct download *download, struct file_download *file_download)
 		if (file_download->dlg_data)
 			redraw_dialog(file_download->dlg_data, 1);
 
-		load_uri(file_download->uri, get_cache_uri_struct(ce), &file_download->download,
+		load_uri(file_download->uri, get_cache_uri(ce), &file_download->download,
 			 PRI_DOWNLOAD, CACHE_MODE_NORMAL,
 			 download->prg ? download->prg->start : 0);
 
@@ -1052,7 +1052,7 @@ ses_chktype(struct session *ses, struct download *loading, struct cache_entry *c
 	struct mime_handler *handler;
 	struct view_state *vs;
 	struct tq *tq;
-	unsigned char *ctype = get_content_type(ce->head, get_cache_uri_struct(ce));
+	unsigned char *ctype = get_content_type(ce->head, get_cache_uri(ce));
 	int plaintext = 1;
 	int ret = 0;
 	int xwin, i;

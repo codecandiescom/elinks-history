@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.105 2004/04/03 02:21:51 jonas Exp $ */
+/* $Id: dump.c,v 1.106 2004/04/03 12:34:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.plain = 0;
 	o.frames = 0;
 
-	init_vs(&vs, get_cache_uri_struct(ce), -1);
+	init_vs(&vs, get_cache_uri(ce), -1);
 
 	render_document(&vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
@@ -244,7 +244,7 @@ dump_end(struct download *status, void *p)
 		if (status->state >= 0)
 			change_connection(status, NULL, PRI_CANCEL, 0);
 
-		load_uri(uri, get_cache_uri_struct(ce), status, PRI_MAIN, 0, -1);
+		load_uri(uri, get_cache_uri(ce), status, PRI_MAIN, 0, -1);
 		return;
 	}
 

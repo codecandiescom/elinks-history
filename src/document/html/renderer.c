@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.418 2004/02/15 12:14:19 zas Exp $ */
+/* $Id: renderer.c,v 1.419 2004/04/03 12:33:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1512,7 +1512,7 @@ render_html_document(struct cache_entry *ce, struct document *document)
 	if (!init_string(&head)) return;
 
 	g_ctrl_num = 0;
-	url = get_cache_uri(ce);
+	url = get_cache_uri_string(ce);
 
 	fr = ce->frag.next;
 	start = fr->data;

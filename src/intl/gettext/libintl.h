@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.27 2005/01/05 14:37:44 jonas Exp $ */
+/* $Id: libintl.h,v 1.28 2005/03/02 23:02:35 zas Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -32,6 +32,13 @@ _(unsigned char *msg, struct terminal *term)
 {
 	return gettext_noop(msg);
 }
+
+static inline unsigned char *
+n_(unsigned char *msg1, unsigned char *msg2, unsigned long int n, struct terminal *term)
+{
+	return gettext_noop(msg1);
+}
+
 
 #else
 
@@ -137,6 +144,34 @@ do_lookup:
 }
 
 #endif
+
+/* For plural handling. */
+/* Wraps around ngettext(), employing charset multiplexing. If you don't care
+ * about charset (usually during initialization or when you don't use terminals
+ * at all), use ngettext() directly. */
+static inline unsigned char *
+n_(unsigned char *msg1, unsigned char *msg2, unsigned long int n, struct terminal *term)
+{
+	int new_charset;
+
+	/* Prevent useless (and possibly dangerous) calls. */
+	if (!msg1 || !*msg1)
+		return msg1;
+
+	if (!term) goto do_lookup;
+
+	new_charset = get_opt_codepage_tree(term->spec, "charset");
+	/* Prevent useless switching. */
+	if (current_charset != new_charset) {
+		bind_textdomain_codeset( /* PACKAGE */ "elinks",
+					get_cp_mime_name(new_charset));
+		current_charset = new_charset;
+	}
+
+do_lookup:
+	return (unsigned char *) ngettext(msg1, msg2, n);
+}
+
 
 /* Languages table lookups. */
 

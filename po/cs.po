@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "POT-Creation-Date: 2003-10-15 14:13+0200\n"
-"PO-Revision-Date: 2003-10-12 22:32+0200\n"
+"PO-Revision-Date: 2003-10-15 16:02+0200\n"
 "Last-Translator: Petr Baudis <pasky@ucw.cz>\n"
 "Language-Team: Czech <translation-team-cs@lists.souceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -1329,11 +1329,11 @@ msgstr "Horizontální okraj textu"
 
 #: src/config/options.c:1199
 msgid "Horizontal text margin."
-msgstr ""
+msgstr "Horizontální okraj textu."
 
 #: src/config/options.c:1201
 msgid "Document meta refresh"
-msgstr ""
+msgstr "Automatická obnova dokumentù"
 
 #: src/config/options.c:1203
 msgid ""
@@ -1368,12 +1368,12 @@ msgstr "Poøadí navigace v tabulkách"
 
 #: src/config/options.c:1219
 msgid "Move by columns in table, instead of rows."
-msgstr ""
+msgstr "Pøesun po odkazech v tabulce pùjde po sloupcích, nikoliv po øádcích."
 
 #. Keep options in alphabetical order.
 #: src/config/options.c:1225
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: src/config/options.c:1227
 msgid "Cache options."
@@ -1420,7 +1420,7 @@ msgstr "Formátované dokumenty"
 
 #: src/config/options.c:1257
 msgid "Format cache options."
-msgstr ""
+msgstr "Nastavení cache formátovaných dokumentù."
 
 #: src/config/options.c:1259
 msgid "Number"
@@ -1428,7 +1428,7 @@ msgstr "Poèet"
 
 #: src/config/options.c:1261
 msgid "Number of cached formatted pages."
-msgstr ""
+msgstr "Poèet nacachovaných zformátovaných stránek."
 
 #: src/config/options.c:1263
 msgid "Memory cache"
@@ -1443,9 +1443,8 @@ msgid "Size"
 msgstr "Velikost"
 
 #: src/config/options.c:1269
-#, fuzzy
 msgid "Memory cache size (in bytes)."
-msgstr "Nastavení pamì»ové cache."
+msgstr "Velikost pamì»ové cache (v bytech)."
 
 #: src/config/options.c:1273
 msgid "Charset"
@@ -1453,7 +1452,7 @@ msgstr "Znaková sada"
 
 #: src/config/options.c:1275
 msgid "Charset options."
-msgstr ""
+msgstr "Nastavení znakových sad."
 
 #: src/config/options.c:1277
 msgid "Default codepage"
@@ -1461,7 +1460,7 @@ msgstr "Výchozí kódová stránka"
 
 #: src/config/options.c:1279
 msgid "Default document codepage."
-msgstr ""
+msgstr "Výchozí kódová stránka dokumentu."
 
 #: src/config/options.c:1281
 msgid "Ignore charset info from server"
@@ -1469,7 +1468,7 @@ msgstr "Ignorovat informaci o kódové stránce od serveru"
 
 #: src/config/options.c:1283
 msgid "Ignore charset info sent by server."
-msgstr ""
+msgstr "Ignorovat informaci o kódové stránce, odeslanou serverem."
 
 #: src/config/options.c:1287
 msgid "Default color settings"
@@ -1477,7 +1476,7 @@ msgstr "Výchozí nastavení barev"
 
 #: src/config/options.c:1289
 msgid "Default document color settings."
-msgstr ""
+msgstr "Výchozí nastavení barev dokumentu."
 
 #: src/config/options.c:1292 src/config/options.c:1902
 #: src/config/options.c:1914 src/config/options.c:1934
@@ -1537,7 +1536,7 @@ msgstr "Barva textu"
 #: src/config/options.c:2619 src/config/options.c:2636
 #: src/config/options.c:2648 src/config/options.c:2660
 msgid "Default text color."
-msgstr ""
+msgstr "Výchozí barva textu."
 
 #: src/config/options.c:1296 src/config/options.c:1906
 #: src/config/options.c:1918 src/config/options.c:1938
@@ -1605,7 +1604,7 @@ msgstr "Barva odkazu"
 
 #: src/config/options.c:1302
 msgid "Default link color."
-msgstr ""
+msgstr "Výchozí barva odkazu."
 
 #: src/config/options.c:1304
 msgid "Visited-link color"
@@ -1613,7 +1612,7 @@ msgstr "Barva nav¹tíveného odkazu"
 
 #: src/config/options.c:1306
 msgid "Default visited link color."
-msgstr ""
+msgstr "Výchozí barva nav¹tíveného odkazu."
 
 #: src/config/options.c:1308
 msgid "Directory color"
@@ -1624,6 +1623,8 @@ msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
 msgstr ""
+"Výchozí barva odkazu na adresáø.\n"
+"Viz volbu document.browse.links.color_dirs."
 
 #: src/config/options.c:1313
 msgid "Allow dark colors on black background"

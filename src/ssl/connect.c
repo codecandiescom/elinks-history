@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: connect.c,v 1.79 2004/08/03 09:08:48 jonas Exp $ */
+/* $Id: connect.c,v 1.80 2004/08/03 09:18:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -170,7 +170,7 @@ ssl_want_read(struct connection *conn)
 #endif
 
 			conn->conn_info = NULL;
-			conn_info->func(conn);
+			conn_info->done(conn);
 			mem_free_if(conn_info->addr);
 			mem_free(conn_info);
 

@@ -1,4 +1,4 @@
-/* $Id: connect.h,v 1.24 2004/08/01 09:51:35 jonas Exp $ */
+/* $Id: connect.h,v 1.25 2004/08/03 09:18:34 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_CONNECT_H
 #define EL__LOWLEVEL_CONNECT_H
@@ -12,7 +12,7 @@ struct connection_socket;
 struct conn_info {
 	struct sockaddr_storage *addr; /* array of addresses */
 
-	void (*func)(struct connection *);
+	void (*done)(struct connection *);
 
 	struct connection_socket *socket;
 
@@ -35,7 +35,14 @@ struct read_buffer {
 };
 
 void close_socket(struct connection *conn, struct connection_socket *socket);
-void make_connection(struct connection *, int, struct connection_socket *, void (*)(struct connection *));
+
+/* Establish connection with the host in @conn->uri. Storing the socket
+ * descriptor in @socket. When the connection has been established the @done
+ * callback will be run. */
+void make_connection(struct connection *conn, int port,
+		     struct connection_socket *socket,
+		     void (*done)(struct connection *));
+
 void dns_found(/* struct connection */ void *, int);
 int get_pasv_socket(struct connection *, int, unsigned char *);
 #ifdef CONFIG_IPV6

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.127 2003/07/02 17:17:23 pasky Exp $ */
+/* $Id: view.c,v 1.128 2003/07/02 17:22:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -812,23 +812,27 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 static void
 draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 {
-	int xp = f->xp;
-	int yp = f->yp;
-	int xw = f->xw;
-	int yw = f->yw;
-	struct view_state *vs = f->vs;
-	int vx = vs->view_posx;
-	int vy = vs->view_pos;
 	struct form_state *fs;
-	struct form_control *frm = l->form;
+	struct form_control *frm;
+	struct view_state *vs;
+	int xp, yp;
+	int xw, yw;
+	int vx, vy;
 
-	if (!frm) {
-		internal("link %d has no form", (int)(l - f->f_data->links));
-		return;
-	}
+	assert(t && f && f->f_data && l);
+	frm = l->form;
+	assertm(frm, "link %d has no form", (int)(l - f->f_data->links));
 
 	fs = find_form_state(f, frm);
 	if (!fs) return;
+
+	xp = f->xp;
+	yp = f->yp;
+	xw = f->xw;
+	yw = f->yw;
+	vs = f->vs;
+	vx = vs->view_posx;
+	vy = vs->view_pos;
 
 	switch (frm->type) {
 		struct line_info *ln, *lnx;
@@ -944,12 +948,15 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 static void
 draw_forms(struct terminal *t, struct f_data_c *f)
 {
-	struct link *l1 = get_first_link(f);
-	struct link *l2 = get_last_link(f);
+	struct link *l1, *l2;
+
+	assert(t && f);
+
+	l1 = get_first_link(f);
+	l2 = get_last_link(f);
 
 	if (!l1 || !l2) {
-		if (l1 || l2)
-			internal("get_first_link == %p, get_last_link == %p", l1, l2);
+		assertm(!l1 && !l2, "get_first_link == %p, get_last_link == %p", l1, l2);
 		return;
 	}
 	do {

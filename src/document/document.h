@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.2 2003/10/29 16:14:12 jonas Exp $ */
+/* $Id: document.h,v 1.3 2003/10/29 16:24:32 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -104,5 +104,14 @@ struct document {
 };
 
 #define document_has_frames(document_) ((document_) && (document_)->frame_desc)
+
+/* Initializes a document and it's canvas. The @uristring should match a
+ * cache_entry. */
+/* Return NULL on allocation failure. */
+struct document *
+init_document(unsigned char *uristring, struct document_options *options);
+
+/* Releases the document and all it's resources. */
+void done_document(struct document *document);
 
 #endif

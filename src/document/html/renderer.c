@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.321 2003/10/28 12:47:19 jonas Exp $ */
+/* $Id: renderer.c,v 1.322 2003/10/29 16:24:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,6 +14,7 @@
 #include "main.h"
 #include "config/options.h"
 #include "document/cache.h"
+#include "document/document.h"
 #include "document/options.h"
 #include "document/html/frames.h"
 #include "document/html/parser.h"

@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.30 2003/10/23 23:09:42 jonas Exp $ */
+/* $Id: view.h,v 1.31 2003/10/29 16:24:33 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -8,15 +8,6 @@
 #include "terminal/event.h"
 #include "terminal/terminal.h"
 
-
-/* Initializes a document and it's canvas. The @uristring should match a
- * cache_entry. */
-/* Return NULL on allocation failure. */
-struct document *
-init_document(unsigned char *uristring, struct document_options *options);
-
-/* Releases the document and all it's resources. */
-void done_document(struct document *document);
 
 /* Releases the document view's resources. But doesn't free() the @view. */
 void detach_formatted(struct document_view *doc_view);

@@ -1,5 +1,5 @@
 /* Gopher access protocol (RFC 1436) */
-/* $Id: gopher.c,v 1.22 2004/11/04 21:10:10 jonas Exp $ */
+/* $Id: gopher.c,v 1.23 2004/11/08 23:51:19 jonas Exp $ */
 
 /* Based on version of HTGopher.c in the lynx tree.
  *
@@ -485,7 +485,7 @@ add_gopher_menu_line(struct string *buffer, unsigned char *line)
 				host, entity);
 
 			/* Encode selector string */
-			encode_uri_string(&address, selector, 0);
+			encode_uri_string(&address, selector, 1);
 		}
 
 		/* Error response from Gopher doesn't deserve to

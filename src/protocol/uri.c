@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.28 2003/07/22 14:53:48 jonas Exp $ */
+/* $Id: uri.c,v 1.29 2003/07/22 15:01:42 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -786,6 +786,7 @@ encode_uri_string(struct string *string, unsigned char *name)
 	}
 }
 
+#if 0
 /* This function is evil, it modifies its parameter. */
 /* XXX: but decoded string is _never_ longer than encoded string so it's an
  * efficient way to do that, imho. --Zas */
@@ -819,3 +820,4 @@ decode_uri_string(unsigned char *src) {
 		*dst++ = c;
 	} while (c != '\0');
 }
+#endif

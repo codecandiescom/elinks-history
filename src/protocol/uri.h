@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.20 2003/07/22 14:57:11 jonas Exp $ */
+/* $Id: uri.h,v 1.21 2003/07/22 15:01:42 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -83,6 +83,8 @@ void get_filenamepart_from_url(unsigned char *, unsigned char **, int *);
 unsigned char *get_extension_from_url(unsigned char *url);
 
 void encode_uri_string(struct string *, unsigned char *);
+#if 0
 void decode_uri_string(unsigned char *);
+#endif
 
 #endif

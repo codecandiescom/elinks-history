@@ -1,10 +1,13 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.1 2003/10/22 22:50:59 jonas Exp $ */
+/* $Id: options.inc,v 1.2 2003/10/22 23:44:12 jonas Exp $ */
 
 /* These function are called from register_options(). */
 
 /* TODO: The change hooks should be added more elegantly! --pasky */
 /* TODO: Autogenerate this file from something more human readable. --jonas */
+
+/* Ok so shoot me. It will probably do me good. --jonas */
+#define N_(msg) (gettext_noop(msg))
 
 /* Keep options in alphabetical order. */
 

@@ -50,8 +50,8 @@ GMOFILES = @GMOFILES@
 DISTFILES = Makefile.in README $(PACKAGE).pot \
 	$(POFILES) $(GMOFILES)
 
-POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' | sort)
-POTFILES_ABS = $(shell cd $(top_srcdir); find src/ -name '*.[ch]' | sort)
+POTFILES_REL = $(shell find $(top_srcdir)/src/ -name '*.[ch]' -o -name options.inc | sort)
+POTFILES_ABS = $(shell cd $(top_srcdir); find src/ -name '*.[ch]' -o -name options.inc | sort)
 
 CATALOGS = @CATALOGS@
 

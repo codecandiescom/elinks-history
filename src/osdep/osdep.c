@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.121 2004/01/01 15:54:38 jonas Exp $ */
+/* $Id: osdep.c,v 1.122 2004/01/22 16:22:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,11 +216,15 @@ int
 is_xterm(void)
 {
 	static int xt = -1;
+	unsigned char *display;
 
 	if (xt == -1) {
 		unsigned char *display = getenv("DISPLAY");
+		unsigned char *windowid = getenv("WINDOWID");
 
-		xt = (display && *display);
+		if (!windowid || !*windowid)
+			windowid = getenv("KONSOLE_DCOP_SESSION");
+		xt = (display && *display && windowid && *windowid);
 	}
 
 	return xt;

@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.10 2003/07/21 17:58:39 pasky Exp $ */
+/* $Id: form.c,v 1.11 2003/07/21 18:00:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -883,18 +883,20 @@ field_op(struct session *ses, struct document_view *f, struct link *l,
 					for (prev = fs->value + fs->state - 1;
 					     prev > fs->value
 						&& *prev != ASCII_LF;
-					     --prev)
+					     prev--)
 						;
 
 					if (prev > fs->value
 					    && fs->state
 					    && fs->value[fs->state - 1]
 						    != ASCII_LF)
-						++prev;
+						prev++;
+
 					memmove(prev,
 						fs->value + fs->state,
 						strlen(fs->value + fs->state)
 						 + 1);
+
 					fs->state = (int) (prev - fs->value);
 				}
 				break;

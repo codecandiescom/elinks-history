@@ -1,5 +1,5 @@
 /* HTML elements stack */
-/* $Id: stack.c,v 1.26 2004/10/21 20:54:22 pasky Exp $ */
+/* $Id: stack.c,v 1.27 2004/10/22 07:59:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -165,11 +165,27 @@ html_stack_dup(enum html_element_type type)
 	add_to_list(html_context.stack, e);
 }
 
+static void
+kill_element(int ls, struct html_element *e)
+{
+	int l = 0;
+
+	while ((void *) e != &html_context.stack) {
+		if (ls && e == html_context.stack.next)
+			break;
+
+		if (e->linebreak > l)
+			l = e->linebreak;
+		e = e->prev;
+		kill_html_stack_item(e->next);
+	}
+
+	ln_break(l, html_context.line_break_f, html_context.part);
+}
 
 void
 kill_html_stack_until(int ls, ...)
 {
-	int l;
 	struct html_element *e = &html_top;
 
 	if (ls) e = e->next;
@@ -197,12 +213,14 @@ kill_html_stack_until(int ls, ...)
 			if (!sk) {
 				if (e->type < ELEMENT_KILLABLE) break;
 				va_end(arg);
-				goto killll;
+				kill_element(ls, e);
+				return;
 
 			} else if (sk == 1) {
 				va_end(arg);
 				e = e->prev;
-				goto killll;
+				kill_element(ls, e);
+				return;
 
 			} else {
 				break;
@@ -223,20 +241,4 @@ kill_html_stack_until(int ls, ...)
 
 		e = e->next;
 	}
-
-	return;
-
-killll:
-	l = 0;
-	while ((void *) e != &html_context.stack) {
-		if (ls && e == html_context.stack.next)
-			break;
-
-		if (e->linebreak > l)
-			l = e->linebreak;
-		e = e->prev;
-		kill_html_stack_item(e->next);
-	}
-
-	ln_break(l, html_context.line_break_f, html_context.part);
 }

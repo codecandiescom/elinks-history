@@ -1,5 +1,5 @@
 /* Memory allocation manager */
-/* $Id: memory.c,v 1.5 2002/11/28 22:45:08 pasky Exp $ */
+/* $Id: memory.c,v 1.6 2002/11/29 11:13:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,9 +15,9 @@
 
 #ifndef LEAK_DEBUG
 
-int alloc_try = 0;
+static int alloc_try = 0;
 
-int
+static int
 patience(unsigned char *of)
 {
 	++alloc_try;
@@ -45,7 +45,7 @@ patience(unsigned char *of)
 void *
 mem_alloc(size_t size)
 {
-	void *p = NULL;
+	void *p;
 
 	if (!size) return DUMMY;
 

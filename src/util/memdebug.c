@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.9 2002/11/25 12:04:56 zas Exp $ */
+/* $Id: memdebug.c,v 1.10 2002/11/29 11:13:21 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,6 @@
 
 
 #ifdef LEAK_DEBUG
-
-int alloc_try = 0;
 
 /* Eat less memory, but sacrifice speed?
  * Default is defined. */
@@ -215,6 +213,34 @@ check_memory_leaks()
 	force_dump();
 }
 
+static int alloc_try = 0;
+
+static int
+patience(unsigned char *file, int line, unsigned char *of)
+{
+	++alloc_try;
+	if (alloc_try < ALLOC_MAXTRIES) {
+		error("[%s:%d] Out of memory (%s returned NULL): retry #%d,"
+			" I still exercise my patience and retry tirelessly.",
+			file, line, of, alloc_try);
+		sleep(ALLOC_DELAY);
+		return alloc_try;
+	}
+
+#ifdef CRASH_IF_ALLOC_MAXTRIES
+	errfile = file;
+	errline = line;
+	int_error("Out of memory (%s returned NULL) after %d tries,"
+		" I give up. See ya on the other side.",
+		of, alloc_try);
+#else
+	error("[%s:%d] Out of memory (%s returned NULL) after %d tries,"
+		" I give up and try to continue. Pray for me, please.",
+		file, line, of, alloc_try);
+#endif
+	alloc_try = 0;
+	return 0;
+}
 
 void *
 debug_mem_alloc(unsigned char *file, int line, size_t size)
@@ -223,29 +249,11 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 
 	if (!size) return DUMMY;
 
-again:
-	ah = malloc(SIZE_BASE2AH(size));
-	if (!ah) {
-		++alloc_try;
-		errfile = file;
-		errline = line;
-		if (alloc_try < ALLOC_MAXTRIES) {
-			fprintf(stderr, "%s:%d out of memory (malloc returned NULL) retry %d,"
-					" i wait and retry.", errfile, errline, alloc_try);
-			sleep(ALLOC_DELAY);
-			goto again;
-		} else {
-			alloc_try = 0;
-#ifdef CRASH_IF_ALLOC_MAXTRIES
-			int_error("out of memory (malloc returned NULL) after %d tries,"
-				  " i give up.", alloc_try);
-#else
-			fprintf(stderr, "%s:%d out of memory (malloc returned NULL) after %d tries,"
-					" i give up and try to continue.", errfile, errline, alloc_try);
-#endif
-		}
-		return NULL;
-	}
+	do {
+		ah = malloc(SIZE_BASE2AH(size));
+		if (ah) break;
+	} while (patience(file, line, "malloc"));
+	if (!ah) return NULL;
 
 #ifdef FILL_ON_ALLOC
 	memset(ah, FILL_ON_ALLOC_VALUE, SIZE_BASE2AH(size));
@@ -285,29 +293,11 @@ debug_mem_calloc(unsigned char *file, int line, size_t eltcount, size_t eltsize)
 	 * comment, it means YOU should help us and do the benchmarks! :)
 	 * Thanks a lot. --pasky */
 
-again:
-	ah = calloc(1, SIZE_BASE2AH(size));
-	if (!ah) {
-		++alloc_try;
-		errfile = file;
-		errline = line;
-		if (alloc_try < ALLOC_MAXTRIES) {
-			fprintf(stderr, "%s:%d out of memory (calloc returned NULL) retry %d,"
-					" i wait and retry.", errfile, errline, alloc_try);
-			sleep(ALLOC_DELAY);
-			goto again;
-		} else {
-			alloc_try = 0;
-#ifdef CRASH_IF_ALLOC_MAXTRIES
-			int_error("out of memory (calloc returned NULL) after %d tries,"
-				  " i give up.", alloc_try);
-#else
-			fprintf(stderr, "%s:%d out of memory (calloc returned NULL) after %d tries,"
-					" i give up and try to continue.", errfile, errline, alloc_try);
-#endif
-		}
-		return NULL;
-	}
+	do {
+		ah = calloc(1, SIZE_BASE2AH(size));
+		if (ah) break;
+	} while (patience(file, line, "calloc"));
+	if (!ah) return NULL;
 
 	/* No, we do NOT want to fill this with FILL_ON_ALLOC_VALUE ;)). */
 
@@ -416,29 +406,11 @@ debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 	 * and change nothing, this conforms to usual realloc() behavior. */
 	if (ah->size == size) return (void *) ptr;
 
-again:
-	ah = realloc(ah, SIZE_BASE2AH(size));
-	if (!ah) {
-		++alloc_try;
-		errfile = file;
-		errline = line;
-		if (alloc_try < ALLOC_MAXTRIES) {
-			fprintf(stderr, "%s:%d out of memory (realloc returned NULL) retry %d,"
-					" i wait and retry.", errfile, errline, alloc_try);
-			sleep(ALLOC_DELAY);
-			goto again;
-		} else {
-			alloc_try = 0;
-#ifdef CRASH_IF_ALLOC_MAXTRIES
-			int_error("out of memory (realloc returned NULL) after %d tries,"
-				  " i give up.", alloc_try);
-#else
-			fprintf(stderr, "%s:%d out of memory (realloc returned NULL) after %d tries,"
-					" i give up and try to continue.", errfile, errline, alloc_try);
-#endif
-		}
-		return NULL;
-	}
+	do {
+		ah = realloc(ah, SIZE_BASE2AH(size));
+		if (ah) break;
+	} while (patience(file, line, "realloc"));
+	if (!ah) return NULL;
 
 	mem_amount += size - ah->size;
 

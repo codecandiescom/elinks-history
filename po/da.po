@@ -52,7 +52,7 @@ msgstr "Ugyldig tekststreng"
 
 #: src/bfu/inpfield.c:72
 msgid "Empty string not allowed"
-msgstr "Tom tekststreng ikke tilladt"
+msgstr "Tom tekststren ikke tilladt"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
@@ -61,7 +61,7 @@ msgstr "read_bookmarks_xbel(): Fejl i XML_ParserCreate()"
 #: src/bookmarks/backend/xbel.c:110
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr "read_bookmarks_xbel(): Fej ved læsning af %s"
+msgstr "read_bookmarks_xbel(): Fejl ved læsning af %s"
 
 #: src/bookmarks/backend/xbel.c:119
 #, c-format
@@ -133,7 +133,8 @@ msgid ""
 msgstr ""
 "Desværre, dette bogmærke er allerede i brug.\n"
 "\n"
-"Title: \"%s\"URL: \"%s\""
+"Title: \"%s\""
+"URL: \"%s\""
 
 #: src/bookmarks/dialogs.c:413
 msgid "Delete marked bookmarks?"
@@ -216,7 +217,7 @@ msgid "Search bookmarks"
 msgstr "Søg bogmærker"
 
 #: src/config/cmdline.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse option %s: %s"
 msgstr "Fejl ved parsning af indstilingen %s: %s"
 
@@ -257,7 +258,7 @@ msgid "Info"
 msgstr "Info"
 
 #: src/config/dialogs.c:120
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Name: %s\n"
 "Type: %s\n"
@@ -270,14 +271,15 @@ msgstr ""
 "Type: %s\n"
 "Værdi: %s\n"
 "\n"
-"Beskrivelse: %s\n"
+"Beskrivelse:\n"
+"%s\n"
 
 #: src/config/dialogs.c:126 src/config/dialogs.c:138 src/config/dialogs.c:213
 msgid "N/A"
-msgstr ""
+msgstr "Ingen"
 
 #: src/config/dialogs.c:133
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Name: %s\n"
 "Type: %s\n"
@@ -286,7 +288,8 @@ msgid ""
 msgstr ""
 "Navn: %s\n"
 "Type: %s\n"
-"Beskrivelse: %s\n"
+"Beskrivelse:\n"
+"%s\n"
 
 #: src/config/dialogs.c:189 src/protocol/url.c:64 src/sched/session.c:332
 #: src/viewer/text/view.c:2029
@@ -295,7 +298,7 @@ msgstr "Fejl"
 
 #: src/config/dialogs.c:190
 msgid "Bad option value."
-msgstr "Ukorrekt værdi for indstilling."
+msgstr "Ugyldig værdi for indstilling."
 
 #: src/config/dialogs.c:207 src/config/dialogs.c:411 src/dialogs/edit.c:26
 #: src/lua/core.c:304 src/lua/core.c:305
@@ -340,7 +343,7 @@ msgid "Cannot delete this option."
 msgstr "Denne indstilling kan ikke slettes."
 
 #: src/config/dialogs.c:479
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the option \"%s\"?"
 msgstr "Vil du virkelig slette indstillingen \"%s\"?"
 
@@ -402,9 +405,7 @@ msgstr ""
 #: src/config/dialogs.c:738
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
-"Vil du virkelig slette tastaturgenvejen \"%s\" (handling \"%s\", "
-"Tasteoversigt \"%s\")?"
+msgstr "Vil du virkelig slette tastaturgenvejen \"%s\" (handling \"%s\", Tasteoversigt \"%s\")?"
 
 #: src/config/dialogs.c:770
 msgid "Keybinding manager"
@@ -516,9 +517,8 @@ msgid "Find the next occurrence of the current search text"
 msgstr "Find næste forkommelse af det nuværende søgestreng"
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Find the previous occurrence of the current search text"
-msgstr "Find næste forkommelse af det nuværende søgestreng"
+msgstr "Find næste forkommelse af den nuværende søgestreng"
 
 #: src/config/kbdbind.c:389
 msgid "Forget authentication credentials"
@@ -541,9 +541,8 @@ msgid "Go to the homepage"
 msgstr "Gå til hjemmesiden"
 
 #: src/config/kbdbind.c:394
-#, fuzzy
 msgid "Show informations about the current page HTTP headers"
-msgstr "Vi information om den nuværende side"
+msgstr "Vis information om den nuværende side"
 
 #: src/config/kbdbind.c:395
 msgid "Open history manager"
@@ -570,7 +569,6 @@ msgid "Move the cursor left"
 msgstr "Flyt markør til venstre"
 
 #: src/config/kbdbind.c:401
-#, fuzzy
 msgid "Open the link context menu"
 msgstr "Åben link menu"
 
@@ -617,206 +615,194 @@ msgstr "Flyt en side op"
 
 #: src/config/kbdbind.c:416
 msgid "Paste text from the clipboard"
-msgstr ""
+msgstr "Kopier tekst fra udklipsholder"
 
 #: src/config/kbdbind.c:417
 msgid "Move to the previous frame"
-msgstr ""
+msgstr "Flut til den forrige ramme"
 
 #: src/config/kbdbind.c:418
 msgid "Open a quit confirmation dialog box"
-msgstr ""
+msgstr "Åben et dialog vindue til at bekræftige afslutning"
 
 #: src/config/kbdbind.c:419
-#, fuzzy
 msgid "Quit without confirmation"
-msgstr "Venter på bekræftelse på omdirigering"
+msgstr "Afslut uden bekræftelse"
 
 #: src/config/kbdbind.c:420
 msgid "Reload the current page"
-msgstr ""
+msgstr "Genindlæs den nuværende side"
 
 #: src/config/kbdbind.c:421
 msgid "Attempt to resume download of the current link"
-msgstr ""
+msgstr "Forsøg at genoptage hentning af den nuværende henvisning"
 
 #: src/config/kbdbind.c:422
-#, fuzzy
 msgid "Move the cursor right"
-msgstr "Udfyld markør"
+msgstr "Flyt markøren til højre"
 
 #: src/config/kbdbind.c:423
-#, fuzzy
 msgid "Save formatted document"
-msgstr "Gem behandlet ~dokument"
+msgstr "Gem behandlet dokument"
 
 #: src/config/kbdbind.c:424
 msgid "Scroll down"
-msgstr ""
+msgstr "Rul ned"
 
 #: src/config/kbdbind.c:425
 msgid "Scroll left"
-msgstr ""
+msgstr "Rul til venstre"
 
 #: src/config/kbdbind.c:426
 msgid "Scroll right"
-msgstr ""
+msgstr "Rul til højre"
 
 #: src/config/kbdbind.c:427
 msgid "Scroll up"
-msgstr ""
+msgstr "Rul op"
 
 #: src/config/kbdbind.c:428
-#, fuzzy
 msgid "Search for a text pattern"
-msgstr "Søg efter tekst"
+msgstr "Søg efter tekststring"
 
 #: src/config/kbdbind.c:429
-#, fuzzy
 msgid "Search backwards for a text pattern"
-msgstr "Søg efter tekst"
+msgstr "Søg bagud efter tekststreng"
 
 #: src/config/kbdbind.c:430
-#, fuzzy
 msgid "Close tab"
-msgstr "Luk"
+msgstr "Luk tab"
 
 #: src/config/kbdbind.c:431
 msgid "Next tab"
-msgstr ""
+msgstr "Næste tab"
 
 #: src/config/kbdbind.c:432
-#, fuzzy
 msgid "Previous tab"
-msgstr "Ingen tidligere søgning"
+msgstr "Forrige tab"
 
 #: src/config/kbdbind.c:433
 msgid "Toggle displaying of links to images"
-msgstr ""
+msgstr "Skift mellem visning af henvisninger til billeder"
 
 #: src/config/kbdbind.c:434
 msgid "Toggle rendering of tables"
-msgstr ""
+msgstr "Skift mellem visning af tabeller"
 
 #: src/config/kbdbind.c:435
 msgid "Toggle rendering page as HTML / plain text"
-msgstr ""
+msgstr "Skift mellem visning af side som HTML eller almindelig tekst"
 
 #: src/config/kbdbind.c:436
 msgid "Toggle displaying of links numbers"
-msgstr ""
+msgstr "Skift mellem visning af nummerering af henvisninger"
 
 #: src/config/kbdbind.c:437
 msgid "Go forward in the unhistory"
-msgstr ""
+msgstr "Gå frem i anti-historik"
 
 #: src/config/kbdbind.c:438
 msgid "Move cursor upwards"
-msgstr ""
+msgstr "Flyt markør op af"
 
 #: src/config/kbdbind.c:439
-#, fuzzy
 msgid "View the current image"
-msgstr "Vis b~illede"
+msgstr "Vis det nuværende billede"
 
 #: src/config/kbdbind.c:440
 msgid "Maximize the current frame"
-msgstr ""
+msgstr "Maksimer den nuværende ramme"
 
 #: src/config/kbdbind.c:635
 msgid "Unrecognised keymap"
-msgstr ""
+msgstr "Ugenkendt tasteoversigt"
 
 #: src/config/kbdbind.c:637
-#, fuzzy
 msgid "Error parsing keystroke"
-msgstr "Fejl ved skrivning til sokkel"
+msgstr "Fejl ved parsning af tastekombination"
 
 #: src/config/kbdbind.c:639
 msgid "Unrecognised action (internal error)"
-msgstr ""
+msgstr "Ugenkendt handling (intern fejl)"
 
 #: src/config/options.c:521 src/config/options.c:545 src/config/opttypes.c:39
 msgid "Parameter expected"
-msgstr ""
+msgstr "Parameter forventet"
 
 #: src/config/options.c:546
 msgid "Too many parameters"
-msgstr ""
+msgstr "For mange parametre"
 
 #: src/config/options.c:551
-#, fuzzy
 msgid "error"
-msgstr "Fejl"
+msgstr "fejl"
 
 #: src/config/options.c:553 src/sched/error.c:45
 msgid "Host not found"
 msgstr "Værtsmaskinen kan ikke lokaliseres"
 
 #: src/config/options.c:567
-#, fuzzy
 msgid "Resolver error"
-msgstr "Fejl ved skrivning"
+msgstr "Fejl ved resolution"
 
 #: src/config/options.c:589
 #, c-format
 msgid "ELinks %s - Text WWW browser\n"
-msgstr ""
+msgstr "ELinks %s - Tekst WWW browser\n"
 
 #: src/config/options.c:631
-#, fuzzy
 msgid "Template option folder"
-msgstr "Slet indstilling"
+msgstr "Skabelon indstillingsmappe"
 
 #: src/config/options.c:647
 #, c-format
 msgid "    %s%s%s %s (default: %d)"
-msgstr ""
+msgstr "    %s%s%s %s (standardværdi: %d)"
 
 #: src/config/options.c:652 src/config/options.c:677
 #, c-format
 msgid "    %s%s%s %s (default: \"%s\")"
-msgstr ""
+msgstr "    %s%s%s %s (standardværdi:\" %s\")"
 
 #: src/config/options.c:657
 #, c-format
 msgid "    %s%s%s %s (alias for %s)"
-msgstr ""
+msgstr "    %s%s%s %s (alias til %s)"
 
 #: src/config/options.c:662
 #, c-format
 msgid "    %s%s%s %s (default: %s)"
-msgstr ""
+msgstr "    %s%s%s %s (standardværdi: %s)"
 
 #: src/config/options.c:669
 #, c-format
 msgid "    %s%s%s %s (default: #%02x%02x%02x)"
-msgstr ""
+msgstr "    %s%s%s %s (standardværdi: #%02x%02x%02x)"
 
 #: src/config/options.c:782
 msgid "Configuration options:\n"
-msgstr ""
+msgstr "Konfigurationsindstillinger:\n"
 
 #: src/config/options.c:785
 msgid ""
 "Usage: elinks [OPTION]... [URL]\n"
 "\n"
 msgstr ""
+"Brug: elinks [INDSTILLING]... [URL]\n"
+"\n"
 
 #: src/config/options.c:786
 msgid "Options:\n"
-msgstr ""
+msgstr "Indstilling:\n"
 
 #. TODO: The change hooks should be added more elegantly! --pasky
 #: src/config/options.c:879 src/util/version.c:79
-#, fuzzy
 msgid "Bookmarks"
-msgstr "Bogmærke"
+msgstr "Bogmærker"
 
 #: src/config/options.c:881
-#, fuzzy
 msgid "Bookmark options."
-msgstr "Bogmærke"
+msgstr "Bogmærkeindstillinger."
 
 #: src/config/options.c:886
 msgid ""
@@ -834,9 +820,8 @@ msgid ""
 msgstr ""
 
 #: src/config/options.c:896
-#, fuzzy
 msgid "File format"
-msgstr "Filoplæsning"
+msgstr "Filformat"
 
 #: src/config/options.c:902
 msgid "Configuration system"

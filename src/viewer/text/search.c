@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.253 2004/07/12 12:00:40 jonas Exp $ */
+/* $Id: search.c,v 1.254 2004/07/12 12:07:14 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1233,7 +1233,7 @@ link_typeahead_handler(struct input_line *line, int action)
 
 		case TYPEAHEAD_ERROR:
 			typeahead_error(ses, buffer);
-			/* Falling */
+			return INPUT_LINE_PROCEED;
 
 		case TYPEAHEAD_CANCEL:
 		default:

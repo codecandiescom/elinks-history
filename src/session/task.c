@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.43 2004/04/02 16:38:09 jonas Exp $ */
+/* $Id: task.c,v 1.44 2004/04/02 16:39:26 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -479,7 +479,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 	ses->reloadlevel = cache_mode;
 
 	u = translate_url(url, ses->tab->term->cwd);
-	pos = extract_fragment(u);
+	pos = u ? extract_fragment(u) : NULL;
 
 	if (!u) {
 		struct download stat = { NULL_LIST_HEAD, NULL, NULL,

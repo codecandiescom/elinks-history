@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.12 2003/07/21 18:01:26 pasky Exp $ */
+/* $Id: form.c,v 1.13 2003/07/22 02:10:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,19 +650,17 @@ get_form_url(struct session *ses, struct document_view *f,
 	     struct form_control *frm)
 {
 	struct list_head submit;
-	unsigned char *data;
-	unsigned char *go;
+	struct string data;
+	struct string go;
 	unsigned char bound[BL];
 	int cp_from, cp_to;
-	int len;
 
 	assert(ses && ses->tab && ses->tab->term);
 	if_assert_failed return NULL;
 	assert(f && f->document && frm);
 	if_assert_failed return NULL;
 
-	go = init_str();
-	if (!go) return NULL;
+	if (!init_string(&go)) return NULL;
 
 	if (frm->type == FC_RESET) {
 		reset_form(f, frm->form_num);
@@ -675,57 +673,55 @@ get_form_url(struct session *ses, struct document_view *f,
 	cp_from = get_opt_int_tree(ses->tab->term->spec, "charset");
 	cp_to = f->document->cp;
 	if (frm->method == FM_GET || frm->method == FM_POST)
-		encode_controls(&submit, &data, &len, cp_from, cp_to);
+		encode_controls(&submit, &data.source, &data.length, cp_from, cp_to);
 	else
-		encode_multipart(ses, &submit, &data, &len, bound, cp_from, cp_to);
+		encode_multipart(ses, &submit, &data.source, &data.length, bound, cp_from, cp_to);
 
-	if (!data) {
+	if (!data.source) {
 		free_succesful_controls(&submit);
 		return NULL;
 	}
 
 	if (frm->method == FM_GET) {
-		int l = 0;
 		unsigned char *pos = strchr(frm->action, '#');
 
 		if (pos) {
-			add_bytes_to_str(&go, &l, frm->action, pos - frm->action);
+			add_bytes_to_string(&go, frm->action, pos - frm->action);
 		} else {
-			add_to_str(&go, &l, frm->action);
+			add_to_string(&go, frm->action);
 		}
 
-		if (strchr(go, '?'))
-			add_chr_to_str(&go, &l, '&');
+		if (strchr(go.source, '?'))
+			add_char_to_string(&go, '&');
 		else
-			add_chr_to_str(&go, &l, '?');
+			add_char_to_string(&go, '?');
 
-		add_to_str(&go, &l, data);
+		add_string_to_string(&go, &data);
 
-		if (pos) add_to_str(&go, &l, pos);
+		if (pos) add_to_string(&go, pos);
 	} else {
-		int l = 0;
 		int i;
 
-		add_to_str(&go, &l, frm->action);
-		add_chr_to_str(&go, &l, POST_CHAR);
+		add_to_string(&go, frm->action);
+		add_char_to_string(&go, POST_CHAR);
 		if (frm->method == FM_POST) {
-			add_to_str(&go, &l, "application/x-www-form-urlencoded\n");
+			add_to_string(&go, "application/x-www-form-urlencoded\n");
 		} else {
-			add_to_str(&go, &l, "multipart/form-data; boundary=");
-			add_bytes_to_str(&go, &l, bound, BL);
-			add_chr_to_str(&go, &l, '\n');
+			add_to_string(&go, "multipart/form-data; boundary=");
+			add_bytes_to_string(&go, bound, BL);
+			add_char_to_string(&go, '\n');
 		}
-		for (i = 0; i < len; i++) {
+		for (i = 0; i < data.length; i++) {
 			unsigned char p[3];
 
-			ulonghexcat(p, NULL, (int) data[i], 2, '0', 0);
-			add_to_str(&go, &l, p);
+			ulonghexcat(p, NULL, (int) data.source[i], 2, '0', 0);
+			add_to_string(&go, p);
 		}
 	}
 
-	mem_free(data);
+	done_string(&data);
 	free_succesful_controls(&submit);
-	return go;
+	return go.source;
 }
 
 #undef BL

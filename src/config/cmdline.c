@@ -1,5 +1,5 @@
 /* Command line processing */
-/* $Id: cmdline.c,v 1.59 2004/04/23 19:30:01 pasky Exp $ */
+/* $Id: cmdline.c,v 1.60 2004/04/23 19:30:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,7 +38,7 @@
 static unsigned char *remote_url;
 
 static int
-_parse_options(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
+parse_options_(int argc, unsigned char *argv[], struct option *opt, struct list_head *url_list)
 {
 	while (argc) {
 		argv++, argc--;
@@ -107,7 +107,7 @@ unknown_option:
 int
 parse_options(int argc, unsigned char *argv[], struct list_head *url_list)
 {
-	return _parse_options(argc, argv, cmdline_options, url_list);
+	return parse_options_(argc, argv, cmdline_options, url_list);
 }
 
 

@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.263 2004/08/12 01:17:21 jonas Exp $ */
+/* $Id: menu.c,v 1.264 2004/08/15 10:06:38 miciah Exp $ */
 
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
 
@@ -573,7 +573,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 
 	if (!check_mouse_position(ev, &menu->box)) {
 		if (check_mouse_action(ev, B_DOWN)) {
-			delete_window_ev(win, NULL);
+			delete_window_ev(win, ev);
 
 		} else {
 			struct window *w1;

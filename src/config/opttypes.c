@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.56 2003/07/17 08:56:30 zas Exp $ */
+/* $Id: opttypes.c,v 1.57 2003/07/21 06:05:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -181,17 +181,12 @@ redir_remove(struct option *opt, unsigned char *str)
 /* Support functions for config file parsing. */
 
 static void
-add_quoted_to_str(unsigned char **s, int *l, unsigned char *q)
+add_optstring_to_string(struct string *s, unsigned char *q, int qlen)
 {
-	if (!commandline) add_chr_to_str(s, l, '"');
-	while (*q) {
-		if (*q == '"' || *q == '\\') add_chr_to_str(s, l, '\\');
-		add_chr_to_str(s, l, *q);
-		q++;
-	}
-	if (!commandline) add_chr_to_str(s, l, '"');
+ 	if (!commandline) add_char_to_string(s, '"');
+	add_quoted_to_string(s, q, qlen);
+	if (!commandline) add_char_to_string(s, '"');
 }
-
 
 /* Config file handlers. */
 
@@ -234,9 +229,9 @@ long_set(struct option *opt, unsigned char *str)
 }
 
 static void
-num_wr(struct option *o, unsigned char **s, int *l)
+num_wr(struct option *option, struct string *string)
 {
-	add_knum_to_str(s, l, *((int *) o->ptr));
+	add_knum_to_string(string, *((int *) option->ptr));
 }
 
 static void *
@@ -318,20 +313,11 @@ str_set(struct option *opt, unsigned char *str)
 }
 
 static void
-str_wr(struct option *o, unsigned char **s, int *l)
+str_wr(struct option *o, struct string *s)
 {
-	if (strlen(o->ptr) >= o->max) {
-		unsigned char *s1 = init_str();
-		int l1 = 0;
+	int len = strlen(o->ptr);
 
-		if (!s1) return;
-
-		add_bytes_to_str(&s1, &l1, o->ptr, o->max - 1);
-		add_quoted_to_str(s, l, s1);
-		mem_free(s1);
-	} else {
-		add_quoted_to_str(s, l, o->ptr);
-	}
+	add_optstring_to_string(s, o->ptr, (len >= o->max) ? o->max - 1 : len);
 }
 
 static void *
@@ -357,9 +343,11 @@ cp_set(struct option *opt, unsigned char *str)
 }
 
 static void
-cp_wr(struct option *o, unsigned char **s, int *l)
+cp_wr(struct option *o, struct string *s)
 {
-	add_quoted_to_str(s, l, get_cp_mime_name(*((int *) o->ptr)));
+	unsigned char *mime_name = get_cp_mime_name(*((int *) o->ptr));
+
+	add_optstring_to_string(s, mime_name, strlen(mime_name));
 }
 
 
@@ -376,10 +364,12 @@ lang_set(struct option *opt, unsigned char *str)
 }
 
 static void
-lang_wr(struct option *o, unsigned char **s, int *l)
+lang_wr(struct option *o, struct string *s)
 {
 #ifdef ENABLE_NLS
-	add_quoted_to_str(s, l, language_to_name(current_language));
+	unsigned char *lang = language_to_name(current_language);
+
+	add_optstring_to_string(s, lang, strlen(lang));
 #endif
 }
 
@@ -398,20 +388,20 @@ color_set(struct option *opt, unsigned char *str)
 }
 
 static void
-color_wr(struct option *opt, unsigned char **str, int *len)
+color_wr(struct option *opt, struct string *str)
 {
 	struct rgb *color = (struct rgb *) opt->ptr;
 	unsigned char *strcolor = get_color_name(color);
+	unsigned char hexcolor[8];
 
 	if (!strcolor) {
-		strcolor = (unsigned char *) mem_alloc(8 * sizeof(unsigned char));
-		if (!strcolor) return;
-		color_to_string(color, strcolor);
+		color_to_string(color, hexcolor);
+		strcolor = hexcolor;
 	}
 
-	add_quoted_to_str(str, len, strcolor);
+	add_optstring_to_string(str, strcolor, strlen(strcolor));
 
-	mem_free(strcolor);
+	if (strcolor != hexcolor) mem_free(strcolor);
 }
 
 static void *

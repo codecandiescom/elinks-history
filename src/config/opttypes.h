@@ -1,15 +1,16 @@
-/* $Id: opttypes.h,v 1.6 2002/12/08 16:55:27 pasky Exp $ */
+/* $Id: opttypes.h,v 1.7 2003/07/21 06:05:54 jonas Exp $ */
 
 #ifndef EL__CONFIG_OPTTYPES_H
 #define EL__CONFIG_OPTTYPES_H
 
 #include "config/options.h"
+#include "util/string.h"
 
 struct option_type_info {
 	unsigned char *name;
 	unsigned char *(*cmdline)(struct option *, unsigned char ***, int *);
 	unsigned char *(*read)(struct option *, unsigned char **);
-	void (*write)(struct option *, unsigned char **, int *);
+	void (*write)(struct option *, struct string *);
 	/* Return duplicate of option->ptr. */
 	void *(*dup)(struct option *, struct option *);
 	int (*set)(struct option *, unsigned char *);

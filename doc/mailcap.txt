@@ -12,13 +12,14 @@ multiple mail reading user agent (MUA) programs about the locally-installed
 facilities for handling mail in various formats. It is designed to work with
 the Multipurpose Internet Mail Extensions, known as MIME.
 
-ELinks supports MIME quite well already, so why support mailcap? It can be
-seen as an alternative or simply as a supplement for setting up MIME handler.
-Mailcap files are present at most UNIX systems (/etc/mailcap) so this makes it
-possible for ELinks to know how to handle a great variety of file formats with
-little configuration. To be able to use mailcap, it has to be compiled into
-ELinks. This is the default. If you don't need mailcap support, just configure
-ELinks with the flag: --disable-mailcap.
+ELinks allows MIME handlers to be defined using its own configuration system,
+so why support mailcap? It can be seen as an alternative or simply as
+a supplement for setting up MIME handlers in ELinks.  Mailcap files are present
+on most UNIX systems--usually in /etc/mailcap--so this makes it possible for
+ELinks to know how to handle a great variety of file formats with little
+configuration. To be able to use mailcap, it has to be compiled into ELinks.
+This is the default. If you don't need mailcap support, just configure ELinks
+with the flag: --disable-mailcap.
 
 Parameters to Mailcap Entries
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -116,4 +117,4 @@ Below are examples of how to specify external viewers:
 	application/postscript; ps2ascii %s ; copiousoutput
 
 
-$Id: mailcap.txt,v 1.4 2005/01/03 08:25:13 miciah Exp $
+$Id: mailcap.txt,v 1.5 2005/01/03 08:28:51 miciah Exp $

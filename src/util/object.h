@@ -1,4 +1,4 @@
-/* $Id: object.h,v 1.1 2003/11/17 18:43:10 jonas Exp $ */
+/* $Id: object.h,v 1.2 2003/11/17 21:31:00 pasky Exp $ */
 
 #ifndef EL__UTIL_OBJECT_H
 #define EL__UTIL_OBJECT_H
@@ -28,7 +28,7 @@
 		if_assert_failed (obj)->refcount = 0;			\
 	} while (0)
 #else
-#define refcount_sanity_check(doc)
+#define object_sanity_check(doc)
 #endif
 
 #define get_object_refcount(obj) ((obj)->refcount)

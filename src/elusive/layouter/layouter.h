@@ -1,4 +1,4 @@
-/* $Id: layouter.h,v 1.2 2002/12/30 18:15:09 pasky Exp $ */
+/* $Id: layouter.h,v 1.3 2002/12/31 00:48:54 pasky Exp $ */
 
 #ifndef EL__USIVE_LAYOUTER_LAYOUTER_H
 #define EL__USIVE_LAYOUTER_LAYOUTER_H
@@ -36,9 +36,9 @@ struct layouter_state {
 };
 
 struct layouter_backend {
-	void (*init)(struct layout_rectangle *);
-	void (*layout)(struct layout_rectangle *, unsigned char **, int *);
-	void (*done)(struct layout_rectangle *);
+	void (*init)(struct layouter_state *);
+	void (*layout)(struct layouter_state *, unsigned char **, int *);
+	void (*done)(struct layouter_state *);
 };
 
 

@@ -1,5 +1,5 @@
 /* Layout rectangle utility tools */
-/* $Id: rectangle.c,v 1.3 2002/12/30 23:57:02 pasky Exp $ */
+/* $Id: rectangle.c,v 1.4 2002/12/31 00:48:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,6 +13,7 @@
 #include "elusive/parser/attrib.h"
 #include "elusive/parser/syntree.h"
 #include "util/memory.h"
+#include "util/string.h"
 
 
 struct layout_rectangle *
@@ -26,7 +27,7 @@ init_layout_rectangle()
 	init_list(rect->leafs);
 	init_list(rect->attrs);
 
-	return node;
+	return rect;
 }
 
 void

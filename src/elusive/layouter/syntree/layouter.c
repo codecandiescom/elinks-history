@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.2 2002/12/31 00:06:33 pasky Exp $ */
+/* $Id: layouter.c,v 1.3 2002/12/31 00:48:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,7 +34,7 @@ spawn_rect(struct layouter_state *state)
 	return rect;
 }
 
-static
+static void
 layout_node(struct layouter_state *state, struct syntree_node *node)
 {
 	struct layout_rectangle_text *text;
@@ -105,7 +105,7 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	foreach (leaf, node->leafs) {
 		rect = spawn_rect(state);
 		state->root = rect;
-		add_attrib(state->current->attribs, "display", 7, "block", 5);
+		add_attrib(state->current->attrs, "display", 7, "block", 5);
 		layout_node(state, leaf);
 	}
 }
@@ -122,21 +122,21 @@ syntree_layout(struct layouter_state *state, unsigned char **str, int *len)
 {
 	struct syntree_node *node;
 
-	elusive_parser_parse(state->parse, str, len);
+	elusive_parser_parse(state->parser_state, str, len);
 
-	node = state->parse->real_root;
-	add_attrib(state->current->attribs, "display", 7, "block", 5);
+	node = state->parser_state->real_root;
+	add_attrib(state->current->attrs, "display", 7, "block", 5);
 	layout_node(state, node);
 }
 
 static void
 syntree_done(struct layouter_state *state)
 {
-	elusive_parser_done(state->parser);
+	elusive_parser_done(state->parser_state);
 }
 
 
-struct parser_backend html_parser_backend = {
+struct layouter_backend syntree_layouter_backend = {
 	syntree_init,
 	syntree_layout,
 	syntree_done,

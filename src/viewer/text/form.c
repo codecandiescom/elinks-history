@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.195 2004/06/16 19:42:32 jonas Exp $ */
+/* $Id: form.c,v 1.196 2004/06/16 20:49:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1392,6 +1392,10 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 	case FC_PASSWORD:
 	case FC_FILE:
 	case FC_TEXTAREA:
+		if (fc->ro) {
+			add_form_attr_to_string(&str, term, N_("read only"), NULL);
+		}
+
 		/* Should we add info about entering insert mode or add info
 		 * about submitting the form? */
 		if (ses->insert_mode == INSERT_MODE_OFF) {
@@ -1400,7 +1404,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 			if (!key) break;
 
 			if (fc->ro)
-				label = N_("press %s to move");
+				label = N_("press %s to navigate");
 			else
 				label = N_("press %s to edit");
 
@@ -1410,10 +1414,7 @@ get_form_info(struct session *ses, struct document_view *doc_view)
 			mem_free(key);
 			break;
 
-		} if (fc->ro) {
-			add_form_attr_to_string(&str, term, N_("read only"), NULL);
 		}
-
 
 		if (fc->type == FC_TEXTAREA)
 			break;

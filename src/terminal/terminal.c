@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.48 2003/11/27 13:53:03 jonas Exp $ */
+/* $Id: terminal.c,v 1.49 2003/11/27 13:56:27 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,7 @@
 #include "terminal/window.h"
 #include "util/error.h"
 #include "util/memory.h"
+#include "util/object.h"
 #include "util/string.h"
 #include "viewer/text/textarea.h"
 

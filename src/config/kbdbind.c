@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.84 2003/10/18 22:13:09 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.85 2003/10/18 22:15:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -722,6 +722,8 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_REALLY_QUIT, 'Q' },
 	{ ACT_DOCUMENT_INFO, '=' },
 	{ ACT_HEADER_INFO, '|' },
+	{ ACT_OPEN_NEW_TAB, 't' },
+	{ ACT_OPEN_NEW_TAB_IN_BACKGROUND, 'T' },
 	{ ACT_TAB_CLOSE, 'c' },
 	{ ACT_TAB_NEXT, '>' },
 	{ ACT_TAB_PREV, '<' },

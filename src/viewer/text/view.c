@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.285 2003/12/03 17:07:28 jonas Exp $ */
+/* $Id: view.c,v 1.286 2003/12/03 17:10:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1193,12 +1193,17 @@ quit:
 		if (ses->visible_tabs_bar) bars++;
 		if (ses->visible_status_bar) bars++;
 
-		if (ev->y == ses->tab->term->height - bars && (ev->b & BM_ACT) == B_DOWN
-		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
+		if (ev->y == ses->tab->term->height - bars && (ev->b & BM_ACT) == B_DOWN) {
 			int nb_tabs = number_of_tabs(ses->tab->term);
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 
-			if (tab != -1) {
+		    	if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+				switch_to_next_tab(ses->tab->term);
+
+			} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
+				switch_to_prev_tab(ses->tab->term);
+
+			} else if (tab != -1) {
 				switch_to_tab(ses->tab->term, tab, nb_tabs);
 
 				if ((ev->b & BM_BUTT) == B_RIGHT) {

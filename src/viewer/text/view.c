@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.510 2004/06/21 12:20:24 miciah Exp $ */
+/* $Id: view.c,v 1.511 2004/06/21 12:43:38 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -653,11 +653,12 @@ move_document_end(struct session *ses, struct document_view *doc_view)
 	int_lower_bound(&doc_view->vs->y, int_max(0, max_height));
 
 	if (ses->navigate_mode == NAVIGATE_CURSOR_ROUTING) {
-		/* Move to the last line but preserve the column. This is done
-		 * to avoid moving the cursor backwards if it is
-		 * already on the last line but is not on the first column. */
+		/* Move to the last line of the document,
+		 * but preserve the column. This is done to avoid
+		 * moving the cursor backwards if it is already
+		 * on the last line but is not on the first column. */
 		move_cursor(ses, doc_view, ses->tab->x,
-			    doc_view->document->height);
+			    doc_view->document->height - doc_view->vs->y);
 	} else {
 		find_link_page_up(doc_view);
 	}

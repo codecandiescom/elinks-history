@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.135 2004/08/19 06:58:56 miciah Exp $ */
+/* $Id: renderer.c,v 1.136 2004/08/19 07:12:05 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -233,7 +233,6 @@ add_document_line(struct plain_renderer *renderer,
 	int expanded = 0;
 	int width = line_width;
 	int line_pos;
-	int backspaces = 0;
 	int last_link_end;
 
 	line = convert_string(renderer->convert_table, line, width, CSM_NONE, &width);
@@ -248,10 +247,8 @@ add_document_line(struct plain_renderer *renderer,
 
 			expanded += tab_width;
 		} else if (line_char == ASCII_BS) {
-			if (backspaces * 2 < line_pos) {
-				backspaces++;
+			if (expanded + line_pos)
 				expanded--;
-			}
 			expanded--;
 		}
 	}
@@ -262,7 +259,7 @@ add_document_line(struct plain_renderer *renderer,
 		return 0;
 	}
 
-	expanded = backspaces = last_link_end = 0;
+	expanded = last_link_end = 0;
 	for (line_pos = 0; line_pos < width; line_pos++) {
 		unsigned char line_char = line[line_pos];
 
@@ -280,7 +277,7 @@ add_document_line(struct plain_renderer *renderer,
 
 		} else if (line_char == ASCII_BS) {
 
-			if (backspaces * 2 >= line_pos) {
+			if (!(expanded + line_pos)) {
 				/* We've backspaced to the start
 				 * of the line */
 				expanded--; /* Don't count it */
@@ -303,7 +300,6 @@ add_document_line(struct plain_renderer *renderer,
 
 				/* Go back and reparse the swapped characters */
 				line_pos -= 2;
-				backspaces--;
 				continue;
 			}
 
@@ -312,13 +308,11 @@ add_document_line(struct plain_renderer *renderer,
 				        * when returning the line's width
 				        * or when expanding tabs */
 
-			backspaces++;
-
 			if (pos->data == '_' && line[line_pos + 1] == '_') {
 				/* Is _^H_ an underlined underscore
 				 * or an emboldened underscore? */
 
-				if (backspaces * 2 < line_pos
+				if (expanded + line_pos >= 0
 				    && (pos - 1)->attr) {
 					/* There is some preceding text,
 					 * and it has an attribute; copy it */

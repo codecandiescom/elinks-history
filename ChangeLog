@@ -1,3 +1,9 @@
+Thu Nov 14 22:23:21 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/view.c:
+
+	Textarea editor fix of the day.  
+
 Wed Nov 13 22:12:25 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* src/bfu/listbox.c:

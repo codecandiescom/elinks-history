@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.154 2004/12/25 14:19:21 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.155 2004/12/25 14:40:14 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -248,6 +248,9 @@ jsval_to_value(JSContext *ctx, jsval *vp, JSType type, union jsval_union *var)
 	}
 }
 
+#define jsval_to_string(ctx, val, var) jsval_to_value(ctx, val, JSTYPE_STRING, var)
+#define jsval_to_boolean(ctx, val, var) jsval_to_value(ctx, val, JSTYPE_BOOLEAN, var)
+#define jsval_to_number(ctx, val, var) jsval_to_value(ctx, val, JSTYPE_NUMBER, var)
 
 
 static JSBool window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp);
@@ -336,7 +339,7 @@ window_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		JSObject *obj;
 		union jsval_union v;
 
-		jsval_to_value(ctx, &id, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, &id, &v);
 		obj = try_resolve_frame(doc_view, v.string);
 		/* TODO: Try other lookups (mainly element lookup) until
 		 * something yields data. */
@@ -447,11 +450,11 @@ window_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	union jsval_union v;
 
 	if (JSVAL_IS_STRING(id)) {
-		jsval_to_value(ctx, &id, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, &id, &v);
 		if (!strcmp(v.string, "location")) {
 			struct document_view *doc_view = vs->doc_view;
 
-			jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+			jsval_to_string(ctx, vp, &v);
 			location_goto(doc_view, v.string);
 			/* Do NOT touch our .location property, evil
 			 * SpiderMonkey!! */
@@ -493,7 +496,7 @@ window_alert(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval
 	if (argc != 1)
 		return JS_TRUE;
 
-	jsval_to_value(ctx, &argv[0], JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &argv[0], &v);
 	if (!v.string || !*v.string)
 		return JS_TRUE;
 
@@ -553,7 +556,7 @@ window_open(JSContext *ctx, JSObject *obj, uintN argc,jsval *argv, jsval *rval)
 			return JS_TRUE;
 	}
 
-	jsval_to_value(ctx, &argv[0], JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &argv[0], &v);
 	url = v.string;
 	assert(url);
 	/* TODO: Support for window naming and perhaps some window features? */
@@ -799,51 +802,51 @@ input_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_INPUT_ACCESSKEY:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		if (link) link->accesskey = read_key(v.string);
 		break;
 	case JSP_INPUT_ALT:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		mem_free_set(&fc->alt, stracpy(v.string));
 		break;
 	case JSP_INPUT_CHECKED:
 		if (fc->type != FC_CHECKBOX && fc->type != FC_RADIO)
 			break;
-		jsval_to_value(ctx, vp, JSTYPE_BOOLEAN, &v);
+		jsval_to_boolean(ctx, vp, &v);
 		fs->state = v.boolean;
 		break;
 	case JSP_INPUT_DISABLED:
 		/* FIXME: <input readonly disabled> --pasky */
-		jsval_to_value(ctx, vp, JSTYPE_BOOLEAN, &v);
+		jsval_to_boolean(ctx, vp, &v);
 		fc->mode = (v.boolean ? FORM_MODE_DISABLED
 		                      : fc->mode == FORM_MODE_READONLY ? FORM_MODE_READONLY
 		                                                       : FORM_MODE_NORMAL);
 		break;
 	case JSP_INPUT_MAX_LENGTH:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		fc->maxlength = atol(v.string);
 		break;
 	case JSP_INPUT_NAME:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		mem_free_set(&fc->name, stracpy(v.string));
 		break;
 	case JSP_INPUT_READONLY:
 		/* FIXME: <input readonly disabled> --pasky */
-		jsval_to_value(ctx, vp, JSTYPE_BOOLEAN, &v);
+		jsval_to_boolean(ctx, vp, &v);
 		fc->mode = (v.boolean ? FORM_MODE_READONLY
 		                      : fc->mode == FORM_MODE_DISABLED ? FORM_MODE_DISABLED
 		                                                       : FORM_MODE_NORMAL);
 		break;
 	case JSP_INPUT_SRC:
 		if (link) {
-			jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+			jsval_to_string(ctx, vp, &v);
 			mem_free_set(&link->where_img, stracpy(v.string));
 		}
 		break;
 	case JSP_INPUT_VALUE:
 		if (fc->type == FC_FILE)
 			break; /* A huge security risk otherwise. */
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		mem_free_set(&fs->value, stracpy(v.string));
 		if (fc->type == FC_TEXT || fc->type == FC_PASSWORD)
 			fs->state = strlen(fs->value);
@@ -1083,7 +1086,7 @@ form_elements_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval
 	if (argc != 1)
 		return JS_TRUE;
 
-	jsval_to_value(ctx, &argv[0], JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &argv[0], &v);
 	index = atol(v.string);
 
 	foreach (fc, form->items) {
@@ -1125,7 +1128,7 @@ form_elements_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, 
 	if (argc != 1)
 		return JS_TRUE;
 
-	jsval_to_value(ctx, &argv[0], JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &argv[0], &v);
 	if (!v.string || !*v.string)
 		return JS_TRUE;
 
@@ -1210,7 +1213,7 @@ form_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		struct form_control *fc;
 		union jsval_union v;
 
-		jsval_to_value(ctx, &id, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, &id, &v);
 		foreach (fc, form->items) {
 			JSObject *fcobj = NULL;
 
@@ -1325,12 +1328,12 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_FORM_ACTION:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		mem_free_set(&form->action, stracpy(v.string));
 		break;
 
 	case JSP_FORM_ENCODING:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		if (!strcasecmp(v.string, "application/x-www-form-urlencoded")) {
 			form->method = form->method == FORM_METHOD_GET ? FORM_METHOD_GET
 			                                               : FORM_METHOD_POST;
@@ -1342,7 +1345,7 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 
 	case JSP_FORM_METHOD:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		if (!strcasecmp(v.string, "GET")) {
 			form->method = FORM_METHOD_GET;
 		} else if (!strcasecmp(v.string, "POST")) {
@@ -1351,12 +1354,12 @@ form_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		break;
 
 	case JSP_FORM_NAME:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		mem_free_set(&form->name, stracpy(v.string));
 		break;
 
 	case JSP_FORM_TARGET:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		mem_free_set(&form->target, stracpy(v.string));
 		break;
 
@@ -1517,7 +1520,7 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	if (argc != 1)
 		return JS_TRUE;
 
-	jsval_to_value(ctx, &argv[0], JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &argv[0], &v);
 	index = atol(v.string);
 
 	foreach (fv, vs->forms) {
@@ -1550,7 +1553,7 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	if (argc != 1)
 		return JS_TRUE;
 
-	jsval_to_value(ctx, &argv[0], JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &argv[0], &v);
 	if (!v.string || !*v.string)
 		return JS_TRUE;
 
@@ -1606,7 +1609,7 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		struct form *form;
 		union jsval_union v;
 
-		jsval_to_value(ctx, &id, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, &id, &v);
 #ifdef CONFIG_COOKIES
 		if (!strcmp(v.string, "cookie")) {
 			struct string *cookies = send_cookies(vs->uri);
@@ -1684,10 +1687,10 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	union jsval_union v;
 
 	if (JSVAL_IS_STRING(id)) {
-		jsval_to_value(ctx, &id, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, &id, &v);
 #ifdef CONFIG_COOKIES
 		if (!strcmp(v.string, "cookie")) {
-			jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+			jsval_to_string(ctx, vp, &v);
 			set_cookie(vs->uri, v.string);
 			/* Do NOT touch our .cookie property, evil
 			 * SpiderMonkey!! */
@@ -1702,7 +1705,7 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_DOC_TITLE:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		if (document->title) mem_free(document->title);
 		document->title = stracpy(v.string);
 		break;
@@ -1711,7 +1714,7 @@ document_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 		 * broken sites still assign to it (i.e.
 		 * http://www.e-handelsfonden.dk/validering.asp?URL=www.polyteknisk.dk).
 		 * So emulate window.location. */
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		location_goto(doc_view, v.string);
 		break;
 	}
@@ -1809,7 +1812,7 @@ location_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_LOC_HREF:
-		jsval_to_value(ctx, vp, JSTYPE_STRING, &v);
+		jsval_to_string(ctx, vp, &v);
 		location_goto(doc_view, v.string);
 		break;
 	}
@@ -1965,7 +1968,7 @@ unibar_set_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 
 	switch (JSVAL_TO_INT(id)) {
 	case JSP_UNIBAR_VISIBLE:
-		jsval_to_value(ctx, vp, JSTYPE_BOOLEAN, &v);
+		jsval_to_boolean(ctx, vp, &v);
 #define unibar_set(bar) \
 	status->force_show_##bar##_bar = v.boolean;
 		switch (*bar) {
@@ -2320,7 +2323,7 @@ spidermonkey_eval_stringback(struct ecmascript_interpreter *interpreter,
 		return NULL;
 	}
 
-	jsval_to_value(ctx, &rval, JSTYPE_STRING, &v);
+	jsval_to_string(ctx, &rval, &v);
 	if (!v.string) return NULL;
 
 	return stracpy(v.string);
@@ -2348,6 +2351,6 @@ spidermonkey_eval_boolback(struct ecmascript_interpreter *interpreter,
 		return -1;
 	}
 
-	jsval_to_value(ctx, &rval, JSTYPE_BOOLEAN, &v);
+	jsval_to_boolean(ctx, &rval, &v);
 	return v.boolean;
 }

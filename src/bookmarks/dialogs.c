@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.109 2003/11/08 21:25:25 jonas Exp $ */
+/* $Id: dialogs.c,v 1.110 2003/11/08 22:23:32 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -71,18 +71,6 @@ bookmark_dlg_box_build(void)
 	add_to_list(bookmark_boxes, box);
 
 	return box;
-}
-
-
-/* Cleans up after the bookmark dialog */
-static void
-bookmark_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-
-	del_from_list(box);
-	/* Delete the box structure */
-	mem_free(box);
 }
 
 
@@ -595,7 +583,7 @@ menu_bookmark_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->title = _("Bookmark manager", term);
 	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = bookmark_dialog_abort_handler;
+	dlg->abort = hierbox_dialog_abort_handler;
 	dlg->udata = ses;
 
 	add_dlg_listbox(dlg, 12, bookmark_dlg_box_build());

@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.107 2003/11/08 21:25:25 jonas Exp $ */
+/* $Id: dialogs.c,v 1.108 2003/11/08 22:23:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -68,18 +68,6 @@ option_dlg_box_build(void)
 	add_to_list(option_boxes, box);
 
 	return box;
-}
-
-
-/* Cleans up after the option dialog */
-static void
-option_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-
-	del_from_list(box);
-	/* Delete the box structure */
-	mem_free(box);
 }
 
 
@@ -461,7 +449,7 @@ menu_options_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->title = _("Options manager", term);
 	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = option_dialog_abort_handler;
+	dlg->abort = hierbox_dialog_abort_handler;
 	dlg->udata = ses;
 
 	add_dlg_listbox(dlg, 12, option_dlg_box_build());
@@ -502,18 +490,6 @@ kbdbind_dlg_box_build(void)
 	add_to_list(kbdbind_boxes, box);
 
 	return box;
-}
-
-
-/* Cleans up after the keybinding dialog */
-static void
-kbdbind_dialog_abort_handler(struct dialog_data *dlg_data)
-{
-	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
-
-	del_from_list(box);
-	/* Delete the box structure */
-	mem_free(box);
 }
 
 
@@ -688,7 +664,7 @@ menu_keybinding_manager(struct terminal *term, void *fcp, struct session *ses)
 	dlg->title = _("Keybinding manager", term);
 	dlg->layouter = hierbox_browser_layouter;
 	dlg->handle_event = hierbox_dialog_event_handler;
-	dlg->abort = kbdbind_dialog_abort_handler;
+	dlg->abort = hierbox_dialog_abort_handler;
 	dlg->udata = ses;
 
 	add_dlg_listbox(dlg, 12, kbdbind_dlg_box_build());

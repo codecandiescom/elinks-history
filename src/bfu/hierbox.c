@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.43 2003/11/08 21:25:25 jonas Exp $ */
+/* $Id: hierbox.c,v 1.44 2003/11/08 22:23:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -129,6 +129,16 @@ display_dlg:
 	return EVENT_NOT_PROCESSED;
 }
 
+/* Cleans up after the option dialog */
+void
+hierbox_dialog_abort_handler(struct dialog_data *dlg_data)
+{
+	struct listbox_data *box = get_dlg_listbox_data(dlg_data);
+
+	del_from_list(box);
+	/* Delete the box structure */
+	mem_free(box);
+}
 
 void
 hierbox_browser_layouter(struct dialog_data *dlg_data)

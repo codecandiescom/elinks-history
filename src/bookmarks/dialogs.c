@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.60 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: dialogs.c,v 1.61 2002/12/08 20:33:28 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -49,7 +49,7 @@ unsigned char *bm_last_searched_url = NULL;
 
 static void listbox_delete_bookmark(struct terminal *, struct listbox_data *);
 
-struct listbox_ops bookmarks_listbox_ops = {
+static struct listbox_ops bookmarks_listbox_ops = {
 	listbox_delete_bookmark,
 };
 
@@ -104,6 +104,7 @@ push_add_button(struct dialog_data *dlg, struct widget_data *di)
 }
 
 
+static
 void launch_bm_search_doc_dialog(struct terminal *, struct dialog_data *,
 				 struct session *);
 
@@ -791,7 +792,7 @@ launch_bm_add_doc_dialog(struct terminal *term,
 
 
 /* launch_bm_search_doc_dialog() */
-void
+static void
 launch_bm_search_doc_dialog(struct terminal *term,
 			    struct dialog_data *parent,
 			    struct session *ses)

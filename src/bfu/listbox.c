@@ -1,5 +1,5 @@
 /* Listbox widget implementation. */
-/* $Id: listbox.c,v 1.54 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: listbox.c,v 1.55 2002/12/08 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ struct box_context {
 };
 
 /* Takes care about listbox top moving. */
-int
+static int
 box_sel_move_do(struct listbox_item *item, void *data_, int offset)
 {
 	struct box_context *data = data_;
@@ -286,7 +286,7 @@ box_sel_move(struct widget_data *listbox_item_data, int dist)
 
 
 /* Takes care about rendering of each listbox item. */
-int
+static int
 display_listbox_item(struct listbox_item *item, void *data_, int offset)
 {
 	struct box_context *data = data_;
@@ -372,7 +372,7 @@ display_listbox_item(struct listbox_item *item, void *data_, int offset)
 }
 
 /* Displays a dialog box */
-void
+static void
 display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 		int sel)
 {
@@ -411,7 +411,7 @@ display_listbox(struct widget_data *listbox_item_data, struct dialog_data *dlg,
 	mem_free(data);
 }
 
-void
+static void
 init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 	     struct event *ev)
 {
@@ -430,7 +430,7 @@ init_listbox(struct widget_data *widget, struct dialog_data *dialog,
 #endif
 }
 
-int
+static int
 mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	      struct event *ev)
 {
@@ -479,7 +479,7 @@ mouse_listbox(struct widget_data *di, struct dialog_data *dlg,
 	return EVENT_NOT_PROCESSED;
 }
 
-int
+static int
 kbd_listbox(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
 	/* Not a pure listbox, but you're not supposed to use this outside of

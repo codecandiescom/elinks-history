@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.22 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: dialog.c,v 1.23 2002/12/08 20:30:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ do_dialog(struct terminal *term, struct dialog *dlg,
 	return dd;
 }
 
-void
+static void
 redraw_dialog(struct dialog_data *dlg)
 {
 	int i;
@@ -84,7 +84,7 @@ redraw_dialog(struct dialog_data *dlg)
 	redraw_from_window(dlg->win);
 }
 
-void
+static void
 select_dlg_item(struct dialog_data *dlg, int i)
 {
 	if (dlg->selected != i) {

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.18 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: inpfield.c,v 1.19 2002/12/08 20:30:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -90,7 +90,7 @@ dlg_format_field(struct terminal *term, struct terminal *t2,
 	(*y)++;
 }
 
-int
+static int
 input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *) = di->item->udata;
@@ -102,7 +102,7 @@ input_field_cancel(struct dialog_data *dlg, struct widget_data *di)
 	return 0;
 }
 
-int
+static int
 input_field_ok(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *, unsigned char *) = di->item->udata;
@@ -269,19 +269,19 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 	}
 }
 
-void
+static void
 display_field(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	display_field_do(di, dlg, sel, 0);
 }
 
-void
+static void
 display_field_pass(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	display_field_do(di, dlg, sel, 1);
 }
 
-void
+static void
 init_field(struct widget_data *widget, struct dialog_data *dialog,
 	   struct event *ev)
 {
@@ -303,7 +303,7 @@ init_field(struct widget_data *widget, struct dialog_data *dialog,
 	widget->cpos = strlen(widget->cdata);
 }
 
-int
+static int
 mouse_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
 	if (ev->y != di->y || ev->x < di->x
@@ -346,7 +346,7 @@ dsp_f:
 }
 
 /* XXX: The world's best candidate for massive goto cleanup! --pasky */
-int
+static int
 kbd_field(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
 	struct window *win = dlg->win;

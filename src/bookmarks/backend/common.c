@@ -1,5 +1,5 @@
 /* Internal bookmarks support - file format backends multiplexing */
-/* $Id: common.c,v 1.2 2002/12/07 20:05:52 pasky Exp $ */
+/* $Id: common.c,v 1.3 2002/12/08 20:33:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,7 +33,7 @@
 /* Note that the numbering is static, that means that you have to provide at
  * least dummy NULL handlers even when no support is compiled in. */
 
-struct bookmarks_backend *bookmarks_backends[] = {
+static struct bookmarks_backend *bookmarks_backends[] = {
 	&default_bookmarks_backend,
 };
 

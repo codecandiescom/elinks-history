@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.63 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.64 2002/12/08 20:33:28 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -229,7 +229,7 @@ write_bookmarks()
 }
 
 /* Clears the bookmark list */
-void
+static void
 free_bookmarks(struct list_head *bookmarks, struct list_head *box_items)
 {
 	struct bookmark *bm;

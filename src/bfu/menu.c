@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.23 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: menu.c,v 1.24 2002/12/08 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -45,11 +45,11 @@ struct mainmenu {
 unsigned char m_bar = 0;
 
 /* Prototypes */
-void menu_func(struct window *, struct event *, int);
-void mainmenu_func(struct window *, struct event *, int);
+static void menu_func(struct window *, struct event *, int);
+static void mainmenu_func(struct window *, struct event *, int);
 
 
-void
+static void
 free_menu_items(struct menu_item *items)
 {
 	int i;
@@ -95,7 +95,7 @@ do_menu(struct terminal *term, struct menu_item *items, void *data)
 	do_menu_selected(term, items, data, 0);
 }
 
-void
+static void
 select_menu(struct terminal *term, struct menu *menu)
 {
 	struct menu_item *it = &menu->items[menu->selected];
@@ -131,7 +131,7 @@ select_menu(struct terminal *term, struct menu *menu)
 	func(term, data1, data2);
 }
 
-void
+static void
 count_menu_size(struct terminal *term, struct menu *menu)
 {
 	int sx = term->x;
@@ -165,7 +165,7 @@ count_menu_size(struct terminal *term, struct menu *menu)
 	if (menu->y + my > sy) menu->y = sy - my;
 }
 
-void
+static void
 scroll_menu(struct menu *menu, int d)
 {
 	int c = 0;
@@ -215,7 +215,7 @@ scroll_menu(struct menu *menu, int d)
 		menu->view = 0;
 }
 
-void
+static void
 display_menu(struct terminal *term, struct menu *menu)
 {
 	int p, s;
@@ -288,7 +288,7 @@ display_menu(struct terminal *term, struct menu *menu)
 	redraw_from_window(menu->win);
 }
 
-void
+static void
 menu_func(struct window *win, struct event *ev, int fwd)
 {
 	struct window *w1;
@@ -561,7 +561,7 @@ do_mainmenu(struct terminal *term, struct menu_item *items,
 	}
 }
 
-void
+static void
 display_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	int i;
@@ -613,7 +613,7 @@ display_mainmenu(struct terminal *term, struct mainmenu *menu)
 	redraw_from_window(menu->win);
 }
 
-void
+static void
 select_mainmenu(struct terminal *term, struct mainmenu *menu)
 {
 	struct menu_item *it = &menu->items[menu->selected];
@@ -635,7 +635,7 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 	it->func(term, it->data, menu->data);
 }
 
-void
+static void
 mainmenu_func(struct window *win, struct event *ev, int fwd)
 {
 	int s = 0;

@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.16 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: msgbox.c,v 1.17 2002/12/08 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@
 #include "util/string.h"
 
 
-void
+static void
 msg_box_fn(struct dialog_data *dlg)
 {
 	struct terminal *term = dlg->win->term;
@@ -75,7 +75,7 @@ msg_box_fn(struct dialog_data *dlg)
 	mem_free(text);
 }
 
-int
+static int
 msg_box_button(struct dialog_data *dlg, struct widget_data *di)
 {
 	void (*fn)(void *) = (void (*)(void *)) di->item->udata;

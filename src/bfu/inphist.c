@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.8 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: inphist.c,v 1.9 2002/12/08 20:30:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "util/memory.h"
 
 
-void
+static void
 tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	    struct window *win)
 {
@@ -37,7 +37,7 @@ tab_compl_n(struct terminal *term, unsigned char *item, int len,
 	dialog_func(win, &ev, 0);
 }
 
-void
+static void
 tab_compl(struct terminal *term, unsigned char *item, struct window *win)
 {
 	tab_compl_n(term, item, strlen(item), win);

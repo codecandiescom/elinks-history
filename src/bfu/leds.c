@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.11 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: leds.c,v 1.12 2002/12/08 20:30:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,6 +35,10 @@
  * way someone can just get any struct led and add/subscribe appropriate struct
  * led for his control; however, I bet on programmers' responsibility rather,
  * and hope that everyone will abide the "rules". */
+
+/* TODO: In order for this to have some real value, this should be per-session,
+ * not global. Then we could even use it for something ;-). --pasky */
+
 static struct led leds[LEDS_COUNT];
 static unsigned char leds_backup[LEDS_COUNT];
 static int timer_duration_backup = 0;
@@ -43,7 +47,7 @@ static int redraw_timer = -1;
 static int drawing = 0;
 
 
-void redraw_leds(void *);
+static void redraw_leds(void *);
 
 void
 init_leds()
@@ -106,7 +110,7 @@ draw_leds(struct terminal *term)
 }
 
 /* Determine if leds redrawing if neccessary. Returns non-zero if so. */
-int
+static int
 sync_leds()
 {
 	int resync = 0;
@@ -127,7 +131,7 @@ sync_leds()
 	return resync;
 }
 
-void
+static void
 redraw_leds(void *xxx)
 {
 	struct terminal *term;

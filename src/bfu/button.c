@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.14 2002/12/07 20:05:51 pasky Exp $ */
+/* $Id: button.c,v 1.15 2002/12/08 20:30:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ dlg_format_buttons(struct terminal *term, struct terminal *t2,
 }
 
 
-void
+static void
 display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 {
 	struct terminal *term = dlg->win->term;
@@ -109,7 +109,7 @@ display_button(struct widget_data *di, struct dialog_data *dlg, int sel)
 	}
 }
 
-int
+static int
 mouse_button(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 {
 	if ((ev->b & BM_BUTT) >= B_WHEEL_UP || ev->y != di->y || ev->x < di->x
@@ -124,7 +124,7 @@ mouse_button(struct widget_data *di, struct dialog_data *dlg, struct event *ev)
 	return EVENT_PROCESSED;
 }
 
-void
+static void
 select_button(struct widget_data *di, struct dialog_data *dlg)
 {
 	di->item->fn(dlg, di);

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.1 2003/05/06 17:24:40 jonas Exp $ */
+/* $Id: mime.c,v 1.2 2003/05/07 18:19:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,8 +105,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 	}
 
 	/* Fallback.. use some hardwired default */
-	/* TODO: Make this rather mime.extension._template_ ..? --pasky */
-	return stracpy(get_opt_str("mime.default_mime_type"));
+	return stracpy(get_opt_str("mime.default_type"));
 }
 
 /* Find program to handle mimetype. The @term is for getting info about X

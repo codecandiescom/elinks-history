@@ -1,4 +1,4 @@
-/* $Id: dialog.h,v 1.35 2003/12/01 15:26:02 pasky Exp $ */
+/* $Id: dialog.h,v 1.36 2003/12/27 04:09:46 miciah Exp $ */
 
 #ifndef EL__BFU_DIALOG_H
 #define EL__BFU_DIALOG_H
@@ -11,6 +11,7 @@
 
 
 struct dialog_data;
+struct term_event;
 
 /* Event handlers return this values */
 #define	EVENT_PROCESSED		0

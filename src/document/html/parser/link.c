@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.52 2004/12/10 18:12:20 zas Exp $ */
+/* $Id: link.c,v 1.53 2004/12/10 18:14:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -265,7 +265,7 @@ html_img(unsigned char *a)
 		 * If not, just exit now. */
 		if (!global_doc_opts->images && !format.link) {
 			mem_free_if(src);
-			/* FIXME: if (usemap) kill_html_stack_item(&html_top) ? --Zas */
+			if (usemap) kill_html_stack_item(&html_top);
 			return;
 		}
 

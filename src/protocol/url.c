@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: url.c,v 1.64 2003/05/20 21:54:30 pasky Exp $ */
+/* $Id: url.c,v 1.65 2003/05/21 07:10:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -221,30 +221,22 @@ parse_url(unsigned char *url, int *prlen,
 	if (host || holen) { /* Only enter if needed. */
 #ifdef IPV6
 		if (rbracket) {
-			static unsigned char hostbuf[NI_MAXHOST];
 			int addrlen = rbracket - lbracket - 1;
 
 			/* Check for valid length.
 			 * addrlen >= sizeof(hostbuf) is theorically impossible
 			 * but i keep the test in case of... Safer, imho --Zas */
-			if (addrlen > 0 && addrlen < sizeof(hostbuf)) {
-				/* Ok, copy address to hostbuf. */
-				/* Don't forget the trailing space! ;-) --pasky */
-				safe_strncpy(hostbuf, lbracket + 1, addrlen + 1);
+			if (addrlen >= 0 && addrlen < NI_MAXHOST) {
+				if (host) *host = lbracket + 1;
+				if (holen) *holen = addrlen;
 			} else {
-				/* Invalid length or empty address,
-				 * set hostbuf to empty string. */
 				internal("parse_url(): addrlen value is bad "
 					"(%d) for URL '%s'. Problems are "
 					"likely to be encountered. Please "
 					"report this, it is a security bug!",
 					addrlen, url);
-				hostbuf[0] = '\0';
-				addrlen = 0;
+				return -1;
 			}
-
-			if (host) *host = hostbuf;
-			if (holen) *holen = addrlen;
 		} else
 #endif
 		{

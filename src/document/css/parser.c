@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.66 2004/01/27 02:22:09 pasky Exp $ */
+/* $Id: parser.c,v 1.67 2004/01/27 02:23:20 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -208,7 +208,7 @@ next_one:
 	if (!selector)
 		goto syntax_error;
 
-	pkg = mem_alloc(sizeof(struct selector_pkg));
+	pkg = mem_calloc(1, sizeof(struct selector_pkg));
 	if (!pkg)
 		goto syntax_error;
 	pkg->selector = selector;
@@ -254,7 +254,11 @@ next_one:
 
 	if (token->type != '{') {
 syntax_error:
-		if (pkg) mem_free(pkg);
+		if (pkg) {
+			if (pkg->next)
+				del_from_list(pkg);
+			mem_free(pkg);
+		}
 		free_list(selectors);
 
 		skip_css_block(scanner);

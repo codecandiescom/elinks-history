@@ -1,5 +1,5 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.h,v 1.3 2002/10/02 08:48:17 zas Exp $ */
+/* $Id: ftpparse.h,v 1.4 2002/10/12 14:17:19 pasky Exp $ */
 
 #ifndef FTPPARSE_H
 #define FTPPARSE_H
@@ -32,6 +32,8 @@ struct ftpparse {
 	int idlen;
 	unsigned char *symlink;
 	int symlinklen;
+	unsigned char *perm;
+	int permlen;
 };
 
 #define FTPPARSE_SIZE_UNKNOWN 0

@@ -1,5 +1,10 @@
 /* FTP directory parsing */
-/* $Id: ftpparse.c,v 1.4 2002/10/02 08:48:17 zas Exp $ */
+/* $Id: ftpparse.c,v 1.5 2002/10/12 14:17:19 pasky Exp $ */
+
+/* These sources aren't the officially distributed version, they are modified
+ * by us (ELinks coders) and some other third-party hackers. See ELinks
+ * ChangeLog for details about changes we made here, comments bellow may give
+ * you some indices as well. --pasky */
 
 /*** NOTE: the following source file has been modified to compile cleanly
  *** under gcc-2.95. The functionality should remain unchanged from the public
@@ -33,6 +38,7 @@ NCSA Telnet FTP server. Has LIST = NLST (and bad NLST for directories).
 */
 
 #include <time.h>
+#include <string.h>
 #include "ftpparse.h"
 
 static long
@@ -224,6 +230,8 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 	fp->idlen = 0;
 	fp->symlink = 0;
 	fp->symlinklen = 0;
+	fp->perm = 0;
+	fp->permlen = 0;
 
 	if (len < 2)		/* an empty name in EPLF, with no info, could be 2 chars */
 		return 0;
@@ -299,6 +307,17 @@ ftpparse(struct ftpparse *fp, unsigned char *buf, int len)
 				fp->flagtryretr = 1;
 			if (*buf == 'l')
 				fp->flagtrycwd = fp->flagtryretr = 1;
+
+			if (buf[1] != ' ') {
+				/* We wanna know permissions as well! And I
+				 * decided to completely ignore the NetWare
+				 * perms, they are very rare and of some
+				 * nonstandart format. If you want them,
+				 * though, I'll accept patch enabling them.
+				 * --pasky */
+				fp->perm = buf + 1;
+				fp->permlen = strcspn(buf + 1, " ");
+			}
 
 			state = 1;
 			i = 0;

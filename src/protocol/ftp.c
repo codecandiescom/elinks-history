@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.54 2002/10/12 13:59:54 pasky Exp $ */
+/* $Id: ftp.c,v 1.55 2002/10/12 14:17:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -943,6 +943,15 @@ display_dir_entry(struct cache_entry *c_e, int *pos, int *tries,
 		add_to_str(&str, &strl, "[   ] ");
 	}
 
+	if (ftp_info->perm) {
+		if (ftp_info->permlen)
+			add_bytes_to_str(&str, &strl, ftp_info->perm,
+					 ftp_info->permlen);
+		else
+			add_to_str(&str, &strl, "         ");
+		add_to_str(&str, &strl, " ");
+	}
+
 	if (ftp_info->mtime) {
 		if (ftp_info->mtime == -1)
 			sprintf(tmp, "%-21s ", "-");
@@ -1131,6 +1140,8 @@ out_of_mem:
 			ftp_info.idlen = 0;
 			ftp_info.symlink = NULL;
 			ftp_info.symlinklen = 0;
+			ftp_info.perm = ""; /* still align - looks good in most cases */
+			ftp_info.permlen = 0;
 
 			display_dir_entry(conn->cache, &conn->from, &conn->tries,
 					  colorize_dir, dircolor, &ftp_info);

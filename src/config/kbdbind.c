@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.51 2002/12/17 15:17:24 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.52 2002/12/20 21:46:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,9 +514,8 @@ bind_do(unsigned char *keymap, unsigned char *keystroke, unsigned char *action)
 	return 0;
 }
 
-void
-bind_act(unsigned char **str, int *len, unsigned char *keymap,
-	 unsigned char *keystroke)
+unsigned char *
+bind_act(unsigned char *keymap, unsigned char *keystroke)
 {
 	int keymap_;
 	long key_, meta_;
@@ -524,24 +523,21 @@ bind_act(unsigned char **str, int *len, unsigned char *keymap,
 	struct keybinding *kb;
 
 	keymap_ = read_keymap(keymap);
-	if (keymap_ < 0) {
-fail:
-		add_to_str(str, len, "\"\"");
-		return;
-	}
+	if (keymap_ < 0)
+		return NULL;
 
-	if (parse_keystroke(keystroke, &key_, &meta_) < 0) goto fail;
+	if (parse_keystroke(keystroke, &key_, &meta_) < 0)
+		return NULL;
 
 	kb = kbd_ev_lookup(keymap_, key_, meta_, NULL);
-	if (!kb) goto fail;
+	if (!kb) return NULL;
 
 	action = write_action(kb->action);
-	if (!action) goto fail;
+	if (!action)
+		return NULL;
 
 	kb->flags |= KBDB_WATERMARK;
-	add_to_str(str, len, "\"");
-	add_to_str(str, len, action);
-	add_to_str(str, len, "\"");
+	return straconcat("\"", action, "\"", NULL);
 }
 
 void

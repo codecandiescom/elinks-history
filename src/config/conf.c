@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.70 2002/12/12 21:33:48 pasky Exp $ */
+/* $Id: conf.c,v 1.71 2002/12/20 21:46:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,19 +139,21 @@ parse_set(struct option *opt_tree, unsigned char **file, int *line,
 			return ERROR_VALUE;
 
 		val = option_types[opt->type].read(opt, file);
-		if (str) {
+		if (!val) {
+			return ERROR_VALUE;
+		} if (str) {
 			opt->flags |= OPT_WATERMARK;
 			if (option_types[opt->type].write)
 				option_types[opt->type].write(opt, str, len);
 		} else if (!val || !option_types[opt->type].set
 			   || !option_types[opt->type].set(opt, val)) {
-			if (val) mem_free(val);
+			mem_free(val);
 			return ERROR_VALUE;
 		}
 		/* This is not needed since this will be WATERMARK'd when
 		 * saving it. We won't need to save it as touched. */
 		/* if (!str) opt->flags |= OPT_TOUCHED; */
-		if (val) mem_free(val);
+		mem_free(val);
 	}
 
 	return ERROR_NONE;
@@ -161,7 +163,7 @@ static enum parse_error
 parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	   unsigned char **str, int *len)
 {
-	unsigned char *orig_pos = *file;
+	unsigned char *orig_pos = *file, *next_pos;
 	unsigned char *keymap, *keystroke, *action;
 	enum parse_error error = ERROR_NONE;
 
@@ -196,10 +198,8 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 		return ERROR_PARSE;
 	}
 
-	/* Mirror what we already have */
-	if (str) add_bytes_to_str(str, len, orig_pos, *file - orig_pos);
-
 	/* Action */
+	next_pos = *file;
 	action = option_types[OPT_STRING].read(NULL, file);
 	if (!action) {
 		mem_free(keymap);
@@ -207,7 +207,16 @@ parse_bind(struct option *opt_tree, unsigned char **file, int *line,
 	}
 
 	if (str) {
-		bind_act(str, len, keymap, keystroke);
+		/* Mirror what we already have */
+		unsigned char *act_str = bind_act(keymap, keystroke);
+
+		if (act_str) {
+			add_bytes_to_str(str, len, orig_pos, next_pos - orig_pos);
+			add_to_str(str, len, act_str);
+			mem_free(act_str);
+		} else {
+			error = ERROR_VALUE;
+		}
 	} else {
 		error = bind_do(keymap, keystroke, action) ? ERROR_VALUE : ERROR_NONE;
 	}
@@ -314,15 +323,26 @@ parse_config_file(struct option *options, unsigned char *name,
 
 				if (!strncmp(file, handler->command, cmdlen)
 				    && WHITECHAR(file[cmdlen])) {
+					unsigned char *s2 = NULL;
+					int l2 = 0;
+
 					/* Mirror what we already have */
-					if (str)
-						add_bytes_to_str(str, len,
+					if (str) {
+						s2 = init_str();
+						if (s2)
+						add_bytes_to_str(&s2, &l2,
 								 file, cmdlen);
+					}
 
 					file += cmdlen;
 					error = handler->handler(options,
 								 &file, &line,
-								 str, len);
+								 str?&s2:NULL,
+								 &l2);
+					if (!error && str && s2) {
+						add_to_str(str, len, s2);
+					}
+					if (s2)	mem_free(s2);
 					goto test_end;
 				}
 			}

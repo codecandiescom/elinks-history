@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.217 2004/06/13 22:43:53 zas Exp $ */
+/* $Id: link.c,v 1.218 2004/06/13 22:46:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -430,10 +430,9 @@ set_pos_y(struct document_view *doc_view, struct link *link)
 }
 
 /* direction == 1 -> DOWN
- * direction == -1 -> UP
- * normal == 0 -> PAGE	*/ /* TODO: invert test -> page */
+ * direction == -1 -> UP */
 static void
-find_link(struct document_view *doc_view, int direction, int normal)
+find_link(struct document_view *doc_view, int direction, int page_mode)
 {
 	struct link **line;
 	struct link *link = NULL;
@@ -472,7 +471,7 @@ find_link(struct document_view *doc_view, int direction, int normal)
 	if (!link) goto nolink;
 
 	link_pos = link - doc_view->document->links;
-	if (!normal) {
+	if (page_mode) {
 		next_in_view(doc_view, link_pos, direction, in_view, NULL);
 		return;
 	}
@@ -487,25 +486,25 @@ nolink:
 void
 find_link_up(struct document_view *doc_view)
 {
-	find_link(doc_view, -1, 1);
+	find_link(doc_view, -1, 0);
 }
 
 void
 find_link_page_up(struct document_view *doc_view)
 {
-	find_link(doc_view, -1, 0);
+	find_link(doc_view, -1, 1);
 }
 
 void
 find_link_down(struct document_view *doc_view)
 {
-	find_link(doc_view, 1, 1);
+	find_link(doc_view, 1, 0);
 }
 
 void
 find_link_page_down(struct document_view *doc_view)
 {
-	find_link(doc_view, 1, 0);
+	find_link(doc_view, 1, 1);
 }
 
 struct uri *

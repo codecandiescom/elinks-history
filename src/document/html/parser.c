@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.320 2004/01/04 00:38:08 zas Exp $ */
+/* $Id: parser.c,v 1.321 2004/01/04 00:40:45 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3138,7 +3138,7 @@ ng:;
 							if (e->type != ELEMENT_KILLABLE) break;
 							if (!strlcasecmp(e->name, e->namelen, name, namelen)) break;
 						}
-						if (e->name && !strlcasecmp(e->name, e->namelen, name, namelen)) {
+						if (!strlcasecmp(e->name, e->namelen, name, namelen)) {
 							while (e->prev != (void *)&html_stack) kill_html_stack_item(e->prev);
 
 							if (e->type != ELEMENT_IMMORTAL)

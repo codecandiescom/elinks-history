@@ -1,3 +1,71 @@
+Mon Feb  2 16:20:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/renderer.c:
+
+	detach_formatted() should already take care of these.  
+
+Mon Feb  2 16:11:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.h:
+
+	Describe tags and nodes and then move things a bit.  
+
+Mon Feb  2 15:58:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.h:
+
+	Cleanup.  
+
+Mon Feb  2 15:40:48 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Typeahead is not a hack anymore.  
+
+Mon Feb  2 15:32:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	search_link_text(): Spit and polish.  
+
+Mon Feb  2 15:24:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	search_link_text(): Cleanup initialisation of variables.  
+
+Mon Feb  2 15:19:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Decrease indentation level.  
+
+Mon Feb  2 15:12:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Move link text searching to separate function.  
+
+Mon Feb  2 15:04:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	Rename charpos -> textlen, typeahead -> text, doc_view->document ->
+	document.  
+
+Mon Feb  2 13:54:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/scanner.h:
+
+	Make dump_scanner() available if SCANNER_DEBUG is defined. Fix typo.
+	Add state member to struct scanner useful for SGML scanner.  
+
+Mon Feb  2 09:52:01 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Don't show error dialogs for missing CSS stylesheets.  
+
 Sun Feb  1 16:43:43 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/css/scanner.h:

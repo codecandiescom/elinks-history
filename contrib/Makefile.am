@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.8 2004/11/07 00:23:37 jonas Exp $
+## $Id: Makefile.am,v 1.9 2005/01/10 23:54:23 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -7,6 +7,7 @@ EXTRA_DIST = \
  LinksOS2Icon.zip \
  README \
  colws.diff \
+ elinks.conf \
  elinks-vim.diff \
  elinks.spec.in \
  elinks.vim \

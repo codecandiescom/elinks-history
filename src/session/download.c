@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.28 2003/05/12 20:23:58 pasky Exp $ */
+/* $Id: download.c,v 1.29 2003/05/12 20:24:35 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -339,7 +339,7 @@ download_window_function(struct dialog_data *dlg)
 			dialog_text_color, AL_LEFT);
 
 	if (t && status->prg->size >= 0) {
-		unsigned char q[5];
+		unsigned char q[10];
 		unsigned int qlen = 0;
 		int p = w - 6;
 
@@ -351,7 +351,7 @@ download_window_function(struct dialog_data *dlg)
 				 / (longlong) status->prg->size),
 			  1, get_bfu_color(term, "dialog.meter"));
 		ulongcat(q, &qlen, ((longlong) 100 * (longlong) status->prg->pos
-				    / (longlong) status->prg->size), 3, ' ');
+				    / (longlong) status->prg->size), 8, ' ');
 		q[qlen++] = '%';
 		q[qlen] = '\0';
 		print_text(term, x + w - 4, y, qlen, q, dialog_text_color);

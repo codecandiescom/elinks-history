@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.75 2003/10/29 14:09:50 pasky Exp $ */
+/* $Id: inpfield.c,v 1.76 2003/10/29 14:31:35 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -196,7 +196,7 @@ input_field(struct terminal *term, struct memory_list *ml, int intl,
 	if (!dlg) return;
 
 	field = (unsigned char *) dlg + sizeof_dialog(INPUT_WIDGETS_COUNT, 0);
-	*field = 0;
+	/* *field = 0; */ /* calloc() job. --Zas */
 
 	if (def) {
 		int defsize = strlen(def) + 1;
@@ -281,14 +281,15 @@ init_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 		struct input_history_item *item;
 
 		foreach (item, widget_data->widget->info.field.history->items) {
-			int dsize = strlen(item->d) + 1;
+			int datalen = strlen(item->d);
 			struct input_history_item *hi;
 
+			/* One byte is reserved in struct input_history_item. */
 			hi = mem_alloc(sizeof(struct input_history_item)
-				       + dsize);
+				       + datalen);
 			if (!hi) continue;
 
-			memcpy(hi->d, item->d, dsize);
+			memcpy(hi->d, item->d, datalen + 1);
 			add_to_list(widget_data->info.field.history, hi);
 		}
 	}

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.238 2003/07/05 13:06:36 jonas Exp $ */
+/* $Id: options.c,v 1.239 2003/07/05 13:19:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -557,7 +557,7 @@ eval_cmd(struct option *o, unsigned char ***argv, int *argc)
 static unsigned char *
 forcehtml_cmd(struct option *o, unsigned char ***argv, int *argc)
 {
-	strcpy(get_opt_str("document.download.default_mime_type"), "text/html");
+	strcpy(get_opt_str("mime.default_type"), "text/html");
 	return NULL;
 }
 

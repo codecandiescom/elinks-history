@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.67 2003/05/08 00:37:57 zas Exp $ */
+/* $Id: menu.c,v 1.68 2003/05/08 11:17:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -23,17 +23,29 @@
 
 /* Types and structures */
 
-struct menu {
+/* Must match the start of structs menu and mainmenu */
+struct menu_head {
 	struct window *win;
 	struct menu_item *items;
 	void *data;
-
 	int selected;
+	int ni;
+};
+
+struct menu {
+	/* menu_head */
+	struct window *win;
+	struct menu_item *items;
+	void *data;
+	int selected;
+	int ni;
+	/* end of menu_head */
+
 	int view;
 	int x, y;
 	int xp, yp;
         int xw, yw;
-	int ni;
+
 	int hotkeys;
 #ifdef ENABLE_NLS
 	int lang;
@@ -41,13 +53,15 @@ struct menu {
 };
 
 struct mainmenu {
+	/* menu_head */
 	struct window *win;
 	struct menu_item *items;
 	void *data;
-
 	int selected;
-	int sp;
 	int ni;
+	/* end of menu_head */
+
+	int sp;
 };
 
 /* Global variables */
@@ -160,25 +174,98 @@ refresh_hotkeys(struct terminal *term, struct menu *menu)
 #endif
 }
 
-
+/* Returns true if key (upcased) matches one of the hotkeys in menu */
 static inline int
-is_hotkey(struct menu_item *item, unsigned char hotkey, struct terminal *term)
+is_hotkey(struct menu_item *item, unsigned char key, struct terminal *term)
 {
-	unsigned char *text = _(item->text, term);
+	unsigned char *text;
+
+	if (!item || !item->text) return 0;
+	text = _(item->text, term);
+	if (!text || !*text) return 0;
 
 #ifdef DEBUG
+	{
 	int key_pos = item->hotkey_pos;
 
 	if (key_pos < 0) key_pos = -key_pos;
 
 	return (key_pos && text
-		&& (upcase(text[key_pos]) == upcase(hotkey)));
+		&& (upcase(text[key_pos]) == key));
+	}
 #else
 	return (item->hotkey_pos && text
-		&& (upcase(text[item->hotkey_pos]) == upcase(hotkey)));
+		&& (upcase(text[item->hotkey_pos]) == key));
 #endif
 }
 
+/* Returns true if a hotkey was found in the menu, and set menu->selected. */
+static int inline
+check_hotkeys(struct menu_head *menu, unsigned char hotkey, struct terminal *term)
+{
+	unsigned char key = upcase(hotkey);
+	int i = menu->selected;
+	int start;
+
+	if (menu->ni < 1) return 0;
+
+	i %= menu->ni;
+	if (i < 0) i += menu->ni;
+
+	start = i;
+
+	while (1) {
+		if (i + 1 == menu->ni) i = 0;
+		else i++;
+
+		if (is_hotkey(&menu->items[i], key, term)) {
+			menu->selected = i;
+			return 1;
+		}
+
+		if (i == start) break;
+
+	};
+
+	return 0;
+}
+
+/* Search if first letter of an entry in menu matches the key (caseless comp.).
+ * It searchs in all entries, from selected entry to bottom and then from top
+ * to selected entry.
+ * It returns 1 if found and set menu->selected. */
+static inline int
+check_not_so_hot_keys(struct menu_head *menu, unsigned char key, struct terminal *term)
+{
+	unsigned char *text;
+	unsigned char k = upcase(key);
+	int i = menu->selected;
+	int start;
+
+	if (menu->ni < 1) return 0;
+
+	i %= menu->ni;
+	if (i < 0) i += menu->ni;
+
+	start = i;
+
+	while (1) {
+		if (i + 1 == menu->ni) i = 0;
+		else i++;
+
+		text = menu->items[i].text;
+
+		if (text && upcase(text[0]) == k) {
+			menu->selected = i;
+			return 1;
+		}
+
+		if (i == start) break;
+	};
+
+	return 0;
+
+}
 
 static void
 free_menu_items(struct menu_item *items)
@@ -473,30 +560,6 @@ display_menu(struct terminal *term, struct menu *menu)
 	redraw_from_window(menu->win);
 }
 
-/* Search if first letter of an entry in menu matches the key (caseless comp.).
- * It searchs in all entries, from selected entry to bottom and then from top
- * to selected entry. */
-static inline void
-check_not_so_hot_keys(struct menu *menu, unsigned char key, struct terminal *term)
-{
-	unsigned char evx = upcase(key);
-	unsigned char *text;
-	int i = menu->selected + 1;
-
-	while (1) {
-		if (i == menu->ni) i = 0;
-		text = menu->items[i].text;
-
-		if (text && upcase(text[0]) == evx) {
-			menu->selected = i;
-			scroll_menu(menu, 0);
-			break;
-		}
-
-		i++;
-		if (i == menu->selected) break;
-	}
-}
 
 static void
 menu_func(struct window *win, struct event *ev, int fwd)
@@ -685,8 +748,6 @@ menu_func(struct window *win, struct event *ev, int fwd)
 #undef DIST
 				default:
 				{
-					int i;
-
 					if ((ev->x >= KBD_F1 && ev->x <= KBD_F12) ||
 					    ev->y == KBD_ALT) {
 						delete_window_ev(win, ev);
@@ -703,25 +764,16 @@ menu_func(struct window *win, struct event *ev, int fwd)
 						goto break2;
 					}
 
-					if (ev->x <= ' ' || ev->x >= 256)
-						break;
-
-					for (i = 0; i < menu->ni; i++) {
-						if (is_hotkey(&menu->items[i], ev->x, win->term)) {
-							menu->selected = i;
+					if (ev->x > ' ' && ev->x < 255) {
+						if (check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+							s = 1, scroll_menu(menu, 0);
+						else if (check_not_so_hot_keys((struct menu_head *)menu, ev->x, win->term))
 							scroll_menu(menu, 0);
-							s = 1;
-							break;
-						}
+						break;
 					}
 
-					if (s != 0)
-						break;
-
-					check_not_so_hot_keys(menu, ev->x, win->term);
-
-					break;
 				}
+					break;
 			}
 
 			display_menu(win->term, menu);
@@ -941,26 +993,19 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 				break;
 			}
 
-			if (ev->x > ' ' && ev->x < 256) {
-				int i;
+			if (ev->x > ' ' && ev->x < 256 &&
+			    check_hotkeys((struct menu_head *)menu, ev->x, win->term))
+				s = 2;
 
-				s = 1;
-				for (i = 0; i < menu->ni; i++) {
-					if (is_hotkey(&menu->items[i], ev->x, win->term)) {
-						menu->selected = i;
-						s = 2;
-						break;
-					}
-				}
-			} else if (!s) {
+			if (!s) {
 				delete_window_ev(win, ev->x != KBD_ESC  ? ev
 									: NULL);
-				break;
-			}
+			} else {
 
-			display_mainmenu(win->term, menu);
-			if (s == 2)
-				select_mainmenu(win->term, menu);
+				display_mainmenu(win->term, menu);
+				if (s == 2)
+					select_mainmenu(win->term, menu);
+			}
 			break;
 
 		case EV_ABORT:

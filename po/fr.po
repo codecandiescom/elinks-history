@@ -4360,7 +4360,7 @@ msgstr "~Voir l'image"
 
 #: src/viewer/text/view.c:3480
 msgid "Download ima~ge"
-msgstr "~Enregistrer l'image"
+msgstr "Enregistrer l'~image"
 
 #: src/viewer/text/view.c:3486
 msgid "No link selected"

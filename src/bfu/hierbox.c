@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.163 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: hierbox.c,v 1.164 2004/05/31 05:04:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -48,11 +48,14 @@ update_hierbox_browser(struct hierbox_browser *browser)
 /* Common backend for listbox adding */
 struct listbox_item *
 add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
-		 enum listbox_item_type type, void *data)
+		 enum listbox_item_type type, void *data, int add_position)
 {
 	struct listbox_item *item;
 
-	if (!root) root = &browser->root;
+	if (!root) {
+		assertm(browser, "Nowhere to add new list box item");
+		root = &browser->root;
+	}
 
 	item = mem_calloc(1, sizeof(struct listbox_item));
 	if (!item) return NULL;
@@ -65,9 +68,13 @@ add_listbox_item(struct hierbox_browser *browser, struct listbox_item *root,
 	item->depth = root->depth + 1;
 	if (item->depth > 0) item->root = root;
 
-	/* TODO: Sort? */
-	add_to_list(root->child, item);
-	update_hierbox_browser(browser);
+	/* TODO: Possibility to sort by making add_position into a flag */
+	if (add_position < 0)
+		add_to_list_end(root->child, item);
+	else
+		add_to_list(root->child, item);
+
+	if (browser) update_hierbox_browser(browser);
 
 	return item;
 }

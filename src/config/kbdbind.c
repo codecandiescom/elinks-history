@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.216 2004/05/31 03:45:44 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.217 2004/05/31 05:04:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -610,45 +610,32 @@ write_action(enum keymap keymap, int action)
 static void
 init_action_listboxes(void)
 {
-	struct strtonum *act;
-	int i;
+	struct listbox_item *root = &keybinding_browser.root;
+	struct strtonum *act, *map;
 
-	for (i = 0; i < KM_MAX; i++) {
+	/* Do it backwards because add_listbox_item() add to front
+	 * of list. */
+	for (map = keymap_table; map->str; map++) {
 		struct listbox_item *keymap;
 
-		keymap = mem_calloc(1, sizeof(struct listbox_item));
+		keymap = add_listbox_item(NULL, root, BI_FOLDER, map, -1);
 		if (!keymap) continue;
 
-		init_list(keymap->child);
-		keymap->visible = 1;
-		keymap->udata = &keymap_table[i];
-		keymap->type = BI_FOLDER;
-		keymap->expanded = 0; /* Maybe you would like this being 1? */
-		keymap->depth = 0;
-		add_to_list_end(keybinding_browser.root.child, keymap);
-
-		for (act = action_table[i]; act->str; act++) {
-			struct listbox_item *box_item;
+		for (act = action_table[map->num]; act->str; act++) {
+			struct listbox_item *item;
 
 			if (act->num == ACT_MAIN_SCRIPTING_FUNCTION
 			    || act->num == ACT_MAIN_NONE)
 				continue;
 
-			box_item = mem_calloc(1, sizeof(struct listbox_item));
-			if (!box_item) continue;
-
-			box_item->root = keymap;
-			add_to_list_end(keymap->child, box_item);
-			init_list(box_item->child);
-			box_item->udata = act;
-			box_item->type = BI_FOLDER;
-			box_item->expanded = 1;
-			box_item->visible = 1;
-			box_item->depth = 1;
-
 			assert(act->desc);
 
-			action_box_items[i][act->num] = box_item;
+			item = add_listbox_item(NULL, keymap, BI_FOLDER, act, -1);
+			if (!item) continue;
+
+			item->expanded = 1;
+
+			action_box_items[map->num][act->num] = item;
 		}
 	}
 }

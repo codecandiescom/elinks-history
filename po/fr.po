@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-28 11:34+0100\n"
+"POT-Creation-Date: 2003-12-29 19:21+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -817,11 +817,11 @@ msgstr "Erreur de fichier fiable"
 
 #: src/config/conf.c:702
 msgid "Cannot read the file"
-msgstr "Echec de lecture du fichier"
+msgstr "Échec de lecture du fichier"
 
 #: src/config/conf.c:705
 msgid "Cannot stat the file"
-msgstr "Echec d'obtention du statut du fichier"
+msgstr "Échec d'obtention du statut du fichier"
 
 #: src/config/conf.c:708
 msgid "Cannot access the file"
@@ -829,11 +829,11 @@ msgstr "Eched d'accès au fichier"
 
 #: src/config/conf.c:711
 msgid "Cannot create temp file"
-msgstr "Echec de création de fichier temporaire"
+msgstr "Échec de création de fichier temporaire"
 
 #: src/config/conf.c:714
 msgid "Cannot rename the file"
-msgstr "Echec du renommage du fichier"
+msgstr "Échec du renommage du fichier"
 
 #: src/config/conf.c:717
 msgid "File saving disabled by option"
@@ -1183,7 +1183,7 @@ msgstr "Ouvrir la console Lua"
 
 #: src/config/kbdbind.c:443
 msgid "Open a Lua console (DISABLED)"
-msgstr "Ouvrir la console Lua (NON ACTIF)"
+msgstr "Ouvrir la console Lua (DÉSACTIVÉ)"
 
 #. internal use only
 #: src/config/kbdbind.c:446
@@ -1320,7 +1320,7 @@ msgstr "Recherche de texte"
 
 #: src/config/kbdbind.c:480
 msgid "Search backwards for a text pattern"
-msgstr "Recherche de texte (vers le haut)"
+msgstr "Recherche de texte (en arrière)"
 
 #: src/config/kbdbind.c:481
 msgid "Search link text by typing ahead"
@@ -1509,15 +1509,15 @@ msgstr ""
 
 #: src/config/options.inc:63
 msgid "Show template"
-msgstr "Montrer les modèles"
+msgstr "Montrer les squelettes"
 
 #: src/config/options.inc:65
 msgid ""
 "Show _template_ options in autocreated trees in the options\n"
 "manager and save them to the configuration file."
 msgstr ""
-"Montrer les options _template_ (modèles) dans les arbres autogénérés\n"
-"dans le gestionnaire d'options et les enregistrer dans le fichier de\n"
+"Montrer les options _template_ (squelette) dans l'arborescence autogénérée\n"
+"du gestionnaire d'options et les enregistrer dans le fichier de\n"
 "configuration."
 
 #. Keep options in alphabetical order.
@@ -1784,12 +1784,12 @@ msgstr "Couleurs du lien actif."
 #: src/config/options.inc:199 src/config/options.inc:394
 #: src/config/options.inc:894
 msgid "Background color"
-msgstr "Couleur de l'arrière-plan"
+msgstr "Couleur du fond"
 
 #: src/config/options.inc:201 src/config/options.inc:396
 #: src/config/options.inc:895
 msgid "Default background color."
-msgstr "Couleur de l'arrière-plan par défaut"
+msgstr "Couleur par défaut du fond."
 
 #. ==========================================================
 #. ============= BORING PART (colors) START =================
@@ -1971,8 +1971,8 @@ msgid ""
 msgstr ""
 "Mode de recherche:\n"
 "0 pour plein texte.\n"
-"1 pour expressions régulières. (INACTIF)\n"
-"2 pour expressions régulières étendues. (INACTIF)"
+"1 pour expressions régulières. (DÉSACTIVÉ)\n"
+"2 pour expressions régulières étendues. (DÉSACTIVÉ)"
 
 #: src/config/options.inc:290
 msgid "Show search hit top or bottom dialogs"
@@ -2788,18 +2788,18 @@ msgstr "Exécuter ou non les scripts CGI locaux."
 
 #: src/config/options.inc:737
 msgid "Local CGI specific options. (DISABLED)"
-msgstr "Options des scripts CGI locaux. (INACTIF)"
+msgstr "Options des scripts CGI locaux. (DÉSACTIVÉ)"
 
 #: src/config/options.inc:741
 msgid ""
 "Colon separated list of directories, where CGI scripts are stored. (DISABLED)"
 msgstr ""
 "Liste séparée par des virgules des répertoires où sont les scripts CGI. "
-"(INACTIF)"
+"(DÉSACTIVÉ)"
 
 #: src/config/options.inc:745
 msgid "Whether to execute local CGI scripts. (DISABLED)"
-msgstr "Exécuter ou non les scripts CGI locaux. (INACTIF)"
+msgstr "Exécuter ou non les scripts CGI locaux. (DÉSACTIVÉ)"
 
 #: src/config/options.inc:748
 msgid "Allow reading special files"
@@ -3476,7 +3476,7 @@ msgstr ""
 "Activer le timer:\n"
 "0 non\n"
 "1 oui, mais ne pas montrer le timer\n"
-"2 oui et montrer le timer près des LEDs (INACTIF)"
+"2 oui et montrer le timer près des LEDs (DÉSACTIVÉ)"
 
 #: src/config/options.inc:1145
 msgid "Duration"
@@ -4553,14 +4553,14 @@ msgstr ""
 
 #: src/globhist/globhist.c:88
 msgid "Auto-save interval"
-msgstr "Intervalle de sauvegarde automatique"
+msgstr "Intervalle pour la sauvegarde automatique"
 
 #: src/globhist/globhist.c:90
 msgid ""
 "Interval at which to write global history to disk if it\n"
 "has changed (seconds; 0 to disable)"
 msgstr ""
-"Intervalle de sauvegarde de l'historique global\n"
+"Intervalle pour la sauvegarde de l'historique global\n"
 "sur disque lorsque celui-ci a changé.\n"
 "(en secondes; 0 pour désactiver)"
 
@@ -4758,7 +4758,7 @@ msgstr "%d échecs de select()."
 
 #: src/main.c:103
 msgid "Cannot create a pipe for internal communication."
-msgstr "Echec de la création d'un tube pour la communication interne."
+msgstr "Échec de la création d'un tube pour la communication interne."
 
 #: src/mime/backend/default.c:25
 msgid "MIME type associations"
@@ -4878,7 +4878,7 @@ msgstr "Mailcap"
 
 #: src/mime/backend/mailcap.c:96
 msgid "Options for mailcap support."
-msgstr "Options concernant le support mailcap"
+msgstr "Options concernant le support mailcap."
 
 #: src/mime/backend/mailcap.c:100
 msgid "Enable mailcap support."
@@ -4927,9 +4927,10 @@ msgid ""
 "path. This means that wildcard entries (like: image/*) will\n"
 "also be checked before deciding the handler."
 msgstr ""
-"Prioritize entries by the order of the files in the mailcap\n"
-"path. This means that wildcard entries (like: image/*) will\n"
-"also be checked before deciding the handler."
+"Attribuer des priorités aux entrées en fonction de l'ordre des\n"
+"fichiers dans le chemin vers mailcap. Cela signifie que les\n"
+"entrées joker (comme: image/*) seront aussi traitées avant\n"
+"le choix du gestionnaire."
 
 #: src/mime/backend/mailcap.c:132
 msgid ""
@@ -5003,10 +5004,9 @@ msgid ""
 "Mimetypes search path. Colon-separated list of files.\n"
 "Leave as \"\" to use built-in default instead."
 msgstr ""
-"Chemin de recherche pour mime.types. Liste de fichiers séparés par des "
-"virgules.\n"
-"Mettre la valeur \"\" pour utiliser la valeur par défaut.les valeurs par "
-"défaut."
+"Chemin de recherche pour les fichiers de types mime.\n"
+"Liste de fichiers séparés par des virgules.\n"
+"Mettre \"\" pour utiliser la valeur interne par défaut."
 
 #. name:
 #: src/mime/mime.c:32 src/mime/mime.c:196
@@ -5039,7 +5039,7 @@ msgstr "Fonctionnalités:"
 
 #: src/modules/version.c:84
 msgid "Standard"
-msgstr "Standard"
+msgstr "Standart"
 
 #: src/modules/version.c:86
 msgid "Debug"
@@ -5406,7 +5406,7 @@ msgstr "Erreur lors de l'ouverture du fichier"
 
 #: src/sched/error.c:62
 msgid "CGI script not in CGI path"
-msgstr "Script CGI absent du chemin des CGI"
+msgstr "Script CGI absent du chemin des CGIs"
 
 #: src/sched/error.c:64
 msgid "Bad FTP response"
@@ -5418,7 +5418,7 @@ msgstr "Service FTP indisponible"
 
 #: src/sched/error.c:66
 msgid "Bad FTP login"
-msgstr "Echec de l'authentification FTP"
+msgstr "Échec de l'authentification FTP"
 
 #: src/sched/error.c:67
 msgid "FTP PORT command failed"

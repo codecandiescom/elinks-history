@@ -1,5 +1,5 @@
 /* Sessions status managment */
-/* $Id: status.c,v 1.4 2003/12/01 15:21:31 pasky Exp $ */
+/* $Id: status.c,v 1.5 2003/12/01 15:45:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -274,9 +274,7 @@ display_tab_bar(struct session *ses, struct terminal *term, int tabs_count)
 
 		draw_area(term, xpos, ypos, actual_tab_width, 1, ' ', 0, color);
 
-		msglen = strlen(msg);
-		if (msglen >= actual_tab_width)
-			msglen = actual_tab_width - 1;
+		msglen = int_min(strlen(msg), actual_tab_width - 1);
 
 		draw_text(term, xpos, ypos, msg, msglen, 0, color);
 		tab->xpos = xpos;
@@ -312,9 +310,8 @@ print_screen_status(struct session *ses)
 			msg = print_current_title(ses);
 			if (msg) {
 				int msglen = strlen(msg);
-				int pos = term->width - 1 - msglen;
+				int pos = int_max(term->width - 1 - msglen, 0);
 
-				if (pos < 0) pos = 0;
 				draw_text(term, pos, 0, msg, msglen, 0,
 					  get_bfu_color(term, "title.title-text"));
 				mem_free(msg);
@@ -359,10 +356,8 @@ title_set:
 			find_in_cache(ses->doc_view->document->url);
 
 		if (cache_entry) {
-			if (cache_entry->ssl_info)
-				ses->ssl_led->value = 'S';
-			else
-				ses->ssl_led->value = '-';
+			ses->ssl_led->value = (cache_entry->ssl_info)
+					    ? 'S' : '-';
 		} else {
 			/* FIXME: We should do this thing better. */
 			ses->ssl_led->value = '?';

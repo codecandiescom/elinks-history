@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.5 2003/12/06 21:58:15 pasky Exp $ */
+/* $Id: task.c,v 1.6 2003/12/06 23:37:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,6 +26,7 @@
 #include "terminal/terminal.h"
 #include "terminal/window.h"
 #include "sched/download.h"
+#include "sched/event.h"
 #include "sched/session.h"
 #include "sched/task.h"
 #include "viewer/text/view.h"

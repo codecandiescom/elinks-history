@@ -1,3 +1,55 @@
+Mon Dec 16 22:59:29 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/options.c:
+
+	Inline.  
+
+Mon Dec 16 22:56:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/history.c:
+
+	Static + inline + minor tidyup.  
+
+Mon Dec 16 22:52:48 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/dump.c:
+
+	Static.  
+
+Mon Dec 16 22:47:54 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/download.c:
+
+	Static + inline. Minor cleanup. We should move tp_* functions from
+	here to somewhere.  
+
+Mon Dec 16 22:29:03 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/cache.c:
+
+	Staticfication.  
+
+Mon Dec 16 15:07:31 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: README, find_unused_translations.sh:
+
+	README was updated and old ./find_unused_translations.sh was
+	removed.  
+
+Mon Dec 16 15:06:18 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/: sync_vs_source.pl, sync_vs_source.sh:
+
+	New scripts for source/translations synchronisation. One use perl,
+	sorry. Later these scripts will become one.  
+
+Mon Dec 16 10:08:25 2002  Laurent Monin <zas@norz.org>:
+
+	* intl/find_unused_translations.sh:
+
+	That script is still buggy, i desactivate it until new functionnal
+	version.  
+
 Sun Dec 15 22:49:09 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,

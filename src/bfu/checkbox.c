@@ -1,5 +1,5 @@
 /* Checkbox widget handlers. */
-/* $Id: checkbox.c,v 1.56 2003/10/29 14:09:50 pasky Exp $ */
+/* $Id: checkbox.c,v 1.57 2003/10/29 23:56:48 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,35 +36,35 @@ dlg_format_checkbox(struct terminal *term, struct terminal *t2,
 }
 
 void
-dlg_format_checkboxes(struct terminal *term, struct terminal *t2, int intl,
+dlg_format_checkboxes(struct terminal *term, struct terminal *t2,
 		      struct widget_data *widget_data, int n,
-		      int x, int *y, int w, int *rw,
-		      unsigned char **texts)
+		      int x, int *y, int w, int *rw, int intl)
 {
 	while (n) {
-		unsigned char *text = texts[0];
+		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, t2);
 		dlg_format_checkbox(term, t2, widget_data, x, y, w, rw, text);
-		texts++;
 		widget_data++;
 		n--;
 	}
 }
 
 void
-checkboxes_width(struct terminal *term, int intl, unsigned char **texts,
+checkboxes_width(struct terminal *term, int intl,
+		 struct widget_data *widget_data, int n,
 		 int *minwidth, int *maxwidth)
 {
 	*minwidth -= 4;
 	*maxwidth -= 4;
 
-	while (texts[0]) {
-		unsigned char *text = texts[0];
+	while (n) {
+		unsigned char *text = widget_data->widget->text;
 
 		if (intl) text = _(text, term);
 		text_width(term, text, minwidth, maxwidth);
-		texts++;
+		widget_data++;
+		n--;
 	}
 
 	*minwidth += 4;

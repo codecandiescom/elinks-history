@@ -1,4 +1,4 @@
-/* $Id: checkbox.h,v 1.18 2003/10/29 14:27:40 zas Exp $ */
+/* $Id: checkbox.h,v 1.19 2003/10/29 23:56:48 jonas Exp $ */
 
 #ifndef EL__BFU_CHECKBOX_H
 #define EL__BFU_CHECKBOX_H
@@ -6,9 +6,10 @@
 #include "bfu/widget.h"
 #include "terminal/terminal.h"
 
-#define add_dlg_checkbox(dlg, n, data_)					\
+#define add_dlg_checkbox(dlg, n, text_, data_)				\
 	do {								\
 		(dlg)->widgets[n].type = WIDGET_CHECKBOX;		\
+		(dlg)->widgets[n].text = (text_);			\
 		(dlg)->widgets[n].info.checkbox.gid = 0;		\
 		(dlg)->widgets[n].info.checkbox.gnum = 0;		\
 		(dlg)->widgets[n].datalen = sizeof(int);		\
@@ -16,9 +17,10 @@
 		(n)++;							\
 	} while (0)
 
- #define add_dlg_radio(dlg, n, groupid, groupnum, data_)		\
+ #define add_dlg_radio(dlg, n, text_, groupid, groupnum, data_)		\
 	do {								\
 		(dlg)->widgets[n].type = WIDGET_CHECKBOX;		\
+		(dlg)->widgets[n].text = (text_);			\
 		(dlg)->widgets[n].info.checkbox.gid = (groupid);	\
 		(dlg)->widgets[n].info.checkbox.gnum = (groupnum);	\
 		(dlg)->widgets[n].datalen = sizeof(int);		\
@@ -27,7 +29,7 @@
 	} while (0)
 
 extern struct widget_ops checkbox_ops;
-void checkboxes_width(struct terminal *term, int intl, unsigned char **texts, int *minwidth, int *maxwidth);
-void dlg_format_checkboxes(struct terminal *, struct terminal *, int, struct widget_data *, int, int, int *, int, int *, unsigned char **);
+void checkboxes_width(struct terminal *term, int intl, struct widget_data *widget_data, int n, int *minwidth, int *maxwidth);
+void dlg_format_checkboxes(struct terminal *, struct terminal *, struct widget_data *, int, int, int *, int, int *, int);
 
 #endif

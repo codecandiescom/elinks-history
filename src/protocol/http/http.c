@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.86 2002/12/26 21:26:28 pasky Exp $ */
+/* $Id: http.c,v 1.87 2002/12/26 21:47:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,7 +62,7 @@ struct http_connection_info {
 static void uncompress_shutdown(struct connection *);
 
 
-static inline unsigned char *
+static unsigned char *
 subst_user_agent(unsigned char *fmt, unsigned char *version,
 		 unsigned char *sysname, unsigned char *termsize)
 {
@@ -140,7 +140,7 @@ add_url_to_http_str(unsigned char **hdr, int *l, unsigned char *url_data,
 }
 
 
-static inline int
+static int
 get_http_code(unsigned char *head, int *code, int *version)
 {
 	/* \s* */
@@ -177,7 +177,7 @@ get_http_code(unsigned char *head, int *code, int *version)
 }
 
 
-static inline int
+static int
 check_http_server_bugs(unsigned char *url,
 		       struct http_connection_info *info,
 		       unsigned char *head)
@@ -765,7 +765,7 @@ uncompress_shutdown(struct connection *conn)
 	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 }
 
-static inline int
+static int
 is_line_in_buffer(struct read_buffer *rb)
 {
 	int l;
@@ -943,7 +943,7 @@ read_more:
 	setcstate(conn, S_TRANS);
 }
 
-static inline int
+static int
 get_header(struct read_buffer *rb)
 {
 	int i;

@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.70 2002/12/18 21:48:30 pasky Exp $ */
+/* $Id: sched.c,v 1.71 2002/12/26 21:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -119,7 +119,7 @@ static void check_queue_bugs();
 #endif
 
 
-static inline int
+static /* inline */ int
 getpri(struct connection *c)
 {
 	int i;
@@ -403,7 +403,7 @@ send_connection_info(struct connection *c)
 	}
 }
 
-static inline void
+static void
 del_connection(struct connection *c)
 {
 	del_from_list(c);
@@ -472,7 +472,7 @@ del_keepalive_socket(struct k_conn *kc)
 	mem_free(kc);
 }
 
-static inline void
+static void
 keepalive_timer(void *x)
 {
 	keepalive_timeout = -1;
@@ -523,7 +523,7 @@ add_to_queue(struct connection *c)
 	add_at_pos(cc->prev, c);
 }
 
-static inline void
+static void
 sort_queue()
 {
 	struct connection *c;
@@ -545,7 +545,7 @@ sort_queue()
 	} while (swp);
 }
 
-static inline void
+static void
 interrupt_connection(struct connection *c)
 {
 	/* FIXME: can we get rid of that -1 pointer ? */
@@ -1135,7 +1135,7 @@ detach_connection(struct status *stat, int pos)
 	free_entry_to(conn->cache, pos);
 }
 
-static inline void
+static void
 connection_timeout(struct connection *c)
 {
 	c->timer = -1;
@@ -1150,7 +1150,7 @@ connection_timeout(struct connection *c)
 	}
 }
 
-static inline void
+static void
 connection_timeout_1(struct connection *c)
 {
 	c->timer = install_timer((c->unrestartable ? get_opt_int("connection.unrestartable_receive_timeout")

@@ -1,5 +1,5 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.20 2002/12/17 12:20:11 zas Exp $ */
+/* $Id: select.c,v 1.21 2002/12/26 21:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -286,9 +286,9 @@ static int signal_mask[NUM_SIGNALS];
 static struct signal_handler signal_handlers[NUM_SIGNALS];
 static int critical_section = 0;
 
-static inline void check_for_select_race();
+static void check_for_select_race();
 
-static inline void
+static void
 got_signal(int sig)
 {
 	if (sig >= NUM_SIGNALS || sig < 0) {
@@ -334,14 +334,14 @@ install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 
 static int pending_alarm = 0;
 
-static inline void
+static void
 alarm_handler(void *x)
 {
 	pending_alarm = 0;
 	check_for_select_race();
 }
 
-static inline void
+static void
 check_for_select_race()
 {
 	if (critical_section) {
@@ -381,7 +381,7 @@ check_signals()
 	return r;
 }
 
-static inline void
+static void
 sigchld(void *p)
 {
 #ifdef WNOHANG

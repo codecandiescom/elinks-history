@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.37 2002/12/21 18:03:21 zas Exp $ */
+/* $Id: file.c,v 1.38 2002/12/26 21:47:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -83,7 +83,7 @@ setst(int m, unsigned char *p)
 #endif
 
 
-static inline void
+static void
 stat_mode(unsigned char **p, int *l, struct stat *stp)
 {
 	unsigned char c = '?';
@@ -131,7 +131,7 @@ stat_mode(unsigned char **p, int *l, struct stat *stp)
 }
 
 
-static inline void
+static void
 stat_links(unsigned char **p, int *l, struct stat *stp)
 {
 #ifdef FS_UNIX_HARDLINKS
@@ -206,7 +206,7 @@ end:
 }
 
 
-static inline void
+static void
 stat_size(unsigned char **p, int *l, struct stat *stp)
 {
 	if (!stp) {
@@ -220,7 +220,7 @@ stat_size(unsigned char **p, int *l, struct stat *stp)
 }
 
 
-static inline void
+static void
 stat_date(unsigned char **p, int *l, struct stat *stp)
 {
 	time_t current_time = time(NULL);
@@ -286,7 +286,7 @@ struct dirs {
 };
 
 
-static inline int
+static int
 comp_de(struct dirs *d1, struct dirs *d2)
 {
 	if (d1->f[0] == '.' && d1->f[1] == '.' && !d1->f[2]) return -1;

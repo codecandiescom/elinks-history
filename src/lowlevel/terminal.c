@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation. */
-/* $Id: terminal.c,v 1.40 2002/12/20 23:31:49 pasky Exp $ */
+/* $Id: terminal.c,v 1.41 2002/12/26 21:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ alloc_term_screen(struct terminal *term, int x, int y)
 
 
 static void in_term(struct terminal *);
-static inline void check_if_no_terminal();
+static void check_if_no_terminal();
 
 
 static inline void
@@ -457,7 +457,7 @@ term_send_event(struct terminal *term, struct event *ev)
 }
 #endif
 
-static inline void
+static void
 term_send_ucs(struct terminal *term, struct event *ev, unicode_val u)
 {
 	unsigned char *recoded;
@@ -713,6 +713,7 @@ struct rs_opt_cache {
 	int type, m11_hack, utf_8_io, colors, charset, restrict_852, cp437, koi8r, trans;
 };
 
+/* Time critical section. */
 static inline void
 print_char(struct terminal *term, struct rs_opt_cache *opt_cache,
 	   unsigned char **a, int *l, int p, int *mode, int *attrib)
@@ -968,7 +969,7 @@ destroy_all_terminals()
 		destroy_terminal(term);
 }
 
-static inline void
+static void
 check_if_no_terminal()
 {
 	if (list_empty(terminals)) {

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.66 2002/12/18 00:38:58 zas Exp $ */
+/* $Id: main.c,v 1.67 2002/12/26 21:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -99,7 +99,7 @@ sig_ctrl_c(struct terminal *t)
 	if (!is_blocked()) kbd_ctrl_c();
 }
 
-static inline void
+static void
 sig_ign(void *x)
 {
 }
@@ -382,7 +382,7 @@ fatal_error:
 }
 
 
-static inline void
+static void
 terminate_all_subsystems()
 {
 	af_unix_close();

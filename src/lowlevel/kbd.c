@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.18 2002/12/17 11:50:06 zas Exp $ */
+/* $Id: kbd.c,v 1.19 2002/12/26 21:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -162,7 +162,7 @@ static unsigned char *term_seq_tw_mouse = "\033[?9l";
 
 /*unsigned char *term_seq = "\033[2J\033[?1000l\0338\b \b";*/
 
-static inline void
+static void
 send_init_sequence(int h, int flags)
 {
 	hard_write(h, init_seq, strlen(init_seq));
@@ -175,7 +175,7 @@ send_init_sequence(int h, int flags)
 }
 
 
-static inline void
+static void
 send_term_sequence(int h, int flags)
 {
 	hard_write(h, term_seq, strlen(term_seq));
@@ -340,7 +340,7 @@ end:
 }
 
 
-static inline void
+static void
 unblock_itrm_x(void *h)
 {
 	close_handle(h);

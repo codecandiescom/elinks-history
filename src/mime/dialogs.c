@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.10 2002/12/24 10:33:12 pasky Exp $ */
+/* $Id: dialogs.c,v 1.11 2002/12/26 21:47:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,7 +121,7 @@ add_ext_fn(struct dialog_data *dlg)
 }
 
 
-static inline void
+static void
 really_del_ext(void *fcp)
 {
 	struct option *opt;

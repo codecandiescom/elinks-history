@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.272 2003/09/15 20:47:55 jonas Exp $ */
+/* $Id: renderer.c,v 1.273 2003/09/15 21:08:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -920,7 +920,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	assert(part);
 	if_assert_failed return;
 
-	assert(chars);
+	assert(chars && charslen);
 	if_assert_failed return;
 
 	/* If we are not handling verbatim aligning and we are at the begining

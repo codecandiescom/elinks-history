@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.16 2002/04/06 18:02:30 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.17 2002/04/07 14:13:10 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -169,6 +169,8 @@ bookmark_simple_search(unsigned char *search_url, unsigned char *search_title)
 }
 
 
+static int new_bookmarks_format = 1;
+
 /* Loads the bookmarks from file */
 void
 read_bookmarks()
@@ -202,7 +204,10 @@ read_bookmarks()
 		/* TODO: Writing this while we're dating era of 0.4pre5-CVS.
 		 * You, people from the future, should remove this probably
 		 * around 0.7 or so.. -- pasky, zas */
-		if (!url) url = strchr(in_buffer, '|');
+		if (!url) {
+			url = strchr(in_buffer, '|');
+			new_bookmarks_format = 0;
+		}
 
 		/* If separator is not found, or title is empty or too long,
 		 * skip that line -- Zas */
@@ -249,10 +254,11 @@ write_bookmarks()
 		int i;
 
 		for (i = strlen(p) - 1; i >= 0; i--)
-			if (p[i] < ' ')
+			if (p[i] < ' '
+			    || (!new_bookmarks_format && p[i] == '|'))
 				p[i] = ' ';
 		fputs(p,out);
-		fputc('\t', out);
+		fputc(new_bookmarks_format ? '\t' : '|', out);
 		fputs(bm->url,out);
 		fputc('\n',out);
 		mem_free(p);

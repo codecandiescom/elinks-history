@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.72 2004/09/21 00:08:27 pasky Exp $ */
+/* $Id: apply.c,v 1.73 2004/09/21 09:24:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,11 +93,11 @@ examine_element(struct css_selector *base,
 
 #define process_found_selector(sel, type, base) \
 	if (selector) { \
+		merge_css_selectors(base, sel); \
 		/* More specific matches? */ \
 		examine_element(sel, type + 1, CSR_SPECIFITY, \
 		                &sel->leaves, element); \
 		/* TODO: HTML stack lookup. */ \
-		merge_css_selectors(base, sel); \
 	}
 
 	if (seltype <= CST_ELEMENT) {

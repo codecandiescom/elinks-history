@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.201 2004/08/23 00:20:05 miciah Exp $ */
+/* $Id: connection.c,v 1.202 2004/09/26 13:28:51 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -895,6 +895,7 @@ load_uri(struct uri *uri, struct uri *referrer, struct download *download,
 			download->conn = conn;
 			download->cached = conn->cached;
 			add_to_list(conn->downloads, download);
+			/* This is likely to call download->end() now! */
 			set_connection_state(conn, conn->state);
 		}
 		check_queue_bugs();

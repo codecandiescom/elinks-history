@@ -1,3 +1,97 @@
+Fri Jun  4 13:44:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Introduced get_composed_uri(). Not used yet.  
+
+Fri Jun  4 13:43:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	find_tag(): Take length arg.  
+
+Fri Jun  4 13:36:04 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Make room for URI_FRAGMENT flag.  
+
+Fri Jun  4 13:27:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/frames.c, sched/session.c, sched/session.h,
+	sched/task.c:
+
+	ses_change_frame_uri(): Remove it. Two users. Better inline it IMO.
+	Plus the format_frame() one we already have the frame so ...  
+
+Fri Jun  4 13:04:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Space fix.  
+
+Fri Jun  4 12:48:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/dump/dump.c:
+
+	dump_formatted(): Don't use get_cache_uri() when passing URI to
+	init_vs(). It assumes it is non-NULL and besides the cache_entry
+	should never be incomplete at this point.  
+
+Fri Jun  4 12:46:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	request_frame(): Even though something might not use it pass the CWD
+	to get_translated_uri().  
+
+Fri Jun  4 07:54:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	clear_hchars(): Also clear color using par_format.bgcolor. Fix bug
+	462.  
+
+Fri Jun  4 07:40:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/document.h, sched/session.c, viewer/text/form.c,
+	viewer/text/link.c, viewer/text/search.c:
+
+	Introduce link_is_form() macro. Morning zas :) 
+
+Fri Jun  4 07:37:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/: search.c, search.h:
+
+	@a, @d -> @direction.  
+
+Fri Jun  4 07:33:37 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	Drop useless whitelines and minor reindentation.  
+
+Fri Jun  4 07:29:53 2004  Laurent Monin <zas@norz.org>:
+
+	* src/viewer/text/search.c:
+
+	lowered_string(): drop useless intermediate variables.  
+
+Thu Jun  3 23:01:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	Remove TODO about using struct string. I think it is better to keep
+	the tuned sizes of integer members. Add TODO about trying
+	file_exist() for URIs with fragment and query part removed.  
+
+Thu Jun  3 22:55:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix bad handling of /.. introduced in the patch that was supposed to
+	reduce the number of directory redirects.  
+
 Thu Jun  3 21:12:41 2004  Laurent Monin <zas@norz.org>:
 
 	* src/viewer/text/search.c:

@@ -1,3 +1,86 @@
+Wed Nov 27 17:46:56 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/session.c:
+
+	Attempted to clarify the empty user_agent warning, inspired by
+	Jürgen A. Erhard <jae@jerhard.org>.  
+
+Wed Nov 27 17:43:34 2002  Laurent Monin <zas@norz.org>:
+
+	* src/document/view.c:
+
+	Many untested return values are now checked. search_for() and
+	search_for_back() now use the same code.  
+
+Wed Nov 27 17:14:18 2002  Laurent Monin <zas@norz.org>:
+
+	* src/config/kbdbind.c:
+
+	Default keybinding for ACT_GOTO_URL_CURRENT_LINK was added. "E" is
+	used for it.  
+
+Wed Nov 27 17:06:02 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/menu.c:
+
+	PAGE_UP/PAGE_DOWN handling were improved in main menu.  
+
+Wed Nov 27 14:08:25 2002  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	Support for KBD_HOME and KBD_END in listboxes was added. They
+	respectively go at top of list or end of list.  
+
+Wed Nov 27 12:59:27 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Test looks successful ;-).  
+
+Wed Nov 27 12:57:47 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Dummy test.  
+
+Wed Nov 27 11:45:45 2002  Laurent Monin <zas@norz.org>:
+
+	* configure.in, src/util/string.c, src/util/string.h:
+
+	Workarounds for potential portability issues. Concerned functions
+	are strchr(), strrchr(), strerror(), strstr(), memmove().  
+
+Wed Nov 27 10:51:35 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sysname.c:
+
+	MAX_STR_LEN -> sizeof(system_name).  
+
+Wed Nov 27 10:22:04 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/terminal.c:
+
+	Fix a potential memleak.  
+
+Wed Nov 27 10:15:39 2002  Laurent Monin <zas@norz.org>:
+
+	* src/lowlevel/sysname.c:
+
+	Safe way for everybody. Really minor changes.  
+
+Tue Nov 26 23:14:52 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/mime.html:
+
+	Oops, pasky tried to change something again.  
+
+Tue Nov 26 23:14:26 2002  Petr Baudis <pasky@ucw.cz>:
+
+	* doc/mime.html:
+
+	Corrected some spelling mistakes, minor enhancements, added Id tag.  
+
 Tue Nov 26 22:58:00 2002  Petr Baudis <pasky@ucw.cz>:
 
 	* doc/mime.html:

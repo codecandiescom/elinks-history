@@ -1,5 +1,5 @@
 /* Bookmarks dialogs */
-/* $Id: dialogs.c,v 1.128 2003/11/22 12:28:31 jonas Exp $ */
+/* $Id: dialogs.c,v 1.129 2003/11/22 13:45:02 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -42,8 +42,6 @@
 /* Last searched values */
 unsigned char *bm_last_searched_name = NULL;
 unsigned char *bm_last_searched_url = NULL;
-
-static void listbox_delete_bookmark(struct terminal *, struct listbox_data *);
 
 static void
 lock_bookmark(struct listbox_item *item)
@@ -91,7 +89,6 @@ done_bookmark_item(struct listbox_item *item, int last)
 }
 
 static struct listbox_ops bookmarks_listbox_ops = {
-	listbox_delete_bookmark,
 	lock_bookmark,
 	unlock_bookmark,
 	is_bookmark_used,
@@ -260,134 +257,6 @@ push_edit_button(struct dialog_data *dlg_data, struct widget_data *edit_btn)
 	}
 
 	return 0;
-}
-
-
-/**** DELETE *********************************************************/
-
-/* Do the job needed for really deleting a bookmark. */
-static void
-do_del_bookmark(struct terminal *term, struct bookmark *bookmark)
-{
-	if (is_object_used(bookmark)) {
-		if (bookmark->box_item->type == BI_FOLDER)
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Delete bookmark"), AL_CENTER,
-			msg_text(term, N_("Sorry, but this bookmark is already "
-				"being used by something right now.\n\n"
-				"Title: \"%s\""),
-				bookmark->title),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
-		else
-		msg_box(term, NULL, MSGBOX_FREE_TEXT,
-			N_("Delete bookmark"), AL_CENTER,
-			msg_text(term, N_("Sorry, but this bookmark is already "
-				"being used by something right now.\n\n"
-				"Title: \"%s\"\n"
-				"URL: \"%s\""),
-				bookmark->title, bookmark->url),
-			NULL, 1,
-			N_("OK"), NULL, B_ENTER | B_ESC);
-		return;
-	}
-
-	if (bookmark->box_item->type == BI_FOLDER) {
-		while (!list_empty(bookmark->child)) {
-			do_del_bookmark(term, bookmark->child.next);
-		}
-	}
-
-	if (list_empty(bookmark->child))
-		delete_bookmark(bookmark);
-}
-
-static int
-delete_marked(struct listbox_item *item, void *data_, int *offset)
-{
-	struct delete_hierbox_item_info *hop = data_;
-
-	if (item->marked) {
-		do_del_bookmark(hop->term, item->udata);
-		return 1;
-	}
-	return 0;
-}
-
-/* Called to _really_ delete a bookmark (a confirm in the delete dialog) */
-static void
-really_del_bookmark(void *vhop)
-{
-	struct delete_hierbox_item_info *hop = vhop;
-
-	if (hop->item) {
-		struct bookmark *bm = hop->item->udata;
-
-		if (is_object_used(bm)) object_unlock(bm);
-		do_del_bookmark(hop->term, bm);
-	} else {
-		traverse_listbox_items_list(bookmark_box_items.next, 0, 0,
-						delete_marked, hop);
-	}
-
-#ifdef BOOKMARKS_RESAVE
-	write_bookmarks();
-#endif
-}
-
-static void
-cancel_del_bookmark(void *vhop)
-{
-	struct delete_hierbox_item_info *hop = vhop;
-	struct bookmark *bm = hop->item->udata;
-
-	if (bm) object_unlock(bm);
-}
-
-static void
-listbox_delete_bookmark(struct terminal *term, struct listbox_data *box)
-{
-	struct delete_hierbox_item_info *hop;
-	struct bookmark *bm;
-
-	if (!box->sel || !box->sel->udata) return;
-
-	/* Deleted in really_del_bookmark() */
-	hop = get_hierbox_delete_info(box, term);
-	if (!hop) return;
-
-	if (!hop->item) {
-		msg_box(term, getml(hop, NULL), 0,
-			N_("Delete bookmark"), AL_CENTER,
-			N_("Delete marked bookmarks?"),
-			hop, 2,
-			N_("Yes"), really_del_bookmark, B_ENTER,
-			N_("No"), cancel_del_bookmark, B_ESC);
-		return;
-	}
-
-	bm = hop->item->udata;
-	if (bm) object_lock(bm);
-
-	if (hop->item->type == BI_FOLDER)
-		msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete bookmark"), AL_CENTER,
-			msg_text(term, N_("Delete content of folder \"%s\"?"),
-				 hop->item->text),
-			hop, 2,
-			N_("Yes"), really_del_bookmark, B_ENTER,
-			N_("No"), cancel_del_bookmark, B_ESC);
-	else
-		msg_box(term, getml(hop, NULL), MSGBOX_FREE_TEXT,
-			N_("Delete bookmark"), AL_CENTER,
-			msg_text(term, N_("Delete bookmark \"%s\"?\n\n"
-				"URL: \"%s\""),
-				bm->title, bm->url),
-			hop, 2,
-			N_("Yes"), really_del_bookmark, B_ENTER,
-			N_("No"), cancel_del_bookmark, B_ESC);
-
-	return;
 }
 
 

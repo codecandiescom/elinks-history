@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.64 2004/10/10 01:46:57 miciah Exp $ */
+/* $Id: view.h,v 1.65 2004/11/12 17:11:36 zas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -40,10 +40,10 @@ void move_link_dir(struct session *ses, struct document_view *doc_view,
 #define move_link_left(ses, doc_view) move_link_dir(ses, doc_view, -1,  0)
 #define move_link_right(ses, doc_view) move_link_dir(ses, doc_view,  1,  0)
 
-void scroll_up(struct session *ses, struct document_view *doc_view);
-void scroll_down(struct session *ses, struct document_view *doc_view);
-void scroll_left(struct session *ses, struct document_view *doc_view);
-void scroll_right(struct session *ses, struct document_view *doc_view);
+enum frame_event_status scroll_up(struct session *ses, struct document_view *doc_view);
+enum frame_event_status scroll_down(struct session *ses, struct document_view *doc_view);
+enum frame_event_status scroll_left(struct session *ses, struct document_view *doc_view);
+enum frame_event_status scroll_right(struct session *ses, struct document_view *doc_view);
 
 void move_document_start(struct session *ses, struct document_view *doc_view);
 void move_document_end(struct session *ses, struct document_view *doc_view);

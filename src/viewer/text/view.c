@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.648 2004/11/12 17:03:51 zas Exp $ */
+/* $Id: view.c,v 1.649 2004/11/12 17:11:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -299,7 +299,7 @@ horizontal_scroll(struct session *ses, struct document_view *doc_view, int steps
 	find_link_page_down(doc_view);
 }
 
-void
+enum frame_event_status
 scroll_up(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -310,9 +310,11 @@ scroll_up(struct session *ses, struct document_view *doc_view)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, -steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
-void
+enum frame_event_status
 scroll_down(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -323,9 +325,11 @@ scroll_down(struct session *ses, struct document_view *doc_view)
 		steps = get_opt_int("document.browse.scrolling.vertical_step");
 
 	vertical_scroll(ses, doc_view, steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
-void
+enum frame_event_status
 scroll_left(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -336,9 +340,11 @@ scroll_left(struct session *ses, struct document_view *doc_view)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, -steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
-void
+enum frame_event_status
 scroll_right(struct session *ses, struct document_view *doc_view)
 {
 	int steps = ses->kbdprefix.repeat_count;
@@ -349,6 +355,8 @@ scroll_right(struct session *ses, struct document_view *doc_view)
 		steps = get_opt_int("document.browse.scrolling.horizontal_step");
 
 	horizontal_scroll(ses, doc_view, steps);
+
+	return FRAME_EVENT_REFRESH;
 }
 
 #ifdef CONFIG_MOUSE

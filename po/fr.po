@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-29 22:07+0100\n"
+"POT-Creation-Date: 2003-12-29 23:33+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Laurent Monin <zas@norz.org>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -32,8 +32,8 @@ msgstr "Info"
 #: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:609
 #: src/config/dialogs.c:45 src/config/dialogs.c:203 src/config/dialogs.c:262
 #: src/config/dialogs.c:292 src/config/dialogs.c:327 src/config/dialogs.c:339
-#: src/config/dialogs.c:428 src/config/dialogs.c:475 src/config/dialogs.c:502
-#: src/config/dialogs.c:543 src/config/dialogs.c:556 src/dialogs/document.c:50
+#: src/config/dialogs.c:427 src/config/dialogs.c:471 src/config/dialogs.c:498
+#: src/config/dialogs.c:539 src/config/dialogs.c:552 src/dialogs/document.c:50
 #: src/dialogs/document.c:235 src/dialogs/document.c:305
 #: src/dialogs/document.c:317 src/dialogs/edit.c:99 src/dialogs/info.c:48
 #: src/dialogs/info.c:125 src/dialogs/info.c:146 src/dialogs/menu.c:116
@@ -88,14 +88,14 @@ msgid "Delete marked items?"
 msgstr "Supprimer les items sélectionnés?"
 
 #: src/bfu/hierbox.c:640 src/bfu/hierbox.c:661 src/bfu/hierbox.c:675
-#: src/bfu/hierbox.c:735 src/config/dialogs.c:451 src/dialogs/menu.c:163
+#: src/bfu/hierbox.c:735 src/config/dialogs.c:447 src/dialogs/menu.c:163
 #: src/dialogs/mime.c:86 src/formhist/formhist.c:492 src/sched/task.c:169
 #: src/terminal/tab.c:192 src/terminal/tab.c:228
 msgid "Yes"
 msgstr "Oui"
 
 #: src/bfu/hierbox.c:641 src/bfu/hierbox.c:662 src/bfu/hierbox.c:676
-#: src/bfu/hierbox.c:736 src/config/dialogs.c:452 src/dialogs/menu.c:164
+#: src/bfu/hierbox.c:736 src/config/dialogs.c:448 src/dialogs/menu.c:164
 #: src/dialogs/mime.c:87 src/formhist/formhist.c:493 src/sched/task.c:170
 #: src/terminal/tab.c:193 src/terminal/tab.c:229
 msgid "No"
@@ -263,8 +263,8 @@ msgid "Folder name"
 msgstr "Nom du dossier"
 
 #: src/bookmarks/dialogs.c:191 src/bookmarks/dialogs.c:609
-#: src/config/dialogs.c:263 src/config/dialogs.c:339 src/config/dialogs.c:502
-#: src/config/dialogs.c:557 src/dialogs/edit.c:103 src/dialogs/menu.c:116
+#: src/config/dialogs.c:263 src/config/dialogs.c:339 src/config/dialogs.c:498
+#: src/config/dialogs.c:553 src/dialogs/edit.c:103 src/dialogs/menu.c:116
 #: src/dialogs/menu.c:607 src/dialogs/menu.c:638 src/dialogs/mime.c:160
 #: src/dialogs/options.c:193 src/dialogs/options.c:264
 #: src/protocol/auth/dialogs.c:78 src/sched/download.c:485
@@ -291,7 +291,7 @@ msgid "Edit"
 msgstr "Modifier"
 
 #: src/bookmarks/dialogs.c:376 src/cache/dialogs.c:147
-#: src/config/dialogs.c:360 src/config/dialogs.c:577 src/cookies/dialogs.c:130
+#: src/config/dialogs.c:360 src/config/dialogs.c:573 src/cookies/dialogs.c:130
 #: src/formhist/dialogs.c:168 src/globhist/dialogs.c:185
 msgid "Delete"
 msgstr "Supprimer"
@@ -301,7 +301,7 @@ msgid "Move"
 msgstr "Déplacer"
 
 #: src/bookmarks/dialogs.c:379 src/config/dialogs.c:359
-#: src/config/dialogs.c:576
+#: src/config/dialogs.c:572
 msgid "Add"
 msgstr "Ajouter"
 
@@ -313,7 +313,7 @@ msgstr "Chercher"
 
 #. TODO: Would this be useful? --jonas
 #: src/bookmarks/dialogs.c:383 src/config/dialogs.c:361
-#: src/config/dialogs.c:579 src/cookies/dialogs.c:132
+#: src/config/dialogs.c:575 src/cookies/dialogs.c:132
 #: src/dialogs/options.c:192 src/formhist/dialogs.c:171
 #: src/globhist/dialogs.c:191 src/sched/download.c:982
 #: src/sched/download.c:1018
@@ -914,40 +914,40 @@ msgstr "Impossible d'ajouter cette option ici."
 msgid "Option manager"
 msgstr "Gestionnaire d'options"
 
-#: src/config/dialogs.c:425 src/config/dialogs.c:472 src/config/dialogs.c:501
+#: src/config/dialogs.c:424 src/config/dialogs.c:468 src/config/dialogs.c:497
 msgid "Add keybinding"
 msgstr "Ajouter une association de touches"
 
-#: src/config/dialogs.c:426
+#: src/config/dialogs.c:425
 msgid "Invalid keystroke."
 msgstr "Touche invalide."
 
-#: src/config/dialogs.c:445
+#: src/config/dialogs.c:441
 msgid "Keystroke already used"
 msgstr "Touche déjà utilisée"
 
-#: src/config/dialogs.c:446
+#: src/config/dialogs.c:442
 #, c-format
 msgid ""
 "The keystroke \"%s\" is currently used for \"%s\".\n"
 "Are you sure you want to replace it?"
 msgstr ""
-"La combinaision de touches \"%s\" est déjà utilisée pour \"%s\".\n"
+"La combinaison de touches \"%s\" est déjà utilisée pour l'action \"%s\".\n"
 "Etes-vous sûr de vouloir remplacer ?"
 
-#: src/config/dialogs.c:473
+#: src/config/dialogs.c:469
 msgid "Need to select a keymap."
 msgstr "Vous devez sélectionner une table."
 
-#: src/config/dialogs.c:488 src/config/options.inc:1149
+#: src/config/dialogs.c:484 src/config/options.inc:1149
 msgid "Action"
 msgstr "Action"
 
-#: src/config/dialogs.c:489
+#: src/config/dialogs.c:485
 msgid "Keymap"
 msgstr "Table"
 
-#: src/config/dialogs.c:490
+#: src/config/dialogs.c:486
 msgid ""
 "Keystroke should be written in the format: [Prefix-]Key\n"
 "Prefix: Shift, Ctrl, Alt\n"
@@ -957,31 +957,31 @@ msgstr ""
 "Prefix: Shift, Ctrl, Alt\n"
 "Touche: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
-#: src/config/dialogs.c:494
+#: src/config/dialogs.c:490
 msgid "Keystroke"
 msgstr "Touches"
 
-#: src/config/dialogs.c:539 src/config/dialogs.c:550
+#: src/config/dialogs.c:535 src/config/dialogs.c:546
 msgid "Delete keybinding"
 msgstr "Supprimer l'association de touches"
 
-#: src/config/dialogs.c:540
+#: src/config/dialogs.c:536
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr "Cet objet n'est pas une association de touches."
 
-#: src/config/dialogs.c:551
+#: src/config/dialogs.c:547
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
 msgstr ""
 "Supprimer l'association de touches \"%s\" (action \"%s\", keymap \"%s\")?"
 
-#: src/config/dialogs.c:578 src/dialogs/info.c:126 src/globhist/dialogs.c:187
+#: src/config/dialogs.c:574 src/dialogs/info.c:126 src/globhist/dialogs.c:187
 msgid "Toggle display"
 msgstr "Commuter affich."
 
-#: src/config/dialogs.c:583
+#: src/config/dialogs.c:579
 msgid "Keybinding manager"
 msgstr "Gestionnaire d'assoc. de touches"
 

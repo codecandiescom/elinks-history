@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.555 2004/07/20 21:52:40 miciah Exp $ */
+/* $Id: view.c,v 1.556 2004/07/20 21:54:26 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -976,15 +976,12 @@ quit:
 				delete_window(m);
 
 			} else if (doc_view
-				   && get_opt_int("document"
-						  ".browse"
-						  ".accesskey"
-						  ".priority")
-				    <= 0
-				   && try_document_key(ses,
-					   doc_view, ev)) {
+				   && get_opt_int("document.browse.accesskey"
+						  ".priority") <= 0
+				   && try_document_key(ses, doc_view, ev)) {
 				/* The document ate the key! */
 				refresh_view(ses, doc_view, 0);
+
 				return;
 			} else {
 				goto x;

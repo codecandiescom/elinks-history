@@ -1,5 +1,5 @@
 /* HTML tables parser */
-/* $Id: table.c,v 1.7 2004/06/29 01:17:58 jonas Exp $ */
+/* $Id: table.c,v 1.8 2004/06/29 01:22:03 jonas Exp $ */
 
 /* Note that this does *not* fit to the HTML parser infrastructure yet, it has
  * some special custom calling conventions and is managed from
@@ -33,7 +33,7 @@
 static inline void
 add_bad_html_end(struct html_start_end *bad_html, int pos, unsigned char *end)
 {
-	if (!bad_html[pos - 1].end)
+	if (pos && !bad_html[pos - 1].end)
 		bad_html[pos - 1].end = end;
 }
 

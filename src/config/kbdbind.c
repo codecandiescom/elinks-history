@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.149 2004/01/08 03:44:01 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.150 2004/01/08 03:48:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -484,7 +484,7 @@ static struct strtonum action_table[] = {
 	{ "select", ACT_SELECT, DACT(N_("Select current highlighted item")) },
 	{ "show-term-options", ACT_SHOW_TERM_OPTIONS, DACT(N_("Show terminal options dialog")) },
 	{ "submit-form", ACT_SUBMIT_FORM, DACT(N_("Submit form")) },
-	{ "submit-form-reload", ACT_SUBMIT_FORM, DACT(N_("Submit form and reload")) },
+	{ "submit-form-reload", ACT_SUBMIT_FORM_RELOAD, DACT(N_("Submit form and reload")) },
 	{ "tab-close", ACT_TAB_CLOSE, DACT(N_("Close tab")) },
 	{ "tab-close-all-but-current", ACT_TAB_CLOSE_ALL_BUT_CURRENT, DACT(N_("Close all tabs but the current one")) },
 	{ "tab-menu", ACT_TAB_MENU, DACT(N_("Open the tab menu")) },

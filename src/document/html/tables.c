@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.55 2003/07/31 01:34:11 zas Exp $ */
+/* $Id: tables.c,v 1.56 2003/07/31 14:54:16 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -235,18 +235,23 @@ expand_cells(struct table *t, int x, int y)
 	if (x >= t->x) {
 		if (t->x) {
 			int tx = t->x - 1;
-			register int i = 0;
+			register int i;
 
-			for (; i < t->y; i++) if (CELL(t, tx, i)->colspan == -1) {
+			for (i = 0; i < t->y; i++) {
 				register int j;
+				struct table_cell *cellp = CELL(t, tx, i);
+
+				if (cellp->colspan != -1) continue;
 
 				for (j = t->x; j <= x; j++) {
-					CELL(t, j, i)->used = 1;
-					CELL(t, j, i)->spanned = 1;
-					CELL(t, j, i)->rowspan = CELL(t, tx, i)->rowspan;
-					CELL(t, j, i)->colspan = -1;
-					CELL(t, j, i)->mx = CELL(t, tx, i)->mx;
-					CELL(t, j, i)->my = CELL(t, tx, i)->my;
+					struct table_cell *cell = CELL(t, j, i);
+
+					cell->used = 1;
+					cell->spanned = 1;
+					cell->rowspan = cellp->rowspan;
+					cell->colspan = -1;
+					cell->mx = cellp->mx;
+					cell->my = cellp->my;
 				}
 			}
 		}
@@ -256,18 +261,23 @@ expand_cells(struct table *t, int x, int y)
 	if (y >= t->y) {
 		if (t->y) {
 			int ty = t->y - 1;
-			register int i = 0;
+			register int i;
 
-			for (; i < t->x; i++) if (CELL(t, i, ty)->rowspan == -1) {
+			for (i = 0; i < t->x; i++) {
 				register int j;
+				struct table_cell *cellp = CELL(t, i, ty);
+
+				if (cellp->rowspan != -1) continue;
 
 				for (j = t->y; j <= y; j++) {
-					CELL(t, i, j)->used = 1;
-					CELL(t, i, j)->spanned = 1;
-					CELL(t, i, j)->rowspan = -1;
-					CELL(t, i, j)->colspan = CELL(t, i, ty)->colspan;
-					CELL(t, i, j)->mx = CELL(t, i, ty)->mx;
-					CELL(t, i, j)->my = CELL(t, i, ty)->my;
+					struct table_cell *cell = CELL(t, i, j);
+
+					cell->used = 1;
+					cell->spanned = 1;
+					cell->rowspan = -1;
+					cell->colspan = cellp->colspan;
+					cell->mx = cellp->mx;
+					cell->my = cellp->my;
 				}
 			}
 		}

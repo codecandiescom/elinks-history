@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.11 2002/09/17 13:21:42 zas Exp $ */
+/* $Id: language.c,v 1.12 2002/11/29 18:39:07 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,8 @@ shutdown_trans()
 			if (translation_array[i][j]) {
 				for (k = 0; k < T__N_TEXTS; k++)
 					if (translation_array[i][j][k])
-				mem_free(translation_array[i][j][k]);
+						mem_free(translation_array[i][j][k]);
+
 				mem_free(translation_array[i][j]);
 			}
 }

@@ -1,4 +1,4 @@
-/* $Id: memory.h,v 1.22 2004/04/17 02:39:53 jonas Exp $ */
+/* $Id: memory.h,v 1.23 2004/04/17 11:34:35 pasky Exp $ */
 
 #ifndef EL__UTIL_MEMORY_H
 #define EL__UTIL_MEMORY_H
@@ -139,11 +139,10 @@ mem_align_alloc__(
 /* XXX: way to improve ? */
 #define mem_free_set_if(x, v) do { register void *p = (x); if (p) mem_free(p); (x) = (v); } while (0)
 
-#ifdef LEAK_DEBUG
+/* #define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0) */
+/* This helps to find bugs. Just take care to do it never or everytime,
+ * otherwise it could hide bugs in debug mode or so. */
 #define mem_free_if(x) mem_free_set_if(x, NULL)
-#else
-#define mem_free_if(x) do { register void *p = (x); if (p) mem_free(p); } while (0)
-#endif
 
 
 #endif

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.76 2003/10/02 17:14:44 jonas Exp $ */
+/* $Id: draw.c,v 1.77 2003/10/17 15:08:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -74,7 +74,7 @@ draw_border_char(struct terminal *term, int x, int y,
 	term->screen->image[position].attr = SCREEN_ATTR_FRAME;
 	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT,
 		       get_opt_int_tree(term->spec, "colors"));
-	term->screen->dirty = 1;
+	set_screen_dirty(term->screen, y, y);
 }
 
 
@@ -100,7 +100,7 @@ draw_char_color(struct terminal *term, int x, int y, struct color_pair *color)
 	position = x + term->x * y;
 	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT,
 		       get_opt_int_tree(term->spec, "colors"));
-	term->screen->dirty = 1;
+	set_screen_dirty(term->screen, y, y);
 }
 
 void
@@ -111,7 +111,7 @@ draw_char_data(struct terminal *term, int x, int y, unsigned char data)
 	check_range(term, x, y);
 
 	term->screen->image[x + term->x * y].data = data;
-	term->screen->dirty = 1;
+	set_screen_dirty(term->screen, y, y);
 }
 
 /* Updates a line in the terms screen. */
@@ -130,7 +130,7 @@ draw_line(struct terminal *term, int x, int y, int l, struct screen_char *line)
 
 	position = x + term->x * y;
 	copy_screen_chars(&term->screen->image[position], line, size);
-	term->screen->dirty = 1;
+	set_screen_dirty(term->screen, y, y);
 }
 
 void
@@ -172,6 +172,8 @@ draw_border(struct terminal *term, int x, int y, int xw, int yw,
 		draw_border_char(term, x, yt, p[2], color);
 		draw_border_char(term, xt, yt, p[3], color);
 	}
+
+	set_screen_dirty(term->screen, y, y + yw);
 }
 
 void
@@ -190,7 +192,8 @@ draw_char(struct terminal *term, int x, int y,
 	term->screen->image[position].attr = attr;
 	set_term_color(&term->screen->image[position], color, COLOR_DEFAULT,
 		       get_opt_int_tree(term->spec, "colors"));
-	term->screen->dirty = 1;
+
+	set_screen_dirty(term->screen, y, y);
 }
 
 void
@@ -234,7 +237,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 		copy_screen_chars(pos, line, width);
 	}
 
-	term->screen->dirty = 1;
+	set_screen_dirty(term->screen, y, y + yw);
 }
 
 void
@@ -270,7 +273,8 @@ draw_text(struct terminal *term, int x, int y,
 	}
 
 	end->data = *text;
-	term->screen->dirty = 1;
+
+	set_screen_dirty(term->screen, y, y);
 }
 
 void
@@ -286,9 +290,10 @@ set_cursor(struct terminal *term, int x, int y, int blockable)
 	}
 
 	if (term->screen->cx != x || term->screen->cy != y) {
+		set_screen_dirty(term->screen, int_min(term->screen->cy, y),
+					       int_max(term->screen->cy, y));
 		term->screen->cx = x;
 		term->screen->cy = y;
-		term->screen->dirty = 1;
 	}
 }
 

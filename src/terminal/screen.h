@@ -1,4 +1,4 @@
-/* $Id: screen.h,v 1.17 2003/09/08 22:19:39 jonas Exp $ */
+/* $Id: screen.h,v 1.18 2003/10/17 15:08:28 jonas Exp $ */
 
 #ifndef EL__TERMINAL_SCREEN_H
 #define EL__TERMINAL_SCREEN_H
@@ -17,12 +17,18 @@ struct terminal_screen {
 	int cx, cy;
 	int lcx, lcy;
 
-	/* We are sure that @screen and the physical screen are out of sync. */
-	unsigned int dirty:1;
+	/* We are sure that @screen and the physical screen are out of sync
+	 * in the given range of lines. */
+	int dirty_from, dirty_to;
 };
 
 /* Mark the screen ready for redrawing. */
-#define set_screen_dirty(s) do { (s)->dirty = 1; } while (0)
+static inline void
+set_screen_dirty(struct terminal_screen *screen, int from, int to)
+{
+	int_upper_bound(&screen->dirty_from, from);
+	int_lower_bound(&screen->dirty_to, to);
+}
 
 /* Initializes a screen. Returns NULL upon allocation failure. */
 struct terminal_screen *init_screen(void);

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.104 2003/10/11 13:20:56 jonas Exp $ */
+/* $Id: screen.c,v 1.105 2003/10/17 15:08:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -560,7 +560,7 @@ redraw_screen(struct terminal *term)
 
 	if (!driver
 	    || !screen
-	    || !screen->dirty
+	    || (screen->dirty_from > screen->dirty_to)
 	    || (term->master && is_blocked())
 	    || !init_string(&image)) return;
 
@@ -609,7 +609,8 @@ redraw_screen(struct terminal *term)
 	done_string(&image);
 
 	copy_screen_chars(screen->last_image, screen->image, term->x * term->y);
-	screen->dirty = 0;
+	screen->dirty_from = term->y;
+	screen->dirty_to = 0;
 }
 
 void
@@ -640,7 +641,6 @@ init_screen(void)
 
 	screen->lcx = -1;
 	screen->lcy = -1;
-	screen->dirty = 1;
 
 	return screen;
 }
@@ -668,7 +668,8 @@ resize_screen(struct terminal *term, int x, int y)
 
 	term->x = x;
 	term->y = y;
-	screen->dirty = 1;
+	screen->dirty_from = 0;
+	screen->dirty_to = y;
 }
 
 void

@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: os_dep.c,v 1.47 2003/05/03 00:04:22 zas Exp $ */
+/* $Id: os_dep.c,v 1.48 2003/05/03 16:33:13 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1717,7 +1717,10 @@ unhandle_mouse(void *data)
 int
 get_system_env()
 {
-	if (is_xterm()) return 0;
+	/* XXX: Couldn't we return ENV_XWIN instead of ENV_CONSOLE, if it
+	 * is_xterm() ? I don't have a clue about OS/2 but it seems right.
+	 * --pasky */
+	if (is_xterm()) return ENV_CONSOLE;
 	return ENV_OS2VIO;		/* !!! FIXME: telnet */
 }
 
@@ -1731,7 +1734,7 @@ get_system_env()
 	if (!term || (upcase(term[0]) == 'B' && upcase(term[1]) == 'E'))
 		return ENV_BE;
 
-	return 0;
+	return ENV_CONSOLE;
 }
 
 #elif defined(WIN32)
@@ -1747,7 +1750,7 @@ get_system_env()
 int
 get_system_env()
 {
-	return 0;
+	return ENV_CONSOLE;
 }
 
 #endif

@@ -1,4 +1,4 @@
-/* $Id: terminal.h,v 1.25 2003/05/03 00:04:22 zas Exp $ */
+/* $Id: terminal.h,v 1.26 2003/05/03 16:33:13 pasky Exp $ */
 
 #ifndef EL__LOWLEVEL_TERMINAL_H
 #define EL__LOWLEVEL_TERMINAL_H
@@ -38,12 +38,13 @@ enum term_mode_type {
 };
 
 enum term_env_type {
-	ENV_XWIN = 1,
-	ENV_SCREEN = 2,
-	ENV_OS2VIO = 4,
-	ENV_BE = 8,
-	ENV_TWIN = 16,
-	ENV_WIN32 = 32,
+	ENV_CONSOLE = 1,
+	ENV_XWIN = 2,
+	ENV_SCREEN = 4,
+	ENV_OS2VIO = 8,
+	ENV_BE = 16,
+	ENV_TWIN = 32,
+	ENV_WIN32 = 64,
 };
 
 struct terminal {

@@ -1,4 +1,4 @@
-/* $Id: protocol.h,v 1.38 2004/08/21 15:59:25 jonas Exp $ */
+/* $Id: protocol.h,v 1.39 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_PROTOCOL_H
 #define EL__PROTOCOL_PROTOCOL_H
@@ -36,8 +36,8 @@ enum protocol {
 };
 
 /* Besides the session an external handler also takes the url as an argument */
-typedef void (protocol_handler)(struct connection *);
-typedef void (protocol_external_handler)(struct session *, struct uri *);
+typedef void (protocol_handler_T)(struct connection *);
+typedef void (protocol_external_handler_T)(struct session *, struct uri *);
 
 /* Accessors for the protocol backends. */
 
@@ -47,8 +47,8 @@ int get_protocol_need_slash_after_host(enum protocol protocol);
 int get_protocol_free_syntax(enum protocol protocol);
 int get_protocol_need_ssl(enum protocol protocol);
 
-protocol_handler *get_protocol_handler(enum protocol protocol);
-protocol_external_handler *get_protocol_external_handler(enum protocol protocol);
+protocol_handler_T *get_protocol_handler(enum protocol protocol);
+protocol_external_handler_T *get_protocol_external_handler(enum protocol protocol);
 
 /* Resolves the given protocol @name with length @namelen to a known protocol,
  * PROTOCOL_UNKOWN or PROTOCOL_INVALID if no protocol part could be identified.

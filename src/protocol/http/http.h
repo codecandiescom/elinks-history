@@ -1,4 +1,4 @@
-/* $Id: http.h,v 1.15 2004/12/31 01:39:56 jonas Exp $ */
+/* $Id: http.h,v 1.16 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_HTTP_H
 #define EL__PROTOCOL_HTTP_HTTP_H
@@ -45,8 +45,8 @@ struct http_connection_info {
 	int http_code;
 };
 
-extern protocol_handler http_protocol_handler;
-extern protocol_handler proxy_protocol_handler;
+extern protocol_handler_T http_protocol_handler;
+extern protocol_handler_T proxy_protocol_handler;
 
 #ifdef CONFIG_SSL
 #define https_protocol_handler http_protocol_handler

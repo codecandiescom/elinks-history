@@ -1,4 +1,4 @@
-/* $Id: finger.h,v 1.2 2005/02/25 18:40:24 jonas Exp $ */
+/* $Id: finger.h,v 1.3 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FINGER_FINGER_H
 #define EL__PROTOCOL_FINGER_FINGER_H
@@ -7,7 +7,7 @@
 #include "protocol/protocol.h"
 
 #ifdef CONFIG_FINGER
-extern protocol_handler finger_protocol_handler;
+extern protocol_handler_T finger_protocol_handler;
 #else
 #define finger_protocol_handler NULL
 #endif

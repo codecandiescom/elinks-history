@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.227 2005/03/04 18:33:24 zas Exp $ */
+/* $Id: connection.c,v 1.228 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,7 +652,7 @@ suspend_connection(struct connection *conn)
 static void
 run_connection(struct connection *conn)
 {
-	protocol_handler *func = get_protocol_handler(conn->uri->protocol);
+	protocol_handler_T *func = get_protocol_handler(conn->uri->protocol);
 
 	assert(func);
 

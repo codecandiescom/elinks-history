@@ -1,5 +1,5 @@
 /* Protocol implementation manager. */
-/* $Id: protocol.c,v 1.92 2005/03/03 12:21:12 jonas Exp $ */
+/* $Id: protocol.c,v 1.93 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@
 struct protocol_backend {
 	unsigned char *name;
 	int port;
-	protocol_handler *handler;
+	protocol_handler_T *handler;
 	unsigned int need_slashes:1;
 	unsigned int need_slash_after_host:1;
 	unsigned int free_syntax:1;
@@ -182,7 +182,7 @@ get_protocol_need_ssl(enum protocol protocol)
 	return protocol_backends[protocol].need_ssl;
 }
 
-protocol_handler *
+protocol_handler_T *
 get_protocol_handler(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));
@@ -231,7 +231,7 @@ generic_external_protocol_handler(struct session *ses, struct uri *uri)
 	print_error_dialog(ses, state, PRI_CANCEL);
 }
 
-protocol_external_handler *
+protocol_external_handler_T *
 get_protocol_external_handler(enum protocol protocol)
 {
 	assert(VALID_PROTOCOL(protocol));

@@ -1,4 +1,4 @@
-/* $Id: ftp.h,v 1.8 2004/10/12 14:26:48 zas Exp $ */
+/* $Id: ftp.h,v 1.9 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_FTP_FTP_H
 #define EL__PROTOCOL_FTP_FTP_H
@@ -9,7 +9,7 @@
 extern struct module ftp_protocol_module;
 
 #ifdef CONFIG_FTP
-extern protocol_handler ftp_protocol_handler;
+extern protocol_handler_T ftp_protocol_handler;
 #else
 #define ftp_protocol_handler NULL
 #endif

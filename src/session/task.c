@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.166 2005/03/05 20:31:11 zas Exp $ */
+/* $Id: task.c,v 1.167 2005/03/05 21:04:49 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -418,7 +418,7 @@ do_redirect(struct session *ses, struct download **download_p, struct cache_entr
 		break;
 	case TASK_FORWARD:
 	{
-		protocol_external_handler *fn;
+		protocol_external_handler_T *fn;
 		struct uri *uri = cached->redirect;
 
 		fn = get_protocol_external_handler(uri->protocol);
@@ -546,7 +546,7 @@ do_follow_url(struct session *ses, struct uri *uri, unsigned char *target,
 	      enum task_type task, enum cache_mode cache_mode, int do_referrer)
 {
 	struct uri *referrer = NULL;
-	protocol_external_handler *external_handler;
+	protocol_external_handler_T *external_handler;
 
 	if (!uri) {
 		print_error_dialog(ses, S_BAD_URL, PRI_CANCEL);

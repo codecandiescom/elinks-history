@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.63 2003/09/08 19:24:21 jonas Exp $ */
+/* $Id: draw.c,v 1.64 2003/09/08 22:19:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -188,9 +188,8 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	  unsigned char data, enum screen_char_attr attr,
 	  struct color_pair *color)
 {
-	unsigned char space[MAX_SCREEN_CHAR_SIZE];
 	struct screen_char *line;
-	struct screen_char *template = (struct screen_char *)space; /* Ew ;) */
+	struct screen_char area = INIT_SCREEN_CHAR(data, attr, 0);
 	int position;
 	int endx, endy;
 	register int i;
@@ -208,19 +207,11 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 	line = &term->screen->image[position];
 
 	/* Compose a screen position in the area so memcpy() can be used. */
-	if (color) {
-		template->attr = attr;
-		set_term_color(template, color, COLOR_DEFAULT);
-	} else {
-		memset(template, 0, sizeof(struct screen_char));
-		template->attr = attr;
-	}
-	template->data = data;
-		
+	if (color) set_term_color(&area, color, COLOR_DEFAULT);
 
 	/* Draw the first area line. */
 	for (i = 0; i < endx; i++) {
-		memcpy(&line[i], template, sizeof(struct screen_char));
+		memcpy(&line[i], &area, sizeof(struct screen_char));
 	}
 
 	endx *= sizeof(struct screen_char);
@@ -240,28 +231,21 @@ draw_text(struct terminal *term, int x, int y,
 	  unsigned char *text, int length,
 	  enum screen_char_attr attr, struct color_pair *color)
 {
-	unsigned char space[MAX_SCREEN_CHAR_SIZE];
-	struct screen_char *template = (struct screen_char *)space; /* Ew ;) */
 	int position, end;
+	struct screen_char schar = INIT_SCREEN_CHAR(' ', attr, 0);
 
 	assert(term && term->screen && term->screen->image && text && length >= 0);
 	if_assert_failed return;
 	check_range(term, x, y);
 
-	if (color) {
-		template->attr = attr;
-		set_term_color(template, color, COLOR_DEFAULT);
-	} else {
-		memset(template, 0, sizeof(struct screen_char));
-		template->attr = attr;
-	}
+	if (color) set_term_color(&schar, color, COLOR_DEFAULT);
 
 	end = int_min(length, term->x - x);
 	position = x + term->x * y;
 
 	for (end += position; position < end && *text; text++, position++) {
-		template->data = *text;
-		memcpy(&term->screen->image[position], template, sizeof(struct screen_char));
+		schar.data = *text;
+		memcpy(&term->screen->image[position], &schar, sizeof(struct screen_char));
 	}
 
 	term->screen->dirty = 1;

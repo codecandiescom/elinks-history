@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.37 2003/09/08 21:16:53 jonas Exp $ */
+/* $Id: color.c,v 1.38 2003/09/08 22:19:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,13 +174,13 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 
 	assert(schar);
 
-	if (dump_pos || !d_opt) return;
+	if (dump_pos) return;
 
 	fg = find_nearest_color(pair->foreground, levels[type].fglevel);
 	bg = find_nearest_color(pair->background, levels[type].bglevel);
 
 	/* Adjusts the foreground color to be more visible. */
-	if (!d_opt->allow_dark_on_black) {
+	if (d_opt && !d_opt->allow_dark_on_black) {
 		fg = fg_color[fg][bg];
 	}
 
@@ -194,7 +194,7 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 	}
 
 	/* Adjusts the foreground color to be more visible. */
-	if (!d_opt->allow_dark_on_black || bg == fg) {
+	if ((d_opt && !d_opt->allow_dark_on_black) || bg == fg) {
 		fg = fg_color[fg][bg];
 
 		if (fg & SCREEN_ATTR_BOLD) {
@@ -206,5 +206,5 @@ set_term_color(struct screen_char *schar, struct color_pair *pair,
 		schar->attr |= SCREEN_ATTR_STANDOUT;
 	}
 
-	schar->color[0] = (bg << 4 | fg);
+	schar->color = (bg << 4 | fg);
 }

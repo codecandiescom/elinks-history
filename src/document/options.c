@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.18 2003/09/08 21:07:56 jonas Exp $ */
+/* $Id: options.c,v 1.19 2003/09/08 22:19:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,6 @@ compare_opt(struct document_options *o1, struct document_options *o2)
 	    o1->hard_assume == o2->hard_assume &&
 	    o1->use_document_colours == o2->use_document_colours &&
 	    o1->allow_dark_on_black == o2->allow_dark_on_black &&
-	    o1->color_size == o2->color_size &&
 	    o1->tables == o2->tables &&
 	    o1->frames == o2->frames &&
 	    o1->images == o2->images &&

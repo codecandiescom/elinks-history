@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.245 2003/09/08 21:07:57 jonas Exp $ */
+/* $Id: renderer.c,v 1.246 2003/09/08 22:19:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,6 @@
 #include "sched/session.h"
 #include "terminal/color.h"
 #include "terminal/draw.h"
-#include "terminal/screen.h"
 #include "util/color.h"
 #include "util/conv.h"
 #include "util/error.h"
@@ -131,10 +130,11 @@ realloc_lines(struct document *document, int y)
 static int
 realloc_line(struct document *document, int y, int x)
 {
+	int i;
 	int newsize = ALIGN_LINE(x + 1);
 	struct line *line;
 	struct color_pair colors = INIT_COLOR_PAIR(par_format.bgcolor, 0x0);
-	struct screen_char *pos, *end;
+	struct screen_char schar = INIT_SCREEN_CHAR(' ', 0, 0);
 
 	assert(document);
 	if_assert_failed return 0;
@@ -150,18 +150,13 @@ realloc_line(struct document *document, int y, int x)
 		line->d = l;
 	}
 
-	end = &line->d[x];
-	end->data = ' ';
-	end->attr = 0;
+	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
-	/* Set color of the ending char. */
-	set_term_color(end, &colors, COLOR_DEFAULT);
-
-	for (pos = &line->d[line->l]; pos < end; pos++) {
-		memcpy(pos, end, sizeof(struct screen_char));
+	for (i = line->l; i <= x; i++) {
+		memcpy(&line->d[i], &schar, sizeof(struct screen_char));
 	}
 
-	line->l = x + 1;
+	line->l = i;
 
 	return 0;
 }
@@ -256,14 +251,12 @@ set_hchars(struct part *part, int x, int y, int xl,
 
 	if (bgcolor) {
 		struct color_pair colors = INIT_COLOR_PAIR(*bgcolor, 0x0);
-		struct screen_char *template = &POS(x, y);
+		struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
 
-		template->data = data;
-		template->attr = attr;
-		set_term_color(template, &colors, COLOR_DEFAULT);
+		set_term_color(&schar, &colors, COLOR_DEFAULT);
 
-		for (x += 1, xl -= 1; xl; xl--, x++) {
-			memcpy(&POS(x, y), template, sizeof(struct screen_char));
+		for (; xl; xl--, x++) {
+			memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
 		}
 	} else {
 		for (; xl; xl--, x++) {
@@ -306,7 +299,7 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	    unsigned char data, color_t bgcolor, enum screen_char_attr attr)
 {
 	struct color_pair colors = INIT_COLOR_PAIR(bgcolor, 0x0);
-	struct screen_char *template;
+	struct screen_char schar = INIT_SCREEN_CHAR(data, attr, 0);
 
 	assert(part && part->document);
 	if_assert_failed return;
@@ -317,22 +310,18 @@ xset_vchars(struct part *part, int x, int y, int yl,
 	assert(part->document->data);
 	if_assert_failed return;
 
-	template = &POS(x, y);
-	template->data = data;
-	template->attr = attr;
-	set_term_color(template, &colors, COLOR_DEFAULT);
+	set_term_color(&schar, &colors, COLOR_DEFAULT);
 
-	for (y += 1, yl -= 1; yl; yl--, y++) {
+	for (; yl; yl--, y++) {
 	    	if (xpand_line(part, y, x)) return;
 
-		memcpy(&POS(x, y), template, sizeof(struct screen_char));
+		memcpy(&POS(x, y), &schar, sizeof(struct screen_char));
 	}
 }
 
-static inline void put_chars_format_change(struct part *part, struct screen_char *template);
-
 static inline void
-set_hline(struct part *part, int x, int y, unsigned char *chars, int charslen)
+set_hline(struct part *part, int x, int y, unsigned char *chars,
+	  int charslen, unsigned char color, enum screen_char_attr attr)
 {
 	assert(part);
 	if_assert_failed return;
@@ -341,21 +330,14 @@ set_hline(struct part *part, int x, int y, unsigned char *chars, int charslen)
 		return;
 
 	if (part->document) {
-		struct screen_char *template;
-
 		if (xpand_lines(part, y)
 		    || xpand_line(part, y, x + charslen - 1))
 			return;
 
-		template = &POS(x, y);
-		put_chars_format_change(part, template);
-		template->data = *chars;
-
-		charslen--, x++, chars++;
-
 		for (; charslen > 0; charslen--, x++, chars++) {
 			part->spaces[x] = (*chars == ' ');
-			memcpy(&POS(x, y), template, sizeof(struct screen_char));
+			POS(x, y).color = color;
+			POS(x, y).attr = attr;
 			POS(x, y).data = *chars;
 		}
 	} else {
@@ -764,44 +746,46 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 }
 
 static inline void
-put_chars_format_change(struct part *part, struct screen_char *schar) 
+put_chars_format_change(struct part *part, unsigned char *color,
+			enum screen_char_attr *attr)
 {
-	static unsigned char space[MAX_SCREEN_CHAR_SIZE];
 	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
-	struct screen_char *template = (struct screen_char *)space; /* Ew ;) */
+	static struct screen_char schar_cache;
 	struct color_pair colors;
 
 	if (!memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
-		memcpy(schar, template, sizeof(struct screen_char));
+		*color = schar_cache.color;
+		*attr = schar_cache.attr;
 		return;
 	}
 
 	colors.background = format.bg;
 	colors.foreground = format.fg;
 
-	template->attr = 0;
+	schar_cache.attr = 0;
 	if (format.attr) {
 		if (format.attr & AT_UNDERLINE) {
-			template->attr |= SCREEN_ATTR_UNDERLINE;
+			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 		}
 
 		if (format.attr & AT_BOLD) {
-			template->attr |= SCREEN_ATTR_BOLD;
+			schar_cache.attr |= SCREEN_ATTR_BOLD;
 		}
 
 		if (format.attr & AT_ITALIC) {
-			template->attr |= SCREEN_ATTR_ITALIC;
+			schar_cache.attr |= SCREEN_ATTR_ITALIC;
 		}
 
 		if (format.attr & AT_GRAPHICS) {
-			template->attr |= SCREEN_ATTR_FRAME;
+			schar_cache.attr |= SCREEN_ATTR_FRAME;
 		}
 	}
 
 	memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
-	set_term_color(template, &colors, COLOR_DEFAULT);
+	set_term_color(&schar_cache, &colors, COLOR_DEFAULT);
 
-	memcpy(schar, template, sizeof(struct screen_char));
+	*color = schar_cache.color;
+	*attr = schar_cache.attr;
 
 	/* FIXME:
 	 * This doesn't work correctly with <a href="foo">123<sup>456</sup>789</a> */
@@ -970,6 +954,9 @@ process_link(struct part *part, unsigned char *chars, int charslen)
 void
 put_chars(struct part *part, unsigned char *chars, int charslen)
 {
+	unsigned char color;
+	enum screen_char_attr attr = 0;
+
 	assert(part);
 	if_assert_failed return;
 
@@ -993,6 +980,8 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	    || format.image || format.form)
 		process_link(part, chars, charslen);
 
+	put_chars_format_change(part, &color, &attr);
+
 	if (part->cx == par_format.leftmargin && *chars == ' '
 	    && par_format.align != AL_NONE) {
 		chars++;
@@ -1006,7 +995,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 	if (nowrap && part->cx + charslen > overlap(par_format))
 		return;
 
-	set_hline(part, part->cx, part->cy, chars, charslen);
+	set_hline(part, part->cx, part->cy, chars, charslen, color, attr);
 	part->cx += charslen;
 	nobreak = 0;
 
@@ -1781,7 +1770,6 @@ html_interpret(struct session *ses)
 
 	o.col = get_opt_bool_tree(ses->tab->term->spec, "colors");
 	o.cp = get_opt_int_tree(ses->tab->term->spec, "charset");
-	o.color_size = get_term_color_size(ses->tab->term);
 
 	mk_document_options(&o);
 

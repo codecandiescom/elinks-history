@@ -1,4 +1,4 @@
-/* $Id: draw.h,v 1.31 2003/09/08 19:24:21 jonas Exp $ */
+/* $Id: draw.h,v 1.32 2003/09/08 22:19:38 jonas Exp $ */
 
 #ifndef EL__TERMINAL_DRAW_H
 #define EL__TERMINAL_DRAW_H
@@ -25,12 +25,10 @@ struct screen_char {
 	unsigned char attr;
 
 	/* The encoded fore- and background color. */
-	unsigned char color[1]; /* XXX: Keep last, man! */
+	unsigned char color;
 };
 
-/* Some stack buffer allocation sizes for handling various color sizes. */
-#define SCREEN_COLOR_EXTRA   0
-#define MAX_SCREEN_CHAR_SIZE (sizeof(struct screen_char) + SCREEN_COLOR_EXTRA)
+#define INIT_SCREEN_CHAR(data, attr, color) { data, attr, color }
 
 /* Linux frame symbols table (it's magically converted to other terminals when
  * needed). */

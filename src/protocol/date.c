@@ -1,5 +1,5 @@
 /* Parser of HTTP date */
-/* $Id: date.c,v 1.9 2005/03/29 01:03:08 jonas Exp $ */
+/* $Id: date.c,v 1.10 2005/03/29 02:33:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,33 +41,22 @@ parse_year(const unsigned char **date_p)
 {
 	const unsigned char *date = *date_p;
 	int year;
-	unsigned char c;
 
-	/* TODO: Use strtol() ? ;)) --pasky
-	 * Well, if faster only... --Zas */
+	if (!isdigit(date[0]) || !isdigit(date[1]))
+		return -1;
 
-	c = *date++;
-	if (!isdigit(c)) return -1;
-	year = (c - '0') * 10;
+	year = (date[0] - '0') * 10 + date[1] - '0';
 
-	c = *date++;
-	if (!isdigit(c)) return -1;
-	year += c - '0';
-
-	c = *date++;
-	if (isdigit(c)) {
+	if (isdigit(date[2]) && isdigit(date[3])) {
 		/* Four digits date */
-		year = year * 10 + c - '0';
-
-		c = *date++;
-		if (!isdigit(c)) return -1;
-		year = year * 10 + c - '0' - 1900;
+		year = year * 10 + date[2] - '0';
+		year = year * 10 + date[3] - '0' - 1900;
+		date += 4;
 
 	} else if (year < 60) {
 		/* It's already next century. */
 		year += 100;
-
-		date--; /* Take a step back! */
+		date += 2;
 	}
 
 	*date_p = date;

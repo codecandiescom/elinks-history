@@ -1,5 +1,5 @@
 /* File utilities */
-/* $Id: file.c,v 1.15 2003/06/18 00:19:27 jonas Exp $ */
+/* $Id: file.c,v 1.16 2003/07/21 22:01:06 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,23 +57,22 @@ file_exists(const unsigned char *filename)
 unsigned char *
 expand_tilde(unsigned char *filename)
 {
-	unsigned char *file = init_str();
-	int filelen = 0;
+	struct string file;
 
-	if (!file) return NULL;
+	if (!init_string(&file)) return NULL;
 
 	if (filename[0] == '~' && (!filename[1] || dir_sep(filename[1]))) {
 		unsigned char *home = getenv("HOME");
 
 		if (home) {
-			add_to_str(&file, &filelen, home);
+			add_to_string(&file, home);
 			filename++;
 		}
 	}
 
-	add_to_str(&file, &filelen, filename);
+	add_to_string(&file, filename);
 
-	return file;
+	return file.source;
 }
 
 unsigned char *

@@ -1,5 +1,5 @@
 /* Error handling and debugging stuff */
-/* $Id: error.c,v 1.13 2002/06/15 22:11:42 pasky Exp $ */
+/* $Id: error.c,v 1.14 2002/06/16 13:47:23 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -35,7 +35,7 @@ struct alloc_header {
 };
 #endif
 
-#define L_D_S ((sizeof(struct alloc_header) + 7) & ~7)
+#define SIZE_AH_ALIGNED ((sizeof(struct alloc_header) + 7) & ~7)
 
 #endif
 
@@ -57,54 +57,58 @@ do_not_optimize_here(void *p)
 }
 
 void
-er(int b, unsigned char *m, va_list l)
+er(int bell, unsigned char *fmt, va_list params)
 {
-	if (b) fprintf(stderr, "%c", (char)7);
-	vfprintf(stderr, m, l);
+	if (bell) fprintf(stderr, "%c", (char)7);
+	vfprintf(stderr, fmt, params);
 	fprintf(stderr, "\n");
 	fflush(stderr);
 	sleep(1);
 }
 
 void
-error(unsigned char *m, ...)
+error(unsigned char *fmt, ...)
 {
-	va_list l;
+	va_list params;
 
-	va_start(l, m);
-	er(1, m, l);
-	va_end(l);
+	va_start(params, fmt);
+	er(1, fmt, params);
+	va_end(params);
 }
 
 int errline;
 unsigned char *errfile;
 
-unsigned char errbuf[4096];
-
 void
-int_error(unsigned char *m, ...)
+int_error(unsigned char *fmt, ...)
 {
-	va_list l;
+	unsigned char errbuf[4096];
+	va_list params;
 
-	va_start(l, m);
+	va_start(params, fmt);
+
 	sprintf(errbuf, "\033[1mINTERNAL ERROR\033[0m at %s:%d: ", errfile,
 		errline);
-	strcat(errbuf, m);
-	er(1, errbuf, l);
-	va_end(l);
+	strcat(errbuf, fmt);
+	er(1, errbuf, params);
+
+	va_end(params);
 	force_dump();
 }
 
 void
-debug_msg(unsigned char *m, ...)
+debug_msg(unsigned char *fmt, ...)
 {
-	va_list l;
+	unsigned char errbuf[4096];
+	va_list params;
 
-	va_start(l, m);
+	va_start(params, fmt);
+
 	sprintf(errbuf, "DEBUG MESSAGE at %s:%d: ", errfile, errline);
-	strcat(errbuf, m);
-	er(0, errbuf, l);
-	va_end(l);
+	strcat(errbuf, fmt);
+	er(0, errbuf, params);
+
+	va_end(params);
 }
 
 
@@ -122,54 +126,54 @@ struct list_head memory_list = { &memory_list, &memory_list };
 void
 check_memory_leaks()
 {
-	if (mem_amount) {
-		fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n",
-			mem_amount);
-#ifdef LEAK_DEBUG_LIST
-		fprintf(stderr, "\nList of blocks: ");
-		{
-			int r = 0;
-			struct alloc_header *ah;
-			foreach (ah, memory_list) {
-				fprintf(stderr, "%s%p:%d @ %s:%d",
-					r ? ", ": "",
-					(char *)ah + L_D_S,
-					ah->size,
-					ah->file,
-					ah->line);
-			       	r = 1;
-				if (ah->comment)
-					fprintf(stderr, ":\"%s\"", ah->comment);
-			}
-			fprintf(stderr, "\n");
-		}
-#endif
-		force_dump();
+	int comma = 0;
+	struct alloc_header *ah;
+
+	if (!mem_amount) {
+		/* No leaks - escape now. */
+		return;
 	}
+
+	fprintf(stderr, "\n\033[1mMemory leak by %ld bytes\033[0m\n",
+		mem_amount);
+
+#ifdef LEAK_DEBUG_LIST
+	fprintf(stderr, "\nList of blocks: ");
+	foreach (ah, memory_list) {
+		fprintf(stderr, "%s%p:%d @ %s:%d", comma ? ", ": "",
+			(char *) ah + SIZE_AH_ALIGNED,
+			ah->size, ah->file, ah->line);
+		comma = 1;
+		if (ah->comment) fprintf(stderr, ":\"%s\"", ah->comment);
+	}
+	fprintf(stderr, "\n");
+#endif
+
+	force_dump();
 }
 
 
 void *
 debug_mem_alloc(unsigned char *file, int line, size_t size)
 {
-	void *p;
 	struct alloc_header *ah;
+	void *ptr;
 
 	if (!size) return DUMMY;
 
 	mem_amount += size;
-	size += L_D_S;
+	size += SIZE_AH_ALIGNED;
 
-	p = malloc(size);
-	if (!p) {
+	ptr = malloc(size);
+	if (!ptr) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
 
-	ah = p;
-	p = (char *)p + L_D_S;
+	ah = ptr;
+	ptr = (char *) ptr + SIZE_AH_ALIGNED;
 
-	ah->size = size - L_D_S;
+	ah->size = size - SIZE_AH_ALIGNED;
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
@@ -178,14 +182,14 @@ debug_mem_alloc(unsigned char *file, int line, size_t size)
 	add_to_list(memory_list, ah);
 #endif
 
-	return p;
+	return ptr;
 }
 
 void *
 debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
 {
-	void *p;
 	struct alloc_header *ah;
+	void *ptr;
 
 	if (!size) return DUMMY;
 
@@ -198,18 +202,18 @@ debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
 	 * Thanks a lot. --pasky */
 
 	mem_amount += size * eltsize;
-	size += L_D_S;
+	size += SIZE_AH_ALIGNED;
 
-	p = calloc(1, size);
-	if (!p) {
+	ptr = calloc(1, size);
+	if (!ptr) {
 		error("ERROR: out of memory (malloc returned NULL)\n");
 		return NULL;
 	}
 
-	ah = p;
-	p = (char *)p + L_D_S;
+	ah = ptr;
+	ptr = (char *) ptr + SIZE_AH_ALIGNED;
 
-	ah->size = size - L_D_S;
+	ah->size = size - SIZE_AH_ALIGNED;
 #ifdef LEAK_DEBUG_LIST
 	ah->file = file;
 	ah->line = line;
@@ -218,82 +222,85 @@ debug_mem_calloc(unsigned char *file, int line, size_t size, size_t eltsize)
 	add_to_list(memory_list, ah);
 #endif
 
-	return p;
+	return ptr;
 }
 
 void
-debug_mem_free(unsigned char *file, int line, void *p)
+debug_mem_free(unsigned char *file, int line, void *ptr)
 {
 	struct alloc_header *ah;
 
-	if (p == DUMMY) return;
-	if (!p) {
+	if (ptr == DUMMY) return;
+	if (!ptr) {
 		errfile = file;
 		errline = line;
 		int_error("mem_free(NULL)");
 		return;
 	}
 
-	p = (char *)p - L_D_S;
-	ah = p;
+	ptr = (char *) ptr - SIZE_AH_ALIGNED;
+	ah = ptr;
+
 #ifdef LEAK_DEBUG_LIST
 	del_from_list(ah);
 	if (ah->comment)
 		free(ah->comment);
 #endif
+
 	mem_amount -= ah->size;
-	free(p);
+	free(ptr);
 }
 
 void *
-debug_mem_realloc(unsigned char *file, int line, void *p, size_t size)
+debug_mem_realloc(unsigned char *file, int line, void *ptr, size_t size)
 {
 	struct alloc_header *ah;
 
-	if (p == DUMMY)
-		return debug_mem_alloc(file, line, size);
-	if (!p) {
+	if (ptr == DUMMY) return debug_mem_alloc(file, line, size);
+	if (!ptr) {
 		errfile = file;
 		errline = line;
 		int_error("mem_realloc(NULL, %d)", size);
 		return NULL;
 	}
+
 	if (!size) {
-		debug_mem_free(file, line, p);
+		debug_mem_free(file, line, ptr);
 		return DUMMY;
 	}
 
-	p = realloc((char *)p - L_D_S, size + L_D_S);
-	if (!p) {
+	ptr = realloc((char *) ptr - SIZE_AH_ALIGNED, size + SIZE_AH_ALIGNED);
+	if (!ptr) {
 		error("ERROR: out of memory (realloc returned NULL)\n");
 		return NULL;
 	}
 
-	ah = p;
+	ah = ptr;
 	mem_amount += size - ah->size;
+
 	ah->size = size;
 #ifdef LEAK_DEBUG_LIST
 	ah->prev->next = ah;
 	ah->next->prev = ah;
 #endif
 
-	return (char *)p + L_D_S;
+	return (char *) ptr + SIZE_AH_ALIGNED;
 }
 
 void
-set_mem_comment(void *p, unsigned char *c, int l)
+set_mem_comment(void *ptr, unsigned char *str, int len)
 {
 #ifdef LEAK_DEBUG_LIST
-	struct alloc_header *ah = (struct alloc_header *)((char *)p - L_D_S);
+	struct alloc_header *ah;
+	
+	ah = (struct alloc_header *) ((char *) ptr - SIZE_AH_ALIGNED);
 
 	if (ah->comment)
 		free(ah->comment);
 
-	ah->comment = malloc(l + 1);
-	if (ah->comment) {
-		memcpy(ah->comment, c, l);
-		ah->comment[l] = '\0';
-	}
+	ah->comment = malloc(len + 1);
+	if (ah->comment)
+		safe_strncpy(ah->comment, str, len + 1);
 #endif
 }
 

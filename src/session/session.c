@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.144 2003/09/12 18:51:01 miciah Exp $ */
+/* $Id: session.c,v 1.145 2003/09/15 13:40:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -301,7 +301,7 @@ print_screen_status(struct session *ses)
 				color = selected_color;
 			} else {
 				struct download *stat;
-				
+
 				stat = get_current_download(tab->data);
 
 				if (stat && stat->state != S_OK)
@@ -1588,12 +1588,13 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 	foreachback (frm, l->frames) {
 		if (strcasecmp(frm->name, name)) continue;
 
-		if (url_len > strlen(frm->vs.url)) {
+		if (url_len > frm->vs.url_len) {
 			struct document_view *fd;
 			struct frame *nf = frm;
 
-			nf = mem_realloc(frm, sizeof(struct frame)
-				         + url_len + 1);
+			/* struct view_state reserves 1 byte for url, so
+			 * url_len is sufficient. */
+			nf = mem_realloc(frm, sizeof(struct frame) + url_len);
 			if (!nf) return NULL;
 
 			nf->prev->next = nf->next->prev = nf;
@@ -1605,6 +1606,7 @@ ses_change_frame_url(struct session *ses, unsigned char *name,
 			frm = nf;
 		}
 		memcpy(frm->vs.url, url, url_len + 1);
+		frm->vs.url_len = url_len;
 
 		return frm;
 	}

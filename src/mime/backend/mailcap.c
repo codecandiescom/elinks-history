@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.39 2003/06/11 14:54:37 jonas Exp $ */
+/* $Id: mailcap.c,v 1.40 2003/06/11 14:59:24 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -175,7 +175,7 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
 /* Returns a NULL terminated RFC 1524 field, while modifying @next to point
  * to the next field. */
 static unsigned char *
-get_field(unsigned char **next)
+get_mailcap_field(unsigned char **next)
 {
 	unsigned char *field;
 	unsigned char *fieldend;
@@ -219,7 +219,7 @@ get_field(unsigned char **next)
  * fails. */
 
 static unsigned char *
-get_field_text(unsigned char *field)
+get_mailcap_field_text(unsigned char *field)
 {
 	skip_whitespace(field);
 
@@ -240,7 +240,7 @@ static inline int
 parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 {
 	while (0xf131d5) {
-		unsigned char *field = get_field(&line);
+		unsigned char *field = get_mailcap_field(&line);
 
 		if (!field) break;
 
@@ -251,7 +251,7 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 			entry->copiousoutput = 1;
 
 		} else if (!strncasecmp(field, "test", 4)) {
-			entry->testcommand = get_field_text(field + 4);
+			entry->testcommand = get_mailcap_field_text(field + 4);
 			if (!entry->testcommand)
 				return 0;
 
@@ -263,7 +263,7 @@ parse_optional_fields(struct mailcap_entry *entry, unsigned char *line)
 				}
 
 		} else if (!strncasecmp(field, "description", 11)) {
-			entry->description = get_field_text(field + 11);
+			entry->description = get_mailcap_field_text(field + 11);
 			if (!entry->description)
 				return 0;
 		}
@@ -299,11 +299,11 @@ parse_mailcap_file(unsigned char *filename, unsigned int priority)
 		linepos = line;
 
 		/* Get type */
-		type = get_field(&linepos);
+		type = get_mailcap_field(&linepos);
 		if (!type) continue;
 
 		/* Next field is the viewcommand */
-		command = get_field(&linepos);
+		command = get_mailcap_field(&linepos);
 		if (!command) continue;
 
 		entry = init_mailcap_entry(command, priority);

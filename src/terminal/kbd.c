@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.44 2004/01/01 15:54:38 jonas Exp $ */
+/* $Id: kbd.c,v 1.45 2004/01/30 19:01:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -892,7 +892,7 @@ process_queue(struct itrm *itrm)
 						    && !(getenv("TERM") && strstr("rxvt", getenv("TERM"))
 							 && (ev.b & BM_BUTT) >= B_WHEEL_UP))
 #endif
-							xterm_button = ev.b & BM_BUTT;
+							xterm_button = get_mouse_button(&ev);
 
 						el += 3;
 					}

@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.83 2004/01/25 13:17:22 jonas Exp $ */
+/* $Id: text.c,v 1.84 2004/01/30 19:01:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -379,28 +379,37 @@ mouse_text(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	if (ev->x != x || ev->y < y || ev->y >= y + height)
 		return EVENT_NOT_PROCESSED;
 
-	/* Left click scrolls up or down by one step. */
-	if ((ev->b & BM_BUTT) ==  B_LEFT) {
+	switch (get_mouse_button(ev)) {
+	case B_LEFT:
 		/* Left click scrolls up or down by one step. */
 		if (ev->y <= scroller_middle)
 			current--;
 		else
 			current++;
+		break;
 
-	} else if ((ev->b & BM_BUTT) == B_RIGHT) {
+	case B_RIGHT:
 		/* Right click scrolls up or down by more than one step.
 		 * Faster. */
 		if (ev->y <= scroller_middle)
 			current -= 5;
 		else
 			current += 5;
-	} else if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+		break;
+
+	case B_WHEEL_UP:
 		/* Mouse wheel up scrolls up. */
 		current--;
-	} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
+		break;
+
+	case B_WHEEL_DOWN:
 		/* Mouse wheel up scrolls down. */
 		current++;
-	} else return EVENT_NOT_PROCESSED;
+		break;
+
+	default:
+		return EVENT_NOT_PROCESSED;
+	}
 
 	/* Save last direction used. */
 	if (widget_data->info.text.current < current)

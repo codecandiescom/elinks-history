@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.45 2003/12/01 15:26:02 pasky Exp $ */
+/* $Id: button.c,v 1.46 2004/01/30 19:01:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -101,7 +101,7 @@ display_button(struct widget_data *widget_data, struct dialog_data *dlg_data, in
 static int
 mouse_button(struct widget_data *widget_data, struct dialog_data *dlg_data, struct term_event *ev)
 {
-	if ((ev->b & BM_BUTT) >= B_WHEEL_UP || ev->y != widget_data->y || ev->x < widget_data->x
+	if (check_mouse_wheel(ev) || ev->y != widget_data->y || ev->x < widget_data->x
 	    || ev->x >= widget_data->x + strlen(widget_data->widget->text) + 4)
 		return EVENT_NOT_PROCESSED;
 

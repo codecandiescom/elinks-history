@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.192 2004/01/25 13:05:32 jonas Exp $ */
+/* $Id: menu.c,v 1.193 2004/01/30 19:01:45 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -502,7 +502,7 @@ menu_mouse_handler(struct menu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
 
-	switch (ev->b & BM_BUTT) {
+	switch (get_mouse_button(ev)) {
 		/* XXX: We return here directly because we
 		 * would just break this switch instead of the
 		 * large one. If you will add some generic
@@ -882,7 +882,7 @@ mainmenu_mouse_handler(struct mainmenu *menu, struct term_event *ev)
 {
 	struct window *win = menu->win;
 
-	if ((ev->b & BM_BUTT) >= B_WHEEL_UP)
+	if (check_mouse_wheel(ev))
 		return;
 
 	if ((ev->b & BM_ACT) == B_DOWN && ev->y) {

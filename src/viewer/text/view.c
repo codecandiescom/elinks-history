@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.363 2004/01/30 18:36:03 jonas Exp $ */
+/* $Id: view.c,v 1.364 2004/01/30 19:01:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -722,12 +722,12 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 		 * handled by anything else here. */
 		struct link *link = choose_mouse_link(doc_view, ev);
 
-		if ((ev->b & BM_BUTT) >= B_WHEEL_UP) {
+		if (check_mouse_wheel(ev)) {
 			if ((ev->b & BM_ACT) != B_DOWN) {
 				/* We handle only B_DOWN case... */
-			} else if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+			} else if (check_mouse_button(ev, B_WHEEL_UP)) {
 				rep_ev(ses, doc_view, scroll, -2);
-			} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
+			} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
 				rep_ev(ses, doc_view, scroll, 2);
 			}
 
@@ -742,9 +742,9 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				print_screen_status(ses);
 				redraw_from_window(ses->tab);
 
-				if ((ev->b & BM_BUTT) ==  B_LEFT)
+				if (check_mouse_button(ev, B_LEFT))
 					x = enter(ses, doc_view, 0);
-				else if ((ev->b & BM_BUTT) ==  B_MIDDLE)
+				else if (check_mouse_button(ev, B_MIDDLE))
 					open_current_link_in_new_tab(ses, 1);
 				else
 					link_menu(ses->tab->term, NULL, ses);
@@ -942,7 +942,7 @@ quit:
 		int bars;
 
 		if (ev->y == 0 && (ev->b & BM_ACT) == B_DOWN
-		    && (ev->b & BM_BUTT) < B_WHEEL_UP) {
+		    && !check_mouse_wheel(ev)) {
 			struct window *m;
 
 			activate_bfu_technology(ses, -1);
@@ -959,16 +959,16 @@ quit:
 			int nb_tabs = number_of_tabs(ses->tab->term);
 			int tab = get_tab_number_by_xpos(ses->tab->term, ev->x);
 
-			if ((ev->b & BM_BUTT) == B_WHEEL_UP) {
+			if (check_mouse_button(ev, B_WHEEL_UP)) {
 				switch_to_prev_tab(ses->tab->term);
 
-			} else if ((ev->b & BM_BUTT) == B_WHEEL_DOWN) {
+			} else if (check_mouse_button(ev, B_WHEEL_DOWN)) {
 				switch_to_next_tab(ses->tab->term);
 
 			} else if (tab != -1) {
 				switch_to_tab(ses->tab->term, tab, nb_tabs);
 
-				if ((ev->b & BM_BUTT) == B_RIGHT) {
+				if (check_mouse_button(ev, B_RIGHT)) {
 					struct window *tab = get_current_tab(ses->tab->term);
 
 					set_window_ptr(tab, ev->x, ev->y);

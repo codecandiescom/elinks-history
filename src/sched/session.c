@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.211 2003/11/10 16:49:31 kuser Exp $ */
+/* $Id: session.c,v 1.212 2003/11/10 20:53:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -902,7 +902,6 @@ void
 display_timer(struct session *ses)
 {
 	ttime t = get_time();
-	html_interpret(ses);
 	draw_formatted(ses);
 
 	t = (get_time() - t) * DISPLAY_TIME;
@@ -1025,7 +1024,6 @@ doc_end_load(struct download *stat, struct session *ses)
 			ses->display_timer = -1;
 		}
 
-		html_interpret(ses);
 		draw_formatted(ses);
 
 		if (get_opt_bool_tree(cmdline_options, "auto-submit")) {
@@ -1701,7 +1699,6 @@ tabwin_func(struct window *tab, struct term_event *ev, int fw)
 			/* fall-through */
 		case EV_RESIZE:
 			if (!ses) break;
-			html_interpret(ses);
 			draw_formatted(ses);
 			load_frames(ses, ses->doc_view);
 			process_file_requests(ses);

@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.398 2003/11/06 09:45:58 zas Exp $ */
+/* $Id: options.c,v 1.399 2003/11/10 20:53:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,7 +26,6 @@
 #include "config/options.h"
 #include "config/opttypes.h"
 #include "cache/cache.h"
-#include "document/html/renderer.h"
 #include "document/options.h"
 #include "globhist/globhist.h"
 #include "intl/charsets.h"
@@ -1036,7 +1035,6 @@ change_hook_connection(struct session *ses, struct option *current, struct optio
 static int
 change_hook_html(struct session *ses, struct option *current, struct option *changed)
 {
-	html_interpret(ses);
 	draw_formatted(ses);
 	load_frames(ses, ses->doc_view);
 	process_file_requests(ses);

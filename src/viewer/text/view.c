@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.259 2003/11/09 22:59:05 zas Exp $ */
+/* $Id: view.c,v 1.260 2003/11/10 20:53:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,7 +27,7 @@
 #include "cache/cache.h"
 #include "document/document.h"
 #include "document/options.h"
-#include "document/html/renderer.h"
+#include "document/renderer.h"
 #include "globhist/dialogs.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
@@ -300,6 +300,8 @@ draw_formatted(struct session *ses)
 	assert(ses && ses->tab);
 	if_assert_failed return;
 
+	render_document_frames(ses);
+
 	if (ses->tab != get_current_tab(ses->tab->term))
 		return;
 
@@ -486,7 +488,6 @@ toggle_plain_html(struct session *ses, struct document_view *doc_view, int a)
 	}
 
 	doc_view->vs->plain = !doc_view->vs->plain;
-	html_interpret(ses);
 	draw_formatted(ses);
 }
 
@@ -505,7 +506,6 @@ toggle_images(struct session *ses, struct document_view *doc_view, int a)
 	get_opt_int("document.browse.images.show_as_links") =
 		!get_opt_int("document.browse.images.show_as_links");
 
-	html_interpret(ses);
 	draw_formatted(ses);
 }
 
@@ -524,7 +524,6 @@ toggle_link_numbering(struct session *ses, struct document_view *doc_view, int a
 	get_opt_int("document.browse.links.numbering") =
 		!get_opt_int("document.browse.links.numbering");
 
-	html_interpret(ses);
 	draw_formatted(ses);
 }
 
@@ -547,7 +546,6 @@ toggle_document_colors(struct session *ses, struct document_view *doc_view, int 
 			(mode + 1 <= 2) ? mode + 1 : 0;
 	}
 
-	html_interpret(ses);
 	draw_formatted(ses);
 }
 
@@ -1042,7 +1040,6 @@ quit:
 			case ACT_TOGGLE_DISPLAY_TABLES:
 				get_opt_int("document.html.display_tables") =
 					!get_opt_int("document.html.display_tables");
-				html_interpret(ses);
 				draw_formatted(ses);
 				goto x;
 			case ACT_TOGGLE_HTML_PLAIN:

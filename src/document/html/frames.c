@@ -1,5 +1,5 @@
 /* HTML frames parser */
-/* $Id: frames.c,v 1.33 2003/11/04 23:12:38 pasky Exp $ */
+/* $Id: frames.c,v 1.34 2003/11/10 20:53:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -13,8 +13,8 @@
 #include "elinks.h"
 
 #include "document/html/frames.h"
-#include "document/html/renderer.h"
 #include "document/options.h"
+#include "document/renderer.h"
 #include "document/view.h"
 #include "lowlevel/ttime.h"
 #include "protocol/uri.h"
@@ -199,7 +199,7 @@ repeat:
 	}
 
 	doc_view = find_fd(ses, name, depth, o->x, o->y);
-	if (doc_view) cached_format_html(vs, doc_view, o);
+	if (doc_view) render_document(vs, doc_view, o);
 
 	return doc_view;
 }

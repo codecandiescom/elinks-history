@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.53 2003/10/31 22:33:50 pasky Exp $ */
+/* $Id: renderer.h,v 1.54 2003/11/10 20:53:21 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -10,17 +10,9 @@
 #include "lowlevel/ttime.h"
 #include "util/color.h"
 #include "util/lists.h"
-/* We need this included later, otherwise it will miss some our
- * declarations. */
-/* #include "vs.h" */
 
 
-struct view_state;
-struct document_options;
-void cached_format_html(struct view_state *, struct document_view *, struct document_options *);
-
-struct session;
-void html_interpret(struct session *);
+void render_html_document(struct cache_entry *ce, struct document *document);
 
 /* Interface with tables.c */
 

@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.123 2003/11/10 14:12:38 jonas Exp $ */
+/* $Id: core.c,v 1.124 2003/11/10 20:53:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -29,7 +29,7 @@
 #include "bfu/text.h"
 #include "config/kbdbind.h"
 #include "cache/cache.h"
-#include "document/html/renderer.h"
+#include "document/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/home.h"
 #include "lowlevel/signals.h"
@@ -154,7 +154,7 @@ l_current_document_formatted(LS)
 	if (width > 0) {
 		old_width = lua_ses->tab->term->width;
 		lua_ses->tab->term->width = width;
-		html_interpret(lua_ses);
+		render_document_frames(lua_ses);
 	}
 
 	if (init_string(&buffer)) {
@@ -165,7 +165,7 @@ l_current_document_formatted(LS)
 
 	if (width > 0) {
 		lua_ses->tab->term->width = old_width;
-		html_interpret(lua_ses);
+		render_document_frames(lua_ses);
 	}
 	return 1;
 

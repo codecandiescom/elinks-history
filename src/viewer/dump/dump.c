@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.53 2003/10/31 22:37:18 pasky Exp $ */
+/* $Id: dump.c,v 1.54 2003/11/10 20:53:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,8 +24,8 @@
 #include "main.h"
 #include "config/options.h"
 #include "cache/cache.h"
-#include "document/html/renderer.h"
 #include "document/options.h"
+#include "document/renderer.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
 #include "osdep/ascii.h"
@@ -121,7 +121,7 @@ dump_formatted(int fd, struct download *status, struct cache_entry *ce)
 	o.frames = 0;
 
 	init_vs(vs, ce->url);
-	cached_format_html(vs, &formatted, &o);
+	render_document(vs, &formatted, &o);
 	dump_to_file(formatted.document, fd);
 	detach_formatted(&formatted);
 	destroy_vs(vs);

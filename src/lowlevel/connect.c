@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: connect.c,v 1.47 2003/10/24 11:21:19 zas Exp $ */
+/* $Id: connect.c,v 1.48 2003/10/26 23:17:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -387,14 +387,14 @@ connected(void *data)
 }
 
 static void
-write_select(struct connection *c)
+write_select(struct connection *conn)
 {
-	struct write_buffer *wb = c->buffer;
+	struct write_buffer *wb = conn->buffer;
 	int wr;
 
 	assertm(wb, "write socket has no buffer");
 	if_assert_failed {
-		abort_conn_with_state(c, S_INTERNAL);
+		abort_conn_with_state(conn, S_INTERNAL);
 		return;
 	}
 
@@ -404,14 +404,14 @@ write_select(struct connection *c)
 	printf("-\n");
 #endif
 
-	if (c->ssl) {
-		wr = ssl_write(c, wb);
+	if (conn->ssl) {
+		wr = ssl_write(conn, wb);
 		if (wr <= 0) return;
 	} else {
 		assert(wb->len - wb->pos > 0);
 		wr = safe_write(wb->sock, wb->data + wb->pos, wb->len - wb->pos);
 		if (wr <= 0) {
-			retry_conn_with_state(c, wr ? -errno : S_CANT_WRITE);
+			retry_conn_with_state(conn, wr ? -errno : S_CANT_WRITE);
 			return;
 		}
 	}
@@ -421,15 +421,15 @@ write_select(struct connection *c)
 	if (wb->pos == wb->len) {
 		void (*f)(struct connection *) = wb->done;
 
-		c->buffer = NULL;
+		conn->buffer = NULL;
 		set_handlers(wb->sock, NULL, NULL, NULL, NULL);
 		mem_free(wb);
-		f(c);
+		f(conn);
 	}
 }
 
 void
-write_to_socket(struct connection *c, int s, unsigned char *data,
+write_to_socket(struct connection *conn, int s, unsigned char *data,
 		int len, void (*write_func)(struct connection *))
 {
 	struct write_buffer *wb;
@@ -441,7 +441,7 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 
 	wb = mem_alloc(sizeof(struct write_buffer) + len);
 	if (!wb) {
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return;
 	}
 
@@ -450,9 +450,9 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 	wb->pos = 0;
 	wb->done = write_func;
 	memcpy(wb->data, data, len);
-	if (c->buffer) mem_free(c->buffer);
-	c->buffer = wb;
-	set_handlers(s, NULL, (void *)write_select, (void *)exception, c);
+	if (conn->buffer) mem_free(conn->buffer);
+	conn->buffer = wb;
+	set_handlers(s, NULL, (void *)write_select, (void *)exception, conn);
 }
 
 #define RD_ALLOC_GR (2<<11) /* 4096 */
@@ -460,14 +460,14 @@ write_to_socket(struct connection *c, int s, unsigned char *data,
 #define RD_SIZE(len) ((RD_MEM + (len)) & ~(RD_ALLOC_GR - 1))
 
 static void
-read_select(struct connection *c)
+read_select(struct connection *conn)
 {
-	struct read_buffer *rb = c->buffer;
+	struct read_buffer *rb = conn->buffer;
 	int rd;
 
 	assertm(rb, "read socket has no buffer");
 	if_assert_failed {
-		abort_conn_with_state(c, S_INTERNAL);
+		abort_conn_with_state(conn, S_INTERNAL);
 		return;
 	}
 
@@ -478,27 +478,27 @@ read_select(struct connection *c)
 
 		rb = mem_realloc(rb, size);
 		if (!rb) {
-			abort_conn_with_state(c, S_OUT_OF_MEM);
+			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
 		rb->freespace = size - sizeof(struct read_buffer);
 		assert(rb->freespace > 0);
-		c->buffer = rb;
+		conn->buffer = rb;
 	}
 
-	if (c->ssl) {
-		rd = ssl_read(c, rb);
+	if (conn->ssl) {
+		rd = ssl_read(conn, rb);
 		if (rd <= 0) return;
 	} else {
 		rd = safe_read(rb->sock, rb->data + rb->len, rb->freespace);
 		if (rd <= 0) {
 			if (rb->close && !rd) {
 				rb->close = 2;
-				rb->done(c, rb);
+				rb->done(conn, rb);
 				return;
 			}
 
-			retry_conn_with_state(c, rd ? -errno : S_CANT_READ);
+			retry_conn_with_state(conn, rd ? -errno : S_CANT_READ);
 			return;
 		}
 	}
@@ -509,17 +509,17 @@ read_select(struct connection *c)
 	rb->freespace -= rd;
 	assert(rb->freespace >= 0);
 
-	rb->done(c, rb);
+	rb->done(conn, rb);
 }
 
 struct read_buffer *
-alloc_read_buffer(struct connection *c)
+alloc_read_buffer(struct connection *conn)
 {
 	struct read_buffer *rb;
 
 	rb = mem_calloc(1, RD_SIZE(0));
 	if (!rb) {
-		abort_conn_with_state(c, S_OUT_OF_MEM);
+		abort_conn_with_state(conn, S_OUT_OF_MEM);
 		return NULL;
 	}
 
@@ -533,15 +533,15 @@ alloc_read_buffer(struct connection *c)
 #undef RD_SIZE
 
 void
-read_from_socket(struct connection *c, int s, struct read_buffer *buf,
+read_from_socket(struct connection *conn, int s, struct read_buffer *buf,
 		 void (*read_func)(struct connection *, struct read_buffer *))
 {
 	buf->done = read_func;
 	buf->sock = s;
-	if (c->buffer && buf != c->buffer)
-		mem_free(c->buffer);
-	c->buffer = buf;
-	set_handlers(s, (void *)read_select, NULL, (void *)exception, c);
+	if (conn->buffer && buf != conn->buffer)
+		mem_free(conn->buffer);
+	conn->buffer = buf;
+	set_handlers(s, (void *)read_select, NULL, (void *)exception, conn);
 }
 
 void

@@ -1,5 +1,5 @@
 /* Internal "https" protocol implementation */
-/* $Id: https.c,v 1.16 2003/07/06 21:25:48 pasky Exp $ */
+/* $Id: https.c,v 1.17 2003/10/26 23:17:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -16,16 +16,16 @@
 #include "sched/connection.h"
 
 static void
-https_func(struct connection *c)
+https_func(struct connection *conn)
 {
 #ifdef HAVE_SSL
-	c->ssl = get_ssl();
-	if (!c->ssl)
-		abort_conn_with_state(c, S_SSL_ERROR);
+	conn->ssl = get_ssl();
+	if (!conn->ssl)
+		abort_conn_with_state(conn, S_SSL_ERROR);
 	else
-		http_protocol_backend.handler(c);
+		http_protocol_backend.handler(conn);
 #else
-	abort_conn_with_state(c, S_NO_SSL);
+	abort_conn_with_state(conn, S_NO_SSL);
 #endif
 }
 

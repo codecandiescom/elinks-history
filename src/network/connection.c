@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.106 2003/10/21 13:26:15 pasky Exp $ */
+/* $Id: connection.c,v 1.107 2003/10/26 23:17:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ static INIT_LIST_HEAD(host_connections);
 static INIT_LIST_HEAD(keepalive_connections);
 
 /* Prototypes */
-static void send_connection_info(struct connection *c);
+static void send_connection_info(struct connection *conn);
 static void check_keepalive_connections(void);
 
 /* See connection_state description. */
@@ -74,12 +74,12 @@ static void check_keepalive_connections(void);
 #define is_in_progress_state(cstate)	(cstate >= 0)
 
 static /* inline */ enum connection_priority
-get_priority(struct connection *c)
+get_priority(struct connection *conn)
 {
 	enum connection_priority priority;
 
 	for (priority = 0; priority < PRIORITIES; priority++)
-		if (c->pri[priority])
+		if (conn->pri[priority])
 			break;
 
 	assertm(priority != PRIORITIES, "Connection has no owner");
@@ -92,22 +92,22 @@ long
 connect_info(int type)
 {
 	long info = 0;
-	struct connection *ce;
-	struct keepalive_connection *cee;
+	struct connection *conn;
+	struct keepalive_connection *keep_conn;
 
 	switch (type) {
 		case INFO_FILES:
-			foreach (ce, queue) info++;
+			foreach (conn, queue) info++;
 			break;
 		case INFO_CONNECTING:
-			foreach (ce, queue)
-				info += (ce->state > S_WAIT && ce->state < S_TRANS);
+			foreach (conn, queue)
+				info += (conn->state > S_WAIT && conn->state < S_TRANS);
 			break;
 		case INFO_TRANSFER:
-			foreach (ce, queue) info += (ce->state == S_TRANS);
+			foreach (conn, queue) info += (conn->state == S_TRANS);
 			break;
 		case INFO_KEEP:
-			foreach (cee, keepalive_connections) info++;
+			foreach (keep_conn, keepalive_connections) info++;
 			break;
 		default:
 			internal("connect_info: bad request");
@@ -116,12 +116,12 @@ connect_info(int type)
 }
 
 static inline int
-connection_disappeared(struct connection *c)
+connection_disappeared(struct connection *conn)
 {
-	struct connection *d;
+	struct connection *c;
 
-	foreach (d, queue)
-		if (c == d && c->id == d->id)
+	foreach (c, queue)
+		if (conn == c && conn->id == c->id)
 			return 0;
 
 	return 1;
@@ -143,16 +143,16 @@ struct host_connection {
 };
 
 static struct host_connection *
-get_host_connection(struct connection *c)
+get_host_connection(struct connection *conn)
 {
-	unsigned char *host = c->uri.host;
-	int hostlen = c->uri.hostlen;
-	struct host_connection *connection;
+	unsigned char *host = conn->uri.host;
+	int hostlen = conn->uri.hostlen;
+	struct host_connection *host_conn;
 
 	if (!host) return NULL;
-	foreach (connection, host_connections)
-		if (!strlcmp(connection->host, -1, host, hostlen))
-			return connection;
+	foreach (host_conn, host_connections)
+		if (!strlcmp(host_conn->host, -1, host, hostlen))
+			return host_conn;
 
 	return NULL;
 }
@@ -160,35 +160,35 @@ get_host_connection(struct connection *c)
 /* Returns if the connection was successfully added. */
 /* Don't add hostnameless host connections but they're valid. */
 static int
-add_host_connection(struct connection *c)
+add_host_connection(struct connection *conn)
 {
-	struct host_connection *hc = get_host_connection(c);
+	struct host_connection *host_conn = get_host_connection(conn);
 
-	if (!hc && c->uri.host) {
-		hc = mem_calloc(1, sizeof(struct host_connection) + c->uri.hostlen);
-		if (!hc) return 0;
+	if (!host_conn && conn->uri.host) {
+		host_conn = mem_calloc(1, sizeof(struct host_connection) + conn->uri.hostlen);
+		if (!host_conn) return 0;
 
-		memcpy(hc->host, c->uri.host, c->uri.hostlen);
-		add_to_list(host_connections, hc);
+		memcpy(host_conn->host, conn->uri.host, conn->uri.hostlen);
+		add_to_list(host_connections, host_conn);
 	}
-	if (hc) hc->connections++;
+	if (host_conn) host_conn->connections++;
 
 	return 1;
 }
 
 /* Decrements and free()s the host connection if it is the last 'refcount'. */
 static void
-done_host_connection(struct connection *c)
+done_host_connection(struct connection *conn)
 {
-	struct host_connection *h = get_host_connection(c);
+	struct host_connection *host_conn = get_host_connection(conn);
 
-	if (!h) return;
+	if (!host_conn) return;
 
-	h->connections--;
-	if (h->connections > 0) return;
+	host_conn->connections--;
+	if (host_conn->connections > 0) return;
 
-	del_from_list(h);
-	mem_free(h);
+	del_from_list(host_conn);
+	mem_free(host_conn);
 }
 
 
@@ -198,18 +198,18 @@ static void sort_queue();
 static void
 check_queue_bugs(void)
 {
-	struct connection *d;
+	struct connection *conn;
 	enum connection_priority prev_priority = 0;
 	int cc = 0;
 
-	foreach (d, queue) {
-		enum connection_priority priority = get_priority(d);
+	foreach (conn, queue) {
+		enum connection_priority priority = get_priority(conn);
 
-		cc += d->running;
+		cc += conn->running;
 
 		assertm(priority >= prev_priority, "queue is not sorted");
-		assertm(d->state >= 0, "interrupted connection on queue "
-			"(conn %s, state %d)", struri(d->uri), d->state);
+		assertm(conn->state >= 0, "interrupted connection on queue "
+			"(conn %s, state %d)", struri(conn->uri), conn->state);
 		prev_priority = priority;
 	}
 
@@ -226,45 +226,46 @@ static struct connection *
 init_connection(unsigned char *url, unsigned char *ref_url, int start,
 		enum cache_mode cache_mode, enum connection_priority priority)
 {
-	struct connection *c = mem_calloc(1, sizeof(struct connection));
+	struct connection *conn = mem_calloc(1, sizeof(struct connection));
 
-	if (!c) return NULL;
+	if (!conn) return NULL;
 
-	if (!parse_uri(&c->uri, url)) {
+	if (!parse_uri(&conn->uri, url)) {
 		/* Alert small hack to signal parse uri failure. */
 		*url = 0;
-		mem_free(c);
+		mem_free(conn);
 		return NULL;
 	}
 
-	c->id = connection_id++;
-	c->ref_url = ref_url;
-	c->pri[priority] =  1;
-	c->cache_mode = cache_mode;
-	c->socket = c->data_socket = -1;
-	c->content_encoding = ENCODING_NONE;
-	c->stream_pipes[0] = c->stream_pipes[1] = -1;
-	init_list(c->downloads);
-	c->est_length = -1;
-	c->prg.start = start;
-	c->prg.timer = -1;
-	c->timer = -1;
-	return c;
+	conn->id = connection_id++;
+	conn->ref_url = ref_url;
+	conn->pri[priority] =  1;
+	conn->cache_mode = cache_mode;
+	conn->socket = conn->data_socket = -1;
+	conn->content_encoding = ENCODING_NONE;
+	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
+	init_list(conn->downloads);
+	conn->est_length = -1;
+	conn->prg.start = start;
+	conn->prg.timer = -1;
+	conn->timer = -1;
+	
+	return conn;
 };
 
-static void stat_timer(struct connection *c);
+static void stat_timer(struct connection *conn);
 
 static void
-update_remaining_info(struct connection *c)
+update_remaining_info(struct connection *conn)
 {
-	struct remaining_info *prg = &c->prg;
+	struct remaining_info *prg = &conn->prg;
 	ttime a = get_time() - prg->last_time;
 
-	prg->loaded = c->received;
-	prg->size = c->est_length;
-	prg->pos = c->from;
+	prg->loaded = conn->received;
+	prg->size = conn->est_length;
+	prg->pos = conn->from;
 	if (prg->size < prg->pos && prg->size != -1)
-		prg->size = c->from;
+		prg->size = conn->from;
 
 	prg->dis_b += a;
 	while (prg->dis_b >= SPD_DISP_TIME * CURRENT_SPD_SEC) {
@@ -280,27 +281,27 @@ update_remaining_info(struct connection *c)
 	prg->last_loaded = prg->loaded;
 	prg->last_time += a;
 	prg->elapsed += a;
-	prg->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, c);
+	prg->timer = install_timer(SPD_DISP_TIME, (void (*)(void *)) stat_timer, conn);
 }
 
 static void
-stat_timer(struct connection *c)
+stat_timer(struct connection *conn)
 {
-	update_remaining_info(c);
-	send_connection_info(c);
+	update_remaining_info(conn);
+	send_connection_info(conn);
 }
 
 void
-set_connection_state(struct connection *c, enum connection_state state)
+set_connection_state(struct connection *conn, enum connection_state state)
 {
 	struct download *download;
-	struct remaining_info *prg = &c->prg;
+	struct remaining_info *prg = &conn->prg;
 
-	if (is_in_result_state(c->state) && is_in_progress_state(state))
-		c->prev_error = c->state;
+	if (is_in_result_state(conn->state) && is_in_progress_state(state))
+		conn->prev_error = conn->state;
 
-	c->state = state;
-	if (c->state == S_TRANS) {
+	conn->state = state;
+	if (conn->state == S_TRANS) {
 		if (prg->timer == -1) {
 			if (!prg->valid) {
 				int tmp = prg->start;
@@ -313,8 +314,8 @@ set_connection_state(struct connection *c, enum connection_state state)
 			}
 			prg->last_time = get_time();
 			prg->last_loaded = prg->loaded;
-			update_remaining_info(c);
-			if (connection_disappeared(c))
+			update_remaining_info(conn);
+			if (connection_disappeared(conn))
 				return;
 		}
 
@@ -323,105 +324,105 @@ set_connection_state(struct connection *c, enum connection_state state)
 		prg->timer = -1;
 	}
 
-	foreach (download, c->downloads) {
+	foreach (download, conn->downloads) {
 		download->state = state;
-		download->prev_error = c->prev_error;
+		download->prev_error = conn->prev_error;
 	}
 
-	if (is_in_progress_state(state)) send_connection_info(c);
+	if (is_in_progress_state(state)) send_connection_info(conn);
 }
 
 static void
-free_connection_data(struct connection *c)
+free_connection_data(struct connection *conn)
 {
-	assertm(c->running, "connection already suspended");
+	assertm(conn->running, "connection already suspended");
 	/* XXX: Recovery path? Originally, there was none. I think we'll get
 	 * at least active_connections underflows along the way. --pasky */
-	c->running = 0;
+	conn->running = 0;
 
-	if (c->socket != -1) set_handlers(c->socket, NULL, NULL, NULL, NULL);
-	if (c->data_socket != -1) set_handlers(c->data_socket, NULL, NULL, NULL, NULL);
-	close_socket(NULL, &c->data_socket);
+	if (conn->socket != -1) set_handlers(conn->socket, NULL, NULL, NULL, NULL);
+	if (conn->data_socket != -1) set_handlers(conn->data_socket, NULL, NULL, NULL, NULL);
+	close_socket(NULL, &conn->data_socket);
 
 	/* XXX: See also protocol/http/http.c:uncompress_shutdown(). */
-	if (c->stream) {
-		close_encoded(c->stream);
-		c->stream = NULL;
+	if (conn->stream) {
+		close_encoded(conn->stream);
+		conn->stream = NULL;
 	}
-	if (c->stream_pipes[1] >= 0)
-		close(c->stream_pipes[1]);
-	c->stream_pipes[0] = c->stream_pipes[1] = -1;
+	if (conn->stream_pipes[1] >= 0)
+		close(conn->stream_pipes[1]);
+	conn->stream_pipes[0] = conn->stream_pipes[1] = -1;
 
-	if (c->dnsquery) {
-		kill_dns_request(&c->dnsquery);
+	if (conn->dnsquery) {
+		kill_dns_request(&conn->dnsquery);
 	}
-	if (c->conn_info) {
-		if (c->conn_info->addr) mem_free(c->conn_info->addr);
-		mem_free(c->conn_info);
-		c->conn_info = NULL;
+	if (conn->conn_info) {
+		if (conn->conn_info->addr) mem_free(conn->conn_info->addr);
+		mem_free(conn->conn_info);
+		conn->conn_info = NULL;
 	}
-	if (c->buffer) {
-		mem_free(c->buffer);
-		c->buffer = NULL;
+	if (conn->buffer) {
+		mem_free(conn->buffer);
+		conn->buffer = NULL;
 	}
-	if (c->info) {
-		mem_free(c->info);
-		c->info = NULL;
+	if (conn->info) {
+		mem_free(conn->info);
+		conn->info = NULL;
 	}
-	if (c->timer != -1) {
-		kill_timer(c->timer);
-		c->timer = -1;
+	if (conn->timer != -1) {
+		kill_timer(conn->timer);
+		conn->timer = -1;
 	}
 
 	active_connections--;
 	assertm(active_connections >= 0, "active connections underflow");
 	if_assert_failed active_connections = 0;
 
-	if (c->state != S_WAIT)
-		done_host_connection(c);
+	if (conn->state != S_WAIT)
+		done_host_connection(conn);
 }
 
 void
-send_connection_info(struct connection *c)
+send_connection_info(struct connection *conn)
 {
-	enum connection_state state = c->state;
-	struct download *download = c->downloads.next;
+	enum connection_state state = conn->state;
+	struct download *download = conn->downloads.next;
 
-	while ((void *)download != &c->downloads) {
-		download->ce = c->cache;
+	while ((void *)download != &conn->downloads) {
+		download->ce = conn->cache;
 		download = download->next;
 		if (download->prev->end)
 			download->prev->end(download->prev, download->prev->data);
-		if (is_in_progress_state(state) && connection_disappeared(c))
+		if (is_in_progress_state(state) && connection_disappeared(conn))
 			return;
 	}
 }
 
 static void
-done_connection(struct connection *c)
+done_connection(struct connection *conn)
 {
-	del_from_list(c);
-	send_connection_info(c);
+	del_from_list(conn);
+	send_connection_info(conn);
 	/* TODO: Some free_uri(). */
-	mem_free(struri(c->uri));
-	mem_free(c);
+	mem_free(struri(conn->uri));
+	mem_free(conn);
 	check_queue_bugs();
 }
 
 
 static inline void
-done_keepalive_connection(struct keepalive_connection *kc)
+done_keepalive_connection(struct keepalive_connection *keep_conn)
 {
-	del_from_list(kc);
-	if (kc->socket != -1) close(kc->socket);
-	mem_free(kc);
+	del_from_list(keep_conn);
+	if (keep_conn->socket != -1) close(keep_conn->socket);
+	mem_free(keep_conn);
 }
 
 static struct keepalive_connection *
-init_keepalive_connection(struct connection *c, ttime timeout)
+init_keepalive_connection(struct connection *conn, ttime timeout)
 {
-	struct keepalive_connection *k;
-	struct uri *uri = &c->uri;
+	struct keepalive_connection *keep_conn;
+	struct uri *uri = &conn->uri;
 	unsigned char *host = uri->user ? uri->user : uri->host;
 	int hostlen  = (uri->port ? uri->port + uri->portlen - host
 				  : uri->host + uri->hostlen - host);
@@ -429,25 +430,25 @@ init_keepalive_connection(struct connection *c, ttime timeout)
 	assert(uri->host);
 	if_assert_failed return NULL;
 
-	k = mem_calloc(1, sizeof(struct keepalive_connection) + hostlen);
-	if (!k) return NULL;
+	keep_conn = mem_calloc(1, sizeof(struct keepalive_connection) + hostlen);
+	if (!keep_conn) return NULL;
 
-	memcpy(k->host, host, hostlen);
-	k->port = get_uri_port(uri);
-	k->protocol = get_protocol_handler(uri->protocol);
-	k->pf = c->pf;
-	k->socket = c->socket;
-	k->timeout = timeout;
-	k->add_time = get_time();
+	memcpy(keep_conn->host, host, hostlen);
+	keep_conn->port = get_uri_port(uri);
+	keep_conn->protocol = get_protocol_handler(uri->protocol);
+	keep_conn->pf = conn->pf;
+	keep_conn->socket = conn->socket;
+	keep_conn->timeout = timeout;
+	keep_conn->add_time = get_time();
 
-	return k;
+	return keep_conn;
 }
 
 static struct keepalive_connection *
-get_keepalive_connection(struct connection *c)
+get_keepalive_connection(struct connection *conn)
 {
-	struct keepalive_connection *connection;
-	struct uri *uri = &c->uri;
+	struct keepalive_connection *keep_conn;
+	struct uri *uri = &conn->uri;
 	protocol_handler *handler = get_protocol_handler(uri->protocol);
 	int port = get_uri_port(uri);
 	unsigned char *host = uri->user ? uri->user : uri->host;
@@ -456,49 +457,49 @@ get_keepalive_connection(struct connection *c)
 
 	if (!uri->host) return NULL;
 
-	foreach (connection, keepalive_connections)
-		if (connection->protocol == handler
-		    && connection->port == port
-		    && !strlcmp(connection->host, -1, host, hostlen))
-			return connection;
+	foreach (keep_conn, keepalive_connections)
+		if (keep_conn->protocol == handler
+		    && keep_conn->port == port
+		    && !strlcmp(keep_conn->host, -1, host, hostlen))
+			return keep_conn;
 
 	return NULL;
 }
 
 int
-has_keepalive_connection(struct connection *c)
+has_keepalive_connection(struct connection *conn)
 {
-	struct keepalive_connection *k = get_keepalive_connection(c);
+	struct keepalive_connection *keep_conn = get_keepalive_connection(conn);
 
-	if (!k) return 0;
+	if (!keep_conn) return 0;
 
-	c->socket = k->socket;
-	c->pf = k->pf;
+	conn->socket = keep_conn->socket;
+	conn->pf = keep_conn->pf;
 
 	/* Mark that the socket should not be closed */
-	k->socket = -1;
-	done_keepalive_connection(k);
+	keep_conn->socket = -1;
+	done_keepalive_connection(keep_conn);
 
 	return 1;
 }
 
 void
-add_keepalive_connection(struct connection *c, ttime timeout)
+add_keepalive_connection(struct connection *conn, ttime timeout)
 {
-	struct keepalive_connection *k;
+	struct keepalive_connection *keep_conn;
 
-	free_connection_data(c);
-	assertm(c->socket != -1, "keepalive connection not connected");
+	free_connection_data(conn);
+	assertm(conn->socket != -1, "keepalive connection not connected");
 	if_assert_failed goto done;
 
-	k = init_keepalive_connection(c, timeout);
-	if (k)
-		add_to_list(keepalive_connections, k);
+	keep_conn = init_keepalive_connection(conn, timeout);
+	if (keep_conn)
+		add_to_list(keepalive_connections, keep_conn);
 	else
-		close(c->socket);
+		close(conn->socket);
 
 done:
-	done_connection(c);
+	done_connection(conn);
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
@@ -512,7 +513,7 @@ keepalive_timer(void *x)
 void
 check_keepalive_connections(void)
 {
-	struct keepalive_connection *kc;
+	struct keepalive_connection *keep_conn;
 	ttime ct = get_time();
 	int p = 0;
 
@@ -521,10 +522,11 @@ check_keepalive_connections(void)
 		keepalive_timeout = -1;
 	}
 
-	foreach (kc, keepalive_connections) {
-		if (can_read(kc->socket) || ct - kc->add_time > kc->timeout) {
-			kc = kc->prev;
-			done_keepalive_connection(kc->next);
+	foreach (keep_conn, keepalive_connections) {
+		if (can_read(keep_conn->socket)
+		    || ct - keep_conn->add_time > keep_conn->timeout) {
+			keep_conn = keep_conn->prev;
+			done_keepalive_connection(keep_conn->next);
 		} else {
 			p++;
 		}
@@ -552,34 +554,35 @@ abort_all_keepalive_connections(void)
 
 
 static inline void
-add_to_queue(struct connection *c)
+add_to_queue(struct connection *conn)
 {
-	struct connection *cc;
-	enum connection_priority priority = get_priority(c);
+	struct connection *c;
+	enum connection_priority priority = get_priority(conn);
 
-	foreach (cc, queue)
-		if (get_priority(cc) > priority)
+	foreach (c, queue)
+		if (get_priority(c) > priority)
 			break;
 
-	add_at_pos(cc->prev, c);
+	add_at_pos(c->prev, conn);
 }
 
 static void
 sort_queue(void)
 {
-	struct connection *c;
 	int swp;
 
 	do {
+		struct connection *conn;
+
 		swp = 0;
-		foreach (c, queue) {
-			if ((void *)c->next == &queue) break;
+		foreach (conn, queue) {
+			if ((void *)conn->next == &queue) break;
 
-			if (get_priority(c->next) < get_priority(c)) {
-				struct connection *n = c->next;
+			if (get_priority(conn->next) < get_priority(conn)) {
+				struct connection *c = conn->next;
 
-				del_from_list(c);
-				add_at_pos(n, c);
+				del_from_list(conn);
+				add_at_pos(c, conn);
 				swp = 1;
 			}
 		}
@@ -587,67 +590,67 @@ sort_queue(void)
 }
 
 static void
-interrupt_connection(struct connection *c)
+interrupt_connection(struct connection *conn)
 {
-	if (c->ssl) {
-		free_ssl(c->ssl);
-		c->ssl = NULL;
+	if (conn->ssl) {
+		free_ssl(conn->ssl);
+		conn->ssl = NULL;
 	}
 
-	close_socket(c, &c->socket);
-	free_connection_data(c);
+	close_socket(conn, &conn->socket);
+	free_connection_data(conn);
 }
 
 static inline void
-suspend_connection(struct connection *c)
+suspend_connection(struct connection *conn)
 {
-	interrupt_connection(c);
-	set_connection_state(c, S_WAIT);
+	interrupt_connection(conn);
+	set_connection_state(conn, S_WAIT);
 }
 
 static void
-run_connection(struct connection *c)
+run_connection(struct connection *conn)
 {
-	protocol_handler *func = get_protocol_handler(c->uri.protocol);
+	protocol_handler *func = get_protocol_handler(conn->uri.protocol);
 
 	assert(func);
 
-	assertm(!c->running, "connection already running");
+	assertm(!conn->running, "connection already running");
 	if_assert_failed return;
 
-	if (!add_host_connection(c)) {
-		set_connection_state(c, S_OUT_OF_MEM);
-		done_connection(c);
+	if (!add_host_connection(conn)) {
+		set_connection_state(conn, S_OUT_OF_MEM);
+		done_connection(conn);
 		return;
 	}
 
 	active_connections++;
-	c->running = 1;
-	func(c);
+	conn->running = 1;
+	func(conn);
 }
 
 void
-retry_connection(struct connection *c)
+retry_connection(struct connection *conn)
 {
 	int max_tries = get_opt_int("connection.retries");
 
-	interrupt_connection(c);
-	if (c->uri.post || !max_tries || ++c->tries >= max_tries) {
-		/*send_connection_info(c);*/
-		done_connection(c);
+	interrupt_connection(conn);
+	if (conn->uri.post || !max_tries || ++conn->tries >= max_tries) {
+		/*send_connection_info(conn);*/
+		done_connection(conn);
 		register_bottom_half((void (*)(void *))check_queue, NULL);
 	} else {
-		c->prev_error = c->state;
-		run_connection(c);
+		conn->prev_error = conn->state;
+		run_connection(conn);
 	}
 }
 
 void
-abort_connection(struct connection *c)
+abort_connection(struct connection *conn)
 {
-	if (c->running) interrupt_connection(c);
-	/* send_connection_info(c); */
-	done_connection(c);
+	if (conn->running) interrupt_connection(conn);
+	/* send_connection_info(conn); */
+	done_connection(conn);
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
@@ -668,17 +671,17 @@ retry_conn_with_state(struct connection *conn, enum connection_state state)
 }
 
 static int
-try_to_suspend_connection(struct connection *c, unsigned char *ho)
+try_to_suspend_connection(struct connection *conn, unsigned char *host)
 {
-	enum connection_priority priority = get_priority(c);
-	struct connection *d;
+	enum connection_priority priority = get_priority(conn);
+	struct connection *c;
 
-	foreachback (d, queue) {
-		if (get_priority(d) <= priority) return -1;
-		if (d->state == S_WAIT) continue;
-		if (d->uri.post && get_priority(d) < PRI_CANCEL) continue;
-		if (ho && strlcmp(ho, -1, c->uri.host, c->uri.hostlen)) continue;
-		suspend_connection(d);
+	foreachback (c, queue) {
+		if (get_priority(c) <= priority) return -1;
+		if (c->state == S_WAIT) continue;
+		if (c->uri.post && get_priority(c) < PRI_CANCEL) continue;
+		if (host && strlcmp(host, -1, conn->uri.host, conn->uri.hostlen)) continue;
+		suspend_connection(c);
 		return 0;
 	}
 
@@ -686,63 +689,63 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 }
 
 static inline int
-try_connection(struct connection *c, int max_conns_to_host, int max_conns)
+try_connection(struct connection *conn, int max_conns_to_host, int max_conns)
 {
-	struct host_connection *hc = get_host_connection(c);
+	struct host_connection *host_conn = get_host_connection(conn);
 
-	if (hc && hc->connections >= max_conns_to_host)
-		return try_to_suspend_connection(c, hc->host) ? 0 : -1;
+	if (host_conn && host_conn->connections >= max_conns_to_host)
+		return try_to_suspend_connection(conn, host_conn->host) ? 0 : -1;
 
 	if (active_connections >= max_conns)
-		return try_to_suspend_connection(c, NULL) ? 0 : -1;
+		return try_to_suspend_connection(conn, NULL) ? 0 : -1;
 
-	run_connection(c);
+	run_connection(conn);
 	return 1;
 }
 
 void
 check_queue(void)
 {
-	struct connection *c;
+	struct connection *conn;
 	int max_conns_to_host = get_opt_int("connection.max_connections_to_host");
 	int max_conns = get_opt_int("connection.max_connections");
 
 again:
-	c = queue.next;
+	conn = queue.next;
 	check_queue_bugs();
 	check_keepalive_connections();
 
-	while (c != (struct connection *)&queue) {
-		struct connection *d;
-		enum connection_priority cp = get_priority(c);
+	while (conn != (struct connection *)&queue) {
+		struct connection *c;
+		enum connection_priority pri = get_priority(conn);
 
 		/* No way to reduce code redundancy here ? --Zas */
-		for (d = c; d != (struct connection *)&queue && get_priority(d) == cp;) {
-			struct connection *dd = d;
+		for (c = conn; c != (struct connection *)&queue && get_priority(c) == pri;) {
+			struct connection *cc = c;
 
-			d = d->next;
-			if (dd->state == S_WAIT && get_keepalive_connection(dd)
-			    && try_connection(dd, max_conns_to_host, max_conns))
+			c = c->next;
+			if (cc->state == S_WAIT && get_keepalive_connection(cc)
+			    && try_connection(cc, max_conns_to_host, max_conns))
 				goto again;
 		}
 
-		for (d = c; d != (struct connection *)&queue && get_priority(d) == cp;) {
-			struct connection *dd = d;
+		for (c = conn; c != (struct connection *)&queue && get_priority(c) == pri;) {
+			struct connection *cc = c;
 
-			d = d->next;
-			if (dd->state == S_WAIT
-			    && try_connection(dd, max_conns_to_host, max_conns))
+			c = c->next;
+			if (cc->state == S_WAIT
+			    && try_connection(cc, max_conns_to_host, max_conns))
 				goto again;
 		}
-		c = d;
+		conn = c;
 	}
 
 again2:
-	foreachback (c, queue) {
-		if (get_priority(c) < PRI_CANCEL) break;
-		if (c->state == S_WAIT) {
-			set_connection_state(c, S_INTERRUPTED);
-			done_connection(c);
+	foreachback (conn, queue) {
+		if (get_priority(conn) < PRI_CANCEL) break;
+		if (conn->state == S_WAIT) {
+			set_connection_state(conn, S_INTERRUPTED);
+			done_connection(conn);
 			goto again2;
 		}
 	}
@@ -754,8 +757,8 @@ int
 load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	 enum connection_priority pri, enum cache_mode cache_mode, int start)
 {
-	struct cache_entry *e = NULL;
-	struct connection *c;
+	struct cache_entry *ce = NULL;
+	struct connection *conn;
 	unsigned char *u;
 
 	if (download) {
@@ -767,11 +770,11 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 
 #ifdef DEBUG
-	foreach (c, queue) {
+	foreach (conn, queue) {
 		struct download *assigned;
 
-		foreach (assigned, c->downloads) {
-			assertm(assigned != download, "Download assigned to '%s'", struri(c->uri));
+		foreach (assigned, conn->downloads) {
+			assertm(assigned != download, "Download assigned to '%s'", struri(conn->uri));
 			if_assert_failed {
 				download->state = S_INTERNAL;
 				if (download->end) download->end(download, download->data);
@@ -782,15 +785,15 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 	}
 #endif
 
-	if (cache_mode <= NC_CACHE && find_in_cache(url, &e) && !e->incomplete) {
-		if (!e->refcount &&
-		    ((e->cache_mode == NC_PR_NO_CACHE && cache_mode != NC_ALWAYS_CACHE)
-		     || (e->redirect && !get_opt_int("document.cache.cache_redirects")))) {
-			delete_cache_entry(e);
-			e = NULL;
+	if (cache_mode <= NC_CACHE && find_in_cache(url, &ce) && !ce->incomplete) {
+		if (!ce->refcount &&
+		    ((ce->cache_mode == NC_PR_NO_CACHE && cache_mode != NC_ALWAYS_CACHE)
+		     || (ce->redirect && !get_opt_int("document.cache.cache_redirects")))) {
+			delete_cache_entry(ce);
+			ce = NULL;
 		} else {
 			if (download) {
-				download->ce = e;
+				download->ce = ce;
 				download->state = S_OK;
 			/* XXX: This doesn't work since sometimes stat->prg is
 			 * undefined and contains random memory locations. It's
@@ -812,34 +815,34 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return -1;
 	}
 
-	foreach (c, queue) {
-		if (c->detached || strcmp(struri(c->uri), u))
+	foreach (conn, queue) {
+		if (conn->detached || strcmp(struri(conn->uri), u))
 			continue;
 
 		mem_free(u);
 
-		if (get_priority(c) > pri) {
-			del_from_list(c);
-			c->pri[pri]++;
-			add_to_queue(c);
+		if (get_priority(conn) > pri) {
+			del_from_list(conn);
+			conn->pri[pri]++;
+			add_to_queue(conn);
 			register_bottom_half((void (*)(void *))check_queue, NULL);
 		} else {
-			c->pri[pri]++;
+			conn->pri[pri]++;
 		}
 
 		if (download) {
-			download->prg = &c->prg;
-			download->c = c;
-			download->ce = c->cache;
-			add_to_list(c->downloads, download);
-			set_connection_state(c, c->state);
+			download->prg = &conn->prg;
+			download->c = conn;
+			download->ce = conn->cache;
+			add_to_list(conn->downloads, download);
+			set_connection_state(conn, conn->state);
 		}
 		check_queue_bugs();
 		return 0;
 	}
 
-	c = init_connection(u, ref_url, start, cache_mode, pri);
-	if (!c) {
+	conn = init_connection(u, ref_url, start, cache_mode, pri);
+	if (!conn) {
 		if (download) {
 			/* Zero length uri signals parse uri failure */
 			download->state = (!*u ? S_BAD_URL : S_OUT_OF_MEM);
@@ -849,19 +852,19 @@ load_url(unsigned char *url, unsigned char *ref_url, struct download *download,
 		return -1;
 	}
 
-	if (cache_mode < NC_RELOAD && e && !list_empty(e->frag)
-	    && !((struct fragment *) e->frag.next)->offset)
-		c->from = ((struct fragment *) e->frag.next)->length;
+	if (cache_mode < NC_RELOAD && ce && !list_empty(ce->frag)
+	    && !((struct fragment *) ce->frag.next)->offset)
+		conn->from = ((struct fragment *) ce->frag.next)->length;
 
 	if (download) {
-		download->prg = &c->prg;
-		download->c = c;
+		download->prg = &conn->prg;
+		download->c = conn;
 		download->ce = NULL;
-		add_to_list(c->downloads, download);
+		add_to_list(conn->downloads, download);
 	}
 
-	add_to_queue(c);
-	set_connection_state(c, S_WAIT);
+	add_to_queue(conn);
+	set_connection_state(conn, S_WAIT);
 
 	check_queue_bugs();
 
@@ -875,7 +878,7 @@ void
 change_connection(struct download *old, struct download *new,
 		  int newpri, int interrupt)
 {
-	struct connection *c;
+	struct connection *conn;
 
 	assert(old);
 	if_assert_failed return;
@@ -892,27 +895,27 @@ change_connection(struct download *old, struct download *new,
 
 	check_queue_bugs();
 
-	c = old->c;
+	conn = old->c;
 
-	c->pri[old->pri]--;
-	assertm(c->pri[old->pri] >= 0, "priority counter underflow");
-	if_assert_failed c->pri[old->pri] = 0;
+	conn->pri[old->pri]--;
+	assertm(conn->pri[old->pri] >= 0, "priority counter underflow");
+	if_assert_failed conn->pri[old->pri] = 0;
 
-	c->pri[newpri]++;
+	conn->pri[newpri]++;
 	del_from_list(old);
 	old->state = S_INTERRUPTED;
 
 	if (new) {
-		new->prg = &c->prg;
-		add_to_list(c->downloads, new);
-		new->state = c->state;
-		new->prev_error = c->prev_error;
+		new->prg = &conn->prg;
+		add_to_list(conn->downloads, new);
+		new->state = conn->state;
+		new->prev_error = conn->prev_error;
 		new->pri = newpri;
-		new->c = c;
-		new->ce = c->cache;
+		new->c = conn;
+		new->ce = conn->cache;
 
-	} else if (c->detached || interrupt) {
-		abort_conn_with_state(c, S_INTERRUPTED);
+	} else if (conn->detached || interrupt) {
+		abort_conn_with_state(conn, S_INTERRUPTED);
 	}
 
 	sort_queue();
@@ -973,37 +976,39 @@ detach_connection(struct download *download, int pos)
 }
 
 static void
-connection_timeout(struct connection *c)
+connection_timeout(struct connection *conn)
 {
-	c->timer = -1;
-	set_connection_state(c, S_TIMEOUT);
-	if (c->dnsquery) {
-		abort_connection(c);
-	} else if (c->conn_info) {
-		dns_found(c, 0); /* jump to next addr */
-		if (c->conn_info) set_connection_timeout(c);
+	conn->timer = -1;
+	set_connection_state(conn, S_TIMEOUT);
+	if (conn->dnsquery) {
+		abort_connection(conn);
+	} else if (conn->conn_info) {
+		dns_found(conn, 0); /* jump to next addr */
+		if (conn->conn_info) set_connection_timeout(conn);
 	} else {
-		retry_connection(c);
+		retry_connection(conn);
 	}
 }
 
 /* Huh, using two timers? Is this to account for changes of c->unrestartable
  * or can it be reduced? --jonas */
 static void
-connection_timeout_1(struct connection *c)
+connection_timeout_1(struct connection *conn)
 {
-	c->timer = install_timer((c->unrestartable ? get_opt_int("connection.unrestartable_receive_timeout")
-						   : get_opt_int("connection.receive_timeout"))
-				 * 500, (void (*)(void *)) connection_timeout, c);
+	conn->timer = install_timer((conn->unrestartable
+				     ? get_opt_int("connection.unrestartable_receive_timeout")
+				     : get_opt_int("connection.receive_timeout"))
+				    * 500, (void (*)(void *)) connection_timeout, conn);
 }
 
 void
-set_connection_timeout(struct connection *c)
+set_connection_timeout(struct connection *conn)
 {
-	if (c->timer != -1) kill_timer(c->timer);
-	c->timer = install_timer((c->unrestartable ? get_opt_int("connection.unrestartable_receive_timeout")
-						   : get_opt_int("connection.receive_timeout"))
-				 * 500, (void (*)(void *))connection_timeout_1, c);
+	if (conn->timer != -1) kill_timer(conn->timer);
+	conn->timer = install_timer((conn->unrestartable
+				     ? get_opt_int("connection.unrestartable_receive_timeout")
+				     : get_opt_int("connection.receive_timeout"))
+				    * 500, (void (*)(void *))connection_timeout_1, conn);
 }
 
 
@@ -1021,12 +1026,12 @@ abort_all_connections(void)
 void
 abort_background_connections(void)
 {
-	struct connection *connection;
+	struct connection *conn;
 
-	foreach (connection, queue) {
-		if (get_priority(connection) >= PRI_CANCEL) {
-			connection = connection->prev;
-			abort_conn_with_state(connection->next, S_INTERRUPTED);
+	foreach (conn, queue) {
+		if (get_priority(conn) >= PRI_CANCEL) {
+			conn = conn->prev;
+			abort_conn_with_state(conn->next, S_INTERRUPTED);
 		}
 	}
 }

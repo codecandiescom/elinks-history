@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.450 2004/06/10 17:59:07 jonas Exp $ */
+/* $Id: session.c,v 1.451 2004/06/10 18:15:52 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -63,9 +63,6 @@
 struct initial_session_info {
 	/* The session whose state to copy, -1 is none. */
 	struct session *base_session;
-
-	/* Whether to open URLs in the master using -remote */
-	enum remote_session_flags remote;
 
 	/* The URIs we should load. Multiple URIs are only used when
 	 * initializing a session from the command line. */
@@ -698,7 +695,6 @@ init_session_info(struct session *base_session, enum remote_session_flags remote
 	if (!info) return NULL;
 
 	info->base_session = base_session;
-	info->remote = remote;
 
 	if (uri) add_to_uri_list(&info->uri_list, uri);
 
@@ -827,8 +823,14 @@ decode_session_info(struct terminal *term, int len, const int *data)
 			len = magic;
 	}
 
-	info = init_session_info(base_session, remote, NULL);
-	if (!info) return NULL;
+	/* If it is a remote session we return NULL so that the
+	 * terminal of the remote session will be destroyed ASAP. */
+	if (remote) {
+		info = NULL;
+	} else {
+		info = init_session_info(base_session, remote, NULL);
+		if (!info) return NULL;
+	}
 
 	str = (unsigned char *) data;
 
@@ -845,7 +847,11 @@ decode_session_info(struct terminal *term, int len, const int *data)
 		mem_free_if(decoded);
 
 		if (uri) {
-			add_to_uri_list(&info->uri_list, uri);
+			if (remote) {
+				remote = handle_remote_session(base_session, remote, uri);
+			} else {
+				add_to_uri_list(&info->uri_list, uri);
+			}
 			done_uri(uri);
 		}
 
@@ -869,11 +875,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 {
 	if (!info) return NULL;
 
-	if (info->remote) {
-		assert(info->base_session);
-		ses = info->base_session;
-
-	} else if (info->base_session) {
+	if (info->base_session) {
 		copy_session(info->base_session, ses);
 	}
 
@@ -883,10 +885,7 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 		int index;
 
 		foreach_uri (uri, index, &info->uri_list) {
-			if (info->remote) {
-				info->remote = handle_remote_session(ses, info->remote, uri);
-
-			} else if (first) {
+			if (first) {
 				/* Open first url. */
 				goto_uri(ses, uri);
 				first = 0;
@@ -896,9 +895,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 				open_uri_in_new_tab(ses, uri, 1);
 			}
 		}
-
-	} else if (info->remote) {
-		handle_remote_session(ses, info->remote, NULL);
 
 #ifdef CONFIG_BOOKMARKS
 	} else if (!first_use
@@ -917,10 +913,6 @@ process_session_info(struct session *ses, struct initial_session_info *info)
 			}
 		}
 	}
-
-	/* If it is a remote session we return non zero so that the
-	 * terminal of the remote session will be destroyed ASAP. */
-	if (info->remote) ses = NULL;
 
 	free_session_info(info);
 

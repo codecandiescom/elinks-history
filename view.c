@@ -1232,7 +1232,7 @@ void encode_multipart(struct session *ses, struct list_head *l, unsigned char **
 		bnd:
 		add_to_str(data, len, "--");
 		if (!(nbound_ptrs & (ALLOC_GR-1))) {
-			if (!(nbp = mem_realloc(bound_ptrs, nbound_ptrs + ALLOC_GR))) goto xx;
+			if (!(nbp = mem_realloc(bound_ptrs, (nbound_ptrs + ALLOC_GR) * sizeof(int)))) goto xx;
 			bound_ptrs = nbp;
 		}
 		bound_ptrs[nbound_ptrs++] = *len;

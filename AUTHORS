@@ -100,6 +100,9 @@ Gianluca Montecchi <gianluca@pluto.linux.it>
 Ionel Mugurel Ciobica <I.M.Ciobica@TUe.nl>
 	Romanian translation
 
+Jacek Fedorynski <jfedor@jfedor.org>
+	Fixed segfault when posting large forms
+
 Jan Bobrowski <jb@mohan.krakow.pl>
 	Small optimization in file listing
 
@@ -237,4 +240,4 @@ zas@norz.org
 	Bookmarks hacking
 	Misc minor improvements
 
-$Id: AUTHORS,v 1.22 2002/01/30 14:48:56 pasky Exp $
+$Id: AUTHORS,v 1.23 2002/01/30 14:58:40 pasky Exp $

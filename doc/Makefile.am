@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.21 2004/12/21 13:18:43 jonas Exp $
+## $Id: Makefile.am,v 1.22 2004/12/21 23:38:34 jonas Exp $
 
 SUBDIRS = man
 
@@ -14,6 +14,7 @@ EXTRA_DIST = \
  feedback.txt \
  hacking.txt \
  index.txt \
+ introduction.txt \
  mailcap.txt \
  marks.txt \
  mime.html \

@@ -1,3 +1,226 @@
+Wed Mar 23 22:48:13 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use os.remove instead of remove to fix the code2html hook.  
+
+Wed Mar 23 22:30:32 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Add a LEO smartprefix.  
+
+Wed Mar 23 22:28:28 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use math.mod instead of just mod.  
+
+Wed Mar 23 22:28:05 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Improve the 'bug' smartprefix to allow 'bug' for 
+	<http://bugzilla.elinks.or.cz>, 'bug [0-9]+' to get a bug by the ID, 
+	or 'bug foo' to search for bugs with 'foo' in the sort description.  
+
+Wed Mar 23 16:33:12 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/auth/dialogs.c:
+
+	Drop the accelerators from the text fields in the auth box;
+	accelerators are not yet supported for fields.  
+
+Wed Mar 23 15:53:17 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Mar 23 15:52:37 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Initialise the _OUTPUT global used by write and writeto.  
+
+Wed Mar 23 15:49:06 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Use table.remove instead of tab.remove in the write function.  
+
+Wed Mar 23 15:43:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/hierbox.c, bfu/msgbox.c, cache/dialogs.c,
+	config/dialogs.c, cookies/dialogs.c, dialogs/download.c,
+	dialogs/edit.c, dialogs/info.c, dialogs/menu.c, dialogs/options.c,
+	formhist/dialogs.c, formhist/formhist.c, globhist/dialogs.c,
+	mime/dialogs.c, protocol/protocol.c, protocol/auth/dialogs.c,
+	sched/download.c, sched/session.c, sched/task.c,
+	scripting/lua/core.c, terminal/tab.c, viewer/text/search.c:
+
+	Add accelerators to buttons.  
+
+Wed Mar 23 15:41:09 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Mar 23 15:26:08 2005  Laurent Monin <zas@norz.org>:
+
+	* po/Makefile.am:
+
+	Also check for missing keyboard accelerators using
+	--check-accelerators option in check-po rule.  
+
+Wed Mar 23 14:28:41 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/hierbox.c:
+
+	Fix i18n code, reported by Jonas.  
+
+Wed Mar 23 14:26:42 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: inpfield.c, msgbox.c:
+
+	Add keyboard accelerators to some Ok and Cancel buttons.  
+
+Wed Mar 23 14:16:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: bfu/hierbox.c, bfu/inpfield.c, bfu/inpfield.h,
+	bookmarks/dialogs.c, config/dialogs.c, dialogs/menu.c,
+	scripting/lua/core.c, viewer/text/view.c:
+
+	Introduce input_dialog() that wraps input_field(). I18n is always
+	on, and OK/Cancel buttons always there.  
+
+Wed Mar 23 14:00:54 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	push_kbdbind_add_button(): i18n improvement and code simplification.  
+
+Wed Mar 23 13:40:34 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: sched/session.c, scripting/lua/core.c,
+	scripting/ruby/core.c, viewer/text/draw.c, viewer/text/form.c,
+	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c:
+
+	Use info_box() instead of direct call to msg_box() where it is
+	possible.  
+
+Wed Mar 23 11:41:00 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: formhist/dialogs.c, protocol/user.c, protocol/nntp/codes.c,
+	sched/download.c:
+
+	Use info_box() instead of direct call to msg_box() where it is
+	possible.  
+
+Wed Mar 23 11:28:39 2005  Laurent Monin <zas@norz.org>:
+
+	* src/: dialogs/document.c, dialogs/info.c,
+	ecmascript/spidermonkey.c:
+
+	Use info_box() instead of direct call to msg_box() where it is
+	possible.  
+
+Wed Mar 23 11:24:27 2005  Laurent Monin <zas@norz.org>:
+
+	* src/config/dialogs.c:
+
+	Use info_box() instead of direct call to msg_box() where it is
+	possible.  
+
+Wed Mar 23 11:19:13 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: hierbox.c, inpfield.c, leds.c:
+
+	Use info_box() instead of direct call to msg_box() where it is
+	possible.  
+
+Wed Mar 23 11:18:08 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: msgbox.c, msgbox.h:
+
+	info_box() was introduced, it wraps msg_box() call, and will help to
+	reduce code size.  
+
+Wed Mar 23 10:57:56 2005  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/: button.c, button.h:
+
+	Add code to find missing keyboard accelerators in buttons. Enable it
+	by defining DEBUG_BUTTON_HOTKEY in bfu/button.h, it will emit
+	messages through DBG() at runtime.  
+
+Wed Mar 23 10:42:44 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Wed Mar 23 10:10:38 2005  Laurent Monin <zas@norz.org>:
+
+	* NEWS, configure.in, src/scripting/lua/core.c,
+	src/scripting/lua/core.h, src/scripting/lua/hooks.c:
+
+	Support for Lua4.x was dropped in favor of support for Lua5.x.
+	Configure script Lua detection was improved, C code was modified to
+	use Lua 5.x functions (lua_pcall() is always available, lua_open()
+	has no parameter). NEWS file was updated.  
+
+Wed Mar 23 09:19:33 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/perl/hooks.pl:
+
+	Tons of cleanup this time.  
+	
+	Added some prefixes.  They are all documented at the top along with 
+	a sample config.pl.  
+	
+	Fixed a bug that resulted from *having* a config.pl but *not* having 
+	a particular option in it.  
+	
+	Patch by Russ.  
+
+Wed Mar 23 05:40:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	In pre_format_html_hook, add |or nil| to |return ret and html| to
+	avoid the error about an invalid return value.  
+
+Wed Mar 23 05:18:09 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	Oops. While that will make the error message go away, it is not a
+	particularly bright fix, rendering all rewrite rules ineffective.  
+
+Wed Mar 23 04:53:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in:
+
+	In pre_format_html_hook, initialise html to nil to avoid an error
+	about an return value.  
+
+Wed Mar 23 04:48:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* contrib/lua/hooks.lua.in, src/scripting/lua/core.c:
+
+	Move to Lua 5.  
+	
+	 - In the C code, explicitely include the table library 
+	
+	 - Use the new table-based function names in hooks.lua 
+	
+	 - Drop % for upval references, which are no longer necessary 
+	   with Lua 5's scoping rules 
+	
+	 - Add compatibility routines from Lua's compat.lua 
+
 Tue Mar 22 16:05:03 2005  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/draw.c:

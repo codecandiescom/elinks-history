@@ -1,3 +1,9 @@
+Sun Mar 14 06:22:01 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/cookies/dialogs.c:
+
+	Removed draw_cookie. Set cookie->box_item->text instead.  
+
 Sat Mar 13 17:57:04 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/document/html/parser.c:

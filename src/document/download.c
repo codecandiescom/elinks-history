@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.20 2002/06/21 13:35:10 pasky Exp $ */
+/* $Id: download.c,v 1.21 2002/06/22 16:45:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -885,16 +885,24 @@ type_query(struct session *ses, struct cache_entry *ce, unsigned char *ct,
 		}
 	} else {
 		unsigned char *m2;
+		struct option *opt;
 
-#if 0
-		if (a->label)
-			m2 = stracpy(a->label);
-		else
-#endif
-			m2 = stracpy("");
-
+		m2 = get_mime_type_name(ct);
 		if (!m2) {
-			free(m1);
+			mem_free(m1);
+			return;
+		}
+
+		opt = get_opt_rec_real(root_options, m2);
+		mem_free(m2);
+		if (!opt) {
+			mem_free(m1);
+			return;
+		}
+
+		m2 = stracpy((unsigned char *) opt->ptr);
+		if (!m2) {
+			mem_free(m1);
 			return;
 		}
 
@@ -938,7 +946,7 @@ ses_chktype(struct session *ses, struct status **stat, struct cache_entry *ce)
 	r = 1;
 	if (!strcasecmp(ct, "text/plain")) goto free_ct;
 
-	assoc = get_type_assoc(ses->term, ct);
+	assoc = get_mime_type_handler(ses->term, ct);
 	if (!assoc && strlen(ct) >= 4 && !casecmp(ct, "text", 4)) goto free_ct;
 
 	if (ses->tq_url)

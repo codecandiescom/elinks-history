@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.32 2002/06/22 10:42:24 pasky Exp $ */
+/* $Id: types.c,v 1.33 2002/06/22 16:45:19 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -136,7 +136,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 		if (extension)
 			add_bytes_to_str(&ext_type, &el, extension, ext_len);
 
-		if (get_type_assoc(NULL, ext_type))
+		if (get_mime_type_handler(NULL, ext_type))
 			return ext_type;
 
 		mem_free(ext_type);
@@ -152,11 +152,10 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 
 unsigned char *
-get_type_assoc_name(unsigned char *type, int xwin)
+get_mime_type_name(unsigned char *type)
 {
 	unsigned char *class, *id;
 	unsigned char *name;
-	unsigned char *system_str;
 
 	class = stracpy(type);
 	if (!class) { return NULL; }
@@ -166,26 +165,44 @@ get_type_assoc_name(unsigned char *type, int xwin)
 
 	*(id++) = '\0';
 
-	system_str = get_system_str(xwin);
-	if (!system_str) { mem_free(class); return NULL; }
-
-	name = straconcat("mime.association", ".", class, ".", id, ".",
-			  system_str, NULL);
-	mem_free(system_str);
+	name = straconcat("mime.type", ".", class, ".", id, NULL);
 	mem_free(class);
+
+	return name;
+}
+
+unsigned char *
+get_mime_handler_name(unsigned char *type, int xwin)
+{
+	struct option *opt;
+	unsigned char *name = get_mime_type_name(type);
+	unsigned char *system_str;
+
+	if (!name) return NULL;
+
+	opt = get_opt_rec_real(root_options, name);
+	mem_free(name);
+	if (!opt) { return NULL; }
+
+	system_str = get_system_str(xwin);
+	if (!system_str) { return NULL; }
+
+	name = straconcat("mime.handler", ".", (unsigned char *) opt->ptr,
+			  ".", system_str, NULL);
+	mem_free(system_str);
 
 	return name;
 }
 
 /* Return tree containing options specific to this type. */
 struct option *
-get_type_assoc(struct terminal *term, unsigned char *type)
+get_mime_type_handler(struct terminal *term, unsigned char *type)
 {
 	struct option *opt_tree;
 	unsigned char *name;
 	int xwin = term ? term->environment & ENV_XWIN : 0;
 
-	name = get_type_assoc_name(type, xwin);
+	name = get_mime_handler_name(type, xwin);
 	if (!name) return NULL;
 
 	opt_tree = get_opt_rec_real(root_options, name);
@@ -199,6 +216,9 @@ get_type_assoc(struct terminal *term, unsigned char *type)
 
 
 #if 0
+
+/* This stuff needs to be redesigned, reworked, rewritten. Separate menu for
+ * MIME types and MIME associations. */
 
 unsigned char *ct_msg[] = {
 	TEXT(T_LABEL),
@@ -531,7 +551,7 @@ menu_list_assoc(struct terminal *term, void *fn, void *xxx)
 			       	if (!mi) return;
 			}
 
-			add_to_menu(&mi, ct, "",
+			add_to_menu(&mi, ct, (unsigned char *) id_opt->ptr,
 				    "", MENU_FUNC fn, (void *) ct, 0);
 		}
 	}

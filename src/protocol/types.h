@@ -1,4 +1,4 @@
-/* $Id: types.h,v 1.8 2002/06/20 11:05:33 pasky Exp $ */
+/* $Id: types.h,v 1.9 2002/06/22 16:45:19 pasky Exp $ */
 
 #ifndef EL__PROTOCOL_TYPES_H
 #define EL__PROTOCOL_TYPES_H
@@ -8,8 +8,12 @@
 #include "util/lists.h"
 
 unsigned char *get_content_type(unsigned char *, unsigned char *);
-struct option *get_type_assoc(struct terminal *term, unsigned char *);
-unsigned char *get_prog(struct terminal *term, unsigned char *);
+
+unsigned char *get_mime_type_name(unsigned char *);
+unsigned char *get_mime_handler_name(unsigned char *, int);
+struct option *get_mime_type_handler(struct terminal *, unsigned char *);
+
+unsigned char *get_prog(struct terminal *, unsigned char *);
 
 void menu_add_ct(struct terminal *, void *, void *);
 void menu_del_ct(struct terminal *, void *, void *);

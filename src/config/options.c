@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.60 2002/06/21 16:23:44 zas Exp $ */
+/* $Id: options.c,v 1.61 2002/06/22 16:45:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -739,36 +739,44 @@ register_options()
 		"MIME-related options.");
 
 
-	/* Basically, it will look like mime.association.text.plain.unix-xwin.program = "blah" */
-	/* TODO: Make it possible to alias some MIME-types. */
+	/* Basically, it will look like mime.type.image.gif = "Picture" */
 
 	add_opt_tree("mime",
-		"association", OPT_AUTOCREATE,
+		"type", OPT_AUTOCREATE,
 		"Action<->MIME-type association.");
 
-	add_opt_tree("mime.association",
+	add_opt_tree("mime.type",
 		"_template_", OPT_AUTOCREATE,
-		"Action description matching this MIME-type class.");
+		"Handler matching this MIME-type class.");
 
-	add_opt_tree("mime.association._template_",
+	add_opt_string("mime.type._template_",
+		"_template_", 0, "",
+		"Handler matching this MIME-type name.");
+
+
+	add_opt_tree("mime",
+		"handler", OPT_AUTOCREATE,
+		"Handler for certain file types.");
+
+	add_opt_tree("mime.handler",
 		"_template_", OPT_AUTOCREATE,
-		"Action description matching this MIME-type name.");
+		"Handler description for this file type.");
 
-	add_opt_tree("mime.association._template_._template_",
+	add_opt_tree("mime.handler._template_",
 		"_template_", OPT_AUTOCREATE,
-		"System-specific action description matching this MIME-type.");
+		"System-specific handler description.");
 
-	add_opt_bool("mime.association._template_._template_._template_",
+	add_opt_bool("mime.handler._template_._template_",
 		"ask", 0, 1,
 		"Ask before opening.");
 
-	add_opt_bool("mime.association._template_._template_._template_",
+	add_opt_bool("mime.handler._template_._template_",
 		"block", 0, 1,
 		"Block the terminal when the handler is running.");
 
-	add_opt_string("mime.association._template_._template_._template_",
+	add_opt_string("mime.handler._template_._template_",
 		"program", 0, "",
-		"Handler for this MIME-type.");
+		"External viewer for this file type.");
 
 
 	add_opt_tree("mime",
@@ -777,7 +785,8 @@ register_options()
 
 	add_opt_string("mime.extension",
 		"_template_", 0, "",
-		"MIME-type matching this file extension.");
+		"MIME-type matching this file extension (dashes are used here\n"
+		"instead of dots).");
 
 
 

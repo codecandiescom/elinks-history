@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.53 2003/05/08 01:06:46 pasky Exp $ */
+/* $Id: session.c,v 1.54 2003/05/08 01:07:14 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1364,7 +1364,7 @@ int startup_goto_dialog_paint = 0;
 struct session *startup_goto_dialog_ses;
 
 static int
-read_session_info(struct session *ses, struct initial_session_info *info)
+process_session_info(struct session *ses, struct initial_session_info *info)
 {
 	struct session *s;
 
@@ -1714,7 +1714,7 @@ tabwin_func(struct window *tab, struct event *ev, int fw)
 			/* FIXME: This needs to be done differently and more
 			 * universally. Works only for the first tab. --pasky */
 			ses = tab->data = create_session(tab);
-			if (!ses || read_session_info(ses, ev->b)) {
+			if (!ses || process_session_info(ses, ev->b)) {
 				destroy_terminal(tab->term);
 				return;
 			}

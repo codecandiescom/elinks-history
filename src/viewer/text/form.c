@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.194 2004/06/16 18:50:32 jonas Exp $ */
+/* $Id: form.c,v 1.195 2004/06/16 19:42:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -53,8 +53,8 @@
 /* FIXME: Add comments!! --Zas */
 
 struct submitted_value *
-new_submitted_value(unsigned char *name, unsigned char *value, enum form_type type,
-		    struct form_control *fc, int position)
+init_submitted_value(unsigned char *name, unsigned char *value, enum form_type type,
+		     struct form_control *fc, int position)
 {
 	struct submitted_value *sv;
 
@@ -75,7 +75,7 @@ new_submitted_value(unsigned char *name, unsigned char *value, enum form_type ty
 }
 
 void
-free_submitted_value(struct submitted_value *sv)
+done_submitted_value(struct submitted_value *sv)
 {
 	if (!sv) return;
 	mem_free_if(sv->value);
@@ -415,7 +415,7 @@ has_form_submit(struct document *document, struct form_control *frm)
 
 
 void
-free_submitted_value_list(struct list_head *list)
+done_submitted_value_list(struct list_head *list)
 {
 	struct submitted_value *sv, *svtmp;
 
@@ -426,7 +426,7 @@ free_submitted_value_list(struct list_head *list)
 		svtmp = sv;
 		sv = sv->prev;
 		del_from_list(svtmp);
-		free_submitted_value(svtmp);
+		done_submitted_value(svtmp);
 	}
 }
 
@@ -451,7 +451,7 @@ add_submitted_value_to_list(struct form_control *frm,
 	case FC_PASSWORD:
 	case FC_FILE:
 	case FC_TEXTAREA:
-		sub = new_submitted_value(name, fs->value, type, frm, position);
+		sub = init_submitted_value(name, fs->value, type, frm, position);
 		if (sub) add_to_list(*list, sub);
 		break;
 
@@ -463,8 +463,8 @@ add_submitted_value_to_list(struct form_control *frm,
 	case FC_SUBMIT:
 	case FC_HIDDEN:
 	case FC_RESET:
-		sub = new_submitted_value(name, frm->default_value, type, frm,
-					  position);
+		sub = init_submitted_value(name, frm->default_value, type, frm,
+					   position);
 		if (sub) add_to_list(*list, sub);
 		break;
 
@@ -472,20 +472,20 @@ add_submitted_value_to_list(struct form_control *frm,
 		if (!frm->nvalues) break;
 
 		fixup_select_state(frm, fs);
-		sub = new_submitted_value(name, fs->value, type, frm, position);
+		sub = init_submitted_value(name, fs->value, type, frm, position);
 		if (sub) add_to_list(*list, sub);
 		break;
 
 	case FC_IMAGE:
 	        name = straconcat(frm->name, ".x", NULL);
 		if (!name) break;
-		sub = new_submitted_value(name, "0", type, frm, position);
+		sub = init_submitted_value(name, "0", type, frm, position);
 		mem_free(name);
 		if (sub) add_to_list(*list, sub);
 
 		name = straconcat(frm->name, ".y", NULL);
 		if (!name) break;
-		sub = new_submitted_value(name, "0", type, frm, position);
+		sub = init_submitted_value(name, "0", type, frm, position);
 		mem_free(name);
 		if (sub) add_to_list(*list, sub);
 
@@ -970,7 +970,7 @@ get_form_uri(struct session *ses, struct document_view *doc_view,
 		memorize_form(ses, &submit, frm);
 #endif
 
-	free_submitted_value_list(&submit);
+	done_submitted_value_list(&submit);
 
 	if (!data.source
 	    || !init_string(&go)) {

@@ -1,5 +1,5 @@
 /* Implementation of a login manager for HTML forms */
-/* $Id: formhist.c,v 1.85 2004/06/16 15:32:42 zas Exp $ */
+/* $Id: formhist.c,v 1.86 2004/06/16 19:42:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,7 +111,7 @@ new_form(unsigned char *url)
 void
 free_form(struct formhist_data *form)
 {
-	free_submitted_value_list(form->submit);
+	done_submitted_value_list(form->submit);
 	mem_free(form->submit);
 	if (form->box_item)
 		done_listbox_item(&formhist_browser, form->box_item);
@@ -222,7 +222,7 @@ cont:
 					   : stracpy(value);
 			if (!enc_value) goto fail;
 
-			sv = new_submitted_value(name, enc_value,
+			sv = init_submitted_value(name, enc_value,
 						 ftype, NULL, 0);
 
 			mem_free(enc_value);
@@ -434,8 +434,8 @@ memorize_form(struct session *ses, struct list_head *submit,
 		if ((sv->type == FC_TEXT) || (sv->type == FC_PASSWORD)) {
 			struct submitted_value *sv2;
 
-			sv2 = new_submitted_value(sv->name, sv->value,
-					 	  sv->type, NULL, 0);
+			sv2 = init_submitted_value(sv->name, sv->value,
+					 	   sv->type, NULL, 0);
 			if (!sv2) goto fail;
 
 			add_to_list(*form->submit, sv2);
@@ -467,7 +467,7 @@ done_form_history(struct module *module)
 	struct formhist_data *form;
 
 	foreach(form, saved_forms) {
-		free_submitted_value_list(form->submit);
+		done_submitted_value_list(form->submit);
 		mem_free(form->submit);
 		if (form->box_item)
 			done_listbox_item(&formhist_browser, form->box_item);

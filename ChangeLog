@@ -1,3 +1,240 @@
+Tue May 25 18:08:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/encoding/encoding.c:
+
+	SSL is now nicely contained, so remove header defence.  
+
+Tue May 25 18:05:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Whoops. What is COLOR_MODE_DUMP doing there it is not for stuff like
+	that.  
+
+Tue May 25 17:40:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.c:
+
+	Fix to use CONFIG_IDN.  
+
+Tue May 25 17:39:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/osdep/: osdep.c, unix/sysinfo.h, unix/unix.c:
+
+	Fix to use CONFIG_GPM.  
+
+Tue May 25 17:35:45 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: encoding/encoding.c, modules/version.c,
+	protocol/http/http.c:
+
+	Use CONFIG_GZIP and CONFIG_BZIP2 instead of *_H variants. Reported
+	by Stephane CHAZELAS.  
+
+Tue May 25 17:34:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in:
+
+	EL_CHECK_OPTIONAL_LIBRARY(): #define CONFIG_* macros.  
+
+Tue May 25 16:47:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/intl/gettext/: bindtextdom.c, dcgettext.c, dcigettext.c,
+	dcngettext.c, dgettext.c, dngettext.c, explodename.c, finddomain.c,
+	gettext.c, gettextP.h, intl-compat.c, l10nflist.c, loadmsgcat.c,
+	localealias.c, ngettext.c, plural.c, textdomain.c:
+
+	Normalize subdir includes by specifying the complete path. This
+	should hopefully fix libintl.h inclusion conflicting with system
+	libintl.h .. I thought I already fixed this on another solaris box
+	but Stephane Chazelas reported it May 11 2004 on elinks-dev.  
+
+Tue May 25 16:29:00 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, config/options.inc, terminal/color.c,
+	terminal/color.h, terminal/screen.c:
+
+	Make the option system with its tremendous min/max value ensurance
+	guard us against malicious values in term->spec->color_mode. Me
+	thinks that is where it belongs, plus this completely wipes _all_
+	traces of 256 color support when disabled oh and then it is less
+	code too ;) 
+
+Tue May 25 15:07:10 2004  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/http/: date.c, date.h:
+
+	date.{c,h} were removed.  
+
+Tue May 25 07:14:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/: action.c, session.c, task.c, task.h:
+
+	Move goto_url_home() to task file. Merge in get_homepage_url().  
+
+Tue May 25 06:54:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: search.c, view.c, view.h:
+
+	Use goto_current_link() in do_typeahead() and
+	text_typeahead_handler(). Remove send_enter().  
+
+Tue May 25 06:46:11 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/action.c, viewer/text/view.c, viewer/text/view.h:
+
+	save_as(): Make it into a frame action.  
+
+Tue May 25 06:38:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, viewer/text/view.c, viewer/text/view.h:
+
+	Move save_url() closer to dialog_save_url().  
+
+Tue May 25 04:48:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bookmarks/bookmarks.c, dialogs/menu.c,
+	dialogs/menu.h, sched/session.c, terminal/tab.c, terminal/tab.h:
+
+	Revert the last 4 patches. I hate this crap.  
+
+Tue May 25 04:20:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: dialogs/menu.c, dialogs/menu.h, sched/session.c:
+
+	open_url_in_new_window(): Take URI struct as arg.  
+
+Tue May 25 04:17:05 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	process_session_info(): Use URI struct in the url_list loop.  
+
+Tue May 25 04:13:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, bookmarks/bookmarks.c, sched/session.c,
+	terminal/tab.c, terminal/tab.h:
+
+	open_url_in_new_tab(): Take URI struct as arg.  
+
+Tue May 25 04:03:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	get_listbox_uri() introduced.  
+
+Tue May 25 03:52:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/html/parser.c, document/html/parser.h,
+	sched/task.c:
+
+	Pass session->imgmap_href_base as URI struct all the way down the
+	call path.  
+
+Tue May 25 03:45:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: uri.c, uri.h:
+
+	uri->protocol_str -> uri->string.  
+
+Tue May 25 03:40:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: cache/cache.h, sched/session.c:
+
+	Last user of get_cache_uri_string() looks bogus too so remove it
+	completely.  
+
+Tue May 25 03:37:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: parser.c, parser.h, renderer.c:
+
+	Push the cache_entry URI all the way down to init_html_parser() even
+	if the cache entry is incomplete making it easier to track the URI
+	and finally fix the old behaviour so that the href_base is always
+	properly initialized.  
+
+Tue May 25 01:19:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, viewer/text/view.c:
+
+	Never ever do we want to struri() something headed for follow_url().  
+
+Tue May 25 01:00:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/task.c, sched/task.h,
+	viewer/text/link.c:
+
+	goto_url_frame(): Take URI arg. Damn I forgot to rename it ;(.  
+
+Tue May 25 00:55:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/refresh.c, sched/task.c, sched/task.h,
+	viewer/text/link.c:
+
+	Merge goto_url_frame() and goto_url_frame_reload() by adding an
+	extra enum cache_mode arg to to former.  
+
+Tue May 25 00:48:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, link.c, link.h:
+
+	goto_link() -> goto_current_link() and now graps current links from
+	passed doc_view.  
+
+Tue May 25 00:28:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h:
+
+	goto_link(): Return type changed to void. Nothing can go wrong in
+	there.  
+
+Tue May 25 00:26:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, sched/task.c,
+	sched/task.h, viewer/text/link.c:
+
+	session->imgmap_href_base changed to be a URI struct. goto_imgmap()
+	now takes URI struct.  
+
+Tue May 25 00:19:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, link.c, link.h:
+
+	goto_link(): Now takes URI struct.  
+
+Tue May 25 00:16:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, form.h, link.c:
+
+	get_form_url() -> get_form_uri() and now returns URI struct.
+	get_link_url() was merged into get_link_uri().  
+
+Tue May 25 00:08:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, link.c:
+
+	Let the caller of goto_link() free the URL.  
+
+Mon May 24 23:59:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: link.c, link.h:
+
+	get_link_url(): Make it static.  
+
+Mon May 24 23:57:51 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	open_current_link_in_new_tab(): What a long name .. anyway use
+	get_link_uri().  
+
+Mon May 24 23:52:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Let.s get the ball rolling. Use get_link_uri() in
+	open_url_in_new_window().  
+
 Mon May 24 18:18:45 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/terminal/kbd.c:

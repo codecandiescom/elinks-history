@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.40 2003/10/06 21:35:49 pasky Exp $ */
+/* $Id: search.c,v 1.41 2003/10/06 21:52:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -873,16 +873,22 @@ struct input_history search_history = { 0, {D_LIST_HEAD(search_history.items)} }
  * etc. The useless cruft should be blasted out. And it's quite ugly anyway,
  * a nice cleanup target ;-). --pasky */
 
-static unsigned char *radio_labels[] = {
+static unsigned char *regex_labels[] = {
 	N_("Normal search"),
 	N_("Regexp search"),
 	N_("Extended regexp search"),
 	NULL
 };
 
+static unsigned char *case_labels[] = {
+	N_("Case sensitive"),
+	N_("Case insensitive"),
+	NULL
+};
+
 struct search_dlg_hop {
 	void *data;
-	int whether_regex;
+	int whether_regex, cases;
 };
 
 static int
@@ -908,12 +914,24 @@ search_dlg_ok(struct dialog_data *dlg, struct widget_data *di)
 
 	update_dialog_data(dlg, di);
 
+	/* TODO: Some generic update_opt() or so. --pasky */
+
 	{
 		struct option *o = get_opt_rec(config_options,
 					       "document.browse.search.regex");
 
 		if (*((int *) o->ptr) != hop->whether_regex) {
 			*((int *) o->ptr) = hop->whether_regex;
+			o->flags |= OPT_TOUCHED;
+		}
+	}
+
+	{
+		struct option *o = get_opt_rec(config_options,
+					       "document.browse.search.case");
+
+		if (*((int *) o->ptr) != hop->cases) {
+			*((int *) o->ptr) = hop->cases;
 			o->flags |= OPT_TOUCHED;
 		}
 	}
@@ -938,9 +956,11 @@ search_dlg_fn(struct dialog_data *dlg)
 
 	text_width(term, dlg->dlg->udata, &min, &max);
 	/* I'm leet! --pasky */
-	max_group_width(term, 1, radio_labels, dlg->items + 1, 3, &max);
-	min_group_width(term, 1, radio_labels, dlg->items + 1, 3, &min);
-	buttons_width(term, dlg->items + 4, 2, &min, &max);
+	max_group_width(term, 1, regex_labels, dlg->items + 1, 3, &max);
+	min_group_width(term, 1, regex_labels, dlg->items + 1, 3, &min);
+	max_group_width(term, 1, case_labels, dlg->items + 4, 2, &max);
+	min_group_width(term, 1, case_labels, dlg->items + 4, 2, &min);
+	buttons_width(term, dlg->items + 6, 2, &min, &max);
 
 	if (max < dlg->dlg->items->dlen) max = dlg->dlg->items->dlen;
 
@@ -955,11 +975,15 @@ search_dlg_fn(struct dialog_data *dlg)
 			 AL_LEFT);
 
 	y++;
-	dlg_format_group(NULL, term, 1, radio_labels, dlg->items + 1, 3, 0,
+	dlg_format_group(NULL, term, 1, regex_labels, dlg->items + 1, 3, 0,
 			 &y, w, &rw);
 
 	y++;
-	dlg_format_buttons(NULL, term, dlg->items + 4, 2, 0, &y, w, &rw,
+	dlg_format_group(NULL, term, 1, case_labels, dlg->items + 4, 2, 0,
+			 &y, w, &rw);
+
+	y++;
+	dlg_format_buttons(NULL, term, dlg->items + 6, 2, 0, &y, w, &rw,
 			   AL_CENTER);
 
 	w = rw;
@@ -976,11 +1000,15 @@ search_dlg_fn(struct dialog_data *dlg)
 			 &y, w, NULL, AL_LEFT);
 
 	y++;
-	dlg_format_group(term, term, 1, radio_labels, dlg->items + 1, 3,
+	dlg_format_group(term, term, 1, regex_labels, dlg->items + 1, 3,
 			 dlg->x + DIALOG_LB, &y, w, NULL);
 
 	y++;
-	dlg_format_buttons(term, term, dlg->items + 4, 2, dlg->x + DIALOG_LB,
+	dlg_format_group(term, term, 1, case_labels, dlg->items + 4, 2,
+			 dlg->x + DIALOG_LB, &y, w, NULL);
+
+	y++;
+	dlg_format_buttons(term, term, dlg->items + 6, 2, dlg->x + DIALOG_LB,
 			   &y, w, NULL, AL_CENTER);
 }
 
@@ -1011,6 +1039,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	hop = mem_calloc(1, sizeof(struct search_dlg_hop));
 	if (!hop) return;
 	hop->whether_regex = get_opt_int("document.browse.search.regex");
+	hop->cases = get_opt_int("document.browse.search.case");
 	hop->data = data;
 
 #define SIZEOF_DIALOG (sizeof(struct dialog) + 4 * sizeof(struct widget))
@@ -1065,21 +1094,33 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 	dlg->items[3].dlen = sizeof(int);
 	dlg->items[3].data = (unsigned char *) &hop->whether_regex;
 
-	dlg->items[4].type = D_BUTTON;
-	dlg->items[4].gid = B_ENTER;
-	dlg->items[4].fn = search_dlg_ok;
-	dlg->items[4].dlen = 0;
-	dlg->items[4].text = okbutton;
-	dlg->items[4].udata = fn;
+	dlg->items[4].type = D_CHECKBOX;	
+	dlg->items[4].gid = 2;
+	dlg->items[4].gnum = 1;
+	dlg->items[4].dlen = sizeof(int);
+	dlg->items[4].data = (unsigned char *) &hop->cases;
 
-	dlg->items[5].type = D_BUTTON;
-	dlg->items[5].gid = B_ESC;
-	dlg->items[5].fn = search_dlg_cancel;
-	dlg->items[5].dlen = 0;
-	dlg->items[5].text = cancelbutton;
-	dlg->items[5].udata = cancelfn;
+	dlg->items[5].type = D_CHECKBOX;	
+	dlg->items[5].gid = 2;
+	dlg->items[5].gnum = 0;
+	dlg->items[5].dlen = sizeof(int);
+	dlg->items[5].data = (unsigned char *) &hop->cases;
 
-	dlg->items[6].type = D_END;
+	dlg->items[6].type = D_BUTTON;
+	dlg->items[6].gid = B_ENTER;
+	dlg->items[6].fn = search_dlg_ok;
+	dlg->items[6].dlen = 0;
+	dlg->items[6].text = okbutton;
+	dlg->items[6].udata = fn;
+
+	dlg->items[7].type = D_BUTTON;
+	dlg->items[7].gid = B_ESC;
+	dlg->items[7].fn = search_dlg_cancel;
+	dlg->items[7].dlen = 0;
+	dlg->items[7].text = cancelbutton;
+	dlg->items[7].udata = cancelfn;
+
+	dlg->items[8].type = D_END;
 
 	add_to_ml(&ml, dlg, NULL);
 	do_dialog(term, dlg, ml);

@@ -1,5 +1,5 @@
 /* Visited URL history managment - NOT goto_url_dialog history! */
-/* $Id: history.c,v 1.33 2003/10/23 22:18:26 pasky Exp $ */
+/* $Id: history.c,v 1.34 2003/10/23 22:27:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -59,7 +59,6 @@ destroy_history(struct ses_history *history)
 void
 clean_unhistory(struct ses_history *history)
 {
-	if (get_opt_int("document.history.keep_unhistory")) return;
 	free_history(&history->unhistory);
 }
 

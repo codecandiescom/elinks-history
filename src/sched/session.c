@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.180 2003/10/23 22:15:17 pasky Exp $ */
+/* $Id: session.c,v 1.181 2003/10/23 22:27:18 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1526,7 +1526,8 @@ really_goto_url_w(struct session *ses, unsigned char *url, unsigned char *target
 	/* abort_loading(ses); */
 
 end:
-	clean_unhistory(&ses->history);
+	if (get_opt_int("document.history.keep_unhistory"))
+		clean_unhistory(&ses->history);
 }
 
 static void

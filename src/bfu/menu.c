@@ -1,5 +1,5 @@
 /* Menu system implementation. */
-/* $Id: menu.c,v 1.64 2003/05/04 19:54:33 pasky Exp $ */
+/* $Id: menu.c,v 1.65 2003/05/07 12:41:43 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,27 +24,30 @@
 /* Types and structures */
 
 struct menu {
+	struct window *win;
+	struct menu_item *items;
+	void *data;
+
 	int selected;
 	int view;
+	int x, y;
 	int xp, yp;
-	int x, y, xw, yw;
+        int xw, yw;
 	int ni;
 	int hotkeys;
 #ifdef ENABLE_NLS
 	int lang;
 #endif
-	void *data;
-	struct window *win;
-	struct menu_item *items;
 };
 
 struct mainmenu {
+	struct window *win;
+	struct menu_item *items;
+	void *data;
+
 	int selected;
 	int sp;
 	int ni;
-	void *data;
-	struct window *win;
-	struct menu_item *items;
 };
 
 /* Global variables */
@@ -373,7 +376,15 @@ display_menu(struct terminal *term, struct menu *menu)
 		int co = menu_normal_color;
 		int hkco = menu_hotkey_color;
 
+#ifdef DEBUG
+		/* Sanity check. */
+		if (!menu->items[p].text)
+			internal("[%p] menu->items[%d].text == NULL", menu->items[p],
+				 menu->items[p].text);
+#endif
+
 		if (p == menu->selected) {
+			/* This entry is selected. */
 			co = menu_selected_color;
 			hkco = menu_selected_hotkey_color;
 
@@ -382,28 +393,45 @@ display_menu(struct terminal *term, struct menu *menu)
 			fill_area(term, menu->x + 1, s, menu->xw - 2, 1, co);
 		}
 
-		if (menu->items[p].rtext != M_BAR ||
-		    (_(menu->items[p].text, term) && _(menu->items[p].text, term)[0])) {
+		if (menu->items[p].rtext == M_BAR &&
+		    menu->items[p].text && !*menu->items[p].text) {
+
+			/* Horizontal separator */
+			set_char(term, menu->x, s,
+				 menu_frame_color | FRAMES_RTEE);
+
+			fill_area(term, menu->x + 1, s, menu->xw - 2, 1,
+				  menu_frame_color | FRAMES_HLINE);
+
+			set_char(term, menu->x + menu->xw - 1, s,
+				 menu_frame_color | FRAMES_LTEE);
+
+		} else {
+			unsigned char *text = _(menu->items[p].text, term);
+			unsigned char *rtext = _(menu->items[p].rtext, term);
 			unsigned char c;
 			int l = menu->items[p].hotkey_pos;
 			int x;
 
 			if (l) {
+				/* There's an hotkey so handle it. */
 				int hk = 0;
 #ifdef DEBUG
+				/* For redundant hotkeys highlighting. */
 				int double_hk = 0;
 
 				if (l < 0) l = -l, double_hk = 1;
 #endif
 				for (x = 0;
 				     x < menu->xw - 4
-				     && (c = _(menu->items[p].text, term)[x]);
+				     && (c = text[x]);
 				     x++) {
 					if (!hk && l
 					    && x == l - 1) {
 						hk = 1;
 						continue;
 					}
+
 					if (hk == 1) {
 #ifdef DEBUG
 						set_char(term, menu->x + x - 1 + 2,
@@ -419,33 +447,24 @@ display_menu(struct terminal *term, struct menu *menu)
 				}
 
 			} else {
+				/* No hotkey, just left text. */
 				for (x = 0;
 				     x < menu->xw - 4
-				     && (c = _(menu->items[p].text, term)[x]);
+				     && (c = text[x]);
 				     x++)
 					set_char(term, menu->x + x + 2, s, c | co);
 			}
 
-			if (_(menu->items[p].rtext, term)
-			    && _(menu->items[p].rtext, term)[0]) {
-				l = strlen(_(menu->items[p].rtext, term));
+			if (rtext && *rtext) {
+				/* There's a right text, so print it */
+				l = strlen(rtext);
 
 				for (x = l - 1;
 				     (x >= 0) && (menu->xw - 4 >= l - x)
-				     && (c = _(menu->items[p].rtext, term)[x]);
+				     && (c = rtext[x]);
 				     x--)
 					set_char(term, menu->x + menu->xw - 2 - l + x, s, c | co);
 			}
-
-		} else {
-			set_char(term, menu->x, s,
-				 menu_frame_color | FRAMES_RTEE);
-
-			fill_area(term, menu->x + 1, s, menu->xw - 2, 1,
-				  menu_frame_color | FRAMES_HLINE);
-
-			set_char(term, menu->x + menu->xw - 1, s,
-				 menu_frame_color | FRAMES_LTEE);
 		}
 	}
 
@@ -817,7 +836,15 @@ select_mainmenu(struct terminal *term, struct mainmenu *menu)
 		     delete_window(win)) ;
 	}
 
+#ifdef DEBUG
+	if (!it->func) {
+	       	internal("No menu function");
+	} else {
+		it->func(term, it->data, menu->data);
+	}
+#else
 	it->func(term, it->data, menu->data);
+#endif
 }
 
 static void
@@ -847,11 +874,10 @@ mainmenu_func(struct window *win, struct event *ev, int fwd)
 
 				for (i = 0; i < menu->ni; i++) {
 					int o = p;
+					unsigned char *text = _(menu->items[i].text, win->term);
 
-					if (_(menu->items[i].text, win->term)
-					    && _(menu->items[i].text, win->term)[0])
-						p += strlen(_(menu->items[i].text,
-							    win->term)) + 4
+					if (text && text[0])
+						p += strlen(text) + 4
 							    - (menu->items[i].hotkey_pos
 							    ? 1 : 0);
 

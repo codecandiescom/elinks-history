@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.16 2003/05/07 10:49:31 zas Exp $ */
+/* $Id: menu.h,v 1.17 2003/05/07 12:41:43 zas Exp $ */
 
 #ifndef EL__BFU_MENU_H
 #define EL__BFU_MENU_H
@@ -41,19 +41,17 @@ enum item_free {
  *
  */
 
+/* XXX: keep order of fields, there's some hard initializations for it. --Zas
+ */
 struct menu_item {
 	unsigned char *text;
 	unsigned char *rtext; /* FIXME: Use real keybindings. */
-
-	void *data;
-
 	void (*func)(struct terminal *, void *, void *);
-
+	void *data;
 	int in_m;
+	enum item_free item_free;
 	int hotkey_pos;
 	int ignore_hotkey;
-
-	enum item_free item_free;
 };
 
 

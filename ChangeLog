@@ -1,3 +1,98 @@
+Tue Apr  2 17:40:31 2002  Petr Baudis <pasky@ji.cz>:
+
+	* TODO, src/config/default.c, src/document/html/parser.c:
+	
+	Some support for vlink attribute. We honour it somehow now (thanks
+	to global history), BUT frequently after RGB approximation we won't
+	see the difference, and also the document must be re-rendered (thus
+	reloaded for now - I guess we would find some use for rerender
+	action as well) in order to update the colors (I fear I won't be
+	able to do it better with current HTML support).
+
+Tue Apr  2 17:16:11 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/protocol/ftp.c:
+	
+	Parse LIST response only after RETR, patch by Zas.
+
+Tue Apr  2 17:09:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/brazilian_portuguese.lng, intl/bulgarian.lng,
+	intl/catalan.lng, intl/czech.lng, intl/dutch.lng, intl/english.lng,
+	intl/estonian.lng, intl/finnish.lng, intl/french.lng,
+	intl/galician.lng, intl/german.lng, intl/greek.lng,
+	intl/hungarian.lng, intl/icelandic.lng, intl/indonesian.lng,
+	intl/italian.lng, intl/lithuanian.lng, intl/polish.lng,
+	intl/romanian.lng, intl/russian.lng, intl/slovak.lng,
+	intl/spanish.lng, intl/swedish.lng, intl/turkish.lng,
+	intl/ukrainian.lng, src/bookmarks/dialogs.c,
+	src/dialogs/globhist.c, src/intl/lang_defs.h,
+	src/intl/language.inc:
+	
+	Nicer displaying of Delete bookmark? dialog, patch by Zas.
+
+Tue Apr  2 17:04:38 2002  Petr Baudis <pasky@ji.cz>:
+
+	* intl/french.lng, src/intl/language.inc:
+	
+	French language updates for global history by Zas.
+
+Tue Apr  2 16:00:22 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: dialogs/globhist.c, document/globhist.c,
+	document/globhist.h:
+	
+	last_searched_globhist_* -> gh_last_searched_*.
+
+Tue Apr  2 15:58:32 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: bookmarks/dialogs.c, dialogs/globhist.c:
+	
+	Support for searching in global history, patch by Miciah.
+
+Tue Apr  2 14:11:57 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: Makefile.am, bookmarks/dialogs.c, dialogs/Makefile.am,
+	dialogs/edit.c, dialogs/edit.h:
+	
+	Moved code for edit_dialog() from bookmarks/dialogs.c to
+	dialogs/edit.c - we're going to use that code in global history as
+	well.
+
+Tue Apr  2 13:46:06 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS, src/osdep/os_dep.c:
+	
+	In xterm, modify window title accordingly to the URL being visited.
+	Patch by Kevin Everets and Michal Maruska.
+
+Tue Apr  2 13:36:53 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/: bookmarks.c, bookmarks.h, dialogs.c:
+	
+	And now the proper fix for the bookmarks bug. During
+	read_bookmarks(), we called add_bookmark(), which called
+	write_bookmarks() .. guess what happenned? Report and patch by Zas.
+
+Tue Apr  2 13:21:36 2002  Petr Baudis <pasky@ji.cz>:
+
+	* AUTHORS:
+	
+	Zas' true identity revealed!
+
+Tue Apr  2 12:53:17 2002  Petr Baudis <pasky@ji.cz>:
+
+	* BUGS:
+	
+	Long textarea weirdness
+
+Tue Apr  2 10:18:16 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/bookmarks/bookmarks.c:
+	
+	Tmp disable bookmarks resave in add_bookmark() .. real fix will
+	follow soon.
+
 Mon Apr  1 22:19:59 2002  Petr Baudis <pasky@ji.cz>:
 
 	* src/: Makefile.am, bookmarks/Makefile.am, bookmarks/bookmarks.c,

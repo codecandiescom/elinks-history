@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.82 2003/10/27 23:22:11 pasky Exp $ */
+/* $Id: link.c,v 1.83 2003/10/28 11:20:48 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,6 +185,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 	template = &doc_view->link_bg[link->n].c;
 	template->attr = 0;
 
+	/* FIXME: following test !! --Zas */
 	if (d_opt) {
 		if (!d_opt->allow_dark_on_black)
 			color_flags |= COLOR_INCREASE_CONTRAST;
@@ -199,6 +200,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 			template->attr |= SCREEN_ATTR_BOLD;
 	}
 
+	/* FIXME: and here ??? */
 	if (d_opt->color_active_link) {
 		colors.foreground = d_opt->active_link_fg;
 		colors.background = d_opt->active_link_bg;
@@ -214,6 +216,7 @@ draw_link(struct terminal *t, struct document_view *doc_view, int l)
 		colors.background = link->color.background;
 	}
 
+	/* FIXME: this causes segfaults. --Zas */
 	set_term_color(template, &colors, color_flags, d_opt->color_mode);
 
 	xmax = doc_view->xp + doc_view->xw;

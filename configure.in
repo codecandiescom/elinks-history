@@ -939,13 +939,6 @@ AC_OUTPUT([ \
  src/dialogs/Makefile \
  src/document/Makefile \
  src/document/html/Makefile \
- src/elusive/Makefile \
- src/elusive/layouter/Makefile \
- src/elusive/layouter/syntree/Makefile \
- src/elusive/parser/Makefile \
- src/elusive/parser/html/Makefile \
- src/elusive/renderer/Makefile \
- src/elusive/renderer/text/Makefile \
  src/formhist/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \

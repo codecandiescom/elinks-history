@@ -1,5 +1,5 @@
 /* Internal bookmarks XBEL bookmarks basic support */
-/* $Id: xbel.c,v 1.24 2003/06/08 10:49:25 zas Exp $ */
+/* $Id: xbel.c,v 1.25 2003/10/02 17:27:37 fabio Exp $ */
 
 /*
  * TODO: Decent XML output.
@@ -67,7 +67,7 @@ static void write_bookmarks_xbel(struct secure_save_info *ssi,
 /* Element */
 struct tree_node {
 	unsigned char *name;		/* Name of the element */
-	unsigned char *text;       	/* Text inside the element */
+	unsigned char *text;		/* Text inside the element */
 	struct attributes *attrs;	/* Attributes of the element */
 	struct tree_node *parent;
 	struct tree_node *children;

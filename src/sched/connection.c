@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.50 2003/07/03 22:49:23 jonas Exp $ */
+/* $Id: connection.c,v 1.51 2003/07/03 22:55:51 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,36 +232,37 @@ set_connection_state(struct connection *c, int state)
 }
 
 static struct keepalive_connection *
-is_host_on_keepalive_list(struct connection *c)
+get_keepalive_connection(struct connection *c)
 {
-	unsigned char *ho;
-	protocol_handler *ph = get_protocol_handler(c->url);
-	int po;
-	struct keepalive_connection *h;
+	unsigned char *host;
+	protocol_handler *handler = get_protocol_handler(c->url);
+	int port;
+	struct keepalive_connection *keepalive_connection;
 
-	if (!ph) return NULL;
+	if (!handler) return NULL;
 
-	po = get_port(c->url);
-	if (po == -1) return NULL;
+	port = get_port(c->url);
+	if (port == -1) return NULL;
 
-	ho = get_host_and_pass(c->url, 1);
-	if (!ho) return NULL;
+	host = get_host_and_pass(c->url, 1);
+	if (!host) return NULL;
 
-	foreach (h, keepalive_connections)
-		if (h->protocol == ph && h->port == po
-			&& !strcmp(h->host, ho)) {
-			mem_free(ho);
-			return h;
+	foreach (keepalive_connection, keepalive_connections)
+		if (keepalive_connection->protocol == handler
+		    && keepalive_connection->port == port
+		    && !strcmp(keepalive_connection->host, host)) {
+			mem_free(host);
+			return keepalive_connection;
 		}
 
-	mem_free(ho);
+	mem_free(host);
 	return NULL;
 }
 
 int
 get_keepalive_socket(struct connection *c)
 {
-	struct keepalive_connection *k = is_host_on_keepalive_list(c);
+	struct keepalive_connection *k = get_keepalive_connection(c);
 
 	if (!k) return -1;
 
@@ -692,7 +693,7 @@ again:
 			struct connection *dd = d;
 
 			d = d->next;
-			if (!dd->state && is_host_on_keepalive_list(dd)
+			if (!dd->state && get_keepalive_connection(dd)
 			    && try_connection(dd, max_conns_to_host, max_conns))
 				goto again;
 		}

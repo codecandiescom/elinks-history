@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.146 2004/03/28 18:21:39 zas Exp $ */
+/* $Id: tables.c,v 1.147 2004/03/28 18:23:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -138,7 +138,7 @@ int table_level;
 static void
 get_table_frames(struct table *t, struct table_frames *result)
 {
-	assert(t);
+	assert(t && result);
 
 	if (t->border) {
 		result->top = !!(t->frame & TABLE_FRAME_ABOVE);

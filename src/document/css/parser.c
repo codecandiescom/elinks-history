@@ -1,5 +1,5 @@
 /* CSS main parser */
-/* $Id: parser.c,v 1.79 2004/01/29 04:16:48 jonas Exp $ */
+/* $Id: parser.c,v 1.80 2004/01/29 04:19:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 {
 	unsigned char *name = NULL, *id = NULL, *class = NULL, *pseudo = NULL;
 	struct scanner_token *token = get_scanner_token(scanner);
-	struct selector_pkg *pkg = NULL;
 
 	/* TODO: selector is (<element>)?([#:.]<ident>)?, not just <element>.
 	 * And anyway we should have css_parse_selector(). --pasky */
@@ -193,9 +192,8 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 	/* FIXME: element can be even '*' --pasky */
 
 	while (scanner_has_tokens(scanner)) {
+		struct selector_pkg *pkg = NULL;
 		struct css_selector *selector;
-
-		pkg = NULL;
 
 		/* Load up the selector */
 
@@ -205,19 +203,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 		}
 
 		name = memacpy(token->string, token->length);
-
-		/* Check if we have already encountered the selector */
-
-		/* FIXME: This is totally broken because we have to do this _after_
-		 * scanning for id/class/pseudo. --pasky */
-		selector = get_css_selector(css, name, -1);
-		if (!selector)
-			goto syntax_error;
-
-		pkg = mem_calloc(1, sizeof(struct selector_pkg));
-		if (!pkg)
-			goto syntax_error;
-		pkg->selector = selector;
 
 		/* Let's see if we will get anything else of this. */
 
@@ -250,6 +235,19 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 			token = get_next_scanner_token(scanner);
 		}
 
+		/* Check if we have already encountered the selector */
+
+		/* FIXME: This is totally broken because we have to do this _after_
+		 * scanning for id/class/pseudo. --pasky */
+		selector = get_css_selector(css, name, -1);
+		if (!selector)
+			goto syntax_error;
+
+		pkg = mem_calloc(1, sizeof(struct selector_pkg));
+		if (!pkg)
+			goto syntax_error;
+		pkg->selector = selector;
+
 		/* This is a temporary measure, so that overly specific selectors won't
 		 * spoil our whole stylesheet until we support them, and we always
 		 * favour the general selectors instead. Keep just the add_to_list()
@@ -272,12 +270,6 @@ css_parse_selector(struct css_stylesheet *css, struct scanner *scanner,
 
 	if (token->type != '{') {
 syntax_error:
-		if (pkg) {
-			if (pkg->next)
-				del_from_list(pkg);
-			mem_free(pkg);
-		}
-
 		if (id) mem_free(id), id = NULL;
 		if (class) mem_free(class), class = NULL;
 		if (pseudo) mem_free(pseudo), pseudo = NULL;

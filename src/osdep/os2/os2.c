@@ -1,5 +1,5 @@
 /* OS/2 support fo ELinks. It has pretty different life than rest of ELinks. */
-/* $Id: os2.c,v 1.13 2003/10/28 00:17:49 pasky Exp $ */
+/* $Id: os2.c,v 1.14 2003/10/28 01:18:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -595,6 +595,16 @@ unhandle_mouse(void *om)
 	set_handlers(oms->p[0], NULL, NULL, NULL, NULL);
 	close(oms->p[0]);
 	done_draw();
+}
+
+void
+suspend_mouse(void *om)
+{
+}
+
+void
+resume_mouse(void *om)
+{
 }
 
 void

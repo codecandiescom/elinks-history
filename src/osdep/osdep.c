@@ -1,5 +1,5 @@
 /* Features which vary with the OS */
-/* $Id: osdep.c,v 1.116 2003/10/27 23:53:38 pasky Exp $ */
+/* $Id: osdep.c,v 1.117 2003/10/28 01:18:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -550,6 +550,16 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 
 void
 unhandle_mouse(void *data)
+{
+}
+
+void
+suspend_mouse(void *data)
+{
+}
+
+void
+resume_mouse(void *data)
 {
 }
 

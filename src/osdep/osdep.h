@@ -1,4 +1,4 @@
-/* $Id: osdep.h,v 1.36 2003/10/28 00:17:48 pasky Exp $ */
+/* $Id: osdep.h,v 1.37 2003/10/28 01:18:31 pasky Exp $ */
 
 #ifndef EL__OSDEP_OSDEP_H
 #define EL__OSDEP_OSDEP_H
@@ -26,6 +26,8 @@ void done_draw(void);
 void terminate_osdep(void);
 void *handle_mouse(int, void (*)(void *, unsigned char *, int), void *);
 void unhandle_mouse(void *);
+void suspend_mouse(void *);
+void resume_mouse(void *);
 int start_thread(void (*)(void *, int), void *, int);
 unsigned char *get_clipboard_text(void);
 void set_clipboard_text(unsigned char *);

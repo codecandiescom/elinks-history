@@ -1,5 +1,5 @@
 /* UNIX system-specific routines. */
-/* $Id: unix.c,v 1.7 2003/10/28 00:17:50 pasky Exp $ */
+/* $Id: unix.c,v 1.8 2003/10/28 01:18:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -27,6 +27,7 @@
 
 struct gpm_mouse_spec {
 	int h;
+	int cons;
 	void (*fn)(void *, unsigned char *, int);
 	void *data;
 };
@@ -67,14 +68,14 @@ gpm_mouse_in(struct gpm_mouse_spec *gms)
 }
 
 int
-init_mouse(int cons)
+init_mouse(int cons, int suspend)
 {
 	Gpm_Connect conn;
 
-	conn.eventMask = ~GPM_MOVE;
-	conn.defaultMask = GPM_MOVE;
-	conn.minMod = 0;
-	conn.maxMod = 0;
+	conn.eventMask = suspend ? 0 : ~GPM_MOVE;
+	conn.defaultMask = suspend ? ~0 : GPM_MOVE;
+	conn.minMod = suspend ? ~0 : 0;
+	conn.maxMod = suspend ? ~0 : 0;
 
 	return Gpm_Open(&conn, cons);
 }
@@ -92,12 +93,13 @@ handle_mouse(int cons, void (*fn)(void *, unsigned char *, int),
 	int h;
 	struct gpm_mouse_spec *gms;
 
-	h = init_mouse(cons);
+	h = init_mouse(cons, 0);
 	if (h < 0) return NULL;
 
 	gms = mem_alloc(sizeof(struct gpm_mouse_spec));
 	if (!gms) return NULL;
 	gms->h = h;
+	gms->cons = cons;
 	gms->fn = fn;
 	gms->data = data;
 	set_handlers(h, (void (*)(void *))gpm_mouse_in, NULL, NULL, gms);
@@ -115,6 +117,33 @@ unhandle_mouse(void *h)
 	set_handlers(gms->h, NULL, NULL, NULL, NULL);
 	mem_free(gms);
 	done_mouse();
+}
+
+void
+suspend_mouse(void *h)
+{
+	struct gpm_mouse_spec *gms = h;
+
+	if (!gms) return;
+
+	gms->h = init_mouse(gms->cons, 1);
+	if (gms->h < 0) return;
+
+	set_handlers(gms->h, NULL, NULL, NULL, NULL);
+}
+
+void
+resume_mouse(void *h)
+{
+	struct gpm_mouse_spec *gms = h;
+	int h;
+
+	if (!gms) return;
+
+	gms->h = init_mouse(gms->cons, 0);
+	if (gms->h < 0) return;
+
+	set_handlers(gms->h, (void (*)(void *))gpm_mouse_in, NULL, NULL, gms);
 }
 
 #endif

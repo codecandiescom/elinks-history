@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: sched.c,v 1.67 2002/12/15 01:51:21 zas Exp $ */
+/* $Id: sched.c,v 1.68 2002/12/17 12:07:37 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,6 @@
 
 
 /* Types and structs */
-struct list_head queue = {&queue, &queue};
-
 struct h_conn {
 	struct h_conn *next;
 	struct h_conn *prev;
@@ -54,15 +52,8 @@ struct k_conn {
 	ttime add_time;
 };
 
+
 /* Global variables */
-tcount connection_count = 0;
-int active_connections = 0;
-int st_r = 0;
-int keepalive_timeout = -1;
-
-struct list_head h_conns = {&h_conns, &h_conns};
-struct list_head keepalive_connections = {&keepalive_connections, &keepalive_connections};
-
 struct s_msg_dsc msg_dsc[] = {
 	{S_WAIT,		TEXT(T_WAITING_IN_QUEUE)},
 	{S_DNS,			TEXT(T_LOOKING_UP_HOST)},
@@ -110,11 +101,21 @@ struct s_msg_dsc msg_dsc[] = {
 	{0,			NULL}
 };
 
+static tcount connection_count = 0;
+static int active_connections = 0;
+static int st_r = 0;
+static int keepalive_timeout = -1;
+
+static struct list_head queue = {&queue, &queue};
+static struct list_head h_conns = {&h_conns, &h_conns};
+static struct list_head keepalive_connections = {&keepalive_connections, &keepalive_connections};
+
+
 /* Prototypes */
-void send_connection_info(struct connection *c);
-void check_keepalive_connections();
+static void send_connection_info(struct connection *c);
+static void check_keepalive_connections();
 #ifdef DEBUG
-void check_queue_bugs();
+static void check_queue_bugs();
 #endif
 
 
@@ -160,7 +161,7 @@ connect_info(int type)
 	return 0;
 }
 
-int
+static inline int
 connection_disappeared(struct connection *c, tcount count)
 {
 	struct connection *d;
@@ -172,7 +173,7 @@ connection_disappeared(struct connection *c, tcount count)
 	return 1;
 }
 
-struct h_conn *
+static struct h_conn *
 is_host_on_list(struct connection *c)
 {
 	unsigned char *ho = get_host_name(c->url);
@@ -188,7 +189,7 @@ is_host_on_list(struct connection *c)
 	return NULL;
 }
 
-void
+static void
 stat_timer(struct connection *c)
 {
 	ttime a;
@@ -263,7 +264,7 @@ setcstate(struct connection *c, int state)
 	if (state >= 0) send_connection_info(c);
 }
 
-struct k_conn *
+static struct k_conn *
 is_host_on_keepalive_list(struct connection *c)
 {
 	unsigned char *ho;
@@ -307,7 +308,7 @@ get_keepalive_socket(struct connection *c)
 	return 0;
 }
 
-void
+static inline void
 abort_all_keepalive_connections()
 {
 	struct k_conn *k;
@@ -320,7 +321,7 @@ abort_all_keepalive_connections()
 	check_keepalive_connections();
 }
 
-void
+static void
 free_connection_data(struct connection *c)
 {
 	struct h_conn *h;
@@ -402,7 +403,7 @@ send_connection_info(struct connection *c)
 	}
 }
 
-void
+static inline void
 del_connection(struct connection *c)
 {
 	del_from_list(c);
@@ -462,7 +463,7 @@ close:
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
 
-void
+static inline void
 del_keepalive_socket(struct k_conn *kc)
 {
 	del_from_list(kc);
@@ -471,7 +472,7 @@ del_keepalive_socket(struct k_conn *kc)
 	mem_free(kc);
 }
 
-void
+static inline void
 keepalive_timer(void *x)
 {
 	keepalive_timeout = -1;
@@ -509,7 +510,7 @@ check_keepalive_connections()
 				                  keepalive_timer, NULL);
 }
 
-void
+static inline void
 add_to_queue(struct connection *c)
 {
 	struct connection *cc;
@@ -522,7 +523,7 @@ add_to_queue(struct connection *c)
 	add_at_pos(cc->prev, c);
 }
 
-void
+static inline void
 sort_queue()
 {
 	struct connection *c;
@@ -544,7 +545,7 @@ sort_queue()
 	} while (swp);
 }
 
-void
+static inline void
 interrupt_connection(struct connection *c)
 {
 	/* FIXME: can we get rid of that -1 pointer ? */
@@ -558,14 +559,14 @@ interrupt_connection(struct connection *c)
 	free_connection_data(c);
 }
 
-void
+static inline void
 suspend_connection(struct connection *c)
 {
 	interrupt_connection(c);
 	setcstate(c, S_WAIT);
 }
 
-int
+static int
 try_to_suspend_connection(struct connection *c, unsigned char *ho)
 {
 	int pri = getpri(c);
@@ -592,7 +593,7 @@ try_to_suspend_connection(struct connection *c, unsigned char *ho)
 	return -1;
 }
 
-void
+static void
 run_connection(struct connection *c)
 {
 	struct h_conn *hc;
@@ -680,7 +681,7 @@ retry_conn_with_state(struct connection *conn, int state)
 	retry_connection(conn);
 }
 
-int
+static int
 try_connection(struct connection *c)
 {
 	struct h_conn *hc = is_host_on_list(c);
@@ -700,7 +701,7 @@ try_connection(struct connection *c)
 
 
 #ifdef DEBUG
-void
+static void
 check_queue_bugs()
 {
 	struct connection *d;
@@ -1131,7 +1132,7 @@ detach_connection(struct status *stat, int pos)
 	free_entry_to(conn->cache, pos);
 }
 
-void
+static inline void
 connection_timeout(struct connection *c)
 {
 	c->timer = -1;
@@ -1146,7 +1147,7 @@ connection_timeout(struct connection *c)
 	}
 }
 
-void
+static inline void
 connection_timeout_1(struct connection *c)
 {
 	c->timer = install_timer((c->unrestartable ? get_opt_int("connection.unrestartable_receive_timeout")
@@ -1163,6 +1164,8 @@ set_timeout(struct connection *c)
 				 * 500, (void (*)(void *))connection_timeout_1, c);
 }
 
+#if 0
+/* Not used for now. */
 void
 reset_timeout(struct connection *c)
 {
@@ -1171,6 +1174,7 @@ reset_timeout(struct connection *c)
 		c->timer = -1;
 	}
 }
+#endif
 
 void
 abort_all_connections()

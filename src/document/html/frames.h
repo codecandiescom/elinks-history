@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.8 2003/08/23 04:44:58 jonas Exp $ */
+/* $Id: frames.h,v 1.9 2003/08/23 17:34:10 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -32,8 +32,6 @@ struct line {
 	struct screen_char *d;
 
 	int l;
-	int size;
-	int dsize;
 
 	color_t bgcolor;
 };

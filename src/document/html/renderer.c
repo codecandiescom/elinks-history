@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.210 2003/08/23 16:33:21 jonas Exp $ */
+/* $Id: renderer.c,v 1.211 2003/08/23 17:34:10 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -97,27 +97,22 @@ static int super = 0; /* Activated/deactivated by AT_SUPERSCRIPT */
 
 
 static int
-realloc_lines(struct part *p, int y)
+realloc_lines(struct document *document, int y)
 {
 	int i;
 	int newsize = ALIGN(y + 1);
-	struct document *document;
 	struct line *lines;
 
-	assert(p && p->document);
+	assert(document);
 	if_assert_failed return 0;
 
-	document = p->document;
 	lines = document->data;
 
-	if (newsize >= ALIGN(document->y)
-	    && (!document->data || document->data->size < newsize)) {
-
+	if (newsize > ALIGN(document->y)) {
 		lines = mem_realloc(lines, newsize * sizeof(struct line));
 		if (!lines) return -1;
 
 		document->data = lines;
-		lines->size = newsize;
 	}
 
 	for (i = document->y; i <= y; i++) {
@@ -132,27 +127,25 @@ realloc_lines(struct part *p, int y)
 }
 
 static int
-realloc_line(struct part *p, int y, int x)
+realloc_line(struct document *document, int y, int x)
 {
 	int i;
 	int newsize = ALIGN(x + 1);
 	struct line *line;
 	unsigned char color;
 
-	assert(p && p->document);
+	assert(document);
 	if_assert_failed return 0;
 
-	line = &p->document->data[y];
+	line = &document->data[y];
 
-	if (newsize >= ALIGN(line->l)
-	    && (!line->d || line->dsize < newsize)) {
+	if (newsize > ALIGN(line->l)) {
 		struct screen_char *l;
 
 		l = mem_realloc(line->d, newsize * sizeof(struct screen_char));
 		if (!l)	return -1;
 
 		line->d = l;
-		line->dsize = newsize;
 	}
 
 	line->bgcolor = par_format.bgcolor;
@@ -178,7 +171,7 @@ xpand_lines(struct part *p, int y)
 	if_assert_failed return 0;
 
 	y += p->yp;
-	if (y >= p->document->y) return realloc_lines(p, y);
+	if (y >= p->document->y) return realloc_lines(p->document, y);
 
 	return 0;
 }
@@ -204,7 +197,7 @@ xpand_line(struct part *p, int y, int x)
 	if (x < p->document->data[y].l)
 		return 0;
 
-	return realloc_line(p, y, x);
+	return realloc_line(p->document, y, x);
 }
 
 int

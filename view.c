@@ -2132,6 +2132,12 @@ static int try_document_key(struct session *ses, struct f_data_c *fd,
 {
 	int i; /* GOD I HATE C! --FF */ /* YEAH, BRAINFUCK RULEZ! --pasky */
 	long x = (ev->x < 0x100) ? upcase(ev->x) : ev->x;
+	int passed = -1;
+		    
+	if (x >= 'A' && x <= 'Z' && ev->y != KBD_ALT) {
+		/* We accept those only in alt-combo. */
+		return 0;
+	}
 
 	/* Run through all the links and see if one of them is bound to the
 	 * key we test.. */
@@ -2139,10 +2145,20 @@ static int try_document_key(struct session *ses, struct f_data_c *fd,
 	for (i = 0; i < fd->f_data->nlinks; i++) {
 		struct link *link = &fd->f_data->links[i];
 
-		if (x == link->accesskey
-		    && (x < 'A' || x > 'Z' || ev->y == KBD_ALT)) {
+		if (x == link->accesskey) {
+			if (passed != i && i <= fd->vs->current_link) {
+				/* This is here in order to rotate between
+				 * links with same accesskey. */
+				if (passed < 0)	passed = i;
+				continue;
+			}
 			goto_link_number_do(ses, fd, i);
 			return 1;
+		}
+
+		if (i == fd->f_data->nlinks - 1 && passed >= 0) {
+			/* Return to the start. */
+			i = passed - 1;
 		}
 	}
 

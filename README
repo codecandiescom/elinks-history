@@ -30,7 +30,7 @@ drastic bloating of the code, the development is driven in the course of
 modularization and separation of add-on modules (like cookies, bookmarks, ssl,
 lua etc).
 
-If you want to write some patches, please read the HACKING document.
+If you want to write some patches, please read the doc/hacking.txt document.
 
 If you want to add a new language, please read intl/README document.
 
@@ -40,6 +40,6 @@ If you want to request features or report bugs, use the mailing list as
 mentioned above, bugzilla at bugzilla.elinks.or.cz or come and see us on
 irc.freenode.net #elinks.
 
-$Id: README,v 1.19 2003/10/13 18:39:13 fabio Exp $
+$Id: README,v 1.20 2003/12/20 22:42:36 pasky Exp $
 
 vim: textwidth=80

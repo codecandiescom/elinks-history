@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.96 2003/06/25 10:27:23 pasky Exp $ */
+/* $Id: file.c,v 1.97 2003/06/26 11:10:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -131,11 +131,11 @@ static inline void
 stat_links(unsigned char **p, int *l, struct stat *stp)
 {
 #ifdef FS_UNIX_HARDLINKS
-	unsigned char lnk[64];
-
 	if (!stp) {
 		add_to_str(p, l, "    ");
 	} else {
+		unsigned char lnk[64];
+
 		ulongcat(lnk, NULL, stp->st_nlink, 3, ' ');
 		add_to_str(p, l, lnk);
 		add_chr_to_str(p, l, ' ');
@@ -231,7 +231,6 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 		unsigned char str[13];
 		int wr;
 
-
 		if (current_time > when + 6L * 30L * 24L * 60L * 60L
 		    || current_time < when - 60L * 60L)
 			fmt = "%b %e  %Y";
@@ -252,15 +251,16 @@ stat_date(unsigned char **p, int *l, struct stat *stp)
 
 
 struct directory_entry {
+	/* The various attribute info collected with the stat_* functions. */
 	unsigned char *attrib;
+
+	/* The full path of the dir entry. */
 	unsigned char *name;
 };
 
 static int
-comp_de(struct directory_entry *d1, struct directory_entry *d2)
+compare_dir_entries(struct directory_entry *d1, struct directory_entry *d2)
 {
-	if (d1->name[0] == '.' && d1->name[1] == '.' && !d1->name[2]) return -1;
-	if (d2->name[0] == '.' && d2->name[1] == '.' && !d2->name[2]) return 1;
 	if (d1->attrib[0] == 'd' && d2->attrib[0] != 'd') return -1;
 	if (d1->attrib[0] != 'd' && d2->attrib[0] == 'd') return 1;
 	return strcmp(d1->name, d2->name);
@@ -271,14 +271,13 @@ comp_de(struct directory_entry *d1, struct directory_entry *d2)
  * fragment. */
 static inline void
 add_dir_entry(struct directory_entry *entry, struct file_data *data,
-	      unsigned char *path, unsigned char *dircolor)
+	      int pathlen, unsigned char *dircolor)
 {
 	unsigned char *lnk = NULL;
 	unsigned char *htmlname = init_str();
 	unsigned char *fragment = data->fragment;
 	int fragmentlen = data->fragmentlen;
 	int htmlnamelen = 0;
-	int pathlen = strlen(path);
 
 	if (!htmlname) return;
 	add_htmlesc_str(&htmlname, &htmlnamelen,
@@ -312,8 +311,7 @@ add_dir_entry(struct directory_entry *entry, struct file_data *data,
 	add_to_str(&fragment, &fragmentlen, "\">");
 
 	if (entry->attrib[0] == 'd' && *dircolor) {
-		/* The <b> is here for the case when we've
-		 * use_document_colors off. */
+		/* The <b> is for the case when use_document_colors is off. */
 		add_to_str(&fragment, &fragmentlen, "<font color=\"");
 		add_to_str(&fragment, &fragmentlen, dircolor);
 		add_to_str(&fragment, &fragmentlen, "\"><b>");
@@ -346,7 +344,6 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	struct directory_entry *entries = NULL;
 	int size = 0;
-	int i;
 	struct dirent *entry;
 	unsigned char dircolor[8];
 	int show_hidden_files = get_opt_bool("protocol.file.show_hidden_files");
@@ -383,6 +380,9 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		if (!new_entries) continue;
 		entries = new_entries;
 
+		/* We allocate the full path because it is used in a few places
+		 * which means less allocation although a bit more short term
+		 * memory usage. */
 		name = straconcat(dirpath, entry->d_name, NULL);
 		if (!name) continue;
 
@@ -406,23 +406,28 @@ add_dir_entries(DIR *directory, unsigned char *dirpath, struct file_data *data)
 		stat_group(&attrib, &attriblen, stp);
 		stat_size(&attrib, &attriblen, stp);
 		stat_date(&attrib, &attriblen, stp);
+
 		entries[size].name = name;
 		entries[size].attrib = attrib;
 		size++;
 	}
 
 	if (size) {
+		int dirpathlen = strlen(dirpath);
+		int i;
+
 		qsort(entries, size, sizeof(struct directory_entry),
-		      (int(*)(const void *, const void *))comp_de);
+		      (int(*)(const void *, const void *))compare_dir_entries);
+
+		for (i = 0; i < size; i++) {
+			add_dir_entry(&entries[i], data, dirpathlen, dircolor);
+			mem_free(entries[i].attrib);
+			mem_free(entries[i].name);
+		}
 	}
 
-	for (i = 0; i < size; i++) {
-		add_dir_entry(&entries[i], data, dirpath, dircolor);
-		if (entries[i].attrib) mem_free(entries[i].attrib);
-		if (entries[i].name) mem_free(entries[i].name);
-	}
-
-	mem_free(entries);
+	/* We may have allocated space for entries but added none. */
+	if (entries) mem_free(entries);
 }
 
 /* Generates a HTML page listing the content of @directory with the path
@@ -433,29 +438,26 @@ list_directory(DIR *directory, unsigned char *dirpath, struct file_data *data)
 {
 	unsigned char *fragment = init_str();
 	int fragmentlen = 0;
+	unsigned char *slash = dirpath;
+	unsigned char *pslash = ++slash;
 
 	if (!fragment) return S_OUT_OF_MEM;
 
 	add_to_str(&fragment, &fragmentlen, "<html>\n<head><title>");
 	add_htmlesc_str(&fragment, &fragmentlen, dirpath, strlen(dirpath));
-	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory ");
-	{
-		/* Make the directory path with links to each subdir. */
-		unsigned char *slash = dirpath;
-		unsigned char *pslash = ++slash;
+	add_to_str(&fragment, &fragmentlen, "</title></head>\n<body>\n<h2>Directory /");
 
-		add_chr_to_str(&fragment, &fragmentlen, '/');
-		while ((slash = strchr(slash, '/'))) {
-			*slash = 0;
-			add_to_str(&fragment, &fragmentlen, "<a href=\"");
-			/* FIXME: htmlesc? At least we should escape quotes. --pasky */
-			add_to_str(&fragment, &fragmentlen, dirpath);
-			add_to_str(&fragment, &fragmentlen, "/\">");
-			add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
-			add_to_str(&fragment, &fragmentlen, "</a>/");
-			*slash = '/';
-			pslash = ++slash;
-		}
+	/* Make the directory path with links to each subdir. */
+	while ((slash = strchr(slash, '/'))) {
+		*slash = 0;
+		add_to_str(&fragment, &fragmentlen, "<a href=\"");
+		/* FIXME: htmlesc? At least we should escape quotes. --pasky */
+		add_to_str(&fragment, &fragmentlen, dirpath);
+		add_to_str(&fragment, &fragmentlen, "/\">");
+		add_htmlesc_str(&fragment, &fragmentlen, pslash, strlen(pslash));
+		add_to_str(&fragment, &fragmentlen, "</a>/");
+		*slash = '/';
+		pslash = ++slash;
 	}
 	add_to_str(&fragment, &fragmentlen, "</h2>\n<pre>");
 

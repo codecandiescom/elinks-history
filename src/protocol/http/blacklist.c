@@ -1,5 +1,5 @@
 /* Blacklist manager */
-/* $Id: blacklist.c,v 1.20 2004/07/15 16:11:29 jonas Exp $ */
+/* $Id: blacklist.c,v 1.21 2004/07/15 16:12:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -85,7 +85,7 @@ del_blacklist_entry(struct uri *uri, enum blacklist_flags flags)
 	}
 }
 
-int
+enum blacklist_flags
 get_blacklist_flags(struct uri *uri)
 {
 	struct blacklist_entry *entry = get_blacklist_entry(uri);

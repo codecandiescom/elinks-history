@@ -1,4 +1,4 @@
-/* $Id: blacklist.h,v 1.7 2004/07/15 16:01:51 jonas Exp $ */
+/* $Id: blacklist.h,v 1.8 2004/07/15 16:12:21 jonas Exp $ */
 
 #ifndef EL__PROTOCOL_HTTP_BLACKLIST_H
 #define EL__PROTOCOL_HTTP_BLACKLIST_H
@@ -12,7 +12,7 @@ enum blacklist_flags {
 
 void add_blacklist_entry(struct uri *, enum blacklist_flags);
 void del_blacklist_entry(struct uri *, enum blacklist_flags);
-int get_blacklist_flags(struct uri *);
+enum blacklist_flags get_blacklist_flags(struct uri *);
 void free_blacklist(void);
 
 #endif

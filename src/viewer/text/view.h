@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.63 2004/10/10 00:43:33 miciah Exp $ */
+/* $Id: view.h,v 1.64 2004/10/10 01:46:57 miciah Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -54,17 +54,14 @@ struct document_view *current_frame(struct session *);
 /* Used for changing between formatted and source (plain) view. */
 void toggle_plain_html(struct session *ses, struct document_view *doc_view, int xxxx);
 
-enum frame_event_status move_cursor(struct session *ses,
-				    struct document_view *doc_view,
-				    int x, int y);
-
-#define kbdprefix_repeat_count_or_one(ses) \
-	((ses)->kbdprefix.repeat_count ? (ses)->kbdprefix.repeat_count : 1)
-
-#define move_cursor_left(ses, view)	move_cursor(ses, view, ses->tab->x - kbdprefix_repeat_count_or_one(ses), ses->tab->y)
-#define move_cursor_right(ses, view)	move_cursor(ses, view, ses->tab->x + kbdprefix_repeat_count_or_one(ses), ses->tab->y)
-#define move_cursor_up(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y - kbdprefix_repeat_count_or_one(ses))
-#define move_cursor_down(ses, view)	move_cursor(ses, view, ses->tab->x, ses->tab->y + kbdprefix_repeat_count_or_one(ses))
+enum frame_event_status move_cursor_left(struct session *ses,
+					 struct document_view *view);
+enum frame_event_status move_cursor_right(struct session *ses,
+					  struct document_view *view);
+enum frame_event_status move_cursor_up(struct session *ses,
+				       struct document_view *view);
+enum frame_event_status move_cursor_down(struct session *ses,
+					 struct document_view *view);
 
 /* Used for changing wrapping of text */
 void toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx);

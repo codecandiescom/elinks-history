@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.606 2004/10/10 00:43:33 miciah Exp $ */
+/* $Id: view.c,v 1.607 2004/10/10 01:46:57 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -364,6 +364,10 @@ scroll_mouse_right(struct session *ses, struct document_view *doc_view)
 }
 #endif /* CONFIG_MOUSE */
 
+static enum frame_event_status move_cursor(struct session *ses,
+					   struct document_view *doc_view,
+					   int x, int y);
+
 void
 move_document_start(struct session *ses, struct document_view *doc_view)
 {
@@ -451,7 +455,7 @@ toggle_wrap_text(struct session *ses, struct document_view *doc_view, int xxxx)
 /* Move the cursor to the document coordinates provided as @x and @y,
  * scroll the document if necessary, put us in cursor-routing navigation mode
  * if that is not the current mode, and select any link under the cursor. */
-enum frame_event_status
+static enum frame_event_status
 move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 {
 	struct terminal *term = ses->tab->term;
@@ -504,6 +508,35 @@ move_cursor(struct session *ses, struct document_view *doc_view, int x, int y)
 
 	return FRAME_EVENT_REFRESH;
 }
+
+#define kbdprefix_repeat_count_or_one(ses) \
+	(ses->kbdprefix.repeat_count ? (ses)->kbdprefix.repeat_count : 1)
+
+enum frame_event_status
+move_cursor_left(struct session *ses, struct document_view *view)
+{
+	return move_cursor(ses, view, ses->tab->x - kbdprefix_repeat_count_or_one(ses), ses->tab->y);
+}
+
+enum frame_event_status
+move_cursor_right(struct session *ses, struct document_view *view)
+{
+	return move_cursor(ses, view, ses->tab->x + kbdprefix_repeat_count_or_one(ses), ses->tab->y);
+}
+
+enum frame_event_status
+move_cursor_up(struct session *ses, struct document_view *view)
+{
+	return move_cursor(ses, view, ses->tab->x, ses->tab->y - kbdprefix_repeat_count_or_one(ses));
+}
+
+enum frame_event_status
+move_cursor_down(struct session *ses, struct document_view *view)
+{
+	return move_cursor(ses, view, ses->tab->x, ses->tab->y + kbdprefix_repeat_count_or_one(ses));
+}
+
+#undef kbdprefix_repeat_count_or_one
 
 
 enum frame_event_status

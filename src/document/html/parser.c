@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.106 2003/06/08 13:59:06 pasky Exp $ */
+/* $Id: parser.c,v 1.107 2003/06/08 14:40:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -177,11 +177,11 @@ aa:
 			e++;
 		}
 	} else {
-		unsigned char uu = *e;
+		unsigned char quote = *e;
 
 a:
 		e++;
-		while (*e != uu) {
+		while (*e != quote) {
 			if (!*e) {
 				if (a) mem_free(a);
 				return NULL;
@@ -195,7 +195,7 @@ a:
 			e++;
 		}
 		e++;
-		if (*e == uu) {
+		if (*e == quote) {
 			if (!f) add_chr(a, l, *e);
 			goto a;
 		}

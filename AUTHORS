@@ -9,7 +9,7 @@ Adam Harvey <matlhdam@iinet.net.au>
 	Fixed sometimes badly posted form
 
 Arun Upadhyaya Kishan <akishan@cs.stanford.edu>
-	ftpparse.{c,h} update for gcc 2.95	
+	ftpparse.{c,h} update for gcc 2.95
 
 Alberto García <berto@gpul.org>
 	Galician translation
@@ -342,6 +342,9 @@ Pixel <pixel@mandrakesoft.com>
 Radovan Stas <radoone@skmi.science.upjs.sk>
 	Slovak translation
 
+Raúl Núñez de Arenas Coronado <raul@pleyades.net>
+	get_unique_name() fix.
+
 Sebastian Zagrodzki <s.zagrodzki@sith.mimuw.edu.pl>
 	Shift-G opens dialog with pre-displayed current URL
 
@@ -423,4 +426,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.118 2003/01/26 19:48:56 pasky Exp $
+$Id: AUTHORS,v 1.119 2003/04/28 10:00:51 zas Exp $

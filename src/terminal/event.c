@@ -1,5 +1,5 @@
 /* Event system support routines. */
-/* $Id: event.c,v 1.42 2004/06/12 12:14:01 jonas Exp $ */
+/* $Id: event.c,v 1.43 2004/06/13 03:13:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,55 +115,21 @@ term_send_ucs(struct terminal *term, struct term_event *ev, unicode_val u)
 	}
 }
 
-
-void
-in_term(struct terminal *term)
+static int
+handle_interlink_event(struct terminal *term, struct term_event *ev)
 {
-	struct term_event *ev;
-	int r;
-	unsigned char *iq = term->input_queue;
-
-	if (!iq || !term->qfreespace || term->qfreespace - term->qlen > ALLOC_GR) {
-		int newsize = ((term->qlen + ALLOC_GR) & ~(ALLOC_GR - 1));
-
-		iq = mem_realloc(term->input_queue, newsize);
-		if (!iq) {
-			destroy_terminal(term);
-			return;
-		}
-		term->input_queue = iq;
-		term->qfreespace = newsize - term->qlen;
-	}
-
-	r = safe_read(term->fdin, iq + term->qlen, term->qfreespace);
-	if (r <= 0) {
-		if (r == -1 && errno != ECONNRESET)
-			ERROR(_("Could not read event: %d (%s)", term),
-			      errno, (unsigned char *) strerror(errno));
-
-		destroy_terminal(term);
-		return;
-	}
-	term->qlen += r;
-	term->qfreespace -= r;
-
-test_queue:
-	if (term->qlen < sizeof(struct term_event)) return;
-	ev = (struct term_event *)iq;
-	r = sizeof(struct term_event);
+	struct terminal_info *info = NULL;
 
 	switch (ev->ev) {
 	case EV_INIT:
 	{
-		struct terminal_info *info;
-
 		if (term->qlen < sizeof(struct terminal_info))
-			return;
+			return 0;
 
-		info = (struct terminal_info *) iq;
+		info = (struct terminal_info *) ev;
 
 		if (term->qlen < sizeof(struct terminal_info) + info->length)
-			return;
+			return 0;
 
 		memcpy(term->term, info->term, MAX_TERM_LEN);
 		term->term[MAX_TERM_LEN - 1] = 0;
@@ -203,7 +169,6 @@ test_queue:
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
 		term->environment = info->system_env;
-		r = sizeof(struct terminal_info) + info->length;
 
 		/* We need to make sure that it is possible to draw on before
 		 * decoding the session info so that handling of bad URL syntax
@@ -214,7 +179,7 @@ test_queue:
 		 * are doing a remote session so quit.*/
 		if (!decode_session_info(term, info->length, (int *) info->data)) {
 			destroy_terminal(term);
-			return;
+			return 0;
 		}
 
 		ev->ev = EV_REDRAW;
@@ -302,11 +267,56 @@ test_queue:
 
 	case EV_ABORT:
 		destroy_terminal(term);
-		return;
+		return 0;
 
 	default:
 		ERROR(_("Bad event %d", term), ev->ev);
 	}
+
+	/* For EV_INIT we read a liitle more */
+	if (info) return sizeof(struct term_event) + info->length;
+	return sizeof(struct term_event);
+}
+
+void
+in_term(struct terminal *term)
+{
+	struct term_event *ev;
+	int r;
+	unsigned char *iq = term->input_queue;
+
+	if (!iq || !term->qfreespace || term->qfreespace - term->qlen > ALLOC_GR) {
+		int newsize = ((term->qlen + ALLOC_GR) & ~(ALLOC_GR - 1));
+
+		iq = mem_realloc(term->input_queue, newsize);
+		if (!iq) {
+			destroy_terminal(term);
+			return;
+		}
+		term->input_queue = iq;
+		term->qfreespace = newsize - term->qlen;
+	}
+
+	r = safe_read(term->fdin, iq + term->qlen, term->qfreespace);
+	if (r <= 0) {
+		if (r == -1 && errno != ECONNRESET)
+			ERROR(_("Could not read event: %d (%s)", term),
+			      errno, (unsigned char *) strerror(errno));
+
+		destroy_terminal(term);
+		return;
+	}
+	term->qlen += r;
+	term->qfreespace -= r;
+
+test_queue:
+	if (term->qlen < sizeof(struct term_event)) return;
+	ev = (struct term_event *)iq;
+
+	r = sizeof(struct term_event);
+
+	if (!handle_interlink_event(term, ev))
+		return;
 	/* redraw_screen(term); */
 
 	if (term->qlen == r) {

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.43 2002/12/05 22:48:54 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.44 2002/12/06 20:28:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,6 +327,7 @@ static struct strtonum action_table[] = {
 	{ "next-frame", ACT_NEXT_FRAME },
 	{ "open-new-window", ACT_OPEN_NEW_WINDOW },
 	{ "open-link-in-new-window", ACT_OPEN_LINK_IN_NEW_WINDOW },
+	{ "options-manager", ACT_OPTIONS_MANAGER },
 	{ "page-down", ACT_PAGE_DOWN },
 	{ "page-up", ACT_PAGE_UP },
 	{ "paste-clipboard", ACT_PASTE_CLIPBOARD },
@@ -546,6 +547,7 @@ static struct default_kb default_main_keymap[] = {
 	{ ACT_BOOKMARK_MANAGER, 's' },
 	{ ACT_BOOKMARK_MANAGER, 'S' },
 	{ ACT_HISTORY_MANAGER, 'h' },
+	{ ACT_OPTIONS_MANAGER, 'o' },
 	{ ACT_COOKIES_LOAD, 'K', KBD_CTRL },
 	{ ACT_QUIT, 'q' },
 	{ ACT_REALLY_QUIT, 'Q' },

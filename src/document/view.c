@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.105 2002/12/06 14:20:08 pasky Exp $ */
+/* $Id: view.c,v 1.106 2002/12/06 20:28:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -26,8 +26,9 @@
 #include "dialogs/menu.h"
 #include "bookmarks/dialogs.h"
 #include "cookies/cookies.h"
-#include "config/options.h"
+#include "config/dialogs.h"
 #include "config/kbdbind.h"
+#include "config/options.h"
 #include "dialogs/document.h"
 #include "document/cache.h"
 #include "document/download.h"
@@ -2903,6 +2904,10 @@ quak:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					menu_history_manager(ses->term, NULL, ses);
 #endif
+				goto x;
+			case ACT_OPTIONS_MANAGER:
+				if (!get_opt_int_tree(cmdline_options, "anonymous"))
+					menu_options_manager(ses->term, NULL, ses);
 				goto x;
 			case ACT_COOKIES_LOAD:
 #ifdef COOKIES

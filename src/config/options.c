@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.131 2002/12/06 18:51:12 pasky Exp $ */
+/* $Id: options.c,v 1.132 2002/12/06 20:28:47 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -20,6 +20,7 @@
 
 #include "links.h"
 
+#include "bfu/listbox.h"
 #include "config/conf.h"
 #include "config/options.h"
 #include "config/opttypes.h"
@@ -48,6 +49,12 @@
 
 struct list_head *root_options;
 struct list_head *cmdline_options;
+
+struct list_head root_option_box_items = {
+	&root_option_box_items, &root_option_box_items
+};
+
+struct list_head option_boxes = { &option_boxes, &option_boxes };
 
 /**********************************************************************
  Options interface
@@ -170,12 +177,27 @@ get_opt_(unsigned char *file, int line, struct list_head *tree,
 void
 add_opt_rec(struct list_head *tree, unsigned char *path, struct option *option)
 {
+	struct option *opt_tree = NULL;
 	struct list_head *cat = tree;
 
-	if (*path) cat = get_opt(tree, path);
+	if (*path) {
+		opt_tree = get_opt_rec(tree, path);
+		cat = opt_tree->ptr;
+	}
 	if (!cat) return;
 
-	add_to_list(*cat, option);
+	if (opt_tree && opt_tree->box_item && option->box_item) {
+		option->box_item->depth = opt_tree->box_item->depth + 1;
+		option->box_item->root = opt_tree->box_item;
+
+		add_at_pos((struct listbox_item *) opt_tree->box_item->child.prev,
+				option->box_item);
+	} else if (option->box_item) {
+		add_at_pos((struct listbox_item *) root_option_box_items.prev,
+				option->box_item);
+	}
+
+	add_at_pos((struct option *) cat->prev, option);
 }
 
 struct option *
@@ -195,6 +217,26 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 	option->max = max;
 	option->ptr = ptr;
 	option->desc = desc;
+
+	if (option->type == OPT_ALIAS || tree != root_options) {
+		option->box_item = NULL;
+		goto add_it;
+	}
+	option->box_item = mem_calloc(1, sizeof(struct listbox_item)
+						+ strlen(name) + 1);
+	if (option->box_item) {
+		init_list(option->box_item->child);
+		option->box_item->visible = 1;
+
+		option->box_item->text = ((unsigned char *) option->box_item
+						+ sizeof(struct listbox_item));
+		strcpy(option->box_item->text, name);
+
+		option->box_item->box = &option_boxes;
+		option->box_item->udata = option;
+		option->box_item->type = type == OPT_TREE ? BI_FOLDER : BI_LEAF;
+	}
+add_it:
 
 	add_opt_rec(tree, path, option);
 	return option;
@@ -224,6 +266,10 @@ free_option(struct option *option)
 	}
 
 	if (option->name) mem_free(option->name);
+	if (option->box_item) {
+		del_from_list(option->box_item);
+		mem_free(option->box_item);
+	}
 }
 
 void
@@ -250,6 +296,7 @@ copy_option(struct option *template)
 				? option_types[template->type].dup(template)
 				: template->ptr;
 	option->desc = template->desc;
+	option->box_item = NULL; /* FIXME/TODO */
 
 	return option;
 }

@@ -412,4 +412,5 @@
 #define T_MOVE    408	
 #define T_AFTER_RESUME    409	
 #define T_TOGGLE_DISPLAY    410	
-#define T__N_TEXTS    411	
+#define T_OPTIONS_MANAGER    411	
+#define T__N_TEXTS    412	

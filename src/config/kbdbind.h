@@ -1,4 +1,4 @@
-/* $Id: kbdbind.h,v 1.26 2002/12/05 22:48:54 pasky Exp $ */
+/* $Id: kbdbind.h,v 1.27 2002/12/06 20:28:47 pasky Exp $ */
 
 #ifndef EL__CONFIG_KBDBIND_H
 #define EL__CONFIG_KBDBIND_H
@@ -59,6 +59,7 @@ enum keyact {
 	ACT_NEXT_FRAME,
 	ACT_OPEN_NEW_WINDOW,
 	ACT_OPEN_LINK_IN_NEW_WINDOW,
+	ACT_OPTIONS_MANAGER,
 	ACT_PAGE_DOWN,
 	ACT_PAGE_UP,
 	ACT_PASTE_CLIPBOARD,

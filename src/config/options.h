@@ -1,7 +1,10 @@
-/* $Id: options.h,v 1.37 2002/11/30 02:16:58 pasky Exp $ */
+/* $Id: options.h,v 1.38 2002/12/06 20:28:47 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
+
+/* #include "bfu/listbox.h" */
+struct listbox_item;
 
 #include "document/html/colors.h"
 #include "util/lists.h"
@@ -60,11 +63,18 @@ struct option {
 	int min, max;
 	void *ptr;
 	unsigned char *desc;
+
+	/* This is indeed maintained by bookmarks.c, not dialogs.c; much easier
+	 * and simpler. */
+	struct listbox_item *box_item;
 };
 
 
 extern struct list_head *root_options;
 extern struct list_head *cmdline_options;
+
+extern struct list_head root_option_box_items;
+extern struct list_head option_boxes;
 
 
 extern void init_options();

@@ -412,6 +412,7 @@ struct translation translation_english [] = {
   {T_MOVE, "Move"},
   {T_AFTER_RESUME, "after resume"},
   {T_TOGGLE_DISPLAY, "Toggle display"},
+  {T_OPTIONS_MANAGER, "Options manager"},
   {0, NULL}
 };
 
@@ -827,6 +828,7 @@ struct translation translation_brazilian_portuguese [] = {
   {T_MOVE, "Mover"},
   {T_AFTER_RESUME, "Depois de resumido"},
   {T_TOGGLE_DISPLAY, "Trocar display"},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -1242,6 +1244,7 @@ struct translation translation_bulgarian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -1657,6 +1660,7 @@ struct translation translation_catalan [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -2072,6 +2076,7 @@ struct translation translation_croatian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -2487,6 +2492,7 @@ struct translation translation_czech [] = {
   {T_MOVE, "Pøesunout"},
   {T_AFTER_RESUME, "po posledním navázání"},
   {T_TOGGLE_DISPLAY, "Pøepnout URL/název"},
+  {T_OPTIONS_MANAGER, "Správce nastavení"},
   {0, NULL}
 };
 
@@ -2902,6 +2908,7 @@ struct translation translation_danish [] = {
   {T_MOVE, "Flyt"},
   {T_AFTER_RESUME, "efter fortsættelse"},
   {T_TOGGLE_DISPLAY, "Skifte mellem visning"},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -3317,6 +3324,7 @@ struct translation translation_dutch [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -3732,6 +3740,7 @@ struct translation translation_estonian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -4147,6 +4156,7 @@ struct translation translation_finnish [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -4562,6 +4572,7 @@ struct translation translation_french [] = {
   {T_MOVE, "Déplacer"},
   {T_AFTER_RESUME, "après reprise"},
   {T_TOGGLE_DISPLAY, "Commuter affich."},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -4977,6 +4988,7 @@ struct translation translation_galician [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -5392,6 +5404,7 @@ struct translation translation_german [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -5807,6 +5820,7 @@ struct translation translation_greek [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -6222,6 +6236,7 @@ struct translation translation_hungarian [] = {
   {T_MOVE, "Mozgat"},
   {T_AFTER_RESUME, "a folytatás után"},
   {T_TOGGLE_DISPLAY, "Váltás URL/cím"},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -6637,6 +6652,7 @@ struct translation translation_icelandic [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -7052,6 +7068,7 @@ struct translation translation_indonesian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -7467,6 +7484,7 @@ struct translation translation_italian [] = {
   {T_MOVE, "Sposta"},
   {T_AFTER_RESUME, "dopo il resume"},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -7882,6 +7900,7 @@ struct translation translation_lithuanian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -8297,6 +8316,7 @@ struct translation translation_norwegian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -8712,6 +8732,7 @@ struct translation translation_polish [] = {
   {T_MOVE, "Przenie¶"},
   {T_AFTER_RESUME, "po wznowieniu"},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -9127,6 +9148,7 @@ struct translation translation_portuguese [] = {
   {T_MOVE, "Mover"},
   {T_AFTER_RESUME, "depois de resumido"},
   {T_TOGGLE_DISPLAY, "Trocar display"},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -9542,6 +9564,7 @@ struct translation translation_romanian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -9957,6 +9980,7 @@ struct translation translation_russian [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -10372,6 +10396,7 @@ struct translation translation_slovak [] = {
   {T_MOVE, "Presunú»"},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, "Prepnú» URL/názov"},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -10787,6 +10812,7 @@ struct translation translation_spanish [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -11202,6 +11228,7 @@ struct translation translation_swedish [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -11617,6 +11644,7 @@ struct translation translation_turkish [] = {
   {T_MOVE, NULL},
   {T_AFTER_RESUME, NULL},
   {T_TOGGLE_DISPLAY, NULL},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 
@@ -12032,6 +12060,7 @@ struct translation translation_ukrainian [] = {
   {T_MOVE, "ðÅÒÅÍ¦ÓÔÉÔÉ"},
   {T_AFTER_RESUME, "Ð¦ÓÌÑ ÐÒÏÄÏ×ÖÅÎÎÑ"},
   {T_TOGGLE_DISPLAY, "ðÅÒÅÍÉËÎÕÔÉ URL/ÎÁÚ×Á"},
+  {T_OPTIONS_MANAGER, NULL},
   {0, NULL}
 };
 

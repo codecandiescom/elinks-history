@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.124 2004/01/28 19:38:30 pasky Exp $ */
+/* $Id: conf.c,v 1.125 2004/02/04 12:59:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -331,6 +331,42 @@ static struct parse_handler parse_handlers[] = {
 };
 
 
+static enum parse_error
+parse_config_command(struct option *options, unsigned char *file, int *line,
+		     struct string *mirror)
+{
+	struct parse_handler *handler;
+
+	for (handler = parse_handlers; handler->command;
+	     handler++) {
+		int cmdlen = strlen(handler->command);
+
+		if (!strncmp(file, handler->command, cmdlen)
+		    && isspace(file[cmdlen])) {
+			enum parse_error err;
+			struct string mirror2 = NULL_STRING;
+			struct string *m2 = NULL;
+
+			/* Mirror what we already have */
+			if (mirror && init_string(&mirror2)) {
+				m2 = &mirror2;
+				add_bytes_to_string(m2, file, cmdlen);
+			}
+
+
+			file += cmdlen;
+			err = handler->handler(options, &file, &line, m2);
+			if (!err && mirror && m2) {
+				add_string_to_string(mirror, m2);
+			}
+			if (m2)	done_string(m2);
+			return err;
+		}
+	}
+
+	return ERROR_COMMAND;
+}
+
 void
 parse_config_file(struct option *options, unsigned char *name,
 		  unsigned char *file, struct string *mirror)
@@ -359,40 +395,10 @@ parse_config_file(struct option *options, unsigned char *name,
 		/* Second chance to escape from the hell. */
 		if (!*file) break;
 
-		{
-			struct parse_handler *handler;
+		err = parse_config_command(options, file, &line, mirror);
+		if (err != ERROR_COMMAND)
+			goto test_end;
 
-			for (handler = parse_handlers; handler->command;
-			     handler++) {
-				int cmdlen = strlen(handler->command);
-
-				if (!strncmp(file, handler->command, cmdlen)
-				    && isspace(file[cmdlen])) {
-					struct string mirror2 = NULL_STRING;
-					struct string *m2 = NULL;
-
-					/* Mirror what we already have */
-					if (mirror && init_string(&mirror2)) {
-						m2 = &mirror2;
-						add_bytes_to_string(m2,
-								    file, cmdlen);
-					}
-
-
-					file += cmdlen;
-					err = handler->handler(options,
-							       &file, &line,
-							       m2);
-					if (!err && mirror && m2) {
-						add_string_to_string(mirror, m2);
-					}
-					if (m2)	done_string(m2);
-					goto test_end;
-				}
-			}
-		}
-
-		err = ERROR_COMMAND;
 		orig_pos = file;
 		/* Jump over this crap we can't understand. */
 		while (!isspace(*file) && *file != '#' && *file)

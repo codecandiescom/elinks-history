@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.141 2004/07/02 22:31:32 zas Exp $ */
+/* $Id: ftp.c,v 1.142 2004/07/02 23:30:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -904,17 +904,13 @@ ftp_got_final_response(struct connection *conn, struct read_buffer *rb)
 
 		if (!conn->cached)
 			conn->cached = get_cache_entry(conn->uri);
-		if (!conn->cached) {
+
+		if (!conn->cached
+		    || !redirect_cache(conn->cached, "/", 1, 0)) {
 			abort_conn_with_state(conn, S_OUT_OF_MEM);
 			return;
 		}
 
-		if (!redirect_cache(conn->cached, "/", 1, 0)) {
-			abort_conn_with_state(conn, S_OUT_OF_MEM);
-			return;
-		}
-
-		/* setcstate(conn, S_FTP_NO_FILE); */
 		abort_conn_with_state(conn, S_OK);
 		return;
 	}

@@ -1,3 +1,29 @@
+Sat Apr 27 13:15:51 2002  Petr Baudis <pasky@ji.cz>:
+
+	* src/: main.c, bookmarks/bookmarks.c, config/Makefile.am,
+	config/conf.c, config/conf.h, config/default.c, config/default.h,
+	config/kbdbind.c, config/kbdbind.h, config/options.c,
+	config/options.h, cookies/cookies.c, dialogs/info.c,
+	dialogs/menu.c, dialogs/options.c, document/cache.c,
+	document/download.c, document/dump.c, document/globhist.c,
+	document/history.c, document/session.c, document/view.c,
+	document/html/parser.c, document/html/renderer.c,
+	lowlevel/af_unix.c, lowlevel/dns.c, lowlevel/sched.c, lua/lua.c,
+	protocol/file.c, protocol/ftp.c, protocol/types.c,
+	protocol/http/http.c, util/secsave.c:
+
+	Splitted config/default.* to config/conf.* (takes care about config
+	file and command line proccessing) and config/options.* (takes care
+	about options handling). This can be considered as a first little
+	step for new options system.  
+
+Sat Apr 27 11:52:33 2002  Petr Baudis <pasky@ji.cz>:
+
+	* linkskeys.5, src/osdep/os_dep.c:
+
+	Catch errors reported by X and handle them properly. Also typo fix
+	in linkskeys.5. Patch by Peter Wang, minor change by me.  
+
 Sat Apr 27 11:34:11 2002  Petr Baudis <pasky@ji.cz>:
 
 	* configure.in:

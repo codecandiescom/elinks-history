@@ -1,3 +1,9 @@
+Mon Jan 17 14:28:46 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/introduction.txt:
+
+	Drop a note about menu searching.  
+
 Sat Jan 15 22:12:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
 
 	* src/dialogs/edit.c:

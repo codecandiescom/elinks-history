@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.60 2002/12/05 21:30:05 pasky Exp $ */
+/* $Id: bookmarks.c,v 1.61 2002/12/06 18:48:56 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,17 +139,55 @@ update_bookmark(struct bookmark *bm, const unsigned char *title,
 		const unsigned char *url)
 {
 	if (title) {
+		struct listbox_item *b2;
+		struct list_head *orig_child;
+
 		mem_free(bm->title);
 		bm->title = stracpy((unsigned char *) title);
 		if (!bm->title) return 0;
 
-		bm->box_item = mem_realloc(bm->box_item,
-					   sizeof(struct listbox_item)
-					   + strlen(bm->title) + 1);
-		if (!bm->box_item) {
-			mem_free(bm->title);
+		orig_child = &bm->box_item->child;
+		b2 = mem_realloc(bm->box_item,
+				 sizeof(struct listbox_item)
+				 + strlen(bm->title) + 1);
+		if (!b2) {
+			/* XXX: The original bookmark is preserved, so we
+			 * should keep this even when we'll be out-of-sync
+			 * with the dialog. --pasky */
+			/* mem_free(bm->title); */
 			return 0;
 		}
+
+		if (b2 != bm->box_item) {
+			struct listbox_item *item;
+			struct listbox_data *box;
+
+			/* We are being relocated, so update everything. */
+			b2->next->prev = b2;
+			b2->prev->next = b2;
+			foreach (box, *b2->box) {
+				if (box->sel == bm->box_item) box->sel = b2;
+				if (box->top == bm->box_item) box->top = b2;
+			}
+
+			if (b2->child.next == orig_child) {
+				b2->child.next = &b2->child;
+				b2->child.prev = &b2->child;
+			} else {
+				((struct list_head *) b2->child.next)->prev = &b2->child;
+				((struct list_head *) b2->child.prev)->next = &b2->child;
+			}
+
+			foreach (item, b2->child) {
+				item->root = b2;
+			}
+
+			bm->box_item = b2;
+			bm->box_item->text =
+				((unsigned char *) bm->box_item
+				 + sizeof(struct listbox_item));
+		}
+
 		strcpy(bm->box_item->text, bm->title);
 	}
 

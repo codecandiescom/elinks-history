@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.26 2004/01/19 23:10:48 jonas Exp $ */
+/* $Id: scanner.c,v 1.27 2004/01/19 23:21:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -198,7 +198,7 @@ get_css_token_(struct css_scanner *scanner)
 	assert(check_css_scanner(scanner));
 
 #ifdef CSS_SCANNER_DEBUG
-	if (scanner->tokens) {
+	if (css_scanner_has_tokens(scanner)) {
 		struct css_token *token = &scanner->table[scanner->current];
 
 		errfile = scanner->file, errline = scanner->line;
@@ -248,7 +248,7 @@ check_next_css_token(struct css_scanner *scanner, enum css_token_type type)
 	/* See comment about alignment of the scanners token table */
 	assert(check_css_scanner(scanner));
 
-	return scanner->tokens > 0
+	return css_scanner_has_tokens(scanner)
 		&& scanner->table[scanner->current + 1].type == type;
 }
 

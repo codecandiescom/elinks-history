@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.545 2004/07/04 17:33:53 jonas Exp $ */
+/* $Id: view.c,v 1.546 2004/07/04 18:17:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -174,17 +174,21 @@ move_link(struct session *ses, struct document_view *doc_view, int direction,
 			continue;
 		}
 
-		/* FIXME: The link at index @wraparound_bound is not
-		 * necessarily the first or the last link in the view which
-		 * means that moving to the previous or next link could end up
-		 * calling next_link_in_view(). This is bad because
-		 * next_link_in_view() will then 'reset'
-		 * doc_view->vs->current_link to -1 and the effect will be that
-		 * the current link will 'wrap around'. Question is whether it
-		 * is bug in link sorting or bug in move_link(). */
 		if (current_link != wraparound_bound
 		    && next_link_in_view(doc_view, current_link + direction, direction, link_in_view_y, set_pos_x))
 			continue;
+
+		/* This is a work around for the case where the index of
+		 * @wraparound_bound is not necessarily the index of the first
+		 * or the last link in the view. It means that the link moving
+		 * could end up calling next_link_in_view() in the condition
+		 * above. This is bad because next_link_in_view() will then
+		 * 'reset' doc_view->vs->current_link to -1 and the effect will
+		 * be that the current link will 'wrap around'. By restoring
+		 * the index of the @current_link nothing will be wrapped
+		 * around and move_{up,down} will take care of finding the next
+		 * link. */
+		doc_view->vs->current_link = current_link;
 
 		if (direction > 0) {
 			move_down(ses, doc_view, 1);

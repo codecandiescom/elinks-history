@@ -415,6 +415,12 @@ func(int a, int b)
 - There are obviously exceptions to these rules, but don't make a rule from
   your exception and be prepared to defend your exception at anytime ;).
 
+- All the .c files MUST start by a short one-line description and an $Id: hacking.txt,v 1.11 2003/06/21 22:45:38 pasky Exp $ tag
+  on the next line.
+
+- All the .h files MUST start by an $Id: hacking.txt,v 1.11 2003/06/21 22:45:38 pasky Exp $ tag and then anti-reinclusion ifdef.
+  The macro is EL__<path_relative_to_src:s/[\/.]/_/>.
+
 
 Coding practices:
 ----------------
@@ -425,6 +431,7 @@ Coding practices:
   field). HOWEVER please ALWAYS specify signedness of all such fields. It is
   very easy to reach the top bit in these cases, and with int foo:1, foo would
   be either 0 or -1, which is probably not what you want.
+
 
 4, Patches
 ~~~~~~~~~~
@@ -473,4 +480,4 @@ execute in one of these modes, then rework it.
 
 Happy hacking!
 
-$Id: hacking.txt,v 1.10 2003/06/17 14:36:23 zas Exp $
+$Id: hacking.txt,v 1.11 2003/06/21 22:45:38 pasky Exp $

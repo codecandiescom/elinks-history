@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.340 2004/01/18 14:52:55 zas Exp $ */
+/* $Id: parser.c,v 1.341 2004/01/18 14:55:01 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2258,7 +2258,7 @@ html_frame(unsigned char *a)
 }
 
 static void
-parse_frame_widths(unsigned char *str, int ww, int www, int **op, int *olp)
+parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **op, int *olp)
 {
 	unsigned char *tmp_str;
 	unsigned long n;
@@ -2278,8 +2278,8 @@ new_ch:
 	}
 
 	q = n;
-	if (*str == '%') q = q * ww / 100;
-	else if (*str != '*') q = (q + (www - 1) / 2) / www;
+	if (*str == '%') q = q * max_value / 100;
+	else if (*str != '*') q = (q + (pixels_per_char - 1) / 2) / pixels_per_char;
 	else if (!q) q = -1;
 	else q = -q;
 
@@ -2299,11 +2299,11 @@ new_ch:
 	q = 2 * ol - 1;
 	for (i = 0; i < ol; i++) if (o[i] > 0) q += o[i] - 1;
 
-	if (q >= ww) {
+	if (q >= max_value) {
 
 distribute:
 		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
-		q -= ww;
+		q -= max_value;
 		divisor = 0;
 		for (i = 0; i < ol; i++) divisor += o[i];
 		qq = q;
@@ -2335,7 +2335,7 @@ distribute:
 		}
 		memcpy(oo, o, ol * sizeof(int));
 		for (i = 0; i < ol; i++) if (o[i] < 1) o[i] = 1;
-		q = ww - q;
+		q = max_value - q;
 		divisor = 0;
 		for (i = 0; i < ol; i++) if (oo[i] < 0) divisor += -oo[i];
 		qq = q;

@@ -1,11 +1,14 @@
-/* $Id: ssl.h,v 1.17 2003/10/27 23:14:12 pasky Exp $ */
+/* $Id: ssl.h,v 1.18 2003/10/27 23:58:58 jonas Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
 
 #ifdef HAVE_SSL
 
+#include "modules/module.h"
 #include "sched/connection.h"
+
+extern struct module ssl_module;
 
 /* Initializes the SSL connection data. Returns S_OK on success and S_SSL_ERROR
  * on failure. */

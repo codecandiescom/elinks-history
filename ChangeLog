@@ -1,3 +1,54 @@
+Sat Jul  5 01:14:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5pre2 
+
+Sat Jul  5 00:55:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Some final retouching of the boxes. I'm an ascii-art freak. Almost
+	there, CIA commit #999! 
+
+Sat Jul  5 00:48:49 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/README:
+
+	Retouched and actualized the ideal dependency tree, added couple of
+	notes. CTYRI! 
+
+Sat Jul  5 00:47:55 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: lowlevel/connect.c, sched/connection.c, sched/connection.h,
+	ssl/connect.c:
+
+	'Predeclare' struct connection so we can give connection->conn_info
+	proper type. (4 mississipi) 
+
+Sat Jul  5 00:29:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/ftp.c, sched/connection.h:
+
+	Cleanups of struct connection: remove unused member and move
+	read_func to ftp_connection_info. If it should be reintroduced it
+	should have some typedef attached.  
+
+Fri Jul  4 23:35:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: protocol/http/http.c, sched/connection.c,
+	sched/connection.h:
+
+	Make connection->unrestartable a boolean field. It was apparently
+	involved in a http hack to mark form posting. We now use
+	connection->uri.post to check that instead.  
+
+Fri Jul  4 23:20:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/connection.h, ssl/connect.c:
+
+	Make connection->no_tsl a boolean field.  
+
 Fri Jul  4 21:41:46 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/: protocol/ftp.c, protocol/http/http.c, sched/connection.c,

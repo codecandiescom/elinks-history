@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.10 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: ssl.c,v 1.11 2002/07/05 11:16:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -17,6 +17,7 @@
 
 #include "ssl/ssl.h"
 #include "util/conv.h"
+#include "util/error.h"
 #include "util/string.h"
 
 
@@ -65,13 +66,19 @@ get_ssl(void)
 #ifdef HAVE_OPENSSL
 	return (SSL_new(context));
 #elif defined(HAVE_GNUTLS)
-	/* XXX: GNUTLS_STATE itself is obviously a pointer by itself, but as it
-	 * is hidden for some stupid design decision, we must not rely on that,
+	/* XXX: GNUTLS_STATE is obviously a pointer by itself, but as it is
+	 * hidden for some stupid design decision, we must not rely on that,
 	 * who knows if some future implementation won't have that as a
 	 * structure itself.. --pasky */
 	GNUTLS_STATE *state = mem_alloc(sizeof(GNUTLS_STATE));
+	int ret;
 
-	gnutls_init(state, GNUTLS_CLIENT);
+	ret = gnutls_init(state, GNUTLS_CLIENT);
+	if (ret < 0) {
+		/* debug("sslinit %s", gnutls_strerror(ret)); */
+		mem_free(state);
+		return NULL;
+	}
 	return state;
 #endif
 #else
@@ -87,6 +94,7 @@ free_ssl(ssl_t *ssl)
 	SSL_free(ssl);
 #elif defined(HAVE_GNUTLS)
 	gnutls_deinit(*ssl);
+	mem_free(ssl);
 #endif
 #endif
 }
@@ -110,7 +118,7 @@ get_ssl_cipher_str(ssl_t *ssl) {
 #elif defined(HAVE_GNUTLS)
 	/* XXX: How to get other relevant parameters? */
 	add_to_str(&str, &l, (unsigned char *)
-			gnutls_protocol_get_name(gnutls_protocl_get_version(*ssl)));
+			gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)));
 	add_to_str(&str, &l, " ");
 	add_to_str(&str, &l, (unsigned char *)
 			gnutls_cipher_get_name(gnutls_cipher_get(*ssl)));

@@ -1,4 +1,4 @@
-/* $Id: ssl.h,v 1.7 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: ssl.h,v 1.8 2002/07/05 11:16:01 pasky Exp $ */
 
 #ifndef EL__SSL_SSL_H
 #define EL__SSL_SSL_H
@@ -13,7 +13,7 @@
 #ifdef HAVE_OPENSSL
 #define	ssl_t	SSL
 #elif HAVE_GNUTLS
-#define	ssl_t	GNUTLS_STATE *
+#define	ssl_t	GNUTLS_STATE
 #endif
 #else
 #define	ssl_t	void

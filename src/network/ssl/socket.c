@@ -1,5 +1,5 @@
 /* SSL socket workshop */
-/* $Id: socket.c,v 1.9 2002/07/05 03:59:40 pasky Exp $ */
+/* $Id: socket.c,v 1.10 2002/07/05 11:16:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -50,12 +50,13 @@ ssl_set_no_tls(struct connection *conn)
 #ifdef HAVE_OPENSSL
 	conn->ssl->options |= SSL_OP_NO_TLSv1;
 #elif defined(HAVE_GNUTLS)
-	int protocol_priority[];
+	int protocol_priority[3];
+	int i = 0;
 
-	if (conn->no_tsl)
-		protocol_priority = { GNUTLS_SSL3, 0 };
-	else
-		protocol_priority = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
+	if (!conn->no_tsl)
+		protocol_priority[i++] = GNUTLS_TLS1;
+	protocol_priority[i++] = GNUTLS_SSL3;
+	protocol_priority[i++] = 0;
 
 	gnutls_protocol_set_priority(*conn->ssl, protocol_priority);
 #endif
@@ -103,24 +104,26 @@ int
 ssl_connect(struct connection *conn, int sock)
 {
 #ifdef HAVE_SSL
-        struct conn_info *c_i = (struct conn_info *) conn->buffer;
+        struct conn_info *c_i = (struct conn_info *) conn->conn_info;
+	int ret;
 
 	conn->ssl = get_ssl();
+#if 0
 	if (conn->no_tsl)
 		ssl_set_no_tls(conn);
+#endif
 #ifdef HAVE_OPENSSL
 	SSL_set_fd(conn->ssl, sock);
 #elif defined(HAVE_GNUTLS)
 	gnutls_transport_set_ptr(*conn->ssl, sock);
 #endif
 
-	switch (
 #ifdef HAVE_OPENSSL
-		SSL_get_error(conn->ssl, SSL_connect(conn->ssl))
+	ret = SSL_get_error(conn->ssl, SSL_connect(conn->ssl));
 #elif defined(HAVE_GNUTLS)
-		gnutls_handshare(*conn->ssl)
+	ret = gnutls_handshake(*conn->ssl);
 #endif
-		) {
+	switch (ret) {
 		case SSL_ERROR_WANT_READ:
 		case SSL_ERROR_WANT_READ2:
 			setcstate(conn, S_SSL_NEG);
@@ -132,6 +135,7 @@ ssl_connect(struct connection *conn, int sock)
 			break;
 
 		default:
+			debug("sslerr %s", gnutls_strerror(ret));
 			conn->no_tsl++;
 			setcstate(conn, S_SSL_ERROR);
 			close_socket(NULL, c_i->sock);

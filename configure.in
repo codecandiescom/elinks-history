@@ -264,21 +264,46 @@ dnl ===================================================================
 dnl Check for SSL support.
 dnl ===================================================================
 
+dnl We by default use OpenSSL, and we always prefer it. However, when GNUTLS
+dnl is enabled, we won't try to use OpenSSL anymore.
+
 dnl For wiping SSL hooks..
 #ifdef HAVE_SSL
 
-CFLAGS_X="$CFLAGS"
-LIBS_X="$LIBS"
-cf_result=no
+disable_openssl=""
+disable_gnutls=""
+enable_gnutls=""
 
-AC_ARG_WITH(ssl, [  --without-ssl           disable SSL support],
-            [if test "$withval" = no;  then disable_ssl=yes; fi])
+AC_ARG_WITH(gnutls, [  --without-gnutls        disable GNUTLS SSL support],
+	    [if test "$with_gnutls" = no;  then disable_gnutls=yes; fi])
+AC_ARG_WITH(gnutls, [  --with-gnutls[=prefix]  enable GNUTLS SSL support],
+	    [enable_gnutls=yes;])
+gnutls_withval="$withval"
+
+if test "$enable_gnutls"; then
+	disable_openssl=yes;
+fi
+
+AC_ARG_WITH(openssl, [  --without-openssl       disable OpenSSL support],
+	    [if test "$with_openssl" = no;  then disable_openssl=yes; fi])
+AC_ARG_WITH(openssl, [  --with-openssl[=prefix] enable OpenSSL support (default)])
+openssl_withval="$withval"
+
+dnl ---- OpenSSL
+
 AC_MSG_CHECKING([for OpenSSL])
 
-if test -z "$disable_ssl"; then
-	for ssldir in "" /usr /usr/local/openssl /usr/lib/openssl \
-			 /usr/local/ssl /usr/local/www /usr/lib/ssl \
-			 /usr/local /usr/pkg /opt /opt/openssl; do
+CFLAGS_X="$CFLAGS"
+LIBS_X="$LIBS"
+cf_result="no"
+
+if test "$disable_openssl"; then
+	cf_result="not used"
+else
+	for ssldir in "" "$openssl_withval" /usr /usr/local/openssl \
+			 /usr/lib/openssl /usr/local/ssl \
+			 /usr/local/www /usr/lib/ssl /usr/local \
+			 /usr/pkg /opt /opt/openssl; do
 		if test "$cf_result" = no; then
 			if test ! -z "$ssldir"; then
 				LIBS="-L$ssldir/lib -lssl -lcrypto $LIBS_X"
@@ -309,6 +334,67 @@ if test -z "$disable_ssl"; then
 	fi
 fi
 
+AC_MSG_RESULT($cf_result)
+
+dnl ---- GNU TLS
+dnl We can't have AC_MSG_CHECKING here, because AC_PATH_PROG prints its own and
+dnl it looks ugly then.
+
+if test "$cf_result" = yes; then
+	cf_result="not used"
+else
+	CFLAGS_X="$CFLAGS"
+	LIBS_X="$LIBS"
+	cf_result="no"
+
+	if test -z "$disable_gnutls"; then
+		# Sure, we maybe _could_ use their macro, but how to ensure
+		# that the ./configure script won't fail if the macro won't be
+		# found..? :( --pasky
+		for ssldir in "" "$gnutls_withval" /usr/local/gnutls /opt /opt/gnutls; do
+			if test "$cf_result" = no; then
+
+				if test "x$ssldir" != "x"; then
+				   libgnutls_config_args="$libgnutls_config_args --prefix=$ssldir"
+				   if test x${LIBGNUTLS_CONFIG+set} != xset ; then
+				      LIBGNUTLS_CONFIG=$ssldir/bin/libgnutls-config
+				   fi
+				fi
+
+				AC_PATH_PROG(LIBGNUTLS_CONFIG, libgnutls-config, no, "$PATH:$ssldir")
+
+				if test "$LIBGNUTLS_CONFIG" = "no" ; then
+					cf_result=no
+				else
+					LIBGNUTLS_CFLAGS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --cflags`
+					LIBGNUTLS_LIBS=`$LIBGNUTLS_CONFIG $libgnutls_config_args --libs`
+
+					LIBS="$LIBGNUTLS_LIBS $LIBS_X"
+					CFLAGS="$CFLAGS_X $LIBGNUTLS_CFLAGS"
+
+					# Verify if it's really usable
+					AC_TRY_LINK([#include <gnutls.h>],
+						    [gnutls_check_version(NULL)],
+						    cf_result=yes, cf_result=no)
+				fi
+			fi
+		done
+
+		if test "$cf_result" != yes; then
+			if test "$withval" = yes; then
+				AC_MSG_CHECKING([for GNU TLS])
+				AC_MSG_ERROR("GNUTLS not found")
+			fi
+			CFLAGS="$CFLAGS_X"
+			LIBS="$LIBS_X"
+		else
+			AC_DEFINE(HAVE_GNUTLS)
+			AC_DEFINE(HAVE_SSL)
+		fi
+	fi
+fi
+
+AC_MSG_CHECKING([for GNU TLS])
 AC_MSG_RESULT($cf_result)
 
 #endif

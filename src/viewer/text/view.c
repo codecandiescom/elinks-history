@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.329 2004/01/07 00:21:49 jonas Exp $ */
+/* $Id: view.c,v 1.330 2004/01/07 01:09:03 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -991,9 +991,21 @@ send_event(struct session *ses, struct term_event *ev)
 
 	if (ev->ev == EV_KBD) {
 		int func_ref;
+		enum keyact action;
 
 		if (doc_view && send_to_frame(ses, ev)) return;
 
+		action = kbd_action(KM_MAIN, ev, &func_ref);
+
+		if (do_action(ses, action, NULL, 0) == action) {
+			/* Did the session disappear in some EV_ABORT handler? */
+			if (action == ACT_TAB_CLOSE
+			    || action == ACT_TAB_CLOSE_ALL_BUT_CURRENT)
+				ses = NULL;
+			goto x;
+		}
+
+		/* TODO: Merge with do_action() */
 		switch (kbd_action(KM_MAIN, ev, &func_ref)) {
 			case ACT_MENU:
 				activate_bfu_technology(ses, -1);
@@ -1012,28 +1024,19 @@ send_event(struct session *ses, struct term_event *ev)
 				next_frame(ses, -1);
 				draw_formatted(ses, 0);
 				goto x;
-			case ACT_BACK:
-				go_back(ses);
-				goto x;
-			case ACT_UNBACK:
-				go_unback(ses);
-				goto x;
-			case ACT_RELOAD:
-				reload(ses, CACHE_MODE_INCREMENT);
-				goto x;
 			case ACT_ABORT_CONNECTION:
 				abort_loading(ses, 1);
 				print_screen_status(ses);
-				goto x;
-			case ACT_GOTO_URL:
-quak:
-				dialog_goto_url(ses,"");
 				goto x;
 			case ACT_GOTO_URL_CURRENT: {
 				unsigned char *url;
 				struct location *loc;
 
-				if (!have_location(ses)) goto quak;
+				if (!have_location(ses)) {
+quak:
+					dialog_goto_url(ses,"");
+					goto x;
+				}
 
 				loc = cur_loc(ses);
 				url = get_no_post_url(loc->vs.url, NULL);
@@ -1076,9 +1079,6 @@ quak:
 			case ACT_SAVE_OPTIONS:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
 					write_config(ses->tab->term);
-				goto x;
-			case ACT_KILL_BACKGROUNDED_CONNECTIONS:
-				abort_background_connections();
 				goto x;
 			case ACT_ADD_BOOKMARK:
 #ifdef CONFIG_BOOKMARKS
@@ -1152,36 +1152,18 @@ quak:
 quit:
 				exit_prog(ses->tab->term, (void *)(ev->x == KBD_CTRL_C), ses);
 				goto x;
-			case ACT_DOCUMENT_INFO:
-				state_msg(ses);
-				goto x;
-			case ACT_HEADER_INFO:
-				head_msg(ses);
-				goto x;
 			case ACT_SHOW_TERM_OPTIONS:
 				terminal_options(ses->tab->term, NULL, ses);
-				goto x;
-			case ACT_TOGGLE_DISPLAY_IMAGES:
-				toggle_images(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_TOGGLE_DISPLAY_TABLES:
 				get_opt_int("document.html.display_tables") =
 					!get_opt_int("document.html.display_tables");
 				draw_formatted(ses, 1);
 				goto x;
-			case ACT_TOGGLE_HTML_PLAIN:
-				toggle_plain_html(ses, ses->doc_view, 0);
-				goto x;
 			case ACT_TOGGLE_PLAIN_COMPRESS_EMPTY_LINES:
 				get_opt_int("document.plain.compress_empty_lines") =
 					!get_opt_int("document.plain.compress_empty_lines");
 				draw_formatted(ses, 1);
-				goto x;
-			case ACT_TOGGLE_NUMBERED_LINKS:
-				toggle_link_numbering(ses, ses->doc_view, 0);
-				goto x;
-			case ACT_TOGGLE_DOCUMENT_COLORS:
-				toggle_document_colors(ses, ses->doc_view, 0);
 				goto x;
 			case ACT_OPEN_OS_SHELL:
 				if (!get_opt_int_tree(cmdline_options, "anonymous"))
@@ -1206,14 +1188,6 @@ quit:
 			case ACT_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
 				open_in_new_tab_in_background(ses->tab->term, 1, ses);
 				goto x;
-			case ACT_TAB_CLOSE:
-				close_tab(ses->tab->term, ses);
-				ses = NULL; /* Disappeared in EV_ABORT handler. */
-				goto x;
-			case ACT_TAB_CLOSE_ALL_BUT_CURRENT:
-				close_all_tabs_but_current(ses);
-				ses = NULL;
-				goto x;
 			case ACT_TAB_MENU:
 			{
 				struct window *tab = get_current_tab(ses->tab->term);
@@ -1226,12 +1200,6 @@ quit:
 				tab_menu(ses->tab->term, tab, tab->data);
 				goto x;
 			}
-			case ACT_TAB_NEXT:
-				switch_to_next_tab(ses->tab->term);
-				goto x;
-			case ACT_TAB_PREV:
-				switch_to_prev_tab(ses->tab->term);
-				goto x;
 			case ACT_REDRAW:
 				redraw_terminal_cls(ses->tab->term);
 				goto x;

@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.14 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: mimetypes.c,v 1.15 2003/09/22 15:08:46 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -31,7 +31,7 @@
 
 struct mimetypes_entry {
 	unsigned char *content_type;
-	unsigned char *extension;
+	unsigned char extension[1];
 };
 
 /* State variables */
@@ -41,11 +41,10 @@ static struct option *mimetypes_tree = NULL;
 
 
 static void
-free_mimetypes_entry(struct mimetypes_entry *entry)
+done_mimetypes_entry(struct mimetypes_entry *entry)
 {
 	if (!entry) return;
 	if (entry->content_type) mem_free(entry->content_type);
-	if (entry->extension) mem_free(entry->extension);
 	mem_free(entry);
 }
 
@@ -85,15 +84,16 @@ parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)
 		item = get_hash_item(mimetypes_map, extension, extlen);
 		if (item) continue;
 
-		entry = mem_alloc(sizeof(struct mimetypes_entry));
+		entry = mem_calloc(1, sizeof(struct mimetypes_entry) + extlen);
 		if (!entry) continue;
 
 		entry->content_type = memacpy(ctype, ctypelen);
-		entry->extension = memacpy(extension, extlen);
-		if (!entry->content_type || !entry->extension) {
-			free_mimetypes_entry(entry);
+		if (!entry->content_type) {
+			done_mimetypes_entry(entry);
 			continue;
 		}
+
+		memcpy(entry->extension, extension, extlen);
 
 		item = add_hash_item(mimetypes_map, entry->extension, extlen,
 				     entry);
@@ -101,7 +101,7 @@ parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)
 		if (item)
 			mimetypes_map_size++;
 		else
-			free_mimetypes_entry(entry);
+			done_mimetypes_entry(entry);
 	}
 }
 
@@ -191,7 +191,7 @@ done_mimetypes(void)
 		if (item->value) {
 			struct mimetypes_entry *entry = item->value;
 
-			free_mimetypes_entry(entry);
+			done_mimetypes_entry(entry);
 		}
 
 	free_hash(mimetypes_map);

@@ -1,5 +1,5 @@
 /* DOM document renderer */
-/* $Id: renderer.c,v 1.9 2004/09/26 09:50:45 jonas Exp $ */
+/* $Id: renderer.c,v 1.10 2004/09/26 10:05:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -596,8 +596,19 @@ render_dom_attribute_source(struct dom_navigator *navigator, struct dom_node *no
 			assert_source(renderer, renderer->position, 0);
 		}
 
-		if (node->data.attribute.reference)
-			add_dom_link(renderer, value, valuelen);
+		if (node->data.attribute.reference
+		    && valuelen - quoted * 2 > 0) {
+			/* Need to flush the first quoting delimiter so that
+			 * the renderers x position is at the start of the
+			 * value string. */
+			if (quoted) {
+				render_dom_text(renderer, template, value, 1);
+				value++;
+				valuelen--;
+			}
+
+			add_dom_link(renderer, value, valuelen - quoted);
+		}
 
 		/* TODO: Different template for links. */
 		render_dom_text(renderer, template, value, valuelen);

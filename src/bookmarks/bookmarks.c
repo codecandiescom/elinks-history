@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: bookmarks.c,v 1.19 2002/04/20 10:16:36 zas Exp $ */
+/* $Id: bookmarks.c,v 1.20 2002/04/20 11:26:29 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -243,7 +243,7 @@ write_bookmarks()
 	file_name = straconcat(links_home, "bookmarks", NULL);
 	if (!file_name) return;
 
-	ssi = secure_open(file_name, 022);
+	ssi = secure_open(file_name, 0177);
 	mem_free(file_name);
 	if (!ssi) return;
 

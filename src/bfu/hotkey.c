@@ -1,5 +1,5 @@
 /* Hotkeys handling. */
-/* $Id: hotkey.c,v 1.24 2004/08/03 17:08:09 zas Exp $ */
+/* $Id: hotkey.c,v 1.25 2004/08/03 20:57:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,17 +37,16 @@ void
 init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 	     int hotkeys)
 {
-	int i;
+	struct menu_item *mi;
 
 #ifdef CONFIG_DEBUG
 	/* hotkey debugging */
 	if (hotkeys) {
-		unsigned char used_hotkeys[255];
+		struct menu_item *used_hotkeys[255];
 
-		memset(used_hotkeys, 0, 255);
+		memset(used_hotkeys, 0, sizeof(used_hotkeys));
 
-		for (i = 0; i < ni; i++) {
-			struct menu_item *mi = &items[i];
+		foreach_menu_item(mi, items) {
 			unsigned char *text = mi->text;
 
 			if (!mi_has_left_text(mi)) continue;
@@ -61,26 +60,22 @@ init_hotkeys(struct terminal *term, struct menu_item *items, int ni,
 			 * used by another entry. We mark it to be able to highlight
 			 * this hotkey in menus. --Zas */
 			if (mi->hotkey_pos) {
-				unsigned char *used = &used_hotkeys[toupper(text[mi->hotkey_pos])];
+				struct menu_item **used = &used_hotkeys[toupper(text[mi->hotkey_pos])];
 
 				if (*used) {
-					int n = *used - 1;
-
 					mi->hotkey_pos = -mi->hotkey_pos;
-					if (items[n].hotkey_pos > 0)
-						items[n].hotkey_pos = -items[n].hotkey_pos;
+					if ((*used)->hotkey_pos > 0)
+						(*used)->hotkey_pos = -(*used)->hotkey_pos;
 				}
 
-				*used = i + 1;
+				*used = mi;
 				mi->hotkey_state = HKS_CACHED;
 			}
 		}
 	}
 #endif
 
-	for (i = 0; i < ni; i++) {
-		struct menu_item *mi = &items[i];
-
+	foreach_menu_item(mi, items) {
 		if (!hotkeys) {
 			mi->hotkey_pos = 0;
 			mi->hotkey_state = HKS_IGNORE;

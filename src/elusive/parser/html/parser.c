@@ -1,5 +1,5 @@
 /* Parser frontend */
-/* $Id: parser.c,v 1.5 2002/12/27 22:32:33 pasky Exp $ */
+/* $Id: parser.c,v 1.6 2002/12/27 22:37:09 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,7 +24,7 @@
 
 enum state_code {
 	HPT_PLAIN,
-	HTP_ENTITY,
+	HPT_ENTITY,
 	HPT_TAG,
 	HPT_NO,
 };
@@ -171,7 +171,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (*html == '&') {
 			state->current->strlen += *len - html_len;
 
-			pstate = html_state_push(state, HTP_ENTITY);
+			pstate = html_state_push(state, HPT_ENTITY);
 			*str = html, *len = html_len;
 			return 0;
 		}
@@ -179,7 +179,7 @@ plain_parse(struct parser_state *state, unsigned char **str, int *len)
 		if (*html == '<') {
 			state->current->strlen += *len - html_len;
 
-			pstate = html_state_push(state, HTP_TAG);
+			pstate = html_state_push(state, HPT_TAG);
 			*str = html, *len = html_len;
 			return 0;
 		}
@@ -251,8 +251,8 @@ tag_parse(struct parser_state *state, unsigned char **str, int *len)
 		/* We don't have anything to do for now. So just retire. */
 		pstate = html_state_pop(state);
 #ifdef DEBUG
-		if (pstate->state != HTP_PLAIN)
-			internal("At HTP_TAG [2], pstate->state is %d! That means corrupted HTML stack. Fear.", pstate->state);
+		if (pstate->state != HPT_PLAIN)
+			internal("At HPT_TAG [2], pstate->state is %d! That means corrupted HTML stack. Fear.", pstate->state);
 #endif
 
 		html++, html_len--; /* > */
@@ -412,7 +412,7 @@ html_parser(struct parser_state *state, unsigned char **str, int *len)
 {
 	struct html_parser_state *pstate = state->data;
 
-	if (!pstate) pstate = html_state_push(state, HTP_PLAIN);
+	if (!pstate) pstate = html_state_push(state, HPT_PLAIN);
 	if (!pstate) return;
 
 	while (html_len) {

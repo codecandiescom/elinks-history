@@ -16,7 +16,9 @@
    Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  */
 
 /* Never include system <libintl.h> */
+#ifndef _LIBINTL_H
 #define _LIBINTL_H	1
+#endif
 
 #ifndef EL__INTL_GETTEXT_LIBGNUINTL_H
 #define EL__INTL_GETTEXT_LIBGNUINTL_H	1

@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.372 2004/12/24 14:55:17 pasky Exp $ */
+/* $Id: tables.c,v 1.373 2004/12/29 15:43:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -830,9 +830,9 @@ draw_table_cell(struct table *table, int col, int row, int x, int y)
 
 	state = init_html_parser_state(ELEMENT_DONT_KILL, cell->align, 0, 0);
 
-	if (cell->is_header) format.attr |= AT_BOLD;
+	if (cell->is_header) format.style.attr |= AT_BOLD;
 
-	format.bg = cell->bgcolor;
+	format.style.bg = cell->bgcolor;
 	par_format.bgcolor = cell->bgcolor;
 
 	if (cell->valign == VALIGN_MIDDLE)

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: link.c,v 1.75 2004/12/20 11:22:12 miciah Exp $ */
+/* $Id: link.c,v 1.76 2004/12/29 15:43:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -67,19 +67,19 @@ html_a(unsigned char *a)
 			; /* Shut up compiler */
 #ifdef CONFIG_GLOBHIST
 		} else if (get_global_history_item(format.link)) {
-			format.fg = format.vlink;
+			format.style.fg = format.vlink;
 			html_top.pseudo_class &= ~ELEMENT_LINK;
 			html_top.pseudo_class |= ELEMENT_VISITED;
 #endif
 #ifdef CONFIG_BOOKMARKS
 		} else if (get_bookmark(format.link)) {
-			format.fg = format.bookmark_link;
+			format.style.fg = format.bookmark_link;
 			html_top.pseudo_class &= ~ELEMENT_VISITED;
 			/* XXX: Really set ELEMENT_LINK? --pasky */
 			html_top.pseudo_class |= ELEMENT_LINK;
 #endif
 		} else {
-			format.fg = format.clink;
+			format.style.fg = format.clink;
 			html_top.pseudo_class &= ~ELEMENT_VISITED;
 			html_top.pseudo_class |= ELEMENT_LINK;
 		}
@@ -201,10 +201,10 @@ put_image_label(unsigned char *a, unsigned char *label)
 	 * extension to the standard. After all, it makes sense. */
 	html_focusable(a);
 
-	fg = format.fg;
-	format.fg = format.image_link;
+	fg = format.style.fg;
+	format.style.fg = format.image_link;
 	put_chrs(label, strlen(label), html_context.put_chars_f, html_context.part);
-	format.fg = fg;
+	format.style.fg = fg;
 }
 
 static void
@@ -238,7 +238,7 @@ html_img_do(unsigned char *a, unsigned char *object_src)
 		html_stack_dup(ELEMENT_KILLABLE);
 		mem_free_set(&format.link, map_url);
 		format.form = NULL;
-		format.attr |= AT_BOLD;
+		format.style.attr |= AT_BOLD;
 		usemap = 1;
  	}
 
@@ -362,7 +362,7 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	put_chrs(prefix, strlen(prefix), html_context.put_chars_f, html_context.part);
 	format.link = join_urls(html_context.base_href, link);
 	format.target = stracpy(target);
-	format.fg = format.clink;
+	format.style.fg = format.clink;
 	put_chrs(linkname, strlen(linkname), html_context.put_chars_f, html_context.part);
 	ln_break(1, html_context.line_break_f, html_context.part);
 	kill_html_stack_item(&html_top);

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.517 2004/12/29 14:59:34 zas Exp $ */
+/* $Id: renderer.c,v 1.518 2004/12/29 15:43:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -307,11 +307,11 @@ draw_frame_vchars(struct part *part, int x, int y, int height,
 static inline struct screen_char *
 get_format_screen_char(struct part *part, enum link_state link_state)
 {
-	static struct text_attrib_beginning ta_cache = { -1, 0x0, 0x0 };
+	static struct text_attrib_style ta_cache = { -1, 0x0, 0x0 };
 	static struct screen_char schar_cache;
 
-	if (memcmp(&ta_cache, &format, sizeof(struct text_attrib_beginning))) {
-		struct color_pair colors = INIT_COLOR_PAIR(format.bg, format.fg);
+	if (memcmp(&ta_cache, &format.style, sizeof(struct text_attrib_style))) {
+		struct color_pair colors = INIT_COLOR_PAIR(format.style.bg, format.style.fg);
 		static enum color_mode color_mode;
 		static enum color_flags color_flags;
 
@@ -321,20 +321,20 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		}
 
 		schar_cache.attr = 0;
-		if (format.attr) {
-			if (format.attr & AT_UNDERLINE) {
+		if (format.style.attr) {
+			if (format.style.attr & AT_UNDERLINE) {
 				schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 			}
 
-			if (format.attr & AT_BOLD) {
+			if (format.style.attr & AT_BOLD) {
 				schar_cache.attr |= SCREEN_ATTR_BOLD;
 			}
 
-			if (format.attr & AT_ITALIC) {
+			if (format.style.attr & AT_ITALIC) {
 				schar_cache.attr |= SCREEN_ATTR_ITALIC;
 			}
 
-			if (format.attr & AT_GRAPHICS) {
+			if (format.style.attr & AT_GRAPHICS) {
 				schar_cache.attr |= SCREEN_ATTR_FRAME;
 			}
 		}
@@ -344,11 +344,11 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 			schar_cache.attr |= SCREEN_ATTR_UNDERLINE;
 		}
 
-		memcpy(&ta_cache, &format, sizeof(struct text_attrib_beginning));
+		copy_struct(&ta_cache, &format.style);
 		set_term_color(&schar_cache, &colors, color_flags, color_mode);
 
 		if (global_doc_opts->display_subs) {
-			if (format.attr & AT_SUBSCRIPT) {
+			if (format.style.attr & AT_SUBSCRIPT) {
 				if (!renderer_context.did_subscript) {
 					renderer_context.did_subscript = 1;
 					put_chars(part, "[", 1);
@@ -364,7 +364,7 @@ get_format_screen_char(struct part *part, enum link_state link_state)
 		if (global_doc_opts->display_sups) {
 			static int super = 0;
 
-			if (format.attr & AT_SUPERSCRIPT) {
+			if (format.style.attr & AT_SUPERSCRIPT) {
 				if (!super) {
 					super = 1;
 					put_chars(part, "^", 1);
@@ -913,9 +913,9 @@ new_link(struct document *document, int link_number,
 		link->target = null_or_stracpy(form ? form->target : NULL);
 	}
 
-	link->color.background = format.bg;
+	link->color.background = format.style.bg;
 	link->color.foreground = link_is_textinput(link)
-				? format.fg : format.clink;
+				? format.style.fg : format.clink;
 
 	link->event_hooks = mem_calloc(1, sizeof(struct list_head));
 	if (link->event_hooks) {
@@ -972,7 +972,7 @@ put_chars_conv(struct part *part, unsigned char *chars, int charslen)
 	assert(part && chars && charslen);
 	if_assert_failed return;
 
-	if (format.attr & AT_GRAPHICS) {
+	if (format.style.attr & AT_GRAPHICS) {
 		put_chars(part, chars, charslen);
 		return;
 	}
@@ -1159,8 +1159,8 @@ process_hidden_link(struct part *part)
 }
 
 #define is_drawing_subs_or_sups() \
-	((format.attr & AT_SUBSCRIPT && global_doc_opts->display_subs) \
-	 || (format.attr & AT_SUPERSCRIPT && global_doc_opts->display_sups))
+	((format.style.attr & AT_SUBSCRIPT && global_doc_opts->display_subs) \
+	 || (format.style.attr & AT_SUPERSCRIPT && global_doc_opts->display_sups))
 
 static inline int
 html_has_non_space_chars(unsigned char *chars, int charslen)

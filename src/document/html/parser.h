@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.76 2004/12/20 11:22:12 miciah Exp $ */
+/* $Id: parser.h,v 1.77 2004/12/29 15:43:31 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_PARSER_H
 #define EL__DOCUMENT_HTML_PARSER_H
@@ -34,19 +34,14 @@ enum format_attr {
 	AT_PREFORMATTED = 128,
 };
 
-struct text_attrib_beginning {
+struct text_attrib_style {
 	enum format_attr attr;
 	color_t fg;
 	color_t bg;
 };
 
 struct text_attrib {
-	/* Should match struct text_attrib_beginning fields
-	 * FIXME: can we use a field of struct text_attrib_beginning type ?
-	 */
-	enum format_attr attr;
-	color_t fg;
-	color_t bg;
+	struct text_attrib_style style;
 
 	int fontsize;
 	unsigned char *link;

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.513 2004/12/20 11:22:12 miciah Exp $ */
+/* $Id: parser.c,v 1.514 2004/12/29 15:43:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -270,37 +270,37 @@ html_span(unsigned char *a)
 void
 html_bold(unsigned char *a)
 {
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 }
 
 void
 html_italic(unsigned char *a)
 {
-	format.attr |= AT_ITALIC;
+	format.style.attr |= AT_ITALIC;
 }
 
 void
 html_underline(unsigned char *a)
 {
-	format.attr |= AT_UNDERLINE;
+	format.style.attr |= AT_UNDERLINE;
 }
 
 void
 html_fixed(unsigned char *a)
 {
-	format.attr |= AT_FIXED;
+	format.style.attr |= AT_FIXED;
 }
 
 void
 html_subscript(unsigned char *a)
 {
-	format.attr |= AT_SUBSCRIPT;
+	format.style.attr |= AT_SUBSCRIPT;
 }
 
 void
 html_superscript(unsigned char *a)
 {
-	format.attr |= AT_SUPERSCRIPT;
+	format.style.attr |= AT_SUPERSCRIPT;
 }
 
 /* Extract the extra information that is available for elements which can
@@ -368,17 +368,17 @@ html_font(unsigned char *a)
 		}
 		mem_free(al);
 	}
-	get_color(a, "color", &format.fg);
+	get_color(a, "color", &format.style.fg);
 }
 
 void
 html_body(unsigned char *a)
 {
-	get_color(a, "text", &format.fg);
+	get_color(a, "text", &format.style.fg);
 	get_color(a, "link", &format.clink);
 	get_color(a, "vlink", &format.vlink);
 
-	get_bgcolor(a, &format.bg);
+	get_bgcolor(a, &format.style.bg);
 #ifdef CONFIG_CSS
 	/* If there are any CSS twaks regarding bgcolor, make sure we will get
 	 * it _and_ prefer it over bgcolor attribute. */
@@ -387,12 +387,12 @@ html_body(unsigned char *a)
 		          &html_context.stack);
 #endif
 
-	if (par_format.bgcolor != format.bg) {
+	if (par_format.bgcolor != format.style.bg) {
 		/* Modify the root HTML element - format_html_part() will take
 		 * this from there. */
 		struct html_element *e = html_context.stack.prev;
 
-		e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
+		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
 	}
 
 	if (html_context.has_link_lines
@@ -587,8 +587,8 @@ html_html(unsigned char *a)
 	 * this from there. */
 	struct html_element *e = html_context.stack.prev;
 
-	if (par_format.bgcolor != format.bg)
-		e->parattr.bgcolor = e->attr.bg = par_format.bgcolor = format.bg;
+	if (par_format.bgcolor != format.style.bg)
+		e->parattr.bgcolor = e->attr.style.bg = par_format.bgcolor = format.style.bg;
 }
 
 void
@@ -694,7 +694,7 @@ html_h(int h, unsigned char *a,
 void
 html_h1(unsigned char *a)
 {
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 	html_h(1, a, ALIGN_CENTER);
 }
 
@@ -731,7 +731,7 @@ html_h6(unsigned char *a)
 void
 html_pre(unsigned char *a)
 {
-	format.attr |= AT_PREFORMATTED;
+	format.style.attr |= AT_PREFORMATTED;
 	par_format.leftmargin = (par_format.leftmargin > 1);
 	par_format.rightmargin = 0;
 }
@@ -761,7 +761,7 @@ html_hr(unsigned char *a)
 
 	i = get_width(a, "width", 1);
 	if (i == -1) i = get_html_max_width();
-	format.attr = AT_GRAPHICS;
+	format.style.attr = AT_GRAPHICS;
 	html_context.special_f(html_context.part, SP_NOWRAP, 1);
 	while (i-- > 0) {
 		put_chrs(&r, 1, html_context.put_chars_f, html_context.part);
@@ -777,7 +777,7 @@ html_table(unsigned char *a)
 	par_format.leftmargin = par_format.rightmargin = html_context.margin;
 	par_format.align = ALIGN_LEFT;
 	html_linebrk(a);
-	format.attr = 0;
+	format.style.attr = 0;
 }
 
 void
@@ -791,7 +791,7 @@ html_th(unsigned char *a)
 {
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 }
 
@@ -800,7 +800,7 @@ html_td(unsigned char *a)
 {
 	/*html_linebrk(a);*/
 	kill_html_stack_until(1, "TD", "TH", "", "TR", "TABLE", NULL);
-	format.attr &= ~AT_BOLD;
+	format.style.attr &= ~AT_BOLD;
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 }
 
@@ -1493,7 +1493,7 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	if (!e) return;
 	add_to_list(html_context.stack, e);
 
-	format.attr = 0;
+	format.style.attr = 0;
 	format.fontsize = 3;
 	format.link = format.target = format.image = NULL;
 	format.onclick = format.ondblclick = format.onmouseover = format.onhover
@@ -1502,8 +1502,8 @@ init_html_parser(struct uri *uri, struct document_options *options,
 	format.form = NULL;
 	format.title = NULL;
 
-	format.fg = options->default_fg;
-	format.bg = options->default_bg;
+	format.style.fg = options->default_fg;
+	format.style.bg = options->default_bg;
 	format.clink = options->default_link;
 	format.vlink = options->default_vlink;
 #ifdef CONFIG_BOOKMARKS

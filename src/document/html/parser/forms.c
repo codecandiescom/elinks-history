@@ -1,5 +1,5 @@
 /* HTML forms parser */
-/* $Id: forms.c,v 1.60 2004/12/18 01:42:18 pasky Exp $ */
+/* $Id: forms.c,v 1.61 2004/12/29 15:43:31 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -159,7 +159,7 @@ no_type_attr:
 	if (fc->type == FC_IMAGE) fc->alt = get_attr_val(a, "alt");
 	html_context.special_f(html_context.part, SP_CONTROL, fc);
 	format.form = fc;
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 }
 
 void
@@ -225,16 +225,16 @@ no_type_attr:
 		case FC_TEXT:
 		case FC_PASSWORD:
 		case FC_FILE:
-			format.attr |= AT_BOLD;
+			format.style.attr |= AT_BOLD;
 			for (i = 0; i < fc->size; i++)
 				put_chrs("_", 1, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_CHECKBOX:
-			format.attr |= AT_BOLD;
+			format.style.attr |= AT_BOLD;
 			put_chrs("[&nbsp;]", 8, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_RADIO:
-			format.attr |= AT_BOLD;
+			format.style.attr |= AT_BOLD;
 			put_chrs("(&nbsp;)", 8, html_context.put_chars_f, html_context.part);
 			break;
 		case FC_IMAGE:
@@ -245,7 +245,7 @@ no_type_attr:
 				format.image = join_urls(html_context.base_href, al);
 				mem_free(al);
 			}
-			format.attr |= AT_BOLD;
+			format.style.attr |= AT_BOLD;
 			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.part);
 			if (fc->alt)
 				put_chrs(fc->alt, strlen(fc->alt), html_context.put_chars_f, html_context.part);
@@ -259,7 +259,7 @@ no_type_attr:
 		case FC_SUBMIT:
 		case FC_RESET:
 		case FC_BUTTON:
-			format.attr |= AT_BOLD;
+			format.style.attr |= AT_BOLD;
 			put_chrs("[&nbsp;", 7, html_context.put_chars_f, html_context.part);
 			if (fc->default_value)
 				put_chrs(fc->default_value, strlen(fc->default_value), html_context.put_chars_f, html_context.part);
@@ -359,7 +359,7 @@ end_parse:
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 	put_chrs("[ ]", 3, html_context.put_chars_f, html_context.part);
 	kill_html_stack_item(&html_top);
 	put_chrs(" ", 1, html_context.put_chars_f, html_context.part);
@@ -513,7 +513,7 @@ end_parse:
 	put_chrs("[", 1, html_context.put_chars_f, part);
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 
 	max_width = 0;
 	for (i = 0; i < order; i++) {
@@ -626,7 +626,7 @@ pp:
 
 	html_stack_dup(ELEMENT_KILLABLE);
 	format.form = fc;
-	format.attr |= AT_BOLD;
+	format.style.attr |= AT_BOLD;
 
 	for (i = 0; i < rows; i++) {
 		int j;

@@ -1,5 +1,5 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.95 2004/01/29 12:16:20 pasky Exp $ */
+/* $Id: options.inc,v 1.96 2004/02/08 00:17:09 witekfl Exp $ */
 
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 /* TODO: Make #ifdef FEATURE more consistent. */
@@ -743,7 +743,7 @@ struct option_info config_options_info[] = {
 		"file", 0,
 		N_("Options specific to local browsing.")),
 
-#ifdef ELINKS_LOCAL_CGI
+#ifdef CONFIG_CGI
 	INIT_OPT_TREE("protocol.file", N_("Local CGI"),
 		"cgi", 0,
 		N_("Local CGI specific options.")),
@@ -767,7 +767,7 @@ struct option_info config_options_info[] = {
 	INIT_OPT_BOOL("protocol.file.cgi", N_("Allow local CGI"),
 		"policy", 0, 0,
 		N_("Whether to execute local CGI scripts. (DISABLED)")),
-#endif /* ELINKS_LOCAL_CGI */
+#endif /* CONFIG_CGI */
 
 	INIT_OPT_BOOL("protocol.file", N_("Allow reading special files"),
 		"allow_special_files", 0, 0,

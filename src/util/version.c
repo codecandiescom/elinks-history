@@ -1,5 +1,5 @@
 /* Version information */
-/* $Id: version.c,v 1.1 2003/05/19 14:12:30 zas Exp $ */
+/* $Id: version.c,v 1.2 2003/05/20 09:41:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -100,13 +100,7 @@ init_static_version()
 
 	memset(full_static_version, 0, sizeof(full_static_version));
 	if (s) {
-		int slen = strlen(s);
-
-		if (slen) memcpy(full_static_version, s,
-				 slen < sizeof(full_static_version)
-				 ? slen
-				 : sizeof(full_static_version) - 1);
-
+		safe_strncpy(full_static_version, s, sizeof(full_static_version));
 		mem_free(s);
 	}
 }

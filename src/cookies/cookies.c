@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.90 2003/11/15 22:33:02 miciah Exp $ */
+/* $Id: cookies.c,v 1.91 2003/11/15 23:44:17 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -558,7 +558,7 @@ accept_cookie_dialog(struct session *ses)
 	}
 #endif
 
-	msg_box(ses->tab->term, expires ? getml(expires, NULL) : NULL, MSGBOX_FREE_TEXT,
+	msg_box(ses->tab->term, getml(expires, NULL), MSGBOX_FREE_TEXT,
 		N_("Accept cookie?"), AL_LEFT,
 		msg_text(ses->tab->term, N_("Do you want to accept a cookie "
 		"from %s?\n\n"

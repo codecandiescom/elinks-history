@@ -1,5 +1,5 @@
 /* Support for mime.types files for mapping file extensions to content types */
-/* $Id: mimetypes.c,v 1.34 2003/11/27 13:08:01 jonas Exp $ */
+/* $Id: mimetypes.c,v 1.35 2003/12/31 10:42:00 jonas Exp $ */
 
 /* Copyright (C) 1996-2000 Michael R. Elkins <me@cs.hmc.edu>
  * Copyright (C) 2003-	   The ELinks Project */
@@ -87,9 +87,6 @@ done_mimetypes_entry(struct mimetypes_entry *entry)
  *	basetype/subtype	extension1 [extension2 ... extensionN]
  *
  * Comments starts with '#'. */
-
-#define skip_whitespace(S) \
-	do { while (*(S) && isspace(*(S))) (S)++; } while (0)
 
 static inline void
 parse_mimetypes_extensions(unsigned char *token, unsigned char *ctype)

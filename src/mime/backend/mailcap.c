@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.75 2003/12/31 08:50:40 jonas Exp $ */
+/* $Id: mailcap.c,v 1.76 2003/12/31 10:42:00 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -250,9 +250,6 @@ add_mailcap_entry(struct mailcap_entry *entry, unsigned char *type, int typelen)
  *
  * line wraps with a \ at the end of the line, # for comments. */
 /* TODO handle default pipe. Maybe by prepending "cat |" to the command. */
-
-#define skip_whitespace(S) \
-	do { while (*(S) && isspace(*(S))) (S)++; } while (0)
 
 /* Returns a NULL terminated RFC 1524 field, while modifying @next to point
  * to the next field. */

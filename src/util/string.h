@@ -1,4 +1,4 @@
-/* $Id: string.h,v 1.54 2003/12/12 14:24:19 jonas Exp $ */
+/* $Id: string.h,v 1.55 2003/12/31 10:42:01 jonas Exp $ */
 
 #ifndef EL__UTIL_STRING_H
 #define EL__UTIL_STRING_H
@@ -89,6 +89,9 @@ int elinks_strlcmp(const unsigned char *s1, size_t n1,
 int elinks_strlcasecmp(const unsigned char *s1, size_t n1,
 		       const unsigned char *s2, size_t n2);
 
+
+#define skip_whitespace(S) \
+	do { while (*(S) && isspace(*(S))) (S)++; } while (0)
 
 #define WHITECHAR(x) ((x) == ' ' || ((x) >= ASCII_TAB && (x) <= ASCII_CR))
 #define IS_QUOTE(x) ((x) == '"' || (x) == '\'')

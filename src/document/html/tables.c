@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.320 2004/06/29 23:15:45 pasky Exp $ */
+/* $Id: tables.c,v 1.321 2004/06/30 00:47:40 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -514,7 +514,7 @@ end1:
 	fmem_free(widths);
 
 end:
-	if (u) fmem_free(u);
+	if (visited_cols) fmem_free(visited_cols);
 }
 
 

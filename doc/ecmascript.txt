@@ -44,25 +44,53 @@ To get SpiderMonkey source, go at ftp://ftp.mozilla.org/pub/mozilla.org/js/
 and fetch the newest js- tarball there (js-1.5-rc6a.tar.gz at the time of
 writing this; you may try the RPMs, but we didn't test them).
 
+	$ cd elinks
+	$ wget ftp://ftp.mozilla.org/pub/mozilla.org/js/js-1.5-rc6a.tar.gz
+	$ tar xvzf js-1.5-rc6a.tar.gz
+
 Next, you need to patch it so that you will have any chance to install it as
 you fetched it. Grab it in ELinks at contrib/js-1.5-rc6a+elinks.patch (if you
 have a different version, still try to go ahead, you might have some success),
-then go to SpiderMonkey into the src/ subdir and apply it as
+then go to SpiderMonkey directory (called js) and apply it as
 
-	$ patch -p1 <the-patch-file
+	$ cd js
+	$ patch -p1 <../contrib/js-1.5-rc6a+elinks.patch
+	$ cd src
 
 Now, edit config.mk and adjust the $PREFIX variable - you probably won't like
 the default value - ELinks will find it there, but your dynamic linker likely
 won't.
 
+Ie. for /usr/local installation:
+	$ sed 's#^PREFIX = /opt/spidermonkey#PREFIX = /usr/local#' < config.mk > config.mk.t
+	$ mv -f config.mk.t config.mk
+
 Now you can finally go for it:
 
 	$ make -f Makefile.ref
 	$ make -f Makefile.ref export
-	# make -f Makefile.ref install
+
+Now install it:
+	$ su -c 'make -f Makefile.ref install && (ldconfig -v | grep libjs)'
+
+Check for:
+	libjs.so -> libjs.so
 
 If all went well, you can proceed to rebuild ELinks now. If something broke,
 see you on #elinks @ FreeNode or in the mailing list.
+You may add your options to ./configure as usual, spidermonkey should be
+autodetected.
+
+	$ cd ../..
+	$ ./configure
+
+Check for "Ecmascript .................... SpiderMonkey" in Feature summary.
+
+	$ make
+	$ su -c 'make install'
+
+Enjoy.
+
 
 
 		The ECMAScript support is buggy! Shall I blame Mozilla people?

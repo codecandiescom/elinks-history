@@ -1,3 +1,52 @@
+Wed Aug 27 16:23:09 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	struct table_cell: Make @used, @spanned and @b members boolean.  
+
+Wed Aug 27 16:03:26 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	struct table_cell: Remove useless variables.  
+
+Tue Aug 26 23:52:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	fg_color(): Instead of using brightwhite on white use brightgrey.
+	Improves /.  
+
+Tue Aug 26 23:35:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	copy_chars(): Use memcpy().  
+
+Tue Aug 26 23:23:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	Fix compile error.  
+
+Tue Aug 26 23:14:04 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	xset_vchars(): Use memcpy().  
+
+Tue Aug 26 23:10:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	set_hline(): Move test outside the loop.  
+
+Tue Aug 26 23:04:43 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	realloc_line() + set_hchars(): Use memcpy().  
+
 Tue Aug 26 12:50:49 2003  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

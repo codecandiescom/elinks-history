@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.332 2003/10/23 00:12:55 jonas Exp $ */
+/* $Id: options.c,v 1.333 2003/10/23 00:26:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -192,11 +192,31 @@ get_opt_(
 	errline = line;
 	if (!opt) elinks_internal("Attempted to fetch nonexisting option %s!", name);
 
-	/* TODO: Sanity check that values are within min/max limits. --jonas */
-	if ((opt->type == OPT_TREE && !opt->value.tree)
-	    || ((opt->type == OPT_STRING || opt->type == OPT_ALIAS)
-		&& !opt->value.string))
-		elinks_internal("Option %s has no value!", name);
+	/* Various sanity checks. */
+	switch (opt->type) {
+	case OPT_TREE:
+		if (!opt->value.tree)
+			elinks_internal("Option %s has no value!", name);
+		break;
+	case OPT_STRING:
+	case OPT_ALIAS:
+		if (!opt->value.string)
+			elinks_internal("Option %s has no value!", name);
+		break;
+	case OPT_BOOL:
+	case OPT_INT:
+	case OPT_LONG:
+		if (opt->value.number < opt->min
+		    || opt->value.number > opt->max)
+			elinks_internal("Option %s has invalid value!", name);
+		break;
+	case OPT_COMMAND:
+		if (!opt->value.command)
+			elinks_internal("Option %s has no value!", name);
+		break;
+	default:
+		break;
+	}
 #endif
 
 	return &opt->value;

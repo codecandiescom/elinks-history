@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.209 2004/06/19 12:58:03 jonas Exp $ */
+/* $Id: form.c,v 1.210 2004/06/20 13:11:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1190,10 +1190,18 @@ field_op(struct session *ses, struct document_view *doc_view,
 			mem_free(text);
 			break;
 		case ACT_EDIT_ENTER:
-			if (fc->type != FC_TEXTAREA)
-				status = FRAME_EVENT_IGNORED;
-			else
+			if (fc->type == FC_TEXTAREA) {
 				status = textarea_op_enter(fs, fc);
+				break;
+			}
+
+			/* Set status to ok if either it is not possible to
+			 * submit the form or posting fails. */
+			/* FIXME: We should maybe have ACT_EDIT_ENTER_RELOAD */
+			if ((!has_form_submit(doc_view->document, fc)
+			    && !get_opt_int("document.browse.forms.auto_submit"))
+			    || goto_current_link(ses, doc_view, 0))
+				status = FRAME_EVENT_OK;
 			break;
 		case ACT_EDIT_BACKSPACE:
 			if (form_field_is_readonly(fc)) {

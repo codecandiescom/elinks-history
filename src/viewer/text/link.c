@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.235 2004/06/19 18:16:28 jonas Exp $ */
+/* $Id: link.c,v 1.236 2004/06/20 13:11:34 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -624,18 +624,10 @@ enter(struct session *ses, struct document_view *doc_view, int do_reload)
 	if (!link) return FRAME_EVENT_REFRESH;
 
 	if (!link_is_form(link)
-	    || link->type == LINK_BUTTON
-	    || ((has_form_submit(doc_view->document, link->form_control)
-		 || get_opt_int("document.browse.forms.auto_submit"))
-		&& link_is_textinput(link))) {
+	    || link->type == LINK_BUTTON) {
 
 		if (goto_current_link(ses, doc_view, do_reload))
 			return FRAME_EVENT_OK;
-
-	} else if (link_is_textinput(link)) {
-		/* We won't get here if (has_form_submit() ||
-		 * 			 get_opt_int("..")) */
-		down(ses, doc_view);
 
 	} else if (link->type == LINK_CHECKBOX) {
 		struct form_state *fs = find_form_state(doc_view, link->form_control);

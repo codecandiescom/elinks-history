@@ -1,5 +1,5 @@
 /* Lua scripting hooks */
-/* $Id: hooks.c,v 1.31 2003/09/25 14:59:46 jonas Exp $ */
+/* $Id: hooks.c,v 1.32 2003/09/25 15:25:32 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,7 +21,7 @@ static inline int
 str_event_code(unsigned char **retval, unsigned char *value)
 {
 	*retval = value;
-	return !!value;
+	return value ? EHS_LAST : EHS_NEXT;
 }
 
 /* The events that will trigger the functions below and what they are expected
@@ -39,8 +39,9 @@ script_hook_goto_url(va_list ap)
 
 	lua_getglobal(L, "goto_url_hook");
 	if (lua_isnil(L, -1)) {
+		/* The function is not defined */
 		lua_pop(L, 1);
-		return str_event_code(new_url, url);
+		return EHS_NEXT;
 	}
 
 	lua_pushstring(L, url);
@@ -82,8 +83,9 @@ script_hook_follow_url(va_list ap)
 
 	lua_getglobal(L, "follow_url_hook");
 	if (lua_isnil(L, -1)) {
+		/* The function is not defined */
 		lua_pop(L, 1);
-		return str_event_code(new_url, url);
+		return EHS_NEXT;
 	}
 
 	lua_pushstring(L, url);
@@ -121,8 +123,9 @@ script_hook_pre_format_html(va_list ap)
 
 	lua_getglobal(L, "pre_format_html_hook");
 	if (lua_isnil(L, -1)) {
+		/* The function is not defined */
 		lua_pop(L, 1);
-		return str_event_code(new_html_src, NULL);
+		return EHS_NEXT;
 	}
 
 	lua_pushstring(L, url);
@@ -161,8 +164,9 @@ script_hook_get_proxy(va_list ap)
 
 	lua_getglobal(L, "proxy_for_hook");
 	if (lua_isnil(L, -1)) {
+		/* The function is not defined */
 		lua_pop(L, 1);
-		return str_event_code(new_proxy_url, NULL);
+		return EHS_NEXT;
 	}
 
 	lua_pushstring(L, url);

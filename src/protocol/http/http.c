@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.159 2003/07/07 15:36:04 jonas Exp $ */
+/* $Id: http.c,v 1.160 2003/07/07 19:15:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -334,16 +334,21 @@ static void
 http_send_header(struct connection *conn)
 {
 	static unsigned char *accept_charset = NULL;
-	unsigned char *host = GET_REAL_URI(conn->uri);
 	struct http_connection_info *info;
 	int trace = get_opt_bool("protocol.http.trace");
-	unsigned char *post = NULL;
 	unsigned char *hdr;
-	unsigned char *host_data, *url_data;
+	unsigned char *host_data;
+	struct uri real_uri;
+	struct uri *uri;
 	int l = 0;
 	unsigned char *optstr;
 
 	set_connection_timeout(conn);
+
+	if (!conn->uri.data) {
+		http_end_request(conn, S_BAD_URL);
+		return;
+	}
 
 	info = mem_calloc(1, sizeof(struct http_connection_info));
 	if (!info) {
@@ -354,11 +359,21 @@ http_send_header(struct connection *conn)
 	info->sent_version.major = 1;
 	info->sent_version.minor = 1;
 
-	host_data = get_host_name(host);
-	if (host_data) {
-		info->bl_flags = get_blacklist_flags(host_data, strlen(host_data));
-		mem_free(host_data);
+	/* Setup the real uri. */
+	if (IS_PROXY_URI(conn->uri)) {
+		uri = &real_uri;
+		uri->protocol = conn->uri.data;
+		if (!parse_uri(uri)) {
+			/* We messed up the proxy url somehow! */
+			http_end_request(conn, S_BAD_URL);
+			return;
+		}
+	} else {
+		uri = &conn->uri;
 	}
+
+	if (uri->host)
+		info->bl_flags = get_blacklist_flags(uri->host, uri->hostlen);
 
 	if (info->bl_flags & BL_HTTP10
 	    || get_opt_int("protocol.http.bugs.http10")) {
@@ -372,11 +387,9 @@ http_send_header(struct connection *conn)
 		return;
 	}
 
-	post = conn->uri.post;
-
 	if (trace) {
 		add_to_str(&hdr, &l, "TRACE ");
-	} else if (post) {
+	} else if (uri->post) {
 		add_to_str(&hdr, &l, "POST ");
 	} else {
 		add_to_str(&hdr, &l, "GET ");
@@ -386,13 +399,7 @@ http_send_header(struct connection *conn)
 		add_chr_to_str(&hdr, &l, '/');
 	}
 
-	url_data = conn->uri.data;
-	if (!url_data) {
-		http_end_request(conn, S_BAD_URL);
-		return;
-	}
-
-	add_url_to_http_str(&hdr, &l, url_data, post);
+	add_url_to_http_str(&hdr, &l, conn->uri.data, conn->uri.post);
 
 	add_to_str(&hdr, &l, " HTTP/");
 	add_num_to_str(&hdr, &l, info->sent_version.major);
@@ -400,29 +407,21 @@ http_send_header(struct connection *conn)
 	add_num_to_str(&hdr, &l, info->sent_version.minor);
 	add_to_str(&hdr, &l, "\r\n");
 
-	host_data = get_host_name(host);
-
-	if (host_data) {
+	if (uri->host) {
 		add_to_str(&hdr, &l, "Host: ");
 #ifdef IPV6
-		if (strchr(host_data, ':') != strrchr(host_data, ':')) {
+		if (strchr(uri->host, ':') != strrchr(uri->host, ':')) {
 			/* IPv6 address */
 			add_chr_to_str(&hdr, &l, '[');
-			add_to_str(&hdr, &l, host_data);
+			add_bytes_to_str(&hdr, &l, uri->host, uri->hostlen);
 			add_chr_to_str(&hdr, &l, ']');
 		} else
 #endif
-			add_to_str(&hdr, &l, host_data);
+			add_bytes_to_str(&hdr, &l, uri->host, uri->hostlen);
 
-		mem_free(host_data);
-
-		host_data = get_port_str(host);
-		if (host_data) {
-			if (*host_data) {
-				add_chr_to_str(&hdr, &l, ':');
-				add_to_str(&hdr, &l, host_data);
-			}
-			mem_free(host_data);
+		if (uri->portlen) {
+			add_chr_to_str(&hdr, &l, ':');
+			add_bytes_to_str(&hdr, &l, uri->port, uri->portlen);
 		}
 
 		add_to_str(&hdr, &l, "\r\n");
@@ -501,30 +500,21 @@ http_send_header(struct connection *conn)
 		case REFERER_SAME_URL:
 			add_to_str(&hdr, &l, "Referer: ");
 
+			/* FIXME: IPv6. */
 			add_to_str(&hdr, &l, "http://");
-			host_data = get_host_name(extract_proxy(host));
-			if (host_data) {
-				add_to_str(&hdr, &l, host_data);
-				mem_free(host_data);
+			if (uri->host) {
+				int hostlen = uri->hostlen;
 
-				host_data = get_port_str(extract_proxy(host));
-				if (host_data) {
-					if (*host_data) {
-						add_chr_to_str(&hdr, &l, ':');
-						add_to_str(&hdr, &l, host_data);
-					}
-					mem_free(host_data);
-				}
+				/* Maybe add ':' and port string. */
+				if (uri->portlen) hostlen += uri->portlen + 1;
+				add_bytes_to_str(&hdr, &l, uri->host, hostlen);
 			}
 
-			if (!IS_PROXY_URI(conn->uri) || hdr[l - 1] != '/') {
+			if (!IS_PROXY_URI(conn->uri) || hdr[l - 1] != '/')
 				add_chr_to_str(&hdr, &l, '/');
-			}
 
-			url_data = get_url_data(extract_proxy(conn->uri.protocol));
-			if (url_data) {
-				add_url_to_http_str(&hdr, &l, url_data, post);
-			}
+			if (uri->data)
+				add_url_to_http_str(&hdr, &l, uri->data, uri->post);
 
 			add_to_str(&hdr, &l, "\r\n");
 			break;
@@ -613,7 +603,7 @@ http_send_header(struct connection *conn)
 			add_to_str(&hdr, &l, "Proxy-Connection: ");
 		}
 
-		if (!post || !get_opt_int("protocol.http.bugs.post_no_keepalive")) {
+		if (!uri->post || !get_opt_int("protocol.http.bugs.post_no_keepalive")) {
 			add_to_str(&hdr, &l, "Keep-Alive\r\n");
 		} else {
 			add_to_str(&hdr, &l, "close\r\n");
@@ -643,7 +633,7 @@ http_send_header(struct connection *conn)
 		add_to_str(&hdr, &l, "-\r\n");
 	}
 
-	host_data = find_auth(host);
+	host_data = find_auth(uri->protocol);
 	if (host_data) {
 		add_to_str(&hdr, &l, "Authorization: Basic ");
 		add_to_str(&hdr, &l, host_data);
@@ -651,28 +641,29 @@ http_send_header(struct connection *conn)
 		mem_free(host_data);
 	}
 
-	if (post) {
-		unsigned char *pd = strchr(post, '\n');
+	if (uri->post) {
+		unsigned char *postend = strchr(uri->post, '\n');
 
-		if (pd) {
+		if (postend) {
 			add_to_str(&hdr, &l, "Content-Type: ");
-			add_bytes_to_str(&hdr, &l, post, pd - post);
+			add_bytes_to_str(&hdr, &l, uri->post, postend - uri->post);
 			add_to_str(&hdr, &l, "\r\n");
-			post = pd + 1;
+			uri->post = postend + 1;
 		}
 		add_to_str(&hdr, &l, "Content-Length: ");
-		add_num_to_str(&hdr, &l, strlen(post) / 2);
+		add_num_to_str(&hdr, &l, strlen(uri->post) / 2);
 		add_to_str(&hdr, &l, "\r\n");
 	}
 
 #ifdef COOKIES
-	send_cookies(&hdr, &l, host);
+	send_cookies(&hdr, &l, uri->protocol);
 #endif
 
 	add_to_str(&hdr, &l, "\r\n");
 
-	if (post) {
+	if (uri->post) {
 #define POST_BUFFER_SIZE 4096		
+		unsigned char *post = uri->post;
 		unsigned char buffer[POST_BUFFER_SIZE];
 		int n = 0;
 		
@@ -699,7 +690,7 @@ http_send_header(struct connection *conn)
 			add_bytes_to_str(&hdr, &l, buffer, n);
 #undef POST_BUFFER_SIZE
 	}
-		
+
 	write_to_socket(conn, conn->sock1, hdr, l, http_get_header);
 	mem_free(hdr);
 

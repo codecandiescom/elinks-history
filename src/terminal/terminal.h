@@ -1,9 +1,9 @@
-/* $Id: terminal.h,v 1.28 2003/12/01 14:31:30 pasky Exp $ */
+/* $Id: terminal.h,v 1.29 2003/12/01 14:31:58 pasky Exp $ */
 
 #ifndef EL__TERMINAL_TERMINAL_H
 #define EL__TERMINAL_TERMINAL_H
 
-#include "config/option.h"
+#include "config/options.h"
 #include "intl/charsets.h"
 #include "terminal/event.h"
 #include "util/lists.h"

@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.45 2003/10/17 15:31:44 zas Exp $ */
+/* $Id: session.h,v 1.46 2003/10/22 21:55:59 pasky Exp $ */
 
 #ifndef EL__SCHED_SESSION_H
 #define EL__SCHED_SESSION_H
@@ -82,6 +82,10 @@ struct session {
 
 	/* Browsing history */
 
+	/* The _last_ visited location is always stored _first_ in the list.
+	 * Thus, after visiting A B C D E and then going back to C, in history
+	 * will be (in this order, from list.next through ->nexts) B A and in
+	 * unhistory will be D E. */
 	struct list_head history; /* -> struct location */
 	struct list_head unhistory; /* -> struct location */
 

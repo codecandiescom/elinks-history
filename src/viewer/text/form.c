@@ -1,9 +1,11 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.206 2004/06/18 09:33:50 miciah Exp $ */
+/* $Id: form.c,v 1.207 2004/06/18 15:00:53 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#define _GNU_SOURCE /* XXX: we want memrchr() ! */
 
 #include <errno.h>
 #include <stdio.h>
@@ -1237,15 +1239,9 @@ field_op(struct session *ses, struct document_view *doc_view,
 				break;
 			}
 
-			/* TODO: Make this memrchr(), and introduce stub for
-			 * that function into util/string.*. --pasky */
-			text = fs->value + fs->state - 1;
-			while (text > fs->value && *text != ASCII_LF)
-				text--;
-
-			if (text > fs->value
-			    && fs->value[fs->state - 1] != ASCII_LF)
-				text++;
+			text = memrchr(fs->value, ASCII_LF, fs->state - 1);
+			/* Don't remove the line feed */
+			text = text ? text + 1 : fs->value;
 
 			length = strlen(fs->value + fs->state) + 1;
 			memmove(text, fs->value + fs->state, length);

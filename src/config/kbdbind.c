@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.240 2004/07/14 14:02:47 jonas Exp $ */
+/* $Id: kbdbind.c,v 1.241 2004/07/14 14:13:28 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,6 +36,14 @@ static void add_default_keybindings(void);
 static void init_action_listboxes(void);
 static void free_action_listboxes(void);
 
+static struct listbox_item *
+get_keybinding_action_box_item(enum keymap km, int action)
+{
+	assert(action < ACTION_BOX_SIZE);
+	if_assert_failed return NULL;
+
+	return action_box_items[km][action];
+}
 
 static int
 delete_keybinding(enum keymap km, long key, long meta)
@@ -88,14 +96,10 @@ add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 		return NULL; /* Or goto. */
 	}
 
-	assert(action < ACTION_BOX_SIZE);
-	if_assert_failed return NULL;
-
-	root = action_box_items[km][action];
+	root = get_keybinding_action_box_item(km, action);
 	if (!root) {
 		return NULL; /* Or goto ;-). */
 	}
-
 	kb->box_item = add_listbox_leaf(&keybinding_browser, root, kb);
 
 	return kb;

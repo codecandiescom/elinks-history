@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.97 2004/07/28 14:37:28 jonas Exp $ */
+/* $Id: kbd.c,v 1.98 2004/07/28 14:39:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -909,20 +909,18 @@ process_queue(struct itrm *itrm)
 			}
 		}
 
-		goto l1;
-
 	} else if (itrm->kqueue[0] == 0) {
 		if (itrm->qlen < 2) goto ret;
 		ev.x = os2xtd[itrm->kqueue[1]].x;
 		if (!ev.x) ev.x = -1;
 		ev.y = os2xtd[itrm->kqueue[1]].y;
 		el = 2;
-		goto l1;
-	}
-	el = 1;
-	set_kbd_event(&ev, itrm->kqueue[0], 0);
 
-l1:
+	} else {
+		el = 1;
+		set_kbd_event(&ev, itrm->kqueue[0], 0);
+	}
+
 	assertm(itrm->qlen >= el, "event queue underflow");
 	if_assert_failed { itrm->qlen = el; }
 

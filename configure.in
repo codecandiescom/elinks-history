@@ -651,6 +651,7 @@ AC_OUTPUT([ \
  src/elusive/renderer/text/Makefile \
  src/globhist/Makefile \
  src/intl/Makefile \
+ src/intl/gettext/Makefile \
  src/lowlevel/Makefile \
  src/lua/Makefile \
  src/osdep/Makefile \

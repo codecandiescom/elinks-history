@@ -1,7 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.6 2002/12/07 21:22:42 pasky Exp $
+## $Id: Makefile.am,v 1.7 2003/01/02 16:31:40 pasky Exp $
 
 include $(top_srcdir)/Makefile.base
+
+SUBDIRS = gettext
 
 # THIS IS WRONG (so what, automake won't let us do better) :
 BUILT_SOURCES = language.inc lang_defs.h $(wildcard lng_*.inc)

@@ -1,5 +1,5 @@
 /* Widget group implementation. */
-/* $Id: group.c,v 1.24 2003/09/01 12:52:26 zas Exp $ */
+/* $Id: group.c,v 1.25 2003/10/05 20:47:34 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,7 +32,7 @@ base_group_width(struct terminal *term, struct widget_data *item)
 }
 
 /* TODO: We should join these two functions in one. --Zas */
-static inline void
+inline void
 max_group_width(struct terminal *term, int intl, unsigned char **texts,
 		struct widget_data *item, int n, int *w)
 {
@@ -55,7 +55,7 @@ max_group_width(struct terminal *term, int intl, unsigned char **texts,
 	int_lower_bound(w, ww);
 }
 
-static inline void
+inline void
 min_group_width(struct terminal *term, int intl, unsigned char **texts,
 		struct widget_data *item, int n, int *w)
 {
@@ -77,7 +77,7 @@ min_group_width(struct terminal *term, int intl, unsigned char **texts,
 	*w = wt + base;
 }
 
-static void
+void
 dlg_format_group(struct terminal *term, struct terminal *t2, int intl,
 		 unsigned char **texts, struct widget_data *item,
 		 int n, int x, int *y, int w, int *rw)

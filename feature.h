@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.4 2003/12/31 21:35:10 pasky Exp $ */
+/* $Id: feature.h,v 1.5 2003/12/31 21:44:20 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -25,6 +25,9 @@
  * screen as [-----]. They are used for indication of various states, ie.
  * whether you are currently talking through a SSL-secured connection.
  *
+ * This is rather a fancy thing, and it doesn't do anything actually useful yet
+ * anyway.
+ *
  * Default: disabled */
 
 /* #define USE_LEDS */
@@ -36,6 +39,9 @@
  * by pressing 's'. When bookmarks are enabled, also support for the internal
  * ELinks bookmarks format is always compiled in.
  *
+ * This is a favourite target for disabling in various embedded applications.
+ * It all depends on your requirements.
+ *
  * Default: enabled */
 
 #define BOOKMARKS
@@ -46,6 +52,9 @@
  * ELinks also supports universal XML bookmarks format called XBEL, also
  * supported by ie. Galeon, various "always-have-my-bookmarks" websites and
  * number of universal bookmark convertors.
+ *
+ * Frequently, you know you will not need it, then you can of course happily
+ * forcibly remove support for it and save few bytes.
  *
  * Default: enabled if libexpat (required library) found */
 
@@ -115,6 +124,11 @@
  * handle a media type. The file format is defined in RFC 1524 and more info
  * including examples can be found in the doc/mailcap.html file.
  *
+ * This is very useful especially for clean interoperability with other
+ * MIME-aware applications and fitting nicely into the UNIX system, where this
+ * is the standard way of specifying MIME handlers. If you are not interested
+ * in that, you can still use the internal MIME associations system, though.
+ *
  * Default: enabled */
 
 #define MAILCAP
@@ -123,6 +137,8 @@
  *
  * Mimetypes file can be used to specify the relation between media types and
  * file extensions.
+ *
+ * Basically same thing applies here as for the mailcap support.
  *
  * Default: enabled */
 
@@ -140,8 +156,17 @@
  *
  * - Recent versions of PuTTY also have some support for 256 colors.
  *
- * When enabled, the memory usage is increased even when running in mono and 16
- * color mode.
+ * You will still need to enable this at the runtime for a given terminal in
+ * terminal options, or set your $TERM variable to xterm-256color - then,
+ * ELinks will automatically configure itself to make use of all the available
+ * terminal features, while still acting sensibly when you happen to run it in
+ * an xterm w/o the 256 colors support.
+ *
+ * When enabled, the memory usage is somewhat increased even when running in
+ * mono and 16 colors mode (the memory consumption can be especially remarkable
+ * when rendering very large documents and/or using very large terminals).
+ * However, when you actually run it in the suitable terminal, it looks really
+ * impressive, I'd say marvelous!
  *
  * Default: disabled */
 

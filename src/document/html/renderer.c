@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.27 2002/06/08 11:44:13 zas Exp $ */
+/* $Id: renderer.c,v 1.28 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2017,6 +2017,7 @@ void format_frames(struct session *ses, struct frameset_desc *fsd,
 /* html_interpret() */
 void html_interpret(struct session *ses)
 {
+	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct document_options o;
 	struct f_data_c *fd;
 	struct f_data_c *cf = NULL;
@@ -2035,8 +2036,8 @@ void html_interpret(struct session *ses)
 	o.yp = 1;
 	o.xw = ses->term->x;
 	o.yw = ses->term->y - 2;
-	o.col = ses->term->spec->col;
-	o.cp = ses->term->spec->charset;
+	o.col = get_opt_bool_tree(opt_tree, "colors");
+	o.cp = get_opt_int_tree(opt_tree, "charset");
 
 	mk_document_options(&o);
 

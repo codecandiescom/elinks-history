@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.29 2002/06/09 14:53:22 pasky Exp $ */
+/* $Id: conf.c,v 1.30 2002/06/09 20:14:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -262,8 +262,9 @@ tree_config_string(unsigned char **str, int *len, struct list_head *options,
 	struct option *option;
 
 	foreachback (option, *options) {
-		if (option_types[option->type].write
-		    && !(option->flags & OPT_HIDDEN)) {
+		if (option->flags & OPT_HIDDEN) continue;
+
+		if (option_types[option->type].write) {
 			add_to_str(str, len, "set ");
 			if (path) {
 				add_to_str(str, len, path);

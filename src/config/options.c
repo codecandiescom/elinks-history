@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.43 2002/06/09 14:53:22 pasky Exp $ */
+/* $Id: options.c,v 1.44 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -93,19 +93,19 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 	}
 
 	if (cat && cat->flags & OPT_AUTOCREATE) {
-		struct option *template = get_opt_rec(tree, "#template#");
+		struct option *template = get_opt_rec(tree, "_template_");
 
 		if (!template) {
 			internal("Requested %s should be autocreated but "
-				 "%.*s.#template# is missing!",
+				 "%.*s._template_ is missing!",
 				 name_, sep - name_, name_);
 			mem_free(aname);
 			return NULL;
 		}
 
 		/* We will just create the option and return pointer to it
-		 * automagically. And, we will create it by cloning #template#
-		 * option. By having #template# OPT_AUTOCREATE and #template#
+		 * automagically. And, we will create it by cloning _template_
+		 * option. By having _template_ OPT_AUTOCREATE and _template_
 		 * inside, you can have even multi-level autocreating. */
 
 		option = copy_option(template);
@@ -113,6 +113,7 @@ get_opt_rec(struct list_head *tree, unsigned char *name_)
 			mem_free(aname);
 			return NULL;
 		}
+		mem_free(option->name);
 		option->name = stracpy(name);
 
 		add_opt_rec(tree, "", option);
@@ -163,7 +164,7 @@ add_opt(struct list_head *tree, unsigned char *path, unsigned char *name,
 {
 	struct option *option = mem_alloc(sizeof(struct option));
 
-	option->name = name;
+	option->name = stracpy(name); /* I hope everyone will like this. */
 	option->flags = flags;
 	option->type = type;
 	option->min = min;
@@ -179,12 +180,12 @@ copy_option(struct option *template)
 {
 	struct option *option = mem_alloc(sizeof(struct option));
 
-	option->name = template->name;
+	option->name = stracpy(template->name);
 	option->flags = template->flags;
 	option->type = template->type;
 	option->min = template->min;
 	option->max = template->max;
-	option->ptr = option_types[template->type].dup(template)
+	option->ptr = option_types[template->type].dup
 				? option_types[template->type].dup(template)
 				: template->ptr;
 	option->desc = template->desc;
@@ -233,6 +234,8 @@ free_options_tree(struct list_head *tree)
 			free_options_tree((struct list_head *) option->ptr);
 			/*debug("<-");*/
 		}
+
+		mem_free(option->name);
 	}
 
 	free_list(*tree);
@@ -817,6 +820,53 @@ register_options()
 
 
 	add_opt_tree("",
+		"terminal", OPT_AUTOCREATE,
+		"Terminal options");
+
+	add_opt_tree("terminal",
+		"_template_", 0,
+		"Options specific to this terminal type");
+
+	add_opt_int("terminal._template_",
+		"type", 0, 0, 3, 0,
+		"Terminal type; matters mostly only when drawing frames and\n"
+		"dialog box borders:\n"
+		"0 is dumb terminal type, ASCII art\n"
+		"1 is Linux, you get double frames and other goodies\n"
+		"2 is VT100, simple but portable\n"
+		"3 is KOI-8");
+
+	add_opt_bool("terminal._template_",
+		"m11_hack", 0, 1,
+		"If using Linux terminal, switch font when drawing lines,\n"
+		"enabling both local characters and lines working at the same\n"
+		"time.");
+
+	add_opt_bool("terminal._template_",
+		"utf_8_io", 0, 0,
+		"Enable I/O in UTF8 for Unicode terminals.");
+
+	add_opt_bool("terminal._template_",
+		"restrict_852", 0, 0,
+		"Someone who understands this ... ;)) I'm too lazy to think about this now :P.");
+
+	add_opt_bool("terminal._template_",
+		"block_cursor", 0, 0,
+		"This means that we always move cursor to bottom right corner\n"
+		"when done drawing. This is particularily useful when we are\n"
+		"using block cursor, as inversed stuff is displayed correctly.");
+
+	add_opt_bool("terminal._template_",
+		"colors", 0, 0,
+		"If we should use colors.");
+
+	add_opt_codepage("terminal._template_",
+		"charset", 0, get_cp_index("us-ascii"),
+		"Codepage of charset used for displaying of content on terminal.");
+
+
+
+	add_opt_tree("",
 		"ui", 0,
 		"User interface options.");
 
@@ -896,10 +946,6 @@ register_options()
 	/* These will disappear */
 
 #if 0
-	add_opt_void("",
-		"terminal", 0, OPT_TERM,
-		NULL);
-
 	add_opt_void("",
 		"association", 0, OPT_MIME_TYPE,
 		NULL);

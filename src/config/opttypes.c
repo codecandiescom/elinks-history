@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.12 2002/06/09 14:53:22 pasky Exp $ */
+/* $Id: opttypes.c,v 1.13 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,75 +428,6 @@ prog_wr(struct option *o, unsigned char **s, int *l)
 }
 
 
-/* terminal NAME(str) MODE(0-3) M11_HACK(0-1) BLOCK_CURSOR.RESTRICT_852.COL(0-7) CHARSET(str) [ UTF_8_IO("utf-8") ]*/
-int
-term_rd(struct option *o, unsigned char **c)
-{
-#if 0
-	struct term_spec *ts;
-	unsigned char *w;
-	int i;
-	if (!(w = get_token(&c))) goto err;
-	if (!(ts = new_term_spec(w))) {
-		mem_free(w);
-		goto end;
-	}
-	ts->utf_8_io = 0;
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '3') goto err_f;
-	ts->mode = w[0] - '0';
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '1') goto err_f;
-	ts->m11_hack = w[0] - '0';
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if (strlen(w) != 1 || w[0] < '0' || w[0] > '7') goto err_f;
-	ts->col = (w[0] - '0') & 1;
-	ts->restrict_852 = !!((w[0] - '0') & 2);
-	ts->block_cursor = !!((w[0] - '0') & 4);
-	mem_free(w);
-	if (!(w = get_token(&c))) goto err;
-	if ((i = get_cp_index(w)) == -1) goto err_f;
-	ts->charset = i;
-	mem_free(w);
-	if (!(w = get_token(&c))) goto end;
-	if (!(strcasecmp(w, "utf-8"))) ts->utf_8_io = 1;
-	mem_free(w);
-	end:
-	return NULL;
-	err_f:
-	mem_free(w);
-	err:
-	return "Error reading terminal specification";
-#endif
-	return 0;
-}
-
-void
-term_wr(struct option *o, unsigned char **s, int *l)
-{
-#if 0
-	struct term_spec *ts;
-	foreachback(ts, term_specs) {
-		add_quoted_to_str(s, l, ts->term);
-		add_to_str(s, l, " ");
-		add_num_to_str(s, l, ts->mode);
-		add_to_str(s, l, " ");
-		add_num_to_str(s, l, ts->m11_hack);
-		add_to_str(s, l, " ");
-		add_num_to_str(s, l, !!ts->col + !!ts->restrict_852 * 2 + !!ts->block_cursor * 4);
-		add_to_str(s, l, " ");
-		add_to_str(s, l, get_cp_mime_name(ts->charset));
-		if (ts->utf_8_io) {
-			add_to_str(s, l, " utf-8");
-		}
-	}
-#endif
-}
-
-
 int
 color_rd(struct option *opt, unsigned char **str)
 {
@@ -555,7 +486,10 @@ tree_dup(struct option *opt)
 	struct list_head *tree = (struct list_head *) opt->ptr;
 	struct option *option;
 
-	foreach (option, *tree) {
+	if (!new) return NULL;
+	init_list(*new);
+
+	foreachback (option, *tree) {
 		struct option *new_opt = copy_option(option);
 
 		if (new_opt) add_to_list(*new, new_opt);
@@ -572,14 +506,7 @@ struct option_type_info option_types[] = {
 	{ gen_cmd, str_rd, str_wr, str_dup, "<str>" },
 
 	{ gen_cmd, cp_rd, cp_wr, int_dup, "<codepage>" },
-	{ gen_cmd, lang_rd, lang_wr, int_dup, "<language>" },
-#if 0
-	{ NULL, type_rd, NULL /*type_wr*/, "" },
-	{ NULL, ext_rd, NULL /*ext_wr*/, "" },
-	{ NULL, term_rd, NULL /*term_wr*/, "" },
-	{ NULL, bind_rd, NULL, "" },
-	{ NULL, unbind_rd, NULL, "" },
-#endif
+	{ gen_cmd, lang_rd, lang_wr, NULL, "<language>" },
 	{ NULL, prog_rd, NULL /*prog_wr*/, NULL, "" },
 	{ gen_cmd, color_rd, color_wr, rgb_dup, "<color|#rrggbb>" },
 

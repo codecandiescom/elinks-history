@@ -1,5 +1,5 @@
 /* Support for multiple languages */
-/* $Id: language.c,v 1.3 2002/05/10 09:03:33 zas Exp $ */
+/* $Id: language.c,v 1.4 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -62,14 +62,16 @@ shutdown_trans()
 unsigned char *
 get_text_translation(unsigned char *text, struct terminal *term)
 {
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	unsigned char **current_tra;
 	struct conv_table *conv_table;
 	unsigned char *trn;
+	int charset = get_opt_int_tree(opt_tree, "charset");
 
 	if (text < dummyarray || text > dummyarray + T__N_TEXTS)
 		return text;
 
-	current_tra = translation_array[current_language][term->spec->charset];
+	current_tra = translation_array[current_language][charset];
 	if (current_tra) {
 		unsigned char *tt;
 
@@ -82,16 +84,16 @@ tr:
 			trn = stracpy(translation_english[text - dummyarray].name);
 		} else {
 			conv_table = get_translation_table(current_lang_charset,
-							   term->spec->charset);
+							   charset);
 			trn = convert_string(conv_table, tt, strlen(tt));
 		}
 		current_tra[text - dummyarray] = trn;
 
 	} else {
 		if (current_lang_charset
-		    && term->spec->charset != current_lang_charset) {
+		    && charset != current_lang_charset) {
 			current_tra = mem_alloc(sizeof (unsigned char **) * T__N_TEXTS);
-			translation_array[current_language][term->spec->charset] = current_tra;
+			translation_array[current_language][charset] = current_tra;
 
 			if (current_tra) {
 				memset(current_tra, 0, sizeof (unsigned char **) * T__N_TEXTS);

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.39 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: session.c,v 1.40 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -419,6 +419,7 @@ x:
 void
 ses_imgmap(struct session *ses)
 {
+	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct cache_entry *ce;
 	struct fragment *fr;
 	struct memory_list *ml;
@@ -435,7 +436,7 @@ ses_imgmap(struct session *ses)
 	if (get_image_map(ce->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
-			  ses->term->spec->charset,
+			  get_opt_int_tree(opt_tree, "charset"),
 			  get_opt_int("document.assume_codepage"),
 			  get_opt_int("document.force_assume_codepage")))
 		return;

@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.11 2002/05/11 20:13:44 pasky Exp $ */
+/* $Id: terminal.c,v 1.12 2002/06/09 20:14:38 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -376,61 +376,6 @@ void add_empty_window(struct terminal *term, void (*fn)(void *), void *data)
 	add_window(term, empty_window_handler, ewd);
 }
 
-/* free_term_specs() */
-void free_term_specs()
-{
-	free_list(term_specs);
-}
-
-
-
-
-struct list_head term_specs = {&term_specs, &term_specs};
-struct term_spec dumb_term = { NULL, NULL, "", 0, 1, 0, 0, 0 };
-
-
-/* get_term_spec() */
-struct term_spec *get_term_spec(unsigned char *term)
-{
-	struct term_spec *t;
-
-	foreach(t, term_specs)
-		if (!strcasecmp(t->term, term))
-			return t;
-
-	return &dumb_term;
-}
-
-/* new_term_spec() */
-struct term_spec *new_term_spec(unsigned char *term)
-{
-	struct term_spec *t;
-
-	foreach(t, term_specs)
-		if (!strcasecmp(t->term, term))
-			return t;
-
-	t = mem_alloc(sizeof(struct term_spec));
-	if (!t) return NULL;
-	memcpy(t, &dumb_term, sizeof(struct term_spec));
-
-	safe_strncpy(t->term, term, MAX_TERM_LEN - 1);
-
-	add_to_list(term_specs, t);
-	sync_term_specs();
-
-	return t;
-}
-
-/* sync_term_specs() */
-void sync_term_specs()
-{
-	struct terminal *term;
-
-	foreach (term, terminals)
-		term->spec = get_term_spec(term->term);
-}
-
 
 
 /* init_term() */
@@ -463,7 +408,7 @@ struct terminal *init_term(int fdin, int fdout,
 	term->blocked = -1;
 	term->screen = DUMMY;
 	term->last_screen = DUMMY;
-	term->spec = &dumb_term;
+	term->spec = get_opt_rec(root_options, "terminal.default");
 	term->term[0] = 0;
 	term->cwd[0] = 0;
 	term->input_queue = DUMMY;
@@ -499,10 +444,11 @@ static inline void term_send_event(struct terminal *term, struct event *ev)
 
 static inline void term_send_ucs(struct terminal *term, struct event *ev, int u)
 {
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	unsigned char *recoded;
 
 	if (u == 0xA0) u = ' ';
-	recoded = u2cp(u, term->spec->charset);
+	recoded = u2cp(u, get_opt_int_tree(opt_tree, "charset"));
 	if (! recoded) recoded = "*";
 	while (*recoded) {
 		ev->x = *recoded;
@@ -514,6 +460,7 @@ static inline void term_send_ucs(struct terminal *term, struct event *ev, int u)
 /* in_term() */
 void in_term(struct terminal *term)
 {
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	struct event *ev;
 	int r;
 	unsigned char *iq;
@@ -564,13 +511,19 @@ test_queue:
 		memcpy(term->term, iq + sizeof(struct event), MAX_TERM_LEN);
 		term->term[MAX_TERM_LEN - 1] = 0;
 
+		{
+			unsigned char name[MAX_TERM_LEN + 10];
+
+			sprintf(name, "terminal.%s", term->term);
+			term->spec = get_opt_rec(root_options, name);
+		}
+
 		memcpy(term->cwd, iq + evterm_len, MAX_CWD_LEN);
 		term->cwd[MAX_CWD_LEN - 1] = 0;
 
 		term->environment = *(int *)(iq + evtermcwd_len);
 		ev->b = (long)(iq + evtermcwd1int_len);
 		r = evtermcwd2int_len + init_len;
-		sync_term_specs();
 	}
 
 	if (ev->ev == EV_REDRAW || ev->ev == EV_RESIZE || ev->ev == EV_INIT) {
@@ -604,7 +557,8 @@ send_redraw:
 			((struct window *) &term->windows)->prev->handler(term->windows.prev, ev, 0);
 		else if (ev->ev == EV_KBD) {
 			if (term->utf_8.len) {
-				if ((ev->x & 0xC0) == 0x80 && term->spec->utf_8_io) {
+				if ((ev->x & 0xC0) == 0x80
+				    && get_opt_bool_tree(opt_tree, "utf_8_io")) {
 					term->utf_8.ucs <<= 6;
 					term->utf_8.ucs |= ev->x & 0x3F;
 					if (! --term->utf_8.len) {
@@ -619,7 +573,8 @@ send_redraw:
 					term_send_ucs(term, ev, UCS_NO_CHAR);
 				}
 			}
-			if (ev->x < 0x80 || ev->x > 0xFF || ! term->spec->utf_8_io) {
+			if (ev->x < 0x80 || ev->x > 0xFF
+			    || !get_opt_bool_tree(opt_tree, "utf_8_io")) {
 				term_send_event(term, ev);
 				goto mm;
 			} else if ((ev->x & 0xC0) == 0xC0 && (ev->x & 0xFE) != 0xFE) {
@@ -693,39 +648,44 @@ unsigned char frame_restrict[48] = {
 	unsigned char c = ch & 0xff;						\
 	unsigned char A = ch >> 8 & 0x7f;					\
 										\
-	if (s->mode == TERM_LINUX) {						\
-		if (s->m11_hack && !s->utf_8_io) {				\
+	if (get_opt_int_tree(opt_tree, "type") == TERM_LINUX) {			\
+		if (get_opt_bool_tree(opt_tree, "m11_hack") &&			\
+		    !get_opt_bool_tree(opt_tree, "utf_8_io")) {			\
 			if (ch >> 15 != mode) {					\
 				mode = ch >> 15;				\
 				if (!mode) add_to_str(&a, &l, "\033[10m");	\
 				else add_to_str(&a, &l, "\033[11m");		\
 			}							\
 		}								\
-		if (s->restrict_852) {						\
+		if (get_opt_bool_tree(opt_tree, "restrict_852")) {		\
 			if ((ch >> 15) && c >= 176 && c < 224) {		\
 				if (frame_restrict[c - 176])			\
 					c = frame_restrict[c - 176];		\
 			}							\
 		}								\
-	} else if (s->mode == TERM_VT100 && !s->utf_8_io) {			\
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100		\
+		   && !get_opt_bool_tree(opt_tree, "utf_8_io")) {		\
 		if (ch >> 15 != mode) {						\
 			mode = ch >> 15;					\
 			if (!mode) add_to_str(&a, &l, "\x0f");			\
 			else add_to_str(&a, &l, "\x0e");			\
 		}								\
 		if (mode && c >= 176 && c < 224) c = frame_vt100[c - 176];	\
-	} else if (s->mode == TERM_VT100 && (ch >> 15) && c >= 176 && c < 224) { \
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_VT100		\
+		   && (ch >> 15) && c >= 176 && c < 224) { 			\
 		c = frame_vt100_u[c - 176];					\
-	} else if (s->mode == TERM_KOI8 && (ch >> 15) && c >= 176 && c < 224) { \
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_KOI8		\
+		   && (ch >> 15) && c >= 176 && c < 224) { 			\
 		c = frame_koi[c - 176];						\
-	} else if (s->mode == TERM_DUMB && (ch >> 15) && c >= 176 && c < 224)	\
+	} else if (get_opt_int_tree(opt_tree, "type") == TERM_DUMB		\
+		   && (ch >> 15) && c >= 176 && c < 224)			\
 		c = frame_dumb[c - 176];					\
 										\
 	if (!(A & 0100) && (A >> 3) == (A & 7)) A = (A & 070) | 7 * !(A & 020);	\
 	if (A != attrib) {							\
 		attrib = A;							\
 		add_to_str(&a, &l, "\033[0");					\
-		if (s->col) {							\
+		if (get_opt_bool_tree(opt_tree, "colors")) {			\
 			unsigned char m[4];					\
 										\
 			m[0] = ';';						\
@@ -742,19 +702,22 @@ unsigned char frame_restrict[48] = {
 		add_to_str(&a, &l, "m");					\
 	}									\
 	if (c >= ' ' && c != 127/* && c != 155*/) {				\
-		int charset = s->charset;					\
+		int charset = get_opt_int_tree(opt_tree, "charset");		\
+		int type = get_opt_int_tree(opt_tree, "type");			\
 										\
 		if (ch >> 15) {							\
-			int frames_charset = (s->mode == TERM_LINUX ||		\
-					      s->mode == TERM_VT100)		\
+			int frames_charset = (type == TERM_LINUX ||		\
+					      type == TERM_VT100)		\
 						? get_cp_index("cp437")		\
-						: s->mode == TERM_KOI8		\
+						: type == TERM_KOI8		\
 							? get_cp_index("koi8-r")\
 							: -1;			\
 			if (frames_charset != -1) charset = frames_charset;	\
 		}								\
-		if (s->utf_8_io) add_to_str(&a, &l, cp2utf_8(charset, c));	\
-		else add_chr_to_str(&a, &l, c);					\
+		if (get_opt_bool_tree(opt_tree, "utf_8_io"))			\
+			add_to_str(&a, &l, cp2utf_8(charset, c));		\
+		else 								\
+			add_chr_to_str(&a, &l, c);				\
 	}									\
 	else if (!c || c == 1) add_chr_to_str(&a, &l, ' ');			\
 	else add_chr_to_str(&a, &l, '.');					\
@@ -775,20 +738,18 @@ void redraw_all_terminals()
 /* redraw_screen() */
 void redraw_screen(struct terminal *term)
 {
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 	int x, y, p = 0;
 	int cx = -1, cy = -1;
 	unsigned char *a;
 	int attrib = -1;
 	int mode = -1;
 	int l = 0;
-	struct term_spec *s;
 
 	if (!term->dirty || (term->master && is_blocked())) return;
 
 	a = init_str();
 	if (!a) return;
-
-	s = term->spec;
 
 	for (y = 0; y < term->y; y++)
 		for (x = 0; x < term->x; x++, p++) {
@@ -823,11 +784,16 @@ void redraw_screen(struct terminal *term)
 		}
 
 	if (l) {
-		if (s->col) add_to_str(&a, &l, "\033[37;40m");
+		if (get_opt_int_tree(opt_tree, "colors"))
+				add_to_str(&a, &l, "\033[37;40m");
+
 		add_to_str(&a, &l, "\033[0m");
-		if (s->mode == TERM_LINUX && s->m11_hack)
+
+		if (get_opt_int_tree(opt_tree, "type") == TERM_LINUX
+		    && get_opt_bool_tree(opt_tree, "m11_hack"))
 			add_to_str(&a, &l, "\033[10m");
-		if (s->mode == TERM_VT100)
+
+		if (get_opt_int_tree(opt_tree, "type") == TERM_VT100)
 			add_to_str(&a, &l, "\x0f");
 	}
 
@@ -1032,8 +998,10 @@ void print_text(struct terminal *t, int x, int y, int l,
  * set. It is usually bottom right corner of the screen. */
 void set_cursor(struct terminal *term, int x, int y, int altx, int alty)
 {
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
+
 	term->dirty = 1;
-	if (term->spec->block_cursor) {
+	if (get_opt_bool_tree(opt_tree, "block_cursor")) {
 		x = altx;
 		y = alty;
 	}

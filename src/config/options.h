@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.27 2002/06/09 14:53:22 pasky Exp $ */
+/* $Id: options.h,v 1.28 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -6,7 +6,7 @@
 #include "document/html/colors.h"
 #include "links.h" /* lists stuff */ /* MAX_STR_LEN, safe_strncpy() */
 
-#define option option_dirty_workaround_for_name_clash_with_include_on_cygwin
+#define option option_cygwin_workaround
 
 
 enum option_flags {
@@ -17,8 +17,8 @@ enum option_flags {
 	OPT_HIDDEN = 1,
 	/* For OPT_TREE, automatically create missing hiearchy piece just
 	 * under this category when adding an option. The 'template' for
-	 * the added hiearchy piece (category) is stored as "#template#"
-	 * category and should have OPT_HIDDEN. */
+	 * the added hiearchy piece (category) is stored as "_template_"
+	 * category. */
 	OPT_AUTOCREATE = 2,
 };
 
@@ -30,13 +30,6 @@ enum option_type {
 
 	OPT_CODEPAGE,
 	OPT_LANGUAGE,
-#if 0
-	OPT_MIME_TYPE,
-	OPT_EXTENSION,
-	OPT_TERM,
-	OPT_KEYBIND,
-	OPT_KEYUNBIND,
-#endif
 	OPT_PROGRAM,
 	OPT_COLOR,
 

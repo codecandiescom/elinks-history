@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.50 2002/06/07 19:53:45 pasky Exp $ */
+/* $Id: view.c,v 1.51 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1386,6 +1386,7 @@ void reset_form(struct f_data_c *f, int form_num)
 
 unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form_control *form)
 {
+	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	struct list_head submit;
 	unsigned char *data;
 	unsigned char bound[BL];
@@ -1400,7 +1401,7 @@ unsigned char *get_form_url(struct session *ses, struct f_data_c *f, struct form
 	}
 	if (!form->action) return NULL;
 	get_succesful_controls(f, form, &submit);
-	cp_from = ses->term->spec->charset;
+	cp_from = get_opt_int_tree(opt_tree, "charset");
 	cp_to = f->f_data->cp;
 	if (form->method == FM_GET || form->method == FM_POST)
 		encode_controls(&submit, &data, &len, cp_from, cp_to);

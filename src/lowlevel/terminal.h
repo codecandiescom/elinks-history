@@ -1,8 +1,9 @@
-/* $Id: terminal.h,v 1.9 2002/05/10 17:09:21 pasky Exp $ */
+/* $Id: terminal.h,v 1.10 2002/06/09 20:14:38 pasky Exp $ */
 
 #ifndef EL__TERMINAL_H
 #define EL__TERMINAL_H
 
+#include "config/options.h"
 #include "links.h" /* list_head */
 
 typedef unsigned short chr;
@@ -36,21 +37,6 @@ enum term_mode_type {
 	TERM_KOI8,
 };
 
-struct term_spec {
-	struct term_spec *next;
-	struct term_spec *prev;
-	unsigned char term[MAX_TERM_LEN];
-	enum term_mode_type mode;
-	int m11_hack;
-	int utf_8_io;
-	int restrict_852;
-	/* This means we always move cursor to (altx,alty) in set_cursor(),
-	 * which is usually bottom right corner. */
-	int block_cursor;
-	int col;
-	int charset;
-};
-
 enum term_env_type {
 	ENV_XWIN = 1,
 	ENV_SCREEN = 2,
@@ -73,7 +59,7 @@ struct terminal {
 	unsigned char cwd[MAX_CWD_LEN];
 	unsigned *screen;
 	unsigned *last_screen;
-	struct term_spec *spec;
+	struct option *spec;
 	int cx;
 	int cy;
 	int lcx;
@@ -101,7 +87,6 @@ struct window {
 	struct terminal *term;
 };
 
-extern struct list_head term_specs;
 extern struct list_head terminals;
 
 extern unsigned char frame_dumb[];
@@ -111,9 +96,6 @@ int hard_read(int, unsigned char *, int);
 unsigned char *get_cwd();
 void set_cwd(unsigned char *);
 struct terminal *init_term(int, int, void (*)(struct window *, struct event *, int));
-void sync_term_specs();
-struct term_spec *new_term_spec(unsigned char *);
-void free_term_specs();
 void destroy_terminal(struct terminal *);
 void redraw_terminal(struct terminal *);
 void redraw_terminal_all(struct terminal *);

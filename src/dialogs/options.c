@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.11 2002/05/25 13:46:04 pasky Exp $ */
+/* $Id: options.c,v 1.12 2002/06/09 20:14:37 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -36,24 +36,26 @@
 void
 display_codepage(struct terminal *term, void *pcp, struct session *ses)
 {
-	int cp = (int)pcp;
-	struct term_spec *t = new_term_spec(term->term);
-	if (t) t->charset = cp;
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
+
+	get_opt_int_tree(opt_tree, "charset") = (int) pcp;
 	cls_redraw_all_terminals();
 }
 
 void
 charset_list(struct terminal *term, void *xxx, struct session *ses)
 {
+	struct list_head *opt_tree = (struct list_head *) ses->term->spec->ptr;
 	int i, sel;
 	unsigned char *n;
 	struct menu_item *mi;
+
 	if (!(mi = new_menu(1))) return;
 	for (i = 0; (n = get_cp_name(i)); i++) {
 		if (is_cp_special(i)) continue;
 		add_to_menu(&mi, get_cp_name(i), "", "", MENU_FUNC display_codepage, (void *)i, 0);
 	}
-	sel = ses->term->spec->charset;
+	sel = get_opt_int_tree(opt_tree, "charset");
 	if (sel < 0) sel = 0;
 	do_menu_selected(term, mi, ses, sel);
 }
@@ -61,7 +63,7 @@ charset_list(struct terminal *term, void *xxx, struct session *ses)
 void
 set_val(struct terminal *term, void *ip, int *d)
 {
-	*d = (int)ip;
+	*d = (int) ip;
 }
 
 void
@@ -70,6 +72,7 @@ charset_sel_list(struct terminal *term, struct session *ses, int *ptr)
 	int i, sel;
 	unsigned char *n;
 	struct menu_item *mi;
+
 	if (!(mi = new_menu(1))) return;
 	for (i = 0; (n = get_cp_name(i)); i++) {
 		add_to_menu(&mi, get_cp_name(i), "", "", MENU_FUNC set_val, (void *)i, 0);
@@ -103,9 +106,7 @@ void
 terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *d;
-	struct term_spec *ts = new_term_spec(term->term);
-
-	if (!ts) return;
+	struct list_head *opt_tree = (struct list_head *) term->spec->ptr;
 
 	d = mem_alloc(sizeof(struct dialog) + 12 * sizeof(struct dialog_item));
 	if (!d) return;
@@ -120,50 +121,50 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[0].gid = 1;
 	d->items[0].gnum = TERM_DUMB;
 	d->items[0].dlen = sizeof(int);
-	d->items[0].data = (void *) &ts->mode;
+	d->items[0].data = (void *) get_opt_ptr_tree(opt_tree, "type");
 
 	d->items[1].type = D_CHECKBOX;
 	d->items[1].gid = 1;
 	d->items[1].gnum = TERM_VT100;
 	d->items[1].dlen = sizeof(int);
-	d->items[1].data = (void *) &ts->mode;
+	d->items[1].data = (void *) get_opt_ptr_tree(opt_tree, "type");
 
 	d->items[2].type = D_CHECKBOX;
 	d->items[2].gid = 1;
 	d->items[2].gnum = TERM_LINUX;
 	d->items[2].dlen = sizeof(int);
-	d->items[2].data = (void *) &ts->mode;
+	d->items[2].data = (void *) get_opt_ptr_tree(opt_tree, "type");
 
 	d->items[3].type = D_CHECKBOX;
 	d->items[3].gid = 1;
 	d->items[3].gnum = TERM_KOI8;
 	d->items[3].dlen = sizeof(int);
-	d->items[3].data = (void *) &ts->mode;
+	d->items[3].data = (void *) get_opt_ptr_tree(opt_tree, "type");
 
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 0;
 	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (void *) &ts->m11_hack;
+	d->items[4].data = (void *) get_opt_ptr_tree(opt_tree, "m11_hack");
 
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 0;
 	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (void *) &ts->restrict_852;
+	d->items[5].data = (void *) get_opt_ptr_tree(opt_tree, "restrict_852");
 
 	d->items[6].type = D_CHECKBOX;
 	d->items[6].gid = 0;
 	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (void *) &ts->block_cursor;
+	d->items[6].data = (void *) get_opt_ptr_tree(opt_tree, "block_cursor");
 
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 0;
 	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (void *) &ts->col;
+	d->items[7].data = (void *) get_opt_ptr_tree(opt_tree, "colors");
 
 	d->items[8].type = D_CHECKBOX;
 	d->items[8].gid = 0;
 	d->items[8].dlen = sizeof(int);
-	d->items[8].data = (void *) &ts->utf_8_io;
+	d->items[8].data = (void *) get_opt_ptr_tree(opt_tree, "utf_8_io");
 
 	d->items[9].type = D_BUTTON;
 	d->items[9].gid = B_ENTER;

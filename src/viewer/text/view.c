@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.537 2004/06/26 22:57:45 pasky Exp $ */
+/* $Id: view.c,v 1.538 2004/06/26 22:59:27 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -205,6 +205,7 @@ move_link_dir(struct session *ses, struct document_view *doc_view, int dir_x, in
 		if (next_in_dir(doc_view, current_link, dir_x, dir_y))
 			continue;
 
+		/* FIXME: This won't preserve the column! */
 		if (dir_y > 0)
 			move_down(ses, doc_view, 1);
 		else if (dir_y < 0)

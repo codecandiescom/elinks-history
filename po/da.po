@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-22 14:55+0100\n"
-"PO-Revision-Date: 2005-01-22 18:45+0100\n"
+"PO-Revision-Date: 2005-01-23 21:52+0100\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -72,7 +72,7 @@ msgstr "Beklager, men emnet \"%s\" kan ikke slettes."
 #: src/bfu/hierbox.c:565
 #, c-format
 msgid "Sorry, but the item \"%s\" is being used by something else."
-msgstr "Desværre, men emnet \"%s\" er optaget af en anden process."
+msgstr "Desværre, men emnet \"%s\" er optaget af en anden proces."
 
 #. cant_delete_folder
 #: src/bfu/hierbox.c:568 src/bookmarks/dialogs.c:124
@@ -565,7 +565,7 @@ msgstr "Desværre, cacheemnet \"%s\" kan ikke slettes."
 #: src/cache/dialogs.c:180
 #, c-format
 msgid "Sorry, but cache entry \"%s\" is being used by something else."
-msgstr "Desværre, cacheemnet \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, cacheemnet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/cache/dialogs.c:186
@@ -759,7 +759,7 @@ msgid ""
 "ignored. It forces use of default keybindings and will reset\n"
 "user-defined ones on save."
 msgstr ""
-"Hvis aktiveret vil all tasteturgenveje fra konfigurationsfiler\n"
+"Hvis aktiveret vil alle tasteturgenveje fra konfigurationsfiler\n"
 "blive ignoreret. Dette tvinger brug af standard tasteturgenveje\n"
 "og vil nulstille brugerdefinerede genveje ved gemning."
 
@@ -817,8 +817,8 @@ msgid ""
 "This is equivalent to -default-mime-type text/html."
 msgstr ""
 "Dette får ELinks til at tro at filer er i HTML. Anvendeligt\n"
-"når ELinks bruges som ekstern fremviser fra MUAs. Modsvarer\n"
-"kommandolinje-parameteret -default-mime-type text/html."
+"når ELinks bruges som ekstern fremviser fra e-postprogrammer.\n"
+"Modsvarer kommandolinje-parameteren -default-mime-type text/html."
 
 #: src/config/cmdline.c:685
 msgid "Print usage help and exit"
@@ -838,8 +838,8 @@ msgid ""
 "with local addresses (ie. 127.0.0.1). No connections to remote\n"
 "servers will be permitted."
 msgstr ""
-"Begræns ELinks til at afbejde i afkoblet tilstand og kun at oprette\n"
-"forbindelse til servere med lokale netadresser (ie. 127.0.0.1).\n"
+"Begræns ELinks til at arbejde i afkoblet tilstand og kun at oprette\n"
+"forbindelse til servere med lokale netadresser (dvs. 127.0.0.1).\n"
 "Ingen forbindelser til fjernservere er tilladt."
 
 #: src/config/cmdline.c:695
@@ -885,7 +885,7 @@ msgid ""
 "configuration directory (~/.elinks). It forces default configuration\n"
 "values to be used and disables saving of runtime state files."
 msgstr ""
-"Deaktiver oprettelse og anvendelse af filer i brugerens hjemme\n"
+"Deaktivér oprettelse og anvendelse af filer i brugerens hjemme\n"
 "konfigurationsmappe (~/.elinks). Dette tvinger brug af standard\n"
 "værdier for indstillinger og slår skrivning af køreselstids\n"
 "tilstandsfiler fra."
@@ -982,7 +982,7 @@ msgstr ""
 "bliver herefter den primære session (betyder ikke så meget for brugeren).\n"
 "Bemærk at det normalt kun er udviklere der kan have brug for dette i\n"
 "testningsøjemed. Hvis alle ELinks-sessioner skal køres separat (og ikke\n"
-"i kredse), er det bedre at bruge kommandolinje-parameteret -no-connect.\n"
+"i kredse), er det bedre at bruge kommandolinje-parameteren -no-connect.\n"
 "Bemærk i den forbindelse også at filer med oplysning om kørselstilstand\n"
 "ikke bliver skrevet til disk med -no-connect. Se også -touch-files."
 
@@ -1007,7 +1007,7 @@ msgid ""
 "these options."
 msgstr ""
 "Hvis aktiveret tillades ændringer af tilstandsfiler såsom bogmærker\n"
-"og historik selv når -no-connect or -session-ring er anvendt.\n"
+"og historik selv når -no-connect eller -session-ring er anvendt.\n"
 "Indstillingen har kun effekt hvis den bruges i forbindelse med\n"
 "en af de ovennævnte indstillinger."
 
@@ -1023,8 +1023,8 @@ msgid ""
 "\t1 means show serious errors and warnings\n"
 "\t2 means show all messages"
 msgstr ""
-"Verbositetsniveauet kontrollere hvilke beskeder som vises ved opstart og\n"
-"under kørslen:\n"
+"Verbositetsniveauet kontrollerer hvilke beskeder som vises\n"
+"ved opstart og under kørslen:\n"
 "\t0 betyder vis kun kritiske fejl\n"
 "\t1 betyder vis kritiske fejl og advarsler\n"
 "\t1 betyder vis alle beskeder"
@@ -1035,7 +1035,7 @@ msgstr "Udskriv versionsinformation og afslut"
 
 #: src/config/cmdline.c:784
 msgid "Print ELinks version information and exit."
-msgstr "Udskriv versionsnummer på ELinks of afslut."
+msgstr "Udskriv versionsnummer på ELinks og afslut."
 
 #: src/config/conf.c:699
 msgid ""
@@ -1419,7 +1419,7 @@ msgstr "Åbn historikhåndtering"
 
 #: src/config/kbdbind.c:461
 msgid "Return to the previous document in history"
-msgstr "Returnér til forrige dokument i historik"
+msgstr "Returner til forrige dokument i historik"
 
 #: src/config/kbdbind.c:462
 msgid "Go forward in history"
@@ -1757,7 +1757,7 @@ msgstr "Gå til første linje i bufferen"
 #. internal use only
 #: src/config/kbdbind.c:556 src/config/kbdbind.c:583
 msgid "Cancel current state"
-msgstr "Anullér aktuelle tilstand"
+msgstr "Annullér aktuelle tilstand"
 
 #: src/config/kbdbind.c:558
 msgid "Delete text from clipboard"
@@ -1887,7 +1887,7 @@ msgid ""
 "file. Zero means that no indentation is performed at all\n"
 "when saving the configuration."
 msgstr ""
-"Størrelsen af indryk i opsæningsfilen for hvert niveau.\n"
+"Størrelsen af indryk i opsætningsfilen for hvert niveau.\n"
 "Nul betyder ingen indryk når opsætningsfilen gemmes."
 
 #: src/config/options.inc:37
@@ -1911,7 +1911,7 @@ msgstr ""
 "     indstillinger tilføjes i slutning af fil\n"
 "2 er opsætningsfilen omskrives helt fra bunden\n"
 "3 er værdier af aktuelle indstillinger ændres, og manglende\n"
-"     indstillinger som er ÆNDRET i denn ELinks-session tilføjes\n"
+"     indstillinger som er ÆNDRET i denne ELinks-session tilføjes\n"
 "     i slutning af filen"
 
 #: src/config/options.inc:48
@@ -2478,7 +2478,7 @@ msgstr ""
 
 #: src/config/options.inc:330
 msgid "Warn about maliciously crafted URIs"
-msgstr "Advar om ondskabsfuld konstuerede URIs"
+msgstr "Advar om ondskabsfulde konstruerede adresser"
 
 #: src/config/options.inc:332
 msgid ""
@@ -2487,8 +2487,8 @@ msgid ""
 "warning dialog will ask before following the link."
 msgstr ""
 "Når links følges tjekkes brugeridentitetsdelen af\n"
-"URIen og hvis en ondskabsfuld konstrueret URI opdages\n"
-"advarselsdialogvindue vil forespørge før linket\n"
+"adressen og hvis en ondskabsfuld konstrueret adresse\n"
+"opdages advarselsdialogvindue vil forespørge før linket\n"
 "følges."
 
 #. TODO - this is somehow implemented by ff, but disabled
@@ -2528,7 +2528,7 @@ msgstr ""
 
 #: src/config/options.inc:353
 msgid "Extended horizontal scrolling"
-msgstr "Udvided horisontal rul"
+msgstr "Udvidet horisontal rul"
 
 #: src/config/options.inc:355
 msgid ""
@@ -2618,7 +2618,7 @@ msgstr "Fortsæt søgning fra begyndelse/slut af dokument"
 msgid "Wrap around when searching. Currently only used for typeahead."
 msgstr ""
 "Fortsæt søgning fra begyndelse/slut af dokument hvis bunden/toppen\n"
-"rammes. I øjeblikket kun brugt med tast og find."
+"rammes. I øjeblikket kun brugt ved tast og find."
 
 #: src/config/options.inc:397
 msgid "Show not found"
@@ -2633,7 +2633,7 @@ msgid ""
 msgstr ""
 "Hvordan fejl håndteres når søgning ikke matcher:\n"
 "0 betyder at intet sker\n"
-"1 betyder at der gives et \"beep\"\n"
+"1 betyder at der gives et \"bip\"\n"
 "2 betyder at en påmindelse popper op."
 
 #: src/config/options.inc:404
@@ -2651,15 +2651,15 @@ msgid ""
 "1 automatically starts typeahead searching thru link text\n"
 "2 automatically starts typeahead searching thru all document text"
 msgstr ""
-"Begynd inkrementel søgning ved tryk af en ubundet tast hvis hverken\n"
+"Begynd tast og find søgning ved tryk af en ubundet tast hvis hverken\n"
 "Shift eller Alt er tastet. Bemærk, at de fleste taster som standard\n"
 "er bruges i tasteturgenveje, så denne egenskab er ikke brugbar med\n"
 "mindre du sletter dem.\n"
-"0 betyder deaktiver denne egenskab, dvs. inkrementel søgning vil kun\n"
+"0 betyder deaktivér denne egenskab, dvs. tast og find søgning vil kun\n"
 "  anvendes, når du trykker en tast bundet til search-typeahead eller\n"
 "  lignende\n"
-"1 betyder begynd automatisk inkrementel søgning af linktekst\n"
-"2 betyder begynd automatisk inkrementel søgning af dokumenttekst"
+"1 betyder begynd automatisk tast og find søgning af linktekst\n"
+"2 betyder begynd automatisk tast og find søgning af dokumenttekst"
 
 #: src/config/options.inc:415
 msgid "Horizontal text margin"
@@ -2671,7 +2671,7 @@ msgstr "Vandret tekstmargin"
 
 #: src/config/options.inc:419
 msgid "Document meta refresh"
-msgstr "Dokument meta refresh"
+msgstr "Dokument meta genopfriskning"
 
 #: src/config/options.inc:421
 msgid ""
@@ -2812,7 +2812,7 @@ msgstr ""
 "Maksimalt antal optegnede dokumenter der må være i cachen. Vær\n"
 "opmærksom på det kan være problematisk at være alt for gavmild,\n"
 "da et optegnet dokument også indeholder diverse datastrukturer,\n"
-"som alt efter omstædighederne kan være rimelig omfattende. Det\n"
+"som alt efter omstændighederne kan være rimelig omfattende. Det\n"
 "er ikke ualmindeligt at et optegnet dokument fylder dobbelt så\n"
 "meget som HTML kildeteksten, men det kan fylde endnu mere hvis\n"
 "dokumentet indeholder en masse små korte højrejusterede linjer.\n"
@@ -2954,7 +2954,7 @@ msgstr ""
 "1 betyder brug forgrundsfarver fra dokument hvis muligt\n"
 "2 betyder brug dokumentets farver, inklusiv baggrundsfarven.\n"
 "  Dette kan ofte se meget imponerende ud, men enkelte\n"
-"  sites ser virkelig grimme ud. Bemærk at hvis baggrundsfarven\n"
+"  netsteder ser virkelig grimme ud. Bemærk at hvis baggrundsfarven\n"
 "  ikke er sort, vil det ødelægge gennemsigtighedseffekten\n"
 "  (transparency) på din skærm hvis du bruger en sådan"
 
@@ -3210,7 +3210,7 @@ msgstr "Ekstern URI håndtering"
 
 #: src/config/options.inc:698
 msgid "Rules for passing URIs to external commands."
-msgstr "Regler for håndtering af URIs af eksterne kommandoer."
+msgstr "Regler for håndtering af adresser af eksterne kommandoer."
 
 #: src/config/options.inc:702
 msgid ""
@@ -3786,7 +3786,7 @@ msgstr "Indstillinger for dialogbokse"
 
 #: src/config/options.inc:1048
 msgid "Dialogs-specific appearance and behaviour settings."
-msgstr "Indstillinger der vedrører dialogbokses udseend og adfærde."
+msgstr "Indstillinger der vedrører dialogbokses udseende og adfærd."
 
 #: src/config/options.inc:1051
 msgid "Minimal height of listbox widget"
@@ -4285,7 +4285,7 @@ msgstr "Desværre, cookien \"%s\" kan ikke slettes."
 #: src/cookies/dialogs.c:204
 #, c-format
 msgid "Sorry, but cookie \"%s\" is being used by something else."
-msgstr "Desværre, cookien \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, cookien \"%s\" er optaget af en anden proces."
 
 #. cant_delete_folder
 #: src/cookies/dialogs.c:206
@@ -4297,7 +4297,7 @@ msgstr "Desværre, cookiedomænet \"%s\" kan ikke slettes."
 #: src/cookies/dialogs.c:208
 #, c-format
 msgid "Sorry, but cookie domain \"%s\" is being used by something else."
-msgstr "Desværre, cookiedomænet \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, cookiedomænet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/cookies/dialogs.c:210
@@ -4428,7 +4428,7 @@ msgstr "Desværre, denne download \"%s\" kan ikke afbrydes."
 #: src/dialogs/download.c:404
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
-msgstr "Desværre, denne download \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, denne download \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/dialogs/download.c:410
@@ -4448,7 +4448,7 @@ msgstr "Afbryd download"
 #. delete_item
 #: src/dialogs/download.c:420
 msgid "Interrupt this download?"
-msgstr "Afbryd dennee download?"
+msgstr "Afbryd denne download?"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:422
@@ -4743,7 +4743,7 @@ msgstr "ELinks C~vsWeb"
 
 #: src/dialogs/menu.c:430
 msgid "ELinks Cvs ~History"
-msgstr "ELinks cvs ~historik"
+msgstr "ELinks CVS ~historik"
 
 #: src/dialogs/menu.c:431
 msgid "ELinks ~LXR"
@@ -5159,7 +5159,7 @@ msgstr "Desværre, formularen \"%s\" kan ikke slettes."
 #: src/formhist/dialogs.c:123
 #, c-format
 msgid "Sorry, but form \"%s\" is being used by something else."
-msgstr "Desværre, formularen \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, formularen \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/formhist/dialogs.c:129
@@ -5270,7 +5270,7 @@ msgstr "Desværre, historikemnet \"%s\" kan ikke slettes."
 #: src/globhist/dialogs.c:108
 #, c-format
 msgid "Sorry, but history entry \"%s\" is being used by something else."
-msgstr "Desværre, historikemnet \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, historikemnet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/globhist/dialogs.c:114
@@ -5531,7 +5531,7 @@ msgstr "Ingen fjernsession at forbinde til."
 
 #: src/main.c:227
 msgid "Unable to encode session info."
-msgstr "Kunne ikke inkode sessionsinformation."
+msgstr "Kunne ikke indkode sessionsinformation."
 
 #: src/main.c:244
 msgid "Unable to attach_terminal()."
@@ -5601,7 +5601,7 @@ msgstr "Beskrivelse af denne programhåndtering."
 #: src/mime/backend/default.c:62
 msgid "System-specific handler description (ie. unix, unix-xwin, ...)."
 msgstr ""
-"Systemspecifik beskrivelse af programhåndtering, f.eks unix, unix-xwin ..."
+"Systemspecifik beskrivelse af programhåndtering, f.eks. unix, unix-xwin ..."
 
 #: src/mime/backend/default.c:64 src/mime/backend/mailcap.c:103
 msgid "Ask before opening"
@@ -5845,7 +5845,7 @@ msgstr "~Vindue"
 
 #: src/osdep/newwin.c:27
 msgid "~Full screen"
-msgstr "~Maximér skærm"
+msgstr "~Maksimer skærm"
 
 #: src/osdep/newwin.c:33
 msgid "~BeOS terminal"
@@ -5890,7 +5890,7 @@ msgstr "Desværre, autentifikationsemnet \"%s\" kan ikke slettes."
 #: src/protocol/auth/dialogs.c:214
 #, c-format
 msgid "Sorry, but auth entry \"%s\" is being used by something else."
-msgstr "Desværre, autentifikationsemnet \"%s\" er optaget af en anden proces.."
+msgstr "Desværre, autentifikationsemnet \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/protocol/auth/dialogs.c:220
@@ -5956,7 +5956,7 @@ msgstr "Om udførelse af lokale CGI-scripts er tilladt."
 
 #: src/protocol/file/file.c:56
 msgid "Allow reading special files"
-msgstr "Tillad læsning af specialfiler"
+msgstr "Tillad læsning af specielle filer"
 
 #: src/protocol/file/file.c:58
 msgid ""
@@ -6085,7 +6085,7 @@ msgstr ""
 "  så det er uvidst hvad der gik galt. Kontakt venligst administratoren\n"
 "  af webserveren angående dette, hvis du tror at denne fejl ikke burde\n"
 "  opstå, da det ikke er nogen pæn opførelse fra webserverens side og\n"
-"  ofte antyder at der er et dybbereliggende problem med webserverens\n"
+"  ofte antyder at der er et dybereliggende problem med webserverens\n"
 "  programmel.\n"
 
 #. name:
@@ -6138,7 +6138,7 @@ msgstr ""
 "Forkerte 302-omdirigeringer. Bryder med RFC-standard, men er\n"
 "kompatibel med Netscape. Denne fejl er almindelig i mange\n"
 "diskussionsfora og lignende. Hvis du har problemer med\n"
-"sådanne sites, så prøv at aktivere denne indstilling."
+"sådanne netsteder, så prøv at aktivere denne indstilling."
 
 #: src/protocol/http/http.c:82
 msgid "No keepalive after POST requests"
@@ -6566,8 +6566,8 @@ msgid ""
 "%u in the string means the whole URL"
 msgstr ""
 "Eksternt program til aktuelle protokol og system.\n"
-"%f angviver hvilket filnavn formulardata skal inkluderes fra\n"
-"%h erstattes med værtsmaskine eller email adresse\n"
+"%f angiver hvilket filnavn formulardata skal inkluderes fra\n"
+"%h erstattes med værtsmaskine eller e-post-adresse\n"
 "%p erstattes med portnummer\n"
 "%d erstattes med sti fra adressen (alt der står efter portnummer)\n"
 "%s erstattes med emnestreng (dvs. ?subject=<emne streng>)\n"

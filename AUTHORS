@@ -76,7 +76,7 @@ Csaba Raduly <csaba.raduly@sophos.com>
 Christian Häggström <c00chm@cs.umu.se>
 	Fixes in parse_http_date()
 
-Cliff Cunnington <cliff@ccnet.demon.nl>
+Cliff Cunnington <cliff@ccnet.xs4all.nl>
 	Links' website at http://links.sf.net/
 	User's manual at http://links.sf.net/docs/manual-0.82-en/
 	Minor fixes/improvements
@@ -404,4 +404,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.100 2002/11/29 00:56:03 pasky Exp $
+$Id: AUTHORS,v 1.101 2002/11/29 10:18:07 pasky Exp $

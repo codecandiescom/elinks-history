@@ -1,5 +1,5 @@
 /* CSS style applier */
-/* $Id: apply.c,v 1.82 2004/09/21 16:15:06 pasky Exp $ */
+/* $Id: apply.c,v 1.83 2004/09/21 16:15:31 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -106,9 +106,6 @@ examine_element(struct css_selector *base,
 	if (selector) { \
 		dbginfo(sel, type, base); \
 		merge_css_selectors(base, sel); \
-		/* More specific matches? */ \
-		examine_element(base, type + 1, CSR_SPECIFITY, \
-		                &sel->leaves, element, html_stack); \
 		/* Ancestor matches? */ \
 		if ((struct list_head *) element->next != html_stack) { \
 			struct html_element *ancestor; \
@@ -128,6 +125,9 @@ examine_element(struct css_selector *base,
 			                &sel->leaves, element->next, \
 			                html_stack); \
 		} \
+		/* More specific matches? */ \
+		examine_element(base, type + 1, CSR_SPECIFITY, \
+		                &sel->leaves, element, html_stack); \
 	}
 
 	if (seltype <= CST_ELEMENT && element->namelen) {

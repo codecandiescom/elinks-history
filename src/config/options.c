@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.178 2003/01/04 21:55:13 jonas Exp $ */
+/* $Id: options.c,v 1.179 2003/01/04 21:59:50 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -993,7 +993,7 @@ register_options()
 
 	
 
-	add_opt_tree("", N_("Documents"),
+	add_opt_tree("", N_("Document"),
 		"document", 0,
 		N_("Document options."));
 

@@ -1,5 +1,5 @@
 /* Internal "mailto", "telnet", "tn3270" and misc. protocol implementation */
-/* $Id: user.c,v 1.40 2003/07/10 00:00:36 jonas Exp $ */
+/* $Id: user.c,v 1.41 2003/07/14 07:15:22 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -195,7 +195,7 @@ user_func(struct session *ses, unsigned char *url)
 }
 
 struct protocol_backend user_protocol_backend = {
-	/* name: */			"costum",
+	/* name: */			"custom",
 	/* port: */			0,
 	/* handler: */			NULL,
 	/* external_handler: */		user_func,

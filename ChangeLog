@@ -1,3 +1,428 @@
+Tue Nov 18 23:08:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Finally fixed @width computation.  
+
+Tue Nov 18 23:07:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Fixed @width computation in add_document_lines()'s loop.  
+
+Tue Nov 18 23:05:35 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Fixed missing include.  
+
+Tue Nov 18 22:59:59 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.h:
+
+	Fixed missing include.  
+
+Tue Nov 18 22:58:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.h:
+
+	Fixed missing trailing semicolon.  
+
+Tue Nov 18 22:53:38 2003  Laurent Monin <zas@norz.org>:
+
+	* po/cs.po:
+
+	Compilation fix ;).  
+
+Tue Nov 18 22:52:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	@longest_match_len -> @longest_common_match 
+
+Tue Nov 18 22:46:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/kbdbind.c:
+
+	Simplify make_keystroke().  
+
+Tue Nov 18 22:41:39 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Probably fixed XMP tag handling, broken by removing traces of the
+	plaintext handling.  
+
+Tue Nov 18 22:23:10 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: docdata.h, html/renderer.c, plain/renderer.c:
+
+	Unified realloc_points().  
+
+Tue Nov 18 22:19:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	realloc_document_links() is now just an ALIGN_LINK() frontend.  
+
+Tue Nov 18 22:18:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/docdata.h:
+
+	document/docdata.h requires document/document.h 
+
+Tue Nov 18 22:18:12 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, docdata.c, docdata.h,
+	html/renderer.c, plain/renderer.c:
+
+	Unified realloc_lines() from document/*/renderer.c to
+	document/docdata.c.  
+
+Tue Nov 18 22:14:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: Makefile.am, docdata.h, html/renderer.c,
+	plain/renderer.c:
+
+	Moved ALIGN_LINE, ALIGN_LINES and LIN*_GRANULARITY from
+	document/*/renderer.c to document/docdata.h.  
+
+Tue Nov 18 22:04:21 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	realloc_lines() now returns struct line * instead of int.  
+
+Tue Nov 18 22:02:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	return NULL if_assert_failed inside of realloc_lines().  
+
+Tue Nov 18 21:55:52 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/renderer.c:
+
+	Trivial whitespace cleanup.  
+
+Tue Nov 18 21:52:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.c, sched/session.c, viewer/text/view.c,
+	viewer/text/view.h:
+
+	draw_formatted() now takes a @rerender argument describing whether
+	to rerender the documnet as well or not. This fixes a regression
+	introduced by Jonas in the renderer multiplexing patch.  
+
+Tue Nov 18 21:40:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/: document.h, renderer.h, view.h:
+
+	Removed useless includes, added missing includes and struct
+	declarations.  
+
+Tue Nov 18 21:35:43 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/textarea.c:
+
+	Set @y to 0. Lost this in a patch by me :( 
+
+Tue Nov 18 20:54:17 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/kbdbind.c, config/kbdbind.h, dialogs/menu.c,
+	viewer/text/view.c:
+
+	Added cookie-manager action, by default bound to 'K'.  
+
+Tue Nov 18 20:52:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/menu.c:
+
+	Let 'k' be the Cookies hotkey in File menu.  
+
+Tue Nov 18 20:44:23 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Another minor reindentation in get_srch().  
+
+Tue Nov 18 20:43:42 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/search.c:
+
+	Minor reindentation in get_srch().  
+
+Tue Nov 18 20:38:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Tue Nov 18 20:21:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Do not touch directly the cache entry content in
+	add_document_line().  
+
+Tue Nov 18 20:16:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Simplified (and fixed for NUL chars) the @width computation in
+	add_document_lines().  
+
+Tue Nov 18 20:07:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Fixed accidentally removed @convert_table declaration.  
+
+Tue Nov 18 20:05:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Pass @length to add_document_lines(). This could fix displaying of
+	\0 chars in the plaintext renderer.  
+
+Tue Nov 18 20:03:29 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Each line is converted separately now. This makes the conversion to
+	happen after substitution of dangerous chars like \0.  
+
+Tue Nov 18 19:59:10 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/document/html/tables.c:
+
+	Use @int_min.  
+
+Tue Nov 18 19:57:04 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	For low values of @line_char, use '.' instead of ' '.  
+
+Tue Nov 18 19:51:31 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/renderer.c:
+
+	Trivial whitespace fix.  
+
+Tue Nov 18 17:40:38 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	Resynced .po and updated Italian translation.  
+
+Tue Nov 18 17:23:14 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	NUL char will produce a parse errror and breaks some loops, wherever
+	needed.  
+
+Tue Nov 18 16:22:54 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Label end was renamed parse_error. Comments about unhandled cases
+	were added.  
+
+Tue Nov 18 16:05:20 2003  Laurent Monin <zas@norz.org>:
+
+	* src/cache/dialogs.c:
+
+	Minor tidy up of displayed info in Cache Manager 
+
+Tue Nov 18 15:09:13 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/form.c:
+
+	Use @int_(min|max).  
+
+Tue Nov 18 14:32:51 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/form.c:
+
+	Indentation fix.  
+
+Tue Nov 18 13:29:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.h, cookies/dialogs.c:
+
+	Introduce hierbox_dialog_list_item.  
+
+Tue Nov 18 11:51:52 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/vs.c:
+
+	Use @int_upper_bound.  
+
+Tue Nov 18 11:40:52 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/view.c:
+
+	Use @int_(bounds|lower_bound).  
+
+Tue Nov 18 11:15:35 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/textarea.c:
+
+	Don't use gotos in a row.  
+
+Tue Nov 18 11:07:44 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/textarea.c:
+
+	Use @int_upper_bound. Also fix last patch.  
+
+Tue Nov 18 10:59:50 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/textarea.c:
+
+	Use @int_lower_bound.  
+
+Tue Nov 18 10:55:51 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	Reintroduced @longest_match_len description removed by Miciah.  
+
+Tue Nov 18 10:55:15 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	@last -> @matchpos 
+
+Tue Nov 18 10:54:47 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	last_match* -> match* 
+
+Tue Nov 18 10:53:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	shortest_match_len -> longest_match_len 
+
+Tue Nov 18 10:53:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/inphist.c:
+
+	starting_len -> base_len 
+
+Tue Nov 18 10:49:45 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/textarea.c:
+
+	Use @int_(lower|upper)_bound. @int_bounds could be used if
+	@frm->(cols|rows) > 0 can be assumed.  
+
+Tue Nov 18 10:48:48 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	Last patch was fixed.  
+
+Tue Nov 18 10:38:32 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/viewer/text/textarea.c:
+
+	Reorder loop to make it more readable.  
+
+Tue Nov 18 10:37:42 2003  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/parser.c:
+
+	parse_element() now treat NUL char as any other char, we rely on eof
+	for exiting loops. We do not set *eof to NUL anymore, and just
+	return -1 on parse error (as before but without goto stuff). Code
+	was simplified a lot.  
+
+Tue Nov 18 10:03:46 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inphist.c:
+
+	In do_tab_compl_unambiguous(), replace that awful while loop with a
+	nicer for loop.  
+
+Tue Nov 18 09:56:32 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inphist.c:
+
+	In do_tab_compl_unambiguous(), eliminate a useless check (I hope)
+	and simplify the check for whether we hit the end of @last.  
+
+Tue Nov 18 09:48:38 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/document/html/parser.c:
+
+	Fix infinite loop when opening binary files.  
+
+Tue Nov 18 09:44:54 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/cache/dialogs.c:
+
+	Finish previous commit: Introduce hierbox_browser_box_build(),
+	replacing *_box_build().  
+
+Tue Nov 18 09:25:39 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Tue Nov 18 09:21:12 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inphist.c:
+
+	In do_tab_compl_unambiguous(), initialise last_match to
+	widget_data->cdata and s/!last_match/last_match ==
+	widget_data->cdata/ to eliminate an ugly ternary expression in the
+	loop.  
+
+Tue Nov 18 09:12:57 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inphist.c:
+
+	In do_tab_compl_unambiguous(), rename cdata_len to starting_len,
+	match_len to last_match_len, max to shortest_match_len, match to
+	last_match, c to cur, m to last, and len to cur_len.  
+
+Tue Nov 18 07:52:48 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/dialogs.c,
+	config/dialogs.c, cookies/dialogs.c, globhist/dialogs.c:
+
+	Introduce hierbox_browser_box_build(), replacing *_box_build().  
+
+Tue Nov 18 05:51:36 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/bookmarks.c, bookmarks/bookmarks.h,
+	bookmarks/dialogs.c, globhist/dialogs.c, globhist/globhist.c,
+	globhist/globhist.h:
+
+	Use reference counting macros for bookmarks and global history
+	items.  
+
+Tue Nov 18 05:44:11 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bookmarks/bookmarks.c, globhist/globhist.c:
+
+	Use mem_calloc to allocate bookmarks and global history items.  
+
+Mon Nov 17 23:42:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/menu.c:
+
+	Cookie hotkey conflict with OS shell.  
+
 Mon Nov 17 22:59:18 2003  Fabio Bonelli <fabiobonelli@libero.it>:
 
 	* po/it.po:

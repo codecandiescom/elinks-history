@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.63 2004/01/21 03:04:31 jonas Exp $ */
+/* $Id: scanner.c,v 1.64 2004/01/21 03:45:21 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -322,8 +322,8 @@ scan_css_tokens(struct css_scanner *scanner)
 /* Scanner table accessors and mutators */
 
 #ifdef CSS_SCANNER_DEBUG
-struct css_token *
-get_css_token_debug(struct css_scanner *scanner)
+void
+dump_css_scanner(struct css_scanner *scanner)
 {
 	unsigned char buffer[MAX_STR_LEN];
 	struct css_token *token = scanner->current;
@@ -333,7 +333,7 @@ get_css_token_debug(struct css_scanner *scanner)
 	int token_lookahead = 4;
 	int srclen;
 
-	if (!css_scanner_has_tokens(scanner)) return NULL;
+	if (!css_scanner_has_tokens(scanner)) return;
 
 	memset(buffer, 0, MAX_STR_LEN);
 	for (; token_lookahead > 0 && token < table_end; token++, token_lookahead--) {
@@ -370,6 +370,14 @@ get_css_token_debug(struct css_scanner *scanner)
 
 	errfile = scanner->file, errline = scanner->line;
 	elinks_wdebug("%s", buffer);
+}
+
+struct css_token *
+get_css_token_debug(struct css_scanner *scanner)
+{
+	if (!css_scanner_has_tokens(scanner)) return NULL;
+
+	dump_css_scanner(scanner);
 
 	/* Make sure we do not return CSS_TOKEN_NONE tokens */
 	assert(!css_scanner_has_tokens(scanner)
@@ -377,6 +385,7 @@ get_css_token_debug(struct css_scanner *scanner)
 
 	return get_css_token_(scanner);
 }
+
 #endif
 
 struct css_token *

@@ -1,4 +1,4 @@
-/* $Id: frames.h,v 1.25 2003/10/30 12:04:58 zas Exp $ */
+/* $Id: frames.h,v 1.26 2003/10/30 13:12:58 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_FRAMES_H
 #define EL__DOCUMENT_HTML_FRAMES_H
@@ -48,7 +48,7 @@ struct document_view {
 	int link_bg_n;
 	int x, y; /* pos of window */
 	int width, height; /* size of window */
-	int xl, yl; /* last pos of window */
+	int last_x, last_y; /* last pos of window */
 	int depth;
 	int used;
 };

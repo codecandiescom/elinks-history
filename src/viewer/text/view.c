@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.243 2003/10/30 12:04:59 zas Exp $ */
+/* $Id: view.c,v 1.244 2003/10/30 13:12:59 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -232,9 +232,9 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	}
 	vx = vs->x;
 	vy = vs->y;
-	if (doc_view->xl == vx
-	    && doc_view->yl == vy
-	    && doc_view->xl != -1
+	if (doc_view->last_x != -1
+	    && doc_view->last_x == vx
+	    && doc_view->last_y == vy
 	    && !has_search_word(doc_view)) {
 		clear_link(t, doc_view);
 		draw_forms(t, doc_view);
@@ -242,8 +242,8 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 		return;
 	}
 	free_link(doc_view);
-	doc_view->xl = vx;
-	doc_view->yl = vy;
+	doc_view->last_x = vx;
+	doc_view->last_y = vy;
 	draw_area(t, xp, yp, width, height, ' ', 0, &color);
 	if (!doc_view->document->height) return;
 
@@ -263,7 +263,7 @@ draw_doc(struct terminal *t, struct document_view *doc_view, int active)
 	draw_forms(t, doc_view);
 	if (active) draw_current_link(t, doc_view);
 	if (has_search_word(doc_view))
-		doc_view->xl = doc_view->yl = -1;
+		doc_view->last_x = doc_view->last_y = -1;
 }
 
 static void
@@ -278,7 +278,10 @@ draw_frames(struct session *ses)
 
 	if (!document_has_frames(ses->doc_view->document)) return;
 	n = 0;
-	foreach (doc_view, ses->scrn_frames) doc_view->xl = doc_view->yl = -1, n++;
+	foreach (doc_view, ses->scrn_frames) {
+	       doc_view->last_x = doc_view->last_y = -1;
+	       n++;
+	}
 	l = &cur_loc(ses)->vs.current_link;
 	if (*l < 0) *l = 0;
 	if (!n) n = 1;
@@ -316,7 +319,7 @@ draw_formatted(struct session *ses)
 
 	if (!ses->doc_view->vs && have_location(ses))
 		ses->doc_view->vs = &cur_loc(ses)->vs;
-	ses->doc_view->xl = ses->doc_view->yl = -1;
+	ses->doc_view->last_x = ses->doc_view->last_y = -1;
 	draw_doc(ses->tab->term, ses->doc_view, 1);
 	draw_frames(ses);
 	print_screen_status(ses);

@@ -10,6 +10,7 @@ Adam Borowski <kilobyte@mimuw.edu.pl>
 
 Adam Golebiowski <adamg@pld-linux.org>
 	Polish translation updates
+	Hints for gettexted strings
 
 Adam Harvey <matlhdam@iinet.net.au>
 	Fixed sometimes badly posted form
@@ -533,4 +534,4 @@ Yurii Rashkovskii <yrashk@univer.kharkov.ua>
 	RPM spec file in contrib/
 	RedHat compilation fixes
 
-$Id: AUTHORS,v 1.181 2005/01/02 18:32:44 jonas Exp $
+$Id: AUTHORS,v 1.182 2005/01/03 17:58:33 jonas Exp $

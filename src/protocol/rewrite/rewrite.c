@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.39 2005/01/02 14:07:00 jonas Exp $ */
+/* $Id: rewrite.c,v 1.40 2005/01/03 17:58:33 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,6 +84,7 @@ static struct option_info uri_rewrite_options[] = {
 	 * also be useful and dare I mention some kind of proxy argument. --jonas */
 	INIT_OPT_STRING("protocol.rewrite.smart", NULL,
 		"_template_", 0, "",
+		/* xgettext:no-c-format */
 		N_("Replacement URI for this smartprefix:\n"
 		"%c in the string means the current URL\n"
 		"%s in the string means the whole argument to smartprefix\n"

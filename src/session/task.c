@@ -1,5 +1,5 @@
 /* Sessions task management */
-/* $Id: task.c,v 1.66 2004/04/04 16:38:25 jonas Exp $ */
+/* $Id: task.c,v 1.67 2004/04/04 17:04:16 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,6 +118,9 @@ ses_goto(struct session *ses, struct uri *uri, unsigned char *target_frame,
 	    && ses->doc_view->document->refresh) {
 		kill_document_refresh(ses->doc_view->document->refresh);
 	}
+
+	/* Do it here because it might be ses->goto_position being passed */
+	pos = null_or_stracpy(pos);
 
 	if (!task
 	    || !uri->post
@@ -331,17 +334,10 @@ do_move(struct session *ses, struct download **stat)
 		}
 			/* Fall through. */
 		case TASK_IMGMAP:
-			{
-			unsigned char *gp = ses->goto_position
-					    ? stracpy(ses->goto_position)
-					    : NULL;
-
 			ses_goto(ses, cached->redirect, ses->task.target_frame, NULL,
 				 PRI_MAIN, CACHE_MODE_NORMAL, task,
-				 gp, end_load, 1);
-			if (gp) mem_free(gp);
+				 ses->goto_position, end_load, 1);
 			return 2;
-			}
 		case TASK_HISTORY:
 			ses_goto(ses, cached->redirect, NULL, ses->task.target_location,
 				 PRI_MAIN, CACHE_MODE_NORMAL, TASK_RELOAD,
@@ -486,6 +482,7 @@ do_follow_url(struct session *ses, unsigned char *url, unsigned char *target,
 		 PRI_MAIN, cache_mode, task,
 		 pos, end_load, 0);
 	done_uri(uri);
+	if (pos) mem_free(pos);
 	/* abort_loading(ses); */
 }
 

@@ -1,4 +1,4 @@
-/* $Id: stylesheet.h,v 1.40 2004/10/13 15:34:46 zas Exp $ */
+/* $Id: stylesheet.h,v 1.41 2005/03/05 21:08:11 zas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_STYLESHEET_H
 #define EL__DOCUMENT_CSS_STYLESHEET_H
@@ -64,7 +64,7 @@ struct css_selector {
 
 
 struct css_stylesheet;
-typedef void (*css_stylesheet_importer)(struct css_stylesheet *, struct uri *,
+typedef void (*css_stylesheet_importer_T)(struct css_stylesheet *, struct uri *,
 					unsigned char *url, int urllen);
 
 /* The {struct css_stylesheet} describes all the useful data that was extracted
@@ -75,7 +75,7 @@ struct css_stylesheet {
 	/* The import callback function. */
 	/* TODO: Maybe we need some CSS parser struct for these, and some
 	 * possibility to have some import data as well. --jonas */
-	css_stylesheet_importer import;
+	css_stylesheet_importer_T import;
 
 	/* The list of basic element selectors (which can then somehow
 	 * tree up on inside). */
@@ -89,7 +89,7 @@ struct css_stylesheet {
 	{ import, { D_LIST_HEAD(css.selectors) } }
 
 /* Dynamically allocates a stylesheet. */
-struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer importer);
+struct css_stylesheet *init_css_stylesheet(css_stylesheet_importer_T importer);
 
 /* Mirror given CSS stylesheet @css1 to an identical copy of itself (including
  * all the selectors), @css2. */

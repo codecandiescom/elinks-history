@@ -1,5 +1,5 @@
 /* CSS stylesheet handling */
-/* $Id: stylesheet.c,v 1.48 2005/02/28 11:16:42 zas Exp $ */
+/* $Id: stylesheet.c,v 1.49 2005/03/05 21:08:11 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -213,7 +213,7 @@ dump_css_selector_tree(struct list_head *sels)
 
 
 struct css_stylesheet *
-init_css_stylesheet(css_stylesheet_importer importer)
+init_css_stylesheet(css_stylesheet_importer_T importer)
 {
 	struct css_stylesheet *css;
 

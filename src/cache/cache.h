@@ -1,4 +1,4 @@
-/* $Id: cache.h,v 1.45 2003/11/14 19:21:59 zas Exp $ */
+/* $Id: cache.h,v 1.46 2003/11/14 19:22:22 zas Exp $ */
 
 #ifndef EL__CACHE_CACHE_H
 #define EL__CACHE_CACHE_H
@@ -54,7 +54,7 @@ struct cache_entry {
 	enum cache_mode cache_mode;
 };
 
-#if 1
+#if 0
 #define DEBUG_CACHE_ENTRIES_LOCKS
 #endif
 

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.76 2003/09/08 22:19:38 jonas Exp $ */
+/* $Id: screen.c,v 1.77 2003/09/09 17:50:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -499,7 +499,7 @@ redraw_screen(struct terminal *term)
 
 	done_string(&image);
 
-	memcpy(screen->last_image, screen->image, term->x * term->y * sizeof(struct screen_char));
+	copy_screen_chars(screen->last_image, screen->image, term->x * term->y);
 	screen->dirty = 0;
 }
 

@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.64 2003/09/08 22:19:38 jonas Exp $ */
+/* $Id: draw.c,v 1.65 2003/09/09 17:50:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -211,7 +211,7 @@ draw_area(struct terminal *term, int x, int y, int xw, int yw,
 
 	/* Draw the first area line. */
 	for (i = 0; i < endx; i++) {
-		memcpy(&line[i], &area, sizeof(struct screen_char));
+		copy_screen_chars(&line[i], &area, 1);
 	}
 
 	endx *= sizeof(struct screen_char);
@@ -245,7 +245,7 @@ draw_text(struct terminal *term, int x, int y,
 
 	for (end += position; position < end && *text; text++, position++) {
 		schar.data = *text;
-		memcpy(&term->screen->image[position], &schar, sizeof(struct screen_char));
+		copy_screen_chars(&term->screen->image[position], &schar, 1);
 	}
 
 	term->screen->dirty = 1;

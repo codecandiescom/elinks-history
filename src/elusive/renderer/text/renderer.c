@@ -1,5 +1,5 @@
 /* Text-only output renderer */
-/* $Id: renderer.c,v 1.31 2003/09/08 22:19:38 jonas Exp $ */
+/* $Id: renderer.c,v 1.32 2003/09/09 17:50:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,7 +98,7 @@ realloc_line(struct document *document, int y, int x)
 	}
 
 	for (i = document->data[y].l; i <= x; i++) {
-		memcpy(&document->data[y].d[i], &schar, sizeof(struct screen_char));
+		copy_screen_chars(&document->data[y].d[i], &schar, 1);
 	}
 
 	document->data[y].l = i;

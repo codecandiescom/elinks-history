@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.51 2003/09/08 22:19:39 jonas Exp $ */
+/* $Id: link.c,v 1.52 2003/09/09 17:50:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -189,7 +189,7 @@ draw_link(struct terminal *t, struct document_view *scr, int l)
 		scr->link_bg[i].y = y;
 
 		co = get_char(t, x, y);
-		memcpy(&scr->link_bg[i].c, co, sizeof(struct screen_char));
+		copy_screen_chars(&scr->link_bg[i].c, co, 1);
 
 		if (i == cursor_offset) {
 			int blockable;
@@ -239,7 +239,7 @@ clear_link(struct terminal *t, struct document_view *scr)
 				struct screen_char *co;
 
 				co = get_char(t, bgchar->x, bgchar->y);
-				memcpy(co, &bgchar->c, sizeof(struct screen_char));
+				copy_screen_chars(co, &bgchar->c, 1);
 			}
 		}
 

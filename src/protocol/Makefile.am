@@ -1,5 +1,5 @@
 ## Process this file with automake to produce Makefile.in
-## $Id: Makefile.am,v 1.16 2003/07/01 15:22:39 jonas Exp $
+## $Id: Makefile.am,v 1.17 2003/07/06 00:26:21 jonas Exp $
 
 include $(top_srcdir)/Makefile.base
 
@@ -17,6 +17,8 @@ libprotocol_a_SOURCES = \
  ftpparse.h \
  protocol.c \
  protocol.h \
+ proxy.c \
+ proxy.h \
  uri.c \
  uri.h \
  url.c \

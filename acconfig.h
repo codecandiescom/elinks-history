@@ -69,12 +69,6 @@
 /* Define to 1 if we should include leak debugger and internal error checking facilites */
 #undef DEBUG
 
-/* Define to 1 if we should include support for cookies */
-#undef COOKIES
-
-/* Define to 1 if we should include global history */
-#undef GLOBHIST
-
 /* Directory containing default config */
 #undef CONFDIR
 

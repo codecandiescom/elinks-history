@@ -1,4 +1,4 @@
-/* $Id: feature.h,v 1.2 2003/12/31 21:26:15 jonas Exp $ */
+/* $Id: feature.h,v 1.3 2003/12/31 21:31:49 pasky Exp $ */
 
 #ifndef ELINKS__DOTDOT_FEATURE_H
 #define ELINKS__DOTDOT_FEATURE_H
@@ -53,6 +53,49 @@
 /* Comment out the following line if you want to always have this disabled: */
 #undef HAVE_LIBEXPAT
 #endif
+
+
+/*** Cookies
+ *
+ * Support for HTTP cookies --- a data token which the server sends the client
+ * once and then the client sends it back along each request to the server.
+ * This mechanism is crucial for ie. keeping HTTP sessions (you "log in" to a
+ * site, and from then on the site recognizes you usually because of the
+ * cookie), but also for various banner systems, remembering values filled to
+ * various forms, and so on. You can further tune the ELinks behaviour at
+ * runtime (whether to accept/send cookies, ask for confirmation when accepting
+ * a cookie etc).
+ *
+ * This functionality is usually quite important and you should not disable it
+ * unless you really know what are you doing.
+ *
+ * Default: enabled */
+
+#define COOKIES
+
+
+/*** Global history
+ *
+ * This device records each and every page you visit (to a configurable limit).
+ * You can browse through this history in the history manager (press 'h').  Do
+ * not confuse this with the "session history", recording history of your
+ * browsing in the frame of one session (session history is the thing you move
+ * through when pressing 'back' and 'unback' or which you see in the
+ * File::History menu).
+ *
+ * Global history does not care about the order you visited the pages in, it
+ * just records that you visited it, when did you do that and the title of the
+ * page. Then, you can see when did you visit a link last time (and what was
+ * the title of the target document at that time), links can be coloured as
+ * visited etc.
+ *
+ * If you disable this feature, you will not lose any crucial functionality,
+ * just some relatively minor convenience features, which can nevertheless
+ * prove sometimes very practical.
+ *
+ * Default: enabled */
+
+#define GLOBHIST
 
 
 /*** MIME

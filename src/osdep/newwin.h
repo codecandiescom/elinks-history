@@ -1,4 +1,4 @@
-/* $Id: newwin.h,v 1.6 2004/04/17 01:30:30 jonas Exp $ */
+/* $Id: newwin.h,v 1.7 2004/04/17 02:09:15 jonas Exp $ */
 
 #ifndef EL__DIALOG_SYSTEM_H
 #define EL__DIALOG_SYSTEM_H
@@ -11,7 +11,12 @@ struct open_in_new {
 	unsigned char *text;
 };
 
-struct open_in_new *get_open_in_new(struct terminal * term);
+#define foreach_open_in_new(i, term_env) \
+	for ((i) = 0; open_in_new[(i)].env; (i)++) \
+		if (((term_env) & open_in_new[(i)].env))
+
+extern const struct open_in_new open_in_new[];
+
 int can_open_in_new(struct terminal *);
 
 void open_new_window(struct terminal *term, unsigned char *exe_name,

@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.302 2004/04/17 01:10:38 jonas Exp $ */
+/* $Id: menu.c,v 1.303 2004/04/17 02:09:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -572,27 +572,30 @@ open_in_new_window(struct terminal *term,
 		   struct session *ses)
 {
 	struct menu_item *mi;
-	struct open_in_new *oi, *oin;
+	int posibilities;
 
 	assert(term && ses && xxx);
 	if_assert_failed return;
 
-	oin = get_open_in_new(term);
-	if (!oin) return;
-	if (!oin[1].text) {
-		xxx(term, oin[0].env, ses);
-		mem_free(oin);
+	switch (can_open_in_new(term)) {
+	case 0:
 		return;
+
+	case 1:
+		xxx(term, term->environment, ses);
+		return;
+
+	default:
+		mi = new_menu(FREE_LIST);
+		if (!mi) return;
 	}
 
-	mi = new_menu(FREE_LIST);
-	if (!mi) {
-		mem_free(oin);
-		return;
-	}
-	for (oi = oin; oi->text; oi++)
+	foreach_open_in_new (posibilities, term->environment) {
+		const struct open_in_new *oi = &open_in_new[posibilities];
+
 		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, (void *) oi->env, 0);
-	mem_free(oin);
+	}
+
 	do_menu(term, mi, ses, 1);
 }
 

@@ -1,5 +1,5 @@
 /* Open in new window handling */
-/* $Id: newwin.c,v 1.14 2004/04/17 01:52:08 jonas Exp $ */
+/* $Id: newwin.c,v 1.15 2004/04/17 02:09:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -18,7 +18,7 @@
 #include "util/string.h"
 
 
-static struct open_in_new open_in_new[] = {
+const struct open_in_new open_in_new[] = {
 	{ ENV_XWIN,	DEFAULT_XTERM_CMD,	    N_("~Xterm") },
 	{ ENV_TWIN,	DEFAULT_TWTERM_CMD,	    N_("T~wterm") },
 	{ ENV_SCREEN,	DEFAULT_SCREEN_CMD,	    N_("~Screen") },
@@ -34,26 +34,6 @@ static struct open_in_new open_in_new[] = {
 #endif
 	{ 0, NULL, NULL }
 };
-
-#define foreach_open_in_new(i, term_env) \
-	for ((i) = 0; open_in_new[(i)].env; (i)++) \
-		if (((term_env) & open_in_new[(i)].env))
-
-struct open_in_new *
-get_open_in_new(struct terminal *term)
-{
-	int i = can_open_in_new(term);
-	size_t size = i ? (i + 1) * sizeof(struct open_in_new) : 0;
-	struct open_in_new *oin = mem_calloc(1, size);
-	int noin = 0;
-
-	if (!oin) return NULL;
-
-	foreach_open_in_new (i, term->environment)
-		memcpy(&oin[noin++], &open_in_new[i], sizeof(struct open_in_new));
-
-	return oin;
-}
 
 /* Returns:
  * 0 if it is impossible to open anything in anything new

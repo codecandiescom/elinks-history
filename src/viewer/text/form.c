@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.41 2003/10/17 12:35:12 zas Exp $ */
+/* $Id: form.c,v 1.42 2003/10/17 13:59:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -139,16 +139,16 @@ done_form_control(struct form_control *fc)
 }
 
 struct form_state *
-find_form_state(struct document_view *f, struct form_control *frm)
+find_form_state(struct document_view *doc_view, struct form_control *frm)
 {
 	struct view_state *vs;
 	struct form_state *fs;
 	int n;
 
-	assert(f && f->vs && frm);
+	assert(doc_view && doc_view->vs && frm);
 	if_assert_failed return NULL;
 
-	vs = f->vs;
+	vs = doc_view->vs;
 	n = frm->g_ctrl_num;
 
 	if (n < vs->form_info_len) fs = &vs->form_info[n];
@@ -182,7 +182,7 @@ find_form_state(struct document_view *f, struct form_control *frm)
 }
 
 void
-draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
+draw_form_entry(struct terminal *t, struct document_view *doc_view, struct link *l)
 {
 	struct form_state *fs;
 	struct form_control *frm;
@@ -191,20 +191,20 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 	int xw, yw;
 	int vx, vy;
 
-	assert(t && f && f->document && f->vs && l);
+	assert(t && doc_view && doc_view->document && doc_view->vs && l);
 	if_assert_failed return;
 	frm = l->form;
-	assertm(frm, "link %d has no form", (int)(l - f->document->links));
+	assertm(frm, "link %d has no form", (int)(l - doc_view->document->links));
 	if_assert_failed return;
 
-	fs = find_form_state(f, frm);
+	fs = find_form_state(doc_view, frm);
 	if (!fs) return;
 
-	xp = f->xp;
-	yp = f->yp;
-	xw = f->xw;
-	yw = f->yw;
-	vs = f->vs;
+	xp = doc_view->xp;
+	yp = doc_view->yp;
+	xw = doc_view->xw;
+	yw = doc_view->yw;
+	vs = doc_view->vs;
 	vx = vs->view_posx;
 	vy = vs->view_pos;
 
@@ -239,7 +239,7 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 			}
 			break;
 		case FC_TEXTAREA:
-			draw_textarea(t, fs, f, l);
+			draw_textarea(t, fs, doc_view, l);
 			break;
 		case FC_CHECKBOX:
 		case FC_RADIO:
@@ -275,15 +275,15 @@ draw_form_entry(struct terminal *t, struct document_view *f, struct link *l)
 }
 
 void
-draw_forms(struct terminal *t, struct document_view *f)
+draw_forms(struct terminal *t, struct document_view *doc_view)
 {
 	struct link *l1, *l2;
 
-	assert(t && f);
+	assert(t && doc_view);
 	if_assert_failed return;
 
-	l1 = get_first_link(f);
-	l2 = get_last_link(f);
+	l1 = get_first_link(doc_view);
+	l2 = get_last_link(doc_view);
 
 	if (!l1 || !l2) {
 		assertm(!l1 && !l2, "get_first_link == %p, get_last_link == %p", l1, l2);
@@ -308,7 +308,7 @@ draw_forms(struct terminal *t, struct document_view *f)
 			}
 		}
 #endif /* FORMS_MEMORY */
-			draw_form_entry(t, f, l1);
+			draw_form_entry(t, doc_view, l1);
 
 	} while (l1++ < l2);
 }
@@ -353,17 +353,17 @@ free_succesful_controls(struct list_head *submit)
 }
 
 static void
-get_succesful_controls(struct document_view *f, struct form_control *fc,
+get_succesful_controls(struct document_view *doc_view, struct form_control *fc,
 		       struct list_head *subm)
 {
 	struct form_control *frm;
 	int ch;
 
-	assert(f && f->document && fc && subm);
+	assert(doc_view && doc_view->document && fc && subm);
 	if_assert_failed return;
 
 	init_list(*subm);
-	foreach (frm, f->document->forms) {
+	foreach (frm, doc_view->document->forms) {
 		if (frm->form_num == fc->form_num
 		    && ((frm->type != FC_SUBMIT &&
 			 frm->type != FC_IMAGE &&
@@ -371,7 +371,7 @@ get_succesful_controls(struct document_view *f, struct form_control *fc,
 		    && frm->name && frm->name[0]) {
 			struct submitted_value *sub;
 			int fi = 0;
-			struct form_state *fs = find_form_state(f, frm);
+			struct form_state *fs = find_form_state(doc_view, frm);
 
 			if (!fs) continue;
 			if ((frm->type == FC_CHECKBOX

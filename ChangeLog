@@ -1,3 +1,58 @@
+Sat Jan 15 22:12:48 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/dialogs/edit.c:
+
+	In my_cancel_dialog, use the given widget_data instead of using a
+	hardwired offset into the dialog's array of widgets.  
+
+Sat Jan 15 21:42:36 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/protocol/protocol.c:
+
+	In generic_external_protocol_handler, do not localise the title and
+	the label of the OK button for the unsupported-protocol error box
+	twice.  
+
+Sat Jan 15 20:24:41 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/da.po:
+
+	Update Danish translation.  
+
+Sat Jan 15 20:16:47 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/fi.po:
+
+	I added several translations, removed some entirely incorrect fuzzy
+	translations, and changed some translations for hopefully better
+	consistency.  
+	
+	I also converted the file to ISO-8859-15, in order to translate 
+	"Czech" correctly.  
+	
+	I haven't seen any response from Ilkka Karvinen.  
+	
+	-- Kalle Olavi Niemitalo 
+
+Sat Jan 15 20:00:41 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inpfield.c:
+
+	Insert a blank line.  
+
+Sat Jan 15 19:59:42 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/inpfield.c:
+
+	Return the return value of cancel_dialog from input_field_cancel.  
+
+Sat Jan 15 18:15:18 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/inpfield.c,
+	dialogs/options.c, viewer/text/search.c:
+
+	Drop the unused parameter widget_data from update_dialog_data.  
+
 Fri Jan 14 18:47:46 2005  Laurent Monin <zas@norz.org>:
 
 	* po/fr.po:

@@ -1,5 +1,5 @@
 /* Sockets-o-matic */
-/* $Id: socket.c,v 1.29 2002/11/18 22:31:15 zas Exp $ */
+/* $Id: socket.c,v 1.30 2002/12/02 14:30:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -346,7 +346,7 @@ dns_found(void *data, int state)
 
 	conn->conn_info = NULL;
 	c_i->func(conn);
-	mem_free(c_i->addr);
+	if (c_i->addr) mem_free(c_i->addr);
 	mem_free(c_i);
 }
 
@@ -385,7 +385,7 @@ connected(void *data)
 
 	conn->conn_info = NULL;
 	func(conn);
-	mem_free(c_i->addr);
+	if (c_i->addr) mem_free(c_i->addr);
 	mem_free(c_i);
 }
 

@@ -1,5 +1,5 @@
 /* AF_UNIX inter-instances socket interface */
-/* $Id: af_unix.c,v 1.18 2002/10/12 14:51:13 pasky Exp $ */
+/* $Id: af_unix.c,v 1.19 2002/12/02 14:25:58 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -76,7 +76,7 @@ int get_address()
 	unsigned char *path = init_str();
 	int pathl = 0;
 
-	if (!elinks_home) return -1;
+	if (!elinks_home || !path) return -1;
 
 	add_to_str(&path, &pathl, elinks_home);
 
@@ -155,6 +155,8 @@ int bind_to_af_unix()
 	int attempts = 0;
 	int af;
 
+	if (!s_unix) return -1;
+	
 	af = get_address();
 	if (af == -1) return -1;
 

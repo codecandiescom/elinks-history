@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.70 2004/06/14 02:21:03 jonas Exp $ */
+/* $Id: kbd.c,v 1.71 2004/06/15 21:05:17 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -49,7 +49,6 @@ struct itrm {
 	int sock_in;
 	int sock_out;
 	int ctl_in;
-	int blocked;
 	struct termios t;
 	int flags;
 	unsigned char kqueue[IN_BUF_SIZE];
@@ -59,6 +58,8 @@ struct itrm {
 	int eqlen;
 	void *mouse_h;
 	unsigned char *orig_title;
+
+	unsigned int blocked:1;
 };
 
 static struct itrm *ditrm = NULL;

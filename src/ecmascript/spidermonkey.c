@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.65 2004/10/22 23:53:47 jonas Exp $ */
+/* $Id: spidermonkey.c,v 1.66 2004/10/23 10:04:40 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -934,7 +934,7 @@ error_reporter(JSContext *ctx, const char *message, JSErrorReport *report)
 		N_("OK"), NULL, B_ENTER | B_ESC);
 
 reported:
-	/* Do not break the script execution. TODO: Configurable? --pasky */
+	/* Im clu'les. --pasky */
 	JS_ClearPendingException(ctx);
 }
 

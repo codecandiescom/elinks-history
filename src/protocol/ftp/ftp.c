@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.203 2005/03/12 00:06:28 zas Exp $ */
+/* $Id: ftp.c,v 1.204 2005/03/12 00:08:02 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -650,6 +650,12 @@ add_file_cmd_to_str(struct connection *conn)
 	struct ftp_connection_info *c_i;
 	struct string command, ftp_data_command;
 
+	if (!conn->uri->data) {
+		INTERNAL("conn->uri->data empty");
+		abort_conn_with_state(conn, S_INTERNAL);
+		return NULL;
+	}
+
 	c_i = mem_calloc(1, sizeof(*c_i));
 	if (!c_i) {
 		abort_conn_with_state(conn, S_OUT_OF_MEM);
@@ -673,14 +679,6 @@ add_file_cmd_to_str(struct connection *conn)
 		done_string(&command);
 		done_string(&ftp_data_command);
 		INTERNAL("Ftp data socket failure");
-		abort_conn_with_state(conn, S_INTERNAL);
-		return NULL;
-	}
-
-	if (!conn->uri->data) {
-		done_string(&command);
-		done_string(&ftp_data_command);
-		INTERNAL("conn->uri->data empty");
 		abort_conn_with_state(conn, S_INTERNAL);
 		return NULL;
 	}

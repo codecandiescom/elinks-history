@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.172 2003/10/24 21:03:48 pasky Exp $ */
+/* $Id: menu.c,v 1.173 2003/10/24 21:05:41 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -173,8 +173,6 @@ flush_caches(struct terminal *term, void *d, void *e)
 static void
 go_historywards(struct terminal *term, struct location *target, struct session *ses)
 {
-	abort_loading(ses, 0);
-
 	go_history(ses, target);
 }
 

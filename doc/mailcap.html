@@ -33,7 +33,8 @@ on the web that does this. Google and thou shall find. ;)
 </p>
 
 <hr />
-<h2>1. A short intro to mailcap <a id="intro"></a></h2>
+<a id="intro" />
+<h2>1. A short intro to mailcap</h2>
 <p>
 Mailcap is a file format defined in rfc 1524. It is purpose is to
 inform multiple mail reading user agent (MUA) programs about the
@@ -51,7 +52,8 @@ configuration.
 </p>
 
 <hr />
-<h2>2. Parameters <a id="parameters"></a></h2>
+<a id="parameters" />
+<h2>2. Parameters</h2>
 
 <p>
 The code has been ported from mutt and thereby inherits some of it's various
@@ -82,7 +84,8 @@ much sense for non-MUA:</p>
 </dl>
 
 <hr />
-<h2>3. Reading of mailcap files <a id="reading"></a></h2>
+<a id="reading" />
+<h2>3. Reading of mailcap files</h2>
 
 <p>
 Mailcap files will be read when starting ELinks. The mailcap files
@@ -102,7 +105,8 @@ will be determined in the following way:
 </ul>
 
 <hr />
-<h2>4. Fields <a id="fields"></a></h2>
+<a id="fields" />
+<h2>4. Fields</h2>
 
 <p>
 Since mailcap handling is primarily for displaying of resources all
@@ -129,7 +133,8 @@ your pager or present on your system.
 </p>
 
 <hr />
-<h2>5. Mailcap configuration <a id="config"></a></h2>
+<a id="config" />
+<h2>5. Mailcap configuration</h2>
 
 <p>
 Besides the option <i>protocol.mailcap.path</i> there's only
@@ -142,7 +147,8 @@ a file. The option is a boolian and can be set like this:
 <p>if you would like to be asked before opening a file.</p>
 
 <hr />
-<h2>6. Some sample mailcap entries <a id="sample"></a></h2>
+<a id="sample" />
+<h2>6. Some sample mailcap entries</h2>
 <pre>
 <b># Convert images to text using the netpbm tools</b>
 <i>image/*</i>;                (anytopnm %s | pnmscale -xysize 200 150 | \
@@ -156,5 +162,10 @@ a file. The option is a boolian and can be set like this:
 
 
 </pre>
+
+<p>
+<tt>$Id: mailcap.html,v 1.2 2002/12/10 21:21:32 pasky Exp $</tt>
+</p>
+
 </body>
 </html>

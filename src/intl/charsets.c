@@ -1,5 +1,5 @@
 /* Charsets convertor */
-/* $Id: charsets.c,v 1.18 2002/12/02 14:20:41 zas Exp $ */
+/* $Id: charsets.c,v 1.19 2002/12/02 14:43:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -88,10 +88,8 @@ new_translation_table(struct conv_table *p)
 {
 	int i;
 
-	if (!no_str) {
-		no_str = stracpy("*");
-		if (no_str) return;
-	}
+	if (!no_str) no_str = stracpy("*");
+	if (!no_str) return;
 	
 	for (i = 0; i < 256; i++)
 		if (p[i].t)

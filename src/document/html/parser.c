@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.261 2003/11/14 12:00:45 zas Exp $ */
+/* $Id: parser.c,v 1.262 2003/11/14 12:49:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -3225,7 +3225,7 @@ ng:;
 			if (!inv) {
 				unsigned char *a;
 
-				if (ei->func == html_xmp) {
+				if (was_xmp) {
 					put_chrs("<", 1, put_chars_f, f);
 					html = prev_html + 1;
 					break;
@@ -3286,7 +3286,7 @@ ng:;
 				int lnb = 0;
 				int xxx = 0;
 
-				if (ei->func == html_xmp) was_xmp = 0;
+				if (was_xmp) was_xmp = 0;
 				was_br = 0;
 				if (ei->nopair == 1 || ei->nopair == 3) break;
 				/*debug_stack();*/

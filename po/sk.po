@@ -2,13 +2,12 @@
 # Radovan Stas <radoone@skmi.science.upjs.sk>
 # Peter Samek <samek@upc.uniba.sk>, 2002
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-22 21:26+0100\n"
-"PO-Revision-Date: 2003-01-03 03:41+0100\n"
+"PO-Revision-Date: 2003-11-24 19:00+0100\n"
 "Last-Translator: Peter Samek <samek@upc.uniba.sk>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
 "MIME-Version: 1.0\n"
@@ -58,37 +57,35 @@ msgstr "OK"
 
 #: src/bfu/hierbox.c:425
 msgid "Deleting used folder"
-msgstr ""
+msgstr "Ma¾em pou¾itú zlo¾ku"
 
 #: src/bfu/hierbox.c:426
-#, fuzzy, c-format
+#, c-format
 msgid "Sorry, but the folder \"%s\" is being used by something else."
-msgstr ""
-"Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program."
+msgstr "Smola, ale zlo¾ku \"%s\" práve pou¾íva nieèo iné."
 
 #: src/bfu/hierbox.c:438
-#, fuzzy
 msgid "Deleting used item"
-msgstr "Zma¾ polo¾ku v histórii"
+msgstr "Ma¾em pou¾ité polo¾ky"
 
 #: src/bfu/hierbox.c:439
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Sorry, but the item \"%s\" is being used by something else.\n"
 "\n"
 "%s"
 msgstr ""
-"Je mi to stra¹ne µúto, ale s touto zálo¾kou práve pracuje nejaký iný program."
+"Smola, ale polo¾ku \"%s\" práve pou¾íva nieèo iné."
+"\n"
+"%s"
 
 #: src/bfu/hierbox.c:536
-#, fuzzy
 msgid "Delete marked items"
-msgstr "Zma¾ polo¾ku v histórii"
+msgstr "Zmaza» oznaèené polo¾ky"
 
 #: src/bfu/hierbox.c:537
-#, fuzzy
 msgid "Delete marked items?"
-msgstr "Zma¾ polo¾ku v histórii"
+msgstr "Zmaza» oznaèené polo¾ky?"
 
 #: src/bfu/hierbox.c:539 src/bfu/hierbox.c:551 src/bfu/hierbox.c:565
 #: src/bfu/hierbox.c:618 src/dialogs/menu.c:151 src/dialogs/mime.c:86
@@ -103,27 +100,27 @@ msgid "No"
 msgstr "Nie"
 
 #: src/bfu/hierbox.c:547
-#, fuzzy
 msgid "Delete folder"
-msgstr "Zma¾ zálo¾ku"
+msgstr "Zmaza» zlo¾ku"
 
 #: src/bfu/hierbox.c:548
-#, fuzzy, c-format
+#, c-format
 msgid "Delete the folder \"%s\" and its content?"
-msgstr "Zmaza» príponu"
+msgstr "Zmaza» zlo¾ku \"%s\" a jej obsah?"
 
 #: src/bfu/hierbox.c:560
-#, fuzzy
 msgid "Delete item"
-msgstr "Zma¾ polo¾ku v histórii"
+msgstr "Zmaza» polo¾ku"
 
 #: src/bfu/hierbox.c:561
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Delete \"%s\"?\n"
 "\n"
 "%s"
-msgstr "Zma¾ zálo¾ku"
+msgstr "Zmaza» \"%s\"?\n"
+"\n"
+"%s"
 
 #: src/bfu/hierbox.c:615
 #, fuzzy
@@ -157,39 +154,36 @@ msgstr "Prázdny re»azec je neprípustný!"
 
 #: src/bfu/leds.c:64
 msgid "LEDs"
-msgstr ""
+msgstr "LED-ky"
 
 #: src/bfu/leds.c:66
-#, fuzzy
 msgid "LEDs options."
-msgstr "Ulo¾ na~stavenia"
+msgstr "LED nastavenia."
 
 #. XXX: Disable global history if -anonymous is given?
 #: src/bfu/leds.c:68 src/config/options.inc:1719 src/config/options.inc:1726
 #: src/globhist/globhist.c:73 src/mime/backend/mailcap.c:98
 #: src/mime/backend/mimetypes.c:55 src/ssl/ssl.c:82
-#, fuzzy
 msgid "Enable"
-msgstr "meno"
+msgstr "Zapnú»"
 
 #: src/bfu/leds.c:70
-#, fuzzy
 msgid "Enable LEDs."
-msgstr "meno"
+msgstr "Zapnú» LED-ky."
 
 #. name:
 #: src/bfu/leds.c:237
 msgid "LED indicators"
-msgstr ""
+msgstr "LED indikátory"
 
 #: src/bookmarks/backend/xbel.c:98
 msgid "read_bookmarks_xbel(): Error in XML_ParserCreate()"
-msgstr ""
+msgstr "read_bookmarks_xbel(): Chyba v XML_ParserCreate()"
 
 #: src/bookmarks/backend/xbel.c:110
 #, c-format
 msgid "read_bookmarks_xbel(): Error reading %s"
-msgstr ""
+msgstr "read_bookmarks_xbel(): chyba pri èítaní %s"
 
 #: src/bookmarks/backend/xbel.c:119
 #, c-format
@@ -197,27 +191,25 @@ msgid ""
 "read_bookmarks_xbel(): Parse error in %s at line %d column %d:\n"
 "%s"
 msgstr ""
+"read_bookmarks_xbel(): Chyba syntaxe v súbore %s na riadku %d v ståpci %d:\n"
+"%s"
 
 #: src/bookmarks/backend/xbel.c:381 src/bookmarks/backend/xbel.c:398
-#, fuzzy
 msgid "No title"
-msgstr "Titulok linku"
+msgstr "®iadny titulok"
 
 #. name:
 #: src/bookmarks/bookmarks.c:42 src/bookmarks/bookmarks.c:99
-#, fuzzy
 msgid "Bookmarks"
-msgstr "Zálo¾k~y"
+msgstr "Zálo¾ky"
 
 #: src/bookmarks/bookmarks.c:44
-#, fuzzy
 msgid "Bookmark options."
-msgstr "Zálo¾k~y"
+msgstr "Nastavenie zálo¾iek."
 
 #: src/bookmarks/bookmarks.c:47 src/bookmarks/bookmarks.c:53
-#, fuzzy
 msgid "File format"
-msgstr "Upload súboru"
+msgstr "Formát súboru"
 
 #: src/bookmarks/bookmarks.c:49
 msgid ""
@@ -225,6 +217,9 @@ msgid ""
 "0 is the default ELinks (Links 0.9x compatible) format\n"
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)"
 msgstr ""
+"Formát súboru so zálo¾kami (ovplyvòuje naèítanie aj ulo¾enie):\n"
+"0 je ¹tandardný Elinks-ový formát (Links 0.9x kompatibilný)\n"
+"1 je XBEL, univerzálny XML-orientovaný formát (BEZ PODPORY DIAKRITIKY!)"
 
 #: src/bookmarks/bookmarks.c:55
 msgid ""
@@ -233,6 +228,10 @@ msgid ""
 "1 is XBEL universal XML bookmarks format (NO NATIONAL CHARS SUPPORT!)  "
 "(DISABLED)"
 msgstr ""
+"Formát súboru so zálo¾kami (ovplyvòuje naèítanie aj ulo¾enie):\n"
+"0 je ¹tandardný Elinks-ový formát (Links 0.9x kompatibilný)\n"
+"1 je XBEL, univerzálny XML-orientovaný formát (BEZ PODPORY DIAKRITIKY!)"
+"(NEFUNGUJE)"
 
 #: src/bookmarks/dialogs.c:72
 #, c-format
@@ -276,7 +275,7 @@ msgstr "Choï na"
 #: src/bookmarks/dialogs.c:411 src/config/dialogs.c:197
 #: src/config/dialogs.c:255 src/config/dialogs.c:382
 msgid "Edit"
-msgstr "Edituj"
+msgstr "Editova»"
 
 #: src/bookmarks/dialogs.c:412 src/cache/dialogs.c:146
 #: src/config/dialogs.c:384 src/config/dialogs.c:540 src/cookies/dialogs.c:133
@@ -298,15 +297,15 @@ msgstr "Prida»"
 #: src/viewer/text/search.c:879 src/viewer/text/search.c:900
 #: src/viewer/text/search.c:1080
 msgid "Search"
-msgstr "Hµadaj"
+msgstr "Hµada»"
 
 #: src/bookmarks/dialogs.c:548
 msgid "Search bookmarks"
-msgstr "Hµadaj v zálo¾kách"
+msgstr "Hµada» v zálo¾kách"
 
 #: src/bookmarks/dialogs.c:562
 msgid "Add bookmark"
-msgstr "Pridaj zálo¾ku"
+msgstr "Prida» zálo¾ku"
 
 #: src/cache/dialogs.c:56 src/dialogs/document.c:65 src/dialogs/edit.c:96
 #: src/scripting/lua/core.c:396
@@ -347,32 +346,30 @@ msgstr "neúplný"
 
 #: src/cache/dialogs.c:97
 msgid "invalid"
-msgstr ""
+msgstr "neplatný"
 
 #: src/cache/dialogs.c:102
 msgid "ID tag"
 msgstr ""
 
 #: src/cache/dialogs.c:106
-#, fuzzy
 msgid "Header"
-msgstr "Informácie o hlavièke"
+msgstr "Hlavièka"
 
 #. Keep options in alphabetical order.
 #: src/cache/dialogs.c:142 src/config/options.inc:312
-#, fuzzy
 msgid "Cache"
-msgstr "Zru¹i»"
+msgstr "Doèasná pamä» (cache)"
 
 #: src/config/cmdline.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot parse option %s: %s"
-msgstr "Chyba pri zapisovaní do socketu"
+msgstr "Nemô¾em rozpozna» voµbu %s: %s"
 
 #: src/config/cmdline.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown option %s"
-msgstr "Spojenie"
+msgstr "Neznáma voµba %s"
 
 #: src/config/conf.c:604
 msgid ""
@@ -381,6 +378,11 @@ msgid ""
 "## options through UI, however only option values will be altered\n"
 "## and all your formatting, own comments etc will be kept as-is.\n"
 msgstr ""
+"## Toto je konfiguraèný súbor Elinksu. Mô¾ete ho ruène editova»,\n"
+"## pokiaµ si to ¾eláte; tento súbor je editovaný Elinksom pri ukladaní\n"
+"## nastavení cez u¾ívateµské rozhranie, ale menené sú v¾dy iba hodnoty\n"
+"## volieb a v¹etko va¹e formátovanie, vlastné komentáre a pod. zostane\n"
+"## tak ako je.\n"
 
 #: src/config/conf.c:612
 msgid ""
@@ -392,6 +394,13 @@ msgid ""
 "## it is NOT counted as missing. Note that all your formatting,\n"
 "## own comments and so on will be kept as-is.\n"
 msgstr ""
+"## Toto je konfiguraèný súbor Elinksu. Mô¾ete ho ruène editova»,\n"
+"## pokiaµ si to ¾eláte; tento súbor je editovaný Elinksom pri ukladaní\n"
+"## nastavení cez u¾ívateµské rozhranie, ale menené sú v¾dy iba hodnoty\n"
+"## volieb a chýbajúce hodnoty budú pridané na konci súboru; voµba sa\n"
+"## nepova¾uje za chýbajúcu, ak sa nachádza v includovanom súbore.\n"
+"## V¹etko va¹e formátovanie, vlastné komentáre a pod. zostane zachované.\n"
+"## \n"
 
 #: src/config/conf.c:622
 msgid ""
@@ -400,6 +409,10 @@ msgid ""
 "## by ELinks when you save options through UI and you are out of\n"
 "## luck with your formatting and own comments then, so beware.\n"
 msgstr ""
+"## Toto je konfiguraèný súbor Elinksu. Mô¾ete ho ruène editova»,\n"
+"## ak si to ¾eláte; ale pamätajte na to, ¾e tento súbor Elinks prepí¹e\n"
+"## zaka¾dým keï ulo¾íte nsatavenia cez u¾ívateµské rozhranie. A s va¹ím\n"
+"## formátovaním a poznámkami je amen.\n"
 
 #: src/config/conf.c:633
 msgid ""
@@ -407,14 +420,17 @@ msgid ""
 "## this file, you can change it by altering the config.saving_style\n"
 "## option. Come on, aren't we friendly guys after all?\n"
 msgstr ""
+"## Samozrejme, ak sa vám nepáèi to èo Elinks urobí s týmto súborom,\n"
+"## mô¾ete to ovplyvni» zmenou voµby config.saving_style. Nie sme a¾\n"
+"## takí zlí, nie? ;-)\n"
 
 #: src/config/conf.c:648
 msgid "Automatically saved options\n"
-msgstr ""
+msgstr "Automaticky ulo¾ené nastavenie\n"
 
 #: src/config/conf.c:662
 msgid "Automatically saved keybindings\n"
-msgstr ""
+msgstr "Automaticky ulo¾ené klávesové skratky\n"
 
 #: src/config/conf.c:700
 #, fuzzy
@@ -448,7 +464,7 @@ msgstr "Chyba pri zápise do súboru"
 
 #: src/config/conf.c:721
 msgid "File saving disabled by option"
-msgstr ""
+msgstr "Ukladanie do súboru bolo vypnuté v nastavení"
 
 #: src/config/conf.c:724 src/sched/error.c:44
 msgid "Out of memory"
@@ -464,9 +480,9 @@ msgid "Config error"
 msgstr "Chyba v konfigurácii"
 
 #: src/config/dialogs.c:57
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to write to config file %s: %s"
-msgstr "Nemô¾em zapisova» do konfiguraèného súboru!"
+msgstr "Nemô¾em zapísa» do konfiguraèného súboru %s: %s"
 
 #: src/config/dialogs.c:99
 #, c-format
@@ -478,10 +494,16 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Meno: %s\n"
+"Typ: %s\n"
+"Hodnota: %s\n"
+"\n"
+"Popis:\n"
+"%s"
 
 #: src/config/dialogs.c:105 src/config/dialogs.c:117 src/config/dialogs.c:212
 msgid "N/A"
-msgstr ""
+msgstr "niè"
 
 #: src/config/dialogs.c:112
 #, c-format
@@ -492,6 +514,11 @@ msgid ""
 "Description:\n"
 "%s"
 msgstr ""
+"Meno: %s\n"
+"Typ: %s\n"
+"\n"
+"Popis:\n"
+"%s"
 
 #: src/config/dialogs.c:168 src/protocol/protocol.c:57 src/sched/session.c:413
 #: src/sched/session.c:1561 src/viewer/text/textarea.c:265
@@ -500,7 +527,7 @@ msgstr "Chyba"
 
 #: src/config/dialogs.c:169
 msgid "Bad option value."
-msgstr ""
+msgstr "Chybná hodnota voµby."
 
 #: src/config/dialogs.c:206 src/config/dialogs.c:306 src/dialogs/edit.c:92
 #: src/scripting/lua/core.c:394 src/scripting/lua/core.c:395
@@ -510,48 +537,48 @@ msgstr "Názov"
 
 #: src/config/dialogs.c:207
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: src/config/dialogs.c:209
-#, fuzzy
 msgid "Value"
-msgstr "hodnota"
+msgstr "Hodnota"
 
 #: src/config/dialogs.c:210
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
 #: src/config/dialogs.c:256
 msgid ""
 "This option cannot be edited. This means that this is some special option "
 "like a folder - try to press a space in order to see its contents."
 msgstr ""
+"Túto voµbu nie je mo¾né zmeni». To znamená, ¾e je to nejaká ¹peciálna voµba,"
+"ako napr. strom volieb - skús stlaèi» medzeru, objaví sa obsah tohto stromu."
 
 #: src/config/dialogs.c:292 src/config/dialogs.c:306
 msgid "Add option"
-msgstr ""
+msgstr "Pridaj voµbu"
 
 #: src/config/dialogs.c:293
 msgid "Cannot add an option here."
-msgstr ""
+msgstr "Do tejto zlo¾ky nemô¾em prida» novú voµbu."
 
 #: src/config/dialogs.c:336 src/config/dialogs.c:350
 msgid "Delete option"
-msgstr ""
+msgstr "Zmaza» voµbu"
 
 #: src/config/dialogs.c:337
 msgid "Cannot delete this option."
-msgstr ""
+msgstr "Túto voµbu nemô¾em zmaza»."
 
 #: src/config/dialogs.c:351
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete the option \"%s\"?"
-msgstr "Zmaza» príponu"
+msgstr "Naozaj zmaza» voµbu \"%s\"?"
 
 #: src/config/dialogs.c:378
-#, fuzzy
 msgid "Option manager"
-msgstr "Správca zálo¾iek"
+msgstr "Správca nastavenia"
 
 #: src/config/dialogs.c:385 src/config/dialogs.c:542 src/cookies/dialogs.c:135
 #: src/dialogs/options.c:190 src/sched/download.c:1227
@@ -561,23 +588,23 @@ msgstr "Ulo¾i»"
 
 #: src/config/dialogs.c:408 src/config/dialogs.c:430 src/config/dialogs.c:459
 msgid "Add keybinding"
-msgstr ""
+msgstr "Prida» klávesovú skratku"
 
 #: src/config/dialogs.c:409
 msgid "Invalid keystroke."
-msgstr ""
+msgstr "Neplatná kombinácia kláves."
 
 #: src/config/dialogs.c:431
 msgid "Need to select a keymap."
-msgstr ""
+msgstr "Potrebné vybra» klávesovú mapu."
 
 #: src/config/dialogs.c:446 src/config/options.inc:1738
 msgid "Action"
-msgstr ""
+msgstr "Akcia"
 
 #: src/config/dialogs.c:447
 msgid "Keymap"
-msgstr ""
+msgstr "Klávesová mapa"
 
 #: src/config/dialogs.c:448
 msgid ""
@@ -585,29 +612,34 @@ msgid ""
 "Prefix: Shift, Ctrl, Alt\n"
 "Key: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 msgstr ""
+"Kombinácia kláves by mala byø zapísaná vo formáte: [Prefix-]Kláves\n"
+"Prefix: Shift, Ctrl, Alt\n"
+"Kláves: a,b,c,...,1,2,3,...,Space,Up,PageDown,Tab,Enter,Insert,F5,..."
 
 #: src/config/dialogs.c:452
 msgid "Keystroke"
-msgstr ""
+msgstr "Kombinácia kláves"
 
 #: src/config/dialogs.c:497 src/config/dialogs.c:508
 msgid "Delete keybinding"
-msgstr ""
+msgstr "Zmaza» klávesovú skratku"
 
 #: src/config/dialogs.c:498
 msgid ""
 "This item is not a keybinding. Try to press a space in order to get to the "
 "keybindings themselves."
 msgstr ""
+"Táto polo¾ka nie je kombináciou kláves. Skús stlaèi» medzeru, dostane¹ sa tak "
+"èasom mo¾no aj k samotným kombináciám kláves."
 
 #: src/config/dialogs.c:509
 #, c-format
 msgid "Really delete the keybinding \"%s\" (action \"%s\", keymap \"%s\")?"
-msgstr ""
+msgstr "Naozaj zmaza» kombináciu \"%s\" (akcia \"%s\", klávesová mapa \"%s\")?"
 
 #: src/config/dialogs.c:536
 msgid "Keybinding manager"
-msgstr ""
+msgstr "Správca klávesových skratiek"
 
 #: src/config/dialogs.c:541 src/globhist/dialogs.c:216
 msgid "Toggle display"
@@ -615,76 +647,71 @@ msgstr "Prepnú» URL/názov"
 
 #: src/config/kbdbind.c:272
 msgid "Main mapping"
-msgstr ""
+msgstr "Hlavné mapovanie"
 
 #: src/config/kbdbind.c:273
 msgid "Edit mapping"
-msgstr ""
+msgstr "Edituj mapovanie"
 
 #: src/config/kbdbind.c:274
 msgid "Menu mapping"
 msgstr ""
 
 #: src/config/kbdbind.c:379
-#, fuzzy
 msgid "Abort connection"
-msgstr "spojenie"
+msgstr "Preru¹i» spojenie"
 
 #: src/config/kbdbind.c:380
-#, fuzzy
 msgid "Add a new bookmark"
-msgstr "Pridaj zálo¾ku"
+msgstr "Prida» novú zálo¾ku"
 
 #: src/config/kbdbind.c:381
 msgid "Add a new bookmark using current link"
-msgstr ""
+msgstr "Prida» novú zalo¾ku na aktuálny odkaz"
 
 #: src/config/kbdbind.c:382
 msgid "Attempt to auto-complete the input"
-msgstr ""
+msgstr "Pokus o automatické doplnenie vstupu"
 
 #: src/config/kbdbind.c:383
 msgid "Attempt to unambiguously auto-complete the input"
-msgstr ""
+msgstr "Pokus o automatické doplnenie vstupu najvhodnej¹ou alternatívou"
 
 #: src/config/kbdbind.c:384
 msgid "Return to the previous document in history"
-msgstr ""
+msgstr "Návrat k predchádzajúcemu dokumentu v histórii"
 
 #: src/config/kbdbind.c:385
 msgid "Delete character in front of the cursor"
-msgstr ""
+msgstr "Zmaza» znak pred kurzorom"
 
 #: src/config/kbdbind.c:386
-#, fuzzy
 msgid "Open bookmark manager"
-msgstr "Správca zálo¾iek"
+msgstr "Otvori» správcu zálo¾iek"
 
 #: src/config/kbdbind.c:387
-#, fuzzy
 msgid "Open cache manager"
-msgstr "Správca zálo¾iek"
+msgstr "Otvori» správcu cache"
 
 #: src/config/kbdbind.c:388
-#, fuzzy
 msgid "Open cookie manager"
-msgstr "Správca zálo¾iek"
+msgstr "Otvori» správcu cookies"
 
 #: src/config/kbdbind.c:389
 msgid "Reload cookies file"
-msgstr ""
+msgstr "Znovunahranie súboru s cookies"
 
 #: src/config/kbdbind.c:390
 msgid "Copy text to clipboard"
-msgstr ""
+msgstr "Okopírova» text do schránky"
 
 #: src/config/kbdbind.c:391
 msgid "Delete text from clipboard"
-msgstr ""
+msgstr "Zmaza» text zo schránky"
 
 #: src/config/kbdbind.c:392
 msgid "Delete character under cursor"
-msgstr ""
+msgstr "Zmaza» znak pod kurzorom"
 
 #: src/config/kbdbind.c:393
 #, fuzzy

@@ -1,4 +1,4 @@
-/* $Id: select.h,v 1.9 2004/04/14 02:35:02 jonas Exp $ */
+/* $Id: select.h,v 1.10 2004/04/14 19:46:56 jonas Exp $ */
 
 #ifndef EL__LOWLEVEL_SELECT_H
 #define EL__LOWLEVEL_SELECT_H
@@ -6,7 +6,6 @@
 #include "util/lists.h"
 #include "util/ttime.h"
 
-extern int terminate;
 extern struct list_head bottom_halves;
 
 long select_info(int);

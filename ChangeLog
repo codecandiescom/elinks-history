@@ -1,3 +1,53 @@
+Sat Jan  1 18:11:51 2005  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Sat Jan  1 17:38:38 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Keep the EVENT_MOUSE case even if mouse is disabled.  
+
+Sat Jan  1 16:37:53 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, forms.c, html/renderer.c:
+
+	Make done_form() also free the form struct.  
+
+Sat Jan  1 16:37:09 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	Limit long lines.  
+
+Sat Jan  1 14:38:52 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Reformat comments.  
+
+Sat Jan  1 13:54:31 2005  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	Only handle clicks outside the input line (introduced in 1.189 ->
+	1.190) if CONFIG_MOUSE.  
+
+Sat Jan  1 13:15:27 2005  Petr Baudis <pasky@ucw.cz>:
+
+	* src/dialogs/info.c:
+
+	'appy naw yer *hick* 
+
+Sat Jan  1 05:44:02 2005  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	In update_options_visibility, use get_opt_bool instead of
+	get_opt_rec.  
+
 Fri Dec 31 12:29:09 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/osdep/osdep.c:

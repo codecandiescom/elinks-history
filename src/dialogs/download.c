@@ -1,5 +1,5 @@
 /* Download dialogs */
-/* $Id: download.c,v 1.66 2004/11/19 16:22:19 zas Exp $ */
+/* $Id: download.c,v 1.67 2004/11/21 14:53:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -257,10 +257,10 @@ display_download(struct terminal *term, struct file_download *file_download,
 
 	object_lock(file_download);
 
-	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_undisplay_download, _("Background", term), NULL);
-	add_dlg_button(dlg, B_ENTER | B_ESC, dlg_set_notify, _("Background with notify", term), NULL);
-	add_dlg_button(dlg, 0, dlg_abort_download, _("Abort", term), NULL);
-	add_dlg_button(dlg, 0, push_delete_button, _("Abort and delete file", term), NULL);
+	add_dlg_button(dlg, _("Background", term), B_ENTER | B_ESC, dlg_undisplay_download, NULL);
+	add_dlg_button(dlg, _("Background with notify", term), B_ENTER | B_ESC, dlg_set_notify, NULL);
+	add_dlg_button(dlg, _("Abort", term), 0, dlg_abort_download, NULL);
+	add_dlg_button(dlg, _("Abort and delete file", term), 0, push_delete_button, NULL);
 
 	add_dlg_end(dlg, DOWNLOAD_WIDGETS_COUNT);
 

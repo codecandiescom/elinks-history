@@ -1,5 +1,5 @@
 /* Hiearchic listboxes browser dialog commons */
-/* $Id: hierbox.c,v 1.194 2004/11/18 00:52:43 zas Exp $ */
+/* $Id: hierbox.c,v 1.195 2004/11/21 14:53:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -342,10 +342,10 @@ hierbox_browser(struct hierbox_browser *browser, struct session *ses)
 			continue;
 		}
 
-		add_dlg_button(dlg, B_ENTER, but->handler, _(but->label, term), NULL);
+		add_dlg_button(dlg, _(but->label, term), B_ENTER, but->handler, NULL);
 	}
 
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Close", term), NULL);
+	add_dlg_button(dlg, _("Close", term), B_ESC, cancel_dialog, NULL);
 
 	/* @anonymous was initially 1 if we are running in anonymous mode so we
 	 * have to subtract one. */

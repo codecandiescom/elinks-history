@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: dialogs.c,v 1.199 2004/11/19 16:22:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.200 2004/11/21 14:53:30 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -398,8 +398,8 @@ build_edit_dialog(struct terminal *term, struct session *ses,
 
 	add_dlg_text(dlg, desc, ALIGN_LEFT, 0);
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, _("OK", term), B_ENTER, ok_dialog, NULL);
+	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 

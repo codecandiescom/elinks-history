@@ -1,5 +1,5 @@
 /* Prefabricated message box implementation. */
-/* $Id: msgbox.c,v 1.94 2004/11/21 14:03:25 zas Exp $ */
+/* $Id: msgbox.c,v 1.95 2004/11/21 14:53:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ msg_box(struct terminal *term, struct memory_list *ml, enum msgbox_flags flags,
 		if (!(flags & MSGBOX_NO_INTL))
 			label = _(label, term);
 
-		add_dlg_ok_button(dlg, bflags, label, done, udata);
+		add_dlg_ok_button(dlg, label, bflags, done, udata);
 	}
 
 	va_end(ap);

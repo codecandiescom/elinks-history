@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.301 2004/11/19 16:16:27 zas Exp $ */
+/* $Id: search.c,v 1.302 2004/11/21 14:53:31 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -1564,8 +1564,8 @@ search_dlg_do(struct terminal *term, struct memory_list *ml,
 	add_dlg_radio(dlg, _("Case sensitive", term), 2, 1, hop->values[SEARCH_OPT_CASE].number);
 	add_dlg_radio(dlg, _("Case insensitive", term), 2, 0, hop->values[SEARCH_OPT_CASE].number);
 
-	add_dlg_button(dlg, B_ENTER, search_dlg_ok, _("OK", term), fn);
-	add_dlg_button(dlg, B_ESC, search_dlg_cancel, _("Cancel", term), NULL);
+	add_dlg_button(dlg, _("OK", term), B_ENTER, search_dlg_ok, fn);
+	add_dlg_button(dlg, _("Cancel", term), B_ESC, search_dlg_cancel, NULL);
 
 	add_dlg_end(dlg, SEARCH_WIDGETS_COUNT);
 

@@ -1,5 +1,5 @@
 /* Button widget handlers. */
-/* $Id: button.c,v 1.77 2004/11/21 14:14:27 zas Exp $ */
+/* $Id: button.c,v 1.78 2004/11/21 14:53:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -33,8 +33,9 @@
 #define BUTTON_LR_LEN (BUTTON_LEFT_LEN + BUTTON_RIGHT_LEN)
 
 void
-add_dlg_button_do(struct dialog *dlg, int flags, t_widget_handler *handler, unsigned char *text,
-		  void *data, t_done_handler *done, void *done_data)
+add_dlg_button_do(struct dialog *dlg, unsigned char *text, int flags,
+		  t_widget_handler *handler, void *data,
+		  t_done_handler *done, void *done_data)
 {
 	struct widget *widget;
 

@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.80 2004/11/21 14:03:25 zas Exp $ */
+/* $Id: edit.c,v 1.81 2004/11/21 14:53:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -92,15 +92,15 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 
 	add_dlg_field(dlg, _("URL", term), 0, 0, NULL, MAX_STR_LEN, url, NULL);
 
-	add_dlg_ok_button(dlg, B_ENTER, _("OK", term), when_done, dlg);
-	add_dlg_button(dlg, 0, clear_dialog, _("Clear", term), NULL);
+	add_dlg_ok_button(dlg, _("OK", term), B_ENTER, when_done, dlg);
+	add_dlg_button(dlg, _("Clear", term), 0, clear_dialog, NULL);
 
 	if (when_cancel)
-		add_dlg_button(dlg, B_ESC, my_cancel_dialog,
-			_("Cancel", term), when_cancel);
+		add_dlg_button(dlg, _("Cancel", term), B_ESC,
+			       my_cancel_dialog, when_cancel);
 	else
-		add_dlg_button(dlg, B_ESC, cancel_dialog,
-			_("Cancel", term), NULL);
+		add_dlg_button(dlg, _("Cancel", term), B_ESC,
+			       cancel_dialog, NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 

@@ -1,5 +1,5 @@
 /* Cookie-related dialogs */
-/* $Id: dialogs.c,v 1.75 2004/11/19 16:22:19 zas Exp $ */
+/* $Id: dialogs.c,v 1.76 2004/11/21 14:53:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,8 +352,8 @@ build_edit_dialog(struct terminal *term, struct cookie *cookie)
 	add_dlg_field_float(dlg, _("Expires", term), 0, 0, set_cookie_expires, MAX_STR_LEN, expires, NULL);
 	add_dlg_field_float(dlg, _("Secure", term), 0, 0, set_cookie_secure, MAX_STR_LEN, secure, NULL);
 
-	add_dlg_button(dlg, B_ENTER, ok_dialog, _("OK", term), NULL);
-	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
+	add_dlg_button(dlg, _("OK", term), B_ENTER, ok_dialog, NULL);
+	add_dlg_button(dlg, _("Cancel", term), B_ESC, cancel_dialog, NULL);
 
 	add_dlg_end(dlg, EDIT_WIDGETS_COUNT);
 

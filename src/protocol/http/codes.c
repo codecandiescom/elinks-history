@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.31 2004/06/28 02:27:20 jonas Exp $ */
+/* $Id: codes.c,v 1.32 2004/07/25 10:11:49 zas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for asprintf() */
@@ -173,7 +173,7 @@ show_http_error_document(struct session *ses, void *data)
 
 	if (str) {
 		if (cached) delete_entry_content(cache);
-		mem_free_set(&cache->head, stracpy("\r\nContent-type: text/html\r\n"));
+		mem_free_set(&cache->head, stracpy("\r\nContent-Type: text/html\r\n"));
 		add_fragment(cache, 0, str, strlen(str));
 		mem_free(str);
 

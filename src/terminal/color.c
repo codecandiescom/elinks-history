@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.12 2003/08/31 00:40:51 jonas Exp $ */
+/* $Id: color.c,v 1.13 2003/08/31 09:29:51 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -98,41 +98,43 @@ static inline unsigned char
 find_nearest_color(color_t color, int level)
 {
 	static struct rgb_cache_entry rgb_fgcache[RGB_HASH_SIZE];
-	struct rgb_cache_entry *rgb_cache = rgb_fgcache;
+	struct rgb_cache_entry *rgb_cache;
 	struct rgb rgb;
 	static int cache_init = 0;
-	register int h, i;
-	int min_dist = 0xffffff;
-	unsigned char nearest_color = 0;
 
 	if (!cache_init) {
+		register int h;
+
 		for (h = 0; h < RGB_HASH_SIZE; h++)
-			rgb_cache[h].color = -1;
+			rgb_fgcache[h].color = -1;
 		cache_init = 1;
 	}
 
 	INT2RGB(color, rgb);
-	h = HASH_RGB(rgb, level);
+	rgb_cache = &rgb_fgcache[HASH_RGB(rgb, level)];
 
-	if (rgb_cache[h].color != -1
-	    && rgb_cache[h].l == level
-	    && rgb_cache[h].rgb == color)
-		return rgb_cache[h].color;
+	if (rgb_cache->color == -1
+	    || rgb_cache->l != level
+	    || rgb_cache->rgb != color) {
+		unsigned char nearest_color = 0;
+		int min_dist = 0xffffff;
+		register int i;
 
-	for (i = 0; i < level; i++) {
-		int dist = color_distance(&rgb, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
+		for (i = 0; i < level; i++) {
+			int dist = color_distance(&rgb, /*l==8 ? &bgpalette[i] :*/ &palette[i]);
 
-		if (dist < min_dist) {
-			min_dist = dist;
-			nearest_color = i;
+			if (dist < min_dist) {
+				min_dist = dist;
+				nearest_color = i;
+			}
 		}
+
+		rgb_cache->color = nearest_color;
+		rgb_cache->l = level;
+		rgb_cache->rgb = color;
 	}
 
-	rgb_cache[h].color = nearest_color;
-	rgb_cache[h].l = level;
-	rgb_cache[h].rgb = color;
-
-	return nearest_color;
+	return rgb_cache->color;
 }
 
 #undef HASH_RGB

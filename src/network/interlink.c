@@ -1,5 +1,5 @@
 /* Inter-instances internal communication socket interface */
-/* $Id: interlink.c,v 1.87 2004/07/18 15:48:56 zas Exp $ */
+/* $Id: interlink.c,v 1.88 2004/07/18 15:50:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -438,7 +438,7 @@ connect_to_af_unix(void)
 		if (s_info_connect.fd == -1) {
 			ERROR(G_("socket() failed: %d (%s)"),
 			      errno, (unsigned char *) strerror(errno));
-			goto free_and_error;
+			break;
 		}
 
 		if (connect(s_info_connect.fd, s_info_connect.addr,
@@ -452,7 +452,7 @@ connect_to_af_unix(void)
 		if (saved_errno != ECONNREFUSED && saved_errno != ENOENT) {
 			ERROR(G_("connect() failed: %d (%s)"),
 			      saved_errno, (unsigned char *) strerror(saved_errno));
-			goto free_and_error;
+			break;
 		}
 
 		elinks_usleep(CONNECT_TRIES_DELAY * attempts);

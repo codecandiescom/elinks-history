@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.310 2004/06/29 22:48:07 pasky Exp $ */
+/* $Id: tables.c,v 1.311 2004/06/29 22:49:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -355,7 +355,7 @@ static void
 distribute_widths(struct table *table, int width)
 {
 	int col;
-	int d = width - table->min_width;
+	int spare_width = width - table->min_width;
 	int om = 0;
 	char *u;
 	int *widths, *max_widths;
@@ -364,7 +364,8 @@ distribute_widths(struct table *table, int width)
 
 	if (!table->cols) return;
 
-	assertm(d >= 0, "too small width %d, required %d", width, table->min_width);
+	assertm(spare_width >= 0, "too small width %d, required %d",
+	        width, table->min_width);
 
 	for (col = 0; col < table->cols; col++)
 		int_lower_bound(&max_cols_width, table->max_cols_widths[col]);
@@ -382,11 +383,11 @@ distribute_widths(struct table *table, int width)
 	max_widths = fmem_alloc(cols_size);
 	if (!max_widths) goto end1;
 
-	while (d) {
+	while (spare_width) {
 		int max, max_index;
 		int total_width = 0;
 		int wq;
-		int dd;
+		int total_spare_width;
 
 		memset(widths, 0, cols_size);
 		memset(max_widths, 0, cols_size);
@@ -463,7 +464,7 @@ distribute_widths(struct table *table, int width)
 
 		wq = 0;
 		if (u) memset(u, 0, table->cols);
-		dd = d;
+		total_spare_width = spare_width;
 
 again:
 		max = 0;
@@ -474,7 +475,7 @@ again:
 			if (!widths[col]) continue;
 			if (u && u[col]) continue;
 
-			max_width = dd * widths[col] / total_width;
+			max_width = total_spare_width * widths[col] / total_width;
 			int_bounds(&max_width, 1, max_widths[col]);
 			if (max_width > max) {
 				max = max_width;
@@ -485,14 +486,14 @@ again:
 		if (max_index != -1) {
 			if (u) u[max_index] = 1;
 
-			if (max > d) max = d;
+			if (max > spare_width) max = spare_width;
 			assertm(max >= 0, "shrinking cell");
 
 			table->cols_widths[max_index] += max;
-			d -= max;
+			spare_width -= max;
 
 			wq = 1;
-			if (d) goto again;
+			if (spare_width) goto again;
 
 		} else if (!wq) {
 			om++;

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.255 2004/06/25 10:52:30 zas Exp $ */
+/* $Id: uri.c,v 1.256 2004/06/27 13:10:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -111,9 +111,9 @@ get_protocol_length(const unsigned char *url)
 
 	/* Seek the end of the protocol name if any. */
 	/* RFC1738:
-	 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ] */
-	while (isalpha(*end) || isdigit(*end)
-		|| *end == '+' || *end == '-' || *end == '.')
+	 * scheme  = 1*[ lowalpha | digit | "+" | "-" | "." ]
+	 * (but per its recommendations we accept "upalpha" too) */
+	while (isalnum(*end) || *end == '+' || *end == '-' || *end == '.')
 		end++;
 
 	/* Also return 0 if there's no protocol name (@end == @url). */

@@ -1,3 +1,147 @@
+Mon Jun 28 21:42:21 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	has_vline_width() macro introduced.  
+
+Mon Jun 28 20:23:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	Cleanup includes and such.  
+
+Mon Jun 28 20:16:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	Oops we only need one free_table().  
+
+Mon Jun 28 20:12:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: Makefile.am, html/tables.c,
+	html/parser/Makefile.am, html/parser/table.c, html/parser/table.h:
+
+	Split out HTML table parsing. A lot of the table internals will have
+	to be exposed. But it should make it more easy to split functions
+	which zas would like. Unused check_cell_widths() #if 0'ed.  
+
+Mon Jun 28 18:35:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_point(): @i,@j -> @col,@row.  
+
+Mon Jun 28 18:31:15 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_vline(): @i,@j -> @col,@row.  
+
+Mon Jun 28 18:30:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	draw_frame_hline(): @i,@j -> @col,@row.  
+
+Mon Jun 28 18:28:03 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	display_table_frames(): @i,@j -> @col,@row.  
+
+Mon Jun 28 18:17:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_table(): rearrange code is a more logical fashion,
+	@real_(cols|rows) are related to cells, while @real_columns_count is
+	related to columns.  
+
+Mon Jun 28 15:31:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix for parsing of numerical values in get_num() when the attribute
+	value is the empty string. Introduced in document/html/parser.c
+	(1.374 -> 1.375) 
+	
+	Spotted and tracked down by zas, one-liner by pasky and I get to be
+	the lucky one commiting it.  
+
+Mon Jun 28 13:29:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Revert get_{v}align() changes.  
+
+Mon Jun 28 11:14:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/style.h, document/css/value.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c:
+
+	enum format_align: ALIGN_BLOCK -> ALIGN_JUSTIFY, since that's
+	what'tis used for.  
+
+Mon Jun 28 11:07:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.c, bfu/dialog.c, bfu/group.c, bfu/hierbox.c,
+	bfu/inpfield.c, bfu/style.h, bfu/text.c, config/dialogs.c,
+	cookies/cookies.c, cookies/dialogs.c, dialogs/document.c,
+	dialogs/download.c, dialogs/info.c, dialogs/menu.c,
+	dialogs/options.c, document/css/value.c, document/html/parser.c,
+	document/html/renderer.c, document/html/tables.c,
+	document/html/parser/parse.c, formhist/dialogs.c,
+	formhist/formhist.c, mime/dialogs.c, protocol/user.c,
+	protocol/auth/dialogs.c, sched/connection.c, sched/download.c,
+	sched/session.c, sched/task.c, scripting/lua/core.c,
+	terminal/tab.c, viewer/text/draw.c, viewer/text/form.c,
+	viewer/text/search.c, viewer/text/textarea.c, viewer/text/view.c:
+
+	enum format_align: AL_* -> ALIGN_* 
+
+Mon Jun 28 10:50:08 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.h:
+
+	Tidyup.  
+
+Mon Jun 28 10:38:02 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/header.h:
+
+	Fix standard header.  
+
+Mon Jun 28 10:33:25 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/: protocol.c, protocol.h:
+
+	Move VALID_PROTOCOL() macro to c-file.  
+
+Mon Jun 28 10:07:19 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	get_valign(): Return alignment.  
+
+Mon Jun 28 10:02:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	get_align(): Return alignment.  
+
+Mon Jun 28 07:55:16 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	new_cell(), expand_cells(): @dst_col, @dst_row -> @dest_col,
+	@dest_row. Idea by pasky ;).  
+
+Mon Jun 28 02:27:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/http/: codes.c, codes.h:
+
+	Make http_code_to_string() static.  
+
 Sun Jun 27 21:37:42 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/protocol/about.c:

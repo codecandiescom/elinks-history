@@ -1,5 +1,5 @@
 # Example hooks.pl file, put in ~/.elinks/ as hooks.pl.
-# $Id: hooks.pl,v 1.18 2005/03/26 13:11:48 pasky Exp $
+# $Id: hooks.pl,v 1.19 2005/03/26 13:13:42 pasky Exp $
 #
 # This file is (c) Apu Nahasapeemapetilon and GPL'd.
 
@@ -749,6 +749,3 @@ sub search
 	$url = $url_{$engine} if $url_{$engine};
 	return $url;
 }
-
-
-# vim: ts=4 sw=4 sts=0 nowrap

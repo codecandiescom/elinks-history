@@ -1,5 +1,5 @@
 /* Dialog box implementation. */
-/* $Id: dialog.c,v 1.18 2002/11/29 12:02:20 pasky Exp $ */
+/* $Id: dialog.c,v 1.19 2002/11/29 13:58:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -121,15 +121,16 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 				memset(widget, 0, sizeof(struct widget_data));
 				widget->item = &dlg->dlg->items[i];
 
-				widget->cdata = mem_alloc(widget->item->dlen);
-				if (widget->cdata) {
-					memcpy(widget->cdata,
-					       widget->item->data,
-					       widget->item->dlen);
-				} else {
-					continue;
+				if (widget->item->dlen) {
+					widget->cdata = mem_alloc(widget->item->dlen);
+					if (widget->cdata) {
+						memcpy(widget->cdata,
+						       widget->item->data,
+						       widget->item->dlen);
+					} else {
+						continue;
+					}
 				}
-
 				/* XXX: REMOVE THIS! --pasky */
 				{
 					struct widget_ops *w_o[] = {
@@ -144,7 +145,7 @@ dialog_func(struct window *win, struct event *ev, int fwd)
 					widget->item->ops =
 						w_o[widget->item->type];
 				}
-
+				
 				init_list(widget->history);
 				widget->cur_hist = (struct input_history_item *)
 						   &widget->history;

@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.73 2003/05/15 23:02:35 pasky Exp $ */
+/* $Id: view.c,v 1.74 2003/05/16 23:44:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -320,7 +320,7 @@ _area_cursor(struct form_control *frm, struct form_state *fs)
 	int q = 0;
 	int y;
 
-	ln = format_text(fs->value, frm->cols, frm->wrap);
+	ln = format_text(fs->value, frm->cols, !!frm->wrap);
 	if (!ln) return 0;
 
 	for (y = 0; ln[y].st; y++) {
@@ -799,7 +799,7 @@ draw_form_entry(struct terminal *t, struct f_data_c *f, struct link *l)
 			if (!l->n) break;
 			x = l->pos[0].x + xp - vx; y = l->pos[0].y + yp - vy;
 			_area_cursor(frm, fs);
-			lnx = format_text(fs->value, frm->cols, frm->wrap);
+			lnx = format_text(fs->value, frm->cols, !!frm->wrap);
 			if (!lnx) break;
 			ln = lnx;
 			sl = fs->vypos;
@@ -2132,7 +2132,7 @@ field_op(struct session *ses, struct f_data_c *f, struct link *l,
 					struct line_info *ln;
 					int y;
 
-					ln = format_text(fs->value, frm->cols, frm->wrap);
+					ln = format_text(fs->value, frm->cols, !!frm->wrap);
 					if (!ln) break;
 
 					for (y = 0; ln[y].st; y++) {
@@ -2152,7 +2152,7 @@ x:
 					struct line_info *ln;
 					int y;
 
-					ln = format_text(fs->value, frm->cols, frm->wrap);
+					ln = format_text(fs->value, frm->cols, !!frm->wrap);
 					if (!ln) break;
 
 rep1:
@@ -2181,7 +2181,7 @@ xx:
 					struct line_info *ln;
 					int y;
 
-					ln = format_text(fs->value, frm->cols, frm->wrap);
+					ln = format_text(fs->value, frm->cols, !!frm->wrap);
 					if (!ln) break;
 
 rep2:
@@ -2210,7 +2210,7 @@ yy:
 					struct line_info *ln;
 					int y;
 
-					ln = format_text(fs->value, frm->cols, frm->wrap);
+					ln = format_text(fs->value, frm->cols, !!frm->wrap);
 					if (!ln) break;
 
 					for (y = 0; ln[y].st; y++) {

@@ -1,5 +1,5 @@
 /* Connections management */
-/* $Id: connection.c,v 1.231 2005/03/09 17:58:54 zas Exp $ */
+/* $Id: connection.c,v 1.232 2005/04/04 12:33:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -345,6 +345,10 @@ free_connection_data(struct connection *conn)
 	 * at least active_connections underflows along the way. --pasky */
 	conn->running = 0;
 
+	active_connections--;
+	assertm(active_connections >= 0, "active connections underflow");
+	if_assert_failed active_connections = 0;
+
 	if (conn->socket.fd != -1)
 		set_handlers(conn->socket.fd, NULL, NULL, NULL, NULL);
 	if (conn->data_socket.fd != -1)
@@ -379,10 +383,6 @@ free_connection_data(struct connection *conn)
 	mem_free_set(&conn->info, NULL);
 
 	kill_timer(&conn->timer);
-
-	active_connections--;
-	assertm(active_connections >= 0, "active connections underflow");
-	if_assert_failed active_connections = 0;
 
 	if (conn->state != S_WAIT)
 		done_host_connection(conn);

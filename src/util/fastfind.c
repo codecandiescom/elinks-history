@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.70 2004/10/28 16:20:27 zas Exp $ */
+/* $Id: fastfind.c,v 1.71 2004/11/05 15:31:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,6 +185,7 @@ struct fastfind_info {
 		unsigned long testsmax;
 		unsigned long memory_usage;
 		unsigned long total_key_len;
+		unsigned int  compressed_nodes;
 		unsigned char *comment;
 	} debug;
 #endif
@@ -196,6 +197,7 @@ struct fastfind_info {
 #define FF_DBG_mem(x, size) (x)->debug.memory_usage += (size)
 #define FF_DBG_test(x) (x)->debug.tests++
 #define FF_DBG_iter(x) (x)->debug.iterations++
+#define FF_DBG_cnode(x) (x)->debug.compressed_nodes++
 #define FF_DBG_found(x) \
 	do { \
 		unsigned long iter = (x)->debug.iterations - (x)->debug.itertmp;	\
@@ -234,12 +236,17 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
 	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
 	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
-	fprintf(stderr, "FFleafsets  : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
+	fprintf(stderr, "Leafsets    : %d/%d max.\n", info->leafsets_count, FF_MAX_LEAFSETS);
+	if (info->compress)
+		fprintf(stderr, "C. leafsets : %d/%d (%0.2f%%)\n",
+			info->debug.compressed_nodes,
+			info->leafsets_count,
+			100 * (double) info->debug.compressed_nodes / info->leafsets_count);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
 		info->debug.memory_usage, (double) info->debug.memory_usage / info->pointers_count);
-	fprintf(stderr, "struct info : %d bytes\n", sizeof(struct fastfind_info) - sizeof(info->debug));
-	fprintf(stderr, "Struct node : %d bytes (normal) , %d bytes (compressed)\n",
-		sizeof(struct ff_node), sizeof(struct ff_node_c));
+	fprintf(stderr, "Struct info : %d bytes\n", sizeof(struct fastfind_info) - sizeof(info->debug));
+	fprintf(stderr, "Struct node : %d bytes\n", sizeof(struct ff_node));
+	fprintf(stderr, "Struct cnode: %d bytes\n", sizeof(struct ff_node_c));
 	fprintf(stderr, "Searches    : %lu\n", info->debug.searches);
 	fprintf(stderr, "Found       : %lu (%0.2f%%)\n",
 		info->debug.found, 100 * (double) info->debug.found / info->debug.searches);
@@ -263,6 +270,7 @@ FF_DBG_dump_stats(struct fastfind_info *info)
 #define FF_DBG_mem(x, size)
 #define FF_DBG_test(x)
 #define FF_DBG_iter(x)
+#define FF_DBG_cnode(x)
 #define FF_DBG_found(x)
 #define FF_DBG_comment(x, comment)
 #define FF_DBG_search_stats(info, key_len)
@@ -370,6 +378,26 @@ init_idxtab(struct fastfind_info *info)
 		info->idxtab[i] = char2idx((unsigned char) i, info);
 }
 
+static inline void
+fastfind_new_cnode(struct ff_node *leafset, struct fastfind_info *info,
+		   int i, int pos)
+{
+	struct ff_node_c *new = mem_alloc(sizeof(struct ff_node_c));
+
+	if (!new) return;
+
+	new->c = 1;
+	new->e = leafset[pos].e;
+	new->p = leafset[pos].p;
+	new->l = leafset[pos].l;
+	new->ch = pos;
+
+	mem_free_set(&info->leafsets[i], (struct ff_node *) new);
+	FF_DBG_cnode(info);
+	FF_DBG_mem(info, sizeof(struct ff_node_c));
+	FF_DBG_mem(info, sizeof(struct ff_node) * -info->uniq_chars_count);
+}
+
 static void
 fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 {
@@ -398,25 +426,11 @@ fastfind_node_compress(struct ff_node *leafset, struct fastfind_info *info)
 	if (cnt != 1 || leafset[pos].c) return;
 
 	/* Compress if possible ;) */
-	for (i = 1; i < info->leafsets_count; i++)
-		if (info->leafsets[i] == leafset)
-			break;
-
-	if (i < info->leafsets_count) {
-		struct ff_node_c *new = mem_alloc(sizeof(struct ff_node_c));
-
-		if (!new) return;
-
-		new->c = 1;
-		new->e = leafset[pos].e;
-		new->p = leafset[pos].p;
-		new->l = leafset[pos].l;
-		new->ch = pos;
-
-		mem_free(info->leafsets[i]);
-		info->leafsets[i] = (struct ff_node *) new;
-		FF_DBG_mem(info, sizeof(struct ff_node_c));
-		FF_DBG_mem(info, sizeof(struct ff_node) * -info->uniq_chars_count);
+	for (i = 1; i < info->leafsets_count; i++) {
+		if (info->leafsets[i] == leafset) {
+			fastfind_new_cnode(leafset, info, i, pos);
+			return;
+		}
 	}
 }
 

@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.78 2004/12/17 00:05:26 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.79 2004/12/17 00:20:49 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -683,6 +683,16 @@ static const JSPropertySpec forms_props[] = {
 	{ NULL }
 };
 
+static JSObject *
+get_form_control_object(JSContext *ctx, JSObject *parent, struct form_control *fc)
+{
+	JSObject *form = JS_NewObject(ctx, (JSClass *) &form_control_class, NULL, parent);
+
+	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
+	JS_SetPrivate(ctx, form, fc);
+	return form;
+}
+
 static JSBool
 forms_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 {
@@ -719,7 +729,6 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct form_control *fc;
 	int counter = 0;
 	int index;
-	JSObject *form;
 
 	if (argc != 1) return JS_FALSE;
 	if (!JSVAL_IS_INT(argv[0])) return JS_FALSE;
@@ -729,10 +738,8 @@ forms_item(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 		if (counter == index) break;
 	}
 	if (index > counter) return JS_FALSE;
-	form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
-	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
-	JS_SetPrivate(ctx, form, fc);
-	*rval = OBJECT_TO_JSVAL(form);
+
+	*rval = OBJECT_TO_JSVAL(get_form_control_object(ctx, obj, fc));
 	return JS_TRUE;
 }
 
@@ -745,7 +752,6 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 	struct document *document = doc_view->document;
 	struct form_control *fc;
 	unsigned char *name;
-	JSObject *form;
 
 	if (argc != 1) return JS_FALSE;
 	if (!JSVAL_IS_STRING(argv[0])) return JS_FALSE;
@@ -755,11 +761,9 @@ forms_namedItem(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *r
 		if (fc->formname && !strcasecmp(name, fc->formname)) goto ok;
 	}
 	return JS_FALSE;
+
 ok:
-	form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
-	JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
-	JS_SetPrivate(ctx, form, fc);
-	*rval = OBJECT_TO_JSVAL(form);
+	*rval = OBJECT_TO_JSVAL(get_form_control_object(ctx, obj, fc));
 	return JS_TRUE;
 }
 
@@ -814,11 +818,13 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 #endif
 		foreach (fc, document->forms) {
 			if (fc->formname && !strcasecmp(v.string, fc->formname)) {
-				JSObject *form = JS_NewObject(ctx, (JSClass *)&form_control_class, NULL, parent);
+				jsval forms;
+				JSBool success;
 
-				JS_DefineFunctions(ctx, form, (JSFunctionSpec *)&form_control_funcs);
-				JS_SetPrivate(ctx, form, fc);
-				p.object = form;
+				success = JS_GetProperty(ctx, obj, "forms", &forms);
+				assert(success == JS_TRUE);
+
+				p.object = get_form_control_object(ctx, JSVAL_TO_OBJECT(forms), fc);
 				prop_type = JSPT_OBJECT;
 				goto convert;
 			}
@@ -1274,7 +1280,7 @@ void *
 spidermonkey_get_interpreter(struct ecmascript_interpreter *interpreter)
 {
 	JSContext *ctx;
-	JSObject *window_obj, *document_obj, *location_obj,
+	JSObject *window_obj, *document_obj, *forms_obj, *location_obj,
 	         *statusbar_obj, *menubar_obj;
 
 	assert(interpreter);

@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.12 2003/12/05 17:10:58 pasky Exp $ */
+/* $Id: cgi.c,v 1.13 2003/12/05 17:31:48 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -135,6 +135,8 @@ set_vars(struct connection *conn, unsigned char *script)
 			if (setenv("QUERY_STRING", "", 1)) return -1;
 		}
 	}
+
+	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;
 
 	return setenv("SCRIPT_NAME", script, 1);
 }

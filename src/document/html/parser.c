@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.258 2003/11/14 08:28:44 miciah Exp $ */
+/* $Id: parser.c,v 1.259 2003/11/14 08:40:01 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -655,9 +655,9 @@ get_width(unsigned char *a, unsigned char *n, int trunc)
 }
 
 void
-set_fragment_identifier(unsigned char *attr_name)
+set_fragment_identifier(unsigned char *attr_name, unsigned char *attr)
 {
-	unsigned char *id_attr = get_attr_val(attr_name, "id");
+	unsigned char *id_attr = get_attr_val(attr_name, attr);
 
 	if (id_attr) {
 		special_f(ff, SP_TAG, id_attr);
@@ -766,7 +766,7 @@ html_focusable(unsigned char *a)
 static void
 html_a(unsigned char *a)
 {
-	unsigned char *href, *name;
+	unsigned char *href;
 
 	href = get_url_val(a, "href");
 	if (href) {
@@ -801,11 +801,7 @@ html_a(unsigned char *a)
 		kill_html_stack_item(&html_top);
 	}
 
-	name = get_attr_val(a, "name");
-	if (name) {
-		special_f(ff, SP_TAG, name);
-		mem_free(name);
-	}
+	set_fragment_identifier(a, "name");
 }
 
 static void

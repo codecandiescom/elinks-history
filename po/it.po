@@ -1138,7 +1138,7 @@ msgstr ""
 "si hanno lingue diverse in terminali diversi, la lingua usata\n"
 "nel file di configurazione PUÒ essere la stessa usata nel terminale\n"
 "in cui si è salvato il file, ma generalmente dovrebbe essere\n"
-"generalmente considerato non prevedibile."
+"considerato non prevedibile."
 
 #: src/config/options.inc:57
 msgid "Saving style warnings"

@@ -1,3 +1,97 @@
+Fri Sep  5 21:29:24 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Put the static int @loaded local to load_saved_forms().  
+
+Fri Sep  5 21:18:26 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/formhist/formhist.c:
+
+	Don't call base64_decode with an empty string. This fixes an
+	assertion failure when a saved form field is blank.  
+
+Fri Sep  5 20:33:14 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/config/options.c:
+
+	Expand the description for the document.browse.refresh option.  
+
+Fri Sep  5 17:55:43 2003  Laurent Monin <zas@norz.org>:
+
+	* src/formhist/formhist.c:
+
+	Test for @url and @name parameters were added to
+	get_form_history_value() to prevent bad things (like a segfault).
+	Issue reported by Jonas.  
+
+Fri Sep  5 13:40:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/html/frames.h,
+	document/html/parser.c, document/html/parser.h,
+	document/html/renderer.c, sched/session.c, sched/session.h,
+	viewer/text/view.c:
+
+	Support for html meta refresh. Patch by Witold and me.  
+
+Fri Sep  5 13:25:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/renderer.c:
+
+	html_special(): Cleanup.  
+
+Fri Sep  5 12:02:10 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	doc_end_load(): Cleanup.  
+
+Fri Sep  5 10:47:27 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS:
+
+	Heh, we still have some. links -> ELinks.  
+
+Fri Sep  5 09:41:15 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt_BR.po, pt.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	French translation was updated, .po files were resynced.  
+
+Fri Sep  5 02:01:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.h:
+
+	Update comment.  
+
+Fri Sep  5 01:19:37 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/draw.c:
+
+	draw_border_cross(): Use BORDER_* enums in the lookup table.  
+
+Fri Sep  5 00:29:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	Tidyup + rename rgb_cache_entry->l to level.  
+
+Fri Sep  5 00:17:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/color.c:
+
+	find_nearest_color(): No need to poison the cache since @level
+	should always be > 0.  
+
+Thu Sep  4 23:33:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* po/pl.po:
+
+	Polish translation updated by Witold 
+
 Thu Sep  4 19:05:46 2003  Laurent Monin <zas@norz.org>:
 
 	* src/terminal/kbd.c:

@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.26 2003/07/27 21:28:25 jonas Exp $ */
+/* $Id: screen.c,v 1.27 2003/07/28 02:57:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -245,6 +245,36 @@ add_cursor_move_to_string(struct string *screen, int y, int x)
 	return add_bytes_to_string(screen, code, length);
 }
 
+#if 0
+/* Performance testing utility */
+#define fill_option_cache(c, t) do { \
+		(c).type	 = 2; \
+		(c).m11_hack	 = 1; \
+		(c).utf_8_io	 = 0; \
+		(c).colors	 = 1; \
+		(c).charset	 = 3; \
+		(c).restrict_852 = 0; \
+		(c).cp437	 = 1; \
+		(c).koi8r	 = 1; \
+	} while (0)
+#else
+/* Fill the cache */
+#define fill_option_cache(c, t) do { \
+		(c).type	 = get_opt_int_tree((t)->spec,	"type"); \
+		(c).m11_hack	 = get_opt_bool_tree((t)->spec,	"m11_hack"); \
+		(c).utf_8_io	 = get_opt_bool_tree((t)->spec,	"utf_8_io"); \
+		(c).colors	 = get_opt_bool_tree((t)->spec,	"colors"); \
+		(c).charset	 = get_opt_int_tree((t)->spec,	"charset"); \
+		(c).restrict_852 = get_opt_bool_tree((t)->spec,	"restrict_852"); \
+		(c).trans	 = get_opt_bool_tree((t)->spec,	"transparency"); \
+		\
+		/* Cache these values as they don't change and
+		 * get_cp_index() is pretty CPU-intensive. */ \
+		(c).cp437	 = get_cp_index("cp437"); \
+		(c).koi8r	 = get_cp_index("koi8-r"); \
+	} while (0)
+#endif
+
 void
 redraw_screen(struct terminal *term)
 {
@@ -261,33 +291,7 @@ redraw_screen(struct terminal *term)
 
 	if (!init_string(&screen)) return;
 
-#if 0
-	/* Performance testing utility */
-	/* Fill the cache */
-	opt_cache.type = 2;
-	opt_cache.m11_hack = 1;
-	opt_cache.utf_8_io = 0;
-	opt_cache.colors = 1;
-	opt_cache.charset = 3;
-	opt_cache.restrict_852 = 0;
-	/* Cache these values as they don't change and
-	 * get_cp_index() is pretty CPU-intensive. */
-	opt_cache.cp437 = 1;
-	opt_cache.koi8r = 1;
-#else
-	/* Fill the cache */
-	opt_cache.type = get_opt_int_tree(term->spec, "type");
-	opt_cache.m11_hack = get_opt_bool_tree(term->spec, "m11_hack");
-	opt_cache.utf_8_io = get_opt_bool_tree(term->spec, "utf_8_io");
-	opt_cache.colors = get_opt_bool_tree(term->spec, "colors");
-	opt_cache.charset = get_opt_int_tree(term->spec, "charset");
-	opt_cache.restrict_852 = get_opt_bool_tree(term->spec, "restrict_852");
-	opt_cache.trans = get_opt_bool_tree(term->spec, "transparency");
-	/* Cache these values as they don't change and
-	 * get_cp_index() is pretty CPU-intensive. */
-	opt_cache.cp437 = get_cp_index("cp437");
-	opt_cache.koi8r = get_cp_index("koi8-r");
-#endif
+	fill_option_cache(opt_cache, term);
 
 	for (; y < term->y; y++) {
 		register int x = 0;

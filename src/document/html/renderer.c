@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.342 2003/10/30 14:04:56 zas Exp $ */
+/* $Id: renderer.c,v 1.343 2003/10/30 14:09:40 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -994,7 +994,7 @@ put_chars(struct part *part, unsigned char *chars, int charslen)
 
 	assert(charslen > 0);
 	part->xa += charslen;
-	int_lower_bound(&part->xmax, part->xa
+	int_lower_bound(&part->max_width, part->xa
 			+ par_format.leftmargin + par_format.rightmargin
 			- (chars[charslen - 1] == ' '
 			   && par_format.align != AL_NONE));
@@ -1304,7 +1304,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 
 	done_html_parser_state(html_state);
 
-	part->xmax = int_max(part->xmax, part->width);
+	part->max_width = int_max(part->max_width, part->width);
 
 	nobreak = 0;
 

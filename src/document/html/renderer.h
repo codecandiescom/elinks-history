@@ -1,4 +1,4 @@
-/* $Id: renderer.h,v 1.49 2003/10/30 14:04:57 zas Exp $ */
+/* $Id: renderer.h,v 1.50 2003/10/30 14:09:41 zas Exp $ */
 
 #ifndef EL__DOCUMENT_HTML_RENDERER_H
 #define EL__DOCUMENT_HTML_RENDERER_H
@@ -32,7 +32,7 @@ struct part {
 
 	int width, height;
 	int xp, yp;
-	int xmax;
+	int max_width;
 	int xa;
 	int cx, cy;
 	int link_num;

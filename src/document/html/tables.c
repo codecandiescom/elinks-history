@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.99 2003/10/30 14:04:57 zas Exp $ */
+/* $Id: tables.c,v 1.100 2003/10/30 14:09:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -762,7 +762,7 @@ get_cell_width(unsigned char *start, unsigned char *end, int cellpd, int w,
 	if (!p) return;
 
 	if (min) *min = p->width;
-	if (max) *max = p->xmax;
+	if (max) *max = p->max_width;
 	if (n_links) *n_links = p->link_num;
 
 	assertm(!((min && max && *min > *max)), "get_cell_width: %d > %d",
@@ -1776,7 +1776,7 @@ again:
 		if (!wf) int_upper_bound(&t->max_t, width);
 		int_lower_bound(&t->max_t, t->min_t);
 
-		p->xmax = int_max(p->xmax, t->max_t + margins);
+		p->max_width = int_max(p->max_width, t->max_t + margins);
 		p->width = int_max(p->width, t->min_t + margins);
 
 		goto ret2;

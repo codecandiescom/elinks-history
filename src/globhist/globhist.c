@@ -1,5 +1,5 @@
 /* Global history */
-/* $Id: globhist.c,v 1.34 2003/07/17 08:56:31 zas Exp $ */
+/* $Id: globhist.c,v 1.35 2003/10/24 19:43:26 jonas Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* XXX: we _WANT_ strcasestr() ! */
@@ -449,7 +449,7 @@ global_history_write_timer_handler(void *xxx)
 			      NULL);
 }
 
-int
+static int
 global_history_write_timer_change_hook(struct session *ses,
 				       struct option *current,
 				       struct option *changed)
@@ -468,6 +468,13 @@ global_history_write_timer_change_hook(struct session *ses,
 void
 init_global_history(void)
 {
+	struct change_hook_info global_history_change_hooks[] = {
+		{ "document.history.global.write_interval",
+		  global_history_write_timer_change_hook },
+		{ NULL,	NULL },
+	};
+
+	register_change_hooks(global_history_change_hooks);
 	read_global_history();
 
 	if (elinks_home && !get_opt_int_tree(cmdline_options, "anonymous"))

@@ -1,10 +1,23 @@
-/* $Id: error.h,v 1.20 2003/06/08 12:55:29 pasky Exp $ */
+/* $Id: error.h,v 1.21 2003/06/08 13:59:09 pasky Exp $ */
 
 #ifndef EL__UTIL_ERROR_H
 #define EL__UTIL_ERROR_H
 
 void force_dump(void);
+
+
+/* This function does nothing, except making compiler not to optimize certains
+ * spots of code --- this is useful when that particular optimization is buggy.
+ * So we are just workarounding buggy compilers. */
+/* This function should be always used only in context of compiler version
+ * specific macros. */
 void do_not_optimize_here(void *);
+
+#if defined(__GNUC__) && __GNUC__ == 2 && __GNUC_MINOR__ <= 7
+#define do_not_optimize_here_gcc_2_7(x) do_not_optimize_here(x)
+#else
+#define do_not_optimize_here_gcc_2_7(x)
+#endif
 
 
 /* This errfile thing is needed, as we don't have var-arg macros in standart,

@@ -1,4 +1,4 @@
-/* $Id: lists.h,v 1.29 2003/06/08 12:55:20 pasky Exp $ */
+/* $Id: lists.h,v 1.30 2003/06/08 13:59:09 pasky Exp $ */
 
 #ifndef EL__UTIL_LISTS_H
 #define EL__UTIL_LISTS_H
@@ -132,23 +132,23 @@ do { \
 #define del_from_list(x) \
 do { \
 	list_magic_check(x, "del_from_list"); \
-	do_not_optimize_here(x); \
+	do_not_optimize_here_gcc_2_7(x); \
 	((struct list_head *) (x)->next)->prev = (x)->prev; \
 	((struct list_head *) (x)->prev)->next = (x)->next; \
 	list_del_enforce(x); \
-	do_not_optimize_here(x); \
+	do_not_optimize_here_gcc_2_7(x); \
 } while (0)
 
 #define add_at_pos(p,x) \
 do { \
 	list_magic_check(p, "add_at_pos"); \
 	list_magic_set(*(x)); \
-	do_not_optimize_here(p); \
+	do_not_optimize_here_gcc_2_7(p); \
 	(x)->next = (p)->next; \
 	(x)->prev = (p); \
    	(p)->next = (x); \
    	(x)->next->prev = (x); \
-	do_not_optimize_here(p); \
+	do_not_optimize_here_gcc_2_7(p); \
 } while (0)
 
 
@@ -190,13 +190,13 @@ do { \
 #define free_list(l) \
 do { \
 	list_magic_check(&(l), "free_list"); \
-	do_not_optimize_here(&l); \
+	do_not_optimize_here_gcc_2_7(&l); \
 	while ((l).next != &(l)) { \
 		struct list_head *a__ = (l).next; \
 		del_from_list(a__); \
 		mem_free(a__); \
 	} \
-	do_not_optimize_here(&l); \
+	do_not_optimize_here_gcc_2_7(&l); \
 } while (0)
 
 

@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.105 2003/06/08 13:47:10 pasky Exp $ */
+/* $Id: parser.c,v 1.106 2003/06/08 13:59:06 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2305,8 +2305,8 @@ distribute:
 		qq = q;
 		for (i = 0; i < ol; i++) {
 			q -= o[i] - o[i] * (d - qq) / d;
-			do_not_optimize_here(&d);
-				/* SIGH! gcc 2.7.2.* has an optimizer bug! */
+			/* SIGH! gcc 2.7.2.* has an optimizer bug! */
+			do_not_optimize_here_gcc_2_7(&d);
 			o[i] = o[i] * (d - qq) / d;
 		}
 		while (q) {

@@ -1,5 +1,5 @@
 /* String handling functions */
-/* $Id: string.c,v 1.65 2003/07/23 14:05:42 pasky Exp $ */
+/* $Id: string.c,v 1.66 2003/07/23 15:35:50 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -344,8 +344,8 @@ add_bytes_to_string(struct string *string, unsigned char *bytes, int length)
 	realloc_string(string, newlength);
 
 	memcpy(string->source + string->length, bytes, length);
-	string->length = newlength;
 	string->source[newlength] = 0;
+	string->length = newlength;
 
 	return string;
 }
@@ -400,29 +400,41 @@ string_concat(struct string *string, ...)
 struct string *
 add_char_to_string(struct string *string, unsigned char character)
 {
+	int newlength;
+
 	assert(string && character);
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
 
-	return add_bytes_to_string(string, &character, 1);
+	newlength = string->length + 1;
+	realloc_string(string, newlength);
+
+	string->source[string->length] = character;
+	string->source[newlength] = 0;
+	string->length = newlength;
+
+	return string;
 }
 
 struct string *
 add_xchar_to_string(struct string *string, unsigned char character, int times)
 {
-	unsigned char buffer[MAX_STR_LEN];
+	int newlength;
 
 	assert(string && character && times > 0);
 	if_assert_failed { return NULL; }
 
 	check_string_magic(string);
 
-	if (times > MAX_STR_LEN - 1) return NULL;
+	newlength = string->length + times;
+	realloc_string(string, newlength);
 
-	memset(buffer, character, times);
+	memset(string->source + string->length, character, times);
+	string->source[newlength] = 0;
+	string->length = newlength;
 
-	return add_bytes_to_string(string, buffer, times);
+	return string;
 }
 
 /* Add printf-like format string to @string. */

@@ -1,5 +1,5 @@
 /* Functionality for handling mime types */
-/* $Id: mime.c,v 1.60 2004/08/14 05:56:24 jonas Exp $ */
+/* $Id: mime.c,v 1.61 2004/08/16 00:33:41 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,18 +169,11 @@ get_extension_content_type(unsigned char *extension)
 }
 
 unsigned char *
-get_content_type(struct cache_entry *cached)
+get_cache_header_content_type(struct cache_entry *cached)
 {
 	struct uri *uri = get_cache_uri(cached);
 	unsigned char *extension, *ctype;
 
-	debug_get_content_type_params(cached);
-
-	if (cached->content_type)
-		return cached->content_type;
-
-	/* If there's one in header, it's simple.. */
-	if (cached->head) {
 		ctype = parse_header(cached->head, "Content-Type", NULL);
 		if (ctype) {
 			unsigned char *end = strchr(ctype, ';');
@@ -195,7 +188,6 @@ get_content_type(struct cache_entry *cached)
 			debug_ctype(ctype);
 
 			if (*ctype) {
-				cached->content_type = ctype;
 				return ctype;
 			}
 
@@ -209,9 +201,30 @@ get_content_type(struct cache_entry *cached)
 			ctype = get_extension_content_type(extension);
 			mem_free(extension);
 			if (ctype) {
-				cached->content_type = ctype;
 				return ctype;
 			}
+		}
+
+	return NULL;
+}
+
+unsigned char *
+get_content_type(struct cache_entry *cached)
+{
+	struct uri *uri = get_cache_uri(cached);
+	unsigned char *extension, *ctype;
+
+	debug_get_content_type_params(cached);
+
+	if (cached->content_type)
+		return cached->content_type;
+
+	/* If there's one in header, it's simple.. */
+	if (cached->head) {
+		ctype = get_cache_header_content_type(cached);
+		if (ctype && *ctype) {
+			cached->content_type = ctype;
+			return ctype;
 		}
 	}
 

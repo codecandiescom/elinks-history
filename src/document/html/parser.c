@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.85 2003/05/06 16:47:44 zas Exp $ */
+/* $Id: parser.c,v 1.86 2003/05/06 22:36:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -441,6 +441,7 @@ static int position;
 static int putsp;
 
 static int was_br;
+static int was_li;
 
 static inline void
 ln_break(int n, void (*line_break)(void *), void *f)
@@ -448,13 +449,17 @@ ln_break(int n, void (*line_break)(void *), void *f)
 	if (!n || html_top.invisible) return;
 	while (n > line_breax) line_breax++, line_break(f);
 	position = 0;
-	putsp = -1; /* ??? */
+	putsp = -1;
 }
 
 static void
 put_chrs(unsigned char *start, int len,
 	 void (*put_chars)(void *, unsigned char *, int), void *f)
 {
+	if (was_li) {
+		was_li = 0;
+		line_breax = 0;
+	}
 	if (par_format.align == AL_NO) putsp = 0;
 	if (!len || html_top.invisible) return;
 	if (putsp == 1) put_chars(f, " ", 1), position++, putsp = -1;
@@ -640,42 +645,42 @@ put_link_line(unsigned char *prefix, unsigned char *linkname,
 	kill_html_stack_item(&html_top);
 }
 
-static void
+static inline void
 html_span(unsigned char *a)
 {
 }
 
-static void
+static inline void
 html_bold(unsigned char *a)
 {
 	format.attr |= AT_BOLD;
 }
 
-static void
+static inline void
 html_italic(unsigned char *a)
 {
 	format.attr |= AT_ITALIC;
 }
 
-static void
+static inline void
 html_underline(unsigned char *a)
 {
 	format.attr |= AT_UNDERLINE;
 }
 
-static void
+static inline void
 html_fixed(unsigned char *a)
 {
        format.attr |= AT_FIXED;
 }
 
-static void
+static inline void
 html_subscript(unsigned char *a)
 {
        format.attr |= AT_SUBSCRIPT;
 }
 
-static void
+static inline void
 html_superscript(unsigned char *a)
 {
        format.attr |= AT_SUPERSCRIPT;
@@ -990,8 +995,10 @@ static void
 html_br(unsigned char *a)
 {
 	html_linebrk(a);
-	if (was_br) ln_break(2, line_break_f, ff);
-	was_br = 1;
+	if (was_br)
+		ln_break(2, line_break_f, ff);
+	else
+		was_br = 1;
 }
 
 static void
@@ -1268,6 +1275,7 @@ html_li(unsigned char *a)
 	}
 	putsp = -1;
 	line_breax = 2;
+	was_li = 1;
 }
 
 static void
@@ -2590,6 +2598,7 @@ parse_html(unsigned char *html, unsigned char *eof,
 	line_breax = table_level ? 2 : 1;
 	position = 0;
 	was_br = 0;
+	was_li = 0;
 	put_chars_f = put_chars;
 	line_break_f = line_break;
 	init_f = init;

@@ -1,3 +1,103 @@
+Fri Dec 19 23:37:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/session.c:
+
+	Check for @url protocol in request_additional_file() and take
+	appropriate protocols if it is strange. This fixes crash reported by
+	zas at http://www.contenido.de. I hope we have all the possible URL
+	entry points hardened now.  
+
+Fri Dec 19 23:21:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/sched/task.c:
+
+	Update @protocol in do_move() when redirected, so that
+	PROTOCOL_UNKNOWN redirects are catched and dismissed and the right
+	handler is used when we were redirected to a different @protocol.
+	Spotted and proposed fix by Martin Bays
+	<elinks-dev@zugzwang.port5.com>.  
+
+Fri Dec 19 22:01:24 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/task.c:
+
+	Localize @fn in do_follow_url().  
+
+Fri Dec 19 18:30:46 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/lowlevel/sysname.c:
+
+	Removed a newline. Just wanted to trigger a commit ;-).  
+
+Fri Dec 19 16:27:16 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/options.inc, mime/backend/mailcap.c:
+
+	Moved the protocol.mailcap compatibility aliases from
+	config/options.inc to mime/backend/mailcap.c.  
+
+Fri Dec 19 16:24:07 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	protocol.mailcap.description is now alias to
+	mime.mailcap.description like all the other protocol.mailcap
+	options. Jonas, please review. Spotted by Zas.  
+
+Fri Dec 19 14:29:47 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation cleanups.  
+
+Fri Dec 19 12:07:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Clarify confusing (or confused?) description of
+	replace_listbox_item().  
+
+Fri Dec 19 12:03:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: bfu/hierbox.c, bfu/hierbox.h, bookmarks/bookmarks.c,
+	cache/cache.c, config/kbdbind.c, config/options.c,
+	cookies/cookies.c, formhist/formhist.c, globhist/globhist.c,
+	sched/download.c:
+
+	Renamed *horribly* misnamed functions: init_browser_box_item() ->
+	init_listbox_item(), replace_box_item() -> replace_listbox_item(),
+	done_browser_box() (!!!) -> done_listbox_item().  
+
+Fri Dec 19 11:53:01 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/bfu/hierbox.c:
+
+	Blank lines changes.  
+
+Fri Dec 19 11:32:08 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	ses_chktype(): free_ct -> plaintext_follow 
+
+Fri Dec 19 11:26:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	ses_chktype(): Unify end and free_ct 
+
+Fri Dec 19 11:26:22 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	ses_chktype(): ret1 -> do_not_follow 
+
+Fri Dec 19 08:29:28 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
 Thu Dec 18 22:37:29 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* src/bfu/: dialog.c, menu.c:

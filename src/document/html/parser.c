@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.516 2005/01/05 02:13:20 miciah Exp $ */
+/* $Id: parser.c,v 1.517 2005/01/13 14:12:47 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -330,7 +330,7 @@ html_focusable(unsigned char *a)
 	}
 
 	tabindex = get_num(a, "tabindex");
-	if (tabindex > 0) {
+	if (0 < tabindex && tabindex < 32767) {
 		format.tabindex = (tabindex & 0x7fff) << 16;
 	}
 

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.18 2003/08/01 15:17:07 jonas Exp $ */
+/* $Id: leds.c,v 1.19 2003/08/01 15:20:08 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,7 +58,7 @@ init_leds(void)
 	for (i = 0; i < LEDS_COUNT; i++) {
 		leds[i].number = i;
 		leds[i].value = '-';
-		leds[i].color = COL(070);
+		leds[i].color = 070;
 		leds[i].__used = 0;
 		leds_backup[i] = 0; /* assure first redraw */
 	}

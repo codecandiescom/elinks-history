@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.26 2003/05/04 19:54:32 pasky Exp $ */
+/* $Id: inpfield.c,v 1.27 2003/05/06 11:33:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -194,10 +194,9 @@ input_field(struct terminal *term, struct memory_list *ml,
 #undef SIZEOF_DIALOG
 
 	if (def) {
-		if (strlen(def) + 1 > l)
-			memcpy(field, def, l - 1);
-		else
-			strcpy(field, def);
+		int defsize = strlen(def) + 1;
+
+		memcpy(field, def, (defsize > l) ? l - 1 : defsize);
 	}
 
 	dlg->title = title;
@@ -251,16 +250,15 @@ display_field_do(struct widget_data *di, struct dialog_data *dlg, int sel,
 			get_bfu_color(term, "dialog.field"));
 	{
 		int len = strlen(di->cdata + di->vpos);
+		int l = (len <= di->l) ? len : di->l;
 
 		if (!hide) {
-			print_text(term, di->x, di->y,
-					len <= di->l ? len : di->l,
-					di->cdata + di->vpos,
-					get_bfu_color(term, "dialog.field-text"));
+			print_text(term, di->x, di->y, l,
+				   di->cdata + di->vpos,
+				   get_bfu_color(term, "dialog.field-text"));
 		} else {
-			fill_area(term, di->x, di->y,
-					len <= di->l ? len : di->l, 1,
-					get_bfu_color(term, "dialog.field-text") | '*');
+			fill_area(term, di->x, di->y, l, 1,
+				  get_bfu_color(term, "dialog.field-text") | '*');
 		}
 	}
 	if (sel) {

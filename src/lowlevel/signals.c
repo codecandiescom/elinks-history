@@ -1,10 +1,11 @@
 /* Signals handling. */
-/* $Id: signals.c,v 1.25 2004/07/23 00:57:30 pasky Exp $ */
+/* $Id: signals.c,v 1.26 2004/11/08 19:37:52 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <string.h>
@@ -204,6 +205,7 @@ static void
 got_signal(int sig)
 {
 	struct signal_info *s;
+	int saved_errno = errno;
 
 	if (sig >= NUM_SIGNALS || sig < 0) {
 		/* Signal handler - we have no good way how to tell this the
@@ -217,11 +219,14 @@ got_signal(int sig)
 
 	if (s->critical) {
 		s->handler(s->data);
+		errno = saved_errno;
 		return;
 	}
 
 	s->mask = 1;
 	check_for_select_race();
+
+	errno = saved_errno;
 }
 
 void

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.457 2004/06/23 15:14:25 zas Exp $ */
+/* $Id: renderer.c,v 1.458 2004/06/24 09:04:34 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -61,9 +61,9 @@ struct table_cache_entry_key {
 	unsigned char *start;
 	unsigned char *end;
 	int align;
-	int m;
+	int margin;
 	int width;
-	int xs;
+	int x;
 	int link_num;
 };
 
@@ -1342,8 +1342,8 @@ free_table_cache(void)
 
 struct part *
 format_html_part(unsigned char *start, unsigned char *end,
-		 int align, int m, int width, struct document *document,
-		 int xs, int ys, unsigned char *head,
+		 int align, int margin, int width, struct document *document,
+		 int x, int y, unsigned char *head,
 		 int link_num)
 {
 	struct part *part;
@@ -1370,9 +1370,9 @@ format_html_part(unsigned char *start, unsigned char *end,
 		key.start = start;
 		key.end = end;
 		key.align = align;
-		key.m = m;
+		key.margin = margin;
 		key.width = width;
-		key.xs = xs;
+		key.x = x;
 		key.link_num = link_num;
 
 		item = get_hash_item(renderer_context.table_cache,
@@ -1390,7 +1390,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		}
 	}
 
-	assertm(ys >= 0, "format_html_part: ys == %d", ys);
+	assertm(y >= 0, "format_html_part: y == %d", y);
 	if_assert_failed return NULL;
 
 	if (document) {
@@ -1399,7 +1399,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		if (node) {
 			int node_width = !html_context.table_level ? MAXINT : width;
 
-			set_box(&node->box, xs, ys, node_width, 1);
+			set_box(&node->box, x, y, node_width, 1);
 			add_to_list(document->nodes, node);
 		}
 
@@ -1412,7 +1412,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 		renderer_context.last_tag_for_newline = NULL;
 	}
 
-	html_context.margin = m;
+	html_context.margin = margin;
 	renderer_context.empty_format = !document;
 
 	done_link_state_info();
@@ -1422,13 +1422,13 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (!part) goto ret;
 
 	part->document = document;
-	part->box.x = xs;
-	part->box.y = ys;
+	part->box.x = x;
+	part->box.y = y;
 	part->cx = -1;
 	part->cy = 0;
 	part->link_num = link_num;
 
-	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, m, width);
+	html_state = init_html_parser_state(ELEMENT_IMMORTAL, align, margin, width);
 
 	parse_html(start, end, part, head);
 
@@ -1444,7 +1444,7 @@ format_html_part(unsigned char *start, unsigned char *end,
 	if (document) {
 		struct node *node = document->nodes.next;
 
-		node->box.height = ys - node->box.y + part->box.height;
+		node->box.height = y - node->box.y + part->box.height;
 	}
 
 ret:
@@ -1468,9 +1468,9 @@ ret:
 		tce->key.start = start;
 		tce->key.end = end;
 		tce->key.align = align;
-		tce->key.m = m;
+		tce->key.margin = margin;
 		tce->key.width = width;
-		tce->key.xs = xs;
+		tce->key.x = x;
 		tce->key.link_num = link_num;
 		memcpy(&tce->part, part, sizeof(struct part));
 

@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.85 2004/03/20 18:32:45 jonas Exp $ */
+/* $Id: uri.c,v 1.86 2004/03/20 18:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -94,6 +94,7 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 	if (protocol == PROTOCOL_INVALID) return 0;
 
 	set_string_magic(&uri->user);
+	set_string_magic(&uri->password);
 
 	known = (protocol != PROTOCOL_UNKNOWN);
 	uri->protocollen = prefix_end - uristring;
@@ -144,8 +145,8 @@ parse_uri(struct uri *uri, unsigned char *uristring)
 		} else {
 			uri->user.source = prefix_end;
 			uri->user.length = user_end - prefix_end;
-			uri->password = user_end + 1;
-			uri->passwordlen = host_end - user_end - 1;
+			uri->password.source = user_end + 1;
+			uri->password.length = host_end - user_end - 1;
 		}
 		prefix_end = host_end + 1;
 	}
@@ -272,10 +273,9 @@ add_uri_to_string(struct string *string, struct uri *uri,
  	if (wants(URI_USER) && !string_is_empty(&uri->user)) {
 		add_string_to_string(string, &uri->user);
 
- 		if (wants(URI_PASSWORD) && uri->passwordlen) {
+ 		if (wants(URI_PASSWORD) && !string_is_empty(&uri->password)) {
 			add_char_to_string(string, ':');
-			add_bytes_to_string(string, uri->password,
-						    uri->passwordlen);
+			add_string_to_string(string, &uri->password);
  		}
 
 		add_char_to_string(string, '@');

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.121 2004/03/20 18:32:46 jonas Exp $ */
+/* $Id: ftp.c,v 1.122 2004/03/20 18:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -384,10 +384,8 @@ ftp_pass(struct connection *conn)
 	}
 
 	add_to_string(&cmd, "PASS ");
-	if (conn->uri.passwordlen) {
-		struct uri *uri = &conn->uri;
-
-		add_bytes_to_string(&cmd, uri->password, uri->passwordlen);
+	if (!string_is_empty(&conn->uri.password)) {
+		add_string_to_string(&cmd, &conn->uri.password);
 	} else {
 		add_to_string(&cmd, get_opt_str("protocol.ftp.anon_passwd"));
 	}

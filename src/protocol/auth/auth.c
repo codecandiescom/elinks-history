@@ -1,5 +1,5 @@
 /* HTTP Authentication support */
-/* $Id: auth.c,v 1.71 2004/03/20 18:32:46 jonas Exp $ */
+/* $Id: auth.c,v 1.72 2004/03/20 18:55:22 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,9 +77,9 @@ find_auth_entry(unsigned char *url, unsigned char *realm)
 
 #define set_auth_password(e, u) \
 	do { \
-		int passwordlen = int_min((u)->passwordlen, HTTP_AUTH_PASSWORD_MAXLEN - 1); \
+		int passwordlen = int_min((u)->password.length, HTTP_AUTH_PASSWORD_MAXLEN - 1); \
 		if (passwordlen) \
-			memcpy((e)->password, (u)->password, passwordlen); \
+			memcpy((e)->password, (u)->password.source, passwordlen); \
 		(e)->password[passwordlen] = 0; \
 	} while (0)
 
@@ -178,8 +178,8 @@ add_auth_entry(struct uri *uri, unsigned char *realm)
 		}
 
 		if (!*entry->password
-		    || (!uri->password || !uri->passwordlen ||
-			strlcmp(entry->password, -1, uri->password, uri->passwordlen))) {
+		    || (string_is_empty(&uri->password)
+			|| string_strlcmp(&uri->password, entry->password, -1))) {
 
 			entry->valid = 0;
 			set_auth_password(entry, uri);
@@ -222,13 +222,13 @@ find_auth(struct uri *uri)
 	mem_free(newurl);
 
 	/* Check is user/pass info is in url. */
-	if (!string_is_empty(&uri->user) || uri->passwordlen) {
+	if (!string_is_empty(&uri->user) || !string_is_empty(&uri->password)) {
 		/* If there's no entry a new one is added else if the entry
 		 * does not correspond to any existing one update it with the
 		 * user and password from the uri. */
 		if (!entry
 		    || (auth_entry_has_userinfo(entry)
-		        && !strlcmp(entry->password, -1, uri->password, uri->passwordlen)
+		        && !string_strlcmp(&uri->password, entry->password, -1)
 		        && !string_strlcmp(&uri->user, entry->user, -1))) {
 
 			entry = add_auth_entry(uri, NULL);

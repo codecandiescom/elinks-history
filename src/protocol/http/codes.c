@@ -1,5 +1,5 @@
 /* HTTP response codes */
-/* $Id: codes.c,v 1.5 2003/06/21 13:00:29 pasky Exp $ */
+/* $Id: codes.c,v 1.6 2003/06/21 13:01:10 pasky Exp $ */
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE /* Needed for vasprintf() */
@@ -92,7 +92,6 @@ http_code_to_string(int code)
 unsigned char *
 http_error_document(int code)
 {
-	unsigned char errs[] = "xxx";
 	unsigned char *str;
 	unsigned char *codestr = http_code_to_string(info->error_code);
 

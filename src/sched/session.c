@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.554 2004/08/28 16:23:55 jonas Exp $ */
+/* $Id: session.c,v 1.555 2004/09/07 10:41:27 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -755,7 +755,7 @@ init_session(struct session *base_session, struct terminal *term,
 	 * the document cache is not filled with useless documents if the
 	 * content is already cached.
 	 *
-	 * For big document it reduces memory usage quite a bit because
+	 * For big document it also reduces memory usage quite a bit because
 	 * (atleast that is my interpretation --jonas) the old document will
 	 * have a chance to be released before rendering a new one. A few
 	 * numbers when opening a new tab while viewing debians package list

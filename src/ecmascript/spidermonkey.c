@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.43 2004/09/25 20:23:24 pasky Exp $ */
+/* $Id: spidermonkey.c,v 1.44 2004/09/25 20:32:12 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -377,8 +377,9 @@ static const JSClass document_class = {
 	JS_EnumerateStub, JS_ResolveStub, JS_ConvertStub, JS_FinalizeStub
 };
 
-enum document_prop { JSP_DOC_TITLE, JSP_DOC_URL };
+enum document_prop { JSP_DOC_REF, JSP_DOC_TITLE, JSP_DOC_URL };
 static const JSPropertySpec document_props[] = {
+	{ "referrer",	JSP_DOC_REF,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ "title",	JSP_DOC_TITLE,	JSPROP_ENUMERATE }, /* TODO: Charset? */
 	{ "url",	JSP_DOC_URL,	JSPROP_ENUMERATE | JSPROP_READONLY },
 	{ NULL }
@@ -390,12 +391,39 @@ document_get_property(JSContext *ctx, JSObject *obj, jsval id, jsval *vp)
 	JSObject *parent = JS_GetParent(ctx, obj);
 	struct document_view *doc_view = JS_GetPrivate(ctx, parent);
 	struct document *document = doc_view->document;
+	struct session *ses = doc_view->session;
 
 	VALUE_TO_JSVAL_START;
 	if (!JSVAL_IS_INT(id))
 		goto bye;
 
 	switch (JSVAL_TO_INT(id)) {
+	case JSP_DOC_REF:
+		prop_type = JSPT_UNDEF;
+		switch (get_opt_int("protocol.http.referer.policy")) {
+		case REFERER_NONE:
+			/* oh well */
+			break;
+
+		case REFERER_FAKE:
+			p.string = get_opt_str("protocol.http.referer.fake");
+			prop_type = JSPT_STRING;
+			break;
+
+		case REFERER_TRUE:
+			/* XXX: Encode as in add_url_to_http_string() ? --pasky */
+			if (ses->referrer) {
+				p.string = get_uri_string(ses->referrer, URI_HTTP_REFERRER);
+				prop_type = JSPT_ASTRING;
+			}
+			break;
+
+		case REFERER_SAME_URL:
+			p.string = get_uri_string(document->uri, URI_HTTP_REFERRER);
+			prop_type = JSPT_ASTRING;
+			break;
+		}
+		break;
 	case JSP_DOC_TITLE: p.string = document->title; prop_type = JSPT_STRING; break;
 	case JSP_DOC_URL: p.string = get_uri_string(document->uri, URI_ORIGINAL); prop_type = JSPT_ASTRING; break;
 	default:

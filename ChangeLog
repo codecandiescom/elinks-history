@@ -1,3 +1,194 @@
+Mon Nov 10 22:57:48 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/hierbox.c:
+
+	Fix bug introduced in src/bfu/hierbox.c revision 1.54: '[' (or '-'
+	or '_') no longer jumps to the parent folder when a leaf is
+	selected.  
+
+Mon Nov 10 22:37:30 2003  Laurent Monin <zas@norz.org>:
+
+	* src/main.c:
+
+	@u -> @url.  
+
+Mon Nov 10 22:36:11 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* po/it.po:
+
+	Italian translation update.  
+
+Mon Nov 10 22:31:15 2003  Miciah Dashiel Butler Masters <miciah@myrealbox.com>:
+
+	* src/bfu/dialog.c:
+
+	Eliminate superfluous assertions.  
+
+Mon Nov 10 21:29:57 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/sched/download.c:
+
+	Fix a crash by restoring the old behaviour.  
+
+Mon Nov 10 21:29:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, src/document/Makefile.am, src/document/renderer.c,
+	src/document/plain/Makefile.am, src/document/plain/renderer.c,
+	src/document/plain/renderer.h:
+
+	Readd plain text renderer. Fixes some bug.  
+
+Mon Nov 10 21:27:49 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, html/renderer.c:
+
+	Generalize cache defragmentation.  
+
+Mon Nov 10 20:53:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.c, document/Makefile.am,
+	document/renderer.c, document/renderer.h, document/html/frames.c,
+	document/html/renderer.c, document/html/renderer.h,
+	sched/session.c, scripting/lua/core.c, viewer/dump/dump.c,
+	viewer/text/view.c:
+
+	Move the document rendering multiplexing to document/.
+	cached_format_html() -> render_document(), html_interpret() ->
+	render_document_frames(). We call render_document_frames() from
+	draw_formatted() now since they seem to go together.  
+
+Mon Nov 10 20:45:54 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/options.inc:
+
+	Use by default red for the tabs separator, instead of green. Green
+	is already used for highlighting the current tab, so red will stand
+	out more, I think. It is also more visible on white.  
+
+Mon Nov 10 20:35:32 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* .cvsignore, autogen.sh, configure.in, ltmain.sh, src/.cvsignore,
+	src/Makefile.am, src/scripting/guile/.cvsignore,
+	src/scripting/guile/Makefile.am, src/scripting/lua/.cvsignore,
+	src/scripting/lua/Makefile.am:
+
+	Blast off the libtool for good. We aren't going to have DSO modules
+	anytime soon anyway, and this will make the world suddenly again so
+	much brighter place.  
+
+Mon Nov 10 20:19:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/modules/: .cvsignore, .vimrc:
+
+	Jonas: when copying fairies, take big care about their contents or
+	just copy them over from some suitably ordinary directory at the
+	same level in the directory hiearchy (that is, not from the parent
+	directory).  
+
+Mon Nov 10 17:06:54 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/dialog.c:
+
+	Fix testing of whether we are dealing with a radio button.  
+
+Mon Nov 10 16:49:31 2003  Karsten Schölzel <kuser@gmx.de>:
+
+	* src/sched/session.c:
+
+	Include fix for bug 270 from links-0.99pre13 
+
+Mon Nov 10 15:45:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/plain/: .cvsignore, .vimrc:
+
+	Fairies.  
+
+Mon Nov 10 15:35:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/widget.h:
+
+	Return -1 that is not a valid group id. We can now enjoy space
+	before the buttons in the terminal option dialog again.  
+
+Mon Nov 10 15:13:25 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/cs.po:
+
+	Czech translation update.  
+
+Mon Nov 10 15:08:25 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/dialog.h, bfu/widget.h,
+	viewer/text/search.c:
+
+	Introduce float_group dialog layout option and blast the search
+	dialog layouter.  
+
+Mon Nov 10 14:12:38 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Maximize dialog width (to honour the hack).  
+
+Mon Nov 10 09:42:35 2003  Laurent Monin <zas@norz.org>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced and french translation was updated.  
+
+Mon Nov 10 00:51:29 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/inpfield.c, bfu/widget.h, config/dialogs.c:
+
+	Funky stuff to be able to float input field labels so we can use
+	generic layouter for option edit dialogs.  
+
+Mon Nov 10 00:32:36 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/msgbox.c, bfu/text.c, bfu/text.h, bfu/widget.h,
+	dialogs/auth.c, dialogs/options.c:
+
+	Text widget can now be marked as being labels which means they do
+	not put space afterwards. This is used to add labels to checkbox
+	groups in the terminal option dialog.  
+
+Mon Nov 10 00:15:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/checkbox.c, bfu/checkbox.h, bfu/dialog.c,
+	dialogs/options.c:
+
+	Add checkbox formatting to the generic dialog layouter and use it
+	for the terminal option dialog. Features a nice little treat to
+	visually group checkboxes in same group.  
+
+Sun Nov  9 23:59:32 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/checkbox.c:
+
+	dlg_format_checkbox(): Make more generic.  
+
+Sun Nov  9 23:54:50 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/scripting/lua/core.c:
+
+	Remove very hackish lua dialog layouters and use the generic one.
+	Now if someone objects we can always add dlg->layout.force_50 ;) 
+
+Sun Nov  9 23:43:14 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/download.c:
+
+	download_data(): Minor simplification.  
+
+Sun Nov  9 23:16:22 2003  Laurent Monin <zas@norz.org>:
+
+	* src/protocol/uri.c:
+
+	Comments were added.  
+
 Sun Nov  9 23:02:56 2003  Laurent Monin <zas@norz.org>:
 
 	* src/scripting/lua/core.c:

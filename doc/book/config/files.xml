@@ -10,7 +10,7 @@
 	<varlistentry><term><filename>~/.elinks/elinks.conf</filename></term>
 	<listitem><para>
 
-	Per-user config file, loaded after site-wide configuration.
+	Per-user configuration file, loaded after site-wide configuration.
 
 	</para></listitem>
 	</varlistentry>

@@ -41,7 +41,7 @@
 	If, while browsing with ELinks, you need to display files that it can't
 	show (like images or PDF documents), then you will likely want to pass
 	them to other programs that are suitable for this task.  While you may
-	do it manually (saving the file to disk, running the auxiliar program
+	do it manually (saving the file to disk, running the auxiliary program
 	to show it and then removing the file when finished), ELinks provides a
 	method to do this automatically using MIME types.
 
@@ -146,7 +146,7 @@
 	will be automatically called upon when you demand ELinks to show
 	something attached to this handler.  Otherwise, if you ask for
 	confirmation, you will be prompted to open it with a external program,
-	with additional choices that include cancelling the operation and
+	with additional choices that include canceling the operation and
 	viewing it with ELinks.  E.g: you may use this option for programs
 	written in <acronym>C</acronym> so that you may always choose if you
 	want to read the source with ELinks, or if you want to save it, or if
@@ -197,7 +197,7 @@ set mime.extension.<userinput>ext</userinput> = "<userinput>type</userinput>"
 </screen>
 <para>
 
-	replacing <varname>ext</varname> with the appropiate file extension, and
+	replacing <varname>ext</varname> with the appropriate file extension, and
 	<varname>type</varname> with its MIME type.  E.g. you may want to have
 
 </para>

@@ -1,4 +1,4 @@
-<!-- $Id: installation.xml,v 1.3 2003/10/16 13:12:03 zas Exp $ -->
+<!-- $Id: installation.xml,v 1.4 2003/10/19 22:28:26 jonas Exp $ -->
 
 <chapter id="installation"><title> Getting ELinks up and running </title>
 	
@@ -16,8 +16,8 @@
 <para>
 
 	There are various methods of requiring the source code for ELinks all
-	you have to do is find one that suites your need. Basicly there are two
-	flavours:
+	you have to do is find one that suites your need. Basically there are two
+	flavors:
 
 <variablelist>
 
@@ -25,7 +25,7 @@
 	<term><type>stable</type></term>
 	<listitem><para>
 
-		The hopefully rocksolid version of ELinks that is well tested
+		The hopefully rock solid version of ELinks that is well tested
 		but not fully up to date. This should be considered if you are
 		going to maintain ELinks on systems with lot's of users.
 
@@ -37,7 +37,7 @@
 
 		The bleeding edge version of ELinks for the brave ones. This
 		should be considered if you want to be up to date or need some
-		specific feature.  Also consider this flavour if you want to
+		specific feature.  Also consider this flavor if you want to
 		contribute to ELinks by testing it. (This of course requires
 		you to mail us.
 		See more about this in <xref linkend="bugreporting" />).
@@ -64,7 +64,7 @@
 </para>
 <para>
 
-	Tarballs of the various flavours are available from the download page
+	Tarballs of the various flavors are available from the download page
 	at ELinks homepage (see <xref linkend="homepage" />). Besides the various
 	releases you can download daily generated CVS snapshots of both the
 	<type>stable</type> and <type>development</type> branches.
@@ -76,7 +76,7 @@
 <para>
 
 	If you regularly upgrade your ELinks (using the <type>development</type>)
-	flavour you will find getting ELinks the CVS way much more easy. Also this
+	flavor you will find getting ELinks the CVS way much more easy. Also this
 	way you might save some bandwidth since you wont have to download the
 	full package every time.
 	
@@ -89,7 +89,7 @@
 </para></note>
 <para>
 
-	To checkout the <type>development</type> flavour do the following:
+	To checkout the <type>development</type> flavor do the following:
 
 </para>
 <screen>
@@ -113,7 +113,7 @@
 </screen>
 <para>
 
-	Later when you want to update yout existing tree to the latest CVS
+	Later when you want to update your existing tree to the latest CVS
 	version just do:
 	
 </para>
@@ -142,7 +142,7 @@
 </screen>
 <para>
 
-	However you might consider to tweek a few compile time options before
+	However you might consider to tweak a few compile time options before
 	building ELinks. Before we seeing how to do this lets take a look at
 	some of the programs and libraries required or recommended that you
 	install.

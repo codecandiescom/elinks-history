@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.33 2003/12/05 18:21:07 pasky Exp $ */
+/* $Id: cgi.c,v 1.34 2003/12/05 19:02:44 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -113,15 +113,15 @@ set_vars(struct connection *conn, unsigned char *script)
 {
 	unsigned char *post = conn->uri.post;
 	unsigned char *question_mark = strchr(conn->uri.data, '?');
+	unsigned char *query_string = question_mark ? question_mark + 1 : "";
 	unsigned char *optstr;
 
 	if (post) {
 		unsigned char *postend = strchr(post, '\n');
 		unsigned char buf[16];
+		int res;
 
 		if (postend) {
-			int res;
-
 			*postend = '\0';
 			res = setenv("CONTENT_TYPE", post, 1);
 			*postend = '\n';
@@ -131,14 +131,14 @@ set_vars(struct connection *conn, unsigned char *script)
 		snprintf(buf, 16, "%d", strlen(post) / 2);
 		if (setenv("CONTENT_LENGTH", buf, 1)) return -1;
 		if (setenv("REQUEST_METHOD", "POST", 1)) return -1;
+
+		*post = '\0';
+		res = setenv("QUERY_STRING", query_string, 1);
+		*post = POST_CHAR;
+		if (res) return -1;
 	} else {
 		if (setenv("REQUEST_METHOD", "GET", 1)) return -1;
-	}
-
-	if (question_mark) {
-		if (setenv("QUERY_STRING", question_mark + 1, 1)) return -1;
-	} else {
-		if (setenv("QUERY_STRING", "", 1)) return -1;
+		if (setenv("QUERY_STRING", query_string, 1)) return -1;
 	}
 
 	if (setenv("SERVER_SOFTWARE", "ELinks/" VERSION, 1)) return -1;

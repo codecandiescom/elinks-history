@@ -1,4 +1,4 @@
-/* $Id: inpfield.h,v 1.26 2004/01/28 05:44:52 jonas Exp $ */
+/* $Id: inpfield.h,v 1.27 2004/01/28 06:14:54 jonas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
@@ -9,6 +9,7 @@
 #include "util/memlist.h"
 
 struct input_history;
+struct session;
 struct terminal;
 
 #define add_dlg_field_do(dlg, t, label, min_, max_, handler, datalen_, data_, hist)	\
@@ -52,9 +53,11 @@ void input_field(struct terminal *, struct memory_list *, int, unsigned char *,
 #define INPUT_LINE_BUFFER_SIZE	80
 #define INPUT_LINE_WIDGETS	1
 
+/* If the handler returns non zero value it means to cancel the input line */
+typedef int (*input_line_handler)(struct session *ses, int action, unsigned char *buffer);
+
 void
 input_field_line(struct session *ses, unsigned char *prompt,
-		 struct input_history *history,
-		 int (*handle_event)(struct dialog_data *, struct term_event *));
+		 struct input_history *history, input_line_handler handler);
 
 #endif

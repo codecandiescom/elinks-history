@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.157 2004/01/24 23:58:42 pasky Exp $ */
+/* $Id: search.c,v 1.158 2004/01/28 06:14:55 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1082,7 +1082,7 @@ do_typeahead(struct session *ses, struct document_view *doc_view,
 void
 search_typeahead(struct session *ses, struct document_view *doc_view, int a)
 {
-	ses->kbdprefix.typeahead = mem_calloc(1, MAX_STR_LEN);
+	input_field_line(ses, "#", NULL, NULL);
 	if (!a) draw_formatted(ses, 0);
 }
 

@@ -1,5 +1,5 @@
 /* Ex-mode-like commandline support */
-/* $Id: exmode.c,v 1.28 2004/01/28 05:44:52 jonas Exp $ */
+/* $Id: exmode.c,v 1.29 2004/01/28 06:14:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -167,53 +167,27 @@ exmode_exec(struct session *ses, unsigned char buffer[INPUT_LINE_BUFFER_SIZE])
 
 
 static int
-exmode_handle_event(struct dialog_data *dlg_data, struct term_event *ev)
+exmode_input_handler(struct session *ses, int action, unsigned char *buffer)
 {
-	unsigned char *buffer = dlg_data->dlg->udata;
-	struct session *ses = dlg_data->dlg->udata2;
+	switch (action) {
+		case ACT_EDIT_ENTER:
+			exmode_exec(ses, buffer);
+			/* Falling */
+		case ACT_EDIT_CANCEL:
+			return 1;
 
-	switch (ev->ev) {
-		case EV_INIT:
-		case EV_RESIZE:
-		case EV_REDRAW:
-		case EV_MOUSE:
-		case EV_ABORT:
-			/* dialog_func() handles these for use */
-			break;
+		case ACT_EDIT_BACKSPACE:
+			if (!*buffer) return 1;
 
-		case EV_KBD:
-			update_dialog_data(dlg_data, NULL);
-
-			switch (kbd_action(KM_EDIT, ev, NULL)) {
-				case ACT_EDIT_ENTER:
-					exmode_exec(ses, buffer);
-					/* Falling */
-				case ACT_EDIT_CANCEL:
-					cancel_dialog(dlg_data, NULL);
-					break;
-
-				case ACT_EDIT_BACKSPACE:
-					if (*buffer)
-						return EVENT_NOT_PROCESSED;
-
-					cancel_dialog(dlg_data, NULL);
-					break;
-
-				default:
-					return EVENT_NOT_PROCESSED;
-			}
-
-			/* Let the input field handle it */
-			return EVENT_PROCESSED;
+		default:
+			return 0;
 	}
-
-	return EVENT_NOT_PROCESSED;
 }
 
 void
 exmode_start(struct session *ses)
 {
-	input_field_line(ses, ":", &exmode_history, exmode_handle_event);
+	input_field_line(ses, ":", &exmode_history, exmode_input_handler);
 }
 
 #endif /* CONFIG_EXMODE */

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.107 2004/01/28 05:44:52 jonas Exp $ */
+/* $Id: inpfield.c,v 1.108 2004/01/28 06:14:54 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -491,10 +491,31 @@ input_line_layouter(struct dialog_data *dlg_data)
 			 &y, win->term->width, NULL, AL_LEFT);
 }
 
+static int
+input_line_event_handler(struct dialog_data *dlg_data, struct term_event *ev)
+{
+	input_line_handler handler = dlg_data->dlg->udata;
+	unsigned char *buffer = dlg_data->dlg->widgets->data;
+	struct session *ses = dlg_data->dlg->udata2;
+	enum edit_action action;
+
+	if (!ev->ev == EV_KBD) return EVENT_NOT_PROCESSED;
+
+	/* First let the input field do its business */
+	kbd_field(dlg_data->widgets_data, dlg_data, ev);
+	update_dialog_data(dlg_data, NULL);
+
+	action = kbd_action(KM_EDIT, ev, NULL);
+
+	if (handler(ses, action, buffer))
+		cancel_dialog(dlg_data, NULL);
+
+	return EVENT_PROCESSED;
+}
+
 void
 input_field_line(struct session *ses, unsigned char *prompt,
-		 struct input_history *history,
-		 int (*handle_event)(struct dialog_data *, struct term_event *))
+		 struct input_history *history, input_line_handler handler)
 {
 	struct dialog *dlg;
 	unsigned char *buffer;
@@ -506,10 +527,10 @@ input_field_line(struct session *ses, unsigned char *prompt,
 
 	buffer = get_dialog_offset(dlg, INPUT_LINE_WIDGETS);
 
-	dlg->handle_event = handle_event;
+	dlg->handle_event = input_line_event_handler;
 	dlg->layouter = input_line_layouter;
 	dlg->layout.only_widgets = 1;
-	dlg->udata = buffer;
+	dlg->udata = handler;
 	dlg->udata2 = ses;
 	dlg->widgets->info.field.float_label = 1;
 

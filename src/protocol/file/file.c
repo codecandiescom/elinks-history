@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.49 2003/06/21 14:55:27 jonas Exp $ */
+/* $Id: file.c,v 1.50 2003/06/21 15:12:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -288,14 +288,7 @@ file_func(struct connection *c)
 	struct stat stt;
 	int namelen;
 	int saved_errno;
-	unsigned char dircolor[8];
-	int colorize_dir = get_opt_int("document.browse.links.color_dirs");
 	enum stream_encoding encoding = ENCODING_NONE;
-
-	if (colorize_dir) {
-		color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
-				(unsigned char *) &dircolor);
-	}
 
 	if (get_opt_int_tree(&cmdline_options, "anonymous")) {
 		abort_conn_with_state(c, S_BAD_URL);
@@ -379,6 +372,8 @@ file_func(struct connection *c)
 		int dirl;
 		int i;
 		struct dirent *de;
+		unsigned char dircolor[8];
+		int colorize_dir;
 
 		d = opendir(name);
 
@@ -387,6 +382,13 @@ file_func(struct connection *c)
 dir:
 		dir = NULL;
 		dirl = 0;
+
+		colorize_dir = get_opt_int("document.browse.links.color_dirs");
+		if (colorize_dir) {
+			color_to_string((struct rgb *) get_opt_ptr("document.colors.dirs"),
+				(unsigned char *) &dircolor);
+		}
+
 
 		if (name[0] && !dir_sep(name[namelen - 1])) {
 			if (get_cache_entry(c->url, &e)) {

@@ -1,5 +1,5 @@
 /* Option variables types handlers */
-/* $Id: opttypes.c,v 1.49 2003/01/03 02:23:53 pasky Exp $ */
+/* $Id: opttypes.c,v 1.50 2003/01/04 20:17:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,7 +37,7 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 	unsigned char *error;
 	unsigned char *str;
 
-	if (!*argc) return "Parameter expected";
+	if (!*argc) return gettext("Parameter expected");
 
 	/* FIXME!! We will modify argv! (maybe) */
 	commandline = 1;
@@ -52,7 +52,7 @@ gen_cmd(struct option *o, unsigned char ***argv, int *argc)
 		}
 		mem_free(str);
 	}
-	error = "Read error";
+	error = gettext("Read error");
 
 	return error;
 }
@@ -459,14 +459,14 @@ tree_dup(struct option *opt, struct option *template)
 
 
 struct option_type_info option_types[] = {
-	{ N_("Boolean"), bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "[0|1]" },
-	{ N_("Integer"), gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, "<num>" },
-	{ N_("Longint"), gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, "<num>" },
-	{ N_("String"), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, "<str>" },
+	{ N_("Boolean"), bool_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, N_("[0|1]") },
+	{ N_("Integer"), gen_cmd, num_rd, num_wr, int_dup, int_set, NULL, NULL, N_("<num>") },
+	{ N_("Longint"), gen_cmd, num_rd, num_wr, long_dup, long_set, NULL, NULL, N_("<num>") },
+	{ N_("String"), gen_cmd, str_rd, str_wr, str_dup, str_set, NULL, NULL, N_("<str>") },
 
-	{ N_("Codepage"), gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, "<codepage>" },
-	{ N_("Language"), gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, "<language>" },
-	{ N_("Color"), gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, "<color|#rrggbb>" },
+	{ N_("Codepage"), gen_cmd, str_rd, cp_wr, int_dup, cp_set, NULL, NULL, N_("<codepage>") },
+	{ N_("Language"), gen_cmd, str_rd, lang_wr, NULL, lang_set, NULL, NULL, N_("<language>") },
+	{ N_("Color"), gen_cmd, str_rd, color_wr, color_dup, color_set, NULL, NULL, N_("<color|#rrggbb>") },
 
 	{ N_("Special"), exec_cmd, NULL, NULL, NULL, NULL, NULL, NULL, "" },
 

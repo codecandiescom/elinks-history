@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.66 2003/11/07 13:33:46 jonas Exp $ */
+/* $Id: edit.c,v 1.67 2003/11/07 21:04:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -41,21 +41,13 @@ my_cancel_dialog(struct dialog_data *dlg_data, struct widget_data *widget_data)
 static void
 add_dialog_layouter(struct dialog_data *dlg_data)
 {
-	int y = -1;
+	int y = 5;
 	struct terminal *term = dlg_data->win->term;
 	struct color_pair *dialog_text_color = get_bfu_color(term, "dialog.text");
 	int w = dialog_max_width(term);
-	int rw = w;
 
-	dlg_format_text(NULL, edit_add_msg[0], 0, &y,
-			w, &rw, dialog_text_color, AL_LEFT);
-	y += 2;
-	dlg_format_text(NULL, edit_add_msg[1], 0, &y,
-			w, &rw, dialog_text_color, AL_LEFT);
-	y += 2;
 	dlg_format_buttons(NULL, dlg_data->widgets_data + 2, 2, 0,
-			   &y, w, &rw, AL_CENTER);
-	w = rw;
+			   &y, w, NULL, AL_CENTER);
 
 	draw_dialog(dlg_data, w, y, AL_CENTER);
 

@@ -1,5 +1,5 @@
 /* Memory debugging (leaks, overflows & co) */
-/* $Id: memdebug.c,v 1.24 2004/01/24 19:20:25 pasky Exp $ */
+/* $Id: memdebug.c,v 1.25 2004/04/23 15:45:42 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -89,6 +89,16 @@ struct alloc_header {
 	int line;
 	unsigned char *file;
 	unsigned char *comment;
+
+#ifdef CHECK_XFLOWS
+	/* This is a little magic. We want to keep the main pointer aligned,
+	 * that means we want to have the xflow underflow mark in the
+	 * alloc_header space, but at the _end_ of the aligned reserved space.
+	 * This means we in fact live at [SIZE_AH_ALIGNED - 1], not here. (Of
+	 * course this might be equivalent in some cases, but it is very
+	 * unlikely in practice.) */
+	unsigned char xflow_underflow_placeholder;
+#endif
 };
 
 /* Size is set to be on boundary of 8 (a multiple of 7) in order to have the
@@ -108,12 +118,13 @@ struct alloc_header {
 
 /* These macros are used to convert pointers and sizes to or from real ones
  * when using alloc_header stuff. */
-#define PTR_AH2BASE(ah) (void *) ((char *) (ah) + SIZE_AH_ALIGNED + XFLOW_INC)
+#define PTR_AH2BASE(ah) (void *) ((char *) (ah) + SIZE_AH_ALIGNED)
 #define PTR_BASE2AH(ptr) (struct alloc_header *) \
-				((char *) (ptr) - SIZE_AH_ALIGNED - XFLOW_INC)
+				((char *) (ptr) - SIZE_AH_ALIGNED)
 
-#define SIZE_BASE2AH(size) ((size) + SIZE_AH_ALIGNED + XFLOW_INC * 2)
-#define SIZE_AH2BASE(size) ((size) - SIZE_AH_ALIGNED - XFLOW_INC * 2)
+/* The second overflow mark is not embraced in SIZE_AH_ALIGNED. */
+#define SIZE_BASE2AH(size) ((size) + SIZE_AH_ALIGNED + XFLOW_INC)
+#define SIZE_AH2BASE(size) ((size) - SIZE_AH_ALIGNED - XFLOW_INC)
 
 #ifdef CHECK_XFLOWS
 #define PTR_OVERFLOW_MAGIC(ah) ((char *) PTR_AH2BASE(ah) + (ah)->size)

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.32 2003/05/16 10:01:48 zas Exp $ */
+/* $Id: download.c,v 1.33 2003/05/16 19:05:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1124,7 +1124,8 @@ tp_display(struct session *ses)
 {
 	struct location *l;
 
-	l = mem_alloc(sizeof(struct location) + strlen(ses->tq_url) + 1);
+	/* strlen() is ok here, NUL char is in struct view_state */
+	l = mem_alloc(sizeof(struct location) + strlen(ses->tq_url));
 	if (!l) return;
 	memset(l, 0, sizeof(struct location));
 

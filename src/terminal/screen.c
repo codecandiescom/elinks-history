@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.87 2003/10/01 23:24:07 jonas Exp $ */
+/* $Id: screen.c,v 1.88 2003/10/01 23:48:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -305,12 +305,8 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		add_term_string(screen, driver->frame_seqs[!!border]);
 	}
 
-	/* This is optimized for the (common) case that underlines are rare. */
 	if (underline != state->underline && driver->underline) {
-		/* Completely handle the underlining even if we later change
-		 * the color. */
 		state->underline = underline;
-
 		add_term_string(screen, driver->underline[!!underline]);
 	}
 
@@ -319,7 +315,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 
 		add_bytes_to_string(screen, "\033[0", 3);
 
-		if (driver->color_mode) {
+		if (driver->color_mode == COLOR_MODE_16) {
 			static unsigned char code[6] = ";30;40";
 			unsigned char bgcolor = TERM_COLOR_BACKGROUND(color);
 
@@ -331,6 +327,7 @@ add_char16(struct string *screen, struct screen_driver *driver,
 			} else {
 				add_bytes_to_string(screen, code, 3);
 			}
+
 		} else if (ch->attr & SCREEN_ATTR_STANDOUT) {
 			/* Flip the fore- and background colors for highlighing
 			 * purposes. */
@@ -342,7 +339,6 @@ add_char16(struct string *screen, struct screen_driver *driver,
 		}
 
 		/* Check if the char should be rendered bold. */
-		/* TODO: Don't use @color but @attr here. */
 		if (color & SCREEN_ATTR_BOLD) {
 			add_bytes_to_string(screen, ";1", 2);
 		}

@@ -5,14 +5,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre0.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-11 21:00+0100\n"
+"POT-Creation-Date: 2003-11-12 18:17+0100\n"
 "PO-Revision-Date: 2003-01-03 03:41+0100\n"
 "Last-Translator: Simen Graaten <simeng@slarkware.com>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:213
 msgid "Close"
@@ -35,24 +35,24 @@ msgstr "Nummer forventet i felt"
 #: src/config/dialogs.c:309 src/config/dialogs.c:364 src/config/dialogs.c:379
 #: src/config/dialogs.c:452 src/config/dialogs.c:474 src/config/dialogs.c:501
 #: src/config/dialogs.c:565 src/config/dialogs.c:578 src/dialogs/auth.c:79
-#: src/dialogs/document.c:47 src/dialogs/document.c:208
-#: src/dialogs/document.c:277 src/dialogs/document.c:289 src/dialogs/edit.c:99
-#: src/dialogs/info.c:48 src/dialogs/info.c:75 src/dialogs/info.c:95
-#: src/dialogs/info.c:122 src/dialogs/info.c:188 src/dialogs/info.c:208
+#: src/dialogs/document.c:47 src/dialogs/document.c:244
+#: src/dialogs/document.c:313 src/dialogs/document.c:325 src/dialogs/edit.c:99
+#: src/dialogs/info.c:49 src/dialogs/info.c:89 src/dialogs/info.c:109
+#: src/dialogs/info.c:136 src/dialogs/info.c:202 src/dialogs/info.c:222
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
 #: src/dialogs/mime.c:165 src/dialogs/options.c:189 src/dialogs/options.c:264
 #: src/globhist/dialogs.c:208 src/globhist/dialogs.c:379
 #: src/protocol/protocol.c:60 src/protocol/user.c:157 src/protocol/user.c:173
 #: src/sched/download.c:450 src/sched/download.c:526 src/sched/download.c:552
 #: src/sched/download.c:827 src/sched/error.c:40 src/sched/session.c:395
-#: src/sched/session.c:1214 src/sched/session.c:1231 src/sched/session.c:1255
+#: src/sched/session.c:1222 src/sched/session.c:1239 src/sched/session.c:1263
 #: src/scripting/lua/core.c:384 src/scripting/lua/core.c:467
 #: src/scripting/lua/core.c:574 src/scripting/lua/core.c:700
 #: src/viewer/text/form.c:652 src/viewer/text/search.c:824
 #: src/viewer/text/search.c:850 src/viewer/text/search.c:856
 #: src/viewer/text/search.c:878 src/viewer/text/search.c:1044
 #: src/viewer/text/search.c:1055 src/viewer/text/textarea.c:269
-#: src/viewer/text/view.c:729 src/viewer/text/view.c:1414
+#: src/viewer/text/view.c:728 src/viewer/text/view.c:1409
 msgid "OK"
 msgstr "Ok"
 
@@ -137,12 +137,12 @@ msgstr ""
 #: src/config/dialogs.c:579 src/dialogs/auth.c:80 src/dialogs/edit.c:103
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
 #: src/dialogs/mime.c:166 src/dialogs/options.c:191 src/dialogs/options.c:265
-#: src/sched/download.c:743 src/sched/download.c:1226
-#: src/sched/download.c:1235 src/sched/download.c:1262
-#: src/sched/download.c:1274 src/scripting/lua/core.c:385
+#: src/sched/download.c:743 src/sched/download.c:1225
+#: src/sched/download.c:1234 src/sched/download.c:1261
+#: src/sched/download.c:1273 src/scripting/lua/core.c:385
 #: src/scripting/lua/core.c:468 src/scripting/lua/core.c:700
 #: src/viewer/text/search.c:1044 src/viewer/text/search.c:1055
-#: src/viewer/text/view.c:729
+#: src/viewer/text/view.c:728
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -181,7 +181,7 @@ msgstr ""
 #: src/bookmarks/dialogs.c:408 src/dialogs/menu.c:149 src/dialogs/mime.c:86
 #: src/formhist/formhist.c:380 src/globhist/dialogs.c:290
 #: src/globhist/dialogs.c:301 src/globhist/dialogs.c:342
-#: src/sched/session.c:664
+#: src/sched/session.c:671
 msgid "Yes"
 msgstr "Ja"
 
@@ -189,7 +189,7 @@ msgstr "Ja"
 #: src/bookmarks/dialogs.c:409 src/dialogs/menu.c:150 src/dialogs/mime.c:87
 #: src/formhist/formhist.c:381 src/globhist/dialogs.c:291
 #: src/globhist/dialogs.c:302 src/globhist/dialogs.c:343
-#: src/sched/session.c:665
+#: src/sched/session.c:672
 msgid "No"
 msgstr "Nei"
 
@@ -353,7 +353,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Kan ikke skrive til konfigurasjonsfil"
 
 #: src/config/dialogs.c:100 src/config/dialogs.c:113 src/config/dialogs.c:404
-#: src/dialogs/document.c:41 src/dialogs/document.c:205
+#: src/dialogs/document.c:41 src/dialogs/document.c:241
 #: src/globhist/dialogs.c:372 src/globhist/dialogs.c:439
 msgid "Info"
 msgstr "Info"
@@ -444,7 +444,7 @@ msgid "Option manager"
 msgstr "Bokmerke-behandler"
 
 #: src/config/dialogs.c:408 src/config/dialogs.c:606 src/dialogs/options.c:190
-#: src/sched/download.c:1224 src/sched/download.c:1260
+#: src/sched/download.c:1223 src/sched/download.c:1259
 msgid "Save"
 msgstr "Lagre"
 
@@ -502,359 +502,359 @@ msgstr ""
 msgid "Toggle display"
 msgstr ""
 
-#: src/config/kbdbind.c:258
+#: src/config/kbdbind.c:273
 msgid "Main mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:259
+#: src/config/kbdbind.c:274
 msgid "Edit mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:260
+#: src/config/kbdbind.c:275
 msgid "Menu mapping"
 msgstr ""
 
-#: src/config/kbdbind.c:373
+#: src/config/kbdbind.c:388
 #, fuzzy
 msgid "Abort connection"
 msgstr "forbindelser"
 
-#: src/config/kbdbind.c:374
+#: src/config/kbdbind.c:389
 #, fuzzy
 msgid "Add a new bookmark"
 msgstr "Legg til bokmerke"
 
-#: src/config/kbdbind.c:375
+#: src/config/kbdbind.c:390
 msgid "Add a new bookmark using current link"
 msgstr ""
 
-#: src/config/kbdbind.c:376
+#: src/config/kbdbind.c:391
 msgid "Attempt to auto-complete the input"
 msgstr ""
 
-#: src/config/kbdbind.c:377
+#: src/config/kbdbind.c:392
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr ""
 
-#: src/config/kbdbind.c:378
+#: src/config/kbdbind.c:393
 msgid "Return to the previous document in history"
 msgstr ""
 
-#: src/config/kbdbind.c:379
+#: src/config/kbdbind.c:394
 msgid "Delete character in front of the cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:380
+#: src/config/kbdbind.c:395
 #, fuzzy
 msgid "Open bookmark manager"
 msgstr "Bokmerke-behandler"
 
-#: src/config/kbdbind.c:381
+#: src/config/kbdbind.c:396
 msgid "Reload cookies file"
 msgstr ""
 
-#: src/config/kbdbind.c:382
+#: src/config/kbdbind.c:397
 msgid "Copy text to clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:383
+#: src/config/kbdbind.c:398
 msgid "Delete text from clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:384
+#: src/config/kbdbind.c:399
 msgid "Delete character under cursor"
 msgstr ""
 
-#: src/config/kbdbind.c:385
+#: src/config/kbdbind.c:400
 #, fuzzy
 msgid "Show information about the current page"
 msgstr "Hent bilde"
 
-#: src/config/kbdbind.c:386
+#: src/config/kbdbind.c:401
 msgid "Move cursor downwards"
 msgstr ""
 
-#: src/config/kbdbind.c:387
+#: src/config/kbdbind.c:402
 #, fuzzy
 msgid "Download the current link"
 msgstr "Last ne~d lenke"
 
-#: src/config/kbdbind.c:388
+#: src/config/kbdbind.c:403
 #, fuzzy
 msgid "Download the current image"
 msgstr "Hent bilde"
 
-#: src/config/kbdbind.c:389
+#: src/config/kbdbind.c:404
 msgid "Begin editing"
 msgstr ""
 
 #. FIXME
-#: src/config/kbdbind.c:390
+#: src/config/kbdbind.c:405
 msgid "Go to the end of the page/line"
 msgstr ""
 
-#: src/config/kbdbind.c:391
+#: src/config/kbdbind.c:406
 #, fuzzy
 msgid "Follow the current link"
 msgstr "~Følg lenke"
 
-#: src/config/kbdbind.c:392
+#: src/config/kbdbind.c:407
 msgid "Follow the current link, forcing reload of the target"
 msgstr ""
 
-#: src/config/kbdbind.c:393
+#: src/config/kbdbind.c:408
 msgid "Open the File menu"
 msgstr ""
 
-#: src/config/kbdbind.c:394
+#: src/config/kbdbind.c:409
 msgid "Find the next occurrence of the current search text"
 msgstr ""
 
-#: src/config/kbdbind.c:395
+#: src/config/kbdbind.c:410
 msgid "Find the previous occurrence of the current search text"
 msgstr ""
 
-#: src/config/kbdbind.c:396
+#: src/config/kbdbind.c:411
 msgid "Forget authentication credentials"
 msgstr ""
 
-#: src/config/kbdbind.c:397
+#: src/config/kbdbind.c:412
 msgid "Open \"Go to URL\" dialog box"
 msgstr ""
 
-#: src/config/kbdbind.c:398
+#: src/config/kbdbind.c:413
 msgid "Open \"Go to URL\" dialog box containing the current URL"
 msgstr ""
 
-#: src/config/kbdbind.c:399
+#: src/config/kbdbind.c:414
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
 msgstr ""
 
-#: src/config/kbdbind.c:400
+#: src/config/kbdbind.c:415
 msgid "Go to the homepage"
 msgstr ""
 
-#: src/config/kbdbind.c:401
+#: src/config/kbdbind.c:416
 msgid "Show information about the current page HTTP headers"
 msgstr ""
 
-#: src/config/kbdbind.c:402
+#: src/config/kbdbind.c:417
 msgid "Open history manager"
 msgstr ""
 
-#: src/config/kbdbind.c:403
+#: src/config/kbdbind.c:418
 msgid "Go to the start of the page/line"
 msgstr ""
 
-#: src/config/kbdbind.c:404
+#: src/config/kbdbind.c:419
 #, fuzzy
 msgid "Delete to beginning of line"
 msgstr "Slett fil-etternavn"
 
-#: src/config/kbdbind.c:405
+#: src/config/kbdbind.c:420
 #, fuzzy
 msgid "Delete to end of line"
 msgstr "Slett fil-etternavn"
 
-#: src/config/kbdbind.c:406
+#: src/config/kbdbind.c:421
 msgid "Open keybinding manager"
 msgstr ""
 
-#: src/config/kbdbind.c:407
+#: src/config/kbdbind.c:422
 #, fuzzy
 msgid "Move the cursor left"
 msgstr "Hel markør"
 
-#: src/config/kbdbind.c:408
+#: src/config/kbdbind.c:423
 msgid "Open the link context menu"
 msgstr ""
 
-#: src/config/kbdbind.c:409
+#: src/config/kbdbind.c:424
 #, fuzzy
 msgid "Jump to link"
 msgstr "Gå til lenke"
 
-#: src/config/kbdbind.c:411
+#: src/config/kbdbind.c:426
 msgid "Open a Lua console"
 msgstr ""
 
-#: src/config/kbdbind.c:413
+#: src/config/kbdbind.c:428
 msgid "Open a Lua console (DISABLED)"
 msgstr ""
 
 #. internal use only
-#: src/config/kbdbind.c:416
+#: src/config/kbdbind.c:431
 msgid "Activate the menu"
 msgstr ""
 
-#: src/config/kbdbind.c:417
+#: src/config/kbdbind.c:432
 msgid "Move to the next frame"
 msgstr ""
 
-#: src/config/kbdbind.c:418
+#: src/config/kbdbind.c:433
 #, fuzzy
 msgid "Open a new tab"
 msgstr "Åpne i nytt vindu"
 
-#: src/config/kbdbind.c:419
+#: src/config/kbdbind.c:434
 #, fuzzy
 msgid "Open a new tab in background"
 msgstr "Bakgrunn"
 
-#: src/config/kbdbind.c:420
+#: src/config/kbdbind.c:435
 #, fuzzy
 msgid "Open a new window"
 msgstr "Åpne i nytt vindu"
 
-#: src/config/kbdbind.c:421
+#: src/config/kbdbind.c:436
 #, fuzzy
 msgid "Open the current link in a new tab"
 msgstr "Åpne i nytt vindu"
 
-#: src/config/kbdbind.c:423
+#: src/config/kbdbind.c:438
 #, fuzzy
 msgid "Open the current link a new tab in background"
 msgstr "Åpne i nytt vindu"
 
-#: src/config/kbdbind.c:424
+#: src/config/kbdbind.c:439
 #, fuzzy
 msgid "Open the current link in a new window"
 msgstr "Åpne i nytt vindu"
 
-#: src/config/kbdbind.c:425
+#: src/config/kbdbind.c:440
 msgid "Open options manager"
 msgstr ""
 
-#: src/config/kbdbind.c:426
+#: src/config/kbdbind.c:441
 msgid "Move downwards by a page"
 msgstr ""
 
-#: src/config/kbdbind.c:427
+#: src/config/kbdbind.c:442
 msgid "Move upwards by a page"
 msgstr ""
 
-#: src/config/kbdbind.c:428
+#: src/config/kbdbind.c:443
 msgid "Paste text from the clipboard"
 msgstr ""
 
-#: src/config/kbdbind.c:429
+#: src/config/kbdbind.c:444
 msgid "Move to the previous frame"
 msgstr ""
 
-#: src/config/kbdbind.c:430
+#: src/config/kbdbind.c:445
 msgid "Open a quit confirmation dialog box"
 msgstr ""
 
-#: src/config/kbdbind.c:431
+#: src/config/kbdbind.c:446
 #, fuzzy
 msgid "Quit without confirmation"
 msgstr "Venter på bekreftelse av omdirigering"
 
-#: src/config/kbdbind.c:432
+#: src/config/kbdbind.c:447
 msgid "Reload the current page"
 msgstr ""
 
-#: src/config/kbdbind.c:433
+#: src/config/kbdbind.c:448
 msgid "Attempt to resume download of the current link"
 msgstr ""
 
-#: src/config/kbdbind.c:434
+#: src/config/kbdbind.c:449
 #, fuzzy
 msgid "Move the cursor right"
 msgstr "Hel markør"
 
-#: src/config/kbdbind.c:435
+#: src/config/kbdbind.c:450
 #, fuzzy
 msgid "Save formatted document"
 msgstr "Lagre formatert ~dokument"
 
-#: src/config/kbdbind.c:436
+#: src/config/kbdbind.c:451
 msgid "Scroll down"
 msgstr ""
 
-#: src/config/kbdbind.c:437
+#: src/config/kbdbind.c:452
 msgid "Scroll left"
 msgstr ""
 
-#: src/config/kbdbind.c:438
+#: src/config/kbdbind.c:453
 msgid "Scroll right"
 msgstr ""
 
-#: src/config/kbdbind.c:439
+#: src/config/kbdbind.c:454
 msgid "Scroll up"
 msgstr ""
 
-#: src/config/kbdbind.c:440
+#: src/config/kbdbind.c:455
 #, fuzzy
 msgid "Search for a text pattern"
 msgstr "Søk etter tekst"
 
-#: src/config/kbdbind.c:441
+#: src/config/kbdbind.c:456
 #, fuzzy
 msgid "Search backwards for a text pattern"
 msgstr "Søk etter tekst"
 
-#: src/config/kbdbind.c:442
+#: src/config/kbdbind.c:457
 #, fuzzy
 msgid "Close tab"
 msgstr "Lukk"
 
-#: src/config/kbdbind.c:443
+#: src/config/kbdbind.c:458
 msgid "Next tab"
 msgstr ""
 
-#: src/config/kbdbind.c:444
+#: src/config/kbdbind.c:459
 #, fuzzy
 msgid "Previous tab"
 msgstr "Ingen tidligere søk"
 
-#: src/config/kbdbind.c:445
+#: src/config/kbdbind.c:460
 msgid "Toggle displaying of links to images"
 msgstr ""
 
-#: src/config/kbdbind.c:446
+#: src/config/kbdbind.c:461
 msgid "Toggle rendering of tables"
 msgstr ""
 
-#: src/config/kbdbind.c:447
+#: src/config/kbdbind.c:462
 msgid "Toggle rendering page as HTML / plain text"
 msgstr ""
 
-#: src/config/kbdbind.c:448
+#: src/config/kbdbind.c:463
 msgid "Toggle displaying of links numbers"
 msgstr ""
 
-#: src/config/kbdbind.c:449
+#: src/config/kbdbind.c:464
 msgid "Toggle usage of document specific colors"
 msgstr ""
 
-#: src/config/kbdbind.c:450
+#: src/config/kbdbind.c:465
 msgid "Go forward in the unhistory"
 msgstr ""
 
-#: src/config/kbdbind.c:451
+#: src/config/kbdbind.c:466
 msgid "Move cursor upwards"
 msgstr ""
 
-#: src/config/kbdbind.c:452
+#: src/config/kbdbind.c:467
 #, fuzzy
 msgid "View the current image"
 msgstr "V~is bilde"
 
-#: src/config/kbdbind.c:453
+#: src/config/kbdbind.c:468
 msgid "Maximize the current frame"
 msgstr ""
 
-#: src/config/kbdbind.c:648
+#: src/config/kbdbind.c:663
 msgid "Unrecognised keymap"
 msgstr ""
 
-#: src/config/kbdbind.c:650
+#: src/config/kbdbind.c:665
 #, fuzzy
 msgid "Error parsing keystroke"
 msgstr "Feil ved skriving til sokkel"
 
-#: src/config/kbdbind.c:652
+#: src/config/kbdbind.c:667
 msgid "Unrecognised action (internal error)"
 msgstr ""
 
@@ -3486,12 +3486,20 @@ msgstr "~Lenker"
 msgid "Link title"
 msgstr ""
 
-#: src/dialogs/document.c:227 src/dialogs/document.c:274
-#: src/dialogs/document.c:286
+#: src/dialogs/document.c:226
+msgid "Link last visit time"
+msgstr ""
+
+#: src/dialogs/document.c:232
+msgid "Link title (from history)"
+msgstr ""
+
+#: src/dialogs/document.c:263 src/dialogs/document.c:310
+#: src/dialogs/document.c:322
 msgid "Header info"
 msgstr "Info om dokumenthode"
 
-#: src/dialogs/document.c:287
+#: src/dialogs/document.c:323
 msgid "No header info."
 msgstr ""
 
@@ -3499,58 +3507,19 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: src/dialogs/info.c:45
+#: src/dialogs/info.c:46
 msgid "About"
 msgstr "Om"
 
-#: src/dialogs/info.c:56
+#: src/dialogs/info.c:86
 msgid "Keys"
 msgstr "Taster"
 
-#: src/dialogs/info.c:57
-#, fuzzy
-msgid ""
-"ESC      display menu\n"
-"^C, q    quit\n"
-"^P, ^N   scroll up, down\n"
-"[, ]     scroll left, right\n"
-"up, down select link\n"
-"->       follow link\n"
-"<-       go back\n"
-"g        go to URL\n"
-"G        go to URL based on current URL\n"
-"/        search\n"
-"?        search back\n"
-"n        find next\n"
-"N        find previous\n"
-"=        document info\n"
-"|        header info\n"
-"\\        document source\n"
-"d        download"
-msgstr ""
-"ESC      vis meny\n"
-"^C, q    avslutt\n"
-"^P, ^N   bla opp/ned\n"
-"[, ]     bla venstre/høyre\n"
-"opp,ned  velg lenker\n"
-"->       følg lenke\n"
-"<-       gå tilbake\n"
-"g        gå til URL\n"
-"G        gå til URL basert på nåværende URL\n"
-"/        søk\n"
-"?        søk baklengs\n"
-"n        finn neste\n"
-"N        finn forrige\n"
-"=        dokument informasjon\n"
-"|        vis dokumenthode\n"
-"\\        vis kilde\n"
-"d        start fil-overføring"
-
-#: src/dialogs/info.c:82
+#: src/dialogs/info.c:96
 msgid "Copying"
 msgstr "Lisens"
 
-#: src/dialogs/info.c:83
+#: src/dialogs/info.c:97
 #, fuzzy, c-format
 msgid ""
 "ELinks %s\n"
@@ -3572,11 +3541,11 @@ msgstr ""
 "i henhold til GNU General Public License, publisert av Free Software "
 "Foundation, enten versjon 2 eller en hvilken som helst senere versjon."
 
-#: src/dialogs/info.c:108
+#: src/dialogs/info.c:122
 msgid "Resources"
 msgstr "Ressurser"
 
-#: src/dialogs/info.c:109
+#: src/dialogs/info.c:123
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
@@ -3585,30 +3554,30 @@ msgid ""
 "Formatted document cache: %d documents, %d locked."
 msgstr ""
 
-#: src/dialogs/info.c:173
+#: src/dialogs/info.c:187
 #, fuzzy
 msgid "No entry."
 msgstr "Ingen innhold"
 
-#: src/dialogs/info.c:179
+#: src/dialogs/info.c:193
 #, c-format
 msgid "%ld more entries."
 msgstr ""
 
-#: src/dialogs/info.c:185
+#: src/dialogs/info.c:199
 msgid "Cache info"
 msgstr "Cache-informasjon"
 
-#: src/dialogs/info.c:186
+#: src/dialogs/info.c:200
 #, fuzzy, c-format
 msgid "Cache content: %s"
 msgstr "Cache-innhold"
 
-#: src/dialogs/info.c:204
+#: src/dialogs/info.c:218
 msgid "Memory info"
 msgstr "Minne-informasjon"
 
-#: src/dialogs/info.c:205
+#: src/dialogs/info.c:219
 #, fuzzy, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "bytes minne allokert"
@@ -4544,41 +4513,41 @@ msgid ""
 "%s"
 msgstr "Kunne ikke skrive til fil"
 
-#: src/sched/download.c:1218 src/sched/download.c:1229
+#: src/sched/download.c:1217 src/sched/download.c:1228
 msgid "Unknown type"
 msgstr "Ukjent type"
 
-#: src/sched/download.c:1219
+#: src/sched/download.c:1218
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr ""
 
-#: src/sched/download.c:1225 src/sched/download.c:1234
-#: src/sched/download.c:1261 src/sched/download.c:1273
+#: src/sched/download.c:1224 src/sched/download.c:1233
+#: src/sched/download.c:1260 src/sched/download.c:1272
 msgid "Display"
 msgstr "Vis"
 
-#: src/sched/download.c:1230
+#: src/sched/download.c:1229
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr ""
 
-#: src/sched/download.c:1252 src/sched/download.c:1265
+#: src/sched/download.c:1251 src/sched/download.c:1264
 msgid "What to do?"
 msgstr "Hva skal jeg gjøre?"
 
-#: src/sched/download.c:1253
+#: src/sched/download.c:1252
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 msgstr ""
 
-#: src/sched/download.c:1259 src/sched/download.c:1272
+#: src/sched/download.c:1258 src/sched/download.c:1271
 msgid "Open"
 msgstr "Åpne"
 
-#: src/sched/download.c:1266
+#: src/sched/download.c:1265
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4730,30 +4699,30 @@ msgstr ""
 msgid "No document"
 msgstr "dokumenter"
 
-#: src/sched/session.c:650
+#: src/sched/session.c:657
 #, fuzzy, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Vil du følge omdirigeringen og sende innholdet i skjemaet til URL"
 
-#: src/sched/session.c:653
+#: src/sched/session.c:660
 #, fuzzy, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Vil du sende innholdet i skjemaet til URL"
 
-#: src/sched/session.c:655
+#: src/sched/session.c:662
 #, fuzzy, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Vil du sende innholdet i skjemaet til URL om igjen"
 
-#: src/sched/session.c:661 src/sched/session.c:1219 src/sched/session.c:1239
+#: src/sched/session.c:668 src/sched/session.c:1227 src/sched/session.c:1247
 msgid "Warning"
 msgstr "Advarsel"
 
-#: src/sched/session.c:1209
+#: src/sched/session.c:1217
 msgid "Welcome"
 msgstr "Velkommen"
 
-#: src/sched/session.c:1210
+#: src/sched/session.c:1218
 #, fuzzy
 msgid ""
 "Welcome to ELinks!\n"
@@ -4761,7 +4730,7 @@ msgid ""
 "Press ESC for menu. Documentation is available in Help menu."
 msgstr "Trykk ESC for meny. Velg Hjelp->Brukerveiledning for mere informasjon"
 
-#: src/sched/session.c:1220
+#: src/sched/session.c:1228
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -4772,7 +4741,7 @@ msgid ""
 "be used. Apologies for any inconvience caused."
 msgstr ""
 
-#: src/sched/session.c:1240
+#: src/sched/session.c:1248
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5060,21 +5029,59 @@ msgstr "Søk etter tekst"
 msgid "You can do this only on the master terminal"
 msgstr ""
 
-#: src/viewer/text/view.c:728
+#: src/viewer/text/view.c:727
 msgid "Go to link"
 msgstr "Gå til lenke"
 
-#: src/viewer/text/view.c:728
+#: src/viewer/text/view.c:727
 msgid "Enter link number"
 msgstr "Skriv nummer på lenke"
 
-#: src/viewer/text/view.c:1411
+#: src/viewer/text/view.c:1406
 msgid "Save error"
 msgstr "Feil ved lagring"
 
-#: src/viewer/text/view.c:1412
+#: src/viewer/text/view.c:1407
 msgid "Error writing to file"
 msgstr "Feil ved skriving til fil"
+
+#, fuzzy
+#~ msgid ""
+#~ "ESC      display menu\n"
+#~ "^C, q    quit\n"
+#~ "^P, ^N   scroll up, down\n"
+#~ "[, ]     scroll left, right\n"
+#~ "up, down select link\n"
+#~ "->       follow link\n"
+#~ "<-       go back\n"
+#~ "g        go to URL\n"
+#~ "G        go to URL based on current URL\n"
+#~ "/        search\n"
+#~ "?        search back\n"
+#~ "n        find next\n"
+#~ "N        find previous\n"
+#~ "=        document info\n"
+#~ "|        header info\n"
+#~ "\\        document source\n"
+#~ "d        download"
+#~ msgstr ""
+#~ "ESC      vis meny\n"
+#~ "^C, q    avslutt\n"
+#~ "^P, ^N   bla opp/ned\n"
+#~ "[, ]     bla venstre/høyre\n"
+#~ "opp,ned  velg lenker\n"
+#~ "->       følg lenke\n"
+#~ "<-       gå tilbake\n"
+#~ "g        gå til URL\n"
+#~ "G        gå til URL basert på nåværende URL\n"
+#~ "/        søk\n"
+#~ "?        søk baklengs\n"
+#~ "n        finn neste\n"
+#~ "N        finn forrige\n"
+#~ "=        dokument informasjon\n"
+#~ "|        vis dokumenthode\n"
+#~ "\\        vis kilde\n"
+#~ "d        start fil-overføring"
 
 #, fuzzy
 #~ msgid "Secure open failed"

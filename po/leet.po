@@ -3,14 +3,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ELinks 0.5pre1.CVS\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-11-11 21:00+0100\n"
+"POT-Creation-Date: 2003-11-12 18:17+0100\n"
 "PO-Revision-Date: 2003-10-20 18:36+0200\n"
 "Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
 "Language-Team: |=|4x0rs Un173\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 
 #: src/bfu/hierbox.c:213
 msgid "Close"
@@ -33,24 +33,24 @@ msgstr "|\\|u|V|B3R 3><P3(73|) 1N |=i3|D"
 #: src/config/dialogs.c:309 src/config/dialogs.c:364 src/config/dialogs.c:379
 #: src/config/dialogs.c:452 src/config/dialogs.c:474 src/config/dialogs.c:501
 #: src/config/dialogs.c:565 src/config/dialogs.c:578 src/dialogs/auth.c:79
-#: src/dialogs/document.c:47 src/dialogs/document.c:208
-#: src/dialogs/document.c:277 src/dialogs/document.c:289 src/dialogs/edit.c:99
-#: src/dialogs/info.c:48 src/dialogs/info.c:75 src/dialogs/info.c:95
-#: src/dialogs/info.c:122 src/dialogs/info.c:188 src/dialogs/info.c:208
+#: src/dialogs/document.c:47 src/dialogs/document.c:244
+#: src/dialogs/document.c:313 src/dialogs/document.c:325 src/dialogs/edit.c:99
+#: src/dialogs/info.c:49 src/dialogs/info.c:89 src/dialogs/info.c:109
+#: src/dialogs/info.c:136 src/dialogs/info.c:202 src/dialogs/info.c:222
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
 #: src/dialogs/mime.c:165 src/dialogs/options.c:189 src/dialogs/options.c:264
 #: src/globhist/dialogs.c:208 src/globhist/dialogs.c:379
 #: src/protocol/protocol.c:60 src/protocol/user.c:157 src/protocol/user.c:173
 #: src/sched/download.c:450 src/sched/download.c:526 src/sched/download.c:552
 #: src/sched/download.c:827 src/sched/error.c:40 src/sched/session.c:395
-#: src/sched/session.c:1214 src/sched/session.c:1231 src/sched/session.c:1255
+#: src/sched/session.c:1222 src/sched/session.c:1239 src/sched/session.c:1263
 #: src/scripting/lua/core.c:384 src/scripting/lua/core.c:467
 #: src/scripting/lua/core.c:574 src/scripting/lua/core.c:700
 #: src/viewer/text/form.c:652 src/viewer/text/search.c:824
 #: src/viewer/text/search.c:850 src/viewer/text/search.c:856
 #: src/viewer/text/search.c:878 src/viewer/text/search.c:1044
 #: src/viewer/text/search.c:1055 src/viewer/text/textarea.c:269
-#: src/viewer/text/view.c:729 src/viewer/text/view.c:1414
+#: src/viewer/text/view.c:728 src/viewer/text/view.c:1409
 msgid "OK"
 msgstr "0|<"
 
@@ -142,12 +142,12 @@ msgstr "f0|D4R |\\|4|V|3"
 #: src/config/dialogs.c:579 src/dialogs/auth.c:80 src/dialogs/edit.c:103
 #: src/dialogs/menu.c:533 src/dialogs/menu.c:544 src/dialogs/menu.c:575
 #: src/dialogs/mime.c:166 src/dialogs/options.c:191 src/dialogs/options.c:265
-#: src/sched/download.c:743 src/sched/download.c:1226
-#: src/sched/download.c:1235 src/sched/download.c:1262
-#: src/sched/download.c:1274 src/scripting/lua/core.c:385
+#: src/sched/download.c:743 src/sched/download.c:1225
+#: src/sched/download.c:1234 src/sched/download.c:1261
+#: src/sched/download.c:1273 src/scripting/lua/core.c:385
 #: src/scripting/lua/core.c:468 src/scripting/lua/core.c:700
 #: src/viewer/text/search.c:1044 src/viewer/text/search.c:1055
-#: src/viewer/text/view.c:729
+#: src/viewer/text/view.c:728
 msgid "Cancel"
 msgstr "(4N(3|"
 
@@ -193,7 +193,7 @@ msgstr "|)3|_373 marked 800|<|V|4R|<5?"
 #: src/bookmarks/dialogs.c:408 src/dialogs/menu.c:149 src/dialogs/mime.c:86
 #: src/formhist/formhist.c:380 src/globhist/dialogs.c:290
 #: src/globhist/dialogs.c:301 src/globhist/dialogs.c:342
-#: src/sched/session.c:664
+#: src/sched/session.c:671
 msgid "Yes"
 msgstr "Yes"
 
@@ -201,7 +201,7 @@ msgstr "Yes"
 #: src/bookmarks/dialogs.c:409 src/dialogs/menu.c:150 src/dialogs/mime.c:87
 #: src/formhist/formhist.c:381 src/globhist/dialogs.c:291
 #: src/globhist/dialogs.c:302 src/globhist/dialogs.c:343
-#: src/sched/session.c:665
+#: src/sched/session.c:672
 msgid "No"
 msgstr "|\\|0"
 
@@ -369,7 +369,7 @@ msgid "Unable to write to config file %s: %s"
 msgstr "Unable to VV|2173 70 config f1|3 %s: %s"
 
 #: src/config/dialogs.c:100 src/config/dialogs.c:113 src/config/dialogs.c:404
-#: src/dialogs/document.c:41 src/dialogs/document.c:205
+#: src/dialogs/document.c:41 src/dialogs/document.c:241
 #: src/globhist/dialogs.c:372 src/globhist/dialogs.c:439
 msgid "Info"
 msgstr "1Nf0"
@@ -471,7 +471,7 @@ msgid "Option manager"
 msgstr "0P710|\\|5 |\\/|4N493|2"
 
 #: src/config/dialogs.c:408 src/config/dialogs.c:606 src/dialogs/options.c:190
-#: src/sched/download.c:1224 src/sched/download.c:1260
+#: src/sched/download.c:1223 src/sched/download.c:1259
 msgid "Save"
 msgstr "54\\/3"
 
@@ -535,333 +535,333 @@ msgstr "|<3`/81|\\|9 |\\/|4N493|2"
 msgid "Toggle display"
 msgstr "709913 display"
 
-#: src/config/kbdbind.c:258
+#: src/config/kbdbind.c:273
 msgid "Main mapping"
 msgstr "|V|41|\\| mapping"
 
-#: src/config/kbdbind.c:259
+#: src/config/kbdbind.c:274
 msgid "Edit mapping"
 msgstr "3o|17 mapping"
 
-#: src/config/kbdbind.c:260
+#: src/config/kbdbind.c:275
 msgid "Menu mapping"
 msgstr "|V|3|\\|U mapping"
 
-#: src/config/kbdbind.c:373
+#: src/config/kbdbind.c:388
 msgid "Abort connection"
 msgstr "@80R7 (0|\\||\\|3(710N"
 
-#: src/config/kbdbind.c:374
+#: src/config/kbdbind.c:389
 msgid "Add a new bookmark"
 msgstr "4|)|) a |\\|u 800|<|V|4R|<"
 
-#: src/config/kbdbind.c:375
+#: src/config/kbdbind.c:390
 msgid "Add a new bookmark using current link"
 msgstr "4|)|) a |\\|u 800|<|V|4R|< using current |1N|<"
 
-#: src/config/kbdbind.c:376
+#: src/config/kbdbind.c:391
 msgid "Attempt to auto-complete the input"
 msgstr "Attempt to au70-complete the input"
 
-#: src/config/kbdbind.c:377
+#: src/config/kbdbind.c:392
 msgid "Attempt to unambiguously auto-complete the input"
 msgstr "Attempt to unambiguously au70-complete the input"
 
-#: src/config/kbdbind.c:378
+#: src/config/kbdbind.c:393
 msgid "Return to the previous document in history"
 msgstr "Return 70 the |oR3\\/10U5 |)0(U|V|3N7 in |-|1570r`/"
 
-#: src/config/kbdbind.c:379
+#: src/config/kbdbind.c:394
 msgid "Delete character in front of the cursor"
 msgstr "|)3|_373 (|-|4R4(73R in front of the cursor"
 
-#: src/config/kbdbind.c:380
+#: src/config/kbdbind.c:395
 msgid "Open bookmark manager"
 msgstr "0p3N 800|<|V|4R|< |\\/|4N493|2"
 
-#: src/config/kbdbind.c:381
+#: src/config/kbdbind.c:396
 msgid "Reload cookies file"
 msgstr "|23|04|) cookies f1|3"
 
-#: src/config/kbdbind.c:382
+#: src/config/kbdbind.c:397
 msgid "Copy text to clipboard"
 msgstr "Copy 73><7 70 clipboard"
 
-#: src/config/kbdbind.c:383
+#: src/config/kbdbind.c:398
 msgid "Delete text from clipboard"
 msgstr "|)3|_373 73><7 from clipboard"
 
-#: src/config/kbdbind.c:384
+#: src/config/kbdbind.c:399
 msgid "Delete character under cursor"
 msgstr "|)3|_373 (|-|4R4(73R under cursor"
 
-#: src/config/kbdbind.c:385
+#: src/config/kbdbind.c:400
 msgid "Show information about the current page"
 msgstr "Show inf0|2|V|ations 480U7 the current page"
 
-#: src/config/kbdbind.c:386
+#: src/config/kbdbind.c:401
 msgid "Move cursor downwards"
 msgstr "Move cursor downwards"
 
-#: src/config/kbdbind.c:387
+#: src/config/kbdbind.c:402
 msgid "Download the current link"
 msgstr "|)0VVN|04|) the current |1N|<"
 
-#: src/config/kbdbind.c:388
+#: src/config/kbdbind.c:403
 msgid "Download the current image"
 msgstr "|)0VVN|04|) the current 1|V|463"
 
-#: src/config/kbdbind.c:389
+#: src/config/kbdbind.c:404
 msgid "Begin editing"
 msgstr "Begin 3o|17ing"
 
 #. FIXME
-#: src/config/kbdbind.c:390
+#: src/config/kbdbind.c:405
 msgid "Go to the end of the page/line"
 msgstr "60 70 the end of the page/line"
 
-#: src/config/kbdbind.c:391
+#: src/config/kbdbind.c:406
 msgid "Follow the current link"
 msgstr "f0110VV the current |1N|<"
 
-#: src/config/kbdbind.c:392
+#: src/config/kbdbind.c:407
 msgid "Follow the current link, forcing reload of the target"
 msgstr "f0110VV the current |1N|<, forcing |23|04|) of the target"
 
-#: src/config/kbdbind.c:393
+#: src/config/kbdbind.c:408
 msgid "Open the File menu"
 msgstr "0p3N the f1|3 |V|3|\\|U"
 
-#: src/config/kbdbind.c:394
+#: src/config/kbdbind.c:409
 msgid "Find the next occurrence of the current search text"
 msgstr "f1|\\||) the |\\|3><7 occurrence of the current 534R(H 73><7"
 
-#: src/config/kbdbind.c:395
+#: src/config/kbdbind.c:410
 msgid "Find the previous occurrence of the current search text"
 msgstr "f1|\\||) the |oR3\\/10U5 occurrence of the current 534R(H 73><7"
 
-#: src/config/kbdbind.c:396
+#: src/config/kbdbind.c:411
 msgid "Forget authentication credentials"
 msgstr "Forget authentication credentials"
 
-#: src/config/kbdbind.c:397
+#: src/config/kbdbind.c:412
 msgid "Open \"Go to URL\" dialog box"
 msgstr "0p3N \"60 70 |_|R|_\" dialog box"
 
-#: src/config/kbdbind.c:398
+#: src/config/kbdbind.c:413
 msgid "Open \"Go to URL\" dialog box containing the current URL"
 msgstr "0p3N \"60 70 URL\" dialog box (0|\\|741N5ing the current |_|R|_"
 
-#: src/config/kbdbind.c:399
+#: src/config/kbdbind.c:414
 msgid "Open \"Go to URL\" dialog box containing the current link URL"
 msgstr "0p3N \"60 70 URL\" dialog box (0|\\|741N5ing the current |1N|< |_|R|_"
 
-#: src/config/kbdbind.c:400
+#: src/config/kbdbind.c:415
 msgid "Go to the homepage"
 msgstr "60 70 the homepage"
 
-#: src/config/kbdbind.c:401
+#: src/config/kbdbind.c:416
 msgid "Show information about the current page HTTP headers"
 msgstr "Show inf0|2|V|ations 480U7 the current page HTTP |-|34|)3Rs"
 
-#: src/config/kbdbind.c:402
+#: src/config/kbdbind.c:417
 msgid "Open history manager"
 msgstr "0p3N |-|1570r`/ |\\/|4N493|2"
 
-#: src/config/kbdbind.c:403
+#: src/config/kbdbind.c:418
 msgid "Go to the start of the page/line"
 msgstr "60 70 the start of the page/line"
 
-#: src/config/kbdbind.c:404
+#: src/config/kbdbind.c:419
 msgid "Delete to beginning of line"
 msgstr "|)3|_373 70 beginning of line"
 
-#: src/config/kbdbind.c:405
+#: src/config/kbdbind.c:420
 msgid "Delete to end of line"
 msgstr "|)3|_373 70 end of line"
 
-#: src/config/kbdbind.c:406
+#: src/config/kbdbind.c:421
 msgid "Open keybinding manager"
 msgstr "0p3N |<3`/81|\\|9 |\\/|4N493|2"
 
-#: src/config/kbdbind.c:407
+#: src/config/kbdbind.c:422
 msgid "Move the cursor left"
 msgstr "Move the cursor left"
 
-#: src/config/kbdbind.c:408
+#: src/config/kbdbind.c:423
 msgid "Open the link context menu"
 msgstr "0p3N the |1N|< con73><7 |V|3|\\|U"
 
-#: src/config/kbdbind.c:409
+#: src/config/kbdbind.c:424
 msgid "Jump to link"
 msgstr "Jump 70 |1N|<"
 
-#: src/config/kbdbind.c:411
+#: src/config/kbdbind.c:426
 msgid "Open a Lua console"
 msgstr "0p3N a Lua console"
 
-#: src/config/kbdbind.c:413
+#: src/config/kbdbind.c:428
 msgid "Open a Lua console (DISABLED)"
 msgstr "0p3N a Lua console (DISABLED)"
 
 #. internal use only
-#: src/config/kbdbind.c:416
+#: src/config/kbdbind.c:431
 msgid "Activate the menu"
 msgstr "Activate the |V|3|\\|U"
 
-#: src/config/kbdbind.c:417
+#: src/config/kbdbind.c:432
 msgid "Move to the next frame"
 msgstr "Move 70 the |\\|3><7 f|24|V|3"
 
-#: src/config/kbdbind.c:418
+#: src/config/kbdbind.c:433
 msgid "Open a new tab"
 msgstr "0p3N a |\\|u 74B"
 
-#: src/config/kbdbind.c:419
+#: src/config/kbdbind.c:434
 msgid "Open a new tab in background"
 msgstr "0p3N a |\\|u 74b in 84(|<6R0Un|)"
 
-#: src/config/kbdbind.c:420
+#: src/config/kbdbind.c:435
 msgid "Open a new window"
 msgstr "0p3N a |\\|u \\/\\/1N|)0VV"
 
-#: src/config/kbdbind.c:421
+#: src/config/kbdbind.c:436
 msgid "Open the current link in a new tab"
 msgstr "0p3N the current |1N|< in a |\\|u 7ab"
 
-#: src/config/kbdbind.c:423
+#: src/config/kbdbind.c:438
 msgid "Open the current link a new tab in background"
 msgstr "0p3N the current |1N|< in a |\\|u 7ab in b4(k6R0un|)"
 
-#: src/config/kbdbind.c:424
+#: src/config/kbdbind.c:439
 msgid "Open the current link in a new window"
 msgstr "0p3N the current |1N|< in a |\\|u \\/\\/1N|)0VV"
 
-#: src/config/kbdbind.c:425
+#: src/config/kbdbind.c:440
 msgid "Open options manager"
 msgstr "0p3N 0p710Ns |\\/|4N493|2"
 
-#: src/config/kbdbind.c:426
+#: src/config/kbdbind.c:441
 msgid "Move downwards by a page"
 msgstr "Move downwards by a page"
 
-#: src/config/kbdbind.c:427
+#: src/config/kbdbind.c:442
 msgid "Move upwards by a page"
 msgstr "Move upwards by a page"
 
-#: src/config/kbdbind.c:428
+#: src/config/kbdbind.c:443
 msgid "Paste text from the clipboard"
 msgstr "Paste 73><7 from the clipboard"
 
-#: src/config/kbdbind.c:429
+#: src/config/kbdbind.c:444
 msgid "Move to the previous frame"
 msgstr "Move 70 the |oR3\\/10U5 f|24|V|3"
 
-#: src/config/kbdbind.c:430
+#: src/config/kbdbind.c:445
 msgid "Open a quit confirmation dialog box"
 msgstr "0p3N a quit confirmation dialog box"
 
-#: src/config/kbdbind.c:431
+#: src/config/kbdbind.c:446
 msgid "Quit without confirmation"
 msgstr "Quit without confirmation"
 
-#: src/config/kbdbind.c:432
+#: src/config/kbdbind.c:447
 msgid "Reload the current page"
 msgstr "|23|04|) the current page"
 
-#: src/config/kbdbind.c:433
+#: src/config/kbdbind.c:448
 msgid "Attempt to resume download of the current link"
 msgstr "Attempt 70 resume |)0VVN|04|) of the current |1N|<"
 
-#: src/config/kbdbind.c:434
+#: src/config/kbdbind.c:449
 msgid "Move the cursor right"
 msgstr "Move the cursor right"
 
-#: src/config/kbdbind.c:435
+#: src/config/kbdbind.c:450
 msgid "Save formatted document"
 msgstr "54\\/3 f0|2|V|atted |)0(U|V|3N7"
 
-#: src/config/kbdbind.c:436
+#: src/config/kbdbind.c:451
 msgid "Scroll down"
 msgstr "Scroll down"
 
-#: src/config/kbdbind.c:437
+#: src/config/kbdbind.c:452
 msgid "Scroll left"
 msgstr "Scroll left"
 
-#: src/config/kbdbind.c:438
+#: src/config/kbdbind.c:453
 msgid "Scroll right"
 msgstr "Scroll right"
 
-#: src/config/kbdbind.c:439
+#: src/config/kbdbind.c:454
 msgid "Scroll up"
 msgstr "Scroll up"
 
-#: src/config/kbdbind.c:440
+#: src/config/kbdbind.c:455
 msgid "Search for a text pattern"
 msgstr "534R(H for a 73><7 pattern"
 
-#: src/config/kbdbind.c:441
+#: src/config/kbdbind.c:456
 msgid "Search backwards for a text pattern"
 msgstr "534R(H 84(|<VV4R|)s for a 73><7 pattern"
 
-#: src/config/kbdbind.c:442
+#: src/config/kbdbind.c:457
 msgid "Close tab"
 msgstr "(1053 74|3"
 
-#: src/config/kbdbind.c:443
+#: src/config/kbdbind.c:458
 msgid "Next tab"
 msgstr "|\\|3><7 74|3"
 
-#: src/config/kbdbind.c:444
+#: src/config/kbdbind.c:459
 msgid "Previous tab"
 msgstr "|oR3\\/10U5 74|3"
 
-#: src/config/kbdbind.c:445
+#: src/config/kbdbind.c:460
 msgid "Toggle displaying of links to images"
 msgstr "709913 displaying of |1N|<s 70 1|V|463s"
 
-#: src/config/kbdbind.c:446
+#: src/config/kbdbind.c:461
 msgid "Toggle rendering of tables"
 msgstr "709913 rendering of 74|3les"
 
-#: src/config/kbdbind.c:447
+#: src/config/kbdbind.c:462
 msgid "Toggle rendering page as HTML / plain text"
 msgstr "709913 rendering page as HTML / plain 73><7"
 
-#: src/config/kbdbind.c:448
+#: src/config/kbdbind.c:463
 msgid "Toggle displaying of links numbers"
 msgstr "709913 displaying of |1N|<s |\\|U|V|83Rs"
 
-#: src/config/kbdbind.c:449
+#: src/config/kbdbind.c:464
 msgid "Toggle usage of document specific colors"
 msgstr "7o99le U5463 of |)0(U|V|3N7 specific (0|_0Rs"
 
-#: src/config/kbdbind.c:450
+#: src/config/kbdbind.c:465
 msgid "Go forward in the unhistory"
 msgstr "60 forward in the un|-|1570r`/"
 
-#: src/config/kbdbind.c:451
+#: src/config/kbdbind.c:466
 msgid "Move cursor upwards"
 msgstr "Move cursor upwards"
 
-#: src/config/kbdbind.c:452
+#: src/config/kbdbind.c:467
 msgid "View the current image"
 msgstr "\\/13\\/\\/ the current 1|V|463"
 
-#: src/config/kbdbind.c:453
+#: src/config/kbdbind.c:468
 msgid "Maximize the current frame"
 msgstr "Maximize the current f|24|V|3"
 
-#: src/config/kbdbind.c:648
+#: src/config/kbdbind.c:663
 msgid "Unrecognised keymap"
 msgstr "Unrecognised |<3`/map"
 
-#: src/config/kbdbind.c:650
+#: src/config/kbdbind.c:665
 msgid "Error parsing keystroke"
 msgstr "3RR0R parsing |<3`/5troke"
 
-#: src/config/kbdbind.c:652
+#: src/config/kbdbind.c:667
 msgid "Unrecognised action (internal error)"
 msgstr "Unrecognised action (1|\\|73RN4|_ 3RR0R)"
 
@@ -3674,12 +3674,21 @@ msgstr "|1N|<"
 msgid "Link title"
 msgstr "|1N|< 717|3"
 
-#: src/dialogs/document.c:227 src/dialogs/document.c:274
-#: src/dialogs/document.c:286
+#: src/dialogs/document.c:226
+#, fuzzy
+msgid "Link last visit time"
+msgstr "Last visit 71|V|3"
+
+#: src/dialogs/document.c:232
+msgid "Link title (from history)"
+msgstr ""
+
+#: src/dialogs/document.c:263 src/dialogs/document.c:310
+#: src/dialogs/document.c:322
 msgid "Header info"
 msgstr "|-|34|)3R 1|\\|f0"
 
-#: src/dialogs/document.c:287
+#: src/dialogs/document.c:323
 msgid "No header info."
 msgstr "|\\|0 |-|34|)3R 1|\\|f0."
 
@@ -3687,57 +3696,19 @@ msgstr "|\\|0 |-|34|)3R 1|\\|f0."
 msgid "Clear"
 msgstr "Clear"
 
-#: src/dialogs/info.c:45
+#: src/dialogs/info.c:46
 msgid "About"
 msgstr "480U7"
 
-#: src/dialogs/info.c:56
+#: src/dialogs/info.c:86
 msgid "Keys"
 msgstr "|<3`/5"
 
-#: src/dialogs/info.c:57
-msgid ""
-"ESC      display menu\n"
-"^C, q    quit\n"
-"^P, ^N   scroll up, down\n"
-"[, ]     scroll left, right\n"
-"up, down select link\n"
-"->       follow link\n"
-"<-       go back\n"
-"g        go to URL\n"
-"G        go to URL based on current URL\n"
-"/        search\n"
-"?        search back\n"
-"n        find next\n"
-"N        find previous\n"
-"=        document info\n"
-"|        header info\n"
-"\\        document source\n"
-"d        download"
-msgstr ""
-"ESC      display menu\n"
-"^C, q    quit\n"
-"^P, ^N   scroll up, down\n"
-"[, ]     scroll left, right\n"
-"up, down select link\n"
-"->       follow link\n"
-"<-       go back\n"
-"g        go to URL\n"
-"G        go to URL based on current URL\n"
-"/        search\n"
-"?        search back\n"
-"n        find next\n"
-"N        find previous\n"
-"=        document info\n"
-"|        header info\n"
-"\\        document source\n"
-"d        download"
-
-#: src/dialogs/info.c:82
+#: src/dialogs/info.c:96
 msgid "Copying"
 msgstr "(0|o`/1|\\|6"
 
-#: src/dialogs/info.c:83
+#: src/dialogs/info.c:97
 #, c-format
 msgid ""
 "ELinks %s\n"
@@ -3760,11 +3731,11 @@ msgstr ""
 "Software Foundation; either version 2 of the License, or (at your option) "
 "any later version."
 
-#: src/dialogs/info.c:108
+#: src/dialogs/info.c:122
 msgid "Resources"
 msgstr "Resources"
 
-#: src/dialogs/info.c:109
+#: src/dialogs/info.c:123
 #, c-format
 msgid ""
 "Resources: %d handles, %d timers.\n"
@@ -3777,29 +3748,29 @@ msgstr ""
 "Memory cache: %d bytes, %d files, %d locked, %d loading.\n"
 "Formatted document cache: %d documents, %d locked."
 
-#: src/dialogs/info.c:173
+#: src/dialogs/info.c:187
 msgid "No entry."
 msgstr "|\\|0 entry."
 
-#: src/dialogs/info.c:179
+#: src/dialogs/info.c:193
 #, c-format
 msgid "%ld more entries."
 msgstr "%ld more entries."
 
-#: src/dialogs/info.c:185
+#: src/dialogs/info.c:199
 msgid "Cache info"
 msgstr "(4(|-|3 1|\\|f0"
 
-#: src/dialogs/info.c:186
+#: src/dialogs/info.c:200
 #, c-format
 msgid "Cache content: %s"
 msgstr "(4(|-|3 content: %s"
 
-#: src/dialogs/info.c:204
+#: src/dialogs/info.c:218
 msgid "Memory info"
 msgstr "/\\/\\3|V|0R`/ 1|\\|f0"
 
-#: src/dialogs/info.c:205
+#: src/dialogs/info.c:219
 #, fuzzy, c-format
 msgid "%ld bytes of memory allocated."
 msgstr "%ld bytes of /\\/\\3|V|0R`/ allocated."
@@ -4782,30 +4753,30 @@ msgstr ""
 "Could not create file '%s':\n"
 "%s"
 
-#: src/sched/download.c:1218 src/sched/download.c:1229
+#: src/sched/download.c:1217 src/sched/download.c:1228
 msgid "Unknown type"
 msgstr "U|\\||<N0VVn 7`/P3"
 
-#: src/sched/download.c:1219
+#: src/sched/download.c:1218
 #, c-format
 msgid "Would you like to save the file '%s' (type: %s) or display it?"
 msgstr "Would you like to save the file '%s' (type: %s) or display it?"
 
-#: src/sched/download.c:1225 src/sched/download.c:1234
-#: src/sched/download.c:1261 src/sched/download.c:1273
+#: src/sched/download.c:1224 src/sched/download.c:1233
+#: src/sched/download.c:1260 src/sched/download.c:1272
 msgid "Display"
 msgstr "Display"
 
-#: src/sched/download.c:1230
+#: src/sched/download.c:1229
 #, c-format
 msgid "Would you like to display the file '%s' (type: %s)?"
 msgstr "Would you like to display the file '%s' (type: %s)?"
 
-#: src/sched/download.c:1252 src/sched/download.c:1265
+#: src/sched/download.c:1251 src/sched/download.c:1264
 msgid "What to do?"
 msgstr "VV007 70 do?"
 
-#: src/sched/download.c:1253
+#: src/sched/download.c:1252
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4814,11 +4785,11 @@ msgstr ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
 "with '%s', save it or display it?"
 
-#: src/sched/download.c:1259 src/sched/download.c:1272
+#: src/sched/download.c:1258 src/sched/download.c:1271
 msgid "Open"
 msgstr "0p3N"
 
-#: src/sched/download.c:1266
+#: src/sched/download.c:1265
 #, c-format
 msgid ""
 "Would you like to open the file '%s' (type: %s%s%s)\n"
@@ -4971,30 +4942,30 @@ msgstr "U|\\|717|3d"
 msgid "No document"
 msgstr "|\\|0 |)0(U|V|3N7"
 
-#: src/sched/session.c:650
+#: src/sched/session.c:657
 #, c-format
 msgid "Do you want to follow redirect and post form data to URL %s?"
 msgstr "Do you want to f0110VV R3o|1R3(7 and |o057 f0|2|V| data 70 |_|R|_ %s?"
 
-#: src/sched/session.c:653
+#: src/sched/session.c:660
 #, c-format
 msgid "Do you want to post form data to URL %s?"
 msgstr "Do you want to |o057 f0|2|V| data 70 |_|R|_ %s?"
 
-#: src/sched/session.c:655
+#: src/sched/session.c:662
 #, c-format
 msgid "Do you want to repost form data to URL %s?"
 msgstr "Do you want to re|o057 f0|2|V| data 70 |_|R|_ %s?"
 
-#: src/sched/session.c:661 src/sched/session.c:1219 src/sched/session.c:1239
+#: src/sched/session.c:668 src/sched/session.c:1227 src/sched/session.c:1247
 msgid "Warning"
 msgstr "VV4RN1N6"
 
-#: src/sched/session.c:1209
+#: src/sched/session.c:1217
 msgid "Welcome"
 msgstr "VV3|(0|V|3"
 
-#: src/sched/session.c:1210
+#: src/sched/session.c:1218
 msgid ""
 "Welcome to ELinks!\n"
 "\n"
@@ -5004,7 +4975,7 @@ msgstr ""
 "\n"
 "Press ESC for menu. Documentation is available in Help menu."
 
-#: src/sched/session.c:1220
+#: src/sched/session.c:1228
 msgid ""
 "You have empty string in protocol.http.user_agent - this was a default value "
 "in the past, substituted by default ELinks User-Agent string. However, "
@@ -5022,7 +4993,7 @@ msgstr ""
 "what I'm talking about, just do this), so that correct default setting will "
 "be used. Apologies for any inconvience caused."
 
-#: src/sched/session.c:1240
+#: src/sched/session.c:1248
 msgid ""
 "You have option config.saving_style set to a de facto obsolete value. The "
 "configuration saving algorithms of ELinks were changed from the last time "
@@ -5318,21 +5289,58 @@ msgstr "534R(H for 73><7"
 msgid "You can do this only on the master terminal"
 msgstr "You can do this only on the master 73R|V|1|\\|4|"
 
-#: src/viewer/text/view.c:728
+#: src/viewer/text/view.c:727
 msgid "Go to link"
 msgstr "60 70 |1N|<"
 
-#: src/viewer/text/view.c:728
+#: src/viewer/text/view.c:727
 msgid "Enter link number"
 msgstr "3|\\|73R |1N|< |\\|U|V|83R"
 
-#: src/viewer/text/view.c:1411
+#: src/viewer/text/view.c:1406
 msgid "Save error"
 msgstr "54\\/3 3RR0R"
 
-#: src/viewer/text/view.c:1412
+#: src/viewer/text/view.c:1407
 msgid "Error writing to file"
 msgstr "3RR0R VV|2171n9 70 f1|3"
+
+#~ msgid ""
+#~ "ESC      display menu\n"
+#~ "^C, q    quit\n"
+#~ "^P, ^N   scroll up, down\n"
+#~ "[, ]     scroll left, right\n"
+#~ "up, down select link\n"
+#~ "->       follow link\n"
+#~ "<-       go back\n"
+#~ "g        go to URL\n"
+#~ "G        go to URL based on current URL\n"
+#~ "/        search\n"
+#~ "?        search back\n"
+#~ "n        find next\n"
+#~ "N        find previous\n"
+#~ "=        document info\n"
+#~ "|        header info\n"
+#~ "\\        document source\n"
+#~ "d        download"
+#~ msgstr ""
+#~ "ESC      display menu\n"
+#~ "^C, q    quit\n"
+#~ "^P, ^N   scroll up, down\n"
+#~ "[, ]     scroll left, right\n"
+#~ "up, down select link\n"
+#~ "->       follow link\n"
+#~ "<-       go back\n"
+#~ "g        go to URL\n"
+#~ "G        go to URL based on current URL\n"
+#~ "/        search\n"
+#~ "?        search back\n"
+#~ "n        find next\n"
+#~ "N        find previous\n"
+#~ "=        document info\n"
+#~ "|        header info\n"
+#~ "\\        document source\n"
+#~ "d        download"
 
 #~ msgid "Secure open failed"
 #~ msgstr "Secure 0p3N failed"

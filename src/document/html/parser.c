@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.216 2003/10/09 09:34:54 zas Exp $ */
+/* $Id: parser.c,v 1.217 2003/10/09 09:49:39 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2723,7 +2723,7 @@ html_link_parse(unsigned char *a, struct hlink *link)
 static void
 html_link(unsigned char *a)
 {
-	int link_display = get_opt_int("document.html.link_display");
+	int link_display = d_opt->meta_link_display;
 	unsigned char *name = NULL;
 	struct hlink link;
 	static unsigned char link_rel_string[] = "Link: ";

@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.26 2003/10/04 21:44:46 jonas Exp $ */
+/* $Id: options.c,v 1.27 2003/10/09 09:49:38 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -34,6 +34,7 @@ init_document_options(struct document_options *doo)
 	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
 	doo->margin = get_opt_int("document.browse.margin_width");
 	doo->num_links_key = get_opt_int("document.browse.links.number_keys_select_link");
+	doo->meta_link_display = get_opt_int("document.html.link_display");
 
 	/* Default colors. */
 	doo->default_fg = get_opt_color("document.colors.text");

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.16 2003/10/04 21:44:46 jonas Exp $ */
+/* $Id: options.h,v 1.17 2003/10/09 09:49:38 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -10,6 +10,7 @@ struct document_options {
 	int margin;
 	int num_links_key;
 	int use_document_colours;
+	int meta_link_display;
 
 	color_t default_fg;
 	color_t default_bg;

@@ -1,4 +1,4 @@
-/* $Id: scanner.h,v 1.9 2004/02/02 13:54:53 jonas Exp $ */
+/* $Id: scanner.h,v 1.10 2004/05/04 01:10:11 jonas Exp $ */
 
 #ifndef EL__UTIL_SCANNER_H
 #define EL__UTIL_SCANNER_H
@@ -40,16 +40,15 @@ struct scan_table_info {
 	enum { SCAN_RANGE, SCAN_STRING, SCAN_END } type;
 	union scan_table_data {
 		struct { unsigned char *source; long length; } string;
-		struct { long start, end; } range;
+		struct { unsigned char *start; long end; } range;
 	} data;
 	int bits;
 };
 
 #define	SCAN_TABLE_SIZE	256
 
-/* FIXME: We assume that sizeof(void *) == sizeof(long) here! --pasky */
 #define SCAN_TABLE_INFO(type, data1, data2, bits) \
-	{ (type), { { (unsigned char *) (data1), (data2) } }, (bits) }
+	{ (type), { { (data1), (data2) } }, (bits) }
 
 #define SCAN_TABLE_RANGE(from, to, bits) SCAN_TABLE_INFO(SCAN_RANGE, from, to, bits)
 #define SCAN_TABLE_STRING(str, bits)	 SCAN_TABLE_INFO(SCAN_STRING, str, sizeof(str) - 1, bits)

@@ -1,5 +1,5 @@
 /* A pretty generic scanner */
-/* $Id: scanner.c,v 1.7 2004/04/23 20:44:30 pasky Exp $ */
+/* $Id: scanner.c,v 1.8 2004/05/04 01:10:11 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -130,11 +130,11 @@ init_scanner_info(struct scanner_info *scanner_info)
 		union scan_table_data *data = &info[i].data;
 
 		if (info[i].type == SCAN_RANGE) {
-			int index = data->range.start;
+			int index = *data->range.start;
 
-			assert(data->range.start > 0);
+			assert(index > 0);
 			assert(data->range.end < SCAN_TABLE_SIZE);
-			assert(data->range.start <= data->range.end);
+			assert(index <= data->range.end);
 
 			for (; index <= data->range.end; index++)
 				scan_table[index] |= info[i].bits;

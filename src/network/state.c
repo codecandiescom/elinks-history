@@ -1,5 +1,5 @@
 /* Status/error messages managment */
-/* $Id: state.c,v 1.28 2004/07/22 21:50:47 zas Exp $ */
+/* $Id: state.c,v 1.29 2004/07/22 22:20:30 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,7 +105,9 @@ struct strerror_val {
 
 static INIT_LIST_HEAD(strerror_buf); /* struct strerror_val */
 
-
+/* It returns convenient error message, depending on @state.
+ * It never returns NULL (if one changes that, be warn that
+ * callers may not test for this condition) --Zas */
 unsigned char *
 get_err_msg(int state, struct terminal *term)
 {

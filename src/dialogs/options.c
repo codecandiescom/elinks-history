@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.128 2003/11/27 00:49:23 jonas Exp $ */
+/* $Id: options.c,v 1.129 2003/11/27 01:05:18 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -132,9 +132,8 @@ static int
 push_save_button(struct dialog_data *dlg_data, struct widget_data *button)
 {
 	push_ok_button(dlg_data, button);
-	if (!get_opt_int_tree(cmdline_options, "anonymous"))
-	        write_config(dlg_data->win->term);
-        return 0;
+	write_config(dlg_data->win->term);
+	return 0;
 }
 
 #ifdef USE_256_COLORS
@@ -148,6 +147,7 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *dlg;
 	int i, *values;
+	int anonymous = get_opt_int_tree(cmdline_options, "anonymous");
 
 	dlg = calloc_dialog(TERMOPT_WIDGETS_COUNT, sizeof(int) * TERM_OPTIONS);
 	if (!dlg) return;
@@ -187,10 +187,11 @@ terminal_options(struct terminal *term, void *xxx, struct session *ses)
 	add_dlg_checkbox(dlg, _("UTF-8 I/O", term), values[TERM_OPT_UTF_8_IO]);
 
 	add_dlg_button(dlg, B_ENTER, push_ok_button, _("OK", term), NULL);
-	add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), NULL);
+	if (!anonymous)
+		add_dlg_button(dlg, B_ENTER, push_save_button, _("Save", term), NULL);
 	add_dlg_button(dlg, B_ESC, cancel_dialog, _("Cancel", term), NULL);
 
-	add_dlg_end(dlg, TERMOPT_WIDGETS_COUNT);
+	add_dlg_end(dlg, TERMOPT_WIDGETS_COUNT - anonymous);
 
 	do_dialog(term, dlg, getml(dlg, NULL));
 }

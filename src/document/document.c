@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.15 2003/10/31 01:11:44 jonas Exp $ */
+/* $Id: document.c,v 1.16 2003/10/31 17:56:15 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -244,4 +244,20 @@ formatted_info(int type)
 	}
 
 	return 0;
+}
+
+#include "document/html/parser.h"
+#include "document/html/renderer.h"
+
+void
+init_documents(void)
+{
+	init_tags_lookup();
+}
+
+void
+done_documents(void)
+{
+	free_tags_lookup();
+	free_table_cache();
 }

@@ -1,5 +1,5 @@
 /* The main program - startup */
-/* $Id: main.c,v 1.151 2003/10/30 19:29:22 jonas Exp $ */
+/* $Id: main.c,v 1.152 2003/10/31 17:56:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,8 +30,7 @@
 #include "config/urlhist.h"
 #include "dialogs/menu.h"
 #include "cache/cache.h"
-#include "document/html/parser.h"
-#include "document/html/renderer.h"
+#include "document/document.h"
 #include "intl/charsets.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/dns.h"
@@ -88,7 +87,7 @@ init(void)
 
 	init_charsets_lookup();
 	init_colors_lookup();
-	init_tags_lookup();
+	init_documents();
 
 	init_event();
 	init_options();
@@ -221,8 +220,7 @@ terminate_all_subsystems(void)
 	shrink_memory(1);
 	free_charsets_lookup();
 	free_colors_lookup();
-	free_tags_lookup();
-	free_table_cache();
+	done_documents();
 	free_history_lists();
 	free_auth();
 	free_keymaps();

@@ -1,5 +1,5 @@
 /* SSL support - wrappers for SSL routines */
-/* $Id: ssl.c,v 1.40 2003/10/28 09:26:36 jonas Exp $ */
+/* $Id: ssl.c,v 1.41 2003/10/28 20:50:37 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -251,36 +251,24 @@ unsigned char *
 get_ssl_connection_cipher(struct connection *conn)
 {
 	ssl_t *ssl = conn->ssl;
-	struct string str = NULL_STRING;
+	struct string str;
 
 	if (!init_string(&str)) return NULL;
 
 #ifdef HAVE_OPENSSL
-	add_long_to_string(&str, SSL_get_cipher_bits(ssl, NULL));
-	add_to_string(&str, "-bit ");
-	add_to_string(&str, SSL_get_cipher_version(ssl));
-	add_char_to_string(&str, ' ');
-	add_to_string(&str, (unsigned char *) SSL_get_cipher_name(ssl));
+	add_format_to_string(&str, "%ld-bit %s %s",
+		SSL_get_cipher_bits(ssl, NULL),
+		SSL_get_cipher_version(ssl),
+		SSL_get_cipher_name(ssl));
 #elif defined(HAVE_GNUTLS)
 	/* XXX: How to get other relevant parameters? */
-	add_to_string(&str, (unsigned char *)
-		      gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)));
-	add_to_string(&str, " - ");
-	add_to_string(&str, (unsigned char *)
-		      gnutls_kx_get_name(gnutls_kx_get(*ssl)));
-	add_to_string(&str, " - ");
-	add_to_string(&str, (unsigned char *)
-			gnutls_cipher_get_name(gnutls_cipher_get(*ssl)));
-	add_to_string(&str, " - ");
-	add_to_string(&str, (unsigned char *)
-			gnutls_mac_get_name(gnutls_mac_get(*ssl)));
-	add_to_string(&str, " - ");
-	add_to_string(&str, (unsigned char *)
-			gnutls_cert_type_get_name(gnutls_cert_type_get(*ssl)));
-	add_to_string(&str, " (compr:");
-	add_to_string(&str, (unsigned char *)
-			gnutls_compression_get_name(gnutls_compression_get(*ssl)));
-	add_char_to_string(&str, ')');
+	add_format_to_string(&str, "%s - %s - %s - %s - %s (compr: %s)",
+		gnutls_protocol_get_name(gnutls_protocol_get_version(*ssl)),
+		gnutls_kx_get_name(gnutls_kx_get(*ssl)),
+		gnutls_cipher_get_name(gnutls_cipher_get(*ssl)),
+		gnutls_mac_get_name(gnutls_mac_get(*ssl)),
+		gnutls_cert_type_get_name(gnutls_cert_type_get(*ssl)),
+		gnutls_compression_get_name(gnutls_compression_get(*ssl)));
 #endif
 
 	return str.source;

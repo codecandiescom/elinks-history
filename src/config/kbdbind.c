@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.169 2004/01/24 20:03:37 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.170 2004/01/24 20:04:26 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -38,66 +38,65 @@ struct keybinding *
 add_keybinding(enum keymap km, int action, long key, long meta, int func_ref)
 {
 	struct keybinding *kb;
+	struct listbox_item *keymap;
+	struct string keystroke;
 
 	delete_keybinding(km, key, meta);
 
 	kb = mem_alloc(sizeof(struct keybinding));
-	if (kb) {
-		struct listbox_item *keymap;
-		struct string keystroke;
+	if (!kb) return NULL;
 
-		kb->keymap = km;
-		kb->action = action;
-		kb->key = key;
-		kb->meta = meta;
-		kb->func_ref = func_ref;
-		kb->flags &= ~KBDB_WATERMARK;
-		add_to_list(keymaps[km], kb);
+	kb->keymap = km;
+	kb->action = action;
+	kb->key = key;
+	kb->meta = meta;
+	kb->func_ref = func_ref;
+	kb->flags &= ~KBDB_WATERMARK;
+	add_to_list(keymaps[km], kb);
 
-		if (action == ACT_NONE) {
-			/* We don't want such a listbox_item, do we? */
-			kb->box_item = NULL;
-			return; /* Or goto. */
-		}
-
-		if (!init_string(&keystroke)) return;
-
-		make_keystroke(&keystroke, key, meta, 0);
-		kb->box_item = mem_calloc(1, sizeof(struct listbox_item)
-					  + keystroke.length + 1);
-		if (!kb->box_item) {
-			done_string(&keystroke);
-			return; /* Or just goto after end of this if block. */
-		}
-		kb->box_item->text = ((unsigned char *) kb->box_item
-					+ sizeof(struct listbox_item));
-		strcpy(kb->box_item->text, keystroke.source);
-		done_string(&keystroke);
-
-		if (!action_box_items[action]) {
-boom:
-			mem_free(kb->box_item);
-			kb->box_item = NULL;
-			return; /* Or goto ;-). */
-		}
-		for (keymap = action_box_items[action]->child.next;
-		     keymap != (struct listbox_item *) &action_box_items[action]->child && km;
-		     km--)
-			keymap = keymap->next;
-		if (keymap == (struct listbox_item *) &action_box_items[action]->child)
-			goto boom;
-
-		add_to_list(keymap->child, kb->box_item);
-		kb->box_item->root = keymap;
-		init_list(kb->box_item->child);
-		kb->box_item->visible = 1;
-		kb->box_item->translated = 1;
-		kb->box_item->udata = kb;
-		kb->box_item->type = BI_LEAF;
-		kb->box_item->depth = keymap->depth + 1;
-
-		update_hierbox_browser(&keybinding_browser);
+	if (action == ACT_NONE) {
+		/* We don't want such a listbox_item, do we? */
+		kb->box_item = NULL;
+		return; /* Or goto. */
 	}
+
+	if (!init_string(&keystroke)) return;
+
+	make_keystroke(&keystroke, key, meta, 0);
+	kb->box_item = mem_calloc(1, sizeof(struct listbox_item)
+				  + keystroke.length + 1);
+	if (!kb->box_item) {
+		done_string(&keystroke);
+		return; /* Or just goto after end of this if block. */
+	}
+	kb->box_item->text = ((unsigned char *) kb->box_item
+				+ sizeof(struct listbox_item));
+	strcpy(kb->box_item->text, keystroke.source);
+	done_string(&keystroke);
+
+	if (!action_box_items[action]) {
+boom:
+		mem_free(kb->box_item);
+		kb->box_item = NULL;
+		return; /* Or goto ;-). */
+	}
+	for (keymap = action_box_items[action]->child.next;
+	     keymap != (struct listbox_item *) &action_box_items[action]->child && km;
+	     km--)
+		keymap = keymap->next;
+	if (keymap == (struct listbox_item *) &action_box_items[action]->child)
+		goto boom;
+
+	add_to_list(keymap->child, kb->box_item);
+	kb->box_item->root = keymap;
+	init_list(kb->box_item->child);
+	kb->box_item->visible = 1;
+	kb->box_item->translated = 1;
+	kb->box_item->udata = kb;
+	kb->box_item->type = BI_LEAF;
+	kb->box_item->depth = keymap->depth + 1;
+
+	update_hierbox_browser(&keybinding_browser);
 
 	return kb;
 }

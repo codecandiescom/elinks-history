@@ -1,5 +1,5 @@
 /* Digest MD5 */
-/* $Id: digest.c,v 1.7 2004/11/14 18:48:37 jonas Exp $ */
+/* $Id: digest.c,v 1.8 2004/11/14 18:51:57 jonas Exp $ */
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -80,8 +80,8 @@ digest_calc_ha1(struct auth_entry *entry, unsigned char *cnounce)
 }
 
 unsigned char *
-digest_calc_response(struct auth_entry *entry, unsigned char *ha1,
-	unsigned char *cnonce)
+digest_calc_response(struct auth_entry *entry, struct uri *uri,
+		     unsigned char *ha1, unsigned char *cnonce)
 {
 	MD5_CTX MD5Ctx;
 	unsigned char Ha2[MD5_DIGEST_LENGTH + 1];
@@ -90,7 +90,7 @@ digest_calc_response(struct auth_entry *entry, unsigned char *ha1,
 	MD5_Init(&MD5Ctx);
 	MD5_Update(&MD5Ctx, "GET", 3);
 	MD5_Update(&MD5Ctx, ":/", 2);
-	MD5_Update(&MD5Ctx, entry->uri->data, strlen(entry->uri->data));
+	MD5_Update(&MD5Ctx, uri->data, strlen(uri->data));
 	MD5_Final(Ha2, &MD5Ctx);
 	Ha2_hex = convert_hex(Ha2, 16);
 

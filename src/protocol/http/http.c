@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.360 2004/11/14 18:46:10 jonas Exp $ */
+/* $Id: http.c,v 1.361 2004/11/14 18:51:57 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -589,7 +589,7 @@ http_send_header(struct connection *conn)
 		if (entry->digest) {
 			unsigned char *cnonce = random_cnonce();
 			unsigned char *ha1 = digest_calc_ha1(entry, cnonce);
-			unsigned char *response = digest_calc_response(entry, ha1, cnonce);
+			unsigned char *response = digest_calc_response(entry, uri, ha1, cnonce);
 
 			add_to_string(&header, "Authorization: Digest ");
 			add_to_string(&header, "username=\"");

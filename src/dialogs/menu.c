@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.21 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: menu.c,v 1.22 2002/05/10 17:35:30 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -327,8 +327,8 @@ struct menu_item file_menu22[] = {
 	{TEXT(T_CACHE_INFO), "", TEXT(T_HK_CACHE_INFO), MENU_FUNC cache_inf, (void *)0, 0, 0},
 #ifdef LEAK_DEBUG
 	{TEXT(T_MEMORY_INFO), "", TEXT(T_HK_MEMORY_INFO), MENU_FUNC memory_inf, (void *)0, 0, 0},
-	{"", "", M_BAR, NULL, NULL, 0, 0},
 #endif
+	{"", "", M_BAR, NULL, NULL, 0, 0},
 };
 
 struct menu_item file_menu3[] = {

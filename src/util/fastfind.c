@@ -1,5 +1,5 @@
 /* Very fast search_keyword_in_list. */
-/* $Id: fastfind.c,v 1.29 2003/06/15 11:14:12 pasky Exp $ */
+/* $Id: fastfind.c,v 1.30 2003/06/15 11:17:02 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,11 +55,10 @@
  * (the ending nodes are upcased just for this drawing, not in real)
  *
  * To optimize this for speed, leafs of nodes are organized in per-node arrays
- * (so-called 'trampolines'; er, well, if you have better name for them, go
- * ahead and share yourself... ;-), indexed by symbol value of the key's next
- * character. But to optimize that for memory, we first compose own alphabet
- * consisting only from the chars we ever use in the key strings. @uniq_chars
- * holds that alphabet and @idxtab is used to translate between it and ASCII.
+ * (so-called 'leafsets'), indexed by symbol value of the key's next character.
+ * But to optimize that for memory, we first compose own alphabet consisting
+ * only from the chars we ever use in the key strings. @uniq_chars holds that
+ * alphabet and @idxtab is used to translate between it and ASCII.
  *
  * Tree building: O((L+M)*N)
  * 			(L: mean key length, M: alphabet size,
@@ -124,7 +123,7 @@ struct ff_node {
 	/* Index in pointers */
 	unsigned int p:POINTER_INDEX_BITS;
 
-	/* Index in trampolines */
+	/* Index in leafsets */
 	unsigned int l:LINE_INDEX_BITS;
 };
 
@@ -151,8 +150,8 @@ struct fastfind_info {
 	void **pointers;
 	int *keylen_list;
 
-	struct ff_node **trampolines;
-	struct ff_node *root_trampoline;
+	struct ff_node **leafsets;
+	struct ff_node *root_leafset;
 
 	int uniq_chars_count;
 	int min_key_len;
@@ -162,7 +161,7 @@ struct fastfind_info {
 	int idxtab[FF_MAX_CHARS];
 
 	int pointers_count;
-	int trampolines_count;
+	int leafsets_count;
 
 #ifdef FASTFIND_DEBUG
 	unsigned long searches;
@@ -254,30 +253,30 @@ add_to_pointers(void *p, int key_len, struct fastfind_info *info)
 
 /* Return 1 on success, 0 on allocation failure */
 static int
-alloc_trampoline(struct fastfind_info *info)
+alloc_leafset(struct fastfind_info *info)
 {
-	struct ff_node **trampolines;
-	struct ff_node *trampoline;
+	struct ff_node **leafsets;
+	struct ff_node *leafset;
 
-	assert(info->trampolines_count < FF_MAX_TLINES);
+	assert(info->leafsets_count < FF_MAX_TLINES);
 
-	/* info->trampolines[0] is never used since l=0 marks no leaf
+	/* info->leafsets[0] is never used since l=0 marks no leaf
 	 * in struct ff_node. That's the reason of that + 2. */
-	trampolines = mem_realloc(info->trampolines,
+	leafsets = mem_realloc(info->leafsets,
 				  sizeof(struct ff_node *)
-				  * (info->trampolines_count + 2));
-	if (!trampolines) return 0;
-	info->trampolines = trampolines;
+				  * (info->leafsets_count + 2));
+	if (!leafsets) return 0;
+	info->leafsets = leafsets;
 
-	trampoline = mem_calloc(info->uniq_chars_count,
+	leafset = mem_calloc(info->uniq_chars_count,
 				sizeof(struct ff_node));
-	if (!trampoline) return 0;
+	if (!leafset) return 0;
 
 	meminc(info, sizeof(struct ff_node *));
 	meminc(info, sizeof(struct ff_node) * info->uniq_chars_count);
 
-	info->trampolines_count++;
-	info->trampolines[info->trampolines_count] = trampoline;
+	info->leafsets_count++;
+	info->leafsets[info->leafsets_count] = leafset;
 
 	return 1;
 }
@@ -355,16 +354,16 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 
 	init_idxtab(info);
 
-	/* Root trampoline allocation */
-	if (!alloc_trampoline(info)) goto alloc_error;
+	/* Root leafset allocation */
+	if (!alloc_leafset(info)) goto alloc_error;
 
-	info->root_trampoline = info->trampolines[info->trampolines_count];
+	info->root_leafset = info->leafsets[info->leafsets_count];
 
 	/* Do it */
 	(*reset)();
 	while ((p = (*next)())) {
 		int key_len = strlen(p->key);
-		struct ff_node *current = info->root_trampoline;
+		struct ff_node *current = info->root_leafset;
 		register int i;
 
 #if 0
@@ -375,13 +374,13 @@ fastfind_index(void (*reset)(void), struct fastfind_key_value *(*next)(void),
 			int idx = info->idxtab[ifcase(p->key[i])];
 
 			if (current[idx].l == 0) {
-				/* There's no leaf trampoline yet */
-				if (!alloc_trampoline(info)) goto alloc_error;
-				current[idx].l = info->trampolines_count;
+				/* There's no leaf leafset yet */
+				if (!alloc_leafset(info)) goto alloc_error;
+				current[idx].l = info->leafsets_count;
 			}
 
-			/* Descend to leaf trampoline */
-			current = info->trampolines[current[idx].l];
+			/* Descend to leaf leafset */
+			current = info->leafsets[current[idx].l];
 		}
 
 		/* Index final leaf */
@@ -415,8 +414,8 @@ fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
 		if (current[i].c) continue;
 
 		if (current[i].l) {
-			/* There's a leaf trampoline, descend to it, and recurse */
-			fastfind_node_compress(info->trampolines[current[i].l],
+			/* There's a leaf leafset, descend to it, and recurse */
+			fastfind_node_compress(info->leafsets[current[i].l],
 						info);
 		}
 
@@ -429,11 +428,11 @@ fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
 	if (pos == -1 || cnt >= 2 || current[pos].c) return;
 
 	/* Compress if possible ;) */
-	for (i = 1; i < info->trampolines_count; i++)
-		if (info->trampolines[i] == current)
+	for (i = 1; i < info->leafsets_count; i++)
+		if (info->leafsets[i] == current)
 			break;
 
-	if (i < info->trampolines_count) {
+	if (i < info->leafsets_count) {
 		struct ff_node_c *new = mem_alloc(sizeof(struct ff_node_c));
 
 		if (!new) return;
@@ -444,8 +443,8 @@ fastfind_node_compress(struct ff_node *current, struct fastfind_info *info)
 		new->l = current[pos].l;
 		new->ch = pos;
 
-		mem_free(info->trampolines[i]);
-		info->trampolines[i] = (struct ff_node *) new;
+		mem_free(info->leafsets[i]);
+		info->leafsets[i] = (struct ff_node *) new;
 		meminc(info, sizeof(struct ff_node_c));
 		meminc(info, sizeof(struct ff_node) * -info->uniq_chars_count);
 	}
@@ -455,7 +454,7 @@ void
 fastfind_index_compress(struct fastfind_info *info)
 {
 	assert(info);
-	fastfind_node_compress(info->root_trampoline, info);
+	fastfind_node_compress(info->root_leafset, info);
 }
 
 void *
@@ -477,7 +476,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 	accif(info) (key_len > info->max_key_len) return NULL;
 	accif(info) (key_len < info->min_key_len) return NULL;
 
-	current = info->root_trampoline;
+	current = info->root_leafset;
 
 	testinc(info); /* We count one test for case sensitivity (in loop for now). */
 
@@ -492,7 +491,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 		accif(info) (lidx < 0) return NULL;
 
 		accif(info) (current->c) {
-			/* It is a compressed trampoline. */
+			/* It is a compressed leafset. */
 			accif(info) (((struct ff_node_c *) current)->ch != lidx)
 				return NULL;
 		} else {
@@ -509,7 +508,7 @@ fastfind_search(unsigned char *key, int key_len, struct fastfind_info *info)
 		accif(info) (!current->l)
 			return NULL;
 
-		current = (struct ff_node *) info->trampolines[current->l];
+		current = (struct ff_node *) info->leafsets[current->l];
 	}
 
 	return NULL;
@@ -527,7 +526,7 @@ fastfind_terminate(struct fastfind_info *info)
 	fprintf(stderr, "Min_key_len : %d\n", info->min_key_len);
 	fprintf(stderr, "Max_key_len : %d\n", info->max_key_len);
 	fprintf(stderr, "Entries     : %d/%d max.\n", info->pointers_count, FF_MAX_KEYS);
-	fprintf(stderr, "FFtlines    : %d/%d max.\n", info->trampolines_count, FF_MAX_TLINES);
+	fprintf(stderr, "FFtlines    : %d/%d max.\n", info->leafsets_count, FF_MAX_TLINES);
 	fprintf(stderr, "Memory usage: %lu bytes (cost per entry = %0.2f bytes)\n",
 		info->memory_usage, (double) info->memory_usage / info->pointers_count);
 	fprintf(stderr, "Struct node : %d bytes (normal) , %d bytes (compressed)\n",
@@ -549,12 +548,12 @@ fastfind_terminate(struct fastfind_info *info)
 
 	if (info->pointers) mem_free(info->pointers);
 	if (info->keylen_list) mem_free(info->keylen_list);
-	while (info->trampolines_count) {
-		if (info->trampolines[info->trampolines_count])
-			mem_free(info->trampolines[info->trampolines_count]);
-		info->trampolines_count--;
+	while (info->leafsets_count) {
+		if (info->leafsets[info->leafsets_count])
+			mem_free(info->leafsets[info->leafsets_count]);
+		info->leafsets_count--;
 	}
-	if (info->trampolines) mem_free(info->trampolines);
+	if (info->leafsets) mem_free(info->leafsets);
 	mem_free(info);
 }
 

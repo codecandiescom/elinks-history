@@ -1,5 +1,5 @@
 /* Forms viewing/manipulation handling */
-/* $Id: form.c,v 1.61 2003/11/26 13:13:23 miciah Exp $ */
+/* $Id: form.c,v 1.62 2003/11/28 04:58:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -654,19 +654,41 @@ encode_error:
 }
 
 static void
-reset_form(struct document_view *doc_view, int form_num)
+do_reset_form(struct document_view *doc_view, int form_num)
 {
 	struct form_control *frm;
-
+ 
 	assert(doc_view && doc_view->document);
 	if_assert_failed return;
-
+ 
 	foreach (frm, doc_view->document->forms)
 		if (frm->form_num == form_num) {
 			struct form_state *fs = find_form_state(doc_view, frm);
-
+ 
 			if (fs) init_ctrl(frm, fs);
 		}
+}
+
+int
+reset_form(struct terminal *term, void *xxx, struct session *ses)
+{
+	struct document_view *doc_view;
+	struct link *link;
+
+	assert(term && ses);
+	if_assert_failed return 1;
+
+	doc_view = current_frame(ses);
+
+	assert(doc_view && doc_view->vs && doc_view->document);
+	if_assert_failed return 1;
+
+	if (doc_view->vs->current_link == -1) return 1;
+
+	link = &doc_view->document->links[doc_view->vs->current_link];
+	do_reset_form(doc_view, link->form->form_num);
+	draw_forms(term, doc_view);
+	return 0;
 }
 
 unsigned char *
@@ -685,7 +707,7 @@ get_form_url(struct session *ses, struct document_view *doc_view,
 	if_assert_failed return NULL;
 
 	if (frm->type == FC_RESET) {
-		reset_form(doc_view, frm->form_num);
+		do_reset_form(doc_view, frm->form_num);
 		return NULL;
 	}
 	if (!frm->action) return NULL;

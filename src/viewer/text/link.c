@@ -1,5 +1,5 @@
 /* Links viewing/manipulation handling */
-/* $Id: link.c,v 1.111 2003/11/28 00:53:29 pasky Exp $ */
+/* $Id: link.c,v 1.112 2003/11/28 04:58:25 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -946,6 +946,9 @@ link_menu(struct terminal *term, void *xxx, struct session *ses)
 			if (!get_opt_int_tree(cmdline_options, "anonymous"))
 				add_to_menu(&mi, N_("Submit form and ~download"), "d",
 					    (menu_func) send_download, NULL, 0);
+
+			add_to_menu(&mi, N_("~Reset form"), "",
+				    (menu_func) reset_form, NULL, 0);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /* These cute LightEmittingDiode-like indicators. */
-/* $Id: leds.c,v 1.1 2002/07/06 21:08:43 pasky Exp $ */
+/* $Id: leds.c,v 1.2 2002/07/06 21:53:00 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 
 #include "bfu/colors.h"
 #include "bfu/leds.h"
+#include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
 #include "util/error.h"
 
@@ -30,10 +31,15 @@
  * led for his control; however, I bet on programmers' responsibility rather,
  * and hope that everyone will abide the "rules". */
 static struct led leds[LEDS_COUNT];
+static unsigned char leds_backup[LEDS_COUNT];
 
+static int redraw_timer;
+
+
+void redraw_leds(void *);
 
 void
-setup_leds()
+init_leds()
 {
 	int i;
 
@@ -42,7 +48,17 @@ setup_leds()
 		leds[i].value = '-';
 		leds[i].color = COL(070);
 		leds[i].__used = 0;
+		leds_backup[i] = 0; /* assure first redraw */
 	}
+
+	/* Redraw each 100ms. */
+	redraw_timer = install_timer(100, redraw_leds, NULL);
+}
+
+void
+done_leds()
+{
+	kill_timer(redraw_timer);
 }
 
 void
@@ -50,13 +66,48 @@ draw_leds(struct terminal *term)
 {
 	int i;
 
-	set_char(term, term->x - LEDS_COUNT - 2, term->y, '[' | COL(070));
+	/* We must shift the whole thing by one char to left, because we don't
+	 * draft the char in the right-down corner :(. */
+
+	set_char(term, term->x - LEDS_COUNT - 3, term->y - 1, '[' | COL(070));
 
 	for (i = 0; i < LEDS_COUNT; i++)
-		set_char(term, term->x - LEDS_COUNT - i, term->y,
+		set_char(term, term->x - LEDS_COUNT - 2 + i, term->y - 1,
 			 leds[i].value | leds[i].color);
 
-	set_char(term, term->x, term->y, ']' | COL(070));
+	set_char(term, term->x - 2, term->y - 1, ']' | COL(070));
+}
+
+/* Determine if leds redrawing if neccessary. Returns non-zero if so. */
+int
+sync_leds()
+{
+	int resync = 0;
+	int i;
+
+	for (i = 0; i < LEDS_COUNT; i++) {
+		if (leds[i].value != leds_backup[i]) {
+			leds_backup[i] = leds[i].value;
+			resync++;
+		}
+	}
+
+	return resync;
+}
+
+void
+redraw_leds(void *xxx)
+{
+	struct terminal *term;
+
+	redraw_timer = install_timer(100, redraw_leds, NULL);
+
+	if (!sync_leds()) return;
+
+	foreach (term, terminals) {
+		redraw_terminal(term);
+		draw_leds(term);
+	}
 }
 
 

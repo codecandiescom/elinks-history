@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.46 2002/07/05 20:42:14 pasky Exp $ */
+/* $Id: session.c,v 1.47 2002/07/06 21:53:01 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -12,6 +12,7 @@
 #include "links.h"
 
 #include "bfu/colors.h"
+#include "bfu/leds.h"
 #include "bfu/menu.h"
 #include "bfu/msgbox.h"
 #include "config/options.h"
@@ -275,6 +276,7 @@ print_screen_status(struct session *ses)
 	}
 
 	redraw_from_window(ses->win);
+	draw_leds(term);
 }
 
 void

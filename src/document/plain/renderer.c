@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.119 2004/08/17 04:45:51 miciah Exp $ */
+/* $Id: renderer.c,v 1.120 2004/08/17 04:54:24 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -14,12 +14,15 @@
 #include "cache/cache.h"
 #include "document/docdata.h"
 #include "document/document.h"
+#include "document/options.h"
 #include "document/plain/renderer.h"
 #include "document/renderer.h"
 #include "intl/charsets.h"
 #include "protocol/protocol.h"
 #include "protocol/uri.h"
+#include "terminal/color.h"
 #include "terminal/draw.h"
+#include "util/color.h"
 #include "util/error.h"
 #include "util/memory.h"
 #include "util/string.h"

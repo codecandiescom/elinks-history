@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.76 2003/08/23 10:41:58 zas Exp $ */
+/* $Id: cookies.c,v 1.77 2003/08/23 10:59:36 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -206,6 +206,14 @@ set_cookie(struct terminal *term, struct uri *uri, unsigned char *str)
 	date = parse_http_header_param(str, "expires");
 	if (date) {
 		cookie->expires = parse_http_date(date);
+
+		if (cookie->expires) {
+			ttime deadline = time(NULL) + 365*24*3600 /* One year in seconds.*/;
+
+			if (cookie->expires > deadline)
+				cookie->expires = deadline;
+		}
+
 #if 0
 		/* I decided not to expire such cookies (possibly ones with
 		 * date we can't parse properly), but instead just keep their

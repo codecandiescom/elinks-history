@@ -1,3 +1,281 @@
+Thu Nov 27 21:52:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/download.c:
+
+	Refresh downloads in the manager so we can show progress with simple
+	percentage. Implementing meter should not be that hard now.  
+
+Thu Nov 27 21:51:56 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/: dialog.c, dialog.h:
+
+	Add support for more generic dialog refresh.  
+
+Thu Nov 27 21:20:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/: auth.c, mime.c:
+
+	A bunch of compile fixes.  
+
+Thu Nov 27 19:40:41 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/: dialogs.c, formhist.c:
+
+	Indentation beautification.  
+
+Thu Nov 27 19:26:35 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/auth.c:
+
+	I cannot see how the auth dialog could have worked before since the
+	text field data was not synced to the auth entry. At least it should
+	be now.  
+
+Thu Nov 27 19:12:48 2003  Fabio Bonelli <fabiobonelli@libero.it>:
+
+	* src/formhist/formhist.c:
+
+	Set loaded = 1 when successfully saving formhist file, this should
+	definitely close bug #295-take2.  
+
+Thu Nov 27 18:51:08 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/msgbox.c, dialogs/mime.c:
+
+	Use default ok button handler.  
+
+Thu Nov 27 18:43:20 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Use default ok button handler.  
+
+Thu Nov 27 18:39:24 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/button.h, bfu/dialog.c, bfu/dialog.h, bfu/widget.h,
+	dialogs/edit.c, scripting/lua/core.c:
+
+	Introduce a default ok handler to make a cleaner interface than the
+	current dlg->refresh(_data).  
+
+Thu Nov 27 16:02:58 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Create wrapper for cell formatting.  
+
+Thu Nov 27 14:17:05 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Correctly pass the delete error type.  
+
+Thu Nov 27 14:08:17 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Check if the item is used before asking whether the user wants to
+	delete it.  
+
+Thu Nov 27 14:05:21 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/: event.c, terminal.c:
+
+	Lock the 'real' term->spec .. not the _template_ :/ 
+
+Thu Nov 27 13:59:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Fix hierbox delete actions by propagating delete properties from
+	parents to children.  
+
+Thu Nov 27 13:56:27 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.c:
+
+	Just another compile fix[tm].  
+
+Thu Nov 27 13:53:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/terminal.c:
+
+	Lock the term->spec option tree so it won't be deleted.  
+
+Thu Nov 27 13:16:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/kbdbind.c:
+
+	Fix superfluous blank line between text and OK button in the
+	Help::Keys dialogs.  
+
+Thu Nov 27 13:09:52 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Remove FIXME.  
+
+Thu Nov 27 13:08:01 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/mime/backend/: mailcap.c, mimetypes.c:
+
+	Paranoid handling in mailcap / mimetypes MIME when running in
+	anonymous mode. They will now disable themselves. Enable checking
+	was moved to the entry functions.  
+
+Thu Nov 27 12:42:01 2003  Laurent Monin <zas@norz.org>:
+
+	* po/be.po, po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po,
+	po/el.po, po/es.po, po/et.po, po/fi.po, po/fr.po, po/gl.po,
+	po/hr.po, po/hu.po, po/id.po, po/is.po, po/it.po, po/leet.po,
+	po/lt.po, po/nl.po, po/no.po, po/pl.po, po/pt.po, po/pt_BR.po,
+	po/ro.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	src/bfu/leds.c:
+
+	Description of LEDs is now more complete. .po files were resynced
+	and french translation was updated.  
+
+Thu Nov 27 12:16:56 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated and improved.  
+
+Thu Nov 27 11:34:45 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/dialogs.c:
+
+	Try to hint more to the new users - in the info window, show that
+	space expands the folder if you open the info window upon a folder.  
+
+Thu Nov 27 11:16:01 2003  Laurent Monin <zas@norz.org>:
+
+	* src/bfu/listbox.c:
+
+	A segfault occuring when calling keybinding manager was fixed, it
+	was introduced by rev 1.123. No ops case is now handled correctly.
+	It closes bug 298.  
+
+Thu Nov 27 08:11:26 2003  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Thu Nov 27 06:56:48 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/sched/: download.c, download.h, session.c:
+
+	Simplification.  
+
+Thu Nov 27 06:31:59 2003  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation update.  
+
+Thu Nov 27 03:47:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/hierbox.c:
+
+	Use print_delete_error().  
+
+Thu Nov 27 03:13:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/listbox.c:
+
+	When resizing ensure that the selected item is moved into the
+	hierbox browsers visible area. Fixes bug 58.  
+
+Thu Nov 27 02:14:28 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/auth.c:
+
+	No need to call ok_dialog() since we just want to cancel the dialog.  
+
+Thu Nov 27 02:06:59 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/bfu/inpfield.c:
+
+	No need to call ok_dialog() since input_field_ok() already does
+	everything it does. Use macro to check whether to add to history.  
+
+Thu Nov 27 01:55:51 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/search.c:
+
+	No need to call ok_dialog() since we have already done everything it
+	does and we really just want to nuke the dialog.  
+
+Thu Nov 27 01:55:02 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	Ok I try once more (although I should really go to bed). Dialog
+	checking should now be ok when adding mime extensions.  
+
+Thu Nov 27 01:43:16 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	Fix last patch. We should of course also check dialog data.  
+
+Thu Nov 27 01:19:12 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/mime.c:
+
+	Use real button handler in the add mime extensions dialog.  
+
+Thu Nov 27 01:06:41 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/globhist/dialogs.c:
+
+	Don't allow to bookmark glohist entries in anonymous mode.  
+
+Thu Nov 27 01:05:18 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Don't show terminal option save button in anonymous mode.  
+
+Thu Nov 27 00:49:23 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Fix last patch to proxy ok button handler.  
+
+Thu Nov 27 00:38:31 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/options.c:
+
+	Use button handler to do the terminal resizing and not dlg->refresh.  
+
+Thu Nov 27 00:29:40 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/dialogs/auth.c:
+
+	Fix bad usage of dlg->refresh_data .. instead use dlg->udata.  
+
+Thu Nov 27 00:05:06 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: config/options.inc, document/options.c, document/options.h,
+	document/html/renderer.c:
+
+	Add new option to control handling of non breaking space. If set it
+	means do not honour non breaking space (the nbsp entity) but allow
+	to wrap the text.  This can help keeping the width of documents down
+	so no horizontal scrolling is needed. This is a partial fix of bug
+	292 "Text should wrap on screen boundary".  
+
+Wed Nov 26 23:49:45 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/listbox.c, bfu/listbox.h, bookmarks/dialogs.c,
+	cache/dialogs.c, config/dialogs.c, cookies/dialogs.c,
+	dialogs/download.c, formhist/dialogs.c, globhist/dialogs.c:
+
+	Add support for listbox specific drawing operations. For now it is
+	used by download to trim long urls with ending dots.  
+
 Wed Nov 26 23:03:34 2003  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/bfu/hierbox.c:

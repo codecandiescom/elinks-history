@@ -1,3 +1,131 @@
+Mon Dec 22 03:42:36 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	0.5rc1 
+
+Mon Dec 22 03:41:05 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* po/: be.po, bg.po, ca.po, cs.po, da.po, de.po, el.po, es.po,
+	et.po, fi.po, fr.po, gl.po, hr.po, hu.po, id.po, is.po, it.po,
+	leet.po, lt.po, nl.po, no.po, pl.po, pt.po, pt_BR.po, ro.po, ru.po,
+	sk.po, sv.po, tr.po, uk.po:
+
+	.po files were resynced, Czech translation updated.  
+
+Mon Dec 22 03:02:47 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/textarea.c:
+
+	Fix ACT_HOME in textareas.  
+
+Mon Dec 22 03:01:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/cmdline.c:
+
+	.xif elipmoC 
+
+Mon Dec 22 02:53:28 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/config/: cmdline.c, conf.c:
+
+	Introduced -conffile, through which you can specify alternate
+	configuration file name. Fixes bug 302, suggested by zas.  
+
+Mon Dec 22 02:15:02 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Initialize @term in download_data_store(). Spotted by Jonas.  
+
+Mon Dec 22 02:12:13 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	Ensure correct handling of get_download_ses() returning NULL.  
+
+Mon Dec 22 02:10:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/plain/renderer.c:
+
+	Handle allocation failure.  
+
+Mon Dec 22 02:09:14 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/: download.c, download.h:
+
+	get_download_ses() now --- when the original session is not around
+	anymore --- prefers session belonging to the same terminal as the
+	original one. This is accomplished by introduction of
+	file_download.term.  
+
+Mon Dec 22 02:07:50 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/sched/download.c:
+
+	When destroying session, do not destroy downloads to external
+	handlers if we have another session belonging to that terminal,
+	which could still handle these. Being reported by Miciah, this
+	should fix bug 226.  
+
+Mon Dec 22 01:45:37 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: config/cmdline.c, viewer/dump/dump.c:
+
+	Introduced commandline argument -no-numbering, which turns out
+	numbering of links in the dump output. Numbering of links in the
+	dump output is now the default behaviour.  
+
+Mon Dec 22 01:19:19 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man1/elinks.1.in:
+
+	Add new command line options, some undocumented env. variables and
+	finally new ~/.elinks/ files.  
+
+Mon Dec 22 01:12:41 2003  Petr Baudis <pasky@ucw.cz>:
+
+	* AUTHORS, src/viewer/dump/dump.c:
+
+	If the links are numbered, show their list at the dump output
+	footer. Patch by Jakub Horak <thement@hysteria.sk>, cleaned up by
+	me.  
+
+Mon Dec 22 00:24:00 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* doc/man/man5/elinks.conf.5:
+
+	Sync with current option tree.  
+
+Mon Dec 22 00:10:42 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* contrib/elinks.vim:
+
+	Add multiple new actions.  
+
+Sun Dec 21 23:56:11 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/dialog.c, bfu/hierbox.c, bfu/menu.c, config/kbdbind.c,
+	config/kbdbind.h:
+
+	Remake ACT_TOGGLE_EXPAND into ACT_SELECT bound to ' ', and handle
+	ACT_SELECT as ACT_ENTER in the other dialog kbd event handlers. This
+	is a clean fix for the previous patch making hierbox browser keys
+	configurable.  
+
+Sun Dec 21 23:23:22 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/config/: kbdbind.c, kbdbind.h:
+
+	Fix alphabetic order of actions.  
+
+Sun Dec 21 23:19:03 2003  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: bfu/hierbox.c, config/kbdbind.c, config/kbdbind.h:
+
+	Make hierbox browser keys configurable through ACT_TOGGLE_EXPAND,
+	ACT_EXPAND and ACT_UNEXPAND.  
+
 Sun Dec 21 23:02:40 2003  Petr Baudis <pasky@ucw.cz>:
 
 	* NEWS:

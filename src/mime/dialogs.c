@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.73 2003/11/07 22:22:02 jonas Exp $ */
+/* $Id: dialogs.c,v 1.74 2003/11/09 11:23:09 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -32,49 +32,6 @@ get_real_opt(unsigned char *base, unsigned char *id)
 	struct option *opt = get_opt_rec_real(config_options, base);
 
 	return (opt ? get_opt_rec_real(opt, id) : NULL);
-}
-
-
-static void
-add_ext_layouter(struct dialog_data *dlg_data)
-{
-	struct terminal *term = dlg_data->win->term;
-	int w = dialog_max_width(term);
-	int rw = 0;
-	int y = -1;
-
-	dlg_format_field(NULL, &dlg_data->widgets_data[0],
-			 0, &y, w, NULL, AL_LEFT);
-	y++;
-	dlg_format_field(NULL, &dlg_data->widgets_data[1],
-			 0, &y, w, NULL, AL_LEFT);
-
-	y++;
-	dlg_format_buttons(NULL,
-			   dlg_data->widgets_data + 2, 2,
-			   0, &y, w, &rw,
-			   AL_CENTER);
-
-	w = rw;
-
-	draw_dialog(dlg_data, w, y, AL_CENTER);
-
-	y = dlg_data->y + DIALOG_TB;
-	dlg_format_field(term,
-			 &dlg_data->widgets_data[0],
-			 dlg_data->x + DIALOG_LB, &y, w, NULL,
-			 AL_LEFT);
-	y++;
-	dlg_format_field(term,
-			 &dlg_data->widgets_data[1],
-			 dlg_data->x + DIALOG_LB, &y, w, NULL,
-			 AL_LEFT);
-
-	y++;
-	dlg_format_buttons(term,
-			   &dlg_data->widgets_data[2], 2,
-			   dlg_data->x + DIALOG_LB, &y, w, NULL,
-			   AL_CENTER);
 }
 
 
@@ -198,9 +155,10 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	if (fcp) done_string(&translated);
 
 	dlg->title = _("Extension", term);
-	dlg->layouter = add_ext_layouter;
+	dlg->layouter = generic_dialog_layouter;
 	dlg->refresh = (void (*)(void *)) really_add_ext;
 	dlg->refresh_data = new;
+	dlg->align = AL_BLOCK;
 
 	add_dlg_field(dlg, _("Extension(s)", term), 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
 	add_dlg_field(dlg, _("Content-Type", term), 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);

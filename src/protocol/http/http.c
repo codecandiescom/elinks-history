@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.332 2004/09/22 15:46:07 jonas Exp $ */
+/* $Id: http.c,v 1.333 2004/09/22 17:01:41 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -133,6 +133,25 @@ add_url_to_http_string(struct string *header, struct uri *uri, int components)
 	mem_free(string);
 }
 
+/* Parse from @end - 1 to @start and set *@value to integer found.
+ * It returns -1 if not a number, 0 otherwise.
+ * @end should be > @start. */
+static int
+revstr2num(unsigned char *start, unsigned char *end, int *value)
+{
+	int q = 1, val = 0;
+
+	do {
+		--end;
+		if (!isdigit(*end)) return -1; /* NaN */
+		val += (*end - '0') * q;
+		q *= 10;
+	} while (end > start);
+
+	*value = val;
+	return 0;
+}
+
 /* This function extracts code, major and minor version from string
  * "\s*HTTP/\d+.\d+\s+\d\d\d..."
  * It returns a negative value on error, 0 on success.
@@ -140,8 +159,7 @@ add_url_to_http_string(struct string *header, struct uri *uri, int components)
 static int
 get_http_code(unsigned char *head, int *code, struct http_version *version)
 {
-	unsigned char *end, *start;
-	int q;
+	unsigned char *start;
 
 	*code = 0;
 	version->major = 0;
@@ -165,33 +183,19 @@ get_http_code(unsigned char *head, int *code, struct http_version *version)
 	    || (head - start) > 4
 	    || !isdigit(*(head + 1)))
 		return -2;
-	end = head;
 
 	/* Extract major version number. */
-	q = 1;
-	do {
-		--head;
-		if (!isdigit(*head)) return -3; /* NaN */
-		version->major += (*head - '0') * q;
-		q *= 10;
-	} while (head != start);
+	if (revstr2num(start, head, &version->major)) return -3; /* NaN */
 
-	start = end + 1;
+	start = head + 1;
+
 	/* Find next ' '. */
 	while (*head && *head != ' ') head++;
 	/* Sanity check. */
 	if (!*head || !(head - start) || (head - start) > 4) return -4;
-	end = head;
 
 	/* Extract minor version number. */
-	q = 1;
-	do {
-		--head;
-		if (!isdigit(*head)) return -5; /* NaN */
-		version->minor += (*head - '0') * q;
-		q *= 10;
-	} while (head != start);
-	head = end;
+	if (revstr2num(start, head, &version->minor)) return -5; /* NaN */
 
 	/* Ignore spaces. */
 	while (*head == ' ') head++;

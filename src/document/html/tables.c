@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.340 2004/07/01 14:42:12 jonas Exp $ */
+/* $Id: tables.c,v 1.341 2004/07/01 14:46:59 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1121,7 +1121,7 @@ draw_table_caption(struct table *table, int x, int y)
 }
 
 static void
-draw_table_bad_html(struct table *table, int x)
+draw_table_bad_html(struct table *table)
 {
 	int i;
 
@@ -1208,8 +1208,6 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 	part->cy += table->real_height;
 	part->cx = -1;
 
-	draw_table_bad_html(table, indent);
-
 	new_node = mem_alloc(sizeof(struct node));
 	if (new_node) {
 		set_box(&new_node->box, node->box.x, part->box.y + part->cy,
@@ -1220,8 +1218,10 @@ format_table(unsigned char *attr, unsigned char *html, unsigned char *eof,
 ret2:
 	part->link_num = table->link_num;
 	int_lower_bound(&part->box.height, part->cy);
-	free_table(table);
 	done_html_parser_state(state);
+
+	draw_table_bad_html(table);
+	free_table(table);
 
 ret0:
 	html_context.table_level--;

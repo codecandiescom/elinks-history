@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.174 2004/05/16 14:04:24 zas Exp $ */
+/* $Id: tables.c,v 1.175 2004/05/16 14:08:32 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -118,7 +118,7 @@ struct table {
 	int columns_count;
 	int real_columns_count;	/* Number of columns really allocated. */
 	int xc;
-	int rh;
+	int real_height;
 	int link_num;
 };
 
@@ -1377,9 +1377,9 @@ get_table_heights(struct table *table)
 		struct table_frames table_frames;
 
 		get_table_frames(table, &table_frames);
-		table->rh = table_frames.top + table_frames.bottom;
+		table->real_height = table_frames.top + table_frames.bottom;
 		for (j = 0; j < table->y; j++) {
-			table->rh += table->rows_height[j] +
+			table->real_height += table->rows_height[j] +
 				 (j && get_hline_width(table, j) >= 0);
 		}
 	}
@@ -1911,7 +1911,7 @@ again:
 
 		int_bounds(&ww, table->real_width, par_format.width);
 		int_lower_bound(&part->box.width, ww);
-		part->cy += table->rh;
+		part->cy += table->real_height;
 
 		goto ret2;
 	}
@@ -1938,7 +1938,7 @@ again:
 
 	if (!part->document) {
 		int_lower_bound(&part->box.width, table->real_width + margins);
-		part->cy += table->rh;
+		part->cy += table->real_height;
 		goto ret2;
 	}
 
@@ -1955,8 +1955,8 @@ again:
 		add_to_list(part->document->nodes, new_node);
 	}
 
-	assertm(part->cy + table->rh == cye, "size does not match; 1:%d, 2:%d",
-		part->cy + table->rh, cye);
+	assertm(part->cy + table->real_height == cye, "size does not match; 1:%d, 2:%d",
+		part->cy + table->real_height, cye);
 
 	part->cy = cye;
 	part->cx = -1;

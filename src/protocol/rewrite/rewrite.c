@@ -1,5 +1,5 @@
 /* URI rewriting module */
-/* $Id: rewrite.c,v 1.9 2003/12/21 21:18:27 jonas Exp $ */
+/* $Id: rewrite.c,v 1.10 2003/12/21 21:28:39 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -84,18 +84,102 @@ static struct option_info uri_rewrite_options[] = {
 
 	INIT_OPT_DUMB_PREFIX("elinks", ELINKS_HOMEPAGE),
 	INIT_OPT_DUMB_PREFIX("documentation", ELINKS_DOC_URL),
+	INIT_OPT_DUMB_PREFIX("bz", ELINKS_BUGS_URL),
+	INIT_OPT_DUMB_PREFIX("bug", ELINKS_BUGS_URL),
+
+	INIT_OPT_DUMB_PREFIX("arc", "http://web.archive.org/web/*/%c"),
+	INIT_OPT_DUMB_PREFIX("b", "http://babelfish.altavista.com/babelfish/tr"),
+	INIT_OPT_DUMB_PREFIX("d", "http://www.dict.org"),
+	INIT_OPT_DUMB_PREFIX("g", "http://www.google.com/"),
+	INIT_OPT_DUMB_PREFIX("gg", "http://www.google.com/"),
+	INIT_OPT_DUMB_PREFIX("go", "http://www.google.com/"),
+	INIT_OPT_DUMB_PREFIX("fm", "http://www.freshmeat.net/"),
+	INIT_OPT_DUMB_PREFIX("sf", "http://www.sourceforge.net/"),
+	INIT_OPT_DUMB_PREFIX("dbug", "http://bugs.debian.org/"),
+	INIT_OPT_DUMB_PREFIX("dpkg", "http://packages.debian.org/"),
+	/* Hm, is this Debian-centric? -- Miciah */
+	INIT_OPT_DUMB_PREFIX("lua", "file:///usr/share/doc/lua40-doc/manual/idx.html"),
+	INIT_OPT_DUMB_PREFIX("pycur", "http://www.python.org/doc/current/"),
+	INIT_OPT_DUMB_PREFIX("pydev", "http://www.python.org/dev/doc/devel/"),
+	INIT_OPT_DUMB_PREFIX("pyhelp", "http://starship.python.net/crew/theller/pyhelp.cgi"),
+	INIT_OPT_DUMB_PREFIX("pyvault", "http://www.vex.net/parnassus/"),
+	INIT_OPT_DUMB_PREFIX("e2", "http://www.everything2.org/"),
+	INIT_OPT_DUMB_PREFIX("sd", "http://www.slashdot.org/"),
+	INIT_OPT_DUMB_PREFIX("vhtml", "http://validator.w3.org/check?uri=%c"),
+	INIT_OPT_DUMB_PREFIX("vcss", "http://jigsaw.w3.org/css-validator/validator?uri=%c"),
 
 #define INIT_OPT_SMART_PREFIX(prefix, uri) \
 	INIT_OPT_STRING("protocol.rewrite.smart", NULL, prefix, 0, uri, NULL)
 #define bugzilla_prefix(prefix) (ELINKS_BUGS_URL prefix)
 
 	INIT_OPT_SMART_PREFIX("bug", bugzilla_prefix("show_bug.cgi?id=%s")),
-	INIT_OPT_SMART_PREFIX("google", "http://www.google.com/search?q=%s"),
 
 #ifdef DEBUG
 	INIT_OPT_SMART_PREFIX("milestone-bugs", bugzilla_prefix("buglist.cgi?target_milestone=%s")),
 	INIT_OPT_SMART_PREFIX("search-bugs", bugzilla_prefix("buglist.cgi?short_desc_type=allwordssubstr&short_desc=%s")),
 #endif
+
+	INIT_OPT_SMART_PREFIX("arc", "http://web.archive.org/web/*/%s"),
+	INIT_OPT_SMART_PREFIX("bb", "http://babelfish.altavista.com/babelfish/tr?urltext=%s"),
+	INIT_OPT_SMART_PREFIX("bb_fr_en", "http://babelfish.altavista.com/babelfish/tr?lp=fr_en&submit=1&urltext=%s"),
+	INIT_OPT_SMART_PREFIX("bb_en_fr", "http://babelfish.altavista.com/babelfish/tr?lp=en_fr&submit=1&urltext=%s"),
+	INIT_OPT_SMART_PREFIX("cambridge", "http://dictionary.cambridge.org/results.asp?searchword=%s"),
+	INIT_OPT_SMART_PREFIX("cliki", "http://www.cliki.net/admin/search?words=%s"),
+	INIT_OPT_SMART_PREFIX("d", "http://www.dict.org/bin/Dict?Query=%s&Form=Dict1&Strategy=*&Database=*&submit=Submit+query"),
+	INIT_OPT_SMART_PREFIX("dmoz", "http://search.dmoz.org/cgi-bin/search?search=%s"),
+	INIT_OPT_SMART_PREFIX("foldoc", "http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?%s"),
+	INIT_OPT_SMART_PREFIX("g", "http://www.google.com/search?q=%s&btnG=Google+Search"),
+	INIT_OPT_SMART_PREFIX("gd", "http://www.google.com/search?q=%s&cat=gwd/Top"),
+	/* Whose idea was it to use 'gg' for websearches? -- Miciah */
+	/* INIT_OPT_SMART_PREFIX("gg", "http://groups.google.com/groups?q=%s"), */
+	INIT_OPT_SMART_PREFIX("gg", "http://www.google.com/search?q=%s&btnG=Google+Search"),
+	INIT_OPT_SMART_PREFIX("gi", "http://images.google.com/images?q=%s"),
+	INIT_OPT_SMART_PREFIX("gn", "http://news.google.com/news?q=%s"),
+	INIT_OPT_SMART_PREFIX("go", "http://www.google.com/search?q=%s&btnG=Google+Search"),
+	INIT_OPT_SMART_PREFIX("google", "http://www.google.com/search?q=%s"),
+	INIT_OPT_SMART_PREFIX("gwho", "http://www.googlism.com/?ism=%s&name=1"),
+	INIT_OPT_SMART_PREFIX("gwhat", "http://www.googlism.com/?ism=%s&name=2"),
+	INIT_OPT_SMART_PREFIX("gwhere", "http://www.googlism.com/?ism=%s&name=3"),
+	INIT_OPT_SMART_PREFIX("gwhen", "http://www.googlism.com/?ism=%s&name=4"),
+	INIT_OPT_SMART_PREFIX("fm", "http://www.freshmeat.net/search/?q=%s"),
+	INIT_OPT_SMART_PREFIX("savannah", "http://savannah.nongnu.org/search/?words=%s&type_of_search=soft&exact=1"),
+	INIT_OPT_SMART_PREFIX("sf", "http://sourceforge.net/search/?q=%s"),
+	INIT_OPT_SMART_PREFIX("sfp", "http://sourceforge.net/projects/%s"),
+	INIT_OPT_SMART_PREFIX("sd", "http://www.slashdot.org/search.pl?query=%s"),
+	INIT_OPT_SMART_PREFIX("sdc", "http://www.slashdot.org/search.pl?query=%s&op=comments"),
+	INIT_OPT_SMART_PREFIX("sdu", "http://www.slashdot.org/search.pl?query=%s&op=users"),
+	INIT_OPT_SMART_PREFIX("sdp", "http://www.slashdot.org/search.pl?query=%s&op=polls"),
+	INIT_OPT_SMART_PREFIX("sdj", "http://www.slashdot.org/search.pl?query=%s&op=journals"),
+	INIT_OPT_SMART_PREFIX("dbug", "http://bugs.debian.org/%s"),
+	INIT_OPT_SMART_PREFIX("dpkg", "http://packages.debian.org/%s"),
+	INIT_OPT_SMART_PREFIX("emacs", "http://www.emacswiki.org/cgi-bin/wiki.pl?search=%s"),
+	INIT_OPT_SMART_PREFIX("lyrics", "http://music.lycos.com/lyrics/results.asp?QT=L&QW=%s"),
+	INIT_OPT_SMART_PREFIX("lxr", "http://lxr.linux.no/ident?i=%s"),
+	INIT_OPT_SMART_PREFIX("onelook", "http://onelook.com/?w=%s&ls=a"),
+	INIT_OPT_SMART_PREFIX("py", "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=current"),
+	INIT_OPT_SMART_PREFIX("pydev", "http://starship.python.net/crew/theller/pyhelp.cgi?keyword=%s&version=devel"),
+	INIT_OPT_SMART_PREFIX("pyvault", "http://py.vaults.ca/apyllo.py?find=%s"),
+	INIT_OPT_SMART_PREFIX("e2", "http://www.everything2.org/?node=%s"),
+	INIT_OPT_SMART_PREFIX("encz", "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=0&ecd_lines=15&ecd_hptxt=0"),
+	INIT_OPT_SMART_PREFIX("czen", "http://www.slovnik.cz/bin/ecd?ecd_il=1&ecd_vcb=%s&ecd_trn=translate&ecd_trn_dir=1&ecd_lines=15&ecd_hptxt=0"),
+	INIT_OPT_SMART_PREFIX("dict", "http://dictionary.reference.com/search?q=%s"),
+	INIT_OPT_SMART_PREFIX("thes", "http://thesaurus.reference.com/search?q=%s"),
+	INIT_OPT_SMART_PREFIX("a", "http://acronymfinder.com/af-query.asp?String=exact&Acronym=%s"),
+	INIT_OPT_SMART_PREFIX("imdb", "http://imdb.com/Find?%s"),
+	INIT_OPT_SMART_PREFIX("mw", "http://www.m-w.com/cgi-bin/dictionary?book=Dictionary&va=%s"),
+	INIT_OPT_SMART_PREFIX("mwt", "http://www.m-w.com/cgi-bin/thesaurus?book=Thesaurus&va=%s"),
+	INIT_OPT_SMART_PREFIX("whatis", "http://uptime.netcraft.com/up/graph/?host=%s"),
+	INIT_OPT_SMART_PREFIX("wiki", "http://www.wikipedia.org/w/wiki.phtml?search=%s"),
+	INIT_OPT_SMART_PREFIX("wn", "http://www.cogsci.princeton.edu/cgi-bin/webwn1.7.1?stage=1&word=%s"),
+	/* rfc by number */
+	INIT_OPT_SMART_PREFIX("rfc", "http://www.rfc-editor.org/rfc/rfc%s.txt"),
+	/* rfc search */
+	INIT_OPT_SMART_PREFIX("rfcs", "http://www.rfc-editor.org/cgi-bin/rfcsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25"),
+	INIT_OPT_SMART_PREFIX("cr", "http://www.rfc-editor.org/cgi-bin/rfcsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25"),
+	/* Internet Draft search */
+	INIT_OPT_SMART_PREFIX("rfcid", "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25"),
+	INIT_OPT_SMART_PREFIX("id", "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25"),
+	INIT_OPT_SMART_PREFIX("draft", "http://www.rfc-editor.org/cgi-bin/idsearch.pl?searchwords=%s&format=http&abstract=abson&keywords=keyon&num=25"),
 
 	NULL_OPTION_INFO,
 };

@@ -1,5 +1,5 @@
 -- Example hooks.lua file, put in ~/.elinks/ as hooks.lua.
--- $Id: hooks.lua.in,v 1.25 2003/11/24 13:30:01 zas Exp $
+-- $Id: hooks.lua.in,v 1.26 2003/12/21 21:28:39 pasky Exp $
 
 -- TODO: Bookmarks stuff should be completely moved to bm.lua. --pasky
 
@@ -60,6 +60,8 @@ function escape (str)
 end
 
 -- You can write smt like "gg" to goto URL dialog and it'll go to google.com.
+
+-- Note that this is obsoleted by the URI rewrite plugin.
 
 dumbprefixes = {
     arc = "http://web.archive.org/web/*/%c",
@@ -133,6 +135,9 @@ end
 
 -- You can write "gg:foo" or "gg foo" to goto URL dialog and it'll ask google
 -- for it automagically.
+
+-- Note that this is _mostly_ obsoleted by the URI rewrite plugin. (It can't do the
+-- metas, though.)
 
 smartprefixes = {
     arc = "http://web.archive.org/web/*/%s",

@@ -1,5 +1,5 @@
 /* Keybinding implementation */
-/* $Id: kbdbind.c,v 1.198 2004/01/30 23:01:08 pasky Exp $ */
+/* $Id: kbdbind.c,v 1.199 2004/01/31 00:23:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -575,6 +575,7 @@ static struct strtonum edit_action_table[EDIT_ACTIONS + 1] = {
 	{ "kill-to-eol", ACT_EDIT_KILL_TO_EOL, DACT(N_("Delete to end of line")) },
 	{ "left", ACT_EDIT_LEFT,DACT( N_("Move the cursor left")) },
 	{ "next-item", ACT_EDIT_NEXT_ITEM, DACT(N_("Move to the next item")) },
+	{ "previous-item", ACT_EDIT_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "paste-clipboard", ACT_EDIT_PASTE_CLIPBOARD, DACT(N_("Paste text from the clipboard")) },
 	{ "redraw", ACT_EDIT_REDRAW, DACT(N_("Redraw the terminal")) },
 	{ "right", ACT_EDIT_RIGHT, DACT(N_("Move the cursor right")) },
@@ -596,6 +597,7 @@ static struct strtonum menu_action_table[MENU_ACTIONS + 1] = {
 	{ "left", ACT_MENU_LEFT,DACT( N_("Move the cursor left")) },
 	{ "mark-item", ACT_MENU_MARK_ITEM, DACT(N_("Mark item")) },
 	{ "next-item", ACT_MENU_NEXT_ITEM, DACT(N_("Move to the next item")) },
+	{ "previous-item", ACT_MENU_PREVIOUS_ITEM, DACT(N_("Move to the previous item")) },
 	{ "page-down", ACT_MENU_PAGE_DOWN, DACT(N_("Move downwards by a page")) },
 	{ "page-up", ACT_MENU_PAGE_UP, DACT(N_("Move upwards by a page")) },
 	{ "redraw", ACT_MENU_REDRAW, DACT(N_("Redraw the terminal")) },
@@ -872,7 +874,7 @@ static struct default_kb default_edit_keymap[] = {
 	{ KBD_LEFT,	 0,		ACT_EDIT_LEFT },
 	{ KBD_RIGHT,	 0,		ACT_EDIT_RIGHT },
 	{ KBD_TAB,	 0,		ACT_EDIT_NEXT_ITEM },
-	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_ITEM },
+	{ KBD_TAB,	 KBD_ALT,	ACT_EDIT_PREVIOUS_ITEM },
 	{ KBD_UP,	 0,		ACT_EDIT_UP },
 	{ 0, 0, 0 }
 };
@@ -907,7 +909,7 @@ static struct default_kb default_menu_keymap[] = {
 	{ KBD_PAGE_UP,	 0,		ACT_MENU_PAGE_UP },
 	{ KBD_RIGHT,	 0,		ACT_MENU_RIGHT },
 	{ KBD_TAB,	 0,		ACT_MENU_NEXT_ITEM },
-	{ KBD_TAB,	 KBD_ALT,	ACT_MAIN_PREVIOUS_ITEM },
+	{ KBD_TAB,	 KBD_ALT,	ACT_MENU_PREVIOUS_ITEM },
 	{ KBD_UP,	 0,		ACT_MENU_UP },
 	{ 0, 0, 0}
 };

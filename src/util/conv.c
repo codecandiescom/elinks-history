@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.49 2003/09/21 14:13:49 jonas Exp $ */
+/* $Id: conv.c,v 1.50 2003/10/28 01:42:22 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -297,7 +297,9 @@ add_shell_safe_to_string(struct string *string, unsigned char *cmd, int cmdlen)
 		if (is_safe_in_shell(*cmd)) {
 			add_char_to_string(string, *cmd);
 		} else {
-			add_char_to_string(string, '_');
+			add_char_to_string(string, '%');
+			add_char_to_string(string, hx((*cmd & 0xf0) >> 4));
+			add_char_to_string(string, hx(*cmd & 0x0f));
 		}
 	}
 

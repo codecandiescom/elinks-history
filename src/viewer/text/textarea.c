@@ -1,5 +1,5 @@
 /* Textarea form item handlers */
-/* $Id: textarea.c,v 1.68 2004/06/16 19:59:59 jonas Exp $ */
+/* $Id: textarea.c,v 1.69 2004/06/16 20:08:47 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -586,19 +586,23 @@ x:
 enum frame_event_status
 textarea_op_enter(struct form_state *fs, struct form_control *frm, int rep)
 {
+	unsigned char *value;
 	int value_len;
 
 	assert(fs && fs->value && frm);
 	if_assert_failed return FRAME_EVENT_OK;
 
-	value_len = strlen(fs->value);
+	value = fs->value;
+	value_len = strlen(value);
 	if (!frm->ro && value_len < frm->maxlength) {
-		unsigned char *v = mem_realloc(fs->value, value_len + 2);
+		value = mem_realloc(value, value_len + 2);
 
-		if (v) {
-			fs->value = v;
-			memmove(v + fs->state + 1, v + fs->state, strlen(v + fs->state) + 1);
-			v[fs->state++] = '\n';
+		if (value) {
+			unsigned char *insertpos = &value[fs->state++];
+
+			memmove(insertpos + 1, insertpos, strlen(insertpos) + 1);
+			*insertpos = '\n';
+			fs->value = value;
 		}
 	}
 

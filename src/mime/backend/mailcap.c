@@ -1,5 +1,5 @@
 /* RFC1524 (mailcap file) implementation */
-/* $Id: mailcap.c,v 1.21 2003/06/06 19:24:28 jonas Exp $ */
+/* $Id: mailcap.c,v 1.22 2003/06/06 19:37:17 jonas Exp $ */
 
 /* This file contains various functions for implementing a fair subset of
  * rfc1524.
@@ -390,7 +390,7 @@ done_mailcap(void)
  * Only % is supported by subst_file() which is equivalent to %s. */
 
 /* The formating is prosponed to when the command is needed. This means
- * @type can be NULL */
+ * @type can be NULL. If '%t' is used in command we bail out. */
 static unsigned char *
 format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 {
@@ -414,7 +414,11 @@ format_command(unsigned char *command, unsigned char *type, int copiousoutput)
 
 			if (*command == 's')
 				add_chr_to_str(&cmd, &cmdlen, '%');
-			else if (*command == 't' && type)
+			else if (*command == 't')
+				if (!type) {
+					mem_free(cmd);
+					return NULL;
+				}
 				add_to_str(&cmd, &cmdlen, type);
 
 			command++;

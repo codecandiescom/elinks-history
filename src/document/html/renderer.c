@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.496 2004/09/23 10:28:47 zas Exp $ */
+/* $Id: renderer.c,v 1.497 2004/09/24 10:54:24 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1401,11 +1401,13 @@ html_special(struct part *part, enum html_special_type c, ...)
 			break;
 		case SP_STYLESHEET:
 		{
+#ifdef CONFIG_CSS
 			struct uri *uri = va_arg(l, struct uri *);
 
+			if (document)
+				add_to_uri_list(&document->css_imports, uri);
+#endif
 			va_end(l);
-			if (!document) break;
-			add_to_uri_list(&document->css_imports, uri);
 			break;
 		}
 	}

@@ -1,4 +1,4 @@
-/* $Id: document.h,v 1.74 2004/09/24 00:03:35 pasky Exp $ */
+/* $Id: document.h,v 1.75 2004/09/24 10:54:23 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_DOCUMENT_H
 #define EL__DOCUMENT_DOCUMENT_H
@@ -122,7 +122,7 @@ struct document {
 	 * always appear at the list end. */
 	struct list_head onload_snippets; /* -> struct string_list_item */
 #endif
-
+#ifdef CONFIG_CSS
 	/* FIXME: We should externally maybe using cache_entry store the
 	 * dependencies between the various entries so nothing gets removed
 	 * unneeded. */
@@ -130,6 +130,7 @@ struct document {
 	/* Calculated from the id's of all the cache entries in css_imports.
 	 * Used for checking rerendering for available CSS imports. */
 	unsigned long css_magic;
+#endif
 
 	struct uri *uri;
 	unsigned char *title;

@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.79 2004/09/24 01:41:54 pasky Exp $ */
+/* $Id: document.c,v 1.80 2004/09/24 10:54:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -140,8 +140,9 @@ done_document(struct document *document)
 		done_form_control(fc);
 	}
 
+#ifdef CONFIG_CSS
 	free_uri_list(&document->css_imports);
-
+#endif
 #ifdef CONFIG_ECMASCRIPT
 	free_string_list(&document->onload_snippets);
 #endif
@@ -177,6 +178,7 @@ release_document(struct document *document)
 
 /* Formatted document cache management */
 
+#if CONFIG_CSS
 unsigned long
 get_document_css_magic(struct document *document)
 {
@@ -193,6 +195,13 @@ get_document_css_magic(struct document *document)
 	return css_magic;
 }
 
+#define check_document_css_magic(document) \
+	((document)->css_magic == get_document_css_magic(document))
+#else
+#define check_document_css_magic(document) 1
+#endif
+
+
 struct document *
 get_cached_document(struct cache_entry *cached, struct document_options *options)
 {
@@ -205,7 +214,7 @@ get_cached_document(struct cache_entry *cached, struct document_options *options
 
 		if (options->no_cache
 		    || cached->id != document->id
-		    || document->css_magic != get_document_css_magic(document)) {
+		    || !check_document_css_magic(document)) {
 			if (!is_object_used(document)) {
 				done_document(document);
 			}

@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.79 2004/09/24 10:47:37 pasky Exp $ */
+/* $Id: renderer.c,v 1.80 2004/09/24 10:54:23 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -201,8 +201,9 @@ render_document(struct view_state *vs, struct document_view *doc_view,
 		                 &vs->onload_snippets,
 		                 &vs->current_onload_snippet);
 #endif
-
+#ifdef CONFIG_CSS
 		document->css_magic = get_document_css_magic(document);
+#endif
 	}
 
 	/* If we do not care about the height and width of the document

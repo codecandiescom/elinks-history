@@ -1,5 +1,5 @@
 /* Internal MIME types implementation dialogs */
-/* $Id: dialogs.c,v 1.50 2003/10/24 23:08:43 pasky Exp $ */
+/* $Id: dialogs.c,v 1.51 2003/10/24 23:19:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -238,17 +238,8 @@ menu_add_ext(struct terminal *term, void *fcp, void *xxx2)
 	dlg->refresh = (void (*)(void *)) really_add_ext;
 	dlg->refresh_data = new;
 
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = ext;
-	dlg->items[n].fn = check_nonempty;
-	n++;
-
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = ct;
-	dlg->items[n].fn = check_nonempty;
-	n++;
+	set_dlg_field(dlg, n, 0, 0, check_nonempty, MAX_STR_LEN, ext, NULL);
+	set_dlg_field(dlg, n, 0, 0, check_nonempty, MAX_STR_LEN, ct, NULL);
 
 	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", term), NULL);

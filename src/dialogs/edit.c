@@ -1,5 +1,5 @@
 /* Generic support for edit/search historyitem/bookmark dialog */
-/* $Id: edit.c,v 1.43 2003/10/24 23:08:43 pasky Exp $ */
+/* $Id: edit.c,v 1.44 2003/10/24 23:19:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -149,17 +149,11 @@ do_edit_dialog(struct terminal *term, int intl, unsigned char *title,
 	dlg->udata = parent;
 	dlg->udata2 = done_data;
 
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = name;
-	if (dialog_type == EDIT_DLG_ADD) dlg->items[n].fn = check_nonempty;
-	n++;
+	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, name, NULL);
+	if (dialog_type == EDIT_DLG_ADD) dlg->items[n - 1].fn = check_nonempty;
 
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = url;
-	/* if (dialog_type == EDIT_DLG_ADD) d->items[n].fn = check_nonempty; */
-	n++;
+	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, url, NULL);
+	/* if (dialog_type == EDIT_DLG_ADD) d->items[n - 1].fn = check_nonempty; */
 
 	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", term), NULL);
 	set_dlg_button(dlg, n, 0, clear_dialog, _("Clear", term), NULL);

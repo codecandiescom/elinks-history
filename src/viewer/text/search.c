@@ -1,5 +1,5 @@
 /* Searching in the HTML document */
-/* $Id: search.c,v 1.61 2003/10/24 23:08:45 pasky Exp $ */
+/* $Id: search.c,v 1.62 2003/10/24 23:19:45 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1116,14 +1116,7 @@ search_dlg_do(struct terminal *term, struct memory_list *ml, int intl,
 
 	add_to_ml(&ml, hop, NULL);
 
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].gid = min;
-	dlg->items[n].gnum = max;
-	dlg->items[n].fn = check;
-	dlg->items[n].history = history;
-	dlg->items[n].dlen = l;
-	dlg->items[n].data = field;
-	n++;
+	set_dlg_field(dlg, n, min, max, check, l, field, history);
 
 	set_dlg_checkbox(dlg, n, 1, 0, hop->whether_regex);
 	set_dlg_checkbox(dlg, n, 1, 1, hop->whether_regex);

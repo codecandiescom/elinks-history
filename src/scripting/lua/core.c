@@ -1,5 +1,5 @@
 /* Lua interface (scripting engine) */
-/* $Id: core.c,v 1.84 2003/10/24 23:08:45 pasky Exp $ */
+/* $Id: core.c,v 1.85 2003/10/24 23:19:44 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -444,20 +444,9 @@ l_edit_bookmark_dialog(LS)
 	dlg->refresh = (void (*)(void *))dialog_run_lua;
 	dlg->refresh_data = data;
 
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = data->cat;
-	n++;
-
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = data->name;
-	n++;
-
-	dlg->items[n].type = D_FIELD;
-	dlg->items[n].dlen = MAX_STR_LEN;
-	dlg->items[n].data = data->url;
-	n++;
+	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->cat, NULL);
+	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->name, NULL);
+	set_dlg_field(dlg, n, 0, 0, NULL, MAX_STR_LEN, data->url, NULL);
 
 	set_dlg_button(dlg, n, B_ENTER, ok_dialog, _("OK", lua_ses->tab->term), NULL);
 	set_dlg_button(dlg, n, B_ESC, cancel_dialog, _("Cancel", lua_ses->tab->term), NULL);

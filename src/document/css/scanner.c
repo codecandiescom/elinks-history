@@ -1,5 +1,5 @@
 /* CSS token scanner utilities */
-/* $Id: scanner.c,v 1.37 2004/01/20 01:05:10 jonas Exp $ */
+/* $Id: scanner.c,v 1.38 2004/01/20 01:42:58 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -42,7 +42,7 @@ enum css_char_group {
 #define	is_css_char_token(c)	check_css_table(c, CSS_CHAR_TOKEN)
 #define	scan_css(s, bit)	while (check_css_table(*(s), bit)) (s)++;
 
-static inline enum css_token_type
+static inline void
 scan_css_token(struct css_scanner *scanner, struct css_token *token)
 {
 	unsigned char *string = scanner->position;
@@ -137,8 +137,6 @@ scan_css_token(struct css_scanner *scanner, struct css_token *token)
 	token->type = type;
 	token->length = string - token->string;
 	scanner->position = string;
-
-	return token->type;
 }
 
 /* Fills the scanner with tokens. Already scanned tokens that has not been
@@ -180,7 +178,9 @@ scan_css_tokens(struct css_scanner *scanner)
 		scan_css(scanner->position, CSS_CHAR_WHITESPACE);
 		if (!*scanner->position) break;
 
-		if (scan_css_token(scanner, token) == CSS_TOKEN_GARBAGE) {
+		scan_css_token(scanner, token);
+
+		if (token->type == CSS_TOKEN_GARBAGE) {
 			current--;
 		}
 	}

@@ -1,5 +1,5 @@
 /* Input field widget implementation. */
-/* $Id: inpfield.c,v 1.150 2004/07/15 15:54:20 jonas Exp $ */
+/* $Id: inpfield.c,v 1.151 2004/07/22 02:19:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -341,7 +341,6 @@ display_field:
 	return EVENT_PROCESSED;
 }
 
-/* XXX: The world's best candidate for massive goto cleanup! --pasky */
 static int
 kbd_field(struct widget_data *widget_data, struct dialog_data *dlg_data,
 	  struct term_event *ev)

@@ -1,5 +1,5 @@
 /* Sessions action management */
-/* $Id: action.c,v 1.105 2004/10/10 02:42:41 miciah Exp $ */
+/* $Id: action.c,v 1.106 2004/10/10 02:51:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -284,6 +284,9 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_LINK_MENU:
+			if (!try_jump_to_link_number(ses, doc_view))
+				break;
+
 			link_menu(term, NULL, ses);
 			break;
 
@@ -303,16 +306,25 @@ do_action(struct session *ses, enum main_action action, int verbose)
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
+			if (!try_jump_to_link_number(ses, doc_view))
+				break;
+
 			open_current_link_in_new_tab(ses, 0);
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
+			if (!try_jump_to_link_number(ses, doc_view))
+				break;
+
 			open_current_link_in_new_tab(ses, 1);
 			break;
 
 		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
 			/* FIXME: Use do_frame_action(). --jonas */
-			if (!doc_view || doc_view->vs->current_link == -1) break;
+			if (!doc_view
+			    || !try_jump_to_link_number(ses, doc_view)
+			    || doc_view->vs->current_link == -1)
+				break;
 			open_in_new_window(term, send_open_in_new_window, ses);
 			break;
 

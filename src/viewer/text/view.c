@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.610 2004/10/10 02:23:31 miciah Exp $ */
+/* $Id: view.c,v 1.611 2004/10/10 02:51:55 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -723,15 +723,6 @@ frame_ev_kbd(struct session *ses, struct document_view *doc_view, struct term_ev
 			ses->kbdprefix.mark = KP_MARK_GOTO;
 #endif
 			status = FRAME_EVENT_OK;
-			break;
-		case ACT_MAIN_LINK_MENU:
-		case ACT_MAIN_OPEN_LINK_IN_NEW_WINDOW:
-		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB:
-		case ACT_MAIN_OPEN_LINK_IN_NEW_TAB_IN_BACKGROUND:
-			if (!try_jump_to_link_number(ses, doc_view))
-				status = FRAME_EVENT_OK;
-			else
-				status = FRAME_EVENT_IGNORED;
 			break;
 		default:
 			if (isdigit(get_kbd_key(ev))) {

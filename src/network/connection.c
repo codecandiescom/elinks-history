@@ -1,5 +1,5 @@
 /* Connections managment */
-/* $Id: connection.c,v 1.76 2003/07/05 16:13:47 jonas Exp $ */
+/* $Id: connection.c,v 1.77 2003/07/05 17:57:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -37,13 +37,6 @@
 
 
 /* Types and structs */
-struct host_connection {
-	LIST_HEAD(struct host_connection);
-
-	int connections;
-	unsigned char host[1]; /* Keep last */
-};
-
 struct keepalive_connection {
 	LIST_HEAD(struct keepalive_connection);
 
@@ -136,6 +129,20 @@ connection_disappeared(struct connection *c)
 	return 1;
 }
 
+/* Host connection management: */
+/* Used to keep track on the number of connections to any given host. When
+ * trying to setup a new connection the list is searched to see if the maximum
+ * number of connection has been reached. If that is the case we try to suspend
+ * an already established connection. */
+/* Some connections (like file://) that do not involve hosts are not maintained
+ * in the list. */
+
+struct host_connection {
+	LIST_HEAD(struct host_connection);
+
+	int connections;
+	unsigned char host[1]; /* Keep last */
+};
 
 static struct host_connection *
 get_host_connection(struct connection *c)
@@ -152,6 +159,7 @@ get_host_connection(struct connection *c)
 	return NULL;
 }
 
+/* Returns if the connection was succesfully added. */
 /* Don't add hostnameless host connections but they're valid. */
 static int
 add_host_connection(struct connection *c)
@@ -173,6 +181,7 @@ add_host_connection(struct connection *c)
 	return 1;
 }
 
+/* Decrements and free()s the host connection if it is the last 'refcount'. */
 static void
 done_host_connection(struct connection *c)
 {

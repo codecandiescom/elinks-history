@@ -2,6 +2,8 @@ See ChangeLog for recent changes, bugfixes and new features.
 
 ELinks-now:
 
+* -ping option
+* Mozilla-compliant support for -remote option
 * cookies creation and edition
 * perl scripting extensions
 * tab moving

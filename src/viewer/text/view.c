@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.29 2003/04/30 17:16:36 zas Exp $ */
+/* $Id: view.c,v 1.30 2003/05/01 17:09:13 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -393,9 +393,11 @@ draw_link(struct terminal *t, struct f_data_c *scr, int l)
 				if (x >= xp && y >= yp && x < xp+xw && y < yp+yw) {
 					unsigned co = get_char(t, x, y);
 
-					if (scr->link_bg) scr->link_bg[i].x = x,
-							  scr->link_bg[i].y = y,
-							  scr->link_bg[i].c = co;
+					if (scr->link_bg) {
+						scr->link_bg[i].x = x;
+						scr->link_bg[i].y = y;
+						scr->link_bg[i].c = co;
+					}
 					if (!f
 					    || (lnk->type == L_CHECKBOX && i == 1)
 					    || (lnk->type == L_BUTTON && i == 2)
@@ -711,16 +713,19 @@ find_form_state(struct f_data_c *f, struct form_control *frm)
 		fs = mem_realloc(vs->form_info, (n + 1) * sizeof(struct form_state));
 		if (!fs) return NULL;
 		vs->form_info = fs;
-		memset(fs + vs->form_info_len, 0, (n + 1 - vs->form_info_len) * sizeof(struct form_state));
+		memset(fs + vs->form_info_len, 0,
+		       (n + 1 - vs->form_info_len) * sizeof(struct form_state));
 		vs->form_info_len = n + 1;
 		fs = &vs->form_info[n];
 	}
+
 	if (fs->form_num == frm->form_num
 	    && fs->ctrl_num == frm->ctrl_num
 	    && fs->g_ctrl_num == frm->g_ctrl_num
 	    && fs->position == frm->position
 	    && fs->type == frm->type)
 		return fs;
+
 	if (fs->value) mem_free(fs->value);
 	memset(fs, 0, sizeof(struct form_state));
 	fs->form_num = frm->form_num;
@@ -1065,7 +1070,7 @@ in_viewy(struct f_data_c *f, struct link *l)
 	for (i = 0; i < l->n; i++) {
 		if (l->pos[i].y >= f->vs->view_pos
 		    && l->pos[i].y < f->vs->view_pos + f->yw)
-		return 1;
+			return 1;
 	}
 	return 0;
 }
@@ -1156,18 +1161,20 @@ find_link(struct f_data_c *f, int p, int s)
 	int y;
 	int l;
 	struct link *lnk;
-	struct link **line = p == -1 ? f->f_data->lines2 : f->f_data->lines1;
+	struct link **line = (p == -1) ? f->f_data->lines2 : f->f_data->lines1;
 
 	if (!line) goto nolink;
 
 	if (p == -1) {
 		y = f->vs->view_pos + f->yw - 1;
 		if (y >= f->f_data->y) y = f->f_data->y - 1;
+		if (y < 0) goto nolink;
 	} else {
 		y = f->vs->view_pos;
 		if (y < 0) y = 0;
+		if (y >= f->f_data->y) goto nolink;
 	}
-	if (y < 0 || y >= f->f_data->y) goto nolink;
+
 	lnk = NULL;
 	do {
 		if (line[y]
@@ -1178,8 +1185,10 @@ find_link(struct f_data_c *f, int p, int s)
 		   || y < f->vs->view_pos
 		   || y >= f->vs->view_pos + f->f_data->opt.yw
 		   || y >= f->f_data->y));
+
 	if (!lnk) goto nolink;
 	l = lnk - f->f_data->links;
+
 	if (s == 0) {
 		next_in_view(f, l, p, in_view, NULL);
 		return;
@@ -1195,9 +1204,14 @@ nolink:
 static void
 page_down(struct session *ses, struct f_data_c *f, int a)
 {
-	if (f->vs->view_pos + f->f_data->opt.yw < f->f_data->y)
-		f->vs->view_pos += f->f_data->opt.yw, find_link(f, 1, a);
-	else find_link(f, -1, a);
+	int newpos = f->vs->view_pos + f->f_data->opt.yw;
+	int direction = -1;
+
+	if (newpos < f->f_data->y) {
+		f->vs->view_pos = newpos;
+		direction = 1;
+	}
+	find_link(f, direction, a);
 }
 
 static void
@@ -1348,15 +1362,17 @@ free_succesful_controls(struct list_head *submit)
 static inline unsigned char *
 encode_textarea(unsigned char *t)
 {
-	int len = 0;
 	unsigned char *o = init_str();
 
-	if (!o) return NULL;
+	if (o) {
+		int len = 0;
 
-	for (; *t; t++) {
-		if (*t != '\n') add_chr_to_str(&o, &len, *t);
-		else add_to_str(&o, &len, "\r\n");
+		for (; *t; t++) {
+			if (*t != '\n') add_chr_to_str(&o, &len, *t);
+			else add_to_str(&o, &len, "\r\n");
+		}
 	}
+
 	return o;
 }
 
@@ -1426,6 +1442,7 @@ fi_rep:
 			}
 		}
 	}
+
 	do {
 		struct submitted_value *sub, *nx;
 
@@ -1544,6 +1561,7 @@ xx:
 			add_to_str(data, len, strip_file_name(sv->value));
 				/* It sends bad data if the file name contains ", but
 				   Netscape does the same */
+				/* FIXME: is this a reason ? --Zas */
 		}
 		add_to_str(data, len, "\"\r\n\r\n");
 		if (sv->type != FC_FILE) {
@@ -1733,8 +1751,7 @@ get_link_url(struct session *ses, struct f_data_c *f,
 void
 set_frame(struct session *ses, struct f_data_c *f, int a)
 {
-	if (f == ses->screen) return;
-	goto_url(ses, f->vs->url);
+	if (f != ses->screen) goto_url(ses, f->vs->url);
 }
 
 /* This is common backend for submit_form_do() and enter(). */
@@ -1789,7 +1806,6 @@ submit_form_reload(struct terminal *term, void *xxx, struct session *ses)
 {
 	return submit_form_do(term, xxx, ses, 1);
 }
-
 
 static int
 enter(struct session *ses, struct f_data_c *fd, int a)
@@ -1856,10 +1872,11 @@ enter(struct session *ses, struct f_data_c *fd, int a)
 void
 toggle(struct session *ses, struct f_data_c *f, int a)
 {
-	if (!f || !f->vs) return;
-	f->vs->plain = !f->vs->plain;
-	html_interpret(ses);
-	draw_formatted(ses);
+	if (f && f->vs) {
+		f->vs->plain = !f->vs->plain;
+		html_interpret(ses);
+		draw_formatted(ses);
+	}
 }
 
 static inline void
@@ -1882,8 +1899,7 @@ selected_item(struct terminal *term, void *pitem, struct session *ses)
 	struct link *l;
 	struct form_state *fs;
 
-	if (!f) return;
-	if (f->vs->current_link == -1) return;
+	if (!f || f->vs->current_link == -1) return;
 	l = &f->f_data->links[f->vs->current_link];
 	if (l->type != L_SELECT) return;
 
@@ -1914,12 +1930,12 @@ get_current_state(struct session *ses)
 	struct link *l;
 	struct form_state *fs;
 
-	if (!f) return -1;
-	if (f->vs->current_link == -1) return -1;
+	if (!f || f->vs->current_link == -1) return -1;
 	l = &f->f_data->links[f->vs->current_link];
-	if (l->type != L_SELECT) return -1;
-	fs = find_form_state(f, l->form);
-	if (fs) return fs->state;
+	if (l->type == L_SELECT) {
+		fs = find_form_state(f, l->form);
+		if (fs) return fs->state;
+	}
 	return -1;
 }
 
@@ -1953,7 +1969,8 @@ textarea_edit(int op, struct terminal *term_, struct form_control *form_,
 	static char *fn = NULL;
 
 	if (op == 0 && !term_->master) {
-		if (fn) mem_free(fn); fn = NULL; fs = NULL;
+		if (fn) mem_free(fn);
+		fn = NULL; fs = NULL;
 
 		msg_box(term_, NULL,
 			N_("Error"), AL_CENTER,
@@ -2045,8 +2062,8 @@ close:
 			unlink(fn);
 		}
 
-		mem_free(fn);
-		textarea_editor = 0; fn = NULL; fs = NULL;
+		mem_free(fn); fn = NULL; fs = NULL;
+		textarea_editor = 0;
 	}
 }
 
@@ -2476,8 +2493,8 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 	struct link *l;
 	int i;
 
-	if (!f->f_data->nlinks) return NULL;
-	if (ev->x < 0 || ev->y < 0 || ev->x >= f->xw || ev->y >= f->yw)
+	if (!f->f_data->nlinks
+	    || ev->x < 0 || ev->y < 0 || ev->x >= f->xw || ev->y >= f->yw)
 		return NULL;
 
 	for (i = f->vs->view_pos;
@@ -2502,10 +2519,10 @@ choose_mouse_link(struct f_data_c *f, struct event *ev)
 static void
 jump_to_link_number(struct session *ses, struct f_data_c *fd, int n)
 {
-	if (n < 0 || n > fd->f_data->nlinks) return;
-
-	fd->vs->current_link = n;
-	check_vs(fd);
+	if (n >= 0 && n <= fd->f_data->nlinks) {
+		fd->vs->current_link = n;
+		check_vs(fd);
+	}
 }
 
 /* This is common backend for goto_link_number() and try_document_key(). */
@@ -2808,20 +2825,18 @@ current_frame(struct session *ses)
 static int
 send_to_frame(struct session *ses, struct event *ev)
 {
-	int r;
-	struct f_data_c *fd;
+	int r = 0;
+	struct f_data_c *fd = current_frame(ses);
 
-	fd = current_frame(ses);
-	if (!fd) {
-		/*internal("document not formatted");*/
-		return 0;
+	if (fd) {
+		r = frame_ev(ses, fd, ev);
+		if (r == 1) {
+			draw_doc(ses->term, fd, 1);
+			print_screen_status(ses);
+			redraw_from_window(ses->win);
+		}
 	}
-	r = frame_ev(ses, fd, ev);
-	if (r == 1) {
-		draw_doc(ses->term, fd, 1);
-		print_screen_status(ses);
-		redraw_from_window(ses->win);
-	}
+
 	return r;
 }
 
@@ -2832,11 +2847,7 @@ do_for_frame(struct session *ses,
 {
 	struct f_data_c *fd = current_frame(ses);
 
-	if (!fd) {
-		/*internal("document not formatted");*/
-		return;
-	}
-	f(ses, fd, a);
+	if (fd) f(ses, fd, a);
 }
 
 static void
@@ -3111,8 +3122,10 @@ frm_download(struct session *ses, struct f_data_c *fd, int resume)
 	int l = 0;
 
 	if (fd->vs->current_link == -1) return;
-	if (ses->dn_url) mem_free(ses->dn_url), ses->dn_url = NULL;
-
+	if (ses->dn_url) {
+		mem_free(ses->dn_url);
+		ses->dn_url = NULL;
+	}
 	lnk = &fd->f_data->links[fd->vs->current_link];
 	if (lnk->type != L_LINK && lnk->type != L_BUTTON) return;
 
@@ -3143,8 +3156,7 @@ _send_download(struct terminal *term, void *xxx, struct session *ses, enum dl_ty
 	struct f_data_c *fd = current_frame(ses);
 	int l = 0;
 
-	if (!fd) return;
-	if (fd->vs->current_link == -1) return;
+	if (!fd || fd->vs->current_link == -1) return;
 	if (ses->dn_url) {
 		mem_free(ses->dn_url);
 		ses->dn_url = NULL;
@@ -3209,8 +3221,7 @@ send_open_in_new_xterm(struct terminal *term,
 {
 	struct f_data_c *fd = current_frame(ses);
 
-	if (!fd) return;
-	if (fd->vs->current_link == -1) return;
+	if (!fd || fd->vs->current_link == -1) return;
 	if (ses->dn_url) mem_free(ses->dn_url);
 	ses->dn_url = get_link_url(ses, fd, &fd->f_data->links[fd->vs->current_link]);
 	/* FIXME: We can't do this because ses->dn_url isn't alloc'd by init_str(). --pasky */
@@ -3290,7 +3301,8 @@ save_url(struct session *ses, unsigned char *url)
 	unsigned char *u = translate_url(url, ses->term->cwd);
 
 	if (!u) {
-		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL, PRI_CANCEL, 0, NULL, NULL };
+		struct status stat = { NULL_LIST_HEAD, NULL, NULL, S_BAD_URL,
+				       PRI_CANCEL, 0, NULL, NULL };
 
 		print_error_dialog(ses, &stat, N_("Error"));
 		return;
@@ -3310,11 +3322,9 @@ send_image(struct terminal *term, void *xxx, struct session *ses)
 	unsigned char *u;
 	struct f_data_c *fd = current_frame(ses);
 
-	if (!fd) return;
-	if (fd->vs->current_link == -1) return;
+	if (!fd || fd->vs->current_link == -1) return;
 	u = fd->f_data->links[fd->vs->current_link].where_img;
-	if (!u) return;
-	goto_url(ses, u);
+	if (u) goto_url(ses, u);
 }
 
 void
@@ -3467,16 +3477,12 @@ end:
 unsigned char *
 print_current_link_title_do(struct f_data_c *fd, struct terminal *term)
 {
-	struct link *lnk;
+	if (fd && !fd->f_data->frame && fd->vs->current_link != -1
+	    && fd->vs->current_link < fd->f_data->nlinks) {
+		struct link *lnk = &fd->f_data->links[fd->vs->current_link];
 
-	if (!fd || fd->f_data->frame || fd->vs->current_link == -1
-	    || fd->vs->current_link >= fd->f_data->nlinks)
-		return NULL;
-
-	lnk = &fd->f_data->links[fd->vs->current_link];
-
-	if (lnk->title)
-		return stracpy(lnk->title);
+		if (lnk->title) return stracpy(lnk->title);
+	}
 
 	return NULL;
 }
@@ -3503,7 +3509,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			if (!str) return NULL;
 
 			add_to_str(&str, &strl, _("Image", term));
-			add_to_str(&str, &strl, " ");
+			add_chr_to_str(&str, &strl, ' ');
 			url = strip_url_password(lnk->where_img);
 			if (url) {
 				add_to_str(&str, &strl, url);
@@ -3521,7 +3527,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 			if (!str) return NULL;
 
 			add_to_str(&str, &strl, _("Usemap", term));
-			add_to_str(&str, &strl, " ");
+			add_chr_to_str(&str, &strl, ' ');
 			url = strip_url_password(lnk->where + 4);
 			if (url) {
 				add_to_str(&str, &strl, url);
@@ -3598,7 +3604,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		if (lnk->form->name && lnk->form->name[0]) {
 			add_to_str(&str, &strl, ", ");
 			add_to_str(&str, &strl, _("name", term));
-			add_to_str(&str, &strl, " ");
+			add_chr_to_str(&str, &strl, ' ');
 			add_to_str(&str, &strl, lnk->form->name);
 		}
 
@@ -3608,7 +3614,7 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 		    && lnk->form->default_value[0]) {
 			add_to_str(&str, &strl, ", ");
 			add_to_str(&str, &strl, _("value", term));
-			add_to_str(&str, &strl, " ");
+			add_chr_to_str(&str, &strl, ' ');
 			add_to_str(&str, &strl, lnk->form->default_value);
 		}
 
@@ -3619,12 +3625,12 @@ print_current_link_do(struct f_data_c *fd, struct terminal *term)
 
 			add_to_str(&str, &strl, ", ");
 			add_to_str(&str, &strl, _("hit ENTER to", term));
-			add_to_str(&str, &strl, " ");
+			add_chr_to_str(&str, &strl, ' ');
 			if (lnk->form->method == FM_GET)
 				add_to_str(&str, &strl, _("submit to", term));
 			else
 				add_to_str(&str, &strl, _("post to", term));
-			add_to_str(&str, &strl, " ");
+			add_chr_to_str(&str, &strl, ' ');
 			url = strip_url_password(lnk->form->action);
 			if (url) {
 				add_to_str(&str, &strl, url);
@@ -3651,11 +3657,10 @@ unsigned char *
 print_current_titlex(struct f_data_c *fd, int w)
 {
 	int ml = 0, pl = 0;
-	unsigned char *m, *p;
+	unsigned char *m;
+	unsigned char *p;
 
 	if (!fd) return NULL;
-
-	w -= 1;
 
 	p = init_str();
 	if (!p) return NULL;
@@ -3675,9 +3680,9 @@ print_current_titlex(struct f_data_c *fd, int w)
 		if (fd->f_data->title)
 			add_chr_to_str(&p, &pl, ' ');
 
-		add_to_str(&p, &pl, "(");
+		add_chr_to_str(&p, &pl, '(');
 		add_num_to_str(&p, &pl, pp);
-		add_to_str(&p, &pl, "/");
+		add_chr_to_str(&p, &pl, '/');
 		add_num_to_str(&p, &pl, pe);
 		add_chr_to_str(&p, &pl, ')');
 	}
@@ -3685,21 +3690,20 @@ print_current_titlex(struct f_data_c *fd, int w)
 	if (!fd->f_data->title) return p;
 
 	m = init_str();
-	if (!m) {
-		mem_free(p);
-		return NULL;
-	}
+	if (!m) goto end;
 
 	add_to_str(&m, &ml, fd->f_data->title);
 
-	if (ml + pl > w - 3) {
-		ml = w - 3 - pl;
+	if (ml + pl > w - 4) {
+		ml = w - 4 - pl;
 		if (ml < 0) ml = 0;
 		add_to_str(&m, &ml, "...");
 
 	}
 
 	add_to_str(&m, &ml, p);
+
+end:
 	mem_free(p);
 
 	return m;

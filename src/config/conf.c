@@ -1,5 +1,5 @@
 /* Config file manipulation */
-/* $Id: conf.c,v 1.63 2002/12/10 22:12:45 pasky Exp $ */
+/* $Id: conf.c,v 1.64 2002/12/10 23:13:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -437,6 +437,8 @@ load_config()
 }
 
 
+static int indentation = 2;
+
 static void
 smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 		       unsigned char *path, int depth, int do_print_comment,
@@ -449,7 +451,7 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 
 	switch (action) {
 		case 0:
-			for (i = 0; i < depth * 2; i++)
+			for (i = 0; i < depth * indentation; i++)
 				add_chr_to_str(str, len, ' ');
 
 			add_to_str(str, len, "## ");
@@ -469,14 +471,14 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 
 			l = strlen(option->desc);
 
-			for (i = 0; i < depth * 2; i++)
+			for (i = 0; i < depth * indentation; i++)
 				add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, "# ");
 
 			for (i = 0; i < l; i++) {
 				if (option->desc[i] == '\n') {
 					add_to_str(str, len, NEWLINE);
-					for (j = 0; j < depth * 2; j++)
+					for (j = 0; j < depth * indentation; j++)
 						add_chr_to_str(str, len, ' ');
 					add_to_str(str, len, "# ");
 				} else {
@@ -489,7 +491,7 @@ smart_config_output_fn(unsigned char **str, int *len, struct option *option,
 			break;
 
 		case 2:
-			for (j = 0; j < depth * 2; j++)
+			for (j = 0; j < depth * indentation; j++)
 				add_chr_to_str(str, len, ' ');
 			add_to_str(str, len, "set ");
 			if (path) {
@@ -559,6 +561,8 @@ create_config_string(unsigned char *prefix, unsigned char *name,
 
 	if (savestyle == 0)
 		goto get_me_out;
+
+	indentation = get_opt_int("config.indentation");
 
 	tmpstr = init_str(); tmplen = 0;
 	add_to_str(&tmpstr, &tmplen, NEWLINE NEWLINE NEWLINE);

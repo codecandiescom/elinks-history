@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.143 2002/12/10 22:49:18 pasky Exp $ */
+/* $Id: options.c,v 1.144 2002/12/10 23:13:52 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -652,6 +652,12 @@ register_options()
 	add_opt_tree("",
 		"config", 0,
 		"Configuration handling options.");
+
+	add_opt_int("config",
+		"indentation", 0, 0, 16, 2,
+		"Shift width of one indentation level in the configuration\n"
+		"file. Zero means that no indentation is performed at all\n"
+		"when saving the configuration to a file.");
 
 	/* You can disagree about the default value here - the original
 	 * behaviour up to 20021013 (during pre18.CVS) was 1, but when I added

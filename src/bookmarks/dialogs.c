@@ -1,5 +1,5 @@
 /* Internal bookmarks support */
-/* $Id: dialogs.c,v 1.30 2002/09/12 17:02:46 pasky Exp $ */
+/* $Id: dialogs.c,v 1.31 2002/09/12 17:07:54 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -352,10 +352,10 @@ really_del_bookmark(void *vhop)
 	if (box->sel && box->sel->udata == hop->bm) {
 		struct bookmark *bm = (struct bookmark *) box->sel->udata;
 
-		box->sel = traverse_listbox_items_list(bm->box_item, 1,
+		box->sel = traverse_listbox_items_list(bm->box_item, -1,
 				1, NULL, NULL);
 		if (bm->box_item == box->sel)
-			box->sel = traverse_listbox_items_list(bm->box_item, -1,
+			box->sel = traverse_listbox_items_list(bm->box_item, 1,
 					1, NULL, NULL);
 		if (bm->box_item == box->sel)
 			box->sel = NULL;

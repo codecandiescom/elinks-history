@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.57 2002/10/12 18:55:15 zas Exp $ */
+/* $Id: ftp.c,v 1.58 2002/10/12 23:36:55 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -15,7 +15,9 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <fcntl.h>
+#ifdef HAVE_FCNTL_H
+#include <fcntl.h> /* OS/2 needs this after sys/types.h */
+#endif
 
 /* We need to have it here. Stupid BSD. */
 #include <netinet/in.h>

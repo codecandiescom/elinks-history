@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.316 2003/10/19 13:31:33 pasky Exp $ */
+/* $Id: options.c,v 1.317 2003/10/20 08:37:08 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1432,6 +1432,7 @@ register_options(void)
 		"history", 0,
 		N_("History options."));
 
+#ifdef GLOBHIST
 	add_opt_tree("document.history", N_("Global history"),
 		"global", 0,
 		N_("Global history options."));
@@ -1457,7 +1458,8 @@ register_options(void)
 		"has changed (seconds; 0 to disable)"));
 	get_opt_rec(config_options, "document.history.global.write_interval")
 		->change_hook = global_history_write_timer_change_hook;
-
+#endif /* GLOBHIST */
+	
 	add_opt_bool("document.history", N_("Keep unhistory"),
 		"keep_unhistory", 0, 1,
 		N_("Keep unhistory (\"forward history\")?"));

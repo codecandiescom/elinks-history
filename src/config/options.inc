@@ -1,9 +1,8 @@
 /* Option definitions. */
-/* $Id: options.inc,v 1.3 2003/10/23 00:39:16 jonas Exp $ */
+/* $Id: options.inc,v 1.4 2003/10/23 00:59:03 jonas Exp $ */
 
 /* These function are called from register_options(). */
 
-/* TODO: The change hooks should be added more elegantly! --pasky */
 /* TODO: Autogenerate this file from something more human readable. --jonas */
 
 /* Ok so shoot me. It will probably do me good. --jonas */
@@ -78,7 +77,6 @@ add_opt_bool("config", N_("Show template"),
 	"show_template", 0, 0,
 	N_("Show _template_ options in autocreated trees in the options\n"
 	"manager and save them to the configuration file."));
-get_opt_rec(config_options, "config.show_template")->change_hook = change_hook_stemplate;
 
 /* Keep options in alphabetical order. */
 
@@ -86,7 +84,6 @@ get_opt_rec(config_options, "config.show_template")->change_hook = change_hook_s
 add_opt_tree("", N_("Connections"),
 	"connection", 0,
 	N_("Connection options."));
-get_opt_rec(config_options, "connection")->change_hook = change_hook_connection;
 
 
 add_opt_tree("connection", N_("SSL"),
@@ -184,7 +181,6 @@ add_opt_tree("", N_("Document"),
 add_opt_tree("document", N_("Browsing"),
 	"browse", 0,
 	N_("Document browsing options (mainly interactivity)."));
-get_opt_rec(config_options, "document.browse")->change_hook = change_hook_html;
 
 
 add_opt_tree("document.browse", N_("Accesskeys"),
@@ -402,7 +398,6 @@ add_opt_bool("document.browse", N_("Tables navigation order"),
 add_opt_tree("document", N_("Cache"),
 	"cache", 0,
 	N_("Cache options."));
-get_opt_rec(config_options, "document.cache")->change_hook = change_hook_cache;
 
 add_opt_bool("document.cache", N_("Cache information about redirects"),
 	"cache_redirects", 0, 0,
@@ -464,7 +459,6 @@ add_opt_bool("document.codepage", N_("Ignore charset info from server"),
 add_opt_tree("document", N_("Default color settings"),
 	"colors", 0,
 	N_("Default document color settings."));
-get_opt_rec(config_options, "document.colors")->change_hook = change_hook_html;
 
 
 add_opt_color("document.colors", N_("Text color"),
@@ -595,8 +589,6 @@ add_opt_int("document.history.global", N_("Auto-save interval"),
 	"write_interval", 0, 0, MAXINT, 300,
 	N_("Interval at which to write global history to disk if it\n"
 	"has changed (seconds; 0 to disable)"));
-get_opt_rec(config_options, "document.history.global.write_interval")
-	->change_hook = global_history_write_timer_change_hook;
 #endif /* GLOBHIST */
 
 add_opt_bool("document.history", N_("Keep unhistory"),
@@ -608,7 +600,6 @@ add_opt_bool("document.history", N_("Keep unhistory"),
 add_opt_tree("document", N_("HTML rendering"),
 	"html", 0,
 	N_("Options concerning the display of HTML pages."));
-get_opt_rec(config_options, "document.html")->change_hook = change_hook_html;
 
 add_opt_bool("document.html", N_("Display frames"),
 	"display_frames", 0, 1,
@@ -1006,7 +997,6 @@ add_opt_str("protocol", N_("No-proxy domains"),
 add_opt_tree("", N_("Terminals"),
 	"terminal", OPT_AUTOCREATE,
 	N_("Terminal options."));
-get_opt_rec(config_options, "terminal")->change_hook = change_hook_terminal;
 
 add_opt_tree("terminal", NULL,
 	"_template_", 0,
@@ -1970,7 +1960,6 @@ add_opt_lang("ui", N_("Language"),
 	"language", 0,
 	N_("Language of user interface. System means that the language will\n"
 	"be extracted from the environment dynamically."));
-get_opt_rec(config_options, "ui.language")->change_hook = change_hook_language;
 
 /* Compatibility alias: added by pasky at 2002-12-01, 0.4pre20.CVS.
  * Estimated due time: 2003-02-01 */

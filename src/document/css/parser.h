@@ -1,4 +1,4 @@
-/* $Id: parser.h,v 1.4 2004/01/18 02:38:35 jonas Exp $ */
+/* $Id: parser.h,v 1.5 2004/01/18 12:54:45 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_PARSER_H
 #define EL__DOCUMENT_CSS_PARSER_H
@@ -9,10 +9,10 @@
  * internally inside of the CSS engine. */
 
 /* This function takes a semicolon separated list of declarations from the
- * given string, parses them to atoms, and possibly creates {struct
- * css_property} and chains it up to the specified list. The function returns
- * positive value in case it recognized a property in the given string, or zero
- * in case of an error. */
+ * given string, parses them to atoms, and chains the newly created {struct
+ * css_property}es to the specified list. The function returns positive value
+ * in case it recognized a property in the given string, or zero in case of an
+ * error. */
 void css_parse_decl(struct list_head *props, unsigned char *string);
 
 #endif

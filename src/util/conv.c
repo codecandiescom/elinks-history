@@ -1,5 +1,5 @@
 /* Conversion functions */
-/* $Id: conv.c,v 1.56 2004/06/10 16:49:39 jonas Exp $ */
+/* $Id: conv.c,v 1.57 2004/06/12 15:19:14 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -356,48 +356,6 @@ strtolx(unsigned char *str, unsigned char **end)
 	}
 
 	return num;
-}
-
-/* This is _NOT_ for what do you think it's for! We use this to make URL
- * shell-safe, nothing more. */
-struct string *
-add_encoded_shell_safe_url(struct string *string, unsigned char *url)
-{
-	for (; *url; url++) {
-		if (is_safe_in_shell(*url))
-			add_char_to_string(string, *url);
-		else {
-			add_char_to_string(string, '=');
-			add_char_to_string(string, hx(*url >> 4));
-			add_char_to_string(string, hx(*url & 0xf));
-			add_char_to_string(string, '=');
-		}
-	}
-
-	return string;
-}
-
-/* This is _NOT_ for what do you think it's for! We use this to recover from
- * making URL shell-safe, nothing more. */
-unsigned char *
-decode_shell_safe_url(unsigned char *url, int url_len)
-{
-	struct string u;
-
-	if (!init_string(&u)) return NULL;
-
-	for (; url_len > 0; url++, url_len--) {
-		if (url_len < 4 || url[0] != '=' || unhx(url[1]) == -1
-		    || unhx(url[2]) == -1 || url[3] != '=') {
-			add_char_to_string(&u, *url);
-		} else {
-			add_char_to_string(&u, (unhx(url[1]) << 4) + unhx(url[2]));
-			url += 3;
-			url_len -= 3;
-		}
-	}
-
-	return u.source;
 }
 
 int

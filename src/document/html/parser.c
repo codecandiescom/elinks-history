@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.350 2004/01/18 15:25:01 zas Exp $ */
+/* $Id: parser.c,v 1.351 2004/01/18 15:28:24 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -2269,7 +2269,7 @@ static void
 parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int **new_values, int *new_values_count)
 {
 	unsigned char *tmp_str;
-	int val, tmp_val, divisor;
+	int val, tmp_val;
 	int *values = NULL;
 	int values_count = 0;
 	register int i;
@@ -2323,12 +2323,15 @@ parse_frame_widths(unsigned char *str, int max_value, int pixels_per_char, int *
 	for (i = 0; i < values_count; i++) if (values[i] > 0) val += values[i] - 1;
 
 	if (val >= max_value) {
+		int divisor = 0;
 
 distribute:
 		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
 		val -= max_value;
-		divisor = 0;
+
 		for (i = 0; i < values_count; i++) divisor += values[i];
+		assert(divisor);
+
 		tmp_val = val;
 		for (i = 0; i < values_count; i++) {
 			int tmp;
@@ -2339,6 +2342,7 @@ distribute:
 			val -= values[i] - tmp;
 			values[i] = tmp;
 		}
+		
 		while (val) {
 			int flag = 0;
 			
@@ -2351,6 +2355,7 @@ distribute:
 		}
 	} else {
 		int *tmp_values;
+		int divisor = 0;
 		int neg = 0;
 
 		for (i = 0; i < values_count; i++) if (values[i] < 0) neg = 1;
@@ -2364,8 +2369,10 @@ distribute:
 		memcpy(tmp_values, values, values_count * sizeof(int));
 		for (i = 0; i < values_count; i++) if (values[i] < 1) values[i] = 1;
 		val = max_value - val;
-		divisor = 0;
+	
 		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) divisor += -tmp_values[i];
+		assert(divisor);
+		
 		tmp_val = val;
 		for (i = 0; i < values_count; i++) if (tmp_values[i] < 0) {
 			int tmp = (-tmp_values[i] * tmp_val / divisor);

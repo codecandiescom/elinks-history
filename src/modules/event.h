@@ -1,4 +1,4 @@
-/* $Id: event.h,v 1.1 2003/09/19 13:14:49 jonas Exp $ */
+/* $Id: event.h,v 1.2 2003/09/22 18:37:11 jonas Exp $ */
 
 #ifndef EL__SCHED_EVENT_H
 #define EL__SCHED_EVENT_H
@@ -42,5 +42,9 @@ void unregister_event_hook(int id, int (*callback)(va_list ap));
 
 void init_event(void);
 void done_event(void);
+
+#define set_event_id(event, name) \
+	if (event == EVENT_NONE) \
+		event = get_event_id(name);
 
 #endif

@@ -1,3 +1,35 @@
+Sat Aug 28 16:23:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/sched/session.c:
+
+	Related to bug 297: Big memory leak, ELinks doesn't free memory on
+	cache flush atleast this was discovered while debugging that bug.  
+	
+	When initializing a session in init_session() update the session
+	status info _before_ opening the requested URI. Reduces the memory
+	usage quite a bit from looking at top.  
+
+Sat Aug 28 14:58:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/document.c:
+
+	Remove global @format_cache_entries and the hazzle with keeping it
+	in sync. It is not even used when returning document cache info and
+	we are iterating all entries in shrink_format_cache() (only real
+	user) anyway so count it there.  
+
+Sat Aug 28 14:23:24 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/protocol/uri.h:
+
+	Make {struct uri} length members unsigned int.  
+
+Sat Aug 28 02:52:47 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/formhist/formhist.h:
+
+	Boolean members should always have unsigned int type.  
+
 Mon Aug 23 17:22:08 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/sched/connection.h:

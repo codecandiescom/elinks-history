@@ -1,3 +1,355 @@
+Fri Sep 24 21:29:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	The private interpreter->doc_view is now property of global_obj
+	instead of document_obj and location_obj (which look it up in their
+	parent). The Blue Ones can already smell some window object traces.  
+
+Fri Sep 24 21:23:06 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	Return NULL in eval_stringback() if JSVAL_IS_VOID(). Fixes
+	javascript:void(0); 
+
+Fri Sep 24 21:21:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/vs.c:
+
+	Fixed EcmaScriptless compilation as reported by zas.  
+
+Fri Sep 24 20:47:20 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/: ecmascript.h, spidermonkey.c:
+
+	A safeguard function introduced, which kills the script after 5
+	seconds of running. That has to be enough for anything.  
+
+Fri Sep 24 20:34:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/util/ttime.h:
+
+	Simplify the #ifdef maze.  
+
+Fri Sep 24 20:24:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	...for the interpreter structure itself.  
+
+Fri Sep 24 20:23:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	interpreter->doc_view was also made private of the both objects
+	(document, location), and it's fetched from there now. We will need
+	the context private...  
+
+Fri Sep 24 20:18:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/ecmascript/spidermonkey.c:
+
+	FIXME about timer safeguards against CPU eaters. Pointer out by
+	witekfl.  
+
+Fri Sep 24 20:05:45 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Ok, now for the first process_snippets() call @doc_current was one
+	entry ahead ;-). Hopefully calibrated well now.  
+
+Fri Sep 24 19:54:22 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	process_snippets() @doc_view was two entries behind @*current when
+	merging new snippets, taking ELinks down in flames at
+	http://www.dr.dk/.  
+
+Fri Sep 24 19:14:24 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Fixed totally broken --> scanning in do_html_script().  
+
+Fri Sep 24 19:01:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser/stack.c:
+
+	It's ok when part->document is NULL - that means we are just
+	'pre-rendering' stuff at a dry run (i.e. in the tables code to
+	compute tables width), therefore we ignore onload_snippets gained in
+	that way. Could fix few more crashes.  
+
+Fri Sep 24 18:59:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/: navigator.c, node.c:
+
+	Fix compile error when LEAK_DEBUG is disabled. Reported by witekfl.  
+
+Fri Sep 24 18:50:38 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Enhanced scanning for </script> - don't at least get fooled by
+	<script><\!--document.write('</script>');--></script>.  
+
+Fri Sep 24 18:42:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Mention that rxvt supports 256 colors.  
+
+Fri Sep 24 18:38:31 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* po/pl.po:
+
+	Polish translation was updated.  
+
+Fri Sep 24 18:10:13 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* features.conf:
+
+	Oops, forgot to :w before committing.  
+
+Fri Sep 24 18:01:49 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* NEWS, configure.in, features.conf:
+
+	Make HTML highlighting support official.  
+
+Fri Sep 24 13:07:23 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser/parse.c:
+
+	Call do_html_script() only after we have an entry in the HTML stack.
+	Otherwise it would be difficult to skip the contents if we weren't
+	processing the element (and if we were processing it, it was broken
+	until now because we were calling html_skip() on its parent).  
+
+Fri Sep 24 12:54:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	In do_html_script(), skip all leading blanks, not just newlines.  
+
+Fri Sep 24 12:43:36 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser.h, parser/parse.c:
+
+	Support for inline <script> elements containing Javascript code.  
+
+Fri Sep 24 12:28:03 2004  Laurent Monin <zas@norz.org>:
+
+	* po/fr.po:
+
+	French translation was updated.  
+
+Fri Sep 24 10:57:52 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/parse.c:
+
+	Fix crash on tabloid pages with onLoad on body - when retreating
+	from parse_html() reset html_context.part in case it was destroyed
+	in the last iteration by a recursive parse_html() call.  
+
+Fri Sep 24 10:54:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: document.c, document.h, renderer.c,
+	html/renderer.c:
+
+	Don't add css_magic and css_imports member to {struct document} and
+	related code when CONFIG_CSS=no.  
+
+Fri Sep 24 10:47:37 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Fix crash for multiple process_snippets() calls - initialize
+	@doc_current correctly if *current.  
+
+Fri Sep 24 10:27:15 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	OnLoad games only if CONFIG_ECMASCRIPT.  
+
+Fri Sep 24 02:53:32 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Out define DOM tree rendering code.  
+
+Fri Sep 24 02:51:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser.c:
+
+	Insert magic check that workaround a bug in the <html> CSS handling.
+	Suggested by pasky.  
+
+Fri Sep 24 02:34:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/dom/renderer.c:
+
+	The actual source highlighting without some arcane default
+	stylesheet tinkering. Jonas is lazy so it's up to me, therefore
+	being impossibly dirty. But at least I get to choose the colors,
+	which are vim-like now. Quotes and &; of entities should be
+	highlighted too, though.  
+
+Fri Sep 24 02:11:44 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/parser.h:
+
+	Nitpicking variable renaming.  
+
+Fri Sep 24 02:08:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/: renderer.c, dom/renderer.c, dom/renderer.h,
+	sgml/parser.c, sgml/parser.h:
+
+	Pass the buffer so DOM rendering supports compressed documents.
+	Pointed out by pasky.  
+
+Fri Sep 24 01:52:21 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Fix those damn onLoad memleaks Jonas is bothering me with.  
+
+Fri Sep 24 01:47:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	Mention our onLoad-on-any-element extension.  
+
+Fri Sep 24 01:46:00 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/stack.c:
+
+	kill_html_stack_item(): @onLoad -> @onload as req by Jonas.  
+
+Fri Sep 24 01:45:11 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Fixed initial adding to the snippets queue in process_snippets().
+	onLoad should work fine now.  
+
+Fri Sep 24 01:43:51 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser.c:
+
+	Oops.  
+
+Fri Sep 24 01:41:54 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/document.c:
+
+	@css_magic now takes the stylesheets' current length into account
+	too, so that if the document is rendered and loading of stylesheets
+	is yet in progress, the document will be still rerendered after the
+	stylesheets make it. Reported by me, idea by Jonas.  
+
+Fri Sep 24 01:37:32 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: parser.c, parser/parse.c:
+
+	<html> element now has its corresponding structure in the HTML stack
+	since CSS can apply styles to it.  
+
+Fri Sep 24 01:16:52 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/dom/renderer.c:
+
+	Use the URI string as title for highlighted HTML source. Idea by
+	pasky. ;) 
+
+Fri Sep 24 00:59:53 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/sgml/scanner.c:
+
+	Don't check quoting when skipping potential garbage inside of tags.  
+
+Fri Sep 24 00:59:47 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/cookies/dialogs.c:
+
+	Fixed bogus check in push_add_button() causing crash when there are
+	no cookies. Reported by uroboros.  
+
+Fri Sep 24 00:44:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* configure.in, features.conf, src/document/Makefile.am,
+	src/document/renderer.c, src/document/dom/.cvsignore,
+	src/document/dom/.vimrc, src/document/dom/Makefile.am,
+	src/document/dom/navigator.c, src/document/dom/navigator.h,
+	src/document/dom/node.c, src/document/dom/node.h,
+	src/document/dom/renderer.c, src/document/dom/renderer.h,
+	src/document/sgml/.cvsignore, src/document/sgml/.vimrc,
+	src/document/sgml/Makefile.am, src/document/sgml/parser.c,
+	src/document/sgml/parser.h, src/document/sgml/scanner.c,
+	src/document/sgml/scanner.h, src/document/sgml/sgml.c,
+	src/document/sgml/sgml.h, src/document/sgml/html/.cvsignore,
+	src/document/sgml/html/.vimrc, src/document/sgml/html/Makefile.am,
+	src/document/sgml/html/attribute.inc,
+	src/document/sgml/html/element.inc, src/document/sgml/html/html.c,
+	src/document/sgml/html/html.h, src/intl/charsets.c,
+	src/intl/charsets.h:
+
+	Import the DOM and SGML parser code from the ECMASCRIPT and use it
+	for HTML source highlighting.  
+
+Fri Sep 24 00:07:39 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/renderer.c:
+
+	Set doc_view->document as soon as we get it in render_document(), so
+	that it's immediatelly available for ECMAScript chewing.  
+
+Fri Sep 24 00:03:35 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/: document/document.c, document/document.h,
+	document/renderer.c, document/html/parser/stack.c, sched/session.c,
+	viewer/text/vs.c, viewer/text/vs.h:
+
+	A little wild support for the onLoad element hooks.  
+
+Thu Sep 23 23:34:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/util/file.c:
+
+	stat_size(): Increase the @size buffer, but only use it if the
+	number is bigger than 8 chars.  
+
+Thu Sep 23 23:17:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/viewer/text/draw.c:
+
+	If draw_formatted()'s @rerender > 2, let render_document_frames()
+	know.  
+
+Thu Sep 23 22:18:34 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/css/apply.c:
+
+	Remove unused local list head.  
+
+Thu Sep 23 22:15:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	FTP URIs are now auto-encoded again. There is hopefully no harm to
+	be done there, so why not...? Right? 
+
+Thu Sep 23 22:14:43 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/uri.c:
+
+	Oops, fixed prepending of schemes to URIs. Hopefully.  
+
 Thu Sep 23 22:08:01 2004  Petr Baudis <pasky@ucw.cz>:
 
 	* src/protocol/uri.c:

@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.131 2003/11/06 11:42:43 zas Exp $ */
+/* $Id: download.c,v 1.132 2003/11/06 14:34:24 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -275,6 +275,38 @@ download_progress_string(struct terminal *term,
 }
 
 static void
+download_progress_bar(struct terminal *term, struct download *download,
+	     	      int x, int *y, int w,
+		      struct color_pair *text_color,
+		      struct color_pair *meter_color)
+{
+	/* FIXME: not yet perfect, pasky will improve it later. --Zas */
+	/* Note : values > 100% are theorically possible and were seen. */
+	unsigned char q[] = "XXXX%"; /* Reduce or enlarge at will. */
+	const unsigned int qwidth = sizeof(q) - 1;
+	unsigned int qlen = 0;
+	int p = w - qwidth; /* width for gauge meter */
+	int progress = (int) ((longlong) 100 * (longlong) download->prg->pos
+			      / (longlong) download->prg->size);
+	int barprogress = p * progress / 100;
+
+	int_upper_bound(&barprogress, p); /* Limit to preserve display. */
+
+	if (ulongcat(q, &qlen, progress, qwidth - 1, 0) > 0)
+		memset(q, '?', qlen); /* Too long, we limit to preserve display. */
+
+	q[qlen++] = '%'; /* on error, will print '%' only, should not occur. */
+	q[qlen] = '\0';
+
+	(*y)++;
+	draw_char_data(term, x, *y, '[');
+	draw_char_data(term, x + w - qwidth, *y, ']');
+	draw_area(term, x + 1, *y, barprogress, 1, ' ', 0, meter_color);
+	draw_text(term, x + w - qlen + 1, *y, q, qlen, 0, text_color);
+	(*y)++;
+}
+
+static void
 download_window_function(struct dialog_data *dlg_data)
 {
 	struct file_download *file_download = dlg_data->dlg->udata;
@@ -359,11 +391,9 @@ download_window_function(struct dialog_data *dlg_data)
 			dialog_text_color, AL_LEFT);
 
 	if (t && download->prg->size >= 0)
-		draw_progress_bar(term, x, &y, w,
-				  dialog_text_color,
-			     	  get_bfu_color(term, "dialog.meter"),
-				  download->prg->pos,
-				  download->prg->size);
+		download_progress_bar(term, download, x, &y, w,
+				      dialog_text_color,
+			     	      get_bfu_color(term, "dialog.meter"));
 
 	y++;
 	dlg_format_text(term, msg.source, x, &y, w, NULL,

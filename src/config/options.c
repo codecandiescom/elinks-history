@@ -1,5 +1,5 @@
 /* Options variables manipulation core */
-/* $Id: options.c,v 1.323 2003/10/22 19:24:45 jonas Exp $ */
+/* $Id: options.c,v 1.324 2003/10/22 19:42:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -269,13 +269,20 @@ add_opt(struct option *tree, unsigned char *path, unsigned char *capt,
 
 	/* XXX: For allocated values we allocate in the add_opt_<type>() macro.
 	 * This involves OPT_TREE, OPT_STRING and OPT_ALIAS. */
-	/* TODO: Check for allocation failure */
 	switch (type) {
 		case OPT_TREE:
+			if (!value) {
+				delete_option(option);
+				return NULL;
+			}
 			option->value.tree = value;
 			break;
 		case OPT_STRING:
 		case OPT_ALIAS:
+			if (!value) {
+				delete_option(option);
+				return NULL;
+			}
 			option->value.string = value;
 			break;
 		case OPT_BOOL:
@@ -315,11 +322,14 @@ free_option_value(struct option *option)
 	switch (option->type) {
 		case OPT_STRING:
 		case OPT_ALIAS:
-			mem_free(option->value.string);
+			if (option->value.string)
+				mem_free(option->value.string);
 			break;
 		case OPT_TREE:
-			free_options_tree(option->value.tree);
-			mem_free(option->value.tree);
+			if (option->value.tree) {
+				free_options_tree(option->value.tree);
+				mem_free(option->value.tree);
+			}
 			break;
 		default:
 			break;

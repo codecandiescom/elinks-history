@@ -1,5 +1,5 @@
 /* Public terminal drawing API. Frontend for the screen image in memory. */
-/* $Id: draw.c,v 1.10 2003/07/27 17:23:53 jonas Exp $ */
+/* $Id: draw.c,v 1.11 2003/07/27 17:47:35 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -57,23 +57,24 @@ set_only_char(struct terminal *t, int x, int y, unsigned c)
 	t->dirty = 1;
 }
 
-/* FIXME it seems we can just get rid of the @x args. */
+/* Updates a line in the terms screen. */
+/* When doing frame drawing @x can be different than 0. */
 void
 set_line(struct terminal *t, int x, int y, int l, chr *line)
 {
-	register int i = 0;
-	int end = l;
-	register int offset = t->x * y;
+	register int i;
+	int end = (x + l <= t->x) ? l :  t->x - x;
+	register int offset = x + t->x * y;
 
-	assert(l >= 0 && l <= t->x && x == 0 && y >= 0 && y < t->y);
+	assert(l >= 0 && l <= t->x && x >= 0 && x < t->x && y >= 0 && y < t->y);
 	if_assert_failed { return; }
 
-	if (i >= end) return;
+	if (end == 0) return;
 
 	assert(line);
 	if_assert_failed { return; }
 
-	for (; i < end; i++)
+	for (i = 0; i < end; i++)
 		t->screen[i + offset] = line[i];
 	t->dirty = 1;
 }

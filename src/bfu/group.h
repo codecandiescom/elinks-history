@@ -1,4 +1,4 @@
-/* $Id: group.h,v 1.9 2003/11/04 14:25:47 zas Exp $ */
+/* $Id: group.h,v 1.10 2003/11/04 21:56:56 zas Exp $ */
 
 #ifndef EL__BFU_GROUP_H
 #define EL__BFU_GROUP_H
@@ -7,12 +7,6 @@
 #include "bfu/widget.h"
 #include "terminal/terminal.h"
 
-#if 0	/* Unused for now. */
-void max_group_width(struct terminal *term, int intl,
-		struct widget_data *widget_data, int n, int *w);
-void min_group_width(struct terminal *term, int intl,
-		struct widget_data *widget_data, int n, int *w);
-#endif
 void group_width(struct terminal *term, int intl,
 		 struct widget_data *widget_data, int n,
 	         int *min_width, int *max_width);

@@ -1,5 +1,5 @@
 /* Internal cookies implementation */
-/* $Id: cookies.c,v 1.24 2002/05/19 21:27:15 pasky Exp $ */
+/* $Id: cookies.c,v 1.25 2002/05/25 13:46:03 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -117,7 +117,7 @@ check_domain_security(unsigned char *server, unsigned char *domain)
 
 	need_dots = 1;
 
-	if (get_opt_int("cookies_paranoid_security")) {
+	if (get_opt_int("cookies.paranoid_security")) {
 		/* This is somehow controversial attempt (by the way violating
 		 * RFC) to increase cookies security in national domains, done
 		 * by Mikulas. As it breaks a lot of sites, I decided to make
@@ -161,7 +161,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 	struct c_server *cs;
 	struct cookie_str cstr;
 
-	if (get_opt_int("cookies_accept") == COOKIES_ACCEPT_NONE)
+	if (get_opt_int("cookies.policy") == COOKIES_ACCEPT_NONE)
 		return 0;
 
 #ifdef COOKIES_DEBUG
@@ -285,7 +285,7 @@ set_cookie(struct terminal *term, unsigned char *url, unsigned char *str)
 		return 0;
 	}
 
-	if (get_opt_int("cookies_accept") != COOKIES_ACCEPT_ALL) {
+	if (get_opt_int("cookies.policy") != COOKIES_ACCEPT_ALL) {
 		/* TODO */
 		free_cookie(cookie);
 		mem_free(cookie);
@@ -329,7 +329,7 @@ accept_cookie(struct cookie *c)
 	strcpy(cd->domain, c->domain);
 	add_to_list(c_domains, cd);
 
-	if (get_opt_int("cookies_save") && get_opt_int("cookies_resave"))
+	if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
 		save_cookies();
 }
 
@@ -355,7 +355,7 @@ end:
 	free_cookie(c);
 	mem_free(c);
 
-	if (get_opt_int("cookies_save") && get_opt_int("cookies_resave"))
+	if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
 		save_cookies();
 }
 
@@ -489,7 +489,7 @@ ok:
 			free_cookie(d);
 			mem_free(d);
 
-			if (get_opt_int("cookies_save") && get_opt_int("cookies_resave"))
+			if (get_opt_int("cookies.save") && get_opt_int("cookies.resave"))
 				save_cookies();
 
 			continue;
@@ -640,7 +640,7 @@ save_cookies() {
 void
 init_cookies()
 {
-	if (get_opt_int("cookies_save"))
+	if (get_opt_int("cookies.save"))
 		load_cookies();
 }
 
@@ -652,7 +652,7 @@ cleanup_cookies()
 
 	free_list(c_domains);
 
-	if (get_opt_int("cookies_save"))
+	if (get_opt_int("cookies.save"))
 		save_cookies();
 
 	foreach (c, cookies)

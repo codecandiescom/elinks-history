@@ -1,5 +1,5 @@
 /* Options dialogs */
-/* $Id: options.c,v 1.10 2002/05/19 16:06:43 pasky Exp $ */
+/* $Id: options.c,v 1.11 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -263,34 +263,34 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[0].type = D_CHECKBOX;
 	d->items[0].gid = 0;
 	d->items[0].dlen = sizeof(int);
-	d->items[0].data = (void *) get_opt_ptr("http_bugs.http10");
+	d->items[0].data = (void *) get_opt_ptr("protocol.http.bugs.http10");
 
 	d->items[1].type = D_CHECKBOX;
 	d->items[1].gid = 0;
 	d->items[1].dlen = sizeof(int);
-	d->items[1].data = (void *) get_opt_ptr("http_bugs.allow_blacklist");
+	d->items[1].data = (void *) get_opt_ptr("protocol.http.bugs.allow_blacklist");
 
 	d->items[2].type = D_CHECKBOX;
 	d->items[2].gid = 0;
 	d->items[2].dlen = sizeof(int);
-	d->items[2].data = (void *) get_opt_ptr("http_bugs.bug_302_redirect");
+	d->items[2].data = (void *) get_opt_ptr("protocol.http.bugs.broken_302_redirect");
 
 	d->items[3].type = D_CHECKBOX;
 	d->items[3].gid = 0;
 	d->items[3].dlen = sizeof(int);
-	d->items[3].data = (void *) get_opt_ptr("http_bugs.bug_post_no_keepalive");
+	d->items[3].data = (void *) get_opt_ptr("protocol.http.bugs.post_no_keepalive");
 
 	d->items[4].type = D_CHECKBOX;
 	d->items[4].gid = 1;
 	d->items[4].gnum = REFERER_NONE;
 	d->items[4].dlen = sizeof(int);
-	d->items[4].data = (void *) get_opt_ptr("http_referer");
+	d->items[4].data = (void *) get_opt_ptr("protocol.http.referer.policy");
 
 	d->items[5].type = D_CHECKBOX;
 	d->items[5].gid = 1;
 	d->items[5].gnum = REFERER_SAME_URL;
 	d->items[5].dlen = sizeof(int);
-	d->items[5].data = (void *) get_opt_ptr("http_referer");
+	d->items[5].data = (void *) get_opt_ptr("protocol.http.referer.policy");
 
 	/* This should be last, but I did it wrong originally and now I would
 	 * break backwards compatibility by changing it :/. */
@@ -298,25 +298,25 @@ dlg_http_options(struct dialog_data *dlg, struct dialog_item_data *di)
 	d->items[6].gid = 1;
 	d->items[6].gnum = REFERER_FAKE;
 	d->items[6].dlen = sizeof(int);
-	d->items[6].data = (void *) get_opt_ptr("http_referer");
+	d->items[6].data = (void *) get_opt_ptr("protocol.http.referer.policy");
 
 	d->items[7].type = D_CHECKBOX;
 	d->items[7].gid = 1;
 	d->items[7].gnum = REFERER_TRUE;
 	d->items[7].dlen = sizeof(int);
-	d->items[7].data = (void *) get_opt_ptr("http_referer");
+	d->items[7].data = (void *) get_opt_ptr("protocol.http.referer.policy");
 
 	d->items[8].type = D_FIELD;
 	d->items[8].dlen = MAX_STR_LEN;
-	d->items[8].data = get_opt_str("fake_referer");
+	d->items[8].data = get_opt_str("protocol.http.referer.fake");
 
 	d->items[9].type = D_FIELD;
 	d->items[9].dlen = MAX_STR_LEN;
-	d->items[9].data = get_opt_str("user_agent");
+	d->items[9].data = get_opt_str("protocol.http.user_agent");
 
 	d->items[10].type = D_FIELD;
 	d->items[10].dlen = MAX_STR_LEN;
-	d->items[10].data = get_opt_str("accept_language");
+	d->items[10].data = get_opt_str("protocol.http.accept_language");
 
 	d->items[11].type = D_BUTTON;
 	d->items[11].gid = B_ENTER;
@@ -380,11 +380,11 @@ void
 refresh_net(void *xxx)
 {
 	/* abort_all_connections(); */
-	get_opt_int("max_connections") = atoi(max_c_str);
-	get_opt_int("max_connections_to_host") = atoi(max_cth_str);
-	get_opt_int("retries") = atoi(max_t_str);
-	get_opt_int("receive_timeout") = atoi(time_str);
-	get_opt_int("unrestartable_receive_timeout") = atoi(unrtime_str);
+	get_opt_int("connection.max_connections") = atoi(max_c_str);
+	get_opt_int("connection.max_connections_to_host") = atoi(max_cth_str);
+	get_opt_int("connection.retries") = atoi(max_t_str);
+	get_opt_int("connection.receive_timeout") = atoi(time_str);
+	get_opt_int("connection.unrestartable_receive_timeout") = atoi(unrtime_str);
 
 	register_bottom_half((void (*)(void *))check_queue, NULL);
 }
@@ -455,11 +455,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 {
 	struct dialog *d;
 
-	snprint(max_c_str, 3, get_opt_int("max_connections"));
-	snprint(max_cth_str, 2, get_opt_int("max_connections_to_host"));
-	snprint(max_t_str, 2, get_opt_int("retries"));
-	snprint(time_str, 5, get_opt_int("receive_timeout"));
-	snprint(unrtime_str, 5, get_opt_int("unrestartable_receive_timeout"));
+	snprint(max_c_str, 3, get_opt_int("connection.max_connections"));
+	snprint(max_cth_str, 2, get_opt_int("connection.max_connections_to_host"));
+	snprint(max_t_str, 2, get_opt_int("connection.retries"));
+	snprint(time_str, 5, get_opt_int("connection.receive_timeout"));
+	snprint(unrtime_str, 5, get_opt_int("connection.unrestartable_receive_timeout"));
 
 	d = mem_alloc(sizeof(struct dialog) + 14 * sizeof(struct dialog_item));
 	if (!d) return;
@@ -471,11 +471,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 
 	d->items[0].type = D_FIELD;
 	d->items[0].dlen = MAX_STR_LEN;
-	d->items[0].data = get_opt_str("http_proxy");
+	d->items[0].data = get_opt_str("protocol.http.proxy.host");
 
 	d->items[1].type = D_FIELD;
 	d->items[1].dlen = MAX_STR_LEN;
-	d->items[1].data = get_opt_str("ftp_proxy");
+	d->items[1].data = get_opt_str("protocol.ftp.proxy.host");
 
 	d->items[2].type = D_FIELD;
 	d->items[2].data = max_c_str;
@@ -513,11 +513,11 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	d->items[6].gnum = 1800;
 
 	d->items[7].type = D_CHECKBOX;
-	d->items[7].data = (unsigned char *) get_opt_ptr("async_dns");
+	d->items[7].data = (unsigned char *) get_opt_ptr("connection.async_dns");
 	d->items[7].dlen = sizeof(int);
 
 	d->items[8].type = D_CHECKBOX;
-	d->items[8].data = (unsigned char *) get_opt_ptr("download_utime");
+	d->items[8].data = (unsigned char *) get_opt_ptr("document.download.download_utime");
 	d->items[8].dlen = sizeof(int);
 
 	d->items[9].type = D_BUTTON;
@@ -534,7 +534,7 @@ net_options(struct terminal *term, void *xxx, void *yyy)
 	d->items[10].gid = 0;
 	d->items[10].fn = dlg_ftp_options;
 	d->items[10].text = TEXT(T_FTP_OPTIONS);
-	d->items[10].data = get_opt_str("ftp.anonymous_password");
+	d->items[10].data = get_opt_str("protocol.ftp.anon_passwd");
 	d->items[10].dlen = MAX_STR_LEN;
 
 	d->items[11].type = D_BUTTON;
@@ -672,8 +672,8 @@ unsigned char doc_str[4];
 void
 cache_refresh(void *xxx)
 {
-	get_opt_long("memory_cache_size") = atoi(mc_str) * 1024;
-	get_opt_int("format_cache_size") = atoi(doc_str);
+	get_opt_long("document.cache.memory_cache_size") = atoi(mc_str) * 1024;
+	get_opt_int("document.cache.format_cache_size") = atoi(doc_str);
 	count_format_cache();
 	shrink_memory(0);
 }
@@ -689,8 +689,8 @@ cache_opt(struct terminal *term, void *xxx, void *yyy)
 {
 	struct dialog *d;
 
-	snprint(mc_str, 8, get_opt_long("memory_cache_size") / 1024);
-	snprint(doc_str, 4, get_opt_int("format_cache_size"));
+	snprint(mc_str, 8, get_opt_long("document.cache.memory_cache_size") / 1024);
+	snprint(doc_str, 4, get_opt_int("document.cache.format_cache_size"));
 
 	d = mem_alloc(sizeof(struct dialog) + 5 * sizeof(struct dialog_item));
 	if (!d) return;
@@ -734,19 +734,6 @@ cache_opt(struct terminal *term, void *xxx, void *yyy)
 void
 menu_save_html_options(struct terminal *term, void *xxx, struct session *ses)
 {
-	struct document_setup dds;
-
-	memcpy(&dds, &ses->ds, sizeof(struct document_setup));
-	get_opt_int("html_assume_codepage") = dds.assume_cp;
-	get_opt_int("html_hard_assume") = dds.hard_assume;
-	get_opt_int("html_use_document_colours") = dds.use_document_colours;
-	get_opt_int("html_avoid_dark_on_black") = dds.avoid_dark_on_black;
-	get_opt_int("html_tables") = dds.tables;
-	get_opt_int("html_frames") = dds.frames;
-	get_opt_int("html_images") = dds.images;
-	get_opt_int("html_margin") = dds.margin;
-	get_opt_int("html_numbered_links") = dds.num_links;
-	get_opt_int("html_table_order") = dds.table_order;
 	write_config(term);
 }
 
@@ -755,7 +742,7 @@ unsigned char marg_str[2];
 void
 html_refresh(struct session *ses)
 {
-	ses->ds.margin = atoi(marg_str);
+	get_opt_int("document.browse.margin_width") = atoi(marg_str);
 	html_interpret(ses);
 	draw_formatted(ses);
 	load_frames(ses, ses->screen);
@@ -788,7 +775,7 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 {
 	struct dialog *d;
 
-	snprint(marg_str, 2, ses->ds.margin);
+	snprint(marg_str, 2, get_opt_int("document.browse.margin_width"));
 
 	d = mem_alloc(sizeof(struct dialog) + 13 * sizeof(struct dialog_item));
 	if (!d) return;
@@ -802,23 +789,23 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 	d->refresh_data = ses;
 
 	d->items[0].type = D_CHECKBOX;
-	d->items[0].data = (unsigned char *) &ses->ds.tables;
+	d->items[0].data = (unsigned char *) get_opt_ptr("document.html.display_tables");
 	d->items[0].dlen = sizeof(int);
 
 	d->items[1].type = D_CHECKBOX;
-	d->items[1].data = (unsigned char *) &ses->ds.frames;
+	d->items[1].data = (unsigned char *) get_opt_ptr("document.html.display_frames");
 	d->items[1].dlen = sizeof(int);
 
 	d->items[2].type = D_CHECKBOX;
-	d->items[2].data = (unsigned char *) &ses->ds.images;
+	d->items[2].data = (unsigned char *) get_opt_ptr("document.browse.images.show_as_links");
 	d->items[2].dlen = sizeof(int);
 
 	d->items[3].type = D_CHECKBOX;
-	d->items[3].data = (unsigned char *) &ses->ds.table_order;
+	d->items[3].data = (unsigned char *) get_opt_ptr("document.browse.table_move_order");
 	d->items[3].dlen = sizeof(int);
 
 	d->items[4].type = D_CHECKBOX;
-	d->items[4].data = (unsigned char *) &ses->ds.num_links;
+	d->items[4].data = (unsigned char *) get_opt_ptr("document.browse.links.numbering");
 	d->items[4].dlen = sizeof(int);
 
 	d->items[5].type = D_FIELD;
@@ -832,19 +819,19 @@ menu_html_options(struct terminal *term, void *xxx, struct session *ses)
 	d->items[6].gid = 0;
 	d->items[6].fn = dlg_assume_cp;
 	d->items[6].text = TEXT(T_DEFAULT_CODEPAGE);
-	d->items[6].data = (unsigned char *) &ses->ds.assume_cp;
+	d->items[6].data = (unsigned char *) get_opt_ptr("document.assume_codepage");
 	d->items[6].dlen = sizeof(int);
 
 	d->items[7].type = D_CHECKBOX;
-	d->items[7].data = (unsigned char *) &ses->ds.hard_assume;
+	d->items[7].data = (unsigned char *) get_opt_ptr("document.force_assume_codepage");
 	d->items[7].dlen = sizeof(int);
 
 	d->items[8].type = D_CHECKBOX;
-	d->items[8].data = (unsigned char *) &ses->ds.use_document_colours;
+	d->items[8].data = (unsigned char *) get_opt_ptr("document.colors.use_document_colors");
 	d->items[8].dlen = sizeof(int);
 
 	d->items[9].type = D_CHECKBOX;
-	d->items[9].data = (unsigned char *) &ses->ds.avoid_dark_on_black;
+	d->items[9].data = (unsigned char *) get_opt_ptr("document.colors.avoid_dark_on_black");
 	d->items[9].dlen = sizeof(int);
 
 	d->items[10].type = D_BUTTON;

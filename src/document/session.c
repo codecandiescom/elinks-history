@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.38 2002/05/19 16:06:44 pasky Exp $ */
+/* $Id: session.c,v 1.39 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -212,9 +212,9 @@ print_screen_status(struct session *ses)
 
 	/* TODO: Make this optionally switchable off. */
 
-	if (get_opt_int("show_title_bar"))
+	if (get_opt_int("document.browse.show_title_bar"))
 		fill_area(term, 0, 0, term->x, 1, COLOR_TITLE_BG);
-	if (get_opt_int("show_status_bar"))
+	if (get_opt_int("document.browse.show_status_bar"))
 		fill_area(term, 0, term->y - 1, term->x, 1, COLOR_STATUS_BG);
 
 	if (ses->wtd)
@@ -234,7 +234,7 @@ print_screen_status(struct session *ses)
 	}
 
 	if (stat) {
-		if (get_opt_int("show_status_bar")) {
+		if (get_opt_int("document.browse.show_status_bar")) {
 			if (stat->state == S_OK)
 				msg = print_current_link(ses);
 			if (!msg)
@@ -246,7 +246,7 @@ print_screen_status(struct session *ses)
 			}
 		}
 
-		if (get_opt_int("show_title_bar")) {
+		if (get_opt_int("document.browse.show_title_bar")) {
 			msg = print_current_title(ses);
 			if (msg) {
 				int pos = term->x - 1 - strlen(msg);
@@ -435,8 +435,9 @@ ses_imgmap(struct session *ses)
 	if (get_image_map(ce->head, fr->data, fr->data + fr->length,
 			  ses->goto_position, &menu, &ml,
 			  ses->imgmap_href_base, ses->imgmap_target_base,
-			  ses->term->spec->charset, ses->ds.assume_cp,
-			  ses->ds.hard_assume))
+			  ses->term->spec->charset,
+			  get_opt_int("document.assume_codepage"),
+			  get_opt_int("document.force_assume_codepage")))
 		return;
 
 	add_empty_window(ses->term, (void (*)(void *))freeml, ml);
@@ -506,7 +507,8 @@ ses_goto(struct session *ses, unsigned char *url, unsigned char *target,
 	unsigned char *m1, *m2;
 	struct cache_entry *e;
 
-	if (!wtd_data || !get_opt_int("form_submit_confirm") || !strchr(url, POST_CHAR)
+	if (!wtd_data || !get_opt_int("document.browse.forms.confirm_submit")
+	    || !strchr(url, POST_CHAR)
 	    || (cache_mode == NC_ALWAYS_CACHE && find_in_cache(url, &e)
 		&& !e->incomplete)) {
 
@@ -580,7 +582,7 @@ do_move(struct session *ses, struct status **stat)
 		u = join_urls(ses->loading_url, ce->redirect);
 		if (!u) goto b;
 
-		if (!get_opt_int("http_bugs.bug_302_redirect")) {
+		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")) {
 			if (!ce->redirect_get) {
 				p = strchr(ses->loading_url, POST_CHAR);
 				if (p) add_to_strn(&u, p);
@@ -987,8 +989,6 @@ create_session(struct window *win)
 	struct session *ses = mem_alloc(sizeof(struct session));
 
 	if (ses) {
-		struct document_setup dds;
-
 		memset(ses, 0, sizeof(struct session));
 		create_history(ses);
 		init_list(ses->scrn_frames);
@@ -1001,18 +1001,6 @@ create_session(struct window *win)
 		ses->display_timer = -1;
 		ses->loading_url = NULL;
 		ses->goto_position = NULL;
-
-		dds.assume_cp = get_opt_int("html_assume_codepage");
-		dds.hard_assume = get_opt_int("html_hard_assume");
-		dds.use_document_colours = get_opt_int("html_use_document_colours");
-		dds.avoid_dark_on_black = get_opt_int("html_avoid_dark_on_black");
-		dds.tables = get_opt_int("html_tables");
-		dds.frames = get_opt_int("html_frames");
-		dds.images = get_opt_int("html_images");
-		dds.margin = get_opt_int("html_margin");
-		dds.num_links = get_opt_int("html_numbered_links");
-		dds.table_order = get_opt_int("html_table_order");
-		memcpy(&ses->ds, &dds, sizeof(struct document_setup));
 
 		add_to_list(sessions, ses);
 	}

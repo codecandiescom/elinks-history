@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.23 2002/05/17 22:13:39 pasky Exp $ */
+/* $Id: renderer.c,v 1.24 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1702,7 +1702,7 @@ void shrink_format_cache(int u)
 	}
 
 	ce = format_cache.prev;
-	while ((u || format_cache_entries > get_opt_int("format_cache_size"))
+	while ((u || format_cache_entries > get_opt_int("document.cache.format_cache_size"))
 	       && (void *)ce != &format_cache) {
 
 		if (ce->refcount) {
@@ -2020,7 +2020,7 @@ void html_interpret(struct session *ses)
 	o.col = ses->term->spec->col;
 	o.cp = ses->term->spec->charset;
 
-	ds2do(&ses->ds, &o);
+	mk_document_options(&o);
 
 	/* FIXME: enigmatic code by Mikulas Corp. -- Zas*/
 	if ((o.plain = l ? l->plain : 1) == -1) o.plain = 0;

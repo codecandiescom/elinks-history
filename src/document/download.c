@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.12 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: download.c,v 1.13 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -389,7 +389,7 @@ download_data(struct status *stat, struct download *down)
 		u = stracpy(ce->redirect);
 		if (!u) return;
 
-		if (!get_opt_int("http_bugs.bug_302_redirect")
+		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")
 		    && !ce->redirect_get) {
 			unsigned char *p = strchr(down->url, POST_CHAR);
 
@@ -485,7 +485,7 @@ end_store:
 				mem_free(down->prog);
 				down->prog = NULL;
 
-			} else if (down->remotetime && get_opt_int("download_utime")) {
+			} else if (down->remotetime && get_opt_int("document.download.download_utime")) {
 				struct utimbuf foo;
 
 				foo.actime = foo.modtime = down->remotetime;
@@ -510,7 +510,7 @@ end_store:
 int
 create_download_file(struct terminal *term, unsigned char *fi, int safe)
 {
-	unsigned char *download_dir = get_opt_str("download_dir");
+	unsigned char *download_dir = get_opt_str("document.download.download_dir");
 	unsigned char *file = fi;
 	unsigned char *wd;
 	int h;

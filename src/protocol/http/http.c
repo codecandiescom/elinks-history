@@ -1,5 +1,5 @@
 /* Internal "http" protocol implementation */
-/* $Id: http.c,v 1.20 2002/05/18 19:23:51 pasky Exp $ */
+/* $Id: http.c,v 1.21 2002/05/25 13:46:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -87,7 +87,7 @@ int check_http_server_bugs(unsigned char *url,
 {
 	unsigned char *server, **s;
 
-	if (!get_opt_int("http_bugs.allow_blacklist") || info->http10)
+	if (!get_opt_int("protocol.http.bugs.allow_blacklist") || info->http10)
 		return 0;
 
 	server = parse_http_header(head, "Server", NULL);
@@ -125,7 +125,7 @@ void http_end_request(struct connection *c)
 #ifdef HAVE_SSL
 	&& (!c->ssl) /* We won't keep alive ssl connections */
 #endif
-	&& (!get_opt_int("http_bugs.bug_post_no_keepalive")
+	&& (!get_opt_int("protocol.http.bugs.post_no_keepalive")
 	    || !strchr(c->url, POST_CHAR))) {
 		add_keepalive_socket(c, HTTP_KEEPALIVE_TIMEOUT);
 	} else {
@@ -168,7 +168,7 @@ void http_send_header(struct connection *c)
 	unsigned char *host = upcase(c->url[0]) != 'P' ? c->url
 						       : get_url_data(c->url);
 	struct http_connection_info *info;
-	int http10 = get_opt_int("http_bugs.http10");
+	int http10 = get_opt_int("protocol.http.bugs.http10");
 	unsigned char *post;
 
 	struct cache_entry *e = NULL;
@@ -305,10 +305,13 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, "\r\n");
 	}
 
-	if (get_opt_str("proxy_user")[0]) {
+	if (get_opt_str("protocol.http.proxy.user")[0]) {
 		unsigned char *proxy_data;
 
-		proxy_data = straconcat(get_opt_str("proxy_user"), ":", get_opt_str("proxy_passwd"), NULL);
+		proxy_data = straconcat(get_opt_str("protocol.http.proxy.user"),
+				        ":",
+					get_opt_str("protocol.http.proxy.passwd"),
+					NULL);
 		if (proxy_data) {
 			unsigned char *proxy_64 = base64_encode(proxy_data);
 
@@ -322,7 +325,7 @@ void http_send_header(struct connection *c)
 		}
 	}
 	
-	if (!get_opt_str("user_agent")[0]) {
+	if (!get_opt_str("protocol.http.user_agent")[0]) {
                 add_to_str(&hdr, &l,
 			   "User-Agent: ELinks (" VERSION_STRING "; ");
                 add_to_str(&hdr, &l, system_name);
@@ -339,18 +342,18 @@ void http_send_header(struct connection *c)
 
         } else {
                 add_to_str(&hdr, &l, "User-Agent: ");
-                add_to_str(&hdr, &l, get_opt_str("user_agent"));
+                add_to_str(&hdr, &l, get_opt_str("protocol.http.user_agent"));
                 add_to_str(&hdr, &l, "\r\n");
         }
 
-	switch (get_opt_int("http_referer")) {
+	switch (get_opt_int("protocol.http.referer.policy")) {
 		case REFERER_NONE:
 			/* oh well */
 			break;
 
 		case REFERER_FAKE:
 			add_to_str(&hdr, &l, "Referer: ");
-			add_to_str(&hdr, &l, get_opt_str("fake_referer"));
+			add_to_str(&hdr, &l, get_opt_str("protocol.http.referer.fake"));
 			add_to_str(&hdr, &l, "\r\n");
 			break;
 
@@ -436,9 +439,9 @@ void http_send_header(struct connection *c)
 		add_to_str(&hdr, &l, accept_charset);
 	}
 
-	if (get_opt_str("accept_language")[0]) {
+	if (get_opt_str("protocol.http.accept_language")[0]) {
 		add_to_str(&hdr, &l, "Accept-Language: ");
-		add_to_str(&hdr, &l, get_opt_str("accept_language"));
+		add_to_str(&hdr, &l, get_opt_str("protocol.http.accept_language"));
 		add_to_str(&hdr, &l, "\r\n");
 	}
 
@@ -449,7 +452,7 @@ void http_send_header(struct connection *c)
 			add_to_str(&hdr, &l, "Proxy-Connection: ");
 		}
 
-		if (!post || !get_opt_int("http_bugs.bug_post_no_keepalive")) {
+		if (!post || !get_opt_int("protocol.http.bugs.post_no_keepalive")) {
 			add_to_str(&hdr, &l, "Keep-Alive\r\n");
 		} else {
 			add_to_str(&hdr, &l, "close\r\n");

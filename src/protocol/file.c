@@ -1,5 +1,5 @@
 /* Internal "file" protocol implementation */
-/* $Id: file.c,v 1.18 2002/05/17 22:31:47 pasky Exp $ */
+/* $Id: file.c,v 1.19 2002/05/25 13:46:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -510,7 +510,7 @@ dir:
 			}
 			add_to_str(&file, &fl, "\">");
 			
-			if (dir[i].s[0] == 'd' && get_opt_int("color_dirs")) {
+			if (dir[i].s[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
 				add_to_str(&file, &fl, "<font color=\""
@@ -520,7 +520,7 @@ dir:
 			add_htmlesc_str(&file, &fl,
 					dir[i].f, strlen(dir[i].f));
 
-			if (dir[i].s[0] == 'd' && get_opt_int("color_dirs")) {
+			if (dir[i].s[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
 				add_to_str(&file, &fl, "</b></font>");
 			}
 			
@@ -550,7 +550,7 @@ dir:
 
 		mem_free(name);
 
-		if (!get_opt_int("allow_special_files")) {
+		if (!get_opt_int("protocol.file.allow_special_files")) {
 			close(h);
 			abort_conn_with_state(c, S_FILE_TYPE);
 			return;

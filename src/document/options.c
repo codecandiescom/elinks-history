@@ -1,5 +1,5 @@
 /* Document options/setup workshop */
-/* $Id: options.c,v 1.2 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: options.c,v 1.3 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -9,13 +9,31 @@
 
 #include "links.h"
 
+#include "config/options.h"
 #include "document/options.h"
 #include "document/html/colors.h"
 
 
 struct document_options *d_opt;
 
-int compare_opt(struct document_options *o1, struct document_options *o2)
+
+void
+mk_document_options(struct document_options *doo)
+{
+	doo->assume_cp = get_opt_int("document.assume_codepage");
+	doo->hard_assume = get_opt_int("document.force_assume_codepage");
+	doo->use_document_colours = get_opt_int("document.colors.use_document_colors");
+	doo->avoid_dark_on_black = get_opt_int("document.colors.avoid_dark_on_black");
+	doo->tables = get_opt_int("document.html.display_tables");
+	doo->frames = get_opt_int("document.html.display_frames");
+	doo->images = get_opt_int("document.browse.images.show_as_links");
+	doo->margin = get_opt_int("document.browse.margin_width");
+	doo->num_links = get_opt_int("document.browse.links.numbering");
+	doo->table_order = get_opt_int("document.browse.table_move_order");
+}
+
+int
+compare_opt(struct document_options *o1, struct document_options *o2)
 {
 	if (o1->xw == o2->xw &&
 	    o1->yw == o2->yw &&
@@ -42,7 +60,8 @@ int compare_opt(struct document_options *o1, struct document_options *o2)
 	return 1;
 }
 
-void copy_opt(struct document_options *o1, struct document_options *o2)
+void
+copy_opt(struct document_options *o1, struct document_options *o2)
 {
 	memcpy(o1, o2, sizeof(struct document_options));
 	o1->framename = stracpy(o2->framename);

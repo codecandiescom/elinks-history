@@ -1,5 +1,5 @@
 /* Internal MIME types implementation */
-/* $Id: types.c,v 1.17 2002/05/17 22:41:52 pasky Exp $ */
+/* $Id: types.c,v 1.18 2002/05/25 13:46:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -216,7 +216,7 @@ get_content_type(unsigned char *head, unsigned char *url)
 
 	/* Fallback.. use some hardwired default */
 
-	return stracpy(get_opt_str("default_mime_type"));
+	return stracpy(get_opt_str("document.download.default_mime_type"));
 }
 
 

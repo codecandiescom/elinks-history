@@ -1,4 +1,4 @@
-/* $Id: session.h,v 1.11 2002/05/08 13:55:02 pasky Exp $ */
+/* $Id: session.h,v 1.12 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifndef EL__DOCUMENT_SESSION_H
 #define EL__DOCUMENT_SESSION_H
@@ -65,7 +65,6 @@ struct session {
 	unsigned char *goto_position;
 	unsigned char *imgmap_href_base;
 	unsigned char *imgmap_target_base;
-	struct document_setup ds;
 	struct kbdprefix kbdprefix;
 	int reloadlevel;
 	int redirect_cnt;

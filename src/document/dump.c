@@ -1,5 +1,5 @@
 /* Support for dumping to the file on startup (w/o bfu) */
-/* $Id: dump.c,v 1.15 2002/05/19 16:06:44 pasky Exp $ */
+/* $Id: dump.c,v 1.16 2002/05/25 13:46:04 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -55,7 +55,7 @@ void dump_end(struct status *stat, void *p)
 		
 		u = join_urls(ce->url, ce->redirect);
 		
-		if (!get_opt_int("http_bugs.bug_302_redirect")
+		if (!get_opt_int("protocol.http.bugs.broken_302_redirect")
 		    && !ce->redirect_get && (p = strchr(ce->url, POST_CHAR)))
 			add_to_strn(&u, p);
 		
@@ -95,7 +95,6 @@ nextfrag:
 		if (stat->state >= 0) return;
 		
 	} else if (ce) {
-		struct document_setup dds;
 		struct document_options o;
 		struct view_state *vs;
 		struct f_data_c fd;
@@ -109,23 +108,11 @@ nextfrag:
 		
 		o.xp = 0;
 		o.yp = 1;
-		o.xw = get_opt_int("dump_width");
+		o.xw = get_opt_int("document.dump_width");
 		o.yw = 25;
 		o.col = 0;
 		o.cp = 0;
-
-		dds.assume_cp = get_opt_int("html_assume_codepage");
-		dds.hard_assume = get_opt_int("html_hard_assume");
-		dds.use_document_colours = get_opt_int("html_use_document_colours");
-		dds.avoid_dark_on_black = get_opt_int("html_avoid_dark_on_black");
-		dds.tables = get_opt_int("html_tables");
-		dds.frames = get_opt_int("html_frames");
-		dds.images = get_opt_int("html_images");
-		dds.margin = get_opt_int("html_margin");
-		dds.num_links = get_opt_int("html_numbered_links");
-		dds.table_order = get_opt_int("html_table_order");
-		ds2do(&dds, &o);
-
+		mk_document_options(&o);
 		o.plain = 0;
 		o.frames = 0;
 		memcpy(&o.default_fg, &default_fg, sizeof(struct rgb));

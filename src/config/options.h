@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.20 2002/05/23 20:44:54 pasky Exp $ */
+/* $Id: options.h,v 1.21 2002/05/25 13:46:03 pasky Exp $ */
 
 #ifndef EL__CONFIG_OPTIONS_H
 #define EL__CONFIG_OPTIONS_H
@@ -60,7 +60,8 @@ extern struct list_head *init_options_tree();
 extern void free_options_tree(struct list_head *);
 
 extern struct option *get_opt_rec(struct list_head *, unsigned char *);
-extern void *get_opt(struct list_head *, unsigned char *);
+extern void *get_opt_(unsigned char *, int, struct list_head *, unsigned char *);
+#define get_opt(tree, name) get_opt_(__FILE__, __LINE__, tree, name)
 
 #define get_opt_int(name) *((int *) get_opt(root_options, name))
 #define get_opt_long(name) *((long *) get_opt(root_options, name))
@@ -75,23 +76,27 @@ extern void add_opt(struct list_head *, unsigned char *path, unsigned char *name
 		    unsigned char *desc);
 
 #define add_opt_bool(path, name, flags, def, desc) do { \
-	add_opt(root_options, path, name, flags, OPT_BOOL, 0, 1, mem_alloc(sizeof(int)), desc); \
-	get_opt_int(name) = def; } while (0)
+	int *ptr = mem_alloc(sizeof(int)); \
+	add_opt(root_options, path, name, flags, OPT_BOOL, 0, 1, ptr, desc); \
+	*ptr = def; } while (0)
 
 #define add_opt_int(path, name, flags, min, max, def, desc) do { \
-	add_opt(root_options, path, name, flags, OPT_INT, min, max, mem_alloc(sizeof(int)), desc); \
-	get_opt_int(name) = def; } while (0)
+	int *ptr = mem_alloc(sizeof(int)); \
+	add_opt(root_options, path, name, flags, OPT_INT, min, max, ptr, desc); \
+	*ptr = def; } while (0)
 
 #define add_opt_long(path, name, flags, min, max, def, desc) do { \
-	add_opt(root_options, path, name, flags, OPT_LONG, min, max, mem_alloc(sizeof(long)), desc); \
-	get_opt_long(name) = def; } while (0)
+	long *ptr = mem_alloc(sizeof(long)); \
+	add_opt(root_options, path, name, flags, OPT_LONG, min, max, ptr, desc); \
+	*ptr = def; } while (0)
 
 #define add_opt_string(path, name, flags, def, desc) \
 	add_opt(root_options, path, name, flags, OPT_STRING, 0, MAX_STR_LEN, stracpy(def), desc);
 
 #define add_opt_codepage(path, name, flags, def, desc) do { \
-	add_opt(root_options, path, name, flags, OPT_CODEPAGE, 0, 0, mem_alloc(sizeof(int)), desc); \
-	get_opt_int(name) = def; } while (0)
+	int *ptr = mem_alloc(sizeof(int)); \
+	add_opt(root_options, path, name, flags, OPT_CODEPAGE, 0, 0, ptr, desc); \
+	*ptr = def; } while (0)
 
 #define add_opt_ptr(path, name, flags, type, def, desc) \
 	add_opt(root_options, path, name, flags, type, 0, 0, def, desc);

@@ -1,5 +1,5 @@
 /* Internal "ftp" protocol implementation */
-/* $Id: ftp.c,v 1.18 2002/05/17 23:18:19 pasky Exp $ */
+/* $Id: ftp.c,v 1.19 2002/05/25 13:46:05 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,7 +283,7 @@ ftp_got_user_info(struct connection *conn, struct read_buffer *rb)
 		if (str && *str) {
 			add_to_str(&cmd, &cmdl, str);
 		} else {
-			add_to_str(&cmd, &cmdl, get_opt_str("ftp.anonymous_password"));
+			add_to_str(&cmd, &cmdl, get_opt_str("protocol.ftp.anon_passwd"));
 		}
 		if (str) mem_free(str);
 		add_to_str(&cmd, &cmdl, "\r\n");
@@ -787,7 +787,7 @@ direntry:
 				add_chr_to_str(&str, &strl, '/');
 			add_to_str(&str, &strl, "\">");
 
-			if (buf[0] == 'd' && get_opt_int("color_dirs")) {
+			if (buf[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
 				/* The <b> is here for the case when we've
 				 * use_document_colors off. */
 				add_to_str(&str, &strl, "<font color=\""
@@ -797,7 +797,7 @@ direntry:
 			add_htmlesc_str(&str, &strl, buf + *dpos,
 					symlinkpos - *dpos);
 
-			if (buf[0] == 'd' && get_opt_int("color_dirs")) {
+			if (buf[0] == 'd' && get_opt_int("document.browse.links.color_dirs")) {
 				add_to_str(&str, &strl, "</b></font>");
 			}
 

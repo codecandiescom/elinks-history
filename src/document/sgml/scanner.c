@@ -1,5 +1,5 @@
 /* SGML token scanner utilities */
-/* $Id: scanner.c,v 1.3 2004/09/24 00:59:53 jonas Exp $ */
+/* $Id: scanner.c,v 1.4 2004/09/25 23:10:19 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -185,7 +185,6 @@ scan_sgml_element_token(struct scanner *scanner, struct scanner_token *token)
 	enum sgml_token_type type = SGML_TOKEN_GARBAGE;
 	int real_length = -1;
 
-	assert(first_char);
 	token->string = string++;
 
 	if (first_char == '<') {
@@ -372,20 +371,19 @@ scan_sgml_tokens(struct scanner *scanner)
 	for (current = scanner->table + scanner->tokens;
 	     current < table_end && scanner->position < scanner->end;
 	     current++) {
-		if (scanner->state == SGML_STATE_TEXT
-		    && *scanner->position != '<') {
+		if (scanner->state == SGML_STATE_ELEMENT
+		    || *scanner->position == '<') {
+			scan_sgml(scanner, scanner->position, SGML_CHAR_WHITESPACE);
+			if (scanner->position >= scanner->end) break;
+
+			scan_sgml_element_token(scanner, current);
+
+			/* Shall we scratch this token? */
+			if (current->type == SGML_TOKEN_SKIP) {
+				current--;
+			}
+		} else {
 			scan_sgml_text_token(scanner, current);
-			continue;
-		}
-
-		scan_sgml(scanner, scanner->position, SGML_CHAR_WHITESPACE);
-		if (scanner->position >= scanner->end) break;
-
-		scan_sgml_element_token(scanner, current);
-
-		/* Shall we scratch this token? */
-		if (current->type == SGML_TOKEN_SKIP) {
- 			current--;
 		}
 	}
 

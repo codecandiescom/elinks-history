@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.425 2004/06/01 05:55:59 miciah Exp $ */
+/* $Id: view.c,v 1.426 2004/06/01 06:18:19 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -784,10 +784,8 @@ frame_ev(struct session *ses, struct document_view *doc_view, struct term_event 
 				else
 					link_menu(ses->tab->term, NULL, ses);
 			}
-		} else {
-			/* Clicking to the edge of screen (TODO: possibly only
-			 * with certain button?) will make the document scroll
-			 * automagically. */
+		} else if (check_mouse_button(ev, B_LEFT)) {
+			/* Clicking the edge of screen will scroll the document. */
 
 			int scrollmargin = get_opt_int("document.browse.scroll_margin");
 

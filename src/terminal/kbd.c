@@ -1,5 +1,5 @@
 /* Support for keyboard interface */
-/* $Id: kbd.c,v 1.90 2004/07/28 13:21:25 jonas Exp $ */
+/* $Id: kbd.c,v 1.91 2004/07/28 13:27:31 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -597,9 +597,9 @@ kbd_timeout(struct itrm *itrm)
 }
 
 
-static inline void
-get_esc_code(unsigned char *str, int len, unsigned char *code,
-	     int *num, int *el)
+/* Returns the length of the escape sequence */
+static inline int
+get_esc_code(unsigned char *str, int len, unsigned char *code, int *num)
 {
 	int pos;
 
@@ -608,12 +608,14 @@ get_esc_code(unsigned char *str, int len, unsigned char *code,
 
 	for (pos = 2; pos < len; pos++) {
 		if (!isdigit(str[pos]) || pos > 7) {
-			*el = pos + 1;
 			*code = str[pos];
-			return;
+
+			return pos + 1;
 		}
 		*num = *num * 10 + str[pos] - '0';
 	}
+
+	return 0;
 }
 
 
@@ -644,7 +646,7 @@ decode_terminal_escape_sequence(struct itrm *itrm, struct term_event *ev)
 
 	if (itrm->qlen < 3) return -1;
 
-	get_esc_code(itrm->kqueue, itrm->qlen, &c, &v, &el);
+	el = get_esc_code(itrm->kqueue, itrm->qlen, &c, &v);
 #ifdef DEBUG_ITRM_QUEUE
 	fprintf(stderr, "esc code: %c v=%d c=%c el=%d\n", itrm->kqueue[1], v, c, el);
 	fflush(stderr);

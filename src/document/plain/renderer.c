@@ -1,5 +1,5 @@
 /* Plain text document renderer */
-/* $Id: renderer.c,v 1.75 2004/01/28 02:29:23 jonas Exp $ */
+/* $Id: renderer.c,v 1.76 2004/01/28 02:32:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -30,6 +30,9 @@ struct plain_renderer {
 	unsigned char *source;
 	int length;
 	struct conv_table *convert_table;
+
+	/* The default template char data for text */
+	struct screen_char template;
 
 	/* The maximum width any line can have (used for wrapping text) */
 	int max_width;
@@ -148,9 +151,10 @@ get_uri_length(unsigned char *line, int length)
 
 static inline int
 add_document_line(struct plain_renderer *renderer, int lineno,
-		  unsigned char *line, int width, struct screen_char *template)
+		  unsigned char *line, int width)
 {
 	struct document *document = renderer->document;
+	struct screen_char *template = &renderer->template;
 	struct screen_char *pos;
 	int expanded = 0;
 	register int line_pos;
@@ -294,13 +298,9 @@ add_document_lines(struct plain_renderer *renderer)
 	struct document *document = renderer->document;
 	unsigned char *source = renderer->source;
 	int length = renderer->length;
-	struct screen_char template;
 	int lineno;
 	int was_empty_line = 0;
 	int compress = document->options.plain_compress_empty_lines;
-
-	/* Setup the style */
-	init_template(&template, global_doc_opts->default_bg, global_doc_opts->default_fg);
 
 	for (lineno = 0; length > 0; lineno++) {
 		unsigned char *xsource;
@@ -367,7 +367,7 @@ add_document_lines(struct plain_renderer *renderer)
 		xsource = memacpy(source, width);
 		if (!xsource) continue;
 
-		added = add_document_line(renderer, lineno, xsource, width, &template);
+		added = add_document_line(renderer, lineno, xsource, width);
 		mem_free(xsource);
 
 		if (added) {
@@ -417,6 +417,11 @@ render_plain_document(struct cache_entry *ce, struct document *document)
 	renderer.convert_table = convert_table;
 	renderer.max_width = document->options.wrap ? document->options.width
 						    : MAXINT;
+
+	/* Setup the style */
+	init_template(&renderer.template, global_doc_opts->default_bg,
+					  global_doc_opts->default_fg);
+
 
 	add_document_lines(&renderer);
 }

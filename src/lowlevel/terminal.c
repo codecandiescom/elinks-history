@@ -1,5 +1,5 @@
 /* Terminal interface - low-level displaying implementation */
-/* $Id: terminal.c,v 1.20 2002/07/11 11:14:53 pasky Exp $ */
+/* $Id: terminal.c,v 1.21 2002/08/05 19:53:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,6 +19,7 @@
  * view.h w/o session.h already loaded doesn't work :/. --pasky */
 #include "document/session.h"
 #include "document/view.h"
+#include "dialogs/menu.h" /* XXX */
 #include "lowlevel/kbd.h"
 #include "lowlevel/select.h"
 #include "lowlevel/terminal.h"
@@ -260,7 +261,6 @@ void add_window_at_pos(struct terminal *term,
 	win->data = data;
 	win->term = term;
 	win->xp = win->yp = 0;
-	win->touched_by_interm = 0;
 	add_at_pos(at, win);
 	win->handler(win, &ev, 0);
 }
@@ -430,7 +430,6 @@ struct terminal *init_term(int fdin, int fdout,
 	win->handler = root_window;
 	win->data = NULL;
 	win->term = term;
-	win->touched_by_interm = 1; /* We want to always initialize this one. */
 
 	add_to_list(term->windows, win);
 	/*alloc_term_screen(term, 80, 25);*/
@@ -566,13 +565,19 @@ send_redraw:
 		erase_screen(term);
 		term->redrawing = 1;
 		foreachback(win, term->windows) {
-			/* This prevents problem, when you will add new window
-			 * in win->handler() for EV_INIT, and then the window
-			 * will get re-initialized. */
-			if (win->touched_by_interm) {
-				win->handler(win, ev, 0);
-			} else {
-				win->touched_by_interm = 1;
+			/* Note that you do NOT want to ever go and create new
+			 * window inside EV_INIT handler (it'll get second
+			 * EV_INIT here). Work out some hack, like me ;-).
+			 * --pasky */
+			win->handler(win, ev, 0);
+		}
+		{
+			extern int startup_goto_dialog_paint;
+			extern struct session *startup_goto_dialog_ses;
+			
+			if (startup_goto_dialog_paint) {
+				dialog_goto_url(startup_goto_dialog_ses, "");
+				startup_goto_dialog_paint = 0;
 			}
 		}
 		term->redrawing = 0;

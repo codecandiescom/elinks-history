@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.51 2002/07/24 08:54:33 zas Exp $ */
+/* $Id: session.c,v 1.52 2002/08/05 19:53:32 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1096,6 +1096,9 @@ decode_url(unsigned char *url)
 	return u;
 }
 
+int startup_goto_dialog_paint = 0;
+struct session *startup_goto_dialog_ses;
+
 int
 read_session_info(int fd, struct session *ses, void *data, int len)
 {
@@ -1133,10 +1136,13 @@ read_session_info(int fd, struct session *ses, void *data, int len)
 		if (!h || !*h)
 			h = WWW_HOME_URL;
 		if (!h || !*h) {
-			/* FIXME: wrong place to do it ?? It appears as black on
-			 * black on startup here --Zas */
-			if (get_opt_int("ui.startup_goto_dialog"))
-				dialog_goto_url(ses, "");
+			if (get_opt_int("ui.startup_goto_dialog")) {
+				/* We can't create new window in EV_INIT
+				 * handler. Stupid. This should be regarded
+				 * only as a very temporary hack. --pasky */
+				startup_goto_dialog_paint = 1;
+				startup_goto_dialog_ses = ses;
+			}
 		} else {
 			goto_url(ses, h);
 		}

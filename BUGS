@@ -1,7 +1,5 @@
 Known bugs:
 
-	Startup dialogs aren't correctly drawn (invisible).
-
 	Frames don't work if there's more frames with same name. Turn them off
 in such case.
 
@@ -29,6 +27,6 @@ top/bottom of screen.
 
 	Handling of textareas splitted to two pages is just weird.
 
-$Id: BUGS,v 1.25 2002/07/24 09:39:35 zas Exp $
+$Id: BUGS,v 1.26 2002/08/05 19:53:31 pasky Exp $
 
 vim: textwidth=80

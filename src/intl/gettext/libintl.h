@@ -1,4 +1,4 @@
-/* $Id: libintl.h,v 1.17 2003/10/20 15:47:30 pasky Exp $ */
+/* $Id: libintl.h,v 1.18 2003/12/01 14:13:04 pasky Exp $ */
 
 #ifndef EL__INTL_GETTEXT_LIBINTL_H
 #define EL__INTL_GETTEXT_LIBINTL_H
@@ -17,7 +17,6 @@
 #include "config/options.h"
 #include "intl/charsets.h"
 #include "terminal/terminal.h"
-#include "util/error.h"
 
 /* Define it to find redundant useless calls */
 /* #define DEBUG_IT */
@@ -56,6 +55,8 @@ do_lookup:
 }
 
 #else
+
+#include "util/error.h"
 
 /* This one will emit errors on null/empty msgs and when multiple calls are
  * done for the same result in the same function. Some noise is possible,

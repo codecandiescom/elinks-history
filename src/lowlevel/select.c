@@ -1,11 +1,11 @@
 /* File descriptors managment and switching */
-/* $Id: select.c,v 1.12 2002/06/20 08:20:59 zas Exp $ */
+/* $Id: select.c,v 1.13 2002/06/20 08:55:25 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <string.h>
+#include <string.h> /* BSD FD_ZERO() macro calls bzero(), so needed */
 #include <errno.h>
 #include <signal.h>
 #ifdef HAVE_SYS_SIGNAL_H
@@ -89,14 +89,19 @@ struct timer {
 
 struct list_head timers = {&timers, &timers};
 
-long select_info(int type)
+long
+select_info(int type)
 {
 	int i = 0, j;
 	struct cache_entry *ce;
+
 	switch (type) {
 		case CI_FILES:
 			for (j = 0; j < FD_SETSIZE; j++)
-				if (threads[j].read_func || threads[j].write_func || threads[j].error_func) i++;
+				if (threads[j].read_func
+				    || threads[j].write_func
+				    || threads[j].error_func)
+					i++;
 			return i;
 		case CI_TIMERS:
 			foreach(ce, timers) i++;
@@ -104,6 +109,7 @@ long select_info(int type)
 		default:
 			internal("cache_info: bad request");
 	}
+
 	return 0;
 }
 
@@ -116,30 +122,41 @@ struct bottom_half {
 
 struct list_head bottom_halves = { &bottom_halves, &bottom_halves };
 
-int register_bottom_half(void (*fn)(void *), void *data)
+int
+register_bottom_half(void (*fn)(void *), void *data)
 {
 	struct bottom_half *bh;
-	foreach(bh, bottom_halves) if (bh->fn == fn && bh->data == data) return 0;
-	if (!(bh = mem_alloc(sizeof(struct bottom_half)))) return -1;
+
+	foreach(bh, bottom_halves)
+		if (bh->fn == fn && bh->data == data)
+			return 0;
+
+	bh = mem_alloc(sizeof(struct bottom_half));
+	if (!bh) return -1;
 	bh->fn = fn;
 	bh->data = data;
 	add_to_list(bottom_halves, bh);
+
 	return 0;
 }
 
-void check_bottom_halves()
+void
+check_bottom_halves()
 {
 	struct bottom_half *bh;
 	void (*fn)(void *);
 	void *data;
-	rep:
+
+rep:
 	if (list_empty(bottom_halves)) return;
+
 	bh = bottom_halves.prev;
 	fn = bh->fn;
 	data = bh->data;
 	del_from_list(bh);
 	mem_free(bh);
 	fn(data);
+
 	goto rep;
 }
 
@@ -147,99 +164,132 @@ void check_bottom_halves()
 
 ttime last_time;
 
-void check_timers()
+void
+check_timers()
 {
 	ttime interval = get_time() - last_time;
 	struct timer *t;
+
 	foreach(t, timers) t->interval -= interval;
-	ch:
+
+ch:
 	foreach(t, timers) if (t->interval <= 0) {
 		struct timer *tt = t;
+
 		del_from_list(tt);
 		tt->func(tt->data);
 		mem_free(tt);
 		CHK_BH;
 		goto ch;
 	} else break;
+
 	last_time += interval;
 }
 
-int install_timer(ttime t, void (*func)(void *), void *data)
+int
+install_timer(ttime t, void (*func)(void *), void *data)
 {
 	struct timer *tm, *tt;
-	if (!(tm = mem_alloc(sizeof(struct timer)))) return -1;
+
+	tm = mem_alloc(sizeof(struct timer));
+	if (!tm) return -1;
 	tm->interval = t;
 	tm->func = func;
 	tm->data = data;
 	tm->id = timer_id++;
-	foreach(tt, timers) if (tt->interval >= t) break;
+	foreach(tt, timers)
+		if (tt->interval >= t)
+			break;
 	add_at_pos(tt->prev, tm);
+
 	return tm->id;
 }
 
-void kill_timer(int id)
+void
+kill_timer(int id)
 {
 	struct timer *tm;
 	int k = 0;
+
 	foreach(tm, timers) if (tm->id == id) {
 		struct timer *tt = tm;
+
 		del_from_list(tm);
 		tm = tm->prev;
 		mem_free(tt);
 		k++;
 	}
+
 	if (!k) internal("trying to kill nonexisting timer");
 	if (k >= 2) internal("more timers with same id");
 }
 
-void *get_handler(int fd, int tp)
+void *
+get_handler(int fd, int tp)
 {
 	if (fd < 0 || fd >= FD_SETSIZE) {
-		internal("get_handler: handle %d >= FD_SETSIZE %d", fd, FD_SETSIZE);
+		internal("get_handler: handle %d >= FD_SETSIZE %d", fd,
+			 FD_SETSIZE);
 		return NULL;
 	}
+
 	switch (tp) {
 		case H_READ:	return threads[fd].read_func;
 		case H_WRITE:	return threads[fd].write_func;
 		case H_ERROR:	return threads[fd].error_func;
 		case H_DATA:	return threads[fd].data;
 	}
+
 	internal("get_handler: bad type %d", tp);
 	return NULL;
 }
 
-void set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *), void (*error_func)(void *), void *data)
+void
+set_handlers(int fd, void (*read_func)(void *), void (*write_func)(void *),
+	     void (*error_func)(void *), void *data)
 {
 	if (fd < 0 || fd >= FD_SETSIZE) {
-		internal("set_handlers: handle %d >= FD_SETSIZE %d", fd, FD_SETSIZE);
+		internal("set_handlers: handle %d >= FD_SETSIZE %d", fd,
+			 FD_SETSIZE);
 		return;
 	}
+
 	threads[fd].read_func = read_func;
 	threads[fd].write_func = write_func;
 	threads[fd].error_func = error_func;
 	threads[fd].data = data;
-	if (read_func) FD_SET(fd, &w_read);
-	else {
+
+	if (read_func) {
+		FD_SET(fd, &w_read);
+	} else {
 		FD_CLR(fd, &w_read);
 		FD_CLR(fd, &x_read);
 	}
-	if (write_func) FD_SET(fd, &w_write);
-	else {
+
+	if (write_func) {
+		FD_SET(fd, &w_write);
+	} else {
 		FD_CLR(fd, &w_write);
 		FD_CLR(fd, &x_write);
 	}
-	if (error_func) FD_SET(fd, &w_error);
-	else {
+
+	if (error_func) {
+		FD_SET(fd, &w_error);
+	} else {
 		FD_CLR(fd, &w_error);
 		FD_CLR(fd, &x_error);
 	}
+
 	if (read_func || write_func || error_func) {
 		if (fd >= w_max) w_max = fd + 1;
 	} else if (fd == w_max - 1) {
 		int i;
+
 		for (i = fd - 1; i >= 0; i--)
-			if (FD_ISSET(i, &w_read) || FD_ISSET(i, &w_write) ||
-			    FD_ISSET(i, &w_error)) break;
+			if (FD_ISSET(i, &w_read)
+			    || FD_ISSET(i, &w_write)
+			    || FD_ISSET(i, &w_error))
+				break;
 		w_max = i + 1;
 	}
 }
@@ -259,31 +309,41 @@ int critical_section = 0;
 
 void check_for_select_race();
 
-void got_signal(int sig)
+void
+got_signal(int sig)
 {
 	if (sig >= NUM_SIGNALS || sig < 0) {
 		error("ERROR: bad signal number: %d", sig);
 		return;
 	}
+
 	if (!signal_handlers[sig].fn) return;
+
 	if (signal_handlers[sig].critical) {
 		signal_handlers[sig].fn(signal_handlers[sig].data);
 		return;
 	}
+
 	signal_mask[sig] = 1;
 	check_for_select_race();
 }
 
-void install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
+void
+install_signal_handler(int sig, void (*fn)(void *), void *data, int critical)
 {
 	struct sigaction sa;
+
 	if (sig >= NUM_SIGNALS || sig < 0) {
 		internal("bad signal number: %d", sig);
 		return;
 	}
+
 	memset(&sa, 0, sizeof sa);
-	if (!fn) sa.sa_handler = SIG_IGN;
-	else sa.sa_handler = got_signal;
+	if (!fn)
+		sa.sa_handler = SIG_IGN;
+	else
+		sa.sa_handler = got_signal;
+
 	sigfillset(&sa.sa_mask);
 	/*sa.sa_flags = SA_RESTART;*/
 	if (!fn) sigaction(sig, &sa, NULL);
@@ -295,13 +355,15 @@ void install_signal_handler(int sig, void (*fn)(void *), void *data, int critica
 
 int pending_alarm = 0;
 
-void alarm_handler(void *x)
+void
+alarm_handler(void *x)
 {
 	pending_alarm = 0;
 	check_for_select_race();
 }
 
-void check_for_select_race()
+void
+check_for_select_race()
 {
 	if (critical_section) {
 #ifdef SIGALRM
@@ -314,7 +376,8 @@ void check_for_select_race()
 	}
 }
 
-void uninstall_alarm()
+void
+uninstall_alarm()
 {
 	pending_alarm = 0;
 #ifdef HAVE_ALARM
@@ -322,20 +385,25 @@ void uninstall_alarm()
 #endif
 }
 
-int check_signals()
+int
+check_signals()
 {
 	int i, r = 0;
+
 	for (i = 0; i < NUM_SIGNALS; i++)
 		if (signal_mask[i]) {
 			signal_mask[i] = 0;
-			if (signal_handlers[i].fn) signal_handlers[i].fn(signal_handlers[i].data);
+			if (signal_handlers[i].fn)
+				signal_handlers[i].fn(signal_handlers[i].data);
 			CHK_BH;
 			r = 1;
 		}
+
 	return r;
 }
 
-void sigchld(void *p)
+void
+sigchld(void *p)
 {
 #ifdef WNOHANG
 	while ((int) waitpid(-1, NULL, WNOHANG) > 0);
@@ -344,14 +412,16 @@ void sigchld(void *p)
 #endif
 }
 
-void set_sigcld()
+void
+set_sigcld()
 {
 	install_signal_handler(SIGCHLD, sigchld, NULL, 1);
 }
 
 int terminate = 0;
 
-void select_loop(void (*init)())
+void
+select_loop(void (*init)())
 {
 	memset(signal_mask, 0, sizeof signal_mask);
 	memset(signal_handlers, 0, sizeof signal_handlers);
@@ -363,13 +433,16 @@ void select_loop(void (*init)())
 	signal(SIGPIPE, SIG_IGN);
 	init();
 	CHK_BH;
+
 	while (!terminate) {
 		int n, i;
 		struct timeval tv;
 		struct timeval *tm = NULL;
+
 		check_signals();
 		check_timers();
 		redraw_all_terminals();
+
 		if (!list_empty(timers)) {
 			ttime tt = ((struct timer *)&timers)->next->interval + 1;
 			if (tt < 0) tt = 0;
@@ -377,43 +450,60 @@ void select_loop(void (*init)())
 			tv.tv_usec = (tt % 1000) * 1000;
 			tm = &tv;
 		}
+
 		memcpy(&x_read, &w_read, sizeof(fd_set));
 		memcpy(&x_write, &w_write, sizeof(fd_set));
 		memcpy(&x_error, &w_error, sizeof(fd_set));
-		/*rep_sel:*/
+
 		if (terminate) break;
 		if (!w_max && list_empty(timers)) break;
 		critical_section = 1;
+
 		if (check_signals()) {
 			critical_section = 0;
 			continue;
 		}
-			/*{
-				int i;
-				printf("\nR:");
-				for (i = 0; i < 256; i++) if (FD_ISSET(i, &x_read)) printf("%d,", i);
-				printf("\nW:");
-				for (i = 0; i < 256; i++) if (FD_ISSET(i, &x_write)) printf("%d,", i);
-				printf("\nE:");
-				for (i = 0; i < 256; i++) if (FD_ISSET(i, &x_error)) printf("%d,", i);
-				fflush(stdout);
-			}*/
-		if ((n = select(w_max, &x_read, &x_write, &x_error, tm)) < 0) {
+#if 0
+		{
+			int i;
+
+			printf("\nR:");
+			for (i = 0; i < 256; i++)
+				if (FD_ISSET(i, &x_read)) printf("%d,", i);
+			printf("\nW:");
+			for (i = 0; i < 256; i++)
+				if (FD_ISSET(i, &x_write)) printf("%d,", i);
+			printf("\nE:");
+			for (i = 0; i < 256; i++)
+				if (FD_ISSET(i, &x_error)) printf("%d,", i);
+			fflush(stdout);
+		}
+#endif
+		n = select(w_max, &x_read, &x_write, &x_error, tm);
+		if (n < 0) {
 			critical_section = 0;
 			uninstall_alarm();
-			if (errno != EINTR) error("ERROR: select failed: %d", errno);
+			if (errno != EINTR)
+				error("ERROR: select failed: %d", errno);
 			continue;
 		}
+
 		critical_section = 0;
 		uninstall_alarm();
 		check_signals();
 		/*printf("sel: %d\n", n);*/
 		check_timers();
+
 		i = -1;
 		while (n > 0 && ++i < w_max) {
 			int k = 0;
-			/*printf("C %d : %d,%d,%d\n",i,FD_ISSET(i, &w_read),FD_ISSET(i, &w_write),FD_ISSET(i, &w_error));
-			printf("A %d : %d,%d,%d\n",i,FD_ISSET(i, &x_read),FD_ISSET(i, &x_write),FD_ISSET(i, &x_error));*/
+
+#if 0
+			printf("C %d : %d,%d,%d\n", i, FD_ISSET(i, &w_read),
+			       FD_ISSET(i, &w_write), FD_ISSET(i, &w_error));
+			printf("A %d : %d,%d,%d\n", i, FD_ISSET(i, &x_read),
+			       FD_ISSET(i, &x_write), FD_ISSET(i, &x_error));
+#endif
 			if (FD_ISSET(i, &x_read)) {
 				if (threads[i].read_func) {
 					threads[i].read_func(threads[i].data);
@@ -421,6 +511,7 @@ void select_loop(void (*init)())
 				}
 				k = 1;
 			}
+
 			if (FD_ISSET(i, &x_write)) {
 				if (threads[i].write_func) {
 					threads[i].write_func(threads[i].data);
@@ -428,6 +519,7 @@ void select_loop(void (*init)())
 				}
 				k = 1;
 			}
+
 			if (FD_ISSET(i, &x_error)) {
 				if (threads[i].error_func) {
 					threads[i].error_func(threads[i].data);
@@ -435,27 +527,32 @@ void select_loop(void (*init)())
 				}
 				k = 1;
 			}
+
 			n -= k;
 		}
 	}
 }
 
-int can_read(int fd)
+int
+can_read(int fd)
 {
 	fd_set fds;
 	struct timeval tv = {0, 0};
 
 	FD_ZERO(&fds);
 	FD_SET(fd, &fds);
+
 	return select(fd + 1, &fds, NULL, NULL, &tv);
 }
 
-int can_write(int fd)
+int
+can_write(int fd)
 {
 	fd_set fds;
 	struct timeval tv = {0, 0};
 
 	FD_ZERO(&fds);
 	FD_SET(fd, &fds);
+
 	return select(fd + 1, NULL, &fds, NULL, &tv);
 }

@@ -1,5 +1,5 @@
 /* Raw syntax tree layouter */
-/* $Id: layouter.c,v 1.1 2002/12/30 23:51:55 pasky Exp $ */
+/* $Id: layouter.c,v 1.2 2002/12/31 00:06:33 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -105,6 +105,7 @@ layout_node(struct layouter_state *state, struct syntree_node *node)
 	foreach (leaf, node->leafs) {
 		rect = spawn_rect(state);
 		state->root = rect;
+		add_attrib(state->current->attribs, "display", 7, "block", 5);
 		layout_node(state, leaf);
 	}
 }
@@ -124,6 +125,7 @@ syntree_layout(struct layouter_state *state, unsigned char **str, int *len)
 	elusive_parser_parse(state->parse, str, len);
 
 	node = state->parse->real_root;
+	add_attrib(state->current->attribs, "display", 7, "block", 5);
 	layout_node(state, node);
 }
 

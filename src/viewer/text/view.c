@@ -1,5 +1,5 @@
 /* HTML viewer (and much more) */
-/* $Id: view.c,v 1.652 2004/11/12 17:24:44 zas Exp $ */
+/* $Id: view.c,v 1.653 2004/11/12 17:28:39 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -82,7 +82,7 @@ detach_formatted(struct document_view *doc_view)
 
 /* type == 0 -> PAGE_DOWN
  * type == 1 -> DOWN */
-void
+static void
 move_down(struct session *ses, struct document_view *doc_view, int type)
 {
 	int newpos;
@@ -118,7 +118,7 @@ move_page_down(struct session *ses, struct document_view *doc_view)
 
 /* type == 0 -> PAGE_UP
  * type == 1 -> UP */
-void
+static void
 move_up(struct session *ses, struct document_view *doc_view, int type)
 {
 	assert(ses && doc_view && doc_view->vs);

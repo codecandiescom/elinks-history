@@ -1,5 +1,5 @@
 /* Menu system */
-/* $Id: menu.c,v 1.297 2004/04/09 03:10:26 jonas Exp $ */
+/* $Id: menu.c,v 1.298 2004/04/15 16:32:02 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -24,6 +24,7 @@
 #include "dialogs/options.h"
 #include "intl/gettext/libintl.h"
 #include "lowlevel/select.h"
+#include "main.h"
 #include "mime/dialogs.h"
 #include "osdep/osdep.h"
 #include "osdep/newwin.h"
@@ -38,6 +39,7 @@
 #include "terminal/kbd.h"
 #include "terminal/tab.h"
 #include "terminal/terminal.h"
+#include "util/conv.h"
 #include "util/memlist.h"
 #include "util/memory.h"
 #include "util/string.h"
@@ -493,3 +495,118 @@ free_history_lists(void)
 	trigger_event_name("free-history");
 #endif
 }
+
+
+static struct string *
+init_session_info_string(struct string *parameters, struct session *ses)
+{
+	int ring = get_opt_int_tree(cmdline_options, "session-ring");
+
+	if (!init_string(parameters)) return NULL;
+
+	add_format_to_string(parameters, "-base-session %d ", ses->id);
+	if (ring) add_format_to_string(parameters, " -session-ring %d ", ring);
+
+	return parameters;
+}
+
+
+void
+open_url_in_new_window(struct session *ses, unsigned char *url,
+			void (*open_window)(struct terminal *, unsigned char *, unsigned char *))
+{
+	struct string parameters;
+
+	assert(open_window && ses && url);
+	if_assert_failed return;
+
+	if (!init_session_info_string(&parameters, ses)) return;
+	if (url) add_encoded_shell_safe_url(&parameters, url);
+
+	open_window(ses->tab->term, path_to_exe, parameters.source);
+	done_string(&parameters);
+}
+
+/* open a link in a new xterm */
+void
+send_open_in_new_window(struct terminal *term,
+		       void (*open_window)(struct terminal *term, unsigned char *, unsigned char *),
+		       struct session *ses)
+{
+	struct document_view *doc_view;
+	struct link *link;
+	struct string parameters;
+	unsigned char *url;
+
+	assert(term && open_window && ses);
+	if_assert_failed return;
+	doc_view = current_frame(ses);
+	assert(doc_view && doc_view->vs && doc_view->document);
+	if_assert_failed return;
+
+	link = get_current_link(doc_view);
+	if (!link) return;
+
+	url = get_link_url(ses, doc_view, link);
+	if (!url) return;
+
+	if (init_session_info_string(&parameters, ses)
+	    && add_encoded_shell_safe_url(&parameters, url)) {
+		open_window(term, path_to_exe, parameters.source);
+	}
+
+	/* TODO: Possibly preload the link URI so it will be ready when
+	 * the new ELinks instance requests it. --jonas */
+	mem_free(url);
+	done_string(&parameters);
+}
+
+void
+send_open_new_window(struct terminal *term,
+		    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
+		    struct session *ses)
+{
+	struct string parameters;
+
+	assert(term && open_window && ses);
+	if_assert_failed return;
+
+	if (!init_session_info_string(&parameters, ses)) return;
+
+	open_window(term, path_to_exe, parameters.source);
+	done_string(&parameters);
+}
+
+
+void
+open_in_new_window(struct terminal *term,
+		   void (*xxx)(struct terminal *,
+			       void (*)(struct terminal *, unsigned char *, unsigned char *),
+			       struct session *ses),
+		   struct session *ses)
+{
+	struct menu_item *mi;
+	struct open_in_new *oi, *oin;
+
+	assert(term && ses && xxx);
+	if_assert_failed return;
+
+	oin = get_open_in_new(term);
+	if (!oin) return;
+	if (!oin[1].text) {
+		xxx(term, oin[0].fn, ses);
+		mem_free(oin);
+		return;
+	}
+
+	mi = new_menu(FREE_LIST);
+	if (!mi) {
+		mem_free(oin);
+		return;
+	}
+	for (oi = oin; oi->text; oi++)
+		add_to_menu(&mi, oi->text, NULL, ACT_MAIN_NONE, (menu_func) xxx, oi->fn, 0);
+	mem_free(oin);
+	do_menu(term, mi, ses, 1);
+}
+

@@ -1,4 +1,4 @@
-/* $Id: menu.h,v 1.28 2004/04/04 03:41:32 jonas Exp $ */
+/* $Id: menu.h,v 1.29 2004/04/15 16:32:02 jonas Exp $ */
 
 #ifndef EL__DIALOG_MENU_H
 #define EL__DIALOG_MENU_H
@@ -24,5 +24,24 @@ void query_exit(struct session *ses);
 void exit_prog(struct session *ses, int query);
 
 void save_url_as(struct session *ses);
+
+void
+open_url_in_new_window(struct session *ses, unsigned char *url,
+			void (*open_window)(struct terminal *, unsigned char *, unsigned char *));
+
+void send_open_new_window(struct terminal *,
+			 void (*)(struct terminal *, unsigned char *, unsigned char *),
+			 struct session *);
+
+void send_open_in_new_window(struct terminal *term,
+			    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
+			    struct session *ses);
+
+void
+open_in_new_window(struct terminal *term,
+		   void (*)(struct terminal *,
+			    void (*)(struct terminal *, unsigned char *, unsigned char *),
+			    struct session *ses),
+		   struct session *ses);
 
 #endif

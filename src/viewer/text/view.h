@@ -1,4 +1,4 @@
-/* $Id: view.h,v 1.43 2004/04/15 16:16:56 jonas Exp $ */
+/* $Id: view.h,v 1.44 2004/04/15 16:32:02 jonas Exp $ */
 
 #ifndef EL__VIEWER_TEXT_VIEW_H
 #define EL__VIEWER_TEXT_VIEW_H
@@ -38,25 +38,6 @@ void save_url(struct session *, unsigned char *);
 
 void send_event(struct session *, struct term_event *);
 void send_enter(struct terminal *term, void *xxx, struct session *ses);
-
-void
-open_url_in_new_window(struct session *ses, unsigned char *url,
-			void (*open_window)(struct terminal *, unsigned char *, unsigned char *));
-
-void send_open_new_window(struct terminal *,
-			 void (*)(struct terminal *, unsigned char *, unsigned char *),
-			 struct session *);
-
-void send_open_in_new_window(struct terminal *term,
-			    void (*open_window)(struct terminal *, unsigned char *, unsigned char *),
-			    struct session *ses);
-
-void
-open_in_new_window(struct terminal *term,
-		   void (*)(struct terminal *,
-			    void (*)(struct terminal *, unsigned char *, unsigned char *),
-			    struct session *ses),
-		   struct session *ses);
 
 void save_formatted_dlg(struct session *ses, struct document_view *doc_view, int a);
 void view_image(struct session *ses, struct document_view *doc_view, int a);

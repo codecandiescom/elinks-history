@@ -1,5 +1,5 @@
 /* CSS property value parser */
-/* $Id: value.c,v 1.29 2004/01/18 17:57:02 jonas Exp $ */
+/* $Id: value.c,v 1.30 2004/01/18 18:01:43 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -169,29 +169,24 @@ css_parse_font_weight_value(struct css_property_info *propinfo,
 	assert(propinfo->value_type == CSS_VT_FONT_ATTRIBUTE);
 
 	if (token->type == CSS_TOKEN_IDENTIFIER) {
-		if (!strncasecmp(*string, "bolder", 6)) {
-			(*string) += 6;
+		if (css_token_contains(token, "bolder", 6)) {
 			value->font_attribute.add |= AT_BOLD;
-			return 1;
-		}
 
-		if (!strncasecmp(*string, "lighter", 7)) {
-			(*string) += 7;
+		} else if (css_token_contains(token, "lighter", 7)) {
 			value->font_attribute.rem |= AT_BOLD;
-			return 1;
-		}
 
-		if (!strncasecmp(*string, "bold", 4)) {
-			(*string) += 4;
+		} else if (css_token_contains(token, "bold", 4)) {
 			value->font_attribute.add |= AT_BOLD;
-			return 1;
+
+		} else if (css_token_contains(token, "normal", 6)) {
+			value->font_attribute.rem |= AT_BOLD;
+
+		} else {
+			return 0;
 		}
 
-		if (!strncasecmp(*string, "normal", 6)) {
-			(*string) += 6;
-			value->font_attribute.rem |= AT_BOLD;
-			return 1;
-		}
+		skip_css_tokens(scanner, CSS_TOKEN_IDENTIFIER);
+		return 1;
 	}
 
 	if (token->type != CSS_TOKEN_DIGIT) return 0;

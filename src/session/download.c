@@ -1,5 +1,5 @@
 /* Downloads managment */
-/* $Id: download.c,v 1.343 2005/02/23 23:42:12 jonas Exp $ */
+/* $Id: download.c,v 1.344 2005/02/24 21:51:51 miciah Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1146,8 +1146,9 @@ do_type_query(struct type_query *type_query, unsigned char *ct, struct mime_hand
 	}
 
 	dlg_data = do_dialog(term, dlg, ml);
-	/* When there's some username, but no password, automagically jump at
-	 * the password. */
+	/* Don't focus the text field; we want the user to be able
+	 * to select a button by typing the first letter of its label
+	 * without having to first leave the text field. */
 	if (dlg_data) {
 		select_widget_by_id(dlg_data, 2);
 	}

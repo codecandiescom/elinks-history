@@ -1,3 +1,66 @@
+Wed Mar  3 18:12:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: view.c, link.c:
+
+	Cleanup and use get_current_link().  
+
+Wed Mar  3 18:10:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/: form.c, textarea.c:
+
+	Use get_current_link() and shorten lines.  
+
+Wed Mar  3 18:07:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/terminal/tab.c:
+
+	Cleanup and use get_current_link().  
+
+Wed Mar  3 18:03:29 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/view.h:
+
+	Better checking before looking up the current link.  
+
+Wed Mar  3 17:42:20 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: document/view.h, sched/session.c:
+
+	Introduce get_current_link() macro.  
+
+Wed Mar  3 17:27:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/: sched/session.c, sched/session.h, scripting/lua/core.c:
+
+	get_current_link() -> get_current_session_link().  
+
+Wed Mar  3 17:08:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Cleanup and remove goto usage.  
+
+Wed Mar  3 16:34:56 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/viewer/text/view.c:
+
+	Fix wrong width and height in comparison. Fixes bug 388.  
+
+Wed Mar  3 12:00:05 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* src/: config/options.inc, protocol/http/http.c:
+
+	Information how many bars is displayed by ELinks is sent in
+	User-Agent header field. Note, that this information will be
+	accurate for new instances only when they run with -no-connect
+	option.  
+
+Wed Mar  3 08:21:27 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
+
+	* acconfig.h, configure.in:
+
+	Missing commit.  
+
 Tue Mar  2 17:06:15 2004  Witold Filipczyk <witekfl@poczta.gazeta.pl>:
 
 	* src/: Makefile.am, main.c, main.h, scripting/Makefile.am,

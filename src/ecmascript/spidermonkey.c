@@ -1,5 +1,5 @@
 /* The SpiderMonkey ECMAScript backend. */
-/* $Id: spidermonkey.c,v 1.167 2004/12/27 01:07:36 zas Exp $ */
+/* $Id: spidermonkey.c,v 1.168 2004/12/27 01:09:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -907,9 +907,6 @@ input_focus(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 	struct form_state *fs = JS_GetPrivate(ctx, obj);
 	struct form_control *fc;
 	int linknum;
-	struct jsval_property prop;
-
-	set_prop_boolean(&prop, 0);
 
 	assert(fs);
 	fc = find_form_control(document, fs);
@@ -922,7 +919,7 @@ input_focus(JSContext *ctx, JSObject *obj, uintN argc, jsval *argv, jsval *rval)
 
 	jump_to_link_number(ses, doc_view, linknum);
 
-	value_to_jsval(ctx, rval, &prop);
+	boolean_to_jsval(ctx, rval, 0);
 	return JS_TRUE;
 }
 

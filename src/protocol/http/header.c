@@ -1,5 +1,5 @@
 /* Parser of HTTP headers */
-/* $Id: header.c,v 1.15 2003/11/29 12:59:51 pasky Exp $ */
+/* $Id: header.c,v 1.16 2003/11/29 13:00:08 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -19,7 +19,7 @@ unsigned char *
 parse_http_header(unsigned char *head, unsigned char *item,
 		  unsigned char **ptr)
 {
-	unsigned char *f, *h = NULL;
+	unsigned char *f;
 
 	if (!head) return NULL;
 
@@ -34,7 +34,7 @@ parse_http_header(unsigned char *head, unsigned char *item,
 		if (!*f) break;
 
 		if (f[0] == ':') {
-			unsigned char *g;
+			unsigned char *g, *h = NULL;
 
 			while (f[1] == ' ') f++;
 			for (g = ++f; *g >= ' '; g++);

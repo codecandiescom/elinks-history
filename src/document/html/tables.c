@@ -1,5 +1,5 @@
 /* HTML tables renderer */
-/* $Id: tables.c,v 1.68 2003/09/01 13:05:13 zas Exp $ */
+/* $Id: tables.c,v 1.69 2003/09/12 12:56:28 zas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1377,7 +1377,7 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 				par_format.bgcolor = t->bgcolor;
 				for (s = yp; s < yp + yw; s++) {
 					expand_lines(t->p, s);
-					expand_line(t->p, s, MAX(xp - 1, 0));
+					expand_line(t->p, s, xp);
 				}
 
 				html_stack_dup();
@@ -1451,23 +1451,30 @@ display_complicated_table(struct table *t, int x, int y, int *yy)
 			(signed char *) NULL : &fv[(yy) + 1 + (t->y + 2) * (xx)]))
 #endif
 
-#define H_LINE(xx, yy) (H_LINE_X((xx), (yy)) == -1 ? 0 : H_LINE_X((xx), (yy)))
-#define V_LINE(xx, yy) (V_LINE_X((xx), (yy)) == -1 ? 0 : V_LINE_X((xx), (yy)))
+static inline int
+check_char(register signed char lx)
+{
+	if (lx == -1) return 0;
+	return lx;
+};
 
-#define draw_frame_point(xx, yy, ii, jj)				\
-{									\
-	if (H_LINE_X((ii) - 1, (jj)) >= 0				\
-	    || H_LINE_X((ii), (jj)) >= 0				\
-	    || V_LINE_X((ii), (jj) - 1) >= 0				\
-	    || V_LINE_X((ii), (jj)) >= 0) {				\
-		register int pos = V_LINE((ii), (jj) - 1)		\
-				 + 3 * H_LINE((ii), (jj))		\
-				 + 9 * H_LINE((ii) - 1, (jj)) 		\
-				 + 27 * V_LINE((ii), (jj));		\
-									\
-		xset_hchar(t->p, (xx), (yy), frame_table[pos],		\
-			   par_format.bgcolor, SCREEN_ATTR_FRAME);	\
-	}								\
+#define H_LINE(xx, yy) check_char(H_LINE_X((xx), (yy)))
+#define V_LINE(xx, yy) check_char(V_LINE_X((xx), (yy)))
+
+#define draw_frame_point(xx, yy, ii, jj)                                \
+{                                                                       \
+        if (H_LINE_X((ii) - 1, (jj)) >= 0                               \
+            || H_LINE_X((ii), (jj)) >= 0                                \
+            || V_LINE_X((ii), (jj) - 1) >= 0                            \
+            || V_LINE_X((ii), (jj)) >= 0) {                             \
+                register int pos = V_LINE((ii), (jj) - 1)               \
+                                 + 3 * H_LINE((ii), (jj))               \
+                                 + 9 * H_LINE((ii) - 1, (jj))           \
+                                 + 27 * V_LINE((ii), (jj));             \
+                                                                        \
+                xset_hchar(t->p, (xx), (yy), frame_table[pos],          \
+                           par_format.bgcolor, SCREEN_ATTR_FRAME);      \
+        }                                                               \
 }
 
 #define draw_frame_hline(xx, yy, ii, jj)				\

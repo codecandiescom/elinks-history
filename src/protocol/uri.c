@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.172 2004/04/07 20:01:28 jonas Exp $ */
+/* $Id: uri.c,v 1.173 2004/04/07 20:06:46 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -428,17 +428,16 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 	return uristring;
 }
 
-/* The standard URI comes in, and if the URI is not of the 'file' scheme, the
- * same URI comes out. However, for the file scheme, bastardized URI comes out
- * which consists of just the complete path to file/directory, which the dumb
- * 'file' protocol backend can understand. No host parts etc, that is what this
- * function is supposed to chew. */
+/* The 'file' scheme URI comes in and bastardized URI comes out which consists
+ * of just the complete path to file/directory, which the dumb 'file' protocol
+ * backend can understand. No host parts etc, that is what this function is
+ * supposed to chew. */
 static struct uri *
 transform_file_url(struct uri *uri, unsigned char *cwd)
 {
 	unsigned char *path = uri->data;
 
-	assert(uri->data);
+	assert(uri->protocol == PROTOCOL_FILE && uri->data);
 
 	/* Sort out the host part. We currently support only host "localhost"
 	 * (plus empty host part will be assumed to be "localhost" as well).

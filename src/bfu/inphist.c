@@ -1,5 +1,5 @@
 /* Input history for input fields. */
-/* $Id: inphist.c,v 1.65 2003/11/18 23:53:01 pasky Exp $ */
+/* $Id: inphist.c,v 1.66 2003/11/18 23:53:36 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -115,10 +115,8 @@ do_tab_compl_unambiguous(struct terminal *term, struct list_head *history,
 		for (; *cur && *cur == *matchpos; ++cur, ++matchpos) {
 			++cur_len;
 
-			if (!longest_common_match)
-				continue;
-
-			if (cur_len >= longest_common_match)
+			if (longest_common_match
+			    && cur_len >= longest_common_match)
 				break;
 		}
 

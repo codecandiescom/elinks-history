@@ -1,5 +1,5 @@
 /* Internal "cgi" protocol implementation */
-/* $Id: cgi.c,v 1.32 2003/12/05 18:20:09 pasky Exp $ */
+/* $Id: cgi.c,v 1.33 2003/12/05 18:21:07 pasky Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -223,6 +223,9 @@ set_vars(struct connection *conn, unsigned char *script)
 		setenv("HTTP_PRAGMA", "no-cache", 1);
 		setenv("HTTP_CACHE_CONTROL", "no-cache", 1);
 	}
+
+	/* TODO: HTTP auth support. On the other side, it was weird over CGI
+	 * IIRC. --pasky */
 
 	return 0;
 }

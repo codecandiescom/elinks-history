@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.301 2004/01/25 07:31:28 jonas Exp $ */
+/* $Id: session.c,v 1.302 2004/01/25 09:33:30 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -264,6 +264,21 @@ load_frames(struct session *ses, struct document_view *doc_view)
 	request_frameset(ses, document->frame_desc);
 }
 
+inline void
+load_css_imports(struct session *ses, struct document_view *doc_view)
+{
+	struct document *document = doc_view->document;
+	struct string_list_item *import;
+
+	if (!document) return;
+
+	foreach (import, document->css_imports) {
+		unsigned char *url = import->string.source;
+
+		request_additional_file(ses, "", url, PRI_CSS);
+	}
+}
+
 void
 display_timer(struct session *ses)
 {
@@ -277,6 +292,7 @@ display_timer(struct session *ses)
 					   ses);
 
 	load_frames(ses, ses->doc_view);
+	load_css_imports(ses, ses->doc_view);
 	process_file_requests(ses);
 }
 
@@ -370,6 +386,7 @@ doc_end_load(struct download *stat, struct session *ses)
 		}
 
 		load_frames(ses, ses->doc_view);
+		load_css_imports(ses, ses->doc_view);
 		process_file_requests(ses);
 
 		if (ses->doc_view->document->refresh
@@ -417,7 +434,7 @@ file_end_load(struct download *stat, struct file_to_load *ftl)
 
 	/* FIXME: We need to do content-type check here! However, we won't
 	 * handle properly the "Choose action" dialog now :(. */
-	if (ftl->ce && !ftl->ce->redirect_get) {
+	if (ftl->ce && !ftl->ce->redirect_get && stat->pri != PRI_CSS) {
 		struct session *ses = ftl->ses;
 		unsigned char *loading_url = ses->loading_url;
 		unsigned char *target_frame = ses->task.target_frame;

@@ -1,5 +1,5 @@
 /* CSS module management */
-/* $Id: css.c,v 1.35 2004/01/25 07:19:54 jonas Exp $ */
+/* $Id: css.c,v 1.36 2004/01/25 09:33:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -31,6 +31,12 @@ struct option_info css_options_info[] = {
 		"enable", 0, 1,
 		N_("Enable adding of CSS style info to documents.")),
 
+	INIT_OPT_BOOL("document.css", N_("Import external style sheets"),
+		"import", 0, 1,
+		N_("When enabled any external style sheets that are imported from\n"
+		"either CSS itself using the @import keyword or from the HTML using\n"
+		"<link> tags in the document header will also be downloaded.")),
+
 	INIT_OPT_STRING("document.css", N_("Default style sheet"),
 		"stylesheet", 0, "",
 		N_("The path to the file containing the default user defined\n"
@@ -41,6 +47,26 @@ struct option_info css_options_info[] = {
 
 	NULL_OPTION_INFO,
 };
+
+
+void
+import_css(struct css_stylesheet *css, unsigned char *url)
+{
+	/* Do we have it in the cache? (TODO: CSS cache) */
+	struct cache_entry *cache_entry = find_in_cache(url);
+	struct fragment *fragment;
+
+	if (!cache_entry) return;
+
+	defrag_entry(cache_entry);
+	fragment = cache_entry->frag.next;
+
+	if (!list_empty(cache_entry->frag)
+	    && !fragment->offset
+	    && fragment->length) {
+		css_parse_stylesheet(css, fragment->data);
+	}
+}
 
 
 static void

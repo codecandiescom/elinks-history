@@ -1,5 +1,5 @@
 /* HTML renderer */
-/* $Id: renderer.c,v 1.413 2004/01/22 18:09:39 jonas Exp $ */
+/* $Id: renderer.c,v 1.414 2004/01/25 09:33:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -1249,6 +1249,15 @@ html_special(struct part *part, enum html_special_type c, ...)
 			if (document && doc_colors_and_bg(&document->options))
 				color_link_lines(document);
 			break;
+		case SP_STYLESHEET:
+		{
+			unsigned char *url = va_arg(l, unsigned char *);
+
+			va_end(l);
+			if (!document) break;
+			add_to_string_list(&document->css_imports, url, -1);
+			break;
+		}
 	}
 
 	return NULL;

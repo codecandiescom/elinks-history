@@ -1,5 +1,5 @@
 /* HTML parser */
-/* $Id: parser.c,v 1.379 2004/01/25 08:17:44 jonas Exp $ */
+/* $Id: parser.c,v 1.380 2004/01/25 09:33:30 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -21,6 +21,7 @@
 #include "config/options.h"
 #include "config/kbdbind.h"
 #include "document/css/apply.h"
+#include "document/css/css.h"
 #include "document/css/parser.h"
 #include "document/css/stylesheet.h"
 #include "document/html/frames.h"
@@ -728,6 +729,28 @@ add_fragment_identifier(void *part, unsigned char *attr)
 static void
 import_css_stylesheet(struct css_stylesheet *css, unsigned char *url, int len)
 {
+	unsigned char *import_url;
+
+	if (!global_doc_opts->css_enable
+	    || !global_doc_opts->css_import)
+		return;
+
+	url = memacpy(url, len);
+	if (!url) return;
+
+	/* HTML <head> urls should already be fine but we can.t detect them. */
+	import_url = join_urls(format.href_base, url);
+	mem_free(url);
+
+	if (!import_url) return;
+
+	/* Request the imported stylesheet as part of the document ... */
+	special_f(ff, SP_STYLESHEET, import_url);
+
+	/* ... and then attempt to import from the cache. */
+	import_css(css, import_url);
+
+	mem_free(import_url);
 }
 
 static struct form form = NULL_STRUCT_FORM;
@@ -2598,6 +2621,10 @@ html_link(unsigned char *a)
 
 	if (!link_display) return;
 	if (!html_link_parse(a, &link)) return;
+
+	if (link.type == LT_STYLESHEET) {
+		import_css_stylesheet(&css_styles, link.href, strlen(link.href));
+	}
 
 	/* Ignore few annoying links.. */
 	if (link_display < 5 &&

@@ -1,4 +1,4 @@
-/* $Id: css.h,v 1.9 2004/01/23 23:59:35 jonas Exp $ */
+/* $Id: css.h,v 1.10 2004/01/25 09:33:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_CSS_CSS_H
 #define EL__DOCUMENT_CSS_CSS_H
@@ -18,5 +18,8 @@ struct module;
 extern struct css_stylesheet default_stylesheet;
 
 extern struct module css_module;
+
+/* This function will try to import the given @url from the cache. */
+void import_css(struct css_stylesheet *css, unsigned char *url);
 
 #endif

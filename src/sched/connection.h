@@ -1,4 +1,4 @@
-/* $Id: connection.h,v 1.47 2003/12/20 18:48:31 pasky Exp $ */
+/* $Id: connection.h,v 1.48 2004/01/25 09:33:30 jonas Exp $ */
 
 #ifndef EL__SCHED_CONNECTION_H
 #define EL__SCHED_CONNECTION_H
@@ -17,6 +17,7 @@ enum connection_priority {
 	PRI_MAIN	= 0,
 	PRI_DOWNLOAD	= 0,
 	PRI_FRAME,
+	PRI_CSS,
 	PRI_NEED_IMG,
 	PRI_IMG,
 	PRI_PRELOAD,

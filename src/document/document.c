@@ -1,5 +1,5 @@
 /* The document base functionality */
-/* $Id: document.c,v 1.48 2004/01/19 21:33:30 jonas Exp $ */
+/* $Id: document.c,v 1.49 2004/01/25 09:33:29 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -54,6 +54,7 @@ init_document(unsigned char *uristring, struct cache_entry *cache_entry,
 	init_list(document->forms);
 	init_list(document->tags);
 	init_list(document->nodes);
+	init_list(document->css_imports);
 
 	object_nolock(document);
 	object_lock(document);
@@ -146,6 +147,7 @@ done_document(struct document *document)
 	free_list(document->forms);
 	free_list(document->tags);
 	free_list(document->nodes);
+	free_string_list(&document->css_imports);
 
 	if (document->search) mem_free(document->search);
 	if (document->slines1) mem_free(document->slines1);

@@ -1,4 +1,4 @@
-/* $Id: options.h,v 1.43 2004/01/21 10:09:01 witekfl Exp $ */
+/* $Id: options.h,v 1.44 2004/01/25 09:33:29 jonas Exp $ */
 
 #ifndef EL__DOCUMENT_OPTIONS_H
 #define EL__DOCUMENT_OPTIONS_H
@@ -30,6 +30,7 @@ struct document_options {
 	/* XXX: Keep boolean options grouped to save padding */
 	/* CSS stuff */
 	unsigned int css_enable:1;
+	unsigned int css_import:1;
 
 	/* HTML stuff */
 	unsigned int tables:1;

@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: ELinks 0.10.CVS\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-25 23:50+0100\n"
-"PO-Revision-Date: 2005-01-26 00:46+0100\n"
-"Last-Translator: Jonas Fonseca <fonseca@diku.dk>\n"
+"PO-Revision-Date: 2005-01-27 18:43+0100\n"
+"Last-Translator: Morten Bo Johansen <mojo@mbjnet.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
@@ -229,7 +229,7 @@ msgid ""
 "Format string for the digital clock. See the strftime(3)\n"
 "manpage for details."
 msgstr ""
-"Formatteringsstreng for det digitale ur. Se manual siden strftime(3)\n"
+"Formateringsstreng for det digitale ur. Se manualsiden strftime(3)\n"
 "for hjælp."
 
 #: src/bfu/leds.c:89
@@ -274,10 +274,10 @@ msgstr ""
 " |||||`- Bruges ikke\n"
 " ||||`-- Bruges ikke\n"
 " |||`--- Et JavaScript pop-up vindue blev blokeret\n"
-" ||`---- En JavaScript fejl er opstået\n"
+" ||`---- En JavaScript-fejl er opstået\n"
 " |`----- Tilstanden for indsætningstilstand i indtastningsfelter\n"
 " |       'I' betyder ingen modus, 'i' betyder indsætning aktiveret\n"
-" `------ Om en SSL forbindelse blev brugt\n"
+" `------ Om en SSL-forbindelse blev brugt\n"
 "\n"
 "'-' i almindelighed betyder at LED-indikatoren er deaktiveret."
 
@@ -360,10 +360,10 @@ msgid ""
 "This feature requires bookmark support."
 msgstr ""
 "Automatisk gem et øjebliksbillede af alle faneblade periodisk.\n"
-"Dette vil periodisk gemme alle faneblade i alle åbne terminaler\n"
+"Dette vil gemme alle faneblade i alle åbne terminaler periodisk\n"
 "som bogmærker i en separat mappe for senere genskabelse i tilfælde\n"
-"af nedbrug.\n"
-"Denne egenskab kræver bogmærke understøttelse."
+"af nedbrud.\n"
+"Denne egenskab kræver bogmærkeunderstøttelse."
 
 #: src/bookmarks/dialogs.c:75 src/config/options.inc:935
 #: src/dialogs/document.c:81 src/globhist/dialogs.c:66
@@ -627,7 +627,7 @@ msgstr "Fjernmetode kendes ikke"
 
 #: src/config/cmdline.c:358
 msgid "Template option folder"
-msgstr "Skabelon indstillingsmappe"
+msgstr "Mappe med skabelonindstillinger"
 
 #: src/config/cmdline.c:381
 #, c-format
@@ -677,7 +677,7 @@ msgid ""
 "in the association table can't be added or modified."
 msgstr ""
 "Begræns visse faciliteter i ELinks så den kan anvendes med anonyme\n"
-"brugerkonti. Ingen visning af lokale filer, ingen downloads. Brug af\n"
+"brugerkonti. Ingen visning af lokale filer, ingen filoverførsler. Brug af\n"
 "fremvisere er tilladt, men brugeren kan ikke tilføje eller ændre i\n"
 "opsætningen af hvilke fremvisere der bruges ved hvilke filtyper."
 
@@ -689,9 +689,11 @@ msgstr "Indsend første formular automatisk"
 msgid "Automatically submit the first form in the given URLs."
 msgstr "Indsend automatisk den første formular i de givne adresser."
 
+# rettet "ID" til fælleskøn, men måske er det et ID-nummer og så er din
+# bedre, men i så fald burde vi kalde det ID-nummer og ikke bare ID.
 #: src/config/cmdline.c:616
 msgid "Clone internal session with given ID"
-msgstr "Kloning af intern session med et givent ID"
+msgstr "Kloning af intern session med en given ID"
 
 #: src/config/cmdline.c:618
 msgid ""
@@ -699,8 +701,8 @@ msgid ""
 "The ID maps to information that will be used when creating the\n"
 "new instance. You don't want to use it."
 msgstr ""
-"Bruges internt, når ELinks instanser åbnes i nye terminalvinduer.\n"
-"Det givne ID henviser til information som den nye instans baseres på.\n"
+"Bruges internt når ELinks-instanser åbnes i nye terminalvinduer.\n"
+"Den givne ID henviser til information som den nye instans baseres på.\n"
 "Dette programargument bør ikke benyttes."
 
 #: src/config/cmdline.c:624
@@ -744,9 +746,13 @@ msgstr "Udskriv hjælp til opsætningsindstillinger og afslut."
 msgid "MIME type assumed for unknown document types"
 msgstr "MIME-typen som antages for dokumenter af ukendt type"
 
+# Har rettet sætninger af typen "standard ..." til "forvalgt ...". RO
+# nævner intet om at "standard" kan bruges som adjektiv, det kan nok
+# bruges i sammenstillinger, men så skal vi sige f.eks. "standard-MIME-type",
+# og det bliver jo let klodset. Det er en udbredt fejl i mange oversættelser.
 #: src/config/cmdline.c:645
 msgid "The default MIME type used for documents of unknown type."
-msgstr "Standard MIME-typen for dokumenter af ukendt type."
+msgstr "Forvalgt MIME-type for dokumenter af ukendt type."
 
 #: src/config/cmdline.c:647
 msgid "Ignore user-defined keybindings"
@@ -837,9 +843,9 @@ msgid ""
 "with local addresses (ie. 127.0.0.1). No connections to remote\n"
 "servers will be permitted."
 msgstr ""
-"Begræns ELinks til at arbejde i afkoblet tilstand og kun at oprette\n"
-"forbindelse til servere med lokale netadresser (dvs. 127.0.0.1).\n"
-"Ingen forbindelser til fjernservere er tilladt."
+"Begræns ELinks til at arbejde i afkoblet tilstand og til kun at\n"
+"oprette forbindelse til servere med lokale netadresser\n"
+"(dvs. 127.0.0.1). Ingen forbindelser til fjernservere er tilladt."
 
 #: src/config/cmdline.c:695
 msgid "Print detailed usage help and exit"
@@ -884,10 +890,9 @@ msgid ""
 "configuration directory (~/.elinks). It forces default configuration\n"
 "values to be used and disables saving of runtime state files."
 msgstr ""
-"Deaktivér oprettelse og anvendelse af filer i brugerens hjemme\n"
-"konfigurationsmappe (~/.elinks). Dette tvinger brug af standard\n"
-"værdier for indstillinger og slår skrivning af køreselstids\n"
-"tilstandsfiler fra."
+"Deaktivér oprettelse og anvendelse af filer i brugerens private\n"
+"opsætningskatalog (~/.elinks). Dette tvinger brug af standardværdier\n"
+"for indstillinger og slår skrivning af køreselstids-tilstandsfiler fra."
 
 #: src/config/cmdline.c:716
 msgid "Disable link numbering in dump output"
@@ -1291,6 +1296,7 @@ msgstr "Primære tastetildelinger"
 msgid "Edit mapping"
 msgstr "Redigér tastetildelinger"
 
+# Menu over tastaturoversigt?
 #: src/config/kbdbind.c:259
 msgid "Menu mapping"
 msgstr "Menu tastaturoversigt"
@@ -1354,7 +1360,7 @@ msgstr "Åbn downloadhåndtering"
 
 #: src/config/kbdbind.c:445
 msgid "Enter ex-mode (command line)"
-msgstr "Skift til ex-mode kommandolinje"
+msgstr "Skift til ex-mode (kommandolinje)"
 
 #: src/config/kbdbind.c:446
 msgid "Open the File menu"
@@ -1370,7 +1376,7 @@ msgstr "Find forrige forekomst af den aktuelle søgetekst"
 
 #: src/config/kbdbind.c:449
 msgid "Forget authentication credentials"
-msgstr "Ignorer HTTP verificering"
+msgstr "Ignorer HTTP-verificering"
 
 #: src/config/kbdbind.c:450
 msgid "Open form history manager"
@@ -1378,7 +1384,7 @@ msgstr "Åbn formularhistorikhåndtering"
 
 #: src/config/kbdbind.c:451
 msgid "Pass URI of current frame to external command"
-msgstr "Videregiv adressen fra den aktuelle ramme til ekstern program"
+msgstr "Videregiv adressen fra den aktuelle ramme til eksternt program"
 
 #: src/config/kbdbind.c:452
 msgid "Maximize the current frame"
@@ -1446,11 +1452,11 @@ msgstr "Hent det aktuelle billede"
 
 #: src/config/kbdbind.c:468
 msgid "Attempt to resume download of the current link"
-msgstr "Forsøg at genoptage download af det aktuelle link"
+msgstr "Forsøg at genoptage overførsel af det aktuelle link"
 
 #: src/config/kbdbind.c:469
 msgid "Pass URI of current link to external command"
-msgstr "Videregiv den aktuelle linkadresse et til ekstern program"
+msgstr "Videregiv den aktuelle linkadresse et til eksternt program"
 
 #: src/config/kbdbind.c:470 src/config/kbdbind.c:563 src/config/kbdbind.c:587
 msgid "Follow the current link"
@@ -2352,7 +2358,7 @@ msgstr "Baggrundsfarve"
 #: src/config/options.inc:268 src/config/options.inc:528
 #: src/config/options.inc:830
 msgid "Default background color."
-msgstr "Standard baggrundsfarve."
+msgstr "Forvalgt baggrundsfarve."
 
 #. ==========================================================
 #. ============= BORING PART (colors) START =================
@@ -2370,7 +2376,7 @@ msgstr "Tekstfarve"
 #: src/config/options.inc:272 src/config/options.inc:524
 #: src/config/options.inc:828
 msgid "Default text color."
-msgstr "Standard tekstfarve."
+msgstr "Forvalgt tekstfarve."
 
 #: src/config/options.inc:274
 msgid "Enable color"
@@ -2477,7 +2483,7 @@ msgstr ""
 
 #: src/config/options.inc:330
 msgid "Warn about maliciously crafted URIs"
-msgstr "Advar om ondskabsfulde konstruerede adresser"
+msgstr "Advar om ondskabsfuldt konstruerede adresser"
 
 #: src/config/options.inc:332
 msgid ""
@@ -2485,9 +2491,9 @@ msgid ""
 "checked and if a maliciously crafted URI is detected a\n"
 "warning dialog will ask before following the link."
 msgstr ""
-"Når links følges tjekkes brugeridentitetsdelen af\n"
-"adressen og hvis en ondskabsfuld konstrueret adresse\n"
-"opdages advarselsdialogvindue vil forespørge før linket\n"
+"Når links følges, tjekkes brugeridentitetsdelen af\n"
+"adressen og hvis en ondskabsfuldt konstrueret adresse\n"
+"opdages, vil et advarselsdialogvindue forespørge før linket\n"
 "følges."
 
 #. TODO - this is somehow implemented by ff, but disabled
@@ -2535,7 +2541,7 @@ msgid ""
 "does not extend off the screen. Useful for copy/paste\n"
 "operations."
 msgstr ""
-"Om det skal være muligt at rulle horisontalt selv hvis\n"
+"Om det skal være muligt at rulle horisontalt, selv hvis\n"
 "dokumentet ikke er bredere end skærmen. Brugbart ved\n"
 "kopiering til og indsættelse fra klippebord."
 
@@ -2670,7 +2676,7 @@ msgstr "Vandret tekstmargin"
 
 #: src/config/options.inc:419
 msgid "Document meta refresh"
-msgstr "Dokument meta genopfriskning"
+msgstr "Dokument meta-genopfriskning"
 
 #: src/config/options.inc:421
 msgid ""
@@ -2691,7 +2697,7 @@ msgstr ""
 
 #: src/config/options.inc:428
 msgid "Document meta refresh minimum time"
-msgstr "Minimumstid for dokument genopfriskning"
+msgstr "Minimumstid for genopfriskning af dokument"
 
 #: src/config/options.inc:430
 msgid ""
@@ -2809,17 +2815,17 @@ msgid ""
 "threshold. (Then of course no other documents can be cached.)"
 msgstr ""
 "Maksimalt antal optegnede dokumenter der må være i cachen. Vær\n"
-"opmærksom på det kan være problematisk at være alt for gavmild,\n"
-"da et optegnet dokument også indeholder diverse datastrukturer,\n"
+"opmærksom på at det kan være problematisk at være alt for gavmild,\n"
+"da et optegnet dokument også indeholder diverse datastrukturer\n"
 "som alt efter omstændighederne kan være rimelig omfattende. Det\n"
 "er ikke ualmindeligt at et optegnet dokument fylder dobbelt så\n"
-"meget som HTML kildeteksten, men det kan fylde endnu mere hvis\n"
+"meget som HTML-kildeteksten, men det kan fylde endnu mere hvis\n"
 "dokumentet indeholder en masse små korte højrejusterede linjer.\n"
 "Med andre ord hvis du sætter maksimum til 256 og du ikke bryder\n"
-"dig om at ELinks æder 90 megabyte hukommelse er det ikke os, du\n"
+"dig om at ELinks æder 90 megabyte hukommelse, er det ikke os du\n"
 "skal klage til. ;-)\n"
 "Bemærk også, at cachen med optegnede dokumenter ikke tælles med\n"
-"i størrelsen af hukommelsescachen, men at HTML kildeteksten til\n"
+"i størrelsen af hukommelsescachen, men at HTML-kildeteksten til\n"
 "optegnede dokumenter altid er i hukommelsescachen, selv om det\n"
 "betyder at størrelsen på hukommelsecachen overskrider maksimum.\n"
 "Efterfølgende kan yderligere dokumenter ikke tilføjes i cachen."
@@ -2846,15 +2852,16 @@ msgstr "Tegnsætindstillinger."
 
 #: src/config/options.inc:506
 msgid "Default codepage"
-msgstr "Standard tegnkodningstabel"
+msgstr "Forvalgt tegnkodningstabel"
 
 #: src/config/options.inc:508
 msgid ""
 "Default document codepage. 'System' stands for\n"
 "a codepage determined by a selected locale."
 msgstr ""
-"Standard kodeside. 'System' angiver at kodesiden vælges på baggrund\n"
-"af den valgte lokalitet."
+"Forvalgt tegnkodningstabel for dokument. 'System' angiver\n"
+"at tegnkodningstabellen vælges på baggrund af den valgte\n"
+"sprogindstilling."
 
 #: src/config/options.inc:511
 msgid "Ignore charset info from server"
@@ -2866,11 +2873,11 @@ msgstr "Ignorer information om tegnsæt sendt fra server"
 
 #: src/config/options.inc:517
 msgid "Default color settings"
-msgstr "Standard farveindstillinger"
+msgstr "Forvalgte farveindstillinger"
 
 #: src/config/options.inc:519
 msgid "Default document color settings."
-msgstr "Standard farveindstillinger for dokumenter"
+msgstr "Forvalgte farveindstillinger for dokumenter"
 
 #: src/config/options.inc:530
 msgid "Link color"
@@ -2878,7 +2885,7 @@ msgstr "Linkfarve"
 
 #: src/config/options.inc:532
 msgid "Default link color."
-msgstr "Standard linkfarve."
+msgstr "Forvalgt linkfarve."
 
 #: src/config/options.inc:534
 msgid "Visited-link color"
@@ -2886,7 +2893,7 @@ msgstr "Farve for besøgte links."
 
 #: src/config/options.inc:536
 msgid "Default visited link color."
-msgstr "Standardfarve for besøgte links."
+msgstr "Forvalgt farve for besøgte links."
 
 #: src/config/options.inc:538
 msgid "Image-link color"
@@ -2894,7 +2901,7 @@ msgstr "Farve for billedlinks."
 
 #: src/config/options.inc:540
 msgid "Default image link color."
-msgstr "Standard billedlinkfarve."
+msgstr "Forvalgt billedlinkfarve."
 
 #: src/config/options.inc:542
 msgid "Bookmarked-link color"
@@ -2902,7 +2909,7 @@ msgstr "Linkfarve for tilføjede bogmærker"
 
 #: src/config/options.inc:544
 msgid "Default bookmarked link color."
-msgstr "Standard farve for links til gemte bogmærker."
+msgstr "Forvalgt farve for links til gemte bogmærker."
 
 #: src/config/options.inc:546
 msgid "Directory color"
@@ -2913,7 +2920,7 @@ msgid ""
 "Default directory color.\n"
 "See document.browse.links.color_dirs option."
 msgstr ""
-"Standardfarve for kataloger.\n"
+"Forvalgt farve for kataloger.\n"
 "Se indstillingen document.browse.links.color_dirs."
 
 #: src/config/options.inc:551
@@ -2949,13 +2956,13 @@ msgid ""
 "  not black, it will break the behaviour of transparency."
 msgstr ""
 "Brug farver fra dokument:\n"
-"0 betyder brug altid standard farve-indstillinger\n"
+"0 betyder brug altid forvalgte farveindstillinger\n"
 "1 betyder brug forgrundsfarver fra dokument hvis muligt\n"
 "2 betyder brug dokumentets farver, inklusiv baggrundsfarven.\n"
 "  Dette kan ofte se meget imponerende ud, men enkelte\n"
 "  netsteder ser virkelig grimme ud. Bemærk at hvis baggrundsfarven\n"
 "  ikke er sort, vil det ødelægge gennemsigtighedseffekten\n"
-"  (transparency) på din skærm hvis du bruger en sådan"
+"  (transparency) på din skærm hvis du bruger en sådan."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:577
@@ -2968,11 +2975,11 @@ msgstr "Indstillinger for downloadning og filhåndtering."
 
 #: src/config/options.inc:581
 msgid "Default download directory"
-msgstr "Standard downloadkatalog"
+msgstr "Forvalgt downloadkatalog"
 
 #: src/config/options.inc:583
 msgid "Default download directory."
-msgstr "Standard downloadkatalog."
+msgstr "Forvalgt downloadkatalog."
 
 #: src/config/options.inc:585
 msgid "Set original time"
@@ -3037,8 +3044,9 @@ msgid ""
 "Codepage used in dump output. 'System' stands for\n"
 "a codepage determined by a selected locale."
 msgstr ""
-"Kodeside brug i dumpet udskrift. 'System' betyder at\n"
-"kodesiden hørende til den valgte lokalitet benyttes."
+"Tegnkodningstabel for dump-uddata. 'System' angiver at\n"
+"tegnkodningstabellen vælges på baggrund af den valgte\n"
+"sprogindstilling."
 
 #: src/config/options.inc:617
 #, c-format
@@ -3377,7 +3385,7 @@ msgstr ""
 "de sendes til skærmen. Farvetilstandene er:\n"
 "0 betyder tilstanden monokron, hvor kun 2 farver bruges\n"
 "1 betyder tilstanden 16-farver, som bruger de normale ANSI-farver\n"
-"2 betyder tilstanden 256-farve, som bruger XTerm RGB farvekoder"
+"2 betyder tilstanden 256-farve, som bruger XTerm RGB-farvekoder"
 
 #: src/config/options.inc:784 src/dialogs/options.c:170
 msgid "Transparency"
@@ -3406,8 +3414,9 @@ msgid ""
 "Codepage of charset used for displaying content on terminal.\n"
 "'System' stands for a codepage determined by a selected locale."
 msgstr ""
-"Tegnkodningstabellens tegnsæt brugt til skærmvisning.\n"
-"'System' betyder tegnsættet angivet af den valgte lokalitet."
+"Tegnkodningstabel til skærmvisning . 'System' angiver at\n"
+"tegnkodningstabellen vælges på baggrund af den valgte\n"
+"sprogindstilling."
 
 #. Keep options in alphabetical order.
 #: src/config/options.inc:805
@@ -3424,7 +3433,7 @@ msgstr "Farveindstillinger"
 
 #: src/config/options.inc:813
 msgid "Default user interface color settings."
-msgstr "Standard farveindstillinger for brugergrænseflade."
+msgstr "Forvalgte farveindstillinger for brugergrænseflade."
 
 #: src/config/options.inc:840
 msgid "Color terminals"
@@ -3973,9 +3982,9 @@ msgid ""
 "Pop up goto dialog in newly created tabs when there's no homepage\n"
 "set. This means also showing goto dialog on startup."
 msgstr ""
-"Åbn et gå til adresse dialogvindue i ny-åbnede faneblade, når der ikke\n"
-"er sat nogen hjemmeside. Dette også indebærer visning af gå til adresse\n"
-"dialog ved opstart."
+"Åbn et \"gå til adresse\"-dialogvindue i nyåbnede faneblade\n"
+"når ingen hjemmeside er angivet. Dette indebærer også visning\n"
+"af \"gå til adresse\"-dialog ved opstart."
 
 #: src/config/options.inc:1144
 msgid "Show a message box when file is saved successfully"
@@ -4195,10 +4204,10 @@ msgid ""
 "very bad. Note, it is off by default as it breaks a lot of sites."
 msgstr ""
 "Hvis aktiveret kræves det at der for alle ikke nationale domæner\n"
-"er tre punktummer i cookie domænet (i stedet for kun to). Nogle\n"
-"lande har generiske anden niveaus domæner (eksempelvis .co.uk og\n"
+"er tre punktummer i cookiedomænet (i stedet for kun to). Nogle\n"
+"lande har generiske anden-niveaus domæner (eksempelvis .co.uk og\n"
 ".com.pl) og det kan potentielt være farligt at tillade netsteder\n"
-"at sætte cookies for disse generiske domæner. Bemærk, at denne\n"
+"at sætte cookies for disse generiske domæner. Bemærk at denne\n"
 "indstilling er deaktiveret som standard, da denne egenskab gør\n"
 "flere netsteder utilgængelige."
 
@@ -4208,7 +4217,7 @@ msgstr "Gemning"
 
 #: src/cookies/cookies.c:112
 msgid "Whether cookies should be loaded from and save to disk."
-msgstr "Om cookier skal indlæses og gemmes til disken."
+msgstr "Om cookier skal indlæses fra og gemmes på disken."
 
 #: src/cookies/cookies.c:114
 msgid "Resaving"
@@ -4420,13 +4429,13 @@ msgstr "Afbryd og slet fil"
 #: src/dialogs/download.c:402
 #, c-format
 msgid "Sorry, but download \"%s\" cannot be interrupted."
-msgstr "Desværre, denne download \"%s\" kan ikke afbrydes."
+msgstr "Desværre, denne filoverførsel \"%s\" kan ikke afbrydes."
 
 #. cant_delete_used_item
 #: src/dialogs/download.c:404
 #, c-format
 msgid "Sorry, but download \"%s\" is being used by something else."
-msgstr "Desværre, denne download \"%s\" er optaget af en anden proces."
+msgstr "Desværre, denne filoverførsel \"%s\" er optaget af en anden proces."
 
 #. delete_marked_items_title
 #: src/dialogs/download.c:410
@@ -4441,17 +4450,17 @@ msgstr "Afbryd markerede filoverførelser?"
 #. delete_item_title
 #: src/dialogs/download.c:418
 msgid "Interrupt download"
-msgstr "Afbryd download"
+msgstr "Afbryd filoverførsel"
 
 #. delete_item
 #: src/dialogs/download.c:420
 msgid "Interrupt this download?"
-msgstr "Afbryd denne download?"
+msgstr "Afbryd denne filoverførsel?"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:422
 msgid "Interrupt all downloads"
-msgstr "Afbryd alle downloads?"
+msgstr "Afbryd alle filoverførsler?"
 
 #. clear_all_items_title
 #: src/dialogs/download.c:424
@@ -4519,7 +4528,7 @@ msgstr ""
 "Ressourcer: %d håndteringer, %d timere.\n"
 "Forbindelser: %d forbindelser, %d oprettes, %d overfører, %d holdes i live.\n"
 "Hukommelsescache: %d bytes, %d filer, %d låste filer, %d indlæses.\n"
-"Dokumentcache: %d formatterede, %d bruges, %d genopfriskes.\n"
+"Dokumentcache: %d formaterede, %d bruges, %d genopfriskes.\n"
 "Intern kommunikation: %s terminal, %d terminaler, %d sessioner."
 
 #: src/dialogs/info.c:200
@@ -5028,7 +5037,7 @@ msgstr "CSS stilark"
 
 #: src/document/css/css.c:31
 msgid "Options concerning how to use CSS for styling documents."
-msgstr "Indstillinger for CSS stilark til dokumentoptegning."
+msgstr "Indstillinger for CSS-stilark til dokumentoptegning."
 
 #: src/document/css/css.c:33
 msgid "Enable CSS"
@@ -5036,7 +5045,7 @@ msgstr "Aktivér CSS"
 
 #: src/document/css/css.c:35
 msgid "Enable adding of CSS style info to documents."
-msgstr "Anvend CSS stilark ved optegning af dokumenter."
+msgstr "Anvend CSS-stilark ved optegning af dokumenter."
 
 #: src/document/css/css.c:37
 msgid "Import external style sheets"
@@ -5049,13 +5058,13 @@ msgid ""
 "<link> tags in the document header will also be downloaded."
 msgstr ""
 "Når indstillingen er aktiveret indlæses og importeres alle eksternt\n"
-"refererede stilark enten CSS dokumenter når @import anvendes eller\n"
-"fra HTML dokumenter i forbindelse med <link> elementer i hovedet af\n"
+"refererede stilark fra enten CSS-dokumenter når @import anvendes eller\n"
+"fra HTML-dokumenter i forbindelse med <link> elementer i hovedet af\n"
 "dokumentet"
 
 #: src/document/css/css.c:43
 msgid "Default style sheet"
-msgstr "Standard stilark"
+msgstr "Forvalgt stilark"
 
 #: src/document/css/css.c:45
 msgid ""
@@ -5066,8 +5075,8 @@ msgid ""
 "Leave as \"\" to use built-in document styling."
 msgstr ""
 "Stien til den fil som indeholder det brugerdefinerede standard\n"
-"CSS stilark. Stilarket kan anvendes til at kontrollere det\n"
-"generelle udseende af HTML dokumenter. Stien antages at være\n"
+"CSS-stilark. Stilarket kan anvendes til at kontrollere det\n"
+"generelle udseende af HTML-dokumenter. Stien antages at være\n"
 "relativ til ELinks' hjemmemappe.\n"
 "Sæt til \"\" for at anvende det indbyggede layout."
 
@@ -5124,7 +5133,7 @@ msgstr "JavaScript-fejl"
 
 #: src/ecmascript/spidermonkey.c:1955
 msgid "JavaScript Emergency"
-msgstr "JavaScript nødssituation"
+msgstr "JavaScript-nødsituation"
 
 #: src/ecmascript/spidermonkey.c:1957
 #, c-format
@@ -5136,7 +5145,7 @@ msgid ""
 msgstr ""
 "Det indlejrede script i det aktuelle dokument kørte i mere end %d\n"
 "sekunder. Dette skyldes sikkert en fejl i scriptet og at scriptet\n"
-"kunne have afsluttet hele ELinks, så scriptet eksekveringen blev\n"
+"kunne have afsluttet hele ELinks, så eksekveringen af scriptet blev\n"
 "afbrudt."
 
 #: src/formhist/dialogs.c:67
@@ -5215,6 +5224,8 @@ msgstr "Gemning fra/til"
 msgid "Form history manager"
 msgstr "Formularhistorikhåndtering"
 
+#. TODO: Remember multiple login for the same form.
+#. * TODO: Password manager GUI (here?) (in dialogs.c, of course --pasky).
 #: src/formhist/formhist.c:37
 msgid "Show form history dialog"
 msgstr "Vis dialogboks for formularhistorik"
@@ -5773,7 +5784,7 @@ msgstr "MIME-relaterede indstillinger (programmer for diverse MIME-typer)."
 
 #: src/mime/mime.c:39
 msgid "Default MIME-type"
-msgstr "Standard MIME-type"
+msgstr "Forvalgt MIME-type"
 
 #: src/mime/mime.c:41
 msgid ""
@@ -6066,7 +6077,7 @@ msgstr "Gopher"
 #: src/protocol/http/codes.c:107
 #, c-format
 msgid "HTTP error %03d"
-msgstr "HTTP fejl %03d"
+msgstr "HTTP-fejl %03d"
 
 #: src/protocol/http/codes.c:130
 msgid ""
@@ -6078,11 +6089,11 @@ msgid ""
 "  and indicates that there is some much deeper problem with the web server\n"
 "  software.\n"
 msgstr ""
-"  En fejl opstod hos serveren mens dokumentet du bad om blev overført.\n"
+"  En fejl opstod på serveren mens dokumentet du bad om blev overført.\n"
 "  Desværre sendte serveren ikke nogen tilbagemelding om hvad der skete,\n"
-"  så det er uvidst hvad der gik galt. Kontakt venligst administratoren\n"
-"  af webserveren angående dette, hvis du tror at denne fejl ikke burde\n"
-"  opstå, da det ikke er nogen pæn opførelse fra webserverens side og\n"
+"  så det er uvist hvad der gik galt. Kontakt venligst administratoren\n"
+"  af webserveren angående dette hvis du tror at denne fejl ikke burde\n"
+"  opstå, da det ikke er nogen pæn opførsel fra webserverens side og\n"
 "  ofte antyder at der er et dybereliggende problem med webserverens\n"
 "  programmel.\n"
 
@@ -6173,11 +6184,11 @@ msgstr "Brugernavn"
 
 #: src/protocol/http/http.c:101
 msgid "Proxy authentication username."
-msgstr "Proxy verificerings brugernavn."
+msgstr "Brugernavn til proxy-autentifikation."
 
 #: src/protocol/http/http.c:105
 msgid "Proxy authentication password."
-msgstr "Adgangskode til proxygodkendelse."
+msgstr "Adgangskode til proxy-autentifikation."
 
 #: src/protocol/http/http.c:108
 msgid "Referer sending"
@@ -6354,20 +6365,20 @@ msgstr "NNTP- og news-specifikke indstillinger."
 
 #: src/protocol/nntp/nntp.c:37
 msgid "Default news server"
-msgstr "Standard nyhedsserver"
+msgstr "Forvalgt nyhedsserver"
 
 #: src/protocol/nntp/nntp.c:39
 msgid ""
 "Used when resolving news: URIs. If set to the empty string\n"
 "the value of the NNTPSERVER environment variable will be used."
 msgstr ""
-"Anvendes ved håndtering af news: adresser til at omskrive til\n"
-"nntp: URI. Hvis sat til den tomme streng vil miljøvariablen\n"
-"NNTPSERVER anvendes i stedet."
+"Anvendes ved håndtering af news:-adresser til at omskrive til\n"
+"nntp: URI. Hvis sat til den tomme streng, vil miljøvariablen\n"
+"NNTPSERVER blive anvendt i stedet."
 
 #: src/protocol/nntp/nntp.c:42
 msgid "Message header entries"
-msgstr "Visning af indgange fra protokolhoved i besked"
+msgstr "Visning af linjer fra protokolhoved i besked"
 
 #: src/protocol/nntp/nntp.c:44
 msgid ""
@@ -6375,9 +6386,9 @@ msgid ""
 "to show. E.g. 'Subject' and 'From'.\n"
 "All header entries can be read in the header info dialog."
 msgstr ""
-"Komma separeret list af indgange som skal vises fra artiklens\n"
-"protokolhoved. Eksempelvis 'Subject' eller 'From'.\n"
-"Hele protokolhovedet kan læses via et separat dialogvindue."
+"Kommasepareret liste over linjer fra artiklens protokolhoved\n"
+"som skal vises. Eksempelvis 'Subject' eller 'From'.\n"
+"Hele protokolhovedet kan læses i et separat dialogvindue."
 
 #: src/protocol/protocol.c:223
 #, c-format
@@ -6461,8 +6472,8 @@ msgid ""
 "'gg:search keywords' or 'gn search keywords for news'."
 msgstr ""
 "Anvend smarte præfikser - adresseskabeloner der kan bruges ved\n"
-"at skrive en given forkortelse i Gå til adresse dialogvinduet\n"
-"efterfulgt af en liste argumenter hvorfra den endelige URI\n"
+"at skrive en given forkortelse i \"Gå til adresse\"-dialogvinduet\n"
+"efterfulgt af en liste argumenter hvorfra den endelige adresse\n"
 "sammensættes. Eksempler: 'gg:søgeord' eller 'gn søgeord for news'."
 
 #: src/protocol/rewrite/rewrite.c:68
@@ -6527,7 +6538,7 @@ msgstr "Akkreditiver"
 
 #: src/protocol/smb/smb.c:79
 msgid "Credentials file passed to smbclient via -A option."
-msgstr "Fil med akkreditiver som gives til smbclient via -A indstillingern."
+msgstr "Fil med akkreditiver som gives til smbclient med parameteren -A."
 
 #. name:
 #: src/protocol/user.c:35 src/protocol/user.c:85
@@ -6601,7 +6612,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Fejl ved download af %s:\n"
+"Fejl ved overførsel af %s:\n"
 "\n"
 "%s"
 
@@ -6611,7 +6622,7 @@ msgid ""
 "Download complete:\n"
 "%s"
 msgstr ""
-"Download fuldført:\n"
+"Filoverførsel fuldført:\n"
 "%s"
 
 #: src/sched/download.c:504
@@ -6648,7 +6659,7 @@ msgstr "Overskriv originalfilen"
 
 #: src/sched/download.c:550
 msgid "Resume download of the original file"
-msgstr "Genoptag download af originalfilen"
+msgstr "Genoptag overførsel af originalfilen"
 
 #: src/sched/download.c:1013 src/sched/download.c:1025
 msgid "Unknown type"
@@ -6786,7 +6797,7 @@ msgid ""
 "by the encoded file being corrupt."
 msgstr ""
 "Fejl ved afkodning af fil. Dette betyder eventuelt\n"
-"at den indkodede fil er korrupt."
+"at den indkodede fil er ødelagt."
 
 #: src/sched/error.c:60
 msgid ""
@@ -7099,7 +7110,7 @@ msgstr "Ugyldig hændelse %d"
 #: src/terminal/event.c:356
 #, c-format
 msgid "Could not read event: %d (%s)"
-msgstr "Kunne ikke læse hændelse: %s (%s)"
+msgstr "Kunne ikke læse hændelse: %d (%s)"
 
 #: src/terminal/kbd.c:998
 msgid "Too many bytes read from the itrm!"

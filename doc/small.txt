@@ -33,7 +33,7 @@ Dependencies over external libs must be removed using related configure options.
 --without-lua		removes liblua dependency (lua scripting)
 --without-gnutls	removes libtls dependency (ssl support)
 --without-openssl	removes libssl dependency (ssl support)
---without-x 		removes libx11 dependency (setting terminal title)
+--without-x 		removes libx11 dependency (restoring terminal title)
 
 It seems gcc 2.95.x do not generate as small binaries as gcc 3.2.x with
 same flags.
@@ -60,4 +60,4 @@ Details about --enable-small configure option effects:
 - it disables fastfind feature (reducing performance, but also reducing a lot
   memory usage, and a bit the executable size).
 
-/* $Id: small.txt,v 1.10 2003/11/01 22:35:03 pasky Exp $ */
+/* $Id: small.txt,v 1.11 2003/12/24 12:22:48 jonas Exp $ */

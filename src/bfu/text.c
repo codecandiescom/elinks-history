@@ -1,5 +1,5 @@
 /* Text widget implementation. */
-/* $Id: text.c,v 1.60 2003/11/29 04:31:01 jonas Exp $ */
+/* $Id: text.c,v 1.61 2003/11/29 05:21:50 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -153,6 +153,12 @@ dlg_format_text(struct terminal *term, struct widget_data *widget_data,
 
 		lines = (unsigned char **) widget_data->cdata;
 		current = widget_data->info.text.current;
+
+		/* Make maximum number of lines available */
+		if (widget_data->info.text.lines - current < widget_data->h) {
+			current = widget_data->info.text.lines - widget_data->h;
+			widget_data->info.text.current = current;
+		}
 
 		/* Set the current position */
 		text = lines[current];

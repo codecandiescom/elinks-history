@@ -1,16 +1,18 @@
-/* $Id: inpfield.h,v 1.41 2004/11/19 15:33:07 zas Exp $ */
+/* $Id: inpfield.h,v 1.42 2004/11/19 15:40:20 zas Exp $ */
 
 #ifndef EL__BFU_INPFIELD_H
 #define EL__BFU_INPFIELD_H
 
-#include "bfu/dialog.h"
+#include "bfu/common.h"
 #include "bfu/style.h"
 #include "util/memlist.h"
 
 struct dialog;
+struct dialog_data;
 struct input_history;
 struct session;
 struct terminal;
+struct widget_data;
 
 void
 add_dlg_field_do(struct dialog *dlg, enum widget_type type, unsigned char *label,

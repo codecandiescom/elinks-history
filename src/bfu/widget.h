@@ -1,4 +1,4 @@
-/* $Id: widget.h,v 1.69 2004/11/19 15:33:07 zas Exp $ */
+/* $Id: widget.h,v 1.70 2004/11/19 15:40:20 zas Exp $ */
 
 #ifndef EL__BFU_WIDGET_H
 #define EL__BFU_WIDGET_H
@@ -15,14 +15,6 @@ struct term_event;
 
 struct widget_data;
 
-enum widget_type {
-	WIDGET_CHECKBOX,
-	WIDGET_FIELD,
-	WIDGET_FIELD_PASS,
-	WIDGET_BUTTON,
-	WIDGET_LISTBOX,
-	WIDGET_TEXT,
-};
 
 #define add_dlg_end(dlg, n)						\
 	do {								\

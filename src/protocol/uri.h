@@ -1,4 +1,4 @@
-/* $Id: uri.h,v 1.39 2003/10/16 13:08:44 zas Exp $ */
+/* $Id: uri.h,v 1.40 2003/11/09 22:40:55 zas Exp $ */
 
 #ifndef EL__PROTOCOL_URI_H
 #define EL__PROTOCOL_URI_H
@@ -120,6 +120,8 @@ unsigned char *extract_proxy(unsigned char *);
  * else @slen is used as @s length. */
 int end_with_known_tld(unsigned char *s, int slen);
 
+/* Return an allocated string containing url without postdata */
+unsigned char *get_no_post_url(unsigned char *url);
 
 static inline int
 end_of_dir(unsigned char c)

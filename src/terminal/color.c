@@ -1,5 +1,5 @@
 /* Terminal color composing. */
-/* $Id: color.c,v 1.14 2003/08/31 12:51:38 jonas Exp $ */
+/* $Id: color.c,v 1.15 2003/08/31 13:07:04 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -200,7 +200,7 @@ static unsigned char fg_color[16][8] = {
  * and background color are a number between 0 and 7. They are stored in an
  * unsigned as specified in the following bit sequence:
  *
- *	00bbbfff (0 = not used, f = foreground bit, b = background bit)
+ *	0+bbbfff (0 = not used, + = bold, f = foreground, b = background)
  */
 
 static inline unsigned char

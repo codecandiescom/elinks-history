@@ -1,5 +1,5 @@
 #!/usr/bin/make -f
-# $Id: rules,v 1.3 2005/01/11 00:32:03 jonas Exp $
+# $Id: rules,v 1.4 2005/01/11 00:37:05 jonas Exp $
 # Sample debian/rules that uses debhelper.
 # GNU copyright 1997 to 1999 by Joey Hess.
 
@@ -51,7 +51,7 @@ install: build
 	$(MAKE) install DESTDIR=`pwd`/debian/elinks
 	
 	mkdir -p debian/elinks/etc/elinks
-	install -o root -g root -m 644 debian/elinks.conf debian/elinks/etc/elinks/elinks.conf
+	install -o root -g root -m 644 contrib/elinks.conf debian/elinks/etc/elinks/elinks.conf
 # KDE menu integration
 	mkdir -p debian/elinks/usr/share/applnk/Internet/
 	cp debian/elinks.desktop debian/elinks/usr/share/applnk/Internet/

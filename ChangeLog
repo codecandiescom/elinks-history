@@ -1,3 +1,388 @@
+Tue Jun 29 21:28:53 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* configure.in:
+
+	First try Lua 4.0, then Lua 5.0 - that's what we still tune it for.  
+
+Tue Jun 29 15:39:19 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Introduce has_hline_width(table, row) macro.  
+
+Tue Jun 29 15:29:59 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @p -> @total_width.  
+
+Tue Jun 29 15:27:00 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): use int_bounds().  
+
+Tue Jun 29 15:25:09 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): minor tidyup.  
+
+Tue Jun 29 15:23:25 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @ss -> @max_width.  
+
+Tue Jun 29 15:19:45 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	distribute_widths(): @mss -> @max, @mii -> @max_index.  
+
+Tue Jun 29 15:09:02 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Drop commented out check_cell_widths(), cvs will keep it for us.  
+
+Tue Jun 29 15:06:14 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_table_margin(): comment cleanup.  
+
+Tue Jun 29 13:44:22 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c:
+
+	get_bordercolor(): Ditch return value. It is never handled.  
+
+Tue Jun 29 13:09:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): xw -> width, yw -> height.  
+
+Tue Jun 29 13:06:59 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cell(): xp -> x, yp -> y.  
+
+Tue Jun 29 11:18:22 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	Revert part of last get_table_margin() patch, use of int_bounds()
+	here causes segfault here. Why ?.  
+
+Tue Jun 29 10:56:17 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	draw_table_cells(): Split out the height sanity checking to
+	check_table_height().  
+
+Tue Jun 29 10:43:43 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Move the inner parts of draw_table_cells() loop to
+	draw_table_cell(). Caching of struct variables in local ones was
+	ditched to simplify draw_table_cell() calling.  
+
+Tue Jun 29 10:29:54 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table_bad_html() -> draw_table_bad_html(),
+	display_complicated_table() -> draw_table_cells(),
+	display_table_frames() -> draw_table_frames().  
+
+Tue Jun 29 10:24:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Improve handling of <caption> (bug 432) (and other bad html ;) tags
+	by formatting them to be within the real_width of the table. It now
+	looks more like the way cells are formatted.  
+
+Tue Jun 29 09:20:51 2004  Laurent Monin <zas@norz.org>:
+
+	* src/document/html/tables.c:
+
+	get_table_margin(): @ww -> @width, >>1 -> /2, use int_bounds().  
+
+Tue Jun 29 08:14:44 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	display_complicated_table() tail check: table->part->cy +
+	table->real_height -> @old_height.  
+
+Tue Jun 29 08:12:27 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	display_complicated_table() tail check: @yp -> @our_height.  
+
+Tue Jun 29 08:10:46 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Separate table->real_height calculation from get_table_heights() to
+	get_table_real_height() but only moan about the impossibility of
+	using it in display_complicated_table() tail check.  
+
+Tue Jun 29 07:50:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Separate the tail display_complicated_table() sanity check to a
+	separate block, compiled in only ifndef CONFIG_FASTMEM (since in
+	that case the assertm() will be thrown away anyway so it'd be quite
+	pointless).  
+
+Tue Jun 29 07:46:59 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Simplify the assertion check at the tail of
+	display_complicated_table().  
+
+Tue Jun 29 07:20:13 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	format_bad_table_html() -> format_table_bad_html() 
+
+Tue Jun 29 07:16:29 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/table.c:
+
+	It's bad HTML, not bad table, dammit! ;-). add_bad_table_html_*() ->
+	add_table_bad_html_*() 
+
+Tue Jun 29 04:06:26 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	Initialize table->bgcolor in parse_table_attributes().  
+
+Tue Jun 29 03:48:36 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	get_table_cellpadding(): Return -1 as error code.  
+
+Tue Jun 29 03:47:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Split out something that looks like cellpadding
+	fixup to get_table_cellpadding().  
+
+Tue Jun 29 03:33:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	get_table_margin(): Switch the alignment.  
+
+Tue Jun 29 03:29:35 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Move table x offset aka. margin calculation to
+	get_table_margin().  
+
+Tue Jun 29 03:25:18 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	Add table->align member and parse the value the generic way.  
+
+Tue Jun 29 03:23:55 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	Group attribute get functions.  
+
+Tue Jun 29 03:07:14 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Move align attribute checking used for x offset
+	calculation + local @al variable to block.  
+
+Tue Jun 29 03:01:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Remove @cye local variable by rearranging
+	calculations.  
+
+Tue Jun 29 02:46:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c:
+
+	format_table(): Move attribute parsing to parse_table_attributes().  
+
+Tue Jun 29 02:43:37 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Initialize table->border directly.  
+
+Tue Jun 29 02:42:06 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Initialize table->vcellpadding directly.  
+
+Tue Jun 29 02:41:10 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Initialize table->cellpadding directly.  
+
+Tue Jun 29 02:37:27 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Initialize table->cellspacing directly.  
+
+Tue Jun 29 02:35:30 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Initialize table->rules directly.  
+
+Tue Jun 29 02:34:28 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Initialize table->frame directly.  
+
+Tue Jun 29 02:31:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Parse before extracting attributes.  
+
+Tue Jun 29 02:30:23 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Tidyup.  
+
+Tue Jun 29 02:29:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	parse_table_attributes(), get_bordercolor(): Move.  
+
+Tue Jun 29 02:24:15 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.h:
+
+	struct table: has_width -> full_width, since we set it to
+	par_format.width - margins and original name was 'wf'.  
+
+Tue Jun 29 02:21:50 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.h:
+
+	parse_table_attributes(): Handle width. Reintroduce
+	table->has_width.  
+
+Tue Jun 29 02:11:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	parse_table_attributes(): Handle id.  
+
+Tue Jun 29 02:09:39 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	Introduce parse_table_attributes().  
+
+Tue Jun 29 01:54:42 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Prospone border color initialization to after table
+	parsing.  
+
+Tue Jun 29 01:48:40 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_bad_table_html(): Cleanup. Use start/end local variables and
+	don't modify the table pointers. There's no need to.  
+
+Tue Jun 29 01:43:38 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/tables.c:
+
+	format_table(): Move formatting of bad html to separate function. Do
+	the formatting after the various table formatting members has been
+	initialized (especially table->part).  
+
+Tue Jun 29 01:37:41 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/: tables.c, parser/table.c, parser/table.h:
+
+	Make bad_html array and size members of struct table. Define
+	functions to add start and end pointers.  
+
+Tue Jun 29 01:22:03 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	Oops fix off by oner in last patch.  
+
+Tue Jun 29 01:17:58 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	parse_html(): Cleanup bad html end setup. Just check if end pointer
+	is missing instead of using local state variable.  
+
+Tue Jun 29 00:45:16 2004  Jonas Fonseca <fonseca@diku.dk>:
+
+	* src/document/html/parser/table.c:
+
+	parse_html(): Cleanup bad html position adding.  
+
+Mon Jun 28 22:52:50 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/parser/table.c:
+
+	Add a warning at the top that this file does not fit to the general
+	HTML parser infrastructure.  
+
+Mon Jun 28 22:51:14 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/tables.c:
+
+	Add the 'const' qualifier to the border tables, to help the compiler
+	to optimize them.  
+
+Mon Jun 28 22:49:55 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/document/html/: tables.c, parser/table.c:
+
+	Keep only functions with a reasonable speed_sensitivity/size factor
+	inline.  
+
+Mon Jun 28 22:39:04 2004  Petr Baudis <pasky@ucw.cz>:
+
+	* src/protocol/rewrite/.cvsignore:
+
+	Ugh, looks like .cvsignore got blank. Funny.  
+
 Mon Jun 28 21:42:21 2004  Jonas Fonseca <fonseca@diku.dk>:
 
 	* src/document/html/tables.c:

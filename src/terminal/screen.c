@@ -1,5 +1,5 @@
 /* Terminal screen drawing routines. */
-/* $Id: screen.c,v 1.103 2003/10/05 16:02:51 jonas Exp $ */
+/* $Id: screen.c,v 1.104 2003/10/11 13:20:56 jonas Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -77,8 +77,8 @@ static struct string underline_seqs[] = {
 	/* end underline: */	TERM_STRING("\033[4m"),
 };
 
-/* Used in print_char() and redraw_screen() to reduce the logic. It is updated
- * from terminal._template_.* using option change_hooks. */
+/* Used in {add_char*()} and {redraw_screen()} to reduce the logic. It is
+ * updated from terminal._template_.* using option change_hooks. */
 /* TODO: termcap/terminfo can maybe gradually be introduced via this
  *	 structure. We'll see. --jonas */
 struct screen_driver {

@@ -1,5 +1,5 @@
 /* Sessions managment - you'll find things here which you wouldn't expect */
-/* $Id: session.c,v 1.477 2004/06/11 13:29:50 jonas Exp $ */
+/* $Id: session.c,v 1.478 2004/06/11 13:54:33 jonas Exp $ */
 
 /* stpcpy */
 #ifndef _GNU_SOURCE
@@ -706,23 +706,27 @@ create_session(struct window *tab, struct initial_session_info *info)
 }
 
 
-void
+struct initial_session_info *
 init_session(struct session *ses, struct terminal *term,
 	     struct uri *uri, int in_background)
 {
+	struct initial_session_info *info;
 	struct window *tab;
 	struct term_event ev = INIT_TERM_EVENT(EV_INIT, 0, 0, 0);
 
 	tab = init_tab(term, in_background, tabwin_func);
-	if (!tab) return;
+	if (!tab) return NULL;
 
-	ev.b = (long) init_session_info(ses, uri);
-	if (!ev.b) {
+	info = init_session_info(ses, uri);
+	if (!info) {
 		mem_free(tab);
-		return;
+		return NULL;
 	}
 
+	ev.b = (long) info;
 	tab->handler(tab, &ev, 0);
+
+	return info;
 }
 
 static enum remote_session_flags

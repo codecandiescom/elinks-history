@@ -1,5 +1,5 @@
 /* URL parser and translator; implementation of RFC 2396. */
-/* $Id: uri.c,v 1.183 2004/04/16 16:34:44 zas Exp $ */
+/* $Id: uri.c,v 1.184 2004/04/16 17:41:01 kuser Exp $ */
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -409,9 +409,10 @@ normalize_uri(struct uri *uri, unsigned char *uristring, int parse)
 
 				/* @dest might be pointing to a dir separator
 				 * so we decrement before any testing. */
-				do {
-					if (dest > path) dest--;
-				} while (!dsep(*dest));
+				while (dest > path) {
+					dest--;
+					if (dsep(*dest)) break;
+				}
 
 				src += 3;
 				continue;
